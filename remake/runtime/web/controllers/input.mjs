@@ -58,11 +58,11 @@ export function createInputController({state, actions, $, canvas, ctx}) {
     window.addEventListener('keydown',event=>{
       const key=event.key.length===1?event.key.toLowerCase():event.key;
       if(state.startupView?.key(key,event.repeat)){event.preventDefault();return;}
+      if(['event','opening'].includes(state.scenes?.phase)&&actions.dialogueKey(key,event.repeat)){event.preventDefault();return;}
       if(state.worldMapView?.key(key,event.repeat)){event.preventDefault();return;}
       if(state.menuContext){const kind=key==='Escape'?'cancel':[' ','Enter'].includes(key)?'confirm':key==='Tab'?'ignore':'select';const handle=()=>{if(key==='Escape'){if(!event.repeat&&state.operationMenu.escape())actions.closePartyMenu();return true;}return state.operationMenu.key(key,event.repeat);};const handled=state.menuFeedback?state.menuFeedback.run(kind,handle,{repeat:event.repeat}):handle();if(handled)event.preventDefault();return;}
       if(state.scenes?.phase.startsWith('battle-')){if(actions.battleKey(key,event.repeat))event.preventDefault();return;}
       if(state.scenes?.phase==='map'&&state.world.value.source.kind==='native-new-game'&&key==='Tab'&&!event.shiftKey){event.preventDefault();if(!event.repeat)actions.openPartyMenu();return;}
-      if(['event','opening'].includes(state.scenes?.phase)&&actions.dialogueKey(key,event.repeat)){event.preventDefault();return;}
       if(['INPUT','SELECT','TEXTAREA','BUTTON'].includes(document.activeElement?.tagName))return;
       if(state.scenes?.phase!=='map')return;
       if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','w','a','s','d','Shift','e'].includes(key)){event.preventDefault();if(key==='e'){if(!event.repeat)actions.interact();}else state.keys.add(key);}

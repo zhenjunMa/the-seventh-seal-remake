@@ -6,6 +6,7 @@ import {createHash} from 'node:crypto';
 import {validateContentDependencies} from '../web/core/content_dependencies.mjs';
 import {validateForestStage} from '../web/forest_stage.mjs';
 import {readContentDefinition} from './resolve_content_definition.mjs';
+import {requireContentReadiness} from '../web/core/content_readiness.mjs';
 const web=fileURLToPath(new URL('../web/',import.meta.url)),prototype=fileURLToPath(new URL('../../prototype/web/',import.meta.url)),original=fileURLToPath(new URL('../../../',import.meta.url));
 const digest=bytes=>createHash('sha256').update(bytes).digest('hex');
 const inputs={};
@@ -16,6 +17,7 @@ export async function auditContentFiles(){
   const names={catalog:'catalog',seed:'opening_seed',story:'chapter_story',resources:'chapter_map_resources',party:'party_combat',commands:'party_skills',forest:'forest_combat',ai:'forest_ai',rewards:'party_rewards',reactions:'party_reactions',status:'forest_status',encounters:'encounters',view:'party_battle_view',itemView:'item_presentation',lifecycle:'battle_lifecycle',menu:'operation_menu'};
   const data=Object.fromEntries(await Promise.all(Object.entries(names).map(async([key,name])=>[key,await read(`data/${name}.json`)])));
   const counts=validateContentDependencies(content,data),checked=new Set();
+  const readiness=requireContentReadiness(content,data.story,data.resources);
   for(const source of [...Object.values(content.roles).map(role=>role.source),...Object.values(content.programs)]){
     const raw=await readFile(path.join(original,source.path));
     if(digest(raw)!==source.sha256)throw new Error(`原输入与内容登记不同：${source.path}`);
@@ -37,7 +39,7 @@ export async function auditContentFiles(){
     const stage=await read(row.path);if(stage.stage_id!==id)throw new Error(`场景身份不一致：${id}`);
     validateForestStage(stage,content);await references(stage);
   }
-  return {definition,content,report:{schema:'seventh-seal-content-dependencies',version:1,passed:true,...counts,resource_files_checked:checked.size,input_sha256:inputs}};
+  return {definition,content,report:{schema:'seventh-seal-content-dependencies',version:1,passed:true,...counts,readiness,resource_files_checked:checked.size,input_sha256:inputs}};
 }
 if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){
   const {definition,content,report}=await auditContentFiles();

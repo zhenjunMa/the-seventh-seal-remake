@@ -15,7 +15,8 @@ import subprocess
 import sys
 from uuid import uuid4
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from content_registration import definition, map_ids, role_ids, program_ids
+from content_registration import definition, map_ids, role_ids, program_ids, stage_exports
+from export_battle_stages import source_files as stage_source_files
 
 RUNTIME = Path(__file__).resolve().parents[1]
 ROOT = RUNTIME.parents[1]
@@ -93,15 +94,24 @@ STEPS['chapter-story'] = replace(STEPS['chapter-story'],
 for target in ['party-combat','party-skills','party-rewards','item-presentation','battle-lifecycle','battle-packs','menu']:
     STEPS[target]=replace(STEPS[target],inputs=(*STEPS[target].inputs,'data/runtime_content.json'))
 
+STEPS['story-check'] = Step('check_content.mjs', (), ('chapter-story','opening-seed','enemies'),
+    inputs=('data/runtime_content.json','data/opening_seed.json','data/forest_combat.json',
+            'data/chapter_story.json','data/chapter_map_resources.json','data/maps'))
+source_stages = {ident: row for ident, row in stage_exports().items() if row['export'] == 'source'}
+STEPS['battle-stages'] = Step('export_battle_stages.py',
+    tuple(item for row in source_stages.values() for item in (row['path'],row['asset_prefix'])),
+    ('forest-stage',), ('battle_stages_export.json',) if source_stages else (),
+    ('data/runtime_content.json','data/forest_stage.json'), stage_source_files() if source_stages else ())
+
 # A single content build prepares its source-derived data before compiling the
 # final registry. Ordinary parameter-only exports reuse the unchanged assets.
 for target, dependencies in {
-    'party-combat': ('chapter-story','enemies'),
+    'party-combat': ('story-check',),
     'configuration': ('party-skills','enemy-rewards','encounters'),
     'catalog': ('configuration','chapter-maps'),
     'item-presentation': ('items','party-skills'),
-    'audio': ('party-skills','item-presentation','chapter-maps'),
-    'content': ('catalog','party-rewards','battle-packs','audio','menu-fonts'),
+    'audio': ('party-skills','item-presentation','chapter-maps','encounters'),
+    'content': ('catalog','party-rewards','battle-packs','audio','menu-fonts','dialogue-ui','prologue-presentation','map-effects'),
     'party-rewards': ('party-combat','enemy-rewards'),
 }.items():
     STEPS[target]=replace(STEPS[target],depends=dependencies)
@@ -112,6 +122,9 @@ STEPS['party-rewards']=replace(STEPS['party-rewards'],inputs=(*STEPS['party-rewa
 STEPS['party-skills']=replace(STEPS['party-skills'],outputs=(*STEPS['party-skills'].outputs,*tuple(f'data/party_role_layers_{ident}.json' for ident in REGISTERED_PLAYER_IDS)))
 STEPS['item-presentation']=replace(STEPS['item-presentation'],outputs=(*STEPS['item-presentation'].outputs,*tuple(f'data/item_role_layers_{ident}.json' for ident in REGISTERED_PLAYER_IDS)))
 STEPS['content']=replace(STEPS['content'],inputs=(*STEPS['content'].inputs,'data/operation_menu.json'))
+STEPS['battle-packs']=replace(STEPS['battle-packs'],depends=(*STEPS['battle-packs'].depends,'battle-stages'))
+STEPS['dialogue-ui']=replace(STEPS['dialogue-ui'],depends=('catalog','chapter-story'))
+STEPS['prologue-presentation']=replace(STEPS['prologue-presentation'],depends=('chapter-story',))
 
 
 def sha(path):
@@ -268,7 +281,13 @@ def main():
     parser.add_argument('--validate', action='store_true', help='Audit selected tools, input sources and existing outputs without regenerating assets')
     parser.add_argument('--force', action='store_true', help='Rebuild selected exports, preserving configuration parameters')
     parser.add_argument('--check', action='store_true', help='Run verify_current.py after successful exports')
+    parser.add_argument('--preflight', action='store_true', help='Read-only story capability check using existing exported source records')
     args = parser.parse_args()
+    if args.preflight:
+        if args.run or args.validate or args.force or args.check:
+            parser.error('--preflight cannot be combined with export/validation flags')
+        subprocess.run(['node', str(RUNTIME/'tools/check_content.mjs')], cwd=ROOT, check=True)
+        return
     names = list(STEPS) if 'all' in args.target else args.target
     if args.validate:
         rows = []

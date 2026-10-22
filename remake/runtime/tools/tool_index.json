@@ -2,11 +2,13 @@
   "schema": "seventh-seal-tool-index",
   "version": 1,
   "updated": "2026-10-22",
-  "registered_steps": 32,
+  "registered_steps": 34,
   "content_plan": [
     "chapter-maps",
     "chapter-story",
+    "opening-seed",
     "enemies",
+    "story-check",
     "party-combat",
     "party-skills",
     "enemy-rewards",
@@ -21,11 +23,16 @@
     "battle-lifecycle",
     "skill-test",
     "battle-result",
+    "battle-stages",
     "battle-packs",
     "audio",
     "menu",
     "menu-techniques",
     "menu-fonts",
+    "dialogue-ui",
+    "prologue-presentation",
+    "opening-maps",
+    "map-effects",
     "content"
   ],
   "tools": [
@@ -62,6 +69,14 @@
       "imported_by": []
     },
     {
+      "path": "check_content.mjs",
+      "role": "registered-build",
+      "build_targets": [
+        "story-check"
+      ],
+      "imported_by": []
+    },
+    {
       "path": "content_registration.py",
       "role": "shared-current",
       "build_targets": [],
@@ -70,6 +85,7 @@
         "build_runtime.py",
         "export_audio.py",
         "export_battle_lifecycle.py",
+        "export_battle_stages.py",
         "export_chapter_maps.py",
         "export_chapter_story.py",
         "export_encounters.py",
@@ -161,6 +177,16 @@
       "role": "independent-source-export",
       "build_targets": [],
       "imported_by": []
+    },
+    {
+      "path": "export_battle_stages.py",
+      "role": "registered-build",
+      "build_targets": [
+        "battle-stages"
+      ],
+      "imported_by": [
+        "build_runtime.py"
+      ]
     },
     {
       "path": "export_battle_ui.py",
@@ -314,6 +340,7 @@
         "forest-stage"
       ],
       "imported_by": [
+        "export_battle_stages.py",
         "export_skill_test.py"
       ]
     },
@@ -484,6 +511,7 @@
       "imported_by": [
         "export_battle_lifecycle.py",
         "export_battle_result.py",
+        "export_battle_stages.py",
         "export_battle_view.py",
         "export_forest_presentation.py",
         "export_forest_skills.py",

@@ -24,10 +24,10 @@ export function validateWorldMapData(data) {
 }
 
 export class WorldMapController {
-  constructor({world, data, prepare, load, captureView = () => null, rollbackView = () => {}, onPhase = () => {}, notify = () => {}}) {
+  constructor({world, data, prepare, load, enter = null, captureView = () => null, rollbackView = () => {}, onPhase = () => {}, notify = () => {}}) {
     requireValue(world && typeof world.snapshot === 'function' && typeof world.replace === 'function' && typeof prepare === 'function' && typeof load === 'function', '大地图控制器依赖缺失');
     this.data = validateWorldMapData(data);
-    Object.assign(this, {world, prepare, load, captureView, rollbackView, onPhase, notify});
+    Object.assign(this, {world, prepare, load, enter, captureView, rollbackView, onPhase, notify});
     this.phase = 'closed'; this.area = null;
   }
   initialState() { return {areas: this.data.areas.map(area => ({id: area.id, selected_index: area.selected_index, statuses: [...area.statuses]}))}; }
@@ -95,13 +95,19 @@ export class WorldMapController {
       const next = copy(before);
       next.world_map.areas.find(item => item.id === area).selected_index = index;
       next.location = {...location}; next.revision = (before.revision + 1) >>> 0;
-      const normalized = validateWorld(next, this.world.mapIds);
+      validateWorld(next, this.world.mapIds);
       // load is the same kind of synchronous view commit as SceneController's
       // commitView. Preparation must finish first; neither callback writes world.
       viewAttempted = true;
       const result = this.load(prepared, {...location});
       requireValue(!result || typeof result.then !== 'function', '大地图视图提交必须同步');
-      checkWorld(); this.world.replace(normalized);
+      checkWorld();
+      if (this.enter && await this.enter(prepared, next, 'world-map')) {
+        checkWorld();
+        const finished = this.load(prepared, {...next.location});
+        requireValue(!finished || typeof finished.then !== 'function', '大地图视图提交必须同步');
+      }
+      checkWorld(); this.world.replace(validateWorld(next, this.world.mapIds));
       this.area = null; this.setPhase('closed'); return prepared;
     } catch (error) {
       if (viewAttempted) this.rollbackView(checkpoint);

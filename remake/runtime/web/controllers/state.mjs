@@ -28,6 +28,7 @@ export function createRuntimeState($) {
     mapEffects: null,
     chapterStory: null,
     chapterRunner: null,
+    sceneEntryDraft: null,
     objectPreview: null,
     lastStoryTrigger: '',
     partyCombat: null,

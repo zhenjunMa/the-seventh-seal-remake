@@ -25,6 +25,7 @@ import {DialogueView} from "../dialogue_view.mjs";
 import {WorldMapView} from "../world_map_view.mjs";
 import {runtimeContent,runtimeContentDefinition,validateContentRegistration} from "../core/content_registry.mjs";
 import {validateStoryBindings} from "../core/content_dependencies.mjs";
+import {worldMapEntry} from "../core/map_connections.mjs";
 
 export function createBootController({state, actions, $, canvas, ctx}) {
   async function boot(){
@@ -46,7 +47,7 @@ export function createBootController({state, actions, $, canvas, ctx}) {
     }
     state.battleData=await actions.json(state.catalog.combat_sample??'data/combat_sample.json');
     const [worldMapData,loadedRouteEvents,loadedEncounters,loadedForest]=await Promise.all([actions.json(state.catalog.world_map),actions.json(state.catalog.route_events),actions.json(state.catalog.encounters),actions.json(state.catalog.forest_combat)]);
-    state.routeEvents=loadedRouteEvents;state.encounterData=validateEncounterData(loadedEncounters);state.forestData=loadedForest;
+    state.routeEvents={...loadedRouteEvents,...state.chapterStory.maps};state.encounterData=validateEncounterData(loadedEncounters);state.forestData=loadedForest;
     state.schedulerData=validateScheduler(await actions.json('data/battle_scheduler.json'));
     [state.aiData,state.rewardData,state.reactionData,state.statusData]=await Promise.all([actions.json('data/forest_ai.json').then(validateForestAIData),actions.json('data/forest_rewards.json').then(validateForestRewards),actions.json('data/forest_reactions.json').then(validateForestReactionsData),actions.json('data/forest_status.json').then(validateForestStatusData)]);
     [state.partyCombat,state.partySkills,state.partyRewards,state.partyReactions]=await Promise.all([actions.json(state.catalog.party_combat),actions.json(state.catalog.party_skills),actions.json(state.catalog.party_rewards).then(validateForestRewards),actions.json(state.catalog.party_reactions).then(validateForestReactionsData)]);
@@ -106,18 +107,19 @@ export function createBootController({state, actions, $, canvas, ctx}) {
     state.selectedRole=state.world.value.leader_id;
     state.events=state.catalog.events?await actions.json(state.catalog.events):[];if(!Array.isArray(state.events))state.events=state.events.events;
     await Promise.all(state.catalog.roles.flatMap(r=>r.actions.filter(a=>a.index<=2).map(async a=>{a.bitmap=await actions.image(a.sheet);}))); 
-    state.scenes=new SceneController({world: state.world,prepare:actions.prepareMap,validateEntry: actions.validateEntry,commitView: actions.commitView,onPhase:actions.busy,
+    state.scenes=new SceneController({world: state.world,prepare:actions.prepareMap,validateEntry: actions.validateEntry,commitView: actions.commitView,enter:actions.enterMap,onPhase:actions.busy,
       captureView:()=>({view:{...state.view},name:$('mapName').textContent,probes:Array.from($('probe').children,child=>child.cloneNode(true)),nearest: state.nearest,resetHidden:$('resetEventSample').hidden}),
-      rollbackView:checkpoint=>{Object.assign(state.view,checkpoint.view);$('mapName').textContent=checkpoint.name;$('probe').replaceChildren(...checkpoint.probes);$('resetEventSample').hidden=checkpoint.resetHidden;state.nearest=checkpoint.nearest;}});
+      rollbackView:checkpoint=>{Object.assign(state.view,checkpoint.view);$('mapName').textContent=checkpoint.name;$('probe').replaceChildren(...checkpoint.probes);$('resetEventSample').hidden=checkpoint.resetHidden;state.nearest=checkpoint.nearest;state.audio?.setScene({mapId:state.world.location.map_id,battle:false});}});
     state.runner=new EventRunner({world: state.world,say: actions.say,wait:ms=>new Promise(resolve=>setTimeout(resolve,ms)),log: actions.log,setPhase:phase=>state.scenes.setPhase(phase)});
     state.chapterRunner=new ChapterRunner({world: state.world,data:state.chapterStory,objectData:state.chapterResources.interactive_objects,
       choose:actions.chooseChapter,
       say:({mapId,record})=>actions.say(actions.chapterSpeaker(mapId,record),record.text_raw,record.style,{mapId,record}),
       animate:actions.animateChapter,objectAnimation:actions.animateChapterObject,log: actions.log,setPhase:phase=>state.scenes.setPhase(phase)});
     state.worldMap=new WorldMapController({world: state.world,data:worldMapData,
-      prepare:async destination=>{const scene=await actions.prepareMap(destination.map_id),entry=scene.data.route_entry;if(!entry||entry.marker!==destination.entry_marker||entry.sort_code!==destination.sort_code)throw new Error('大地图入口标记尚未接入');
-        const location={map_id:destination.map_id,x:entry.x,y:entry.y,direction:entry.direction};actions.validateEntry(scene,location);return {scene,location};},
+      prepare:async destination=>{const scene=await actions.prepareMap(destination.map_id),location=worldMapEntry(scene,destination,state.chapterStory);
+        actions.validateEntry(scene,location);return {scene,location};},
       load:(prepared,location)=>{actions.commitView(prepared.scene,location);state.scenes.current=prepared.scene;},
+      enter:async(prepared,draft,reason)=>{const played=await actions.enterMap(prepared.scene,draft,reason);if(played)prepared.scene=state.scenes.current;return played;},
       captureView:()=>({scene:state.scenes.current,view:state.scenes.captureView()}),rollbackView:checkpoint=>{state.scenes.current=checkpoint.scene;state.scenes.rollbackView(checkpoint.view);},
       onPhase:phase=>state.scenes.setPhase(phase==='open'?'world-map':phase==='loading'?'loading':'map'),notify:actions.renderWorldMap});
     state.worldMapView=await WorldMapView.create({manifest:await actions.json('data/world_map_ui.json'),

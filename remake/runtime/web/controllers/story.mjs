@@ -1,7 +1,7 @@
 // story adapters. Persistent state belongs to the shared runtime context.
 import {OpeningView} from "../opening_view.mjs";
 import {ChapterAnimationRunner} from "../core/chapter_animation.mjs";
-import {runtimeContent} from "../core/content_registry.mjs";
+import {runtimeContent,storyBindings} from "../core/content_registry.mjs";
 
 export function createStoryController({state, actions, $, canvas, ctx}) {
   let session=null,sequence=0;
@@ -73,7 +73,7 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
       actor=state.openingView.actors.get(record.speaker-1);
     }
     if(!actor){
-      if(record.speaker===1)actor=state.world.location;
+      if(record.speaker===1)actor=state.sceneEntryDraft?.location??state.world.location;
       else actor=state.scenes.current?.npcs.find(npc=>npc.speaker_slot_one_based===record.speaker);
     }
     if(!actor)return {x:320,y:240};
@@ -109,7 +109,7 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
     return (state.chapterResources?.npcs_by_map?.[mapId]??[]).find(npc=>npc.speaker_slot_one_based===record.speaker)?.name??'';
   }
   async function animateChapter({program,mapId,draft,runTlk,joinActor}){
-    const scene=await actions.prepareMap(mapId);
+    const scene=await actions.prepareMap(mapId,{world:draft});
     if(state.scenes.current?.data.id===mapId)scene.npcRuntime?.inherit(state.scenes.current.npcRuntime);
     const prepared=new Map([[mapId,scene]]);
     state.openingView=new OpeningView({resources:state.openingResources,prepared,nativeViewport:true,
@@ -135,6 +135,21 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
       clearDialogue();actions.status(error.message,true);
     }finally{if(state.openingView)state.openingView.dispose();state.objectPreview=null;canvas.focus({preventScroll:true});}
   }
+  async function enterMap(scene,draft,reason){
+    const recordId=storyBindings(scene.data.id).entry_record;
+    if(!recordId||!['exit','world-map'].includes(reason))return false;
+    state.sceneEntryDraft=draft;
+    state.scenes.setPhase('event');$('worldMapPanel').hidden=true;
+    try{
+      await state.chapterRunner.runTlk({mapId:scene.data.id,recordId,draft});
+      actions.validateEntry(state.scenes.current,draft.location);
+      actions.log({type:'map-entry-story',map_id:scene.data.id,record_id:recordId});
+      return true;
+    }catch(error){clearDialogue();throw error;}
+    finally{
+      state.openingView?.dispose();state.objectPreview=null;state.sceneEntryDraft=null;
+    }
+  }
   async function animateChapterObject({mapId,objectIndex}){
     const resource=state.chapterResources.object_animations[mapId]?.find(row=>row.object_index_zero_based===objectIndex);
     if(!resource)throw new Error('物件动作资源尚未准备');
@@ -149,5 +164,5 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
     });
     state.objectPreview=null;
   }
-  return {say, clearDialogue, chooseChapter, chooseDialogue, advanceDialogue, dialogueKey, dialogueKeyUp, releaseDialogueKeys, interact, chapterSpeaker, animateChapter, runChapter, animateChapterObject};
+  return {say, clearDialogue, chooseChapter, chooseDialogue, advanceDialogue, dialogueKey, dialogueKeyUp, releaseDialogueKeys, interact, chapterSpeaker, animateChapter, runChapter, enterMap, animateChapterObject};
 }

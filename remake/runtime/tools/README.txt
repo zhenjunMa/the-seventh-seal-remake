@@ -9,20 +9,25 @@
 完整当前检查：python -B remake/runtime/tools/verify_current.py
 列全部构建计划：python -B remake/runtime/tools/build_runtime.py --target all
 盘点当前内容依赖：python -B remake/runtime/tools/build_runtime.py --target content --validate
+只读剧情能力预检查：python -B remake/runtime/tools/build_runtime.py --preflight
+结构化检查输出：node remake/runtime/tools/check_content.mjs --json
 
 执行语义
 不加--run只列计划。--validate检查工具、既有来源台账与产物，记录当前指纹到evidence/export_inventory.json；不执行导出，也不等于原输入已经与历史来源逐项一致。
 --run按依赖执行，命中缓存仍核对产物存在及SHA。缺失、手改或输入变化会触发重建；每个成功步骤即时保存，失败可续跑。
 --force与--run一起强制重建，仍保留当前parameters。配置--reset才恢复原值，正常接入不使用。
 --check须与--run一起使用，在成功后执行verify_current；8767服务需要先开启。
+--preflight独立使用，检查已有源表的接入能力，不导出、不写报告、不核验原媒体；新地图没有源表时先构建chapter-story。显式入口发现未知能力返回非零退出码；旧隐式NPC仅提示，显式npcs进入阻断检查。
 只有明确需要整体重建时才用--target all --run，日常文档维护无需重导素材。
 
 登记驱动的生产
 runtime_content.json为唯一编辑选择；导出器直接读取它选择地图／角色／程序，来源解析器再从已生成数据编译最终运行登记。
 chapter-maps按maps.export归属准备地图、NPC、物件和源物理出口；chapter-story按story和programs准备TLK／ANM、被引用道具与登记玩家初值。
+story-check在源表、初始角色和怪物准备后检查已登记的进入剧情、触发器、箱子、休息、出口和显式NPC的可达分支，报告地图／入口／记录号，阻断未实现机制；最终content再次检查。
+battle-stages按stages选择新舞台的SCN／DGP，默认ID路径，不维护每个舞台的素材名单。当前支持SCN v2／mode4及已恢复的零镜头规则；专用旧产物默认existing，可显式export:"source"使用通用导出。
 enemies按登记敌人实际学习表生成属性／AI／反应／状态／图层；enemy-rewards读取经验和奖励槽；encounters读取登记地图的DAT／STG池。音频按登记地图及动作生成。
 party-skills读取新enemy清单组合正式party反应／表现；敌我复用源图集和独立像素校验，历史forest_full_battle_view／forest_reactions保留。
-content目标贯通玩家、怪物、地图、剧情、配置、资源图集、声音、字体、目录与最终登记。新增技能／道具数值仍只进入统一config。
+content目标贯通玩家、怪物、地图、剧情、配置、资源图集、声音、菜单／对白／字幕字体、地图光效、目录与最终登记。新增技能／道具数值仍只进入统一config。
 已恢复格式、未知指令／状态／掉落、局部遇敌分区和新舞台的边界见../config_guide.txt；登记不会补实现。
 
 前置与来源
@@ -53,33 +58,35 @@ opening-maps: export_opening_maps.py; 依赖=无声明依赖
 chapter-maps: export_chapter_maps.py; 依赖=无声明依赖
 chapter-story: export_chapter_story.py; 依赖=chapter-maps
 map-effects: export_map_effects.py; 依赖=opening-maps,chapter-maps
-party-combat: export_party_combat.py; 依赖=chapter-story,enemies
+party-combat: export_party_combat.py; 依赖=story-check
 party-skills: export_party_skills.py; 依赖=party-combat
 party-rewards: export_party_rewards.py; 依赖=party-combat,enemy-rewards
 items: export_chapter_items.py; 依赖=无声明依赖
 item-presentation: export_item_presentation.py; 依赖=items,party-skills
 recovery: export_chapter_recovery.py; 依赖=无声明依赖
-audio: export_audio.py; 依赖=party-skills,item-presentation,chapter-maps
+audio: export_audio.py; 依赖=party-skills,item-presentation,chapter-maps,encounters
 forest-stage: export_forest_stage.py; 依赖=无声明依赖
 menu: export_operation_menu.py; 依赖=items,party-skills
 battle-ui: export_battle_ui.py; 依赖=无声明依赖
 battle-lifecycle: export_battle_lifecycle.py; 依赖=无声明依赖
 skill-test: export_skill_test.py; 依赖=无声明依赖
 battle-result: export_battle_result.py; 依赖=无声明依赖
-battle-packs: export_battle_packs.py; 依赖=party-skills,item-presentation,forest-stage,battle-ui,battle-lifecycle,skill-test,battle-result
+battle-packs: export_battle_packs.py; 依赖=party-skills,item-presentation,forest-stage,battle-ui,battle-lifecycle,skill-test,battle-result,battle-stages
 menu-techniques: export_menu_techniques.py; 依赖=menu,party-skills
 menu-fonts: export_menu_text_gdi.py; 依赖=menu-techniques
 startup-media: export_startup_media.py; 依赖=无声明依赖
 startup-menu: export_startup_menu.py; 依赖=无声明依赖
-prologue-presentation: export_prologue_presentation.py; 依赖=无声明依赖
-dialogue-ui: export_dialogue_ui.py; 依赖=无声明依赖
+prologue-presentation: export_prologue_presentation.py; 依赖=chapter-story
+dialogue-ui: export_dialogue_ui.py; 依赖=catalog,chapter-story
 world-map-ui: export_world_map_ui.py; 依赖=无声明依赖
 configuration: export_runtime_config.mjs; 依赖=party-skills,enemy-rewards,encounters
 catalog: build_catalog.py; 依赖=configuration,chapter-maps
-content: export_content_registry.mjs; 依赖=catalog,party-rewards,battle-packs,audio,menu-fonts
+content: export_content_registry.mjs; 依赖=catalog,party-rewards,battle-packs,audio,menu-fonts,dialogue-ui,prologue-presentation,map-effects
 enemies: export_enemy_content.py; 依赖=无声明依赖
 enemy-rewards: export_forest_rewards.py; 依赖=无声明依赖
 encounters: export_encounters.py; 依赖=无声明依赖
+story-check: check_content.mjs; 依赖=chapter-story,opening-seed,enemies
+battle-stages: export_battle_stages.py; 依赖=forest-stage
 
 当前检查覆盖什么
 verify_current检查JS／Python回归、Python语法、原输入、保留资产、现有导出台账、配置／登记、HTTP资源和归档，写current_validation.json、current_validation.tap和current_python_tests.log。

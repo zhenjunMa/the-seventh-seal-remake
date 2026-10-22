@@ -14,7 +14,12 @@ export function validateStoryBindings(content,story,resources){
   validateChapterStory(story);
   for(const [id,binding]of Object.entries(content.maps)){
     const table=story.maps[id];
-    need(table||![...binding.triggers,...binding.objects,...binding.rests,...binding.routes].length,`${id} 缺少剧情表`);
+    need(table||!binding.entry_record&&![...binding.triggers,...binding.objects,...binding.rests,...binding.routes,...(binding.npcs??[])].length,`${id} 缺少剧情表`);
+    if(binding.entry_record){
+      need(binding.entry_record===table.header_entry_tlk_raw&&table.records.some(row=>row.id===binding.entry_record),`${id} 进入剧情与原 DAT 不同`);
+      need(table.header_entry_tlk_source?.offset===0x11e&&table.header_entry_tlk_source.sha256===table.map_source.sha256,`${id} 进入剧情来源缺失`);
+    }
+    for(const slot of binding.npcs??[])need(resources.npcs_by_map[id]?.some(row=>row.slot_zero_based===slot)&&table.index_nonzero.some(row=>row.slot===slot),`${id} NPC 槽 ${slot} 缺少原对白入口`);
     for(const triggerId of binding.triggers){
       const trigger=resources.trigger_regions[id]?.find(row=>row.id===triggerId);
       need(trigger&&table.records.some(record=>record.id===trigger.field_26_raw),`${id} 触发器 ${triggerId} 缺少对白入口`);

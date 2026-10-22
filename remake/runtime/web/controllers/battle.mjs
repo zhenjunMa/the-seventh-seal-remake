@@ -118,7 +118,7 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
       const rngSeed=group?encounterState.rng_state:0x20261011;
       state.battleRng=createNativeRng(rngSeed);state.battleNatural=Boolean(group);
       await revealBattle(before,sample,()=>state.battle.start({...sample,lifecycle_enabled:Boolean(state.battleView.lifecycle),side_priority:state.sidePriority,rng:state.battleRng,source:{...sample.source,rng_seed:rngSeed,rng_seed_policy:group?'persistent-development-global-stream':'controlled-development-seed'}}));
-      state.audio?.setScene({mapId:state.world.location.map_id,battle:true,stageId:'stage13.scn'});
+      state.audio?.setScene({mapId:state.world.location.map_id,battle:true,stageId:group?.stage??null});
       if(group)actions.log({type:'field-encounter',group,location:state.world.location,counter_after:state.world.value.encounters.counters[state.selectedRole]});
       actions.status('行动槽随时间推进；满槽后选择招式和目标。Tab / X / Z 切换满槽人物，Esc 返回上一层。');
     }catch(error){state.battleMenu?.dispose();state.battleMenu=null;canvas.hidden=false;for(const id of ['battleCanvas','battleHud','battleCommands'])$(id).hidden=true;Object.assign(state.view,state.battleCheckpoint);state.scenes.setPhase('map');throw error;}

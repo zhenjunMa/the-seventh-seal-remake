@@ -39,16 +39,22 @@ attributes使用已参与getter的26个字段及原范围；其余原字段留�
 runtime_content.json编辑格式v2只保留接入选择。角色source／native_slot、默认技能ID、ANM来源、地图路径／原旗标和休息选项由同一来源解析器推导。
 roles：阵营side；玩家battle_skills／field_skills的原index与处理器；primary_skill选择主要表现。技能可省略id，生成“角色编号_原索引”；已有ID保持兼容。
 battle_rosters：历史资源样本列明确身份，正式阵容可使用$players／$enemies。
-stages：登记已实现舞台的路径、schema和asset_prefix；新格式须先补提取与绘制支持。
+stages：新增同格式舞台可只登记ID与{}，默认读取Fight_Bk/<ID>.scn，生成data/stages/<ID>.json和assets/stages/<ID>/。可指定path、schema、asset_prefix；指定path的旧登记默认由既有导出器维护，需要通用导出时显式加export:"source"；export:"existing"保留专用生产。
+通用舞台支持SCN v2／mode4、固定记录布局、默认640×480零镜头、天空单循环动画及静态地面／景物；从原记录读取素材名和锚点，不为新舞台硬编码文件名单。新格式、非天空动画、动态镜头仍须补规则。
 programs：原ANM程序ID。导出从源opcode10推导唯一控制地图，不能按文件名猜；多控制地图和未恢复指令拒绝。
-maps：按原地图ID登记triggers、objects、rests、routes。空地图可为{}；objects绑定原index和已实现handler，rests只选descriptor_id，routes只补已核实的出口前置／拒绝分支。
+maps：按原地图ID登记triggers、objects、rests、routes。空地图可为{}；objects绑定原index和已实现handler，rests只选descriptor_id。
+entry:true选择原DAT +0x11E的进入剧情，不能手填替代记录；只在普通出口和大地图真正进入时执行。位置、剧情旗标和奖励成功后一起提交，失败保留原场景和进度；载入存档、启动和预览不重播。
+npcs:[原零基槽]明确开放可交谈NPC，进入构建阻断检查；[]保留人物显示但不开放交谈。省略时保持旧隐式NPC行为，预检查仅提示其未知分支；新地图建议显式登记npcs。
+routes可只登记{descriptor_id:原出口描述编号}，record_id由DAT推导，运行出口直接读取同一chapter_story。存在前置演出的出口继续提供已核实的requires_flag、animation、denial_record_id、speaker_role_id。不再为每张新地图手工编写route_events表。
+大地图入口使用原entry_marker和sort_code从chapter_story的DAT标记推导坐标，旧地图仍兼容route_entry；缺少标记或排序处理器时拒绝，不填兜底坐标。
 maps.export：默认{assets:"chapter",story:true}。assets="existing"保留已有开场／路线导出器的素材产物；story=false表示尚未接入该图TLK。新地图一般省略export。该字段只控制生产，不开放剧情。
 
 新增地图和剧情
 1. 从原DAT／TLK核对真实入口、出口、NPC、物件、进入事件、剧情依赖和遇敌／舞台，确认格式及机制已支持。
-2. 在maps登记原ID及需要开放的交互；新动画在programs登记。普通state0物理出口从DAT推导到已登记地图；剧情型出口仍走TLK／ANM规则。
-3. 执行content构建。chapter-maps生产地图／NPC／物件，chapter-story生产源记录、被引用的道具定义和登记玩家初值，随后生成遭遇、音乐、字体和目录等依赖。
-4. 验收进入／退出、对白／分支、领取／再次进入、失败回滚和存读档。新增中文字须随相应字体导出；源表导出不表示所有分支已开放。
+2. 在maps登记原ID及需要开放的交互、NPC槽和进入剧情；新动画在programs登记。普通state0物理出口从DAT推导到已登记地图，大地图型出口登记routes。遇敌引用的新舞台在stages登记。
+3. 先执行chapter-story构建准备新地图源记录，再运行--preflight查看能力缺口。该命令只读已有源表，不能替代尚未执行的提取，也不验证原媒体像素／浏览器表现。
+4. 执行content构建。story-check在来源准备后、玩家表现和图集生产前遍历显式开放入口的可达分支；缺少条件、变更、选项、ANM或处理器时阻断，并显示地图、入口和记录号。之后统一生成遭遇、舞台、音乐、菜单／对白字体及最终登记。
+5. 验收进入／退出、对白／分支、领取／再次进入、失败回滚和存读档。新增中文字须随相应字体导出；源表导出不表示所有分支已开放。
 
 新增怪物
 1. 准备原CHR／DGP，在roles登记side=enemy。已有机制的源技能由实际学习表识别，不在脚本中增加怪物ID或技能索引分支。
@@ -74,6 +80,9 @@ M17025、m17020-1、014的隔离导出只验证内容生产能力，未开放正
 
 构建与调参示例
 内容变化：python -B remake/runtime/tools/build_runtime.py --target content --run
+只读能力预检查：python -B remake/runtime/tools/build_runtime.py --preflight
+结构化预检查：node remake/runtime/tools/check_content.mjs --json
+先准备地图／剧情：python -B remake/runtime/tools/build_runtime.py --target chapter-story --run
 已有来源只调参数：node remake/runtime/tools/export_runtime_config.mjs
 只核对登记：node remake/runtime/tools/export_content_registry.mjs --check
 完整检查：python -B remake/runtime/tools/verify_current.py（8767服务需启动）

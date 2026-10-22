@@ -11,6 +11,7 @@ import {savedPreviewPng,SAVE_PREVIEW_WIDTH,SAVE_PREVIEW_HEIGHT} from "../core/sa
 import {MapNpcRuntime} from "../core/map_npcs.mjs";
 import {MapObjectRuntime} from "../core/map_objects.mjs";
 import {storyBindings,registeredRoles} from "../core/content_registry.mjs";
+import {chapterRouteExits} from "../core/map_connections.mjs";
 
 export function createMapController({state, actions, $, canvas, ctx}) {
   function role() { return state.catalog.roles.find(role=>role.id===state.selectedRole); }
@@ -34,7 +35,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
     const entry=state.catalog.maps.find(map=>map.id===id); if(!entry) throw new Error(`地图尚未纳入本版：${id}`);
     const data=await actions.json(entry.path);
     if(data.schema!=='seventh-seal-runtime-map'||data.version!==1||data.id!==id) throw new Error('地图数据版本或标识不匹配');
-    const extraExits=state.chapterResources.exits_by_map[id]??[];
+    const extraExits=[...(state.chapterResources.exits_by_map[id]??[]),...chapterRouteExits(id,state.chapterStory,state.chapterResources)];
     data.exits=[...(data.exits??[]).filter(exit=>!extraExits.some(extra=>extra.id===exit.id)),...extraExits];
     data.opening_npcs=state.chapterResources.npcs_by_map[id]??data.opening_npcs;
     data.story_triggers=(state.chapterResources.trigger_regions[id]??[]).filter(trigger=>storyBindings(id).triggers.includes(trigger.id));
@@ -110,7 +111,10 @@ export function createMapController({state, actions, $, canvas, ctx}) {
   }
   function updateNearest(){
     state.nearest=null;if(!state.scenes.current)return;const at=state.world.location;
-    for(const npc of state.scenes.current.npcs){if(!npcAvailable(npc))continue;const distance=Math.hypot(npc.x-at.x,npc.y-at.y);if(distance<64&&(!state.nearest||distance<state.nearest.distance))state.nearest={...npc,distance};}
+    for(const npc of state.scenes.current.npcs){if(!npcAvailable(npc))continue;
+      const admitted=storyBindings(at.map_id).npcs;
+      if(!npc.event&&admitted&&!admitted.includes(npc.slot_zero_based))continue;
+      const distance=Math.hypot(npc.x-at.x,npc.y-at.y);if(distance<64&&(!state.nearest||distance<state.nearest.distance))state.nearest={...npc,distance};}
     for(const object of state.chapterStory.maps[at.map_id]?.objects??[]){
       if(!storyBindings(at.map_id).objects.some(row=>row.index===object.index))continue;
       if(object.behavior_raw_cf!==3||!object.interaction_record_raw_f6)continue;
@@ -164,11 +168,12 @@ export function createMapController({state, actions, $, canvas, ctx}) {
   function drawCollision(scene){const size=16;for(let y=0;y<scene.movement.height;y++)for(let x=0;x<scene.movement.width;x++){const cell=scene.movement.cell(x,y);ctx.fillStyle=cell.trigger?'#e6bd6855':cell.blocked?'#d14d4738':'#78c79623';ctx.fillRect(x*size,y*size,size,size);}}
   function paint(){
     const scene=state.scenes?.current;
+    const world=state.sceneEntryDraft??state.world.value;
     const draw=state.openingView?.active&&state.openingView.nativeViewport?drawOpeningScene:drawGameScene;
-    draw(ctx,{scene,world:state.world.value,role:role(),action:sheetAction(),view:state.view,width:state.cssWidth,height:state.cssHeight,objectBitmap,
+    draw(ctx,{scene,world,role:role(),action:sheetAction(),view:state.view,width:state.cssWidth,height:state.cssHeight,objectBitmap:(scene,obj)=>objectBitmap(scene,obj,world),
       openingQueue:state.openingView?.active?state.openingView.drawQueue(scene.data.role_layer_preview??2):null,
       collision:scene&&state.view.collision?()=>drawCollision(scene):null,nearest:state.nearest});
-    if(!scene)return;const at=state.world.location;
+    if(!scene)return;const at=world.location;
     $('zoomValue').textContent=`${Math.round(state.view.zoom*100)}%`;$('position').textContent=`${at.map_id} · ${at.x.toFixed(1)}, ${at.y.toFixed(1)}`;
     $('position').dataset.x=at.x;$('position').dataset.y=at.y;$('position').dataset.map=at.map_id;
   }
@@ -211,7 +216,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
       state.startupView?.tick(now);
     state.scenes?.current?.npcRuntime?.update(now,{player:state.world.location,visible:npcAvailable,
       paused:!['map','event'].includes(state.scenes.phase)||Boolean(state.openingView?.active)});
-    state.scenes?.current?.objectRuntime?.update(now,{world:state.world.value,
+    state.scenes?.current?.objectRuntime?.update(now,{world:state.sceneEntryDraft??state.world.value,
       paused:!['map','event'].includes(state.scenes.phase)||Boolean(state.openingView?.active)});
     if(state.scenes?.phase==='map'){
       reconcileResources();
