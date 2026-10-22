@@ -8,7 +8,7 @@ import {BattleResources} from '../web/core/battle_resources.mjs';
 
 const runtime=fileURLToPath(new URL('../',import.meta.url)),web=path.join(runtime,'web');
 const args=process.argv.slice(2),strict=args.includes('--assets'),reportAt=args.indexOf('--report');
-const report={engine:'Phaser 3.90.0',code:{passed:false,modules:0},assets:{required:0,present:0,missing:[],invalid:[]},errors:[]};
+const report={engine:'Phaser 3.90.0',code:{passed:false,modules:0},assets:{required:0,present:0,missing:[],invalid:[],non_file_hashes:[]},errors:[]};
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 const readJson=async file=>JSON.parse(await fs.readFile(file,'utf8'));
 const resolveUrl=url=>url.startsWith('/prototype/')?path.join(runtime,'../prototype/web',url.slice(11)):path.join(web,url.replace(/^\//,''));
@@ -49,7 +49,13 @@ try{
         const dimensions=value.sheet&&geometry&&value.frame_count
           ?{width:geometry.frame_width*value.frame_count,height:geometry.frame_height*(value.directions??1)}
           :Number.isInteger(value.width)&&Number.isInteger(value.height)?{width:value.width,height:value.height}:{};
-        const old=assets.get(canonical(name))??{};assets.set(canonical(name),{...old,...(value.sha256?{sha256:value.sha256}:{}),...dimensions});
+        // Legacy descriptors also carry hashes of original DGP bytes or the
+        // decoded MNU sensor plane. Neither identifies the exported PNG bytes.
+        const hashKind=value.sheet&&value.source?'original-source'
+          :value.source_offset!==undefined&&value.value_counts?'decoded-sensor-plane':null;
+        if(value.sha256&&hashKind&&!report.assets.non_file_hashes.some(row=>row.path===canonical(name)))
+          report.assets.non_file_hashes.push({path:canonical(name),kind:hashKind,sha256:value.sha256});
+        const old=assets.get(canonical(name))??{};assets.set(canonical(name),{...old,...(value.sha256&&!hashKind?{sha256:value.sha256}:{}),...dimensions});
       }
       for(const child of Object.values(value))collect(child,geometry);
     }
