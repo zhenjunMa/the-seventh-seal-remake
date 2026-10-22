@@ -26,7 +26,8 @@ const scene={data:{id:'M17010',role_layer_preview:2},bitmap:background,objects:[
   npcs:[{id:'preview-npc',x:420,y:410,direction:2,bitmap:sheet,resource:{frame_width:32,frame_height:48,frames_per_direction:4,interval_ms:180,anchor_x:16,anchor_y:40}}]};
 const mapOptions=()=>({scene,world,role:{frame_width:32,frame_height:48,map_draw_offset:{x:0,y:-40}},action:{bitmap:sheet},view:viewState,
   objectBitmap:(_s,o)=>o.bitmap,openingQueue:null,nearest:null,time:0});
-let mode='exploration',previous=0,battle,view,lastError=null;
+let mode='exploration',battle,view,lastError=null,manualPause=false;
+const listeners=new AbortController(),inputOptions={signal:listeners.signal};
 const runtime=await PhaserRuntime.create({parent:$('phaserHost'),focusTarget:$('focus'),onError:error=>{lastError=error.message;status(error.stack);}});
 const images=new Map(),imageHints=new Map();
 function placeholder(asset){
@@ -48,7 +49,12 @@ function placeholder(asset){
   }));
   return images.get(key);
 }
-function showMap(){mode='exploration';runtime.presentMap(mapOptions());$('attack').disabled=true;}
+function showMap(){mode='exploration';runtime.setPhase('map');runtime.presentMap(mapOptions());$('attack').disabled=true;}
+const battlePhase=phase=>`battle-${['command','action','charging'].includes(phase)?phase:'result'}`;
+function showBattle(){
+  mode='battle';runtime.setPhase(battlePhase(battle.state.phase));
+  drawBattle(runtime.battle.clock.time);$('attack').disabled=runtime.paused||!battle.canChoose('yantu');status(report());
+}
 function report(){return {engine:runtime.snapshot(),mode,error:lastError,
   battle:battle?{phase:battle.state.phase,contacts:battle.state.history.filter(h=>h.impact).length,
     hp:battle.state.actors.map(a=>({id:a.id,hp:a.hp.current,mp:a.mp.current}))}:null};}
@@ -61,29 +67,32 @@ function compareMap(){
   let different=0,maxDelta=0;
   for(let i=0;i<a.length;i+=4){let diff=false;for(let c=0;c<4;c++){const delta=Math.abs(a[i+c]-b[i+c]);maxDelta=Math.max(maxDelta,delta);if(delta>1)diff=true;}if(diff)different++;}
   const result={differentPixels:different,totalPixels:640*480,maxChannelDelta:maxDelta};
-  if(before==='battle'){mode='battle';drawBattle(performance.now());}
+  if(before==='battle')showBattle();
   status({...report(),mapComparison:result});return result;
 }
 $('map').onclick=showMap;
-$('battle').onclick=()=>{mode='battle';drawBattle(performance.now());$('attack').disabled=!battle.canChoose('yantu');status(report());};
+$('battle').onclick=showBattle;
 $('attack').onclick=async()=>{try{$('attack').disabled=true;await battle.choose('yantu');status(report());}
-  catch(error){lastError=error.message;status(error.stack);}finally{$('attack').disabled=!battle.canChoose('yantu');}};
+  catch(error){lastError=error.message;status(error.stack);}finally{$('attack').disabled=runtime.paused||mode!=='battle'||!battle.canChoose('yantu');}};
+$('pause').onclick=()=>{
+  manualPause=!manualPause;if(manualPause)runtime.pause();else runtime.resume();
+  $('pause').textContent=manualPause?'继续运行':'暂停运行';
+  $('attack').disabled=runtime.paused||mode!=='battle'||!battle?.canChoose('yantu');status(report());
+};
 $('compare').onclick=compareMap;
 $('capture').onclick=()=>{const image=canvas(640,480);runtime.capture(mode,image);const link=document.createElement('a');
   link.download='phaser-preview.png';link.href=image.toDataURL('image/png');link.click();};
 window.addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','w','a','s','d','Shift'].includes(event.key)){
-  event.preventDefault();keys.add(event.key);}});
-window.addEventListener('keyup',event=>keys.delete(event.key));window.addEventListener('blur',()=>keys.clear());
-$('focus').addEventListener('wheel',event=>{event.preventDefault();viewState.zoom=Math.max(.4,Math.min(3,viewState.zoom*(event.deltaY<0?1.1:1/1.1)));},{passive:false});
-runtime.start(now=>{
-  const dt=Math.min((now-previous)/1000||0,.08);previous=now;
-  if(mode==='exploration'){
+  event.preventDefault();if(!runtime.paused)keys.add(event.key);}},inputOptions);
+window.addEventListener('keyup',event=>keys.delete(event.key),inputOptions);window.addEventListener('blur',()=>keys.clear(),inputOptions);
+$('focus').addEventListener('wheel',event=>{event.preventDefault();if(!runtime.paused)viewState.zoom=Math.max(.4,Math.min(3,viewState.zoom*(event.deltaY<0?1.1:1/1.1)));},{...inputOptions,passive:false});
+runtime.start({phase:'map',suspend:()=>keys.clear(),exploration:(now,delta)=>{
+    const dt=Math.min(delta/1000,.08);
     const dx=Number(keys.has('ArrowRight')||keys.has('d'))-Number(keys.has('ArrowLeft')||keys.has('a'));
     const dy=Number(keys.has('ArrowDown')||keys.has('s'))-Number(keys.has('ArrowUp')||keys.has('w'));
     if(dx||dy){const speed=keys.has('Shift')?250:140;world.location.x+=dx*speed*dt;world.location.y+=dy*speed*dt;viewState.frame=Math.floor(now/120)%4;}
     viewState.x=world.location.x;viewState.y=world.location.y;runtime.presentMap(mapOptions());
-  }else if(view&&battle)drawBattle(now);
-});
+  },battle:now=>{if(view&&battle)drawBattle(now);}});
 showMap();status('Phaser 探索场景已准备；正在读取现有战斗定义…');
 window.phaserPreview={runtime,mapOptions,compareMap,report,showMap,glow};
 try{
@@ -94,8 +103,9 @@ try{
   view=new BattleView({canvas:runtime.battle.surface.canvas,assetLoader:placeholder,jsonLoader:json});
   await view.prepare();view.setRoster(sample.actors,sample.skills);
   battle=new BattleController({world:store,resolveAction,applyDamage:applyNativeDamage,
-    playAction:(result,hooks)=>view.playAction(result,hooks),resourcesForWorld,consumeResources:consumeBattleMp});
+    playAction:(result,hooks)=>view.playAction(result,hooks),resourcesForWorld,consumeResources:consumeBattleMp,
+    now:()=>runtime.battle.clock.time,notify:snapshot=>{if(mode==='battle')runtime.setPhase(battlePhase(snapshot.phase));}});
   battle.start({...sample,rng:createNativeRng(12345)});
   $('battle').disabled=false;Object.assign(window.phaserPreview,{battle,view});status({...report(),mapComparison:compareMap()});
 }catch(error){lastError=error.message;status(error.stack);}
-window.addEventListener('pagehide',()=>{view?.stop('预览已关闭');runtime.destroy();},{once:true});
+window.addEventListener('pagehide',event=>{if(event.persisted)return;listeners.abort();view?.destroy();runtime.destroy();},{once:true});

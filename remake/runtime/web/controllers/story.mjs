@@ -112,7 +112,7 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
     const scene=await actions.prepareMap(mapId,{world:draft});
     if(state.scenes.current?.data.id===mapId)scene.npcRuntime?.inherit(state.scenes.current.npcRuntime);
     const prepared=new Map([[mapId,scene]]);
-    state.openingView=new OpeningView({resources:state.openingResources,prepared,nativeViewport:true,clock:state.engine?.clock,
+    state.openingView=new OpeningView({resources:state.openingResources,prepared,nativeViewport:true,clock:state.engine?.exploration.clock,
       install:scene=>{state.scenes.current=scene;actions.commitView(scene,draft.location);state.view.follow=false;},
       camera:(x,y)=>{state.view.x=x;state.view.y=y;},say,log: actions.log,shade:()=>{}});
     const playback=new ChapterAnimationRunner({program,hooks:state.openingView.hooks(),runTlk,joinActor,initialLocation:draft.location});
@@ -157,7 +157,7 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
     state.objectPreview={mapId,objectIndex,bitmap:frames[0]};
     const start=performance.now(),interval=resource.actions[0].interval_raw;
     if(state.engine){
-      try{await state.engine.clock.tween(interval*frames.length,t=>{
+      try{await state.engine.exploration.clock.tween(interval*frames.length,t=>{
         state.objectPreview.bitmap=frames[Math.min(frames.length-1,Math.floor(t*frames.length))];
       });}finally{state.objectPreview=null;}
       return;

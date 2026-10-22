@@ -217,10 +217,8 @@ export function createMapController({state, actions, $, canvas, ctx}) {
     for (const id of state.actorResourcesByMap.keys()) if (id !== scene.data.id) state.actorResourcesByMap.delete(id);
     retainedRevision = state.resources.revision;
   }
-  function render(now){
-    const delta=Math.min((now-state.lastTime)/1000||0,.08);state.lastTime=now;
-    if(state.menuContext)state.operationMenu?.tick(now);
-      state.startupView?.tick(now);
+  function updateExploration(now,deltaMs){
+    const delta=Math.min(deltaMs/1000,.08);
     state.scenes?.current?.npcRuntime?.update(now,{player:state.world.location,visible:npcAvailable,
       paused:!['map','event'].includes(state.scenes.phase)||Boolean(state.openingView?.active)});
     state.scenes?.current?.objectRuntime?.update(now,{world:state.sceneEntryDraft??state.world.value,
@@ -258,14 +256,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
       if(state.clock>=interval){state.view.frame=(state.view.frame+Math.floor(state.clock/interval))%a.frames_per_direction;state.clock%=interval;}
       if(state.view.follow)follow();updateNearest();
     }
-    if(state.scenes?.phase.startsWith('battle-')){
-      if(state.scenes.phase!=='battle-loading'&&!state.battlePresentationError)try{
-        state.battle?.advanceClock(now);
-        state.battleView?.draw(state.battle?.presentationSnapshot(),now);actions.drawBattleInterface(now);
-      }catch(error){
-        state.battlePresentationError=error.message;state.battleView?.stop(error.message);state.battle?.interrupt(error);actions.status(error.message,true);
-      }
-    }else if(!state.startupView||state.startupView.sequence.stage==='closed')paint();
+    paint();
   }
-  return {role, sheetAction, buildHud, prepareMap, validateEntry, commitView, changeMap, follow, fit, resize, npcAvailable, updateNearest, objectBitmap, transitionFor, renderWorldMap,selectWorldMapDestination,closeWorldMap, routeExit, drawCollision, paint, render,captureScene,captureSavePreview,loadSavePreview};
+  return {role, sheetAction, buildHud, prepareMap, validateEntry, commitView, changeMap, follow, fit, resize, npcAvailable, updateNearest, objectBitmap, transitionFor, renderWorldMap,selectWorldMapDestination,closeWorldMap, routeExit, drawCollision, paint, updateExploration,captureScene,captureSavePreview,loadSavePreview};
 }

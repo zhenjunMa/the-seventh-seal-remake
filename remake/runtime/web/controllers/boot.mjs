@@ -133,7 +133,9 @@ export function createBootController({state, actions, $, canvas, ctx}) {
       getSave:()=>{try{return JSON.parse(localStorage.getItem(state.saveKey)??'null');}catch{return null;}},status:actions.status,log:actions.log});
     actions.wire();actions.resize();await state.scenes.loadLocation(state.world.location,{reason:'boot'});actions.buildHud();
     try{if(localStorage.getItem(state.saveKey))$('saveStatus').textContent='已有本版存档，可载入继续。';}catch{}
-    actions.log({type:'boot',map_id:state.world.location.map_id,source:state.world.value.source,engine:'Phaser 3.90.0'});state.engine.start(actions.render);
+    actions.log({type:'boot',map_id:state.world.location.map_id,source:state.world.value.source,engine:'Phaser 3.90.0'});
+    state.engine.start({phase:state.scenes.phase,interface:actions.updateInterface,
+      exploration:actions.updateExploration,battle:actions.updateBattleFrame,suspend:actions.releaseInput});
     actions.status('片头按Esc跳过；提示画面按任意键进入主菜单。首次交互启用声音。');state.startupView.start();
   }
   return {boot};

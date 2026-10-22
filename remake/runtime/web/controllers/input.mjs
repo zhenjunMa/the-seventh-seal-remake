@@ -6,6 +6,7 @@ import {effectiveSkillSource} from "../core/battle_skill_access.mjs";
 import {createContentSample} from "../core/content_sample.mjs";
 
 export function createInputController({state, actions, $, canvas, ctx}) {
+  const listeners=new AbortController(),options={signal:listeners.signal};
   function wire(){
     $('partyMenuOpen').onclick=()=>actions.openPartyMenu();
     $('menuActor').onchange=()=>{$('menuShortcutEditor').hidden=true;actions.refreshPartyMenu();};$('menuSlot').onchange=actions.refreshPartyMenu;$('menuItem').onchange=actions.refreshPartyMenu;
@@ -56,6 +57,7 @@ export function createInputController({state, actions, $, canvas, ctx}) {
     $('layerPrevious').onclick=actions.guarded(async()=>{state.layerIndex=Math.max(0,state.layerIndex-1);await actions.drawLayer();});$('layerNext').onclick=actions.guarded(async()=>{state.layerIndex=Math.min(state.layerData.frames.length-1,state.layerIndex+1);await actions.drawLayer();});$('mainLayer').onchange=actions.guarded(actions.drawLayer);$('intrinsicLayer').onchange=actions.guarded(actions.drawLayer);
     $('layerSelect').onchange=actions.guarded(async()=>{state.layerIndex=Number($('layerSelect').value);await actions.drawLayer();});
     window.addEventListener('keydown',event=>{
+      if(state.engine?.paused)return;
       const key=event.key.length===1?event.key.toLowerCase():event.key;
       if(state.startupView?.key(key,event.repeat)){event.preventDefault();return;}
       if(['event','opening'].includes(state.scenes?.phase)&&actions.dialogueKey(key,event.repeat)){event.preventDefault();return;}
@@ -66,9 +68,14 @@ export function createInputController({state, actions, $, canvas, ctx}) {
       if(['INPUT','SELECT','TEXTAREA','BUTTON'].includes(document.activeElement?.tagName))return;
       if(state.scenes?.phase!=='map')return;
       if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','w','a','s','d','Shift','e'].includes(key)){event.preventDefault();if(key==='e'){if(!event.repeat)actions.interact();}else state.keys.add(key);}
-    });
-    window.addEventListener('keyup',event=>{if(actions.dialogueKeyUp(event.key))event.preventDefault();if(state.scenes?.phase.startsWith('battle-')){actions.battleKeyUp?.(event.key);if(event.key===' ')event.preventDefault();}if(state.menuContext&&event.key===' '&&$('menuShortcutEditor').hidden&&state.menuContext.page!=='system')event.preventDefault();state.keys.delete(event.key.length===1?event.key.toLowerCase():event.key);});window.addEventListener('blur',()=>{state.keys.clear();actions.releaseDialogueKeys();actions.battleKeyUp?.(' ');});document.addEventListener('visibilitychange',()=>{state.keys.clear();actions.releaseDialogueKeys();actions.battleKeyUp?.(' ');state.lastTime=performance.now();});window.addEventListener('resize',actions.resize);
-    canvas.addEventListener('pointerdown',()=>canvas.focus());canvas.addEventListener('wheel',event=>{event.preventDefault();if(state.scenes.phase==='map')state.view.zoom=Math.min(3,Math.max(.15,state.view.zoom*(event.deltaY<0?1.1:1/1.1)));},{passive:false});
+    },options);
+    window.addEventListener('keyup',event=>{if(actions.dialogueKeyUp(event.key))event.preventDefault();if(state.scenes?.phase.startsWith('battle-')){actions.battleKeyUp?.(event.key);if(event.key===' ')event.preventDefault();}if(state.menuContext&&event.key===' '&&$('menuShortcutEditor').hidden&&state.menuContext.page!=='system')event.preventDefault();state.keys.delete(event.key.length===1?event.key.toLowerCase():event.key);},options);
+    window.addEventListener('blur',actions.releaseInput,options);
+    document.addEventListener('visibilitychange',actions.releaseInput,options);
+    window.addEventListener('resize',actions.resize,options);
+    canvas.addEventListener('pointerdown',()=>canvas.focus(),options);
+    canvas.addEventListener('wheel',event=>{event.preventDefault();if(!state.engine?.paused&&state.scenes.phase==='map')state.view.zoom=Math.min(3,Math.max(.15,state.view.zoom*(event.deltaY<0?1.1:1/1.1)));},{...options,passive:false});
   }
-  return {wire};
+  function disposeInput(){listeners.abort();state.keys.clear();}
+  return {wire,disposeInput};
 }

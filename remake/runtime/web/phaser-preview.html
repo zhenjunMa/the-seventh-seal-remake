@@ -15,8 +15,8 @@
   <h1>Phaser 迁移预览</h1>
   <p>此页使用程序生成的示意图，并读取项目现有战斗定义与规则。用于检查场景、角色、图集适配、命中回调和截图；原素材像素、真实音视频和完整剧情仍需在有素材的环境验收。正式游戏保持原有素材路径和校验。</p>
   <div id="screen"><div id="phaserHost"></div><canvas id="focus" tabindex="0"></canvas></div>
-  <div><button id="map">探索场景</button><button id="battle" disabled>战斗场景</button><button id="attack" disabled>执行燕突</button><button id="compare">核对地图绘制</button><button id="capture">导出截图</button><a href="/">正式游戏</a></div>
-  <p>探索场景使用方向键／WASD 移动，Shift 加速，滚轮缩放。战斗使用原有控制器与动作时间线；示意图只代表几何结构。</p>
+  <div><button id="map">探索场景</button><button id="battle" disabled>战斗场景</button><button id="attack" disabled>执行燕突</button><button id="pause">暂停运行</button><button id="compare">核对地图绘制</button><button id="capture">导出截图</button><a href="/">正式游戏</a></div>
+  <p>探索场景使用方向键／WASD 移动，Shift 加速，滚轮缩放。可暂停／继续运行；切换到探索会暂停正在播放的战斗，返回后继续。战斗使用原有控制器与动作时间线；示意图只代表几何结构。</p>
   <pre id="status">正在准备 Phaser…</pre>
   <script src="vendor/phaser/phaser-3.90.0.min.js"></script>
   <script type="module" src="phaser/preview.mjs"></script>

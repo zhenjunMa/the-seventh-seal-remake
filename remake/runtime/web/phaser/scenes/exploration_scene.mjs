@@ -1,17 +1,27 @@
 import {mapPresentation} from '../../core/map_presentation.mjs';
 import {TextureCache} from '../rendering/texture_cache.mjs';
 import {MapActor} from '../actors/map_actor.mjs';
+import {ActionClock} from '../components/action_clock.mjs';
 
-export function explorationScene(Phaser){
+export function explorationScene(Phaser,runtime){
   return class ExplorationScene extends Phaser.Scene {
     constructor(){super({key:'exploration',active:true});}
     create(){
+      this.clock=new ActionClock();this.skipDelta=true;
       this.texturesAdapter=new TextureCache(this);this.actors=new Map();
       this.background=this.add.image(0,0,'__WHITE').setOrigin(0).setDepth(-2);
       this.collision=this.add.graphics().setDepth(-1);this.marker=this.add.graphics();this.sourceScene=null;
       this.cameras.main.setBackgroundColor('#0e191b');
-      this.events.once('shutdown',()=>{this.clearActors();this.texturesAdapter.destroy();});
+      const resetDelta=()=>{this.skipDelta=true;};
+      this.events.on('wake',resetDelta);this.events.on('resume',resetDelta);
+      const dispose=()=>{
+        this.events.off('shutdown',dispose);this.events.off('destroy',dispose);
+        this.events.off('wake',resetDelta);this.events.off('resume',resetDelta);
+        this.clock.destroy();this.clearActors();this.texturesAdapter.destroy();this.sourceScene=null;
+      };
+      this.events.once('shutdown',dispose);this.events.once('destroy',dispose);
     }
+    update(_now,delta){runtime.updateScene('exploration',this,delta);}
     clearActors(){for(const actor of this.actors.values())actor.destroy();this.actors.clear();}
     present(options){
       const {scene,view,openingQueue,nearest}=options;if(!scene)return;

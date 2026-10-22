@@ -29,7 +29,7 @@ export function createSessionController({state, actions, $, canvas, ctx}) {
       // Prepare each map at its source opcode, after the outgoing performance.
       // Persistent world replacement still waits for the whole program.
       const prepared=new Map();
-      state.openingView=new OpeningView({resources:state.openingResources,prepared,clock:state.engine?.clock,
+      state.openingView=new OpeningView({resources:state.openingResources,prepared,clock:state.engine?.exploration.clock,
         program:state.openingProgram,
         prepare:(id,signal)=>state.loadingView.run(id,onProgress=>actions.prepareMap(id,{onProgress}),{signal}),
         staging:state.prologuePresentation.staging,effects:state.prologuePresentation.effects,nativeViewport:true,

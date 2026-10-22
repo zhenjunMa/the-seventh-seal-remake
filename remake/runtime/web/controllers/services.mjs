@@ -24,6 +24,7 @@ export function createServicesController({state, actions, $, canvas, ctx}) {
   }
   function image(path, scope = 'shared') { return state.resources.load(path, scope); }
   function busy(phase) {
+    state.engine?.setPhase(phase);
     state.keys.clear(); state.clock=0;state.view.action=0;state.view.frame=0;state.lastTime=performance.now();
     $('scenePhase').textContent=state.phaseNames[phase]??phase;
     $('loading').hidden=!['loading','boot','battle-loading'].includes(phase);
@@ -39,5 +40,12 @@ export function createServicesController({state, actions, $, canvas, ctx}) {
   function guarded(fn){return async()=>{try{await fn();}catch(error){status(error.message,true);log({type:'operation-failed',error:error.message});}};}
   async function saveEnvelope(){if(!state.scenes.canSave())throw new Error('请在地图探索状态保存');const world=state.world.snapshot();if(world.source.kind==='native-new-game')createPartyActors(world,state.partyCombat,{},state.itemData);const preview=actions.captureSavePreview(world);return attachSavePreview(await encodeSave(world),preview);}
   function option(value,text,disabled=false){const node=document.createElement('option');node.value=value;node.textContent=text;node.disabled=disabled;return node;}
-  return {status, log, json, readConfiguredData, image, busy, download, guarded, saveEnvelope, option};
+  function updateInterface(now){
+    if(state.menuContext)state.operationMenu?.tick(now);
+    state.startupView?.tick(now);
+  }
+  function releaseInput(){
+    state.keys.clear();actions.releaseDialogueKeys?.();actions.battleKeyUp?.(' ');
+  }
+  return {status, log, json, readConfiguredData, image, busy, download, guarded, saveEnvelope, option,updateInterface,releaseInput};
 }

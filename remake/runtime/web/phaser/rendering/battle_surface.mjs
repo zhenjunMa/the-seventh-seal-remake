@@ -14,13 +14,12 @@ const intersect=(a,b)=>{const x=Math.max(a.x,b.x),y=Math.max(a.y,b.y);
 // Commands become pooled Phaser Sprites, Graphics and Text, rather than a
 // full-frame Canvas upload. Source atlas regions and native clocks stay intact.
 export class BattleSurface {
-  constructor(scene,onBegin=()=>{}){
-    this.scene=scene;this.onBegin=onBegin;this.textures=new TextureCache(scene);
+  constructor(scene){
+    this.scene=scene;this.textures=new TextureCache(scene);
     this.pools={sprite:[],graphics:[],text:[]};this.gradients=new Map();
     this.canvas={width:640,height:480,getContext:()=>this};this.beginFrame();
   }
   beginFrame(){
-    this.onBegin();
     this.cursor={sprite:0,graphics:0,text:0};this.order=0;this.stack=[];this.matrix=[1,0,0,1,0,0];
     this.clipRect={x:0,y:0,width:640,height:480};this.path=[];
     Object.assign(this,{globalAlpha:1,globalCompositeOperation:'source-over',fillStyle:'#000000',strokeStyle:'#000000',lineWidth:1,font:'12px sans-serif',textAlign:'left',lineJoin:'miter'});
@@ -109,5 +108,8 @@ export class BattleSurface {
   }
   strokeText(value,x,y){this.text(value,x,y,true);}
   fillText(value,x,y){this.text(value,x,y,false);}
-  destroy(){for(const pool of Object.values(this.pools))for(const object of pool)object.destroy();this.textures.destroy();this.gradients.clear();}
+  destroy(){
+    for(const pool of Object.values(this.pools))for(const object of pool)object.destroy();
+    this.pools={sprite:[],graphics:[],text:[]};this.textures.destroy();this.gradients.clear();
+  }
 }
