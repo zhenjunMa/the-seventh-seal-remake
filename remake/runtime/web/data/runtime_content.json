@@ -1,0 +1,217 @@
+{
+  "schema": "seventh-seal-runtime-content",
+  "version": 2,
+  "roles": {
+    "001": {
+      "side": "player",
+      "battle_skills": [
+        {
+          "index": 21,
+          "id": "yanci",
+          "handler": "direct"
+        },
+        {
+          "index": 22,
+          "id": "yantu",
+          "handler": "direct"
+        },
+        {
+          "index": 37,
+          "id": "yancui",
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 23,
+          "handler": "direct"
+        },
+        {
+          "index": 26,
+          "handler": "direct"
+        }
+      ],
+      "field_skills": [
+        {
+          "index": 41,
+          "id": "yannuan"
+        }
+      ],
+      "primary_skill": 22
+    },
+    "002": {
+      "side": "player",
+      "battle_skills": [
+        {
+          "index": 19,
+          "id": "kai_mieyan",
+          "handler": "direct"
+        },
+        {
+          "index": 20,
+          "id": "kai_suizu",
+          "handler": "direct"
+        },
+        {
+          "index": 21,
+          "id": "kai_luoyan",
+          "handler": "direct"
+        },
+        {
+          "index": 22,
+          "id": "kai_liyan",
+          "handler": "direct"
+        },
+        {
+          "index": 23,
+          "id": "kai_duanyan",
+          "handler": "direct"
+        }
+      ],
+      "field_skills": [],
+      "primary_skill": 19
+    },
+    "003": {
+      "side": "player",
+      "battle_skills": [
+        {
+          "index": 21,
+          "handler": "direct"
+        },
+        {
+          "index": 22,
+          "handler": "direct"
+        },
+        {
+          "index": 23,
+          "handler": "direct"
+        },
+        {
+          "index": 24,
+          "handler": "direct"
+        },
+        {
+          "index": 25,
+          "handler": "direct"
+        },
+        {
+          "index": 34,
+          "handler": "effect-carrier"
+        }
+      ],
+      "primary_skill": 21
+    },
+    "011": {
+      "side": "enemy",
+      "presentation": {
+        "ground_offset": 80
+      }
+    },
+    "012": {
+      "side": "enemy",
+      "presentation": {
+        "legacy_motion": "bounce"
+      }
+    },
+    "013": {
+      "side": "enemy"
+    }
+  },
+  "battle_rosters": {
+    "sample": [
+      "001",
+      "012"
+    ],
+    "forest-source-group": [
+      "001",
+      "011",
+      "012",
+      "013"
+    ],
+    "party-source-group": [
+      "$players",
+      "$enemies"
+    ]
+  },
+  "stages": {
+    "stage13": {
+      "path": "data/forest_stage.json",
+      "schema": "seventh-seal-forest-stage",
+      "asset_prefix": "assets/forest_stage/"
+    },
+    "TestStage": {
+      "path": "data/skill_test_stage.json",
+      "schema": "seventh-seal-battle-stage",
+      "asset_prefix": "assets/skill_test_stage/"
+    }
+  },
+  "programs": [
+    "m17029-1",
+    "m17026-1",
+    "m17010-1"
+  ],
+  "maps": {
+    "M01010": {
+      "export": {
+        "assets": "existing",
+        "story": false
+      }
+    },
+    "M01030": {
+      "export": {
+        "assets": "existing",
+        "story": false
+      }
+    },
+    "M17010": {
+      "routes": [
+        {
+          "record_id": 48,
+          "requires_flag": {
+            "index": 48,
+            "bit": 1
+          },
+          "animation": "m17010-1.anm",
+          "denial_record_id": 46,
+          "speaker_role_id": "001"
+        }
+      ],
+      "export": {
+        "assets": "existing"
+      }
+    },
+    "M17020": {
+      "export": {
+        "assets": "existing"
+      }
+    },
+    "M17026": {
+      "objects": [
+        {
+          "index": 9,
+          "handler": "stationary-chest"
+        }
+      ],
+      "rests": [
+        {
+          "descriptor_id": 2
+        }
+      ]
+    },
+    "M17029": {
+      "triggers": [
+        31
+      ]
+    },
+    "M70010": {
+      "export": {
+        "assets": "existing",
+        "story": false
+      }
+    },
+    "M72061": {
+      "export": {
+        "assets": "existing",
+        "story": false
+      }
+    }
+  }
+}

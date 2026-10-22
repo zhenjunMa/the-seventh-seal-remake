@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>第七封印 · 战斗表现 0.4</title><link rel="stylesheet" href="battle.css">
+</head>
+<body>
+  <header><div class="brand"><span class="seal">VII</span><div><h1>第七封印</h1><p>战斗表现 <span>0.4</span></p></div></div>
+    <div class="header-actions"><a id="headerReturnMap" href="index.html">返回地图</a></div></header>
+  <main>
+    <section class="workspace">
+      <div class="scene-head"><span class="badge">角色 × 雪泥怪 · 战斗演示</span><span id="phaseLabel">准备资源</span></div>
+      <div class="arena"><canvas id="battleStage" width="900" height="430" aria-label="人物施放技能与怪物目标"></canvas><div id="loading">正在读取原作人物与技能特效…</div><div id="sequenceLabel" class="sequence-label">准备技能动作</div></div>
+      <div class="hud"><div><strong id="enemyName">敌方候选</strong><span id="hpLabel">实验 HP —</span><div class="hp-track"><div id="hpBar"></div></div></div><div><strong id="playerName">玩家</strong><span id="playerSource">资源尚未载入</span></div></div>
+      <div class="flow"><span>准备</span><i>→</i><span>接近目标</span><i>→</i><span>出招／特效</span><i>→</i><span>退回</span></div>
+      <div class="experiment-buttons"><button id="attack" class="primary" disabled>施放技能</button><button id="targetEnemy" aria-pressed="true">目标：雪泥怪 · 中下</button><button id="enterExperiment">重新开始</button><button id="settle" disabled>应用已知伤害</button><a id="returnMap" href="index.html">返回地图</a></div>
+      <div class="notice"><strong>演示范围</strong><p>怪物在左，人物在右。已显示原作人物、通用烟尘与受击光效；技能自身特效尚未完整显示。接近轨迹、时序和完整数值仍待核对。伤害留空只看表现，输入已知伤害可核对HP；当前使用开发入口。</p></div>
+      <div id="status" role="status" aria-live="polite">资源准备中</div><div id="error" role="alert" hidden></div>
+      <section class="log-panel"><div class="log-head"><h2>实验记录</h2><span id="logCount">0 条</span><button id="exportLog">导出实验日志</button></div><ol id="eventLog"></ol><details><summary>上次退出的实验日志</summary><pre id="lastSessionLog">尚无上次实验记录。</pre></details></section>
+    </section>
+    <aside>
+      <h2>选择技能</h2>
+      <label>玩家资源<select id="playerRole" disabled></select></label>
+      <label>技能记录<select id="playerSkill" disabled></select></label>
+      <label class="check"><input id="sequenceMode" type="checkbox" checked>播放技能动作序列与原作特效</label>
+      <p id="skillScope" class="hint">正在准备人物动作与特效…</p>
+      <details id="animationInspector"><summary>逐帧与动画字段检查</summary>
+      <label>技能内动作记录<select id="skillAction" disabled></select></label>
+      <p class="hint" id="mappingNote">技能与图集动作的运行映射按证据状态显示，不自动配对。</p>
+      <div class="pair"><label>玩家图集动作组<select id="playerAction" disabled></select></label><label>原方向编号<select id="playerDirection" disabled></select></label></div>
+      <details><summary>敌方动画与技能字段</summary><label>敌方图集动作组<select id="enemyAction" disabled></select></label><label>原方向编号<select id="enemyDirection" disabled></select></label><label>目标技能记录（实验选择）<select id="targetSkill" disabled></select></label><p class="hint">选择记录只提供目标技能门字段，不表示原版此时选择了该技能。</p></details>
+      <div class="pair"><label>逐帧检查对象<select id="inspectActor"><option value="player">玩家</option><option value="enemy">敌方</option></select></label><label>实验帧速 / fps<input id="fps" type="number" value="10" min="1" max="60" step="1"></label></div>
+      <label class="frame-control">当前帧 <output id="frameLabel">—</output><input id="frameSlider" type="range" min="0" max="0" value="0"></label>
+      <div class="triple"><button id="playPause" disabled>暂停</button><button id="stepFrame" disabled>下一帧</button><button id="resetAnimation" disabled>重置动画</button></div><p class="hint" id="timingNote">原 interval / loop 字段与实验帧速分别记录。</p>
+      </details>
+      <div class="divider"></div><h2>数值核对</h2>
+      <label>实验结算时点<select id="settlementTiming"><option value="end">动作末帧后，手动应用</option><option value="manual">播放中手动选择帧</option></select></label>
+      <label>已知伤害（手工输入）<input id="knownDamage" type="number" min="0" max="2147483647" step="1" placeholder="留空只看表现，如40可核对扣血"></label>
+      <p class="hint">填写后仅使用 HP 扣减合同。默认不计算防御、技能效果、命中或随机伤害。</p>
+      <label class="check"><input id="useObservedPositions" type="checkbox" checked>依据用户观察检查方位相容</label><p id="observedPositions" class="hint">技能方位正在读取。此规则独立于原分类位号。</p><p class="hint">魔法技巧“看着能打上中下”仍待核对，此描述不会赋给所有魔法。未知技能保持待验证；关闭观察规则可单独测试 HP 合同。</p>
+      <details><summary>原分类与显式概率子项</summary>
+        <label class="check"><input id="useClassGate" type="checkbox">检查原分类拒绝子规则</label>
+        <div class="pair"><label>原拒绝掩码（原字段）<input id="actionMask" type="number" min="0" max="255" step="1" placeholder="未知"></label><label>目标原分类<select id="targetClass"><option value="">未知 / 未输入</option><option value="0">原分类 0</option><option value="1">原分类 1</option><option value="2">原分类 2</option><option value="3">原分类 3</option><option value="4">原分类 4</option></select></label></div>
+        <div class="pair"><label>目标技能门字段<input id="targetSkillGate" type="number" min="0" max="255" step="1" value="0"></label><label>实验 effectToken<input id="effectToken" type="number" min="0" max="2147483647" step="1" value="0"></label></div>
+        <p class="hint">这是原字节分类合同。位号与上／中／下的对应关系、多占位表示仍未确认。开启时按这些输入判断提前拒绝；关闭时仅执行手工 HP 实验。</p>
+        <label class="check"><input id="useRoll" type="checkbox">加入显式 roll ≤ threshold 比较</label>
+        <div class="pair"><label>roll（0–99）<input id="roll" type="number" min="0" max="99" placeholder="显式输入"></label><label>threshold（0–100）<input id="threshold" type="number" min="0" max="100" placeholder="显式输入"></label></div>
+        <p class="hint">只验证这一比较。阈值构成、绕过条件、随机状态和调用顺序未完整恢复；这里不自动抽随机数。</p>
+        <fieldset class="illustration"><legend>目标占位（用户观察实验，可改）</legend><label><input id="zoneUpper" type="checkbox">上</label><label><input id="zoneMiddle" type="checkbox" checked>中</label><label><input id="zoneLower" type="checkbox" checked>下</label><p class="hint">雪泥怪默认中下，来自用户描述。用于独立观察规则；不参与原分类位号计算。</p></fieldset>
+      </details>
+      <details><summary>实验初始 HP 与原字段门</summary>
+        <label>实验目标原 HP<input id="initialHp" type="number" value="100" min="0" max="2147483647"></label>
+        <p class="hint">100 是可编辑实验值，未声明为雪泥怪的原版 HP。修改后点击“重建 HP 实验”。</p>
+        <div class="pair"><label>side_raw<input id="sideRaw" type="number" min="0" max="255" value="0"></label><label>role_link_raw<input id="roleLinkRaw" type="number" min="-2147483648" max="2147483647" value="0"></label></div>
+        <div class="pair"><label>linked_hp_bonus<input id="linkedHpBonus" type="number" min="-2147483648" max="2147483647" value="0"></label><label>status_hp_raw<input id="statusHpRaw" type="number" min="-2147483648" max="2147483647" value="0"></label></div>
+        <label>state_raw<input id="stateRaw" type="number" min="0" max="255" value="0"></label>
+        <label class="check"><input id="gate679c6c" type="checkbox">global_00679c6c</label><label class="check"><input id="gate55ee004" type="checkbox">global_055ee004</label><label class="check"><input id="gate55edfec" type="checkbox">global_055edfec</label>
+        <button id="rebuildHp" class="full" disabled>重建 HP 实验</button>
+      </details>
+      <details><summary>资源与证据详情</summary><pre id="sourceDetails">正在读取…</pre><a href="combat_manifest.json" target="_blank" rel="noopener">人物资源清单 ↗</a> · <a href="combat_presentation.json" target="_blank" rel="noopener">技能特效清单 ↗</a></details>
+    </aside>
+  </main>
+  <footer>本地原作资源 · 实验输入逐项记录 · 不写原版程序或存档</footer>
+  <script type="module" src="battle.js"></script>
+</body></html>

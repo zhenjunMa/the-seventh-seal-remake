@@ -1,0 +1,10 @@
+/* Original dialogue shares the same fitted 640x480 coordinate plane. */
+.dialogue{position:absolute;inset:0;border:0;border-radius:0;background:none;padding:0;min-height:0;box-shadow:none;pointer-events:none}
+.dialogue[hidden]{display:none}
+.dialogue-viewport{position:absolute;left:50%;top:50%;width:640px;height:480px;transform:translate(-50%,-50%) scale(var(--dialogue-scale,1));transform-origin:center}
+.dialogue-viewport canvas{position:absolute;inset:0;width:640px;height:480px;image-rendering:pixelated;pointer-events:none}
+.dialogue-viewport #dialogueNext,.dialogue-viewport #dialogueChoices button{position:absolute;background:transparent;border:0;border-radius:0;outline:0;box-shadow:none;padding:0;pointer-events:auto;color:transparent}
+.dialogue-viewport #dialogueNext{inset:0;width:640px;height:480px}
+.dialogue-viewport #dialogueChoices{display:block;margin:0}
+.dialogue-viewport #dialogueChoices[hidden]{display:none}
+@media(max-width:750px){.dialogue{inset:0;padding:0}}

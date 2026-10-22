@@ -1,0 +1,57 @@
+/* Source bitmaps and hit rectangles share the original 640×480 coordinate plane. */
+.sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+.party-menu{inset:0;padding:0;border:0;border-radius:0;overflow:hidden;background:#000;display:grid;place-items:center;box-shadow:none}
+.operation-frame{position:absolute;left:50%;top:50%;width:640px;height:480px;flex:none;transform:translate(-50%,-50%) scale(var(--operation-scale,1));transform-origin:center;color:#eee5bf;font:20px SimSun,serif;text-shadow:1px 1px 1px #000;outline:none}
+.party-menu .menu-source{position:absolute;pointer-events:none;max-width:none;image-rendering:pixelated;object-fit:none;object-position:top left}
+.main-source{left:0;top:0;width:640px;height:480px}.page-source{left:10px;top:-20px}.body-source{left:20px;top:145px}
+.party-menu button{cursor:pointer;border-radius:0;font:20px SimSun,serif;color:#e7e6dc}
+.party-menu .operation-main-nav button,.party-menu .operation-sub-nav button{position:absolute;background:none;border:0;padding:0;border-radius:0;color:transparent;font-size:0;outline:none;box-shadow:none}
+.party-menu .operation-main-nav button:hover,.party-menu .operation-main-nav button[aria-pressed=true],.party-menu .operation-sub-nav button:hover,.party-menu .operation-sub-nav button[aria-pressed=true]{background:none;box-shadow:none}
+.party-menu select{margin:0;padding:3px 7px;border:0;border-radius:0;background:#120a21ed;color:#eee3ba;font:20px SimSun,serif;max-width:none}
+.party-menu select[size]{background:transparent;border:0;padding:0;outline-offset:2px}.party-menu option{padding:1px 7px;min-height:28px}.party-menu option:checked{background:#584da2;color:#f4ef44}.party-menu option:disabled{color:#777}
+.operation-actor{display:none;position:absolute;left:14px;top:57px;width:110px;margin:0;z-index:1}
+.party-menu[data-menu-page=skills] .operation-actor{display:block}.operation-actor select{height:27px;background:transparent;border:0;color:#eee;font:24px SimSun,serif}
+.actor-bar-source{left:20px;top:50px;width:480px;height:83px}
+.operation-roster{position:absolute;left:20px;top:50px;width:480px;height:344px}
+.party-menu .roster-actor{position:absolute;left:0;width:480px;height:83px;padding:0;border:0;background:none;text-align:left;outline:none}
+.party-menu .roster-actor:hover{background:none}.roster-actor-image{left:0;top:0;width:480px;height:83px}.roster-actor-name{position:absolute;left:0;top:3px;color:#fff2bc;font-size:30px;font-weight:bold;text-shadow:2px 2px #000}
+.operation-summary,.actor-summary-values{position:absolute;left:20px;top:50px;width:480px;height:83px;font:18px SimSun,serif;line-height:18px;color:#fff;margin:0;text-shadow:-1px -1px #222,1px 1px #222}
+.actor-summary-values{left:0;top:0}.operation-summary div,.actor-summary-values div{position:absolute}.operation-summary dd,.actor-summary-values dd{margin:0;white-space:pre;letter-spacing:1px}
+.native-menu-number{position:relative;left:-1px;top:-1px;display:block;max-width:none;image-rendering:pixelated}
+.summary-level{left:82px;top:44px;font-size:26px;line-height:26px}.summary-hp-current{left:178px;top:15px}.summary-hp-maximum{left:240px;top:15px}.summary-mp-current{left:178px;top:50px}.summary-mp-maximum{left:240px;top:50px}.summary-exp{left:372px;top:15px}.summary-next{left:372px;top:50px}
+.party-menu .operation-content{position:absolute;left:20px;top:145px;width:458px;height:269px;border:0;padding:0;margin:0;background:none}
+.party-menu .operation-content h3{margin:0}.party-menu .operation-content label{font:16px SimSun,serif;color:#dccb9a;margin:0}.party-menu .operation-content p{margin:0}
+.party-menu .operation-message{position:absolute;left:8px;top:427px;width:623px;height:43px;margin:0;font:20px SimSun,serif;line-height:20px;overflow:visible;color:#ddd}.party-menu .operation-message.error{color:#ffb09b}
+.party-menu .operation-gold{position:absolute;left:525px;top:388px;width:99px;margin:0;text-align:left;font:20px SimSun,serif;line-height:24px;color:#f1f000;white-space:nowrap}
+.party-menu .operation-area{position:absolute;left:506px;top:329px;width:124px;margin:0;font:20px SimSun,serif;line-height:24px;color:#fff}
+.status-content dl{margin:0;position:relative;height:269px}.status-content .stat-row{position:absolute;left:0;width:285px;height:25px}.status-content dt{position:absolute;left:0;font-size:0}.status-content dd{position:absolute;left:241px;margin:0;top:-2px;font:bold 24px Arial,serif;line-height:27px;min-width:45px;color:#eee;text-align:left}
+.operation-bars{position:absolute;left:71px;top:9px;width:155px;height:7px;overflow:hidden}.operation-bars img{display:block;position:absolute;right:0;width:auto;max-width:none;height:7px;object-fit:none;image-rendering:pixelated}
+.standing-actor{left:340px;top:246px;z-index:1}
+.party-menu .weapon-content{left:10px;top:50px;width:453px;height:365px}.weapon-content #menuWeaponActor,.weapon-content #menuWeaponName{position:absolute;left:7px;top:6px;width:153px;text-align:center;font:24px SimSun,serif;line-height:30px;color:#eee}.weapon-content #menuWeaponName{top:44px}.weapon-content #menuWeaponStats{margin:0}.weapon-content #menuWeaponStats div{position:absolute;left:0}.weapon-content #menuWeaponStats dd{position:absolute;left:413px;margin:0;font:24px Arial,serif;line-height:28px}.weapon-content #menuWeaponCard{left:228px;top:91px;width:175px;height:265px}
+.party-menu .equipment-content{left:20px;top:135px}
+.equipment-content>label:first-child,.equipment-content #menuWorn{display:none}
+.equipment-content #menuEquipped{position:absolute;left:50px;top:0;width:255px;height:180px}
+.party-menu #menuEquipped button{position:absolute;left:0;display:block;border:0;background:transparent;height:30px;width:100%;padding:0;text-align:left;font:22px SimSun,serif;color:#e7e7dc;outline:none;white-space:nowrap}
+.party-menu #menuEquipped button.selected{color:#d58b03;background:none}
+.equipment-content #menuEquipmentStats{position:absolute;left:50px;top:183px;margin:0;width:230px;font:24px Arial,serif}.equipment-content #menuEquipmentStats div{position:absolute;height:30px}.equipment-content #menuEquipmentStats dd{margin:0;line-height:30px;color:#eee}
+.equipment-picker{position:absolute;left:160px;top:3px;width:294px;height:280px;z-index:4}.equipment-picker>.menu-source{left:0;top:0}
+.equipment-picker>label{position:absolute;left:10px;top:29px;width:274px;font-size:0!important}.equipment-picker #menuEquipment{width:274px;height:220px;font-size:20px}.equipment-picker .operation-actions{position:absolute;left:8px;top:280px;display:flex;gap:8px}.equipment-picker .operation-actions button{padding:2px 10px;font-size:16px;background:#261a16;border:1px solid #8d693f}
+.party-menu .item-content{left:11px;top:52px;height:376px;width:472px}.item-content #menuItemCard{left:292px;top:28px;width:175px;height:265px}
+.source-item-list{position:absolute;left:8px;top:28px;width:272px;height:265px;overflow:hidden;scrollbar-width:none}
+.party-menu .source-item-row{position:absolute;left:0;display:block;width:272px;height:25px;border:0;padding:0;background:none;outline:none;text-align:left;font:24px SimSun,serif;color:#fff;white-space:nowrap}
+.source-item-row .item-row-name{position:absolute;left:25px;top:0;line-height:25px}.source-item-row .item-row-quantity{position:absolute;left:225px;top:4px;font:20px SimSun,serif;line-height:22px}
+.source-item-row .item-row-highlight{left:0;top:0;z-index:0}.source-item-row .item-row-name,.source-item-row .item-row-quantity{z-index:1}.source-item-row .item-row-icon{left:0;top:0;width:24px;height:25px}.party-menu .source-item-row.unusable{color:#777}.party-menu .source-item-row.selected{color:#eef143}
+.party-menu .item-filter{position:absolute;padding:0;border:0;background:none;outline:none}.party-menu .item-filter:hover{background:none}
+.item-targets{position:absolute;left:269px;top:15px;width:222px;height:346px;z-index:5}.item-targets>.menu-source{left:0;top:0}
+.item-targets button{position:absolute;left:5px;width:211px;height:84px;border:0;background:none;text-align:left;padding:0;font:18px Arial,serif;line-height:20px;outline:none}.item-targets button:focus,.item-targets button:hover{background:none}.target-panel{left:0;top:0}.target-name{position:absolute;left:20px;top:13px;font:20px SimSun,serif;line-height:22px}.target-current,.target-maximum{position:absolute;left:110px;font-size:18px;line-height:20px}.target-maximum{left:155px}.target-bar{position:absolute;left:49px;height:3px;overflow:hidden}.target-bar img{display:block;width:147px;height:3px}
+.party-menu .skill-content{left:20px;top:145px;height:267px;width:458px}.skill-content>label:first-child{position:absolute;left:28px;top:31px;width:410px;color:transparent;font-size:0}.skill-content #menuSkill{height:172px;font-size:18px}.skill-content #menuSkillHint{position:absolute;left:25px;top:212px;width:409px;font-size:14px}.skill-content .skill-target{position:absolute;left:28px;top:236px;width:180px}.skill-content .skill-target select{display:inline-block;width:100px}.skill-content>.operation-actions{position:absolute;left:247px;top:236px;display:flex;gap:5px}.skill-content .operation-actions button{padding:5px;font-size:14px}
+.skill-content #menuShortcutEditor{position:absolute;left:25px;top:27px;width:414px;padding:16px;background:#150f21f5;border:1px solid #9b7845;z-index:2}.skill-content #menuShortcutEditor label{margin-bottom:14px;font-size:14px}.skill-content #menuShortcutEditor select{margin-top:5px}.skill-content #menuShortcutEditor button{margin-right:8px}
+.party-menu .system-content{left:5px;top:50px;width:469px;height:354px}
+.party-menu .system-source-control{position:absolute;padding:0;border:0;background:none;outline:none;min-width:0;box-shadow:none}
+.party-menu .system-source-control:hover,.party-menu .system-source-control:focus{background:none;box-shadow:none}
+.system-volume-fill{display:block;position:absolute;left:0;top:0;height:25px;overflow:hidden;pointer-events:none}
+.system-volume-fill img{display:block;width:217px;height:25px;max-width:none;image-rendering:pixelated}
+.party-menu.combat-items .operation-main-nav,.party-menu.combat-items .operation-sub-nav{display:none}
+.party-menu button:disabled{opacity:1;cursor:default}
+.party-menu[data-menu-page=skills] .operation-actor{display:none}
+.party-menu[data-menu-page=items] .actor-bar-source,.party-menu[data-menu-page=items] .operation-summary,.party-menu[data-menu-page=system] .actor-bar-source,.party-menu[data-menu-page=system] .operation-summary{display:none}

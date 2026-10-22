@@ -1,0 +1,81 @@
+第七封印 · 内容接入与统一配置
+更新：2026-10-22；以下命令从游戏根目录执行。
+
+先选择修改入口
+内容接入选择：runtime/web/data/runtime_content.json。角色、原技能索引、地图、舞台和ANM登记放在这里。
+数值调整：runtime/web/data/config/index.json及skills.json、battle.json、rewards.json、items.json。所有人物共用这些文件。
+玩家当前HP／MP、等级／成长、背包／装备、旗标、队列、技巧／晶石与学习／熟练度是世界进度，通过游戏和存档维护。
+其余data JSON、图集和runtime_content.mjs是来源或生成结果。不要直接用它们调数值；新增机制先实现对应规则，登记和enabled不会补出处理器。
+
+数值配置
+index.json选择original或debug，并引用四个参数文件。每个条目的name、owner、source、original和道具catalog为只读核对基线，只编辑parameters。
+original要求parameters与原基线一致，有差异会拒绝；debug应用修改并保留本场快照／差异。普通导出保留已有调参，--force不重置；只有显式配置--reset恢复原值。
+技能owner={role_id,skill_index,side}按原角色ID＋技能索引绑定，禁止按名字或队伍位置覆盖数值；道具owner按原item_id绑定。
+启动、打开操作界面和每次战斗重新读取配置，之后使用独立快照。参数变化在下一次对应入口生效；改变来源目录或登记后需构建并刷新。
+配置不重写已保存的资源／实例或原CHR／ITM，不关闭奖励去重，也不接受可执行表达式。
+
+参数分工
+skills.json：耗蓝mp_cost，physical_multiplier_percent，六槽element_power，defense_bonus、term4_bonus、hp_term_bonus、hp_max_term_bonus与preparation_delay_raw等已接入字段。
+minimum／maximum_exclusive表示原随机下限／不含上限，相等为固定值，不抽随机。伤害继续由原公式、属性、装备和RNG计算，不配置固定damage。
+preparation_delay_raw是准备量，不是毫秒；0使用调度默认准备量，原值800。动作、接触、目标、反击与状态规则继续由原记录及处理器决定。
+场外恢复、复活等已接入作用仍使用同一skills.json。暖心之炎001／41原MP6、恢复300HP；001／43复活之炎的原正MP字段不能解释为耗40或恢复40，沿已恢复复活分支处理。
+敌方非零耗蓝及不足后备规则尚未恢复，配置拒绝非零敌方耗蓝。
+battle.json：enemy_编号控制新生成敌人的HP／MP、attack／defense／speed及六槽抗性；ai_编号控制源技能索引权重和combination_chance_percent。权重不自动归一化，保持原区间和随机后备。
+调度按20ms单tick，average_speed_factor原200；speed读取原充能属性，不把装备有效速度混入raw充槽计算。人物当前资源和等级不在此覆盖。
+rewards.json：experience、money与有顺序的drop_item_ids。重复候选增加抽签次数；候选须有已支持奖励来源，掉落和非零金钱合计最多六个原奖励槽。
+items.json：全部原编号的统一目录、基础drop_rate和已实现装备／药品／晶石参数。目录登记不等于作用已实现。
+drop_rate=-1不抽签、0走原特殊必掉落分支、1～100走基础概率并叠加已恢复连击奖励。
+parameters.enabled只开放已实现行为；catalog.behavior及来源字段说明未恢复范围。
+
+装备、药品与晶石
+装备allowed_role_mask按原角色编号位掩码判断，0不限；slot_id为来源，不能将头饰／耳饰拆为虚构部位。
+attributes使用已参与getter的26个字段及原范围；其余原字段留在catalog，未知名称保留native标签。实例按其原范围位置映射参数，不重新抽随机或改source_raw_hex。
+换装保留raw HP／MP；派生属性包含装备和晶石链接，原充槽仍读raw速度。
+药品use_in_field／use_in_battle控制场合，effect控制已恢复HP／MP固定／百分比恢复。普通药品不复活，不绕过倒下／免疫目标限制；战斗消耗一次行动。
+纯数值晶石通过通用镶嵌处理器支持，属性也在items.json。人物保存六槽，当前武器只决定可操作孔数；替换先返还，换武器不丢隐藏槽。关闭enabled后已有晶石仍保留属性并可卸除。
+特殊晶石被动、合成、商店、未知初始化或特殊药品需按真实内容恢复，不能仅修改enabled。
+
+内容登记的最小职责
+runtime_content.json编辑格式v2只保留接入选择。角色source／native_slot、默认技能ID、ANM来源、地图路径／原旗标和休息选项由同一来源解析器推导。
+roles：阵营side；玩家battle_skills／field_skills的原index与处理器；primary_skill选择主要表现。技能可省略id，生成“角色编号_原索引”；已有ID保持兼容。
+battle_rosters：历史资源样本列明确身份，正式阵容可使用$players／$enemies。
+stages：登记已实现舞台的路径、schema和asset_prefix；新格式须先补提取与绘制支持。
+programs：原ANM程序ID。导出从源opcode10推导唯一控制地图，不能按文件名猜；多控制地图和未恢复指令拒绝。
+maps：按原地图ID登记triggers、objects、rests、routes。空地图可为{}；objects绑定原index和已实现handler，rests只选descriptor_id，routes只补已核实的出口前置／拒绝分支。
+maps.export：默认{assets:"chapter",story:true}。assets="existing"保留已有开场／路线导出器的素材产物；story=false表示尚未接入该图TLK。新地图一般省略export。该字段只控制生产，不开放剧情。
+
+新增地图和剧情
+1. 从原DAT／TLK核对真实入口、出口、NPC、物件、进入事件、剧情依赖和遇敌／舞台，确认格式及机制已支持。
+2. 在maps登记原ID及需要开放的交互；新动画在programs登记。普通state0物理出口从DAT推导到已登记地图；剧情型出口仍走TLK／ANM规则。
+3. 执行content构建。chapter-maps生产地图／NPC／物件，chapter-story生产源记录、被引用的道具定义和登记玩家初值，随后生成遭遇、音乐、字体和目录等依赖。
+4. 验收进入／退出、对白／分支、领取／再次进入、失败回滚和存读档。新增中文字须随相应字体导出；源表导出不表示所有分支已开放。
+
+新增怪物
+1. 准备原CHR／DGP，在roles登记side=enemy。已有机制的源技能由实际学习表识别，不在脚本中增加怪物ID或技能索引分支。
+2. enemies导出属性、完整AI／反应记录、已学动作、状态块与图层；默认行动取首个源已学命令。敌我复用素材解码与独立像素审计。
+3. enemy-rewards读取同一集合的经验／奖励槽，encounters读取已登记地图DAT频率及全局STG池。池中怪物和舞台必须已登记，不能用配置编造原遭遇池。
+4. content构建将新数值补入统一配置，保留旧参数。验证自然遇敌、技能／反应／死亡、胜利奖励和再次保存／返回；特殊掉落或新状态先补处理器。
+
+新增队友和技能
+1. 核对原角色CHR、原槽、初始属性／装备、行走图、成长行和技能动作。角色登记不会安排正式入队剧情；剧情需按原事件连接。
+2. 在roles登记player、battle_skills／field_skills及primary_skill。同类直接攻击使用direct，已恢复的独立效果载体使用effect-carrier；其他行为先实现。
+3. 执行content构建：属性、技能／反应、成长、道具动作、生命周期、地图行走、菜单、音频、字体和图集读取同一登记。各角色按自己的源动作／时序导出。
+4. 构建自动补齐config/skills.json；只在parameters调数值，不另建队友专用配置。
+5. 验证入队／重复入队、四槽队列、菜单、等级／学习资格、战斗、用药、倒下／起身、成长与存读档。超过四人和候补队伍须先恢复相应系统。
+技能接入、已学状态、人物等级是独立条件。燕落001／26保留原未学字节及12级要求，仅升级不会自动学会。
+party[].skill_progress v2可保存learned_indices和records[{index,level,experience}]，旧v1已学索引仍可读取。熟练度由原记录派生，不改CHR或skills.json原基线，不增加独立成长参数表。
+编成容量与晶石孔数分别沿原定义，组合记录保存原索引／球数／字符／图标；组合攻击执行未恢复。
+
+开发样本与支持边界
+开发检查→三人扩展样本共用正式入队／成长／战斗入口，显式测试授予技能，不自动保存，也不向主线编造入队或获取事件。
+M17025、m17020-1、014的隔离导出只验证内容生产能力，未开放正式主线。
+当前effect-carrier覆盖已恢复的fresh分配及目标零槽分支；目标已有非空对应源技能槽时拒绝。状态、动作指令、特殊掉落、局部遇敌分区和舞台的新格式同样需先补实现。
+物品目录、素材已提取、登记、可执行机制和正式获取／入队分别核对，不互相替代。
+
+构建与调参示例
+内容变化：python -B remake/runtime/tools/build_runtime.py --target content --run
+已有来源只调参数：node remake/runtime/tools/export_runtime_config.mjs
+只核对登记：node remake/runtime/tools/export_content_registry.mjs --check
+完整检查：python -B remake/runtime/tools/verify_current.py（8767服务需启动）
+例如把index.mode改为debug，修改skills.entries.yantu.parameters.mp_cost，下一场核对资格、真实扣费及保存；恢复原值后将mode改回original。
+命令、缓存、前置条件和工具分类见tools/README.txt。所有JSON严格校验，未知字段、错误范围、来源漂移或未实现行为会报错。

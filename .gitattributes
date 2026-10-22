@@ -1,0 +1,2 @@
+# Preserve bytes and line endings used by the existing SHA-based source audits.
+* -text

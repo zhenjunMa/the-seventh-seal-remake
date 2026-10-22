@@ -1,0 +1,43 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>人物对话独立验收</title><base href="/"><link rel="stylesheet" href="../dialogue.css">
+<style>body{margin:20px;background:#162329;color:#efe8cd;font:14px SimSun,serif}button{margin:4px;padding:8px}#screen{position:relative;width:min(100%,960px);height:600px;background:linear-gradient(#38494a,#182324);overflow:hidden}.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}#result,#events{white-space:pre-wrap;max-width:950px}#ready{color:#b9dcac}</style>
+<h1>人物对话独立验收</h1><p>真实导出记录与当前绘制、输入控制器；不写浏览器存档。上方样本显式设置 style0，其余保留原记录。</p><p id="ready">准备素材…</p>
+<nav><button id="short" disabled>英格妮下方对话</button><button id="long" disabled>长对白滚动</button><button id="thought" disabled>人物自语</button><button id="choice" disabled>住处休息选择</button><button id="top" disabled>上方对话板</button><button id="held" disabled>模拟持续空格</button><button id="abort" disabled>中止当前会话</button><button id="export" disabled>导出验收记录</button></nav>
+<div id="screen"><div id="dialogue" class="dialogue" role="dialog" aria-modal="true" aria-labelledby="speaker" aria-describedby="dialogueText" hidden><div class="dialogue-viewport"><canvas width="640" height="480" aria-hidden="true"></canvas><strong id="speaker" class="sr-only"></strong><p id="dialogueText" class="sr-only"></p><button id="dialogueNext" aria-label="继续对话"></button><div id="dialogueChoices" role="group" aria-label="对话选择" hidden></div></div></div></div>
+<pre id="result">无对话</pre><details><summary>运行事件</summary><pre id="events"></pre></details>
+<script type="module">
+import {DialogueView} from '../dialogue_view.mjs';
+import {createStoryController} from '../controllers/story.mjs';
+import {chapterRestChoices} from '../core/chapter.mjs';
+const $=id=>document.getElementById(id),load=async path=>(await fetch(path)).json();
+const [manifest,fonts,chapter]=await Promise.all([load('../data/dialogue_ui.json'),load('../data/dialogue_fonts.json'),load('../data/chapter_story.json')]);
+const logs=[],samples=[],state={keys:new Set(),world:{location:{map_id:'M17026'}},chapterResources:{npcs_by_map:{}},captionView:{close(){}},
+  cssWidth:640,cssHeight:480,view:{x:320,y:240,zoom:1},scenes:{current:{npcs:[]}}};
+const actions={log:event=>{logs.push(event);$('events').textContent=JSON.stringify(logs,null,2);}};
+Object.assign(actions,createStoryController({state,actions,$,canvas:{}}));
+const image=async path=>{const picture=new Image();picture.src=path;await picture.decode();return picture;};
+state.dialogueView=await DialogueView.create({manifest,fonts,image,root:$('dialogue'),onAdvance:actions.advanceDialogue,onChoose:actions.chooseDialogue,log:actions.log});
+function showResult(){const d=$('dialogue');$('result').textContent=JSON.stringify({sample:currentSample,active:!d.hidden,...d.dataset,result:lastResult},null,2);}
+let currentSample='',lastResult=null;
+function run(name,mapId,id,style=null,choices=false){
+  const record=structuredClone(chapter.maps[mapId].records.find(record=>record.id===id));if(style!==null)record.style=style;
+  currentSample=name;lastResult=null;state.world.location.map_id=mapId;
+  samples.push({name,mapId,id,style:record.style});
+  const promise=choices?actions.chooseChapter({mapId,record,choices:chapterRestChoices(record)}):actions.say('英格妮',record.text_raw,record.style,{mapId,record});
+  promise.then(result=>{lastResult={completed:true,selection:result??null};showResult();},error=>{lastResult={cancelled:true,error:error.message};showResult();});
+  showResult();
+}
+$('short').onclick=()=>run('short','M17026',3);
+$('long').onclick=()=>run('long','M17020',1);
+$('thought').onclick=()=>run('thought','M17026',14);
+$('choice').onclick=()=>run('choice','M17026',10,null,true);
+$('top').onclick=()=>run('top-style0-controlled','M17026',3,0);
+$('held').onclick=()=>{actions.dialogueKey(' ');for(let n=0;n<8;n++)actions.dialogueKey(' ',true);actions.dialogueKeyUp(' ');showResult();};
+$('abort').onclick=()=>{actions.clearDialogue();showResult();};
+$('export').onclick=()=>{const blob=new Blob([JSON.stringify({schema:'seventh-seal-dialogue-samples',samples,logs,result:lastResult},null,2)],{type:'application/json'}),link=document.createElement('a');link.href=URL.createObjectURL(blob);link.download='dialogue_samples_log.json';link.click();};
+window.addEventListener('keydown',event=>{if(actions.dialogueKey(event.key,event.repeat))event.preventDefault();showResult();});
+window.addEventListener('keyup',event=>{if(actions.dialogueKeyUp(event.key))event.preventDefault();showResult();});
+new MutationObserver(showResult).observe($('dialogue'),{attributes:true});
+for(const button of document.querySelectorAll('nav button'))button.disabled=false;
+$('ready').textContent='素材已就绪；真实 DialogueView + StoryController';
+</script></html>

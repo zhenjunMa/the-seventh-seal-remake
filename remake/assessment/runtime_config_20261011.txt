@@ -1,0 +1,6 @@
+统一配置旧阶段记录入口
+本路径仅保留兼容跳转，不维护当前结论。
+当前配置与接入规范：../runtime/config_guide.txt
+当前验证：../runtime/evidence/current_validation.json
+2026-10-11验收原文：../archive/20261022_before_directory_cleanup/assessment/runtime_config_20261011.txt
+原日期报告与观察仍保留在对应evidence路径，不作为当前代码重播。

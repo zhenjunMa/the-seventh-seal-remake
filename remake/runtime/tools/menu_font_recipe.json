@@ -1,0 +1,221 @@
+{
+  "schema": "seventh-seal-menu-font-export-recipe",
+  "version": 1,
+  "numeric_characters": "0123456789/ -x>",
+  "text_characters": " !$%()+-./0123456789?CHMNP_abcdehiklmnoprstuvwxy{}·‘’、。一丁七三上下不与丑且世丝严中丹为主久义之乌乐习书乱了争事于云亚亡产人代以们价任伊伍众优会伟传伤似但位低住体何余作佩使例供信倍值假元充光入全六兰共其具典兼兽内冕冠冥冰冻减凝凡凤凯出击刀切列刚初利到制刺刻前剑力功加动助勇匕化升单博卡印即却卵厅压原去参及反发取变口古召可右号司各合吉同名后吐含启吸周呼命和咒品唐唤唱商嗔嘉嘴器回围圆土在地场均坏块坛城基堂塔增墬士壮壳处备复外多夜够大天太失头夺奇奏契套女如妖妮姆始娱子孔字存学宇守安完宙定宝实害家密寐对寻封射将尔尚尼尽尾屑展属山峰峻嵌工左巧巨已布师希帕帝带席帮常帽幅平年幻庄底度延开异式引弱弹强归当录形彩影往征徐得御循德徽心忌念态性怪恋恍恩息恶情惊惑想意慈慧戏成戒或战戴所扇手打托承技投护拉拓招拥择拳拿持指挡换据接控掷提操支收攻放效敌散数整文斗料斧斩断斯新方旋族无日时明昏星映昧是晕晖晶智暖曜曲更最月有望期木未本术机权材村杖来板极林某染标树样核根格档梦森槽樱次欲歌止此死殊残殿毁母每毒比毛气水永求沉沌沙没河泉法泪洋活流浑浪浴海消涎深混清渊游湖源满濒火灭灯灵灾灿炎炬点炼炽烁烂烈烙烟烧热焠焰然照燃燕爱片版物特状狂狄狱猛玄率玉王玛环玲珍珑珞珠球理琉琴瑛瑞璃瓦生用甲电界留疾病痹白百的皇盐盗目相盾真眠眼着睛睡矛知石矿砂破础硃碎碧祝神祭禁福种秘积称移稀稳穹空穿突竖章符等筋箭簇籽粉粹精素紫繁红级纯纳纸纹终经结绝绦继续绳绿缓编缝缺罗置美羽翅翼耀者而耗耳聚胆胧能脂腕腾臂自致舍舞般色芒芙花苏苔英范茶草药荷莉莱莲获菲萝落蒂蓉蓝蔓蕴蕾藏藓虚虹蚀蚕蛇蛋蛙蛟蜂蜃蜜蜥蝉螂螺蟑血行袍被裂装西要覆见角解言让记设诅识试语诱说诺调谜谷象貌贝负贤质贵费赛赤走超越足路身转轮较辰过运近返进远连迟迷退适逃逆选通速造遂遇道遗遭避那邪部都酒酷酿醒释里重量金钢钥钻铁铂铃铜铬银锁锡键锯锻镇镜镧镯镰镶长闇门闪间阔队防阳阴阶阻阿际陈降限除陷隔雄雅雕雪零雷雾霞青非靠面韧音项预颜颠风飓飞饮饰首香马骨高魂魄魔鸟麝麻黄黑默龙％（）＋，－．／０１２３４５６７８９：；ＡＢＣＤＥ:IΩαβγχⅠⅡⅢⅤⅩ∑∧万个九二五他令保修倒候先八关决凰刃删劈区十千卸双向吼四图圣垂型域奥容宽导序必忆快怒急总捷掌携改暗杀束正步段波测激焦煌爆牙狮直码离究第类索翔翻脚节苍菜虎补袭视认请资跑距蹴闭阵需震霸页额鬼鹭齐AS局表链",
+  "fonts": [
+    {
+      "key": "simsun18",
+      "face": "宋体",
+      "height": 18,
+      "kind": "numeric"
+    },
+    {
+      "key": "simsun20",
+      "face": "宋体",
+      "height": 20,
+      "kind": "numeric"
+    },
+    {
+      "key": "simsun24",
+      "face": "宋体",
+      "height": 24,
+      "kind": "numeric"
+    },
+    {
+      "key": "simsun26",
+      "face": "宋体",
+      "height": 26,
+      "kind": "numeric"
+    },
+    {
+      "key": "arial24",
+      "face": "Arial",
+      "height": 24,
+      "kind": "numeric"
+    },
+    {
+      "key": "arial26",
+      "face": "Arial",
+      "height": 26,
+      "kind": "numeric"
+    },
+    {
+      "key": "simsun19_text",
+      "face": "宋体",
+      "height": 19,
+      "kind": "text"
+    },
+    {
+      "key": "simsun20_text",
+      "face": "宋体",
+      "height": 20,
+      "kind": "text"
+    },
+    {
+      "key": "simsun22_text",
+      "face": "宋体",
+      "height": 22,
+      "kind": "text"
+    },
+    {
+      "key": "simsun24_text",
+      "face": "宋体",
+      "height": 24,
+      "kind": "text"
+    },
+    {
+      "key": "requested_black20_text",
+      "face": "全真特黑體",
+      "height": 20,
+      "kind": "text"
+    },
+    {
+      "key": "requested_black24_text",
+      "face": "全真特黑體",
+      "height": 24,
+      "kind": "text"
+    },
+    {
+      "key": "requested_black19_mnu",
+      "face": "全真特黑體",
+      "height": 19,
+      "kind": "text"
+    },
+    {
+      "key": "requested_black23_mnu",
+      "face": "全真特黑體",
+      "height": 23,
+      "kind": "text"
+    },
+    {
+      "key": "arial23_mnu",
+      "face": "Arial",
+      "height": 23,
+      "kind": "text"
+    },
+    {
+      "key": "arial25_mnu",
+      "face": "Arial",
+      "height": 25,
+      "kind": "text"
+    },
+    {
+      "key": "arial19_mnu",
+      "face": "Arial",
+      "height": 19,
+      "kind": "numeric"
+    }
+  ],
+  "text_sources": [
+    {
+      "path": "web/data/items.json",
+      "sha256": "6cc02187dfe51472f4a3ea09b793889534d3870fee375916f552d02039c393bf"
+    },
+    {
+      "path": "web/data/party_skills.json",
+      "sha256": "fcd2888eaa6d00d640b587ee5bab96a505ae185c425d90a5d26c0303ed4de5b5"
+    },
+    {
+      "path": "web/data/maps/m01010.json",
+      "sha256": "d4ac4a3f50dbddc4755533ca3ada2ae29b7d2e887f4687a5c02941477698074b"
+    },
+    {
+      "path": "web/data/maps/m01030.json",
+      "sha256": "653f2e57b829a459b45a6b8fd4d51a8a74184a4c6898ae03834745db43f55e39"
+    },
+    {
+      "path": "web/data/maps/m17010.json",
+      "sha256": "8e6e90e287b48ad53432163394bc496666bed1b34aea2acb19deb8d23c3c0342"
+    },
+    {
+      "path": "web/data/maps/m17020.json",
+      "sha256": "4b752b08189f93d6edd727ce2713208daebe10d6932056d34fca95743555dd8a"
+    },
+    {
+      "path": "web/data/maps/m17026.json",
+      "sha256": "e56c9c5108a6307f804dce24e797e1dc2bc25a829c2fc908f28a1965e09c0b87"
+    },
+    {
+      "path": "web/data/maps/m17029.json",
+      "sha256": "e9266c2043df8e851095b22e437cc0b520e4d4382048dd4189bd02b1ac5726a1"
+    },
+    {
+      "path": "web/data/maps/m70010.json",
+      "sha256": "263b4300fa6407314bb0dbd6905938a621e37e68a7004b102ec2cab2749cb9ca"
+    },
+    {
+      "path": "web/data/maps/m72061.json",
+      "sha256": "ab15e46979e1e790acbebaaa0a62b4c1a69dbc724c4ae938f23c34fb5cdaaf0d"
+    },
+    {
+      "path": "web/data/world_map.json",
+      "sha256": "c60437c6157f6c71718c3c5296ab74b9ad8fb6c16bb42f440bf601c295ff04fb"
+    },
+    {
+      "path": "web/data/operation_menu.json",
+      "sha256": "97708e9a4f528f7266a462b23e5825e35031cd7bda9dbbbb85b0f3ea6b89fe9a"
+    },
+    {
+      "path": "web/data/operation_techniques.json",
+      "sha256": "3b7c9d30e0af875e32320ce630a5825112d0ae9bf081551630e88984a3e8ad72"
+    },
+    {
+      "path": "web/controllers/menu.mjs",
+      "sha256": "c9d1131c084f60b3714348a1cbcd4888fc7592f103701d75fa8def8dd4929055"
+    },
+    {
+      "path": "web/core/equipment.mjs",
+      "sha256": "8c098c1e2738a00a3cf4ad60680fc99925813826f2d52a904e2cc567f8567311"
+    },
+    {
+      "path": "web/core/field_skills.mjs",
+      "sha256": "0b457ddd951c7df023d0707dc21952ebc6c992aa32aeb9160b486674e8d1f4ff"
+    },
+    {
+      "path": "web/core/menu_presentation.mjs",
+      "sha256": "2cb34028dc307d61eac06c095dc8b8a24be82e0e65c95fb53d914b2a21614a9b"
+    },
+    {
+      "path": "web/core/menu_settings.mjs",
+      "sha256": "daf73aeba1e6a0bbef4b352be99603bf34527398077cc31a867fcaf92e572dde"
+    },
+    {
+      "path": "web/core/menu_techniques.mjs",
+      "sha256": "af37bf933c513327d4851a3bcd66b3c41c5d2f6366885ab1141ce787d1d9119f"
+    },
+    {
+      "path": "web/core/menu_text.mjs",
+      "sha256": "ad47a07788832c79aa16affffce09033366fb2b2648dcc27f64f3f8145f1c823"
+    },
+    {
+      "path": "web/core/operation_menu.mjs",
+      "sha256": "94d8bcac30041339012633937f7928df72b68d0d9d8b40e20053e39f80b11b30"
+    },
+    {
+      "path": "web/operation_equipment_view.mjs",
+      "sha256": "96e77ab96485bcf5a6171e0ffe6596eb8f4545d25fbd483cb4a52f65b6141e02"
+    },
+    {
+      "path": "web/operation_formation_view.mjs",
+      "sha256": "214be566ae5c0263b5f575d14e81f6ce50599312fd1b083b6e1d61c5daf6150a"
+    },
+    {
+      "path": "web/operation_menu_view.mjs",
+      "sha256": "eab05802757b019983a1b402f9e12c3f76507f8630bd780f94cb2cad7a2d4b26"
+    },
+    {
+      "path": "web/operation_system_view.mjs",
+      "sha256": "44c9ee6968d2f10053f098b7d14c418aa63eeab164e32052c02f0abee1f55022"
+    },
+    {
+      "path": "web/operation_technique_view.mjs",
+      "sha256": "f9ef0f09b13edde0d6fce5d54aa31452e3bbf450ab6a2e2a5a72fdc7802b9553"
+    },
+    {
+      "path": "web/operation_weapon_view.mjs",
+      "sha256": "7999ff41176b47ec8679b07af77579713122da5a87cd135a3ac2cf9e855236d4"
+    }
+  ],
+  "charset_policy": "Pinned connected-menu character subset preserves atlas coordinates and is reproducible without an existing generated manifest. Use --refresh-charset only when adding menu text requires new characters."
+}

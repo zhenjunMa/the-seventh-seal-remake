@@ -1,0 +1,83 @@
+{
+  "schema": "seventh-seal-rewards-parameters",
+  "version": 1,
+  "notes": "每种敌人经验、金钱和掉落候选。drop_item_ids允许重复，保留候选顺序；每次候选抽签的概率在items.json。候选与非零金钱合计最多六槽。只发一次由代码保证。",
+  "entries": {
+    "011": {
+      "name": "角鹰",
+      "source": {
+        "path": "Fight_Role/011.CHR",
+        "sha256": "01625263cd7226760c8bb11067878285c5835ba4a43efbcab68020201c698ec4",
+        "header_offset": 8
+      },
+      "original": {
+        "experience": 60,
+        "money": 0,
+        "drop_item_ids": [
+          331,
+          240,
+          358
+        ]
+      },
+      "parameters": {
+        "experience": 60,
+        "money": 0,
+        "drop_item_ids": [
+          331,
+          240,
+          358
+        ]
+      }
+    },
+    "012": {
+      "name": "雪泥怪",
+      "source": {
+        "path": "Fight_Role/012.CHR",
+        "sha256": "4c9d1ef867222a8ffbdfea2e231f7500f30e0d7fec4fbfa1ab18b2dc874061a0",
+        "header_offset": 8
+      },
+      "original": {
+        "experience": 84,
+        "money": 0,
+        "drop_item_ids": [
+          331,
+          241
+        ]
+      },
+      "parameters": {
+        "experience": 84,
+        "money": 0,
+        "drop_item_ids": [
+          331,
+          241
+        ]
+      }
+    },
+    "013": {
+      "name": "森林狩猎者",
+      "source": {
+        "path": "Fight_Role/013.CHR",
+        "sha256": "5e3a7e65761a52b1653a40bc20ae130072af5c4f704b0cb389bbb239a1cd8ef6",
+        "header_offset": 8
+      },
+      "original": {
+        "experience": 50,
+        "money": 0,
+        "drop_item_ids": [
+          331,
+          242,
+          348
+        ]
+      },
+      "parameters": {
+        "experience": 50,
+        "money": 0,
+        "drop_item_ids": [
+          331,
+          242,
+          348
+        ]
+      }
+    }
+  }
+}

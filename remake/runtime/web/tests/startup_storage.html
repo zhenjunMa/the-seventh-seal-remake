@@ -1,0 +1,11 @@
+<!doctype html><meta charset="utf-8"><title>启动验收：存档只读指纹</title>
+<style>body{background:#101b1d;color:#efe9dc;font:16px monospace;padding:32px}a{color:#d8b678}pre{white-space:pre-wrap}</style>
+<h1>启动验收：存档只读指纹</h1><pre id="result">正在读取…</pre><a href="/">返回游戏</a>
+<script type="module">
+const rows=[];
+for(const key of Object.keys(localStorage).filter(key=>key.startsWith('seventh-seal')).sort()){
+  const value=localStorage.getItem(key),digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(value));
+  rows.push({key,bytes:new TextEncoder().encode(value).length,sha256:[...new Uint8Array(digest)].map(b=>b.toString(16).padStart(2,'0')).join('')});
+}
+document.querySelector('#result').textContent=JSON.stringify({read_only:true,entries:rows},null,2);
+</script>

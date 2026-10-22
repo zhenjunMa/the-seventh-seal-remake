@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>第七封印 · 地图与战斗演示 0.4</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="masthead">
+    <div class="brand"><span class="seal">VII</span><div><h1>第七封印</h1><p>原作复刻 · 地图与战斗演示 0.4</p></div></div>
+    <div class="header-right"><span class="badge">原版素材</span><span id="verification">正在载入…</span></div>
+  </header>
+  <main id="mapView" aria-label="地图场景">
+    <section class="workspace">
+      <div class="topbar"><nav aria-label="视图"><button id="mapTab" class="active">地图预览</button><button id="assetTab">素材浏览</button><button id="enterBattle" class="battle-entry" disabled>进入战斗演示<span>开发入口</span></button></nav><span class="map-tag" id="mapName">M01010</span></div>
+      <div class="stage-wrap" id="stageWrap"><canvas id="stage" tabindex="0" aria-label="地图和原作素材预览"></canvas><div class="stage-note" id="stageNote">方向键 / WASD 行走 · Shift 跑步 · 移动自动跟随 · 拖动查看</div><div class="loading" id="loading">正在还原原作画面…</div></div>
+      <div class="toolbar">
+        <div class="zoom"><button id="zoomOut" aria-label="缩小">−</button><span id="zoomValue">100%</span><button id="zoomIn" aria-label="放大">＋</button><button id="fit">全图</button><button id="center">摄像机跟随</button></div>
+        <div><label class="inline"><input id="grid" type="checkbox">参考网格</label><label class="inline"><input id="collisionOverlay" type="checkbox">通行范围</label><button id="capture">导出画面</button></div>
+      </div>
+      <div class="boundary"><span class="dot"></span><p>已接入原作地形通行格与 16 个场景对象。绿：可走，红：阻挡，黄：切图 / 事件格。开发入口可在本页进入战斗演示并返回当前位置。当前城市未接入地图暗雷，NPC 与切图仍待实现；移动手感及角色遮挡仍待原版对照。</p></div>
+    </section>
+    <aside>
+      <div class="panel-title"><span>预览控制</span><small>01 / VISUAL STUDY</small></div>
+      <label>角色<select id="role"></select></label>
+      <label>动作组<select id="action"></select></label>
+      <label>朝向<select id="direction"></select></label>
+      <div class="pair"><label>播放速度<select id="speed"><option value="0.5">0.5 ×</option><option value="1" selected>1 ×</option><option value="2">2 ×</option></select></label><div class="play-control"><span>播放</span><button id="play" class="full">暂停</button></div></div>
+      <label class="frame-label">帧检查<span id="frameLabel">—</span><input id="frame" type="range" min="0" max="9" value="0"></label>
+      <div class="mini-preview"><canvas id="spritePreview" width="300" height="210" aria-label="角色透明背景预览"></canvas></div>
+      <p class="hint" id="timingNote">动作名称与原版播放时序仍待对照。</p>
+      <div id="assetControls" hidden><label>资源<select id="asset"></select></label><label>图集页<select id="page"></select></label></div>
+      <div class="divider"></div>
+      <div class="panel-title"><span>实验状态</span><small id="position">—</small></div>
+      <p class="hint" id="cellInfo">正在读取通行格…</p>
+      <label>移动验证点<select id="probe"></select></label>
+      <button id="jumpProbe" class="full">前往验证点</button>
+      <div class="pair"><button id="save">保存预览</button><button id="restore">恢复预览</button></div>
+      <p class="hint">保存在此浏览器中，仅记录预览位置与选项。</p>
+      <details><summary>来源与验证</summary><dl id="sourceInfo"></dl><p id="failedResources" class="hint"></p><a href="manifest.json" target="_blank">查看资源清单 ↗</a><br><a href="battle.html" target="_blank" rel="noopener">单独打开战斗验证台 ↗</a></details>
+      <div role="status" id="status">准备中</div>
+    </aside>
+  </main>
+  <section id="battleView" class="battle-scene" aria-label="战斗演示场景" hidden>
+    <div class="battle-scene-bar"><div><strong>战斗演示</strong><span class="battle-dev-label">开发入口 · 同页场景</span><p id="battleMapPosition">地图已暂停，返回后继续当前位置。</p></div><button id="closeBattle" type="button">返回地图当前位置</button></div>
+    <p id="battleSceneStatus" class="battle-scene-status" role="status">正在准备战斗演示…</p>
+    <iframe id="battleFrame" title="原作人物与怪物战斗演示" src="about:blank"></iframe>
+  </section>
+  <footer><span>THE SEVENTH SEAL / ORIGINAL ASSET STUDY</span><span>未修改原版程序、资源与存档</span></footer>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

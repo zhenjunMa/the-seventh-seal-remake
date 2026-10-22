@@ -1,0 +1,11 @@
+.startup-screen{position:absolute;inset:0;background:#000;overflow:hidden;outline:none;touch-action:none;z-index:4}
+.startup-viewport{position:absolute;left:50%;top:50%;width:640px;height:480px;transform:translate(-50%,-50%) scale(var(--startup-scale,1));transform-origin:center;background:#000}
+#startupCanvas{position:absolute;inset:0;width:640px;height:480px;image-rendering:pixelated}
+.startup-video{position:absolute;left:0;top:0;width:640px;height:480px;object-fit:contain;background:#000}
+#startupButtons button,#startupOptions button{position:absolute;border:0;border-radius:0;background:transparent;padding:0;min-width:0;opacity:1;color:transparent;box-shadow:none}
+#startupButtons button:hover,#startupOptions button:hover{background:transparent}
+#startupButtons button:focus-visible,#startupOptions button:focus-visible{outline:none}
+#startupOptions button{color:#fff0b0;font:18px SimSun,serif;text-shadow:1px 1px #000;white-space:pre-line}
+#startupOptions .startup-save{font-size:15px;text-align:left;line-height:1.6}
+#startupOptions button[aria-current=true]{color:#ffff60}
+#startupOptions button.startup-save{color:#fff;display:flex;align-items:flex-start;justify-content:flex-start}

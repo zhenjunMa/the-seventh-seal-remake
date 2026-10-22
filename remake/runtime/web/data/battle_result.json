@@ -1,0 +1,2683 @@
+{
+  "schema": "seventh-seal-battle-result",
+  "version": 1,
+  "native_canvas": {
+    "width": 640,
+    "height": 480
+  },
+  "menus": [
+    {
+      "id": "fight_report",
+      "source": "SYSTEM/Fight_Report.mnu",
+      "source_sha256": "b747664bc5582649e096e2ec45511dd7f6c09b31b5e8ee9208aee5332570d40d",
+      "width": 311,
+      "height": 468,
+      "widget_count": 1,
+      "header_hex": "03000000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000010000000000000000000000000000000000000000000000000037010000d40100000d000000190000002700000038000000440000004b000000550000005c000000650000006d0000007700000087000000ab000000d8000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "widgets": [
+        {
+          "index": 0,
+          "source_offset": 1138,
+          "type_raw": 0,
+          "name": "Background",
+          "values_at_25_raw": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "draw_point_raw": {
+            "x": 0,
+            "y": 0
+          },
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0
+          },
+          "bitmap_indices_raw": [
+            1,
+            0,
+            0
+          ],
+          "text_raw": "",
+          "font_raw": "",
+          "raw_hex": "004261636b67726f756e64000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "normal_images": [
+            "assets/battle_result/fight_report/image_000.png"
+          ],
+          "active_images": [],
+          "selected_images": []
+        }
+      ],
+      "groups": [
+        {
+          "index": 0,
+          "name": "BACKGROUND",
+          "source_offset": 147159,
+          "frame_count": 1,
+          "header_hex": "4241434b47524f554e440000000000000000000001000000000000007b91a9010000000000000000000000000000000000000000000000000000000000",
+          "images": [
+            0
+          ],
+          "blend_mode_raw_24": 0
+        }
+      ],
+      "images": [
+        {
+          "index": 0,
+          "group": 0,
+          "frame": 0,
+          "name": "BACKGROUND",
+          "source_offset": 147220,
+          "width": 311,
+          "height": 468,
+          "stream_bytes": 147458,
+          "header_hex": "37010000d401000002400200000000008c380200",
+          "image": "assets/battle_result/fight_report/image_000.png",
+          "primary_image": "assets/battle_result/fight_report/image_000_primary.png",
+          "png_sha256": "de572b75135aca5dcf3a71eececfb4e33d3ea2f0abafc083f4cb96524eeedb4b",
+          "pixel_bounds": [
+            0,
+            0,
+            163,
+            467
+          ],
+          "mask_bytes": 0,
+          "mask_source_offset": null,
+          "mask_image": null,
+          "mask_sha256": null,
+          "mask_limit": null,
+          "alpha_bytes": 145548,
+          "alpha_source_offset": 442156,
+          "alpha_image": "assets/battle_result/fight_report/image_000_alpha.png",
+          "alpha_rule": "Opacity=255-raw, with sparse uncovered pixels transparent",
+          "secondary_verified": true
+        }
+      ],
+      "sensor": {
+        "source_offset": 1611,
+        "bytes": 145548,
+        "sha256": "ee750addcfae9b576e220f5cb84b082d20291d2be274ba0414a7a2c034a9361f",
+        "image": "assets/battle_result/fight_report/sensor.png"
+      },
+      "eof_verified": true,
+      "coordinates": "Source widget draw points and rectangles are relative to this MNU; absolute screen placement requires native caller evidence."
+    }
+  ],
+  "assets": {
+    "fight_report_01": {
+      "id": "fight_report_01",
+      "source": "Fight_Role/combo/Fight_Report_01.dgp",
+      "source_sha256": "0b1daea3f50aa221c8958e14a8812b21a459e137b50072668e8914fe07c95df3",
+      "width": 630,
+      "height": 475,
+      "frame_count": 1,
+      "anchor_raw": [
+        32,
+        0,
+        0
+      ],
+      "frames": [
+        {
+          "index": 0,
+          "image": "assets/battle_result/fight_report_01/frame_000.png",
+          "png_sha256": "429164d4235140dc3f969a0f538884b825a88352fb19b1b32e38053b3ea03e5b",
+          "source_frame_record": {
+            "page": 0,
+            "x": 0,
+            "y": 0,
+            "offset": 0,
+            "size": 361216
+          },
+          "pixel_bounds": [
+            15,
+            5,
+            622,
+            469
+          ],
+          "mask_source_offset": 195,
+          "mask_bytes": 299250,
+          "mask_sha256": "ef2ed6fb2298def335995daf10a79ff8cd900169aede7e30111ff777f402ad67",
+          "mask_image": "assets/battle_result/fight_report_01/frame_000_mask.png",
+          "inverse_mask_image": "assets/battle_result/fight_report_01/frame_000_inverse_mask.png",
+          "render_image": "assets/battle_result/fight_report_01/frame_000_inverse_mask.png",
+          "width": 630,
+          "height": 475
+        }
+      ],
+      "actions": [],
+      "secondary_verification": {
+        "present": false,
+        "checked_pixels": 0
+      },
+      "metadata": {
+        "source": "D:\\game\\dqfy\\The Seventh Seal\\Fight_Role\\combo\\Fight_Report_01.dgp",
+        "sha256": "0b1daea3f50aa221c8958e14a8812b21a459e137b50072668e8914fe07c95df3",
+        "bytes": 660661,
+        "version": 9,
+        "frame_width": 630,
+        "frame_height": 475,
+        "frame_count": 1,
+        "name_cp950": "",
+        "header_hex": "09000000000100000000000000000000000000000001000000000000000000760200000000000000000000010000000000000000000000000000000000000000000000",
+        "geometry_hex": "7602db010100000000000000010100000000000000000000ff00010000000101b5910400008305000000",
+        "extra_header_hex": "000000000100000001000000000000002000000000000000000000000000000000000000000000000000000000000000",
+        "page_records_hex": [
+          "010178020000db01000076020000db010000"
+        ],
+        "optional_blocks": [
+          {
+            "kind": "per_frame_mask",
+            "offset": 195,
+            "bytes": 299250
+          }
+        ],
+        "payload_offset": 299445,
+        "payload_bytes": 361216,
+        "dual_pixel_stream": false,
+        "indexed_auxiliary": [],
+        "indexed_auxiliary_limit": "Header[19] is a separately loaded auxiliary stream. Its effects/rendering semantics are not implemented; main 16-bit spans remain the decoded pixels.",
+        "anchor_raw": [
+          32,
+          0,
+          0
+        ],
+        "actions": [],
+        "frames": [
+          {
+            "page": 0,
+            "x": 0,
+            "y": 0,
+            "offset": 0,
+            "size": 361216
+          }
+        ],
+        "eof_verified": true
+      },
+      "mask_limit": "Inverse-mask PNGs are explicit rendering candidates only. Source raw mask plane and primary spans remain independently available; exact per-resource native blend caller must corroborate their use.",
+      "rendering": {
+        "primary_blend": "source-over",
+        "indexed_blend": "plus-lighter",
+        "mask_rule": "Canvas alpha=(255-source_mask)/255; source native RGB565 lookup rounding remains an explicit adapter.",
+        "evidence": [
+          "ev_fc1019e71d28f99f0db6f5338accaad62c5282b439e3a85cb47c694cbd21238c",
+          "ev_5cc4b952b2f05a12a77f52ac61c63416588a1fcda1f101ebcd71f8132e2ca57b",
+          "ev_fde820ddc28e106694a9825d9dcb0faec8eafc7d6ea9d9add7d77b78bb3cc16a"
+        ]
+      }
+    },
+    "fight_report_02": {
+      "id": "fight_report_02",
+      "source": "Fight_Role/combo/Fight_Report_02.dgp",
+      "source_sha256": "b71e14d28fa9f7d669ea7c7c6eb9260755011cbdefbfaf345ee88aa08e934a81",
+      "width": 175,
+      "height": 26,
+      "frame_count": 4,
+      "anchor_raw": [
+        32,
+        0,
+        0
+      ],
+      "frames": [
+        {
+          "index": 0,
+          "image": "assets/battle_result/fight_report_02/frame_000.png",
+          "png_sha256": "1d5d241ef68a04dc25091bc2dda2f51054df79fa605361c9fe85accbb8288c94",
+          "source_frame_record": {
+            "page": 0,
+            "x": 0,
+            "y": 0,
+            "offset": 0,
+            "size": 8172
+          },
+          "pixel_bounds": [
+            1,
+            0,
+            174,
+            26
+          ],
+          "render_image": "assets/battle_result/fight_report_02/frame_000.png",
+          "width": 175,
+          "height": 26
+        },
+        {
+          "index": 1,
+          "image": "assets/battle_result/fight_report_02/frame_001.png",
+          "png_sha256": "0e0c734d81a886a45d1212996fee5548eb7dd2a1e12a5b5c5820e3d85c952668",
+          "source_frame_record": {
+            "page": 0,
+            "x": 175,
+            "y": 0,
+            "offset": 8172,
+            "size": 8172
+          },
+          "pixel_bounds": [
+            1,
+            0,
+            174,
+            26
+          ],
+          "render_image": "assets/battle_result/fight_report_02/frame_001.png",
+          "width": 175,
+          "height": 26
+        },
+        {
+          "index": 2,
+          "image": "assets/battle_result/fight_report_02/frame_002.png",
+          "png_sha256": "32c28b729ff73dda8730093b43222caed0104687974299f6d6cf5367b25f127e",
+          "source_frame_record": {
+            "page": 0,
+            "x": 350,
+            "y": 0,
+            "offset": 16344,
+            "size": 8172
+          },
+          "pixel_bounds": [
+            1,
+            0,
+            174,
+            26
+          ],
+          "render_image": "assets/battle_result/fight_report_02/frame_002.png",
+          "width": 175,
+          "height": 26
+        },
+        {
+          "index": 3,
+          "image": "assets/battle_result/fight_report_02/frame_003.png",
+          "png_sha256": "a3b35dfe98a22fede070a6fe378c0b96ea8ebe6128d5116301dee35ba7e723d5",
+          "source_frame_record": {
+            "page": 0,
+            "x": 0,
+            "y": 26,
+            "offset": 24516,
+            "size": 8172
+          },
+          "pixel_bounds": [
+            1,
+            0,
+            174,
+            26
+          ],
+          "render_image": "assets/battle_result/fight_report_02/frame_003.png",
+          "width": 175,
+          "height": 26
+        }
+      ],
+      "actions": [],
+      "secondary_verification": {
+        "present": false,
+        "checked_pixels": 0
+      },
+      "metadata": {
+        "source": "D:\\game\\dqfy\\The Seventh Seal\\Fight_Role\\combo\\Fight_Report_02.dgp",
+        "sha256": "b71e14d28fa9f7d669ea7c7c6eb9260755011cbdefbfaf345ee88aa08e934a81",
+        "bytes": 32943,
+        "version": 9,
+        "frame_width": 175,
+        "frame_height": 26,
+        "frame_count": 4,
+        "name_cp950": "",
+        "header_hex": "09000000000000000000000000000000000000000001000000000000000000af0000001a00000000000000010000000100000000000000000000000000000000000000",
+        "geometry_hex": "af001a000400000000000000010100000000000000000000ff00040000000101ff000000b07f00000000",
+        "extra_header_hex": "000000000100000001000000000000002000000000000000000000000000000000000000000000000000000000000000",
+        "page_records_hex": [
+          "03021002000034000000af0000001a000000"
+        ],
+        "optional_blocks": [],
+        "payload_offset": 255,
+        "payload_bytes": 32688,
+        "dual_pixel_stream": false,
+        "indexed_auxiliary": [],
+        "indexed_auxiliary_limit": "Header[19] is a separately loaded auxiliary stream. Its effects/rendering semantics are not implemented; main 16-bit spans remain the decoded pixels.",
+        "anchor_raw": [
+          32,
+          0,
+          0
+        ],
+        "actions": [],
+        "frames": [
+          {
+            "page": 0,
+            "x": 0,
+            "y": 0,
+            "offset": 0,
+            "size": 8172
+          },
+          {
+            "page": 0,
+            "x": 175,
+            "y": 0,
+            "offset": 8172,
+            "size": 8172
+          },
+          {
+            "page": 0,
+            "x": 350,
+            "y": 0,
+            "offset": 16344,
+            "size": 8172
+          },
+          {
+            "page": 0,
+            "x": 0,
+            "y": 26,
+            "offset": 24516,
+            "size": 8172
+          }
+        ],
+        "eof_verified": true
+      },
+      "mask_limit": null,
+      "rendering": {
+        "primary_blend": "source-over",
+        "indexed_blend": "plus-lighter",
+        "mask_rule": "Canvas alpha=(255-source_mask)/255; source native RGB565 lookup rounding remains an explicit adapter.",
+        "evidence": [
+          "ev_fc1019e71d28f99f0db6f5338accaad62c5282b439e3a85cb47c694cbd21238c",
+          "ev_5cc4b952b2f05a12a77f52ac61c63416588a1fcda1f101ebcd71f8132e2ca57b",
+          "ev_fde820ddc28e106694a9825d9dcb0faec8eafc7d6ea9d9add7d77b78bb3cc16a"
+        ]
+      }
+    },
+    "victor": {
+      "id": "victor",
+      "source": "Fight_Role/Effect/victor.dgp",
+      "source_sha256": "c9ac4c305a9900462eb1c75bc2478c2d3ff485384010ed75c049241fce3d6232",
+      "width": 640,
+      "height": 480,
+      "frame_count": 24,
+      "anchor_raw": [
+        32,
+        0,
+        0
+      ],
+      "frames": [
+        {
+          "index": 0,
+          "image": "assets/battle_result/victor/frame_000.png",
+          "png_sha256": "d614f328a8a46a034df38fffe6a0c492754871e086b3a75d517ec7494cc6a340",
+          "source_frame_record": {
+            "page": 0,
+            "x": 0,
+            "y": 0,
+            "offset": 0,
+            "size": 960
+          },
+          "pixel_bounds": null,
+          "indexed_image": "assets/battle_result/victor/frame_000_indexed.png",
+          "indexed_record": {
+            "frame": 0,
+            "record_offset": 24377,
+            "active_raw": 1,
+            "size_field_offset": 24378,
+            "palette_offset": 24382,
+            "palette_sha256": "748a0e5ce421d650083d90249fd7d7d33b13c9a15850f3f992273a388f7b519c",
+            "indexed_pixels_offset": 25150,
+            "indexed_pixels_bytes": 222759,
+            "indexed_pixels_sha256": "2ae68e7285b038f79b0778228455d1a8af7f78c273fadd8e3b22bdbf4d7fb0d2",
+            "end_offset": 247909
+          },
+          "indexed_stats": {
+            "frame": 0,
+            "covered_pixels": 203443,
+            "index_zero_pixels": 0,
+            "index_255_pixels": 0,
+            "nonblack_pixels": 203443,
+            "bounds": [
+              0,
+              0,
+              624,
+              479
+            ],
+            "rgba_sha256": "071c0881e07f1519539bf04e5d7b7aab98674344691d7e3f7bfb26052937f1b5"
+          },
+          "indexed_blend": "lighter",
+          "render_image": "assets/battle_result/victor/frame_000.png",
+          "width": 640,
+          "height": 480
+        },
+        {
+          "index": 1,
+          "image": "assets/battle_result/victor/frame_001.png",
+          "png_sha256": "d614f328a8a46a034df38fffe6a0c492754871e086b3a75d517ec7494cc6a340",
+          "source_frame_record": {
+            "page": 1,
+            "x": 0,
+            "y": 0,
+            "offset": 960,
+            "size": 960
+          },
+          "pixel_bounds": null,
+          "indexed_image": "assets/battle_result/victor/frame_001_indexed.png",
+          "indexed_record": {
+            "frame": 1,
+            "record_offset": 247909,
+            "active_raw": 1,
+            "size_field_offset": 247910,
+            "palette_offset": 247914,
+            "palette_sha256": "205767deb446f5b3d305dafdd3e6fb3ae5481f1a5d1e373f27eb77ebea8e909e",
+            "indexed_pixels_offset": 248682,
+            "indexed_pixels_bytes": 148803,
+            "indexed_pixels_sha256": "7fbe699c845c12a189eded77d60a072c4269c2b96c2eac1d7e1469dabfe308b7",
+            "end_offset": 397485
+          },
+          "indexed_stats": {
+            "frame": 1,
+            "covered_pixels": 137091,
+            "index_zero_pixels": 0,
+            "index_255_pixels": 0,
+            "nonblack_pixels": 137091,
+            "bounds": [
+              45,
+              0,
+              639,
+              479
+            ],
+            "rgba_sha256": "d671d9adea423dcdd1d6d2e8857cea8c2f0545f05907c7b0a22ab68cb8b530b3"
+          },
+          "indexed_blend": "lighter",
+          "render_image": "assets/battle_result/victor/frame_001.png",
+          "width": 640,
+          "height": 480
+        },
+        {
+          "index": 2,
+          "image": "assets/battle_result/victor/frame_002.png",
+          "png_sha256": "d614f328a8a46a034df38fffe6a0c492754871e086b3a75d517ec7494cc6a340",
+          "source_frame_record": {
+            "page": 2,
+            "x": 0,
+            "y": 0,
+            "offset": 1920,
+            "size": 960
+          },
+          "pixel_bounds": null,
+          "indexed_image": "assets/battle_result/victor/frame_002_indexed.png",
+          "indexed_record": {
+            "frame": 2,
+            "record_offset": 397485,
+            "active_raw": 1,
+            "size_field_offset": 397486,
+            "palette_offset": 397490,
+            "palette_sha256": "12754881d3d2d15126373a0edab7950fcc233d8d1af0316d3aae9062ff6d05fa",
+            "indexed_pixels_offset": 398258,
+            "indexed_pixels_bytes": 146497,
+            "indexed_pixels_sha256": "b44373405af38ec982fddca9829d3dac0198da61e7ac7d2f4187d532ad0988b5",
+            "end_offset": 544755
+          },
+          "indexed_stats": {
+            "frame": 2,
+            "covered_pixels": 132149,
+            "index_zero_pixels": 0,
+            "index_255_pixels": 0,
+            "nonblack_pixels": 132149,
+            "bounds": [
+              0,
+              0,
+              639,
+              389
+            ],
+            "rgba_sha256": "6bc9f44b4126465285b0cd34d8b5e060afb0c740e5b11ee8dc99fb18783d790f"
+          },
+          "indexed_blend": "lighter",
+          "render_image": "assets/battle_result/victor/frame_002.png",
+          "width": 640,
+          "height": 480
+        },
+        {
+          "index": 3,
+          "image": "assets/battle_result/victor/frame_003.png",
+          "png_sha256": "d614f328a8a46a034df38fffe6a0c492754871e086b3a75d517ec7494cc6a340",
+          "source_frame_record": {
+            "page": 3,
+            "x": 0,
+            "y": 0,
+            "offset": 2880,
+            "size": 960
+          },
+          "pixel_bounds": null,
+          "indexed_image": "assets/battle_result/victor/frame_003_indexed.png",
+          "indexed_record": {
+            "frame": 3,
+            "record_offset": 544755,
+            "active_raw": 1,
+            "size_field_offset": 544756,
+            "palette_offset": 544760,
+            "palette_sha256": "8ad602a5f0916641ac734e02481778329b40268ce2d0d1dd1a03d56af25afb3b",
+            "indexed_pixels_offset": 545528,
+            "indexed_pixels_bytes": 111629,
+            "indexed_pixels_sha256": "8900e41e521b5cd959279f37691f75b5bd2421630090c07afcbd7c928d2b0811",
+            "end_offset": 657157
+          },
+          "indexed_stats": {
+            "frame": 3,
+            "covered_pixels": 94965,
+            "index_zero_pixels": 0,
+            "index_255_pixels": 1,
+            "nonblack_pixels": 94965,
+            "bounds": [
+              159,
+              0,
+              639,
+              479
+            ],
+            "rgba_sha256": "c9203a478ee05abe5becc0b54d7c621034bb17a01530516635468c930df87dbf"
+          },
+          "indexed_blend": "lighter",
+          "render_image": "assets/battle_result/victor/frame_003.png",
+          "width": 640,
+          "height": 480
+        },
+        {
+          "index": 4,
+          "image": "assets/battle_result/victor/frame_004.png",
+          "png_sha256": "d614f328a8a46a034df38fffe6a0c492754871e086b3a75d517ec7494cc6a340",
+          "source_frame_record": {
+            "page": 4,
+            "x": 0,
+            "y": 0,
+            "offset": 3840,
+            "size": 960
+          },
+          "pixel_bounds": null,
+          "indexed_image": "assets/battle_result/victor/frame_004_indexed.png",
+          "indexed_record": {
+            "frame": 4,
+            "record_offset": 657157,
+            "active_raw": 1,
+            "size_field_offset": 657158,
+            "palette_offset": 657162,
+            "palette_sha256": "19e5ea22c0d20ef56e0deb5de416299d7269314f313061af95cc4c0362e77bbc",
+            "indexed_pixels_offset": 657930,
+            "indexed_pixels_bytes": 143922,
+            "indexed_pixels_sha256": "9acefc3454d2cb2896d133503655b9ec9579a3f22bf88c799bad8d544f8af232",
+            "end_offset": 801852
+          },
+          "indexed_stats": {
+            "frame": 4,
+            "covered_pixels": 136790,
+            "index_zero_pixels": 0,
+            "index_255_pixels": 11616,
+            "nonblack_pixels": 136790,
+            "bounds": [
+              11,
+              0,
+              639,
+              412
+            ],
+            "rgba_sha256": "4118d6ac3e09d832b3a162b968e60a0782f7ed0c664be34002880a564264bf4c"
+          },
+          "indexed_blend": "lighter",
+          "render_image": "assets/battle_result/victor/frame_004.png",
+          "width": 640,
+          "height": 480
+        },
+        {
+          "index": 5,
+          "image": "assets/battle_result/victor/frame_005.png",
+          "png_sha256": "d614f328a8a46a034df38fffe6a0c492754871e086b3a75d517ec7494cc6a340",
+          "source_frame_record": {
+            "page": 5,
+            "x": 0,
+            "y": 0,
+            "offset": 4800,
+            "size": 960
+          },
+          "pixel_bounds": null,
+          "indexed_image": "assets/battle_result/victor/frame_005_indexed.png",
+          "indexed_record": {
+            "frame": 5,
+            "record_offset": 801852,
+            "active_raw": 1,
+            "size_field_offset": 801853,
+            "palette_offset": 801857,
+            "palette_sha256": "5901c37c9a5810719bcd3381447ea2e1d2bbd900b143fd7182c30fc942a206d3",
+            "indexed_pixels_offset": 802625,
+            "indexed_pixels_bytes": 116661,
+            "indexed_pixels_sha256": "f205a9270756b8942d55a18175f142430ef1a56fdd3a8953cf0b8fb62a1b059e",
+            "end_offset": 919286
+          },
+          "indexed_stats": {
+            "frame": 5,
+            "covered_pixels": 105653,
+            "index_zero_pixels": 0,
+            "index_255_pixels": 4851,
+            "nonblack_pixels": 105653,
+            "bounds": [
+              0,
+              15,
+              594,
+              373
+            ],
+            "rgba_sha256": "700d959145c222a743ea96b708dd2c912e08a6d54f5333281d4a044eb14b2368"
+          },
+          "indexed_blend": "lighter",
+          "render_image": "assets/battle_result/victor/frame_005.png",
+          "width": 640,
+          "height": 480
+        },
+        {
+          "index": 6,
+          "image": "assets/battle_result/victor/frame_006.png",
+          "png_sha256": "d614f328a8a46a034df38fffe6a0c492754871e086b3a75d517ec7494cc6a340",
+          "source_frame_record": {
+            "page": 6,
+            "x": 0,
+            "y": 0,
+            "offset": 5760,
+            "size": 960
+          },
+          "pixel_bounds": null,
+          "indexed_image": "assets/battle_result/victor/frame_006_indexed.png",
+          "indexed_record": {
+            "frame": 6,
+            "record_offset": 919286,
+            "active_raw": 1,
+            "size_field_offset": 919287,
+            "palette_offset": 919291,
+            "palette_sha256": "08c8774243c42f5e18a74546ff2e88c9dc0b0ad9782cb0394ab3e6301c52b1c8",
+            "indexed_pixels_offset": 920059,
+            "indexed_pixels_bytes": 161592,
+            "indexed_pixels_sha256": "6e3ba78c3dee9305cda4c05fbb8d510cc368840e81482b0fa37ddbac28a78799",
+            "end_offset": 1081651
+          },
+          "indexed_stats": {
+            "frame": 6,
+            "covered_pixels": 143500,
+            "index_zero_pixels": 0,
+            "index_255_pixels": 3680,
+            "nonblack_pixels": 143500,
+            "bounds": [
+              0,
+              0,
+              639,
+              413
+            ],
+            "rgba_sha256": "e617b7f22e16407a71875b635e017427b477a2bfb7749766a1fa902b6687833d"
+          },
+          "indexed_blend": "lighter",
+          "render_image": "assets/battle_result/victor/frame_006.png",
+          "width": 640,
+          "height": 480
+        },
+        {
+          "index": 7,
+          "image": "assets/battle_result/victor/frame_007.png",
+          "png_sha256": "d614f328a8a46a034df38fffe6a0c492754871e086b3a75d517ec7494cc6a340",
+          "source_frame_record": {
+            "page": 7,
+            "x": 0,
+            "y": 0,
+            "offset": 6720,
+            "size": 960
+          },
+          "pixel_bounds": null,
+          "indexed_image": "assets/battle_result/victor/frame_007_indexed.png",
+          "indexed_record": {
+            "frame": 7,
+            "record_offset": 1081651,
+            "active_raw": 1,
+            "size_field_offset": 1081652,
+            "palette_offset": 1081656,
+            "palette_sha256": "dacbcd87d6e087c03b8159f244876502d4d165197feb2610758e1b9d246a33a5",
+            "indexed_pixels_offset": 1082424,
+            "indexed_pixels_bytes": 212555,
+            "indexed_pixels_sha256": "800613fe5c01f32c8b04a8f550e93b2844dd612f82a95c294d0b6b0cef52ac13",
+            "end_offset": 1294979
+          },
+          "indexed_stats": {
+            "frame": 7,
+            "covered_pixels": 176215,
+            "index_zero_pixels": 0,
+            "index_255_pixels": 2539,
+            "nonblack_pixels": 176215,
+            "bounds": [
+              0,
+              0,
+              639,
+              450
+            ],
+            "rgba_sha256": "731e92e1190bdc3409b77c2e77290d0ec57ba72448d8999a51141323bcfb75ed"
+          },
+          "indexed_blend": "lighter",
+          "render_image": "assets/battle_result/victor/frame_007.png",
+          "width": 640,
+          "height": 480
+        },
+        {
+          "index": 8,
+          "image": "assets/battle_result/victor/frame_008.png",
+          "png_sha256": "d614f328a8a46a034df38fffe6a0c492754871e086b3a75d517ec7494cc6a340",
+          "source_frame_record": {
+            "page": 8,
+            "x": 0,
+            "y": 0,
+            "offset": 7680,
+            "size": 960
+          },
+          "pixel_bounds": null,
+          "indexed_image": "assets/battle_result/victor/frame_008_indexed.png",
+          "indexed_record": {
+            "frame": 8,
+            "record_offset": 1294979,
+            "active_raw": 1,
+            "size_field_offset": 1294980,
+            "palette_offset": 1294984,
+            "palette_sha256": "e94336b1bdef741b20b59c07e8f5e0ea532b7e00ceb9af5e0e41b879c735a95e",
+            "indexed_pixels_offset": 1295752,
+            "indexed_pixels_bytes": 273712,
+            "indexed_pixels_sha256": "d17353e623dc7ad4e388317791441323804a18997366590381402945a70dac90",
+            "end_offset": 1569464
+          },
+          "indexed_stats": {
+            "frame": 8,
+            "covered_pixels": 185120,
+            "index_zero_pixels": 0,
+            "index_255_pixels": 1243,
+            "nonblack_pixels": 185120,
+            "bounds": [
+              0,
+              0,
+              639,
+              478
+            ],
+            "rgba_sha256": "90ce930f5337f376338b16dc0a6c61b4553089996c27a91b4200e1fdda4b5c81"
+          },
+          "indexed_blend": "lighter",
+          "render_image": "assets/battle_result/victor/frame_008.png",
+          "width": 640,
+          "height": 480
+        },
+        {
+          "index": 9,
+          "image": "assets/battle_result/victor/frame_009.png",
+          "png_sha256": "d614f328a8a46a034df38fffe6a0c492754871e086b3a75d517ec7494cc6a340",
+          "source_frame_record": {
+            "page": 9,
+            "x": 0,
+            "y": 0,
+            "offset": 8640,
+            "size": 960
+          },
+          "pixel_bounds": null,
+          "indexed_image": "assets/battle_result/victor/frame_009_indexed.png",
+          "indexed_record": {
+            "frame": 9,
+            "record_offset": 1569464,
+            "active_raw": 1,
+            "size_field_offset": 1569465,
+            "palette_offset": 1569469,
+            "palette_sha256": "8b5ba51ce435078580e6523eab53a67cd17027d591013e06f536eecd6d03ee05",
+            "indexed_pixels_offset": 1570237,
+            "indexed_pixels_bytes": 96294,
+            "indexed_pixels_sha256": "d370f8d28b9ddeefb0590f58a995a9c8a1832f97928be785ae8c24c98a7fac10",
+            "end_offset": 1666531
+          },
+          "indexed_stats": {
+            "frame": 9,
+            "covered_pixels": 52774,
+            "index_zero_pixels": 0,
+            "index_255_pixels": 567,
+            "nonblack_pixels": 52774,
+            "bounds": [
+              65,
+              0,
+              581,
+              471
+            ],
+            "rgba_sha256": "ebda03cc694c8c432fd478cad886dc87caa5a62e2e1fe9649e2bf7597db09e9f"
+          },
+          "indexed_blend": "lighter",
+          "render_image": "assets/battle_result/victor/frame_009.png",
+          "width": 640,
+          "height": 480
+        },
+        {
+          "index": 10,
+          "image": "assets/battle_result/victor/frame_010.png",
+          "png_sha256": "d614f328a8a46a034df38fffe6a0c492754871e086b3a75d517ec7494cc6a340",
+          "source_frame_record": {
+            "page": 10,
+            "x": 0,
+            "y": 0,
+            "offset": 9600,
+            "size": 960
+          },
+          "pixel_bounds": null,
+          "indexed_image": "assets/battle_result/victor/frame_010_indexed.png",
+          "indexed_record": {
+            "frame": 10,
+            "record_offset": 1666531,
+            "active_raw": 1,
+            "size_field_offset": 1666532,
+            "palette_offset": 1666536,
+            "palette_sha256": "9f3805ea1a5f80959153788796cede493704c0d984846cdcbc1d31608f61778e",
+            "indexed_pixels_offset": 1667304,
+            "indexed_pixels_bytes": 82888,
+            "indexed_pixels_sha256": "11fbbe95bc299171b60efb2b0ccafab72aed30230d6d3fa762c3fbb0fab98bab",
+            "end_offset": 1750192
+          },
+          "indexed_stats": {
+            "frame": 10,
+            "covered_pixels": 47728,
+            "index_zero_pixels": 0,
+            "index_255_pixels": 564,
+            "nonblack_pixels": 47728,
+            "bounds": [
+              38,
+              0,
+              606,
+              479
+            ],
+            "rgba_sha256": "8bb539ac8610d1d501084bf1cfda564e9d4d2c8994bae1ad6f2ab92f16c488c7"
+          },
+          "indexed_blend": "lighter",
+          "render_image": "assets/battle_result/victor/frame_010.png",
+          "width": 640,
+          "height": 480
+        },
+        {
+          "index": 11,
+          "image": "assets/battle_result/victor/frame_011.png",
+          "png_sha256": "d614f328a8a46a034df38fffe6a0c492754871e086b3a75d517ec7494cc6a340",
+          "source_frame_record": {
+            "page": 11,
+            "x": 0,
+            "y": 0,
+            "offset": 10560,
+            "size": 960
+          },
+          "pixel_bounds": null,
+          "indexed_image": "assets/battle_result/victor/frame_011_indexed.png",
+          "indexed_record": {
+            "frame": 11,
+            "record_offset": 1750192,
+            "active_raw": 1,
+            "size_field_offset": 1750193,
+            "palette_offset": 1750197,
+            "palette_sha256": "974b63464fd83d47971ec3587df15041be00a412d4efd6a5b9dd547fa07ef432",
+            "indexed_pixels_offset": 1750965,
+            "indexed_pixels_bytes": 65229,
+            "indexed_pixels_sha256": "5bebff4c705996432a10fe7682a70493ff73143e249255ec03859f70ce6a8218",
+            "end_offset": 1816194
+          },
+          "indexed_stats": {
+            "frame": 11,
+            "covered_pixels": 41193,
+            "index_zero_pixels": 0,
+            "index_255_pixels": 560,
+            "nonblack_pixels": 41193,
+            "bounds": [
+              10,
+              1,
+              630,
+              479
+            ],
+            "rgba_sha256": "acace9550491e82828ea92a1a3bf3406542295f43d06b5b1e887fa50cb956abb"
+          },
+          "indexed_blend": "lighter",
+          "render_image": "assets/battle_result/victor/frame_011.png",
+          "width": 640,
+          "height": 480
+        },
+        {
+          "index": 12,
+          "image": "assets/battle_result/victor/frame_012.png",
+          "png_sha256": "d614f328a8a46a034df38fffe6a0c492754871e086b3a75d517ec7494cc6a340",
+          "source_frame_record": {
+            "page": 12,
+            "x": 0,
+            "y": 0,
+            "offset": 11520,
+            "size": 960
+          },
+          "pixel_bounds": null,
+          "indexed_image": "assets/battle_result/victor/frame_012_indexed.png",
+          "indexed_record": {
+            "frame": 12,
+            "record_offset": 1816194,
+            "active_raw": 1,
+            "size_field_offset": 1816195,
+            "palette_offset": 1816199,
+            "palette_sha256": "063deba52ae9d21652464fe8d4194a88a60b8d70096c68eeab446e6168162606",
+            "indexed_pixels_offset": 1816967,
+            "indexed_pixels_bytes": 49145,
+            "indexed_pixels_sha256": "a4fc1871fd726a69f8642d57d73835515134c89df49f8eb6e964dfa54cecb055",
+            "end_offset": 1866112
+          },
+          "indexed_stats": {
+            "frame": 12,
+            "covered_pixels": 36273,
+            "index_zero_pixels": 0,
+            "index_255_pixels": 555,
+            "nonblack_pixels": 36273,
+            "bounds": [
+              22,
+              1,
+              578,
+              473
+            ],
+            "rgba_sha256": "ba4fa9a5f66e3c4be84fcae7dd50f7558d06d8c21693b7da80e0b9786cc6371c"
+          },
+          "indexed_blend": "lighter",
+          "render_image": "assets/battle_result/victor/frame_012.png",
+          "width": 640,
+          "height": 480
+        },
+        {
+          "index": 13,
+          "image": "assets/battle_result/victor/frame_013.png",
+          "png_sha256": "d614f328a8a46a034df38fffe6a0c492754871e086b3a75d517ec7494cc6a340",
+          "source_frame_record": {
+            "page": 13,
+            "x": 0,
+            "y": 0,
+            "offset": 12480,
+            "size": 960
+          },
+          "pixel_bounds": null,
+          "indexed_image": "assets/battle_result/victor/frame_013_indexed.png",
+          "indexed_record": {
+            "frame": 13,
+            "record_offset": 1866112,
+            "active_raw": 1,
+            "size_field_offset": 1866113,
+            "palette_offset": 1866117,
+            "palette_sha256": "94b0005d7d35a77864c8480af7d39bb80ea6f6d86b438757ca7101a4383d5f2f",
+            "indexed_pixels_offset": 1866885,
+            "indexed_pixels_bytes": 41301,
+            "indexed_pixels_sha256": "8da7dabbe0dcdfc7d9cdd043bcdc0b411d96bf3dfa2bcf63352960b07a5f1a3a",
+            "end_offset": 1908186
+          },
+          "indexed_stats": {
+            "frame": 13,
+            "covered_pixels": 34285,
+            "index_zero_pixels": 0,
+            "index_255_pixels": 551,
+            "nonblack_pixels": 34285,
+            "bounds": [
+              5,
+              5,
+              612,
+              472
+            ],
+            "rgba_sha256": "722dabc05deb649d6252cdf260744c050b74f1466bf7bfa71b8ce75b5ab0dd98"
+          },
+          "indexed_blend": "lighter",
+          "render_image": "assets/battle_result/victor/frame_013.png",
+          "width": 640,
+          "height": 480
+        },
+        {
+          "index": 14,
+          "image": "assets/battle_result/victor/frame_014.png",
+          "png_sha256": "d614f328a8a46a034df38fffe6a0c492754871e086b3a75d517ec7494cc6a340",
+          "source_frame_record": {
+            "page": 14,
+            "x": 0,
+            "y": 0,
+            "offset": 13440,
+            "size": 960
+          },
+          "pixel_bounds": null,
+          "indexed_image": "assets/battle_result/victor/frame_014_indexed.png",
+          "indexed_record": {
+            "frame": 14,
+            "record_offset": 1908186,
+            "active_raw": 1,
+            "size_field_offset": 1908187,
+            "palette_offset": 1908191,
+            "palette_sha256": "ed4771d769ee39daca0b94068ce1aacee3cbb24e26be1509a35b70dc7e567900",
+            "indexed_pixels_offset": 1908959,
+            "indexed_pixels_bytes": 40531,
+            "indexed_pixels_sha256": "b6c7dca22228e5b4a5bfca494e47c0a0aab5d96a70beceaf26326ab8b066c0ab",
+            "end_offset": 1949490
+          },
+          "indexed_stats": {
+            "frame": 14,
+            "covered_pixels": 34043,
+            "index_zero_pixels": 0,
+            "index_255_pixels": 550,
+            "nonblack_pixels": 34043,
+            "bounds": [
+              115,
+              101,
+              525,
+              284
+            ],
+            "rgba_sha256": "b8fefc387ac0bde30cc753b8cf5b99124a937ad74e8edc91966bc3fb48e1b3fc"
+          },
+          "indexed_blend": "lighter",
+          "render_image": "assets/battle_result/victor/frame_014.png",
+          "width": 640,
+          "height": 480
+        },
+        {
+          "index": 15,
+          "image": "assets/battle_result/victor/frame_015.png",
+          "png_sha256": "d614f328a8a46a034df38fffe6a0c492754871e086b3a75d517ec7494cc6a340",
+          "source_frame_record": {
+            "page": 15,
+            "x": 0,
+            "y": 0,
+            "offset": 14400,
+            "size": 960
+          },
+          "pixel_bounds": null,
+          "indexed_image": "assets/battle_result/victor/frame_015_indexed.png",
+          "indexed_record": {
+            "frame": 15,
+            "record_offset": 1949490,
+            "active_raw": 1,
+            "size_field_offset": 1949491,
+            "palette_offset": 1949495,
+            "palette_sha256": "92e4cd3b0b34d32fe8b76563390e2c3e705c28756e56f9a9fd9adfeb7fc0b3a1",
+            "indexed_pixels_offset": 1950263,
+            "indexed_pixels_bytes": 63752,
+            "indexed_pixels_sha256": "141b892cb8c657b412afc0a1a8ed544826a8de32fbb08cd44124baba773ad100",
+            "end_offset": 2014015
+          },
+          "indexed_stats": {
+            "frame": 15,
+            "covered_pixels": 55056,
+            "index_zero_pixels": 0,
+            "index_255_pixels": 2405,
+            "nonblack_pixels": 55056,
+            "bounds": [
+              91,
+              71,
+              527,
+              295
+            ],
+            "rgba_sha256": "9fc5c69d870239c61e6330ad75b8a6eb1c769efafb0cab67aa2bf128a33fc714"
+          },
+          "indexed_blend": "lighter",
+          "render_image": "assets/battle_result/victor/frame_015.png",
+          "width": 640,
+          "height": 480
+        },
+        {
+          "index": 16,
+          "image": "assets/battle_result/victor/frame_016.png",
+          "png_sha256": "d614f328a8a46a034df38fffe6a0c492754871e086b3a75d517ec7494cc6a340",
+          "source_frame_record": {
+            "page": 16,
+            "x": 0,
+            "y": 0,
+            "offset": 15360,
+            "size": 960
+          },
+          "pixel_bounds": null,
+          "indexed_image": "assets/battle_result/victor/frame_016_indexed.png",
+          "indexed_record": {
+            "frame": 16,
+            "record_offset": 2014015,
+            "active_raw": 1,
+            "size_field_offset": 2014016,
+            "palette_offset": 2014020,
+            "palette_sha256": "a51c223b8686c6b8e878118362e989a76103d3f96b754b4cbb254535e3710bd2",
+            "indexed_pixels_offset": 2014788,
+            "indexed_pixels_bytes": 85735,
+            "indexed_pixels_sha256": "bb9f7642dda54d05ff32d31bd4e5146b554fb04ca6393590d8a6e3adea21cc32",
+            "end_offset": 2100523
+          },
+          "indexed_stats": {
+            "frame": 16,
+            "covered_pixels": 71215,
+            "index_zero_pixels": 0,
+            "index_255_pixels": 519,
+            "nonblack_pixels": 71215,
+            "bounds": [
+              45,
+              17,
+              534,
+              324
+            ],
+            "rgba_sha256": "f8117a64c1b2aa86ac6b4cdab79560dd863ed7cc7bac5bc109f3ae790c8e2064"
+          },
+          "indexed_blend": "lighter",
+          "render_image": "assets/battle_result/victor/frame_016.png",
+          "width": 640,
+          "height": 480
+        },
+        {
+          "index": 17,
+          "image": "assets/battle_result/victor/frame_017.png",
+          "png_sha256": "d614f328a8a46a034df38fffe6a0c492754871e086b3a75d517ec7494cc6a340",
+          "source_frame_record": {
+            "page": 17,
+            "x": 0,
+            "y": 0,
+            "offset": 16320,
+            "size": 960
+          },
+          "pixel_bounds": null,
+          "indexed_image": "assets/battle_result/victor/frame_017_indexed.png",
+          "indexed_record": {
+            "frame": 17,
+            "record_offset": 2100523,
+            "active_raw": 1,
+            "size_field_offset": 2100524,
+            "palette_offset": 2100528,
+            "palette_sha256": "a21efd2851e6e00aa7abf53d60c4a22df10fdb94ae9989d4476a3efc49137e6f",
+            "indexed_pixels_offset": 2101296,
+            "indexed_pixels_bytes": 106551,
+            "indexed_pixels_sha256": "e3a13ea20a3f7383fdfe6c177765af14a17709ed5440e636e8e0df053aa66904",
+            "end_offset": 2207847
+          },
+          "indexed_stats": {
+            "frame": 17,
+            "covered_pixels": 79563,
+            "index_zero_pixels": 0,
+            "index_255_pixels": 143,
+            "nonblack_pixels": 79563,
+            "bounds": [
+              0,
+              0,
+              592,
+              362
+            ],
+            "rgba_sha256": "f55bbf661661ac421191684a512cf8a2808884dc25c4e1e6cee51a462cdf3c02"
+          },
+          "indexed_blend": "lighter",
+          "render_image": "assets/battle_result/victor/frame_017.png",
+          "width": 640,
+          "height": 480
+        },
+        {
+          "index": 18,
+          "image": "assets/battle_result/victor/frame_018.png",
+          "png_sha256": "d614f328a8a46a034df38fffe6a0c492754871e086b3a75d517ec7494cc6a340",
+          "source_frame_record": {
+            "page": 18,
+            "x": 0,
+            "y": 0,
+            "offset": 17280,
+            "size": 960
+          },
+          "pixel_bounds": null,
+          "indexed_image": "assets/battle_result/victor/frame_018_indexed.png",
+          "indexed_record": {
+            "frame": 18,
+            "record_offset": 2207847,
+            "active_raw": 1,
+            "size_field_offset": 2207848,
+            "palette_offset": 2207852,
+            "palette_sha256": "c12283a054f054871b02d704273055a859e850a3895b85ae15f795c5d5242c82",
+            "indexed_pixels_offset": 2208620,
+            "indexed_pixels_bytes": 109926,
+            "indexed_pixels_sha256": "0377818ecb0ead8c50da568b71ffbb0d558f8fee514911c1da2907e2ab454b06",
+            "end_offset": 2318546
+          },
+          "indexed_stats": {
+            "frame": 18,
+            "covered_pixels": 79186,
+            "index_zero_pixels": 0,
+            "index_255_pixels": 76,
+            "nonblack_pixels": 79186,
+            "bounds": [
+              0,
+              0,
+              604,
+              415
+            ],
+            "rgba_sha256": "0ff647807454e0127aaa6f40a40c1a1834e889cbd8b6a2d0d683a5417681f171"
+          },
+          "indexed_blend": "lighter",
+          "render_image": "assets/battle_result/victor/frame_018.png",
+          "width": 640,
+          "height": 480
+        },
+        {
+          "index": 19,
+          "image": "assets/battle_result/victor/frame_019.png",
+          "png_sha256": "d614f328a8a46a034df38fffe6a0c492754871e086b3a75d517ec7494cc6a340",
+          "source_frame_record": {
+            "page": 19,
+            "x": 0,
+            "y": 0,
+            "offset": 18240,
+            "size": 960
+          },
+          "pixel_bounds": null,
+          "indexed_image": "assets/battle_result/victor/frame_019_indexed.png",
+          "indexed_record": {
+            "frame": 19,
+            "record_offset": 2318546,
+            "active_raw": 1,
+            "size_field_offset": 2318547,
+            "palette_offset": 2318551,
+            "palette_sha256": "50c316213a3400d504cae08acb8b403fe5a6b32ad5e55544c1e90df9ca29877b",
+            "indexed_pixels_offset": 2319319,
+            "indexed_pixels_bytes": 122759,
+            "indexed_pixels_sha256": "7e3d7400a49d19f0a0b7c148f276ee0e544f8c4434c3b5a9019a03a633dc54bb",
+            "end_offset": 2442078
+          },
+          "indexed_stats": {
+            "frame": 19,
+            "covered_pixels": 89007,
+            "index_zero_pixels": 0,
+            "index_255_pixels": 53,
+            "nonblack_pixels": 89007,
+            "bounds": [
+              13,
+              0,
+              619,
+              479
+            ],
+            "rgba_sha256": "143bc4163914befecf99586cd9547b7866851bf186685fe4b4f3b20365d43815"
+          },
+          "indexed_blend": "lighter",
+          "render_image": "assets/battle_result/victor/frame_019.png",
+          "width": 640,
+          "height": 480
+        },
+        {
+          "index": 20,
+          "image": "assets/battle_result/victor/frame_020.png",
+          "png_sha256": "d614f328a8a46a034df38fffe6a0c492754871e086b3a75d517ec7494cc6a340",
+          "source_frame_record": {
+            "page": 20,
+            "x": 0,
+            "y": 0,
+            "offset": 19200,
+            "size": 960
+          },
+          "pixel_bounds": null,
+          "indexed_image": "assets/battle_result/victor/frame_020_indexed.png",
+          "indexed_record": {
+            "frame": 20,
+            "record_offset": 2442078,
+            "active_raw": 1,
+            "size_field_offset": 2442079,
+            "palette_offset": 2442083,
+            "palette_sha256": "18fb0dc874f835a1f01311c5ac05120c032cf096c2eaddbe1b1c0c2cd328b420",
+            "indexed_pixels_offset": 2442851,
+            "indexed_pixels_bytes": 120018,
+            "indexed_pixels_sha256": "084177d310acb18c9b95d7ea8961b4a3d4858e464d4a97b98129a10f4ccc6d03",
+            "end_offset": 2562869
+          },
+          "indexed_stats": {
+            "frame": 20,
+            "covered_pixels": 84258,
+            "index_zero_pixels": 0,
+            "index_255_pixels": 9,
+            "nonblack_pixels": 84258,
+            "bounds": [
+              7,
+              0,
+              639,
+              470
+            ],
+            "rgba_sha256": "3a37e24af2349b1d40408d86bbc8f20630650c577857e9059f58ed8b1044d1f6"
+          },
+          "indexed_blend": "lighter",
+          "render_image": "assets/battle_result/victor/frame_020.png",
+          "width": 640,
+          "height": 480
+        },
+        {
+          "index": 21,
+          "image": "assets/battle_result/victor/frame_021.png",
+          "png_sha256": "d614f328a8a46a034df38fffe6a0c492754871e086b3a75d517ec7494cc6a340",
+          "source_frame_record": {
+            "page": 21,
+            "x": 0,
+            "y": 0,
+            "offset": 20160,
+            "size": 960
+          },
+          "pixel_bounds": null,
+          "indexed_image": "assets/battle_result/victor/frame_021_indexed.png",
+          "indexed_record": {
+            "frame": 21,
+            "record_offset": 2562869,
+            "active_raw": 1,
+            "size_field_offset": 2562870,
+            "palette_offset": 2562874,
+            "palette_sha256": "80db2fe167caeb97cd573ec382d9cffa398ec523809f01aee1c44730cd21f959",
+            "indexed_pixels_offset": 2563642,
+            "indexed_pixels_bytes": 105065,
+            "indexed_pixels_sha256": "d3167ee69fa7f5b8b1baca810a9106c3c3ab5cd5140dd68c2f0a2bb67fc0b3d7",
+            "end_offset": 2668707
+          },
+          "indexed_stats": {
+            "frame": 21,
+            "covered_pixels": 63437,
+            "index_zero_pixels": 0,
+            "index_255_pixels": 0,
+            "nonblack_pixels": 63437,
+            "bounds": [
+              0,
+              0,
+              639,
+              479
+            ],
+            "rgba_sha256": "a471a4af3dbb60f891631a7cfef27bced854fab0b223aad18401359410ab76c5"
+          },
+          "indexed_blend": "lighter",
+          "render_image": "assets/battle_result/victor/frame_021.png",
+          "width": 640,
+          "height": 480
+        },
+        {
+          "index": 22,
+          "image": "assets/battle_result/victor/frame_022.png",
+          "png_sha256": "d614f328a8a46a034df38fffe6a0c492754871e086b3a75d517ec7494cc6a340",
+          "source_frame_record": {
+            "page": 22,
+            "x": 0,
+            "y": 0,
+            "offset": 21120,
+            "size": 960
+          },
+          "pixel_bounds": null,
+          "indexed_image": "assets/battle_result/victor/frame_022_indexed.png",
+          "indexed_record": {
+            "frame": 22,
+            "record_offset": 2668707,
+            "active_raw": 1,
+            "size_field_offset": 2668708,
+            "palette_offset": 2668712,
+            "palette_sha256": "c24ddca5331cffbf442259cddfd3466fbed38bb590af813ff43b2f81c1ff15e3",
+            "indexed_pixels_offset": 2669480,
+            "indexed_pixels_bytes": 81212,
+            "indexed_pixels_sha256": "ecf3d88d0b14dd7a3f2f2c47b5d05ba2bb942737f11101e23507251d7a18fd81",
+            "end_offset": 2750692
+          },
+          "indexed_stats": {
+            "frame": 22,
+            "covered_pixels": 49404,
+            "index_zero_pixels": 0,
+            "index_255_pixels": 0,
+            "nonblack_pixels": 49404,
+            "bounds": [
+              0,
+              0,
+              639,
+              479
+            ],
+            "rgba_sha256": "2cd6f72e46f601a801621a19412477ff64caf304869393e7d8e18004333ed728"
+          },
+          "indexed_blend": "lighter",
+          "render_image": "assets/battle_result/victor/frame_022.png",
+          "width": 640,
+          "height": 480
+        },
+        {
+          "index": 23,
+          "image": "assets/battle_result/victor/frame_023.png",
+          "png_sha256": "d614f328a8a46a034df38fffe6a0c492754871e086b3a75d517ec7494cc6a340",
+          "source_frame_record": {
+            "page": 23,
+            "x": 0,
+            "y": 0,
+            "offset": 22080,
+            "size": 960
+          },
+          "pixel_bounds": null,
+          "indexed_image": "assets/battle_result/victor/frame_023_indexed.png",
+          "indexed_record": {
+            "frame": 23,
+            "record_offset": 2750692,
+            "active_raw": 1,
+            "size_field_offset": 2750693,
+            "palette_offset": 2750697,
+            "palette_sha256": "a742c4093904949c01d42de9f0391834f9bb759d9fed87caa1d5ea6b46c64cee",
+            "indexed_pixels_offset": 2751465,
+            "indexed_pixels_bytes": 67490,
+            "indexed_pixels_sha256": "afe2db66c75f4ee58965389f5b6df00173977d29146d0d0d15cdf84d11be27e5",
+            "end_offset": 2818955
+          },
+          "indexed_stats": {
+            "frame": 23,
+            "covered_pixels": 41386,
+            "index_zero_pixels": 0,
+            "index_255_pixels": 0,
+            "nonblack_pixels": 41386,
+            "bounds": [
+              0,
+              0,
+              639,
+              479
+            ],
+            "rgba_sha256": "6a626f21e9237350745c321763c5f7ad6ce26d1e1433af8da77c02389785e1b2"
+          },
+          "indexed_blend": "lighter",
+          "render_image": "assets/battle_result/victor/frame_023.png",
+          "width": 640,
+          "height": 480
+        }
+      ],
+      "actions": [
+        {
+          "index": 0,
+          "directions": 1,
+          "directions_raw": 0,
+          "interval_raw": 80,
+          "loop_raw": 1,
+          "frames_per_direction": 24,
+          "first_frame": 0,
+          "identifier_raw": 0,
+          "raw_hex": "0050000000000000000000000001180000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000766963746f7262312e7761760000000000000000010000000200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "frame_sequence": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23
+          ]
+        }
+      ],
+      "secondary_verification": {
+        "present": true,
+        "checked_pixels": 0,
+        "conversion": "native 0x5206FD RGB565 to RGB555 exactly matches"
+      },
+      "metadata": {
+        "source": "D:\\game\\dqfy\\The Seventh Seal\\Fight_Role\\Effect\\victor.dgp",
+        "sha256": "c9ac4c305a9900462eb1c75bc2478c2d3ff485384010ed75c049241fce3d6232",
+        "bytes": 2865035,
+        "version": 9,
+        "frame_width": 640,
+        "frame_height": 480,
+        "frame_count": 24,
+        "name_cp950": "",
+        "header_hex": "09000100000000000000000000000000000000010000000000000000000000800200000000000017000000010000000000000000000001000000000000000000000000",
+        "geometry_hex": "8002e0011800000000000000011800000000000000000000ff001800000001018b032b00005a00000001",
+        "extra_header_hex": "000000000100000001000000000000002000000000000000000000000000000000000000000000000000000000000000",
+        "page_records_hex": [
+          "010180020000e001000080020000e0010000",
+          "010180020000e001000080020000e0010000",
+          "010180020000e001000080020000e0010000",
+          "010180020000e001000080020000e0010000",
+          "010180020000e001000080020000e0010000",
+          "010180020000e001000080020000e0010000",
+          "010180020000e001000080020000e0010000",
+          "010180020000e001000080020000e0010000",
+          "010180020000e001000080020000e0010000",
+          "010180020000e001000080020000e0010000",
+          "010180020000e001000080020000e0010000",
+          "010180020000e001000080020000e0010000",
+          "010180020000e001000080020000e0010000",
+          "010180020000e001000080020000e0010000",
+          "010180020000e001000080020000e0010000",
+          "010180020000e001000080020000e0010000",
+          "010180020000e001000080020000e0010000",
+          "010180020000e001000080020000e0010000",
+          "010180020000e001000080020000e0010000",
+          "010180020000e001000080020000e0010000",
+          "010180020000e001000080020000e0010000",
+          "010180020000e001000080020000e0010000",
+          "010180020000e001000080020000e0010000",
+          "010180020000e001000080020000e0010000"
+        ],
+        "optional_blocks": [
+          {
+            "kind": "per_frame_blob",
+            "offset": 1245,
+            "bytes": 960
+          },
+          {
+            "kind": "per_frame_blob",
+            "offset": 2209,
+            "bytes": 960
+          },
+          {
+            "kind": "per_frame_blob",
+            "offset": 3173,
+            "bytes": 960
+          },
+          {
+            "kind": "per_frame_blob",
+            "offset": 4137,
+            "bytes": 960
+          },
+          {
+            "kind": "per_frame_blob",
+            "offset": 5101,
+            "bytes": 960
+          },
+          {
+            "kind": "per_frame_blob",
+            "offset": 6065,
+            "bytes": 960
+          },
+          {
+            "kind": "per_frame_blob",
+            "offset": 7029,
+            "bytes": 960
+          },
+          {
+            "kind": "per_frame_blob",
+            "offset": 7993,
+            "bytes": 960
+          },
+          {
+            "kind": "per_frame_blob",
+            "offset": 8957,
+            "bytes": 960
+          },
+          {
+            "kind": "per_frame_blob",
+            "offset": 9921,
+            "bytes": 960
+          },
+          {
+            "kind": "per_frame_blob",
+            "offset": 10885,
+            "bytes": 960
+          },
+          {
+            "kind": "per_frame_blob",
+            "offset": 11849,
+            "bytes": 960
+          },
+          {
+            "kind": "per_frame_blob",
+            "offset": 12813,
+            "bytes": 960
+          },
+          {
+            "kind": "per_frame_blob",
+            "offset": 13777,
+            "bytes": 960
+          },
+          {
+            "kind": "per_frame_blob",
+            "offset": 14741,
+            "bytes": 960
+          },
+          {
+            "kind": "per_frame_blob",
+            "offset": 15705,
+            "bytes": 960
+          },
+          {
+            "kind": "per_frame_blob",
+            "offset": 16669,
+            "bytes": 960
+          },
+          {
+            "kind": "per_frame_blob",
+            "offset": 17633,
+            "bytes": 960
+          },
+          {
+            "kind": "per_frame_blob",
+            "offset": 18597,
+            "bytes": 960
+          },
+          {
+            "kind": "per_frame_blob",
+            "offset": 19561,
+            "bytes": 960
+          },
+          {
+            "kind": "per_frame_blob",
+            "offset": 20525,
+            "bytes": 960
+          },
+          {
+            "kind": "per_frame_blob",
+            "offset": 21489,
+            "bytes": 960
+          },
+          {
+            "kind": "per_frame_blob",
+            "offset": 22453,
+            "bytes": 960
+          },
+          {
+            "kind": "per_frame_blob",
+            "offset": 23417,
+            "bytes": 960
+          },
+          {
+            "kind": "palette",
+            "offset": 24382,
+            "bytes": 768
+          },
+          {
+            "kind": "indexed_pixels",
+            "offset": 25150,
+            "bytes": 222759
+          },
+          {
+            "kind": "palette",
+            "offset": 247914,
+            "bytes": 768
+          },
+          {
+            "kind": "indexed_pixels",
+            "offset": 248682,
+            "bytes": 148803
+          },
+          {
+            "kind": "palette",
+            "offset": 397490,
+            "bytes": 768
+          },
+          {
+            "kind": "indexed_pixels",
+            "offset": 398258,
+            "bytes": 146497
+          },
+          {
+            "kind": "palette",
+            "offset": 544760,
+            "bytes": 768
+          },
+          {
+            "kind": "indexed_pixels",
+            "offset": 545528,
+            "bytes": 111629
+          },
+          {
+            "kind": "palette",
+            "offset": 657162,
+            "bytes": 768
+          },
+          {
+            "kind": "indexed_pixels",
+            "offset": 657930,
+            "bytes": 143922
+          },
+          {
+            "kind": "palette",
+            "offset": 801857,
+            "bytes": 768
+          },
+          {
+            "kind": "indexed_pixels",
+            "offset": 802625,
+            "bytes": 116661
+          },
+          {
+            "kind": "palette",
+            "offset": 919291,
+            "bytes": 768
+          },
+          {
+            "kind": "indexed_pixels",
+            "offset": 920059,
+            "bytes": 161592
+          },
+          {
+            "kind": "palette",
+            "offset": 1081656,
+            "bytes": 768
+          },
+          {
+            "kind": "indexed_pixels",
+            "offset": 1082424,
+            "bytes": 212555
+          },
+          {
+            "kind": "palette",
+            "offset": 1294984,
+            "bytes": 768
+          },
+          {
+            "kind": "indexed_pixels",
+            "offset": 1295752,
+            "bytes": 273712
+          },
+          {
+            "kind": "palette",
+            "offset": 1569469,
+            "bytes": 768
+          },
+          {
+            "kind": "indexed_pixels",
+            "offset": 1570237,
+            "bytes": 96294
+          },
+          {
+            "kind": "palette",
+            "offset": 1666536,
+            "bytes": 768
+          },
+          {
+            "kind": "indexed_pixels",
+            "offset": 1667304,
+            "bytes": 82888
+          },
+          {
+            "kind": "palette",
+            "offset": 1750197,
+            "bytes": 768
+          },
+          {
+            "kind": "indexed_pixels",
+            "offset": 1750965,
+            "bytes": 65229
+          },
+          {
+            "kind": "palette",
+            "offset": 1816199,
+            "bytes": 768
+          },
+          {
+            "kind": "indexed_pixels",
+            "offset": 1816967,
+            "bytes": 49145
+          },
+          {
+            "kind": "palette",
+            "offset": 1866117,
+            "bytes": 768
+          },
+          {
+            "kind": "indexed_pixels",
+            "offset": 1866885,
+            "bytes": 41301
+          },
+          {
+            "kind": "palette",
+            "offset": 1908191,
+            "bytes": 768
+          },
+          {
+            "kind": "indexed_pixels",
+            "offset": 1908959,
+            "bytes": 40531
+          },
+          {
+            "kind": "palette",
+            "offset": 1949495,
+            "bytes": 768
+          },
+          {
+            "kind": "indexed_pixels",
+            "offset": 1950263,
+            "bytes": 63752
+          },
+          {
+            "kind": "palette",
+            "offset": 2014020,
+            "bytes": 768
+          },
+          {
+            "kind": "indexed_pixels",
+            "offset": 2014788,
+            "bytes": 85735
+          },
+          {
+            "kind": "palette",
+            "offset": 2100528,
+            "bytes": 768
+          },
+          {
+            "kind": "indexed_pixels",
+            "offset": 2101296,
+            "bytes": 106551
+          },
+          {
+            "kind": "palette",
+            "offset": 2207852,
+            "bytes": 768
+          },
+          {
+            "kind": "indexed_pixels",
+            "offset": 2208620,
+            "bytes": 109926
+          },
+          {
+            "kind": "palette",
+            "offset": 2318551,
+            "bytes": 768
+          },
+          {
+            "kind": "indexed_pixels",
+            "offset": 2319319,
+            "bytes": 122759
+          },
+          {
+            "kind": "palette",
+            "offset": 2442083,
+            "bytes": 768
+          },
+          {
+            "kind": "indexed_pixels",
+            "offset": 2442851,
+            "bytes": 120018
+          },
+          {
+            "kind": "palette",
+            "offset": 2562874,
+            "bytes": 768
+          },
+          {
+            "kind": "indexed_pixels",
+            "offset": 2563642,
+            "bytes": 105065
+          },
+          {
+            "kind": "palette",
+            "offset": 2668712,
+            "bytes": 768
+          },
+          {
+            "kind": "indexed_pixels",
+            "offset": 2669480,
+            "bytes": 81212
+          },
+          {
+            "kind": "palette",
+            "offset": 2750697,
+            "bytes": 768
+          },
+          {
+            "kind": "indexed_pixels",
+            "offset": 2751465,
+            "bytes": 67490
+          }
+        ],
+        "payload_offset": 2818955,
+        "payload_bytes": 23040,
+        "dual_pixel_stream": true,
+        "indexed_auxiliary": [
+          {
+            "frame": 0,
+            "record_offset": 24377,
+            "active_raw": 1,
+            "size_field_offset": 24378,
+            "palette_offset": 24382,
+            "palette_sha256": "748a0e5ce421d650083d90249fd7d7d33b13c9a15850f3f992273a388f7b519c",
+            "indexed_pixels_offset": 25150,
+            "indexed_pixels_bytes": 222759,
+            "indexed_pixels_sha256": "2ae68e7285b038f79b0778228455d1a8af7f78c273fadd8e3b22bdbf4d7fb0d2",
+            "end_offset": 247909
+          },
+          {
+            "frame": 1,
+            "record_offset": 247909,
+            "active_raw": 1,
+            "size_field_offset": 247910,
+            "palette_offset": 247914,
+            "palette_sha256": "205767deb446f5b3d305dafdd3e6fb3ae5481f1a5d1e373f27eb77ebea8e909e",
+            "indexed_pixels_offset": 248682,
+            "indexed_pixels_bytes": 148803,
+            "indexed_pixels_sha256": "7fbe699c845c12a189eded77d60a072c4269c2b96c2eac1d7e1469dabfe308b7",
+            "end_offset": 397485
+          },
+          {
+            "frame": 2,
+            "record_offset": 397485,
+            "active_raw": 1,
+            "size_field_offset": 397486,
+            "palette_offset": 397490,
+            "palette_sha256": "12754881d3d2d15126373a0edab7950fcc233d8d1af0316d3aae9062ff6d05fa",
+            "indexed_pixels_offset": 398258,
+            "indexed_pixels_bytes": 146497,
+            "indexed_pixels_sha256": "b44373405af38ec982fddca9829d3dac0198da61e7ac7d2f4187d532ad0988b5",
+            "end_offset": 544755
+          },
+          {
+            "frame": 3,
+            "record_offset": 544755,
+            "active_raw": 1,
+            "size_field_offset": 544756,
+            "palette_offset": 544760,
+            "palette_sha256": "8ad602a5f0916641ac734e02481778329b40268ce2d0d1dd1a03d56af25afb3b",
+            "indexed_pixels_offset": 545528,
+            "indexed_pixels_bytes": 111629,
+            "indexed_pixels_sha256": "8900e41e521b5cd959279f37691f75b5bd2421630090c07afcbd7c928d2b0811",
+            "end_offset": 657157
+          },
+          {
+            "frame": 4,
+            "record_offset": 657157,
+            "active_raw": 1,
+            "size_field_offset": 657158,
+            "palette_offset": 657162,
+            "palette_sha256": "19e5ea22c0d20ef56e0deb5de416299d7269314f313061af95cc4c0362e77bbc",
+            "indexed_pixels_offset": 657930,
+            "indexed_pixels_bytes": 143922,
+            "indexed_pixels_sha256": "9acefc3454d2cb2896d133503655b9ec9579a3f22bf88c799bad8d544f8af232",
+            "end_offset": 801852
+          },
+          {
+            "frame": 5,
+            "record_offset": 801852,
+            "active_raw": 1,
+            "size_field_offset": 801853,
+            "palette_offset": 801857,
+            "palette_sha256": "5901c37c9a5810719bcd3381447ea2e1d2bbd900b143fd7182c30fc942a206d3",
+            "indexed_pixels_offset": 802625,
+            "indexed_pixels_bytes": 116661,
+            "indexed_pixels_sha256": "f205a9270756b8942d55a18175f142430ef1a56fdd3a8953cf0b8fb62a1b059e",
+            "end_offset": 919286
+          },
+          {
+            "frame": 6,
+            "record_offset": 919286,
+            "active_raw": 1,
+            "size_field_offset": 919287,
+            "palette_offset": 919291,
+            "palette_sha256": "08c8774243c42f5e18a74546ff2e88c9dc0b0ad9782cb0394ab3e6301c52b1c8",
+            "indexed_pixels_offset": 920059,
+            "indexed_pixels_bytes": 161592,
+            "indexed_pixels_sha256": "6e3ba78c3dee9305cda4c05fbb8d510cc368840e81482b0fa37ddbac28a78799",
+            "end_offset": 1081651
+          },
+          {
+            "frame": 7,
+            "record_offset": 1081651,
+            "active_raw": 1,
+            "size_field_offset": 1081652,
+            "palette_offset": 1081656,
+            "palette_sha256": "dacbcd87d6e087c03b8159f244876502d4d165197feb2610758e1b9d246a33a5",
+            "indexed_pixels_offset": 1082424,
+            "indexed_pixels_bytes": 212555,
+            "indexed_pixels_sha256": "800613fe5c01f32c8b04a8f550e93b2844dd612f82a95c294d0b6b0cef52ac13",
+            "end_offset": 1294979
+          },
+          {
+            "frame": 8,
+            "record_offset": 1294979,
+            "active_raw": 1,
+            "size_field_offset": 1294980,
+            "palette_offset": 1294984,
+            "palette_sha256": "e94336b1bdef741b20b59c07e8f5e0ea532b7e00ceb9af5e0e41b879c735a95e",
+            "indexed_pixels_offset": 1295752,
+            "indexed_pixels_bytes": 273712,
+            "indexed_pixels_sha256": "d17353e623dc7ad4e388317791441323804a18997366590381402945a70dac90",
+            "end_offset": 1569464
+          },
+          {
+            "frame": 9,
+            "record_offset": 1569464,
+            "active_raw": 1,
+            "size_field_offset": 1569465,
+            "palette_offset": 1569469,
+            "palette_sha256": "8b5ba51ce435078580e6523eab53a67cd17027d591013e06f536eecd6d03ee05",
+            "indexed_pixels_offset": 1570237,
+            "indexed_pixels_bytes": 96294,
+            "indexed_pixels_sha256": "d370f8d28b9ddeefb0590f58a995a9c8a1832f97928be785ae8c24c98a7fac10",
+            "end_offset": 1666531
+          },
+          {
+            "frame": 10,
+            "record_offset": 1666531,
+            "active_raw": 1,
+            "size_field_offset": 1666532,
+            "palette_offset": 1666536,
+            "palette_sha256": "9f3805ea1a5f80959153788796cede493704c0d984846cdcbc1d31608f61778e",
+            "indexed_pixels_offset": 1667304,
+            "indexed_pixels_bytes": 82888,
+            "indexed_pixels_sha256": "11fbbe95bc299171b60efb2b0ccafab72aed30230d6d3fa762c3fbb0fab98bab",
+            "end_offset": 1750192
+          },
+          {
+            "frame": 11,
+            "record_offset": 1750192,
+            "active_raw": 1,
+            "size_field_offset": 1750193,
+            "palette_offset": 1750197,
+            "palette_sha256": "974b63464fd83d47971ec3587df15041be00a412d4efd6a5b9dd547fa07ef432",
+            "indexed_pixels_offset": 1750965,
+            "indexed_pixels_bytes": 65229,
+            "indexed_pixels_sha256": "5bebff4c705996432a10fe7682a70493ff73143e249255ec03859f70ce6a8218",
+            "end_offset": 1816194
+          },
+          {
+            "frame": 12,
+            "record_offset": 1816194,
+            "active_raw": 1,
+            "size_field_offset": 1816195,
+            "palette_offset": 1816199,
+            "palette_sha256": "063deba52ae9d21652464fe8d4194a88a60b8d70096c68eeab446e6168162606",
+            "indexed_pixels_offset": 1816967,
+            "indexed_pixels_bytes": 49145,
+            "indexed_pixels_sha256": "a4fc1871fd726a69f8642d57d73835515134c89df49f8eb6e964dfa54cecb055",
+            "end_offset": 1866112
+          },
+          {
+            "frame": 13,
+            "record_offset": 1866112,
+            "active_raw": 1,
+            "size_field_offset": 1866113,
+            "palette_offset": 1866117,
+            "palette_sha256": "94b0005d7d35a77864c8480af7d39bb80ea6f6d86b438757ca7101a4383d5f2f",
+            "indexed_pixels_offset": 1866885,
+            "indexed_pixels_bytes": 41301,
+            "indexed_pixels_sha256": "8da7dabbe0dcdfc7d9cdd043bcdc0b411d96bf3dfa2bcf63352960b07a5f1a3a",
+            "end_offset": 1908186
+          },
+          {
+            "frame": 14,
+            "record_offset": 1908186,
+            "active_raw": 1,
+            "size_field_offset": 1908187,
+            "palette_offset": 1908191,
+            "palette_sha256": "ed4771d769ee39daca0b94068ce1aacee3cbb24e26be1509a35b70dc7e567900",
+            "indexed_pixels_offset": 1908959,
+            "indexed_pixels_bytes": 40531,
+            "indexed_pixels_sha256": "b6c7dca22228e5b4a5bfca494e47c0a0aab5d96a70beceaf26326ab8b066c0ab",
+            "end_offset": 1949490
+          },
+          {
+            "frame": 15,
+            "record_offset": 1949490,
+            "active_raw": 1,
+            "size_field_offset": 1949491,
+            "palette_offset": 1949495,
+            "palette_sha256": "92e4cd3b0b34d32fe8b76563390e2c3e705c28756e56f9a9fd9adfeb7fc0b3a1",
+            "indexed_pixels_offset": 1950263,
+            "indexed_pixels_bytes": 63752,
+            "indexed_pixels_sha256": "141b892cb8c657b412afc0a1a8ed544826a8de32fbb08cd44124baba773ad100",
+            "end_offset": 2014015
+          },
+          {
+            "frame": 16,
+            "record_offset": 2014015,
+            "active_raw": 1,
+            "size_field_offset": 2014016,
+            "palette_offset": 2014020,
+            "palette_sha256": "a51c223b8686c6b8e878118362e989a76103d3f96b754b4cbb254535e3710bd2",
+            "indexed_pixels_offset": 2014788,
+            "indexed_pixels_bytes": 85735,
+            "indexed_pixels_sha256": "bb9f7642dda54d05ff32d31bd4e5146b554fb04ca6393590d8a6e3adea21cc32",
+            "end_offset": 2100523
+          },
+          {
+            "frame": 17,
+            "record_offset": 2100523,
+            "active_raw": 1,
+            "size_field_offset": 2100524,
+            "palette_offset": 2100528,
+            "palette_sha256": "a21efd2851e6e00aa7abf53d60c4a22df10fdb94ae9989d4476a3efc49137e6f",
+            "indexed_pixels_offset": 2101296,
+            "indexed_pixels_bytes": 106551,
+            "indexed_pixels_sha256": "e3a13ea20a3f7383fdfe6c177765af14a17709ed5440e636e8e0df053aa66904",
+            "end_offset": 2207847
+          },
+          {
+            "frame": 18,
+            "record_offset": 2207847,
+            "active_raw": 1,
+            "size_field_offset": 2207848,
+            "palette_offset": 2207852,
+            "palette_sha256": "c12283a054f054871b02d704273055a859e850a3895b85ae15f795c5d5242c82",
+            "indexed_pixels_offset": 2208620,
+            "indexed_pixels_bytes": 109926,
+            "indexed_pixels_sha256": "0377818ecb0ead8c50da568b71ffbb0d558f8fee514911c1da2907e2ab454b06",
+            "end_offset": 2318546
+          },
+          {
+            "frame": 19,
+            "record_offset": 2318546,
+            "active_raw": 1,
+            "size_field_offset": 2318547,
+            "palette_offset": 2318551,
+            "palette_sha256": "50c316213a3400d504cae08acb8b403fe5a6b32ad5e55544c1e90df9ca29877b",
+            "indexed_pixels_offset": 2319319,
+            "indexed_pixels_bytes": 122759,
+            "indexed_pixels_sha256": "7e3d7400a49d19f0a0b7c148f276ee0e544f8c4434c3b5a9019a03a633dc54bb",
+            "end_offset": 2442078
+          },
+          {
+            "frame": 20,
+            "record_offset": 2442078,
+            "active_raw": 1,
+            "size_field_offset": 2442079,
+            "palette_offset": 2442083,
+            "palette_sha256": "18fb0dc874f835a1f01311c5ac05120c032cf096c2eaddbe1b1c0c2cd328b420",
+            "indexed_pixels_offset": 2442851,
+            "indexed_pixels_bytes": 120018,
+            "indexed_pixels_sha256": "084177d310acb18c9b95d7ea8961b4a3d4858e464d4a97b98129a10f4ccc6d03",
+            "end_offset": 2562869
+          },
+          {
+            "frame": 21,
+            "record_offset": 2562869,
+            "active_raw": 1,
+            "size_field_offset": 2562870,
+            "palette_offset": 2562874,
+            "palette_sha256": "80db2fe167caeb97cd573ec382d9cffa398ec523809f01aee1c44730cd21f959",
+            "indexed_pixels_offset": 2563642,
+            "indexed_pixels_bytes": 105065,
+            "indexed_pixels_sha256": "d3167ee69fa7f5b8b1baca810a9106c3c3ab5cd5140dd68c2f0a2bb67fc0b3d7",
+            "end_offset": 2668707
+          },
+          {
+            "frame": 22,
+            "record_offset": 2668707,
+            "active_raw": 1,
+            "size_field_offset": 2668708,
+            "palette_offset": 2668712,
+            "palette_sha256": "c24ddca5331cffbf442259cddfd3466fbed38bb590af813ff43b2f81c1ff15e3",
+            "indexed_pixels_offset": 2669480,
+            "indexed_pixels_bytes": 81212,
+            "indexed_pixels_sha256": "ecf3d88d0b14dd7a3f2f2c47b5d05ba2bb942737f11101e23507251d7a18fd81",
+            "end_offset": 2750692
+          },
+          {
+            "frame": 23,
+            "record_offset": 2750692,
+            "active_raw": 1,
+            "size_field_offset": 2750693,
+            "palette_offset": 2750697,
+            "palette_sha256": "a742c4093904949c01d42de9f0391834f9bb759d9fed87caa1d5ea6b46c64cee",
+            "indexed_pixels_offset": 2751465,
+            "indexed_pixels_bytes": 67490,
+            "indexed_pixels_sha256": "afe2db66c75f4ee58965389f5b6df00173977d29146d0d0d15cdf84d11be27e5",
+            "end_offset": 2818955
+          }
+        ],
+        "indexed_auxiliary_limit": "Header[19] is a separately loaded auxiliary stream. Its effects/rendering semantics are not implemented; main 16-bit spans remain the decoded pixels.",
+        "anchor_raw": [
+          32,
+          0,
+          0
+        ],
+        "actions": [
+          {
+            "index": 0,
+            "directions": 1,
+            "directions_raw": 0,
+            "interval_raw": 80,
+            "loop_raw": 1,
+            "frames_per_direction": 24,
+            "first_frame": 0,
+            "identifier_raw": 0,
+            "raw_hex": "0050000000000000000000000001180000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000766963746f7262312e7761760000000000000000010000000200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+          }
+        ],
+        "frames": [
+          {
+            "page": 0,
+            "x": 0,
+            "y": 0,
+            "offset": 0,
+            "size": 960
+          },
+          {
+            "page": 1,
+            "x": 0,
+            "y": 0,
+            "offset": 960,
+            "size": 960
+          },
+          {
+            "page": 2,
+            "x": 0,
+            "y": 0,
+            "offset": 1920,
+            "size": 960
+          },
+          {
+            "page": 3,
+            "x": 0,
+            "y": 0,
+            "offset": 2880,
+            "size": 960
+          },
+          {
+            "page": 4,
+            "x": 0,
+            "y": 0,
+            "offset": 3840,
+            "size": 960
+          },
+          {
+            "page": 5,
+            "x": 0,
+            "y": 0,
+            "offset": 4800,
+            "size": 960
+          },
+          {
+            "page": 6,
+            "x": 0,
+            "y": 0,
+            "offset": 5760,
+            "size": 960
+          },
+          {
+            "page": 7,
+            "x": 0,
+            "y": 0,
+            "offset": 6720,
+            "size": 960
+          },
+          {
+            "page": 8,
+            "x": 0,
+            "y": 0,
+            "offset": 7680,
+            "size": 960
+          },
+          {
+            "page": 9,
+            "x": 0,
+            "y": 0,
+            "offset": 8640,
+            "size": 960
+          },
+          {
+            "page": 10,
+            "x": 0,
+            "y": 0,
+            "offset": 9600,
+            "size": 960
+          },
+          {
+            "page": 11,
+            "x": 0,
+            "y": 0,
+            "offset": 10560,
+            "size": 960
+          },
+          {
+            "page": 12,
+            "x": 0,
+            "y": 0,
+            "offset": 11520,
+            "size": 960
+          },
+          {
+            "page": 13,
+            "x": 0,
+            "y": 0,
+            "offset": 12480,
+            "size": 960
+          },
+          {
+            "page": 14,
+            "x": 0,
+            "y": 0,
+            "offset": 13440,
+            "size": 960
+          },
+          {
+            "page": 15,
+            "x": 0,
+            "y": 0,
+            "offset": 14400,
+            "size": 960
+          },
+          {
+            "page": 16,
+            "x": 0,
+            "y": 0,
+            "offset": 15360,
+            "size": 960
+          },
+          {
+            "page": 17,
+            "x": 0,
+            "y": 0,
+            "offset": 16320,
+            "size": 960
+          },
+          {
+            "page": 18,
+            "x": 0,
+            "y": 0,
+            "offset": 17280,
+            "size": 960
+          },
+          {
+            "page": 19,
+            "x": 0,
+            "y": 0,
+            "offset": 18240,
+            "size": 960
+          },
+          {
+            "page": 20,
+            "x": 0,
+            "y": 0,
+            "offset": 19200,
+            "size": 960
+          },
+          {
+            "page": 21,
+            "x": 0,
+            "y": 0,
+            "offset": 20160,
+            "size": 960
+          },
+          {
+            "page": 22,
+            "x": 0,
+            "y": 0,
+            "offset": 21120,
+            "size": 960
+          },
+          {
+            "page": 23,
+            "x": 0,
+            "y": 0,
+            "offset": 22080,
+            "size": 960
+          }
+        ],
+        "eof_verified": true
+      },
+      "mask_limit": null,
+      "rendering": {
+        "primary_blend": "source-over",
+        "indexed_blend": "plus-lighter",
+        "mask_rule": "Canvas alpha=(255-source_mask)/255; source native RGB565 lookup rounding remains an explicit adapter.",
+        "evidence": [
+          "ev_fc1019e71d28f99f0db6f5338accaad62c5282b439e3a85cb47c694cbd21238c",
+          "ev_5cc4b952b2f05a12a77f52ac61c63416588a1fcda1f101ebcd71f8132e2ca57b",
+          "ev_fde820ddc28e106694a9825d9dcb0faec8eafc7d6ea9d9add7d77b78bb3cc16a"
+        ]
+      }
+    }
+  },
+  "layout": {
+    "report": {
+      "asset": "fight_report_01",
+      "frame": 0,
+      "origin": {
+        "x": 0,
+        "y": 0
+      },
+      "source_origin_globals": [
+        "0x055ee348",
+        "0x055ee34c"
+      ],
+      "render_image_field": "render_image",
+      "evidence": "ev_fc1019e71d28f99f0db6f5338accaad62c5282b439e3a85cb47c694cbd21238c"
+    },
+    "victor": {
+      "asset": "victor",
+      "origin": {
+        "x": 0,
+        "y": 0
+      },
+      "indexed_blend": "plus-lighter",
+      "evidence": "ev_fc1019e71d28f99f0db6f5338accaad62c5282b439e3a85cb47c694cbd21238c"
+    },
+    "text": {
+      "font": "\u5168\u771f\u7279\u9ed1\u9ad4",
+      "size": 18,
+      "report_color_rgb565": "0xffff",
+      "notification_color_rgb": "0xffffff",
+      "source_font": {
+        "source": "GAME.exe",
+        "source_sha256": "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18",
+        "virtual_address": "0x670930",
+        "file_offset": 22832,
+        "bytes": 12,
+        "raw_hex": "a5feaf75af53b6c2c5e90000",
+        "encoding": "cp950 (Big5)"
+      },
+      "limitation": "Browser/GDI fallback glyphs are adaptations if the original font is unavailable."
+    },
+    "counters": {
+      "role_name": {
+        "x": 55,
+        "y": 110,
+        "row_step": 35,
+        "format": "%s"
+      },
+      "role_gain_exp": {
+        "x": 120,
+        "y": 110,
+        "row_step": 35,
+        "format": "%5d"
+      },
+      "role_next_exp": {
+        "x": 220,
+        "y": 110,
+        "row_step": 35,
+        "format": "%d"
+      },
+      "money_total": {
+        "x": 112,
+        "y": 75,
+        "format": "decimal left-padded with zero to 9 digits"
+      },
+      "combo_count": {
+        "x": 112,
+        "y": 251,
+        "format": "%d"
+      },
+      "technique_points": {
+        "x": 112,
+        "y": 320,
+        "format": "%d"
+      },
+      "drops": {
+        "x": 90,
+        "y": 353,
+        "row_step": 33,
+        "items_per_line": 4,
+        "item_format": "%sx%d  "
+      },
+      "positions_relative_to_report_origin": true,
+      "evidence": "ev_fc1019e71d28f99f0db6f5338accaad62c5282b439e3a85cb47c694cbd21238c"
+    },
+    "notifications": {
+      "asset": "fight_report_02",
+      "width": 175,
+      "height": 26,
+      "source_actor_row_formula": "actor_index*35+103",
+      "text_rect_relative": {
+        "left": 20,
+        "top": 3,
+        "right": 126,
+        "bottom": 23
+      },
+      "text_alignment": "center",
+      "frames": [
+        {
+          "index": 0,
+          "pixel_label": "\u4e60\u5f97",
+          "pixel_label_raw": "\u7fd2\u5f97"
+        },
+        {
+          "index": 1,
+          "pixel_label": "\u52a0\u4e58",
+          "pixel_label_raw": "\u52a0\u4e58"
+        },
+        {
+          "index": 2,
+          "pixel_label": "\u5347\u7ea7",
+          "pixel_label_raw": "\u5347\u7d1a"
+        },
+        {
+          "index": 3,
+          "pixel_label": "\u53d6\u5f97",
+          "pixel_label_raw": "\u53d6\u5f97"
+        }
+      ],
+      "actor_type_frame_formula": "actor_type<4: frame=(kind!=0); actor_type>=4: frame=actor_type-4",
+      "text_formula": "actor_type<4: skill_index==-1 ? actor_name : skill_name; type6: x%d(value); other>=4: item_name",
+      "source_item_index_note": "50D450 item-name branch uses type payload directly as zero-based index. Preserve raw source record; do not silently reinterpret item IDs.",
+      "visibility": "Active records draw whenever Victor has finished; phase 2 is not required.",
+      "ordering": "Draw insertion order; active earlier records remain. Same actor notifications occupy the same y and later records cover earlier ones.",
+      "evidence": [
+        "ev_96193c1728e3441caf00afc7e8beca645ca137938f3e7bf13295d58f0c251dc0",
+        "ev_fc1019e71d28f99f0db6f5338accaad62c5282b439e3a85cb47c694cbd21238c"
+      ]
+    }
+  },
+  "motion": {
+    "victor": {
+      "clock_ms": 60,
+      "comparison": "elapsed>59",
+      "source_frame_sequence": "ascending native report frame field",
+      "dgp_interval_ms": 80,
+      "native_override": true,
+      "evidence": "ev_80f3c42c7bb0d743ef65acf4fcd13d24ca7e5cefe7feb0c926d55885cd7f06c3"
+    },
+    "report": {
+      "initial_x": -630,
+      "target_x": 0,
+      "y": 0,
+      "initial_dx": 120,
+      "clock_ms": 30,
+      "update": "If x<target, when (step_count&3)!=0 and dx>10: dx-=dx>>2; step_count++; x+=dx. Otherwise clamp x=target and mark slide complete.",
+      "evidence": [
+        "ev_d93a2b9d11e8c26fc5fd7848801bda58021ad2ef02437be2185e35e6240628fe",
+        "ev_80f3c42c7bb0d743ef65acf4fcd13d24ca7e5cefe7feb0c926d55885cd7f06c3"
+      ]
+    },
+    "counters": {
+      "clock_ms": 10,
+      "increment": 1,
+      "all_counters_parallel": true,
+      "update": "For each unfinished record on its clock: displayed_value++; remaining--; player EXP++/NEXT--. At role threshold call 518B60 and enqueue role-level notice. Phase remains1 while any counter unfinished.",
+      "skip": "50E070 consumes all remaining values, loops all earned role levels, and adds each role-level notification.",
+      "evidence": [
+        "ev_80f3c42c7bb0d743ef65acf4fcd13d24ca7e5cefe7feb0c926d55885cd7f06c3",
+        "ev_d54f568f6dc17be1f4f30336dafe7059aa8e8299c6038ed095b021b06283a286"
+      ]
+    },
+    "notifications": {
+      "initial_x": 500,
+      "target_x": 280,
+      "dx": -80,
+      "clock_ms": 30,
+      "ordinal": "count of all previously enqueued records with same actor/type byte",
+      "initial_active": "ordinal==0",
+      "advance": "Snap active unfinished records to target/done; activate each unfinished record whose ordinal==page+1; increment page once if any were activated.",
+      "done": "Motion completion means x has reached280; it does not erase active records.",
+      "evidence": [
+        "ev_96193c1728e3441caf00afc7e8beca645ca137938f3e7bf13295d58f0c251dc0",
+        "ev_809acdfbb830a227fc864e7895c92169f0ebb733a89d462b495a0c8f5cd2f725",
+        "ev_80f3c42c7bb0d743ef65acf4fcd13d24ca7e5cefe7feb0c926d55885cd7f06c3"
+      ]
+    }
+  },
+  "input": {
+    "native_messages": {
+      "press": [
+        "WM_KEYDOWN(any key)",
+        "WM_LBUTTONDOWN",
+        "WM_RBUTTONDOWN"
+      ],
+      "release": [
+        "WM_KEYUP",
+        "WM_LBUTTONUP",
+        "WM_RBUTTONUP"
+      ],
+      "evidence": "ev_f9258eb8d1b08429a2a6b0e3a558d5248672f0675bc036275eaaed1293de1140"
+    },
+    "latch": {
+      "address": "0x055ee73d",
+      "reset": "release handler50E240",
+      "limit": "50E280 early intro-skip returns before setting this latch. Browser uses Space physical edges uniformly to satisfy the requested no-repeat behavior.",
+      "evidence": [
+        "ev_553d57db70ae0dea89b35e73fdf79fdad5acc94ea003d9b02b52c2e157b57a2d",
+        "ev_eebb5c3cbfc4ef9dc9e02172760f2f5dd96bc2248837370bc632ee2b1a13ac77"
+      ]
+    },
+    "phases": [
+      {
+        "value": 1,
+        "behavior": "Victor not complete: skip Victor only; else force report to target, finish every counter and move to phase2."
+      },
+      {
+        "value": 2,
+        "behavior": "If any notification is unfinished, advance notification group; otherwise free assets and leave battle result."
+      }
+    ],
+    "final_confirmation": "One later press after all notifications are done exits; same press which advances pending records cannot exit.",
+    "evidence": [
+      "ev_553d57db70ae0dea89b35e73fdf79fdad5acc94ea003d9b02b52c2e157b57a2d",
+      "ev_b50cc21269b2d70a0ddc707a400a36efb4a49d3bacd3ffb89db2360ae16f6bbc"
+    ],
+    "browser_adapter": "Space keydown physical edge only; ignore repeat, release before next advance."
+  },
+  "sound": {
+    "embedded_victor_action": {
+      "path": "/assets/battle_result/audio/victorb1.mp3",
+      "mime": "audio/mpeg",
+      "sha256": "575bca1e72fc6d5be594aec109c7d16a994c02b3ab869e57d78bd32a1957e853",
+      "source": "sound/victorb1.wav",
+      "source_sha256": "575bca1e72fc6d5be594aec109c7d16a994c02b3ab869e57d78bd32a1957e853",
+      "source_action_offset": 67,
+      "source_sound_field_offset": 86,
+      "source_logical_frame_offset": 106,
+      "logical_frame": 1,
+      "token": "victorb1.wav",
+      "authority": "source DGP action field only",
+      "limitation": "Result update/draw routines do not explicitly dispatch this sound. Original victory sound playback was not observed; autoplay is a renderer adapter, not a native playback claim."
+    }
+  },
+  "source_hashes": {
+    "GAME.exe": "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18",
+    "SYSTEM/Fight_Report.mnu": "b747664bc5582649e096e2ec45511dd7f6c09b31b5e8ee9208aee5332570d40d",
+    "SYSTEM/Fight_Report.CAP": "488a7734569c641049b904c5f72419c788253d62c751c8ecd5698127f6f1757f",
+    "Fight_Role/combo/Fight_Report_01.dgp": "0b1daea3f50aa221c8958e14a8812b21a459e137b50072668e8914fe07c95df3",
+    "Fight_Role/combo/Fight_Report_02.dgp": "b71e14d28fa9f7d669ea7c7c6eb9260755011cbdefbfaf345ee88aa08e934a81",
+    "Fight_Role/Effect/victor.dgp": "c9ac4c305a9900462eb1c75bc2478c2d3ff485384010ed75c049241fce3d6232",
+    "sound/victorb1.wav": "575bca1e72fc6d5be594aec109c7d16a994c02b3ab869e57d78bd32a1957e853"
+  },
+  "evidence": {
+    "settlement_entry": "ev_3d51cc407c911df6d23e5df86fb4479cb5f6068417ff096b5441648f71f517f4",
+    "load_report": "ev_30c71b9786a51edb45bc952c04f319b24982290a980ceb9725e43cb9a6ac5378",
+    "counter_enqueue": "ev_d93a2b9d11e8c26fc5fd7848801bda58021ad2ef02437be2185e35e6240628fe",
+    "notification_enqueue": "ev_96193c1728e3441caf00afc7e8beca645ca137938f3e7bf13295d58f0c251dc0",
+    "notification_advance": "ev_809acdfbb830a227fc864e7895c92169f0ebb733a89d462b495a0c8f5cd2f725",
+    "notification_pending": "ev_b50cc21269b2d70a0ddc707a400a36efb4a49d3bacd3ffb89db2360ae16f6bbc",
+    "draw": "ev_fc1019e71d28f99f0db6f5338accaad62c5282b439e3a85cb47c694cbd21238c",
+    "advance": "ev_80f3c42c7bb0d743ef65acf4fcd13d24ca7e5cefe7feb0c926d55885cd7f06c3",
+    "counter_finish": "ev_d54f568f6dc17be1f4f30336dafe7059aa8e8299c6038ed095b021b06283a286",
+    "press": "ev_553d57db70ae0dea89b35e73fdf79fdad5acc94ea003d9b02b52c2e157b57a2d",
+    "release": "ev_eebb5c3cbfc4ef9dc9e02172760f2f5dd96bc2248837370bc632ee2b1a13ac77",
+    "input_messages": "ev_f9258eb8d1b08429a2a6b0e3a558d5248672f0675bc036275eaaed1293de1140",
+    "masked_dispatch": "ev_5cc4b952b2f05a12a77f52ac61c63416588a1fcda1f101ebcd71f8132e2ca57b",
+    "masked_draw": "ev_fde820ddc28e106694a9825d9dcb0faec8eafc7d6ea9d9add7d77b78bb3cc16a",
+    "skill_settle": "ev_52de1d1214c5e68725611fe6e1854200d48df975fd5a9c44438eaf39fbd4051d",
+    "skill_level": "ev_794c3dec94cb02a466ba8a1fff4e2f1c294fc19359e69508c92fbc85526c4fc7",
+    "skill_requirements": "ev_aee7e06b76e16c0eae1c5bef850c894798010124cc5575e87b0fcded927f0766",
+    "skill_practice": "ev_671ce5d0595f5d8a6af3720a3dbdadeb33e2cfa1a168b28595b81f6d8861a1f2",
+    "single_practice_caller": "ev_9814c00d3dfa36aabf515b6de7928ab6bce59b490b8d67a71738ec2112b51486",
+    "combo_practice_caller": "ev_83211444e38be8006ea27651f70345eacf6b681907e03ef2386c58dcd58028e5",
+    "party_copy": "ev_abe7acaa257b00cbb6771c157e5e99bf34c63e21579b00bc1d633ce8f9b7d101",
+    "money_text": "ev_e6d348f849b2f6f65bd056c222ba42a79c5d1c954215e6771bebc4629695a770"
+  },
+  "native_bundle": "evidence/battle_result_20261020/native_evidence.json",
+  "native_bundle_sha256": "8e6aa1b83e250017b677d47217d038e3f8541b44c7610bd0be221a6cd14aaf2a",
+  "findings": "evidence/battle_result_20261020/findings.json",
+  "original_game_execution_observed": false,
+  "limitations": [
+    "No original executable gameplay was run or observed.",
+    "Static reported coordinates and message gates are source facts; browser frame scheduling and font fallback remain adapters.",
+    "RGB565 masked blending and indexed additive layers are represented in Canvas 8-bit color; native per-channel LUT rounding is not reproduced.",
+    "Fight_Report.mnu is preserved as a source menu but the confirmed battle renderer uses the DGP plate; MNU presence alone does not establish a battle draw caller.",
+    "Embedded victory sound token is preserved without claiming original playback."
+  ],
+  "original_inputs_unchanged": true
+}

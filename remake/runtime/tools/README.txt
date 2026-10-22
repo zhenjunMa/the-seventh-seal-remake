@@ -1,0 +1,100 @@
+第七封印 · 构建、导出与验证工具
+更新：2026-10-22；所有命令从游戏根目录执行。
+
+常用操作
+启动检查用服务：python -B remake/runtime/serve.py
+新增内容：python -B remake/runtime/tools/build_runtime.py --target content --run
+已有来源只调参数：node remake/runtime/tools/export_runtime_config.mjs
+只核对内容登记：node remake/runtime/tools/export_content_registry.mjs --check
+完整当前检查：python -B remake/runtime/tools/verify_current.py
+列全部构建计划：python -B remake/runtime/tools/build_runtime.py --target all
+盘点当前内容依赖：python -B remake/runtime/tools/build_runtime.py --target content --validate
+
+执行语义
+不加--run只列计划。--validate检查工具、既有来源台账与产物，记录当前指纹到evidence/export_inventory.json；不执行导出，也不等于原输入已经与历史来源逐项一致。
+--run按依赖执行，命中缓存仍核对产物存在及SHA。缺失、手改或输入变化会触发重建；每个成功步骤即时保存，失败可续跑。
+--force与--run一起强制重建，仍保留当前parameters。配置--reset才恢复原值，正常接入不使用。
+--check须与--run一起使用，在成功后执行verify_current；8767服务需要先开启。
+只有明确需要整体重建时才用--target all --run，日常文档维护无需重导素材。
+
+登记驱动的生产
+runtime_content.json为唯一编辑选择；导出器直接读取它选择地图／角色／程序，来源解析器再从已生成数据编译最终运行登记。
+chapter-maps按maps.export归属准备地图、NPC、物件和源物理出口；chapter-story按story和programs准备TLK／ANM、被引用道具与登记玩家初值。
+enemies按登记敌人实际学习表生成属性／AI／反应／状态／图层；enemy-rewards读取经验和奖励槽；encounters读取登记地图的DAT／STG池。音频按登记地图及动作生成。
+party-skills读取新enemy清单组合正式party反应／表现；敌我复用源图集和独立像素校验，历史forest_full_battle_view／forest_reactions保留。
+content目标贯通玩家、怪物、地图、剧情、配置、资源图集、声音、字体、目录与最终登记。新增技能／道具数值仍只进入统一config。
+已恢复格式、未知指令／状态／掉落、局部遇敌分区和新舞台的边界见../config_guide.txt；登记不会补实现。
+
+前置与来源
+使用支持node:test和当前WebCrypto的Node、Python3，以及各工具实际使用的Pillow／NumPy、FFmpeg／FFprobe或Windows GDI。
+本入口接管已有基础内容与来源台账，不是从空目录自动重建原游戏的安装器。初始路线／原型提取、原资源和save_analysis仍有实际依赖。
+声明原输入的新步骤可建立首份台账；其他步骤需要既有来源报告。路径、哈希、原像素／解码或未知格式校验仍由对应工具负责。
+生成的运行表和素材不手工调参；普通配置导出迁移已核对基线并保留parameters。仅参数变化无需重建图集。
+
+构建台账
+声明依赖与签名由build_runtime.py维护，状态写evidence/build_state.json；每次运行在evidence/builds/<UTC时间-唯一ID>/记录run.json和实际步骤日志。
+日期命名证据如被导出器重新生成，构建入口先保存到该步骤generated-evidence，再恢复旧文件原字节。失败也保留诊断；不要将旧报告重绑成新观察。
+当前剧情台账为chapter_story_export.json，怪物为enemy_content_export.json／enemy_rewards_export.json，遭遇为encounter_export.json；具体reports／inputs／outputs以STEPS为准。
+旧五份提取基线保存在evidence/export_tools_20261022/legacy_extractions并按历史SHA核对，当前生成文件按新台账检查。
+直接执行历史导出器不经过日期保护，需要先查看其代码和输出范围。
+
+工具导航
+本轮分类见tool_index.json，记录构建目标、共享导入关系及独立工具用途。新工具加入时同步索引，实际目标始终以build_runtime.py列出的计划为准。
+registered-build：统一构建中的生产步骤。
+shared-current：当前步骤或检查仍导入的解析／素材助手，保留原路径。
+specialized-evidence-check：专题验收和日期观察复核，按各工具代码检查范围；不是每日全部执行的命令。
+fixture-or-observation-preparation：创建独立样本或原版观察副本，不等于正式获取／入队流程。
+source-observation：只读检查或记录原版，原目录输入保持只读。
+independent-source-export：独立基础来源或旧样本生产入口，可能仍用于初始提取；分类不表示可删除。
+
+当前构建目标与直接依赖
+opening-seed: export_opening_seed.py; 依赖=无声明依赖
+opening-maps: export_opening_maps.py; 依赖=无声明依赖
+chapter-maps: export_chapter_maps.py; 依赖=无声明依赖
+chapter-story: export_chapter_story.py; 依赖=chapter-maps
+map-effects: export_map_effects.py; 依赖=opening-maps,chapter-maps
+party-combat: export_party_combat.py; 依赖=chapter-story,enemies
+party-skills: export_party_skills.py; 依赖=party-combat
+party-rewards: export_party_rewards.py; 依赖=party-combat,enemy-rewards
+items: export_chapter_items.py; 依赖=无声明依赖
+item-presentation: export_item_presentation.py; 依赖=items,party-skills
+recovery: export_chapter_recovery.py; 依赖=无声明依赖
+audio: export_audio.py; 依赖=party-skills,item-presentation,chapter-maps
+forest-stage: export_forest_stage.py; 依赖=无声明依赖
+menu: export_operation_menu.py; 依赖=items,party-skills
+battle-ui: export_battle_ui.py; 依赖=无声明依赖
+battle-lifecycle: export_battle_lifecycle.py; 依赖=无声明依赖
+skill-test: export_skill_test.py; 依赖=无声明依赖
+battle-result: export_battle_result.py; 依赖=无声明依赖
+battle-packs: export_battle_packs.py; 依赖=party-skills,item-presentation,forest-stage,battle-ui,battle-lifecycle,skill-test,battle-result
+menu-techniques: export_menu_techniques.py; 依赖=menu,party-skills
+menu-fonts: export_menu_text_gdi.py; 依赖=menu-techniques
+startup-media: export_startup_media.py; 依赖=无声明依赖
+startup-menu: export_startup_menu.py; 依赖=无声明依赖
+prologue-presentation: export_prologue_presentation.py; 依赖=无声明依赖
+dialogue-ui: export_dialogue_ui.py; 依赖=无声明依赖
+world-map-ui: export_world_map_ui.py; 依赖=无声明依赖
+configuration: export_runtime_config.mjs; 依赖=party-skills,enemy-rewards,encounters
+catalog: build_catalog.py; 依赖=configuration,chapter-maps
+content: export_content_registry.mjs; 依赖=catalog,party-rewards,battle-packs,audio,menu-fonts
+enemies: export_enemy_content.py; 依赖=无声明依赖
+enemy-rewards: export_forest_rewards.py; 依赖=无声明依赖
+encounters: export_encounters.py; 依赖=无声明依赖
+
+当前检查覆盖什么
+verify_current检查JS／Python回归、Python语法、原输入、保留资产、现有导出台账、配置／登记、HTTP资源和归档，写current_validation.json、current_validation.tap和current_python_tests.log。
+检查需要8767服务，数量和时间以报告为准。它核对历史浏览器观察及指纹，不重播UI，不运行原GAME.exe，不会自动完成后续剧情。
+规则／事务变化运行对应回归；实际页面／动画变化另做浏览器观察。独立页面在web/tests，包括battle_loading.html、dialogue_alignment.html和startup_storage.html，各有其限定范围。
+verify_*中的旧阶段门槛不能替代当前回归；写--record的新现场按工具说明生成，已冻结观察不重写。
+
+常见问题
+登记未编译：执行content --run后刷新；只运行catalog不会编译最终登记。
+缺少原输入或来源台账：按报错恢复对应来源／基础提取；不跳过来源校验。
+未知行为：先实现并验证规则，再登记；不改raw记录或放宽校验来绕过。
+配置原版模式拒绝差异：恢复parameters原值，或明确使用debug验证；模式不重置用户进度。
+生成资源缺失或指纹变化：检查对应步骤日志及产物，针对性重建。文件路径迁移必须同步工具、索引与引用。
+历史证据不匹配：只表示代码时点不同，需要新观察；不改旧报告使其看起来匹配。
+
+资料维护
+来源和现场证据索引见../evidence/README.txt，恢复／归档见../../archive/README.txt。
+旧逐项工具说明和历史命令原文已保存在../../archive/20261022_before_directory_cleanup/documents.zip。

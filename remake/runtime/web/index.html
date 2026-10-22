@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>第七封印 · 重制 0.8</title><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="battle_shell.css"><link rel="stylesheet" href="operation_menu.css"><link rel="stylesheet" href="startup.css"><link rel="stylesheet" href="caption.css"><link rel="stylesheet" href="dialogue.css"><link rel="stylesheet" href="world_map.css"></head>
+<body>
+  <header class="masthead"><div class="brand"><span class="seal">VII</span><div><h1>第七封印</h1><p>THE SEVENTH SEAL</p></div></div><span class="edition">重制第一阶段 <b>0.8</b></span><a href="/prototype/" target="_blank" rel="noopener">打开原型实验 ↗</a></header>
+  <main>
+    <section class="game-shell" aria-label="游戏场景">
+      <div class="scene-bar"><div><span class="eyebrow">第七封印 · 场景片段</span><strong id="mapName">正在进入…</strong></div><span id="scenePhase" role="status">准备资源</span></div>
+      <div class="screen" id="screen">
+        <canvas id="stage" tabindex="0" aria-label="游戏地图，方向键移动，E交互，Tab操作界面"></canvas>
+        <canvas id="battleCanvas" aria-label="队伍与敌人的战斗" hidden></canvas>
+        <div id="battleHud" class="battle-interface" aria-label="战斗操作界面" hidden></div>
+        <div id="battleCommands" class="sr-only" hidden><span id="battleMessage" role="status"></span><button id="battleReturn" hidden>返回地图</button></div>
+        <div id="partyMenu" class="party-menu" role="dialog" aria-modal="true" aria-labelledby="partyMenuTitle" hidden>
+          <div class="operation-frame" id="operationFrame">
+            <img id="menuBackground" class="menu-source main-source" alt="" draggable="false">
+            <img id="menuPageHeader" class="menu-source page-source" alt="" draggable="false">
+            <img id="menuPageBody" class="menu-source body-source" alt="" draggable="false">
+            <img id="menuActorBar" class="menu-source actor-bar-source" src="assets/menu/actor_bar.png" alt="" draggable="false"><dl id="menuActorSummary" class="operation-summary"></dl>
+            <div id="menuRoster" class="operation-roster" aria-label="队伍人物"></div><img id="menuStandingActor" class="menu-source standing-actor" alt="">
+            <h2 id="partyMenuTitle" class="sr-only">操作界面</h2>
+            <nav class="operation-main-nav" aria-label="操作分类"><button id="menuStatusTab" aria-pressed="true">人物状态</button><button id="menuObjectsTab" aria-pressed="false">物品</button><button id="menuTechTab" aria-pressed="false">技能</button><button id="menuSystemTab" aria-pressed="false">系统设定</button></nav>
+            <nav class="operation-sub-nav" id="menuStatusNavigation" aria-label="人物操作"><button id="menuStatusPage" aria-pressed="false">状态</button><button id="menuEquipmentPage" aria-pressed="false">装备</button><button id="menuFormationPage" aria-pressed="false">队列</button><button id="menuWeaponPage" aria-pressed="false">法器</button></nav>
+            <nav class="operation-sub-nav" id="menuInventoryNavigation" aria-label="物品分类" hidden><button id="menuItemsPage" aria-pressed="true">道具</button><button id="menuInventoryEquipmentPage" aria-pressed="false">防具</button><button id="menuCrystalsPage" aria-pressed="false">水晶石</button></nav>
+            <nav class="operation-sub-nav" id="menuSystemNavigation" aria-label="系统操作" hidden></nav>
+            <label class="operation-actor"><span class="sr-only">角色／使用目标</span><select id="menuActor" aria-label="操作角色"></select></label>
+            <p id="menuVitals" class="sr-only"></p>
+            <p id="menuGold" class="operation-gold"></p><p id="menuArea" class="operation-area"></p>
+            <section id="menuStatusSection" class="operation-content status-content" aria-label="人物状态"><dl id="menuStats"></dl></section>
+            <section id="menuWeaponSection" class="operation-content weapon-content" aria-label="法器详情" hidden><p id="menuWeaponActor"></p><p id="menuWeaponName"></p><dl id="menuWeaponStats"></dl><div id="menuWeaponSockets"></div><img id="menuWeaponCard" class="menu-source" alt="" hidden></section>
+            <section id="menuEquipmentSection" class="operation-content equipment-content" aria-label="装备" hidden>
+              <label>部位<select id="menuSlot" aria-label="装备部位"></select></label><p id="menuWorn"></p>
+              <div id="menuEquipped"></div><dl id="menuEquipmentStats"></dl>
+              <div id="menuEquipmentPicker" class="equipment-picker" hidden><img id="menuEquipmentPickerSource" class="menu-source" alt=""><label>选择装备<select id="menuEquipment" aria-label="可用装备" size="6"></select></label><div class="operation-actions"><button id="menuEquip">装上</button><button id="menuUnequip">卸下</button></div></div><p id="menuEquipmentHint" hidden></p>
+            </section>
+            <section id="menuItemSection" class="operation-content item-content" aria-label="物品" hidden>
+              <label class="sr-only">物品<select id="menuItem" aria-label="使用道具" size="8"></select></label><div id="menuItemList" class="source-item-list"></div>
+              <img id="menuItemCard" class="menu-source" alt="" hidden><div id="menuItemTargets" class="item-targets" hidden><img id="menuItemTargetSource" class="menu-source" alt=""><div id="menuItemTargetList"></div></div><button id="menuUseItem" hidden>使用</button><p id="menuItemHint" hidden></p>
+            </section>
+            <section id="menuSkillsSection" class="operation-content skill-content" aria-label="技能" hidden>
+              <label>技能<select id="menuSkill" aria-label="选择技能" size="7"></select></label><p id="menuSkillHint"></p>
+              <label class="skill-target">使用目标<select id="menuSkillTarget" aria-label="技能使用目标"></select></label>
+              <div class="operation-actions"><button id="menuFieldSkill">使用技能</button><button id="menuEditShortcut">快捷技能设置</button></div>
+              <div id="menuShortcutEditor" hidden><label>快捷技能一<select id="menuShortcut1" aria-label="快捷技能一"></select></label><label>快捷技能二<select id="menuShortcut2" aria-label="快捷技能二"></select></label><label>快捷技能三<select id="menuShortcut3" aria-label="快捷技能三"></select></label><button id="menuShortcutSave">确定</button><button id="menuShortcutCancel">取消</button></div>
+            </section>
+            <section id="menuSystemSection" class="operation-content system-content" aria-label="系统设定" hidden></section>
+            <p id="menuMessage" class="operation-message" role="status"></p>
+          </div>
+        </div>
+        <div id="interactionHint" class="interaction-hint" hidden></div>
+        <div id="loading" class="loading"><span class="seal">VII</span><p>正在进入场景…</p></div>
+        <div id="openingShade" class="opening-shade" hidden></div>
+        <div id="sceneLoading" class="scene-loading" role="status" aria-label="正在加载场景" hidden><canvas width="640" height="480" aria-hidden="true"></canvas></div>
+        <div id="startMenu" class="startup-screen" role="dialog" aria-modal="true" aria-label="第七封印启动界面" tabindex="0" hidden>
+          <div id="startupViewport" class="startup-viewport">
+            <canvas id="startupCanvas" width="640" height="480" aria-label="原版主菜单"></canvas>
+            <video id="startupVideo" class="startup-video" playsinline preload="auto" muted></video>
+            <nav id="startupButtons" aria-label="主菜单选项"><button id="menuLoad" aria-label="游戏读取"></button><button id="menuNew" aria-label="开始游戏"></button><button id="menuExtras" aria-label="特典"></button><button id="menuExit" aria-label="离开"></button></nav>
+            <div id="startupOptions" aria-label="子菜单"></div>
+            <button id="menuResume" class="sr-only" hidden>继续游戏</button>
+          </div>
+          <span id="startupAnnouncement" class="sr-only" role="status"></span>
+        </div>
+        <div id="gameOver" class="game-over" role="dialog" aria-modal="true" aria-label="全队败北" hidden><video id="gameOverVideo" src="/assets/video/go02.mp4" preload="none" playsinline muted></video><button id="gameOverSkip">返回主菜单</button></div>
+        <div id="worldMapPanel" class="world-map-panel" role="dialog" aria-modal="true" aria-label="大地图：方向键选择目的地，空格或Enter前往，Esc返回" tabindex="-1" hidden><div class="world-map-viewport"><canvas width="640" height="480" aria-hidden="true"></canvas><div id="worldMapDestinations" class="world-map-destinations"></div></div></div>
+        <div id="storyCaption" class="story-caption" role="dialog" aria-modal="true" aria-label="序章字幕" aria-describedby="captionText" hidden><div class="caption-viewport"><canvas width="640" height="480" aria-hidden="true"></canvas><p id="captionText" class="sr-only"></p><button aria-label="继续序章字幕"></button></div></div>
+        <div id="dialogue" class="dialogue" role="dialog" aria-modal="true" aria-labelledby="speaker" aria-describedby="dialogueText" hidden><div class="dialogue-viewport"><canvas width="640" height="480" aria-hidden="true"></canvas><strong id="speaker" class="sr-only"></strong><p id="dialogueText" class="sr-only"></p><button id="dialogueNext" aria-label="继续对话"></button><div id="dialogueChoices" role="group" aria-label="对话选择" hidden></div></div></div>
+      </div>
+      <div class="game-controls"><span><kbd>WASD</kbd> / 方向键移动　<kbd>Shift</kbd> 跑步　<kbd>E</kbd> 交互　<kbd>Tab</kbd> 操作界面</span><div><button id="zoomOut" aria-label="缩小">−</button><span id="zoomValue">100%</span><button id="zoomIn" aria-label="放大">＋</button><button id="fit">全图</button><button id="follow">跟随</button><button id="fullscreen">全屏</button></div></div>
+      <p id="status" role="status" class="status">正在准备世界状态…</p>
+    </section>
+    <aside>
+      <div class="chapter"><span class="eyebrow">FIRST PLAYABLE CHAPTER</span><h2>从这里开始</h2><p id="scopeText">探索街道，与人物交谈，走向地图出口。进度会记录事件状态与背包。</p></div>
+      <label class="role-label">当前角色<select id="role"><option value="001">英格妮</option><option value="002">凯</option></select></label>
+      <button id="newGame" class="new-game">新游戏</button>
+      <button id="partyMenuOpen" class="new-game">物品／装备／技能</button>
+      <details><summary>声音</summary><label class="check"><input id="audioMuted" type="checkbox">静音</label><label>音量<input id="audioVolume" type="range" min="0" max="100" value="70" aria-label="音量"></label></details>
+      <div class="save-controls"><button id="save" class="primary">保存进度</button><button id="load">载入进度</button></div>
+      <p id="saveStatus" class="quiet">尚未在此浏览器保存</p>
+      <p id="money" class="quiet">金钱 —</p>
+      <div class="battle-entry"><button id="battleOpen">开始战斗样本</button><p class="quiet">英格妮 × 雪泥怪 · 独立演示</p></div>
+      <details><summary>背包 <span id="itemCount">—</span></summary><ul id="inventory" class="inventory"></ul></details>
+      <details><summary>存档文件</summary><div class="file-controls"><button id="exportSave">导出存档</button><button id="importSave">导入存档</button><input type="file" id="saveFile" accept=".json,application/json" hidden></div><p class="quiet">使用本版重制格式，可转移到另一浏览器。</p></details>
+      <details id="devTools"><summary>开发检查</summary><div class="dev-content"><p id="position">—</p><button id="routeSample">进入火之谷剧情后样本</button><button id="citySample">进入原城市验证样本</button><button id="contentSample">进入三人扩展样本</button><label>样本定位<select id="probe"></select></label><button id="jumpProbe">前往样本位置</button><button id="resetEventSample" hidden>恢复侦探首次交互样本</button><label class="check"><input type="checkbox" id="collision">显示通行与出口</label><button id="layerOpen">燕突图层检查</button><button id="exportLog">导出运行记录</button><p id="stateInfo" class="quiet"></p><ol id="eventLog" class="event-log"></ol></div></details>
+      <div class="scope"><span class="eyebrow">本版范围</span><p id="boundaries">地图探索、对话、存档与森林实时战斗。</p></div>
+    </aside>
+  </main>
+  <section id="layerPanel" class="layer-panel" role="dialog" aria-modal="true" aria-labelledby="layerTitle" hidden><div class="layer-inner"><div class="layer-header"><div><span class="eyebrow">SOURCE FRAME COMPOSITION</span><h2 id="layerTitle">燕突 · 本体图层检查</h2></div><button id="layerClose">返回地图</button></div><canvas id="layerCanvas" width="800" height="500" aria-label="燕突主人物和本体效果合成"></canvas><div class="layer-controls"><button id="layerPrevious">上一帧</button><button id="layerNext">下一帧</button><label class="check">源帧<select id="layerSelect" aria-label="燕突源帧"></select></label><span id="layerFrame">—</span><label class="check"><input type="checkbox" id="mainLayer" checked>人物主层</label><label class="check"><input type="checkbox" id="intrinsicLayer" checked>本体加色层</label></div><p id="layerNote" class="quiet">按同一源帧合成，用于核对真实像素；浏览器加色是近似显示，原版层序、锚点应用及精确时序另行对照。</p></div></section>
+  <footer><span>原作素材 · 独立世界状态 · 持续重制</span><span>本地运行 / ORIGINAL ASSETS</span></footer>
+  <script type="module" src="app.js"></script>
+</body></html>
