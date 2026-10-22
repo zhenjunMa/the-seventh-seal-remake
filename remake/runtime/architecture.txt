@@ -7,6 +7,7 @@ Phaser 3.90.0运行库固定在web/vendor/phaser，保留MIT许可和SHA清单�
 web/app.js创建共享state和actions，装配services、map、story、menu、session、battle、inspection、input、boot控制器，再调用boot。
 app先创建phaser/runtime.mjs中的PhaserRuntime。runtime场景只推进共享转场与界面；exploration和battle分别在自己的update中调用探索／战斗适配器并绘制，地图控制器不再推进战斗。原SceneController继续负责世界地点准备／提交／回滚。
 controllers处理浏览器流程和系统连接；core处理来源校验、资格、规则与事务；视图负责输入层级和绘制。新规则不写入app.js或按人物名字分支。
+input连接fullscreen适配器：点击全屏后仅申请锁定Escape，短按沿用游戏返回；全屏内保留退出按钮与长按Esc提示。退出全屏／释放输入时解除锁定，不支持或拒绝权限时在画面内提示。
 boot读取目录、内容登记、来源数据、配置和界面清单，准备共享视图及世界／场景／战斗入口。新增控制器通过同一state/actions连接。
 
 Phaser目录（相对web）

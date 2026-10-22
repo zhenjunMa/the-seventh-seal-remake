@@ -4,9 +4,11 @@ import {changeSkillShortcuts} from "../core/skill_shortcuts.mjs";
 import {availableFieldSkills, useWorldSkill} from "../core/field_skills.mjs";
 import {effectiveSkillSource} from "../core/battle_skill_access.mjs";
 import {createContentSample} from "../core/content_sample.mjs";
+import {createFullscreenController} from "./fullscreen.mjs";
 
 export function createInputController({state, actions, $, canvas, ctx}) {
   const listeners=new AbortController(),options={signal:listeners.signal};
+  const fullscreen=createFullscreenController({$,canvas});
   function saveKey(key,repeat=false){
     if(!['F4','F5'].includes(key))return false;
     if(!repeat){if(state.engine?.paused)actions.status('请先返回游戏，再存取进度。',true);else actions.guarded(()=>key==='F4'?actions.saveProgress('quick'):actions.loadProgress('quick'))();}
@@ -43,7 +45,9 @@ export function createInputController({state, actions, $, canvas, ctx}) {
     });
     $('role').onchange=()=>{state.selectedRole=$('role').value;state.world.transact(draft=>{draft.leader_id=state.selectedRole;});state.view.action=0;state.view.frame=0;state.clock=0;canvas.focus();};
     $('zoomOut').onclick=()=>{state.view.zoom=Math.max(.15,state.view.zoom/1.2);};$('zoomIn').onclick=()=>{state.view.zoom=Math.min(3,state.view.zoom*1.2);};$('fit').onclick=actions.fit;$('follow').onclick=()=>{state.view.zoom=1;state.view.follow=true;canvas.focus();};
-    $('fullscreen').onclick=actions.guarded(async()=>{if(document.fullscreenElement)await document.exitFullscreen();else await $('screen').requestFullscreen();});
+    $('fullscreen').onclick=actions.guarded(fullscreen.toggle);
+    $('fullscreenExit').onclick=actions.guarded(fullscreen.toggle);
+    document.addEventListener('fullscreenchange',fullscreen.changed,options);
     $('collision').onchange=()=>{state.view.collision=$('collision').checked;};
     $('jumpProbe').onclick=actions.guarded(async()=>{if(state.scenes.phase!=='map')return;const p=state.scenes.current.probes[Number($('probe').value)];if(!p)throw new Error('当前地图没有样本位置');actions.validateEntry(state.scenes.current,{...p,map_id:state.world.location.map_id});state.world.setPosition(p.x,p.y,p.direction??state.world.location.direction);state.view.follow=true;actions.updateNearest();actions.log({type:'development-relocation',map_id:state.world.location.map_id,...p});actions.status(`已定位开发样本：${p.name}`);canvas.focus();});
     $('resetEventSample').onclick=actions.guarded(async()=>{
@@ -82,6 +86,6 @@ export function createInputController({state, actions, $, canvas, ctx}) {
     canvas.addEventListener('pointerdown',()=>canvas.focus(),options);
     canvas.addEventListener('wheel',event=>{event.preventDefault();if(!state.engine?.paused&&state.scenes.phase==='map')state.view.zoom=Math.min(3,Math.max(.15,state.view.zoom*(event.deltaY<0?1.1:1/1.1)));},{...options,passive:false});
   }
-  function disposeInput(){listeners.abort();state.keys.clear();}
+  function disposeInput(){listeners.abort();fullscreen.dispose();state.keys.clear();}
   return {wire,disposeInput,saveKey};
 }
