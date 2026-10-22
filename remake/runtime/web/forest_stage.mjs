@@ -8,7 +8,7 @@ export function validateForestStage(stage,content=runtimeContent){
   const prefix=entry.asset_prefix;
   const c=stage.default_composition;
   need(c?.viewport.width===640&&c.viewport.height===480&&c.camera.x===0&&c.camera.y===0,'当前只支持原默认镜头');
-  need(Array.isArray(stage.layers)&&new Set(stage.layers.map(l=>l.id)).size===3,'图层无效');
+  need(Array.isArray(stage.layers)&&stage.layers.length>=2&&new Set(stage.layers.map(l=>l.id)).size===stage.layers.length,'图层无效');
   for(const layer of stage.layers){
     need(Array.isArray(layer.frames)&&layer.frames.length===layer.source.frame_count,'帧表无效');
     for(const f of layer.frames)need(f.path.startsWith(prefix)&&/^[A-Za-z0-9_./-]+\.png$/.test(f.path)&&!f.path.split('/').includes('..')&&/^[a-f0-9]{64}$/.test(f.sha256),'图片来源无效');

@@ -17,6 +17,7 @@ BattleController持有本场参战者、资源快照、充槽、输入、pending
 唯一编辑登记是web/data/runtime_content.json v2；只选择角色阵营、技能原索引／处理器、资源阵容、舞台、ANM程序和地图交互。
 tools/content_registration.py直接读取编辑定义选择生产输入，不要求新地图／怪物预先有生成产物。
 tools/build_runtime.py按声明依赖导出；chapter-maps／chapter-story准备地图与剧情，enemies准备怪物，随后准备玩家、遭遇／奖励、配置、表现、音频、字体和目录。
+story-check读取已导出的源表，沿显式入口遍历TLK分支和ANM嵌套对白，提前阻断未实现能力。旧隐式NPC仅列提示，显式npcs作为构建门槛；最终内容编译再次执行同一检查。--preflight提供只读入口，不要求本次重导媒体。
 core/content_definition.mjs与tools/resolve_content_definition.mjs共用来源解析：展开角色身份／原槽、默认技能ID、ANM来源、地图原旗标与休息选择。
 export_content_registry.mjs核对跨文件依赖和原输入，生成web/data/runtime_content.mjs。boot比较其中definition快照与编辑JSON，拒绝未编译登记。
 运行登记不进入存档；添加登记不自动入队、学会技能、打开触发器或实现新机制。
@@ -31,6 +32,8 @@ CHR／DAT／TLK／ANM和生成的party_*、forest_*、enemy_*等JSON保存来源
 地图、剧情与演出
 map controller连接地图载入、视口、连续移动、NPC与交互；terrain、占格、路径、移动／遇敌规则由对应core及共享MovementMap处理。
 chapter-maps从原DAT的state0描述推导已登记地图间的物理出口；剧情型出口、前置条件和演出继续走TLK／ANM系统。
+map_connections按登记与源描述连接大地图出口，并共用原标记／排序规则推导大地图进入位置。chapter_story覆盖已登记出口来源，route_events只兼容尚未接入TLK的旧地图。
+maps.entry明确选择DAT +0x11E进入剧情；SceneController与WorldMapController通过同一enterMap钩子执行，位置和剧情共用未提交草稿。失败回滚显示及世界状态，过期revision拒绝覆盖；启动、恢复和缩略图不触发进入剧情。
 maps.export标记生产归属：新地图默认chapter素材和story=true；existing地图由已有专用导出器负责，story=false表示尚未接入其TLK。该选择不替代运行交互登记。
 chapter-story按登记读取原记录，道具定义从mutation5引用推导，角色初值按登记玩家生成，ANM控制地图由opcode10的源DAT确定。多控制地图或未恢复格式明确拒绝。
 core/chapter.mjs解释已恢复条件／变更，保留草稿、源记录与事件状态，失败不提交。core/chapter_animation.mjs验证受支持指令；core/anm_runtime.mjs处理动作等待、并发、取消和过期完成。
@@ -47,6 +50,7 @@ forest_stage先完成天空、地面、全部场景贴图，再画按地面Y排�
 battle_layout按保存的四个固定队列槽定位，不压缩空位；idle、受击和防御的已接入时序读取各自源动作。普通攻击／技能仍有预览时钟与轨迹适配边界。
 battle_lifecycle_view独立推进入场、死亡、起身，完成后回执core；死亡完成前不结算终局，复活epoch使旧回执失效。
 battle_packs用裁切图集保留源PNG核对关系；资源完成解码后才开放战斗。battleEntryPending、加载锁、有限并发图片池和七种原来源转场控制入场，表现随机与战斗RNG分开。
+battle-stages按登记读取原SCN／DGP生产同格式背景，复用来源解码／像素审计和默认镜头规则；战斗背景与音乐按本场实际stage选择。旧专用舞台产物继续由原导出器维护。
 
 菜单、保存与声音
 menu controller通过core事务连接装备、用药、技巧、队列和晶石；OperationMenuView及子视图管理页签、候选、焦点、取消和动画。
@@ -65,7 +69,7 @@ session controller管理保存、载入、导入／导出、主菜单与缩略�
 UI：现有controller和view，原素材／字体导出及状态验收；通用方法见../assessment/menu_alignment_workflow.txt。
 
 当前边界与维护
-构建支持已恢复的矩形v6地图、全局STG池、指令、状态和掉落类型。stage13与TestStage仍有专用舞台导出器；新格式和新机制按实际内容补齐。
+构建支持已恢复的矩形v6地图、全局STG池、指令、状态和掉落类型。SCN v2／mode4默认镜头支持通用舞台导出；stage13与TestStage保留专用导出器，新格式和新机制按实际内容补齐。
 候补队伍、组合攻击、部分特殊效果／熟练度、原动态镜头、精确混色和长流程性能仍见唯一当前计划。当前整份来源JSON装载，尚未完成按区域拆分或全游戏压测。
 prototype中的共享移动模块、角色资源和解码器，以及evidence中的来源／台账仍属于当前依赖。历史浏览器观察不能作为当前代码重播。
 最近自动检查见evidence/current_validation.json，证据分类见evidence/README.txt；改动规则需对应回归，改变实际流程或表现需记录新的浏览器观察。

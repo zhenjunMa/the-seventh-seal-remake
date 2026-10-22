@@ -11,7 +11,7 @@ export function validateChapterAnimation(program,content=runtimeContent) {
   need(program.commands?.length > 0 && program.commands.length <= 256
     && program.source.bytes === 67 + program.commands.length * 74, '剧情动画长度无效');
   for (const [index, c] of program.commands.entries()) {
-    need(c.index === index && OPCODES.has(c.opcode) && /^[0-9a-f]{148}$/.test(c.raw_hex), '剧情动画命令未支持');
+    need(c.index === index && OPCODES.has(c.opcode) && /^[0-9a-f]{148}$/.test(c.raw_hex), `剧情动画 ${program.id} 命令 ${index}（opcode ${c.opcode}）未支持`);
     const b = Uint8Array.from(c.raw_hex.match(/../g), part => parseInt(part,16)), v = new DataView(b.buffer);
     need(c.opcode === b[0] && c.source.offset === 67 + index*74
       && c.source.sha256 === program.source.sha256 && c.source.path === program.source.path, '剧情动画记录来源不符');

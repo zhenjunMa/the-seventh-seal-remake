@@ -44,6 +44,26 @@ def program_ids():
     return tuple(rows)
 
 
+def stage_exports(value=None):
+    """Existing explicit paths retain their established exporters; new IDs default to SCN."""
+    import re
+    value = definition() if value is None else value
+    result = {}
+    for ident, row in value['stages'].items():
+        if not re.fullmatch(r'[A-Za-z0-9_-]+', ident) or set(row) - {'path', 'schema', 'asset_prefix', 'export'}:
+            raise ValueError(f'Invalid stage definition: {ident}')
+        policy = row.get('export', 'existing' if 'path' in row else 'source')
+        output, prefix = row.get('path', f'data/stages/{ident}.json'), row.get('asset_prefix', f'assets/stages/{ident}/')
+        if policy not in ('source', 'existing') or not re.fullmatch(r'data/[A-Za-z0-9_/-]+\.json', output) or not re.fullmatch(r'assets/[A-Za-z0-9_/-]+/', prefix):
+            raise ValueError(f'Invalid stage export policy: {ident}')
+        if row.get('schema', 'seventh-seal-battle-stage') not in ('seventh-seal-forest-stage', 'seventh-seal-battle-stage'):
+            raise ValueError(f'Unsupported stage schema: {ident}')
+        result[ident] = dict(path=output, asset_prefix=prefix, schema=row.get('schema', 'seventh-seal-battle-stage'), export=policy)
+    if len({row['path'] for row in result.values()}) != len(result) or len({row['asset_prefix'] for row in result.values()}) != len(result):
+        raise ValueError('Stage output paths must be unique')
+    return result
+
+
 @lru_cache(maxsize=1)
 def registration():
     # Use the same source resolver as the JS compiler, before party exports exist.

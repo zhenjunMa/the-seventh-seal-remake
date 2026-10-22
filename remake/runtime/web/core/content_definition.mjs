@@ -28,7 +28,7 @@ export function resolveContentDefinition(definition,{seed,forest,story,maps}){
   }));
   const resolvedMaps={};
   for(const [id,row]of Object.entries(definition.maps)){
-    keys(row,['triggers','objects','rests','routes','export'],`地图 ${id}`);
+    keys(row,['triggers','objects','rests','routes','entry','npcs','export'],`地图 ${id}`);
     if(row.export){
       keys(row.export,['assets','story'],`地图导出 ${id}`);
       need(row.export.assets===undefined||['chapter','existing'].includes(row.export.assets),`地图 ${id} 素材导出器无效`);
@@ -49,9 +49,25 @@ export function resolveContentDefinition(definition,{seed,forest,story,maps}){
       need(restore_records.length>0,`休息 ${id} 缺少恢复分支`);
       return {descriptor_id:rest.descriptor_id,record_id:record.id,restore_records,choices};
     });
+    need(row.entry===undefined||typeof row.entry==='boolean',`地图 ${id} entry 必须为布尔值`);
+    if(row.entry)need(Number.isInteger(table?.header_entry_tlk_raw)&&table.header_entry_tlk_raw>0,`地图 ${id} 缺少 DAT +0x11E 进入剧情`);
+    const routes=(row.routes??[]).map(route=>{
+      keys(route,['descriptor_id','record_id','requires_flag','animation','denial_record_id','speaker_role_id'],`出口 ${id}`);
+      const descriptor=table?.descriptors.find(d=>route.descriptor_id===undefined?d.state_raw===2&&d.field_26_raw===route.record_id:d.id===route.descriptor_id);
+      need(descriptor?.state_raw===2&&descriptor.field_26_raw>0,`地图 ${id} 出口缺少原始描述`);
+      need(route.record_id===undefined||route.record_id===descriptor.field_26_raw,`地图 ${id} 出口记录与原描述不同`);
+      return {...copy(route),record_id:descriptor.field_26_raw};
+    });
     const flag_index=table?.map_flag_index??map.map_flag_index??map.flag_index;
-    resolvedMaps[id]={path:`data/maps/${id.toLowerCase()}.json`,triggers:copy(row.triggers??[]),objects:copy(row.objects??[]),rests,routes:copy(row.routes??[]),
+    resolvedMaps[id]={path:`data/maps/${id.toLowerCase()}.json`,triggers:copy(row.triggers??[]),objects:copy(row.objects??[]),rests,routes,
+      ...(row.entry?{entry_record:table.header_entry_tlk_raw}:{}),
+      ...(row.npcs===undefined?{}:{npcs:copy(row.npcs)}),
       ...(flag_index===undefined?{}:{flag_index})};
   }
-  return {schema:definition.schema,version:1,party_limit:4,roles,battle_rosters,stages:copy(definition.stages),programs,maps:resolvedMaps};
+  const stages=Object.fromEntries(Object.entries(definition.stages).map(([id,row])=>{
+    keys(row,['path','schema','asset_prefix','export'],`舞台 ${id}`);
+    need(row.export===undefined||['source','existing'].includes(row.export),`舞台 ${id} 导出方式无效`);
+    return [id,{path:row.path??`data/stages/${id}.json`,schema:row.schema??'seventh-seal-battle-stage',asset_prefix:row.asset_prefix??`assets/stages/${id}/`}];
+  }));
+  return {schema:definition.schema,version:1,party_limit:4,roles,battle_rosters,stages,programs,maps:resolvedMaps};
 }

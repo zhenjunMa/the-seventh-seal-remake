@@ -34,6 +34,8 @@ export function validateContentRegistration(content){
     need(/^[A-Za-z0-9_-]+$/.test(id)&&/^data\/[A-Za-z0-9_/-]+\.json$/.test(stage.path),'战斗场景路径无效');
     need(['seventh-seal-forest-stage','seventh-seal-battle-stage'].includes(stage.schema)&&/^assets\/[A-Za-z0-9_/-]+\/$/.test(stage.asset_prefix),'战斗场景格式未支持');
   }
+  const stages=Object.values(content.stages??{});
+  need(new Set(stages.map(row=>row.path)).size===stages.length&&new Set(stages.map(row=>row.asset_prefix)).size===stages.length,'战斗场景产物路径重复');
   for(const [id,source]of Object.entries(content.programs??{}))
     need(/^[a-z0-9_-]+$/.test(id)&&source?.path?.toLowerCase()===`animate/${id}.anm`&&sourceHash(source.sha256),'演出来源无效');
   for(const [id,row]of Object.entries(content.maps??{})){
@@ -43,7 +45,11 @@ export function validateContentRegistration(content){
       need(rows.every(r=>Number.isInteger(r[key])&&r[key]>=0)&&new Set(rows.map(r=>r[key])).size===rows.length,`地图 ${id} 入口重复或无效`);
     need(row.objects.every(r=>r.handler==='stationary-chest'),'物件处理器尚未实现');
     need(row.rests.every(r=>Number.isInteger(r.record_id)&&r.record_id>0&&Array.isArray(r.restore_records)&&r.restore_records.length>0&&r.restore_records.every(n=>Number.isInteger(n)&&n>0)&&Array.isArray(r.choices)&&r.choices.length>=1&&r.choices.length<=3&&r.choices.every(c=>Number.isInteger(c.index)&&c.index>=0&&c.index<3&&typeof c.text==='string'&&Number.isInteger(c.record_id)&&c.record_id>=0)),'休息入口无效');
-    need(row.routes.every(r=>Number.isInteger(r.requires_flag?.index)&&r.requires_flag.index>=0&&r.requires_flag.index<2000&&Number.isInteger(r.requires_flag.bit)&&r.requires_flag.bit>=1&&r.requires_flag.bit<=32),'出口前置旗标无效');
+    if(row.entry_record!==undefined)need(Number.isInteger(row.entry_record)&&row.entry_record>0,'进入剧情记录无效');
+    if(row.npcs!==undefined)need(Array.isArray(row.npcs)&&new Set(row.npcs).size===row.npcs.length&&row.npcs.every(n=>Number.isInteger(n)&&n>=0&&n<499),'NPC 槽登记无效');
+    need(row.routes.every(r=>Number.isInteger(r.record_id)&&r.record_id>0&&(r.descriptor_id===undefined||Number.isInteger(r.descriptor_id)&&r.descriptor_id>=0)),'出口记录无效');
+    need(row.routes.every(r=>r.requires_flag===undefined||Number.isInteger(r.requires_flag?.index)&&r.requires_flag.index>=0&&r.requires_flag.index<2000&&Number.isInteger(r.requires_flag.bit)&&r.requires_flag.bit>=1&&r.requires_flag.bit<=32),'出口前置旗标无效');
+    need(row.routes.every(r=>r.animation===undefined||typeof r.animation==='string'&&Number.isInteger(r.denial_record_id)&&r.denial_record_id>0&&content.roles[r.speaker_role_id]?.side==='player'),'出口拒绝分支无效');
   }
   return content;
 }
