@@ -4,6 +4,7 @@
  */
 
 import {compileNativeSequence} from './core/skill_sequence.mjs';
+import {idlePoseAt} from './core/battle_scheduler.mjs';
 import {BattleLifecyclePlayback} from './battle_lifecycle_view.mjs';
 import {battleViewport,battleActorPositions} from './core/battle_layout.mjs';
 import {battleResources,drawBattleImage} from './core/battle_resources.mjs';
@@ -40,7 +41,7 @@ export function validateBattleViewMetadata(meta,content=runtimeContent) {
           !urlAllowed(action.sheet) || !/^[a-f0-9]{64}$/.test(action.sha256)) throw new Error('动作图集无效');
       actions.set(action.index, action);
     }
-    for (const segment of [role.idle, role.reaction, ...(role.skill?.segments || []),...[...(role.alternate_skills??[]),...(role.response_skills??[])].flatMap(s=>s.segments??[])]) {
+    for (const segment of [role.idle, ...(role.idle_sequence?.segments??[]), role.reaction, ...(role.skill?.segments || []),...[...(role.alternate_skills??[]),...(role.response_skills??[])].flatMap(s=>s.segments??[])]) {
       const action = actions.get(segment?.action_index);
       if (!action || !Array.isArray(segment.frames) || !segment.frames.length ||
           segment.frames.some(frame => !integer(frame) || frame >= action.frame_count) ||
@@ -409,13 +410,13 @@ export class BattleView {
         const channels=[run,...run.children];let selected=null,at=Infinity,ending=false;
         for(const channel of channels){if(channel.done||(channel===run&&run.main_done))continue;const end=channel.visited+1>=channel.steps.length,due=channel.next_at+(end?this.meta.policy.tail_ms:0);if(due<at){selected=channel;at=due;ending=end;}}
         if(!selected||at>run.elapsed)break;const channel=selected,child=channel!==run;
-        if(ending){if(child){channel.done=true;run.onReactionEnd?.(clone(channel.descriptor),true);}else{run.main_done=true;run.onPrimaryEnd?.();}continue;}
+        if(ending){if(child){channel.done=true;run.onReactionEnd?.(clone(channel.descriptor),true,run.started+at);}else{run.main_done=true;run.onPrimaryEnd?.(run.started+at);}continue;}
         const i=channel.visited+1,step=channel.steps[i];
         run.onFrame?.({...clone(step),actor_id:channel.result.actor_id,target_id:channel.result.target_id,channel_id:child?channel.channel_id:'main'});
         channel.cursor=i;
         if(step.plan_record_index!==channel.record_visited){if(child)run.onReactionRecord?.(clone(step),clone(channel.descriptor));else run.onRecord(clone(step));channel.record_visited=step.plan_record_index;}
         if(step.event){
-          const detail={...clone(step),contact_key:`${child?channel.channel_id:'main'}:${step.plan_record_index}:${step.logical_frame}`,actor_id:channel.result.actor_id,target_id:channel.result.target_id,skill_id:channel.result.skill_id,
+          const detail={...clone(step),presentation_time_ms:run.started+at,contact_key:`${child?channel.channel_id:'main'}:${step.plan_record_index}:${step.logical_frame}`,actor_id:channel.result.actor_id,target_id:channel.result.target_id,skill_id:channel.result.skill_id,
             basis:'Original logical CHR contact position; original composition and DGP frame table, preview animation clock'};
           const response=child?run.onReactionContact?.(detail,clone(channel.descriptor)):run.onContact(detail);if(!response||typeof response.then==='function')throw new Error('完整接触结算必须同步返回原结算结果');
           channel.result={...channel.result,skipped:null,...clone(response)};channel.impact_called=true;channel.impact_done=true;channel.impact_elapsed=at-(channel.at??0);
@@ -606,6 +607,8 @@ export class BattleView {
       if(this.lifecycle?.hidden(id))continue;
       const dead = actor?.alive === false || actor?.hp?.current === 0;
       let alpha = 1, segment = role.idle, frame = poseFrame(segment,now,true), pair = null;
+      const idlePose=actor?.idle_pose??(role.idle_sequence?idlePoseAt(role.idle_sequence.segments,now):null);
+      if(idlePose){segment={action_index:idlePose.action_index};frame=idlePose.action_frame;}
       const acting=run?.sequence?[...run.children].reverse().find(c=>!c.done&&c.result.actor_id===id)??(!run.main_done&&run.result.actor_id===id?run:null):run?.result.actor_id===id?run:null;
       const impacting=run?.sequence?[run,...run.children].filter(c=>c.result.target_id===id&&c.impact_called&&this._damaging(c.result)).sort((a,b)=>(b.at??0)+(b.impact_elapsed??0)-(a.at??0)-(a.impact_elapsed??0))[0]:run?.result.target_id===id&&run.impact_called&&this._damaging(run.result)?run:null;
       const lifePose=this.lifecycle?.pose(id);
@@ -624,7 +627,7 @@ export class BattleView {
         frame = poseFrame(segment,age);
         if (!this.lifecycle&&(impacting.result.death || impacting.result.remainingHp === 0 || dead)) alpha = Math.max(0, 1 - age / 520);
         else if (age >= segment.frames.length * segment.interval_raw) {
-          segment = role.idle; frame = poseFrame(segment,now,true);
+          segment = idlePose?{action_index:idlePose.action_index}:role.idle; frame = idlePose?.action_frame??poseFrame(segment,now,true);
         }
       } else if (dead){
         if(!this.lifecycle)continue;

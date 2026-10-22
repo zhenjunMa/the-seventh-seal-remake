@@ -15,7 +15,7 @@ export function validateScheduler(data){
   for(const id of ['001','011','012','013'])fail(/^([a-f0-9]{2}){1053}$/.test(data.idle_skills?.[id]?.fixed_raw_hex),'原待机属性缺失');
   return data;
 }
-export function initializeScheduler(actors,data,sidePriority=0){
+export function initializeScheduler(actors,data,sidePriority=0,now=0){
   validateScheduler(data);fail(sidePriority===0||sidePriority===1,'行动阵营优先状态无效');
   // 0x50AC80 sums header current speed, before skill/status/equipment bonuses.
   const threshold=Math.imul(Math.trunc(actors.reduce((sum,a)=>(sum+raw(a,'0x0524a729'))|0,0)/actors.length),data.average_speed_factor);
@@ -26,13 +26,42 @@ export function initializeScheduler(actors,data,sidePriority=0){
     // 0x519A80 zeroes the allocated actor block: F68E starts at queue index0.
     // Idle preserves it; 0x51C640 explicitly clears it after a normal hit.
     actor.native_active=false;actor.current_target_id=actors[0].id;actor.reaction_special_gate_raw=0;actor.native_z_raw=0;
-    setIdleSkill(actor,data);
+    setIdleSkill(actor,data,now);
   }
   return {mode:'native-forest',threshold,tick_interval_ms:20,ticks:0,elapsed_ms:0,side_priority:sidePriority,pending:null,active_actor_id:null,...(data.default_preparation_delay&&data.default_preparation_delay!==800?{default_preparation_delay:data.default_preparation_delay}:{})};
 }
-export function setIdleSkill(actor,data){
+// The source idle skill can contain multiple records with different hit
+// classes (50E980 copies the current record +24 to actor 524A633).
+// Use one pose for rendering and settlement; never freeze the first record.
+export function idlePoseAt(segments,elapsed){
+  fail(Array.isArray(segments)&&segments.length>0&&Number.isFinite(elapsed),'待机动作时钟无效');
+  const duration=segments.reduce((sum,s)=>sum+s.frames.length*s.interval_raw,0);
+  fail(duration>0&&Number.isFinite(duration),'原待机动作时长无效');
+  let at=Math.max(0,elapsed)%duration;
+  for(const segment of segments){
+    const length=segment.frames.length*segment.interval_raw;
+    if(at<length){
+      const raw=segment.raw_hex;
+      fail(typeof raw==='string'&&/^(?:[a-f0-9]{2}){176}$/i.test(raw),'原待机动作记录缺失');
+      return {chr_record_index:segment.chr_record_index,action_index:segment.action_index,
+        action_frame:segment.frames[Math.floor(at/segment.interval_raw)],
+        class_raw:parseInt(raw.slice(0x24*2,0x24*2+2),16),action_mask_raw:parseInt(raw.slice(0x78*2,0x78*2+2),16)};
+    }
+    at-=length;
+  }
+}
+export function advanceIdleSkill(actor,data,now){
+  const idle=data.idle_skills[actor.resource_id??actor.id];
+  if(!idle?.segments)return;
+  if(actor.current_skill?.id!==idle.id||actor.hp.current===0||actor.state_raw>=4||actor.native_active||actor.immune_raw||actor.reaction_busy_raw||actor.defense_half_raw){delete actor.idle_pose;return;}
+  actor.idle_pose=idlePoseAt(idle.segments,now-actor.idle_started_at);
+  actor.class_raw=actor.idle_pose.class_raw;actor.action_mask_raw=actor.idle_pose.action_mask_raw;
+}
+export function setIdleSkill(actor,data,now=0){
   const idle=data.idle_skills[actor.resource_id??actor.id];fail(idle,'参战角色原待机属性缺失');
   actor.current_skill=clone(idle);actor.class_raw=idle.class_raw;actor.action_mask_raw=idle.action_mask_raw;
+  actor.idle_started_at=now;delete actor.idle_pose;
+  advanceIdleSkill(actor,data,now);
 }
 export function chargeActor(actor,rng){
   const c=actor.charge;fail(c,'行动槽未初始化');

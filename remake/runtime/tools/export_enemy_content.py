@@ -22,7 +22,7 @@ from combat_resources import CHR, GAME_SHA256
 from dgp import DGP
 from export_forest_ai import role_record
 import export_combat_sample as combat
-from export_party_skills import source_role, export_role_assets
+from export_party_skills import source_role, export_role_assets, enrich_sequence
 from export_battle_view import sequence
 
 
@@ -69,9 +69,10 @@ def prepare_role(ident, status):
         return sequence(c, d, index)['segments'][0]
     responses = [sequence(c, d, index) for index, skill in enumerate(c.skills)
                  if skill['id_raw'] in (1, 2, 3, 9, 12, 18, 19)]
+    idle = enrich_sequence(c, d, 0)
     role = dict(id=ident, name=c.name, frame_width=d.width, frame_height=d.height,
         anchor=dict(x=d.anchor_raw[0], y=d.anchor_raw[1]), mirror=False, direction=0,
-        idle=pose(0), reaction=pose(1), skill=views[0], alternate_skills=views[1:], response_skills=responses)
+        idle=idle['segments'][0], idle_sequence=idle, reaction=pose(1), skill=views[0], alternate_skills=views[1:], response_skills=responses)
     primary = copy.deepcopy(ai['skills'][ai['learned_indices'][0]])
     primary['id'] = f'{ident}_attack'
     actor = combat.actor_record(ident, 'enemy', c.header, c.path, 8,
@@ -102,6 +103,7 @@ def export():
         first_action = bytes.fromhex(c.skills[0]['actions'][0]['raw_hex'])
         scheduler['idle_skills'][ident] = dict(id=f'{ident}_idle', actor_id=ident, name=c.skills[0]['name_cp936'],
             fixed_raw_hex=raw.hex(), class_raw=first_action[0x24], action_mask_raw=first_action[0x78],
+            segments=copy.deepcopy(view['idle_sequence']['segments']),
             source=dict(path=f'Fight_Role/{ident}.CHR', sha256=c.sha256,
                         offset=c.skills[0]['offset'], bytes=0x41d))
         # Use the same independently audited image/layer implementation as players.
@@ -115,7 +117,7 @@ def export():
     reactions['policy']['roster'] = 'party-source-group'
     meta['source_hashes'].update(sources)
     meta['extra_layer_banks'] = banks
-    meta['policy']['roster'] = 'party-source-group'
+    meta['policy']['roster'] = 'forest-source-group'
     meta['policy']['complete_contacts'] = True
     # Effects not already present are exported by the shared party presentation
     # pass, which scans every selected enemy and player view.

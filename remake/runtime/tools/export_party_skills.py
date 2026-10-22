@@ -139,7 +139,7 @@ def enrich_sequence(c, d, index, runtime_id=None):
 
 def export_role_assets(role, c, d, sources, checks, group='party'):
     views = [role['skill']] + role['alternate_skills'] + role['response_skills']
-    segments = [s for v in views for s in v['segments']] + [role['idle'], role['reaction']]
+    segments = [s for v in views for s in v['segments']] + role.get('idle_sequence', {}).get('segments', [role['idle']]) + [role['reaction']]
     used = sorted({s['action_index'] for s in segments})
     role['actions'] = []
     for index in used:
