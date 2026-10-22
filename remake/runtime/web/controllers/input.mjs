@@ -57,8 +57,8 @@ export function createInputController({state, actions, $, canvas, ctx}) {
       actions.log({type:'development-event-reset',event:event.id,changes:event.sample.clear_bits.map(bit=>({index:bit.index,bit:bit.bit,before:before.flags[bit.index],after:state.world.value.flags[bit.index]}))});
       actions.buildHud();actions.status('已恢复受控的首次／重复交互条件；这是开发样本设置。');canvas.focus();
     });
-    $('save').onclick=actions.guarded(()=>actions.saveProgress('manual'));
-    $('load').onclick=actions.guarded(()=>actions.loadProgress('manual'));
+    $('save').onclick=actions.guarded(()=>actions.openSaveMenu({mode:'save'}));
+    $('load').onclick=actions.guarded(()=>actions.openSaveMenu({mode:'load'}));
     $('exportSave').onclick=actions.guarded(async()=>actions.download(await actions.saveEnvelope(),'seventh-seal-runtime-save.json'));
     $('importSave').onclick=()=>$('saveFile').click();$('saveFile').onchange=actions.guarded(async()=>{const file=$('saveFile').files[0];$('saveFile').value='';if(!file)return;if(file.size>8_000_000)throw new Error('存档文件超过当前版本上限');await actions.restore(JSON.parse(await file.text()));});
     $('exportLog').onclick=()=>actions.download({schema:'seventh-seal-runtime-log',version:2,events:state.logs,battle_history:state.battleHistory,current_battle:state.battle?.snapshot()??null,world:state.world.snapshot(),audio:state.audio?.snapshot()??null,scope:state.catalog.scope},'seventh-seal-runtime-log.json');
@@ -69,6 +69,7 @@ export function createInputController({state, actions, $, canvas, ctx}) {
       const key=event.key.length===1?event.key.toLowerCase():event.key;
       if(saveKey(key,event.repeat)){event.preventDefault();return;}
       if(state.engine?.paused)return;
+      if(state.saveMenu?.key(key,event.repeat)){event.preventDefault();return;}
       if(state.startupView?.key(key,event.repeat)){event.preventDefault();return;}
       if(['event','opening'].includes(state.scenes?.phase)&&actions.dialogueKey(key,event.repeat)){event.preventDefault();return;}
       if(state.worldMapView?.key(key,event.repeat)){event.preventDefault();return;}

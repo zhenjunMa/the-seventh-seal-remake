@@ -50,9 +50,11 @@ test('skip, held key, obsolete completion and close do not cross state boundarie
 function setup({save=null,onNew=async()=>{},onLoad=async()=>{},getSaves,refreshSaves,isBusy,getPreview}={}){
   const nodes=new Map();
   const draws=[];
-  const make=()=>({hidden:false,style:{setProperty(){}},dataset:{},setAttribute(){},addEventListener(){},focus(){},replaceChildren(){},append(){},
+  const make=()=>{const node={hidden:false,children:[],listeners:{},attributes:{},style:{setProperty(){}},dataset:{},
+    setAttribute(name,value){this.attributes[name]=value;},addEventListener(name,listener){this.listeners[name]=listener;},focus(){},replaceChildren(){this.children=[];},append(child){this.children.push(child);},
     getBoundingClientRect:()=>({width:800,height:600}),getContext:()=>({clearRect(){},fillRect(){},drawImage:(...args)=>draws.push(args)}),
-    pause(){this.paused=true;},play(){this.paused=false;return Promise.resolve();},removeAttribute(){},load(){}});
+    pause(){this.paused=true;},play(){this.paused=false;return Promise.resolve();},removeAttribute(){},load(){}};
+    node.classList={contains:name=>(node.className??'').split(' ').includes(name)};return node;};
   const $=id=>{if(!nodes.has(id))nodes.set(id,make());return nodes.get(id);};
   globalThis.ResizeObserver=class {observe(){}};
   globalThis.document={createElement:make};
@@ -112,6 +114,67 @@ test('title lists ordinary and quick files, refreshes on entry and loads the sel
   assert.equal(refreshes,1);assert.equal(view.optionCount(),2);assert.equal(view.getSave(),manual);
   view.key('ArrowDown');assert.equal(view.getSave(),quick);await view.confirm();
   assert.deepEqual(loads,[{save:quick,slot:'quick'}]);
+});
+
+const numberedSaves=()=>[...Array.from({length:20},(_,index)=>{
+  const slot=String(index).padStart(2,'0');return {slot,label:'存档 '+slot,envelope:{sha256:slot,payload:'{}'}};
+}),{slot:'quick',label:'快速存档',envelope:{sha256:'quick',payload:'{}'}}];
+const saveButtons=$=>$('startupOptions').children.filter(node=>node.classList.contains('startup-save'));
+
+test('title keeps three native save rows while navigation reaches every numbered slot and quick file',async()=>{
+  const entries=numberedSaves(),loads=[];const {view,$}=setup({getSaves:()=>entries,onLoad:(save,slot)=>loads.push({save,slot})});
+  view.showMenu();settle(view);await view.confirm();settle(view);
+  assert.equal(saveButtons($).length,3);assert.equal(view.listTop,0);
+  view.key('PageDown');assert.equal(view.subIndex,3);assert.equal(view.listTop,1);
+  view.key('PageUp');assert.equal(view.subIndex,0);assert.equal(view.listTop,0);
+  view.key('End');assert.equal(view.getSave(),entries[20].envelope);assert.equal(view.listTop,18);
+  assert.deepEqual(saveButtons($).map(node=>node.style.top),['99px','207px','315px']);
+  assert.ok(saveButtons($)[0].textContent.startsWith('存档 18'));
+  assert.ok(saveButtons($)[2].textContent.startsWith('快速存档'));
+  await view.confirm();assert.deepEqual(loads,[{save:entries[20].envelope,slot:'quick'}]);
+  view.key('ArrowUp');assert.equal(view.subIndex,19);await view.confirm();assert.equal(loads[1].slot,'19');
+  view.key('Home');assert.equal(view.subIndex,0);assert.equal(view.listTop,0);
+  view.key('ArrowUp');assert.equal(view.subIndex,0);
+  for(let index=1;index<entries.length;index++){
+    view.key('ArrowDown');assert.equal(view.subIndex,index);
+    assert.ok(index>=view.listTop&&index<view.listTop+3);
+  }
+  view.key('ArrowDown');assert.equal(view.subIndex,20);
+  view.key('Escape');assert.equal(view.submenu,null);assert.equal(loads.length,2);
+});
+
+test('read wheel only scrolls the read panel and a visible row click loads its full-list slot',async()=>{
+  const entries=numberedSaves(),loads=[];let busy=false;
+  const {view,$}=setup({getSaves:()=>entries,isBusy:()=>busy,onLoad:(save,slot)=>loads.push({save,slot})});
+  let prevented=0,stopped=0;const event={deltaY:120,preventDefault(){prevented++;},stopPropagation(){stopped++;}};
+  const wheel=event=>$('startMenu').listeners.wheel(event);
+  view.showMenu();settle(view);wheel(event);assert.equal(prevented,0);assert.equal(view.subIndex,0);
+  await view.confirm();wheel(event);assert.equal(view.subIndex,0);settle(view);
+  busy=true;wheel(event);assert.equal(view.subIndex,0);busy=false;
+  for(let index=0;index<30;index++)wheel(event);
+  assert.equal(view.subIndex,20);assert.equal(view.listTop,18);assert.equal(prevented,stopped);
+  const row=saveButtons($)[1];row.onclick();await new Promise(done=>setImmediate(done));
+  assert.equal(view.subIndex,19);assert.deepEqual(loads,[{save:entries[19].envelope,slot:'19'}]);
+  wheel({...event,deltaY:-1});assert.equal(view.subIndex,18);
+  view.key('Escape');const before=prevented;wheel(event);assert.equal(prevented,before);
+  view.submenu='extras';wheel(event);assert.equal(prevented,before);
+});
+
+test('late read previews cannot replace another slot and the selected thumbnail stays in its visible row',async()=>{
+  const entries=numberedSaves(),requests=[];
+  const {view,draws}=setup({getSaves:()=>entries,getPreview:save=>new Promise(resolve=>requests.push({save,resolve}))});
+  view.showMenu();settle(view);await view.confirm();settle(view);await Promise.resolve();
+  view.key('End');await Promise.resolve();
+  const stale={name:'slot00'},quick={name:'quick'};
+  requests[0].resolve({image:stale,source:'stored'});await new Promise(done=>setImmediate(done));
+  assert.equal(view.previewImage,null);
+  requests.at(-1).resolve({image:quick,source:'stored'});await new Promise(done=>setImmediate(done));
+  assert.equal(view.previewImage,quick);
+  assert.ok(draws.some(args=>args[0]===quick&&args.slice(1).join(',')==='17,313,104,76'));
+  assert.ok(!draws.some(args=>args[0]===stale));
+  view.key('ArrowUp');await Promise.resolve();assert.equal(view.previewImage,null);
+  const ordinary={name:'slot19'};requests.at(-1).resolve({image:ordinary,source:'stored'});await new Promise(done=>setImmediate(done));
+  assert.ok(draws.some(args=>args[0]===ordinary&&args.slice(1).join(',')==='17,205,104,76'));
 });
 
 test('an external quick load locks title keyboard, mouse confirmation and new game until it finishes',async()=>{

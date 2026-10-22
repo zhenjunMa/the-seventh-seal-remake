@@ -3,6 +3,7 @@ import {SAVE_PREVIEW_WIDTH,SAVE_PREVIEW_HEIGHT} from './core/save_preview.mjs';
 
 const labels=['游戏读取','开始游戏','特典','离开'];
 const buttonIds=['menuLoad','menuNew','menuExtras','menuExit'];
+const visibleSaveRows=3;
 
 // The view owns media, menu focus and transient animation. World replacement
 // remains in the session controller and only happens after an explicit confirm.
@@ -26,6 +27,12 @@ export class StartupView {
       this.syncVideoAudio(true);if(this.sequence.pointer(event.button)){event.preventDefault();event.stopPropagation();}
     });
     this.root.addEventListener('contextmenu',event=>event.preventDefault());
+    this.root.addEventListener('wheel',event=>{
+      if(this.sequence.stage!=='menu'||this.submenu!=='read')return;
+      event.preventDefault();event.stopPropagation();
+      if(this.pending||this.isBusy()||this.rotation||this.panelX!==0||!event.deltaY)return;
+      this.selectRead(this.subIndex+Math.sign(event.deltaY));
+    },{passive:false});
     buttonIds.forEach((id,index)=>{
       $(id).onclick=event=>{event.preventDefault();if(this.sequence.stage!=='menu'||this.pending||this.isBusy()||this.rotation)return;
         if(this.selected!==index)this.select(index);else this.confirm();};
@@ -100,7 +107,11 @@ export class StartupView {
     if(repeat||this.pending||this.isBusy()||this.rotation)return true;
     if(key==='Escape'){if(this.submenu){this.previewRequest++;this.cue('cancel');this.submenu=null;this.draw();this.renderOptions();this.updateButtons();}return true;}
     if(this.submenu){
-      if(['ArrowUp','ArrowDown'].includes(key)){const count=this.optionCount();if(count>1){const next=Math.max(0,Math.min(count-1,this.subIndex+(key==='ArrowUp'?-1:1)));if(next!==this.subIndex){if(this.submenu==='read'){this.previewRequest++;this.previewImage=null;}this.subIndex=next;this.listTop=this.galleryTop(next);this.cue('move');this.draw();this.renderOptions();}}}
+      if(this.submenu==='read'&&['ArrowUp','ArrowDown','PageUp','PageDown','Home','End'].includes(key)){
+        const next={ArrowUp:this.subIndex-1,ArrowDown:this.subIndex+1,PageUp:this.subIndex-visibleSaveRows,PageDown:this.subIndex+visibleSaveRows,Home:0,End:this.optionCount()-1}[key];
+        this.selectRead(next);
+      }
+      else if(['ArrowUp','ArrowDown'].includes(key)){const count=this.optionCount();if(count>1){const next=Math.max(0,Math.min(count-1,this.subIndex+(key==='ArrowUp'?-1:1)));if(next!==this.subIndex){this.subIndex=next;this.listTop=this.galleryTop(next);this.cue('move');this.draw();this.renderOptions();}}}
       else if([' ','Enter'].includes(key))this.confirm();
       return true;
     }
@@ -151,8 +162,8 @@ export class StartupView {
     this.asset('menuhlp'+this.selected+this.plaqueIndex,0,this.helpX??0,400);
     if(this.panelType==='read'&&this.panelX>-432){
       this.asset('menulbk',0,this.panelX-8,60);
-      this.saveEntries().forEach((_entry,index)=>this.asset('menulbx',0,this.panelX,81+108*index));
-      if(this.previewImage)c.drawImage(this.previewImage,this.panelX+17,97+108*this.subIndex,SAVE_PREVIEW_WIDTH,SAVE_PREVIEW_HEIGHT);
+      this.visibleSaves().forEach((_entry,row)=>this.asset('menulbx',0,this.panelX,81+108*row));
+      if(this.previewImage)c.drawImage(this.previewImage,this.panelX+17,97+108*(this.subIndex-this.listTop),SAVE_PREVIEW_WIDTH,SAVE_PREVIEW_HEIGHT);
     }
     if(this.panelType==='extras'&&this.panelX>-432){
       this.asset('specialback',0,this.panelX-8,70);
@@ -165,6 +176,16 @@ export class StartupView {
   plaqueCount(){return this.selected===3&&this.allowResume?2:1;}
   galleryTop(index){return index<18?Math.max(0,Math.min(11,index-3)):Math.max(18,Math.min(23,index-3));}
   saveEntries(){return this.readSaves();}
+  visibleSaves(){return this.saveEntries().slice(this.listTop,this.listTop+visibleSaveRows);}
+  selectRead(index){
+    const count=this.optionCount(),next=Math.max(0,Math.min(count-1,index));
+    if(!count||next===this.subIndex)return;
+    this.previewRequest++;this.previewImage=null;this.subIndex=next;
+    if(next<this.listTop)this.listTop=next;
+    else if(next>=this.listTop+visibleSaveRows)this.listTop=next-visibleSaveRows+1;
+    this.listTop=Math.max(0,Math.min(Math.max(0,count-visibleSaveRows),this.listTop));
+    this.cue('move');this.draw();this.renderOptions();
+  }
   getSave(){return this.saveEntries()[this.subIndex]?.envelope??null;}
   optionCount(){return this.submenu==='read'?this.saveEntries().length:this.submenu==='extras'?(this.manifest.audio.gallery?.length??0):0;}
   previewKey(save){return `${save?.sha256??''}:${save?.payload??''}:${save?.saved_at??''}:${save?.preview?.png??''}`;}
@@ -196,10 +217,10 @@ export class StartupView {
     if(this.submenu==='read'){
       const entries=this.saveEntries(),selected=this.getSave();
       if(selected)this.requestPreview(selected);
-      for(const [index,entry] of entries.entries()){const save=entry.envelope;let world={};try{world=JSON.parse(save.payload);}catch{}
+      for(const [row,entry] of this.visibleSaves().entries()){const index=this.listTop+row,save=entry.envelope;let world={};try{world=JSON.parse(save.payload);}catch{}
         const date=save.saved_at?new Date(save.saved_at).toLocaleString('zh-CN',{timeZone:'Asia/Shanghai'}):'';
         const party=(world.party??[]).map(actor=>actor.name).join('　');
-        add(`${entry.label}　${party}\n${date}\n${world.location?.map_id??''}`,147,99+108*index,265,78,index,()=>{this.draw();this.renderOptions();this.confirm();}).className='startup-save panel-row';
+        add(`${entry.label}　${party}\n${date}\n${world.location?.map_id??''}`,147,99+108*row,265,78,index,()=>{this.draw();this.renderOptions();this.confirm();}).className='startup-save panel-row';
       }
       if(!entries.length)this.announce('尚无重制存档，Esc返回');
     }else if(this.submenu==='extras'){

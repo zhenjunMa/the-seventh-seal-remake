@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="zh-CN">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>第七封印 · 重制 0.8</title><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="battle_shell.css"><link rel="stylesheet" href="operation_menu.css"><link rel="stylesheet" href="startup.css"><link rel="stylesheet" href="caption.css"><link rel="stylesheet" href="dialogue.css"><link rel="stylesheet" href="world_map.css"></head>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>第七封印 · 重制 0.8</title><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="battle_shell.css"><link rel="stylesheet" href="operation_menu.css"><link rel="stylesheet" href="startup.css"><link rel="stylesheet" href="save_menu.css"><link rel="stylesheet" href="caption.css"><link rel="stylesheet" href="dialogue.css"><link rel="stylesheet" href="world_map.css"></head>
 <body>
   <header class="masthead"><div class="brand"><span class="seal">VII</span><div><h1>第七封印</h1><p>THE SEVENTH SEAL</p></div></div><span class="edition">重制第一阶段 <b>0.8</b></span><a href="/prototype/" target="_blank" rel="noopener">打开原型实验 ↗</a></header>
   <main>
@@ -62,6 +62,7 @@
           </div>
           <span id="startupAnnouncement" class="sr-only" role="status"></span>
         </div>
+        <div id="saveMenu" class="save-menu" role="dialog" aria-modal="true" aria-label="存档栏位选择" tabindex="-1" hidden><div class="save-menu-viewport"><canvas width="640" height="480" aria-hidden="true"></canvas><div class="save-menu-buttons"></div><p class="save-menu-message" role="status"></p></div></div>
         <div id="gameOver" class="game-over" role="dialog" aria-modal="true" aria-label="全队败北" hidden><video id="gameOverVideo" src="/assets/video/go02.mp4" preload="none" playsinline muted></video><button id="gameOverSkip">返回主菜单</button></div>
         <div id="worldMapPanel" class="world-map-panel" role="dialog" aria-modal="true" aria-label="大地图：方向键选择目的地，空格或Enter前往，Esc返回" tabindex="-1" hidden><div class="world-map-viewport"><canvas width="640" height="480" aria-hidden="true"></canvas><div id="worldMapDestinations" class="world-map-destinations"></div></div></div>
         <div id="storyCaption" class="story-caption" role="dialog" aria-modal="true" aria-label="序章字幕" aria-describedby="captionText" hidden><div class="caption-viewport"><canvas width="640" height="480" aria-hidden="true"></canvas><p id="captionText" class="sr-only"></p><button aria-label="继续序章字幕"></button></div></div>

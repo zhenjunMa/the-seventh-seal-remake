@@ -65,6 +65,7 @@ independent-source-export：独立基础来源或旧样本生产入口，可能�
 当前构建目标与直接依赖
 下方标记内内容由sync_tool_docs.py生成，不手工修改。
 [自动生成：构建目标开始]
+save-menu: export_save_menu.py; 依赖=无声明依赖
 opening-seed: export_opening_seed.py; 依赖=无声明依赖
 opening-maps: export_opening_maps.py; 依赖=无声明依赖
 chapter-maps: export_chapter_maps.py; 依赖=无声明依赖
@@ -93,7 +94,7 @@ dialogue-ui: export_dialogue_ui.py; 依赖=catalog,chapter-story
 world-map-ui: export_world_map_ui.py; 依赖=无声明依赖
 configuration: export_runtime_config.mjs; 依赖=party-skills,enemy-rewards,encounters
 catalog: build_catalog.py; 依赖=configuration,chapter-maps
-content: export_content_registry.mjs; 依赖=catalog,party-rewards,battle-packs,audio,menu-fonts,dialogue-ui,prologue-presentation,map-effects
+content: export_content_registry.mjs; 依赖=catalog,party-rewards,battle-packs,audio,menu-fonts,save-menu,dialogue-ui,prologue-presentation,map-effects
 enemies: export_enemy_content.py; 依赖=无声明依赖
 enemy-rewards: export_forest_rewards.py; 依赖=无声明依赖
 encounters: export_encounters.py; 依赖=无声明依赖
