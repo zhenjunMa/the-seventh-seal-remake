@@ -17,7 +17,13 @@ phaser/components：sprite_pose适配原帧／光层；action_clock由所属Phas
 phaser/rendering：texture_cache管理纹理引用，battle_surface将既有绘制命令适配为Phaser对象。
 phaser/preview.mjs与phaser-preview.html：独立示意素材验证入口，不进入正式内容登记。
 vendor/phaser：固定版本运行库、许可及manifest.json。controllers、core、data、assets及导出工具继续保留原位置。
-页面隐藏与手动暂停独立计数，只有全部暂停原因解除才恢复；恢复首帧丢弃暂停期间的delta，非活动场景时钟不推进。截图临时选择可见场景，完成后恢复原模式，不推进时钟或世界。
+截图临时选择可见场景，完成后恢复原模式，不推进时钟或世界。
+
+时钟与暂停边界
+PhaserRuntime按原因集合管理页面隐藏、手动暂停和错误挂起，全部原因解除后才恢复；场景休眠／暂停时，其update及ActionClock不推进。探索／战斗唤醒或恢复，以及runtime时钟恢复的首帧丢弃该次delta。
+正式ANM与物件演出使用exploration.clock，战斗动作／充槽／生命周期使用battle.clock，共享入战转场使用runtime.clock；这些时钟由Phaser的delta推进。
+菜单和启动页的tick经runtime场景调度，但当前仍接收Phaser传入的now；它们没有统一改用runtime.clock.time。DialogueView自行使用requestAnimationFrame及performance.now驱动文字／画像；EventRunner的wait适配仍是setTimeout。
+因此场景暂停不等于所有DOM界面、浏览器等待或媒体都同步冻结；后台恢复还可能按经过时间更新界面。这里只描述现状，统一暂停／计时的待办与完成标准见../assessment/validation_design.txt。
 
 三个状态边界
 WorldStore持有可保存世界：地点、人物资源／成长、背包／装备、旗标、事件、队列、技巧／晶石、遇敌RNG与奖励去重记录。变更通过草稿及revision提交，避免异步加载覆盖期间的新操作。
@@ -87,10 +93,9 @@ session controller管理保存、载入、导入／导出、主菜单与缩略�
 UI：现有controller和view、Phaser显示场景及相应组件，原素材／字体导出及状态验收；通用方法见../assessment/menu_alignment_workflow.txt。
 
 当前边界与维护
-web/phaser-preview.html使用独立示意图和现有战斗定义，复用正式PhaserRuntime、Scene生命周期和动作时钟，支持暂停／恢复及动作中切换探索／战斗；检查探索、缩放、动作命中及截图，不写正式存档、不关闭正式素材校验。tools/verify_phaser.mjs检查运行库指纹、两个入口的模块图和数据中的素材引用；--assets要求素材齐全且现有指纹／尺寸一致。
-Phaser迁移在无原媒体环境完成代码与示意图验证；真实素材、完整主线、字体、混色、音视频、反复进出及长流程释放仍需素材持有者验收。待办只维护在../assessment/validation_design.txt。
+web/phaser-preview.html使用独立示意图和现有战斗定义，复用正式PhaserRuntime、Scene生命周期和动作时钟，支持暂停／恢复及动作中切换探索／战斗；检查探索、缩放、动作命中及截图，不写正式存档、不关闭正式素材校验。检查命令、选项与结果解读见tools/README.txt。
+当前代码已接入Phaser运行与显示层；各阶段验收范围及本版待办只维护在../assessment/validation_design.txt。
 构建支持已恢复的矩形v6地图、全局STG池、指令、状态和掉落类型。SCN v2／mode4默认镜头支持通用舞台导出；stage13与TestStage保留专用导出器，新格式和新机制按实际内容补齐。
-候补队伍、组合攻击、部分特殊效果／熟练度、原动态镜头、精确混色和长流程性能仍见唯一当前计划。当前整份来源JSON装载，尚未完成按区域拆分或全游戏压测。
+当前整份来源JSON装载；能力扩展与性能待办见唯一当前计划。
 prototype中的共享移动模块、角色资源和解码器，以及evidence中的来源／台账仍属于当前依赖。历史浏览器观察不能作为当前代码重播。
-最近自动检查见evidence/current_validation.json，证据分类见evidence/README.txt；改动规则需对应回归，改变实际流程或表现需记录新的浏览器观察。
-完整来源检查无法运行时，使用verify_phaser的code／assets结果及新建浏览器观察说明本轮范围；旧current_validation和历史观察不能代替Phaser迁移验收。
+来源资料、报告位置和缺失处理见../local_materials.txt；检查命令见tools/README.txt，通用验收方法见../assessment/menu_alignment_workflow.txt。

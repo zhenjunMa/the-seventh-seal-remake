@@ -1,10 +1,11 @@
 第七封印 · 运行与操作
 更新：2026-10-22
+本文描述当前代码支持的操作；本版验收状态与待办见../assessment/validation_design.txt，素材前置条件见../../README.md。
 
 启动和主菜单
-从remake双击start.cmd或start_runtime.cmd，或在游戏根目录执行python -B remake/runtime/serve.py。
+Windows从remake双击start.cmd或start_runtime.cmd，也可在仓库根目录执行python -B remake/runtime/serve.py；macOS/Linux使用python3 -B remake/runtime/serve.py。所选命令需指向Python 3。
 浏览器访问http://127.0.0.1:8767/，已有服务时刷新即可。启动窗口需要保持运行。
-游戏使用本地Phaser 3.90.0；探索和战斗由各自Scene更新，非活动场景休眠，地图菜单与加载暂停场景。菜单、对白、配置和存档操作保持原有入口。替换serve.py后应重启服务，以应用并发加载设置。
+游戏使用随代码提供的Phaser 3.90.0；素材需另外准备。替换serve.py后应重启服务；加载、场景与暂停机制见architecture.txt。
 片头按原顺序播放，Esc可跳过；等待页按键或点击进入主菜单。左右选择读取／游戏／特典／离开，空格或Enter确认，Esc逐层返回。界面按640×480整体等比显示。
 游戏→开始游戏进入真实新游戏。读取只读取重制存档；音乐欣赏提供已接入的原曲列表。探索中返回主菜单后可“回到游戏”继续当前进度。
 媒体播放遵守现有音量／静音设置，浏览器首次交互前可能静音自动播放。
@@ -12,7 +13,7 @@
 探索和剧情
 点击地图获得焦点；WASD／方向键移动，Shift跑步，E交互。Enter／空格或点击推进对白；文字未完时先补全，满行后滚动或换页。
 问题文字完成后显示选项；方向键选择，Enter／空格或点击确认。按住确认只处理一次；选项没有Esc取消。
-当前正式路线：神殿序章→村庄西南王厅邀请凯→村庄东北住处领取装备／与长老交谈→村庄南口→火之谷南出口→大地图→白木森林。
+当前代码接入的正式路线：神殿序章→村庄西南王厅邀请凯→村庄东北住处领取装备／与长老交谈→村庄南口→火之谷南出口→大地图→白木森林。
 装备箱按剧情条件发放珍珠耳环、烈焰冠和兽骨戒指；长老另赠茶。已领取事件不重复发放，装备需要在菜单手动穿戴。
 住处床附近E可选择休息／不用。未邀请凯、未领取装备等出口条件沿原已接入剧情判断。
 大地图方向键循环选择已解锁地点，Enter／空格或直接点击前往，Esc回当前场景。资源已提取的地点仍可能尚未开放剧情。
@@ -56,6 +57,5 @@ M17025、m17020-1和014目前只做过工具隔离导出，没有开放到正式
 内容登记／数值：config_guide.txt
 导出和检查命令：tools/README.txt
 当前待办：../assessment/validation_design.txt
-来源与验收范围：evidence/README.txt；最近自动检查：evidence/current_validation.json
-current_validation属于需要原输入／历史证据的完整检查；缺少材料时先查看verify_phaser的code／assets结果，并另记本轮浏览器范围。历史报告不代表Phaser版完整流程已通过。
-自动检查不会重播浏览器；历史截图和观察只代表对应代码时点。
+本地素材／来源台账／历史资料的准备与缺失处理：../local_materials.txt
+完整检查的本地结果为evidence/current_validation.json；可能缺失或失败，解读范围见本地资料说明。检查命令与实玩要求分别见tools/README.txt和../assessment/menu_alignment_workflow.txt。
