@@ -18,7 +18,7 @@ import {BattleController} from '../web/core/combat.mjs';
 import {BattleView} from '../web/battle_view.mjs';
 import {WorldStore,encodeSave,decodeSave} from '../web/core/world.mjs';
 const copy=structuredClone,web=new URL('../web/',import.meta.url),read=async name=>JSON.parse(await readFile(new URL('data/'+name,web),'utf8'));
-const [base,forest,scheduler,ai,rewards,seed,meta]=await Promise.all(['combat_sample.json','forest_combat.json','battle_scheduler.json','forest_ai.json','forest_rewards.json','route_seed.json','forest_full_battle_view.json'].map(read));
+const [base,forest,scheduler,ai,rewards,seed,meta]=await Promise.all(['combat_sample.json','forest_combat.json','battle_scheduler.json','forest_ai.json','forest_rewards.json','route_seed.json','enemy_battle_view.json'].map(read));
 const data={combat:base,forest,scheduler,ai,rewards,party_skills:await read('party_skills.json'),items:await read('items.json')},config=await loadRuntimeConfiguration(p=>read(p.slice(5))),maps=['M01010','M01030','M17010','M70010'];
 const debug=()=>({...copy(config),manifest:{...copy(config.manifest),mode:'debug'}});
 function sample(c,ids=['012'],world=seed){const d=compileRuntimeConfiguration(data,c);return createForestSample(world,d.combat,d.forest,{map_id:'M70010',members:ids.map(id=>({id}))},null,d.scheduler,d.ai,d.rewards);}
@@ -128,7 +128,7 @@ async function fullFixture(cfg){
   const s=createForestSample(world.snapshot(),d.combat,d.forest,{map_id:'M70010',members:[{id:'013'}]},null,d.scheduler,d.ai,d.rewards,
     await read('forest_reactions.json'),await read('forest_status.json'));
   const ctx={setTransform(){},clearRect(){},fillRect(){},beginPath(){},rect(){},clip(){},moveTo(){},lineTo(){},stroke(){},ellipse(){},fill(){},save(){},restore(){},drawImage(){},fillText(){},createLinearGradient:()=>({addColorStop(){}})};
-  const v=new BattleView({canvas:{width:960,height:540,getContext:()=>ctx},metadataPath:'/data/forest_full_battle_view.json',jsonLoader:p=>read(p.slice(6)),assetLoader:async a=>({image:{width:a.width,height:a.height},sha256:a.sha256})});
+  const v=new BattleView({canvas:{width:960,height:540,getContext:()=>ctx},metadataPath:'/data/enemy_battle_view.json',jsonLoader:p=>read(p.slice(6)),assetLoader:async a=>({image:{width:a.width,height:a.height},sha256:a.sha256})});
   await v.prepare();v.setRoster(s.actors,s.skills);let time=0,battle;const logs=[],rng=createNativeRng(0x20261011);
   battle=new BattleController({world,id:()=> 'configured-full',now:()=>time,waitTick:async()=>{time+=20;},resolveAction,applyDamage:applyNativeDamage,resourcesForWorld,consumeResources:consumeBattleMp,log:e=>logs.push(e),
     playSequence:async(r,callbacks)=>{const promise=v.playSequence(r,callbacks);v.draw({actors:battle.state.actors},time);let n=0;while(v.run){assert.ok(++n<20000);time+=20;battle.advanceClock();v.draw({actors:battle.state.actors},time);}return promise;}});

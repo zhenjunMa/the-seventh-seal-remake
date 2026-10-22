@@ -705,7 +705,7 @@
   "route_events": "data/route_events.json",
   "encounters": "data/encounters.json",
   "forest_combat": "data/forest_combat.json",
-  "forest_battle_view": "data/forest_full_battle_view.json",
+  "forest_battle_view": "data/enemy_battle_view.json",
   "scope": {
     "official_runtime_started": true,
     "ready_exits": 6,

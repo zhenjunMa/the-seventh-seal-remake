@@ -1,5 +1,5 @@
 // Bounded party / up-to-four-enemy lifecycle. Native rules are injected.
-import {initializeScheduler,chargeActor,isActorReady,selectReady,dispatchCharge,dispatchItemCharge,setIdleSkill} from './battle_scheduler.mjs';
+import {initializeScheduler,chargeActor,isActorReady,selectReady,dispatchCharge,dispatchItemCharge,setIdleSkill,advanceIdleSkill} from './battle_scheduler.mjs';
 import {planForestEnemyAction,selectNativeTarget} from './forest_ai.mjs';
 import {composeNativeSequence,directSequence} from './skill_sequence.mjs';
 import {createRewardLedger,collectEnemyDefeat,recordNativeContact,resetNativeChain,planVictoryRewards} from './battle_rewards.mjs';
@@ -47,7 +47,7 @@ export class BattleController {
       lifecycle_events:state.lifecycle_events??[],pending_outcome:state.pending_outcome??null,
       ready_player_ids:this.readyPlayerIds(),command_available:this.canCommand(),input_busy:Boolean(scheduler?.pending)||this.running&&scheduler?.active_actor_id===player_id,action_busy:this.running,
       source:{runtime_configuration:{mode},player_command_order:state.source.player_command_order},
-      actors:state.actors.map(({id,name,side,hp,mp,alive,charge,state_raw,defense_half_raw,party_slot_zero_based,life_epoch})=>({id,name,side,hp,mp,alive,charge,state_raw,party_slot_zero_based,life_epoch,defending:Boolean(defense_half_raw),escaped:state_raw===11})),
+      actors:state.actors.map(({id,name,side,hp,mp,alive,charge,state_raw,defense_half_raw,party_slot_zero_based,life_epoch,idle_pose})=>({id,name,side,hp,mp,alive,charge,state_raw,party_slot_zero_based,life_epoch,idle_pose,defending:Boolean(defense_half_raw),escaped:state_raw===11})),
       history:state.history.map(({action_id,actor_id,target_id,skill_id,round,result,impact,presentation,command_kind})=>({
         action_id,actor_id,target_id,skill_id,round,impact,presentation,command_kind,
         result:result?{hit:result.hit,damage:result.damage,...(result.success!==undefined?{success:result.success}:{})}:undefined}))});
@@ -82,7 +82,7 @@ export class BattleController {
       enemy_skill_id:enemySkills[enemy.id],enemy_skill_ids:copy(enemySkills),enemy_ids:enemies.map(a=>a.id),action_count:0,source:copy(source),history:[],error:null,outcome:null,test_mode};
     if(this.itemData)this.state.inventory=copy(this.world.value.inventory);
     this.schedulerData=scheduler_data?copy(scheduler_data):null;
-    if(this.schedulerData){this.state.scheduler=initializeScheduler(next,this.schedulerData,side_priority);this.state.scheduler.command_stage='closed';this.state.phase='charging';this.chargeClock=this.now();}
+    if(this.schedulerData){this.chargeClock=this.now();this.state.scheduler=initializeScheduler(next,this.schedulerData,side_priority,this.chargeClock);this.state.scheduler.command_stage='closed';this.state.phase='charging';}
     this.actionTask=null;
     this.nativeAiData=enemy_ai_data?copy(enemy_ai_data):null;this.enemySkillTables=enemy_skill_tables?copy(enemy_skill_tables):null;this.completeContacts=complete_contacts;this.rewardData=!test_mode&&reward_data?copy(reward_data):null;this.rewardPlan=null;
     this.skillGrowthData=skill_data?skillGrowthSource(skill_data):null;this.skillPractice={};
@@ -127,14 +127,14 @@ export class BattleController {
     if(index<0||!actor||actor.life_epoch!==life_epoch)return false;
     const event=this.state.lifecycle_events[index];this.state.lifecycle_events.splice(index,1);
     if(event.kind==='entry'){
-      actor.state_raw=0;actor.immune_raw=0;actor.native_active=false;setIdleSkill(actor,this.schedulerData);
+      actor.state_raw=0;actor.immune_raw=0;actor.native_active=false;setIdleSkill(actor,this.schedulerData,this.now());
     }else if(event.kind==='death'){
       actor.native_active=false;
       // 519DD0 turns an ended native id12 into category7. Keep its source
       // death skill as the corpse pose; it must not become an idle live actor.
       if(event.source_id_raw===12)actor.state_raw=7;
     }else if(event.kind==='revive'){
-      actor.native_active=false;setIdleSkill(actor,this.schedulerData);
+      actor.native_active=false;setIdleSkill(actor,this.schedulerData,this.now());
     }
     this.log({type:'battle-lifecycle-completed',battle_id:this.state.id,event:copy(event)});
     this.refreshCommandState();this.publish();return true;
@@ -247,8 +247,9 @@ export class BattleController {
   advanceClock(now=this.now()) {
     const s=this.state?.scheduler;
     if(!s||!['command','charging','action'].includes(this.state.phase))return false;
-    if(now-this.chargeClock<20)return false;
     try {
+      for(const actor of this.state.actors)advanceIdleSkill(actor,this.schedulerData,now);
+      if(now-this.chargeClock<20)return false;
       this.checkWorld();this.chargeClock=now;s.ticks++;s.elapsed_ms+=20;
       for(const actor of this.state.actors){chargeActor(actor,this.rng);if(actor.state_raw===4&&this.reactionData&&this.canFinalizeDeath(actor))this.finalizeDeath(actor);}
       if(this.statusData)for(const actor of this.state.actors){if(!actor.native_status_slots.some(s=>s.raw_hex.slice(2,4)!=='00'))continue;const update=tickNativeStatuses({actor,threshold:s.threshold,now:s.elapsed_ms,data:this.statusData});Object.assign(actor,update.actor);if(update.cancel_command&&s.pending?.actor_id===actor.id)s.pending=null;if(update.expired.length)this.log({type:'battle-status-expired',battle_id:this.state.id,actor_id:actor.id,slots:update.expired});}
@@ -378,7 +379,7 @@ export class BattleController {
           };
           await this.playItem({action_id:actionId,actor_id:attacker.id,target_id:target.id,item_id:consumed.item.id,name:result.name,skill_id:skillId},{onUse});
           this.checkWorld();requireValue(committed,'道具原动作没有触发使用事件');
-          s.active_actor_id=null;setIdleSkill(attacker,this.schedulerData);this.state.round++;break;
+          s.active_actor_id=null;setIdleSkill(attacker,this.schedulerData,this.now());this.state.round++;break;
         }
         const nativePlan=this.completeContacts?(attacker.side==='player'?{kind:'single',skill_indices:[skill.original_skill_index],target_id:target.id,trace:[]}:planForestEnemyAction({actors:this.state.actors,actor_id:attacker.id,data:this.nativeAiData,rng:this.rng})):null;
         requireValue(!nativePlan||nativePlan.target_id,'原选招未产生可行动目标');
@@ -396,7 +397,8 @@ export class BattleController {
           ticks:s.ticks,threshold:s.threshold,selection,native_plan:nativePlan?copy(nativePlan):null,charge,gauges:this.state.actors.map(a=>({id:a.id,...copy(a.charge)}))});
         if(this.state.reward_ledger)resetNativeChain(this.state.reward_ledger,attacker.id);
         this.publish();if(plan)await this.performSequence(attacker,victim,selected,plan);else await this.performAction(attacker,victim,selected);this.checkWorld();
-        s.active_actor_id=null;if(attacker.hp.current>0){setIdleSkill(attacker,this.schedulerData);attacker.native_active=false;}
+        s.active_actor_id=null;if(attacker.hp.current>0){attacker.native_active=false;
+          if(attacker.current_skill?.id!==this.schedulerData.idle_skills[attacker.resource_id??attacker.id].id)setIdleSkill(attacker,this.schedulerData,this.now());}
         if(this.lifecycleEnabled)for(const actor of this.state.actors)if(actor.hp.current===0&&actor.state_raw===4&&this.canFinalizeDeath(actor))this.finalizeDeath(actor);
         if(attacker.side==='player'){this.state.round++;break;}
         if(s.pending&&this.actor(s.pending.actor_id)?.hp.current===0)s.pending=null;
@@ -421,10 +423,13 @@ export class BattleController {
     const onRecord=(step,descriptor=null)=>{const actor=descriptor?this.actor(descriptor.actor_id):attacker;if(actor.state_raw>=5)return;
       const source=descriptor?descriptor.skill:plan.kind==='single'?selected:this.nativeAiData.roles[actor.resource_id].skills[step.source_skill_index];
       requireValue(source,'原组合技能属性来源无效');actor.current_skill=copy(source);actor.class_raw=step.class_raw;actor.action_mask_raw=step.action_mask_raw;};
-    const end=(actor,token)=>{if(actor.native_sequence_token!==token)return;actor.native_active=false;
-      if(actor.hp.current>0)setIdleSkill(actor,this.schedulerData);if(this.state.reward_ledger)resetNativeChain(this.state.reward_ledger,actor.id);};
+    const end=(actor,token,now=this.now())=>{if(actor.native_sequence_token!==token)return;actor.native_active=false;
+      if(actor.hp.current>0)setIdleSkill(actor,this.schedulerData,now);if(this.state.reward_ledger)resetNativeChain(this.state.reward_ledger,actor.id);};
     const onContact=(step,descriptor=null)=>{
       if(seen.has(step.contact_key))return copy(seen.get(step.contact_key));this.checkWorld();onRecord(step,descriptor);
+      // A slow RAF can replay several contacts. Each sees the idle record at
+      // its own source presentation time, not the last rendered frame.
+      for(const actor of this.state.actors)advanceIdleSkill(actor,this.schedulerData,step.presentation_time_ms??this.now());
       const striker=descriptor?this.actor(descriptor.actor_id):attacker,victim=descriptor?this.actor(descriptor.target_id):target;
       const source=copy(striker.current_skill),before=copy({attacker:striker,target:victim??null}),fixed=Uint8Array.from(source.fixed_raw_hex.match(/../g),x=>parseInt(x,16));
       const isRevival=source.battle_handler==='native-revival';
@@ -441,7 +446,7 @@ export class BattleController {
             if(this.state.lifecycle_events)this.state.lifecycle_events=this.state.lifecycle_events.filter(e=>e.actor_id!==victim.id);
             if(revival.animation)Object.assign(victim,copy(revival.animation.after));
             if(this.lifecycleEnabled&&revival.animation)this.queueLifecycle(victim,revival.animation);
-            else{victim.native_active=false;setIdleSkill(victim,this.schedulerData);}
+            else{victim.native_active=false;setIdleSkill(victim,this.schedulerData,this.now());}
           }
           result={hit:revival.applied,damage:0,native_return:revival.native_return,mp_cost:source.mp_cost,revived:revival.applied,hp_delta:revival.hp_delta??0,
             ...(!revival.applied?{skipped:revival.reason}:{}),trace:[...copy(revival.animation?.trace??[]),...copy(revival.trace)]};
@@ -471,7 +476,7 @@ export class BattleController {
         hit:result.hit,damage:result.damage,skipped:result.skipped??null,hp_before:before.target?.hp.current??null,hp_after:victim?.hp.current??null,mp_before:before.attacker.mp.current,mp_after:striker.mp.current,trace:copy(result.trace??[]),status:copy(presented.status),reaction:reaction?{kind:reaction.kind,source_skill_index:reaction.source_skill_index,target_id:reaction.target_id,trace:copy(reaction.trace)}:null,presentation:copy(step)});this.publish();return presented;
     };
     await this.playSequence({actor_id:attacker.id,target_id:target.id,skill_id:selected.id,action_id:actionId,plan:copy(plan)},{onContact,onRecord,
-      onReactionContact:onContact,onReactionRecord:onRecord,onReactionEnd:(descriptor,completed)=>{if(completed)end(this.actor(descriptor.actor_id),descriptor.token);},onPrimaryEnd:()=>end(attacker,primaryToken)});this.checkWorld();
+      onReactionContact:onContact,onReactionRecord:onRecord,onReactionEnd:(descriptor,completed,now)=>{if(completed)end(this.actor(descriptor.actor_id),descriptor.token,now);},onPrimaryEnd:now=>end(attacker,primaryToken,now)});this.checkWorld();
     requireValue(entry.contacts.length>0,'完整技能结束却没有接触结算');
     for(const actor of this.state.actors)if(actor.hp.current===0&&actor.state_raw===4&&this.canFinalizeDeath(actor))this.finalizeDeath(actor);
     if(this.state.reward_ledger)resetNativeChain(this.state.reward_ledger,attacker.id);

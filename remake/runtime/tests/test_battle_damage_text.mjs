@@ -9,7 +9,7 @@ import {compileNativeSequence,directSequence} from '../web/core/skill_sequence.m
 
 const web=new URL('../web/',import.meta.url),root=new URL('../../../',import.meta.url);
 const read=async name=>JSON.parse(await readFile(new URL('data/'+name,web)));
-const [meta,ai,reactions,base]=await Promise.all(['forest_full_battle_view.json','forest_ai.json','forest_reactions.json','combat_sample.json'].map(read));
+const [meta,ai,reactions,base]=await Promise.all(['enemy_battle_view.json','forest_ai.json','forest_reactions.json','combat_sample.json'].map(read));
 const copy=structuredClone,images=new Map(),eagle=ai.roles['011'].skills[14],counter=reactions.roles['001'].skills.find(s=>s.original_id_raw===19);
 const plan=directSequence(eagle),compiled=compileNativeSequence(meta,'011',plan),contactTimes=[];
 let duration=0;for(const step of compiled.steps){if(step.event)contactTimes.push(duration);duration+=step.duration_ms===0?0:meta.policy.frame_ms;}
@@ -30,7 +30,7 @@ async function fixture(){
     save(){stack.push({globalAlpha:this.globalAlpha,globalCompositeOperation:this.globalCompositeOperation});},
     restore(){Object.assign(this,stack.pop());},drawImage(){},
     fillText(value,x,y){calls.push({text:String(value),x,y,alpha:this.globalAlpha});},strokeText(){}};
-  const view=new BattleView({canvas:{width:1280,height:960,getContext:()=>ctx},metadataPath:'/data/forest_full_battle_view.json',assetLoader,jsonLoader:p=>read(p.slice('/data/'.length))});await view.prepare();
+  const view=new BattleView({canvas:{width:1280,height:960,getContext:()=>ctx},metadataPath:'/data/enemy_battle_view.json',assetLoader,jsonLoader:p=>read(p.slice('/data/'.length))});await view.prepare();
   const actors=[{id:'001',resource_id:'001',side:'player',hp:{current:1000,maximum:1000},alive:true},{id:'enemy-0',resource_id:'011',side:'enemy',hp:{current:1000,maximum:1000},alive:true}];
   view.setRoster(actors,{yantu:base.skills.yantu,eagle:{...copy(eagle),id:'eagle',actor_id:'enemy-0'}});
   return {view,draw(now){calls.length=0;view.draw({actors},now);return copy(calls);},texts:()=>calls.map(c=>c.text)};

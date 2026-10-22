@@ -26,6 +26,7 @@ function add(row){
 for(const [metadataPath,itemMetadataPath,stageMetadataPath,lifecycleMetadataPath]of [
   ...Object.values(content.stages).map(stage=>['/data/party_battle_view.json','/data/item_presentation.json','/'+stage.path,'/data/battle_lifecycle.json']),
   ['/data/forest_full_battle_view.json',null,'/data/forest_stage.json',null],
+  ['/data/enemy_battle_view.json',null,'/data/forest_stage.json',null],
   ['/data/battle_view.json',null,null,null],
 ]){
   const view=new BattleView({canvas:{getContext:()=>({})},metadataPath,itemMetadataPath,stageMetadataPath,lifecycleMetadataPath,jsonLoader,content,

@@ -123,9 +123,7 @@ export const definition = {
     ],
     "forest-source-group": [
       "001",
-      "011",
-      "012",
-      "013"
+      "$enemies"
     ],
     "party-source-group": [
       "$players",

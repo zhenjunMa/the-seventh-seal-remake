@@ -60,7 +60,7 @@ def build():
                  combat_sample='data/combat_sample.json',battle_view='data/battle_view.json',
                  runtime_config='data/config/index.json',
                  world_map='data/world_map.json',route_events='data/route_events.json',encounters='data/encounters.json',
-                 forest_combat='data/forest_combat.json',forest_battle_view='data/forest_full_battle_view.json',
+                 forest_combat='data/forest_combat.json',forest_battle_view='data/enemy_battle_view.json',
                  scope=dict(official_runtime_started=True,ready_exits=ready,source_backed_events=event_count,
                             one_on_one_turn_sample=True,full_combat=False,original_action_queue=True,forest_ai=True,complete_forest_contacts=True,forest_rewards=True,
                             hidden_encounters=route,original_save_compatibility=False,visual_fidelity_pending=True,
