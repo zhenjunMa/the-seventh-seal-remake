@@ -13,8 +13,8 @@ export function physicalFrame(action, logicalIndex) {
   return frame;
 }
 export class OpeningView {
-  constructor({resources, prepared, prepare, install, camera, say, shade, log, program,staging={},effects={},nativeViewport=false}) {
-    Object.assign(this, {resources, prepared, prepare, install, camera, say, shade, log,staging,effects,nativeViewport});
+  constructor({resources, prepared, prepare, install, camera, say, shade, log, program,staging={},effects={},nativeViewport=false,clock=null}) {
+    Object.assign(this, {resources, prepared, prepare, install, camera, say, shade, log,staging,effects,nativeViewport,clock});
     this.actors = new Map(); this.active = false; this.focus = null;
     this.controller=new AbortController();
     this.directArrivals=directArrivalMoves(program,staging);
@@ -44,6 +44,7 @@ export class OpeningView {
       ({slot,visible:a.visible,direction:a.direction,x:a.x,y:a.y,action:a.action,frame:a.frame}))});
   }
   tween(duration, update, signal) {
+    if(this.clock)return this.clock.tween(duration,progress=>{update(progress);this.updateCamera();},[signal,this.controller.signal]);
     return new Promise((resolve, reject) => {
       const start = performance.now();
       const tick = now => {
@@ -182,7 +183,13 @@ export class OpeningView {
     };
   }
   drawQueue(layer = 2) {
-    return [...this.actors.values()].filter(a => a.visible).map(actor => ({layer, sort_y: actor.y + 32,
+    return [...this.actors.entries()].filter(([,a]) => a.visible).map(([slot,actor]) => {
+      const r=actor.role,a=r.actions.find(a=>a.index===actor.action);
+      return {key:`opening:${slot}`,layer,sort_y:actor.y+32,alpha:actor.alpha,
+      blend:actor.effect?.kind==='rise'?'lighter':'source-over',
+      pose:actor.effect?{image:actor.effect.canvas,x:actor.x+16-r.anchor.x,y:actor.y-r.anchor.y-160}
+        :{image:a.bitmap,light:a.intrinsic_bitmap,sx:actor.frame*r.frame_width,sy:actor.direction*r.frame_height,
+          width:r.frame_width,height:r.frame_height,x:actor.x+16-r.anchor.x,y:actor.y-r.anchor.y},
       draw: ctx => {
         const r = actor.role, a = r.actions.find(a => a.index === actor.action);
         ctx.save(); ctx.globalAlpha = actor.alpha;
@@ -190,6 +197,6 @@ export class OpeningView {
         else drawMapSprite(ctx,a.bitmap,a.intrinsic_bitmap,actor.frame*r.frame_width,actor.direction*r.frame_height,
           r.frame_width,r.frame_height,actor.x+16-r.anchor.x,actor.y-r.anchor.y);
         ctx.restore();
-      }}));
+      }};});
   }
 }

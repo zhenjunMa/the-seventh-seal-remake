@@ -1,0 +1,10 @@
+{
+  "name": "phaser",
+  "version": "3.90.0",
+  "license": "MIT",
+  "source": "https://registry.npmjs.org/phaser/-/phaser-3.90.0.tgz",
+  "files": {
+    "phaser-3.90.0.min.js": "e92ddef111ba42e92d316979c732311757093688ea1810591cb7aa2858eba7a7",
+    "LICENSE.md": "080f3d5539e766bb556df5b8e86c4f5d581ece35c692b80956ca352b84d29134"
+  }
+}

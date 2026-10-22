@@ -136,7 +136,7 @@ async function loadJson(path, expectedHash) {
   return battleResources.json(path,expectedHash);
 }
 
-/** The external RAF must call draw while playAction is pending. No own timer. */
+/** The Phaser frame loop calls draw while playAction is pending. No own timer. */
 export class BattleView {
   constructor({canvas, assetLoader = null, jsonLoader = loadJson,metadataPath='/data/battle_view.json',itemMetadataPath=null,stageMetadataPath=null,lifecycleMetadataPath=null,content=runtimeContent} = {}) {
     if (!canvas?.getContext) throw new Error('战斗画布缺失');
@@ -572,6 +572,7 @@ export class BattleView {
     if (!Number.isFinite(now)) throw new Error('战斗表现时钟无效');
     this.lastDrawAt=now;
     const ctx = this.context, width = this.canvas.width, height = this.canvas.height;
+    ctx.beginFrame?.();
     ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,width,height);ctx.fillStyle='#000';ctx.fillRect(0,0,width,height);
     const viewport=battleViewport(width,height);
     ctx.save();ctx.beginPath();ctx.rect(viewport.x,viewport.y,viewport.width,viewport.height);ctx.clip();

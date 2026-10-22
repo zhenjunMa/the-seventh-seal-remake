@@ -776,6 +776,12 @@
       "imported_by": []
     },
     {
+      "path": "verify_phaser.mjs",
+      "role": "daily-entry",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
       "path": "verify_roster_focus.py",
       "role": "specialized-evidence-check",
       "build_targets": [],

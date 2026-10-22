@@ -8,6 +8,7 @@ import {createBattleController} from './controllers/battle.mjs';
 import {createInspectionController} from './controllers/inspection.mjs';
 import {createInputController} from './controllers/input.mjs';
 import {createBootController} from './controllers/boot.mjs';
+import {PhaserRuntime} from './phaser/runtime.mjs';
 
 const $ = id => document.getElementById(id), canvas = $('stage'), ctx = canvas.getContext('2d');
 const state = createRuntimeState($);
@@ -20,4 +21,10 @@ for (const create of [createServicesController, createMapController,
   createBattleController, createInspectionController, createInputController,
   createBootController]) Object.assign(actions, create(context));
 
-actions.boot().catch(error=>{actions.status(error.message,true);$('loading').querySelector('p').textContent=error.message;});
+const failed=error=>{actions.status(error.message,true);$('loading').hidden=false;$('loading').querySelector('p').textContent=error.message;};
+async function start(){
+  state.engine=await PhaserRuntime.create({parent:$('phaserHost'),focusTarget:canvas,onError:failed});
+  window.addEventListener('pagehide',event=>{if(event.persisted)return;state.openingView?.dispose();state.engine.destroy();});
+  await actions.boot();
+}
+start().catch(failed);

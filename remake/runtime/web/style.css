@@ -7,3 +7,9 @@
 @media(max-width:750px){.party-menu{inset:8px 3%;padding:15px}}
 .game-over{position:absolute;inset:0;background:#000;z-index:45;display:flex;align-items:center;justify-content:center}.game-over[hidden]{display:none}.game-over video{max-width:100%;max-height:100%;object-fit:contain}.game-over button{position:absolute;right:18px;bottom:18px}
 
+
+/* Phaser owns the visible 640x480 scene. Legacy canvases remain read-only
+   capture / focus targets for transitions and existing browser tooling. */
+.phaser-host{position:absolute;inset:0;overflow:hidden;background:#000}
+.phaser-host canvas{display:block;image-rendering:pixelated;touch-action:none}
+.phaser-enabled>#stage,.phaser-enabled>#battleCanvas{position:absolute;inset:0;opacity:0;pointer-events:none}

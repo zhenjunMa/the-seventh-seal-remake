@@ -202,6 +202,8 @@ def verify():
     refs = {path.relative_to(WEB).as_posix() for glob in ['*.html', '*.css', '*.js', '*.mjs', 'controllers/*.mjs', 'core/*.mjs', 'data/config/*.json']
             for path in WEB.glob(glob)}
     refs.add('data/catalog.json')
+    refs.update(path.relative_to(WEB).as_posix() for path in (WEB/'phaser').rglob('*.mjs'))
+    refs.update(path.relative_to(WEB).as_posix() for path in (WEB/'vendor/phaser').iterdir() if path.is_file())
     refs.update(['data/runtime_content.json','data/runtime_content.mjs'])
     for key in ['seed', 'events', 'combat_sample', 'battle_view', 'runtime_config', 'world_map',
                 'route_events', 'encounters', 'forest_combat', 'forest_battle_view', 'opening_program', 'opening_resources', 'chapter_story', 'chapter_resources',
@@ -255,6 +257,7 @@ def verify():
     for name, expected in party_sources.items(): assert sha(ROOT/name) == expected, f'Party input changed during checks: {name}'
     for name, expected in system_sources.items(): assert sha(ROOT/name) == expected, f'System input changed during checks: {name}'
     current = [*tests, *RUNTIME.glob('tests/test_*.py'), RUNTIME/'tools/build_runtime.py', *WEB.glob('*.html'), *WEB.glob('*.css'), *WEB.glob('*.js'), *WEB.glob('*.mjs'), *WEB.glob('core/*.mjs'), *WEB.glob('controllers/*.mjs'), *WEB.glob('data/config/*.json'),
+               *WEB.glob('phaser/**/*.mjs'), *WEB.glob('vendor/phaser/*'), RUNTIME/'tools/verify_phaser.mjs',
                WEB/'data/catalog.json', WEB/'data/runtime_content.json', WEB/'data/runtime_content.mjs',
                RUNTIME/'tools/export_content_registry.mjs', RUNTIME/'tools/content_registration.py', RUNTIME/'tests/preserve_history.mjs', Path(__file__),
                REMAKE/'archive/restore_snapshot.py', *[REMAKE/name for name in docs], *[exported_path(name) for name in system_outputs if exported_path(name).suffix=='.json']]

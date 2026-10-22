@@ -7,7 +7,7 @@ export function battleTransitionFrame(kind,frame){
   return {count,delay:kind===0||kind===2?Math.max(0,90-frame*6):kind===3?90+frame*6:kind===4?30:40};
 }
 export class BattleTransitionView {
-  constructor({loadingView,log,random=Math.random}){Object.assign(this,{loadingView,log,random});this.epoch=0;}
+  constructor({loadingView,log,random=Math.random,clock=null}){Object.assign(this,{loadingView,log,random,clock});this.epoch=0;}
   capture(source){
     const canvas=source.ownerDocument.createElement('canvas');canvas.width=640;canvas.height=480;
     const viewport=battleViewport(source.width,source.height);
@@ -58,10 +58,11 @@ export class BattleTransitionView {
     try{
       this.log?.({type:'battle-transition-start',kind,authority:'GAME.exe 0x430850; Canvas/RAF adapter'});
       let nextAt=null,frame=0;
+      const schedule=callback=>this.clock?this.clock.requestFrame(callback):requestAnimationFrame(callback);
       await new Promise((resolve,reject)=>{
         const tick=now=>{try{check();if(nextAt===null||now>=nextAt){paint(frame);nextAt=now+battleTransitionFrame(kind,frame).delay;frame++;}
-          if(frame>=battleTransitionFrame(kind,0).count)resolve();else requestAnimationFrame(tick);
-        }catch(error){reject(error);}};requestAnimationFrame(tick);
+          if(frame>=battleTransitionFrame(kind,0).count)resolve();else schedule(tick);
+        }catch(error){reject(error);}};schedule(tick);
       });
       check();c.globalAlpha=1;c.drawImage(after,0,0);this.log?.({type:'battle-transition-complete',kind,frames:frame,elapsed_ms:performance.now()-started});
     }finally{if(epoch===this.epoch){root.hidden=true;delete root.dataset.kind;delete root.dataset.transition;delete root.dataset.progress;}}
