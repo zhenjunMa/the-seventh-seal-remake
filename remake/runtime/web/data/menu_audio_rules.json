@@ -1,0 +1,64 @@
+{
+  "schema": "seventh-seal-menu-audio",
+  "version": 1,
+  "game_sha256": "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18",
+  "native_bundle": "remake/runtime/evidence/menu_audio_native_20261014.json",
+  "native_bundle_sha256": "0af611955509e1f20b5a3675edf977ab744fa50db0e51104a57d1b6a3a68519b",
+  "evidence": {
+    "load": "ev_ec8ca9e45a4ed9c0a69c8548c01f7f9cd4aa6e34737da989677fa2f00a59fc7a",
+    "play": "ev_e14a7081ace157e14a5a98e4aa396c97491cffcbe23d769312dd4629bb665fa5",
+    "open": "ev_2e9fdff76a5c7aa6ee0afd89a3973ede53ce1dcef8c71f63f5c4469d71d75df2",
+    "close": "ev_ba29381017d160cb1e33a464c1247cf42c19517a379a64ac000c6ffc34051436",
+    "select": "ev_f81745888d0626f0048c12bd0a0126529a664e7227dee861158f075367a94f32",
+    "confirm_cancel": "ev_5fff3bb1547428170da4c7b38baeaa47d0187bcb67ae4e7ba81b9ec31454530e",
+    "invalid": "ev_87da0cb90d9629d05d4ad2eb83d869c66454e8535b6cfcf85eae7c40d1b3508d"
+  },
+  "table_address": "0x67c928",
+  "table_u32": [
+    6753028,
+    6753016,
+    6753004,
+    6752992,
+    6752980
+  ],
+  "banks": [
+    {
+      "index": 0,
+      "source": "sound/menu/cancel.wav",
+      "available": true
+    },
+    {
+      "index": 1,
+      "source": "sound/menu/decide.wav",
+      "available": true
+    },
+    {
+      "index": 2,
+      "source": "sound/menu/select.wav",
+      "available": true
+    },
+    {
+      "index": 3,
+      "source": "sound/menu/open.wav",
+      "available": true
+    },
+    {
+      "index": 4,
+      "source": "sound/menu/close.wav",
+      "available": false
+    }
+  ],
+  "cue_indices": {
+    "menuCancel": 0,
+    "menuError": 0,
+    "menuConfirm": 1,
+    "menuSelect": 2,
+    "menuOpen": 3,
+    "menuClose": 4
+  },
+  "limits": [
+    "Static original loader, pointer table and handlers; original mixer playback was not recorded.",
+    "The source refers to close.wav, which is absent. close.mp3 and _close.wav are not automatically substituted.",
+    "Browser feedback owns one gesture; native nested panel events and exact mixer scheduling are not reproduced."
+  ]
+}

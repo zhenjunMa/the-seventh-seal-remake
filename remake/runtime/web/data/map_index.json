@@ -1,0 +1,16 @@
+{
+  "schema": "seventh-seal-runtime-map-index",
+  "version": 1,
+  "maps": [
+    {
+      "id": "M01010",
+      "name": "升焰高冕",
+      "path": "/data/maps/m01010.json"
+    },
+    {
+      "id": "M01030",
+      "name": "焰坛连回道",
+      "path": "/data/maps/m01030.json"
+    }
+  ]
+}

@@ -1,0 +1,351 @@
+{
+  "schema": "seventh-seal-world-map-ui",
+  "version": 1,
+  "width": 640,
+  "height": 480,
+  "areas": [
+    {
+      "id": 0,
+      "background": "assets/world_map/locate_001/image_000.png",
+      "source": "SYSTEM/locate_001.mnu",
+      "source_sha256": "bcd4b4fccbeed806605567ec5661f317b884a125ace65e93ead37fa54483456e",
+      "sensor": {
+        "source_offset": 4922,
+        "bytes": 308321,
+        "sha256": "e7e6629061cf556ec245b217632bb632b3f1fede622d404fe31bf1745cf6e153",
+        "image": "assets/world_map/locate_001/sensor.png",
+        "value_counts": {
+          "0": 283924,
+          "24": 7673,
+          "40": 1103,
+          "56": 4848,
+          "72": 3669,
+          "104": 4166,
+          "135": 1930,
+          "183": 1008
+        }
+      },
+      "destinations": [
+        {
+          "index": 0,
+          "map_id": "M01060",
+          "widget_index": 1,
+          "point": {
+            "x": 344,
+            "y": 51
+          },
+          "rect": {
+            "left": 352,
+            "top": 62,
+            "right": 458,
+            "bottom": 189
+          },
+          "normal": "assets/world_map/locate_001/image_001.png",
+          "active": "assets/world_map/locate_001/image_002.png",
+          "selected": "assets/world_map/locate_001/image_002.png",
+          "sensor_value": 24,
+          "source_offset": 1611
+        },
+        {
+          "index": 1,
+          "map_id": "M71071",
+          "widget_index": 2,
+          "point": {
+            "x": 301,
+            "y": 130
+          },
+          "rect": {
+            "left": 318,
+            "top": 164,
+            "right": 358,
+            "bottom": 208
+          },
+          "normal": "assets/world_map/locate_001/image_004.png",
+          "active": "assets/world_map/locate_001/image_005.png",
+          "selected": "assets/world_map/locate_001/image_005.png",
+          "sensor_value": 40,
+          "source_offset": 2084
+        },
+        {
+          "index": 2,
+          "map_id": "M71014",
+          "widget_index": 3,
+          "point": {
+            "x": 314,
+            "y": 181
+          },
+          "rect": {
+            "left": 318,
+            "top": 185,
+            "right": 420,
+            "bottom": 255
+          },
+          "normal": "assets/world_map/locate_001/image_007.png",
+          "active": "assets/world_map/locate_001/image_008.png",
+          "selected": "assets/world_map/locate_001/image_008.png",
+          "sensor_value": 56,
+          "source_offset": 2557
+        },
+        {
+          "index": 3,
+          "map_id": "M70071",
+          "widget_index": 4,
+          "point": {
+            "x": 317,
+            "y": 222
+          },
+          "rect": {
+            "left": 324,
+            "top": 232,
+            "right": 407,
+            "bottom": 326
+          },
+          "normal": "assets/world_map/locate_001/image_019.png",
+          "active": "assets/world_map/locate_001/image_020.png",
+          "selected": "assets/world_map/locate_001/image_020.png",
+          "sensor_value": 72,
+          "source_offset": 3030
+        },
+        {
+          "index": 4,
+          "map_id": "M17010",
+          "widget_index": 5,
+          "point": {
+            "x": 237,
+            "y": 303
+          },
+          "rect": {
+            "left": 277,
+            "top": 349,
+            "right": 319,
+            "bottom": 406
+          },
+          "normal": "assets/world_map/locate_001/image_013.png",
+          "active": "assets/world_map/locate_001/image_014.png",
+          "selected": "assets/world_map/locate_001/image_014.png",
+          "sensor_value": 135,
+          "source_offset": 3503
+        },
+        {
+          "index": 5,
+          "map_id": "XXXXXX",
+          "widget_index": 6,
+          "point": {
+            "x": 283,
+            "y": 390
+          },
+          "rect": {
+            "left": 293,
+            "top": 408,
+            "right": 328,
+            "bottom": 435
+          },
+          "normal": "assets/world_map/locate_001/image_016.png",
+          "active": "assets/world_map/locate_001/image_017.png",
+          "selected": "assets/world_map/locate_001/image_017.png",
+          "sensor_value": 183,
+          "source_offset": 3976
+        },
+        {
+          "index": 6,
+          "map_id": "M70010",
+          "widget_index": 7,
+          "point": {
+            "x": 277,
+            "y": 226
+          },
+          "rect": {
+            "left": 283,
+            "top": 269,
+            "right": 362,
+            "bottom": 367
+          },
+          "normal": "assets/world_map/locate_001/image_010.png",
+          "active": "assets/world_map/locate_001/image_011.png",
+          "selected": "assets/world_map/locate_001/image_011.png",
+          "sensor_value": 104,
+          "source_offset": 4449
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "background": "assets/world_map/locate_002/image_000.png",
+      "source": "SYSTEM/locate_002.mnu",
+      "source_sha256": "4da69f943fc10044b36d92e27fd9b593e41cbfd9a254ba0548674b7f55b535e0",
+      "sensor": {
+        "source_offset": 4922,
+        "bytes": 308321,
+        "sha256": "6291bb2733fe48053db358c5eecafa4f750cac2384d8f68ea0676b9e4acd32cd",
+        "image": "assets/world_map/locate_002/sensor.png",
+        "value_counts": {
+          "0": 296242,
+          "28": 3099,
+          "38": 1787,
+          "58": 1559,
+          "87": 1393,
+          "119": 3178,
+          "151": 720,
+          "185": 343
+        }
+      },
+      "destinations": [
+        {
+          "index": 0,
+          "map_id": "M29010",
+          "widget_index": 1,
+          "point": {
+            "x": 316,
+            "y": 35
+          },
+          "rect": {
+            "left": 327,
+            "top": 43,
+            "right": 399,
+            "bottom": 111
+          },
+          "normal": "assets/world_map/locate_002/image_001.png",
+          "active": "assets/world_map/locate_002/image_002.png",
+          "selected": "assets/world_map/locate_002/image_002.png",
+          "sensor_value": 28,
+          "source_offset": 1611
+        },
+        {
+          "index": 1,
+          "map_id": "M72061",
+          "widget_index": 2,
+          "point": {
+            "x": 180,
+            "y": 81
+          },
+          "rect": {
+            "left": 231,
+            "top": 111,
+            "right": 267,
+            "bottom": 165
+          },
+          "normal": "assets/world_map/locate_002/image_004.png",
+          "active": "assets/world_map/locate_002/image_005.png",
+          "selected": "assets/world_map/locate_002/image_005.png",
+          "sensor_value": 38,
+          "source_offset": 2084
+        },
+        {
+          "index": 2,
+          "map_id": "ELF-FOREST-A",
+          "widget_index": 3,
+          "point": {
+            "x": 217,
+            "y": 128
+          },
+          "rect": {
+            "left": 270,
+            "top": 133,
+            "right": 308,
+            "bottom": 182
+          },
+          "normal": "assets/world_map/locate_002/image_007.png",
+          "active": "assets/world_map/locate_002/image_008.png",
+          "selected": "assets/world_map/locate_002/image_008.png",
+          "sensor_value": 58,
+          "source_offset": 2557
+        },
+        {
+          "index": 3,
+          "map_id": "REBIRTH-B04",
+          "widget_index": 4,
+          "point": {
+            "x": 290,
+            "y": 111
+          },
+          "rect": {
+            "left": 312,
+            "top": 144,
+            "right": 347,
+            "bottom": 187
+          },
+          "normal": "assets/world_map/locate_002/image_010.png",
+          "active": "assets/world_map/locate_002/image_011.png",
+          "selected": "assets/world_map/locate_002/image_011.png",
+          "sensor_value": 87,
+          "source_offset": 3030
+        },
+        {
+          "index": 4,
+          "map_id": "M03060",
+          "widget_index": 5,
+          "point": {
+            "x": 368,
+            "y": 243
+          },
+          "rect": {
+            "left": 378,
+            "top": 276,
+            "right": 452,
+            "bottom": 342
+          },
+          "normal": "assets/world_map/locate_002/image_013.png",
+          "active": "assets/world_map/locate_002/image_014.png",
+          "selected": "assets/world_map/locate_002/image_014.png",
+          "sensor_value": 119,
+          "source_offset": 3503
+        },
+        {
+          "index": 5,
+          "map_id": "XXXXXX",
+          "widget_index": 6,
+          "point": {
+            "x": 306,
+            "y": 290
+          },
+          "rect": {
+            "left": 324,
+            "top": 325,
+            "right": 360,
+            "bottom": 354
+          },
+          "normal": "assets/world_map/locate_002/image_016.png",
+          "active": "assets/world_map/locate_002/image_017.png",
+          "selected": "assets/world_map/locate_002/image_017.png",
+          "sensor_value": 151,
+          "source_offset": 3976
+        },
+        {
+          "index": 6,
+          "map_id": "M55010",
+          "widget_index": 7,
+          "point": {
+            "x": 435,
+            "y": 376
+          },
+          "rect": {
+            "left": 450,
+            "top": 422,
+            "right": 471,
+            "bottom": 443
+          },
+          "normal": "assets/world_map/locate_002/image_019.png",
+          "active": "assets/world_map/locate_002/image_020.png",
+          "selected": "assets/world_map/locate_002/image_020.png",
+          "sensor_value": 185,
+          "source_offset": 4449
+        }
+      ]
+    }
+  ],
+  "source_hashes": {
+    "GAME.exe": "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18",
+    "SYSTEM/locate_001.mnu": "bcd4b4fccbeed806605567ec5661f317b884a125ace65e93ead37fa54483456e",
+    "SYSTEM/locate_002.mnu": "4da69f943fc10044b36d92e27fd9b593e41cbfd9a254ba0548674b7f55b535e0",
+    "SYSTEM/locate_001.CAP": "9e7afafd46cb3c92c2266fa7d70407b98a560621a085fdf3c8fd13fc5c59faa7",
+    "SYSTEM/locate_002.CAP": "445759352471eecc14d6a93c42088855bdad135f4fba11e695f43dafa8e64e0b"
+  },
+  "evidence_file": "remake/runtime/evidence/route_native_20261011.json",
+  "evidence_procedures": [
+    "0x49f340",
+    "0x49f580",
+    "0x49f940",
+    "0x49ffa0"
+  ],
+  "boundary": "Read-only source MNU pixels and widget coordinates; 641x481 editor plane clipped to native 640x480. No original executable runtime observed."
+}

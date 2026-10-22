@@ -1,0 +1,164 @@
+{
+  "schema": "seventh-seal-prologue-presentation",
+  "version": 3,
+  "resources": {
+    "ends": {
+      "source": "SYSTEM/SysMsessageA.dgp",
+      "source_sha256": "b6b905bccd9e906168581fd143585424cd2d1fd70381fe11c5dc493a9a7c24e3",
+      "width": 32,
+      "height": 45,
+      "frames": [
+        {
+          "image": "/assets/prologue/ends_00.png",
+          "sha256": "b1153141fffb9f88740c2b9891cca772407e704a55f6595fab6df0ccaecdc602"
+        },
+        {
+          "image": "/assets/prologue/ends_01.png",
+          "sha256": "2745f5eb44fb37ce83f43a03f6d17679aea1d825ca533da87f89699caad007b0"
+        }
+      ],
+      "interval_ms": null,
+      "source_action_hex": []
+    },
+    "lines": {
+      "source": "SYSTEM/SysMsessageB.dgp",
+      "source_sha256": "cc7ad387bb596610e03bf8a3a56b531d3d462d31b9d95598c190a53c4f3811f3",
+      "width": 638,
+      "height": 45,
+      "frames": [
+        {
+          "image": "/assets/prologue/lines_00.png",
+          "sha256": "22af78f65700e3742072bff68af229600855787ee3c1430eea1cfcd9e2db6fb8"
+        }
+      ],
+      "interval_ms": null,
+      "source_action_hex": []
+    },
+    "wait": {
+      "source": "SYSTEM/MessageWait1.dgp",
+      "source_sha256": "3bffe305c9c20847fd3702883078204ca023d431a75efaa398b36232b8b2dd34",
+      "width": 31,
+      "height": 29,
+      "frames": [
+        {
+          "image": "/assets/prologue/wait_00.png",
+          "sha256": "2a3232d23f384fa49442d872ee6fe88acaeccbb1a8b8d7e508e4ba37d168e942"
+        },
+        {
+          "image": "/assets/prologue/wait_01.png",
+          "sha256": "4a6d94e8e194417e059e1eff59872e58b349822e10fc5e52b695dccd3cc22422"
+        },
+        {
+          "image": "/assets/prologue/wait_02.png",
+          "sha256": "df17c369fed0469dd8d779e3a740600d7958387859d375713aba9ef0df9c3aa8"
+        },
+        {
+          "image": "/assets/prologue/wait_03.png",
+          "sha256": "3b9c0ff708afa0bd6c23735079c0a633615041188a11f578b49212c0882721fe"
+        },
+        {
+          "image": "/assets/prologue/wait_04.png",
+          "sha256": "51e66a35be1c0d44de971759277ccb2c5fd7d83f7f609718b0557769ffff40f8"
+        },
+        {
+          "image": "/assets/prologue/wait_05.png",
+          "sha256": "a0fbc8565b3bb50b0b0b51e08e754c6318aba07e36046be3f9711c7cfb8dfd18"
+        },
+        {
+          "image": "/assets/prologue/wait_06.png",
+          "sha256": "4189524cea8b35d0fb70279111e551267f08c372a4660c173ca211882d4b2517"
+        }
+      ],
+      "interval_ms": 120,
+      "source_action_hex": [
+        "007800000000000000000000000107000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+      ]
+    }
+  },
+  "loading": {
+    "backgrounds": [
+      {
+        "image": "/assets/prologue_loading/background_00.png",
+        "sha256": "f5804626f3961baf9e56afd43523ee2076d1f1ff0c5ba0a79479a242e9f19c70"
+      },
+      {
+        "image": "/assets/prologue_loading/background_01.png",
+        "sha256": "e6d56e92bc2c2f9219954a1e3ddba0e6bbccc620796b67065304222263e9ee9b"
+      },
+      {
+        "image": "/assets/prologue_loading/background_02.png",
+        "sha256": "72a3849c6820fcbbe62c591ce5876a98ff557ea75e09a528af4077a4bfc33798"
+      },
+      {
+        "image": "/assets/prologue_loading/background_03.png",
+        "sha256": "d4256f7a1f700c79c6291f530f6e885b2c95100c76727d9715fb133b844822a8"
+      },
+      {
+        "image": "/assets/prologue_loading/background_04.png",
+        "sha256": "b96f112d4baa6a060c21d1174c12d67fb258a9b98e56b9c046205748839d433f"
+      },
+      {
+        "image": "/assets/prologue_loading/background_05.png",
+        "sha256": "ee169e11a128ebd51cb752b3bb2159d0aef8637b427cb1594cf84a83eafdc403"
+      }
+    ],
+    "origin": {
+      "x": 233,
+      "y": 403
+    },
+    "frame": "/assets/prologue_loading/progress/image_000.png",
+    "fill": "/assets/prologue_loading/progress/image_001.png",
+    "fill_rect": {
+      "left": 6,
+      "top": 6,
+      "right": 161,
+      "bottom": 15
+    },
+    "minimum_display_ms": 600,
+    "authority": "GAME.exe 4B77F0/4B7A40; Progress01 action origin and Progress.mnu control104. Progress counts browser preparation tasks."
+  },
+  "font_manifest": "data/prologue_fonts.json",
+  "style": 3,
+  "font_height": 19,
+  "character_step": 21,
+  "character_interval_ms": 120,
+  "foreground": "#f0e8b8",
+  "shadow": "#e0b800",
+  "border": false,
+  "staging": {
+    "M72061": {
+      "slots": [
+        10,
+        11,
+        12,
+        13,
+        14
+      ],
+      "initially_hidden": true,
+      "axis_approach": true,
+      "direct_arrivals": {
+        "slots": [
+          10,
+          11,
+          12,
+          13
+        ],
+        "direction": 3,
+        "authority": "User correction: four later arrivals should move directly to their final positions without an intermediate turn."
+      },
+      "authority": "User original screenshots: empty first caption; actor14 first, four followers later; final approach faces up. Raw DAT direction retained."
+    }
+  },
+  "effects": {
+    "tick_ms": 20,
+    "reveal_ticks": 40,
+    "particle_ticks": 30
+  },
+  "authority": "User original screenshots and order; native ANM, camera, effect dispatch and original loading resources; local GDI caption masks.",
+  "limitations": [
+    "Original screenshots supplied by user; no new original GAME.exe runtime capture.",
+    "Browser clock, deterministic particle seed and 8-bit compositing approximate native render ticks, RNG and RGB565 blending.",
+    "The four followers use a direct visual arrival per user request; intermediate source moves still execute in the VM. The lead actor retains its separate approach.",
+    "Loading progress counts actual browser asset preparation tasks; cached transitions keep the page visible for 600ms."
+  ]
+}

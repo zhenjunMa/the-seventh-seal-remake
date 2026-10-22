@@ -1,0 +1,127 @@
+{
+  "schema": "seventh-seal-combat-rule-contract",
+  "version": 1,
+  "source": {
+    "path": "GAME.exe",
+    "sha256": "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18"
+  },
+  "native_bundle": {
+    "path": "remake/runtime/evidence/turn_rules_native_20261011.json",
+    "sha256": "0937ff9c092d27d2f8f5cd11487277d65fc68b28d3d0ee1c78d95af8464b6af9",
+    "records": 47
+  },
+  "module": {
+    "path": "core/combat_rules.mjs",
+    "sha256": "7f79c90d217840a212dee4f70f1a26bc035af91eb8385852438c34de62806c25"
+  },
+  "functions": {
+    "effective": "0x41C610",
+    "elements": "0x41CFE0",
+    "damage": "0x41D990",
+    "rng": "0x571060",
+    "reaction_type_gate": "0x50B3E0",
+    "hp_submit": "0x5005C0",
+    "selected_actor_settled_clear": "0x503BD8"
+  },
+  "evidence": [
+    "ev_abb8ffa7bac45ac74b095aa37d3b44882a1545b791d4b19d917871e53bdbbb30",
+    "ev_1303a62e3e254cd7e702384a9dc7969f724a5a21d0d057b071f3f42bfb371a68",
+    "ev_f5bcd44561bffdadc0f43a2e73375f63705feb6f86519a1c3aeda83898e807f0",
+    "ev_f945f3ecee307d16b21890133246943d7f42b507454779e95c6032d5a46951cc",
+    "ev_0c88fd90539d1a633ab604e67359c60f0a2796bfaf7d3040ed6d16906cdec781",
+    "ev_e76dc0fc2a37ba715b7005825ea4ce93f1523440769a6aa6549a0ac77569df72",
+    "ev_635bf69f89b9158deec299cbb4f0e334664adeb56ef85dca7d95156113e301e8",
+    "ev_6ee54dc6fe565f173e91b950485b3f7ad09dc8ebbe91d714b32509786be353a8",
+    "ev_42f120407753a49a48957bab6ad73688d821ee2256599705fc0190738c495af7"
+  ],
+  "required_native_tables": {
+    "raw": [
+      "0x0524a701",
+      "0x0524a705",
+      "0x0524a711",
+      "0x0524a715",
+      "0x0524a719",
+      "0x0524a71d",
+      "0x0524a729",
+      "0x0524a72d",
+      "0x0524a74b",
+      "0x0524a74f",
+      "0x0524a753",
+      "0x0524a757",
+      "0x0524a75b",
+      "0x0524a75f"
+    ],
+    "status": [
+      "0x0521f551",
+      "0x0521f555",
+      "0x0521f561",
+      "0x0521f565",
+      "0x0521f569",
+      "0x0521f56d",
+      "0x0521f571",
+      "0x0521f575",
+      "0x0521f581",
+      "0x0521f585",
+      "0x0521f589",
+      "0x0521f58d",
+      "0x0521f591",
+      "0x0521f595",
+      "0x0521f5a5",
+      "0x0521f5b9",
+      "0x0521f5bd",
+      "0x0521f5c1",
+      "0x0521f5c5",
+      "0x0521f5c9",
+      "0x0521f5cd"
+    ],
+    "link": [
+      "0x04f99088",
+      "0x04f9908c",
+      "0x04f99098",
+      "0x04f9909c",
+      "0x04f990a4",
+      "0x04f990d0",
+      "0x04f990d4",
+      "0x04f990d8",
+      "0x04f990e0",
+      "0x04f990e4",
+      "0x04f990e8",
+      "0x04f990ec",
+      "0x04f990f0",
+      "0x04f990f4"
+    ]
+  },
+  "skill_fixed_source_bytes": 1053,
+  "native_skill_stride_bytes": 1057,
+  "native_skill_extra_bytes": "Trailing action-array pointer; never fabricated by source exporter.",
+  "resource_fields": {
+    "0x0524a701": "current_raw_hp",
+    "0x0524a705": "maximum_raw_hp",
+    "0x0524a709": "current_raw_mp",
+    "0x0524a70d": "maximum_raw_mp"
+  },
+  "input_contract": [
+    "attacker and target contain explicit source-exported raw/status/linked tables; omitted values reject.",
+    "target.current_skill is the whole selected source skill, fixed_raw_hex plus proved mp_cost.",
+    "Fresh battle status and globals are explicit controlled initialization, not captured original battle state.",
+    "A dead linked actor may have negative raw HP; preserve DWORD bits in world state and decode signed for native arithmetic.",
+    "Selected actor settled_raw is cleared at its own action start following 0x503BD8; target settlement result persists."
+  ],
+  "rng": {
+    "kind": "uint32-lcg",
+    "multiplier": 214013,
+    "increment": 2531011,
+    "output": "(state >>> 16) & 32767",
+    "seed_authority": "Controlled reconstruction input; original RNG state unknown."
+  },
+  "original_game_execution_observed": false,
+  "coverage": [
+    "Bounded direct damage: raw class gates, effective randomized inputs, hit comparison and bypass, physical multiplier, element addition, minimum/deflection, guard reduction, HP submit."
+  ],
+  "limits": [
+    "This numeric port does not establish original action queue/charging timing, enemy AI or encounter composition.",
+    "Effect-token damage, ailments, other skill execution types, counters, item actions, rewards and original save compatibility remain outside the contract.",
+    "RNG call order is checked within the admitted numeric functions; random calls elsewhere in the original game are not simulated.",
+    "Static instruction-text differential replay uses explicit record/display/clock/death hooks and is not execution of GAME.exe."
+  ]
+}

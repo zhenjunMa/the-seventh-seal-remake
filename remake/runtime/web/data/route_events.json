@@ -1,0 +1,173 @@
+{
+  "M17010": {
+    "source": {
+      "path": "Map/m17010.TLK",
+      "sha256": "04fc3299206a21504ac500a8797e4c96bf9ccee6fa104e41a3c8960861479f58"
+    },
+    "records": [
+      {
+        "id": 41,
+        "offset": 67906,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 9,
+        "mutation_index": 1,
+        "mutation_bit": 6,
+        "if_true": 0,
+        "next": 42,
+        "text_raw": ""
+      },
+      {
+        "id": 42,
+        "offset": 69553,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 9,
+        "mutation_index": 1,
+        "mutation_bit": 4,
+        "if_true": 0,
+        "next": 43,
+        "text_raw": ""
+      },
+      {
+        "id": 43,
+        "offset": 71200,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 9,
+        "mutation_index": 0,
+        "mutation_bit": 4,
+        "if_true": 0,
+        "next": 0,
+        "text_raw": ""
+      },
+      {
+        "id": 46,
+        "offset": 76141,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 1,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 0,
+        "text_raw": "我还有事，还不能离开这里。"
+      },
+      {
+        "id": 48,
+        "offset": 79435,
+        "kind": 1,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 48,
+        "condition_bit": 1,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 41,
+        "next": 0,
+        "text_raw": "m17010-1.anm"
+      }
+    ],
+    "authority": "Static TLK chain and native type9 handler; no original execution observed"
+  },
+  "M70010": {
+    "source": {
+      "path": "Map/m70010.TLK",
+      "sha256": "223979cd995a89ee5a4bdfac3339294857933a757711f99709b82149bf079583"
+    },
+    "records": [
+      {
+        "id": 1,
+        "offset": 2026,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 15,
+        "text_raw": ""
+      },
+      {
+        "id": 15,
+        "offset": 25084,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 10,
+        "condition_bit": 2,
+        "mutation_type": 9,
+        "mutation_index": 0,
+        "mutation_bit": 6,
+        "if_true": 16,
+        "next": 0,
+        "text_raw": ""
+      },
+      {
+        "id": 16,
+        "offset": 26731,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 384,
+        "condition_bit": 1,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 17,
+        "next": 0,
+        "text_raw": ""
+      },
+      {
+        "id": 17,
+        "offset": 28378,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 9,
+        "mutation_index": 0,
+        "mutation_bit": 6,
+        "if_true": 0,
+        "next": 0,
+        "text_raw": ""
+      }
+    ],
+    "authority": "Static TLK chain and native type9 handler; no original execution observed"
+  }
+}

@@ -1,0 +1,1016 @@
+{
+  "schema": "seventh-seal-dialogue-ui",
+  "version": 1,
+  "viewport": {
+    "width": 640,
+    "height": 480
+  },
+  "resources": {
+    "board": {
+      "source": "SYSTEM/MessageBoard.dgp",
+      "source_sha256": "d13696c8f7dcd7156b9bb0724157e2bec241aa8110615fb9db1d95a5f3deebc6",
+      "width": 450,
+      "height": 120,
+      "frames": [
+        {
+          "index": 0,
+          "image": "/assets/dialogue_ui/board_000.png",
+          "sha256": "cdbce880b0b171ed7f961cb63dfadb8ada8c9177dd53167079c6e0269d6cb8d6"
+        }
+      ],
+      "interval_ms": null,
+      "frame_count": 1,
+      "source_actions": [],
+      "header_hex": "09000000000000000000000000000000000000000000000000000000000000c20100000000000000000000010000000000000000000000000000000000000000000000",
+      "geometry_hex": "c20178000100000000000000010100000000000000000000ff00010000000101b70100006a5601000001",
+      "anchor_raw": [
+        32,
+        0,
+        0
+      ]
+    },
+    "think": {
+      "source": "SYSTEM/Think_Msg.dgp",
+      "source_sha256": "cb1892376a734be4bdb6e222a324bd4b8a9cc3696d36add6248777c73fd70e77",
+      "width": 190,
+      "height": 90,
+      "frames": [
+        {
+          "index": 0,
+          "image": "/assets/dialogue_ui/think_000.png",
+          "sha256": "349faccc6aef8d984a7b4093332a4b7c325ef9b70a2ccdedd8ce018153ab260d"
+        }
+      ],
+      "interval_ms": null,
+      "frame_count": 1,
+      "source_actions": [],
+      "header_hex": "09000000000000000000000000000000000000000000000000000000000000be0000000000000000000000010000000000000000000000000000000000000000000000",
+      "geometry_hex": "be005a000100000000000000010100000000000000000000ff000100000001017b0100006e7100000001",
+      "anchor_raw": [
+        32,
+        0,
+        0
+      ]
+    },
+    "wait1": {
+      "source": "SYSTEM/MessageWait1.dgp",
+      "source_sha256": "3bffe305c9c20847fd3702883078204ca023d431a75efaa398b36232b8b2dd34",
+      "width": 31,
+      "height": 29,
+      "frames": [
+        {
+          "index": 0,
+          "image": "/assets/dialogue_ui/wait1_000.png",
+          "sha256": "2a3232d23f384fa49442d872ee6fe88acaeccbb1a8b8d7e508e4ba37d168e942"
+        },
+        {
+          "index": 1,
+          "image": "/assets/dialogue_ui/wait1_001.png",
+          "sha256": "4a6d94e8e194417e059e1eff59872e58b349822e10fc5e52b695dccd3cc22422"
+        },
+        {
+          "index": 2,
+          "image": "/assets/dialogue_ui/wait1_002.png",
+          "sha256": "df17c369fed0469dd8d779e3a740600d7958387859d375713aba9ef0df9c3aa8"
+        },
+        {
+          "index": 3,
+          "image": "/assets/dialogue_ui/wait1_003.png",
+          "sha256": "3b9c0ff708afa0bd6c23735079c0a633615041188a11f578b49212c0882721fe"
+        },
+        {
+          "index": 4,
+          "image": "/assets/dialogue_ui/wait1_004.png",
+          "sha256": "51e66a35be1c0d44de971759277ccb2c5fd7d83f7f609718b0557769ffff40f8"
+        },
+        {
+          "index": 5,
+          "image": "/assets/dialogue_ui/wait1_005.png",
+          "sha256": "a0fbc8565b3bb50b0b0b51e08e754c6318aba07e36046be3f9711c7cfb8dfd18"
+        },
+        {
+          "index": 6,
+          "image": "/assets/dialogue_ui/wait1_006.png",
+          "sha256": "4189524cea8b35d0fb70279111e551267f08c372a4660c173ca211882d4b2517"
+        }
+      ],
+      "interval_ms": 120,
+      "frame_count": 7,
+      "source_actions": [
+        {
+          "index": 0,
+          "directions": 1,
+          "directions_raw": 0,
+          "interval_raw": 120,
+          "loop_raw": 1,
+          "frames_per_direction": 7,
+          "first_frame": 0,
+          "identifier_raw": 0,
+          "raw_hex": "00780000000000000000000000010700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+        }
+      ],
+      "header_hex": "0800010000000000000000000000000000000000000000000000000000ff00d90000000000000000000000070000000000000000000001000000000000000000000000",
+      "geometry_hex": "1f001d000700000000000000010100000000000000000000ff00070000000101cb010000e41d00000000",
+      "anchor_raw": [
+        32,
+        0,
+        0
+      ]
+    },
+    "wait2": {
+      "source": "SYSTEM/MessageWait2.dgp",
+      "source_sha256": "3b253e501f093b2cca88f57a81e86f718b54f2648a6e3ceed4200879176abc1d",
+      "width": 23,
+      "height": 23,
+      "frames": [
+        {
+          "index": 0,
+          "image": "/assets/dialogue_ui/wait2_000.png",
+          "sha256": "7636c3ce87eac5b9fc58adebd7cda697870ef3d8d76d905ef87be91701aaee46"
+        },
+        {
+          "index": 1,
+          "image": "/assets/dialogue_ui/wait2_001.png",
+          "sha256": "f18251d7f33a93ddbe439ea1054dfc38def2769a434bcf1c8e88aec8c2bd3410"
+        },
+        {
+          "index": 2,
+          "image": "/assets/dialogue_ui/wait2_002.png",
+          "sha256": "7a000ff27cad6d2f6c39c1babadf28c9c4922ffd0367db0fa210eb91ce8580c9"
+        },
+        {
+          "index": 3,
+          "image": "/assets/dialogue_ui/wait2_003.png",
+          "sha256": "132b2fa65dab8769823ddb0c42c17e94ae797b2483685e2b259c5afcc7f07cf4"
+        },
+        {
+          "index": 4,
+          "image": "/assets/dialogue_ui/wait2_004.png",
+          "sha256": "b0a639d4aa10be9bedc86a959511c0cd5c348b7e0eefcaddb06343526ed6c1c3"
+        },
+        {
+          "index": 5,
+          "image": "/assets/dialogue_ui/wait2_005.png",
+          "sha256": "9b8b1bf40732595f97beec40b41126913176ba1766ec8db8bca668b73392f204"
+        },
+        {
+          "index": 6,
+          "image": "/assets/dialogue_ui/wait2_006.png",
+          "sha256": "a26da5047bb434ed90fa4be9455ca5f56cc2d45a77f052905e3ae0006edd2821"
+        },
+        {
+          "index": 7,
+          "image": "/assets/dialogue_ui/wait2_007.png",
+          "sha256": "52dd842c88be63662e23a4ab3fd432cc05f5fb851d6bf04be3d048158bc8eaa2"
+        },
+        {
+          "index": 8,
+          "image": "/assets/dialogue_ui/wait2_008.png",
+          "sha256": "ed0c4c1034c1e5f3b247788372cdb5807a97dfdebfdc758489c9df71f6d30bd2"
+        },
+        {
+          "index": 9,
+          "image": "/assets/dialogue_ui/wait2_009.png",
+          "sha256": "2b2ab490e948a5e2e58227a9bde02ae6d60e41755902f48fc176390deb37a029"
+        },
+        {
+          "index": 10,
+          "image": "/assets/dialogue_ui/wait2_010.png",
+          "sha256": "aa4b5855ca245a73cc4c91afc8be5b8823ea3e3df8cf1df6f4973b9a5f359f24"
+        },
+        {
+          "index": 11,
+          "image": "/assets/dialogue_ui/wait2_011.png",
+          "sha256": "ef15b0e2fb57057bff06cf1c9f10c6b727e55c6bf996ff982202820a5af72029"
+        },
+        {
+          "index": 12,
+          "image": "/assets/dialogue_ui/wait2_012.png",
+          "sha256": "aa4b5855ca245a73cc4c91afc8be5b8823ea3e3df8cf1df6f4973b9a5f359f24"
+        },
+        {
+          "index": 13,
+          "image": "/assets/dialogue_ui/wait2_013.png",
+          "sha256": "4c30489bcabec4f5f9acc046f6a99738dad73d18dc42e0cef07cbc762ef6173c"
+        },
+        {
+          "index": 14,
+          "image": "/assets/dialogue_ui/wait2_014.png",
+          "sha256": "1b18af5d1fad93bd571955738cf658dfd1380505d0118ef8b08bcc36fb8142c6"
+        },
+        {
+          "index": 15,
+          "image": "/assets/dialogue_ui/wait2_015.png",
+          "sha256": "94b2d732cbd753a08b27b063aad9db189754912032cd8b8b1d551a11a1e305ef"
+        },
+        {
+          "index": 16,
+          "image": "/assets/dialogue_ui/wait2_016.png",
+          "sha256": "f544f6c75d489d26a366a64d5e3d554fa9904bd24cc757d37fa785f40cda2769"
+        },
+        {
+          "index": 17,
+          "image": "/assets/dialogue_ui/wait2_017.png",
+          "sha256": "14cb3f03b466a1fa8623aeae6af560a1eb4b8e1141610a54da23a954d3ea9799"
+        },
+        {
+          "index": 18,
+          "image": "/assets/dialogue_ui/wait2_018.png",
+          "sha256": "4736dd8e9fb4cabb2a96ff79800288d2720a167ba0d49c54df523471793b718c"
+        },
+        {
+          "index": 19,
+          "image": "/assets/dialogue_ui/wait2_019.png",
+          "sha256": "ea814a8238cbd444f1a5d13e3b7f166f6e983c719cb7123d62a7d5b490033699"
+        }
+      ],
+      "interval_ms": 50,
+      "frame_count": 20,
+      "source_actions": [
+        {
+          "index": 0,
+          "directions": 1,
+          "directions_raw": 0,
+          "interval_raw": 50,
+          "loop_raw": 1,
+          "frames_per_direction": 20,
+          "first_frame": 0,
+          "identifier_raw": 0,
+          "raw_hex": "00320000000000000000000000011400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+        }
+      ],
+      "header_hex": "0800010000000000000000000000000000000000000000000000000000ff00cc0100000000000000000000140000000000000000000001000000000000000000000000",
+      "geometry_hex": "170017001400000000000000010100000000000000000000ff00140000000101cf020000dc1c00000000",
+      "anchor_raw": [
+        32,
+        0,
+        0
+      ]
+    },
+    "faces": {
+      "source": "ROLE/face.dgp",
+      "source_sha256": "94f08ac043ef51426322bba48fcbd31470be59a31ead0ef26ad17f39b5f7b372",
+      "width": 248,
+      "height": 308,
+      "frames": [
+        {
+          "index": 0,
+          "image": "/assets/dialogue_ui/faces_000.png",
+          "sha256": "4e4ec9e9f89b78eea1422bd183e13798e2464b993276b5a626ecdbd3f1982efa"
+        },
+        {
+          "index": 1,
+          "image": "/assets/dialogue_ui/faces_001.png",
+          "sha256": "551db097f6186898a94f31834d988dbdb481bedc1a7460a4f6c0215dced936ee"
+        },
+        {
+          "index": 2,
+          "image": "/assets/dialogue_ui/faces_002.png",
+          "sha256": "b96d386814d8553a223f287c9b70184d03c425c6ad405168afaeb98f4b378c15"
+        },
+        {
+          "index": 3,
+          "image": "/assets/dialogue_ui/faces_003.png",
+          "sha256": "e2681a6e94290eeec092cff4b43fa4c43099c685bf0f306da4879abca4071d0b"
+        },
+        {
+          "index": 4,
+          "image": "/assets/dialogue_ui/faces_004.png",
+          "sha256": "f431bb3e0ad125b0282d6a6d81b92bc3f73570faafac2f99ad6174629203fd08"
+        },
+        {
+          "index": 5,
+          "image": "/assets/dialogue_ui/faces_005.png",
+          "sha256": "1f879c7127ef9ff70251abbbc9db821096281eabeddae587ffa7b6507c230644"
+        },
+        {
+          "index": 6,
+          "image": "/assets/dialogue_ui/faces_006.png",
+          "sha256": "7c8b12fa6f277177fb6e7c25396148a3e88ae379056e6439a46763f4b3c5667a"
+        },
+        {
+          "index": 7,
+          "image": "/assets/dialogue_ui/faces_007.png",
+          "sha256": "01b6e0e3482dac48360737e5e74bebe2d50f9d9823491bf7ec1c270b82f1f1e5"
+        },
+        {
+          "index": 8,
+          "image": "/assets/dialogue_ui/faces_008.png",
+          "sha256": "1c32c13e707ad400a429e6e0a4443112412356f2618a16b5d731f8078ededcb3"
+        },
+        {
+          "index": 9,
+          "image": "/assets/dialogue_ui/faces_009.png",
+          "sha256": "24bd834ea164191e4b19d26c8474e17d108cf6239e602997051ef848471fa9fb"
+        },
+        {
+          "index": 10,
+          "image": "/assets/dialogue_ui/faces_010.png",
+          "sha256": "99677c452b805a8c06c781b4568018264d953354aaabd8d7551e865755d3c8a7"
+        },
+        {
+          "index": 11,
+          "image": "/assets/dialogue_ui/faces_011.png",
+          "sha256": "2b4fd258f5c15f1a41fc707dbec18e9a83718759a1dcd4659016389918dc723b"
+        },
+        {
+          "index": 12,
+          "image": "/assets/dialogue_ui/faces_012.png",
+          "sha256": "b6e3f2e13bcd82870e0e7b442280f89dfc924c77e77db41fe20c77dbfbe0efeb"
+        },
+        {
+          "index": 13,
+          "image": "/assets/dialogue_ui/faces_013.png",
+          "sha256": "7a888c8a20c563d38e914fb50bf60d84a136bb55f8752d12cb05e5937cb98c0b"
+        },
+        {
+          "index": 14,
+          "image": "/assets/dialogue_ui/faces_014.png",
+          "sha256": "671a68b372097bd0cea40ac937b5473edf6f33ec6e4755f02b83727322bab74c"
+        },
+        {
+          "index": 15,
+          "image": "/assets/dialogue_ui/faces_015.png",
+          "sha256": "c6081513fbcd23b3cbd39cf5fae414f18d8236647a4c544b7702f0359c1d9ae1"
+        },
+        {
+          "index": 16,
+          "image": "/assets/dialogue_ui/faces_016.png",
+          "sha256": "a26d863ba3246bc5b6340a0b8ad90a1c97f3b0a97acf1521a1c036dd590d3ea3"
+        },
+        {
+          "index": 17,
+          "image": "/assets/dialogue_ui/faces_017.png",
+          "sha256": "c149825813a31472067ca46e362051162f7c4f4d4536b307b345c14d49701d1a"
+        },
+        {
+          "index": 18,
+          "image": "/assets/dialogue_ui/faces_018.png",
+          "sha256": "064e17a52f2448f4cf7521bd93eb11e10c9dba0a495bb11f96fb68e42f59a365"
+        },
+        {
+          "index": 19,
+          "image": "/assets/dialogue_ui/faces_019.png",
+          "sha256": "12198bac1f0563d2f8115576e4326304020087d41c68c780396506e7a78d4830"
+        },
+        {
+          "index": 20,
+          "image": "/assets/dialogue_ui/faces_020.png",
+          "sha256": "1df989271f60e3f286b3af50d4bde77faaab76c0c469a2b00c06ef6a23c49e8f"
+        },
+        {
+          "index": 21,
+          "image": "/assets/dialogue_ui/faces_021.png",
+          "sha256": "5c1fa5e8b254ce0e02da5fdb1fdc03b3ce7cbde264c0de3841856fd520385075"
+        },
+        {
+          "index": 22,
+          "image": "/assets/dialogue_ui/faces_022.png",
+          "sha256": "269ff73b7559af87628b9c2221f22bec4ffdd36a23d603241bfd2d987125aa86"
+        },
+        {
+          "index": 23,
+          "image": "/assets/dialogue_ui/faces_023.png",
+          "sha256": "5b41f5c6c58b2b6cebc51a06c0914235bb04057910730b6c1dcb86fc2a2d45e4"
+        },
+        {
+          "index": 24,
+          "image": "/assets/dialogue_ui/faces_024.png",
+          "sha256": "b8bf907e22cec332dfe64d6a8dbb23d25022730423d60c28ece3ab6545f84c5c"
+        },
+        {
+          "index": 25,
+          "image": "/assets/dialogue_ui/faces_025.png",
+          "sha256": "ef20da3444bf62ae6c36c41b2d6c7f61bfa34eb2a11e8ded04d0e69b9e73e053"
+        },
+        {
+          "index": 26,
+          "image": "/assets/dialogue_ui/faces_026.png",
+          "sha256": "ff215c0cd0b2a7607652f0020c940efbd6c308d68b5638b365e6a4c32e2dd0a9"
+        },
+        {
+          "index": 27,
+          "image": "/assets/dialogue_ui/faces_027.png",
+          "sha256": "5dc7e9281460af06373b821914a800708f4f9956342a8f7e7b305654a1cdeda3"
+        },
+        {
+          "index": 28,
+          "image": "/assets/dialogue_ui/faces_028.png",
+          "sha256": "e797bf80758af1b77014d719b137309a397892700c9bd0d92a4a820df7308b7c"
+        },
+        {
+          "index": 29,
+          "image": "/assets/dialogue_ui/faces_029.png",
+          "sha256": "8bdf2273ede285c6ae5e7d6aca37b8df7251d4acef3fb1d07ba7a17fa39f6682"
+        },
+        {
+          "index": 30,
+          "image": "/assets/dialogue_ui/faces_030.png",
+          "sha256": "03374dd8c1b7966ce9513d8670992676b762d2b54a4355ff5c11b3b8d9176fc8"
+        },
+        {
+          "index": 31,
+          "image": "/assets/dialogue_ui/faces_031.png",
+          "sha256": "97e6459e55bbcd9337a3de10370392a539af2b5eb36416ca64cd4babf281b379"
+        },
+        {
+          "index": 32,
+          "image": "/assets/dialogue_ui/faces_032.png",
+          "sha256": "5380b8475aa7c4dd132b7b6ee8f2881179280969134246f479b67b24a1ce786c"
+        },
+        {
+          "index": 33,
+          "image": "/assets/dialogue_ui/faces_033.png",
+          "sha256": "32f67d352b8523c58c8496a2fc1f356e2b24757cc72104d5d330f863029cce4b"
+        },
+        {
+          "index": 34,
+          "image": "/assets/dialogue_ui/faces_034.png",
+          "sha256": "d90031306b7fca77e66b3bb49aa2d268c2f76356a85742c46e99675918490127"
+        },
+        {
+          "index": 35,
+          "image": "/assets/dialogue_ui/faces_035.png",
+          "sha256": "9b2f95e9525dd230bca42066bc5ad8da66bdffa13a0d9d7723939c79d543e155"
+        },
+        {
+          "index": 36,
+          "image": "/assets/dialogue_ui/faces_036.png",
+          "sha256": "49c0cec8c1b41909593765ff6fe270fea2e04663ca902644634c5e306361a4c5"
+        },
+        {
+          "index": 37,
+          "image": "/assets/dialogue_ui/faces_037.png",
+          "sha256": "6567cd6f44ff4b964c1d255d233520cf56460353b01d21305f55c4dd04388f01"
+        },
+        {
+          "index": 38,
+          "image": "/assets/dialogue_ui/faces_038.png",
+          "sha256": "b29b6094459b5426941fbec00d2fc73033e252d02ec6214464014114382dc2d7"
+        },
+        {
+          "index": 39,
+          "image": "/assets/dialogue_ui/faces_039.png",
+          "sha256": "3b4c17b565c17c485866001099bb45d7e781ce4279b6083d508f3171f3f6e10c"
+        },
+        {
+          "index": 40,
+          "image": "/assets/dialogue_ui/faces_040.png",
+          "sha256": "e86262cd7825257d5cc68a6db9a6b364ea4baf43e0cf055a9f942056a049ceb9"
+        },
+        {
+          "index": 41,
+          "image": "/assets/dialogue_ui/faces_041.png",
+          "sha256": "5f7ccda5c8d6054ad994fb4db92f915564303e016ace34d87edd2307ac5d4e1c"
+        },
+        {
+          "index": 42,
+          "image": "/assets/dialogue_ui/faces_042.png",
+          "sha256": "29938c1e7a311e35b6936903a02b324baf0b45ec2c258b484d5df3914dcf325d"
+        },
+        {
+          "index": 43,
+          "image": "/assets/dialogue_ui/faces_043.png",
+          "sha256": "a0afb6e136507e75e18c720a14d2eeec0358b1c18c21a7f3b788d8458e29fc7f"
+        },
+        {
+          "index": 44,
+          "image": "/assets/dialogue_ui/faces_044.png",
+          "sha256": "7257e1ab1fe531545a6f8107026dc312be4e079c976ce1878b05d2fec750f4f0"
+        },
+        {
+          "index": 45,
+          "image": "/assets/dialogue_ui/faces_045.png",
+          "sha256": "766c149c1cc88aa0148ac949b9e19d742091d1060956f2e0a44aea58c8065709"
+        },
+        {
+          "index": 46,
+          "image": "/assets/dialogue_ui/faces_046.png",
+          "sha256": "a386255ff47dd70fb4b4170f3afc8e5b3e0c8c1ef974fa61f2d01e12f5259b01"
+        },
+        {
+          "index": 47,
+          "image": "/assets/dialogue_ui/faces_047.png",
+          "sha256": "29cdcc2e2c8319b511436620386b53556d1fa430fc60137614a0a72847a8fd35"
+        },
+        {
+          "index": 48,
+          "image": "/assets/dialogue_ui/faces_048.png",
+          "sha256": "122a16891f1f9854807113f9f75a9ed1e2112ef769551c28da7531a9e3342de5"
+        },
+        {
+          "index": 49,
+          "image": "/assets/dialogue_ui/faces_049.png",
+          "sha256": "52670b3a0a4f4a5bf8057aed9c7770ac382dca9d8b24af5afd2a4eae9e139c7e"
+        },
+        {
+          "index": 50,
+          "image": "/assets/dialogue_ui/faces_050.png",
+          "sha256": "cc8e86f07de2adeb3a15a59214ef43230f01c55a5c260b534c9608ce04a8300a"
+        },
+        {
+          "index": 51,
+          "image": "/assets/dialogue_ui/faces_051.png",
+          "sha256": "1495aa98d7c3a7b49a0f3904e78a6ec5bc71344d5b184785a0664e684c72fbbb"
+        },
+        {
+          "index": 52,
+          "image": "/assets/dialogue_ui/faces_052.png",
+          "sha256": "12f823fd5616f4affdb67e61b4807357a573aec7e6c30532bd2d15b16d74d681"
+        },
+        {
+          "index": 53,
+          "image": "/assets/dialogue_ui/faces_053.png",
+          "sha256": "f34e2d270a5af12707a8f17035404c49adcaf8579a8297f6b4cd85af958c770a"
+        },
+        {
+          "index": 54,
+          "image": "/assets/dialogue_ui/faces_054.png",
+          "sha256": "39ef4f1a762cd786e6d3f3eac747433cc2cc33fbaaadd045968d20477cea02a0"
+        },
+        {
+          "index": 55,
+          "image": "/assets/dialogue_ui/faces_055.png",
+          "sha256": "d4ebece4aac6f9d5930b3e32da2ab987400341763b6a9e4b751a35aa7708ac6c"
+        },
+        {
+          "index": 56,
+          "image": "/assets/dialogue_ui/faces_056.png",
+          "sha256": "f741248df9aacd04e0b89c28b916bc90e91812e598d8820b806125ae58167862"
+        },
+        {
+          "index": 57,
+          "image": "/assets/dialogue_ui/faces_057.png",
+          "sha256": "6d7bd93d5c2061cd4d7a93fcedbaad71a578d71eed7f3f9bbd91054842e2416e"
+        },
+        {
+          "index": 58,
+          "image": "/assets/dialogue_ui/faces_058.png",
+          "sha256": "a05d849bcdad767ea72c0dfa199e142fc058699c72c7b74795e9982dbaa47362"
+        },
+        {
+          "index": 59,
+          "image": "/assets/dialogue_ui/faces_059.png",
+          "sha256": "2ebd503a43b07ea9cab74d8d5eaa0da0c4e1a69af7b25095c6606d8e5e7cc5a5"
+        },
+        {
+          "index": 60,
+          "image": "/assets/dialogue_ui/faces_060.png",
+          "sha256": "e80fa5f27cdc80074b3ab9023d352fc5e97568ab0b390b597489fbc968a648d8"
+        },
+        {
+          "index": 61,
+          "image": "/assets/dialogue_ui/faces_061.png",
+          "sha256": "4b1c68a05aea75a5fc9ce062bafbd71e198b4d621b138dfc5038048edf46d63e"
+        },
+        {
+          "index": 62,
+          "image": "/assets/dialogue_ui/faces_062.png",
+          "sha256": "806ec7b356f3eb663ede6915ed2f862af59b3318ba76120ac07339c4e1dfdc61"
+        },
+        {
+          "index": 63,
+          "image": "/assets/dialogue_ui/faces_063.png",
+          "sha256": "15de32871fe93595f677b30f27c0fbffd141fc4b8c194d33fcee9fe806c13254"
+        },
+        {
+          "index": 64,
+          "image": "/assets/dialogue_ui/faces_064.png",
+          "sha256": "4056ca142cc69e739b86cf253e5ca4315f794e2c5d42db119175cdfc0f3fbe1c"
+        },
+        {
+          "index": 65,
+          "image": "/assets/dialogue_ui/faces_065.png",
+          "sha256": "d3534f61f79bdaf785682e100c668aea7e63c0d7e448addfc2845324d9a500cb"
+        },
+        {
+          "index": 66,
+          "image": "/assets/dialogue_ui/faces_066.png",
+          "sha256": "0cb0c603da286e6cf4977a36309d58b40f5be5eb89ee7e492641df29a67119b5"
+        },
+        {
+          "index": 67,
+          "image": "/assets/dialogue_ui/faces_067.png",
+          "sha256": "304a612d628aa86690bddfa7391ec65d1b76044b33c288456daa0085e8b97a3e"
+        },
+        {
+          "index": 68,
+          "image": "/assets/dialogue_ui/faces_068.png",
+          "sha256": "2fa44644f043984d9b7a9f68012362027d4fa0bd44660a067af70ac6631c887e"
+        },
+        {
+          "index": 69,
+          "image": "/assets/dialogue_ui/faces_069.png",
+          "sha256": "43d6999cb3f837c68ad505f40d9f69bb8ee43a7f0436eccfb864f62e4ad04291"
+        },
+        {
+          "index": 70,
+          "image": "/assets/dialogue_ui/faces_070.png",
+          "sha256": "f5f87c7762ac9c002f378f3153fb5c4c8eb4cfe964b7fed82e1dad6387afc513"
+        },
+        {
+          "index": 71,
+          "image": "/assets/dialogue_ui/faces_071.png",
+          "sha256": "0af73c7d243393d34b3fdd0587cd2c41586e69a13b8673327819a876a32fe786"
+        },
+        {
+          "index": 72,
+          "image": "/assets/dialogue_ui/faces_072.png",
+          "sha256": "32fa87d8d4c4bab41dffaab608a86b247054d49218db0a67f8c2502014dff7c7"
+        },
+        {
+          "index": 73,
+          "image": "/assets/dialogue_ui/faces_073.png",
+          "sha256": "b4339bef33b96a52dd117607f2ba4b1d3ec8cedcd9afd41eb59ccd2282b35dc2"
+        },
+        {
+          "index": 74,
+          "image": "/assets/dialogue_ui/faces_074.png",
+          "sha256": "9da4ca8c1de02854ebddd6c0039dcc077a6fa8a85f8dd5b6e867d37683d3e62c"
+        },
+        {
+          "index": 75,
+          "image": "/assets/dialogue_ui/faces_075.png",
+          "sha256": "3a70e691f943d145887f970aa8265de12d48f38915693c6c77c6fe122506bc5a"
+        },
+        {
+          "index": 76,
+          "image": "/assets/dialogue_ui/faces_076.png",
+          "sha256": "d1c2b947e612a638c1b5107320ebaf08de24b8b7abaa1828c28550c847b25810"
+        },
+        {
+          "index": 77,
+          "image": "/assets/dialogue_ui/faces_077.png",
+          "sha256": "6add625d748c31384a59e8bfed26345a7f59b9f519444ddacdbe05c497408768"
+        },
+        {
+          "index": 78,
+          "image": "/assets/dialogue_ui/faces_078.png",
+          "sha256": "9b1f4aa6d9eecdd5abf95ed88de2a67d059544ea99f4acaa1f52894d78c694f0"
+        },
+        {
+          "index": 79,
+          "image": "/assets/dialogue_ui/faces_079.png",
+          "sha256": "e853a8c2b9a0cea8d7ef0944019bede134c6a25b618e97d9a92dcfba7e3f6b54"
+        },
+        {
+          "index": 80,
+          "image": "/assets/dialogue_ui/faces_080.png",
+          "sha256": "e57eb25d2b027af75697ef7809b26c69bb898f6f5d6b5056368f39a862e7e060"
+        },
+        {
+          "index": 81,
+          "image": "/assets/dialogue_ui/faces_081.png",
+          "sha256": "a6314877df53b30e228fdbde871d0f8b96aba3b39836e4a536d3b152094a9590"
+        },
+        {
+          "index": 82,
+          "image": "/assets/dialogue_ui/faces_082.png",
+          "sha256": "ae7e38d383a1b71688ab22c49c26e5e7a4c591dcb1f8785386491f4193fb5dc4"
+        },
+        {
+          "index": 83,
+          "image": "/assets/dialogue_ui/faces_083.png",
+          "sha256": "e7b91beda8a109b8c3f8b849364f2951ddba95c42ff488478ef638de6ce6a3cb"
+        },
+        {
+          "index": 84,
+          "image": "/assets/dialogue_ui/faces_084.png",
+          "sha256": "aa98b4dd6db9db49830652fbfd393ea005ef21f8491d486e323436949c9eedf4"
+        },
+        {
+          "index": 85,
+          "image": "/assets/dialogue_ui/faces_085.png",
+          "sha256": "26cc8c0c15fd60f6e71e2c9381155216261bf2b9c620d6b7676c5049e628a775"
+        },
+        {
+          "index": 86,
+          "image": "/assets/dialogue_ui/faces_086.png",
+          "sha256": "152dffe462aa029e90fdff6bfa429dfbb4c49f37cdad66e730ac677cfa4b848b"
+        },
+        {
+          "index": 87,
+          "image": "/assets/dialogue_ui/faces_087.png",
+          "sha256": "bba6d770645b5eb77e9afe653e8a7e6f91002a6e6b4d42dcfb4fa8af855d92da"
+        },
+        {
+          "index": 88,
+          "image": "/assets/dialogue_ui/faces_088.png",
+          "sha256": "5b5d52816786f568b9e8847f74881bc955119bec1dca1a5f08a7a379a9930671"
+        },
+        {
+          "index": 89,
+          "image": "/assets/dialogue_ui/faces_089.png",
+          "sha256": "ff12f5605614f47b6b8914255556e81f9da19293238a95fdd72dc3543d3b40ba"
+        },
+        {
+          "index": 90,
+          "image": "/assets/dialogue_ui/faces_090.png",
+          "sha256": "9cc525f5f04f64a748a93267dbf2425c4c5c840734a984453e87c95e7368e91f"
+        },
+        {
+          "index": 91,
+          "image": "/assets/dialogue_ui/faces_091.png",
+          "sha256": "303025d54163d5ef02767def186524df1ea952896dd972e57f65f8f26a297b86"
+        },
+        {
+          "index": 92,
+          "image": "/assets/dialogue_ui/faces_092.png",
+          "sha256": "5d6b2e9880d4c5f2407763d72464ebde6565772e5ed236fac9dd2e29adc4503a"
+        },
+        {
+          "index": 93,
+          "image": "/assets/dialogue_ui/faces_093.png",
+          "sha256": "cf5229903e619298d065e40b06e2b71e3cbf6da79412b63809930d165d1c5f86"
+        }
+      ],
+      "interval_ms": null,
+      "frame_count": 94,
+      "source_actions": [],
+      "header_hex": "09000000000000000000000000000000000000000001000000000000000000f0010000000000002e000000020000000000000000000000000000000000000000000000",
+      "geometry_hex": "f80034015e00000000000000012f00000000000000000000ff005e0000000101ebee000024baa6000001",
+      "anchor_raw": [
+        32,
+        0,
+        0
+      ]
+    }
+  },
+  "font_manifest": "data/dialogue_fonts.json",
+  "record_overrides": {
+    "Map/m01030.TLK#19": {
+      "style": 2,
+      "portrait_id": 0,
+      "region_byte_raw": 0,
+      "speaker": 20,
+      "source": {
+        "path": "Map/m01030.TLK",
+        "offset": 31727,
+        "record_id": 19,
+        "record_offset": 31672
+      },
+      "text_raw": "侦探：对不起，如果没有事可以请你离开，别妨碍我调查好吗？"
+    },
+    "Map/m01030.TLK#20": {
+      "style": 1,
+      "portrait_id": 27,
+      "region_byte_raw": 0,
+      "speaker": 1,
+      "source": {
+        "path": "Map/m01030.TLK",
+        "offset": 33374,
+        "record_id": 20,
+        "record_offset": 33319
+      },
+      "text_raw": "调查？？请问你在调查什么呢？"
+    },
+    "Map/m01030.TLK#21": {
+      "style": 2,
+      "portrait_id": 0,
+      "region_byte_raw": 0,
+      "speaker": 20,
+      "source": {
+        "path": "Map/m01030.TLK",
+        "offset": 35021,
+        "record_id": 21,
+        "record_offset": 34966
+      },
+      "text_raw": "侦探：说到这个，我可是在呼荷世界，无人不知无人不晓的名侦探。"
+    },
+    "Map/m01030.TLK#22": {
+      "style": 1,
+      "portrait_id": 35,
+      "region_byte_raw": 0,
+      "speaker": 2,
+      "source": {
+        "path": "Map/m01030.TLK",
+        "offset": 36668,
+        "record_id": 22,
+        "record_offset": 36613
+      },
+      "text_raw": "侦探？那是什么东西啊！？"
+    },
+    "Map/m01030.TLK#23": {
+      "style": 2,
+      "portrait_id": 0,
+      "region_byte_raw": 0,
+      "speaker": 20,
+      "source": {
+        "path": "Map/m01030.TLK",
+        "offset": 38315,
+        "record_id": 23,
+        "record_offset": 38260
+      },
+      "text_raw": "侦探：你不知道？算了！我告诉你，侦探就是专门帮人家调查一些稀奇古怪的事情。"
+    },
+    "Map/m01030.TLK#24": {
+      "style": 1,
+      "portrait_id": 37,
+      "region_byte_raw": 0,
+      "speaker": 2,
+      "source": {
+        "path": "Map/m01030.TLK",
+        "offset": 39962,
+        "record_id": 24,
+        "record_offset": 39907
+      },
+      "text_raw": "调查稀奇古怪的事情？这有什么困难的，我和大姊还不是常常接受你们索摩族的请托，帮忙解决一些稀奇古怪的事情。"
+    },
+    "Map/m01030.TLK#25": {
+      "style": 2,
+      "portrait_id": 0,
+      "region_byte_raw": 0,
+      "speaker": 20,
+      "source": {
+        "path": "Map/m01030.TLK",
+        "offset": 41609,
+        "record_id": 25,
+        "record_offset": 41554
+      },
+      "text_raw": "侦探：看样子，你是不相信我的能力啰！总有一天，你会来拜托我的，如果没事我可要继续执行我的任务了。"
+    },
+    "Map/m01030.TLK#26": {
+      "style": 1,
+      "portrait_id": 0,
+      "region_byte_raw": 0,
+      "speaker": 20,
+      "source": {
+        "path": "Map/m01030.TLK",
+        "offset": 43256,
+        "record_id": 26,
+        "record_offset": 43201
+      },
+      "text_raw": "侦探：别忘了，想要我调查的话，记得来找我啊！"
+    }
+  },
+  "ordinary": {
+    "styles": [
+      0,
+      1
+    ],
+    "font_key": "dialogue17",
+    "ascii_font_key": "latin17",
+    "font_height": 17,
+    "character_step": 19,
+    "line_step": 21,
+    "text_width": 350,
+    "text_height": 60,
+    "text_origin_x": 40,
+    "left_portrait_text_origin_x": 268,
+    "text_origin_y": {
+      "0": 60,
+      "1": 390
+    },
+    "text_draw_offset": [
+      -1,
+      -1
+    ],
+    "board_origin": {
+      "0": [
+        0,
+        10
+      ],
+      "1": [
+        0,
+        360
+      ]
+    },
+    "portrait_origin": {
+      "right": {
+        "0": [
+          392,
+          0
+        ],
+        "1": [
+          392,
+          172
+        ]
+      },
+      "left": {
+        "0": [
+          0,
+          0
+        ],
+        "1": [
+          0,
+          172
+        ]
+      }
+    },
+    "portrait_id_field": "TLK byte+2; zero means none; frame=id-1",
+    "portrait_side_field": "TLK byte+6 (region_byte_raw); zero=right; nonzero=left",
+    "speaker_name_panel": false,
+    "page_overflow": "Before adding a new line, next row y>text_height-10 waits; ordinary rows0,21,42.",
+    "board_entry": {
+      "start_x": -320,
+      "step_x": 32,
+      "tick_ms": 20,
+      "end_x": 0
+    },
+    "portrait_entry": {
+      "initial_size": [
+        148,
+        208
+      ],
+      "size_step": [
+        10,
+        10
+      ],
+      "ticks": 10,
+      "tick_ms": 20,
+      "initial_alpha_raw": 220,
+      "alpha_step_raw": -20
+    }
+  },
+  "thought": {
+    "style": 2,
+    "font_key": "dialogue13",
+    "ascii_font_key": "latin13",
+    "font_height": 13,
+    "character_step": 15,
+    "line_step": 15,
+    "text_width": 130,
+    "text_height": 54,
+    "text_anchor": "actor x minus65, actor head y minus54, then clamp text rect to 640x480",
+    "background_offset": [
+      -28,
+      -20
+    ],
+    "text_draw_offset": [
+      -1,
+      -1
+    ],
+    "auto_close": false
+  },
+  "timing": {
+    "character_interval_ms": 120,
+    "waiting_marker": "ordinary=wait1, style2=wait2",
+    "marker_origin": "logical origin + penX+2, penY+fontHeight-resource.height"
+  },
+  "colors": {
+    "party": {
+      "foreground": "#4b1410",
+      "shadow": "#fb8c39"
+    },
+    "npc": {
+      "foreground": "#3f1c1c",
+      "shadow": "#e5b900"
+    },
+    "speaker_cutoff": 11,
+    "choice_selected": {
+      "foreground": "#8b1a14",
+      "shadow": "#fffa84"
+    },
+    "choice_normal": {
+      "foreground": "#ed0e00",
+      "shadow": "#faca66"
+    },
+    "choice_fill_rgb": [
+      171,
+      168,
+      105
+    ],
+    "choice_border_rgb": [
+      116,
+      106,
+      62
+    ]
+  },
+  "input": {
+    "typing": "Input routed into4661F0 requests fast fill; next timer draws remainder, no immediate branch.",
+    "waiting": "style0/1 scroll upward one21px row and retain penY; style2 resets penY and clears its text surface. When source exhausted and choices absent follow TLK next.",
+    "choices_appearance": "0x465350 invokes0x465700 when text reaches its terminator; final characters reveal choices automatically. A fill input cannot also submit a choice.",
+    "choices": {
+      "maximum": 3,
+      "default_index": 0,
+      "previous": [
+        "ArrowLeft",
+        "ArrowUp"
+      ],
+      "next": [
+        "ArrowRight",
+        "ArrowDown"
+      ],
+      "confirm": [
+        "Enter",
+        "Space"
+      ],
+      "cancel": null,
+      "layout": "Horizontal on row after text. DBCS choice advance17/13, no2 gap; gap between options=font height.",
+      "highlight_padding": [
+        -5,
+        -2,
+        5,
+        2
+      ]
+    },
+    "escape": "No cancellation case in focused4661F0; outer input-dispatch coverage is separate."
+  },
+  "limitations": [
+    "Static original-code/resource evidence; no original runtime observation in this pass.",
+    "All connected audited TLK records use portrait-side byte0. Nonzero-side background position needs original runtime corroboration.",
+    "Original font files absent: GDI face_resolved records the current Windows substitution; masks are derived, not original captures.",
+    "Native RGB565 blend, global clock, scrolling and portrait alpha need browser adaptation.",
+    "No new dialogue audio mapping inferred from menu audio. Focused rendering/input routines contain no sound call."
+  ]
+}

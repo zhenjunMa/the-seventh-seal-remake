@@ -1,0 +1,60 @@
+{
+  "schema": "seventh-seal-startup-media",
+  "version": 1,
+  "export_evidence": "remake/runtime/evidence/startup_media_export.json",
+  "media_order_authority": "No observed sequence asserted by this media manifest.",
+  "media": {
+    "gametitle": {
+      "url": "/assets/video/startup/gametitle.mp4",
+      "mime": "video/mp4",
+      "sha256": "a83c224885d178207948036059edf2ae4de3614c1781c81295a07e4b6526752e",
+      "source": "Animate/Gametitle.bik",
+      "source_sha256": "c1b10d7ea42a5e230d13bc4392387739d7aed3cdb75a1722584e665981cdfa4f",
+      "width": 640,
+      "height": 300,
+      "fps": "30",
+      "frames": 6247,
+      "video_duration_seconds": 208.233333,
+      "container_duration_seconds": 208.239456,
+      "audio": {
+        "codec": "aac",
+        "sample_rate": 44100,
+        "channels": 2,
+        "channel_layout": "stereo",
+        "source_decoded_duration_seconds": 208.23945578231292,
+        "source_samples_per_channel": 9183360
+      },
+      "lossy_conversion": true
+    },
+    "preopenpress": {
+      "url": "/assets/video/startup/preopenpress.mp4",
+      "mime": "video/mp4",
+      "sha256": "0abb39ce382b1b6bb53a66a543816cdf31ee3103ab3bc431b1258db9d88e5630",
+      "source": "Animate/preopenpress.bik",
+      "source_sha256": "63e2ac89d20eee9ca8b71ac2181a09ec763d791aed2af2c9f936f60f88709856",
+      "width": 640,
+      "height": 480,
+      "fps": "30",
+      "frames": 51,
+      "video_duration_seconds": 1.7,
+      "container_duration_seconds": 1.7,
+      "audio": null,
+      "lossy_conversion": true
+    },
+    "openpress": {
+      "url": "/assets/video/startup/openpress.mp4",
+      "mime": "video/mp4",
+      "sha256": "2b028ea00c8310362762f0be2266f93200ef5b8456cabfdc386208f8e1b9c76c",
+      "source": "Animate/openpress.bik",
+      "source_sha256": "097a9e286be0f76411820c9fa83ab37e68c53415436d3fa2ff6c2491bad695fd",
+      "width": 640,
+      "height": 480,
+      "fps": "30",
+      "frames": 60,
+      "video_duration_seconds": 2.0,
+      "container_duration_seconds": 2.0,
+      "audio": null,
+      "lossy_conversion": true
+    }
+  }
+}

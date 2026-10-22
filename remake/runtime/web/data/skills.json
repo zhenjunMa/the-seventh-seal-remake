@@ -1,0 +1,134 @@
+{
+  "schema": "seventh-seal-skill-config",
+  "version": 1,
+  "mode": "original",
+  "notes": {
+    "mode": "original：参数须与保留原记录一致；debug：使用parameters调试，日志明确记录差异。",
+    "original": "原版提取基线，勿手改；parameters为当前生效参数。恢复原版时复制original到parameters，并设mode=original。",
+    "damage": "最终伤害由角色、装备、公式及随机计算；此处配置物理倍率和元素强度，不填固定伤害。",
+    "ranges": "maximum_exclusive是随机上限，不包含该值；上下限相等代表固定值。",
+    "elements": "element_power严格保持原始六槽顺序，不以猜测的元素名称替换。",
+    "resources": "mp_cost为非负消耗；当前两招原值均0。只接直接伤害与MP消耗，回复／异常／其他技能类型另做。",
+    "reload": "保存此文件，下一次点开始战斗样本会重新读取。战斗过程中继续使用进入时的配置快照。"
+  },
+  "skills": {
+    "yantu": {
+      "name": "炎剑．燕突",
+      "source": {
+        "path": "save_analysis_20261010/verified_level12_SaveGame0.Dat",
+        "sha256": "f720fdd2eb0353f67b3acdb598bb3e2cbf24be438bca96a13967da71bec70706",
+        "fixed_record_offset": 367185,
+        "fixed_bytes": 1053
+      },
+      "original": {
+        "mp_cost": 0,
+        "physical_multiplier_percent": {
+          "minimum": 35,
+          "maximum_exclusive": 40
+        },
+        "element_power": [
+          200,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "defense_bonus": {
+          "minimum": 0,
+          "maximum_exclusive": 0
+        },
+        "term4_bonus": {
+          "minimum": 0,
+          "maximum_exclusive": 0
+        },
+        "hp_term_bonus": 0,
+        "hp_max_term_bonus": 0
+      },
+      "parameters": {
+        "mp_cost": 0,
+        "physical_multiplier_percent": {
+          "minimum": 35,
+          "maximum_exclusive": 40
+        },
+        "element_power": [
+          200,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "defense_bonus": {
+          "minimum": 0,
+          "maximum_exclusive": 0
+        },
+        "term4_bonus": {
+          "minimum": 0,
+          "maximum_exclusive": 0
+        },
+        "hp_term_bonus": 0,
+        "hp_max_term_bonus": 0
+      }
+    },
+    "snow_attack": {
+      "name": "球化攻击",
+      "source": {
+        "path": "Fight_Role/012.CHR",
+        "sha256": "4c9d1ef867222a8ffbdfea2e231f7500f30e0d7fec4fbfa1ab18b2dc874061a0",
+        "fixed_record_offset": 22041,
+        "fixed_bytes": 1053
+      },
+      "original": {
+        "mp_cost": 0,
+        "physical_multiplier_percent": {
+          "minimum": 40,
+          "maximum_exclusive": 50
+        },
+        "element_power": [
+          0,
+          75,
+          0,
+          0,
+          0,
+          0
+        ],
+        "defense_bonus": {
+          "minimum": 0,
+          "maximum_exclusive": 0
+        },
+        "term4_bonus": {
+          "minimum": 0,
+          "maximum_exclusive": 0
+        },
+        "hp_term_bonus": 0,
+        "hp_max_term_bonus": 0
+      },
+      "parameters": {
+        "mp_cost": 0,
+        "physical_multiplier_percent": {
+          "minimum": 40,
+          "maximum_exclusive": 50
+        },
+        "element_power": [
+          0,
+          75,
+          0,
+          0,
+          0,
+          0
+        ],
+        "defense_bonus": {
+          "minimum": 0,
+          "maximum_exclusive": 0
+        },
+        "term4_bonus": {
+          "minimum": 0,
+          "maximum_exclusive": 0
+        },
+        "hp_term_bonus": 0,
+        "hp_max_term_bonus": 0
+      }
+    }
+  }
+}

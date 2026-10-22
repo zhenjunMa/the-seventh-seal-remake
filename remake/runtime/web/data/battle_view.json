@@ -1,0 +1,847 @@
+{
+  "schema": "seventh-seal-battle-view",
+  "version": 1,
+  "roles": [
+    {
+      "id": "001",
+      "name": "英格妮",
+      "frame_width": 539,
+      "frame_height": 439,
+      "anchor": {
+        "x": 266,
+        "y": 324,
+        "source": "DGP extra_header+0x10/+0x14 raw values",
+        "native_use_verified": false
+      },
+      "mirror": false,
+      "direction": 0,
+      "idle": {
+        "chr_record_index": 0,
+        "action_index": 0,
+        "source": {
+          "source": "Fight_Role/001.CHR",
+          "offset": 1840,
+          "bytes": 176,
+          "raw_sha256": "ab2da748f6d1b809b91918db694c447be189eb32bbf5727dfc2e1e3c1dd21f9c"
+        },
+        "frames": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21
+        ],
+        "start": 0,
+        "end_exclusive": 22,
+        "reverse_raw": 0,
+        "interval_raw": 70,
+        "movement_flag_raw": 0,
+        "event": null,
+        "reaction_class_raw": 0,
+        "effects": [],
+        "evidence": [
+          "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+          "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+          "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+        ]
+      },
+      "reaction": {
+        "chr_record_index": 0,
+        "action_index": 1,
+        "source": {
+          "source": "Fight_Role/001.CHR",
+          "offset": 3069,
+          "bytes": 176,
+          "raw_sha256": "07f70f28318820bd94eb392a0ee6ed37b07e91c45e92152e82b4b7dc567dae37"
+        },
+        "frames": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "start": 0,
+        "end_exclusive": 6,
+        "reverse_raw": 0,
+        "interval_raw": 70,
+        "movement_flag_raw": 0,
+        "event": null,
+        "reaction_class_raw": 0,
+        "effects": [],
+        "evidence": [
+          "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+          "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+          "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+        ]
+      },
+      "actions": [
+        {
+          "index": 0,
+          "sheet": "/prototype/assets/combat_lab/001/action_00.png",
+          "sha256": "48ea4e7be91fee0bac45b097c8036b5bdf23e90d4a10306708dcbe7b2289b957",
+          "frame_count": 22,
+          "directions": 1,
+          "first_frame": 0
+        },
+        {
+          "index": 1,
+          "sheet": "/prototype/assets/combat_lab/001/action_01.png",
+          "sha256": "6c09a38ac7ac841385eb9e73562d9774f68cc46b376a5c9b71fd30231b8f62a7",
+          "frame_count": 6,
+          "directions": 1,
+          "first_frame": 22
+        },
+        {
+          "index": 7,
+          "sheet": "/prototype/assets/combat_lab/001/action_07.png",
+          "sha256": "d95dec7d08a593cf88adf47c984aff8689772b019dd841b55d66db0cbc0e1756",
+          "frame_count": 4,
+          "directions": 1,
+          "first_frame": 62
+        },
+        {
+          "index": 8,
+          "sheet": "/prototype/assets/combat_lab/001/action_08.png",
+          "sha256": "21415df1469772665ee8f5a182230e5efc592b5138c00ee4b64745155f7787ad",
+          "frame_count": 3,
+          "directions": 1,
+          "first_frame": 66
+        },
+        {
+          "index": 9,
+          "sheet": "/prototype/assets/combat_lab/001/action_09.png",
+          "sha256": "0afc236b6fd30a47a4c95284f80561258695af4b3254f9fd78e73598983ad93f",
+          "frame_count": 4,
+          "directions": 1,
+          "first_frame": 69
+        },
+        {
+          "index": 10,
+          "sheet": "/prototype/assets/combat_lab/001/action_10.png",
+          "sha256": "d90641d62d4ad5a3570c10dd4d6afbdf54b7f28fdeba66f3d3000aaab51c5f38",
+          "frame_count": 5,
+          "directions": 1,
+          "first_frame": 73
+        },
+        {
+          "index": 11,
+          "sheet": "/prototype/assets/combat_lab/001/action_11.png",
+          "sha256": "adb30ebab1dd9603baba47f4a6a8e20437049800f5723f970c47dbe55ccf6023",
+          "frame_count": 3,
+          "directions": 1,
+          "first_frame": 78
+        },
+        {
+          "index": 12,
+          "sheet": "/prototype/assets/combat_lab/001/action_12.png",
+          "sha256": "76bc40561ead6e1f3324ff101f108d367f836e2b9f8426b7785d20d370cb4169",
+          "frame_count": 3,
+          "directions": 1,
+          "first_frame": 81
+        },
+        {
+          "index": 28,
+          "sheet": "/prototype/assets/combat_lab/001/action_28.png",
+          "sha256": "57b55bb8e33c54fc32395fb45597c4b4777c514b0205cc6338d617f8db1f3cd6",
+          "frame_count": 10,
+          "directions": 1,
+          "first_frame": 333
+        }
+      ],
+      "skill": {
+        "role_id": "001",
+        "chr_skill_index": 22,
+        "skill_id_raw": 26,
+        "name": "炎剑．燕突",
+        "segments": [
+          {
+            "chr_record_index": 0,
+            "action_index": 7,
+            "source": {
+              "source": "Fight_Role/001.CHR",
+              "offset": 41198,
+              "bytes": 176,
+              "raw_sha256": "68348d2daf5bda297aac234bf4b0030bc47e181f0862797b41d4c6ef338e0dbc"
+            },
+            "frames": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "start": 0,
+            "end_exclusive": 4,
+            "reverse_raw": 0,
+            "interval_raw": 90,
+            "movement_flag_raw": 0,
+            "event": null,
+            "reaction_class_raw": 0,
+            "effects": [],
+            "evidence": [
+              "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+              "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+              "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+            ]
+          },
+          {
+            "chr_record_index": 1,
+            "action_index": 11,
+            "source": {
+              "source": "Fight_Role/001.CHR",
+              "offset": 41374,
+              "bytes": 176,
+              "raw_sha256": "831e41c7673d689f440fe560059904313f5fa9fed017c37f7562319f2e48cceb"
+            },
+            "frames": [
+              0,
+              1,
+              2
+            ],
+            "start": 0,
+            "end_exclusive": 3,
+            "reverse_raw": 0,
+            "interval_raw": 60,
+            "movement_flag_raw": 1,
+            "event": null,
+            "reaction_class_raw": 0,
+            "effects": [],
+            "evidence": [
+              "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+              "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+              "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+            ]
+          },
+          {
+            "chr_record_index": 2,
+            "action_index": 8,
+            "source": {
+              "source": "Fight_Role/001.CHR",
+              "offset": 41550,
+              "bytes": 176,
+              "raw_sha256": "084d622df0ac0970400669f290259db407c20f562335b838ef7e2b3482fe3954"
+            },
+            "frames": [
+              0,
+              1,
+              2
+            ],
+            "start": 0,
+            "end_exclusive": 3,
+            "reverse_raw": 0,
+            "interval_raw": 90,
+            "movement_flag_raw": 0,
+            "event": null,
+            "reaction_class_raw": 0,
+            "effects": [
+              {
+                "asset_id": "_DutyN",
+                "frame": 0,
+                "slot": "actor",
+                "condition": "source nonempty actor effect",
+                "source_field": "0x9",
+                "source_event_field": "0x5"
+              }
+            ],
+            "evidence": [
+              "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+              "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+              "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+            ]
+          },
+          {
+            "chr_record_index": 3,
+            "action_index": 28,
+            "source": {
+              "source": "Fight_Role/001.CHR",
+              "offset": 41726,
+              "bytes": 176,
+              "raw_sha256": "5fd791760fe4b8dfa1b815620a6938871c9eea3e1b0b702fa3ca3a8e84abf685"
+            },
+            "frames": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9
+            ],
+            "start": 0,
+            "end_exclusive": 10,
+            "reverse_raw": 0,
+            "interval_raw": 70,
+            "movement_flag_raw": 0,
+            "event": {
+              "frame": 5,
+              "field": "0x49",
+              "evidence": [
+                "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01",
+                "ev_7199407875fd945ae708cfdfaabfd31e75f0148dd8b57f794f1095e39d526c30"
+              ]
+            },
+            "reaction_class_raw": 1,
+            "effects": [
+              {
+                "asset_id": "BFr01_Dn",
+                "frame": 5,
+                "slot": "target",
+                "condition": "accepted nonzero damage in bounded normal branch",
+                "source_field": "0x4e",
+                "source_event_field": "0x49"
+              }
+            ],
+            "evidence": [
+              "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+              "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+              "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+            ]
+          },
+          {
+            "chr_record_index": 4,
+            "action_index": 9,
+            "source": {
+              "source": "Fight_Role/001.CHR",
+              "offset": 41902,
+              "bytes": 176,
+              "raw_sha256": "9ed14123ec560d736a8e92c578c086a8033fef69c89f00e5a333b6376e2a5f73"
+            },
+            "frames": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "start": 0,
+            "end_exclusive": 4,
+            "reverse_raw": 0,
+            "interval_raw": 90,
+            "movement_flag_raw": 0,
+            "event": null,
+            "reaction_class_raw": 0,
+            "effects": [],
+            "evidence": [
+              "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+              "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+              "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+            ]
+          },
+          {
+            "chr_record_index": 5,
+            "action_index": 12,
+            "source": {
+              "source": "Fight_Role/001.CHR",
+              "offset": 42078,
+              "bytes": 176,
+              "raw_sha256": "67d2ac83ea7716433fb7433c1447c5dac37a891eee1b08412a48f0188023418e"
+            },
+            "frames": [
+              0,
+              1,
+              2
+            ],
+            "start": 0,
+            "end_exclusive": 3,
+            "reverse_raw": 0,
+            "interval_raw": 60,
+            "movement_flag_raw": 1,
+            "event": null,
+            "reaction_class_raw": 0,
+            "effects": [],
+            "evidence": [
+              "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+              "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+              "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+            ]
+          },
+          {
+            "chr_record_index": 6,
+            "action_index": 10,
+            "source": {
+              "source": "Fight_Role/001.CHR",
+              "offset": 42254,
+              "bytes": 176,
+              "raw_sha256": "6895f90c841605acf4fc9e30184cdea4442b0fe6aa893e257e8706bb7918fde1"
+            },
+            "frames": [
+              0,
+              1,
+              2,
+              3,
+              4
+            ],
+            "start": 0,
+            "end_exclusive": 5,
+            "reverse_raw": 0,
+            "interval_raw": 90,
+            "movement_flag_raw": 0,
+            "event": null,
+            "reaction_class_raw": 0,
+            "effects": [
+              {
+                "asset_id": "_DutyN",
+                "frame": 0,
+                "slot": "actor",
+                "condition": "source nonempty actor effect",
+                "source_field": "0x9",
+                "source_event_field": "0x5"
+              }
+            ],
+            "evidence": [
+              "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+              "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+              "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+            ]
+          }
+        ],
+        "terminal_commands": [
+          {
+            "type_raw": 1,
+            "command_raw": 11,
+            "source": {
+              "source": "Fight_Role/001.CHR",
+              "offset": 42430,
+              "bytes": 176,
+              "raw_sha256": "dff3f3bab490d107e665e7b58e0ebdaf706736ca7c4974bfa57e383d67c4bc4a"
+            },
+            "evidence": [
+              "ev_28368650259f3980bb37bf5b679f3a547aa66aa025d16e78432827d87efb27ab",
+              "ev_edcb55141827495dc256b7857ff40d1ab90f34d1605e9a9bb3d1e93130eb5e95"
+            ]
+          }
+        ]
+      },
+      "reaction_basis": "original category 1 image sequence projected for the bounded normal surviving reaction branch"
+    },
+    {
+      "id": "012",
+      "name": "雪泥怪",
+      "frame_width": 539,
+      "frame_height": 439,
+      "anchor": {
+        "x": 266,
+        "y": 324,
+        "source": "DGP extra_header+0x10/+0x14 raw values",
+        "native_use_verified": false
+      },
+      "mirror": false,
+      "direction": 0,
+      "idle": {
+        "chr_record_index": 0,
+        "action_index": 0,
+        "source": {
+          "source": "Fight_Role/012.CHR",
+          "offset": 1840,
+          "bytes": 176,
+          "raw_sha256": "f1f48ad7bb56437c7472dae2a8819344f66c240e1b865d2245e7d53607f71ce8"
+        },
+        "frames": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "start": 0,
+        "end_exclusive": 9,
+        "reverse_raw": 0,
+        "interval_raw": 120,
+        "movement_flag_raw": 0,
+        "event": null,
+        "reaction_class_raw": 0,
+        "effects": [],
+        "evidence": [
+          "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+          "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+          "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+        ]
+      },
+      "reaction": {
+        "chr_record_index": 0,
+        "action_index": 1,
+        "source": {
+          "source": "Fight_Role/012.CHR",
+          "offset": 4653,
+          "bytes": 176,
+          "raw_sha256": "4ca9098c1f3687626b4d5df1ddea674bcd81aa89e2ec7a5da25e877dd5afa2f0"
+        },
+        "frames": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "start": 0,
+        "end_exclusive": 6,
+        "reverse_raw": 0,
+        "interval_raw": 70,
+        "movement_flag_raw": 0,
+        "event": null,
+        "reaction_class_raw": 0,
+        "effects": [],
+        "evidence": [
+          "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+          "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+          "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+        ]
+      },
+      "actions": [
+        {
+          "index": 0,
+          "sheet": "/prototype/assets/combat_lab/012/action_00.png",
+          "sha256": "297014578b2bcbfc499118d844cf50171e8aeaab536f0a0d791361b42216c3dd",
+          "frame_count": 9,
+          "directions": 1,
+          "first_frame": 0
+        },
+        {
+          "index": 1,
+          "sheet": "/prototype/assets/combat_lab/012/action_01.png",
+          "sha256": "441b9bf6264937d9ab19edd646adec1df3fa162971f4925334356437805f03cc",
+          "frame_count": 6,
+          "directions": 1,
+          "first_frame": 9
+        },
+        {
+          "index": 7,
+          "sheet": "/prototype/assets/combat_lab/012/action_07.png",
+          "sha256": "ccbe0d5be94ab737e7217cd779ff77bf1b65494ccb90f4e16d56ef296a927b57",
+          "frame_count": 5,
+          "directions": 1,
+          "first_frame": 40
+        },
+        {
+          "index": 8,
+          "sheet": "/prototype/assets/combat_lab/012/action_08.png",
+          "sha256": "02172d6017eee8442f0fc6bccd84f5e2d903aa0e0fc7f2f7cee9e45b425408f1",
+          "frame_count": 5,
+          "directions": 1,
+          "first_frame": 45
+        },
+        {
+          "index": 14,
+          "sheet": "/prototype/assets/combat_lab/012/action_14.png",
+          "sha256": "fbe573f1b3009bccf689587428021012ecaebc4da57a3fa99e7e3d3a17cf3934",
+          "frame_count": 14,
+          "directions": 1,
+          "first_frame": 87
+        }
+      ],
+      "skill": {
+        "role_id": "012",
+        "chr_skill_index": 14,
+        "skill_id_raw": 25,
+        "name": "球化攻击",
+        "segments": [
+          {
+            "chr_record_index": 0,
+            "action_index": 7,
+            "source": {
+              "source": "Fight_Role/012.CHR",
+              "offset": 23094,
+              "bytes": 176,
+              "raw_sha256": "d3ba32af093cb32bf1c31708bd92f32551e5a4652a7e1f283972bfe6339ce26a"
+            },
+            "frames": [
+              0,
+              1,
+              2,
+              3,
+              4
+            ],
+            "start": 0,
+            "end_exclusive": 5,
+            "reverse_raw": 0,
+            "interval_raw": 60,
+            "movement_flag_raw": 0,
+            "event": null,
+            "reaction_class_raw": 0,
+            "effects": [],
+            "evidence": [
+              "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+              "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+              "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+            ]
+          },
+          {
+            "chr_record_index": 1,
+            "action_index": 14,
+            "source": {
+              "source": "Fight_Role/012.CHR",
+              "offset": 23270,
+              "bytes": 176,
+              "raw_sha256": "517956542e890725f310667fbf7f4b97afe751836f1728521a80f00364cabd2f"
+            },
+            "frames": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13
+            ],
+            "start": 0,
+            "end_exclusive": 14,
+            "reverse_raw": 0,
+            "interval_raw": 80,
+            "movement_flag_raw": 0,
+            "event": {
+              "frame": 4,
+              "field": "0x49",
+              "evidence": [
+                "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01",
+                "ev_7199407875fd945ae708cfdfaabfd31e75f0148dd8b57f794f1095e39d526c30"
+              ]
+            },
+            "reaction_class_raw": 1,
+            "effects": [
+              {
+                "asset_id": "BNo01_Nm",
+                "frame": 4,
+                "slot": "target",
+                "condition": "accepted nonzero damage in bounded normal branch",
+                "source_field": "0x4e",
+                "source_event_field": "0x49"
+              }
+            ],
+            "evidence": [
+              "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+              "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+              "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+            ]
+          },
+          {
+            "chr_record_index": 2,
+            "action_index": 8,
+            "source": {
+              "source": "Fight_Role/012.CHR",
+              "offset": 23446,
+              "bytes": 176,
+              "raw_sha256": "28cda4895aad2bd98113f02012f9f24ccf00fe24444026afa0e1b33dc604195c"
+            },
+            "frames": [
+              0,
+              1,
+              2,
+              3,
+              4
+            ],
+            "start": 0,
+            "end_exclusive": 5,
+            "reverse_raw": 0,
+            "interval_raw": 60,
+            "movement_flag_raw": 0,
+            "event": null,
+            "reaction_class_raw": 0,
+            "effects": [],
+            "evidence": [
+              "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+              "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+              "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+            ]
+          }
+        ],
+        "terminal_commands": [
+          {
+            "type_raw": 1,
+            "command_raw": 11,
+            "source": {
+              "source": "Fight_Role/012.CHR",
+              "offset": 23622,
+              "bytes": 176,
+              "raw_sha256": "dff3f3bab490d107e665e7b58e0ebdaf706736ca7c4974bfa57e383d67c4bc4a"
+            },
+            "evidence": [
+              "ev_28368650259f3980bb37bf5b679f3a547aa66aa025d16e78432827d87efb27ab",
+              "ev_edcb55141827495dc256b7857ff40d1ab90f34d1605e9a9bb3d1e93130eb5e95"
+            ]
+          }
+        ]
+      },
+      "reaction_basis": "original category 1 image sequence projected for the bounded normal surviving reaction branch"
+    }
+  ],
+  "effects": [
+    {
+      "id": "_DutyN",
+      "source": "Fight_Role/Effect/_DutyN.dgp",
+      "source_sha256": "74cdeea0ef4a1905a92b8524cf5ca6644994960344a5b6e13d11f6eadb2f47f9",
+      "frame_width": 319,
+      "frame_height": 239,
+      "anchor": {
+        "x": 146,
+        "y": 119
+      },
+      "sheet": "/prototype/assets/combat_effects/_DutyN/action_00.png",
+      "sha256": "0d0e02018c234dd3321f66a7e4d11b274a72eed738fd50b609ffaf9e99fce3ef",
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "frame_count": 12,
+      "blend": "lighter",
+      "evidence": [
+        "ev_9abd5ba6645433c0752e35b69015a7f998c9c9b054862a5afdfadc7499e40962",
+        "ev_0c237df7043928c88bbdebd562f666aa4b7f4201a779c0a793b1483939fd71d2",
+        "ev_a6647ea0bc3a48a670332ca03d6a4e02d7b145a407b5a5ad2dcfa4ed39b122d1",
+        "ev_8a5106859a74859307743cb5be1794a453316af2b92ccfc05d4705257ef5ea6c"
+      ]
+    },
+    {
+      "id": "BFr01_Dn",
+      "source": "Fight_Role/Effect/BFr01_Dn.dgp",
+      "source_sha256": "42966b552280e54331cd7ca532c2fbbc8ea91016baa28e1d43c362a4235f0844",
+      "frame_width": 559,
+      "frame_height": 519,
+      "anchor": {
+        "x": 281,
+        "y": 249
+      },
+      "sheet": "/prototype/assets/combat_effects/BFr01_Dn/action_00.png",
+      "sha256": "36751c002dbd373556c6a1779308601809e6480d7d35f34e80550942c59e4872",
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frame_count": 8,
+      "blend": "lighter",
+      "evidence": [
+        "ev_9abd5ba6645433c0752e35b69015a7f998c9c9b054862a5afdfadc7499e40962",
+        "ev_0c237df7043928c88bbdebd562f666aa4b7f4201a779c0a793b1483939fd71d2",
+        "ev_a6647ea0bc3a48a670332ca03d6a4e02d7b145a407b5a5ad2dcfa4ed39b122d1",
+        "ev_8a5106859a74859307743cb5be1794a453316af2b92ccfc05d4705257ef5ea6c"
+      ]
+    },
+    {
+      "id": "BNo01_Nm",
+      "source": "Fight_Role/Effect/BNo01_Nm.dgp",
+      "source_sha256": "792aa682d42624795e63a5964173e74e20710c5eb2a500e5b71b34327b09cbba",
+      "frame_width": 559,
+      "frame_height": 519,
+      "anchor": {
+        "x": 281,
+        "y": 344
+      },
+      "sheet": "/assets/combat_effects/BNo01_Nm/action_00.png",
+      "sha256": "64cebff5723844f1b0334fe1f7afcc3a7583e3cbe8f55f63a0736098d0ece5e9",
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "frame_count": 8,
+      "blend": "lighter",
+      "evidence": [
+        "ev_0c237df7043928c88bbdebd562f666aa4b7f4201a779c0a793b1483939fd71d2",
+        "ev_8a5106859a74859307743cb5be1794a453316af2b92ccfc05d4705257ef5ea6c"
+      ]
+    }
+  ],
+  "layers": {
+    "path": "/data/yantu_layers.json",
+    "sha256": "9ba6390ff46d42bbe6da96bb0c0fe6f032c7024ec2a5fa71f5357b696e236bee"
+  },
+  "source_hashes": {
+    "GAME.exe": "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18",
+    "Fight_Role/001.dgp": "df86e4089870c720beee6c8fb216ee1f85156b061c69433a6ce767ce9dee6b49",
+    "Fight_Role/001.CHR": "37ce92ab57622d2cce022b4a9b8add9b29789f89d82bc369ea7352f38ca75c0a",
+    "Fight_Role/002.dgp": "1e25e940b0f814a22576facf390157b8be6a5fb04a77c6a8680c81ca041982ca",
+    "Fight_Role/002.CHR": "854aed104fa990aa3f5fbf9d926724e0d8ae3ca73a5aabbc7a27a10ec91447e3",
+    "Fight_Role/012.dgp": "7b6f61ef8c5b529e80ed187063d3d4f69e6a8e5aca3817c7a7e63c3391f18bd3",
+    "Fight_Role/012.CHR": "4c9d1ef867222a8ffbdfea2e231f7500f30e0d7fec4fbfa1ab18b2dc874061a0",
+    "Fight_Role/Effect/_DutyN.dgp": "74cdeea0ef4a1905a92b8524cf5ca6644994960344a5b6e13d11f6eadb2f47f9",
+    "Fight_Role/Effect/BFr01_Dn.dgp": "42966b552280e54331cd7ca532c2fbbc8ea91016baa28e1d43c362a4235f0844",
+    "Fight_Role/Effect/BFr01_Nm.dgp": "d0fb0648dea49d5b25deb91391aaac015da84a81b80d208e21edd778e2977fa1",
+    "Fight_Role/Effect/BNo01_Nm.dgp": "792aa682d42624795e63a5964173e74e20710c5eb2a500e5b71b34327b09cbba"
+  },
+  "reference_hashes": {
+    "remake/prototype/web/combat_manifest.json": "61467d8e49ed5add07c08ecc709d9a55904aa40b257e71f3cc924993413f1102",
+    "remake/prototype/web/combat_presentation.json": "e33c9d87421879914d99ddabf88dc136630a4f6892b846dc39e2bcb34e122f50",
+    "remake/runtime/web/data/yantu_layers.json": "9ba6390ff46d42bbe6da96bb0c0fe6f032c7024ec2a5fa71f5357b696e236bee"
+  },
+  "policy": {
+    "frame_ms": 65,
+    "tail_ms": 260,
+    "coordinate_space": [
+      960,
+      540
+    ],
+    "sprite_scale": 1.15,
+    "player_slot": [
+      720,
+      350
+    ],
+    "enemy_slot": [
+      240,
+      350
+    ],
+    "approach_distance": 255,
+    "choreography": "preview approach/hold/return, original precise displacement and timing unknown",
+    "backdrop": "runtime development gradient; original battle background unknown",
+    "intrinsic_blend": "same-source-frame source-over main followed by lighter intrinsic; RGB565 destination saturation approximated",
+    "death": "fade after committed zero HP; original death action selection unknown",
+    "original_game_execution_observed": false
+  },
+  "limits": [
+    "Only player001 Yantu and enemy012 skill14 are covered.",
+    "World HP, MP, hit, damage and death are external controller results; this view never computes damage.",
+    "Reaction uses bounded category1 sprite metadata; alternate native states and death action selection remain unresolved.",
+    "Audio, camera and complete native skill scheduler remain unimplemented."
+  ]
+}

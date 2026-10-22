@@ -1,0 +1,166 @@
+/** Independent per-actor entry / death / get-up playback.
+ * Numeric effects, source selection and RNG belong to the combat controller.
+ * 5130D0 cmd7 starts appearance; 51A4F0 waits while F666 is nonzero.
+ * Source: ev_6a97d55ce2cda38f5a9cacf245900414d96566b052c7e04fb96bac9a431a6764,
+ * ev_e7ebc40b1eb0efaa9d96ff7f3e6fc290955d8807dff0dc831ad32c06ceb45a70.
+ */
+const need=(ok,message)=>{if(!ok)throw new TypeError(message);};
+const copy=value=>structuredClone(value);
+const integer=(value,min=0)=>Number.isInteger(value)&&value>=min;
+// A7B1=60 is the appearance update CLOCK, not a proven 60-frame duration.
+// 552642 -> 55259B mode1 returns0 once 240-(elapsed<<5)<20: elapsed>=7.
+// Mode5 initializes current=minX-y,target255 and adds8 each actual render;
+// initialization repeats while source elapsed==0. Completion has no fixed
+// elapsed threshold. Pixel geometry is supplied by the owning source renderer.
+export const APPEARANCE_ALPHA_ADAPTER=Object.freeze({
+  source_clock_ms:60,complete_elapsed_raw:Object.freeze({1:7,5:null,7:null}),
+  particle_step_raw:8,particle_target_raw:255,
+  pixels:'8-bit alpha adapter; original scanline mask not reproduced',
+});
+// F66A is a disappearance MODE selected by rand()%7+1, despite the legacy
+// event field name fade_increment_raw. It is never an opacity speed.
+export const FADE_ALPHA_ADAPTER=Object.freeze({
+  complete_elapsed_raw:Object.freeze({1:30,2:30,3:30,4:30,5:30,6:30,7:30}),
+  pixels:'8-bit alpha adapter uses original elapsed30 hard stop; original particles can finish earlier',
+});
+export class BattleLifecyclePlayback {
+  constructor(manifest,{appearanceBounds=null}={}){
+    need(appearanceBounds===null||typeof appearanceBounds==='function','Lifecycle appearance bounds provider invalid');this.appearanceBounds=appearanceBounds;
+    need(Array.isArray(manifest?.roles),'Lifecycle manifest roles missing');this.roles=new Map();
+    for(const role of manifest.roles){
+      need(typeof role.id==='string'&&!this.roles.has(role.id)&&Array.isArray(role.skills),'Lifecycle role invalid');
+      const skills=new Map();for(const skill of role.skills){
+        need(integer(skill.chr_skill_index)&&!skills.has(skill.chr_skill_index)&&Array.isArray(skill.timeline),'Lifecycle source skill invalid');
+        const timeline=skill.timeline.map(step=>{
+          if(step.kind==='sprite')need(['action_index','action_frame','source_frame'].every(key=>integer(step[key]))&&integer(step.interval_raw,1),'Lifecycle source frame invalid');
+          else need(step.kind==='command'&&integer(step.command_raw),'Lifecycle source command invalid');return copy(step);
+        });
+        skills.set(skill.chr_skill_index,{index:skill.chr_skill_index,id:skill.skill_id_raw??skill.original_id_raw,timeline});
+      }
+      this.roles.set(role.id,{side:role.side,skills,fadeClock:role.death_policy?.enemy_fade_fields?.clock_raw,frame_width:role.frame_width,frame_height:role.frame_height});
+    }
+    this.reset();
+  }
+  reset(){this.channels=new Map();this.held=new Map();this.hiddenActors=new Set();this.alphas=new Map();this.epochs=new Map();this.finished=new Set();this.retired=new Set();this.completed=[];this.battleId=null;this.lastNow=null;}
+  _key(event){return `${event.actor_id}\0${event.life_epoch}\0${event.token}`;}
+  _cancel(actorId){
+    const channel=this.channels.get(actorId);if(channel)this.retired.add(this._key(channel.event));
+    this.channels.delete(actorId);this.held.delete(actorId);this.hiddenActors.delete(actorId);this.alphas.delete(actorId);
+    this.completed=this.completed.filter(row=>row.actor_id!==actorId);
+  }
+  _start(event,actor,roster,now){
+    const roleId=roster?.resource_id??actor.resource_id??actor.id,role=this.roles.get(roleId);
+    need(role,'Lifecycle actor resource missing');const index=event.source_skill_index;
+    const skill=index===null||index===undefined?null:role.skills.get(index);
+    need(index===null||index===undefined||skill,'Exact selected lifecycle source skill missing');
+    if(skill&&event.source_id_raw!==null&&event.source_id_raw!==undefined)need(skill.id===event.source_id_raw,'Lifecycle selected source ID differs');
+    const channel={event:copy(event),actor_id:actor.id,resource_id:roleId,role,side:roster?.side??actor.side??role.side,skill,cursor:0,pose:null,deadline:now,started:now,appearance:null,blocked:null,mode:'sequence'};
+    if(!skill){
+      const fadeMode=event.fade_mode_raw??event.fade_increment_raw;
+      if(event.kind==='death'&&integer(fadeMode,1)&&fadeMode<=7){
+        const clock=event.fade_clock_raw??role.fadeClock;
+        if(integer(clock,1)){channel.mode='fade';channel.fade_mode_raw=fadeMode;channel.fade_clock_ms=clock;}
+        else{channel.mode='blocked';channel.blocked='missing-source-fade-clock';}
+      }
+      else{channel.mode='blocked';channel.blocked='missing-source-lifecycle-presentation';}
+    }
+    this.channels.set(actor.id,channel);this.alphas.set(actor.id,1);return channel;
+  }
+  _finish(channel){
+    const {event,actor_id}=channel,key=this._key(event);if(this.finished.has(key))return;
+    this.finished.add(key);this.channels.delete(actor_id);
+    if(event.kind==='death'){
+      if(event.hold_final_frame&&channel.side==='player'&&channel.pose)this.held.set(actor_id,{event:copy(event),pose:copy(channel.pose)});
+      else if(channel.side==='enemy')this.hiddenActors.add(actor_id);
+    }
+    this.alphas.set(actor_id,this.hiddenActors.has(actor_id)?0:1);
+    this.completed.push({token:event.token,actor_id,life_epoch:event.life_epoch});
+  }
+  _advanceChannel(channel,now){
+    if(channel.mode==='blocked')return;
+    if(channel.mode==='fade'){
+      const limit=FADE_ALPHA_ADAPTER.complete_elapsed_raw[channel.fade_mode_raw];
+      if(limit===null||limit===undefined){channel.blocked='fade-renderer-threshold-unresolved';return;}
+      const elapsed=Math.floor(Math.max(0,now-channel.started)/channel.fade_clock_ms);
+      channel.fade_elapsed_raw=elapsed;
+      this.alphas.set(channel.actor_id,1-Math.min(1,elapsed/limit));if(elapsed>=limit)this._finish(channel);return;
+    }
+    while(now>=channel.deadline){
+      if(channel.appearance){
+        const appearance=channel.appearance,limit=APPEARANCE_ALPHA_ADAPTER.complete_elapsed_raw[appearance.mode];
+        appearance.elapsed_raw=Math.floor(Math.max(0,now-appearance.started)/APPEARANCE_ALPHA_ADAPTER.source_clock_ms);
+        if(appearance.mode===5){
+          if(appearance.render_limit===null){
+            let geometry=this.appearanceBounds?.(channel.resource_id,channel.pose?copy(channel.pose):null);
+            if(geometry===null||geometry===undefined){
+              // Source canvas bounds are a declared conservative adapter when
+              // no decoded alpha-pixel bounds are available (e.g. fake canvas).
+              need(integer(channel.role.frame_width,1)&&integer(channel.role.frame_height,1),'Lifecycle source canvas dimensions missing');
+              geometry={min_x:0,max_y:channel.role.frame_height-1,empty:false};appearance.geometry_source='source-canvas-conservative-adapter';
+            }else appearance.geometry_source='displayed-source-pixel-bounds';
+            need(typeof geometry.empty==='boolean'&&(geometry.empty||Number.isInteger(geometry.min_x)&&Number.isInteger(geometry.max_y)),'Lifecycle source pixel bounds invalid');
+            if(!channel.pose&&geometry.pose){
+              need(['action_index','action_frame','source_frame'].every(key=>integer(geometry.pose[key])),'Lifecycle source appearance pose invalid');
+              channel.pose={action_index:geometry.pose.action_index,action_frame:geometry.pose.action_frame,source_frame:geometry.pose.source_frame};
+            }
+            appearance.render_limit=geometry.empty?1:Math.max(1,Math.ceil((255+geometry.max_y-geometry.min_x)/8));
+          }
+          if(appearance.elapsed_raw===0)appearance.render_calls=0;
+          appearance.render_calls++;this.alphas.set(channel.actor_id,Math.min(1,appearance.render_calls/appearance.render_limit));
+          if(appearance.render_calls<appearance.render_limit)return;
+          // Render-count completion occurs NOW; do not backdate this to a
+          // guessed duration and skip the following source sprite frames.
+          channel.deadline=now;
+        }else{
+          if(limit===null||limit===undefined){channel.blocked='appearance-renderer-threshold-unresolved';return;}
+          this.alphas.set(channel.actor_id,Math.min(1,appearance.elapsed_raw/limit));
+          if(appearance.elapsed_raw<limit)return;
+          channel.deadline=appearance.started+limit*APPEARANCE_ALPHA_ADAPTER.source_clock_ms;
+        }
+        channel.appearance=null;channel.blocked=null;this.alphas.set(channel.actor_id,1);
+      }
+      if(channel.cursor>=channel.skill.timeline.length){this._finish(channel);return;}
+      const step=channel.skill.timeline[channel.cursor++];
+      if(step.kind==='sprite'){
+        channel.pose={action_index:step.action_index,action_frame:step.action_frame,source_frame:step.source_frame};channel.deadline+=step.interval_raw;
+      }else if(step.command_raw===7){
+        const mode=step.mode_raw_0x47??step.mode_raw47;
+        if(!integer(mode,1)){channel.blocked='appearance-mode-requires-controller-rng';channel.mode='blocked';return;}
+        channel.appearance={mode,clock_raw:60,elapsed_raw:0,started:channel.deadline,render_calls:0,render_limit:null,geometry_source:null};this.alphas.set(channel.actor_id,0);
+      }else{channel.blocked=`unsupported-lifecycle-command-${step.command_raw}`;channel.mode='blocked';return;}
+    }
+  }
+  advance(snapshot,roster,now){
+    need(Number.isFinite(now)&&now>=0,'Lifecycle presentation time invalid');need(Array.isArray(snapshot?.actors)&&Array.isArray(roster),'Lifecycle snapshot or roster invalid');
+    if(this.battleId!==null&&snapshot.id!==undefined&&snapshot.id!==this.battleId)this.reset();
+    if(snapshot.id!==undefined)this.battleId=snapshot.id;
+    const time=this.lastNow===null?now:Math.max(now,this.lastNow);this.lastNow=time;
+    const actors=new Map(snapshot.actors.map(actor=>[actor.id,actor])),members=new Map(roster.map(actor=>[actor.id,actor]));
+    for(const [id,epoch]of this.epochs){if(!actors.has(id)||!members.has(id)){this._cancel(id);this.epochs.delete(id);}else if((actors.get(id).life_epoch??0)!==epoch){this._cancel(id);this.epochs.set(id,actors.get(id).life_epoch??0);}}
+    for(const actor of snapshot.actors)if(members.has(actor.id)&&!this.epochs.has(actor.id))this.epochs.set(actor.id,actor.life_epoch??0);
+    const latest=new Map();for(const event of snapshot.lifecycle_events??[]){
+      const actor=actors.get(event.actor_id);if(!actor||!members.has(actor.id)||(actor.life_epoch??0)!==event.life_epoch)continue;
+      need(typeof event.token==='string'&&event.token.length>0&&integer(event.life_epoch)&&['entry','death','revive'].includes(event.kind),'Lifecycle event invalid');latest.set(actor.id,event);
+    }
+    for(const[id,channel]of this.channels){const event=latest.get(id);if(!event||event.token!==channel.event.token||event.life_epoch!==channel.event.life_epoch)this._cancel(id);}
+    for(const[id,event]of latest){
+      if(this.finished.has(this._key(event))||this.retired.has(this._key(event)))continue;
+      let channel=this.channels.get(id);
+      if(!channel){this._cancel(id);channel=this._start(event,actors.get(id),members.get(id),time);}
+      this._advanceChannel(channel,time);
+    }
+    return this.snapshot();
+  }
+  alpha(actorId){return this.alphas.get(actorId)??1;}
+  pose(actorId){const pose=this.channels.get(actorId)?.pose??this.held.get(actorId)?.pose;return pose?{...pose,alpha:this.alpha(actorId)}:null;}
+  hidden(actorId){return this.hiddenActors.has(actorId);}
+  drainCompleted(){const rows=this.completed;this.completed=[];return rows.map(copy);}
+  snapshot(){
+    return {active:[...this.channels.values()].map(channel=>({actor_id:channel.actor_id,token:channel.event.token,life_epoch:channel.event.life_epoch,kind:channel.event.kind,
+      source_skill_index:channel.skill?.index??null,cursor:channel.cursor,frame:channel.pose?.source_frame??null,alpha:this.alpha(channel.actor_id),mode:channel.mode,blocked:channel.blocked,
+      fade:channel.mode==='fade'?{mode:channel.fade_mode_raw,clock_raw:channel.fade_clock_ms,elapsed_raw:channel.fade_elapsed_raw??0,completion_adapter:'source elapsed30 hard stop; earlier original particle completion not reproduced'}:null,
+      appearance:channel.appearance?{mode:channel.appearance.mode,clock_raw:channel.appearance.clock_raw,elapsed_raw:channel.appearance.elapsed_raw,
+        render_calls:channel.appearance.render_calls,render_limit:channel.appearance.render_limit,geometry_source:channel.appearance.geometry_source}:null})),
+      held:[...this.held].map(([actor_id,row])=>({actor_id,token:row.event.token,life_epoch:row.event.life_epoch,frame:row.pose.source_frame})),hidden:[...this.hiddenActors],completed_count:this.completed.length};
+  }
+}

@@ -1,0 +1,1186 @@
+{
+  "schema": "seventh-seal-runtime-map",
+  "version": 1,
+  "id": "M72061",
+  "name": "神殿大门",
+  "name_bytes_hex": "c9f1b5eeb4f3c3c5",
+  "width": 992,
+  "height": 832,
+  "background": {
+    "image": "/assets/maps/m72061/background.png",
+    "width": 992,
+    "height": 832,
+    "sources": [
+      {
+        "path": "M72061.DGP",
+        "sha256": "2a5d8f2d9812b8cab0a51a45dc0e3444424e367fbc441b4049d1b3866d7d3fd5"
+      }
+    ],
+    "image_sha256": "544280c4ee1948debed475bbf403a0f737b64211f2b81c5e48358e0d54294c92",
+    "assembly": {
+      "referenced_frames": 750,
+      "empty_blocks": 0,
+      "columns": 31,
+      "rows": 26,
+      "resource_count": 1,
+      "animation_frame": 0,
+      "assembly": "DAT even-cell frame/resource -> indexed header DGP; 0x4A3770 rectangular branch",
+      "odd_size_policy": "Native tile-origin loops; pixels beyond real dimensions are clipped"
+    }
+  },
+  "movement": {
+    "schema": "seventh-seal-map-movement",
+    "version": 1,
+    "map": "M72061",
+    "source": "Map/m72061.dat",
+    "source_sha256": "f618ebc0e77203eae589201d4b83ccfebd3b019a9c3dceff760fa0cc6521e9a6",
+    "width": 62,
+    "height": 52,
+    "cell_size": 16,
+    "native_coordinate_shift": 3,
+    "native_to_pixel_scale": 2,
+    "terrain_rows": [
+      "11111111111111111111111111111111111111111111111111111111111111",
+      "11111111111111111111111111111111111111111111111111111111111111",
+      "11111111111111111111111111111111111111111111111111111111111111",
+      "11111111111111111111111111111111111111111111111111111111111111",
+      "11111111111111111111111111111111111111111111111111111111111111",
+      "11111111111111111111111111111111111111111111111111111111111111",
+      "11111111111111111111111111111111111111111111111111111111111111",
+      "11111111111111111111111111111111111111111111111111111111111111",
+      "11111111111111111111111111111111111111111111111111111111111111",
+      "11111111111111111111111111111111111111111111111111111111111111",
+      "11111111111111111111111111111111111111111111111111111111111111",
+      "11111111111111111111111111111111111111111111111111111111111111",
+      "11111111111111111111111111111111111111111111111111111111111111",
+      "11111111111111111111111111111111111111111111111111111111111111",
+      "11111111111111111111111111111111111111111111111111111111111111",
+      "11111111111111111111111111111111111111111111111111111111111111",
+      "11111111111111111111111111111111111111111111111111111111111111",
+      "11111111111111111111111111111111111111111111111111111111111111",
+      "11111111111111111111111111111111111111111111111111111111111111",
+      "11111111111111111111111111111111111111111111111111111111111111",
+      "11111111111111111111111111111111111111111111111111111111111111",
+      "11111111111111111111111000000000000011111111111111111111111111",
+      "11111111111111111111111000000000000011111111111111111111111111",
+      "11111111111111111111111000000000000011111111111111111111111111",
+      "11111111111111111111111000000000000011111111111111111111111111",
+      "11111111111111111111111000000000000011111111111111111111111111",
+      "11111111111111111111111000000000000011111111111111111111111111",
+      "11111111111111111111111000000000000001111111111111111111111111",
+      "11111111111111111111111000000000000001111111111111111111111111",
+      "11111111111111111111111111111111111111111111111111111111111111",
+      "11111111111111111111111111111111111111111111111111111111111111",
+      "11111111111111111111100000000000000000111111111111111111111111",
+      "11111111111111111110000000000000000000111111111111111111111111",
+      "11111111111111111100000000000000000000111111111111111111111111",
+      "11111111111111111111111000000000000000001111111111111111111111",
+      "11111111111111111111111000000000000000000111111111111111111111",
+      "11111111111111111111111000000000000000000011111111111111111111",
+      "11111111111111111111100000000000000000000001111111111111111111",
+      "11111111111111111111000000000000000000000001111111111111111111",
+      "11111111111111111110000000000000000000000001111111111111111111",
+      "11111111111111111100000000000000000000000000111111111111111111",
+      "11111111111111111000000000000000000000000000111111111111111111",
+      "11111111111111111000000000000000000000000000111111111111111111",
+      "11111111111111000000000000000000000000000000111111111111111111",
+      "11111111111111000000000000000000000000000000111111111111111111",
+      "11111111111110000000000000000000000000000000111111111111111111",
+      "11111111111100000000000000000000000000000000001111111111111111",
+      "11111111111100000000000000000000000000000000000111111111111111",
+      "11111111111111111111111111111111111111111111111111111111111111",
+      "11111111111111111111111111111111111111111111111111111111111111",
+      "11111111111111111111111111111111111111111111111111111111111111",
+      "11111111111111111111111111111111111111111111111111111111111111"
+    ],
+    "triggers": [
+      {
+        "x": 12,
+        "y": 47,
+        "id": 1,
+        "state_raw": 2,
+        "path_gate": false,
+        "descriptor_hex": "02000000000000000000000000000000000070656e2e616e6d000000000000000000000000000b000000000000000100000000000000000000000000000000000000"
+      },
+      {
+        "x": 13,
+        "y": 47,
+        "id": 1,
+        "state_raw": 2,
+        "path_gate": false,
+        "descriptor_hex": "02000000000000000000000000000000000070656e2e616e6d000000000000000000000000000b000000000000000100000000000000000000000000000000000000"
+      },
+      {
+        "x": 14,
+        "y": 47,
+        "id": 1,
+        "state_raw": 2,
+        "path_gate": false,
+        "descriptor_hex": "02000000000000000000000000000000000070656e2e616e6d000000000000000000000000000b000000000000000100000000000000000000000000000000000000"
+      },
+      {
+        "x": 15,
+        "y": 47,
+        "id": 1,
+        "state_raw": 2,
+        "path_gate": false,
+        "descriptor_hex": "02000000000000000000000000000000000070656e2e616e6d000000000000000000000000000b000000000000000100000000000000000000000000000000000000"
+      },
+      {
+        "x": 16,
+        "y": 47,
+        "id": 1,
+        "state_raw": 2,
+        "path_gate": false,
+        "descriptor_hex": "02000000000000000000000000000000000070656e2e616e6d000000000000000000000000000b000000000000000100000000000000000000000000000000000000"
+      },
+      {
+        "x": 17,
+        "y": 47,
+        "id": 1,
+        "state_raw": 2,
+        "path_gate": false,
+        "descriptor_hex": "02000000000000000000000000000000000070656e2e616e6d000000000000000000000000000b000000000000000100000000000000000000000000000000000000"
+      },
+      {
+        "x": 18,
+        "y": 47,
+        "id": 1,
+        "state_raw": 2,
+        "path_gate": false,
+        "descriptor_hex": "02000000000000000000000000000000000070656e2e616e6d000000000000000000000000000b000000000000000100000000000000000000000000000000000000"
+      },
+      {
+        "x": 19,
+        "y": 47,
+        "id": 1,
+        "state_raw": 2,
+        "path_gate": false,
+        "descriptor_hex": "02000000000000000000000000000000000070656e2e616e6d000000000000000000000000000b000000000000000100000000000000000000000000000000000000"
+      },
+      {
+        "x": 20,
+        "y": 47,
+        "id": 1,
+        "state_raw": 2,
+        "path_gate": false,
+        "descriptor_hex": "02000000000000000000000000000000000070656e2e616e6d000000000000000000000000000b000000000000000100000000000000000000000000000000000000"
+      },
+      {
+        "x": 21,
+        "y": 47,
+        "id": 1,
+        "state_raw": 2,
+        "path_gate": false,
+        "descriptor_hex": "02000000000000000000000000000000000070656e2e616e6d000000000000000000000000000b000000000000000100000000000000000000000000000000000000"
+      },
+      {
+        "x": 22,
+        "y": 47,
+        "id": 1,
+        "state_raw": 2,
+        "path_gate": false,
+        "descriptor_hex": "02000000000000000000000000000000000070656e2e616e6d000000000000000000000000000b000000000000000100000000000000000000000000000000000000"
+      },
+      {
+        "x": 23,
+        "y": 47,
+        "id": 1,
+        "state_raw": 2,
+        "path_gate": false,
+        "descriptor_hex": "02000000000000000000000000000000000070656e2e616e6d000000000000000000000000000b000000000000000100000000000000000000000000000000000000"
+      },
+      {
+        "x": 24,
+        "y": 47,
+        "id": 1,
+        "state_raw": 2,
+        "path_gate": false,
+        "descriptor_hex": "02000000000000000000000000000000000070656e2e616e6d000000000000000000000000000b000000000000000100000000000000000000000000000000000000"
+      },
+      {
+        "x": 25,
+        "y": 47,
+        "id": 1,
+        "state_raw": 2,
+        "path_gate": false,
+        "descriptor_hex": "02000000000000000000000000000000000070656e2e616e6d000000000000000000000000000b000000000000000100000000000000000000000000000000000000"
+      },
+      {
+        "x": 26,
+        "y": 47,
+        "id": 1,
+        "state_raw": 2,
+        "path_gate": false,
+        "descriptor_hex": "02000000000000000000000000000000000070656e2e616e6d000000000000000000000000000b000000000000000100000000000000000000000000000000000000"
+      },
+      {
+        "x": 27,
+        "y": 47,
+        "id": 1,
+        "state_raw": 2,
+        "path_gate": false,
+        "descriptor_hex": "02000000000000000000000000000000000070656e2e616e6d000000000000000000000000000b000000000000000100000000000000000000000000000000000000"
+      },
+      {
+        "x": 28,
+        "y": 47,
+        "id": 1,
+        "state_raw": 2,
+        "path_gate": false,
+        "descriptor_hex": "02000000000000000000000000000000000070656e2e616e6d000000000000000000000000000b000000000000000100000000000000000000000000000000000000"
+      },
+      {
+        "x": 29,
+        "y": 47,
+        "id": 1,
+        "state_raw": 2,
+        "path_gate": false,
+        "descriptor_hex": "02000000000000000000000000000000000070656e2e616e6d000000000000000000000000000b000000000000000100000000000000000000000000000000000000"
+      },
+      {
+        "x": 30,
+        "y": 47,
+        "id": 1,
+        "state_raw": 2,
+        "path_gate": false,
+        "descriptor_hex": "02000000000000000000000000000000000070656e2e616e6d000000000000000000000000000b000000000000000100000000000000000000000000000000000000"
+      },
+      {
+        "x": 31,
+        "y": 47,
+        "id": 1,
+        "state_raw": 2,
+        "path_gate": false,
+        "descriptor_hex": "02000000000000000000000000000000000070656e2e616e6d000000000000000000000000000b000000000000000100000000000000000000000000000000000000"
+      },
+      {
+        "x": 32,
+        "y": 47,
+        "id": 1,
+        "state_raw": 2,
+        "path_gate": false,
+        "descriptor_hex": "02000000000000000000000000000000000070656e2e616e6d000000000000000000000000000b000000000000000100000000000000000000000000000000000000"
+      },
+      {
+        "x": 33,
+        "y": 47,
+        "id": 1,
+        "state_raw": 2,
+        "path_gate": false,
+        "descriptor_hex": "02000000000000000000000000000000000070656e2e616e6d000000000000000000000000000b000000000000000100000000000000000000000000000000000000"
+      },
+      {
+        "x": 34,
+        "y": 47,
+        "id": 1,
+        "state_raw": 2,
+        "path_gate": false,
+        "descriptor_hex": "02000000000000000000000000000000000070656e2e616e6d000000000000000000000000000b000000000000000100000000000000000000000000000000000000"
+      },
+      {
+        "x": 35,
+        "y": 47,
+        "id": 1,
+        "state_raw": 2,
+        "path_gate": false,
+        "descriptor_hex": "02000000000000000000000000000000000070656e2e616e6d000000000000000000000000000b000000000000000100000000000000000000000000000000000000"
+      },
+      {
+        "x": 36,
+        "y": 47,
+        "id": 1,
+        "state_raw": 2,
+        "path_gate": false,
+        "descriptor_hex": "02000000000000000000000000000000000070656e2e616e6d000000000000000000000000000b000000000000000100000000000000000000000000000000000000"
+      },
+      {
+        "x": 37,
+        "y": 47,
+        "id": 1,
+        "state_raw": 2,
+        "path_gate": false,
+        "descriptor_hex": "02000000000000000000000000000000000070656e2e616e6d000000000000000000000000000b000000000000000100000000000000000000000000000000000000"
+      },
+      {
+        "x": 38,
+        "y": 47,
+        "id": 1,
+        "state_raw": 2,
+        "path_gate": false,
+        "descriptor_hex": "02000000000000000000000000000000000070656e2e616e6d000000000000000000000000000b000000000000000100000000000000000000000000000000000000"
+      },
+      {
+        "x": 39,
+        "y": 47,
+        "id": 1,
+        "state_raw": 2,
+        "path_gate": false,
+        "descriptor_hex": "02000000000000000000000000000000000070656e2e616e6d000000000000000000000000000b000000000000000100000000000000000000000000000000000000"
+      },
+      {
+        "x": 40,
+        "y": 47,
+        "id": 1,
+        "state_raw": 2,
+        "path_gate": false,
+        "descriptor_hex": "02000000000000000000000000000000000070656e2e616e6d000000000000000000000000000b000000000000000100000000000000000000000000000000000000"
+      },
+      {
+        "x": 41,
+        "y": 47,
+        "id": 1,
+        "state_raw": 2,
+        "path_gate": false,
+        "descriptor_hex": "02000000000000000000000000000000000070656e2e616e6d000000000000000000000000000b000000000000000100000000000000000000000000000000000000"
+      },
+      {
+        "x": 42,
+        "y": 47,
+        "id": 1,
+        "state_raw": 2,
+        "path_gate": false,
+        "descriptor_hex": "02000000000000000000000000000000000070656e2e616e6d000000000000000000000000000b000000000000000100000000000000000000000000000000000000"
+      },
+      {
+        "x": 43,
+        "y": 47,
+        "id": 1,
+        "state_raw": 2,
+        "path_gate": false,
+        "descriptor_hex": "02000000000000000000000000000000000070656e2e616e6d000000000000000000000000000b000000000000000100000000000000000000000000000000000000"
+      },
+      {
+        "x": 44,
+        "y": 47,
+        "id": 1,
+        "state_raw": 2,
+        "path_gate": false,
+        "descriptor_hex": "02000000000000000000000000000000000070656e2e616e6d000000000000000000000000000b000000000000000100000000000000000000000000000000000000"
+      },
+      {
+        "x": 45,
+        "y": 47,
+        "id": 1,
+        "state_raw": 2,
+        "path_gate": false,
+        "descriptor_hex": "02000000000000000000000000000000000070656e2e616e6d000000000000000000000000000b000000000000000100000000000000000000000000000000000000"
+      },
+      {
+        "x": 46,
+        "y": 47,
+        "id": 1,
+        "state_raw": 2,
+        "path_gate": false,
+        "descriptor_hex": "02000000000000000000000000000000000070656e2e616e6d000000000000000000000000000b000000000000000100000000000000000000000000000000000000"
+      },
+      {
+        "x": 23,
+        "y": 21,
+        "id": 2,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37323036322e646174000000000000000000000001000000030000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 24,
+        "y": 21,
+        "id": 2,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37323036322e646174000000000000000000000001000000030000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 25,
+        "y": 21,
+        "id": 2,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37323036322e646174000000000000000000000001000000030000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 26,
+        "y": 21,
+        "id": 2,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37323036322e646174000000000000000000000001000000030000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 27,
+        "y": 21,
+        "id": 2,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37323036322e646174000000000000000000000001000000030000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 28,
+        "y": 21,
+        "id": 2,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37323036322e646174000000000000000000000001000000030000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 29,
+        "y": 21,
+        "id": 2,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37323036322e646174000000000000000000000001000000030000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 30,
+        "y": 21,
+        "id": 2,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37323036322e646174000000000000000000000001000000030000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 31,
+        "y": 21,
+        "id": 2,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37323036322e646174000000000000000000000001000000030000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 32,
+        "y": 21,
+        "id": 2,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37323036322e646174000000000000000000000001000000030000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 33,
+        "y": 21,
+        "id": 2,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37323036322e646174000000000000000000000001000000030000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 34,
+        "y": 21,
+        "id": 2,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37323036322e646174000000000000000000000001000000030000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 35,
+        "y": 21,
+        "id": 2,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37323036322e646174000000000000000000000001000000030000000000000000000000000000000000000000000000"
+      }
+    ],
+    "terrain_rule": "cell byte +0x20 == 0 permits terrain entry",
+    "transition_rule": "0x4A80E0: +0x38 reference, descriptor[0]==0 and descriptor[0x11]!=0 is path-gated",
+    "policy": "Unimplemented native transition gates block. Runtime enables only separately verified exits.",
+    "role_occupancy_rule": "+0x14 is runtime role index + 1, not static terrain",
+    "object_lookup_rule": "+0x2B is runtime object index + 1, not a second collision mask"
+  },
+  "objects": [
+    {
+      "index": 0,
+      "resource_filename": "001.DGP",
+      "source": "mapm/m72061/001.dgp",
+      "resource_sha256": "37340e820bc6c35439bb100d02a752e69686b657f14d3d378af236f7f26cf863",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 240,
+      "y_native": 200,
+      "x_world": 480,
+      "y_world": 400,
+      "anchor_x": 191,
+      "anchor_y": 340,
+      "draw_x": 289,
+      "draw_y": 60,
+      "frame_width": 400,
+      "frame_height": 500,
+      "width_cells": 5,
+      "height_cells": 5,
+      "cell_x": 30,
+      "cell_y": 25,
+      "kind_raw": 1,
+      "layer": 1,
+      "sort_x": 480,
+      "sort_y": 560,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m72061/objects/001_frame_000.png",
+      "image_sha256": "b3da823c9843719ca8c564824f49e79dec35f2de309c1cc8db8560926f8c1a2b"
+    },
+    {
+      "index": 1,
+      "resource_filename": "002.DGP",
+      "source": "mapm/m72061/002.dgp",
+      "resource_sha256": "1caa061beb43d395fd510c2b21e3ef5c4108ed69540aa9c4421f1c41b580d1f4",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 144,
+      "y_native": 232,
+      "x_world": 288,
+      "y_world": 464,
+      "anchor_x": 32,
+      "anchor_y": 294,
+      "draw_x": 256,
+      "draw_y": 170,
+      "frame_width": 84,
+      "frame_height": 326,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 18,
+      "cell_y": 29,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 288,
+      "sort_y": 496,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m72061/objects/002_frame_000.png",
+      "image_sha256": "49a2815f87af051d5db8f4074b51406f9102c171ecb43c78f5ec311603d385f2"
+    },
+    {
+      "index": 2,
+      "resource_filename": "003.DGP",
+      "source": "mapm/m72061/003.dgp",
+      "resource_sha256": "164a6e7930613b43b3e475933b70b34dd35ca67ba146c8175525c38bd6b39a36",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 352,
+      "y_native": 240,
+      "x_world": 704,
+      "y_world": 480,
+      "anchor_x": 60,
+      "anchor_y": 295,
+      "draw_x": 644,
+      "draw_y": 185,
+      "frame_width": 92,
+      "frame_height": 327,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 44,
+      "cell_y": 30,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 704,
+      "sort_y": 512,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m72061/objects/003_frame_000.png",
+      "image_sha256": "dea18501758513083043d08f99d52c665f833c7eb97013a6ebbf135dd7929b7f"
+    },
+    {
+      "index": 3,
+      "resource_filename": "004.DGP",
+      "source": "mapm/m72061/004.dgp",
+      "resource_sha256": "a6f500ccef0b1b84f4732953f4d8bba0da94dee8bdffea00c78f0612886cf520",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 112,
+      "y_native": 312,
+      "x_world": 224,
+      "y_world": 624,
+      "anchor_x": 32,
+      "anchor_y": 26,
+      "draw_x": 192,
+      "draw_y": 598,
+      "frame_width": 117,
+      "frame_height": 88,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 14,
+      "cell_y": 39,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 224,
+      "sort_y": 656,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m72061/objects/004_frame_000.png",
+      "image_sha256": "f2a0e2102f93c1aaf33beded912d891e2c41aaf79a60bdb08ecddef670d7c2cf"
+    },
+    {
+      "index": 4,
+      "resource_filename": "005.DGP",
+      "source": "mapm/m72061/005.dgp",
+      "resource_sha256": "23343f0a609795bd81e3e8768f8c04e21bc8c5292959d0c265a178426fd06fe4",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 176,
+      "y_native": 280,
+      "x_world": 352,
+      "y_world": 560,
+      "anchor_x": 45,
+      "anchor_y": 8,
+      "draw_x": 307,
+      "draw_y": 552,
+      "frame_width": 77,
+      "frame_height": 46,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 22,
+      "cell_y": 35,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 352,
+      "sort_y": 592,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m72061/objects/005_frame_000.png",
+      "image_sha256": "e4b505e0e0e283780f7e5517fa38d318a3351e6167d61af276eee56b93fb5323"
+    },
+    {
+      "index": 5,
+      "resource_filename": "006.DGP",
+      "source": "mapm/m72061/006.dgp",
+      "resource_sha256": "06fc5679c1633bd7bc85e3d4239359f094cc7dfc880af41a53dd678c562d19ad",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 384,
+      "y_native": 352,
+      "x_world": 768,
+      "y_world": 704,
+      "anchor_x": 71,
+      "anchor_y": 52,
+      "draw_x": 697,
+      "draw_y": 652,
+      "frame_width": 130,
+      "frame_height": 103,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 48,
+      "cell_y": 44,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 768,
+      "sort_y": 736,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m72061/objects/006_frame_000.png",
+      "image_sha256": "a583bebb9a0d28db644b507498f7a6bfa3892ffbbcc9f5d786891e7e959063c7"
+    },
+    {
+      "index": 6,
+      "resource_filename": "007.DGP",
+      "source": "mapm/m72061/007.dgp",
+      "resource_sha256": "cafe83f4d8b5e0403935de8a43f1c8b0a0d410069a1cab58c2919c4ff61ce702",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 336,
+      "y_native": 264,
+      "x_world": 672,
+      "y_world": 528,
+      "anchor_x": 42,
+      "anchor_y": 134,
+      "draw_x": 630,
+      "draw_y": 394,
+      "frame_width": 97,
+      "frame_height": 166,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 42,
+      "cell_y": 33,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 672,
+      "sort_y": 560,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m72061/objects/007_frame_000.png",
+      "image_sha256": "c88810ccd13b3ee1889de892f3bad419f7c79a6020e1366810a7b61680445e9c"
+    },
+    {
+      "index": 7,
+      "resource_filename": "008.DGP",
+      "source": "mapm/m72061/008.dgp",
+      "resource_sha256": "611969233e1b96c5ed457d3a0aed6bd6bd82688efbbbe3afa6003e3c577f1d99",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 80,
+      "y_native": 344,
+      "x_world": 160,
+      "y_world": 688,
+      "anchor_x": 32,
+      "anchor_y": 82,
+      "draw_x": 128,
+      "draw_y": 606,
+      "frame_width": 104,
+      "frame_height": 127,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 10,
+      "cell_y": 43,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 160,
+      "sort_y": 720,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m72061/objects/008_frame_000.png",
+      "image_sha256": "550889180a6c81e9af6923cbe14cff1aa6c03e9a602b17318a85995110cb2d7f"
+    },
+    {
+      "index": 8,
+      "resource_filename": "009.DGP",
+      "source": "mapm/m72061/009.dgp",
+      "resource_sha256": "788af079dc99cc3641763e47719e7d331299fa6f73dfc8fc9ed51fc1b692b10d",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 113,
+      "y_native": 280,
+      "x_world": 226,
+      "y_world": 560,
+      "anchor_x": 52,
+      "anchor_y": 53,
+      "draw_x": 174,
+      "draw_y": 507,
+      "frame_width": 108,
+      "frame_height": 104,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 14,
+      "cell_y": 35,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 226,
+      "sort_y": 592,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m72061/objects/009_frame_000.png",
+      "image_sha256": "9522f9fa91725310f40ac3138bb615e11730071f5a89902eed0b91f51ef20fa8"
+    }
+  ],
+  "exits": [],
+  "unresolved_triggers": [
+    {
+      "id": 1,
+      "offset": 208050,
+      "bytes": 66,
+      "state_raw": 2,
+      "filename_raw": "",
+      "field_26_raw": 11,
+      "field_2a_raw": 0,
+      "field_2e_raw": 1,
+      "cells": [
+        {
+          "x": 12,
+          "y": 47
+        },
+        {
+          "x": 13,
+          "y": 47
+        },
+        {
+          "x": 14,
+          "y": 47
+        },
+        {
+          "x": 15,
+          "y": 47
+        },
+        {
+          "x": 16,
+          "y": 47
+        },
+        {
+          "x": 17,
+          "y": 47
+        },
+        {
+          "x": 18,
+          "y": 47
+        },
+        {
+          "x": 19,
+          "y": 47
+        },
+        {
+          "x": 20,
+          "y": 47
+        },
+        {
+          "x": 21,
+          "y": 47
+        },
+        {
+          "x": 22,
+          "y": 47
+        },
+        {
+          "x": 23,
+          "y": 47
+        },
+        {
+          "x": 24,
+          "y": 47
+        },
+        {
+          "x": 25,
+          "y": 47
+        },
+        {
+          "x": 26,
+          "y": 47
+        },
+        {
+          "x": 27,
+          "y": 47
+        },
+        {
+          "x": 28,
+          "y": 47
+        },
+        {
+          "x": 29,
+          "y": 47
+        },
+        {
+          "x": 30,
+          "y": 47
+        },
+        {
+          "x": 31,
+          "y": 47
+        },
+        {
+          "x": 32,
+          "y": 47
+        },
+        {
+          "x": 33,
+          "y": 47
+        },
+        {
+          "x": 34,
+          "y": 47
+        },
+        {
+          "x": 35,
+          "y": 47
+        },
+        {
+          "x": 36,
+          "y": 47
+        },
+        {
+          "x": 37,
+          "y": 47
+        },
+        {
+          "x": 38,
+          "y": 47
+        },
+        {
+          "x": 39,
+          "y": 47
+        },
+        {
+          "x": 40,
+          "y": 47
+        },
+        {
+          "x": 41,
+          "y": 47
+        },
+        {
+          "x": 42,
+          "y": 47
+        },
+        {
+          "x": 43,
+          "y": 47
+        },
+        {
+          "x": 44,
+          "y": 47
+        },
+        {
+          "x": 45,
+          "y": 47
+        },
+        {
+          "x": 46,
+          "y": 47
+        }
+      ],
+      "path_gate": false,
+      "descriptor_hex": "02000000000000000000000000000000000070656e2e616e6d000000000000000000000000000b000000000000000100000000000000000000000000000000000000"
+    },
+    {
+      "id": 2,
+      "offset": 208116,
+      "bytes": 66,
+      "state_raw": 0,
+      "filename_raw": "m72062.dat",
+      "field_26_raw": 1,
+      "field_2a_raw": 3,
+      "field_2e_raw": 0,
+      "cells": [
+        {
+          "x": 23,
+          "y": 21
+        },
+        {
+          "x": 24,
+          "y": 21
+        },
+        {
+          "x": 25,
+          "y": 21
+        },
+        {
+          "x": 26,
+          "y": 21
+        },
+        {
+          "x": 27,
+          "y": 21
+        },
+        {
+          "x": 28,
+          "y": 21
+        },
+        {
+          "x": 29,
+          "y": 21
+        },
+        {
+          "x": 30,
+          "y": 21
+        },
+        {
+          "x": 31,
+          "y": 21
+        },
+        {
+          "x": 32,
+          "y": 21
+        },
+        {
+          "x": 33,
+          "y": 21
+        },
+        {
+          "x": 34,
+          "y": 21
+        },
+        {
+          "x": 35,
+          "y": 21
+        }
+      ],
+      "path_gate": true,
+      "descriptor_hex": "00000000000000000000000000000000006d37323036322e646174000000000000000000000001000000030000000000000000000000000000000000000000000000"
+    }
+  ],
+  "role_layer_preview": 2,
+  "role_layer_note": "Runtime render policy; native role +0xF3 initial value remains unverified",
+  "source": {
+    "path": "Map/m72061.dat",
+    "sha256": "f618ebc0e77203eae589201d4b83ccfebd3b019a9c3dceff760fa0cc6521e9a6",
+    "bytes": 254797,
+    "object_table_start": 219730,
+    "object_table_end": 222196,
+    "unknown_tail_bytes": 32601,
+    "native_evidence": {
+      "map_loader": "ev_86fb8504826b15ccbea2b3911eaa302ef3f5cbeba7d1b233df62109a9ff38681",
+      "background_draw": "ev_2f7d67b0c8598838be7ac99150b959c5012222fdac93464caaf6732031f0b6e7",
+      "background_resource_loader": "ev_7c353572e07610a7b7e99f989466929dd711a469b13e61acb2597b40ff70e8d4",
+      "transition_path_gate": "ev_1ccb72823e262e4317968f322fcebaf8bd8724a31c215f127d8a68ac77c7b2b2",
+      "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+      "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+      "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+      "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+    },
+    "object_native_evidence": [
+      "ev_86fb8504826b15ccbea2b3911eaa302ef3f5cbeba7d1b233df62109a9ff38681",
+      "ev_6093394ea87d8eb856eef46d19eabdaf9e4735e58a8a18243c3aa798fda1feb5",
+      "ev_c0c0aa49cfd0507760600c7f4f475d3912f8210c498f1896a6fb058f80960b5b",
+      "ev_05dce0e80a25427e4e72280265291973d42f600238f7f832c0320114fed82fb7",
+      "ev_70e72b030eca65a4073731754bc443a383f4b215be5da103ed824b0c1a97727a",
+      "ev_02ca024fc6f9093e9bd38f06052ee2a4f2b2671240c4df2293cf1a50c4e2ae02",
+      "ev_813d397c0060f8bec0ba044eadc20f12cfb9fd8a36a56b19620629114d4ec9a7",
+      "ev_f32a0609558d1fb49c46e1a996c57b11aa62f681842c5ee0f86256aa7b74ffbe",
+      "ev_0781814eee25b61ac8bbd2b2ede6999858f4f7041d5b908f25c58d7a7691a89d",
+      "ev_9abd5ba6645433c0752e35b69015a7f998c9c9b054862a5afdfadc7499e40962"
+    ]
+  },
+  "limitations": [
+    "Static resource/code evidence; original-game entry/transition timing is not observed.",
+    "Background uses its initial animation frame; background animation is not advanced.",
+    "Initial static objects; script changes and object animation are not reconstructed.",
+    "Role depth and continuous keyboard movement are runtime policies.",
+    "Opening NPC positions are raw map defaults; Resurrect.ANM relocates and changes actors before control is returned"
+  ],
+  "opening_npcs": [
+    {
+      "id": "M72061-role-10",
+      "slot_zero_based": 10,
+      "speaker_slot_one_based": 11,
+      "name": "沙帝斯-左使",
+      "resource_id": "013",
+      "x": 336,
+      "y": 704,
+      "x_native": 168,
+      "y_native": 352,
+      "direction": 0,
+      "direction_raw_45": 0,
+      "hidden": true,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 1,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 9,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m72061.dat",
+        "sha256": "f618ebc0e77203eae589201d4b83ccfebd3b019a9c3dceff760fa0cc6521e9a6",
+        "offset": 222196,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M72061-role-11",
+      "slot_zero_based": 11,
+      "speaker_slot_one_based": 12,
+      "name": "沙帝斯-右使",
+      "resource_id": "013",
+      "x": 608,
+      "y": 704,
+      "x_native": 304,
+      "y_native": 352,
+      "direction": 0,
+      "direction_raw_45": 0,
+      "hidden": true,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 1,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 10,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m72061.dat",
+        "sha256": "f618ebc0e77203eae589201d4b83ccfebd3b019a9c3dceff760fa0cc6521e9a6",
+        "offset": 223417,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M72061-role-12",
+      "slot_zero_based": 12,
+      "speaker_slot_one_based": 13,
+      "name": "沙帝斯-右使",
+      "resource_id": "013",
+      "x": 608,
+      "y": 624,
+      "x_native": 304,
+      "y_native": 312,
+      "direction": 0,
+      "direction_raw_45": 0,
+      "hidden": true,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 1,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 11,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m72061.dat",
+        "sha256": "f618ebc0e77203eae589201d4b83ccfebd3b019a9c3dceff760fa0cc6521e9a6",
+        "offset": 224638,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M72061-role-13",
+      "slot_zero_based": 13,
+      "speaker_slot_one_based": 14,
+      "name": "沙帝斯-左使",
+      "resource_id": "013",
+      "x": 336,
+      "y": 624,
+      "x_native": 168,
+      "y_native": 312,
+      "direction": 0,
+      "direction_raw_45": 0,
+      "hidden": true,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 1,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 12,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m72061.dat",
+        "sha256": "f618ebc0e77203eae589201d4b83ccfebd3b019a9c3dceff760fa0cc6521e9a6",
+        "offset": 225859,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M72061-role-14",
+      "slot_zero_based": 14,
+      "speaker_slot_one_based": 15,
+      "name": "沙帝斯-領導",
+      "resource_id": "013",
+      "x": 464,
+      "y": 752,
+      "x_native": 232,
+      "y_native": 376,
+      "direction": 0,
+      "direction_raw_45": 0,
+      "hidden": true,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 1,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 13,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m72061.dat",
+        "sha256": "f618ebc0e77203eae589201d4b83ccfebd3b019a9c3dceff760fa0cc6521e9a6",
+        "offset": 227080,
+        "bytes": 1221
+      }
+    }
+  ],
+  "map_flag_index": 388
+}

@@ -1,0 +1,19 @@
+{
+  "schema": "seventh-seal-combat-user-observations",
+  "version": 1,
+  "reported_date": "2026-10-11",
+  "source": "current_conversation_user_report",
+  "evidence_type": "user_reported",
+  "skills": [
+    {"names": ["燕突", "炎剑．燕突"], "target_positions": ["middle", "lower"], "status": "user_reported"},
+    {"names": ["瓦裂", "炎体．瓦裂"], "target_positions": ["upper", "middle", "lower"], "status": "user_reported"},
+    {"names": ["破霞", "炎体．破霞"], "target_positions": ["upper", "middle"], "status": "user_reported"}
+  ],
+  "targets": [{"names": ["雪泥怪"], "occupied_positions": ["middle", "lower"], "status": "user_reported"}],
+  "tentative": [{"claim": "魔法技巧看着能打上中下", "status": "user_reported_tentative", "applies_to_all_magic": false}],
+  "limits": [
+    "只对明确技能名及其列出的别名匹配，未知技能保持未知。",
+    "明确方位数组的交集检查属于用户观察规则实验，不建立原分类编号、原字节位或多方位原生编码。",
+    "有方位交集不意味着原版必定命中；完整命中、伤害和技能命令仍需原版证据。"
+  ]
+}

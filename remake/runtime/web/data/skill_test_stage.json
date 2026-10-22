@@ -1,0 +1,443 @@
+{
+  "schema": "seventh-seal-battle-stage",
+  "version": 1,
+  "stage_id": "TestStage",
+  "source_scn": {
+    "path": "Fight_Bk/TestStage.scn",
+    "sha256": "6d747c5d04899cbf8113b17791747a4b5d206cebeabd390d4a98c53f5edad3e4",
+    "version_raw": 2,
+    "header_raw_hex": "02000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004000000010000000400000000000000000000000000000000000000",
+    "record_start": 25284,
+    "record_bytes": 71,
+    "record_count": 3,
+    "additional_objects_raw_34": 1,
+    "rendering_mode_raw_38": 4,
+    "opaque_block": {
+      "offset": 76,
+      "bytes": 25208,
+      "sha256": "a2b45d2a83061d24e0d98c0d337abfcba18a042da05f024a97bc128f1862f51d"
+    }
+  },
+  "layers": [
+    {
+      "id": "FSBLACK",
+      "role": "sky",
+      "source": {
+        "path": "Fight_Bk/FSBLACK.DGP",
+        "sha256": "cd62f149a29c6805a2baed8f40966b156abf367af0c2412e37f181802f816679",
+        "width": 640,
+        "height": 480,
+        "frame_count": 1,
+        "anchor_raw": [
+          32,
+          0,
+          0
+        ],
+        "header_raw_hex": "09000000000000000000000000000000000000000001000000000000000000800200000000000000000000010000000000000000000000000000000000000000000000"
+      },
+      "scn": {
+        "record_index": 0,
+        "offset": 25284,
+        "bytes": 71,
+        "raw_hex": "004653424c41434b2e4447500000000000000000000400000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000",
+        "type_raw_00": 0,
+        "current_frame_raw_1d": 0,
+        "position_raw": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "flags_raw_31_36": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "sort_category_raw_36": 1
+      },
+      "frames": [
+        {
+          "index": 0,
+          "path": "assets/skill_test_stage/FSBLACK/frame_000.png",
+          "sha256": "406bac86fa777227aeafc5ba74787a7e2a93ccc66dbbc5dce4f42e470960eb96",
+          "rgba_sha256": "13d8097034a59f0d0b9305090716569a8f8bbb4de83d1b8394815efaaca69b75",
+          "bounds": [
+            0,
+            0,
+            639,
+            479
+          ],
+          "covered_pixels": 306081,
+          "transparent_pixels": 1119
+        }
+      ],
+      "animation": null
+    },
+    {
+      "id": "FGTEST",
+      "role": "ground",
+      "source": {
+        "path": "Fight_Bk/FGTEST.DGP",
+        "sha256": "b29ab4c2706bc4dc302aee2562ac432a34cfdda6ca4bd5d8c1a42847099b03b5",
+        "width": 1400,
+        "height": 400,
+        "frame_count": 1,
+        "anchor_raw": [
+          32,
+          0,
+          0
+        ],
+        "header_raw_hex": "09000000000000000000000000000000000000000001000000000000000000000000009001000001000000000000000000000000000000000000000000000000000000"
+      },
+      "scn": {
+        "record_index": 1,
+        "offset": 25355,
+        "bytes": 71,
+        "raw_hex": "014647544553542e444750000000000000000000000200000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000",
+        "type_raw_00": 1,
+        "current_frame_raw_1d": 0,
+        "position_raw": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "flags_raw_31_36": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "sort_category_raw_36": 1
+      },
+      "frames": [
+        {
+          "index": 0,
+          "path": "assets/skill_test_stage/FGTEST/frame_000.png",
+          "sha256": "84eda60f68a7dcdbbd25f027694f83a99e01a4f42f09a661ad51081fb59083fd",
+          "rgba_sha256": "e67ae4dcaae324aadd15df73cf5dc30e007c69c2306f7e077cbe864809132819",
+          "bounds": [
+            0,
+            0,
+            1399,
+            399
+          ],
+          "covered_pixels": 449740,
+          "transparent_pixels": 110260
+        }
+      ],
+      "animation": null
+    },
+    {
+      "id": "FBTEST",
+      "role": "scene_object",
+      "source": {
+        "path": "Fight_Bk/FBTEST.DGP",
+        "sha256": "bde2037c80ef8f038bc5ebc3196116f7c6624cff7f18fed0a0af0a2757b8a351",
+        "width": 899,
+        "height": 399,
+        "frame_count": 1,
+        "anchor_raw": [
+          446,
+          349,
+          0
+        ],
+        "header_raw_hex": "09000000000000000000000000000000000000000001000000000000000000000000008f01000001000000000000000000000000000000000000000000000000000000"
+      },
+      "scn": {
+        "record_index": 2,
+        "offset": 25426,
+        "bytes": 71,
+        "raw_hex": "024642544553542e444750000000000000000000000300000000000000000000000701000057000000000000000000000000000000000100000000000000000000000000000000",
+        "type_raw_00": 2,
+        "current_frame_raw_1d": 0,
+        "position_raw": {
+          "x": 263,
+          "y": 87,
+          "z": 0
+        },
+        "flags_raw_31_36": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "sort_category_raw_36": 1
+      },
+      "frames": [
+        {
+          "index": 0,
+          "path": "assets/skill_test_stage/FBTEST/frame_000.png",
+          "sha256": "b85ed57d6ca10e1c928056fc39b8fdf0f544504e4d57d5c83de314528a561dee",
+          "rgba_sha256": "b4662fe4d593f1cfbc998d087573256416a7f8c36c2f4bc9461a241a7894171c",
+          "bounds": [
+            0,
+            0,
+            899,
+            399
+          ],
+          "covered_pixels": 358701,
+          "transparent_pixels": 0
+        }
+      ],
+      "animation": null
+    }
+  ],
+  "default_composition": {
+    "viewport": {
+      "width": 640,
+      "height": 480,
+      "evidence": {
+        "bundle": "evidence/forest_stage_native.json",
+        "evidence_id": "ev_8ca2bfee0c0cc1cf3aef8c7925374a59763d8c00ddae639444d2cca1b6d09581",
+        "operation": "read_bytes",
+        "address": "0x67c3a0"
+      }
+    },
+    "camera": {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "authority": "source SCN loader zero-camera initialization"
+    },
+    "sky": {
+      "layer_id": "FSBLACK",
+      "initial_frame": 0,
+      "source_rect": [
+        0,
+        0,
+        640,
+        175
+      ],
+      "destination_rect": [
+        0,
+        0,
+        640,
+        175
+      ],
+      "clip_bottom": 175,
+      "origin_ignores_dgp_anchor": true,
+      "evidence": {
+        "bundle": "evidence/forest_stage_native.json",
+        "evidence_id": "ev_862e12f6c9e9063110e4f7b011aad3061a9c93e4ebed25ef2af3c9872c654623",
+        "operation": "procedure_pseudo_code",
+        "address": "0x5154d8"
+      }
+    },
+    "ground": {
+      "layer_id": "FGTEST",
+      "frame": 0,
+      "source_rect": [
+        380,
+        95,
+        640,
+        305
+      ],
+      "destination_rect": [
+        0,
+        175,
+        640,
+        305
+      ],
+      "cropped_asset": {
+        "path": "/assets/skill_test_stage/ground_default.png",
+        "sha256": "84e4bbfe6616094931f407005f2409b1aa96a538477bb800cc8fc4a777811682",
+        "width": 640,
+        "height": 305
+      },
+      "source_x_at_camera_zero": 380,
+      "evidence": {
+        "bundle": "evidence/forest_stage_native.json",
+        "evidence_id": "ev_fb4eae0c9be69541893c3047b15076c461006bd02d921a124867ba8dc1294465",
+        "operation": "procedure_assembly",
+        "address": "0x5145d0"
+      }
+    },
+    "scene_objects": [
+      {
+        "layer_id": "FBTEST",
+        "frame": 0,
+        "source_rect": [
+          0,
+          0,
+          899,
+          399
+        ],
+        "destination_rect": [
+          -183,
+          -214,
+          899,
+          399
+        ],
+        "sort_category": 1,
+        "sort_y": 87,
+        "placement_is_top_left": true,
+        "evidence": {
+          "bundle": "evidence/forest_stage_native.json",
+          "evidence_id": "ev_18cdcb45ca765d672e35f752afdc5e706f22e1459b45625a11f7c281f3ba326b",
+          "operation": "procedure_assembly",
+          "address": "0x513fc0"
+        }
+      }
+    ],
+    "draw_order": "sky, ground, scenery textures, combat actors sorted by ground Y, then effects and HUD",
+    "camera_limit_x": 410,
+    "sort_evidence": {
+      "bundle": "evidence/forest_stage_native.json",
+      "evidence_id": "ev_885213dafbc931d020af2efd8feb71415f8a38dde2ccdcff8bc6e3cd161d64cb",
+      "operation": "procedure_pseudo_code",
+      "address": "0x515320"
+    },
+    "animated_camera_projection_implemented": false,
+    "browser_adapter": "Shared640x480 uniform stage geometry; actor placement uses the existing formal-battle presentation adapter."
+  },
+  "default_composite": {
+    "path": "/assets/skill_test_stage/default_composite.png",
+    "sha256": "43826095213369fe2b7288cde24a91052fc1ca8c337d3c8cf0566a1dc99cb08c",
+    "width": 640,
+    "height": 480
+  },
+  "source_hashes": {
+    "GAME.exe": "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18",
+    "Fight_Bk/TestStage.scn": "6d747c5d04899cbf8113b17791747a4b5d206cebeabd390d4a98c53f5edad3e4",
+    "Fight_Bk/FSBLACK.DGP": "cd62f149a29c6805a2baed8f40966b156abf367af0c2412e37f181802f816679",
+    "Fight_Bk/FGTEST.DGP": "b29ab4c2706bc4dc302aee2562ac432a34cfdda6ca4bd5d8c1a42847099b03b5",
+    "Fight_Bk/FBTEST.DGP": "bde2037c80ef8f038bc5ebc3196116f7c6624cff7f18fed0a0af0a2757b8a351"
+  },
+  "native_evidence": {
+    "entry": {
+      "bundle": "evidence/skill_test_20261020/native_evidence.json",
+      "evidence_id": "ev_3053806c3f96f602ac2121092314cf53d988bca8670bb1278e42908bf9e67a4f",
+      "operation": "procedure_assembly",
+      "address": "0x44e430"
+    },
+    "party": {
+      "bundle": "evidence/skill_test_20261020/native_evidence.json",
+      "evidence_id": "ev_b65c4a01e0d0dd0e29afe1585765ff91302ce20d20660c204cb5290f958de608",
+      "operation": "procedure_assembly",
+      "address": "0x4451c0"
+    },
+    "literals": {
+      "bundle": "evidence/skill_test_20261020/native_evidence.json",
+      "evidence_id": "ev_8812c7dd634d30d66de5568e5c98c32eabee06063650474a99b0d61499da2620",
+      "operation": "read_bytes",
+      "address": "0x66d804"
+    },
+    "hp_gate": {
+      "bundle": "evidence/skill_test_20261020/native_evidence.json",
+      "evidence_id": "ev_e76dc0fc2a37ba715b7005825ea4ce93f1523440769a6aa6549a0ac77569df72",
+      "operation": "procedure_assembly",
+      "address": "0x5005c0"
+    },
+    "mp_gate": {
+      "bundle": "evidence/skill_test_20261020/native_evidence.json",
+      "evidence_id": "ev_1f0e32e11e007c147993f592f3b3ac175e5c949ec2995a596658e2fca57df3e2",
+      "operation": "procedure_pseudo_code",
+      "address": "0x501aa0"
+    },
+    "escape_success": {
+      "bundle": "evidence/skill_test_20261020/native_evidence.json",
+      "evidence_id": "ev_b3e8f00fd1100fe39140f97ba388e7a69ca7055155bf538796149bbc4330e5e9",
+      "operation": "procedure_assembly",
+      "address": "0x41f070"
+    },
+    "individual_escape": {
+      "bundle": "evidence/skill_test_20261020/native_evidence.json",
+      "evidence_id": "ev_f59b62a177316aa7c44b5cc8f2240c49c1bef71a562cfcb9477f3204b2175b82",
+      "operation": "procedure_pseudo_code",
+      "address": "0x50e4b0"
+    },
+    "dispatch": {
+      "bundle": "evidence/skill_test_20261020/native_evidence.json",
+      "evidence_id": "ev_cc2a61bc12664a3028466acad29330e69f7d036955f7d95117e84388aa0af6c1",
+      "operation": "procedure_pseudo_code",
+      "address": "0x42fe40"
+    },
+    "item_effect": {
+      "bundle": "evidence/skill_test_20261020/native_evidence.json",
+      "evidence_id": "ev_4ad9019da5e0945f74684bdf2d2c6ee7429b3a2a2e7bb84eee812d448c861eac",
+      "operation": "procedure_pseudo_code",
+      "address": "0x41b3e9"
+    },
+    "inventory_consume": {
+      "bundle": "evidence/skill_test_20261020/native_evidence.json",
+      "evidence_id": "ev_30a51f575fae179fb07958b9531837207391b415d7ff5294105d9ea493429c40",
+      "operation": "procedure_pseudo_code",
+      "address": "0x47c8e0"
+    },
+    "cleanup": {
+      "bundle": "evidence/skill_test_20261020/native_evidence.json",
+      "evidence_id": "ev_82fd89694f83fbb80f862849e9e2dc9439aa7c8043a3c84242cf6932a4a39ad6",
+      "operation": "procedure_pseudo_code",
+      "address": "0x445f80"
+    },
+    "party_writeback": {
+      "bundle": "evidence/skill_test_20261020/native_evidence.json",
+      "evidence_id": "ev_098098daf927c69d8aba6f775790a32fcb885f40cc82c56ab90011a4e39f3356",
+      "operation": "procedure_pseudo_code",
+      "address": "0x4fe0c0"
+    },
+    "ui_suspend": {
+      "bundle": "evidence/skill_test_20261020/native_evidence.json",
+      "evidence_id": "ev_37412b58fa23061718657df20fd3ff926387573930ab18c6ad9b55e396cb89d3",
+      "operation": "procedure_pseudo_code",
+      "address": "0x562de0"
+    },
+    "ui_resume": {
+      "bundle": "evidence/skill_test_20261020/native_evidence.json",
+      "evidence_id": "ev_fe59de3975691edce9d33a7db106ac8f12ed894268a32b7ad85d8e72be38a7cd",
+      "operation": "procedure_pseudo_code",
+      "address": "0x562e70"
+    },
+    "stage_loader": {
+      "bundle": "evidence/forest_stage_native.json",
+      "evidence_id": "ev_943b0b73f1e96b42f7c10b51e88dc4d7863d2f2860e0306b9f3676596bf34686",
+      "operation": "procedure_pseudo_code",
+      "address": "0x51c48f"
+    },
+    "viewport": {
+      "bundle": "evidence/forest_stage_native.json",
+      "evidence_id": "ev_8ca2bfee0c0cc1cf3aef8c7925374a59763d8c00ddae639444d2cca1b6d09581",
+      "operation": "read_bytes",
+      "address": "0x67c3a0"
+    },
+    "sky_draw": {
+      "bundle": "evidence/forest_stage_native.json",
+      "evidence_id": "ev_862e12f6c9e9063110e4f7b011aad3061a9c93e4ebed25ef2af3c9872c654623",
+      "operation": "procedure_pseudo_code",
+      "address": "0x5154d8"
+    },
+    "ground_scanlines": {
+      "bundle": "evidence/forest_stage_native.json",
+      "evidence_id": "ev_fb4eae0c9be69541893c3047b15076c461006bd02d921a124867ba8dc1294465",
+      "operation": "procedure_assembly",
+      "address": "0x5145d0"
+    },
+    "object_projection": {
+      "bundle": "evidence/forest_stage_native.json",
+      "evidence_id": "ev_18cdcb45ca765d672e35f752afdc5e706f22e1459b45625a11f7c281f3ba326b",
+      "operation": "procedure_assembly",
+      "address": "0x513fc0"
+    },
+    "sort": {
+      "bundle": "evidence/forest_stage_native.json",
+      "evidence_id": "ev_885213dafbc931d020af2efd8feb71415f8a38dde2ccdcff8bc6e3cd161d64cb",
+      "operation": "procedure_pseudo_code",
+      "address": "0x515320"
+    }
+  },
+  "native_bundle": {
+    "path": "remake/runtime/evidence/skill_test_20261020/native_evidence.json",
+    "sha256": "8ed9d1a24c01b2efcd4fc13aeb25432c5b14d985aeec38f32bc19b59b17a79b7"
+  },
+  "original_game_execution_observed": false,
+  "limitations": [
+    "Source TestStage pixels and zero-camera geometry are statically derived; no original battle runtime was observed.",
+    "Original dynamic projection, native RGB565 mixing and camera changes are not claimed by this export."
+  ]
+}

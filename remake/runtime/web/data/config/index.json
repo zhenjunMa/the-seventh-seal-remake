@@ -1,0 +1,12 @@
+{
+  "schema": "seventh-seal-runtime-config",
+  "version": 1,
+  "mode": "original",
+  "files": {
+    "skills": "skills.json",
+    "battle": "battle.json",
+    "rewards": "rewards.json",
+    "items": "items.json"
+  },
+  "notes": "统一修改parameters；original和source用于核对。original模式禁止数值差异，debug模式应用调参。每场战斗重新读取并保留快照。"
+}

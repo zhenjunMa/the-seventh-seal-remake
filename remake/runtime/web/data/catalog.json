@@ -1,0 +1,738 @@
+{
+  "schema": "seventh-seal-runtime-catalog",
+  "version": 1,
+  "title": "第七封印 · 重制 0.8",
+  "seed": "data/opening_seed.json",
+  "maps": [
+    {
+      "id": "M01010",
+      "path": "data/maps/m01010.json",
+      "sha256": "d4ac4a3f50dbddc4755533ca3ada2ae29b7d2e887f4687a5c02941477698074b"
+    },
+    {
+      "id": "M01030",
+      "path": "data/maps/m01030.json",
+      "sha256": "653f2e57b829a459b45a6b8fd4d51a8a74184a4c6898ae03834745db43f55e39"
+    },
+    {
+      "id": "M17010",
+      "path": "data/maps/m17010.json",
+      "sha256": "8e6e90e287b48ad53432163394bc496666bed1b34aea2acb19deb8d23c3c0342"
+    },
+    {
+      "id": "M17020",
+      "path": "data/maps/m17020.json",
+      "sha256": "1d299e878709b13a8a50f93892313cdd30715a5a9d397bafae0fd165c65fa3d9"
+    },
+    {
+      "id": "M17026",
+      "path": "data/maps/m17026.json",
+      "sha256": "369809e230fd539e0d12b074c1ce7d8f99ad5303ac43edaa8828b8a3ace75f53"
+    },
+    {
+      "id": "M17029",
+      "path": "data/maps/m17029.json",
+      "sha256": "d687c1943d598f6f5f3b7dd947c03fb2b3d93d282684b89ab4d642e245c72598"
+    },
+    {
+      "id": "M70010",
+      "path": "data/maps/m70010.json",
+      "sha256": "263b4300fa6407314bb0dbd6905938a621e37e68a7004b102ec2cab2749cb9ca"
+    },
+    {
+      "id": "M72061",
+      "path": "data/maps/m72061.json",
+      "sha256": "aac2c2cbbbf4cc2a1ed03565c3df8f0b5517446991d1de7f0d8559599d8b1d5d"
+    }
+  ],
+  "roles": [
+    {
+      "id": "001",
+      "source": "ROLE/001.dgp",
+      "name": "英格妮",
+      "frame_count": 1608,
+      "frame_width": 160,
+      "frame_height": 150,
+      "sha256": "83e1e533be733c53a462f64a5160da6b6d28ae06557f0f3eaf74fb6a9e40f0a6",
+      "anchor_raw": [
+        80,
+        111,
+        0
+      ],
+      "actions": [
+        {
+          "index": 0,
+          "directions": 8,
+          "directions_raw": 8,
+          "interval_raw": 180,
+          "loop_raw": 1,
+          "frames_per_direction": 10,
+          "first_frame": 0,
+          "identifier_raw": 0,
+          "sheet": "/prototype/assets/ROLE_001/action_00.png",
+          "interval_ms_preview": 180
+        },
+        {
+          "index": 1,
+          "directions": 8,
+          "directions_raw": 8,
+          "interval_raw": 250,
+          "loop_raw": 1,
+          "frames_per_direction": 10,
+          "first_frame": 80,
+          "identifier_raw": 1,
+          "sheet": "/prototype/assets/ROLE_001/action_01.png",
+          "interval_ms_preview": 250
+        },
+        {
+          "index": 2,
+          "directions": 8,
+          "directions_raw": 8,
+          "interval_raw": 130,
+          "loop_raw": 1,
+          "frames_per_direction": 12,
+          "first_frame": 160,
+          "identifier_raw": 2,
+          "sheet": "/prototype/assets/ROLE_001/action_02.png",
+          "interval_ms_preview": 130
+        }
+      ],
+      "map_draw_offset": {
+        "x": -64,
+        "y": -111
+      }
+    },
+    {
+      "id": "002",
+      "source": "ROLE/002.dgp",
+      "name": "凯",
+      "frame_count": 1336,
+      "frame_width": 160,
+      "frame_height": 160,
+      "sha256": "15f4fc712c95486e2f6c5917d20e9865573f191845eb7ec3f39883190966a15c",
+      "anchor_raw": [
+        80,
+        121,
+        0
+      ],
+      "actions": [
+        {
+          "index": 0,
+          "directions": 8,
+          "directions_raw": 8,
+          "interval_raw": 180,
+          "loop_raw": 1,
+          "frames_per_direction": 10,
+          "first_frame": 0,
+          "identifier_raw": 0,
+          "sheet": "/prototype/assets/ROLE_002/action_00.png",
+          "interval_ms_preview": 180
+        },
+        {
+          "index": 1,
+          "directions": 8,
+          "directions_raw": 8,
+          "interval_raw": 250,
+          "loop_raw": 1,
+          "frames_per_direction": 10,
+          "first_frame": 80,
+          "identifier_raw": 1,
+          "sheet": "/prototype/assets/ROLE_002/action_01.png",
+          "interval_ms_preview": 250
+        },
+        {
+          "index": 2,
+          "directions": 8,
+          "directions_raw": 8,
+          "interval_raw": 130,
+          "loop_raw": 1,
+          "frames_per_direction": 12,
+          "first_frame": 160,
+          "identifier_raw": 2,
+          "sheet": "/prototype/assets/ROLE_002/action_02.png",
+          "interval_ms_preview": 130
+        }
+      ],
+      "map_draw_offset": {
+        "x": -64,
+        "y": -121
+      }
+    },
+    {
+      "id": "003",
+      "name": "娃蒂",
+      "source": {
+        "path": "ROLE/003.dgp",
+        "sha256": "e2c3e669c460f7076a811c2d1a1af60c8201d75a3702f24acdb040abc3c06124"
+      },
+      "frame_width": 170,
+      "frame_height": 160,
+      "anchor": {
+        "x": 85,
+        "y": 119
+      },
+      "actions": [
+        {
+          "index": 0,
+          "sheet": "/assets/chapter_roles/003/action_00.png",
+          "sha256": "f1ee2833f994920b30eea8ee9bccdace02852e4177b8299c6b28ed3c708e814e",
+          "frame_count": 10,
+          "directions": 8,
+          "first_frame": 0,
+          "interval_raw": 180,
+          "loop_raw": 1,
+          "raw_hex": "08b40000000000000000000000010a00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "sequence_length_raw": 0,
+          "sequence_raw": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "uses_sequence": false,
+          "logical_count": 10,
+          "logical_frames": [
+            {
+              "logical_index": 0,
+              "physical_frame": 0,
+              "hold_interval_raw": 180
+            },
+            {
+              "logical_index": 1,
+              "physical_frame": 1,
+              "hold_interval_raw": 180
+            },
+            {
+              "logical_index": 2,
+              "physical_frame": 2,
+              "hold_interval_raw": 180
+            },
+            {
+              "logical_index": 3,
+              "physical_frame": 3,
+              "hold_interval_raw": 180
+            },
+            {
+              "logical_index": 4,
+              "physical_frame": 4,
+              "hold_interval_raw": 180
+            },
+            {
+              "logical_index": 5,
+              "physical_frame": 5,
+              "hold_interval_raw": 180
+            },
+            {
+              "logical_index": 6,
+              "physical_frame": 6,
+              "hold_interval_raw": 180
+            },
+            {
+              "logical_index": 7,
+              "physical_frame": 7,
+              "hold_interval_raw": 180
+            },
+            {
+              "logical_index": 8,
+              "physical_frame": 8,
+              "hold_interval_raw": 180
+            },
+            {
+              "logical_index": 9,
+              "physical_frame": 9,
+              "hold_interval_raw": 180
+            }
+          ],
+          "sequence_rule": "(raw+0x0D &0x0F)==0 selects byte+0x16+logical_index; otherwise logical_index. Add first_frame and direction*physical_frame_count.",
+          "sequence_evidence": [
+            "ev_0ffb771246c6d16325580fe6f266e66f57fbb84cfe7a3be766ff48234043fbab"
+          ],
+          "source_offset": 67
+        },
+        {
+          "index": 1,
+          "sheet": "/assets/chapter_roles/003/action_01.png",
+          "sha256": "440062d57806466c050a3b4e2f449f97a068e82e2ad825425133da5e25378d30",
+          "frame_count": 10,
+          "directions": 8,
+          "first_frame": 80,
+          "interval_raw": 250,
+          "loop_raw": 1,
+          "raw_hex": "08fa0000000000000000000000010a00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000050000000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "sequence_length_raw": 0,
+          "sequence_raw": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "uses_sequence": false,
+          "logical_count": 10,
+          "logical_frames": [
+            {
+              "logical_index": 0,
+              "physical_frame": 0,
+              "hold_interval_raw": 250
+            },
+            {
+              "logical_index": 1,
+              "physical_frame": 1,
+              "hold_interval_raw": 250
+            },
+            {
+              "logical_index": 2,
+              "physical_frame": 2,
+              "hold_interval_raw": 250
+            },
+            {
+              "logical_index": 3,
+              "physical_frame": 3,
+              "hold_interval_raw": 250
+            },
+            {
+              "logical_index": 4,
+              "physical_frame": 4,
+              "hold_interval_raw": 250
+            },
+            {
+              "logical_index": 5,
+              "physical_frame": 5,
+              "hold_interval_raw": 250
+            },
+            {
+              "logical_index": 6,
+              "physical_frame": 6,
+              "hold_interval_raw": 250
+            },
+            {
+              "logical_index": 7,
+              "physical_frame": 7,
+              "hold_interval_raw": 250
+            },
+            {
+              "logical_index": 8,
+              "physical_frame": 8,
+              "hold_interval_raw": 250
+            },
+            {
+              "logical_index": 9,
+              "physical_frame": 9,
+              "hold_interval_raw": 250
+            }
+          ],
+          "sequence_rule": "(raw+0x0D &0x0F)==0 selects byte+0x16+logical_index; otherwise logical_index. Add first_frame and direction*physical_frame_count.",
+          "sequence_evidence": [
+            "ev_0ffb771246c6d16325580fe6f266e66f57fbb84cfe7a3be766ff48234043fbab"
+          ],
+          "source_offset": 239
+        },
+        {
+          "index": 2,
+          "sheet": "/assets/chapter_roles/003/action_02.png",
+          "sha256": "cf65350c6d816731eb04caaeb1f11b7bf67c515290eee176748a7f20bdcf53ed",
+          "frame_count": 12,
+          "directions": 8,
+          "first_frame": 160,
+          "interval_raw": 130,
+          "loop_raw": 1,
+          "raw_hex": "08820000000000000000000000010c000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a0000000000000000000000002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "sequence_length_raw": 0,
+          "sequence_raw": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "uses_sequence": false,
+          "logical_count": 12,
+          "logical_frames": [
+            {
+              "logical_index": 0,
+              "physical_frame": 0,
+              "hold_interval_raw": 130
+            },
+            {
+              "logical_index": 1,
+              "physical_frame": 1,
+              "hold_interval_raw": 130
+            },
+            {
+              "logical_index": 2,
+              "physical_frame": 2,
+              "hold_interval_raw": 130
+            },
+            {
+              "logical_index": 3,
+              "physical_frame": 3,
+              "hold_interval_raw": 130
+            },
+            {
+              "logical_index": 4,
+              "physical_frame": 4,
+              "hold_interval_raw": 130
+            },
+            {
+              "logical_index": 5,
+              "physical_frame": 5,
+              "hold_interval_raw": 130
+            },
+            {
+              "logical_index": 6,
+              "physical_frame": 6,
+              "hold_interval_raw": 130
+            },
+            {
+              "logical_index": 7,
+              "physical_frame": 7,
+              "hold_interval_raw": 130
+            },
+            {
+              "logical_index": 8,
+              "physical_frame": 8,
+              "hold_interval_raw": 130
+            },
+            {
+              "logical_index": 9,
+              "physical_frame": 9,
+              "hold_interval_raw": 130
+            },
+            {
+              "logical_index": 10,
+              "physical_frame": 10,
+              "hold_interval_raw": 130
+            },
+            {
+              "logical_index": 11,
+              "physical_frame": 11,
+              "hold_interval_raw": 130
+            }
+          ],
+          "sequence_rule": "(raw+0x0D &0x0F)==0 selects byte+0x16+logical_index; otherwise logical_index. Add first_frame and direction*physical_frame_count.",
+          "sequence_evidence": [
+            "ev_0ffb771246c6d16325580fe6f266e66f57fbb84cfe7a3be766ff48234043fbab"
+          ],
+          "source_offset": 411
+        }
+      ],
+      "limitation": "DGP action indexes are zero-based; exact native blend/timing remains unobserved"
+    }
+  ],
+  "runtime_content": "data/runtime_content.json",
+  "opening_program": "data/opening_program.json",
+  "opening_resources": "data/opening_map_resources.json",
+  "chapter_story": "data/chapter_story.json",
+  "chapter_resources": "data/chapter_map_resources.json",
+  "map_effects": "data/map_effects.json",
+  "party_combat": "data/party_combat.json",
+  "party_skills": "data/party_skills.json",
+  "party_rewards": "data/party_rewards.json",
+  "party_reactions": "data/party_reactions.json",
+  "party_battle_view": "data/party_battle_view.json",
+  "items": "data/items.json",
+  "item_presentation": "data/item_presentation.json",
+  "audio": "data/audio.json",
+  "operation_menu": "data/operation_menu.json",
+  "content_checklist": "data/content_checklist.json",
+  "events": "data/events.json",
+  "combat_sample": "data/combat_sample.json",
+  "battle_view": "data/battle_view.json",
+  "runtime_config": "data/config/index.json",
+  "world_map": "data/world_map.json",
+  "route_events": "data/route_events.json",
+  "encounters": "data/encounters.json",
+  "forest_combat": "data/forest_combat.json",
+  "forest_battle_view": "data/forest_full_battle_view.json",
+  "scope": {
+    "official_runtime_started": true,
+    "ready_exits": 6,
+    "source_backed_events": 1,
+    "one_on_one_turn_sample": true,
+    "full_combat": false,
+    "original_action_queue": true,
+    "forest_ai": true,
+    "complete_forest_contacts": true,
+    "forest_rewards": true,
+    "hidden_encounters": true,
+    "original_save_compatibility": false,
+    "visual_fidelity_pending": true,
+    "new_game_initialization": true,
+    "opening_prologue": true,
+    "opening_story": false,
+    "fire_valley_departure": true,
+    "new_game_party_combat": true,
+    "chapter_complete": false,
+    "post_story_route": true,
+    "native_groups": true,
+    "item_use": true,
+    "equipment_menu": true,
+    "home_rest": true,
+    "forest_game_over": true,
+    "audio": true
+  },
+  "introduction": "新游戏从神殿序章开始，王厅找凯并入队，回住处领取装备，离谷进入白木森林探索与战斗。",
+  "boundaries": "0.8：新游戏主线、双人森林战斗、物品使用、按人物／部位换装、住处休息、败北电影与主菜单、基础音乐音效和存读档已接入。后续剧情及原版镜头、轨迹、混色、字体的精确对照仍待完善。"
+}

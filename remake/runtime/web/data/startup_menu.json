@@ -1,0 +1,5824 @@
+{
+  "schema": "seventh-seal-startup-menu",
+  "version": 1,
+  "game_sha256": "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18",
+  "assets": {
+    "menuback": {
+      "source": {
+        "path": "picture/MenuBack.pak",
+        "bytes": 1850093,
+        "sha256": "321770818538d4aee9820466a43e6e42c574cb074ecef96405dfd428a13320dc"
+      },
+      "frames": [
+        {
+          "index": 0,
+          "path": "/assets/startup/menuback/frame_000.png",
+          "width": 640,
+          "height": 480,
+          "sha256": "e5fc3101f9ac3664bcad82532df5fe421746c4ab4c522cbfb68b30f5739ec032",
+          "source_offset": 437,
+          "source_bytes": 308276,
+          "source_name": "01.bmp",
+          "offset": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "index": 1,
+          "path": "/assets/startup/menuback/frame_001.png",
+          "width": 640,
+          "height": 480,
+          "sha256": "f048a45d45ff7edb6ae0fe7cc061f27a591ed7c8754febdf6a0877377724b745",
+          "source_offset": 308713,
+          "source_bytes": 308276,
+          "source_name": "02.bmp",
+          "offset": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "index": 2,
+          "path": "/assets/startup/menuback/frame_002.png",
+          "width": 640,
+          "height": 480,
+          "sha256": "c21b5aa21ea4a95656523b8d84f02831bfb15093b3d5113d8cedeb2e214d814e",
+          "source_offset": 616989,
+          "source_bytes": 308276,
+          "source_name": "03.bmp",
+          "offset": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "index": 3,
+          "path": "/assets/startup/menuback/frame_003.png",
+          "width": 640,
+          "height": 480,
+          "sha256": "084b68b25208fe8dd6b8a26de29ac4e5ee5993854fd563667ed6ad348e3c665f",
+          "source_offset": 925265,
+          "source_bytes": 308276,
+          "source_name": "04.bmp",
+          "offset": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "index": 4,
+          "path": "/assets/startup/menuback/frame_004.png",
+          "width": 640,
+          "height": 480,
+          "sha256": "193dde1091badd7a3d3d72c519c6ec3c6b604d9888b61a4a2e3adc823980a66f",
+          "source_offset": 1233541,
+          "source_bytes": 308276,
+          "source_name": "05.bmp",
+          "offset": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "index": 5,
+          "path": "/assets/startup/menuback/frame_005.png",
+          "width": 640,
+          "height": 480,
+          "sha256": "83042cf4e1b9cc761c807012ed857b9263daad7626aa9273d609c086010e620d",
+          "source_offset": 1541817,
+          "source_bytes": 308276,
+          "source_name": "06.bmp",
+          "offset": {
+            "x": 0,
+            "y": 0
+          }
+        }
+      ],
+      "frame_count": 6,
+      "indexing": "Zero based source index, with local span positions retained inside PNG"
+    },
+    "menubtn": {
+      "source": {
+        "path": "picture/MenuBtn.pak",
+        "bytes": 847886,
+        "sha256": "4f84335d6a5229e7557dab04c928fbc3f6bedf165430ea09376ee4cb696533ea"
+      },
+      "frames": [
+        {
+          "index": 0,
+          "path": "/assets/startup/menubtn/frame_000.png",
+          "width": 204,
+          "height": 156,
+          "sha256": "a7e91dcee8700b061c1b2e084917456c2dca41cad25b41afe7ce1d55cae04807",
+          "source_offset": 152,
+          "source_bounds": {
+            "x": 32,
+            "y": 15,
+            "width": 170,
+            "height": 138
+          },
+          "blend_bounds": {
+            "x": 30,
+            "y": 13,
+            "width": 174,
+            "height": 143
+          },
+          "opaque_spans": 173,
+          "blend_spans": 346,
+          "blend_offset": 16845,
+          "encoded_bytes": 21227,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 1,
+          "path": "/assets/startup/menubtn/frame_001.png",
+          "width": 205,
+          "height": 150,
+          "sha256": "a974e86068b35ed7016245d56cc8cf3cada91c3596e9c7495e6b6b2469b717c3",
+          "source_offset": 21379,
+          "source_bounds": {
+            "x": 25,
+            "y": 16,
+            "width": 178,
+            "height": 131
+          },
+          "blend_bounds": {
+            "x": 22,
+            "y": 14,
+            "width": 183,
+            "height": 136
+          },
+          "opaque_spans": 172,
+          "blend_spans": 344,
+          "blend_offset": 16969,
+          "encoded_bytes": 21355,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 2,
+          "path": "/assets/startup/menubtn/frame_002.png",
+          "width": 204,
+          "height": 143,
+          "sha256": "d6d516b8e326e4f8db170bbbb370f7b2a5ce7b8a87d00850550eb470089903a3",
+          "source_offset": 42734,
+          "source_bounds": {
+            "x": 19,
+            "y": 18,
+            "width": 182,
+            "height": 122
+          },
+          "blend_bounds": {
+            "x": 16,
+            "y": 16,
+            "width": 188,
+            "height": 127
+          },
+          "opaque_spans": 187,
+          "blend_spans": 366,
+          "blend_offset": 17113,
+          "encoded_bytes": 21733,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 3,
+          "path": "/assets/startup/menubtn/frame_003.png",
+          "width": 200,
+          "height": 143,
+          "sha256": "c105da387aaca87ca397f64fc8f9f09eac51d3e7a04f4f3bdbaa59e8205759a5",
+          "source_offset": 64467,
+          "source_bounds": {
+            "x": 16,
+            "y": 17,
+            "width": 182,
+            "height": 123
+          },
+          "blend_bounds": {
+            "x": 13,
+            "y": 16,
+            "width": 187,
+            "height": 127
+          },
+          "opaque_spans": 236,
+          "blend_spans": 419,
+          "blend_offset": 17231,
+          "encoded_bytes": 22523,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 4,
+          "path": "/assets/startup/menubtn/frame_004.png",
+          "width": 195,
+          "height": 150,
+          "sha256": "6a825c440a851ab615d1ce58f72730b6fd43a2da6e401edb291a2e500984c727",
+          "source_offset": 86990,
+          "source_bounds": {
+            "x": 15,
+            "y": 16,
+            "width": 177,
+            "height": 131
+          },
+          "blend_bounds": {
+            "x": 12,
+            "y": 14,
+            "width": 183,
+            "height": 136
+          },
+          "opaque_spans": 247,
+          "blend_spans": 484,
+          "blend_offset": 17066,
+          "encoded_bytes": 22922,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 5,
+          "path": "/assets/startup/menubtn/frame_005.png",
+          "width": 189,
+          "height": 156,
+          "sha256": "9a4ce974f52ea5c6c69b7af55d382f00c581a5d42d8b3d81298a549f1c5475dd",
+          "source_offset": 109912,
+          "source_bounds": {
+            "x": 15,
+            "y": 15,
+            "width": 170,
+            "height": 138
+          },
+          "blend_bounds": {
+            "x": 13,
+            "y": 13,
+            "width": 176,
+            "height": 143
+          },
+          "opaque_spans": 247,
+          "blend_spans": 481,
+          "blend_offset": 16938,
+          "encoded_bytes": 22706,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 6,
+          "path": "/assets/startup/menubtn/frame_006.png",
+          "width": 193,
+          "height": 159,
+          "sha256": "01282f98ed1c8490278d5803ad352e9272467b651a6f00e5f94bb85d8159b178",
+          "source_offset": 132618,
+          "source_bounds": {
+            "x": 18,
+            "y": 14,
+            "width": 173,
+            "height": 142
+          },
+          "blend_bounds": {
+            "x": 15,
+            "y": 13,
+            "width": 178,
+            "height": 146
+          },
+          "opaque_spans": 238,
+          "blend_spans": 473,
+          "blend_offset": 16888,
+          "encoded_bytes": 22618,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 7,
+          "path": "/assets/startup/menubtn/frame_007.png",
+          "width": 198,
+          "height": 161,
+          "sha256": "7885abc7d6c5f85e7150e0a698bec9998284222cb6816134bef1be7017b5a254",
+          "source_offset": 155236,
+          "source_bounds": {
+            "x": 21,
+            "y": 14,
+            "width": 175,
+            "height": 143
+          },
+          "blend_bounds": {
+            "x": 19,
+            "y": 13,
+            "width": 179,
+            "height": 148
+          },
+          "opaque_spans": 229,
+          "blend_spans": 426,
+          "blend_offset": 16954,
+          "encoded_bytes": 22366,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 8,
+          "path": "/assets/startup/menubtn/frame_008.png",
+          "width": 201,
+          "height": 160,
+          "sha256": "376d8b01546f5e79261855bfcdd81b18c1875b8dd1938a53b3eb9e1b5878cfe1",
+          "source_offset": 177602,
+          "source_bounds": {
+            "x": 26,
+            "y": 14,
+            "width": 174,
+            "height": 142
+          },
+          "blend_bounds": {
+            "x": 24,
+            "y": 13,
+            "width": 177,
+            "height": 147
+          },
+          "opaque_spans": 195,
+          "blend_spans": 379,
+          "blend_offset": 16951,
+          "encoded_bytes": 21773,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 9,
+          "path": "/assets/startup/menubtn/frame_009.png",
+          "width": 204,
+          "height": 156,
+          "sha256": "53178a0158dec8a71f69e130c8a3f7679ac7312bc6c1c6db30afaf32c247d8ee",
+          "source_offset": 199375,
+          "source_bounds": {
+            "x": 32,
+            "y": 15,
+            "width": 170,
+            "height": 138
+          },
+          "blend_bounds": {
+            "x": 30,
+            "y": 13,
+            "width": 174,
+            "height": 143
+          },
+          "opaque_spans": 191,
+          "blend_spans": 372,
+          "blend_offset": 17083,
+          "encoded_bytes": 21771,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 10,
+          "path": "/assets/startup/menubtn/frame_010.png",
+          "width": 205,
+          "height": 150,
+          "sha256": "6efd150e3448c3cd5e5f148431a9820bc1fe9ba3ccf78a7cf391aaa3a84aa5c1",
+          "source_offset": 221146,
+          "source_bounds": {
+            "x": 25,
+            "y": 16,
+            "width": 178,
+            "height": 131
+          },
+          "blend_bounds": {
+            "x": 22,
+            "y": 14,
+            "width": 183,
+            "height": 136
+          },
+          "opaque_spans": 185,
+          "blend_spans": 364,
+          "blend_offset": 17166,
+          "encoded_bytes": 21808,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 11,
+          "path": "/assets/startup/menubtn/frame_011.png",
+          "width": 204,
+          "height": 143,
+          "sha256": "1722bbad67a13a0fc6637ea5ba26c1cd3bfceeb68c2f134bf2f2d7dc31b811c2",
+          "source_offset": 242954,
+          "source_bounds": {
+            "x": 19,
+            "y": 18,
+            "width": 182,
+            "height": 122
+          },
+          "blend_bounds": {
+            "x": 16,
+            "y": 16,
+            "width": 188,
+            "height": 127
+          },
+          "opaque_spans": 199,
+          "blend_spans": 374,
+          "blend_offset": 17345,
+          "encoded_bytes": 22067,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 12,
+          "path": "/assets/startup/menubtn/frame_012.png",
+          "width": 200,
+          "height": 143,
+          "sha256": "29f981c189569be0f00dc55e42cb3f329725ebb51abefc22fe85b751923e68b0",
+          "source_offset": 265021,
+          "source_bounds": {
+            "x": 16,
+            "y": 17,
+            "width": 182,
+            "height": 123
+          },
+          "blend_bounds": {
+            "x": 13,
+            "y": 16,
+            "width": 187,
+            "height": 127
+          },
+          "opaque_spans": 245,
+          "blend_spans": 435,
+          "blend_offset": 17445,
+          "encoded_bytes": 22899,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 13,
+          "path": "/assets/startup/menubtn/frame_013.png",
+          "width": 195,
+          "height": 150,
+          "sha256": "30a9844fc3ef6dc91fd7e5ed178d39953a463b0e3aea658543515dd66cca3d9f",
+          "source_offset": 287920,
+          "source_bounds": {
+            "x": 15,
+            "y": 16,
+            "width": 177,
+            "height": 131
+          },
+          "blend_bounds": {
+            "x": 12,
+            "y": 14,
+            "width": 183,
+            "height": 136
+          },
+          "opaque_spans": 258,
+          "blend_spans": 500,
+          "blend_offset": 17316,
+          "encoded_bytes": 23334,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 14,
+          "path": "/assets/startup/menubtn/frame_014.png",
+          "width": 187,
+          "height": 156,
+          "sha256": "5175644ca3f980c11a5753c87645760b1db554f2313fca6eff3a6d8888081b1b",
+          "source_offset": 311254,
+          "source_bounds": {
+            "x": 15,
+            "y": 15,
+            "width": 170,
+            "height": 138
+          },
+          "blend_bounds": {
+            "x": 13,
+            "y": 13,
+            "width": 174,
+            "height": 143
+          },
+          "opaque_spans": 260,
+          "blend_spans": 496,
+          "blend_offset": 17150,
+          "encoded_bytes": 23112,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 15,
+          "path": "/assets/startup/menubtn/frame_015.png",
+          "width": 193,
+          "height": 159,
+          "sha256": "d713a0b2f700c3535b6bb8a3ed8d9119ad7bfcb3843e40a0469412c0ae90cd41",
+          "source_offset": 334366,
+          "source_bounds": {
+            "x": 18,
+            "y": 14,
+            "width": 173,
+            "height": 142
+          },
+          "blend_bounds": {
+            "x": 15,
+            "y": 13,
+            "width": 178,
+            "height": 146
+          },
+          "opaque_spans": 244,
+          "blend_spans": 473,
+          "blend_offset": 16975,
+          "encoded_bytes": 22757,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 16,
+          "path": "/assets/startup/menubtn/frame_016.png",
+          "width": 198,
+          "height": 161,
+          "sha256": "07ebe93a1965bf31ec477d09c201b7a9b183f422ffa2a1ac5b809db3ff54d0e0",
+          "source_offset": 357123,
+          "source_bounds": {
+            "x": 21,
+            "y": 14,
+            "width": 175,
+            "height": 143
+          },
+          "blend_bounds": {
+            "x": 19,
+            "y": 13,
+            "width": 179,
+            "height": 148
+          },
+          "opaque_spans": 226,
+          "blend_spans": 423,
+          "blend_offset": 16999,
+          "encoded_bytes": 22395,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 17,
+          "path": "/assets/startup/menubtn/frame_017.png",
+          "width": 201,
+          "height": 160,
+          "sha256": "9d382a192c755859e82b47e040eba18f4359f963b14126b368489baf146696e7",
+          "source_offset": 379518,
+          "source_bounds": {
+            "x": 26,
+            "y": 14,
+            "width": 174,
+            "height": 142
+          },
+          "blend_bounds": {
+            "x": 24,
+            "y": 13,
+            "width": 177,
+            "height": 147
+          },
+          "opaque_spans": 195,
+          "blend_spans": 377,
+          "blend_offset": 16977,
+          "encoded_bytes": 21793,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 18,
+          "path": "/assets/startup/menubtn/frame_018.png",
+          "width": 204,
+          "height": 156,
+          "sha256": "dd50f5766fe69ef12510c81b59b6f1da3ca342497e93faf542f76790a0ffea03",
+          "source_offset": 401311,
+          "source_bounds": {
+            "x": 32,
+            "y": 15,
+            "width": 170,
+            "height": 138
+          },
+          "blend_bounds": {
+            "x": 30,
+            "y": 13,
+            "width": 174,
+            "height": 143
+          },
+          "opaque_spans": 187,
+          "blend_spans": 364,
+          "blend_offset": 17035,
+          "encoded_bytes": 21577,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 19,
+          "path": "/assets/startup/menubtn/frame_019.png",
+          "width": 205,
+          "height": 150,
+          "sha256": "08579a559481d5fc8507dff329d788e490b83da416cada7b97e5d200957d0efa",
+          "source_offset": 422888,
+          "source_bounds": {
+            "x": 24,
+            "y": 16,
+            "width": 179,
+            "height": 131
+          },
+          "blend_bounds": {
+            "x": 22,
+            "y": 14,
+            "width": 183,
+            "height": 136
+          },
+          "opaque_spans": 177,
+          "blend_spans": 340,
+          "blend_offset": 17024,
+          "encoded_bytes": 21330,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 20,
+          "path": "/assets/startup/menubtn/frame_020.png",
+          "width": 204,
+          "height": 143,
+          "sha256": "4c3a8b47659d3c0b2c4a68c6dd4df729836d31d65a1e333d864e7de796427504",
+          "source_offset": 444218,
+          "source_bounds": {
+            "x": 19,
+            "y": 18,
+            "width": 182,
+            "height": 122
+          },
+          "blend_bounds": {
+            "x": 16,
+            "y": 16,
+            "width": 188,
+            "height": 127
+          },
+          "opaque_spans": 180,
+          "blend_spans": 348,
+          "blend_offset": 17054,
+          "encoded_bytes": 21384,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 21,
+          "path": "/assets/startup/menubtn/frame_021.png",
+          "width": 200,
+          "height": 143,
+          "sha256": "5e3cccebb23ba57d30daadc4ff3f3ec7619bd0df9050d8b720f2ea7ad47d3456",
+          "source_offset": 465602,
+          "source_bounds": {
+            "x": 15,
+            "y": 17,
+            "width": 183,
+            "height": 123
+          },
+          "blend_bounds": {
+            "x": 13,
+            "y": 16,
+            "width": 187,
+            "height": 127
+          },
+          "opaque_spans": 218,
+          "blend_spans": 400,
+          "blend_offset": 17112,
+          "encoded_bytes": 22012,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 22,
+          "path": "/assets/startup/menubtn/frame_022.png",
+          "width": 195,
+          "height": 150,
+          "sha256": "c4b433ba9a7b2c5fc2998623fceefbfbd6f7828df9948390c9bb1abbdc9188fd",
+          "source_offset": 487614,
+          "source_bounds": {
+            "x": 14,
+            "y": 16,
+            "width": 178,
+            "height": 131
+          },
+          "blend_bounds": {
+            "x": 12,
+            "y": 14,
+            "width": 183,
+            "height": 136
+          },
+          "opaque_spans": 232,
+          "blend_spans": 447,
+          "blend_offset": 16951,
+          "encoded_bytes": 22367,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 23,
+          "path": "/assets/startup/menubtn/frame_023.png",
+          "width": 187,
+          "height": 155,
+          "sha256": "644b9ea8d6317fc8c0b0820cfd5800cecb8928fb2cc9f45a2c2b026d4ad1109e",
+          "source_offset": 509981,
+          "source_bounds": {
+            "x": 15,
+            "y": 15,
+            "width": 170,
+            "height": 138
+          },
+          "blend_bounds": {
+            "x": 13,
+            "y": 13,
+            "width": 174,
+            "height": 142
+          },
+          "opaque_spans": 227,
+          "blend_spans": 443,
+          "blend_offset": 16733,
+          "encoded_bytes": 22057,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 24,
+          "path": "/assets/startup/menubtn/frame_024.png",
+          "width": 193,
+          "height": 159,
+          "sha256": "165d4988d1c0dbaaeb2807a01f6f770e79e05280074b672a3805f9c94e892225",
+          "source_offset": 532038,
+          "source_bounds": {
+            "x": 17,
+            "y": 14,
+            "width": 174,
+            "height": 142
+          },
+          "blend_bounds": {
+            "x": 15,
+            "y": 13,
+            "width": 178,
+            "height": 146
+          },
+          "opaque_spans": 217,
+          "blend_spans": 427,
+          "blend_offset": 16616,
+          "encoded_bytes": 21778,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 25,
+          "path": "/assets/startup/menubtn/frame_025.png",
+          "width": 198,
+          "height": 161,
+          "sha256": "c8c32eddd09252f8f0061d3b2a296bdd881f7c419d1a44361c9177bf5731138c",
+          "source_offset": 553816,
+          "source_bounds": {
+            "x": 21,
+            "y": 14,
+            "width": 175,
+            "height": 143
+          },
+          "blend_bounds": {
+            "x": 19,
+            "y": 13,
+            "width": 179,
+            "height": 148
+          },
+          "opaque_spans": 210,
+          "blend_spans": 397,
+          "blend_offset": 16670,
+          "encoded_bytes": 21648,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 26,
+          "path": "/assets/startup/menubtn/frame_026.png",
+          "width": 201,
+          "height": 160,
+          "sha256": "fced7a01fdb902702b5c5a66a72c817261c74216c6cfacfa9136a2dd924eb29f",
+          "source_offset": 575464,
+          "source_bounds": {
+            "x": 26,
+            "y": 14,
+            "width": 174,
+            "height": 142
+          },
+          "blend_bounds": {
+            "x": 24,
+            "y": 13,
+            "width": 177,
+            "height": 147
+          },
+          "opaque_spans": 173,
+          "blend_spans": 348,
+          "blend_offset": 16609,
+          "encoded_bytes": 20995,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 27,
+          "path": "/assets/startup/menubtn/frame_027.png",
+          "width": 204,
+          "height": 156,
+          "sha256": "c8f50035e1665038b5eeaa96df7af2f8c63fb3d1762c44a460763b2a68a2d07e",
+          "source_offset": 596459,
+          "source_bounds": {
+            "x": 32,
+            "y": 15,
+            "width": 170,
+            "height": 138
+          },
+          "blend_bounds": {
+            "x": 30,
+            "y": 13,
+            "width": 174,
+            "height": 143
+          },
+          "opaque_spans": 165,
+          "blend_spans": 339,
+          "blend_offset": 16703,
+          "encoded_bytes": 20943,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 28,
+          "path": "/assets/startup/menubtn/frame_028.png",
+          "width": 205,
+          "height": 150,
+          "sha256": "26b16c62090c549a44e86e4b25829b615bfcbc9748266fe3c502c44d9507414c",
+          "source_offset": 617402,
+          "source_bounds": {
+            "x": 25,
+            "y": 16,
+            "width": 178,
+            "height": 131
+          },
+          "blend_bounds": {
+            "x": 22,
+            "y": 14,
+            "width": 183,
+            "height": 136
+          },
+          "opaque_spans": 169,
+          "blend_spans": 344,
+          "blend_offset": 16843,
+          "encoded_bytes": 21151,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 29,
+          "path": "/assets/startup/menubtn/frame_029.png",
+          "width": 204,
+          "height": 143,
+          "sha256": "ff964cd7479b930d746f137df6695f8121beea2c09bb64698d9c5a61b39c1ea6",
+          "source_offset": 638553,
+          "source_bounds": {
+            "x": 19,
+            "y": 18,
+            "width": 182,
+            "height": 122
+          },
+          "blend_bounds": {
+            "x": 16,
+            "y": 16,
+            "width": 188,
+            "height": 127
+          },
+          "opaque_spans": 180,
+          "blend_spans": 361,
+          "blend_offset": 17000,
+          "encoded_bytes": 21492,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 30,
+          "path": "/assets/startup/menubtn/frame_030.png",
+          "width": 200,
+          "height": 143,
+          "sha256": "3e149b773954f160ea0e2787deb425325f3dbb4bd9838aa692f36ebd2d149bce",
+          "source_offset": 660045,
+          "source_bounds": {
+            "x": 16,
+            "y": 17,
+            "width": 182,
+            "height": 123
+          },
+          "blend_bounds": {
+            "x": 13,
+            "y": 16,
+            "width": 187,
+            "height": 127
+          },
+          "opaque_spans": 223,
+          "blend_spans": 421,
+          "blend_offset": 17107,
+          "encoded_bytes": 22291,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 31,
+          "path": "/assets/startup/menubtn/frame_031.png",
+          "width": 195,
+          "height": 150,
+          "sha256": "6559c32d9dda46665cb7b49ae94e14af327464da632ed1149a97513c3ca7d03b",
+          "source_offset": 682336,
+          "source_bounds": {
+            "x": 15,
+            "y": 16,
+            "width": 177,
+            "height": 131
+          },
+          "blend_bounds": {
+            "x": 12,
+            "y": 14,
+            "width": 183,
+            "height": 136
+          },
+          "opaque_spans": 236,
+          "blend_spans": 477,
+          "blend_offset": 16945,
+          "encoded_bytes": 22663,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 32,
+          "path": "/assets/startup/menubtn/frame_032.png",
+          "width": 187,
+          "height": 156,
+          "sha256": "cbb983b620725018ed9156dde0662b13071be3addba4849e980ec0678f1884d9",
+          "source_offset": 704999,
+          "source_bounds": {
+            "x": 15,
+            "y": 15,
+            "width": 170,
+            "height": 138
+          },
+          "blend_bounds": {
+            "x": 13,
+            "y": 13,
+            "width": 174,
+            "height": 143
+          },
+          "opaque_spans": 237,
+          "blend_spans": 461,
+          "blend_offset": 16784,
+          "encoded_bytes": 22354,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 33,
+          "path": "/assets/startup/menubtn/frame_033.png",
+          "width": 193,
+          "height": 159,
+          "sha256": "8806f0a281c0884102cc8f490d6dd3aab2218fa26fbd5c103b1f2dd955de2f26",
+          "source_offset": 727353,
+          "source_bounds": {
+            "x": 18,
+            "y": 14,
+            "width": 173,
+            "height": 142
+          },
+          "blend_bounds": {
+            "x": 15,
+            "y": 13,
+            "width": 178,
+            "height": 146
+          },
+          "opaque_spans": 232,
+          "blend_spans": 440,
+          "blend_offset": 16766,
+          "encoded_bytes": 22140,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 34,
+          "path": "/assets/startup/menubtn/frame_034.png",
+          "width": 198,
+          "height": 161,
+          "sha256": "e6399cec6257b261d68f9a6ca7dc45ef30755f4979a27162b9f06854a5f9435e",
+          "source_offset": 749493,
+          "source_bounds": {
+            "x": 21,
+            "y": 14,
+            "width": 175,
+            "height": 143
+          },
+          "blend_bounds": {
+            "x": 19,
+            "y": 13,
+            "width": 179,
+            "height": 148
+          },
+          "opaque_spans": 209,
+          "blend_spans": 402,
+          "blend_offset": 16752,
+          "encoded_bytes": 21842,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 35,
+          "path": "/assets/startup/menubtn/frame_035.png",
+          "width": 201,
+          "height": 159,
+          "sha256": "63189411c60c693fadb250d3ed0abd986523f29a3fa590c743615c7c7d25cb58",
+          "source_offset": 771335,
+          "source_bounds": {
+            "x": 26,
+            "y": 14,
+            "width": 174,
+            "height": 142
+          },
+          "blend_bounds": {
+            "x": 24,
+            "y": 13,
+            "width": 177,
+            "height": 146
+          },
+          "opaque_spans": 181,
+          "blend_spans": 354,
+          "blend_offset": 16757,
+          "encoded_bytes": 21255,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        }
+      ],
+      "frame_count": 36,
+      "indexing": "Zero based source index, with local span positions retained inside PNG"
+    },
+    "menuhlp00": {
+      "source": {
+        "path": "picture/MenuHLP00.pak",
+        "bytes": 77264,
+        "sha256": "6b2b4ece18ecb2be7d6a77494270b446617f876b35a40fc385652d4779a0f58b"
+      },
+      "frames": [
+        {
+          "index": 0,
+          "path": "/assets/startup/menuhlp00/frame_000.png",
+          "width": 429,
+          "height": 89,
+          "sha256": "c4deb6973abe3f424a2c4e6e2420b6b8191aef803fbb09ebbb9e0fa9cdeacb24",
+          "source_offset": 12,
+          "source_bounds": {
+            "x": 12,
+            "y": 6,
+            "width": 343,
+            "height": 45
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 429,
+            "height": 89
+          },
+          "opaque_spans": 303,
+          "blend_spans": 392,
+          "blend_offset": 6672,
+          "encoded_bytes": 75716,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        }
+      ],
+      "frame_count": 1,
+      "indexing": "Zero based source index, with local span positions retained inside PNG"
+    },
+    "menuhlp10": {
+      "source": {
+        "path": "picture/MenuHLP10.pak",
+        "bytes": 78522,
+        "sha256": "1803c6eec363bfd7dcc232f0a708933d134db05f3b768ae08523918ff5f869ec"
+      },
+      "frames": [
+        {
+          "index": 0,
+          "path": "/assets/startup/menuhlp10/frame_000.png",
+          "width": 429,
+          "height": 89,
+          "sha256": "8468979faad6e3be18b22f34da46dd86e1f2bbb942889e9ae47d333378ef3e26",
+          "source_offset": 12,
+          "source_bounds": {
+            "x": 12,
+            "y": 6,
+            "width": 412,
+            "height": 45
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 429,
+            "height": 89
+          },
+          "opaque_spans": 444,
+          "blend_spans": 533,
+          "blend_offset": 7952,
+          "encoded_bytes": 76974,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        }
+      ],
+      "frame_count": 1,
+      "indexing": "Zero based source index, with local span positions retained inside PNG"
+    },
+    "menuhlp20": {
+      "source": {
+        "path": "picture/MenuHLP20.pak",
+        "bytes": 78196,
+        "sha256": "8fa6b348f7c687a6ec173f19c2182c949f9aace8ad9b69cc4f9046da6efb24dd"
+      },
+      "frames": [
+        {
+          "index": 0,
+          "path": "/assets/startup/menuhlp20/frame_000.png",
+          "width": 429,
+          "height": 89,
+          "sha256": "efb840a21f90d8887f3075029a080fa6ebaaf56d4815664171db6c7c3c917ebf",
+          "source_offset": 12,
+          "source_bounds": {
+            "x": 10,
+            "y": 6,
+            "width": 411,
+            "height": 45
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 429,
+            "height": 89
+          },
+          "opaque_spans": 401,
+          "blend_spans": 490,
+          "blend_offset": 7504,
+          "encoded_bytes": 76648,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        }
+      ],
+      "frame_count": 1,
+      "indexing": "Zero based source index, with local span positions retained inside PNG"
+    },
+    "menuhlp21": {
+      "source": {
+        "path": "picture/MenuHLP21.pak",
+        "bytes": 79073,
+        "sha256": "04eac56bcb505ec723161da3398312e9a7d457be8b40eb6d46418a8046e781e8"
+      },
+      "frames": [
+        {
+          "index": 0,
+          "path": "/assets/startup/menuhlp21/frame_000.png",
+          "width": 429,
+          "height": 89,
+          "sha256": "2b16689c394b3131675379be594fd0589efd450a0d5c4c946f4f5586d967525a",
+          "source_offset": 12,
+          "source_bounds": {
+            "x": 12,
+            "y": 6,
+            "width": 413,
+            "height": 46
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 429,
+            "height": 89
+          },
+          "opaque_spans": 451,
+          "blend_spans": 540,
+          "blend_offset": 7527,
+          "encoded_bytes": 77525,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        }
+      ],
+      "frame_count": 1,
+      "indexing": "Zero based source index, with local span positions retained inside PNG"
+    },
+    "menuhlp22": {
+      "source": {
+        "path": "picture/MenuHLP22.pak",
+        "bytes": 78047,
+        "sha256": "d1b229b77dd2e7d07b471da80feae081cac0328939e23d12b5c99fab722d0420"
+      },
+      "frames": [
+        {
+          "index": 0,
+          "path": "/assets/startup/menuhlp22/frame_000.png",
+          "width": 429,
+          "height": 89,
+          "sha256": "0803c45ecd73ca0bf641233a2aab9291ad918fca8cf7c663d842825879d900ff",
+          "source_offset": 12,
+          "source_bounds": {
+            "x": 10,
+            "y": 6,
+            "width": 411,
+            "height": 45
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 429,
+            "height": 89
+          },
+          "opaque_spans": 394,
+          "blend_spans": 483,
+          "blend_offset": 7527,
+          "encoded_bytes": 76499,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        }
+      ],
+      "frame_count": 1,
+      "indexing": "Zero based source index, with local span positions retained inside PNG"
+    },
+    "menuhlp30": {
+      "source": {
+        "path": "picture/MenuHLP30.pak",
+        "bytes": 78267,
+        "sha256": "e82c323ef93160d629dfe2313ced690bbb3bdfd36d8918843d8008cece8220bf"
+      },
+      "frames": [
+        {
+          "index": 0,
+          "path": "/assets/startup/menuhlp30/frame_000.png",
+          "width": 429,
+          "height": 89,
+          "sha256": "9691c2fa093a1fb91efd429ae460c13b54f8433609f975e0adb1c972cae67a3e",
+          "source_offset": 12,
+          "source_bounds": {
+            "x": 12,
+            "y": 6,
+            "width": 355,
+            "height": 46
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 429,
+            "height": 89
+          },
+          "opaque_spans": 336,
+          "blend_spans": 425,
+          "blend_offset": 6263,
+          "encoded_bytes": 76719,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        }
+      ],
+      "frame_count": 1,
+      "indexing": "Zero based source index, with local span positions retained inside PNG"
+    },
+    "menuhlp31": {
+      "source": {
+        "path": "picture/MenuHLP31.pak",
+        "bytes": 78184,
+        "sha256": "2db873d0abbc65a022c6a4796509d76483d7bf5d904980f61f2ce3a8296206e4"
+      },
+      "frames": [
+        {
+          "index": 0,
+          "path": "/assets/startup/menuhlp31/frame_000.png",
+          "width": 429,
+          "height": 89,
+          "sha256": "7e1b6cefb3772891783d552f8d5b64cd457b5441fd1ac1f345910a40756a3f4d",
+          "source_offset": 12,
+          "source_bounds": {
+            "x": 10,
+            "y": 6,
+            "width": 111,
+            "height": 45
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 429,
+            "height": 89
+          },
+          "opaque_spans": 142,
+          "blend_spans": 231,
+          "blend_offset": 2854,
+          "encoded_bytes": 76636,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        }
+      ],
+      "frame_count": 1,
+      "indexing": "Zero based source index, with local span positions retained inside PNG"
+    },
+    "menulbk": {
+      "source": {
+        "path": "picture/MenuLBK.pak",
+        "bytes": 262677,
+        "sha256": "3df40a0532b029c8cd32465c09918c8b90281840d21cb406cd190dd06b81b92a"
+      },
+      "frames": [
+        {
+          "index": 0,
+          "path": "/assets/startup/menulbk/frame_000.png",
+          "width": 430,
+          "height": 366,
+          "sha256": "f9f56fe71eb0d4cf6aa7b5d5792709f9983322aedf51a325ce02efc1f8de0a6e",
+          "source_offset": 4,
+          "source_bounds": {
+            "x": 9,
+            "y": 2,
+            "width": 411,
+            "height": 362
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 430,
+            "height": 366
+          },
+          "opaque_spans": 842,
+          "blend_spans": 610,
+          "blend_offset": 47823,
+          "encoded_bytes": 261137,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        }
+      ],
+      "frame_count": 1,
+      "indexing": "Zero based source index, with local span positions retained inside PNG"
+    },
+    "menulbx": {
+      "source": {
+        "path": "picture/MenuLBX.pak",
+        "bytes": 78561,
+        "sha256": "43f9ebdb329602d1feef5522dac6aef7cded389329f7e394f80705a8b39aa638"
+      },
+      "frames": [
+        {
+          "index": 0,
+          "path": "/assets/startup/menulbx/frame_000.png",
+          "width": 413,
+          "height": 108,
+          "sha256": "579ba98e54af76d3ba740625d28554fec94dde42136c92bbeaab970fca47ea4d",
+          "source_offset": 4,
+          "source_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 413,
+            "height": 108
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 413,
+            "height": 108
+          },
+          "opaque_spans": 273,
+          "blend_spans": 165,
+          "blend_offset": 16491,
+          "encoded_bytes": 77021,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        }
+      ],
+      "frame_count": 1,
+      "indexing": "Zero based source index, with local span positions retained inside PNG"
+    },
+    "menuspecial00": {
+      "source": {
+        "path": "picture/MenuSpecial00.pak",
+        "bytes": 444818,
+        "sha256": "2952527456c26189f57defba0ea88f047d492eb12e81f80392d1f7d1df6af4bc"
+      },
+      "frames": [
+        {
+          "index": 0,
+          "path": "/assets/startup/menuspecial00/frame_000.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "f596d55005d0b4b0078378565ecb1061fd8f0d152ccb66bccd1966271816e756",
+          "source_offset": 128,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 1,
+          "path": "/assets/startup/menuspecial00/frame_001.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "a835a8badf0162399fb559e3ca37159a860dfef1cc3cd581bec43380fa73fdd0",
+          "source_offset": 13415,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 2,
+          "path": "/assets/startup/menuspecial00/frame_002.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "b39dcbdf64cdb5a995c543cc0b50e912d6f47bf98cc3f41886f1b6e2227a0bb9",
+          "source_offset": 26702,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 3,
+          "path": "/assets/startup/menuspecial00/frame_003.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "12f100082ad9b1d5e39df90d0b4face47a4b2167eed57bb3b3b5dbb22d93947d",
+          "source_offset": 39989,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 4,
+          "path": "/assets/startup/menuspecial00/frame_004.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "5010da41f695a59660e844b50cdd17cf3fa03b320ac2c3503abd5fa8955f1d9a",
+          "source_offset": 53276,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 5,
+          "path": "/assets/startup/menuspecial00/frame_005.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "9b6f2971b85874a6f278cb1e18875884aa863947a0e81f6bb02354fb22263a52",
+          "source_offset": 66563,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 6,
+          "path": "/assets/startup/menuspecial00/frame_006.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "05f209c8447120514eefddb9a550c0317a92e2fbef81d6f0486a5c434041c204",
+          "source_offset": 79850,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 7,
+          "path": "/assets/startup/menuspecial00/frame_007.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "d69a0f5e25913516980c4fa4b09c0e99bb1bd24659390307d1d10df7b650c6af",
+          "source_offset": 93137,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 8,
+          "path": "/assets/startup/menuspecial00/frame_008.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "40a1be8fccf1094df3f08849cc652574326c85ec30b084189836b12745e789c4",
+          "source_offset": 106424,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 9,
+          "path": "/assets/startup/menuspecial00/frame_009.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "caf80bc8ceb32f730bab6dbf0d49841af89ba33efbd9a5b761320c02e9a86a9e",
+          "source_offset": 119711,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 10,
+          "path": "/assets/startup/menuspecial00/frame_010.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "81707f6e0c2022265baa6b01fbc3e1f88f0c622be17281e9225d4d6810bc5d52",
+          "source_offset": 132998,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 11,
+          "path": "/assets/startup/menuspecial00/frame_011.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "0b18c148a4bfe9b1fffb71796b8811222887d1be8465f6e8206925263e806308",
+          "source_offset": 146285,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 12,
+          "path": "/assets/startup/menuspecial00/frame_012.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "8e7073bacf14724bc6f11218061c484abcde9dbadcc9acef1c0e3720bb99ac88",
+          "source_offset": 159572,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 13,
+          "path": "/assets/startup/menuspecial00/frame_013.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "b29fa99369a14ac67cc724e166df3096ccd615900410c690145b7ebb549995db",
+          "source_offset": 172859,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 14,
+          "path": "/assets/startup/menuspecial00/frame_014.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "926eb39676a2b843e2a433f3f96ea8ce5021a9e67d2460ea79d05324d135ab2d",
+          "source_offset": 186146,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 15,
+          "path": "/assets/startup/menuspecial00/frame_015.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "30a42c328f16d9a2dbf4d233d43da2ead6b84b9492c746cbc0592c602b4450db",
+          "source_offset": 199433,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 16,
+          "path": "/assets/startup/menuspecial00/frame_016.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "cd250d18417ccc96f44fcdb8df7b0247fe07a78bf0eea68aaa6978084647f2f4",
+          "source_offset": 212720,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 17,
+          "path": "/assets/startup/menuspecial00/frame_017.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "953aad0d076d695563dc7edc441656f2030975986b7aa6bb11f928a1124dc537",
+          "source_offset": 226007,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 18,
+          "path": "/assets/startup/menuspecial00/frame_018.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "5da443d84437132734e2eb0c0957684bf957b6ad0b1816d788cb80277e57b03e",
+          "source_offset": 239294,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 19,
+          "path": "/assets/startup/menuspecial00/frame_019.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "567549faa145dab427d71f4526e186a668002cffea4d6fa6d43296afb6cf536f",
+          "source_offset": 252581,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 20,
+          "path": "/assets/startup/menuspecial00/frame_020.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "1f64432a586525509c4bc9ea1226f97d4b1d510c24ff41643d614c48162b1453",
+          "source_offset": 265868,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 21,
+          "path": "/assets/startup/menuspecial00/frame_021.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "15aeaf0ee881800fa798a341b92acb6db77b4f602cf141a9b393bc78df6920a5",
+          "source_offset": 279155,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 22,
+          "path": "/assets/startup/menuspecial00/frame_022.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "226d188d60138ef954a6259f5af1d1f6332735af2a8234a1fe981ed0b19bc47c",
+          "source_offset": 292442,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 23,
+          "path": "/assets/startup/menuspecial00/frame_023.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "47172b4c034ba301ab6f42c5344f6245f6aa1df440472fea76e2c32e325e4e4d",
+          "source_offset": 305729,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 24,
+          "path": "/assets/startup/menuspecial00/frame_024.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "0ac7129f8fb237de589ad638c651dbee71054b80d0f799fc0f2993b168a6ed9d",
+          "source_offset": 319016,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 25,
+          "path": "/assets/startup/menuspecial00/frame_025.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "c397262e89e43496961d477eea8724f9a0061a5d2f1d4502378596073631eefe",
+          "source_offset": 332303,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 26,
+          "path": "/assets/startup/menuspecial00/frame_026.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "2d3297a6aca4f8953d172bc3ed66e844d0203aa1d452a08f873eeaee43b35f9f",
+          "source_offset": 345590,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 27,
+          "path": "/assets/startup/menuspecial00/frame_027.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "964e7ce54d63cdbb4ca7a1099424691146c9ac54a5000f805715f6acd48bcaed",
+          "source_offset": 358877,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 28,
+          "path": "/assets/startup/menuspecial00/frame_028.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "cad53cad94cbb2f16efdb5a7a362aa1ed0ed02153f7a880ff34f30c9d8c9ae16",
+          "source_offset": 372164,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 29,
+          "path": "/assets/startup/menuspecial00/frame_029.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "d7674c134f713fe100c2a2e2a2e37c13e4d8afe86324b7d3de09fee25580de17",
+          "source_offset": 385451,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        }
+      ],
+      "frame_count": 30,
+      "indexing": "Zero based source index, with local span positions retained inside PNG"
+    },
+    "menuspecial01": {
+      "source": {
+        "path": "picture/MenuSpecial01.pak",
+        "bytes": 444818,
+        "sha256": "21ba468d047367b7c8fb706cb6c2ef1dc93afffff531e8093a747a4a6bdcf6f4"
+      },
+      "frames": [
+        {
+          "index": 0,
+          "path": "/assets/startup/menuspecial01/frame_000.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "38900058cf601b2c40f11f00278b01b19858c8fc1a1fcdf42e261eacad649839",
+          "source_offset": 128,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 1,
+          "path": "/assets/startup/menuspecial01/frame_001.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "efa3340867a32ebbbaace9e824355407e1c88bac4b396f9fa98149a06449de7c",
+          "source_offset": 13415,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 2,
+          "path": "/assets/startup/menuspecial01/frame_002.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "bf2ae6d09e1c2c43c856dd8f9672fc865876b35731f6f6444d2114494dad90a7",
+          "source_offset": 26702,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 3,
+          "path": "/assets/startup/menuspecial01/frame_003.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "470a35aa481e40d1f009ba702b2c6b4e5c2b6b419a50b6a83e60a3821b3a7817",
+          "source_offset": 39989,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 4,
+          "path": "/assets/startup/menuspecial01/frame_004.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "2c3b0439ab4ab2e683ed3ed32c612c61f7dce09e018eb40a78bf28057d276720",
+          "source_offset": 53276,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 5,
+          "path": "/assets/startup/menuspecial01/frame_005.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "ef109b8343a3c26c21e6ad8525380da4549fe95b25cb7316eb45e730a0d31a0c",
+          "source_offset": 66563,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 6,
+          "path": "/assets/startup/menuspecial01/frame_006.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "bb7d89d3ffb8044b1603494fb2b1e11c6d6d62a166216f8bac3db738f428e25e",
+          "source_offset": 79850,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 7,
+          "path": "/assets/startup/menuspecial01/frame_007.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "5084c37976fa2763fbde91df33dd12a0396c2ca287d71ac58a93d91bb1c13bc2",
+          "source_offset": 93137,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 8,
+          "path": "/assets/startup/menuspecial01/frame_008.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "d8e449d9a4a7ff61361530574924240f9c0d509f9bb5d70297fad1065b7d81da",
+          "source_offset": 106424,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 9,
+          "path": "/assets/startup/menuspecial01/frame_009.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "316c752d16df3799da531c45e41e4abc298fe1234c177f9de93a608a243a8156",
+          "source_offset": 119711,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 10,
+          "path": "/assets/startup/menuspecial01/frame_010.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "cffe9c7ad8ff394f2384bad9fde339d29c5d6a5f7eb198d6083bb09a3b06ca46",
+          "source_offset": 132998,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 11,
+          "path": "/assets/startup/menuspecial01/frame_011.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "a4f4fdaca2a7306ed2415a040bc39a91050a5e956c8e5a1935964ddfcaa7544e",
+          "source_offset": 146285,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 12,
+          "path": "/assets/startup/menuspecial01/frame_012.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "e778f0e46daa2a37743d86d0408a92744945238f2dcc041ec3600ab301682dd0",
+          "source_offset": 159572,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 13,
+          "path": "/assets/startup/menuspecial01/frame_013.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "f5ad976c5d63de1ccaa3e4955b16ff19d2b41912676a8fc11e3a4812c3d6ea67",
+          "source_offset": 172859,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 14,
+          "path": "/assets/startup/menuspecial01/frame_014.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "209e3e962c1e368117c7d8737a325cd679e5536523bb717d28b8024358964f15",
+          "source_offset": 186146,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 15,
+          "path": "/assets/startup/menuspecial01/frame_015.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "5fc7d354e35d2a9c2afe9e9dcb55b2108dd7eee6df60724e6f1f2ef19dbc9535",
+          "source_offset": 199433,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 16,
+          "path": "/assets/startup/menuspecial01/frame_016.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "17701b48db680a11e8fd02a08c7cad14dd087210a3bb3aefd2285cc812e833e6",
+          "source_offset": 212720,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 17,
+          "path": "/assets/startup/menuspecial01/frame_017.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "8569422401fd98a86a90776480d40f08f4b93a1ae40c3a9e10d5b577b2aae2f4",
+          "source_offset": 226007,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 18,
+          "path": "/assets/startup/menuspecial01/frame_018.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "eda4c26c86d3cc152d3facc749c81bb9d9fdc17911590fe31dc6c7ad86006b88",
+          "source_offset": 239294,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 19,
+          "path": "/assets/startup/menuspecial01/frame_019.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "2365982cefe99ad9ffe85c512525bb07093dbadc02362c81552faa8304a18d25",
+          "source_offset": 252581,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 20,
+          "path": "/assets/startup/menuspecial01/frame_020.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "e238f96778f34a265d87115c5ab7c3454f1cf29bebe8026b5b1e0516d9e3fc45",
+          "source_offset": 265868,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 21,
+          "path": "/assets/startup/menuspecial01/frame_021.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "eb52a6f9e327be4d165b42f65a09ab28d7f275cc55dc2bb182cad336d1b4bfb7",
+          "source_offset": 279155,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 22,
+          "path": "/assets/startup/menuspecial01/frame_022.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "7a9f5f69fff3cf987fc5527c9bfab23ec3cf4986ec89db7fa1f92363785f0b0e",
+          "source_offset": 292442,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 23,
+          "path": "/assets/startup/menuspecial01/frame_023.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "de6d50abd3c1f6320eb83a7b55cb1a3d14afa53a7fdc4d099992797d14bb12ff",
+          "source_offset": 305729,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 24,
+          "path": "/assets/startup/menuspecial01/frame_024.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "60299e0d7ee55209976d89f204358f432e3e3cdc58286dd7853a39cc85f60f3c",
+          "source_offset": 319016,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 25,
+          "path": "/assets/startup/menuspecial01/frame_025.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "76e24d43101f350211abb66d1f53d167e0c9d4ba4748fb0cd3b003bc3ab91837",
+          "source_offset": 332303,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 26,
+          "path": "/assets/startup/menuspecial01/frame_026.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "5d268977958ae007548c694615e9a4732b5dbdaa09efffd3c882cd675915009a",
+          "source_offset": 345590,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 27,
+          "path": "/assets/startup/menuspecial01/frame_027.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "ce83b31283d5cea37c91fc7de0c4d137af14ae6f0841baf757c3a0fe84553aee",
+          "source_offset": 358877,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 28,
+          "path": "/assets/startup/menuspecial01/frame_028.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "281ec26873669d8416a5731fd5c3e6642c63da7f97dfd0308ae2dd71f35c1f5e",
+          "source_offset": 372164,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 29,
+          "path": "/assets/startup/menuspecial01/frame_029.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "d71ec94105581ade1852eeb7b4e1e90a0c466d55f920fd0854111a0169633df3",
+          "source_offset": 385451,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        }
+      ],
+      "frame_count": 30,
+      "indexing": "Zero based source index, with local span positions retained inside PNG"
+    },
+    "menuspecial10": {
+      "source": {
+        "path": "picture/MenuSpecial10.pak",
+        "bytes": 74143,
+        "sha256": "47fe6ebdc585d0f5c885c21eb464f91791a0fe0842823d473d909db7cff7f60c"
+      },
+      "frames": [
+        {
+          "index": 0,
+          "path": "/assets/startup/menuspecial10/frame_000.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "6a2ceec705a97e639141a99b12c18e473aab7dc3a37eae27c7721bcb29a99bbd",
+          "source_offset": 28,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 1,
+          "path": "/assets/startup/menuspecial10/frame_001.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "f9fdea625ea26403b97d1d1743763414fe72f1338ead0b94e2aa3fa0002c9c28",
+          "source_offset": 13315,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 2,
+          "path": "/assets/startup/menuspecial10/frame_002.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "8f1216febd9a07103cbc094ae01b315b535458222106cc9428e5702077b0987a",
+          "source_offset": 26602,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 3,
+          "path": "/assets/startup/menuspecial10/frame_003.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "654736d03feecc11c954bb693b324ba4105e01b5084d8a72a10706a1306415fa",
+          "source_offset": 39889,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 4,
+          "path": "/assets/startup/menuspecial10/frame_004.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "027f32e5ae60cc0a3d6c35380ec597ccbf0c0999c503eef969607e1a400032a3",
+          "source_offset": 53176,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        }
+      ],
+      "frame_count": 5,
+      "indexing": "Zero based source index, with local span positions retained inside PNG"
+    },
+    "menuspecial11": {
+      "source": {
+        "path": "picture/MenuSpecial11.pak",
+        "bytes": 74143,
+        "sha256": "2d308e1ded3cb2fb4083ad48f7cad9da4341f792f49bfbcd9f2caa400bcb110f"
+      },
+      "frames": [
+        {
+          "index": 0,
+          "path": "/assets/startup/menuspecial11/frame_000.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "ab8f3b11ee37c578bd371f5492ea598125b4a7b5bd8e25643774b4d6e280f57e",
+          "source_offset": 28,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 1,
+          "path": "/assets/startup/menuspecial11/frame_001.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "c778344cac93808080a75899cdebe768f74f5c656e7e9187cc0daed617660dea",
+          "source_offset": 13315,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 2,
+          "path": "/assets/startup/menuspecial11/frame_002.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "0023b5156a298752894a7ff740f1820aa153cad309bb6da58129a9861e859d5c",
+          "source_offset": 26602,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 3,
+          "path": "/assets/startup/menuspecial11/frame_003.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "63eb6cc8adc78b0478f32d95303886a8a553954d6cd87641a42e17506580eaa4",
+          "source_offset": 39889,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 4,
+          "path": "/assets/startup/menuspecial11/frame_004.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "b0f3a0ae9389b2dae1bdd74255d9f2876733ec22d1a339b6e852cc046aea5b74",
+          "source_offset": 53176,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        }
+      ],
+      "frame_count": 5,
+      "indexing": "Zero based source index, with local span positions retained inside PNG"
+    },
+    "menuspecial20": {
+      "source": {
+        "path": "picture/MenuSpecial20.pak",
+        "bytes": 74143,
+        "sha256": "cc4685c7b44ad9bbfe113cb23b7b63d57ade7d7bc52418b61606cbf46d6039f8"
+      },
+      "frames": [
+        {
+          "index": 0,
+          "path": "/assets/startup/menuspecial20/frame_000.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "f242aeed779870cb4005eb4d3596d2c3be986bb4867f8e44468f82383d6957b8",
+          "source_offset": 28,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 1,
+          "path": "/assets/startup/menuspecial20/frame_001.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "bf049765de7ae90f0ae6e8b81a08cb3b3ffbfe35d8eaa08768ef7217340139ca",
+          "source_offset": 13315,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 2,
+          "path": "/assets/startup/menuspecial20/frame_002.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "397ce0df60315b277b7109310a76d5a14b1b74f6cebf10a3adf084556cdcb7af",
+          "source_offset": 26602,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 3,
+          "path": "/assets/startup/menuspecial20/frame_003.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "c7569b86939a800ea9b24ae4f9c8e63cf31fc5d90bc44e1869cc74c96599d79b",
+          "source_offset": 39889,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 4,
+          "path": "/assets/startup/menuspecial20/frame_004.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "228d2c746951266014ae3864f64742b3e192058ac4761823b3ef25ced687fef6",
+          "source_offset": 53176,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        }
+      ],
+      "frame_count": 5,
+      "indexing": "Zero based source index, with local span positions retained inside PNG"
+    },
+    "menuspecial21": {
+      "source": {
+        "path": "picture/MenuSpecial21.pak",
+        "bytes": 74143,
+        "sha256": "12b01feddc8a93bc8058026dd583d86845b8100b15746cf39b2b385d87cd58f1"
+      },
+      "frames": [
+        {
+          "index": 0,
+          "path": "/assets/startup/menuspecial21/frame_000.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "f2163229ad4e3a0d83cc41760d09c6c40a297dd162c0e9f25e931ab39ddea36d",
+          "source_offset": 28,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 1,
+          "path": "/assets/startup/menuspecial21/frame_001.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "36d194d0f2ad57717386719226e84d32640ce3411d05649f07a87dbb0c9d45cd",
+          "source_offset": 13315,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 2,
+          "path": "/assets/startup/menuspecial21/frame_002.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "2944cb696b05d29fe2f1d75d328902291db1b8fee51affdd36c97be97db28966",
+          "source_offset": 26602,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 3,
+          "path": "/assets/startup/menuspecial21/frame_003.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "a4512c55a1aed4d48f4776eb4551f8f7f8d9ba6191e799f66ac3621315889cfb",
+          "source_offset": 39889,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 4,
+          "path": "/assets/startup/menuspecial21/frame_004.png",
+          "width": 419,
+          "height": 35,
+          "sha256": "6fafc9d68ad57e6207298b2d923b31c7a62584a88d2fe2826b4d7cdc50d78921",
+          "source_offset": 53176,
+          "source_bounds": {
+            "x": 0,
+            "y": 1,
+            "width": 418,
+            "height": 33
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 35
+          },
+          "opaque_spans": 125,
+          "blend_spans": 210,
+          "blend_offset": 10457,
+          "encoded_bytes": 13287,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        }
+      ],
+      "frame_count": 5,
+      "indexing": "Zero based source index, with local span positions retained inside PNG"
+    },
+    "menuspecial30": {
+      "source": {
+        "path": "picture/MenuSpecial30.pak",
+        "bytes": 42314,
+        "sha256": "0749d9fcfb5e0ed9ac61b774d0187f1ebb91eca202bca196abd8da3d77f9bcf8"
+      },
+      "frames": [
+        {
+          "index": 0,
+          "path": "/assets/startup/menuspecial30/frame_000.png",
+          "width": 340,
+          "height": 54,
+          "sha256": "3e4e8b8114c025a612ee1441084962425dc65965c81e4ddde7e402add8ff2d41",
+          "source_offset": 16,
+          "source_bounds": {
+            "x": 2,
+            "y": 1,
+            "width": 333,
+            "height": 44
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 340,
+            "height": 54
+          },
+          "opaque_spans": 162,
+          "blend_spans": 237,
+          "blend_offset": 10981,
+          "encoded_bytes": 19613,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 1,
+          "path": "/assets/startup/menuspecial30/frame_001.png",
+          "width": 340,
+          "height": 54,
+          "sha256": "6960e58cdd95bfe616bb00c0d8d2a6f2103aa24304facee1e50cc9411d78479f",
+          "source_offset": 19629,
+          "source_bounds": {
+            "x": 2,
+            "y": 1,
+            "width": 333,
+            "height": 44
+          },
+          "blend_bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 340,
+            "height": 54
+          },
+          "opaque_spans": 162,
+          "blend_spans": 237,
+          "blend_offset": 10981,
+          "encoded_bytes": 19613,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        }
+      ],
+      "frame_count": 2,
+      "indexing": "Zero based source index, with local span positions retained inside PNG"
+    },
+    "menusub0": {
+      "source": {
+        "path": "picture/MenuSub0.pak",
+        "bytes": 12886,
+        "sha256": "f4ae6e84afb5c25862e86a013e7f2dccee1e9bd7b9e1e0d23049fb9a29a8e5b7"
+      },
+      "frames": [
+        {
+          "index": 0,
+          "path": "/assets/startup/menusub0/frame_000.png",
+          "width": 184,
+          "height": 51,
+          "sha256": "384aa26a5c8e22e971f499d141ff98f5110744f453cf3928083e9e3a9240c237",
+          "source_offset": 12,
+          "source_bounds": {
+            "x": 4,
+            "y": 4,
+            "width": 174,
+            "height": 39
+          },
+          "blend_bounds": {
+            "x": 1,
+            "y": 1,
+            "width": 183,
+            "height": 50
+          },
+          "opaque_spans": 63,
+          "blend_spans": 130,
+          "blend_offset": 6306,
+          "encoded_bytes": 11338,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        }
+      ],
+      "frame_count": 1,
+      "indexing": "Zero based source index, with local span positions retained inside PNG"
+    },
+    "menusub02": {
+      "source": {
+        "path": "picture/MenuSub02.pak",
+        "bytes": 12284,
+        "sha256": "08c073694a039e721eae94deadbc3177f22c904352d6dc439aba1528fd8c584e"
+      },
+      "frames": [
+        {
+          "index": 0,
+          "path": "/assets/startup/menusub02/frame_000.png",
+          "width": 179,
+          "height": 50,
+          "sha256": "d3527227c83e55d39c3df6f7e3d66a73a0ad4654d41ddae7a9f6d877aab0a417",
+          "source_offset": 12,
+          "source_bounds": {
+            "x": 8,
+            "y": 5,
+            "width": 165,
+            "height": 37
+          },
+          "blend_bounds": {
+            "x": 5,
+            "y": 2,
+            "width": 174,
+            "height": 48
+          },
+          "opaque_spans": 65,
+          "blend_spans": 134,
+          "blend_offset": 5744,
+          "encoded_bytes": 10736,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        }
+      ],
+      "frame_count": 1,
+      "indexing": "Zero based source index, with local span positions retained inside PNG"
+    },
+    "menusub1": {
+      "source": {
+        "path": "picture/MenuSub1.pak",
+        "bytes": 12886,
+        "sha256": "ba7b511e3bfebdf5f15eba8d33edaf74d2dcb0371d26e221ed19c155bb257668"
+      },
+      "frames": [
+        {
+          "index": 0,
+          "path": "/assets/startup/menusub1/frame_000.png",
+          "width": 184,
+          "height": 51,
+          "sha256": "f6dd8dac02ae7bcd6ba3544ff30c01b67f7194bee6b974309533a149fb321da7",
+          "source_offset": 12,
+          "source_bounds": {
+            "x": 4,
+            "y": 4,
+            "width": 174,
+            "height": 39
+          },
+          "blend_bounds": {
+            "x": 1,
+            "y": 1,
+            "width": 183,
+            "height": 50
+          },
+          "opaque_spans": 63,
+          "blend_spans": 130,
+          "blend_offset": 6306,
+          "encoded_bytes": 11338,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        }
+      ],
+      "frame_count": 1,
+      "indexing": "Zero based source index, with local span positions retained inside PNG"
+    },
+    "menusub12": {
+      "source": {
+        "path": "picture/MenuSub12.pak",
+        "bytes": 12284,
+        "sha256": "68735a87ee3ce22533e794a59a0068be80dcae100ba91aa97c01b6b7a6b497be"
+      },
+      "frames": [
+        {
+          "index": 0,
+          "path": "/assets/startup/menusub12/frame_000.png",
+          "width": 179,
+          "height": 50,
+          "sha256": "8604a43296d58ae90ecfb411ebed63bacdee1ca0b677ef62dacd7779db23fd8f",
+          "source_offset": 12,
+          "source_bounds": {
+            "x": 8,
+            "y": 5,
+            "width": 165,
+            "height": 37
+          },
+          "blend_bounds": {
+            "x": 5,
+            "y": 2,
+            "width": 174,
+            "height": 48
+          },
+          "opaque_spans": 65,
+          "blend_spans": 134,
+          "blend_offset": 5744,
+          "encoded_bytes": 10736,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        }
+      ],
+      "frame_count": 1,
+      "indexing": "Zero based source index, with local span positions retained inside PNG"
+    },
+    "menusub2": {
+      "source": {
+        "path": "picture/MenuSub2.pak",
+        "bytes": 38642,
+        "sha256": "bc0a3a705bc556c9dc8491f3c97f421c044601cda14d550cc83959df4ec085ff"
+      },
+      "frames": [
+        {
+          "index": 0,
+          "path": "/assets/startup/menusub2/frame_000.png",
+          "width": 184,
+          "height": 51,
+          "sha256": "099f93b32b5057c71e910ce5cdc2f5704bb20d9c1f32bb579b65fd99a80de8f3",
+          "source_offset": 20,
+          "source_bounds": {
+            "x": 4,
+            "y": 4,
+            "width": 174,
+            "height": 39
+          },
+          "blend_bounds": {
+            "x": 1,
+            "y": 1,
+            "width": 183,
+            "height": 50
+          },
+          "opaque_spans": 63,
+          "blend_spans": 130,
+          "blend_offset": 6306,
+          "encoded_bytes": 11338,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 1,
+          "path": "/assets/startup/menusub2/frame_001.png",
+          "width": 184,
+          "height": 51,
+          "sha256": "8b847a5444236086538bd5a45f9aab94c003b1e9c912dc87b79f44a01610298b",
+          "source_offset": 11358,
+          "source_bounds": {
+            "x": 4,
+            "y": 4,
+            "width": 174,
+            "height": 39
+          },
+          "blend_bounds": {
+            "x": 1,
+            "y": 1,
+            "width": 183,
+            "height": 50
+          },
+          "opaque_spans": 63,
+          "blend_spans": 130,
+          "blend_offset": 6306,
+          "encoded_bytes": 11338,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 2,
+          "path": "/assets/startup/menusub2/frame_002.png",
+          "width": 184,
+          "height": 51,
+          "sha256": "89a3aa483e268f29b8bff3304bc0d6cf6ace66d5f46ab6084f498abe6415d964",
+          "source_offset": 22696,
+          "source_bounds": {
+            "x": 4,
+            "y": 4,
+            "width": 174,
+            "height": 39
+          },
+          "blend_bounds": {
+            "x": 1,
+            "y": 1,
+            "width": 183,
+            "height": 50
+          },
+          "opaque_spans": 63,
+          "blend_spans": 130,
+          "blend_offset": 6306,
+          "encoded_bytes": 11338,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        }
+      ],
+      "frame_count": 3,
+      "indexing": "Zero based source index, with local span positions retained inside PNG"
+    },
+    "menusub22": {
+      "source": {
+        "path": "picture/MenuSub22.pak",
+        "bytes": 36836,
+        "sha256": "5589dcfcafe37d026ed960e4f577bb0f2f899b5f06221cbd570cb8b32a6d1337"
+      },
+      "frames": [
+        {
+          "index": 0,
+          "path": "/assets/startup/menusub22/frame_000.png",
+          "width": 179,
+          "height": 50,
+          "sha256": "f26079eb38d74164d81ce9620e54802bd58658932af6c90b3eb98afe5f25f563",
+          "source_offset": 20,
+          "source_bounds": {
+            "x": 8,
+            "y": 5,
+            "width": 165,
+            "height": 37
+          },
+          "blend_bounds": {
+            "x": 5,
+            "y": 2,
+            "width": 174,
+            "height": 48
+          },
+          "opaque_spans": 65,
+          "blend_spans": 134,
+          "blend_offset": 5744,
+          "encoded_bytes": 10736,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 1,
+          "path": "/assets/startup/menusub22/frame_001.png",
+          "width": 179,
+          "height": 50,
+          "sha256": "d4f0602eabe2e59725eeff9f7aef8e5ac537e2bdade83ccad67cc6e740b9f8c5",
+          "source_offset": 10756,
+          "source_bounds": {
+            "x": 8,
+            "y": 5,
+            "width": 165,
+            "height": 37
+          },
+          "blend_bounds": {
+            "x": 5,
+            "y": 2,
+            "width": 174,
+            "height": 48
+          },
+          "opaque_spans": 65,
+          "blend_spans": 134,
+          "blend_offset": 5744,
+          "encoded_bytes": 10736,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 2,
+          "path": "/assets/startup/menusub22/frame_002.png",
+          "width": 179,
+          "height": 50,
+          "sha256": "21e5870408f044a4f4c7a8908fbc37733ecd4bacd139dd7d2f0c6c38fbedac90",
+          "source_offset": 21492,
+          "source_bounds": {
+            "x": 8,
+            "y": 5,
+            "width": 165,
+            "height": 37
+          },
+          "blend_bounds": {
+            "x": 5,
+            "y": 2,
+            "width": 174,
+            "height": 48
+          },
+          "opaque_spans": 65,
+          "blend_spans": 134,
+          "blend_offset": 5744,
+          "encoded_bytes": 10736,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        }
+      ],
+      "frame_count": 3,
+      "indexing": "Zero based source index, with local span positions retained inside PNG"
+    },
+    "menusub3": {
+      "source": {
+        "path": "picture/MenuSub3.pak",
+        "bytes": 25764,
+        "sha256": "9a1f576bba3c40d6728043fa191b2fd19051e5d16d2fd6b114375be79ae96f9c"
+      },
+      "frames": [
+        {
+          "index": 0,
+          "path": "/assets/startup/menusub3/frame_000.png",
+          "width": 184,
+          "height": 51,
+          "sha256": "93e9d8809fcfa3f09878b4b2b25bb40ff61ec5e17c5dccf7e423c42e9eceb56b",
+          "source_offset": 16,
+          "source_bounds": {
+            "x": 4,
+            "y": 4,
+            "width": 174,
+            "height": 39
+          },
+          "blend_bounds": {
+            "x": 1,
+            "y": 1,
+            "width": 183,
+            "height": 50
+          },
+          "opaque_spans": 63,
+          "blend_spans": 130,
+          "blend_offset": 6306,
+          "encoded_bytes": 11338,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 1,
+          "path": "/assets/startup/menusub3/frame_001.png",
+          "width": 184,
+          "height": 51,
+          "sha256": "467f23f97dc4638fca3c507522f2fc45cc83e4d9a8b6b390d15c1eec602d710e",
+          "source_offset": 11354,
+          "source_bounds": {
+            "x": 4,
+            "y": 4,
+            "width": 174,
+            "height": 39
+          },
+          "blend_bounds": {
+            "x": 1,
+            "y": 1,
+            "width": 183,
+            "height": 50
+          },
+          "opaque_spans": 63,
+          "blend_spans": 130,
+          "blend_offset": 6306,
+          "encoded_bytes": 11338,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        }
+      ],
+      "frame_count": 2,
+      "indexing": "Zero based source index, with local span positions retained inside PNG"
+    },
+    "menusub32": {
+      "source": {
+        "path": "picture/MenuSub32.pak",
+        "bytes": 24560,
+        "sha256": "b09ebed5d2d41cf0db87431fa0b6bd8ad62ea516f7e28f0b63b343e88342f833"
+      },
+      "frames": [
+        {
+          "index": 0,
+          "path": "/assets/startup/menusub32/frame_000.png",
+          "width": 179,
+          "height": 50,
+          "sha256": "5ffb5ffbeb0a9602a6ca310a8f3da476ec37b284c3ad242dc1326938242a797a",
+          "source_offset": 16,
+          "source_bounds": {
+            "x": 8,
+            "y": 5,
+            "width": 165,
+            "height": 37
+          },
+          "blend_bounds": {
+            "x": 5,
+            "y": 2,
+            "width": 174,
+            "height": 48
+          },
+          "opaque_spans": 65,
+          "blend_spans": 134,
+          "blend_offset": 5744,
+          "encoded_bytes": 10736,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        },
+        {
+          "index": 1,
+          "path": "/assets/startup/menusub32/frame_001.png",
+          "width": 179,
+          "height": 50,
+          "sha256": "9b8e45b7acae82706d4fd00191bf7f98ae4e94b9320ed58b4018c705c40575dc",
+          "source_offset": 10752,
+          "source_bounds": {
+            "x": 8,
+            "y": 5,
+            "width": 165,
+            "height": 37
+          },
+          "blend_bounds": {
+            "x": 5,
+            "y": 2,
+            "width": 174,
+            "height": 48
+          },
+          "opaque_spans": 65,
+          "blend_spans": 134,
+          "blend_offset": 5744,
+          "encoded_bytes": 10736,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        }
+      ],
+      "frame_count": 2,
+      "indexing": "Zero based source index, with local span positions retained inside PNG"
+    },
+    "specialback": {
+      "source": {
+        "path": "picture/SpecialBack.pak",
+        "bytes": 155193,
+        "sha256": "a959307777fb77c1c3db0c2cec79c7de8aaef54add78a4e51d3ed56a2b8ad192"
+      },
+      "frames": [
+        {
+          "index": 0,
+          "path": "/assets/startup/specialback/frame_000.png",
+          "width": 434,
+          "height": 325,
+          "sha256": "a7f40f07ed420e7b4f8def2dfe90475f109c718f0f191eb260ecbc4fd92a491c",
+          "source_offset": 12,
+          "source_bounds": {
+            "x": 11,
+            "y": 47,
+            "width": 418,
+            "height": 269
+          },
+          "blend_bounds": {
+            "x": 6,
+            "y": 46,
+            "width": 428,
+            "height": 279
+          },
+          "opaque_spans": 873,
+          "blend_spans": 1278,
+          "blend_offset": 74771,
+          "encoded_bytes": 153645,
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "pixel_policy": "Original local span positions retained; source RGB565 and preweighted 5-bit alpha colors expanded to RGBA"
+        }
+      ],
+      "frame_count": 1,
+      "indexing": "Zero based source index, with local span positions retained inside PNG"
+    }
+  },
+  "layout": {
+    "viewport": {
+      "width": 640,
+      "height": 480
+    },
+    "button": {
+      "x": 420,
+      "y": 320
+    },
+    "plaques": {
+      "x": 450,
+      "y": 100,
+      "step_y": 50,
+      "initial_x": 640,
+      "initial_step_x": 50
+    },
+    "help": {
+      "x": 0,
+      "y": 400,
+      "initial_x": -432
+    },
+    "read": {
+      "initial_x": -432,
+      "x": -8,
+      "y": 60,
+      "selection_x": 0,
+      "selection_y": [
+        81,
+        188,
+        295
+      ],
+      "slot_x": 2,
+      "slot_y": [
+        87,
+        195,
+        301
+      ]
+    },
+    "special": {
+      "initial_x": -432,
+      "x": -8,
+      "y": 70,
+      "rows_x": 3,
+      "rows_y": 117,
+      "row_step_y": 39,
+      "heading_x": 16,
+      "heading_y": 60,
+      "selected_asset": "menuspecial00",
+      "normal_asset": "menuspecial01",
+      "heading_asset": "menuspecial30",
+      "music_groups": [
+        {
+          "first": 0,
+          "last": 17,
+          "heading_frame": 0,
+          "window_first_min": 0,
+          "window_first_max": 11
+        },
+        {
+          "first": 18,
+          "last": 29,
+          "heading_frame": 1,
+          "window_first_min": 18,
+          "window_first_max": 23
+        }
+      ],
+      "window": "first=clamp(selected-3,group.window_first_min,group.window_first_max),last=first+6"
+    },
+    "movies": {
+      "gametitle": {
+        "x": 0,
+        "y": 90,
+        "width": 640,
+        "height": 300
+      },
+      "preopenpress": {
+        "x": 0,
+        "y": 0,
+        "width": 640,
+        "height": 480
+      },
+      "openpress": {
+        "x": 0,
+        "y": 0,
+        "width": 640,
+        "height": 480
+      }
+    }
+  },
+  "timing": {
+    "button_frame_ms": 10,
+    "tick_ms": 10,
+    "source": "4BE350 uses 66F7F0 float32 0.01 seconds; reverse rotation and sliding gated by tick; forward rotation advances once per render loop",
+    "fidelity_boundary": "Browser uses a 10ms logical clock; native positive rotation depends on render-loop speed",
+    "button": {
+      "positive": "Increment zero-based index each render until target, wrap36",
+      "negative": "Decrement index on 10ms tick until target, wrap36"
+    },
+    "plaque_slide": {
+      "initial_x": 640,
+      "initial_step_x": 50,
+      "target_x": 450,
+      "step": [
+        {
+          "if_x_at_least": 481,
+          "delta": -10
+        },
+        {
+          "if_x_at_least": 461,
+          "delta": -5
+        },
+        {
+          "if_x_at_least": 451,
+          "delta": -1
+        }
+      ],
+      "source": "4BE350: x>=481 subtract10; x461..480 subtract5; x451..460 subtract1; stop450"
+    },
+    "help_slide": {
+      "initial_x": -432,
+      "target_x": 0,
+      "step": [
+        {
+          "if_x_below": -100,
+          "delta": 32
+        },
+        {
+          "if_x_below": -50,
+          "delta": 24
+        },
+        {
+          "if_x_below": -20,
+          "delta": 16
+        },
+        {
+          "if_x_below": 0,
+          "delta": 8
+        }
+      ],
+      "source": "4BE350: first matching ascending threshold, on10ms tick; remaining positive branches unreachable from initial state"
+    },
+    "panel_slide": {
+      "initial_x": -432,
+      "target_x": 0,
+      "open_step": [
+        {
+          "if_x_below": -100,
+          "delta": 32
+        },
+        {
+          "if_x_below": 80,
+          "delta": 16
+        }
+      ],
+      "close_step": [
+        {
+          "if_x_below": -100,
+          "delta": -32
+        },
+        {
+          "if_x_below": 80,
+          "delta": -16
+        }
+      ],
+      "source": "4BE350: initial negative range to0 opens in32 then16 steps; closes from0 to-432 in16 then32 steps, on10ms tick"
+    }
+  },
+  "menu": {
+    "stable_frames": {
+      "read": 1,
+      "start": 10,
+      "special": 19,
+      "exit": 28
+    },
+    "frame_count": 36,
+    "default": "read",
+    "plaque_counts": {
+      "read": 1,
+      "start": 1,
+      "special": 3,
+      "exit": 2
+    },
+    "plaque_policy": "Current submenu selector853 uses MenuSubN; other rows use MenuSubN2. Row index is not main category index.",
+    "exit_count": {
+      "startup": 1,
+      "in_game": 2
+    },
+    "navigation": "Up/Down clamp submenu, extras row and save row/scroll; Left/Right cycle main categories",
+    "extras_gates": "MenuCode/83B can restrict selection;861==0 forces visible count1/selector0. Unlock rules remain incomplete.",
+    "music_tracks": [
+      {
+        "index": 0,
+        "source": "sound/Special/GGT/GGT001.wav"
+      },
+      {
+        "index": 1,
+        "source": "sound/Special/GGT/GGT002.wav"
+      },
+      {
+        "index": 2,
+        "source": "sound/Special/GGT/GGT003.wav"
+      },
+      {
+        "index": 3,
+        "source": "sound/Special/GGT/GGT004.wav"
+      },
+      {
+        "index": 4,
+        "source": "sound/Special/GGT/GGT005.wav"
+      },
+      {
+        "index": 5,
+        "source": "sound/Special/GGT/GGT006.wav"
+      },
+      {
+        "index": 6,
+        "source": "sound/Special/GGT/GGT007.wav"
+      },
+      {
+        "index": 7,
+        "source": "sound/Special/GGT/GGT008.wav"
+      },
+      {
+        "index": 8,
+        "source": "sound/Special/GGT/GGT009.wav"
+      },
+      {
+        "index": 9,
+        "source": "sound/Special/GGT/GGT010.wav"
+      },
+      {
+        "index": 10,
+        "source": "sound/Special/GGT/GGT011.wav"
+      },
+      {
+        "index": 11,
+        "source": "sound/Special/GGT/GGT012.wav"
+      },
+      {
+        "index": 12,
+        "source": "sound/Special/GGT/GGT013.wav"
+      },
+      {
+        "index": 13,
+        "source": "sound/Special/GGT/GGT014.wav"
+      },
+      {
+        "index": 14,
+        "source": "sound/Special/GGT/GGT015.wav"
+      },
+      {
+        "index": 15,
+        "source": "sound/Special/GGT/GGT016.wav"
+      },
+      {
+        "index": 16,
+        "source": "sound/Special/GGT/GGT017.wav"
+      },
+      {
+        "index": 17,
+        "source": "sound/Special/GGT/GGT018.wav"
+      },
+      {
+        "index": 18,
+        "source": "sound/Special/Mitsuda/YM001.wav"
+      },
+      {
+        "index": 19,
+        "source": "sound/Special/Mitsuda/YM002.wav"
+      },
+      {
+        "index": 20,
+        "source": "sound/Special/Mitsuda/YM003.wav"
+      },
+      {
+        "index": 21,
+        "source": "sound/Special/Mitsuda/YM004.wav"
+      },
+      {
+        "index": 22,
+        "source": "sound/Special/Mitsuda/YM005.wav"
+      },
+      {
+        "index": 23,
+        "source": "sound/Special/Mitsuda/YM006.wav"
+      },
+      {
+        "index": 24,
+        "source": "sound/Special/Mitsuda/YM007.wav"
+      },
+      {
+        "index": 25,
+        "source": "sound/Special/Mitsuda/YM008.wav"
+      },
+      {
+        "index": 26,
+        "source": "sound/Special/Mitsuda/YM009.wav"
+      },
+      {
+        "index": 27,
+        "source": "sound/Special/Mitsuda/YM010.wav"
+      },
+      {
+        "index": 28,
+        "source": "sound/Special/Mitsuda/YM011.wav"
+      },
+      {
+        "index": 29,
+        "source": "sound/Special/Mitsuda/YM012.wav"
+      }
+    ],
+    "left_cycle": [
+      "read",
+      "start",
+      "special",
+      "exit"
+    ],
+    "right_cycle": [
+      "read",
+      "exit",
+      "special",
+      "start"
+    ]
+  },
+  "audio": {
+    "clips": {
+      "sound/menu/MBack.wav": {
+        "path": "/assets/startup/audio/menu/MBack.mp3",
+        "mime": "audio/mpeg",
+        "sha256": "258f8e4d8d890b5b1b43a2fa50045471f9d45bebe16e190a3d5c20c24b912f07",
+        "source": {
+          "path": "sound/menu/MBack.wav",
+          "sha256": "258f8e4d8d890b5b1b43a2fa50045471f9d45bebe16e190a3d5c20c24b912f07",
+          "bytes": 5838997,
+          "declared_extension": ".wav",
+          "observed_encoding": "MPEG Layer III"
+        },
+        "audio": {
+          "codec": "mp3",
+          "sample_rate": 44100,
+          "channels": 2,
+          "duration_seconds": 291.89865
+        },
+        "export": {
+          "method": "byte-preserving MPEG suffix correction",
+          "decoded_pcm_md5": "MD5=c9137392ce945a80a803b49c8ac0e570",
+          "decoded_audio_unchanged": true
+        }
+      },
+      "sound/menu/mMainMenu.wav": {
+        "path": "/assets/startup/audio/menu/mMainMenu.wav",
+        "mime": "audio/wav",
+        "sha256": "3a89f26b9e1317f363eea5868ca4011dc9db88e6991af7f6f1868fbdde57e4ff",
+        "source": {
+          "path": "sound/menu/mMainMenu.wav",
+          "sha256": "4f5d49b4243bfa54ebefd95f7746adab6a815768eab17fb0d339d6cfd01155a4",
+          "bytes": 36908,
+          "declared_extension": ".wav",
+          "observed_encoding": "RIFF/WAVE PCM"
+        },
+        "audio": {
+          "codec": "pcm_s16le",
+          "sample_rate": 44100,
+          "channels": 2,
+          "duration_seconds": 0.183923
+        },
+        "export": {
+          "method": "canonical PCM RIFF rewrap",
+          "decoded_pcm_md5": "MD5=d587b6513b8c8f8b21d8db4793eaff23",
+          "decoded_audio_unchanged": true
+        }
+      },
+      "sound/menu/mUpdown.wav": {
+        "path": "/assets/startup/audio/menu/mUpdown.wav",
+        "mime": "audio/wav",
+        "sha256": "729f8fb4555d016fb2d0c553352cf9f491aa054b01c81643689576b137f78bc1",
+        "source": {
+          "path": "sound/menu/mUpdown.wav",
+          "sha256": "94a4c09f692f7cdf2420c02315ebfdfd71bcfec6f05639a640c0f4338c34d16c",
+          "bytes": 465452,
+          "declared_extension": ".wav",
+          "observed_encoding": "RIFF/WAVE PCM"
+        },
+        "audio": {
+          "codec": "pcm_s16le",
+          "sample_rate": 44100,
+          "channels": 2,
+          "duration_seconds": 2.613311
+        },
+        "export": {
+          "method": "canonical PCM RIFF rewrap",
+          "decoded_pcm_md5": "MD5=81acb787516414a6d5dbdb6d4fd9dea9",
+          "decoded_audio_unchanged": true
+        }
+      },
+      "sound/menu/mDecide.wav": {
+        "path": "/assets/startup/audio/menu/mDecide.wav",
+        "mime": "audio/wav",
+        "sha256": "f1aa468929e713fef438ab70cfc4399cc97b92ea2a487595da94d6d3f05957f9",
+        "source": {
+          "path": "sound/menu/mDecide.wav",
+          "sha256": "b00c648481200c701dbabcf5b28fdeb0037fca58a47a8c4c3ba43ff0fb69143d",
+          "bytes": 62252,
+          "declared_extension": ".wav",
+          "observed_encoding": "RIFF/WAVE PCM"
+        },
+        "audio": {
+          "codec": "pcm_s16le",
+          "sample_rate": 22050,
+          "channels": 2,
+          "duration_seconds": 0.655193
+        },
+        "export": {
+          "method": "canonical PCM RIFF rewrap",
+          "decoded_pcm_md5": "MD5=298fb1acc7b1cd9c1ad7fb5f473b737b",
+          "decoded_audio_unchanged": true
+        }
+      },
+      "sound/menu/mSubMenu.wav": {
+        "path": "/assets/startup/audio/menu/mSubMenu.wav",
+        "mime": "audio/wav",
+        "sha256": "22148c1b5ffc8646819b7322b3ad2fba637a9b9e02b664e310d5a5cbaba2cd18",
+        "source": {
+          "path": "sound/menu/mSubMenu.wav",
+          "sha256": "38db9eca345c4a28bdcb446263d95b887023b68803e61db99c5a8a75db464e17",
+          "bytes": 69164,
+          "declared_extension": ".wav",
+          "observed_encoding": "RIFF/WAVE PCM"
+        },
+        "audio": {
+          "codec": "pcm_s16le",
+          "sample_rate": 22050,
+          "channels": 2,
+          "duration_seconds": 0.73356
+        },
+        "export": {
+          "method": "canonical PCM RIFF rewrap",
+          "decoded_pcm_md5": "MD5=f6f83e77b25d5142a63cca0a6ea1824b",
+          "decoded_audio_unchanged": true
+        }
+      },
+      "sound/Special/GGT/GGT001.wav": {
+        "path": "/assets/startup/audio/Special/GGT/GGT001.mp3",
+        "mime": "audio/mpeg",
+        "sha256": "b9ddadf6f1542f45f6591773c68209f6463260a69d5944779bf448670a5cf1c3",
+        "source": {
+          "path": "sound/Special/GGT/GGT001.wav",
+          "sha256": "b9ddadf6f1542f45f6591773c68209f6463260a69d5944779bf448670a5cf1c3",
+          "bytes": 2529280,
+          "declared_extension": ".wav",
+          "observed_encoding": "MPEG Layer III"
+        },
+        "audio": {
+          "codec": "mp3",
+          "sample_rate": 44100,
+          "channels": 2,
+          "duration_seconds": 158.017375
+        },
+        "export": {
+          "method": "byte-preserving MPEG suffix correction",
+          "decoded_pcm_md5": "MD5=760947d25e993b4ad0493c1130766f67",
+          "decoded_audio_unchanged": true
+        }
+      },
+      "sound/Special/GGT/GGT002.wav": {
+        "path": "/assets/startup/audio/Special/GGT/GGT002.mp3",
+        "mime": "audio/mpeg",
+        "sha256": "4418361a56a7888b2ff82035785c45c2c0de6a0bd279adc5d60be87ef9c09729",
+        "source": {
+          "path": "sound/Special/GGT/GGT002.wav",
+          "sha256": "4418361a56a7888b2ff82035785c45c2c0de6a0bd279adc5d60be87ef9c09729",
+          "bytes": 2721654,
+          "declared_extension": ".wav",
+          "observed_encoding": "MPEG Layer III"
+        },
+        "audio": {
+          "codec": "mp3",
+          "sample_rate": 44100,
+          "channels": 2,
+          "duration_seconds": 170.103375
+        },
+        "export": {
+          "method": "byte-preserving MPEG suffix correction",
+          "decoded_pcm_md5": "MD5=4ab6599ea57ab4df37b82a381bc910d0",
+          "decoded_audio_unchanged": true
+        }
+      },
+      "sound/Special/GGT/GGT003.wav": {
+        "path": "/assets/startup/audio/Special/GGT/GGT003.mp3",
+        "mime": "audio/mpeg",
+        "sha256": "d1940ea3e407ce81118469ff318a22ba7d77e8d7ae4ee975c1b494b44772ed91",
+        "source": {
+          "path": "sound/Special/GGT/GGT003.wav",
+          "sha256": "d1940ea3e407ce81118469ff318a22ba7d77e8d7ae4ee975c1b494b44772ed91",
+          "bytes": 2911193,
+          "declared_extension": ".wav",
+          "observed_encoding": "MPEG Layer III"
+        },
+        "audio": {
+          "codec": "mp3",
+          "sample_rate": 44100,
+          "channels": 2,
+          "duration_seconds": 145.50845
+        },
+        "export": {
+          "method": "byte-preserving MPEG suffix correction",
+          "decoded_pcm_md5": "MD5=2958b4b677542a8902818ea7b1c304d9",
+          "decoded_audio_unchanged": true
+        }
+      },
+      "sound/Special/GGT/GGT004.wav": {
+        "path": "/assets/startup/audio/Special/GGT/GGT004.mp3",
+        "mime": "audio/mpeg",
+        "sha256": "3fa5580f5e44744c4415d8b3d3e5f96a635da4172d448b98d7d038546d8cf11b",
+        "source": {
+          "path": "sound/Special/GGT/GGT004.wav",
+          "sha256": "3fa5580f5e44744c4415d8b3d3e5f96a635da4172d448b98d7d038546d8cf11b",
+          "bytes": 2543744,
+          "declared_extension": ".wav",
+          "observed_encoding": "MPEG Layer III"
+        },
+        "audio": {
+          "codec": "mp3",
+          "sample_rate": 44100,
+          "channels": 2,
+          "duration_seconds": 158.957438
+        },
+        "export": {
+          "method": "byte-preserving MPEG suffix correction",
+          "decoded_pcm_md5": "MD5=745b2d807652178173ab667bc2f296bb",
+          "decoded_audio_unchanged": true
+        }
+      },
+      "sound/Special/GGT/GGT005.wav": {
+        "path": "/assets/startup/audio/Special/GGT/GGT005.mp3",
+        "mime": "audio/mpeg",
+        "sha256": "1e534c345abab78c5d65b59a06d777afea1745cd0bee8b5a76c72764c8fcf4dd",
+        "source": {
+          "path": "sound/Special/GGT/GGT005.wav",
+          "sha256": "1e534c345abab78c5d65b59a06d777afea1745cd0bee8b5a76c72764c8fcf4dd",
+          "bytes": 2667209,
+          "declared_extension": ".wav",
+          "observed_encoding": "MPEG Layer III"
+        },
+        "audio": {
+          "codec": "mp3",
+          "sample_rate": 44100,
+          "channels": 2,
+          "duration_seconds": 133.30925
+        },
+        "export": {
+          "method": "byte-preserving MPEG suffix correction",
+          "decoded_pcm_md5": "MD5=5bc897962280c6bd111372e0a8740d82",
+          "decoded_audio_unchanged": true
+        }
+      },
+      "sound/Special/GGT/GGT006.wav": {
+        "path": "/assets/startup/audio/Special/GGT/GGT006.mp3",
+        "mime": "audio/mpeg",
+        "sha256": "86cd1956ff28db17e3ee5a5b71fd5fc64a88ed006f449b16d6bf896e8218f802",
+        "source": {
+          "path": "sound/Special/GGT/GGT006.wav",
+          "sha256": "86cd1956ff28db17e3ee5a5b71fd5fc64a88ed006f449b16d6bf896e8218f802",
+          "bytes": 3537024,
+          "declared_extension": ".wav",
+          "observed_encoding": "MPEG Layer III"
+        },
+        "audio": {
+          "codec": "mp3",
+          "sample_rate": 44100,
+          "channels": 2,
+          "duration_seconds": 176.7551
+        },
+        "export": {
+          "method": "byte-preserving MPEG suffix correction",
+          "decoded_pcm_md5": "MD5=9b22646e4815688b73f6aea87e85ae8f",
+          "decoded_audio_unchanged": true
+        }
+      },
+      "sound/Special/GGT/GGT007.wav": {
+        "path": "/assets/startup/audio/Special/GGT/GGT007.mp3",
+        "mime": "audio/mpeg",
+        "sha256": "14566fac59737aa483f3085c11040895968b319f3f05d6b0e942a0ab29575466",
+        "source": {
+          "path": "sound/Special/GGT/GGT007.wav",
+          "sha256": "14566fac59737aa483f3085c11040895968b319f3f05d6b0e942a0ab29575466",
+          "bytes": 2189440,
+          "declared_extension": ".wav",
+          "observed_encoding": "MPEG Layer III"
+        },
+        "audio": {
+          "codec": "mp3",
+          "sample_rate": 44100,
+          "channels": 2,
+          "duration_seconds": 109.4115
+        },
+        "export": {
+          "method": "byte-preserving MPEG suffix correction",
+          "decoded_pcm_md5": "MD5=53509f8c923a19dfb9359ed2ac269fda",
+          "decoded_audio_unchanged": true
+        }
+      },
+      "sound/Special/GGT/GGT008.wav": {
+        "path": "/assets/startup/audio/Special/GGT/GGT008.mp3",
+        "mime": "audio/mpeg",
+        "sha256": "6e155dfb66419d7967d9b0d9f90da79f3f19c09d8fb1ccd22d24eac375f13ef3",
+        "source": {
+          "path": "sound/Special/GGT/GGT008.wav",
+          "sha256": "6e155dfb66419d7967d9b0d9f90da79f3f19c09d8fb1ccd22d24eac375f13ef3",
+          "bytes": 3366768,
+          "declared_extension": ".wav",
+          "observed_encoding": "MPEG Layer III"
+        },
+        "audio": {
+          "codec": "mp3",
+          "sample_rate": 44100,
+          "channels": 2,
+          "duration_seconds": 168.2872
+        },
+        "export": {
+          "method": "byte-preserving MPEG suffix correction",
+          "decoded_pcm_md5": "MD5=24d9c0f8c7c2e096ee361ff27ef59b8f",
+          "decoded_audio_unchanged": true
+        }
+      },
+      "sound/Special/GGT/GGT009.wav": {
+        "path": "/assets/startup/audio/Special/GGT/GGT009.mp3",
+        "mime": "audio/mpeg",
+        "sha256": "c754b75b4a6312c226b77f1c0d12951abc5b99ffaf56ff9fe1cf1a1b3c649160",
+        "source": {
+          "path": "sound/Special/GGT/GGT009.wav",
+          "sha256": "c754b75b4a6312c226b77f1c0d12951abc5b99ffaf56ff9fe1cf1a1b3c649160",
+          "bytes": 1918540,
+          "declared_extension": ".wav",
+          "observed_encoding": "MPEG Layer III"
+        },
+        "audio": {
+          "codec": "mp3",
+          "sample_rate": 44100,
+          "channels": 2,
+          "duration_seconds": 95.8758
+        },
+        "export": {
+          "method": "byte-preserving MPEG suffix correction",
+          "decoded_pcm_md5": "MD5=da4f051ebd793787f9c44a5cdb61caad",
+          "decoded_audio_unchanged": true
+        }
+      },
+      "sound/Special/GGT/GGT010.wav": {
+        "path": "/assets/startup/audio/Special/GGT/GGT010.mp3",
+        "mime": "audio/mpeg",
+        "sha256": "4f10306d24909c92071b3d9bd8ef83a35cd15f95aeae3da45d05983a4145135c",
+        "source": {
+          "path": "sound/Special/GGT/GGT010.wav",
+          "sha256": "4f10306d24909c92071b3d9bd8ef83a35cd15f95aeae3da45d05983a4145135c",
+          "bytes": 2510976,
+          "declared_extension": ".wav",
+          "observed_encoding": "MPEG Layer III"
+        },
+        "audio": {
+          "codec": "mp3",
+          "sample_rate": 44100,
+          "channels": 2,
+          "duration_seconds": 156.920438
+        },
+        "export": {
+          "method": "byte-preserving MPEG suffix correction",
+          "decoded_pcm_md5": "MD5=eab81db0c2399c715135166324d9d826",
+          "decoded_audio_unchanged": true
+        }
+      },
+      "sound/Special/GGT/GGT011.wav": {
+        "path": "/assets/startup/audio/Special/GGT/GGT011.mp3",
+        "mime": "audio/mpeg",
+        "sha256": "49a3f3441f4d0367ea8406012530dab6bda7ff32067a061668247fa038dbd73d",
+        "source": {
+          "path": "sound/Special/GGT/GGT011.wav",
+          "sha256": "49a3f3441f4d0367ea8406012530dab6bda7ff32067a061668247fa038dbd73d",
+          "bytes": 2603136,
+          "declared_extension": ".wav",
+          "observed_encoding": "MPEG Layer III"
+        },
+        "audio": {
+          "codec": "mp3",
+          "sample_rate": 44100,
+          "channels": 2,
+          "duration_seconds": 162.614438
+        },
+        "export": {
+          "method": "byte-preserving MPEG suffix correction",
+          "decoded_pcm_md5": "MD5=7ab2254a4c664f02e7cfdf28a184bfe4",
+          "decoded_audio_unchanged": true
+        }
+      },
+      "sound/Special/GGT/GGT012.wav": {
+        "path": "/assets/startup/audio/Special/GGT/GGT012.mp3",
+        "mime": "audio/mpeg",
+        "sha256": "b7f241f8c2d0baedcd14db3eeee53a116146d7d93b8fd558d8d05a97a7aa286a",
+        "source": {
+          "path": "sound/Special/GGT/GGT012.wav",
+          "sha256": "b7f241f8c2d0baedcd14db3eeee53a116146d7d93b8fd558d8d05a97a7aa286a",
+          "bytes": 2389789,
+          "declared_extension": ".wav",
+          "observed_encoding": "MPEG Layer III"
+        },
+        "audio": {
+          "codec": "mp3",
+          "sample_rate": 44100,
+          "channels": 2,
+          "duration_seconds": 119.43825
+        },
+        "export": {
+          "method": "byte-preserving MPEG suffix correction",
+          "decoded_pcm_md5": "MD5=0af4f68d15ef5ff3ed9bd9ae045bd443",
+          "decoded_audio_unchanged": true
+        }
+      },
+      "sound/Special/GGT/GGT013.wav": {
+        "path": "/assets/startup/audio/Special/GGT/GGT013.mp3",
+        "mime": "audio/mpeg",
+        "sha256": "4136aaec38d9f7055f85f88c6a6347d28c79b3bd6d0a9c1d0b14a0fe6b34924f",
+        "source": {
+          "path": "sound/Special/GGT/GGT013.wav",
+          "sha256": "4136aaec38d9f7055f85f88c6a6347d28c79b3bd6d0a9c1d0b14a0fe6b34924f",
+          "bytes": 2386654,
+          "declared_extension": ".wav",
+          "observed_encoding": "MPEG Layer III"
+        },
+        "audio": {
+          "codec": "mp3",
+          "sample_rate": 44100,
+          "channels": 2,
+          "duration_seconds": 119.2815
+        },
+        "export": {
+          "method": "byte-preserving MPEG suffix correction",
+          "decoded_pcm_md5": "MD5=bf8462d7d011d8895f38f0746ed1e815",
+          "decoded_audio_unchanged": true
+        }
+      },
+      "sound/Special/GGT/GGT014.wav": {
+        "path": "/assets/startup/audio/Special/GGT/GGT014.mp3",
+        "mime": "audio/mpeg",
+        "sha256": "107057aea9c3de6b93d07591fd49b27b007b4aa209d086637e1822c1c5f2397d",
+        "source": {
+          "path": "sound/Special/GGT/GGT014.wav",
+          "sha256": "107057aea9c3de6b93d07591fd49b27b007b4aa209d086637e1822c1c5f2397d",
+          "bytes": 2691200,
+          "declared_extension": ".wav",
+          "observed_encoding": "MPEG Layer III"
+        },
+        "audio": {
+          "codec": "mp3",
+          "sample_rate": 44100,
+          "channels": 2,
+          "duration_seconds": 168.126
+        },
+        "export": {
+          "method": "byte-preserving MPEG suffix correction",
+          "decoded_pcm_md5": "MD5=879f11a204aa66d278519848a767a345",
+          "decoded_audio_unchanged": true
+        }
+      },
+      "sound/Special/GGT/GGT015.wav": {
+        "path": "/assets/startup/audio/Special/GGT/GGT015.mp3",
+        "mime": "audio/mpeg",
+        "sha256": "72d1c9abf9dc862dfa78aad5ddf3bb12e61c39dbb36112927e31d080d0f0673d",
+        "source": {
+          "path": "sound/Special/GGT/GGT015.wav",
+          "sha256": "72d1c9abf9dc862dfa78aad5ddf3bb12e61c39dbb36112927e31d080d0f0673d",
+          "bytes": 2744448,
+          "declared_extension": ".wav",
+          "observed_encoding": "MPEG Layer III"
+        },
+        "audio": {
+          "codec": "mp3",
+          "sample_rate": 44100,
+          "channels": 2,
+          "duration_seconds": 171.391563
+        },
+        "export": {
+          "method": "byte-preserving MPEG suffix correction",
+          "decoded_pcm_md5": "MD5=8e94719673d66ce541a869a8d800de7b",
+          "decoded_audio_unchanged": true
+        }
+      },
+      "sound/Special/GGT/GGT016.wav": {
+        "path": "/assets/startup/audio/Special/GGT/GGT016.mp3",
+        "mime": "audio/mpeg",
+        "sha256": "b1bb0bb926ea46f31a021727f93286ffa475af42c99a32936f36b001b74612ed",
+        "source": {
+          "path": "sound/Special/GGT/GGT016.wav",
+          "sha256": "b1bb0bb926ea46f31a021727f93286ffa475af42c99a32936f36b001b74612ed",
+          "bytes": 3457152,
+          "declared_extension": ".wav",
+          "observed_encoding": "MPEG Layer III"
+        },
+        "audio": {
+          "codec": "mp3",
+          "sample_rate": 44100,
+          "channels": 2,
+          "duration_seconds": 216.007563
+        },
+        "export": {
+          "method": "byte-preserving MPEG suffix correction",
+          "decoded_pcm_md5": "MD5=2535d228b4f834ed9e8244d686c661a5",
+          "decoded_audio_unchanged": true
+        }
+      },
+      "sound/Special/GGT/GGT017.wav": {
+        "path": "/assets/startup/audio/Special/GGT/GGT017.mp3",
+        "mime": "audio/mpeg",
+        "sha256": "5402fde736804e1b49cd22b0802238ee697e55046771bca6ee69f5d2be669f80",
+        "source": {
+          "path": "sound/Special/GGT/GGT017.wav",
+          "sha256": "5402fde736804e1b49cd22b0802238ee697e55046771bca6ee69f5d2be669f80",
+          "bytes": 6750670,
+          "declared_extension": ".wav",
+          "observed_encoding": "MPEG Layer III"
+        },
+        "audio": {
+          "codec": "mp3",
+          "sample_rate": 44100,
+          "channels": 2,
+          "duration_seconds": 337.4823
+        },
+        "export": {
+          "method": "byte-preserving MPEG suffix correction",
+          "decoded_pcm_md5": "MD5=6cdd330c1e154218318645610d1f1145",
+          "decoded_audio_unchanged": true
+        }
+      },
+      "sound/Special/GGT/GGT018.wav": {
+        "path": "/assets/startup/audio/Special/GGT/GGT018.mp3",
+        "mime": "audio/mpeg",
+        "sha256": "03254a73f755bce0439b8c97f82c5a2214762ed13e1e3103a5d245b43cde818d",
+        "source": {
+          "path": "sound/Special/GGT/GGT018.wav",
+          "sha256": "03254a73f755bce0439b8c97f82c5a2214762ed13e1e3103a5d245b43cde818d",
+          "bytes": 6553600,
+          "declared_extension": ".wav",
+          "observed_encoding": "MPEG Layer III"
+        },
+        "audio": {
+          "codec": "mp3",
+          "sample_rate": 44100,
+          "channels": 2,
+          "duration_seconds": 327.66635
+        },
+        "export": {
+          "method": "byte-preserving MPEG suffix correction",
+          "decoded_pcm_md5": "MD5=95d443b07722380968d917080ce65962",
+          "decoded_audio_unchanged": true
+        }
+      },
+      "sound/Special/Mitsuda/YM001.wav": {
+        "path": "/assets/startup/audio/Special/Mitsuda/YM001.mp3",
+        "mime": "audio/mpeg",
+        "sha256": "870609b53f0de0714500b9a9195cb2abd5830d985dd95a237927e5e087444af5",
+        "source": {
+          "path": "sound/Special/Mitsuda/YM001.wav",
+          "sha256": "870609b53f0de0714500b9a9195cb2abd5830d985dd95a237927e5e087444af5",
+          "bytes": 3309400,
+          "declared_extension": ".wav",
+          "observed_encoding": "MPEG Layer III"
+        },
+        "audio": {
+          "codec": "mp3",
+          "sample_rate": 44100,
+          "channels": 2,
+          "duration_seconds": 206.8375
+        },
+        "export": {
+          "method": "byte-preserving MPEG suffix correction",
+          "decoded_pcm_md5": "MD5=9be315bda0c8b699b77840fe46444e8a",
+          "decoded_audio_unchanged": true
+        }
+      },
+      "sound/Special/Mitsuda/YM002.wav": {
+        "path": "/assets/startup/audio/Special/Mitsuda/YM002.mp3",
+        "mime": "audio/mpeg",
+        "sha256": "e0db5397ac86030719aa7c6557c4d8aca82467a89cfdaa007dda02cd3f315b42",
+        "source": {
+          "path": "sound/Special/Mitsuda/YM002.wav",
+          "sha256": "e0db5397ac86030719aa7c6557c4d8aca82467a89cfdaa007dda02cd3f315b42",
+          "bytes": 5046857,
+          "declared_extension": ".wav",
+          "observed_encoding": "MPEG Layer III"
+        },
+        "audio": {
+          "codec": "mp3",
+          "sample_rate": 44100,
+          "channels": 2,
+          "duration_seconds": 315.428563
+        },
+        "export": {
+          "method": "byte-preserving MPEG suffix correction",
+          "decoded_pcm_md5": "MD5=a067e857252f8d63781c0950ec062dd5",
+          "decoded_audio_unchanged": true
+        }
+      },
+      "sound/Special/Mitsuda/YM003.wav": {
+        "path": "/assets/startup/audio/Special/Mitsuda/YM003.mp3",
+        "mime": "audio/mpeg",
+        "sha256": "eca547225fd2bf4a10bda8bcb3e9a3cd30e129322e738978bd0f77436d1765d5",
+        "source": {
+          "path": "sound/Special/Mitsuda/YM003.wav",
+          "sha256": "eca547225fd2bf4a10bda8bcb3e9a3cd30e129322e738978bd0f77436d1765d5",
+          "bytes": 6089772,
+          "declared_extension": ".wav",
+          "observed_encoding": "MPEG Layer III"
+        },
+        "audio": {
+          "codec": "mp3",
+          "sample_rate": 44100,
+          "channels": 2,
+          "duration_seconds": 304.4374
+        },
+        "export": {
+          "method": "byte-preserving MPEG suffix correction",
+          "decoded_pcm_md5": "MD5=570b775c216be89cad8504c342153b09",
+          "decoded_audio_unchanged": true
+        }
+      },
+      "sound/Special/Mitsuda/YM004.wav": {
+        "path": "/assets/startup/audio/Special/Mitsuda/YM004.mp3",
+        "mime": "audio/mpeg",
+        "sha256": "258f8e4d8d890b5b1b43a2fa50045471f9d45bebe16e190a3d5c20c24b912f07",
+        "source": {
+          "path": "sound/Special/Mitsuda/YM004.wav",
+          "sha256": "258f8e4d8d890b5b1b43a2fa50045471f9d45bebe16e190a3d5c20c24b912f07",
+          "bytes": 5838997,
+          "declared_extension": ".wav",
+          "observed_encoding": "MPEG Layer III"
+        },
+        "audio": {
+          "codec": "mp3",
+          "sample_rate": 44100,
+          "channels": 2,
+          "duration_seconds": 291.89865
+        },
+        "export": {
+          "method": "byte-preserving MPEG suffix correction",
+          "decoded_pcm_md5": "MD5=c9137392ce945a80a803b49c8ac0e570",
+          "decoded_audio_unchanged": true
+        }
+      },
+      "sound/Special/Mitsuda/YM005.wav": {
+        "path": "/assets/startup/audio/Special/Mitsuda/YM005.mp3",
+        "mime": "audio/mpeg",
+        "sha256": "d092a2add6a70e7ccf0608e4bd36094be9f4013dc896366edaf67a4eda00a317",
+        "source": {
+          "path": "sound/Special/Mitsuda/YM005.wav",
+          "sha256": "d092a2add6a70e7ccf0608e4bd36094be9f4013dc896366edaf67a4eda00a317",
+          "bytes": 5767680,
+          "declared_extension": ".wav",
+          "observed_encoding": "MPEG Layer III"
+        },
+        "audio": {
+          "codec": "mp3",
+          "sample_rate": 48000,
+          "channels": 2,
+          "duration_seconds": 288.384
+        },
+        "export": {
+          "method": "byte-preserving MPEG suffix correction",
+          "decoded_pcm_md5": "MD5=be8b2dff919485aacaa9099327f163d4",
+          "decoded_audio_unchanged": true
+        }
+      },
+      "sound/Special/Mitsuda/YM006.wav": {
+        "path": "/assets/startup/audio/Special/Mitsuda/YM006.mp3",
+        "mime": "audio/mpeg",
+        "sha256": "19a620dc959720e356a9f1a51f7c5ce69920dce248373c19c727d87fa6b57ae0",
+        "source": {
+          "path": "sound/Special/Mitsuda/YM006.wav",
+          "sha256": "19a620dc959720e356a9f1a51f7c5ce69920dce248373c19c727d87fa6b57ae0",
+          "bytes": 5119200,
+          "declared_extension": ".wav",
+          "observed_encoding": "MPEG Layer III"
+        },
+        "audio": {
+          "codec": "mp3",
+          "sample_rate": 48000,
+          "channels": 2,
+          "duration_seconds": 255.96
+        },
+        "export": {
+          "method": "byte-preserving MPEG suffix correction",
+          "decoded_pcm_md5": "MD5=32016d6f161631cdd7179d627ce37f17",
+          "decoded_audio_unchanged": true
+        }
+      },
+      "sound/Special/Mitsuda/YM007.wav": {
+        "path": "/assets/startup/audio/Special/Mitsuda/YM007.mp3",
+        "mime": "audio/mpeg",
+        "sha256": "9ad412fc2be1f8fff191562f648d6612ba39261e69fddc9ff27237c9a43b905e",
+        "source": {
+          "path": "sound/Special/Mitsuda/YM007.wav",
+          "sha256": "9ad412fc2be1f8fff191562f648d6612ba39261e69fddc9ff27237c9a43b905e",
+          "bytes": 4608960,
+          "declared_extension": ".wav",
+          "observed_encoding": "MPEG Layer III"
+        },
+        "audio": {
+          "codec": "mp3",
+          "sample_rate": 48000,
+          "channels": 2,
+          "duration_seconds": 230.448
+        },
+        "export": {
+          "method": "byte-preserving MPEG suffix correction",
+          "decoded_pcm_md5": "MD5=ab2de76335f4ec79679143df2eea81cc",
+          "decoded_audio_unchanged": true
+        }
+      },
+      "sound/Special/Mitsuda/YM008.wav": {
+        "path": "/assets/startup/audio/Special/Mitsuda/YM008.mp3",
+        "mime": "audio/mpeg",
+        "sha256": "0c778448a48be27c236f0694426f66f8207844c659951ac1ac2c5e6d0c0232a5",
+        "source": {
+          "path": "sound/Special/Mitsuda/YM008.wav",
+          "sha256": "0c778448a48be27c236f0694426f66f8207844c659951ac1ac2c5e6d0c0232a5",
+          "bytes": 3445237,
+          "declared_extension": ".wav",
+          "observed_encoding": "MPEG Layer III"
+        },
+        "audio": {
+          "codec": "mp3",
+          "sample_rate": 44100,
+          "channels": 2,
+          "duration_seconds": 215.327313
+        },
+        "export": {
+          "method": "byte-preserving MPEG suffix correction",
+          "decoded_pcm_md5": "MD5=611ffd597225c052d5930b3593dd364d",
+          "decoded_audio_unchanged": true
+        }
+      },
+      "sound/Special/Mitsuda/YM009.wav": {
+        "path": "/assets/startup/audio/Special/Mitsuda/YM009.mp3",
+        "mime": "audio/mpeg",
+        "sha256": "c8ccfc326dfc247b6ceade6fac47d3b47cc30af5c14966f81d1bfbb4c1d874f1",
+        "source": {
+          "path": "sound/Special/Mitsuda/YM009.wav",
+          "sha256": "c8ccfc326dfc247b6ceade6fac47d3b47cc30af5c14966f81d1bfbb4c1d874f1",
+          "bytes": 8560956,
+          "declared_extension": ".wav",
+          "observed_encoding": "MPEG Layer III"
+        },
+        "audio": {
+          "codec": "mp3",
+          "sample_rate": 44100,
+          "channels": 2,
+          "duration_seconds": 427.9966
+        },
+        "export": {
+          "method": "byte-preserving MPEG suffix correction",
+          "decoded_pcm_md5": "MD5=d74be4df9c91be356e0c176c9101ace7",
+          "decoded_audio_unchanged": true
+        }
+      },
+      "sound/Special/Mitsuda/YM010.wav": {
+        "path": "/assets/startup/audio/Special/Mitsuda/YM010.mp3",
+        "mime": "audio/mpeg",
+        "sha256": "9c0c994dae1034624f7f42c1a81b2dd9f92160eb3402d24c7edf45e42417635f",
+        "source": {
+          "path": "sound/Special/Mitsuda/YM010.wav",
+          "sha256": "9c0c994dae1034624f7f42c1a81b2dd9f92160eb3402d24c7edf45e42417635f",
+          "bytes": 5395435,
+          "declared_extension": ".wav",
+          "observed_encoding": "MPEG Layer III"
+        },
+        "audio": {
+          "codec": "mp3",
+          "sample_rate": 44100,
+          "channels": 2,
+          "duration_seconds": 337.214688
+        },
+        "export": {
+          "method": "byte-preserving MPEG suffix correction",
+          "decoded_pcm_md5": "MD5=86edd099a447f4c240b56065d75e15d0",
+          "decoded_audio_unchanged": true
+        }
+      },
+      "sound/Special/Mitsuda/YM011.wav": {
+        "path": "/assets/startup/audio/Special/Mitsuda/YM011.mp3",
+        "mime": "audio/mpeg",
+        "sha256": "062385c3789fa41ce7639bd4e810b3f00ad79fb87833e6c5a56d1cf0235d504e",
+        "source": {
+          "path": "sound/Special/Mitsuda/YM011.wav",
+          "sha256": "062385c3789fa41ce7639bd4e810b3f00ad79fb87833e6c5a56d1cf0235d504e",
+          "bytes": 4168724,
+          "declared_extension": ".wav",
+          "observed_encoding": "MPEG Layer III"
+        },
+        "audio": {
+          "codec": "mp3",
+          "sample_rate": 44100,
+          "channels": 2,
+          "duration_seconds": 260.54525
+        },
+        "export": {
+          "method": "byte-preserving MPEG suffix correction",
+          "decoded_pcm_md5": "MD5=c79e11068cca805124397879bd5e405b",
+          "decoded_audio_unchanged": true
+        }
+      },
+      "sound/Special/Mitsuda/YM012.wav": {
+        "path": "/assets/startup/audio/Special/Mitsuda/YM012.mp3",
+        "mime": "audio/mpeg",
+        "sha256": "34e0bb63cfbfc94644fc038873a0841009da00772a489fbba63642eb1f2874bb",
+        "source": {
+          "path": "sound/Special/Mitsuda/YM012.wav",
+          "sha256": "34e0bb63cfbfc94644fc038873a0841009da00772a489fbba63642eb1f2874bb",
+          "bytes": 6277753,
+          "declared_extension": ".wav",
+          "observed_encoding": "MPEG Layer III"
+        },
+        "audio": {
+          "codec": "mp3",
+          "sample_rate": 44100,
+          "channels": 2,
+          "duration_seconds": 313.78285
+        },
+        "export": {
+          "method": "byte-preserving MPEG suffix correction",
+          "decoded_pcm_md5": "MD5=8e897364892a23f5d9c99c4f88b29372",
+          "decoded_audio_unchanged": true
+        }
+      }
+    },
+    "music": "sound/menu/MBack.wav",
+    "gallery": [
+      {
+        "index": 0,
+        "clip": "sound/Special/GGT/GGT001.wav"
+      },
+      {
+        "index": 1,
+        "clip": "sound/Special/GGT/GGT002.wav"
+      },
+      {
+        "index": 2,
+        "clip": "sound/Special/GGT/GGT003.wav"
+      },
+      {
+        "index": 3,
+        "clip": "sound/Special/GGT/GGT004.wav"
+      },
+      {
+        "index": 4,
+        "clip": "sound/Special/GGT/GGT005.wav"
+      },
+      {
+        "index": 5,
+        "clip": "sound/Special/GGT/GGT006.wav"
+      },
+      {
+        "index": 6,
+        "clip": "sound/Special/GGT/GGT007.wav"
+      },
+      {
+        "index": 7,
+        "clip": "sound/Special/GGT/GGT008.wav"
+      },
+      {
+        "index": 8,
+        "clip": "sound/Special/GGT/GGT009.wav"
+      },
+      {
+        "index": 9,
+        "clip": "sound/Special/GGT/GGT010.wav"
+      },
+      {
+        "index": 10,
+        "clip": "sound/Special/GGT/GGT011.wav"
+      },
+      {
+        "index": 11,
+        "clip": "sound/Special/GGT/GGT012.wav"
+      },
+      {
+        "index": 12,
+        "clip": "sound/Special/GGT/GGT013.wav"
+      },
+      {
+        "index": 13,
+        "clip": "sound/Special/GGT/GGT014.wav"
+      },
+      {
+        "index": 14,
+        "clip": "sound/Special/GGT/GGT015.wav"
+      },
+      {
+        "index": 15,
+        "clip": "sound/Special/GGT/GGT016.wav"
+      },
+      {
+        "index": 16,
+        "clip": "sound/Special/GGT/GGT017.wav"
+      },
+      {
+        "index": 17,
+        "clip": "sound/Special/GGT/GGT018.wav"
+      },
+      {
+        "index": 18,
+        "clip": "sound/Special/Mitsuda/YM001.wav"
+      },
+      {
+        "index": 19,
+        "clip": "sound/Special/Mitsuda/YM002.wav"
+      },
+      {
+        "index": 20,
+        "clip": "sound/Special/Mitsuda/YM003.wav"
+      },
+      {
+        "index": 21,
+        "clip": "sound/Special/Mitsuda/YM004.wav"
+      },
+      {
+        "index": 22,
+        "clip": "sound/Special/Mitsuda/YM005.wav"
+      },
+      {
+        "index": 23,
+        "clip": "sound/Special/Mitsuda/YM006.wav"
+      },
+      {
+        "index": 24,
+        "clip": "sound/Special/Mitsuda/YM007.wav"
+      },
+      {
+        "index": 25,
+        "clip": "sound/Special/Mitsuda/YM008.wav"
+      },
+      {
+        "index": 26,
+        "clip": "sound/Special/Mitsuda/YM009.wav"
+      },
+      {
+        "index": 27,
+        "clip": "sound/Special/Mitsuda/YM010.wav"
+      },
+      {
+        "index": 28,
+        "clip": "sound/Special/Mitsuda/YM011.wav"
+      },
+      {
+        "index": 29,
+        "clip": "sound/Special/Mitsuda/YM012.wav"
+      }
+    ],
+    "cues": {
+      "move": "sound/menu/mUpdown.wav",
+      "rotate": "sound/menu/mMainMenu.wav",
+      "submenu": "sound/menu/mSubMenu.wav",
+      "confirm": "sound/menu/mDecide.wav",
+      "open": "sound/menu/mDecide.wav",
+      "cancel": null
+    },
+    "triggers": {
+      "rotate": "4BE350: current frame2,11,20,29 calls mMainMenu",
+      "submenu": "4C2130 /4C30A0: mSubMenu played while initializing category plaques",
+      "confirm": "4C15E0: opening load/extras and accepting selections use mDecide",
+      "cancel": "4BBAC0 WM_KEYDOWN Escape clears flags/selectors without a sound call",
+      "move": "4BFAC0 /4C0260 mUpdown on changed submenu or extras row; save row path has its own boundary details",
+      "gallery": "4C15E0 stops/frees950 then loads selected track and loops;4BBAC0 Escape only clears list selectors, retaining current950 track;4BDA10 stops/frees950 when leaving main menu"
+    }
+  },
+  "evidence": {
+    "bundle": "remake/runtime/evidence/startup_menu_native_20261020.json",
+    "bundle_sha256": "01e598a8bd12f809d3ebe74a424b8419df393944cba886f3191e9e697ce4aab8",
+    "procedures": {
+      "0x417d10": "ev_1cb139629b320438ceca0788b19902972b1f053dddb7071729beb9e0cbf95d8a",
+      "0x419e90": "ev_1cb139629b320438ceca0788b19902972b1f053dddb7071729beb9e0cbf95d8a",
+      "0x4bb580": "ev_1e3b06debe2c2c7dc66c84015a6ee91b32aec64168e84b14233e30da1edf0f6d",
+      "0x4c2130": "ev_1e3b06debe2c2c7dc66c84015a6ee91b32aec64168e84b14233e30da1edf0f6d",
+      "0x4c30a0": "ev_1e3b06debe2c2c7dc66c84015a6ee91b32aec64168e84b14233e30da1edf0f6d",
+      "0x4bfac0": "ev_1e3b06debe2c2c7dc66c84015a6ee91b32aec64168e84b14233e30da1edf0f6d",
+      "0x4c0260": "ev_1e3b06debe2c2c7dc66c84015a6ee91b32aec64168e84b14233e30da1edf0f6d",
+      "0x478c80": "ev_1e3b06debe2c2c7dc66c84015a6ee91b32aec64168e84b14233e30da1edf0f6d",
+      "0x4c69a0": "ev_3ed3cd139aed8806399f884152a4944a2bb195f93d1c0a00b2f9c286ff00d2a0",
+      "0x4c5880": "ev_6745b900b3efb02e14ba7b2392c8419660f0396d4aeb21af7bf004696a8df45a",
+      "0x4c58e0": "ev_6745b900b3efb02e14ba7b2392c8419660f0396d4aeb21af7bf004696a8df45a",
+      "0x530cd6": "ev_962472f4d569f8fb892dc40610c0311d5cec09f088122e9e523ab52066cb45f1",
+      "0x4bda10": "ev_962472f4d569f8fb892dc40610c0311d5cec09f088122e9e523ab52066cb45f1",
+      "0x4c5170": "ev_aa47017088878fd1321e9a7a0371bb3fd017bdc58cb13763b3e11f1f89cb27de",
+      "0x4c5de0": "ev_aa47017088878fd1321e9a7a0371bb3fd017bdc58cb13763b3e11f1f89cb27de",
+      "0x4304a0": "ev_ae5891b77abb4e2186c1329d52b7ffaf6a7b557862af39d8e98c425d9ac70bd8",
+      "0x4305d0": "ev_ae5891b77abb4e2186c1329d52b7ffaf6a7b557862af39d8e98c425d9ac70bd8",
+      "0x430690": "ev_ae5891b77abb4e2186c1329d52b7ffaf6a7b557862af39d8e98c425d9ac70bd8",
+      "0x4bc1e0": "ev_cac716f9c546cf58f031cea7d1ec8ba274f0e99becb80a352757fe9408251259",
+      "0x4c15e0": "ev_cac716f9c546cf58f031cea7d1ec8ba274f0e99becb80a352757fe9408251259",
+      "0x479610": "ev_cac716f9c546cf58f031cea7d1ec8ba274f0e99becb80a352757fe9408251259",
+      "0x47a500": "ev_cac716f9c546cf58f031cea7d1ec8ba274f0e99becb80a352757fe9408251259",
+      "0x47a640": "ev_cac716f9c546cf58f031cea7d1ec8ba274f0e99becb80a352757fe9408251259",
+      "0x402590": "ev_cac716f9c546cf58f031cea7d1ec8ba274f0e99becb80a352757fe9408251259",
+      "0x530d56": "ev_cac716f9c546cf58f031cea7d1ec8ba274f0e99becb80a352757fe9408251259",
+      "0x530e42": "ev_cac716f9c546cf58f031cea7d1ec8ba274f0e99becb80a352757fe9408251259",
+      "0x4bbac0": "ev_cb857510d137637708b12063dcb460d7d7a7e4f78c7c59d0855405855ab56221",
+      "0x4c59b0": "ev_fcb6693308efde54381d06de9d2ca7c0ebd5f77adb7845f66a39cced2c3234a9",
+      "0x4a8960": "ev_cb857510d137637708b12063dcb460d7d7a7e4f78c7c59d0855405855ab56221",
+      "0x432450": "ev_cb857510d137637708b12063dcb460d7d7a7e4f78c7c59d0855405855ab56221",
+      "0x4be350": "ev_fcb6693308efde54381d06de9d2ca7c0ebd5f77adb7845f66a39cced2c3234a9",
+      "0x530c50": "ev_fcb6693308efde54381d06de9d2ca7c0ebd5f77adb7845f66a39cced2c3234a9",
+      "0x4c6560": "ev_fcb6693308efde54381d06de9d2ca7c0ebd5f77adb7845f66a39cced2c3234a9"
+    },
+    "initial_rules": "remake/runtime/evidence/startup_rules.json",
+    "authority": "Source carrier bytes plus native Ghidra static calls; not original runtime observation"
+  },
+  "limitations": [
+    "Native alpha overlays use 5-bit preweighted color and RGB565 destination quantization; PNG exports preserve source color/alpha with browser rounding differences.",
+    "MenuCode registry and extras unlock gates are retained as unknown; assets include selected/normal row variants without claiming completion unlocks.",
+    "Read panel images are original; actual remake save metadata must be rendered from browser saves, never inferred from original user save bytes."
+  ]
+}

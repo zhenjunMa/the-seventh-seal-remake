@@ -1,0 +1,473 @@
+{
+  "schema": "seventh-seal-native-layer-bank",
+  "version": 1,
+  "role_id": "002",
+  "frame_width": 539,
+  "frame_height": 439,
+  "anchor": {
+    "x": 268,
+    "y": 324
+  },
+  "frames": [
+    {
+      "source_frame": 169,
+      "main": {
+        "path": "assets/item_presentation/roles/002/frame_0169_main.png",
+        "sha256": "8a1107974d0933d385c090f9af41ca6c50066ca4ba0bbceb342bc5138a4b9390",
+        "rgba_sha256": "94b27d468f346b79d473d310f0aea4f25b1f63c090ab77403a7f601a7ea7a921",
+        "bounds": [
+          232,
+          214,
+          307,
+          348
+        ],
+        "covered_pixels": 3257,
+        "transparent_pixels": 233364
+      },
+      "intrinsic": {
+        "path": "assets/item_presentation/roles/002/frame_0169_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 170,
+      "main": {
+        "path": "assets/item_presentation/roles/002/frame_0170_main.png",
+        "sha256": "23fdbb44b6e46c0a8fcea18f6f0e652a1bfd7870f85f0852d6aca5f6ae194557",
+        "rgba_sha256": "c0956ef5242c77bdbeca3e2c188864bc1ccd4b418211f60608bbc07d7afbbb76",
+        "bounds": [
+          238,
+          211,
+          307,
+          348
+        ],
+        "covered_pixels": 3363,
+        "transparent_pixels": 233258
+      },
+      "intrinsic": {
+        "path": "assets/item_presentation/roles/002/frame_0170_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 171,
+      "main": {
+        "path": "assets/item_presentation/roles/002/frame_0171_main.png",
+        "sha256": "a7349bef6f9bea22b7af0cf8a3248b071b49f2b83948f8228b48beffd68f059c",
+        "rgba_sha256": "19623e3a635d8f8aa8526985a19c5c5d3cd71ca5027443103cc40a9cba6ccf3c",
+        "bounds": [
+          238,
+          211,
+          307,
+          348
+        ],
+        "covered_pixels": 3411,
+        "transparent_pixels": 233210
+      },
+      "intrinsic": {
+        "path": "assets/item_presentation/roles/002/frame_0171_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 172,
+      "main": {
+        "path": "assets/item_presentation/roles/002/frame_0172_main.png",
+        "sha256": "ce8b216e9e8cb38835c6c11ce6ca0b56b046bbc7c0fcd77f9f01790b7f5445d0",
+        "rgba_sha256": "8bd0b882ca5f754bbab44c62ff2bd259ac5a303d74471c6d58d313bba761f1e8",
+        "bounds": [
+          238,
+          210,
+          309,
+          348
+        ],
+        "covered_pixels": 3398,
+        "transparent_pixels": 233223
+      },
+      "intrinsic": {
+        "path": "assets/item_presentation/roles/002/frame_0172_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 173,
+      "main": {
+        "path": "assets/item_presentation/roles/002/frame_0173_main.png",
+        "sha256": "96d6f93c9b234059c944aa2df63fbf9d33d07ce0a7cbed0660863e8ef414b5c1",
+        "rgba_sha256": "9239a066c0287b7386221391c1fbefe1ae168f4b87fabfc08fb1e7155e25af6e",
+        "bounds": [
+          238,
+          210,
+          310,
+          348
+        ],
+        "covered_pixels": 3394,
+        "transparent_pixels": 233227
+      },
+      "intrinsic": {
+        "path": "assets/item_presentation/roles/002/frame_0173_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 174,
+      "main": {
+        "path": "assets/item_presentation/roles/002/frame_0174_main.png",
+        "sha256": "46a6335d755c7b355d7d4cbd878191e5712941d0ef4b840256b56b1caa30b748",
+        "rgba_sha256": "44f7edb6bc39f1e7e68ed0f85fb1f8baa2ed94fca9d40ebeceb27fa02aea75f0",
+        "bounds": [
+          238,
+          210,
+          308,
+          348
+        ],
+        "covered_pixels": 3363,
+        "transparent_pixels": 233258
+      },
+      "intrinsic": {
+        "path": "assets/item_presentation/roles/002/frame_0174_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 175,
+      "main": {
+        "path": "assets/item_presentation/roles/002/frame_0175_main.png",
+        "sha256": "0ca6e28806f6f2d562f1cecb4a65198430993f29e673bcb5099891d592d9bfe2",
+        "rgba_sha256": "a6891af510df6dd46261ef085fc6f83723a88129d0868db27a7f133db319ccc8",
+        "bounds": [
+          238,
+          210,
+          307,
+          348
+        ],
+        "covered_pixels": 3359,
+        "transparent_pixels": 233262
+      },
+      "intrinsic": {
+        "path": "assets/item_presentation/roles/002/frame_0175_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 176,
+      "main": {
+        "path": "assets/item_presentation/roles/002/frame_0176_main.png",
+        "sha256": "7980380949ac3cb35f69eff8667310618e1962af8bfa6c41851285393dcc7c37",
+        "rgba_sha256": "70a1b27d1286e14ac5b64bf5a3b9015e0cf6966cc15ab7a56eb0df12a2c8644e",
+        "bounds": [
+          231,
+          222,
+          307,
+          348
+        ],
+        "covered_pixels": 2685,
+        "transparent_pixels": 233936
+      },
+      "intrinsic": {
+        "path": "assets/item_presentation/roles/002/frame_0176_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 177,
+      "main": {
+        "path": "assets/item_presentation/roles/002/frame_0177_main.png",
+        "sha256": "cb0161e96186ddf45b02de6babba86d09b0f6e517b287801685932f89c0f43ab",
+        "rgba_sha256": "6e12ccd9df4f1b53247ab015285484ffd6ad8acfc8d1cc6b3bb879d8be8e99d6",
+        "bounds": [
+          228,
+          236,
+          307,
+          348
+        ],
+        "covered_pixels": 2871,
+        "transparent_pixels": 233750
+      },
+      "intrinsic": {
+        "path": "assets/item_presentation/roles/002/frame_0177_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 178,
+      "main": {
+        "path": "assets/item_presentation/roles/002/frame_0178_main.png",
+        "sha256": "240241d2abe3b64fed4f5a8856efa582e2dc9a2492061af7361291dcfaaa829e",
+        "rgba_sha256": "561f967c93a0054c71a7d7bfcb2edbbd36d2c8b86337b151bb42c9502e8a6379",
+        "bounds": [
+          221,
+          243,
+          307,
+          348
+        ],
+        "covered_pixels": 2940,
+        "transparent_pixels": 233681
+      },
+      "intrinsic": {
+        "path": "assets/item_presentation/roles/002/frame_0178_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 179,
+      "main": {
+        "path": "assets/item_presentation/roles/002/frame_0179_main.png",
+        "sha256": "ddd236a696ff263a8875422b6b7ceeac234fcc5a630c520c38c634ba784a46c4",
+        "rgba_sha256": "3bc36a27e60ec0ae09d1a380533da50c8247fc90adda04ef235f2cbe7ea4d74a",
+        "bounds": [
+          219,
+          223,
+          307,
+          348
+        ],
+        "covered_pixels": 3033,
+        "transparent_pixels": 233588
+      },
+      "intrinsic": {
+        "path": "assets/item_presentation/roles/002/frame_0179_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 180,
+      "main": {
+        "path": "assets/item_presentation/roles/002/frame_0180_main.png",
+        "sha256": "9a35c7ff40bba357ba2c82117347cceb8411b411fbb871634ed769d23e706446",
+        "rgba_sha256": "ae5fd63d27adc538879d297bd27e06b463079beb54ad3b91aed865d6edafbe8d",
+        "bounds": [
+          227,
+          178,
+          334,
+          348
+        ],
+        "covered_pixels": 3611,
+        "transparent_pixels": 233010
+      },
+      "intrinsic": {
+        "path": "assets/item_presentation/roles/002/frame_0180_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 181,
+      "main": {
+        "path": "assets/item_presentation/roles/002/frame_0181_main.png",
+        "sha256": "0302200c5e7d6904eb3cf3c7718f496362e4858f145fdd0806ca0019bd7330c1",
+        "rgba_sha256": "b73adb8e97b06129e27d749561b28294259fc3310e8ebc223b36e47fdd32637b",
+        "bounds": [
+          227,
+          175,
+          337,
+          348
+        ],
+        "covered_pixels": 3642,
+        "transparent_pixels": 232979
+      },
+      "intrinsic": {
+        "path": "assets/item_presentation/roles/002/frame_0181_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 182,
+      "main": {
+        "path": "assets/item_presentation/roles/002/frame_0182_main.png",
+        "sha256": "46b60d18c989d19abd015c10ca5dca49df77af26968b232e713e35bac7df5f47",
+        "rgba_sha256": "782831bbca596e17829b7cb3b60d70c30556a854e8eae34d4ca0f85ab2f56614",
+        "bounds": [
+          227,
+          174,
+          333,
+          348
+        ],
+        "covered_pixels": 3634,
+        "transparent_pixels": 232987
+      },
+      "intrinsic": {
+        "path": "assets/item_presentation/roles/002/frame_0182_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 183,
+      "main": {
+        "path": "assets/item_presentation/roles/002/frame_0183_main.png",
+        "sha256": "8b1e0bdb119005d0cf70e05a1fe8093d257a2d5371314137fe6727eccbe9f74f",
+        "rgba_sha256": "dba3f080e42feeedca90bb46d7398aba2ac0bfcf29b0f59a6a41cb8627a58e53",
+        "bounds": [
+          227,
+          177,
+          322,
+          348
+        ],
+        "covered_pixels": 3621,
+        "transparent_pixels": 233000
+      },
+      "intrinsic": {
+        "path": "assets/item_presentation/roles/002/frame_0183_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 184,
+      "main": {
+        "path": "assets/item_presentation/roles/002/frame_0184_main.png",
+        "sha256": "d1d584e4aff7bf9870c4fcf6225dcdf751334fbff79aae1259fa3bc42f9df0c5",
+        "rgba_sha256": "82843a35cbe3188c04ba13d7edc6a5d33b58d1269947d97a34bfa6446c751b66",
+        "bounds": [
+          227,
+          189,
+          310,
+          348
+        ],
+        "covered_pixels": 3556,
+        "transparent_pixels": 233065
+      },
+      "intrinsic": {
+        "path": "assets/item_presentation/roles/002/frame_0184_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 185,
+      "main": {
+        "path": "assets/item_presentation/roles/002/frame_0185_main.png",
+        "sha256": "6fc8db6ba97cd24855386fd2d95696d4a1e1695352fc92e099ee1e93a28c80f3",
+        "rgba_sha256": "9156c38f5556f12a45899c679f1032eda0cac9fed5a6413a5e2e49205ba774d3",
+        "bounds": [
+          227,
+          209,
+          307,
+          348
+        ],
+        "covered_pixels": 3399,
+        "transparent_pixels": 233222
+      },
+      "intrinsic": {
+        "path": "assets/item_presentation/roles/002/frame_0185_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 186,
+      "main": {
+        "path": "assets/item_presentation/roles/002/frame_0186_main.png",
+        "sha256": "7279aacd62c9e4613dd47e2196745238230f155afee43e43563cd2f080d45300",
+        "rgba_sha256": "9e9b5e522e8f67d27913e95a5807a073bb816d0c0dfe107fcce36639092d3d26",
+        "bounds": [
+          227,
+          213,
+          307,
+          348
+        ],
+        "covered_pixels": 3213,
+        "transparent_pixels": 233408
+      },
+      "intrinsic": {
+        "path": "assets/item_presentation/roles/002/frame_0186_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    }
+  ],
+  "source_hashes": {
+    "GAME.exe": "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18",
+    "Fight_Role/002.CHR": "854aed104fa990aa3f5fbf9d926724e0d8ae3ca73a5aabbc7a27a10ec91447e3",
+    "Fight_Role/002.dgp": "1e25e940b0f814a22576facf390157b8be6a5fb04a77c6a8680c81ca041982ca"
+  },
+  "evidence": [
+    "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+    "ev_0c237df7043928c88bbdebd562f666aa4b7f4201a779c0a793b1483939fd71d2",
+    "ev_a6647ea0bc3a48a670332ca03d6a4e02d7b145a407b5a5ad2dcfa4ed39b122d1"
+  ]
+}

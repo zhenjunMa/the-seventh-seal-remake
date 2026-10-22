@@ -1,0 +1,1657 @@
+{
+  "schema": "seventh-seal-opening-program",
+  "version": 1,
+  "id": "new-game-resurrect",
+  "source": {
+    "path": "Animate/resurrect.anm",
+    "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+    "bytes": 4211
+  },
+  "commands": [
+    {
+      "index": 0,
+      "opcode": 10,
+      "raw_hex": "0a00000000000000000000000000000000000000000000000000000000000000000084010000000000000000000000000000000000004d37323036312e44415400000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 67,
+        "record_index": 0
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 388,
+      "u32_plus1": 0,
+      "u32_plus5": 0,
+      "u32_plus9": 0,
+      "u32_plus13": 0,
+      "u32_plus17": 0,
+      "u32_plus21": 0,
+      "u32_plus25": 0,
+      "byte_plus29": 0,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 0,
+      "byte_plus33": 0,
+      "filename": "M72061.DAT"
+    },
+    {
+      "index": 1,
+      "opcode": 35,
+      "raw_hex": "23010000000e00000014000000f10000007d0100000000000014000000000000000084010000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 141,
+        "record_index": 1
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 388,
+      "u32_plus1": 1,
+      "u32_plus5": 14,
+      "u32_plus9": 20,
+      "u32_plus13": 241,
+      "u32_plus17": 381,
+      "u32_plus21": 0,
+      "u32_plus25": 20,
+      "byte_plus29": 0,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 0,
+      "byte_plus33": 0
+    },
+    {
+      "index": 2,
+      "opcode": 32,
+      "raw_hex": "20000000000e00000000000000f0000000800100000000000000000000010000000084010000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 215,
+        "record_index": 2
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 388,
+      "u32_plus1": 0,
+      "u32_plus5": 14,
+      "u32_plus9": 0,
+      "u32_plus13": 240,
+      "u32_plus17": 384,
+      "u32_plus21": 0,
+      "u32_plus25": 0,
+      "byte_plus29": 1,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 0,
+      "byte_plus33": 0
+    },
+    {
+      "index": 3,
+      "opcode": 17,
+      "raw_hex": "1100000000000000000000000000000000000000000000000000000000000000000084010000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 289,
+        "record_index": 3
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 388,
+      "u32_plus1": 0,
+      "u32_plus5": 0,
+      "u32_plus9": 0,
+      "u32_plus13": 0,
+      "u32_plus17": 0,
+      "u32_plus21": 0,
+      "u32_plus25": 0,
+      "byte_plus29": 0,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 0,
+      "byte_plus33": 0
+    },
+    {
+      "index": 4,
+      "opcode": 14,
+      "raw_hex": "0e000000000d0000000000000000000000000000000000000000000000000000000084010000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 363,
+        "record_index": 4
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 388,
+      "u32_plus1": 0,
+      "u32_plus5": 13,
+      "u32_plus9": 0,
+      "u32_plus13": 0,
+      "u32_plus17": 0,
+      "u32_plus21": 0,
+      "u32_plus25": 0,
+      "byte_plus29": 0,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 0,
+      "byte_plus33": 0
+    },
+    {
+      "index": 5,
+      "opcode": 16,
+      "raw_hex": "1000000000000000000000000000000000000000000000000000000000000000000084010000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 437,
+        "record_index": 5
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 388,
+      "u32_plus1": 0,
+      "u32_plus5": 0,
+      "u32_plus9": 0,
+      "u32_plus13": 0,
+      "u32_plus17": 0,
+      "u32_plus21": 0,
+      "u32_plus25": 0,
+      "byte_plus29": 0,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 0,
+      "byte_plus33": 0
+    },
+    {
+      "index": 6,
+      "opcode": 49,
+      "raw_hex": "31000000000e0000000000000000000000000000000000000000000000060000000084010000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 511,
+        "record_index": 6
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 388,
+      "u32_plus1": 0,
+      "u32_plus5": 14,
+      "u32_plus9": 0,
+      "u32_plus13": 0,
+      "u32_plus17": 0,
+      "u32_plus21": 0,
+      "u32_plus25": 0,
+      "byte_plus29": 6,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 0,
+      "byte_plus33": 0
+    },
+    {
+      "index": 7,
+      "opcode": 31,
+      "raw_hex": "1f00000000000000000000000000000000000000000000000000000000000000000084010000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 585,
+        "record_index": 7
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 388,
+      "u32_plus1": 0,
+      "u32_plus5": 0,
+      "u32_plus9": 0,
+      "u32_plus13": 0,
+      "u32_plus17": 0,
+      "u32_plus21": 0,
+      "u32_plus25": 0,
+      "byte_plus29": 0,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 0,
+      "byte_plus33": 0
+    },
+    {
+      "index": 8,
+      "opcode": 33,
+      "raw_hex": "21000000000e00000015000000f30000000c0100000000000004000000000100000084010000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 659,
+        "record_index": 8
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 388,
+      "u32_plus1": 0,
+      "u32_plus5": 14,
+      "u32_plus9": 21,
+      "u32_plus13": 243,
+      "u32_plus17": 268,
+      "u32_plus21": 0,
+      "u32_plus25": 4,
+      "byte_plus29": 0,
+      "byte_plus30": 1,
+      "byte_plus31": 0,
+      "byte_plus32": 0,
+      "byte_plus33": 0
+    },
+    {
+      "index": 9,
+      "opcode": 31,
+      "raw_hex": "1f00000000000000000000000000000000000000000000000000000000000000010084010000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 733,
+        "record_index": 9
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 388,
+      "u32_plus1": 0,
+      "u32_plus5": 0,
+      "u32_plus9": 0,
+      "u32_plus13": 0,
+      "u32_plus17": 0,
+      "u32_plus21": 0,
+      "u32_plus25": 0,
+      "byte_plus29": 0,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 1,
+      "byte_plus33": 0
+    },
+    {
+      "index": 10,
+      "opcode": 35,
+      "raw_hex": "23000000000d00000016000000a700000039010000000000000a000000000000010084010000010000000000000000000000000000000000000000000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 807,
+        "record_index": 10
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 388,
+      "u32_plus1": 0,
+      "u32_plus5": 13,
+      "u32_plus9": 22,
+      "u32_plus13": 167,
+      "u32_plus17": 313,
+      "u32_plus21": 0,
+      "u32_plus25": 10,
+      "byte_plus29": 0,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 1,
+      "byte_plus33": 0
+    },
+    {
+      "index": 11,
+      "opcode": 35,
+      "raw_hex": "23000000000c000000170000003001000038010000000000001e000000000000010084010000010000000000000000000000000000000000000000000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 881,
+        "record_index": 11
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 388,
+      "u32_plus1": 0,
+      "u32_plus5": 12,
+      "u32_plus9": 23,
+      "u32_plus13": 304,
+      "u32_plus17": 312,
+      "u32_plus21": 0,
+      "u32_plus25": 30,
+      "byte_plus29": 0,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 1,
+      "byte_plus33": 0
+    },
+    {
+      "index": 12,
+      "opcode": 35,
+      "raw_hex": "23000000000a00000018000000a80000005f010000000000000a000000000000010084010000010000000000000000000000000000000000000000000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 955,
+        "record_index": 12
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 388,
+      "u32_plus1": 0,
+      "u32_plus5": 10,
+      "u32_plus9": 24,
+      "u32_plus13": 168,
+      "u32_plus17": 351,
+      "u32_plus21": 0,
+      "u32_plus25": 10,
+      "byte_plus29": 0,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 1,
+      "byte_plus33": 0
+    },
+    {
+      "index": 13,
+      "opcode": 35,
+      "raw_hex": "23000000000b000000190000003001000061010000000000001e000000000000010084010000020000000000000000000000000000000000000000000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 1029,
+        "record_index": 13
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 388,
+      "u32_plus1": 0,
+      "u32_plus5": 11,
+      "u32_plus9": 25,
+      "u32_plus13": 304,
+      "u32_plus17": 353,
+      "u32_plus21": 0,
+      "u32_plus25": 30,
+      "byte_plus29": 0,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 1,
+      "byte_plus33": 0
+    },
+    {
+      "index": 14,
+      "opcode": 16,
+      "raw_hex": "1000000000000000000000000000000000000000000000000000000000010000010084010000010000000000000000000000000000000000000000000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 1103,
+        "record_index": 14
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 388,
+      "u32_plus1": 0,
+      "u32_plus5": 0,
+      "u32_plus9": 0,
+      "u32_plus13": 0,
+      "u32_plus17": 0,
+      "u32_plus21": 0,
+      "u32_plus25": 0,
+      "byte_plus29": 1,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 1,
+      "byte_plus33": 0
+    },
+    {
+      "index": 15,
+      "opcode": 49,
+      "raw_hex": "31000000000b0000000000000000000000000000000000000000000000010000000084010000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 1177,
+        "record_index": 15
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 388,
+      "u32_plus1": 0,
+      "u32_plus5": 11,
+      "u32_plus9": 0,
+      "u32_plus13": 0,
+      "u32_plus17": 0,
+      "u32_plus21": 0,
+      "u32_plus25": 0,
+      "byte_plus29": 1,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 0,
+      "byte_plus33": 0
+    },
+    {
+      "index": 16,
+      "opcode": 49,
+      "raw_hex": "31000000000c0000000000000000000000000000000000000000000000010000000084010000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 1251,
+        "record_index": 16
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 388,
+      "u32_plus1": 0,
+      "u32_plus5": 12,
+      "u32_plus9": 0,
+      "u32_plus13": 0,
+      "u32_plus17": 0,
+      "u32_plus21": 0,
+      "u32_plus25": 0,
+      "byte_plus29": 1,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 0,
+      "byte_plus33": 0
+    },
+    {
+      "index": 17,
+      "opcode": 49,
+      "raw_hex": "31000000000a0000000000000000000000000000000000000000000000010000000084010000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 1325,
+        "record_index": 17
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 388,
+      "u32_plus1": 0,
+      "u32_plus5": 10,
+      "u32_plus9": 0,
+      "u32_plus13": 0,
+      "u32_plus17": 0,
+      "u32_plus21": 0,
+      "u32_plus25": 0,
+      "byte_plus29": 1,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 0,
+      "byte_plus33": 0
+    },
+    {
+      "index": 18,
+      "opcode": 49,
+      "raw_hex": "31000000000d0000000000000000000000000000000000000000000000010000000084010000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 1399,
+        "record_index": 18
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 388,
+      "u32_plus1": 0,
+      "u32_plus5": 13,
+      "u32_plus9": 0,
+      "u32_plus13": 0,
+      "u32_plus17": 0,
+      "u32_plus21": 0,
+      "u32_plus25": 0,
+      "byte_plus29": 1,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 0,
+      "byte_plus33": 0
+    },
+    {
+      "index": 19,
+      "opcode": 31,
+      "raw_hex": "1f00000000000000000000000000000000000000000000000000000000000000000084010000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 1473,
+        "record_index": 19
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 388,
+      "u32_plus1": 0,
+      "u32_plus5": 0,
+      "u32_plus9": 0,
+      "u32_plus13": 0,
+      "u32_plus17": 0,
+      "u32_plus21": 0,
+      "u32_plus25": 0,
+      "byte_plus29": 0,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 0,
+      "byte_plus33": 0
+    },
+    {
+      "index": 20,
+      "opcode": 33,
+      "raw_hex": "21000000000d0000001a000000c30000003a0100000000000004000000000000000084010000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 1547,
+        "record_index": 20
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 388,
+      "u32_plus1": 0,
+      "u32_plus5": 13,
+      "u32_plus9": 26,
+      "u32_plus13": 195,
+      "u32_plus17": 314,
+      "u32_plus21": 0,
+      "u32_plus25": 4,
+      "byte_plus29": 0,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 0,
+      "byte_plus33": 0
+    },
+    {
+      "index": 21,
+      "opcode": 33,
+      "raw_hex": "21000000000a0000001b000000c8000000590100000000000004000000000000000084010000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 1621,
+        "record_index": 21
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 388,
+      "u32_plus1": 0,
+      "u32_plus5": 10,
+      "u32_plus9": 27,
+      "u32_plus13": 200,
+      "u32_plus17": 345,
+      "u32_plus21": 0,
+      "u32_plus25": 4,
+      "byte_plus29": 0,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 0,
+      "byte_plus33": 0
+    },
+    {
+      "index": 22,
+      "opcode": 33,
+      "raw_hex": "21000000000b0000001c000000240100005c0100000000000004000000000000000084010000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 1695,
+        "record_index": 22
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 388,
+      "u32_plus1": 0,
+      "u32_plus5": 11,
+      "u32_plus9": 28,
+      "u32_plus13": 292,
+      "u32_plus17": 348,
+      "u32_plus21": 0,
+      "u32_plus25": 4,
+      "byte_plus29": 0,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 0,
+      "byte_plus33": 0
+    },
+    {
+      "index": 23,
+      "opcode": 33,
+      "raw_hex": "21000000000c0000001d0000001a010000330100000000000004000000000000000084010000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 1769,
+        "record_index": 23
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 388,
+      "u32_plus1": 0,
+      "u32_plus5": 12,
+      "u32_plus9": 29,
+      "u32_plus13": 282,
+      "u32_plus17": 307,
+      "u32_plus21": 0,
+      "u32_plus25": 4,
+      "byte_plus29": 0,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 0,
+      "byte_plus33": 0
+    },
+    {
+      "index": 24,
+      "opcode": 31,
+      "raw_hex": "1f00000000000000000000000000000000000000000000000000000000000000000084010000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 1843,
+        "record_index": 24
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 388,
+      "u32_plus1": 0,
+      "u32_plus5": 0,
+      "u32_plus9": 0,
+      "u32_plus13": 0,
+      "u32_plus17": 0,
+      "u32_plus21": 0,
+      "u32_plus25": 0,
+      "byte_plus29": 0,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 0,
+      "byte_plus33": 0
+    },
+    {
+      "index": 25,
+      "opcode": 33,
+      "raw_hex": "21000000000d0000001e000000d0000000180100000000000004000000000000000084010000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 1917,
+        "record_index": 25
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 388,
+      "u32_plus1": 0,
+      "u32_plus5": 13,
+      "u32_plus9": 30,
+      "u32_plus13": 208,
+      "u32_plus17": 280,
+      "u32_plus21": 0,
+      "u32_plus25": 4,
+      "byte_plus29": 0,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 0,
+      "byte_plus33": 0
+    },
+    {
+      "index": 26,
+      "opcode": 33,
+      "raw_hex": "21000000000a0000001f000000d00000003b0100000000000004000000000000000084010000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 1991,
+        "record_index": 26
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 388,
+      "u32_plus1": 0,
+      "u32_plus5": 10,
+      "u32_plus9": 31,
+      "u32_plus13": 208,
+      "u32_plus17": 315,
+      "u32_plus21": 0,
+      "u32_plus25": 4,
+      "byte_plus29": 0,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 0,
+      "byte_plus33": 0
+    },
+    {
+      "index": 27,
+      "opcode": 33,
+      "raw_hex": "21000000000b00000020000000130100003b0100000000000004000000000000000084010000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 2065,
+        "record_index": 27
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 388,
+      "u32_plus1": 0,
+      "u32_plus5": 11,
+      "u32_plus9": 32,
+      "u32_plus13": 275,
+      "u32_plus17": 315,
+      "u32_plus21": 0,
+      "u32_plus25": 4,
+      "byte_plus29": 0,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 0,
+      "byte_plus33": 0
+    },
+    {
+      "index": 28,
+      "opcode": 33,
+      "raw_hex": "21000000000c0000002100000013010000180100000000000004000000000000000084010000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 2139,
+        "record_index": 28
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 388,
+      "u32_plus1": 0,
+      "u32_plus5": 12,
+      "u32_plus9": 33,
+      "u32_plus13": 275,
+      "u32_plus17": 280,
+      "u32_plus21": 0,
+      "u32_plus25": 4,
+      "byte_plus29": 0,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 0,
+      "byte_plus33": 0
+    },
+    {
+      "index": 29,
+      "opcode": 31,
+      "raw_hex": "1f00000000000000000000000000000000000000000000000000000000000000000084010000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 2213,
+        "record_index": 29
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 388,
+      "u32_plus1": 0,
+      "u32_plus5": 0,
+      "u32_plus9": 0,
+      "u32_plus13": 0,
+      "u32_plus17": 0,
+      "u32_plus21": 0,
+      "u32_plus25": 0,
+      "byte_plus29": 0,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 0,
+      "byte_plus33": 0
+    },
+    {
+      "index": 30,
+      "opcode": 14,
+      "raw_hex": "0e00000000010000000000000000000000000000000000000000000000000000000084010000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 2287,
+        "record_index": 30
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 388,
+      "u32_plus1": 0,
+      "u32_plus5": 1,
+      "u32_plus9": 0,
+      "u32_plus13": 0,
+      "u32_plus17": 0,
+      "u32_plus21": 0,
+      "u32_plus25": 0,
+      "byte_plus29": 0,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 0,
+      "byte_plus33": 0
+    },
+    {
+      "index": 31,
+      "opcode": 16,
+      "raw_hex": "1000000000000000000000000000000000000000000000000000000000000000000084010000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 2361,
+        "record_index": 31
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 388,
+      "u32_plus1": 0,
+      "u32_plus5": 0,
+      "u32_plus9": 0,
+      "u32_plus13": 0,
+      "u32_plus17": 0,
+      "u32_plus21": 0,
+      "u32_plus25": 0,
+      "byte_plus29": 0,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 0,
+      "byte_plus33": 0
+    },
+    {
+      "index": 32,
+      "opcode": 48,
+      "raw_hex": "30000000000e00000000000000010000000b0000000000000001000000080000000084010000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 2435,
+        "record_index": 32
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 388,
+      "u32_plus1": 0,
+      "u32_plus5": 14,
+      "u32_plus9": 0,
+      "u32_plus13": 1,
+      "u32_plus17": 11,
+      "u32_plus21": 0,
+      "u32_plus25": 1,
+      "byte_plus29": 8,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 0,
+      "byte_plus33": 0
+    },
+    {
+      "index": 33,
+      "opcode": 31,
+      "raw_hex": "1f00000000000000000000000000000000000000000000000000000000000000000084010000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 2509,
+        "record_index": 33
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 388,
+      "u32_plus1": 0,
+      "u32_plus5": 0,
+      "u32_plus9": 0,
+      "u32_plus13": 0,
+      "u32_plus17": 0,
+      "u32_plus21": 0,
+      "u32_plus25": 0,
+      "byte_plus29": 0,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 0,
+      "byte_plus33": 0
+    },
+    {
+      "index": 34,
+      "opcode": 41,
+      "raw_hex": "29000000000e0000000000000000000000000000000000000000000000010000000084010000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 2583,
+        "record_index": 34
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 388,
+      "u32_plus1": 0,
+      "u32_plus5": 14,
+      "u32_plus9": 0,
+      "u32_plus13": 0,
+      "u32_plus17": 0,
+      "u32_plus21": 0,
+      "u32_plus25": 0,
+      "byte_plus29": 1,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 0,
+      "byte_plus33": 0
+    },
+    {
+      "index": 35,
+      "opcode": 31,
+      "raw_hex": "1f00000000000000000000000000000000000000000000000000000000000000000084010000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 2657,
+        "record_index": 35
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 388,
+      "u32_plus1": 0,
+      "u32_plus5": 0,
+      "u32_plus9": 0,
+      "u32_plus13": 0,
+      "u32_plus17": 0,
+      "u32_plus21": 0,
+      "u32_plus25": 0,
+      "byte_plus29": 0,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 0,
+      "byte_plus33": 0
+    },
+    {
+      "index": 36,
+      "opcode": 17,
+      "raw_hex": "1100000000000000000000000000000000000000000000000001000000010000000084010000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 2731,
+        "record_index": 36
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 388,
+      "u32_plus1": 0,
+      "u32_plus5": 0,
+      "u32_plus9": 0,
+      "u32_plus13": 0,
+      "u32_plus17": 0,
+      "u32_plus21": 0,
+      "u32_plus25": 1,
+      "byte_plus29": 1,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 0,
+      "byte_plus33": 0
+    },
+    {
+      "index": 37,
+      "opcode": 255,
+      "raw_hex": "ff0000000000000000000000000000000000000000000000000000000000000000008401000000000000000000000000000000000000c5aac0c900000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 2805,
+        "record_index": 37
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 388,
+      "u32_plus1": 0,
+      "u32_plus5": 0,
+      "u32_plus9": 0,
+      "u32_plus13": 0,
+      "u32_plus17": 0,
+      "u32_plus21": 0,
+      "u32_plus25": 0,
+      "byte_plus29": 0,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 0,
+      "byte_plus33": 0
+    },
+    {
+      "index": 38,
+      "opcode": 10,
+      "raw_hex": "0a0000000000000000000000000000000000000000000000000000000000000000007e010000000000000000000000000000000000004d31373032302e44415400000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 2879,
+        "record_index": 38
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 382,
+      "u32_plus1": 0,
+      "u32_plus5": 0,
+      "u32_plus9": 0,
+      "u32_plus13": 0,
+      "u32_plus17": 0,
+      "u32_plus21": 0,
+      "u32_plus25": 0,
+      "byte_plus29": 0,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 0,
+      "byte_plus33": 0,
+      "filename": "M17020.DAT"
+    },
+    {
+      "index": 39,
+      "opcode": 35,
+      "raw_hex": "230000000000000000270000005202000082010000000000004600000000000000007e010000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 2953,
+        "record_index": 39
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 382,
+      "u32_plus1": 0,
+      "u32_plus5": 0,
+      "u32_plus9": 39,
+      "u32_plus13": 594,
+      "u32_plus17": 386,
+      "u32_plus21": 0,
+      "u32_plus25": 70,
+      "byte_plus29": 0,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 0,
+      "byte_plus33": 0
+    },
+    {
+      "index": 40,
+      "opcode": 16,
+      "raw_hex": "100000000000000000000000000000000000000000000000000000000001000000007e010000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 3027,
+        "record_index": 40
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 382,
+      "u32_plus1": 0,
+      "u32_plus5": 0,
+      "u32_plus9": 0,
+      "u32_plus13": 0,
+      "u32_plus17": 0,
+      "u32_plus21": 0,
+      "u32_plus25": 0,
+      "byte_plus29": 1,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 0,
+      "byte_plus33": 0
+    },
+    {
+      "index": 41,
+      "opcode": 32,
+      "raw_hex": "2000000000000000000000000078010000e8020000000000000000000001000000007e010000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 3101,
+        "record_index": 41
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 382,
+      "u32_plus1": 0,
+      "u32_plus5": 0,
+      "u32_plus9": 0,
+      "u32_plus13": 376,
+      "u32_plus17": 744,
+      "u32_plus21": 0,
+      "u32_plus25": 0,
+      "byte_plus29": 1,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 0,
+      "byte_plus33": 0
+    },
+    {
+      "index": 42,
+      "opcode": 31,
+      "raw_hex": "1f0000000000000000000000000000000000000000000000000000000000000000007e010000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 3175,
+        "record_index": 42
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 382,
+      "u32_plus1": 0,
+      "u32_plus5": 0,
+      "u32_plus9": 0,
+      "u32_plus13": 0,
+      "u32_plus17": 0,
+      "u32_plus21": 0,
+      "u32_plus25": 0,
+      "byte_plus29": 0,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 0,
+      "byte_plus33": 0
+    },
+    {
+      "index": 43,
+      "opcode": 17,
+      "raw_hex": "110000000000000000000000000000000000000000000000000000000000000000007e010000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 3249,
+        "record_index": 43
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 382,
+      "u32_plus1": 0,
+      "u32_plus5": 0,
+      "u32_plus9": 0,
+      "u32_plus13": 0,
+      "u32_plus17": 0,
+      "u32_plus21": 0,
+      "u32_plus25": 0,
+      "byte_plus29": 0,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 0,
+      "byte_plus33": 0
+    },
+    {
+      "index": 44,
+      "opcode": 33,
+      "raw_hex": "2100000000000000002800000022020000ed010000000000000700000000010000007e010000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 3323,
+        "record_index": 44
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 382,
+      "u32_plus1": 0,
+      "u32_plus5": 0,
+      "u32_plus9": 40,
+      "u32_plus13": 546,
+      "u32_plus17": 493,
+      "u32_plus21": 0,
+      "u32_plus25": 7,
+      "byte_plus29": 0,
+      "byte_plus30": 1,
+      "byte_plus31": 0,
+      "byte_plus32": 0,
+      "byte_plus33": 0
+    },
+    {
+      "index": 45,
+      "opcode": 31,
+      "raw_hex": "1f0000000000000000000000000000000000000000000000000000000000000000007e010000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 3397,
+        "record_index": 45
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 382,
+      "u32_plus1": 0,
+      "u32_plus5": 0,
+      "u32_plus9": 0,
+      "u32_plus13": 0,
+      "u32_plus17": 0,
+      "u32_plus21": 0,
+      "u32_plus25": 0,
+      "byte_plus29": 0,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 0,
+      "byte_plus33": 0
+    },
+    {
+      "index": 46,
+      "opcode": 48,
+      "raw_hex": "300000000000000000000000000100000015000000000000000100000006000000007e010000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 3471,
+        "record_index": 46
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 382,
+      "u32_plus1": 0,
+      "u32_plus5": 0,
+      "u32_plus9": 0,
+      "u32_plus13": 1,
+      "u32_plus17": 21,
+      "u32_plus21": 0,
+      "u32_plus25": 1,
+      "byte_plus29": 6,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 0,
+      "byte_plus33": 0
+    },
+    {
+      "index": 47,
+      "opcode": 31,
+      "raw_hex": "1f0000000000000000000000000000000000000000000000000000000000000000007e010000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 3545,
+        "record_index": 47
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 382,
+      "u32_plus1": 0,
+      "u32_plus5": 0,
+      "u32_plus9": 0,
+      "u32_plus13": 0,
+      "u32_plus17": 0,
+      "u32_plus21": 0,
+      "u32_plus25": 0,
+      "byte_plus29": 0,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 0,
+      "byte_plus33": 0
+    },
+    {
+      "index": 48,
+      "opcode": 48,
+      "raw_hex": "30000000000000000000000000010000000b000000000000000100000000000000007e010000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 3619,
+        "record_index": 48
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 382,
+      "u32_plus1": 0,
+      "u32_plus5": 0,
+      "u32_plus9": 0,
+      "u32_plus13": 1,
+      "u32_plus17": 11,
+      "u32_plus21": 0,
+      "u32_plus25": 1,
+      "byte_plus29": 0,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 0,
+      "byte_plus33": 0
+    },
+    {
+      "index": 49,
+      "opcode": 31,
+      "raw_hex": "1f0000000000000000000000000000000000000000000000000000000000000000007e010000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 3693,
+        "record_index": 49
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 382,
+      "u32_plus1": 0,
+      "u32_plus5": 0,
+      "u32_plus9": 0,
+      "u32_plus13": 0,
+      "u32_plus17": 0,
+      "u32_plus21": 0,
+      "u32_plus25": 0,
+      "byte_plus29": 0,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 0,
+      "byte_plus33": 0
+    },
+    {
+      "index": 50,
+      "opcode": 14,
+      "raw_hex": "0e0000000001000000000000000000000000000000000000000000000000000000007e010000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 3767,
+        "record_index": 50
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 382,
+      "u32_plus1": 0,
+      "u32_plus5": 1,
+      "u32_plus9": 0,
+      "u32_plus13": 0,
+      "u32_plus17": 0,
+      "u32_plus21": 0,
+      "u32_plus25": 0,
+      "byte_plus29": 0,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 0,
+      "byte_plus33": 0
+    },
+    {
+      "index": 51,
+      "opcode": 16,
+      "raw_hex": "100000000000000000000000000000000000000000000000000000000000000000007e010000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 3841,
+        "record_index": 51
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 382,
+      "u32_plus1": 0,
+      "u32_plus5": 0,
+      "u32_plus9": 0,
+      "u32_plus13": 0,
+      "u32_plus17": 0,
+      "u32_plus21": 0,
+      "u32_plus25": 0,
+      "byte_plus29": 0,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 0,
+      "byte_plus33": 0
+    },
+    {
+      "index": 52,
+      "opcode": 30,
+      "raw_hex": "1e0000000000000000000000000000000000000000000000000000000000000000007e010000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 3915,
+        "record_index": 52
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 382,
+      "u32_plus1": 0,
+      "u32_plus5": 0,
+      "u32_plus9": 0,
+      "u32_plus13": 0,
+      "u32_plus17": 0,
+      "u32_plus21": 0,
+      "u32_plus25": 0,
+      "byte_plus29": 0,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 0,
+      "byte_plus33": 0
+    },
+    {
+      "index": 53,
+      "opcode": 16,
+      "raw_hex": "100000000000000000000000000000000000000000000000000000000000000000007e010000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 3989,
+        "record_index": 53
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 382,
+      "u32_plus1": 0,
+      "u32_plus5": 0,
+      "u32_plus9": 0,
+      "u32_plus13": 0,
+      "u32_plus17": 0,
+      "u32_plus21": 0,
+      "u32_plus25": 0,
+      "byte_plus29": 0,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 0,
+      "byte_plus33": 0
+    },
+    {
+      "index": 54,
+      "opcode": 255,
+      "raw_hex": "ff0000000000000000000000000000000000000000000000000000000000000000007e010000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 4063,
+        "record_index": 54
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 382,
+      "u32_plus1": 0,
+      "u32_plus5": 0,
+      "u32_plus9": 0,
+      "u32_plus13": 0,
+      "u32_plus17": 0,
+      "u32_plus21": 0,
+      "u32_plus25": 0,
+      "byte_plus29": 0,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 0,
+      "byte_plus33": 0
+    },
+    {
+      "index": 55,
+      "opcode": 16,
+      "raw_hex": "100000000000000000000000000000000000000000000000000000000000000000007e010000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "source": {
+        "path": "Animate/resurrect.anm",
+        "sha256": "6dc46a32c4733931b4b2e37e1e5c9c2a54f71f426be04d1d2809a8dbb19f7268",
+        "offset": 4137,
+        "record_index": 55
+      },
+      "evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "map_index_raw": 382,
+      "u32_plus1": 0,
+      "u32_plus5": 0,
+      "u32_plus9": 0,
+      "u32_plus13": 0,
+      "u32_plus17": 0,
+      "u32_plus21": 0,
+      "u32_plus25": 0,
+      "byte_plus29": 0,
+      "byte_plus30": 0,
+      "byte_plus31": 0,
+      "byte_plus32": 0,
+      "byte_plus33": 0
+    }
+  ],
+  "required_opcodes": [
+    10,
+    14,
+    16,
+    17,
+    30,
+    31,
+    32,
+    33,
+    35,
+    41,
+    48,
+    49,
+    255
+  ],
+  "maps": [
+    "M72061",
+    "M17020"
+  ],
+  "dialogues": {
+    "M72061": {
+      "source": {
+        "path": "Map/m72061.TLK",
+        "sha256": "47c40807bf0da9347798302740ad4dc147b6731e3435fab0b06150f2b28016a0"
+      },
+      "records": [
+        {
+          "id": 1,
+          "offset": 2026,
+          "kind": 0,
+          "style": 3,
+          "region_byte_raw": 0,
+          "speaker": 500,
+          "condition_type": 0,
+          "condition_index": 0,
+          "condition_bit": 0,
+          "mutation_type": 0,
+          "mutation_index": 0,
+          "mutation_bit": 0,
+          "if_true": 0,
+          "next": 0,
+          "text_raw": "时候、时候终于到了。",
+          "raw_hex": "000300000000000000000000000000f4010000010000000000000000000000000000000000000000000000000000000000000000000000cab1baf2a1a2cab1baf2d6d5d3dab5bdc1cba1a3000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+        },
+        {
+          "id": 13,
+          "offset": 21790,
+          "kind": 0,
+          "style": 3,
+          "region_byte_raw": 0,
+          "speaker": 500,
+          "condition_type": 0,
+          "condition_index": 0,
+          "condition_bit": 0,
+          "mutation_type": 0,
+          "mutation_index": 0,
+          "mutation_bit": 0,
+          "if_true": 0,
+          "next": 0,
+          "text_raw": "一万八千年后………………",
+          "raw_hex": "000300000000000000000000000000f40100000d0000000000000000000000000000000000000000000000000000000000000000000000d2bbcdf2b0cbc7a7c4eabaf3a1ada1ada1ada1ada1ada1ad0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+        }
+      ]
+    },
+    "M17020": {
+      "source": {
+        "path": "Map/m17020.TLK",
+        "sha256": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39"
+      },
+      "records": [
+        {
+          "id": 1,
+          "offset": 2026,
+          "kind": 0,
+          "style": 1,
+          "region_byte_raw": 0,
+          "speaker": 1,
+          "condition_type": 0,
+          "condition_index": 0,
+          "condition_bit": 0,
+          "mutation_type": 0,
+          "mutation_index": 0,
+          "mutation_bit": 0,
+          "if_true": 0,
+          "next": 2,
+          "text_raw": "刚刚索摩族又有事情传呼我们火妖精一族，最近他们好像过得很不安稳，我看倒不如找凯去炎城一趟，调查看看他们到底发生了什么事情。",
+          "raw_hex": "00012000000000000000000000000001000000010000000000000000000000000000000000000000000000000000000000000002000000b8d5b8d5cbf7c4a6d7e5d3d6d3d0cac2c7e9b4abbaf4ced2c3c7bbf0d1fdbeabd2bbd7e5a3acd7eebdfccbfbc3c7bac3cff1b9fdb5c3badcb2bbb0b2cec8a3acced2bfb4b5b9b2bbc8e7d5d2bfadc8a5d1d7b3c7d2bbcccba3acb5f7b2e9bfb4bfb4cbfbc3c7b5bdb5d7b7a2c9fac1cbcab2c3b4cac2c7e9a1a3000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+        },
+        {
+          "id": 2,
+          "offset": 3673,
+          "kind": 0,
+          "style": 1,
+          "region_byte_raw": 0,
+          "speaker": 1,
+          "condition_type": 0,
+          "condition_index": 0,
+          "condition_bit": 0,
+          "mutation_type": 0,
+          "mutation_index": 0,
+          "mutation_bit": 0,
+          "if_true": 0,
+          "next": 0,
+          "text_raw": "我想凯应该是在王厅内处理事情吧！可是每次交代他处理一些族内的事，就只会四处找人聊天，都不处理正事，这次他会乖乖的在王厅做事吗？真是怀疑！",
+          "raw_hex": "00011d00000000000000000000000001000000020000000000000000000000000000000000000000000000000000000000000000000000ced2cfebbfadd3a6b8c3cac7d4dacdf5ccfcc4dab4a6c0edcac2c7e9b0c9a3a1bfc9cac7c3bfb4cebdbbb4facbfbb4a6c0edd2bbd0a9d7e5c4dab5c4cac2a3acbecdd6bbbbe1cbc4b4a6d5d2c8cbc1c4cceca3acb6bcb2bbb4a6c0edd5fdcac2a3acd5e2b4cecbfbbbe1b9d4b9d4b5c4d4dacdf5ccfcd7f6cac2c2f0a3bfd5e6cac7bbb3d2c9a3a100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+        }
+      ]
+    }
+  },
+  "expected": {
+    "control_map": "M17020",
+    "final_move_actor": 0,
+    "final_move_native": [
+      546,
+      493
+    ],
+    "final_move_pixels": [
+      1092,
+      986
+    ]
+  },
+  "native_evidence": [
+    "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1",
+    "ev_b8d64c491638942bb5b0a242ee4bb2e7c64fbdd5b133123facd1b6a9dd4d80e2"
+  ],
+  "limitations": [
+    "All conclusions are shipped resource/native static evidence; GAME.exe has not been observed running by this worker",
+    "TLK trailing payload is retained but not executed",
+    "Opcode255 comments/no-op and loop wait fields must be handled according to native loader/VM",
+    "DGP action indexes differ from ANM byte+0x1D action IDs; mapping requires resource action descriptors"
+  ]
+}

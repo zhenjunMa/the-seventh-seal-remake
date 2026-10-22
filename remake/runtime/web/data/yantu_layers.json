@@ -1,0 +1,1823 @@
+{
+  "schema": "seventh-seal-skill-layers",
+  "version": 1,
+  "id": "yantu",
+  "name": "炎剑．燕突",
+  "role_id": "001",
+  "chr_skill_index": 22,
+  "skill_id_raw": 26,
+  "source_hashes": {
+    "GAME.exe": "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18",
+    "Fight_Role/001.CHR": "37ce92ab57622d2cce022b4a9b8add9b29789f89d82bc369ea7352f38ca75c0a",
+    "Fight_Role/001.dgp": "df86e4089870c720beee6c8fb216ee1f85156b061c69433a6ce767ce9dee6b49"
+  },
+  "frame_width": 539,
+  "frame_height": 439,
+  "anchor": {
+    "x": 266,
+    "y": 324,
+    "z_raw": 0,
+    "source": "DGP extra_header+0x10/+0x14 raw values",
+    "native_use_verified": false
+  },
+  "source_orientation": {
+    "direction": 0,
+    "mirror": false,
+    "basis": "retained prototype battle_facing_correction_20261011.json visual check"
+  },
+  "composition": {
+    "order": [
+      "main",
+      "intrinsic"
+    ],
+    "coordinate_space": "complete same-source-frame DGP raster",
+    "relative_origin": [
+      0,
+      0
+    ],
+    "native_battle_draw_order_verified": false,
+    "inspection_order": "main source-over then RGB565 saturating indexed contribution"
+  },
+  "timing": {
+    "original_timing_verified": false,
+    "interval_field": "DGP action+0x01 raw DWORD"
+  },
+  "segments": [
+    {
+      "index": 0,
+      "chr_record_index": 0,
+      "action_index": 7,
+      "chr_source_offset": 41198,
+      "chr_raw_sha256": "68348d2daf5bda297aac234bf4b0030bc47e181f0862797b41d4c6ef338e0dbc",
+      "source_frame_start": 62,
+      "frame_sequence": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "native_frame_range": {
+        "start": 0,
+        "end_exclusive": 4,
+        "reverse_raw": 0
+      },
+      "interval_raw": 90,
+      "timing_verified": false,
+      "direction": 0,
+      "frame_indices": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "index": 1,
+      "chr_record_index": 1,
+      "action_index": 11,
+      "chr_source_offset": 41374,
+      "chr_raw_sha256": "831e41c7673d689f440fe560059904313f5fa9fed017c37f7562319f2e48cceb",
+      "source_frame_start": 78,
+      "frame_sequence": [
+        0,
+        1,
+        2
+      ],
+      "native_frame_range": {
+        "start": 0,
+        "end_exclusive": 3,
+        "reverse_raw": 0
+      },
+      "interval_raw": 60,
+      "timing_verified": false,
+      "direction": 0,
+      "frame_indices": [
+        4,
+        5,
+        6
+      ]
+    },
+    {
+      "index": 2,
+      "chr_record_index": 2,
+      "action_index": 8,
+      "chr_source_offset": 41550,
+      "chr_raw_sha256": "084d622df0ac0970400669f290259db407c20f562335b838ef7e2b3482fe3954",
+      "source_frame_start": 66,
+      "frame_sequence": [
+        0,
+        1,
+        2
+      ],
+      "native_frame_range": {
+        "start": 0,
+        "end_exclusive": 3,
+        "reverse_raw": 0
+      },
+      "interval_raw": 90,
+      "timing_verified": false,
+      "direction": 0,
+      "frame_indices": [
+        7,
+        8,
+        9
+      ]
+    },
+    {
+      "index": 3,
+      "chr_record_index": 3,
+      "action_index": 28,
+      "chr_source_offset": 41726,
+      "chr_raw_sha256": "5fd791760fe4b8dfa1b815620a6938871c9eea3e1b0b702fa3ca3a8e84abf685",
+      "source_frame_start": 333,
+      "frame_sequence": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "native_frame_range": {
+        "start": 0,
+        "end_exclusive": 10,
+        "reverse_raw": 0
+      },
+      "interval_raw": 70,
+      "timing_verified": false,
+      "direction": 0,
+      "frame_indices": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ]
+    },
+    {
+      "index": 4,
+      "chr_record_index": 4,
+      "action_index": 9,
+      "chr_source_offset": 41902,
+      "chr_raw_sha256": "9ed14123ec560d736a8e92c578c086a8033fef69c89f00e5a333b6376e2a5f73",
+      "source_frame_start": 69,
+      "frame_sequence": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "native_frame_range": {
+        "start": 0,
+        "end_exclusive": 4,
+        "reverse_raw": 0
+      },
+      "interval_raw": 90,
+      "timing_verified": false,
+      "direction": 0,
+      "frame_indices": [
+        20,
+        21,
+        22,
+        23
+      ]
+    },
+    {
+      "index": 5,
+      "chr_record_index": 5,
+      "action_index": 12,
+      "chr_source_offset": 42078,
+      "chr_raw_sha256": "67d2ac83ea7716433fb7433c1447c5dac37a891eee1b08412a48f0188023418e",
+      "source_frame_start": 81,
+      "frame_sequence": [
+        0,
+        1,
+        2
+      ],
+      "native_frame_range": {
+        "start": 0,
+        "end_exclusive": 3,
+        "reverse_raw": 0
+      },
+      "interval_raw": 60,
+      "timing_verified": false,
+      "direction": 0,
+      "frame_indices": [
+        24,
+        25,
+        26
+      ]
+    },
+    {
+      "index": 6,
+      "chr_record_index": 6,
+      "action_index": 10,
+      "chr_source_offset": 42254,
+      "chr_raw_sha256": "6895f90c841605acf4fc9e30184cdea4442b0fe6aa893e257e8706bb7918fde1",
+      "source_frame_start": 73,
+      "frame_sequence": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "native_frame_range": {
+        "start": 0,
+        "end_exclusive": 5,
+        "reverse_raw": 0
+      },
+      "interval_raw": 90,
+      "timing_verified": false,
+      "direction": 0,
+      "frame_indices": [
+        27,
+        28,
+        29,
+        30,
+        31
+      ]
+    }
+  ],
+  "frames": [
+    {
+      "sequence_index": 0,
+      "segment_index": 0,
+      "action_index": 7,
+      "action_frame": 0,
+      "direction": 0,
+      "source_frame": 62,
+      "main": {
+        "path": "assets/skills/yantu/frame_0062_main.png",
+        "sha256": "a52f9954b8f32213c5fbdcab895a6c6647c771d1fc9ba92ff618b374b3f35510",
+        "rgba_sha256": "241d75d6de9419d51c34a86b82f94ba237f686242b2d510c4eb13c24f0277999",
+        "bounds": [
+          234,
+          243,
+          312,
+          348
+        ],
+        "covered_pixels": 2447,
+        "transparent_pixels": 234174,
+        "blend": "source-over",
+        "pixel_format": "sparse RGB565 expanded to RGB8"
+      },
+      "intrinsic": {
+        "path": "assets/skills/yantu/frame_0062_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "blend": "additive-rgb565",
+        "active": false,
+        "alpha_semantics": "Sparse coverage only; covered palette index 0/255 are retained",
+        "rgb_semantics": "Palette truncated: R/B & 0xF8, G & 0xFC; saturating native channel addition"
+      },
+      "intrinsic_record": {
+        "frame": 62,
+        "record_offset": 612398,
+        "active_raw": 0,
+        "end_offset": 612399
+      },
+      "main_source_span": {
+        "source_offset": 11975379,
+        "source_bytes": 6528,
+        "source_span_sha256": "02bd9f658da51e4f73c902e8a5e8c36da99f11c492423a8dd18b59da5a5d4627"
+      }
+    },
+    {
+      "sequence_index": 1,
+      "segment_index": 0,
+      "action_index": 7,
+      "action_frame": 1,
+      "direction": 0,
+      "source_frame": 63,
+      "main": {
+        "path": "assets/skills/yantu/frame_0063_main.png",
+        "sha256": "eba54573691e0900a42902e90dd78f3c300bc52982600a108cfd8a7d7b82cf72",
+        "rgba_sha256": "5facda47eacc35afff1faf6dcd87d09e0f9c853a9811930556cd9c7ad20f461d",
+        "bounds": [
+          238,
+          266,
+          327,
+          347
+        ],
+        "covered_pixels": 2186,
+        "transparent_pixels": 234435,
+        "blend": "source-over",
+        "pixel_format": "sparse RGB565 expanded to RGB8"
+      },
+      "intrinsic": {
+        "path": "assets/skills/yantu/frame_0063_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "blend": "additive-rgb565",
+        "active": false,
+        "alpha_semantics": "Sparse coverage only; covered palette index 0/255 are retained",
+        "rgb_semantics": "Palette truncated: R/B & 0xF8, G & 0xFC; saturating native channel addition"
+      },
+      "intrinsic_record": {
+        "frame": 63,
+        "record_offset": 612399,
+        "active_raw": 0,
+        "end_offset": 612400
+      },
+      "main_source_span": {
+        "source_offset": 11981907,
+        "source_bytes": 5850,
+        "source_span_sha256": "5b1f6c0b9b26e3f000c706eea2e2ac95de2cca2da994721eaf6ff96dce91f088"
+      }
+    },
+    {
+      "sequence_index": 2,
+      "segment_index": 0,
+      "action_index": 7,
+      "action_frame": 2,
+      "direction": 0,
+      "source_frame": 64,
+      "main": {
+        "path": "assets/skills/yantu/frame_0064_main.png",
+        "sha256": "5b659181fb92fa0c5681023ce5d942165aa67af5d63338f2c6b5b2d0b98360d2",
+        "rgba_sha256": "2138eb28000c5ec09bff3997758776f694eba58bd49f43999adfe82ab0683314",
+        "bounds": [
+          247,
+          286,
+          338,
+          347
+        ],
+        "covered_pixels": 1942,
+        "transparent_pixels": 234679,
+        "blend": "source-over",
+        "pixel_format": "sparse RGB565 expanded to RGB8"
+      },
+      "intrinsic": {
+        "path": "assets/skills/yantu/frame_0064_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "blend": "additive-rgb565",
+        "active": false,
+        "alpha_semantics": "Sparse coverage only; covered palette index 0/255 are retained",
+        "rgb_semantics": "Palette truncated: R/B & 0xF8, G & 0xFC; saturating native channel addition"
+      },
+      "intrinsic_record": {
+        "frame": 64,
+        "record_offset": 612400,
+        "active_raw": 0,
+        "end_offset": 612401
+      },
+      "main_source_span": {
+        "source_offset": 11987757,
+        "source_bytes": 5238,
+        "source_span_sha256": "d59cb106c72b68ee593dc4e369794b71d945176af12ed8e23a54d9e2d50d913b"
+      }
+    },
+    {
+      "sequence_index": 3,
+      "segment_index": 0,
+      "action_index": 7,
+      "action_frame": 3,
+      "direction": 0,
+      "source_frame": 65,
+      "main": {
+        "path": "assets/skills/yantu/frame_0065_main.png",
+        "sha256": "39ddf07905ee89f57d8409a80217a156fe5ac707f7e5c19b7c58a9573ae52b4c",
+        "rgba_sha256": "d0e26c2e2530c79971e2f234d483a5878f453e57f47dec5fe8587bf3f0fa89ad",
+        "bounds": [
+          247,
+          274,
+          326,
+          346
+        ],
+        "covered_pixels": 2304,
+        "transparent_pixels": 234317,
+        "blend": "source-over",
+        "pixel_format": "sparse RGB565 expanded to RGB8"
+      },
+      "intrinsic": {
+        "path": "assets/skills/yantu/frame_0065_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "blend": "additive-rgb565",
+        "active": false,
+        "alpha_semantics": "Sparse coverage only; covered palette index 0/255 are retained",
+        "rgb_semantics": "Palette truncated: R/B & 0xF8, G & 0xFC; saturating native channel addition"
+      },
+      "intrinsic_record": {
+        "frame": 65,
+        "record_offset": 612401,
+        "active_raw": 0,
+        "end_offset": 612402
+      },
+      "main_source_span": {
+        "source_offset": 11992995,
+        "source_bytes": 6010,
+        "source_span_sha256": "19da66f1b13dbb8c201920be931f2e902c1378ffcc04b3c7f190c68d30cdd5c6"
+      }
+    },
+    {
+      "sequence_index": 4,
+      "segment_index": 1,
+      "action_index": 11,
+      "action_frame": 0,
+      "direction": 0,
+      "source_frame": 78,
+      "main": {
+        "path": "assets/skills/yantu/frame_0078_main.png",
+        "sha256": "03189493c20f75664962728c525b8a9e142c124ce7cb9593f1a2313cd9073cb7",
+        "rgba_sha256": "7789e91cb8c317906b8c4e37c94cf6770d73b1dd76c3cc6e012e29a2019bba50",
+        "bounds": [
+          220,
+          260,
+          321,
+          345
+        ],
+        "covered_pixels": 2536,
+        "transparent_pixels": 234085,
+        "blend": "source-over",
+        "pixel_format": "sparse RGB565 expanded to RGB8"
+      },
+      "intrinsic": {
+        "path": "assets/skills/yantu/frame_0078_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "blend": "additive-rgb565",
+        "active": false,
+        "alpha_semantics": "Sparse coverage only; covered palette index 0/255 are retained",
+        "rgb_semantics": "Palette truncated: R/B & 0xF8, G & 0xFC; saturating native channel addition"
+      },
+      "intrinsic_record": {
+        "frame": 78,
+        "record_offset": 612414,
+        "active_raw": 0,
+        "end_offset": 612415
+      },
+      "main_source_span": {
+        "source_offset": 12073219,
+        "source_bytes": 6582,
+        "source_span_sha256": "240e340fe992183b8dc85a45698b4f6e624d9df77d54af8cb4329db148d4e947"
+      }
+    },
+    {
+      "sequence_index": 5,
+      "segment_index": 1,
+      "action_index": 11,
+      "action_frame": 1,
+      "direction": 0,
+      "source_frame": 79,
+      "main": {
+        "path": "assets/skills/yantu/frame_0079_main.png",
+        "sha256": "b576ba5e76c380ab610a0702c804dd5ed11c7d138fb624c745c6b9efd7815956",
+        "rgba_sha256": "d55a33926766fe6b6b827ea209752a08dc8eb5fc88c2718bf4732a1493f6fdac",
+        "bounds": [
+          190,
+          243,
+          327,
+          332
+        ],
+        "covered_pixels": 2566,
+        "transparent_pixels": 234055,
+        "blend": "source-over",
+        "pixel_format": "sparse RGB565 expanded to RGB8"
+      },
+      "intrinsic": {
+        "path": "assets/skills/yantu/frame_0079_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "blend": "additive-rgb565",
+        "active": false,
+        "alpha_semantics": "Sparse coverage only; covered palette index 0/255 are retained",
+        "rgb_semantics": "Palette truncated: R/B & 0xF8, G & 0xFC; saturating native channel addition"
+      },
+      "intrinsic_record": {
+        "frame": 79,
+        "record_offset": 612415,
+        "active_raw": 0,
+        "end_offset": 612416
+      },
+      "main_source_span": {
+        "source_offset": 12079801,
+        "source_bytes": 6530,
+        "source_span_sha256": "fb6e85afff78950cc6bf08b7b441869aeb57a414926df1cf6439f8d23c4f73ef"
+      }
+    },
+    {
+      "sequence_index": 6,
+      "segment_index": 1,
+      "action_index": 11,
+      "action_frame": 2,
+      "direction": 0,
+      "source_frame": 80,
+      "main": {
+        "path": "assets/skills/yantu/frame_0080_main.png",
+        "sha256": "013b15e6ffdf8bc4391661fd596b3dda4bbd5bd9874e539d0eef7c258feb2562",
+        "rgba_sha256": "3438335721a781a605f333b4debff8f8425f58ebfb6f8ec622d6a66358dca412",
+        "bounds": [
+          189,
+          269,
+          320,
+          342
+        ],
+        "covered_pixels": 2632,
+        "transparent_pixels": 233989,
+        "blend": "source-over",
+        "pixel_format": "sparse RGB565 expanded to RGB8"
+      },
+      "intrinsic": {
+        "path": "assets/skills/yantu/frame_0080_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "blend": "additive-rgb565",
+        "active": false,
+        "alpha_semantics": "Sparse coverage only; covered palette index 0/255 are retained",
+        "rgb_semantics": "Palette truncated: R/B & 0xF8, G & 0xFC; saturating native channel addition"
+      },
+      "intrinsic_record": {
+        "frame": 80,
+        "record_offset": 612416,
+        "active_raw": 0,
+        "end_offset": 612417
+      },
+      "main_source_span": {
+        "source_offset": 12086331,
+        "source_bytes": 6706,
+        "source_span_sha256": "f9033ea8a8ff727494f4e39f35a368a71a300bcfde765a50e72e539ac2f762f9"
+      }
+    },
+    {
+      "sequence_index": 7,
+      "segment_index": 2,
+      "action_index": 8,
+      "action_frame": 0,
+      "direction": 0,
+      "source_frame": 66,
+      "main": {
+        "path": "assets/skills/yantu/frame_0066_main.png",
+        "sha256": "c6271b85ae42058a327c1cbc312f7b6490ac313a49eb74f4f9b70471c9785c8a",
+        "rgba_sha256": "946e713f827f88eca5645ccc83cac13880a2f97728389fd6f9396869d84268c0",
+        "bounds": [
+          189,
+          291,
+          304,
+          346
+        ],
+        "covered_pixels": 2346,
+        "transparent_pixels": 234275,
+        "blend": "source-over",
+        "pixel_format": "sparse RGB565 expanded to RGB8"
+      },
+      "intrinsic": {
+        "path": "assets/skills/yantu/frame_0066_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "blend": "additive-rgb565",
+        "active": false,
+        "alpha_semantics": "Sparse coverage only; covered palette index 0/255 are retained",
+        "rgb_semantics": "Palette truncated: R/B & 0xF8, G & 0xFC; saturating native channel addition"
+      },
+      "intrinsic_record": {
+        "frame": 66,
+        "record_offset": 612402,
+        "active_raw": 0,
+        "end_offset": 612403
+      },
+      "main_source_span": {
+        "source_offset": 11999005,
+        "source_bytes": 6034,
+        "source_span_sha256": "a18f67ededceaeb338f7c37d3aecda7eecccbc519e7b4e3c4a640725240388ae"
+      }
+    },
+    {
+      "sequence_index": 8,
+      "segment_index": 2,
+      "action_index": 8,
+      "action_frame": 1,
+      "direction": 0,
+      "source_frame": 67,
+      "main": {
+        "path": "assets/skills/yantu/frame_0067_main.png",
+        "sha256": "3a655230a71227944e680a296233895e732a1b7a13720c4b4d36a21fc035aa45",
+        "rgba_sha256": "5ad63017f1819f901a66065fb81c6ead57dff016948510a6b3cad19d7d9af7b6",
+        "bounds": [
+          198,
+          266,
+          305,
+          347
+        ],
+        "covered_pixels": 2565,
+        "transparent_pixels": 234056,
+        "blend": "source-over",
+        "pixel_format": "sparse RGB565 expanded to RGB8"
+      },
+      "intrinsic": {
+        "path": "assets/skills/yantu/frame_0067_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "blend": "additive-rgb565",
+        "active": false,
+        "alpha_semantics": "Sparse coverage only; covered palette index 0/255 are retained",
+        "rgb_semantics": "Palette truncated: R/B & 0xF8, G & 0xFC; saturating native channel addition"
+      },
+      "intrinsic_record": {
+        "frame": 67,
+        "record_offset": 612403,
+        "active_raw": 0,
+        "end_offset": 612404
+      },
+      "main_source_span": {
+        "source_offset": 12005039,
+        "source_bytes": 6644,
+        "source_span_sha256": "6b71a9bdfc922d346939dfeac97dc3045e9ac1cc6f8a35133fe8153cb702e6a5"
+      }
+    },
+    {
+      "sequence_index": 9,
+      "segment_index": 2,
+      "action_index": 8,
+      "action_frame": 2,
+      "direction": 0,
+      "source_frame": 68,
+      "main": {
+        "path": "assets/skills/yantu/frame_0068_main.png",
+        "sha256": "eba8364567da43f444f71d5509d1bfa3ce6c26b7fe543ce782d483eab2422ae8",
+        "rgba_sha256": "4293945dbb443496d86d0e2056a2a198fc5cbd4c30be1d4d490f397f8d0d81b7",
+        "bounds": [
+          219,
+          241,
+          305,
+          348
+        ],
+        "covered_pixels": 2644,
+        "transparent_pixels": 233977,
+        "blend": "source-over",
+        "pixel_format": "sparse RGB565 expanded to RGB8"
+      },
+      "intrinsic": {
+        "path": "assets/skills/yantu/frame_0068_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "blend": "additive-rgb565",
+        "active": false,
+        "alpha_semantics": "Sparse coverage only; covered palette index 0/255 are retained",
+        "rgb_semantics": "Palette truncated: R/B & 0xF8, G & 0xFC; saturating native channel addition"
+      },
+      "intrinsic_record": {
+        "frame": 68,
+        "record_offset": 612404,
+        "active_raw": 0,
+        "end_offset": 612405
+      },
+      "main_source_span": {
+        "source_offset": 12011683,
+        "source_bytes": 6962,
+        "source_span_sha256": "8cb68e2ccc48adbd264d6c4ed1fc16838ae5dc5b6718382787d72a28cd50e2ac"
+      }
+    },
+    {
+      "sequence_index": 10,
+      "segment_index": 3,
+      "action_index": 28,
+      "action_frame": 0,
+      "direction": 0,
+      "source_frame": 333,
+      "main": {
+        "path": "assets/skills/yantu/frame_0333_main.png",
+        "sha256": "acba4ee96435f415689f978efb94d30c346aa8502fff78ab9d236562c3566974",
+        "rgba_sha256": "6d7d990464167285bb556fc4c1ff79bb3439ff9f826e9e883b94a14e3ae030a3",
+        "bounds": [
+          232,
+          230,
+          305,
+          347
+        ],
+        "covered_pixels": 2425,
+        "transparent_pixels": 234196,
+        "blend": "source-over",
+        "pixel_format": "sparse RGB565 expanded to RGB8"
+      },
+      "intrinsic": {
+        "path": "assets/skills/yantu/frame_0333_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "blend": "additive-rgb565",
+        "active": false,
+        "alpha_semantics": "Sparse coverage only; covered palette index 0/255 are retained",
+        "rgb_semantics": "Palette truncated: R/B & 0xF8, G & 0xFC; saturating native channel addition"
+      },
+      "intrinsic_record": {
+        "frame": 333,
+        "record_offset": 6292227,
+        "active_raw": 0,
+        "end_offset": 6292228
+      },
+      "main_source_span": {
+        "source_offset": 13762963,
+        "source_bytes": 6468,
+        "source_span_sha256": "1e76cbd0a47959743bb9b298d06d14d42cb71f54be85ffe8e0d1e3dc2a026dd6"
+      }
+    },
+    {
+      "sequence_index": 11,
+      "segment_index": 3,
+      "action_index": 28,
+      "action_frame": 1,
+      "direction": 0,
+      "source_frame": 334,
+      "main": {
+        "path": "assets/skills/yantu/frame_0334_main.png",
+        "sha256": "f122952d4671179eaf220445f86cf47c5ebc86dbd41ce54f4368c53b592ee13d",
+        "rgba_sha256": "000067f17fc73a2636e3cb299861c005a7024d6fb205b3f3e3188576a3d2a8fc",
+        "bounds": [
+          233,
+          230,
+          306,
+          347
+        ],
+        "covered_pixels": 2453,
+        "transparent_pixels": 234168,
+        "blend": "source-over",
+        "pixel_format": "sparse RGB565 expanded to RGB8"
+      },
+      "intrinsic": {
+        "path": "assets/skills/yantu/frame_0334_intrinsic.png",
+        "sha256": "6f9d37b5ccedeabdddd65f8b3e45cbbcd3356bbc426e55897b42f24326073b3f",
+        "rgba_sha256": "3eb4ed62a0215a7c3423ccac31435ca268cf6a7c80418969199206923b1717cb",
+        "bounds": [
+          249,
+          159,
+          304,
+          252
+        ],
+        "covered_pixels": 3729,
+        "transparent_pixels": 232892,
+        "blend": "additive-rgb565",
+        "active": true,
+        "alpha_semantics": "Sparse coverage only; covered palette index 0/255 are retained",
+        "rgb_semantics": "Palette truncated: R/B & 0xF8, G & 0xFC; saturating native channel addition"
+      },
+      "intrinsic_record": {
+        "frame": 334,
+        "record_offset": 6292228,
+        "active_raw": 1,
+        "size_field_offset": 6292229,
+        "palette_offset": 6292233,
+        "indexed_pixels_offset": 6293001,
+        "indexed_pixels_bytes": 5211,
+        "end_offset": 6298212
+      },
+      "main_source_span": {
+        "source_offset": 13769431,
+        "source_bytes": 6544,
+        "source_span_sha256": "59f40576eb947c65537581e5f1aa0e6ed6aded057b49058b7d151064185941a5"
+      }
+    },
+    {
+      "sequence_index": 12,
+      "segment_index": 3,
+      "action_index": 28,
+      "action_frame": 2,
+      "direction": 0,
+      "source_frame": 335,
+      "main": {
+        "path": "assets/skills/yantu/frame_0335_main.png",
+        "sha256": "f951dc6c682805ad544b280952bd71624e92242460970bd65ba36eb32ea51cd4",
+        "rgba_sha256": "e61624062959b17332bd6b870799bd7bf71fae39287768176c83786429099ca1",
+        "bounds": [
+          234,
+          232,
+          306,
+          346
+        ],
+        "covered_pixels": 2458,
+        "transparent_pixels": 234163,
+        "blend": "source-over",
+        "pixel_format": "sparse RGB565 expanded to RGB8"
+      },
+      "intrinsic": {
+        "path": "assets/skills/yantu/frame_0335_intrinsic.png",
+        "sha256": "755c9b171e1e71def8078da07fc823d42c0b9b68b2bf30da3e7c95ef48116fc8",
+        "rgba_sha256": "8153b4b6dfa222afaca2d3e1fcc95b7e3f97a266d8ba2a32ac2ce140ce9b3abb",
+        "bounds": [
+          248,
+          153,
+          311,
+          255
+        ],
+        "covered_pixels": 4571,
+        "transparent_pixels": 232050,
+        "blend": "additive-rgb565",
+        "active": true,
+        "alpha_semantics": "Sparse coverage only; covered palette index 0/255 are retained",
+        "rgb_semantics": "Palette truncated: R/B & 0xF8, G & 0xFC; saturating native channel addition"
+      },
+      "intrinsic_record": {
+        "frame": 335,
+        "record_offset": 6298212,
+        "active_raw": 1,
+        "size_field_offset": 6298213,
+        "palette_offset": 6298217,
+        "indexed_pixels_offset": 6298985,
+        "indexed_pixels_bytes": 6081,
+        "end_offset": 6305066
+      },
+      "main_source_span": {
+        "source_offset": 13775975,
+        "source_bytes": 6550,
+        "source_span_sha256": "45bc8f1303b991ed62494b8fb460544cda8e5992e3ca6d6c17f93159d4edcf4d"
+      }
+    },
+    {
+      "sequence_index": 13,
+      "segment_index": 3,
+      "action_index": 28,
+      "action_frame": 3,
+      "direction": 0,
+      "source_frame": 336,
+      "main": {
+        "path": "assets/skills/yantu/frame_0336_main.png",
+        "sha256": "56da0641798a394a956242b4fd3922595c5ebd800668f818bf102da18cdc4edb",
+        "rgba_sha256": "86028ceab122da608149fbbb2e83aacfba7b6943737b1bc7cc9898b64a3cb35d",
+        "bounds": [
+          230,
+          231,
+          306,
+          346
+        ],
+        "covered_pixels": 2420,
+        "transparent_pixels": 234201,
+        "blend": "source-over",
+        "pixel_format": "sparse RGB565 expanded to RGB8"
+      },
+      "intrinsic": {
+        "path": "assets/skills/yantu/frame_0336_intrinsic.png",
+        "sha256": "28c60bce36a78a3399418b0b3856ba85d2c2fad0c63b55905a6fa00454c77a7f",
+        "rgba_sha256": "34fb19938ab5896f643ae75e6e395d2a8dfb76aa415aac5f476329729e0876db",
+        "bounds": [
+          243,
+          147,
+          316,
+          262
+        ],
+        "covered_pixels": 5520,
+        "transparent_pixels": 231101,
+        "blend": "additive-rgb565",
+        "active": true,
+        "alpha_semantics": "Sparse coverage only; covered palette index 0/255 are retained",
+        "rgb_semantics": "Palette truncated: R/B & 0xF8, G & 0xFC; saturating native channel addition"
+      },
+      "intrinsic_record": {
+        "frame": 336,
+        "record_offset": 6305066,
+        "active_raw": 1,
+        "size_field_offset": 6305067,
+        "palette_offset": 6305071,
+        "indexed_pixels_offset": 6305839,
+        "indexed_pixels_bytes": 7194,
+        "end_offset": 6313033
+      },
+      "main_source_span": {
+        "source_offset": 13782525,
+        "source_bytes": 6422,
+        "source_span_sha256": "f5094055b1e5ad1f827b7dad438b027a69d07aa3f266174b5b0a992f2a2fcf5c"
+      }
+    },
+    {
+      "sequence_index": 14,
+      "segment_index": 3,
+      "action_index": 28,
+      "action_frame": 4,
+      "direction": 0,
+      "source_frame": 337,
+      "main": {
+        "path": "assets/skills/yantu/frame_0337_main.png",
+        "sha256": "73e800e5f606108fe64f40ae5ee5854069ebfa5f8eb6c8fe4f5cd26950d3daee",
+        "rgba_sha256": "b16d941a226db7ba201eeaf7943e89ab23caf7de7a9f9239ce51e409c974f590",
+        "bounds": [
+          228,
+          243,
+          306,
+          347
+        ],
+        "covered_pixels": 2316,
+        "transparent_pixels": 234305,
+        "blend": "source-over",
+        "pixel_format": "sparse RGB565 expanded to RGB8"
+      },
+      "intrinsic": {
+        "path": "assets/skills/yantu/frame_0337_intrinsic.png",
+        "sha256": "64cc22bd22ddeebd8d5ba3269da620cf42e2dd9bd8f46f1e633082588f0f4031",
+        "rgba_sha256": "378d7f4b8c9ff7b7f6dfbae41843eef6c4c97a4862a424258b49d9a0454ad2a3",
+        "bounds": [
+          143,
+          143,
+          321,
+          346
+        ],
+        "covered_pixels": 15638,
+        "transparent_pixels": 220983,
+        "blend": "additive-rgb565",
+        "active": true,
+        "alpha_semantics": "Sparse coverage only; covered palette index 0/255 are retained",
+        "rgb_semantics": "Palette truncated: R/B & 0xF8, G & 0xFC; saturating native channel addition"
+      },
+      "intrinsic_record": {
+        "frame": 337,
+        "record_offset": 6313033,
+        "active_raw": 1,
+        "size_field_offset": 6313034,
+        "palette_offset": 6313038,
+        "indexed_pixels_offset": 6313806,
+        "indexed_pixels_bytes": 19144,
+        "end_offset": 6332950
+      },
+      "main_source_span": {
+        "source_offset": 13788947,
+        "source_bytes": 6158,
+        "source_span_sha256": "449e53c20601be534189f985c4f9be40b297c9471cb250881e2ccd023f1c3bfb"
+      }
+    },
+    {
+      "sequence_index": 15,
+      "segment_index": 3,
+      "action_index": 28,
+      "action_frame": 5,
+      "direction": 0,
+      "source_frame": 338,
+      "main": {
+        "path": "assets/skills/yantu/frame_0338_main.png",
+        "sha256": "02b3732001e90ecf88fcd89418095ec8c50454c6fa36fc07d467d19ec1951f68",
+        "rgba_sha256": "43d2673355ea8010c38e3ad50749cb3c1c0b6b3105a976fa217ffd4ce5dc528c",
+        "bounds": [
+          188,
+          256,
+          307,
+          347
+        ],
+        "covered_pixels": 2313,
+        "transparent_pixels": 234308,
+        "blend": "source-over",
+        "pixel_format": "sparse RGB565 expanded to RGB8"
+      },
+      "intrinsic": {
+        "path": "assets/skills/yantu/frame_0338_intrinsic.png",
+        "sha256": "6f7b10b364594ce7c05b2d202a30569b68bdfd43b3770147b054a46bd8bb12a6",
+        "rgba_sha256": "507b5ce1ef2b25d2f36a9e4701d02606d9238d148130afc88cfdbc548ab52501",
+        "bounds": [
+          122,
+          139,
+          325,
+          352
+        ],
+        "covered_pixels": 18030,
+        "transparent_pixels": 218591,
+        "blend": "additive-rgb565",
+        "active": true,
+        "alpha_semantics": "Sparse coverage only; covered palette index 0/255 are retained",
+        "rgb_semantics": "Palette truncated: R/B & 0xF8, G & 0xFC; saturating native channel addition"
+      },
+      "intrinsic_record": {
+        "frame": 338,
+        "record_offset": 6332950,
+        "active_raw": 1,
+        "size_field_offset": 6332951,
+        "palette_offset": 6332955,
+        "indexed_pixels_offset": 6333723,
+        "indexed_pixels_bytes": 22536,
+        "end_offset": 6356259
+      },
+      "main_source_span": {
+        "source_offset": 13795105,
+        "source_bytes": 6108,
+        "source_span_sha256": "76f81c29811d4c9a69e4ec14fc10be91d6efecd3db2a842cd54d3eb34c33215b"
+      }
+    },
+    {
+      "sequence_index": 16,
+      "segment_index": 3,
+      "action_index": 28,
+      "action_frame": 6,
+      "direction": 0,
+      "source_frame": 339,
+      "main": {
+        "path": "assets/skills/yantu/frame_0339_main.png",
+        "sha256": "61bb79ba7910e9da1da76ec40b815e761d526d1c074b26cea59d0f8d2abc9494",
+        "rgba_sha256": "0d9f2be04d8c1dfa3f0c7561bae13a7508196203060c457fa19b954cec7d1261",
+        "bounds": [
+          191,
+          260,
+          307,
+          347
+        ],
+        "covered_pixels": 2291,
+        "transparent_pixels": 234330,
+        "blend": "source-over",
+        "pixel_format": "sparse RGB565 expanded to RGB8"
+      },
+      "intrinsic": {
+        "path": "assets/skills/yantu/frame_0339_intrinsic.png",
+        "sha256": "8b7a725b71c12dd148a6bc8dc5005266f61db737194d3b9af3fc0aebc2056bfc",
+        "rgba_sha256": "123c131ad7501f9fa95e21d787cfb9f8d71e652695bc9da68c5efd538362a0f9",
+        "bounds": [
+          127,
+          179,
+          310,
+          359
+        ],
+        "covered_pixels": 14510,
+        "transparent_pixels": 222111,
+        "blend": "additive-rgb565",
+        "active": true,
+        "alpha_semantics": "Sparse coverage only; covered palette index 0/255 are retained",
+        "rgb_semantics": "Palette truncated: R/B & 0xF8, G & 0xFC; saturating native channel addition"
+      },
+      "intrinsic_record": {
+        "frame": 339,
+        "record_offset": 6356259,
+        "active_raw": 1,
+        "size_field_offset": 6356260,
+        "palette_offset": 6356264,
+        "indexed_pixels_offset": 6357032,
+        "indexed_pixels_bytes": 17900,
+        "end_offset": 6374932
+      },
+      "main_source_span": {
+        "source_offset": 13801213,
+        "source_bytes": 6076,
+        "source_span_sha256": "3d351914f55ecfc7ae82fd59ff8a28bd80b2ded0c20273ad993d23acef3b83b0"
+      }
+    },
+    {
+      "sequence_index": 17,
+      "segment_index": 3,
+      "action_index": 28,
+      "action_frame": 7,
+      "direction": 0,
+      "source_frame": 340,
+      "main": {
+        "path": "assets/skills/yantu/frame_0340_main.png",
+        "sha256": "8044b485cdf4e18f8da9dbef633486f397829161036e13c03357de8281a249a9",
+        "rgba_sha256": "9e9d7de15f3485e090ed6aded98172cb0a78eaa9ca09a25be2a0b71e0463367a",
+        "bounds": [
+          194,
+          262,
+          307,
+          346
+        ],
+        "covered_pixels": 2385,
+        "transparent_pixels": 234236,
+        "blend": "source-over",
+        "pixel_format": "sparse RGB565 expanded to RGB8"
+      },
+      "intrinsic": {
+        "path": "assets/skills/yantu/frame_0340_intrinsic.png",
+        "sha256": "0c810ec93278cde55b41755d78cf1b838410d8b8de1be292112ac59b7ff2f4f2",
+        "rgba_sha256": "59956e85bec2b757d3ba26013bb6c2240e9e25b3d355bbda22152f3ce7184d25",
+        "bounds": [
+          117,
+          195,
+          315,
+          357
+        ],
+        "covered_pixels": 14479,
+        "transparent_pixels": 222142,
+        "blend": "additive-rgb565",
+        "active": true,
+        "alpha_semantics": "Sparse coverage only; covered palette index 0/255 are retained",
+        "rgb_semantics": "Palette truncated: R/B & 0xF8, G & 0xFC; saturating native channel addition"
+      },
+      "intrinsic_record": {
+        "frame": 340,
+        "record_offset": 6374932,
+        "active_raw": 1,
+        "size_field_offset": 6374933,
+        "palette_offset": 6374937,
+        "indexed_pixels_offset": 6375705,
+        "indexed_pixels_bytes": 18629,
+        "end_offset": 6394334
+      },
+      "main_source_span": {
+        "source_offset": 13807289,
+        "source_bytes": 6288,
+        "source_span_sha256": "e01d10a79e39a7d3b5d0c7c0fb248dbbd0ec4ebf2255eb3e7dd3feb415145c68"
+      }
+    },
+    {
+      "sequence_index": 18,
+      "segment_index": 3,
+      "action_index": 28,
+      "action_frame": 8,
+      "direction": 0,
+      "source_frame": 341,
+      "main": {
+        "path": "assets/skills/yantu/frame_0341_main.png",
+        "sha256": "e7de09fe13dc23c0e54fd03fc2ae9baa8b11c0af4792ef9f5483e85381d17aeb",
+        "rgba_sha256": "d31cead2613d9803dc3d752b59a8a7dabb0e48d7368714420ba71cfb4727ebff",
+        "bounds": [
+          208,
+          252,
+          306,
+          347
+        ],
+        "covered_pixels": 2440,
+        "transparent_pixels": 234181,
+        "blend": "source-over",
+        "pixel_format": "sparse RGB565 expanded to RGB8"
+      },
+      "intrinsic": {
+        "path": "assets/skills/yantu/frame_0341_intrinsic.png",
+        "sha256": "968d2d17a650b6d8535ceac9b0a55820229e778053b5b20eb00077b4234b1753",
+        "rgba_sha256": "cf0e09f3c3904563c9f35d40a0ca4d556c34bf62d1b470ded05ac40c4ef559f6",
+        "bounds": [
+          119,
+          191,
+          320,
+          360
+        ],
+        "covered_pixels": 12551,
+        "transparent_pixels": 224070,
+        "blend": "additive-rgb565",
+        "active": true,
+        "alpha_semantics": "Sparse coverage only; covered palette index 0/255 are retained",
+        "rgb_semantics": "Palette truncated: R/B & 0xF8, G & 0xFC; saturating native channel addition"
+      },
+      "intrinsic_record": {
+        "frame": 341,
+        "record_offset": 6394334,
+        "active_raw": 1,
+        "size_field_offset": 6394335,
+        "palette_offset": 6394339,
+        "indexed_pixels_offset": 6395107,
+        "indexed_pixels_bytes": 18305,
+        "end_offset": 6413412
+      },
+      "main_source_span": {
+        "source_offset": 13813577,
+        "source_bytes": 6462,
+        "source_span_sha256": "659e1b8802ced3921f285a2b4804817ed965a65a9e743c14a833b86f2499a204"
+      }
+    },
+    {
+      "sequence_index": 19,
+      "segment_index": 3,
+      "action_index": 28,
+      "action_frame": 9,
+      "direction": 0,
+      "source_frame": 342,
+      "main": {
+        "path": "assets/skills/yantu/frame_0342_main.png",
+        "sha256": "53a2e97c5e5e1f9caaa40987a6c0c6220bd31c4c710604a84428f635c09c9818",
+        "rgba_sha256": "96102b10626c152afb96012cfd9521992210d4fc36db75d6a777e610e7a4069d",
+        "bounds": [
+          221,
+          240,
+          306,
+          347
+        ],
+        "covered_pixels": 2530,
+        "transparent_pixels": 234091,
+        "blend": "source-over",
+        "pixel_format": "sparse RGB565 expanded to RGB8"
+      },
+      "intrinsic": {
+        "path": "assets/skills/yantu/frame_0342_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "blend": "additive-rgb565",
+        "active": false,
+        "alpha_semantics": "Sparse coverage only; covered palette index 0/255 are retained",
+        "rgb_semantics": "Palette truncated: R/B & 0xF8, G & 0xFC; saturating native channel addition"
+      },
+      "intrinsic_record": {
+        "frame": 342,
+        "record_offset": 6413412,
+        "active_raw": 0,
+        "end_offset": 6413413
+      },
+      "main_source_span": {
+        "source_offset": 13820039,
+        "source_bytes": 6706,
+        "source_span_sha256": "94d79fb0ae09693f926f9374ee49460cacbff7c5abf42f9eec57ec313ce178a6"
+      }
+    },
+    {
+      "sequence_index": 20,
+      "segment_index": 4,
+      "action_index": 9,
+      "action_frame": 0,
+      "direction": 0,
+      "source_frame": 69,
+      "main": {
+        "path": "assets/skills/yantu/frame_0069_main.png",
+        "sha256": "96dd588f269e034eca7a6cbe2eabd66a765f6e51f73ec5e37c7afe6c7c875adc",
+        "rgba_sha256": "9bb7f55970eb3d7ea6fe595f44144c0504e0003d8d3e1433394b59fd00945d98",
+        "bounds": [
+          231,
+          240,
+          305,
+          348
+        ],
+        "covered_pixels": 2552,
+        "transparent_pixels": 234069,
+        "blend": "source-over",
+        "pixel_format": "sparse RGB565 expanded to RGB8"
+      },
+      "intrinsic": {
+        "path": "assets/skills/yantu/frame_0069_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "blend": "additive-rgb565",
+        "active": false,
+        "alpha_semantics": "Sparse coverage only; covered palette index 0/255 are retained",
+        "rgb_semantics": "Palette truncated: R/B & 0xF8, G & 0xFC; saturating native channel addition"
+      },
+      "intrinsic_record": {
+        "frame": 69,
+        "record_offset": 612405,
+        "active_raw": 0,
+        "end_offset": 612406
+      },
+      "main_source_span": {
+        "source_offset": 12018645,
+        "source_bytes": 6774,
+        "source_span_sha256": "d8f01e6b8768bb9cf10205fa16ac2472de2a9779f7e0379701161bf7924df3cd"
+      }
+    },
+    {
+      "sequence_index": 21,
+      "segment_index": 4,
+      "action_index": 9,
+      "action_frame": 1,
+      "direction": 0,
+      "source_frame": 70,
+      "main": {
+        "path": "assets/skills/yantu/frame_0070_main.png",
+        "sha256": "6dc0a16d3bce43d72f27163d5322b79944d22c7ba33eeecad6797d5abb641c18",
+        "rgba_sha256": "3d84f3a54524ee89a04d8a278dc5c1adeec06c45303ac0866ea0fa52e0e5cb1f",
+        "bounds": [
+          221,
+          268,
+          305,
+          348
+        ],
+        "covered_pixels": 2343,
+        "transparent_pixels": 234278,
+        "blend": "source-over",
+        "pixel_format": "sparse RGB565 expanded to RGB8"
+      },
+      "intrinsic": {
+        "path": "assets/skills/yantu/frame_0070_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "blend": "additive-rgb565",
+        "active": false,
+        "alpha_semantics": "Sparse coverage only; covered palette index 0/255 are retained",
+        "rgb_semantics": "Palette truncated: R/B & 0xF8, G & 0xFC; saturating native channel addition"
+      },
+      "intrinsic_record": {
+        "frame": 70,
+        "record_offset": 612406,
+        "active_raw": 0,
+        "end_offset": 612407
+      },
+      "main_source_span": {
+        "source_offset": 12025419,
+        "source_bytes": 6124,
+        "source_span_sha256": "2417bcb27d426ee6ac6836eaa0d2f0e69dabde1b79de19089c3498ab734235d3"
+      }
+    },
+    {
+      "sequence_index": 22,
+      "segment_index": 4,
+      "action_index": 9,
+      "action_frame": 2,
+      "direction": 0,
+      "source_frame": 71,
+      "main": {
+        "path": "assets/skills/yantu/frame_0071_main.png",
+        "sha256": "e40b53d6bbe7aa3528b59bc5f7226f98662dd1189d03c6c8bed8ee383a9f925f",
+        "rgba_sha256": "a0cc018cf36d548602631b6d1bef6ee0e22dbcdc7d323546c8ff49c7d804c864",
+        "bounds": [
+          195,
+          277,
+          306,
+          349
+        ],
+        "covered_pixels": 2652,
+        "transparent_pixels": 233969,
+        "blend": "source-over",
+        "pixel_format": "sparse RGB565 expanded to RGB8"
+      },
+      "intrinsic": {
+        "path": "assets/skills/yantu/frame_0071_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "blend": "additive-rgb565",
+        "active": false,
+        "alpha_semantics": "Sparse coverage only; covered palette index 0/255 are retained",
+        "rgb_semantics": "Palette truncated: R/B & 0xF8, G & 0xFC; saturating native channel addition"
+      },
+      "intrinsic_record": {
+        "frame": 71,
+        "record_offset": 612407,
+        "active_raw": 0,
+        "end_offset": 612408
+      },
+      "main_source_span": {
+        "source_offset": 12031543,
+        "source_bytes": 6810,
+        "source_span_sha256": "dedae0987e90cf65bb37e3ea98a15f75c707703e1b9bdeb80067a076f00c84d3"
+      }
+    },
+    {
+      "sequence_index": 23,
+      "segment_index": 4,
+      "action_index": 9,
+      "action_frame": 3,
+      "direction": 0,
+      "source_frame": 72,
+      "main": {
+        "path": "assets/skills/yantu/frame_0072_main.png",
+        "sha256": "9c6929efdb6df5c3db6eaa83f469def41206809d373a98325eb85bd735668916",
+        "rgba_sha256": "71016e953c51357d99ee4fefa55677ddf2a5905af1e38a217a6c6895414d3dfd",
+        "bounds": [
+          208,
+          284,
+          305,
+          349
+        ],
+        "covered_pixels": 2432,
+        "transparent_pixels": 234189,
+        "blend": "source-over",
+        "pixel_format": "sparse RGB565 expanded to RGB8"
+      },
+      "intrinsic": {
+        "path": "assets/skills/yantu/frame_0072_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "blend": "additive-rgb565",
+        "active": false,
+        "alpha_semantics": "Sparse coverage only; covered palette index 0/255 are retained",
+        "rgb_semantics": "Palette truncated: R/B & 0xF8, G & 0xFC; saturating native channel addition"
+      },
+      "intrinsic_record": {
+        "frame": 72,
+        "record_offset": 612408,
+        "active_raw": 0,
+        "end_offset": 612409
+      },
+      "main_source_span": {
+        "source_offset": 12038353,
+        "source_bytes": 6274,
+        "source_span_sha256": "823aeaf4459ee642c4d864203c85abdb9cb4f3cf351be6c34769c4d180bebfcb"
+      }
+    },
+    {
+      "sequence_index": 24,
+      "segment_index": 5,
+      "action_index": 12,
+      "action_frame": 0,
+      "direction": 0,
+      "source_frame": 81,
+      "main": {
+        "path": "assets/skills/yantu/frame_0081_main.png",
+        "sha256": "76050cc9aefd42a83ff770067629860a520b94d1dae58c7b245cb01c9592c928",
+        "rgba_sha256": "f26072ccf2286905411f24936bed19a8ccde9b3ebadc90dd437a76b09c9fbd5c",
+        "bounds": [
+          221,
+          249,
+          300,
+          337
+        ],
+        "covered_pixels": 2190,
+        "transparent_pixels": 234431,
+        "blend": "source-over",
+        "pixel_format": "sparse RGB565 expanded to RGB8"
+      },
+      "intrinsic": {
+        "path": "assets/skills/yantu/frame_0081_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "blend": "additive-rgb565",
+        "active": false,
+        "alpha_semantics": "Sparse coverage only; covered palette index 0/255 are retained",
+        "rgb_semantics": "Palette truncated: R/B & 0xF8, G & 0xFC; saturating native channel addition"
+      },
+      "intrinsic_record": {
+        "frame": 81,
+        "record_offset": 612417,
+        "active_raw": 0,
+        "end_offset": 612418
+      },
+      "main_source_span": {
+        "source_offset": 12093037,
+        "source_bytes": 5806,
+        "source_span_sha256": "32b3c2bb6ec8b713ec6a101377b6f99ef8e65c08ad0141eaca8f9371454ba28e"
+      }
+    },
+    {
+      "sequence_index": 25,
+      "segment_index": 5,
+      "action_index": 12,
+      "action_frame": 1,
+      "direction": 0,
+      "source_frame": 82,
+      "main": {
+        "path": "assets/skills/yantu/frame_0082_main.png",
+        "sha256": "ca30f29d806bece7661f38c4b908fe2c03aa17f6140409fa912acdf0184d11a4",
+        "rgba_sha256": "8d9986fdbcb69b4e28d5c2907886c47e6feb12f1ddf81bc66b9d6e8e54ea636b",
+        "bounds": [
+          226,
+          227,
+          316,
+          323
+        ],
+        "covered_pixels": 2374,
+        "transparent_pixels": 234247,
+        "blend": "source-over",
+        "pixel_format": "sparse RGB565 expanded to RGB8"
+      },
+      "intrinsic": {
+        "path": "assets/skills/yantu/frame_0082_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "blend": "additive-rgb565",
+        "active": false,
+        "alpha_semantics": "Sparse coverage only; covered palette index 0/255 are retained",
+        "rgb_semantics": "Palette truncated: R/B & 0xF8, G & 0xFC; saturating native channel addition"
+      },
+      "intrinsic_record": {
+        "frame": 82,
+        "record_offset": 612418,
+        "active_raw": 0,
+        "end_offset": 612419
+      },
+      "main_source_span": {
+        "source_offset": 12098843,
+        "source_bytes": 6210,
+        "source_span_sha256": "b269db2023c67c7b8ea4b914f286f542277bf2e6090413dc7712f57579d68e05"
+      }
+    },
+    {
+      "sequence_index": 26,
+      "segment_index": 5,
+      "action_index": 12,
+      "action_frame": 2,
+      "direction": 0,
+      "source_frame": 83,
+      "main": {
+        "path": "assets/skills/yantu/frame_0083_main.png",
+        "sha256": "4dd11dbbec44bd256f5057e8cd7f448bf6f60db6337e276db10add13c85a525b",
+        "rgba_sha256": "3c2d5baedebf614f3a1f3ca5e6f840cc8ebef12229e486b69f31477f1463bd4c",
+        "bounds": [
+          241,
+          241,
+          312,
+          335
+        ],
+        "covered_pixels": 2363,
+        "transparent_pixels": 234258,
+        "blend": "source-over",
+        "pixel_format": "sparse RGB565 expanded to RGB8"
+      },
+      "intrinsic": {
+        "path": "assets/skills/yantu/frame_0083_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "blend": "additive-rgb565",
+        "active": false,
+        "alpha_semantics": "Sparse coverage only; covered palette index 0/255 are retained",
+        "rgb_semantics": "Palette truncated: R/B & 0xF8, G & 0xFC; saturating native channel addition"
+      },
+      "intrinsic_record": {
+        "frame": 83,
+        "record_offset": 612419,
+        "active_raw": 0,
+        "end_offset": 612420
+      },
+      "main_source_span": {
+        "source_offset": 12105053,
+        "source_bytes": 6212,
+        "source_span_sha256": "d2fe9afba1fed3b56963733f26976bc89a5aedab1d9170072eb53ffc924c046a"
+      }
+    },
+    {
+      "sequence_index": 27,
+      "segment_index": 6,
+      "action_index": 10,
+      "action_frame": 0,
+      "direction": 0,
+      "source_frame": 73,
+      "main": {
+        "path": "assets/skills/yantu/frame_0073_main.png",
+        "sha256": "b6a05a0b8797015338609697ef5a2fbf101bface2beb81c76da3f29ddbf271e3",
+        "rgba_sha256": "b9ee78ee99c834d2d01572efe43ffe29622b4f595e4e17f61351f6e2c97e125a",
+        "bounds": [
+          243,
+          293,
+          327,
+          349
+        ],
+        "covered_pixels": 1796,
+        "transparent_pixels": 234825,
+        "blend": "source-over",
+        "pixel_format": "sparse RGB565 expanded to RGB8"
+      },
+      "intrinsic": {
+        "path": "assets/skills/yantu/frame_0073_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "blend": "additive-rgb565",
+        "active": false,
+        "alpha_semantics": "Sparse coverage only; covered palette index 0/255 are retained",
+        "rgb_semantics": "Palette truncated: R/B & 0xF8, G & 0xFC; saturating native channel addition"
+      },
+      "intrinsic_record": {
+        "frame": 73,
+        "record_offset": 612409,
+        "active_raw": 0,
+        "end_offset": 612410
+      },
+      "main_source_span": {
+        "source_offset": 12044627,
+        "source_bytes": 5002,
+        "source_span_sha256": "7a94c67eb8cd577d7acc6bd488f49bd0ff92d68a3dc6b5b5148ac0706324e194"
+      }
+    },
+    {
+      "sequence_index": 28,
+      "segment_index": 6,
+      "action_index": 10,
+      "action_frame": 1,
+      "direction": 0,
+      "source_frame": 74,
+      "main": {
+        "path": "assets/skills/yantu/frame_0074_main.png",
+        "sha256": "33a17d052cf5ad952f2a75bc808600861375ed27312c604e0486bbb976b5fc23",
+        "rgba_sha256": "b14b58ab3825832f65d98803fadc705a004b0b7de9e02231a7efab4ae5cc498e",
+        "bounds": [
+          241,
+          287,
+          326,
+          348
+        ],
+        "covered_pixels": 1847,
+        "transparent_pixels": 234774,
+        "blend": "source-over",
+        "pixel_format": "sparse RGB565 expanded to RGB8"
+      },
+      "intrinsic": {
+        "path": "assets/skills/yantu/frame_0074_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "blend": "additive-rgb565",
+        "active": false,
+        "alpha_semantics": "Sparse coverage only; covered palette index 0/255 are retained",
+        "rgb_semantics": "Palette truncated: R/B & 0xF8, G & 0xFC; saturating native channel addition"
+      },
+      "intrinsic_record": {
+        "frame": 74,
+        "record_offset": 612410,
+        "active_raw": 0,
+        "end_offset": 612411
+      },
+      "main_source_span": {
+        "source_offset": 12049629,
+        "source_bytes": 5128,
+        "source_span_sha256": "b7c856adeed3fe58b005d921294908f4b9e59d93f77c49c6924976f09573eee4"
+      }
+    },
+    {
+      "sequence_index": 29,
+      "segment_index": 6,
+      "action_index": 10,
+      "action_frame": 2,
+      "direction": 0,
+      "source_frame": 75,
+      "main": {
+        "path": "assets/skills/yantu/frame_0075_main.png",
+        "sha256": "9ae0c492163f80d686a4f6cda9c6301d0057c78347849f087a2cf40eff655bbb",
+        "rgba_sha256": "026e0df9b060370545ea479e4600a35d2f81c170dab85f8860b75604afc234a4",
+        "bounds": [
+          239,
+          272,
+          319,
+          348
+        ],
+        "covered_pixels": 2044,
+        "transparent_pixels": 234577,
+        "blend": "source-over",
+        "pixel_format": "sparse RGB565 expanded to RGB8"
+      },
+      "intrinsic": {
+        "path": "assets/skills/yantu/frame_0075_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "blend": "additive-rgb565",
+        "active": false,
+        "alpha_semantics": "Sparse coverage only; covered palette index 0/255 are retained",
+        "rgb_semantics": "Palette truncated: R/B & 0xF8, G & 0xFC; saturating native channel addition"
+      },
+      "intrinsic_record": {
+        "frame": 75,
+        "record_offset": 612411,
+        "active_raw": 0,
+        "end_offset": 612412
+      },
+      "main_source_span": {
+        "source_offset": 12054757,
+        "source_bytes": 5594,
+        "source_span_sha256": "ba7c3bbc6144e9cab18b4ab77893dc6640494823476065abdb3d9dc55b6bc06f"
+      }
+    },
+    {
+      "sequence_index": 30,
+      "segment_index": 6,
+      "action_index": 10,
+      "action_frame": 3,
+      "direction": 0,
+      "source_frame": 76,
+      "main": {
+        "path": "assets/skills/yantu/frame_0076_main.png",
+        "sha256": "c9fafef5d71055abf137755c9d40187c8dea08a1c58aa3b4c39e889091a216cf",
+        "rgba_sha256": "8736c09c069e3e20c7605b20a0818804fa47ca4a5b64b67e8e213706804faa33",
+        "bounds": [
+          237,
+          252,
+          311,
+          348
+        ],
+        "covered_pixels": 2285,
+        "transparent_pixels": 234336,
+        "blend": "source-over",
+        "pixel_format": "sparse RGB565 expanded to RGB8"
+      },
+      "intrinsic": {
+        "path": "assets/skills/yantu/frame_0076_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "blend": "additive-rgb565",
+        "active": false,
+        "alpha_semantics": "Sparse coverage only; covered palette index 0/255 are retained",
+        "rgb_semantics": "Palette truncated: R/B & 0xF8, G & 0xFC; saturating native channel addition"
+      },
+      "intrinsic_record": {
+        "frame": 76,
+        "record_offset": 612412,
+        "active_raw": 0,
+        "end_offset": 612413
+      },
+      "main_source_span": {
+        "source_offset": 12060351,
+        "source_bytes": 6164,
+        "source_span_sha256": "1a52a43ee1e8bf31f244073ac41472119ae7b467b97753eb31a7a0f35c019fbd"
+      }
+    },
+    {
+      "sequence_index": 31,
+      "segment_index": 6,
+      "action_index": 10,
+      "action_frame": 4,
+      "direction": 0,
+      "source_frame": 77,
+      "main": {
+        "path": "assets/skills/yantu/frame_0077_main.png",
+        "sha256": "5384d04f80934dc06d748f747558cb89c7b0e6cf1555307a3fd590c85762fc98",
+        "rgba_sha256": "cd43dd67eeb19fb69f8501ccbc31c16cfb16a34e37f89d360135b9ce0187e813",
+        "bounds": [
+          234,
+          238,
+          305,
+          348
+        ],
+        "covered_pixels": 2507,
+        "transparent_pixels": 234114,
+        "blend": "source-over",
+        "pixel_format": "sparse RGB565 expanded to RGB8"
+      },
+      "intrinsic": {
+        "path": "assets/skills/yantu/frame_0077_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "blend": "additive-rgb565",
+        "active": false,
+        "alpha_semantics": "Sparse coverage only; covered palette index 0/255 are retained",
+        "rgb_semantics": "Palette truncated: R/B & 0xF8, G & 0xFC; saturating native channel addition"
+      },
+      "intrinsic_record": {
+        "frame": 77,
+        "record_offset": 612413,
+        "active_raw": 0,
+        "end_offset": 612414
+      },
+      "main_source_span": {
+        "source_offset": 12066515,
+        "source_bytes": 6704,
+        "source_span_sha256": "35641c2181d81ba804e2540f9dee5a2fbef8e8ec961c7d1782a4945d41965eff"
+      }
+    }
+  ],
+  "evidence": {
+    "references": {
+      "loader": "ev_9abd5ba6645433c0752e35b69015a7f998c9c9b054862a5afdfadc7499e40962",
+      "indexed_draw": "ev_0c237df7043928c88bbdebd562f666aa4b7f4201a779c0a793b1483939fd71d2",
+      "pixel_format": "ev_a6647ea0bc3a48a670332ca03d6a4e02d7b145a407b5a5ad2dcfa4ed39b122d1",
+      "integrated_scaled_additive": "ev_c2389f434b39dc55444e72ee2ab400b3277d3cf3149032728acf29ffa53dd76e",
+      "frame_range": "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+      "frame_range_pseudo": "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29"
+    },
+    "bundles": [
+      "remake/prototype/evidence/combat_presentation_native_20261011.json",
+      "remake/prototype/evidence/combat_presentation_indexed_native_20261011.json"
+    ],
+    "retained_gap": "remake/prototype/evidence/skill_intrinsic_layer_gap_20261011.json"
+  },
+  "limits": [
+    "Only role001 CHR skill22/id26 Yantu, single existing source direction, seven segments/32 source frames.",
+    "Main/intrinsic images share the complete DGP raster; use identical origin/scale and no additional mirror.",
+    "Anchor x/y are DGP extra_header+0x10/+0x14 raw values; their native battle-world usage remains unverified.",
+    "Inspection composition draws main then same-frame intrinsic additive contribution. This export does not claim the original battle draw branch or runtime layer order is fully recovered.",
+    "Retained 0x52868a scaled additive routine reads the same physical frame for main and indexed records and processes main rows before auxiliary rows. Its use by this specific battle sample has not been observed.",
+    "Intrinsic validity follows source active_raw and sparse per-frame spans; no independent effect queue/lifetime is invented for this actor-internal layer.",
+    "interval_raw and CHR segment order are preserved; combined animation timing, movement trajectory, camera and original skill replay remain unverified.",
+    "Canvas lighter is approximate. Exact RGB565 inspection first quantizes destination R/B to5 bits and G to6, adds contribution, saturates and expands for display.",
+    "Generic dust/target effects, damage/hit/MP settlement and sounds are outside this bounded layer export."
+  ]
+}

@@ -1,0 +1,221 @@
+{
+  "schema": "seventh-seal-map-effects",
+  "version": 1,
+  "roles": {
+    "013": {
+      "source": {
+        "path": "ROLE/013.dgp",
+        "sha256": "e216994c8474b9ddc31e2941ca8d147384ec7a2c20f644c1bac1f5b1a0b1bbca"
+      },
+      "frame_width": 190,
+      "frame_height": 190,
+      "actions": [
+        {
+          "index": 8,
+          "frame_count": 10,
+          "directions": 8,
+          "interval_raw": 150,
+          "first_frame": 304,
+          "logical_frames": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9
+          ],
+          "intrinsic_sheet": "/assets/map_effects/role_013/action_08_intrinsic.png"
+        }
+      ]
+    },
+    "183": {
+      "source": {
+        "path": "ROLE/183.dgp",
+        "sha256": "dd5ef25a4e7e960283639ce2d2ab624ca0d584e1c936ff3c900ba4d5eb6b80f5"
+      },
+      "frame_width": 150,
+      "frame_height": 170,
+      "actions": [
+        {
+          "index": 0,
+          "frame_count": 15,
+          "directions": 1,
+          "interval_raw": 130,
+          "first_frame": 0,
+          "logical_frames": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14
+          ],
+          "intrinsic_sheet": "/assets/map_effects/role_183/action_00_intrinsic.png"
+        }
+      ]
+    }
+  },
+  "maps": {
+    "M70010": {
+      "map_flag_index": 114,
+      "objects": [
+        {
+          "index": 8,
+          "bank": "m70010_016",
+          "behavior_raw_cf": 4,
+          "source_record_offset": 252130,
+          "initial_frame_raw": 0
+        },
+        {
+          "index": 10,
+          "bank": "m70010_017",
+          "behavior_raw_cf": 4,
+          "source_record_offset": 252678,
+          "initial_frame_raw": 0
+        }
+      ]
+    }
+  },
+  "object_banks": {
+    "m70010_016": {
+      "source": {
+        "path": "mapm/m70010/016.dgp",
+        "sha256": "3a6310a9c04d263212ff2e34cf8e289ba0708eae1ca5eea6e7f2735dca01c520"
+      },
+      "frame_width": 128,
+      "frame_height": 140,
+      "actions": [
+        {
+          "index": 0,
+          "frame_count": 10,
+          "directions": 1,
+          "interval_raw": 110,
+          "first_frame": 0,
+          "logical_frames": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9
+          ],
+          "main_sheet": "/assets/map_effects/m70010_016/action_00_main.png",
+          "intrinsic_sheet": "/assets/map_effects/m70010_016/action_00_intrinsic.png"
+        },
+        {
+          "index": 1,
+          "frame_count": 16,
+          "directions": 1,
+          "interval_raw": 130,
+          "first_frame": 10,
+          "logical_frames": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15
+          ],
+          "main_sheet": "/assets/map_effects/m70010_016/action_01_main.png",
+          "intrinsic_sheet": "/assets/map_effects/m70010_016/action_01_intrinsic.png"
+        }
+      ]
+    },
+    "m70010_017": {
+      "source": {
+        "path": "mapm/m70010/017.dgp",
+        "sha256": "dda14608299ae70edb25e8c3c6739bdf8e294ed5732a85df84673549a8fc8337"
+      },
+      "frame_width": 170,
+      "frame_height": 191,
+      "actions": [
+        {
+          "index": 0,
+          "frame_count": 10,
+          "directions": 1,
+          "interval_raw": 150,
+          "first_frame": 0,
+          "logical_frames": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9
+          ],
+          "main_sheet": "/assets/map_effects/m70010_017/action_00_main.png",
+          "intrinsic_sheet": "/assets/map_effects/m70010_017/action_00_intrinsic.png"
+        },
+        {
+          "index": 1,
+          "frame_count": 16,
+          "directions": 1,
+          "interval_raw": 110,
+          "first_frame": 10,
+          "logical_frames": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15
+          ],
+          "main_sheet": "/assets/map_effects/m70010_017/action_01_main.png",
+          "intrinsic_sheet": "/assets/map_effects/m70010_017/action_01_intrinsic.png"
+        }
+      ]
+    }
+  },
+  "blend": "lighter",
+  "evidence": [
+    "ev_02ca024fc6f9093e9bd38f06052ee2a4f2b2671240c4df2293cf1a50c4e2ae02",
+    "ev_0c237df7043928c88bbdebd562f666aa4b7f4201a779c0a793b1483939fd71d2",
+    "ev_7ff7092a0522a10920b1c81430af56c62cb116c3d66a5af86a35ecb5e9498a5c",
+    "ev_a6647ea0bc3a48a670332ca03d6a4e02d7b145a407b5a5ad2dcfa4ed39b122d1"
+  ],
+  "limits": [
+    "Canvas additive RGB is an 8-bit presentation adaptation of native RGB565/555.",
+    "No original executable execution or pixel/time-identical comparison is claimed."
+  ]
+}

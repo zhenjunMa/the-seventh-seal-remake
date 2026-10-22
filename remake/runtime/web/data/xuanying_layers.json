@@ -1,0 +1,1119 @@
+{
+  "schema": "seventh-seal-skill-layers",
+  "version": 1,
+  "id": "yanci",
+  "name": "炎剑．旋樱斩",
+  "role_id": "001",
+  "frame_width": 539,
+  "frame_height": 439,
+  "anchor": {
+    "x": 266,
+    "y": 324,
+    "source": "DGP extra_header+0x10/+0x14 raw values",
+    "native_use_verified": false
+  },
+  "frames": [
+    {
+      "sequence_index": 0,
+      "segment_index": 0,
+      "action_index": 7,
+      "action_frame": 0,
+      "source_frame": 62,
+      "main": {
+        "path": "assets/skills/xuanying/frame_0062_main.png",
+        "sha256": "a52f9954b8f32213c5fbdcab895a6c6647c771d1fc9ba92ff618b374b3f35510",
+        "rgba_sha256": "241d75d6de9419d51c34a86b82f94ba237f686242b2d510c4eb13c24f0277999",
+        "bounds": [
+          234,
+          243,
+          312,
+          348
+        ],
+        "covered_pixels": 2447,
+        "transparent_pixels": 234174
+      },
+      "intrinsic": {
+        "path": "assets/skills/xuanying/frame_0062_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "sequence_index": 1,
+      "segment_index": 0,
+      "action_index": 7,
+      "action_frame": 1,
+      "source_frame": 63,
+      "main": {
+        "path": "assets/skills/xuanying/frame_0063_main.png",
+        "sha256": "eba54573691e0900a42902e90dd78f3c300bc52982600a108cfd8a7d7b82cf72",
+        "rgba_sha256": "5facda47eacc35afff1faf6dcd87d09e0f9c853a9811930556cd9c7ad20f461d",
+        "bounds": [
+          238,
+          266,
+          327,
+          347
+        ],
+        "covered_pixels": 2186,
+        "transparent_pixels": 234435
+      },
+      "intrinsic": {
+        "path": "assets/skills/xuanying/frame_0063_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "sequence_index": 2,
+      "segment_index": 0,
+      "action_index": 7,
+      "action_frame": 2,
+      "source_frame": 64,
+      "main": {
+        "path": "assets/skills/xuanying/frame_0064_main.png",
+        "sha256": "5b659181fb92fa0c5681023ce5d942165aa67af5d63338f2c6b5b2d0b98360d2",
+        "rgba_sha256": "2138eb28000c5ec09bff3997758776f694eba58bd49f43999adfe82ab0683314",
+        "bounds": [
+          247,
+          286,
+          338,
+          347
+        ],
+        "covered_pixels": 1942,
+        "transparent_pixels": 234679
+      },
+      "intrinsic": {
+        "path": "assets/skills/xuanying/frame_0064_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "sequence_index": 3,
+      "segment_index": 0,
+      "action_index": 7,
+      "action_frame": 3,
+      "source_frame": 65,
+      "main": {
+        "path": "assets/skills/xuanying/frame_0065_main.png",
+        "sha256": "39ddf07905ee89f57d8409a80217a156fe5ac707f7e5c19b7c58a9573ae52b4c",
+        "rgba_sha256": "d0e26c2e2530c79971e2f234d483a5878f453e57f47dec5fe8587bf3f0fa89ad",
+        "bounds": [
+          247,
+          274,
+          326,
+          346
+        ],
+        "covered_pixels": 2304,
+        "transparent_pixels": 234317
+      },
+      "intrinsic": {
+        "path": "assets/skills/xuanying/frame_0065_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "sequence_index": 4,
+      "segment_index": 1,
+      "action_index": 11,
+      "action_frame": 0,
+      "source_frame": 78,
+      "main": {
+        "path": "assets/skills/xuanying/frame_0078_main.png",
+        "sha256": "03189493c20f75664962728c525b8a9e142c124ce7cb9593f1a2313cd9073cb7",
+        "rgba_sha256": "7789e91cb8c317906b8c4e37c94cf6770d73b1dd76c3cc6e012e29a2019bba50",
+        "bounds": [
+          220,
+          260,
+          321,
+          345
+        ],
+        "covered_pixels": 2536,
+        "transparent_pixels": 234085
+      },
+      "intrinsic": {
+        "path": "assets/skills/xuanying/frame_0078_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "sequence_index": 5,
+      "segment_index": 1,
+      "action_index": 11,
+      "action_frame": 1,
+      "source_frame": 79,
+      "main": {
+        "path": "assets/skills/xuanying/frame_0079_main.png",
+        "sha256": "b576ba5e76c380ab610a0702c804dd5ed11c7d138fb624c745c6b9efd7815956",
+        "rgba_sha256": "d55a33926766fe6b6b827ea209752a08dc8eb5fc88c2718bf4732a1493f6fdac",
+        "bounds": [
+          190,
+          243,
+          327,
+          332
+        ],
+        "covered_pixels": 2566,
+        "transparent_pixels": 234055
+      },
+      "intrinsic": {
+        "path": "assets/skills/xuanying/frame_0079_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "sequence_index": 6,
+      "segment_index": 1,
+      "action_index": 11,
+      "action_frame": 2,
+      "source_frame": 80,
+      "main": {
+        "path": "assets/skills/xuanying/frame_0080_main.png",
+        "sha256": "013b15e6ffdf8bc4391661fd596b3dda4bbd5bd9874e539d0eef7c258feb2562",
+        "rgba_sha256": "3438335721a781a605f333b4debff8f8425f58ebfb6f8ec622d6a66358dca412",
+        "bounds": [
+          189,
+          269,
+          320,
+          342
+        ],
+        "covered_pixels": 2632,
+        "transparent_pixels": 233989
+      },
+      "intrinsic": {
+        "path": "assets/skills/xuanying/frame_0080_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "sequence_index": 7,
+      "segment_index": 2,
+      "action_index": 8,
+      "action_frame": 0,
+      "source_frame": 66,
+      "main": {
+        "path": "assets/skills/xuanying/frame_0066_main.png",
+        "sha256": "c6271b85ae42058a327c1cbc312f7b6490ac313a49eb74f4f9b70471c9785c8a",
+        "rgba_sha256": "946e713f827f88eca5645ccc83cac13880a2f97728389fd6f9396869d84268c0",
+        "bounds": [
+          189,
+          291,
+          304,
+          346
+        ],
+        "covered_pixels": 2346,
+        "transparent_pixels": 234275
+      },
+      "intrinsic": {
+        "path": "assets/skills/xuanying/frame_0066_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "sequence_index": 8,
+      "segment_index": 2,
+      "action_index": 8,
+      "action_frame": 1,
+      "source_frame": 67,
+      "main": {
+        "path": "assets/skills/xuanying/frame_0067_main.png",
+        "sha256": "3a655230a71227944e680a296233895e732a1b7a13720c4b4d36a21fc035aa45",
+        "rgba_sha256": "5ad63017f1819f901a66065fb81c6ead57dff016948510a6b3cad19d7d9af7b6",
+        "bounds": [
+          198,
+          266,
+          305,
+          347
+        ],
+        "covered_pixels": 2565,
+        "transparent_pixels": 234056
+      },
+      "intrinsic": {
+        "path": "assets/skills/xuanying/frame_0067_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "sequence_index": 9,
+      "segment_index": 2,
+      "action_index": 8,
+      "action_frame": 2,
+      "source_frame": 68,
+      "main": {
+        "path": "assets/skills/xuanying/frame_0068_main.png",
+        "sha256": "eba8364567da43f444f71d5509d1bfa3ce6c26b7fe543ce782d483eab2422ae8",
+        "rgba_sha256": "4293945dbb443496d86d0e2056a2a198fc5cbd4c30be1d4d490f397f8d0d81b7",
+        "bounds": [
+          219,
+          241,
+          305,
+          348
+        ],
+        "covered_pixels": 2644,
+        "transparent_pixels": 233977
+      },
+      "intrinsic": {
+        "path": "assets/skills/xuanying/frame_0068_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "sequence_index": 10,
+      "segment_index": 3,
+      "action_index": 27,
+      "action_frame": 0,
+      "source_frame": 319,
+      "main": {
+        "path": "assets/skills/xuanying/frame_0319_main.png",
+        "sha256": "c928924cf43041754fca0b6ea1d91b183abd7e9aa37fc1a52fad8a11666360a9",
+        "rgba_sha256": "a20047b67c70dd6d3285b9dfc3a5dba7e5f256d35dffe75eedf3fd5613c82f67",
+        "bounds": [
+          232,
+          231,
+          307,
+          347
+        ],
+        "covered_pixels": 2395,
+        "transparent_pixels": 234226
+      },
+      "intrinsic": {
+        "path": "assets/skills/xuanying/frame_0319_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "sequence_index": 11,
+      "segment_index": 3,
+      "action_index": 27,
+      "action_frame": 1,
+      "source_frame": 320,
+      "main": {
+        "path": "assets/skills/xuanying/frame_0320_main.png",
+        "sha256": "16b26d24ecebabd408b29c50b41f9ca928b96dcd518d7aac3a051512ff9ec83a",
+        "rgba_sha256": "39a0c7f43a0ad26e183f527c8406d33d432e89a7976a48033f40d9777314bb63",
+        "bounds": [
+          231,
+          235,
+          310,
+          346
+        ],
+        "covered_pixels": 2319,
+        "transparent_pixels": 234302
+      },
+      "intrinsic": {
+        "path": "assets/skills/xuanying/frame_0320_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "sequence_index": 12,
+      "segment_index": 3,
+      "action_index": 27,
+      "action_frame": 2,
+      "source_frame": 321,
+      "main": {
+        "path": "assets/skills/xuanying/frame_0321_main.png",
+        "sha256": "031b1dbef34d91ff5f4f36674d12795ebf4a4d2868b739f89cfeff1e684f0976",
+        "rgba_sha256": "8812f4de9b0191941d717227d655eea44c77209a877f2847412fa1642be5860a",
+        "bounds": [
+          230,
+          237,
+          312,
+          345
+        ],
+        "covered_pixels": 2476,
+        "transparent_pixels": 234145
+      },
+      "intrinsic": {
+        "path": "assets/skills/xuanying/frame_0321_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "sequence_index": 13,
+      "segment_index": 3,
+      "action_index": 27,
+      "action_frame": 3,
+      "source_frame": 322,
+      "main": {
+        "path": "assets/skills/xuanying/frame_0322_main.png",
+        "sha256": "6f4e483d98e096c2736eee7a97b7aaccae92a432911cdaf91ea5ed860985f1fb",
+        "rgba_sha256": "c1bc180a9f3ae4a3dcf2179222b1b8d5e348d4d30aac2fce4fb7aa0b6fd9f41a",
+        "bounds": [
+          226,
+          235,
+          313,
+          345
+        ],
+        "covered_pixels": 2492,
+        "transparent_pixels": 234129
+      },
+      "intrinsic": {
+        "path": "assets/skills/xuanying/frame_0322_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "sequence_index": 14,
+      "segment_index": 3,
+      "action_index": 27,
+      "action_frame": 4,
+      "source_frame": 323,
+      "main": {
+        "path": "assets/skills/xuanying/frame_0323_main.png",
+        "sha256": "9dc83f82cabac9a76ebaa32d6bf87a03673f80e8ffee548a213fd128cfa4ac26",
+        "rgba_sha256": "451274516bbe8876aeefb452a5df73bdbbeb6483f3842e62e434c298f10ce4d1",
+        "bounds": [
+          224,
+          231,
+          313,
+          346
+        ],
+        "covered_pixels": 2499,
+        "transparent_pixels": 234122
+      },
+      "intrinsic": {
+        "path": "assets/skills/xuanying/frame_0323_intrinsic.png",
+        "sha256": "6b45e856c2bb6fba441c5e8c44855d59652c99eb32d25808aa371de9b3ce8039",
+        "rgba_sha256": "db153041ebb551ef7eadec5d49a3259e99a10dbcb432582960e8be25709216a5",
+        "bounds": [
+          154,
+          138,
+          306,
+          296
+        ],
+        "covered_pixels": 9218,
+        "transparent_pixels": 227403,
+        "active": true
+      }
+    },
+    {
+      "sequence_index": 15,
+      "segment_index": 3,
+      "action_index": 27,
+      "action_frame": 5,
+      "source_frame": 324,
+      "main": {
+        "path": "assets/skills/xuanying/frame_0324_main.png",
+        "sha256": "264bfd9be3abb9d745e511e704d6fa575ceae2bfe0c432d28d5769811ee21634",
+        "rgba_sha256": "11eeabb41a371561c37c34072541b05dbaa0072ed65ce4c78c9e2bb017e2acf9",
+        "bounds": [
+          225,
+          233,
+          313,
+          346
+        ],
+        "covered_pixels": 2565,
+        "transparent_pixels": 234056
+      },
+      "intrinsic": {
+        "path": "assets/skills/xuanying/frame_0324_intrinsic.png",
+        "sha256": "aebb69f5e2ceb591114cd04a85026d08774f5ef8ae6ac1d78094e04368da6a50",
+        "rgba_sha256": "9c95dd22e68375f61410ec8f959d1d8672ced813056f60a321065bf9537e2877",
+        "bounds": [
+          166,
+          135,
+          310,
+          300
+        ],
+        "covered_pixels": 10522,
+        "transparent_pixels": 226099,
+        "active": true
+      }
+    },
+    {
+      "sequence_index": 16,
+      "segment_index": 3,
+      "action_index": 27,
+      "action_frame": 6,
+      "source_frame": 325,
+      "main": {
+        "path": "assets/skills/xuanying/frame_0325_main.png",
+        "sha256": "de106685dc827600042e033c9d831a99b38e8cb3499c24bcd199bfba4c6ee271",
+        "rgba_sha256": "143376457b8394f94099842627db6e33bc1b618ad40e0e37ac5b6e38885381e4",
+        "bounds": [
+          227,
+          238,
+          313,
+          346
+        ],
+        "covered_pixels": 2496,
+        "transparent_pixels": 234125
+      },
+      "intrinsic": {
+        "path": "assets/skills/xuanying/frame_0325_intrinsic.png",
+        "sha256": "775fe6abaac289c732c3df810114649fc08277dc51be40579150b594176a0cae",
+        "rgba_sha256": "0f097872691fccd08e801069db30cdc56fcae7549290de7429542f910915a14a",
+        "bounds": [
+          129,
+          137,
+          379,
+          332
+        ],
+        "covered_pixels": 21054,
+        "transparent_pixels": 215567,
+        "active": true
+      }
+    },
+    {
+      "sequence_index": 17,
+      "segment_index": 3,
+      "action_index": 27,
+      "action_frame": 7,
+      "source_frame": 326,
+      "main": {
+        "path": "assets/skills/xuanying/frame_0326_main.png",
+        "sha256": "57a064f6f8d33f774a7c12301cb4835af77f362ece292362ca3a4a4b6672c3a6",
+        "rgba_sha256": "76ed7a6d7df248850034c676c3fa9ee3f8c23955e03645910594913924831059",
+        "bounds": [
+          208,
+          240,
+          311,
+          346
+        ],
+        "covered_pixels": 2485,
+        "transparent_pixels": 234136
+      },
+      "intrinsic": {
+        "path": "assets/skills/xuanying/frame_0326_intrinsic.png",
+        "sha256": "7532d62b963aadcddf6c13b7a363f36802f1cdc81ea0f7f1c1695763962dd077",
+        "rgba_sha256": "9fcde1ae563eea7cbd5e37a368cb08546bf005280bfb3e3e5b2e4fff667e6afc",
+        "bounds": [
+          114,
+          133,
+          384,
+          351
+        ],
+        "covered_pixels": 30307,
+        "transparent_pixels": 206314,
+        "active": true
+      }
+    },
+    {
+      "sequence_index": 18,
+      "segment_index": 3,
+      "action_index": 27,
+      "action_frame": 8,
+      "source_frame": 327,
+      "main": {
+        "path": "assets/skills/xuanying/frame_0327_main.png",
+        "sha256": "38441bc7df9d3a521b139d4ffd14de1d822c62af0fad1001c0b685b295578be9",
+        "rgba_sha256": "4e53a4aa099a51f27d0b8544da020d9262f7a168960dcb4f9c845fee4ffc9b1d",
+        "bounds": [
+          206,
+          251,
+          309,
+          345
+        ],
+        "covered_pixels": 2397,
+        "transparent_pixels": 234224
+      },
+      "intrinsic": {
+        "path": "assets/skills/xuanying/frame_0327_intrinsic.png",
+        "sha256": "eac9dad986485ed01dd812bab82947d6f72bb9030dcc217e4496ca3a5f9b86f1",
+        "rgba_sha256": "9bb03a54df9ae2437ae3d1ce185fb1605ec6bc7cd83bee8f3b6cff9ceabc1be0",
+        "bounds": [
+          104,
+          166,
+          390,
+          361
+        ],
+        "covered_pixels": 27258,
+        "transparent_pixels": 209363,
+        "active": true
+      }
+    },
+    {
+      "sequence_index": 19,
+      "segment_index": 3,
+      "action_index": 27,
+      "action_frame": 9,
+      "source_frame": 328,
+      "main": {
+        "path": "assets/skills/xuanying/frame_0328_main.png",
+        "sha256": "318dda227b1100fb55beafdde367d9b6ec217391aae340ba47806563ec1f71a2",
+        "rgba_sha256": "01e67e2070055b526755e01dd0dd96e42bf034b3d1c2dd55447bde71eb958f96",
+        "bounds": [
+          201,
+          249,
+          307,
+          345
+        ],
+        "covered_pixels": 2458,
+        "transparent_pixels": 234163
+      },
+      "intrinsic": {
+        "path": "assets/skills/xuanying/frame_0328_intrinsic.png",
+        "sha256": "f1cca42579cd39275bda230c458f29a7e114e40bdc8e36ce539b98c8e55e800d",
+        "rgba_sha256": "bcae3572c6cadbe3980ec82dd1f81bb68995a359e4da6b8530790d10730903d9",
+        "bounds": [
+          99,
+          190,
+          390,
+          368
+        ],
+        "covered_pixels": 28089,
+        "transparent_pixels": 208532,
+        "active": true
+      }
+    },
+    {
+      "sequence_index": 20,
+      "segment_index": 3,
+      "action_index": 27,
+      "action_frame": 10,
+      "source_frame": 329,
+      "main": {
+        "path": "assets/skills/xuanying/frame_0329_main.png",
+        "sha256": "d1739c01fba474d5c3d0366552e51ff8cab55fa6e3da4b8d23f0158b06f0468e",
+        "rgba_sha256": "9dcf161047e028805f86965ae92ce1332762c0f60150dc9b737962c47b35c35d",
+        "bounds": [
+          204,
+          256,
+          307,
+          346
+        ],
+        "covered_pixels": 2435,
+        "transparent_pixels": 234186
+      },
+      "intrinsic": {
+        "path": "assets/skills/xuanying/frame_0329_intrinsic.png",
+        "sha256": "60c0884508a2eda91a3e800e64e8fe08e1c38f908e91a9a94e7306556e448b57",
+        "rgba_sha256": "ef5904058f5b2d103fb3731bfde1b2801aa703e51ae0fe319d20b9ae5442179c",
+        "bounds": [
+          94,
+          192,
+          349,
+          373
+        ],
+        "covered_pixels": 24314,
+        "transparent_pixels": 212307,
+        "active": true
+      }
+    },
+    {
+      "sequence_index": 21,
+      "segment_index": 3,
+      "action_index": 27,
+      "action_frame": 11,
+      "source_frame": 330,
+      "main": {
+        "path": "assets/skills/xuanying/frame_0330_main.png",
+        "sha256": "cfeb59416bfa8d3c9484a9104c4c6beb9254e02c83506e1a11fa5bbb353ba957",
+        "rgba_sha256": "2ae1142e2800bd6e62695aeeec2106d55344aeb0dd9ccb44112f61bf1e420835",
+        "bounds": [
+          211,
+          262,
+          306,
+          346
+        ],
+        "covered_pixels": 2396,
+        "transparent_pixels": 234225
+      },
+      "intrinsic": {
+        "path": "assets/skills/xuanying/frame_0330_intrinsic.png",
+        "sha256": "0cbca0fe869a6096f7a49668042480e15155ead93da088f3a1f820f82937fb7b",
+        "rgba_sha256": "e93d70a1e8266168bf7754cffa3894947bb7671d500608f274a3dbf3001be53a",
+        "bounds": [
+          88,
+          187,
+          342,
+          379
+        ],
+        "covered_pixels": 22169,
+        "transparent_pixels": 214452,
+        "active": true
+      }
+    },
+    {
+      "sequence_index": 22,
+      "segment_index": 3,
+      "action_index": 27,
+      "action_frame": 12,
+      "source_frame": 331,
+      "main": {
+        "path": "assets/skills/xuanying/frame_0331_main.png",
+        "sha256": "91395ee208e88f16cc1e9206274bbbdc76aaded3d8a7739419e708bfac7b3479",
+        "rgba_sha256": "df1093c0a5db7bccb1731f1831cc33fc6d8f18e3a6580a0f69669244dad21fe7",
+        "bounds": [
+          217,
+          253,
+          306,
+          347
+        ],
+        "covered_pixels": 2583,
+        "transparent_pixels": 234038
+      },
+      "intrinsic": {
+        "path": "assets/skills/xuanying/frame_0331_intrinsic.png",
+        "sha256": "bce144219fe4be2ad6d156b7ab85865b7ed3a054dbfc7b99183056233279e57e",
+        "rgba_sha256": "90ea898b77d8672bd7711a7312b04ccc777dea35023647c87c2fec43c71e57f0",
+        "bounds": [
+          84,
+          187,
+          336,
+          378
+        ],
+        "covered_pixels": 14100,
+        "transparent_pixels": 222521,
+        "active": true
+      }
+    },
+    {
+      "sequence_index": 23,
+      "segment_index": 3,
+      "action_index": 27,
+      "action_frame": 13,
+      "source_frame": 332,
+      "main": {
+        "path": "assets/skills/xuanying/frame_0332_main.png",
+        "sha256": "465fd72c4c824240fa47c7c644a7071f1c6708794150003a2df07b9ab85fa783",
+        "rgba_sha256": "ceaac75eff6986fa701b8cc9fcac1b2e290d5b09751f549b38c4ee2faeb6f082",
+        "bounds": [
+          221,
+          239,
+          306,
+          347
+        ],
+        "covered_pixels": 2670,
+        "transparent_pixels": 233951
+      },
+      "intrinsic": {
+        "path": "assets/skills/xuanying/frame_0332_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "sequence_index": 24,
+      "segment_index": 4,
+      "action_index": 9,
+      "action_frame": 0,
+      "source_frame": 69,
+      "main": {
+        "path": "assets/skills/xuanying/frame_0069_main.png",
+        "sha256": "96dd588f269e034eca7a6cbe2eabd66a765f6e51f73ec5e37c7afe6c7c875adc",
+        "rgba_sha256": "9bb7f55970eb3d7ea6fe595f44144c0504e0003d8d3e1433394b59fd00945d98",
+        "bounds": [
+          231,
+          240,
+          305,
+          348
+        ],
+        "covered_pixels": 2552,
+        "transparent_pixels": 234069
+      },
+      "intrinsic": {
+        "path": "assets/skills/xuanying/frame_0069_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "sequence_index": 25,
+      "segment_index": 4,
+      "action_index": 9,
+      "action_frame": 1,
+      "source_frame": 70,
+      "main": {
+        "path": "assets/skills/xuanying/frame_0070_main.png",
+        "sha256": "6dc0a16d3bce43d72f27163d5322b79944d22c7ba33eeecad6797d5abb641c18",
+        "rgba_sha256": "3d84f3a54524ee89a04d8a278dc5c1adeec06c45303ac0866ea0fa52e0e5cb1f",
+        "bounds": [
+          221,
+          268,
+          305,
+          348
+        ],
+        "covered_pixels": 2343,
+        "transparent_pixels": 234278
+      },
+      "intrinsic": {
+        "path": "assets/skills/xuanying/frame_0070_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "sequence_index": 26,
+      "segment_index": 4,
+      "action_index": 9,
+      "action_frame": 2,
+      "source_frame": 71,
+      "main": {
+        "path": "assets/skills/xuanying/frame_0071_main.png",
+        "sha256": "e40b53d6bbe7aa3528b59bc5f7226f98662dd1189d03c6c8bed8ee383a9f925f",
+        "rgba_sha256": "a0cc018cf36d548602631b6d1bef6ee0e22dbcdc7d323546c8ff49c7d804c864",
+        "bounds": [
+          195,
+          277,
+          306,
+          349
+        ],
+        "covered_pixels": 2652,
+        "transparent_pixels": 233969
+      },
+      "intrinsic": {
+        "path": "assets/skills/xuanying/frame_0071_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "sequence_index": 27,
+      "segment_index": 4,
+      "action_index": 9,
+      "action_frame": 3,
+      "source_frame": 72,
+      "main": {
+        "path": "assets/skills/xuanying/frame_0072_main.png",
+        "sha256": "9c6929efdb6df5c3db6eaa83f469def41206809d373a98325eb85bd735668916",
+        "rgba_sha256": "71016e953c51357d99ee4fefa55677ddf2a5905af1e38a217a6c6895414d3dfd",
+        "bounds": [
+          208,
+          284,
+          305,
+          349
+        ],
+        "covered_pixels": 2432,
+        "transparent_pixels": 234189
+      },
+      "intrinsic": {
+        "path": "assets/skills/xuanying/frame_0072_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "sequence_index": 28,
+      "segment_index": 5,
+      "action_index": 12,
+      "action_frame": 0,
+      "source_frame": 81,
+      "main": {
+        "path": "assets/skills/xuanying/frame_0081_main.png",
+        "sha256": "76050cc9aefd42a83ff770067629860a520b94d1dae58c7b245cb01c9592c928",
+        "rgba_sha256": "f26072ccf2286905411f24936bed19a8ccde9b3ebadc90dd437a76b09c9fbd5c",
+        "bounds": [
+          221,
+          249,
+          300,
+          337
+        ],
+        "covered_pixels": 2190,
+        "transparent_pixels": 234431
+      },
+      "intrinsic": {
+        "path": "assets/skills/xuanying/frame_0081_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "sequence_index": 29,
+      "segment_index": 5,
+      "action_index": 12,
+      "action_frame": 1,
+      "source_frame": 82,
+      "main": {
+        "path": "assets/skills/xuanying/frame_0082_main.png",
+        "sha256": "ca30f29d806bece7661f38c4b908fe2c03aa17f6140409fa912acdf0184d11a4",
+        "rgba_sha256": "8d9986fdbcb69b4e28d5c2907886c47e6feb12f1ddf81bc66b9d6e8e54ea636b",
+        "bounds": [
+          226,
+          227,
+          316,
+          323
+        ],
+        "covered_pixels": 2374,
+        "transparent_pixels": 234247
+      },
+      "intrinsic": {
+        "path": "assets/skills/xuanying/frame_0082_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "sequence_index": 30,
+      "segment_index": 5,
+      "action_index": 12,
+      "action_frame": 2,
+      "source_frame": 83,
+      "main": {
+        "path": "assets/skills/xuanying/frame_0083_main.png",
+        "sha256": "4dd11dbbec44bd256f5057e8cd7f448bf6f60db6337e276db10add13c85a525b",
+        "rgba_sha256": "3c2d5baedebf614f3a1f3ca5e6f840cc8ebef12229e486b69f31477f1463bd4c",
+        "bounds": [
+          241,
+          241,
+          312,
+          335
+        ],
+        "covered_pixels": 2363,
+        "transparent_pixels": 234258
+      },
+      "intrinsic": {
+        "path": "assets/skills/xuanying/frame_0083_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "sequence_index": 31,
+      "segment_index": 6,
+      "action_index": 10,
+      "action_frame": 0,
+      "source_frame": 73,
+      "main": {
+        "path": "assets/skills/xuanying/frame_0073_main.png",
+        "sha256": "b6a05a0b8797015338609697ef5a2fbf101bface2beb81c76da3f29ddbf271e3",
+        "rgba_sha256": "b9ee78ee99c834d2d01572efe43ffe29622b4f595e4e17f61351f6e2c97e125a",
+        "bounds": [
+          243,
+          293,
+          327,
+          349
+        ],
+        "covered_pixels": 1796,
+        "transparent_pixels": 234825
+      },
+      "intrinsic": {
+        "path": "assets/skills/xuanying/frame_0073_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "sequence_index": 32,
+      "segment_index": 6,
+      "action_index": 10,
+      "action_frame": 1,
+      "source_frame": 74,
+      "main": {
+        "path": "assets/skills/xuanying/frame_0074_main.png",
+        "sha256": "33a17d052cf5ad952f2a75bc808600861375ed27312c604e0486bbb976b5fc23",
+        "rgba_sha256": "b14b58ab3825832f65d98803fadc705a004b0b7de9e02231a7efab4ae5cc498e",
+        "bounds": [
+          241,
+          287,
+          326,
+          348
+        ],
+        "covered_pixels": 1847,
+        "transparent_pixels": 234774
+      },
+      "intrinsic": {
+        "path": "assets/skills/xuanying/frame_0074_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "sequence_index": 33,
+      "segment_index": 6,
+      "action_index": 10,
+      "action_frame": 2,
+      "source_frame": 75,
+      "main": {
+        "path": "assets/skills/xuanying/frame_0075_main.png",
+        "sha256": "9ae0c492163f80d686a4f6cda9c6301d0057c78347849f087a2cf40eff655bbb",
+        "rgba_sha256": "026e0df9b060370545ea479e4600a35d2f81c170dab85f8860b75604afc234a4",
+        "bounds": [
+          239,
+          272,
+          319,
+          348
+        ],
+        "covered_pixels": 2044,
+        "transparent_pixels": 234577
+      },
+      "intrinsic": {
+        "path": "assets/skills/xuanying/frame_0075_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "sequence_index": 34,
+      "segment_index": 6,
+      "action_index": 10,
+      "action_frame": 3,
+      "source_frame": 76,
+      "main": {
+        "path": "assets/skills/xuanying/frame_0076_main.png",
+        "sha256": "c9fafef5d71055abf137755c9d40187c8dea08a1c58aa3b4c39e889091a216cf",
+        "rgba_sha256": "8736c09c069e3e20c7605b20a0818804fa47ca4a5b64b67e8e213706804faa33",
+        "bounds": [
+          237,
+          252,
+          311,
+          348
+        ],
+        "covered_pixels": 2285,
+        "transparent_pixels": 234336
+      },
+      "intrinsic": {
+        "path": "assets/skills/xuanying/frame_0076_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "sequence_index": 35,
+      "segment_index": 6,
+      "action_index": 10,
+      "action_frame": 4,
+      "source_frame": 77,
+      "main": {
+        "path": "assets/skills/xuanying/frame_0077_main.png",
+        "sha256": "5384d04f80934dc06d748f747558cb89c7b0e6cf1555307a3fd590c85762fc98",
+        "rgba_sha256": "cd43dd67eeb19fb69f8501ccbc31c16cfb16a34e37f89d360135b9ce0187e813",
+        "bounds": [
+          234,
+          238,
+          305,
+          348
+        ],
+        "covered_pixels": 2507,
+        "transparent_pixels": 234114
+      },
+      "intrinsic": {
+        "path": "assets/skills/xuanying/frame_0077_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    }
+  ],
+  "source_hashes": {
+    "GAME.exe": "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18",
+    "Fight_Role/001.CHR": "37ce92ab57622d2cce022b4a9b8add9b29789f89d82bc369ea7352f38ca75c0a",
+    "Fight_Role/001.dgp": "df86e4089870c720beee6c8fb216ee1f85156b061c69433a6ce767ce9dee6b49"
+  },
+  "evidence": [
+    "ev_0c237df7043928c88bbdebd562f666aa4b7f4201a779c0a793b1483939fd71d2",
+    "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+    "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+  ],
+  "limits": [
+    "Source main/intrinsic pairs, additive Canvas approximation; original exact timing and RGB565 destination remain outside this view."
+  ]
+}

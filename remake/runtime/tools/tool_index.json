@@ -1,0 +1,824 @@
+{
+  "schema": "seventh-seal-tool-index",
+  "version": 1,
+  "updated": "2026-10-22",
+  "registered_steps": 32,
+  "content_plan": [
+    "chapter-maps",
+    "chapter-story",
+    "enemies",
+    "party-combat",
+    "party-skills",
+    "enemy-rewards",
+    "encounters",
+    "configuration",
+    "catalog",
+    "party-rewards",
+    "items",
+    "item-presentation",
+    "forest-stage",
+    "battle-ui",
+    "battle-lifecycle",
+    "skill-test",
+    "battle-result",
+    "battle-packs",
+    "audio",
+    "menu",
+    "menu-techniques",
+    "menu-fonts",
+    "content"
+  ],
+  "tools": [
+    {
+      "path": "battle_pack_inventory.mjs",
+      "role": "independent-source-export",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "build_catalog.py",
+      "role": "registered-build",
+      "build_targets": [
+        "catalog"
+      ],
+      "imported_by": []
+    },
+    {
+      "path": "build_runtime.py",
+      "role": "daily-entry",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "capture_original_window.py",
+      "role": "source-observation",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "chapter_walk_path.py",
+      "role": "independent-source-export",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "content_registration.py",
+      "role": "shared-current",
+      "build_targets": [],
+      "imported_by": [
+        "build_catalog.py",
+        "build_runtime.py",
+        "export_audio.py",
+        "export_battle_lifecycle.py",
+        "export_chapter_maps.py",
+        "export_chapter_story.py",
+        "export_encounters.py",
+        "export_enemy_content.py",
+        "export_forest_rewards.py",
+        "export_item_presentation.py",
+        "export_operation_menu.py",
+        "export_party_combat.py",
+        "export_party_rewards.py",
+        "export_party_skills.py"
+      ]
+    },
+    {
+      "path": "create_battle_alignment_fixture.mjs",
+      "role": "fixture-or-observation-preparation",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "create_battle_lifecycle_fixture.mjs",
+      "role": "fixture-or-observation-preparation",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "create_map_effects_fixture.mjs",
+      "role": "fixture-or-observation-preparation",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "create_map_viewport_fixture.mjs",
+      "role": "fixture-or-observation-preparation",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "create_menu_finish_fixture.mjs",
+      "role": "fixture-or-observation-preparation",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "create_menu_socket_fixture.mjs",
+      "role": "fixture-or-observation-preparation",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "create_npc_motion_fixture.mjs",
+      "role": "fixture-or-observation-preparation",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "export_audio.py",
+      "role": "registered-build",
+      "build_targets": [
+        "audio"
+      ],
+      "imported_by": []
+    },
+    {
+      "path": "export_battle_lifecycle.py",
+      "role": "registered-build",
+      "build_targets": [
+        "battle-lifecycle"
+      ],
+      "imported_by": []
+    },
+    {
+      "path": "export_battle_packs.py",
+      "role": "registered-build",
+      "build_targets": [
+        "battle-packs"
+      ],
+      "imported_by": []
+    },
+    {
+      "path": "export_battle_result.py",
+      "role": "registered-build",
+      "build_targets": [
+        "battle-result"
+      ],
+      "imported_by": []
+    },
+    {
+      "path": "export_battle_scheduler.py",
+      "role": "independent-source-export",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "export_battle_ui.py",
+      "role": "registered-build",
+      "build_targets": [
+        "battle-ui"
+      ],
+      "imported_by": [
+        "export_battle_result.py",
+        "export_prologue_presentation.py"
+      ]
+    },
+    {
+      "path": "export_battle_view.py",
+      "role": "shared-current",
+      "build_targets": [],
+      "imported_by": [
+        "export_enemy_content.py",
+        "export_forest_skills.py",
+        "export_party_skills.py",
+        "export_route.py"
+      ]
+    },
+    {
+      "path": "export_chapter_items.py",
+      "role": "registered-build",
+      "build_targets": [
+        "items"
+      ],
+      "imported_by": []
+    },
+    {
+      "path": "export_chapter_maps.py",
+      "role": "registered-build",
+      "build_targets": [
+        "chapter-maps"
+      ],
+      "imported_by": []
+    },
+    {
+      "path": "export_chapter_recovery.py",
+      "role": "registered-build",
+      "build_targets": [
+        "recovery"
+      ],
+      "imported_by": []
+    },
+    {
+      "path": "export_chapter_story.py",
+      "role": "registered-build",
+      "build_targets": [
+        "chapter-story"
+      ],
+      "imported_by": []
+    },
+    {
+      "path": "export_combat_rules.py",
+      "role": "independent-source-export",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "export_combat_sample.py",
+      "role": "shared-current",
+      "build_targets": [],
+      "imported_by": [
+        "export_enemy_content.py",
+        "export_forest_ai.py",
+        "export_party_combat.py",
+        "export_route.py"
+      ]
+    },
+    {
+      "path": "export_content_registry.mjs",
+      "role": "registered-build",
+      "build_targets": [
+        "content"
+      ],
+      "imported_by": []
+    },
+    {
+      "path": "export_dialogue_ui.py",
+      "role": "registered-build",
+      "build_targets": [
+        "dialogue-ui"
+      ],
+      "imported_by": []
+    },
+    {
+      "path": "export_encounters.py",
+      "role": "registered-build",
+      "build_targets": [
+        "encounters"
+      ],
+      "imported_by": []
+    },
+    {
+      "path": "export_enemy_content.py",
+      "role": "registered-build",
+      "build_targets": [
+        "enemies"
+      ],
+      "imported_by": []
+    },
+    {
+      "path": "export_events.py",
+      "role": "independent-source-export",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "export_forest_ai.py",
+      "role": "shared-current",
+      "build_targets": [],
+      "imported_by": [
+        "export_enemy_content.py"
+      ]
+    },
+    {
+      "path": "export_forest_presentation.py",
+      "role": "independent-source-export",
+      "build_targets": [],
+      "imported_by": [
+        "export_route.py"
+      ]
+    },
+    {
+      "path": "export_forest_reactions.py",
+      "role": "independent-source-export",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "export_forest_rewards.py",
+      "role": "registered-build",
+      "build_targets": [
+        "enemy-rewards"
+      ],
+      "imported_by": []
+    },
+    {
+      "path": "export_forest_skills.py",
+      "role": "independent-source-export",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "export_forest_stage.py",
+      "role": "registered-build",
+      "build_targets": [
+        "forest-stage"
+      ],
+      "imported_by": [
+        "export_skill_test.py"
+      ]
+    },
+    {
+      "path": "export_forest_status.py",
+      "role": "independent-source-export",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "export_gameover_video.py",
+      "role": "independent-source-export",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "export_item_presentation.py",
+      "role": "registered-build",
+      "build_targets": [
+        "item-presentation"
+      ],
+      "imported_by": []
+    },
+    {
+      "path": "export_map_effects.py",
+      "role": "registered-build",
+      "build_targets": [
+        "map-effects"
+      ],
+      "imported_by": []
+    },
+    {
+      "path": "export_maps.py",
+      "role": "shared-current",
+      "build_targets": [],
+      "imported_by": [
+        "export_chapter_maps.py",
+        "export_opening_maps.py",
+        "route_export_maps.py"
+      ]
+    },
+    {
+      "path": "export_menu_font_gdi.py",
+      "role": "shared-current",
+      "build_targets": [],
+      "imported_by": [
+        "export_dialogue_ui.py",
+        "export_menu_text_gdi.py",
+        "export_prologue_presentation.py"
+      ]
+    },
+    {
+      "path": "export_menu_techniques.py",
+      "role": "registered-build",
+      "build_targets": [
+        "menu-techniques"
+      ],
+      "imported_by": []
+    },
+    {
+      "path": "export_menu_text_gdi.py",
+      "role": "registered-build",
+      "build_targets": [
+        "menu-fonts"
+      ],
+      "imported_by": [
+        "export_menu_font_gdi.py",
+        "verify_menu_finish.py",
+        "verify_menu_focus.py",
+        "verify_technique_list.py",
+        "verify_technique_replace.py"
+      ]
+    },
+    {
+      "path": "export_opening_maps.py",
+      "role": "registered-build",
+      "build_targets": [
+        "opening-maps"
+      ],
+      "imported_by": []
+    },
+    {
+      "path": "export_opening_seed.py",
+      "role": "registered-build",
+      "build_targets": [
+        "opening-seed"
+      ],
+      "imported_by": []
+    },
+    {
+      "path": "export_operation_menu.py",
+      "role": "registered-build",
+      "build_targets": [
+        "menu"
+      ],
+      "imported_by": [
+        "export_battle_ui.py",
+        "export_menu_techniques.py",
+        "export_world_map_ui.py"
+      ]
+    },
+    {
+      "path": "export_party_combat.py",
+      "role": "registered-build",
+      "build_targets": [
+        "party-combat"
+      ],
+      "imported_by": []
+    },
+    {
+      "path": "export_party_rewards.py",
+      "role": "registered-build",
+      "build_targets": [
+        "party-rewards"
+      ],
+      "imported_by": []
+    },
+    {
+      "path": "export_party_skills.py",
+      "role": "registered-build",
+      "build_targets": [
+        "party-skills"
+      ],
+      "imported_by": [
+        "export_battle_lifecycle.py",
+        "export_enemy_content.py",
+        "export_item_presentation.py"
+      ]
+    },
+    {
+      "path": "export_prologue_presentation.py",
+      "role": "registered-build",
+      "build_targets": [
+        "prologue-presentation"
+      ],
+      "imported_by": []
+    },
+    {
+      "path": "export_route.py",
+      "role": "independent-source-export",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "export_runtime_config.mjs",
+      "role": "registered-build",
+      "build_targets": [
+        "configuration"
+      ],
+      "imported_by": []
+    },
+    {
+      "path": "export_seed.py",
+      "role": "independent-source-export",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "export_skill_config.py",
+      "role": "independent-source-export",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "export_skill_layers.py",
+      "role": "shared-current",
+      "build_targets": [],
+      "imported_by": [
+        "export_battle_lifecycle.py",
+        "export_battle_result.py",
+        "export_battle_view.py",
+        "export_forest_presentation.py",
+        "export_forest_skills.py",
+        "export_forest_stage.py",
+        "export_item_presentation.py",
+        "export_map_effects.py",
+        "export_party_skills.py",
+        "export_skill_test.py",
+        "verify_route_pixels.py"
+      ]
+    },
+    {
+      "path": "export_skill_test.py",
+      "role": "registered-build",
+      "build_targets": [
+        "skill-test"
+      ],
+      "imported_by": []
+    },
+    {
+      "path": "export_startup_media.py",
+      "role": "registered-build",
+      "build_targets": [
+        "startup-media"
+      ],
+      "imported_by": []
+    },
+    {
+      "path": "export_startup_menu.py",
+      "role": "registered-build",
+      "build_targets": [
+        "startup-menu"
+      ],
+      "imported_by": []
+    },
+    {
+      "path": "export_world_map_ui.py",
+      "role": "registered-build",
+      "build_targets": [
+        "world-map-ui"
+      ],
+      "imported_by": []
+    },
+    {
+      "path": "inspect_battle_ui_bindings.py",
+      "role": "source-observation",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "inspect_opening_initial_state.py",
+      "role": "source-observation",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "map_npc_fields.py",
+      "role": "shared-current",
+      "build_targets": [],
+      "imported_by": [
+        "export_chapter_maps.py",
+        "export_opening_maps.py"
+      ]
+    },
+    {
+      "path": "prepare_battle_loading_fixture.mjs",
+      "role": "fixture-or-observation-preparation",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "prepare_original_observation.py",
+      "role": "fixture-or-observation-preparation",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "resolve_content_definition.mjs",
+      "role": "shared-current",
+      "build_targets": [],
+      "imported_by": [
+        "battle_pack_inventory.mjs",
+        "export_content_registry.mjs"
+      ]
+    },
+    {
+      "path": "route_export_maps.py",
+      "role": "shared-current",
+      "build_targets": [],
+      "imported_by": [
+        "export_chapter_maps.py",
+        "export_opening_maps.py"
+      ]
+    },
+    {
+      "path": "route_extract_resources.py",
+      "role": "shared-current",
+      "build_targets": [],
+      "imported_by": [
+        "export_chapter_maps.py",
+        "export_chapter_story.py",
+        "export_opening_maps.py"
+      ]
+    },
+    {
+      "path": "test_map_transitions.mjs",
+      "role": "standalone-check",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "verify_audio.py",
+      "role": "specialized-evidence-check",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "verify_battle_alignment.py",
+      "role": "specialized-evidence-check",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "verify_battle_lifecycle.py",
+      "role": "specialized-evidence-check",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "verify_battle_loading.py",
+      "role": "specialized-evidence-check",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "verify_battle_render.py",
+      "role": "specialized-evidence-check",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "verify_chapter_maps.py",
+      "role": "specialized-evidence-check",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "verify_chapter_systems_browser.py",
+      "role": "specialized-evidence-check",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "verify_current.py",
+      "role": "daily-entry",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "verify_delivery.py",
+      "role": "specialized-evidence-check",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "verify_dialogue_alignment.py",
+      "role": "specialized-evidence-check",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "verify_events.py",
+      "role": "specialized-evidence-check",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "verify_forest_combat.py",
+      "role": "specialized-evidence-check",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "verify_forest_presentation.py",
+      "role": "specialized-evidence-check",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "verify_http.py",
+      "role": "specialized-evidence-check",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "verify_maps.py",
+      "role": "specialized-evidence-check",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "verify_menu_audio.py",
+      "role": "specialized-evidence-check",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "verify_menu_detail.py",
+      "role": "specialized-evidence-check",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "verify_menu_finish.py",
+      "role": "specialized-evidence-check",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "verify_menu_focus.py",
+      "role": "specialized-evidence-check",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "verify_menu_socket.py",
+      "role": "specialized-evidence-check",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "verify_operation_menu_browser.py",
+      "role": "specialized-evidence-check",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "verify_operation_menu_fidelity_browser.py",
+      "role": "specialized-evidence-check",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "verify_original_menu_browser.py",
+      "role": "specialized-evidence-check",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "verify_party_browser.py",
+      "role": "specialized-evidence-check",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "verify_roster_focus.py",
+      "role": "specialized-evidence-check",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "verify_route.py",
+      "role": "specialized-evidence-check",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "verify_route_browser.py",
+      "role": "specialized-evidence-check",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "verify_route_delivery.py",
+      "role": "specialized-evidence-check",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "verify_route_pixels.py",
+      "role": "specialized-evidence-check",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "verify_runtime_config.py",
+      "role": "specialized-evidence-check",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "verify_save_preview.py",
+      "role": "specialized-evidence-check",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "verify_skill_config_browser.py",
+      "role": "specialized-evidence-check",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "verify_startup_alignment.py",
+      "role": "specialized-evidence-check",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "verify_technique_list.py",
+      "role": "specialized-evidence-check",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "verify_technique_replace.py",
+      "role": "specialized-evidence-check",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "verify_tests.py",
+      "role": "specialized-evidence-check",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "verify_turn_browser.py",
+      "role": "specialized-evidence-check",
+      "build_targets": [],
+      "imported_by": []
+    }
+  ],
+  "notes": [
+    "Classification is navigation; an independent exporter may still be needed to bootstrap source data.",
+    "Shared helpers remain in place. Inspect code and source/evidence references before relocation."
+  ]
+}

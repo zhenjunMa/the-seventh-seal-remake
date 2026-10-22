@@ -1,0 +1,5 @@
+.world-map-panel{position:absolute;inset:0;z-index:19;background:#000;overflow:hidden;outline:none}
+.world-map-viewport{position:absolute;left:50%;top:50%;width:640px;height:480px;transform:translate(-50%,-50%) scale(var(--world-map-scale,1));transform-origin:center}
+.world-map-viewport canvas{position:absolute;inset:0;width:640px;height:480px;image-rendering:pixelated;touch-action:none}
+.world-map-destinations{position:absolute;inset:0;pointer-events:none}
+.world-map-destinations button,.world-map-destinations button:hover,.world-map-destinations button:focus-visible{position:absolute;margin:0;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;outline:none;color:transparent;font-size:0;opacity:1;pointer-events:none}

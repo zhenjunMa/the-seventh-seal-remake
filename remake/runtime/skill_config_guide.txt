@@ -1,0 +1,8 @@
+第七封印 · 技能配置兼容入口
+更新：2026-10-13。
+
+统一参数和新增技能规范只维护在config_guide.txt。
+修改入口是web/data/config/skills.json v2，模式在web/data/config/index.json。
+旧web/data/skills.json保留为历史验证基线，当前运行时不从它读取调参。
+生成／迁移／恢复命令见config_guide.txt和tools/README.txt；模块连接见architecture.txt。
+本文件不重复维护技能清单、范围或生成流程。

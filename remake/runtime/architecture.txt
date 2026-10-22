@@ -1,0 +1,71 @@
+第七封印 · 当前实现架构
+更新：2026-10-22；路径以runtime为基准。
+
+启动与分层
+serve.py只提供静态文件：/映射web，/prototype/映射../prototype/web；不提供原程序、原存档或证据目录。
+web/app.js创建共享state和actions，装配services、map、story、menu、session、battle、inspection、input、boot控制器，再调用boot。
+controllers处理浏览器流程和系统连接；core处理来源校验、资格、规则与事务；视图负责输入层级和绘制。新规则不写入app.js或按人物名字分支。
+boot读取目录、内容登记、来源数据、配置和界面清单，准备共享视图及世界／场景／战斗入口。新增控制器通过同一state/actions连接。
+
+三个状态边界
+WorldStore持有可保存世界：地点、人物资源／成长、背包／装备、旗标、事件、队列、技巧／晶石、遇敌RNG与奖励去重记录。变更通过草稿及revision提交，避免异步加载覆盖期间的新操作。
+SceneController管理地图准备、切换和回滚；先准备必需资源，再提交地点／图层／NPC状态，失败恢复原场景。
+BattleController持有本场参战者、资源快照、充槽、输入、pending、动作和生命周期。通过planning／commit向世界一次提交本场结果，重复返回不重复扣费或发奖励。
+配置快照和浏览器偏好分别独立于WorldStore；菜单焦点、预览、动画和加载锁也不写进世界进度。
+
+内容生产与运行登记
+唯一编辑登记是web/data/runtime_content.json v2；只选择角色阵营、技能原索引／处理器、资源阵容、舞台、ANM程序和地图交互。
+tools/content_registration.py直接读取编辑定义选择生产输入，不要求新地图／怪物预先有生成产物。
+tools/build_runtime.py按声明依赖导出；chapter-maps／chapter-story准备地图与剧情，enemies准备怪物，随后准备玩家、遭遇／奖励、配置、表现、音频、字体和目录。
+core/content_definition.mjs与tools/resolve_content_definition.mjs共用来源解析：展开角色身份／原槽、默认技能ID、ANM来源、地图原旗标与休息选择。
+export_content_registry.mjs核对跨文件依赖和原输入，生成web/data/runtime_content.mjs。boot比较其中definition快照与编辑JSON，拒绝未编译登记。
+运行登记不进入存档；添加登记不自动入队、学会技能、打开触发器或实现新机制。
+
+数据分工
+web/data/config/index.json及skills／battle／rewards／items是唯一数值配置。source／original用于核对，parameters用于调参；已有修改由普通导出保留。
+CHR／DAT／TLK／ANM和生成的party_*、forest_*、enemy_*等JSON保存来源及可执行输入，不作为另一套手工调参表。部分forest命名保留历史接口兼容。
+地图数据放data/maps，资源放assets/maps及角色／物件图集。catalog记录可用地图、资源入口及文件身份；content登记进一步限制已接入交互与机制。
+技能／道具注册按原角色ID＋技能索引、原道具ID绑定；保存实例、角色当前资源和学习进度独立于参数与原字节。
+详细编辑步骤与字段见config_guide.txt，构建命令和工具分类见tools/README.txt。
+
+地图、剧情与演出
+map controller连接地图载入、视口、连续移动、NPC与交互；terrain、占格、路径、移动／遇敌规则由对应core及共享MovementMap处理。
+chapter-maps从原DAT的state0描述推导已登记地图间的物理出口；剧情型出口、前置条件和演出继续走TLK／ANM系统。
+maps.export标记生产归属：新地图默认chapter素材和story=true；existing地图由已有专用导出器负责，story=false表示尚未接入其TLK。该选择不替代运行交互登记。
+chapter-story按登记读取原记录，道具定义从mutation5引用推导，角色初值按登记玩家生成，ANM控制地图由opcode10的源DAT确定。多控制地图或未恢复格式明确拒绝。
+core/chapter.mjs解释已恢复条件／变更，保留草稿、源记录与事件状态，失败不提交。core/chapter_animation.mjs验证受支持指令；core/anm_runtime.mjs处理动作等待、并发、取消和过期完成。
+入队统一经party_members.mjs检查原身份、初始化和重复入队，补队列空位及遇敌计数；已有成员保留资源／成长，RNG不重置。
+DialogueView管理原对话板、画像、打字、滚动／换页与选择，OpeningView及字幕／加载视图负责对应演出。空白对白、退出或失败都须完成相应等待与清理。
+
+战斗规则与表现
+encounters从登记地图的原DAT频率和STG池生成来源表；运行端按成功移动步长、可保存RNG及A／B池生成敌组。
+party_sample／forest_sample组装本场来源，party_attributes组合当前人物、装备与晶石派生属性；skill_registry／runtime_config应用同一配置快照。
+combat、combat_rules、forest_ai、battle_scheduler等core模块负责原公式、抽随机、选招、20ms充槽、目标与动作仲裁。技能学习、人物等级和实现处理器分别门控。
+类型恢复、受击／反击、状态、死亡／起身、技能成长、奖励池与结算各有独立core模块；BattleController连接它们并保持单次资源提交。
+BattleView消费时间线和只读表现数据，不修改HP／MP或抽战斗随机。场景、角色和效果共用640×480逻辑坐标。
+forest_stage先完成天空、地面、全部场景贴图，再画按地面Y排序的战斗人物，最后画效果和HUD。人物升空与地面锚点分开，背景纹理不与人物混排。
+battle_layout按保存的四个固定队列槽定位，不压缩空位；idle、受击和防御的已接入时序读取各自源动作。普通攻击／技能仍有预览时钟与轨迹适配边界。
+battle_lifecycle_view独立推进入场、死亡、起身，完成后回执core；死亡完成前不结算终局，复活epoch使旧回执失效。
+battle_packs用裁切图集保留源PNG核对关系；资源完成解码后才开放战斗。battleEntryPending、加载锁、有限并发图片池和七种原来源转场控制入场，表现随机与战斗RNG分开。
+
+菜单、保存与声音
+menu controller通过core事务连接装备、用药、技巧、队列和晶石；OperationMenuView及子视图管理页签、候选、焦点、取消和动画。
+队列formation_slots、七槽technique_bindings、组合technique_combinations、六槽crystal_sockets及技能skill_progress是可选保存状态；旧格式沿现有兼容规则读取。
+技巧测试复用正式战斗和同一数值配置，以私有票据保留菜单页／焦点。测试门控控制HP、MP及敌方主动派发，药品等真实资源变化仍按正常事务提交。
+菜单站立interval由party_battle_view中相同角色idle生成；队列、状态和装备共用，不维护第二份速度参数。原菜单DGP的120ms留作来源，并非当前统一播放策略。
+core/audio管理素材、音量、静音与cue；menu_feedback对每次输入／事务只发一次反馈，音效诊断有限保留。音频导出按登记地图及技能／动作来源建立清单。
+session controller管理保存、载入、导入／导出、主菜单与缩略图。新截图绑定世界payload，旧存档预览只读重建，过期异步结果不覆盖当前页面。
+
+扩展位置
+地图／出口：登记、导出器、map controller、scenes／route／world_map规则和地图资源。
+剧情／演出：chapter来源、story controller、chapter／chapter_animation／anm_runtime及相应视图。
+队友／技能：登记、原CHR／技能动作、party_*导出、统一注册／配置、party_sample、菜单和表现。content_sample只用于隔离验证。
+怪物：enemies、enemy-rewards、encounters目标及统一配置；新增行为先补规则，再登记。
+道具／晶石：源ITM、item_registry、items／equipment／crystal_sockets等通用处理器及界面连接。
+UI：现有controller和view，原素材／字体导出及状态验收；通用方法见../assessment/menu_alignment_workflow.txt。
+
+当前边界与维护
+构建支持已恢复的矩形v6地图、全局STG池、指令、状态和掉落类型。stage13与TestStage仍有专用舞台导出器；新格式和新机制按实际内容补齐。
+候补队伍、组合攻击、部分特殊效果／熟练度、原动态镜头、精确混色和长流程性能仍见唯一当前计划。当前整份来源JSON装载，尚未完成按区域拆分或全游戏压测。
+prototype中的共享移动模块、角色资源和解码器，以及evidence中的来源／台账仍属于当前依赖。历史浏览器观察不能作为当前代码重播。
+最近自动检查见evidence/current_validation.json，证据分类见evidence/README.txt；改动规则需对应回归，改变实际流程或表现需记录新的浏览器观察。

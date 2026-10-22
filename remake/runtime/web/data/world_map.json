@@ -1,0 +1,266 @@
+{
+  "source": {
+    "path": "GAME.exe",
+    "sha256": "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18"
+  },
+  "evidence": [
+    "ev_28628aae003f504d2c22a923ef890ec1c079e092595a456d0ed2fb5892058f3e",
+    "ev_40ad84a3a81f54a7fa0d1c8eb33a25a92c1fa38d633c8cce4603e81027f2c53e"
+  ],
+  "areas": [
+    {
+      "id": 0,
+      "selected_index": 0,
+      "statuses": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "destinations": [
+        {
+          "index": 0,
+          "name": "运炎河右岸",
+          "map_id": "M01060",
+          "entry_marker": 1,
+          "sort_code": 1,
+          "source": {
+            "path": "GAME.exe",
+            "sha256": "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18",
+            "file_offset": 57342,
+            "raw_hex": "014d30313036302e646174000000000000000000000101"
+          },
+          "evidence": [
+            "ev_28628aae003f504d2c22a923ef890ec1c079e092595a456d0ed2fb5892058f3e"
+          ]
+        },
+        {
+          "index": 1,
+          "name": "研究所遗迹",
+          "map_id": "M71071",
+          "entry_marker": 1,
+          "sort_code": 6,
+          "source": {
+            "path": "GAME.exe",
+            "sha256": "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18",
+            "file_offset": 57365,
+            "raw_hex": "014d37313037312e646174000000000000000000000106"
+          },
+          "evidence": [
+            "ev_28628aae003f504d2c22a923ef890ec1c079e092595a456d0ed2fb5892058f3e"
+          ]
+        },
+        {
+          "index": 2,
+          "name": "翠碧湖入口",
+          "map_id": "M71014",
+          "entry_marker": 1,
+          "sort_code": 5,
+          "source": {
+            "path": "GAME.exe",
+            "sha256": "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18",
+            "file_offset": 57388,
+            "raw_hex": "014d37313031342e646174000000000000000000000105"
+          },
+          "evidence": [
+            "ev_28628aae003f504d2c22a923ef890ec1c079e092595a456d0ed2fb5892058f3e"
+          ]
+        },
+        {
+          "index": 3,
+          "name": "里白木森林",
+          "map_id": "M70071",
+          "entry_marker": 1,
+          "sort_code": 5,
+          "source": {
+            "path": "GAME.exe",
+            "sha256": "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18",
+            "file_offset": 57411,
+            "raw_hex": "014d37303037312e646174000000000000000000000105"
+          },
+          "evidence": [
+            "ev_28628aae003f504d2c22a923ef890ec1c079e092595a456d0ed2fb5892058f3e"
+          ]
+        },
+        {
+          "index": 4,
+          "name": "火之谷入口",
+          "map_id": "M17010",
+          "entry_marker": 1,
+          "sort_code": 5,
+          "source": {
+            "path": "GAME.exe",
+            "sha256": "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18",
+            "file_offset": 57434,
+            "raw_hex": "014d31373031302e646174000000000000000000000105"
+          },
+          "evidence": [
+            "ev_28628aae003f504d2c22a923ef890ec1c079e092595a456d0ed2fb5892058f3e"
+          ]
+        },
+        {
+          "index": 5,
+          "name": "XXXXXX",
+          "map_id": "XXXXXX",
+          "entry_marker": 1,
+          "sort_code": 1,
+          "source": {
+            "path": "GAME.exe",
+            "sha256": "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18",
+            "file_offset": 57457,
+            "raw_hex": "017878787878782e646174000000000000000000000101"
+          },
+          "evidence": [
+            "ev_28628aae003f504d2c22a923ef890ec1c079e092595a456d0ed2fb5892058f3e"
+          ]
+        },
+        {
+          "index": 6,
+          "name": "白木森林",
+          "map_id": "M70010",
+          "entry_marker": 1,
+          "sort_code": 5,
+          "source": {
+            "path": "GAME.exe",
+            "sha256": "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18",
+            "file_offset": 57480,
+            "raw_hex": "014d37303031302e646174000000000000000000000105"
+          },
+          "evidence": [
+            "ev_28628aae003f504d2c22a923ef890ec1c079e092595a456d0ed2fb5892058f3e"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "selected_index": 0,
+      "statuses": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "destinations": [
+        {
+          "index": 0,
+          "name": "风领地力城",
+          "map_id": "M29010",
+          "entry_marker": 1,
+          "sort_code": 1,
+          "source": {
+            "path": "GAME.exe",
+            "sha256": "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18",
+            "file_offset": 57578,
+            "raw_hex": "014d32393031302e646174000000000000000000000101"
+          },
+          "evidence": [
+            "ev_40ad84a3a81f54a7fa0d1c8eb33a25a92c1fa38d633c8cce4603e81027f2c53e"
+          ]
+        },
+        {
+          "index": 1,
+          "name": "神殿大门",
+          "map_id": "M72061",
+          "entry_marker": 1,
+          "sort_code": 5,
+          "source": {
+            "path": "GAME.exe",
+            "sha256": "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18",
+            "file_offset": 57601,
+            "raw_hex": "014d37323036312e646174000000000000000000000105"
+          },
+          "evidence": [
+            "ev_40ad84a3a81f54a7fa0d1c8eb33a25a92c1fa38d633c8cce4603e81027f2c53e"
+          ]
+        },
+        {
+          "index": 2,
+          "name": "妖精森林",
+          "map_id": "ELF-FOREST-A",
+          "entry_marker": 1,
+          "sort_code": 5,
+          "source": {
+            "path": "GAME.exe",
+            "sha256": "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18",
+            "file_offset": 57624,
+            "raw_hex": "01456c662d666f726573742d412e646174000000000105"
+          },
+          "evidence": [
+            "ev_40ad84a3a81f54a7fa0d1c8eb33a25a92c1fa38d633c8cce4603e81027f2c53e"
+          ]
+        },
+        {
+          "index": 3,
+          "name": "封印遗迹",
+          "map_id": "REBIRTH-B04",
+          "entry_marker": 1,
+          "sort_code": 1,
+          "source": {
+            "path": "GAME.exe",
+            "sha256": "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18",
+            "file_offset": 57647,
+            "raw_hex": "01526562697274682d6230342e64617400000000000101"
+          },
+          "evidence": [
+            "ev_40ad84a3a81f54a7fa0d1c8eb33a25a92c1fa38d633c8cce4603e81027f2c53e"
+          ]
+        },
+        {
+          "index": 4,
+          "name": "飘城大广场",
+          "map_id": "M03060",
+          "entry_marker": 1,
+          "sort_code": 1,
+          "source": {
+            "path": "GAME.exe",
+            "sha256": "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18",
+            "file_offset": 57670,
+            "raw_hex": "014d30333036302e646174000000000000000000000101"
+          },
+          "evidence": [
+            "ev_40ad84a3a81f54a7fa0d1c8eb33a25a92c1fa38d633c8cce4603e81027f2c53e"
+          ]
+        },
+        {
+          "index": 5,
+          "name": "XXXXXX",
+          "map_id": "XXXXXX",
+          "entry_marker": 1,
+          "sort_code": 1,
+          "source": {
+            "path": "GAME.exe",
+            "sha256": "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18",
+            "file_offset": 57693,
+            "raw_hex": "017878787878782e646174000000000000000000000101"
+          },
+          "evidence": [
+            "ev_40ad84a3a81f54a7fa0d1c8eb33a25a92c1fa38d633c8cce4603e81027f2c53e"
+          ]
+        },
+        {
+          "index": 6,
+          "name": "东大陆海岸",
+          "map_id": "M55010",
+          "entry_marker": 1,
+          "sort_code": 8,
+          "source": {
+            "path": "GAME.exe",
+            "sha256": "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18",
+            "file_offset": 57716,
+            "raw_hex": "014d35353031302e646174000000000000000000000108"
+          },
+          "evidence": [
+            "ev_40ad84a3a81f54a7fa0d1c8eb33a25a92c1fa38d633c8cce4603e81027f2c53e"
+          ]
+        }
+      ]
+    }
+  ]
+}
