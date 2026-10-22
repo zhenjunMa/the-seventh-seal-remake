@@ -35,6 +35,16 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
   }
   function battleKey(key,repeat=false){return state.battleMenu?.key(key,repeat)??false;}
   function battleKeyUp(key){state.battleMenu?.keyup(key);}
+  function updateBattleFrame(now){
+    if(state.battleEntryPending||state.battlePresentationError)return;
+    try{
+      state.battle?.advanceClock(now);
+      state.battleView?.draw(state.battle?.presentationSnapshot(),now);drawBattleInterface(now);
+    }catch(error){
+      state.battlePresentationError=error.message;state.battleView?.stop(error.message);
+      state.battle?.interrupt(error);actions.status(error.message,true);
+    }
+  }
   function drawBattleInterface(now){if(state.battleMenu){state.battleMenu.draw(now,state.battleView?.actorPositions());state.battleMenu.paintTo(state.engine?.battle.surface.canvas??$('battleCanvas'));
     $('battleCommands').dataset.lifecycle=JSON.stringify(state.battleView?.lifecycleSnapshot());
     const battle=state.battle,completed=state.battleView?.drainLifecycleCompleted()??[];
@@ -52,6 +62,7 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
     const actionSound=(result,step)=>state.audio?.playAction({...step,sound_inhibited:Boolean(battle.actor(step.actor_id).immune_raw)},`${result.action_id}:${step.channel_id}:${step.plan_record_index}:${step.logical_frame}`);
     const present=method=>async(result,options)=>{const played=await view[method](result,{...options,onFrame:step=>actionSound(result,step)});actions.log({type:'battle-presentation',action_id:result.action_id,actor_id:result.actor_id,skill_id:result.skill_id,observations:played.observations});return played;};
     battle=new BattleController({world,resolveAction,applyDamage:applyNativeDamage,playAction:present('playAction'),playSequence:present('playSequence'),
+      now:()=>state.engine?.battle.clock.time??performance.now(),
       resourcesForWorld:newParty?partyResourcesForWorld:resourcesForWorld,consumeResources:newParty?consumePartyMp:consumeBattleMp,notify:updateBattle,log:actions.log,itemData:newParty?state.itemData:null,
       playItem:async(event,hooks)=>{actions.status(`${event.name} → ${battle.actor(event.target_id).name}`);const played=await view.playItem(event,{...hooks,onFrame:step=>actionSound(event,step),onEffectFrame:step=>state.audio?.playItemEffect(event.item_id,`${event.action_id}:effect:${step.logical_frame}`,step.logical_frame)});actions.log({type:'battle-item-presentation',action_id:event.action_id,item_id:event.item_id,observations:played.observations});}});
     return battle;
@@ -66,6 +77,7 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
     await state.battleMenu.prepare({onProgress});
   }
   function showBattle(){
+    state.engine?.setMode('battle');
     for(const id of ['battleCanvas','battleHud','battleCommands'])$(id).hidden=false;
     canvas.hidden=true;$('dialogue').hidden=true;actions.resize();state.battleMenu.fit();
   }
@@ -201,5 +213,10 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
     if(defeatPolicy){await actions.presentGameOver(defeatPolicy);return;}
     actions.status(result.outcome==='victory'?`战斗胜利，队伍HP / MP${result.rewards_applied?'和奖励':''}已保存到当前进度；可以保存存档。`:result.outcome==='defeat'?'队伍倒下，结果已保留；可载入存档。':'已经返回地图，队伍HP / MP变化已保留。');
   }
-  return {updateBattle, startBattle, startTechniqueTest, returnFromBattle, battleKey, battleKeyUp, drawBattleInterface};
+  function disposeBattles(){
+    state.battleMenu?.dispose();state.battleMenu=null;
+    for(const view of state.battleViews.values())view.destroy();
+    state.battleViews.clear();
+  }
+  return {updateBattle, startBattle, startTechniqueTest, returnFromBattle, battleKey, battleKeyUp, drawBattleInterface,updateBattleFrame,disposeBattles};
 }

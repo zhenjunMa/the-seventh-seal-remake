@@ -1,17 +1,29 @@
-// One clock, driven by Phaser's frame loop. ANM parallelism, waits and aborts
-// retain their existing promise contract without independent RAF callbacks.
+// Scope-owned elapsed time, advanced only by the owning Phaser update step.
+// ANM waits/aborts retain their promise contract; sprites add no contact clock.
 export class ActionClock {
-  constructor(){this.tasks=new Set();this.closed=false;}
-  update(now){for(const task of [...this.tasks])if(this.tasks.has(task))task.tick(now);}
-  requestFrame(callback){
+  constructor(){this.tasks=new Set();this.closed=false;this.time=performance.now();}
+  update(now){
+    if(this.closed)return;
+    this.time=now;
+    for(const task of [...this.tasks])if(this.tasks.has(task))task.tick(now);
+  }
+  advance(delta){this.update(this.time+Math.max(0,delta));}
+  requestFrame(callback,{signal,onCancel=()=>{}}={}){
     if(this.closed)throw new Error('游戏时钟已关闭');
-    const task={tick:now=>{this.tasks.delete(task);callback(now);},cancel:()=>this.tasks.delete(task)};
+    const cleanup=()=>{this.tasks.delete(task);signal?.removeEventListener('abort',abort);};
+    const task={tick:now=>{cleanup();callback(now);},cancel:reason=>{
+      if(!this.tasks.has(task))return;
+      cleanup();onCancel(reason);
+    }};
+    const abort=()=>task.cancel(signal.reason);
+    if(signal?.aborted){onCancel(signal.reason);return task;}
+    signal?.addEventListener('abort',abort,{once:true});
     this.tasks.add(task);return task;
   }
   tween(duration,update,signals=[]){
     if(this.closed)return Promise.reject(new Error('游戏时钟已关闭'));
     return new Promise((resolve,reject)=>{
-      const start=performance.now();let task;
+      const start=this.time;let task;
       const cleanup=()=>{this.tasks.delete(task);for(const signal of signals)signal?.removeEventListener('abort',abort);};
       const finish=(error)=>{cleanup();error?reject(error):resolve();};
       const abort=()=>finish(signals.find(s=>s?.aborted)?.reason??new DOMException('动作已取消','AbortError'));

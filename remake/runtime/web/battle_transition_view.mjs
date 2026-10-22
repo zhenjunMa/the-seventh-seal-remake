@@ -58,8 +58,11 @@ export class BattleTransitionView {
     try{
       this.log?.({type:'battle-transition-start',kind,authority:'GAME.exe 0x430850; Canvas/RAF adapter'});
       let nextAt=null,frame=0;
-      const schedule=callback=>this.clock?this.clock.requestFrame(callback):requestAnimationFrame(callback);
       await new Promise((resolve,reject)=>{
+        const schedule=callback=>{
+          if(this.clock)this.pendingFrame=this.clock.requestFrame(callback,{signal,onCancel:reject});
+          else requestAnimationFrame(callback);
+        };
         const tick=now=>{try{check();if(nextAt===null||now>=nextAt){paint(frame);nextAt=now+battleTransitionFrame(kind,frame).delay;frame++;}
           if(frame>=battleTransitionFrame(kind,0).count)resolve();else schedule(tick);
         }catch(error){reject(error);}};schedule(tick);
@@ -67,5 +70,5 @@ export class BattleTransitionView {
       check();c.globalAlpha=1;c.drawImage(after,0,0);this.log?.({type:'battle-transition-complete',kind,frames:frame,elapsed_ms:performance.now()-started});
     }finally{if(epoch===this.epoch){root.hidden=true;delete root.dataset.kind;delete root.dataset.transition;delete root.dataset.progress;}}
   }
-  cancel(){this.epoch++;const root=this.loadingView.root;root.hidden=true;delete root.dataset.kind;delete root.dataset.transition;delete root.dataset.progress;}
+  cancel(){this.epoch++;this.pendingFrame?.cancel(new Error('入战转场已取消'));this.pendingFrame=null;const root=this.loadingView.root;root.hidden=true;delete root.dataset.kind;delete root.dataset.transition;delete root.dataset.progress;}
 }
