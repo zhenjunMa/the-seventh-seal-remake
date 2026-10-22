@@ -882,6 +882,18 @@
       "sha256": "94021442d0bcda91f7445a64a4d7dc9c818519df9ef0fed6b78781d90947910d",
       "replacement": "remake/runtime/config_guide.txt",
       "recovery_commit": "5636876ffb7ae11e6c85c7c552f4b5620570a502"
+    },
+    {
+      "path": "remake/prototype/rules_probe.md",
+      "sha256": "bb1a2f9b1fde2f223d39ac4b42c357cf1200f0789521feb3495c5b08909810b5",
+      "replacement": "remake/runtime/architecture.txt",
+      "recovery_commit": "ffd529a93457bc259e86d482be3e9da4b23ebb0d"
+    },
+    {
+      "path": "remake/runtime/skill_config_guide.txt",
+      "sha256": "3e30039dc7fcc5173a73ebe2b71a9b9d5259069bd0c13fafdaeba6ba82b95363",
+      "replacement": "remake/runtime/config_guide.txt",
+      "recovery_commit": "ffd529a93457bc259e86d482be3e9da4b23ebb0d"
     }
   ]
 }

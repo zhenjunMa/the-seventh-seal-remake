@@ -74,7 +74,7 @@ def main():
 
     paths = [*WEB.glob('*.js'), *WEB.glob('*.mjs'), *WEB.glob('core/*.mjs'), *WEB.glob('data/config/*.json'), WEB/'data/catalog.json',
              RUNTIME/'tools/export_runtime_config.mjs', RUNTIME/'tools/export_skill_config.py', RUNTIME/'tools/build_catalog.py', Path(__file__),
-             *tests, RUNTIME/'tests/preserve_history.mjs', RUNTIME/'config_guide.txt', RUNTIME/'skill_config_guide.txt',
+             *tests, RUNTIME/'tests/preserve_history.mjs', RUNTIME/'config_guide.txt',
              RUNTIME/'README.txt', RUNTIME.parent/'README.txt', RUNTIME.parent/'assessment/menu_alignment_workflow.txt',
              RUNTIME.parent/'assessment/validation_design.txt',
              *EVIDENCE.glob('runtime_config_browser*'), EVIDENCE/'runtime_config_before_browser_20261011.json']

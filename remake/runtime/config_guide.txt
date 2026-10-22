@@ -7,6 +7,7 @@ Phaser迁移沿用现有内容登记、数值配置和媒体路径。新增同�
 数值调整：runtime/web/data/config/index.json及skills.json、battle.json、rewards.json、items.json。所有人物共用这些文件。
 玩家当前HP／MP、等级／成长、背包／装备、旗标、队列、技巧／晶石与学习／熟练度是世界进度，通过游戏和存档维护。
 其余data JSON、图集和runtime_content.mjs是来源或生成结果。不要直接用它们调数值；新增机制先实现对应规则，登记和enabled不会补出处理器。
+旧web/data/skills.json仅保留为历史验证基线，当前调参统一使用web/data/config/skills.json；生成／迁移／恢复命令见tools/README.txt。
 
 数值配置
 index.json选择original或debug，并引用四个参数文件。每个条目的name、owner、source、original和道具catalog为只读核对基线，只编辑parameters。
