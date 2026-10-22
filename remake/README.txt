@@ -29,7 +29,7 @@ runtime/tools/    当前构建工具、共享解析器、独立提取器及历�
 runtime/tests/    JS与Python回归；web/tests是独立浏览器验证页
 runtime/evidence/ 来源证据、构建台账、截图／录屏及验证输出；部分是构建输入
 prototype/        正式版仍使用的共享移动模块、角色资源和解码器，以及早期实验
-assessment/       当前计划、方法和原资源索引
+assessment/       当前开发计划与界面／动态表现验收方法
 observation/      原版隔离观察副本；用途见其中README.txt
 archive/          冻结文档、会话快照与整理前备份
 

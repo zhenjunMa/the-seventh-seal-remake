@@ -39,7 +39,7 @@ browser=read(RUNTIME/'evidence/route_browser_20261011.json');assert browser['suc
 for p,s in browser['screenshot_sha256'].items():assert sha(RUNTIME/'evidence'/p)==s
 out=RUNTIME/'evidence/route_delivery_20261011.json'
 files=[p for p in RUNTIME.rglob('*') if p.is_file() and p!=out and '__pycache__' not in p.parts]
-files += [ROOT/p for p in ['remake/README.txt','remake/assessment/validation_design.txt','remake/assessment/assessment.txt','remake/assessment/minimal_validation_next_20261011.txt','remake/archive/20261011_before_chapter/assessment/runtime_phase3_20261011.txt']]
+files += [ROOT/p for p in ['remake/README.txt','remake/assessment/validation_design.txt','remake/assessment/menu_alignment_workflow.txt','remake/archive/20261011_before_chapter/assessment/runtime_phase3_20261011.txt']]
 out.write_text(json.dumps(dict(schema='seventh-seal-route-delivery',version=1,created_utc=datetime.now(timezone.utc).isoformat(),success=True,
     tests=suite['counts'],http=len(suite['http']),source_hashes=sources,asset_hashes=assets,output_hashes={p.relative_to(ROOT).as_posix():sha(p) for p in sorted(files)},
     original_game_execution_observed=False,scope='Post-story route, native source groups and bounded first-contact fixed-order combat; original opening/gauges/AI/multihit/rewards pending'),ensure_ascii=False,indent=2)+'\n','utf-8')

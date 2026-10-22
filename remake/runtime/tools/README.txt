@@ -11,6 +11,7 @@
 盘点当前内容依赖：python -B remake/runtime/tools/build_runtime.py --target content --validate
 只读剧情能力预检查：python -B remake/runtime/tools/build_runtime.py --preflight
 结构化检查输出：node remake/runtime/tools/check_content.mjs --json
+原版资源盘点：python -B remake/runtime/tools/resource_inventory.py（需要本地原版资源，输出evidence/resource_inventory.json）
 
 执行语义
 不加--run只列计划。--validate检查工具、既有来源台账与产物，记录当前指纹到evidence/export_inventory.json；不执行导出，也不等于原输入已经与历史来源逐项一致。
@@ -50,6 +51,7 @@ shared-current：当前步骤或检查仍导入的解析／素材助手，保留
 specialized-evidence-check：专题验收和日期观察复核，按各工具代码检查范围；不是每日全部执行的命令。
 fixture-or-observation-preparation：创建独立样本或原版观察副本，不等于正式获取／入队流程。
 source-observation：只读检查或记录原版，原目录输入保持只读。
+resource_inventory.py盘点原资源目录、文件头、GAME.exe的PE导入和已有证据索引，不解码自定义格式；生成报告统一保存在runtime/evidence，不写assessment。
 independent-source-export：独立基础来源或旧样本生产入口，可能仍用于初始提取；分类不表示可删除。
 
 当前构建目标与直接依赖
@@ -105,3 +107,5 @@ verify_*中的旧阶段门槛不能替代当前回归；写--record的新现场�
 资料维护
 来源和现场证据索引见../evidence/README.txt，恢复／归档见../../archive/README.txt。
 旧逐项工具说明和历史命令原文已保存在../../archive/20261022_before_directory_cleanup/documents.zip。
+assessment只维护validation_design.txt和menu_alignment_workflow.txt；旧兼容跳转页已清理。清理文件及迁移工具的原路径、SHA与Git恢复版本见tool_index.json的retired_documents和工具previous_path字段。
+verify_runtime_config.py的复核文字报告输出到evidence/runtime_config_recheck.txt，不再生成assessment下的旧跳转页。
