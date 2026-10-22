@@ -37,6 +37,7 @@ class Step:
 
 
 STEPS = {
+    'save-menu': Step('export_save_menu.py', ('data/save_menu.json', 'assets/menu/game_save_01', 'assets/menu/game_save_02', 'assets/menu/game_save_03'), reports=('save_slots_20261023/resource_export.json',), sources=('GAME.exe', *tuple(f'SYSTEM/game_save_{i:02}{suffix}' for i in range(1,4) for suffix in ('.mnu','.CAP')))),
     'opening-seed': Step('export_opening_seed.py', ('data/opening_seed.json',), reports=('opening_seed_export_20261011.json',)),
     'opening-maps': Step('export_opening_maps.py', ('data/opening_map_resources.json', 'data/maps/m72061.json', 'data/maps/m17020.json', 'assets/maps/m72061', 'assets/maps/m17020', 'assets/opening_roles'), reports=('opening_map_export_20261011.json',)),
     'chapter-maps': Step('export_chapter_maps.py', ('data/chapter_map_resources.json', 'data/maps/m17029.json', 'data/maps/m17026.json', 'assets/maps/m17029', 'assets/maps/m17026', 'assets/chapter_roles', 'assets/chapter_objects'), reports=('chapter_map_export.json',)),
@@ -111,7 +112,7 @@ for target, dependencies in {
     'catalog': ('configuration','chapter-maps'),
     'item-presentation': ('items','party-skills'),
     'audio': ('party-skills','item-presentation','chapter-maps','encounters'),
-    'content': ('catalog','party-rewards','battle-packs','audio','menu-fonts','dialogue-ui','prologue-presentation','map-effects'),
+    'content': ('catalog','party-rewards','battle-packs','audio','menu-fonts','save-menu','dialogue-ui','prologue-presentation','map-effects'),
     'party-rewards': ('party-combat','enemy-rewards'),
 }.items():
     STEPS[target]=replace(STEPS[target],depends=dependencies)

@@ -64,7 +64,12 @@ export function createSessionController({state, actions, $, canvas, ctx}) {
     const restored=await decodeSave(envelope,state.catalog.maps.map(m=>m.id));
     if(restored.party.some(actor=>!state.catalog.roles.some(role=>role.id===actor.id)))throw new Error('存档包含尚未接入的队伍角色');
     if(restored.source.kind==='native-new-game'){createPartyActors(restored,state.partyCombat,{},state.itemData);validateSourceSkillShortcuts(restored,state.partySkills);for(const role of restored.party){techniqueCombinations(restored,state.partySkills,role.id);if(restored.technique_bindings)techniqueSlots(restored,state.partySkills,role.id);}}
-    if(restored.opening?.status==='pending'){operation.kind='restore-opening';state.scenes.setPhase(previousPhase);await beginOpening(restored);return;}
+    if(restored.opening?.status==='pending'){
+      // A legacy pending prologue must release the picker before it takes input.
+      const picker=state.saveMenuContext;
+      if(picker){state.saveMenu.hide();state.saveMenuContext=null;picker.resolve();operation.phase=picker.originPhase;}
+      operation.kind='restore-opening';state.scenes.setPhase(operation.phase);await beginOpening(restored);return;
+    }
     try{
       state.scenes.setPhase('map');
       await state.scenes.loadLocation(restored.location,{reason:'restore',restoredWorld:restored});
@@ -73,13 +78,28 @@ export function createSessionController({state, actions, $, canvas, ctx}) {
     }catch(error){if(previousPhase==='menu')showTitle();throw error;}
   }
   async function openSaveCrystal(){
-    if(state.scenes.phase!=='map'||state.saveOperation)throw new Error('当前操作完成后才能使用通讯水晶');
-    state.scenes.setPhase('event');
-    let selected;
-    try{selected=await actions.say('','保存当前进度？',1,{choices:[{index:0,text:'保存进度。'},{index:1,text:'取消。'}]});}
-    finally{state.scenes.setPhase('map');canvas.focus({preventScroll:true});}
-    if(selected===0)return actions.saveProgress('manual');
-    actions.status('已离开通讯水晶。');
+    return openSaveMenu({mode:'save'});
+  }
+  async function openSaveMenu({mode='save'}={}){
+    const originPhase=state.scenes.phase;
+    if(state.saveOperation||state.saveMenuContext||!['map','menu'].includes(originPhase)||mode==='save'&&originPhase!=='map')throw new Error('当前操作完成后才能打开存档页面');
+    let resolve;const finished=new Promise(done=>resolve=done),context={mode,originPhase,resolve};state.saveMenuContext=context;state.scenes.setPhase('save-menu');
+    state.saveMenu.show({mode,summary:{name:state.world.value.party.map(role=>role.name).join('　'),money:state.world.value.money??0}});
+    await actions.refreshSaveSlots({quiet:true});
+    if(state.saveMenuContext===context)state.saveMenu.setEntries(actions.saveEntries());
+    actions.log({type:'save-menu-open',mode,slots:20});return finished;
+  }
+  function closeSaveMenu({loaded=false}={}){
+    const context=state.saveMenuContext;if(!context||state.saveOperation)return false;
+    state.saveMenu.hide();state.saveMenuContext=null;state.scenes.setPhase(loaded?'map':context.originPhase);context.resolve();canvas.focus({preventScroll:true});return true;
+  }
+  async function selectSaveSlot(row){
+    const context=state.saveMenuContext;if(!context||state.saveOperation)throw new Error('存档页面已关闭或正在存取进度');
+    if(context.mode==='save'){
+      try{await actions.saveProgress(row.slot,{fromMenu:true,createOnly:!row.envelope,expectedSha:row.envelope?.sha256});}
+      catch(error){if(error.status===412){await actions.refreshSaveSlots({quiet:true});if(state.saveMenuContext===context)state.saveMenu.setEntries(actions.saveEntries());}throw error;}
+      await actions.refreshSaveSlots({quiet:true});state.saveMenu.setEntries(actions.saveEntries());state.saveMenu.setMessage(`栏位 ${row.slot} 已保存。`);
+    }else{await actions.loadProgress(row.slot,{fromMenu:true});closeSaveMenu({loaded:true});}
   }
   async function presentGameOver(policy){
     state.audio?.suspend();state.scenes.setPhase('game-over');$('gameOver').hidden=false;
@@ -93,5 +113,5 @@ export function createSessionController({state, actions, $, canvas, ctx}) {
     $('gameOver').hidden=true;showTitle();actions.status('全队倒下。请载入已保存的进度，或开始新游戏。');
     actions.log({type:'game-over',policy,movie:'/assets/video/go02.mp4',playback_error:playbackError});
   }
-  return {showTitle, resumeExploration, beginOpening, restore, openSaveCrystal, presentGameOver};
+  return {showTitle, resumeExploration, beginOpening, restore, openSaveCrystal,openSaveMenu,closeSaveMenu,selectSaveSlot, presentGameOver};
 }

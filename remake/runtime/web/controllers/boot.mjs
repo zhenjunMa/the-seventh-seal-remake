@@ -27,6 +27,7 @@ import {runtimeContent,runtimeContentDefinition,validateContentRegistration} fro
 import {validateStoryBindings} from "../core/content_dependencies.mjs";
 import {worldMapEntry} from "../core/map_connections.mjs";
 import {createSaveStorage} from "../core/save_storage.mjs";
+import {SaveMenuView} from "../save_menu_view.mjs";
 
 export function createBootController({state, actions, $, canvas, ctx}) {
   async function boot(){
@@ -57,6 +58,7 @@ export function createBootController({state, actions, $, canvas, ctx}) {
     state.sourceItemData=validateItemData(await actions.json('data/items.json'));
     state.itemData=(await actions.readConfiguredData()).items;
     const operationManifest=await actions.json('data/operation_menu.json');
+    state.saveMenu=await SaveMenuView.create({manifest:await actions.json('data/save_menu.json'),root:$('saveMenu'),image:actions.image,getPreview:actions.loadSavePreview,onConfirm:actions.selectSaveSlot,onClose:actions.closeSaveMenu,log:actions.log});
     await Promise.all(['assets/menu/main.png','assets/menu/actor_bar.png',...['game001d','game001a','game001a_2','game002a','game002_1','game003a','game003_1','game005'].map(id=>operationManifest.menus.find(menu=>menu.id===id).composed)].map(actions.image));
     const textRenderer=await createMenuTextRenderer(await actions.json('data/menu_fonts.json'));
     state.prologuePresentation=await actions.json('data/prologue_presentation.json');
@@ -133,7 +135,7 @@ export function createBootController({state, actions, $, canvas, ctx}) {
       onStage:stage=>{state.scenes.setPhase(stage==='menu'?'menu':'startup');},
       onNew:()=>actions.beginOpening(),onLoad:(_save,slot)=>actions.loadProgress(slot),onResume:()=>actions.resumeExploration(),
       getPreview:save=>actions.loadSavePreview(save),
-      getSaves:()=>['manual','quick'].flatMap(slot=>state.saveSlots[slot]?[{slot,label:slot==='quick'?'快速存档':'普通存档',envelope:state.saveSlots[slot]}]:[]),
+      getSaves:()=>actions.saveEntries().filter(row=>row.envelope),
       refreshSaves:()=>actions.refreshSaveSlots(),isBusy:()=>Boolean(state.saveOperation),status:actions.status,log:actions.log});
     actions.wire();actions.resize();await state.scenes.loadLocation(state.world.location,{reason:'boot'});actions.buildHud();
     await actions.refreshSaveSlots({quiet:true});

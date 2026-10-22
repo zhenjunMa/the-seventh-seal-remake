@@ -11,7 +11,8 @@ import threading
 
 ROOT = Path(__file__).resolve().parent
 MOUNTS = {'/prototype/': ROOT.parent / 'prototype' / 'web', '/': ROOT / 'web'}
-SAVE_FILES = {'manual': 'SaveGame0.json', 'quick': 'QuickSave.json'}
+SAVE_FILES = {**{f'{index:02}': f'SaveGame{index:02}.json' for index in range(20)}, 'quick': 'QuickSave.json'}
+LEGACY_SAVE_FILE = 'SaveGame0.json'
 MAX_SAVE_BYTES = 8_000_000
 
 
@@ -28,6 +29,30 @@ def validate_save(raw):
         raise ValueError('存档世界格式不兼容')
     return value
 
+
+def normalize_save_slot(slot):
+    slot = '00' if slot == 'manual' else slot
+    return slot if slot in SAVE_FILES else None
+
+
+def existing_save_path(directory, slot):
+    """00 falls back to the old single-slot filename without modifying it."""
+    path = directory / SAVE_FILES[slot]
+    if slot == '00' and not path.exists() and not path.is_symlink():
+        legacy = directory / LEGACY_SAVE_FILE
+        if legacy.exists() or legacy.is_symlink():
+            return legacy
+    return path
+
+
+def read_save_file(path):
+    if path.is_symlink():
+        raise ValueError('存档路径无效')
+    raw = path.read_bytes()
+    if len(raw) > MAX_SAVE_BYTES:
+        raise ValueError('存档文件超过当前版本上限')
+    return validate_save(raw)
+
 class RuntimeHandler(SimpleHTTPRequestHandler):
     protocol_version = 'HTTP/1.1'
 
@@ -41,6 +66,8 @@ class RuntimeHandler(SimpleHTTPRequestHandler):
 
     def save_slot(self):
         path = urlsplit(self.path).path
+        if path == '/api/saves':
+            return ''
         return path[len('/api/saves/'):] if path.startswith('/api/saves/') else None
 
     def local_request(self):
@@ -57,17 +84,27 @@ class RuntimeHandler(SimpleHTTPRequestHandler):
             return super().do_GET()
         if not self.local_request():
             return self.json_response(403, {'error': '存档接口仅供本地游戏访问'})
-        if slot not in SAVE_FILES:
+        if slot == '':
+            slots = []
+            with self.server.save_lock:
+                for key in SAVE_FILES:
+                    row = {'slot': key, 'envelope': None, 'error': None}
+                    try:
+                        row['envelope'] = read_save_file(existing_save_path(self.server.save_dir, key))
+                    except FileNotFoundError:
+                        pass
+                    except (ValueError, UnicodeError):
+                        row['error'] = '存档文件损坏，当前进度已保留'
+                    except OSError:
+                        row['error'] = '无法读取 remake/saves 中的存档'
+                    slots.append(row)
+            return self.json_response(200, {'slots': slots})
+        slot = normalize_save_slot(slot)
+        if slot is None:
             return self.json_response(404, {'error': '存档槽不存在'})
         try:
             with self.server.save_lock:
-                path = self.server.save_dir / SAVE_FILES[slot]
-                if path.is_symlink():
-                    raise ValueError('存档路径无效')
-                raw = path.read_bytes()
-                if len(raw) > MAX_SAVE_BYTES:
-                    raise ValueError('存档文件超过当前版本上限')
-                value = validate_save(raw)
+                value = read_save_file(existing_save_path(self.server.save_dir, slot))
         except FileNotFoundError:
             return self.json_response(404, {'error': '此存档槽尚未保存进度'})
         except (ValueError, UnicodeError):
@@ -81,8 +118,8 @@ class RuntimeHandler(SimpleHTTPRequestHandler):
         self.close_connection = True
         if not self.local_request():
             return self.json_response(403, {'error': '存档接口仅供本地游戏访问'})
-        slot = self.save_slot()
-        if slot not in SAVE_FILES:
+        slot = normalize_save_slot(self.save_slot())
+        if slot is None:
             return self.json_response(404, {'error': '存档槽不存在'})
         try:
             length = int(self.headers.get('Content-Length', '0'))
@@ -102,8 +139,17 @@ class RuntimeHandler(SimpleHTTPRequestHandler):
             with self.server.save_lock:
                 self.server.save_dir.mkdir(parents=True, exist_ok=True)
                 path = self.server.save_dir / SAVE_FILES[slot]
-                if self.headers.get('If-None-Match') == '*' and path.exists():
+                existing = existing_save_path(self.server.save_dir, slot)
+                if self.headers.get('If-None-Match') == '*' and (existing.exists() or existing.is_symlink()):
                     return self.json_response(412, {'error': '此存档槽已有文件，保留现有进度'})
+                expected = self.headers.get('If-Match')
+                if expected is not None:
+                    try:
+                        current = read_save_file(existing)
+                    except (ValueError, UnicodeError, OSError):
+                        return self.json_response(412, {'error': '此存档槽已发生变化，请重新选择后确认覆盖'})
+                    if expected != f'"{current["sha256"]}"':
+                        return self.json_response(412, {'error': '此存档槽已发生变化，请重新选择后确认覆盖'})
                 if path.is_symlink():
                     raise OSError('Invalid save path')
                 with tempfile.NamedTemporaryFile(dir=self.server.save_dir, suffix='.tmp', delete=False) as stream:

@@ -1,8 +1,8 @@
 {
   "schema": "seventh-seal-tool-index",
   "version": 1,
-  "updated": "2026-10-22",
-  "registered_steps": 34,
+  "updated": "2026-10-23",
+  "registered_steps": 35,
   "content_plan": [
     "chapter-maps",
     "chapter-story",
@@ -29,6 +29,7 @@
     "menu",
     "menu-techniques",
     "menu-fonts",
+    "save-menu",
     "dialogue-ui",
     "prologue-presentation",
     "opening-maps",
@@ -441,6 +442,7 @@
       "imported_by": [
         "export_battle_ui.py",
         "export_menu_techniques.py",
+        "export_save_menu.py",
         "export_world_map_ui.py"
       ]
     },
@@ -491,6 +493,14 @@
       "role": "registered-build",
       "build_targets": [
         "configuration"
+      ],
+      "imported_by": []
+    },
+    {
+      "path": "export_save_menu.py",
+      "role": "registered-build",
+      "build_targets": [
+        "save-menu"
       ],
       "imported_by": []
     },
