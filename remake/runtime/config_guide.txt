@@ -1,13 +1,13 @@
 第七封印 · 内容接入与统一配置
-更新：2026-10-22；以下命令从游戏根目录执行。
+更新：2026-10-22；文中web路径以runtime为基准，命令从仓库根目录执行。示例使用python3，Windows可换为指向Python 3的python或py -3。
 
 先选择修改入口
 Phaser迁移沿用现有内容登记、数值配置和媒体路径。新增同类地图／角色继续走下述流程，不为每张地图创建专用Phaser Scene；通用显示行为放web/phaser中对应组件。phaser-preview使用独立示意图，不写入正式内容登记或素材目录。
-内容接入选择：runtime/web/data/runtime_content.json。角色、原技能索引、地图、舞台和ANM登记放在这里。
-数值调整：runtime/web/data/config/index.json及skills.json、battle.json、rewards.json、items.json。所有人物共用这些文件。
+内容接入选择：web/data/runtime_content.json。角色、原技能索引、地图、舞台和ANM登记放在这里。
+数值调整：web/data/config/index.json及skills.json、battle.json、rewards.json、items.json。所有人物共用这些文件。
 玩家当前HP／MP、等级／成长、背包／装备、旗标、队列、技巧／晶石与学习／熟练度是世界进度，通过游戏和存档维护。
 其余data JSON、图集和runtime_content.mjs是来源或生成结果。不要直接用它们调数值；新增机制先实现对应规则，登记和enabled不会补出处理器。
-旧web/data/skills.json仅保留为历史验证基线，当前调参统一使用web/data/config/skills.json；生成／迁移／恢复命令见tools/README.txt。
+旧web/data/skills.json仅保留为历史验证基线，当前调参统一使用web/data/config/skills.json；导出、缓存及配置重置语义见tools/README.txt。
 
 数值配置
 index.json选择original或debug，并引用四个参数文件。每个条目的name、owner、source、original和道具catalog为只读核对基线，只编辑parameters。
@@ -81,12 +81,9 @@ M17025、m17020-1、014的隔离导出只验证内容生产能力，未开放正
 物品目录、素材已提取、登记、可执行机制和正式获取／入队分别核对，不互相替代。
 
 构建与调参示例
-内容变化：python -B remake/runtime/tools/build_runtime.py --target content --run
-只读能力预检查：python -B remake/runtime/tools/build_runtime.py --preflight
-结构化预检查：node remake/runtime/tools/check_content.mjs --json
-先准备地图／剧情：python -B remake/runtime/tools/build_runtime.py --target chapter-story --run
-已有来源只调参数：node remake/runtime/tools/export_runtime_config.mjs
-只核对登记：node remake/runtime/tools/export_content_registry.mjs --check
-完整检查：python -B remake/runtime/tools/verify_current.py（8767服务需启动）
+新增地图先准备源表：python3 -B remake/runtime/tools/build_runtime.py --target chapter-story --run
+随后只读核对能力：python3 -B remake/runtime/tools/build_runtime.py --preflight
+补齐机制后构建内容：python3 -B remake/runtime/tools/build_runtime.py --target content --run
+这些是已有基础内容与匹配来源台账下的接入步骤；首次构建前置见tools/README.txt和../local_materials.txt。
 例如把index.mode改为debug，修改skills.entries.yantu.parameters.mp_cost，下一场核对资格、真实扣费及保存；恢复原值后将mode改回original。
-命令、缓存、前置条件和工具分类见tools/README.txt。所有JSON严格校验，未知字段、错误范围、来源漂移或未实现行为会报错。
+参数导出、登记检查、完整检查及全部选项统一见tools/README.txt。所有JSON严格校验，未知字段、错误范围、来源漂移或未实现行为会报错。

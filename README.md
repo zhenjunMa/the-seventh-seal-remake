@@ -4,9 +4,9 @@
 
 ## 当前状态
 
-已接入序章、火之谷至白木森林的初期主线，以及战斗、操作菜单、成长和存读档。娃蒂作为第三名队友接入开发样本；正式主线的入队剧情尚未添加。
+当前代码已接入序章、火之谷至白木森林的初期主线，以及战斗、操作菜单、成长和存读档。娃蒂作为第三名队友接入开发样本；正式主线的入队剧情尚未添加。
 
-正式入口已接入 Phaser 3.90.0：主循环、探索场景、人物显示和战斗绘制使用 Phaser，已有规则、配置、存档、素材路径及菜单／对白保持原有契约。运行库随代码提供，无需 npm 安装或 CDN。真实素材下的完整流程仍需交接验收。
+正式入口已接入 Phaser 3.90.0：主循环、探索场景、人物显示和战斗绘制使用 Phaser，已有规则、配置、存档、素材路径及菜单／对白保持原有契约。运行库随代码提供，无需 npm 安装或 CDN。本版真实素材下的完整流程仍待验收；当前任务与完成标准统一维护在[开发计划](remake/assessment/validation_design.txt)。
 
 **当前发布的是代码与配置基线。干净克隆后，仅凭原版文件生成全部素材的首次构建流程尚未打通。** 现有导出入口用于增量构建，部分步骤仍依赖本地来源台账、原生验证记录和历史样本；这些记录和样本不在仓库中。首次构建准备完成前，运行游戏需要本地已生成的资源，不能直接把克隆仓库视为完整可运行安装包。
 
@@ -38,8 +38,10 @@ the-seventh-seal-remake/
 已有完整本地生成资源时，从仓库根目录启动：
 
 ```console
-python -B remake/runtime/serve.py
+python3 -B remake/runtime/serve.py
 ```
+
+以上命令适用于 macOS/Linux。Windows 可用 `python -B remake/runtime/serve.py`，或双击 `remake/start.cmd`；所选命令需指向 Python 3。
 
 访问 <http://127.0.0.1:8767/>。仅启动静态服务不能补齐缺失素材。
 
@@ -47,7 +49,7 @@ python -B remake/runtime/serve.py
 
 代码与资源预检查：`node remake/runtime/tools/verify_phaser.mjs`。素材持有者使用 `node remake/runtime/tools/verify_phaser.mjs --assets` 核对资源是否齐全及已有指纹／尺寸。检查通过后仍需实际验证剧情、战斗和存读档。
 
-开发依赖包括 Python、Node.js、Pillow；部分媒体工具还需要 FFmpeg，GDI 字体导出需要 Windows。完整的统一依赖安装和首次导出命令仍需补齐，不承诺所有原版发行版本都适用。
+运行静态服务需要 Python 3；代码预检查需要 Node.js。构建工具另外使用 Pillow、NumPy、FFmpeg/FFprobe，GDI 字体导出需要 Windows；具体前置条件与命令见[工具说明](remake/runtime/tools/README.txt)。统一依赖安装和首次构建仍是未完成任务，不能把增量构建命令当作首次安装流程。
 
 ## 配置与开发文档
 
@@ -57,7 +59,9 @@ python -B remake/runtime/serve.py
 - [配置与内容扩展](remake/runtime/config_guide.txt)
 - [导出与验证工具](remake/runtime/tools/README.txt)
 - [当前计划](remake/assessment/validation_design.txt)
+- [界面与动态表现验收方法](remake/assessment/menu_alignment_workflow.txt)
+- [本地素材、证据与历史资料](remake/local_materials.txt)
 
 技能、道具、战斗和奖励数值统一维护在 `remake/runtime/web/data/config/`。修改 `parameters`，保留 `original` 和 `source` 核对字段。当前 `original` 模式要求原版参数一致，应用修改使用 `debug` 模式；普通导出保留已有参数，显式重置才恢复原值。
 
-现有详细文档中的 `evidence/`、`archive/` 和 `observation/` 引用指向本地开发材料，不属于公开仓库内容。完整验证工具也依赖这些材料；历史验收结果不能视为干净克隆的构建验证。
+素材、来源台账和历史观察的用途、交接方式与缺失处理统一见[本地资料说明](remake/local_materials.txt)。历史报告只说明对应阶段的验收范围，不代表当前 Phaser 版或干净克隆的构建已通过。

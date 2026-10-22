@@ -1,17 +1,20 @@
 第七封印 · 构建、导出与验证工具
-更新：2026-10-22；所有命令从游戏根目录执行。
+更新：2026-10-22；所有命令从仓库根目录执行。示例使用python3；Windows可换为指向Python 3的python或py -3。
 
 常用操作
-启动检查用服务：python -B remake/runtime/serve.py
-新增内容：python -B remake/runtime/tools/build_runtime.py --target content --run
+启动检查用服务：python3 -B remake/runtime/serve.py
+新增内容：python3 -B remake/runtime/tools/build_runtime.py --target content --run
 已有来源只调参数：node remake/runtime/tools/export_runtime_config.mjs
 只核对内容登记：node remake/runtime/tools/export_content_registry.mjs --check
-完整当前检查：python -B remake/runtime/tools/verify_current.py
-列全部构建计划：python -B remake/runtime/tools/build_runtime.py --target all
-盘点当前内容依赖：python -B remake/runtime/tools/build_runtime.py --target content --validate
-只读剧情能力预检查：python -B remake/runtime/tools/build_runtime.py --preflight
+完整当前检查：python3 -B remake/runtime/tools/verify_current.py
+列全部构建计划：python3 -B remake/runtime/tools/build_runtime.py --target all
+先准备新地图源表：python3 -B remake/runtime/tools/build_runtime.py --target chapter-story --run
+盘点当前内容依赖：python3 -B remake/runtime/tools/build_runtime.py --target content --validate
+只读剧情能力预检查：python3 -B remake/runtime/tools/build_runtime.py --preflight
 结构化检查输出：node remake/runtime/tools/check_content.mjs --json
-原版资源盘点：python -B remake/runtime/tools/resource_inventory.py（需要本地原版资源，输出evidence/resource_inventory.json）
+原版资源盘点：python3 -B remake/runtime/tools/resource_inventory.py（需要本地原版资源，输出evidence/resource_inventory.json）
+同步构建文档：python3 -B remake/runtime/tools/sync_tool_docs.py
+只读核对构建文档：python3 -B remake/runtime/tools/sync_tool_docs.py --check
 
 执行语义
 不加--run只列计划。--validate检查工具、既有来源台账与产物，记录当前指纹到evidence/export_inventory.json；不执行导出，也不等于原输入已经与历史来源逐项一致。
@@ -32,9 +35,12 @@ content目标贯通玩家、怪物、地图、剧情、配置、资源图集、�
 已恢复格式、未知指令／状态／掉落、局部遇敌分区和新舞台的边界见../config_guide.txt；登记不会补实现。
 
 前置与来源
-使用支持node:test和当前WebCrypto的Node、Python3，以及各工具实际使用的Pillow／NumPy、FFmpeg／FFprobe或Windows GDI。
+按任务准备环境：静态服务使用Python 3标准库；verify_phaser需要Node.js，脚本内部会调用当前Node执行语法检查。
+素材导出另需Pillow；startup-media还使用NumPy；音视频转换需要FFmpeg／FFprobe；GDI字体导出和部分原版观察需要Windows。完整回归还依赖当前Node的node:test／WebCrypto及各专题工具所需环境。
+可先运行python3 --version和node --version；涉及媒体时再核对所需Python包、FFmpeg／FFprobe或Windows组件。当前尚无统一锁定环境与已验证的跨平台首次安装命令，不把prototype/requirements.txt当作正式构建的全部依赖。
 本入口接管已有基础内容与来源台账，不是从空目录自动重建原游戏的安装器。初始路线／原型提取、原资源和save_analysis仍有实际依赖。
 声明原输入的新步骤可建立首份台账；其他步骤需要既有来源报告。路径、哈希、原像素／解码或未知格式校验仍由对应工具负责。
+来源与历史材料的用途、准备及恢复统一见../../local_materials.txt。材料不足时先执行无素材预检查；仅列计划不能证明首次构建可执行，--target all --run也不会自动补齐来源。首次构建任务和完成标准见../../assessment/validation_design.txt。
 生成的运行表和素材不手工调参；普通配置导出迁移已核对基线并保留parameters。仅参数变化无需重建图集。
 
 构建台账
@@ -45,7 +51,9 @@ content目标贯通玩家、怪物、地图、剧情、配置、资源图集、�
 直接执行历史导出器不经过日期保护，需要先查看其代码和输出范围。
 
 工具导航
-本轮分类见tool_index.json，记录构建目标、共享导入关系及独立工具用途。新工具加入时同步索引，实际目标始终以build_runtime.py列出的计划为准。
+分类见tool_index.json，记录构建目标、共享导入关系及独立工具用途。新增／迁移工具时人工维护path、role、imported_by及历史恢复字段；不根据命名猜测用途。
+sync_tool_docs.py从build_runtime.STEPS及plan生成registered_steps、content_plan、各工具build_targets和下方依赖清单；其余字段保留。默认同步，--check发现过期内容或索引遗漏时非零退出，不运行导出、不改素材或证据。实际构建计划始终以build_runtime.py为准。
+daily-entry：常用构建／检查／文档维护入口；standalone-check：不属于统一构建的独立检查。
 registered-build：统一构建中的生产步骤。
 shared-current：当前步骤或检查仍导入的解析／素材助手，保留原路径。
 specialized-evidence-check：专题验收和日期观察复核，按各工具代码检查范围；不是每日全部执行的命令。
@@ -55,6 +63,8 @@ resource_inventory.py盘点原资源目录、文件头、GAME.exe的PE导入和�
 independent-source-export：独立基础来源或旧样本生产入口，可能仍用于初始提取；分类不表示可删除。
 
 当前构建目标与直接依赖
+下方标记内内容由sync_tool_docs.py生成，不手工修改。
+[自动生成：构建目标开始]
 opening-seed: export_opening_seed.py; 依赖=无声明依赖
 opening-maps: export_opening_maps.py; 依赖=无声明依赖
 chapter-maps: export_chapter_maps.py; 依赖=无声明依赖
@@ -89,6 +99,7 @@ enemy-rewards: export_forest_rewards.py; 依赖=无声明依赖
 encounters: export_encounters.py; 依赖=无声明依赖
 story-check: check_content.mjs; 依赖=chapter-story,opening-seed,enemies
 battle-stages: export_battle_stages.py; 依赖=forest-stage
+[自动生成：构建目标结束]
 
 当前检查覆盖什么
 Phaser无素材预检查：node remake/runtime/tools/verify_phaser.mjs。核对固定运行库指纹、正式／预览入口模块图与JS语法，并报告现有JSON所引用的素材缺失。默认允许缺失素材，输出分别标明code.passed与assets.passed。
@@ -110,7 +121,6 @@ verify_*中的旧阶段门槛不能替代当前回归；写--record的新现场�
 历史证据不匹配：只表示代码时点不同，需要新观察；不改旧报告使其看起来匹配。
 
 资料维护
-来源和现场证据索引见../evidence/README.txt，恢复／归档见../../archive/README.txt。
-旧逐项工具说明和历史命令原文已保存在../../archive/20261022_before_directory_cleanup/documents.zip。
+来源证据、现场记录及历史归档的目录、准备方式与缺失处理统一见../../local_materials.txt；可选本地索引或旧压缩包不作为当前命令的唯一说明。
 assessment只维护validation_design.txt和menu_alignment_workflow.txt；旧兼容跳转页已清理。清理文件及迁移工具的原路径、SHA与Git恢复版本见tool_index.json的retired_documents和工具previous_path字段。
 verify_runtime_config.py的复核文字报告输出到evidence/runtime_config_recheck.txt，不再生成assessment下的旧跳转页。

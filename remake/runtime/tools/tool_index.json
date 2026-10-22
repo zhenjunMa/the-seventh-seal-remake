@@ -54,7 +54,9 @@
       "path": "build_runtime.py",
       "role": "daily-entry",
       "build_targets": [],
-      "imported_by": []
+      "imported_by": [
+        "sync_tool_docs.py"
+      ]
     },
     {
       "path": "capture_original_window.py",
@@ -624,6 +626,12 @@
         "export_chapter_story.py",
         "export_opening_maps.py"
       ]
+    },
+    {
+      "path": "sync_tool_docs.py",
+      "role": "daily-entry",
+      "build_targets": [],
+      "imported_by": []
     },
     {
       "path": "test_map_transitions.mjs",
