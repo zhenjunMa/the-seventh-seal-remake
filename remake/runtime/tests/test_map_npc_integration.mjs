@@ -74,9 +74,7 @@ test('map drawing uses live action atlases and physical frames without advancing
   assert.equal(JSON.stringify({npc,world}),before);
 });
 
-test('RAF advances environment NPCs in exploration and ordinary dialogue and pauses other presentations',()=>{
-  const original=globalThis.requestAnimationFrame;globalThis.requestAnimationFrame=()=>1;
-  try{
+test('Phaser exploration adapter advances environment NPCs in exploration and ordinary dialogue and pauses other presentations',()=>{
     const updates=[],role={id:'001',actions:[{index:0,interval_raw:180,frames_per_direction:2}]},$=elements();
     const world={location:{map_id:'M17020',x:80,y:100,direction:1},party:[{id:'001',hp:{current:1}}],flags:[1]};
     const state={world:{value:world,location:world.location},scenes:{phase:'map',current:{data:{id:'M17020'},npcs:[],
@@ -85,16 +83,16 @@ test('RAF advances environment NPCs in exploration and ordinary dialogue and pau
       keys:new Set(),selectedRole:'001',catalog:{roles:[role]},mapVitals:new Map(),view:{action:0,frame:0,follow:false},
       clock:0,lastTime:0,chapterStory:{maps:{}},battleUnavailable:''};
     const before=structuredClone(world),controller=createMapController({state,actions:{},$,canvas:{},ctx:{}});
+    state.engine={presentMap(){}};
     for(const [phase,opening,paused] of [['map',false,false],['event',false,false],['event',true,true],
       ['opening',true,true],['party-menu',false,true],['menu',false,true],['battle-loading',false,true]]){
-      state.scenes.phase=phase;state.openingView={active:opening};controller.render(100+updates.length*16);
+      state.scenes.phase=phase;state.openingView={active:opening,drawQueue:()=>[]};controller.updateExploration(100+updates.length*16,16);
       assert.equal(updates.at(-1).paused,paused,`${phase}, opening=${opening}`);
       assert.equal(updates.at(-1).player,world.location);
       assert.equal(updates.at(-1).visible({hidden:true}),false);
       assert.equal(updates.at(-1).visible({event:{conditions:[{index:0,value:1}]}}),true);
     }
     assert.deepEqual(world,before);
-  }finally{globalThis.requestAnimationFrame=original;}
 });
 
 test('interaction holds the live NPC identity and releases it after success, missing dialogue or failure',async()=>{
