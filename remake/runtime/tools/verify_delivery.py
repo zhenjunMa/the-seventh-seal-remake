@@ -117,8 +117,7 @@ files = [path for path in RUNTIME.rglob('*') if path.is_file() and path != outpu
          and '__pycache__' not in path.parts]
 files += [ROOT/name for name in ['remake/start.cmd', 'remake/start_runtime.cmd',
           'remake/start_prototype.cmd', 'remake/README.txt', 'remake/prototype/README.md',
-          'remake/assessment/assessment.txt', 'remake/assessment/validation_design.txt',
-          'remake/assessment/minimal_validation_next_20261011.txt',
+          'remake/assessment/validation_design.txt', 'remake/assessment/menu_alignment_workflow.txt',
           'remake/archive/20261011_before_chapter/assessment/runtime_phase1_20261011.txt',
           'remake/archive/20261011_before_chapter/assessment/runtime_phase2_20261011.txt']]
 report = dict(schema='seventh-seal-runtime-delivery', version=1,

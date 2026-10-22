@@ -181,8 +181,7 @@ def verify():
     # Source resources, retained assets and archive members remain checked above.
     assert not (RUNTIME/'tools/update_forest_combat_docs.py').exists(), 'Retired document writer returned'
     docs = ['README.txt', 'AGENTS.md', 'runtime/README.txt', 'runtime/architecture.txt', 'runtime/config_guide.txt', 'runtime/tools/README.txt',
-            'prototype/README.md', 'assessment/assessment.txt', 'assessment/validation_design.txt',
-            'assessment/minimal_validation_next_20261011.txt', 'assessment/runtime_config_20261011.txt', 'archive/README.txt']
+            'prototype/README.md', 'assessment/validation_design.txt', 'assessment/menu_alignment_workflow.txt', 'archive/README.txt']
     assert all((REMAKE/name).is_file() for name in docs)
     prototype_readme = (REMAKE/'prototype/README.md').read_text(encoding='utf-8')
     for ref in re.findall(r'\]\(([^)]+)\)', prototype_readme):

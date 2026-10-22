@@ -75,8 +75,8 @@ def main():
     paths = [*WEB.glob('*.js'), *WEB.glob('*.mjs'), *WEB.glob('core/*.mjs'), *WEB.glob('data/config/*.json'), WEB/'data/catalog.json',
              RUNTIME/'tools/export_runtime_config.mjs', RUNTIME/'tools/export_skill_config.py', RUNTIME/'tools/build_catalog.py', Path(__file__),
              *tests, RUNTIME/'tests/preserve_history.mjs', RUNTIME/'config_guide.txt', RUNTIME/'skill_config_guide.txt',
-             RUNTIME/'README.txt', RUNTIME.parent/'README.txt', RUNTIME.parent/'assessment/assessment.txt',
-             RUNTIME.parent/'assessment/minimal_validation_next_20261011.txt', RUNTIME.parent/'assessment/validation_design.txt',
+             RUNTIME/'README.txt', RUNTIME.parent/'README.txt', RUNTIME.parent/'assessment/menu_alignment_workflow.txt',
+             RUNTIME.parent/'assessment/validation_design.txt',
              *EVIDENCE.glob('runtime_config_browser*'), EVIDENCE/'runtime_config_before_browser_20261011.json']
     hashes = {path.relative_to(ROOT).as_posix():sha(path) for path in paths}
     report = dict(schema='seventh-seal-runtime-config-delivery', version=1, passed=True, tests=count, new_configuration_tests=14,
@@ -107,7 +107,7 @@ def main():
              '使用说明：runtime/config_guide.txt；证据：runtime/evidence/runtime_config_delivery_20261011.json、runtime_config_tests_20261011.tap、runtime_config_browser*。',
              '复做：node remake/runtime/tools/export_runtime_config.mjs；python -B remake/runtime/tools/verify_runtime_config.py（8767服务需已启动）。',
              '森林四步和更早日期报告保留当时指纹；本轮静态／适配器测试不称原游戏运行对照。']
-    (RUNTIME.parent/'assessment/runtime_config_20261011.txt').write_text('\n'.join(lines)+'\n', encoding='utf-8')
+    (EVIDENCE/'runtime_config_recheck.txt').write_text('\n'.join(lines)+'\n', encoding='utf-8')
     print(json.dumps(dict(passed=True, tests=count, new_tests=14, http=len(refs), sources=len(source_checks), retained_assets=len(previous['asset_hashes']), browser=True)))
 
 if __name__ == '__main__':

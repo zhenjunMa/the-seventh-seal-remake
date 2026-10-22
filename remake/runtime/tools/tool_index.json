@@ -598,6 +598,15 @@
       ]
     },
     {
+      "path": "resource_inventory.py",
+      "role": "source-observation",
+      "build_targets": [],
+      "imported_by": [],
+      "previous_path": "remake/assessment/resource_inventory.py",
+      "previous_sha256": "783a500b41859c8fa5380692a34ea010c93a4f95d2409d1d8e4944aac0a4342b",
+      "recovery_commit": "5636876ffb7ae11e6c85c7c552f4b5620570a502"
+    },
+    {
       "path": "route_export_maps.py",
       "role": "shared-current",
       "build_targets": [],
@@ -848,5 +857,25 @@
   "notes": [
     "Classification is navigation; an independent exporter may still be needed to bootstrap source data.",
     "Shared helpers remain in place. Inspect code and source/evidence references before relocation."
+  ],
+  "retired_documents": [
+    {
+      "path": "remake/assessment/assessment.txt",
+      "sha256": "81349dfb6f856d818c3cb4dfd4cd97188fed88d3ded8df63980173b318ef8a0a",
+      "replacement": "remake/assessment/validation_design.txt",
+      "recovery_commit": "5636876ffb7ae11e6c85c7c552f4b5620570a502"
+    },
+    {
+      "path": "remake/assessment/minimal_validation_next_20261011.txt",
+      "sha256": "72f639cecd7b7f477cc8483a81f05a3cbda58eabac49caa8a8b7df68e0a37d4b",
+      "replacement": "remake/assessment/validation_design.txt",
+      "recovery_commit": "5636876ffb7ae11e6c85c7c552f4b5620570a502"
+    },
+    {
+      "path": "remake/assessment/runtime_config_20261011.txt",
+      "sha256": "94021442d0bcda91f7445a64a4d7dc9c818519df9ef0fed6b78781d90947910d",
+      "replacement": "remake/runtime/config_guide.txt",
+      "recovery_commit": "5636876ffb7ae11e6c85c7c552f4b5620570a502"
+    }
   ]
 }

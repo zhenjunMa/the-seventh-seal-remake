@@ -3,8 +3,8 @@ from pathlib import Path
 from collections import defaultdict
 import struct, hashlib, re, json
 
-ROOT = Path(__file__).resolve().parents[2]
-OUT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[3]
+OUT = Path(__file__).resolve().parents[1] / 'evidence'
 u16 = lambda b,p: struct.unpack_from('<H',b,p)[0]
 u32 = lambda b,p: struct.unpack_from('<I',b,p)[0]
 
@@ -60,6 +60,7 @@ for p in sorted((ROOT/'save_analysis_20261010').glob('rea_*evidence.json')):
 result=dict(boundary='Filesystem metadata, raw headers, PE import descriptors, raw ASCII strings and prior evidence index only. No custom asset decoding or runtime observation.',
   binary=dict(path='GAME.exe',sha256=hashlib.sha256(b).hexdigest(),machine=hex(u16(b,coff)),image_base=hex(base),sections=sections,imports=imports,filtered_ascii_strings=strings),
   resource_groups=inventory, prior_evidence=evidence)
+OUT.mkdir(parents=True, exist_ok=True)
 (OUT/'resource_inventory.json').write_text(json.dumps(result,ensure_ascii=False,indent=2),'utf-8')
 print(json.dumps(dict(groups=[{k:v for k,v in g.items() if k!='samples'} for g in inventory],
   dlls=[dict(dll=i['dll'],count=len(i['symbols']),symbols=[s.get('name','ordinal '+str(s.get('ordinal'))) for s in i['symbols']]) if i['dll'].lower() not in ['kernel32.dll','user32.dll','gdi32.dll'] else dict(dll=i['dll'],count=len(i['symbols'])) for i in imports],
