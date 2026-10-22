@@ -43,7 +43,7 @@ python3 -B remake/runtime/serve.py
 
 以上命令适用于 macOS/Linux。Windows 可用 `python -B remake/runtime/serve.py`，或双击 `remake/start.cmd`；所选命令需指向 Python 3。
 
-访问 <http://127.0.0.1:8767/>。仅启动静态服务不能补齐缺失素材。
+访问 <http://127.0.0.1:8767/>。本地服务同时读写 `remake/saves/` 下的普通档和快速档；仅启动服务不能补齐缺失素材。
 
 没有媒体素材时，可访问 <http://127.0.0.1:8767/phaser-preview.html>：使用程序生成的示意图体验探索、缩放和基于现有规则的战斗，不读取或覆盖正式存档。该页面不代表原素材表现或完整主线验收。
 

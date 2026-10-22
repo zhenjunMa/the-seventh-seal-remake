@@ -41,6 +41,7 @@
 /remake/observation/
 /remake/**/evidence/
 /remake/archive/
+/remake/saves/
 /remake/assessment/*.json
 
 # Local environments, caches, editor state, and credentials.

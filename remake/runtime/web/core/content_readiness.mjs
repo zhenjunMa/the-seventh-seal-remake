@@ -1,6 +1,6 @@
 // Audit only admitted entrances as build gates. Legacy implicit NPC dialogue is
 // inventoried separately so existing bounded content does not gain new promises.
-import {chapterRestChoices,initializeChapterItem} from './chapter.mjs';
+import {chapterChoices,chapterRestChoices,initializeChapterItem} from './chapter.mjs';
 import {validateChapterAnimation} from './chapter_animation.mjs';
 import {validateRouteRecord} from './route.mjs';
 import {chapterRouteExits} from './map_connections.mjs';
@@ -23,7 +23,7 @@ export function inspectContentReadiness(content,story,resources){
     const npcSlots=binding.npcs??(resources.npcs_by_map[mapId]??[]).map(npc=>npc.slot_zero_based);
     for(const slot of new Set(npcSlots)){
       const id=table?.index_nonzero.find(row=>row.slot===slot)?.record;
-      if(id||binding.npcs)roots.push({kind:'npc',id,label:slot,advisory:binding.npcs===undefined});
+      if(id||binding.npcs)roots.push({kind:'npc',id,label:slot,explicit:true,advisory:binding.npcs===undefined});
     }
     for(const root of roots){
       const diagnostic=(recordId,message)=>({map_id:mapId,entrance:root.kind,entrance_id:root.label??root.id,record_id:recordId,message});
@@ -66,6 +66,8 @@ export function inspectContentReadiness(content,story,resources){
               need(record.region_byte_raw===0&&record.mutation_index===0&&binding.objects.some(row=>row.index===record.mutation_bit-1&&row.handler==='stationary-chest'),'物件状态变更处理器尚未接入');break;
             case 2:
               need(item.explicit&&record.mutation_index===0&&record.mutation_bit===0&&binding.rests.some(row=>row.restore_records.includes(record.id)),'恢复分支需要已登记的主动休息入口');break;
+            case 4:
+              need(item.explicit&&record.mutation_index===0&&record.mutation_bit===0,'存档分支需要主动交互入口');break;
             case 5:{
               const definition=story.item_definitions?.[record.mutation_bit];
               need(record.mutation_index===0&&definition?.source?.sha256===story.source_hashes[definition.source.path],'道具变更来源或处理器缺失');
@@ -78,8 +80,8 @@ export function inspectContentReadiness(content,story,resources){
             const choiceBytes=record.raw_hex?.slice(0x537*2);
             if(record.style===1&&choiceBytes&&/[^0]/.test(choiceBytes)){
               const rest=binding.rests.find(row=>row.record_id===record.id);
-              need(item.explicit&&rest,'选择分支需要已登记的主动入口');
-              for(const choice of chapterRestChoices(record,rest))add(choice.recordId);
+              need(item.explicit,'选择分支需要已登记的主动入口');
+              for(const choice of rest?chapterRestChoices(record,rest):chapterChoices(record))add(choice.recordId);
             }else add(record.next);
           }else if(record.kind===1){
             const name=record.text_raw.replace(/\.anm$/i,'').toLowerCase(),program=story.programs[name];

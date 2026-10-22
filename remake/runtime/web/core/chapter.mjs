@@ -100,20 +100,21 @@ export function chapterProgress(world) {
     equipment_ready:Boolean(world.flags[48] & 1)};
 }
 
-// The bounded home-bed question uses two of the native three entries. Each
-// entry has a 100-byte GBK label followed by a DWORD TLK target; the final
-// unused entry is zero. Read raw bytes so the displayed choices and targets
-// cannot diverge from the original record.
-export function chapterRestChoices(record,binding=null) {
-  need(record?.kind === 0 && record.style === 1, '休息选择记录无效');
-  const b = bytes(record.raw_hex, 0x66f, '休息选择'), v = view(b), choices = [];
+// Native style1 stores three 100-byte GBK labels followed by DWORD TLK targets.
+export function chapterChoices(record) {
+  need(record?.kind === 0 && record.style === 1, '剧情选择记录无效');
+  const b = bytes(record.raw_hex, 0x66f, '剧情选择'), v = view(b), choices = [];
   for (let index = 0; index < 3; index++) {
     const offset = 0x537 + index * 104, textBytes = b.slice(offset, offset + 100), end = textBytes.indexOf(0);
     const text = new TextDecoder('gbk', {fatal:true}).decode(end < 0 ? textBytes : textBytes.slice(0, end));
     const target = v.getUint32(offset + 100, true);
     if (text) choices.push({index, text, recordId:target});
-    else need(target === 0, '休息空选择含未支持的跳转');
+    else need(target === 0, '剧情空选择含未支持的跳转');
   }
+  return choices;
+}
+export function chapterRestChoices(record,binding=null) {
+  const choices=chapterChoices(record);
   binding??=Object.entries(runtimeContent.maps).find(([id,row])=>record.source?.path?.toLowerCase()===`map/${id.toLowerCase()}.tlk`&&row.rests.some(rest=>rest.record_id===record.id))?.[1].rests.find(rest=>rest.record_id===record.id);
   need(choices.length>=1&&choices.length<=3&&binding?.choices?.length===choices.length&&choices.every((choice,index)=>{
     const expected=binding.choices[index];return choice.index===expected.index&&choice.text===expected.text&&choice.recordId===expected.record_id;
@@ -215,18 +216,20 @@ export class ChapterRunner {
       if (storyBindings(mapId,this.content).rests.some(row=>row.restore_records.includes(record.id)))
         need(context.explicitInteraction === true, '休息需要主动操作床铺');
       traversed.push(id);
-      this.applyMutation(draft, table, record);
+      this.applyMutation(draft, table, record, context);
       this.log({type:'chapter-record', mapId, recordId:id, source:record.source ?? table.source});
       if (this.condition(draft, table, record)) { id = record.if_true; continue; }
       if (record.kind === 0) {
-        if (storyBindings(mapId,this.content).rests.some(row=>row.record_id===record.id)) {
+        const binding=storyBindings(mapId,this.content).rests.find(row=>row.record_id===record.id);
+        const choices=binding?chapterRestChoices(record,binding):record.style===1?chapterChoices(record):[];
+        if (choices.length) {
           need(context.explicitInteraction === true,
             '剧情选择需要已恢复的主动交互入口');
-          need(typeof this.choose === 'function', '休息选择显示接口缺失');
-          const binding=storyBindings(mapId,this.content).rests.find(row=>row.record_id===record.id);
-          const choices = chapterRestChoices(record,binding), selected = await this.choose({mapId, record, choices:copy(choices), draft});
+          need(choices.every(choice=>choice.recordId===0||records.has(choice.recordId)), '剧情选择跳转目标缺失');
+          need(typeof this.choose === 'function', '剧情选择显示接口缺失');
+          const selected = await this.choose({mapId, record, choices:copy(choices), draft});
           const choice = choices.find(row => row.index === selected);
-          need(choice, '休息选择结果无效');
+          need(choice, '剧情选择结果无效');
           dialogueIds.push(id);
           id = choice.recordId;
           continue;
@@ -247,7 +250,7 @@ export class ChapterRunner {
         id = record.next;
       } else throw new Error(`火之谷对白类型 ${record.kind} 尚未接入`);
     }
-    return {mapId, recordId, traversed, dialogueIds};
+    return {mapId, recordId, traversed, dialogueIds,save_requested:Boolean(context.saveRequested)};
   }
   condition(draft, table, record) {
     need(record.condition_type === 0, `火之谷剧情条件 ${record.condition_type} 尚未接入`);
@@ -257,7 +260,16 @@ export class ChapterRunner {
     need(flagIndex(index) && bit >= 1 && bit <= 32, '火之谷剧情旗标条件无效');
     return Boolean(draft.flags[index] & (1 << (bit - 1)));
   }
-  applyMutation(draft, table, record) {
+  applyMutation(draft, table, record, context={}) {
+    if(record.mutation_type===4){
+      need(context.explicitInteraction===true&&record.mutation_index===0&&record.mutation_bit===0,
+        '存档需要主动交互入口');
+      // Native 0x464d80 case4 clears dialogue then opens 0x4794e0. Defer UI
+      // until the complete story transaction commits and exploration resumes.
+      context.saveRequested=true;
+      this.log({type:'chapter-save-request',mapId:table.id,recordId:record.id,source:record.source,native_handler:'0x464d80:case4'});
+      return;
+    }
     if (record.mutation_type === 2) {
       need(storyBindings(table.id,this.content).rests.some(row=>row.restore_records.includes(record.id)) && record.mutation_index === 0
         && record.mutation_bit === 0, '剧情恢复行为尚未接入');

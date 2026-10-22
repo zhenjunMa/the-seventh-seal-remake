@@ -9,3 +9,4 @@
 #startupOptions .startup-save{font-size:15px;text-align:left;line-height:1.6}
 #startupOptions button[aria-current=true]{color:#ffff60}
 #startupOptions button.startup-save{color:#fff;display:flex;align-items:flex-start;justify-content:flex-start}
+#startupOptions button.startup-save[aria-current=true]{color:#ffff60}

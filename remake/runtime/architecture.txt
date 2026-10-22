@@ -1,8 +1,8 @@
 第七封印 · 当前实现架构
-更新：2026-10-22；路径以runtime为基准。
+更新：2026-10-23；路径以runtime为基准。
 
 启动与分层
-serve.py只提供静态文件：/映射web，/prototype/映射../prototype/web；不提供原程序、原存档或证据目录。
+serve.py提供静态文件和固定存档接口：/映射web，/prototype/映射../prototype/web；GET／PUT /api/saves/manual和/api/saves/quick读写../saves/SaveGame0.json及QuickSave.json。封装校验后在同目录临时写入并原子替换，仅接受本地同源请求；不提供原程序、原存档、证据目录或任意文件路径。
 Phaser 3.90.0运行库固定在web/vendor/phaser，保留MIT许可和SHA清单；直接随静态服务提供，不依赖CDN或npm安装。
 web/app.js创建共享state和actions，装配services、map、story、menu、session、battle、inspection、input、boot控制器，再调用boot。
 app先创建phaser/runtime.mjs中的PhaserRuntime。runtime场景只推进共享转场与界面；exploration和battle分别在自己的update中调用探索／战斗适配器并绘制，地图控制器不再推进战斗。原SceneController继续负责世界地点准备／提交／回滚。
@@ -83,6 +83,8 @@ menu controller通过core事务连接装备、用药、技巧、队列和晶石�
 菜单站立interval由party_battle_view中相同角色idle生成；队列、状态和装备共用，不维护第二份速度参数。原菜单DGP的120ms留作来源，并非当前统一播放策略。
 core/audio管理素材、音量、静音与cue；menu_feedback对每次输入／事务只发一次反馈，音效诊断有限保留。音频导出按登记地图及技能／动作来源建立清单。
 session controller管理保存、载入、导入／导出、主菜单与缩略图。新截图绑定世界payload，旧存档预览只读重建，过期异步结果不覆盖当前页面。
+core/save_storage经本地服务持久化普通／快速双槽；普通文件缺失时迁移旧浏览器存档并保留副本。services统一存取锁及save-io阶段，等待期间冻结探索；读档复用WorldStore校验和SceneController恢复事务。启动菜单仅缓存列表，确认读取时重新读取文件；偏好仍独立保存在浏览器。
+剧情style1选择从TLK原始三槽解码；床铺继续核对登记选择。主动NPC交互到达mutation4时只返回save_requested，剧情成功提交后再显示通讯水晶保存界面，避免在未提交草稿上落盘。
 
 扩展位置
 地图／出口：登记、导出器、map controller、core/scenes／route／world_map规则和地图资源；共用phaser/scenes/exploration_scene显示，几何描述放core/map_presentation。

@@ -69,7 +69,7 @@ export class PhaserRuntime {
     this.phase=phase;
     if(phase.startsWith('battle-')){
       if(phase!=='battle-loading')this.mode='battle';
-    }else if(['map','event','opening','loading','party-menu','world-map','inspect'].includes(phase))this.mode='exploration';
+    }else if(['map','event','opening','loading','save-io','party-menu','world-map','inspect'].includes(phase))this.mode='exploration';
     else this.mode=null;
     this.syncScenes();
   }
