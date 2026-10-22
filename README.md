@@ -51,7 +51,7 @@ python -B remake/runtime/serve.py
 
 ## 配置与开发文档
 
-- [项目入口](remake/README.txt)
+- [重制文档导航](remake/README.txt)
 - [运行与操作说明](remake/runtime/README.txt)
 - [代码架构](remake/runtime/architecture.txt)
 - [配置与内容扩展](remake/runtime/config_guide.txt)
