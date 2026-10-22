@@ -17,6 +17,7 @@ import {commitSkillTestResources} from "../core/skill_test_commit.mjs";
 import {battleResources} from "../core/battle_resources.mjs";
 
 export function createBattleController({state, actions, $, canvas, ctx}) {
+  const captureScene=kind=>actions.captureScene?.(kind)??(kind==='battle'?$('battleCanvas'):canvas);
   function updateBattle(snapshot){
     if(!snapshot||snapshot.phase==='closed')return;
     if(!state.battleEntryPending)state.scenes.setPhase(snapshot.phase==='command'?'battle-command':snapshot.phase==='charging'?'battle-charging':snapshot.phase==='action'?'battle-action':snapshot.phase==='interrupted'?'battle-interrupted':'battle-result');
@@ -34,14 +35,14 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
   }
   function battleKey(key,repeat=false){return state.battleMenu?.key(key,repeat)??false;}
   function battleKeyUp(key){state.battleMenu?.keyup(key);}
-  function drawBattleInterface(now){if(state.battleMenu){state.battleMenu.draw(now,state.battleView?.actorPositions());state.battleMenu.paintTo($('battleCanvas'));
+  function drawBattleInterface(now){if(state.battleMenu){state.battleMenu.draw(now,state.battleView?.actorPositions());state.battleMenu.paintTo(state.engine?.battle.surface.canvas??$('battleCanvas'));
     $('battleCommands').dataset.lifecycle=JSON.stringify(state.battleView?.lifecycleSnapshot());
     const battle=state.battle,completed=state.battleView?.drainLifecycleCompleted()??[];
     if(completed.length)queueMicrotask(()=>{if(state.battle===battle)for(const event of completed)battle.ackLifecycle(event);});
-  }}
+  }state.engine?.battle.surface.endFrame();}
   async function prepareView({mode,newParty,stagePath=null,lifecycle=false,actors,onProgress}){
     mode=`${mode}:${stagePath??''}`;
-    if(!state.battleViews.has(mode))state.battleViews.set(mode,new BattleView({canvas:$('battleCanvas'),
+    if(!state.battleViews.has(mode))state.battleViews.set(mode,new BattleView({canvas:state.engine?.battle.surface.canvas??$('battleCanvas'),
       metadataPath:newParty?'/'+state.catalog.party_battle_view:stagePath?'/'+state.catalog.forest_battle_view:'/data/battle_view.json',
       itemMetadataPath:newParty?'/data/item_presentation.json':null,stageMetadataPath:stagePath,lifecycleMetadataPath:lifecycle?'/data/battle_lifecycle.json':null}));
     const view=state.battleViews.get(mode);await view.prepare({actors,onProgress});return view;
@@ -82,8 +83,9 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
       start();
       if(state.battleTransition&&before)await state.battleTransition.run(before,()=>{
         showBattle();const snapshot=state.battle.presentationSnapshot();state.battleView.draw(snapshot,0);
-        state.battleMenu.draw(0,state.battleView.actorPositions());state.battleMenu.paintTo($('battleCanvas'));
-        const after=state.battleTransition.capture($('battleCanvas'));
+        state.battleMenu.draw(0,state.battleView.actorPositions());state.battleMenu.paintTo(state.engine?.battle.surface.canvas??$('battleCanvas'));
+        state.engine?.battle.surface.endFrame();
+        const after=state.battleTransition.capture(captureScene('battle'));
         // The captured entry pose must not start lifecycle clocks during the transition.
         state.battleView.setRoster(sample.actors,sample.skills);return after;
       });
@@ -93,7 +95,7 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
   }
   async function startBattle(group=null,encounterState=null){
     if(state.scenes.phase!=='map')return;
-    const revision=state.world.value.revision,before=state.battleTransition?.capture(canvas);state.battlePresentationError=null;
+    const revision=state.world.value.revision,before=state.battleTransition?.capture(captureScene());state.battlePresentationError=null;
     state.battleCheckpoint={...state.view};state.scenes.setPhase('battle-loading');$('loading').querySelector('p').textContent='正在准备战斗…';actions.status('正在准备战斗资源…');
     try{
       let sample,newParty;
@@ -126,7 +128,7 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
   }
   async function startTechniqueTest(){
     if(state.skillTestSession||state.scenes.phase!=='party-menu'||!state.menuContext||state.menuContext.combat)return;
-    const before=state.battleTransition?.capture(canvas),ticket=actions.beginTechniqueTestMenu();
+    const before=state.battleTransition?.capture(captureScene()),ticket=actions.beginTechniqueTestMenu();
     const session={ticket,mapWorld:state.world,revision:state.world.value.revision,viewState:{...state.view},mapName:$('mapName').textContent,
       previous:{battle:state.battle,battleView:state.battleView,battleMenu:state.battleMenu,battleRng:state.battleRng,battleNatural:state.battleNatural,battleCursorMemory:state.battleCursorMemory,sidePriority:state.sidePriority,battlePresentationError:state.battlePresentationError,itemData:state.itemData},
       visibility:{canvas:canvas.hidden,dialogue:$('dialogue').hidden},view:null,battle:null,returnPending:false};

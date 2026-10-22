@@ -103,7 +103,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
   }
   function follow() {const im=state.scenes.current.bitmap;Object.assign(state.view,openingCamera(state.world.location,im.width,im.height));}
   function fit(){if(!state.scenes?.current)return;const im=state.scenes.current.bitmap;state.view.zoom=Math.min(640/im.width,480/im.height)*.97;state.view.x=im.width/2;state.view.y=im.height/2;state.view.follow=false;}
-  function resize(){const rect=$('screen').getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,2);state.cssWidth=rect.width;state.cssHeight=rect.height;for(const target of [canvas,$('battleCanvas')]){target.width=Math.round(rect.width*dpr);target.height=Math.round(rect.height*dpr);}ctx.setTransform(dpr,0,0,dpr,0,0);ctx.imageSmoothingEnabled=false;}
+  function resize(){const rect=$('screen').getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,2);state.cssWidth=rect.width;state.cssHeight=rect.height;for(const target of [canvas,$('battleCanvas')]){target.width=Math.round(rect.width*dpr);target.height=Math.round(rect.height*dpr);}ctx.setTransform(dpr,0,0,dpr,0,0);ctx.imageSmoothingEnabled=false;state.engine?.resize();}
   function npcAvailable(npc) {
     if(npc.hidden)return false;
     const conditions=npc.event?.conditions??[];
@@ -170,12 +170,19 @@ export function createMapController({state, actions, $, canvas, ctx}) {
     const scene=state.scenes?.current;
     const world=state.sceneEntryDraft??state.world.value;
     const draw=state.openingView?.active&&state.openingView.nativeViewport?drawOpeningScene:drawGameScene;
-    draw(ctx,{scene,world,role:role(),action:sheetAction(),view:state.view,width:state.cssWidth,height:state.cssHeight,objectBitmap:(scene,obj)=>objectBitmap(scene,obj,world),
+    const options={scene,world,role:role(),action:sheetAction(),view:state.view,width:state.cssWidth,height:state.cssHeight,objectBitmap:(scene,obj)=>objectBitmap(scene,obj,world),
       openingQueue:state.openingView?.active?state.openingView.drawQueue(scene.data.role_layer_preview??2):null,
-      collision:scene&&state.view.collision?()=>drawCollision(scene):null,nearest:state.nearest});
+      nativeViewport:Boolean(state.openingView?.active&&state.openingView.nativeViewport),
+      collision:scene&&state.view.collision?()=>drawCollision(scene):null,nearest:state.nearest};
+    if(state.engine)state.engine.presentMap(options);else draw(ctx,options);
     if(!scene)return;const at=world.location;
     $('zoomValue').textContent=`${Math.round(state.view.zoom*100)}%`;$('position').textContent=`${at.map_id} · ${at.x.toFixed(1)}, ${at.y.toFixed(1)}`;
     $('position').dataset.x=at.x;$('position').dataset.y=at.y;$('position').dataset.map=at.map_id;
+  }
+  function captureScene(kind='exploration'){
+    const target=kind==='battle'?$('battleCanvas'):canvas;
+    if(state.engine){if(kind==='exploration')paint();state.engine.capture(kind,target);}
+    return target;
   }
   function renderSavePreview(scene,world,{view=null,action=null}={}){
     const r=state.catalog.roles.find(role=>role.id===world.leader_id),a=action??r?.actions.find(action=>action.index===0);
@@ -258,7 +265,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
       }catch(error){
         state.battlePresentationError=error.message;state.battleView?.stop(error.message);state.battle?.interrupt(error);actions.status(error.message,true);
       }
-    }else if(!state.startupView||state.startupView.sequence.stage==='closed')paint();state.raf=requestAnimationFrame(render);
+    }else if(!state.startupView||state.startupView.sequence.stage==='closed')paint();
   }
-  return {role, sheetAction, buildHud, prepareMap, validateEntry, commitView, changeMap, follow, fit, resize, npcAvailable, updateNearest, objectBitmap, transitionFor, renderWorldMap,selectWorldMapDestination,closeWorldMap, routeExit, drawCollision, paint, render,captureSavePreview,loadSavePreview};
+  return {role, sheetAction, buildHud, prepareMap, validateEntry, commitView, changeMap, follow, fit, resize, npcAvailable, updateNearest, objectBitmap, transitionFor, renderWorldMap,selectWorldMapDestination,closeWorldMap, routeExit, drawCollision, paint, render,captureScene,captureSavePreview,loadSavePreview};
 }

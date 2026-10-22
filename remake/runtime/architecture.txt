@@ -3,9 +3,20 @@
 
 启动与分层
 serve.py只提供静态文件：/映射web，/prototype/映射../prototype/web；不提供原程序、原存档或证据目录。
+Phaser 3.90.0运行库固定在web/vendor/phaser，保留MIT许可和SHA清单；直接随静态服务提供，不依赖CDN或npm安装。
 web/app.js创建共享state和actions，装配services、map、story、menu、session、battle、inspection、input、boot控制器，再调用boot。
+app先创建phaser/runtime.mjs中的PhaserRuntime。Phaser的runtime场景驱动唯一游戏主循环，再调用原controller的render；exploration与battle场景负责显示。原SceneController继续负责世界地点准备／提交／回滚，与Phaser显示场景分工明确。
 controllers处理浏览器流程和系统连接；core处理来源校验、资格、规则与事务；视图负责输入层级和绘制。新规则不写入app.js或按人物名字分支。
 boot读取目录、内容登记、来源数据、配置和界面清单，准备共享视图及世界／场景／战斗入口。新增控制器通过同一state/actions连接。
+
+Phaser目录（相对web）
+phaser/runtime.mjs：引擎创建、主循环、显示场景选择、缩放、同步截图和释放。
+phaser/scenes：exploration_scene与battle_scene，分别承载探索人物／相机和战斗绘制接口。
+phaser/actors/map_actor.mjs：可销毁重建的地图人物／物件显示组合，持有SpritePose。
+phaser/components：sprite_pose适配原帧／光层；action_clock负责源动作等待、并发推进和取消。
+phaser/rendering：texture_cache管理纹理引用，battle_surface将既有绘制命令适配为Phaser对象。
+phaser/preview.mjs与phaser-preview.html：独立示意素材验证入口，不进入正式内容登记。
+vendor/phaser：固定版本运行库、许可及manifest.json。controllers、core、data、assets及导出工具继续保留原位置。
 
 三个状态边界
 WorldStore持有可保存世界：地点、人物资源／成长、背包／装备、旗标、事件、队列、技巧／晶石、遇敌RNG与奖励去重记录。变更通过草稿及revision提交，避免异步加载覆盖期间的新操作。
@@ -31,6 +42,8 @@ CHR／DAT／TLK／ANM和生成的party_*、forest_*、enemy_*等JSON保存来源
 
 地图、剧情与演出
 map controller连接地图载入、视口、连续移动、NPC与交互；terrain、占格、路径、移动／遇敌规则由对应core及共享MovementMap处理。
+core/map_presentation生成按原图层／地面Y排序的只读显示描述。phaser/scenes/exploration_scene使用MapActor与SpritePose组合人物主层和光效层，Phaser相机保持640×480原逻辑平面。MapActor为临时显示对象，不保存HP、成长或旗标。
+map_scene_view保留为存档缩略图与几何对照绘制，消费同一map_presentation。OpeningView同时提供显示描述与兼容draw回调；正式ANM动作、物件动作和战斗转场由Phaser驱动的ActionClock推进，原等待、并发与取消契约不变。
 chapter-maps从原DAT的state0描述推导已登记地图间的物理出口；剧情型出口、前置条件和演出继续走TLK／ANM系统。
 map_connections按登记与源描述连接大地图出口，并共用原标记／排序规则推导大地图进入位置。chapter_story覆盖已登记出口来源，route_events只兼容尚未接入TLK的旧地图。
 maps.entry明确选择DAT +0x11E进入剧情；SceneController与WorldMapController通过同一enterMap钩子执行，位置和剧情共用未提交草稿。失败回滚显示及世界状态，过期revision拒绝覆盖；启动、恢复和缩略图不触发进入剧情。
@@ -46,6 +59,8 @@ party_sample／forest_sample组装本场来源，party_attributes组合当前人
 combat、combat_rules、forest_ai、battle_scheduler等core模块负责原公式、抽随机、选招、20ms充槽、目标与动作仲裁。技能学习、人物等级和实现处理器分别门控。
 类型恢复、受击／反击、状态、死亡／起身、技能成长、奖励池与结算各有独立core模块；BattleController连接它们并保持单次资源提交。
 BattleView消费时间线和只读表现数据，不修改HP／MP或抽战斗随机。场景、角色和效果共用640×480逻辑坐标。
+正式BattleView注入phaser/rendering/battle_surface提供的绘制接口。已有源图集裁切、平移、缩放、加色和文本命令转为复用的Phaser Sprite／Graphics／Text；不将整场旧Canvas逐帧上传为背景。BattleResources原SHA、尺寸、分片和资源租约检查继续生效。
+第一版选择Phaser的Canvas渲染后端以衔接现有加色语义。TextureCache仅拥有Phaser纹理引用，不取代ImageResources／BattleResources的解码与来源校验；每帧回收未使用的纹理引用。战斗动作和生命周期继续由已有源时间线控制，Sprite不额外启动另一套自动播放时钟。
 forest_stage先完成天空、地面、全部场景贴图，再画按地面Y排序的战斗人物，最后画效果和HUD。人物升空与地面锚点分开，背景纹理不与人物混排。
 battle_layout按保存的四个固定队列槽定位，不压缩空位；idle、受击和防御的已接入时序读取各自源动作。普通攻击／技能仍有预览时钟与轨迹适配边界。
 battle_lifecycle_view独立推进入场、死亡、起身，完成后回执core；死亡完成前不结算终局，复活epoch使旧回执失效。
@@ -53,6 +68,8 @@ battle_packs用裁切图集保留源PNG核对关系；资源完成解码后才�
 battle-stages按登记读取原SCN／DGP生产同格式背景，复用来源解码／像素审计和默认镜头规则；战斗背景与音乐按本场实际stage选择。旧专用舞台产物继续由原导出器维护。
 
 菜单、保存与声音
+菜单、对白、字幕、加载及像素转场沿用已有DOM／局部Canvas视图；这些界面保持现有输入层级、字体和音频控制。Phaser不再安装第二套键盘和音频系统。
+phaserHost承载可见游戏画布。stage与battleCanvas保留为透明的兼容焦点／截图目标；入战截图调用captureScene同步渲染当前Phaser显示列表，截图过程不推进世界或动作时钟。
 menu controller通过core事务连接装备、用药、技巧、队列和晶石；OperationMenuView及子视图管理页签、候选、焦点、取消和动画。
 队列formation_slots、七槽technique_bindings、组合technique_combinations、六槽crystal_sockets及技能skill_progress是可选保存状态；旧格式沿现有兼容规则读取。
 技巧测试复用正式战斗和同一数值配置，以私有票据保留菜单页／焦点。测试门控控制HP、MP及敌方主动派发，药品等真实资源变化仍按正常事务提交。
@@ -61,15 +78,18 @@ core/audio管理素材、音量、静音与cue；menu_feedback对每次输入／
 session controller管理保存、载入、导入／导出、主菜单与缩略图。新截图绑定世界payload，旧存档预览只读重建，过期异步结果不覆盖当前页面。
 
 扩展位置
-地图／出口：登记、导出器、map controller、scenes／route／world_map规则和地图资源。
-剧情／演出：chapter来源、story controller、chapter／chapter_animation／anm_runtime及相应视图。
-队友／技能：登记、原CHR／技能动作、party_*导出、统一注册／配置、party_sample、菜单和表现。content_sample只用于隔离验证。
+地图／出口：登记、导出器、map controller、core/scenes／route／world_map规则和地图资源；共用phaser/scenes/exploration_scene显示，几何描述放core/map_presentation。
+剧情／演出：chapter来源、story controller、chapter／chapter_animation／anm_runtime及OpeningView；通过phaser/components/action_clock同步动作，人物主层／光效由SpritePose显示。
+队友／技能：登记、原CHR／技能动作、party_*导出、统一注册／配置、party_sample、菜单和表现；地图显示共用MapActor，战斗显示共用battle_scene／battle_surface及原动作时间线。content_sample只用于隔离验证。
 怪物：enemies、enemy-rewards、encounters目标及统一配置；新增行为先补规则，再登记。
 道具／晶石：源ITM、item_registry、items／equipment／crystal_sockets等通用处理器及界面连接。
-UI：现有controller和view，原素材／字体导出及状态验收；通用方法见../assessment/menu_alignment_workflow.txt。
+UI：现有controller和view、Phaser显示场景及相应组件，原素材／字体导出及状态验收；通用方法见../assessment/menu_alignment_workflow.txt。
 
 当前边界与维护
+web/phaser-preview.html使用独立示意图和现有战斗定义，检查探索、缩放、动作命中及截图，不写正式存档、不关闭正式素材校验。tools/verify_phaser.mjs检查运行库指纹、两个入口的模块图和数据中的素材引用；--assets要求素材齐全且现有指纹／尺寸一致。
+Phaser迁移在无原媒体环境完成代码与示意图验证；真实素材、完整主线、字体、混色、音视频、反复进出及长流程释放仍需素材持有者验收。待办只维护在../assessment/validation_design.txt。
 构建支持已恢复的矩形v6地图、全局STG池、指令、状态和掉落类型。SCN v2／mode4默认镜头支持通用舞台导出；stage13与TestStage保留专用导出器，新格式和新机制按实际内容补齐。
 候补队伍、组合攻击、部分特殊效果／熟练度、原动态镜头、精确混色和长流程性能仍见唯一当前计划。当前整份来源JSON装载，尚未完成按区域拆分或全游戏压测。
 prototype中的共享移动模块、角色资源和解码器，以及evidence中的来源／台账仍属于当前依赖。历史浏览器观察不能作为当前代码重播。
 最近自动检查见evidence/current_validation.json，证据分类见evidence/README.txt；改动规则需对应回归，改变实际流程或表现需记录新的浏览器观察。
+完整来源检查无法运行时，使用verify_phaser的code／assets结果及新建浏览器观察说明本轮范围；旧current_validation和历史观察不能代替Phaser迁移验收。

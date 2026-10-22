@@ -2,6 +2,7 @@
 更新：2026-10-22；以下命令从游戏根目录执行。
 
 先选择修改入口
+Phaser迁移沿用现有内容登记、数值配置和媒体路径。新增同类地图／角色继续走下述流程，不为每张地图创建专用Phaser Scene；通用显示行为放web/phaser中对应组件。phaser-preview使用独立示意图，不写入正式内容登记或素材目录。
 内容接入选择：runtime/web/data/runtime_content.json。角色、原技能索引、地图、舞台和ANM登记放在这里。
 数值调整：runtime/web/data/config/index.json及skills.json、battle.json、rewards.json、items.json。所有人物共用这些文件。
 玩家当前HP／MP、等级／成长、背包／装备、旗标、队列、技巧／晶石与学习／熟练度是世界进度，通过游戏和存档维护。

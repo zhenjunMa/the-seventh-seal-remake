@@ -6,7 +6,8 @@
   <main>
     <section class="game-shell" aria-label="游戏场景">
       <div class="scene-bar"><div><span class="eyebrow">第七封印 · 场景片段</span><strong id="mapName">正在进入…</strong></div><span id="scenePhase" role="status">准备资源</span></div>
-      <div class="screen" id="screen">
+      <div class="screen phaser-enabled" id="screen">
+        <div id="phaserHost" class="phaser-host"></div>
         <canvas id="stage" tabindex="0" aria-label="游戏地图，方向键移动，E交互，Tab操作界面"></canvas>
         <canvas id="battleCanvas" aria-label="队伍与敌人的战斗" hidden></canvas>
         <div id="battleHud" class="battle-interface" aria-label="战斗操作界面" hidden></div>
@@ -87,5 +88,6 @@
   </main>
   <section id="layerPanel" class="layer-panel" role="dialog" aria-modal="true" aria-labelledby="layerTitle" hidden><div class="layer-inner"><div class="layer-header"><div><span class="eyebrow">SOURCE FRAME COMPOSITION</span><h2 id="layerTitle">燕突 · 本体图层检查</h2></div><button id="layerClose">返回地图</button></div><canvas id="layerCanvas" width="800" height="500" aria-label="燕突主人物和本体效果合成"></canvas><div class="layer-controls"><button id="layerPrevious">上一帧</button><button id="layerNext">下一帧</button><label class="check">源帧<select id="layerSelect" aria-label="燕突源帧"></select></label><span id="layerFrame">—</span><label class="check"><input type="checkbox" id="mainLayer" checked>人物主层</label><label class="check"><input type="checkbox" id="intrinsicLayer" checked>本体加色层</label></div><p id="layerNote" class="quiet">按同一源帧合成，用于核对真实像素；浏览器加色是近似显示，原版层序、锚点应用及精确时序另行对照。</p></div></section>
   <footer><span>原作素材 · 独立世界状态 · 持续重制</span><span>本地运行 / ORIGINAL ASSETS</span></footer>
+  <script src="vendor/phaser/phaser-3.90.0.min.js"></script>
   <script type="module" src="app.js"></script>
 </body></html>

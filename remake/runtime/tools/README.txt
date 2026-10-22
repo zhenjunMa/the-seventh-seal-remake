@@ -91,8 +91,13 @@ story-check: check_content.mjs; 依赖=chapter-story,opening-seed,enemies
 battle-stages: export_battle_stages.py; 依赖=forest-stage
 
 当前检查覆盖什么
+Phaser无素材预检查：node remake/runtime/tools/verify_phaser.mjs。核对固定运行库指纹、正式／预览入口模块图与JS语法，并报告现有JSON所引用的素材缺失。默认允许缺失素材，输出分别标明code.passed与assets.passed。
+有素材交接检查：同一命令加--assets，要求素材齐全且已声明SHA／PNG尺寸匹配。--report <runtime/evidence内路径>可保留完整JSON报告。浏览器预览为/phaser-preview.html，正式流程验收仍从/进入。
+战斗单帧逻辑路径按battle_packs.json解析到实际图集页，检查沿用BattleResources的图集定义校验；运行交付无需在图集之外重复提供这些单帧源PNG。地图、菜单、字体、音视频等直接加载的媒体仍须提供。
+无素材时默认命令可在code.passed=true、assets.passed=false时成功退出；--assets在素材缺失时失败。两者都不表示完整主线已通过实玩验收。
 verify_current检查JS／Python回归、Python语法、原输入、保留资产、现有导出台账、配置／登记、HTTP资源和归档，写current_validation.json、current_validation.tap和current_python_tests.log。
 检查需要8767服务，数量和时间以报告为准。它核对历史浏览器观察及指纹，不重播UI，不运行原GAME.exe，不会自动完成后续剧情。
+缺少原版输入／历史evidence时，verify_current可能在来源核对阶段终止；不沿用旧current_validation作为当前Phaser通过记录，应另存本轮预检查与限定范围浏览器结果。
 规则／事务变化运行对应回归；实际页面／动画变化另做浏览器观察。独立页面在web/tests，包括battle_loading.html、dialogue_alignment.html和startup_storage.html，各有其限定范围。
 verify_*中的旧阶段门槛不能替代当前回归；写--record的新现场按工具说明生成，已冻结观察不重写。
 

@@ -3,8 +3,10 @@
 - 重制代码、提取素材、方案、日志、截图和验证报告统一保存在本 `remake` 目录中。
 - 正式游戏位于 `runtime`；当前计划统一维护在 `assessment/validation_design.txt`。运行素材与内容位于 `runtime/web/assets` 和 `runtime/web/data`，来源与验收证据位于 `runtime/evidence`。
 - 当前实现连接见 `runtime/architecture.txt`：`web/app.js` 只组装共享状态与控制器；浏览器流程放 `web/controllers`，规则／事务放 `web/core`，绘制沿用对应视图。当前待办只在工作计划维护；配置说明放 `runtime/config_guide.txt`，导出／验证命令放 `runtime/tools/README.txt`。
+- Phaser运行层放`runtime/web/phaser`：场景在scenes，临时人物显示在actors，可组合姿态／时钟在components，纹理与战斗绘制适配在rendering。复用已有世界／剧情／战斗规则和素材契约，不在Sprite中复制存档状态或另起命中时钟；菜单／对白沿用对应视图。固定运行库及许可在web/vendor/phaser，修改后核对manifest.json。
 - `prototype` 保留实验、共享移动模块／角色素材和提取器，正式版仍依赖该目录。历史方案／阶段报告与压缩会话快照归 `archive`，不要把历史限制当作当前进展。
 - 日常验证使用 `runtime/tools/verify_current.py`，写当前检查结果；旧日期报告只保留对应阶段，不再累加当前结论。该工具核对已有浏览器证据，不重新操作浏览器；新观察需单独记录范围与当时指纹。
+- 无原版素材／历史来源材料时，先运行`runtime/tools/verify_phaser.mjs`核对代码和资源引用，用`web/phaser-preview.html`做示意图验证；素材交接加`--assets`并补正式流程实玩。完整来源检查受阻时明确原因，不能把旧current_validation当作Phaser迁移通过记录。
 - 已注册导出统一入口是 `runtime/tools/build_runtime.py`，依赖既有基础内容与来源台账。文档维护优先盘点／核对；普通导出保留参数，`--force` 不等于配置 `--reset`。
 - 原版游戏输入位于上一级游戏目录，已有独立存档分析位于上一级的 `save_analysis_20261010`。工具应只读这些输入；修改原作程序、资源或存档需有用户对应的任务授权。
 - 新增队友和技能必须遵循 `runtime/config_guide.txt` 的接入规范：所有已接入技能数值统一登记到 `runtime/web/data/config/skills.json`，以原角色编号＋技能索引绑定；原记录／动作留作核对，只编辑 `parameters`，不得添加队友专用调参文件或按角色／技能名覆盖数值的分支。未实现行为先恢复规则和验证，再登记为可用。

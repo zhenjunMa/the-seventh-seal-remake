@@ -9,6 +9,7 @@ ROOT = Path(__file__).resolve().parent
 MOUNTS = {'/prototype/': ROOT.parent / 'prototype' / 'web', '/': ROOT / 'web'}
 
 class RuntimeHandler(SimpleHTTPRequestHandler):
+    protocol_version = 'HTTP/1.1'
     def translate_path(self, path):
         decoded = unquote(urlsplit(path).path)
         prefix = '/prototype/' if decoded.startswith('/prototype/') else '/'
@@ -27,11 +28,15 @@ class RuntimeHandler(SimpleHTTPRequestHandler):
         self.send_header('X-Content-Type-Options', 'nosniff')
         super().end_headers()
 
+class RuntimeServer(ThreadingHTTPServer):
+    # ES module graphs and map atlases request many files concurrently.
+    request_queue_size = 128
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--port', type=int, default=8767)
     args = parser.parse_args()
-    server = ThreadingHTTPServer(('127.0.0.1', args.port), RuntimeHandler)
+    server = RuntimeServer(('127.0.0.1', args.port), RuntimeHandler)
     print(f'Seventh Seal runtime: http://127.0.0.1:{args.port}/', flush=True)
     try:
         server.serve_forever()

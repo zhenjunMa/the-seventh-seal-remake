@@ -2,6 +2,7 @@ import {ImageResources} from "../core/image_resources.mjs";
 // One owner for mutable runtime state; views and rules receive explicit adapters.
 export function createRuntimeState($) {
   return {
+    engine: null,
     keys: new Set(),
     resources: new ImageResources(),
     actorResourcesByMap: new Map(),
