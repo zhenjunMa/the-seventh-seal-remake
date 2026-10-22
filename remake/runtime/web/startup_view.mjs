@@ -15,8 +15,9 @@ export class StartupView {
     await Promise.all(frames.map(async frame=>view.images.set(frame.path,await options.image(frame.path))));
     return view;
   }
-  constructor({manifest,media,$,image,audio,onNew,onLoad,onResume,onStage,getSave,getPreview,status,log}) {
-    Object.assign(this,{manifest,media,$,image,audio,onNew,onLoad,onResume,onStage,getSave,getPreview,status,log});
+  constructor({manifest,media,$,image,audio,onNew,onLoad,onResume,onStage,getSave,getSaves,refreshSaves,isBusy=()=>false,getPreview,status,log}) {
+    Object.assign(this,{manifest,media,$,image,audio,onNew,onLoad,onResume,onStage,refreshSaves,isBusy,getPreview,status,log});
+    this.readSaves=getSaves??(()=>{const envelope=getSave?.();return envelope?[{slot:'manual',label:'普通存档',envelope}]:[];});
     this.root=$('startMenu');this.canvas=$('startupCanvas');this.ctx=this.canvas.getContext('2d');
     this.video=$('startupVideo');this.images=new Map();this.allowResume=false;this.pending=false;this.previewRequest=0;this.previewCache=null;this.previewImage=null;
     this.sequence=new StartupSequence(snapshot=>this.changeStage(snapshot));
@@ -26,7 +27,7 @@ export class StartupView {
     });
     this.root.addEventListener('contextmenu',event=>event.preventDefault());
     buttonIds.forEach((id,index)=>{
-      $(id).onclick=event=>{event.preventDefault();if(this.sequence.stage!=='menu'||this.pending||this.rotation)return;
+      $(id).onclick=event=>{event.preventDefault();if(this.sequence.stage!=='menu'||this.pending||this.isBusy()||this.rotation)return;
         if(this.selected!==index)this.select(index);else this.confirm();};
     });
     $('menuResume').onclick=()=>{if(this.allowResume)this.onResume();};
@@ -96,10 +97,10 @@ export class StartupView {
     if(this.sequence.stage==='closed')return false;
     this.syncVideoAudio(true);
     if(this.sequence.stage!=='menu')return this.sequence.key(key,repeat);
-    if(repeat||this.pending||this.rotation)return true;
+    if(repeat||this.pending||this.isBusy()||this.rotation)return true;
     if(key==='Escape'){if(this.submenu){this.previewRequest++;this.cue('cancel');this.submenu=null;this.draw();this.renderOptions();this.updateButtons();}return true;}
     if(this.submenu){
-      if(['ArrowUp','ArrowDown'].includes(key)){const count=this.optionCount();if(count>1){const next=Math.max(0,Math.min(count-1,this.subIndex+(key==='ArrowUp'?-1:1)));if(next!==this.subIndex){this.subIndex=next;this.listTop=this.galleryTop(next);this.cue('move');this.draw();this.renderOptions();}}}
+      if(['ArrowUp','ArrowDown'].includes(key)){const count=this.optionCount();if(count>1){const next=Math.max(0,Math.min(count-1,this.subIndex+(key==='ArrowUp'?-1:1)));if(next!==this.subIndex){if(this.submenu==='read'){this.previewRequest++;this.previewImage=null;}this.subIndex=next;this.listTop=this.galleryTop(next);this.cue('move');this.draw();this.renderOptions();}}}
       else if([' ','Enter'].includes(key))this.confirm();
       return true;
     }
@@ -138,7 +139,7 @@ export class StartupView {
     const spots=[{x:440,y:380,w:95,h:85},{x:540,y:367,w:80,h:75},{x:525,y:333,w:65,h:35},{x:465,y:340,w:62,h:35}];
     buttonIds.forEach((id,index)=>{const button=this.$(id),spot=spots[(index-this.selected+4)%4];
       Object.assign(button.style,{left:spot.x+'px',top:spot.y+'px',width:spot.w+'px',height:spot.h+'px'});
-      button.tabIndex=-1;button.disabled=this.pending||Boolean(this.rotation)||Boolean(this.submenu);
+      button.tabIndex=-1;button.disabled=this.pending||this.isBusy()||Boolean(this.rotation)||Boolean(this.submenu);
       button.setAttribute('aria-pressed',String(index===this.selected));
     });
   }
@@ -149,8 +150,9 @@ export class StartupView {
     for(let i=0;i<this.plaqueCount();i++)this.asset('menusub'+this.selected+(i===this.plaqueIndex?'':'2'),i,this.plaqueX?.[i]??450,100+50*i);
     this.asset('menuhlp'+this.selected+this.plaqueIndex,0,this.helpX??0,400);
     if(this.panelType==='read'&&this.panelX>-432){
-      this.asset('menulbk',0,this.panelX-8,60);if(this.getSave())this.asset('menulbx',0,this.panelX,81);
-      if(this.previewImage)c.drawImage(this.previewImage,this.panelX+17,97,SAVE_PREVIEW_WIDTH,SAVE_PREVIEW_HEIGHT);
+      this.asset('menulbk',0,this.panelX-8,60);
+      this.saveEntries().forEach((_entry,index)=>this.asset('menulbx',0,this.panelX,81+108*index));
+      if(this.previewImage)c.drawImage(this.previewImage,this.panelX+17,97+108*this.subIndex,SAVE_PREVIEW_WIDTH,SAVE_PREVIEW_HEIGHT);
     }
     if(this.panelType==='extras'&&this.panelX>-432){
       this.asset('specialback',0,this.panelX-8,70);
@@ -162,7 +164,9 @@ export class StartupView {
   }
   plaqueCount(){return this.selected===3&&this.allowResume?2:1;}
   galleryTop(index){return index<18?Math.max(0,Math.min(11,index-3)):Math.max(18,Math.min(23,index-3));}
-  optionCount(){return this.submenu==='read'?(this.getSave()?1:0):this.submenu==='extras'?(this.manifest.audio.gallery?.length??0):0;}
+  saveEntries(){return this.readSaves();}
+  getSave(){return this.saveEntries()[this.subIndex]?.envelope??null;}
+  optionCount(){return this.submenu==='read'?this.saveEntries().length:this.submenu==='extras'?(this.manifest.audio.gallery?.length??0):0;}
   previewKey(save){return `${save?.sha256??''}:${save?.payload??''}:${save?.saved_at??''}:${save?.preview?.png??''}`;}
   requestPreview(save){
     if(!this.getPreview)return;
@@ -183,20 +187,21 @@ export class StartupView {
     const holder=this.$('startupOptions');holder.replaceChildren();holder.hidden=false;
     const add=(text,x,y,w,h,index,handler)=>{const button=document.createElement('button');button.textContent=text;button.type='button';button.tabIndex=-1;
       button.setAttribute('aria-current',String(index===this.subIndex));Object.assign(button.style,{left:x+'px',top:y+'px',width:w+'px',height:h+'px'});
-      button.onclick=()=>{this.subIndex=index;handler();};holder.append(button);return button;};
+      button.onclick=()=>{if(this.submenu==='read'&&this.subIndex!==index){this.previewRequest++;this.previewImage=null;}this.subIndex=index;handler();};holder.append(button);return button;};
     const captions=this.selected===3?['离开','回到游戏']:[labels[this.selected]];
     for(let i=0;i<this.plaqueCount();i++){
       const button=add('',450,100+50*i,184,51,i,()=>{if(!this.submenu){this.plaqueIndex=i;this.confirm();}});
       button.setAttribute('aria-label','确认'+captions[i]);button.className='startup-plaque';button.dataset.row=String(i);
     }
     if(this.submenu==='read'){
-      const save=this.getSave();
-      if(save){let world={};try{world=JSON.parse(save.payload);}catch{}
-        this.requestPreview(save);
+      const entries=this.saveEntries(),selected=this.getSave();
+      if(selected)this.requestPreview(selected);
+      for(const [index,entry] of entries.entries()){const save=entry.envelope;let world={};try{world=JSON.parse(save.payload);}catch{}
         const date=save.saved_at?new Date(save.saved_at).toLocaleString('zh-CN',{timeZone:'Asia/Shanghai'}):'';
         const party=(world.party??[]).map(actor=>actor.name).join('　');
-        add(`重制存档　${party}\n${date}\n${world.location?.map_id??''}`,147,99,265,78,0,()=>this.confirm()).className='startup-save panel-row';
-      }else this.announce('尚无重制浏览器存档，Esc返回');
+        add(`${entry.label}　${party}\n${date}\n${world.location?.map_id??''}`,147,99+108*index,265,78,index,()=>{this.draw();this.renderOptions();this.confirm();}).className='startup-save panel-row';
+      }
+      if(!entries.length)this.announce('尚无重制存档，Esc返回');
     }else if(this.submenu==='extras'){
       for(let i=0;i<7;i++){const index=this.listTop+i;if(index>=this.optionCount())break;
         const button=add('',3,117+39*i,419,35,index,()=>{this.subIndex=index;this.draw();this.renderOptions();this.confirm();});
@@ -209,11 +214,11 @@ export class StartupView {
     for(const node of this.$('startupOptions').children??[]){
       const plaque=node.classList.contains('startup-plaque');
       node.style.transform=`translateX(${plaque?(this.plaqueX[Number(node.dataset.row)]??450)-450:this.panelX}px)`;
-      node.disabled=this.pending||Boolean(this.rotation)||(plaque?Boolean(this.submenu):this.panelX!==0);
+      node.disabled=this.pending||this.isBusy()||Boolean(this.rotation)||(plaque?Boolean(this.submenu):this.panelX!==0);
     }
   }
   async confirm(){
-    if(this.pending||this.rotation||this.sequence.stage!=='menu')return;
+    if(this.pending||this.isBusy()||this.rotation||this.sequence.stage!=='menu')return;
     if(!this.submenu){
       if(this.selected===1){this.cue('confirm');await this.run(this.onNew);return;}
       if(this.selected===3){
@@ -222,22 +227,24 @@ export class StartupView {
         return;
       }
       this.submenu=['read',null,'extras'][this.selected];this.subIndex=0;this.listTop=0;this.panelType=this.submenu;this.cue('open');
+      let refreshErrors;
+      if(this.submenu==='read'&&this.refreshSaves){await this.run(async()=>{refreshErrors=await this.refreshSaves();});if(this.sequence.stage!=='menu'||this.submenu!=='read')return;}
       this.draw();this.renderOptions();this.updateButtons();
       if(this.submenu==='extras')this.status('上下选择音乐，空格／Enter播放，Esc返回主菜单。');
-      if(this.submenu==='read'&&!this.getSave())this.status('此浏览器尚未保存重制进度；可从侧栏导入重制存档，Esc返回。');
+      if(this.submenu==='read'&&!this.getSave()&&!refreshErrors?.length)this.status('尚无重制存档；可从侧栏导入重制存档，Esc返回。');
       return;
     }
     if(this.submenu==='read'){
       if(this.panelX!==0)return;
       const save=this.getSave();if(!save){this.cue('cancel');return;}
-      this.cue('confirm');await this.run(()=>this.onLoad(save));
+      this.cue('confirm');await this.run(()=>this.onLoad(save,this.saveEntries()[this.subIndex].slot));
     }else if(this.submenu==='extras'&&this.panelX===0){
       const track=this.manifest.audio.gallery?.[this.subIndex];if(track){this.cue('confirm');this.audio.setMusic(track.clip??track);this.log({type:'startup-gallery-play',index:this.subIndex,clip:track.clip??track});}
     }
   }
   async run(action){
-    const epoch=this.sequence.epoch;this.pending=true;this.updateButtons();
+    const epoch=this.sequence.epoch;this.pending=true;this.updateButtons();this.updateOptionPositions();
     try{await action();}catch(error){this.status(error.message,true);this.log({type:'startup-action-failed',error:error.message});}
-    finally{if(this.sequence.epoch===epoch){this.pending=false;this.updateButtons();}}
+    finally{if(this.sequence.epoch===epoch){this.pending=false;this.updateButtons();this.updateOptionPositions();}}
   }
 }

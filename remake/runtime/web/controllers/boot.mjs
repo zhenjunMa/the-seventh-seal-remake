@@ -26,10 +26,13 @@ import {WorldMapView} from "../world_map_view.mjs";
 import {runtimeContent,runtimeContentDefinition,validateContentRegistration} from "../core/content_registry.mjs";
 import {validateStoryBindings} from "../core/content_dependencies.mjs";
 import {worldMapEntry} from "../core/map_connections.mjs";
+import {createSaveStorage} from "../core/save_storage.mjs";
 
 export function createBootController({state, actions, $, canvas, ctx}) {
   async function boot(){
     actions.busy('boot');
+    let legacyStorage;try{legacyStorage=localStorage;}catch{}
+    state.saveStorage=createSaveStorage({legacyStorage,legacyKey:state.saveKey});
     state.catalog=await actions.json('data/catalog.json');if(state.catalog.schema!=='seventh-seal-runtime-catalog'||state.catalog.version!==1)throw new Error('运行清单版本不兼容');
     const registration=await actions.json(state.catalog.runtime_content??'data/runtime_content.json');
     validateContentRegistration(runtimeContent);
@@ -128,11 +131,12 @@ export function createBootController({state, actions, $, canvas, ctx}) {
     $('boundaries').textContent=state.catalog.boundaries;$('scopeText').textContent=state.catalog.introduction;
     state.startupView=await StartupView.create({manifest:startupManifest,media:startupMedia,$,image:actions.image,audio:state.audio,
       onStage:stage=>{state.scenes.setPhase(stage==='menu'?'menu':'startup');},
-      onNew:()=>actions.beginOpening(),onLoad:save=>actions.restore(save),onResume:()=>actions.resumeExploration(),
+      onNew:()=>actions.beginOpening(),onLoad:(_save,slot)=>actions.loadProgress(slot),onResume:()=>actions.resumeExploration(),
       getPreview:save=>actions.loadSavePreview(save),
-      getSave:()=>{try{return JSON.parse(localStorage.getItem(state.saveKey)??'null');}catch{return null;}},status:actions.status,log:actions.log});
+      getSaves:()=>['manual','quick'].flatMap(slot=>state.saveSlots[slot]?[{slot,label:slot==='quick'?'快速存档':'普通存档',envelope:state.saveSlots[slot]}]:[]),
+      refreshSaves:()=>actions.refreshSaveSlots(),isBusy:()=>Boolean(state.saveOperation),status:actions.status,log:actions.log});
     actions.wire();actions.resize();await state.scenes.loadLocation(state.world.location,{reason:'boot'});actions.buildHud();
-    try{if(localStorage.getItem(state.saveKey))$('saveStatus').textContent='已有本版存档，可载入继续。';}catch{}
+    await actions.refreshSaveSlots({quiet:true});
     actions.log({type:'boot',map_id:state.world.location.map_id,source:state.world.value.source,engine:'Phaser 3.90.0'});
     state.engine.start({phase:state.scenes.phase,interface:actions.updateInterface,
       exploration:actions.updateExploration,battle:actions.updateBattleFrame,suspend:actions.releaseInput});

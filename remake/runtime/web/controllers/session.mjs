@@ -9,6 +9,7 @@ import {techniqueSlots,techniqueCombinations} from "../core/menu_techniques.mjs"
 
 export function createSessionController({state, actions, $, canvas, ctx}) {
   function showTitle({allowResume=false}={}){
+    if(state.saveOperation&&state.scenes.phase==='save-io')throw new Error('正在存取进度，请稍候');
     state.audio?.suspend();
     state.scenes.setPhase('menu');
     $('menuResume').hidden=!allowResume;
@@ -21,6 +22,7 @@ export function createSessionController({state, actions, $, canvas, ctx}) {
     state.audio?.setScene({mapId:state.world.location.map_id,battle:false});actions.buildHud();actions.updateNearest();canvas.focus({preventScroll:true});actions.status('已返回当前游戏。');
   }
   async function beginOpening(seed=null){
+    if(state.saveOperation&&state.saveOperation.kind!=='restore-opening')throw new Error('正在存取进度，请稍候');
     if(!['map','menu'].includes(state.scenes.phase))return;
     const previous={scene:state.scenes.current,world:state.world.snapshot(),view:state.scenes.captureView(),phase:state.scenes.phase};
     state.startupView.hide();state.audio?.suspend();state.scenes.setPhase('opening');
@@ -55,19 +57,29 @@ export function createSessionController({state, actions, $, canvas, ctx}) {
       actions.log({type:'opening-failed',error:error.message});throw error;
     }
   }
-  async function restore(envelope){
-    if(!['map','menu'].includes(state.scenes.phase))throw new Error('当前操作完成后才能载入');
+  async function restore(envelope,{operation=null}={}){
+    if(!operation)return actions.withSaveOperation('load',owned=>restore(envelope,{operation:owned}));
+    if(state.saveOperation!==operation)throw new Error('存档操作已失效');
+    const previousPhase=operation.phase;
     const restored=await decodeSave(envelope,state.catalog.maps.map(m=>m.id));
     if(restored.party.some(actor=>!state.catalog.roles.some(role=>role.id===actor.id)))throw new Error('存档包含尚未接入的队伍角色');
     if(restored.source.kind==='native-new-game'){createPartyActors(restored,state.partyCombat,{},state.itemData);validateSourceSkillShortcuts(restored,state.partySkills);for(const role of restored.party){techniqueCombinations(restored,state.partySkills,role.id);if(restored.technique_bindings)techniqueSlots(restored,state.partySkills,role.id);}}
-    if(restored.opening?.status==='pending'){await beginOpening(restored);return;}
-    const previousPhase=state.scenes.phase;
+    if(restored.opening?.status==='pending'){operation.kind='restore-opening';state.scenes.setPhase(previousPhase);await beginOpening(restored);return;}
     try{
-      if(previousPhase==='menu')state.scenes.setPhase('map');
+      state.scenes.setPhase('map');
       await state.scenes.loadLocation(restored.location,{reason:'restore',restoredWorld:restored});
       state.startupView.hide();actions.buildHud();actions.updateNearest();canvas.focus();actions.status('进度已载入，可以继续探索。');
       actions.log({type:'restore',map_id:restored.location.map_id,opening:restored.opening?.status??'legacy-v1'});
     }catch(error){if(previousPhase==='menu')showTitle();throw error;}
+  }
+  async function openSaveCrystal(){
+    if(state.scenes.phase!=='map'||state.saveOperation)throw new Error('当前操作完成后才能使用通讯水晶');
+    state.scenes.setPhase('event');
+    let selected;
+    try{selected=await actions.say('','保存当前进度？',1,{choices:[{index:0,text:'保存进度。'},{index:1,text:'取消。'}]});}
+    finally{state.scenes.setPhase('map');canvas.focus({preventScroll:true});}
+    if(selected===0)return actions.saveProgress('manual');
+    actions.status('已离开通讯水晶。');
   }
   async function presentGameOver(policy){
     state.audio?.suspend();state.scenes.setPhase('game-over');$('gameOver').hidden=false;
@@ -81,5 +93,5 @@ export function createSessionController({state, actions, $, canvas, ctx}) {
     $('gameOver').hidden=true;showTitle();actions.status('全队倒下。请载入已保存的进度，或开始新游戏。');
     actions.log({type:'game-over',policy,movie:'/assets/video/go02.mp4',playback_error:playbackError});
   }
-  return {showTitle, resumeExploration, beginOpening, restore, presentGameOver};
+  return {showTitle, resumeExploration, beginOpening, restore, openSaveCrystal, presentGameOver};
 }

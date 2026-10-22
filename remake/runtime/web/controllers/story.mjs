@@ -94,7 +94,7 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
       if(!state.nearest.event){
         const table=state.chapterStory.maps[state.world.location.map_id],slot=state.nearest.slot_zero_based;
         const entry=table?.index_nonzero.find(row=>row.slot===slot);
-        if(entry){await runChapter({mapId:state.world.location.map_id,recordId:entry.record});return;}
+        if(entry){await runChapter({mapId:state.world.location.map_id,recordId:entry.record,context:{steps:0,explicitInteraction:true}});return;}
         actions.status('这里暂时没有可执行的对白。');return;
       }
       try{await state.runner.run(state.nearest.event);actions.buildHud();actions.status('交谈结束。');}
@@ -130,6 +130,7 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
       const result=args.rest?await state.chapterRunner.runRest({explicitInteraction:true,descriptorId:args.descriptorId??null}):args.objectIndex===undefined?await state.chapterRunner.runTlk(args):await state.chapterRunner.runObject(args);
       actions.commitView(state.scenes.current,state.world.location);actions.buildHud();actions.updateNearest();
       actions.status(result.already_done?'箱子里的装备已经领取。':'可以继续探索。');
+      if(result.save_requested)await actions.openSaveCrystal();
     }catch(error){
       state.scenes.current=previous.scene;state.scenes.rollbackView(previous.view);
       clearDialogue();actions.status(error.message,true);

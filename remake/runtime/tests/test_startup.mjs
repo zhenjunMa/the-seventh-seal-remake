@@ -47,7 +47,7 @@ test('skip, held key, obsolete completion and close do not cross state boundarie
   assert.equal(flow.complete(pending),false);assert.equal(flow.stage,'closed');
 });
 
-function setup({save=null,onNew=async()=>{},onLoad=async()=>{},getPreview}={}){
+function setup({save=null,onNew=async()=>{},onLoad=async()=>{},getSaves,refreshSaves,isBusy,getPreview}={}){
   const nodes=new Map();
   const draws=[];
   const make=()=>({hidden:false,style:{setProperty(){}},dataset:{},setAttribute(){},addEventListener(){},focus(){},replaceChildren(){},append(){},
@@ -58,7 +58,7 @@ function setup({save=null,onNew=async()=>{},onLoad=async()=>{},getPreview}={}){
   globalThis.document={createElement:make};
   const view=new StartupView({manifest:{assets:{},timing:{button_frame_ms:10},audio:{music:'title',cues:{}}},media:{media:{gametitle:{url:'title.mp4',source:'title.bik'}}},$,
     audio:{setMusic(){},suspend(){},snapshot:()=>({unlocked:false,channels:{master:{volume:1},music:{volume:1}}})},
-    onNew,onLoad,onResume(){},onStage(){},getSave:()=>save,getPreview,status(){},log(){}});
+    onNew,onLoad,onResume(){},onStage(){},getSave:()=>save,getSaves,refreshSaves,isBusy,getPreview,status(){},log(){}});
   return {view,$,draws};
 }
 const settle=view=>view.tick(view.lastTick+1000);
@@ -103,4 +103,21 @@ test('read preview uses the native thumbnail rectangle and ignores completion af
   view.previewCache=null;view.requestPreview(view.getSave());await Promise.resolve();
   view.previewImage=null;view.key('Escape');resolve({image,source:'stored'});await new Promise(done=>setImmediate(done));
   assert.equal(view.submenu,null);assert.equal(view.previewImage,null);
+});
+
+test('title lists ordinary and quick files, refreshes on entry and loads the selected slot',async()=>{
+  let entries=[],refreshes=0;const loads=[],quick={sha256:'quick',payload:'{}'},manual={sha256:'manual',payload:'{}'};
+  const {view}=setup({getSaves:()=>entries,refreshSaves:async()=>{refreshes++;entries=[{slot:'manual',label:'普通存档',envelope:manual},{slot:'quick',label:'快速存档',envelope:quick}];},onLoad:(save,slot)=>loads.push({save,slot})});
+  view.showMenu();settle(view);await view.confirm();settle(view);
+  assert.equal(refreshes,1);assert.equal(view.optionCount(),2);assert.equal(view.getSave(),manual);
+  view.key('ArrowDown');assert.equal(view.getSave(),quick);await view.confirm();
+  assert.deepEqual(loads,[{save:quick,slot:'quick'}]);
+});
+
+test('an external quick load locks title keyboard, mouse confirmation and new game until it finishes',async()=>{
+  let busy=false,starts=0;const {view,$}=setup({isBusy:()=>busy,onNew:()=>starts++});
+  view.showMenu();settle(view);view.selected=1;busy=true;view.updateButtons();
+  assert.equal($('menuNew').disabled,true);view.key('ArrowLeft');assert.equal(view.selected,1);
+  await view.confirm();assert.equal(starts,0);
+  busy=false;view.updateButtons();await view.confirm();assert.equal(starts,1);
 });

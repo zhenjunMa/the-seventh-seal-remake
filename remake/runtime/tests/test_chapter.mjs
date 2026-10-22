@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {webcrypto} from 'node:crypto';
-import {ChapterRunner, validateChapterStory, chapterProgress, chapterRoleFromDefinition, chapterObjectState, initializeChapterItem, chapterRestChoices} from '../web/core/chapter.mjs';
+import {ChapterRunner, validateChapterStory, chapterProgress, chapterRoleFromDefinition, chapterObjectState, initializeChapterItem, chapterRestChoices,chapterChoices} from '../web/core/chapter.mjs';
 import {WorldStore, validateWorld, encodeSave, decodeSave} from '../web/core/world.mjs';
 
 globalThis.crypto ??= webcrypto;
@@ -22,6 +22,27 @@ const store = () => new WorldStore(seed());
 function runner(world, extra = {}) {
   return new ChapterRunner({world, data:story, say:async () => {}, ...extra});
 }
+
+test('Fire Valley crystal follows native use/leave choices and defers saving until commit',async()=>{
+  const world=store();world.transact(draft=>{draft.location.map_id='M17010';});
+  const before=world.snapshot(),record=story.maps.M17010.records.find(row=>row.id===44);
+  assert.deepEqual(chapterChoices(record).map(row=>[row.text,row.recordId]),[['使用。',45],['离开。',0]]);
+  const event=runner(world,{choose:async()=>{assert.deepEqual(world.snapshot(),before);return 0;}});
+  const result=await event.runTlk({mapId:'M17010',recordId:44,context:{steps:0,explicitInteraction:true}});
+  assert.deepEqual(result.traversed,[44,45]);assert.equal(result.save_requested,true);assert.equal(event.running,false);
+  assert.equal(result.world.revision,before.revision+1);
+  assert.deepEqual(result.world.party,before.party);assert.deepEqual(result.world.flags,before.flags);
+  const leave=runner(world,{choose:async()=>1});
+  assert.equal((await leave.runTlk({mapId:'M17010',recordId:44,context:{steps:0,explicitInteraction:true}})).save_requested,false);
+});
+
+test('crystal saves require explicit interaction and failed choices leave all progress intact',async()=>{
+  const world=store(),before=world.snapshot();
+  await assert.rejects(runner(world).runTlk({mapId:'M17010',recordId:45}),/存档需要主动交互入口/);
+  await assert.rejects(runner(world,{choose:async()=>0}).runTlk({mapId:'M17010',recordId:44}),/主动交互入口/);
+  await assert.rejects(runner(world,{choose:async()=>99}).runTlk({mapId:'M17010',recordId:44,context:{steps:0,explicitInteraction:true}}),/选择结果无效/);
+  assert.deepEqual(world.snapshot(),before);
+});
 
 test('Fire Valley full TLK table stays bound to source bytes and rejects changed text', () => {
   validateChapterStory(story);
