@@ -727,7 +727,7 @@
     },
     "required_seed_id": "opening-new-game-v1",
     "seed_path": "remake/runtime/web/data/opening_seed.json",
-    "seed_sha256": "8da9ceab9be7b2f728a0bdb7f4bd0abf6cd4986a982e61d1ecaa69c3e692cb79",
+    "seed_sha256": "d22cac66f87121e147518fd1e9833ad7a98667cde923ca141194e5363cc8f3d3",
     "native_bundle_hashes": {
       "remake/runtime/evidence/turn_actor_native_20261011.json": "86edb9c269f7ef0694f20cd18a4f38e46ea5d43749e17d4e95b85000a0cf0c31",
       "remake/runtime/evidence/opening_native.json": "3abba336b2be6715a85da23ead1ecc169806fd7c4c9240507b236fcc72d5be0d"

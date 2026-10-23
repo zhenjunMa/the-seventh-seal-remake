@@ -4068,7 +4068,7 @@
     },
     "native_bundle": {
       "path": "remake/runtime/evidence/opening_native.json",
-      "sha256": "91ea067ad80254c43529963577709fa28380ed73f51a493ca6d4c43d28ccee8e"
+      "sha256": "3abba336b2be6715a85da23ead1ecc169806fd7c4c9240507b236fcc72d5be0d"
     },
     "native_evidence": {
       "menu_new_game": {
