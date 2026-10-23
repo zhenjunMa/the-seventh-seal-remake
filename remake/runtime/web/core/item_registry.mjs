@@ -1,5 +1,6 @@
 // One editable item catalog; source records and saved rolls stay immutable.
 import {isSupportedCrystalDefinition} from './crystal_catalog.mjs';
+import {expandParameterOverrides,isParameterOverrideFile} from './config_overrides.mjs';
 const copy=structuredClone;
 const object=v=>v!==null&&typeof v==='object'&&!Array.isArray(v);
 const canonical=v=>JSON.stringify(Array.isArray(v)?v.map(x=>JSON.parse(canonical(x))):object(v)?Object.fromEntries(Object.keys(v).sort().map(k=>[k,JSON.parse(canonical(v[k]))])):v);
@@ -44,6 +45,7 @@ export function deriveItemConfiguration(data,{socketSupport=true}={}){
 
 export function compileItemConfiguration(data,cfg,mode){
   const baseline=deriveItemConfiguration(data),result=copy(data),differences=[];
+  cfg=expandParameterOverrides(baseline,cfg);
   fields(cfg,['schema','version','notes','entries'],'items.json');
   need(cfg.schema===baseline.schema&&cfg.version===2&&typeof cfg.notes==='string','版本不兼容，请运行统一配置导出器迁移');
   fields(cfg.entries,Object.keys(baseline.entries),'entries');
@@ -84,6 +86,7 @@ export function compileItemConfiguration(data,cfg,mode){
 
 export function upgradeItemConfiguration(data,existing){
   const next=deriveItemConfiguration(data);
+  if(isParameterOverrideFile(existing))return expandParameterOverrides(next,existing,{allowNewEntries:true});
   if(existing.version===2){
     const legacy=deriveItemConfiguration(data,{socketSupport:false});
     for(const [id,row]of Object.entries(existing.entries)){

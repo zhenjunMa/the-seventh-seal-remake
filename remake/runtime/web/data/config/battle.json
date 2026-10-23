@@ -1,262 +1,41 @@
 {
   "schema": "seventh-seal-battle-parameters",
-  "version": 1,
-  "notes": "敌人属性为生成时初值，不覆盖玩家存档。speed为原充能属性范围；调度保持20ms单tick。AI权重保留原加权与后备选招规则；组合长度仍为3～5招。",
+  "version": 2,
+  "notes": "怪物生成属性、选招AI和公共充能参数；不覆盖玩家存档。只编辑parameters；空对象使用原版默认值，嵌套对象只填写修改项，数组整体替换。默认值和生效值可用配置导出器--reference查看。name、owner和source_hashes只读。",
+  "source_hashes": {
+    "Fight_Role/011.CHR": "01625263cd7226760c8bb11067878285c5835ba4a43efbcab68020201c698ec4",
+    "Fight_Role/012.CHR": "4c9d1ef867222a8ffbdfea2e231f7500f30e0d7fec4fbfa1ab18b2dc874061a0",
+    "Fight_Role/013.CHR": "5e3a7e65761a52b1653a40bc20ae130072af5c4f704b0cb389bbb239a1cd8ef6",
+    "GAME.exe": "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18"
+  },
   "entries": {
     "scheduler": {
       "name": "行动充能",
-      "source": {
-        "path": "GAME.exe",
-        "sha256": "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18"
-      },
-      "original": {
-        "average_speed_factor": 200,
-        "default_preparation_delay": 800
-      },
-      "parameters": {
-        "average_speed_factor": 200,
-        "default_preparation_delay": 800
-      }
+      "parameters": {}
     },
     "enemy_011": {
       "name": "角鹰",
-      "source": {
-        "path": "Fight_Role/011.CHR",
-        "sha256": "01625263cd7226760c8bb11067878285c5835ba4a43efbcab68020201c698ec4",
-        "header_offset": 8,
-        "header_bytes": 779
-      },
-      "original": {
-        "hp_maximum": 742,
-        "mp_maximum": 20,
-        "attack": {
-          "minimum": 50,
-          "maximum_exclusive": 50
-        },
-        "defense": {
-          "minimum": 20,
-          "maximum_exclusive": 20
-        },
-        "speed": {
-          "minimum": 60,
-          "maximum_exclusive": 60
-        },
-        "element_resistance": [
-          0,
-          0,
-          90,
-          0,
-          0,
-          0
-        ]
-      },
-      "parameters": {
-        "hp_maximum": 742,
-        "mp_maximum": 20,
-        "attack": {
-          "minimum": 50,
-          "maximum_exclusive": 50
-        },
-        "defense": {
-          "minimum": 20,
-          "maximum_exclusive": 20
-        },
-        "speed": {
-          "minimum": 60,
-          "maximum_exclusive": 60
-        },
-        "element_resistance": [
-          0,
-          0,
-          90,
-          0,
-          0,
-          0
-        ]
-      }
+      "parameters": {}
     },
     "ai_011": {
       "name": "角鹰选招",
-      "source": {
-        "path": "Fight_Role/011.CHR",
-        "sha256": "01625263cd7226760c8bb11067878285c5835ba4a43efbcab68020201c698ec4",
-        "header_offset": 8,
-        "header_bytes": 779
-      },
-      "original": {
-        "combination_chance_percent": 20,
-        "skill_weights": {
-          "14": 20,
-          "15": 50
-        }
-      },
-      "parameters": {
-        "combination_chance_percent": 20,
-        "skill_weights": {
-          "14": 20,
-          "15": 50
-        }
-      }
+      "parameters": {}
     },
     "enemy_012": {
       "name": "雪泥怪",
-      "source": {
-        "path": "Fight_Role/012.CHR",
-        "sha256": "4c9d1ef867222a8ffbdfea2e231f7500f30e0d7fec4fbfa1ab18b2dc874061a0",
-        "header_offset": 8,
-        "header_bytes": 779
-      },
-      "original": {
-        "hp_maximum": 1362,
-        "mp_maximum": 24,
-        "attack": {
-          "minimum": 48,
-          "maximum_exclusive": 48
-        },
-        "defense": {
-          "minimum": 24,
-          "maximum_exclusive": 24
-        },
-        "speed": {
-          "minimum": 50,
-          "maximum_exclusive": 50
-        },
-        "element_resistance": [
-          0,
-          110,
-          0,
-          60,
-          0,
-          0
-        ]
-      },
-      "parameters": {
-        "hp_maximum": 1362,
-        "mp_maximum": 24,
-        "attack": {
-          "minimum": 48,
-          "maximum_exclusive": 48
-        },
-        "defense": {
-          "minimum": 24,
-          "maximum_exclusive": 24
-        },
-        "speed": {
-          "minimum": 50,
-          "maximum_exclusive": 50
-        },
-        "element_resistance": [
-          0,
-          110,
-          0,
-          60,
-          0,
-          0
-        ]
-      }
+      "parameters": {}
     },
     "ai_012": {
       "name": "雪泥怪选招",
-      "source": {
-        "path": "Fight_Role/012.CHR",
-        "sha256": "4c9d1ef867222a8ffbdfea2e231f7500f30e0d7fec4fbfa1ab18b2dc874061a0",
-        "header_offset": 8,
-        "header_bytes": 779
-      },
-      "original": {
-        "combination_chance_percent": 20,
-        "skill_weights": {
-          "14": 30,
-          "15": 30
-        }
-      },
-      "parameters": {
-        "combination_chance_percent": 20,
-        "skill_weights": {
-          "14": 30,
-          "15": 30
-        }
-      }
+      "parameters": {}
     },
     "enemy_013": {
       "name": "森林狩猎者",
-      "source": {
-        "path": "Fight_Role/013.CHR",
-        "sha256": "5e3a7e65761a52b1653a40bc20ae130072af5c4f704b0cb389bbb239a1cd8ef6",
-        "header_offset": 8,
-        "header_bytes": 779
-      },
-      "original": {
-        "hp_maximum": 960,
-        "mp_maximum": 20,
-        "attack": {
-          "minimum": 60,
-          "maximum_exclusive": 60
-        },
-        "defense": {
-          "minimum": 30,
-          "maximum_exclusive": 30
-        },
-        "speed": {
-          "minimum": 55,
-          "maximum_exclusive": 55
-        },
-        "element_resistance": [
-          0,
-          0,
-          0,
-          100,
-          0,
-          0
-        ]
-      },
-      "parameters": {
-        "hp_maximum": 960,
-        "mp_maximum": 20,
-        "attack": {
-          "minimum": 60,
-          "maximum_exclusive": 60
-        },
-        "defense": {
-          "minimum": 30,
-          "maximum_exclusive": 30
-        },
-        "speed": {
-          "minimum": 55,
-          "maximum_exclusive": 55
-        },
-        "element_resistance": [
-          0,
-          0,
-          0,
-          100,
-          0,
-          0
-        ]
-      }
+      "parameters": {}
     },
     "ai_013": {
       "name": "森林狩猎者选招",
-      "source": {
-        "path": "Fight_Role/013.CHR",
-        "sha256": "5e3a7e65761a52b1653a40bc20ae130072af5c4f704b0cb389bbb239a1cd8ef6",
-        "header_offset": 8,
-        "header_bytes": 779
-      },
-      "original": {
-        "combination_chance_percent": 20,
-        "skill_weights": {
-          "15": 20,
-          "16": 20
-        }
-      },
-      "parameters": {
-        "combination_chance_percent": 20,
-        "skill_weights": {
-          "15": 20,
-          "16": 20
-        }
-      }
+      "parameters": {}
     }
   }
 }

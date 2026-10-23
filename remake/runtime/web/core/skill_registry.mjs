@@ -2,6 +2,7 @@
 // Source actions, eligibility, targeting and effect rules stay in source data.
 import {configureSkills,sourceSkillParameters} from './skill_config.mjs';
 import {supportedBattleRecoverySkills} from './battle_skill_access.mjs';
+import {expandParameterOverrides,isParameterOverrideFile} from './config_overrides.mjs';
 const copy=structuredClone;
 const fail=(ok,message)=>{if(!ok)throw new Error(`技能配置：${message}`);};
 const object=v=>v!==null&&typeof v==='object'&&!Array.isArray(v);
@@ -81,6 +82,7 @@ export function applyRegisteredSkillParameters(skill,row,mode){
  */
 export function upgradeSkillConfiguration(data,config){
   const defaults=deriveSkillConfiguration(data);
+  if(isParameterOverrideFile(config))return expandParameterOverrides(defaults,config,{allowNewEntries:true});
   fields(config,['schema','version','notes','entries'],'skills.json');
   fail(config.schema===defaults.schema&&[1,2].includes(config.version)&&typeof config.notes==='string'&&object(config.entries),'技能配置版本不兼容');
   const legacy={yantu:data.combat.skills.yantu,...data.forest.player_skills,...enemySkills(data)};

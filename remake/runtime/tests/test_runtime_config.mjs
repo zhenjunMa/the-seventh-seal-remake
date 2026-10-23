@@ -5,7 +5,7 @@ import {readFile,writeFile,mkdtemp,rm} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {pathToFileURL} from 'node:url';
-import {compileRuntimeConfiguration,loadRuntimeConfiguration} from '../web/core/runtime_config.mjs';
+import {compileRuntimeConfiguration,loadRuntimeConfiguration,expandRuntimeConfiguration} from '../web/core/runtime_config.mjs';
 import {exportRuntimeConfiguration} from '../tools/export_runtime_config.mjs';
 import {createBattleSample,consumeBattleMp,resourcesForWorld} from '../web/combat_sample.mjs';
 import {createForestSample} from '../web/forest_sample.mjs';
@@ -20,7 +20,7 @@ import {WorldStore,encodeSave,decodeSave} from '../web/core/world.mjs';
 const copy=structuredClone,web=new URL('../web/',import.meta.url),read=async name=>JSON.parse(await readFile(new URL('data/'+name,web),'utf8'));
 const [base,forest,scheduler,ai,rewards,seed,meta]=await Promise.all(['combat_sample.json','forest_combat.json','battle_scheduler.json','forest_ai.json','forest_rewards.json','route_seed.json','enemy_battle_view.json'].map(read));
 const data={combat:base,forest,scheduler,ai,rewards,party_skills:await read('party_skills.json'),items:await read('items.json')},config=await loadRuntimeConfiguration(p=>read(p.slice(5))),maps=['M01010','M01030','M17010','M70010'];
-const debug=()=>({...copy(config),manifest:{...copy(config.manifest),mode:'debug'}});
+const debug=()=>({...expandRuntimeConfiguration(data,config),manifest:{...copy(config.manifest),mode:'debug'}});
 function sample(c,ids=['012'],world=seed){const d=compileRuntimeConfiguration(data,c);return createForestSample(world,d.combat,d.forest,{map_id:'M70010',members:ids.map(id=>({id}))},null,d.scheduler,d.ai,d.rewards);}
 const byte=(s,p)=>Buffer.from(s.fixed_raw_hex,'hex')[p];
 const draws=values=>{let i=0;return()=>{assert.ok(i<values.length,'unexpected RNG');return values[i++];};};
@@ -102,6 +102,10 @@ test('unknown fields, source drift, bad mode, invalid ranges and unsupported eff
     c=>{c.battle.entries.enemy_011.parameters.speed={minimum:1000000,maximum_exclusive:1000000};c.battle.entries.scheduler.parameters.average_speed_factor=10000;}];
   const before=copy(data);for(const mutate of mutations){const cfg=debug();mutate(cfg);assert.throws(()=>compileRuntimeConfiguration(data,cfg),/配置/);}assert.deepEqual(data,before);
   const cfg=copy(config);cfg.items.entries['331'].parameters.drop_rate=30;assert.throws(()=>compileRuntimeConfiguration(data,cfg),/原版模式/);
+  const sparse=copy(config);sparse.manifest.mode='debug';sparse.skills.entries.yantu.parameters={physical_multiplier_percent:{minimum:2}};
+  assert.equal(compileRuntimeConfiguration(data,sparse).audit.parameters.skills.yantu.physical_multiplier_percent.minimum,2);
+  sparse.skills.source_hashes['Fight_Role/001.CHR']='0'.repeat(64);assert.throws(()=>compileRuntimeConfiguration(data,sparse),/来源指纹/);
+  const unknown=copy(config);unknown.skills.entries.yantu.parameters={physical_multiplier_percent:{typo:2}};assert.throws(()=>compileRuntimeConfiguration(data,unknown),/字段缺失或未知/);
 });
 test('battle uses entry snapshot and configured player MP cost commits raw resources once',async()=>{
   const cfg=debug();cfg.skills.entries.yantu.parameters.mp_cost=5;const d=compileRuntimeConfiguration(data,cfg),world=new WorldStore(copy(seed),maps),logs=[];
@@ -119,7 +123,7 @@ test('export migrates old debug edits once, preserves new edits, and resets only
     const first=await exportRuntimeConfiguration({dataDirectory:directory,outputDirectory:output});assert.equal(first.written.length,5);
     const readTemp=async file=>JSON.parse(await readFile(new URL(file,output),'utf8'));assert.equal((await readTemp('skills.json')).entries.yantu.parameters.mp_cost,5);
     const before=await readFile(new URL('skills.json',output),'utf8'),second=await exportRuntimeConfiguration({dataDirectory:directory,outputDirectory:output});assert.deepEqual(second.written,[]);assert.equal(await readFile(new URL('skills.json',output),'utf8'),before);
-    await exportRuntimeConfiguration({dataDirectory:directory,outputDirectory:output,reset:true});assert.equal((await readTemp('index.json')).mode,'original');assert.equal((await readTemp('skills.json')).entries.yantu.parameters.mp_cost,0);
+    await exportRuntimeConfiguration({dataDirectory:directory,outputDirectory:output,reset:true});assert.equal((await readTemp('index.json')).mode,'original');assert.deepEqual((await readTemp('skills.json')).entries.yantu.parameters,{});
   }finally{assert.ok(path.resolve(temporary).startsWith(path.resolve(tmpdir())+path.sep));await rm(temporary,{recursive:true,force:true});}
 });
 

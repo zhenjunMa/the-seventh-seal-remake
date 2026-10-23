@@ -4,7 +4,7 @@ import {readFile} from 'node:fs/promises';
 import {validateBattleSkillProgress,isBattleSkillLearned,supportedBattleRecoverySkills} from '../web/core/battle_skill_access.mjs';
 import {createPartySample} from '../web/party_sample.mjs';
 import {WorldStore,validateWorld,encodeSave,decodeSave} from '../web/core/world.mjs';
-import {compileRuntimeConfiguration,loadRuntimeConfiguration} from '../web/core/runtime_config.mjs';
+import {compileRuntimeConfiguration,loadRuntimeConfiguration,expandRuntimeConfiguration} from '../web/core/runtime_config.mjs';
 const read=async name=>JSON.parse(await readFile(new URL('../web/data/'+name+'.json',import.meta.url)));
 const names={combat:'combat_sample',forest:'forest_combat',scheduler:'battle_scheduler',ai:'forest_ai',rewards:'party_rewards',party_skills:'party_skills',items:'items'};
 const data=Object.fromEntries(await Promise.all(Object.entries(names).map(async([key,name])=>[key,await read(name)])));
@@ -48,7 +48,8 @@ test('Explicit learned indices survive the save envelope and reload while legacy
 
 test('The 001_43 command uses the unified source-bound skill overlay for MP, recovery and preparation debt',()=>{
   const cfg=copy(config),before=copy(data),world=learnedWorld(),row=cfg.skills.entries['001_43'];
-  assert.ok(row);assert.deepEqual(row.owner,{role_id:'001',skill_index:43,side:'player'});assert.deepEqual(row.source,source.source);assert.equal(row.original.mp_cost,0);assert.equal(row.original.hp_term_bonus,150);
+  const baseline=expandRuntimeConfiguration(data,cfg).skills.entries['001_43'];
+  assert.ok(row);assert.deepEqual(row.owner,{role_id:'001',skill_index:43,side:'player'});assert.deepEqual(baseline.source,source.source);assert.equal(baseline.original.mp_cost,0);assert.equal(baseline.original.hp_term_bonus,150);
   const original=compileRuntimeConfiguration(data,cfg),plain=createPartySample(world,attributes,commands,original).skills['001_43'];assert.equal(plain.fixed_raw_hex,learnedHex());assert.deepEqual(plain.actions,source.actions);
   cfg.manifest.mode='debug';Object.assign(row.parameters,{mp_cost:3,hp_term_bonus:225,hp_max_term_bonus:225,preparation_delay_raw:1234});
   const compiled=compileRuntimeConfiguration(data,cfg),sample=createPartySample(world,attributes,commands,compiled),skill=sample.skills['001_43'],raw=Buffer.from(skill.fixed_raw_hex,'hex');

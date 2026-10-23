@@ -40,6 +40,6 @@ export function createPartySample(world,attributes,commands,configured=null,item
     required_world_source:copy(attributes.source.required_world_source),
     ...(configured?.audit?{runtime_configuration:copy(configured.audit)}:{}),
     command_policy:'Live frame-driven charging; ready living party actors queue source learned direct attacks while other animations continue.',
-    skill_configuration_scope:'All implemented player and enemy skills share config/skills.json; owner/source/original are verified before numeric parameters are applied.',
+    skill_configuration_scope:'All implemented player and enemy skills share config/skills.json; source fingerprints and owner bindings are verified, overrides are merged with source defaults, and the full numeric snapshot is retained.',
     limitations:['Source gear must be equipped through the operation menu; legacy saves retain initial source weapons until first equipment change.', 'All seven native slot bindings drive the wheel; direct attacks, item, defense and per-actor escape are connected. Player composed-technique execution remains unrecovered.']}};
 }

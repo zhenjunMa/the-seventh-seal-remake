@@ -62,6 +62,6 @@ python3 -B remake/runtime/serve.py
 - [界面与动态表现验收方法](remake/assessment/menu_alignment_workflow.txt)
 - [本地素材、证据与历史资料](remake/local_materials.txt)
 
-技能、道具、战斗和奖励数值统一维护在 `remake/runtime/web/data/config/`。修改 `parameters`，保留 `original` 和 `source` 核对字段。当前 `original` 模式要求原版参数一致，应用修改使用 `debug` 模式；普通导出保留已有参数，显式重置才恢复原值。
+技能、道具、战斗和奖励数值统一维护在 `remake/runtime/web/data/config/`。只在 `parameters` 填写修改项，空对象沿用来源默认值；文件级 `source_hashes` 和身份字段只读。默认值及生效值可用 `node remake/runtime/tools/export_runtime_config.mjs --reference skills yantu` 查询。`original` 模式要求原版参数一致，应用修改使用 `debug` 模式；普通导出迁移旧格式、补齐新增内容并保留调参，显式重置才恢复原值。
 
 素材、来源台账和历史观察的用途、交接方式与缺失处理统一见[本地资料说明](remake/local_materials.txt)。历史报告只说明对应阶段的验收范围，不代表当前 Phaser 版或干净克隆的构建已通过。

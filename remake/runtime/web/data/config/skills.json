@@ -1,7 +1,15 @@
 {
   "schema": "seventh-seal-skills-parameters",
-  "version": 2,
-  "notes": "所有已接入角色技能共用此表；owner按角色编号与原技能索引绑定，ID保持稳定。只修改parameters；source、owner和original只读。随机上限不包含；六元素槽保持原顺序。preparation_delay_raw=0使用battle.json默认准备量。动作、目标、学习条件和特效规则保留原来源；敌方耗蓝当前只支持0。",
+  "version": 3,
+  "notes": "按原角色编号＋技能索引绑定；敌我共用本表。只编辑parameters；空对象使用原版默认值，嵌套对象只填写修改项，数组整体替换。默认值和生效值可用配置导出器--reference查看。name、owner和source_hashes只读。",
+  "source_hashes": {
+    "Fight_Role/001.CHR": "37ce92ab57622d2cce022b4a9b8add9b29789f89d82bc369ea7352f38ca75c0a",
+    "Fight_Role/002.CHR": "854aed104fa990aa3f5fbf9d926724e0d8ae3ca73a5aabbc7a27a10ec91447e3",
+    "Fight_Role/003.CHR": "85f462f3598309fc47ceccef998ab07ccd34a5389ef3fee0146f8a0bca984fe0",
+    "Fight_Role/011.CHR": "01625263cd7226760c8bb11067878285c5835ba4a43efbcab68020201c698ec4",
+    "Fight_Role/012.CHR": "4c9d1ef867222a8ffbdfea2e231f7500f30e0d7fec4fbfa1ab18b2dc874061a0",
+    "Fight_Role/013.CHR": "5e3a7e65761a52b1653a40bc20ae130072af5c4f704b0cb389bbb239a1cd8ef6"
+  },
   "entries": {
     "yanci": {
       "name": "炎剑．旋樱斩",
@@ -10,64 +18,7 @@
         "skill_index": 21,
         "side": "player"
       },
-      "source": {
-        "path": "Fight_Role/001.CHR",
-        "sha256": "37ce92ab57622d2cce022b4a9b8add9b29789f89d82bc369ea7352f38ca75c0a",
-        "fixed_record_offset": 37684,
-        "fixed_bytes": 1053
-      },
-      "original": {
-        "mp_cost": 0,
-        "physical_multiplier_percent": {
-          "minimum": 40,
-          "maximum_exclusive": 45
-        },
-        "element_power": [
-          220,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        "defense_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "term4_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "hp_term_bonus": 0,
-        "hp_max_term_bonus": 0,
-        "preparation_delay_raw": 800
-      },
-      "parameters": {
-        "mp_cost": 0,
-        "physical_multiplier_percent": {
-          "minimum": 40,
-          "maximum_exclusive": 45
-        },
-        "element_power": [
-          220,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        "defense_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "term4_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "hp_term_bonus": 0,
-        "hp_max_term_bonus": 0,
-        "preparation_delay_raw": 800
-      }
+      "parameters": {}
     },
     "yantu": {
       "name": "炎剑．燕突",
@@ -76,64 +27,7 @@
         "skill_index": 22,
         "side": "player"
       },
-      "source": {
-        "path": "Fight_Role/001.CHR",
-        "sha256": "37ce92ab57622d2cce022b4a9b8add9b29789f89d82bc369ea7352f38ca75c0a",
-        "fixed_record_offset": 40145,
-        "fixed_bytes": 1053
-      },
-      "original": {
-        "mp_cost": 0,
-        "physical_multiplier_percent": {
-          "minimum": 35,
-          "maximum_exclusive": 40
-        },
-        "element_power": [
-          200,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        "defense_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "term4_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "hp_term_bonus": 0,
-        "hp_max_term_bonus": 0,
-        "preparation_delay_raw": 800
-      },
-      "parameters": {
-        "mp_cost": 0,
-        "physical_multiplier_percent": {
-          "minimum": 35,
-          "maximum_exclusive": 40
-        },
-        "element_power": [
-          200,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        "defense_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "term4_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "hp_term_bonus": 0,
-        "hp_max_term_bonus": 0,
-        "preparation_delay_raw": 800
-      }
+      "parameters": {}
     },
     "yancui": {
       "name": "炎灵．焠炼",
@@ -142,922 +36,7 @@
         "skill_index": 37,
         "side": "player"
       },
-      "source": {
-        "path": "Fight_Role/001.CHR",
-        "sha256": "37ce92ab57622d2cce022b4a9b8add9b29789f89d82bc369ea7352f38ca75c0a",
-        "fixed_record_offset": 81108,
-        "fixed_bytes": 1053
-      },
-      "original": {
-        "mp_cost": 5,
-        "physical_multiplier_percent": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "element_power": [
-          280,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        "defense_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "term4_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "hp_term_bonus": 0,
-        "hp_max_term_bonus": 0,
-        "preparation_delay_raw": 1000
-      },
-      "parameters": {
-        "mp_cost": 5,
-        "physical_multiplier_percent": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "element_power": [
-          280,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        "defense_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "term4_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "hp_term_bonus": 0,
-        "hp_max_term_bonus": 0,
-        "preparation_delay_raw": 1000
-      }
-    },
-    "kai_mieyan": {
-      "name": "灭颜打",
-      "owner": {
-        "role_id": "002",
-        "skill_index": 19,
-        "side": "player"
-      },
-      "source": {
-        "path": "Fight_Role/002.CHR",
-        "sha256": "854aed104fa990aa3f5fbf9d926724e0d8ae3ca73a5aabbc7a27a10ec91447e3",
-        "fixed_record_offset": 27306,
-        "fixed_bytes": 1053
-      },
-      "original": {
-        "mp_cost": 0,
-        "physical_multiplier_percent": {
-          "minimum": 65,
-          "maximum_exclusive": 70
-        },
-        "element_power": [
-          180,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        "defense_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "term4_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "hp_term_bonus": 0,
-        "hp_max_term_bonus": 0,
-        "preparation_delay_raw": 800
-      },
-      "parameters": {
-        "mp_cost": 0,
-        "physical_multiplier_percent": {
-          "minimum": 65,
-          "maximum_exclusive": 70
-        },
-        "element_power": [
-          180,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        "defense_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "term4_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "hp_term_bonus": 0,
-        "hp_max_term_bonus": 0,
-        "preparation_delay_raw": 800
-      }
-    },
-    "kai_suizu": {
-      "name": "碎足打",
-      "owner": {
-        "role_id": "002",
-        "skill_index": 20,
-        "side": "player"
-      },
-      "source": {
-        "path": "Fight_Role/002.CHR",
-        "sha256": "854aed104fa990aa3f5fbf9d926724e0d8ae3ca73a5aabbc7a27a10ec91447e3",
-        "fixed_record_offset": 29767,
-        "fixed_bytes": 1053
-      },
-      "original": {
-        "mp_cost": 0,
-        "physical_multiplier_percent": {
-          "minimum": 75,
-          "maximum_exclusive": 80
-        },
-        "element_power": [
-          180,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        "defense_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "term4_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "hp_term_bonus": 0,
-        "hp_max_term_bonus": 0,
-        "preparation_delay_raw": 800
-      },
-      "parameters": {
-        "mp_cost": 0,
-        "physical_multiplier_percent": {
-          "minimum": 75,
-          "maximum_exclusive": 80
-        },
-        "element_power": [
-          180,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        "defense_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "term4_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "hp_term_bonus": 0,
-        "hp_max_term_bonus": 0,
-        "preparation_delay_raw": 800
-      }
-    },
-    "kai_luoyan": {
-      "name": "落焰打",
-      "owner": {
-        "role_id": "002",
-        "skill_index": 21,
-        "side": "player"
-      },
-      "source": {
-        "path": "Fight_Role/002.CHR",
-        "sha256": "854aed104fa990aa3f5fbf9d926724e0d8ae3ca73a5aabbc7a27a10ec91447e3",
-        "fixed_record_offset": 32228,
-        "fixed_bytes": 1053
-      },
-      "original": {
-        "mp_cost": 0,
-        "physical_multiplier_percent": {
-          "minimum": 85,
-          "maximum_exclusive": 90
-        },
-        "element_power": [
-          180,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        "defense_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "term4_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "hp_term_bonus": 0,
-        "hp_max_term_bonus": 0,
-        "preparation_delay_raw": 800
-      },
-      "parameters": {
-        "mp_cost": 0,
-        "physical_multiplier_percent": {
-          "minimum": 85,
-          "maximum_exclusive": 90
-        },
-        "element_power": [
-          180,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        "defense_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "term4_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "hp_term_bonus": 0,
-        "hp_max_term_bonus": 0,
-        "preparation_delay_raw": 800
-      }
-    },
-    "kai_liyan": {
-      "name": "里焰打",
-      "owner": {
-        "role_id": "002",
-        "skill_index": 22,
-        "side": "player"
-      },
-      "source": {
-        "path": "Fight_Role/002.CHR",
-        "sha256": "854aed104fa990aa3f5fbf9d926724e0d8ae3ca73a5aabbc7a27a10ec91447e3",
-        "fixed_record_offset": 34689,
-        "fixed_bytes": 1053
-      },
-      "original": {
-        "mp_cost": 0,
-        "physical_multiplier_percent": {
-          "minimum": 80,
-          "maximum_exclusive": 85
-        },
-        "element_power": [
-          180,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        "defense_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "term4_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "hp_term_bonus": 0,
-        "hp_max_term_bonus": 0,
-        "preparation_delay_raw": 800
-      },
-      "parameters": {
-        "mp_cost": 0,
-        "physical_multiplier_percent": {
-          "minimum": 80,
-          "maximum_exclusive": 85
-        },
-        "element_power": [
-          180,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        "defense_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "term4_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "hp_term_bonus": 0,
-        "hp_max_term_bonus": 0,
-        "preparation_delay_raw": 800
-      }
-    },
-    "kai_duanyan": {
-      "name": "断焰打",
-      "owner": {
-        "role_id": "002",
-        "skill_index": 23,
-        "side": "player"
-      },
-      "source": {
-        "path": "Fight_Role/002.CHR",
-        "sha256": "854aed104fa990aa3f5fbf9d926724e0d8ae3ca73a5aabbc7a27a10ec91447e3",
-        "fixed_record_offset": 37150,
-        "fixed_bytes": 1053
-      },
-      "original": {
-        "mp_cost": 0,
-        "physical_multiplier_percent": {
-          "minimum": 90,
-          "maximum_exclusive": 95
-        },
-        "element_power": [
-          180,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        "defense_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "term4_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "hp_term_bonus": 0,
-        "hp_max_term_bonus": 0,
-        "preparation_delay_raw": 800
-      },
-      "parameters": {
-        "mp_cost": 0,
-        "physical_multiplier_percent": {
-          "minimum": 90,
-          "maximum_exclusive": 95
-        },
-        "element_power": [
-          180,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        "defense_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "term4_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "hp_term_bonus": 0,
-        "hp_max_term_bonus": 0,
-        "preparation_delay_raw": 800
-      }
-    },
-    "011_14": {
-      "name": "鹰爪",
-      "owner": {
-        "role_id": "011",
-        "skill_index": 14,
-        "side": "enemy"
-      },
-      "source": {
-        "path": "Fight_Role/011.CHR",
-        "sha256": "01625263cd7226760c8bb11067878285c5835ba4a43efbcab68020201c698ec4",
-        "fixed_record_offset": 19753,
-        "fixed_bytes": 1053
-      },
-      "original": {
-        "mp_cost": 0,
-        "physical_multiplier_percent": {
-          "minimum": 30,
-          "maximum_exclusive": 40
-        },
-        "element_power": [
-          0,
-          0,
-          70,
-          0,
-          0,
-          0
-        ],
-        "defense_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "term4_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "hp_term_bonus": 0,
-        "hp_max_term_bonus": 0,
-        "preparation_delay_raw": 800
-      },
-      "parameters": {
-        "mp_cost": 0,
-        "physical_multiplier_percent": {
-          "minimum": 30,
-          "maximum_exclusive": 40
-        },
-        "element_power": [
-          0,
-          0,
-          70,
-          0,
-          0,
-          0
-        ],
-        "defense_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "term4_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "hp_term_bonus": 0,
-        "hp_max_term_bonus": 0,
-        "preparation_delay_raw": 800
-      }
-    },
-    "011_15": {
-      "name": "飞鹰突击",
-      "owner": {
-        "role_id": "011",
-        "skill_index": 15,
-        "side": "enemy"
-      },
-      "source": {
-        "path": "Fight_Role/011.CHR",
-        "sha256": "01625263cd7226760c8bb11067878285c5835ba4a43efbcab68020201c698ec4",
-        "fixed_record_offset": 22566,
-        "fixed_bytes": 1053
-      },
-      "original": {
-        "mp_cost": 0,
-        "physical_multiplier_percent": {
-          "minimum": 85,
-          "maximum_exclusive": 95
-        },
-        "element_power": [
-          0,
-          0,
-          70,
-          0,
-          0,
-          0
-        ],
-        "defense_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "term4_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "hp_term_bonus": 0,
-        "hp_max_term_bonus": 0,
-        "preparation_delay_raw": 800
-      },
-      "parameters": {
-        "mp_cost": 0,
-        "physical_multiplier_percent": {
-          "minimum": 85,
-          "maximum_exclusive": 95
-        },
-        "element_power": [
-          0,
-          0,
-          70,
-          0,
-          0,
-          0
-        ],
-        "defense_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "term4_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "hp_term_bonus": 0,
-        "hp_max_term_bonus": 0,
-        "preparation_delay_raw": 800
-      }
-    },
-    "012_14": {
-      "name": "球化攻击",
-      "owner": {
-        "role_id": "012",
-        "skill_index": 14,
-        "side": "enemy"
-      },
-      "source": {
-        "path": "Fight_Role/012.CHR",
-        "sha256": "4c9d1ef867222a8ffbdfea2e231f7500f30e0d7fec4fbfa1ab18b2dc874061a0",
-        "fixed_record_offset": 22041,
-        "fixed_bytes": 1053
-      },
-      "original": {
-        "mp_cost": 0,
-        "physical_multiplier_percent": {
-          "minimum": 40,
-          "maximum_exclusive": 50
-        },
-        "element_power": [
-          0,
-          75,
-          0,
-          0,
-          0,
-          0
-        ],
-        "defense_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "term4_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "hp_term_bonus": 0,
-        "hp_max_term_bonus": 0,
-        "preparation_delay_raw": 800
-      },
-      "parameters": {
-        "mp_cost": 0,
-        "physical_multiplier_percent": {
-          "minimum": 40,
-          "maximum_exclusive": 50
-        },
-        "element_power": [
-          0,
-          75,
-          0,
-          0,
-          0,
-          0
-        ],
-        "defense_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "term4_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "hp_term_bonus": 0,
-        "hp_max_term_bonus": 0,
-        "preparation_delay_raw": 800
-      }
-    },
-    "012_15": {
-      "name": "盘化突击",
-      "owner": {
-        "role_id": "012",
-        "skill_index": 15,
-        "side": "enemy"
-      },
-      "source": {
-        "path": "Fight_Role/012.CHR",
-        "sha256": "4c9d1ef867222a8ffbdfea2e231f7500f30e0d7fec4fbfa1ab18b2dc874061a0",
-        "fixed_record_offset": 23798,
-        "fixed_bytes": 1053
-      },
-      "original": {
-        "mp_cost": 0,
-        "physical_multiplier_percent": {
-          "minimum": 60,
-          "maximum_exclusive": 70
-        },
-        "element_power": [
-          0,
-          80,
-          0,
-          0,
-          0,
-          0
-        ],
-        "defense_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "term4_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "hp_term_bonus": 0,
-        "hp_max_term_bonus": 0,
-        "preparation_delay_raw": 800
-      },
-      "parameters": {
-        "mp_cost": 0,
-        "physical_multiplier_percent": {
-          "minimum": 60,
-          "maximum_exclusive": 70
-        },
-        "element_power": [
-          0,
-          80,
-          0,
-          0,
-          0,
-          0
-        ],
-        "defense_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "term4_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "hp_term_bonus": 0,
-        "hp_max_term_bonus": 0,
-        "preparation_delay_raw": 800
-      }
-    },
-    "013_15": {
-      "name": "烈爪突击",
-      "owner": {
-        "role_id": "013",
-        "skill_index": 15,
-        "side": "enemy"
-      },
-      "source": {
-        "path": "Fight_Role/013.CHR",
-        "sha256": "5e3a7e65761a52b1653a40bc20ae130072af5c4f704b0cb389bbb239a1cd8ef6",
-        "fixed_record_offset": 20982,
-        "fixed_bytes": 1053
-      },
-      "original": {
-        "mp_cost": 0,
-        "physical_multiplier_percent": {
-          "minimum": 20,
-          "maximum_exclusive": 30
-        },
-        "element_power": [
-          0,
-          0,
-          0,
-          90,
-          0,
-          0
-        ],
-        "defense_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "term4_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "hp_term_bonus": 0,
-        "hp_max_term_bonus": 0,
-        "preparation_delay_raw": 800
-      },
-      "parameters": {
-        "mp_cost": 0,
-        "physical_multiplier_percent": {
-          "minimum": 20,
-          "maximum_exclusive": 30
-        },
-        "element_power": [
-          0,
-          0,
-          0,
-          90,
-          0,
-          0
-        ],
-        "defense_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "term4_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "hp_term_bonus": 0,
-        "hp_max_term_bonus": 0,
-        "preparation_delay_raw": 800
-      }
-    },
-    "013_16": {
-      "name": "盾面突击",
-      "owner": {
-        "role_id": "013",
-        "skill_index": 16,
-        "side": "enemy"
-      },
-      "source": {
-        "path": "Fight_Role/013.CHR",
-        "sha256": "5e3a7e65761a52b1653a40bc20ae130072af5c4f704b0cb389bbb239a1cd8ef6",
-        "fixed_record_offset": 23443,
-        "fixed_bytes": 1053
-      },
-      "original": {
-        "mp_cost": 0,
-        "physical_multiplier_percent": {
-          "minimum": 35,
-          "maximum_exclusive": 45
-        },
-        "element_power": [
-          0,
-          0,
-          0,
-          90,
-          0,
-          0
-        ],
-        "defense_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "term4_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "hp_term_bonus": 0,
-        "hp_max_term_bonus": 0,
-        "preparation_delay_raw": 800
-      },
-      "parameters": {
-        "mp_cost": 0,
-        "physical_multiplier_percent": {
-          "minimum": 35,
-          "maximum_exclusive": 45
-        },
-        "element_power": [
-          0,
-          0,
-          0,
-          90,
-          0,
-          0
-        ],
-        "defense_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "term4_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "hp_term_bonus": 0,
-        "hp_max_term_bonus": 0,
-        "preparation_delay_raw": 800
-      }
-    },
-    "yannuan": {
-      "name": "炎浴．暖心之炎",
-      "owner": {
-        "role_id": "001",
-        "skill_index": 41,
-        "side": "player"
-      },
-      "source": {
-        "path": "Fight_Role/001.CHR",
-        "sha256": "37ce92ab57622d2cce022b4a9b8add9b29789f89d82bc369ea7352f38ca75c0a",
-        "fixed_record_offset": 92184,
-        "fixed_bytes": 1053
-      },
-      "original": {
-        "mp_cost": 6,
-        "physical_multiplier_percent": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "element_power": [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        "defense_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "term4_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "hp_term_bonus": 300,
-        "hp_max_term_bonus": 300,
-        "preparation_delay_raw": 800
-      },
-      "parameters": {
-        "mp_cost": 6,
-        "physical_multiplier_percent": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "element_power": [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        "defense_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "term4_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "hp_term_bonus": 300,
-        "hp_max_term_bonus": 300,
-        "preparation_delay_raw": 800
-      }
-    },
-    "001_43": {
-      "name": "炎浴．复活之炎",
-      "owner": {
-        "role_id": "001",
-        "skill_index": 43,
-        "side": "player"
-      },
-      "source": {
-        "path": "Fight_Role/001.CHR",
-        "sha256": "37ce92ab57622d2cce022b4a9b8add9b29789f89d82bc369ea7352f38ca75c0a",
-        "fixed_record_offset": 97810,
-        "fixed_bytes": 1053
-      },
-      "original": {
-        "mp_cost": 0,
-        "physical_multiplier_percent": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "element_power": [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        "defense_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "term4_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "hp_term_bonus": 150,
-        "hp_max_term_bonus": 150,
-        "preparation_delay_raw": 2000
-      },
-      "parameters": {
-        "mp_cost": 0,
-        "physical_multiplier_percent": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "element_power": [
-          0,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        "defense_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "term4_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "hp_term_bonus": 150,
-        "hp_max_term_bonus": 150,
-        "preparation_delay_raw": 2000
-      }
+      "parameters": {}
     },
     "001_23": {
       "name": "炎体．百里",
@@ -1066,64 +45,7 @@
         "skill_index": 23,
         "side": "player"
       },
-      "source": {
-        "path": "Fight_Role/001.CHR",
-        "sha256": "37ce92ab57622d2cce022b4a9b8add9b29789f89d82bc369ea7352f38ca75c0a",
-        "fixed_record_offset": 42606,
-        "fixed_bytes": 1053
-      },
-      "original": {
-        "mp_cost": 0,
-        "physical_multiplier_percent": {
-          "minimum": 60,
-          "maximum_exclusive": 65
-        },
-        "element_power": [
-          180,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        "defense_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "term4_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "hp_term_bonus": 0,
-        "hp_max_term_bonus": 0,
-        "preparation_delay_raw": 800
-      },
-      "parameters": {
-        "mp_cost": 0,
-        "physical_multiplier_percent": {
-          "minimum": 60,
-          "maximum_exclusive": 65
-        },
-        "element_power": [
-          180,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        "defense_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "term4_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "hp_term_bonus": 0,
-        "hp_max_term_bonus": 0,
-        "preparation_delay_raw": 800
-      }
+      "parameters": {}
     },
     "001_26": {
       "name": "炎剑．燕落",
@@ -1132,64 +54,52 @@
         "skill_index": 26,
         "side": "player"
       },
-      "source": {
-        "path": "Fight_Role/001.CHR",
-        "sha256": "37ce92ab57622d2cce022b4a9b8add9b29789f89d82bc369ea7352f38ca75c0a",
-        "fixed_record_offset": 49989,
-        "fixed_bytes": 1053
+      "parameters": {}
+    },
+    "kai_mieyan": {
+      "name": "灭颜打",
+      "owner": {
+        "role_id": "002",
+        "skill_index": 19,
+        "side": "player"
       },
-      "original": {
-        "mp_cost": 0,
-        "physical_multiplier_percent": {
-          "minimum": 45,
-          "maximum_exclusive": 50
-        },
-        "element_power": [
-          240,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        "defense_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "term4_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "hp_term_bonus": 0,
-        "hp_max_term_bonus": 0,
-        "preparation_delay_raw": 800
+      "parameters": {}
+    },
+    "kai_suizu": {
+      "name": "碎足打",
+      "owner": {
+        "role_id": "002",
+        "skill_index": 20,
+        "side": "player"
       },
-      "parameters": {
-        "mp_cost": 0,
-        "physical_multiplier_percent": {
-          "minimum": 45,
-          "maximum_exclusive": 50
-        },
-        "element_power": [
-          240,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        "defense_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "term4_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "hp_term_bonus": 0,
-        "hp_max_term_bonus": 0,
-        "preparation_delay_raw": 800
-      }
+      "parameters": {}
+    },
+    "kai_luoyan": {
+      "name": "落焰打",
+      "owner": {
+        "role_id": "002",
+        "skill_index": 21,
+        "side": "player"
+      },
+      "parameters": {}
+    },
+    "kai_liyan": {
+      "name": "里焰打",
+      "owner": {
+        "role_id": "002",
+        "skill_index": 22,
+        "side": "player"
+      },
+      "parameters": {}
+    },
+    "kai_duanyan": {
+      "name": "断焰打",
+      "owner": {
+        "role_id": "002",
+        "skill_index": 23,
+        "side": "player"
+      },
+      "parameters": {}
     },
     "003_21": {
       "name": "火精．炎月",
@@ -1198,64 +108,7 @@
         "skill_index": 21,
         "side": "player"
       },
-      "source": {
-        "path": "Fight_Role/003.CHR",
-        "sha256": "85f462f3598309fc47ceccef998ab07ccd34a5389ef3fee0146f8a0bca984fe0",
-        "fixed_record_offset": 34516,
-        "fixed_bytes": 1053
-      },
-      "original": {
-        "mp_cost": 0,
-        "physical_multiplier_percent": {
-          "minimum": 105,
-          "maximum_exclusive": 110
-        },
-        "element_power": [
-          150,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        "defense_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "term4_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "hp_term_bonus": 0,
-        "hp_max_term_bonus": 0,
-        "preparation_delay_raw": 800
-      },
-      "parameters": {
-        "mp_cost": 0,
-        "physical_multiplier_percent": {
-          "minimum": 105,
-          "maximum_exclusive": 110
-        },
-        "element_power": [
-          150,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        "defense_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "term4_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "hp_term_bonus": 0,
-        "hp_max_term_bonus": 0,
-        "preparation_delay_raw": 800
-      }
+      "parameters": {}
     },
     "003_22": {
       "name": "火精．炎羽",
@@ -1264,64 +117,7 @@
         "skill_index": 22,
         "side": "player"
       },
-      "source": {
-        "path": "Fight_Role/003.CHR",
-        "sha256": "85f462f3598309fc47ceccef998ab07ccd34a5389ef3fee0146f8a0bca984fe0",
-        "fixed_record_offset": 36977,
-        "fixed_bytes": 1053
-      },
-      "original": {
-        "mp_cost": 0,
-        "physical_multiplier_percent": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "element_power": [
-          230,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        "defense_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "term4_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "hp_term_bonus": 0,
-        "hp_max_term_bonus": 0,
-        "preparation_delay_raw": 800
-      },
-      "parameters": {
-        "mp_cost": 0,
-        "physical_multiplier_percent": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "element_power": [
-          230,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        "defense_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "term4_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "hp_term_bonus": 0,
-        "hp_max_term_bonus": 0,
-        "preparation_delay_raw": 800
-      }
+      "parameters": {}
     },
     "003_23": {
       "name": "火精．落樱",
@@ -1330,64 +126,7 @@
         "skill_index": 23,
         "side": "player"
       },
-      "source": {
-        "path": "Fight_Role/003.CHR",
-        "sha256": "85f462f3598309fc47ceccef998ab07ccd34a5389ef3fee0146f8a0bca984fe0",
-        "fixed_record_offset": 39438,
-        "fixed_bytes": 1053
-      },
-      "original": {
-        "mp_cost": 0,
-        "physical_multiplier_percent": {
-          "minimum": 110,
-          "maximum_exclusive": 115
-        },
-        "element_power": [
-          160,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        "defense_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "term4_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "hp_term_bonus": 0,
-        "hp_max_term_bonus": 0,
-        "preparation_delay_raw": 1200
-      },
-      "parameters": {
-        "mp_cost": 0,
-        "physical_multiplier_percent": {
-          "minimum": 110,
-          "maximum_exclusive": 115
-        },
-        "element_power": [
-          160,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        "defense_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "term4_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "hp_term_bonus": 0,
-        "hp_max_term_bonus": 0,
-        "preparation_delay_raw": 1200
-      }
+      "parameters": {}
     },
     "003_24": {
       "name": "炎剑．破阵",
@@ -1396,64 +135,7 @@
         "skill_index": 24,
         "side": "player"
       },
-      "source": {
-        "path": "Fight_Role/003.CHR",
-        "sha256": "85f462f3598309fc47ceccef998ab07ccd34a5389ef3fee0146f8a0bca984fe0",
-        "fixed_record_offset": 41899,
-        "fixed_bytes": 1053
-      },
-      "original": {
-        "mp_cost": 0,
-        "physical_multiplier_percent": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "element_power": [
-          260,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        "defense_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "term4_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "hp_term_bonus": 0,
-        "hp_max_term_bonus": 0,
-        "preparation_delay_raw": 1000
-      },
-      "parameters": {
-        "mp_cost": 0,
-        "physical_multiplier_percent": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "element_power": [
-          260,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        "defense_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "term4_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "hp_term_bonus": 0,
-        "hp_max_term_bonus": 0,
-        "preparation_delay_raw": 1000
-      }
+      "parameters": {}
     },
     "003_25": {
       "name": "炎剑．碎顶",
@@ -1462,64 +144,7 @@
         "skill_index": 25,
         "side": "player"
       },
-      "source": {
-        "path": "Fight_Role/003.CHR",
-        "sha256": "85f462f3598309fc47ceccef998ab07ccd34a5389ef3fee0146f8a0bca984fe0",
-        "fixed_record_offset": 44360,
-        "fixed_bytes": 1053
-      },
-      "original": {
-        "mp_cost": 0,
-        "physical_multiplier_percent": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "element_power": [
-          330,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        "defense_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "term4_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "hp_term_bonus": 0,
-        "hp_max_term_bonus": 0,
-        "preparation_delay_raw": 1000
-      },
-      "parameters": {
-        "mp_cost": 0,
-        "physical_multiplier_percent": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "element_power": [
-          330,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        "defense_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "term4_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "hp_term_bonus": 0,
-        "hp_max_term_bonus": 0,
-        "preparation_delay_raw": 1000
-      }
+      "parameters": {}
     },
     "003_34": {
       "name": "炎灵．焠炼",
@@ -1528,64 +153,79 @@
         "skill_index": 34,
         "side": "player"
       },
-      "source": {
-        "path": "Fight_Role/003.CHR",
-        "sha256": "85f462f3598309fc47ceccef998ab07ccd34a5389ef3fee0146f8a0bca984fe0",
-        "fixed_record_offset": 70205,
-        "fixed_bytes": 1053
+      "parameters": {}
+    },
+    "yannuan": {
+      "name": "炎浴．暖心之炎",
+      "owner": {
+        "role_id": "001",
+        "skill_index": 41,
+        "side": "player"
       },
-      "original": {
-        "mp_cost": 5,
-        "physical_multiplier_percent": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "element_power": [
-          280,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        "defense_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "term4_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "hp_term_bonus": 0,
-        "hp_max_term_bonus": 0,
-        "preparation_delay_raw": 1500
+      "parameters": {}
+    },
+    "001_43": {
+      "name": "炎浴．复活之炎",
+      "owner": {
+        "role_id": "001",
+        "skill_index": 43,
+        "side": "player"
       },
-      "parameters": {
-        "mp_cost": 5,
-        "physical_multiplier_percent": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "element_power": [
-          280,
-          0,
-          0,
-          0,
-          0,
-          0
-        ],
-        "defense_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "term4_bonus": {
-          "minimum": 0,
-          "maximum_exclusive": 0
-        },
-        "hp_term_bonus": 0,
-        "hp_max_term_bonus": 0,
-        "preparation_delay_raw": 1500
-      }
+      "parameters": {}
+    },
+    "011_14": {
+      "name": "鹰爪",
+      "owner": {
+        "role_id": "011",
+        "skill_index": 14,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "011_15": {
+      "name": "飞鹰突击",
+      "owner": {
+        "role_id": "011",
+        "skill_index": 15,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "012_14": {
+      "name": "球化攻击",
+      "owner": {
+        "role_id": "012",
+        "skill_index": 14,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "012_15": {
+      "name": "盘化突击",
+      "owner": {
+        "role_id": "012",
+        "skill_index": 15,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "013_15": {
+      "name": "烈爪突击",
+      "owner": {
+        "role_id": "013",
+        "skill_index": 15,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "013_16": {
+      "name": "盾面突击",
+      "owner": {
+        "role_id": "013",
+        "skill_index": 16,
+        "side": "enemy"
+      },
+      "parameters": {}
     }
   }
 }

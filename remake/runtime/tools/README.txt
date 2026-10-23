@@ -1,10 +1,12 @@
 第七封印 · 构建、导出与验证工具
-更新：2026-10-22；所有命令从仓库根目录执行。示例使用python3；Windows可换为指向Python 3的python或py -3。
+更新：2026-10-23；所有命令从仓库根目录执行。示例使用python3；Windows可换为指向Python 3的python或py -3。
 
 常用操作
 启动检查用服务：python3 -B remake/runtime/serve.py
 新增内容：python3 -B remake/runtime/tools/build_runtime.py --target content --run
 已有来源只调参数：node remake/runtime/tools/export_runtime_config.mjs
+只读查询技能默认／生效参数：node remake/runtime/tools/export_runtime_config.mjs --reference skills yantu
+只读查询道具默认／生效参数：node remake/runtime/tools/export_runtime_config.mjs --reference items 4
 只核对内容登记：node remake/runtime/tools/export_content_registry.mjs --check
 完整当前检查：python3 -B remake/runtime/tools/verify_current.py
 列全部构建计划：python3 -B remake/runtime/tools/build_runtime.py --target all
@@ -21,6 +23,7 @@
 不加--run只列计划。--validate检查工具、既有来源台账与产物，记录当前指纹到evidence/export_inventory.json；不执行导出，也不等于原输入已经与历史来源逐项一致。
 --run按依赖执行，命中缓存仍核对产物存在及SHA。缺失、手改或输入变化会触发重建；每个成功步骤即时保存，失败可续跑。
 --force与--run一起强制重建，仍保留当前parameters。配置--reset才恢复原值，正常接入不使用。
+配置导出自动迁移旧完整格式，当前skills／items为v3、battle／rewards为v2：只保存身份与修改项，来源指纹在文件级集中登记。普通导出补齐新增角色／怪物的技能、属性、AI及奖励，保留旧调参并剔除等于默认值的冗余项；未知编号、身份或来源漂移在任何写入前拒绝。--reference <skills|battle|rewards|items> [编号]只读显示来源默认值与生效值，不生成或修改配置。配置--reset清空修改项并恢复original模式。
 --check须与--run一起使用，在成功后执行verify_current；8767服务需要先开启。
 --preflight独立使用，检查已有源表的接入能力，不导出、不写报告、不核验原媒体；新地图没有源表时先构建chapter-story。显式入口发现未知能力返回非零退出码；旧隐式NPC仅提示，显式npcs进入阻断检查。
 只有明确需要整体重建时才用--target all --run，日常文档维护无需重导素材。
