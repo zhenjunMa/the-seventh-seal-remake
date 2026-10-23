@@ -1,8 +1,8 @@
-"""Export the new-game party's learned direct attacks and Kai battle pixels.
+"""Export registered player skills, reactions and battle presentation.
 
 Only writes new party outputs. Historical forest manifests, source resources and
-the level-12 saved fixture remain immutable. Native menu/default binding rules
-are retained separately from the remake's direct-skill command presentation.
+the level-12 saved fixture remain immutable. Registration does not unlock skills;
+native learning, level and resource gates remain separate from menu bindings.
 """
 from pathlib import Path
 import hashlib
@@ -254,17 +254,17 @@ def main():
     save(WEB / 'data/party_skills.json', dict(schema='seventh-seal-party-skills', version=1,
         skills=commands, field_skills=field_commands, roles=roles, idle_skills=idles, source_hashes=sources,
         evidence=evidence, native_bundle=native_ref,
-        policy=dict(eligibility='Native learned byte +0x23 and nonzero type +0x32 low nibble.',
-            commands='Remake directly exposes selected learned attacks; native default UI binds the first three eligible skills.',
-            source='Fresh CHR definitions; admission does not alter learned bytes, required levels or saved progress.',
+        policy=dict(eligibility='登记与学习状态独立；运行按原学习状态、技能类型、等级及资源条件判断可用性。',
+            commands='战斗与场外技能按runtime_content.json登记；原前三个合资格技能用于默认快捷键来源，操作菜单与战斗使用已保存的七槽绑定。',
+            source='基于原CHR定义；登记不改写原学习字节、等级条件或存档进度。',
             original_game_execution_observed=False),
-        limits=['001 exposes two learned attacks and source skill37 fire spell; other learned spells/attacks remain outside this milestone.',
-                '002 exposes all five learned direct attacks at its source level 10; no skill unlock is invented.',
-                'Original active command menu and default three-slot configuration are not reproduced.']))
+        limits=['技能接入范围以runtime_content.json为准；保留完整CHR技能用于来源核对，不表示全部技能已实现。',
+                '登记未学习技能不会自动解锁；开发样本的显式技能授予只作用于该样本。',
+                '七槽绑定与组合记录编辑由操作菜单模块实现；组合攻击执行尚未恢复，当前实现与验收范围见remake/assessment/validation_design.txt。']))
     reactions = read(WEB / 'data/enemy_reactions.json')
     reactions['roles'].update(roles)
     reactions['source_hashes'].update({p: sources[p] for p in original_paths if p.endswith('.CHR')})
-    reactions['policy']['player_attack_skills'] = 'Party source CHR direct skills; historical fixture source remains separate.'
+    reactions['policy']['player_attack_skills'] = '按内容登记读取玩家原CHR技能；历史样本来源独立保留。'
     reactions['policy']['roster'] = 'party-source-group'
     reactions['party_native_bundle'] = native_ref
     save(WEB / 'data/party_reactions.json', reactions)

@@ -1,7 +1,7 @@
 {
   "schema": "seventh-seal-chapter-content-checklist",
   "version": 1,
-  "scope": "真实新游戏至首次白木森林探索、战斗、返回及存读档的可玩循环",
+  "scope": "真实新游戏至首次白木森林探索、战斗、返回及存读档的可玩循环；implemented表示代码已接入，当前验收状态与待办见remake/assessment/validation_design.txt，所列浏览器证据仅说明各自记录的范围",
   "browser_evidence": "remake/runtime/evidence/chapter_systems_browser_validation.json",
   "operation_menu_browser_evidence": "remake/runtime/evidence/operation_menu_browser_validation.json",
   "original_game_execution_observed": false,
@@ -10,8 +10,12 @@
     {"id":"kai-join","kind":"required","status":"implemented","sources":["Map/m17029.TLK","Animate/m17029-1.anm","Fight_Role/002.CHR"],"tests":["test_chapter.mjs"],"description":"王厅原地板事件、邀请旗标及一次入队"},
     {"id":"home-rewards","kind":"required","status":"implemented","sources":["Map/m17026.dat","Map/m17026.TLK","SYSTEM/Object.ITM"],"tests":["test_chapter.mjs","test_items.mjs"],"description":"装备箱、五份茶、原对象状态和重复交互"},
     {"id":"equipment","kind":"required-system","status":"implemented","sources":["GAME.exe","SYSTEM/Object.ITM"],"tests":["test_items.mjs","test_party_attributes.mjs"],"description":"按人物掩码和部位装卸、原始资源保留、旧v1迁移及数量同步"},
-    {"id":"operation-menu","kind":"required-system","status":"implemented","sources":["GAME.exe","SYSTEM/game001.mnu","SYSTEM/Object.ITM","Fight_Role/001.CHR"],"tests":["test_operation_menu.mjs","test_skill_shortcuts.mjs","test_field_skills.mjs"],"description":"Tab开关、原素材分页面、储存属性和剩余升级经验、物品卡片、场外暖心之炎及前三槽快捷设置／保存；完整七槽与招式编成另列待恢复"},
-    {"id":"technique-composition","kind":"later-system","status":"deferred","sources":["GAME.exe","SYSTEM/game002_2a.mnu","SYSTEM/game002_2b.mnu"],"tests":[],"description":"原完整招式编成／组合及七槽命令、队列和法器详情；前三槽快捷设置不是完整编辑"},
+    {"id":"operation-menu","kind":"required-system","status":"implemented","sources":["GAME.exe","SYSTEM/game001.mnu","SYSTEM/Object.ITM","Fight_Role/001.CHR"],"tests":["test_operation_menu.mjs","test_skill_shortcuts.mjs","test_field_skills.mjs","test_menu_settings.mjs"],"description":"Tab开关、原素材分页面、属性和剩余升级经验、物品卡片、场外暖心之炎、声音与光标设置；七槽设定、编成记录、队列和法器分别登记"},
+    {"id":"technique-composition","kind":"required-system","status":"implemented","sources":["GAME.exe","SYSTEM/game002_2a.mnu","SYSTEM/game002_2b.mnu"],"tests":["test_menu_techniques.mjs","test_operation_technique_view.mjs"],"description":"七槽命令绑定、组合记录创建／改名／删除及保存，兼容旧前三槽设置；组合攻击执行另列待恢复"},
+    {"id":"technique-test","kind":"required-system","status":"implemented","sources":["GAME.exe","Fight_Bk/TestStage.scn"],"tests":["test_skill_test_core.mjs","test_skill_test_menu.mjs","test_skill_test_session.mjs"],"description":"从技巧测试进入原TestStage并返回同一菜单；保留MP资格判断，不扣施法MP或受击HP，药品消耗等已接入资源变化正常提交"},
+    {"id":"formation","kind":"required-system","status":"implemented","sources":["GAME.exe"],"tests":["test_party_formation.mjs","test_operation_formation_view.mjs"],"description":"四个固定队列槽支持人物与空位交换并保存，地图领队与战斗位置独立；候补系统与队列战斗加成的边界见当前计划"},
+    {"id":"crystal-sockets","kind":"required-system","status":"implemented","sources":["GAME.exe","SYSTEM/Object.ITM"],"tests":["test_crystal_sockets.mjs","test_operation_weapon_view.mjs"],"description":"纯数值晶石镶嵌／替换／卸下及保存，替换返还旧晶石，换武器保留人物六槽记录；特殊晶石被动尚未恢复"},
+    {"id":"combination-execution","kind":"later-system","status":"deferred","sources":["GAME.exe"],"tests":[],"description":"组合记录编辑和绑定已接入；组合攻击执行尚未恢复，后续能力与完成标准见当前计划"},
     {"id":"medicine","kind":"required-system","status":"implemented","sources":["GAME.exe","SYSTEM/Object.ITM","Fight_Role/001.CHR","Fight_Role/002.CHR"],"tests":["test_items.mjs","test_item_presentation.mjs"],"description":"战斗外直接吃药；战斗内花一次行动，在原逻辑帧17恢复并扣量"},
     {"id":"item-configuration","kind":"required-system","status":"implemented","sources":["SYSTEM/Object.ITM"],"tests":["test_item_configuration.mjs","test_runtime_config.mjs"],"description":"416条统一配置、属性／药效／角色／场合／掉落、只读来源、旧六项迁移；特殊未还原作用不可启用"},
     {"id":"home-rest","kind":"required-system","status":"implemented","sources":["Map/m17026.TLK","Animate/m17026-1.anm"],"tests":["test_chapter.mjs","test_recovery.mjs"],"description":"床显式交互、原接受/拒绝选项、两人原始HP/MP恢复"},
@@ -20,9 +24,9 @@
     {"id":"game-over","kind":"required-system","status":"implemented","sources":["GAME.exe","Animate/GO02.bik"],"tests":["test_recovery.mjs"],"description":"全队倒下进入原败北电影/主菜单，可载入或新游戏"},
     {"id":"audio","kind":"required-presentation","status":"implemented","sources":["GAME.exe","Fight_Bk/stage13.scn","sound/mn170-1.wav","sound/mn700-1.wav"],"tests":["test_audio.mjs"],"description":"地图、世界地图、战斗音乐，人物/药品动作音效、音量、静音和清理"},
     {"id":"forest-background","kind":"required-presentation","status":"implemented","sources":["GAME.exe","Fight_Bk/stage13.scn","Fight_Bk/FS13A.DGP","Fight_Bk/FG13A.DGP","Fight_Bk/FB13A.DGP"],"tests":["test_forest_stage.mjs"],"description":"默认640×480构图与地面裁剪、天空帧、场景物件深度排序；动态镜头和实时原时钟仍待对照"},
-    {"id":"save-load","kind":"required-system","status":"implemented","sources":["GAME.exe"],"tests":["test_runtime.mjs","test_items.mjs"],"description":"重制独立JSON进度；原存档只读"},
+    {"id":"save-load","kind":"required-system","status":"implemented","sources":["GAME.exe","Map/m17010.TLK"],"tests":["test_runtime.mjs","test_items.mjs","test_chapter.mjs","test_save_menu.mjs","test_save_controller.mjs","test_save_storage.mjs","test_save_files.py"],"description":"通讯水晶原始选择／存档指令、00–19栏位与覆盖确认、F4快速保存／F5快速读取；重制JSON写入remake/saves，保留旧单档及浏览器存档迁移，原存档只读且不直接兼容"},
     {"id":"village-dialogues","kind":"optional","status":"implemented-bounded","sources":["Map/m17020.TLK"],"tests":["test_chapter.mjs"],"description":"已覆盖普通文本和type0旗标分支；不扩充新主线前置条件"},
-    {"id":"later-story","kind":"later-story","status":"deferred","sources":["Map/m17010.TLK","Map/m17020.TLK"],"tests":["test_chapter.mjs"],"description":"flag12/16后续ANM、援攻72、通讯水晶和特殊败北TLK；恢复来源规则前明确拒绝"},
+    {"id":"later-story","kind":"later-story","status":"deferred","sources":["Map/m17010.TLK","Map/m17020.TLK"],"tests":["test_chapter.mjs"],"description":"flag12/16后续ANM、援攻72和特殊败北TLK；未恢复分支明确拒绝，当前待办以remake/assessment/validation_design.txt为准"},
     {"id":"exact-presentation","kind":"fidelity","status":"deferred","sources":["GAME.exe"],"tests":[],"description":"原程序实玩对照、镜头/位移/时钟/混色/字体与尚未覆盖的声音；目前源素材及浏览器预览不冒称完全复刻"}
   ]
 }
