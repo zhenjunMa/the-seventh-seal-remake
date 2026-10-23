@@ -6,6 +6,7 @@ web/data/runtime_content.json仍是唯一接入登记。maps选择地图、NPC�
 web/data/chapter_story.json、opening_program.json、data/events/*.json及chapter_map_resources.json是原作来源台账，由既有提取工具生成，保留原字节、文件指纹和证据，不作为手工文案编辑入口。
 web/content/events/适合存放自行编写的独立NPC事件，web/content/quests/存放任务定义。可以按章节或区域建立子目录，每个事件／任务有稳定ID，不按内容在数组中的位置标识。
 web/data/story/是自动生成的运行包。不要直接修改其中台词或跳转；修改来源或编辑文件后重新构建。
+队友、道具和技能引用先查web/data/library/index.json；它将原角色编号、原item_id和技能原索引关联到唯一配置。使用tools/build_content_library.mjs --query或core/content_library.mjs查询；同名对象必须选具体编号。MAG原ID有重复，使用system_magic_原零基记录索引。runtime_registered=false表示仅有来源，新增剧情不能绕过接入检查直接执行该技能或安排未接入角色入队。完整规范见config_guide.txt的“全量来源与引用索引”。
 
 运行结构
 index.json保存地图包、共享包与序章包的路径和指纹，并绑定当前接入登记。

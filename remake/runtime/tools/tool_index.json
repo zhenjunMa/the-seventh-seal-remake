@@ -2,7 +2,7 @@
   "schema": "seventh-seal-tool-index",
   "version": 1,
   "updated": "2026-10-23",
-  "registered_steps": 36,
+  "registered_steps": 39,
   "content_plan": [
     "chapter-maps",
     "chapter-story",
@@ -13,10 +13,13 @@
     "party-skills",
     "enemy-rewards",
     "encounters",
+    "source-catalog",
+    "items",
+    "source-magic",
     "configuration",
+    "content-library",
     "catalog",
     "party-rewards",
-    "items",
     "item-presentation",
     "forest-stage",
     "battle-ui",
@@ -48,6 +51,14 @@
       "role": "registered-build",
       "build_targets": [
         "catalog"
+      ],
+      "imported_by": []
+    },
+    {
+      "path": "build_content_library.mjs",
+      "role": "registered-build",
+      "build_targets": [
+        "content-library"
       ],
       "imported_by": []
     },
@@ -592,6 +603,22 @@
       "imported_by": []
     },
     {
+      "path": "export_source_catalog.py",
+      "role": "registered-build",
+      "build_targets": [
+        "source-catalog"
+      ],
+      "imported_by": []
+    },
+    {
+      "path": "export_source_magic.py",
+      "role": "registered-build",
+      "build_targets": [
+        "source-magic"
+      ],
+      "imported_by": []
+    },
+    {
       "path": "export_startup_media.py",
       "role": "registered-build",
       "build_targets": [
@@ -721,6 +748,14 @@
       "imported_by": []
     },
     {
+      "path": "source/catalog_chr.py",
+      "role": "source-decoder",
+      "build_targets": [],
+      "imported_by": [
+        "export_source_catalog.py"
+      ]
+    },
+    {
       "path": "source/combat_resources.py",
       "role": "source-decoder",
       "build_targets": [],
@@ -750,7 +785,10 @@
         "export_route.py",
         "export_skill_layers.py",
         "export_skill_test.py",
-        "inspect_opening_initial_state.py"
+        "export_source_catalog.py",
+        "export_source_magic.py",
+        "inspect_opening_initial_state.py",
+        "source/catalog_chr.py"
       ],
       "previous_path": "remake/prototype/tools/combat_resources.py",
       "previous_sha256": "5a641a6dd7dd53f4021cc2325b63aa29110e6fc4aec6c0d4cff954282af98f30",

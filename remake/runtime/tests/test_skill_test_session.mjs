@@ -16,6 +16,8 @@ const retainedSave=JSON.parse(await readFile(new URL('../evidence/chapter_system
 const retainedTea=JSON.parse(retainedSave.payload).inventory.find(a=>a.id===12);
 function worldFixture(){const source=copy(seed);source.party.push(chapterRoleFromDefinition(source.source.role_definitions['002']));source.inventory.push(copy(retainedTea));source.opening.status='complete';return new WorldStore(source,['M72061','M70010']);}
 const data=Object.fromEntries(await Promise.all(Object.entries({combat:'combat_sample',forest:'forest_combat',scheduler:'battle_scheduler',ai:'forest_ai',rewards:'party_rewards',party_skills:'party_skills',items:'items'}).map(async([key,value])=>[key,await load(value)])));
+data.source_skills=await load('library/skills');
+data.source_magic=await load('library/magic');
 const configured=compileRuntimeConfiguration(data,await loadRuntimeConfiguration(json));
 function resultFor(world){return {test_mode:true,outcome:'escaped',battle_id:'test',resources_by_actor:Object.fromEntries(world.value.party.map(a=>[a.id,{hp:a.hp.current,mp:a.mp.current}]))};}
 function snapshotFor(world){return {test_mode:true,actors:world.value.party.map(a=>({id:a.id,side:'player'})),inventory:copy(world.value.inventory)};}

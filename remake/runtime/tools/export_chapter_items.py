@@ -138,6 +138,34 @@ def catalog_fields(raw, ident, offset):
 def write(path, value):
     path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
 
+
+def catalog_indexes(definitions):
+    """Exact source lookups: names may collide; every lookup returns native IDs.
+
+    ``definitions[str(item_id)]`` is the by-ID index. These indexes describe
+    source fields only; membership never grants runtime support or enables an
+    item. Role membership follows the recovered native bit rule, including
+    source records whose behavior has not been implemented.
+    """
+    indexes = dict(ids=[], by_name={}, by_category={}, by_record_status={},
+                   by_type_subtype={}, by_slot={}, by_role_mask={}, by_allowed_role={})
+    for ident, row in sorted(definitions.items(), key=lambda pair: int(pair[0])):
+        assert str(row['id']) == ident
+        item_id = row['id']
+        indexes['ids'].append(item_id)
+        for index, key in [('by_name', row['name']), ('by_category', row['category']),
+                           ('by_record_status', row['record_status']),
+                           ('by_type_subtype', f"{row['type_raw_24']}:{row['subtype_raw_25']}"),
+                           ('by_role_mask', str(row['allowed_role_mask_raw_13e']))]:
+            indexes[index].setdefault(key, []).append(item_id)
+        if 'slot_id' in row:
+            indexes['by_slot'].setdefault(row['slot_id'], []).append(item_id)
+        for bit in range(32):
+            if row['allowed_role_mask_raw_13e'] & (1 << bit):
+                indexes['by_allowed_role'].setdefault(f'{bit + 1:03}', []).append(item_id)
+    return indexes
+
+
 def export():
     paths = ['GAME.exe', 'SYSTEM/Object.ITM']
     original = {p: (ROOT / p).read_bytes() for p in paths}
@@ -223,13 +251,27 @@ def export():
     assert all(len(row['value_ranges']) == 32 and row['source']['record_sha256'] == sha(bytes.fromhex(row['raw_hex']))
                and row['validation']['drop_rate_in_native_range'] and row['validation']['target_flags_are_boolean']
                for row in definitions.values())
+    indexes = catalog_indexes(definitions)
+    duplicate_names = {name: ids for name, ids in indexes['by_name'].items() if len(ids) > 1}
+    reconstructed = itm[:0x61c] + b''.join(bytes.fromhex(definitions[str(ident)]['raw_hex'])
+                                        for ident in indexes['ids'])
+    assert reconstructed == itm and sha(reconstructed) == ITM_SHA
     output = RUNTIME / 'web/data/items.json'
     value = dict(schema='seventh-seal-chapter-items', version=1, slots=SLOTS,
-                 definitions=definitions, source_hashes=hashes, evidence=evidence,
+                 definitions=definitions, indexes=indexes, source_hashes=hashes, evidence=evidence,
                  catalog=dict(record_count=count, header_bytes=0x61c, record_bytes=0x3bf,
                     count_field_offset=0x20, header_raw_hex=itm[:0x61c].hex(),
                     complete_source_coverage=True, empty_record_ids=[],
                     placeholder_record_ids=[r['id'] for r in definitions.values() if r['record_status']=='placeholder'],
+                    internal_record_ids=indexes['by_record_status'].get('internal-source', []),
+                    unknown_category_item_ids=indexes['by_category'].get('unknown', []),
+                    duplicate_names=duplicate_names,
+                    index_policy=dict(by_id='definitions[str(original item ID)]; no renumbering',
+                        lookup_values='Original numeric IDs, ascending; all records retained, including placeholders and internal records.',
+                        by_name='Exact cp936-decoded source name; values are lists because names are not unique. Reference by ID after choosing a record.',
+                        by_type_subtype='Original type and subtype bytes joined with a colon; categories do not assign unrecovered mechanics.',
+                        by_allowed_role='Three-digit numeric role ID for each set bit in the raw uint32 role mask. This source lookup does not enable items or assert usable behavior.',
+                        availability='Source indexes are independent of runtime activation. config/items.json remains the only editable parameter catalog.'),
                     default_enabled_item_ids=IDS, simple_restore_item_ids=SIMPLE_RESTORE_IDS,
                     source_value_ranges_per_record=32, source_range_issues=range_issues,
                     random_initialization_item_ids=variable_ids,
@@ -270,6 +312,12 @@ def export():
                   output_path=output.relative_to(ROOT).as_posix(), output_sha256=sha(output.read_bytes()),
                   item_ids=list(range(1, count + 1)), enabled_item_ids=IDS,
                   record_count=count, value_range_checks=count * len(VALUE_PAIRS),
+                  source_reconstruction_exact=True, reconstructed_source_bytes=len(reconstructed),
+                  reconstructed_source_sha256=sha(reconstructed),
+                  duplicate_names=duplicate_names,
+                  index_key_counts={key: len(rows) for key, rows in indexes.items()},
+                  internal_record_ids=value['catalog']['internal_record_ids'],
+                  unknown_category_item_ids=value['catalog']['unknown_category_item_ids'],
                   deterministic_initialized_records=sum('initialized_raw_hex' in r for r in definitions.values()),
                   source_range_issues=range_issues, random_initialization_item_ids=variable_ids,
                   behavior_counts=value['catalog']['behavior_counts'],

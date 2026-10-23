@@ -20,6 +20,8 @@ import {WorldStore,encodeSave,decodeSave} from '../web/core/world.mjs';
 const copy=structuredClone,web=new URL('../web/',import.meta.url),read=async name=>JSON.parse(await readFile(new URL('data/'+name,web),'utf8'));
 const [base,forest,scheduler,ai,rewards,seed,meta]=await Promise.all(['combat_sample.json','forest_combat.json','battle_scheduler.json','forest_ai.json','forest_rewards.json','route_seed.json','enemy_battle_view.json'].map(read));
 const data={combat:base,forest,scheduler,ai,rewards,party_skills:await read('party_skills.json'),items:await read('items.json')},config=await loadRuntimeConfiguration(p=>read(p.slice(5))),maps=['M01010','M01030','M17010','M70010'];
+data.source_skills=await read('library/skills.json');
+data.source_magic=await read('library/magic.json');
 const debug=()=>({...expandRuntimeConfiguration(data,config),manifest:{...copy(config.manifest),mode:'debug'}});
 function sample(c,ids=['012'],world=seed){const d=compileRuntimeConfiguration(data,c);return createForestSample(world,d.combat,d.forest,{map_id:'M70010',members:ids.map(id=>({id}))},null,d.scheduler,d.ai,d.rewards);}
 const byte=(s,p)=>Buffer.from(s.fixed_raw_hex,'hex')[p];
@@ -33,7 +35,7 @@ test('config loader uses one manifest and four dedicated files, rejects arbitrar
 });
 test('default profile covers all admitted skills, three enemies, six drops and retains numeric source bytes',()=>{
   const before=copy(data),cfgBefore=copy(config),d=compileRuntimeConfiguration(data,config);
-  assert.equal(Object.keys(config.skills.entries).length,24);assert.equal(Object.keys(config.rewards.entries).length,3);assert.equal(Object.keys(config.items.entries).length,416);
+  assert.equal(Object.keys(config.skills.entries).length,Object.keys(data.source_skills.skills).length+Object.keys(data.source_magic.magic).length);assert.equal(Object.keys(d.skill_registry).length,24);assert.equal(Object.keys(config.rewards.entries).length,3);assert.equal(Object.keys(config.items.entries).length,416);
   assert.deepEqual(d.audit.differences,[]);
   for(const [id,s]of Object.entries(data.party_skills.skills))assert.equal(d.party_skills.skills[id].fixed_raw_hex,s.fixed_raw_hex);
   for(const [id,s]of Object.entries(base.skills))assert.equal(d.combat.skills[id].fixed_raw_hex,s.fixed_raw_hex);
@@ -57,7 +59,7 @@ test('enemy initial HP MP attributes and resistance apply to every duplicate and
   assert.equal(createBattleSample(seed,compileRuntimeConfiguration(data,cfg).combat).actors[1].hp.current,700);
 });
 test('all eight skill overlays reach forest singles and native combo numeric records without changing actions',()=>{
-  const cfg=debug();for(const row of Object.values(cfg.skills.entries)){row.parameters.physical_multiplier_percent={minimum:90,maximum_exclusive:90};row.parameters.element_power=[0,0,0,0,0,0];row.parameters.preparation_delay_raw=1200;}
+  const cfg=debug();for(const row of Object.values(cfg.skills.entries)){if(Object.hasOwn(row.parameters,'enabled'))continue;row.parameters.physical_multiplier_percent={minimum:90,maximum_exclusive:90};row.parameters.element_power=[0,0,0,0,0,0];row.parameters.preparation_delay_raw=1200;}
   const s=sample(cfg,['011','012','013']);for(const skill of Object.values(s.skills)){assert.equal(Buffer.from(skill.fixed_raw_hex,'hex').readInt32LE(0xcb),90);assert.equal(Buffer.from(skill.fixed_raw_hex,'hex').readInt32LE(0x2e),1200);}
   for(const [id,role]of Object.entries(s.enemy_ai_data.roles))for(const index of role.learned_indices){
     const skill=role.skills[index];assert.equal(Buffer.from(skill.fixed_raw_hex,'hex').readInt32LE(0xcb),90);assert.deepEqual(skill.actions,ai.roles[id].skills[index].actions);

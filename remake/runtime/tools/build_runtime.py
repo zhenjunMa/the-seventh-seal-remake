@@ -136,6 +136,32 @@ STEPS['dialogue-ui']=replace(STEPS['dialogue-ui'],depends=('catalog','chapter-st
 STEPS['dialogue-ui']=replace(STEPS['dialogue-ui'],inputs=(*STEPS['dialogue-ui'].inputs,'data/runtime_content.json','content'))
 STEPS['prologue-presentation']=replace(STEPS['prologue-presentation'],depends=('chapter-story',))
 
+# Full source inventory is independent of the subset opened by runtime_content.
+# Rebuilding numeric configuration preserves existing sparse overrides.
+STEPS['source-catalog']=Step('export_source_catalog.py',
+    ('data/library/roles.json','data/library/skills.json'), ('opening-seed',),
+    ('source_library_20261023/source_export.json',),
+    ('data/opening_seed.json','../tools/source/catalog_chr.py',
+     '../tools/source/combat_resources.py','../evidence/source_library_20261023/native.json'),
+    ('GAME.exe',*tuple(file.relative_to(ROOT).as_posix() for file in sorted((ROOT/'Fight_Role').rglob('*')) if file.suffix.lower()=='.chr')))
+STEPS['configuration']=replace(STEPS['configuration'],
+    depends=(*STEPS['configuration'].depends,'source-catalog','items'),
+    inputs=(*STEPS['configuration'].inputs,'data/library/skills.json'))
+STEPS['content-library']=Step('build_content_library.mjs', ('data/library/index.json',),
+    ('configuration',), inputs=('data/library/roles.json','data/library/skills.json',
+        'data/items.json','data/config/skills.json','data/config/items.json',
+        'data/runtime_content.json','core/content_library.mjs'))
+STEPS['catalog']=replace(STEPS['catalog'],depends=(*STEPS['catalog'].depends,'content-library'))
+STEPS['source-magic']=Step('export_source_magic.py', ('data/library/magic.json',),
+    reports=('source_library_20261023/magic_export.json',),
+    inputs=('../evidence/source_library_20261023/magic_native.json',),
+    sources=('GAME.exe','SYSTEM/System.MAG'))
+STEPS['configuration']=replace(STEPS['configuration'],
+    depends=(*STEPS['configuration'].depends,'source-magic'),
+    inputs=(*STEPS['configuration'].inputs,'data/library/magic.json'))
+STEPS['content-library']=replace(STEPS['content-library'],
+    inputs=(*STEPS['content-library'].inputs,'data/library/magic.json','data/party_skills.json','data/forest_ai.json'))
+
 
 def sha(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()

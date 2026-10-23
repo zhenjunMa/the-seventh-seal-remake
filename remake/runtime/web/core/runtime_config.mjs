@@ -1,5 +1,5 @@
 // Editable overlays over retained extraction data. No source/world mutation.
-import {createSkillRegistry,deriveSkillConfiguration,applyRegisteredSkillParameters,skillOwnerKey} from './skill_registry.mjs';
+import {createSkillRegistry,deriveSkillConfiguration,applyRegisteredSkillParameters,skillOwnerKey,validateSourceOnlySkillParameters} from './skill_registry.mjs';
 import {deriveItemConfiguration,compileItemConfiguration} from './item_registry.mjs';
 import {expandParameterOverrides,compactParameterConfiguration} from './config_overrides.mjs';
 const copy=structuredClone;
@@ -65,6 +65,7 @@ export function compactRuntimeConfiguration(data,bundle){
 function validateParameters(section,id,p,baseline,data,owner){
   fields(p,Object.keys(baseline),`${section}.${id}.parameters`);
   if(section==='skills'){
+    if(Object.hasOwn(baseline,'enabled'))return validateSourceOnlySkillParameters(p,baseline,id);
     // The established skill compiler validates all existing numeric fields.
     integer(p.preparation_delay_raw,`${id}.preparation_delay_raw`,0,1000000);
     fail(owner.side!=='enemy'||p.mp_cost===0,`${id}敌方非零耗蓝及后备规则尚未接入`);
@@ -93,7 +94,10 @@ export function compileRuntimeConfiguration(data,bundle){
   fail(manifest.schema===baseline.manifest.schema&&manifest.version===1,'配置版本不兼容');fail(['original','debug'].includes(manifest.mode),'mode须为original或debug');
   fail(same(manifest.files,CONFIG_FILES)&&typeof manifest.notes==='string','配置文件路径无效');
   bundle=expandBundle(baseline,bundle);
-  const differences=[],compiled=copy(data),registry=createSkillRegistry(data),skillsByOwner=new Map();
+  // The complete native catalog is a cached configuration reference, not a
+  // battle input or a save payload. Only implemented commands are compiled.
+  const {source_skills,source_magic,...runtimeData}=data;
+  const differences=[],compiled=copy(runtimeData),registry=createSkillRegistry(data),skillsByOwner=new Map();
   compiled.skill_registry={};
   for(const section of Object.keys(CONFIG_FILES)){
     if(section==='items'){
@@ -116,6 +120,7 @@ export function compileRuntimeConfiguration(data,bundle){
       const changes=Object.keys(b.original).filter(k=>!same(b.original[k],row.parameters[k])).map(field=>({section,id,field,original:copy(b.original[field]),current:copy(row.parameters[field])}));
       fail(manifest.mode==='debug'||changes.length===0,`${label}原版模式有参数差异，请切换debug或恢复original`);differences.push(...changes);
       if(section==='skills'){
+        if(!Object.hasOwn(registry,id))continue;
         const s=registry[id].skill,skill=applyRegisteredSkillParameters(s,row,manifest.mode);
         compiled.skill_registry[id]=skill;skillsByOwner.set(skillOwnerKey(s),row);
       }else if(section==='battle'){
@@ -149,7 +154,7 @@ export function compileRuntimeConfiguration(data,bundle){
     const weight=view(s).getUint8(0x27),next=replace(s);if(next!==s){const v=view(next);v.setUint8(0x27,weight);next.fixed_raw_hex=rawHex(v);}return next;
   });
   for(const a of Object.values(compiled.forest.actors))fail(a.raw_by_address['0x0524a72d']*compiled.scheduler.average_speed_factor<=0x7fffffff,'敌人速度与充能系数的组合超出当前运行范围');
-  const audit={schema:manifest.schema,version:1,mode:manifest.mode,differences,parameters:Object.fromEntries(Object.keys(CONFIG_FILES).map(section=>[section,Object.fromEntries(Object.entries(bundle[section].entries).map(([id,row])=>[id,copy(row.parameters)]))]))};
+  const audit={schema:manifest.schema,version:1,mode:manifest.mode,differences,parameters:Object.fromEntries(Object.keys(CONFIG_FILES).map(section=>[section,Object.fromEntries(Object.entries(bundle[section].entries).filter(([id])=>section!=='skills'||Object.hasOwn(registry,id)).map(([id,row])=>[id,copy(row.parameters)]))]))};
   compiled.combat.source.runtime_configuration=copy(audit);compiled.audit=audit;return compiled;
 }
 

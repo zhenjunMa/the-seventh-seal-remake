@@ -17,6 +17,8 @@ const read=async p=>JSON.parse(await readFile(new URL('../'+p,import.meta.url)))
 const json=p=>read('web/'+p),clone=structuredClone;
 const attributes=await json('data/party_combat.json'),commands=await json('data/party_skills.json');
 const data={combat:await json('data/combat_sample.json'),forest:await json('data/forest_combat.json'),scheduler:await json('data/battle_scheduler.json'),ai:await json('data/forest_ai.json'),rewards:await json('data/party_rewards.json'),party_skills:commands,items:await json('data/items.json')};
+data.source_skills=await json('data/library/skills.json');
+data.source_magic=await json('data/library/magic.json');
 const reaction=await json('data/party_reactions.json'),statuses=await json('data/forest_status.json'),assembly=await read('evidence/turn_rules_assembly_20261011.json');
 const config=await loadRuntimeConfiguration(json);
 async function worldFixture(){const seed=await json('data/opening_seed.json');seed.party.push(chapterRoleFromDefinition(seed.source.role_definitions['002']));seed.opening.status='complete';return new WorldStore(seed,['M72061','M70010']);}

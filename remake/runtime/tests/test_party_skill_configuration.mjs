@@ -20,6 +20,8 @@ import {dispatchCharge,initializeScheduler} from '../web/core/battle_scheduler.m
 const copy=structuredClone,read=async name=>JSON.parse(await readFile(new URL('../web/data/'+name,import.meta.url),'utf8'));
 const names={combat:'combat_sample',forest:'forest_combat',scheduler:'battle_scheduler',ai:'forest_ai',rewards:'party_rewards',party_skills:'party_skills',items:'items'};
 const data=Object.fromEntries(await Promise.all(Object.entries(names).map(async([id,name])=>[id,await read(name+'.json')])));
+data.source_skills=await read('library/skills.json');
+data.source_magic=await read('library/magic.json');
 const attributes=await read('party_combat.json'),reactions=await read('party_reactions.json'),statuses=await read('forest_status.json');
 const config=await loadRuntimeConfiguration(p=>read(p.slice(5))),newIds=['yancui','kai_mieyan','kai_suizu','kai_luoyan','kai_liyan','kai_duanyan'];
 const debug=()=>({...expandRuntimeConfiguration(data,config),manifest:{...copy(config.manifest),mode:'debug'}});
@@ -27,8 +29,8 @@ async function worldFixture(){const seed=await read('opening_seed.json');seed.pa
 
 test('unified catalog owns every implemented player/enemy skill and original mode keeps all source bytes',()=>{
   const before=copy(data),bundle=copy(config),compiled=compileRuntimeConfiguration(data,bundle);
-  assert.equal(bundle.skills.version,3);assert.equal(Object.keys(bundle.skills.entries).length,24);
-  const counts={};for(const row of Object.values(bundle.skills.entries))counts[row.owner.role_id]=(counts[row.owner.role_id]??0)+1;
+  assert.equal(bundle.skills.version,3);assert.equal(Object.keys(bundle.skills.entries).length,Object.keys(data.source_skills.skills).length+Object.keys(data.source_magic.magic).length);
+  const counts={};for(const id of Object.keys(compiled.skill_registry)){const row=bundle.skills.entries[id];counts[row.owner.role_id]=(counts[row.owner.role_id]??0)+1;}
   assert.deepEqual(counts,{'001':7,'002':5,'003':6,'011':2,'012':2,'013':2});
   for(const [id,source]of Object.entries(data.party_skills.skills)){
     const next=compiled.skill_registry[id];assert.equal(next.fixed_raw_hex,source.fixed_raw_hex);assert.deepEqual(next.actions,source.actions);
@@ -53,14 +55,14 @@ test('each of the six new skill overlays changes numeric fields, MP debt and cha
 });
 
 test('future role/index registration is data-driven and does not mix equal skill indices between actors',()=>{
-  const next=copy(data),source=copy(next.party_skills.skills.yantu);source.id='004_22';source.actor_id='004';source.source.path='Fight_Role/004.CHR';source.source.sha256='1'.repeat(64);
+  const next=copy(data),source=copy(next.party_skills.skills.yantu);source.id='999_22';source.actor_id='999';source.source.path='Fight_Role/999.CHR';source.source.sha256='1'.repeat(64);
   next.party_skills.skills[source.id]=source;next.party_skills.source_hashes[source.source.path]=source.source.sha256;
-  const cfg=deriveRuntimeConfiguration(next);cfg.manifest.mode='debug';cfg.skills.entries['004_22'].parameters.mp_cost=7;
+  const cfg=deriveRuntimeConfiguration(next);cfg.manifest.mode='debug';cfg.skills.entries['999_22'].parameters.mp_cost=7;
   const compiled=compileRuntimeConfiguration(next,cfg);
-  assert.equal(Object.keys(compiled.skill_registry).length,Object.keys(config.skills.entries).length+1);assert.equal(compiled.skill_registry['004_22'].mp_cost,7);
-  assert.equal(compiled.skill_registry.yantu.mp_cost,0);assert.deepEqual(compiled.skill_registry['004_22'].configuration.owner,{role_id:'004',skill_index:22,side:'player'});
+  assert.equal(Object.keys(compiled.skill_registry).length,25);assert.equal(compiled.skill_registry['999_22'].mp_cost,7);
+  assert.equal(compiled.skill_registry.yantu.mp_cost,0);assert.deepEqual(compiled.skill_registry['999_22'].configuration.owner,{role_id:'999',skill_index:22,side:'player'});
   const existing=compactRuntimeConfiguration(data,debug());existing.skills.entries.kai_mieyan.parameters.mp_cost=2;
-  const upgraded=upgradeSkillConfiguration(next,existing.skills);assert.equal(upgraded.entries.kai_mieyan.parameters.mp_cost,2);assert.equal(upgraded.entries['004_22'].parameters.mp_cost,0);
+  const upgraded=upgradeSkillConfiguration(next,existing.skills);assert.equal(upgraded.entries.kai_mieyan.parameters.mp_cost,2);assert.equal(upgraded.entries['999_22'].parameters.mp_cost,0);
   assert.throws(()=>compileRuntimeConfiguration(next,existing),/字段缺失/);
 });
 
@@ -120,8 +122,11 @@ test('export migrates v1 source identities, adds new skills and preserves all ed
   const temporary=await mkdtemp(path.join(tmpdir(),'seventh-seal-party-config-')),directory=pathToFileURL(temporary+path.sep),output=new URL('config/',directory);
   try{
     for(const [id,name]of Object.entries(names))await writeFile(new URL(name+'.json',directory),JSON.stringify(data[id]));
+    await mkdir(new URL('library/',directory));await writeFile(new URL('library/skills.json',directory),JSON.stringify(data.source_skills));
+    await writeFile(new URL('library/magic.json',directory),JSON.stringify(data.source_magic));
     await writeFile(new URL('forest_rewards.json',directory),JSON.stringify(await read('forest_rewards.json')));
     const original=deriveRuntimeConfiguration(data),legacy=copy(original.skills);legacy.version=1;
+    for(const [id,row]of Object.entries(legacy.entries))if(Object.hasOwn(row.original,'enabled'))delete legacy.entries[id];
     delete legacy.entries.yannuan;
     // Revival was registered after the historical v1 catalog. Migration must
     // add it from the retained source, not impersonate a legacy source row.

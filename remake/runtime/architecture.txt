@@ -53,6 +53,7 @@ export_content_registry.mjs核对跨文件依赖和原输入，生成web/data/ru
 web/data/config/index.json及skills／battle／rewards／items是唯一数值配置。skills和items为v3，battle和rewards为v2；每条只保留name、必要的owner和稀疏parameters，source_hashes按原文件集中登记。默认值及完整来源保留在生成数据中，可由配置导出器--reference只读查询。
 core/config_overrides把修改项按字段合并到来源基线，数组整体替换，再交给既有编译器校验范围、身份及机制支持。original模式拒绝实际数值差异；编译后的审计与战斗快照仍保留完整生效参数。空parameters不表示关闭或未接入。普通导出迁移旧完整配置，补齐新角色／怪物的技能、属性、AI和奖励条目，并保留已有调参；未知编号和来源指纹变化拒绝写入。
 CHR／DAT／TLK／ANM和生成的party_*、forest_*、enemy_*等JSON保存来源及可执行输入，不作为另一套手工调参表。部分forest命名保留历史接口兼容。
+library/roles.json、skills.json、magic.json是全量静态来源，library/index.json将它们与既有items.json及统一配置关联，供内容编写按原编号引用。全量配置保留现有技能ID和参数，只追加缺项；源技能与已实现技能分别校验，compiled.skill_registry仍只容纳已实现处理器。原生MAG存在重复ID，按原记录索引绑定。原始全表启动时读取一次，不复制进世界或存档；查询与索引构建复用core/content_library.mjs。
 地图数据放data/maps，资源放assets/maps及角色／物件图集。catalog记录可用地图、资源入口及文件身份；content登记进一步限制已接入交互与机制。
 技能／道具注册按原角色ID＋技能索引、原道具ID绑定；保存实例、角色当前资源和学习进度独立于参数与原字节。
 详细编辑步骤与字段见config_guide.txt，构建命令和工具分类见tools/README.txt。

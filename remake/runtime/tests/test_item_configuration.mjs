@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {webcrypto} from 'node:crypto';
+import {webcrypto,createHash} from 'node:crypto';
 import {deriveItemConfiguration,compileItemConfiguration,upgradeItemConfiguration} from '../web/core/item_registry.mjs';
 import {expandParameterOverrides} from '../web/core/config_overrides.mjs';
 import {ChapterRunner,chapterRoleFromDefinition} from '../web/core/chapter.mjs';
@@ -13,6 +13,65 @@ import {isSupportedCrystalDefinition,insertCrystal,removeCrystal} from '../web/c
 globalThis.crypto??=webcrypto;
 const read=async name=>JSON.parse(await readFile(new URL('../web/data/'+name+'.json',import.meta.url),'utf8'));
 const data=await read('items'),attributes=await read('party_combat'),overrides=await read('config/items'),config=expandParameterOverrides(deriveItemConfiguration(data),overrides),copy=structuredClone;
+
+test('The complete indexed catalog reconstructs the immutable 416-record source and covers every unified parameter entry',()=>{
+  const ids=Array.from({length:416},(_,i)=>i+1),records=ids.map(id=>Buffer.from(data.definitions[id].raw_hex,'hex'));
+  assert.deepEqual(data.indexes.ids,ids);
+  assert.deepEqual(Object.keys(overrides.entries),ids.map(String));
+  const source=Buffer.concat([Buffer.from(data.catalog.header_raw_hex,'hex'),...records]);
+  assert.equal(source.length,400508);assert.equal(source.readUInt32LE(0x20),416);
+  assert.equal(createHash('sha256').update(source).digest('hex'),'9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8');
+  for(const id of ids){
+    const def=data.definitions[id],raw=records[id-1];
+    assert.equal(raw.length,959);assert.equal(raw.readUInt32LE(0),id);
+    assert.equal(def.source.record_index,id-1);assert.equal(def.source.record_offset,0x61c+(id-1)*959);
+    assert.equal(def.source.definition_file_offset,def.source.record_offset);
+    assert.equal(def.source.record_sha256,createHash('sha256').update(raw).digest('hex'));
+    assert.equal(def.type_raw_24,raw[0x24]);assert.equal(def.subtype_raw_25,raw[0x25]);
+    assert.equal(def.allowed_role_mask_raw_13e,raw.readUInt32LE(0x13e));
+    assert.equal(def.drop_rate,raw.readInt32LE(0x158));assert.equal(def.unique_raw,raw[0x14b]);
+    assert.equal(def.raw_fields.special_effect_block.raw_hex,raw.subarray(0x2a8).toString('hex'));
+    assert.equal(def.value_ranges.length,32);
+    for(const [instanceOffset,definitionOffset]of ITEM_VALUE_PAIRS){
+      const range=def.value_ranges.find(r=>r.instance_offset===instanceOffset);
+      assert.equal(range.definition_offset,definitionOffset);
+      assert.equal(range.minimum,raw.readInt32LE(definitionOffset));assert.equal(range.maximum,raw.readInt32LE(definitionOffset+4));
+    }
+  }
+});
+
+test('Exact source indexes preserve duplicate names, internal rows, placeholders and raw classification without enabling them',()=>{
+  const definitions=Object.values(data.definitions),check=(name,keyOf)=>{
+    const keys=[...new Set(definitions.map(keyOf).filter(key=>key!==null))];
+    assert.deepEqual(Object.keys(data.indexes[name]).sort(),keys.sort());
+    for(const key of keys)assert.deepEqual(data.indexes[name][key],definitions.filter(r=>keyOf(r)===key).map(r=>r.id));
+  };
+  check('by_name',r=>r.name);check('by_category',r=>r.category);check('by_record_status',r=>r.record_status);
+  check('by_type_subtype',r=>`${r.type_raw_24}:${r.subtype_raw_25}`);check('by_slot',r=>r.slot_id??null);
+  check('by_role_mask',r=>String(r.allowed_role_mask_raw_13e));
+  assert.deepEqual(data.indexes.by_name['\u6d77\u7687\u5370'],[125,393]);
+  assert.deepEqual(data.catalog.duplicate_names,{'\u6d77\u7687\u5370':[125,393]});
+  assert.equal(data.definitions[125].category,'equipment');assert.equal(data.definitions[393].category,'item');
+  assert.deepEqual(data.indexes.by_record_status.placeholder,[6,75,76,232,233,234,235]);
+  assert.equal(data.indexes.by_record_status['internal-source'].length,20);
+  assert.deepEqual(data.catalog.classification_counts,{weapon:18,equipment:108,crystal:66,item:135,material:68,unknown:1,internal:20});
+  for(const id of [...data.indexes.by_record_status.placeholder,...data.indexes.by_record_status['internal-source']]){
+    assert.equal(config.entries[id].parameters.enabled,false);
+    assert.equal(data.definitions[id].behavior.kind,'source-only');
+  }
+});
+
+test('Role lookup uses every raw mask bit and retains ascending native IDs independently of runtime support',()=>{
+  const expectedRoleIds=[];
+  for(let bit=0;bit<32;bit++){
+    const ids=Object.values(data.definitions).filter(r=>(r.allowed_role_mask_raw_13e&2**bit)!==0).map(r=>r.id);
+    if(!ids.length)continue;
+    const roleId=String(bit+1).padStart(3,'0');expectedRoleIds.push(roleId);
+    assert.deepEqual(data.indexes.by_allowed_role[roleId],ids);
+  }
+  assert.deepEqual(Object.keys(data.indexes.by_allowed_role).sort(),expectedRoleIds.sort());
+});
+
 async function fixture(){
   const seed=await read('opening_seed');seed.opening.status='complete';seed.location={map_id:'M17026',x:400,y:320,direction:0};
   seed.party.push(chapterRoleFromDefinition(seed.source.role_definitions['002']));seed.flags[51]|=1;

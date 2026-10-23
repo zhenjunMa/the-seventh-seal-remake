@@ -13,7 +13,7 @@ const versions=Object.freeze({
   'seventh-seal-items-parameters':3,
 });
 const notes=Object.freeze({
-  'seventh-seal-skills-parameters':'按原角色编号＋技能索引绑定；敌我共用本表。',
+  'seventh-seal-skills-parameters':'全部来源技能按原角色编号＋技能索引绑定；已实现技能保留现有ID。source-only记录默认enabled=false且不可启用，原MP增量和数值槽只作来源配置，不开放行为。',
   'seventh-seal-battle-parameters':'怪物生成属性、选招AI和公共充能参数；不覆盖玩家存档。',
   'seventh-seal-rewards-parameters':'怪物经验、金钱和有顺序的掉落候选；重复物品保留抽签次数，基础概率在items.json。',
   'seventh-seal-items-parameters':'全部原道具编号共用本表；装备、药品、晶石和材料按编号引用。未恢复效果不可启用。',
