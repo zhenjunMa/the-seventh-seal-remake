@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {webcrypto} from 'node:crypto';
 import {deriveItemConfiguration,compileItemConfiguration,upgradeItemConfiguration} from '../web/core/item_registry.mjs';
+import {expandParameterOverrides} from '../web/core/config_overrides.mjs';
 import {ChapterRunner,chapterRoleFromDefinition} from '../web/core/chapter.mjs';
 import {WorldStore,encodeSave,decodeSave} from '../web/core/world.mjs';
 import {createPartyActors} from '../web/core/party_attributes.mjs';
@@ -11,7 +12,7 @@ import {validateItemInstance,ITEM_VALUE_PAIRS,withItemQuantity} from '../web/cor
 import {isSupportedCrystalDefinition,insertCrystal,removeCrystal} from '../web/core/crystal_sockets.mjs';
 globalThis.crypto??=webcrypto;
 const read=async name=>JSON.parse(await readFile(new URL('../web/data/'+name+'.json',import.meta.url),'utf8'));
-const data=await read('items'),attributes=await read('party_combat'),config=await read('config/items'),copy=structuredClone;
+const data=await read('items'),attributes=await read('party_combat'),overrides=await read('config/items'),config=expandParameterOverrides(deriveItemConfiguration(data),overrides),copy=structuredClone;
 async function fixture(){
   const seed=await read('opening_seed');seed.opening.status='complete';seed.location={map_id:'M17026',x:400,y:320,direction:0};
   seed.party.push(chapterRoleFromDefinition(seed.source.role_definitions['002']));seed.flags[51]|=1;
@@ -22,6 +23,10 @@ async function fixture(){
 
 test('All 416 source items share one configuration, including unimplemented crystals and anomalous records',()=>{
   const before=copy(data),cfgBefore=copy(config),compiled=compileItemConfiguration(data,config,'original');
+  assert.deepEqual(compileItemConfiguration(data,overrides,'original'),compiled);
+  const sparse=copy(overrides);sparse.entries['4'].parameters={attributes:{speed_flat:{minimum:40,maximum_exclusive:40}}};
+  assert.equal(compileItemConfiguration(data,sparse,'debug').data.definitions['4'].runtime_attributes.speed_flat.minimum,40);
+  const badSource=copy(overrides);badSource.source_hashes['SYSTEM/Object.ITM']='0'.repeat(64);assert.throws(()=>compileItemConfiguration(data,badSource,'original'),/来源指纹/);
   assert.equal(Object.keys(config.entries).length,416);assert.deepEqual(data,before);assert.deepEqual(config,cfgBefore);
   for(const [id,def]of Object.entries(data.definitions)){
     assert.equal(config.entries[id].owner.item_id,def.id);assert.equal(compiled.data.definitions[id].raw_hex,def.raw_hex);

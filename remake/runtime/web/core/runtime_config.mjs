@@ -1,6 +1,7 @@
 // Editable overlays over retained extraction data. No source/world mutation.
 import {createSkillRegistry,deriveSkillConfiguration,applyRegisteredSkillParameters,skillOwnerKey} from './skill_registry.mjs';
 import {deriveItemConfiguration,compileItemConfiguration} from './item_registry.mjs';
+import {expandParameterOverrides,compactParameterConfiguration} from './config_overrides.mjs';
 const copy=structuredClone;
 const fail=(ok,message)=>{if(!ok)throw new Error(`运行配置：${message}`);};
 const object=v=>v!==null&&typeof v==='object'&&!Array.isArray(v);
@@ -36,7 +37,7 @@ export function deriveRuntimeConfiguration(data){
     {experience:e.experience,money:e.reward_slots.filter(n=>n<0).reduce((sum,n)=>sum-n,0),drop_item_ids:e.reward_slots.filter(n=>n>0)})]));
   const items=deriveItemConfiguration(data.items);
   return {manifest:{schema:'seventh-seal-runtime-config',version:1,mode:'original',files:copy(CONFIG_FILES),
-    notes:'统一修改parameters；original和source用于核对。original模式禁止数值差异，debug模式应用调参。每场战斗重新读取并保留快照。'},
+    notes:'只在parameters填写修改项；空对象沿用来源默认值。source_hashes用于核对，默认值用--reference查看。original模式禁止数值差异，debug模式应用调参。每次入口重新读取并保留快照。'},
     skills,
     battle:category('battle',battle,'敌人属性为生成时初值，不覆盖玩家存档。speed为原充能属性范围；调度保持20ms单tick。AI权重保留原加权与后备选招规则；组合长度仍为3～5招。'),
     rewards:category('rewards',rewards,'每种敌人经验、金钱和掉落候选。drop_item_ids允许重复，保留候选顺序；每次候选抽签的概率在items.json。候选与非零金钱合计最多六槽。只发一次由代码保证。'),
@@ -44,6 +45,23 @@ export function deriveRuntimeConfiguration(data){
 }
 
 function validateRange(v,label,min=0){fields(v,['minimum','maximum_exclusive'],label);integer(v.minimum,label,min);integer(v.maximum_exclusive,label,min);fail(v.minimum<=v.maximum_exclusive&&v.maximum_exclusive-v.minimum<=0x7fffffff,`${label}上下限无效`);}
+
+function expandBundle(baseline,bundle){
+  fields(bundle,['manifest',...Object.keys(CONFIG_FILES)],'配置文件集合');
+  return {...bundle,...Object.fromEntries(Object.keys(CONFIG_FILES).map(section=>
+    [section,expandParameterOverrides(baseline[section],bundle[section])]))};
+}
+
+export function expandRuntimeConfiguration(data,bundle){
+  return expandBundle(deriveRuntimeConfiguration(data),bundle);
+}
+
+export function compactRuntimeConfiguration(data,bundle){
+  const baseline=deriveRuntimeConfiguration(data),expanded=expandBundle(baseline,bundle);
+  compileRuntimeConfiguration(data,expanded);
+  return {manifest:{...copy(expanded.manifest),notes:baseline.manifest.notes},...Object.fromEntries(Object.keys(CONFIG_FILES).map(section=>
+    [section,compactParameterConfiguration(baseline[section],expanded[section])]))};
+}
 function validateParameters(section,id,p,baseline,data,owner){
   fields(p,Object.keys(baseline),`${section}.${id}.parameters`);
   if(section==='skills'){
@@ -74,6 +92,7 @@ export function compileRuntimeConfiguration(data,bundle){
   fields(bundle,['manifest',...Object.keys(CONFIG_FILES)],'配置文件集合');fields(manifest,['schema','version','mode','files','notes'],'index.json');
   fail(manifest.schema===baseline.manifest.schema&&manifest.version===1,'配置版本不兼容');fail(['original','debug'].includes(manifest.mode),'mode须为original或debug');
   fail(same(manifest.files,CONFIG_FILES)&&typeof manifest.notes==='string','配置文件路径无效');
+  bundle=expandBundle(baseline,bundle);
   const differences=[],compiled=copy(data),registry=createSkillRegistry(data),skillsByOwner=new Map();
   compiled.skill_registry={};
   for(const section of Object.keys(CONFIG_FILES)){

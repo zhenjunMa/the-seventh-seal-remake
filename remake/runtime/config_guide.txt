@@ -1,5 +1,5 @@
 第七封印 · 内容接入与统一配置
-更新：2026-10-22；文中web路径以runtime为基准，命令从仓库根目录执行。示例使用python3，Windows可换为指向Python 3的python或py -3。
+更新：2026-10-23；文中web路径以runtime为基准，命令从仓库根目录执行。示例使用python3，Windows可换为指向Python 3的python或py -3。
 
 先选择修改入口
 Phaser迁移沿用现有内容登记、数值配置和媒体路径。新增同类地图／角色继续走下述流程，不为每张地图创建专用Phaser Scene；通用显示行为放web/phaser中对应组件。phaser-preview使用独立示意图，不写入正式内容登记或素材目录。
@@ -10,9 +10,12 @@ Phaser迁移沿用现有内容登记、数值配置和媒体路径。新增同�
 旧web/data/skills.json仅保留为历史验证基线，当前调参统一使用web/data/config/skills.json；导出、缓存及配置重置语义见tools/README.txt。
 
 数值配置
-index.json选择original或debug，并引用四个参数文件。每个条目的name、owner、source、original和道具catalog为只读核对基线，只编辑parameters。
-original要求parameters与原基线一致，有差异会拒绝；debug应用修改并保留本场快照／差异。普通导出保留已有调参，--force不重置；只有显式配置--reset恢复原值。
-技能owner={role_id,skill_index,side}按原角色ID＋技能索引绑定，禁止按名字或队伍位置覆盖数值；道具owner按原item_id绑定。
+index.json选择original或debug，并引用四个参数文件。skills／items使用v3，battle／rewards使用v2。每条保留name、必要的owner和parameters；source_hashes按源文件集中登记。name、owner及source_hashes只读，原始字段、完整目录和默认值保留在生成来源数据中。
+只在parameters填写修改项；{}沿用全部来源默认值，不表示禁用或空技能。嵌套对象按字段合并，数组整体替换，未知字段拒绝。例如燕突耗蓝只需把其parameters写为{"mp_cost":5}；装备速度可写{"attributes":{"speed_flat":{"minimum":40,"maximum_exclusive":40}}}。删除修改字段即恢复该项默认值，不用复制其余参数。
+默认值和生效值只读查询：node remake/runtime/tools/export_runtime_config.mjs --reference skills yantu；道具示例为--reference items 4。省略最后编号可查看整个类别；分类限skills、battle、rewards、items。查询不导出或写文件，返回original及合并后的parameters。
+original要求合并后的参数与原基线一致，有差异会拒绝；debug应用修改并保留完整生效快照／差异。普通导出迁移旧完整格式、删除等于默认值的冗余项并保留调参，--force不重置；只有显式配置--reset清空全部修改项并恢复original模式。
+批量登记新内容后，统一导出自动补齐所有已接入技能、怪物属性／AI、奖励和道具编号；每张地图及NPC继续走runtime_content与地图来源表，不复制到数值配置。运行要求当前登记编号齐全；源文件指纹变化、已移除编号或身份错配会阻断，核实来源后处理，不通过重置掩盖漂移。
+技能owner={role_id,skill_index,side}按原角色ID＋技能索引绑定，禁止按名字或队伍位置覆盖数值；道具owner按原item_id绑定。名称可重复，原ID与绑定保持稳定。
 启动、打开操作界面和每次战斗重新读取配置，之后使用独立快照。参数变化在下一次对应入口生效；改变来源目录或登记后需构建并刷新。
 配置不重写已保存的资源／实例或原CHR／ITM，不关闭奖励去重，也不接受可执行表达式。
 
@@ -27,7 +30,7 @@ battle.json：enemy_编号控制新生成敌人的HP／MP、attack／defense／s
 rewards.json：experience、money与有顺序的drop_item_ids。重复候选增加抽签次数；候选须有已支持奖励来源，掉落和非零金钱合计最多六个原奖励槽。
 items.json：全部原编号的统一目录、基础drop_rate和已实现装备／药品／晶石参数。目录登记不等于作用已实现。
 drop_rate=-1不抽签、0走原特殊必掉落分支、1～100走基础概率并叠加已恢复连击奖励。
-parameters.enabled只开放已实现行为；catalog.behavior及来源字段说明未恢复范围。
+parameters.enabled只开放已实现行为；data/items.json中definition的behavior及来源字段说明未恢复范围。
 
 装备、药品与晶石
 装备allowed_role_mask按原角色编号位掩码判断，0不限；slot_id为来源，不能将头饰／耳饰拆为虚构部位。

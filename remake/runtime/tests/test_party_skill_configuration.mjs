@@ -5,9 +5,9 @@ import {readFile,writeFile,mkdtemp,mkdir,rm} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {pathToFileURL} from 'node:url';
-import {deriveRuntimeConfiguration,compileRuntimeConfiguration,loadRuntimeConfiguration} from '../web/core/runtime_config.mjs';
+import {deriveRuntimeConfiguration,compileRuntimeConfiguration,loadRuntimeConfiguration,expandRuntimeConfiguration,compactRuntimeConfiguration} from '../web/core/runtime_config.mjs';
 import {upgradeSkillConfiguration} from '../web/core/skill_registry.mjs';
-import {exportRuntimeConfiguration} from '../tools/export_runtime_config.mjs';
+import {exportRuntimeConfiguration,inspectRuntimeConfiguration} from '../tools/export_runtime_config.mjs';
 import {createPartySample} from '../web/party_sample.mjs';
 import {assembleForestSample} from '../web/forest_sample.mjs';
 import {chapterRoleFromDefinition} from '../web/core/chapter.mjs';
@@ -22,12 +22,12 @@ const names={combat:'combat_sample',forest:'forest_combat',scheduler:'battle_sch
 const data=Object.fromEntries(await Promise.all(Object.entries(names).map(async([id,name])=>[id,await read(name+'.json')])));
 const attributes=await read('party_combat.json'),reactions=await read('party_reactions.json'),statuses=await read('forest_status.json');
 const config=await loadRuntimeConfiguration(p=>read(p.slice(5))),newIds=['yancui','kai_mieyan','kai_suizu','kai_luoyan','kai_liyan','kai_duanyan'];
-const debug=()=>({...copy(config),manifest:{...copy(config.manifest),mode:'debug'}});
+const debug=()=>({...expandRuntimeConfiguration(data,config),manifest:{...copy(config.manifest),mode:'debug'}});
 async function worldFixture(){const seed=await read('opening_seed.json');seed.party.push(chapterRoleFromDefinition(seed.source.role_definitions['002']));seed.party[1].mp.current=20;seed.opening.status='complete';return new WorldStore(seed,['M72061','M70010']);}
 
 test('unified catalog owns every implemented player/enemy skill and original mode keeps all source bytes',()=>{
   const before=copy(data),bundle=copy(config),compiled=compileRuntimeConfiguration(data,bundle);
-  assert.equal(bundle.skills.version,2);assert.equal(Object.keys(bundle.skills.entries).length,24);
+  assert.equal(bundle.skills.version,3);assert.equal(Object.keys(bundle.skills.entries).length,24);
   const counts={};for(const row of Object.values(bundle.skills.entries))counts[row.owner.role_id]=(counts[row.owner.role_id]??0)+1;
   assert.deepEqual(counts,{'001':7,'002':5,'003':6,'011':2,'012':2,'013':2});
   for(const [id,source]of Object.entries(data.party_skills.skills)){
@@ -59,7 +59,7 @@ test('future role/index registration is data-driven and does not mix equal skill
   const compiled=compileRuntimeConfiguration(next,cfg);
   assert.equal(Object.keys(compiled.skill_registry).length,Object.keys(config.skills.entries).length+1);assert.equal(compiled.skill_registry['004_22'].mp_cost,7);
   assert.equal(compiled.skill_registry.yantu.mp_cost,0);assert.deepEqual(compiled.skill_registry['004_22'].configuration.owner,{role_id:'004',skill_index:22,side:'player'});
-  const existing=debug();existing.skills.entries.kai_mieyan.parameters.mp_cost=2;
+  const existing=compactRuntimeConfiguration(data,debug());existing.skills.entries.kai_mieyan.parameters.mp_cost=2;
   const upgraded=upgradeSkillConfiguration(next,existing.skills);assert.equal(upgraded.entries.kai_mieyan.parameters.mp_cost,2);assert.equal(upgraded.entries['004_22'].parameters.mp_cost,0);
   assert.throws(()=>compileRuntimeConfiguration(next,existing),/字段缺失/);
 });
@@ -70,7 +70,7 @@ test('foreign owner, source/index drift, duplicate bindings, missing config and 
     c=>c.skills.entries.yancui.source.sha256='0'.repeat(64),c=>c.skills.entries.yancui.parameters.target_side=1];
   const world=await worldFixture(),before=world.snapshot(),sourceBefore=copy(data);
   for(const change of mutations){const cfg=debug();change(cfg);assert.throws(()=>compileRuntimeConfiguration(data,cfg),/配置/);}
-  for(const id of newIds){const cfg=copy(config);cfg.skills.entries[id].parameters.mp_cost++;assert.throws(()=>compileRuntimeConfiguration(data,cfg),/原版模式/);}
+  for(const id of newIds){const cfg=copy(config);cfg.skills.entries[id].parameters.mp_cost=deriveRuntimeConfiguration(data).skills.entries[id].original.mp_cost+1;assert.throws(()=>compileRuntimeConfiguration(data,cfg),/原版模式/);}
   const duplicates=copy(data);duplicates.party_skills.skills.duplicate={...copy(duplicates.party_skills.skills.yantu),id:'duplicate'};
   assert.throws(()=>deriveRuntimeConfiguration(duplicates),/重复登记/);
   const wrongIndex=copy(data);wrongIndex.ai.roles['011'].skills[14].original_skill_index=15;assert.throws(()=>deriveRuntimeConfiguration(wrongIndex),/源索引/);
@@ -132,11 +132,13 @@ test('export migrates v1 source identities, adds new skills and preserves all ed
     legacy.entries.yantu.parameters.mp_cost=6;legacy.entries['011_14'].parameters.preparation_delay_raw=1100;original.manifest.mode='debug';
     await mkdir(output);
     for(const [id,name]of Object.entries({manifest:'index',skills:'skills',battle:'battle',rewards:'rewards',items:'items'}))await writeFile(new URL(name+'.json',output),JSON.stringify(id==='skills'?legacy:original[id]));
-    const first=await exportRuntimeConfiguration({dataDirectory:directory,outputDirectory:output});assert.deepEqual(first.written,['skills.json']);assert.equal(first.skills,Object.keys(original.skills.entries).length);
+    const first=await exportRuntimeConfiguration({dataDirectory:directory,outputDirectory:output});assert.deepEqual(first.written,['skills.json','battle.json','rewards.json','items.json']);assert.equal(first.skills,Object.keys(original.skills.entries).length);
     const readTemp=async name=>JSON.parse(await readFile(new URL(name+'.json',output),'utf8')),migrated=await readTemp('skills');
-    assert.equal(migrated.version,2);assert.equal(migrated.entries.yantu.parameters.mp_cost,6);assert.equal(migrated.entries['011_14'].parameters.preparation_delay_raw,1100);
-    assert.equal(migrated.entries.yantu.source.path,'Fight_Role/001.CHR');assert.equal(migrated.entries.yancui.parameters.mp_cost,5);
-    assert.deepEqual(migrated.entries['001_43'],original.skills.entries['001_43']);
+    assert.equal(migrated.version,3);assert.equal(migrated.entries.yantu.parameters.mp_cost,6);assert.equal(migrated.entries['011_14'].parameters.preparation_delay_raw,1100);
+    const reference=await inspectRuntimeConfiguration({dataDirectory:directory,outputDirectory:output,section:'skills'});
+    assert.equal(reference.entries.yantu.source.path,'Fight_Role/001.CHR');assert.equal(reference.entries.yancui.parameters.mp_cost,5);
+    assert.deepEqual(reference.entries['001_43'].parameters,original.skills.entries['001_43'].parameters);
+    assert.deepEqual(migrated.entries['001_43'].parameters,{});
     assert.deepEqual((await exportRuntimeConfiguration({dataDirectory:directory,outputDirectory:output})).written,[]);
     migrated.entries.kai_mieyan.parameters.mp_cost=3;await writeFile(new URL('skills.json',output),JSON.stringify(migrated));
     assert.deepEqual((await exportRuntimeConfiguration({dataDirectory:directory,outputDirectory:output})).written,[]);
@@ -145,6 +147,7 @@ test('export migrates v1 source identities, adds new skills and preserves all ed
     const files=['index','skills','battle','rewards','items'],bytesBefore=await Promise.all(files.map(name=>readFile(new URL(name+'.json',output),'utf8')));
     await assert.rejects(exportRuntimeConfiguration({dataDirectory:directory,outputDirectory:output}),/配置/);
     assert.deepEqual(await Promise.all(files.map(name=>readFile(new URL(name+'.json',output),'utf8'))),bytesBefore);
-    await exportRuntimeConfiguration({dataDirectory:directory,outputDirectory:output,reset:true});assert.equal((await readTemp('index')).mode,'original');assert.equal((await readTemp('skills')).entries.kai_mieyan.parameters.mp_cost,0);
+    await writeFile(new URL('skills.json',output),'{broken json');
+    await exportRuntimeConfiguration({dataDirectory:directory,outputDirectory:output,reset:true});assert.equal((await readTemp('index')).mode,'original');assert.deepEqual((await readTemp('skills')).entries.kai_mieyan.parameters,{});
   }finally{assert.ok(path.resolve(temporary).startsWith(path.resolve(tmpdir())+path.sep));await rm(temporary,{recursive:true,force:true});}
 });
