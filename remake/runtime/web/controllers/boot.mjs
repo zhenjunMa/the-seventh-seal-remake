@@ -73,6 +73,8 @@ export function createBootController({state, actions, $, canvas, ctx}) {
     [state.aiData,state.rewardData,state.reactionData,state.statusData]=await Promise.all([actions.json('data/forest_ai.json').then(validateForestAIData),actions.json('data/forest_rewards.json').then(validateForestRewards),actions.json('data/forest_reactions.json').then(validateForestReactionsData),actions.json('data/forest_status.json').then(validateForestStatusData)]);
     [state.partyCombat,state.partySkills,state.partyRewards,state.partyReactions]=await Promise.all([actions.json(state.catalog.party_combat),actions.json(state.catalog.party_skills),actions.json(state.catalog.party_rewards).then(validateForestRewards),actions.json(state.catalog.party_reactions).then(validateForestReactionsData)]);
     state.sourceItemData=validateItemData(await actions.json('data/items.json'));
+    if(state.catalog.source_skills)state.sourceSkills=await actions.json(state.catalog.source_skills);
+    if(state.catalog.source_magic)state.sourceMagic=await actions.json(state.catalog.source_magic);
     state.itemData=(await actions.readConfiguredData()).items;
     const operationManifest=await actions.json('data/operation_menu.json');
     state.saveMenu=await SaveMenuView.create({manifest:await actions.json('data/save_menu.json'),root:$('saveMenu'),image:actions.image,getPreview:actions.loadSavePreview,onConfirm:actions.selectSaveSlot,onClose:actions.closeSaveMenu,log:actions.log});

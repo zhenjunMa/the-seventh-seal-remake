@@ -3,6 +3,9 @@ from pathlib import Path
 from datetime import datetime, timedelta, timezone
 import argparse
 import json
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from build_runtime import STEPS, plan
 

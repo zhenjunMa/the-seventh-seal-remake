@@ -57,6 +57,7 @@ def build():
                  chapter_story='data/chapter_story.json',chapter_resources='data/chapter_map_resources.json',
                  map_effects='data/map_effects.json',map_shadows='data/map_shadows.json',
                  party_combat='data/party_combat.json',party_skills='data/party_skills.json',
+                 content_library='data/library/index.json',source_roles='data/library/roles.json',source_skills='data/library/skills.json',source_magic='data/library/magic.json',
                  party_rewards='data/party_rewards.json',party_reactions='data/party_reactions.json',party_battle_view='data/party_battle_view.json',
                  items='data/items.json',item_presentation='data/item_presentation.json',audio='data/audio.json',operation_menu='data/operation_menu.json',content_checklist='data/content_checklist.json',
                  events='data/events.json' if event_count else None,

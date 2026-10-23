@@ -10,18 +10,28 @@ Phaser迁移沿用现有内容登记、数值配置和媒体路径。新增同�
 基础导出清单集中在web/data/source，正式素材集中在web/assets，通用解析器位于tools/source；prototype仅做实验验证，不作为新内容的生产入口。其余data JSON、图集和runtime_content.mjs是来源或生成结果。不要直接用它们调数值；新增机制先实现对应规则，登记和enabled不会补出处理器。
 旧web/data/skills.json仅保留为历史验证基线，当前调参统一使用web/data/config/skills.json；导出、缓存及配置重置语义见tools/README.txt。
 
+全量来源与引用索引
+web/data/library/index.json统一索引全部来源：6名队友、100个CHR角色、1948条CHR技能／待机／反应记录、System.MAG的41条全局法术及416条道具。roles.json保存角色初值、装备、成长来源和技能引用，skills.json保留CHR全部固定记录／动作，magic.json保留MAG原记录；道具仍使用既有data/items.json，不复制另一份道具目录。
+现有party_*、已接入技能ID、全部道具编号及既有parameters继续保留，只向统一配置补齐缺项。角色／技能目录中的源数值不作为另一套调参入口。
+角色用原CHR文件名编号（001～006为队友）；CHR技能用“角色编号_原零基技能索引”，例如001_22；旧yantu等ID通过索引的configuration_id／skill_aliases对应同一来源，不能重复登记。道具用原item_id。
+全局法术用system_magic_原零基记录索引，例如system_magic_0；owner.source_kind为system-magic、magic_index为原索引。MAG原ID28有两条不同记录（原索引27与28），所以原ID只作source_id核对，不作唯一主键。
+索引entries提供来源与配置位置、角色归属、原索引和runtime_registered；indexes提供名称、角色、类别及来源类型查询。名称可能重复，by_name返回编号列表，resolveContentReference遇到重名会拒绝静默选择。
+只读查询：node remake/runtime/tools/build_content_library.mjs --query roles 004；技能示例--query skills 001_22或--query skills yantu；道具示例--query items 125；名称检索--query search 海皇印 items。省略--query后的参数可看数量与六队友索引。
+内容工具可复用web/core/content_library.mjs的resolveContentReference／searchContentLibrary，按index中的definition及configuration定位来源和参数。该引用可用于地图／剧情编写与接入校验；实际入队、获取、学习及行为执行仍须按既有runtime_content和StoryFlow流程接通。
+
 数值配置
 index.json选择original或debug，并引用四个参数文件。skills／items使用v3，battle／rewards使用v2。每条保留name、必要的owner和parameters；source_hashes按源文件集中登记。name、owner及source_hashes只读，原始字段、完整目录和默认值保留在生成来源数据中。
 只在parameters填写修改项；{}沿用全部来源默认值，不表示禁用或空技能。嵌套对象按字段合并，数组整体替换，未知字段拒绝。例如燕突耗蓝只需把其parameters写为{"mp_cost":5}；装备速度可写{"attributes":{"speed_flat":{"minimum":40,"maximum_exclusive":40}}}。删除修改字段即恢复该项默认值，不用复制其余参数。
 默认值和生效值只读查询：node remake/runtime/tools/export_runtime_config.mjs --reference skills yantu；道具示例为--reference items 4。省略最后编号可查看整个类别；分类限skills、battle、rewards、items。查询不导出或写文件，返回original及合并后的parameters。
 original要求合并后的参数与原基线一致，有差异会拒绝；debug应用修改并保留完整生效快照／差异。普通导出迁移旧完整格式、删除等于默认值的冗余项并保留调参，--force不重置；只有显式配置--reset清空全部修改项并恢复original模式。
 批量登记新内容后，统一导出自动补齐所有已接入技能、怪物属性／AI、奖励和道具编号；每张地图及NPC继续走runtime_content与地图来源表，不复制到数值配置。运行要求当前登记编号齐全；源文件指纹变化、已移除编号或身份错配会阻断，核实来源后处理，不通过重置掩盖漂移。
-技能owner={role_id,skill_index,side}按原角色ID＋技能索引绑定，禁止按名字或队伍位置覆盖数值；道具owner按原item_id绑定。名称可重复，原ID与绑定保持稳定。
+CHR技能owner={role_id,skill_index,side}按原角色ID＋技能索引绑定，禁止按名字或队伍位置覆盖数值；未分类的源角色side=source。MAG技能按source_kind＋magic_index绑定；道具owner按原item_id绑定。名称可重复，原ID与绑定保持稳定。
 启动、打开操作界面和每次战斗重新读取配置，之后使用独立快照。参数变化在下一次对应入口生效；改变来源目录或登记后需构建并刷新。
 配置不重写已保存的资源／实例或原CHR／ITM，不关闭奖励去重，也不接受可执行表达式。
 
 参数分工
 skills.json：耗蓝mp_cost，physical_multiplier_percent，六槽element_power，defense_bonus、term4_bonus、hp_term_bonus、hp_max_term_bonus与preparation_delay_raw等已接入字段。
+未接入CHR记录保留原signed数值槽和mp_delta_raw，不将正MP字段猜成耗蓝；未接入MAG记录目前只有enabled:false。来源默认enabled=false可在稀疏parameters中省略；不能通过改为true启用未恢复行为，来源记录也不进入运行技能表或菜单。--reference skills 原编号会标明runtime_registered并展开默认值。原始倒置／负值范围仅作为来源保留，不表示运行处理器支持。
 minimum／maximum_exclusive表示原随机下限／不含上限，相等为固定值，不抽随机。伤害继续由原公式、属性、装备和RNG计算，不配置固定damage。
 preparation_delay_raw是准备量，不是毫秒；0使用调度默认准备量，原值800。动作、接触、目标、反击与状态规则继续由原记录及处理器决定。
 场外恢复、复活等已接入作用仍使用同一skills.json。暖心之炎001／41原MP6、恢复300HP；001／43复活之炎的原正MP字段不能解释为耗40或恢复40，沿已恢复复活分支处理。

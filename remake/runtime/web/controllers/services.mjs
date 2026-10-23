@@ -21,7 +21,8 @@ export function createServicesController({state, actions, $, canvas, ctx}) {
   async function readConfiguredData(){
     const config=await loadRuntimeConfiguration(json,state.catalog.runtime_config??'data/config/index.json');
     return compileRuntimeConfiguration({combat:state.battleData,forest:state.forestData,scheduler:state.schedulerData,ai:state.aiData,
-      rewards:state.world.value.source.kind==='native-new-game'?state.partyRewards:state.rewardData,party_skills:state.partySkills,items:state.sourceItemData},config);
+      rewards:state.world.value.source.kind==='native-new-game'?state.partyRewards:state.rewardData,party_skills:state.partySkills,items:state.sourceItemData,
+      ...(state.sourceSkills?{source_skills:state.sourceSkills}:{}),...(state.sourceMagic?{source_magic:state.sourceMagic}:{})},config);
   }
   function image(path, scope = 'shared') { return state.resources.load(path, scope); }
   function busy(phase) {

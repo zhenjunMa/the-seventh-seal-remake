@@ -8,6 +8,8 @@ import {compileRuntimeConfiguration,loadRuntimeConfiguration,expandRuntimeConfig
 const read=async name=>JSON.parse(await readFile(new URL('../web/data/'+name+'.json',import.meta.url)));
 const names={combat:'combat_sample',forest:'forest_combat',scheduler:'battle_scheduler',ai:'forest_ai',rewards:'party_rewards',party_skills:'party_skills',items:'items'};
 const data=Object.fromEntries(await Promise.all(Object.entries(names).map(async([key,name])=>[key,await read(name)])));
+data.source_skills=await read('library/skills');
+data.source_magic=await read('library/magic');
 const [seed,attributes]=await Promise.all(['opening_seed','party_combat'].map(read)),config=await loadRuntimeConfiguration(p=>read(p.slice(5,-5))),copy=structuredClone;
 const commands=data.party_skills,source=commands.roles['001'].skills[43],maps=['M72061','M70010'];
 const learnedHex=()=>{const raw=Buffer.from(source.fixed_raw_hex,'hex');raw[0x23]=1;return raw.toString('hex');};

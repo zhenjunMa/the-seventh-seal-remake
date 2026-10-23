@@ -4,13 +4,20 @@ import {fileURLToPath} from 'node:url';
 import path from 'node:path';
 import {deriveRuntimeConfiguration,compileRuntimeConfiguration,compactRuntimeConfiguration,expandRuntimeConfiguration,loadRuntimeConfiguration,CONFIG_FILES} from '../web/core/runtime_config.mjs';
 import {expandParameterOverrides} from '../web/core/config_overrides.mjs';
-import {upgradeSkillConfiguration} from '../web/core/skill_registry.mjs';
+import {upgradeSkillConfiguration,createSkillRegistry} from '../web/core/skill_registry.mjs';
 import {upgradeItemConfiguration} from '../web/core/item_registry.mjs';
 import {sourceSkillParameters} from '../web/core/skill_config.mjs';
 const sourceNames={combat:'combat_sample',forest:'forest_combat',scheduler:'battle_scheduler',ai:'forest_ai',rewards:'forest_rewards',party_skills:'party_skills',items:'items'};
 const readJson=async url=>JSON.parse(await readFile(url,'utf8'));
 async function readSources(directory){
-  return Object.fromEntries(await Promise.all(Object.entries(sourceNames).map(async([id,name])=>[id,await readJson(new URL(`${name}.json`,directory))])));
+  const data=Object.fromEntries(await Promise.all(Object.entries(sourceNames).map(async([id,name])=>[id,await readJson(new URL(`${name}.json`,directory))])));
+  // Older isolated fixtures legitimately contain only implemented sources.
+  // A malformed or unreadable full catalog is never silently ignored.
+  for(const [id,file]of Object.entries({source_skills:'skills',source_magic:'magic'})){
+    try{data[id]=await readJson(new URL(`library/${file}.json`,directory));}
+    catch(error){if(error.code!=='ENOENT')throw error;}
+  }
+  return data;
 }
 
 export async function exportRuntimeConfiguration({dataDirectory=new URL('../web/data/',import.meta.url),outputDirectory=new URL('config/',dataDirectory),reset=false}={}){
@@ -64,11 +71,11 @@ export async function inspectRuntimeConfiguration({dataDirectory=new URL('../web
   const data=await readSources(dataDirectory);
   const bundle=await loadRuntimeConfiguration(file=>readJson(new URL(file,outputDirectory)),'index.json');
   compileRuntimeConfiguration(data,bundle);
-  const expanded=expandRuntimeConfiguration(data,bundle),entries=expanded[section].entries;
+  const expanded=expandRuntimeConfiguration(data,bundle),entries=expanded[section].entries,registry=section==='skills'?createSkillRegistry(data):null;
   if(id!==undefined&&!Object.hasOwn(entries,id))throw new Error(`参数配置：未登记${section}.${id}`);
   return {section,mode:expanded.manifest.mode,readonly:true,
     entries:Object.fromEntries(Object.entries(entries).filter(([key])=>id===undefined||key===id).map(([key,row])=>[key,{
-      name:row.name,...(row.owner?{owner:row.owner}:{}),source:row.source,original:row.original,parameters:row.parameters,
+      name:row.name,...(row.owner?{owner:row.owner}:{}),...(registry?{runtime_registered:Object.hasOwn(registry,key)}:{}),source:row.source,original:row.original,parameters:row.parameters,
     }]))};
 }
 

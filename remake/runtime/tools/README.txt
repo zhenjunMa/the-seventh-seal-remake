@@ -7,6 +7,10 @@
 已有来源只调参数：node remake/runtime/tools/export_runtime_config.mjs
 只读查询技能默认／生效参数：node remake/runtime/tools/export_runtime_config.mjs --reference skills yantu
 只读查询道具默认／生效参数：node remake/runtime/tools/export_runtime_config.mjs --reference items 4
+补全原版角色／技能来源目录：python3 -B remake/runtime/tools/build_runtime.py --target source-catalog source-magic --run
+生成全量引用索引：node remake/runtime/tools/build_content_library.mjs
+按原编号查询：node remake/runtime/tools/build_content_library.mjs --query roles 004
+按名称检索（返回所有同名原编号）：node remake/runtime/tools/build_content_library.mjs --query search 海皇印 items
 只核对内容登记：node remake/runtime/tools/export_content_registry.mjs --check
 完整当前检查：python3 -B remake/runtime/tools/verify_current.py
 列全部构建计划：python3 -B remake/runtime/tools/build_runtime.py --target all
@@ -132,8 +136,8 @@ startup-menu: export_startup_menu.py; 依赖=无声明依赖
 prologue-presentation: export_prologue_presentation.py; 依赖=chapter-story
 dialogue-ui: export_dialogue_ui.py; 依赖=catalog,chapter-story
 world-map-ui: export_world_map_ui.py; 依赖=无声明依赖
-configuration: export_runtime_config.mjs; 依赖=party-skills,enemy-rewards,encounters
-catalog: build_catalog.py; 依赖=configuration,chapter-maps
+configuration: export_runtime_config.mjs; 依赖=party-skills,enemy-rewards,encounters,source-catalog,items,source-magic
+catalog: build_catalog.py; 依赖=configuration,chapter-maps,content-library
 content: export_content_registry.mjs; 依赖=catalog,party-rewards,battle-packs,audio,menu-fonts,save-menu,dialogue-ui,prologue-presentation,map-effects
 enemies: export_enemy_content.py; 依赖=无声明依赖
 enemy-rewards: export_forest_rewards.py; 依赖=无声明依赖
@@ -141,6 +145,9 @@ encounters: export_encounters.py; 依赖=无声明依赖
 story-check: check_content.mjs; 依赖=chapter-story,opening-seed,enemies
 battle-stages: export_battle_stages.py; 依赖=forest-stage
 story-pack: export_story_packages.mjs; 依赖=无声明依赖
+source-catalog: export_source_catalog.py; 依赖=opening-seed
+content-library: build_content_library.mjs; 依赖=configuration
+source-magic: export_source_magic.py; 依赖=无声明依赖
 [自动生成：构建目标结束]
 
 当前检查覆盖什么
@@ -155,6 +162,8 @@ verify_current检查JS／Python回归、Python语法、原输入、保留资产�
 verify_*中的旧阶段门槛不能替代当前回归；写--record的新现场按工具说明生成，已冻结观察不重写。
 
 常见问题
+全量内容补缺：source-catalog遍历全部CHR并核对EOF／逐字节重组，source-magic保留System.MAG的41条原记录，items继续维护原道具目录。configuration只补齐新条目并保留旧ID及调参，content-library生成来源与统一配置的关联索引；content构建已包含这些步骤。需要保留的REA证据及边界见evidence/source_library_20261023，原始游戏输入只读。
+独立复核：export_source_catalog.py --check、export_source_magic.py --check及build_content_library.mjs --check。前两项核对当前原输入及保留原生证据，最后一项核对索引与当前来源／配置。独立工具不导出媒体、不自动开放角色／技能或改写存档。
 登记未编译：执行content --run后刷新；只运行catalog不会编译最终登记。
 缺少原输入或来源台账：按报错恢复对应来源／基础提取；不跳过来源校验。
 未知行为：先实现并验证规则，再登记；不改raw记录或放宽校验来绕过。
