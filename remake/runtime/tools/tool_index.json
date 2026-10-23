@@ -2,7 +2,7 @@
   "schema": "seventh-seal-tool-index",
   "version": 1,
   "updated": "2026-10-23",
-  "registered_steps": 35,
+  "registered_steps": 36,
   "content_plan": [
     "chapter-maps",
     "chapter-story",
@@ -91,6 +91,7 @@
         "export_battle_stages.py",
         "export_chapter_maps.py",
         "export_chapter_story.py",
+        "export_dialogue_ui.py",
         "export_encounters.py",
         "export_enemy_content.py",
         "export_forest_rewards.py",
@@ -605,6 +606,17 @@
         "startup-menu"
       ],
       "imported_by": []
+    },
+    {
+      "path": "export_story_packages.mjs",
+      "role": "registered-build",
+      "build_targets": [
+        "story-pack"
+      ],
+      "imported_by": [
+        "export_content_registry.mjs",
+        "verify_phaser.mjs"
+      ]
     },
     {
       "path": "export_world_map_ui.py",

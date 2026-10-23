@@ -1,4 +1,5 @@
 import {AnmActions, COMMON_ANM_OPCODES} from './anm_runtime.mjs';
+import {validateCompactRecords} from './story_packages.mjs';
 // Bounded Resurrect.ANM playback. Native authority: GAME.exe 0x473e30
 // (ev_021cb8364fd8c2778f25fa267a76fa12a34176836d4cba37ae4610b05af773bc),
 // outer tick 0x477330, and new-game caller 0x4a8960. This module does not
@@ -32,17 +33,19 @@ function dialogueChain(program, mapId, firstId) {
   fail(group && typeof group.source?.path === 'string' && /^[a-f\d]{64}$/i.test(group.source.sha256),
     `Opening dialogue source missing for ${mapId}`);
   fail(Array.isArray(group.records), `Opening dialogue records missing for ${mapId}`);
+  if(program.version===2)validateCompactRecords(group);
   const seen = new Set(), chain = [];
   for (let id = firstId; id; ) {
     fail(chain.length < 32 && !seen.has(id), `Opening dialogue cycle at ${mapId}:${id}`);
     seen.add(id);
     const record = group.records.find(entry => entry.id === id);
-    fail(record && Number.isInteger(record.offset) && record.offset >= 0 && typeof record.raw_hex === 'string',
+    fail(record && Number.isInteger(record.offset) && record.offset >= 0 && (program.version===2||typeof record.raw_hex === 'string'),
       `Opening dialogue record missing at ${mapId}:${id}`);
     fail(record.kind === 0 && record.condition_type === 0 && record.mutation_type === 0 && record.if_true === 0,
       `Opening dialogue ${mapId}:${id} has unsupported control/state payload`);
     fail(typeof record.text_raw === 'string' && Number.isInteger(record.next) && record.next >= 0,
       `Opening dialogue text/link invalid at ${mapId}:${id}`);
+    if(program.version===2){chain.push(record);id=record.next;continue;}
     fail(/^(?:[a-f\d]{2}){1647}$/i.test(record.raw_hex), `Opening dialogue source bytes invalid at ${mapId}:${id}`);
     const bytes = Uint8Array.from(record.raw_hex.match(/../g), value => parseInt(value, 16));
     const view = new DataView(bytes.buffer);
@@ -68,7 +71,7 @@ function dialogueChain(program, mapId, firstId) {
  * shipped comment record (native default return 0), never an end marker.
  */
 export function validateOpeningProgram(program) {
-  fail(program?.schema === 'seventh-seal-opening-program' && program.version === 1,
+  fail(program?.schema === 'seventh-seal-opening-program' && [1,2].includes(program.version),
     'Unsupported opening program schema');
   fail(program.id === 'new-game-resurrect' && typeof program.source?.path === 'string'
     && program.source.path.toLowerCase() === 'animate/resurrect.anm'
@@ -165,12 +168,13 @@ export function validateOpeningProgram(program) {
  * contains no direct sound opcode, so there is no fabricated sound request.
  */
 export class OpeningRunner {
-  constructor({program, hooks, onPhase} = {}) {
+  constructor({program, hooks, onPhase, playback = null} = {}) {
     validateOpeningProgram(program);
     for (const name of REQUIRED_HOOKS) fail(typeof hooks?.[name] === 'function', `Opening hook missing: ${name}`);
     this.program = freeze(structuredClone(program));
     this.hooks = hooks;
     this.onPhase = onPhase;
+    this.playback = playback;
     this.phase = 'idle';
     this.index = -1;
     this.lastError = null;
@@ -181,16 +185,16 @@ export class OpeningRunner {
     fail(this.phase === 'idle', `Opening cannot run in phase ${this.phase}`);
     this.phase = 'running';
     this.abortController = new AbortController();
-    const signal = this.abortController.signal;
     const positions = new Map(), executed = [], dialogueIds = [];
     let mapId = null;
     const notify = () => this.onPhase?.({phase:this.phase, index:this.index, mapId});
-    const actions = new AnmActions({hooks:this.hooks, positions, controller:this.abortController,
+    const actions = new AnmActions({hooks:this.hooks, positions, controller:this.abortController,playback:this.playback,
       context:() => ({mapId}), nativeMetadata:true,
       describeError:(error, command) => new Error(`Opening command ${command.index} (opcode ${command.opcode}) failed: ${error?.message ?? error}`, {cause:error})});
     try {
       notify();
       for (const command of this.program.commands) {
+        if(this.playback?.paused)await this.playback.ready();
         actions.check();
         this.index = command.index;
         notify();
@@ -219,7 +223,7 @@ export class OpeningRunner {
         }
         executed.push(command.index);
       }
-      await actions.flush();
+      await actions.flush();actions.check();
       const location = positions.get(this.program.expected.final_move_actor);
       fail(location && location.map_id === this.program.expected.control_map
         && location.x === this.program.expected.final_move_pixels[0] && location.y === this.program.expected.final_move_pixels[1],
@@ -234,9 +238,9 @@ export class OpeningRunner {
       this.abortController.abort(error);
       this.lastError = error;
       this.result = null;
-      this.phase = 'failed';
+      this.phase = this.playback?.phase==='cancelled'?'cancelled':'failed';
       try { notify(); } catch { /* Preserve the playback failure. */ }
       throw error;
-    }
+    } finally {actions.dispose();}
   }
 }

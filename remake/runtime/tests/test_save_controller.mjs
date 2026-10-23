@@ -4,6 +4,7 @@ import {readFileSync} from 'node:fs';
 import {WorldStore,encodeSave,decodeSave} from '../web/core/world.mjs';
 import {SceneController} from '../web/core/scenes.mjs';
 import {createServicesController} from '../web/controllers/services.mjs';
+import {createStoryController} from '../web/controllers/story.mjs';
 import {createInputController} from '../web/controllers/input.mjs';
 import {PhaserRuntime} from '../web/phaser/runtime.mjs';
 import {MANUAL_SAVE_SLOTS} from '../web/core/save_slots.mjs';
@@ -24,6 +25,7 @@ function fixture(){
   Object.assign(actions,createServicesController({state,actions,$,canvas}));
   state.scenes=new SceneController({world,prepare:async()=>({data:{id:seed.location.map_id}}),validateEntry(){},commitView(){}});
   state.scenes.current={data:{id:seed.location.map_id}};state.scenes.setPhase('map');
+  Object.assign(actions,createStoryController({state,actions,$,canvas}));
   Object.assign(actions,createSessionController({state,actions,$,canvas}));
   state.saveMenu={active:false,show(options){this.active=true;this.options=options;},hide(){this.active=false;},setEntries(entries){this.entries=entries;},setMessage(message){this.message=message;},key(key){if(!this.active)return false;if(key==='Escape')actions.closeSaveMenu();return true;}};
   const files=new Map(),storageCalls=[];

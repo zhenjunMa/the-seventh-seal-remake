@@ -17,6 +17,7 @@ sys.path.insert(0,str(ROOT/'remake/runtime/tools'))
 sys.path.insert(0,str(Path(__file__).resolve().parent))
 from source.dgp import DGP
 import export_menu_font_gdi as gdi
+from content_registration import definition
 
 
 def sha(path):
@@ -78,6 +79,7 @@ def main():
             for item in value:collect(item)
     paths=[WEB/'data/opening_program.json',WEB/'data/chapter_story.json',WEB/'data/events.json',
         *sorted((WEB/'data/events').glob('*.json'))]
+    paths.extend(WEB/name for name in definition().get('story', {}).get('events', []) if WEB/name not in paths)
     for path in paths:
         if path.exists():
             text_sources.append({'path':path.relative_to(RUNTIME).as_posix(),'sha256':sha(path)})

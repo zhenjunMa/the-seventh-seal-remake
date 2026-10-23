@@ -4,7 +4,7 @@ import hashlib
 import json
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from content_registration import role_ids
+from content_registration import role_ids, definition
 
 RUNTIME = Path(__file__).resolve().parents[1]
 WEB = RUNTIME / 'web'
@@ -34,7 +34,7 @@ def build():
         ready+=sum(exit.get('state')=='ready' for exit in value.get('exits',[]))
     assert maps and any(m['id']=='M01010' for m in maps)
     events=[]
-    for path in sorted((WEB/'data/events').glob('*.json')):
+    for path in (WEB / name for name in definition().get('story', {}).get('events', [])):
         event=json.loads(path.read_text(encoding='utf-8'))
         if event.get('schema')!='seventh-seal-event':continue
         scene=json.loads((WEB/f"data/maps/{event['map_id'].lower()}.json").read_text(encoding='utf-8'))
@@ -49,10 +49,10 @@ def build():
                              scope=event['sample_initial_flags_scope'])
         events.append(event)
     event_count=len(events)
-    if events:(WEB/'data/events.json').write_text(json.dumps(events,ensure_ascii=False,indent=2),encoding='utf-8')
+    (WEB/'data/events.json').write_text(json.dumps(events,ensure_ascii=False,indent=2),encoding='utf-8')
     route=(WEB/'data/route_seed.json').exists()
     catalog=dict(schema='seventh-seal-runtime-catalog',version=1,title='第七封印 · 重制 0.8',
-                 seed='data/opening_seed.json',maps=maps,roles=roles,runtime_content='data/runtime_content.json',
+                 seed='data/opening_seed.json',maps=maps,roles=roles,runtime_content='data/runtime_content.json',story='data/story/index.json',
                  opening_program='data/opening_program.json',opening_resources='data/opening_map_resources.json',
                  chapter_story='data/chapter_story.json',chapter_resources='data/chapter_map_resources.json',
                  map_effects='data/map_effects.json',map_shadows='data/map_shadows.json',

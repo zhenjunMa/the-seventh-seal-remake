@@ -78,9 +78,13 @@ export class PhaserRuntime {
     this.mode=mode;this.syncScenes();
   }
   syncScenes(){
+    this.clock.paused=!this.started||this.paused;
     if(!this.exploration||!this.battle)return;
     for(const key of ['exploration','battle']){
       const scene=this[key],sys=scene.sys;
+      const active=this.started&&!this.paused&&(key==='exploration'?['map','event','opening'].includes(this.phase)
+        :this.phase.startsWith('battle-')&&!['battle-loading','battle-interrupted'].includes(this.phase));
+      scene.clock.paused=key!==this.mode||!active;
       if(key!==this.mode){
         // Phaser 3.90 only sleeps running scenes. Resume synchronously first;
         // no update step runs between resume and sleep.
@@ -88,8 +92,6 @@ export class PhaserRuntime {
         if(!sys.isSleeping())sys.sleep();
         continue;
       }
-      const active=!this.paused&&(key==='exploration'?['map','event','opening'].includes(this.phase)
-        :this.phase.startsWith('battle-')&&!['battle-loading','battle-interrupted'].includes(this.phase));
       if(sys.isSleeping())sys.wake();
       if(active){if(sys.isPaused())sys.resume();}
       else if(!sys.isPaused())sys.pause();

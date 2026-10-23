@@ -4,6 +4,8 @@ import {readFile} from 'node:fs/promises';
 import {drawMapScene} from '../web/map_scene_view.mjs';
 import {WorldStore} from '../web/core/world.mjs';
 import {ChapterRunner} from '../web/core/chapter.mjs';
+import {StoryRepository} from '../web/core/story_repository.mjs';
+import {runtimeContent,runtimeContentDefinition} from '../web/core/content_registry.mjs';
 
 const {createMapController}=await import('../web/controllers/map.mjs');
 const {createStoryController}=await import('../web/controllers/story.mjs');
@@ -25,14 +27,15 @@ function acceleratedPresentation(){
   return ()=>{globalThis.document=document;OpeningView.prototype.tween=tween;};
 }
 async function fixture(mapId='M17020'){
-  const [catalog,chapterResources,openingResources,chapterStory,data]=await Promise.all([
-    read('data/catalog.json'),read('data/chapter_map_resources.json'),read('data/opening_map_resources.json'),
-    read('data/chapter_story.json'),read(`data/maps/${mapId.toLowerCase()}.json`)]);
-  openingResources.roles={...openingResources.roles,...chapterResources.roles};
+  const [catalog,index,openingResources,data]=await Promise.all([
+    read('data/catalog.json'),read('data/story/index.json'),read('data/opening_map_resources.json'),read(`data/maps/${mapId.toLowerCase()}.json`)]);
   const world={location:{map_id:mapId,x:640,y:592,direction:4},flags:[],event_records:[],object_states:{}};
-  const state={catalog,chapterResources,openingResources,chapterStory,events:[],world:{value:world,location:world.location},
+  const state={catalog,openingResources,events:[],world:{value:world,location:world.location},
     actorResourcesByMap:new Map(),view:{zoom:1,frame:0},resources:{revision:0,retainScopes(){},
       async attach(action,sheet){action.bitmap={sheet};return action.bitmap;}}};
+  state.storyRepository=await StoryRepository.create({read,index,content:runtimeContent,definition:runtimeContentDefinition,currentMap:()=>state.scenes?.current?.data.id});
+  state.chapterResources=state.storyRepository.resources;state.chapterStory=state.storyRepository.story;state.events=state.storyRepository.events;
+  openingResources.roles={...openingResources.roles,...state.chapterResources.roles};
   const $=elements(),actions={json:async()=>structuredClone(data),image:async path=>({path,width:data.width,height:data.height})};
   const controller=createMapController({state,actions,$,canvas:{focus(){}},ctx:{}});
   const scene=await controller.prepareMap(mapId);state.scenes={current:scene,phase:'map'};
@@ -93,13 +96,13 @@ test('Phaser exploration adapter advances environment NPCs in exploration and or
 test('interaction holds the live NPC identity and releases it after success, missing dialogue or failure',async()=>{
   for(const outcome of ['success','missing','failure']){
     const trace=[],live={id:'live-NPC',slot_zero_based:10},event={id:'event'},nearest={...live,event:outcome==='missing'?null:event};
-    const state={nearest,world:{location:{map_id:'M17020'}},scenes:{phase:'map',current:{npcs:[live],npcRuntime:{
+    const state={nearest,world:{location:{map_id:'M17020'}},scenes:{phase:'map',captureView(){return {};},rollbackView(){},current:{npcs:[live],npcRuntime:{
       hold(id){assert.equal(id,live.id);trace.push('hold');return ()=>trace.push('release');}}}},
-      chapterStory:{maps:{M17020:{index_nonzero:[]}}},runner:{async run(value){
+      chapterStory:{maps:{M17020:{index_nonzero:[]}}},chapterRunner:{async runEvent(value){
         assert.equal(value,event);assert.deepEqual(trace,['hold']);
-        if(outcome==='failure')throw new Error('dialogue failed');}},
+        if(outcome==='failure')throw new Error('dialogue failed');return {};}},
       captionView:{close(){}},dialogueView:{close(){}}};
-    const controller=createStoryController({state,actions:{buildHud(){},status(){}},$:elements(),canvas:{focus(){}}});
+    const controller=createStoryController({state,actions:{buildHud(){},status(){},commitView(){},updateNearest(){}},$:elements(),canvas:{focus(){}}});
     await controller.interact();assert.deepEqual(trace,['hold','release']);
   }
 });
@@ -160,6 +163,6 @@ test('failed chapter ANM restores the previous roaming scene and leaves persiste
     await controller.runChapter({mapId:'M17029',recordId:25});
     assert.deepEqual(errors,['ANM dialogue failed']);assert.equal(state.scenes.current,scene);
     assert.deepEqual(scene.npcRuntime.snapshot(),before);assert.deepEqual(state.world.snapshot(),world);
-    assert.equal(state.openingView.active,false);
+    assert.equal(state.openingView,null);
   }finally{restore();}
 });

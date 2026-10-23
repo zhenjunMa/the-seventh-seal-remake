@@ -30,9 +30,9 @@ vendor/phaser：固定版本运行库、许可及manifest.json。controllers、c
 
 时钟与暂停边界
 PhaserRuntime按原因集合管理页面隐藏、手动暂停和错误挂起，全部原因解除后才恢复；场景休眠／暂停时，其update及ActionClock不推进。探索／战斗唤醒或恢复，以及runtime时钟恢复的首帧丢弃该次delta。
-正式ANM与物件演出使用exploration.clock，战斗动作／充槽／生命周期使用battle.clock，共享入战转场使用runtime.clock；这些时钟由Phaser的delta推进。
-菜单和启动页的tick经runtime场景调度，但当前仍接收Phaser传入的now；它们没有统一改用runtime.clock.time。DialogueView自行使用requestAnimationFrame及performance.now驱动文字／画像；EventRunner的wait适配仍是setTimeout。
-因此场景暂停不等于所有DOM界面、浏览器等待或媒体都同步冻结；后台恢复还可能按经过时间更新界面。这里只描述现状，统一暂停／计时的待办与完成标准见../assessment/validation_design.txt。
+正式ANM、物件演出、DialogueView文字／画像、CaptionView字幕及事件wait使用exploration.clock，战斗动作／充槽／生命周期使用battle.clock，共享入战转场与默认加载展示使用runtime.clock；序章加载显式使用探索时钟。这些时钟由Phaser的delta推进，暂停时不消费等待时长。
+controllers/story.playStory为序章、地图入口剧情、NPC、物件和休息事件建立唯一StoryPlayback会话，传递同一个取消信号；嵌套TLK／ANM复用会话。暂停不接收对白确认／选择，恢复首帧不补算后台经过时间；成功、失败及中止分别收尾，统一清理对白、字幕、临时演员、物件预览与按键。取消／错误会阻止后续指令和世界提交，正常事件仍由原事务完成一次提交；pagehide与引擎错误会中止当前会话。
+视图无注入时钟时保留独立展示／工具的浏览器计时退路，正式入口始终注入场景时钟。菜单和启动页的tick仍接收Phaser传入的now，媒体也有独立生命周期；全局暂停剩余边界与完成标准见../assessment/validation_design.txt。本轮不提供剧情快进或跳过。
 
 三个状态边界
 WorldStore持有可保存世界：地点、人物资源／成长、背包／装备、旗标、事件、队列、技巧／晶石、遇敌RNG与奖励去重记录。变更通过草稿及revision提交，避免异步加载覆盖期间的新操作。
@@ -58,6 +58,8 @@ CHR／DAT／TLK／ANM和生成的party_*、forest_*、enemy_*等JSON保存来源
 详细编辑步骤与字段见config_guide.txt，构建命令和工具分类见tools/README.txt。
 
 地图、剧情与演出
+runtime_content.story显式登记独立事件与任务文件；web/content为编辑内容，web/data/story为生成产物。tools/export_story_packages.mjs核对保留来源、可达能力和引用，生成共享包、分地图包、文本表与序章包；content编译同时生成这些产物。详细编写／快速构建入口见story_guide.txt。
+core/story_flow_compiler.mjs将原TLK和旧／自编NPC事件统一编译为StoryFlow命令图，core/story_flow.mjs提供唯一流程执行器。ChapterRunner提供共同事务与游戏行为适配；NPC入口只引用flow_id。炎城侦探作为开发片段保留，也采用完整成功后提交。core/events.mjs仅保留旧来源核对适配，调用同一个执行器，正式浏览器入口不引用它。
 map controller提供地图载入、视口、连续移动、NPC与交互的探索适配器，由exploration_scene.update调用；terrain、占格、路径、移动／遇敌规则由对应core及core/movement.mjs中的MovementMap处理。
 core/map_locomotion供玩家、剧情与普通NPC共用46CED0移动间隔换算和地图native_step_shift，以实际接受的轴向距离推进步伐；4984E0先减后测的计数对应行走两次步进、跑步三次步进。玩家保留连续键盘控制与斜走速度归一化，走跑／转向保留相位，受阻／松键站立。map_npcs保留源路径、占格、逐轴逻辑步进与独立RNG；visual坐标只追随已接受位置，并以相同源速度平滑，motion携带显示位置／朝向／帧，身体与阴影共用。停谈与暂停冻结显示，剧情接管从显示姿态开始；这些场景内状态不进入存档或遇敌计数。连续显示不声称原版逐帧动态等价，普通NPC斜走仍沿源逐轴步进。
 ANM33的+25低字节经anm_runtime以arrivalFacingRaw传递：0保留当前朝向，1..8在到达时减1写入方向，不参与速度计算。OpeningView按移动动作及源人物speedBias得到步进速度，用相同DistanceGait推进逻辑序列帧；直达／分轴路线沿现有舞台配置。零距离只处理到达状态，短路径按实际长度完成；原指令、并发等待和取消仍由ANM执行器管理。
@@ -68,7 +70,7 @@ map_connections按登记与源描述连接大地图出口，并共用原标记�
 maps.entry明确选择DAT +0x11E进入剧情；SceneController与WorldMapController通过同一enterMap钩子执行，位置和剧情共用未提交草稿。失败回滚显示及世界状态，过期revision拒绝覆盖；启动、恢复和缩略图不触发进入剧情。
 maps.export标记生产归属：新地图默认chapter素材和story=true；existing地图由已有专用导出器负责，story=false表示尚未接入其TLK。该选择不替代运行交互登记。
 chapter-story按登记读取原记录，道具定义从mutation5引用推导，角色初值按登记玩家生成，ANM控制地图由opcode10的源DAT确定。多控制地图或未恢复格式明确拒绝。
-core/chapter.mjs解释已恢复条件／变更，保留草稿、源记录与事件状态，失败不提交。core/chapter_animation.mjs验证受支持指令；core/anm_runtime.mjs处理动作等待、并发、取消和过期完成。
+core/chapter.mjs适配已恢复剧情行为，保留草稿、源记录与事件状态，控制流交给StoryFlowRunner，失败不提交。core/chapter_animation.mjs验证受支持ANM指令；core/anm_runtime.mjs处理动作等待、并发、取消和过期完成。
 入队统一经party_members.mjs检查原身份、初始化和重复入队，补队列空位及遇敌计数；已有成员保留资源／成长，RNG不重置。
 DialogueView管理原对话板、画像、打字、滚动／换页与选择，OpeningView及字幕／加载视图负责对应演出。空白对白、退出或失败都须完成相应等待与清理。
 
@@ -110,5 +112,5 @@ UI：现有controller和view、Phaser显示场景及相应组件，原素材／�
 web/phaser-preview.html使用独立示意图和现有战斗定义，复用正式PhaserRuntime、Scene生命周期和动作时钟，支持暂停／恢复及动作中切换探索／战斗；检查探索、缩放、动作命中及截图，不写正式存档、不关闭正式素材校验。检查命令、选项与结果解读见tools/README.txt。
 当前代码已接入Phaser运行与显示层；各阶段验收范围及本版待办只维护在../assessment/validation_design.txt。
 构建支持已恢复的矩形v6地图、全局STG池、指令、状态和掉落类型。SCN v2／mode4默认镜头支持通用舞台导出；stage13与TestStage保留专用导出器，新格式和新机制按实际内容补齐。
-当前整份来源JSON装载；能力扩展与性能待办见唯一当前计划。
+剧情由core/story_repository.mjs统一提供，启动只加载索引和共享包，地图包与序章按需读取；四图缓存保护当前和正在准备的地图。core/story_packages.mjs管理文本编号、包指纹和紧凑对白校验，core/story_quests.mjs从既有世界状态推导任务阶段。能力扩展与性能待办见唯一当前计划。
 来源资料、报告位置和缺失处理见../local_materials.txt；检查命令见tools/README.txt，通用验收方法见../assessment/menu_alignment_workflow.txt。

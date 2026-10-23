@@ -9,8 +9,8 @@ export class CaptionView {
     }));
     return new CaptionView({...options,manifest,resources,textRenderer:await createMenuTextRenderer(fonts)});
   }
-  constructor({root,manifest,resources,textRenderer,onAdvance,log}) {
-    Object.assign(this,{root,manifest,resources,textRenderer,onAdvance,log});
+  constructor({root,manifest,resources,textRenderer,onAdvance,log,clock=null}) {
+    Object.assign(this,{root,manifest,resources,textRenderer,onAdvance,log,clock});
     this.canvas=root.querySelector('canvas');this.context=this.canvas.getContext('2d');
     this.button=root.querySelector('button');this.label=root.querySelector('p');
     this.ink=document.createElement('canvas');this.active=false;this.epoch=0;
@@ -27,14 +27,20 @@ export class CaptionView {
   show(text) {
     this.close();this.active=true;this.root.hidden=false;this.label.textContent=text;
     this.layout=captionLayout(text,this.manifest.font_height);
-    this.playback=new CaptionPlayback(text,performance.now(),this.manifest.character_interval_ms);
+    this.playback=new CaptionPlayback(text,this.now(),this.manifest.character_interval_ms);
     this.lastText=null;this.resize();this.button.focus({preventScroll:true});
     const epoch=this.epoch;
-    const frame=now=>{if(!this.active||this.epoch!==epoch)return;this.draw(now);this.raf=requestAnimationFrame(frame);};
-    this.draw(performance.now());this.raf=requestAnimationFrame(frame);
+    const frame=now=>{if(!this.active||this.epoch!==epoch)return;this.draw(now);this.scheduleFrame(frame);};
+    this.draw(this.now());this.scheduleFrame(frame);
     this.log?.({type:'caption-open',style:3,text,layout:this.layout});
   }
+  now(){return this.clock?.time??performance.now();}
+  scheduleFrame(frame){
+    if(this.clock)this.frameTask=this.clock.requestFrame(frame);
+    else this.raf=requestAnimationFrame(frame);
+  }
   draw(now) {
+    if(!this.active)return;
     const text=this.playback.tick(now),{manifest:m,resources:r,layout:l,context:c}=this;
     if(text!==this.lastText){
       this.inkBounds=this.textRenderer.paint(this.ink,text,{font:'caption19',foreground:m.foreground,
@@ -51,13 +57,13 @@ export class CaptionView {
     this.root.dataset.revealed=String(this.playback.revealed);
   }
   advance(){
-    if(!this.active)return false;
+    if(!this.active||this.clock?.paused||this.clock?.closed)return false;
     const done=this.playback.advance();
-    if(done)this.close();else this.draw(performance.now());
+    if(done)this.close();else this.draw(this.now());
     return done;
   }
   close(){
-    this.active=false;this.epoch++;cancelAnimationFrame(this.raf);this.root.hidden=true;
+    this.active=false;this.epoch++;this.frameTask?.cancel();this.frameTask=null;cancelAnimationFrame(this.raf);this.root.hidden=true;
     this.context?.clearRect(0,0,640,480);this.label.textContent='';
     delete this.root.dataset.complete;delete this.root.dataset.revealed;
   }

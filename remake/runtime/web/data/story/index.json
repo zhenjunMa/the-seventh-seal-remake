@@ -1,0 +1,47 @@
+{
+  "schema": "seventh-seal-story-index",
+  "version": 2,
+  "definition_sha256": "ffda50ac9bf0ebed5498480370d77a48e403c08ffe69299e23182655a757d69f",
+  "shared": {
+    "path": "data/story/shared.json",
+    "sha256": "f1560c01de140a48d0b68e20c36464ec548d030a44e0fd3dcecccdbe0d81785e"
+  },
+  "maps": {
+    "M01010": {
+      "path": "data/story/maps/m01010.json",
+      "sha256": "46d9e4c9923a4a6c1c596921040a96386bbe484484f7fcfa5a71718da6412734"
+    },
+    "M01030": {
+      "path": "data/story/maps/m01030.json",
+      "sha256": "c5b00efc4ce7d9bad17e982754c5d89e67e570c0bc3943047ebac48f2d8e859f"
+    },
+    "M17010": {
+      "path": "data/story/maps/m17010.json",
+      "sha256": "ad829901d891310343e0d8204ef1e3416e00d01b6daea56c774f3e7ce17ff588"
+    },
+    "M17020": {
+      "path": "data/story/maps/m17020.json",
+      "sha256": "ffba2f5f0da774a5364c79ae09eb53ac36849312fe251209be2827562e659dbd"
+    },
+    "M17026": {
+      "path": "data/story/maps/m17026.json",
+      "sha256": "0697291f7386baec44205d84742269ddaf0958e86b24becce992cbbdd33bc407"
+    },
+    "M17029": {
+      "path": "data/story/maps/m17029.json",
+      "sha256": "5219692bda7495f061dca910f17fe91b26b9e383cc51304ae7b69af9d48334c2"
+    },
+    "M70010": {
+      "path": "data/story/maps/m70010.json",
+      "sha256": "fe397d3d46396b4368587f4b5a1d6c10f9a684900da1fc3412f63bb156d7dac7"
+    },
+    "M72061": {
+      "path": "data/story/maps/m72061.json",
+      "sha256": "362c62f75ef77fa5bda65fa40bcad8c5ac8987cb5fb7aaaf6cdf4212a325e012"
+    }
+  },
+  "opening": {
+    "path": "data/story/opening.json",
+    "sha256": "4ec2cda822206733d559a584dc32f7c82d8795a13fab96996f2027ca20e8d12e"
+  }
+}

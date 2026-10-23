@@ -9,8 +9,8 @@ export class DialogueView {
     }));
     return new DialogueView({...options,manifest,resources,textRenderer:await createMenuTextRenderer(fonts)});
   }
-  constructor({root,manifest,resources,textRenderer,onAdvance,onChoose,log}){
-    Object.assign(this,{root,manifest,resources,textRenderer,onAdvance,onChoose,log});
+  constructor({root,manifest,resources,textRenderer,onAdvance,onChoose,log,clock=null}){
+    Object.assign(this,{root,manifest,resources,textRenderer,onAdvance,onChoose,log,clock});
     this.canvas=root.querySelector('canvas');this.context=this.canvas.getContext('2d');
     this.button=root.querySelector('#dialogueNext');this.speaker=root.querySelector('#speaker');
     this.label=root.querySelector('#dialogueText');this.choicesRoot=root.querySelector('#dialogueChoices');
@@ -26,7 +26,7 @@ export class DialogueView {
     this.close();this.active=true;this.root.hidden=false;
     Object.assign(this,{style:style&15,sessionId,getAnchor,record});
     const m=this.manifest;
-    this.started=performance.now();this.entryDuration=m.ordinary.portrait_entry.ticks*m.ordinary.portrait_entry.tick_ms;
+    this.started=this.now();this.entryDuration=m.ordinary.portrait_entry.ticks*m.ordinary.portrait_entry.tick_ms;
     this.readyAt=this.started+(this.style<=1?this.entryDuration:0);
     const bytes=record?.raw_hex?.match(/../g)?.map(byte=>parseInt(byte,16));
     this.faceIndex=(record?.portrait_id??bytes?.[2]??0)-1;this.faceLeft=Boolean(record?.region_byte_raw??bytes?.[6]);
@@ -38,17 +38,23 @@ export class DialogueView {
     this.playback=new DialoguePlayback(dialoguePages(text,{...this.profile,scroll:this.style<=1,measureLatin}),{now:this.readyAt,interval:m.timing.character_interval_ms,choices});
     this.choicesRoot.replaceChildren(...(choices??[]).map(choice=>{
       const button=document.createElement('button');button.textContent=choice.text;button.dataset.index=String(choice.index);
-      button.onclick=event=>{if(event.detail===0||!this.active||!this.playback.select(choice.index))return;this.commitChoice();};
-      button.onpointerenter=()=>{if(this.playback.select(choice.index))this.draw(performance.now());};
-      button.onfocus=()=>{if(this.playback.select(choice.index))this.draw(performance.now());};
+      button.onclick=event=>{if(event.detail===0||this.suspended||!this.active||!this.playback.select(choice.index))return;this.commitChoice();};
+      button.onpointerenter=()=>{if(!this.suspended&&this.playback.select(choice.index))this.draw(this.now());};
+      button.onfocus=()=>{if(!this.suspended&&this.playback.select(choice.index))this.draw(this.now());};
       return button;
     }));
     this.choicesRoot.hidden=true;this.button.hidden=false;this.resize();this.button.focus({preventScroll:true});
     const epoch=this.epoch;
-    const frame=now=>{if(!this.active||epoch!==this.epoch)return;this.draw(now);this.raf=requestAnimationFrame(frame);};
-    this.draw(this.started);this.raf=requestAnimationFrame(frame);
+    const frame=now=>{if(!this.active||epoch!==this.epoch)return;this.draw(now);this.scheduleFrame(frame);};
+    this.draw(this.started);this.scheduleFrame(frame);
     this.log?.({type:'dialogue-open',session:sessionId,style:this.style,text,speaker,face_index:this.faceIndex,
       face_left:this.faceLeft,pages:this.playback.pages.length,choices:choices?.map(choice=>({index:choice.index,text:choice.text}))??[]});
+  }
+  now(){return this.clock?.time??performance.now();}
+  get suspended(){return Boolean(this.clock?.paused||this.clock?.closed);}
+  scheduleFrame(frame){
+    if(this.clock)this.frameTask=this.clock.requestFrame(frame);
+    else this.raf=requestAnimationFrame(frame);
   }
   geometry(){
     const m=this.manifest;
@@ -140,7 +146,7 @@ export class DialogueView {
     this.root.dataset.selection=String(this.playback.selected);
   }
   commitChoice(){
-    if(!this.active||this.playback.stage!=='choices')return;
+    if(!this.active||this.suspended||this.playback.stage!=='choices')return;
     const index=this.playback.choices[this.playback.selected].index;
     this.log?.({type:'dialogue-choice',session:this.sessionId,index});this.onChoose(index,this.sessionId);
   }
@@ -153,27 +159,27 @@ export class DialogueView {
     this.choicesRoot.children[this.playback.selected]?.focus({preventScroll:true});
   }
   advance(){
-    if(!this.active||performance.now()<this.readyAt)return false;
-    const result=this.playback.advance(performance.now());
+    if(!this.active||this.suspended||this.now()<this.readyAt)return false;
+    const result=this.playback.advance(this.now());
     this.log?.({type:'dialogue-advance',session:this.sessionId,page:this.playback.page,result:result.kind});
     if(result.kind==='close')return true;
     if(result.kind==='choice'){this.commitChoice();return false;}
     if(result.kind==='choices')this.showChoices();
-    this.draw(performance.now());return false;
+    this.draw(this.now());return false;
   }
   key(key,repeat=false){
-    if(!this.active)return false;
+    if(!this.active||this.suspended)return false;
     if(['ArrowUp','ArrowLeft','ArrowDown','ArrowRight'].includes(key)){
       if(this.playback.stage==='choices'){
         this.playback.move(['ArrowUp','ArrowLeft'].includes(key)?-1:1);
-        this.choicesRoot.children[this.playback.selected]?.focus({preventScroll:true});this.draw(performance.now());
+        this.choicesRoot.children[this.playback.selected]?.focus({preventScroll:true});this.draw(this.now());
       }
       return true;
     }
     return ['Escape','Tab','e'].includes(key);
   }
   close(){
-    this.active=false;this.epoch++;cancelAnimationFrame(this.raf);this.root.hidden=true;
+    this.active=false;this.epoch++;this.frameTask?.cancel();this.frameTask=null;cancelAnimationFrame(this.raf);this.root.hidden=true;
     this.context.clearRect(0,0,640,480);this.inkCache.clear();this.label.textContent='';
     this.choicesRoot.replaceChildren();this.choicesRoot.hidden=true;
     for(const key of ['stage','page','pages','revealed','style','face','selection'])delete this.root.dataset[key];

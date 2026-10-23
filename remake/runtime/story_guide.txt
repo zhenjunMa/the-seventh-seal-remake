@@ -1,0 +1,61 @@
+第七封印 · 地图、NPC、对白与任务
+路径以runtime为基准；命令从仓库根目录执行。
+
+编辑与生成的边界
+web/data/runtime_content.json仍是唯一接入登记。maps选择地图、NPC槽、进入剧情、触发器、物件与出口；programs选择原ANM；story.events与story.quests显式引用事件和任务文件。未登记文件不自动开放。
+web/data/chapter_story.json、opening_program.json、data/events/*.json及chapter_map_resources.json是原作来源台账，由既有提取工具生成，保留原字节、文件指纹和证据，不作为手工文案编辑入口。
+web/content/events/适合存放自行编写的独立NPC事件，web/content/quests/存放任务定义。可以按章节或区域建立子目录，每个事件／任务有稳定ID，不按内容在数组中的位置标识。
+web/data/story/是自动生成的运行包。不要直接修改其中台词或跳转；修改来源或编辑文件后重新构建。
+
+运行结构
+index.json保存地图包、共享包与序章包的路径和指纹，并绑定当前接入登记。
+shared.json保存共用角色、物品定义及任务定义；maps/mxxxxx.json版本2保存统一的flows流程表、NPC入口、ANM、交互资源与texts文本表。TLK、旧侦探样本和自行编写的事件全部编译为seventh-seal-story-flow版本1；文本编号按地图＋TLK记录号、选项编号或事件＋稳定句子ID生成。
+原对白字节与正文的一致性、已登记分支能力、跳转及来源绑定在编译时检查。运行主线对白不再携带1647字节TLK原记录；仍供物件、人物运动、道具初始化及ANM执行器使用的原记录保留。
+浏览器启动只加载清单和共享包，进入地图前加载对应剧情包，开始新游戏时加载序章包。默认保留最近四张地图，当前地图及正在准备的地图受到保护；活动准备超过容量时暂时保留，后续加载回收。加载失败可重试，安装前校验完整包，加载不会修改世界进度。
+运行事件只有core/story_flow.mjs中的StoryFlowRunner负责命令执行。ChapterRunner提供统一的世界事务、对白、选项、物品、休息和ANM行为适配，火之谷与炎城NPC都从这里进入；chapter记录仅保留来源绑定、物件和地图索引，不再另行解释一遍TLK控制流。
+炎城侦探是开发验证片段，保留首次／重复交互和未恢复分支提示，不代表炎城主线已贯通。它现在也采用完整事件成功后提交；中断或失败不会消耗任务旗标。旧存档的旗标、物件记录、入队和奖励去重语义沿用原规则。
+正式播放的生命周期由controllers/story.playStory与core/story_playback.mjs统一管理：序章、地图入口及交互事件各有一个会话，嵌套TLK／ANM共用取消信号。对白、字幕、动作和剧情wait均受探索场景时钟控制，暂停后不响应确认／选择，恢复后继续剩余时长。中止／失败沿用事务回滚并清理临时表现，不按成功处理；结束清理完成前不启动下一段事件。新增行为需传递playback／signal，等待使用playback.wait或场景时钟，异步资源返回后先检查信号再安装场景或修改草稿。
+core/events.mjs仅供旧来源核对工具使用：它将旧program转换为同一种StoryFlow并调用同一个执行器，不包含另一套解释循环；历史native-entry提交观察只存在于该核对适配器，正式入口不使用它。
+
+新增原作地图或NPC
+1. 按config_guide.txt从原DAT／TLK确认入口、NPC原槽、地图旗标和所需ANM，在runtime_content登记。普通NPC使用原槽编号，npcs显式列表可限制开放范围。
+2. 执行chapter-story准备来源，再执行--preflight查看能力缺口。登记不会自动实现未知条件、指令或奖励机制。
+3. 执行content完整构建。最终内容编译会同时生成剧情包，无需为新地图增加专用Scene、控制器或手写route_events表。
+4. 从正式入口核对进入、交谈、选择、任务推进、奖励、退出、重复进入及存读档。图像和音频仍由原资源构建链提供。
+
+新增独立NPC对话
+在web/content/events/中创建一个seventh-seal-story-event版本1文件，再将相对web的文件路径加入story.events。例如以下只是格式示例，不会自动接入游戏：
+{
+  "schema": "seventh-seal-story-event",
+  "version": 1,
+  "id": "fire-valley-villager-example",
+  "map_id": "M17020",
+  "npc_slot": 10,
+  "program": [
+    {"op": "say", "id": "greeting", "speaker": "火妖精", "text": "一路小心。", "style_raw": 2},
+    {"op": "end"}
+  ]
+}
+npc_slot绑定地图已导出的原NPC，不重复创建人物。同一个NPC只能登记一个独立事件，在该事件内处理首次、重复与任务阶段分支。独立人物也可用npc提供既有事件格式的id、名称、坐标、朝向与图集resource，替代npc_slot；它仍需要真实可用的媒体。
+每句say必须有稳定且唯一的id，修改台词时保持id不变。跳转支持命令label以及字符串target／if_true／if_false，构建时解析为运行地址；不要依赖手算数组下标。
+say可指定style_raw:0至3、portrait_id（0为无画像，其他为已有画像编号）及portrait_left。绑定原NPC时，思考对白沿该NPC头部定位。
+当前编写入口支持say、旗标判断／变更、跳转、等待与物件状态等指令。原TLK的选择、物品、休息、存档请求和ANM同样编译到统一流程，入队仍由ANM行为适配器调用既有通用入队规则；来源绑定继续按原事件登记。新增指令先实现通用处理器和导入映射，再接入内容。
+所有正式事件采用成功后原子提交，失败不消耗任务旗标。自行编写事件的来源在构建时标为authored，不伪造原作证据。运行NPC入口只引用flow_id，不携带旧program或区域专用commit_policy。
+NPC可用conditions:[{"index":原旗标索引,"value":原完整旗标值}]限定显示／交互资格；原地图的可见与移动状态继续由原记录解释。
+
+新增任务
+每个任务文件使用seventh-seal-quests版本1和quests数组，路径登记到story.quests。已有样本是web/content/quests/fire-valley.json，描述现有邀请凯与领取装备的准备流程。
+任务包含id、name、maps与有序stages；阶段包含id、status、text、when。按顺序选择第一个满足条件的阶段，因此通常先列完成／失败阶段，再列进行中阶段，最后可用{"all":[]}作为默认阶段；没有匹配阶段时隐藏。
+status可为hidden、available、active、completed、failed。when支持all、any、not、flag:{index,bit,value}和party_member:"原角色ID"，只接受声明式数据，不执行脚本表达式。
+任务进度通过storyRepository.journal(world)或core/story_quests.mjs的questJournal查询，控制器也会更新state.questProgress，供后续任务界面使用。本次不改变现有菜单布局。
+任务定义只观察世界状态，不发奖励、不自动写旗标，也不另存一份任务进度。奖励仍由剧情事务执行，并使用原事件状态／旗标防止重复领取。新增原作任务先核对其真实旗标；新增独立持久状态或未恢复的任务条件需要相应实现与存档设计。
+
+构建与检查
+只修改独立事件、任务文件或story中的事件／任务登记：
+  python3 -B remake/runtime/tools/build_runtime.py --target story-pack --run
+此步骤复用已有来源台账和已编译地图／角色身份，不依赖本机原版安装；不重新提取或声称已核验原始文件。只允许快速刷新story登记，地图、角色或ANM登记变化必须走content完整构建。
+只读核对剧情包是否过期：
+  node remake/runtime/tools/export_story_packages.mjs --check
+正式代码预检查已包含上述核对：
+  node remake/runtime/tools/verify_phaser.mjs
+新增对白文字也被dialogue-ui的字体收集读取；需要新增原字体字形时执行对应字体／UI构建。新地图、原素材提取和完整content构建仍需要config_guide.txt与tools/README.txt声明的原作文件和本地前置材料。

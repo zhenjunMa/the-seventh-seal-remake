@@ -140,6 +140,7 @@ enemy-rewards: export_forest_rewards.py; 依赖=无声明依赖
 encounters: export_encounters.py; 依赖=无声明依赖
 story-check: check_content.mjs; 依赖=chapter-story,opening-seed,enemies
 battle-stages: export_battle_stages.py; 依赖=forest-stage
+story-pack: export_story_packages.mjs; 依赖=无声明依赖
 [自动生成：构建目标结束]
 
 当前检查覆盖什么
@@ -165,3 +166,6 @@ verify_*中的旧阶段门槛不能替代当前回归；写--record的新现场�
 来源证据、现场记录及历史归档的目录、准备方式与缺失处理统一见../../local_materials.txt；可选本地索引或旧压缩包不作为当前命令的唯一说明。
 assessment只维护validation_design.txt和menu_alignment_workflow.txt；旧兼容跳转页已清理。清理文件及迁移工具的原路径、SHA与Git恢复版本见tool_index.json的retired_documents和工具previous_path字段。
 verify_runtime_config.py的复核文字报告输出到evidence/runtime_config_recheck.txt，不再生成assessment下的旧跳转页。
+[剧情运行包]
+export_story_packages.mjs从已保留的TLK／ANM来源台账与runtime_content.story登记的独立事件／任务编译web/data/story；原字节一致性在构建时核对，地图剧情按需加载。content最终编译自动执行此步骤；只改独立事件、任务或story登记可用build_runtime.py --target story-pack --run，不需要原版安装。地图、角色或ANM登记变化仍需完整content构建。
+node remake/runtime/tools/export_story_packages.mjs --check只读核对生成结果，verify_phaser.mjs已包含该检查。新增文字还需相应字体构建。完整编写规范与现有任务样本见../story_guide.txt。

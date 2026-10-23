@@ -4,6 +4,7 @@ import {createPartyActors} from "../core/party_attributes.mjs";
 import {OpeningRunner} from "../core/opening.mjs";
 import {completedOpeningWorld} from "../core/opening_state.mjs";
 import {OpeningView} from "../opening_view.mjs";
+import {playbackTask} from "../core/story_playback.mjs";
 import {validateSourceSkillShortcuts} from "../core/skill_shortcuts.mjs";
 import {techniqueSlots,techniqueCombinations} from "../core/menu_techniques.mjs";
 
@@ -26,36 +27,40 @@ export function createSessionController({state, actions, $, canvas, ctx}) {
     if(!['map','menu'].includes(state.scenes.phase))return;
     const previous={scene:state.scenes.current,world:state.world.snapshot(),view:state.scenes.captureView(),phase:state.scenes.phase};
     state.startupView.hide();state.audio?.suspend();state.scenes.setPhase('opening');
-    try{
-      const initial=seed??await actions.json('data/opening_seed.json');
-      // Prepare each map at its source opcode, after the outgoing performance.
-      // Persistent world replacement still waits for the whole program.
-      const prepared=new Map();
-      state.openingView=new OpeningView({resources:state.openingResources,prepared,clock:state.engine?.exploration.clock,
-        program:state.openingProgram,
-        prepare:(id,signal)=>state.loadingView.run(id,onProgress=>actions.prepareMap(id,{onProgress}),{signal}),
-        staging:state.prologuePresentation.staging,effects:state.prologuePresentation.effects,nativeViewport:true,
-        install:scene=>{actions.commitView(scene,initial.location);state.scenes.current=scene;state.view.follow=false;},
-        camera:(x,y)=>{state.view.x=x;state.view.y=y;},say: actions.say,log: actions.log,
-        shade:alpha=>{$('openingShade').style.opacity=String(alpha);}});
-      $('openingShade').hidden=false;$('openingShade').style.opacity='1';
-      actions.status('序章正在演出；Enter／空格或点击画面推进字幕，文字未显示完时先补全。');
-      const playback=new OpeningRunner({program:state.openingProgram,hooks:state.openingView.hooks()});
-      const result=await playback.run(),hero=state.openingView.getActor(0);
-      const next=completedOpeningWorld(initial,result,hero.direction,state.catalog.maps.map(m=>m.id));
-      actions.validateEntry(state.scenes.current,next.location);
-      state.world.replace(next);state.scenes.current.npcRuntime?.adoptActors(state.openingView.actors);
-      state.openingView.dispose();actions.commitView(state.scenes.current,next.location);
-      $('openingShade').hidden=true;state.scenes.setPhase('map');actions.buildHud();actions.updateNearest();
-      actions.log({type:'opening-complete',commands:result.executed_indices.length,source:result.source,limitations:result.limitations});
-      actions.status('序章结束。去王厅寻找凯，再回住处领取装备。');canvas.focus({preventScroll:true});
-    }catch(error){
-      if(state.openingView)state.openingView.dispose();
-      $('openingShade').hidden=true;actions.clearDialogue();
-      state.world.replace(previous.world);state.scenes.current=previous.scene;state.scenes.rollbackView(previous.view);
-      if(previous.phase==='menu')showTitle();else{state.scenes.setPhase('map');actions.buildHud();}
-      actions.log({type:'opening-failed',error:error.message});throw error;
-    }
+    return actions.playStory(async playback=>{
+      try{
+        const initial=seed??await playbackTask(actions.json('data/opening_seed.json'),playback.signal);
+        const program=await playbackTask(state.storyRepository.opening(),playback.signal);playback.check();
+        if(playback.paused)await playback.ready();state.openingProgram=program;
+        // Prepare each map at its source opcode, after the outgoing performance.
+        // Persistent world replacement still waits for the whole program.
+        const prepared=new Map();
+        state.openingView=new OpeningView({resources:state.openingResources,prepared,clock:state.engine?.exploration.clock,
+          program:state.openingProgram,
+          prepare:(id,signal)=>state.loadingView.run(id,onProgress=>actions.prepareMap(id,{onProgress}),{signal,clock:playback.clock}),
+          staging:state.prologuePresentation.staging,effects:state.prologuePresentation.effects,nativeViewport:true,
+          install:scene=>{actions.commitView(scene,initial.location);state.scenes.current=scene;state.view.follow=false;},
+          camera:(x,y)=>{state.view.x=x;state.view.y=y;},say: actions.say,log: actions.log,
+          shade:alpha=>{$('openingShade').style.opacity=String(alpha);}});
+        $('openingShade').hidden=false;$('openingShade').style.opacity='1';
+        actions.status('序章正在演出；Enter／空格或点击画面推进字幕，文字未显示完时先补全。');
+        const runner=new OpeningRunner({program:state.openingProgram,hooks:state.openingView.hooks(),playback});
+        const result=await runner.run();
+        if(playback.paused)await playback.ready();playback.check();const hero=state.openingView.getActor(0);
+        const next=completedOpeningWorld(initial,result,hero.direction,state.catalog.maps.map(m=>m.id));
+        actions.validateEntry(state.scenes.current,next.location);
+        state.world.replace(next);state.scenes.current.npcRuntime?.adoptActors(state.openingView.actors);
+        state.openingView.dispose();actions.commitView(state.scenes.current,next.location);
+        $('openingShade').hidden=true;state.scenes.setPhase('map');actions.buildHud();actions.updateNearest();
+        actions.log({type:'opening-complete',commands:result.executed_indices.length,source:result.source,limitations:result.limitations});
+        actions.status('序章结束。去王厅寻找凯，再回住处领取装备。');canvas.focus({preventScroll:true});
+      }catch(error){
+        $('openingShade').hidden=true;
+        state.world.replace(previous.world);state.scenes.current=previous.scene;state.scenes.rollbackView(previous.view);
+        if(previous.phase==='menu')showTitle();else{state.scenes.setPhase('map');actions.buildHud();}
+        actions.log({type:'opening-failed',error:error.message});throw error;
+      }finally{$('openingShade').hidden=true;}
+    });
   }
   async function restore(envelope,{operation=null}={}){
     if(!operation)return actions.withSaveOperation('load',owned=>restore(envelope,{operation:owned}));

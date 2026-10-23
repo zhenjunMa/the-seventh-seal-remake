@@ -1,11 +1,13 @@
 // Author only admission choices. Identity, hashes and native story fields come
 // from the retained source catalogs; the resolved runtime table is generated.
+import {validateStorySelection} from './story_packages.mjs';
 const copy=structuredClone;
 const need=(ok,message)=>{if(!ok)throw new Error(`内容定义：${message}`);};
 const keys=(row,allowed,label)=>need(row&&typeof row==='object'&&!Array.isArray(row)&&Object.keys(row).every(key=>allowed.includes(key)),`${label} 包含重复来源或未知字段`);
 export function resolveContentDefinition(definition,{seed,forest,story,maps}){
   need(definition?.schema==='seventh-seal-runtime-content'&&definition.version===2,'编辑格式版本无效');
-  keys(definition,['schema','version','roles','battle_rosters','stages','programs','maps'],'根');
+  keys(definition,['schema','version','roles','battle_rosters','stages','programs','maps','story'],'根');
+  if(definition.story)validateStorySelection(definition.story);
   need(Array.isArray(definition.programs)&&new Set(definition.programs).size===definition.programs.length,'演出登记重复或无效');
   const roles={};
   for(const [id,row]of Object.entries(definition.roles)){
@@ -69,5 +71,5 @@ export function resolveContentDefinition(definition,{seed,forest,story,maps}){
     need(row.export===undefined||['source','existing'].includes(row.export),`舞台 ${id} 导出方式无效`);
     return [id,{path:row.path??`data/stages/${id}.json`,schema:row.schema??'seventh-seal-battle-stage',asset_prefix:row.asset_prefix??`assets/stages/${id}/`}];
   }));
-  return {schema:definition.schema,version:1,party_limit:4,roles,battle_rosters,stages,programs,maps:resolvedMaps};
+  return {schema:definition.schema,version:1,party_limit:4,roles,battle_rosters,stages,programs,maps:resolvedMaps,...(definition.story?{story:copy(definition.story)}:{})};
 }

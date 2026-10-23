@@ -689,6 +689,7 @@
     }
   ],
   "runtime_content": "data/runtime_content.json",
+  "story": "data/story/index.json",
   "opening_program": "data/opening_program.json",
   "opening_resources": "data/opening_map_resources.json",
   "chapter_story": "data/chapter_story.json",

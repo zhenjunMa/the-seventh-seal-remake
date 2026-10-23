@@ -212,6 +212,14 @@ export const definition = {
         "story": false
       }
     }
+  },
+  "story": {
+    "events": [
+      "data/events/detective.json"
+    ],
+    "quests": [
+      "content/quests/fire-valley.json"
+    ]
   }
 };
 export default {
@@ -520,5 +528,13 @@ export default {
       "routes": [],
       "flag_index": 388
     }
+  },
+  "story": {
+    "events": [
+      "data/events/detective.json"
+    ],
+    "quests": [
+      "content/quests/fire-valley.json"
+    ]
   }
 };

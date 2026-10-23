@@ -59,6 +59,7 @@ python3 -B remake/runtime/serve.py
 - [运行与操作说明](remake/runtime/README.txt)
 - [代码架构](remake/runtime/architecture.txt)
 - [配置与内容扩展](remake/runtime/config_guide.txt)
+- [地图、NPC、对白与任务接入](remake/runtime/story_guide.txt)
 - [导出与验证工具](remake/runtime/tools/README.txt)
 - [当前计划](remake/assessment/validation_design.txt)
 - [界面与动态表现验收方法](remake/assessment/menu_alignment_workflow.txt)

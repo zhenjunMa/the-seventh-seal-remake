@@ -21,12 +21,12 @@ for (const create of [createServicesController, createMapController,
   createBattleController, createInspectionController, createInputController,
   createBootController]) Object.assign(actions, create(context));
 
-const failed=error=>{actions.status(error.message,true);$('loading').hidden=false;$('loading').querySelector('p').textContent=error.message;};
+const failed=error=>{void actions.cancelStoryPlayback(error);actions.status(error.message,true);$('loading').hidden=false;$('loading').querySelector('p').textContent=error.message;};
 async function start(){
   state.engine=await PhaserRuntime.create({parent:$('phaserHost'),focusTarget:canvas,onError:failed});
   window.addEventListener('pagehide',event=>{
     if(event.persisted)return;
-    state.openingView?.dispose();state.battleTransition?.cancel();
+    void actions.cancelStoryPlayback();state.battleTransition?.cancel();
     actions.disposeBattles();actions.disposeInput();state.engine.destroy();
   });
   await actions.boot();

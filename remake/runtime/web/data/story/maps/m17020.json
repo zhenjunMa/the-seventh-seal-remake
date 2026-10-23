@@ -1,0 +1,3583 @@
+{
+  "schema": "seventh-seal-story-map",
+  "version": 2,
+  "map_id": "M17020",
+  "chapter": {
+    "id": "M17020",
+    "name": "火之谷村庄",
+    "flag_index": 382,
+    "map_flag_index": 382,
+    "source": {
+      "path": "Map/m17020.TLK",
+      "sha256": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
+      "bytes": 40260
+    },
+    "map_source": {
+      "path": "Map/m17020.dat",
+      "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+      "bytes": 730613
+    },
+    "index_nonzero": [
+      {
+        "slot": 0,
+        "offset": 26,
+        "record": 1
+      },
+      {
+        "slot": 20,
+        "offset": 106,
+        "record": 3
+      },
+      {
+        "slot": 21,
+        "offset": 110,
+        "record": 4
+      },
+      {
+        "slot": 25,
+        "offset": 126,
+        "record": 5
+      },
+      {
+        "slot": 26,
+        "offset": 130,
+        "record": 6
+      },
+      {
+        "slot": 27,
+        "offset": 134,
+        "record": 7
+      },
+      {
+        "slot": 28,
+        "offset": 138,
+        "record": 8
+      },
+      {
+        "slot": 29,
+        "offset": 142,
+        "record": 9
+      },
+      {
+        "slot": 499,
+        "offset": 2022,
+        "record": 10
+      }
+    ],
+    "index_count": 500,
+    "record_base": 2026,
+    "record_bytes": 1647,
+    "record_count": 11,
+    "records": [
+      {
+        "id": 1,
+        "offset": 2026,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 1,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 2,
+        "source": {
+          "path": "Map/m17020.TLK",
+          "sha256": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
+          "record_id": 1,
+          "record_bytes": 1647,
+          "offset": 2026
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "text_id": "M17020:TLK:1",
+        "portrait_id": 32,
+        "choices": []
+      },
+      {
+        "id": 2,
+        "offset": 3673,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 1,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 0,
+        "source": {
+          "path": "Map/m17020.TLK",
+          "sha256": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
+          "record_id": 2,
+          "record_bytes": 1647,
+          "offset": 3673
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "text_id": "M17020:TLK:2",
+        "portrait_id": 29,
+        "choices": []
+      },
+      {
+        "id": 3,
+        "offset": 5320,
+        "kind": 0,
+        "style": 2,
+        "region_byte_raw": 0,
+        "speaker": 21,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 0,
+        "source": {
+          "path": "Map/m17020.TLK",
+          "sha256": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
+          "record_id": 3,
+          "record_bytes": 1647,
+          "offset": 5320
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "text_id": "M17020:TLK:3",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 4,
+        "offset": 6967,
+        "kind": 0,
+        "style": 2,
+        "region_byte_raw": 0,
+        "speaker": 22,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 0,
+        "source": {
+          "path": "Map/m17020.TLK",
+          "sha256": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
+          "record_id": 4,
+          "record_bytes": 1647,
+          "offset": 6967
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "text_id": "M17020:TLK:4",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 5,
+        "offset": 8614,
+        "kind": 0,
+        "style": 2,
+        "region_byte_raw": 0,
+        "speaker": 26,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 0,
+        "source": {
+          "path": "Map/m17020.TLK",
+          "sha256": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
+          "record_id": 5,
+          "record_bytes": 1647,
+          "offset": 8614
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "text_id": "M17020:TLK:5",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 6,
+        "offset": 10261,
+        "kind": 0,
+        "style": 2,
+        "region_byte_raw": 0,
+        "speaker": 27,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 0,
+        "source": {
+          "path": "Map/m17020.TLK",
+          "sha256": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
+          "record_id": 6,
+          "record_bytes": 1647,
+          "offset": 10261
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "text_id": "M17020:TLK:6",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 7,
+        "offset": 11908,
+        "kind": 0,
+        "style": 2,
+        "region_byte_raw": 0,
+        "speaker": 28,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 0,
+        "source": {
+          "path": "Map/m17020.TLK",
+          "sha256": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
+          "record_id": 7,
+          "record_bytes": 1647,
+          "offset": 11908
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "text_id": "M17020:TLK:7",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 8,
+        "offset": 13555,
+        "kind": 0,
+        "style": 2,
+        "region_byte_raw": 0,
+        "speaker": 29,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 0,
+        "source": {
+          "path": "Map/m17020.TLK",
+          "sha256": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
+          "record_id": 8,
+          "record_bytes": 1647,
+          "offset": 13555
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "text_id": "M17020:TLK:8",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 9,
+        "offset": 15202,
+        "kind": 0,
+        "style": 2,
+        "region_byte_raw": 0,
+        "speaker": 30,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 0,
+        "source": {
+          "path": "Map/m17020.TLK",
+          "sha256": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
+          "record_id": 9,
+          "record_bytes": 1647,
+          "offset": 15202
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "text_id": "M17020:TLK:9",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 10,
+        "offset": 16849,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 12,
+        "condition_bit": 1,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 11,
+        "next": 0,
+        "source": {
+          "path": "Map/m17020.TLK",
+          "sha256": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
+          "record_id": 10,
+          "record_bytes": 1647,
+          "offset": 16849
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "text_id": "M17020:TLK:10",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 11,
+        "offset": 18496,
+        "kind": 1,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 0,
+        "source": {
+          "path": "Map/m17020.TLK",
+          "sha256": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
+          "record_id": 11,
+          "record_bytes": 1647,
+          "offset": 18496
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "text_id": "M17020:TLK:11",
+        "portrait_id": 0,
+        "choices": []
+      }
+    ],
+    "trailing_bytes": 20117,
+    "trailing_sha256": "4418998b882a07425183117c9e5eaa261e9d1e92f554f97cec038eacb363b226",
+    "header_raw_hex": "3344a661b9cfb8eaaec6286329596f6b690000000600000001000000bbf0d6aeb9c8b4e5d7af0000000000000000000000000000000000000000000000000000000000006d6e3137302d312e77617600000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000030315000000150001000a000000000000007e010000020000004d31373032302e444750000000000000000000004d3137303230412e44475000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000020300010166000000650000002e5c4d41504d5c4d31373032305c00000000000000000000900100009001000000010100",
+    "compatibility_variant": 1,
+    "descriptors": [
+      {
+        "id": 1,
+        "state_raw": 0,
+        "filename_raw": "m17010.dat",
+        "field_26_raw": 11,
+        "field_2a_raw": 6,
+        "field_2e_raw": 0,
+        "record_bytes": 66,
+        "raw_hex": "00000000000000000000000000000000006d31373031302e64617400000000000000000000000b000000060000000000000000000000000000000000000000000000",
+        "cells": [
+          {
+            "x": 13,
+            "y": 97,
+            "offset": 634418
+          },
+          {
+            "x": 14,
+            "y": 97,
+            "offset": 634482
+          },
+          {
+            "x": 15,
+            "y": 97,
+            "offset": 634546
+          },
+          {
+            "x": 16,
+            "y": 97,
+            "offset": 634610
+          },
+          {
+            "x": 17,
+            "y": 97,
+            "offset": 634674
+          },
+          {
+            "x": 18,
+            "y": 97,
+            "offset": 634738
+          },
+          {
+            "x": 19,
+            "y": 97,
+            "offset": 634802
+          },
+          {
+            "x": 20,
+            "y": 97,
+            "offset": 634866
+          },
+          {
+            "x": 21,
+            "y": 97,
+            "offset": 634930
+          },
+          {
+            "x": 22,
+            "y": 97,
+            "offset": 634994
+          },
+          {
+            "x": 23,
+            "y": 97,
+            "offset": 635058
+          },
+          {
+            "x": 24,
+            "y": 97,
+            "offset": 635122
+          },
+          {
+            "x": 25,
+            "y": 97,
+            "offset": 635186
+          },
+          {
+            "x": 26,
+            "y": 97,
+            "offset": 635250
+          },
+          {
+            "x": 27,
+            "y": 97,
+            "offset": 635314
+          },
+          {
+            "x": 28,
+            "y": 97,
+            "offset": 635378
+          },
+          {
+            "x": 29,
+            "y": 97,
+            "offset": 635442
+          },
+          {
+            "x": 30,
+            "y": 97,
+            "offset": 635506
+          },
+          {
+            "x": 31,
+            "y": 97,
+            "offset": 635570
+          },
+          {
+            "x": 32,
+            "y": 97,
+            "offset": 635634
+          },
+          {
+            "x": 33,
+            "y": 97,
+            "offset": 635698
+          },
+          {
+            "x": 34,
+            "y": 97,
+            "offset": 635762
+          },
+          {
+            "x": 35,
+            "y": 97,
+            "offset": 635826
+          },
+          {
+            "x": 36,
+            "y": 97,
+            "offset": 635890
+          },
+          {
+            "x": 37,
+            "y": 97,
+            "offset": 635954
+          },
+          {
+            "x": 38,
+            "y": 97,
+            "offset": 636018
+          },
+          {
+            "x": 39,
+            "y": 97,
+            "offset": 636082
+          },
+          {
+            "x": 40,
+            "y": 97,
+            "offset": 636146
+          },
+          {
+            "x": 41,
+            "y": 97,
+            "offset": 636210
+          },
+          {
+            "x": 42,
+            "y": 97,
+            "offset": 636274
+          },
+          {
+            "x": 43,
+            "y": 97,
+            "offset": 636338
+          },
+          {
+            "x": 44,
+            "y": 97,
+            "offset": 636402
+          },
+          {
+            "x": 45,
+            "y": 97,
+            "offset": 636466
+          },
+          {
+            "x": 46,
+            "y": 97,
+            "offset": 636530
+          },
+          {
+            "x": 47,
+            "y": 97,
+            "offset": 636594
+          },
+          {
+            "x": 48,
+            "y": 97,
+            "offset": 636658
+          },
+          {
+            "x": 49,
+            "y": 97,
+            "offset": 636722
+          },
+          {
+            "x": 50,
+            "y": 97,
+            "offset": 636786
+          },
+          {
+            "x": 51,
+            "y": 97,
+            "offset": 636850
+          },
+          {
+            "x": 52,
+            "y": 97,
+            "offset": 636914
+          },
+          {
+            "x": 53,
+            "y": 97,
+            "offset": 636978
+          },
+          {
+            "x": 54,
+            "y": 97,
+            "offset": 637042
+          },
+          {
+            "x": 55,
+            "y": 97,
+            "offset": 637106
+          },
+          {
+            "x": 56,
+            "y": 97,
+            "offset": 637170
+          },
+          {
+            "x": 57,
+            "y": 97,
+            "offset": 637234
+          },
+          {
+            "x": 58,
+            "y": 97,
+            "offset": 637298
+          },
+          {
+            "x": 59,
+            "y": 97,
+            "offset": 637362
+          },
+          {
+            "x": 60,
+            "y": 97,
+            "offset": 637426
+          },
+          {
+            "x": 61,
+            "y": 97,
+            "offset": 637490
+          },
+          {
+            "x": 62,
+            "y": 97,
+            "offset": 637554
+          },
+          {
+            "x": 63,
+            "y": 97,
+            "offset": 637618
+          },
+          {
+            "x": 64,
+            "y": 97,
+            "offset": 637682
+          },
+          {
+            "x": 65,
+            "y": 97,
+            "offset": 637746
+          },
+          {
+            "x": 66,
+            "y": 97,
+            "offset": 637810
+          },
+          {
+            "x": 67,
+            "y": 97,
+            "offset": 637874
+          },
+          {
+            "x": 68,
+            "y": 97,
+            "offset": 637938
+          },
+          {
+            "x": 69,
+            "y": 97,
+            "offset": 638002
+          },
+          {
+            "x": 70,
+            "y": 97,
+            "offset": 638066
+          },
+          {
+            "x": 71,
+            "y": 97,
+            "offset": 638130
+          },
+          {
+            "x": 72,
+            "y": 97,
+            "offset": 638194
+          },
+          {
+            "x": 73,
+            "y": 97,
+            "offset": 638258
+          }
+        ],
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "descriptor_id": 1,
+          "bytes": 66,
+          "offset": 661042
+        },
+        "evidence": [
+          "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a"
+        ],
+        "field_expansion": "Native 0x42-byte descriptor fields"
+      },
+      {
+        "id": 2,
+        "state_raw": 0,
+        "filename_raw": "m17029.dat",
+        "field_26_raw": 1,
+        "field_2a_raw": 3,
+        "field_2e_raw": 0,
+        "record_bytes": 66,
+        "raw_hex": "00000000000000000000000000000000006d31373032392e646174000000000000000000000001000000030000000000000000000000000000000000000000000000",
+        "cells": [
+          {
+            "x": 23,
+            "y": 77,
+            "offset": 504498
+          },
+          {
+            "x": 24,
+            "y": 77,
+            "offset": 504562
+          },
+          {
+            "x": 25,
+            "y": 77,
+            "offset": 504626
+          },
+          {
+            "x": 23,
+            "y": 78,
+            "offset": 511026
+          }
+        ],
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "descriptor_id": 2,
+          "bytes": 66,
+          "offset": 661108
+        },
+        "evidence": [
+          "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a"
+        ],
+        "field_expansion": "Native 0x42-byte descriptor fields"
+      },
+      {
+        "id": 3,
+        "state_raw": 0,
+        "filename_raw": "m17027.dat",
+        "field_26_raw": 1,
+        "field_2a_raw": 4,
+        "field_2e_raw": 0,
+        "record_bytes": 66,
+        "raw_hex": "00000000000000000000000000000000006d31373032372e646174000000000000000000000001000000040000000000000000000000000000000000000000000000",
+        "cells": [
+          {
+            "x": 76,
+            "y": 82,
+            "offset": 540530
+          },
+          {
+            "x": 77,
+            "y": 82,
+            "offset": 540594
+          },
+          {
+            "x": 78,
+            "y": 82,
+            "offset": 540658
+          },
+          {
+            "x": 76,
+            "y": 83,
+            "offset": 547058
+          },
+          {
+            "x": 77,
+            "y": 83,
+            "offset": 547122
+          },
+          {
+            "x": 78,
+            "y": 83,
+            "offset": 547186
+          }
+        ],
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "descriptor_id": 3,
+          "bytes": 66,
+          "offset": 661174
+        },
+        "evidence": [
+          "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a"
+        ],
+        "field_expansion": "Native 0x42-byte descriptor fields"
+      },
+      {
+        "id": 4,
+        "state_raw": 0,
+        "filename_raw": "m17025.dat",
+        "field_26_raw": 1,
+        "field_2a_raw": 2,
+        "field_2e_raw": 0,
+        "record_bytes": 66,
+        "raw_hex": "00000000000000000000000000000000006d31373032352e646174000000000000000000000001000000020000000000000000000000000000000000000000000000",
+        "cells": [
+          {
+            "x": 18,
+            "y": 24,
+            "offset": 158194
+          },
+          {
+            "x": 19,
+            "y": 24,
+            "offset": 158258
+          },
+          {
+            "x": 20,
+            "y": 24,
+            "offset": 158322
+          },
+          {
+            "x": 21,
+            "y": 24,
+            "offset": 158386
+          },
+          {
+            "x": 22,
+            "y": 24,
+            "offset": 158450
+          },
+          {
+            "x": 18,
+            "y": 25,
+            "offset": 164722
+          },
+          {
+            "x": 19,
+            "y": 25,
+            "offset": 164786
+          },
+          {
+            "x": 20,
+            "y": 25,
+            "offset": 164850
+          },
+          {
+            "x": 21,
+            "y": 25,
+            "offset": 164914
+          },
+          {
+            "x": 22,
+            "y": 25,
+            "offset": 164978
+          }
+        ],
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "descriptor_id": 4,
+          "bytes": 66,
+          "offset": 661240
+        },
+        "evidence": [
+          "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a"
+        ],
+        "field_expansion": "Native 0x42-byte descriptor fields"
+      },
+      {
+        "id": 5,
+        "state_raw": 0,
+        "filename_raw": "m17026.dat",
+        "field_26_raw": 1,
+        "field_2a_raw": 5,
+        "field_2e_raw": 0,
+        "record_bytes": 66,
+        "raw_hex": "00000000000000000000000000000000006d31373032362e646174000000000000000000000001000000050000000000000000000000000000000000000000000000",
+        "cells": [
+          {
+            "x": 56,
+            "y": 29,
+            "offset": 193266
+          },
+          {
+            "x": 57,
+            "y": 29,
+            "offset": 193330
+          },
+          {
+            "x": 58,
+            "y": 29,
+            "offset": 193394
+          },
+          {
+            "x": 59,
+            "y": 29,
+            "offset": 193458
+          },
+          {
+            "x": 60,
+            "y": 29,
+            "offset": 193522
+          },
+          {
+            "x": 56,
+            "y": 30,
+            "offset": 199794
+          },
+          {
+            "x": 57,
+            "y": 30,
+            "offset": 199858
+          },
+          {
+            "x": 58,
+            "y": 30,
+            "offset": 199922
+          },
+          {
+            "x": 59,
+            "y": 30,
+            "offset": 199986
+          },
+          {
+            "x": 60,
+            "y": 30,
+            "offset": 200050
+          }
+        ],
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "descriptor_id": 5,
+          "bytes": 66,
+          "offset": 661306
+        },
+        "evidence": [
+          "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a"
+        ],
+        "field_expansion": "Native 0x42-byte descriptor fields"
+      },
+      {
+        "id": 6,
+        "state_raw": 0,
+        "filename_raw": "m17028.dat",
+        "field_26_raw": 1,
+        "field_2a_raw": 4,
+        "field_2e_raw": 0,
+        "record_bytes": 66,
+        "raw_hex": "00000000000000000000000000000000006d31373032382e646174000000000000000000000001000000040000000000000000000000000000000000000000000000",
+        "cells": [
+          {
+            "x": 93,
+            "y": 38,
+            "offset": 254386
+          },
+          {
+            "x": 91,
+            "y": 39,
+            "offset": 260786
+          },
+          {
+            "x": 92,
+            "y": 39,
+            "offset": 260850
+          },
+          {
+            "x": 93,
+            "y": 39,
+            "offset": 260914
+          },
+          {
+            "x": 92,
+            "y": 40,
+            "offset": 267378
+          },
+          {
+            "x": 93,
+            "y": 40,
+            "offset": 267442
+          }
+        ],
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "descriptor_id": 6,
+          "bytes": 66,
+          "offset": 661372
+        },
+        "evidence": [
+          "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a"
+        ],
+        "field_expansion": "Native 0x42-byte descriptor fields"
+      },
+      {
+        "id": 7,
+        "state_raw": 0,
+        "filename_raw": "m17015.dat",
+        "field_26_raw": 2,
+        "field_2a_raw": 2,
+        "field_2e_raw": 0,
+        "record_bytes": 66,
+        "raw_hex": "00000000000000000000000000000000006d31373031352e646174000000000000000000000002000000020000000000000000000000000000000000000000000000",
+        "cells": [
+          {
+            "x": 97,
+            "y": 68,
+            "offset": 450482
+          },
+          {
+            "x": 98,
+            "y": 68,
+            "offset": 450546
+          },
+          {
+            "x": 97,
+            "y": 69,
+            "offset": 457010
+          },
+          {
+            "x": 98,
+            "y": 69,
+            "offset": 457074
+          }
+        ],
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "descriptor_id": 7,
+          "bytes": 66,
+          "offset": 661438
+        },
+        "evidence": [
+          "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a"
+        ],
+        "field_expansion": "Native 0x42-byte descriptor fields"
+      },
+      {
+        "id": 8,
+        "state_raw": 0,
+        "filename_raw": "m17021.dat",
+        "field_26_raw": 1,
+        "field_2a_raw": 6,
+        "field_2e_raw": 0,
+        "record_bytes": 66,
+        "raw_hex": "00000000000000000000000000000000006d31373032312e646174000000000000000000000001000000060000000000000000000000000000000000000000000000",
+        "cells": [
+          {
+            "x": 71,
+            "y": 46,
+            "offset": 305202
+          },
+          {
+            "x": 72,
+            "y": 46,
+            "offset": 305266
+          },
+          {
+            "x": 73,
+            "y": 46,
+            "offset": 305330
+          },
+          {
+            "x": 74,
+            "y": 46,
+            "offset": 305394
+          },
+          {
+            "x": 75,
+            "y": 46,
+            "offset": 305458
+          },
+          {
+            "x": 76,
+            "y": 46,
+            "offset": 305522
+          },
+          {
+            "x": 77,
+            "y": 46,
+            "offset": 305586
+          },
+          {
+            "x": 78,
+            "y": 46,
+            "offset": 305650
+          },
+          {
+            "x": 71,
+            "y": 47,
+            "offset": 311730
+          },
+          {
+            "x": 72,
+            "y": 47,
+            "offset": 311794
+          },
+          {
+            "x": 73,
+            "y": 47,
+            "offset": 311858
+          },
+          {
+            "x": 74,
+            "y": 47,
+            "offset": 311922
+          },
+          {
+            "x": 75,
+            "y": 47,
+            "offset": 311986
+          },
+          {
+            "x": 76,
+            "y": 47,
+            "offset": 312050
+          },
+          {
+            "x": 77,
+            "y": 47,
+            "offset": 312114
+          },
+          {
+            "x": 78,
+            "y": 47,
+            "offset": 312178
+          }
+        ],
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "descriptor_id": 8,
+          "bytes": 66,
+          "offset": 661504
+        },
+        "evidence": [
+          "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a"
+        ],
+        "field_expansion": "Native 0x42-byte descriptor fields"
+      },
+      {
+        "id": 31,
+        "state_raw": 1,
+        "filename_raw": "m17010-3.anm",
+        "field_26_raw": 0,
+        "field_2a_raw": 0,
+        "field_2e_raw": 1,
+        "record_bytes": 66,
+        "raw_hex": "01000000000000000000000000000000006d31373031302d332e616e6d00000000000000000000000000000000000100000000000000000000000000000000000000",
+        "cells": [],
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "descriptor_id": 31,
+          "bytes": 66,
+          "offset": 663022
+        },
+        "evidence": [
+          "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a"
+        ],
+        "field_expansion": "Native 0x42-byte descriptor fields"
+      }
+    ],
+    "objects": [
+      {
+        "index": 0,
+        "slot_one_based": 1,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d31373032305c3030312e44475001000000000000007001000018010000010000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 368,
+        "y_native": 280,
+        "resource_id_raw": 1,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "bytes": 274,
+          "offset": 672722
+        }
+      },
+      {
+        "index": 1,
+        "slot_one_based": 2,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d31373032305c3030332e44475003000000000000000003000070010000010000000100000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 768,
+        "y_native": 368,
+        "resource_id_raw": 3,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "bytes": 274,
+          "offset": 672996
+        }
+      },
+      {
+        "index": 2,
+        "slot_one_based": 3,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d31373032305c3030342e44475004000000000000007002000008030000010000000100000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 624,
+        "y_native": 776,
+        "resource_id_raw": 4,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "bytes": 274,
+          "offset": 673270
+        }
+      },
+      {
+        "index": 3,
+        "slot_one_based": 4,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d31373032305c3030352e444750050000000000000070020000b8010000010000000100000000000000000000000000000000000300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 624,
+        "y_native": 440,
+        "resource_id_raw": 5,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "bytes": 274,
+          "offset": 673544
+        }
+      },
+      {
+        "index": 4,
+        "slot_one_based": 5,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d31373032305c3030362e4447500600000000000000e002000081020000010000000100000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 736,
+        "y_native": 641,
+        "resource_id_raw": 6,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "bytes": 274,
+          "offset": 673818
+        }
+      },
+      {
+        "index": 5,
+        "slot_one_based": 6,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d31373032305c3030372e4447500700000000000000b000000008020000010000000100000000000000000000000000000000000500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 176,
+        "y_native": 520,
+        "resource_id_raw": 7,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "bytes": 274,
+          "offset": 674092
+        }
+      },
+      {
+        "index": 6,
+        "slot_one_based": 7,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d31373032305c3030382e4447500800000000000000b0010000f8010000010000000100000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 432,
+        "y_native": 504,
+        "resource_id_raw": 8,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "bytes": 274,
+          "offset": 674366
+        }
+      },
+      {
+        "index": 7,
+        "slot_one_based": 8,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d31373032305c3030392e444750090000000000000070000000d8020000010000000100000000000000000000000000000000000700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 112,
+        "y_native": 728,
+        "resource_id_raw": 9,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "bytes": 274,
+          "offset": 674640
+        }
+      },
+      {
+        "index": 8,
+        "slot_one_based": 9,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d31373032305c3031302e4447500a00000000000000d000000088010000010000000100000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 208,
+        "y_native": 392,
+        "resource_id_raw": 10,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "bytes": 274,
+          "offset": 674914
+        }
+      },
+      {
+        "index": 9,
+        "slot_one_based": 10,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d31373032305c3031312e4447500b00000000000000b000000098020000010000000100000000000000000000000000000000000900000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 176,
+        "y_native": 664,
+        "resource_id_raw": 11,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "bytes": 274,
+          "offset": 675188
+        }
+      },
+      {
+        "index": 10,
+        "slot_one_based": 11,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d31373032305c3031322e4447500c000000000000006002000090020000010000000100000000000000000000000000000000000a00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 608,
+        "y_native": 656,
+        "resource_id_raw": 12,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "bytes": 274,
+          "offset": 675462
+        }
+      },
+      {
+        "index": 11,
+        "slot_one_based": 12,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d31373032305c3030322e44475002000000000000007000000048020000010000000100000000000000000000000000000000000b00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 112,
+        "y_native": 584,
+        "resource_id_raw": 2,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "bytes": 274,
+          "offset": 675736
+        }
+      },
+      {
+        "index": 12,
+        "slot_one_based": 13,
+        "raw_hex": "433a5c534556454e5c2e5c4d41504d5c4d31373032305c3031332e4447500d00000000000000ec00000023010000010000000100000000000000000000000000000000000c00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000453032372e776176000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ffffffff010000000201000100000000000000000000000000000000000000000000000000000000000000000000000000000000260000000000000000000000000000000000000000000000",
+        "x_native": 236,
+        "y_native": 291,
+        "resource_id_raw": 13,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "bytes": 274,
+          "offset": 676010
+        }
+      },
+      {
+        "index": 13,
+        "slot_one_based": 14,
+        "raw_hex": "433a5c534556454e5c2e5c4d41504d5c4d31373032305c3031332e4447500d00000000000000c800000048010000010000000100000000000000000000000000000000000d00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000453032372e776176000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ffffffff020000000201000100000000000000000000000000000000000000000000000000000000000000000000000000000000260000000000000000000000000000000000000000000000",
+        "x_native": 200,
+        "y_native": 328,
+        "resource_id_raw": 13,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "bytes": 274,
+          "offset": 676284
+        }
+      },
+      {
+        "index": 14,
+        "slot_one_based": 15,
+        "raw_hex": "433a5c534556454e5c2e5c4d41504d5c4d31373032305c3031332e4447500d00000000000000c000000078010000010000000100000000000000000000000000000000000e00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000453032372e776176000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ffffffff030000000201000100000000000000000000000000000000000000000000000000000000000000000000000000000000260000000001000000000000000000000000000000000000",
+        "x_native": 192,
+        "y_native": 376,
+        "resource_id_raw": 13,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "bytes": 274,
+          "offset": 676558
+        }
+      },
+      {
+        "index": 15,
+        "slot_one_based": 16,
+        "raw_hex": "433a5c534556454e5c2e5c4d41504d5c4d31373032305c3031332e4447500d000000000000001801000020010000010000000100000000000000000000000000000000000f00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000453032372e776176000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ffffffff040000000201000100000000000000000000000000000000000000000000000000000000000000000000000000000000260000000000000000000000000000000000000000000000",
+        "x_native": 280,
+        "y_native": 288,
+        "resource_id_raw": 13,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "bytes": 274,
+          "offset": 676832
+        }
+      },
+      {
+        "index": 16,
+        "slot_one_based": 17,
+        "raw_hex": "433a5c534556454e5c2e5c4d41504d5c4d31373032305c3031332e4447500d000000000000004a01000027010000010000000100000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000453032372e776176000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ffffffff050000000201000100000000000000000000000000000000000000000000000000000000000000000000000000000000260000000000000000000000000000000000000000000000",
+        "x_native": 330,
+        "y_native": 295,
+        "resource_id_raw": 13,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "bytes": 274,
+          "offset": 677106
+        }
+      },
+      {
+        "index": 17,
+        "slot_one_based": 18,
+        "raw_hex": "433a5c534556454e5c2e5c4d41504d5c4d31373032305c3031332e4447500d000000000000001e010000e4010000010000000100000000000000000000000000000000001100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000453032372e776176000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ffffffff060000000201000100000000000000000000000000000000000000000000000000000000000000000000000000000000260000000000000000000000000000000000000000000000",
+        "x_native": 286,
+        "y_native": 484,
+        "resource_id_raw": 13,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "bytes": 274,
+          "offset": 677380
+        }
+      },
+      {
+        "index": 18,
+        "slot_one_based": 19,
+        "raw_hex": "433a5c534556454e5c2e5c4d41504d5c4d31373032305c3031332e4447500d0000000000000048010000d0010000010000000100000000000000000000000000000000001200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000453032372e776176000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ffffffff070000000201000100000000000000000000000000000000000000000000000000000000000000000000000000000000260000000000000000000000000000000000000000000000",
+        "x_native": 328,
+        "y_native": 464,
+        "resource_id_raw": 13,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "bytes": 274,
+          "offset": 677654
+        }
+      },
+      {
+        "index": 19,
+        "slot_one_based": 20,
+        "raw_hex": "433a5c534556454e5c2e5c4d41504d5c4d31373032305c3031332e4447500d00000000000000d8000000d8010000010000000100000000000000000000000000000000001300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000453032372e776176000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ffffffff080000000201000100000000000000000000000000000000000000000000000000000000000000000000000000000000260000000000000000000000000000000000000000000000",
+        "x_native": 216,
+        "y_native": 472,
+        "resource_id_raw": 13,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "bytes": 274,
+          "offset": 677928
+        }
+      },
+      {
+        "index": 20,
+        "slot_one_based": 21,
+        "raw_hex": "433a5c534556454e5c2e5c4d41504d5c4d31373032305c3031332e4447500d00000000000000b8000000b0010000010000000100000000000000000000000000000000001400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000453032372e776176000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ffffffff090000000201000100000000000000000000000000000000000000000000000000000000000000000000000000000000260000000000000000000000000000000000000000000000",
+        "x_native": 184,
+        "y_native": 432,
+        "resource_id_raw": 13,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "bytes": 274,
+          "offset": 678202
+        }
+      }
+    ],
+    "npc_records": [
+      {
+        "slot_zero_based": 10,
+        "offset": 678476,
+        "resource_id": 30,
+        "name_cp950": "火妖精",
+        "x_native": 288,
+        "y_native": 584,
+        "direction": 5,
+        "raw_hex": "3033300000000000000000000000000000000000a4f5a7afbaeb00000000000000000000000000001e00000000000000200100004802000000000000000000000015000000050001020101ffffffffffffffffffffffffffffff000000000000000000000000000000000000000000200100004802000000000000000000000500000000000000000000003200000000000000000000000000000000000000000000000000000000000000006b000000520000000000000000000000000000000000000000000000000000000000000000000000000016000000000000000000000000000000000000000000000000000000000200000f0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000050000000a00000002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000"
+      },
+      {
+        "slot_zero_based": 11,
+        "offset": 679697,
+        "resource_id": 30,
+        "name_cp950": "火妖精",
+        "x_native": 552,
+        "y_native": 600,
+        "direction": 5,
+        "raw_hex": "3033300000000000000000000000000000000000a4f5a7afbaeb00000000000000000000000000001e00000000000000280200005802000000000000000000000016000000050001020101ffffffffffffffffffffffffffffff000000000000000000000000000000000000000000280200005802000000000000000000000500000000000000000000003200000000000000000000000000000000000000000000000000000000000000006b000000520000000000000000000000000000000000000000000000000000000000000000000000000016000000000000000000000000000000000000000000000000000000000200000f0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000050000000a00000002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000"
+      },
+      {
+        "slot_zero_based": 12,
+        "offset": 680918,
+        "resource_id": 30,
+        "name_cp950": "火妖精",
+        "x_native": 744,
+        "y_native": 432,
+        "direction": 6,
+        "raw_hex": "3033300000000000000000000000000000000000a4f5a7afbaeb00000000000000000000000000001e00000000000000e8020000b001000000000000000000000017000000060001020101ffffffffffffffffffffffffffffff000000000000000000000000000000000000000000e8020000b001000000000000000000000600000000000000000000003c00000001000000000000000000000000000000000000000000000000000000006b000000520000000000000000000000000000000000000000000000000000000000000000000000000016000000000000000000000000000000000000000000000000000000000200000f0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000050000000a00000002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000"
+      },
+      {
+        "slot_zero_based": 13,
+        "offset": 682139,
+        "resource_id": 30,
+        "name_cp950": "火妖精",
+        "x_native": 480,
+        "y_native": 480,
+        "direction": 7,
+        "raw_hex": "3033300000000000000000000000000000000000a4f5a7afbaeb00000000000000000000000000001e00000000000000e0010000e001000000000000000000000018000000070001020101ffffffffffffffffffffffffffffff000000000000000000000000000000000000000000e0010000e001000000000000000000000700000000000000000000004600000000000000000000000000000000000000000000000000000000000000006b000000520000000000000000000000000000000000000000000000000000000000000000000000000016000000000000000000000000000000000000000000000000000000000200000f0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000050000000a00000002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000"
+      },
+      {
+        "slot_zero_based": 14,
+        "offset": 683360,
+        "resource_id": 30,
+        "name_cp950": "火妖精",
+        "x_native": 88,
+        "y_native": 488,
+        "direction": 4,
+        "raw_hex": "3033300000000000000000000000000000000000a4f5a7afbaeb00000000000000000000000000001e0000000000000058000000e801000000000000000000000019000000040001020101ffffffffffffffffffffffffffffff00000000000000000000000000000000000000000058000000e80100000000000000000000040000000000000000000000280000000000000000000000000000000000000000000000000000000000000000680000004f0000000000000000000000000000000000000000000000000000000000000000000000000016000000000000000000000000000000000000000000000000000000000200000f0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000050000000a000000020000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000feffffff000000000000000000000000"
+      },
+      {
+        "slot_zero_based": 15,
+        "offset": 684581,
+        "resource_id": 30,
+        "name_cp950": "火妖精",
+        "x_native": 208,
+        "y_native": 240,
+        "direction": 7,
+        "raw_hex": "3033300000000000000000000000000000000000a4f5a7afbaeb00000000000000000000000000001e00000000000000d0000000f00000000000000000000000001a000000070001020101ffffffffffffffffffffffffffffff000000000000000000000000000000000000000000d0000000f00000000000000000000000070000000000000000000000460000000000000000000000000000000000000000000000000000000000000000640000004c0000000000000000000000000000000000000000000000000000000000000000000000000016000000000000000000000000000000000000000000000000000000000200000f0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000050000000a000000020000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000faffffff000000000000000000000000"
+      },
+      {
+        "slot_zero_based": 16,
+        "offset": 685802,
+        "resource_id": 30,
+        "name_cp950": "火妖精",
+        "x_native": 496,
+        "y_native": 264,
+        "direction": 3,
+        "raw_hex": "3033300000000000000000000000000000000000a4f5a7afbaeb00000000000000000000000000001e00000000000000f0010000080100000000000000000000001b000000030001020101ffffffffffffffffffffffffffffff000000000000000000000000000000000000000000f00100000801000000000000000000000300000000000000000000001e0000000000000000000000000000000000000000000000000000000000000000640000004c0000000000000000000000000000000000000000000000000000000000000000000000000016000000000000000000000000000000000000000000000000000000000200000f0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000050000000a000000020000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000faffffff000000000000000000000000"
+      },
+      {
+        "slot_zero_based": 17,
+        "offset": 687023,
+        "resource_id": 30,
+        "name_cp950": "火妖精",
+        "x_native": 152,
+        "y_native": 752,
+        "direction": 5,
+        "raw_hex": "3033300000000000000000000000000000000000a4f5a7afbaeb00000000000000000000000000001e0000000000000098000000f00200000000000000000000001c000000050001020101ffffffffffffffffffffffffffffff00000000000000000000000000000000000000000098000000f002000000000000000000000500000000000000000000003200000000000000000000000000000000000000000000000000000000000000006b000000520000000000000000000000000000000000000000000000000000000000000000000000000016000000000000000000000000000000000000000000000000000000000200000f0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000050000000a00000002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000"
+      },
+      {
+        "slot_zero_based": 18,
+        "offset": 688244,
+        "resource_id": 30,
+        "name_cp950": "火妖精",
+        "x_native": 560,
+        "y_native": 744,
+        "direction": 0,
+        "raw_hex": "3033300000000000000000000000000000000000a4f5a7afbaeb00000000000000000000000000001e0000000000000030020000e80200000000000000000000001d000000000001020101ffffffffffffffffffffffffffffff00000000000000000000000000000000000000000030020000e802000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006b000000520000000000000000000000000000000000000000000000000000000000000000000000000016000000000000000000000000000000000000000000000000000000000200000f0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000050000000a00000002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000"
+      },
+      {
+        "slot_zero_based": 19,
+        "offset": 689465,
+        "resource_id": 30,
+        "name_cp950": "火妖精",
+        "x_native": 352,
+        "y_native": 552,
+        "direction": 6,
+        "raw_hex": "3033300000000000000000000000000000000000a4f5a7afbaeb00000000000000000000000000001e0000000000000060010000280200000000000000000000001e000000060001020101ffffffffffffffffffffffffffffff000000000000000000000000000000000000000000600100002802000000000000000000000600000000000000000000003c00000000000000000000000000000000000000000000000000000000000000006b000000520000000000000000000000000000000000000000000000000000000000000000000000000016000000000000000000000000000000000000000000000000000000000200000f0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000050000000a00000002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000"
+      },
+      {
+        "slot_zero_based": 20,
+        "offset": 690686,
+        "resource_id": 31,
+        "name_cp950": "火戰士",
+        "x_native": 560,
+        "y_native": 392,
+        "direction": 0,
+        "raw_hex": "3033310000000000000000000000000000000000a4f5bed4a46800000000000000000000000000001f0000000000000030020000880100000000000000000000001f000000000001020101ffffffffffffffffffffffffffffff000000000000000000000000000000000000000000300200008801000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000007a0000008e000000000000000000000000000000000000000000000000000000000000000000000000001600000000000000000000000000000000000000000000000000000000020001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000050000000a00000002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000"
+      },
+      {
+        "slot_zero_based": 21,
+        "offset": 691907,
+        "resource_id": 31,
+        "name_cp950": "火戰士",
+        "x_native": 608,
+        "y_native": 392,
+        "direction": 6,
+        "raw_hex": "3033310000000000000000000000000000000000a4f5bed4a46800000000000000000000000000001f00000000000000600200008801000000000000000000000020000000060001020101ffffffffffffffffffffffffffffff000000000000000000000000000000000000000000600200008801000000000000000000000600000000000000000000003c00000001000000000000000000000000000000000000000000000000000000007a0000008e000000000000000000000000000000000000000000000000000000000000000000000000001600000000000000000000000000000000000000000000000000000000020001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000050000000a00000002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000"
+      },
+      {
+        "slot_zero_based": 22,
+        "offset": 693128,
+        "resource_id": 30,
+        "name_cp950": "火妖精",
+        "x_native": 288,
+        "y_native": 656,
+        "direction": 0,
+        "raw_hex": "3033300000000000000000000000000000000000a4f5a7afbaeb00000000000000000000000000001e00000000000000200100009002000000000000000000000021000000000001020101ffffffffffffffffffffffffffffff000000000000000000000000000000000000000000200100009002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006b000000520000000000000000000000000000000000000000000000000000000000000000000000000016000000000000000000000000000000000000000000000000000000000200000f0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000050000000a00000002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000"
+      },
+      {
+        "slot_zero_based": 23,
+        "offset": 694349,
+        "resource_id": 30,
+        "name_cp950": "火妖精",
+        "x_native": 176,
+        "y_native": 312,
+        "direction": 4,
+        "raw_hex": "3033300000000000000000000000000000000000a4f5a7afbaeb00000000000000000000000000001e00000000000000b00000003801000000000000000000000022000000040001020101ffffffffffffffffffffffffffffff000000000000000000000000000000000000000000b0000000380100000000000000000000040000000000000000000000280000000000000000000000000000000000000000000000000000000000000000660000004e0000000000000000000000000000000000000000000000000000000000000000000000000016000000000000000000000000000000000000000000000000000000000200000f0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000050000000a000000020000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000fcffffff000000000000000000000000"
+      },
+      {
+        "slot_zero_based": 24,
+        "offset": 695570,
+        "resource_id": 30,
+        "name_cp950": "火妖精",
+        "x_native": 680,
+        "y_native": 528,
+        "direction": 3,
+        "raw_hex": "3033300000000000000000000000000000000000a4f5a7afbaeb00000000000000000000000000001e00000000000000a80200001002000000000000000000000023000000030001020101ffffffffffffffffffffffffffffff000000000000000000000000000000000000000000a80200001002000000000000000000000300000000000000000000001e00000000000000000000000000000000000000000000000000000000000000006b000000520000000000000000000000000000000000000000000000000000000000000000000000000016000000000000000000000000000000000000000000000000000000000200000f0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000050000000a00000002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000"
+      },
+      {
+        "slot_zero_based": 25,
+        "offset": 696791,
+        "resource_id": 33,
+        "name_cp950": "女火長老",
+        "x_native": 432,
+        "y_native": 488,
+        "direction": 2,
+        "raw_hex": "3033330000000000000000000000000000000000a46ba4f5aaf8a6d10000000000000000000000002100000000000000b0010000e801000000000000000000000024000000020001020101ffffffffffffffffffffffffffffff000000000000000000000000000000000000000000b0010000e80100000000000000000000020000000000000000000000140000000100000000000000000000000000000000000000000000000000000000820000009a000000000000000000000000000000000000000000000000000000000000000000000000001600000000000000000000000000000000000000000000000000000000020001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000050000000a00000002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000"
+      },
+      {
+        "slot_zero_based": 26,
+        "offset": 698012,
+        "resource_id": 34,
+        "name_cp950": "女火長老",
+        "x_native": 448,
+        "y_native": 480,
+        "direction": 6,
+        "raw_hex": "3033340000000000000000000000000000000000a46ba4f5aaf8a6d10000000000000000000000002200000000000000c0010000e001000000000000000000000025000000060001020101ffffffffffffffffffffffffffffff000000000000000000000000000000000000000000c0010000e001000000000000000000000600000000000000000000003c0000000100000000000000000000000000000000000000000000000000000000730000008a000000000000000000000000000000000000000000000000000000000000000000000000001600000000000000000000000000000000000000000000000000000000020001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000050000000a00000002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000"
+      },
+      {
+        "slot_zero_based": 27,
+        "offset": 699233,
+        "resource_id": 31,
+        "name_cp950": "火戰士",
+        "x_native": 232,
+        "y_native": 624,
+        "direction": 0,
+        "raw_hex": "3033310000000000000000000000000000000000a4f5bed4a46800000000000000000000000000001f00000000000000e80000007002000000000000000000000026000000000001020101ffffffffffffffffffffffffffffff000000000000000000000000000000000000000000e80000007002000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000007a0000008e000000000000000000000000000000000000000000000000000000000000000000000000001600000000000000000000000000000000000000000000000000000000020001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000050000000a00000002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000"
+      },
+      {
+        "slot_zero_based": 28,
+        "offset": 700454,
+        "resource_id": 31,
+        "name_cp950": "火戰士",
+        "x_native": 208,
+        "y_native": 664,
+        "direction": 0,
+        "raw_hex": "3033310000000000000000000000000000000000a4f5bed4a46800000000000000000000000000001f00000000000000d00000009802000000000000000000000027000000000001020101ffffffffffffffffffffffffffffff000000000000000000000000000000000000000000d00000009802000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000007a0000008e000000000000000000000000000000000000000000000000000000000000000000000000001600000000000000000000000000000000000000000000000000000000020001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000050000000a00000002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000"
+      },
+      {
+        "slot_zero_based": 29,
+        "offset": 701675,
+        "resource_id": 32,
+        "name_cp950": "火智者",
+        "x_native": 656,
+        "y_native": 552,
+        "direction": 6,
+        "raw_hex": "3033320000000000000000000000000000000000a4f5b4bcaacc00000000000000000000000000002000000000000000900200002802000000000000000000000028000000060001020101ffffffffffffffffffffffffffffff000000000000000000000000000000000000000000900200002802000000000000000000000600000000000000000000003c0000000100000000000000000000000000000000000000000000000000000000740000008b000000000000000000000000000000000000000000000000000000000000000000000000001600000000000000000000000000000000000000000000000000000000020001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000050000000a00000002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000"
+      },
+      {
+        "slot_zero_based": 30,
+        "offset": 702896,
+        "resource_id": 31,
+        "name_cp950": "火戰士",
+        "x_native": 424,
+        "y_native": 256,
+        "direction": 6,
+        "raw_hex": "3033310000000000000000000000000000000000a4f5bed4a46800000000000000000000000000001f00000000000000a80100000001000000000000000000000029000000060001020101ffffffffffffffffffffffffffffff000000000000000000000000000000000000000000a80100000001000000000000000000000600000000000000000000003c00000001000000000000000000000000000000000000000000000000000000007200000084000000000000000000000000000000000000000000000000000000000000000000000000001600000000000000000000000000000000000000000000000000000000020001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000050000000a000000020000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000faffffff000000000000000000000000"
+      }
+    ],
+    "entry_markers": {
+      "1": [
+        {
+          "x": 46,
+          "y": 93,
+          "offset": 610418
+        }
+      ],
+      "2": [
+        {
+          "x": 28,
+          "y": 81,
+          "offset": 530930
+        }
+      ],
+      "3": [
+        {
+          "x": 18,
+          "y": 28,
+          "offset": 184306
+        }
+      ],
+      "4": [
+        {
+          "x": 57,
+          "y": 33,
+          "offset": 219442
+        }
+      ],
+      "5": [
+        {
+          "x": 89,
+          "y": 43,
+          "offset": 286770
+        }
+      ],
+      "6": [
+        {
+          "x": 93,
+          "y": 72,
+          "offset": 476338
+        }
+      ],
+      "7": [
+        {
+          "x": 72,
+          "y": 86,
+          "offset": 566386
+        },
+        {
+          "x": 73,
+          "y": 86,
+          "offset": 566450
+        }
+      ],
+      "8": [
+        {
+          "x": 72,
+          "y": 51,
+          "offset": 337906
+        }
+      ]
+    },
+    "default_object_index_slot": 499,
+    "default_object_record": 10,
+    "header_entry_tlk_raw": 0,
+    "header_entry_tlk_source": {
+      "path": "Map/m17020.dat",
+      "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+      "bytes": 4,
+      "offset": 286
+    },
+    "evidence": [
+      "ev_e14d28c11ec31e5eebdf4c08a994a900102658650d8e5364d58b848cbd114ea7",
+      "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a"
+    ],
+    "limitations": [
+      "Index slot499 is retained as the object default TLK entry; it must not be used as an automatic map-load event. Header +0x11E controls map-entry TLK.",
+      "TLK record kind/mutation numbers are raw native values; dialogue text alone does not define their behavior."
+    ],
+    "flow_id": "M17020:tlk"
+  },
+  "programs": {},
+  "flows": {
+    "M17020:tlk": {
+      "schema": "seventh-seal-story-flow",
+      "version": 1,
+      "id": "M17020:tlk",
+      "map_id": "M17020",
+      "entry": "M17020:tlk:1",
+      "entries": {
+        "1": "M17020:tlk:1",
+        "2": "M17020:tlk:2",
+        "3": "M17020:tlk:3",
+        "4": "M17020:tlk:4",
+        "5": "M17020:tlk:5",
+        "6": "M17020:tlk:6",
+        "7": "M17020:tlk:7",
+        "8": "M17020:tlk:8",
+        "9": "M17020:tlk:9",
+        "10": "M17020:tlk:10",
+        "11": "M17020:tlk:11"
+      },
+      "commands": [
+        {
+          "id": "M17020:tlk:1",
+          "op": "record",
+          "record_id": 1,
+          "source": {
+            "path": "Map/m17020.TLK",
+            "sha256": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
+            "record_id": 1,
+            "record_bytes": 1647,
+            "offset": 2026
+          }
+        },
+        {
+          "id": "M17020:tlk:1:1",
+          "op": "say",
+          "record_id": 1,
+          "source": {
+            "path": "Map/m17020.TLK",
+            "sha256": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
+            "record_id": 1,
+            "record_bytes": 1647,
+            "offset": 2026
+          },
+          "text_id": "M17020:TLK:1",
+          "presentation": {
+            "speaker": 1,
+            "style": 1,
+            "portrait_id": 32,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M17020:tlk:1:2",
+          "op": "jump",
+          "record_id": 1,
+          "source": {
+            "path": "Map/m17020.TLK",
+            "sha256": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
+            "record_id": 1,
+            "record_bytes": 1647,
+            "offset": 2026
+          },
+          "target": "M17020:tlk:2"
+        },
+        {
+          "id": "M17020:tlk:2",
+          "op": "record",
+          "record_id": 2,
+          "source": {
+            "path": "Map/m17020.TLK",
+            "sha256": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
+            "record_id": 2,
+            "record_bytes": 1647,
+            "offset": 3673
+          }
+        },
+        {
+          "id": "M17020:tlk:2:1",
+          "op": "say",
+          "record_id": 2,
+          "source": {
+            "path": "Map/m17020.TLK",
+            "sha256": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
+            "record_id": 2,
+            "record_bytes": 1647,
+            "offset": 3673
+          },
+          "text_id": "M17020:TLK:2",
+          "presentation": {
+            "speaker": 1,
+            "style": 1,
+            "portrait_id": 29,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M17020:tlk:2:2",
+          "op": "jump",
+          "record_id": 2,
+          "source": {
+            "path": "Map/m17020.TLK",
+            "sha256": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
+            "record_id": 2,
+            "record_bytes": 1647,
+            "offset": 3673
+          },
+          "target": "M17020:tlk:end"
+        },
+        {
+          "id": "M17020:tlk:3",
+          "op": "record",
+          "record_id": 3,
+          "source": {
+            "path": "Map/m17020.TLK",
+            "sha256": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
+            "record_id": 3,
+            "record_bytes": 1647,
+            "offset": 5320
+          }
+        },
+        {
+          "id": "M17020:tlk:3:1",
+          "op": "say",
+          "record_id": 3,
+          "source": {
+            "path": "Map/m17020.TLK",
+            "sha256": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
+            "record_id": 3,
+            "record_bytes": 1647,
+            "offset": 5320
+          },
+          "text_id": "M17020:TLK:3",
+          "presentation": {
+            "speaker": 21,
+            "style": 2,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M17020:tlk:3:2",
+          "op": "jump",
+          "record_id": 3,
+          "source": {
+            "path": "Map/m17020.TLK",
+            "sha256": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
+            "record_id": 3,
+            "record_bytes": 1647,
+            "offset": 5320
+          },
+          "target": "M17020:tlk:end"
+        },
+        {
+          "id": "M17020:tlk:4",
+          "op": "record",
+          "record_id": 4,
+          "source": {
+            "path": "Map/m17020.TLK",
+            "sha256": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
+            "record_id": 4,
+            "record_bytes": 1647,
+            "offset": 6967
+          }
+        },
+        {
+          "id": "M17020:tlk:4:1",
+          "op": "say",
+          "record_id": 4,
+          "source": {
+            "path": "Map/m17020.TLK",
+            "sha256": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
+            "record_id": 4,
+            "record_bytes": 1647,
+            "offset": 6967
+          },
+          "text_id": "M17020:TLK:4",
+          "presentation": {
+            "speaker": 22,
+            "style": 2,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M17020:tlk:4:2",
+          "op": "jump",
+          "record_id": 4,
+          "source": {
+            "path": "Map/m17020.TLK",
+            "sha256": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
+            "record_id": 4,
+            "record_bytes": 1647,
+            "offset": 6967
+          },
+          "target": "M17020:tlk:end"
+        },
+        {
+          "id": "M17020:tlk:5",
+          "op": "record",
+          "record_id": 5,
+          "source": {
+            "path": "Map/m17020.TLK",
+            "sha256": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
+            "record_id": 5,
+            "record_bytes": 1647,
+            "offset": 8614
+          }
+        },
+        {
+          "id": "M17020:tlk:5:1",
+          "op": "say",
+          "record_id": 5,
+          "source": {
+            "path": "Map/m17020.TLK",
+            "sha256": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
+            "record_id": 5,
+            "record_bytes": 1647,
+            "offset": 8614
+          },
+          "text_id": "M17020:TLK:5",
+          "presentation": {
+            "speaker": 26,
+            "style": 2,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M17020:tlk:5:2",
+          "op": "jump",
+          "record_id": 5,
+          "source": {
+            "path": "Map/m17020.TLK",
+            "sha256": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
+            "record_id": 5,
+            "record_bytes": 1647,
+            "offset": 8614
+          },
+          "target": "M17020:tlk:end"
+        },
+        {
+          "id": "M17020:tlk:6",
+          "op": "record",
+          "record_id": 6,
+          "source": {
+            "path": "Map/m17020.TLK",
+            "sha256": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
+            "record_id": 6,
+            "record_bytes": 1647,
+            "offset": 10261
+          }
+        },
+        {
+          "id": "M17020:tlk:6:1",
+          "op": "say",
+          "record_id": 6,
+          "source": {
+            "path": "Map/m17020.TLK",
+            "sha256": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
+            "record_id": 6,
+            "record_bytes": 1647,
+            "offset": 10261
+          },
+          "text_id": "M17020:TLK:6",
+          "presentation": {
+            "speaker": 27,
+            "style": 2,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M17020:tlk:6:2",
+          "op": "jump",
+          "record_id": 6,
+          "source": {
+            "path": "Map/m17020.TLK",
+            "sha256": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
+            "record_id": 6,
+            "record_bytes": 1647,
+            "offset": 10261
+          },
+          "target": "M17020:tlk:end"
+        },
+        {
+          "id": "M17020:tlk:7",
+          "op": "record",
+          "record_id": 7,
+          "source": {
+            "path": "Map/m17020.TLK",
+            "sha256": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
+            "record_id": 7,
+            "record_bytes": 1647,
+            "offset": 11908
+          }
+        },
+        {
+          "id": "M17020:tlk:7:1",
+          "op": "say",
+          "record_id": 7,
+          "source": {
+            "path": "Map/m17020.TLK",
+            "sha256": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
+            "record_id": 7,
+            "record_bytes": 1647,
+            "offset": 11908
+          },
+          "text_id": "M17020:TLK:7",
+          "presentation": {
+            "speaker": 28,
+            "style": 2,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M17020:tlk:7:2",
+          "op": "jump",
+          "record_id": 7,
+          "source": {
+            "path": "Map/m17020.TLK",
+            "sha256": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
+            "record_id": 7,
+            "record_bytes": 1647,
+            "offset": 11908
+          },
+          "target": "M17020:tlk:end"
+        },
+        {
+          "id": "M17020:tlk:8",
+          "op": "record",
+          "record_id": 8,
+          "source": {
+            "path": "Map/m17020.TLK",
+            "sha256": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
+            "record_id": 8,
+            "record_bytes": 1647,
+            "offset": 13555
+          }
+        },
+        {
+          "id": "M17020:tlk:8:1",
+          "op": "say",
+          "record_id": 8,
+          "source": {
+            "path": "Map/m17020.TLK",
+            "sha256": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
+            "record_id": 8,
+            "record_bytes": 1647,
+            "offset": 13555
+          },
+          "text_id": "M17020:TLK:8",
+          "presentation": {
+            "speaker": 29,
+            "style": 2,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M17020:tlk:8:2",
+          "op": "jump",
+          "record_id": 8,
+          "source": {
+            "path": "Map/m17020.TLK",
+            "sha256": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
+            "record_id": 8,
+            "record_bytes": 1647,
+            "offset": 13555
+          },
+          "target": "M17020:tlk:end"
+        },
+        {
+          "id": "M17020:tlk:9",
+          "op": "record",
+          "record_id": 9,
+          "source": {
+            "path": "Map/m17020.TLK",
+            "sha256": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
+            "record_id": 9,
+            "record_bytes": 1647,
+            "offset": 15202
+          }
+        },
+        {
+          "id": "M17020:tlk:9:1",
+          "op": "say",
+          "record_id": 9,
+          "source": {
+            "path": "Map/m17020.TLK",
+            "sha256": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
+            "record_id": 9,
+            "record_bytes": 1647,
+            "offset": 15202
+          },
+          "text_id": "M17020:TLK:9",
+          "presentation": {
+            "speaker": 30,
+            "style": 2,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M17020:tlk:9:2",
+          "op": "jump",
+          "record_id": 9,
+          "source": {
+            "path": "Map/m17020.TLK",
+            "sha256": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
+            "record_id": 9,
+            "record_bytes": 1647,
+            "offset": 15202
+          },
+          "target": "M17020:tlk:end"
+        },
+        {
+          "id": "M17020:tlk:10",
+          "op": "record",
+          "record_id": 10,
+          "source": {
+            "path": "Map/m17020.TLK",
+            "sha256": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
+            "record_id": 10,
+            "record_bytes": 1647,
+            "offset": 16849
+          }
+        },
+        {
+          "id": "M17020:tlk:10:1",
+          "op": "test_flag_bit",
+          "record_id": 10,
+          "source": {
+            "path": "Map/m17020.TLK",
+            "sha256": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
+            "record_id": 10,
+            "record_bytes": 1647,
+            "offset": 16849
+          },
+          "index": 12,
+          "bit": 1,
+          "if_true": "M17020:tlk:11",
+          "if_false": "M17020:tlk:10:2"
+        },
+        {
+          "id": "M17020:tlk:10:2",
+          "op": "jump",
+          "record_id": 10,
+          "source": {
+            "path": "Map/m17020.TLK",
+            "sha256": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
+            "record_id": 10,
+            "record_bytes": 1647,
+            "offset": 16849
+          },
+          "target": "M17020:tlk:end"
+        },
+        {
+          "id": "M17020:tlk:11",
+          "op": "record",
+          "record_id": 11,
+          "source": {
+            "path": "Map/m17020.TLK",
+            "sha256": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
+            "record_id": 11,
+            "record_bytes": 1647,
+            "offset": 18496
+          }
+        },
+        {
+          "id": "M17020:tlk:11:1",
+          "op": "animation",
+          "record_id": 11,
+          "source": {
+            "path": "Map/m17020.TLK",
+            "sha256": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
+            "record_id": 11,
+            "record_bytes": 1647,
+            "offset": 18496
+          },
+          "program_id": "m17020-1"
+        },
+        {
+          "id": "M17020:tlk:11:2",
+          "op": "jump",
+          "record_id": 11,
+          "source": {
+            "path": "Map/m17020.TLK",
+            "sha256": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
+            "record_id": 11,
+            "record_bytes": 1647,
+            "offset": 18496
+          },
+          "target": "M17020:tlk:end"
+        },
+        {
+          "id": "M17020:tlk:end",
+          "op": "end"
+        }
+      ]
+    }
+  },
+  "events": [],
+  "resources": {
+    "npcs_by_map": [
+      {
+        "id": "M17020-role-10",
+        "slot_zero_based": 10,
+        "speaker_slot_one_based": 11,
+        "name": "火妖精",
+        "resource_id": "030",
+        "x": 576,
+        "y": 1168,
+        "x_native": 288,
+        "y_native": 584,
+        "direction": 5,
+        "direction_raw_45": 5,
+        "hidden": false,
+        "hidden_raw_97": 0,
+        "hidden_on_load_raw_2ac": 0,
+        "initial_visibility_evidence": [
+          "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+        ],
+        "raw_field_41": 21,
+        "action_mode_raw_2f": 0,
+        "animation_index_raw_83": 0,
+        "frame_index_raw_7b": 0,
+        "actor_mode_raw_f0": 0,
+        "behavior_raw_c5": 0,
+        "behavior_state_raw_f5": 0,
+        "movement_direction_raw_2b1": 0,
+        "blend_mode_raw_4bd": 0,
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "offset": 678476,
+          "bytes": 1221
+        }
+      },
+      {
+        "id": "M17020-role-11",
+        "slot_zero_based": 11,
+        "speaker_slot_one_based": 12,
+        "name": "火妖精",
+        "resource_id": "030",
+        "x": 1104,
+        "y": 1200,
+        "x_native": 552,
+        "y_native": 600,
+        "direction": 5,
+        "direction_raw_45": 5,
+        "hidden": false,
+        "hidden_raw_97": 0,
+        "hidden_on_load_raw_2ac": 0,
+        "initial_visibility_evidence": [
+          "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+        ],
+        "raw_field_41": 22,
+        "action_mode_raw_2f": 0,
+        "animation_index_raw_83": 0,
+        "frame_index_raw_7b": 0,
+        "actor_mode_raw_f0": 0,
+        "behavior_raw_c5": 0,
+        "behavior_state_raw_f5": 0,
+        "movement_direction_raw_2b1": 0,
+        "blend_mode_raw_4bd": 0,
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "offset": 679697,
+          "bytes": 1221
+        }
+      },
+      {
+        "id": "M17020-role-12",
+        "slot_zero_based": 12,
+        "speaker_slot_one_based": 13,
+        "name": "火妖精",
+        "resource_id": "030",
+        "x": 1488,
+        "y": 864,
+        "x_native": 744,
+        "y_native": 432,
+        "direction": 6,
+        "direction_raw_45": 6,
+        "hidden": false,
+        "hidden_raw_97": 0,
+        "hidden_on_load_raw_2ac": 0,
+        "initial_visibility_evidence": [
+          "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+        ],
+        "raw_field_41": 23,
+        "action_mode_raw_2f": 0,
+        "animation_index_raw_83": 0,
+        "frame_index_raw_7b": 0,
+        "actor_mode_raw_f0": 0,
+        "behavior_raw_c5": 0,
+        "behavior_state_raw_f5": 0,
+        "movement_direction_raw_2b1": 0,
+        "blend_mode_raw_4bd": 0,
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "offset": 680918,
+          "bytes": 1221
+        }
+      },
+      {
+        "id": "M17020-role-13",
+        "slot_zero_based": 13,
+        "speaker_slot_one_based": 14,
+        "name": "火妖精",
+        "resource_id": "030",
+        "x": 960,
+        "y": 960,
+        "x_native": 480,
+        "y_native": 480,
+        "direction": 7,
+        "direction_raw_45": 7,
+        "hidden": false,
+        "hidden_raw_97": 0,
+        "hidden_on_load_raw_2ac": 0,
+        "initial_visibility_evidence": [
+          "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+        ],
+        "raw_field_41": 24,
+        "action_mode_raw_2f": 0,
+        "animation_index_raw_83": 0,
+        "frame_index_raw_7b": 0,
+        "actor_mode_raw_f0": 0,
+        "behavior_raw_c5": 0,
+        "behavior_state_raw_f5": 0,
+        "movement_direction_raw_2b1": 0,
+        "blend_mode_raw_4bd": 0,
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "offset": 682139,
+          "bytes": 1221
+        }
+      },
+      {
+        "id": "M17020-role-14",
+        "slot_zero_based": 14,
+        "speaker_slot_one_based": 15,
+        "name": "火妖精",
+        "resource_id": "030",
+        "x": 176,
+        "y": 976,
+        "x_native": 88,
+        "y_native": 488,
+        "direction": 4,
+        "direction_raw_45": 4,
+        "hidden": false,
+        "hidden_raw_97": 0,
+        "hidden_on_load_raw_2ac": 0,
+        "initial_visibility_evidence": [
+          "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+        ],
+        "raw_field_41": 25,
+        "action_mode_raw_2f": 0,
+        "animation_index_raw_83": 0,
+        "frame_index_raw_7b": 0,
+        "actor_mode_raw_f0": 0,
+        "behavior_raw_c5": 0,
+        "behavior_state_raw_f5": 0,
+        "movement_direction_raw_2b1": 0,
+        "blend_mode_raw_4bd": 0,
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "offset": 683360,
+          "bytes": 1221
+        }
+      },
+      {
+        "id": "M17020-role-15",
+        "slot_zero_based": 15,
+        "speaker_slot_one_based": 16,
+        "name": "火妖精",
+        "resource_id": "030",
+        "x": 416,
+        "y": 480,
+        "x_native": 208,
+        "y_native": 240,
+        "direction": 7,
+        "direction_raw_45": 7,
+        "hidden": false,
+        "hidden_raw_97": 0,
+        "hidden_on_load_raw_2ac": 0,
+        "initial_visibility_evidence": [
+          "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+        ],
+        "raw_field_41": 26,
+        "action_mode_raw_2f": 0,
+        "animation_index_raw_83": 0,
+        "frame_index_raw_7b": 0,
+        "actor_mode_raw_f0": 0,
+        "behavior_raw_c5": 0,
+        "behavior_state_raw_f5": 0,
+        "movement_direction_raw_2b1": 0,
+        "blend_mode_raw_4bd": 0,
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "offset": 684581,
+          "bytes": 1221
+        }
+      },
+      {
+        "id": "M17020-role-16",
+        "slot_zero_based": 16,
+        "speaker_slot_one_based": 17,
+        "name": "火妖精",
+        "resource_id": "030",
+        "x": 992,
+        "y": 528,
+        "x_native": 496,
+        "y_native": 264,
+        "direction": 3,
+        "direction_raw_45": 3,
+        "hidden": false,
+        "hidden_raw_97": 0,
+        "hidden_on_load_raw_2ac": 0,
+        "initial_visibility_evidence": [
+          "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+        ],
+        "raw_field_41": 27,
+        "action_mode_raw_2f": 0,
+        "animation_index_raw_83": 0,
+        "frame_index_raw_7b": 0,
+        "actor_mode_raw_f0": 0,
+        "behavior_raw_c5": 0,
+        "behavior_state_raw_f5": 0,
+        "movement_direction_raw_2b1": 0,
+        "blend_mode_raw_4bd": 0,
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "offset": 685802,
+          "bytes": 1221
+        }
+      },
+      {
+        "id": "M17020-role-17",
+        "slot_zero_based": 17,
+        "speaker_slot_one_based": 18,
+        "name": "火妖精",
+        "resource_id": "030",
+        "x": 304,
+        "y": 1504,
+        "x_native": 152,
+        "y_native": 752,
+        "direction": 5,
+        "direction_raw_45": 5,
+        "hidden": false,
+        "hidden_raw_97": 0,
+        "hidden_on_load_raw_2ac": 0,
+        "initial_visibility_evidence": [
+          "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+        ],
+        "raw_field_41": 28,
+        "action_mode_raw_2f": 0,
+        "animation_index_raw_83": 0,
+        "frame_index_raw_7b": 0,
+        "actor_mode_raw_f0": 0,
+        "behavior_raw_c5": 0,
+        "behavior_state_raw_f5": 0,
+        "movement_direction_raw_2b1": 0,
+        "blend_mode_raw_4bd": 0,
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "offset": 687023,
+          "bytes": 1221
+        }
+      },
+      {
+        "id": "M17020-role-18",
+        "slot_zero_based": 18,
+        "speaker_slot_one_based": 19,
+        "name": "火妖精",
+        "resource_id": "030",
+        "x": 1120,
+        "y": 1488,
+        "x_native": 560,
+        "y_native": 744,
+        "direction": 0,
+        "direction_raw_45": 0,
+        "hidden": false,
+        "hidden_raw_97": 0,
+        "hidden_on_load_raw_2ac": 0,
+        "initial_visibility_evidence": [
+          "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+        ],
+        "raw_field_41": 29,
+        "action_mode_raw_2f": 0,
+        "animation_index_raw_83": 0,
+        "frame_index_raw_7b": 0,
+        "actor_mode_raw_f0": 0,
+        "behavior_raw_c5": 0,
+        "behavior_state_raw_f5": 0,
+        "movement_direction_raw_2b1": 0,
+        "blend_mode_raw_4bd": 0,
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "offset": 688244,
+          "bytes": 1221
+        }
+      },
+      {
+        "id": "M17020-role-19",
+        "slot_zero_based": 19,
+        "speaker_slot_one_based": 20,
+        "name": "火妖精",
+        "resource_id": "030",
+        "x": 704,
+        "y": 1104,
+        "x_native": 352,
+        "y_native": 552,
+        "direction": 6,
+        "direction_raw_45": 6,
+        "hidden": false,
+        "hidden_raw_97": 0,
+        "hidden_on_load_raw_2ac": 0,
+        "initial_visibility_evidence": [
+          "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+        ],
+        "raw_field_41": 30,
+        "action_mode_raw_2f": 0,
+        "animation_index_raw_83": 0,
+        "frame_index_raw_7b": 0,
+        "actor_mode_raw_f0": 0,
+        "behavior_raw_c5": 0,
+        "behavior_state_raw_f5": 0,
+        "movement_direction_raw_2b1": 0,
+        "blend_mode_raw_4bd": 0,
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "offset": 689465,
+          "bytes": 1221
+        }
+      },
+      {
+        "id": "M17020-role-20",
+        "slot_zero_based": 20,
+        "speaker_slot_one_based": 21,
+        "name": "火戰士",
+        "resource_id": "031",
+        "x": 1120,
+        "y": 784,
+        "x_native": 560,
+        "y_native": 392,
+        "direction": 0,
+        "direction_raw_45": 0,
+        "hidden": false,
+        "hidden_raw_97": 0,
+        "hidden_on_load_raw_2ac": 0,
+        "initial_visibility_evidence": [
+          "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+        ],
+        "raw_field_41": 31,
+        "action_mode_raw_2f": 0,
+        "animation_index_raw_83": 0,
+        "frame_index_raw_7b": 0,
+        "actor_mode_raw_f0": 0,
+        "behavior_raw_c5": 0,
+        "behavior_state_raw_f5": 1,
+        "movement_direction_raw_2b1": 0,
+        "blend_mode_raw_4bd": 0,
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "offset": 690686,
+          "bytes": 1221
+        }
+      },
+      {
+        "id": "M17020-role-21",
+        "slot_zero_based": 21,
+        "speaker_slot_one_based": 22,
+        "name": "火戰士",
+        "resource_id": "031",
+        "x": 1216,
+        "y": 784,
+        "x_native": 608,
+        "y_native": 392,
+        "direction": 6,
+        "direction_raw_45": 6,
+        "hidden": false,
+        "hidden_raw_97": 0,
+        "hidden_on_load_raw_2ac": 0,
+        "initial_visibility_evidence": [
+          "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+        ],
+        "raw_field_41": 32,
+        "action_mode_raw_2f": 0,
+        "animation_index_raw_83": 0,
+        "frame_index_raw_7b": 0,
+        "actor_mode_raw_f0": 0,
+        "behavior_raw_c5": 0,
+        "behavior_state_raw_f5": 1,
+        "movement_direction_raw_2b1": 0,
+        "blend_mode_raw_4bd": 0,
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "offset": 691907,
+          "bytes": 1221
+        }
+      },
+      {
+        "id": "M17020-role-22",
+        "slot_zero_based": 22,
+        "speaker_slot_one_based": 23,
+        "name": "火妖精",
+        "resource_id": "030",
+        "x": 576,
+        "y": 1312,
+        "x_native": 288,
+        "y_native": 656,
+        "direction": 0,
+        "direction_raw_45": 0,
+        "hidden": false,
+        "hidden_raw_97": 0,
+        "hidden_on_load_raw_2ac": 0,
+        "initial_visibility_evidence": [
+          "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+        ],
+        "raw_field_41": 33,
+        "action_mode_raw_2f": 0,
+        "animation_index_raw_83": 0,
+        "frame_index_raw_7b": 0,
+        "actor_mode_raw_f0": 0,
+        "behavior_raw_c5": 0,
+        "behavior_state_raw_f5": 0,
+        "movement_direction_raw_2b1": 0,
+        "blend_mode_raw_4bd": 0,
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "offset": 693128,
+          "bytes": 1221
+        }
+      },
+      {
+        "id": "M17020-role-23",
+        "slot_zero_based": 23,
+        "speaker_slot_one_based": 24,
+        "name": "火妖精",
+        "resource_id": "030",
+        "x": 352,
+        "y": 624,
+        "x_native": 176,
+        "y_native": 312,
+        "direction": 4,
+        "direction_raw_45": 4,
+        "hidden": false,
+        "hidden_raw_97": 0,
+        "hidden_on_load_raw_2ac": 0,
+        "initial_visibility_evidence": [
+          "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+        ],
+        "raw_field_41": 34,
+        "action_mode_raw_2f": 0,
+        "animation_index_raw_83": 0,
+        "frame_index_raw_7b": 0,
+        "actor_mode_raw_f0": 0,
+        "behavior_raw_c5": 0,
+        "behavior_state_raw_f5": 0,
+        "movement_direction_raw_2b1": 0,
+        "blend_mode_raw_4bd": 0,
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "offset": 694349,
+          "bytes": 1221
+        }
+      },
+      {
+        "id": "M17020-role-24",
+        "slot_zero_based": 24,
+        "speaker_slot_one_based": 25,
+        "name": "火妖精",
+        "resource_id": "030",
+        "x": 1360,
+        "y": 1056,
+        "x_native": 680,
+        "y_native": 528,
+        "direction": 3,
+        "direction_raw_45": 3,
+        "hidden": false,
+        "hidden_raw_97": 0,
+        "hidden_on_load_raw_2ac": 0,
+        "initial_visibility_evidence": [
+          "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+        ],
+        "raw_field_41": 35,
+        "action_mode_raw_2f": 0,
+        "animation_index_raw_83": 0,
+        "frame_index_raw_7b": 0,
+        "actor_mode_raw_f0": 0,
+        "behavior_raw_c5": 0,
+        "behavior_state_raw_f5": 0,
+        "movement_direction_raw_2b1": 0,
+        "blend_mode_raw_4bd": 0,
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "offset": 695570,
+          "bytes": 1221
+        }
+      },
+      {
+        "id": "M17020-role-25",
+        "slot_zero_based": 25,
+        "speaker_slot_one_based": 26,
+        "name": "女火長老",
+        "resource_id": "033",
+        "x": 864,
+        "y": 976,
+        "x_native": 432,
+        "y_native": 488,
+        "direction": 2,
+        "direction_raw_45": 2,
+        "hidden": false,
+        "hidden_raw_97": 0,
+        "hidden_on_load_raw_2ac": 0,
+        "initial_visibility_evidence": [
+          "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+        ],
+        "raw_field_41": 36,
+        "action_mode_raw_2f": 0,
+        "animation_index_raw_83": 0,
+        "frame_index_raw_7b": 0,
+        "actor_mode_raw_f0": 0,
+        "behavior_raw_c5": 0,
+        "behavior_state_raw_f5": 1,
+        "movement_direction_raw_2b1": 0,
+        "blend_mode_raw_4bd": 0,
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "offset": 696791,
+          "bytes": 1221
+        }
+      },
+      {
+        "id": "M17020-role-26",
+        "slot_zero_based": 26,
+        "speaker_slot_one_based": 27,
+        "name": "女火長老",
+        "resource_id": "034",
+        "x": 896,
+        "y": 960,
+        "x_native": 448,
+        "y_native": 480,
+        "direction": 6,
+        "direction_raw_45": 6,
+        "hidden": false,
+        "hidden_raw_97": 0,
+        "hidden_on_load_raw_2ac": 0,
+        "initial_visibility_evidence": [
+          "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+        ],
+        "raw_field_41": 37,
+        "action_mode_raw_2f": 0,
+        "animation_index_raw_83": 0,
+        "frame_index_raw_7b": 0,
+        "actor_mode_raw_f0": 0,
+        "behavior_raw_c5": 0,
+        "behavior_state_raw_f5": 1,
+        "movement_direction_raw_2b1": 0,
+        "blend_mode_raw_4bd": 0,
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "offset": 698012,
+          "bytes": 1221
+        }
+      },
+      {
+        "id": "M17020-role-27",
+        "slot_zero_based": 27,
+        "speaker_slot_one_based": 28,
+        "name": "火戰士",
+        "resource_id": "031",
+        "x": 464,
+        "y": 1248,
+        "x_native": 232,
+        "y_native": 624,
+        "direction": 0,
+        "direction_raw_45": 0,
+        "hidden": false,
+        "hidden_raw_97": 0,
+        "hidden_on_load_raw_2ac": 0,
+        "initial_visibility_evidence": [
+          "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+        ],
+        "raw_field_41": 38,
+        "action_mode_raw_2f": 0,
+        "animation_index_raw_83": 0,
+        "frame_index_raw_7b": 0,
+        "actor_mode_raw_f0": 0,
+        "behavior_raw_c5": 0,
+        "behavior_state_raw_f5": 1,
+        "movement_direction_raw_2b1": 0,
+        "blend_mode_raw_4bd": 0,
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "offset": 699233,
+          "bytes": 1221
+        }
+      },
+      {
+        "id": "M17020-role-28",
+        "slot_zero_based": 28,
+        "speaker_slot_one_based": 29,
+        "name": "火戰士",
+        "resource_id": "031",
+        "x": 416,
+        "y": 1328,
+        "x_native": 208,
+        "y_native": 664,
+        "direction": 0,
+        "direction_raw_45": 0,
+        "hidden": false,
+        "hidden_raw_97": 0,
+        "hidden_on_load_raw_2ac": 0,
+        "initial_visibility_evidence": [
+          "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+        ],
+        "raw_field_41": 39,
+        "action_mode_raw_2f": 0,
+        "animation_index_raw_83": 0,
+        "frame_index_raw_7b": 0,
+        "actor_mode_raw_f0": 0,
+        "behavior_raw_c5": 0,
+        "behavior_state_raw_f5": 1,
+        "movement_direction_raw_2b1": 0,
+        "blend_mode_raw_4bd": 0,
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "offset": 700454,
+          "bytes": 1221
+        }
+      },
+      {
+        "id": "M17020-role-29",
+        "slot_zero_based": 29,
+        "speaker_slot_one_based": 30,
+        "name": "火智者",
+        "resource_id": "032",
+        "x": 1312,
+        "y": 1104,
+        "x_native": 656,
+        "y_native": 552,
+        "direction": 6,
+        "direction_raw_45": 6,
+        "hidden": false,
+        "hidden_raw_97": 0,
+        "hidden_on_load_raw_2ac": 0,
+        "initial_visibility_evidence": [
+          "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+        ],
+        "raw_field_41": 40,
+        "action_mode_raw_2f": 0,
+        "animation_index_raw_83": 0,
+        "frame_index_raw_7b": 0,
+        "actor_mode_raw_f0": 0,
+        "behavior_raw_c5": 0,
+        "behavior_state_raw_f5": 1,
+        "movement_direction_raw_2b1": 0,
+        "blend_mode_raw_4bd": 0,
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "offset": 701675,
+          "bytes": 1221
+        }
+      },
+      {
+        "id": "M17020-role-30",
+        "slot_zero_based": 30,
+        "speaker_slot_one_based": 31,
+        "name": "火戰士",
+        "resource_id": "031",
+        "x": 848,
+        "y": 512,
+        "x_native": 424,
+        "y_native": 256,
+        "direction": 6,
+        "direction_raw_45": 6,
+        "hidden": true,
+        "hidden_raw_97": 0,
+        "hidden_on_load_raw_2ac": 1,
+        "initial_visibility_evidence": [
+          "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+        ],
+        "raw_field_41": 41,
+        "action_mode_raw_2f": 0,
+        "animation_index_raw_83": 0,
+        "frame_index_raw_7b": 0,
+        "actor_mode_raw_f0": 0,
+        "behavior_raw_c5": 0,
+        "behavior_state_raw_f5": 1,
+        "movement_direction_raw_2b1": 0,
+        "blend_mode_raw_4bd": 0,
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "offset": 702896,
+          "bytes": 1221
+        }
+      }
+    ],
+    "exits_by_map": [
+      {
+        "id": 1,
+        "state": "ready",
+        "cells": [
+          {
+            "x": 13,
+            "y": 97
+          },
+          {
+            "x": 14,
+            "y": 97
+          },
+          {
+            "x": 15,
+            "y": 97
+          },
+          {
+            "x": 16,
+            "y": 97
+          },
+          {
+            "x": 17,
+            "y": 97
+          },
+          {
+            "x": 18,
+            "y": 97
+          },
+          {
+            "x": 19,
+            "y": 97
+          },
+          {
+            "x": 20,
+            "y": 97
+          },
+          {
+            "x": 21,
+            "y": 97
+          },
+          {
+            "x": 22,
+            "y": 97
+          },
+          {
+            "x": 23,
+            "y": 97
+          },
+          {
+            "x": 24,
+            "y": 97
+          },
+          {
+            "x": 25,
+            "y": 97
+          },
+          {
+            "x": 26,
+            "y": 97
+          },
+          {
+            "x": 27,
+            "y": 97
+          },
+          {
+            "x": 28,
+            "y": 97
+          },
+          {
+            "x": 29,
+            "y": 97
+          },
+          {
+            "x": 30,
+            "y": 97
+          },
+          {
+            "x": 31,
+            "y": 97
+          },
+          {
+            "x": 32,
+            "y": 97
+          },
+          {
+            "x": 33,
+            "y": 97
+          },
+          {
+            "x": 34,
+            "y": 97
+          },
+          {
+            "x": 35,
+            "y": 97
+          },
+          {
+            "x": 36,
+            "y": 97
+          },
+          {
+            "x": 37,
+            "y": 97
+          },
+          {
+            "x": 38,
+            "y": 97
+          },
+          {
+            "x": 39,
+            "y": 97
+          },
+          {
+            "x": 40,
+            "y": 97
+          },
+          {
+            "x": 41,
+            "y": 97
+          },
+          {
+            "x": 42,
+            "y": 97
+          },
+          {
+            "x": 43,
+            "y": 97
+          },
+          {
+            "x": 44,
+            "y": 97
+          },
+          {
+            "x": 45,
+            "y": 97
+          },
+          {
+            "x": 46,
+            "y": 97
+          },
+          {
+            "x": 47,
+            "y": 97
+          },
+          {
+            "x": 48,
+            "y": 97
+          },
+          {
+            "x": 49,
+            "y": 97
+          },
+          {
+            "x": 50,
+            "y": 97
+          },
+          {
+            "x": 51,
+            "y": 97
+          },
+          {
+            "x": 52,
+            "y": 97
+          },
+          {
+            "x": 53,
+            "y": 97
+          },
+          {
+            "x": 54,
+            "y": 97
+          },
+          {
+            "x": 55,
+            "y": 97
+          },
+          {
+            "x": 56,
+            "y": 97
+          },
+          {
+            "x": 57,
+            "y": 97
+          },
+          {
+            "x": 58,
+            "y": 97
+          },
+          {
+            "x": 59,
+            "y": 97
+          },
+          {
+            "x": 60,
+            "y": 97
+          },
+          {
+            "x": 61,
+            "y": 97
+          },
+          {
+            "x": 62,
+            "y": 97
+          },
+          {
+            "x": 63,
+            "y": 97
+          },
+          {
+            "x": 64,
+            "y": 97
+          },
+          {
+            "x": 65,
+            "y": 97
+          },
+          {
+            "x": 66,
+            "y": 97
+          },
+          {
+            "x": 67,
+            "y": 97
+          },
+          {
+            "x": 68,
+            "y": 97
+          },
+          {
+            "x": 69,
+            "y": 97
+          },
+          {
+            "x": 70,
+            "y": 97
+          },
+          {
+            "x": 71,
+            "y": 97
+          },
+          {
+            "x": 72,
+            "y": 97
+          },
+          {
+            "x": 73,
+            "y": 97
+          }
+        ],
+        "target_map": "M17010",
+        "entry": {
+          "x": 1088,
+          "y": 1008,
+          "direction": 7,
+          "cell_x": 68,
+          "cell_y": 63,
+          "native_x": 544,
+          "native_y": 504
+        },
+        "conditions": [],
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "descriptor_offset": 661042,
+          "descriptor_bytes": 66,
+          "descriptor_hex": "00000000000000000000000000000000006d31373031302e64617400000000000000000000000b000000060000000000000000000000000000000000000000000000",
+          "compact_field_expansion_evidence": null,
+          "target_path": "Map/m17010.dat",
+          "target_sha256": "634a1eea243656b16341d9e217578a42a5d58f82f00af9aa0f8a0f805e83515a",
+          "target_entry_marker": 11,
+          "entry_sort_code": 6,
+          "entry_scan_cells": [
+            {
+              "x": 68,
+              "y": 63,
+              "offset": 512754
+            }
+          ],
+          "entry_sorted_cells": [
+            {
+              "x": 68,
+              "y": 63
+            }
+          ],
+          "entry_sort": "y descending; stable ties",
+          "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
+          "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
+          "native_evidence": {
+            "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+            "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+            "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+            "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+          }
+        },
+        "execution": "Native transition descriptor only; map-entry TLK/ANM and their once-only checks must complete separately.",
+        "limitations": [
+          "Static source/code evidence; original timing not observed",
+          "Continuous keyboard movement is runtime policy"
+        ]
+      },
+      {
+        "id": 2,
+        "state": "ready",
+        "cells": [
+          {
+            "x": 23,
+            "y": 77
+          },
+          {
+            "x": 24,
+            "y": 77
+          },
+          {
+            "x": 25,
+            "y": 77
+          },
+          {
+            "x": 23,
+            "y": 78
+          }
+        ],
+        "target_map": "M17029",
+        "entry": {
+          "x": 640,
+          "y": 592,
+          "direction": 4,
+          "cell_x": 40,
+          "cell_y": 37,
+          "native_x": 320,
+          "native_y": 296
+        },
+        "conditions": [],
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "descriptor_offset": 661108,
+          "descriptor_bytes": 66,
+          "descriptor_hex": "00000000000000000000000000000000006d31373032392e646174000000000000000000000001000000030000000000000000000000000000000000000000000000",
+          "compact_field_expansion_evidence": null,
+          "target_path": "Map/m17029.dat",
+          "target_sha256": "57851abbfe75121b806268f5bce8c778ec4e5d82ebb7dfa623fbd6952977c314",
+          "target_entry_marker": 1,
+          "entry_sort_code": 3,
+          "entry_scan_cells": [
+            {
+              "x": 40,
+              "y": 37,
+              "offset": 145010
+            }
+          ],
+          "entry_sorted_cells": [
+            {
+              "x": 40,
+              "y": 37
+            }
+          ],
+          "entry_sort": "x ascending; stable ties",
+          "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
+          "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
+          "native_evidence": {
+            "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+            "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+            "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+            "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+          }
+        },
+        "execution": "Native transition descriptor only; map-entry TLK/ANM and their once-only checks must complete separately.",
+        "limitations": [
+          "Static source/code evidence; original timing not observed",
+          "Continuous keyboard movement is runtime policy"
+        ]
+      },
+      {
+        "id": 5,
+        "state": "ready",
+        "cells": [
+          {
+            "x": 56,
+            "y": 29
+          },
+          {
+            "x": 57,
+            "y": 29
+          },
+          {
+            "x": 58,
+            "y": 29
+          },
+          {
+            "x": 59,
+            "y": 29
+          },
+          {
+            "x": 60,
+            "y": 29
+          },
+          {
+            "x": 56,
+            "y": 30
+          },
+          {
+            "x": 57,
+            "y": 30
+          },
+          {
+            "x": 58,
+            "y": 30
+          },
+          {
+            "x": 59,
+            "y": 30
+          },
+          {
+            "x": 60,
+            "y": 30
+          }
+        ],
+        "target_map": "M17026",
+        "entry": {
+          "x": 272,
+          "y": 560,
+          "direction": 2,
+          "cell_x": 17,
+          "cell_y": 35,
+          "native_x": 136,
+          "native_y": 280
+        },
+        "conditions": [],
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "descriptor_offset": 661306,
+          "descriptor_bytes": 66,
+          "descriptor_hex": "00000000000000000000000000000000006d31373032362e646174000000000000000000000001000000050000000000000000000000000000000000000000000000",
+          "compact_field_expansion_evidence": null,
+          "target_path": "Map/m17026.dat",
+          "target_sha256": "087ccf781d85f63249a2e1bce48ee71382d2587cdf857c47e575caaae54a646c",
+          "target_entry_marker": 1,
+          "entry_sort_code": 5,
+          "entry_scan_cells": [
+            {
+              "x": 17,
+              "y": 35,
+              "offset": 104498
+            }
+          ],
+          "entry_sorted_cells": [
+            {
+              "x": 17,
+              "y": 35
+            }
+          ],
+          "entry_sort": "row-major scan; first four; missing followers repeat last observed cell",
+          "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
+          "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
+          "native_evidence": {
+            "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+            "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+            "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+            "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+          }
+        },
+        "execution": "Native transition descriptor only; map-entry TLK/ANM and their once-only checks must complete separately.",
+        "limitations": [
+          "Static source/code evidence; original timing not observed",
+          "Continuous keyboard movement is runtime policy"
+        ]
+      }
+    ],
+    "trigger_regions": [],
+    "interactive_objects": [],
+    "object_animations": []
+  },
+  "route": null,
+  "texts": {
+    "M17020:TLK:1": "刚刚索摩族又有事情传呼我们火妖精一族，最近他们好像过得很不安稳，我看倒不如找凯去炎城一趟，调查看看他们到底发生了什么事情。",
+    "M17020:TLK:2": "我想凯应该是在王厅内处理事情吧！可是每次交代他处理一些族内的事，就只会四处找人聊天，都不处理正事，这次他会乖乖的在王厅做事吗？真是怀疑！",
+    "M17020:TLK:3": "火战士：目前往火祭坛的通路上并没有特别的事！",
+    "M17020:TLK:4": "火战士：目前往火祭坛的通路上并没有特别的事！",
+    "M17020:TLK:5": "火长老：最近为了索摩族的事，我们一些智者级以上的族人都常常不在火之谷内，东奔西走处理问题。",
+    "M17020:TLK:6": "火长老：看看四周，我们谷里都快要变成小火妖精的乐园，看看这些小东西在那边跑来跑去，都快管不动啰。",
+    "M17020:TLK:7": "火战士：当守门的总是特别无聊，我还宁愿多出一些任务。",
+    "M17020:TLK:8": "火战士：这些小火妖精到处乱跑，看的我眼睛都花了！",
+    "M17020:TLK:9": "火智者：听说最近火能量的浮动造成了不少的意外，让我们都得东奔西跑，真是麻烦。",
+    "M17020:TLK:10": "",
+    "M17020:TLK:11": "m17020-1.anm"
+  }
+}

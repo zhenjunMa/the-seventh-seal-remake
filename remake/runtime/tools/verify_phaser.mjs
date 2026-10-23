@@ -5,6 +5,7 @@ import {fileURLToPath} from 'node:url';
 import {createHash} from 'node:crypto';
 import {spawnSync} from 'node:child_process';
 import {BattleResources} from '../web/core/battle_resources.mjs';
+import {exportStoryPackages} from './export_story_packages.mjs';
 
 const runtime=fileURLToPath(new URL('../',import.meta.url)),web=path.join(runtime,'web');
 const args=process.argv.slice(2),strict=args.includes('--assets'),reportAt=args.indexOf('--report');
@@ -20,6 +21,7 @@ async function files(directory){const result=[];for(const row of await fs.readdi
 }return result;}
 
 try{
+  report.story=await exportStoryPackages({check:true});
   const vendor=path.join(web,'vendor/phaser'),manifest=await readJson(path.join(vendor,'manifest.json'));
   if(manifest.version!=='3.90.0')throw new Error('Phaser 版本未固定为 3.90.0');
   for(const [name,expected]of Object.entries(manifest.files))if(hash(await fs.readFile(path.join(vendor,name)))!==expected)throw new Error(`运行库指纹不符：${name}`);

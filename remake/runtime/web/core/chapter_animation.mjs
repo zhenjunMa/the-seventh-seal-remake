@@ -28,18 +28,19 @@ export function validateChapterAnimation(program,content=runtimeContent) {
   return program;
 }
 export class ChapterAnimationRunner {
-  constructor({program,hooks,runTlk,joinActor,initialLocation,content=runtimeContent}) {
+  constructor({program,hooks,runTlk,joinActor,initialLocation,playback=null,content=runtimeContent}) {
     validateChapterAnimation(program,content);
     for (const name of ['map','actor','move','camera','wait']) need(typeof hooks?.[name] === 'function', `剧情动画接口缺失：${name}`);
-    Object.assign(this,{program,hooks,runTlk,joinActor,initialLocation}); this.phase = 'idle';
+    Object.assign(this,{program,hooks,runTlk,joinActor,initialLocation,playback}); this.phase = 'idle';
   }
   async run() {
     need(this.phase === 'idle','剧情动画已执行'); this.phase = 'running';
     const positions = new Map([[0,{...this.initialLocation}]]);
     let mapId = this.initialLocation.map_id;
-    const actions = new AnmActions({hooks:this.hooks, context:() => ({mapId}), positions});
+    const actions = new AnmActions({hooks:this.hooks, context:() => ({mapId}), positions,playback:this.playback});
     try {
       for (const c of this.program.commands) {
+        if(this.playback?.paused)await this.playback.ready();
         actions.check();
         if (COMMON_ANM_OPCODES.has(c.opcode)) { await actions.execute(c); continue; }
         switch(c.opcode) {
@@ -52,8 +53,9 @@ export class ChapterAnimationRunner {
           default: throw new Error(`剧情动画指令${c.opcode}尚未支持`);
         }
       }
-      await actions.flush(); this.phase = 'complete';
+      await actions.flush(); actions.check(); this.phase = 'complete';
       return {location:positions.get(0),commands:this.program.commands.length,source:this.program.source};
-    } catch(error) { actions.abort(error); this.phase = 'failed'; throw error; }
+    } catch(error) { actions.abort(error); this.phase = this.playback?.phase==='cancelled'?'cancelled':'failed'; throw error; }
+    finally {actions.dispose();}
   }
 }

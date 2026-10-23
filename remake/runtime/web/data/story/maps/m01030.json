@@ -1,0 +1,664 @@
+{
+  "schema": "seventh-seal-story-map",
+  "version": 2,
+  "map_id": "M01030",
+  "chapter": null,
+  "programs": {},
+  "flows": {
+    "M01030-detective-first-contact": {
+      "schema": "seventh-seal-story-flow",
+      "version": 1,
+      "id": "M01030-detective-first-contact",
+      "map_id": "M01030",
+      "entry": "M01030-detective-first-contact:command:0",
+      "commands": [
+        {
+          "op": "test_flag_bit",
+          "index": 426,
+          "bit": 1,
+          "source": {
+            "path": "Map/m01030.TLK",
+            "offset": 132162,
+            "record_id": 80,
+            "record_offset": 132139
+          },
+          "evidence": [
+            "ev_e14d28c11ec31e5eebdf4c08a994a900102658650d8e5364d58b848cbd114ea7",
+            "ev_355033370cd2b94e5b494b774d1ed2a2a16245dbaf89d4c942e5c40b37f448d0"
+          ],
+          "if_true": "M01030-detective-first-contact:command:23",
+          "if_false": "M01030-detective-first-contact:command:2",
+          "id": "M01030-detective-first-contact:command:0"
+        },
+        {
+          "op": "jump",
+          "source": {
+            "path": "Map/m01030.TLK",
+            "offset": 132190,
+            "record_id": 80,
+            "record_offset": 132139
+          },
+          "evidence": [
+            "ev_e14d28c11ec31e5eebdf4c08a994a900102658650d8e5364d58b848cbd114ea7",
+            "ev_63a239118d571c40e001f04d25eb6688e64ee7466487a1626d48fdab812a257b"
+          ],
+          "target": "M01030-detective-first-contact:command:2",
+          "id": "M01030-detective-first-contact:command:1"
+        },
+        {
+          "op": "test_flag_bit",
+          "index": 107,
+          "bit": 1,
+          "source": {
+            "path": "Map/m01030.TLK",
+            "offset": 133809,
+            "record_id": 81,
+            "record_offset": 133786
+          },
+          "evidence": [
+            "ev_e14d28c11ec31e5eebdf4c08a994a900102658650d8e5364d58b848cbd114ea7",
+            "ev_355033370cd2b94e5b494b774d1ed2a2a16245dbaf89d4c942e5c40b37f448d0"
+          ],
+          "if_true": "M01030-detective-first-contact:command:24",
+          "if_false": "M01030-detective-first-contact:command:4",
+          "id": "M01030-detective-first-contact:command:2"
+        },
+        {
+          "op": "jump",
+          "source": {
+            "path": "Map/m01030.TLK",
+            "offset": 133837,
+            "record_id": 81,
+            "record_offset": 133786
+          },
+          "evidence": [
+            "ev_e14d28c11ec31e5eebdf4c08a994a900102658650d8e5364d58b848cbd114ea7",
+            "ev_63a239118d571c40e001f04d25eb6688e64ee7466487a1626d48fdab812a257b"
+          ],
+          "target": "M01030-detective-first-contact:command:4",
+          "id": "M01030-detective-first-contact:command:3"
+        },
+        {
+          "op": "test_all_flag_bits",
+          "conditions": [
+            {
+              "index": 3,
+              "bit": 3
+            },
+            {
+              "index": 5,
+              "bit": 31
+            }
+          ],
+          "source": {
+            "path": "Map/m01030.TLK",
+            "offset": 44903,
+            "record_id": 27,
+            "record_offset": 44848
+          },
+          "evidence": [
+            "ev_e14d28c11ec31e5eebdf4c08a994a900102658650d8e5364d58b848cbd114ea7",
+            "ev_32db520615254c07ca1b1f5be84def5bd3946a60f19bb52b183994a544640759",
+            "ev_355033370cd2b94e5b494b774d1ed2a2a16245dbaf89d4c942e5c40b37f448d0"
+          ],
+          "if_true": "M01030-detective-first-contact:command:25",
+          "if_false": "M01030-detective-first-contact:command:5",
+          "id": "M01030-detective-first-contact:command:4"
+        },
+        {
+          "op": "test_flag_bit",
+          "index": 3,
+          "bit": 3,
+          "source": {
+            "path": "Map/m01030.TLK",
+            "offset": 31695,
+            "record_id": 19,
+            "record_offset": 31672
+          },
+          "evidence": [
+            "ev_e14d28c11ec31e5eebdf4c08a994a900102658650d8e5364d58b848cbd114ea7",
+            "ev_355033370cd2b94e5b494b774d1ed2a2a16245dbaf89d4c942e5c40b37f448d0"
+          ],
+          "if_true": "M01030-detective-first-contact:command:21",
+          "if_false": "M01030-detective-first-contact:command:6",
+          "id": "M01030-detective-first-contact:command:5"
+        },
+        {
+          "op": "say",
+          "speaker": "侦探",
+          "speaker_slot": 20,
+          "style_raw": 2,
+          "source": {
+            "path": "Map/m01030.TLK",
+            "offset": 31727,
+            "record_id": 19,
+            "record_offset": 31672
+          },
+          "evidence": [
+            "ev_e14d28c11ec31e5eebdf4c08a994a900102658650d8e5364d58b848cbd114ea7",
+            "ev_208aa985aa8dfd71196424202a3ce88f20eb321a18b0c86bf8b19bc445aaa066"
+          ],
+          "presentation": {
+            "speaker": 20,
+            "style": 2,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          },
+          "text_id": "M01030:TLK:19",
+          "id": "M01030-detective-first-contact:command:6",
+          "record_id": 19
+        },
+        {
+          "op": "jump",
+          "source": {
+            "path": "Map/m01030.TLK",
+            "offset": 31723,
+            "record_id": 19,
+            "record_offset": 31672
+          },
+          "evidence": [
+            "ev_e14d28c11ec31e5eebdf4c08a994a900102658650d8e5364d58b848cbd114ea7",
+            "ev_63a239118d571c40e001f04d25eb6688e64ee7466487a1626d48fdab812a257b"
+          ],
+          "target": "M01030-detective-first-contact:command:8",
+          "id": "M01030-detective-first-contact:command:7"
+        },
+        {
+          "op": "say",
+          "speaker": "英格妮",
+          "speaker_slot": 1,
+          "style_raw": 1,
+          "source": {
+            "path": "Map/m01030.TLK",
+            "offset": 33374,
+            "record_id": 20,
+            "record_offset": 33319
+          },
+          "evidence": [
+            "ev_e14d28c11ec31e5eebdf4c08a994a900102658650d8e5364d58b848cbd114ea7",
+            "ev_208aa985aa8dfd71196424202a3ce88f20eb321a18b0c86bf8b19bc445aaa066"
+          ],
+          "presentation": {
+            "speaker": 1,
+            "style": 1,
+            "portrait_id": 27,
+            "region_byte_raw": 0
+          },
+          "text_id": "M01030:TLK:20",
+          "id": "M01030-detective-first-contact:command:8",
+          "record_id": 20
+        },
+        {
+          "op": "jump",
+          "source": {
+            "path": "Map/m01030.TLK",
+            "offset": 33370,
+            "record_id": 20,
+            "record_offset": 33319
+          },
+          "evidence": [
+            "ev_e14d28c11ec31e5eebdf4c08a994a900102658650d8e5364d58b848cbd114ea7",
+            "ev_63a239118d571c40e001f04d25eb6688e64ee7466487a1626d48fdab812a257b"
+          ],
+          "target": "M01030-detective-first-contact:command:10",
+          "id": "M01030-detective-first-contact:command:9"
+        },
+        {
+          "op": "say",
+          "speaker": "侦探",
+          "speaker_slot": 20,
+          "style_raw": 2,
+          "source": {
+            "path": "Map/m01030.TLK",
+            "offset": 35021,
+            "record_id": 21,
+            "record_offset": 34966
+          },
+          "evidence": [
+            "ev_e14d28c11ec31e5eebdf4c08a994a900102658650d8e5364d58b848cbd114ea7",
+            "ev_208aa985aa8dfd71196424202a3ce88f20eb321a18b0c86bf8b19bc445aaa066"
+          ],
+          "presentation": {
+            "speaker": 20,
+            "style": 2,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          },
+          "text_id": "M01030:TLK:21",
+          "id": "M01030-detective-first-contact:command:10",
+          "record_id": 21
+        },
+        {
+          "op": "jump",
+          "source": {
+            "path": "Map/m01030.TLK",
+            "offset": 35017,
+            "record_id": 21,
+            "record_offset": 34966
+          },
+          "evidence": [
+            "ev_e14d28c11ec31e5eebdf4c08a994a900102658650d8e5364d58b848cbd114ea7",
+            "ev_63a239118d571c40e001f04d25eb6688e64ee7466487a1626d48fdab812a257b"
+          ],
+          "target": "M01030-detective-first-contact:command:12",
+          "id": "M01030-detective-first-contact:command:11"
+        },
+        {
+          "op": "say",
+          "speaker": "凯",
+          "speaker_slot": 2,
+          "style_raw": 1,
+          "source": {
+            "path": "Map/m01030.TLK",
+            "offset": 36668,
+            "record_id": 22,
+            "record_offset": 36613
+          },
+          "evidence": [
+            "ev_e14d28c11ec31e5eebdf4c08a994a900102658650d8e5364d58b848cbd114ea7",
+            "ev_208aa985aa8dfd71196424202a3ce88f20eb321a18b0c86bf8b19bc445aaa066"
+          ],
+          "presentation": {
+            "speaker": 2,
+            "style": 1,
+            "portrait_id": 35,
+            "region_byte_raw": 0
+          },
+          "text_id": "M01030:TLK:22",
+          "id": "M01030-detective-first-contact:command:12",
+          "record_id": 22
+        },
+        {
+          "op": "jump",
+          "source": {
+            "path": "Map/m01030.TLK",
+            "offset": 36664,
+            "record_id": 22,
+            "record_offset": 36613
+          },
+          "evidence": [
+            "ev_e14d28c11ec31e5eebdf4c08a994a900102658650d8e5364d58b848cbd114ea7",
+            "ev_63a239118d571c40e001f04d25eb6688e64ee7466487a1626d48fdab812a257b"
+          ],
+          "target": "M01030-detective-first-contact:command:14",
+          "id": "M01030-detective-first-contact:command:13"
+        },
+        {
+          "op": "say",
+          "speaker": "侦探",
+          "speaker_slot": 20,
+          "style_raw": 2,
+          "source": {
+            "path": "Map/m01030.TLK",
+            "offset": 38315,
+            "record_id": 23,
+            "record_offset": 38260
+          },
+          "evidence": [
+            "ev_e14d28c11ec31e5eebdf4c08a994a900102658650d8e5364d58b848cbd114ea7",
+            "ev_208aa985aa8dfd71196424202a3ce88f20eb321a18b0c86bf8b19bc445aaa066"
+          ],
+          "presentation": {
+            "speaker": 20,
+            "style": 2,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          },
+          "text_id": "M01030:TLK:23",
+          "id": "M01030-detective-first-contact:command:14",
+          "record_id": 23
+        },
+        {
+          "op": "jump",
+          "source": {
+            "path": "Map/m01030.TLK",
+            "offset": 38311,
+            "record_id": 23,
+            "record_offset": 38260
+          },
+          "evidence": [
+            "ev_e14d28c11ec31e5eebdf4c08a994a900102658650d8e5364d58b848cbd114ea7",
+            "ev_63a239118d571c40e001f04d25eb6688e64ee7466487a1626d48fdab812a257b"
+          ],
+          "target": "M01030-detective-first-contact:command:16",
+          "id": "M01030-detective-first-contact:command:15"
+        },
+        {
+          "op": "say",
+          "speaker": "凯",
+          "speaker_slot": 2,
+          "style_raw": 1,
+          "source": {
+            "path": "Map/m01030.TLK",
+            "offset": 39962,
+            "record_id": 24,
+            "record_offset": 39907
+          },
+          "evidence": [
+            "ev_e14d28c11ec31e5eebdf4c08a994a900102658650d8e5364d58b848cbd114ea7",
+            "ev_208aa985aa8dfd71196424202a3ce88f20eb321a18b0c86bf8b19bc445aaa066"
+          ],
+          "presentation": {
+            "speaker": 2,
+            "style": 1,
+            "portrait_id": 37,
+            "region_byte_raw": 0
+          },
+          "text_id": "M01030:TLK:24",
+          "id": "M01030-detective-first-contact:command:16",
+          "record_id": 24
+        },
+        {
+          "op": "jump",
+          "source": {
+            "path": "Map/m01030.TLK",
+            "offset": 39958,
+            "record_id": 24,
+            "record_offset": 39907
+          },
+          "evidence": [
+            "ev_e14d28c11ec31e5eebdf4c08a994a900102658650d8e5364d58b848cbd114ea7",
+            "ev_63a239118d571c40e001f04d25eb6688e64ee7466487a1626d48fdab812a257b"
+          ],
+          "target": "M01030-detective-first-contact:command:18",
+          "id": "M01030-detective-first-contact:command:17"
+        },
+        {
+          "op": "set_flag_bit",
+          "index": 3,
+          "bit": 3,
+          "source": {
+            "path": "Map/m01030.TLK",
+            "offset": 41589,
+            "record_id": 25,
+            "record_offset": 41554
+          },
+          "evidence": [
+            "ev_e14d28c11ec31e5eebdf4c08a994a900102658650d8e5364d58b848cbd114ea7",
+            "ev_bf9af000fbc18c6f6eac561f0f48cc7069f26b2dea7441564896eb1ba836a96f",
+            "ev_7b9ea86472664085b6d45fcd9728e222140632969c2551ba92b4fb40d5f31e0a",
+            "ev_060c9d4bcba5e8bc11e3444fa21c68df929f22ac70f38e6fe9cd7269d8c04d0f"
+          ],
+          "id": "M01030-detective-first-contact:command:18"
+        },
+        {
+          "op": "say",
+          "speaker": "侦探",
+          "speaker_slot": 20,
+          "style_raw": 2,
+          "source": {
+            "path": "Map/m01030.TLK",
+            "offset": 41609,
+            "record_id": 25,
+            "record_offset": 41554
+          },
+          "evidence": [
+            "ev_e14d28c11ec31e5eebdf4c08a994a900102658650d8e5364d58b848cbd114ea7",
+            "ev_208aa985aa8dfd71196424202a3ce88f20eb321a18b0c86bf8b19bc445aaa066"
+          ],
+          "presentation": {
+            "speaker": 20,
+            "style": 2,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          },
+          "text_id": "M01030:TLK:25",
+          "id": "M01030-detective-first-contact:command:19",
+          "record_id": 25
+        },
+        {
+          "op": "end",
+          "source": {
+            "path": "Map/m01030.TLK",
+            "offset": 41605,
+            "record_id": 25,
+            "record_offset": 41554
+          },
+          "evidence": [
+            "ev_e14d28c11ec31e5eebdf4c08a994a900102658650d8e5364d58b848cbd114ea7",
+            "ev_63a239118d571c40e001f04d25eb6688e64ee7466487a1626d48fdab812a257b"
+          ],
+          "id": "M01030-detective-first-contact:command:20"
+        },
+        {
+          "op": "say",
+          "speaker": "侦探",
+          "speaker_slot": 20,
+          "style_raw": 1,
+          "source": {
+            "path": "Map/m01030.TLK",
+            "offset": 43256,
+            "record_id": 26,
+            "record_offset": 43201
+          },
+          "evidence": [
+            "ev_e14d28c11ec31e5eebdf4c08a994a900102658650d8e5364d58b848cbd114ea7",
+            "ev_208aa985aa8dfd71196424202a3ce88f20eb321a18b0c86bf8b19bc445aaa066"
+          ],
+          "presentation": {
+            "speaker": 20,
+            "style": 1,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          },
+          "text_id": "M01030:TLK:26",
+          "id": "M01030-detective-first-contact:command:21",
+          "record_id": 26
+        },
+        {
+          "op": "end",
+          "source": {
+            "path": "Map/m01030.TLK",
+            "offset": 43252,
+            "record_id": 26,
+            "record_offset": 43201
+          },
+          "evidence": [
+            "ev_e14d28c11ec31e5eebdf4c08a994a900102658650d8e5364d58b848cbd114ea7",
+            "ev_63a239118d571c40e001f04d25eb6688e64ee7466487a1626d48fdab812a257b"
+          ],
+          "id": "M01030-detective-first-contact:command:22"
+        },
+        {
+          "op": "unsupported",
+          "reason": "事件分支尚未恢复：原作记录 83 超出本次恢复的侦探初次／重复交互样本",
+          "source": {
+            "path": "Map/m01030.TLK",
+            "offset": 137080,
+            "record_id": 83
+          },
+          "evidence": [
+            "ev_e14d28c11ec31e5eebdf4c08a994a900102658650d8e5364d58b848cbd114ea7",
+            "ev_63a239118d571c40e001f04d25eb6688e64ee7466487a1626d48fdab812a257b"
+          ],
+          "id": "M01030-detective-first-contact:command:23"
+        },
+        {
+          "op": "unsupported",
+          "reason": "事件分支尚未恢复：原作记录 65 超出本次恢复的侦探初次／重复交互样本",
+          "source": {
+            "path": "Map/m01030.TLK",
+            "offset": 107434,
+            "record_id": 65
+          },
+          "evidence": [
+            "ev_e14d28c11ec31e5eebdf4c08a994a900102658650d8e5364d58b848cbd114ea7",
+            "ev_63a239118d571c40e001f04d25eb6688e64ee7466487a1626d48fdab812a257b"
+          ],
+          "id": "M01030-detective-first-contact:command:24"
+        },
+        {
+          "op": "unsupported",
+          "reason": "事件分支尚未恢复：原作记录 28 超出本次恢复的侦探初次／重复交互样本",
+          "source": {
+            "path": "Map/m01030.TLK",
+            "offset": 46495,
+            "record_id": 28
+          },
+          "evidence": [
+            "ev_e14d28c11ec31e5eebdf4c08a994a900102658650d8e5364d58b848cbd114ea7",
+            "ev_63a239118d571c40e001f04d25eb6688e64ee7466487a1626d48fdab812a257b"
+          ],
+          "id": "M01030-detective-first-contact:command:25"
+        }
+      ]
+    }
+  },
+  "events": [
+    {
+      "schema": "seventh-seal-story-event-binding",
+      "version": 1,
+      "id": "M01030-detective-first-contact",
+      "map_id": "M01030",
+      "map_flag_index": 3,
+      "npc": {
+        "id": "M01030-role-19",
+        "name": "侦探",
+        "slot_zero_based": 19,
+        "speaker_slot_one_based": 20,
+        "x": 1680,
+        "y": 448,
+        "x_native": 840,
+        "y_native": 224,
+        "direction": 6,
+        "source": {
+          "path": "Map/m01030.dat",
+          "offset": 786883,
+          "bytes": 1221,
+          "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72"
+        },
+        "resource": {
+          "source": "ROLE/070.DGP",
+          "sha256": "34b8806897a6906ee49c296027e909c86dd439fa90673c43b2f6855a3d342d0e",
+          "name_resource": "男役者3",
+          "sheet": "assets/npcs/ROLE_070/action_00.png",
+          "frame_width": 193,
+          "frame_height": 163,
+          "directions": 8,
+          "frames_per_direction": 10,
+          "first_frame": 0,
+          "anchor_x": 97,
+          "anchor_y": 125,
+          "interval_ms": 180
+        },
+        "evidence": [
+          "ev_2888b25485bd9e11fe0810b0a7a279f9c4ab59a54405fc65518a2f4ae5fd659a",
+          "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b",
+          "ev_2e8ee10d305ee8113511d6ac354fad72c58c62e7d613e3d6f28da6a78a0c904c",
+          "ev_46b49ffe18c24e84d0114934087a847605f367e5188c6f40c6e55da3e90a3576",
+          "ev_cc6cf47e0e22152bcfa459b8b4a92a419ffd25fc7897e151c1bced7e2c36a385"
+        ],
+        "limits": [
+          "Idle atlas is rendered from action 0; native NPC turning, idle timing and dynamic role occupancy need runtime comparison."
+        ]
+      },
+      "entry_record_id": 80,
+      "sample_initial_flags": [
+        {
+          "index": 426,
+          "bit": 1,
+          "value": false
+        },
+        {
+          "index": 107,
+          "bit": 1,
+          "value": false
+        },
+        {
+          "index": 3,
+          "bit": 3,
+          "value": false
+        },
+        {
+          "index": 5,
+          "bit": 31,
+          "value": false
+        }
+      ],
+      "sample_initial_flags_scope": "受控首次＋重复事件样本：仅清除所列位，其余世界状态保持；不是原作新游戏初值。",
+      "source": {
+        "path": "Map/m01030.TLK",
+        "sha256": "98ceb26bbb00d6d2cc200a627e53b805f3bc31c1d2b66e53b1ccf746573364c6",
+        "bytes": 326838,
+        "index_offset": 102,
+        "index_slot": 19,
+        "record_bytes": 1647,
+        "record_base": 2026,
+        "native_loader_end": 163432,
+        "unexplained_tail_bytes": 163406
+      },
+      "evidence": [
+        "ev_5e8b2970ad7fd9a51d0b4085cf684c21860c22ae04bec8712cdaf84c11e56eea",
+        "ev_63a239118d571c40e001f04d25eb6688e64ee7466487a1626d48fdab812a257b",
+        "ev_cc6cf47e0e22152bcfa459b8b4a92a419ffd25fc7897e151c1bced7e2c36a385",
+        "ev_46b49ffe18c24e84d0114934087a847605f367e5188c6f40c6e55da3e90a3576",
+        "ev_e14d28c11ec31e5eebdf4c08a994a900102658650d8e5364d58b848cbd114ea7",
+        "ev_32db520615254c07ca1b1f5be84def5bd3946a60f19bb52b183994a544640759",
+        "ev_355033370cd2b94e5b494b774d1ed2a2a16245dbaf89d4c942e5c40b37f448d0",
+        "ev_060c9d4bcba5e8bc11e3444fa21c68df929f22ac70f38e6fe9cd7269d8c04d0f",
+        "ev_bf9af000fbc18c6f6eac561f0f48cc7069f26b2dea7441564896eb1ba836a96f",
+        "ev_7b9ea86472664085b6d45fcd9728e222140632969c2551ba92b4fb40d5f31e0a",
+        "ev_7e97ec6e97d27593180e152a74f6b8e150c4eb65bac1b0375c3b4964174c4764",
+        "ev_208aa985aa8dfd71196424202a3ce88f20eb321a18b0c86bf8b19bc445aaa066",
+        "ev_2888b25485bd9e11fe0810b0a7a279f9c4ab59a54405fc65518a2f4ae5fd659a",
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b",
+        "ev_2e8ee10d305ee8113511d6ac354fad72c58c62e7d613e3d6f28da6a78a0c904c"
+      ],
+      "limitations": [
+        "Static resource/code reconstruction; original gameplay/video comparison remains pending.",
+        "TLK trailing payload remains unexplained and is not executed.",
+        "Record branches 28, 65 and 83 are source-preserved but not implemented.",
+        "GBK decodes the shipped simplified-Chinese text; DGP metadata uses CP950.",
+        "The +0x23 dispatcher decompilation fails; case 0 is derived from retained exact native bytes and its resolved flag setter.",
+        "No portrait, audio, conversation camera, native walking-to-NPC or exact bubble placement is restored."
+      ],
+      "sample": {
+        "clear_bits": [
+          {
+            "index": 426,
+            "bit": 1
+          },
+          {
+            "index": 107,
+            "bit": 1
+          },
+          {
+            "index": 3,
+            "bit": 3
+          },
+          {
+            "index": 5,
+            "bit": 31
+          }
+        ],
+        "probe": {
+          "name": "侦探 · 交互样本",
+          "x": 1680,
+          "y": 480,
+          "direction": 3,
+          "purpose": "Development relocation to an open interaction approach cell; not native approach/pathfinding."
+        },
+        "scope": "受控首次＋重复事件样本：仅清除所列位，其余世界状态保持；不是原作新游戏初值。"
+      },
+      "flow_id": "M01030-detective-first-contact"
+    }
+  ],
+  "resources": {
+    "npcs_by_map": [],
+    "exits_by_map": [],
+    "trigger_regions": [],
+    "interactive_objects": [],
+    "object_animations": []
+  },
+  "route": null,
+  "texts": {
+    "M01030:TLK:19": "侦探：对不起，如果没有事可以请你离开，别妨碍我调查好吗？",
+    "M01030:TLK:20": "调查？？请问你在调查什么呢？",
+    "M01030:TLK:21": "侦探：说到这个，我可是在呼荷世界，无人不知无人不晓的名侦探。",
+    "M01030:TLK:22": "侦探？那是什么东西啊！？",
+    "M01030:TLK:23": "侦探：你不知道？算了！我告诉你，侦探就是专门帮人家调查一些稀奇古怪的事情。",
+    "M01030:TLK:24": "调查稀奇古怪的事情？这有什么困难的，我和大姊还不是常常接受你们索摩族的请托，帮忙解决一些稀奇古怪的事情。",
+    "M01030:TLK:25": "侦探：看样子，你是不相信我的能力啰！总有一天，你会来拜托我的，如果没事我可要继续执行我的任务了。",
+    "M01030:TLK:26": "侦探：别忘了，想要我调查的话，记得来找我啊！"
+  }
+}
