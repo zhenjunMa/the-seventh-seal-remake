@@ -42,7 +42,7 @@ STEPS = {
     'opening-maps': Step('export_opening_maps.py', ('data/opening_map_resources.json', 'data/maps/m72061.json', 'data/maps/m17020.json', 'assets/maps/m72061', 'assets/maps/m17020', 'assets/opening_roles'), reports=('opening_map_export_20261011.json',)),
     'chapter-maps': Step('export_chapter_maps.py', ('data/chapter_map_resources.json', 'data/maps/m17029.json', 'data/maps/m17026.json', 'assets/maps/m17029', 'assets/maps/m17026', 'assets/chapter_roles', 'assets/chapter_objects'), reports=('chapter_map_export.json',)),
     'chapter-story': Step('export_chapter_story.py', ('data/chapter_story.json',), ('chapter-maps',), ('chapter_story_export.json',)),
-    'map-effects': Step('export_map_effects.py', ('data/map_effects.json','assets/map_effects'), ('opening-maps','chapter-maps'), ('map_effects_20261021/export.json',), ('data/maps','../evidence/map_effects_20261021/native_retained.json')),
+    'map-effects': Step('export_map_effects.py', ('data/map_effects.json','assets/map_effects','data/map_shadows.json','assets/map_shadows'), ('opening-maps','chapter-maps'), ('map_effects_20261021/export.json','movement_optimization_20261023/shadow_export.json'), ('data/maps','../evidence/map_effects_20261021/native_retained.json','../tools/export_map_shadows.py','../../prototype/tools/dgp.py','../evidence/movement_audit_20261023/native_evidence.json','data/opening_map_resources.json','data/chapter_map_resources.json','data/events.json')),
     'party-combat': Step('export_party_combat.py', ('data/party_combat.json',), reports=('party_combat_export.json',)),
     'party-skills': Step('export_party_skills.py', ('data/party_skills.json', 'data/party_reactions.json', 'data/party_battle_view.json', 'assets/party_layers', 'assets/party_roles', 'assets/party_effects'), ('party-combat',), ('party_skills_export.json',)),
     'party-rewards': Step('export_party_rewards.py', ('data/party_rewards.json',), ('party-combat',), ('party_rewards_export.json',)),
@@ -117,6 +117,7 @@ for target, dependencies in {
 }.items():
     STEPS[target]=replace(STEPS[target],depends=dependencies)
 STEPS['chapter-maps']=replace(STEPS['chapter-maps'],inputs=('data/runtime_content.json','data/opening_map_resources.json'))
+STEPS['map-effects']=replace(STEPS['map-effects'],inputs=(*STEPS['map-effects'].inputs,'data/catalog.json'))
 STEPS['party-combat']=replace(STEPS['party-combat'],inputs=(*STEPS['party-combat'].inputs,'data/opening_seed.json'))
 STEPS['catalog']=replace(STEPS['catalog'],inputs=(*STEPS['catalog'].inputs,'data/chapter_map_resources.json'))
 STEPS['party-rewards']=replace(STEPS['party-rewards'],inputs=(*STEPS['party-rewards'].inputs,'../evidence/content_workflow_20261021/growth_native.json'))

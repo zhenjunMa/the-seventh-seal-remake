@@ -6,6 +6,7 @@ import {readFile} from 'node:fs/promises';
 import {WorldStore,encodeSave,decodeSave} from '../web/core/world.mjs';
 import {BattleController} from '../web/core/combat.mjs';
 import {selectReady} from '../web/core/battle_scheduler.mjs';
+import {withItemQuantity} from '../web/core/equipment.mjs';
 const read=async name=>JSON.parse(await readFile(new URL('../web/data/'+name,import.meta.url)));
 const seed=await read('route_seed.json'),source=await read('combat_sample.json'),scheduler=await read('battle_scheduler.json');
 const clone=structuredClone;
@@ -118,13 +119,55 @@ test('A slow enemy action leaves ready-party selection usable and confirmation q
   assert.deepEqual(battle.players().map(a=>a.charge.gauge),gauges);assert.equal(battle.canChoose('two'),true);
   const queued=await battle.choose('two');assert.equal(queued.scheduler.pending.actor_id,'002');assert.equal(queued.phase,'action');
   assert.equal(battle.actor('002').mp.current,30);assert.deepEqual(calls.map(c=>c.attacker.id),['012']);
-  assert.equal(battle.state.scheduler.active_actor_id,'012');assert.equal(battle.canCommand('001'),false);
-  assert.throws(()=>battle.selectPlayer('001'));await assert.rejects(battle.choose('two'));assert.throws(()=>battle.finish());
+  assert.equal(battle.state.scheduler.active_actor_id,'012');assert.equal(battle.canCommand('001'),true);
+  battle.selectPlayer('001');assert.equal(battle.canChoose('one'),true);assert.throws(()=>battle.selectPlayer('002'));await assert.rejects(battle.choose('two'));assert.throws(()=>battle.finish());
   release();await enemyTask;
   assert.equal(battle.running,false);assert.equal(battle.actor('002').mp.current,30);assert.equal(battle.state.scheduler.pending.actor_id,'002');assert.equal(calls.length,1);
   await battle.waitTick();battle.advanceClock();if(battle.actionTask)await battle.actionTask;
   assert.equal(battle.actor('002').mp.current,23);assert.deepEqual(calls.map(c=>c.attacker.id),['012','002']);assert.equal(battle.state.scheduler.pending,null);
   assert.deepEqual(world.snapshot(),saved);
+});
+
+test('Both full actors can confirm during an enemy animation; native arbitration dispatches their own commands once',async()=>{
+  const {battle,world,calls,enemyTask,release}=await slowEnemyFixture(),saved=world.snapshot(),s=battle.state.scheduler;
+  battle.actor('001').charge.gauge=s.threshold+100;const gauges=battle.players().map(a=>structuredClone(a.charge));
+  battle.selectPlayer('002');await battle.choose('two');assert.equal(battle.state.player_id,'001');
+  assert.equal(battle.canCommand('001'),true);assert.equal(battle.presentationSnapshot().input_busy,false);
+  await battle.choose('one');assert.equal(s.pending.actor_id,'002');assert.equal(s.queued_commands[0].actor_id,'001');
+  assert.deepEqual(battle.players().map(a=>a.charge),gauges);assert.deepEqual(battle.players().map(a=>a.mp.current),[20,30]);
+  assert.equal(battle.canCommand('001'),false);assert.equal(battle.canCommand('002'),false);await assert.rejects(battle.choose('one'));
+  release();await enemyTask;
+  await battle.waitTick();battle.advanceClock();if(battle.actionTask)await battle.actionTask;
+  assert.deepEqual(calls.map(c=>[c.attacker.id,c.skill.id]),[['012','snow_attack'],['001','one']]);
+  assert.equal(s.pending.actor_id,'002');assert.deepEqual(s.queued_commands,[]);assert.equal(battle.actor('001').mp.current,15);
+  await battle.waitTick();battle.advanceClock();if(battle.actionTask)await battle.actionTask;
+  assert.deepEqual(calls.map(c=>c.attacker.id),['012','001','002']);assert.equal(battle.actor('002').mp.current,23);
+  assert.equal(s.pending,null);assert.deepEqual(s.queued_commands,[]);assert.deepEqual(world.snapshot(),saved);
+});
+
+test('The last medicine stays reserved through queueing and its use animation without blocking another actor command',async()=>{
+  const itemData=await read('items.json'),{battle,enemyTask,release}=await slowEnemyFixture();battle.itemData=itemData;
+  const tea=battle.world.value.inventory.find(item=>item.id===12);battle.state.inventory=[withItemQuantity(tea,1)];
+  for(const a of battle.players())Object.assign(a,{raw_hp:a.hp.current,raw_mp:a.mp.current,raw_hp_maximum:a.hp.maximum,raw_mp_maximum:a.mp.maximum,resource_bonuses:{hp_current:0,mp_current:0}});
+  battle.selectPlayer('001');await battle.chooseItem(tea.instance_id,'001');assert.equal(battle.canCommand('002'),true);
+  assert.deepEqual(battle.items(),[]);await assert.rejects(battle.chooseItem(tea.instance_id,'002'),/占用/);
+  let use; battle.playItem=async(_,{onUse})=>{await new Promise(resolve=>use=()=>{onUse();resolve();});};
+  release();await enemyTask;await battle.waitTick();battle.advanceClock();const itemTask=battle.actionTask;
+  assert.equal(battle.state.scheduler.active_actor_id,'001');assert.equal(battle.canCommand('002'),true);
+  assert.equal(battle.state.inventory[0].quantity,1);assert.deepEqual(battle.items(),[]);
+  await assert.rejects(battle.chooseItem(tea.instance_id,'002'),/占用/);use();await itemTask;
+  assert.deepEqual(battle.state.inventory,[]);assert.equal(battle.state.history.filter(h=>h.item_id===12).length,1);
+});
+
+test('A fallen extra command is removed without losing another actor command; victory clears every remaining reservation',async()=>{
+  const {battle,enemyTask,release}=await slowEnemyFixture(),s=battle.state.scheduler;
+  battle.selectPlayer('002');await battle.choose('two');await battle.choose('one');
+  battle.actor('001').hp.current=0; battle.actor('001').state_raw=4;battle.refreshCommandState();
+  assert.equal(s.pending.actor_id,'002');assert.deepEqual(s.queued_commands,[]);
+  release();await enemyTask;
+  const f=await slowEnemyFixture();f.battle.selectPlayer('002');await f.battle.choose('two');await f.battle.choose('one');
+  f.battle.actor('012').hp.current=0;f.battle.actor('012').state_raw=5;f.release();await f.enemyTask;
+  assert.equal(f.battle.state.phase,'victory');assert.equal(f.battle.state.scheduler.pending,null);assert.deepEqual(f.battle.state.scheduler.queued_commands,[]);
 });
 
 test('Another ready actor may queue during a player animation, and completion preserves the next actor command',async()=>{

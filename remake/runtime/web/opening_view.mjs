@@ -5,6 +5,7 @@ import {openingCamera,approachPoint,directArrivalMoves} from './core/opening_pre
 import {ActorEffectView} from './actor_effect_view.mjs';
 import {drawMapSprite} from './map_sprite.mjs';
 import {runtimeContent} from './core/content_registry.mjs';
+import {DistanceGait,mapMotionProfile,mapTravelDistance} from './core/map_locomotion.mjs';
 
 export function physicalFrame(action, logicalIndex) {
   const frame = action.uses_sequence ? action.sequence_raw[logicalIndex] : logicalIndex;
@@ -75,7 +76,8 @@ export class OpeningView {
           const stage=this.staging[mapId],awaitingAppearance=Boolean(stage?.initially_hidden&&stage.slots.includes(npc.slot_zero_based));
           const {motion,...pose}=npc;
           this.actors.set(npc.slot_zero_based,
-            {...pose,awaitingAppearance,role:this.resources.roles[npc.resource_id],visible:!npc.hidden&&!awaitingAppearance,
+            {...pose,x:motion?.x??pose.x,y:motion?.y??pose.y,direction:motion?.direction??pose.direction,
+              awaitingAppearance,role:this.resources.roles[npc.resource_id],visible:!npc.hidden&&!awaitingAppearance,
               action:motion?.action??0,frame:motion?.frame??0,alpha:1});
         }
         this.actors.set(0, {x: 0, y: 0, direction: 1, role: this.resources.roles['001'], visible: false, action: 0, frame: 0, alpha: 1});
@@ -140,7 +142,8 @@ export class OpeningView {
         }
         throw new Error(`未支持的序章人物演出：${kind}`);
       },
-      move: async ({actor: id, x, y, speedRaw, signal,command}) => {
+      move: async ({actor: id, x, y, arrivalFacingRaw=0, actionRaw=0, signal,command}) => {
+        signal?.throwIfAborted();this.controller.signal.throwIfAborted();
         const actor = this.getActor(id), from = {x: actor.x, y: actor.y};
         const arrival=this.directArrivals.get(command?.index);
         if(arrival?.defer){
@@ -148,28 +151,32 @@ export class OpeningView {
             presentation:'deferred-to-direct-arrival',source_commands:arrival.sourceCommands,motion_frames:[]});
           return;
         }
-        const dx = x - from.x, dy = y - from.y,axisApproach=!arrival&&this.staging[this.mapId]?.axis_approach;
-        actor.action = 1;
-        const action = actor.role.actions.find(a => a.index === 1);
+        const axisApproach=!arrival&&this.staging[this.mapId]?.axis_approach;
+        const source=this.scene.npcRuntime?.actors.get(actor.id)?.source;
+        const action = actor.role.actions.find(a => a.index === (actionRaw||(source?.bindings[1]??1)));
         if (!action) throw new Error(`角色 ${id} 缺少移动动作`);
-        // Source speed0 is retained. Default preview speed prevents an infinite
-        // tween; its native timing still needs execution comparison.
+        if(!Number.isInteger(arrivalFacingRaw)||arrivalFacingRaw<0||arrivalFacingRaw>8)throw new Error('剧情到达朝向无效');
+        const motion=mapMotionProfile(action,this.scene.data.movement,'',source?.speedBias??0);
+        const gait=new DistanceGait();let previous=0;
         const motionFrames=[];
-        const distance=axisApproach?Math.abs(dx)+Math.abs(dy):Math.hypot(dx,dy);
-        const duration = Math.max(200, distance / (Math.max(1,speedRaw) * 30) * 1000);
-        await this.tween(duration, t => {
+        const distance=mapTravelDistance(from,{x,y},axisApproach);
+        const duration=distance/motion.speed*1000;
+        const update=t=>{
           const point=approachPoint(from,{x,y},t,axisApproach);
           actor.x=point.x;actor.y=point.y;
           if(point.dx||point.dy)actor.direction=locomotion(point,true).direction;
-          const index=Math.floor(t * duration / Math.max(16, action.interval_raw)) % (action.uses_sequence?action.sequence_raw.length:action.frame_count);
-          actor.frame=physicalFrame(action,index);
+          actor.action=action.index;
+          actor.frame=gait.advance(action,{dx:distance*Math.max(0,t-previous),stride:motion.stride});
+          previous=t;
           if(this.nativeViewport&&this.focus!==null){
             const focus=this.getActor(this.focus),camera=openingCamera(focus,this.scene.bitmap.width,this.scene.bitmap.height);
             motionFrames.push({time_ms:performance.now(),x:actor.x,y:actor.y,camera_x:camera.x,camera_y:camera.y});
           }
-        }, signal);
+        };
+        if(distance)await this.tween(duration,update,signal);
         actor.action = 0; actor.frame = 0;
         if(arrival)actor.direction=arrival.arrivalDirection;
+        else if(arrivalFacingRaw)actor.direction=arrivalFacingRaw-1;
         this.snapshot('opening-move-complete',{actor:id,command:command?.index,
           presentation:arrival?'direct-arrival':'source-move',motion_frames:motionFrames});
       },
@@ -188,14 +195,14 @@ export class OpeningView {
       return {key:`opening:${slot}`,layer,sort_y:actor.y+32,alpha:actor.alpha,
       blend:actor.effect?.kind==='rise'?'lighter':'source-over',
       pose:actor.effect?{image:actor.effect.canvas,x:actor.x+16-r.anchor.x,y:actor.y-r.anchor.y-160}
-        :{image:a.bitmap,light:a.intrinsic_bitmap,sx:actor.frame*r.frame_width,sy:actor.direction*r.frame_height,
+        :{image:a.bitmap,light:a.intrinsic_bitmap,shadow:a.shadow_bitmap,shadow_geometry:a.shadow_geometry,sx:actor.frame*r.frame_width,sy:actor.direction*r.frame_height,
           width:r.frame_width,height:r.frame_height,x:actor.x+16-r.anchor.x,y:actor.y-r.anchor.y},
       draw: ctx => {
         const r = actor.role, a = r.actions.find(a => a.index === actor.action);
         ctx.save(); ctx.globalAlpha = actor.alpha;
         if(actor.effect)actor.effect.draw(ctx,actor.x+16-r.anchor.x,actor.y-r.anchor.y);
         else drawMapSprite(ctx,a.bitmap,a.intrinsic_bitmap,actor.frame*r.frame_width,actor.direction*r.frame_height,
-          r.frame_width,r.frame_height,actor.x+16-r.anchor.x,actor.y-r.anchor.y);
+          r.frame_width,r.frame_height,actor.x+16-r.anchor.x,actor.y-r.anchor.y,a.shadow_bitmap,a.shadow_geometry);
         ctx.restore();
       }};});
   }

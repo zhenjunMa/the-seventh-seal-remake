@@ -59,7 +59,7 @@ def export_movement(manifest, parsed=None):
     movement = dict(schema='seventh-seal-map-movement', version=1, map='M01010',
         source='Map/m01010.dat', source_sha256=before['Map/m01010.dat'],
         width=data.width, height=data.height, cell_size=16, native_coordinate_shift=3,
-        native_to_pixel_scale=2, terrain_rows=terrain, triggers=triggers,
+        native_to_pixel_scale=2, native_step_shift=data.data[0x144], terrain_rows=terrain, triggers=triggers,
         terrain_rule='cell byte +0x20 == 0 permits terrain entry',
         transition_rule='0x4A80E0: +0x38 reference, descriptor[0]==0 and descriptor[0x11]!=0 is path-gated',
         policy='Preview stops at native path-gated transition cells; events and map changes are not executed',

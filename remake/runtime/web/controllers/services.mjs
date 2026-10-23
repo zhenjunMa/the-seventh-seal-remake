@@ -28,7 +28,7 @@ export function createServicesController({state, actions, $, canvas, ctx}) {
     state.engine?.setPhase(phase);
     state.keys.clear(); state.clock=0;state.view.action=0;state.view.frame=0;state.lastTime=performance.now();
     $('scenePhase').textContent=state.phaseNames[phase]??phase;
-    $('loading').hidden=!['loading','boot','battle-loading'].includes(phase);
+    $('loading').hidden=!['loading','boot'].includes(phase);
     $('partyMenuOpen').disabled=phase!=='map'||state.world?.value.source.kind!=='native-new-game';
     $('interactionHint').hidden=phase!=='map'||!state.nearest;
     for(const id of ['save','load','role','jumpProbe','resetEventSample','exportSave','importSave','layerOpen','battleOpen','zoomOut','zoomIn','fit','follow','collision','probe','routeSample','citySample','contentSample']) $(id).disabled=phase!=='map';

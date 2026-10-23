@@ -126,7 +126,7 @@ export function validateOpeningProgram(program) {
         fail(record.byte_plus29 <= 1, `${context}: unsupported camera focus mode`);
         break;
       case 33:
-        fail(record.byte_plus29 === 0 && record.u32_plus25 > 0 && record.u32_plus25 <= 255,
+        fail(record.byte_plus29 === 0 && (record.u32_plus25&255) <= 8,
           `${context}: unsupported movement action/speed`);
         break;
       case 35:

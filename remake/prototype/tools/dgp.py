@@ -113,9 +113,13 @@ class DGP:
         if self.header[6]:
             for _ in self.frames:
                 keep('per_frame_records', r.u32() * 8)
+        self.shadow_blobs = []
         if self.geometry[41]:
             for _ in self.frames:
-                keep('per_frame_blob', r.u32())
+                # Native 0x53ECAA consumes these as colorless sparse rows.
+                # Keep the original bytes; shadows are a separate destination
+                # darkening pass, never part of the main RGB565 raster.
+                self.shadow_blobs.append(keep('per_frame_blob', r.u32()))
         self.indexed_auxiliary = []
         if self.header[19]:
             # 0x51FCC4 reads header[0x13]'s optional records into +0xC5,
@@ -206,6 +210,44 @@ class DGP:
                 cursor = x + size
         return Image.frombytes('RGBA', (self.width, self.height), bytes(pixels))
 
+    def shadow_rows(self, index: int):
+        """Source mask rows from geometry[41], verified native 0x53ECAA.
+
+        Unlike the main stream each span is only absolute X and length;
+        no color bytes follow. Reject corruption rather than guessing a mask.
+        """
+        if not self.shadow_blobs:
+            raise DGPError('No per-frame shadow stream')
+        r = Reader(self.shadow_blobs[index])
+        for y in range(self.height):
+            count = u16(r.take(2), 0)
+            spans, cursor = [], 0
+            if count != 0xffff:
+                if count > self.width:
+                    raise DGPError(f'Shadow frame {index}, row {y}: excessive span count {count}')
+                for _ in range(count):
+                    x, size = struct.unpack('<HH', r.take(4))
+                    if x < cursor or x + size > self.width:
+                        raise DGPError(f'Shadow frame {index}, row {y}: span outside width / overlaps ({x}, {size})')
+                    spans.append((x, size))
+                    cursor = x + size
+            yield y, spans
+        if r.pos != len(r.data):
+            raise DGPError(f'Shadow frame {index}: unread bytes {len(r.data) - r.pos}')
+
+    def decode_shadow(self, index: int) -> Image.Image:
+        """Black 50% RGBA mask in the same full-frame coordinates as decode.
+
+        Native halves the RGB565/555 destination components. Alpha 128 is
+        the nearest 8-bit Canvas/Phaser presentation, not bit-exact 16-bit math.
+        """
+        pixels = bytearray(self.width * self.height * 4)
+        for y, spans in self.shadow_rows(index):
+            for x, size in spans:
+                start = (y * self.width + x) * 4
+                pixels[start:start + size * 4] = bytes((0, 0, 0, 128)) * size
+        return Image.frombytes('RGBA', (self.width, self.height), bytes(pixels))
+
     def verify_secondary(self):
         if self.secondary is None:
             return dict(present=False, checked_pixels=0)
@@ -232,6 +274,7 @@ class DGP:
                     optional_blocks=self.optional_blocks, payload_offset=self.payload_start,
                     payload_bytes=self.payload_bytes, dual_pixel_stream=self.secondary is not None,
                     indexed_auxiliary=self.indexed_auxiliary,
+                    shadow_stream_present=bool(self.shadow_blobs),
                     indexed_auxiliary_limit='Header[19] is a separately loaded auxiliary stream. Its effects/rendering semantics are not implemented; main 16-bit spans remain the decoded pixels.',
                     anchor_raw=self.anchor_raw, actions=self.actions,
                     frames=[vars(f) for f in self.frames], eof_verified=True)

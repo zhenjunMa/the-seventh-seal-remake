@@ -85,6 +85,21 @@ test('Repeated open/update cannot restart the same report or issue its completio
   view.dispose();assert.equal(view.active,false);
 });
 
+test('Victory playback and skip input share the battle clock after time spent outside battle',()=>{
+  const node=()=>({hidden:true,dataset:{},setAttribute(){},focus(){},remove(){}}),root={dataset:{},ownerDocument:{createElement:node},append(){}};
+  const manifest={schema:'seventh-seal-battle-result',version:1,native_canvas:{width:640,height:480},assets:Object.fromEntries(['fight_report_01','fight_report_02','victor'].map(id=>[id,{frames:Array.from({length:id==='fight_report_02'?4:24},(_,i)=>({image:`assets/battle_result/${id}/${i}.png`}))}]))};
+  let battleTime=1000;
+  const view=new BattleResultView({root,manifest,onComplete(){},now:()=>battleTime});
+  view.asset=()=>{};view.text=()=>{};
+  const snapshot={id:summary.battle_id,phase:'victory',rewards:summary,actors};
+  view.open(snapshot);battleTime+=60;view.draw({}, {},battleTime);
+  assert.equal(view.model.victorFrame,1,'The first source frame must advance without waiting for page uptime');
+  battleTime+=60;view.key(' ');assert.equal(view.model.lastReport,battleTime);
+  battleTime+=30;view.draw({}, {},battleTime);
+  assert.ok(view.model.reportX>-630,'Skipping the victory effect must not inject the page clock into report sliding');
+  view.dispose();
+});
+
 test('Source report frames retain their audited hashes and the transparent/additive renderer selects the native plate mask',async()=>{
   const manifest=JSON.parse(await readFile(new URL('../web/data/battle_result.json',import.meta.url),'utf8'));validateBattleResultManifest(manifest);
   for(const asset of Object.values(manifest.assets))for(const f of asset.frames){const bytes=await readFile(new URL('../web/'+f.image,import.meta.url));assert.equal(createHash('sha256').update(bytes).digest('hex'),f.png_sha256);}

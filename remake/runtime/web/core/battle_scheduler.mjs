@@ -28,7 +28,7 @@ export function initializeScheduler(actors,data,sidePriority=0,now=0){
     actor.native_active=false;actor.current_target_id=actors[0].id;actor.reaction_special_gate_raw=0;actor.native_z_raw=0;
     setIdleSkill(actor,data,now);
   }
-  return {mode:'native-forest',threshold,tick_interval_ms:20,ticks:0,elapsed_ms:0,side_priority:sidePriority,pending:null,active_actor_id:null,...(data.default_preparation_delay&&data.default_preparation_delay!==800?{default_preparation_delay:data.default_preparation_delay}:{})};
+  return {mode:'native-forest',threshold,tick_interval_ms:20,ticks:0,elapsed_ms:0,side_priority:sidePriority,pending:null,queued_commands:[],active_actor_id:null,...(data.default_preparation_delay&&data.default_preparation_delay!==800?{default_preparation_delay:data.default_preparation_delay}:{})};
 }
 // The source idle skill can contain multiple records with different hit
 // classes (50E980 copies the current record +24 to actor 524A633).
@@ -90,6 +90,11 @@ export function isActorReady(actor,scheduler){
   const c=actor?.charge,flags=actor?.status_flags_raw??0;
   return Boolean(c&&actor.hp.current>0&&actor.state_raw<4&&!actor.immune_raw&&!actor.reaction_inhibit_raw&&!c.recovery&&!c.delay&&!(flags&0x1e1)&&c.gauge>=scheduler.threshold);
 }
+// Native commands live in each actor's 0x30274-byte block (0x521A7C5-C8).
+// Keep pending as the first row for existing snapshots; arbitration still uses
+// native charge/side priority, rather than the order commands were confirmed.
+export function pendingCommands(scheduler){return scheduler?.pending?[scheduler.pending,...(scheduler.queued_commands??[])]:[];}
+export function commandForActor(scheduler,id){return pendingCommands(scheduler).find(command=>!command.actor_id||command.actor_id===id);}
 export function selectReady(actors,scheduler,{enemy_passive=false}={}){
   const candidates=[];let selected=null,best=-999999;
   for(let i=0;i<actors.length;i++){
@@ -102,7 +107,7 @@ export function selectReady(actors,scheduler,{enemy_passive=false}={}){
     if(!isActorReady(a,scheduler))continue;
     if(a.side==='player'){
       clearCommandDefense(a);
-      if(!scheduler.pending||scheduler.pending.actor_id&&scheduler.pending.actor_id!==a.id)continue;
+      if(!commandForActor(scheduler,a.id))continue;
     }
     candidates.push(i);if(c.gauge>best){selected=i;best=c.gauge;}
   }

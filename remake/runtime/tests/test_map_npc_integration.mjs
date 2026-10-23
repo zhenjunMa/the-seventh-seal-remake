@@ -120,10 +120,24 @@ test('OpeningView seeds chapter actors from live poses and preserves raw default
   view.dispose();
 });
 
+test('chapter handoff begins at the displayed smoothed NPC pose',async()=>{
+  const role={actions:[{index:0},{index:1}]};
+  const npc={id:'npc',slot_zero_based:10,resource_id:'030',x:100,y:120,direction:1,
+    motion:{role,action:1,frame:3,x:98.5,y:119,direction:2}};
+  const scene={data:{opening_npcs:[]},npcs:[npc]};
+  const view=new OpeningView({resources:{roles:{'030':role,'001':role}},prepared:new Map([['M17020',scene]]),install(){},camera(){}});
+  await view.hooks().map({mapId:'M17020'});
+  const actor=view.getActor(10);assert.deepEqual([actor.x,actor.y,actor.direction,actor.frame],[98.5,119,2,3]);
+  assert.deepEqual([npc.x,npc.y],[100,120]);view.dispose();
+});
+
 test('same-map chapter ANM inherits roaming poses and adopts actors before disposing the presentation',async()=>{
   const {state,actions,controller:map,scene,$}=await fixture('M17029'),restore=acceleratedPresentation();
   try{
-    const npc=scene.npcs[0];npc.x+=32;npc.y+=16;const expected={x:npc.x,y:npc.y,direction:npc.direction};
+    const npc=scene.npcs[0];
+    scene.npcRuntime.adoptActors(new Map([[npc.slot_zero_based,{x:npc.x+32,y:npc.y+16,
+      direction:npc.direction,visible:true,action:0,frame:0}]]));
+    const expected={x:npc.x,y:npc.y,direction:npc.direction};
     const draft={location:{map_id:'M17029',x:640,y:592,direction:4}};
     Object.assign(actions,{prepareMap:map.prepareMap,commitView(){},validateEntry:map.validateEntry,log(){}});
     const controller=createStoryController({state,actions,$,canvas:{focus(){}}});

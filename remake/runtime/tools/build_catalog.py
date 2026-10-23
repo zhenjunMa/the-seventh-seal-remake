@@ -21,7 +21,10 @@ def build():
     for ident in role_ids('player'):
         if not any(role['id']==ident for role in roles):
             role=resources['roles'][ident]
-            roles.append(dict(role,id=ident,actions=[action for action in role['actions'] if action['index']<=2]))
+            roles.append(dict(role,id=ident,
+                map_draw_offset=dict(x=16-role['anchor']['x'],y=-role['anchor']['y']),
+                actions=[dict(action,frames_per_direction=action['frame_count'])
+                         for action in role['actions'] if action['index']<=2]))
     maps=[]
     ready=0
     for path in sorted((WEB/'data/maps').glob('*.json')):
@@ -52,7 +55,7 @@ def build():
                  seed='data/opening_seed.json',maps=maps,roles=roles,runtime_content='data/runtime_content.json',
                  opening_program='data/opening_program.json',opening_resources='data/opening_map_resources.json',
                  chapter_story='data/chapter_story.json',chapter_resources='data/chapter_map_resources.json',
-                 map_effects='data/map_effects.json',
+                 map_effects='data/map_effects.json',map_shadows='data/map_shadows.json',
                  party_combat='data/party_combat.json',party_skills='data/party_skills.json',
                  party_rewards='data/party_rewards.json',party_reactions='data/party_reactions.json',party_battle_view='data/party_battle_view.json',
                  items='data/items.json',item_presentation='data/item_presentation.json',audio='data/audio.json',operation_menu='data/operation_menu.json',content_checklist='data/content_checklist.json',

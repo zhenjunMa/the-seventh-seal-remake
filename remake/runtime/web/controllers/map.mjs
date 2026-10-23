@@ -12,8 +12,10 @@ import {MapNpcRuntime} from "../core/map_npcs.mjs";
 import {MapObjectRuntime} from "../core/map_objects.mjs";
 import {storyBindings,registeredRoles} from "../core/content_registry.mjs";
 import {chapterRouteExits} from "../core/map_connections.mjs";
+import {DistanceGait,mapMotionProfile} from "../core/map_locomotion.mjs";
 
 export function createMapController({state, actions, $, canvas, ctx}) {
+  const gait=new DistanceGait();let gaitScene=null,gaitRole=null;
   function role() { return state.catalog.roles.find(role=>role.id===state.selectedRole); }
   function sheetAction(index=state.view.action) { return role().actions.find(action=>action.index===index); }
   function buildHud() {
@@ -51,24 +53,29 @@ export function createMapController({state, actions, $, canvas, ctx}) {
     const completedAnimations=(state.chapterResources.object_animations[id]??[]).filter(animation=>
       table&&world.event_records[table.map_flag_index]?.[animation.object_index_zero_based]?.slice(0,2)==='03');
     const total=1+(data.objects??[]).length+state.events.filter(e=>e.map_id===id&&e.npc?.resource?.sheet).length+
+      state.events.filter(e=>e.map_id===id&&e.npc?.resource?.shadow_sheet).length+
       [...actorIds].reduce((n,roleId)=>n+(state.openingResources.roles[roleId]?.actions??[])
-        .reduce((count,action)=>count+1+Number(Boolean(action.intrinsic_sheet)),0),0)+completedAnimations.length+
+        .reduce((count,action)=>count+1+Number(Boolean(action.intrinsic_sheet))+Number(Boolean(action.shadow_sheet)),0),0)+completedAnimations.length+
       effectObjects.reduce((count,obj)=>count+state.mapEffects.object_banks[obj.bank].actions.length*2,0);
     let completed=0;onProgress?.({completed,total});
     const step=async promise=>{const value=await promise;onProgress?.({completed:++completed,total});return value;};
     const bitmap=await step(actions.image(typeof data.background==='string'?data.background:data.background.image, `map:${id}`));
     if(bitmap.width!==movement.width*16||bitmap.height!==movement.height*16) throw new Error('背景尺寸与逻辑地图不匹配');
     const objects=await Promise.all((data.objects??[]).map(async obj=>({...obj,bitmap:await step(actions.image(obj.image, `map:${id}`))})));
-    const npcs=await Promise.all(state.events.filter(event=>event.map_id===id&&event.npc).map(async event=>({event,...event.npc,bitmap:event.npc.resource?.sheet?await step(actions.image(event.npc.resource.sheet, `map:${id}`)):null})));
+    const npcs=await Promise.all(state.events.filter(event=>event.map_id===id&&event.npc).map(async event=>({event,...event.npc,
+      bitmap:event.npc.resource?.sheet?await step(actions.image(event.npc.resource.sheet, `map:${id}`)):null,
+      shadow_bitmap:event.npc.resource?.shadow_sheet?await step(actions.image(event.npc.resource.shadow_sheet, `map:${id}`)):null})));
     state.actorResourcesByMap.set(id, actorIds);
     await Promise.all([...actorIds].flatMap(roleId => (state.openingResources.roles[roleId]?.actions ?? [])
       .flatMap(action => [step(state.resources.attach(action, action.sheet, `role:${roleId}`)),
-        ...(action.intrinsic_sheet?[step(state.resources.attach(action,action.intrinsic_sheet,`role:${roleId}`,'intrinsic_bitmap'))]:[])])));
+        ...(action.intrinsic_sheet?[step(state.resources.attach(action,action.intrinsic_sheet,`role:${roleId}`,'intrinsic_bitmap'))]:[]),
+        ...(action.shadow_sheet?[step(state.resources.attach(action,action.shadow_sheet,`role:${roleId}`,'shadow_bitmap'))]:[])])));
     await Promise.all(completedAnimations.map(animation=>step(actions.image(animation.frames[animation.completed_last_frame].image, `map:${id}`))));
     for(const npc of data.opening_npcs??[]){
       const r=state.openingResources.roles[npc.resource_id],a=r?.actions.find(a=>a.index===0);
       if(!a?.bitmap)throw new Error(`地图人物资源未准备：${npc.resource_id}`);
-      npcs.push({...npc,bitmap:a.bitmap,resource:{frame_width:r.frame_width,frame_height:r.frame_height,frames_per_direction:a.frame_count,interval_ms:a.interval_raw,anchor_x:r.anchor.x,anchor_y:r.anchor.y}});
+      npcs.push({...npc,bitmap:a.bitmap,shadow_bitmap:a.shadow_bitmap,resource:{frame_width:r.frame_width,frame_height:r.frame_height,
+        frames_per_direction:a.frame_count,interval_ms:a.interval_raw,anchor_x:r.anchor.x,anchor_y:r.anchor.y,shadow_geometry:a.shadow_geometry}});
     }
     const probes=[...(data.probes??[]),...state.events.filter(event=>event.map_id===id&&event.sample?.probe).map(event=>event.sample.probe)];
     const scene={data,movement,bitmap,objects,npcs,probes};
@@ -88,6 +95,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
   }
   function validateEntry(scene,at) { if(scene.movement.at(at.x,at.y).blocked) throw new Error(`目标位置不在可通行格：${at.map_id} ${at.x},${at.y}`); }
   function commitView(scene,at) {
+    gait.reset();gaitScene=scene;gaitRole=state.selectedRole;
     state.view.action=0;state.view.frame=0;state.view.follow=true;state.view.zoom=1;
     Object.assign(state.view,openingCamera(at,scene.bitmap.width,scene.bitmap.height));
     state.clock=0;state.nearest=null;state.lastExit='';
@@ -213,7 +221,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
     const roleIds = state.actorResourcesByMap.get(scene.data.id) ?? new Set(registeredRoles('player'));
     state.resources.retainScopes(['shared', `map:${scene.data.id}`, ...[...roleIds].map(id => `role:${id}`)]);
     for (const [id, role] of Object.entries(state.openingResources.roles))
-      if (!roleIds.has(id)) for (const action of role.actions) {delete action.bitmap;delete action.intrinsic_bitmap;}
+      if (!roleIds.has(id)) for (const action of role.actions) {delete action.bitmap;delete action.intrinsic_bitmap;delete action.shadow_bitmap;}
     for (const id of state.actorResourcesByMap.keys()) if (id !== scene.data.id) state.actorResourcesByMap.delete(id);
     retainedRevision = state.resources.revision;
   }
@@ -227,10 +235,16 @@ export function createMapController({state, actions, $, canvas, ctx}) {
       reconcileResources();
       const dx=Number(state.keys.has('ArrowRight')||state.keys.has('d'))-Number(state.keys.has('ArrowLeft')||state.keys.has('a'));
       const dy=Number(state.keys.has('ArrowDown')||state.keys.has('s'))-Number(state.keys.has('ArrowUp')||state.keys.has('w'));
-      const at=state.world.location;let action=0;
+      const at=state.world.location;let action=0,travelX=0,travelY=0,motion=null;
+      if(gaitScene!==state.scenes.current||gaitRole!==state.selectedRole||state.view.action!==gait.action){
+        gait.reset();gaitScene=state.scenes.current;gaitRole=state.selectedRole;
+      }
       const active=state.world.value.party.find(actor=>actor.id===state.selectedRole),effectivePlayer=state.mapVitals.get(state.selectedRole)??active;
-      if((dx||dy)&&effectivePlayer.hp.current>0){const length=Math.hypot(dx,dy),running=state.keys.has('Shift'),velocity=running?270:150;
-        const moved=state.scenes.current.movement.move(at.x,at.y,dx/length*velocity*delta,dy/length*velocity*delta),choice=locomotion({dx,dy,running},moved.moved);
+      if((dx||dy)&&effectivePlayer.hp.current>0){const length=Math.hypot(dx,dy),running=state.keys.has('Shift');
+        motion=mapMotionProfile(sheetAction(running?2:1),state.scenes.current.data.movement,
+          state.chapterStory.maps[at.map_id]?.header_raw_hex);
+        const moved=state.scenes.current.movement.move(at.x,at.y,dx/length*motion.speed*delta,dy/length*motion.speed*delta),choice=locomotion({dx,dy,running},moved.moved);
+        travelX=moved.x-at.x;travelY=moved.y-at.y;
         state.world.setPosition(moved.x,moved.y,choice.direction);action=choice.action;state.view.follow=true;
         const reached=state.scenes.current.movement.at(moved.x,moved.y),exit=reached.trigger?transitionFor(reached):null;
         const storyTrigger=state.scenes.current.data.story_triggers.find(trigger=>trigger.cells.some(cell=>cell.x===reached.x&&cell.y===reached.y));
@@ -251,9 +265,9 @@ export function createMapController({state, actions, $, canvas, ctx}) {
           else if(preview.steps||moved.x!==at.x||moved.y!==at.y)state.world.setEncounterState(preview.state);
         }
       }
-      if(state.view.action!==action){state.view.action=action;state.view.frame=0;state.clock=0;}
-      const a=sheetAction();state.clock+=delta*1000;const interval=Math.max(20,a.interval_ms_preview??a.interval_raw??180);
-      if(state.clock>=interval){state.view.frame=(state.view.frame+Math.floor(state.clock/interval))%a.frames_per_direction;state.clock%=interval;}
+      state.view.action=action;
+      state.view.frame=gait.advance(sheetAction(),{dx:travelX,dy:travelY,elapsedMs:delta*1000,stride:motion?.stride});
+      state.clock=gait.elapsed;
       if(state.view.follow)follow();updateNearest();
     }
     paint();

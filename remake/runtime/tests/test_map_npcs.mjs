@@ -83,10 +83,41 @@ test('scene inheritance and ANM handoff preserve live positions without sharing 
   next.runtime.adoptActors(new Map([[10,{x:800,y:820,direction:5,visible:true,action:0,frame:2}]]));
   assert.equal(next.npc.x,800);assert.equal(next.npc.y,820);assert.equal(next.npc.direction,5);
   assert.equal(next.npc.motion.frame,2);assert.deepEqual(first.runtime.snapshot(),before);
+  next.runtime.adoptActors(new Map([[10,{x:810,y:824,direction:3,visible:true,action:1,frame:6}]]));
+  assert.equal(next.npc.motion.frame,6);assert.deepEqual([next.npc.motion.x,next.npc.motion.y],[810,824]);
 });
 
 test('NPC movement does not access persistent world resources, RNG, or revision and previews stay isolated',()=>{
   const live=fixture(),preview=fixture(),world={revision:6,encounters:{rng_state:123},location:{map_id:'M17020',x:1092,y:986}};
   const before=structuredClone(world),previewBefore=preview.runtime.snapshot();run(live.runtime,8000,{player:world.location});
   assert.deepEqual(world,before);assert.deepEqual(preview.runtime.snapshot(),previewBefore);
+});
+
+test('native countdown advances every two visits across cell boundaries',()=>{
+  const {runtime,npc}=fixture(),a=runtime.actors.get(npc.id);
+  runtime.visible=()=>true;a.path=Array.from({length:3},(_,i)=>({x:41+i,y:40}));a.wait=0;
+  const frames=[];
+  for(let visit=0;visit<12;visit++){runtime.tick(a,null);frames.push(a.logicalFrame);}
+  assert.deepEqual(frames,[1,1,2,2,3,3,4,4,5,5,6,6]);
+});
+
+test('ordinary NPC visual travel is bounded by source speed, shares distance gait, and freezes on hold/pause',()=>{
+  for(const hz of [30,60,120]){
+    const {runtime,npc}=fixture(),a=runtime.actors.get(npc.id);
+    a.path=Array.from({length:8},(_,i)=>({x:41+i,y:40}));a.wait=0;a.interval=43;
+    runtime.update(0);let previous=640;
+    for(let n=1;n<=hz;n++){
+      runtime.update(n*1000/hz);
+      assert.ok(npc.motion.x<=npc.x+1e-8);assert.ok(npc.motion.x>=previous);
+      assert.ok(npc.motion.x-previous<=4/43*1000/hz+1e-8);
+      const traveled=npc.motion.x-640;
+      assert.equal(npc.motion.frame,Math.floor(traveled/8+1e-8)%10);
+      previous=npc.motion.x;
+    }
+    assert.ok(npc.motion.x>728&&npc.motion.x<734);
+    const release=runtime.hold(npc.id),held={...npc.motion};
+    runtime.update(1100);assert.equal(npc.motion.x,held.x);assert.equal(npc.motion.y,held.y);assert.equal(npc.motion.action,0);
+    runtime.update(5000,{paused:true});assert.equal(npc.motion.x,held.x);
+    release();runtime.update(5016);assert.ok(Math.abs(npc.motion.x-held.x)<=4/43*16+1e-8);
+  }
 });
