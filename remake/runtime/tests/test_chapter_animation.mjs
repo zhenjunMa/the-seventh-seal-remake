@@ -21,12 +21,12 @@ test('each bounded chapter animation matches every original byte and rejects an 
   const bad=structuredClone(story.programs['m17029-1']);bad.commands[0].opcode=254;
   assert.throws(()=>validateChapterAnimation(bad),/未支持/);
 });
-test('source王厅 animation runs speed0, nested TLK24 and native actor1 join in source order',async()=>{
+test('source王厅 animation preserves arrival facing0, nested TLK24 and native actor1 join in source order',async()=>{
   const next=structuredClone(seed);next.opening.status='complete';next.location={map_id:'M17029',x:640,y:592,direction:4};
   const world=new WorldStore(next,maps),trace=[];
   const runner=new ChapterRunner({world,data:story,say:async({record})=>trace.push(`say${record.id}`),
     animate:async({program,draft,runTlk,joinActor})=>{
-      const h=hooks();h.move=async p=>trace.push(`move${p.actor}:${p.speedRaw}`);
+      const h=hooks();h.move=async p=>trace.push(`move${p.actor}:${p.arrivalFacingRaw}`);
       const result=await new ChapterAnimationRunner({program,hooks:h,runTlk,joinActor:async p=>{
         assert.equal(draft.flags[51]&1,1);trace.push('join');await joinActor(p);
       },initialLocation:draft.location}).run();draft.location={...result.location,direction:4};

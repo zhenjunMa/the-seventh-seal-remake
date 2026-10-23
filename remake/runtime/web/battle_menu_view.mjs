@@ -6,10 +6,18 @@ import {battleResources,drawBattleImage} from './core/battle_resources.mjs';
 const clamp=n=>Math.max(0,Math.min(1,n));
 const terminal=phase=>['victory','defeat','escaped','interrupted','closed'].includes(phase);
 const originalSlots=[[5,386],[55,334],[205,396],[255,344]];
+// GAME.exe 0x429c10: top, upper-left, lower-left, bottom, lower-right,
+// upper-right, center. Native navigation keeps unavailable slots focusable.
+const wheelNavigation={
+  ArrowLeft:[1,1,2,2,3,6,1],
+  ArrowUp:[0,0,1,6,5,0,0],
+  ArrowRight:[5,6,3,4,4,5,5],
+  ArrowDown:[6,2,3,3,3,4,3]
+};
 
 // Stable transparent controls over the original source pixels. No world writes.
 export class BattleMenuView{
-  constructor({root,manifest,battle,getSettings,getBindings=null,playCue,onReturn,onStage=()=>{},textRenderer=null,memory=null,returnLabel=null,resultManifest=null,onResultEvent=()=>{}}){
+  constructor({root,manifest,battle,getSettings,getBindings=null,playCue,onReturn,onStage=()=>{},textRenderer=null,memory=null,returnLabel=null,resultManifest=null,onResultEvent=()=>{},now=()=>performance.now()}){
     Object.assign(this,{root,manifest,battle,getSettings,getBindings,playCue,onReturn,onStage,textRenderer,returnLabel});
     this.doc=root.ownerDocument;this.images=new Map();this.players=new Map();this.targets=new Map();this.memory=memory??new Map();this.textCache=new Map();this.ballCache=new Map();this.fontOptions=new WeakMap();this.stage='waiting';this.focusIndex=0;this.listIndex=0;this.listOffset=0;this.draft=null;this.message='';this.epoch=0;this.cueSequence=0;
     this.menus=new Map(manifest.menus.map(m=>[m.id,m]));
@@ -26,10 +34,9 @@ export class BattleMenuView{
     this.listButtons=Array.from({length:6},(_,i)=>{const b=this.button('battle-list-hit',()=>this.selectEntry(this.listOffset+i));b.onfocus=()=>{this.listIndex=this.listOffset+i;this.remember();this.setInfo(this.entries?.[this.listIndex]?.description??'');};this.frame.append(b);return b;});
     this.previous=this.button('battle-scroll-hit',()=>this.moveList(-6));this.previous.setAttribute('aria-label','上一页');this.place(this.previous,467+152,274+40,12,16);this.frame.append(this.previous);
     this.next=this.button('battle-scroll-hit',()=>this.moveList(6));this.next.setAttribute('aria-label','下一页');this.place(this.next,467+152,274+186,12,16);this.frame.append(this.next);
-    this.back=this.button('battle-back',()=>this.escape());this.back.textContent='返回';this.place(this.back,435,450,45,22);this.frame.append(this.back);
     this.returnButton=this.doc.getElementById('battleReturn')??this.doc.createElement('button');this.returnButton.id='battleReturn';this.returnButton.className='battle-result-return';this.returnButton.onclick=()=>this.onReturn();this.frame.append(this.returnButton);
     this.info=this.doc.createElement('span');this.info.className='sr-only';this.info.setAttribute('role','status');this.frame.append(this.info);
-    this.resultView=resultManifest?new BattleResultView({root:this.frame,manifest:resultManifest,onComplete:onReturn,onEvent:onResultEvent,textRenderer}):null;
+    this.resultView=resultManifest?new BattleResultView({root:this.frame,manifest:resultManifest,onComplete:onReturn,onEvent:onResultEvent,textRenderer,now}):null;
     this.resizeObserver=new ResizeObserver(()=>this.fit());this.resizeObserver.observe(root);this.fit();
   }
   button(className,action){const b=this.doc.createElement('button');b.type='button';b.className=className;b.onclick=()=>{if(b.getAttribute('aria-disabled')==='true'){this.reject('当前无法执行此操作。');return;}action();};return b;}
@@ -47,17 +54,17 @@ export class BattleMenuView{
   reject(message){this.setInfo(message);this.cue('menuError');}
   setStage(stage){if(this.stage===stage)return;this.stage=stage;this.root.dataset.focusLayer=stage;this.onStage(stage);}
   ready(){return this.battle.readyPlayerIds?.()??(this.snapshot?.phase==='command'?[this.snapshot.player_id]:[]);}
-  available(){return this.battle.canCommand?.()??this.snapshot?.phase==='command';}
+  available(id=this.snapshot?.player_id){return this.battle.canCommand?.(id)??this.snapshot?.phase==='command';}
   skills(){const id=this.snapshot.player_id,order=this.snapshot.source.player_command_order?.[id]??[];return Object.values(this.battle.skills).filter(s=>s.actor_id===id).sort((a,b)=>(order.indexOf(a.id)<0?999:order.indexOf(a.id))-(order.indexOf(b.id)<0?999:order.indexOf(b.id)));}
   slots(){const skills=this.skills(),bindings=this.getBindings?.(this.snapshot.player_id);return (bindings??[...Array.from({length:3},(_,i)=>({type:0,index_one_based:(skills[i]?.original_skill_index??i)+1})),...[1,2,3,4].map(n=>({type:2,index_one_based:n,icon:n-1,color:0}))]).map((slot,i)=>{const skill=slot.type===0?(bindings?skills.find(s=>s.original_skill_index===slot.index_one_based-1):skills[i]):null;return {...slot,skill,name:slot.type===2?['使用招式','使用物品','防御','逃跑'][slot.index_one_based-1]:skill?.name??slot.name??(slot.type===1?'编成技巧':'当前不可用')};});}
   remember(){if(this.snapshot)this.memory.set(this.snapshot.player_id,{wheel:this.focusIndex,list:this.listIndex,target:this.targetId});}
   update(snapshot){
     if(this.disposed)return;const previous=this.snapshot;this.snapshot=snapshot;this.root.dataset.phase=snapshot.phase;this.root.dataset.actorId=snapshot.player_id;this.root.dataset.ticks=String(snapshot.scheduler?.ticks??0);this.root.dataset.readyIds=this.ready().join(',');
     const changed=previous?.player_id!==snapshot.player_id;
-    if(changed){this.draft=null;this.entries=null;this.listIndex=0;this.listOffset=0;this.setStage(this.ready().length?'wheel':'waiting');const memory=this.getSettings?.().battleCursor==='memory'?this.memory.get(snapshot.player_id):null;this.focusIndex=memory?.wheel??0;this.targetId=memory?.target??null;}
+    if(changed){this.draft=null;this.entries=null;this.listIndex=0;this.listOffset=0;this.setStage(this.available()?(this.stage==='actors'?'actors':'wheel'):'waiting');const memory=this.getSettings?.().battleCursor==='memory'?this.memory.get(snapshot.player_id):null;this.focusIndex=memory?.wheel??0;this.targetId=memory?.target??null;}
     if(terminal(snapshot.phase)){this.draft=null;this.setStage('result');this.setInfo(snapshot.phase==='victory'?'战斗胜利':snapshot.phase==='defeat'?'队伍已经倒下':snapshot.phase==='escaped'?'已经逃离战斗':snapshot.error??'战斗结束');this.resultView?.open(snapshot);}
-    else if(!this.ready().includes(snapshot.player_id)){this.draft=null;if(this.stage!=='waiting')this.setStage('waiting');this.setInfo('');}
-    else if(this.stage==='waiting'&&!snapshot.scheduler?.pending){this.focusIndex=this.getSettings?.().battleCursor==='memory'?(this.memory.get(snapshot.player_id)?.wheel??0):0;this.setStage('wheel');this.needsFocus=true;this.setInfo(snapshot.actors.find(a=>a.id===snapshot.player_id)?.name??'');}
+    else if(!this.available()){this.draft=null;if(this.stage!=='waiting')this.setStage('waiting');this.setInfo('');}
+    else if(this.stage==='waiting'){this.focusIndex=this.getSettings?.().battleCursor==='memory'?(this.memory.get(snapshot.player_id)?.wheel??0):0;this.setStage('wheel');this.needsFocus=true;this.setInfo(snapshot.actors.find(a=>a.id===snapshot.player_id)?.name??'');}
     if(this.stage==='items')this.refreshItems();
     if(this.stage==='skills')for(const entry of this.entries??[])entry.available=this.battle.canChoose(entry.id);
     if(this.stage==='target'){
@@ -65,21 +72,21 @@ export class BattleMenuView{
       else if(!candidates.some(a=>a.id===this.targetId))this.targetId=candidates[0].id;
     }
     this.syncPlayers();this.syncWheel();this.syncList();this.syncTargets();
-    this.back.hidden=!['skills','items','target'].includes(this.stage);
     this.actorLayer.hidden=this.targetLayer.hidden=Boolean(this.resultView?.active);
     this.returnButton.hidden=this.stage!=='result'||Boolean(this.resultView?.active);this.returnButton.disabled=false;this.returnButton.textContent=this.returnLabel??(snapshot.phase==='defeat'?'返回主菜单':'返回地图');
-    if((changed||this.needsFocus)&&this.available()){this.needsFocus=false;this.wheelButtons[this.focusIndex]?.focus({preventScroll:true});}
+    if((changed||this.needsFocus)&&this.available()){this.needsFocus=false;(this.stage==='actors'?this.players.get(snapshot.player_id):this.wheelButtons[this.focusIndex])?.focus({preventScroll:true});}
   }
   syncPlayers(){
     const party=this.snapshot.actors.filter(a=>a.side==='player');const ready=this.ready();
-    party.forEach((a,index)=>{let b=this.players.get(a.id);if(!b){b=this.button('battle-actor-hit',()=>this.selectActor(a.id));b.dataset.actorId=a.id;this.players.set(a.id,b);this.actorLayer.append(b);}b.hidden=a.escaped||a.state_raw===11;const [x,y]=originalSlots[a.party_slot_zero_based??index]??originalSlots[0];this.place(b,x,y,203,53);b.setAttribute('aria-label',`${a.name}，HP ${a.hp.current}/${a.hp.maximum}，MP ${a.mp.current}/${a.mp.maximum}，${ready.includes(a.id)?'行动槽已满':'充能中'}`);b.setAttribute('aria-pressed',String(a.id===this.snapshot.player_id&&ready.includes(a.id)));b.setAttribute('aria-disabled',String(!ready.includes(a.id)||!this.available()));});
+    party.forEach((a,index)=>{let b=this.players.get(a.id);if(!b){b=this.button('battle-actor-hit',()=>this.selectActor(a.id));b.dataset.actorId=a.id;this.players.set(a.id,b);this.actorLayer.append(b);}b.hidden=a.escaped||a.state_raw===11;const [x,y]=originalSlots[a.party_slot_zero_based??index]??originalSlots[0];this.place(b,x,y,203,53);const queued=[this.snapshot.scheduler?.pending,...(this.snapshot.scheduler?.queued_commands??[])].some(command=>command?.actor_id===a.id);b.setAttribute('aria-label',`${a.name}，HP ${a.hp.current}/${a.hp.maximum}，MP ${a.mp.current}/${a.mp.maximum}，${queued?'指令已确认':ready.includes(a.id)?'行动槽已满':'充能中'}`);b.setAttribute('aria-pressed',String(a.id===this.snapshot.player_id&&ready.includes(a.id)));b.setAttribute('aria-disabled',String(!this.available(a.id)));});
   }
   syncWheel(){
     const slots=this.slots();this.commandSlots=slots;
     this.wheelButtons.forEach((b,i)=>{const slot=slots[i],skill=slot?.skill;b.hidden=this.stage!=='wheel';b.setAttribute('aria-label',slot?.name??'空快捷栏');b.dataset.skill=skill?.id??'';const supported=slot?.type===0?Boolean(skill)&&this.battle.canChoose(skill.id):slot?.type===2?[Boolean(this.skills().length),Boolean(this.battle.itemData&&this.battle.items().length),typeof this.battle.chooseDefend==='function',typeof this.battle.chooseEscape==='function'][slot.index_one_based-1]:false;b.setAttribute('aria-disabled',String(!this.available()||!supported));});
   }
-  selectActor(id){if(!this.ready().includes(id)||!this.available()){this.reject('行动槽尚未充满。');return;}if(id===this.snapshot.player_id)return;this.remember();this.battle.selectPlayer(id);this.cue('menuSelect');}
-  cycleActor(direction=1){const ids=this.ready();if(ids.length<2||!this.available())return;this.selectActor(ids[(ids.indexOf(this.snapshot.player_id)+direction+ids.length)%ids.length]);}
+  selectActor(id){if(!this.available(id)){this.reject('此角色尚不能输入新指令。');return;}if(id===this.snapshot.player_id)return;this.remember();this.battle.selectPlayer(id);this.cue('menuSelect');}
+  cycleActor(direction=1){const ids=this.ready().filter(id=>this.available(id));if(!ids.length)return;const current=ids.indexOf(this.snapshot.player_id);this.selectActor(ids[current<0?(direction<0?ids.length-1:0):(current+direction+ids.length)%ids.length]);}
+  moveActor(key){const slot={ArrowLeft:0,ArrowUp:1,ArrowDown:2,ArrowRight:3}[key],party=this.snapshot.actors.filter(a=>a.side==='player'),actor=party.find((a,index)=>(a.party_slot_zero_based??index)===slot);if(actor&&this.available(actor.id))this.selectActor(actor.id);}
   activateWheel(index){
     if(this.stage!=='wheel')return;
     if(!this.available()){this.reject('请等待行动槽充满。');return;}this.focusIndex=index;this.remember();
@@ -108,16 +115,22 @@ export class BattleMenuView{
     try{if(draft.actorId!==this.snapshot.player_id)throw new Error('行动人物已变化，请重新选择。');if(draft.kind==='item')await this.battle.chooseItem(draft.instanceId,targetId);else await this.battle.choose(draft.skillId,targetId);}
     catch(error){if(!this.disposed&&epoch===this.epoch){this.reject(error.message);this.update(this.battle.presentationSnapshot());}}
   }
-  escape(){if(this.stage==='target'){this.draft=null;this.setStage(this.returnStage??'wheel');this.syncWheel();if(['skills','items'].includes(this.stage)){this.syncList();this.listButtons[this.listIndex-this.listOffset]?.focus({preventScroll:true});}else this.wheelButtons[this.focusIndex]?.focus({preventScroll:true});}else if(['skills','items'].includes(this.stage)){this.entries=null;this.setStage('wheel');this.syncWheel();this.wheelButtons[this.focusIndex]?.focus({preventScroll:true});}else return;this.syncTargets();this.syncList();this.cue('menuCancel');this.setInfo('');}
+  escape(){if(this.stage==='target'){this.draft=null;this.setStage(this.returnStage??'wheel');this.syncWheel();if(['skills','items'].includes(this.stage)){this.syncList();this.listButtons[this.listIndex-this.listOffset]?.focus({preventScroll:true});}else this.wheelButtons[this.focusIndex]?.focus({preventScroll:true});}else if(['skills','items'].includes(this.stage)){this.entries=null;this.setStage('wheel');this.syncWheel();this.wheelButtons[this.focusIndex]?.focus({preventScroll:true});}else if(this.stage==='wheel'&&this.snapshot.actors.filter(a=>a.side==='player'&&!a.escaped&&a.state_raw!==11).length>1){this.setStage('actors');this.syncWheel();this.players.get(this.snapshot.player_id)?.focus({preventScroll:true});}else return;this.syncTargets();this.syncList();this.cue('menuCancel');this.setInfo('');}
+  moveWheel(key){
+    const next=wheelNavigation[key]?.[this.focusIndex];
+    if(next===undefined||next===this.focusIndex)return;
+    this.focusIndex=next;this.wheelButtons[next].focus({preventScroll:true});this.cue('menuSelect');
+  }
   key(key,repeat=false){
     if(this.resultView?.active)return this.resultView.key(key,repeat);
     if(this.disposed)return false;if(['Enter',' ','Escape'].includes(key)&&repeat)return true;
     if(key==='Escape'){this.escape();return true;}if(key==='Tab'||key==='x'||key==='z'){this.cycleActor(key==='z'?-1:1);return true;}
     if(!['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Enter',' '].includes(key))return false;
     if(this.stage==='result'){if(['Enter',' '].includes(key))this.onReturn();return true;}
-    if(['Enter',' '].includes(key)){if(this.stage==='wheel')this.activateWheel(this.focusIndex);else if(['skills','items'].includes(this.stage))this.selectEntry(this.listIndex);else if(this.stage==='target')this.commit();return true;}
+    if(['Enter',' '].includes(key)){if(this.stage==='actors'&&this.available()){this.setStage('wheel');this.syncWheel();this.wheelButtons[this.focusIndex]?.focus({preventScroll:true});this.cue('menuOpen');}else if(this.stage==='wheel')this.activateWheel(this.focusIndex);else if(['skills','items'].includes(this.stage))this.selectEntry(this.listIndex);else if(this.stage==='target')this.commit();return true;}
     const direction=['ArrowUp','ArrowLeft'].includes(key)?-1:1;
-    if(this.stage==='wheel'){this.focusIndex=(this.focusIndex+direction+7)%7;this.wheelButtons[this.focusIndex].focus({preventScroll:true});this.cue('menuSelect');}
+    if(this.stage==='actors')this.moveActor(key);
+    else if(this.stage==='wheel')this.moveWheel(key);
     else if(['skills','items'].includes(this.stage))this.moveList(direction);
     else if(this.stage==='target'){const actors=this.targetActors(),i=actors.findIndex(a=>a.id===this.targetId);if(actors.length){this.targetId=actors[(i+direction+actors.length)%actors.length].id;this.targets.get(this.targetId)?.focus({preventScroll:true});this.cue('menuSelect');}}
     return true;
@@ -164,7 +177,7 @@ export class BattleMenuView{
   }
   drawWheel(now){
     this.image(this.menus.get('game002d').images[0].image,490,340);
-    if(!this.available()){this.asset('fight_board_mask',0,490,340);return;}
+    if(this.stage==='actors'||!this.available()){this.asset('fight_board_mask',0,490,340);return;}
     const slots=this.commandSlots??this.slots();
     this.wheelButtons.forEach((b,i)=>{const x=parseFloat(b.style.left),y=parseFloat(b.style.top),slot=slots[i],active=i===this.focusIndex&&this.stage==='wheel'&&this.available();if(slot){let icon=slot.icon,units=slot.color;if(slot.type===0&&slot.skill&&icon===undefined){const raw=Uint8Array.from(slot.skill.fixed_raw_hex.match(/../g),x=>parseInt(x,16));icon=(raw[0x32]>>4)&15;units=raw[0x36];}this.asset(slot.type===2?'other_ball':slot.type===1?'name_ball':'magic_ball1',(icon??0)+(active?(slot.type===2?4:slot.type===1?88:6):0),x,y);if(units>0)this.asset('magic_ball1_num',Math.min(41,(slot.type===1?Math.floor(icon/11):icon)*7+units-1),x+14,y+12);}
       if(i===this.focusIndex&&this.stage==='wheel'&&this.available())this.asset('board_bright',Math.floor(now/120),x-13,y-13,{blend:'lighter'});

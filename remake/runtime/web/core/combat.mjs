@@ -1,5 +1,5 @@
 // Bounded party / up-to-four-enemy lifecycle. Native rules are injected.
-import {initializeScheduler,chargeActor,isActorReady,selectReady,dispatchCharge,dispatchItemCharge,setIdleSkill,advanceIdleSkill} from './battle_scheduler.mjs';
+import {initializeScheduler,chargeActor,isActorReady,selectReady,dispatchCharge,dispatchItemCharge,setIdleSkill,advanceIdleSkill,pendingCommands,commandForActor} from './battle_scheduler.mjs';
 import {planForestEnemyAction,selectNativeTarget} from './forest_ai.mjs';
 import {composeNativeSequence,directSequence} from './skill_sequence.mjs';
 import {createRewardLedger,collectEnemyDefeat,recordNativeContact,resetNativeChain,planVictoryRewards} from './battle_rewards.mjs';
@@ -45,7 +45,7 @@ export class BattleController {
     const mode=(state.source.runtime_configuration??state.source.skill_configuration)?.mode;
     return copy({id,phase,round,player_id,enemy_id,error,outcome,scheduler,rewards,test_mode,
       lifecycle_events:state.lifecycle_events??[],pending_outcome:state.pending_outcome??null,
-      ready_player_ids:this.readyPlayerIds(),command_available:this.canCommand(),input_busy:Boolean(scheduler?.pending)||this.running&&scheduler?.active_actor_id===player_id,action_busy:this.running,
+      ready_player_ids:this.readyPlayerIds(),command_available:this.canCommand(),input_busy:Boolean(commandForActor(scheduler,player_id))||this.running&&scheduler?.active_actor_id===player_id,action_busy:this.running,
       source:{runtime_configuration:{mode},player_command_order:state.source.player_command_order},
       actors:state.actors.map(({id,name,side,hp,mp,alive,charge,state_raw,defense_half_raw,party_slot_zero_based,life_epoch,idle_pose})=>({id,name,side,hp,mp,alive,charge,state_raw,party_slot_zero_based,life_epoch,idle_pose,defending:Boolean(defense_half_raw),escaped:state_raw===11})),
       history:state.history.map(({action_id,actor_id,target_id,skill_id,round,result,impact,presentation,command_kind})=>({
@@ -83,7 +83,7 @@ export class BattleController {
     if(this.itemData)this.state.inventory=copy(this.world.value.inventory);
     this.schedulerData=scheduler_data?copy(scheduler_data):null;
     if(this.schedulerData){this.chargeClock=this.now();this.state.scheduler=initializeScheduler(next,this.schedulerData,side_priority,this.chargeClock);this.state.scheduler.command_stage='closed';this.state.phase='charging';}
-    this.actionTask=null;
+    this.actionTask=null;this.activeItemInstanceId=null;
     this.nativeAiData=enemy_ai_data?copy(enemy_ai_data):null;this.enemySkillTables=enemy_skill_tables?copy(enemy_skill_tables):null;this.completeContacts=complete_contacts;this.rewardData=!test_mode&&reward_data?copy(reward_data):null;this.rewardPlan=null;
     this.skillGrowthData=skill_data?skillGrowthSource(skill_data):null;this.skillPractice={};
     if(complete_contacts)requireValue(this.nativeAiData&&this.enemySkillTables&&typeof this.playSequence==='function','完整技能序列执行器缺失');
@@ -156,7 +156,7 @@ export class BattleController {
   canCommand(id=this.state?.player_id) {
     const actor=this.state&&this.actor(id),scheduler=this.state?.scheduler;
     if(!scheduler)return Boolean(this.state?.phase==='command'&&!this.running&&actor?.side==='player'&&actor.hp.current>0);
-    return Boolean(['command','charging','action'].includes(this.state.phase)&&!this.state.pending_outcome&&!scheduler.pending&&actor?.side==='player'&&actor.id!==scheduler.active_actor_id&&!this.state.lifecycle_events?.some(e=>e.actor_id===id)&&isActorReady(actor,scheduler));
+    return Boolean(['command','charging','action'].includes(this.state.phase)&&!this.state.pending_outcome&&!commandForActor(scheduler,id)&&actor?.side==='player'&&actor.id!==scheduler.active_actor_id&&!this.state.lifecycle_events?.some(e=>e.actor_id===id)&&isActorReady(actor,scheduler));
   }
   setCommandStage(stage='closed') {
     requireValue(typeof stage==='string'&&stage.length>0&&stage.length<=64,'战斗命令层无效');
@@ -172,15 +172,26 @@ export class BattleController {
     const skill=this.skills?.[skillId], player=this.state && this.actor(this.state.player_id);
     return this.canCommand() && skill?.actor_id===player.id && (!skill.fixed_raw_hex||(player.level??0)>=requiredSkillLevel(skill)) && player.mp.current>=skill.mp_cost&&!silenced(player,skill)&&(skill.battle_handler!=='native-revival'||this.targetIdsForSkill(skillId).length>0);
   }
-  items() { return this.itemData&&this.state?.inventory?copy(usableItems(this.state.inventory,this.itemData)):[]; }
+  reservedItems(instanceId){return pendingCommands(this.state?.scheduler).filter(command=>command.item_instance_id===instanceId).length+(this.activeItemInstanceId===instanceId?1:0);}
+  items() { return this.itemData&&this.state?.inventory?copy(usableItems(this.state.inventory,this.itemData)).map(item=>({...item,quantity:item.quantity-this.reservedItems(item.instance_id)})).filter(item=>item.quantity>0):[]; }
+  queueCommand(command){
+    const s=this.state.scheduler;
+    if(s.pending)(s.queued_commands??=[]).push(command);else s.pending=command;
+    s.command_stage='closed';this.refreshCommandState();
+    this.log({type:'battle-command-queued',battle_id:this.state.id,...copy(command),scheduler:copy(s)});this.publish();
+  }
+  removeCommand(command){
+    const s=this.state.scheduler,remaining=pendingCommands(s).filter(row=>row!==command);
+    s.pending=remaining.shift()??null;s.queued_commands=remaining;
+  }
+  clearCommands(){const s=this.state.scheduler;s.pending=null;s.queued_commands=[];}
   async chooseDefend() { return this.chooseFixedCommand('defend'); }
   async chooseEscape() { return this.chooseFixedCommand('escape'); }
   async chooseFixedCommand(kind) {
     requireValue(['defend','escape'].includes(kind),'固定战斗命令无效');
     requireValue(this.state?.scheduler&&this.canCommand(),'行动槽尚未充满或已有行动指令');this.checkWorld();
-    const s=this.state.scheduler,player=this.actor(this.state.player_id);
-    s.pending={actor_id:player.id,skill_id:kind,target_id:player.id,command_kind:kind};s.command_stage='closed';
-    this.log({type:'battle-command-queued',battle_id:this.state.id,...copy(s.pending),scheduler:copy(s)});this.publish();
+    const player=this.actor(this.state.player_id);
+    this.queueCommand({actor_id:player.id,skill_id:kind,target_id:player.id,command_kind:kind});
     if(!this.running){const task=this.scheduleReady();if(task)await task;}
     return this.snapshot();
   }
@@ -252,18 +263,18 @@ export class BattleController {
       if(now-this.chargeClock<20)return false;
       this.checkWorld();this.chargeClock=now;s.ticks++;s.elapsed_ms+=20;
       for(const actor of this.state.actors){chargeActor(actor,this.rng);if(actor.state_raw===4&&this.reactionData&&this.canFinalizeDeath(actor))this.finalizeDeath(actor);}
-      if(this.statusData)for(const actor of this.state.actors){if(!actor.native_status_slots.some(s=>s.raw_hex.slice(2,4)!=='00'))continue;const update=tickNativeStatuses({actor,threshold:s.threshold,now:s.elapsed_ms,data:this.statusData});Object.assign(actor,update.actor);if(update.cancel_command&&s.pending?.actor_id===actor.id)s.pending=null;if(update.expired.length)this.log({type:'battle-status-expired',battle_id:this.state.id,actor_id:actor.id,slots:update.expired});}
+      if(this.statusData)for(const actor of this.state.actors){if(!actor.native_status_slots.some(s=>s.raw_hex.slice(2,4)!=='00'))continue;const update=tickNativeStatuses({actor,threshold:s.threshold,now:s.elapsed_ms,data:this.statusData});Object.assign(actor,update.actor);if(update.cancel_command){const command=commandForActor(s,actor.id);if(command)this.cancelQueuedCommand(command,'actor-status');}if(update.expired.length)this.log({type:'battle-status-expired',battle_id:this.state.id,actor_id:actor.id,slots:update.expired});}
       this.refreshCommandState();this.publish();
       this.scheduleReady();return true;
     }catch(error){this.interrupt(error);return false;}
   }
   interrupt(error) {
-    this.running=false;this.state.phase='interrupted';this.state.error=error.message;
-    if(this.state.scheduler){this.state.scheduler.pending=null;this.state.scheduler.active_actor_id=null;this.state.scheduler.command_stage='closed';}
+    this.running=false;this.activeItemInstanceId=null;this.state.phase='interrupted';this.state.error=error.message;
+    if(this.state.scheduler){this.clearCommands();this.state.scheduler.active_actor_id=null;this.state.scheduler.command_stage='closed';}
     this.log({type:'battle-interrupted',battle_id:this.state.id,error:error.message});this.publish();
   }
   cancelQueuedCommand(pending,reason,details={}) {
-    if(this.state.scheduler.pending===pending)this.state.scheduler.pending=null;
+    this.removeCommand(pending);
     this.log({type:'battle-command-cancelled',battle_id:this.state.id,...copy(pending),reason,...copy(details)});
   }
   queuedTarget(pending,attacker,skill) {
@@ -296,24 +307,27 @@ export class BattleController {
     if(!this.state?.scheduler||!['command','charging','action'].includes(this.state.phase))return;
     const s=this.state.scheduler,victory=this.state.actors.filter(a=>a.side==='enemy').every(a=>a.hp.current===0);
     if(this.testMode&&this.state.test_exit_requested&&!this.running){
-      s.pending=null;s.command_stage='closed';
+      this.clearCommands();s.command_stage='closed';
       if(this.hasLifecycle()){this.state.pending_outcome='escaped';this.state.phase='charging';return;}
       this.state.pending_outcome=null;this.state.phase='escaped';this.state.outcome='escaped';return;
     }
     if(!this.running&&(!this.activePlayers().length||victory)){
       const outcome=victory?'victory':this.players().some(a=>a.state_raw===11)?'escaped':'defeat';
       if(this.lifecycleEnabled&&(this.hasLifecycle('death')||this.state.actors.some(a=>a.hp.current===0&&a.state_raw===4))){
-        this.state.pending_outcome=outcome;this.state.phase='charging';s.pending=null;s.command_stage='closed';return;
+        this.state.pending_outcome=outcome;this.state.phase='charging';this.clearCommands();s.command_stage='closed';return;
       }
-      this.state.pending_outcome=null;this.state.phase=outcome;this.state.outcome=outcome;s.pending=null;s.command_stage='closed';
+      this.state.pending_outcome=null;this.state.phase=outcome;this.state.outcome=outcome;this.clearCommands();s.command_stage='closed';
       if(victory&&this.rewardData)this.prepareRewards();return;
     }
     if(this.activePlayers().length&&!victory)this.state.pending_outcome=null;
-    if(s.pending&&this.actor(s.pending.actor_id)?.hp.current===0)this.cancelQueuedCommand(s.pending,'actor-fallen');
-    if(s.pending?.item_instance_id){const target=this.actor(s.pending.target_id);if(!target||target.hp.current===0||target.state_raw>=4||target.immune_raw||target.escaped)this.cancelQueuedCommand(s.pending,'item-target-unavailable');}
-    const ready=this.readyPlayerIds();
-    if(!s.pending&&!ready.includes(this.state.player_id))this.state.player_id=ready[0]??this.activePlayers()[0]?.id??this.state.player_id;
-    if(!this.running)this.state.phase=ready.length&&!s.pending?'command':'charging';
+    for(const command of pendingCommands(s)){
+      if(this.actor(command.actor_id)?.hp.current===0){this.cancelQueuedCommand(command,'actor-fallen');continue;}
+      if(command.item_instance_id){const target=this.actor(command.target_id);if(!target||target.hp.current===0||target.state_raw>=4||target.immune_raw||target.escaped)this.cancelQueuedCommand(command,'item-target-unavailable');}
+    }
+    const ready=this.readyPlayerIds().filter(id=>this.canCommand(id));
+    if(!ready.includes(this.state.player_id)&&ready.length)this.state.player_id=ready[0];
+    else if(!this.activePlayers().some(a=>a.id===this.state.player_id))this.state.player_id=this.activePlayers()[0]?.id??this.state.player_id;
+    if(!this.running)this.state.phase=ready.length?'command':'charging';
   }
   scheduleReady() {
     if(this.running||!this.state?.scheduler||this.state.pending_outcome||this.hasLifecycle('entry')||!['command','charging'].includes(this.state.phase))return this.actionTask;
@@ -328,11 +342,12 @@ export class BattleController {
   }
   async chooseScheduled(skillId,targetId=null,itemCommand=null) {
     requireValue(this.state&&['command','charging','action'].includes(this.state.phase),'当前战斗不能选择命令');this.checkWorld();
-    const player=this.actor(this.state.player_id),s=this.state.scheduler;
+    const player=this.actor(this.state.player_id);
     requireValue(this.canCommand(player.id),'角色行动槽尚未充满');
     let skill=this.skills[skillId];
     if(itemCommand){
       const consumed=consumeInventoryItem(this.state.inventory,itemCommand.instance_id,this.itemData);
+      requireValue(consumed.item.quantity>this.reservedItems(itemCommand.instance_id),'道具已被其他角色的待执行指令占用');
       const target=this.actor(targetId??player.id);restoreActorWithItem(target,consumed.item,this.itemData);
       skill={id:`item:${consumed.item.id}`,actor_id:player.id,mp_cost:0};
     }
@@ -344,8 +359,7 @@ export class BattleController {
     const target=itemCommand?this.actor(targetId??player.id):targetId===null?this.actor(this.targetIdsForSkill(skill.id)[0]):this.actor(targetId);
     requireValue(revival?target&&this.targetIdsForSkill(skill.id).includes(target.id):target?.side===(itemCommand?'player':'enemy')&&target.hp.current>0&&target.state_raw!==11&&!target.escaped,'目标已经倒下、离场或阵营不匹配');
     requireValue(this.testMode||this.state.round<=100,'当前样本超过100次玩家行动，请退出测试');
-    s.pending={actor_id:player.id,skill_id:skill.id,target_id:target.id,...(itemCommand?{item_instance_id:itemCommand.instance_id}:{})};s.command_stage='closed';
-    this.log({type:'battle-command-queued',battle_id:this.state.id,...copy(s.pending),scheduler:copy(s)});this.publish();
+    this.queueCommand({actor_id:player.id,skill_id:skill.id,target_id:target.id,...(itemCommand?{item_instance_id:itemCommand.instance_id}:{})});
     if(!this.running){const task=this.scheduleReady();if(task)await task;}return this.snapshot();
   }
   async runScheduledReady(firstSelection) {
@@ -353,26 +367,26 @@ export class BattleController {
     try {
       while(this.activePlayers().length&&this.state.actors.some(a=>a.side==='enemy'&&a.hp.current>0)){
         if(!selection.actor_id)break;
-        const pending=s.pending,chosenPlayer=this.actor(pending?.actor_id??this.state.player_id),player=chosenPlayer?.hp.current>0&&chosenPlayer.state_raw!==11?chosenPlayer:this.activePlayers()[0],skill=pending?this.skills[pending.skill_id]:null;
+        const attacker=this.actor(selection.actor_id),pending=attacker.side==='player'?commandForActor(s,attacker.id):s.pending,chosenPlayer=this.actor(pending?.actor_id??this.state.player_id),player=chosenPlayer?.hp.current>0&&chosenPlayer.state_raw!==11?chosenPlayer:this.activePlayers()[0],skill=pending?this.skills[pending.skill_id]:null;
         const itemCommand=pending?.item_instance_id?{instance_id:pending.item_instance_id}:null;
         let target=pending?this.actor(pending.target_id):null;const skillId=pending?.skill_id;
-        const attacker=this.actor(selection.actor_id);
         if(attacker.side==='player'&&!pending?.command_kind){target=this.queuedTarget(pending,attacker,skill);if(!target)break;}
         // A dispatched command belongs to the active action now. Free the
         // input queue so another ready party member can choose its next action
         // during this animation; completion must preserve that new pending row.
-        if(attacker.side==='player'&&s.pending===pending)s.pending=null;
+        if(attacker.side==='player')this.removeCommand(pending);
         if(attacker.side==='player'&&pending?.command_kind){
           if(pending.command_kind==='defend')this.performDefend(attacker);else this.performEscape(attacker);
           s.active_actor_id=null;break;
         }
         if(itemCommand&&attacker.id===player.id){
           const consumed=consumeInventoryItem(this.state.inventory,itemCommand.instance_id,this.itemData);
+          this.activeItemInstanceId=itemCommand.instance_id;
           let result=restoreActorWithItem(target,consumed.item,this.itemData),committed=false;
           const charge=dispatchItemCharge(attacker,s),actionId=`${this.state.id}:${this.state.action_count+1}`;
           this.state.phase='action';this.publish();
           const onUse=()=>{
-            if(!committed){this.checkWorld();const before=copy(target);result=restoreActorWithItem(target,consumed.item,this.itemData);Object.assign(target,result.actor);this.state.inventory=consumed.inventory;committed=true;this.state.action_count++;
+            if(!committed){this.checkWorld();const before=copy(target);result=restoreActorWithItem(target,consumed.item,this.itemData);Object.assign(target,result.actor);this.state.inventory=consumed.inventory;committed=true;this.activeItemInstanceId=null;this.state.action_count++;
               const entry={action_id:actionId,actor_id:attacker.id,target_id:target.id,skill_id:skillId,item_id:consumed.item.id,round:this.state.round,impact:true,result:{hit:true,damage:0,changes:result.changes},before,after:copy(target)};
               this.state.history.push(entry);this.log({type:'battle-item-used',battle_id:this.state.id,...copy(entry),name:result.name,charge});this.publish();}
             return {hit:true,damage:0,item_used:true,remainingHp:target.hp.current};
@@ -401,7 +415,6 @@ export class BattleController {
           if(attacker.current_skill?.id!==this.schedulerData.idle_skills[attacker.resource_id??attacker.id].id)setIdleSkill(attacker,this.schedulerData,this.now());}
         if(this.lifecycleEnabled)for(const actor of this.state.actors)if(actor.hp.current===0&&actor.state_raw===4&&this.canFinalizeDeath(actor))this.finalizeDeath(actor);
         if(attacker.side==='player'){this.state.round++;break;}
-        if(s.pending&&this.actor(s.pending.actor_id)?.hp.current===0)s.pending=null;
         // Return control after each completed action. The next frame performs
         // the next arbitration, leaving input a boundary to confirm a ready
         // player's command instead of draining an unbounded enemy action chain.
@@ -459,7 +472,7 @@ export class BattleController {
       if(victim&&!isRevival&&result.native_return!==-1){
         if(this.state.reward_ledger)recordNativeContact(this.state.reward_ledger,{attacker:striker,target:victim,skill:source,hit:result.hit,settledBefore:victim.settled_raw});
         victim.settled_raw=result.after_settled_raw;
-        if(this.statusData){status=applyNativeSkillStatus({actor:victim,skill:source,data:this.statusData,rng:this.rng,now:this.state.scheduler.elapsed_ms});Object.assign(victim,status.actor);if(status.cancel_command&&this.state.scheduler.pending?.actor_id===victim.id)this.state.scheduler.pending=null;}
+        if(this.statusData){status=applyNativeSkillStatus({actor:victim,skill:source,data:this.statusData,rng:this.rng,now:this.state.scheduler.elapsed_ms});Object.assign(victim,status.actor);if(status.cancel_command){const command=commandForActor(this.state.scheduler,victim.id);if(command)this.cancelQueuedCommand(command,'actor-status');}}
         const applied=this.applyDamage(copy(victim),copy(result),this.nativeContext());actorShape(applied);requireValue(applied.hp.current<=victim.hp.current&&applied.id===victim.id,'完整接触提交改变了目标身份或增加HP');Object.assign(victim,applied);
         lethal=before.target.hp.current>0&&victim.hp.current===0;
         if(lethal&&this.lifecycleEnabled)victim.killer_actor_id=striker.id;
@@ -486,7 +499,7 @@ export class BattleController {
     if(death)Object.assign(actor,copy(death.after));else actor.state_raw=5;
     if(this.statusData)Object.assign(actor,clearNativeStatuses(actor,this.statusData));
     if(this.lifecycleEnabled&&actor.charge)Object.assign(actor.charge,{gauge:0,delay:0,recovery:0,recovery_ticks:0});
-    if(this.state.scheduler?.pending?.actor_id===actor.id)this.state.scheduler.pending=null;
+    const command=commandForActor(this.state.scheduler,actor.id);if(command)this.cancelQueuedCommand(command,'actor-fallen');
     if(this.state.reward_ledger&&actor.side==='enemy')collectEnemyDefeat(this.state.reward_ledger,actor,{data:this.rewardData});
     if(this.lifecycleEnabled&&death){
       this.state.lifecycle_events=this.state.lifecycle_events.filter(e=>e.actor_id!==actor.id);this.queueLifecycle(actor,death);

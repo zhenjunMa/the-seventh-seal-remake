@@ -4,8 +4,8 @@ import {battleResources,drawBattleImage} from './core/battle_resources.mjs';
 // Original report assets stay in the battle's 640x480 plane. The reward plan
 // belongs to combat; this view only counts and acknowledges its presentation.
 export class BattleResultView{
-  constructor({root,manifest,onComplete,onEvent=()=>{},textRenderer=null}){
-    Object.assign(this,{root,manifest:validateBattleResultManifest(manifest),onComplete,onEvent,textRenderer});
+  constructor({root,manifest,onComplete,onEvent=()=>{},textRenderer=null,now=()=>performance.now()}){
+    Object.assign(this,{root,manifest:validateBattleResultManifest(manifest),onComplete,onEvent,textRenderer,now});
     this.doc=root.ownerDocument;this.images=new Map();this.textCache=new Map();this.active=false;
     this.hit=this.doc.createElement('button');this.hit.type='button';this.hit.className='battle-report-hit';
     this.hit.setAttribute('aria-label','战斗结算，按空格继续');this.hit.hidden=true;this.hit.onclick=()=>{this.advance();this.release();};root.append(this.hit);
@@ -15,7 +15,7 @@ export class BattleResultView{
     const paths=new Set(Object.values(this.manifest.assets).flatMap(a=>a.frames.flatMap(f=>[f.image,f.indexed_image,f.inverse_mask_image,f.render_image].filter(Boolean))));
     this.images=await battleResources.preparePaths([...paths],{scope:'battle-result',onProgress});
   }
-  open(snapshot,now=performance.now()){
+  open(snapshot,now=this.now()){
     if(this.model?.battleId===snapshot.id)return;
     if(snapshot.phase!=='victory'||!snapshot.rewards)return;
     this.model=new BattleResultSequence({battleId:snapshot.id,summary:snapshot.rewards,actors:snapshot.actors,now,victorFrames:this.manifest.assets.victor.frames.length});
@@ -30,7 +30,7 @@ export class BattleResultView{
     if(this.status.textContent!==message)this.status.textContent=message;
     if(kind)this.onEvent({type:'battle-report-'+kind,battle_id:s.battle_id,phase:s.phase,page:s.page,visible_notice_ids:s.notifications.filter(n=>n.active).map(n=>n.id),complete:s.done});
   }
-  advance(repeat=false,now=performance.now()){
+  advance(repeat=false,now=this.now()){
     if(!this.active||!this.model)return;
     const result=this.model.advance({repeat,now});if(result.kind==='ignored')return;
     this.publish(result.kind);if(result.kind==='complete')this.onComplete();

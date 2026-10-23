@@ -6,7 +6,6 @@
 .battle-interface button:hover,.battle-interface button:focus-visible{background:transparent;border:0;outline:none}
 .battle-interface button[aria-disabled=true]{cursor:default}
 .battle-interface .battle-list-hit:focus-visible{outline:1px solid #fff4}
-.battle-interface .battle-back{font:12px SimSun;color:#fff;text-shadow:1px 1px #000;background:#100e0bcc;border:1px solid #aa9259}
 .battle-interface .battle-result-return{left:260px;top:268px;min-width:120px;height:30px;color:#fff;font:16px SimSun;background:#17140de8;border:1px solid #c6a057}
 .battle-interface .battle-result-return:focus-visible{outline:2px solid #f6df96}
 .battle-interface .battle-report-hit{inset:0;width:640px;height:480px;cursor:pointer}

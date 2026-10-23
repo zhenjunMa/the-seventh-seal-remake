@@ -139,6 +139,10 @@ def export():
     write(folder / 'export.json', dict(passed=True, source_bytes_unchanged=True, source_hashes=sources,
         output_hashes=outputs, roles=list(roles), maps=maps, frame_checks=checks,
         original_game_execution_observed=False))
+    # Keep the same source-frame shadow channel when the registered map
+    # presentation assets are rebuilt. This helper never rewrites main/light.
+    from export_map_shadows import export as export_shadows
+    export_shadows()
     print(json.dumps(dict(passed=True, roles=list(roles), maps=list(maps), checked_frames=len(checks), outputs=len(outputs))))
 
 

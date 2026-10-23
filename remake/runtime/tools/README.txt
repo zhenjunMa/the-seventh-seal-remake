@@ -15,6 +15,7 @@
 原版资源盘点：python3 -B remake/runtime/tools/resource_inventory.py（需要本地原版资源，输出evidence/resource_inventory.json）
 同步构建文档：python3 -B remake/runtime/tools/sync_tool_docs.py
 只读核对构建文档：python3 -B remake/runtime/tools/sync_tool_docs.py --check
+只增量导出人物原始逐帧阴影：python3 -B remake/runtime/tools/export_map_shadows.py
 
 执行语义
 不加--run只列计划。--validate检查工具、既有来源台账与产物，记录当前指纹到evidence/export_inventory.json；不执行导出，也不等于原输入已经与历史来源逐项一致。
@@ -60,6 +61,7 @@ specialized-evidence-check：专题验收和日期观察复核，按各工具代
 fixture-or-observation-preparation：创建独立样本或原版观察副本，不等于正式获取／入队流程。
 source-observation：只读检查或记录原版，原目录输入保持只读。
 resource_inventory.py盘点原资源目录、文件头、GAME.exe的PE导入和已有证据索引，不解码自定义格式；生成报告统一保存在runtime/evidence，不写assessment。
+export_map_shadows.py也是map-effects构建步骤的共享助手：从现有opening/chapter角色清单及事件NPC取动作组，只新增assets/map_shadows与data/map_shadows.json，逐帧核对DGP geometry[41]原掩码，保留人物main／intrinsic PNG。按动作全部帧／方向的非空包围盒并集裁剪，shadow_geometry保存原帧偏移及紧凑尺寸；每帧重新展开后与独立原掩码逐像素核对，全空动作跳过。独立命令写movement_optimization_20261023/shadow_export.json，不运行全量构建。50%黑色alpha近似原16位背景RGB分量减半；主图／阴影／加色层保持同源帧、锚点及人物depth。
 independent-source-export：独立基础来源或旧样本生产入口，可能仍用于初始提取；分类不表示可删除。
 
 当前构建目标与直接依赖

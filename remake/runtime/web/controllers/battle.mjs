@@ -20,7 +20,8 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
   const captureScene=kind=>actions.captureScene?.(kind)??(kind==='battle'?$('battleCanvas'):canvas);
   function updateBattle(snapshot){
     if(!snapshot||snapshot.phase==='closed')return;
-    if(!state.battleEntryPending)state.scenes.setPhase(snapshot.phase==='command'?'battle-command':snapshot.phase==='charging'?'battle-charging':snapshot.phase==='action'?'battle-action':snapshot.phase==='interrupted'?'battle-interrupted':'battle-result');
+    const phase=snapshot.phase==='command'?'battle-command':snapshot.phase==='charging'?'battle-charging':snapshot.phase==='action'?'battle-action':snapshot.phase==='interrupted'?'battle-interrupted':'battle-result';
+    if(!state.battleEntryPending&&state.scenes.phase!==phase)state.scenes.setPhase(phase);
     const node=$('battleCommands');node.dataset.phase=snapshot.phase;node.dataset.round=snapshot.round;
     node.dataset.mode=state.skillTestSession?'skill-test':'battle';
     const impacted=snapshot.history.findLast(entry=>entry.impact);
@@ -73,7 +74,8 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
     const bindingSource=newParty?effectiveSkillSource(state.partySkills,state.world.value):null;
     state.battleMenu=new BattleMenuView({root:$('battleHud'),manifest:uiManifest,battle:state.battle,returnLabel,
       getSettings:()=>state.menuSettings?.snapshot()??{},getBindings:newParty?id=>techniqueSlots(state.world.value,bindingSource,id).map(slot=>({...slot,name:slot.type===1?techniqueCombinations(state.world.value,bindingSource,id)[slot.index_one_based-1]?.name:techniqueSlotName(bindingSource,id,slot)})):null,
-      playCue:(...args)=>state.audio?.playCue(...args),onReturn:actions.guarded(returnFromBattle),onStage:stage=>state.battle.setCommandStage?.(stage),textRenderer:state.operationMenu?.textRenderer,memory:state.battleCursorMemory,resultManifest,onResultEvent:actions.log});
+      playCue:(...args)=>state.audio?.playCue(...args),onReturn:actions.guarded(returnFromBattle),onStage:stage=>state.battle.setCommandStage?.(stage),textRenderer:state.operationMenu?.textRenderer,memory:state.battleCursorMemory,resultManifest,onResultEvent:actions.log,
+      now:()=>state.engine?.battle.clock.time??performance.now()});
     await state.battleMenu.prepare({onProgress});
   }
   function showBattle(){
@@ -81,11 +83,12 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
     for(const id of ['battleCanvas','battleHud','battleCommands'])$(id).hidden=false;
     canvas.hidden=true;$('dialogue').hidden=true;actions.resize();state.battleMenu.fit();
   }
-  async function prepareWithLoading(mode,work){
+  async function prepareBattleResources(mode,work){
     const started=performance.now();
-    if(state.loadingView)$('loading').hidden=true;
-    const run=state.loadingView?state.loadingView.run(mode,work,{kind:'battle',minimumDisplayMs:0}):work(()=>{});
-    const result=await run;
+    // Keep the exploration/menu image visible until the battle can be drawn.
+    // LoadingView is shared with map changes; its progress artwork is not an
+    // entry animation and must never be exposed by battle preparation.
+    const result=await work(()=>{});
     actions.log({type:'battle-resources-ready',mode,elapsed_ms:performance.now()-started,cache:battleResources.snapshot()});
     return result;
   }
@@ -108,10 +111,10 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
   async function startBattle(group=null,encounterState=null){
     if(state.scenes.phase!=='map')return;
     const revision=state.world.value.revision,before=state.battleTransition?.capture(captureScene());state.battlePresentationError=null;
-    state.battleCheckpoint={...state.view};state.scenes.setPhase('battle-loading');$('loading').querySelector('p').textContent='正在准备战斗…';actions.status('正在准备战斗资源…');
+    state.battleCheckpoint={...state.view};state.scenes.setPhase('battle-loading');
     try{
       let sample,newParty;
-      await prepareWithLoading('battle',async progress=>{
+      await prepareBattleResources('battle',async progress=>{
       state.battleData??=await actions.json(state.catalog.combat_sample??'data/combat_sample.json');
       newParty=state.world.value.source.kind==='native-new-game';
       if(newParty&&!group)throw new Error('新游戏请在白木森林中行走遇敌。');
@@ -134,9 +137,8 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
       await revealBattle(before,sample,()=>state.battle.start({...sample,lifecycle_enabled:Boolean(state.battleView.lifecycle),side_priority:state.sidePriority,rng:state.battleRng,source:{...sample.source,rng_seed:rngSeed,rng_seed_policy:group?'persistent-development-global-stream':'controlled-development-seed'}}));
       state.audio?.setScene({mapId:state.world.location.map_id,battle:true,stageId:group?.stage??null});
       if(group)actions.log({type:'field-encounter',group,location:state.world.location,counter_after:state.world.value.encounters.counters[state.selectedRole]});
-      actions.status('行动槽随时间推进；满槽后选择招式和目标。Tab / X / Z 切换满槽人物，Esc 返回上一层。');
+      actions.status('满槽后选择招式和目标。Esc 收起轮盘，方向键切换人物，空格打开轮盘；也可用 Tab / X / Z 切换满槽人物。');
     }catch(error){state.battleMenu?.dispose();state.battleMenu=null;canvas.hidden=false;for(const id of ['battleCanvas','battleHud','battleCommands'])$(id).hidden=true;Object.assign(state.view,state.battleCheckpoint);state.scenes.setPhase('map');throw error;}
-    finally{$('loading').querySelector('p').textContent='正在进入场景…';}
   }
   async function startTechniqueTest(){
     if(state.skillTestSession||state.scenes.phase!=='party-menu'||!state.menuContext||state.menuContext.combat)return;
@@ -145,10 +147,10 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
       previous:{battle:state.battle,battleView:state.battleView,battleMenu:state.battleMenu,battleRng:state.battleRng,battleNatural:state.battleNatural,battleCursorMemory:state.battleCursorMemory,sidePriority:state.sidePriority,battlePresentationError:state.battlePresentationError,itemData:state.itemData},
       visibility:{canvas:canvas.hidden,dialogue:$('dialogue').hidden},view:null,battle:null,returnPending:false};
     state.skillTestSession=session;state.battlePresentationError=null;state.battleNatural=false;state.battleCursorMemory=new Map(state.battleCursorMemory);
-    state.scenes.setPhase('battle-loading');$('loading').querySelector('p').textContent='正在准备技巧测试…';actions.status('正在准备技巧测试…');
+    state.scenes.setPhase('battle-loading');
     try{
       let sample,rules;
-      await prepareWithLoading('skill-test',async progress=>{
+      await prepareBattleResources('skill-test',async progress=>{
       state.battleData??=await actions.json(state.catalog.combat_sample??'data/combat_sample.json');
       const [configured,loadedRules]=await Promise.all([actions.readConfiguredData(),actions.json('data/skill_test.json')]);rules=loadedRules;
       state.itemData=configured.items;
@@ -170,7 +172,6 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
       actions.status('技巧测试：目标不主动攻击，技能不消耗HP／MP；道具照常消耗。选择逃跑返回技巧页面。');
       actions.log({type:'technique-test-opened',battle_id:state.battle.state.id,stage_id:rules.stage.stage_id,enemy_resources:rules.enemy_resources,world_revision:session.revision});
     }catch(error){restoreTechniqueTest(session,'测试启动失败');throw error;}
-    finally{$('loading').querySelector('p').textContent='正在进入场景…';}
   }
   function restoreTechniqueTest(session,reason){
     if(state.skillTestSession!==session)return;

@@ -256,7 +256,7 @@ def export_map(map_id: str, parsed: dict, output_files: dict) -> dict:
     movement = dict(schema="seventh-seal-map-movement", version=1, map=map_id,
                     source=source_path(dat_path), source_sha256=sha(dat_path),
                     width=bg.width, height=bg.height, cell_size=16,
-                    native_coordinate_shift=3, native_to_pixel_scale=2,
+                    native_coordinate_shift=3, native_to_pixel_scale=2, native_step_shift=bg.data[0x144],
                     terrain_rows=rows, triggers=triggers,
                     terrain_rule="cell byte +0x20 == 0 permits terrain entry",
                     transition_rule="0x4A80E0: +0x38 reference, descriptor[0]==0 and descriptor[0x11]!=0 is path-gated",

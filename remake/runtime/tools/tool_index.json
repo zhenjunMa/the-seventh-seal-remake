@@ -376,6 +376,14 @@
       "imported_by": []
     },
     {
+      "path": "export_map_shadows.py",
+      "role": "shared-current",
+      "build_targets": [],
+      "imported_by": [
+        "export_map_effects.py"
+      ]
+    },
+    {
       "path": "export_maps.py",
       "role": "shared-current",
       "build_targets": [],

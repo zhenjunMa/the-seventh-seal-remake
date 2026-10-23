@@ -64,7 +64,9 @@ function controllerFixture(){
   return {world,state,actions,controller,previous,ticket,events,$,canvas};
 }
 test('Failed test startup releases battle UI and returns to the same retained menu and world',async()=>{
-  const f=controllerFixture(),before=f.world.snapshot();await assert.rejects(f.controller.startTechniqueTest(),/技巧测试来源/);
+  const f=controllerFixture(),before=f.world.snapshot();
+  f.state.loadingView={run(){throw Error('Technique test must not show a loading page');}};
+  await assert.rejects(f.controller.startTechniqueTest(),/技巧测试来源/);
   assert.equal(f.state.skillTestSession,null);assert.equal(f.state.scenes.phase,'party-menu');assert.equal(f.state.menuContext.page,'skills');assert.equal(f.$('partyMenu').hidden,false);
   for(const [key,value]of Object.entries(f.previous))assert.equal(f.state[key],value,key);assert.deepEqual(f.world.snapshot(),before);assert.equal(f.canvas.hidden,false);
 });

@@ -49,6 +49,21 @@ export function createBootController({state, actions, $, canvas, ctx}) {
       for(const source of resource.actions){const action=role?.actions.find(action=>action.index===source.index);
         if(!action)throw new Error('地图光效动作未准备');action.intrinsic_sheet=source.intrinsic_sheet;}
     }
+    const shadows=await actions.json(state.catalog.map_shadows??'data/map_shadows.json');
+    if(shadows.schema!=='seventh-seal-map-shadows'||shadows.version!==1)throw new Error('地图阴影清单版本不兼容');
+    for(const [id,resource] of Object.entries(shadows.roles)){
+      const role=state.openingResources.roles[id],catalogRole=state.catalog.roles.find(role=>role.id===id);
+      if(!role&&!resource.event_only)throw new Error('地图阴影人物未准备');
+      for(const target of [role,catalogRole].filter(Boolean)){
+        if(target.frame_width!==resource.frame_width||target.frame_height!==resource.frame_height)throw new Error('地图阴影尺寸不匹配');
+        for(const source of resource.actions){
+          const action=target.actions.find(action=>action.index===source.index);
+          if(!action){if(target===catalogRole)continue;throw new Error('地图阴影动作未准备');}
+          if((action.frame_count??action.frames_per_direction)!==source.frame_count||action.directions!==source.directions||action.first_frame!==source.first_frame)throw new Error('地图阴影帧分组不匹配');
+          action.shadow_sheet=source.shadow_sheet;action.shadow_geometry=source.shadow_geometry;
+        }
+      }
+    }
     state.battleData=await actions.json(state.catalog.combat_sample??'data/combat_sample.json');
     const [worldMapData,loadedRouteEvents,loadedEncounters,loadedForest]=await Promise.all([actions.json(state.catalog.world_map),actions.json(state.catalog.route_events),actions.json(state.catalog.encounters),actions.json(state.catalog.forest_combat)]);
     state.routeEvents={...loadedRouteEvents,...state.chapterStory.maps};state.encounterData=validateEncounterData(loadedEncounters);state.forestData=loadedForest;
@@ -111,7 +126,12 @@ export function createBootController({state, actions, $, canvas, ctx}) {
     $('audioMuted').onchange=()=>state.audio.setMuted($('audioMuted').checked);$('audioVolume').oninput=()=>state.audio.setVolume(Number($('audioVolume').value)/100);
     state.selectedRole=state.world.value.leader_id;
     state.events=state.catalog.events?await actions.json(state.catalog.events):[];if(!Array.isArray(state.events))state.events=state.events.events;
-    await Promise.all(state.catalog.roles.flatMap(r=>r.actions.filter(a=>a.index<=2).map(async a=>{a.bitmap=await actions.image(a.sheet);}))); 
+    for(const event of state.events){const resource=event.npc?.resource;
+      if(resource){const id=resource.source?.match(/(?:^|\/)([^/]+)\.dgp$/i)?.[1],action=shadows.roles[id]?.actions.find(action=>action.index===0);
+        if(action){resource.shadow_sheet=action.shadow_sheet;resource.shadow_geometry=action.shadow_geometry;}}}
+    await Promise.all(state.catalog.roles.flatMap(r=>r.actions.filter(a=>a.index<=2).flatMap(a=>[
+      actions.image(a.sheet).then(image=>{a.bitmap=image;}),
+      ...(a.shadow_sheet?[actions.image(a.shadow_sheet).then(image=>{a.shadow_bitmap=image;})]:[])])));
     state.scenes=new SceneController({world: state.world,prepare:actions.prepareMap,validateEntry: actions.validateEntry,commitView: actions.commitView,enter:actions.enterMap,onPhase:actions.busy,
       captureView:()=>({view:{...state.view},name:$('mapName').textContent,probes:Array.from($('probe').children,child=>child.cloneNode(true)),nearest: state.nearest,resetHidden:$('resetEventSample').hidden}),
       rollbackView:checkpoint=>{Object.assign(state.view,checkpoint.view);$('mapName').textContent=checkpoint.name;$('probe').replaceChildren(...checkpoint.probes);$('resetEventSample').hidden=checkpoint.resetHidden;state.nearest=checkpoint.nearest;state.audio?.setScene({mapId:state.world.location.map_id,battle:false});}});

@@ -7,42 +7,42 @@
     {
       "id": "M01010",
       "path": "data/maps/m01010.json",
-      "sha256": "d4ac4a3f50dbddc4755533ca3ada2ae29b7d2e887f4687a5c02941477698074b"
+      "sha256": "f2c011c9729e122e90c2d909846f8eef8dffbae0d99cbfb24369e424f2f3dd25"
     },
     {
       "id": "M01030",
       "path": "data/maps/m01030.json",
-      "sha256": "653f2e57b829a459b45a6b8fd4d51a8a74184a4c6898ae03834745db43f55e39"
+      "sha256": "5473b264e0bd505e491a025ef87f89ad5fbf27dff032866245364ee28e62153e"
     },
     {
       "id": "M17010",
       "path": "data/maps/m17010.json",
-      "sha256": "8e6e90e287b48ad53432163394bc496666bed1b34aea2acb19deb8d23c3c0342"
+      "sha256": "08de6953a94b165abcfe6bb229ab4d4db5531e3ec54731c7d64fda12ab53ffb7"
     },
     {
       "id": "M17020",
       "path": "data/maps/m17020.json",
-      "sha256": "1d299e878709b13a8a50f93892313cdd30715a5a9d397bafae0fd165c65fa3d9"
+      "sha256": "845f5da1f8193a3d51093fbf1cd77b077e4b5ee212e12be9be076446bb8533f8"
     },
     {
       "id": "M17026",
       "path": "data/maps/m17026.json",
-      "sha256": "369809e230fd539e0d12b074c1ce7d8f99ad5303ac43edaa8828b8a3ace75f53"
+      "sha256": "39276a52820d224c91d0ea6941131c767fb2336c3052dd47723e1664eed5764d"
     },
     {
       "id": "M17029",
       "path": "data/maps/m17029.json",
-      "sha256": "d687c1943d598f6f5f3b7dd947c03fb2b3d93d282684b89ab4d642e245c72598"
+      "sha256": "bb9967d59efde485a12f09b20ca7da9451da5cbe04e2dec31f0ec505c29e5e10"
     },
     {
       "id": "M70010",
       "path": "data/maps/m70010.json",
-      "sha256": "263b4300fa6407314bb0dbd6905938a621e37e68a7004b102ec2cab2749cb9ca"
+      "sha256": "f742cb4fa3194f3fcffb8ed494a90d1428ff41a1f873b9569efee401508fbaad"
     },
     {
       "id": "M72061",
       "path": "data/maps/m72061.json",
-      "sha256": "aac2c2cbbbf4cc2a1ed03565c3df8f0b5517446991d1de7f0d8559599d8b1d5d"
+      "sha256": "cd42f9b4221eb92dbab7ee8322eb844d31aa9c19434f203557d382f50308018d"
     }
   ],
   "roles": [
@@ -335,7 +335,8 @@
           "sequence_evidence": [
             "ev_0ffb771246c6d16325580fe6f266e66f57fbb84cfe7a3be766ff48234043fbab"
           ],
-          "source_offset": 67
+          "source_offset": 67,
+          "frames_per_direction": 10
         },
         {
           "index": 1,
@@ -500,7 +501,8 @@
           "sequence_evidence": [
             "ev_0ffb771246c6d16325580fe6f266e66f57fbb84cfe7a3be766ff48234043fbab"
           ],
-          "source_offset": 239
+          "source_offset": 239,
+          "frames_per_direction": 10
         },
         {
           "index": 2,
@@ -675,10 +677,15 @@
           "sequence_evidence": [
             "ev_0ffb771246c6d16325580fe6f266e66f57fbb84cfe7a3be766ff48234043fbab"
           ],
-          "source_offset": 411
+          "source_offset": 411,
+          "frames_per_direction": 12
         }
       ],
-      "limitation": "DGP action indexes are zero-based; exact native blend/timing remains unobserved"
+      "limitation": "DGP action indexes are zero-based; exact native blend/timing remains unobserved",
+      "map_draw_offset": {
+        "x": -69,
+        "y": -119
+      }
     }
   ],
   "runtime_content": "data/runtime_content.json",
@@ -687,6 +694,7 @@
   "chapter_story": "data/chapter_story.json",
   "chapter_resources": "data/chapter_map_resources.json",
   "map_effects": "data/map_effects.json",
+  "map_shadows": "data/map_shadows.json",
   "party_combat": "data/party_combat.json",
   "party_skills": "data/party_skills.json",
   "party_rewards": "data/party_rewards.json",

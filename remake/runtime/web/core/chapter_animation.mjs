@@ -20,7 +20,7 @@ export function validateChapterAnimation(program,content=runtimeContent) {
     if ([32,33,35,36,48,49].includes(c.opcode)) need(c.u32_plus5>=10||Object.values(content.roles).some(role=>role.side==='player'&&role.native_slot===c.u32_plus5), '剧情动画人物未接入');
     if (c.opcode === 10) need(c.filename?.toUpperCase() === `${program.expected.control_map}.DAT`
       && c.u32_plus5 === 0, '剧情动画地图入口未支持');
-    if (c.opcode === 33) need(c.byte_plus29 === 0 && c.u32_plus25 <= 255, '剧情移动模式未支持');
+    if (c.opcode === 33) need(c.byte_plus29 === 0 && (c.u32_plus25&255) <= 8, '剧情移动模式／到达朝向未支持');
     if (c.opcode === 36) need(Object.values(content.roles).some(role=>role.side==='player'&&role.native_slot===c.u32_plus5)&&c.byte_plus29 === 0, '剧情队伍操作未支持');
     if (c.opcode === 48) need(c.u32_plus13 >= 1 && c.u32_plus17 > c.u32_plus13
       && c.u32_plus17 <= 512 && c.u32_plus25 > 0, '剧情动作帧范围无效');

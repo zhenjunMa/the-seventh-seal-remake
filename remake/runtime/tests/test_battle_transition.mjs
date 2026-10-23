@@ -12,6 +12,19 @@ test('pixel/row transitions explicitly reveal the complete battle and clear the 
  try{for(const kind of [0,2,3,4,5,6]){const {view,root,calls}=fixture(),before={},after={};await view.run(before,()=>after,{kind});assert.deepEqual(calls.last,[after,0,0]);assert.equal(root.hidden,true);assert.deepEqual(root.dataset,{});}}
  finally{globalThis.requestAnimationFrame=original;}
 });
+test('the transition replaces stale loading pixels before exposing its canvas or waiting for a frame',async()=>{
+ const original=globalThis.requestAnimationFrame;let scheduled;
+ globalThis.requestAnimationFrame=callback=>{scheduled=callback;};
+ try{
+   const {view,root,calls}=fixture();let hidden=true,drawsWhenShown=0;
+   Object.defineProperty(root,'hidden',{get:()=>hidden,set:value=>{hidden=value;if(!value)drawsWhenShown=calls.count;}});
+   const pending=view.run({},()=>({}),{kind:6});
+   assert.ok(drawsWhenShown>0);assert.equal(root.dataset.kind,'battle-transition');
+   assert.equal(root.dataset.progress,String(1/20));assert.equal(root.hidden,false);
+   view.cancel();scheduled(1000);await assert.rejects(pending,/取消/);
+   assert.equal(root.hidden,true);assert.deepEqual(root.dataset,{});
+ }finally{globalThis.requestAnimationFrame=original;}
+});
 test('a failed first battle draw never opens an overlay; cancelling cannot leave a stale progress state',async()=>{
  const {view,root}=fixture();await assert.rejects(view.run({},()=>{throw Error('draw failed');}),/draw failed/);assert.equal(root.hidden,true);
  const original=globalThis.requestAnimationFrame;globalThis.requestAnimationFrame=callback=>queueMicrotask(()=>callback(100));

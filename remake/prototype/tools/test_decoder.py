@@ -40,6 +40,13 @@ def auxiliary_sample(active=True):
     return bytes(data[:195]) + auxiliary + bytes(data[195:])
 
 
+def shadow_sample(blob):
+    data = bytearray(sparse_sample())
+    data[67 + 41] = 1
+    struct.pack_into('<I', data, 67 + 32, 195 + 4 + len(blob))
+    return bytes(data[:195]) + struct.pack('<I', len(blob)) + blob + bytes(data[195:])
+
+
 class IntegrityTests(unittest.TestCase):
     def decode_bytes(self, data):
         with tempfile.TemporaryDirectory(dir=PROJECT) as directory:
@@ -58,6 +65,29 @@ class IntegrityTests(unittest.TestCase):
     def test_truncated_payload_rejected(self):
         with self.assertRaisesRegex(DGPError, 'Truncated'):
             self.decode_bytes(sparse_sample()[:-1])
+
+    def test_shadow_is_a_separate_sparse_half_alpha_mask(self):
+        blob = struct.pack('<HHHHHH', 2, 0, 1, 2, 1, 0xffff)
+        decoder = self.decode_bytes(shadow_sample(blob))
+        image = decoder.decode_shadow(0)
+        self.assertEqual(image.getpixel((0, 0)), (0, 0, 0, 128))
+        self.assertEqual(image.getpixel((2, 0)), (0, 0, 0, 128))
+        self.assertEqual(image.getpixel((1, 0)), (0, 0, 0, 0))
+        self.assertEqual(image.getpixel((0, 1)), (0, 0, 0, 0))
+        self.assertEqual(decoder.decode(0).tobytes(), self.decode_bytes(sparse_sample()).decode(0).tobytes())
+
+    def test_shadow_rejects_out_of_bounds_overlapping_and_truncated_spans(self):
+        blobs = [struct.pack('<HHHH', 1, 3, 1, 0xffff),
+                 struct.pack('<HHHHHH', 2, 0, 2, 1, 1, 0xffff),
+                 struct.pack('<HHH', 1, 0, 1),
+                 struct.pack('<HH', 0xffff, 0xffff) + b'\0']
+        for blob in blobs:
+            with self.subTest(blob=blob.hex()), self.assertRaises(DGPError):
+                self.decode_bytes(shadow_sample(blob)).decode_shadow(0)
+
+    def test_absent_shadow_stream_is_explicit(self):
+        with self.assertRaisesRegex(DGPError, 'No per-frame shadow stream'):
+            self.decode_bytes(sparse_sample()).decode_shadow(0)
 
     def test_indexed_auxiliary_does_not_replace_primary_pixels(self):
         for active in (False, True):
@@ -84,7 +114,7 @@ class IntegrityTests(unittest.TestCase):
             self.decode_bytes(sparse_sample() + b'\0')
 
     def test_unknown_version_rejected(self):
-        data = bytearray(sparse_sample()); data[0] = 8
+        data = bytearray(sparse_sample()); data[0] = 7
         with self.assertRaisesRegex(DGPError, 'Unsupported DGP version'):
             self.decode_bytes(data)
 

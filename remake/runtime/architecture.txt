@@ -14,7 +14,7 @@ Phaser目录（相对web）
 phaser/runtime.mjs：引擎创建、阶段到场景生命周期的映射、暂停原因、缩放、同步截图和释放。探索／战斗切换使用sleep／wake，菜单／加载保留画面并pause，主菜单与启动阶段休眠游戏场景。
 phaser/scenes：exploration_scene与battle_scene，分别拥有update、动作时钟和显示对象；shutdown与destroy都清理自有对象、纹理引用和待执行任务。
 phaser/actors/map_actor.mjs：可销毁重建的地图人物／物件显示组合，持有SpritePose。
-phaser/components：sprite_pose适配原帧／光层；action_clock由所属Phaser更新步的delta推进，负责源动作等待、并发和取消。探索演出用探索时钟，战斗规则与表现共用战斗时钟，共享转场用runtime时钟；Sprite不额外启动命中时钟。
+phaser/components：sprite_pose适配原帧／光层和可选的逐帧阴影；action_clock由所属Phaser更新步的delta推进，负责源动作等待、并发和取消。探索演出用探索时钟，战斗规则与表现共用战斗时钟，共享转场用runtime时钟；Sprite不额外启动命中时钟。
 phaser/rendering：texture_cache管理纹理引用，battle_surface将既有绘制命令适配为Phaser对象。
 phaser/preview.mjs与phaser-preview.html：独立示意素材验证入口，不进入正式内容登记。
 vendor/phaser：固定版本运行库、许可及manifest.json。controllers、core、data、assets及导出工具继续保留原位置。
@@ -29,7 +29,7 @@ PhaserRuntime按原因集合管理页面隐藏、手动暂停和错误挂起，�
 三个状态边界
 WorldStore持有可保存世界：地点、人物资源／成长、背包／装备、旗标、事件、队列、技巧／晶石、遇敌RNG与奖励去重记录。变更通过草稿及revision提交，避免异步加载覆盖期间的新操作。
 SceneController管理地图准备、切换和回滚；先准备必需资源，再提交地点／图层／NPC状态，失败恢复原场景。
-BattleController持有本场参战者、资源快照、充槽、输入、pending、动作和生命周期。通过planning／commit向世界一次提交本场结果，重复返回不重复扣费或发奖励。
+BattleController持有本场参战者、资源快照、充槽、输入、按人物保存的待执行指令、动作和生命周期。scheduler.pending保留首条，queued_commands保存其余队员的指令；原充能／阵营仲裁选择人物，不能把某人的指令借给其他人。确认时保留道具数量，使用事件才消耗。通过planning／commit向世界一次提交本场结果，重复返回不重复扣费或发奖励。胜利演出与跳过输入统一使用战斗场景时钟。
 配置快照和浏览器偏好分别独立于WorldStore；菜单焦点、预览、动画和加载锁也不写进世界进度。
 
 内容生产与运行登记
@@ -50,7 +50,9 @@ CHR／DAT／TLK／ANM和生成的party_*、forest_*、enemy_*等JSON保存来源
 
 地图、剧情与演出
 map controller提供地图载入、视口、连续移动、NPC与交互的探索适配器，由exploration_scene.update调用；terrain、占格、路径、移动／遇敌规则由对应core及共享MovementMap处理。
-core/map_presentation生成按原图层／地面Y排序的只读显示描述。phaser/scenes/exploration_scene使用MapActor与SpritePose组合人物主层和光效层，Phaser相机保持640×480原逻辑平面。MapActor为临时显示对象，不保存HP、成长或旗标。
+core/map_locomotion供玩家、剧情与普通NPC共用46CED0移动间隔换算和地图native_step_shift，以实际接受的轴向距离推进步伐；4984E0先减后测的计数对应行走两次步进、跑步三次步进。玩家保留连续键盘控制与斜走速度归一化，走跑／转向保留相位，受阻／松键站立。map_npcs保留源路径、占格、逐轴逻辑步进与独立RNG；visual坐标只追随已接受位置，并以相同源速度平滑，motion携带显示位置／朝向／帧，身体与阴影共用。停谈与暂停冻结显示，剧情接管从显示姿态开始；这些场景内状态不进入存档或遇敌计数。连续显示不声称原版逐帧动态等价，普通NPC斜走仍沿源逐轴步进。
+ANM33的+25低字节经anm_runtime以arrivalFacingRaw传递：0保留当前朝向，1..8在到达时减1写入方向，不参与速度计算。OpeningView按移动动作及源人物speedBias得到步进速度，用相同DistanceGait推进逻辑序列帧；直达／分轴路线沿现有舞台配置。零距离只处理到达状态，短路径按实际长度完成；原指令、并发等待和取消仍由ANM执行器管理。
+core/map_presentation生成按原图层／地面Y排序的只读显示描述。phaser/scenes/exploration_scene使用MapActor与SpritePose在同一深度组合人物阴影、主层和光效层，Phaser相机保持640×480原逻辑平面。阴影由map_shadows按原DGP逐帧跨度掩码导出，按动作包围框压缩图集，shadow_geometry恢复原帧内偏移；黑色alpha128近似原16位RGB分量减半。MapActor为临时显示对象，不保存HP、成长或旗标。
 map_scene_view保留为存档缩略图与几何对照绘制，消费同一map_presentation。OpeningView同时提供显示描述与兼容draw回调；正式ANM动作、物件动作和战斗转场由Phaser驱动的ActionClock推进，原等待、并发与取消契约不变。
 chapter-maps从原DAT的state0描述推导已登记地图间的物理出口；剧情型出口、前置条件和演出继续走TLK／ANM系统。
 map_connections按登记与源描述连接大地图出口，并共用原标记／排序规则推导大地图进入位置。chapter_story覆盖已登记出口来源，route_events只兼容尚未接入TLK的旧地图。
@@ -72,7 +74,7 @@ BattleView消费时间线和只读表现数据，不修改HP／MP或抽战斗随
 forest_stage先完成天空、地面、全部场景贴图，再画按地面Y排序的战斗人物，最后画效果和HUD。人物升空与地面锚点分开，背景纹理不与人物混排。
 battle_layout按保存的四个固定队列槽定位，不压缩空位；idle、受击和防御的已接入时序读取各自源动作。普通攻击／技能仍有预览时钟与轨迹适配边界。
 battle_lifecycle_view独立推进入场、死亡、起身，完成后回执core；死亡完成前不结算终局，复活epoch使旧回执失效。
-battle_packs用裁切图集保留源PNG核对关系；资源完成解码后才开放战斗。battleEntryPending、加载锁、有限并发图片池和七种原来源转场控制入场，表现随机与战斗RNG分开。
+battle_packs用裁切图集保留源PNG核对关系；资源完成解码后才开放战斗。准备期间保留原画面，不显示通用或地图载入页；随后直接衔接七种原来源转场和人物入场。转场首帧绘制完再显示共享画布，防止残留载入图闪现。battleEntryPending、加载锁和有限并发图片池控制入场，表现随机与战斗RNG分开。
 battle-stages按登记读取原SCN／DGP生产同格式背景，复用来源解码／像素审计和默认镜头规则；战斗背景与音乐按本场实际stage选择。旧专用舞台产物继续由原导出器维护。
 
 菜单、保存与声音

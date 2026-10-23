@@ -65,7 +65,9 @@ export class AnmActions {
         // Native +29 is a focus mode; record x/y are not camera coordinates.
         await this.call('camera', command, {kind:'focus', actor, modeRaw:command.byte_plus29}); break;
       case 33:
-        this.launch('move', command, {actor, ...position, speedRaw:command.u32_plus25,
+        // 473E30 copies the low byte to actor+2B1; arrival handlers subtract
+        // one into facing. Zero preserves facing; this field is not speed.
+        this.launch('move', command, {actor, ...position, arrivalFacingRaw:command.u32_plus25&255,
           motionModeRaw:command.u32_plus1, actionRaw:command.byte_plus29,
           directionRaw:command.byte_plus30}, recordPosition); break;
       case 35:

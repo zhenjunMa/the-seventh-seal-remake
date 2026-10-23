@@ -54,16 +54,18 @@ export class BattleTransitionView {
       }else for(let y=0;y<480;y++)c.drawImage(before,0,y,640,1,speeds[y]*(frame+1),y,640,1);
       root.dataset.progress=String((frame+1)/battleTransitionFrame(kind,frame).count);
     };
-    root.hidden=false;root.dataset.kind='battle-transition';root.dataset.transition=String(kind);this.loadingView.resize();
     try{
+      // The shared canvas can still contain map-loading artwork. Replace it
+      // synchronously before revealing the transition, even before the next RAF.
+      paint(0);root.dataset.kind='battle-transition';root.dataset.transition=String(kind);this.loadingView.resize();root.hidden=false;
       this.log?.({type:'battle-transition-start',kind,authority:'GAME.exe 0x430850; Canvas/RAF adapter'});
-      let nextAt=null,frame=0;
+      let nextAt=(this.clock?.time??performance.now())+battleTransitionFrame(kind,0).delay,frame=1;
       await new Promise((resolve,reject)=>{
         const schedule=callback=>{
           if(this.clock)this.pendingFrame=this.clock.requestFrame(callback,{signal,onCancel:reject});
           else requestAnimationFrame(callback);
         };
-        const tick=now=>{try{check();if(nextAt===null||now>=nextAt){paint(frame);nextAt=now+battleTransitionFrame(kind,frame).delay;frame++;}
+        const tick=now=>{try{check();if(now>=nextAt){paint(frame);nextAt=now+battleTransitionFrame(kind,frame).delay;frame++;}
           if(frame>=battleTransitionFrame(kind,0).count)resolve();else schedule(tick);
         }catch(error){reject(error);}};schedule(tick);
       });

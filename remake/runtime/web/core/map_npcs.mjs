@@ -2,6 +2,7 @@
 // Coordinates exposed to views are doubled native coordinates. All timers,
 // goals, paths and RNG belong to this scene, never to WorldStore or encounters.
 import {createNativeRng} from './combat_rules.mjs';
+import {DistanceGait,mapStepGeometry,mapMotionProfile} from './map_locomotion.mjs';
 
 const EXPAND=[[-1,0],[-1,-1],[-1,1],[0,-1],[0,1],[1,0],[1,-1],[1,1]];
 const BACKTRACK=[[0,-1],[0,1],[-1,0],[1,0],[-1,-1],[-1,1],[1,-1],[1,1]];
@@ -55,11 +56,10 @@ export class MapNpcRuntime {
     Object.assign(this,{scene,roles,actors:new Map(),held:new Set(),lastTime:null});
     this.rng=createNativeRng((Date.now()^Math.floor(Math.random()*0xffffffff))>>>0);
     this.random=random??(()=>this.rng.next());
-    const header=bytes(table?.header_raw_hex??''),movement=scene.data.movement;
-    this.cellSize=movement?.cell_size??16;
-    this.coordinateShift=movement?.native_coordinate_shift??3;
-    this.stepShift=header[0x144]??0;
-    this.stepSize=(1<<this.stepShift)*(movement?.native_to_pixel_scale??2);
+    const movement=scene.data.movement;
+    const geometry=mapStepGeometry(movement,table?.header_raw_hex);
+    this.cellSize=geometry.cellSize;this.coordinateShift=geometry.coordinateShift;
+    this.stepSize=geometry.stepSize;this.movement=movement;
     this.cellTicks=this.cellSize/this.stepSize;
     const sources=new Map((table?.npc_records??[]).map(row=>[row.slot_zero_based,row]));
     for(const npc of scene.npcs){
@@ -69,7 +69,7 @@ export class MapNpcRuntime {
       if(!idle)continue;
       const a={npc,source,role,home:{x:npc.x,y:npc.y},goal:{x:npc.x,y:npc.y},path:[],step:null,
         wait:source.wait,waitLatch:source.waitLatch,logicalFrame:0,action:idle.index,interval:80,
-        elapsed:0,animationCountdown:0};
+        elapsed:0,animationCountdown:0,visual:{x:npc.x,y:npc.y,direction:npc.direction},gait:new DistanceGait()};
       this.actors.set(npc.id,a);this.project(a);
     }
   }
@@ -80,16 +80,30 @@ export class MapNpcRuntime {
     if(a.action!==action.index){a.action=action.index;a.logicalFrame=0;}
     return action;
   }
-  project(a){
+  project(a,delta=0){
     const action=a.role.actions.find(action=>action.index===a.action),count=this.logicalCount(action);
     a.logicalFrame=((a.logicalFrame%count)+count)%count;
-    a.npc.motion={role:a.role,action:a.action,frame:action.uses_sequence?action.sequence_raw[a.logicalFrame]:a.logicalFrame};
+    const walk=this.action(a,1),motion=walk?mapMotionProfile(walk,this.movement,'',a.source.speedBias):null;
+    const dx=a.npc.x-a.visual.x,dy=a.npc.y-a.visual.y;
+    // Smooth only accepted logical travel, at the source per-axis speed.
+    // Collision, occupancy, RNG and scene handoff keep the logical position.
+    const travel=Math.max(Math.abs(dx),Math.abs(dy));
+    const amount=this.held.has(a.npc.id)?0:Math.min(1,travel&&motion?motion.speed*delta/1000/travel:0);
+    const movedX=dx*amount,movedY=dy*amount;
+    a.visual.x+=movedX;a.visual.y+=movedY;
+    if(movedX||movedY)a.visual.direction=direction(movedX,movedY);
+    const walking=walk&&!this.held.has(a.npc.id)&&(movedX||movedY||a.action===walk.index);
+    const display=walking?walk:action;
+    const frame=walking?a.gait.advance(walk,{dx:movedX,dy:movedY,stride:motion.stride})
+      :action.uses_sequence?action.sequence_raw[a.logicalFrame]:a.logicalFrame;
+    if(!walking){a.gait.reset();a.visual.direction=a.npc.direction;}
+    a.npc.motion={role:a.role,action:display.index,frame,...a.visual};
   }
   idle(a){const action=this.setAction(a,0);a.interval=Math.max(1,action.interval_raw);
     a.logicalFrame=(a.logicalFrame+1)%this.logicalCount(action);}
   animateWalk(a){const action=this.setAction(a,1);
     // 46B690 sets action cadence; 46CED0 scales it for movement/cell size.
-    a.interval=Math.max(10,((action.interval_raw-a.source.speedBias)>>3)-24+this.coordinateShift*8);
+    a.interval=mapMotionProfile(action,{native_coordinate_shift:this.coordinateShift},'',a.source.speedBias).tickMs;
     a.logicalFrame=(a.logicalFrame+1)%this.logicalCount(action);a.animationCountdown=2;}
   canWander(a){return a.source.slot>=10&&!a.source.fixed&&!a.source.locked&&a.source.type<=1
     &&a.source.routeCount===0&&Boolean(this.action(a,1));}
@@ -118,7 +132,7 @@ export class MapNpcRuntime {
     if(a.wait>0){a.wait--;this.idle(a);return;}
     if(a.step){
       a.npc.x+=a.step.dx;a.npc.y+=a.step.dy;a.step.left--;
-      if(a.animationCountdown===0)this.animateWalk(a);else a.animationCountdown--;
+      if(--a.animationCountdown===0)this.animateWalk(a);
       if(!a.step.left){a.npc.x=a.step.x;a.npc.y=a.step.y;a.step=null;}
       return;
     }
@@ -162,7 +176,7 @@ export class MapNpcRuntime {
       // contain multiple 10ms visits without changing source step sizes.
       let visits=0;
       while(a.elapsed>=a.interval&&visits++<32){a.elapsed-=a.interval;this.tick(a,player);}
-      this.project(a);
+      this.project(a,delta);
     }
   }
   hold(id){
@@ -177,7 +191,8 @@ export class MapNpcRuntime {
     for(const [id,a] of this.actors){const previous=other.actors.get(id);if(!previous)continue;
       for(const key of ['home','goal','path','step'])a[key]=structuredClone(previous[key]);
       for(const key of ['wait','waitLatch','logicalFrame','action','interval','elapsed','animationCountdown'])a[key]=previous[key];
-      for(const key of ['x','y','direction','hidden'])a.npc[key]=previous.npc[key];this.project(a);
+      for(const key of ['x','y','direction','hidden'])a.npc[key]=previous.npc[key];
+      a.visual={...previous.visual};Object.assign(a.gait,previous.gait);this.project(a);
     }
   }
   adoptActors(actors){
@@ -188,6 +203,8 @@ export class MapNpcRuntime {
       a.action=actor.action;
       const action=a.role.actions.find(action=>action.index===a.action);
       a.logicalFrame=action?.uses_sequence?Math.max(0,action.sequence_raw.indexOf(actor.frame)):actor.frame;
+      a.visual={x:actor.x,y:actor.y,direction:actor.direction};a.gait.reset();
+      if(a.action===this.action(a,1)?.index)Object.assign(a.gait,{action:a.action,phase:a.logicalFrame/this.logicalCount(action)});
       this.project(a);
     }
     this.lastTime=null;

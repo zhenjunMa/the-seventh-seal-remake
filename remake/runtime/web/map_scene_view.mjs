@@ -25,7 +25,7 @@ export function drawMapScene(ctx,{scene,world,role,action,view,width,height,obje
     if(entry.draw){entry.draw(ctx);continue;}
     const p=entry.pose;
     if(p.width===undefined)ctx.drawImage(p.image,p.x,p.y);
-    else drawMapSprite(ctx,p.image,p.light,p.sx??0,p.sy??0,p.width,p.height,p.x,p.y);
+    else drawMapSprite(ctx,p.image,p.light,p.sx??0,p.sy??0,p.width,p.height,p.x,p.y,p.shadow,p.shadow_geometry);
   }
   if(nearest){ctx.strokeStyle='#edd19b';ctx.lineWidth=1/view.zoom;ctx.beginPath();ctx.ellipse(nearest.x+16,nearest.y+6,19,6,0,0,Math.PI*2);ctx.stroke();}
   ctx.restore();

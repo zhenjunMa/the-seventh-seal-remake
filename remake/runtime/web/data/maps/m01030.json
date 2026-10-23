@@ -532,7 +532,8 @@
     "transition_rule": "0x4A80E0: +0x38 reference, descriptor[0]==0 and descriptor[0x11]!=0 is path-gated",
     "policy": "Unimplemented native transition gates block. Runtime enables only separately verified exits.",
     "role_occupancy_rule": "+0x14 is runtime role index + 1, not static terrain",
-    "object_lookup_rule": "+0x2B is runtime object index + 1, not a second collision mask"
+    "object_lookup_rule": "+0x2B is runtime object index + 1, not a second collision mask",
+    "native_step_shift": 1
   },
   "objects": [
     {

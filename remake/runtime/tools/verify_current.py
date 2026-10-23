@@ -46,7 +46,7 @@ def verify():
     for name, expected in original_inputs.items():
         assert sha(ROOT/name) == expected, f'Original input changed: {name}'
     opening_export = current_export('opening_map_export_20261011.json','opening-maps')
-    opening_seed = read(EVIDENCE/'opening_seed_export_20261011.json')
+    opening_seed = current_export('opening_seed_export_20261011.json','opening-seed')
     opening_sources = {**opening_export['source_hashes'], **opening_seed['source_hashes']}
     for name, expected in opening_sources.items():
         assert sha(ROOT/name) == expected, f'Opening input changed: {name}'
@@ -77,7 +77,7 @@ def verify():
         path = exported_path(name)
         assert sha(path) == expected, f'Party asset changed: {name}'
     system_sources, system_outputs = {}, {}
-    for filename in ['enemy_content_export.json', 'enemy_rewards_export.json', 'encounter_export.json', 'chapter_items_export.json', 'chapter_recovery_export_20261011.json', 'item_presentation_export.json', 'forest_stage_export.json', 'operation_menu_resources.json', 'battle_ui_resources.json','battle_lifecycle_20261015/export.json','skill_test_20261020/export.json','battle_result_20261020/export.json','startup_menu_export_20261020.json','prologue_routes_20261020/export.json','dialogue_alignment_20261021/source_audit.json','battle_loading_20261021/pack_export.json','map_effects_20261021/export.json']:
+    for filename in ['enemy_content_export.json', 'enemy_rewards_export.json', 'encounter_export.json', 'chapter_items_export.json', 'chapter_recovery_export_20261011.json', 'item_presentation_export.json', 'forest_stage_export.json', 'operation_menu_resources.json', 'battle_ui_resources.json','battle_lifecycle_20261015/export.json','skill_test_20261020/export.json','battle_result_20261020/export.json','startup_menu_export_20261020.json','prologue_routes_20261020/export.json','dialogue_alignment_20261021/source_audit.json','battle_loading_20261021/pack_export.json','map_effects_20261021/export.json','movement_optimization_20261023/shadow_export.json']:
         export = read(EVIDENCE/filename)
         assert export.get('passed', export.get('source_bytes_unchanged', export.get('source_unchanged', False)))
         system_sources.update(export['source_hashes'])
@@ -91,7 +91,7 @@ def verify():
     system_outputs['remake/runtime/web/data/audio.json'] = audio_export['manifest_sha256']
     for clip in audio['clips'].values(): system_outputs['remake/runtime/web'+clip['path']] = clip['sha256']
     for name, expected in audio['native_bundle_hashes'].items(): assert sha(ROOT/name) == expected
-    for name, expected in audio['reference_hashes'].items(): assert sha(ROOT/name) == expected
+    for name, expected in audio['reference_hashes'].items(): assert sha(ROOT/name) == expected, f'Audio reference changed: {name}'
     video = read(EVIDENCE/'gameover_video_export.json')
     assert video['success'] and video['original_source_unchanged'] and video['conversion']['decoded_ssim_all'] > .99
     system_sources[video['source']['path']] = video['source']['sha256']
@@ -207,7 +207,7 @@ def verify():
     refs.update(['data/runtime_content.json','data/runtime_content.mjs'])
     for key in ['seed', 'events', 'combat_sample', 'battle_view', 'runtime_config', 'world_map',
                 'route_events', 'encounters', 'forest_combat', 'forest_battle_view', 'opening_program', 'opening_resources', 'chapter_story', 'chapter_resources',
-                'party_combat', 'party_skills', 'party_rewards', 'party_reactions', 'party_battle_view', 'items', 'item_presentation', 'audio', 'operation_menu', 'content_checklist']:
+                'party_combat', 'party_skills', 'party_rewards', 'party_reactions', 'party_battle_view', 'items', 'item_presentation', 'audio', 'operation_menu', 'content_checklist','map_shadows']:
         if catalog.get(key): refs.add(catalog[key])
     refs.update(row['path'] for row in catalog['maps'])
     refs.add('/prototype/movement.mjs')

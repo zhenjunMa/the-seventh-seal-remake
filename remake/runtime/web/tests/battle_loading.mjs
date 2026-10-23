@@ -24,10 +24,12 @@ function reset(){state.battleView?.stop('QA reset');state.battleMenu?.dispose();
   const c=canvas.getContext('2d');for(let y=0;y<540;y+=30)for(let x=0;x<960;x+=30){c.fillStyle=(x/30+y/30)%2?'#3a5b68':'#172837';c.fillRect(x,y,30,30);}c.fillStyle='#fff';c.font='40px sans-serif';c.fillText('进入战斗前的画面',230,270);}
 async function run(kind){reset();const before=state.world.snapshot(),start=performance.now(),from=logs.length,frameFrom=entryFrames.length;
   if(kind==='training'){state.scenes.setPhase('party-menu');state.menuContext={combat:false,page:'skills'};await actions.startTechniqueTest();}
-  else await actions.startBattle({map_id:'M70010',members:[{id:'012'},{id:'013'}]},structuredClone(state.world.value.encounters));
+  else await actions.startBattle({map_id:'M70010',stage:'stage13.scn',members:[{id:'012'},{id:'013'}]},structuredClone(state.world.value.encounters));
   const frames=entryFrames.slice(frameFrom),ready=logs.slice(from).find(e=>e.type==='battle-resources-ready');
   runs.push({kind,total_entry_ms:performance.now()-start,resource_ms:ready?.elapsed_ms,cache:ready?.cache,phase:state.scenes.phase,
     clock_frozen_during_entry:frames.every(f=>f.phase==='battle-loading'&&f.ticks===0),entry_observations:frames.length,
+    no_loading_page:frames.every(f=>!f.generic_loading_visible&&(!f.scene_loading_visible||f.kind==='battle-transition')),
+    entry_kinds:[...new Set(frames.map(f=>f.kind??'retained-map'))],
     world_revision_before:before.revision,world_revision_after:state.world.value.revision});report();}
 async function pixels(){
   reset();
@@ -52,7 +54,8 @@ $('normal').onclick=()=>guarded(()=>run('normal'));$('training').onclick=()=>gua
 $('pixels').onclick=()=>guarded(pixels);$('transitions').onclick=()=>guarded(transitions);
 $('download').onclick=()=>{const value={scope:'Independent controlled browser fixture; no natural encounter RNG or original execution claimed',runs,checks,logs,entryFrames,cache:battleResources.snapshot(),storage_unchanged:JSON.stringify(storageBefore)===JSON.stringify(Object.entries(localStorage))};const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(value,null,2)],{type:'application/json'}));a.download='battle_loading_browser_observation.json';a.click();URL.revokeObjectURL(a.href);};
 document.addEventListener('keydown',e=>{if(state.scenes.phase.startsWith('battle-')&&state.scenes.phase!=='battle-loading'){if(actions.battleKey(e.key,e.repeat))e.preventDefault();}});
-function frame(now){try{if(state.scenes.phase==='battle-loading')entryFrames.push({phase:state.scenes.phase,ticks:state.battle?.presentationSnapshot()?.scheduler?.ticks??0,kind:$('sceneLoading').dataset.kind});
+function frame(now){try{if(state.scenes.phase==='battle-loading')entryFrames.push({phase:state.scenes.phase,ticks:state.battle?.presentationSnapshot()?.scheduler?.ticks??0,kind:$('sceneLoading').dataset.kind,
+    generic_loading_visible:!$('loading').hidden,scene_loading_visible:!$('sceneLoading').hidden});
   else if(state.scenes.phase.startsWith('battle-')&&state.battle){state.battleView.draw(state.battle.presentationSnapshot(),now);actions.drawBattleInterface(now);}}
   catch(e){checks.push({render_error:e.message});state.scenes.setPhase('error');report();}requestAnimationFrame(frame);}
 reset();requestAnimationFrame(frame);document.querySelectorAll('header button').forEach(b=>b.disabled=false);report();
