@@ -16,7 +16,7 @@ function canvas(){
  return {width:960,height:540,calls,getContext:()=>ctx};
 }
 async function assets(a){
- const p=a.path.startsWith('/prototype/')?new URL('remake/prototype/web/'+a.path.slice(11),root):new URL('web/'+a.path.slice(1),base);
+ const p=new URL('web/'+a.path.slice(1),base);
  const b=await readFile(p);assert.equal(createHash('sha256').update(b).digest('hex'),a.sha256);
  assert.equal(b.readUInt32BE(16),a.width);assert.equal(b.readUInt32BE(20),a.height);
  return {image:{path:a.path,width:a.width,height:a.height},sha256:a.sha256};

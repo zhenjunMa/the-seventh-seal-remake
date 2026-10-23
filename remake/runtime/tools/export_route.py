@@ -11,9 +11,8 @@ RUNTIME=Path(__file__).resolve().parents[1]
 ROOT=RUNTIME.parents[1]
 WEB=RUNTIME/'web'
 sys.path.insert(0,str(RUNTIME/'tools'))
-sys.path.insert(0,str(ROOT/'remake/prototype/tools'))
-from combat_resources import CHR
-from dgp import DGP
+from source.combat_resources import CHR
+from source.dgp import DGP
 from PIL import Image
 import export_combat_sample as combat
 from export_battle_view import sequence

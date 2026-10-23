@@ -11,9 +11,9 @@ const args=process.argv.slice(2),strict=args.includes('--assets'),reportAt=args.
 const report={engine:'Phaser 3.90.0',code:{passed:false,modules:0},assets:{required:0,present:0,missing:[],invalid:[],non_file_hashes:[]},errors:[]};
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 const readJson=async file=>JSON.parse(await fs.readFile(file,'utf8'));
-const resolveUrl=url=>url.startsWith('/prototype/')?path.join(runtime,'../prototype/web',url.slice(11)):path.join(web,url.replace(/^\//,''));
+const resolveUrl=url=>path.join(web,url.replace(/^\//,''));
 const exists=async file=>{try{return (await fs.stat(file)).isFile();}catch{return false;}};
-const inside=(file,root)=>!path.relative(root,file).startsWith('..'+path.sep);
+const inside=(file,root)=>{const relative=path.relative(root,file);return relative!=='..'&&!relative.startsWith('..'+path.sep)&&!path.isAbsolute(relative);};
 const canonical=url=>url.startsWith('/')?url:'/'+url;
 async function files(directory){const result=[];for(const row of await fs.readdir(directory,{withFileTypes:true})){
   const file=path.join(directory,row.name);if(row.isDirectory())result.push(...await files(file));else result.push(file);
@@ -33,7 +33,7 @@ try{
     for(const match of source.matchAll(imports)){
       const specifier=match[1];if(!specifier.startsWith('.')&&!specifier.startsWith('/'))throw new Error(`浏览器入口存在未解析包：${specifier}`);
       const target=specifier.startsWith('/')?resolveUrl(specifier):path.resolve(path.dirname(file),specifier);
-      if(!inside(target,web)&&!inside(target,path.join(runtime,'../prototype/web')))throw new Error(`模块超出静态挂载：${specifier}`);
+      if(!inside(target,web))throw new Error(`模块超出静态挂载：${specifier}`);
       if(!await exists(target))throw new Error(`模块缺失：${target}`);pending.push(target);
     }
   }
@@ -41,11 +41,12 @@ try{
   const assets=new Map();
   function collect(value,parentGeometry=null){
     if(typeof value==='string'){
-      if(/^(?:\/?assets\/|\/prototype\/assets\/).+\.(?:png|jpe?g|webp|gif|wav|ogg|mp3|m4a|mp4|webm|woff2?|ttf)$/i.test(value)&&!assets.has(canonical(value)))assets.set(canonical(value),{});
+      if(value.startsWith('/prototype/'))throw new Error(`正式运行数据仍引用实验目录：${value}`);
+      if(/^\/?assets\/.+\.(?:png|jpe?g|webp|gif|wav|ogg|mp3|m4a|mp4|webm|woff2?|ttf)$/i.test(value)&&!assets.has(canonical(value)))assets.set(canonical(value),{});
     }else if(value&&typeof value==='object'){
       const geometry=value.frame_width&&value.frame_height?value:parentGeometry;
       const name=value.path??value.image??value.sheet;
-      if(typeof name==='string'&&/^(?:\/?assets\/|\/prototype\/assets\/)/.test(name)&&/\.[a-z0-9]+$/i.test(name)){
+      if(typeof name==='string'&&/^\/?assets\//.test(name)&&/\.[a-z0-9]+$/i.test(name)){
         const dimensions=value.sheet&&geometry&&value.frame_count
           ?{width:geometry.frame_width*value.frame_count,height:geometry.frame_height*(value.directions??1)}
           :Number.isInteger(value.width)&&Number.isInteger(value.height)?{width:value.width,height:value.height}:{};
@@ -61,15 +62,17 @@ try{
     }
   }
   const packs=await readJson(path.join(web,'data/battle_packs.json'));
+  for(const url of [...Object.keys(packs.images??{}),...Object.keys(packs.manifests??{})])
+    if(url.startsWith('/prototype/'))throw new Error(`正式图集仍引用实验目录：${url}`);
   await new BattleResources({read:async()=>({ok:true,json:async()=>packs})}).catalog();
   report.assets.packed_images=Object.keys(packs.images).length;report.assets.packed_pages=packs.pages.length;
   collect(packs.pages);
   const packedManifests=new Set(Object.keys(packs.manifests));
   for(const file of await files(path.join(web,'data')))if(file.endsWith('.json')){
     const url='/'+path.relative(web,file).split(path.sep).join('/');
-    // These manifests resolve logical PNGs through verified atlas pages. The
-    // individual source PNGs do not have to ship beside the runtime atlases.
-    if(url==='/data/battle_packs.json'||packedManifests.has(url))continue;
+    // Source baselines are build inputs; packed manifests resolve logical PNGs
+    // through atlas pages and do not require individual source PNGs at runtime.
+    if(url.startsWith('/data/source/')||url==='/data/battle_packs.json'||packedManifests.has(url))continue;
     collect(await readJson(file));
   }
   report.assets.required=assets.size;

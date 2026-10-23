@@ -3,6 +3,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 import hashlib
 import json
+from migrate_local_materials import relocated_path
 
 RUNTIME = Path(__file__).resolve().parents[1]
 ROOT = RUNTIME.parents[1]
@@ -32,7 +33,7 @@ for group in [map_report['input_hashes'], npc_report['source_hashes'],
 for path, expected in sources.items():
     assert sha(ROOT/path) == expected, ('original input changed', path)
 for path, expected in layer_report['prototype_hashes_before'].items():
-    assert sha(ROOT/path) == expected, ('historical prototype dependency changed', path)
+    assert sha(relocated_path(path)) == expected, ('historical relocated dependency changed', path)
 
 assets = set()
 for role in catalog['roles']:
@@ -58,7 +59,7 @@ for frame in layers['frames']:
         assets.add(item['path'])
 view_tests = read(EVIDENCE/'battle_view_tests_20261011.json')
 assert view_tests['passed'] and view_tests['test_count']==10
-assert combat_view['original_sources_unchanged'] and combat_view['prototype_code_unchanged']
+assert combat_view['original_sources_unchanged'] and combat_view.get('runtime_view_code_unchanged', combat_view.get('prototype_code_unchanged', False))
 assert sha(WEB/'data/battle_view.json')==combat_view['metadata_sha256']
 assert sha(WEB/'data/combat_sample.json')==actors['sample_sha256']
 assert actors['sources_unchanged'] and actors['all_sample_evidence_references_resolve']
@@ -68,7 +69,7 @@ for item in view_tests['actual_assets_checked']:
 asset_hashes = {}
 for url in sorted(assets):
     if url.startswith('/prototype/'):
-        path = ROOT/'remake/prototype/web'/url[len('/prototype/'):]
+        path = WEB/url[len('/prototype/'):]
     else:
         path = WEB/url.lstrip('/')
     assert path.is_file(), ('missing runtime asset', url)

@@ -1,12 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
-import {registerHooks} from 'node:module';
 import {CaptionPlayback,captionLayout} from '../web/core/caption.mjs';
-registerHooks({resolve(specifier,context,next){
-  if(specifier==='/prototype/movement.mjs')return {url:new URL('../../prototype/web/movement.mjs',import.meta.url).href,shortCircuit:true};
-  return next(specifier,context);
-}});
 const {createStoryController}=await import('../web/controllers/story.mjs');
 
 test('style3 matches the original caption crop without ornamental borders',()=>{

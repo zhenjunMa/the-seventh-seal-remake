@@ -8,14 +8,14 @@ from content_registration import role_ids
 
 RUNTIME = Path(__file__).resolve().parents[1]
 WEB = RUNTIME / 'web'
-PROTOTYPE = RUNTIME.parent / 'prototype/web'
+SOURCES = WEB / 'data/source'
 
 def build():
-    original = json.loads((PROTOTYPE/'manifest.json').read_text(encoding='utf-8'))
+    original = json.loads((SOURCES/'manifest.json').read_text(encoding='utf-8'))
     roles=[]
     for item in original['roles']:
         role={**item,'id':item['id'].replace('ROLE_','')}
-        role['actions']=[{**action,'sheet':'/prototype/'+action['sheet']} for action in item['actions'] if action['index']<=2]
+        role['actions']=[{**action,'sheet':'/'+action['sheet']} for action in item['actions'] if action['index']<=2]
         roles.append(role)
     resources=json.loads((WEB/'data/chapter_map_resources.json').read_text(encoding='utf-8'))
     for ident in role_ids('player'):

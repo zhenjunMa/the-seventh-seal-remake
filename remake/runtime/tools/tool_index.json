@@ -246,6 +246,34 @@
       "imported_by": []
     },
     {
+      "path": "export_combat_lab.py",
+      "role": "independent-source-export",
+      "build_targets": [],
+      "imported_by": [],
+      "previous_path": "remake/prototype/tools/export_combat_lab.py",
+      "previous_sha256": "11e394f64e6c3e0645c48fd857a4c00a008a79aa7b60e12214a1388853dff2d3",
+      "recovery_commit": "1ee90804fc1d1ad1a2b56d3dac56dab30bf6f634"
+    },
+    {
+      "path": "export_combat_presentation.py",
+      "role": "independent-source-export",
+      "build_targets": [],
+      "imported_by": [
+        "export_battle_lifecycle.py",
+        "export_battle_ui.py",
+        "export_battle_view.py",
+        "export_forest_presentation.py",
+        "export_forest_skills.py",
+        "export_item_presentation.py",
+        "export_map_effects.py",
+        "export_party_skills.py",
+        "export_skill_layers.py"
+      ],
+      "previous_path": "remake/prototype/tools/export_combat_presentation.py",
+      "previous_sha256": "b20d7fbddbb70cfe35eb1fbf20ddac48e64983eace0332b8ec5629706fb29db3",
+      "recovery_commit": "1ee90804fc1d1ad1a2b56d3dac56dab30bf6f634"
+    },
+    {
       "path": "export_combat_rules.py",
       "role": "independent-source-export",
       "build_targets": [],
@@ -426,6 +454,17 @@
       ]
     },
     {
+      "path": "export_movement.py",
+      "role": "independent-source-export",
+      "build_targets": [],
+      "imported_by": [
+        "extract.py"
+      ],
+      "previous_path": "remake/prototype/tools/export_movement.py",
+      "previous_sha256": "04a438048e4ae4cbcfc455b2d24d297ecbb388304ca07f655a3dc46b9619ca38",
+      "recovery_commit": "1ee90804fc1d1ad1a2b56d3dac56dab30bf6f634"
+    },
+    {
       "path": "export_opening_maps.py",
       "role": "registered-build",
       "build_targets": [
@@ -576,6 +615,15 @@
       "imported_by": []
     },
     {
+      "path": "extract.py",
+      "role": "independent-source-export",
+      "build_targets": [],
+      "imported_by": [],
+      "previous_path": "remake/prototype/tools/extract.py",
+      "previous_sha256": "e536682ff2ae059871707b7245711ca5686d020f27462f5690caeb5397c0aa3a",
+      "recovery_commit": "1ee90804fc1d1ad1a2b56d3dac56dab30bf6f634"
+    },
+    {
       "path": "inspect_battle_ui_bindings.py",
       "role": "source-observation",
       "build_targets": [],
@@ -594,6 +642,15 @@
       "imported_by": [
         "export_chapter_maps.py",
         "export_opening_maps.py"
+      ]
+    },
+    {
+      "path": "migrate_local_materials.py",
+      "role": "daily-entry",
+      "build_targets": [],
+      "imported_by": [
+        "build_runtime.py",
+        "verify_delivery.py"
       ]
     },
     {
@@ -644,6 +701,117 @@
         "export_chapter_story.py",
         "export_opening_maps.py"
       ]
+    },
+    {
+      "path": "source/__init__.py",
+      "role": "source-decoder",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "source/combat_resources.py",
+      "role": "source-decoder",
+      "build_targets": [],
+      "imported_by": [
+        "export_audio.py",
+        "export_battle_lifecycle.py",
+        "export_battle_scheduler.py",
+        "export_battle_stages.py",
+        "export_battle_view.py",
+        "export_chapter_story.py",
+        "export_combat_lab.py",
+        "export_combat_presentation.py",
+        "export_combat_sample.py",
+        "export_encounters.py",
+        "export_enemy_content.py",
+        "export_forest_ai.py",
+        "export_forest_presentation.py",
+        "export_forest_reactions.py",
+        "export_forest_rewards.py",
+        "export_forest_skills.py",
+        "export_forest_stage.py",
+        "export_forest_status.py",
+        "export_item_presentation.py",
+        "export_opening_seed.py",
+        "export_party_combat.py",
+        "export_party_skills.py",
+        "export_route.py",
+        "export_skill_layers.py",
+        "export_skill_test.py",
+        "inspect_opening_initial_state.py"
+      ],
+      "previous_path": "remake/prototype/tools/combat_resources.py",
+      "previous_sha256": "5a641a6dd7dd53f4021cc2325b63aa29110e6fc4aec6c0d4cff954282af98f30",
+      "recovery_commit": "1ee90804fc1d1ad1a2b56d3dac56dab30bf6f634"
+    },
+    {
+      "path": "source/dgp.py",
+      "role": "source-decoder",
+      "build_targets": [],
+      "imported_by": [
+        "export_battle_lifecycle.py",
+        "export_battle_stages.py",
+        "export_battle_ui.py",
+        "export_battle_view.py",
+        "export_chapter_maps.py",
+        "export_combat_lab.py",
+        "export_combat_presentation.py",
+        "export_dialogue_ui.py",
+        "export_enemy_content.py",
+        "export_events.py",
+        "export_forest_presentation.py",
+        "export_forest_skills.py",
+        "export_forest_stage.py",
+        "export_forest_status.py",
+        "export_item_presentation.py",
+        "export_map_effects.py",
+        "export_map_shadows.py",
+        "export_maps.py",
+        "export_movement.py",
+        "export_opening_maps.py",
+        "export_operation_menu.py",
+        "export_party_skills.py",
+        "export_prologue_presentation.py",
+        "export_route.py",
+        "export_skill_layers.py",
+        "export_skill_test.py",
+        "extract.py",
+        "route_export_maps.py",
+        "source/map_data.py",
+        "source/map_objects.py",
+        "verify_maps.py"
+      ],
+      "previous_path": "remake/prototype/tools/dgp.py",
+      "previous_sha256": "83c893cb773122a4e832fbb839240784d212bc8bd0e8793f1e854620468cc4d2",
+      "recovery_commit": "1ee90804fc1d1ad1a2b56d3dac56dab30bf6f634"
+    },
+    {
+      "path": "source/map_data.py",
+      "role": "source-decoder",
+      "build_targets": [],
+      "imported_by": [
+        "export_maps.py",
+        "export_movement.py",
+        "extract.py"
+      ],
+      "previous_path": "remake/prototype/tools/map_data.py",
+      "previous_sha256": "f43beeb4cc4f4a6d8a7d2bdf2f661454efa59aab2def9471f09a0860ad4de8bf",
+      "recovery_commit": "1ee90804fc1d1ad1a2b56d3dac56dab30bf6f634"
+    },
+    {
+      "path": "source/map_objects.py",
+      "role": "source-decoder",
+      "build_targets": [],
+      "imported_by": [
+        "export_chapter_maps.py",
+        "export_events.py",
+        "export_map_effects.py",
+        "export_maps.py",
+        "export_movement.py"
+      ],
+      "previous_path": "remake/prototype/tools/map_objects.py",
+      "previous_sha256": "c4714d279ea85d26db583fcc58c0865f079cfc09469cd905bf746dd83fb4125e",
+      "recovery_commit": "1ee90804fc1d1ad1a2b56d3dac56dab30bf6f634"
     },
     {
       "path": "sync_tool_docs.py",
@@ -887,8 +1055,8 @@
     }
   ],
   "notes": [
-    "Classification is navigation; an independent exporter may still be needed to bootstrap source data.",
-    "Shared helpers remain in place. Inspect code and source/evidence references before relocation."
+    "Classification is navigation; independent source exporters still require their declared original inputs and retained evidence.",
+    "Production source decoders live in tools/source; prototype may reuse them but production does not depend on experiments."
   ],
   "retired_documents": [
     {

@@ -6,7 +6,7 @@ import {createHash} from 'node:crypto';
 import {BattleView} from '../web/battle_view.mjs';
 const root=new URL('../../../',import.meta.url),web=new URL('../web/',import.meta.url);
 const jsonLoader=async path=>JSON.parse(await fs.readFile(new URL(path.slice(1),web),'utf8'));
-const assetLoader=async a=>{const file=a.path.startsWith('/prototype/')?new URL('remake/prototype/web/'+a.path.slice(11),root):new URL(a.path.slice(1),web),b=await fs.readFile(file);
+const assetLoader=async a=>{const file=new URL(a.path.slice(1),web),b=await fs.readFile(file);
   assert.equal(createHash('sha256').update(b).digest('hex'),a.sha256);assert.equal(b.readUInt32BE(16),a.width);assert.equal(b.readUInt32BE(20),a.height);
   return {image:{width:a.width,height:a.height,path:a.path},sha256:a.sha256};};
 function canvas(){const ctx={globalAlpha:1,globalCompositeOperation:'source-over',createLinearGradient:()=>({addColorStop(){}})};

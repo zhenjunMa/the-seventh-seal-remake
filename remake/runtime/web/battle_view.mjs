@@ -13,7 +13,7 @@ import {validateForestStage,forestStageAssets,drawForestStageBackground} from '.
 const clone = value => structuredClone(value);
 const abortError = reason => Object.assign(new Error(reason || '战斗表现已取消'), {name: 'AbortError'});
 const urlAllowed = path => typeof path === 'string' &&
-  /^\/(?:prototype\/assets\/|assets\/|data\/)[A-Za-z0-9_./-]+$/.test(path) &&
+  /^\/(?:assets\/|data\/)[A-Za-z0-9_./-]+$/.test(path) &&
   !path.split('/').some(part => part === '..' || part === '.');
 const integer = (value, minimum = 0) => Number.isInteger(value) && value >= minimum;
 const skillsOf = role => [role.skill, ...(role.alternate_skills ?? [])];

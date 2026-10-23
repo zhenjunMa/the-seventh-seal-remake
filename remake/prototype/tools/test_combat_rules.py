@@ -47,7 +47,7 @@ class CombatRuleChecks(unittest.TestCase):
     def test_source_and_assembly_anchors(self):
         data = (ROOT / "GAME.exe").read_bytes()
         self.assertEqual(hashlib.sha256(data).hexdigest(), GAME_SHA)
-        bundle = json.loads((ROOT / "remake/prototype/evidence/combat_native_20261011.json").read_text(encoding="utf-8"))
+        bundle = json.loads((ROOT / "remake/runtime/evidence/source/combat_native_20261011.json").read_text(encoding="utf-8"))
         records = {r["evidence_id"]: r for r in bundle["records"]}
         hp = records[ASM_EVIDENCE]
         self.assertEqual(hp["subject"]["digest"]["sha256"], GAME_SHA)

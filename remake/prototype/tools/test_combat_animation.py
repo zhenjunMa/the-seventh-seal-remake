@@ -10,10 +10,10 @@ import json
 import struct
 import sys
 
-sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "runtime/tools"))
 from PIL import Image
-from combat_resources import ROOT, PROJECT
-from dgp import DGP
+from source.combat_resources import ROOT, PROJECT
+from source.dgp import DGP
 from export_combat_lab import SAMPLES, ACTION_CALL_ASM_ID, ACTION_USE_ID
 
 
@@ -23,13 +23,13 @@ def sha256(data):
 
 def main():
     web = PROJECT / "web"
-    manifest = json.loads((web / "combat_manifest.json").read_text("utf-8"))
-    export = json.loads((PROJECT / "evidence/combat_animation_verification_20261011.json").read_text("utf-8"))
+    manifest = json.loads((web / "data/source/combat_manifest.json").read_text("utf-8"))
+    export = json.loads((PROJECT / "evidence/source/combat_animation_verification_20261011.json").read_text("utf-8"))
     assert manifest["schema"] == "seventh-seal-combat-lab" and manifest["version"] == 1
     assert [r["id"] for r in manifest["roles"]] == list(SAMPLES)
     assert not manifest["errors"] and manifest["source_bytes_unchanged"]
     assert manifest["native_action_index_verified"]
-    ids = {r["evidence_id"] for r in json.loads((PROJECT / "evidence/combat_animation_native_20261011.json").read_text("utf-8"))["records"]}
+    ids = {r["evidence_id"] for r in json.loads((PROJECT / "evidence/source/combat_animation_native_20261011.json").read_text("utf-8"))["records"]}
     assert ACTION_CALL_ASM_ID in ids and ACTION_USE_ID in ids
     checks = {c["id"]: c for c in export["checks"]}
     verified_frames = 0
@@ -96,7 +96,7 @@ def main():
     assert unchanged
     result = {"checks": cases, "verified_frames": verified_frames, "source_bytes_unchanged": unchanged,
               "passed": True, "limits": ["Auxiliary indexed effects and original-game timing were not rendered or compared."]}
-    (PROJECT / "evidence/combat_animation_checks_20261011.json").write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
+    (PROJECT / "evidence/source/combat_animation_checks_20261011.json").write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
     print(json.dumps(result, ensure_ascii=True))
 
 

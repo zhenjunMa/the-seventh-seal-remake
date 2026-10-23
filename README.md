@@ -6,20 +6,22 @@
 
 当前代码已接入序章、火之谷至白木森林的初期主线，以及战斗、操作菜单、成长和存读档。娃蒂作为第三名队友接入开发样本；正式主线的入队剧情尚未添加。
 
-正式入口已接入 Phaser 3.90.0：主循环、探索场景、人物显示和战斗绘制使用 Phaser，已有规则、配置、存档、素材路径及菜单／对白保持原有契约。运行库随代码提供，无需 npm 安装或 CDN。本版真实素材下的完整流程仍待验收；当前任务与完成标准统一维护在[开发计划](remake/assessment/validation_design.txt)。
+正式入口已接入 Phaser 3.90.0：主循环、探索场景、人物显示和战斗绘制使用 Phaser，已有规则、配置、存档及菜单／对白保持原有契约。运行库随代码提供，无需 npm 安装或 CDN。本版真实素材下的完整流程仍待验收；当前任务与完成标准统一维护在[开发计划](remake/assessment/validation_design.txt)。
 
 **当前发布的是代码与配置基线。干净克隆后，仅凭原版文件生成全部素材的首次构建流程尚未打通。** 现有导出入口用于增量构建，部分步骤仍依赖本地来源台账、原生验证记录和历史样本；这些记录和样本不在仓库中。首次构建准备完成前，运行游戏需要本地已生成的资源，不能直接把克隆仓库视为完整可运行安装包。
 
 ## 仓库内容
 
 - `remake/runtime/web/`：正式版浏览器代码、地图与剧情定义，以及技能、道具、人物、怪物和战斗配置。
-- `remake/runtime/tools/`：内容构建、素材提取和验证工具。
+- `remake/runtime/tools/`：正式内容构建、素材提取和验证工具；`source/` 保存共享只读解码器。
 - `remake/runtime/tests/`：自动测试；部分集成测试依赖未随仓库提供的原版文件和本地证据。
-- `remake/prototype/`：正式版仍使用的共享移动模块、解码器及早期实验代码。
+- `remake/prototype/`：早期演示和定向验证，复用正式模块及素材；正式游戏不依赖此目录。
 - `remake/assessment/`：当前开发计划和验收方法。
 - `save_analysis_20261010/`：导出器仍引用的四个共享 Python 解析模块，只提交代码。
 
-`.gitignore` 排除原版程序与资源、提取素材、存档、观察副本、证据报告、历史备份和缓存。`runtime/web/data/` 中的 JSON 是运行定义或结构化资源描述，随代码提交；媒体文件本身不提交。
+正式移动模块位于 `remake/runtime/web/core/movement.mjs`，正式媒体统一位于 `remake/runtime/web/assets/`，基础导出清单位于 `remake/runtime/web/data/source/`。已有旧版素材时，先运行 `python3 -B remake/runtime/tools/migrate_local_materials.py` 盘点，加 `--run` 复制；原目录和文件指纹保留。完整升级步骤和跨目录交接命令见[构建工具说明](remake/runtime/tools/README.txt)中的“旧环境升级”；迁移映射见 `remake/runtime/tools/layout_migration.json`。
+
+`.gitignore` 排除原版程序与资源、提取素材、存档、观察副本、证据报告、历史备份和缓存。`remake/runtime/web/data/` 中的 JSON 是运行定义或结构化资源描述，随代码提交；媒体文件本身不提交。
 
 ## 本地目录与运行
 

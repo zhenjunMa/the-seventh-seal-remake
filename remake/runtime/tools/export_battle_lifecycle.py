@@ -16,12 +16,11 @@ ROOT = RUNTIME.parents[1]
 WEB = RUNTIME/'web'
 OUT = WEB/'assets/battle_lifecycle'
 EVIDENCE = RUNTIME/'evidence/battle_lifecycle_20261015'
-sys.path.insert(0,str(ROOT/'remake/prototype/tools'))
+sys.path.insert(0,str(ROOT/'remake/runtime/tools'))
 from PIL import Image
-from combat_resources import CHR, GAME_SHA256
-from dgp import DGP
+from source.combat_resources import CHR, GAME_SHA256
+from source.dgp import DGP
 from export_combat_presentation import indexed_contribution, native_frame_sequence, NATIVE_IDS
-sys.path.insert(0,str(RUNTIME/'tools'))
 from export_skill_layers import SourceAudit
 from export_party_skills import source_skill
 from content_registration import registration,role_ids
@@ -32,12 +31,12 @@ NATIVE = {
  'entry':('remake/runtime/evidence/equipment_speed_native.json','ev_058f6553bdbe4702f6c550168a98b6dc64a09c8af9b303cee8aa51e1f55f7695'),
  'death':('remake/runtime/evidence/forest_death_reactions_native_20261011.json','ev_427d6fcc14c2ce2f41ff99c7b65d9a0ded4cedf3252c2fc0512bb1c36e8b134d'),
  'grounded_death':('remake/runtime/evidence/forest_death_reactions_native_20261011.json','ev_dfd502e36e42d3d86b939d5ecc57e456ccf15f5d452b93d72d9e43a30794c2d9'),
- 'lookup':('remake/prototype/evidence/combat_presentation_native_20261011.json','ev_d636f80d05fddd079b3b8371cbdedeef740f86ef6bc272e85186578555918c41'),
+ 'lookup':('remake/runtime/evidence/source/combat_presentation_native_20261011.json','ev_d636f80d05fddd079b3b8371cbdedeef740f86ef6bc272e85186578555918c41'),
  'command7':('remake/runtime/evidence/party_magic_native.json','ev_6a97d55ce2cda38f5a9cacf245900414d96566b052c7e04fb96bac9a431a6764'),
  'effect_carrier':('remake/runtime/evidence/party_magic_native.json','ev_c9bbdef1c8377c5cb768f67c055aa4189564ec176aa68cd9b38b398e47bb0b9b'),
  'renderer_clear':('remake/runtime/evidence/forest_stage_native.json','ev_5b7111bef94d84d0b13d5977a201ad2d9595de8a70f9458dc568aeb20865f72f'),
  'source_clock':('remake/runtime/evidence/forest_scheduler_native_20261011.json','ev_8e3ec5a4b14b1aa3628f2b1ea4e90e43ca550b15e065c57deac7a65f003216b5'),
- 'sprite_effect_gate':('remake/prototype/evidence/combat_animation_native_20261011.json','ev_15074ba1e716dbee5de449c6c18c8af0dfb570150803f5138f7f9fe4991fe96f'),
+ 'sprite_effect_gate':('remake/runtime/evidence/source/combat_animation_native_20261011.json','ev_15074ba1e716dbee5de449c6c18c8af0dfb570150803f5138f7f9fe4991fe96f'),
 }
 RENDERER_BUNDLE=RUNTIME/'evidence/battle_lifecycle_renderer_native_20261015.json'
 RENDERER_FINDINGS=EVIDENCE/'renderer_static_findings.json'

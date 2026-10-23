@@ -69,7 +69,7 @@
           "frames_per_direction": 10,
           "first_frame": 0,
           "identifier_raw": 0,
-          "sheet": "/prototype/assets/ROLE_001/action_00.png",
+          "sheet": "/assets/ROLE_001/action_00.png",
           "interval_ms_preview": 180
         },
         {
@@ -81,7 +81,7 @@
           "frames_per_direction": 10,
           "first_frame": 80,
           "identifier_raw": 1,
-          "sheet": "/prototype/assets/ROLE_001/action_01.png",
+          "sheet": "/assets/ROLE_001/action_01.png",
           "interval_ms_preview": 250
         },
         {
@@ -93,7 +93,7 @@
           "frames_per_direction": 12,
           "first_frame": 160,
           "identifier_raw": 2,
-          "sheet": "/prototype/assets/ROLE_001/action_02.png",
+          "sheet": "/assets/ROLE_001/action_02.png",
           "interval_ms_preview": 130
         }
       ],
@@ -125,7 +125,7 @@
           "frames_per_direction": 10,
           "first_frame": 0,
           "identifier_raw": 0,
-          "sheet": "/prototype/assets/ROLE_002/action_00.png",
+          "sheet": "/assets/ROLE_002/action_00.png",
           "interval_ms_preview": 180
         },
         {
@@ -137,7 +137,7 @@
           "frames_per_direction": 10,
           "first_frame": 80,
           "identifier_raw": 1,
-          "sheet": "/prototype/assets/ROLE_002/action_01.png",
+          "sheet": "/assets/ROLE_002/action_01.png",
           "interval_ms_preview": 250
         },
         {
@@ -149,7 +149,7 @@
           "frames_per_direction": 12,
           "first_frame": 160,
           "identifier_raw": 2,
-          "sheet": "/prototype/assets/ROLE_002/action_02.png",
+          "sheet": "/assets/ROLE_002/action_02.png",
           "interval_ms_preview": 130
         }
       ],

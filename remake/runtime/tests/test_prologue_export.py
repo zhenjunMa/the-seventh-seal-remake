@@ -5,8 +5,8 @@ import sys
 import unittest
 
 ROOT=Path(__file__).resolve().parents[3]
-sys.path.insert(0,str(ROOT/'remake/prototype/tools'))
-from dgp import DGP,normalize_v8_action
+sys.path.insert(0,str(ROOT/'remake/runtime/tools'))
+from source.dgp import DGP,normalize_v8_action
 
 
 class PrologueExportTests(unittest.TestCase):

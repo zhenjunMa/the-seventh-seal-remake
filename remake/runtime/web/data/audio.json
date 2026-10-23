@@ -3642,7 +3642,7 @@
   },
   "native_bundle_hashes": {
     "remake/runtime/evidence/opening_native.json": "3abba336b2be6715a85da23ead1ecc169806fd7c4c9240507b236fcc72d5be0d",
-    "remake/prototype/evidence/combat_presentation_native_20261011.json": "aeb75c58e03602b2874830c3c2215d3be170e948127a69d4f1ddb8aec2f791c7",
+    "remake/runtime/evidence/source/combat_presentation_native_20261011.json": "aeb75c58e03602b2874830c3c2215d3be170e948127a69d4f1ddb8aec2f791c7",
     "remake/runtime/evidence/chapter_map_native.json": "8e323fc8c196b00db1a47b0897219f2fab15a82b44b5ecc2f627e143f492af5a",
     "remake/runtime/evidence/forest_ai_rules_native_20261011.json": "74e9d5fcc667bcb19cc4572634d96eed82e0b712dfc71f811d02772f0bd1690f",
     "remake/runtime/evidence/audio_native.json": "9967a58dbb8d9a95e0c7d3f1663c1eb598b1b3e74c24eb2fac535728af64c045",

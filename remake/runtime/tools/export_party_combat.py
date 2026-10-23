@@ -17,9 +17,8 @@ RUNTIME = ROOT / 'remake/runtime'
 sys.path.insert(0, str(RUNTIME / 'tools'))
 from export_combat_sample import (equipment_table, HEADER_BASE, HEADER_FIELDS,
                                   STATUS_FIELDS, address)
-sys.path.insert(0, str(ROOT / 'remake/prototype/tools'))
 sys.path.insert(0, str(ROOT / 'save_analysis_20261010'))
-from combat_resources import CHR
+from source.combat_resources import CHR
 from native_item_init import initialize_existing_instance
 from content_registration import role_ids
 

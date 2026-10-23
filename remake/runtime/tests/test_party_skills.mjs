@@ -162,7 +162,7 @@ function canvas(){const ctx={setTransform(){},clearRect(){},fillRect(){},beginPa
 test('actual BattleView loads every party atlas/layer and presents all admitted source commands',async()=>{
  const checked=new Set(),v=new BattleView({canvas:canvas(),metadataPath:'/data/party_battle_view.json',
   jsonLoader:async p=>read(p.slice('/data/'.length)),assetLoader:async a=>{
-   const b=await readFile(a.path.startsWith('/prototype/')?new URL('remake/prototype/web/'+a.path.slice(11),root):new URL(a.path.slice(1),web));
+   const b=await readFile(new URL(a.path.slice(1),web));
    assert.equal(hash(b),a.sha256,a.path);assert.equal(b.readUInt32BE(16),a.width);assert.equal(b.readUInt32BE(20),a.height);
    checked.add(a.path);return {image:{width:a.width,height:a.height,path:a.path},sha256:a.sha256};
   }});

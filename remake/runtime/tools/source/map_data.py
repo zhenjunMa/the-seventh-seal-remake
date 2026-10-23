@@ -9,7 +9,7 @@ import hashlib
 import struct
 
 from PIL import Image
-from dgp import DGP, DGPError, u32
+from .dgp import DGP, DGPError, u32
 
 
 class MapBackground:

@@ -1,6 +1,6 @@
 // Presentation preview for the source-bound ANM player. Interpolation and
 // blend-state transitions are browser approximations, not native equivalence.
-import {locomotion} from '/prototype/movement.mjs';
+import {locomotion} from './core/movement.mjs';
 import {openingCamera,approachPoint,directArrivalMoves} from './core/opening_presentation.mjs';
 import {ActorEffectView} from './actor_effect_view.mjs';
 import {drawMapSprite} from './map_sprite.mjs';

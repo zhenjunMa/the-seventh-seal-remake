@@ -9,9 +9,8 @@ sys.dont_write_bytecode = True
 ROOT = Path(__file__).resolve().parents[3]
 RUNTIME = ROOT / 'remake/runtime'
 sys.path.insert(0, str(RUNTIME / 'tools'))
-sys.path.insert(0, str(ROOT / 'remake/prototype/tools'))
 sys.path.insert(0, str(ROOT / 'save_analysis_20261010'))
-from combat_resources import CHR
+from source.combat_resources import CHR
 from save_format import complete_layout
 from native_item_init import VALUE_PAIRS, initialize_existing_instance
 from content_registration import role_ids

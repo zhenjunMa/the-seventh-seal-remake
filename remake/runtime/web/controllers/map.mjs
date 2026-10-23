@@ -1,5 +1,5 @@
 // map adapters. Persistent state belongs to the shared runtime context.
-import {MovementMap, locomotion} from "/prototype/movement.mjs";
+import {MovementMap, locomotion} from "../core/movement.mjs";
 import {createBattleSample} from "../combat_sample.mjs";
 import {planRouteExit} from "../core/route.mjs";
 import {initialEncounterState, previewMovement} from "../core/encounters.mjs";

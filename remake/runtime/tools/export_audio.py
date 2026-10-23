@@ -20,8 +20,7 @@ ROOT = RUNTIME.parents[1]
 WEB = RUNTIME / 'web'
 sys.path.insert(0, str(RUNTIME / 'tools'))
 GAME_SHA = 'fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18'
-sys.path.insert(0, str(ROOT / 'remake/prototype/tools'))
-from combat_resources import CHR
+from source.combat_resources import CHR
 
 
 def sha(raw): return hashlib.sha256(raw).hexdigest()
@@ -55,10 +54,10 @@ def main():
         p = ROOT / path; raw = p.read_bytes(); sources[path] = sha(raw); return raw
     assert sha(read('GAME.exe')) == GAME_SHA
     native = [evidence_record('remake/runtime/evidence/opening_native.json', '0x4c1d47'),
-              evidence_record('remake/prototype/evidence/combat_presentation_native_20261011.json', '0x512210'),
+              evidence_record('remake/runtime/evidence/source/combat_presentation_native_20261011.json', '0x512210'),
               evidence_record('remake/runtime/evidence/chapter_map_native.json', '0x4a5f00'),
               evidence_record('remake/runtime/evidence/forest_ai_rules_native_20261011.json', '0x49ffa0')]
-    native_paths = ['remake/runtime/evidence/opening_native.json', 'remake/prototype/evidence/combat_presentation_native_20261011.json',
+    native_paths = ['remake/runtime/evidence/opening_native.json', 'remake/runtime/evidence/source/combat_presentation_native_20261011.json',
                     'remake/runtime/evidence/chapter_map_native.json', 'remake/runtime/evidence/forest_ai_rules_native_20261011.json']
     native_ref = {p:sha((ROOT/p).read_bytes()) for p in native_paths}
     extra_path = RUNTIME / 'evidence/audio_native.json'

@@ -96,7 +96,7 @@
       "actions": [
         {
           "index": 0,
-          "sheet": "/prototype/assets/combat_lab/001/action_00.png",
+          "sheet": "/assets/combat_lab/001/action_00.png",
           "sha256": "48ea4e7be91fee0bac45b097c8036b5bdf23e90d4a10306708dcbe7b2289b957",
           "frame_count": 22,
           "directions": 1,
@@ -105,7 +105,7 @@
         },
         {
           "index": 1,
-          "sheet": "/prototype/assets/combat_lab/001/action_01.png",
+          "sheet": "/assets/combat_lab/001/action_01.png",
           "sha256": "6c09a38ac7ac841385eb9e73562d9774f68cc46b376a5c9b71fd30231b8f62a7",
           "frame_count": 6,
           "directions": 1,
@@ -114,7 +114,7 @@
         },
         {
           "index": 7,
-          "sheet": "/prototype/assets/combat_lab/001/action_07.png",
+          "sheet": "/assets/combat_lab/001/action_07.png",
           "sha256": "d95dec7d08a593cf88adf47c984aff8689772b019dd841b55d66db0cbc0e1756",
           "frame_count": 4,
           "directions": 1,
@@ -123,7 +123,7 @@
         },
         {
           "index": 8,
-          "sheet": "/prototype/assets/combat_lab/001/action_08.png",
+          "sheet": "/assets/combat_lab/001/action_08.png",
           "sha256": "21415df1469772665ee8f5a182230e5efc592b5138c00ee4b64745155f7787ad",
           "frame_count": 3,
           "directions": 1,
@@ -132,7 +132,7 @@
         },
         {
           "index": 9,
-          "sheet": "/prototype/assets/combat_lab/001/action_09.png",
+          "sheet": "/assets/combat_lab/001/action_09.png",
           "sha256": "0afc236b6fd30a47a4c95284f80561258695af4b3254f9fd78e73598983ad93f",
           "frame_count": 4,
           "directions": 1,
@@ -141,7 +141,7 @@
         },
         {
           "index": 10,
-          "sheet": "/prototype/assets/combat_lab/001/action_10.png",
+          "sheet": "/assets/combat_lab/001/action_10.png",
           "sha256": "d90641d62d4ad5a3570c10dd4d6afbdf54b7f28fdeba66f3d3000aaab51c5f38",
           "frame_count": 5,
           "directions": 1,
@@ -150,7 +150,7 @@
         },
         {
           "index": 11,
-          "sheet": "/prototype/assets/combat_lab/001/action_11.png",
+          "sheet": "/assets/combat_lab/001/action_11.png",
           "sha256": "adb30ebab1dd9603baba47f4a6a8e20437049800f5723f970c47dbe55ccf6023",
           "frame_count": 3,
           "directions": 1,
@@ -159,7 +159,7 @@
         },
         {
           "index": 12,
-          "sheet": "/prototype/assets/combat_lab/001/action_12.png",
+          "sheet": "/assets/combat_lab/001/action_12.png",
           "sha256": "76bc40561ead6e1f3324ff101f108d367f836e2b9f8426b7785d20d370cb4169",
           "frame_count": 3,
           "directions": 1,
@@ -168,7 +168,7 @@
         },
         {
           "index": 28,
-          "sheet": "/prototype/assets/combat_lab/001/action_28.png",
+          "sheet": "/assets/combat_lab/001/action_28.png",
           "sha256": "57b55bb8e33c54fc32395fb45597c4b4777c514b0205cc6338d617f8db1f3cd6",
           "frame_count": 10,
           "directions": 1,
@@ -5035,7 +5035,7 @@
         "x": 146,
         "y": 119
       },
-      "sheet": "/prototype/assets/combat_effects/_DutyN/action_00.png",
+      "sheet": "/assets/combat_effects/_DutyN/action_00.png",
       "sha256": "0d0e02018c234dd3321f66a7e4d11b274a72eed738fd50b609ffaf9e99fce3ef",
       "frames": [
         0,
@@ -5070,7 +5070,7 @@
         "x": 281,
         "y": 249
       },
-      "sheet": "/prototype/assets/combat_effects/BFr01_Dn/action_00.png",
+      "sheet": "/assets/combat_effects/BFr01_Dn/action_00.png",
       "sha256": "36751c002dbd373556c6a1779308601809e6480d7d35f34e80550942c59e4872",
       "frames": [
         0,
@@ -5247,7 +5247,7 @@
   ],
   "layers": {
     "path": "/data/yantu_layers.json",
-    "sha256": "9ba6390ff46d42bbe6da96bb0c0fe6f032c7024ec2a5fa71f5357b696e236bee"
+    "sha256": "fa161f165f8fdfd9c2c2e031e8eea002f7dc43bc0dbd06344171d330cc8fecbe"
   },
   "source_hashes": {
     "GAME.exe": "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18",
@@ -5271,9 +5271,9 @@
     "Fight_Role/Effect/BNo01_Nd.dgp": "0bde075896389c4adb5b3b0e7f6779801ff9c9e44b6565d00f6eb0f89ff53459"
   },
   "reference_hashes": {
-    "remake/prototype/web/combat_manifest.json": "61467d8e49ed5add07c08ecc709d9a55904aa40b257e71f3cc924993413f1102",
-    "remake/prototype/web/combat_presentation.json": "e33c9d87421879914d99ddabf88dc136630a4f6892b846dc39e2bcb34e122f50",
-    "remake/runtime/web/data/yantu_layers.json": "9ba6390ff46d42bbe6da96bb0c0fe6f032c7024ec2a5fa71f5357b696e236bee"
+    "remake/runtime/web/data/source/combat_manifest.json": "61467d8e49ed5add07c08ecc709d9a55904aa40b257e71f3cc924993413f1102",
+    "remake/runtime/web/data/source/combat_presentation.json": "e33c9d87421879914d99ddabf88dc136630a4f6892b846dc39e2bcb34e122f50",
+    "remake/runtime/web/data/yantu_layers.json": "fa161f165f8fdfd9c2c2e031e8eea002f7dc43bc0dbd06344171d330cc8fecbe"
   },
   "policy": {
     "frame_ms": 65,

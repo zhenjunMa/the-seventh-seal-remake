@@ -1,0 +1,129 @@
+{
+  "schema": "seventh-seal-layout-migration",
+  "version": 1,
+  "date": "2026-10-23",
+  "recovery_commit": "1ee90804fc1d1ad1a2b56d3dac56dab30bf6f634",
+  "files": [
+    {
+      "previous_path": "remake/prototype/web/movement.mjs",
+      "path": "remake/runtime/web/core/movement.mjs",
+      "previous_sha256": "7e04ed7f5514dd0060f5fe8e59690845f19f03d63f390097a7ca18533eb3c65c"
+    },
+    {
+      "previous_path": "remake/prototype/tools/dgp.py",
+      "path": "remake/runtime/tools/source/dgp.py",
+      "previous_sha256": "83c893cb773122a4e832fbb839240784d212bc8bd0e8793f1e854620468cc4d2"
+    },
+    {
+      "previous_path": "remake/prototype/tools/map_data.py",
+      "path": "remake/runtime/tools/source/map_data.py",
+      "previous_sha256": "f43beeb4cc4f4a6d8a7d2bdf2f661454efa59aab2def9471f09a0860ad4de8bf"
+    },
+    {
+      "previous_path": "remake/prototype/tools/map_objects.py",
+      "path": "remake/runtime/tools/source/map_objects.py",
+      "previous_sha256": "c4714d279ea85d26db583fcc58c0865f079cfc09469cd905bf746dd83fb4125e"
+    },
+    {
+      "previous_path": "remake/prototype/tools/combat_resources.py",
+      "path": "remake/runtime/tools/source/combat_resources.py",
+      "previous_sha256": "5a641a6dd7dd53f4021cc2325b63aa29110e6fc4aec6c0d4cff954282af98f30"
+    },
+    {
+      "previous_path": "remake/prototype/tools/extract.py",
+      "path": "remake/runtime/tools/extract.py",
+      "previous_sha256": "e536682ff2ae059871707b7245711ca5686d020f27462f5690caeb5397c0aa3a"
+    },
+    {
+      "previous_path": "remake/prototype/tools/export_movement.py",
+      "path": "remake/runtime/tools/export_movement.py",
+      "previous_sha256": "04a438048e4ae4cbcfc455b2d24d297ecbb388304ca07f655a3dc46b9619ca38"
+    },
+    {
+      "previous_path": "remake/prototype/tools/export_combat_lab.py",
+      "path": "remake/runtime/tools/export_combat_lab.py",
+      "previous_sha256": "11e394f64e6c3e0645c48fd857a4c00a008a79aa7b60e12214a1388853dff2d3"
+    },
+    {
+      "previous_path": "remake/prototype/tools/export_combat_presentation.py",
+      "path": "remake/runtime/tools/export_combat_presentation.py",
+      "previous_sha256": "b20d7fbddbb70cfe35eb1fbf20ddac48e64983eace0332b8ec5629706fb29db3"
+    },
+    {
+      "previous_path": "remake/prototype/web/manifest.json",
+      "path": "remake/runtime/web/data/source/manifest.json",
+      "previous_sha256": "92ba4d9a8f2ea061a1f4c7c889666727ad49dd88f8c1d6b761d60a938f0591d2"
+    },
+    {
+      "previous_path": "remake/prototype/web/combat_manifest.json",
+      "path": "remake/runtime/web/data/source/combat_manifest.json",
+      "previous_sha256": "61467d8e49ed5add07c08ecc709d9a55904aa40b257e71f3cc924993413f1102"
+    },
+    {
+      "previous_path": "remake/prototype/web/combat_presentation.json",
+      "path": "remake/runtime/web/data/source/combat_presentation.json",
+      "previous_sha256": "e33c9d87421879914d99ddabf88dc136630a4f6892b846dc39e2bcb34e122f50"
+    }
+  ],
+  "local_directories": [
+    {
+      "previous_path": "remake/prototype/web/assets",
+      "path": "remake/runtime/web/assets"
+    },
+    {
+      "previous_path": "remake/prototype/evidence",
+      "path": "remake/runtime/evidence/source"
+    }
+  ],
+  "notes": [
+    "Source manifest bytes and original input hashes are retained. Embedded evidence references in source snapshots describe the original export location.",
+    "Local media and evidence are copied only when absent or identical; existing conflicting files are never replaced."
+  ],
+  "runtime_manifests": [
+    {
+      "path": "remake/runtime/web/data/forest_battle_view.json",
+      "previous_sha256": "ca17c446e845dc4adb9d4dbbf6cf98b8e95250bd270e027158ee68b354f061f6",
+      "sha256": "a2f6bb67a3ffabfe9f512d43b9ad57e63a17c84adfb45fd871600e375a39529b"
+    },
+    {
+      "path": "remake/runtime/web/data/forest_full_battle_view.json",
+      "previous_sha256": "43b997d05dd63554adc48afdf9cbedbc4b12c94e5be95498cca01689fb786f62",
+      "sha256": "4969962d070eb5bd10b58c68d1be99eabdac23e87f495731117eb6e8114ec5bb"
+    },
+    {
+      "path": "remake/runtime/web/data/battle_view.json",
+      "previous_sha256": "d64c5a35e8906f76456dc8bf582d28a852ff58089ac1db65c13c647b92d1e952",
+      "sha256": "653a52535fe989271aa0ed22c0084d2e9c0cef87f3ae4299a654b71076ba2196"
+    },
+    {
+      "path": "remake/runtime/web/data/battle_packs.json",
+      "previous_sha256": "961767d601105d55685e9ba5ef7703bc072c8626319a822eedc73a3db9fcf8dd",
+      "sha256": "11de06dddd1f071b9635cf9465445a39232a699e300381248654736e41292ee3"
+    },
+    {
+      "path": "remake/runtime/web/data/party_battle_view.json",
+      "previous_sha256": "f3f452408e728e1cc9a2d7ec672b36283c532b8a7cc114b7a7d0226636553f20",
+      "sha256": "60d9e35fd14154930021bafd0fc55a3eefd9991e5a10acce3b75449841c5504b"
+    },
+    {
+      "path": "remake/runtime/web/data/yantu_layers.json",
+      "previous_sha256": "9ba6390ff46d42bbe6da96bb0c0fe6f032c7024ec2a5fa71f5357b696e236bee",
+      "sha256": "fa161f165f8fdfd9c2c2e031e8eea002f7dc43bc0dbd06344171d330cc8fecbe"
+    },
+    {
+      "path": "remake/runtime/web/data/audio.json",
+      "previous_sha256": "dd2c70662cfbfc29624da20f7ea9b03ba609248c650f380c9c5c3767941bef25",
+      "sha256": "1db36a62dda9402bd8c1aabb2de2879b27e246085c8021375c3314ab29d7e10c"
+    },
+    {
+      "path": "remake/runtime/web/data/catalog.json",
+      "previous_sha256": "0b80afe4d12359d8d7a505b07463e3241dd9ab78cfe00646d769620a30765681",
+      "sha256": "724b1c955011fb90b4d9359170501c35c97b6bc173f4a3730fd9db7d056965c5"
+    },
+    {
+      "path": "remake/runtime/web/data/enemy_battle_view.json",
+      "previous_sha256": "e3052af4d624938c0549520f91ad9ef75bbf13218b315b6a93fb0d9f90db7e7a",
+      "sha256": "4f0df389f501938809392646dd9971521a4cc6547c728139f0658ffdb80a568b"
+    }
+  ]
+}

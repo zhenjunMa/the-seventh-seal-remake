@@ -32,7 +32,7 @@ else:
     assert all(sha(ROOT/p)==s for p,s in sources.items())
     meta=read(RUNTIME/'web/data/forest_battle_view.json');assets={}
     def asset(path,expected):
-        p=ROOT/'remake/prototype/web'/path[11:] if path.startswith('/prototype/') else RUNTIME/'web'/path.lstrip('/')
+        p=RUNTIME/'web'/path[11:] if path.startswith('/prototype/') else RUNTIME/'web'/path.lstrip('/')
         assert sha(p)==expected,path;assets[path]=expected
     for r in meta['roles']:
         for a in r['actions']:asset(a['sheet'],a['sha256'])

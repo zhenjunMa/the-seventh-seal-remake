@@ -1804,10 +1804,10 @@
       "frame_range_pseudo": "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29"
     },
     "bundles": [
-      "remake/prototype/evidence/combat_presentation_native_20261011.json",
-      "remake/prototype/evidence/combat_presentation_indexed_native_20261011.json"
+      "remake/runtime/evidence/source/combat_presentation_native_20261011.json",
+      "remake/runtime/evidence/source/combat_presentation_indexed_native_20261011.json"
     ],
-    "retained_gap": "remake/prototype/evidence/skill_intrinsic_layer_gap_20261011.json"
+    "retained_gap": "remake/runtime/evidence/source/skill_intrinsic_layer_gap_20261011.json"
   },
   "limits": [
     "Only role001 CHR skill22/id26 Yantu, single existing source direction, seven segments/32 source frames.",

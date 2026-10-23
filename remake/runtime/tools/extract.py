@@ -8,15 +8,15 @@ import time
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from PIL import Image
-from dgp import DGP, DGPError, u32
-from map_data import MapBackground
+from source.dgp import DGP, DGPError, u32
+from source.map_data import MapBackground
 from export_movement import export_movement
 
 PROJECT = Path(__file__).resolve().parents[1]
-# Outputs stay inside remake/prototype; original inputs stay in the game root.
+# Outputs stay inside remake/runtime; original inputs stay in the game root.
 ROOT = PROJECT.parents[1]
 OUTPUT = PROJECT / 'web' / 'assets'
-EVIDENCE = PROJECT / 'evidence'
+EVIDENCE = PROJECT / 'evidence/source'
 SOURCES = ['m01010.dgp', 'ROLE/001.dgp', 'ROLE/002.dgp']
 SOURCES += [str(p.relative_to(ROOT)).replace('\\', '/') for p in sorted((ROOT / 'mapm/m01010').glob('*.dgp'))]
 SOURCES += ['Fight_Role/012.dgp', 'Fight_Role/wolf.dgp']
@@ -157,7 +157,7 @@ def main():
                           'Preview state uses its own schema; original save import/export is not implemented.'])
     manifest['verification'] = dict(successful_sources=len(checks), decoded_frames=sum(c['frames'] for c in checks),
                                     unchanged=report['source_bytes_unchanged'], original_comparison=False)
-    write_json(OUTPUT.parent / 'manifest.json', manifest)
+    write_json(OUTPUT.parent / 'data/source/manifest.json', manifest)
     write_json(EVIDENCE / 'verification.json', report)
     print(json.dumps(manifest['verification'], ensure_ascii=False), flush=True)
     return 0 if before == after and manifest['maps'] and len(manifest['roles']) == 2 else 1

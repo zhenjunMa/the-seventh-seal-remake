@@ -5,7 +5,7 @@ import {readFile,writeFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {WorldStore,encodeSave,decodeSave} from '../web/core/world.mjs';
 import {EventRunner,validateProgram} from '../web/core/events.mjs';
-import {MovementMap} from '../../prototype/web/movement.mjs';
+import {MovementMap} from '../web/core/movement.mjs';
 
 const runtime=new URL('../',import.meta.url),root=new URL('../../../',import.meta.url);
 const read=async path=>JSON.parse(await readFile(new URL(path,runtime),'utf8'));

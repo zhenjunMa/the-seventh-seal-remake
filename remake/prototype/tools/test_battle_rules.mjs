@@ -12,7 +12,7 @@ const gamePath = path.join(root, 'GAME.exe');
 const data = fs.readFileSync(gamePath);
 const sha = b => crypto.createHash('sha256').update(b).digest('hex');
 assert.equal(sha(data), 'fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18');
-const evidence = JSON.parse(fs.readFileSync(path.join(root, 'remake/prototype/evidence/combat_native_20261011.json'), 'utf8'));
+const evidence = JSON.parse(fs.readFileSync(path.join(root, 'remake/runtime/evidence/source/combat_native_20261011.json'), 'utf8'));
 const records = new Map(evidence.records.map(r => [r.evidence_id, r]));
 for (const item of Object.values(RULE_EVIDENCE)) assert.equal(records.get(item.assembly).subject.digest.sha256, sha(data));
 function bytesAtVA(address, length) {

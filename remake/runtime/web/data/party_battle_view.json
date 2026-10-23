@@ -10591,7 +10591,7 @@
         "x": 146,
         "y": 119
       },
-      "sheet": "/prototype/assets/combat_effects/_DutyN/action_00.png",
+      "sheet": "/assets/combat_effects/_DutyN/action_00.png",
       "sha256": "0d0e02018c234dd3321f66a7e4d11b274a72eed738fd50b609ffaf9e99fce3ef",
       "frames": [
         0,
@@ -10626,7 +10626,7 @@
         "x": 281,
         "y": 249
       },
-      "sheet": "/prototype/assets/combat_effects/BFr01_Dn/action_00.png",
+      "sheet": "/assets/combat_effects/BFr01_Dn/action_00.png",
       "sha256": "36751c002dbd373556c6a1779308601809e6480d7d35f34e80550942c59e4872",
       "frames": [
         0,
@@ -11015,7 +11015,7 @@
   ],
   "layers": {
     "path": "/data/yantu_layers.json",
-    "sha256": "9ba6390ff46d42bbe6da96bb0c0fe6f032c7024ec2a5fa71f5357b696e236bee"
+    "sha256": "fa161f165f8fdfd9c2c2e031e8eea002f7dc43bc0dbd06344171d330cc8fecbe"
   },
   "source_hashes": {
     "GAME.exe": "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18",
@@ -11044,9 +11044,9 @@
     "Fight_Role/Effect/_Blank28.dgp": "80990864f0aa3aa577fe3fc820febe72a36b4b58ea2bb84d1943f4aae29048b0"
   },
   "reference_hashes": {
-    "remake/prototype/web/combat_manifest.json": "61467d8e49ed5add07c08ecc709d9a55904aa40b257e71f3cc924993413f1102",
-    "remake/prototype/web/combat_presentation.json": "e33c9d87421879914d99ddabf88dc136630a4f6892b846dc39e2bcb34e122f50",
-    "remake/runtime/web/data/yantu_layers.json": "9ba6390ff46d42bbe6da96bb0c0fe6f032c7024ec2a5fa71f5357b696e236bee"
+    "remake/runtime/web/data/source/combat_manifest.json": "61467d8e49ed5add07c08ecc709d9a55904aa40b257e71f3cc924993413f1102",
+    "remake/runtime/web/data/source/combat_presentation.json": "e33c9d87421879914d99ddabf88dc136630a4f6892b846dc39e2bcb34e122f50",
+    "remake/runtime/web/data/yantu_layers.json": "fa161f165f8fdfd9c2c2e031e8eea002f7dc43bc0dbd06344171d330cc8fecbe"
   },
   "policy": {
     "frame_ms": 65,

@@ -37,8 +37,8 @@ class ContentRegistrationTests(unittest.TestCase):
 
     def test_registered_animation_handlers_preserve_current_source_sequences(self):
         from export_party_skills import enrich_sequence
-        from combat_resources import CHR
-        from dgp import DGP
+        from source.combat_resources import CHR
+        from source.dgp import DGP
         root = RUNTIME.parents[1]
         meta = json.loads((RUNTIME / 'web/data/party_battle_view.json').read_text(encoding='utf-8'))
         for ident, bindings in content.skill_bindings().items():

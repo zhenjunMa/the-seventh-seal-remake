@@ -7,9 +7,9 @@ import {BattleView} from '../web/battle_view.mjs';
 import {readContentDefinition} from './resolve_content_definition.mjs';
 
 const runtime=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
-const web=path.join(runtime,'web'),prototype=path.resolve(runtime,'../prototype/web');
+const web=path.join(runtime,'web');
 const canonical=p=>'/'+p.replace(/^\/+/, '');
-const local=p=>p.startsWith('/prototype/')?path.join(prototype,p.slice(11)):path.join(web,p.replace(/^\//,''));
+const local=p=>path.join(web,p.replace(/^\//,''));
 const hash=b=>createHash('sha256').update(b).digest('hex');
 const manifests={},assets=new Map();
 const {content}=await readContentDefinition();

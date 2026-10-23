@@ -16,13 +16,13 @@ import time
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from PIL import Image
-from combat_resources import CHR, GAME_SHA256, ROOT, PROJECT
-from dgp import DGP, DGPError, Reader, u16
+from source.combat_resources import CHR, GAME_SHA256, ROOT, PROJECT
+from source.dgp import DGP, DGPError, Reader, u16
 
 SAMPLES = ("001", "002", "012")
 WEB = PROJECT / "web"
 ASSETS = WEB / "assets/combat_lab"
-EVIDENCE = PROJECT / "evidence"
+EVIDENCE = PROJECT / "evidence/source"
 LOADER_ID = "ev_9abd5ba6645433c0752e35b69015a7f998c9c9b054862a5afdfadc7499e40962"
 ROWS_ID = "ev_6482fb38218f9adb514e906dac54cdf6c3c4a3feb48e936b7968d60150842102"
 ACTION_CALL_ASM_ID = "ev_ad54dbda1ffc67d6ef6a0fcf1e6c3676f23727fe36df43ad0645128b44e9c7ee"
@@ -37,7 +37,7 @@ def sha256(data: bytes) -> str:
 def write_json(path: Path, value) -> None:
     path = path.resolve()
     if not path.is_relative_to(PROJECT.resolve()):
-        raise DGPError("Export path must remain within remake/prototype")
+        raise DGPError("Export path must remain within remake/runtime")
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(value, ensure_ascii=False, indent=2), encoding="utf-8")
 
@@ -201,7 +201,7 @@ def main() -> int:
     before = {p.relative_to(ROOT).as_posix(): sha256(p.read_bytes()) for p in inputs}
     if before["GAME.exe"] != GAME_SHA256:
         raise DGPError("Binary identity differs from retained native evidence")
-    original_manifest = WEB / "manifest.json"
+    original_manifest = WEB / "data/source/manifest.json"
     old_manifest_hash = sha256(original_manifest.read_bytes()) if original_manifest.exists() else None
     index_confirmed = confirmed_animation_index()
     manifest = {"schema": "seventh-seal-combat-lab", "version": 1,
@@ -209,7 +209,7 @@ def main() -> int:
                 "created_utc": datetime.now(timezone.utc).isoformat(), "roles": [], "errors": [],
                 "source_hashes": before, "evidence": [
                     {"path": "remake/assessment/native_resource_evidence.json", "ids": [LOADER_ID, ROWS_ID]},
-                    {"path": "remake/prototype/evidence/combat_animation_native_20261011.json",
+                    {"path": "remake/runtime/evidence/source/combat_animation_native_20261011.json",
                      "ids": [ACTION_CALL_ASM_ID, ACTION_USE_ID, POSITION_WRITE_ASM_ID]}],
                 "limits": [
                     "Every atlas contains real main RGB565 sparse-row pixels; auxiliary indexed palettes are retained without guessing their effect rendering.",
@@ -242,7 +242,7 @@ def main() -> int:
                         decoded_frames=sum(c["decoded_frames"] for c in verification["checks"]),
                         exported_actions=sum(c["actions"] for c in verification["checks"]),
                         elapsed_seconds=round(time.monotonic() - start, 2))
-    write_json(WEB / "combat_manifest.json", manifest)
+    write_json(WEB / "data/source/combat_manifest.json", manifest)
     write_json(EVIDENCE / "combat_animation_verification_20261011.json", verification)
     print(json.dumps({k: verification[k] for k in ("decoded_frames", "exported_actions", "source_bytes_unchanged", "legacy_manifest_unchanged", "elapsed_seconds")}), flush=True)
     return 0 if unchanged and legacy_unchanged and len(manifest["roles"]) == len(SAMPLES) and not manifest["errors"] else 1

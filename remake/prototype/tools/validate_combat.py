@@ -12,6 +12,7 @@ import sys
 PROJECT = Path(__file__).resolve().parents[1]
 ROOT = PROJECT.parents[1]
 EVIDENCE = PROJECT / "evidence"
+SOURCE_EVIDENCE = PROJECT.parent / "runtime/evidence/source"
 GAME_SHA = "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18"
 
 CLAIMS = (
@@ -33,7 +34,10 @@ CLAIMS = (
 
 
 def read(name):
-    return json.loads((EVIDENCE / name).read_text(encoding="utf-8"))
+    path = EVIDENCE / name
+    if not path.is_file():
+        path = SOURCE_EVIDENCE / name
+    return json.loads(path.read_text(encoding="utf-8"))
 
 
 def sha(path):
@@ -44,7 +48,8 @@ def main():
     before = sha(ROOT / "GAME.exe")
     if before != GAME_SHA:
         raise ValueError("GAME.exe does not match the investigation")
-    for script in ("combat_resources.py", "test_combat_resources.py",
+    subprocess.run([sys.executable, "-B", "-m", "remake.runtime.tools.source.combat_resources"], cwd=ROOT, check=True)
+    for script in ("test_combat_resources.py",
                    "combat_sample.py", "test_combat_rules.py"):
         print(f"Running {script}", flush=True)
         subprocess.run([sys.executable, "-B", str(PROJECT / "tools" / script)],
@@ -55,7 +60,7 @@ def main():
     rules = read("combat_rules_verification_20261011.json")
     if resources["failures"] or parser_checks["failed"] or not rules["passed"]:
         raise ValueError("A resource or finite-rule check failed")
-    native_path = EVIDENCE / "combat_native_20261011.json"
+    native_path = SOURCE_EVIDENCE / "combat_native_20261011.json"
     native = read(native_path.name)
     records = {r["evidence_id"]: r for r in native["records"]}
     claims = []

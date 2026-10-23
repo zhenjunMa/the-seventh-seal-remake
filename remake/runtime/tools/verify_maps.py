@@ -9,8 +9,8 @@ import sys
 
 RUNTIME = Path(__file__).resolve().parents[1]
 ROOT = RUNTIME.parents[1]
-sys.path.insert(0, str(ROOT / "remake/prototype/tools"))
-from dgp import DGP
+sys.path.insert(0, str(ROOT / "remake/runtime/tools"))
+from source.dgp import DGP
 from PIL import Image
 
 

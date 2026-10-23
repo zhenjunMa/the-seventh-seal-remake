@@ -17,8 +17,9 @@ END = '[自动生成：构建目标结束]'
 def generated_files():
     index = json.loads(INDEX.read_text(encoding='utf-8'))
     rows = {row['path']: row for row in index['tools']}
-    actual = {path.name for path in TOOLS.iterdir()
-              if path.is_file() and path.suffix in {'.py', '.mjs', '.js'}}
+    actual = {path.relative_to(TOOLS).as_posix() for path in TOOLS.rglob('*')
+              if path.is_file() and '__pycache__' not in path.parts
+              and path.suffix in {'.py', '.mjs', '.js'}}
     if len(rows) != len(index['tools']) or set(rows) != actual:
         raise ValueError(f'工具索引需先人工核对分类：缺少={sorted(actual-set(rows))}，'
                          f'失效={sorted(set(rows)-actual)}；path 不得重复')

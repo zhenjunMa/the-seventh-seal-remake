@@ -17,6 +17,7 @@ from uuid import uuid4
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from content_registration import definition, map_ids, role_ids, program_ids, stage_exports
 from export_battle_stages import source_files as stage_source_files
+from migrate_local_materials import relocated_path
 
 RUNTIME = Path(__file__).resolve().parents[1]
 ROOT = RUNTIME.parents[1]
@@ -42,7 +43,7 @@ STEPS = {
     'opening-maps': Step('export_opening_maps.py', ('data/opening_map_resources.json', 'data/maps/m72061.json', 'data/maps/m17020.json', 'assets/maps/m72061', 'assets/maps/m17020', 'assets/opening_roles'), reports=('opening_map_export_20261011.json',)),
     'chapter-maps': Step('export_chapter_maps.py', ('data/chapter_map_resources.json', 'data/maps/m17029.json', 'data/maps/m17026.json', 'assets/maps/m17029', 'assets/maps/m17026', 'assets/chapter_roles', 'assets/chapter_objects'), reports=('chapter_map_export.json',)),
     'chapter-story': Step('export_chapter_story.py', ('data/chapter_story.json',), ('chapter-maps',), ('chapter_story_export.json',)),
-    'map-effects': Step('export_map_effects.py', ('data/map_effects.json','assets/map_effects','data/map_shadows.json','assets/map_shadows'), ('opening-maps','chapter-maps'), ('map_effects_20261021/export.json','movement_optimization_20261023/shadow_export.json'), ('data/maps','../evidence/map_effects_20261021/native_retained.json','../tools/export_map_shadows.py','../../prototype/tools/dgp.py','../evidence/movement_audit_20261023/native_evidence.json','data/opening_map_resources.json','data/chapter_map_resources.json','data/events.json')),
+    'map-effects': Step('export_map_effects.py', ('data/map_effects.json','assets/map_effects','data/map_shadows.json','assets/map_shadows'), ('opening-maps','chapter-maps'), ('map_effects_20261021/export.json','movement_optimization_20261023/shadow_export.json'), ('data/maps','../evidence/map_effects_20261021/native_retained.json','../tools/export_map_shadows.py','../tools/source/dgp.py','../evidence/movement_audit_20261023/native_evidence.json','data/opening_map_resources.json','data/chapter_map_resources.json','data/events.json')),
     'party-combat': Step('export_party_combat.py', ('data/party_combat.json',), reports=('party_combat_export.json',)),
     'party-skills': Step('export_party_skills.py', ('data/party_skills.json', 'data/party_reactions.json', 'data/party_battle_view.json', 'assets/party_layers', 'assets/party_roles', 'assets/party_effects'), ('party-combat',), ('party_skills_export.json',)),
     'party-rewards': Step('export_party_rewards.py', ('data/party_rewards.json',), ('party-combat',), ('party_rewards_export.json',)),
@@ -65,7 +66,7 @@ STEPS = {
     'dialogue-ui': Step('export_dialogue_ui.py', ('data/dialogue_ui.json','data/dialogue_fonts.json','assets/dialogue_ui'), reports=('dialogue_alignment_20261021/source_audit.json',), inputs=('../evidence/dialogue_alignment_20261021/native_evidence.json','data/opening_program.json','data/chapter_story.json','data/events.json')),
     'world-map-ui': Step('export_world_map_ui.py', ('data/world_map_ui.json','assets/world_map'), reports=('world_map_alignment_20261021/export.json',), inputs=('data/world_map.json','../evidence/route_native_20261011.json','../evidence/operation_menu_native.json')),
     'configuration': Step('export_runtime_config.mjs', ('data/config',), inputs=('data/combat_sample.json', 'data/forest_combat.json', 'data/battle_scheduler.json', 'data/forest_ai.json', 'data/forest_rewards.json', 'data/party_skills.json', 'data/items.json', 'data/config')),
-    'catalog': Step('build_catalog.py', ('data/catalog.json', 'data/events.json'), ('configuration',), inputs=('data/maps', 'data/events', '../../prototype/web/manifest.json')),
+    'catalog': Step('build_catalog.py', ('data/catalog.json', 'data/events.json'), ('configuration',), inputs=('data/maps', 'data/events', 'data/source/manifest.json')),
     'content': Step('export_content_registry.mjs', ('data/runtime_content.mjs',), ('catalog',), inputs=('data/runtime_content.json','data/catalog.json','data/chapter_story.json','data/chapter_map_resources.json','data/party_combat.json','data/party_skills.json','data/forest_combat.json','data/forest_ai.json','data/party_rewards.json','data/party_reactions.json','data/forest_status.json','data/encounters.json','data/party_battle_view.json','data/item_presentation.json','data/battle_lifecycle.json','data/maps')),
 }
 
@@ -165,7 +166,7 @@ def plan(names, steps=None):
 
 
 def source_paths(step):
-    paths = {ROOT / name for name in step.sources}
+    paths = {relocated_path(name, root=ROOT) for name in step.sources}
     for report in step.reports:
         path = EVIDENCE / report
         if not path.is_file():
@@ -177,6 +178,8 @@ def source_paths(step):
         for row in data.get('sources', []):
             if isinstance(row, dict) and row.get('path'):
                 path = RUNTIME / row['path']
+                relative = path.resolve().relative_to(ROOT.resolve()).as_posix()
+                path = relocated_path(relative, root=ROOT)
                 if not path.is_file():
                     raise FileNotFoundError(f'Exporter source no longer exists: {path}')
                 paths.add(path)
@@ -189,7 +192,7 @@ def source_paths(step):
         if data.get('game_source_sha256'):
             source_names.add('GAME.exe')
         for name in source_names:
-            source = ROOT / name
+            source = relocated_path(name, root=ROOT)
             if not source.is_file() and Path(name).name.lower() in asset_sources:
                 source = ROOT / asset_sources[Path(name).name.lower()]
             if not source.is_file():
@@ -199,8 +202,8 @@ def source_paths(step):
 
 
 def signature(step):
-    tools = [Path(__file__), *RUNTIME.glob('tools/*.py'), *RUNTIME.glob('tools/*.mjs'),
-             *RUNTIME.parent.glob('prototype/tools/*.py'), *WEB.glob('core/*.mjs')]
+    tools = [Path(__file__), Path(__file__).with_name('layout_migration.json'), *RUNTIME.glob('tools/*.py'), *RUNTIME.glob('tools/*.mjs'),
+             *RUNTIME.glob('tools/source/*.py'), *WEB.glob('core/*.mjs')]
     dependencies = [WEB / item for name in step.depends for item in STEPS[name].outputs]
     inputs = hashes([*tools, *source_paths(step), *dependencies, *[WEB / name for name in step.inputs]])
     payload = json.dumps({'tool':step.tool, 'inputs':inputs, 'outputs':step.outputs}, sort_keys=True)

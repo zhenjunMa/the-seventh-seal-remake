@@ -187,7 +187,7 @@ def verify():
     for ref in re.findall(r'\]\(([^)]+)\)', prototype_readme):
         assert (REMAKE/'prototype'/ref).resolve().is_file(), f'Broken documentation link: {ref}'
     # Python syntax validation does not regenerate __pycache__.
-    python_paths = [*RUNTIME.glob('tools/*.py'), *RUNTIME.glob('tests/test_*.py'), REMAKE/'archive/restore_snapshot.py', RUNTIME/'serve.py']
+    python_paths = [*RUNTIME.glob('tools/*.py'), *RUNTIME.glob('tools/source/*.py'), *RUNTIME.glob('tests/test_*.py'), REMAKE/'archive/restore_snapshot.py', RUNTIME/'serve.py']
     for path in python_paths: compile(path.read_text(encoding='utf-8-sig'), str(path), 'exec')
 
     catalog = read(WEB/'data/catalog.json')
@@ -210,7 +210,7 @@ def verify():
                 'party_combat', 'party_skills', 'party_rewards', 'party_reactions', 'party_battle_view', 'items', 'item_presentation', 'audio', 'operation_menu', 'content_checklist','map_shadows']:
         if catalog.get(key): refs.add(catalog[key])
     refs.update(row['path'] for row in catalog['maps'])
-    refs.add('/prototype/movement.mjs')
+    refs.add('core/movement.mjs')
     refs.update(action['sheet'] for role in catalog['roles'] for action in role['actions'])
     opening_resources = read(WEB/catalog['opening_resources'])
     refs.update(a['sheet'].lstrip('/') for r in opening_resources['roles'].values() for a in r['actions'])
@@ -231,7 +231,7 @@ def verify():
         refs.add(data['background'] if isinstance(data['background'], str) else data['background']['image'])
         refs.update(row['image'] for row in data['objects'])
     for ref in sorted(refs):
-        path = REMAKE/'prototype/web'/ref.removeprefix('/prototype/') if ref.startswith('/prototype/') else WEB/ref.lstrip('/')
+        path = WEB/ref.lstrip('/')
         with urllib.request.urlopen('http://127.0.0.1:8767/'+ref.lstrip('/'), timeout=10) as response:
             assert response.status == 200
             assert hashlib.sha256(response.read()).hexdigest() == sha(path), f'HTTP resource differs: {ref}'

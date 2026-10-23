@@ -6,7 +6,7 @@ Phaser迁移沿用现有内容登记、数值配置和媒体路径。新增同�
 内容接入选择：web/data/runtime_content.json。角色、原技能索引、地图、舞台和ANM登记放在这里。
 数值调整：web/data/config/index.json及skills.json、battle.json、rewards.json、items.json。所有人物共用这些文件。
 玩家当前HP／MP、等级／成长、背包／装备、旗标、队列、技巧／晶石与学习／熟练度是世界进度，通过游戏和存档维护。
-其余data JSON、图集和runtime_content.mjs是来源或生成结果。不要直接用它们调数值；新增机制先实现对应规则，登记和enabled不会补出处理器。
+基础导出清单集中在web/data/source，正式素材集中在web/assets，通用解析器位于tools/source；prototype仅做实验验证，不作为新内容的生产入口。其余data JSON、图集和runtime_content.mjs是来源或生成结果。不要直接用它们调数值；新增机制先实现对应规则，登记和enabled不会补出处理器。
 旧web/data/skills.json仅保留为历史验证基线，当前调参统一使用web/data/config/skills.json；导出、缓存及配置重置语义见tools/README.txt。
 
 数值配置
@@ -60,6 +60,7 @@ maps.export：默认{assets:"chapter",story:true}。assets="existing"保留已�
 3. 先执行chapter-story构建准备新地图源记录，再运行--preflight查看能力缺口。该命令只读已有源表，不能替代尚未执行的提取，也不验证原媒体像素／浏览器表现。
 4. 执行content构建。story-check在来源准备后、玩家表现和图集生产前遍历显式开放入口的可达分支；缺少条件、变更、选项、ANM或处理器时阻断，并显示地图、入口和记录号。之后统一生成遭遇、舞台、音乐、菜单／对白字体及最终登记。
 5. 验收进入／退出、对白／分支、领取／再次进入、失败回滚和存读档。新增中文字须随相应字体导出；源表导出不表示所有分支已开放。
+需要扩展源格式解析时复用或补充tools/source；正式内容导出放tools，运行机制按architecture.txt分层接入。实验页面和定向验证放prototype并复用正式实现；web/data/source的历史清单不作为新剧情的手工编辑表。
 
 新增怪物
 1. 准备原CHR／DGP，在roles登记side=enemy。已有机制的源技能由实际学习表识别，不在脚本中增加怪物ID或技能索引分支。

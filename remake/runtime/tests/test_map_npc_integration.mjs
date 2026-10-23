@@ -1,15 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {registerHooks} from 'node:module';
 import {drawMapScene} from '../web/map_scene_view.mjs';
 import {WorldStore} from '../web/core/world.mjs';
 import {ChapterRunner} from '../web/core/chapter.mjs';
 
-registerHooks({resolve(specifier,context,next){
-  if(specifier==='/prototype/movement.mjs')return {url:new URL('../../prototype/web/movement.mjs',import.meta.url).href,shortCircuit:true};
-  return next(specifier,context);
-}});
 const {createMapController}=await import('../web/controllers/map.mjs');
 const {createStoryController}=await import('../web/controllers/story.mjs');
 const {OpeningView}=await import('../web/opening_view.mjs');

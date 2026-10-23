@@ -46,7 +46,7 @@ test('Source party, complete contact reactions, two-person rewards and re-entry 
     {...configured.scheduler,idle_skills:{...configured.scheduler.idle_skills,...commands.idle_skills}},configured.ai,configured.rewards,reaction,statuses);
   const ctx={setTransform(){},clearRect(){},fillRect(){},beginPath(){},rect(){},clip(){},moveTo(){},lineTo(){},stroke(){},ellipse(){},fill(){},save(){},restore(){},drawImage(){},fillText(){},createLinearGradient:()=>({addColorStop(){}})};
   const view=new BattleView({canvas:{width:960,height:540,getContext:()=>ctx},metadataPath:'/data/party_battle_view.json',jsonLoader:path=>json(path.slice(1)),assetLoader:async asset=>{
-    const b=await readFile(new URL(asset.path.startsWith('/prototype/')?'../../prototype/web/'+asset.path.slice(11):'../web/'+asset.path.slice(1),import.meta.url));
+    const b=await readFile(new URL('../web/'+asset.path.slice(1),import.meta.url));
     assert.equal(createHash('sha256').update(b).digest('hex'),asset.sha256);assert.equal(b.readUInt32BE(16),asset.width);assert.equal(b.readUInt32BE(20),asset.height);
     return {image:{width:asset.width,height:asset.height,path:asset.path},sha256:asset.sha256};
   }});await view.prepare();view.setRoster(sample.actors,sample.skills);

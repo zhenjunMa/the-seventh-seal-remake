@@ -8,9 +8,9 @@ import struct
 import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from dgp import DGP, DGPError, u32
-from map_data import MapBackground
-from map_objects import MapObjects
+from source.dgp import DGP, DGPError, u32
+from source.map_data import MapBackground
+from source.map_objects import MapObjects
 
 PROJECT = Path(__file__).resolve().parents[1]
 ROOT = PROJECT.parents[1]
@@ -108,12 +108,12 @@ def export_movement(manifest, parsed=None):
                 'Role layer is a same-layer preview pending native role +0xF3 initialization.'])
     if before != after:
         raise DGPError('Input hash changed during movement export')
-    write_json(PROJECT / 'evidence/map_movement_export.json', report)
+    write_json(PROJECT / 'evidence/source/map_movement_export.json', report)
     return report
 
 
 def main():
-    path = PROJECT / 'web/manifest.json'
+    path = PROJECT / 'web/data/source/manifest.json'
     manifest = json.loads(path.read_text(encoding='utf-8'))
     report = export_movement(manifest)
     write_json(path, manifest)

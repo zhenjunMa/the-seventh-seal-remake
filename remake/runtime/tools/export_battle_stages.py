@@ -15,7 +15,6 @@ RUNTIME = Path(__file__).resolve().parents[1]
 ROOT = RUNTIME.parents[1]
 WEB = RUNTIME / 'web'
 sys.path.insert(0, str(RUNTIME / 'tools'))
-sys.path.insert(0, str(RUNTIME.parent / 'prototype/tools'))
 from content_registration import stage_exports
 
 RECORD_START, RECORD_BYTES = 0x62c4, 0x47
@@ -62,7 +61,7 @@ def source_files():
 
 
 def prepare_stage(ident, entry):
-    from dgp import DGP
+    from source.dgp import DGP
     from export_skill_layers import SourceAudit
     name = f'Fight_Bk/{ident}.scn'
     raw = (ROOT / name).read_bytes()
@@ -120,7 +119,7 @@ def export():
         print(json.dumps(dict(passed=True, stages=[], message='No new source stages registered')))
         return
     from PIL import Image
-    from combat_resources import GAME_SHA256
+    from source.combat_resources import GAME_SHA256
     from export_skill_layers import save_layer
     from export_forest_stage import image_asset
     before = {name: sha((ROOT / name).read_bytes()) for name in source_files()}

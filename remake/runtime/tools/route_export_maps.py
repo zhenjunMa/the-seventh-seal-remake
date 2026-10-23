@@ -17,9 +17,8 @@ sys.dont_write_bytecode = True
 RUNTIME = Path(__file__).resolve().parents[1]
 ROOT = RUNTIME.parents[1]
 sys.path.insert(0, str(RUNTIME / "tools"))
-sys.path.insert(0, str(ROOT / "remake/prototype/tools"))
 import export_maps
-from dgp import DGP, DGPError, u32
+from source.dgp import DGP, DGPError, u32
 
 
 class RouteMapBackground:

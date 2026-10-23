@@ -19,8 +19,6 @@ def sha(data):
 
 
 def local(url):
-    if url.startswith('/prototype/'):
-        return RUNTIME.parent / 'prototype/web' / url[len('/prototype/'):]
     return WEB / url.lstrip('/')
 
 

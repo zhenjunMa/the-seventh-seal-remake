@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { skillSequence, previewTravel, sceneEnvelope, validSceneMessage } from '../web/battle_presentation.mjs';
-const web = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../web');
+const web = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../runtime/web/data/source');
 const manifest = JSON.parse(fs.readFileSync(path.join(web, 'combat_manifest.json'), 'utf8'));
 const presentation = JSON.parse(fs.readFileSync(path.join(web, 'combat_presentation.json'), 'utf8'));
 const role = manifest.roles.find(r => r.id === '001');

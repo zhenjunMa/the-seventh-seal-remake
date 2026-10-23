@@ -15,12 +15,11 @@ import sys
 sys.dont_write_bytecode = True
 RUNTIME = Path(__file__).resolve().parents[1]
 ROOT = RUNTIME.parents[1]
-PROTOTYPE = RUNTIME.parent / 'prototype'
+WEB = RUNTIME / 'web'
 sys.path.insert(0, str(RUNTIME / 'tools'))
-sys.path.insert(0, str(PROTOTYPE / 'tools'))
 from PIL import Image
-from combat_resources import CHR
-from dgp import DGP, u32
+from source.combat_resources import CHR
+from source.dgp import DGP, u32
 from export_combat_presentation import indexed_contribution, native_frame_sequence, NATIVE_IDS
 from export_skill_layers import SourceAudit
 
@@ -116,8 +115,8 @@ def export_snow_effect(filename: str) -> dict:
 
 
 def main() -> None:
-    manifest_path = PROTOTYPE / 'web/combat_manifest.json'
-    presentation_path = PROTOTYPE / 'web/combat_presentation.json'
+    manifest_path = WEB / 'data/source/combat_manifest.json'
+    presentation_path = WEB / 'data/source/combat_presentation.json'
     layers_path = RUNTIME / 'web/data/yantu_layers.json'
     manifest = json.loads(manifest_path.read_text('utf-8'))
     presentation = json.loads(presentation_path.read_text('utf-8'))
@@ -127,9 +126,9 @@ def main() -> None:
     before = {p: sha((ROOT / p).read_bytes()) for p in sources}
     if any(before[p] != value for p, value in sources.items()):
         raise ValueError('Retained original source fingerprint mismatch')
-    old_code = PROTOTYPE / 'web/battle.js'
-    old_hash = sha(old_code.read_bytes())
-    native_bundle = json.loads((PROTOTYPE / 'evidence/combat_presentation_native_20261011.json').read_text('utf-8'))
+    view_code = WEB / 'battle_view.mjs'
+    old_hash = sha(view_code.read_bytes())
+    native_bundle = json.loads((RUNTIME / 'evidence/source/combat_presentation_native_20261011.json').read_text('utf-8'))
     known = {entry['evidence_id'] for entry in native_bundle['records']}
     if set(NATIVE_IDS.values()) - known:
         raise ValueError('Missing retained native field evidence')
@@ -149,13 +148,13 @@ def main() -> None:
         for item in src['actions']:
             if item['index'] not in indices:
                 continue
-            asset = PROTOTYPE / 'web' / item['sheet']
+            asset = WEB / item['sheet']
             if sha(asset.read_bytes()) != item['sheet_sha256']:
-                raise ValueError('Prototype atlas fingerprint mismatch')
+                raise ValueError('Source atlas fingerprint mismatch')
             with Image.open(asset) as image:
                 if image.size != (src['frame_width'] * item['frames_per_direction'], src['frame_height'] * item['directions']):
                     raise ValueError('Atlas size differs from source geometry')
-            actions.append(dict(index=item['index'], sheet='/prototype/' + item['sheet'], sha256=item['sheet_sha256'],
+            actions.append(dict(index=item['index'], sheet='/' + item['sheet'], sha256=item['sheet_sha256'],
                 frame_count=item['frames_per_direction'], directions=item['directions'], first_frame=item['first_frame']))
         roles.append(dict(id=ident, name=src['name'], frame_width=src['frame_width'], frame_height=src['frame_height'],
             anchor=src['anchor'], mirror=False, direction=0,
@@ -170,12 +169,12 @@ def main() -> None:
         if src['id'] not in ('_DutyN', 'BFr01_Dn'):
             continue
         action = src['actions'][0]
-        asset = PROTOTYPE / 'web' / action['sheet']
+        asset = WEB / action['sheet']
         if sha(asset.read_bytes()) != action['sheet_sha256']:
-            raise ValueError('Prototype effect fingerprint mismatch')
+            raise ValueError('Source effect fingerprint mismatch')
         effects.append(dict(id=src['id'], source=src['source'], source_sha256=src['source_sha256'],
             frame_width=src['frame_width'], frame_height=src['frame_height'], anchor=src['anchor'],
-            sheet='/prototype/' + action['sheet'], sha256=action['sheet_sha256'], frames=action['frame_sequence'],
+            sheet='/' + action['sheet'], sha256=action['sheet_sha256'], frames=action['frame_sequence'],
             frame_count=action['frames_per_direction'], blend='lighter', evidence=src['evidence']))
     effects.append(export_snow_effect('BNo01_Nm.dgp'))
     output = dict(schema='seventh-seal-battle-view', version=1, roles=roles, effects=effects,
@@ -194,13 +193,13 @@ def main() -> None:
                 'Reaction uses bounded category1 sprite metadata; alternate native states and death action selection remain unresolved.',
                 'Audio, camera and complete native skill scheduler remain unimplemented.'])
     after = {p: sha((ROOT / p).read_bytes()) for p in sources}
-    if before != after or sha(old_code.read_bytes()) != old_hash:
-        raise ValueError('Read-only source/prototype code changed during export')
+    if before != after or sha(view_code.read_bytes()) != old_hash:
+        raise ValueError('Read-only source/runtime view code changed during export')
     save(RUNTIME / 'web/data/battle_view.json', output)
     save(RUNTIME / 'evidence/battle_view_export_20261011.json', dict(
         schema='seventh-seal-battle-view-export-verification', version=1,
-        original_sources_unchanged=True, source_hashes=before, prototype_code_unchanged=True,
-        prototype_battle_js_sha256=old_hash,
+        original_sources_unchanged=True, source_hashes=before, runtime_view_code_unchanged=True,
+        runtime_view_sha256=old_hash,
         checks=dict(yantu_same_source_pairs=len(flattened), snow_skill_index=14,
                     source_event_positions=[(role['id'], segment['chr_record_index'], segment['event']['frame'])
                         for role in roles for segment in role['skill']['segments'] if segment['event']],

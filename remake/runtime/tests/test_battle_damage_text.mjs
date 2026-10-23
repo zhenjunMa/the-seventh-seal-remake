@@ -18,7 +18,7 @@ const hit=(damage=37)=>({hit:true,damage,remainingHp:963,death:false});
 const skipped=()=>({hit:false,damage:0,remainingHp:963,skipped:'native-contact-gate'});
 async function assetLoader(asset){
   if(images.has(asset.path))return images.get(asset.path);
-  const path=asset.path.startsWith('/prototype/')?new URL('remake/prototype/web/'+asset.path.slice(11),root):new URL(asset.path.slice(1),web),bytes=await readFile(path);
+  const path=new URL(asset.path.slice(1),web),bytes=await readFile(path);
   assert.equal(createHash('sha256').update(bytes).digest('hex'),asset.sha256,asset.path);
   assert.equal(bytes.readUInt32BE(16),asset.width);assert.equal(bytes.readUInt32BE(20),asset.height);
   const loaded={image:{width:asset.width,height:asset.height,path:asset.path},sha256:asset.sha256};images.set(asset.path,loaded);return loaded;

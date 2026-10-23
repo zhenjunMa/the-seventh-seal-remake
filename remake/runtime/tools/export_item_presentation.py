@@ -13,11 +13,10 @@ sys.dont_write_bytecode = True
 RUNTIME = Path(__file__).resolve().parents[1]
 ROOT = RUNTIME.parents[1]
 WEB = RUNTIME / 'web'
-sys.path.insert(0, str(ROOT / 'remake/prototype/tools'))
-sys.path.insert(0, str(RUNTIME / 'tools'))
+sys.path.insert(0, str(ROOT / "remake/runtime/tools"))
 from PIL import Image
-from combat_resources import CHR, GAME_SHA256
-from dgp import DGP
+from source.combat_resources import CHR, GAME_SHA256
+from source.dgp import DGP
 from export_party_skills import enrich_sequence, source_skill
 from export_combat_presentation import indexed_contribution, native_frame_sequence, NATIVE_IDS
 from export_skill_layers import SourceAudit, save_layer

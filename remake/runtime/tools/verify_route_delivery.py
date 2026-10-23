@@ -17,7 +17,7 @@ for name,key in [('route_export_20261011.json','source_hashes'),('route_resource
 for p,s in sources.items():assert sha(ROOT/p)==s,('Original input changed',p)
 catalog=read(WEB/'data/catalog.json');assets={}
 def asset(url,expected=None):
-    p=ROOT/'remake/prototype/web'/url[len('/prototype/'):] if url.startswith('/prototype/') else WEB/url.lstrip('/')
+    p=WEB/url[len('/prototype/'):] if url.startswith('/prototype/') else WEB/url.lstrip('/')
     assert p.is_file(),url;actual=sha(p)
     if expected:assert actual==expected,url
     assets[url]=actual

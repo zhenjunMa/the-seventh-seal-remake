@@ -14,9 +14,8 @@ import sys
 sys.dont_write_bytecode = True
 RUNTIME = Path(__file__).resolve().parents[1]
 ROOT = RUNTIME.parents[1]
-sys.path.insert(0, str(ROOT / 'remake/prototype/tools'))
-sys.path.insert(0, str(RUNTIME / 'tools'))
-from combat_resources import CHR
+sys.path.insert(0, str(ROOT / "remake/runtime/tools"))
+from source.combat_resources import CHR
 import export_combat_sample as combat
 
 EVIDENCE = RUNTIME / 'evidence'
