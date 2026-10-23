@@ -7,10 +7,10 @@ import {validateContentDependencies} from '../web/core/content_dependencies.mjs'
 import {validateForestStage} from '../web/forest_stage.mjs';
 import {readContentDefinition} from './resolve_content_definition.mjs';
 import {requireContentReadiness} from '../web/core/content_readiness.mjs';
-const web=fileURLToPath(new URL('../web/',import.meta.url)),prototype=fileURLToPath(new URL('../../prototype/web/',import.meta.url)),original=fileURLToPath(new URL('../../../',import.meta.url));
+const web=fileURLToPath(new URL('../web/',import.meta.url)),original=fileURLToPath(new URL('../../../',import.meta.url));
 const digest=bytes=>createHash('sha256').update(bytes).digest('hex');
 const inputs={};
-const local=value=>value.startsWith('/prototype/')?path.join(prototype,value.slice(11)):path.join(web,value.replace(/^\//,''));
+const local=value=>path.join(web,value.replace(/^\//,''));
 async function read(name){const raw=await readFile(local(name));inputs[name]=digest(raw);return JSON.parse(raw);}
 export async function auditContentFiles(){
   const {definition,content,input_sha256}=await readContentDefinition();Object.assign(inputs,input_sha256);

@@ -204,14 +204,14 @@ class MapObjects:
 if __name__ == '__main__':
     import sys
     sys.path.insert(0, str(Path(__file__).resolve().parent))
-    from dgp import DGP
-    project = Path(__file__).resolve().parents[1]
+    from .dgp import DGP
+    project = Path(__file__).resolve().parents[2]
     root = project.parents[1]
     objects = MapObjects(root / 'Map/m01010.dat')
     objects.prepare_graphics({path.name: DGP(path) for path in (root / 'mapm/m01010').glob('*.dgp')})
     result = objects.metadata()
     result['source'] = 'Map/m01010.dat'
-    out = project / 'evidence/map_layers_probe.json'
+    out = project / 'evidence/source/map_layers_probe.json'
     out.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding='utf-8')
     print(json.dumps({k: result[k] for k in ['object_start', 'object_end', 'object_count',
                                            'occupied_cells', 'unexplained_tail_bytes']}, ensure_ascii=False))

@@ -1,30 +1,31 @@
 第七封印重制 · 本地素材、证据与历史资料
-更新：2026-10-22；路径以仓库根目录为基准。
+更新：2026-10-23；路径以仓库根目录为基准。
 本文件随代码维护，说明资料用途、准备方式和缺失时的处理。实际媒体、来源台账、观察副本和历史归档不随仓库提供。
 
 运行素材
-remake/runtime/web/assets及remake/prototype/web/assets保存正式版仍使用的提取媒体；结构化定义位于对应web/data或清单JSON。
-已有环境交接时，需要与当前定义匹配的两处素材；不能只复制runtime而遗漏prototype共享资源。接收后运行remake/runtime/tools/README.txt中的有素材交接检查，再从正式入口实玩。
+remake/runtime/web/assets统一保存提取媒体；运行定义位于remake/runtime/web/data，基础导出清单位于remake/runtime/web/data/source。remake/prototype实验页面复用这些资源。
+已有新版本环境交接时，复制与当前定义匹配的remake/runtime/web/assets，并按构建需要交接remake/runtime/evidence及原版输入。旧版媒体位于remake/prototype/web/assets，旧来源证据位于remake/prototype/evidence；迁移目标分别为remake/runtime/web/assets和remake/runtime/evidence/source。盘点、同项目复制、跨项目--source-root交接及接收后的检查命令，统一见remake/runtime/tools/README.txt的“旧环境升级”。
+迁移按原字节复制并保留旧文件；同SHA目标复用，冲突拒绝覆盖。实际处理映射记录在remake/runtime/evidence/layout_migration/<UTC时间>.json。源码和三份基础清单由版本更新提供，不由媒体迁移脚本复制。
 无媒体时可以启动服务访问/phaser-preview.html，并执行无素材预检查。示意图仅说明其几何、规则和时序范围，不能证明原作画面、音视频或主线流程已验收。
 
 原版输入与构建来源
 原版GAME.exe、Map、Fight_Role、Fight_Bk、SYSTEM、Animate等目录由使用者从自己的原版安装准备；实际需要的文件和版本由登记、导出器及来源校验决定。
 原版程序、资源和存档只读；不要把未知版本资源与旧台账直接拼接。需要原版操作时使用remake/observation中的隔离副本。
 save_analysis_20261010中四个共享解析模块随代码提供，但原存档、原生观察和历史样本需要单独准备。
-build_runtime.py目前用于已有基础内容上的增量生产。仅有原版文件还不足以保证完成首次构建；环境依赖、命令和缺失处理见remake/runtime/tools/README.txt，打通任务见remake/assessment/validation_design.txt。
+remake/runtime/tools/build_runtime.py目前用于已有基础内容上的增量生产。仅有原版文件还不足以保证完成首次构建；环境依赖、命令和缺失处理见remake/runtime/tools/README.txt，打通任务见remake/assessment/validation_design.txt。
 
 证据与构建记录
 remake/runtime/evidence保存来源SHA、像素核对、原生观察、导出台账、构建日志和浏览器记录；该目录整体被Git排除。
-新导出记录由build_runtime.py写入evidence/builds/<UTC时间-唯一ID>/；成功步骤及generated-evidence可用于核对当次产物，具体来源选择仍以检查器代码为准。
-evidence/current_validation.json是本地最近一次完整检查的结果，可能缺失或passed=false。它不是仓库承诺的验收证书；即使passed=true，也要核对浏览器观察的代码时点和覆盖范围。
+新导出记录由remake/runtime/tools/build_runtime.py写入remake/runtime/evidence/builds/<UTC时间-唯一ID>/；成功步骤及generated-evidence可用于核对当次产物，具体来源选择仍以检查器代码为准。
+remake/runtime/evidence/current_validation.json是本地最近一次完整检查的结果，可能缺失或passed=false。它不是仓库承诺的验收证书；即使passed=true，也要核对浏览器观察的代码时点和覆盖范围。
 资料持有者交接来源文件时应同时给出相对路径、SHA、来源版本及观察条件，保留原目录结构。按报错确认所需文件；没有匹配材料时记录缺项，使用限定范围的预检查，不编造来源报告或修改旧SHA。
-旧说明可能引用本地evidence/README.txt；如交接环境带有该索引，可辅助查找。随仓库的资料入口以本文件为准，不要求该可选索引存在。
+旧说明可能引用本地remake/runtime/evidence/README.txt；如交接环境带有该索引，可辅助查找。随仓库的资料入口以本文件为准，不要求该可选索引存在。
 
 历史归档与恢复
 remake/archive保存阶段方案、旧文档和压缩会话快照；remake/observation保存原版操作副本及观察材料。这些目录不会因克隆代码而自动出现。
 旧文档曾归入remake/archive/20261011_before_chapter和remake/archive/20261022_before_directory_cleanup，后者还记录过documents.zip；这些名称仅用于已有资料的查找，不是当前操作或首次构建的前置说明。
 当前必需的命令、配置和验收方法分别在remake/runtime/tools/README.txt、remake/runtime/config_guide.txt和remake/assessment/menu_alignment_workflow.txt维护；历史资料缺失时从这些当前入口继续。
-已清理文档和迁移工具的原路径、SHA、replacement、previous_path及recovery_commit保存在remake/runtime/tools/tool_index.json。先确认本地Git历史包含对应提交，再用git show <提交>:<原路径>查看；缺少提交或被忽略的归档时，需要向资料持有者取得相应文件。
+目录迁移的源码／清单位置、媒体／证据目录映射和旧SHA位于remake/runtime/tools/layout_migration.json；正式运行清单因路径更新产生的新文件SHA也在其中登记。基础清单按原字节保留，其中旧来源路径描述历史导出位置；当前导出器读取迁移后的来源，旧证据不能重写为新验收。已清理文档和迁移工具的原路径、SHA、replacement、previous_path及recovery_commit保存在remake/runtime/tools/tool_index.json。先确认本地Git历史包含对应提交，再用git show <提交>:<原路径>查看；缺少提交或被忽略的归档时，需要向资料持有者取得相应文件。
 恢复材料先放独立目录核对SHA和引用，不覆盖当前指南或旧证据。仅凭归档名称不能断言文件仍存在或能重现原版观察。
 
 交接结果的表述

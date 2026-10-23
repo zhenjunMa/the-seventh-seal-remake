@@ -10,12 +10,12 @@ import struct
 import sys
 import unittest
 
-sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "runtime/tools"))
 from PIL import Image
-from combat_resources import CHR, ROOT, PROJECT
+from source.combat_resources import CHR, ROOT, PROJECT
 
 WEB = PROJECT / 'web'
-EVIDENCE = PROJECT / 'evidence'
+EVIDENCE = PROJECT / 'evidence/source'
 
 
 def digest(data):
@@ -25,7 +25,7 @@ def digest(data):
 class PresentationTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.manifest = json.loads((WEB / 'combat_presentation.json').read_text('utf8'))
+        cls.manifest = json.loads((WEB / 'data/source/combat_presentation.json').read_text('utf8'))
         cls.crosscheck = json.loads((EVIDENCE / 'effect_indexed_crosscheck_20261011.json').read_text('utf8'))
         cls.verification = json.loads((EVIDENCE / 'combat_presentation_verification_20261011.json').read_text('utf8'))
 
@@ -119,7 +119,7 @@ class PresentationTests(unittest.TestCase):
         for source, expected in self.manifest['source_hashes'].items():
             self.assertEqual(digest((ROOT / source).read_bytes()), expected)
         self.assertEqual(self.verification['source_hashes_before'], self.verification['source_hashes_after'])
-        self.assertEqual(digest((WEB / 'combat_manifest.json').read_bytes()), self.verification['previous_combat_manifest_sha256'])
+        self.assertEqual(digest((WEB / 'data/source/combat_manifest.json').read_bytes()), self.verification['previous_combat_manifest_sha256'])
         bundle = json.loads((EVIDENCE / 'combat_presentation_native_20261011.json').read_text('utf8'))
         records = {r['evidence_id']: r for r in bundle['records']}
         for reference in self.manifest['evidence']['references'].values():

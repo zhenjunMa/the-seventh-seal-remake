@@ -9,7 +9,7 @@ import {fileURLToPath} from 'node:url';
 import {WorldStore, validateWorld, encodeSave, decodeSave} from '../web/core/world.mjs';
 import {SceneController} from '../web/core/scenes.mjs';
 import {EventRunner, validateProgram} from '../web/core/events.mjs';
-import {MovementMap} from '../../prototype/web/movement.mjs';
+import {MovementMap} from '../web/core/movement.mjs';
 
 const runtime = new URL('../', import.meta.url);
 const root = new URL('../../../', import.meta.url);

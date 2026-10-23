@@ -1,7 +1,7 @@
 // Explicit source-seed entries for UI-only NPC behavior verification.
 import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import {encodeSave} from '../web/core/world.mjs';
-import {MovementMap} from '../../prototype/web/movement.mjs';
+import {MovementMap} from '../web/core/movement.mjs';
 const base=new URL('../',import.meta.url),read=async name=>JSON.parse(await readFile(new URL('web/data/'+name+'.json',base),'utf8'));
 const seed=await read('opening_seed'),map=await read('maps/m17020'),movement=new MovementMap(map.movement);
 const folder=new URL('evidence/npc_motion_20261021/',base);await mkdir(folder,{recursive:true});

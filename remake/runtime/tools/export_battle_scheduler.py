@@ -3,9 +3,9 @@ from pathlib import Path
 import hashlib,json,struct,sys
 RUNTIME=Path(__file__).resolve().parents[1]
 ROOT=RUNTIME.parents[1]
-sys.path.insert(0,str(ROOT/'remake/prototype/tools'))
+sys.path.insert(0,str(ROOT/'remake/runtime/tools'))
 sys.path.insert(0,str(ROOT/'save_analysis_20261010'))
-from combat_resources import CHR
+from source.combat_resources import CHR
 from save_format import complete_layout
 def digest(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 def read(p):return json.loads(p.read_text('utf-8'))

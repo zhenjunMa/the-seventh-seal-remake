@@ -1,15 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {registerHooks} from 'node:module';
 import {createHash} from 'node:crypto';
 import {MapNpcRuntime} from '../web/core/map_npcs.mjs';
 import {drawMapScene} from '../web/map_scene_view.mjs';
-import {MovementMap} from '../../prototype/web/movement.mjs';
-registerHooks({resolve(specifier,context,next){
-  if(specifier==='/prototype/movement.mjs')return {url:new URL('../../prototype/web/movement.mjs',import.meta.url).href,shortCircuit:true};
-  return next(specifier,context);
-}});
+import {MovementMap} from '../web/core/movement.mjs';
 const {createMapController}=await import('../web/controllers/map.mjs');
 const {OpeningView}=await import('../web/opening_view.mjs');
 const read=async path=>JSON.parse(await readFile(new URL(path,import.meta.url),'utf8'));

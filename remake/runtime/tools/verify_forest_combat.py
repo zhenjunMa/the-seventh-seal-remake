@@ -42,7 +42,7 @@ def main():
             expected=value.get('sha256')
             ref=value.get('sheet',value.get('path'))
             if isinstance(ref,str) and isinstance(expected,str) and re.fullmatch('[0-9a-f]{64}',expected):
-                if ref.startswith('/prototype/'):path=REMAKE/'prototype/web'/ref.removeprefix('/prototype/')
+                if ref.startswith('/prototype/'):path=WEB/ref.removeprefix('/prototype/')
                 elif ref.startswith('/'):path=WEB/ref.lstrip('/')
                 elif ref.startswith(('assets/','data/')):path=WEB/ref
                 elif ref.startswith('evidence/'):path=RUNTIME/ref
@@ -93,7 +93,7 @@ def main():
         assert hashlib.sha256(content).hexdigest()==digest(WEB/ref), ref
         http.append(ref)
     fingerprints={}
-    paths=[*WEB.glob('*.js'),*WEB.glob('*.mjs'),*WEB.glob('*.html'),*WEB.glob('*.css'),*WEB.glob('core/*.mjs'),*WEB.glob('data/*.json'),*RUNTIME.glob('tools/export_battle_scheduler.py'),*RUNTIME.glob('tools/*forest*.py'),RUNTIME/'tools/build_catalog.py',RUNTIME/'tests/native_assembly_oracle.mjs',RUNTIME/'tests/preserve_history.mjs',REMAKE/'prototype/web/movement.mjs',*tests,
+    paths=[*WEB.glob('*.js'),*WEB.glob('*.mjs'),*WEB.glob('*.html'),*WEB.glob('*.css'),*WEB.glob('core/*.mjs'),*WEB.glob('data/*.json'),*RUNTIME.glob('tools/export_battle_scheduler.py'),*RUNTIME.glob('tools/*forest*.py'),RUNTIME/'tools/build_catalog.py',RUNTIME/'tests/native_assembly_oracle.mjs',RUNTIME/'tests/preserve_history.mjs',WEB/'core/movement.mjs',*tests,
            REMAKE/'README.txt',RUNTIME/'README.txt',REMAKE/'assessment/validation_design.txt',REMAKE/'assessment/menu_alignment_workflow.txt']
     paths+=list(EVIDENCE.glob('forest_combat_four_steps_browser*'))
     for path in paths:fingerprints[str(path.relative_to(ROOT)).replace('\\','/')]=digest(path)

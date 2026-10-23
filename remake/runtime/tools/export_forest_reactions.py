@@ -12,8 +12,8 @@ import sys
 sys.dont_write_bytecode = True
 RUNTIME = Path(__file__).resolve().parents[1]
 ROOT = RUNTIME.parents[1]
-sys.path.insert(0, str(ROOT / 'remake/prototype/tools'))
-from combat_resources import CHR
+sys.path.insert(0, str(ROOT / "remake/runtime/tools"))
+from source.combat_resources import CHR
 
 GAME_SHA = 'fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18'
 EXPECTED = {

@@ -17,11 +17,11 @@ import sys
 
 RUNTIME = Path(__file__).resolve().parents[1]
 ROOT = RUNTIME.parents[1]
-PROTOTYPE_TOOLS = ROOT / "remake/prototype/tools"
-sys.path.insert(0, str(PROTOTYPE_TOOLS))
-from dgp import DGP, DGPError, u32
-from map_data import MapBackground
-from map_objects import MapObjects
+SOURCE_TOOLS = RUNTIME / "tools"
+sys.path.insert(0, str(SOURCE_TOOLS))
+from source.dgp import DGP, DGPError, u32
+from source.map_data import MapBackground
+from source.map_objects import MapObjects
 from PIL import Image
 
 GAME_SHA = "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18"

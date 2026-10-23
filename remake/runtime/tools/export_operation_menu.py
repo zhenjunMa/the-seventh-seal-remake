@@ -1,7 +1,7 @@
 """Read-only export of source MNU menu pixels, widgets, and CAP references.
 
 MNU v3 is not DGP. Its embedded bitmaps use the same 16-bit row spans
-already established by prototype/tools/dgp.py; unknown widget fields are kept.
+already established by runtime/tools/source/dgp.py; unknown widget fields are kept.
 """
 from pathlib import Path
 import hashlib
@@ -13,10 +13,9 @@ from PIL import Image, ImageDraw, ImageChops, ImageOps
 
 RUNTIME = Path(__file__).resolve().parents[1]
 ROOT = RUNTIME.parents[1]
-sys.path.insert(0, str(ROOT / 'remake/prototype/tools'))
-sys.path.insert(0, str(RUNTIME / 'tools'))
+sys.path.insert(0, str(ROOT / "remake/runtime/tools"))
 from content_registration import role_ids
-from dgp import DGP, Reader, u16
+from source.dgp import DGP, Reader, u16
 
 OUT = RUNTIME / 'web/assets/menu'
 

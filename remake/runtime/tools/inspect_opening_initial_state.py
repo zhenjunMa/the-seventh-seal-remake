@@ -14,10 +14,10 @@ sys.dont_write_bytecode = True
 ROOT = Path(__file__).resolve().parents[3]
 EVIDENCE = ROOT / 'remake/runtime/evidence'
 sys.path.insert(0, str(ROOT / 'save_analysis_20261010'))
-sys.path.insert(0, str(ROOT / 'remake/prototype/tools'))
+sys.path.insert(0, str(ROOT / "remake/runtime/tools"))
 from save_format import complete_layout, inventory, character_at_header
 from inspect_equipment import describe_equipment
-from combat_resources import CHR
+from source.combat_resources import CHR
 
 EXPECTED = {
     'GAME.exe': 'fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18',
@@ -60,7 +60,7 @@ def audit():
         'save_analysis_20261010/inspect_equipment.py',
         'save_analysis_20261010/read_inventory.py',
         'save_analysis_20261010/rea_format_evidence.json',
-        'remake/prototype/tools/combat_resources.py',
+        'remake/runtime/tools/source/combat_resources.py',
         'remake/runtime/evidence/route_resources_20261011.json',
     ] + [f'Fight_Role/{i:03d}.CHR' for i in range(1, 7)]
     before = {p: sha((ROOT / p).read_bytes()) for p in source_paths}

@@ -1,7 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {registerHooks} from 'node:module';
 import {WorldStore,encodeSave,decodeSave} from '../web/core/world.mjs';
 import {SceneController} from '../web/core/scenes.mjs';
 import {createServicesController} from '../web/controllers/services.mjs';
@@ -9,10 +8,6 @@ import {createInputController} from '../web/controllers/input.mjs';
 import {PhaserRuntime} from '../web/phaser/runtime.mjs';
 import {MANUAL_SAVE_SLOTS} from '../web/core/save_slots.mjs';
 
-registerHooks({resolve(specifier,context,next){
-  if(specifier==='/prototype/movement.mjs')return {url:new URL('../../prototype/web/movement.mjs',import.meta.url).href,shortCircuit:true};
-  return next(specifier,context);
-}});
 const {createSessionController}=await import('../web/controllers/session.mjs');
 globalThis.document={createElement:()=>({textContent:''})};
 

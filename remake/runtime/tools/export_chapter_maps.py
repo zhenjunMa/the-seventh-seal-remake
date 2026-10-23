@@ -16,12 +16,11 @@ sys.dont_write_bytecode = True
 RUNTIME = Path(__file__).resolve().parents[1]
 ROOT = RUNTIME.parents[1]
 sys.path.insert(0, str(RUNTIME / "tools"))
-sys.path.insert(0, str(ROOT / "remake/prototype/tools"))
 import export_maps
 from route_export_maps import RouteMapBackground
 from route_extract_resources import map_record, tlk_record
-from dgp import DGP, DGPError
-from map_objects import MapObjects
+from source.dgp import DGP, DGPError
+from source.map_objects import MapObjects
 from map_npc_fields import initial_npc_visibility
 from PIL import Image
 from content_registration import role_ids as registered_role_ids, map_ids, map_exports

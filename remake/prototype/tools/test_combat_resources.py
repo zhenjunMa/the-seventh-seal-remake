@@ -10,9 +10,9 @@ import struct
 import tempfile
 import sys
 
-sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "runtime/tools"))
 
-from combat_resources import CHR, CHRError, PROJECT, ROOT, SAMPLES, association_probe, chr_name_inventory
+from source.combat_resources import CHR, CHRError, PROJECT, ROOT, SAMPLES, association_probe, chr_name_inventory
 
 
 def main() -> None:
@@ -68,10 +68,10 @@ def main() -> None:
                 cases.append({"name": label, "pass": True})
             else:
                 raise AssertionError(f"Damaged sample was accepted: {label}")
-    from combat_resources import write_json
+    from source.combat_resources import write_json
     result = {"cases": cases, "passed": len(cases), "failed": 0,
               "limits": ["Static resource parser checks only; no gameplay parity assertion."]}
-    write_json(PROJECT / "evidence/combat_resources_checks_20261011.json", result)
+    write_json(PROJECT / "evidence/source/combat_resources_checks_20261011.json", result)
     print(json.dumps(result, ensure_ascii=True))
 
 

@@ -6,9 +6,9 @@ import sys
 import tempfile
 import unittest
 
-sys.path.insert(0, str(Path(__file__).resolve().parent))
-from dgp import DGP, DGPError
-from map_data import MapBackground
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "runtime/tools"))
+from source.dgp import DGP, DGPError
+from source.map_data import MapBackground
 
 PROJECT = Path(__file__).resolve().parents[1]
 ROOT = PROJECT.parents[1]

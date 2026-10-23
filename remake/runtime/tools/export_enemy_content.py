@@ -16,10 +16,9 @@ RUNTIME = Path(__file__).resolve().parents[1]
 ROOT = RUNTIME.parents[1]
 WEB = RUNTIME / 'web'
 sys.path.insert(0, str(RUNTIME / 'tools'))
-sys.path.insert(0, str(ROOT / 'remake/prototype/tools'))
 from content_registration import role_ids
-from combat_resources import CHR, GAME_SHA256
-from dgp import DGP
+from source.combat_resources import CHR, GAME_SHA256
+from source.dgp import DGP
 from export_forest_ai import role_record
 import export_combat_sample as combat
 from export_party_skills import source_role, export_role_assets, enrich_sequence

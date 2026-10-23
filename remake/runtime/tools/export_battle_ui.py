@@ -11,11 +11,10 @@ import sys
 sys.dont_write_bytecode = True
 RUNTIME = Path(__file__).resolve().parents[1]
 ROOT = RUNTIME.parents[1]
-sys.path.insert(0, str(ROOT / 'remake/prototype/tools'))
+sys.path.insert(0, str(ROOT / "remake/runtime/tools"))
 from PIL import Image, ImageDraw, ImageChops, ImageOps
-from dgp import DGP
+from source.dgp import DGP
 from export_combat_presentation import indexed_contribution, native_frame_sequence
-sys.path.insert(0, str(RUNTIME / 'tools'))
 from export_operation_menu import decode_rows, sha, string, u32
 
 WEB = RUNTIME / 'web'

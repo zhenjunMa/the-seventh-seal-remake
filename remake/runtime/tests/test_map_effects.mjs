@@ -2,14 +2,9 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
-import {registerHooks} from 'node:module';
 import {MapObjectRuntime} from '../web/core/map_objects.mjs';
 import {ImageResources} from '../web/core/image_resources.mjs';
 import {drawMapScene} from '../web/map_scene_view.mjs';
-registerHooks({resolve(specifier,context,next){
-  if(specifier==='/prototype/movement.mjs')return {url:new URL('../../prototype/web/movement.mjs',import.meta.url).href,shortCircuit:true};
-  return next(specifier,context);
-}});
 const {OpeningView}=await import('../web/opening_view.mjs');
 
 const root=new URL('../',import.meta.url),read=async path=>JSON.parse(await readFile(new URL(path,root),'utf8'));

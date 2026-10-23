@@ -13,10 +13,9 @@ sys.dont_write_bytecode = True
 RUNTIME = Path(__file__).resolve().parents[1]
 ROOT = RUNTIME.parents[1]
 WEB = RUNTIME / 'web'
-sys.path.insert(0, str(ROOT / 'remake/prototype/tools'))
-sys.path.insert(0, str(RUNTIME / 'tools'))
-from dgp import DGP
-from map_objects import MapObjects
+sys.path.insert(0, str(ROOT / "remake/runtime/tools"))
+from source.dgp import DGP
+from source.map_objects import MapObjects
 from export_combat_presentation import indexed_contribution, native_frame_sequence, NATIVE_IDS
 from export_skill_layers import SourceAudit
 from PIL import Image
@@ -38,8 +37,8 @@ def export():
     wanted = {NATIVE_IDS['indexed_draw'], NATIVE_IDS['pixel_format'],
               'ev_02ca024fc6f9093e9bd38f06052ee2a4f2b2671240c4df2293cf1a50c4e2ae02',
               'ev_7ff7092a0522a10920b1c81430af56c62cb116c3d66a5af86a35ecb5e9498a5c'}
-    for file in ['remake/prototype/evidence/combat_presentation_indexed_native_20261011.json',
-                 'remake/prototype/evidence/map_layers_native_new.json',
+    for file in ['remake/runtime/evidence/source/combat_presentation_indexed_native_20261011.json',
+                 'remake/runtime/evidence/source/map_layers_native_new.json',
                  'remake/runtime/evidence/chapter_native.json']:
         for row in json.loads((ROOT / file).read_text(encoding='utf-8'))['records']:
             if row['evidence_id'] in wanted:

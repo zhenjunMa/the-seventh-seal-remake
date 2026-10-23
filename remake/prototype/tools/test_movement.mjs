@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {MovementMap, locomotion} from '../web/movement.mjs';
+import {MovementMap, locomotion} from '../../runtime/web/core/movement.mjs';
 
 const fixture = rows => new MovementMap({schema:'seventh-seal-map-movement',version:1,
   width:rows[0].length,height:rows.length,cell_size:16,terrain_rows:rows,triggers:[]});
@@ -63,7 +63,7 @@ test('all eight headings and release preserve movement state contract',()=>{
   assert.equal(locomotion({dx:0,dy:0},false).direction,null);
 });
 
-const data=JSON.parse(fs.readFileSync(new URL('../web/assets/m01010_movement.json',import.meta.url)));
+const data=JSON.parse(fs.readFileSync(new URL('../../runtime/web/assets/m01010_movement.json',import.meta.url)));
 const nativeMap=new MovementMap(data);
 let sweeps=0,samples=0;
 test('every passable M01010 cell: eight directions at walk/run/long displacement',()=>{
@@ -85,7 +85,7 @@ test('every passable M01010 cell: eight directions at walk/run/long displacement
   }
 });
 test('all user-facing validation points and saved start are passable',()=>{
-  const manifest=JSON.parse(fs.readFileSync(new URL('../web/manifest.json',import.meta.url)));
+  const manifest=JSON.parse(fs.readFileSync(new URL('../../runtime/web/data/source/manifest.json',import.meta.url)));
   for(const p of [manifest.maps[0].start_preview,...manifest.maps[0].movement_probes])assert.equal(nativeMap.at(p.x,p.y).blocked,false,p.name);
 });
 const report={created_utc:new Date().toISOString(),passed:checks.length,checks,

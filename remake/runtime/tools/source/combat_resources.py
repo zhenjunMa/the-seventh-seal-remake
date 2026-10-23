@@ -21,7 +21,7 @@ import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-PROJECT = Path(__file__).resolve().parents[1]
+PROJECT = Path(__file__).resolve().parents[2]
 ROOT = PROJECT.parents[1]
 GAME_SHA256 = "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18"
 ROLE_READ_EVIDENCE = "ev_ac1e58d9c4c3c45e5e22037e7532d393f5b5e77cd6ea9bd722b40a83145310a9"
@@ -55,7 +55,7 @@ def digest(path: Path) -> str:
 def write_json(path: Path, value) -> None:
     resolved = path.resolve()
     if not resolved.is_relative_to(PROJECT.resolve()):
-        raise CHRError("Outputs must remain inside remake/prototype")
+        raise CHRError("Outputs must remain inside remake/runtime")
     resolved.parent.mkdir(parents=True, exist_ok=True)
     resolved.write_text(json.dumps(value, ensure_ascii=False, indent=2), encoding="utf-8")
 
@@ -213,7 +213,7 @@ def dgp_action_headers(path: Path) -> dict:
 
 
 def native_loading_evidence() -> dict:
-    path = PROJECT / "evidence/combat_native_20261011.json"
+    path = PROJECT / "evidence/source/combat_native_20261011.json"
     if not path.exists():
         return {"static_loading_rule_confirmed": False, "reason": "Retained native loading evidence unavailable"}
     data = path.read_bytes()
@@ -222,7 +222,7 @@ def native_loading_evidence() -> dict:
     records = [r for r in bundle["records"] if r["evidence_id"] in wanted]
     confirmed = len(records) == 2
     return {"static_loading_rule_confirmed": confirmed,
-            "source": "remake/prototype/evidence/combat_native_20261011.json",
+            "source": "remake/runtime/evidence/source/combat_native_20261011.json",
             "snapshot_sha256": hashlib.sha256(data).hexdigest(),
             "evidence_ids": [r["evidence_id"] for r in records],
             "observations": [
@@ -241,7 +241,7 @@ def native_loading_evidence() -> dict:
 
 
 def native_action_index_evidence() -> dict:
-    path = PROJECT / "evidence/combat_animation_native_20261011.json"
+    path = PROJECT / "evidence/source/combat_animation_native_20261011.json"
     if not path.exists():
         return {"confirmed": False, "evidence_ids": []}
     bundle = json.loads(path.read_text(encoding="utf-8"))
@@ -352,7 +352,7 @@ def chr_name_inventory() -> dict:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--output", type=Path, default=PROJECT / "evidence/combat_resources_20261011.json")
+    parser.add_argument("--output", type=Path, default=PROJECT / "evidence/source/combat_resources_20261011.json")
     args = parser.parse_args()
     inputs = [ROOT / "GAME.exe", ROOT / "save_analysis_20261010/rea_format_evidence.json"]
     inputs += [ROOT / "Fight_Role" / (key + suffix) for key in SAMPLES for suffix in (".CHR", ".dgp")]

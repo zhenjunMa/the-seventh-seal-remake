@@ -18,7 +18,7 @@ const read=async p=>JSON.parse(await readFile(new URL('data/'+p,web)));
 const [seed,base,forest,config,scheduler,ai,rewards,reactions,status,meta]=await Promise.all(['route_seed.json','combat_sample.json','forest_combat.json','skills.json','battle_scheduler.json','forest_ai.json','forest_rewards.json','forest_reactions.json','forest_status.json','enemy_battle_view.json'].map(read));
 const maps=['M01010','M01030','M17010','M70010'],assets=new Map();
 function canvas(){const ctx={setTransform(){},clearRect(){},fillRect(){},beginPath(){},rect(){},clip(){},moveTo(){},lineTo(){},stroke(){},ellipse(){},fill(){},save(){},restore(){},drawImage(){},fillText(){},createLinearGradient:()=>({addColorStop(){}})};return {width:960,height:540,getContext:()=>ctx};}
-async function assetLoader(a){if(assets.has(a.path))return assets.get(a.path);const b=await readFile(a.path.startsWith('/prototype/')?new URL('remake/prototype/web/'+a.path.slice(11),root):new URL(a.path.slice(1),web));
+async function assetLoader(a){if(assets.has(a.path))return assets.get(a.path);const b=await readFile(new URL(a.path.slice(1),web));
  assert.equal(createHash('sha256').update(b).digest('hex'),a.sha256,a.path);assert.equal(b.readUInt32BE(16),a.width);assert.equal(b.readUInt32BE(20),a.height);const value={image:{width:a.width,height:a.height,path:a.path},sha256:a.sha256};assets.set(a.path,value);return value;}
 async function viewFixture(){const v=new BattleView({canvas:canvas(),metadataPath:'/data/enemy_battle_view.json',assetLoader,jsonLoader:async p=>read(p.slice('/data/'.length))});await v.prepare();return v;}
 function sample(ids,world=seed){return createForestSample(world,base,forest,{map_id:'M70010',members:ids.map(id=>({id}))},config,scheduler,ai,rewards,reactions,status);}

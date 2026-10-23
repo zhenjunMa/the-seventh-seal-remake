@@ -15,8 +15,8 @@ sys.dont_write_bytecode = True
 RUNTIME = Path(__file__).resolve().parents[1]
 ROOT = RUNTIME.parents[1]
 WEB = RUNTIME / 'web'
-sys.path.insert(0, str(ROOT / 'remake/prototype/tools'))
-from dgp import DGP, DGPError
+sys.path.insert(0, str(ROOT / "remake/runtime/tools"))
+from source.dgp import DGP, DGPError
 from PIL import Image
 
 GAME_SHA = 'fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18'
@@ -96,8 +96,7 @@ def export():
     for role in read(WEB / 'data/catalog.json')['roles']:
         for action in role['actions']:
             path = action['sheet']
-            rasters.add(ROOT / 'remake/prototype/web' / path.removeprefix('/prototype/')
-                        if path.startswith('/prototype/') else WEB / path.lstrip('/'))
+            rasters.add(WEB / path.lstrip('/'))
     effects = read(WEB / 'data/map_effects.json')
     rasters.update(WEB / a['intrinsic_sheet'].lstrip('/') for role in effects['roles'].values()
                    for a in role['actions'] if a.get('intrinsic_sheet'))

@@ -12,10 +12,10 @@ if errorlevel 1 (
     exit /b 1
   )
 )
-if not exist "web\manifest.json" (
-  "%SEAL_PREVIEW_PYTHON%" tools\extract.py
+if not exist "..\runtime\web\data\source\manifest.json" (
+  "%SEAL_PREVIEW_PYTHON%" ..\runtime\tools\extract.py
   if errorlevel 1 (
-    echo Extraction failed. See evidence\verification.json.
+    echo Extraction failed. See ..\runtime\evidence\source\verification.json.
     pause
     exit /b 1
   )

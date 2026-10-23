@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {MovementMap} from '../../prototype/web/movement.mjs';
+import {MovementMap} from '../web/core/movement.mjs';
 
 const runtime=path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const load=id=>JSON.parse(fs.readFileSync(path.join(runtime,'web/data/maps',id.toLowerCase()+'.json'),'utf8'));

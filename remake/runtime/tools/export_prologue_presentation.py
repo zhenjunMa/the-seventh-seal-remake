@@ -13,9 +13,9 @@ ROOT = RUNTIME.parents[1]
 WEB = RUNTIME/'web'
 OUT = WEB/'assets/prologue'
 REPORT = RUNTIME/'evidence/prologue_routes_20261020'
-sys.path.insert(0,str(ROOT/'remake/prototype/tools'))
+sys.path.insert(0,str(ROOT/'remake/runtime/tools'))
 sys.path.insert(0,str(Path(__file__).resolve().parent))
-from dgp import DGP
+from source.dgp import DGP
 import export_menu_font_gdi as gdi
 import export_battle_ui as ui
 

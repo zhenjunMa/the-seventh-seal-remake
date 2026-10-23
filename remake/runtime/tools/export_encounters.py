@@ -11,8 +11,7 @@ RUNTIME = Path(__file__).resolve().parents[1]
 ROOT = RUNTIME.parents[1]
 WEB = RUNTIME / 'web'
 sys.path.insert(0, str(RUNTIME / 'tools'))
-sys.path.insert(0, str(ROOT / 'remake/prototype/tools'))
-from combat_resources import CHR
+from source.combat_resources import CHR
 from content_registration import definition, map_ids, role_ids
 
 

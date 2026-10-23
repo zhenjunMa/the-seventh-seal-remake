@@ -34,8 +34,7 @@ function canvas() {
 }
 
 async function realAssets(asset) {
-  const path = asset.path.startsWith('/prototype/') ? new URL('remake/prototype/web/' + asset.path.slice('/prototype/'.length), root) :
-    new URL('web/' + asset.path.slice(1), base);
+  const path = new URL('web/' + asset.path.slice(1), base);
   const bytes = await readFile(path);
   assert.deepEqual([...bytes.subarray(0, 8)], [137,80,78,71,13,10,26,10]);
   assert.equal(hash(bytes), asset.sha256);

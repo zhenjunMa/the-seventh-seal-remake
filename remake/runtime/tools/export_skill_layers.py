@@ -15,15 +15,15 @@ import sys
 RUNTIME = Path(__file__).resolve().parents[1]
 REMAKE = RUNTIME.parent
 ROOT = REMAKE.parent
-PROTOTYPE = REMAKE / "prototype"
-sys.path.insert(0, str(PROTOTYPE / "tools"))
+sys.path.insert(0, str(RUNTIME / 'tools'))
 
 from PIL import Image, ImageDraw
-from combat_resources import CHR, GAME_SHA256
-from dgp import DGP, DGPError
+from source.combat_resources import CHR, GAME_SHA256
+from source.dgp import DGP, DGPError
 from export_combat_presentation import indexed_contribution, native_frame_sequence
 
 WEB = RUNTIME / "web"
+SOURCE_WEB = WEB / 'data/source'
 ASSETS = WEB / "assets/skills/yantu"
 EVIDENCE = RUNTIME / "evidence"
 DGP_SHA256 = "df86e4089870c720beee6c8fb216ee1f85156b061c69433a6ce767ce9dee6b49"
@@ -239,11 +239,11 @@ def main() -> None:
     if before != {"GAME.exe": GAME_SHA256, "Fight_Role/001.CHR": CHR_SHA256,
                   "Fight_Role/001.dgp": DGP_SHA256}:
         raise DGPError("Input identity differs from retained native evidence")
-    existing_paths = [PROTOTYPE / "web/combat_manifest.json", PROTOTYPE / "web/combat_presentation.json",
-                      PROTOTYPE / "evidence/skill_intrinsic_layer_gap_20261011.json"]
+    existing_paths = [SOURCE_WEB / "combat_manifest.json", SOURCE_WEB / "combat_presentation.json",
+                      RUNTIME / "evidence/source/skill_intrinsic_layer_gap_20261011.json"]
     existing_before = {p.relative_to(ROOT).as_posix(): sha(p.read_bytes()) for p in existing_paths}
-    bundle_paths = [PROTOTYPE / "evidence/combat_presentation_native_20261011.json",
-                    PROTOTYPE / "evidence/combat_presentation_indexed_native_20261011.json"]
+    bundle_paths = [RUNTIME / "evidence/source/combat_presentation_native_20261011.json",
+                    RUNTIME / "evidence/source/combat_presentation_indexed_native_20261011.json"]
     records = {record["evidence_id"]: record for path in bundle_paths
                for record in json.loads(path.read_text("utf-8"))["records"]}
     if missing := set(NATIVE.values()) - records.keys():

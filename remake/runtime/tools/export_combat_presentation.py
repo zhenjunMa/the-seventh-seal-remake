@@ -14,11 +14,11 @@ import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from PIL import Image
-from combat_resources import CHR, GAME_SHA256, PROJECT, ROOT
-from dgp import DGP, DGPError, Reader, u16, u32
+from source.combat_resources import CHR, GAME_SHA256, PROJECT, ROOT
+from source.dgp import DGP, DGPError, Reader, u16, u32
 
 WEB = PROJECT / 'web'
-EVIDENCE = PROJECT / 'evidence'
+EVIDENCE = PROJECT / 'evidence/source'
 ASSETS = WEB / 'assets/combat_effects'
 SKILLS = (22, 24, 25)
 EFFECTS = ('_DutyN.dgp', 'BFr01_Dn.dgp', 'BFr01_Nm.dgp')
@@ -47,7 +47,7 @@ def sha(data: bytes) -> str:
 
 def save_json(path: Path, value) -> None:
     if not path.resolve().is_relative_to(PROJECT.resolve()):
-        raise DGPError('Export must stay within remake/prototype')
+        raise DGPError('Export must stay within remake/runtime')
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(value, ensure_ascii=False, indent=2), 'utf-8')
 
@@ -271,7 +271,7 @@ def main() -> None:
                ROOT / 'Fight_Role/012.CHR', ROOT / 'Fight_Role/012.dgp']
     sources += [ROOT / 'Fight_Role/Effect' / name for name in EFFECTS]
     before = {p.relative_to(ROOT).as_posix(): sha(p.read_bytes()) for p in sources}
-    old_manifest = WEB / 'combat_manifest.json'
+    old_manifest = WEB / 'data/source/combat_manifest.json'
     original_manifest_hash = sha(old_manifest.read_bytes())
     role, dgp = CHR(ROOT / 'Fight_Role/001.CHR'), DGP(ROOT / 'Fight_Role/001.dgp')
     snow = CHR(ROOT / 'Fight_Role/012.CHR')
@@ -294,12 +294,12 @@ def main() -> None:
     ]
     manifest = dict(schema='seventh-seal-combat-presentation', version=1,
                     native_action_index_verified=True, skills=skills, assets=list(assets),
-                    source_hashes=before, evidence=dict(bundle='../evidence/combat_presentation_native_20261011.json',
+                    source_hashes=before, evidence=dict(bundle='remake/runtime/evidence/source/combat_presentation_native_20261011.json',
                         references=NATIVE_IDS), limits=limits)
     after = {p.relative_to(ROOT).as_posix(): sha(p.read_bytes()) for p in sources}
     if before != after or sha(old_manifest.read_bytes()) != original_manifest_hash:
         raise DGPError('Original input or existing combat manifest changed during export')
-    save_json(WEB / 'combat_presentation.json', manifest)
+    save_json(WEB / 'data/source/combat_presentation.json', manifest)
     verification = dict(schema='seventh-seal-combat-presentation-verification', version=1,
         original_inputs_unchanged=True, source_hashes_before=before, source_hashes_after=after,
         previous_combat_manifest_unchanged=True, previous_combat_manifest_sha256=original_manifest_hash,

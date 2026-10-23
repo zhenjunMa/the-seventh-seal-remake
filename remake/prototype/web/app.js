@@ -1,4 +1,4 @@
-import {MovementMap, locomotion} from './movement.mjs';
+import {MovementMap, locomotion} from '/runtime/core/movement.mjs';
 import {BattleSceneBridge} from './battle_scene_bridge.mjs';
 const $ = (id) => document.getElementById(id);
 const stage = $('stage'), ctx = stage.getContext('2d');

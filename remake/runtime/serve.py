@@ -10,7 +10,7 @@ import tempfile
 import threading
 
 ROOT = Path(__file__).resolve().parent
-MOUNTS = {'/prototype/': ROOT.parent / 'prototype' / 'web', '/': ROOT / 'web'}
+MOUNTS = {'/': ROOT / 'web'}
 SAVE_FILES = {**{f'{index:02}': f'SaveGame{index:02}.json' for index in range(20)}, 'quick': 'QuickSave.json'}
 LEGACY_SAVE_FILE = 'SaveGame0.json'
 MAX_SAVE_BYTES = 8_000_000
@@ -167,7 +167,7 @@ class RuntimeHandler(SimpleHTTPRequestHandler):
 
     def translate_path(self, path):
         decoded = unquote(urlsplit(path).path)
-        prefix = '/prototype/' if decoded.startswith('/prototype/') else '/'
+        prefix = '/'
         root = MOUNTS[prefix].resolve()
         parts = decoded[len(prefix):].split('/')
         if any(part in ('.', '..') or '\\' in part or ':' in part for part in parts):

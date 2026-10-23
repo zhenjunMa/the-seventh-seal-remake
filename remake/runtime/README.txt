@@ -5,6 +5,8 @@
 启动和主菜单
 Windows从remake双击start.cmd或start_runtime.cmd，也可在仓库根目录执行python -B remake/runtime/serve.py；macOS/Linux使用python3 -B remake/runtime/serve.py。所选命令需指向Python 3。
 浏览器访问http://127.0.0.1:8767/，已有服务时刷新即可。启动窗口需要保持运行。
+旧环境仍将素材放在remake/prototype/web/assets时，启动前按tools/README.txt的“旧环境升级”复制至正式素材目录；媒体和来源资料的交接范围见../local_materials.txt。更新服务代码后需重启服务。
+正式服务只提供本目录的web。旧地图／战斗实验由prototype服务单独启动，操作见../prototype/README.md；无素材预览仍在正式服务的/phaser-preview.html。
 游戏使用随代码提供的Phaser 3.90.0；素材需另外准备。替换serve.py后应重启服务；加载、场景与暂停机制见architecture.txt。
 片头按原顺序播放，Esc可跳过；等待页按键或点击进入主菜单。左右选择读取／游戏／特典／离开，空格或Enter确认，Esc逐层返回。界面按640×480整体等比显示。
 游戏→开始游戏进入真实新游戏。读取只读取重制存档；音乐欣赏提供已接入的原曲列表。探索中返回主菜单后可“回到游戏”继续当前进度。

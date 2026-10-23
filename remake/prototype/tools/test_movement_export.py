@@ -3,8 +3,8 @@ from pathlib import Path
 import json
 import struct
 import sys
-sys.path.insert(0, str(Path(__file__).resolve().parent))
-from dgp import DGP
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "runtime/tools"))
+from source.dgp import DGP
 from export_movement import ROOT, PROJECT
 
 b = (ROOT / 'Map/m01010.dat').read_bytes()
@@ -27,7 +27,7 @@ for y in range(h):
             raw = b[transition_start+(trigger_id-1)*0x42:transition_start+trigger_id*0x42]
             assert raw.hex() == t['descriptor_hex']
             assert t['path_gate'] == (raw[0]==0 and raw[0x11]!=0)
-manifest = json.loads((PROJECT / 'web/manifest.json').read_text(encoding='utf-8'))
+manifest = json.loads((PROJECT / 'web/data/source/manifest.json').read_text(encoding='utf-8'))
 from PIL import Image
 for obj in manifest['maps'][0]['objects']:
     dgp = DGP(ROOT / obj['source'])

@@ -12,9 +12,9 @@ import sys
 sys.dont_write_bytecode = True
 ROOT = Path(__file__).resolve().parents[3]
 RUNTIME = ROOT / 'remake/runtime'
-sys.path.insert(0, str(ROOT / 'remake/prototype/tools'))
-from dgp import DGP
-from map_objects import MapObjects
+sys.path.insert(0, str(ROOT / "remake/runtime/tools"))
+from source.dgp import DGP
+from source.map_objects import MapObjects
 from PIL import Image
 
 E = {

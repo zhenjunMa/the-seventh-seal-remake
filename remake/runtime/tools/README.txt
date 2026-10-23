@@ -1,5 +1,5 @@
 第七封印 · 构建、导出与验证工具
-更新：2026-10-23；所有命令从仓库根目录执行。示例使用python3；Windows可换为指向Python 3的python或py -3。
+更新：2026-10-23；所有命令从仓库根目录执行。正文中的web/、tools/、evidence/以runtime为基准；remake/开头的路径以仓库根目录为基准。示例使用python3；Windows可换为指向Python 3的python或py -3。
 
 常用操作
 启动检查用服务：python3 -B remake/runtime/serve.py
@@ -41,25 +41,60 @@ content目标贯通玩家、怪物、地图、剧情、配置、资源图集、�
 前置与来源
 按任务准备环境：静态服务使用Python 3标准库；verify_phaser需要Node.js，脚本内部会调用当前Node执行语法检查。
 素材导出另需Pillow；startup-media还使用NumPy；音视频转换需要FFmpeg／FFprobe；GDI字体导出和部分原版观察需要Windows。完整回归还依赖当前Node的node:test／WebCrypto及各专题工具所需环境。
-可先运行python3 --version和node --version；涉及媒体时再核对所需Python包、FFmpeg／FFprobe或Windows组件。当前尚无统一锁定环境与已验证的跨平台首次安装命令，不把prototype/requirements.txt当作正式构建的全部依赖。
-本入口接管已有基础内容与来源台账，不是从空目录自动重建原游戏的安装器。初始路线／原型提取、原资源和save_analysis仍有实际依赖。
+可先运行python3 --version和node --version；涉及媒体时再核对所需Python包、FFmpeg／FFprobe或Windows组件。当前尚无统一锁定环境与已验证的跨平台首次安装命令，单个实验依赖文件不能代表全部构建环境。
+本入口接管已有基础内容与来源台账，不是从空目录自动重建原游戏的安装器。初始路线／基础资源提取、原资源和save_analysis仍有实际依赖；基础导出器已位于本目录，不再读取prototype。
 声明原输入的新步骤可建立首份台账；其他步骤需要既有来源报告。路径、哈希、原像素／解码或未知格式校验仍由对应工具负责。
 来源与历史材料的用途、准备及恢复统一见../../local_materials.txt。材料不足时先执行无素材预检查；仅列计划不能证明首次构建可执行，--target all --run也不会自动补齐来源。首次构建任务和完成标准见../../assessment/validation_design.txt。
 生成的运行表和素材不手工调参；普通配置导出迁移已核对基线并保留parameters。仅参数变化无需重建图集。
 
 构建台账
+旧台账中的已迁移源码、清单、素材和证据路径按layout_migration.json解析到正式目录；原记录及SHA保持不变，迁移映射也参与构建签名。
 声明依赖与签名由build_runtime.py维护，状态写evidence/build_state.json；每次运行在evidence/builds/<UTC时间-唯一ID>/记录run.json和实际步骤日志。
+历史来源清单位于web/data/source，保留原字节与历史引用；当前正式清单使用/assets路径。迁移映射在layout_migration.json，旧原型证据迁到evidence/source。
 日期命名证据如被导出器重新生成，构建入口先保存到该步骤generated-evidence，再恢复旧文件原字节。失败也保留诊断；不要将旧报告重绑成新观察。
 当前剧情台账为chapter_story_export.json，怪物为enemy_content_export.json／enemy_rewards_export.json，遭遇为encounter_export.json；具体reports／inputs／outputs以STEPS为准。
 旧五份提取基线保存在evidence/export_tools_20261022/legacy_extractions并按历史SHA核对，当前生成文件按新台账检查。
 直接执行历史导出器不经过日期保护，需要先查看其代码和输出范围。
+
+目录迁移与基础来源
+共享解析器位于remake/runtime/tools/source：dgp.py、map_data.py、map_objects.py、combat_resources.py。
+移动模块、解码器、基础导出器和三份基础清单已随代码迁移；web/data/source中的清单保留原始导出字节和历史引用。它们是构建来源，不是新增地图或剧情的编辑入口；内容登记仍使用web/data/runtime_content.json。
+正式素材统一使用/assets/路径。正式服务8767只挂载remake/runtime/web；实验单独运行python3 -B remake/prototype/serve.py，默认8765，复用正式模块和媒体。
+
+旧环境升级
+以下命令从新版本项目根目录执行。迁移脚本只复制本地媒体和证据，源码及基础清单由版本更新提供。
+1. 默认只盘点，不写文件：
+   python3 -B remake/runtime/tools/migrate_local_materials.py
+   从另一个旧项目交接时，先对该目录盘点：
+   python3 -B remake/runtime/tools/migrate_local_materials.py --source-root "/path/to/old-project"
+2. 按相同来源执行复制：
+   python3 -B remake/runtime/tools/migrate_local_materials.py --run
+   跨目录交接使用：
+   python3 -B remake/runtime/tools/migrate_local_materials.py --source-root "/path/to/old-project" --run
+   remake/prototype/web/assets → remake/runtime/web/assets
+   remake/prototype/evidence → remake/runtime/evidence/source
+   原文件保留，同SHA目标复用；发现同名不同内容报错，不覆盖。存在旧文件时，--run会把来源、目标、SHA及处理状态记录到remake/runtime/evidence/layout_migration/<UTC时间>.json。
+   files=0表示选定来源中未找到可迁移文件；该结果不检查新目录中的素材是否齐全。迁移也不会生成缺失媒体或补全原版输入。
+3. 素材齐全的环境检查新路径、图集、指纹和尺寸：
+   node remake/runtime/tools/verify_phaser.mjs --assets
+   只有代码时可省略--assets运行预检查，并使用正式服务的/phaser-preview.html；报告中的assets.passed仍反映素材实际情况。
+4. 启动正式服务，再按../README.txt的正式路线验证剧情、战斗和存读档：
+   python3 -B remake/runtime/serve.py
+   真实素材实玩、Windows启动与首次构建的完成情况见../../assessment/validation_design.txt；迁移本身不改变这些验收结论。
+
+基础导出入口
+python3 -B remake/runtime/tools/extract.py
+python3 -B remake/runtime/tools/export_movement.py
+python3 -B remake/runtime/tools/export_combat_lab.py
+python3 -B remake/runtime/tools/export_combat_presentation.py
+这些独立入口读取对应原输入和保留来源证据，写入remake/runtime/web/data/source、remake/runtime/web/assets及remake/runtime/evidence/source；构建边界见“前置与来源”。新增正式内容继续使用build_runtime.py，不在prototype新增生产工具。
 
 工具导航
 分类见tool_index.json，记录构建目标、共享导入关系及独立工具用途。新增／迁移工具时人工维护path、role、imported_by及历史恢复字段；不根据命名猜测用途。
 sync_tool_docs.py从build_runtime.STEPS及plan生成registered_steps、content_plan、各工具build_targets和下方依赖清单；其余字段保留。默认同步，--check发现过期内容或索引遗漏时非零退出，不运行导出、不改素材或证据。实际构建计划始终以build_runtime.py为准。
 daily-entry：常用构建／检查／文档维护入口；standalone-check：不属于统一构建的独立检查。
 registered-build：统一构建中的生产步骤。
-shared-current：当前步骤或检查仍导入的解析／素材助手，保留原路径。
+shared-current：当前步骤或检查仍导入的素材助手。source-decoder：source/中的共享只读DGP、DAT、地图物件与CHR解析器；正式导出与实验验证共用。
 specialized-evidence-check：专题验收和日期观察复核，按各工具代码检查范围；不是每日全部执行的命令。
 fixture-or-observation-preparation：创建独立样本或原版观察副本，不等于正式获取／入队流程。
 source-observation：只读检查或记录原版，原目录输入保持只读。

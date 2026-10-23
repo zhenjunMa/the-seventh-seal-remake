@@ -1,14 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {registerHooks} from 'node:module';
 import {DistanceGait,mapMotionProfile,mapStepGeometry} from '../web/core/map_locomotion.mjs';
-import {MovementMap} from '../../prototype/web/movement.mjs';
+import {MovementMap} from '../web/core/movement.mjs';
 
-registerHooks({resolve(specifier,context,next){
-  if(specifier==='/prototype/movement.mjs')return {url:new URL('../../prototype/web/movement.mjs',import.meta.url).href,shortCircuit:true};
-  return next(specifier,context);
-}});
 const {createMapController}=await import('../web/controllers/map.mjs');
 const read=name=>JSON.parse(readFileSync(new URL('../web/data/'+name+'.json',import.meta.url),'utf8'));
 const catalog=read('catalog');
