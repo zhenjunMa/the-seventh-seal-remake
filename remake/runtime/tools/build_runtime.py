@@ -124,9 +124,16 @@ STEPS['catalog']=replace(STEPS['catalog'],inputs=(*STEPS['catalog'].inputs,'data
 STEPS['party-rewards']=replace(STEPS['party-rewards'],inputs=(*STEPS['party-rewards'].inputs,'../evidence/content_workflow_20261021/growth_native.json'))
 STEPS['party-skills']=replace(STEPS['party-skills'],outputs=(*STEPS['party-skills'].outputs,*tuple(f'data/party_role_layers_{ident}.json' for ident in REGISTERED_PLAYER_IDS)))
 STEPS['item-presentation']=replace(STEPS['item-presentation'],outputs=(*STEPS['item-presentation'].outputs,*tuple(f'data/item_role_layers_{ident}.json' for ident in REGISTERED_PLAYER_IDS)))
-STEPS['content']=replace(STEPS['content'],inputs=(*STEPS['content'].inputs,'data/operation_menu.json'))
+STEPS['content']=replace(STEPS['content'],outputs=(*STEPS['content'].outputs,'data/story'),
+    inputs=(*STEPS['content'].inputs,'data/operation_menu.json','content','data/events',
+            'data/opening_program.json','data/route_events.json'))
+STEPS['story-pack']=Step('export_story_packages.mjs', ('data/story','data/runtime_content.mjs'),
+    inputs=('data/runtime_content.json','data/chapter_story.json',
+            'data/chapter_map_resources.json','data/opening_program.json','data/route_events.json',
+            'data/events','content','data/maps'))
 STEPS['battle-packs']=replace(STEPS['battle-packs'],depends=(*STEPS['battle-packs'].depends,'battle-stages'))
 STEPS['dialogue-ui']=replace(STEPS['dialogue-ui'],depends=('catalog','chapter-story'))
+STEPS['dialogue-ui']=replace(STEPS['dialogue-ui'],inputs=(*STEPS['dialogue-ui'].inputs,'data/runtime_content.json','content'))
 STEPS['prologue-presentation']=replace(STEPS['prologue-presentation'],depends=('chapter-story',))
 
 

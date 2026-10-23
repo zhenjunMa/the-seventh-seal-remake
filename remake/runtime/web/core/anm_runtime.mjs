@@ -1,22 +1,33 @@
 // Shared execution mechanics for source-validated ANM programs. Map entry,
 // TLK interpretation and persistent writes remain with their owning runner.
+import {linkPlaybackAbort,playbackTask} from './story_playback.mjs';
+
 export const COMMON_ANM_OPCODES = new Set([16,17,30,31,32,33,35,48,49]);
 
 export class AnmActions {
   constructor({hooks, context, positions, controller = new AbortController(),
-    describeError = error => error, nativeMetadata = false}) {
-    Object.assign(this, {hooks, context, positions, controller, describeError, nativeMetadata});
+    describeError = error => error, nativeMetadata = false, playback = null}) {
+    Object.assign(this, {hooks, context, positions, controller, describeError, nativeMetadata, playback});
     this.pending = [];
     this.error = null;
     this.failure = new Promise((resolve, reject) => { this.rejectFailure = reject; });
     this.failure.catch(() => {});
+    this.onAbort=()=>{this.error??=this.controller.signal.reason;this.rejectFailure(this.error);};
+    this.controller.signal.addEventListener('abort',this.onAbort,{once:true});
+    this.unlink=linkPlaybackAbort(playback?.signal,this.controller);
+    if(this.controller.signal.aborted)this.onAbort();
   }
 
-  check() { if (this.error) throw this.error; }
+  check() { if (this.error) throw this.error; this.controller.signal.throwIfAborted(); this.playback?.check(); }
+  dispose() {this.unlink();this.controller.signal.removeEventListener('abort',this.onAbort);}
   abort(error) { this.controller.abort(error); }
   call(hook, command, payload = {}) {
-    return this.hooks[hook]({command, source: command.source, ...this.context(),
-      signal: this.controller.signal, ...payload});
+    const invoke=()=>{
+      this.check();
+      return playbackTask(this.hooks[hook]({command, source:command.source,...this.context(),
+        signal:this.controller.signal,...payload}),this.controller.signal);
+    };
+    return this.playback?.paused?this.playback.ready().then(invoke):invoke();
   }
   launch(hook, command, payload, done) {
     // Invoke before advancing the instruction cursor. Only native barriers

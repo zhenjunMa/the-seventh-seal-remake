@@ -20,6 +20,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
   function sheetAction(index=state.view.action) { return role().actions.find(action=>action.index===index); }
   function buildHud() {
     const snapshot=state.world.snapshot();
+    state.questProgress=state.storyRepository?.journal(snapshot)??[];
     let effective=[];state.battleUnavailable='';
     const newParty=snapshot.source.kind==='native-new-game';
     if(state.battleData)try{effective=newParty?createPartyActors(snapshot,state.partyCombat,{},state.itemData):createBattleSample(snapshot,state.battleData).actors;if(!effective.some(a=>a.side==='player'&&a.hp.current>0))state.battleUnavailable='队伍已经倒下，请载入进度。';}catch(error){state.battleUnavailable=error.message;}
@@ -33,13 +34,24 @@ export function createMapController({state, actions, $, canvas, ctx}) {
     $('money').textContent=`金钱 ${snapshot.money??state.rewardData?.initial_money??'—'}`;
     $('stateInfo').textContent=`世界版本 ${snapshot.revision} · 2000 项事件旗标 · ${snapshot.event_records.reduce((n,row)=>n+row.length,0)} 条原始事件状态`;
   }
-  async function prepareMap(id,{world=state.world.value,onProgress}={}) {
+  async function prepareMap(id,options={}) {
+    const release=state.storyRepository.retainMap(id);
+    try{return await prepareMapContent(id,options);}finally{release();}
+  }
+  async function prepareMapContent(id,{world=state.world.value,onProgress}={}) {
     const entry=state.catalog.maps.find(map=>map.id===id); if(!entry) throw new Error(`地图尚未纳入本版：${id}`);
+    await state.storyRepository.ensureMap(id,{protect:[state.scenes?.current?.data.id].filter(Boolean)});
+    const mapEvents=state.events.filter(event=>event.map_id===id);
+    for(const event of mapEvents){const resource=event.npc?.resource;
+      if(resource){const roleId=resource.source?.match(/(?:^|\/)([^/]+)\.dgp$/i)?.[1],action=state.mapShadows?.roles[roleId]?.actions.find(action=>action.index===0);
+        if(action){resource.shadow_sheet=action.shadow_sheet;resource.shadow_geometry=action.shadow_geometry;}}}
     const data=await actions.json(entry.path);
     if(data.schema!=='seventh-seal-runtime-map'||data.version!==1||data.id!==id) throw new Error('地图数据版本或标识不匹配');
     const extraExits=[...(state.chapterResources.exits_by_map[id]??[]),...chapterRouteExits(id,state.chapterStory,state.chapterResources)];
     data.exits=[...(data.exits??[]).filter(exit=>!extraExits.some(extra=>extra.id===exit.id)),...extraExits];
-    data.opening_npcs=state.chapterResources.npcs_by_map[id]??data.opening_npcs;
+    const nativeNpcs=state.chapterResources.npcs_by_map[id];
+    data.opening_npcs=(nativeNpcs?.length?nativeNpcs:data.opening_npcs??[]).filter(npc=>!mapEvents.some(event=>event.npc
+      &&(event.npc.id===npc.id||event.npc.slot_zero_based!==undefined&&event.npc.slot_zero_based===npc.slot_zero_based)));
     data.story_triggers=(state.chapterResources.trigger_regions[id]??[]).filter(trigger=>storyBindings(id).triggers.includes(trigger.id));
     const readyCells=new Set([...(data.exits??[]).filter(exit=>exit.state==='ready').flatMap(exit=>exit.cells.map(cell=>`${cell.x},${cell.y}`)),
       ...data.story_triggers.flatMap(trigger=>trigger.cells.map(cell=>`${cell.x},${cell.y}`))]);
@@ -74,7 +86,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
     for(const npc of data.opening_npcs??[]){
       const r=state.openingResources.roles[npc.resource_id],a=r?.actions.find(a=>a.index===0);
       if(!a?.bitmap)throw new Error(`地图人物资源未准备：${npc.resource_id}`);
-      npcs.push({...npc,bitmap:a.bitmap,shadow_bitmap:a.shadow_bitmap,resource:{frame_width:r.frame_width,frame_height:r.frame_height,
+      npcs.push({...npc,event:mapEvents.find(event=>event.npc_slot===npc.slot_zero_based),bitmap:a.bitmap,shadow_bitmap:a.shadow_bitmap,resource:{frame_width:r.frame_width,frame_height:r.frame_height,
         frames_per_direction:a.frame_count,interval_ms:a.interval_raw,anchor_x:r.anchor.x,anchor_y:r.anchor.y,shadow_geometry:a.shadow_geometry}});
     }
     const probes=[...(data.probes??[]),...state.events.filter(event=>event.map_id===id&&event.sample?.probe).map(event=>event.sample.probe)];

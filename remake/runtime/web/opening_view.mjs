@@ -1,6 +1,7 @@
 // Presentation preview for the source-bound ANM player. Interpolation and
 // blend-state transitions are browser approximations, not native equivalence.
 import {locomotion} from './core/movement.mjs';
+import {linkPlaybackAbort,playbackFrame,playbackTask} from './core/story_playback.mjs';
 import {openingCamera,approachPoint,directArrivalMoves} from './core/opening_presentation.mjs';
 import {ActorEffectView} from './actor_effect_view.mjs';
 import {drawMapSprite} from './map_sprite.mjs';
@@ -44,29 +45,26 @@ export class OpeningView {
     this.log?.({type,map_id:this.mapId,...extra,actors:[...this.actors.entries()].map(([slot,a])=>
       ({slot,visible:a.visible,direction:a.direction,x:a.x,y:a.y,action:a.action,frame:a.frame}))});
   }
-  tween(duration, update, signal) {
+  async tween(duration, update, signal) {
     if(this.clock)return this.clock.tween(duration,progress=>{update(progress);this.updateCamera();},[signal,this.controller.signal]);
-    return new Promise((resolve, reject) => {
-      const start = performance.now();
-      const tick = now => {
-        if (signal?.aborted||this.controller.signal.aborted) { reject(signal?.reason ?? this.controller.signal.reason); return; }
-        try {
-          // RAF timestamps mark the start of a frame and can precede the
-          // performance.now() read when an ANM starts within that frame.
-          const progress = Math.max(0, Math.min(1, (now - start) / Math.max(1, duration)));
-          update(progress); this.updateCamera();
-          if (progress === 1) resolve(); else requestAnimationFrame(tick);
-        } catch (error) { reject(error); }
-      };
-      requestAnimationFrame(tick);
-    });
+    const controller=new AbortController(),unlink=[signal,this.controller.signal].map(signal=>linkPlaybackAbort(signal,controller));
+    const start=performance.now();
+    try{
+      let progress;
+      do{
+        const now=await playbackFrame(null,controller.signal);
+        progress=Math.max(0,Math.min(1,(now-start)/Math.max(1,duration)));
+        update(progress);this.updateCamera();
+      }while(progress<1);
+    }finally{for(const detach of unlink)detach();}
   }
   hooks() {
     return {
       map: async ({mapId,initialLocation,signal}) => {
         let scene = this.prepared.get(mapId);
-        if(!scene&&this.prepare){scene=await this.prepare(mapId,signal);this.prepared.set(mapId,scene);}
+        if(!scene&&this.prepare){scene=await playbackTask(this.prepare(mapId,signal),signal);this.prepared.set(mapId,scene);}
         if (!scene) throw new Error(`序章地图尚未准备：${mapId}`);
+        while(this.clock?.paused)await this.clock.tween(0,()=>{},[signal,this.controller.signal]);
         if(signal?.aborted||this.controller.signal.aborted)throw signal?.reason??this.controller.signal.reason;
         this.scene=scene;this.mapId=mapId;
         this.actors.clear(); this.focus = null; this.active = true;
@@ -170,7 +168,7 @@ export class OpeningView {
           previous=t;
           if(this.nativeViewport&&this.focus!==null){
             const focus=this.getActor(this.focus),camera=openingCamera(focus,this.scene.bitmap.width,this.scene.bitmap.height);
-            motionFrames.push({time_ms:performance.now(),x:actor.x,y:actor.y,camera_x:camera.x,camera_y:camera.y});
+            motionFrames.push({time_ms:this.clock?.time??performance.now(),x:actor.x,y:actor.y,camera_x:camera.x,camera_y:camera.y});
           }
         };
         if(distance)await this.tween(duration,update,signal);

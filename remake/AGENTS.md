@@ -14,3 +14,5 @@
 - 全部道具的配置统一放在 `runtime/web/data/config/items.json` v3，以原道具ID绑定；装备、药品、水晶与材料不另建各自调参文件。`data/items.json` 保留原来源；只在 `parameters` 填写修改项，空对象使用来源默认值，嵌套对象按字段合并、数组整体替换。技能配置同为v3，战斗／奖励为v2；来源指纹按文件集中登记，默认值与生效值用配置导出器`--reference`只读查询。普通导出迁移旧格式、补齐新编号并保留调参；原实例／存档不因调参重写。特殊行为先还原通用处理器再启用，不能把 source-only 字段当作已实现效果。
 
 - 当前指南按职责重写维护，不继续累加逐次修复日志；历史过程放有日期的evidence或archive并建索引。工具导航见runtime/tools/tool_index.json，本地资料与缺失处理见local_materials.txt；新增或迁移工具同步其分类、导入关系及引用，构建派生清单用runtime/tools/sync_tool_docs.py生成并以--check核对。清理临时文件先核对引用，保留原路径／SHA与恢复映射；构建日志、原生证据及观察材料不能仅按日期删除。
+- 地图／NPC／对白／任务接入见runtime/story_guide.txt。runtime_content.story显式登记独立事件和任务，web/content保存编辑内容，web/data/story由export_story_packages.mjs生成；保留原TLK／ANM来源台账，正式浏览器按地图加载运行包。任务读取既有世界状态，奖励仍在剧情事务中提交，不另存重复进度。
+- TLK、测试片段和自行编写的NPC事件统一编译为StoryFlow，通过StoryFlowRunner执行，ChapterRunner提供共同事务与游戏行为适配。不得为炎城或其他区域新增独立剧情VM；旧EventRunner仅为来源核对适配，正式入口不使用native-entry提交。

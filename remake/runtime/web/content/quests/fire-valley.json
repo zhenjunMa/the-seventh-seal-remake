@@ -1,0 +1,31 @@
+{
+  "schema": "seventh-seal-quests",
+  "version": 1,
+  "quests": [
+    {
+      "id": "fire-valley-departure",
+      "name": "离开火之谷的准备",
+      "maps": ["M17020", "M17029", "M17026", "M17010"],
+      "stages": [
+        {
+          "id": "ready",
+          "status": "completed",
+          "text": "凯已经加入队伍，出发所需的装备已经领取。",
+          "when": {"all": [{"party_member": "002"}, {"flag": {"index": 51, "bit": 1, "value": true}}, {"flag": {"index": 48, "bit": 1, "value": true}}]}
+        },
+        {
+          "id": "equipment",
+          "status": "active",
+          "text": "回英格妮住处领取装备。",
+          "when": {"all": [{"party_member": "002"}, {"flag": {"index": 51, "bit": 1, "value": true}}]}
+        },
+        {
+          "id": "invite-kai",
+          "status": "active",
+          "text": "到火妖精王厅邀请凯同行。",
+          "when": {"all": []}
+        }
+      ]
+    }
+  ]
+}

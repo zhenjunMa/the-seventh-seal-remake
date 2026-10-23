@@ -1,7 +1,6 @@
 // boot adapters. Persistent state belongs to the shared runtime context.
 import {WorldStore} from "../core/world.mjs";
 import {SceneController} from "../core/scenes.mjs";
-import {EventRunner} from "../core/events.mjs";
 import {WorldMapController} from "../core/world_map.mjs";
 import {validateEncounterData} from "../core/encounters.mjs";
 import {createPartyActors} from "../core/party_attributes.mjs";
@@ -24,7 +23,7 @@ import {BattleTransitionView} from "../battle_transition_view.mjs";
 import {DialogueView} from "../dialogue_view.mjs";
 import {WorldMapView} from "../world_map_view.mjs";
 import {runtimeContent,runtimeContentDefinition,validateContentRegistration} from "../core/content_registry.mjs";
-import {validateStoryBindings} from "../core/content_dependencies.mjs";
+import {StoryRepository} from "../core/story_repository.mjs";
 import {worldMapEntry} from "../core/map_connections.mjs";
 import {createSaveStorage} from "../core/save_storage.mjs";
 import {SaveMenuView} from "../save_menu_view.mjs";
@@ -39,9 +38,11 @@ export function createBootController({state, actions, $, canvas, ctx}) {
     validateContentRegistration(runtimeContent);
     if(JSON.stringify(registration)!==JSON.stringify(runtimeContentDefinition))throw new Error('内容登记已变化，请执行 build_runtime.py --target content --run 并刷新页面');
     state.world=new WorldStore(await actions.json(state.catalog.seed),state.catalog.maps.map(m=>m.id));
-    [state.openingResources,state.openingProgram,state.chapterResources,state.chapterStory]=await Promise.all([actions.json(state.catalog.opening_resources),actions.json(state.catalog.opening_program),actions.json(state.catalog.chapter_resources),actions.json(state.catalog.chapter_story)]);
+    const [openingResources,storyIndex]=await Promise.all([actions.json(state.catalog.opening_resources),actions.json(state.catalog.story??'data/story/index.json')]);
+    state.storyRepository=await StoryRepository.create({read:actions.json,index:storyIndex,content:runtimeContent,definition:runtimeContentDefinition,currentMap:()=>state.scenes?.current?.data.id});
+    state.openingResources=openingResources;state.chapterResources=state.storyRepository.resources;state.chapterStory=state.storyRepository.story;
+    state.events=state.storyRepository.events;state.routeEvents=state.storyRepository.routes;
     state.openingResources.roles={...state.openingResources.roles,...state.chapterResources.roles};
-    validateStoryBindings(runtimeContent,state.chapterStory,state.chapterResources);
     state.mapEffects=await actions.json(state.catalog.map_effects);
     if(state.mapEffects.schema!=='seventh-seal-map-effects'||state.mapEffects.version!==1)throw new Error('地图光效清单版本不兼容');
     for(const [id,resource] of Object.entries(state.mapEffects.roles)){
@@ -51,6 +52,7 @@ export function createBootController({state, actions, $, canvas, ctx}) {
     }
     const shadows=await actions.json(state.catalog.map_shadows??'data/map_shadows.json');
     if(shadows.schema!=='seventh-seal-map-shadows'||shadows.version!==1)throw new Error('地图阴影清单版本不兼容');
+    state.mapShadows=shadows;
     for(const [id,resource] of Object.entries(shadows.roles)){
       const role=state.openingResources.roles[id],catalogRole=state.catalog.roles.find(role=>role.id===id);
       if(!role&&!resource.event_only)throw new Error('地图阴影人物未准备');
@@ -65,8 +67,8 @@ export function createBootController({state, actions, $, canvas, ctx}) {
       }
     }
     state.battleData=await actions.json(state.catalog.combat_sample??'data/combat_sample.json');
-    const [worldMapData,loadedRouteEvents,loadedEncounters,loadedForest]=await Promise.all([actions.json(state.catalog.world_map),actions.json(state.catalog.route_events),actions.json(state.catalog.encounters),actions.json(state.catalog.forest_combat)]);
-    state.routeEvents={...loadedRouteEvents,...state.chapterStory.maps};state.encounterData=validateEncounterData(loadedEncounters);state.forestData=loadedForest;
+    const [worldMapData,loadedEncounters,loadedForest]=await Promise.all([actions.json(state.catalog.world_map),actions.json(state.catalog.encounters),actions.json(state.catalog.forest_combat)]);
+    state.encounterData=validateEncounterData(loadedEncounters);state.forestData=loadedForest;
     state.schedulerData=validateScheduler(await actions.json('data/battle_scheduler.json'));
     [state.aiData,state.rewardData,state.reactionData,state.statusData]=await Promise.all([actions.json('data/forest_ai.json').then(validateForestAIData),actions.json('data/forest_rewards.json').then(validateForestRewards),actions.json('data/forest_reactions.json').then(validateForestReactionsData),actions.json('data/forest_status.json').then(validateForestStatusData)]);
     [state.partyCombat,state.partySkills,state.partyRewards,state.partyReactions]=await Promise.all([actions.json(state.catalog.party_combat),actions.json(state.catalog.party_skills),actions.json(state.catalog.party_rewards).then(validateForestRewards),actions.json(state.catalog.party_reactions).then(validateForestReactionsData)]);
@@ -79,13 +81,13 @@ export function createBootController({state, actions, $, canvas, ctx}) {
     state.prologuePresentation=await actions.json('data/prologue_presentation.json');
     state.captionView=await CaptionView.create({manifest:state.prologuePresentation,
       fonts:await actions.json(state.prologuePresentation.font_manifest),image:actions.image,
-      root:$('storyCaption'),onAdvance:()=>actions.advanceDialogue(),log:actions.log});
+      root:$('storyCaption'),clock:state.engine?.exploration.clock,onAdvance:()=>actions.advanceDialogue(),log:actions.log});
     state.loadingView=await LoadingView.create({manifest:state.prologuePresentation.loading,
-      image:actions.image,root:$('sceneLoading'),log:actions.log});
+      image:actions.image,root:$('sceneLoading'),clock:state.engine?.clock,log:actions.log});
     state.battleTransition=new BattleTransitionView({loadingView:state.loadingView,log:actions.log,clock:state.engine?.clock});
     const dialogueManifest=await actions.json('data/dialogue_ui.json');state.dialogueManifest=dialogueManifest;
     state.dialogueView=await DialogueView.create({manifest:dialogueManifest,fonts:await actions.json(dialogueManifest.font_manifest),
-      image:actions.image,root:$('dialogue'),onAdvance:actions.advanceDialogue,onChoose:actions.chooseDialogue,log:actions.log});
+      image:actions.image,root:$('dialogue'),clock:state.engine?.exploration.clock,onAdvance:actions.advanceDialogue,onChoose:actions.chooseDialogue,log:actions.log});
     state.menuSettings=createMenuSettings({storage:localStorage});
     const menuTransaction=fn=>state.menuFeedback?state.menuFeedback.transaction(fn):fn();
     state.operationMenu=new OperationMenuView({manifest:operationManifest,textRenderer,techniquesSupplement:await actions.json('data/operation_techniques.json'),root:$('partyMenu'),onPage:actions.showOperationPage,
@@ -125,20 +127,15 @@ export function createBootController({state, actions, $, canvas, ctx}) {
     $('audioMuted').checked=state.audio.snapshot().muted;$('audioVolume').value=String(Math.round(state.audio.snapshot().volume*100));
     $('audioMuted').onchange=()=>state.audio.setMuted($('audioMuted').checked);$('audioVolume').oninput=()=>state.audio.setVolume(Number($('audioVolume').value)/100);
     state.selectedRole=state.world.value.leader_id;
-    state.events=state.catalog.events?await actions.json(state.catalog.events):[];if(!Array.isArray(state.events))state.events=state.events.events;
-    for(const event of state.events){const resource=event.npc?.resource;
-      if(resource){const id=resource.source?.match(/(?:^|\/)([^/]+)\.dgp$/i)?.[1],action=shadows.roles[id]?.actions.find(action=>action.index===0);
-        if(action){resource.shadow_sheet=action.shadow_sheet;resource.shadow_geometry=action.shadow_geometry;}}}
     await Promise.all(state.catalog.roles.flatMap(r=>r.actions.filter(a=>a.index<=2).flatMap(a=>[
       actions.image(a.sheet).then(image=>{a.bitmap=image;}),
       ...(a.shadow_sheet?[actions.image(a.shadow_sheet).then(image=>{a.shadow_bitmap=image;})]:[])])));
     state.scenes=new SceneController({world: state.world,prepare:actions.prepareMap,validateEntry: actions.validateEntry,commitView: actions.commitView,enter:actions.enterMap,onPhase:actions.busy,
       captureView:()=>({view:{...state.view},name:$('mapName').textContent,probes:Array.from($('probe').children,child=>child.cloneNode(true)),nearest: state.nearest,resetHidden:$('resetEventSample').hidden}),
       rollbackView:checkpoint=>{Object.assign(state.view,checkpoint.view);$('mapName').textContent=checkpoint.name;$('probe').replaceChildren(...checkpoint.probes);$('resetEventSample').hidden=checkpoint.resetHidden;state.nearest=checkpoint.nearest;state.audio?.setScene({mapId:state.world.location.map_id,battle:false});}});
-    state.runner=new EventRunner({world: state.world,say: actions.say,wait:ms=>new Promise(resolve=>setTimeout(resolve,ms)),log: actions.log,setPhase:phase=>state.scenes.setPhase(phase)});
     state.chapterRunner=new ChapterRunner({world: state.world,data:state.chapterStory,objectData:state.chapterResources.interactive_objects,
       choose:actions.chooseChapter,
-      say:({mapId,record})=>actions.say(actions.chapterSpeaker(mapId,record),record.text_raw,record.style,{mapId,record}),
+      say:({mapId,record,signal})=>actions.say(actions.chapterSpeaker(mapId,record),record.text_raw,record.style,{mapId,record,signal}),
       animate:actions.animateChapter,objectAnimation:actions.animateChapterObject,log: actions.log,setPhase:phase=>state.scenes.setPhase(phase)});
     state.worldMap=new WorldMapController({world: state.world,data:worldMapData,
       prepare:async destination=>{const scene=await actions.prepareMap(destination.map_id),location=worldMapEntry(scene,destination,state.chapterStory);

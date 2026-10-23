@@ -1,12 +1,33 @@
 // story adapters. Persistent state belongs to the shared runtime context.
 import {OpeningView} from "../opening_view.mjs";
 import {ChapterAnimationRunner} from "../core/chapter_animation.mjs";
+import {StoryPlayback,storyCancelled,playbackTask,playbackFrame} from '../core/story_playback.mjs';
 import {runtimeContent,storyBindings} from "../core/content_registry.mjs";
 
 export function createStoryController({state, actions, $, canvas, ctx}) {
   let session=null,sequence=0;
   const heldDialogueKeys=new Set();
-  const cancelled=()=>new DOMException('剧情已中止','AbortError');
+  const cancelled=storyCancelled;
+  const inputSuspended=()=>Boolean(state.engine?.paused||state.storyPlayback?.paused||state.storyPlayback?.signal.aborted);
+  async function playStory(work){
+    if(state.storyPlayback)throw new Error('当前剧情尚未结束');
+    const playback=new StoryPlayback({clock:state.engine?.exploration.clock});state.storyPlayback=playback;
+    actions.log?.({type:'story-playback-start'});
+    try{
+      const result=await work(playback);playback.complete();return result;
+    }catch(error){playback.fail(error);throw error;}
+    finally{
+      try{clearDialogue();state.openingView?.dispose();state.openingView=null;state.objectPreview=null;releaseDialogueKeys();state.keys?.clear();}
+      finally{
+        state.storyPlayback=null;playback.dispose();
+        actions.log?.({type:'story-playback-end',status:playback.phase});
+      }
+    }
+  }
+  async function cancelStoryPlayback(reason=cancelled()){
+    const playback=state.storyPlayback;if(!playback)return;
+    playback.cancel(reason);await playback.finished;
+  }
   function closeSession(current){
     if(session!==current)return false;
     current?.detach?.();session=null;state.dialogueResolve=null;state.choicePending=false;
@@ -19,15 +40,17 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
   }
   function present({speaker,text,style=0,choices=null,signal,record=null,mapId=null}){
     clearDialogue();
-    if(signal?.aborted)return Promise.reject(signal.reason??cancelled());
+    const signals=[signal,state.storyPlayback?.signal].filter(Boolean);
+    const aborted=signals.find(signal=>signal.aborted);
+    if(aborted)return Promise.reject(aborted.reason??cancelled());
     state.keys?.clear();
     return new Promise((resolve,reject)=>{
       const current={id:++sequence,resolve,reject,choices,detach:()=>{}};session=current;
-      const abort=()=>{if(closeSession(current))reject(signal.reason??cancelled());};
-      signal?.addEventListener('abort',abort,{once:true});
-      current.detach=()=>signal?.removeEventListener('abort',abort);
+      const abort=()=>{if(closeSession(current))reject(signals.find(signal=>signal.aborted)?.reason??cancelled());};
+      for(const signal of signals)signal.addEventListener('abort',abort,{once:true});
+      current.detach=()=>{for(const signal of signals)signal.removeEventListener('abort',abort);};
       state.choicePending=Boolean(choices);
-      state.dialogueResolve=choices?null:()=>{if(closeSession(current))resolve();};
+      state.dialogueResolve=choices?null:()=>{if(!inputSuspended()&&closeSession(current))resolve();};
       try{
         if(style===3&&!choices)state.captionView.show(text);
         else state.dialogueView.show({speaker,text,style,choices,record,sessionId:current.id,
@@ -44,17 +67,18 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
   }
   function chooseDialogue(index,sessionId){
     const current=session;
-    if(!current?.choices||current.id!==sessionId||!current.choices.some(choice=>choice.index===index))return;
+    if(inputSuspended()||!current?.choices||current.id!==sessionId||!current.choices.some(choice=>choice.index===index))return;
     if(closeSession(current))current.resolve(index);
   }
   function advanceDialogue(){
-    const current=session;if(!current)return;
+    const current=session;if(!current||inputSuspended())return;
     if(state.captionView?.active&&!state.captionView.advance())return;
     if(state.dialogueView?.active&&!state.dialogueView.advance())return;
     if(session===current&&!current.choices)state.dialogueResolve?.();
   }
   function dialogueKey(key,repeat=false){
     if(!session)return false;
+    if(inputSuspended())return true;
     if([' ','Enter'].includes(key)){
       if(!repeat&&!heldDialogueKeys.has(key)){heldDialogueKeys.add(key);advanceDialogue();}
       return true;
@@ -97,26 +121,26 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
         if(entry){await runChapter({mapId:state.world.location.map_id,recordId:entry.record,context:{steps:0,explicitInteraction:true}});return;}
         actions.status('这里暂时没有可执行的对白。');return;
       }
-      try{await state.runner.run(state.nearest.event);actions.buildHud();actions.status('交谈结束。');}
-      catch(error){clearDialogue();actions.status(error.message,true);}
-      finally{canvas.focus({preventScroll:true});}
+      await runChapter({event:state.nearest.event});
     }finally{release?.();}
   }
   function chapterSpeaker(mapId,record){
+    if(typeof record.speaker_name==='string')return record.speaker_name;
     const id=Object.keys(runtimeContent.roles).find(id=>runtimeContent.roles[id].side==='player'&&runtimeContent.roles[id].native_slot===record.speaker-1);
     const definition=state.chapterStory?.role_definitions?.[id]??state.world?.value?.source?.role_definitions?.[id];
     if(definition)return definition.name;
     return (state.chapterResources?.npcs_by_map?.[mapId]??[]).find(npc=>npc.speaker_slot_one_based===record.speaker)?.name??'';
   }
-  async function animateChapter({program,mapId,draft,runTlk,joinActor}){
-    const scene=await actions.prepareMap(mapId,{world:draft});
+  async function animateChapter({program,mapId,draft,runTlk,joinActor,playback,signal}){
+    const scene=await playbackTask(actions.prepareMap(mapId,{world:draft}),signal);
+    if(playback?.paused)await playback.ready();playback?.check();
     if(state.scenes.current?.data.id===mapId)scene.npcRuntime?.inherit(state.scenes.current.npcRuntime);
     const prepared=new Map([[mapId,scene]]);
     state.openingView=new OpeningView({resources:state.openingResources,prepared,nativeViewport:true,clock:state.engine?.exploration.clock,
       install:scene=>{state.scenes.current=scene;actions.commitView(scene,draft.location);state.view.follow=false;},
       camera:(x,y)=>{state.view.x=x;state.view.y=y;},say,log: actions.log,shade:()=>{}});
-    const playback=new ChapterAnimationRunner({program,hooks:state.openingView.hooks(),runTlk,joinActor,initialLocation:draft.location});
-    const result=await playback.run(),hero=state.openingView.getActor(0);
+    const animation=new ChapterAnimationRunner({program,hooks:state.openingView.hooks(),runTlk,joinActor,initialLocation:draft.location,playback});
+    const result=await animation.run();playback?.check();const hero=state.openingView.getActor(0);
     draft.location={...result.location,direction:hero.direction};
     actions.validateEntry(state.scenes.current,draft.location);
     state.scenes.current.npcRuntime?.adoptActors(state.openingView.actors);state.openingView.dispose();
@@ -127,49 +151,48 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
     if(state.scenes.phase!=='map')return;
     const previous={scene:state.scenes.current,view:state.scenes.captureView()};
     try{
-      const result=args.rest?await state.chapterRunner.runRest({explicitInteraction:true,descriptorId:args.descriptorId??null}):args.objectIndex===undefined?await state.chapterRunner.runTlk(args):await state.chapterRunner.runObject(args);
-      actions.commitView(state.scenes.current,state.world.location);actions.buildHud();actions.updateNearest();
+      const result=await playStory(async playback=>{
+        try{
+          const result=args.event?await state.chapterRunner.runEvent(args.event,{playback}):args.rest?await state.chapterRunner.runRest({explicitInteraction:true,descriptorId:args.descriptorId??null,playback}):args.objectIndex===undefined?await state.chapterRunner.runTlk({...args,playback}):await state.chapterRunner.runObject({...args,playback});
+          actions.commitView(state.scenes.current,state.world.location);actions.buildHud();actions.updateNearest();return result;
+        }catch(error){state.scenes.current=previous.scene;state.scenes.rollbackView(previous.view);throw error;}
+      });
       actions.status(result.already_done?'箱子里的装备已经领取。':'可以继续探索。');
       if(result.save_requested)await actions.openSaveCrystal();
-    }catch(error){
-      state.scenes.current=previous.scene;state.scenes.rollbackView(previous.view);
-      clearDialogue();actions.status(error.message,true);
-    }finally{if(state.openingView)state.openingView.dispose();state.objectPreview=null;canvas.focus({preventScroll:true});}
+    }catch(error){actions.status(error.message,true);}
+    finally{canvas.focus({preventScroll:true});}
   }
   async function enterMap(scene,draft,reason){
     const recordId=storyBindings(scene.data.id).entry_record;
     if(!recordId||!['exit','world-map'].includes(reason))return false;
     state.sceneEntryDraft=draft;
     state.scenes.setPhase('event');$('worldMapPanel').hidden=true;
-    try{
-      await state.chapterRunner.runTlk({mapId:scene.data.id,recordId,draft});
+    try{return await playStory(async playback=>{
+      await state.chapterRunner.runTlk({mapId:scene.data.id,recordId,draft,playback});
+      if(playback.paused)await playback.ready();playback.check();
       actions.validateEntry(state.scenes.current,draft.location);
-      actions.log({type:'map-entry-story',map_id:scene.data.id,record_id:recordId});
-      return true;
-    }catch(error){clearDialogue();throw error;}
-    finally{
-      state.openingView?.dispose();state.objectPreview=null;state.sceneEntryDraft=null;
-    }
+      actions.log({type:'map-entry-story',map_id:scene.data.id,record_id:recordId});return true;
+    });}finally{state.sceneEntryDraft=null;}
   }
-  async function animateChapterObject({mapId,objectIndex}){
+  async function animateChapterObject({mapId,objectIndex,signal,playback}){
     const resource=state.chapterResources.object_animations[mapId]?.find(row=>row.object_index_zero_based===objectIndex);
     if(!resource)throw new Error('物件动作资源尚未准备');
-    const frames=await Promise.all(resource.frames.map(frame=>actions.image(frame.image, `map:${mapId}`)));
+    const frames=await playbackTask(Promise.all(resource.frames.map(frame=>actions.image(frame.image, `map:${mapId}`))),signal);
+    if(playback?.paused)await playback.ready();signal?.throwIfAborted();playback?.check();
     state.objectPreview={mapId,objectIndex,bitmap:frames[0]};
     const start=performance.now(),interval=resource.actions[0].interval_raw;
     if(state.engine){
       try{await state.engine.exploration.clock.tween(interval*frames.length,t=>{
         state.objectPreview.bitmap=frames[Math.min(frames.length-1,Math.floor(t*frames.length))];
-      });}finally{state.objectPreview=null;}
+      },[signal]);}finally{state.objectPreview=null;}
       return;
     }
-    await new Promise((resolve,reject)=>{
-      const tick=now=>{try{
-        const frame=Math.min(frames.length-1,Math.floor((now-start)/interval));state.objectPreview.bitmap=frames[frame];
-        if(now-start>=interval*frames.length)resolve();else requestAnimationFrame(tick);
-      }catch(error){reject(error);}};requestAnimationFrame(tick);
-    });
-    state.objectPreview=null;
+    try{
+      let now=start;
+      do{now=await playbackFrame(null,signal);
+        const frame=Math.min(frames.length-1,Math.floor(Math.max(0,now-start)/interval));state.objectPreview.bitmap=frames[frame];
+      }while(now-start<interval*frames.length);
+    }finally{state.objectPreview=null;}
   }
-  return {say, clearDialogue, chooseChapter, chooseDialogue, advanceDialogue, dialogueKey, dialogueKeyUp, releaseDialogueKeys, interact, chapterSpeaker, animateChapter, runChapter, enterMap, animateChapterObject};
+  return {playStory,cancelStoryPlayback,say, clearDialogue, chooseChapter, chooseDialogue, advanceDialogue, dialogueKey, dialogueKeyUp, releaseDialogueKeys, interact, chapterSpeaker, animateChapter, runChapter, enterMap, animateChapterObject};
 }

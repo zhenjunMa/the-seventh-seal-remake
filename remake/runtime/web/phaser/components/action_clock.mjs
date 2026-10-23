@@ -1,11 +1,14 @@
 // Scope-owned elapsed time, advanced only by the owning Phaser update step.
 // ANM waits/aborts retain their promise contract; sprites add no contact clock.
 export class ActionClock {
-  constructor(){this.tasks=new Set();this.closed=false;this.time=performance.now();}
+  constructor(){this.tasks=new Set();this.closed=false;this.paused=false;this.time=performance.now();}
   update(now){
-    if(this.closed)return;
+    if(this.closed||this.paused)return;
     this.time=now;
-    for(const task of [...this.tasks])if(this.tasks.has(task))task.tick(now);
+    for(const task of [...this.tasks]){
+      if(this.closed||this.paused)break;
+      if(this.tasks.has(task))task.tick(now);
+    }
   }
   advance(delta){this.update(this.time+Math.max(0,delta));}
   requestFrame(callback,{signal,onCancel=()=>{}}={}){
@@ -36,5 +39,5 @@ export class ActionClock {
       this.tasks.add(task);
     });
   }
-  destroy(){this.closed=true;for(const task of [...this.tasks])task.cancel(new Error('游戏时钟已关闭'));}
+  destroy(){this.closed=true;this.paused=true;for(const task of [...this.tasks])task.cancel(new Error('游戏时钟已关闭'));}
 }

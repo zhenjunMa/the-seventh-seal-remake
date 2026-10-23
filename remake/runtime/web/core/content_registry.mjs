@@ -1,5 +1,6 @@
 // Content admission is data; source formats and implemented handlers remain code.
 import compiledContent from '../data/runtime_content.mjs';
+import {validateStorySelection} from './story_packages.mjs';
 export {definition as runtimeContentDefinition} from '../data/runtime_content.mjs';
 const need=(ok,message)=>{if(!ok)throw new Error(`内容登记：${message}`);};
 export const roleId=id=>typeof id==='string'&&/^\d{3}$/.test(id);
@@ -7,6 +8,7 @@ export const mapId=id=>typeof id==='string'&&/^M\d{5}$/.test(id);
 export const sourceHash=value=>typeof value==='string'&&/^[a-f0-9]{64}$/.test(value);
 export function validateContentRegistration(content){
   need(content?.schema==='seventh-seal-runtime-content'&&content.version===1,'版本无效');
+  if(content.story)validateStorySelection(content.story);
   // Four active formation positions are a recovered rule, not a content option.
   need(content.party_limit===4,'当前只实现四个参战队列位置');
   need(content.roles&&Object.keys(content.roles).length>0,'角色表缺失');

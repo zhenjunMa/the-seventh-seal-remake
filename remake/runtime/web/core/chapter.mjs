@@ -6,6 +6,10 @@ import {restorePartyAfterRest} from './recovery.mjs';
 import {admitPartyMember} from './party_members.mjs';
 export {chapterRoleFromDefinition} from './party_members.mjs';
 import {runtimeContent,storyBindings} from './content_registry.mjs';
+import {validateCompactRecords} from './story_packages.mjs';
+import {StoryFlowRunner} from './story_flow.mjs';
+import {compileTlkFlow,nativeFlowId} from './story_flow_compiler.mjs';
+import {playbackDelay} from './story_playback.mjs';
 
 const copy = value => structuredClone(value);
 const need = (ok, message) => { if (!ok) throw new Error(message); };
@@ -16,7 +20,6 @@ const bytes = (value, count, label) => {
 };
 const view = b => new DataView(b.buffer, b.byteOffset, b.byteLength);
 const flagIndex = value => Number.isInteger(value) && value >= 0 && value < 2000;
-const signed = value => value | 0;
 const FIELD_OFFSETS = {speaker:0x0f, id:0x13, condition_type:0x17, condition_index:0x1b,
   condition_bit:0x1f, mutation_type:0x23, mutation_index:0x27, mutation_bit:0x2b, if_true:0x2f, next:0x33};
 const VALUE_PAIRS = [[0x0d,0x17e],[0x11,0x186],[0x15,0x18e],[0x19,0x196],
@@ -63,13 +66,14 @@ function setObjectEventState(draft, mapFlagIndex, objectIndex, state) {
 }
 
 export function validateChapterStory(data) {
-  need(data?.schema === 'seventh-seal-chapter-story' && data.version === 1 && data.maps, '火之谷剧情版本不兼容');
+  need(data?.schema === 'seventh-seal-chapter-story' && [1,2].includes(data.version) && data.maps, '剧情版本不兼容');
   for (const [mapId, table] of Object.entries(data.maps)) {
     need(/^M\d{5}$/.test(mapId) && flagIndex(table.map_flag_index) && Array.isArray(table.records)
       && table.records.length > 0 && table.records.length <= 10000, '火之谷对白表无效');
     need(table.source?.path?.toLowerCase() === `map/${mapId.toLowerCase()}.tlk`
       && /^[0-9a-f]{64}$/.test(table.source.sha256)
       && data.source_hashes?.[table.source.path] === table.source.sha256, '火之谷对白来源缺失');
+    if(data.version===2){validateCompactRecords(table);continue;}
     const ids = new Set();
     for (const record of table.records) {
       const b = bytes(record.raw_hex, 0x66f, '对白'), v = view(b);
@@ -103,6 +107,7 @@ export function chapterProgress(world) {
 // Native style1 stores three 100-byte GBK labels followed by DWORD TLK targets.
 export function chapterChoices(record) {
   need(record?.kind === 0 && record.style === 1, '剧情选择记录无效');
+  if(record.raw_hex===undefined&&Array.isArray(record.choices))return copy(record.choices);
   const b = bytes(record.raw_hex, 0x66f, '剧情选择'), v = view(b), choices = [];
   for (let index = 0; index < 3; index++) {
     const offset = 0x537 + index * 104, textBytes = b.slice(offset, offset + 100), end = textBytes.indexOf(0);
@@ -123,16 +128,28 @@ export function chapterRestChoices(record,binding=null) {
 }
 
 export class ChapterRunner {
-  constructor({world, data, say, choose = null, animate, objectData = null, objectAnimation = async () => {}, setPhase = () => {}, log = () => {},content=runtimeContent}) {
+  constructor({world, data, say, choose = null, animate, objectData = null, objectAnimation = async () => {}, wait=playbackDelay, setPhase = () => {}, log = () => {},content=runtimeContent}) {
     validateChapterStory(data);
-    Object.assign(this, {world, data:copy(data), objectData:copy(objectData), objectAnimation, say, choose, animate, setPhase, log,content});
+    Object.assign(this, {world, data:data.version===2?data:copy(data), objectData:data.version===2?objectData:copy(objectData), objectAnimation, say, choose, animate, wait, setPhase, log,content});
+    if(data.version===1)this.data.flows=Object.fromEntries(Object.values(this.data.maps).map(table=>{
+      const flow=compileTlkFlow(table,{choices:chapterChoices});return [flow.id,flow];
+    }));
+    this.flowRunner=new StoryFlowRunner(Object.fromEntries(['record','say','choice','animation','give_item','restore_party','request_save','set_native_object','wait']
+      .map(op=>[op,(command,execution)=>this.applyFlowCommand(op,command,execution)])));
     this.running = false;
   }
-  async runTlk({mapId, recordId, draft, context} = {}) {
+  async runTlk({mapId, recordId, draft, context = {steps:0}, playback = context.playback} = {}) {
+    if(playback)context.playback=playback;
     if (draft) return this.walkTlk({mapId, recordId, draft, context});
-    return this.atomic({mapId, recordId}, next => this.walkTlk({mapId, recordId, draft:next, context}));
+    return this.atomic({mapId, recordId, playback}, next => this.walkTlk({mapId, recordId, draft:next, context}));
   }
-  async runRest({explicitInteraction = false,descriptorId=null} = {}) {
+  async runEvent(event,{playback}={}){
+    need(event.map_id===this.world.location.map_id,'NPC 事件不在当前地图');
+    const flow=this.data.flows?.[event.flow_id];
+    need(flow&&flow.id===event.flow_id&&flow.map_id===event.map_id,'NPC 剧情流程缺失');
+    return this.atomic({mapId:event.map_id,eventId:event.id,playback},draft=>this.flowRunner.execute(flow,{draft,context:{steps:0,explicitInteraction:true,playback}}));
+  }
+  async runRest({explicitInteraction = false,descriptorId=null,playback} = {}) {
     need(explicitInteraction === true, '休息需要主动操作床铺');
     const mapId = this.world.location.map_id, table = this.data.maps[mapId];
     const binding=storyBindings(mapId,this.content).rests.find(row=>descriptorId===null||row.descriptor_id===descriptorId);
@@ -141,20 +158,24 @@ export class ChapterRunner {
     need(descriptor?.state_raw === 2 && descriptor.field_26_raw === binding.record_id
       && descriptor.field_2a_raw === 0 && descriptor.field_2e_raw === 1
       && descriptor.source?.sha256 === this.data.source_hashes[descriptor.source.path], '床铺原始剧情入口缺失');
-    return this.runTlk({mapId, recordId:binding.record_id, context:{steps:0, explicitInteraction:true}});
+    return this.runTlk({mapId, recordId:binding.record_id, context:{steps:0, explicitInteraction:true},playback});
   }
-  async atomic({mapId, recordId, objectIndex}, execute) {
+  async atomic({mapId, recordId, objectIndex, eventId, playback}, execute) {
     need(!this.running, '火之谷剧情正在执行');
     this.running = true;
     const before = this.world.snapshot(), next = copy(before);
     try {
-      this.setPhase('event');
+      playback?.check();this.setPhase('event');
+      if(playback?.paused)await playback.ready();
       const result = await execute(next);
+      if(playback?.paused)await playback.ready();
+      playback?.check();
       need(this.world.value.revision === before.revision, '世界状态在剧情执行期间发生变化');
       next.revision = (before.revision + 1) >>> 0;
       validateWorld(next, this.world.mapIds);
       this.world.replace(next);
       this.log({type:'chapter-commit', mapId, recordId, revision:next.revision,
+        ...(eventId?{event:eventId}:{}),
         ...(objectIndex === undefined ? {} : {objectIndex}),
         commit_policy:'remake-atomic-success', native_mutation_timing:'record-entry'});
       return {...result, world:this.world.snapshot()};
@@ -181,22 +202,24 @@ export class ChapterRunner {
     }
     return {table, object, recordId:v.getUint32(0xf6, true)};
   }
-  async runObject({mapId, objectIndex} = {}) {
+  async runObject({mapId, objectIndex, playback} = {}) {
     need(!this.running, '火之谷剧情正在执行');
     const {table, object, recordId} = this.objectFor(mapId, objectIndex);
     need(this.world.location.map_id === mapId, '剧情物件不在当前地图');
     const initialState = chapterObjectState(this.world.snapshot(), mapId, objectIndex, this.data);
     if (initialState === 3) return {mapId, objectIndex, already_done:true, state:3, world:this.world.snapshot()};
     need([0,1,2].includes(initialState), '剧情物件保存状态尚未接入');
-    return this.atomic({mapId, recordId, objectIndex}, async draft => {
+    return this.atomic({mapId, recordId, objectIndex, playback}, async draft => {
       let result = {traversed:[], dialogueIds:[]};
       // Source 0x4137C0 clears pending state1 before dispatching +F6.
       // Saved state2 means its event already ran: finish the animation only.
       if (initialState === 1) setObjectEventState(draft, table.map_flag_index, objectIndex, 0);
-      if (initialState !== 2) result = await this.walkTlk({mapId, recordId, draft});
+      if (initialState !== 2) result = await this.walkTlk({mapId, recordId, draft,context:{steps:0,playback}});
       let state = chapterObjectState(draft, mapId, objectIndex, this.data);
       if (state === 2) {
-        await this.objectAnimation({mapId, objectIndex, draft, source:object.source, fromState:2, toState:3});
+        playback?.check();
+        await this.objectAnimation({mapId, objectIndex, draft, source:object.source, fromState:2, toState:3,playback,signal:playback?.signal});
+        playback?.check();
         setObjectEventState(draft, table.map_flag_index, objectIndex, 3);
         state = 3;
       }
@@ -204,61 +227,40 @@ export class ChapterRunner {
     });
   }
   async walkTlk({mapId, recordId, draft, context = {steps:0}}) {
-    const table = this.data.maps[mapId];
-    need(table && Number.isInteger(recordId) && recordId > 0, '火之谷剧情入口无效');
-    const records = new Map(table.records.map(record => [record.id, record]));
-    const traversed = [], dialogueIds = [];
-    let id = recordId;
-    while (id) {
-      need(++context.steps <= 1000, '火之谷剧情超过执行步数');
-      const record = records.get(id);
-      need(record, `火之谷对白记录 ${mapId}:${id} 未接入`);
-      if (storyBindings(mapId,this.content).rests.some(row=>row.restore_records.includes(record.id)))
-        need(context.explicitInteraction === true, '休息需要主动操作床铺');
-      traversed.push(id);
-      this.applyMutation(draft, table, record, context);
-      this.log({type:'chapter-record', mapId, recordId:id, source:record.source ?? table.source});
-      if (this.condition(draft, table, record)) { id = record.if_true; continue; }
-      if (record.kind === 0) {
-        const binding=storyBindings(mapId,this.content).rests.find(row=>row.record_id===record.id);
-        const choices=binding?chapterRestChoices(record,binding):record.style===1?chapterChoices(record):[];
-        if (choices.length) {
-          need(context.explicitInteraction === true,
-            '剧情选择需要已恢复的主动交互入口');
-          need(choices.every(choice=>choice.recordId===0||records.has(choice.recordId)), '剧情选择跳转目标缺失');
-          need(typeof this.choose === 'function', '剧情选择显示接口缺失');
-          const selected = await this.choose({mapId, record, choices:copy(choices), draft});
-          const choice = choices.find(row => row.index === selected);
-          need(choice, '剧情选择结果无效');
-          dialogueIds.push(id);
-          id = choice.recordId;
-          continue;
-        }
-        if (record.text_raw) {
-          need(typeof this.say === 'function', '火之谷对白显示接口缺失');
-          await this.say({mapId, record, source:table.source, draft});
-          dialogueIds.push(id);
-        }
-        id = record.next;
-      } else if (record.kind === 1) {
-        const name = record.text_raw.replace(/\.anm$/i, '').toLowerCase();
-        const program = this.data.programs?.[name];
-        need(program && typeof this.animate === 'function', `火之谷演出 ${record.text_raw} 尚未接入`);
-        await this.animate({program, mapId, draft,
-          runTlk:args => this.runTlk({...args, draft, context}),
-          joinActor:args => this.joinActor({...args, draft})});
-        id = record.next;
-      } else throw new Error(`火之谷对白类型 ${record.kind} 尚未接入`);
-    }
-    return {mapId, recordId, traversed, dialogueIds,save_requested:Boolean(context.saveRequested)};
+    const flow=this.data.flows?.[nativeFlowId(mapId)],entry=flow?.entries?.[recordId];
+    need(entry&&Number.isInteger(recordId)&&recordId>0,`剧情入口 ${mapId}:${recordId} 未接入`);
+    const result=await this.flowRunner.execute(flow,{entry,draft,context});
+    return {mapId,recordId,...result,save_requested:Boolean(context.saveRequested)};
   }
-  condition(draft, table, record) {
-    need(record.condition_type === 0, `火之谷剧情条件 ${record.condition_type} 尚未接入`);
-    const bit = signed(record.condition_bit);
-    if (bit === 0) return false;
-    const index = record.condition_index || table.map_flag_index;
-    need(flagIndex(index) && bit >= 1 && bit <= 32, '火之谷剧情旗标条件无效');
-    return Boolean(draft.flags[index] & (1 << (bit - 1)));
+  applyFlowCommand(op,command,{mapId,flowId,draft,context}){
+    const table=this.data.maps[mapId],native=flowId===nativeFlowId(mapId),playback=context.playback;
+    const record=native?table?.records.find(row=>row.id===command.record_id):{
+      ...command.presentation,id:command.record_id,text_raw:command.text,source:command.source,
+      ...(typeof command.speaker==='string'?{speaker_name:command.speaker}:{})};
+    if(op==='record'){
+      need(record,'剧情记录缺失');
+      if(storyBindings(mapId,this.content).rests.some(row=>row.restore_records.includes(record.id)))need(context.explicitInteraction===true,'休息需要主动操作床铺');
+      this.log({type:'chapter-record',mapId,recordId:record.id,source:command.source});return;
+    }
+    if(op==='say'){
+      need(typeof this.say==='function','剧情对白显示接口缺失');
+      return this.say({mapId,record:{...record,text_raw:command.text},source:command.source,draft,playback,signal:playback?.signal});
+    }
+    if(op==='choice'){
+      need(context.explicitInteraction===true,'剧情选择需要已恢复的主动交互入口');
+      const rest=storyBindings(mapId,this.content).rests.find(row=>row.record_id===record.id);
+      if(rest)chapterRestChoices(record,rest);
+      need(typeof this.choose==='function','剧情选择显示接口缺失');
+      return this.choose({mapId,record,choices:copy(command.choices),draft,playback,signal:playback?.signal});
+    }
+    if(op==='animation'){
+      const program=this.data.programs?.[command.program_id];
+      need(program&&typeof this.animate==='function',`剧情演出 ${command.program_id} 尚未接入`);
+      return this.animate({program,mapId,draft,playback,signal:playback?.signal,runTlk:args=>this.runTlk({...args,draft,context}),joinActor:args=>this.joinActor({...args,draft})});
+    }
+    if(op==='wait')return playback?playback.wait(command.ms):this.wait(command.ms);
+    need(native&&record,'原剧情行为记录缺失');
+    this.applyMutation(draft,table,record,context);
   }
   applyMutation(draft, table, record, context={}) {
     if(record.mutation_type===4){
@@ -313,13 +315,7 @@ export class ChapterRunner {
       } else this.log({type:'chapter-inventory-full', id:definition.id, native_capacity:1000});
       return;
     }
-    need(record.mutation_type === 0, `火之谷剧情变更 ${record.mutation_type} 尚未接入`);
-    const bit = signed(record.mutation_bit);
-    if (!bit) return;
-    const index = record.mutation_index || table.map_flag_index;
-    need(flagIndex(index) && bit >= -32 && bit <= 32, '火之谷剧情旗标变更无效');
-    const mask = 1 << (Math.abs(bit) - 1);
-    draft.flags[index] = (bit > 0 ? draft.flags[index] | mask : draft.flags[index] & ~mask) >>> 0;
+    throw new Error(`剧情行为 ${record.mutation_type} 尚未接入`);
   }
   joinActor({actorSlot, modeRaw, draft}) {
     // GAME.exe 0x4B6720 mode0 -> 0x45E400. The helper returns when the

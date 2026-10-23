@@ -211,5 +211,9 @@
         "story": false
       }
     }
+  },
+  "story": {
+    "events": ["data/events/detective.json"],
+    "quests": ["content/quests/fire-valley.json"]
   }
 }
