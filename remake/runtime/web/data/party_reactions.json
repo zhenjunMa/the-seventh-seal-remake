@@ -29559,7 +29559,7 @@
     "authority": "Native source action tick conversion; preview wall clock is separate."
   },
   "policy": {
-    "player_attack_skills": "Party source CHR direct skills; historical fixture source remains separate.",
+    "player_attack_skills": "按内容登记读取玩家原CHR技能；历史样本来源独立保留。",
     "target_reference": "Caller supplies current_target_id for native F68E; guard and death finalization preserve it including null.",
     "death_finalization": "0x4FFE90 clears status, selects id12 or id2 with original lookup draws, or draws enemy fade increment modulo7 plus1.",
     "original_game_execution_observed": false,

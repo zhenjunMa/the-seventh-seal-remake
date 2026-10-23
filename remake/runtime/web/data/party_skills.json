@@ -26737,14 +26737,14 @@
     "sha256": "0370abd9b3181b0f6bea40a6edd51e85e09b4757c8fb81ae8fd93dfe35080bfd"
   },
   "policy": {
-    "eligibility": "Native learned byte +0x23 and nonzero type +0x32 low nibble.",
-    "commands": "Remake directly exposes selected learned attacks; native default UI binds the first three eligible skills.",
-    "source": "Fresh CHR definitions; admission does not alter learned bytes, required levels or saved progress.",
+    "eligibility": "登记与学习状态独立；运行按原学习状态、技能类型、等级及资源条件判断可用性。",
+    "commands": "战斗与场外技能按runtime_content.json登记；原前三个合资格技能用于默认快捷键来源，操作菜单与战斗使用已保存的七槽绑定。",
+    "source": "基于原CHR定义；登记不改写原学习字节、等级条件或存档进度。",
     "original_game_execution_observed": false
   },
   "limits": [
-    "001 exposes two learned attacks and source skill37 fire spell; other learned spells/attacks remain outside this milestone.",
-    "002 exposes all five learned direct attacks at its source level 10; no skill unlock is invented.",
-    "Original active command menu and default three-slot configuration are not reproduced."
+    "技能接入范围以runtime_content.json为准；保留完整CHR技能用于来源核对，不表示全部技能已实现。",
+    "登记未学习技能不会自动解锁；开发样本的显式技能授予只作用于该样本。",
+    "七槽绑定与组合记录编辑由操作菜单模块实现；组合攻击执行尚未恢复，当前实现与验收范围见remake/assessment/validation_design.txt。"
   ]
 }
