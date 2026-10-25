@@ -92,6 +92,7 @@ core/battle_techniques将保存的编成记录映射为本场命令，只引用�
 native_skill_loading在不可变CHR来源上派生4FED00加载后的技能code，正常战斗使用真实入口4451C0设置的模式0；forest_ai消费派生值并保留原选招RNG次序，不直接将文件code当作组合资格。
 类型恢复、受击／反击、状态、死亡／起身、技能成长、奖励池与结算各有独立core模块；BattleController连接它们并保持单次资源提交。
 BattleView消费时间线和只读表现数据，不修改HP／MP或抽战斗随机。场景、角色和效果共用640×480逻辑坐标。
+战斗头顶光标使用同帧人物绘制坐标（含反击通道位移和native_z_raw），Y为人物Y－DGP extra_header+0x0C高度－64－光标自身锚点Y；高度随资源编号导出，并同步battle_packs内嵌清单，不按队伍索引或姓名配置。原调用分支的保留指令见tests/fixtures/battle_cursor_native.json。
 正式BattleView注入phaser/rendering/battle_surface提供的绘制接口。已有源图集裁切、平移、缩放、加色和文本命令转为复用的Phaser Sprite／Graphics／Text；不将整场旧Canvas逐帧上传为背景。BattleResources原SHA、尺寸、分片和资源租约检查继续生效。
 第一版选择Phaser的Canvas渲染后端以衔接现有加色语义。TextureCache仅拥有Phaser纹理引用，不取代ImageResources／BattleResources的解码与来源校验；每帧回收未使用的纹理引用。battle_scene.update驱动战斗控制器与已有源时间线，动作、充槽和生命周期使用同一场景时间；休眠或暂停时均不推进，Sprite不额外启动自动播放时钟。
 forest_stage先完成天空、地面、全部场景贴图，再画按地面Y排序的战斗人物，最后画效果和HUD。人物升空与地面锚点分开，背景纹理不与人物混排。

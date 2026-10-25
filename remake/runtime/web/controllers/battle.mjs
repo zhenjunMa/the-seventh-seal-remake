@@ -81,8 +81,9 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
     if(!owner)state.battleMenu?.dispose();
     const [uiManifest,resultManifest]=await playbackTask(Promise.all([battleResources.json('data/battle_ui.json'),returnLabel?null:battleResources.json('data/battle_result.json')]),signal);check();
     const bindingSource=newParty?effectiveSkillSource(state.partySkills,world.value):null;
-    const host=$('battleHud'),root=owner?host.ownerDocument.createElement('div'):host;
+    const host=$('battleHud'),root=owner?host.ownerDocument.createElement('div'):host,view=state.battleView;
     const menu=new BattleMenuView({root,manifest:uiManifest,battle,returnLabel,reuseReturnButton:!owner,
+      getCursorHeight:id=>view.actorCursorHeight(id),
       getSettings:()=>state.menuSettings?.snapshot()??{},getBindings:newParty?id=>techniqueSlots(world.value,bindingSource,id).map(slot=>({...slot,name:slot.type===1?battle.skills[battleTechniqueId(id,slot.index_one_based)]?.name:techniqueSlotName(bindingSource,id,slot)})):null,
       playCue:(...args)=>state.audio?.playCue(...args),onReturn:actions.guarded(returnFromBattle),onStage:stage=>{if(state.battle===battle)battle.setCommandStage?.(stage);},textRenderer:state.operationMenu?.textRenderer,memory:state.battleCursorMemory,resultManifest,onResultEvent:actions.log,
       now:()=>state.engine?.battle.clock.time??performance.now()});

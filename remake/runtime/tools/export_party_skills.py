@@ -405,6 +405,7 @@ def main():
         views = [enrich_sequence(c, d, i, COMMANDS[ident][i]) for i in ordered]
         responses = [enrich_sequence(c, d, i) for i, s in enumerate(c.skills) if s['id_raw'] in RESPONSE_IDS]
         role = dict(id=ident, name=c.name, frame_width=d.width, frame_height=d.height,
+            cursor_height_raw=d.cursor_height_raw,
             anchor=dict(x=d.anchor_raw[0], y=d.anchor_raw[1], source='DGP extra_header+0x10/+0x14', native_use_verified=False),
             mirror=False, direction=0, idle=enrich_sequence(c, d, 0)['segments'][0],
             reaction=enrich_sequence(c, d, 1)['segments'][0], skill=views[0],

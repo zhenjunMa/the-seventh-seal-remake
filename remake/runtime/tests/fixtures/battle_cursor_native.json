@@ -1,0 +1,51 @@
+{
+  "schema": "seventh-seal-native-battle-cursor-fixture",
+  "binary_sha256": "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18",
+  "evidence_id": "ev_f1296cfec0192d25c150c262cca1758339d6115e458959778a58b6f137de2eb9",
+  "scope": "Bounded cursor coordinate branches; draw call is an external hook. Original gameplay is not executed.",
+  "height_source": "GAME.exe 0x51FCC4: resource+0x7D = DGP extra_header+0x0C, signed LE32.",
+  "functions": {
+    "player": [
+      "0x516af5: PUSH 0x0",
+      "0x516af7: MOV ECX, dword ptr [EBP + -0xc]",
+      "0x516afa: IMUL ECX, ECX, 0x1d",
+      "0x516afd: MOV EDX, dword ptr [EBP + -0x8]",
+      "0x516b00: IMUL EDX, EDX, 0x30274",
+      "0x516b06: MOV EAX, dword ptr [EDX + 0x521a770]",
+      "0x516b0c: SUB EAX, 0x1",
+      "0x516b0f: IMUL EAX, EAX, 0xeb",
+      "0x516b15: MOV EDX, dword ptr [0x055f1300]",
+      "0x516b1b: MOV ECX, dword ptr [EDX + ECX*0x1 + 0x11]",
+      "0x516b1f: SUB ECX, dword ptr [EAX + 0x52193fd]",
+      "0x516b25: SUB ECX, 0x40",
+      "0x516b28: PUSH ECX",
+      "0x516b29: MOV EDX, dword ptr [EBP + -0xc]",
+      "0x516b2c: IMUL EDX, EDX, 0x1d",
+      "0x516b2f: MOV EAX, [0x055f1300]",
+      "0x516b34: MOV ECX, dword ptr [EAX + EDX*0x1 + 0xd]",
+      "0x516b38: PUSH ECX",
+      "0x516b39: CALL 0x005189f0"
+    ],
+    "target": [
+      "0x516b43: PUSH 0x1",
+      "0x516b45: MOV EDX, dword ptr [EBP + -0xc]",
+      "0x516b48: IMUL EDX, EDX, 0x1d",
+      "0x516b4b: MOV EAX, dword ptr [EBP + -0x8]",
+      "0x516b4e: IMUL EAX, EAX, 0x30274",
+      "0x516b54: MOV ECX, dword ptr [EAX + 0x521a770]",
+      "0x516b5a: SUB ECX, 0x1",
+      "0x516b5d: IMUL ECX, ECX, 0xeb",
+      "0x516b63: MOV EAX, [0x055f1300]",
+      "0x516b68: MOV EDX, dword ptr [EAX + EDX*0x1 + 0x11]",
+      "0x516b6c: SUB EDX, dword ptr [ECX + 0x52193fd]",
+      "0x516b72: SUB EDX, 0x40",
+      "0x516b75: PUSH EDX",
+      "0x516b76: MOV EAX, dword ptr [EBP + -0xc]",
+      "0x516b79: IMUL EAX, EAX, 0x1d",
+      "0x516b7c: MOV ECX, dword ptr [0x055f1300]",
+      "0x516b82: MOV EDX, dword ptr [ECX + EAX*0x1 + 0xd]",
+      "0x516b86: PUSH EDX",
+      "0x516b87: CALL 0x005189f0"
+    ]
+  }
+}

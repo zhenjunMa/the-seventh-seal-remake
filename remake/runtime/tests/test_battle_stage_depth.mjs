@@ -86,10 +86,29 @@ test('Counter movement uses its own ground path while the parent flying action c
   const done=view.playSequence({actor_id:'enemy-0',target_id:'001',skill_id:'eagle',plan:directSequence(ai.roles['011'].skills[14])},
     {onRecord(){},onContact:()=>({hit:true,damage:1,remainingHp:999,...(++contacts===1?{reaction_descriptor:descriptor}:{})}),
       onReactionRecord(){},onReactionContact:()=>({hit:true,damage:1,remainingHp:999}),onReactionEnd(){}});
+  const spritePositions=new Map(),originalSprite=view._sprite.bind(view);
+  view._sprite=(role,action,frame,x,y,...rest)=>{spritePositions.set(role.id,[x,y]);return originalSprite(role,action,frame,x,y,...rest);};
   let frames=0;
   for(let now=0;view.run;now+=65){assert.ok(++frames<2000);calls.length=0;view.draw(snapshot,now);
     assertBackgroundFirst(calls,4);
+    const [x,y]=spritePositions.get('001'),position=view.actorPositions()['001'];
+    assert.deepEqual(position,[(x-120)/1.125,y/1.125],'HUD follows the actual reaction-channel sprite');
     if(view.run?.children.some(c=>!c.done))counterFrames++;
   }
   await done;assert.ok(counterFrames>0);
+});
+
+test('HUD actor positions follow native altitude and the displayed resource after a formation exchange',async()=>{
+  const {view,snapshot}=await fixture(['013'],['001','002','003']);
+  view.roster.find(a=>a.id==='002').party_slot_zero_based=3;
+  for(const z of [0,-45,-120,20]){
+    snapshot.actors.find(a=>a.id==='002').native_z_raw=z;
+    view.draw(snapshot,0);
+    assert.deepEqual(view.actorPositions()['002'],[590,290+z]);
+    assert.equal(view.actorCursorHeight('002'),110);
+    const positions=view.actorPositions();positions['002'][0]=0;
+    assert.equal(view.actorPositions()['002'][0],590,'HUD callers cannot mutate the renderer position');
+  }
+  setActors(view,['013'],['001','002']);
+  assert.deepEqual(view.actorPositions()['002'],[540,250],'new rosters discard the previous drawn frame');
 });

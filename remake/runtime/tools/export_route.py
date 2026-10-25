@@ -105,7 +105,7 @@ def main():
             p=WEB/f'assets/forest_roles/{ident}/action_{index:02}.png';p.parent.mkdir(parents=True,exist_ok=True);sheet.save(p)
             actions.append(dict(index=index,sheet='/'+p.relative_to(WEB).as_posix(),sha256=sha(p.read_bytes()),frame_count=a['frames_per_direction'],directions=a['directions'],first_frame=a['first_frame']))
         skill_view['runtime_skill_id']=alias
-        role_views.append(dict(id=ident,name=chr_.name,frame_width=dgp.width,frame_height=dgp.height,anchor=dict(x=dgp.anchor_raw[0],y=dgp.anchor_raw[1]),
+        role_views.append(dict(id=ident,name=chr_.name,frame_width=dgp.width,frame_height=dgp.height,cursor_height_raw=dgp.cursor_height_raw,anchor=dict(x=dgp.anchor_raw[0],y=dgp.anchor_raw[1]),
                                mirror=False,direction=0,idle=idle,reaction=reaction,actions=actions,skill=skill_view))
     groupbytes=bytes.fromhex(records[2]['normalized_result']['bytes_hex'])
     rows=[list(struct.unpack_from('<III',groupbytes,i*12)) for i in range(13)]
