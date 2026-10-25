@@ -15,7 +15,7 @@ import {NativeAssemblyOracle} from './native_assembly_oracle.mjs';
 const read=async name=>JSON.parse(await readFile(new URL('../web/data/'+name+'.json',import.meta.url)));
 const names={combat:'combat_sample',forest:'forest_combat',scheduler:'battle_scheduler',ai:'forest_ai',rewards:'forest_rewards',party_skills:'party_skills',items:'items'};
 const data=Object.fromEntries(await Promise.all(Object.entries(names).map(async([key,name])=>[key,await read(name)])));
-const [seed,meta,reactions,statuses]=await Promise.all(['route_seed','forest_full_battle_view','forest_reactions','forest_status'].map(read));
+const [seed,meta,reactions,statuses]=await Promise.all(['route_seed','enemy_battle_view','enemy_reactions','forest_status'].map(read));
 const assembly=JSON.parse(await readFile(new URL('../evidence/turn_rules_assembly_20261011.json',import.meta.url))),copy=structuredClone;
 function fixture({testMode=true,complete=true,enemyHp=null,party2=false,playReactions=false}={}){
   const config=deriveRuntimeConfiguration(data);config.manifest.mode='debug';config.skills.entries.yanci.parameters.mp_cost=7;

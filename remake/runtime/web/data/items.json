@@ -13626,12 +13626,12 @@
         ]
       },
       "availability": {
-        "enabled": false,
-        "chapter_enabled": false,
+        "enabled": true,
+        "chapter_enabled": true,
         "catalog_visible": true,
-        "default_enabled": false,
+        "default_enabled": true,
         "reasons": [
-          "outside-default-chapter-item-set"
+          "registered-source-equipment; pure-numeric-equip-and-linking-recovered"
         ]
       },
       "raw_fields": {
@@ -13967,12 +13967,12 @@
         ]
       },
       "availability": {
-        "enabled": false,
-        "chapter_enabled": false,
+        "enabled": true,
+        "chapter_enabled": true,
         "catalog_visible": true,
-        "default_enabled": false,
+        "default_enabled": true,
         "reasons": [
-          "outside-default-chapter-item-set"
+          "registered-source-equipment; pure-numeric-equip-and-linking-recovered"
         ]
       },
       "raw_fields": {
@@ -14308,12 +14308,12 @@
         ]
       },
       "availability": {
-        "enabled": false,
-        "chapter_enabled": false,
+        "enabled": true,
+        "chapter_enabled": true,
         "catalog_visible": true,
-        "default_enabled": false,
+        "default_enabled": true,
         "reasons": [
-          "outside-default-chapter-item-set"
+          "registered-source-equipment; pure-numeric-equip-and-linking-recovered"
         ]
       },
       "raw_fields": {
@@ -14649,12 +14649,12 @@
         ]
       },
       "availability": {
-        "enabled": false,
-        "chapter_enabled": false,
+        "enabled": true,
+        "chapter_enabled": true,
         "catalog_visible": true,
-        "default_enabled": false,
+        "default_enabled": true,
         "reasons": [
-          "outside-default-chapter-item-set"
+          "registered-source-equipment; pure-numeric-equip-and-linking-recovered"
         ]
       },
       "raw_fields": {
@@ -17377,12 +17377,12 @@
         ]
       },
       "availability": {
-        "enabled": false,
-        "chapter_enabled": false,
+        "enabled": true,
+        "chapter_enabled": true,
         "catalog_visible": true,
-        "default_enabled": false,
+        "default_enabled": true,
         "reasons": [
-          "outside-default-chapter-item-set"
+          "registered-source-equipment; pure-numeric-equip-and-linking-recovered"
         ]
       },
       "raw_fields": {
@@ -94302,24 +94302,20 @@
         "drop_rate_in_native_range": true
       },
       "behavior": {
-        "kind": "source-only",
-        "status": "unverified",
-        "implemented_scope": [],
-        "unverified_scope": [
-          "special-passive",
-          "crystal-socketing",
-          "crafting",
-          "attack-or-state-effect"
-        ]
+        "kind": "status-cure",
+        "status": "recovered",
+        "implemented_scope": [
+          "battle-single-allied-first-matching-status-removal"
+        ],
+        "unverified_scope": []
       },
       "availability": {
-        "enabled": false,
-        "chapter_enabled": false,
+        "enabled": true,
+        "chapter_enabled": true,
         "catalog_visible": true,
-        "default_enabled": false,
+        "default_enabled": true,
         "reasons": [
-          "outside-default-chapter-item-set",
-          "usage-handler-not-recovered"
+          "registered-source-grant; native-mode1-status-removal-recovered"
         ]
       },
       "raw_fields": {
@@ -94416,6 +94412,33 @@
           "maximum": 0
         },
         "interpretation": "These raw fields alone do not imply a usable simple restore item."
+      },
+      "status_cure": {
+        "effect_id_raw": 5,
+        "mode_raw": 1,
+        "effect_raw_hex": "0c0501000000f40100000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "definition_offset": 680,
+        "effect_bytes": 198,
+        "evidence": "ev_4ee7cc8d9c675c3b1405324f30fb85a23397d5d5af06c75462626bf4fab5b54e"
+      },
+      "effect": {
+        "restore_hp_flat": 0,
+        "restore_mp_flat": 0,
+        "restore_hp_percent": 0,
+        "restore_mp_percent": 0,
+        "revive": false
+      },
+      "use_in_field": false,
+      "use_in_battle": true,
+      "battle": {
+        "animation_skill_id_raw_142": 17,
+        "all_targets_raw_156": 0,
+        "same_side_raw_157": 1,
+        "effect_kind_raw_2b3": 1,
+        "preparation_delay_added": 0,
+        "target_state_max_exclusive": 4,
+        "target_immune_must_be_zero": true,
+        "consume_only_on_native_success": true
       }
     },
     "273": {
@@ -148453,7 +148476,67 @@
   },
   "source_hashes": {
     "GAME.exe": "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18",
-    "SYSTEM/Object.ITM": "9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8"
+    "SYSTEM/Object.ITM": "9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8",
+    "Fight_Role/001.CHR": "37ce92ab57622d2cce022b4a9b8add9b29789f89d82bc369ea7352f38ca75c0a",
+    "Fight_Role/002.CHR": "854aed104fa990aa3f5fbf9d926724e0d8ae3ca73a5aabbc7a27a10ec91447e3",
+    "Fight_Role/003.CHR": "85f462f3598309fc47ceccef998ab07ccd34a5389ef3fee0146f8a0bca984fe0",
+    "Fight_Role/004.CHR": "2b964b7c3065d1520f7fe354f9e1fe6e213e9fcb3f586056eafa7f63fb88b50d",
+    "Fight_Role/005.CHR": "9e06bcbedaf821a6e4c1d08dc0cff31d916c3ae2d00fdc20c37e758d25e09580",
+    "Fight_Role/006.CHR": "27b29fb5cc1073014faea7553d0175559714c18dbbc5132ca1c549e4a9d8e15b",
+    "Map/m01050.dat": "48ae98e95e9ea414e716c85440d381a5bc29cc2ec00ccd3b30c2ef314d4145fc",
+    "Map/m01050.TLK": "6c5d2be29f120977d70c500abd11c8d76f11abba650be689e2dc44f4ae1dc182",
+    "Map/m03039.dat": "c3c01fb5773dda464c2a5bfa0b46520031f2dc9bd363e4a1978c99950b0dcaf2",
+    "Map/m03039.TLK": "b95cbf37de9e4d723a9830d97454b5ece2bc7bf352a51199f0e630aacdb8694a",
+    "Map/m17010.dat": "634a1eea243656b16341d9e217578a42a5d58f82f00af9aa0f8a0f805e83515a",
+    "Map/m17010.TLK": "04fc3299206a21504ac500a8797e4c96bf9ccee6fa104e41a3c8960861479f58",
+    "Map/m17020.dat": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+    "Map/m17020.TLK": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
+    "Map/m17026.dat": "087ccf781d85f63249a2e1bce48ee71382d2587cdf857c47e575caaae54a646c",
+    "Map/m17026.TLK": "9e363538b3b51f2ec5a0074d4fdcaf3c3e3dbba6d4043f1d1ac06db3124b78ee",
+    "Map/m17029.dat": "57851abbfe75121b806268f5bce8c778ec4e5d82ebb7dfa623fbd6952977c314",
+    "Map/m17029.TLK": "ca5d31b51ba3faf0118ba2626be0fb374671641821f59f166171e324c61e6269",
+    "Map/m17011.dat": "1b9c624e9093b4e7cbd4a62259607ed313359e3601ae48555c705d808d19bfc4",
+    "Map/m17011.TLK": "49e0a9ce55d37dd4e50884ffc5fe5df26bc29a7a49502b348612b146aadd3f74",
+    "Map/m17012.dat": "db0f4709ae4a86c8af819eda867bfb87bed2d4d4bbaa48af4dad31bd3ce5b847",
+    "Map/m17012.TLK": "f96b5f0c8f7e1839f2e567d99873f9993e5586c2fbe3ee4754dbd313fe4aca77",
+    "Map/m17013.dat": "1c1bdd0e8f26c8b2ee3b137d0049bfab10ae87f0e5dc76dfa44fc7f61096afcc",
+    "Map/m17013.TLK": "16a7530aa4aa4905ac6712cda3f3f26e41da22fdceb14595ef5ed8bdde6b7322",
+    "Map/m17014.dat": "6128bf9d9940a8176c6d53c8e421132a9f2f2ead6e4a907fac6bce4fd0c135ff",
+    "Map/m17014.TLK": "263de44239d54fed81b82a93c1442132501246a5f5859c3dbd70247886e9e40b",
+    "Map/m17015.dat": "e396282ce0dbf14a02d91dca28af4b0d1914cee1c1b8a1b7b3c8e0089f6d8b0e",
+    "Map/m17015.TLK": "f0d223d713ad8ea7f0163c2deb72f1a6afbe9e75a91eef4a559e4173881d7a59",
+    "Map/m17023.dat": "d9f2021f1f24558f8ead877cc77612c7fa2263b8225a10d630f308384ef857f9",
+    "Map/m17023.TLK": "7ce268d3445ea63766feea2db1cc761aabadec53f86cc30520fa9fcc826bd9a2",
+    "Map/m17024.dat": "18b33b069a469365ed75b531aa6346c58112f0c6a64c7a59ae1c6108318ef599",
+    "Map/m17024.TLK": "32f2b52a24570801178553a208770f315a3dce8006abe6db1a86d958d59132f4",
+    "Map/m17025.dat": "266c901c9784665d27034f4531c1918fbea96815d14ec68fb1f6699d6d3fa3cd",
+    "Map/m17025.TLK": "5c2ee8a36d83e199ff27b24dce28d57c61bb673111bdc46608fb220559347ed1",
+    "Map/m17027.dat": "7c0278bfe4a52f6a1977bb8493fa1ba1d40833b2dce142c42e75d7e2e67c0459",
+    "Map/m17027.TLK": "e4c88998a7d9f67fb0d57a7536c6c737b151eba0441659ea6a8c756145a8bd05",
+    "Map/m17028.dat": "ec1d36649bf8fce856a0e93daf08128ebb099f7b30c59648a5903742f372aeff",
+    "Map/m17028.TLK": "d0efacd1c3d4b3a620fb5d0789eb08f01117d691b35b07b6f5d436fbd1d50f3b",
+    "Map/m17030-1.dat": "85f2b0ea6398a9cf759183892cf9967e9b690dc57b5fb240e58969f69ae77e6b",
+    "Map/m17030-1.TLK": "c1c480cd76f90a1c5141bcad913ebeb5d2f03f087acff96f5fab14d606946a39",
+    "Map/m17030-2.dat": "19c9e32a7cc32da40da096e67aa6b318e18570b29bc784130ad7d07d4430dfe6",
+    "Map/m17030-2.TLK": "22af2e5e273d36c9f8963139ab98dbc7d06b44a3b572ad5dd006ea8e58dce3d9",
+    "Map/m17030.dat": "bbe0b8b99a59f775f1647b7e5e01f7ea12208f4422d1272fe62655c6e41d5bc4",
+    "Map/m17030.TLK": "9f8c48b9e0381ea5adddf79325219c3f6eefee315b0df153cb6539e2b575c21f",
+    "Map/m17032.dat": "fec9023611123ba7557cf0a186317c808a5c041a6ec8d0fd52b30c8576f09bfe",
+    "Map/m17032.TLK": "240e0b23357f2d1ec6a90485841e7d0f5542cea39e6b02616aef20676e734542",
+    "Animate/m01050-1.anm": "c483d0ee85a01072afa8f8e80697220b922fa3e0ad971ee5affcedf12c88f819",
+    "Animate/m01050-2.anm": "19a173b2d01c4e6335a16d4283084ee2f896165f9e35374d45663b5e11a63782",
+    "Animate/m17029-1.anm": "2298d02eabc62ea6b0838379968e3fb998afcc22f45b48ce74b08de0a728319b",
+    "Animate/m17026-1.anm": "943bd0f7da7453ba995c96234f6ec179e6a98ae2979145d1b90c01f5b44ad74f",
+    "Animate/m17010-1.anm": "da273e16d2de10d4516a1e75465af71caef250fcef80b2540187aa18645a231a",
+    "Animate/m17010-4.anm": "fd7975603e201fd5847098265c3a87657f1facce81994be3a048562dd43d8eef",
+    "Animate/m17010-5.anm": "c13968a45985feeb23ae2d338c0560b610918081626379735a660bda7459d2f5",
+    "Animate/m17010-6.anm": "615394315cba49db021353243f2b4985832a6a3c72830683754957bcb7089654",
+    "Animate/m17014-1.anm": "f8d6bf53af068c324ff03e99727005a74a234e59501848211d8c4f61da08775e",
+    "Animate/m17020-1.anm": "34c72c0bc84e0e50d46a55faadc1d018a8efbe3f847c85dfa28de0bebae343e7",
+    "Animate/m17028.anm": "e9d6e1df1c4c40c267adcb9ee711c587b6fe03adc0343d4435853ef2b45c26e6",
+    "Animate/m17010-2.anm": "4496da411c6c8adc76e464efbd866e34a0ce02d2ba66a5cfc42abe902325230c",
+    "Animate/m17030-1.anm": "209c86f42cda1a513c21d38512acea8470508910f44127977b9b7b1738df9df2",
+    "Animate/m17010-3.anm": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e"
   },
   "evidence": {
     "initialize": {
@@ -148552,6 +148635,13 @@
       "operation": "procedure_pseudo_code",
       "bundle": "remake/runtime/evidence/chapter_items_native.json"
     },
+    "status_removal": {
+      "evidence_id": "ev_4ee7cc8d9c675c3b1405324f30fb85a23397d5d5af06c75462626bf4fab5b54e",
+      "procedure": "0x508bb0",
+      "operation": "analyze_function",
+      "bundle": "remake/runtime/evidence/fire_valley_20261024/stage12_status_apply.json",
+      "branch": "0x508c45..0x508d11 mode1 first matching ID removal; success1/no-match0; no RNG"
+    },
     "battle_gauge_dispatch": {
       "evidence_id": "ev_8144fc16b1d9d5d07db75171c36c29c2b6364a5da0cc8346cb2c68498a27ff4c",
       "procedure": "0x5036d0",
@@ -148630,9 +148720,1790 @@
       10,
       11,
       12,
+      39,
+      40,
+      41,
+      42,
+      50,
+      51,
+      61,
+      272
+    ],
+    "original_chapter_item_ids": [
+      1,
+      4,
+      8,
+      10,
+      11,
+      12,
       51,
       61
     ],
+    "equipment_admission": {
+      "policy": "registered-source-plain-equipment-v1",
+      "promoted_item_ids": [
+        39,
+        40,
+        41,
+        42,
+        50
+      ],
+      "sources": {
+        "1": [
+          {
+            "kind": "registered-player-native-initial-equipment",
+            "role_id": "001",
+            "group_index": 0,
+            "entry_index": 0,
+            "instance_sha256": "69414b45c55438070e78c8fd01e6b7260e9ba7b31d12100454a7a91e869d2c28",
+            "source": {
+              "path": "GAME.exe",
+              "sha256": "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18",
+              "address": "0x47af06",
+              "offset": 614150,
+              "bytes": 7,
+              "raw_hex": "c745dc01000000"
+            },
+            "role_source": {
+              "path": "Fight_Role/001.CHR",
+              "sha256": "37ce92ab57622d2cce022b4a9b8add9b29789f89d82bc369ea7352f38ca75c0a"
+            }
+          }
+        ],
+        "10": [
+          {
+            "kind": "registered-player-native-initial-equipment",
+            "role_id": "002",
+            "group_index": 0,
+            "entry_index": 0,
+            "instance_sha256": "d443becbd86549341a574c33c49695b11761300216a45a8edef6a0e8b5a3044f",
+            "source": {
+              "path": "GAME.exe",
+              "sha256": "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18",
+              "address": "0x47af0d",
+              "offset": 614157,
+              "bytes": 7,
+              "raw_hex": "c745e00a000000"
+            },
+            "role_source": {
+              "path": "Fight_Role/002.CHR",
+              "sha256": "854aed104fa990aa3f5fbf9d926724e0d8ae3ca73a5aabbc7a27a10ec91447e3"
+            }
+          }
+        ],
+        "39": [
+          {
+            "kind": "registered-player-native-initial-equipment",
+            "role_id": "003",
+            "group_index": 0,
+            "entry_index": 0,
+            "instance_sha256": "73b6f55155c63a8d1c6324ad625788f13dffeca5ccee5d4de1a9e0329c94c7b6",
+            "source": {
+              "path": "GAME.exe",
+              "sha256": "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18",
+              "address": "0x47af14",
+              "offset": 614164,
+              "bytes": 7,
+              "raw_hex": "c745e427000000"
+            },
+            "role_source": {
+              "path": "Fight_Role/003.CHR",
+              "sha256": "85f462f3598309fc47ceccef998ab07ccd34a5389ef3fee0146f8a0bca984fe0"
+            }
+          }
+        ],
+        "40": [
+          {
+            "kind": "registered-player-native-initial-equipment",
+            "role_id": "004",
+            "group_index": 0,
+            "entry_index": 0,
+            "instance_sha256": "1a4646e4be263718534b2a0c2c42cf0faeaf0c35d59143f2fff8192bbcb0bf35",
+            "source": {
+              "path": "GAME.exe",
+              "sha256": "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18",
+              "address": "0x47af1b",
+              "offset": 614171,
+              "bytes": 7,
+              "raw_hex": "c745e828000000"
+            },
+            "role_source": {
+              "path": "Fight_Role/004.CHR",
+              "sha256": "2b964b7c3065d1520f7fe354f9e1fe6e213e9fcb3f586056eafa7f63fb88b50d"
+            }
+          }
+        ],
+        "41": [
+          {
+            "kind": "registered-player-native-initial-equipment",
+            "role_id": "005",
+            "group_index": 0,
+            "entry_index": 0,
+            "instance_sha256": "0e9b64ffab71c5ea0e5ce0f7863bf2f097a738c8564246d2871a00a576c8d20c",
+            "source": {
+              "path": "GAME.exe",
+              "sha256": "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18",
+              "address": "0x47af22",
+              "offset": 614178,
+              "bytes": 7,
+              "raw_hex": "c745ec29000000"
+            },
+            "role_source": {
+              "path": "Fight_Role/005.CHR",
+              "sha256": "9e06bcbedaf821a6e4c1d08dc0cff31d916c3ae2d00fdc20c37e758d25e09580"
+            }
+          }
+        ],
+        "42": [
+          {
+            "kind": "registered-player-native-initial-equipment",
+            "role_id": "006",
+            "group_index": 0,
+            "entry_index": 0,
+            "instance_sha256": "d0a9fc50319bad6d3c5bf25c898e48921734964168bbe07e04fbb469149bcdca",
+            "source": {
+              "path": "GAME.exe",
+              "sha256": "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18",
+              "address": "0x47af29",
+              "offset": 614185,
+              "bytes": 7,
+              "raw_hex": "c745f02a000000"
+            },
+            "role_source": {
+              "path": "Fight_Role/006.CHR",
+              "sha256": "27b29fb5cc1073014faea7553d0175559714c18dbbc5132ca1c549e4a9d8e15b"
+            }
+          }
+        ],
+        "358": [
+          {
+            "kind": "registered-story-item-grant",
+            "map_id": "M01050",
+            "record_id": 20,
+            "source": {
+              "path": "Map/m01050.TLK",
+              "sha256": "6c5d2be29f120977d70c500abd11c8d76f11abba650be689e2dc44f4ae1dc182",
+              "record_id": 20,
+              "record_bytes": 1647,
+              "offset": 33319
+            },
+            "mutation_type": 5,
+            "mutation_index": 0,
+            "mutation_bit": 358,
+            "entrance": {
+              "map_id": "M01050",
+              "record_id": 1,
+              "kind": "anm-talk",
+              "program_id": "m01050-1",
+              "command_index": 8
+            }
+          }
+        ],
+        "348": [
+          {
+            "kind": "registered-story-item-grant",
+            "map_id": "M01050",
+            "record_id": 21,
+            "source": {
+              "path": "Map/m01050.TLK",
+              "sha256": "6c5d2be29f120977d70c500abd11c8d76f11abba650be689e2dc44f4ae1dc182",
+              "record_id": 21,
+              "record_bytes": 1647,
+              "offset": 34966
+            },
+            "mutation_type": 5,
+            "mutation_index": 0,
+            "mutation_bit": 348,
+            "entrance": {
+              "map_id": "M01050",
+              "record_id": 1,
+              "kind": "anm-talk",
+              "program_id": "m01050-1",
+              "command_index": 8
+            }
+          }
+        ],
+        "342": [
+          {
+            "kind": "registered-story-item-grant",
+            "map_id": "M01050",
+            "record_id": 22,
+            "source": {
+              "path": "Map/m01050.TLK",
+              "sha256": "6c5d2be29f120977d70c500abd11c8d76f11abba650be689e2dc44f4ae1dc182",
+              "record_id": 22,
+              "record_bytes": 1647,
+              "offset": 36613
+            },
+            "mutation_type": 5,
+            "mutation_index": 0,
+            "mutation_bit": 342,
+            "entrance": {
+              "map_id": "M01050",
+              "record_id": 1,
+              "kind": "anm-talk",
+              "program_id": "m01050-1",
+              "command_index": 8
+            }
+          }
+        ],
+        "332": [
+          {
+            "kind": "registered-story-item-grant",
+            "map_id": "M01050",
+            "record_id": 113,
+            "source": {
+              "path": "Map/m01050.TLK",
+              "sha256": "6c5d2be29f120977d70c500abd11c8d76f11abba650be689e2dc44f4ae1dc182",
+              "record_id": 113,
+              "record_bytes": 1647,
+              "offset": 186490
+            },
+            "mutation_type": 5,
+            "mutation_index": 0,
+            "mutation_bit": 332,
+            "entrance": {
+              "map_id": "M01050",
+              "record_id": 1,
+              "kind": "anm-talk",
+              "program_id": "m01050-1",
+              "command_index": 8
+            }
+          }
+        ],
+        "61": [
+          {
+            "kind": "registered-story-item-grant",
+            "map_id": "M17026",
+            "record_id": 2,
+            "source": {
+              "path": "Map/m17026.TLK",
+              "sha256": "9e363538b3b51f2ec5a0074d4fdcaf3c3e3dbba6d4043f1d1ac06db3124b78ee",
+              "record_id": 2,
+              "record_bytes": 1647,
+              "offset": 3673
+            },
+            "mutation_type": 5,
+            "mutation_index": 0,
+            "mutation_bit": 61,
+            "entrance": {
+              "map_id": "M17026",
+              "record_id": 1,
+              "kind": "object",
+              "object_index": 9
+            }
+          }
+        ],
+        "51": [
+          {
+            "kind": "registered-story-item-grant",
+            "map_id": "M17026",
+            "record_id": 5,
+            "source": {
+              "path": "Map/m17026.TLK",
+              "sha256": "9e363538b3b51f2ec5a0074d4fdcaf3c3e3dbba6d4043f1d1ac06db3124b78ee",
+              "record_id": 5,
+              "record_bytes": 1647,
+              "offset": 8614
+            },
+            "mutation_type": 5,
+            "mutation_index": 0,
+            "mutation_bit": 51,
+            "entrance": {
+              "map_id": "M17026",
+              "record_id": 1,
+              "kind": "object",
+              "object_index": 9
+            }
+          }
+        ],
+        "4": [
+          {
+            "kind": "registered-story-item-grant",
+            "map_id": "M17026",
+            "record_id": 6,
+            "source": {
+              "path": "Map/m17026.TLK",
+              "sha256": "9e363538b3b51f2ec5a0074d4fdcaf3c3e3dbba6d4043f1d1ac06db3124b78ee",
+              "record_id": 6,
+              "record_bytes": 1647,
+              "offset": 10261
+            },
+            "mutation_type": 5,
+            "mutation_index": 0,
+            "mutation_bit": 4,
+            "entrance": {
+              "map_id": "M17026",
+              "record_id": 1,
+              "kind": "object",
+              "object_index": 9
+            }
+          },
+          {
+            "kind": "registered-story-item-grant",
+            "map_id": "M17026",
+            "record_id": 7,
+            "source": {
+              "path": "Map/m17026.TLK",
+              "sha256": "9e363538b3b51f2ec5a0074d4fdcaf3c3e3dbba6d4043f1d1ac06db3124b78ee",
+              "record_id": 7,
+              "record_bytes": 1647,
+              "offset": 11908
+            },
+            "mutation_type": 5,
+            "mutation_index": 0,
+            "mutation_bit": 4,
+            "entrance": {
+              "map_id": "M17026",
+              "record_id": 1,
+              "kind": "object",
+              "object_index": 9
+            }
+          }
+        ],
+        "12": [
+          {
+            "kind": "registered-story-item-grant",
+            "map_id": "M17026",
+            "record_id": 16,
+            "source": {
+              "path": "Map/m17026.TLK",
+              "sha256": "9e363538b3b51f2ec5a0074d4fdcaf3c3e3dbba6d4043f1d1ac06db3124b78ee",
+              "record_id": 16,
+              "record_bytes": 1647,
+              "offset": 26731
+            },
+            "mutation_type": 5,
+            "mutation_index": 0,
+            "mutation_bit": 12,
+            "entrance": {
+              "map_id": "M17026",
+              "record_id": 14,
+              "kind": "npc",
+              "npc_slot": 10
+            }
+          },
+          {
+            "kind": "registered-story-item-grant",
+            "map_id": "M17026",
+            "record_id": 17,
+            "source": {
+              "path": "Map/m17026.TLK",
+              "sha256": "9e363538b3b51f2ec5a0074d4fdcaf3c3e3dbba6d4043f1d1ac06db3124b78ee",
+              "record_id": 17,
+              "record_bytes": 1647,
+              "offset": 28378
+            },
+            "mutation_type": 5,
+            "mutation_index": 0,
+            "mutation_bit": 12,
+            "entrance": {
+              "map_id": "M17026",
+              "record_id": 14,
+              "kind": "npc",
+              "npc_slot": 10
+            }
+          },
+          {
+            "kind": "registered-story-item-grant",
+            "map_id": "M17026",
+            "record_id": 18,
+            "source": {
+              "path": "Map/m17026.TLK",
+              "sha256": "9e363538b3b51f2ec5a0074d4fdcaf3c3e3dbba6d4043f1d1ac06db3124b78ee",
+              "record_id": 18,
+              "record_bytes": 1647,
+              "offset": 30025
+            },
+            "mutation_type": 5,
+            "mutation_index": 0,
+            "mutation_bit": 12,
+            "entrance": {
+              "map_id": "M17026",
+              "record_id": 14,
+              "kind": "npc",
+              "npc_slot": 10
+            }
+          },
+          {
+            "kind": "registered-story-item-grant",
+            "map_id": "M17026",
+            "record_id": 19,
+            "source": {
+              "path": "Map/m17026.TLK",
+              "sha256": "9e363538b3b51f2ec5a0074d4fdcaf3c3e3dbba6d4043f1d1ac06db3124b78ee",
+              "record_id": 19,
+              "record_bytes": 1647,
+              "offset": 31672
+            },
+            "mutation_type": 5,
+            "mutation_index": 0,
+            "mutation_bit": 12,
+            "entrance": {
+              "map_id": "M17026",
+              "record_id": 14,
+              "kind": "npc",
+              "npc_slot": 10
+            }
+          },
+          {
+            "kind": "registered-story-item-grant",
+            "map_id": "M17026",
+            "record_id": 20,
+            "source": {
+              "path": "Map/m17026.TLK",
+              "sha256": "9e363538b3b51f2ec5a0074d4fdcaf3c3e3dbba6d4043f1d1ac06db3124b78ee",
+              "record_id": 20,
+              "record_bytes": 1647,
+              "offset": 33319
+            },
+            "mutation_type": 5,
+            "mutation_index": 0,
+            "mutation_bit": 12,
+            "entrance": {
+              "map_id": "M17026",
+              "record_id": 14,
+              "kind": "npc",
+              "npc_slot": 10
+            }
+          }
+        ],
+        "8": [
+          {
+            "kind": "registered-story-item-grant",
+            "map_id": "M17012",
+            "record_id": 5,
+            "source": {
+              "path": "Map/m17012.TLK",
+              "sha256": "f96b5f0c8f7e1839f2e567d99873f9993e5586c2fbe3ee4754dbd313fe4aca77",
+              "record_id": 5,
+              "record_bytes": 1647,
+              "offset": 8614
+            },
+            "mutation_type": 5,
+            "mutation_index": 0,
+            "mutation_bit": 8,
+            "entrance": {
+              "map_id": "M17012",
+              "record_id": 1,
+              "kind": "npc",
+              "npc_slot": 10
+            }
+          },
+          {
+            "kind": "registered-story-item-grant",
+            "map_id": "M17027",
+            "record_id": 3,
+            "source": {
+              "path": "Map/m17027.TLK",
+              "sha256": "e4c88998a7d9f67fb0d57a7536c6c737b151eba0441659ea6a8c756145a8bd05",
+              "record_id": 3,
+              "record_bytes": 1647,
+              "offset": 5320
+            },
+            "mutation_type": 5,
+            "mutation_index": 0,
+            "mutation_bit": 8,
+            "entrance": {
+              "map_id": "M17027",
+              "record_id": 1,
+              "kind": "npc",
+              "npc_slot": 10
+            }
+          },
+          {
+            "kind": "registered-story-item-grant",
+            "map_id": "M17027",
+            "record_id": 4,
+            "source": {
+              "path": "Map/m17027.TLK",
+              "sha256": "e4c88998a7d9f67fb0d57a7536c6c737b151eba0441659ea6a8c756145a8bd05",
+              "record_id": 4,
+              "record_bytes": 1647,
+              "offset": 6967
+            },
+            "mutation_type": 5,
+            "mutation_index": 0,
+            "mutation_bit": 8,
+            "entrance": {
+              "map_id": "M17027",
+              "record_id": 1,
+              "kind": "npc",
+              "npc_slot": 10
+            }
+          },
+          {
+            "kind": "registered-story-item-grant",
+            "map_id": "M17027",
+            "record_id": 5,
+            "source": {
+              "path": "Map/m17027.TLK",
+              "sha256": "e4c88998a7d9f67fb0d57a7536c6c737b151eba0441659ea6a8c756145a8bd05",
+              "record_id": 5,
+              "record_bytes": 1647,
+              "offset": 8614
+            },
+            "mutation_type": 5,
+            "mutation_index": 0,
+            "mutation_bit": 8,
+            "entrance": {
+              "map_id": "M17027",
+              "record_id": 1,
+              "kind": "npc",
+              "npc_slot": 10
+            }
+          }
+        ],
+        "150": [
+          {
+            "kind": "registered-story-item-grant",
+            "map_id": "M17024",
+            "record_id": 4,
+            "source": {
+              "path": "Map/m17024.TLK",
+              "sha256": "32f2b52a24570801178553a208770f315a3dce8006abe6db1a86d958d59132f4",
+              "record_id": 4,
+              "record_bytes": 1647,
+              "offset": 6967
+            },
+            "mutation_type": 5,
+            "mutation_index": 0,
+            "mutation_bit": 150,
+            "entrance": {
+              "map_id": "M17024",
+              "record_id": 1,
+              "kind": "npc",
+              "npc_slot": 10
+            }
+          }
+        ],
+        "50": [
+          {
+            "kind": "registered-story-item-grant",
+            "map_id": "M17025",
+            "record_id": 3,
+            "source": {
+              "path": "Map/m17025.TLK",
+              "sha256": "5c2ee8a36d83e199ff27b24dce28d57c61bb673111bdc46608fb220559347ed1",
+              "record_id": 3,
+              "record_bytes": 1647,
+              "offset": 5320
+            },
+            "mutation_type": 5,
+            "mutation_index": 0,
+            "mutation_bit": 50,
+            "entrance": {
+              "map_id": "M17025",
+              "record_id": 1,
+              "kind": "npc",
+              "npc_slot": 10
+            }
+          }
+        ],
+        "272": [
+          {
+            "kind": "registered-story-item-grant",
+            "map_id": "M17027",
+            "record_id": 9,
+            "source": {
+              "path": "Map/m17027.TLK",
+              "sha256": "e4c88998a7d9f67fb0d57a7536c6c737b151eba0441659ea6a8c756145a8bd05",
+              "record_id": 9,
+              "record_bytes": 1647,
+              "offset": 15202
+            },
+            "mutation_type": 5,
+            "mutation_index": 0,
+            "mutation_bit": 272,
+            "entrance": {
+              "map_id": "M17027",
+              "record_id": 7,
+              "kind": "npc",
+              "npc_slot": 11
+            }
+          },
+          {
+            "kind": "registered-story-item-grant",
+            "map_id": "M17027",
+            "record_id": 10,
+            "source": {
+              "path": "Map/m17027.TLK",
+              "sha256": "e4c88998a7d9f67fb0d57a7536c6c737b151eba0441659ea6a8c756145a8bd05",
+              "record_id": 10,
+              "record_bytes": 1647,
+              "offset": 16849
+            },
+            "mutation_type": 5,
+            "mutation_index": 0,
+            "mutation_bit": 272,
+            "entrance": {
+              "map_id": "M17027",
+              "record_id": 7,
+              "kind": "npc",
+              "npc_slot": 11
+            }
+          },
+          {
+            "kind": "registered-story-item-grant",
+            "map_id": "M17027",
+            "record_id": 11,
+            "source": {
+              "path": "Map/m17027.TLK",
+              "sha256": "e4c88998a7d9f67fb0d57a7536c6c737b151eba0441659ea6a8c756145a8bd05",
+              "record_id": 11,
+              "record_bytes": 1647,
+              "offset": 18496
+            },
+            "mutation_type": 5,
+            "mutation_index": 0,
+            "mutation_bit": 272,
+            "entrance": {
+              "map_id": "M17027",
+              "record_id": 7,
+              "kind": "npc",
+              "npc_slot": 11
+            }
+          }
+        ],
+        "156": [
+          {
+            "kind": "registered-story-item-grant",
+            "map_id": "M17028",
+            "record_id": 9,
+            "source": {
+              "path": "Map/m17028.TLK",
+              "sha256": "d0efacd1c3d4b3a620fb5d0789eb08f01117d691b35b07b6f5d436fbd1d50f3b",
+              "record_id": 9,
+              "record_bytes": 1647,
+              "offset": 15202
+            },
+            "mutation_type": 5,
+            "mutation_index": 0,
+            "mutation_bit": 156,
+            "entrance": {
+              "map_id": "M17028",
+              "record_id": 20,
+              "kind": "npc",
+              "npc_slot": 10
+            }
+          }
+        ]
+      },
+      "previous_availability": {
+        "39": {
+          "enabled": false,
+          "chapter_enabled": false,
+          "catalog_visible": true,
+          "default_enabled": false,
+          "reasons": [
+            "outside-default-chapter-item-set"
+          ]
+        },
+        "40": {
+          "enabled": false,
+          "chapter_enabled": false,
+          "catalog_visible": true,
+          "default_enabled": false,
+          "reasons": [
+            "outside-default-chapter-item-set"
+          ]
+        },
+        "41": {
+          "enabled": false,
+          "chapter_enabled": false,
+          "catalog_visible": true,
+          "default_enabled": false,
+          "reasons": [
+            "outside-default-chapter-item-set"
+          ]
+        },
+        "42": {
+          "enabled": false,
+          "chapter_enabled": false,
+          "catalog_visible": true,
+          "default_enabled": false,
+          "reasons": [
+            "outside-default-chapter-item-set"
+          ]
+        },
+        "50": {
+          "enabled": false,
+          "chapter_enabled": false,
+          "catalog_visible": true,
+          "default_enabled": false,
+          "reasons": [
+            "outside-default-chapter-item-set"
+          ]
+        }
+      },
+      "rejected_sources": [
+        {
+          "item_id": 8,
+          "behavior": "simple-restore",
+          "reason": "not-recovered-plain-numeric-equipment"
+        },
+        {
+          "item_id": 12,
+          "behavior": "simple-restore",
+          "reason": "not-recovered-plain-numeric-equipment"
+        },
+        {
+          "item_id": 51,
+          "behavior": "equip",
+          "reason": "not-recovered-plain-numeric-equipment"
+        },
+        {
+          "item_id": 150,
+          "behavior": "source-only",
+          "reason": "not-recovered-plain-numeric-equipment"
+        },
+        {
+          "item_id": 156,
+          "behavior": "source-only",
+          "reason": "not-recovered-plain-numeric-equipment"
+        },
+        {
+          "item_id": 272,
+          "behavior": "source-only",
+          "reason": "not-recovered-plain-numeric-equipment"
+        },
+        {
+          "item_id": 332,
+          "behavior": "source-only",
+          "reason": "not-recovered-plain-numeric-equipment"
+        },
+        {
+          "item_id": 342,
+          "behavior": "source-only",
+          "reason": "not-recovered-plain-numeric-equipment"
+        },
+        {
+          "item_id": 348,
+          "behavior": "source-only",
+          "reason": "not-recovered-plain-numeric-equipment"
+        },
+        {
+          "item_id": 358,
+          "behavior": "source-only",
+          "reason": "not-recovered-plain-numeric-equipment"
+        }
+      ],
+      "admitted_tlk_roots": [
+        {
+          "map_id": "M01050",
+          "record_id": 17,
+          "kind": "npc",
+          "npc_slot": 15
+        },
+        {
+          "map_id": "M03039",
+          "record_id": 7,
+          "kind": "npc",
+          "npc_slot": 11
+        },
+        {
+          "map_id": "M17010",
+          "record_id": 90,
+          "kind": "entry"
+        },
+        {
+          "map_id": "M17010",
+          "record_id": 69,
+          "kind": "setup"
+        },
+        {
+          "map_id": "M17010",
+          "record_id": 56,
+          "kind": "npc",
+          "npc_slot": 10
+        },
+        {
+          "map_id": "M17010",
+          "record_id": 12,
+          "kind": "npc",
+          "npc_slot": 13
+        },
+        {
+          "map_id": "M17010",
+          "record_id": 58,
+          "kind": "npc",
+          "npc_slot": 17
+        },
+        {
+          "map_id": "M17010",
+          "record_id": 15,
+          "kind": "npc",
+          "npc_slot": 18
+        },
+        {
+          "map_id": "M17010",
+          "record_id": 59,
+          "kind": "npc",
+          "npc_slot": 19
+        },
+        {
+          "map_id": "M17010",
+          "record_id": 60,
+          "kind": "npc",
+          "npc_slot": 20
+        },
+        {
+          "map_id": "M17010",
+          "record_id": 61,
+          "kind": "npc",
+          "npc_slot": 21
+        },
+        {
+          "map_id": "M17010",
+          "record_id": 62,
+          "kind": "npc",
+          "npc_slot": 22
+        },
+        {
+          "map_id": "M17010",
+          "record_id": 66,
+          "kind": "npc",
+          "npc_slot": 23
+        },
+        {
+          "map_id": "M17010",
+          "record_id": 67,
+          "kind": "npc",
+          "npc_slot": 24
+        },
+        {
+          "map_id": "M17010",
+          "record_id": 68,
+          "kind": "npc",
+          "npc_slot": 25
+        },
+        {
+          "map_id": "M17010",
+          "record_id": 44,
+          "kind": "npc",
+          "npc_slot": 26
+        },
+        {
+          "map_id": "M17010",
+          "record_id": 46,
+          "kind": "route-denial"
+        },
+        {
+          "map_id": "M17010",
+          "record_id": 49,
+          "kind": "trigger",
+          "descriptor_id": 31
+        },
+        {
+          "map_id": "M17010",
+          "record_id": 48,
+          "kind": "route",
+          "descriptor_id": 10
+        },
+        {
+          "map_id": "M17020",
+          "record_id": 10,
+          "kind": "setup"
+        },
+        {
+          "map_id": "M17020",
+          "record_id": 3,
+          "kind": "npc",
+          "npc_slot": 20
+        },
+        {
+          "map_id": "M17020",
+          "record_id": 4,
+          "kind": "npc",
+          "npc_slot": 21
+        },
+        {
+          "map_id": "M17020",
+          "record_id": 5,
+          "kind": "npc",
+          "npc_slot": 25
+        },
+        {
+          "map_id": "M17020",
+          "record_id": 6,
+          "kind": "npc",
+          "npc_slot": 26
+        },
+        {
+          "map_id": "M17020",
+          "record_id": 7,
+          "kind": "npc",
+          "npc_slot": 27
+        },
+        {
+          "map_id": "M17020",
+          "record_id": 8,
+          "kind": "npc",
+          "npc_slot": 28
+        },
+        {
+          "map_id": "M17020",
+          "record_id": 9,
+          "kind": "npc",
+          "npc_slot": 29
+        },
+        {
+          "map_id": "M17026",
+          "record_id": 14,
+          "kind": "npc",
+          "npc_slot": 10
+        },
+        {
+          "map_id": "M17026",
+          "record_id": 1,
+          "kind": "object",
+          "object_index": 9
+        },
+        {
+          "map_id": "M17026",
+          "record_id": 10,
+          "kind": "rest",
+          "descriptor_id": 2
+        },
+        {
+          "map_id": "M17029",
+          "record_id": 29,
+          "kind": "npc",
+          "npc_slot": 10
+        },
+        {
+          "map_id": "M17029",
+          "record_id": 30,
+          "kind": "npc",
+          "npc_slot": 11
+        },
+        {
+          "map_id": "M17029",
+          "record_id": 1,
+          "kind": "npc",
+          "npc_slot": 12
+        },
+        {
+          "map_id": "M17029",
+          "record_id": 2,
+          "kind": "npc",
+          "npc_slot": 13
+        },
+        {
+          "map_id": "M17029",
+          "record_id": 5,
+          "kind": "npc",
+          "npc_slot": 14
+        },
+        {
+          "map_id": "M17029",
+          "record_id": 3,
+          "kind": "npc",
+          "npc_slot": 15
+        },
+        {
+          "map_id": "M17029",
+          "record_id": 4,
+          "kind": "npc",
+          "npc_slot": 16
+        },
+        {
+          "map_id": "M17029",
+          "record_id": 6,
+          "kind": "npc",
+          "npc_slot": 17
+        },
+        {
+          "map_id": "M17029",
+          "record_id": 25,
+          "kind": "trigger",
+          "descriptor_id": 31
+        },
+        {
+          "map_id": "M17011",
+          "record_id": 1,
+          "kind": "npc",
+          "npc_slot": 10
+        },
+        {
+          "map_id": "M17011",
+          "record_id": 2,
+          "kind": "npc",
+          "npc_slot": 11
+        },
+        {
+          "map_id": "M17011",
+          "record_id": 5,
+          "kind": "npc",
+          "npc_slot": 12
+        },
+        {
+          "map_id": "M17011",
+          "record_id": 4,
+          "kind": "npc",
+          "npc_slot": 13
+        },
+        {
+          "map_id": "M17012",
+          "record_id": 1,
+          "kind": "npc",
+          "npc_slot": 10
+        },
+        {
+          "map_id": "M17012",
+          "record_id": 2,
+          "kind": "npc",
+          "npc_slot": 11
+        },
+        {
+          "map_id": "M17013",
+          "record_id": 1,
+          "kind": "npc",
+          "npc_slot": 10
+        },
+        {
+          "map_id": "M17013",
+          "record_id": 2,
+          "kind": "npc",
+          "npc_slot": 11
+        },
+        {
+          "map_id": "M17013",
+          "record_id": 3,
+          "kind": "npc",
+          "npc_slot": 12
+        },
+        {
+          "map_id": "M17014",
+          "record_id": 2,
+          "kind": "npc",
+          "npc_slot": 10
+        },
+        {
+          "map_id": "M17015",
+          "record_id": 1,
+          "kind": "npc",
+          "npc_slot": 10
+        },
+        {
+          "map_id": "M17015",
+          "record_id": 2,
+          "kind": "npc",
+          "npc_slot": 11
+        },
+        {
+          "map_id": "M17023",
+          "record_id": 5,
+          "kind": "npc",
+          "npc_slot": 10
+        },
+        {
+          "map_id": "M17024",
+          "record_id": 1,
+          "kind": "npc",
+          "npc_slot": 10
+        },
+        {
+          "map_id": "M17025",
+          "record_id": 1,
+          "kind": "npc",
+          "npc_slot": 10
+        },
+        {
+          "map_id": "M17025",
+          "record_id": 6,
+          "kind": "npc",
+          "npc_slot": 11
+        },
+        {
+          "map_id": "M17027",
+          "record_id": 1,
+          "kind": "npc",
+          "npc_slot": 10
+        },
+        {
+          "map_id": "M17027",
+          "record_id": 7,
+          "kind": "npc",
+          "npc_slot": 11
+        },
+        {
+          "map_id": "M17028",
+          "record_id": 22,
+          "kind": "setup"
+        },
+        {
+          "map_id": "M17028",
+          "record_id": 20,
+          "kind": "npc",
+          "npc_slot": 10
+        },
+        {
+          "map_id": "M17030-1",
+          "record_id": 3,
+          "kind": "npc",
+          "npc_slot": 10
+        },
+        {
+          "map_id": "M17030-2",
+          "record_id": 1,
+          "kind": "npc",
+          "npc_slot": 10
+        },
+        {
+          "map_id": "M17030-2",
+          "record_id": 24,
+          "kind": "npc",
+          "npc_slot": 56
+        },
+        {
+          "map_id": "M17030-2",
+          "record_id": 16,
+          "kind": "npc",
+          "npc_slot": 57
+        },
+        {
+          "map_id": "M17030-2",
+          "record_id": 20,
+          "kind": "npc",
+          "npc_slot": 58
+        },
+        {
+          "map_id": "M17030",
+          "record_id": 1,
+          "kind": "npc",
+          "npc_slot": 10
+        },
+        {
+          "map_id": "M17030",
+          "record_id": 2,
+          "kind": "npc",
+          "npc_slot": 11
+        },
+        {
+          "map_id": "M17030",
+          "record_id": 3,
+          "kind": "npc",
+          "npc_slot": 12
+        },
+        {
+          "map_id": "M17030",
+          "record_id": 4,
+          "kind": "npc",
+          "npc_slot": 13
+        },
+        {
+          "map_id": "M17030",
+          "record_id": 5,
+          "kind": "npc",
+          "npc_slot": 14
+        },
+        {
+          "map_id": "M17030",
+          "record_id": 6,
+          "kind": "npc",
+          "npc_slot": 15
+        },
+        {
+          "map_id": "M17030",
+          "record_id": 7,
+          "kind": "npc",
+          "npc_slot": 16
+        },
+        {
+          "map_id": "M17030",
+          "record_id": 8,
+          "kind": "npc",
+          "npc_slot": 17
+        },
+        {
+          "map_id": "M17030",
+          "record_id": 9,
+          "kind": "npc",
+          "npc_slot": 23
+        },
+        {
+          "map_id": "M17030",
+          "record_id": 10,
+          "kind": "npc",
+          "npc_slot": 24
+        },
+        {
+          "map_id": "M17030",
+          "record_id": 11,
+          "kind": "npc",
+          "npc_slot": 25
+        },
+        {
+          "map_id": "M17032",
+          "record_id": 2,
+          "kind": "trigger",
+          "descriptor_id": 1
+        },
+        {
+          "map_id": "M17032",
+          "record_id": 1,
+          "kind": "trigger",
+          "descriptor_id": 2
+        },
+        {
+          "map_id": "M01050",
+          "record_id": 1,
+          "kind": "anm-talk",
+          "program_id": "m01050-1",
+          "command_index": 8
+        },
+        {
+          "map_id": "M01050",
+          "record_id": 26,
+          "kind": "anm-talk",
+          "program_id": "m01050-2",
+          "command_index": 6
+        },
+        {
+          "map_id": "M17010",
+          "record_id": 5,
+          "kind": "anm-talk",
+          "program_id": "m01050-2",
+          "command_index": 29
+        },
+        {
+          "map_id": "M17029",
+          "record_id": 7,
+          "kind": "anm-talk",
+          "program_id": "m17029-1",
+          "command_index": 8
+        },
+        {
+          "map_id": "M17029",
+          "record_id": 8,
+          "kind": "anm-talk",
+          "program_id": "m17029-1",
+          "command_index": 16
+        },
+        {
+          "map_id": "M17029",
+          "record_id": 11,
+          "kind": "anm-talk",
+          "program_id": "m17029-1",
+          "command_index": 20
+        },
+        {
+          "map_id": "M17029",
+          "record_id": 14,
+          "kind": "anm-talk",
+          "program_id": "m17029-1",
+          "command_index": 26
+        },
+        {
+          "map_id": "M17029",
+          "record_id": 27,
+          "kind": "anm-talk",
+          "program_id": "m17029-1",
+          "command_index": 30
+        },
+        {
+          "map_id": "M17029",
+          "record_id": 24,
+          "kind": "anm-talk",
+          "program_id": "m17029-1",
+          "command_index": 34
+        },
+        {
+          "map_id": "M17029",
+          "record_id": 26,
+          "kind": "anm-talk",
+          "program_id": "m17029-1",
+          "command_index": 44
+        },
+        {
+          "map_id": "M17026",
+          "record_id": 13,
+          "kind": "anm-talk",
+          "program_id": "m17026-1",
+          "command_index": 12
+        },
+        {
+          "map_id": "M17010",
+          "record_id": 46,
+          "kind": "anm-talk",
+          "program_id": "m17010-1",
+          "command_index": 4
+        },
+        {
+          "map_id": "M17010",
+          "record_id": 71,
+          "kind": "anm-talk",
+          "program_id": "m17010-6",
+          "command_index": 5
+        },
+        {
+          "map_id": "M17010",
+          "record_id": 72,
+          "kind": "anm-talk",
+          "program_id": "m17010-6",
+          "command_index": 12
+        },
+        {
+          "map_id": "M17010",
+          "record_id": 83,
+          "kind": "anm-talk",
+          "program_id": "m17010-6",
+          "command_index": 18
+        },
+        {
+          "map_id": "M17014",
+          "record_id": 6,
+          "kind": "anm-talk",
+          "program_id": "m17010-2",
+          "command_index": 10
+        },
+        {
+          "map_id": "M17014",
+          "record_id": 18,
+          "kind": "anm-talk",
+          "program_id": "m17010-2",
+          "command_index": 19
+        },
+        {
+          "map_id": "M17030-2",
+          "record_id": 1,
+          "kind": "anm-talk",
+          "program_id": "m17030-1",
+          "command_index": 15
+        },
+        {
+          "map_id": "M17030-2",
+          "record_id": 5,
+          "kind": "anm-talk",
+          "program_id": "m17030-1",
+          "command_index": 19
+        },
+        {
+          "map_id": "M17030-2",
+          "record_id": 8,
+          "kind": "anm-talk",
+          "program_id": "m17030-1",
+          "command_index": 23
+        },
+        {
+          "map_id": "M17030-2",
+          "record_id": 10,
+          "kind": "anm-talk",
+          "program_id": "m17030-1",
+          "command_index": 27
+        },
+        {
+          "map_id": "M17030-2",
+          "record_id": 13,
+          "kind": "anm-talk",
+          "program_id": "m17030-1",
+          "command_index": 33
+        },
+        {
+          "map_id": "M17030-2",
+          "record_id": 37,
+          "kind": "anm-talk",
+          "program_id": "m17030-1",
+          "command_index": 48
+        },
+        {
+          "map_id": "M17030-2",
+          "record_id": 33,
+          "kind": "anm-talk",
+          "program_id": "m17030-1",
+          "command_index": 38
+        },
+        {
+          "map_id": "M17030-2",
+          "record_id": 16,
+          "kind": "anm-talk",
+          "program_id": "m17030-1",
+          "command_index": 53
+        },
+        {
+          "map_id": "M17030-2",
+          "record_id": 34,
+          "kind": "anm-talk",
+          "program_id": "m17030-1",
+          "command_index": 44
+        },
+        {
+          "map_id": "M17030-2",
+          "record_id": 32,
+          "kind": "anm-talk",
+          "program_id": "m17030-1",
+          "command_index": 59
+        },
+        {
+          "map_id": "M17030-2",
+          "record_id": 18,
+          "kind": "anm-talk",
+          "program_id": "m17030-1",
+          "command_index": 71
+        },
+        {
+          "map_id": "M17030-2",
+          "record_id": 21,
+          "kind": "anm-talk",
+          "program_id": "m17030-1",
+          "command_index": 75
+        },
+        {
+          "map_id": "M17030-2",
+          "record_id": 24,
+          "kind": "anm-talk",
+          "program_id": "m17030-1",
+          "command_index": 80
+        },
+        {
+          "map_id": "M17030-2",
+          "record_id": 25,
+          "kind": "anm-talk",
+          "program_id": "m17030-1",
+          "command_index": 87
+        },
+        {
+          "map_id": "M17030-2",
+          "record_id": 28,
+          "kind": "anm-talk",
+          "program_id": "m17030-1",
+          "command_index": 91
+        },
+        {
+          "map_id": "M17030-2",
+          "record_id": 31,
+          "kind": "anm-talk",
+          "program_id": "m17030-1",
+          "command_index": 104
+        },
+        {
+          "map_id": "M17023",
+          "record_id": 1,
+          "kind": "anm-talk",
+          "program_id": "m17030-1",
+          "command_index": 121
+        },
+        {
+          "map_id": "M17023",
+          "record_id": 31,
+          "kind": "anm-talk",
+          "program_id": "m17030-1",
+          "command_index": 125
+        },
+        {
+          "map_id": "M17023",
+          "record_id": 32,
+          "kind": "anm-talk",
+          "program_id": "m17030-1",
+          "command_index": 131
+        },
+        {
+          "map_id": "M17023",
+          "record_id": 33,
+          "kind": "anm-talk",
+          "program_id": "m17030-1",
+          "command_index": 137
+        },
+        {
+          "map_id": "M17023",
+          "record_id": 41,
+          "kind": "anm-talk",
+          "program_id": "m17030-1",
+          "command_index": 141
+        },
+        {
+          "map_id": "M17023",
+          "record_id": 2,
+          "kind": "anm-talk",
+          "program_id": "m17030-1",
+          "command_index": 146
+        },
+        {
+          "map_id": "M17023",
+          "record_id": 3,
+          "kind": "anm-talk",
+          "program_id": "m17030-1",
+          "command_index": 152
+        },
+        {
+          "map_id": "M17023",
+          "record_id": 9,
+          "kind": "anm-talk",
+          "program_id": "m17030-1",
+          "command_index": 156
+        },
+        {
+          "map_id": "M17023",
+          "record_id": 11,
+          "kind": "anm-talk",
+          "program_id": "m17030-1",
+          "command_index": 160
+        },
+        {
+          "map_id": "M17023",
+          "record_id": 23,
+          "kind": "anm-talk",
+          "program_id": "m17030-1",
+          "command_index": 164
+        },
+        {
+          "map_id": "M17023",
+          "record_id": 23,
+          "kind": "anm-talk",
+          "program_id": "m17030-1",
+          "command_index": 168
+        },
+        {
+          "map_id": "M17023",
+          "record_id": 24,
+          "kind": "anm-talk",
+          "program_id": "m17030-1",
+          "command_index": 172
+        },
+        {
+          "map_id": "M17023",
+          "record_id": 30,
+          "kind": "anm-talk",
+          "program_id": "m17030-1",
+          "command_index": 176
+        },
+        {
+          "map_id": "M17023",
+          "record_id": 47,
+          "kind": "anm-talk",
+          "program_id": "m17030-1",
+          "command_index": 183
+        },
+        {
+          "map_id": "M17010",
+          "record_id": 12,
+          "kind": "anm-talk",
+          "program_id": "m17010-3",
+          "command_index": 18
+        },
+        {
+          "map_id": "M17010",
+          "record_id": 14,
+          "kind": "anm-talk",
+          "program_id": "m17010-3",
+          "command_index": 22
+        },
+        {
+          "map_id": "M17010",
+          "record_id": 23,
+          "kind": "anm-talk",
+          "program_id": "m17010-3",
+          "command_index": 36
+        },
+        {
+          "map_id": "M17010",
+          "record_id": 57,
+          "kind": "anm-talk",
+          "program_id": "m17010-3",
+          "command_index": 40
+        },
+        {
+          "map_id": "M17010",
+          "record_id": 55,
+          "kind": "anm-talk",
+          "program_id": "m17010-3",
+          "command_index": 46
+        },
+        {
+          "map_id": "M17010",
+          "record_id": 38,
+          "kind": "anm-talk",
+          "program_id": "m17010-3",
+          "command_index": 50
+        }
+      ],
+      "reachable_tlk_record_count": 392,
+      "source_hashes": {
+        "GAME.exe": "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18",
+        "SYSTEM/Object.ITM": "9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8",
+        "Fight_Role/001.CHR": "37ce92ab57622d2cce022b4a9b8add9b29789f89d82bc369ea7352f38ca75c0a",
+        "Fight_Role/002.CHR": "854aed104fa990aa3f5fbf9d926724e0d8ae3ca73a5aabbc7a27a10ec91447e3",
+        "Fight_Role/003.CHR": "85f462f3598309fc47ceccef998ab07ccd34a5389ef3fee0146f8a0bca984fe0",
+        "Fight_Role/004.CHR": "2b964b7c3065d1520f7fe354f9e1fe6e213e9fcb3f586056eafa7f63fb88b50d",
+        "Fight_Role/005.CHR": "9e06bcbedaf821a6e4c1d08dc0cff31d916c3ae2d00fdc20c37e758d25e09580",
+        "Fight_Role/006.CHR": "27b29fb5cc1073014faea7553d0175559714c18dbbc5132ca1c549e4a9d8e15b",
+        "Map/m01050.dat": "48ae98e95e9ea414e716c85440d381a5bc29cc2ec00ccd3b30c2ef314d4145fc",
+        "Map/m01050.TLK": "6c5d2be29f120977d70c500abd11c8d76f11abba650be689e2dc44f4ae1dc182",
+        "Map/m03039.dat": "c3c01fb5773dda464c2a5bfa0b46520031f2dc9bd363e4a1978c99950b0dcaf2",
+        "Map/m03039.TLK": "b95cbf37de9e4d723a9830d97454b5ece2bc7bf352a51199f0e630aacdb8694a",
+        "Map/m17010.dat": "634a1eea243656b16341d9e217578a42a5d58f82f00af9aa0f8a0f805e83515a",
+        "Map/m17010.TLK": "04fc3299206a21504ac500a8797e4c96bf9ccee6fa104e41a3c8960861479f58",
+        "Map/m17020.dat": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+        "Map/m17020.TLK": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
+        "Map/m17026.dat": "087ccf781d85f63249a2e1bce48ee71382d2587cdf857c47e575caaae54a646c",
+        "Map/m17026.TLK": "9e363538b3b51f2ec5a0074d4fdcaf3c3e3dbba6d4043f1d1ac06db3124b78ee",
+        "Map/m17029.dat": "57851abbfe75121b806268f5bce8c778ec4e5d82ebb7dfa623fbd6952977c314",
+        "Map/m17029.TLK": "ca5d31b51ba3faf0118ba2626be0fb374671641821f59f166171e324c61e6269",
+        "Map/m17011.dat": "1b9c624e9093b4e7cbd4a62259607ed313359e3601ae48555c705d808d19bfc4",
+        "Map/m17011.TLK": "49e0a9ce55d37dd4e50884ffc5fe5df26bc29a7a49502b348612b146aadd3f74",
+        "Map/m17012.dat": "db0f4709ae4a86c8af819eda867bfb87bed2d4d4bbaa48af4dad31bd3ce5b847",
+        "Map/m17012.TLK": "f96b5f0c8f7e1839f2e567d99873f9993e5586c2fbe3ee4754dbd313fe4aca77",
+        "Map/m17013.dat": "1c1bdd0e8f26c8b2ee3b137d0049bfab10ae87f0e5dc76dfa44fc7f61096afcc",
+        "Map/m17013.TLK": "16a7530aa4aa4905ac6712cda3f3f26e41da22fdceb14595ef5ed8bdde6b7322",
+        "Map/m17014.dat": "6128bf9d9940a8176c6d53c8e421132a9f2f2ead6e4a907fac6bce4fd0c135ff",
+        "Map/m17014.TLK": "263de44239d54fed81b82a93c1442132501246a5f5859c3dbd70247886e9e40b",
+        "Map/m17015.dat": "e396282ce0dbf14a02d91dca28af4b0d1914cee1c1b8a1b7b3c8e0089f6d8b0e",
+        "Map/m17015.TLK": "f0d223d713ad8ea7f0163c2deb72f1a6afbe9e75a91eef4a559e4173881d7a59",
+        "Map/m17023.dat": "d9f2021f1f24558f8ead877cc77612c7fa2263b8225a10d630f308384ef857f9",
+        "Map/m17023.TLK": "7ce268d3445ea63766feea2db1cc761aabadec53f86cc30520fa9fcc826bd9a2",
+        "Map/m17024.dat": "18b33b069a469365ed75b531aa6346c58112f0c6a64c7a59ae1c6108318ef599",
+        "Map/m17024.TLK": "32f2b52a24570801178553a208770f315a3dce8006abe6db1a86d958d59132f4",
+        "Map/m17025.dat": "266c901c9784665d27034f4531c1918fbea96815d14ec68fb1f6699d6d3fa3cd",
+        "Map/m17025.TLK": "5c2ee8a36d83e199ff27b24dce28d57c61bb673111bdc46608fb220559347ed1",
+        "Map/m17027.dat": "7c0278bfe4a52f6a1977bb8493fa1ba1d40833b2dce142c42e75d7e2e67c0459",
+        "Map/m17027.TLK": "e4c88998a7d9f67fb0d57a7536c6c737b151eba0441659ea6a8c756145a8bd05",
+        "Map/m17028.dat": "ec1d36649bf8fce856a0e93daf08128ebb099f7b30c59648a5903742f372aeff",
+        "Map/m17028.TLK": "d0efacd1c3d4b3a620fb5d0789eb08f01117d691b35b07b6f5d436fbd1d50f3b",
+        "Map/m17030-1.dat": "85f2b0ea6398a9cf759183892cf9967e9b690dc57b5fb240e58969f69ae77e6b",
+        "Map/m17030-1.TLK": "c1c480cd76f90a1c5141bcad913ebeb5d2f03f087acff96f5fab14d606946a39",
+        "Map/m17030-2.dat": "19c9e32a7cc32da40da096e67aa6b318e18570b29bc784130ad7d07d4430dfe6",
+        "Map/m17030-2.TLK": "22af2e5e273d36c9f8963139ab98dbc7d06b44a3b572ad5dd006ea8e58dce3d9",
+        "Map/m17030.dat": "bbe0b8b99a59f775f1647b7e5e01f7ea12208f4422d1272fe62655c6e41d5bc4",
+        "Map/m17030.TLK": "9f8c48b9e0381ea5adddf79325219c3f6eefee315b0df153cb6539e2b575c21f",
+        "Map/m17032.dat": "fec9023611123ba7557cf0a186317c808a5c041a6ec8d0fd52b30c8576f09bfe",
+        "Map/m17032.TLK": "240e0b23357f2d1ec6a90485841e7d0f5542cea39e6b02616aef20676e734542",
+        "Animate/m01050-1.anm": "c483d0ee85a01072afa8f8e80697220b922fa3e0ad971ee5affcedf12c88f819",
+        "Animate/m01050-2.anm": "19a173b2d01c4e6335a16d4283084ee2f896165f9e35374d45663b5e11a63782",
+        "Animate/m17029-1.anm": "2298d02eabc62ea6b0838379968e3fb998afcc22f45b48ce74b08de0a728319b",
+        "Animate/m17026-1.anm": "943bd0f7da7453ba995c96234f6ec179e6a98ae2979145d1b90c01f5b44ad74f",
+        "Animate/m17010-1.anm": "da273e16d2de10d4516a1e75465af71caef250fcef80b2540187aa18645a231a",
+        "Animate/m17010-4.anm": "fd7975603e201fd5847098265c3a87657f1facce81994be3a048562dd43d8eef",
+        "Animate/m17010-5.anm": "c13968a45985feeb23ae2d338c0560b610918081626379735a660bda7459d2f5",
+        "Animate/m17010-6.anm": "615394315cba49db021353243f2b4985832a6a3c72830683754957bcb7089654",
+        "Animate/m17014-1.anm": "f8d6bf53af068c324ff03e99727005a74a234e59501848211d8c4f61da08775e",
+        "Animate/m17020-1.anm": "34c72c0bc84e0e50d46a55faadc1d018a8efbe3f847c85dfa28de0bebae343e7",
+        "Animate/m17028.anm": "e9d6e1df1c4c40c267adcb9ee711c587b6fe03adc0343d4435853ef2b45c26e6",
+        "Animate/m17010-2.anm": "4496da411c6c8adc76e464efbd866e34a0ce02d2ba66a5cfc42abe902325230c",
+        "Animate/m17030-1.anm": "209c86f42cda1a513c21d38512acea8470508910f44127977b9b7b1738df9df2",
+        "Animate/m17010-3.anm": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e"
+      },
+      "native_bootstrap": {
+        "procedure": "0x47ae20",
+        "address": "0x47af06",
+        "offset": 614150,
+        "raw_hex": "c745dc01000000c745e00a000000c745e427000000c745e828000000c745ec29000000c745f02a000000",
+        "item_ids": [
+          1,
+          10,
+          39,
+          40,
+          41,
+          42
+        ]
+      },
+      "scope": "Menu equip/link capability only; no inventory grant, party ownership or special passive is inferred.",
+      "generated_input_hashes": {
+        "data/opening_seed.json": "d22cac66f87121e147518fd1e9833ad7a98667cde923ca141194e5363cc8f3d3",
+        "data/chapter_story.json": "c2900e4e23fe971f9aea4f9e5cc221c9b340f124b3c99af37b19e2cbbe379bf3",
+        "data/runtime_content.json": "5484c54a7a2c8bb3f45b21a5c9f76396a935e5842b11c9e233b76a604e1577b8"
+      }
+    },
+    "item_capability_admission": {
+      "policy": "registered-source-item-capabilities-v1",
+      "promoted_item_ids": [
+        272
+      ],
+      "sources": {
+        "272": [
+          {
+            "kind": "registered-story-item-grant",
+            "map_id": "M17027",
+            "record_id": 9,
+            "source": {
+              "path": "Map/m17027.TLK",
+              "sha256": "e4c88998a7d9f67fb0d57a7536c6c737b151eba0441659ea6a8c756145a8bd05",
+              "record_id": 9,
+              "record_bytes": 1647,
+              "offset": 15202
+            },
+            "mutation_type": 5,
+            "mutation_index": 0,
+            "mutation_bit": 272,
+            "entrance": {
+              "map_id": "M17027",
+              "record_id": 7,
+              "kind": "npc",
+              "npc_slot": 11
+            }
+          },
+          {
+            "kind": "registered-story-item-grant",
+            "map_id": "M17027",
+            "record_id": 10,
+            "source": {
+              "path": "Map/m17027.TLK",
+              "sha256": "e4c88998a7d9f67fb0d57a7536c6c737b151eba0441659ea6a8c756145a8bd05",
+              "record_id": 10,
+              "record_bytes": 1647,
+              "offset": 16849
+            },
+            "mutation_type": 5,
+            "mutation_index": 0,
+            "mutation_bit": 272,
+            "entrance": {
+              "map_id": "M17027",
+              "record_id": 7,
+              "kind": "npc",
+              "npc_slot": 11
+            }
+          },
+          {
+            "kind": "registered-story-item-grant",
+            "map_id": "M17027",
+            "record_id": 11,
+            "source": {
+              "path": "Map/m17027.TLK",
+              "sha256": "e4c88998a7d9f67fb0d57a7536c6c737b151eba0441659ea6a8c756145a8bd05",
+              "record_id": 11,
+              "record_bytes": 1647,
+              "offset": 18496
+            },
+            "mutation_type": 5,
+            "mutation_index": 0,
+            "mutation_bit": 272,
+            "entrance": {
+              "map_id": "M17027",
+              "record_id": 7,
+              "kind": "npc",
+              "npc_slot": 11
+            }
+          }
+        ]
+      },
+      "previous_definitions": {
+        "272": {
+          "availability": {
+            "enabled": false,
+            "chapter_enabled": false,
+            "catalog_visible": true,
+            "default_enabled": false,
+            "reasons": [
+              "outside-default-chapter-item-set",
+              "usage-handler-not-recovered"
+            ]
+          },
+          "behavior": {
+            "kind": "source-only",
+            "status": "unverified",
+            "implemented_scope": [],
+            "unverified_scope": [
+              "special-passive",
+              "crystal-socketing",
+              "crafting",
+              "attack-or-state-effect"
+            ]
+          }
+        }
+      },
+      "field_scope": "47D960 has zero initialized fields for these cures; field use cannot succeed or consume.",
+      "battle_scope": "41B3C0 calls 508BB0 mode1 then displays the source effect; consumes only on a successful status removal or recovery."
+    },
     "simple_restore_item_ids": [
       8,
       11,
@@ -148664,10 +150535,11 @@
     },
     "behavior_counts": {
       "equip": 115,
-      "source-only": 298,
-      "simple-restore": 3
+      "source-only": 297,
+      "simple-restore": 3,
+      "status-cure": 1
     },
-    "compatibility": "The original eight chapter IDs keep their initialized bytes/slot/effect contracts; extra definitions are source catalog entries.",
+    "compatibility": "The original eight chapter IDs retain their contracts. Registered source initial/gift equipment enables verified plain numeric equip/linking; registered cure grants enable native mode1 removal. Neither policy grants inventory.",
     "unknown_fields": "Prices, crafting recipes, crystal insertion/removal and special effects are not assigned semantics from names; original bytes remain in raw_hex."
   },
   "equipment_resource_policy": "preserve-raw",
@@ -148686,18 +150558,20 @@
     "effective_resource_getters": "0x500350/0x500480 return raw plus linked bonuses without a zero clamp.",
     "battle_preparation_delay_added": 0,
     "battle_gauge": "0x50E7A0 resets gauge to zero; item flag bypasses skill checks in 0x503D80/88; 0x503F38 subtracts threshold.",
-    "battle_target_gate": "0x41B3C0 permits effect kind 0 only for immune byte 0 and state <4; invalid targets consume no item.",
-    "battle_consumption": "Simple nonzero HP/MP restore succeeds even when full and removes exactly one instance."
+    "battle_target_gate": "0x41B3C0 permits recovered mode0/1 for immune byte0 and state<4; displayed HP is not an additional gate. Invalid targets consume no item.",
+    "battle_consumption": "41B3C0 consumes only if 508BB0 or 47D960 returns success. Nonzero HP/MP restore succeeds even when full; mode1 no-match fails without consumption.",
+    "status_removal": "508BB0 mode1 rejects duplicate id/mode1, otherwise clears the first matching ID and calls508300; no RNG or 508A90 contact-removal pass."
   },
   "source": {
     "native_bundle_sha256": "0d40ce8c24fd0bde684dc4901bb6bff6891238323d4bf5d48bb3add2955ef65d",
     "native_scheduler_bundle_sha256": "94c8b95676fea1b116784452e75e168e3be846204e6bf935630b544127f0e7a8",
     "native_drop_bundle_sha256": "39c61707428df302d62bc78fa0feb9e29c978cb0828626b6e3c568a57c43418f",
+    "native_status_bundle_sha256": "07a16db64a34779bfb57c663833c94b31edac495011411790173e0b87f15d739",
     "original_game_executed": false,
     "limitations": [
       "Static shipped binary evidence; original execution was not observed.",
       "Battle item gauge and zero added preparation debt are native verified; live menu timing and animation completion remain remake adapters.",
-      "Only the eight default chapter items are enabled. Additional valid-slot equipment declares recovered equip/linking scope; source-only records have no usable handler.",
+      "Default capability includes the original chapter set, registered source plain equipment, and registered native mode1 cure grants. Other records remain disabled by default unless an independent recovered handler admits them.",
       "Crystal socketing, crafting, special passive abilities, growth/revival and other item handlers remain unverified.",
       "ID31 has a variable range and ID36 has a reversed range in the shipped source; they are retained rather than silently repaired.",
       "Special slot label is a remake UI label for source category5; its catalog records are present but none is enabled by default."

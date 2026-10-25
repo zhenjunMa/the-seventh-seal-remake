@@ -11,11 +11,31 @@ const clamp=(x,low,high)=>Math.max(low,Math.min(high,x));
 const bytes=hex=>Uint8Array.from(hex.match(/../g)??[],x=>parseInt(x,16));
 const direction=(dx,dy)=>dy<0?(dx>0?2:dx<0?4:3):dy>0?(dx>0?0:dx<0?6:7):dx>0?1:5;
 
+// 469F50 initializes all20 channels from the first DGP action whose +7E
+// identifier matches. DAT +46..59 bytes are a source template, not live state.
+export function nativeNpcActionBindings(role) {
+  const actions=role?.actions;
+  if(!Array.isArray(actions)||!actions.length)throw new Error('人物原动作表缺失');
+  const ordered=[...actions].sort((a,b)=>a.index-b.index),bindings=Array(20).fill(-1);
+  const seen=new Set();
+  for(const [position,action]of ordered.entries()){
+    if(!Number.isInteger(action.index)||action.index<0||action.index>127||seen.has(action.index)
+      ||action.index!==position
+      ||typeof action.raw_hex!=='string'||!/^[0-9a-f]{344}$/i.test(action.raw_hex))throw new Error('人物原动作绑定记录无效');
+    seen.add(action.index);
+    const channel=parseInt(action.raw_hex.slice(0x7e*2,0x7e*2+2),16);
+    if(channel<20&&bindings[channel]===-1)bindings[channel]=action.index;
+  }
+  if(bindings[1]===-1)bindings[1]=bindings[0];
+  // Original +48==FF branch writes +47 back to itself, not run=walk.
+  return bindings;
+}
+
 export function decodeNpcBehavior(record) {
   if(!/^[0-9a-f]{2442}$/i.test(record?.raw_hex??''))return null;
   const raw=bytes(record.raw_hex),view=new DataView(raw.buffer),int=offset=>view.getInt32(offset,true);
   return {slot:record.slot_zero_based,type:raw[0x2c],locked:raw[0x2e]!==0,fixed:raw[0xf5]!==0,
-    turnMask:raw[0xf6],bindings:Array.from(raw.slice(0x46,0x59),x=>x===255?-1:x),
+    turnMask:raw[0xf6],bindings:Array.from(raw.slice(0x46,0x5a),x=>x===255?-1:x),raw_hex:record.raw_hex,
     speedBias:int(0x4b5),routeCount:int(0x14b),wait:raw[0xdf],waitLatch:raw[0xe0]!==0};
 }
 
@@ -63,10 +83,11 @@ export class MapNpcRuntime {
     this.cellTicks=this.cellSize/this.stepSize;
     const sources=new Map((table?.npc_records??[]).map(row=>[row.slot_zero_based,row]));
     for(const npc of scene.npcs){
-      const source=decodeNpcBehavior(sources.get(npc.slot_zero_based)),role=roles?.[npc.resource_id];
+      let source=decodeNpcBehavior(sources.get(npc.slot_zero_based));const role=roles?.[npc.resource_id];
       if(!source||!role)continue;
-      const idle=role.actions.find(action=>action.index===source.bindings[0])??role.actions[0];
-      if(!idle)continue;
+      source={...source,bindings_raw:[...source.bindings],bindings:nativeNpcActionBindings(role),bindings_initialized:true};
+      const idle=role.actions.find(action=>action.index===source.bindings[0]);
+      if(!idle)throw new Error('人物缺少源初始化待机动作');
       const a={npc,source,role,home:{x:npc.x,y:npc.y},goal:{x:npc.x,y:npc.y},path:[],step:null,
         wait:source.wait,waitLatch:source.waitLatch,logicalFrame:0,action:idle.index,interval:80,
         elapsed:0,animationCountdown:0,visual:{x:npc.x,y:npc.y,direction:npc.direction},gait:new DistanceGait()};

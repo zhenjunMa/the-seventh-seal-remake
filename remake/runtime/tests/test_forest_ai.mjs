@@ -5,39 +5,43 @@ import {readFile,writeFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {createNativeRng} from '../web/core/combat_rules.mjs';
 import {NativeAssemblyOracle} from './native_assembly_oracle.mjs';
+import {loadedSkillCodeOracle} from './helpers/native_skill_code_oracle.mjs';
 import {validateForestAIData,selectNativeSkills,selectNativeTarget,planForestEnemyAction} from '../web/core/forest_ai.mjs';
 const clone=structuredClone,hash=b=>createHash('sha256').update(b).digest('hex');
 const data=JSON.parse(await readFile(new URL('../web/data/forest_ai.json',import.meta.url)));
 const instructions=JSON.parse(await readFile(new URL('../evidence/forest_ai_instructions_20261011.json',import.meta.url)));
 const native=JSON.parse(await readFile(new URL('../evidence/forest_ai_rules_native_20261011.json',import.meta.url)));
-const roles=Object.values(data.roles),checks=[];
+const roles=['011','012','013'].map(id=>data.roles[id]),checks=[];
 const report={schema:'seventh-seal-forest-ai-verification',version:1,passed:false,
-  original_game_execution_observed:false,comparison:'Runtime pure selection versus retained x86 instruction interpreter',
+  original_game_execution_observed:false,comparison:'Runtime loaded skill codes and selection versus retained x86 instruction interpreter; normal gameplay streams use4FED00 mode0',
   assembly_source:'forest_ai_instructions_20261011.json',checks,
   case_counts:{skill_instruction_comparisons:0,target_instruction_comparisons:0,stream_plan_comparisons:0},
   oracle_hooks:['0x501E90 captures argument skill index / source code bytes; action merge and gauge changes are not executed.',
+    '0x4FED00 code loading runs retained4FF029..4FF0B6 instructions before selection. Isolated selector boundaries explicitly retain codes under nonzero00679C6C; integrated gameplay streams use zero mode.',
     'Existing NativeAssemblyOracle accepts original JNC instruction as the equivalent JAE carry condition.',
     'CRT rand and debug stack checker use existing bounded interpreter hooks.'],
   limits:['Instruction-text replay is not CPU execution of GAME.exe or original fight observation.',
+    'Raw-file combinations in the explicit nonzero load mode are selector boundary fixtures, not claims that the normal gameplay loader permits those enemy combinations.',
     'Only selection and target identity are compared here; combined animation/contacts have separate validation.']};
 function actor(id='actor',overrides={}){return {id,resource_id:'013',side_raw:0,state_raw:0,immune_raw:0,reaction_busy_raw:0,status_flags_raw:0,
   raw_by_address:{},status_by_address:{},linked_by_address:{},role_link_raw:0,stance_raw:0,class_raw:0,
   settled_raw:0,defense_half_raw:0,reaction_inhibit_raw:0,hp:{current:960,maximum:960},raw_mp:0,...overrides};}
 function scripted(values){let i=0;const rng=()=>{assert.ok(i<values.length,'unexpected RNG draw');return values[i++];};Object.defineProperty(rng,'calls',{get:()=>i});return rng;}
 class AIOracle extends NativeAssemblyOracle {
-  constructor(actors,role,rng){
+  constructor(actors,role,rng,modeRaw=1){
     super(instructions.functions,actors,rng);this.role=role;
     this.write(0x55df74c,actors.length);
     actors.forEach((a,i)=>{const offset=i*0x30274;this.write(0x521f52a+offset,a.status_flags_raw??a.status_by_address['0x0521f52a']);this.write(0x521f5f8+offset,a.reaction_busy_raw,1);});
     if(role){const base=0x20000000;this.write(0x524a6d1,role.skill_count);this.write(0x524a9dc,base);
-      for(const skill of role.skills){const bytes=Buffer.from(skill.fixed_raw_hex,'hex');for(let i=0;i<bytes.length;i++)this.write(base+skill.index*0x421+i,bytes[i],1);}
+      const loaded=loadedSkillCodeOracle(role.skills,{modeRaw});
+      for(const skill of role.skills){const bytes=Buffer.from(skill.fixed_raw_hex,'hex');for(let i=0;i<bytes.length;i++)this.write(base+skill.index*0x421+i,bytes[i],1);this.write(base+skill.index*0x421+0x19,loaded.codes[skill.index],1);}
     }
   }
   external(target){
     if(target===0x501e90){
       const index=this.read(this.reg.ESP+8)&255,pointer=this.read(this.reg.ESP+4)>>>0,codes=[];
       for(let i=0;i<8&&this.read(pointer+i,1)!==0;i++)codes.push(this.read(pointer+i,1));
-      const indices=codes.length?codes.flatMap(code=>this.role.skills.filter(s=>Buffer.from(s.fixed_raw_hex,'hex')[0x19]===code).map(s=>s.index)):[index];
+      const indices=codes.length?codes.flatMap(code=>this.role.skills.filter(s=>this.read(0x20000000+s.index*0x421+0x19,1)===code).map(s=>s.index)):[index];
       const side=this.read(0x20000000+index*0x421+0x25,1);
       this.selected={kind:codes.length?'combination':'single',skill_indices:indices,skill_codes:codes,target_side_raw:side};
       this.write(0x524a634,side,1);return;
@@ -45,9 +49,12 @@ class AIOracle extends NativeAssemblyOracle {
     return super.external(target);
   }
 }
-function compareSelection(role,input,values){
-  const rng=scripted(values),actual=selectNativeSkills({actor:input,role,rng});
-  const oracle=new AIOracle([input],role,scripted(values)),result=oracle.run(0x5029a0,[0]);
+// These isolated selector boundary cases explicitly exercise the native
+// nonzero00679C6C branch that retains source file codes. The integrated stream
+// test below uses the real gameplay entry's zero mode and instruction loader.
+function compareSelection(role,input,values,modeRaw=1){
+  const rng=scripted(values),actual=selectNativeSkills({actor:input,role,rng,load_mode_raw:modeRaw});
+  const oracle=new AIOracle([input],role,scripted(values),modeRaw),result=oracle.run(0x5029a0,[0]);
   assert.equal(actual.native_return,result.eax);assert.equal(actual.kind,oracle.selected?.kind??'none');
   assert.deepEqual(actual.skill_indices,oracle.selected?.skill_indices??[]);assert.deepEqual(actual.skill_codes,oracle.selected?.skill_codes??[]);
   if(oracle.selected)assert.equal(actual.target_side_raw,oracle.selected.target_side_raw);
@@ -145,7 +152,7 @@ test('planned enemy action preserves the same original selection then target RNG
   for(const role of roles)for(let seed=0;seed<50;seed++){
     const actors=[actor('enemy',{resource_id:role.id}),actor('player-a',{resource_id:'001',side_raw:1}),actor('player-b',{resource_id:'001',side_raw:1})],before=clone(actors);
     const rng=createNativeRng((seed*174637823)>>>0),actual=planForestEnemyAction({actors,actor_id:'enemy',data,rng});
-    const nativeRng=createNativeRng((seed*174637823)>>>0),oracle=new AIOracle(actors,role,nativeRng),chosen=oracle.run(0x5029a0,[0]);
+    const nativeRng=createNativeRng((seed*174637823)>>>0),oracle=new AIOracle(actors,role,nativeRng,0),chosen=oracle.run(0x5029a0,[0]);
     assert.equal(chosen.eax,1);assert.deepEqual(actual.skill_indices,oracle.selected.skill_indices);assert.deepEqual(actual.skill_codes,oracle.selected.skill_codes);assert.equal(actual.kind,oracle.selected.kind);
     const targeted=oracle.run(0x5014c0,[0]);assert.equal(actual.target_index,targeted.eax);assert.equal(actual.target_id,actors[targeted.eax].id);
     assert.deepEqual(actual.trace.filter(e=>e.kind==='rng').map(e=>e.raw),oracle.rng_calls);assert.equal(rng.state,nativeRng.state);assert.deepEqual(actors,before);

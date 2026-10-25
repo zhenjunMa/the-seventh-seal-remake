@@ -1,7 +1,8 @@
 """Export the complete source item catalog and static native rule evidence.
 
 Reads original Object.ITM and immutable GAME.exe; never edits saves/resources.
-Only the existing chapter items are enabled by default. Source-only records,
+Source-owned, registered plain equipment is enabled with source provenance.
+Source-only records,
 random or malformed ranges, and unverified crystal/special behaviors remain
 explicit. All 416 original records are retained without normalizing bytes.
 """
@@ -10,13 +11,20 @@ import hashlib
 import json
 import struct
 import sys
+from copy import deepcopy
 from collections import Counter
+from collections import deque
 
 sys.dont_write_bytecode = True
 ROOT = Path(__file__).resolve().parents[3]
 RUNTIME = ROOT / 'remake/runtime'
+# Embedded/isolated Python excludes the script directory from sys.path. Resolve
+# sibling tools explicitly, just as the other standalone runtime exporters do.
+sys.path.insert(0, str(RUNTIME / 'tools'))
 sys.path.insert(0, str(ROOT / 'save_analysis_20261010'))
 from native_item_init import initialize_existing_instance, VALUE_PAIRS
+from content_registration import definition as content_definition, map_ids
+from export_source_catalog import exe_bytes_at_va
 
 GAME_SHA = 'fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18'
 ITM_SHA = '9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8'
@@ -166,11 +174,309 @@ def catalog_indexes(definitions):
     return indexes
 
 
+def source_files(registration=None):
+    registration = content_definition() if registration is None else registration
+    return ('GAME.exe', 'SYSTEM/Object.ITM',
+            *tuple(f'Fight_Role/{ident}.CHR' for ident, row in registration['roles'].items()
+                   if row['side'] == 'player'),
+            *tuple(f'Map/{ident.lower()}{suffix}' for ident in map_ids('story', registration) for suffix in ('.dat', '.TLK')),
+            *tuple(f'Animate/{ident}.anm' for ident in registration['programs']))
+
+
+def registered_tlk_reachability(story, registration, original, hashes, require):
+    """Both source branches, limited to admitted entrances, never an entire TLK.
+
+    ANM uses source opcode10 map changes and opcode20 one-based branch targets;
+    no filename/map-ID guessing or current-world flag assumptions are used.
+    """
+    roots = []
+    def add(map_id, record_id, kind, **fields):
+        if record_id:
+            require(map_id in story['maps'], f'{map_id} admitted TLK root')
+            roots.append(dict(map_id=map_id, record_id=record_id, kind=kind, **fields))
+    for map_id in map_ids('story', registration):
+        table, binding = story['maps'][map_id], registration['maps'][map_id]
+        path = f'Map/{map_id.lower()}.dat'; data = original[path]
+        require(table.get('map_source', {}).get('path') == path and table['map_source'].get('sha256') == hashes[path], f'{map_id} DAT')
+        require(table['header_entry_tlk_raw'] == u32(data, 0x13a)
+                and table['header_setup_tlk_raw'] == u32(data, 0x8a), f'{map_id} DAT entrances')
+        if binding.get('entry'): add(map_id, u32(data, 0x13a), 'entry')
+        if binding.get('setup'): add(map_id, u32(data, 0x8a), 'setup')
+        tlk = original[f'Map/{map_id.lower()}.TLK']
+        slots = {slot: u32(tlk, 0x1a + slot * 4) for slot in range(u32(tlk, 2))}
+        npc_slots = binding.get('npcs', [npc['slot_zero_based'] for npc in table['npc_records']])
+        for slot in npc_slots:
+            require(slot in slots, f'{map_id} NPC {slot} TLK index')
+            add(map_id, slots[slot], 'npc', npc_slot=slot)
+        for index in binding.get('objects', []):
+            obj = next((row for row in table['objects'] if row['index'] == index['index']), None)
+            require(obj is not None, f'{map_id} object {index}')
+            at = obj['source']['offset']; raw = data[at:at + 0x112]
+            require(raw.hex() == obj['raw_hex'] and raw[0xcf] == 3, f'{map_id} object source')
+            add(map_id, u32(raw, 0xf6), 'object', object_index=index['index'])
+        descriptors = {row['id']: row for row in table['descriptors']}
+        selected = [(ident, 'trigger') for ident in binding.get('triggers', [])]
+        selected += [(row['descriptor_id'], 'rest') for row in binding.get('rests', [])]
+        for route in binding.get('routes', []):
+            descriptor_id = route.get('descriptor_id')
+            if descriptor_id is None:
+                descriptor_id = next((row['id'] for row in table['descriptors'] if row['state_raw'] == 2
+                                      and row['field_26_raw'] == route.get('record_id')), None)
+            selected.append((descriptor_id, 'route'))
+            add(map_id, route.get('denial_record_id'), 'route-denial')
+        for ident, kind in selected:
+            descriptor = descriptors.get(ident)
+            require(descriptor is not None, f'{map_id} descriptor {ident}')
+            at = descriptor['source']['offset']; size = descriptor['record_bytes']; raw = data[at:at + size]
+            require(raw.hex() == descriptor['raw_hex'] and raw[0] == 2 and size in (0x2b, 0x42), f'{map_id} descriptor source')
+            record_id = raw[0x26] if size == 0x2b else u32(raw, 0x26)
+            require(record_id == descriptor['field_26_raw'], f'{map_id} descriptor TLK')
+            add(map_id, record_id, kind, descriptor_id=ident)
+    for ident in registration['programs']:
+        program = story.get('programs', {}).get(ident, {})
+        path = f'Animate/{ident}.anm'; data = original[path]; count = u32(data, 2)
+        require(program.get('source', {}).get('sha256') == hashes[path] and len(data) == 67 + count * 74
+                and len(program.get('commands', [])) == count, f'{ident} ANM')
+        raws = []
+        for index, command in enumerate(program['commands']):
+            at = 67 + index * 74; raw = data[at:at + 74]
+            require(command.get('raw_hex') == raw.hex() and command.get('index') == index
+                    and command.get('source', {}).get('offset') == at, f'{ident} ANM command {index}')
+            raws.append(raw)
+        callers = set()
+        for map_id, table in story['maps'].items():
+            if map_id not in registration['maps']: continue
+            if any(row['kind'] == 1 and row['text_raw'].lower() == ident.lower() + '.anm' for row in table['records']): callers.add(map_id)
+            if any(row['state_raw'] == 1 and row['filename_raw'].lower() == ident.lower() + '.anm' for row in table['descriptors']): callers.add(map_id)
+        queue, seen = deque((0, map_id) for map_id in sorted(callers) or [None]), set()
+        while queue:
+            index, map_id = queue.popleft()
+            if index >= count or (index, map_id) in seen: continue
+            require(index >= 0, f'{ident} ANM branch'); seen.add((index, map_id)); raw = raws[index]
+            if raw[0] == 10:
+                require(u32(raw, 5) == 0, f'{ident} ANM map mode')
+                map_id = raw[54:74].split(b'\0')[0].decode('ascii').removesuffix('.DAT').removesuffix('.dat').upper()
+                require(map_id in registration['maps'], f'{ident} ANM map')
+            elif raw[0] == 14:
+                add(map_id, u32(raw, 5), 'anm-talk', program_id=ident, command_index=index)
+            if raw[0] == 20 and raw[29] >= 2 and (u32(raw, 5) or story['maps'][map_id]['map_flag_index']):
+                targets = [u32(raw, 13)] if u32(raw, 25) == 0 else [u32(raw, 13), u32(raw, 17)]
+                require(u32(raw, 25) != 0 or targets[0] > 0, f'{ident} ANM unconditional branch')
+                for target in targets:
+                    require(0 <= target <= count, f'{ident} ANM branch target')
+                    queue.append((target - 1 if target else index + 1, map_id))
+            else: queue.append((index + 1, map_id))
+    queue, reachable = deque((row['map_id'], row['record_id'], row) for row in roots), {}
+    while queue:
+        map_id, record_id, origin = queue.popleft(); key = f'{map_id}:{record_id}'
+        if not record_id or key in reachable: continue
+        table = story['maps'][map_id]
+        require(0 < record_id <= len(table['records']), f'{key} reachable record')
+        row = table['records'][record_id - 1]; raw = bytes.fromhex(row['raw_hex']); reachable[key] = origin
+        if raw[0] != 2 and (u32(raw, 0x17) or u32(raw, 0x1f)):
+            queue.append((map_id, u32(raw, 0x2f), origin))
+        queue.append((map_id, u32(raw, 0x33), origin))
+        if raw[0] == 0 and raw[1] == 1:
+            for index in range(3):
+                at = 0x537 + index * 104
+                if raw[at]: queue.append((map_id, u32(raw, at + 100), origin))
+    return reachable, roots
+
+
+def plain_equipment_supported(row):
+    """Admission is narrower than an equip slot: no unrecovered passive payload."""
+    fields = row.get('raw_fields', {})
+    block = fields.get('special_effect_block', {})
+    try:
+        payload = bytes.fromhex(block.get('raw_hex', ''))
+    except ValueError:
+        return False
+    return bool(row.get('behavior', {}).get('kind') == 'equip'
+                and row.get('record_status') == 'defined'
+                and row.get('slot_id') in {slot['id'] for slot in SLOTS}
+                and row.get('initialization', {}).get('deterministic') is True
+                and row.get('validation', {}).get('all_value_ranges_ordered') is True
+                and len(payload) == 0x117 and not any(payload)
+                and fields.get('effect_kind_raw_2b3') == 0
+                and fields.get('encounter_modifier_raw_3a7') == 0
+                and fields.get('animation_skill_id_raw_142') == 0
+                and fields.get('effect_token_raw_126') == '')
+
+
+def admit_registered_equipment(definitions, seed, story, registration):
+    """Verify original ownership/grants before changing any catalog availability.
+
+    This admits a recovered menu capability, never inventory or party members.
+    Existing save instances and editable parameters are not inputs to admission.
+    """
+    def require(ok, label):
+        if not ok:
+            raise ValueError(f'Equipment admission source mismatch: {label}')
+
+    original = {path: (ROOT / path).read_bytes() for path in source_files(registration)}
+    hashes = {path: sha(raw) for path, raw in original.items()}
+    require(hashes['GAME.exe'] == GAME_SHA and hashes['SYSTEM/Object.ITM'] == ITM_SHA, 'GAME/ITM')
+    source = seed.get('source', {})
+    require(source.get('kind') == 'native-new-game' and source.get('sha256') == GAME_SHA, 'opening seed')
+    require(source.get('source_hashes', {}).get('SYSTEM/Object.ITM') == ITM_SHA, 'seed ITM')
+    require(story.get('source_hashes', {}).get('SYSTEM/Object.ITM') == ITM_SHA, 'story ITM')
+    # 47AE20's six actual x86 MOV [EBP+disp8],imm32 instructions. Values are
+    # read from the pinned original executable rather than a second item-ID list.
+    bootstrap_offset, bootstrap = exe_bytes_at_va(original['GAME.exe'], 0x47af06, 6 * 7)
+    require(all(bootstrap[i * 7:i * 7 + 3] == bytes([0xc7, 0x45, 0xdc + i * 4])
+                for i in range(6)), '47AE20 initial equipment instructions')
+    initial_ids = [u32(bootstrap, i * 7 + 3) for i in range(6)]
+    sources = {}
+
+    def item(ident):
+        row = definitions.get(str(ident))
+        require(row is not None, f'item {ident}')
+        at = 0x61c + (ident - 1) * 0x3bf
+        raw = original['SYSTEM/Object.ITM'][at:at + 0x3bf]
+        require(row.get('id') == ident and row.get('raw_hex') == raw.hex()
+                and row.get('source', {}).get('record_offset') == at
+                and row['source'].get('record_sha256') == sha(raw)
+                and row['source'].get('sha256') == ITM_SHA, f'item {ident} definition')
+        return row, raw, at
+
+    player_ids = {ident for ident, role in registration['roles'].items() if role['side'] == 'player'}
+    seen = set()
+    for entry in source.get('initial_equipment', []):
+        role_id = entry.get('role_id')
+        if role_id not in player_ids:
+            continue
+        slot = int(role_id) - 1
+        require(role_id not in seen and 0 <= slot < len(initial_ids), f'role {role_id} initial slot')
+        seen.add(role_id)
+        ident = initial_ids[slot]
+        row, raw, at = item(ident)
+        require(entry.get('item_id') == ident and entry.get('group_index') == entry.get('entry_index') == 0,
+                f'role {role_id} native bootstrap item')
+        expected = initialize_existing_instance(bytes(0xe5), raw)
+        require(entry.get('source_raw_hex') == expected.hex() and entry.get('instance_sha256') == sha(expected)
+                and entry.get('initialization_rng_calls') == 0, f'role {role_id} initialized instance')
+        require(entry.get('definition_source') == dict(path='SYSTEM/Object.ITM', record_offset=at,
+                    record_bytes=0x3bf, sha256=sha(raw)), f'role {role_id} ITM provenance')
+        path = f'Fight_Role/{role_id}.CHR'
+        role, story_role = source.get('role_definitions', {}).get(role_id, {}), story.get('role_definitions', {}).get(role_id, {})
+        require(role.get('path') == path and role.get('sha256') == hashes[path]
+                and source.get('source_hashes', {}).get(path) == hashes[path]
+                and role.get('header_file_offset') == 8
+                and role.get('header_raw_hex') == original[path][8:8 + 779].hex(), f'role {role_id} CHR')
+        require(story_role.get('source', {}).get('path') == path
+                and story_role['source'].get('sha256') == hashes[path]
+                and story.get('source_hashes', {}).get(path) == hashes[path], f'role {role_id} story CHR')
+        sources.setdefault(str(ident), []).append(dict(kind='registered-player-native-initial-equipment',
+            role_id=role_id, group_index=0, entry_index=0, instance_sha256=sha(expected),
+            source=dict(path='GAME.exe', sha256=GAME_SHA, address=hex(0x47af06 + slot * 7),
+                        offset=bootstrap_offset + slot * 7, bytes=7, raw_hex=bootstrap[slot * 7:slot * 7 + 7].hex()),
+            role_source=dict(path=path, sha256=hashes[path])))
+    # A registered native opening role must retain its source bootstrap entry.
+    require({f'{i + 1:03}' for i in range(len(initial_ids))} & player_ids == seen, 'missing initial equipment')
+    grants = []
+    for map_id in map_ids('story', registration):
+        table = story.get('maps', {}).get(map_id, {})
+        path = f'Map/{map_id.lower()}.TLK'
+        data = original[path]
+        require(table.get('source', {}).get('path') == path and table['source'].get('sha256') == hashes[path]
+                and story.get('source_hashes', {}).get(path) == hashes[path], f'{map_id} TLK fingerprint')
+        index_count, count = struct.unpack_from('<II', data, 2)
+        base = 0x1a + index_count * 4
+        require(table.get('record_count') == count and len(table.get('records', [])) == count
+                and table.get('record_base') == base and table.get('record_bytes') == 0x66f, f'{map_id} TLK table')
+        for index, record in enumerate(table['records']):
+            at = base + index * 0x66f
+            raw = data[at:at + 0x66f]
+            require(record.get('id') == index + 1 and u32(raw, 0x13) == index + 1
+                    and record.get('offset') == at and record.get('raw_hex') == raw.hex()
+                    and record.get('source') == dict(path=path, sha256=hashes[path], offset=at,
+                         record_id=index + 1, record_bytes=0x66f), f'{map_id}:{index + 1} record')
+            require(all(record.get(key) == u32(raw, off) for key, off in
+                        [('mutation_type', 0x23), ('mutation_index', 0x27), ('mutation_bit', 0x2b)]),
+                    f'{map_id}:{index + 1} mutation')
+            # mutation5 index0 adds an item. index1 removes; mutation6 unlocks
+            # a recipe and must never be interpreted as owned equipment.
+            if record['mutation_type'] == 5 and record['mutation_index'] == 0:
+                ident = record['mutation_bit']
+                item(ident)
+                grants.append(dict(kind='registered-story-item-grant',
+                    map_id=map_id, record_id=record['id'], source=deepcopy(record['source']),
+                    mutation_type=5, mutation_index=0, mutation_bit=ident))
+    reachable, roots = registered_tlk_reachability(story, registration, original, hashes, require)
+    for grant in grants:
+        origin = reachable.get(f"{grant['map_id']}:{grant['record_id']}")
+        if origin:
+            sources.setdefault(str(grant['mutation_bit']), []).append(dict(**grant, entrance=deepcopy(origin)))
+    promoted, previous, rejected = [], {}, []
+    for ident in sorted(sources, key=int):
+        row = definitions[ident]
+        if not plain_equipment_supported(row):
+            rejected.append(dict(item_id=int(ident), behavior=row['behavior']['kind'],
+                                 reason='not-recovered-plain-numeric-equipment'))
+            continue
+        if not row['availability']['enabled']:
+            promoted.append(int(ident))
+            previous[ident] = deepcopy(row['availability'])
+            row['availability'] = dict(enabled=True, chapter_enabled=True, catalog_visible=True,
+                default_enabled=True, reasons=['registered-source-equipment; pure-numeric-equip-and-linking-recovered'])
+    return dict(policy='registered-source-plain-equipment-v1', promoted_item_ids=promoted,
+        sources=sources, previous_availability=previous, rejected_sources=rejected,
+        admitted_tlk_roots=roots, reachable_tlk_record_count=len(reachable),
+        source_hashes=hashes, native_bootstrap=dict(procedure='0x47ae20', address='0x47af06',
+            offset=bootstrap_offset, raw_hex=bootstrap.hex(), item_ids=initial_ids),
+        scope='Menu equip/link capability only; no inventory grant, party ownership or special passive is inferred.')
+
+
+def status_cure_supported(row):
+    """Single allied mode1 removal with no field, stat-growth or other payload."""
+    raw = bytes.fromhex(row['raw_hex'])
+    block = raw[0x2a8:0x2a8 + 0xc6]
+    return bool(row['record_status'] == 'defined' and raw[0x24:0x26] == b'\x05\x01'
+        and row['initialization']['deterministic'] and row['validation']['all_value_ranges_ordered']
+        and all(pair['minimum'] == pair['maximum'] == 0 for pair in row['value_ranges'])
+        and raw[0x156] == 0 and raw[0x157] == 1 and i32(raw, 0x142) == 17
+        and block[1] != 0 and block[0xb] == 1 and not any(raw[0x2a8 + 0xc6:])
+        and row['raw_fields']['effect_token_raw_126'] != '')
+
+
+def admit_registered_status_cures(definitions, equipment_admission):
+    # Provenance has already passed the original-byte checks above. Do not
+    # enable all cure records merely because the interpreter supports mode1.
+    sources, previous = {}, {}
+    for ident, provenance in equipment_admission['sources'].items():
+        row = definitions[ident]
+        if not status_cure_supported(row):
+            continue
+        sources[ident] = deepcopy(provenance)
+        previous[ident] = {key: deepcopy(row[key]) for key in ('availability', 'behavior')}
+        row['behavior'] = dict(kind='status-cure', status='recovered',
+            implemented_scope=['battle-single-allied-first-matching-status-removal'],
+            unverified_scope=[])
+        row['availability'] = dict(enabled=True, chapter_enabled=True, catalog_visible=True,
+            default_enabled=True, reasons=['registered-source-grant; native-mode1-status-removal-recovered'])
+        row['status_cure'] = dict(effect_id_raw=bytes.fromhex(row['raw_hex'])[0x2a9], mode_raw=1,
+            effect_raw_hex=bytes.fromhex(row['raw_hex'])[0x2a8:0x36e].hex(),
+            definition_offset=0x2a8, effect_bytes=0xc6,
+            evidence='ev_4ee7cc8d9c675c3b1405324f30fb85a23397d5d5af06c75462626bf4fab5b54e')
+        row['effect'] = dict(restore_hp_flat=0, restore_mp_flat=0, restore_hp_percent=0,
+                             restore_mp_percent=0, revive=False)
+        row['use_in_field'], row['use_in_battle'] = False, True
+        row['battle'] = dict(animation_skill_id_raw_142=i32(bytes.fromhex(row['raw_hex']), 0x142),
+            all_targets_raw_156=0, same_side_raw_157=1, effect_kind_raw_2b3=1,
+            preparation_delay_added=0, target_state_max_exclusive=4,
+            target_immune_must_be_zero=True, consume_only_on_native_success=True)
+    return dict(policy='registered-source-item-capabilities-v1', promoted_item_ids=sorted(map(int, sources)),
+        sources=sources, previous_definitions=previous,
+        field_scope='47D960 has zero initialized fields for these cures; field use cannot succeed or consume.',
+        battle_scope='41B3C0 calls 508BB0 mode1 then displays the source effect; consumes only on a successful status removal or recovery.')
+
+
 def export():
-    paths = ['GAME.exe', 'SYSTEM/Object.ITM']
+    registration = content_definition()
+    paths = source_files(registration)
     original = {p: (ROOT / p).read_bytes() for p in paths}
     hashes = {p: sha(raw) for p, raw in original.items()}
-    assert hashes == {'GAME.exe': GAME_SHA, 'SYSTEM/Object.ITM': ITM_SHA}
+    assert hashes['GAME.exe'] == GAME_SHA and hashes['SYSTEM/Object.ITM'] == ITM_SHA
     itm = original['SYSTEM/Object.ITM']
     count = u32(itm, 0x20)
     assert count == 416 and len(itm) == 0x61c + count * 0x3bf
@@ -191,6 +497,13 @@ def export():
                          procedure=proc, operation=by_proc[proc]['operation'],
                          bundle=proof_path.relative_to(ROOT).as_posix())
                 for key, proc in required.items()}
+    status_path = RUNTIME / 'evidence/fire_valley_20261024/stage12_status_apply.json'
+    status_proof = json.loads(status_path.read_text('utf-8'))
+    assert status_proof['subject']['digest']['sha256'] == GAME_SHA
+    assert status_proof['parameters']['procedure'] == '0x508bb0'
+    evidence['status_removal'] = dict(evidence_id=status_proof['evidence_id'], procedure='0x508bb0',
+        operation=status_proof['operation'], bundle=status_path.relative_to(ROOT).as_posix(),
+        branch='0x508c45..0x508d11 mode1 first matching ID removal; success1/no-match0; no RNG')
     scheduler_path = RUNTIME / 'evidence/forest_scheduler_native_20261011.json'
     scheduler_records = json.loads(scheduler_path.read_text('utf-8'))['records']
     dispatch_record = next(r for r in scheduler_records if r['operation'] == 'procedure_assembly'
@@ -231,6 +544,14 @@ def export():
                                  target_state_max_exclusive=4,
                                  target_immune_must_be_zero=True)
         definitions[str(ident)] = row
+    input_paths = ('opening_seed.json', 'chapter_story.json', 'runtime_content.json')
+    inputs = {name: (RUNTIME / 'web/data' / name).read_bytes() for name in input_paths}
+    assert json.loads(inputs['runtime_content.json']) == registration, 'Content authoring changed during item export'
+    admission = admit_registered_equipment(definitions, json.loads(inputs['opening_seed.json']),
+        json.loads(inputs['chapter_story.json']), registration)
+    capabilities = admit_registered_status_cures(definitions, admission)
+    admission['generated_input_hashes'] = {f'data/{name}': sha(raw) for name, raw in inputs.items()}
+    enabled_ids = [row['id'] for row in definitions.values() if row['availability']['enabled']]
     forest = json.loads((RUNTIME / 'web/data/forest_rewards.json').read_text('utf-8'))['items']
     forest_checks = {}
     for key, item in forest.items():
@@ -247,7 +568,7 @@ def export():
     assert range_issues == {'36': [dict(kind='reversed-source-range', instance_offset=0x7d,
                                       definition_offset=0x27a, minimum=768, maximum=0)]}
     assert variable_ids == [31]
-    assert {k for k, r in definitions.items() if 'effect' in r} == {'8', '11', '12'}
+    assert {k for k, r in definitions.items() if 'effect' in r} == {'8', '11', '12'} | set(capabilities['sources'])
     assert all(len(row['value_ranges']) == 32 and row['source']['record_sha256'] == sha(bytes.fromhex(row['raw_hex']))
                and row['validation']['drop_rate_in_native_range'] and row['validation']['target_flags_are_boolean']
                for row in definitions.values())
@@ -272,12 +593,14 @@ def export():
                         by_type_subtype='Original type and subtype bytes joined with a colon; categories do not assign unrecovered mechanics.',
                         by_allowed_role='Three-digit numeric role ID for each set bit in the raw uint32 role mask. This source lookup does not enable items or assert usable behavior.',
                         availability='Source indexes are independent of runtime activation. config/items.json remains the only editable parameter catalog.'),
-                    default_enabled_item_ids=IDS, simple_restore_item_ids=SIMPLE_RESTORE_IDS,
+                    default_enabled_item_ids=enabled_ids, original_chapter_item_ids=IDS,
+                    equipment_admission=admission, item_capability_admission=capabilities,
+                    simple_restore_item_ids=SIMPLE_RESTORE_IDS,
                     source_value_ranges_per_record=32, source_range_issues=range_issues,
                     random_initialization_item_ids=variable_ids,
                     classification_counts=dict(Counter(r['category'] for r in definitions.values())),
                     behavior_counts=dict(Counter(r['behavior']['kind'] for r in definitions.values())),
-                    compatibility='The original eight chapter IDs keep their initialized bytes/slot/effect contracts; extra definitions are source catalog entries.',
+                    compatibility='The original eight chapter IDs retain their contracts. Registered source initial/gift equipment enables verified plain numeric equip/linking; registered cure grants enable native mode1 removal. Neither policy grants inventory.',
                     unknown_fields='Prices, crafting recipes, crystal insertion/removal and special effects are not assigned semantics from names; original bytes remain in raw_hex.'),
                  equipment_resource_policy='preserve-raw',
                  consumable_resource_policy='raw-add-clamp-to-raw-maximum',
@@ -293,24 +616,30 @@ def export():
                                    effective_resource_getters='0x500350/0x500480 return raw plus linked bonuses without a zero clamp.',
                                    battle_preparation_delay_added=0,
                                    battle_gauge='0x50E7A0 resets gauge to zero; item flag bypasses skill checks in 0x503D80/88; 0x503F38 subtracts threshold.',
-                                   battle_target_gate='0x41B3C0 permits effect kind 0 only for immune byte 0 and state <4; invalid targets consume no item.',
-                                   battle_consumption='Simple nonzero HP/MP restore succeeds even when full and removes exactly one instance.'),
+                                   battle_target_gate='0x41B3C0 permits recovered mode0/1 for immune byte0 and state<4; displayed HP is not an additional gate. Invalid targets consume no item.',
+                                   battle_consumption='41B3C0 consumes only if 508BB0 or 47D960 returns success. Nonzero HP/MP restore succeeds even when full; mode1 no-match fails without consumption.',
+                                   status_removal='508BB0 mode1 rejects duplicate id/mode1, otherwise clears the first matching ID and calls508300; no RNG or 508A90 contact-removal pass.'),
                  source=dict(native_bundle_sha256=sha(proof_path.read_bytes()),
                              native_scheduler_bundle_sha256=sha(scheduler_path.read_bytes()),
                              native_drop_bundle_sha256=sha(drop_path.read_bytes()),
+                             native_status_bundle_sha256=sha(status_path.read_bytes()),
                              original_game_executed=False,
                              limitations=['Static shipped binary evidence; original execution was not observed.',
                                           'Battle item gauge and zero added preparation debt are native verified; live menu timing and animation completion remain remake adapters.',
-                                          'Only the eight default chapter items are enabled. Additional valid-slot equipment declares recovered equip/linking scope; source-only records have no usable handler.',
+                                          'Default capability includes the original chapter set, registered source plain equipment, and registered native mode1 cure grants. Other records remain disabled by default unless an independent recovered handler admits them.',
                                           'Crystal socketing, crafting, special passive abilities, growth/revival and other item handlers remain unverified.',
                                           'ID31 has a variable range and ID36 has a reversed range in the shipped source; they are retained rather than silently repaired.',
                                           'Special slot label is a remake UI label for source category5; its catalog records are present but none is enabled by default.']))
     write(output, value)
     assert all((ROOT / p).read_bytes() == raw for p, raw in original.items())
+    assert all((RUNTIME / 'web/data' / name).read_bytes() == raw for name, raw in inputs.items())
     report = dict(schema='seventh-seal-chapter-item-export', version=1, passed=True,
                   source_bytes_unchanged=True, source_hashes=hashes,
                   output_path=output.relative_to(ROOT).as_posix(), output_sha256=sha(output.read_bytes()),
-                  item_ids=list(range(1, count + 1)), enabled_item_ids=IDS,
+                  item_ids=list(range(1, count + 1)), enabled_item_ids=enabled_ids,
+                  equipment_admission=admission,
+                  item_capability_admission=capabilities,
+                  generated_input_hashes=admission['generated_input_hashes'],
                   record_count=count, value_range_checks=count * len(VALUE_PAIRS),
                   source_reconstruction_exact=True, reconstructed_source_bytes=len(reconstructed),
                   reconstructed_source_sha256=sha(reconstructed),
@@ -324,10 +653,11 @@ def export():
                   classification_counts=value['catalog']['classification_counts'],
                   placeholder_record_ids=value['catalog']['placeholder_record_ids'],
                   forest_drop_definition_checks=forest_checks,
-                  simple_effects={k:r['effect'] for k,r in definitions.items() if 'effect' in r},
+                  simple_effects={k:r['effect'] for k,r in definitions.items() if r['behavior']['kind']=='simple-restore'},
+                  status_cures={k:r['status_cure'] for k,r in definitions.items() if r['behavior']['kind']=='status-cure'},
                   original_game_execution_observed=False, evidence=evidence)
     write(RUNTIME / 'evidence/chapter_items_export.json', report)
-    print(json.dumps(dict(record_count=count, enabled_item_ids=IDS,
+    print(json.dumps(dict(record_count=count, enabled_item_ids=enabled_ids,
         behavior_counts=report['behavior_counts'], value_range_checks=report['value_range_checks'],
         deterministic_initialized_records=report['deterministic_initialized_records'],
         source_range_issues=range_issues, simple_effects=report['simple_effects'],

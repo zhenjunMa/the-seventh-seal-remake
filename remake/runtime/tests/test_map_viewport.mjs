@@ -12,7 +12,7 @@ test('ANM started within a RAF frame never produces a negative logical frame',as
   try{
     const presentation=new OpeningView({});
     const animation=presentation.tween(20,value=>progress.push(value));
-    queued.shift()(performance.now()-10000);
+    queued.shift()(performance.now()-10000);await Promise.resolve();
     queued.shift()(performance.now()+10000);
     await animation;assert.deepEqual(progress,[0,1]);
   }finally{globalThis.requestAnimationFrame=original;}

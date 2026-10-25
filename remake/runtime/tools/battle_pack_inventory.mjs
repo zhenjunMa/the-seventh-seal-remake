@@ -29,11 +29,16 @@ for(const [metadataPath,itemMetadataPath,stageMetadataPath,lifecycleMetadataPath
   ['/data/enemy_battle_view.json',null,'/data/forest_stage.json',null],
   ['/data/battle_view.json',null,null,null],
 ]){
-  const view=new BattleView({canvas:{getContext:()=>({})},metadataPath,itemMetadataPath,stageMetadataPath,lifecycleMetadataPath,jsonLoader,content,
+  // Keep the frozen four-role forest preview packable alongside the current
+  // enemy/party banks. Its scope does not redefine the runtime's live roster.
+  const viewContent=metadataPath==='/data/forest_full_battle_view.json'?structuredClone(content):content;
+  if(viewContent!==content)viewContent.battle_rosters['forest-source-group']=['001','011','012','013'];
+  const view=new BattleView({canvas:{getContext:()=>({})},metadataPath,itemMetadataPath,stageMetadataPath,lifecycleMetadataPath,jsonLoader,content:viewContent,
     assetLoader:async a=>{add(a);return {image:{width:a.width,height:a.height},sha256:a.sha256};}});
   await view.prepare();
   for(const role of view.meta.roles)for(const action of role.actions)add({...assets.get(action.sheet),group:'role-'+role.id,tile_width:role.frame_width,tile_height:role.frame_height});
-  for(const effect of view.meta.effects)add({...assets.get(effect.sheet),group:'effects',tile_width:effect.frame_width,tile_height:effect.frame_height});
+  for(const effect of view.meta.effects)for(const sheet of effect.layer_order?effect.layer_order.map(layer=>effect[`${layer}_sheet`]):[effect.sheet])
+    add({...assets.get(sheet),group:'effects',tile_width:effect.frame_width,tile_height:effect.frame_height});
   for(const bank of [view.layers,...view.alternateLayers.values()])for(const pair of bank.frames)for(const layer of [pair.main,pair.intrinsic]){
     const p='/'+layer.path;add({...assets.get(p),group:'role-'+bank.role_id,tile_width:bank.frame_width,tile_height:bank.frame_height});
   }

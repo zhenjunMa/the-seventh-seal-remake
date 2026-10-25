@@ -61,3 +61,19 @@ export class DistanceGait {
     return action.uses_sequence?action.sequence_raw[logical]:logical;
   }
 }
+// Older route assets retain their original exporter. The verified story table
+// already carries the complete DAT header; recover its two movement bytes
+// without rebuilding pixels, modifying the asset file, or guessing a default.
+export function nativeMapMovement(movement,table){
+  if(!table)return movement;
+  const source=table.map_source,header=table.header_raw_hex;
+  if(source?.sha256!==movement.source_sha256||source.path?.toLowerCase()!==movement.source?.toLowerCase()
+    ||typeof header!=='string'||!/^(?:[a-f0-9]{2}){370}$/i.test(header))throw new Error('地图移动头与来源不一致');
+  const result={...movement};
+  for(const [key,offset]of [['native_step_shift',0x144],['native_camera_step_shift',0x145]]){
+    const value=Number.parseInt(header.slice(offset*2,offset*2+2),16);
+    if(value>30||movement[key]!==undefined&&movement[key]!==value)throw new Error('地图移动步长与来源不一致');
+    result[key]=value;
+  }
+  return result;
+}

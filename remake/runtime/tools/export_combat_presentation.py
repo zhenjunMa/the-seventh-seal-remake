@@ -113,18 +113,30 @@ def indexed_contribution(dgp: DGP, frame: int) -> tuple[Image.Image, dict]:
     return Image.frombytes('RGBA', (dgp.width, dgp.height), bytes(pixels)), stats
 
 
-def native_frame_sequence(raw_action: bytes, start: int, end: int, reverse: int) -> list[int]:
+def native_frame_sequence(raw_action: bytes, start: int, end: int, reverse: int,
+                          *, total_frames: int | None = None) -> list[int]:
     """Bounded 0x50E980 frame interval, not an invented whole-group sequence."""
-    if end < start:
+    if start < 0 or end < start:
         raise DGPError('CHR end-exclusive frame bound precedes its start')
+    if total_frames is not None and (type(total_frames) is not int or total_frames <= 0):
+        raise DGPError('DGP global frame pool must have a positive size')
+    first = u32(raw_action, 0x72)
     if raw_action[0x0D] & 0x0F:
+        if total_frames is not None and first + end > total_frames:
+            raise DGPError('Frame sequence leaves its DGP global frame pool')
         sequence = list(range(start, end))
     else:
         count = u32(raw_action, 0x12)
         if count > 0x5C or end > count:
             raise DGPError('DGP explicit sequence exceeds retained +0x16 table')
         sequence = list(raw_action[0x16 + start:0x16 + end])
-    if any(i >= raw_action[0x0E] for i in sequence):
+    # 50E980 writes action+72 plus the CHR/local frame directly (50F2D7-E6).
+    # Some shipped responses cross the nominal group end. Such a reference is
+    # admitted only when its real DGP pool is known; callers without that pool
+    # retain the conservative per-group bound.
+    if total_frames is not None and any(first + i >= total_frames for i in sequence):
+        raise DGPError('Frame sequence leaves its DGP global frame pool')
+    if total_frames is None and any(i >= raw_action[0x0E] for i in sequence):
         raise DGPError('Frame sequence leaves its DGP physical group')
     return list(reversed(sequence)) if reverse else sequence
 

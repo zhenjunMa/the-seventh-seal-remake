@@ -40,6 +40,7 @@
     "native_coordinate_shift": 3,
     "native_to_pixel_scale": 2,
     "native_step_shift": 1,
+    "native_camera_step_shift": 1,
     "terrain_rows": [
       "111111111111111111111111111111111111111111111111111111111111",
       "111111111111111111111111111111111111111111111111111111111111",
@@ -1161,6 +1162,8 @@
     "path": "Map/m17029.dat",
     "sha256": "57851abbfe75121b806268f5bce8c778ec4e5d82ebb7dfa623fbd6952977c314",
     "bytes": 232412,
+    "object_resource_base_raw": ".\\MAPM\\M17029\\",
+    "object_resource_base": "mapm/m17029",
     "object_table_start": 189298,
     "object_table_end": 196148,
     "unknown_tail_bytes": 36264,

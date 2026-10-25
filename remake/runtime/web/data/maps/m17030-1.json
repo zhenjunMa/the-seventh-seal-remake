@@ -1,0 +1,1424 @@
+{
+  "schema": "seventh-seal-runtime-map",
+  "version": 1,
+  "id": "M17030-1",
+  "name": "火祭坛",
+  "name_bytes_hex": "bbf0bcc0ccb3",
+  "width": 1280,
+  "height": 1664,
+  "background": {
+    "image": "/assets/maps/m17030-1/background.png",
+    "width": 1280,
+    "height": 1664,
+    "sources": [
+      {
+        "path": "M17030.DGP",
+        "sha256": "6c7746871709f5a4df90757933e2eebcb05720103026410ba4f67f487b66ed76"
+      },
+      {
+        "path": "M17030A.DGP",
+        "sha256": "d05733556a50f9f8d95b5d1b85bfeafcd5af9b56e2155828d23aa5e96273cd2a"
+      }
+    ],
+    "image_sha256": "eab2c83dc41647a497d42a906a8d85b8f949290f757acaf61e2c9fef173b4709",
+    "assembly": {
+      "referenced_frames": 1989,
+      "empty_blocks": 0,
+      "columns": 40,
+      "rows": 52,
+      "resource_count": 2,
+      "animation_frame": 0,
+      "assembly": "DAT even-cell frame/resource -> indexed header DGP; 0x4A3770 rectangular branch",
+      "odd_size_policy": "Native tile-origin loops; clip beyond exact DAT dimensions"
+    }
+  },
+  "movement": {
+    "schema": "seventh-seal-map-movement",
+    "version": 1,
+    "map": "M17030-1",
+    "source": "Map/m17030-1.dat",
+    "source_sha256": "85f2b0ea6398a9cf759183892cf9967e9b690dc57b5fb240e58969f69ae77e6b",
+    "width": 80,
+    "height": 104,
+    "cell_size": 16,
+    "native_coordinate_shift": 3,
+    "native_to_pixel_scale": 2,
+    "native_step_shift": 1,
+    "native_camera_step_shift": 1,
+    "terrain_rows": [
+      "11111111111111111111111111111111111111111111111111111111111111111111111111111110",
+      "11111111111111111111111111111111111111111111111111111111111111111111111111111110",
+      "11111111111111111111111111111111111111111111111111111111111111111111111111111110",
+      "11111111111111111111111111111111111111111111111111111111111111111111111111111110",
+      "11111111111111111111111111111111111111111111111111111111111111111111111111111110",
+      "11111111111111111111111111111111111111111111111111111111111111111111111111111110",
+      "11111111111111111111111111111111111111111111111111111111111111111111111111111110",
+      "11111111111111111111111111111111111111111111111111111111111111111111111111111110",
+      "11111111111111111111111111111111111111111111111111111111111111111111111111111110",
+      "11111111111111111111111111111111111111111111111111111111111111111111111111111110",
+      "11111111111111111111111111111111111111111111111111111111111111111111111111111110",
+      "11111111111111111111111111111111111111111111111111111111111111111111111111111110",
+      "11111111111111111111111111111111111111111111111111111111111111111111111111111110",
+      "11111111111111111111111111111111111111111111111111111111111111111111111111111110",
+      "11111111111111111111111111111111111111111111111111111111111111111111111111111110",
+      "11111111111111111111111111111111111111111111111111111111111111111111111111111110",
+      "11111111111111111111111111111111111111111111111111111111111111111111111111111110",
+      "11111111111111111111111111111111111111111111111111111111111111111111111111111110",
+      "11111111111111111111111111111111111111111111111111111111111111111111111111111110",
+      "11111111111111111111111111111111111111111111111111111111111111111111111111111110",
+      "11111111111111111111111111111111111111111111111111111111111111111111111111111110",
+      "11111111111111111111111111111111111111111111111111111111111111111111111111111110",
+      "11111111111111111111111111111111111111111111111111111111111111111111111111111110",
+      "11111111111111111111111111111111111111111111111111111111111111111111111111111110",
+      "11111111111111111111111111111111111111111111111111111111111111111111111111111110",
+      "11111111111111111111111111111111111111111111111111111111111111111111111111111110",
+      "11111111111111111111111111111111111111111111111111111111111111111111111111111110",
+      "11111111111111111111111111111111111111111111111111111111111111111111111111111110",
+      "11111111111111111111111111111100111111111111111001111111111111111111111111111110",
+      "11111111111111111111111111110000011111111111100000111111111111111111111111111110",
+      "11111111111111111111111111100000011111111111000000001111111111111111111111111110",
+      "11111111111111111111111111000000001111111110000000000111111111111111111111111110",
+      "11111111111111111111111110000000000111111100000000000111111111111111111111111110",
+      "11111111111111111111111110000000000011111100000000000111111111111111111111111110",
+      "11111111111111111111111110000000000001111000000000000111111111111111111111111110",
+      "11111111111111111111111110000000000000000000000000000111111111111111111111111110",
+      "11111111111111111111111110000000000000000000000000000111111111111111111111111110",
+      "11111111111111111111111110000000000000000000000000000111111111111111111111111110",
+      "11111111111111111111111110000000000000000000000000000111111111111111111111111110",
+      "11111111111111111111111110000000000000000000000000000111111111111111111111111110",
+      "11111111111111111111111100000000000000000000000000000111111111111111111111111110",
+      "11111111111111111111111100000000000000000000000000000111111111111111111111111110",
+      "11111111111111111111111111111100000000000000000111111111111111111111111111111110",
+      "11111111111111111111111111111100000000000000000111111111111111111111111111111110",
+      "11111111111111111111111111111100000000000000000111111111111111111111111111111110",
+      "11111111111111111111111111111100000000000000000111111111111111111111111111111110",
+      "11111111111111111111111111111100000000000000000011111111111111111111111111111110",
+      "11111111111111111111111111111100000000000000000011111111111111111111111111111110",
+      "11111111111111111111111111111100000000000000000011111111111111111111111111111110",
+      "11111111111111111111111111111100000000000000000011111111111111111111111111111110",
+      "11111111111111111111111111111100000000000000000011111111111111111111111111111110",
+      "11111111111111111111111111111100000000000000000011111111111111111111111111111110",
+      "11111111111111111111111111111100000000000000000011111111111111111111111111111110",
+      "11111111111111111111111111111100000000000000000011111111111111111111111111111110",
+      "11111111111111111111111111111100000000000000000011111111111111111111111111111110",
+      "11111111111111111111111111111100000000000000000011111111111111111111111111111110",
+      "11111111111111111111111111111100000000000000000011111111111111111111111111111110",
+      "11111111111111111111111111111100000000000000000011111111111111111111111111111110",
+      "11111111111111111111111111111100000000000000000011111111111111111111111111111110",
+      "11111111111111111111111111111100000000000000000011111111111111111111111111111110",
+      "11111111111111111111111111111100000000000000000011111111111111111111111111111110",
+      "11111111111111111111111111111100000000000000000011111111111111111111111111111110",
+      "11111111111111111111111111111100000000000000000011111111111111111111111111111110",
+      "11111111111111111111111111111100000000000000000011111111111111111111111111111110",
+      "11111111111111111111111111111100000000000000000011111111111111111111111111111110",
+      "11111111111111111111111111111100000000000000000011111111111111111111111111111110",
+      "11111111111111111111111111111100000000000000000011111111111111111111111111111110",
+      "11111111111111111111111111111100000000000000000011111111111111111111111111111110",
+      "11111111111111111111111111111100000000000000000011111111111111111111111111111110",
+      "11111111111111111111111111111000000000000000000011111111111111111111111111111110",
+      "11111111111111111111111111111000000000000000000011111111111111111111111111111110",
+      "11111111111111111111111111111000000000000000000011111111111111111111111111111110",
+      "11111111111111111111111111111000000000000000000011111111111111111111111111111110",
+      "11111111111111111111111111111000000000000000000011111111111111111111111111111110",
+      "11111111111111111111111111111000000000000000000011111111111111111111111111111110",
+      "11111111111111111111111111111000000000000000000011111111111111111111111111111110",
+      "11111111111111111111111111111000000000000000000011111111111111111111111111111110",
+      "11111111111111111111111111111000000000000000000011111111111111111111111111111110",
+      "11111111111111111111111111111000000000000000000011111111111111111111111111111110",
+      "11111111111111111111111111111000000000000000000011111111111111111111111111111110",
+      "11111111111111111111111111111000000000000000000011111111111111111111111111111110",
+      "11111111111111111111111111111000000000000000000011111111111111111111111111111110",
+      "11111111111111111111111111111000000000000000000011111111111111111111111111111110",
+      "11111111111111111111111111111000000000000000000011111111111111111111111111111110",
+      "11000000000000000000000000000000000000000000000000000000000000000000000000001110",
+      "11000000000000000000000000000000000000000000000000000000000000000000000000001110",
+      "11000000000000000000000000000000000000000000000000000000000000000000000000001110",
+      "11000000000000000000000000000000000000000000000000000000000000000000000000001110",
+      "11000000000000000000000000000000000000000000000000000000000000000000000000001110",
+      "11000000000000000000000000000000000000000000000000000000000000000000000000001110",
+      "11000000000000000000000000000000000000000000000000000000000000000000000000001110",
+      "11000000000000000000000000000000000000000000000000000000000000000000000000001110",
+      "11000000000000000000000000000000000000000000000000000000000000000000000000001110",
+      "11000000000000000000000000000000000000000000000000000000000000000000000000001110",
+      "11000000000000000000000000000000000000000000000000000000000000000000000000001110",
+      "11000000000000000000000000000000000000000000000000000000000000000000000000001110",
+      "11000000000000000000000000000000000000000000000000000000000000000000000000001110",
+      "11000000000000000000000000000000000000000000000000000000000000000000000000001110",
+      "11000000000000000000000000000000000000000000000000000000000000000000000000001110",
+      "11000000000000000000000000000000000000000000000000000000000000000000000000001110",
+      "11000000000000000000000000000000000000000000000000000000000000000000000000001110",
+      "11111111111111111111111111111111111111111111111111111111111111111111111111111110",
+      "11111111111111111111111111111111111111111111111111111111111111111111111111111110",
+      "00000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    ],
+    "triggers": [
+      {
+        "x": 28,
+        "y": 100,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d31373033322e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 29,
+        "y": 100,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d31373033322e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 30,
+        "y": 100,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d31373033322e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 31,
+        "y": 100,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d31373033322e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 32,
+        "y": 100,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d31373033322e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 33,
+        "y": 100,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d31373033322e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 34,
+        "y": 100,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d31373033322e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 35,
+        "y": 100,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d31373033322e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 36,
+        "y": 100,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d31373033322e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 37,
+        "y": 100,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d31373033322e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 38,
+        "y": 100,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d31373033322e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 39,
+        "y": 100,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d31373033322e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 40,
+        "y": 100,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d31373033322e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 41,
+        "y": 100,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d31373033322e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 42,
+        "y": 100,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d31373033322e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 43,
+        "y": 100,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d31373033322e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 44,
+        "y": 100,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d31373033322e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 45,
+        "y": 100,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d31373033322e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 46,
+        "y": 100,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d31373033322e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 47,
+        "y": 100,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d31373033322e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 48,
+        "y": 100,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d31373033322e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 49,
+        "y": 100,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d31373033322e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      }
+    ],
+    "terrain_rule": "cell byte +0x20 == 0 permits terrain entry",
+    "transition_rule": "0x4A80E0: +0x38 reference, descriptor[0]==0 and descriptor[0x11]!=0 is path-gated",
+    "policy": "Unimplemented native transition gates block. Runtime enables only separately verified exits.",
+    "role_occupancy_rule": "+0x14 is runtime role index + 1, not static terrain",
+    "object_lookup_rule": "+0x2B is runtime object index + 1, not a second collision mask"
+  },
+  "objects": [
+    {
+      "index": 0,
+      "resource_filename": "003.DGP",
+      "source": "mapm/m17030/003.dgp",
+      "resource_sha256": "8705b62afbffcbcf40b1ed7702acf49166a3fefff8e7aec60a6622396e3ef8ac",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 208,
+      "y_native": 376,
+      "x_world": 416,
+      "y_world": 752,
+      "anchor_x": 60,
+      "anchor_y": 126,
+      "draw_x": 356,
+      "draw_y": 626,
+      "frame_width": 114,
+      "frame_height": 184,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 26,
+      "cell_y": 47,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 416,
+      "sort_y": 784,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m17030-1/objects/003_frame_000.png",
+      "image_sha256": "080e015756c70b374f24a7c9fabfa270cf8c0bf88389a5a8a1701f2aa1fa392b"
+    },
+    {
+      "index": 1,
+      "resource_filename": "004.DGP",
+      "source": "mapm/m17030/004.dgp",
+      "resource_sha256": "76642bfa6f02867bcd2c48119c794618c07cae2b82872f3b768d3178d0308196",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 416,
+      "y_native": 384,
+      "x_world": 832,
+      "y_world": 768,
+      "anchor_x": 32,
+      "anchor_y": 123,
+      "draw_x": 800,
+      "draw_y": 645,
+      "frame_width": 104,
+      "frame_height": 166,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 52,
+      "cell_y": 48,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 832,
+      "sort_y": 800,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m17030-1/objects/004_frame_000.png",
+      "image_sha256": "64f68d8cab64217741022947977c8444f4b087e9c6f2c87f6496982bca071935"
+    },
+    {
+      "index": 2,
+      "resource_filename": "005.DGP",
+      "source": "mapm/m17030/005.dgp",
+      "resource_sha256": "c3e14866e885849a077e30af771d2b3c71b0e8826ac4db58693c81ccc071072b",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 208,
+      "y_native": 600,
+      "x_world": 416,
+      "y_world": 1200,
+      "anchor_x": 82,
+      "anchor_y": 124,
+      "draw_x": 334,
+      "draw_y": 1076,
+      "frame_width": 114,
+      "frame_height": 170,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 26,
+      "cell_y": 75,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 416,
+      "sort_y": 1232,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m17030-1/objects/005_frame_000.png",
+      "image_sha256": "c9f3c00aa7e9fa7e4dfd34d7367ca5dada0ac0c16f7a655f120dccb5b463193e"
+    },
+    {
+      "index": 3,
+      "resource_filename": "006.DGP",
+      "source": "mapm/m17030/006.dgp",
+      "resource_sha256": "c56e75474024ad36bb7561a816650d498ac1a4408ab47da5ac1b78d053a4b10c",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 432,
+      "y_native": 600,
+      "x_world": 864,
+      "y_world": 1200,
+      "anchor_x": 62,
+      "anchor_y": 125,
+      "draw_x": 802,
+      "draw_y": 1075,
+      "frame_width": 118,
+      "frame_height": 174,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 54,
+      "cell_y": 75,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 864,
+      "sort_y": 1232,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m17030-1/objects/006_frame_000.png",
+      "image_sha256": "2b13696df0dd0bd3410593fd2b3252df5a2fee1b753c2c39e4bee6504205970c"
+    }
+  ],
+  "exits": [
+    {
+      "id": 1,
+      "state": "ready",
+      "cells": [
+        {
+          "x": 28,
+          "y": 100
+        },
+        {
+          "x": 29,
+          "y": 100
+        },
+        {
+          "x": 30,
+          "y": 100
+        },
+        {
+          "x": 31,
+          "y": 100
+        },
+        {
+          "x": 32,
+          "y": 100
+        },
+        {
+          "x": 33,
+          "y": 100
+        },
+        {
+          "x": 34,
+          "y": 100
+        },
+        {
+          "x": 35,
+          "y": 100
+        },
+        {
+          "x": 36,
+          "y": 100
+        },
+        {
+          "x": 37,
+          "y": 100
+        },
+        {
+          "x": 38,
+          "y": 100
+        },
+        {
+          "x": 39,
+          "y": 100
+        },
+        {
+          "x": 40,
+          "y": 100
+        },
+        {
+          "x": 41,
+          "y": 100
+        },
+        {
+          "x": 42,
+          "y": 100
+        },
+        {
+          "x": 43,
+          "y": 100
+        },
+        {
+          "x": 44,
+          "y": 100
+        },
+        {
+          "x": 45,
+          "y": 100
+        },
+        {
+          "x": 46,
+          "y": 100
+        },
+        {
+          "x": 47,
+          "y": 100
+        },
+        {
+          "x": 48,
+          "y": 100
+        },
+        {
+          "x": 49,
+          "y": 100
+        }
+      ],
+      "target_map": "M17032",
+      "entry": {
+        "x": 1536,
+        "y": 336,
+        "direction": 6,
+        "cell_x": 96,
+        "cell_y": 21,
+        "native_x": 768,
+        "native_y": 168
+      },
+      "conditions": [],
+      "source": {
+        "path": "Map/m17030-1.dat",
+        "sha256": "85f2b0ea6398a9cf759183892cf9967e9b690dc57b5fb240e58969f69ae77e6b",
+        "descriptor_offset": 534194,
+        "descriptor_bytes": 66,
+        "descriptor_hex": "00000000000000000000000000000000006d31373033322e646174000000000000000000000002000000020000000000000000000000000000000000000000000000",
+        "compact_field_expansion_evidence": null,
+        "target_path": "Map/m17032.dat",
+        "target_sha256": "fec9023611123ba7557cf0a186317c808a5c041a6ec8d0fd52b30c8576f09bfe",
+        "target_entry_marker": 2,
+        "entry_sort_code": 2,
+        "entry_scan_cells": [
+          {
+            "x": 96,
+            "y": 20,
+            "offset": 146034
+          },
+          {
+            "x": 97,
+            "y": 20,
+            "offset": 146098
+          },
+          {
+            "x": 96,
+            "y": 21,
+            "offset": 153010
+          },
+          {
+            "x": 97,
+            "y": 21,
+            "offset": 153074
+          }
+        ],
+        "entry_sorted_cells": [
+          {
+            "x": 96,
+            "y": 21
+          },
+          {
+            "x": 97,
+            "y": 21
+          },
+          {
+            "x": 96,
+            "y": 20
+          },
+          {
+            "x": 97,
+            "y": 20
+          }
+        ],
+        "entry_sort": "y descending; stable ties",
+        "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
+        "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
+        "native_evidence": {
+          "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+          "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+          "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+          "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+        }
+      },
+      "execution": "Native transition descriptor only; map-entry TLK/ANM and their once-only checks must complete separately.",
+      "limitations": [
+        "Static source/code evidence; original timing not observed",
+        "Continuous keyboard movement is runtime policy"
+      ]
+    }
+  ],
+  "unresolved_triggers": [],
+  "role_layer_preview": 2,
+  "role_layer_note": "Runtime render policy; native role +0xF3 initial value remains unverified",
+  "source": {
+    "path": "Map/m17030-1.dat",
+    "sha256": "85f2b0ea6398a9cf759183892cf9967e9b690dc57b5fb240e58969f69ae77e6b",
+    "bytes": 586897,
+    "object_resource_base_raw": ".\\MAPM\\M17030\\",
+    "object_resource_base": "mapm/m17030",
+    "object_table_start": 545874,
+    "object_table_end": 546970,
+    "unknown_tail_bytes": 39927,
+    "native_evidence": {
+      "map_loader": "ev_86fb8504826b15ccbea2b3911eaa302ef3f5cbeba7d1b233df62109a9ff38681",
+      "background_draw": "ev_2f7d67b0c8598838be7ac99150b959c5012222fdac93464caaf6732031f0b6e7",
+      "background_resource_loader": "ev_7c353572e07610a7b7e99f989466929dd711a469b13e61acb2597b40ff70e8d4",
+      "transition_path_gate": "ev_1ccb72823e262e4317968f322fcebaf8bd8724a31c215f127d8a68ac77c7b2b2",
+      "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+      "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+      "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+      "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+    },
+    "object_native_evidence": [
+      "ev_86fb8504826b15ccbea2b3911eaa302ef3f5cbeba7d1b233df62109a9ff38681",
+      "ev_6093394ea87d8eb856eef46d19eabdaf9e4735e58a8a18243c3aa798fda1feb5",
+      "ev_c0c0aa49cfd0507760600c7f4f475d3912f8210c498f1896a6fb058f80960b5b",
+      "ev_05dce0e80a25427e4e72280265291973d42f600238f7f832c0320114fed82fb7",
+      "ev_70e72b030eca65a4073731754bc443a383f4b215be5da103ed824b0c1a97727a",
+      "ev_02ca024fc6f9093e9bd38f06052ee2a4f2b2671240c4df2293cf1a50c4e2ae02",
+      "ev_813d397c0060f8bec0ba044eadc20f12cfb9fd8a36a56b19620629114d4ec9a7",
+      "ev_f32a0609558d1fb49c46e1a996c57b11aa62f681842c5ee0f86256aa7b74ffbe",
+      "ev_0781814eee25b61ac8bbd2b2ede6999858f4f7041d5b908f25c58d7a7691a89d",
+      "ev_9abd5ba6645433c0752e35b69015a7f998c9c9b054862a5afdfadc7499e40962"
+    ]
+  },
+  "limitations": [
+    "Static resource/code evidence; original-game entry/transition timing is not observed.",
+    "Background uses its initial animation frame; background animation is not advanced.",
+    "Initial static objects; script changes and object animation are not reconstructed.",
+    "Role depth and continuous keyboard movement are runtime policies.",
+    "NPC source defaults require chapter TLK/ANM changes; asset export executes no story"
+  ],
+  "chapter_npcs": [
+    {
+      "id": "M17030-1-role-10",
+      "slot_zero_based": 10,
+      "speaker_slot_one_based": 11,
+      "name": "女火長老",
+      "resource_id": "033",
+      "x": 528,
+      "y": 1488,
+      "x_native": 264,
+      "y_native": 744,
+      "direction": 0,
+      "direction_raw_45": 0,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 4,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m17030-1.dat",
+        "sha256": "85f2b0ea6398a9cf759183892cf9967e9b690dc57b5fb240e58969f69ae77e6b",
+        "offset": 546970,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M17030-1-role-11",
+      "slot_zero_based": 11,
+      "speaker_slot_one_based": 12,
+      "name": "火戰士",
+      "resource_id": "031",
+      "x": 432,
+      "y": 1344,
+      "x_native": 216,
+      "y_native": 672,
+      "direction": 0,
+      "direction_raw_45": 0,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 5,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m17030-1.dat",
+        "sha256": "85f2b0ea6398a9cf759183892cf9967e9b690dc57b5fb240e58969f69ae77e6b",
+        "offset": 548191,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M17030-1-role-12",
+      "slot_zero_based": 12,
+      "speaker_slot_one_based": 13,
+      "name": "火戰士",
+      "resource_id": "031",
+      "x": 784,
+      "y": 1344,
+      "x_native": 392,
+      "y_native": 672,
+      "direction": 6,
+      "direction_raw_45": 6,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 6,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m17030-1.dat",
+        "sha256": "85f2b0ea6398a9cf759183892cf9967e9b690dc57b5fb240e58969f69ae77e6b",
+        "offset": 549412,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M17030-1-role-13",
+      "slot_zero_based": 13,
+      "speaker_slot_one_based": 14,
+      "name": "火戰士祭壇",
+      "resource_id": "031",
+      "x": 832,
+      "y": 512,
+      "x_native": 416,
+      "y_native": 256,
+      "direction": 6,
+      "direction_raw_45": 6,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 7,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m17030-1.dat",
+        "sha256": "85f2b0ea6398a9cf759183892cf9967e9b690dc57b5fb240e58969f69ae77e6b",
+        "offset": 550633,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M17030-1-role-14",
+      "slot_zero_based": 14,
+      "speaker_slot_one_based": 15,
+      "name": "火戰士祭壇",
+      "resource_id": "031",
+      "x": 400,
+      "y": 512,
+      "x_native": 200,
+      "y_native": 256,
+      "direction": 0,
+      "direction_raw_45": 0,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 8,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m17030-1.dat",
+        "sha256": "85f2b0ea6398a9cf759183892cf9967e9b690dc57b5fb240e58969f69ae77e6b",
+        "offset": 551854,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M17030-1-role-15",
+      "slot_zero_based": 15,
+      "speaker_slot_one_based": 16,
+      "name": "火戰士",
+      "resource_id": "031",
+      "x": 32,
+      "y": 1344,
+      "x_native": 16,
+      "y_native": 672,
+      "direction": 0,
+      "direction_raw_45": 0,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 9,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m17030-1.dat",
+        "sha256": "85f2b0ea6398a9cf759183892cf9967e9b690dc57b5fb240e58969f69ae77e6b",
+        "offset": 553075,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M17030-1-role-16",
+      "slot_zero_based": 16,
+      "speaker_slot_one_based": 17,
+      "name": "火戰士",
+      "resource_id": "031",
+      "x": 1200,
+      "y": 1344,
+      "x_native": 600,
+      "y_native": 672,
+      "direction": 6,
+      "direction_raw_45": 6,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 10,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m17030-1.dat",
+        "sha256": "85f2b0ea6398a9cf759183892cf9967e9b690dc57b5fb240e58969f69ae77e6b",
+        "offset": 554296,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M17030-1-role-17",
+      "slot_zero_based": 17,
+      "speaker_slot_one_based": 18,
+      "name": "火智者",
+      "resource_id": "032",
+      "x": 416,
+      "y": 1440,
+      "x_native": 208,
+      "y_native": 720,
+      "direction": 0,
+      "direction_raw_45": 0,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 11,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m17030-1.dat",
+        "sha256": "85f2b0ea6398a9cf759183892cf9967e9b690dc57b5fb240e58969f69ae77e6b",
+        "offset": 555517,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M17030-1-role-18",
+      "slot_zero_based": 18,
+      "speaker_slot_one_based": 19,
+      "name": "火智者",
+      "resource_id": "032",
+      "x": 752,
+      "y": 1424,
+      "x_native": 376,
+      "y_native": 712,
+      "direction": 6,
+      "direction_raw_45": 6,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 12,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m17030-1.dat",
+        "sha256": "85f2b0ea6398a9cf759183892cf9967e9b690dc57b5fb240e58969f69ae77e6b",
+        "offset": 556738,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M17030-1-role-19",
+      "slot_zero_based": 19,
+      "speaker_slot_one_based": 20,
+      "name": "女火長老",
+      "resource_id": "034",
+      "x": 496,
+      "y": 1424,
+      "x_native": 248,
+      "y_native": 712,
+      "direction": 0,
+      "direction_raw_45": 0,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 13,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m17030-1.dat",
+        "sha256": "85f2b0ea6398a9cf759183892cf9967e9b690dc57b5fb240e58969f69ae77e6b",
+        "offset": 557959,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M17030-1-role-20",
+      "slot_zero_based": 20,
+      "speaker_slot_one_based": 21,
+      "name": "女火長老",
+      "resource_id": "034",
+      "x": 688,
+      "y": 1408,
+      "x_native": 344,
+      "y_native": 704,
+      "direction": 6,
+      "direction_raw_45": 6,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 14,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m17030-1.dat",
+        "sha256": "85f2b0ea6398a9cf759183892cf9967e9b690dc57b5fb240e58969f69ae77e6b",
+        "offset": 559180,
+        "bytes": 1221
+      }
+    }
+  ],
+  "opening_npcs": [
+    {
+      "id": "M17030-1-role-10",
+      "slot_zero_based": 10,
+      "speaker_slot_one_based": 11,
+      "name": "女火長老",
+      "resource_id": "033",
+      "x": 528,
+      "y": 1488,
+      "x_native": 264,
+      "y_native": 744,
+      "direction": 0,
+      "direction_raw_45": 0,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 4,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m17030-1.dat",
+        "sha256": "85f2b0ea6398a9cf759183892cf9967e9b690dc57b5fb240e58969f69ae77e6b",
+        "offset": 546970,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M17030-1-role-11",
+      "slot_zero_based": 11,
+      "speaker_slot_one_based": 12,
+      "name": "火戰士",
+      "resource_id": "031",
+      "x": 432,
+      "y": 1344,
+      "x_native": 216,
+      "y_native": 672,
+      "direction": 0,
+      "direction_raw_45": 0,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 5,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m17030-1.dat",
+        "sha256": "85f2b0ea6398a9cf759183892cf9967e9b690dc57b5fb240e58969f69ae77e6b",
+        "offset": 548191,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M17030-1-role-12",
+      "slot_zero_based": 12,
+      "speaker_slot_one_based": 13,
+      "name": "火戰士",
+      "resource_id": "031",
+      "x": 784,
+      "y": 1344,
+      "x_native": 392,
+      "y_native": 672,
+      "direction": 6,
+      "direction_raw_45": 6,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 6,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m17030-1.dat",
+        "sha256": "85f2b0ea6398a9cf759183892cf9967e9b690dc57b5fb240e58969f69ae77e6b",
+        "offset": 549412,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M17030-1-role-13",
+      "slot_zero_based": 13,
+      "speaker_slot_one_based": 14,
+      "name": "火戰士祭壇",
+      "resource_id": "031",
+      "x": 832,
+      "y": 512,
+      "x_native": 416,
+      "y_native": 256,
+      "direction": 6,
+      "direction_raw_45": 6,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 7,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m17030-1.dat",
+        "sha256": "85f2b0ea6398a9cf759183892cf9967e9b690dc57b5fb240e58969f69ae77e6b",
+        "offset": 550633,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M17030-1-role-14",
+      "slot_zero_based": 14,
+      "speaker_slot_one_based": 15,
+      "name": "火戰士祭壇",
+      "resource_id": "031",
+      "x": 400,
+      "y": 512,
+      "x_native": 200,
+      "y_native": 256,
+      "direction": 0,
+      "direction_raw_45": 0,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 8,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m17030-1.dat",
+        "sha256": "85f2b0ea6398a9cf759183892cf9967e9b690dc57b5fb240e58969f69ae77e6b",
+        "offset": 551854,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M17030-1-role-15",
+      "slot_zero_based": 15,
+      "speaker_slot_one_based": 16,
+      "name": "火戰士",
+      "resource_id": "031",
+      "x": 32,
+      "y": 1344,
+      "x_native": 16,
+      "y_native": 672,
+      "direction": 0,
+      "direction_raw_45": 0,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 9,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m17030-1.dat",
+        "sha256": "85f2b0ea6398a9cf759183892cf9967e9b690dc57b5fb240e58969f69ae77e6b",
+        "offset": 553075,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M17030-1-role-16",
+      "slot_zero_based": 16,
+      "speaker_slot_one_based": 17,
+      "name": "火戰士",
+      "resource_id": "031",
+      "x": 1200,
+      "y": 1344,
+      "x_native": 600,
+      "y_native": 672,
+      "direction": 6,
+      "direction_raw_45": 6,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 10,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m17030-1.dat",
+        "sha256": "85f2b0ea6398a9cf759183892cf9967e9b690dc57b5fb240e58969f69ae77e6b",
+        "offset": 554296,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M17030-1-role-17",
+      "slot_zero_based": 17,
+      "speaker_slot_one_based": 18,
+      "name": "火智者",
+      "resource_id": "032",
+      "x": 416,
+      "y": 1440,
+      "x_native": 208,
+      "y_native": 720,
+      "direction": 0,
+      "direction_raw_45": 0,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 11,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m17030-1.dat",
+        "sha256": "85f2b0ea6398a9cf759183892cf9967e9b690dc57b5fb240e58969f69ae77e6b",
+        "offset": 555517,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M17030-1-role-18",
+      "slot_zero_based": 18,
+      "speaker_slot_one_based": 19,
+      "name": "火智者",
+      "resource_id": "032",
+      "x": 752,
+      "y": 1424,
+      "x_native": 376,
+      "y_native": 712,
+      "direction": 6,
+      "direction_raw_45": 6,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 12,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m17030-1.dat",
+        "sha256": "85f2b0ea6398a9cf759183892cf9967e9b690dc57b5fb240e58969f69ae77e6b",
+        "offset": 556738,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M17030-1-role-19",
+      "slot_zero_based": 19,
+      "speaker_slot_one_based": 20,
+      "name": "女火長老",
+      "resource_id": "034",
+      "x": 496,
+      "y": 1424,
+      "x_native": 248,
+      "y_native": 712,
+      "direction": 0,
+      "direction_raw_45": 0,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 13,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m17030-1.dat",
+        "sha256": "85f2b0ea6398a9cf759183892cf9967e9b690dc57b5fb240e58969f69ae77e6b",
+        "offset": 557959,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M17030-1-role-20",
+      "slot_zero_based": 20,
+      "speaker_slot_one_based": 21,
+      "name": "女火長老",
+      "resource_id": "034",
+      "x": 688,
+      "y": 1408,
+      "x_native": 344,
+      "y_native": 704,
+      "direction": 6,
+      "direction_raw_45": 6,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 14,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m17030-1.dat",
+        "sha256": "85f2b0ea6398a9cf759183892cf9967e9b690dc57b5fb240e58969f69ae77e6b",
+        "offset": 559180,
+        "bytes": 1221
+      }
+    }
+  ],
+  "map_flag_index": 471
+}

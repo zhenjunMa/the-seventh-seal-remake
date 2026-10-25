@@ -43,7 +43,8 @@ export function createAudioController(manifest, options = {}) {
   const channelVolume = name => Math.max(1, Math.min(127,
     Math.floor(2 * Math.round(channels.master.volume * 64) * Math.round(channels[name].volume * 64) / 64))) / 127;
   const channelMuted = name => channels.master.muted || channels[name].muted;
-  let unlocked = false, disposed = false;
+  let unlocked = false, disposed = false, storyMusicSuppressed=false;
+  const musicVolume=()=>storyMusicSuppressed?0:channelVolume('music');
   let scene = {mapId:null, battle:false, stageId:null, worldMap:false}, desired = null, music = null, cleanupUnlock = null;
   let nextId = 0;
   const effects = new Set(), seen = new Set(), positions = new Map(), cueEvents=[];
@@ -88,7 +89,7 @@ export function createAudioController(manifest, options = {}) {
     clearMusic();
     if (!desired || !unlocked) return;
     const clip = manifest.clips[desired], media = createMedia(clip.path);
-    media.preload = 'auto'; media.loop = true; media.volume = channelVolume('music'); media.muted = channelMuted('music');
+    media.preload = 'auto'; media.loop = true; media.volume = musicVolume(); media.muted = channelMuted('music');
     const entry = {id:++nextId, clip:desired, media, started:false, pending:false, clean:() => {}};
     const restorePosition = () => {
       if (music !== entry) return;
@@ -102,7 +103,7 @@ export function createAudioController(manifest, options = {}) {
     music = entry; restorePosition(); playMusic();
   }
   function setScene(next) {
-    requireValue(next && typeof next.mapId === 'string' && /^M\d{5}$/.test(next.mapId), '音乐场景地图无效');
+    requireValue(next && typeof next.mapId === 'string' && /^M\d{5}(?:-\d+)?$/.test(next.mapId), '音乐场景地图无效');
     const nextScene = {mapId:next.mapId, battle:next.battle === true, stageId:next.stageId ?? null, worldMap:next.worldMap === true};
     const changed = Object.keys(nextScene).some(key => scene[key] !== nextScene[key]);
     if (changed) { stopEffects(); seen.clear(); }
@@ -189,7 +190,7 @@ export function createAudioController(manifest, options = {}) {
     return playClip(cue.clip, `${eventKey}:item-effect:${mapping.effect_id}`);
   }
   function refreshLevels() {
-    if (music) { music.media.volume = channelVolume('music'); music.media.muted = channelMuted('music'); }
+    if (music) { music.media.volume = musicVolume(); music.media.muted = channelMuted('music'); }
     for (const entry of effects) { entry.media.volume = channelVolume('effects'); entry.media.muted = channelMuted('effects'); }
     if (channelMuted('effects')) stopEffects();
   }
@@ -203,9 +204,12 @@ export function createAudioController(manifest, options = {}) {
   }
   function setVolume(value) { return setChannelVolume('master', value); }
   function setMuted(value) { return setChannelMuted('master', value); }
+  // ANM 63/62 temporarily mutes/restores the map music gain. This must not
+  // rewrite the player's persisted channel preferences or stop music time.
+  function setStoryMusicSuppressed(value){storyMusicSuppressed=Boolean(value);refreshLevels();return snapshot();}
   function snapshot() {
     return clone({scene, desired_clip:desired, unlocked, disposed,
-      volume:channels.master.volume, muted:channels.master.muted, channels,
+      volume:channels.master.volume, muted:channels.master.muted, channels,story_music_suppressed:storyMusicSuppressed,
       music:music ? {clip:music.clip, path:manifest.clips[music.clip].path, started:music.started, pending:music.pending,
         paused:music.media.paused, current_time:Number.isFinite(music.media.currentTime) ? music.media.currentTime : null,
         ready_state:music.media.readyState ?? null} : null,
@@ -214,5 +218,5 @@ export function createAudioController(manifest, options = {}) {
   function suspend() { desired = null; clearMusic(); stopEffects(); seen.clear(); return snapshot(); }
   function dispose() { if (disposed) return; disposed = true; cleanupUnlock?.(); cleanupUnlock = null; clearMusic(); stopEffects(); seen.clear(); }
   return {setScene, setMusic, unlock, attachUnlock, playCue, playClip, playAction, playItemEffect, setMuted, setVolume,
-    setChannelMuted, setChannelVolume, stopEffects, suspend, snapshot, dispose};
+    setChannelMuted, setChannelVolume,setStoryMusicSuppressed, stopEffects, suspend, snapshot, dispose};
 }

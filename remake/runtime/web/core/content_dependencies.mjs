@@ -3,21 +3,41 @@ import {validateContentRegistration,requireRegisteredRoles,registeredRoles,sourc
 import {validateEncounterData} from './encounters.mjs';
 import {validateForestAIData} from './forest_ai.mjs';
 import {validateForestRewards} from './battle_rewards.mjs';
-import {validateForestReactionsData} from './battle_reactions.mjs';
-import {validateForestStatusData} from './battle_status.mjs';
+import {validateForestReactionsData,nativeReactionTargetAvailability} from './battle_reactions.mjs';
+import {validateForestStatusData,validateNativeSkillStatus} from './battle_status.mjs';
+import {validateNativeEffectBinding} from './combat_rules.mjs';
+import {nativeSupportSkillSupported} from './battle_support.mjs';
 import {validateChapterStory,chapterRestChoices} from './chapter.mjs';
 import {validateChapterAnimation} from './chapter_animation.mjs';
 import {validateBattleViewMetadata} from '../battle_view.mjs';
 const need=(ok,message)=>{if(!ok)throw new Error(`内容依赖：${message}`);};
 
-export function validateStoryBindings(content,story,resources){
+export function validateEnemyReactionClosure(ai,reactions,content){
+  for(const [enemyId,role]of Object.entries(ai.roles))for(const index of role.learned_indices){
+    const skill=role.skills[index];
+    // Hostile source skills may select any currently admitted player. Party
+    // composition at a particular development checkpoint is not a capability
+    // restriction on the original AI's learned skill list.
+    if(parseInt(skill.fixed_raw_hex.slice(0x25*2,0x25*2+2),16)===1)continue;
+    for(const playerId of registeredRoles('player',content)){
+      const support=nativeReactionTargetAvailability({skill,target:{resource_id:playerId},data:reactions});
+      need(support.available,`敌人 ${enemyId}／技能索引${index} → 玩家 ${playerId} 的原反应尚未恢复：${support.reason}`);
+    }
+  }
+}
+
+export function validateStoryBindings(content,story,resources,{registeredMaps=content.maps}={}){
   validateChapterStory(story);
   for(const [id,binding]of Object.entries(content.maps)){
     const table=story.maps[id];
-    need(table||!binding.entry_record&&![...binding.triggers,...binding.objects,...binding.rests,...binding.routes,...(binding.npcs??[])].length,`${id} 缺少剧情表`);
+    need(table||!binding.entry_record&&!binding.setup_record&&![...binding.triggers,...binding.objects,...binding.rests,...binding.routes,...(binding.npcs??[])].length,`${id} 缺少剧情表`);
+    if(binding.setup_record){
+      need(binding.setup_record===table.header_setup_tlk_raw&&table.records.some(row=>row.id===binding.setup_record),`${id} 加载布置与原 DAT 不同`);
+      need(table.header_setup_tlk_source?.offset===0x8a&&table.header_setup_tlk_source.sha256===table.map_source.sha256,`${id} 加载布置来源缺失`);
+    }
     if(binding.entry_record){
       need(binding.entry_record===table.header_entry_tlk_raw&&table.records.some(row=>row.id===binding.entry_record),`${id} 进入剧情与原 DAT 不同`);
-      need(table.header_entry_tlk_source?.offset===0x11e&&table.header_entry_tlk_source.sha256===table.map_source.sha256,`${id} 进入剧情来源缺失`);
+      need(table.header_entry_tlk_source?.offset===0x13a&&table.header_entry_tlk_source.sha256===table.map_source.sha256,`${id} 进入剧情来源缺失`);
     }
     for(const slot of binding.npcs??[])need(resources.npcs_by_map[id]?.some(row=>row.slot_zero_based===slot)&&table.index_nonzero.some(row=>row.slot===slot),`${id} NPC 槽 ${slot} 缺少原对白入口`);
     for(const triggerId of binding.triggers){
@@ -48,8 +68,20 @@ export function validateStoryBindings(content,story,resources){
   for(const [id,source]of Object.entries(content.programs)){
     const program=story.programs[id];
     need(program&&program.source.path===source.path&&program.source.sha256===source.sha256&&story.source_hashes[source.path]===source.sha256,`演出 ${id} 来源不一致`);
-    need(content.maps[program.expected?.control_map],`演出 ${id} 地图未登记`);
-    validateChapterAnimation(program,content);
+    need(Array.isArray(program.maps)&&program.maps.length>0&&program.maps.every(mapId=>registeredMaps[mapId]),`演出 ${id} 地图未登记`);
+    for(const caller of program.context_sources?.caller_records??[]){
+      need(registeredMaps[caller.map_id]&&caller.source?.path?.toLowerCase()===`map/${caller.map_id.toLowerCase()}.tlk`
+        &&story.source_hashes[caller.source.path]===caller.source.sha256,`演出 ${id} 调用来源不一致`);
+      const table=story.maps[caller.map_id],record=table?.records.find(record=>record.id===caller.record_id);
+      if(table)need(record?.kind===1&&record.text_raw.toLowerCase()===`${id}.anm`, `演出 ${id} 调用记录不一致`);
+    }
+    for(const caller of program.context_sources?.caller_descriptors??[]){
+      need(registeredMaps[caller.map_id]&&caller.source?.path?.toLowerCase()===`map/${caller.map_id.toLowerCase()}.dat`
+        &&story.source_hashes[caller.source.path]===caller.source.sha256,`演出 ${id} 描述符调用来源不一致`);
+      const table=story.maps[caller.map_id],descriptor=table?.descriptors.find(row=>row.id===caller.descriptor_id);
+      if(table)need(descriptor?.state_raw===1&&descriptor.filename_raw.toLowerCase()===`${id}.anm`,`演出 ${id} 描述符调用记录不一致`);
+    }
+    validateChapterAnimation(program,{...content,maps:registeredMaps});
   }
   return true;
 }
@@ -78,7 +110,7 @@ export function validateContentDependencies(content,data){
       const skill=skills?.[binding.id];need(skill?.actor_id===id&&skill.original_skill_index===binding.index,`${id} 技能 ${binding.id} 缺少已登记的原索引`);
       if(binding.handler==='effect-carrier'){
         need(skill.battle_handler===binding.handler&&skill.effect_context?.effect_source_skill_index===binding.index,`${id} 特效处理器绑定不同`);
-        for(const [targetId,target]of Object.entries(ai.roles))need(target.skill_count<=binding.index&&skill.effect_context.effect_target_skill.source_skill_count_by_role[targetId]===target.skill_count,`${id} 特效目标技能槽需要恢复非空记录处理`);
+        validateNativeEffectBinding(skill,ai.roles);
       }
     }
   }
@@ -91,11 +123,21 @@ export function validateContentDependencies(content,data){
   // acquire an unknown status just because its owner was registered.
   for(const skill of [...Object.values(commands.skills),...Object.values(ai.roles).flatMap(role=>role.learned_indices.map(index=>role.skills[index]))]){
     need(typeof skill.fixed_raw_hex==='string'&&/^[0-9a-f]{2106}$/.test(skill.fixed_raw_hex),'技能源记录缺失');
-    const raw=Uint8Array.from(skill.fixed_raw_hex.match(/../g),part=>parseInt(part,16)),effect=raw.slice(0x16b,0x231);
-    need(effect[0xb]===0&&(effect[1]===0||effect[1]===43&&Array.from(effect,b=>b.toString(16).padStart(2,'0')).join('')===status.status43.effect_raw_hex),'技能使用了未实现的状态处理器');
+    validateNativeSkillStatus(skill,status);
+    if(skill.battle_handler==='native-support')need(nativeSupportSkillSupported(skill),'辅助技能来源未覆盖已恢复处理器');
+    if(skill.battle_handler==='effect-carrier'){
+      const owner=Object.entries(content.roles).find(([,role])=>role.source.path===skill.source?.path)?.[1];
+      need(owner,'特效技能所有者来源缺失');
+      // 501930 reads the victim's source skill table. A player offensive
+      // carrier targets enemy tables; a hostile carrier targets player tables.
+      const allied=parseInt(skill.fixed_raw_hex.slice(0x25*2,0x25*2+2),16)===1;
+      const targetSide=allied?owner.side:owner.side==='player'?'enemy':'player';
+      validateNativeEffectBinding(skill,targetSide==='player'?commands.roles:ai.roles);
+    }
   }
   validateEncounterData(encounters,content);validateForestAIData(ai,content);
   validateForestRewards(rewards,content);validateForestReactionsData(reactions,content);
+  validateEnemyReactionClosure(ai,reactions,content);
   validateForestStatusData(status,content);validateBattleViewMetadata(view,content);
   validateStoryBindings(content,story,resources);
   for(const id of Object.keys(content.roles))need(sourceHash(content.roles[id].source.sha256),`${id} 来源指纹缺失`);

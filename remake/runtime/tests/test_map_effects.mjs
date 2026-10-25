@@ -5,6 +5,7 @@ import {createHash} from 'node:crypto';
 import {MapObjectRuntime} from '../web/core/map_objects.mjs';
 import {ImageResources} from '../web/core/image_resources.mjs';
 import {drawMapScene} from '../web/map_scene_view.mjs';
+import {createMapController} from '../web/controllers/map.mjs';
 const {OpeningView}=await import('../web/opening_view.mjs');
 
 const root=new URL('../',import.meta.url),read=async path=>JSON.parse(await readFile(new URL(path,root),'utf8'));
@@ -60,6 +61,21 @@ test('object clocks discard suspension and independent prepared scenes do not ad
   a.runtime.update(220,{world:a.world,paused:true});a.runtime.update(20000,{world:a.world});
   assert.equal(a.objects[0].motion.frame,1);
   a.runtime.update(20110,{world:a.world});assert.equal(a.objects[0].motion.frame,2);
+});
+
+test('the actual map controller keeps source objects animated during ANM while loading still pauses them',()=>{
+  const {runtime,world,objects}=clock();world.location={map_id:'M70010',x:32,y:32,direction:0};
+  const before=structuredClone(world),role={id:'001',actions:[{index:0}]};
+  const state={world:{value:world,location:world.location},scenes:{phase:'event',current:{data:{id:'M70010'},objects,objectRuntime:runtime}},
+    openingView:{active:true,nativeViewport:true,drawQueue:()=>[]},catalog:{roles:[role]},selectedRole:'001',
+    view:{action:0,zoom:1},cssWidth:640,cssHeight:480,engine:{presentMap(){}}};
+  const nodes=new Map(),$=id=>{if(!nodes.has(id))nodes.set(id,{dataset:{}});return nodes.get(id);};
+  const controller=createMapController({state,actions:{},$,canvas:{},ctx:{}});
+  controller.updateExploration(0,0);controller.updateExploration(110,110);
+  assert.equal(objects[0].motion.frame,1,'cutscene NPC control does not freeze independent source scenery');
+  state.scenes.phase='loading';controller.updateExploration(220,110);assert.equal(objects[0].motion.frame,1);
+  state.scenes.phase='event';controller.updateExploration(330,110);assert.equal(objects[0].motion.frame,2);
+  assert.deepEqual(world,before,'presentation never submits story or encounter state');
 });
 
 test('live map emits main and same-frame light in the existing depth queue and respects hidden NPCs/objects',()=>{

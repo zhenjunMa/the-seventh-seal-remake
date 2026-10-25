@@ -4,7 +4,7 @@ import {validateStorySelection} from './story_packages.mjs';
 export {definition as runtimeContentDefinition} from '../data/runtime_content.mjs';
 const need=(ok,message)=>{if(!ok)throw new Error(`内容登记：${message}`);};
 export const roleId=id=>typeof id==='string'&&/^\d{3}$/.test(id);
-export const mapId=id=>typeof id==='string'&&/^M\d{5}$/.test(id);
+export const mapId=id=>typeof id==='string'&&/^M\d{5}(?:-\d+)?$/.test(id);
 export const sourceHash=value=>typeof value==='string'&&/^[a-f0-9]{64}$/.test(value);
 export function validateContentRegistration(content){
   need(content?.schema==='seventh-seal-runtime-content'&&content.version===1,'版本无效');
@@ -26,7 +26,7 @@ export function validateContentRegistration(content){
           need(Number.isInteger(skill.index)&&skill.index>=0&&skill.index<200&&/^[A-Za-z0-9_]+$/.test(skill.id)&&!skillIds.has(skill.id),'技能源索引或ID无效');skillIds.add(skill.id);
         }
       }
-      need(role.battle_skills.every(skill=>['direct','effect-carrier'].includes(skill.handler)),'战斗技能处理器尚未实现');
+      need(role.battle_skills.every(skill=>['direct','effect-carrier','native-support'].includes(skill.handler)),'战斗技能处理器尚未实现');
     }
   }
   for(const [name,ids]of Object.entries(content.battle_rosters??{})){
@@ -48,6 +48,7 @@ export function validateContentRegistration(content){
     need(row.objects.every(r=>r.handler==='stationary-chest'),'物件处理器尚未实现');
     need(row.rests.every(r=>Number.isInteger(r.record_id)&&r.record_id>0&&Array.isArray(r.restore_records)&&r.restore_records.length>0&&r.restore_records.every(n=>Number.isInteger(n)&&n>0)&&Array.isArray(r.choices)&&r.choices.length>=1&&r.choices.length<=3&&r.choices.every(c=>Number.isInteger(c.index)&&c.index>=0&&c.index<3&&typeof c.text==='string'&&Number.isInteger(c.record_id)&&c.record_id>=0)),'休息入口无效');
     if(row.entry_record!==undefined)need(Number.isInteger(row.entry_record)&&row.entry_record>0,'进入剧情记录无效');
+    if(row.setup_record!==undefined)need(Number.isInteger(row.setup_record)&&row.setup_record>0,'加载布置记录无效');
     if(row.npcs!==undefined)need(Array.isArray(row.npcs)&&new Set(row.npcs).size===row.npcs.length&&row.npcs.every(n=>Number.isInteger(n)&&n>=0&&n<499),'NPC 槽登记无效');
     need(row.routes.every(r=>Number.isInteger(r.record_id)&&r.record_id>0&&(r.descriptor_id===undefined||Number.isInteger(r.descriptor_id)&&r.descriptor_id>=0)),'出口记录无效');
     need(row.routes.every(r=>r.requires_flag===undefined||Number.isInteger(r.requires_flag?.index)&&r.requires_flag.index>=0&&r.requires_flag.index<2000&&Number.isInteger(r.requires_flag.bit)&&r.requires_flag.bit>=1&&r.requires_flag.bit<=32),'出口前置旗标无效');

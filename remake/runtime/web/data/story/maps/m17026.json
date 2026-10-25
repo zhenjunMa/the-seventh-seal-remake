@@ -63,6 +63,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17026:TLK:1",
         "portrait_id": 0,
         "choices": []
@@ -91,6 +92,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17026:TLK:2",
         "portrait_id": 0,
         "choices": []
@@ -119,6 +121,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17026:TLK:3",
         "portrait_id": 1,
         "choices": []
@@ -147,6 +150,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17026:TLK:4",
         "portrait_id": 0,
         "choices": []
@@ -175,6 +179,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17026:TLK:5",
         "portrait_id": 0,
         "choices": []
@@ -203,6 +208,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17026:TLK:6",
         "portrait_id": 0,
         "choices": []
@@ -231,6 +237,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17026:TLK:7",
         "portrait_id": 0,
         "choices": []
@@ -259,6 +266,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17026:TLK:8",
         "portrait_id": 1,
         "choices": []
@@ -287,6 +295,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17026:TLK:9",
         "portrait_id": 0,
         "choices": []
@@ -315,6 +324,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17026:TLK:10",
         "portrait_id": 0,
         "choices": [
@@ -354,6 +364,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17026:TLK:11",
         "portrait_id": 0,
         "choices": []
@@ -382,6 +393,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17026:TLK:12",
         "portrait_id": 0,
         "choices": []
@@ -410,6 +422,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17026:TLK:13",
         "portrait_id": 0,
         "choices": []
@@ -438,6 +451,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17026:TLK:14",
         "portrait_id": 0,
         "choices": []
@@ -466,6 +480,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17026:TLK:15",
         "portrait_id": 0,
         "choices": []
@@ -494,6 +509,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17026:TLK:16",
         "portrait_id": 0,
         "choices": []
@@ -522,6 +538,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17026:TLK:17",
         "portrait_id": 0,
         "choices": []
@@ -550,6 +567,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17026:TLK:18",
         "portrait_id": 0,
         "choices": []
@@ -578,6 +596,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17026:TLK:19",
         "portrait_id": 0,
         "choices": []
@@ -606,6 +625,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17026:TLK:20",
         "portrait_id": 0,
         "choices": []
@@ -634,6 +654,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17026:TLK:21",
         "portrait_id": 0,
         "choices": []
@@ -662,6 +683,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17026:TLK:22",
         "portrait_id": 0,
         "choices": []
@@ -690,6 +712,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17026:TLK:23",
         "portrait_id": 0,
         "choices": []
@@ -1082,14 +1105,21 @@
       "path": "Map/m17026.dat",
       "sha256": "087ccf781d85f63249a2e1bce48ee71382d2587cdf857c47e575caaae54a646c",
       "bytes": 4,
-      "offset": 286
+      "offset": 314
+    },
+    "header_setup_tlk_raw": 0,
+    "header_setup_tlk_source": {
+      "path": "Map/m17026.dat",
+      "sha256": "087ccf781d85f63249a2e1bce48ee71382d2587cdf857c47e575caaae54a646c",
+      "bytes": 4,
+      "offset": 138
     },
     "evidence": [
       "ev_e14d28c11ec31e5eebdf4c08a994a900102658650d8e5364d58b848cbd114ea7",
       "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a"
     ],
     "limitations": [
-      "Index slot499 is retained as the object default TLK entry; it must not be used as an automatic map-load event. Header +0x11E controls map-entry TLK.",
+      "Index slot499 is retained as the object default TLK entry; it must not be used as an automatic map-load event. Header +0x8A controls map setup; +0x13A controls map-entry TLK.",
       "TLK record kind/mutation numbers are raw native values; dialogue text alone does not define their behavior."
     ],
     "flow_id": "M17026:tlk"
@@ -1552,7 +1582,41 @@
       ],
       "expected": {
         "control_map": "M17026",
+        "control_maps": [
+          "M17026"
+        ],
+        "caller_maps": [
+          "M17026"
+        ],
         "final_control_actor": 0
+      },
+      "context_sources": {
+        "map_commands": [
+          {
+            "map_id": "M17026",
+            "command_index": 0,
+            "source": {
+              "path": "Animate/m17026-1.anm",
+              "sha256": "943bd0f7da7453ba995c96234f6ec179e6a98ae2979145d1b90c01f5b44ad74f",
+              "record_index": 0,
+              "offset": 67
+            }
+          }
+        ],
+        "caller_records": [
+          {
+            "map_id": "M17026",
+            "record_id": 11,
+            "source": {
+              "path": "Map/m17026.TLK",
+              "sha256": "9e363538b3b51f2ec5a0074d4fdcaf3c3e3dbba6d4043f1d1ac06db3124b78ee",
+              "record_id": 11,
+              "record_bytes": 1647,
+              "offset": 18496
+            }
+          }
+        ],
+        "caller_descriptors": []
       },
       "native_evidence": [
         "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
@@ -1958,7 +2022,7 @@
         },
         {
           "id": "M17026:tlk:9:1",
-          "op": "unsupported",
+          "op": "test_native_condition",
           "record_id": 9,
           "source": {
             "path": "Map/m17026.TLK",
@@ -1967,7 +2031,12 @@
             "record_bytes": 1647,
             "offset": 15202
           },
-          "reason": "剧情条件 10 尚未接入"
+          "condition_type": 10,
+          "condition_index": 0,
+          "condition_bit": 0,
+          "condition_byte_raw_0b": 0,
+          "if_true": "M17026:tlk:10",
+          "if_false": "M17026:tlk:9:2"
         },
         {
           "id": "M17026:tlk:9:2",

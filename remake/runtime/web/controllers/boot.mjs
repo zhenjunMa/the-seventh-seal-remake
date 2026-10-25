@@ -70,7 +70,7 @@ export function createBootController({state, actions, $, canvas, ctx}) {
     const [worldMapData,loadedEncounters,loadedForest]=await Promise.all([actions.json(state.catalog.world_map),actions.json(state.catalog.encounters),actions.json(state.catalog.forest_combat)]);
     state.encounterData=validateEncounterData(loadedEncounters);state.forestData=loadedForest;
     state.schedulerData=validateScheduler(await actions.json('data/battle_scheduler.json'));
-    [state.aiData,state.rewardData,state.reactionData,state.statusData]=await Promise.all([actions.json('data/forest_ai.json').then(validateForestAIData),actions.json('data/forest_rewards.json').then(validateForestRewards),actions.json('data/forest_reactions.json').then(validateForestReactionsData),actions.json('data/forest_status.json').then(validateForestStatusData)]);
+    [state.aiData,state.rewardData,state.reactionData,state.statusData]=await Promise.all([actions.json('data/forest_ai.json').then(validateForestAIData),actions.json('data/forest_rewards.json').then(validateForestRewards),actions.json('data/enemy_reactions.json').then(validateForestReactionsData),actions.json('data/forest_status.json').then(validateForestStatusData)]);
     [state.partyCombat,state.partySkills,state.partyRewards,state.partyReactions]=await Promise.all([actions.json(state.catalog.party_combat),actions.json(state.catalog.party_skills),actions.json(state.catalog.party_rewards).then(validateForestRewards),actions.json(state.catalog.party_reactions).then(validateForestReactionsData)]);
     state.sourceItemData=validateItemData(await actions.json('data/items.json'));
     if(state.catalog.source_skills)state.sourceSkills=await actions.json(state.catalog.source_skills);
@@ -133,12 +133,14 @@ export function createBootController({state, actions, $, canvas, ctx}) {
       actions.image(a.sheet).then(image=>{a.bitmap=image;}),
       ...(a.shadow_sheet?[actions.image(a.shadow_sheet).then(image=>{a.shadow_bitmap=image;})]:[])])));
     state.scenes=new SceneController({world: state.world,prepare:actions.prepareMap,validateEntry: actions.validateEntry,commitView: actions.commitView,enter:actions.enterMap,onPhase:actions.busy,
+      afterCommit:()=>actions.finishStoryCompletion?.(),
       captureView:()=>({view:{...state.view},name:$('mapName').textContent,probes:Array.from($('probe').children,child=>child.cloneNode(true)),nearest: state.nearest,resetHidden:$('resetEventSample').hidden}),
       rollbackView:checkpoint=>{Object.assign(state.view,checkpoint.view);$('mapName').textContent=checkpoint.name;$('probe').replaceChildren(...checkpoint.probes);$('resetEventSample').hidden=checkpoint.resetHidden;state.nearest=checkpoint.nearest;state.audio?.setScene({mapId:state.world.location.map_id,battle:false});}});
     state.chapterRunner=new ChapterRunner({world: state.world,data:state.chapterStory,objectData:state.chapterResources.interactive_objects,
+      worldMapState:()=>state.worldMap.initialState(),
       choose:actions.chooseChapter,
       say:({mapId,record,signal})=>actions.say(actions.chapterSpeaker(mapId,record),record.text_raw,record.style,{mapId,record,signal}),
-      animate:actions.animateChapter,objectAnimation:actions.animateChapterObject,log: actions.log,setPhase:phase=>state.scenes.setPhase(phase)});
+      animate:actions.animateChapter,transfer:actions.transferChapter,battle:actions.startScriptedBattle,objectAnimation:actions.animateChapterObject,log: actions.log,setPhase:phase=>state.scenes.setPhase(phase)});
     state.worldMap=new WorldMapController({world: state.world,data:worldMapData,
       prepare:async destination=>{const scene=await actions.prepareMap(destination.map_id),location=worldMapEntry(scene,destination,state.chapterStory);
         actions.validateEntry(scene,location);return {scene,location};},

@@ -86,10 +86,11 @@ class SourceAudit:
             for _ in range(self.count):
                 size = struct.unpack_from("<I", data, take(4))[0]
                 take(size * 8)
+        self.shadows = []
         if data[geometry + 41]:
             for _ in range(self.count):
                 size = struct.unpack_from("<I", data, take(4))[0]
-                take(size)
+                self.shadows.append((take(size), size))
         self.indexed = []
         if data[19]:
             for frame in range(self.count):
@@ -149,47 +150,63 @@ class SourceAudit:
             position += 2
             return value
 
-        for y in range(self.height):
+        y = 0
+        visible_end = None
+        retained_spans = retained_pixels = 0
+        # Main16-bit drawing is bounded by native geometry height52AE7F;
+        # complete extra source rows are independently audited and retained.
+        # Indexed rows keep their already established exact-height contract.
+        while y < self.height or (not indexed and position < end):
+            if y >= 8192:
+                raise DGPError('Audit stored row count exceeds bound')
             count = word()
-            if count == 0xFFFF:
-                continue
-            if count > self.width:
-                raise DGPError("Audit excessive span count")
-            previous_end = 0
-            for _ in range(count):
-                x, length = word(), word()
-                if x < previous_end or x + length > self.width:
-                    raise DGPError("Audit absolute span overlaps/leaves width")
-                spans += 1
-                previous_end = x + length
-                if length:
-                    bounds = [min(bounds[0], x), min(bounds[1], y),
-                              max(bounds[2], x + length), max(bounds[3], y + 1)]
-                for dx in range(length):
-                    source_offset = position
-                    if indexed:
-                        if position >= end:
-                            raise DGPError("Audit palette index leaves block")
-                        value = self.data[position]
-                        position += 1
-                        p = value * 3
-                        color = (palette[p] // 8 * 8, palette[p + 1] // 4 * 4,
-                                 palette[p + 2] // 8 * 8, 255)
-                        zeros += value == 0
-                        last_index += value == 255
+            if count != 0xFFFF:
+                if count > self.width:
+                    raise DGPError("Audit excessive span count")
+                previous_end = 0
+                for _ in range(count):
+                    x, length = word(), word()
+                    if x < previous_end or x + length > self.width:
+                        raise DGPError("Audit absolute span overlaps/leaves width")
+                    previous_end = x + length
+                    visible = y < self.height
+                    if visible:
+                        spans += 1
+                        if length:
+                            bounds = [min(bounds[0], x), min(bounds[1], y),
+                                      max(bounds[2], x + length), max(bounds[3], y + 1)]
                     else:
-                        value = word()
-                        r, g, b = value // 2048, (value // 32) % 64, value % 32
-                        color = (r * 8 + r // 4, g * 4 + g // 16, b * 8 + b // 4, 255)
-                    q = (y * self.width + x + dx) * 4
-                    if rgba[q + 3]:
-                        raise DGPError("Audit duplicate occupied pixel")
-                    rgba[q:q + 4] = bytes(color)
-                    occupied += 1
-                    # Retain first, mid-height and near-last spans as source-bound examples.
-                    if dx == 0 and (len(probes) < 2 or y in (self.height // 2, self.height - 1)):
-                        probes.append(dict(x=x, y=y, source_offset=source_offset,
-                                           raw_value=value, rgba=list(color)))
+                        retained_spans += 1
+                        retained_pixels += length
+                    for dx in range(length):
+                        source_offset = position
+                        if indexed:
+                            if position >= end:
+                                raise DGPError("Audit palette index leaves block")
+                            value = self.data[position]
+                            position += 1
+                            p = value * 3
+                            color = (palette[p] // 8 * 8, palette[p + 1] // 4 * 4,
+                                     palette[p + 2] // 8 * 8, 255)
+                            zeros += value == 0
+                            last_index += value == 255
+                        else:
+                            value = word()
+                            r, g, b = value // 2048, (value // 32) % 64, value % 32
+                            color = (r * 8 + r // 4, g * 4 + g // 16, b * 8 + b // 4, 255)
+                        if not visible:
+                            continue
+                        q = (y * self.width + x + dx) * 4
+                        if rgba[q + 3]:
+                            raise DGPError("Audit duplicate occupied pixel")
+                        rgba[q:q + 4] = bytes(color)
+                        occupied += 1
+                        if dx == 0 and (len(probes) < 2 or y in (self.height // 2, self.height - 1)):
+                            probes.append(dict(x=x, y=y, source_offset=source_offset,
+                                               raw_value=value, rgba=list(color)))
+            y += 1
+            if y == self.height:
+                visible_end = position
         if position != end:
             raise DGPError("Audit sparse rows did not consume exact source span")
         transparent = sum(rgba[q] == 0 for q in range(3, len(rgba), 4))
@@ -199,10 +216,66 @@ class SourceAudit:
                                  source_span_sha256=sha(self.data[begin:end]),
                                  rgba_sha256=sha(rgba), covered_pixels=occupied,
                                  transparent_pixels=transparent, span_count=spans,
-                                 rows=self.height, bounds=bounds if occupied else None,
+                                 rows=self.height, stored_rows=y,
+                                 retained_rows=y - self.height, retained_offset=visible_end,
+                                 retained_bytes=end - visible_end,
+                                 retained_sha256=sha(self.data[visible_end:end]),
+                                 retained_span_count=retained_spans, retained_covered_pixels=retained_pixels,
+                                 bounds=bounds if occupied else None,
                                  index_zero_pixels=zeros if indexed else None,
                                  index_255_pixels=last_index if indexed else None,
                                  pixel_probes=probes)
+
+    def shadow(self, frame: int) -> tuple[bytes, dict]:
+        """Independent colorless geometry[41] spans; native destination /2.
+
+        The PNG alpha128 is the existing 8-bit presentation approximation. It
+        must be drawn before the primary copy and intrinsic additive passes.
+        """
+        if not 0 <= frame < self.count:
+            raise DGPError('Audit shadow frame leaves source frame table')
+        rgba = bytearray(self.width * self.height * 4)
+        covered = spans = 0
+        bounds = [self.width, self.height, 0, 0]
+        source = {}
+        if self.shadows:
+            begin, size = self.shadows[frame]
+            end, position = begin + size, begin
+
+            def word():
+                nonlocal position
+                if position + 2 > end:
+                    raise DGPError('Audit shadow word leaves source block')
+                value = self.data[position] | self.data[position + 1] << 8
+                position += 2
+                return value
+
+            for y in range(self.height):
+                count = word()
+                if count == 0xffff:
+                    continue
+                if count > self.width:
+                    raise DGPError('Audit excessive shadow span count')
+                previous_end = 0
+                for _ in range(count):
+                    x, length = word(), word()
+                    if x < previous_end or x + length > self.width:
+                        raise DGPError('Audit shadow span overlaps/leaves width')
+                    previous_end = x + length
+                    spans += 1
+                    if length:
+                        bounds = [min(bounds[0], x), min(bounds[1], y),
+                                  max(bounds[2], x + length), max(bounds[3], y + 1)]
+                    start = (y * self.width + x) * 4
+                    rgba[start:start + length * 4] = bytes((0, 0, 0, 128)) * length
+                    covered += length
+            if position != end:
+                raise DGPError('Audit shadow rows did not consume exact source span')
+            source = dict(source_offset=begin, source_bytes=size,
+                          source_span_sha256=sha(self.data[begin:end]))
+        return bytes(rgba), dict(active=bool(covered), covered_pixels=covered,
+            transparent_pixels=self.width * self.height - covered, span_count=spans,
+            bounds=bounds if covered else None, rows=self.height, rgba_sha256=sha(rgba), **source)
 
 
 def save_layer(image: Image.Image, path: Path, audit_rgba: bytes, check: dict) -> dict:

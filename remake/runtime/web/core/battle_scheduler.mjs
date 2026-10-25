@@ -88,7 +88,7 @@ export function chargeActor(actor,rng){
 // A ready player can choose a command before it has a pending skill.
 export function isActorReady(actor,scheduler){
   const c=actor?.charge,flags=actor?.status_flags_raw??0;
-  return Boolean(c&&actor.hp.current>0&&actor.state_raw<4&&!actor.immune_raw&&!actor.reaction_inhibit_raw&&!c.recovery&&!c.delay&&!(flags&0x1e1)&&c.gauge>=scheduler.threshold);
+  return Boolean(c&&actor.hp.current>0&&actor.state_raw<4&&!actor.native_active&&!actor.immune_raw&&!actor.reaction_inhibit_raw&&!c.recovery&&!c.delay&&!(flags&0x1e1)&&c.gauge>=scheduler.threshold);
 }
 // Native commands live in each actor's 0x30274-byte block (0x521A7C5-C8).
 // Keep pending as the first row for existing snapshots; arbitration still uses

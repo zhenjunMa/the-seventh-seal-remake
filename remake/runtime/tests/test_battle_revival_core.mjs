@@ -9,7 +9,7 @@ import {createForestSample} from '../web/forest_sample.mjs';
 import {selectNativeRevivalAnimation} from '../web/core/battle_reactions.mjs';
 import {REVIVAL_EVIDENCE} from '../web/core/battle_revival.mjs';
 const read=async name=>JSON.parse(await readFile(new URL('../web/data/'+name,import.meta.url)));
-const [seed,base,forest,skills,scheduler,reactions,party]=await Promise.all(['route_seed.json','combat_sample.json','forest_combat.json','skills.json','battle_scheduler.json','forest_reactions.json','party_skills.json'].map(read));
+const [seed,base,forest,skills,scheduler,reactions,party]=await Promise.all(['route_seed.json','combat_sample.json','forest_combat.json','skills.json','battle_scheduler.json','enemy_reactions.json','party_skills.json'].map(read));
 const copy=structuredClone,zero='00'.repeat(0xc6),address=n=>`0x${n.toString(16).padStart(8,'0')}`;
 function fixture({playAction=async(_,{onImpact})=>onImpact(),onRevival=null,learned=true}={}){
   const world=new WorldStore(copy(seed),['M17010','M70010']),sample=createForestSample(world.snapshot(),base,forest,{map_id:'M70010',members:[{id:'012'}]},skills,scheduler),dead=copy(sample.actors[0]);
@@ -49,9 +49,16 @@ test('An explicitly supplied revival command restores a KO ally at its source co
   await f.battle.choose(f.spell.id,'002');
   assert.equal(target.state_raw,0);assert.equal(target.alive,true);assert.equal(target.raw_hp,151);assert.equal(target.hp.current,151+target.resource_bonuses.hp_current);
   assert.deepEqual(target.charge,charge);assert.deepEqual(target.native_status_slots,statuses);assert.equal(target.status_flags_raw,flags);assert.equal(caster.mp.current,mp);
-  assert.equal(f.draws.length,draws+1);assert.deepEqual(f.responses[1],f.responses[0]);assert.equal(f.responses[0].revived,true);assert.equal(f.responses[0].hp_delta,target.hp.current);assert.deepEqual(f.world.snapshot(),saved);
+  // The contact still draws id14 exactly once. The newly connected source
+  // completion separately draws id0 for the caster after the CHR ends.
+  assert.deepEqual(f.battle.state.history[0].contacts[0].result.trace.filter(row=>row.kind==='rng').map(row=>row.label),['reaction-id-14']);
+  const completion=f.logs.find(event=>event.type==='battle-source-completed'&&event.actor_id==='001');
+  assert.deepEqual(completion.descriptor.trace.filter(row=>row.kind==='rng').map(row=>row.label),['reaction-id-0']);
+  assert.equal(f.draws.length,draws+2);assert.deepEqual(f.responses[1],f.responses[0]);assert.equal(f.responses[0].revived,true);assert.equal(f.responses[0].hp_delta,target.hp.current);assert.deepEqual(f.world.snapshot(),saved);
   const event=f.battle.presentationSnapshot().lifecycle_events.find(e=>e.kind==='revive');assert.ok(event);assert.equal(event.actor_id,'002');assert.equal(event.source_id_raw,14);assert.equal(event.life_epoch,1);
-  assert.equal(f.battle.canCommand('002'),false);assert.equal(f.battle.ackLifecycle(event),true);assert.equal(target.native_active,false);assert.equal(parseInt(target.current_skill.fixed_raw_hex.slice(0,2),16),0);assert.equal(f.battle.ackLifecycle(event),false);
+  assert.equal(f.battle.canCommand('002'),false);assert.equal(f.battle.ackLifecycle(event),true);assert.equal(target.native_active,false);assert.equal(parseInt(target.current_skill.fixed_raw_hex.slice(0,2),16),0);
+  assert.equal(f.draws.length,draws+3,'revived source14 completes through its own native id0 lookup');
+  assert.equal(f.battle.ackLifecycle(event),false);assert.equal(f.draws.length,draws+3);
 });
 
 test('Revival replaces an uncompleted death event and rejects its late acknowledgement without resetting restored HP',async()=>{
@@ -85,8 +92,10 @@ test('Type14 selection reuses an already active source14 and otherwise draws exa
 
 test('Core revival preserves type14 lookup before configured recovery RNG and rejects later distinct contacts without another draw',async()=>{
   let later;const f=fixture({onRevival:({callbacks,step})=>{later=callbacks.onContact({...step,contact_key:step.contact_key+':later'});}}),skill=f.battle.skills[f.spell.id],raw=Buffer.from(skill.fixed_raw_hex,'hex');
-  raw.writeInt32LE(160,0xaf);skill.fixed_raw_hex=raw.toString('hex');const values=[7,5],consumed=[];
+  raw.writeInt32LE(160,0xaf);skill.fixed_raw_hex=raw.toString('hex');const values=[7,5,11],consumed=[];
   f.battle.rng=()=>{assert.ok(values.length,'Unexpected core revival RNG');const value=values.shift();consumed.push(value);return value;};
-  await f.battle.choose(f.spell.id,'002');assert.deepEqual(consumed,[7,5]);assert.equal(f.battle.actor('002').raw_hp,156);assert.equal(later.skipped,'revival-target-unavailable');
+  await f.battle.choose(f.spell.id,'002');assert.deepEqual(consumed,[7,5,11]);assert.equal(f.battle.actor('002').raw_hp,156);assert.equal(later.skipped,'revival-target-unavailable');
   assert.deepEqual(f.battle.state.history[0].contacts[0].result.trace.filter(row=>row.kind==='rng').map(row=>row.raw),[7,5]);
+  assert.deepEqual(f.logs.find(event=>event.type==='battle-source-completed'&&event.actor_id==='001').descriptor.trace.filter(row=>row.kind==='rng').map(row=>[row.label,row.raw]),[['reaction-id-0',11]]);
+  assert.deepEqual(values,[]);
 });

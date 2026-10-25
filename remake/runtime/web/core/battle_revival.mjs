@@ -84,14 +84,18 @@ export function applyNativeRevivalRecoveryBlock({actor,effect_raw_hex}){
   }
   sync(out);return {actor:out,native_return:0};
 }
-function recoverSkill(actor,view,rng,trace){
+/** Shared 41E950 recovery arithmetic. The caller owns this actor copy and
+ * supplies the source fixed-record DataView; no damage or status roll occurs.
+ */
+export function recoverSkill(actor,view,rng,trace,label='revival'){
+  resources(actor);need(view instanceof DataView&&view.byteLength===0x41d,'Original recovery skill bytes missing');
   const next=typeof rng==='function'?rng:rng?.next?.bind(rng);
   const range=(low,high,label)=>{if(low>=high)return low;need(next,'Explicit revival RNG required');const draw=int(next(),'native RNG');need(draw>=0&&draw<=32767,'Native RNG outside range');const result=draw%(high-low);trace.push({kind:'rng',label,raw:draw,modulus:high-low,result});return add(low,result);};
-  const hpDelta=range(view.getInt32(0xab,true),view.getInt32(0xaf,true),'revival-hp-range');actor.raw_hp=add(actor.raw_hp,hpDelta);
+  const hpDelta=range(view.getInt32(0xab,true),view.getInt32(0xaf,true),`${label}-hp-range`);actor.raw_hp=add(actor.raw_hp,hpDelta);
   const hpStatus=status(actor,0x521f551),hpDiv=status(actor,0x521f571),hpBase=add(actor.raw_hp,hpStatus),hpExtra=hpDiv?idiv(mul(hpBase,100),hpDiv):0,hpTerm=add(hpBase,hpExtra);
   const hpMaxBase=add(actor.raw_hp_maximum,status(actor,0x521f555)),hpMaxDiv=status(actor,0x521f575),hpMaxExtra=hpMaxDiv?idiv(mul(hpMaxBase,100),hpMaxDiv):0,hpMax=add(hpMaxBase,hpMaxExtra);
   if(hpTerm>hpMax)actor.raw_hp=sub(sub(hpMax,hpExtra),hpStatus);
-  const mpDelta=range(view.getInt32(0xbb,true),view.getInt32(0xbf,true),'revival-mp-range');actor.raw_mp=add(actor.raw_mp,mpDelta);
+  const mpDelta=range(view.getInt32(0xbb,true),view.getInt32(0xbf,true),`${label}-mp-range`);actor.raw_mp=add(actor.raw_mp,mpDelta);
   const mpExtra=mul(hpTerm,status(actor,0x521f579)),mpStatus=status(actor,0x521f559),mpTerm=add(add(actor.raw_mp,mpStatus),mpExtra);
   const mpMaxBase=add(actor.raw_mp_maximum,status(actor,0x521f55d)),mpMaxDiv=status(actor,0x521f57d),mpMax=add(mpMaxBase,mpMaxDiv?idiv(mul(mpMaxBase,100),mpMaxDiv):0);
   if(mpTerm>mpMax)actor.raw_mp=sub(sub(mpMax,mpExtra),mpStatus);

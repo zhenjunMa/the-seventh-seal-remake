@@ -11,6 +11,7 @@ import {createNativeRng,resolveAction,applyNativeDamage} from '../web/core/comba
 import {createForestSample} from '../web/forest_sample.mjs';
 import {consumeBattleMp,resourcesForWorld} from '../web/combat_sample.mjs';
 import {validateBattleViewMetadata,compileActionTimeline} from '../web/battle_view.mjs';
+import {runtimeContent} from '../web/core/content_registry.mjs';
 const read=async p=>JSON.parse(await readFile(new URL('../web/data/'+p,import.meta.url),'utf8'));
 const [seed,data,wm,events,base,forest,meta,config]=await Promise.all(['route_seed.json','encounters.json','world_map.json','route_events.json','combat_sample.json','forest_combat.json','forest_battle_view.json','skills.json'].map(read));
 const clone=structuredClone,mapIds=['M01010','M01030','M17010','M70010'];
@@ -71,10 +72,11 @@ test('persistent encounter RNG continues identically after save and restore',asy
  assert.deepEqual(previewMovement(loaded.encounters,input(),data),previewMovement(world.value.encounters,input(),data));assert.deepEqual(loaded,before);
  const bad=clone(loaded);bad.encounters.remainders['001']=16;assert.throws(()=>new WorldStore(bad,mapIds));bad.encounters.remainders['001']=0;bad.encounters.active=true;assert.throws(()=>new WorldStore(bad,mapIds));
 });
-test('real enemy source metadata binds first contact, retaining later hawk contacts as deferred',async()=>{
- validateBattleViewMetadata(meta);
+test('historical four-role route metadata binds first contact, retaining later hawk contacts as deferred',async()=>{
+ const content=clone(runtimeContent);content.battle_rosters['forest-source-group']=meta.roles.map(role=>role.id);
+ validateBattleViewMetadata(meta,content);
  const layers=await read('yantu_layers.json');
- for(const r of meta.roles){const timeline=compileActionTimeline(meta,layers,r.id);assert.equal(timeline.filter(s=>s.event).length,1);}
+ for(const r of meta.roles){const timeline=compileActionTimeline(meta,layers,r.id,null,null,content);assert.equal(timeline.filter(s=>s.event).length,1);}
  assert.equal(meta.roles.find(r=>r.id==='011').skill.segments.filter(s=>s.deferred_source_event).length,2);
 });
 test('multi-enemy loop skips killed attacker while surviving enemies still act; win requires every enemy',async()=>{

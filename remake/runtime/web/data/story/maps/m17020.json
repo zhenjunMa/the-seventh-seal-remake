@@ -93,6 +93,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17020:TLK:1",
         "portrait_id": 32,
         "choices": []
@@ -121,6 +122,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17020:TLK:2",
         "portrait_id": 29,
         "choices": []
@@ -149,6 +151,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17020:TLK:3",
         "portrait_id": 0,
         "choices": []
@@ -177,6 +180,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17020:TLK:4",
         "portrait_id": 0,
         "choices": []
@@ -205,6 +209,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17020:TLK:5",
         "portrait_id": 0,
         "choices": []
@@ -233,6 +238,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17020:TLK:6",
         "portrait_id": 0,
         "choices": []
@@ -261,6 +267,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17020:TLK:7",
         "portrait_id": 0,
         "choices": []
@@ -289,6 +296,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17020:TLK:8",
         "portrait_id": 0,
         "choices": []
@@ -317,6 +325,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17020:TLK:9",
         "portrait_id": 0,
         "choices": []
@@ -345,6 +354,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17020:TLK:10",
         "portrait_id": 0,
         "choices": []
@@ -373,6 +383,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17020:TLK:11",
         "portrait_id": 0,
         "choices": []
@@ -1858,19 +1869,2687 @@
       "path": "Map/m17020.dat",
       "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
       "bytes": 4,
-      "offset": 286
+      "offset": 314
+    },
+    "header_setup_tlk_raw": 10,
+    "header_setup_tlk_source": {
+      "path": "Map/m17020.dat",
+      "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+      "bytes": 4,
+      "offset": 138
     },
     "evidence": [
       "ev_e14d28c11ec31e5eebdf4c08a994a900102658650d8e5364d58b848cbd114ea7",
       "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a"
     ],
     "limitations": [
-      "Index slot499 is retained as the object default TLK entry; it must not be used as an automatic map-load event. Header +0x11E controls map-entry TLK.",
+      "Index slot499 is retained as the object default TLK entry; it must not be used as an automatic map-load event. Header +0x8A controls map setup; +0x13A controls map-entry TLK.",
       "TLK record kind/mutation numbers are raw native values; dialogue text alone does not define their behavior."
     ],
     "flow_id": "M17020:tlk"
   },
-  "programs": {},
+  "programs": {
+    "m17020-1": {
+      "schema": "seventh-seal-chapter-anm",
+      "version": 1,
+      "id": "m17020-1",
+      "source": {
+        "path": "Animate/m17020-1.anm",
+        "sha256": "34c72c0bc84e0e50d46a55faadc1d018a8efbe3f847c85dfa28de0bebae343e7",
+        "bytes": 1917
+      },
+      "header_raw_hex": "03001900000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "commands": [
+        {
+          "index": 0,
+          "opcode": 10,
+          "raw_hex": "0a00000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000006d31373032302e64617400000000000000000000",
+          "source": {
+            "path": "Animate/m17020-1.anm",
+            "sha256": "34c72c0bc84e0e50d46a55faadc1d018a8efbe3f847c85dfa28de0bebae343e7",
+            "record_index": 0,
+            "offset": 67
+          },
+          "map_index_raw": 0,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 0,
+          "u32_plus13": 0,
+          "u32_plus17": 0,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0,
+          "filename": "m17020.dat"
+        },
+        {
+          "index": 1,
+          "opcode": 35,
+          "raw_hex": "230100000016000000270000002601000092020000000000000000000000000000007e010000010000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17020-1.anm",
+            "sha256": "34c72c0bc84e0e50d46a55faadc1d018a8efbe3f847c85dfa28de0bebae343e7",
+            "record_index": 1,
+            "offset": 141
+          },
+          "map_index_raw": 382,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 1,
+          "u32_plus5": 22,
+          "u32_plus9": 39,
+          "u32_plus13": 294,
+          "u32_plus17": 658,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 2,
+          "opcode": 35,
+          "raw_hex": "23010000000a000000280000002c0100004b020000000000000000000000000000007e010000010000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17020-1.anm",
+            "sha256": "34c72c0bc84e0e50d46a55faadc1d018a8efbe3f847c85dfa28de0bebae343e7",
+            "record_index": 2,
+            "offset": 215
+          },
+          "map_index_raw": 382,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 1,
+          "u32_plus5": 10,
+          "u32_plus9": 40,
+          "u32_plus13": 300,
+          "u32_plus17": 587,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 3,
+          "opcode": 35,
+          "raw_hex": "23010000001b00000029000000ef0000006d020000000000000000000000000000007e010000010000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17020-1.anm",
+            "sha256": "34c72c0bc84e0e50d46a55faadc1d018a8efbe3f847c85dfa28de0bebae343e7",
+            "record_index": 3,
+            "offset": 289
+          },
+          "map_index_raw": 382,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 1,
+          "u32_plus5": 27,
+          "u32_plus9": 41,
+          "u32_plus13": 239,
+          "u32_plus17": 621,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 4,
+          "opcode": 35,
+          "raw_hex": "23010000001c0000002a000000cf000000a0020000000000000000000000000000007e010000010000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17020-1.anm",
+            "sha256": "34c72c0bc84e0e50d46a55faadc1d018a8efbe3f847c85dfa28de0bebae343e7",
+            "record_index": 4,
+            "offset": 363
+          },
+          "map_index_raw": 382,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 1,
+          "u32_plus5": 28,
+          "u32_plus9": 42,
+          "u32_plus13": 207,
+          "u32_plus17": 672,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 5,
+          "opcode": 35,
+          "raw_hex": "23010000000f0000002b000000d2000000f5000000000000000000000000000000007e010000010000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17020-1.anm",
+            "sha256": "34c72c0bc84e0e50d46a55faadc1d018a8efbe3f847c85dfa28de0bebae343e7",
+            "record_index": 5,
+            "offset": 437
+          },
+          "map_index_raw": 382,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 1,
+          "u32_plus5": 15,
+          "u32_plus9": 43,
+          "u32_plus13": 210,
+          "u32_plus17": 245,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 6,
+          "opcode": 35,
+          "raw_hex": "2301000000110000002c0000009b000000ee020000000000000000000000000000007e010000010000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17020-1.anm",
+            "sha256": "34c72c0bc84e0e50d46a55faadc1d018a8efbe3f847c85dfa28de0bebae343e7",
+            "record_index": 6,
+            "offset": 511
+          },
+          "map_index_raw": 382,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 1,
+          "u32_plus5": 17,
+          "u32_plus9": 44,
+          "u32_plus13": 155,
+          "u32_plus17": 750,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 7,
+          "opcode": 35,
+          "raw_hex": "23010000000e0000002d0000005b000000e7010000000000000000000000000000007e010000010000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17020-1.anm",
+            "sha256": "34c72c0bc84e0e50d46a55faadc1d018a8efbe3f847c85dfa28de0bebae343e7",
+            "record_index": 7,
+            "offset": 585
+          },
+          "map_index_raw": 382,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 1,
+          "u32_plus5": 14,
+          "u32_plus9": 45,
+          "u32_plus13": 91,
+          "u32_plus17": 487,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 8,
+          "opcode": 35,
+          "raw_hex": "23010000001e0000002e000000af01000004010000000000000000000000000000007e010000010000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17020-1.anm",
+            "sha256": "34c72c0bc84e0e50d46a55faadc1d018a8efbe3f847c85dfa28de0bebae343e7",
+            "record_index": 8,
+            "offset": 659
+          },
+          "map_index_raw": 382,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 1,
+          "u32_plus5": 30,
+          "u32_plus9": 46,
+          "u32_plus13": 431,
+          "u32_plus17": 260,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 9,
+          "opcode": 35,
+          "raw_hex": "2301000000100000002f000000f10100000b010000000000000000000000000000007e010000010000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17020-1.anm",
+            "sha256": "34c72c0bc84e0e50d46a55faadc1d018a8efbe3f847c85dfa28de0bebae343e7",
+            "record_index": 9,
+            "offset": 733
+          },
+          "map_index_raw": 382,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 1,
+          "u32_plus5": 16,
+          "u32_plus9": 47,
+          "u32_plus13": 497,
+          "u32_plus17": 267,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 10,
+          "opcode": 35,
+          "raw_hex": "23010000001300000030000000690100002a020000000000000000000000000000007e010000010000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17020-1.anm",
+            "sha256": "34c72c0bc84e0e50d46a55faadc1d018a8efbe3f847c85dfa28de0bebae343e7",
+            "record_index": 10,
+            "offset": 807
+          },
+          "map_index_raw": 382,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 1,
+          "u32_plus5": 19,
+          "u32_plus9": 48,
+          "u32_plus13": 361,
+          "u32_plus17": 554,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 11,
+          "opcode": 35,
+          "raw_hex": "23010000001a00000031000000c3010000dc010000000000000000000000000000007e010000010000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17020-1.anm",
+            "sha256": "34c72c0bc84e0e50d46a55faadc1d018a8efbe3f847c85dfa28de0bebae343e7",
+            "record_index": 11,
+            "offset": 881
+          },
+          "map_index_raw": 382,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 1,
+          "u32_plus5": 26,
+          "u32_plus9": 49,
+          "u32_plus13": 451,
+          "u32_plus17": 476,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 12,
+          "opcode": 35,
+          "raw_hex": "23010000000b000000320000002f0200005e020000000000000000000000000000007e010000010000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17020-1.anm",
+            "sha256": "34c72c0bc84e0e50d46a55faadc1d018a8efbe3f847c85dfa28de0bebae343e7",
+            "record_index": 12,
+            "offset": 955
+          },
+          "map_index_raw": 382,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 1,
+          "u32_plus5": 11,
+          "u32_plus9": 50,
+          "u32_plus13": 559,
+          "u32_plus17": 606,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 13,
+          "opcode": 35,
+          "raw_hex": "23010000001d000000330000009e02000026020000000000000000000000000000007e010000010000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17020-1.anm",
+            "sha256": "34c72c0bc84e0e50d46a55faadc1d018a8efbe3f847c85dfa28de0bebae343e7",
+            "record_index": 13,
+            "offset": 1029
+          },
+          "map_index_raw": 382,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 1,
+          "u32_plus5": 29,
+          "u32_plus9": 51,
+          "u32_plus13": 670,
+          "u32_plus17": 550,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 14,
+          "opcode": 35,
+          "raw_hex": "23010000001800000034000000b20200000d020000000000000000000000000000007e010000010000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17020-1.anm",
+            "sha256": "34c72c0bc84e0e50d46a55faadc1d018a8efbe3f847c85dfa28de0bebae343e7",
+            "record_index": 14,
+            "offset": 1103
+          },
+          "map_index_raw": 382,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 1,
+          "u32_plus5": 24,
+          "u32_plus9": 52,
+          "u32_plus13": 690,
+          "u32_plus17": 525,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 15,
+          "opcode": 35,
+          "raw_hex": "23010000000c00000035000000ec020000af010000000000000000000000000000007e010000010000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17020-1.anm",
+            "sha256": "34c72c0bc84e0e50d46a55faadc1d018a8efbe3f847c85dfa28de0bebae343e7",
+            "record_index": 15,
+            "offset": 1177
+          },
+          "map_index_raw": 382,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 1,
+          "u32_plus5": 12,
+          "u32_plus9": 53,
+          "u32_plus13": 748,
+          "u32_plus17": 431,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 16,
+          "opcode": 35,
+          "raw_hex": "230100000015000000360000005e0200008b010000000000000000000000000000007e010000010000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17020-1.anm",
+            "sha256": "34c72c0bc84e0e50d46a55faadc1d018a8efbe3f847c85dfa28de0bebae343e7",
+            "record_index": 16,
+            "offset": 1251
+          },
+          "map_index_raw": 382,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 1,
+          "u32_plus5": 21,
+          "u32_plus9": 54,
+          "u32_plus13": 606,
+          "u32_plus17": 395,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 17,
+          "opcode": 35,
+          "raw_hex": "230100000014000000370000003102000085010000000000000000000000000000007e010000010000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17020-1.anm",
+            "sha256": "34c72c0bc84e0e50d46a55faadc1d018a8efbe3f847c85dfa28de0bebae343e7",
+            "record_index": 17,
+            "offset": 1325
+          },
+          "map_index_raw": 382,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 1,
+          "u32_plus5": 20,
+          "u32_plus9": 55,
+          "u32_plus13": 561,
+          "u32_plus17": 389,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 18,
+          "opcode": 35,
+          "raw_hex": "23010000001700000038000000a900000037010000000000000000000000000000007e010000010000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17020-1.anm",
+            "sha256": "34c72c0bc84e0e50d46a55faadc1d018a8efbe3f847c85dfa28de0bebae343e7",
+            "record_index": 18,
+            "offset": 1399
+          },
+          "map_index_raw": 382,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 1,
+          "u32_plus5": 23,
+          "u32_plus9": 56,
+          "u32_plus13": 169,
+          "u32_plus17": 311,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 19,
+          "opcode": 35,
+          "raw_hex": "2301000000120000003900000034020000ed020000000000000000000000000000007e010000010000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17020-1.anm",
+            "sha256": "34c72c0bc84e0e50d46a55faadc1d018a8efbe3f847c85dfa28de0bebae343e7",
+            "record_index": 19,
+            "offset": 1473
+          },
+          "map_index_raw": 382,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 1,
+          "u32_plus5": 18,
+          "u32_plus9": 57,
+          "u32_plus13": 564,
+          "u32_plus17": 749,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 20,
+          "opcode": 35,
+          "raw_hex": "23010000000d0000003a000000e6010000de010000000000000000000000000000007e010000010000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17020-1.anm",
+            "sha256": "34c72c0bc84e0e50d46a55faadc1d018a8efbe3f847c85dfa28de0bebae343e7",
+            "record_index": 20,
+            "offset": 1547
+          },
+          "map_index_raw": 382,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 1,
+          "u32_plus5": 13,
+          "u32_plus9": 58,
+          "u32_plus13": 486,
+          "u32_plus17": 478,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 21,
+          "opcode": 35,
+          "raw_hex": "2301000000190000003b000000b4010000e6010000000000000000000000000000007e010000020000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17020-1.anm",
+            "sha256": "34c72c0bc84e0e50d46a55faadc1d018a8efbe3f847c85dfa28de0bebae343e7",
+            "record_index": 21,
+            "offset": 1621
+          },
+          "map_index_raw": 382,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 1,
+          "u32_plus5": 25,
+          "u32_plus9": 59,
+          "u32_plus13": 436,
+          "u32_plus17": 486,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 22,
+          "opcode": 16,
+          "raw_hex": "1000000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17020-1.anm",
+            "sha256": "34c72c0bc84e0e50d46a55faadc1d018a8efbe3f847c85dfa28de0bebae343e7",
+            "record_index": 22,
+            "offset": 1695
+          },
+          "map_index_raw": 0,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 0,
+          "u32_plus13": 0,
+          "u32_plus17": 0,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 23,
+          "opcode": 30,
+          "raw_hex": "1e00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17020-1.anm",
+            "sha256": "34c72c0bc84e0e50d46a55faadc1d018a8efbe3f847c85dfa28de0bebae343e7",
+            "record_index": 23,
+            "offset": 1769
+          },
+          "map_index_raw": 0,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 0,
+          "u32_plus13": 0,
+          "u32_plus17": 0,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 24,
+          "opcode": 16,
+          "raw_hex": "1000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17020-1.anm",
+            "sha256": "34c72c0bc84e0e50d46a55faadc1d018a8efbe3f847c85dfa28de0bebae343e7",
+            "record_index": 24,
+            "offset": 1843
+          },
+          "map_index_raw": 0,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 0,
+          "u32_plus13": 0,
+          "u32_plus17": 0,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        }
+      ],
+      "required_opcodes": [
+        10,
+        16,
+        30,
+        35
+      ],
+      "maps": [
+        "M17020"
+      ],
+      "expected": {
+        "control_map": "M17020",
+        "control_maps": [
+          "M17020"
+        ],
+        "caller_maps": [
+          "M17020"
+        ],
+        "final_control_actor": 0
+      },
+      "context_sources": {
+        "map_commands": [
+          {
+            "map_id": "M17020",
+            "command_index": 0,
+            "source": {
+              "path": "Animate/m17020-1.anm",
+              "sha256": "34c72c0bc84e0e50d46a55faadc1d018a8efbe3f847c85dfa28de0bebae343e7",
+              "record_index": 0,
+              "offset": 67
+            }
+          }
+        ],
+        "caller_records": [
+          {
+            "map_id": "M17020",
+            "record_id": 11,
+            "source": {
+              "path": "Map/m17020.TLK",
+              "sha256": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
+              "record_id": 11,
+              "record_bytes": 1647,
+              "offset": 18496
+            }
+          }
+        ],
+        "caller_descriptors": []
+      },
+      "native_evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "limitations": [
+        "Static source/native command export, not observed original execution.",
+        "Native movement speed0, actor party opcode36 and TLK mutation dispatch require their recovered handlers.",
+        "Browser visual timing and exact native blending are separate renderer limitations."
+      ]
+    },
+    "m17010-3": {
+      "schema": "seventh-seal-chapter-anm",
+      "version": 1,
+      "id": "m17010-3",
+      "source": {
+        "path": "Animate/m17010-3.anm",
+        "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+        "bytes": 5025
+      },
+      "header_raw_hex": "03004300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "commands": [
+        {
+          "index": 0,
+          "opcode": 17,
+          "raw_hex": "110000000000000000000000000000000000000000000000000100000001000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 0,
+            "offset": 67
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 0,
+          "u32_plus13": 0,
+          "u32_plus17": 0,
+          "u32_plus21": 0,
+          "u32_plus25": 1,
+          "byte_plus29": 1,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 1,
+          "opcode": 36,
+          "raw_hex": "2400000000000000000000000068020000d8020000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 1,
+            "offset": 141
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 0,
+          "u32_plus13": 616,
+          "u32_plus17": 728,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 2,
+          "opcode": 36,
+          "raw_hex": "2400000000040000000000000068020000d8020000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 2,
+            "offset": 215
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 4,
+          "u32_plus9": 0,
+          "u32_plus13": 616,
+          "u32_plus17": 728,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 3,
+          "opcode": 36,
+          "raw_hex": "2400000000000000000000000068020000d8020000000000000000000003000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 3,
+            "offset": 289
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 0,
+          "u32_plus13": 616,
+          "u32_plus17": 728,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 3,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 4,
+          "opcode": 37,
+          "raw_hex": "2500000000030000000000000068020000d0020000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 4,
+            "offset": 363
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 3,
+          "u32_plus9": 0,
+          "u32_plus13": 616,
+          "u32_plus17": 720,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 5,
+          "opcode": 10,
+          "raw_hex": "0a0000000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000004d31373031302e44415400000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 5,
+            "offset": 437
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 0,
+          "u32_plus13": 0,
+          "u32_plus17": 0,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0,
+          "filename": "M17010.DAT"
+        },
+        {
+          "index": 6,
+          "opcode": 16,
+          "raw_hex": "100000000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 6,
+            "offset": 511
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 0,
+          "u32_plus13": 0,
+          "u32_plus17": 0,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 7,
+          "opcode": 35,
+          "raw_hex": "2300000000000000002600000024020000d7010000000000005000000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 7,
+            "offset": 585
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 38,
+          "u32_plus13": 548,
+          "u32_plus17": 471,
+          "u32_plus21": 0,
+          "u32_plus25": 80,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 8,
+          "opcode": 35,
+          "raw_hex": "23000000001200000027000000550100005d020000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 8,
+            "offset": 659
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 18,
+          "u32_plus9": 39,
+          "u32_plus13": 341,
+          "u32_plus17": 605,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 9,
+          "opcode": 35,
+          "raw_hex": "23000000000d000000280000006a01000069020000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 9,
+            "offset": 733
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 13,
+          "u32_plus9": 40,
+          "u32_plus13": 362,
+          "u32_plus17": 617,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 10,
+          "opcode": 16,
+          "raw_hex": "100000000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 10,
+            "offset": 807
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 0,
+          "u32_plus13": 0,
+          "u32_plus17": 0,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 11,
+          "opcode": 32,
+          "raw_hex": "2000000000000000000000000068020000d8020000000000000000000001000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 11,
+            "offset": 881
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 0,
+          "u32_plus13": 616,
+          "u32_plus17": 728,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 1,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 12,
+          "opcode": 31,
+          "raw_hex": "1f0000000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 12,
+            "offset": 955
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 0,
+          "u32_plus13": 0,
+          "u32_plus17": 0,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 13,
+          "opcode": 17,
+          "raw_hex": "110000000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 13,
+            "offset": 1029
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 0,
+          "u32_plus13": 0,
+          "u32_plus17": 0,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 14,
+          "opcode": 33,
+          "raw_hex": "210000000000000000290000001002000080020000000000000700000000010000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 14,
+            "offset": 1103
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 41,
+          "u32_plus13": 528,
+          "u32_plus17": 640,
+          "u32_plus21": 0,
+          "u32_plus25": 7,
+          "byte_plus29": 0,
+          "byte_plus30": 1,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 15,
+          "opcode": 31,
+          "raw_hex": "1f0000000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 15,
+            "offset": 1177
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 0,
+          "u32_plus13": 0,
+          "u32_plus17": 0,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 16,
+          "opcode": 33,
+          "raw_hex": "21000000000d0000002a000000fe01000097020000000000000300000002000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 16,
+            "offset": 1251
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 13,
+          "u32_plus9": 42,
+          "u32_plus13": 510,
+          "u32_plus17": 663,
+          "u32_plus21": 0,
+          "u32_plus25": 3,
+          "byte_plus29": 2,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 17,
+          "opcode": 31,
+          "raw_hex": "1f0000000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 17,
+            "offset": 1325
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 0,
+          "u32_plus13": 0,
+          "u32_plus17": 0,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 18,
+          "opcode": 14,
+          "raw_hex": "0e000000000c000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 18,
+            "offset": 1399
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 12,
+          "u32_plus9": 0,
+          "u32_plus13": 0,
+          "u32_plus17": 0,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 19,
+          "opcode": 16,
+          "raw_hex": "100000000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 19,
+            "offset": 1473
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 0,
+          "u32_plus13": 0,
+          "u32_plus17": 0,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 20,
+          "opcode": 33,
+          "raw_hex": "2100000000120000002b000000eb01000081020000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 20,
+            "offset": 1547
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 18,
+          "u32_plus9": 43,
+          "u32_plus13": 491,
+          "u32_plus17": 641,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 21,
+          "opcode": 31,
+          "raw_hex": "1f0000000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 21,
+            "offset": 1621
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 0,
+          "u32_plus13": 0,
+          "u32_plus17": 0,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 22,
+          "opcode": 14,
+          "raw_hex": "0e000000000e000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 22,
+            "offset": 1695
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 14,
+          "u32_plus9": 0,
+          "u32_plus13": 0,
+          "u32_plus17": 0,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 23,
+          "opcode": 16,
+          "raw_hex": "100000000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 23,
+            "offset": 1769
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 0,
+          "u32_plus13": 0,
+          "u32_plus17": 0,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 24,
+          "opcode": 33,
+          "raw_hex": "21000000000d0000002c0000006b01000065020000000000000500000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 24,
+            "offset": 1843
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 13,
+          "u32_plus9": 44,
+          "u32_plus13": 363,
+          "u32_plus17": 613,
+          "u32_plus21": 0,
+          "u32_plus25": 5,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 25,
+          "opcode": 33,
+          "raw_hex": "2100000000120000002d0000005001000059020000000000000100000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 25,
+            "offset": 1917
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 18,
+          "u32_plus9": 45,
+          "u32_plus13": 336,
+          "u32_plus17": 601,
+          "u32_plus21": 0,
+          "u32_plus25": 1,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 26,
+          "opcode": 31,
+          "raw_hex": "1f0000000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 26,
+            "offset": 1991
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 0,
+          "u32_plus13": 0,
+          "u32_plus17": 0,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 27,
+          "opcode": 35,
+          "raw_hex": "2300000000040000002e00000027020000d4010000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 27,
+            "offset": 2065
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 4,
+          "u32_plus9": 46,
+          "u32_plus13": 551,
+          "u32_plus17": 468,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 28,
+          "opcode": 16,
+          "raw_hex": "100000000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 28,
+            "offset": 2139
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 0,
+          "u32_plus13": 0,
+          "u32_plus17": 0,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 29,
+          "opcode": 48,
+          "raw_hex": "300000000000000000000000000100000015000000000000000100000006000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 29,
+            "offset": 2213
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 0,
+          "u32_plus13": 1,
+          "u32_plus17": 21,
+          "u32_plus21": 0,
+          "u32_plus25": 1,
+          "byte_plus29": 6,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 30,
+          "opcode": 33,
+          "raw_hex": "2100000000040000002f0000002402000067020000000000000700000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 30,
+            "offset": 2287
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 4,
+          "u32_plus9": 47,
+          "u32_plus13": 548,
+          "u32_plus17": 615,
+          "u32_plus21": 0,
+          "u32_plus25": 7,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 31,
+          "opcode": 31,
+          "raw_hex": "1f0000000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 31,
+            "offset": 2361
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 0,
+          "u32_plus13": 0,
+          "u32_plus17": 0,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 32,
+          "opcode": 48,
+          "raw_hex": "30000000000000000000000000010000000b000000000000000100000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 32,
+            "offset": 2435
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 0,
+          "u32_plus13": 1,
+          "u32_plus17": 11,
+          "u32_plus21": 0,
+          "u32_plus25": 1,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 33,
+          "opcode": 31,
+          "raw_hex": "1f0000000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 33,
+            "offset": 2509
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 0,
+          "u32_plus13": 0,
+          "u32_plus17": 0,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 34,
+          "opcode": 35,
+          "raw_hex": "230000000000000000300000001002000080020000000000001e00000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 34,
+            "offset": 2583
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 48,
+          "u32_plus13": 528,
+          "u32_plus17": 640,
+          "u32_plus21": 0,
+          "u32_plus25": 30,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 35,
+          "opcode": 16,
+          "raw_hex": "100000000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 35,
+            "offset": 2657
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 0,
+          "u32_plus13": 0,
+          "u32_plus17": 0,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 36,
+          "opcode": 14,
+          "raw_hex": "0e0000000017000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 36,
+            "offset": 2731
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 23,
+          "u32_plus9": 0,
+          "u32_plus13": 0,
+          "u32_plus17": 0,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 37,
+          "opcode": 16,
+          "raw_hex": "100000000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 37,
+            "offset": 2805
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 0,
+          "u32_plus13": 0,
+          "u32_plus17": 0,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 38,
+          "opcode": 48,
+          "raw_hex": "30000000000000000000000000010000001000000000000000010000000a000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 38,
+            "offset": 2879
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 0,
+          "u32_plus13": 1,
+          "u32_plus17": 16,
+          "u32_plus21": 0,
+          "u32_plus25": 1,
+          "byte_plus29": 10,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 39,
+          "opcode": 31,
+          "raw_hex": "1f0000000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 39,
+            "offset": 2953
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 0,
+          "u32_plus13": 0,
+          "u32_plus17": 0,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 40,
+          "opcode": 14,
+          "raw_hex": "0e0000000039000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 40,
+            "offset": 3027
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 57,
+          "u32_plus9": 0,
+          "u32_plus13": 0,
+          "u32_plus17": 0,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 41,
+          "opcode": 16,
+          "raw_hex": "100000000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 41,
+            "offset": 3101
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 0,
+          "u32_plus13": 0,
+          "u32_plus17": 0,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 42,
+          "opcode": 31,
+          "raw_hex": "1f00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 42,
+            "offset": 3175
+          },
+          "map_index_raw": 0,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 0,
+          "u32_plus13": 0,
+          "u32_plus17": 0,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 43,
+          "opcode": 48,
+          "raw_hex": "300000000000000000000000000000000000000000000000000100000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 43,
+            "offset": 3249
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 0,
+          "u32_plus13": 0,
+          "u32_plus17": 0,
+          "u32_plus21": 0,
+          "u32_plus25": 1,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 44,
+          "opcode": 11,
+          "raw_hex": "0b000000000000000000000000c8010000e0010000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 44,
+            "offset": 3323
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 0,
+          "u32_plus13": 456,
+          "u32_plus17": 480,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 45,
+          "opcode": 31,
+          "raw_hex": "1f0000000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 45,
+            "offset": 3397
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 0,
+          "u32_plus13": 0,
+          "u32_plus17": 0,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 46,
+          "opcode": 14,
+          "raw_hex": "0e0000000037000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 46,
+            "offset": 3471
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 55,
+          "u32_plus9": 0,
+          "u32_plus13": 0,
+          "u32_plus17": 0,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 47,
+          "opcode": 16,
+          "raw_hex": "100000000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 47,
+            "offset": 3545
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 0,
+          "u32_plus13": 0,
+          "u32_plus17": 0,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 48,
+          "opcode": 32,
+          "raw_hex": "2000000000000000000000000068020000e0020000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 48,
+            "offset": 3619
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 0,
+          "u32_plus13": 616,
+          "u32_plus17": 736,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 49,
+          "opcode": 31,
+          "raw_hex": "1f0000000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 49,
+            "offset": 3693
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 0,
+          "u32_plus13": 0,
+          "u32_plus17": 0,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 50,
+          "opcode": 14,
+          "raw_hex": "0e0000000026000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 50,
+            "offset": 3767
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 38,
+          "u32_plus9": 0,
+          "u32_plus13": 0,
+          "u32_plus17": 0,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 51,
+          "opcode": 16,
+          "raw_hex": "100000000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 51,
+            "offset": 3841
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 0,
+          "u32_plus13": 0,
+          "u32_plus17": 0,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 52,
+          "opcode": 33,
+          "raw_hex": "2100000000000000003100000020020000cc010000000000000400000002000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 52,
+            "offset": 3915
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 49,
+          "u32_plus13": 544,
+          "u32_plus17": 460,
+          "u32_plus21": 0,
+          "u32_plus25": 4,
+          "byte_plus29": 2,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 53,
+          "opcode": 33,
+          "raw_hex": "210000000004000000320000002a020000cc010000000000000400000002000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 53,
+            "offset": 3989
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 4,
+          "u32_plus9": 50,
+          "u32_plus13": 554,
+          "u32_plus17": 460,
+          "u32_plus21": 0,
+          "u32_plus25": 4,
+          "byte_plus29": 2,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 54,
+          "opcode": 11,
+          "raw_hex": "0b00000000000000000000000068010000b0010000000000000000000002000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 54,
+            "offset": 4063
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 0,
+          "u32_plus13": 360,
+          "u32_plus17": 432,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 2,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 55,
+          "opcode": 31,
+          "raw_hex": "1f0000000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 55,
+            "offset": 4137
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 0,
+          "u32_plus13": 0,
+          "u32_plus17": 0,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 56,
+          "opcode": 16,
+          "raw_hex": "100000000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 56,
+            "offset": 4211
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 0,
+          "u32_plus13": 0,
+          "u32_plus17": 0,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 57,
+          "opcode": 17,
+          "raw_hex": "110000000000000000000000000000000000000000000000000100000001000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 57,
+            "offset": 4285
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 0,
+          "u32_plus13": 0,
+          "u32_plus17": 0,
+          "u32_plus21": 0,
+          "u32_plus25": 1,
+          "byte_plus29": 1,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 58,
+          "opcode": 255,
+          "raw_hex": "ff0000000000000000000000000000000000000000000000000000000000000000000a00000001000000000000000000000000000000c5aac0c900000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 58,
+            "offset": 4359
+          },
+          "map_index_raw": 10,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 0,
+          "u32_plus13": 0,
+          "u32_plus17": 0,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 59,
+          "opcode": 10,
+          "raw_hex": "0a00000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000006d31373033322e64617400000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 59,
+            "offset": 4433
+          },
+          "map_index_raw": 0,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 0,
+          "u32_plus13": 0,
+          "u32_plus17": 0,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0,
+          "filename": "m17032.dat"
+        },
+        {
+          "index": 60,
+          "opcode": 35,
+          "raw_hex": "23000000000000000008000000210100005e010000000000001e0000000000000000d6010000010000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 60,
+            "offset": 4507
+          },
+          "map_index_raw": 470,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 8,
+          "u32_plus13": 289,
+          "u32_plus17": 350,
+          "u32_plus21": 0,
+          "u32_plus25": 30,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 61,
+          "opcode": 16,
+          "raw_hex": "100000000000000000000000000000000000000000000000000000000001000000007e010000020000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 61,
+            "offset": 4581
+          },
+          "map_index_raw": 382,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 0,
+          "u32_plus13": 0,
+          "u32_plus17": 0,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 1,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 62,
+          "opcode": 32,
+          "raw_hex": "2000000000000000000000000078010000e8020000000000000000000001000000007e010000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 62,
+            "offset": 4655
+          },
+          "map_index_raw": 382,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 0,
+          "u32_plus13": 376,
+          "u32_plus17": 744,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 1,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 63,
+          "opcode": 31,
+          "raw_hex": "1f0000000000000000000000000000000000000000000000000000000000000000007e010000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 63,
+            "offset": 4729
+          },
+          "map_index_raw": 382,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 0,
+          "u32_plus13": 0,
+          "u32_plus17": 0,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 64,
+          "opcode": 17,
+          "raw_hex": "110000000000000000000000000000000000000000000000000000000000000000007e010000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 64,
+            "offset": 4803
+          },
+          "map_index_raw": 382,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 0,
+          "u32_plus13": 0,
+          "u32_plus17": 0,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 65,
+          "opcode": 30,
+          "raw_hex": "1e0000000000000000000000000000000000000000000000000000000000000000007e010000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 65,
+            "offset": 4877
+          },
+          "map_index_raw": 382,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 0,
+          "u32_plus13": 0,
+          "u32_plus17": 0,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        },
+        {
+          "index": 66,
+          "opcode": 16,
+          "raw_hex": "100000000000000000000000000000000000000000000000000000000000000000007e010000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "source": {
+            "path": "Animate/m17010-3.anm",
+            "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+            "record_index": 66,
+            "offset": 4951
+          },
+          "map_index_raw": 382,
+          "evidence": [
+            "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+          ],
+          "u32_plus1": 0,
+          "u32_plus5": 0,
+          "u32_plus9": 0,
+          "u32_plus13": 0,
+          "u32_plus17": 0,
+          "u32_plus21": 0,
+          "u32_plus25": 0,
+          "byte_plus29": 0,
+          "byte_plus30": 0,
+          "byte_plus31": 0,
+          "byte_plus32": 0,
+          "byte_plus33": 0
+        }
+      ],
+      "required_opcodes": [
+        10,
+        11,
+        14,
+        16,
+        17,
+        30,
+        31,
+        32,
+        33,
+        35,
+        36,
+        37,
+        48,
+        255
+      ],
+      "maps": [
+        "M03039",
+        "M17020",
+        "M17010",
+        "M17032"
+      ],
+      "expected": {
+        "control_map": "M17032",
+        "control_maps": [
+          "M17010",
+          "M17032"
+        ],
+        "caller_maps": [
+          "M03039",
+          "M17020"
+        ],
+        "final_control_actor": 0
+      },
+      "context_sources": {
+        "map_commands": [
+          {
+            "map_id": "M17010",
+            "command_index": 5,
+            "source": {
+              "path": "Animate/m17010-3.anm",
+              "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+              "record_index": 5,
+              "offset": 437
+            }
+          },
+          {
+            "map_id": "M17032",
+            "command_index": 59,
+            "source": {
+              "path": "Animate/m17010-3.anm",
+              "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+              "record_index": 59,
+              "offset": 4433
+            }
+          }
+        ],
+        "caller_records": [
+          {
+            "map_id": "M03039",
+            "record_id": 13,
+            "source": {
+              "path": "Map/m03039.TLK",
+              "sha256": "b95cbf37de9e4d723a9830d97454b5ece2bc7bf352a51199f0e630aacdb8694a",
+              "record_id": 13,
+              "record_bytes": 1647,
+              "offset": 21790
+            }
+          }
+        ],
+        "caller_descriptors": [
+          {
+            "map_id": "M17020",
+            "descriptor_id": 31,
+            "source": {
+              "path": "Map/m17020.dat",
+              "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+              "descriptor_id": 31,
+              "bytes": 66,
+              "offset": 663022
+            }
+          }
+        ]
+      },
+      "native_evidence": [
+        "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
+      ],
+      "limitations": [
+        "Static source/native command export, not observed original execution.",
+        "Native movement speed0, actor party opcode36 and TLK mutation dispatch require their recovered handlers.",
+        "Browser visual timing and exact native blending are separate renderer limitations."
+      ]
+    }
+  },
   "flows": {
     "M17020:tlk": {
       "schema": "seventh-seal-story-flow",
@@ -3466,6 +6145,182 @@
         ]
       },
       {
+        "id": 3,
+        "state": "ready",
+        "cells": [
+          {
+            "x": 76,
+            "y": 82
+          },
+          {
+            "x": 77,
+            "y": 82
+          },
+          {
+            "x": 78,
+            "y": 82
+          },
+          {
+            "x": 76,
+            "y": 83
+          },
+          {
+            "x": 77,
+            "y": 83
+          },
+          {
+            "x": 78,
+            "y": 83
+          }
+        ],
+        "target_map": "M17027",
+        "entry": {
+          "x": 64,
+          "y": 352,
+          "direction": 0,
+          "cell_x": 4,
+          "cell_y": 22,
+          "native_x": 32,
+          "native_y": 176
+        },
+        "conditions": [],
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "descriptor_offset": 661174,
+          "descriptor_bytes": 66,
+          "descriptor_hex": "00000000000000000000000000000000006d31373032372e646174000000000000000000000001000000040000000000000000000000000000000000000000000000",
+          "compact_field_expansion_evidence": null,
+          "target_path": "Map/m17027.dat",
+          "target_sha256": "7c0278bfe4a52f6a1977bb8493fa1ba1d40833b2dce142c42e75d7e2e67c0459",
+          "target_entry_marker": 1,
+          "entry_sort_code": 4,
+          "entry_scan_cells": [
+            {
+              "x": 4,
+              "y": 22,
+              "offset": 65394
+            }
+          ],
+          "entry_sorted_cells": [
+            {
+              "x": 4,
+              "y": 22
+            }
+          ],
+          "entry_sort": "x descending; stable ties",
+          "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
+          "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
+          "native_evidence": {
+            "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+            "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+            "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+            "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+          }
+        },
+        "execution": "Native transition descriptor only; map-entry TLK/ANM and their once-only checks must complete separately.",
+        "limitations": [
+          "Static source/code evidence; original timing not observed",
+          "Continuous keyboard movement is runtime policy"
+        ]
+      },
+      {
+        "id": 4,
+        "state": "ready",
+        "cells": [
+          {
+            "x": 18,
+            "y": 24
+          },
+          {
+            "x": 19,
+            "y": 24
+          },
+          {
+            "x": 20,
+            "y": 24
+          },
+          {
+            "x": 21,
+            "y": 24
+          },
+          {
+            "x": 22,
+            "y": 24
+          },
+          {
+            "x": 18,
+            "y": 25
+          },
+          {
+            "x": 19,
+            "y": 25
+          },
+          {
+            "x": 20,
+            "y": 25
+          },
+          {
+            "x": 21,
+            "y": 25
+          },
+          {
+            "x": 22,
+            "y": 25
+          }
+        ],
+        "target_map": "M17025",
+        "entry": {
+          "x": 624,
+          "y": 368,
+          "direction": 6,
+          "cell_x": 39,
+          "cell_y": 23,
+          "native_x": 312,
+          "native_y": 184
+        },
+        "conditions": [],
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "descriptor_offset": 661240,
+          "descriptor_bytes": 66,
+          "descriptor_hex": "00000000000000000000000000000000006d31373032352e646174000000000000000000000001000000020000000000000000000000000000000000000000000000",
+          "compact_field_expansion_evidence": null,
+          "target_path": "Map/m17025.dat",
+          "target_sha256": "266c901c9784665d27034f4531c1918fbea96815d14ec68fb1f6699d6d3fa3cd",
+          "target_entry_marker": 1,
+          "entry_sort_code": 2,
+          "entry_scan_cells": [
+            {
+              "x": 39,
+              "y": 23,
+              "offset": 70578
+            }
+          ],
+          "entry_sorted_cells": [
+            {
+              "x": 39,
+              "y": 23
+            }
+          ],
+          "entry_sort": "y descending; stable ties",
+          "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
+          "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
+          "native_evidence": {
+            "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+            "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+            "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+            "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+          }
+        },
+        "execution": "Native transition descriptor only; map-entry TLK/ANM and their once-only checks must complete separately.",
+        "limitations": [
+          "Static source/code evidence; original timing not observed",
+          "Continuous keyboard movement is runtime policy"
+        ]
+      },
+      {
         "id": 5,
         "state": "ready",
         "cells": [
@@ -3546,6 +6401,278 @@
             }
           ],
           "entry_sort": "row-major scan; first four; missing followers repeat last observed cell",
+          "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
+          "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
+          "native_evidence": {
+            "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+            "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+            "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+            "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+          }
+        },
+        "execution": "Native transition descriptor only; map-entry TLK/ANM and their once-only checks must complete separately.",
+        "limitations": [
+          "Static source/code evidence; original timing not observed",
+          "Continuous keyboard movement is runtime policy"
+        ]
+      },
+      {
+        "id": 6,
+        "state": "ready",
+        "cells": [
+          {
+            "x": 93,
+            "y": 38
+          },
+          {
+            "x": 91,
+            "y": 39
+          },
+          {
+            "x": 92,
+            "y": 39
+          },
+          {
+            "x": 93,
+            "y": 39
+          },
+          {
+            "x": 92,
+            "y": 40
+          },
+          {
+            "x": 93,
+            "y": 40
+          }
+        ],
+        "target_map": "M17028",
+        "entry": {
+          "x": 112,
+          "y": 352,
+          "direction": 0,
+          "cell_x": 7,
+          "cell_y": 22,
+          "native_x": 56,
+          "native_y": 176
+        },
+        "conditions": [],
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "descriptor_offset": 661372,
+          "descriptor_bytes": 66,
+          "descriptor_hex": "00000000000000000000000000000000006d31373032382e646174000000000000000000000001000000040000000000000000000000000000000000000000000000",
+          "compact_field_expansion_evidence": null,
+          "target_path": "Map/m17028.dat",
+          "target_sha256": "ec1d36649bf8fce856a0e93daf08128ebb099f7b30c59648a5903742f372aeff",
+          "target_entry_marker": 1,
+          "entry_sort_code": 4,
+          "entry_scan_cells": [
+            {
+              "x": 7,
+              "y": 22,
+              "offset": 65586
+            }
+          ],
+          "entry_sorted_cells": [
+            {
+              "x": 7,
+              "y": 22
+            }
+          ],
+          "entry_sort": "x descending; stable ties",
+          "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
+          "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
+          "native_evidence": {
+            "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+            "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+            "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+            "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+          }
+        },
+        "execution": "Native transition descriptor only; map-entry TLK/ANM and their once-only checks must complete separately.",
+        "limitations": [
+          "Static source/code evidence; original timing not observed",
+          "Continuous keyboard movement is runtime policy"
+        ]
+      },
+      {
+        "id": 7,
+        "state": "ready",
+        "cells": [
+          {
+            "x": 97,
+            "y": 68
+          },
+          {
+            "x": 98,
+            "y": 68
+          },
+          {
+            "x": 97,
+            "y": 69
+          },
+          {
+            "x": 98,
+            "y": 69
+          }
+        ],
+        "target_map": "M17015",
+        "entry": {
+          "x": 528,
+          "y": 240,
+          "direction": 6,
+          "cell_x": 33,
+          "cell_y": 15,
+          "native_x": 264,
+          "native_y": 120
+        },
+        "conditions": [],
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "descriptor_offset": 661438,
+          "descriptor_bytes": 66,
+          "descriptor_hex": "00000000000000000000000000000000006d31373031352e646174000000000000000000000002000000020000000000000000000000000000000000000000000000",
+          "compact_field_expansion_evidence": null,
+          "target_path": "Map/m17015.dat",
+          "target_sha256": "e396282ce0dbf14a02d91dca28af4b0d1914cee1c1b8a1b7b3c8e0089f6d8b0e",
+          "target_entry_marker": 2,
+          "entry_sort_code": 2,
+          "entry_scan_cells": [
+            {
+              "x": 33,
+              "y": 15,
+              "offset": 43762
+            }
+          ],
+          "entry_sorted_cells": [
+            {
+              "x": 33,
+              "y": 15
+            }
+          ],
+          "entry_sort": "y descending; stable ties",
+          "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
+          "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
+          "native_evidence": {
+            "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+            "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+            "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+            "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+          }
+        },
+        "execution": "Native transition descriptor only; map-entry TLK/ANM and their once-only checks must complete separately.",
+        "limitations": [
+          "Static source/code evidence; original timing not observed",
+          "Continuous keyboard movement is runtime policy"
+        ]
+      },
+      {
+        "id": 8,
+        "state": "ready",
+        "cells": [
+          {
+            "x": 71,
+            "y": 46
+          },
+          {
+            "x": 72,
+            "y": 46
+          },
+          {
+            "x": 73,
+            "y": 46
+          },
+          {
+            "x": 74,
+            "y": 46
+          },
+          {
+            "x": 75,
+            "y": 46
+          },
+          {
+            "x": 76,
+            "y": 46
+          },
+          {
+            "x": 77,
+            "y": 46
+          },
+          {
+            "x": 78,
+            "y": 46
+          },
+          {
+            "x": 71,
+            "y": 47
+          },
+          {
+            "x": 72,
+            "y": 47
+          },
+          {
+            "x": 73,
+            "y": 47
+          },
+          {
+            "x": 74,
+            "y": 47
+          },
+          {
+            "x": 75,
+            "y": 47
+          },
+          {
+            "x": 76,
+            "y": 47
+          },
+          {
+            "x": 77,
+            "y": 47
+          },
+          {
+            "x": 78,
+            "y": 47
+          }
+        ],
+        "target_map": "M17021",
+        "entry": {
+          "x": 176,
+          "y": 400,
+          "direction": 7,
+          "cell_x": 11,
+          "cell_y": 25,
+          "native_x": 88,
+          "native_y": 200
+        },
+        "conditions": [],
+        "source": {
+          "path": "Map/m17020.dat",
+          "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
+          "descriptor_offset": 661504,
+          "descriptor_bytes": 66,
+          "descriptor_hex": "00000000000000000000000000000000006d31373032312e646174000000000000000000000001000000060000000000000000000000000000000000000000000000",
+          "compact_field_expansion_evidence": null,
+          "target_path": "Map/m17021.dat",
+          "target_sha256": "8936daaa7ae9a874a41d9afabf1180677fe02c5d9640a0585792092357fd0ec5",
+          "target_entry_marker": 1,
+          "entry_sort_code": 6,
+          "entry_scan_cells": [
+            {
+              "x": 11,
+              "y": 25,
+              "offset": 79474
+            }
+          ],
+          "entry_sorted_cells": [
+            {
+              "x": 11,
+              "y": 25
+            }
+          ],
+          "entry_sort": "y descending; stable ties",
           "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
           "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
           "native_evidence": {

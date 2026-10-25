@@ -103,6 +103,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17029:TLK:1",
         "portrait_id": 0,
         "choices": []
@@ -131,6 +132,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17029:TLK:2",
         "portrait_id": 0,
         "choices": []
@@ -159,6 +161,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17029:TLK:3",
         "portrait_id": 0,
         "choices": []
@@ -187,6 +190,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17029:TLK:4",
         "portrait_id": 0,
         "choices": []
@@ -215,6 +219,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17029:TLK:5",
         "portrait_id": 0,
         "choices": []
@@ -243,6 +248,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17029:TLK:6",
         "portrait_id": 0,
         "choices": []
@@ -271,6 +277,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17029:TLK:7",
         "portrait_id": 29,
         "choices": []
@@ -299,6 +306,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17029:TLK:8",
         "portrait_id": 36,
         "choices": []
@@ -327,6 +335,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17029:TLK:9",
         "portrait_id": 32,
         "choices": []
@@ -355,6 +364,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17029:TLK:10",
         "portrait_id": 36,
         "choices": []
@@ -383,6 +393,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17029:TLK:11",
         "portrait_id": 29,
         "choices": []
@@ -411,6 +422,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17029:TLK:12",
         "portrait_id": 36,
         "choices": []
@@ -439,6 +451,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17029:TLK:13",
         "portrait_id": 24,
         "choices": []
@@ -467,6 +480,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17029:TLK:14",
         "portrait_id": 37,
         "choices": []
@@ -495,6 +509,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17029:TLK:15",
         "portrait_id": 29,
         "choices": []
@@ -523,6 +538,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17029:TLK:16",
         "portrait_id": 35,
         "choices": []
@@ -551,6 +567,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17029:TLK:17",
         "portrait_id": 25,
         "choices": []
@@ -579,6 +596,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17029:TLK:18",
         "portrait_id": 2,
         "choices": []
@@ -607,6 +625,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17029:TLK:19",
         "portrait_id": 33,
         "choices": []
@@ -635,6 +654,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17029:TLK:20",
         "portrait_id": 37,
         "choices": []
@@ -663,6 +683,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17029:TLK:21",
         "portrait_id": 29,
         "choices": []
@@ -691,6 +712,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17029:TLK:22",
         "portrait_id": 37,
         "choices": []
@@ -719,6 +741,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17029:TLK:23",
         "portrait_id": 1,
         "choices": []
@@ -747,6 +770,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17029:TLK:24",
         "portrait_id": 2,
         "choices": []
@@ -775,6 +799,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17029:TLK:25",
         "portrait_id": 0,
         "choices": []
@@ -803,6 +828,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17029:TLK:26",
         "portrait_id": 0,
         "choices": []
@@ -831,6 +857,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17029:TLK:27",
         "portrait_id": 37,
         "choices": []
@@ -859,6 +886,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17029:TLK:28",
         "portrait_id": 29,
         "choices": []
@@ -887,6 +915,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17029:TLK:29",
         "portrait_id": 0,
         "choices": []
@@ -915,6 +944,7 @@
         },
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
         "text_id": "M17029:TLK:30",
         "portrait_id": 0,
         "choices": []
@@ -1652,14 +1682,21 @@
       "path": "Map/m17029.dat",
       "sha256": "57851abbfe75121b806268f5bce8c778ec4e5d82ebb7dfa623fbd6952977c314",
       "bytes": 4,
-      "offset": 286
+      "offset": 314
+    },
+    "header_setup_tlk_raw": 0,
+    "header_setup_tlk_source": {
+      "path": "Map/m17029.dat",
+      "sha256": "57851abbfe75121b806268f5bce8c778ec4e5d82ebb7dfa623fbd6952977c314",
+      "bytes": 4,
+      "offset": 138
     },
     "evidence": [
       "ev_e14d28c11ec31e5eebdf4c08a994a900102658650d8e5364d58b848cbd114ea7",
       "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a"
     ],
     "limitations": [
-      "Index slot499 is retained as the object default TLK entry; it must not be used as an automatic map-load event. Header +0x11E controls map-entry TLK.",
+      "Index slot499 is retained as the object default TLK entry; it must not be used as an automatic map-load event. Header +0x8A controls map setup; +0x13A controls map-entry TLK.",
       "TLK record kind/mutation numbers are raw native values; dialogue text alone does not define their behavior."
     ],
     "flow_id": "M17029:tlk"
@@ -2992,7 +3029,41 @@
       ],
       "expected": {
         "control_map": "M17029",
+        "control_maps": [
+          "M17029"
+        ],
+        "caller_maps": [
+          "M17029"
+        ],
         "final_control_actor": 0
+      },
+      "context_sources": {
+        "map_commands": [
+          {
+            "map_id": "M17029",
+            "command_index": 0,
+            "source": {
+              "path": "Animate/m17029-1.anm",
+              "sha256": "2298d02eabc62ea6b0838379968e3fb998afcc22f45b48ce74b08de0a728319b",
+              "record_index": 0,
+              "offset": 67
+            }
+          }
+        ],
+        "caller_records": [
+          {
+            "map_id": "M17029",
+            "record_id": 25,
+            "source": {
+              "path": "Map/m17029.TLK",
+              "sha256": "ca5d31b51ba3faf0118ba2626be0fb374671641821f59f166171e324c61e6269",
+              "record_id": 25,
+              "record_bytes": 1647,
+              "offset": 41554
+            }
+          }
+        ],
+        "caller_descriptors": []
       },
       "native_evidence": [
         "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"

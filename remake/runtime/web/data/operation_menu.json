@@ -46079,6 +46079,45 @@
       "confidence": "native-static-and-source-pixel-confirmed",
       "state_alias_limit": "normal/selected/unfocused are visual aliases matched to supplied screenshots. The literal native widget state is separately preserved in actor_panel_source.binding; high-level focus-to-widget-state ordering remains under verification.",
       "reference": "operation_menu_reference_default_20261011.png / operation_menu_reference_roster_focus_20261011.png"
+    },
+    "004": {
+      "normal": "assets/menu/actor_panels/frame_003.png",
+      "selected": "assets/menu/actor_panels/frame_003.png",
+      "unfocused": "assets/menu/actor_panels/frame_009.png",
+      "width": 480,
+      "height": 83,
+      "source": "Fight_Role/combo/menu_role_board.dgp",
+      "source_frame": 3,
+      "unfocused_frame": 9,
+      "confidence": "native-static-and-source-pixel-confirmed",
+      "state_alias_limit": "normal/selected/unfocused are visual aliases matched to supplied screenshots. The literal native widget state is separately preserved in actor_panel_source.binding; high-level focus-to-widget-state ordering remains under verification.",
+      "reference": "operation_menu_reference_default_20261011.png / operation_menu_reference_roster_focus_20261011.png"
+    },
+    "005": {
+      "normal": "assets/menu/actor_panels/frame_004.png",
+      "selected": "assets/menu/actor_panels/frame_004.png",
+      "unfocused": "assets/menu/actor_panels/frame_010.png",
+      "width": 480,
+      "height": 83,
+      "source": "Fight_Role/combo/menu_role_board.dgp",
+      "source_frame": 4,
+      "unfocused_frame": 10,
+      "confidence": "native-static-and-source-pixel-confirmed",
+      "state_alias_limit": "normal/selected/unfocused are visual aliases matched to supplied screenshots. The literal native widget state is separately preserved in actor_panel_source.binding; high-level focus-to-widget-state ordering remains under verification.",
+      "reference": "operation_menu_reference_default_20261011.png / operation_menu_reference_roster_focus_20261011.png"
+    },
+    "006": {
+      "normal": "assets/menu/actor_panels/frame_005.png",
+      "selected": "assets/menu/actor_panels/frame_005.png",
+      "unfocused": "assets/menu/actor_panels/frame_011.png",
+      "width": 480,
+      "height": 83,
+      "source": "Fight_Role/combo/menu_role_board.dgp",
+      "source_frame": 5,
+      "unfocused_frame": 11,
+      "confidence": "native-static-and-source-pixel-confirmed",
+      "state_alias_limit": "normal/selected/unfocused are visual aliases matched to supplied screenshots. The literal native widget state is separately preserved in actor_panel_source.binding; high-level focus-to-widget-state ordering remains under verification.",
+      "reference": "operation_menu_reference_default_20261011.png / operation_menu_reference_roster_focus_20261011.png"
     }
   },
   "standing_actors": {
@@ -46498,10 +46537,415 @@
       },
       "confidence": "native-source pixels; runtime idle interval derived from the shared battle role definition",
       "limit": "Menu DGP action intervals remain source metadata; runtime standing playback follows the shared role idle interval. Original menu/global phase scheduling is not claimed."
+    },
+    "004": {
+      "frames": [
+        "assets/menu/standing_actors/004/frame_000.png",
+        "assets/menu/standing_actors/004/frame_001.png",
+        "assets/menu/standing_actors/004/frame_002.png",
+        "assets/menu/standing_actors/004/frame_003.png",
+        "assets/menu/standing_actors/004/frame_004.png",
+        "assets/menu/standing_actors/004/frame_005.png",
+        "assets/menu/standing_actors/004/frame_006.png",
+        "assets/menu/standing_actors/004/frame_007.png",
+        "assets/menu/standing_actors/004/frame_008.png",
+        "assets/menu/standing_actors/004/frame_009.png",
+        "assets/menu/standing_actors/004/frame_010.png",
+        "assets/menu/standing_actors/004/frame_011.png",
+        "assets/menu/standing_actors/004/frame_012.png",
+        "assets/menu/standing_actors/004/frame_013.png",
+        "assets/menu/standing_actors/004/frame_014.png",
+        "assets/menu/standing_actors/004/frame_015.png"
+      ],
+      "all_frames": [
+        "assets/menu/standing_actors/004/frame_000.png",
+        "assets/menu/standing_actors/004/frame_001.png",
+        "assets/menu/standing_actors/004/frame_002.png",
+        "assets/menu/standing_actors/004/frame_003.png",
+        "assets/menu/standing_actors/004/frame_004.png",
+        "assets/menu/standing_actors/004/frame_005.png",
+        "assets/menu/standing_actors/004/frame_006.png",
+        "assets/menu/standing_actors/004/frame_007.png",
+        "assets/menu/standing_actors/004/frame_008.png",
+        "assets/menu/standing_actors/004/frame_009.png",
+        "assets/menu/standing_actors/004/frame_010.png",
+        "assets/menu/standing_actors/004/frame_011.png",
+        "assets/menu/standing_actors/004/frame_012.png",
+        "assets/menu/standing_actors/004/frame_013.png",
+        "assets/menu/standing_actors/004/frame_014.png",
+        "assets/menu/standing_actors/004/frame_015.png",
+        "assets/menu/standing_actors/004/frame_016.png",
+        "assets/menu/standing_actors/004/frame_017.png",
+        "assets/menu/standing_actors/004/frame_018.png",
+        "assets/menu/standing_actors/004/frame_019.png",
+        "assets/menu/standing_actors/004/frame_020.png",
+        "assets/menu/standing_actors/004/frame_021.png",
+        "assets/menu/standing_actors/004/frame_022.png",
+        "assets/menu/standing_actors/004/frame_023.png",
+        "assets/menu/standing_actors/004/frame_024.png",
+        "assets/menu/standing_actors/004/frame_025.png"
+      ],
+      "width": 539,
+      "height": 439,
+      "anchor": [
+        266,
+        324,
+        0
+      ],
+      "source": "Fight_Role/combo/menu_role_004.dgp",
+      "source_sha256": "480cd4dcac7ee380081d7c90edf22969a2ce7e70169055cbc588eeba7267a184",
+      "action": 0,
+      "interval_ms": 120,
+      "actions": [
+        {
+          "index": 0,
+          "directions": 1,
+          "directions_raw": 0,
+          "interval_raw": 120,
+          "loop_raw": 1,
+          "frames_per_direction": 16,
+          "first_frame": 0,
+          "identifier_raw": 0,
+          "raw_hex": "00780000000000000000000000011000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+        },
+        {
+          "index": 1,
+          "directions": 1,
+          "directions_raw": 0,
+          "interval_raw": 140,
+          "loop_raw": 1,
+          "frames_per_direction": 10,
+          "first_frame": 16,
+          "identifier_raw": 42,
+          "raw_hex": "008c0000000000000000000000010a0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000002a000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+        }
+      ],
+      "timing_source": {
+        "path": "data/party_battle_view.json",
+        "role_id": "004",
+        "pose": "idle"
+      },
+      "secondary_verification": {
+        "present": true,
+        "checked_pixels": 73136,
+        "conversion": "native 0x5206FD RGB565 to RGB555 exactly matches"
+      },
+      "position": {
+        "x": 387,
+        "y": 340
+      },
+      "image_origin": {
+        "x": 121,
+        "y": 16
+      },
+      "position_semantics": "Source anchor point, subtract anchor to obtain complete image top-left",
+      "native_functions": [
+        "0x45E100",
+        "0x45DDD0",
+        "0x52BEC3"
+      ],
+      "position_source": {
+        "menu": "game001b_2",
+        "origin": {
+          "x": 300,
+          "y": 120
+        },
+        "width": 174,
+        "height": 270,
+        "image_origin_formula": "(menu.x+menu.width/2-anchor.x, menu.y-50+menu.height-anchor.y)"
+      },
+      "confidence": "native-source pixels; runtime idle interval derived from the shared battle role definition",
+      "limit": "Menu DGP action intervals remain source metadata; runtime standing playback follows the shared role idle interval. Original menu/global phase scheduling is not claimed."
+    },
+    "005": {
+      "frames": [
+        "assets/menu/standing_actors/005/frame_000.png",
+        "assets/menu/standing_actors/005/frame_001.png",
+        "assets/menu/standing_actors/005/frame_002.png",
+        "assets/menu/standing_actors/005/frame_003.png",
+        "assets/menu/standing_actors/005/frame_004.png",
+        "assets/menu/standing_actors/005/frame_005.png",
+        "assets/menu/standing_actors/005/frame_006.png",
+        "assets/menu/standing_actors/005/frame_007.png",
+        "assets/menu/standing_actors/005/frame_008.png",
+        "assets/menu/standing_actors/005/frame_009.png",
+        "assets/menu/standing_actors/005/frame_010.png",
+        "assets/menu/standing_actors/005/frame_011.png"
+      ],
+      "all_frames": [
+        "assets/menu/standing_actors/005/frame_000.png",
+        "assets/menu/standing_actors/005/frame_001.png",
+        "assets/menu/standing_actors/005/frame_002.png",
+        "assets/menu/standing_actors/005/frame_003.png",
+        "assets/menu/standing_actors/005/frame_004.png",
+        "assets/menu/standing_actors/005/frame_005.png",
+        "assets/menu/standing_actors/005/frame_006.png",
+        "assets/menu/standing_actors/005/frame_007.png",
+        "assets/menu/standing_actors/005/frame_008.png",
+        "assets/menu/standing_actors/005/frame_009.png",
+        "assets/menu/standing_actors/005/frame_010.png",
+        "assets/menu/standing_actors/005/frame_011.png",
+        "assets/menu/standing_actors/005/frame_012.png",
+        "assets/menu/standing_actors/005/frame_013.png",
+        "assets/menu/standing_actors/005/frame_014.png",
+        "assets/menu/standing_actors/005/frame_015.png",
+        "assets/menu/standing_actors/005/frame_016.png",
+        "assets/menu/standing_actors/005/frame_017.png",
+        "assets/menu/standing_actors/005/frame_018.png",
+        "assets/menu/standing_actors/005/frame_019.png"
+      ],
+      "width": 539,
+      "height": 439,
+      "anchor": [
+        266,
+        324,
+        0
+      ],
+      "source": "Fight_Role/combo/menu_role_005.dgp",
+      "source_sha256": "b79e3e022d416aea35b766d5fb0e1b05b92145c694c711b316ac6942f9ef27b0",
+      "action": 0,
+      "interval_ms": 120,
+      "actions": [
+        {
+          "index": 0,
+          "directions": 1,
+          "directions_raw": 0,
+          "interval_raw": 120,
+          "loop_raw": 1,
+          "frames_per_direction": 12,
+          "first_frame": 0,
+          "identifier_raw": 0,
+          "raw_hex": "00780000000000000000000000010c00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+        },
+        {
+          "index": 1,
+          "directions": 1,
+          "directions_raw": 0,
+          "interval_raw": 140,
+          "loop_raw": 1,
+          "frames_per_direction": 8,
+          "first_frame": 12,
+          "identifier_raw": 42,
+          "raw_hex": "008c000000000000000000000001080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c00000000000000000000002a000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+        }
+      ],
+      "timing_source": {
+        "path": "data/party_battle_view.json",
+        "role_id": "005",
+        "pose": "idle"
+      },
+      "secondary_verification": {
+        "present": true,
+        "checked_pixels": 73055,
+        "conversion": "native 0x5206FD RGB565 to RGB555 exactly matches"
+      },
+      "position": {
+        "x": 387,
+        "y": 340
+      },
+      "image_origin": {
+        "x": 121,
+        "y": 16
+      },
+      "position_semantics": "Source anchor point, subtract anchor to obtain complete image top-left",
+      "native_functions": [
+        "0x45E100",
+        "0x45DDD0",
+        "0x52BEC3"
+      ],
+      "position_source": {
+        "menu": "game001b_2",
+        "origin": {
+          "x": 300,
+          "y": 120
+        },
+        "width": 174,
+        "height": 270,
+        "image_origin_formula": "(menu.x+menu.width/2-anchor.x, menu.y-50+menu.height-anchor.y)"
+      },
+      "confidence": "native-source pixels; runtime idle interval derived from the shared battle role definition",
+      "limit": "Menu DGP action intervals remain source metadata; runtime standing playback follows the shared role idle interval. Original menu/global phase scheduling is not claimed."
+    },
+    "006": {
+      "frames": [
+        "assets/menu/standing_actors/006/frame_000.png",
+        "assets/menu/standing_actors/006/frame_001.png",
+        "assets/menu/standing_actors/006/frame_002.png",
+        "assets/menu/standing_actors/006/frame_003.png",
+        "assets/menu/standing_actors/006/frame_004.png",
+        "assets/menu/standing_actors/006/frame_005.png",
+        "assets/menu/standing_actors/006/frame_006.png",
+        "assets/menu/standing_actors/006/frame_007.png",
+        "assets/menu/standing_actors/006/frame_008.png",
+        "assets/menu/standing_actors/006/frame_009.png",
+        "assets/menu/standing_actors/006/frame_010.png",
+        "assets/menu/standing_actors/006/frame_011.png",
+        "assets/menu/standing_actors/006/frame_012.png",
+        "assets/menu/standing_actors/006/frame_013.png",
+        "assets/menu/standing_actors/006/frame_014.png",
+        "assets/menu/standing_actors/006/frame_015.png",
+        "assets/menu/standing_actors/006/frame_016.png",
+        "assets/menu/standing_actors/006/frame_017.png",
+        "assets/menu/standing_actors/006/frame_018.png",
+        "assets/menu/standing_actors/006/frame_019.png",
+        "assets/menu/standing_actors/006/frame_020.png",
+        "assets/menu/standing_actors/006/frame_021.png",
+        "assets/menu/standing_actors/006/frame_022.png",
+        "assets/menu/standing_actors/006/frame_023.png",
+        "assets/menu/standing_actors/006/frame_024.png",
+        "assets/menu/standing_actors/006/frame_025.png",
+        "assets/menu/standing_actors/006/frame_026.png",
+        "assets/menu/standing_actors/006/frame_027.png",
+        "assets/menu/standing_actors/006/frame_028.png",
+        "assets/menu/standing_actors/006/frame_029.png",
+        "assets/menu/standing_actors/006/frame_030.png",
+        "assets/menu/standing_actors/006/frame_031.png",
+        "assets/menu/standing_actors/006/frame_032.png",
+        "assets/menu/standing_actors/006/frame_033.png",
+        "assets/menu/standing_actors/006/frame_034.png",
+        "assets/menu/standing_actors/006/frame_035.png",
+        "assets/menu/standing_actors/006/frame_036.png",
+        "assets/menu/standing_actors/006/frame_037.png",
+        "assets/menu/standing_actors/006/frame_038.png",
+        "assets/menu/standing_actors/006/frame_039.png"
+      ],
+      "all_frames": [
+        "assets/menu/standing_actors/006/frame_000.png",
+        "assets/menu/standing_actors/006/frame_001.png",
+        "assets/menu/standing_actors/006/frame_002.png",
+        "assets/menu/standing_actors/006/frame_003.png",
+        "assets/menu/standing_actors/006/frame_004.png",
+        "assets/menu/standing_actors/006/frame_005.png",
+        "assets/menu/standing_actors/006/frame_006.png",
+        "assets/menu/standing_actors/006/frame_007.png",
+        "assets/menu/standing_actors/006/frame_008.png",
+        "assets/menu/standing_actors/006/frame_009.png",
+        "assets/menu/standing_actors/006/frame_010.png",
+        "assets/menu/standing_actors/006/frame_011.png",
+        "assets/menu/standing_actors/006/frame_012.png",
+        "assets/menu/standing_actors/006/frame_013.png",
+        "assets/menu/standing_actors/006/frame_014.png",
+        "assets/menu/standing_actors/006/frame_015.png",
+        "assets/menu/standing_actors/006/frame_016.png",
+        "assets/menu/standing_actors/006/frame_017.png",
+        "assets/menu/standing_actors/006/frame_018.png",
+        "assets/menu/standing_actors/006/frame_019.png",
+        "assets/menu/standing_actors/006/frame_020.png",
+        "assets/menu/standing_actors/006/frame_021.png",
+        "assets/menu/standing_actors/006/frame_022.png",
+        "assets/menu/standing_actors/006/frame_023.png",
+        "assets/menu/standing_actors/006/frame_024.png",
+        "assets/menu/standing_actors/006/frame_025.png",
+        "assets/menu/standing_actors/006/frame_026.png",
+        "assets/menu/standing_actors/006/frame_027.png",
+        "assets/menu/standing_actors/006/frame_028.png",
+        "assets/menu/standing_actors/006/frame_029.png",
+        "assets/menu/standing_actors/006/frame_030.png",
+        "assets/menu/standing_actors/006/frame_031.png",
+        "assets/menu/standing_actors/006/frame_032.png",
+        "assets/menu/standing_actors/006/frame_033.png",
+        "assets/menu/standing_actors/006/frame_034.png",
+        "assets/menu/standing_actors/006/frame_035.png",
+        "assets/menu/standing_actors/006/frame_036.png",
+        "assets/menu/standing_actors/006/frame_037.png",
+        "assets/menu/standing_actors/006/frame_038.png",
+        "assets/menu/standing_actors/006/frame_039.png",
+        "assets/menu/standing_actors/006/frame_040.png",
+        "assets/menu/standing_actors/006/frame_041.png",
+        "assets/menu/standing_actors/006/frame_042.png",
+        "assets/menu/standing_actors/006/frame_043.png",
+        "assets/menu/standing_actors/006/frame_044.png",
+        "assets/menu/standing_actors/006/frame_045.png",
+        "assets/menu/standing_actors/006/frame_046.png",
+        "assets/menu/standing_actors/006/frame_047.png",
+        "assets/menu/standing_actors/006/frame_048.png",
+        "assets/menu/standing_actors/006/frame_049.png",
+        "assets/menu/standing_actors/006/frame_050.png",
+        "assets/menu/standing_actors/006/frame_051.png",
+        "assets/menu/standing_actors/006/frame_052.png",
+        "assets/menu/standing_actors/006/frame_053.png",
+        "assets/menu/standing_actors/006/frame_054.png",
+        "assets/menu/standing_actors/006/frame_055.png",
+        "assets/menu/standing_actors/006/frame_056.png",
+        "assets/menu/standing_actors/006/frame_057.png",
+        "assets/menu/standing_actors/006/frame_058.png",
+        "assets/menu/standing_actors/006/frame_059.png"
+      ],
+      "width": 539,
+      "height": 439,
+      "anchor": [
+        266,
+        324,
+        0
+      ],
+      "source": "Fight_Role/combo/menu_role_006.dgp",
+      "source_sha256": "7a6a5714abd84b01ecf10aa2207cb035ac869677e8e9dc38f9e32587a4910318",
+      "action": 0,
+      "interval_ms": 120,
+      "actions": [
+        {
+          "index": 0,
+          "directions": 1,
+          "directions_raw": 0,
+          "interval_raw": 120,
+          "loop_raw": 1,
+          "frames_per_direction": 40,
+          "first_frame": 0,
+          "identifier_raw": 0,
+          "raw_hex": "00780000000000000000000000012800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+        },
+        {
+          "index": 1,
+          "directions": 1,
+          "directions_raw": 0,
+          "interval_raw": 140,
+          "loop_raw": 1,
+          "frames_per_direction": 20,
+          "first_frame": 40,
+          "identifier_raw": 42,
+          "raw_hex": "008c000000000000000000000001140000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002800000000000000000000002a000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+        }
+      ],
+      "timing_source": {
+        "path": "data/party_battle_view.json",
+        "role_id": "006",
+        "pose": "idle"
+      },
+      "secondary_verification": {
+        "present": true,
+        "checked_pixels": 222636,
+        "conversion": "native 0x5206FD RGB565 to RGB555 exactly matches"
+      },
+      "position": {
+        "x": 387,
+        "y": 340
+      },
+      "image_origin": {
+        "x": 121,
+        "y": 16
+      },
+      "position_semantics": "Source anchor point, subtract anchor to obtain complete image top-left",
+      "native_functions": [
+        "0x45E100",
+        "0x45DDD0",
+        "0x52BEC3"
+      ],
+      "position_source": {
+        "menu": "game001b_2",
+        "origin": {
+          "x": 300,
+          "y": 120
+        },
+        "width": 174,
+        "height": 270,
+        "image_origin_formula": "(menu.x+menu.width/2-anchor.x, menu.y-50+menu.height-anchor.y)"
+      },
+      "confidence": "native-source pixels; runtime idle interval derived from the shared battle role definition",
+      "limit": "Menu DGP action intervals remain source metadata; runtime standing playback follows the shared role idle interval. Original menu/global phase scheduling is not claimed."
     }
   },
   "runtime_dependencies": {
-    "data/party_battle_view.json": "f040a7201a4a4f1788465ac827d70f1d4425e8eeb12006be696f46cfe3296fbe"
+    "data/party_battle_view.json": "0fabe2a56176062862ade8afeb3de5cecccd320ffbbb69800839dde998351e1f"
   },
   "item_card_back": {
     "image": "assets/menu/item_card_back.png",

@@ -1,0 +1,195 @@
+{
+  "schema": "seventh-seal-story-map",
+  "version": 2,
+  "map_id": "M17016",
+  "chapter": null,
+  "programs": {},
+  "flows": {},
+  "events": [],
+  "resources": {
+    "npcs_by_map": [],
+    "exits_by_map": [
+      {
+        "id": 1,
+        "state": "ready",
+        "cells": [
+          {
+            "x": 39,
+            "y": 33
+          },
+          {
+            "x": 40,
+            "y": 33
+          },
+          {
+            "x": 41,
+            "y": 33
+          },
+          {
+            "x": 42,
+            "y": 33
+          },
+          {
+            "x": 43,
+            "y": 33
+          },
+          {
+            "x": 44,
+            "y": 33
+          },
+          {
+            "x": 39,
+            "y": 34
+          },
+          {
+            "x": 40,
+            "y": 34
+          },
+          {
+            "x": 41,
+            "y": 34
+          },
+          {
+            "x": 42,
+            "y": 34
+          },
+          {
+            "x": 43,
+            "y": 34
+          },
+          {
+            "x": 44,
+            "y": 34
+          }
+        ],
+        "target_map": "M17010",
+        "entry": {
+          "x": 1440,
+          "y": 928,
+          "direction": 6,
+          "cell_x": 90,
+          "cell_y": 58,
+          "native_x": 720,
+          "native_y": 464
+        },
+        "conditions": [],
+        "source": {
+          "path": "Map/m17016.dat",
+          "sha256": "2771831ca2de861d7d368357e0faac2f0cda04b02a362a0d3775ce4940afba2d",
+          "descriptor_offset": 148658,
+          "descriptor_bytes": 66,
+          "descriptor_hex": "00000000000000000000000000000000006d31373031302e64617400000000000000000000000a000000020000000000000000000000000000000000000000000000",
+          "compact_field_expansion_evidence": null,
+          "target_path": "Map/m17010.dat",
+          "target_sha256": "634a1eea243656b16341d9e217578a42a5d58f82f00af9aa0f8a0f805e83515a",
+          "target_entry_marker": 10,
+          "entry_sort_code": 2,
+          "entry_scan_cells": [
+            {
+              "x": 90,
+              "y": 58,
+              "offset": 473842
+            }
+          ],
+          "entry_sorted_cells": [
+            {
+              "x": 90,
+              "y": 58
+            }
+          ],
+          "entry_sort": "y descending; stable ties",
+          "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
+          "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
+          "native_evidence": {
+            "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+            "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+            "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+            "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+          }
+        },
+        "execution": "Native transition descriptor only; map-entry TLK/ANM and their once-only checks must complete separately.",
+        "limitations": [
+          "Static source/code evidence; original timing not observed",
+          "Continuous keyboard movement is runtime policy"
+        ]
+      },
+      {
+        "id": 2,
+        "state": "ready",
+        "cells": [
+          {
+            "x": 3,
+            "y": 13
+          },
+          {
+            "x": 4,
+            "y": 13
+          },
+          {
+            "x": 5,
+            "y": 13
+          },
+          {
+            "x": 6,
+            "y": 13
+          }
+        ],
+        "target_map": "M17010",
+        "entry": {
+          "x": 1312,
+          "y": 576,
+          "direction": 2,
+          "cell_x": 82,
+          "cell_y": 36,
+          "native_x": 656,
+          "native_y": 288
+        },
+        "conditions": [],
+        "source": {
+          "path": "Map/m17016.dat",
+          "sha256": "2771831ca2de861d7d368357e0faac2f0cda04b02a362a0d3775ce4940afba2d",
+          "descriptor_offset": 148724,
+          "descriptor_bytes": 66,
+          "descriptor_hex": "00000000000000000000000000000000006d31373031302e646174000000000000000000000006000000050000000000000000000000000000000000000000000000",
+          "compact_field_expansion_evidence": null,
+          "target_path": "Map/m17010.dat",
+          "target_sha256": "634a1eea243656b16341d9e217578a42a5d58f82f00af9aa0f8a0f805e83515a",
+          "target_entry_marker": 6,
+          "entry_sort_code": 5,
+          "entry_scan_cells": [
+            {
+              "x": 82,
+              "y": 36,
+              "offset": 295922
+            }
+          ],
+          "entry_sorted_cells": [
+            {
+              "x": 82,
+              "y": 36
+            }
+          ],
+          "entry_sort": "row-major scan; first four; missing followers repeat last observed cell",
+          "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
+          "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
+          "native_evidence": {
+            "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+            "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+            "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+            "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+          }
+        },
+        "execution": "Native transition descriptor only; map-entry TLK/ANM and their once-only checks must complete separately.",
+        "limitations": [
+          "Static source/code evidence; original timing not observed",
+          "Continuous keyboard movement is runtime policy"
+        ]
+      }
+    ],
+    "trigger_regions": [],
+    "interactive_objects": [],
+    "object_animations": []
+  },
+  "route": null,
+  "texts": {}
+}

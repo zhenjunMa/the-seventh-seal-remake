@@ -9,10 +9,11 @@ import {openingCamera} from "../core/opening_presentation.mjs";
 import {decodeSave} from "../core/world.mjs";
 import {savedPreviewPng,SAVE_PREVIEW_WIDTH,SAVE_PREVIEW_HEIGHT} from "../core/save_preview.mjs";
 import {MapNpcRuntime} from "../core/map_npcs.mjs";
+import {projectMapStage} from "../core/map_stage.mjs";
 import {MapObjectRuntime} from "../core/map_objects.mjs";
 import {storyBindings,registeredRoles} from "../core/content_registry.mjs";
 import {chapterRouteExits} from "../core/map_connections.mjs";
-import {DistanceGait,mapMotionProfile} from "../core/map_locomotion.mjs";
+import {DistanceGait,mapMotionProfile,nativeMapMovement} from "../core/map_locomotion.mjs";
 
 export function createMapController({state, actions, $, canvas, ctx}) {
   const gait=new DistanceGait();let gaitScene=null,gaitRole=null;
@@ -47,11 +48,14 @@ export function createMapController({state, actions, $, canvas, ctx}) {
         if(action){resource.shadow_sheet=action.shadow_sheet;resource.shadow_geometry=action.shadow_geometry;}}}
     const data=await actions.json(entry.path);
     if(data.schema!=='seventh-seal-runtime-map'||data.version!==1||data.id!==id) throw new Error('地图数据版本或标识不匹配');
+    data.movement=nativeMapMovement(data.movement,state.chapterStory.maps[id]);
     const extraExits=[...(state.chapterResources.exits_by_map[id]??[]),...chapterRouteExits(id,state.chapterStory,state.chapterResources)];
     data.exits=[...(data.exits??[]).filter(exit=>!extraExits.some(extra=>extra.id===exit.id)),...extraExits];
     const nativeNpcs=state.chapterResources.npcs_by_map[id];
     data.opening_npcs=(nativeNpcs?.length?nativeNpcs:data.opening_npcs??[]).filter(npc=>!mapEvents.some(event=>event.npc
       &&(event.npc.id===npc.id||event.npc.slot_zero_based!==undefined&&event.npc.slot_zero_based===npc.slot_zero_based)));
+    data.opening_npcs=await projectMapStage({mapId:id,world,story:state.chapterStory,npcs:data.opening_npcs,
+      roles:state.openingResources.roles});
     data.story_triggers=(state.chapterResources.trigger_regions[id]??[]).filter(trigger=>storyBindings(id).triggers.includes(trigger.id));
     const readyCells=new Set([...(data.exits??[]).filter(exit=>exit.state==='ready').flatMap(exit=>exit.cells.map(cell=>`${cell.x},${cell.y}`)),
       ...data.story_triggers.flatMap(trigger=>trigger.cells.map(cell=>`${cell.x},${cell.y}`))]);
@@ -100,7 +104,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
         })));
         return {...obj,resource};
       }));
-      scene.objectRuntime=new MapObjectRuntime({objects,resources,mapFlagIndex:effectMap.map_flag_index});
+      scene.objectRuntime=new MapObjectRuntime({objects,resources,mapFlagIndex:effectMap.map_flag_index,mapId:id});
       scene.objectRuntime.update(0,{world,paused:true});
     }
     return scene;
@@ -118,8 +122,8 @@ export function createMapController({state, actions, $, canvas, ctx}) {
   }
   async function changeMap(at,reason='exit',restoredWorld=null) {
     const from=state.world.location.map_id;
-    try { await state.scenes.loadLocation(at,{reason,restoredWorld}); buildHud(); updateNearest(); actions.log({type:'scene-enter',from,map_id:at.map_id,x:at.x,y:at.y,reason}); actions.status(reason==='restore'?'进度已载入，可以继续探索。':'已进入场景。'); canvas.focus({preventScroll:true}); }
-    catch(error){actions.log({type:'scene-failed',error:error.message,from,to:at.map_id});actions.status(`${error.message}，当前场景已保留。`,true);}
+    try { await state.scenes.loadLocation(at,{reason,restoredWorld});if(state.scenes.phase!=='map')return; buildHud(); updateNearest(); actions.log({type:'scene-enter',from,map_id:at.map_id,x:at.x,y:at.y,reason}); actions.status(reason==='restore'?'进度已载入，可以继续探索。':'已进入场景。'); canvas.focus({preventScroll:true}); }
+    catch(error){actions.log({type:'scene-failed',error:error.message,from,to:at.map_id});if(error.gameOverPolicy)await actions.presentGameOver(error.gameOverPolicy);else actions.status(`${error.message}，当前场景已保留。`,true);}
   }
   function follow() {const im=state.scenes.current.bitmap;Object.assign(state.view,openingCamera(state.world.location,im.width,im.height));}
   function fit(){if(!state.scenes?.current)return;const im=state.scenes.current.bitmap;state.view.zoom=Math.min(640/im.width,480/im.height)*.97;state.view.x=im.width/2;state.view.y=im.height/2;state.view.follow=false;}
@@ -242,7 +246,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
     state.scenes?.current?.npcRuntime?.update(now,{player:state.world.location,visible:npcAvailable,
       paused:!['map','event'].includes(state.scenes.phase)||Boolean(state.openingView?.active)});
     state.scenes?.current?.objectRuntime?.update(now,{world:state.sceneEntryDraft??state.world.value,
-      paused:!['map','event'].includes(state.scenes.phase)||Boolean(state.openingView?.active)});
+      paused:!['map','event'].includes(state.scenes.phase)});
     if(state.scenes?.phase==='map'){
       reconcileResources();
       const dx=Number(state.keys.has('ArrowRight')||state.keys.has('d'))-Number(state.keys.has('ArrowLeft')||state.keys.has('a'));
@@ -262,7 +266,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
         const storyTrigger=state.scenes.current.data.story_triggers.find(trigger=>trigger.cells.some(cell=>cell.x===reached.x&&cell.y===reached.y));
         if(storyTrigger){
           const tag=`${at.map_id}:${storyTrigger.id}`;
-          if(tag!==state.lastStoryTrigger){state.lastStoryTrigger=tag;actions.runChapter({mapId:at.map_id,recordId:storyTrigger.field_26_raw});}
+          if(tag!==state.lastStoryTrigger){state.lastStoryTrigger=tag;actions.runChapter({mapId:at.map_id,recordId:storyTrigger.field_26_raw,triggerId:storyTrigger.id});}
         }else state.lastStoryTrigger='';
         if(exit){
           const tag=`${at.map_id}:${exit.id}`;

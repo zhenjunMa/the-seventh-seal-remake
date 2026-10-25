@@ -1,5 +1,5 @@
 第七封印 · 构建、导出与验证工具
-更新：2026-10-23；所有命令从仓库根目录执行。正文中的web/、tools/、evidence/以runtime为基准；remake/开头的路径以仓库根目录为基准。示例使用python3；Windows可换为指向Python 3的python或py -3。
+更新：2026-10-24；所有命令从仓库根目录执行。正文中的web/、tools/、evidence/以runtime为基准；remake/开头的路径以仓库根目录为基准。示例使用python3；Windows可换为指向Python 3的python或py -3。
 
 常用操作
 启动检查用服务：python3 -B remake/runtime/serve.py
@@ -9,6 +9,11 @@
 只读查询道具默认／生效参数：node remake/runtime/tools/export_runtime_config.mjs --reference items 4
 补全原版角色／技能来源目录：python3 -B remake/runtime/tools/build_runtime.py --target source-catalog source-magic --run
 生成全量引用索引：node remake/runtime/tools/build_content_library.mjs
+生成火之谷地图／NPC／剧情来源索引：python3 -B remake/runtime/tools/build_runtime.py --target fire-valley-index --run
+只读核对火之谷索引与覆盖报告：python3 -B remake/runtime/tools/export_fire_valley_index.py --check
+按名称／台词查询火之谷来源：python3 -B remake/runtime/tools/export_fire_valley_index.py --query 英格妮 --limit 20
+查询具体原地图：python3 -B remake/runtime/tools/export_fire_valley_index.py --map M17030-2
+查询跨地图旗标：python3 -B remake/runtime/tools/export_fire_valley_index.py --flag 471:1
 按原编号查询：node remake/runtime/tools/build_content_library.mjs --query roles 004
 按名称检索（返回所有同名原编号）：node remake/runtime/tools/build_content_library.mjs --query search 海皇印 items
 只核对内容登记：node remake/runtime/tools/export_content_registry.mjs --check
@@ -33,7 +38,9 @@
 只有明确需要整体重建时才用--target all --run，日常文档维护无需重导素材。
 
 登记驱动的生产
-runtime_content.json为唯一编辑选择；导出器直接读取它选择地图／角色／程序，来源解析器再从已生成数据编译最终运行登记。
+runtime_content.json为唯一运行接入选择；运行素材导出器直接读取它选择地图／角色／程序，来源解析器再从已生成数据编译最终运行登记。
+fire-valley-index独立于运行登记扫描Map/*.dat、Map/*.TLK及Animate/*.anm（扩展名不区分大小写）；中文来源地图名提名种子，DAT真实连接确认同来源族内地图，编号前缀只限定候选范围。生成web/data/library/fire_valley.json和evidence/fire_valley_20261024/source_index.json，不执行剧情或开放地图。索引保留地图变体、NPC原槽／加载站位／可见性、TLK分支／选项、跨地图旗标和ANM位置变更；DAT+0x8A加载入口与+0x13A到达入口独立登记。能力缺口按原字段／指令定位，完整可玩程度仍由正式登记、预检查和实际流程验收决定。
+story-media从登记ANM及显式来源准备集合m17010-3／m17030-1的原74字节指令读取opcode60视频、opcode62非空声音；--source-program可追加只准备不登记的ANM。生成data/story_media.json与evidence/story_media_export.json，保留原文件名小写键及逐指令引用，不推断剧情可达或演出时序。BIK转浏览器视频逐帧完整解码核对尺寸／帧率／帧数／时长与SSIM，音频核对完整PCM；原.wav若实为MP3，字节复制至真实.mp3后缀。--reuse-existing仍执行完整验证；--verify-only只读重核来源、清单、媒体SHA和完整解码，不重写媒体或报告。
 chapter-maps按maps.export归属准备地图、NPC、物件和源物理出口；chapter-story按story和programs准备TLK／ANM、被引用道具与登记玩家初值。
 story-check在源表、初始角色和怪物准备后检查已登记的进入剧情、触发器、箱子、休息、出口和显式NPC的可达分支，报告地图／入口／记录号，阻断未实现机制；最终content再次检查。
 battle-stages按stages选择新舞台的SCN／DGP，默认ID路径，不维护每个舞台的素材名单。当前支持SCN v2／mode4及已恢复的零镜头规则；专用旧产物默认existing，可显式export:"source"使用通用导出。
@@ -44,7 +51,7 @@ content目标贯通玩家、怪物、地图、剧情、配置、资源图集、�
 
 前置与来源
 按任务准备环境：静态服务使用Python 3标准库；verify_phaser需要Node.js，脚本内部会调用当前Node执行语法检查。
-素材导出另需Pillow；startup-media还使用NumPy；音视频转换需要FFmpeg／FFprobe；GDI字体导出和部分原版观察需要Windows。完整回归还依赖当前Node的node:test／WebCrypto及各专题工具所需环境。
+素材导出另需Pillow；startup-media／story-media还使用NumPy；音视频转换需要FFmpeg／FFprobe；GDI字体导出和部分原版观察需要Windows。完整回归还依赖当前Node的node:test／WebCrypto及各专题工具所需环境。
 可先运行python3 --version和node --version；涉及媒体时再核对所需Python包、FFmpeg／FFprobe或Windows组件。当前尚无统一锁定环境与已验证的跨平台首次安装命令，单个实验依赖文件不能代表全部构建环境。
 本入口接管已有基础内容与来源台账，不是从空目录自动重建原游戏的安装器。初始路线／基础资源提取、原资源和save_analysis仍有实际依赖；基础导出器已位于本目录，不再读取prototype。
 声明原输入的新步骤可建立首份台账；其他步骤需要既有来源报告。路径、哈希、原像素／解码或未知格式校验仍由对应工具负责。
@@ -118,7 +125,7 @@ map-effects: export_map_effects.py; 依赖=opening-maps,chapter-maps
 party-combat: export_party_combat.py; 依赖=story-check
 party-skills: export_party_skills.py; 依赖=party-combat
 party-rewards: export_party_rewards.py; 依赖=party-combat,enemy-rewards
-items: export_chapter_items.py; 依赖=无声明依赖
+items: export_chapter_items.py; 依赖=opening-seed,chapter-story,enemy-rewards
 item-presentation: export_item_presentation.py; 依赖=items,party-skills
 recovery: export_chapter_recovery.py; 依赖=无声明依赖
 audio: export_audio.py; 依赖=party-skills,item-presentation,chapter-maps,encounters
@@ -138,7 +145,7 @@ dialogue-ui: export_dialogue_ui.py; 依赖=catalog,chapter-story
 world-map-ui: export_world_map_ui.py; 依赖=无声明依赖
 configuration: export_runtime_config.mjs; 依赖=party-skills,enemy-rewards,encounters,source-catalog,items,source-magic
 catalog: build_catalog.py; 依赖=configuration,chapter-maps,content-library
-content: export_content_registry.mjs; 依赖=catalog,party-rewards,battle-packs,audio,menu-fonts,save-menu,dialogue-ui,prologue-presentation,map-effects
+content: export_content_registry.mjs; 依赖=catalog,party-rewards,battle-packs,audio,menu-fonts,save-menu,dialogue-ui,prologue-presentation,map-effects,story-media
 enemies: export_enemy_content.py; 依赖=无声明依赖
 enemy-rewards: export_forest_rewards.py; 依赖=无声明依赖
 encounters: export_encounters.py; 依赖=无声明依赖
@@ -148,6 +155,8 @@ story-pack: export_story_packages.mjs; 依赖=无声明依赖
 source-catalog: export_source_catalog.py; 依赖=opening-seed
 content-library: build_content_library.mjs; 依赖=configuration
 source-magic: export_source_magic.py; 依赖=无声明依赖
+fire-valley-index: export_fire_valley_index.py; 依赖=无声明依赖
+story-media: export_story_media.py; 依赖=无声明依赖
 [自动生成：构建目标结束]
 
 当前检查覆盖什么
@@ -173,7 +182,7 @@ verify_*中的旧阶段门槛不能替代当前回归；写--record的新现场�
 
 资料维护
 来源证据、现场记录及历史归档的目录、准备方式与缺失处理统一见../../local_materials.txt；可选本地索引或旧压缩包不作为当前命令的唯一说明。
-assessment只维护validation_design.txt和menu_alignment_workflow.txt；旧兼容跳转页已清理。清理文件及迁移工具的原路径、SHA与Git恢复版本见tool_index.json的retired_documents和工具previous_path字段。
+assessment分别维护当前计划validation_design.txt、界面验收方法menu_alignment_workflow.txt及区域重制经验region_remake_workflow.txt；旧兼容跳转页已清理。清理文件及迁移工具的原路径、SHA与Git恢复版本见tool_index.json的retired_documents和工具previous_path字段。
 verify_runtime_config.py的复核文字报告输出到evidence/runtime_config_recheck.txt，不再生成assessment下的旧跳转页。
 [剧情运行包]
 export_story_packages.mjs从已保留的TLK／ANM来源台账与runtime_content.story登记的独立事件／任务编译web/data/story；原字节一致性在构建时核对，地图剧情按需加载。content最终编译自动执行此步骤；只改独立事件、任务或story登记可用build_runtime.py --target story-pack --run，不需要原版安装。地图、角色或ANM登记变化仍需完整content构建。

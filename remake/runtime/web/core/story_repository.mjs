@@ -2,6 +2,8 @@ import {STORY_RESOURCE_TABLES,hydrateStoryTable,storyDigest} from './story_packa
 import {validateStoryBindings} from './content_dependencies.mjs';
 import {hydrateStoryFlow} from './story_flow.mjs';
 import {validateQuests,questJournal} from './story_quests.mjs';
+import {playbackTask} from './story_playback.mjs';
+import {chapterAnimationContext} from './chapter_animation.mjs';
 
 const need=(ok,message)=>{if(!ok)throw new Error(`剧情加载：${message}`);};
 // One repository admits both TLK maps and standalone NPC events. A failed load
@@ -49,7 +51,7 @@ export class StoryRepository {
     return this.openingData;
   }
   async ensureMap(id,{protect=[]}={}){
-    need(/^M\d{5}$/.test(id)&&Object.hasOwn(this.index.maps,id),`地图 ${id} 尚未登记`);
+    need(/^M\d{5}(?:-\d+)?$/.test(id)&&Object.hasOwn(this.index.maps,id),`地图 ${id} 尚未登记`);
     this.protected=new Set([...protect,id]);
     if(this.loaded.has(id)){
       const value=this.loaded.get(id);this.loaded.delete(id);this.loaded.set(id,value);this.trim();return value;
@@ -58,6 +60,23 @@ export class StoryRepository {
       const promise=this.loadMap(id).finally(()=>{this.pending.delete(id);this.trim();});this.pending.set(id,promise);
     }
     return this.pending.get(id);
+  }
+  async ensureProgram(id,{callerMap,signal}={}){
+    // One requested program owns an explicit, finite map dependency set.
+    // Loading those packages never follows the other programs they contain.
+    need(Object.hasOwn(this.index.maps,callerMap),`演出 ${id} 调用地图未登记`);
+    const releases=[this.retainMap(callerMap)];let released=false;
+    const release=()=>{if(released)return;released=true;releases.reverse().forEach(detach=>detach());this.trim();};
+    try{
+      await playbackTask(this.ensureMap(callerMap),signal);signal?.throwIfAborted();
+      const program=this.story.programs[id];need(program,`演出 ${id} 未在调用地图包中`);
+      const {maps,callerMaps}=chapterAnimationContext(program);
+      need(callerMaps.length===0||callerMaps.includes(callerMap),`演出 ${id} 调用地图不一致`);
+      need(maps.length<=256&&maps.every(mapId=>Object.hasOwn(this.index.maps,mapId)),`演出 ${id} 地图依赖未登记`);
+      for(const mapId of maps)if(mapId!==callerMap)releases.push(this.retainMap(mapId));
+      await playbackTask(Promise.all(maps.map(mapId=>this.ensureMap(mapId,{protect:maps}))),signal);signal?.throwIfAborted();
+      return {program,release};
+    }catch(error){release();throw error;}
   }
   async loadMap(id){
     const value=await this.verified(this.index.maps[id]);
@@ -75,7 +94,9 @@ export class StoryRepository {
     const resources={roles:this.resources.roles};
     for(const key of STORY_RESOURCE_TABLES){need(Array.isArray(value.resources?.[key]),`地图 ${id} 缺少 ${key}`);resources[key]={[id]:value.resources[key]};}
     const data={...this.story,maps:table?{[id]:table}:{},programs:value.programs};
-    validateStoryBindings({...this.content,maps:{[id]:this.content.maps[id]},programs:Object.fromEntries(Object.keys(value.programs).map(key=>[key,this.content.programs[key]]))},data,resources);
+    validateStoryBindings({...this.content,maps:{[id]:this.content.maps[id]},programs:Object.fromEntries(Object.keys(value.programs).map(key=>[key,this.content.programs[key]]))},data,resources,{registeredMaps:this.content.maps});
+    for(const [key,program]of Object.entries(value.programs))if(this.story.programs[key])
+      need(JSON.stringify(this.story.programs[key])===JSON.stringify(program),`演出 ${key} 在地图包之间不一致`);
     // All validation completes before the shared adapters can observe the map.
     if(table)this.story.maps[id]=table;
     Object.assign(this.story.programs,value.programs);
@@ -90,11 +111,11 @@ export class StoryRepository {
       if(this.loaded.size<=this.capacity)break;
       if(this.protected.has(id)||this.pending.has(id)||this.pins.has(id)||this.currentMap()===id)continue;
       delete this.story.maps[id];delete this.routes[id];
-      value.programs.forEach(key=>delete this.story.programs[key]);
+      this.loaded.delete(id);
+      value.programs.forEach(key=>{if(![...this.loaded.values()].some(owner=>owner.programs.includes(key)))delete this.story.programs[key];});
       value.flows.forEach(key=>delete this.story.flows[key]);
       for(const key of STORY_RESOURCE_TABLES)delete this.resources[key][id];
       for(let i=this.events.length-1;i>=0;i--)if(this.events[i].map_id===id)this.events.splice(i,1);
-      this.loaded.delete(id);
     }
   }
   journal(world){return questJournal(this.quests,world);}

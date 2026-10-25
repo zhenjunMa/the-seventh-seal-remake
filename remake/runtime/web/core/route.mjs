@@ -18,7 +18,7 @@ export function validateRouteRecord(r,map_id,content=runtimeContent){
   return index;
 }
 export function planRouteExit(world,map_id,record_id,data,content=runtimeContent){
-  const table=data?.[map_id];if(!table||!/^M\d{5}$/.test(map_id))throw new Error('出口剧情尚未接入');
+  const table=data?.[map_id];if(!table||!/^M\d{5}(?:-\d+)?$/.test(map_id))throw new Error('出口剧情尚未接入');
   const records=new Map(table.records.map(r=>[r.id,r])),commands=[],visited=new Set();let id=record_id;
   while(id){
     if(visited.has(id)||visited.size>20)throw new Error('出口剧情链循环');visited.add(id);

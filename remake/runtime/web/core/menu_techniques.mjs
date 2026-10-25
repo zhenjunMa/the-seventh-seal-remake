@@ -1,6 +1,7 @@
 // Native seven-slot records: 0x4265B0 builds a scratch record; 0x42A910
 // copies its ten bytes only on confirmation. This module does not add actions.
 const need=(ok,message)=>{if(!ok)throw new Error(message);};
+import {allPartyRoles} from './party_roster.mjs';
 const object=v=>Boolean(v)&&typeof v==='object'&&!Array.isArray(v);
 const keys=(value,expected)=>object(value)&&Object.keys(value).sort().join(',')===[...expected].sort().join(',');
 export const TECHNIQUE_COMMANDS=['使用招式','使用物品','防御','逃跑'];
@@ -33,7 +34,7 @@ export function techniqueSlots(world,source,roleId){
   need(world.party.some(role=>role.id===roleId),'技巧角色不在队伍中');
   const role=sourceRole(source,roleId);
   const combinations=techniqueCombinations(world,source,roleId);
-  if(world.technique_bindings){validateTechniqueBindingsState(world.technique_bindings,world.party);const retained=world.technique_bindings.roles[roleId];if(retained){for(const slot of retained){const original=sourceTechniqueSlot(source,roleId,slot.type,slot.index_one_based,combinations);need((slot.type===1?slot.icon<66&&['type','index_one_based','color'].every(key=>slot[key]===original[key]):['type','index_one_based','icon','color'].every(key=>slot[key]===original[key])),'技巧槽记录与原来源不符');}return structuredClone(retained);}}
+  if(world.technique_bindings){validateTechniqueBindingsState(world.technique_bindings,allPartyRoles(world));const retained=world.technique_bindings.roles[roleId];if(retained){for(const slot of retained){const original=sourceTechniqueSlot(source,roleId,slot.type,slot.index_one_based,combinations);need((slot.type===1?slot.icon<66&&['type','index_one_based','color'].every(key=>slot[key]===original[key]):['type','index_one_based','icon','color'].every(key=>slot[key]===original[key])),'技巧槽记录与原来源不符');}return structuredClone(retained);}}
   // Legacy three-slot saves are read without a migration write.
   const direct=world.skill_shortcuts?.roles?.[roleId]??role.default_hotkey_indices;
   need(Array.isArray(direct)&&direct.length===3,'默认技巧快捷槽缺失');
@@ -87,7 +88,7 @@ export function validateTechniqueCombinationState(state,party){
 export function techniqueCombinations(world,source,roleId){
   need(world.party.some(role=>role.id===roleId),'技巧角色不在队伍中');
   if(!world.technique_combinations)return [];
-  validateTechniqueCombinationState(world.technique_combinations,world.party);
+  validateTechniqueCombinationState(world.technique_combinations,allPartyRoles(world));
   const records=world.technique_combinations.roles[roleId]??[],role=sourceRole(source,roleId);
   for(const record of records){let units=0;for(const index of record.indices){const skill=role.skills[index],flags=skill?.type_flags_u32_0x32??0;need(skill?.learned_raw&&[1,2,3].includes(flags&15)&&((flags>>>8)&1),'编成技巧技能来源无效');const n=rawView(skill).getUint32(0x36,true);need(n>0,'编成技巧球数无效');units+=n;}need(units===record.total_units,'编成技巧球数与原来源不符');}
   return structuredClone(records);

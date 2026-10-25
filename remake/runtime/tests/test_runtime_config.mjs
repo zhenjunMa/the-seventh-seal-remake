@@ -16,6 +16,7 @@ import {createRewardLedger,collectEnemyDefeat,planVictoryRewards} from '../web/c
 import {composeNativeSequence,compileNativeSequence} from '../web/core/skill_sequence.mjs';
 import {BattleController} from '../web/core/combat.mjs';
 import {BattleView} from '../web/battle_view.mjs';
+import {supportedBattleRecoverySkills} from '../web/core/battle_skill_access.mjs';
 import {WorldStore,encodeSave,decodeSave} from '../web/core/world.mjs';
 const copy=structuredClone,web=new URL('../web/',import.meta.url),read=async name=>JSON.parse(await readFile(new URL('data/'+name,web),'utf8'));
 const [base,forest,scheduler,ai,rewards,seed,meta]=await Promise.all(['combat_sample.json','forest_combat.json','battle_scheduler.json','forest_ai.json','forest_rewards.json','route_seed.json','enemy_battle_view.json'].map(read));
@@ -35,7 +36,11 @@ test('config loader uses one manifest and four dedicated files, rejects arbitrar
 });
 test('default profile covers all admitted skills, three enemies, six drops and retains numeric source bytes',()=>{
   const before=copy(data),cfgBefore=copy(config),d=compileRuntimeConfiguration(data,config);
-  assert.equal(Object.keys(config.skills.entries).length,Object.keys(data.source_skills.skills).length+Object.keys(data.source_magic.magic).length);assert.equal(Object.keys(d.skill_registry).length,24);assert.equal(Object.keys(config.rewards.entries).length,3);assert.equal(Object.keys(config.items.entries).length,416);
+  assert.equal(Object.keys(config.skills.entries).length,Object.keys(data.source_skills.skills).length+Object.keys(data.source_magic.magic).length);
+  const expectedIds=[...Object.keys({...data.party_skills.skills,...data.party_skills.field_skills,...supportedBattleRecoverySkills(data.party_skills)}),
+    ...Object.entries(data.ai.roles).flatMap(([id,role])=>role.learned_indices.map(index=>`${id}_${index}`))];
+  assert.deepEqual(Object.keys(d.skill_registry).sort(),expectedIds.sort());assert.deepEqual(Object.keys(config.rewards.entries).sort(),Object.keys(forest.actors).sort());assert.equal(Object.keys(config.items.entries).length,416);
+  assert.deepEqual(Object.values(d.skill_registry).filter(s=>s.actor_id==='005').map(s=>s.original_skill_index).sort((a,b)=>a-b),[19,20,21,22]);
   assert.deepEqual(d.audit.differences,[]);
   for(const [id,s]of Object.entries(data.party_skills.skills))assert.equal(d.party_skills.skills[id].fixed_raw_hex,s.fixed_raw_hex);
   for(const [id,s]of Object.entries(base.skills))assert.equal(d.combat.skills[id].fixed_raw_hex,s.fixed_raw_hex);
@@ -68,12 +73,14 @@ test('all eight skill overlays reach forest singles and native combo numeric rec
   for(const step of steps.filter(s=>s.event))assert.equal(Buffer.from(role.skills[step.source_skill_index].fixed_raw_hex,'hex').readInt32LE(0xcb),90);
   const r=resolveAction({attacker:s.actors[0],target:s.actors[2],skill:s.skills.yanci,rng:createNativeRng(9)});assert.equal(r.elemental,0);assert.equal(r.configuration.mode,'debug');
 });
-test('enemy AI weights and combination chance survive numeric skill overlays and keep native fallback',()=>{
+test('enemy AI weights and chance retain fallback without overriding native loaded-code eligibility',()=>{
   const cfg=debug(),p=cfg.battle.entries.ai_011.parameters;p.combination_chance_percent=0;p.skill_weights={'14':100,'15':0};cfg.skills.entries['011_14'].parameters.physical_multiplier_percent={minimum:90,maximum_exclusive:90};
   const d=compileRuntimeConfiguration(data,cfg),actor={side_raw:0,status_flags_raw:0},role=d.ai.roles['011'];
   assert.equal(byte(role.skills[14],0x27),100);assert.equal(selectNativeSkills({actor,role,rng:draws([0,99])}).skill_indices[0],14);
   p.skill_weights={'14':0,'15':0};const empty=compileRuntimeConfiguration(data,cfg).ai.roles['011'];assert.equal(selectNativeSkills({actor,role:empty,rng:draws([99,99,1])}).skill_indices[0],15);
-  p.combination_chance_percent=100;const combo=compileRuntimeConfiguration(data,cfg).ai.roles['011'];assert.equal(selectNativeSkills({actor,role:combo,rng:draws([99,0,0,1,0])}).kind,'combination');
+  p.combination_chance_percent=100;const combo=compileRuntimeConfiguration(data,cfg).ai.roles['011'];
+  assert.equal(selectNativeSkills({actor,role:combo,rng:draws([99,0,1])}).kind,'single','Even100% chance cannot bypass4FED00 zero-code eligibility');
+  assert.equal(selectNativeSkills({actor,role:combo,rng:draws([99,0,0,1,0]),load_mode_raw:1}).kind,'combination','Explicit native nonzero load mode retains source codes');
 });
 test('charge factor, default debt and explicit skill debt change real scheduler arithmetic',()=>{
   const cfg=debug();cfg.battle.entries.scheduler.parameters={average_speed_factor:100,default_preparation_delay:500};cfg.skills.entries.yanci.parameters.preparation_delay_raw=0;
@@ -132,7 +139,7 @@ test('export migrates old debug edits once, preserves new edits, and resets only
 async function fullFixture(cfg){
   const world=new WorldStore(copy(seed),maps),d=cfg?compileRuntimeConfiguration(data,cfg):data;
   const s=createForestSample(world.snapshot(),d.combat,d.forest,{map_id:'M70010',members:[{id:'013'}]},null,d.scheduler,d.ai,d.rewards,
-    await read('forest_reactions.json'),await read('forest_status.json'));
+    await read('enemy_reactions.json'),await read('forest_status.json'));
   const ctx={setTransform(){},clearRect(){},fillRect(){},beginPath(){},rect(){},clip(){},moveTo(){},lineTo(){},stroke(){},ellipse(){},fill(){},save(){},restore(){},drawImage(){},fillText(){},createLinearGradient:()=>({addColorStop(){}})};
   const v=new BattleView({canvas:{width:960,height:540,getContext:()=>ctx},metadataPath:'/data/enemy_battle_view.json',jsonLoader:p=>read(p.slice(6)),assetLoader:async a=>({image:{width:a.width,height:a.height},sha256:a.sha256})});
   await v.prepare();v.setRoster(s.actors,s.skills);let time=0,battle;const logs=[],rng=createNativeRng(0x20261011);

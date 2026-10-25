@@ -28,8 +28,8 @@ export function deriveItemConfiguration(data,{socketSupport=true}={}){
         const r=def.value_ranges.find(r=>r.instance_offset===offset);
         return [name,{minimum:r.minimum,maximum_exclusive:r.maximum}];
       }));
-    }else if(def.behavior.kind==='simple-restore'){
-      parameters.use_in_field=true;parameters.use_in_battle=true;
+    }else if(['simple-restore','status-cure'].includes(def.behavior.kind)){
+      parameters.use_in_field=def.use_in_field??true;parameters.use_in_battle=def.use_in_battle??true;
       parameters.effect=copy(def.effect);
     }
     return [id,{name:def.name,owner:{item_id:def.id},source:copy(def.source),
@@ -69,8 +69,9 @@ export function compileItemConfiguration(data,cfg,mode){
       if(def.behavior.kind==='equip')def.allowed_role_mask_raw_13e=p.allowed_role_mask;
       def.runtime_attributes=copy(p.attributes);
       if(crystal)def.runtime_socket_supported=true;
-    }else if(def.behavior.kind==='simple-restore'){
+    }else if(['simple-restore','status-cure'].includes(def.behavior.kind)){
       need(typeof p.use_in_field==='boolean'&&typeof p.use_in_battle==='boolean',`${id}使用场景须为布尔值`);
+      if(def.behavior.kind==='status-cure')need(p.use_in_field===false,`${id}原解除状态仅支持战斗场景`);
       fields(p.effect,Object.keys(b.original.effect),`${id}.effect`);
       for(const [key,n]of Object.entries(p.effect))if(key!=='revive')integer(n,`${id}.${key}`,0,1000000);
       need(p.effect.revive===false,`${id}复活专用行为尚未还原`);
@@ -89,9 +90,45 @@ export function upgradeItemConfiguration(data,existing){
   if(isParameterOverrideFile(existing))return expandParameterOverrides(next,existing,{allowNewEntries:true});
   if(existing.version===2){
     const legacy=deriveItemConfiguration(data,{socketSupport:false});
+    const admission=data.catalog?.equipment_admission;
+    const capabilities=data.catalog?.item_capability_admission;
+    const former=copy(data);
+    if(admission){
+      need(admission.policy==='registered-source-plain-equipment-v1','装备准入来源版本不兼容');
+      for(const [id,availability]of Object.entries(admission.previous_availability??{})){
+        need(admission.promoted_item_ids.includes(Number(id))&&former.definitions[id]?.behavior.kind==='equip'&&
+          availability.enabled===false&&data.definitions[id].availability.enabled===true,`${id}装备准入旧基线无效`);
+        former.definitions[id].availability=copy(availability);
+      }
+    }
+    if(capabilities){
+      need(capabilities.policy==='registered-source-item-capabilities-v1','道具能力准入来源版本不兼容');
+      for(const [id,previous]of Object.entries(capabilities.previous_definitions??{})){
+        need(capabilities.promoted_item_ids.includes(Number(id))&&former.definitions[id]?.behavior.kind==='status-cure'&&
+          previous.behavior.kind==='source-only'&&previous.availability.enabled===false,`${id}道具能力旧基线无效`);
+        Object.assign(former.definitions[id],copy(previous));
+      }
+    }
+    const legacyEquipment=deriveItemConfiguration(former);
     for(const [id,row]of Object.entries(existing.entries)){
       need(next.entries[id],`${id}编号未登记`);
-      if(isSupportedCrystalDefinition(data.definitions[id])&&!same(row.original,next.entries[id].original)){
+      if(capabilities?.previous_definitions?.[id]&&!same(row.original,next.entries[id].original)){
+        fields(row,['name','owner','source','catalog','original','parameters'],id);
+        for(const key of ['name','owner','source','catalog','original'])need(same(row[key],legacyEquipment.entries[id][key]),`${id}.${key}旧道具来源或基线不匹配`);
+        fields(row.parameters,['drop_rate','enabled'],`${id}.parameters`);integer(row.parameters.drop_rate,`${id}.drop_rate`,-1,100);
+        need(row.parameters.enabled===false,`${id}旧配置不能启用未恢复道具`);
+        next.entries[id].parameters.drop_rate=row.parameters.drop_rate;
+      }else if(admission?.previous_availability?.[id]&&!same(row.original,next.entries[id].original)){
+        fields(row,['name','owner','source','catalog','original','parameters'],id);
+        for(const key of ['name','owner','source','catalog','original'])need(same(row[key],legacyEquipment.entries[id][key]),`${id}.${key}旧装备来源或基线不匹配`);
+        // Copy the complete parameter object, then promote only its former
+        // unavailable default. Sparse explicit enabled:false is handled above
+        // and is never promoted. Legacy full files cannot distinguish an
+        // unchanged false default from a deliberately repeated false value.
+        next.entries[id].parameters=copy(row.parameters);
+        need(typeof row.parameters.enabled==='boolean',`${id}.enabled须为布尔值`);
+        next.entries[id].parameters.enabled=row.parameters.enabled===row.original.enabled?next.entries[id].original.enabled:row.parameters.enabled;
+      }else if(isSupportedCrystalDefinition(data.definitions[id])&&!same(row.original,next.entries[id].original)){
         fields(row,['name','owner','source','catalog','original','parameters'],id);
         for(const key of ['name','owner','source','catalog','original'])need(same(row[key],legacy.entries[id][key]),`${id}.${key}旧晶石来源或基线不匹配`);
         fields(row.parameters,['drop_rate','enabled'],`${id}.parameters`);integer(row.parameters.drop_rate,`${id}.drop_rate`,-1,100);need(typeof row.parameters.enabled==='boolean',`${id}.enabled须为布尔值`);

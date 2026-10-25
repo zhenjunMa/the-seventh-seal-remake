@@ -151,6 +151,24 @@
       },
       "parameters": {}
     },
+    "001_35": {
+      "name": "援攻．烈南",
+      "owner": {
+        "role_id": "001",
+        "skill_index": 35,
+        "side": "player"
+      },
+      "parameters": {}
+    },
+    "001_36": {
+      "name": "援攻．爱西琳",
+      "owner": {
+        "role_id": "001",
+        "skill_index": 36,
+        "side": "player"
+      },
+      "parameters": {}
+    },
     "kai_mieyan": {
       "name": "灭颜打",
       "owner": {
@@ -192,6 +210,24 @@
       "owner": {
         "role_id": "002",
         "skill_index": 23,
+        "side": "player"
+      },
+      "parameters": {}
+    },
+    "002_30": {
+      "name": "援攻．烈南",
+      "owner": {
+        "role_id": "002",
+        "skill_index": 30,
+        "side": "player"
+      },
+      "parameters": {}
+    },
+    "002_31": {
+      "name": "援攻．爱西琳",
+      "owner": {
+        "role_id": "002",
+        "skill_index": 31,
         "side": "player"
       },
       "parameters": {}
@@ -250,6 +286,186 @@
       },
       "parameters": {}
     },
+    "003_33": {
+      "name": "援攻．火族战士",
+      "owner": {
+        "role_id": "003",
+        "skill_index": 33,
+        "side": "player"
+      },
+      "parameters": {}
+    },
+    "004_18": {
+      "name": "水晶杖攻击",
+      "owner": {
+        "role_id": "004",
+        "skill_index": 18,
+        "side": "player"
+      },
+      "parameters": {}
+    },
+    "004_19": {
+      "name": "圣灵．圣光弹",
+      "owner": {
+        "role_id": "004",
+        "skill_index": 19,
+        "side": "player"
+      },
+      "parameters": {}
+    },
+    "004_21": {
+      "name": "圣灵．女神署光",
+      "owner": {
+        "role_id": "004",
+        "skill_index": 21,
+        "side": "player"
+      },
+      "parameters": {}
+    },
+    "004_25": {
+      "name": "圣驰．圣光照耀",
+      "owner": {
+        "role_id": "004",
+        "skill_index": 25,
+        "side": "player"
+      },
+      "parameters": {}
+    },
+    "004_27": {
+      "name": "圣驰．封魔圣印",
+      "owner": {
+        "role_id": "004",
+        "skill_index": 27,
+        "side": "player"
+      },
+      "parameters": {}
+    },
+    "004_29": {
+      "name": "圣驰．忏悔之路",
+      "owner": {
+        "role_id": "004",
+        "skill_index": 29,
+        "side": "player"
+      },
+      "parameters": {}
+    },
+    "004_31": {
+      "name": "圣驰．圣光之眼",
+      "owner": {
+        "role_id": "004",
+        "skill_index": 31,
+        "side": "player"
+      },
+      "parameters": {}
+    },
+    "004_33": {
+      "name": "圣浴．女神恩赐",
+      "owner": {
+        "role_id": "004",
+        "skill_index": 33,
+        "side": "player"
+      },
+      "parameters": {}
+    },
+    "004_38": {
+      "name": "圣浴．女神宽恕",
+      "owner": {
+        "role_id": "004",
+        "skill_index": 38,
+        "side": "player"
+      },
+      "parameters": {}
+    },
+    "005_19": {
+      "name": "炎斧．崩壁",
+      "owner": {
+        "role_id": "005",
+        "skill_index": 19,
+        "side": "player"
+      },
+      "parameters": {}
+    },
+    "005_20": {
+      "name": "炎斧．裂面",
+      "owner": {
+        "role_id": "005",
+        "skill_index": 20,
+        "side": "player"
+      },
+      "parameters": {}
+    },
+    "005_21": {
+      "name": "炎斧．破釜",
+      "owner": {
+        "role_id": "005",
+        "skill_index": 21,
+        "side": "player"
+      },
+      "parameters": {}
+    },
+    "005_22": {
+      "name": "炎斧．碎地",
+      "owner": {
+        "role_id": "005",
+        "skill_index": 22,
+        "side": "player"
+      },
+      "parameters": {}
+    },
+    "006_19": {
+      "name": "风体．疾风脚",
+      "owner": {
+        "role_id": "006",
+        "skill_index": 19,
+        "side": "player"
+      },
+      "parameters": {}
+    },
+    "006_20": {
+      "name": "风体．瞬风脚",
+      "owner": {
+        "role_id": "006",
+        "skill_index": 20,
+        "side": "player"
+      },
+      "parameters": {}
+    },
+    "006_21": {
+      "name": "风体．旋风脚",
+      "owner": {
+        "role_id": "006",
+        "skill_index": 21,
+        "side": "player"
+      },
+      "parameters": {}
+    },
+    "006_22": {
+      "name": "风体．狂风脚",
+      "owner": {
+        "role_id": "006",
+        "skill_index": 22,
+        "side": "player"
+      },
+      "parameters": {}
+    },
+    "006_23": {
+      "name": "风体．削风脚",
+      "owner": {
+        "role_id": "006",
+        "skill_index": 23,
+        "side": "player"
+      },
+      "parameters": {}
+    },
+    "006_24": {
+      "name": "风体．迅风脚",
+      "owner": {
+        "role_id": "006",
+        "skill_index": 24,
+        "side": "player"
+      },
+      "parameters": {}
+    },
     "yannuan": {
       "name": "炎浴．暖心之炎",
       "owner": {
@@ -264,6 +480,24 @@
       "owner": {
         "role_id": "001",
         "skill_index": 43,
+        "side": "player"
+      },
+      "parameters": {}
+    },
+    "004_40": {
+      "name": "圣浴．女神救赎",
+      "owner": {
+        "role_id": "004",
+        "skill_index": 40,
+        "side": "player"
+      },
+      "parameters": {}
+    },
+    "004_41": {
+      "name": "圣浴．女神转世",
+      "owner": {
+        "role_id": "004",
+        "skill_index": 41,
         "side": "player"
       },
       "parameters": {}
@@ -318,6 +552,51 @@
       "owner": {
         "role_id": "013",
         "skill_index": 16,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "032_7": {
+      "name": "怒炎",
+      "owner": {
+        "role_id": "032",
+        "skill_index": 7,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "032_8": {
+      "name": "狼炎",
+      "owner": {
+        "role_id": "032",
+        "skill_index": 8,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "032_9": {
+      "name": "炫炎",
+      "owner": {
+        "role_id": "032",
+        "skill_index": 9,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "032_10": {
+      "name": "爆炎",
+      "owner": {
+        "role_id": "032",
+        "skill_index": 10,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "032_11": {
+      "name": "精灵之吻",
+      "owner": {
+        "role_id": "032",
+        "skill_index": 11,
         "side": "enemy"
       },
       "parameters": {}
@@ -597,24 +876,6 @@
       "owner": {
         "role_id": "001",
         "skill_index": 34,
-        "side": "player"
-      },
-      "parameters": {}
-    },
-    "001_35": {
-      "name": "援攻．烈南",
-      "owner": {
-        "role_id": "001",
-        "skill_index": 35,
-        "side": "player"
-      },
-      "parameters": {}
-    },
-    "001_36": {
-      "name": "援攻．爱西琳",
-      "owner": {
-        "role_id": "001",
-        "skill_index": 36,
         "side": "player"
       },
       "parameters": {}
@@ -921,24 +1182,6 @@
       "owner": {
         "role_id": "002",
         "skill_index": 29,
-        "side": "player"
-      },
-      "parameters": {}
-    },
-    "002_30": {
-      "name": "援攻．烈南",
-      "owner": {
-        "role_id": "002",
-        "skill_index": 30,
-        "side": "player"
-      },
-      "parameters": {}
-    },
-    "002_31": {
-      "name": "援攻．爱西琳",
-      "owner": {
-        "role_id": "002",
-        "skill_index": 31,
         "side": "player"
       },
       "parameters": {}
@@ -1294,15 +1537,6 @@
       },
       "parameters": {}
     },
-    "003_33": {
-      "name": "援攻．火族战士",
-      "owner": {
-        "role_id": "003",
-        "skill_index": 33,
-        "side": "player"
-      },
-      "parameters": {}
-    },
     "003_35": {
       "name": "炎灵．烙印",
       "owner": {
@@ -1618,38 +1852,11 @@
       },
       "parameters": {}
     },
-    "004_18": {
-      "name": "水晶杖攻击",
-      "owner": {
-        "role_id": "004",
-        "skill_index": 18,
-        "side": "player"
-      },
-      "parameters": {}
-    },
-    "004_19": {
-      "name": "圣灵．圣光弹",
-      "owner": {
-        "role_id": "004",
-        "skill_index": 19,
-        "side": "player"
-      },
-      "parameters": {}
-    },
     "004_20": {
       "name": "圣灵．圣流弹",
       "owner": {
         "role_id": "004",
         "skill_index": 20,
-        "side": "player"
-      },
-      "parameters": {}
-    },
-    "004_21": {
-      "name": "圣灵．女神署光",
-      "owner": {
-        "role_id": "004",
-        "skill_index": 21,
         "side": "player"
       },
       "parameters": {}
@@ -1681,29 +1888,11 @@
       },
       "parameters": {}
     },
-    "004_25": {
-      "name": "圣驰．圣光照耀",
-      "owner": {
-        "role_id": "004",
-        "skill_index": 25,
-        "side": "player"
-      },
-      "parameters": {}
-    },
     "004_26": {
       "name": "圣驰．神光笼罩",
       "owner": {
         "role_id": "004",
         "skill_index": 26,
-        "side": "player"
-      },
-      "parameters": {}
-    },
-    "004_27": {
-      "name": "圣驰．封魔圣印",
-      "owner": {
-        "role_id": "004",
-        "skill_index": 27,
         "side": "player"
       },
       "parameters": {}
@@ -1717,15 +1906,6 @@
       },
       "parameters": {}
     },
-    "004_29": {
-      "name": "圣驰．忏悔之路",
-      "owner": {
-        "role_id": "004",
-        "skill_index": 29,
-        "side": "player"
-      },
-      "parameters": {}
-    },
     "004_30": {
       "name": "圣驰．殉道之路",
       "owner": {
@@ -1735,29 +1915,11 @@
       },
       "parameters": {}
     },
-    "004_31": {
-      "name": "圣驰．圣光之眼",
-      "owner": {
-        "role_id": "004",
-        "skill_index": 31,
-        "side": "player"
-      },
-      "parameters": {}
-    },
     "004_32": {
       "name": "圣驰．女神之眼",
       "owner": {
         "role_id": "004",
         "skill_index": 32,
-        "side": "player"
-      },
-      "parameters": {}
-    },
-    "004_33": {
-      "name": "圣浴．女神恩赐",
-      "owner": {
-        "role_id": "004",
-        "skill_index": 33,
         "side": "player"
       },
       "parameters": {}
@@ -1798,38 +1960,11 @@
       },
       "parameters": {}
     },
-    "004_38": {
-      "name": "圣浴．女神宽恕",
-      "owner": {
-        "role_id": "004",
-        "skill_index": 38,
-        "side": "player"
-      },
-      "parameters": {}
-    },
     "004_39": {
       "name": "圣浴．女神慈悲",
       "owner": {
         "role_id": "004",
         "skill_index": 39,
-        "side": "player"
-      },
-      "parameters": {}
-    },
-    "004_40": {
-      "name": "圣浴．女神救赎",
-      "owner": {
-        "role_id": "004",
-        "skill_index": 40,
-        "side": "player"
-      },
-      "parameters": {}
-    },
-    "004_41": {
-      "name": "圣浴．女神转世",
-      "owner": {
-        "role_id": "004",
-        "skill_index": 41,
         "side": "player"
       },
       "parameters": {}
@@ -2055,42 +2190,6 @@
       "owner": {
         "role_id": "005",
         "skill_index": 18,
-        "side": "player"
-      },
-      "parameters": {}
-    },
-    "005_19": {
-      "name": "炎斧．崩壁",
-      "owner": {
-        "role_id": "005",
-        "skill_index": 19,
-        "side": "player"
-      },
-      "parameters": {}
-    },
-    "005_20": {
-      "name": "炎斧．裂面",
-      "owner": {
-        "role_id": "005",
-        "skill_index": 20,
-        "side": "player"
-      },
-      "parameters": {}
-    },
-    "005_21": {
-      "name": "炎斧．破釜",
-      "owner": {
-        "role_id": "005",
-        "skill_index": 21,
-        "side": "player"
-      },
-      "parameters": {}
-    },
-    "005_22": {
-      "name": "炎斧．碎地",
-      "owner": {
-        "role_id": "005",
-        "skill_index": 22,
         "side": "player"
       },
       "parameters": {}
@@ -2361,60 +2460,6 @@
       "owner": {
         "role_id": "006",
         "skill_index": 18,
-        "side": "player"
-      },
-      "parameters": {}
-    },
-    "006_19": {
-      "name": "风体．疾风脚",
-      "owner": {
-        "role_id": "006",
-        "skill_index": 19,
-        "side": "player"
-      },
-      "parameters": {}
-    },
-    "006_20": {
-      "name": "风体．瞬风脚",
-      "owner": {
-        "role_id": "006",
-        "skill_index": 20,
-        "side": "player"
-      },
-      "parameters": {}
-    },
-    "006_21": {
-      "name": "风体．旋风脚",
-      "owner": {
-        "role_id": "006",
-        "skill_index": 21,
-        "side": "player"
-      },
-      "parameters": {}
-    },
-    "006_22": {
-      "name": "风体．狂风脚",
-      "owner": {
-        "role_id": "006",
-        "skill_index": 22,
-        "side": "player"
-      },
-      "parameters": {}
-    },
-    "006_23": {
-      "name": "风体．削风脚",
-      "owner": {
-        "role_id": "006",
-        "skill_index": 23,
-        "side": "player"
-      },
-      "parameters": {}
-    },
-    "006_24": {
-      "name": "风体．迅风脚",
-      "owner": {
-        "role_id": "006",
-        "skill_index": 24,
         "side": "player"
       },
       "parameters": {}
@@ -7653,51 +7698,6 @@
       "owner": {
         "role_id": "032",
         "skill_index": 6,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "032_7": {
-      "name": "怒炎",
-      "owner": {
-        "role_id": "032",
-        "skill_index": 7,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "032_8": {
-      "name": "狼炎",
-      "owner": {
-        "role_id": "032",
-        "skill_index": 8,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "032_9": {
-      "name": "炫炎",
-      "owner": {
-        "role_id": "032",
-        "skill_index": 9,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "032_10": {
-      "name": "爆炎",
-      "owner": {
-        "role_id": "032",
-        "skill_index": 10,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "032_11": {
-      "name": "精灵之吻",
-      "owner": {
-        "role_id": "032",
-        "skill_index": 11,
         "side": "source"
       },
       "parameters": {}

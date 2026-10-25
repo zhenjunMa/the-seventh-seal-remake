@@ -203,12 +203,23 @@ def retain_evidence():
              records=list(records.values()), limitations=["No original executable was launched"]))
 
 
+def optional_map_tlk(ident, policy):
+    """Asset-only passage maps can have no TLK; admitted story maps must have one."""
+    path = ROOT / f"Map/{ident.lower()}.TLK"
+    if not path.is_file():
+        if policy["story"]:
+            raise FileNotFoundError(f"Story map {ident} has no TLK source: {path}")
+        return None
+    return tlk_record(path)
+
+
 def export():
     policies = map_exports()
     IDS = tuple(ident for ident, policy in policies.items() if policy['assets'] == 'chapter' or policy['story'])
     NEW_MAPS = map_ids('assets')
     detail = {ident: map_record(ROOT / f"Map/{ident.lower()}.dat", True) for ident in IDS}
     bg = {ident: RouteMapBackground(ROOT / detail[ident]["path"]) for ident in IDS}
+    tlk_tables = {ident: optional_map_tlk(ident, policies[ident]) for ident in IDS}
     EDGES = physical_edges(IDS, bg, policies)
     for target in {target for _, _, target in EDGES} - set(detail):
         detail[target] = map_record(ROOT / f'Map/{target.lower()}.dat', True)
@@ -218,12 +229,14 @@ def export():
     opening = json.loads((RUNTIME / "web/data/opening_map_resources.json").read_text(encoding="utf-8"))
     role_ids = set(registered_role_ids('player'))
     for ident in IDS:
-        sources.update((detail[ident]["path"], f"Map/{ident.lower()}.TLK"))
+        sources.add(detail[ident]["path"])
+        if tlk_tables[ident]:
+            sources.add(tlk_tables[ident]["path"])
         role_ids.update(f"{npc['resource_id']:03}" for npc in detail[ident]["npc_table"]["records"])
     sources.update(f"ROLE/{ident}.dgp" for ident in role_ids)
     for ident in NEW_MAPS:
         sources.update(export_maps.background_names(bg[ident]))
-        sources.update(export_maps.source_path(p) for p in (ROOT / "mapm" / ident.lower()).glob("*.dgp"))
+        sources.update(export_maps.source_path(p) for p in MapObjects(ROOT / detail[ident]["path"]).resource_paths(ROOT).values())
     before = {name: export_maps.sha(ROOT / name) for name in sorted(sources)}
     if before["GAME.exe"] != export_maps.GAME_SHA:
         raise DGPError("Chapter executable differs from retained native evidence")
@@ -259,7 +272,9 @@ def export():
         maps.append(dict(id=ident, name=record["name"], path=f"/data/maps/{ident.lower()}.json"))
     global_slots = {}
     for ident in IDS:
-        table = tlk_record(ROOT / f"Map/{ident.lower()}.TLK")
+        table = tlk_tables[ident]
+        if table is None:
+            continue
         slot = next((s for s in table["index_nonzero"] if s["slot"] == 499), None)
         if slot:
             global_slots[ident] = dict(record=slot["record"], index_slot=499,
@@ -272,6 +287,7 @@ def export():
     for ident in IDS:
         trigger_regions[ident] = [d for d in transition_descriptors(bg[ident])[0] if d["state_raw"] == 2]
         table = MapObjects(ROOT / detail[ident]["path"])
+        object_paths = table.resource_paths(ROOT)
         interactive_objects[ident] = []
         for obj in table.objects:
             raw = bytes.fromhex(obj["raw_hex"])
@@ -288,7 +304,7 @@ def export():
         if ident in NEW_MAPS:
             object_animations[ident] = []
             for obj in interactive_objects[ident]:
-                name = f"mapm/{ident.lower()}/{obj['resource_id']}.dgp"
+                name = export_maps.source_path(object_paths[f"{obj['resource_id']}.dgp"])
                 dgp = parsed[name]
                 frame_records = []
                 for frame in range(dgp.frame_count):
@@ -309,8 +325,11 @@ def export():
                     roles=roles, npcs_by_map=npc_tables, exits_by_map=dict(exits),
                     global_object_tlk=global_slots, trigger_regions=trigger_regions,
                     interactive_objects=interactive_objects, object_animations=object_animations,
-                    map_entry_tlk_header_raw={ident:dict(offset=0x11E, bytes=4,
-                        raw_hex=bg[ident].data[0x11E:0x122].hex(), value=u32(bg[ident].data, 0x11E),
+                    map_entry_tlk_header_raw={ident:dict(offset=0x13A, bytes=4,
+                        raw_hex=bg[ident].data[0x13A:0x13E].hex(), value=u32(bg[ident].data, 0x13A),
+                        source=dict(path=detail[ident]["path"], sha256=detail[ident]["sha256"])) for ident in IDS},
+                    map_setup_tlk_header_raw={ident:dict(offset=0x8A, bytes=4,
+                        raw_hex=bg[ident].data[0x8A:0x8E].hex(), value=u32(bg[ident].data, 0x8A),
                         source=dict(path=detail[ident]["path"], sha256=detail[ident]["sha256"])) for ident in IDS},
                     authority="Original DAT/TLK/DGP plus retained native static loading/entry rules",
                     limitations=["Only native state0 DAT edges into registered maps are provided; TLK/ANM routes stay separate", "No original execution observed",

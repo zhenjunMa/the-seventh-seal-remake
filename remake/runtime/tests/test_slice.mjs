@@ -59,17 +59,26 @@ test('real map descriptors, entry markers and runtime coverage gates',async()=>{
     assert.equal(hash(bytes),scene.source.sha256);
     const readyCells=new Set(scene.exits.flatMap(e=>e.cells.map(c=>`${c.x},${c.y}`)));
     const movement=new MovementMap({...scene.movement,triggers:scene.movement.triggers.map(t=>({...t,path_gate:!readyCells.has(`${t.x},${t.y}`)}))});
+    const recordBytes=bytes.readUInt32LE(0x18)===1?0x42:0x2b;
+    const checkExitCells=exit=>{
+      assert.ok(exit.cells.some(cell=>!movement.cell(cell.x,cell.y).blocked),`${scene.id} exit${exit.id} has a usable source cell`);
+      for(const cell of exit.cells){
+        const hit=movement.cell(cell.x,cell.y),terrain=scene.movement.terrain_rows[cell.y][cell.x];
+        assert.equal(hit.blocked,terrain==='1',`${scene.id} exit${exit.id} keeps native terrain`);
+        if(hit.blocked)assert.equal(hit.reason,'terrain');
+      }
+    };
     for(const exit of scene.exits){
       if(exit.kind==='world-map-event'){
         const q=exit.source.offset;assert.equal(bytes[q],2);assert.equal(bytes.readUInt32LE(q+0x26),exit.record_id);
-        exit.cells.forEach(c=>assert.equal(movement.cell(c.x,c.y).blocked,false));continue;
+        checkExitCells(exit);continue;
       }
       const q=exit.source.descriptor_offset;
       assert.equal(bytes[q],0);
       assert.equal(bytes.subarray(q+0x11,q+0x26).toString('ascii').split('\0')[0].toUpperCase().replace('.DAT',''),exit.target_map);
-      assert.equal(bytes.readUInt32LE(q+0x26),exit.source.target_entry_marker);
-      assert.equal(bytes.readUInt32LE(q+0x2a),exit.source.entry_sort_code);
-      exit.cells.forEach(c=>assert.equal(movement.cell(c.x,c.y).blocked,false));
+      assert.equal(recordBytes===0x42?bytes.readUInt32LE(q+0x26):bytes[q+0x26],exit.source.target_entry_marker);
+      assert.equal(recordBytes===0x42?bytes.readUInt32LE(q+0x2a):bytes[q+0x27],exit.source.entry_sort_code);
+      checkExitCells(exit);
       const target=await read(`web/data/maps/${exit.target_map.toLowerCase()}.json`);
       const targetBytes=await readFile(new URL(target.source.path,root));
       const cell=exit.entry.cell_y*target.movement.width+exit.entry.cell_x;
@@ -81,7 +90,7 @@ test('real map descriptors, entry markers and runtime coverage gates',async()=>{
   checks.push({name:'source-backed-map-entry-and-coverage-guard',passed:true,maps:catalog.maps.map(m=>m.id),ready_exits:catalog.scope.ready_exits});
 });
 test.after(async()=>{
-  await writeFile(new URL('evidence/slice_verification_20261011.json',runtime),JSON.stringify({schema:'seventh-seal-source-slice-verification',version:1,checks,
+  await writeFile(new URL('evidence/current_slice_verification.json',runtime),JSON.stringify({schema:'seventh-seal-source-slice-verification',version:1,checks,
     authority:'original resource bytes plus recovered static rules replayed by the reconstruction',original_game_execution_observed:false,
     source_sha256:event.source.sha256,seed_sha256:hash(await readFile(new URL('web/data/world_seed.json',runtime)))},null,2));
 });

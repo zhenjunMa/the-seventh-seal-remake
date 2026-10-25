@@ -15,6 +15,8 @@ import {WorldStore} from "../core/world.mjs";
 import {createSkillTestSample} from "../skill_test_sample.mjs";
 import {commitSkillTestResources} from "../core/skill_test_commit.mjs";
 import {battleResources} from "../core/battle_resources.mjs";
+import {beginScriptedBattle,commitScriptedBattle} from '../core/scripted_battle.mjs';
+import {playbackTask} from '../core/story_playback.mjs';
 
 export function createBattleController({state, actions, $, canvas, ctx}) {
   const captureScene=kind=>actions.captureScene?.(kind)??(kind==='battle'?$('battleCanvas'):canvas);
@@ -30,7 +32,9 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
     node.dataset.impactCount=snapshot.history.filter(entry=>entry.impact).length;
     $('battleMessage').textContent=snapshot.phase==='victory'?'战斗胜利':snapshot.phase==='defeat'?'队伍已经倒下':snapshot.phase==='escaped'?'已经逃离战斗':snapshot.phase==='interrupted'?snapshot.error:snapshot.phase==='action'?'正在行动':snapshot.phase==='command'?'选择行动':'行动槽充能中';
     state.battleMenu?.update(snapshot);
-    if(state.skillTestSession){
+    if(state.scriptedBattleSession){
+      if(snapshot.phase==='defeat'&&!state.scriptedBattleSession.returnPending)queueMicrotask(actions.guarded(returnFromBattle));
+    }else if(state.skillTestSession){
       if(snapshot.phase==='escaped'&&!state.skillTestSession.returnPending){state.skillTestSession.returnPending=true;queueMicrotask(actions.guarded(returnFromBattle));}
     }else if(snapshot.phase==='defeat'&&state.world.value.source.kind==='native-new-game')queueMicrotask(actions.guarded(returnFromBattle));
   }
@@ -64,24 +68,38 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
     const present=method=>async(result,options)=>{const played=await view[method](result,{...options,onFrame:step=>actionSound(result,step)});actions.log({type:'battle-presentation',action_id:result.action_id,actor_id:result.actor_id,skill_id:result.skill_id,observations:played.observations});return played;};
     battle=new BattleController({world,resolveAction,applyDamage:applyNativeDamage,playAction:present('playAction'),playSequence:present('playSequence'),
       now:()=>state.engine?.battle.clock.time??performance.now(),
-      resourcesForWorld:newParty?partyResourcesForWorld:resourcesForWorld,consumeResources:newParty?consumePartyMp:consumeBattleMp,notify:updateBattle,log:actions.log,itemData:newParty?state.itemData:null,
+      resourcesForWorld:newParty?partyResourcesForWorld:resourcesForWorld,consumeResources:newParty?consumePartyMp:consumeBattleMp,
+      notify:snapshot=>{if(state.battle===battle)updateBattle(snapshot);},log:actions.log,itemData:newParty?state.itemData:null,
       playItem:async(event,hooks)=>{actions.status(`${event.name} → ${battle.actor(event.target_id).name}`);const played=await view.playItem(event,{...hooks,onFrame:step=>actionSound(event,step),onEffectFrame:step=>state.audio?.playItemEffect(event.item_id,`${event.action_id}:effect:${step.logical_frame}`,step.logical_frame)});actions.log({type:'battle-item-presentation',action_id:event.action_id,item_id:event.item_id,observations:played.observations});}});
+    view.nativeControl=battle;
+    view.nativeControlIsCurrent=()=>state.battle===battle;
     return battle;
   }
-  async function prepareHud(newParty,{returnLabel=null,onProgress}={}){
-    state.battleMenu?.dispose();
-    const [uiManifest,resultManifest]=await Promise.all([battleResources.json('data/battle_ui.json'),returnLabel?null:battleResources.json('data/battle_result.json')]);
-    const bindingSource=newParty?effectiveSkillSource(state.partySkills,state.world.value):null;
-    state.battleMenu=new BattleMenuView({root:$('battleHud'),manifest:uiManifest,battle:state.battle,returnLabel,
-      getSettings:()=>state.menuSettings?.snapshot()??{},getBindings:newParty?id=>techniqueSlots(state.world.value,bindingSource,id).map(slot=>({...slot,name:slot.type===1?techniqueCombinations(state.world.value,bindingSource,id)[slot.index_one_based-1]?.name:techniqueSlotName(bindingSource,id,slot)})):null,
-      playCue:(...args)=>state.audio?.playCue(...args),onReturn:actions.guarded(returnFromBattle),onStage:stage=>state.battle.setCommandStage?.(stage),textRenderer:state.operationMenu?.textRenderer,memory:state.battleCursorMemory,resultManifest,onResultEvent:actions.log,
+  async function prepareHud(newParty,{returnLabel=null,onProgress,world=state.world,battle=state.battle,owner=null,signal}={}){
+    const check=()=>{signal?.throwIfAborted();if(owner&&state.scriptedBattleSession!==owner)throw new Error('剧情战斗界面会话已失效');};
+    if(!owner)state.battleMenu?.dispose();
+    const [uiManifest,resultManifest]=await playbackTask(Promise.all([battleResources.json('data/battle_ui.json'),returnLabel?null:battleResources.json('data/battle_result.json')]),signal);check();
+    const bindingSource=newParty?effectiveSkillSource(state.partySkills,world.value):null;
+    const host=$('battleHud'),root=owner?host.ownerDocument.createElement('div'):host;
+    const menu=new BattleMenuView({root,manifest:uiManifest,battle,returnLabel,reuseReturnButton:!owner,
+      getSettings:()=>state.menuSettings?.snapshot()??{},getBindings:newParty?id=>techniqueSlots(world.value,bindingSource,id).map(slot=>({...slot,name:slot.type===1?techniqueCombinations(world.value,bindingSource,id)[slot.index_one_based-1]?.name:techniqueSlotName(bindingSource,id,slot)})):null,
+      playCue:(...args)=>state.audio?.playCue(...args),onReturn:actions.guarded(returnFromBattle),onStage:stage=>{if(state.battle===battle)battle.setCommandStage?.(stage);},textRenderer:state.operationMenu?.textRenderer,memory:state.battleCursorMemory,resultManifest,onResultEvent:actions.log,
       now:()=>state.engine?.battle.clock.time??performance.now()});
-    await state.battleMenu.prepare({onProgress});
+    if(owner)owner.menu=menu;else state.battleMenu=menu;
+    try{
+      await playbackTask(menu.prepare({onProgress}),signal);check();
+      if(owner){
+        owner.hudChildren=[...host.childNodes];owner.hudDataset={...host.dataset};host.replaceChildren(...root.childNodes);menu.root=host;
+        menu.resizeObserver.unobserve?.(root);menu.resizeObserver.observe(host);menu.fit();state.battleMenu=menu;
+      }
+      return menu;
+    }catch(error){menu.dispose();throw error;}
   }
   function showBattle(){
     state.engine?.setMode('battle');
     for(const id of ['battleCanvas','battleHud','battleCommands'])$(id).hidden=false;
     canvas.hidden=true;$('dialogue').hidden=true;actions.resize();state.battleMenu.fit();
+    if(state.scriptedBattleSession)$('openingShade').hidden=true;
   }
   async function prepareBattleResources(mode,work){
     const started=performance.now();
@@ -92,21 +110,22 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
     actions.log({type:'battle-resources-ready',mode,elapsed_ms:performance.now()-started,cache:battleResources.snapshot()});
     return result;
   }
-  async function revealBattle(before,sample,start){
+  async function revealBattle(before,sample,start,transitionOptions={},isCurrent=()=>true){
     state.battleEntryPending=true;
     try{
       start();
       if(state.battleTransition&&before)await state.battleTransition.run(before,()=>{
+        if(!isCurrent())throw new Error('剧情战斗入场会话已失效');
         showBattle();const snapshot=state.battle.presentationSnapshot();state.battleView.draw(snapshot,0);
         state.battleMenu.draw(0,state.battleView.actorPositions());state.battleMenu.paintTo(state.engine?.battle.surface.canvas??$('battleCanvas'));
         state.engine?.battle.surface.endFrame();
         const after=state.battleTransition.capture(captureScene('battle'));
         // The captured entry pose must not start lifecycle clocks during the transition.
         state.battleView.setRoster(sample.actors,sample.skills);return after;
-      });
+      },transitionOptions);
       else showBattle();
-    }finally{state.battleEntryPending=false;}
-    updateBattle(state.battle.presentationSnapshot());
+    }finally{if(isCurrent())state.battleEntryPending=false;}
+    if(isCurrent())updateBattle(state.battle.presentationSnapshot());
   }
   async function startBattle(group=null,encounterState=null){
     if(state.scenes.phase!=='map')return;
@@ -139,6 +158,73 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
       if(group)actions.log({type:'field-encounter',group,location:state.world.location,counter_after:state.world.value.encounters.counters[state.selectedRole]});
       actions.status('满槽后选择招式和目标。Esc 收起轮盘，方向键切换人物，空格打开轮盘；也可用 Tab / X / Z 切换满槽人物。');
     }catch(error){state.battleMenu?.dispose();state.battleMenu=null;canvas.hidden=false;for(const id of ['battleCanvas','battleHud','battleCommands'])$(id).hidden=true;Object.assign(state.view,state.battleCheckpoint);state.scenes.setPhase('map');throw error;}
+  }
+  async function startScriptedBattle({group,draft,playback,signal=playback?.signal}){
+    if(state.scriptedBattleSession||state.skillTestSession||state.scenes.phase!=='event')throw new Error('剧情战斗入口状态无效');
+    const simulation=beginScriptedBattle(draft,state.world.mapIds),revision=state.world.value.revision;
+    const session={simulation,returnPending:false,previousPhase:state.scenes.phase,
+      viewState:{...state.view},mapName:$('mapName').textContent,
+      visibility:{canvas:canvas.hidden,dialogue:$('dialogue').hidden,shadeHidden:$('openingShade').hidden,shadeOpacity:$('openingShade').style.opacity},
+      previous:{battle:state.battle,battleView:state.battleView,battleMenu:state.battleMenu,battleRng:state.battleRng,
+        battleNatural:state.battleNatural,battleCursorMemory:state.battleCursorMemory,sidePriority:state.sidePriority,
+        battlePresentationError:state.battlePresentationError,battleEntryPending:state.battleEntryPending,itemData:state.itemData}};
+    const finished=new Promise((resolve,reject)=>Object.assign(session,{resolve,reject}));finished.catch(()=>{});
+    const abort=()=>session.reject(signal.reason??new Error('剧情战斗已取消'));
+    signal?.addEventListener('abort',abort,{once:true});
+    const isCurrent=()=>state.scriptedBattleSession===session&&!signal?.aborted;
+    const check=()=>{signal?.throwIfAborted();playback?.check();if(state.scriptedBattleSession!==session)throw new Error('剧情战斗会话已失效');if(state.world.value.revision!==revision)throw new Error('战斗期间世界状态已变化');};
+    const before=state.battleTransition?.capture(captureScene());
+    state.scriptedBattleSession=session;state.battlePresentationError=null;state.battleNatural=false;
+    state.battleCursorMemory=new Map(state.battleCursorMemory);state.scenes.setPhase('battle-loading');
+    try{
+      check();if(!state.battleData){const data=await playbackTask(actions.json(state.catalog.combat_sample??'data/combat_sample.json'),signal);check();state.battleData=data;}
+      const configured=await playbackTask(actions.readConfiguredData(),signal);check();state.itemData=configured.items;
+      const scheduler={...configured.scheduler,idle_skills:{...configured.scheduler.idle_skills,...state.partySkills.idle_skills}};
+      const sample=assembleForestSample(createPartySample(simulation.world.snapshot(),state.partyCombat,state.partySkills,configured,state.itemData),
+        configured.forest,group,scheduler,configured.ai,configured.rewards,state.partyReactions,state.statusData);
+      if(sample.actors.filter(actor=>actor.side==='player').every(actor=>actor.hp.current===0))throw new Error('队伍已经倒下，无法进入剧情战斗');
+      const preparedView=await playbackTask(prepareView({mode:'scripted',newParty:true,stagePath:'/'+battleStage(group.stage).path,lifecycle:true,actors:sample.actors}),signal);check();
+      session.view=state.battleView=preparedView;
+      session.view.setRoster(sample.actors,sample.skills);
+      session.battle=state.battle=createCombat(simulation.world,true,session.view);state.battleRng=simulation.rng;
+      await prepareHud(true,{world:simulation.world,battle:session.battle,owner:session,signal});check();
+      await playbackTask(revealBattle(before,sample,()=>state.battle.start({...sample,lifecycle_enabled:true,rng:simulation.rng,side_priority:state.sidePriority,
+        source:{...sample.source,scripted_battle:true,record:group.source,rng_seed:simulation.encounters.rng_state,
+          rng_seed_policy:'persistent-development-global-stream',transition_draw:simulation.transitionRaw,
+          transition_visual_rng_policy:'Source kind uses CRT; existing pixel-transition adapter uses its separate presentation random source.'}}),
+        {kind:simulation.transitionKind,signal},isCurrent),signal);check();
+      state.audio?.setScene({mapId:draft.location.map_id,battle:true,stageId:group.stage});
+      actions.log({type:'scripted-battle-enter',group,revision,party:draft.party.map(role=>role.id)});
+      actions.status('剧情战斗：选择招式和目标，战斗结束后继续剧情。');
+      const result=await finished;check();
+      commitScriptedBattle(draft,simulation,result);
+      session.committed=true;
+      actions.log({type:'scripted-battle-return',source:group.source,outcome:result.outcome,world_committed:false});
+      return result;
+    }finally{
+      signal?.removeEventListener('abort',abort);
+      const ownsState=state.scriptedBattleSession===session;if(ownsState)state.battleTransition?.cancel();
+      if(session.battle?.state&&session.battle.state.phase!=='closed')session.battle.interrupt(new Error('剧情战斗会话结束'));
+      if(ownsState||state.battleView!==session.view)session.view?.stop('已返回剧情');
+      if(!ownsState&&session.menu?.root===$('battleHud')){
+        const detached=session.menu.root.ownerDocument.createElement('div');
+        if(session.menu.frame.parentNode===session.menu.root)detached.append(session.menu.frame);
+        session.menu.root=detached;
+      }
+      session.menu?.dispose();
+      if(ownsState){
+        for(const id of ['battleCanvas','battleHud','battleCommands'])$(id).hidden=true;
+        Object.assign(state,session.previous);Object.assign(state.view,session.viewState);state.scriptedBattleSession=null;
+        if(session.committed&&session.sidePriority!==undefined)state.sidePriority=session.sidePriority;
+        if(session.hudChildren){
+          const host=$('battleHud');host.replaceChildren(...session.hudChildren);
+          for(const key of Object.keys(host.dataset))delete host.dataset[key];Object.assign(host.dataset,session.hudDataset);
+        }
+        canvas.hidden=session.visibility.canvas;$('dialogue').hidden=session.visibility.dialogue;$('mapName').textContent=session.mapName;
+        $('openingShade').hidden=session.visibility.shadeHidden;$('openingShade').style.opacity=session.visibility.shadeOpacity;
+        state.scenes.setPhase(session.previousPhase);state.audio?.setScene({mapId:draft.location.map_id,battle:false});actions.resize();
+      }
+    }
   }
   async function startTechniqueTest(){
     if(state.skillTestSession||state.scenes.phase!=='party-menu'||!state.menuContext||state.menuContext.combat)return;
@@ -186,6 +272,20 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
   async function returnFromBattle(){
     if(!state.scenes.phase.startsWith('battle-')||!state.battle)return;
     if(state.battleMenu?.resultView?.active&&!state.battleMenu.resultView.complete)return;
+    if(state.scriptedBattleSession){
+      const session=state.scriptedBattleSession;if(session.returnPending)return;session.returnPending=true;
+      try{
+        const result=state.battle.finish(),snapshot=state.battle.snapshot();
+        state.battleHistory.push({result,battle:snapshot});
+        if(result.outcome==='defeat'){
+          const error=new Error('剧情战斗全队败北');error.gameOverPolicy=planPartyDefeat({battle:snapshot});throw error;
+        }
+        if(!['victory','escaped'].includes(result.outcome))throw new Error('剧情战斗已中止，进度未提交');
+        session.sidePriority=snapshot.scheduler?.side_priority;
+        session.resolve(result);
+      }catch(error){session.reject(error);}
+      return;
+    }
     if(state.skillTestSession){
       const session=state.skillTestSession;
       if(state.battle.state?.phase==='interrupted'){restoreTechniqueTest(session,'测试已中止');actions.status('测试已中止，未提交测试中的变化。');return;}
@@ -219,5 +319,5 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
     for(const view of state.battleViews.values())view.destroy();
     state.battleViews.clear();
   }
-  return {updateBattle, startBattle, startTechniqueTest, returnFromBattle, battleKey, battleKeyUp, drawBattleInterface,updateBattleFrame,disposeBattles};
+  return {updateBattle, startBattle, startScriptedBattle, startTechniqueTest, returnFromBattle, battleKey, battleKeyUp, drawBattleInterface,updateBattleFrame,disposeBattles};
 }

@@ -15,24 +15,119 @@
       "sha256": "5473b264e0bd505e491a025ef87f89ad5fbf27dff032866245364ee28e62153e"
     },
     {
+      "id": "M01050",
+      "path": "data/maps/m01050.json",
+      "sha256": "c36b08d8b62a0368cca358ae19c19f67e653c4a7d375368d920bef91eb3b338c"
+    },
+    {
+      "id": "M03039",
+      "path": "data/maps/m03039.json",
+      "sha256": "63eadca1aa1f4a0ee48bc7299799b2e6742675c5ac8b10014a47d47e0570fa0b"
+    },
+    {
       "id": "M17010",
       "path": "data/maps/m17010.json",
       "sha256": "08de6953a94b165abcfe6bb229ab4d4db5531e3ec54731c7d64fda12ab53ffb7"
     },
     {
+      "id": "M17011",
+      "path": "data/maps/m17011.json",
+      "sha256": "2dfb356ebcb1aea501ef3bf738d5f296296b3e4cfcc3586eebaf13d0e5f56310"
+    },
+    {
+      "id": "M17012",
+      "path": "data/maps/m17012.json",
+      "sha256": "48fc6b5c9ddb6477f4cf0b9509117bd5f7fcf3be5db32ad2ba31bb03b4a64780"
+    },
+    {
+      "id": "M17013",
+      "path": "data/maps/m17013.json",
+      "sha256": "24623d99a76e7f5d97d90328ef7a2a658b5cfcdcbf60580b75d7aa6d960c04af"
+    },
+    {
+      "id": "M17014",
+      "path": "data/maps/m17014.json",
+      "sha256": "24632ccbd37b3c33f410c006cddb3a03c043c07f58dc1a3fbbedaeb19202599d"
+    },
+    {
+      "id": "M17015",
+      "path": "data/maps/m17015.json",
+      "sha256": "29566163eac55796af215d4be00c418f5decb50c28334b3b607c035c719f2944"
+    },
+    {
+      "id": "M17016",
+      "path": "data/maps/m17016.json",
+      "sha256": "4c55178b1590a53523c3445a81b449e4faef19ef54f51af9bc18f6ba022a50cb"
+    },
+    {
       "id": "M17020",
       "path": "data/maps/m17020.json",
-      "sha256": "845f5da1f8193a3d51093fbf1cd77b077e4b5ee212e12be9be076446bb8533f8"
+      "sha256": "03a2c696475b7bc8f0cdbf64d4ff5fe92f5115f4b6a7c6bd3268dafd818481f4"
+    },
+    {
+      "id": "M17021",
+      "path": "data/maps/m17021.json",
+      "sha256": "b0f788ff186355ed3af08d0375e190f8cfd045884bb0a9db0511766c03ca0cda"
+    },
+    {
+      "id": "M17022",
+      "path": "data/maps/m17022.json",
+      "sha256": "8888247e6b851f40d8a8e1462cb1161032a7ae0563e53faea92e4e47c63d9e00"
+    },
+    {
+      "id": "M17023",
+      "path": "data/maps/m17023.json",
+      "sha256": "b7c7a416cfb7ded5a71a7465681e5f457f136e850623b9c9d3d9e003f86f6b3b"
+    },
+    {
+      "id": "M17024",
+      "path": "data/maps/m17024.json",
+      "sha256": "904db2927ecd313b7e6ab9ecf78df74a46522ded0fb36d306fb7f1b4e8d86d88"
+    },
+    {
+      "id": "M17025",
+      "path": "data/maps/m17025.json",
+      "sha256": "91c8605612cbec11d9a413ceb9fb475505fab52b7393293fdc0dcb9e40577bd8"
     },
     {
       "id": "M17026",
       "path": "data/maps/m17026.json",
-      "sha256": "39276a52820d224c91d0ea6941131c767fb2336c3052dd47723e1664eed5764d"
+      "sha256": "275fc5aa785927facdb48528c92db64228674bb6a7be2bf4473e5fb99151bbf1"
+    },
+    {
+      "id": "M17027",
+      "path": "data/maps/m17027.json",
+      "sha256": "2a20864ab4743f64a1fd0a542eb795664a4dc553a8000504937cc093e132cf73"
+    },
+    {
+      "id": "M17028",
+      "path": "data/maps/m17028.json",
+      "sha256": "7044afa8705e0992b7567d1ff5762d18111839ba33fbe317a1cb1692ce68b484"
     },
     {
       "id": "M17029",
       "path": "data/maps/m17029.json",
-      "sha256": "bb9967d59efde485a12f09b20ca7da9451da5cbe04e2dec31f0ec505c29e5e10"
+      "sha256": "eb6c62da00ac86fa4dc3b5e339464a5bac0eeacc985ed5d633414de0ed104ee0"
+    },
+    {
+      "id": "M17030-1",
+      "path": "data/maps/m17030-1.json",
+      "sha256": "b2ebc78040b649fb9171effd0e96a42bb2947ac441993585545da7c9af81ad87"
+    },
+    {
+      "id": "M17030-2",
+      "path": "data/maps/m17030-2.json",
+      "sha256": "dec94a9550dae5c3f4a3f80ed5902c222ad69d7eb91fe9b868eb57fa7ed31120"
+    },
+    {
+      "id": "M17030",
+      "path": "data/maps/m17030.json",
+      "sha256": "3d1cb4a0a84d96f989a88527a467ac368c5daef70b45d14dda9eb99b4ab5db1c"
+    },
+    {
+      "id": "M17032",
+      "path": "data/maps/m17032.json",
+      "sha256": "7c2bfb5419a089f50e1d5c18db1669e6ef4ed920eb5c6e1da90a929cfccae635"
     },
     {
       "id": "M70010",
@@ -42,7 +137,7 @@
     {
       "id": "M72061",
       "path": "data/maps/m72061.json",
-      "sha256": "cd42f9b4221eb92dbab7ee8322eb844d31aa9c19434f203557d382f50308018d"
+      "sha256": "17b1e09c8dbee0fa5b7138f028cbb63109998dd61ac9298ea77c947ee27f6fed"
     }
   ],
   "roles": [
@@ -686,6 +781,1588 @@
         "x": -69,
         "y": -119
       }
+    },
+    {
+      "id": "004",
+      "name": "佛蘭珂",
+      "source": {
+        "path": "ROLE/004.dgp",
+        "sha256": "8213f0f44684301b5e62d941aa3314335b913d5c14c83e76bc7d5a53da66c4cd"
+      },
+      "frame_width": 198,
+      "frame_height": 170,
+      "anchor": {
+        "x": 96,
+        "y": 131
+      },
+      "actions": [
+        {
+          "index": 0,
+          "sheet": "/assets/chapter_roles/004/action_00.png",
+          "sha256": "496bbe898c03474892e20edce776a67f369b0741587e2c98cfcd11d964071ed7",
+          "frame_count": 10,
+          "directions": 8,
+          "first_frame": 0,
+          "interval_raw": 180,
+          "loop_raw": 1,
+          "raw_hex": "08b40000000000000000000000010a00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "sequence_length_raw": 0,
+          "sequence_raw": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "uses_sequence": false,
+          "logical_count": 10,
+          "logical_frames": [
+            {
+              "logical_index": 0,
+              "physical_frame": 0,
+              "hold_interval_raw": 180
+            },
+            {
+              "logical_index": 1,
+              "physical_frame": 1,
+              "hold_interval_raw": 180
+            },
+            {
+              "logical_index": 2,
+              "physical_frame": 2,
+              "hold_interval_raw": 180
+            },
+            {
+              "logical_index": 3,
+              "physical_frame": 3,
+              "hold_interval_raw": 180
+            },
+            {
+              "logical_index": 4,
+              "physical_frame": 4,
+              "hold_interval_raw": 180
+            },
+            {
+              "logical_index": 5,
+              "physical_frame": 5,
+              "hold_interval_raw": 180
+            },
+            {
+              "logical_index": 6,
+              "physical_frame": 6,
+              "hold_interval_raw": 180
+            },
+            {
+              "logical_index": 7,
+              "physical_frame": 7,
+              "hold_interval_raw": 180
+            },
+            {
+              "logical_index": 8,
+              "physical_frame": 8,
+              "hold_interval_raw": 180
+            },
+            {
+              "logical_index": 9,
+              "physical_frame": 9,
+              "hold_interval_raw": 180
+            }
+          ],
+          "sequence_rule": "(raw+0x0D &0x0F)==0 selects byte+0x16+logical_index; otherwise logical_index. Add first_frame and direction*physical_frame_count.",
+          "sequence_evidence": [
+            "ev_0ffb771246c6d16325580fe6f266e66f57fbb84cfe7a3be766ff48234043fbab"
+          ],
+          "source_offset": 67,
+          "frames_per_direction": 10
+        },
+        {
+          "index": 1,
+          "sheet": "/assets/chapter_roles/004/action_01.png",
+          "sha256": "68b04740b10a7441aca8b83a859019cfa7f50df33e34c8480643f52fd45aa5e1",
+          "frame_count": 10,
+          "directions": 8,
+          "first_frame": 80,
+          "interval_raw": 250,
+          "loop_raw": 1,
+          "raw_hex": "08fa0000000000000000000000010a00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000050000000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "sequence_length_raw": 0,
+          "sequence_raw": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "uses_sequence": false,
+          "logical_count": 10,
+          "logical_frames": [
+            {
+              "logical_index": 0,
+              "physical_frame": 0,
+              "hold_interval_raw": 250
+            },
+            {
+              "logical_index": 1,
+              "physical_frame": 1,
+              "hold_interval_raw": 250
+            },
+            {
+              "logical_index": 2,
+              "physical_frame": 2,
+              "hold_interval_raw": 250
+            },
+            {
+              "logical_index": 3,
+              "physical_frame": 3,
+              "hold_interval_raw": 250
+            },
+            {
+              "logical_index": 4,
+              "physical_frame": 4,
+              "hold_interval_raw": 250
+            },
+            {
+              "logical_index": 5,
+              "physical_frame": 5,
+              "hold_interval_raw": 250
+            },
+            {
+              "logical_index": 6,
+              "physical_frame": 6,
+              "hold_interval_raw": 250
+            },
+            {
+              "logical_index": 7,
+              "physical_frame": 7,
+              "hold_interval_raw": 250
+            },
+            {
+              "logical_index": 8,
+              "physical_frame": 8,
+              "hold_interval_raw": 250
+            },
+            {
+              "logical_index": 9,
+              "physical_frame": 9,
+              "hold_interval_raw": 250
+            }
+          ],
+          "sequence_rule": "(raw+0x0D &0x0F)==0 selects byte+0x16+logical_index; otherwise logical_index. Add first_frame and direction*physical_frame_count.",
+          "sequence_evidence": [
+            "ev_0ffb771246c6d16325580fe6f266e66f57fbb84cfe7a3be766ff48234043fbab"
+          ],
+          "source_offset": 239,
+          "frames_per_direction": 10
+        },
+        {
+          "index": 2,
+          "sheet": "/assets/chapter_roles/004/action_02.png",
+          "sha256": "4439b560f0129995bf481f3fcb9e110675f2ff000f11f5c8f3f7d3728adeca3c",
+          "frame_count": 12,
+          "directions": 8,
+          "first_frame": 160,
+          "interval_raw": 130,
+          "loop_raw": 1,
+          "raw_hex": "08820000000000000000000000010c000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a0000000000000000000000002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "sequence_length_raw": 0,
+          "sequence_raw": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "uses_sequence": false,
+          "logical_count": 12,
+          "logical_frames": [
+            {
+              "logical_index": 0,
+              "physical_frame": 0,
+              "hold_interval_raw": 130
+            },
+            {
+              "logical_index": 1,
+              "physical_frame": 1,
+              "hold_interval_raw": 130
+            },
+            {
+              "logical_index": 2,
+              "physical_frame": 2,
+              "hold_interval_raw": 130
+            },
+            {
+              "logical_index": 3,
+              "physical_frame": 3,
+              "hold_interval_raw": 130
+            },
+            {
+              "logical_index": 4,
+              "physical_frame": 4,
+              "hold_interval_raw": 130
+            },
+            {
+              "logical_index": 5,
+              "physical_frame": 5,
+              "hold_interval_raw": 130
+            },
+            {
+              "logical_index": 6,
+              "physical_frame": 6,
+              "hold_interval_raw": 130
+            },
+            {
+              "logical_index": 7,
+              "physical_frame": 7,
+              "hold_interval_raw": 130
+            },
+            {
+              "logical_index": 8,
+              "physical_frame": 8,
+              "hold_interval_raw": 130
+            },
+            {
+              "logical_index": 9,
+              "physical_frame": 9,
+              "hold_interval_raw": 130
+            },
+            {
+              "logical_index": 10,
+              "physical_frame": 10,
+              "hold_interval_raw": 130
+            },
+            {
+              "logical_index": 11,
+              "physical_frame": 11,
+              "hold_interval_raw": 130
+            }
+          ],
+          "sequence_rule": "(raw+0x0D &0x0F)==0 selects byte+0x16+logical_index; otherwise logical_index. Add first_frame and direction*physical_frame_count.",
+          "sequence_evidence": [
+            "ev_0ffb771246c6d16325580fe6f266e66f57fbb84cfe7a3be766ff48234043fbab"
+          ],
+          "source_offset": 411,
+          "frames_per_direction": 12
+        }
+      ],
+      "limitation": "DGP action indexes are zero-based; exact native blend/timing remains unobserved",
+      "map_draw_offset": {
+        "x": -80,
+        "y": -131
+      }
+    },
+    {
+      "id": "005",
+      "name": "朱特",
+      "source": {
+        "path": "ROLE/005.dgp",
+        "sha256": "82a2420ee14be57ab12e701f18ff855383f028e0e76bd3a64f291bd435f305dd"
+      },
+      "frame_width": 170,
+      "frame_height": 150,
+      "anchor": {
+        "x": 85,
+        "y": 114
+      },
+      "actions": [
+        {
+          "index": 0,
+          "sheet": "/assets/chapter_roles/005/action_00.png",
+          "sha256": "e24ebc35058df8e1f6fd183d18729ef88cd20e650ee20b2a2717d769dcb6187e",
+          "frame_count": 9,
+          "directions": 8,
+          "first_frame": 0,
+          "interval_raw": 180,
+          "loop_raw": 1,
+          "raw_hex": "08b40000000000000000000000010900000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "sequence_length_raw": 0,
+          "sequence_raw": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "uses_sequence": false,
+          "logical_count": 9,
+          "logical_frames": [
+            {
+              "logical_index": 0,
+              "physical_frame": 0,
+              "hold_interval_raw": 180
+            },
+            {
+              "logical_index": 1,
+              "physical_frame": 1,
+              "hold_interval_raw": 180
+            },
+            {
+              "logical_index": 2,
+              "physical_frame": 2,
+              "hold_interval_raw": 180
+            },
+            {
+              "logical_index": 3,
+              "physical_frame": 3,
+              "hold_interval_raw": 180
+            },
+            {
+              "logical_index": 4,
+              "physical_frame": 4,
+              "hold_interval_raw": 180
+            },
+            {
+              "logical_index": 5,
+              "physical_frame": 5,
+              "hold_interval_raw": 180
+            },
+            {
+              "logical_index": 6,
+              "physical_frame": 6,
+              "hold_interval_raw": 180
+            },
+            {
+              "logical_index": 7,
+              "physical_frame": 7,
+              "hold_interval_raw": 180
+            },
+            {
+              "logical_index": 8,
+              "physical_frame": 8,
+              "hold_interval_raw": 180
+            }
+          ],
+          "sequence_rule": "(raw+0x0D &0x0F)==0 selects byte+0x16+logical_index; otherwise logical_index. Add first_frame and direction*physical_frame_count.",
+          "sequence_evidence": [
+            "ev_0ffb771246c6d16325580fe6f266e66f57fbb84cfe7a3be766ff48234043fbab"
+          ],
+          "source_offset": 67,
+          "frames_per_direction": 9
+        },
+        {
+          "index": 1,
+          "sheet": "/assets/chapter_roles/005/action_01.png",
+          "sha256": "aeac113a8388c7473eafd2c898bf835f5d439015e45e222218c2e5769b3b5467",
+          "frame_count": 10,
+          "directions": 8,
+          "first_frame": 72,
+          "interval_raw": 250,
+          "loop_raw": 1,
+          "raw_hex": "08fa0000000000000000000000010a00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000048000000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "sequence_length_raw": 0,
+          "sequence_raw": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "uses_sequence": false,
+          "logical_count": 10,
+          "logical_frames": [
+            {
+              "logical_index": 0,
+              "physical_frame": 0,
+              "hold_interval_raw": 250
+            },
+            {
+              "logical_index": 1,
+              "physical_frame": 1,
+              "hold_interval_raw": 250
+            },
+            {
+              "logical_index": 2,
+              "physical_frame": 2,
+              "hold_interval_raw": 250
+            },
+            {
+              "logical_index": 3,
+              "physical_frame": 3,
+              "hold_interval_raw": 250
+            },
+            {
+              "logical_index": 4,
+              "physical_frame": 4,
+              "hold_interval_raw": 250
+            },
+            {
+              "logical_index": 5,
+              "physical_frame": 5,
+              "hold_interval_raw": 250
+            },
+            {
+              "logical_index": 6,
+              "physical_frame": 6,
+              "hold_interval_raw": 250
+            },
+            {
+              "logical_index": 7,
+              "physical_frame": 7,
+              "hold_interval_raw": 250
+            },
+            {
+              "logical_index": 8,
+              "physical_frame": 8,
+              "hold_interval_raw": 250
+            },
+            {
+              "logical_index": 9,
+              "physical_frame": 9,
+              "hold_interval_raw": 250
+            }
+          ],
+          "sequence_rule": "(raw+0x0D &0x0F)==0 selects byte+0x16+logical_index; otherwise logical_index. Add first_frame and direction*physical_frame_count.",
+          "sequence_evidence": [
+            "ev_0ffb771246c6d16325580fe6f266e66f57fbb84cfe7a3be766ff48234043fbab"
+          ],
+          "source_offset": 239,
+          "frames_per_direction": 10
+        },
+        {
+          "index": 2,
+          "sheet": "/assets/chapter_roles/005/action_02.png",
+          "sha256": "af2700e0f37a90442e9ecc7eea598a39d957211bd32bd739fbe81b087ff1110a",
+          "frame_count": 12,
+          "directions": 8,
+          "first_frame": 152,
+          "interval_raw": 130,
+          "loop_raw": 1,
+          "raw_hex": "08820000000000000000000000010c00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000098000000000000000000000002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "sequence_length_raw": 0,
+          "sequence_raw": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "uses_sequence": false,
+          "logical_count": 12,
+          "logical_frames": [
+            {
+              "logical_index": 0,
+              "physical_frame": 0,
+              "hold_interval_raw": 130
+            },
+            {
+              "logical_index": 1,
+              "physical_frame": 1,
+              "hold_interval_raw": 130
+            },
+            {
+              "logical_index": 2,
+              "physical_frame": 2,
+              "hold_interval_raw": 130
+            },
+            {
+              "logical_index": 3,
+              "physical_frame": 3,
+              "hold_interval_raw": 130
+            },
+            {
+              "logical_index": 4,
+              "physical_frame": 4,
+              "hold_interval_raw": 130
+            },
+            {
+              "logical_index": 5,
+              "physical_frame": 5,
+              "hold_interval_raw": 130
+            },
+            {
+              "logical_index": 6,
+              "physical_frame": 6,
+              "hold_interval_raw": 130
+            },
+            {
+              "logical_index": 7,
+              "physical_frame": 7,
+              "hold_interval_raw": 130
+            },
+            {
+              "logical_index": 8,
+              "physical_frame": 8,
+              "hold_interval_raw": 130
+            },
+            {
+              "logical_index": 9,
+              "physical_frame": 9,
+              "hold_interval_raw": 130
+            },
+            {
+              "logical_index": 10,
+              "physical_frame": 10,
+              "hold_interval_raw": 130
+            },
+            {
+              "logical_index": 11,
+              "physical_frame": 11,
+              "hold_interval_raw": 130
+            }
+          ],
+          "sequence_rule": "(raw+0x0D &0x0F)==0 selects byte+0x16+logical_index; otherwise logical_index. Add first_frame and direction*physical_frame_count.",
+          "sequence_evidence": [
+            "ev_0ffb771246c6d16325580fe6f266e66f57fbb84cfe7a3be766ff48234043fbab"
+          ],
+          "source_offset": 411,
+          "frames_per_direction": 12
+        }
+      ],
+      "limitation": "DGP action indexes are zero-based; exact native blend/timing remains unobserved",
+      "map_draw_offset": {
+        "x": -69,
+        "y": -114
+      }
+    },
+    {
+      "id": "006",
+      "name": "賽拉飛爾",
+      "source": {
+        "path": "ROLE/006.dgp",
+        "sha256": "d66054ad14e34100c551bd1dd65aa5bff9feee78955a6adde88632901df5d65e"
+      },
+      "frame_width": 160,
+      "frame_height": 160,
+      "anchor": {
+        "x": 80,
+        "y": 123
+      },
+      "actions": [
+        {
+          "index": 0,
+          "sheet": "/assets/chapter_roles/006/action_00.png",
+          "sha256": "5a8c400d300aadd2f46326c583be872e748fed5cc24fcfa343f3cb63d2e7a81f",
+          "frame_count": 10,
+          "directions": 8,
+          "first_frame": 0,
+          "interval_raw": 180,
+          "loop_raw": 1,
+          "raw_hex": "08b40000000000000000000000010a00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "sequence_length_raw": 0,
+          "sequence_raw": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "uses_sequence": false,
+          "logical_count": 10,
+          "logical_frames": [
+            {
+              "logical_index": 0,
+              "physical_frame": 0,
+              "hold_interval_raw": 180
+            },
+            {
+              "logical_index": 1,
+              "physical_frame": 1,
+              "hold_interval_raw": 180
+            },
+            {
+              "logical_index": 2,
+              "physical_frame": 2,
+              "hold_interval_raw": 180
+            },
+            {
+              "logical_index": 3,
+              "physical_frame": 3,
+              "hold_interval_raw": 180
+            },
+            {
+              "logical_index": 4,
+              "physical_frame": 4,
+              "hold_interval_raw": 180
+            },
+            {
+              "logical_index": 5,
+              "physical_frame": 5,
+              "hold_interval_raw": 180
+            },
+            {
+              "logical_index": 6,
+              "physical_frame": 6,
+              "hold_interval_raw": 180
+            },
+            {
+              "logical_index": 7,
+              "physical_frame": 7,
+              "hold_interval_raw": 180
+            },
+            {
+              "logical_index": 8,
+              "physical_frame": 8,
+              "hold_interval_raw": 180
+            },
+            {
+              "logical_index": 9,
+              "physical_frame": 9,
+              "hold_interval_raw": 180
+            }
+          ],
+          "sequence_rule": "(raw+0x0D &0x0F)==0 selects byte+0x16+logical_index; otherwise logical_index. Add first_frame and direction*physical_frame_count.",
+          "sequence_evidence": [
+            "ev_0ffb771246c6d16325580fe6f266e66f57fbb84cfe7a3be766ff48234043fbab"
+          ],
+          "source_offset": 67,
+          "frames_per_direction": 10
+        },
+        {
+          "index": 1,
+          "sheet": "/assets/chapter_roles/006/action_01.png",
+          "sha256": "69f1141980b9aaa5a4701e3615699502609e9d9cebd50a1b63481c9358e3733e",
+          "frame_count": 10,
+          "directions": 8,
+          "first_frame": 80,
+          "interval_raw": 250,
+          "loop_raw": 1,
+          "raw_hex": "08fa0000000000000000000000010a00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000050000000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "sequence_length_raw": 0,
+          "sequence_raw": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "uses_sequence": false,
+          "logical_count": 10,
+          "logical_frames": [
+            {
+              "logical_index": 0,
+              "physical_frame": 0,
+              "hold_interval_raw": 250
+            },
+            {
+              "logical_index": 1,
+              "physical_frame": 1,
+              "hold_interval_raw": 250
+            },
+            {
+              "logical_index": 2,
+              "physical_frame": 2,
+              "hold_interval_raw": 250
+            },
+            {
+              "logical_index": 3,
+              "physical_frame": 3,
+              "hold_interval_raw": 250
+            },
+            {
+              "logical_index": 4,
+              "physical_frame": 4,
+              "hold_interval_raw": 250
+            },
+            {
+              "logical_index": 5,
+              "physical_frame": 5,
+              "hold_interval_raw": 250
+            },
+            {
+              "logical_index": 6,
+              "physical_frame": 6,
+              "hold_interval_raw": 250
+            },
+            {
+              "logical_index": 7,
+              "physical_frame": 7,
+              "hold_interval_raw": 250
+            },
+            {
+              "logical_index": 8,
+              "physical_frame": 8,
+              "hold_interval_raw": 250
+            },
+            {
+              "logical_index": 9,
+              "physical_frame": 9,
+              "hold_interval_raw": 250
+            }
+          ],
+          "sequence_rule": "(raw+0x0D &0x0F)==0 selects byte+0x16+logical_index; otherwise logical_index. Add first_frame and direction*physical_frame_count.",
+          "sequence_evidence": [
+            "ev_0ffb771246c6d16325580fe6f266e66f57fbb84cfe7a3be766ff48234043fbab"
+          ],
+          "source_offset": 239,
+          "frames_per_direction": 10
+        },
+        {
+          "index": 2,
+          "sheet": "/assets/chapter_roles/006/action_02.png",
+          "sha256": "388e8849ec58aec69a20990aa01281938720098a83e2b698be9af2dd6daefe78",
+          "frame_count": 12,
+          "directions": 8,
+          "first_frame": 160,
+          "interval_raw": 130,
+          "loop_raw": 1,
+          "raw_hex": "08820000000000000000000000010c000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a0000000000000000000000002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "sequence_length_raw": 0,
+          "sequence_raw": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "uses_sequence": false,
+          "logical_count": 12,
+          "logical_frames": [
+            {
+              "logical_index": 0,
+              "physical_frame": 0,
+              "hold_interval_raw": 130
+            },
+            {
+              "logical_index": 1,
+              "physical_frame": 1,
+              "hold_interval_raw": 130
+            },
+            {
+              "logical_index": 2,
+              "physical_frame": 2,
+              "hold_interval_raw": 130
+            },
+            {
+              "logical_index": 3,
+              "physical_frame": 3,
+              "hold_interval_raw": 130
+            },
+            {
+              "logical_index": 4,
+              "physical_frame": 4,
+              "hold_interval_raw": 130
+            },
+            {
+              "logical_index": 5,
+              "physical_frame": 5,
+              "hold_interval_raw": 130
+            },
+            {
+              "logical_index": 6,
+              "physical_frame": 6,
+              "hold_interval_raw": 130
+            },
+            {
+              "logical_index": 7,
+              "physical_frame": 7,
+              "hold_interval_raw": 130
+            },
+            {
+              "logical_index": 8,
+              "physical_frame": 8,
+              "hold_interval_raw": 130
+            },
+            {
+              "logical_index": 9,
+              "physical_frame": 9,
+              "hold_interval_raw": 130
+            },
+            {
+              "logical_index": 10,
+              "physical_frame": 10,
+              "hold_interval_raw": 130
+            },
+            {
+              "logical_index": 11,
+              "physical_frame": 11,
+              "hold_interval_raw": 130
+            }
+          ],
+          "sequence_rule": "(raw+0x0D &0x0F)==0 selects byte+0x16+logical_index; otherwise logical_index. Add first_frame and direction*physical_frame_count.",
+          "sequence_evidence": [
+            "ev_0ffb771246c6d16325580fe6f266e66f57fbb84cfe7a3be766ff48234043fbab"
+          ],
+          "source_offset": 411,
+          "frames_per_direction": 12
+        }
+      ],
+      "limitation": "DGP action indexes are zero-based; exact native blend/timing remains unobserved",
+      "map_draw_offset": {
+        "x": -64,
+        "y": -123
+      }
     }
   ],
   "runtime_content": "data/runtime_content.json",
@@ -721,7 +2398,7 @@
   "forest_battle_view": "data/enemy_battle_view.json",
   "scope": {
     "official_runtime_started": true,
-    "ready_exits": 6,
+    "ready_exits": 31,
     "source_backed_events": 1,
     "one_on_one_turn_sample": true,
     "full_combat": false,

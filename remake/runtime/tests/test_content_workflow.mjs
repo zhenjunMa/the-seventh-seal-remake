@@ -37,7 +37,7 @@ test('Minimal content choices resolve identities, default skill IDs and source-o
   assert.equal(result.roles['003'].source.sha256,seed.source.role_definitions['003'].sha256);
   assert.equal(result.roles['003'].native_slot,2);
   assert.equal(result.maps.M70010.flag_index,114);
-  assert.deepEqual(result.battle_rosters['party-source-group'],['001','002','003','011','012','013']);
+  assert.deepEqual(result.battle_rosters['party-source-group'],['001','002','003','004','005','006','011','012','013','032']);
   assert.ok(result.roles['003'].battle_skills.some(row=>row.id==='003_25'&&row.index===25));
   assert.deepEqual(result.maps.M17026.rests[0].choices.map(row=>[row.text,row.record_id]),[['休息。',12],['不用。',0]]);
   const duplicate=structuredClone(before);duplicate.roles['003'].source={path:'foreign'};

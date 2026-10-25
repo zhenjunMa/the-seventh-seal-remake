@@ -54,7 +54,7 @@ contract('original mode source drift, unknown parameters, invalid ranges and mal
   const mutations=[c=>c.mode='typo',c=>c.skills.yantu.parameters.mp_cost=1,c=>c.skills.yantu.original.mp_cost=1,
     c=>c.skills.yantu.source.sha256='0'.repeat(64),c=>c.skills.yantu.parameters.mpCost=5,
     c=>{c.mode='debug';c.skills.yantu.parameters.mp_cost=-1;},c=>{c.mode='debug';c.skills.yantu.parameters.element_power=[10];},
-    c=>{c.mode='debug';c.skills.yantu.parameters.defense_bonus.minimum=1;},c=>{c.mode='debug';c.skills.yantu.parameters.mp_cost=2.5;}];
+    c=>{c.mode='debug';c.skills.yantu.parameters.defense_bonus={minimum:-2147483648,maximum_exclusive:2147483647};},c=>{c.mode='debug';c.skills.yantu.parameters.mp_cost=2.5;}];
   for(const mutate of mutations){const cfg=clone(config);mutate(cfg);assert.throws(()=>configureSkills(data.skills,cfg),/技能配置/);}
 });
 contract('battle retains entry config snapshot after external edits and display failure',async()=>{

@@ -1,0 +1,5119 @@
+{
+  "schema": "seventh-seal-native-layer-bank",
+  "version": 1,
+  "role_id": "006",
+  "frame_width": 539,
+  "frame_height": 439,
+  "anchor": {
+    "x": 266,
+    "y": 324,
+    "source": "DGP extra_header+0x10/+0x14",
+    "native_use_verified": false
+  },
+  "frames": [
+    {
+      "source_frame": 0,
+      "main": {
+        "path": "assets/party_layers/006/frame_0000_main.png",
+        "sha256": "15e693a5e250e52786b73bce505af2e4e5577ce1ebb6cd01fe8d4613984f5e1b",
+        "rgba_sha256": "d7dd68ae02c1608dd27a72a72a3efe5d66e72de3e0011ef22c1b9b28b8d613d8",
+        "bounds": [
+          245,
+          209,
+          299,
+          350
+        ],
+        "covered_pixels": 3649,
+        "transparent_pixels": 232972
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0000_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 1,
+      "main": {
+        "path": "assets/party_layers/006/frame_0001_main.png",
+        "sha256": "1883394f01925429a73fbb381e297d4cebfeb40f6d62d05b694602ff32413c37",
+        "rgba_sha256": "e2c537fb4a625c4873444070e96c83538bd7bb8ab7f0ed16084fe3e8555f114b",
+        "bounds": [
+          245,
+          209,
+          298,
+          350
+        ],
+        "covered_pixels": 3665,
+        "transparent_pixels": 232956
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0001_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 2,
+      "main": {
+        "path": "assets/party_layers/006/frame_0002_main.png",
+        "sha256": "e76bdfb80e5d73ffd9795d1bcbabcffa219533a1ab35e07035f4d769acb9c7d5",
+        "rgba_sha256": "a8c14c08fcf919c3ffe3c3b3db6f148b51d4ef9c5d48256f120c9724dfcbf978",
+        "bounds": [
+          245,
+          209,
+          298,
+          350
+        ],
+        "covered_pixels": 3679,
+        "transparent_pixels": 232942
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0002_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 3,
+      "main": {
+        "path": "assets/party_layers/006/frame_0003_main.png",
+        "sha256": "90793c5a07c6d6d33eae753e15078d6a34dc2d171581f04646f56371444793b8",
+        "rgba_sha256": "1c06a599b9ff697e21ac07a59b6670474ffa0c2ba82f099589b42fc9f2dc30aa",
+        "bounds": [
+          245,
+          209,
+          299,
+          350
+        ],
+        "covered_pixels": 3706,
+        "transparent_pixels": 232915
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0003_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 4,
+      "main": {
+        "path": "assets/party_layers/006/frame_0004_main.png",
+        "sha256": "7b2735c5aff65f7090074483e390c506dc390f414ff6dad8b9e181155b6da183",
+        "rgba_sha256": "b892249b26288b34bc7f8cd8b72be92363b402e1d81b7fe496d25cc36f1a293b",
+        "bounds": [
+          244,
+          209,
+          299,
+          350
+        ],
+        "covered_pixels": 3722,
+        "transparent_pixels": 232899
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0004_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 5,
+      "main": {
+        "path": "assets/party_layers/006/frame_0005_main.png",
+        "sha256": "44c10da048bfbcba1b0d71704e28e30be4a36279284e27ebcdb980a094211498",
+        "rgba_sha256": "52337d562e20037eade4ae00f93add556bd554194b06b13a416269eac0c56811",
+        "bounds": [
+          244,
+          209,
+          300,
+          350
+        ],
+        "covered_pixels": 3731,
+        "transparent_pixels": 232890
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0005_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 6,
+      "main": {
+        "path": "assets/party_layers/006/frame_0006_main.png",
+        "sha256": "90be288b8007f3ac4ed007ce9a084ed06df3c37f6f8dbe52d2c9f91811e85506",
+        "rgba_sha256": "f02568d1ac00968d1edd0f7c901a157d72174d2fde4e51d2354d4c75984e6539",
+        "bounds": [
+          243,
+          209,
+          301,
+          350
+        ],
+        "covered_pixels": 3731,
+        "transparent_pixels": 232890
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0006_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 7,
+      "main": {
+        "path": "assets/party_layers/006/frame_0007_main.png",
+        "sha256": "6ca66ff932a8b0a8ba786052c4c3e76ceea3c09b3b5b74c2877941ed2eeda9fc",
+        "rgba_sha256": "fe086da1aad272db2a66ad8ac5a3674cdb6f2a1e2fba88b7d84d1a4c4312710d",
+        "bounds": [
+          243,
+          209,
+          302,
+          350
+        ],
+        "covered_pixels": 3709,
+        "transparent_pixels": 232912
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0007_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 8,
+      "main": {
+        "path": "assets/party_layers/006/frame_0008_main.png",
+        "sha256": "ba3679eb5935da191a73bf0680053022ae398f5b52c3ecf6d36d4ab34a5aeb84",
+        "rgba_sha256": "32194cb0c96e81ad011d8a62de398a0cfea752a4c3be59122e55a10f5c6a4e90",
+        "bounds": [
+          243,
+          209,
+          303,
+          350
+        ],
+        "covered_pixels": 3687,
+        "transparent_pixels": 232934
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0008_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 9,
+      "main": {
+        "path": "assets/party_layers/006/frame_0009_main.png",
+        "sha256": "c36953e6952e5640a2c6a6c3f709bbe5bdb013014d7dd55f08ba9586e5106999",
+        "rgba_sha256": "dd655bc67c76c3ed2ad436412bc31c9bcadc4fca6c01d46fcd4c7ff8c0f86271",
+        "bounds": [
+          244,
+          209,
+          304,
+          350
+        ],
+        "covered_pixels": 3646,
+        "transparent_pixels": 232975
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0009_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 10,
+      "main": {
+        "path": "assets/party_layers/006/frame_0010_main.png",
+        "sha256": "5f6ad87d3abdba5f703867a234d2f0d577192cefd746ce9f75a090fa43f0e5b1",
+        "rgba_sha256": "d2a53bdf856f059295d590f352ef7e3bdb01d82b777c0219433b9dee01b157f1",
+        "bounds": [
+          244,
+          209,
+          304,
+          350
+        ],
+        "covered_pixels": 3606,
+        "transparent_pixels": 233015
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0010_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 11,
+      "main": {
+        "path": "assets/party_layers/006/frame_0011_main.png",
+        "sha256": "f94af542f104a8274b4931a1bca5d4bea1a6707705744d6371426b3f2267a857",
+        "rgba_sha256": "6e01b4d5d6ffa4934ac06e8b1a3629a00577cfcd4d7fac58a08c986109d239d3",
+        "bounds": [
+          245,
+          208,
+          303,
+          350
+        ],
+        "covered_pixels": 3584,
+        "transparent_pixels": 233037
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0011_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 12,
+      "main": {
+        "path": "assets/party_layers/006/frame_0012_main.png",
+        "sha256": "f3b5d4ddaf8f668d174ca50ea14af70cda4acee351fae863b03979cbe51790ad",
+        "rgba_sha256": "67656dcff715146caebb6adf8d588383fd8a4c2cb05b648ef05d0bac3db0476c",
+        "bounds": [
+          245,
+          208,
+          302,
+          350
+        ],
+        "covered_pixels": 3580,
+        "transparent_pixels": 233041
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0012_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 13,
+      "main": {
+        "path": "assets/party_layers/006/frame_0013_main.png",
+        "sha256": "0ed38625f8eea8e0c03dc27a215ea8e010e52ff3572fcca5d30ac3802cfead4f",
+        "rgba_sha256": "4919c0cc3028e3bac74d351ae27d8970b774b482b3bbed61cf45d04bde1d9487",
+        "bounds": [
+          245,
+          208,
+          301,
+          349
+        ],
+        "covered_pixels": 3598,
+        "transparent_pixels": 233023
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0013_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 14,
+      "main": {
+        "path": "assets/party_layers/006/frame_0014_main.png",
+        "sha256": "0ad15c66f6d71f6564def75a0bd34d84d30e9af3a7c2dde73e5d3ec3614cc9a1",
+        "rgba_sha256": "0659800e0bf500800d5f705149627ab5fac4725cf64e2276c98206664d2ef180",
+        "bounds": [
+          246,
+          208,
+          300,
+          349
+        ],
+        "covered_pixels": 3630,
+        "transparent_pixels": 232991
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0014_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 15,
+      "main": {
+        "path": "assets/party_layers/006/frame_0015_main.png",
+        "sha256": "b2f52576a8d2ea8ed042bddc6eade834b4e4d22255c8d3814225e3285a9966a9",
+        "rgba_sha256": "c5557630b2673e0196f4b44182b1f34852cd098aaa4bea81f64bdb1355e6a74b",
+        "bounds": [
+          245,
+          208,
+          300,
+          349
+        ],
+        "covered_pixels": 3677,
+        "transparent_pixels": 232944
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0015_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 16,
+      "main": {
+        "path": "assets/party_layers/006/frame_0016_main.png",
+        "sha256": "699e09b913babb52234883c66c29765e81b64bb02736823102c49cca56b79cfd",
+        "rgba_sha256": "2d297e972be772b64511c5f4e68f34f28fd682616e68ec350142dd44da580050",
+        "bounds": [
+          245,
+          208,
+          299,
+          349
+        ],
+        "covered_pixels": 3720,
+        "transparent_pixels": 232901
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0016_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 17,
+      "main": {
+        "path": "assets/party_layers/006/frame_0017_main.png",
+        "sha256": "ffeae03f924c30358f2e333584924c5a898fcbf0576739e3fe1289d69a7c070f",
+        "rgba_sha256": "b0c0f7dcad7115f37cb1149e1ad3667999d2e0c802af1ed45b1490fd5441947c",
+        "bounds": [
+          245,
+          208,
+          299,
+          349
+        ],
+        "covered_pixels": 3765,
+        "transparent_pixels": 232856
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0017_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 18,
+      "main": {
+        "path": "assets/party_layers/006/frame_0018_main.png",
+        "sha256": "94d8890ad43c9996594dca89fef831890d0fc8517a264b6aff0a236774981817",
+        "rgba_sha256": "0f83bf9fe2c967ef2fe0d8b6df3199ca8f8c56633fba87d2d21cf7fc283afa36",
+        "bounds": [
+          245,
+          208,
+          299,
+          349
+        ],
+        "covered_pixels": 3809,
+        "transparent_pixels": 232812
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0018_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 19,
+      "main": {
+        "path": "assets/party_layers/006/frame_0019_main.png",
+        "sha256": "8d555d6a103b6749b0fdfc846dd7b12d851fe049165ab2d917daa3418f87ba35",
+        "rgba_sha256": "8d3c79c9cdeb1680ffa282a48684c84938dd9d1b1d43d2eb7e4bc620f47de449",
+        "bounds": [
+          244,
+          208,
+          299,
+          349
+        ],
+        "covered_pixels": 3847,
+        "transparent_pixels": 232774
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0019_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 20,
+      "main": {
+        "path": "assets/party_layers/006/frame_0020_main.png",
+        "sha256": "915c58b65a8f7cc21bfec09b081c840db98656afd8f0833aa21bce3a9ef29f4b",
+        "rgba_sha256": "913dbaac9cc44e44a7372f9afeb67baf0c2533683f8865e16680e08a141c66b7",
+        "bounds": [
+          244,
+          208,
+          299,
+          349
+        ],
+        "covered_pixels": 3872,
+        "transparent_pixels": 232749
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0020_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 21,
+      "main": {
+        "path": "assets/party_layers/006/frame_0021_main.png",
+        "sha256": "7dc76040f235f31debc8feebdec316a8c50990f36160cd92b24db147ad97489c",
+        "rgba_sha256": "3b24934a940d1df5fd6eab51c1541b19151d7f7790c30c59b06cec1a8a8f254a",
+        "bounds": [
+          244,
+          208,
+          299,
+          349
+        ],
+        "covered_pixels": 3885,
+        "transparent_pixels": 232736
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0021_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 22,
+      "main": {
+        "path": "assets/party_layers/006/frame_0022_main.png",
+        "sha256": "a4eb2b4a6d8d883b9f3e44c4f68b2fa913c70ef637ca521a9bc5dafec071e9c7",
+        "rgba_sha256": "daa4e44165f5ec34d6ec4099b6aa26fd627481aaa0c5a44c0f3e503130bb2125",
+        "bounds": [
+          245,
+          208,
+          299,
+          349
+        ],
+        "covered_pixels": 3889,
+        "transparent_pixels": 232732
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0022_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 23,
+      "main": {
+        "path": "assets/party_layers/006/frame_0023_main.png",
+        "sha256": "5fef4daf110722f98a1bf3edd1a9220d2765df61ad303bb08c50b2bf81ced7b0",
+        "rgba_sha256": "8bc3fe43ab4a91a3f304c9a84dce6bdb5f0046b24c18a4ad2e237586d52481e7",
+        "bounds": [
+          245,
+          208,
+          299,
+          349
+        ],
+        "covered_pixels": 3885,
+        "transparent_pixels": 232736
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0023_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 24,
+      "main": {
+        "path": "assets/party_layers/006/frame_0024_main.png",
+        "sha256": "b38bc3aa5de9c1c9773e776cb38b65ae7b993cf27b8ed1fd886f74fb76d64a4b",
+        "rgba_sha256": "988556684bf74dce735aaf5df471edb61a95fbf24b0ac61ca48298bf17f2b94f",
+        "bounds": [
+          245,
+          208,
+          299,
+          349
+        ],
+        "covered_pixels": 3860,
+        "transparent_pixels": 232761
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0024_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 25,
+      "main": {
+        "path": "assets/party_layers/006/frame_0025_main.png",
+        "sha256": "4a1140491f759b29f4a270f48ad6c958b9469a527e681f7ba4cd5f4b9b60378c",
+        "rgba_sha256": "43de3405847d3b9f6b1ded926aecb9b4b42a4d2018517b4f78d4c179aaacf744",
+        "bounds": [
+          246,
+          208,
+          299,
+          349
+        ],
+        "covered_pixels": 3828,
+        "transparent_pixels": 232793
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0025_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 26,
+      "main": {
+        "path": "assets/party_layers/006/frame_0026_main.png",
+        "sha256": "d0dbee54b4d40d67143936d5a63e1269d99edfe65724e312a82fa0a181bcaa7d",
+        "rgba_sha256": "502b94bbc9b05891644bdd0ca3b0725b73ef2ba4ae510dceae16fcf2dbe67d6f",
+        "bounds": [
+          246,
+          208,
+          298,
+          349
+        ],
+        "covered_pixels": 3780,
+        "transparent_pixels": 232841
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0026_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 27,
+      "main": {
+        "path": "assets/party_layers/006/frame_0027_main.png",
+        "sha256": "a68478f3d0367f2afa246c14d70aa9b068345d84620f167277bc17c51c4695fb",
+        "rgba_sha256": "5867a18af2db1d163f47507b00447dd8228d7d002bbdd28d321ca2528d48f6d6",
+        "bounds": [
+          246,
+          208,
+          297,
+          349
+        ],
+        "covered_pixels": 3747,
+        "transparent_pixels": 232874
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0027_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 28,
+      "main": {
+        "path": "assets/party_layers/006/frame_0028_main.png",
+        "sha256": "b81d0886b334888bfaca967e5f5f3337d30ef62bd8381b95750f55ca36cddb2e",
+        "rgba_sha256": "ca176ac28ccbd38e993c228c3d138ec0e8375ba04f2a4346682e0e9246d37f1f",
+        "bounds": [
+          246,
+          208,
+          297,
+          349
+        ],
+        "covered_pixels": 3722,
+        "transparent_pixels": 232899
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0028_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 29,
+      "main": {
+        "path": "assets/party_layers/006/frame_0029_main.png",
+        "sha256": "fc2675a3b91abdbe3093eae417b4bfecf70c3cae602a51c6dc452a5e2efaf276",
+        "rgba_sha256": "85bcaba97647395d5865fce4bb4f11fedd89a5a899919442733af10323158906",
+        "bounds": [
+          246,
+          208,
+          298,
+          349
+        ],
+        "covered_pixels": 3715,
+        "transparent_pixels": 232906
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0029_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 30,
+      "main": {
+        "path": "assets/party_layers/006/frame_0030_main.png",
+        "sha256": "63a06b0a837d3824ad7786535234bd7e589452be2d2229050fab576644e2cee9",
+        "rgba_sha256": "5c3c54db96ecb6e71ea6050c18b40dde090f08271e5d8118cc4a830cb8cf7fe7",
+        "bounds": [
+          245,
+          208,
+          299,
+          349
+        ],
+        "covered_pixels": 3726,
+        "transparent_pixels": 232895
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0030_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 31,
+      "main": {
+        "path": "assets/party_layers/006/frame_0031_main.png",
+        "sha256": "e65a9108c4762d9cb941b1becf4c6fceb0f1d8c1bbb8994c59a9ba0cf1442485",
+        "rgba_sha256": "450b9c195a74260665cac731384100c14572f127498c09c9464555c76a082812",
+        "bounds": [
+          245,
+          208,
+          301,
+          349
+        ],
+        "covered_pixels": 3738,
+        "transparent_pixels": 232883
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0031_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 32,
+      "main": {
+        "path": "assets/party_layers/006/frame_0032_main.png",
+        "sha256": "5bc752d516146330cbc0fd67d719a1e1ca88f77d08888acf5780b29c80a42169",
+        "rgba_sha256": "62d185fe8177d1d86999e2247d92c0024760c735d719d839d215bebf09360644",
+        "bounds": [
+          244,
+          208,
+          302,
+          349
+        ],
+        "covered_pixels": 3734,
+        "transparent_pixels": 232887
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0032_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 33,
+      "main": {
+        "path": "assets/party_layers/006/frame_0033_main.png",
+        "sha256": "17bc99d3016692ef6f96cfa0dfaa0fcf370ef330fc91050b56663eb25bae8b93",
+        "rgba_sha256": "59ba68674382656cd560663478b285dd3734bdbb03b5477092b94f5e97f1bf04",
+        "bounds": [
+          244,
+          209,
+          303,
+          349
+        ],
+        "covered_pixels": 3736,
+        "transparent_pixels": 232885
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0033_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 34,
+      "main": {
+        "path": "assets/party_layers/006/frame_0034_main.png",
+        "sha256": "d1e3145816f8a538bf9a40b8adb77f2a5490e1eaef1d82a4c3da6658ddf9c87d",
+        "rgba_sha256": "c056a43711c4dd088caa202e989383de5467581cb09fc3256ba7e7ccd3b74fa8",
+        "bounds": [
+          244,
+          209,
+          304,
+          349
+        ],
+        "covered_pixels": 3720,
+        "transparent_pixels": 232901
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0034_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 35,
+      "main": {
+        "path": "assets/party_layers/006/frame_0035_main.png",
+        "sha256": "d460d858ae72b9aafb8b8c0585b75935016da27042306196c6aa313b7a7a4028",
+        "rgba_sha256": "d1981ef0b659c782664717c28160b25b00ccf95f012c609d3e57d51b697480e0",
+        "bounds": [
+          244,
+          209,
+          304,
+          349
+        ],
+        "covered_pixels": 3702,
+        "transparent_pixels": 232919
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0035_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 36,
+      "main": {
+        "path": "assets/party_layers/006/frame_0036_main.png",
+        "sha256": "e060807919d12f9eabff6e5168ee4f5ff76e5085b1282e4a6bfcf59ed2499ed3",
+        "rgba_sha256": "c487620c8175827a600c429001b592207e6e27a167e094b9d6ddae73e0e60362",
+        "bounds": [
+          244,
+          209,
+          304,
+          349
+        ],
+        "covered_pixels": 3686,
+        "transparent_pixels": 232935
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0036_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 37,
+      "main": {
+        "path": "assets/party_layers/006/frame_0037_main.png",
+        "sha256": "3649e7fd86d8c26c778d10e4eaa725d608c07bf1af5d190e1c6ed6dd0c40831f",
+        "rgba_sha256": "871179b449701b76ef055651b81d6ed6d94ad55a92b8f7287d9f3562691e8f37",
+        "bounds": [
+          245,
+          209,
+          303,
+          349
+        ],
+        "covered_pixels": 3674,
+        "transparent_pixels": 232947
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0037_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 38,
+      "main": {
+        "path": "assets/party_layers/006/frame_0038_main.png",
+        "sha256": "630f7d899c7b3227bce02bd97c9d2f06aca8639cd70f33869a901ea0da5b3fcd",
+        "rgba_sha256": "9de857ae412548abc4d17dc028b02d0cb9b6820b777651c1243f096fa908f4e4",
+        "bounds": [
+          245,
+          209,
+          302,
+          350
+        ],
+        "covered_pixels": 3657,
+        "transparent_pixels": 232964
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0038_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 39,
+      "main": {
+        "path": "assets/party_layers/006/frame_0039_main.png",
+        "sha256": "acbe5ffa832cc31060bdf3eb4235ef08b99336a5cc70deff233c7b26ae028064",
+        "rgba_sha256": "c72da5345b3c50ec69b7a1e1a099a0c031f01da1276caf79a1a6126f409b71ec",
+        "bounds": [
+          245,
+          209,
+          300,
+          350
+        ],
+        "covered_pixels": 3646,
+        "transparent_pixels": 232975
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0039_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 40,
+      "main": {
+        "path": "assets/party_layers/006/frame_0040_main.png",
+        "sha256": "d69334498afeed03fe8831a412490f513f2b061db7db1d3fa61b3662dedd4387",
+        "rgba_sha256": "402b2505f38c080f9982562de3fef2160890c48af5d3735ac65f0a765727fb5c",
+        "bounds": [
+          235,
+          251,
+          313,
+          349
+        ],
+        "covered_pixels": 3522,
+        "transparent_pixels": 233099
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0040_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 41,
+      "main": {
+        "path": "assets/party_layers/006/frame_0041_main.png",
+        "sha256": "e051758c658e95856a122ab769896bae0521fc884778851b2c04adbfdd6aca35",
+        "rgba_sha256": "fcaaa3ed163b1d3bd01ad2917f7d057b5eba34bfff7dd5fc275ea246a5ece7a9",
+        "bounds": [
+          256,
+          220,
+          348,
+          350
+        ],
+        "covered_pixels": 4262,
+        "transparent_pixels": 232359
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0041_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 42,
+      "main": {
+        "path": "assets/party_layers/006/frame_0042_main.png",
+        "sha256": "b403ec7494759ec063c8a153f75d30276c64d4ca6324f1d1e73d6cff6850708a",
+        "rgba_sha256": "bfcfe3bbb232c7ffa1744e9884289dc99edfd558a5e69729f41f5164cee38749",
+        "bounds": [
+          256,
+          218,
+          344,
+          350
+        ],
+        "covered_pixels": 4255,
+        "transparent_pixels": 232366
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0042_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 43,
+      "main": {
+        "path": "assets/party_layers/006/frame_0043_main.png",
+        "sha256": "a0c5e6a31455052958957dc388a49d65353050115fe47286f1da10089c7a3b51",
+        "rgba_sha256": "25972b7fae44be66b7c58c92a90ac7aa1ae6936f485feaad89756a6e5f908355",
+        "bounds": [
+          256,
+          215,
+          341,
+          350
+        ],
+        "covered_pixels": 4221,
+        "transparent_pixels": 232400
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0043_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 44,
+      "main": {
+        "path": "assets/party_layers/006/frame_0044_main.png",
+        "sha256": "ae611dd62e5b39bbb124df4ae7da2a53b226a79ce3e545dbfae600a1f17d6bc4",
+        "rgba_sha256": "bfcf697d5fdd07ea26d5533ff702bf8e9eac9f8095998df75b67d7511e6fcb02",
+        "bounds": [
+          252,
+          212,
+          327,
+          350
+        ],
+        "covered_pixels": 4193,
+        "transparent_pixels": 232428
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0044_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 45,
+      "main": {
+        "path": "assets/party_layers/006/frame_0045_main.png",
+        "sha256": "2d25906205b4ae0521abe48217bb362133a106b48f2ba12143ef50862de59d42",
+        "rgba_sha256": "1ec439f0736ef7b3d254f7d5efe5ef5a42ad7fc126e55d4e0271077d765cc251",
+        "bounds": [
+          248,
+          210,
+          313,
+          350
+        ],
+        "covered_pixels": 4203,
+        "transparent_pixels": 232418
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0045_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 46,
+      "main": {
+        "path": "assets/party_layers/006/frame_0046_main.png",
+        "sha256": "5e611f669b2be9ac789b361dfe1f4605e9ceca20acd843572063c23858433062",
+        "rgba_sha256": "929c4e9cc8368a49d7d99e3d9f7fbe871b28181f5155ada79bdd180d9db88cc8",
+        "bounds": [
+          228,
+          247,
+          311,
+          338
+        ],
+        "covered_pixels": 3296,
+        "transparent_pixels": 233325
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0046_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 47,
+      "main": {
+        "path": "assets/party_layers/006/frame_0047_main.png",
+        "sha256": "a854365e09a62d292ad023a5d86875f96678f6ef48842230dee19ab1310de38b",
+        "rgba_sha256": "e937302b3a5ec07a31deb2420d91eb8ef7417f7f511dd63bdc03b1e4bf6fe8eb",
+        "bounds": [
+          222,
+          204,
+          325,
+          306
+        ],
+        "covered_pixels": 4214,
+        "transparent_pixels": 232407
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0047_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 48,
+      "main": {
+        "path": "assets/party_layers/006/frame_0048_main.png",
+        "sha256": "ee8e05c0fd267179d912972171107835a56343c315d2574b7a9ad30a3a56055a",
+        "rgba_sha256": "41a74443a2fb48e071427129c102c98a567ec427e993d9dd310cd97e6a7af286",
+        "bounds": [
+          205,
+          228,
+          333,
+          298
+        ],
+        "covered_pixels": 3788,
+        "transparent_pixels": 232833
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0048_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 49,
+      "main": {
+        "path": "assets/party_layers/006/frame_0049_main.png",
+        "sha256": "921d09870d30d70ba0c33b8c9abae8904c4fa39844faa0c8d534ef55ff46dcdc",
+        "rgba_sha256": "ea0e5c17b2d02df50046d26b3eca3d1bd2151d713c9f747f89e6f5d56e1f0a25",
+        "bounds": [
+          198,
+          242,
+          332,
+          310
+        ],
+        "covered_pixels": 3741,
+        "transparent_pixels": 232880
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0049_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 50,
+      "main": {
+        "path": "assets/party_layers/006/frame_0050_main.png",
+        "sha256": "f185e62a49ab4fb002a3777610dbeff4c569a9b8352f7e17807579110554acec",
+        "rgba_sha256": "0caad4d87014858edb0e31e6a2a1cb5ccc19aa34476582db925f3a336da4c8b2",
+        "bounds": [
+          205,
+          253,
+          341,
+          328
+        ],
+        "covered_pixels": 3574,
+        "transparent_pixels": 233047
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0050_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 51,
+      "main": {
+        "path": "assets/party_layers/006/frame_0051_main.png",
+        "sha256": "d91945a5bc0e0d7d9ee426d7fae81fadf4508b7dbb1e65bb45cb430342f4d671",
+        "rgba_sha256": "a376f2762f5246080dc33bda5a8cfcfcb38c79dff5d2ddac57e2d07559363d40",
+        "bounds": [
+          205,
+          271,
+          340,
+          348
+        ],
+        "covered_pixels": 3631,
+        "transparent_pixels": 232990
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0051_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 52,
+      "main": {
+        "path": "assets/party_layers/006/frame_0052_main.png",
+        "sha256": "c597cbaff70302e961506165cbe4ab8e5d0758ec3fb915a6daafcf7d4e8294e7",
+        "rgba_sha256": "a0d69bd9070744633cebf9652c6242b6c8b138f896897308b92e36b3d661bce1",
+        "bounds": [
+          218,
+          261,
+          317,
+          346
+        ],
+        "covered_pixels": 4107,
+        "transparent_pixels": 232514
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0052_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 53,
+      "main": {
+        "path": "assets/party_layers/006/frame_0053_main.png",
+        "sha256": "bf6af31ae2479d398bdec41da264f2cb82f6068b08e6ac0d2889b142c136ea64",
+        "rgba_sha256": "88b9ab4656109331132bef871e911d0665859108c50dd32db4788f51e9f26f31",
+        "bounds": [
+          212,
+          272,
+          326,
+          344
+        ],
+        "covered_pixels": 3892,
+        "transparent_pixels": 232729
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0053_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 54,
+      "main": {
+        "path": "assets/party_layers/006/frame_0054_main.png",
+        "sha256": "359c73ec620d5a6deb224c847be754aa7098233f0b07883930405f3371f07b7e",
+        "rgba_sha256": "efa438f492a6face9a4a05f058d0c49470639e8671a52cceaf80b2f4fb1303ae",
+        "bounds": [
+          204,
+          284,
+          338,
+          343
+        ],
+        "covered_pixels": 3647,
+        "transparent_pixels": 232974
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0054_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 55,
+      "main": {
+        "path": "assets/party_layers/006/frame_0055_main.png",
+        "sha256": "423e8800baa7c2e1c16e78dfddd86517c697ce2c769d45a5ef145921840d3d8b",
+        "rgba_sha256": "10e2fcfe9068db0a5e7ed95d70d9a66b01657d4164d0460263971db3a0ba1c62",
+        "bounds": [
+          199,
+          305,
+          342,
+          343
+        ],
+        "covered_pixels": 3253,
+        "transparent_pixels": 233368
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0055_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 65,
+      "main": {
+        "path": "assets/party_layers/006/frame_0065_main.png",
+        "sha256": "f91c8e25fecda8d89594d39b549e9c9c5e4b49e1c953134ed615b8f976214e7f",
+        "rgba_sha256": "e8c1cff75edbe26408aa96eefed1421bd4728ffb90592c265457d4afdb044f79",
+        "bounds": [
+          254,
+          213,
+          318,
+          349
+        ],
+        "covered_pixels": 4142,
+        "transparent_pixels": 232479
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0065_intrinsic.png",
+        "sha256": "e3c86d1c21e16e05a9c10d35c78b18ea71c05af2679de891c747ce5589f91771",
+        "rgba_sha256": "dfd4b39cb82939ff17ed5518e12ca55842107f891fc496475055a31121e03817",
+        "bounds": [
+          205,
+          150,
+          334,
+          356
+        ],
+        "covered_pixels": 13609,
+        "transparent_pixels": 223012,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 66,
+      "main": {
+        "path": "assets/party_layers/006/frame_0066_main.png",
+        "sha256": "ce66ca64fa375349a18577e95691a8f216cf0deb8dd561c9af9175bee1c41829",
+        "rgba_sha256": "45f8ca92b2284af7ce71859607ff965362c3f13551b849e94451a1c9c948be8f",
+        "bounds": [
+          258,
+          213,
+          319,
+          349
+        ],
+        "covered_pixels": 3883,
+        "transparent_pixels": 232738
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0066_intrinsic.png",
+        "sha256": "53413635e832fb805fa703f2c5fc0416e34f4f731a29e0a0c06c39e03e40d5bd",
+        "rgba_sha256": "178fafd841b28b4ac7c443f2a0c29eafa8b25be4bcaf27edddfb4e03643c0a6f",
+        "bounds": [
+          206,
+          132,
+          356,
+          373
+        ],
+        "covered_pixels": 22184,
+        "transparent_pixels": 214437,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 67,
+      "main": {
+        "path": "assets/party_layers/006/frame_0067_main.png",
+        "sha256": "be4bdb5e62085aa83eced510b0f4764be43bb47021cfd180c2940405afb15caf",
+        "rgba_sha256": "98d44da3370141d741308cc60215838ebc2473e4489181e795616d3e57a123d7",
+        "bounds": [
+          258,
+          212,
+          326,
+          349
+        ],
+        "covered_pixels": 3945,
+        "transparent_pixels": 232676
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0067_intrinsic.png",
+        "sha256": "09273943fc21c2a570703e51509cf8d367ec76d6c57e6c92840c77da46449470",
+        "rgba_sha256": "1575f559a1a476eb67e79daddba9952b96084e7b270af327f01e3eac76f43791",
+        "bounds": [
+          204,
+          112,
+          421,
+          403
+        ],
+        "covered_pixels": 35608,
+        "transparent_pixels": 201013,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 68,
+      "main": {
+        "path": "assets/party_layers/006/frame_0068_main.png",
+        "sha256": "44f464ae973452312ffc7adb89f2328f5e2877aa729f0e0f3c4b879216fe2cf9",
+        "rgba_sha256": "608c1916af817c1873e64c8b8567bc832a161dbe30f6aaac9dc213eea72485e9",
+        "bounds": [
+          251,
+          211,
+          332,
+          349
+        ],
+        "covered_pixels": 4222,
+        "transparent_pixels": 232399
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0068_intrinsic.png",
+        "sha256": "85785da096bed6c2fb88f94c0b7c3beaadd803e94d8323fde9b7e6863aaeb4c0",
+        "rgba_sha256": "4c77c2444ef45e936f61c8191bda2f8aaebc39969550daced9bd732b37920894",
+        "bounds": [
+          205,
+          89,
+          493,
+          407
+        ],
+        "covered_pixels": 50327,
+        "transparent_pixels": 186294,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 69,
+      "main": {
+        "path": "assets/party_layers/006/frame_0069_main.png",
+        "sha256": "0bcd069f2f252306c0a736711924ec3cb663b594d572ea3115b9587e2574dcfb",
+        "rgba_sha256": "f12bd737a229c66b4fd91fbcf5d9bd41ead2cbbe14116f82167ef99a8340a658",
+        "bounds": [
+          239,
+          210,
+          323,
+          349
+        ],
+        "covered_pixels": 4285,
+        "transparent_pixels": 232336
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0069_intrinsic.png",
+        "sha256": "195f23eb2c3214852cf9eb169657ed4057dfd16f56d45f3fa955ce9074c53236",
+        "rgba_sha256": "cf82bd098a54f8e1e36032c1c8e26fc0b08ce794de150762ac1d821418a3c77f",
+        "bounds": [
+          206,
+          66,
+          521,
+          413
+        ],
+        "covered_pixels": 53565,
+        "transparent_pixels": 183056,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 70,
+      "main": {
+        "path": "assets/party_layers/006/frame_0070_main.png",
+        "sha256": "3d4e2452a76c4c9d6c64c3befd3ee12efdc1d567dff05e64362891976cc8807a",
+        "rgba_sha256": "b19c14c5ef272da09f809385d4e75007b79e1425f2c22da3b1c1caa14b23f3d5",
+        "bounds": [
+          236,
+          209,
+          312,
+          350
+        ],
+        "covered_pixels": 4204,
+        "transparent_pixels": 232417
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0070_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 71,
+      "main": {
+        "path": "assets/party_layers/006/frame_0071_main.png",
+        "sha256": "2275d48c6d322b56f385305c906ae39878bd8f1531378bf54e3e828c2a08c242",
+        "rgba_sha256": "c53592acd9d96691a81e396f98906bb73cc5a3985b139925c961596c0e4688c2",
+        "bounds": [
+          244,
+          215,
+          327,
+          348
+        ],
+        "covered_pixels": 3990,
+        "transparent_pixels": 232631
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0071_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 72,
+      "main": {
+        "path": "assets/party_layers/006/frame_0072_main.png",
+        "sha256": "e5df692614068648bc8fde23f463f380a2ca20c15f21ffada483b28e7c7aecf0",
+        "rgba_sha256": "8045699b2f6e95be3864938ab166da7827f9de25d439ecb9a37bc28600a78630",
+        "bounds": [
+          253,
+          232,
+          335,
+          346
+        ],
+        "covered_pixels": 3410,
+        "transparent_pixels": 233211
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0072_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 73,
+      "main": {
+        "path": "assets/party_layers/006/frame_0073_main.png",
+        "sha256": "dcba7365ee2a4b478c86e2a0214e3ec4809387db25e52b6ad1b1e16a04f46b45",
+        "rgba_sha256": "3f10762805cddcd25883b0d8d116b1530a532b317aad1bc8fbb8122b6a2b307f",
+        "bounds": [
+          260,
+          250,
+          355,
+          346
+        ],
+        "covered_pixels": 3451,
+        "transparent_pixels": 233170
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0073_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 74,
+      "main": {
+        "path": "assets/party_layers/006/frame_0074_main.png",
+        "sha256": "ec369214524eb9f888b972baf1cea8741fdeb4019e48accf5568cd45583e5022",
+        "rgba_sha256": "d1b850e9d09dadde4a933619c1fec8577914b9ec6d73d45853f99b0f97c2c1d5",
+        "bounds": [
+          239,
+          254,
+          345,
+          348
+        ],
+        "covered_pixels": 3825,
+        "transparent_pixels": 232796
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0074_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 75,
+      "main": {
+        "path": "assets/party_layers/006/frame_0075_main.png",
+        "sha256": "1d13016caebe8baa31aff75f105463d247fe94fac2a9b8e4d979f1e099f5c3f0",
+        "rgba_sha256": "ca4c55a2b7e2053d0f0acb9308062f058626b234cb67d0817b32dca7d11bb388",
+        "bounds": [
+          197,
+          260,
+          291,
+          348
+        ],
+        "covered_pixels": 3328,
+        "transparent_pixels": 233293
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0075_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 76,
+      "main": {
+        "path": "assets/party_layers/006/frame_0076_main.png",
+        "sha256": "9b1ab91ee23b2b77ae670ba43fe94da9bc775d4f3cabfefc576c903d2f7a4241",
+        "rgba_sha256": "99aee45420ac8da86ebbd17c280926c8ac0f0cfeb060f46840b28cfe22a1d6fe",
+        "bounds": [
+          196,
+          237,
+          288,
+          349
+        ],
+        "covered_pixels": 4045,
+        "transparent_pixels": 232576
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0076_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 77,
+      "main": {
+        "path": "assets/party_layers/006/frame_0077_main.png",
+        "sha256": "32425332bccc0f66ee0efac7345bf65e3a1aa0ee1803fcc1e2da11c66a00daf6",
+        "rgba_sha256": "cdd9254ce73d912fc0af62d9c46f6d74c42c175ce3c7511b043493b42a3c142a",
+        "bounds": [
+          228,
+          217,
+          284,
+          349
+        ],
+        "covered_pixels": 3998,
+        "transparent_pixels": 232623
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0077_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 78,
+      "main": {
+        "path": "assets/party_layers/006/frame_0078_main.png",
+        "sha256": "8e68ad57d2343bdfb36602289542198ebc4a7efabadcadbaac6960f1d346e482",
+        "rgba_sha256": "8618d4703a9d72cd3171638bd6d50bc4bfd6372d67dab393c1786c1fd45e1fef",
+        "bounds": [
+          241,
+          211,
+          307,
+          350
+        ],
+        "covered_pixels": 3903,
+        "transparent_pixels": 232718
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0078_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 79,
+      "main": {
+        "path": "assets/party_layers/006/frame_0079_main.png",
+        "sha256": "35e7b424fe2fa46c9597ffb2437e747a2403220a3d7b07f96c5a7a4ed586946a",
+        "rgba_sha256": "34b7b4b53779453c3430a804c8e4f8548fec7f3e6a0aa9c563afd7ce418bb14d",
+        "bounds": [
+          230,
+          230,
+          314,
+          350
+        ],
+        "covered_pixels": 3749,
+        "transparent_pixels": 232872
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0079_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 80,
+      "main": {
+        "path": "assets/party_layers/006/frame_0080_main.png",
+        "sha256": "5fd7a5e8466dc0dee68fea88e1433efe48b3c1b2685d2e634d900c400ad1420a",
+        "rgba_sha256": "2491cf4164edafaa5f1cd73f7826631f8285c6857e36d0257bc5242ca61fbcea",
+        "bounds": [
+          226,
+          258,
+          325,
+          350
+        ],
+        "covered_pixels": 3626,
+        "transparent_pixels": 232995
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0080_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 81,
+      "main": {
+        "path": "assets/party_layers/006/frame_0081_main.png",
+        "sha256": "804320555f1dca39d702ef57aa7ee48cdaf66d892322b875ac387457c9984782",
+        "rgba_sha256": "1fc23fcd1c2cb20f57d8e9e7294df64b66108a2c255be3d6a90f2bf2059b56a1",
+        "bounds": [
+          245,
+          246,
+          318,
+          349
+        ],
+        "covered_pixels": 3658,
+        "transparent_pixels": 232963
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0081_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 82,
+      "main": {
+        "path": "assets/party_layers/006/frame_0082_main.png",
+        "sha256": "6fbdf282a42ed55e44ca04ba133abdeeaa0cb5cf65f393bcd9b5be7614d4c019",
+        "rgba_sha256": "78d73fc1a316ebe4049cc17e8d8bea6274af232c2cc0730f7226c4604cefcf49",
+        "bounds": [
+          259,
+          247,
+          346,
+          344
+        ],
+        "covered_pixels": 3340,
+        "transparent_pixels": 233281
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0082_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 83,
+      "main": {
+        "path": "assets/party_layers/006/frame_0083_main.png",
+        "sha256": "c8dd1dcba32da0e47c8f6fb62a8d2bb9b52230829650230f539e5853ffad4a01",
+        "rgba_sha256": "8ded9000072729cbb37ae07fec91b9b714d32f88354df77d45c5f7f84436eca3",
+        "bounds": [
+          249,
+          238,
+          329,
+          345
+        ],
+        "covered_pixels": 3315,
+        "transparent_pixels": 233306
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0083_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 84,
+      "main": {
+        "path": "assets/party_layers/006/frame_0084_main.png",
+        "sha256": "c970a35a157b003205d7102b96777bfbb6a231d55a2ae441d90d7477f4f5f201",
+        "rgba_sha256": "cee736562887b67d51447009306f2242547f2f2e1e785f19dbf30efa1bfd206b",
+        "bounds": [
+          232,
+          222,
+          307,
+          347
+        ],
+        "covered_pixels": 4223,
+        "transparent_pixels": 232398
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0084_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 85,
+      "main": {
+        "path": "assets/party_layers/006/frame_0085_main.png",
+        "sha256": "632f542330aabf432133575107870aff65df92489fbce0d873cf34c67a718252",
+        "rgba_sha256": "84a612ec230189ecff1521796eb9dd623eabb0489ad53985fda1e72c1266b78b",
+        "bounds": [
+          199,
+          263,
+          333,
+          341
+        ],
+        "covered_pixels": 3793,
+        "transparent_pixels": 232828
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0085_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 86,
+      "main": {
+        "path": "assets/party_layers/006/frame_0086_main.png",
+        "sha256": "779eacfce18552c32ab42c5992087b1455aa7152e7763e73eb44abd8c9b6267e",
+        "rgba_sha256": "0bbfdb2ee8262f462774d1c7585056614f26392f1385f7fac67fc5870fe42d77",
+        "bounds": [
+          199,
+          267,
+          333,
+          341
+        ],
+        "covered_pixels": 3804,
+        "transparent_pixels": 232817
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0086_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 87,
+      "main": {
+        "path": "assets/party_layers/006/frame_0087_main.png",
+        "sha256": "0ae82b289f6ef04dde8ac8fe2b8d180e0dffe974d2e3430794c54b766b287a3b",
+        "rgba_sha256": "a2203b39a40d74eb6bf82f84c617972ff68abdba6d4f013061226b1b367320e0",
+        "bounds": [
+          199,
+          267,
+          333,
+          341
+        ],
+        "covered_pixels": 3823,
+        "transparent_pixels": 232798
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0087_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 88,
+      "main": {
+        "path": "assets/party_layers/006/frame_0088_main.png",
+        "sha256": "abf1d5631822054e553a56da5f73fbed3e3f956bce86ad1882c41e37315e2017",
+        "rgba_sha256": "05acdf127bb781257abe5724a9def96503c1562dd3aaa3bd23336b376291de30",
+        "bounds": [
+          228,
+          229,
+          334,
+          339
+        ],
+        "covered_pixels": 3466,
+        "transparent_pixels": 233155
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0088_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 89,
+      "main": {
+        "path": "assets/party_layers/006/frame_0089_main.png",
+        "sha256": "bbfba176f602dcb0496f12a446c3e9612f00e82ac3e1734680410f55e00eaf66",
+        "rgba_sha256": "9924049b77d793d169a9b28231aed4b64322a73cf75a5dd7d766b70e83be9ffc",
+        "bounds": [
+          228,
+          229,
+          334,
+          339
+        ],
+        "covered_pixels": 3531,
+        "transparent_pixels": 233090
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0089_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 90,
+      "main": {
+        "path": "assets/party_layers/006/frame_0090_main.png",
+        "sha256": "bad4191b30b65c22ae8f9addf510bccb3e1d528eeb997d4a8c762e1eb55e55b8",
+        "rgba_sha256": "8391454fe2e2300a9ed02003a111765fe5420b220385fa2ccb5e609ab6441deb",
+        "bounds": [
+          228,
+          229,
+          334,
+          339
+        ],
+        "covered_pixels": 3579,
+        "transparent_pixels": 233042
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0090_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 118,
+      "main": {
+        "path": "assets/party_layers/006/frame_0118_main.png",
+        "sha256": "b04ce968d1aa4f3e59eedabb0782ded76057e036a17cb11ce619ec9d5dbd67d8",
+        "rgba_sha256": "2a90b1140c91de302fea035b8f7a2c4c2440cc25ccd921e9ef043e2913abf9b8",
+        "bounds": [
+          230,
+          208,
+          292,
+          349
+        ],
+        "covered_pixels": 4327,
+        "transparent_pixels": 232294
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0118_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 119,
+      "main": {
+        "path": "assets/party_layers/006/frame_0119_main.png",
+        "sha256": "dcab8286e3cd463b8a5f5e86a40b70c0137ac2c4bc42764c98e9db7b7a4a1596",
+        "rgba_sha256": "753af365f51cd1c0b66c4e80f956b5ee1ded1b28bcca0233528cd203a895bc8d",
+        "bounds": [
+          227,
+          209,
+          289,
+          349
+        ],
+        "covered_pixels": 4066,
+        "transparent_pixels": 232555
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0119_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 120,
+      "main": {
+        "path": "assets/party_layers/006/frame_0120_main.png",
+        "sha256": "19ca179c223c5b5f8c8cfa9a212a487e7344d6d13e882c97ddb237eca96ebe19",
+        "rgba_sha256": "597205447d75380e7e1775afe5d94522758cad759c70823405125a65a0bedec6",
+        "bounds": [
+          224,
+          210,
+          291,
+          348
+        ],
+        "covered_pixels": 3673,
+        "transparent_pixels": 232948
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0120_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 121,
+      "main": {
+        "path": "assets/party_layers/006/frame_0121_main.png",
+        "sha256": "177cfcc2a5ec2da602a34864309eaac420ed0c100a04ebb9bd60c8be5c285f29",
+        "rgba_sha256": "35723f2562f9e445e13183ed3b4f26fc248b3b92ebc584039822db876e3ef0d4",
+        "bounds": [
+          227,
+          213,
+          293,
+          348
+        ],
+        "covered_pixels": 3878,
+        "transparent_pixels": 232743
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0121_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 122,
+      "main": {
+        "path": "assets/party_layers/006/frame_0122_main.png",
+        "sha256": "5ed914f052e0b5f869ee99a48b9ddfd80aa1457266d374e377938bffbcbd9918",
+        "rgba_sha256": "612af59c20be2032af1aa38372ec4859481918dc93a78544eea0bdca1d417582",
+        "bounds": [
+          213,
+          213,
+          288,
+          345
+        ],
+        "covered_pixels": 4023,
+        "transparent_pixels": 232598
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0122_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 123,
+      "main": {
+        "path": "assets/party_layers/006/frame_0123_main.png",
+        "sha256": "738aeaafb176c829f2fcffc9063e4b3741c9e0b90574030cd0d40136a4e1bc1a",
+        "rgba_sha256": "e22ff3f2dfe55a1e3e26e79fed918145379a224505ec740af94758f4d9fd8fa4",
+        "bounds": [
+          225,
+          213,
+          288,
+          345
+        ],
+        "covered_pixels": 3507,
+        "transparent_pixels": 233114
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0123_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 124,
+      "main": {
+        "path": "assets/party_layers/006/frame_0124_main.png",
+        "sha256": "7f2ad3709d876277c7536ddb9d0a776f0e09ecc26157fa3bbec23482085a2d85",
+        "rgba_sha256": "075095e8c86071edd8d6d7a2c59b8ff08a6ac7ecb73f1a7e0d1ccd94eeba542a",
+        "bounds": [
+          193,
+          217,
+          287,
+          345
+        ],
+        "covered_pixels": 4081,
+        "transparent_pixels": 232540
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0124_intrinsic.png",
+        "sha256": "e03d993b5a27b17adbe0e16aceb54cab8b3862257e6a5f590ea92c899ef0f26c",
+        "rgba_sha256": "c314296220247fa2b37795505553be70fe264b7875dd75a8f867cc078b54bc92",
+        "bounds": [
+          49,
+          235,
+          313,
+          344
+        ],
+        "covered_pixels": 10457,
+        "transparent_pixels": 226164,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 125,
+      "main": {
+        "path": "assets/party_layers/006/frame_0125_main.png",
+        "sha256": "6a40d74f4f23a0f9c19c3ed1606a83a3f73f6c9328842a39dde445b1ee3a3119",
+        "rgba_sha256": "0146fe743dca1ac4ff9b0a01b9a84dc3d940e4991a6ef11afdbc53a28bece111",
+        "bounds": [
+          203,
+          214,
+          281,
+          345
+        ],
+        "covered_pixels": 3501,
+        "transparent_pixels": 233120
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0125_intrinsic.png",
+        "sha256": "5c2fd9eb176d5dbe54b53ebe6b8a563e27750815ca156ea3ddbf97a1308acb90",
+        "rgba_sha256": "234984ed963d718787f2b34fe35979a631333b6f6317d070ebcc3c2efd2c704a",
+        "bounds": [
+          49,
+          254,
+          326,
+          345
+        ],
+        "covered_pixels": 6465,
+        "transparent_pixels": 230156,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 126,
+      "main": {
+        "path": "assets/party_layers/006/frame_0126_main.png",
+        "sha256": "f386743023d8c9f2071d5e2ec5f4ad77b14268e828cb05fa85867c3fc014e85e",
+        "rgba_sha256": "44952c726f9771c0129bc29f480d4f5a304b8c66a410bf76ca9b6ed941b06928",
+        "bounds": [
+          225,
+          210,
+          280,
+          349
+        ],
+        "covered_pixels": 3219,
+        "transparent_pixels": 233402
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0126_intrinsic.png",
+        "sha256": "383d8756d191c9bba195ae55df89dddc29d83d18123494141d9c1d891d375660",
+        "rgba_sha256": "d42ceffd4d9d2a49fb142e76e952d94a9b4397481bc3c86cef70836460bebade",
+        "bounds": [
+          48,
+          262,
+          312,
+          341
+        ],
+        "covered_pixels": 4076,
+        "transparent_pixels": 232545,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 127,
+      "main": {
+        "path": "assets/party_layers/006/frame_0127_main.png",
+        "sha256": "d62db9bdfeca0e54e85708efbe1a0505c86913b1ec553192f44756234534c808",
+        "rgba_sha256": "8df8920b267db8a5a2832f68eb0401e3f48fba0f823f65352a6996ff492ac651",
+        "bounds": [
+          227,
+          208,
+          287,
+          347
+        ],
+        "covered_pixels": 3429,
+        "transparent_pixels": 233192
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0127_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 128,
+      "main": {
+        "path": "assets/party_layers/006/frame_0128_main.png",
+        "sha256": "773b79b337e7265fca3651cb9690866d1199b0b8f181f32daec88df00b04e3c1",
+        "rgba_sha256": "f4ec9c25caddf6d96bea726ce0075701e62ab595d18e8a4362e862d493c73500",
+        "bounds": [
+          240,
+          208,
+          296,
+          348
+        ],
+        "covered_pixels": 3882,
+        "transparent_pixels": 232739
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0128_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 273,
+      "main": {
+        "path": "assets/party_layers/006/frame_0273_main.png",
+        "sha256": "b566791c75c4e53e35ce34eaf8dea1463cbf0f9de11183b075eea0f2811b02a2",
+        "rgba_sha256": "688cf58fa32b8a7d99e4a288f7385e9023c4f2bcdc672cbb578bccd6a0c29115",
+        "bounds": [
+          237,
+          215,
+          304,
+          350
+        ],
+        "covered_pixels": 4244,
+        "transparent_pixels": 232377
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0273_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 274,
+      "main": {
+        "path": "assets/party_layers/006/frame_0274_main.png",
+        "sha256": "eae8e88543b7ff9986b7a1e209455c2751a176f3209628a8de176380f182bf10",
+        "rgba_sha256": "ee0195cd960b1eca4f845c5d900113fd3143da7ff5030dd0126fb241e08fb53e",
+        "bounds": [
+          227,
+          232,
+          300,
+          350
+        ],
+        "covered_pixels": 4166,
+        "transparent_pixels": 232455
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0274_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 275,
+      "main": {
+        "path": "assets/party_layers/006/frame_0275_main.png",
+        "sha256": "0f43197a61c316910bff2f8481a9b3c89c094f6a95360803bbbcb2b5c4cffe51",
+        "rgba_sha256": "54de3ad9fbe89a6cf5509b358c5c5f65754f62187ed966a2fdc1e49769d87247",
+        "bounds": [
+          224,
+          246,
+          301,
+          350
+        ],
+        "covered_pixels": 3640,
+        "transparent_pixels": 232981
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0275_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 276,
+      "main": {
+        "path": "assets/party_layers/006/frame_0276_main.png",
+        "sha256": "b9e74e44334f42b8bee0b0500e9d5dab0d2b11bfebca9b83275a306ac1f09631",
+        "rgba_sha256": "becd41910a25b61cdba761f735ce144985e78a03c68f35e15cacbe9e4f7e693c",
+        "bounds": [
+          228,
+          237,
+          307,
+          350
+        ],
+        "covered_pixels": 3658,
+        "transparent_pixels": 232963
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0276_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 277,
+      "main": {
+        "path": "assets/party_layers/006/frame_0277_main.png",
+        "sha256": "a75ec13ac1acdea4b8422f338ca035e75b6133349605f346c10f1810c4e885ef",
+        "rgba_sha256": "7d4e8b94159a82fffd145f8990af4f8d086943c592b8a97df0a955bcb8854425",
+        "bounds": [
+          237,
+          223,
+          308,
+          350
+        ],
+        "covered_pixels": 3903,
+        "transparent_pixels": 232718
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0277_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 278,
+      "main": {
+        "path": "assets/party_layers/006/frame_0278_main.png",
+        "sha256": "83aa340a42e51eb98bdcdbb4d7856e55c73891650c44034df773d9dea25689c1",
+        "rgba_sha256": "0cdb2f8685fa73966cd23599c3f4b00b28b90c73cbe0d34074304021e242d60a",
+        "bounds": [
+          250,
+          217,
+          311,
+          350
+        ],
+        "covered_pixels": 4100,
+        "transparent_pixels": 232521
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0278_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 279,
+      "main": {
+        "path": "assets/party_layers/006/frame_0279_main.png",
+        "sha256": "de7a474d9e5e564776360ae7890159bd18abd1e7e4f1487b9ffe79614eceb632",
+        "rgba_sha256": "7466e4d63f87ba52d4958c50c5027c073332310971ac75fbf2dd48dd15935d75",
+        "bounds": [
+          250,
+          213,
+          322,
+          347
+        ],
+        "covered_pixels": 3968,
+        "transparent_pixels": 232653
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0279_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 280,
+      "main": {
+        "path": "assets/party_layers/006/frame_0280_main.png",
+        "sha256": "b43f5f0c02a3213e6290abdaf4089177f89399a0747ff52b05a80f02cc78138c",
+        "rgba_sha256": "972f876a3171bf0b528cad4c5772ee0d5c1197f9c0892616e760d45ffb904be0",
+        "bounds": [
+          250,
+          211,
+          320,
+          348
+        ],
+        "covered_pixels": 3993,
+        "transparent_pixels": 232628
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0280_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 281,
+      "main": {
+        "path": "assets/party_layers/006/frame_0281_main.png",
+        "sha256": "e2ba8e0282d371a983df573a89d44cd14932998a202304d6fa7dcbfbc7e18843",
+        "rgba_sha256": "f0cfb0aead44c30065bf80d3a6fbe9b62a9233e075ce7b43927ba06a64bf8731",
+        "bounds": [
+          250,
+          211,
+          314,
+          349
+        ],
+        "covered_pixels": 3994,
+        "transparent_pixels": 232627
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0281_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 282,
+      "main": {
+        "path": "assets/party_layers/006/frame_0282_main.png",
+        "sha256": "2b2ee352f2c05e3484119e573e308bb53e5ba4b3875e7f9e6141ce6b3c3cf980",
+        "rgba_sha256": "92759dcdca1ce0f6e952614d0d5b2e905af2edb15f7d2548f1beb74269cb319e",
+        "bounds": [
+          250,
+          212,
+          318,
+          349
+        ],
+        "covered_pixels": 3774,
+        "transparent_pixels": 232847
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0282_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 283,
+      "main": {
+        "path": "assets/party_layers/006/frame_0283_main.png",
+        "sha256": "d63c192d76071286be774385864be51787561ba324f0df5a3840400405b12735",
+        "rgba_sha256": "d496531211fc290278f532c2015ccd180738667590813f949d30a4c2742dbd24",
+        "bounds": [
+          250,
+          212,
+          325,
+          349
+        ],
+        "covered_pixels": 3634,
+        "transparent_pixels": 232987
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0283_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 284,
+      "main": {
+        "path": "assets/party_layers/006/frame_0284_main.png",
+        "sha256": "7fcac0a665a11888da74676342c6e9e9ae3de6959bb851fbebafac27423fa3de",
+        "rgba_sha256": "96808b4ec183766873b6584d425b9db9191188719f1ad5c0cdbe2b38d1113250",
+        "bounds": [
+          250,
+          215,
+          328,
+          346
+        ],
+        "covered_pixels": 3823,
+        "transparent_pixels": 232798
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0284_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 285,
+      "main": {
+        "path": "assets/party_layers/006/frame_0285_main.png",
+        "sha256": "5ebde243a0dd36a4df7a992d9a3aa5a8467376f433b2582823a3d39c3f4e8aa3",
+        "rgba_sha256": "fe9b0fc79ab6372e738ce588ffc9294f9d47b4acbdd81ad2a5ea0e721e69adcf",
+        "bounds": [
+          249,
+          228,
+          320,
+          334
+        ],
+        "covered_pixels": 3770,
+        "transparent_pixels": 232851
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0285_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 286,
+      "main": {
+        "path": "assets/party_layers/006/frame_0286_main.png",
+        "sha256": "3da37345e36c22f86e59da1ac4d120056034e1a3aa020f860d403b513f03e37b",
+        "rgba_sha256": "ef01a299c12f0febdbe206acb5f4e88fbbb736a91c87edd2ce160375a6451605",
+        "bounds": [
+          246,
+          246,
+          308,
+          345
+        ],
+        "covered_pixels": 3382,
+        "transparent_pixels": 233239
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0286_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 287,
+      "main": {
+        "path": "assets/party_layers/006/frame_0287_main.png",
+        "sha256": "2303478a04a752da2ae4596ff6632a50a021bbeedc5a427e222c46af3e99b86b",
+        "rgba_sha256": "1b58e5935f2bc7b81a6e3eb6701a707a5097dd2ce036f26fd7c4c32714e8ba8a",
+        "bounds": [
+          248,
+          242,
+          307,
+          345
+        ],
+        "covered_pixels": 3330,
+        "transparent_pixels": 233291
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0287_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 288,
+      "main": {
+        "path": "assets/party_layers/006/frame_0288_main.png",
+        "sha256": "a7ec32a0d2312bbfea93375029fd636ee94b4007cfcfddf6550fc9f4323e595c",
+        "rgba_sha256": "0c8437a1a3d7e1868a3e1a84cb646c0636544fccdb5f3ded72bc392675bae000",
+        "bounds": [
+          249,
+          244,
+          312,
+          345
+        ],
+        "covered_pixels": 2969,
+        "transparent_pixels": 233652
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0288_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 289,
+      "main": {
+        "path": "assets/party_layers/006/frame_0289_main.png",
+        "sha256": "a3dc3c8ea52f3bda17d04fb3d07082cf985990abecc4a157c9a7d92a6e610e25",
+        "rgba_sha256": "af47c75f9168671f5e1f7dad00a916b2a7c53bed126c94ed37c84c158e723124",
+        "bounds": [
+          243,
+          251,
+          316,
+          344
+        ],
+        "covered_pixels": 3203,
+        "transparent_pixels": 233418
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0289_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 290,
+      "main": {
+        "path": "assets/party_layers/006/frame_0290_main.png",
+        "sha256": "8e3880aefbeec02b456a81dae693f96316d0ccf3a4015b678b861164898ad460",
+        "rgba_sha256": "eafd14d0df8d602ea92ce0a130ade806f8f12005358d12e3d89d8523fbc204a4",
+        "bounds": [
+          226,
+          250,
+          314,
+          345
+        ],
+        "covered_pixels": 3211,
+        "transparent_pixels": 233410
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0290_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 291,
+      "main": {
+        "path": "assets/party_layers/006/frame_0291_main.png",
+        "sha256": "c1556278e5f57766c1180336e45a779601e0badededbda373ba391c2595ac9e1",
+        "rgba_sha256": "ffd68338d11833f0997a14bf7743e7923f638032353c81f4d4e19a0c64052283",
+        "bounds": [
+          209,
+          246,
+          318,
+          345
+        ],
+        "covered_pixels": 3409,
+        "transparent_pixels": 233212
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0291_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 292,
+      "main": {
+        "path": "assets/party_layers/006/frame_0292_main.png",
+        "sha256": "da755bc6c94d93bb3b328bac9375a653323ca04341666c100b52f956d2304559",
+        "rgba_sha256": "7dc7c0b53e413a313900de9b49d5d98a94d7d98919be33ff7755ba27111aed29",
+        "bounds": [
+          191,
+          255,
+          319,
+          345
+        ],
+        "covered_pixels": 3644,
+        "transparent_pixels": 232977
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0292_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 293,
+      "main": {
+        "path": "assets/party_layers/006/frame_0293_main.png",
+        "sha256": "1308966e89ec12ab75b4db670d4503a3c460522b6748fab7beeca15f70cf4b1a",
+        "rgba_sha256": "028de09c32a6f382f29b0dc9ad6ca876943e6ab6825ebb993b2fd945fa72bffc",
+        "bounds": [
+          171,
+          280,
+          317,
+          345
+        ],
+        "covered_pixels": 3645,
+        "transparent_pixels": 232976
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0293_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 294,
+      "main": {
+        "path": "assets/party_layers/006/frame_0294_main.png",
+        "sha256": "f1bd747831cd43af9c2e4b267e2d784e09e445ff3a139673a88ed2630c762e73",
+        "rgba_sha256": "7e1b66a62619e47159e56e6f263e1586442b6a1a4e77a9f2b7b0b34caecf4664",
+        "bounds": [
+          155,
+          284,
+          295,
+          347
+        ],
+        "covered_pixels": 3628,
+        "transparent_pixels": 232993
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0294_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 295,
+      "main": {
+        "path": "assets/party_layers/006/frame_0295_main.png",
+        "sha256": "ed84da756fda21ea98d0bcea309ea2c2d2d0ecd8991303ea139803ce58c02132",
+        "rgba_sha256": "4e3ea664271ad3f3640948113e97c12d910982524dd704cdb0fcf204dc715fd7",
+        "bounds": [
+          156,
+          285,
+          305,
+          339
+        ],
+        "covered_pixels": 3616,
+        "transparent_pixels": 233005
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0295_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 296,
+      "main": {
+        "path": "assets/party_layers/006/frame_0296_main.png",
+        "sha256": "c6b034003959bdcb73e861f408d33dcdcea3b3a5f6193e4887f6f6562d78b113",
+        "rgba_sha256": "008657e74f73008bc76a066ed3f58c63a0b755eae185e82d1c719885828b7e60",
+        "bounds": [
+          152,
+          300,
+          309,
+          344
+        ],
+        "covered_pixels": 3426,
+        "transparent_pixels": 233195
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0296_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 297,
+      "main": {
+        "path": "assets/party_layers/006/frame_0297_main.png",
+        "sha256": "a55aff0787b4b95fe9bc2e52fe5c89a09d3378b6497e65361cbd28b285de0e12",
+        "rgba_sha256": "6f8858956aee1bcccad8813cf80d5bff2272f16a334b93f3b2465f926e0e3a42",
+        "bounds": [
+          155,
+          314,
+          311,
+          350
+        ],
+        "covered_pixels": 3230,
+        "transparent_pixels": 233391
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0297_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 401,
+      "main": {
+        "path": "assets/party_layers/006/frame_0401_main.png",
+        "sha256": "4497ef55cd1a68f76eea50ef43171269535133987b8ad9e867d71ffa4faa391d",
+        "rgba_sha256": "c46fb6fafd21e07a1acfae606338cedde4c782244b0d86fcfae635d4d3d75825",
+        "bounds": [
+          243,
+          211,
+          301,
+          349
+        ],
+        "covered_pixels": 4142,
+        "transparent_pixels": 232479
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0401_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 402,
+      "main": {
+        "path": "assets/party_layers/006/frame_0402_main.png",
+        "sha256": "456c98fca1ddf79f3f027c1746f3ef2547d3de9f5e76ad06c241e1c3b98a4b8b",
+        "rgba_sha256": "f33d1c08b3a4e296b4f3da929edbcf47e5afa73f532e42271edb87f33927c91f",
+        "bounds": [
+          254,
+          214,
+          305,
+          348
+        ],
+        "covered_pixels": 4021,
+        "transparent_pixels": 232600
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0402_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 403,
+      "main": {
+        "path": "assets/party_layers/006/frame_0403_main.png",
+        "sha256": "54d6e2ff906c678335345466159831fca77e6eaaf339310219f6f54e5b710ed3",
+        "rgba_sha256": "bf2710b49ebca1cd8548c2d2671cdc187fedb8197addd5972b444ffedfb83e31",
+        "bounds": [
+          239,
+          212,
+          319,
+          343
+        ],
+        "covered_pixels": 4157,
+        "transparent_pixels": 232464
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0403_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 404,
+      "main": {
+        "path": "assets/party_layers/006/frame_0404_main.png",
+        "sha256": "a6ffab142bf4908c64eb9b8a01a4c0d5889821669169ad826eb2f6fbf28ab8b9",
+        "rgba_sha256": "26d97b07bd9b15b752c0412bf01c06bdbdec47912965b211b90dd5391e33a1db",
+        "bounds": [
+          255,
+          212,
+          309,
+          342
+        ],
+        "covered_pixels": 3262,
+        "transparent_pixels": 233359
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0404_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 405,
+      "main": {
+        "path": "assets/party_layers/006/frame_0405_main.png",
+        "sha256": "2992e0621861704079868f262c5e704133695fce7519eee281eb3bfdbda514e0",
+        "rgba_sha256": "cb6a4c26d451d0663adba0ce4bfefdb8e9974ed2f05431ea63ef7acb9567a1a9",
+        "bounds": [
+          198,
+          215,
+          332,
+          342
+        ],
+        "covered_pixels": 3859,
+        "transparent_pixels": 232762
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0405_intrinsic.png",
+        "sha256": "eb41bfa3140e046c5cdf473e838aa1aebe64af7e8c3cd5704f5c0c30968d38e6",
+        "rgba_sha256": "c5e8acc760f0b633e75058ab6e6c1b0c5b098bdaf11caff23ac961e90bfaa8de",
+        "bounds": [
+          38,
+          273,
+          310,
+          348
+        ],
+        "covered_pixels": 9770,
+        "transparent_pixels": 226851,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 406,
+      "main": {
+        "path": "assets/party_layers/006/frame_0406_main.png",
+        "sha256": "a9921b0703df47589a47b3919f9daeb5740d7d4d1954040cec68d90e1b8bacca",
+        "rgba_sha256": "19965ca96c6e930574b29dc39b0e2bb9bd35cf6cebf45b6d1198e947d7d7a9a1",
+        "bounds": [
+          234,
+          213,
+          321,
+          342
+        ],
+        "covered_pixels": 3799,
+        "transparent_pixels": 232822
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0406_intrinsic.png",
+        "sha256": "8da3f26452eb4bc7a43c61c8b1f0582270028e70ee9e30b50984c4c7221f9f7d",
+        "rgba_sha256": "73b2de95e1da417b84f7dacf7174a19d8b9a9390261710e0369656dfbfa074c5",
+        "bounds": [
+          38,
+          297,
+          326,
+          345
+        ],
+        "covered_pixels": 6564,
+        "transparent_pixels": 230057,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 407,
+      "main": {
+        "path": "assets/party_layers/006/frame_0407_main.png",
+        "sha256": "07b39a95b429c6851a87f6239c5f50638cb82e5b06e49e75125d2893e250a700",
+        "rgba_sha256": "c68a0edbc9120a8d0b755abeb00830d60eadb597c5682a31f71642f5e324d0a2",
+        "bounds": [
+          247,
+          210,
+          299,
+          343
+        ],
+        "covered_pixels": 3477,
+        "transparent_pixels": 233144
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0407_intrinsic.png",
+        "sha256": "2873d7d71e2ebc342d94ff3aaeee7c77f3b42b0c0a33fb03dd2175618bf2885b",
+        "rgba_sha256": "8acd5ec097ab06c647e0e2b7615c7209a9c82c09c877e8393bee122314a4ea52",
+        "bounds": [
+          37,
+          315,
+          309,
+          343
+        ],
+        "covered_pixels": 4044,
+        "transparent_pixels": 232577,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 408,
+      "main": {
+        "path": "assets/party_layers/006/frame_0408_main.png",
+        "sha256": "9082df039aec4be3c28c39877761e949e7e429b2fcc1c9a37f1dacc7966a5227",
+        "rgba_sha256": "db74a5ad91b37f07a862633c55bf9449d85ffbb7d3dff7541c756c025106284c",
+        "bounds": [
+          253,
+          208,
+          296,
+          347
+        ],
+        "covered_pixels": 3167,
+        "transparent_pixels": 233454
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0408_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 409,
+      "main": {
+        "path": "assets/party_layers/006/frame_0409_main.png",
+        "sha256": "ba51093edd1fd218582f91aa71a52f963cd9653a757ccb10d5b7d35abb7a3bc7",
+        "rgba_sha256": "766f6ca8a42b6bff205ae2c04f2b22ac8fd56827ee5b95c8a156e76120c221b6",
+        "bounds": [
+          250,
+          216,
+          315,
+          350
+        ],
+        "covered_pixels": 3309,
+        "transparent_pixels": 233312
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0409_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 410,
+      "main": {
+        "path": "assets/party_layers/006/frame_0410_main.png",
+        "sha256": "2abdfd0fcb8859e8fdef5d0f7a8c0fa22ffad0ba7d3e243cab89babef94eec39",
+        "rgba_sha256": "559722b8e7bc6ec9a063aab78466741f9ecd01ebb961aaf08b72fc8908f11ce3",
+        "bounds": [
+          255,
+          215,
+          308,
+          349
+        ],
+        "covered_pixels": 3182,
+        "transparent_pixels": 233439
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0410_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 411,
+      "main": {
+        "path": "assets/party_layers/006/frame_0411_main.png",
+        "sha256": "c73947f7257452a50c85934bc2b82337ea88efa5342f685730ea99a5ef697d37",
+        "rgba_sha256": "c1905bf6e9cd6b0eec77a2d9637ffe08c2731f157db0fc308a9bc9ea1c295d8d",
+        "bounds": [
+          218,
+          214,
+          297,
+          349
+        ],
+        "covered_pixels": 3667,
+        "transparent_pixels": 232954
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0411_intrinsic.png",
+        "sha256": "ed36dc93394f6150a6e50e749ee24f82f1bf7ace72d917683370d87e84452ee7",
+        "rgba_sha256": "b5f509aa4d82f601042b1a412c063bbed78ce1ebd63fa73fcb3af21187c699a7",
+        "bounds": [
+          73,
+          200,
+          299,
+          365
+        ],
+        "covered_pixels": 10722,
+        "transparent_pixels": 225899,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 412,
+      "main": {
+        "path": "assets/party_layers/006/frame_0412_main.png",
+        "sha256": "3080af6d1dde1e4c4dbff0d3debe3696f49a64c81b1c7b911d69073732e42817",
+        "rgba_sha256": "c0584f496d9db0a2223c292ac287bd33de3e1efccc6f440cedc66594c8256574",
+        "bounds": [
+          236,
+          212,
+          297,
+          349
+        ],
+        "covered_pixels": 3761,
+        "transparent_pixels": 232860
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0412_intrinsic.png",
+        "sha256": "9b224338c1f71daa1fcf58816647957568d4e8f9d255469d1e4baf7cdbb2812b",
+        "rgba_sha256": "c4b935156fde4a07d42b52e6b0f803e09729399a3c377a2de1ba4a45bc6afecb",
+        "bounds": [
+          74,
+          201,
+          308,
+          371
+        ],
+        "covered_pixels": 6654,
+        "transparent_pixels": 229967,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 413,
+      "main": {
+        "path": "assets/party_layers/006/frame_0413_main.png",
+        "sha256": "867ca4f5b1ad11e7171624797103094d64face39cfbcda8f3a052939cff8c14a",
+        "rgba_sha256": "4b3c163c9853326f1cd86d311af091baa4d59ad3d8c218ce85b0a205ab7f548c",
+        "bounds": [
+          244,
+          211,
+          296,
+          350
+        ],
+        "covered_pixels": 3624,
+        "transparent_pixels": 232997
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0413_intrinsic.png",
+        "sha256": "2cc4ff13e5754245116906317a044eaeb4e851fc2f2a3ff32143fecb7b124015",
+        "rgba_sha256": "bf0165a32da2c0f5410a28a6f8514e87108d29cffc8f953246aa2fb6d0824f13",
+        "bounds": [
+          73,
+          202,
+          295,
+          361
+        ],
+        "covered_pixels": 4157,
+        "transparent_pixels": 232464,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 414,
+      "main": {
+        "path": "assets/party_layers/006/frame_0414_main.png",
+        "sha256": "9e9a393269037df5257efe3609ef3e6733f86197c0948560b118bbddb27038c1",
+        "rgba_sha256": "476266a67cc212a7881785e39bd0d1fd52fecd14638fbb0fd894f8bd506169e7",
+        "bounds": [
+          246,
+          210,
+          295,
+          350
+        ],
+        "covered_pixels": 3739,
+        "transparent_pixels": 232882
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0414_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 415,
+      "main": {
+        "path": "assets/party_layers/006/frame_0415_main.png",
+        "sha256": "db45ff33c5b52da8186de3ec9d6ee722b3f80253c0161e9494d2fa8b15fe72d9",
+        "rgba_sha256": "28164680fe43dec935ed9cf91649f876079ffc8c09094ebe95981e76a5de6867",
+        "bounds": [
+          245,
+          209,
+          293,
+          350
+        ],
+        "covered_pixels": 3828,
+        "transparent_pixels": 232793
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0415_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 416,
+      "main": {
+        "path": "assets/party_layers/006/frame_0416_main.png",
+        "sha256": "bea3928737f00f4fc37482231eab96df418317f525f953f883f7548a6a98ff7e",
+        "rgba_sha256": "934310d24c8be3d0a49a2a507f979792f4e50bc0cec02ed0e4b7a940f8b48e3c",
+        "bounds": [
+          253,
+          209,
+          295,
+          349
+        ],
+        "covered_pixels": 2865,
+        "transparent_pixels": 233756
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0416_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 417,
+      "main": {
+        "path": "assets/party_layers/006/frame_0417_main.png",
+        "sha256": "24aa713a1056985882857129e0d49ed095a3d32b985b64cf3678a2c8c75f71cd",
+        "rgba_sha256": "cb2b5f8b1ce01837f69a4f03e915532be12881c9d2497180f1fd5c36ad5053b5",
+        "bounds": [
+          252,
+          211,
+          303,
+          348
+        ],
+        "covered_pixels": 3410,
+        "transparent_pixels": 233211
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0417_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 418,
+      "main": {
+        "path": "assets/party_layers/006/frame_0418_main.png",
+        "sha256": "3399c9311ab3308f5e238356f0a0a170df5aab01fb1bb00c681919b8f3b33847",
+        "rgba_sha256": "c3eae6ed4f2488d94a40416bb2b4a1c8dd25376bfd5f75aeb5b4832af2e669e0",
+        "bounds": [
+          244,
+          215,
+          310,
+          345
+        ],
+        "covered_pixels": 3948,
+        "transparent_pixels": 232673
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0418_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 419,
+      "main": {
+        "path": "assets/party_layers/006/frame_0419_main.png",
+        "sha256": "928c1028d2e23401dc2a64d42ebf510410be8a85d441b503e6e5c2cd9d0d41e3",
+        "rgba_sha256": "c3f169aa2667e0ab4da8302d3c0a22d9183965d5bef21d938ebd810c866f7d4b",
+        "bounds": [
+          245,
+          226,
+          307,
+          346
+        ],
+        "covered_pixels": 3726,
+        "transparent_pixels": 232895
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0419_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 420,
+      "main": {
+        "path": "assets/party_layers/006/frame_0420_main.png",
+        "sha256": "945146c1c63bf1f76f84d36022955605e0533867076c6311c0c3beb7e86aaaf9",
+        "rgba_sha256": "97857320ea1df6fc5760d6212168b024be9dbb93bb59e9642caedef62e87b419",
+        "bounds": [
+          230,
+          236,
+          316,
+          346
+        ],
+        "covered_pixels": 3325,
+        "transparent_pixels": 233296
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0420_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 421,
+      "main": {
+        "path": "assets/party_layers/006/frame_0421_main.png",
+        "sha256": "5a374774c29ee3e889db1ab1b21b3ec13c4c1c53cfa68d95c6daf9359fdbc929",
+        "rgba_sha256": "927b9e5cbfa23fa64e49e1e8ae60127f995b12bbeab130e8c0867bf1f691ed18",
+        "bounds": [
+          217,
+          234,
+          318,
+          346
+        ],
+        "covered_pixels": 3729,
+        "transparent_pixels": 232892
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0421_intrinsic.png",
+        "sha256": "d05ba54f5a235c4d309e6521d2530c41b8c776e65dc7473bc13fcdc6d50cef24",
+        "rgba_sha256": "829d20c395fe8f183708b7d7950d22872da879951807cdce2535a8ea06135e95",
+        "bounds": [
+          197,
+          295,
+          339,
+          327
+        ],
+        "covered_pixels": 2837,
+        "transparent_pixels": 233784,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 422,
+      "main": {
+        "path": "assets/party_layers/006/frame_0422_main.png",
+        "sha256": "8d2380b5566bca9b291641367e36b669a23582e67473ef313afc94e83058a6cf",
+        "rgba_sha256": "1672681694f04cf650e837f5f0379ef9c55f694d880756681281c457f3ab195c",
+        "bounds": [
+          177,
+          221,
+          311,
+          346
+        ],
+        "covered_pixels": 4461,
+        "transparent_pixels": 232160
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0422_intrinsic.png",
+        "sha256": "786bd6d27376a8cac3660e9910e38ba2cd168d4d162420feb0152666db87ba9b",
+        "rgba_sha256": "6806e92b91653d97301eb294b3ba0d1a1f6a3072032b1a53af831506caeada6b",
+        "bounds": [
+          73,
+          246,
+          339,
+          324
+        ],
+        "covered_pixels": 7892,
+        "transparent_pixels": 228729,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 423,
+      "main": {
+        "path": "assets/party_layers/006/frame_0423_main.png",
+        "sha256": "d3628359f42759e540d547b5870316842ef01bf48371d01d155ecda9b55973c4",
+        "rgba_sha256": "9e18e356225a2d15f620733cb7fe8d50d236499d944d4929255604d1d98a314b",
+        "bounds": [
+          183,
+          211,
+          306,
+          347
+        ],
+        "covered_pixels": 4478,
+        "transparent_pixels": 232143
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0423_intrinsic.png",
+        "sha256": "70f8aa899eb51ec9395811c387785f147b1cc05f3a74a1a754c79bf251a3c290",
+        "rgba_sha256": "eeb498ca3dac76871917eb91612862e1f36f208e7598b64de309c5551c193391",
+        "bounds": [
+          75,
+          242,
+          323,
+          326
+        ],
+        "covered_pixels": 8975,
+        "transparent_pixels": 227646,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 424,
+      "main": {
+        "path": "assets/party_layers/006/frame_0424_main.png",
+        "sha256": "6e6a91553e8bd2579e7b4e39a330eef7f9463708376cbd0ed227605ee6c38dea",
+        "rgba_sha256": "7ca20da1303108fc4eaaece3e1571d006c3e9500954975a0635795af74ccb056",
+        "bounds": [
+          211,
+          210,
+          300,
+          348
+        ],
+        "covered_pixels": 4250,
+        "transparent_pixels": 232371
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0424_intrinsic.png",
+        "sha256": "09f9af27c66f91d9daf23a1d3a53fe49548ececf46e0e9660339e4c4c5b1e5e2",
+        "rgba_sha256": "c1274ad786eac47e62cd061cdba7f307a6fa6e46b40f124a64e5f82ef893ec61",
+        "bounds": [
+          73,
+          242,
+          227,
+          288
+        ],
+        "covered_pixels": 4585,
+        "transparent_pixels": 232036,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 425,
+      "main": {
+        "path": "assets/party_layers/006/frame_0425_main.png",
+        "sha256": "4e1fd5cf6ab4c07c7394b12c3b0cabb04fb76f3094fb569ab47676d3d8705810",
+        "rgba_sha256": "197000cc867dea439102af7514b81ec9dc16e143afadbc1e84cf02c10370fac4",
+        "bounds": [
+          216,
+          213,
+          299,
+          349
+        ],
+        "covered_pixels": 4044,
+        "transparent_pixels": 232577
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0425_intrinsic.png",
+        "sha256": "2a1da2e00a586a4f25b4cf9c50414dfaa5db36dfa834377a591acd94ff2e4a8a",
+        "rgba_sha256": "741df89222c13fdd946d995b447dea75f5eb072d5beeee5fcefbd53f5705ad4a",
+        "bounds": [
+          84,
+          243,
+          220,
+          270
+        ],
+        "covered_pixels": 2337,
+        "transparent_pixels": 234284,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 426,
+      "main": {
+        "path": "assets/party_layers/006/frame_0426_main.png",
+        "sha256": "2939131b409405bdec204e8399fe932065733da5c93463e57cf867ca1ab3ed63",
+        "rgba_sha256": "9c5438c8cec89511928096ac8a2bf1759a62e5364289a0983bc042d840b52361",
+        "bounds": [
+          228,
+          211,
+          297,
+          349
+        ],
+        "covered_pixels": 3698,
+        "transparent_pixels": 232923
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0426_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 427,
+      "main": {
+        "path": "assets/party_layers/006/frame_0427_main.png",
+        "sha256": "76ce0d74e41ecb49b8ba2930cbd03090edaa9cb1af243a6228dac9ab579cf163",
+        "rgba_sha256": "80b89b72d7be6057c200fe501137d6654795cee203a329548e6e4aa4d25472ef",
+        "bounds": [
+          237,
+          209,
+          295,
+          350
+        ],
+        "covered_pixels": 3905,
+        "transparent_pixels": 232716
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0427_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 428,
+      "main": {
+        "path": "assets/party_layers/006/frame_0428_main.png",
+        "sha256": "9b259946d500235e74b4b589aee970d93c47d631834743c9cb05a0fddc8e79df",
+        "rgba_sha256": "b85926f50da09a1597afe378d58b0cacd620e2053a3869175eb43104997c4c8c",
+        "bounds": [
+          242,
+          211,
+          302,
+          347
+        ],
+        "covered_pixels": 4075,
+        "transparent_pixels": 232546
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0428_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 429,
+      "main": {
+        "path": "assets/party_layers/006/frame_0429_main.png",
+        "sha256": "adaedc4e1247015724957359f79f4d2a5407cbf923c17443c8884614e05ffaf8",
+        "rgba_sha256": "433a8963a901ddf700753d9ad446d735bda8476f70faba2d38f815ce3d374d6e",
+        "bounds": [
+          234,
+          216,
+          296,
+          346
+        ],
+        "covered_pixels": 3867,
+        "transparent_pixels": 232754
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0429_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 430,
+      "main": {
+        "path": "assets/party_layers/006/frame_0430_main.png",
+        "sha256": "c1655ddcb7e9e058fa8edc779d55f98fa8a616d27caec24c1b67f2cc53d20002",
+        "rgba_sha256": "70694bd4390a2d74e66d68035682b9e62e731f16d9171b988c3f9734706edc40",
+        "bounds": [
+          228,
+          223,
+          299,
+          346
+        ],
+        "covered_pixels": 3576,
+        "transparent_pixels": 233045
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0430_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 431,
+      "main": {
+        "path": "assets/party_layers/006/frame_0431_main.png",
+        "sha256": "c5041a219582a912192aac389cd7ee8784bab6554026484f65e78ea00b741f46",
+        "rgba_sha256": "3094abde27f347a1a4b69ee242275998bf651f9e194d5e683dddfe1e3b4911fb",
+        "bounds": [
+          227,
+          230,
+          306,
+          346
+        ],
+        "covered_pixels": 3600,
+        "transparent_pixels": 233021
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0431_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 432,
+      "main": {
+        "path": "assets/party_layers/006/frame_0432_main.png",
+        "sha256": "520d413a1448e009340f904f3cfc943e8f2b79bb4ce16fd61b8ccee3e5356530",
+        "rgba_sha256": "e19f12a85aadcc2c6697eca428e247aa17098d7b2469318c6549aec7b0399ab4",
+        "bounds": [
+          224,
+          236,
+          316,
+          345
+        ],
+        "covered_pixels": 3706,
+        "transparent_pixels": 232915
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0432_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 433,
+      "main": {
+        "path": "assets/party_layers/006/frame_0433_main.png",
+        "sha256": "29b29f530b793740dc32f5bbeb30f0b14d86b3437c1b8969d1693518ea32193f",
+        "rgba_sha256": "cf0ed1497e15a7edd2544a0d29dd551ae69e3d9caa100d6981f07b2ca70a679e",
+        "bounds": [
+          225,
+          239,
+          318,
+          344
+        ],
+        "covered_pixels": 3466,
+        "transparent_pixels": 233155
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0433_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 434,
+      "main": {
+        "path": "assets/party_layers/006/frame_0434_main.png",
+        "sha256": "a4da2f948d7617aee867bfd6729244edc1d9fc1a2c75b49f3a713dbfcf5b631e",
+        "rgba_sha256": "0e1b2ca092b87d2ffa8ca834b4dfb87afe2ac11df9bd94294bb74733ff2cad78",
+        "bounds": [
+          225,
+          242,
+          315,
+          342
+        ],
+        "covered_pixels": 3622,
+        "transparent_pixels": 232999
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0434_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 435,
+      "main": {
+        "path": "assets/party_layers/006/frame_0435_main.png",
+        "sha256": "5e0677097d42f2c33a692f46821401a32509fd442488c77642a0f88c7eaf4d94",
+        "rgba_sha256": "aa42b4515509e427865d30594f3544ae07780b3a1921ee04e74dfeed88751044",
+        "bounds": [
+          225,
+          244,
+          323,
+          341
+        ],
+        "covered_pixels": 3518,
+        "transparent_pixels": 233103
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0435_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 436,
+      "main": {
+        "path": "assets/party_layers/006/frame_0436_main.png",
+        "sha256": "eb600b1dbe9a3bea264992ba15ca7d6717a38618a04458b18b2c850776b17f9f",
+        "rgba_sha256": "b5441b23bc7217567ef61577ca72fe9f470b7553c640a314895fbf54bdf51fc9",
+        "bounds": [
+          229,
+          247,
+          321,
+          342
+        ],
+        "covered_pixels": 3149,
+        "transparent_pixels": 233472
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0436_intrinsic.png",
+        "sha256": "37c3a61d2e018f63b45b969baaab2999fbf2a7d69a75db09a4b7fbe41b75d6a3",
+        "rgba_sha256": "99c64f02706b527eb915adbf2943bedc4d8621853e2b92cd4db546af8ec0c310",
+        "bounds": [
+          211,
+          310,
+          305,
+          329
+        ],
+        "covered_pixels": 859,
+        "transparent_pixels": 235762,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 437,
+      "main": {
+        "path": "assets/party_layers/006/frame_0437_main.png",
+        "sha256": "a206de87eaa5ae5062bc7030a6086ef09d95df2faef19372cfd607dc796f9098",
+        "rgba_sha256": "13c70ece588cb65fc76bcac674ccf8a505971829b0703dbb2e7bc7438496abd5",
+        "bounds": [
+          227,
+          256,
+          307,
+          342
+        ],
+        "covered_pixels": 2440,
+        "transparent_pixels": 234181
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0437_intrinsic.png",
+        "sha256": "6ed870c992dbb52015bae18676ddbd2c0f653c4dbfec25f241e2f6c26833cb2a",
+        "rgba_sha256": "c3f785ed0a4af6b43aa4300f352c777662a8633e9a397e87c2fc74794b028ca7",
+        "bounds": [
+          189,
+          309,
+          305,
+          337
+        ],
+        "covered_pixels": 1781,
+        "transparent_pixels": 234840,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 438,
+      "main": {
+        "path": "assets/party_layers/006/frame_0438_main.png",
+        "sha256": "0b1e4facc450510cadbaea07d6cd0b752101fa3f2757106ff6a185d6f2624328",
+        "rgba_sha256": "fef87cdd9367abad30a9f4b68174e9d30bdf154a31c715ede1cc39e087c71d6d",
+        "bounds": [
+          202,
+          255,
+          329,
+          342
+        ],
+        "covered_pixels": 3833,
+        "transparent_pixels": 232788
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0438_intrinsic.png",
+        "sha256": "1fe58a9d54dcace9e9e5245813957747d4946bc3562c6529eadc6bf1bd62d5d9",
+        "rgba_sha256": "2f0de65376219e723d4c14a01bd44164f2c3f4a8f95bb75029521c72c0b39961",
+        "bounds": [
+          165,
+          281,
+          305,
+          343
+        ],
+        "covered_pixels": 3256,
+        "transparent_pixels": 233365,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 439,
+      "main": {
+        "path": "assets/party_layers/006/frame_0439_main.png",
+        "sha256": "27c2869023e9c6753941f64fc62ffdee6d8c70982d84fac0d12478c23ffe5410",
+        "rgba_sha256": "0b1655e1fd3967da164fb9864dac57b027a3cc4902d2ac42a3e8a732cac20682",
+        "bounds": [
+          199,
+          233,
+          320,
+          339
+        ],
+        "covered_pixels": 4613,
+        "transparent_pixels": 232008
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0439_intrinsic.png",
+        "sha256": "d3ff10c0129e05cf9fb44d0619c2380204273ade8de48d0c78610065aa5c9eba",
+        "rgba_sha256": "9274e61eb05978146b873f80f224b76df534c4a633e339e338eea03ee54a1ec4",
+        "bounds": [
+          138,
+          224,
+          303,
+          343
+        ],
+        "covered_pixels": 5328,
+        "transparent_pixels": 231293,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 440,
+      "main": {
+        "path": "assets/party_layers/006/frame_0440_main.png",
+        "sha256": "9900f6956d0ad8a6c06b1d14f0ed0eb1bb4556cc7740539432647d492f86ba36",
+        "rgba_sha256": "ff1eff6b0d2b53239dc259028988d578ab64eb2d45f2ef435ab35ea2cf8aefd5",
+        "bounds": [
+          207,
+          132,
+          301,
+          293
+        ],
+        "covered_pixels": 4341,
+        "transparent_pixels": 232280
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0440_intrinsic.png",
+        "sha256": "49ff91181d098918f67fc25f274477904af1708d933c7d6756f773b8a1563cce",
+        "rgba_sha256": "3e59193e11e9a3f1c7cd004a1cc551d1f56380f4fdb963f7b203cfa05393fd9e",
+        "bounds": [
+          115,
+          27,
+          321,
+          339
+        ],
+        "covered_pixels": 22982,
+        "transparent_pixels": 213639,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 441,
+      "main": {
+        "path": "assets/party_layers/006/frame_0441_main.png",
+        "sha256": "ca605d7c57567d2475a86671dd83e84eefb2c7520beff5a45f6862d340c23ff0",
+        "rgba_sha256": "d663deed84be687dd173e0e3ce4874110d428be757013f4326c07d6b1a54e0ab",
+        "bounds": [
+          212,
+          109,
+          313,
+          264
+        ],
+        "covered_pixels": 4970,
+        "transparent_pixels": 231651
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0441_intrinsic.png",
+        "sha256": "c2d4279d7091ce9457470dd325e859ad74eed2d065a328857c2713b146f47504",
+        "rgba_sha256": "3e4ad1ee9b461fc0cd41069612448dd5f4b602a6cd58ec5f221c7429c96e0a38",
+        "bounds": [
+          116,
+          19,
+          378,
+          342
+        ],
+        "covered_pixels": 34425,
+        "transparent_pixels": 202196,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 442,
+      "main": {
+        "path": "assets/party_layers/006/frame_0442_main.png",
+        "sha256": "1e3a64ea1dba3fa40154bcdd3b8aaed2180b6884ff377873d72d4a929e7b861d",
+        "rgba_sha256": "b83e135f4085b8d8e424d8b326955567d2e330f8b84617484b252c15a81a2c4d",
+        "bounds": [
+          225,
+          97,
+          336,
+          259
+        ],
+        "covered_pixels": 5167,
+        "transparent_pixels": 231454
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0442_intrinsic.png",
+        "sha256": "85bf2fe7fef51804813c3806cf9477d0f6c42cb6e8df14a2e89d408a2e4fd097",
+        "rgba_sha256": "3bf3f5c5c86505fb8441563d88444e3ead378f9ebbd3cba38c06bc5f469a9b89",
+        "bounds": [
+          119,
+          18,
+          386,
+          342
+        ],
+        "covered_pixels": 40771,
+        "transparent_pixels": 195850,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 443,
+      "main": {
+        "path": "assets/party_layers/006/frame_0443_main.png",
+        "sha256": "186339177ddf15071b84faefa55de0b83abb6b4a023307f6a0197930baefe005",
+        "rgba_sha256": "91aece48108768eca0ab3d5f927257cc2c76fcb21a02e8d6800a43ca037cba93",
+        "bounds": [
+          234,
+          99,
+          330,
+          260
+        ],
+        "covered_pixels": 4754,
+        "transparent_pixels": 231867
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0443_intrinsic.png",
+        "sha256": "2d6ae5e15c512d6d69d2654821bcd020b6d07d0315a6008aa5e93d43aca8269e",
+        "rgba_sha256": "0f934b4f18bd75ba39db16d71b935cba359f8eca066709c5f0db8a1e7d231b0e",
+        "bounds": [
+          116,
+          20,
+          384,
+          301
+        ],
+        "covered_pixels": 36537,
+        "transparent_pixels": 200084,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 444,
+      "main": {
+        "path": "assets/party_layers/006/frame_0444_main.png",
+        "sha256": "ec61a3394163a983a5a13cf087a8c62860a1c353cd7426a2278e888fe1281759",
+        "rgba_sha256": "3201f573b4fc109a87d6aa184a3731ef91fe0e9d5a587d36dd9eed7602cfdb2a",
+        "bounds": [
+          230,
+          126,
+          307,
+          268
+        ],
+        "covered_pixels": 3805,
+        "transparent_pixels": 232816
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0444_intrinsic.png",
+        "sha256": "50d1b6a3d539604dd03d933f70ba855e0626df4f4d01c66aec3b9cb5eb695d55",
+        "rgba_sha256": "1450f80033ae3187634a45c013e8caeb4c6046de288bc7cba5dc11854f25aee3",
+        "bounds": [
+          126,
+          19,
+          385,
+          261
+        ],
+        "covered_pixels": 27322,
+        "transparent_pixels": 209299,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 445,
+      "main": {
+        "path": "assets/party_layers/006/frame_0445_main.png",
+        "sha256": "226ee34d769bdcfed449740ce9a6becd5a190e2fd6526b0a8c7f7bb0698379fb",
+        "rgba_sha256": "32129c9225e8fdedc6d2e1db104e21ef4eed0e8b63d4918702be9c3c48dee3a8",
+        "bounds": [
+          223,
+          162,
+          314,
+          300
+        ],
+        "covered_pixels": 4027,
+        "transparent_pixels": 232594
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0445_intrinsic.png",
+        "sha256": "f7d558fcb59e004b61934a07cb2210e1465a68534aa9a482db15348967e57555",
+        "rgba_sha256": "a54ffa7d9942637f6769f5353e510737b652e7bfe162cd801ba077314e70cd5e",
+        "bounds": [
+          315,
+          71,
+          384,
+          260
+        ],
+        "covered_pixels": 5698,
+        "transparent_pixels": 230923,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 446,
+      "main": {
+        "path": "assets/party_layers/006/frame_0446_main.png",
+        "sha256": "12198bb05b686cb030cd103119402852816015f3f0b8ea29d6552323d4c94e46",
+        "rgba_sha256": "5c476d88028a195162b2fe0cca55a724693d6fb607ddaafa9500cceb99f21aaf",
+        "bounds": [
+          225,
+          205,
+          325,
+          343
+        ],
+        "covered_pixels": 4139,
+        "transparent_pixels": 232482
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0446_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 447,
+      "main": {
+        "path": "assets/party_layers/006/frame_0447_main.png",
+        "sha256": "98e840f18339726059dff839a00667df1b6c4639b02cbfc3ea86118b387f448f",
+        "rgba_sha256": "fface01db82a1caee271654ee0c7ec0e5aefa99be1563a2ff57ed595bbfe5b45",
+        "bounds": [
+          234,
+          238,
+          331,
+          350
+        ],
+        "covered_pixels": 4025,
+        "transparent_pixels": 232596
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0447_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 448,
+      "main": {
+        "path": "assets/party_layers/006/frame_0448_main.png",
+        "sha256": "7aa24f1229739309e135eed1aa07d6e2dc298adf169c70d8c49c96fd4ca33689",
+        "rgba_sha256": "97286a999b83f0d2e22431dcb58f6756bbe1a7a4ca7b1bf0129eab9fe0ea8747",
+        "bounds": [
+          240,
+          235,
+          330,
+          350
+        ],
+        "covered_pixels": 3913,
+        "transparent_pixels": 232708
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0448_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 449,
+      "main": {
+        "path": "assets/party_layers/006/frame_0449_main.png",
+        "sha256": "1a631da713acb4c9f38db21dd7f2145a1d2c2a663e517fe0ad8064bb2b73f2ee",
+        "rgba_sha256": "4a27cdbd000182be013dfc9cf6b550fc13bab3f7d08b557059fbc0ee74e7f2a6",
+        "bounds": [
+          243,
+          219,
+          319,
+          350
+        ],
+        "covered_pixels": 3875,
+        "transparent_pixels": 232746
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0449_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 450,
+      "main": {
+        "path": "assets/party_layers/006/frame_0450_main.png",
+        "sha256": "52d660405c2b557cfbd7b3508f3ce3bc153fd0fc09619632cdf392b03405de9d",
+        "rgba_sha256": "85271b43e4944e147d7cc45ea0f08a04ad80dfcb8db9558a19ba169c07542520",
+        "bounds": [
+          235,
+          209,
+          306,
+          348
+        ],
+        "covered_pixels": 4147,
+        "transparent_pixels": 232474
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0450_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 451,
+      "main": {
+        "path": "assets/party_layers/006/frame_0451_main.png",
+        "sha256": "ef9b250344bed722e6d4b42edbcca594073e825b61cde0af365e871f5172f19a",
+        "rgba_sha256": "6882dc36c965af8c54a373a0ae1390e1abd9944d3b0820581ba24bc45a7bb1b7",
+        "bounds": [
+          256,
+          210,
+          310,
+          344
+        ],
+        "covered_pixels": 3956,
+        "transparent_pixels": 232665
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0451_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 452,
+      "main": {
+        "path": "assets/party_layers/006/frame_0452_main.png",
+        "sha256": "5751321e281abeccb0d8ecadfed40d5d7074f36d1a23548bbd54f608601364e4",
+        "rgba_sha256": "644f04f85659cd7b684cc7e78030b7ef0a0101649065c3718b95bfcb7cc6548b",
+        "bounds": [
+          253,
+          211,
+          318,
+          344
+        ],
+        "covered_pixels": 3696,
+        "transparent_pixels": 232925
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0452_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 453,
+      "main": {
+        "path": "assets/party_layers/006/frame_0453_main.png",
+        "sha256": "89f729a163500e4dba0016d0072d6c02969edcc0216e611fbaccc4b070f13235",
+        "rgba_sha256": "eb8b88febbc32325a39aae0633103ee08d2311699539e2f9e1adc37615b6a6d7",
+        "bounds": [
+          252,
+          213,
+          324,
+          344
+        ],
+        "covered_pixels": 3805,
+        "transparent_pixels": 232816
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0453_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 454,
+      "main": {
+        "path": "assets/party_layers/006/frame_0454_main.png",
+        "sha256": "bccabe3240457798edee3a3f11df34a32bf1aacc9b377a334df5ff0a161d6257",
+        "rgba_sha256": "43bbdd9c8f360c1fd2370137b506bb83a0d72ec6e623a0ef5ede26a70e8c304d",
+        "bounds": [
+          252,
+          214,
+          320,
+          344
+        ],
+        "covered_pixels": 3858,
+        "transparent_pixels": 232763
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0454_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 455,
+      "main": {
+        "path": "assets/party_layers/006/frame_0455_main.png",
+        "sha256": "9a05bd62959f2c130bf9a5465989bfd71c671032976cc37394539beeb41831a0",
+        "rgba_sha256": "fb2bcf31307d1e6ecd6526ce789027d82f8f7741f771de67c165e73c5e6064b7",
+        "bounds": [
+          249,
+          217,
+          317,
+          345
+        ],
+        "covered_pixels": 3860,
+        "transparent_pixels": 232761
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0455_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 456,
+      "main": {
+        "path": "assets/party_layers/006/frame_0456_main.png",
+        "sha256": "e3b36a85ad5d5b1fb625bb21c538cf649d70b2ff6afc1e41fd6845cd6f56214f",
+        "rgba_sha256": "62850bc16f871f880de888a6506200d42281e7db518d47f80b56d25e40e27fd7",
+        "bounds": [
+          245,
+          223,
+          293,
+          350
+        ],
+        "covered_pixels": 3030,
+        "transparent_pixels": 233591
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0456_intrinsic.png",
+        "sha256": "c20ed9e83261e8bd24a5bb93d9042b87593a1f9afbcc8a6021658db01463677f",
+        "rgba_sha256": "7629d58d30cb12cf29b673a506b18db342316c8a8d300e7e3fb30f86a7ed7215",
+        "bounds": [
+          216,
+          316,
+          338,
+          365
+        ],
+        "covered_pixels": 2286,
+        "transparent_pixels": 234335,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 457,
+      "main": {
+        "path": "assets/party_layers/006/frame_0457_main.png",
+        "sha256": "de0f4734c12d6234cd75bed64d52394fa64499d08180f06d343507e7024ef4c8",
+        "rgba_sha256": "ae53b36e2e839bbdd7cc570f0d16475d41894b82c7cde023061b83c493c92897",
+        "bounds": [
+          182,
+          230,
+          301,
+          343
+        ],
+        "covered_pixels": 3705,
+        "transparent_pixels": 232916
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0457_intrinsic.png",
+        "sha256": "563f374e89392bc499b005b088d53c6d12ec5e558583638fb90165af1a3c6808",
+        "rgba_sha256": "c63f92cdc0269613d0284b81b20c312fa57698d753af7e1e9be9aa828d1ab0e3",
+        "bounds": [
+          50,
+          296,
+          338,
+          376
+        ],
+        "covered_pixels": 11697,
+        "transparent_pixels": 224924,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 458,
+      "main": {
+        "path": "assets/party_layers/006/frame_0458_main.png",
+        "sha256": "9db2e1804a0ce3a447d63fb3dede9b75b4b4f78e4e060fa244f755171b9d5139",
+        "rgba_sha256": "8c68370b51d5b7e228b0bb31f487ddedb9e1cbc0e786fecee3f589b5253afe29",
+        "bounds": [
+          188,
+          234,
+          314,
+          343
+        ],
+        "covered_pixels": 3668,
+        "transparent_pixels": 232953
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0458_intrinsic.png",
+        "sha256": "cb5e9c33ae59272bc0cdf4ca4f6d89d6cead659d2bcd4b83a97165b25688d729",
+        "rgba_sha256": "801c593a0d1c01b2e2dadadd2ba29add29c3e7df1297ddbe3bcf99d379955dee",
+        "bounds": [
+          50,
+          278,
+          337,
+          374
+        ],
+        "covered_pixels": 15288,
+        "transparent_pixels": 221333,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 459,
+      "main": {
+        "path": "assets/party_layers/006/frame_0459_main.png",
+        "sha256": "377f79cc56c14dfdda6bc9b1edc9f536ea2d62e41969a3d00e7039f3944af6f4",
+        "rgba_sha256": "a7f611b886f237e1682387fa52ffba22b4619451d6097744c2b0643b7ab8eebb",
+        "bounds": [
+          212,
+          230,
+          301,
+          342
+        ],
+        "covered_pixels": 3453,
+        "transparent_pixels": 233168
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0459_intrinsic.png",
+        "sha256": "c2d5efaeb68803d3c0b7bb038f607a51615be59424410d6f9e9756410cb9e758",
+        "rgba_sha256": "0922d5e8f475230d20722d012121fff69c809d3643b0ec8adcc07ee798158337",
+        "bounds": [
+          51,
+          278,
+          336,
+          374
+        ],
+        "covered_pixels": 14488,
+        "transparent_pixels": 222133,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 460,
+      "main": {
+        "path": "assets/party_layers/006/frame_0460_main.png",
+        "sha256": "7da88683d0c15df1d7059865fe3c911aa67361a13471cefa8e393c7e66854861",
+        "rgba_sha256": "96f6ca72111cccc10b8dc173e4696366df754a3367ade335d3785ab64a215ed5",
+        "bounds": [
+          215,
+          222,
+          301,
+          342
+        ],
+        "covered_pixels": 3452,
+        "transparent_pixels": 233169
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0460_intrinsic.png",
+        "sha256": "eaec0c1429cd015451f7412a5710c73f82125195a816615e167f9c9d74b7e267",
+        "rgba_sha256": "789a1a33f4297a585525d2395a737a003c4cd1c6e4cd7bbaf1fabfea43a923e2",
+        "bounds": [
+          58,
+          277,
+          336,
+          337
+        ],
+        "covered_pixels": 7232,
+        "transparent_pixels": 229389,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 461,
+      "main": {
+        "path": "assets/party_layers/006/frame_0461_main.png",
+        "sha256": "baa820feb45efe56dee93a699de7d4e0f3cb972a1773f6e0eb35d403ee309b4f",
+        "rgba_sha256": "bb548f616177bfe278a6a30eb85517d989933680eb2ca27b41695e4ca7deddfc",
+        "bounds": [
+          222,
+          217,
+          301,
+          341
+        ],
+        "covered_pixels": 3397,
+        "transparent_pixels": 233224
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0461_intrinsic.png",
+        "sha256": "9d30ed8bd1bd6e4dbee188491851aea0f58052082d863169214fe89112befb56",
+        "rgba_sha256": "ec1898dda3f0a2f8d869af7bb933a1265fbde9c2ce20449688fbf67193e48afc",
+        "bounds": [
+          152,
+          278,
+          335,
+          323
+        ],
+        "covered_pixels": 3179,
+        "transparent_pixels": 233442,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 462,
+      "main": {
+        "path": "assets/party_layers/006/frame_0462_main.png",
+        "sha256": "84e66d04fd556d0b5c9f9d9a9c34f70203590107625903d478ab44374eac7c8a",
+        "rgba_sha256": "783c5ed18e42219432e33892106328bfc7e576e15bec5acabc5a3f6e6e8f91ed",
+        "bounds": [
+          226,
+          214,
+          306,
+          343
+        ],
+        "covered_pixels": 3544,
+        "transparent_pixels": 233077
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0462_intrinsic.png",
+        "sha256": "7fceb4ec8586b1a34f54a505e229a28e03dca8ac9c984104605245f77ba549ec",
+        "rgba_sha256": "1c23791f939e9d326af3269bc568b475ae0769aa8ec0fd2c9ee76be2387fc328",
+        "bounds": [
+          250,
+          284,
+          335,
+          323
+        ],
+        "covered_pixels": 1202,
+        "transparent_pixels": 235419,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 463,
+      "main": {
+        "path": "assets/party_layers/006/frame_0463_main.png",
+        "sha256": "c33917ce4aaccbab0c59d53688e437c96bd43c6aab7d36c41b1e99c6e9e29a6e",
+        "rgba_sha256": "13d9341f80660e312794a830ad85d9548fa81331393b586b5a49235fcf8c72cf",
+        "bounds": [
+          234,
+          211,
+          309,
+          346
+        ],
+        "covered_pixels": 3665,
+        "transparent_pixels": 232956
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0463_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 464,
+      "main": {
+        "path": "assets/party_layers/006/frame_0464_main.png",
+        "sha256": "16118904a3fdf93e956d05d5a78706dbe01dd592606943e7d35da26beea50caa",
+        "rgba_sha256": "b50a0be85550cbb11a834f812f8021dbcf73d3429eaef8b9feb0009b687e0f3d",
+        "bounds": [
+          245,
+          210,
+          300,
+          346
+        ],
+        "covered_pixels": 3803,
+        "transparent_pixels": 232818
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0464_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 465,
+      "main": {
+        "path": "assets/party_layers/006/frame_0465_main.png",
+        "sha256": "76376179a40d53a57fd46b5e99d318292233cbfcd13a1c40febd0d4e0e87258d",
+        "rgba_sha256": "38dc94ad5f0f2e2841059eb7851c614278b03917527bd3bc210b0ea5375b0522",
+        "bounds": [
+          243,
+          209,
+          307,
+          350
+        ],
+        "covered_pixels": 4125,
+        "transparent_pixels": 232496
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0465_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 466,
+      "main": {
+        "path": "assets/party_layers/006/frame_0466_main.png",
+        "sha256": "ed3324ac24b112eedb9b847d7dfb8d85f96fdb9d0908329217c2a4ed909d74c5",
+        "rgba_sha256": "81e40c92c3532d01cb51b5f344becc6ee186df4dc6e5dc936fd253fd453ae800",
+        "bounds": [
+          253,
+          210,
+          294,
+          349
+        ],
+        "covered_pixels": 2811,
+        "transparent_pixels": 233810
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0466_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 467,
+      "main": {
+        "path": "assets/party_layers/006/frame_0467_main.png",
+        "sha256": "bde4589e992c015a1e42e6bb044323efbf0ae021f6d4b6a8ad6e5eb408475762",
+        "rgba_sha256": "0e5006be165dbb666eabd36c8b8eb3c2a27dff8033550391bb3fea8a98d42541",
+        "bounds": [
+          251,
+          214,
+          299,
+          348
+        ],
+        "covered_pixels": 3642,
+        "transparent_pixels": 232979
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0467_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 468,
+      "main": {
+        "path": "assets/party_layers/006/frame_0468_main.png",
+        "sha256": "be1dcedb648796f3d24000910cd9cf5846aff5f770a9249dd42f7c8fccab9525",
+        "rgba_sha256": "9f3f99ea3bbc5bc794a934b697b9bf14c4690a230c043ecb467a445dde34b4f2",
+        "bounds": [
+          245,
+          224,
+          306,
+          345
+        ],
+        "covered_pixels": 3902,
+        "transparent_pixels": 232719
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0468_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 469,
+      "main": {
+        "path": "assets/party_layers/006/frame_0469_main.png",
+        "sha256": "13dcd9e38e6994a112df826d6716e65b77dca67802a741bedfee276e6a4e65b2",
+        "rgba_sha256": "9bdcb46d04810b8feba9df50460a64dd930e5dcb5ea832c315b317c470d570ef",
+        "bounds": [
+          241,
+          246,
+          331,
+          347
+        ],
+        "covered_pixels": 3607,
+        "transparent_pixels": 233014
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0469_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 470,
+      "main": {
+        "path": "assets/party_layers/006/frame_0470_main.png",
+        "sha256": "125e976f594a2dbf4070b2a958daec16f9d80b47737251dc5cf699ed3dd98f21",
+        "rgba_sha256": "6f42c5a5d75a8a94c468752a79245fdf0fe174e8a7f80fea8db3de8968b8f355",
+        "bounds": [
+          232,
+          269,
+          352,
+          353
+        ],
+        "covered_pixels": 3240,
+        "transparent_pixels": 233381
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0470_intrinsic.png",
+        "sha256": "61ae03af5eea3f7894ec23ea7e0efd6357e7c5650e34fee04b8eeeaa30b807f4",
+        "rgba_sha256": "adf2cb7e69afdb12114d7010230d8e7cfd3db144a65dbc7544192343f7729f58",
+        "bounds": [
+          302,
+          328,
+          374,
+          376
+        ],
+        "covered_pixels": 1474,
+        "transparent_pixels": 235147,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 471,
+      "main": {
+        "path": "assets/party_layers/006/frame_0471_main.png",
+        "sha256": "3d1e647c7b20776ad055da8bf7664fd9a1418f3b2df503ea2e4aeacb355a5dc3",
+        "rgba_sha256": "f97203bd8bde94272be71314b8c72aea0b96237b2c95551e3aa8f278bbb10284",
+        "bounds": [
+          223,
+          275,
+          325,
+          360
+        ],
+        "covered_pixels": 3597,
+        "transparent_pixels": 233024
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0471_intrinsic.png",
+        "sha256": "b63952ea444b1a6963281e7117a6c1bc1fcfa3843a3e4c41a25fe085f438220d",
+        "rgba_sha256": "38b3634d774898f43da37ed692fecd606c347afe322988f66da8acd2e974ef85",
+        "bounds": [
+          211,
+          328,
+          374,
+          389
+        ],
+        "covered_pixels": 3859,
+        "transparent_pixels": 232762,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 472,
+      "main": {
+        "path": "assets/party_layers/006/frame_0472_main.png",
+        "sha256": "d5bab7cdd14ea204ecfe1d853028aceb4723c2ef606728591a66aad4cfac2d55",
+        "rgba_sha256": "f71fe28da03d8d54a8548f58c97cab03f42a9bffca7ab7d6f5d8231b83681f9f",
+        "bounds": [
+          186,
+          269,
+          318,
+          348
+        ],
+        "covered_pixels": 4258,
+        "transparent_pixels": 232363
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0472_intrinsic.png",
+        "sha256": "c99a65233c2bd7906bb7e979a50771eeee7dcb73580e9620995a0b37e00e1732",
+        "rgba_sha256": "738f517d82eff15f7c214ac6f3f040ba11f385bcc19dcc91bfaabe47d59df39d",
+        "bounds": [
+          88,
+          318,
+          372,
+          392
+        ],
+        "covered_pixels": 9958,
+        "transparent_pixels": 226663,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 473,
+      "main": {
+        "path": "assets/party_layers/006/frame_0473_main.png",
+        "sha256": "fe2f802456cfea23be73c3506377088cbb596d9a78f4b117461f5fc11aca5c81",
+        "rgba_sha256": "c6ea4e237950e060b306b7536373199a46a61e2accec08d57706c57c12b6bb9c",
+        "bounds": [
+          203,
+          262,
+          313,
+          347
+        ],
+        "covered_pixels": 4096,
+        "transparent_pixels": 232525
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0473_intrinsic.png",
+        "sha256": "6fde53091cf5507ce745e5ef4a5e4ef43b83cb90ebf02198e4b5c5f22447c307",
+        "rgba_sha256": "ae93ed1bc6f0e6f6916a8aadb80db1bece44b2c28a81cd72908f63832903879c",
+        "bounds": [
+          84,
+          301,
+          374,
+          390
+        ],
+        "covered_pixels": 12755,
+        "transparent_pixels": 223866,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 474,
+      "main": {
+        "path": "assets/party_layers/006/frame_0474_main.png",
+        "sha256": "76b89aff5cea2f635a5dbec8c2d2fb639a62e00dc1fad23689dc0d21b1d981c9",
+        "rgba_sha256": "4cde10a5306bf739e9aedab04d07482ee32e8f4519e691d21a5e89dd7b2baa6f",
+        "bounds": [
+          220,
+          259,
+          309,
+          348
+        ],
+        "covered_pixels": 3709,
+        "transparent_pixels": 232912
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0474_intrinsic.png",
+        "sha256": "9c7c11ff097bc15e431d5608d6605d5e308e321a5a82fd10973b333ce10f9d1d",
+        "rgba_sha256": "9b26d23a3781ede15094dad0ef0b8ed050900cd2e19c2840071ab6891062df72",
+        "bounds": [
+          88,
+          299,
+          303,
+          391
+        ],
+        "covered_pixels": 10973,
+        "transparent_pixels": 225648,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 475,
+      "main": {
+        "path": "assets/party_layers/006/frame_0475_main.png",
+        "sha256": "1a00912815da991cd7c1c02592994a158563373298524a4389a2b83c16076bb0",
+        "rgba_sha256": "d5331e28639efd079465002f1be2e3fb0132eb9e1c9ac2f8e3c66844bef39049",
+        "bounds": [
+          224,
+          251,
+          302,
+          348
+        ],
+        "covered_pixels": 3514,
+        "transparent_pixels": 233107
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0475_intrinsic.png",
+        "sha256": "3d48412c383b78dcf55b0fdd7f52d3e70f42ff45fda2049c4c5f75af9a02a23a",
+        "rgba_sha256": "9c4e0f523b2108052b44a0291e62049dce98fa08c1150285272dd6441dbacdae",
+        "bounds": [
+          86,
+          300,
+          259,
+          370
+        ],
+        "covered_pixels": 6079,
+        "transparent_pixels": 230542,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 476,
+      "main": {
+        "path": "assets/party_layers/006/frame_0476_main.png",
+        "sha256": "48175aee0c25a78829a0bb211f630670cea1f8acf71014896c74de4aa5ac9f2d",
+        "rgba_sha256": "32d58f07efcffe70763610017b29613ea66e3cfa04a0e1f698ed45b35957fae8",
+        "bounds": [
+          225,
+          238,
+          299,
+          349
+        ],
+        "covered_pixels": 3284,
+        "transparent_pixels": 233337
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0476_intrinsic.png",
+        "sha256": "16617c79797684b5b8c7afad005e85d4b6660d34bc7c79ac5012564f22e3566f",
+        "rgba_sha256": "45a452ca5e5b3c0eaa4608238291f86e54498d2e4839b8f891ed96fd855cca84",
+        "bounds": [
+          124,
+          300,
+          246,
+          325
+        ],
+        "covered_pixels": 2024,
+        "transparent_pixels": 234597,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 477,
+      "main": {
+        "path": "assets/party_layers/006/frame_0477_main.png",
+        "sha256": "0305817e9360afc51694458b4e1492e12493ae6f3d8269c90d3bdda9abd30f96",
+        "rgba_sha256": "12fa0d9763b61afd499f3a4d45e0094861bbdd2a94f3cd0d8f1ae0b60d5f1267",
+        "bounds": [
+          235,
+          223,
+          300,
+          350
+        ],
+        "covered_pixels": 3626,
+        "transparent_pixels": 232995
+      },
+      "intrinsic": {
+        "path": "assets/party_layers/006/frame_0477_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    }
+  ],
+  "source_hashes": {
+    "GAME.exe": "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18",
+    "Fight_Role/006.CHR": "27b29fb5cc1073014faea7553d0175559714c18dbbc5132ca1c549e4a9d8e15b",
+    "Fight_Role/006.dgp": "3eec3a8b10fda36ae95a42730634fc1241a2b6bf6a05a56469346d1bbcd7c92d"
+  },
+  "evidence": [
+    "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+    "ev_0c237df7043928c88bbdebd562f666aa4b7f4201a779c0a793b1483939fd71d2",
+    "ev_a6647ea0bc3a48a670332ca03d6a4e02d7b145a407b5a5ad2dcfa4ed39b122d1"
+  ],
+  "limits": [
+    "Source main and intrinsic layers share one physical frame and origin.",
+    "Canvas additive blending and wall-clock timing are preview policies."
+  ]
+}

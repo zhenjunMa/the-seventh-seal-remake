@@ -3,6 +3,7 @@
 const need=(ok,message)=>{if(!ok)throw new Error(message);};
 import {techniqueSlots} from './menu_techniques.mjs';
 import {battleSkillEligibility} from './battle_skill_access.mjs';
+import {allPartyRoles} from './party_roster.mjs';
 const object=v=>v&&typeof v==='object'&&!Array.isArray(v);
 export function validateSkillShortcutState(state,party){
   need(object(state)&&state.version===1&&Object.keys(state).length===2&&object(state.roles),'快捷技能存档无效');
@@ -23,11 +24,12 @@ function checkSlots(source,roleId,slots){
 }
 export function skillShortcuts(world,source,roleId){
   need(world.party.some(role=>role.id===roleId),'快捷技能角色不在队伍中');
-  if(world.skill_shortcuts)validateSkillShortcutState(world.skill_shortcuts,world.party);
+  if(world.skill_shortcuts)validateSkillShortcutState(world.skill_shortcuts,allPartyRoles(world));
   return checkSlots(source,roleId,world.skill_shortcuts?.roles[roleId]??source.roles?.[roleId]?.default_hotkey_indices);
 }
 export function validateSourceSkillShortcuts(world,source){
-  if(world.skill_shortcuts)for(const roleId of Object.keys(world.skill_shortcuts.roles))skillShortcuts(world,source,roleId);
+  if(world.skill_shortcuts){validateSkillShortcutState(world.skill_shortcuts,allPartyRoles(world));
+    for(const [roleId,slots]of Object.entries(world.skill_shortcuts.roles))checkSlots(source,roleId,slots);}
 }
 export function changeSkillShortcuts(world,source,{roleId,indices,expectedRevision=world.value.revision}){
   need(world.value.revision===expectedRevision,'操作期间进度已变化');

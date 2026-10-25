@@ -40,6 +40,7 @@
     "native_coordinate_shift": 3,
     "native_to_pixel_scale": 2,
     "native_step_shift": 1,
+    "native_camera_step_shift": 1,
     "terrain_rows": [
       "11111111111111111111111111111111111111111111111111111111111111",
       "11111111111111111111111111111111111111111111111111111111111111",
@@ -978,6 +979,8 @@
     "path": "Map/m72061.dat",
     "sha256": "f618ebc0e77203eae589201d4b83ccfebd3b019a9c3dceff760fa0cc6521e9a6",
     "bytes": 254797,
+    "object_resource_base_raw": ".\\MAPM\\M72061\\",
+    "object_resource_base": "mapm/m72061",
     "object_table_start": 219730,
     "object_table_end": 222196,
     "unknown_tail_bytes": 32601,

@@ -51,7 +51,8 @@ test('reward export anchors exact untouched CHR, ITM and verified save inputs',(
     const b=fs.readFileSync(path.join(root,enemy.source.path));assert.equal(enemy.experience,b.readInt32LE(8+0x28));assert.deepEqual(enemy.reward_slots,Array.from({length:6},(_,i)=>b.readInt32LE(8+0xe8+i*4)));
     assert.equal(enemy.reward_slots.filter(v=>v<0).length,0,'forest money must stay zero');
   }
-  assert.deepEqual(Object.values(data.enemies).map(e=>e.experience),[60,84,50]);
+  assert.deepEqual(['011','012','013'].map(id=>data.enemies[id].experience),[60,84,50]);
+  assert.equal(data.enemies['032'].experience,100000);assert.deepEqual(data.enemies['032'].reward_slots,[347,0,0,0,0,0]);
   assert.equal(Buffer.from(data.initial_roles['001'].header_raw_hex,'hex').readInt32LE(0x28),7450);
 });
 

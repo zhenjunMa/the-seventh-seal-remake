@@ -7,6 +7,7 @@ import path from 'node:path';
 import {pathToFileURL} from 'node:url';
 import {deriveRuntimeConfiguration,compileRuntimeConfiguration,loadRuntimeConfiguration,expandRuntimeConfiguration,compactRuntimeConfiguration} from '../web/core/runtime_config.mjs';
 import {upgradeSkillConfiguration} from '../web/core/skill_registry.mjs';
+import {supportedBattleRecoverySkills} from '../web/core/battle_skill_access.mjs';
 import {exportRuntimeConfiguration,inspectRuntimeConfiguration} from '../tools/export_runtime_config.mjs';
 import {createPartySample} from '../web/party_sample.mjs';
 import {assembleForestSample} from '../web/forest_sample.mjs';
@@ -31,7 +32,10 @@ test('unified catalog owns every implemented player/enemy skill and original mod
   const before=copy(data),bundle=copy(config),compiled=compileRuntimeConfiguration(data,bundle);
   assert.equal(bundle.skills.version,3);assert.equal(Object.keys(bundle.skills.entries).length,Object.keys(data.source_skills.skills).length+Object.keys(data.source_magic.magic).length);
   const counts={};for(const id of Object.keys(compiled.skill_registry)){const row=bundle.skills.entries[id];counts[row.owner.role_id]=(counts[row.owner.role_id]??0)+1;}
-  assert.deepEqual(counts,{'001':7,'002':5,'003':6,'011':2,'012':2,'013':2});
+  for(const [id,count]of Object.entries({'001':9,'002':7,'003':7,'005':4,'011':2,'012':2,'013':2}))assert.equal(counts[id],count,id);
+  const expectedIds=[...Object.keys({...data.party_skills.skills,...data.party_skills.field_skills,...supportedBattleRecoverySkills(data.party_skills)}),
+    ...Object.entries(data.ai.roles).flatMap(([id,role])=>role.learned_indices.map(index=>`${id}_${index}`))];
+  assert.deepEqual(Object.keys(compiled.skill_registry).sort(),expectedIds.sort());
   for(const [id,source]of Object.entries(data.party_skills.skills)){
     const next=compiled.skill_registry[id];assert.equal(next.fixed_raw_hex,source.fixed_raw_hex);assert.deepEqual(next.actions,source.actions);
     assert.equal(next.configuration.owner.role_id,source.actor_id);assert.equal(next.configuration.owner.skill_index,source.original_skill_index);
@@ -55,11 +59,12 @@ test('each of the six new skill overlays changes numeric fields, MP debt and cha
 });
 
 test('future role/index registration is data-driven and does not mix equal skill indices between actors',()=>{
+  const originalRegistry=compileRuntimeConfiguration(data,config).skill_registry;
   const next=copy(data),source=copy(next.party_skills.skills.yantu);source.id='999_22';source.actor_id='999';source.source.path='Fight_Role/999.CHR';source.source.sha256='1'.repeat(64);
   next.party_skills.skills[source.id]=source;next.party_skills.source_hashes[source.source.path]=source.source.sha256;
   const cfg=deriveRuntimeConfiguration(next);cfg.manifest.mode='debug';cfg.skills.entries['999_22'].parameters.mp_cost=7;
   const compiled=compileRuntimeConfiguration(next,cfg);
-  assert.equal(Object.keys(compiled.skill_registry).length,25);assert.equal(compiled.skill_registry['999_22'].mp_cost,7);
+  assert.deepEqual(Object.keys(compiled.skill_registry).sort(),[...Object.keys(originalRegistry),'999_22'].sort());assert.equal(compiled.skill_registry['999_22'].mp_cost,7);
   assert.equal(compiled.skill_registry.yantu.mp_cost,0);assert.deepEqual(compiled.skill_registry['999_22'].configuration.owner,{role_id:'999',skill_index:22,side:'player'});
   const existing=compactRuntimeConfiguration(data,debug());existing.skills.entries.kai_mieyan.parameters.mp_cost=2;
   const upgraded=upgradeSkillConfiguration(next,existing.skills);assert.equal(upgraded.entries.kai_mieyan.parameters.mp_cost,2);assert.equal(upgraded.entries['999_22'].parameters.mp_cost,0);

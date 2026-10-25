@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 from pathlib import Path
 import struct
 import sys
@@ -48,11 +49,40 @@ def write(path, value):
     path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
+def program_map_context(commands, maps, ident):
+    """Resolve control contexts from opcode10 and actual TLK/DAT callers only."""
+    loads = []
+    for command in commands:
+        if command['opcode'] != 10:
+            continue
+        filename = command.get('filename', '')
+        if command['u32_plus5'] != 0 or not re.fullmatch(r'M[0-9]{5}(?:-[0-9]+)?\.DAT', filename, re.IGNORECASE):
+            raise ValueError(f'ANM {ident} has an unsupported opcode10 map reference: {filename}')
+        map_id = filename[:-4].upper()
+        if map_id not in maps:
+            raise ValueError(f'ANM {ident} has an unregistered control map: {map_id}')
+        loads.append(dict(map_id=map_id, command_index=command.get('index'), source=command.get('source')))
+    callers, descriptors = [], []
+    for map_id, table in maps.items():
+        for record in table.get('records', []):
+            if record['kind'] == 1 and record['text_raw'].lower() == ident.lower() + '.anm':
+                callers.append(dict(map_id=map_id, record_id=record['id'], source=record.get('source')))
+        for descriptor in table.get('descriptors', []):
+            if descriptor['state_raw'] == 1 and descriptor['filename_raw'].lower() == ident.lower() + '.anm':
+                descriptors.append(dict(map_id=map_id, descriptor_id=descriptor['id'], source=descriptor.get('source')))
+    control_maps = list(dict.fromkeys(row['map_id'] for row in loads))
+    caller_maps = list(dict.fromkeys(row['map_id'] for row in [*callers, *descriptors]))
+    if not control_maps and len(caller_maps) != 1:
+        raise ValueError(f'ANM {ident} without opcode10 requires one actual registered caller map; got {caller_maps}')
+    return dict(control_map=loads[-1]['map_id'] if loads else caller_maps[0],
+                control_maps=control_maps, caller_maps=caller_maps,
+                maps=list(dict.fromkeys([*caller_maps, *control_maps])),
+                context_sources=dict(map_commands=loads, caller_records=callers, caller_descriptors=descriptors))
+
+
 def program_control_map(commands, maps, ident):
-    loaded = {Path(c['filename']).stem.upper() for c in commands if c['opcode'] == 10 and c['u32_plus5'] == 0}
-    if len(loaded) != 1 or not loaded.issubset(maps):
-        raise ValueError(f'ANM {ident} must have one registered control map in native opcode10; got {loaded}')
-    return next(iter(loaded))
+    """Compatibility accessor: the final loaded map, or unique no-load caller."""
+    return program_map_context(commands, maps, ident)['control_map']
 
 
 def export():
@@ -78,6 +108,7 @@ def export():
             raw = bytes.fromhex(record["raw_hex"])
             record["byte_plus7_raw"] = raw[7]
             record["byte_plus8_raw"] = raw[8]
+            record["condition_byte_raw_0b"] = raw[0x0B]
             record["header_bytes_2_to14_raw"] = raw[2:15].hex()
         descriptors = []
         table = dat["fixed_sections"][1]
@@ -128,10 +159,16 @@ def export():
                             for cell in cells] for marker,cells in dat["entry_markers"].items()},
             default_object_index_slot=499,
             default_object_record=next((slot["record"] for slot in tlk["index_nonzero"] if slot["slot"] == 499), 0),
-            header_entry_tlk_raw=u32(data, 0x11E),
-            header_entry_tlk_source=source(dat["path"],dat["sha256"],0x11E,bytes=4),
+            # 4A5F00 loads the header at 0504B1C8; 4A85A0 passes
+            # 0504B302 to 4670C0, giving source offset 0x13A.
+            header_entry_tlk_raw=u32(data, 0x13A),
+            header_entry_tlk_source=source(dat["path"],dat["sha256"],0x13A,bytes=4),
+            # 4A5F00 runs 466EC0 with header 0504B252 before returning;
+            # this rebuilds phase-specific actors even when restoring a save.
+            header_setup_tlk_raw=u32(data, 0x8A),
+            header_setup_tlk_source=source(dat["path"],dat["sha256"],0x8A,bytes=4),
             evidence=[TLK_EVIDENCE, COMPACT_EVIDENCE],
-            limitations=["Index slot499 is retained as the object default TLK entry; it must not be used as an automatic map-load event. Header +0x11E controls map-entry TLK.",
+            limitations=["Index slot499 is retained as the object default TLK entry; it must not be used as an automatic map-load event. Header +0x8A controls map setup; +0x13A controls map-entry TLK.",
                          "TLK record kind/mutation numbers are raw native values; dialogue text alone does not define their behavior."])
     programs = {}
     for ident in ANM_IDS:
@@ -145,16 +182,19 @@ def export():
                 map_index_raw=u32(raw, 34), evidence=[VM_EVIDENCE])
             command.update({f"u32_plus{at}": u32(raw, at) for at in [1,5,9,13,17,21,25]})
             command.update({f"byte_plus{at}": raw[at] for at in range(29,34)})
-            if command["opcode"] == 10:
+            if command["opcode"] in [10,60,62]:
                 command["filename"] = raw[54:74].split(b"\0")[0].decode("ascii", "strict")
             commands.append(command)
-        map_id = program_control_map(commands, maps, ident)
+        context = program_map_context(commands, maps, ident)
         programs[ident] = dict(schema="seventh-seal-chapter-anm", version=1, id=ident,
             source=source(anm["path"], anm["sha256"], bytes=anm["bytes"]),
             header_raw_hex=anm["header_hex"], commands=commands,
             required_opcodes=sorted({command["opcode"] for command in commands}),
-            maps=[map_id], dialogues={map_id: dict(source=maps[map_id]["source"],records=maps[map_id]["records"])},
-            expected=dict(control_map=map_id, final_control_actor=0),
+            maps=context['maps'], dialogues={map_id: dict(source=maps[map_id]["source"],records=maps[map_id]["records"])
+                                             for map_id in context['maps']},
+            expected=dict(control_map=context['control_map'], control_maps=context['control_maps'],
+                          caller_maps=context['caller_maps'], final_control_actor=0),
+            context_sources=context['context_sources'],
             native_evidence=[VM_EVIDENCE],
             limitations=["Static source/native command export, not observed original execution.",
                          "Native movement speed0, actor party opcode36 and TLK mutation dispatch require their recovered handlers.",

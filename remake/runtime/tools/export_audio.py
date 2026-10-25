@@ -112,7 +112,7 @@ def main():
                                              decoded_pcm_md5=decoded_output, decoded_audio_unchanged=True))
         return source
     maps = {}
-    from content_registration import map_ids
+    from content_registration import map_ids, stage_exports
     for ident in map_ids():
         path = f'Map/{ident.lower()}.dat'; raw = read(path); assert struct.unpack_from('<I', raw, 0x14)[0] == 6
         token = original_text(raw, 0x44, 0x40); assert token.lower().endswith('.wav')
@@ -120,17 +120,21 @@ def main():
             evidence=[evidence['0x4a5f00'],evidence['0x4a09c0']], confidence='source DAT+0x44 and confirmed native same-track/load branch')
     encounters = json.loads((WEB/'data/encounters.json').read_text('utf-8'))
     battles = {}
-    for ident, entry in encounters['maps'].items():
-        stage = entry['stage']; path='Fight_Bk/'+stage; raw=read(path); token=original_text(raw,0x1c,20)
+    stage_sources={entry['stage']:entry['evidence'] for entry in encounters['maps'].values()}
+    for stage,row in stage_exports().items():
+        if row['export']=='source':stage_sources.setdefault(stage+'.scn',[])
+    for stage, stage_evidence in stage_sources.items():
+        path='Fight_Bk/'+stage; raw=read(path); token=original_text(raw,0x1c,20)
         # 0x50AA80 enumerates at most ten *.WAV and chooses rand()%count when
         # SCN+0x1C is empty. Order below is deterministic remake enumeration;
         # the original Windows filesystem enumeration order was not observed.
         pool = [clip(p.relative_to(ROOT).as_posix()) for p in sorted((ROOT/'sound/Fight').glob('*.wav'))[:10]] if not token else None
         battles[stage] = dict(clip=clip('sound/'+token) if token else None,
             source=dict(path=path, sha256=sha(raw), offset=0x1c, bytes=20, token=token),
-            evidence=list(entry['evidence'])+[evidence['0x51c48f'],evidence['0x50aacf']],
+            evidence=list(stage_evidence)+[evidence['0x51c48f'],evidence['0x50aacf']],
             confidence='source SCN field and confirmed native fallback pool', **(dict(pool=pool,selection='source default pool; fresh browser random selection') if pool else {}))
-        battles[ident] = dict(battles[stage], stage_id=stage)
+    for ident,entry in encounters['maps'].items():
+        stage=entry['stage'];battles[ident] = dict(battles[stage], stage_id=stage)
     # Keep the older standalone menu clip, but operation MNU controls use the
     # separate five-entry native562EF0 table, not that older menu implementation.
     confirm = clip('sound/menu/mDecide.wav')

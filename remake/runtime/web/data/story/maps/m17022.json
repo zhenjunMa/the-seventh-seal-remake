@@ -1,0 +1,267 @@
+{
+  "schema": "seventh-seal-story-map",
+  "version": 2,
+  "map_id": "M17022",
+  "chapter": null,
+  "programs": {},
+  "flows": {},
+  "events": [],
+  "resources": {
+    "npcs_by_map": [],
+    "exits_by_map": [
+      {
+        "id": 1,
+        "state": "ready",
+        "cells": [
+          {
+            "x": 34,
+            "y": 39
+          },
+          {
+            "x": 35,
+            "y": 39
+          },
+          {
+            "x": 36,
+            "y": 39
+          },
+          {
+            "x": 37,
+            "y": 39
+          },
+          {
+            "x": 38,
+            "y": 39
+          },
+          {
+            "x": 39,
+            "y": 39
+          },
+          {
+            "x": 40,
+            "y": 39
+          },
+          {
+            "x": 41,
+            "y": 39
+          },
+          {
+            "x": 42,
+            "y": 39
+          },
+          {
+            "x": 43,
+            "y": 39
+          },
+          {
+            "x": 44,
+            "y": 39
+          },
+          {
+            "x": 45,
+            "y": 39
+          },
+          {
+            "x": 46,
+            "y": 39
+          }
+        ],
+        "target_map": "M17021",
+        "entry": {
+          "x": 592,
+          "y": 352,
+          "direction": 7,
+          "cell_x": 37,
+          "cell_y": 22,
+          "native_x": 296,
+          "native_y": 176
+        },
+        "conditions": [],
+        "source": {
+          "path": "Map/m17022.dat",
+          "sha256": "777949c861b8666b85162b90e5b0451b2c9e6b3d64089f0e5d780e6caab6492a",
+          "descriptor_offset": 169586,
+          "descriptor_bytes": 66,
+          "descriptor_hex": "00000000000000000000000000000000006d31373032312e646174000000000000000000000002000000060000000000000000000000000000000000000000000000",
+          "compact_field_expansion_evidence": null,
+          "target_path": "Map/m17021.dat",
+          "target_sha256": "8936daaa7ae9a874a41d9afabf1180677fe02c5d9640a0585792092357fd0ec5",
+          "target_entry_marker": 2,
+          "entry_sort_code": 6,
+          "entry_scan_cells": [
+            {
+              "x": 37,
+              "y": 22,
+              "offset": 71730
+            }
+          ],
+          "entry_sorted_cells": [
+            {
+              "x": 37,
+              "y": 22
+            }
+          ],
+          "entry_sort": "y descending; stable ties",
+          "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
+          "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
+          "native_evidence": {
+            "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+            "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+            "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+            "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+          }
+        },
+        "execution": "Native transition descriptor only; map-entry TLK/ANM and their once-only checks must complete separately.",
+        "limitations": [
+          "Static source/code evidence; original timing not observed",
+          "Continuous keyboard movement is runtime policy"
+        ]
+      },
+      {
+        "id": 2,
+        "state": "ready",
+        "cells": [
+          {
+            "x": 5,
+            "y": 7
+          },
+          {
+            "x": 6,
+            "y": 7
+          },
+          {
+            "x": 5,
+            "y": 8
+          }
+        ],
+        "target_map": "M17023",
+        "entry": {
+          "x": 736,
+          "y": 560,
+          "direction": 4,
+          "cell_x": 46,
+          "cell_y": 35,
+          "native_x": 368,
+          "native_y": 280
+        },
+        "conditions": [],
+        "source": {
+          "path": "Map/m17022.dat",
+          "sha256": "777949c861b8666b85162b90e5b0451b2c9e6b3d64089f0e5d780e6caab6492a",
+          "descriptor_offset": 169652,
+          "descriptor_bytes": 66,
+          "descriptor_hex": "00000000000000000000000000000000006d31373032332e646174000000000000000000000001000000030000000000000000000000000000000000000000000000",
+          "compact_field_expansion_evidence": null,
+          "target_path": "Map/m17023.dat",
+          "target_sha256": "d9f2021f1f24558f8ead877cc77612c7fa2263b8225a10d630f308384ef857f9",
+          "target_entry_marker": 1,
+          "entry_sort_code": 3,
+          "entry_scan_cells": [
+            {
+              "x": 46,
+              "y": 35,
+              "offset": 139954
+            }
+          ],
+          "entry_sorted_cells": [
+            {
+              "x": 46,
+              "y": 35
+            }
+          ],
+          "entry_sort": "x ascending; stable ties",
+          "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
+          "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
+          "native_evidence": {
+            "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+            "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+            "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+            "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+          }
+        },
+        "execution": "Native transition descriptor only; map-entry TLK/ANM and their once-only checks must complete separately.",
+        "limitations": [
+          "Static source/code evidence; original timing not observed",
+          "Continuous keyboard movement is runtime policy"
+        ]
+      },
+      {
+        "id": 3,
+        "state": "ready",
+        "cells": [
+          {
+            "x": 54,
+            "y": 12
+          },
+          {
+            "x": 55,
+            "y": 12
+          },
+          {
+            "x": 54,
+            "y": 13
+          },
+          {
+            "x": 55,
+            "y": 13
+          }
+        ],
+        "target_map": "M17024",
+        "entry": {
+          "x": 256,
+          "y": 752,
+          "direction": 2,
+          "cell_x": 16,
+          "cell_y": 47,
+          "native_x": 128,
+          "native_y": 376
+        },
+        "conditions": [],
+        "source": {
+          "path": "Map/m17022.dat",
+          "sha256": "777949c861b8666b85162b90e5b0451b2c9e6b3d64089f0e5d780e6caab6492a",
+          "descriptor_offset": 169718,
+          "descriptor_bytes": 66,
+          "descriptor_hex": "00000000000000000000000000000000006d31373032342e646174000000000000000000000001000000010000000000000000000000000000000000000000000000",
+          "compact_field_expansion_evidence": null,
+          "target_path": "Map/m17024.dat",
+          "target_sha256": "18b33b069a469365ed75b531aa6346c58112f0c6a64c7a59ae1c6108318ef599",
+          "target_entry_marker": 1,
+          "entry_sort_code": 1,
+          "entry_scan_cells": [
+            {
+              "x": 16,
+              "y": 47,
+              "offset": 242034
+            }
+          ],
+          "entry_sorted_cells": [
+            {
+              "x": 16,
+              "y": 47
+            }
+          ],
+          "entry_sort": "row-major scan; first four; missing followers repeat last observed cell",
+          "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
+          "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
+          "native_evidence": {
+            "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+            "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+            "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+            "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+          }
+        },
+        "execution": "Native transition descriptor only; map-entry TLK/ANM and their once-only checks must complete separately.",
+        "limitations": [
+          "Static source/code evidence; original timing not observed",
+          "Continuous keyboard movement is runtime policy"
+        ]
+      }
+    ],
+    "trigger_regions": [],
+    "interactive_objects": [],
+    "object_animations": []
+  },
+  "route": null,
+  "texts": {}
+}

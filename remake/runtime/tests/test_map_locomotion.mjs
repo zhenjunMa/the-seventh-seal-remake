@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {DistanceGait,mapMotionProfile,mapStepGeometry} from '../web/core/map_locomotion.mjs';
+import {DistanceGait,mapMotionProfile,mapStepGeometry,nativeMapMovement} from '../web/core/map_locomotion.mjs';
 import {MovementMap} from '../web/core/movement.mjs';
 
 const {createMapController}=await import('../web/controllers/map.mjs');
@@ -104,4 +104,15 @@ test('chapter-style actions use logical source sequences and idle time never adv
   assert.equal(gait.advance(sequence,{elapsedMs:60000,stride:12}),2);
   assert.equal(gait.advance(sequence,{dx:12,stride:12}),1);
   assert.equal(gait.advance({index:0,frame_count:10,interval_raw:180},{elapsedMs:360}),2);
+});
+
+test('legacy map assets recover exact camera and actor steps from their verified DAT header',()=>{
+ const header=Buffer.alloc(0x172);header[0x144]=2;header[0x145]=3;
+ const movement={source:'Map/m17010.dat',source_sha256:'a'.repeat(64)};
+ const table={map_source:{path:'Map/m17010.dat',sha256:movement.source_sha256},header_raw_hex:header.toString('hex')};
+ assert.deepEqual(nativeMapMovement(movement,table),{...movement,native_step_shift:2,native_camera_step_shift:3});
+ assert.equal(movement.native_camera_step_shift,undefined,'loading does not rewrite source asset data');
+ assert.throws(()=>nativeMapMovement({...movement,native_camera_step_shift:1},table),/步长与来源/);
+ assert.throws(()=>nativeMapMovement({...movement,source_sha256:'b'.repeat(64)},table),/移动头与来源/);
+ assert.throws(()=>nativeMapMovement(movement,{...table,header_raw_hex:table.header_raw_hex.slice(2)}),/移动头与来源/);
 });

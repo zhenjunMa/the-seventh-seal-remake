@@ -27,6 +27,31 @@
         "decoded_audio_unchanged": true
       }
     },
+    "sound/mn030-1.wav": {
+      "path": "/assets/audio/mn030-1.mp3",
+      "mime": "audio/mpeg",
+      "sha256": "1e534c345abab78c5d65b59a06d777afea1745cd0bee8b5a76c72764c8fcf4dd",
+      "source": {
+        "path": "sound/mn030-1.wav",
+        "sha256": "1e534c345abab78c5d65b59a06d777afea1745cd0bee8b5a76c72764c8fcf4dd",
+        "bytes": 2667209,
+        "header_hex": "49443303000000000776000000000000",
+        "declared_extension": ".wav",
+        "observed_encoding": "MPEG Layer III"
+      },
+      "audio": {
+        "codec": "mp3",
+        "sample_rate": 44100,
+        "channels": 2,
+        "bits_per_sample": 0,
+        "duration_seconds": 133.30925
+      },
+      "export": {
+        "method": "byte-preserving MPEG suffix correction",
+        "decoded_pcm_md5": "MD5=5bc897962280c6bd111372e0a8740d82",
+        "decoded_audio_unchanged": true
+      }
+    },
     "sound/mn170-1.wav": {
       "path": "/assets/audio/mn170-1.mp3",
       "mime": "audio/mpeg",
@@ -99,6 +124,31 @@
       "export": {
         "method": "byte-preserving MPEG suffix correction",
         "decoded_pcm_md5": "MD5=7ab2254a4c664f02e7cfdf28a184bfe4",
+        "decoded_audio_unchanged": true
+      }
+    },
+    "sound/mn170-2.wav": {
+      "path": "/assets/audio/mn170-2.mp3",
+      "mime": "audio/mpeg",
+      "sha256": "4136aaec38d9f7055f85f88c6a6347d28c79b3bd6d0a9c1d0b14a0fe6b34924f",
+      "source": {
+        "path": "sound/mn170-2.wav",
+        "sha256": "4136aaec38d9f7055f85f88c6a6347d28c79b3bd6d0a9c1d0b14a0fe6b34924f",
+        "bytes": 2386654,
+        "header_hex": "49443303000000000776000000000000",
+        "declared_extension": ".wav",
+        "observed_encoding": "MPEG Layer III"
+      },
+      "audio": {
+        "codec": "mp3",
+        "sample_rate": 44100,
+        "channels": 2,
+        "bits_per_sample": 0,
+        "duration_seconds": 119.2815
+      },
+      "export": {
+        "method": "byte-preserving MPEG suffix correction",
+        "decoded_pcm_md5": "MD5=bf8462d7d011d8895f38f0746ed1e815",
         "decoded_audio_unchanged": true
       }
     },
@@ -802,6 +852,31 @@
         "decoded_audio_unchanged": true
       }
     },
+    "sound/01-OA.wav": {
+      "path": "/assets/audio/01-OA.mp3",
+      "mime": "audio/mpeg",
+      "sha256": "0b2ec0ccc500b213f8584d0123160d796adebf7564e7a69a858fa9702a783383",
+      "source": {
+        "path": "sound/01-OA.wav",
+        "sha256": "0b2ec0ccc500b213f8584d0123160d796adebf7564e7a69a858fa9702a783383",
+        "bytes": 9926,
+        "header_hex": "fffba000000000000000000000000000",
+        "declared_extension": ".wav",
+        "observed_encoding": "MPEG Layer III"
+      },
+      "audio": {
+        "codec": "mp3",
+        "sample_rate": 44100,
+        "channels": 2,
+        "bits_per_sample": 0,
+        "duration_seconds": 0.423537
+      },
+      "export": {
+        "method": "byte-preserving MPEG suffix correction",
+        "decoded_pcm_md5": "MD5=283d7d68c18772e32ab258f073a57df6",
+        "decoded_audio_unchanged": true
+      }
+    },
     "sound/OS02-02.wav": {
       "path": "/assets/audio/OS02-02.wav",
       "mime": "audio/wav",
@@ -1199,6 +1274,756 @@
       "export": {
         "method": "byte-preserving MPEG suffix correction",
         "decoded_pcm_md5": "MD5=f313f8306da81c5698e1e80c32568505",
+        "decoded_audio_unchanged": true
+      }
+    },
+    "sound/OS04-16.wav": {
+      "path": "/assets/audio/OS04-16.wav",
+      "mime": "audio/wav",
+      "sha256": "51e70040d5a4ff61be37bad52d9f9af8fbaf457d44a1e42d2dc395913e760f7b",
+      "source": {
+        "path": "sound/OS04-16.wav",
+        "sha256": "6415a1cbeb79133e851beee08b82b296a4fd7c1a9e280b0eec0d62a4755d0d99",
+        "bytes": 230444,
+        "header_hex": "52494646e072030057415645666d7420",
+        "declared_extension": ".wav",
+        "observed_encoding": "RIFF/WAVE PCM"
+      },
+      "audio": {
+        "codec": "pcm_s16le",
+        "sample_rate": 44100,
+        "channels": 2,
+        "bits_per_sample": 16,
+        "duration_seconds": 1.281066
+      },
+      "export": {
+        "method": "canonical PCM RIFF rewrap",
+        "decoded_pcm_md5": "MD5=8774560b3210c72ca1ea0d69fda0670c",
+        "decoded_audio_unchanged": true
+      }
+    },
+    "sound/OS04-15.wav": {
+      "path": "/assets/audio/OS04-15.wav",
+      "mime": "audio/wav",
+      "sha256": "1ea4a44d74bb04f34858c7eeeb0515069762b5c974253f65e2b90f0fcac33c4f",
+      "source": {
+        "path": "sound/OS04-15.wav",
+        "sha256": "f8b06f7c6886ebd6073299a649e299b6efe378512a650fc67a48f0c903380b44",
+        "bytes": 156716,
+        "header_hex": "52494646e052020057415645666d7420",
+        "declared_extension": ".wav",
+        "observed_encoding": "RIFF/WAVE PCM"
+      },
+      "audio": {
+        "codec": "pcm_s16le",
+        "sample_rate": 44100,
+        "channels": 2,
+        "bits_per_sample": 16,
+        "duration_seconds": 0.863107
+      },
+      "export": {
+        "method": "canonical PCM RIFF rewrap",
+        "decoded_pcm_md5": "MD5=30bd084a06472ac2199aff68d1b36ae9",
+        "decoded_audio_unchanged": true
+      }
+    },
+    "sound/OS04-11.wav": {
+      "path": "/assets/audio/OS04-11.wav",
+      "mime": "audio/wav",
+      "sha256": "67a125c570bb46851f897c83d93830ac84c1ed19f59a1f8f9627be72b3fe0a05",
+      "source": {
+        "path": "sound/OS04-11.wav",
+        "sha256": "06ef1a904300f2b7638f2f39d02e3904d1b1ff87fb4099eab88358572023cfa9",
+        "bytes": 442412,
+        "header_hex": "52494646e0ae060057415645666d7420",
+        "declared_extension": ".wav",
+        "observed_encoding": "RIFF/WAVE PCM"
+      },
+      "audio": {
+        "codec": "pcm_s16le",
+        "sample_rate": 44100,
+        "channels": 2,
+        "bits_per_sample": 16,
+        "duration_seconds": 2.482698
+      },
+      "export": {
+        "method": "canonical PCM RIFF rewrap",
+        "decoded_pcm_md5": "MD5=82d92957c5aa15958de7135393561138",
+        "decoded_audio_unchanged": true
+      }
+    },
+    "sound/OS04-12.wav": {
+      "path": "/assets/audio/OS04-12.wav",
+      "mime": "audio/wav",
+      "sha256": "3d8ae6fcca0ac53f46e518f6df80eb4c496503a5b5db9b0b4cc6b1ae959e521f",
+      "source": {
+        "path": "sound/OS04-12.wav",
+        "sha256": "22166a403e65d7ccb90c32f314ca580ebac9ee06530879a3ca3dde6f9a40fb05",
+        "bytes": 248876,
+        "header_hex": "52494646e0ba030057415645666d7420",
+        "declared_extension": ".wav",
+        "observed_encoding": "RIFF/WAVE PCM"
+      },
+      "audio": {
+        "codec": "pcm_s16le",
+        "sample_rate": 44100,
+        "channels": 2,
+        "bits_per_sample": 16,
+        "duration_seconds": 1.385556
+      },
+      "export": {
+        "method": "canonical PCM RIFF rewrap",
+        "decoded_pcm_md5": "MD5=187a9a8c1034b05960ae143c92440ac0",
+        "decoded_audio_unchanged": true
+      }
+    },
+    "sound/OS04-14.wav": {
+      "path": "/assets/audio/OS04-14.wav",
+      "mime": "audio/wav",
+      "sha256": "90f5d3cc069b0f10432f1f9def6cd6e7cf7ba18d322f50ec95cd37c9e28b328a",
+      "source": {
+        "path": "sound/OS04-14.wav",
+        "sha256": "b67291438f7ad60b05c8feb211b242346992f86418ebd87157900ea5841c7b81",
+        "bytes": 244268,
+        "header_hex": "52494646e0a8030057415645666d7420",
+        "declared_extension": ".wav",
+        "observed_encoding": "RIFF/WAVE PCM"
+      },
+      "audio": {
+        "codec": "pcm_s16le",
+        "sample_rate": 44100,
+        "channels": 2,
+        "bits_per_sample": 16,
+        "duration_seconds": 1.359433
+      },
+      "export": {
+        "method": "canonical PCM RIFF rewrap",
+        "decoded_pcm_md5": "MD5=5408b4bdcc879e4a7d481fad2066b758",
+        "decoded_audio_unchanged": true
+      }
+    },
+    "sound/OS04-13.wav": {
+      "path": "/assets/audio/OS04-13.wav",
+      "mime": "audio/wav",
+      "sha256": "e531411b71d617b7e41d995b0fd1ef4177925657014c48a2b595bb0fd3c793cd",
+      "source": {
+        "path": "sound/OS04-13.wav",
+        "sha256": "e4864e32102fed132c0c6601bf98ce3326279818a1ae6bbf2fbd18bfcea912f8",
+        "bytes": 248876,
+        "header_hex": "52494646e0ba030057415645666d7420",
+        "declared_extension": ".wav",
+        "observed_encoding": "RIFF/WAVE PCM"
+      },
+      "audio": {
+        "codec": "pcm_s16le",
+        "sample_rate": 44100,
+        "channels": 2,
+        "bits_per_sample": 16,
+        "duration_seconds": 1.385556
+      },
+      "export": {
+        "method": "canonical PCM RIFF rewrap",
+        "decoded_pcm_md5": "MD5=4ef65bad3b5eb44c9028c5d725f2d2b6",
+        "decoded_audio_unchanged": true
+      }
+    },
+    "sound/04-G14.wav": {
+      "path": "/assets/audio/04-G14.mp3",
+      "mime": "audio/mpeg",
+      "sha256": "002c980a2571ff1492254d66652c67d7c828b0bab0d2ff0eba783ce5c457be45",
+      "source": {
+        "path": "sound/04-G14.wav",
+        "sha256": "002c980a2571ff1492254d66652c67d7c828b0bab0d2ff0eba783ce5c457be45",
+        "bytes": 9926,
+        "header_hex": "fffba000000000000000000000000000",
+        "declared_extension": ".wav",
+        "observed_encoding": "MPEG Layer III"
+      },
+      "audio": {
+        "codec": "mp3",
+        "sample_rate": 44100,
+        "channels": 2,
+        "bits_per_sample": 0,
+        "duration_seconds": 0.420975
+      },
+      "export": {
+        "method": "byte-preserving MPEG suffix correction",
+        "decoded_pcm_md5": "MD5=8ef9541963389d12bc5bd8ec81787969",
+        "decoded_audio_unchanged": true
+      }
+    },
+    "sound/04-G21-1.wav": {
+      "path": "/assets/audio/04-G21-1.mp3",
+      "mime": "audio/mpeg",
+      "sha256": "214f0a8e74b2688f4a0f994a755aeab766906a2d1a7a4c8f5670bfaad1644d56",
+      "source": {
+        "path": "sound/04-G21-1.wav",
+        "sha256": "214f0a8e74b2688f4a0f994a755aeab766906a2d1a7a4c8f5670bfaad1644d56",
+        "bytes": 108669,
+        "header_hex": "fffba000000000000000000000000000",
+        "declared_extension": ".wav",
+        "observed_encoding": "MPEG Layer III"
+      },
+      "audio": {
+        "codec": "mp3",
+        "sample_rate": 44100,
+        "channels": 2,
+        "bits_per_sample": 0,
+        "duration_seconds": 5.352653
+      },
+      "export": {
+        "method": "byte-preserving MPEG suffix correction",
+        "decoded_pcm_md5": "MD5=879661cce1893894f798bee9d593fd1a",
+        "decoded_audio_unchanged": true
+      }
+    },
+    "sound/04-MA.wav": {
+      "path": "/assets/audio/04-MA.mp3",
+      "mime": "audio/mpeg",
+      "sha256": "82f0a954a554939da30ef847240e5fc4ee4b8e7328f2f4a3dcabba735cc5cc0b",
+      "source": {
+        "path": "sound/04-MA.wav",
+        "sha256": "82f0a954a554939da30ef847240e5fc4ee4b8e7328f2f4a3dcabba735cc5cc0b",
+        "bytes": 108669,
+        "header_hex": "fffba000000000000000000000000000",
+        "declared_extension": ".wav",
+        "observed_encoding": "MPEG Layer III"
+      },
+      "audio": {
+        "codec": "mp3",
+        "sample_rate": 44100,
+        "channels": 2,
+        "bits_per_sample": 0,
+        "duration_seconds": 5.352653
+      },
+      "export": {
+        "method": "byte-preserving MPEG suffix correction",
+        "decoded_pcm_md5": "MD5=888524b3589673bf6004936e28f04465",
+        "decoded_audio_unchanged": true
+      }
+    },
+    "sound/OS05-02.wav": {
+      "path": "/assets/audio/OS05-02.wav",
+      "mime": "audio/wav",
+      "sha256": "35c9e3723f1972aa5fd81b3e1fbd110a7f36ab1be6de222396dc2257cfa7ab5c",
+      "source": {
+        "path": "sound/OS05-02.wav",
+        "sha256": "036e65fc9047d37321623f9a6ac3af6d86fd96adca11a1d3be47a2c5ade17cdd",
+        "bytes": 377900,
+        "header_hex": "52494646e0b2050057415645666d7420",
+        "declared_extension": ".wav",
+        "observed_encoding": "RIFF/WAVE PCM"
+      },
+      "audio": {
+        "codec": "pcm_s16le",
+        "sample_rate": 44100,
+        "channels": 2,
+        "bits_per_sample": 16,
+        "duration_seconds": 2.116984
+      },
+      "export": {
+        "method": "canonical PCM RIFF rewrap",
+        "decoded_pcm_md5": "MD5=7fc1ffc33e0bee1e32be77927a66560e",
+        "decoded_audio_unchanged": true
+      }
+    },
+    "sound/OS05-03.wav": {
+      "path": "/assets/audio/OS05-03.wav",
+      "mime": "audio/wav",
+      "sha256": "bcb1619043fde3b4c952b05fef799153370c8724735c6ebb4cef58ea05804bf5",
+      "source": {
+        "path": "sound/OS05-03.wav",
+        "sha256": "512551d0106ed1d7df201ac35ad1cb84afd0afa3eb07c1a35e0d7e85ebfb1aeb",
+        "bytes": 124460,
+        "header_hex": "52494646e0d4010057415645666d7420",
+        "declared_extension": ".wav",
+        "observed_encoding": "RIFF/WAVE PCM"
+      },
+      "audio": {
+        "codec": "pcm_s16le",
+        "sample_rate": 44100,
+        "channels": 2,
+        "bits_per_sample": 16,
+        "duration_seconds": 0.680249
+      },
+      "export": {
+        "method": "canonical PCM RIFF rewrap",
+        "decoded_pcm_md5": "MD5=942160a03139ff88d2281a5f252e05c6",
+        "decoded_audio_unchanged": true
+      }
+    },
+    "sound/OS05-05.wav": {
+      "path": "/assets/audio/OS05-05.wav",
+      "mime": "audio/wav",
+      "sha256": "9f5ad2c07ef2afeb96d7d6109dcec80531276dab903a83cdd80e92dca0f3e1dc",
+      "source": {
+        "path": "sound/OS05-05.wav",
+        "sha256": "b6e47e966a7891cb154ca1e06a9ed907bd052232d43f2b8a97dfe0a93155cb68",
+        "bytes": 188972,
+        "header_hex": "52494646e0d0020057415645666d7420",
+        "declared_extension": ".wav",
+        "observed_encoding": "RIFF/WAVE PCM"
+      },
+      "audio": {
+        "codec": "pcm_s16le",
+        "sample_rate": 44100,
+        "channels": 2,
+        "bits_per_sample": 16,
+        "duration_seconds": 1.045964
+      },
+      "export": {
+        "method": "canonical PCM RIFF rewrap",
+        "decoded_pcm_md5": "MD5=79222ad533d32c6ea9c3b794f99536f5",
+        "decoded_audio_unchanged": true
+      }
+    },
+    "sound/OS05-07.wav": {
+      "path": "/assets/audio/OS05-07.wav",
+      "mime": "audio/wav",
+      "sha256": "5f299b928b3dad0a05d734f39ec074f00af4a66f8d6c2dd24a1ce5591b6accca",
+      "source": {
+        "path": "sound/OS05-07.wav",
+        "sha256": "7e20888e17bac22e164899c83b491564b1a6e9aed0410e00e046855b29b41dbf",
+        "bytes": 548396,
+        "header_hex": "52494646e04c080057415645666d7420",
+        "declared_extension": ".wav",
+        "observed_encoding": "RIFF/WAVE PCM"
+      },
+      "audio": {
+        "codec": "pcm_s16le",
+        "sample_rate": 44100,
+        "channels": 2,
+        "bits_per_sample": 16,
+        "duration_seconds": 3.083515
+      },
+      "export": {
+        "method": "canonical PCM RIFF rewrap",
+        "decoded_pcm_md5": "MD5=7c434087f5fe4e1dd4a0dc0e5d14ae6c",
+        "decoded_audio_unchanged": true
+      }
+    },
+    "sound/OS05-09.wav": {
+      "path": "/assets/audio/OS05-09.wav",
+      "mime": "audio/wav",
+      "sha256": "0b700ef53cf7ac56d936d3b2f68e8b679183d73f1d8242e5f8d8c045300c8703",
+      "source": {
+        "path": "sound/OS05-09.wav",
+        "sha256": "f092f67ed16f4790e2febcbccb015d928083a444120064073de5efa96c1b7e55",
+        "bytes": 175148,
+        "header_hex": "52494646e09a020057415645666d7420",
+        "declared_extension": ".wav",
+        "observed_encoding": "RIFF/WAVE PCM"
+      },
+      "audio": {
+        "codec": "pcm_s16le",
+        "sample_rate": 44100,
+        "channels": 2,
+        "bits_per_sample": 16,
+        "duration_seconds": 0.967596
+      },
+      "export": {
+        "method": "canonical PCM RIFF rewrap",
+        "decoded_pcm_md5": "MD5=33b2287fe337a00d935cba298c92e79f",
+        "decoded_audio_unchanged": true
+      }
+    },
+    "sound/OS05-06.wav": {
+      "path": "/assets/audio/OS05-06.wav",
+      "mime": "audio/wav",
+      "sha256": "db861aae8c66bb8427637c20aa99e1be87d4638bd09859334044138a08a30644",
+      "source": {
+        "path": "sound/OS05-06.wav",
+        "sha256": "bb3d1852b7d94216a196aabf7b286daa8467402e52713fdb3eaaf1ec50b35497",
+        "bytes": 235052,
+        "header_hex": "52494646e084030057415645666d7420",
+        "declared_extension": ".wav",
+        "observed_encoding": "RIFF/WAVE PCM"
+      },
+      "audio": {
+        "codec": "pcm_s16le",
+        "sample_rate": 44100,
+        "channels": 2,
+        "bits_per_sample": 16,
+        "duration_seconds": 1.307188
+      },
+      "export": {
+        "method": "canonical PCM RIFF rewrap",
+        "decoded_pcm_md5": "MD5=ffcd9a7fb195af70ba6bcf81656cdab0",
+        "decoded_audio_unchanged": true
+      }
+    },
+    "sound/OS05-11.wav": {
+      "path": "/assets/audio/OS05-11.wav",
+      "mime": "audio/wav",
+      "sha256": "1e3d38a3223f8691941981381b698c414d23b1a387ad1a77e0a28ea3fb310bfd",
+      "source": {
+        "path": "sound/OS05-11.wav",
+        "sha256": "a96328f9a7d64b4d94bc7c9072daa52ca329bb719a4d58c767eeffd06f51fdd0",
+        "bytes": 285740,
+        "header_hex": "52494646e04a040057415645666d7420",
+        "declared_extension": ".wav",
+        "observed_encoding": "RIFF/WAVE PCM"
+      },
+      "audio": {
+        "codec": "pcm_s16le",
+        "sample_rate": 44100,
+        "channels": 2,
+        "bits_per_sample": 16,
+        "duration_seconds": 1.594535
+      },
+      "export": {
+        "method": "canonical PCM RIFF rewrap",
+        "decoded_pcm_md5": "MD5=5f2bba66825854389524ca9f645470da",
+        "decoded_audio_unchanged": true
+      }
+    },
+    "sound/OS05-17.wav": {
+      "path": "/assets/audio/OS05-17.wav",
+      "mime": "audio/wav",
+      "sha256": "24ecfcd814b9d271c9f1839746c4d65288fc87ebff9e501e24c5abc8d1eeaec0",
+      "source": {
+        "path": "sound/OS05-17.wav",
+        "sha256": "8f6df9581c704372bbe58cae5368f61b45a8fecc1686c257c7273b5294e119b3",
+        "bytes": 212012,
+        "header_hex": "52494646e02a030057415645666d7420",
+        "declared_extension": ".wav",
+        "observed_encoding": "RIFF/WAVE PCM"
+      },
+      "audio": {
+        "codec": "pcm_s16le",
+        "sample_rate": 44100,
+        "channels": 2,
+        "bits_per_sample": 16,
+        "duration_seconds": 1.176576
+      },
+      "export": {
+        "method": "canonical PCM RIFF rewrap",
+        "decoded_pcm_md5": "MD5=ab1a7a3c85d78c78fbef4d0210fb78ac",
+        "decoded_audio_unchanged": true
+      }
+    },
+    "sound/OS05-15.wav": {
+      "path": "/assets/audio/OS05-15.wav",
+      "mime": "audio/wav",
+      "sha256": "56b9a32066103f9ff7e896c9dba5577fb0a49fe588b99d76cc7a2cd37d3517e3",
+      "source": {
+        "path": "sound/OS05-15.wav",
+        "sha256": "dbb9d24a1d8f625d675dbb8dbc2737a56864644907842670b5e447972b2001f4",
+        "bytes": 400940,
+        "header_hex": "52494646e00c060057415645666d7420",
+        "declared_extension": ".wav",
+        "observed_encoding": "RIFF/WAVE PCM"
+      },
+      "audio": {
+        "codec": "pcm_s16le",
+        "sample_rate": 44100,
+        "channels": 2,
+        "bits_per_sample": 16,
+        "duration_seconds": 2.247596
+      },
+      "export": {
+        "method": "canonical PCM RIFF rewrap",
+        "decoded_pcm_md5": "MD5=7faa648c98edc562b84cc17713bd8bc1",
+        "decoded_audio_unchanged": true
+      }
+    },
+    "sound/OS05-16.wav": {
+      "path": "/assets/audio/OS05-16.wav",
+      "mime": "audio/wav",
+      "sha256": "28c885bf89ad4c8a4c21e9899b653e150ba5b0b0d39377be4d44ac791fa2483c",
+      "source": {
+        "path": "sound/OS05-16.wav",
+        "sha256": "c54f40483c8bee196701f3a5fcd9c0928e4cefcd19407ad193259dacfc0f43a7",
+        "bytes": 322604,
+        "header_hex": "52494646e0da040057415645666d7420",
+        "declared_extension": ".wav",
+        "observed_encoding": "RIFF/WAVE PCM"
+      },
+      "audio": {
+        "codec": "pcm_s16le",
+        "sample_rate": 44100,
+        "channels": 2,
+        "bits_per_sample": 16,
+        "duration_seconds": 1.803515
+      },
+      "export": {
+        "method": "canonical PCM RIFF rewrap",
+        "decoded_pcm_md5": "MD5=22591c5b06ed743c3e2b8a5dd31f8eba",
+        "decoded_audio_unchanged": true
+      }
+    },
+    "sound/05-G09-1.wav": {
+      "path": "/assets/audio/05-G09-1.mp3",
+      "mime": "audio/mpeg",
+      "sha256": "a9dc162d71d38c408d48b172497b2cac4ea29d348e9fdd50ac664f8b25e26b3a",
+      "source": {
+        "path": "sound/05-G09-1.wav",
+        "sha256": "a9dc162d71d38c408d48b172497b2cac4ea29d348e9fdd50ac664f8b25e26b3a",
+        "bytes": 28212,
+        "header_hex": "fffba000000000000000000000000000",
+        "declared_extension": ".wav",
+        "observed_encoding": "MPEG Layer III"
+      },
+      "audio": {
+        "codec": "mp3",
+        "sample_rate": 44100,
+        "channels": 2,
+        "bits_per_sample": 0,
+        "duration_seconds": 1.333673
+      },
+      "export": {
+        "method": "byte-preserving MPEG suffix correction",
+        "decoded_pcm_md5": "MD5=df8c8e4ce36f1ff9414eefdd5ddaed6a",
+        "decoded_audio_unchanged": true
+      }
+    },
+    "sound/05-G13.wav": {
+      "path": "/assets/audio/05-G13.mp3",
+      "mime": "audio/mpeg",
+      "sha256": "f9d5d7bd81c386b023a7dafa5838ef949fcee3803453c65c458d7b7dd7da1ed9",
+      "source": {
+        "path": "sound/05-G13.wav",
+        "sha256": "f9d5d7bd81c386b023a7dafa5838ef949fcee3803453c65c458d7b7dd7da1ed9",
+        "bytes": 9404,
+        "header_hex": "fffba000000000000000000000000000",
+        "declared_extension": ".wav",
+        "observed_encoding": "MPEG Layer III"
+      },
+      "audio": {
+        "codec": "mp3",
+        "sample_rate": 44100,
+        "channels": 2,
+        "bits_per_sample": 0,
+        "duration_seconds": 0.40127
+      },
+      "export": {
+        "method": "byte-preserving MPEG suffix correction",
+        "decoded_pcm_md5": "MD5=c71c6070c096bf2afe701ee06a95f850",
+        "decoded_audio_unchanged": true
+      }
+    },
+    "sound/05-G14.wav": {
+      "path": "/assets/audio/05-G14.mp3",
+      "mime": "audio/mpeg",
+      "sha256": "dd578e3f022707469c754524672c1c2a45a8466ae2cb91becdff00e5d4879a53",
+      "source": {
+        "path": "sound/05-G14.wav",
+        "sha256": "dd578e3f022707469c754524672c1c2a45a8466ae2cb91becdff00e5d4879a53",
+        "bytes": 24032,
+        "header_hex": "fffba000000000000000000000000000",
+        "declared_extension": ".wav",
+        "observed_encoding": "MPEG Layer III"
+      },
+      "audio": {
+        "codec": "mp3",
+        "sample_rate": 44100,
+        "channels": 2,
+        "bits_per_sample": 0,
+        "duration_seconds": 1.121519
+      },
+      "export": {
+        "method": "byte-preserving MPEG suffix correction",
+        "decoded_pcm_md5": "MD5=e484bc598b6fbec243c7a84c83b44eab",
+        "decoded_audio_unchanged": true
+      }
+    },
+    "sound/05-1A.wav": {
+      "path": "/assets/audio/05-1A.mp3",
+      "mime": "audio/mpeg",
+      "sha256": "04caaa711fea4a89d1f36cabe86207eacdee5e23d0eb31da84175957f3d2f2a4",
+      "source": {
+        "path": "sound/05-1A.wav",
+        "sha256": "04caaa711fea4a89d1f36cabe86207eacdee5e23d0eb31da84175957f3d2f2a4",
+        "bytes": 27689,
+        "header_hex": "fffba000000000000000000000000000",
+        "declared_extension": ".wav",
+        "observed_encoding": "MPEG Layer III"
+      },
+      "audio": {
+        "codec": "mp3",
+        "sample_rate": 44100,
+        "channels": 2,
+        "bits_per_sample": 0,
+        "duration_seconds": 1.295986
+      },
+      "export": {
+        "method": "byte-preserving MPEG suffix correction",
+        "decoded_pcm_md5": "MD5=e363550f7edb80db5a31ef0171940db3",
+        "decoded_audio_unchanged": true
+      }
+    },
+    "sound/05-1B.wav": {
+      "path": "/assets/audio/05-1B.mp3",
+      "mime": "audio/mpeg",
+      "sha256": "173cfdf89848118e240d1b1d3e92684ba854bead18bb4852fbb9129025545fbe",
+      "source": {
+        "path": "sound/05-1B.wav",
+        "sha256": "173cfdf89848118e240d1b1d3e92684ba854bead18bb4852fbb9129025545fbe",
+        "bytes": 28734,
+        "header_hex": "fffba000000000000000000000000000",
+        "declared_extension": ".wav",
+        "observed_encoding": "MPEG Layer III"
+      },
+      "audio": {
+        "codec": "mp3",
+        "sample_rate": 44100,
+        "channels": 2,
+        "bits_per_sample": 0,
+        "duration_seconds": 1.35873
+      },
+      "export": {
+        "method": "byte-preserving MPEG suffix correction",
+        "decoded_pcm_md5": "MD5=09bfec9010fe09a9a88a2a5f1b8109b1",
+        "decoded_audio_unchanged": true
+      }
+    },
+    "sound/05-1C.wav": {
+      "path": "/assets/audio/05-1C.wav",
+      "mime": "audio/wav",
+      "sha256": "49158aaa55869f941fb1195f1a3bab417b09675a02f227f66ee7722c37d02fb1",
+      "source": {
+        "path": "sound/05-1C.wav",
+        "sha256": "0ca7f7047f44b627bb17d89249432e42cb4fe4a1946ffa2342d3e7595adb48e4",
+        "bytes": 156716,
+        "header_hex": "52494646e052020057415645666d7420",
+        "declared_extension": ".wav",
+        "observed_encoding": "RIFF/WAVE PCM"
+      },
+      "audio": {
+        "codec": "pcm_s16le",
+        "sample_rate": 44100,
+        "channels": 2,
+        "bits_per_sample": 16,
+        "duration_seconds": 0.863107
+      },
+      "export": {
+        "method": "canonical PCM RIFF rewrap",
+        "decoded_pcm_md5": "MD5=37b0f5bc62b8bbda203da1f339c52b04",
+        "decoded_audio_unchanged": true
+      }
+    },
+    "sound/05-1D.wav": {
+      "path": "/assets/audio/05-1D.wav",
+      "mime": "audio/wav",
+      "sha256": "4858383c54f79e7f63bc447ca0ffe406c56260017d14832ac662bec3a2490ce8",
+      "source": {
+        "path": "sound/05-1D.wav",
+        "sha256": "0febf2fcdeeeae582d42a9775de96e8460154b9379fcb7870659f020be0839d2",
+        "bytes": 341036,
+        "header_hex": "52494646e022050057415645666d7420",
+        "declared_extension": ".wav",
+        "observed_encoding": "RIFF/WAVE PCM"
+      },
+      "audio": {
+        "codec": "pcm_s16le",
+        "sample_rate": 44100,
+        "channels": 2,
+        "bits_per_sample": 16,
+        "duration_seconds": 1.908005
+      },
+      "export": {
+        "method": "canonical PCM RIFF rewrap",
+        "decoded_pcm_md5": "MD5=de2c4c129598a3792ced07035307f97f",
+        "decoded_audio_unchanged": true
+      }
+    },
+    "sound/06-G07.wav": {
+      "path": "/assets/audio/06-G07.wav",
+      "mime": "audio/wav",
+      "sha256": "38cb2f056e2f21c61968c923dbd3c40e18c4265d21fd69f812c37077fdbbe9ea",
+      "source": {
+        "path": "sound/06-G07.wav",
+        "sha256": "cf3810fff86062682bfbcd30921a6ec2aa80a2607f67094d66a9ab662d901a42",
+        "bytes": 493100,
+        "header_hex": "52494646e074070057415645666d7420",
+        "declared_extension": ".wav",
+        "observed_encoding": "RIFF/WAVE PCM"
+      },
+      "audio": {
+        "codec": "pcm_s16le",
+        "sample_rate": 44100,
+        "channels": 2,
+        "bits_per_sample": 16,
+        "duration_seconds": 2.770045
+      },
+      "export": {
+        "method": "canonical PCM RIFF rewrap",
+        "decoded_pcm_md5": "MD5=208478bede29c3ab0294262c09499d40",
+        "decoded_audio_unchanged": true
+      }
+    },
+    "sound/06-1A.wav": {
+      "path": "/assets/audio/06-1A.mp3",
+      "mime": "audio/mpeg",
+      "sha256": "f571970a1c8439ae1662d19418488859a727d70be7ec64934f7ce24c0fee58c7",
+      "source": {
+        "path": "sound/06-1A.wav",
+        "sha256": "f571970a1c8439ae1662d19418488859a727d70be7ec64934f7ce24c0fee58c7",
+        "bytes": 21420,
+        "header_hex": "fffba000000000000000000000000000",
+        "declared_extension": ".wav",
+        "observed_encoding": "MPEG Layer III"
+      },
+      "audio": {
+        "codec": "mp3",
+        "sample_rate": 44100,
+        "channels": 2,
+        "bits_per_sample": 0,
+        "duration_seconds": 0.9822
+      },
+      "export": {
+        "method": "byte-preserving MPEG suffix correction",
+        "decoded_pcm_md5": "MD5=5dbc9bf082e9da3f68b8470f6dc9b255",
+        "decoded_audio_unchanged": true
+      }
+    },
+    "sound/06-1C.wav": {
+      "path": "/assets/audio/06-1C.wav",
+      "mime": "audio/wav",
+      "sha256": "62acc5f197b7b7354febb5964b0882476dbe9fa990505576026c0b6ceee2b3e9",
+      "source": {
+        "path": "sound/06-1C.wav",
+        "sha256": "68fd22d1f2401a21bf0dd1cbf45ba5f1aa4cf8b4711166ab4ba83447cc1feb48",
+        "bytes": 313388,
+        "header_hex": "52494646e0b6040057415645666d7420",
+        "declared_extension": ".wav",
+        "observed_encoding": "RIFF/WAVE PCM"
+      },
+      "audio": {
+        "codec": "pcm_s16le",
+        "sample_rate": 44100,
+        "channels": 2,
+        "bits_per_sample": 16,
+        "duration_seconds": 1.75127
+      },
+      "export": {
+        "method": "canonical PCM RIFF rewrap",
+        "decoded_pcm_md5": "MD5=68eff17f669aa65ad11d02bdcfc10e8f",
+        "decoded_audio_unchanged": true
+      }
+    },
+    "sound/06-1D.wav": {
+      "path": "/assets/audio/06-1D.mp3",
+      "mime": "audio/mpeg",
+      "sha256": "4524c7f91c972ce5e62f74f7bae46dda9091b909c6b01d6f4fea1732ccef0c4b",
+      "source": {
+        "path": "sound/06-1D.wav",
+        "sha256": "4524c7f91c972ce5e62f74f7bae46dda9091b909c6b01d6f4fea1732ccef0c4b",
+        "bytes": 56947,
+        "header_hex": "fffba000000000000000000000000000",
+        "declared_extension": ".wav",
+        "observed_encoding": "MPEG Layer III"
+      },
+      "audio": {
+        "codec": "mp3",
+        "sample_rate": 44100,
+        "channels": 2,
+        "bits_per_sample": 0,
+        "duration_seconds": 2.779751
+      },
+      "export": {
+        "method": "byte-preserving MPEG suffix correction",
+        "decoded_pcm_md5": "MD5=27bee2888a809361e3bf3c26da75fda3",
         "decoded_audio_unchanged": true
       }
     },
@@ -1777,6 +2602,306 @@
         "decoded_audio_unchanged": true
       }
     },
+    "sound/3252.wav": {
+      "path": "/assets/audio/3252.wav",
+      "mime": "audio/wav",
+      "sha256": "ed31520243ab0ad86d06662c962c3d043ce5faccf2dae32edf2e3dfde7c5f85b",
+      "source": {
+        "path": "sound/3252.wav",
+        "sha256": "cf970214637703106dd61f39ccdad23e2fed87389e54ddbe7c92aaba4adcabec",
+        "bytes": 212012,
+        "header_hex": "52494646e02a030057415645666d7420",
+        "declared_extension": ".wav",
+        "observed_encoding": "RIFF/WAVE PCM"
+      },
+      "audio": {
+        "codec": "pcm_s16le",
+        "sample_rate": 44100,
+        "channels": 2,
+        "bits_per_sample": 16,
+        "duration_seconds": 1.176576
+      },
+      "export": {
+        "method": "canonical PCM RIFF rewrap",
+        "decoded_pcm_md5": "MD5=9d6c665f81e422156bf718f37e1aa82e",
+        "decoded_audio_unchanged": true
+      }
+    },
+    "sound/3249.wav": {
+      "path": "/assets/audio/3249.wav",
+      "mime": "audio/wav",
+      "sha256": "119d604e94c49fe1bccb905e94a17c20073693192bfb28f7364d3f482f267ddb",
+      "source": {
+        "path": "sound/3249.wav",
+        "sha256": "418500d7ce762c45f1e1d732914d17459422731c54b83917ec92de2455b2b0c5",
+        "bytes": 281132,
+        "header_hex": "52494646e038040057415645666d7420",
+        "declared_extension": ".wav",
+        "observed_encoding": "RIFF/WAVE PCM"
+      },
+      "audio": {
+        "codec": "pcm_s16le",
+        "sample_rate": 44100,
+        "channels": 2,
+        "bits_per_sample": 16,
+        "duration_seconds": 1.568413
+      },
+      "export": {
+        "method": "canonical PCM RIFF rewrap",
+        "decoded_pcm_md5": "MD5=0cc654a3adb42097195f9ddb3706c21f",
+        "decoded_audio_unchanged": true
+      }
+    },
+    "sound/3250.wav": {
+      "path": "/assets/audio/3250.wav",
+      "mime": "audio/wav",
+      "sha256": "2449b326dbeba63fe48971eee8ff7ab2693d9234cf4a0b9541c81b14b9b85551",
+      "source": {
+        "path": "sound/3250.wav",
+        "sha256": "473786cab9b9c04292084665fc99dcdd7ff17352c3028e8362bbff1d7f3cb0a8",
+        "bytes": 382508,
+        "header_hex": "52494646e0c4050057415645666d7420",
+        "declared_extension": ".wav",
+        "observed_encoding": "RIFF/WAVE PCM"
+      },
+      "audio": {
+        "codec": "pcm_s16le",
+        "sample_rate": 44100,
+        "channels": 2,
+        "bits_per_sample": 16,
+        "duration_seconds": 2.143107
+      },
+      "export": {
+        "method": "canonical PCM RIFF rewrap",
+        "decoded_pcm_md5": "MD5=0dd93b928722e4fac31854c4b2a3d3c6",
+        "decoded_audio_unchanged": true
+      }
+    },
+    "sound/3244.wav": {
+      "path": "/assets/audio/3244.wav",
+      "mime": "audio/wav",
+      "sha256": "4b3c90d9a74e43a185e5e41f379623208ceb9a52d2e73936ed8b192c940ee23c",
+      "source": {
+        "path": "sound/3244.wav",
+        "sha256": "375ebc66a456db26887ea813b835d61c68ed6e75fdea2cfff6c0cae71ad9d0a6",
+        "bytes": 336428,
+        "header_hex": "52494646e010050057415645666d7420",
+        "declared_extension": ".wav",
+        "observed_encoding": "RIFF/WAVE PCM"
+      },
+      "audio": {
+        "codec": "pcm_s16le",
+        "sample_rate": 44100,
+        "channels": 2,
+        "bits_per_sample": 16,
+        "duration_seconds": 1.881882
+      },
+      "export": {
+        "method": "canonical PCM RIFF rewrap",
+        "decoded_pcm_md5": "MD5=f4ac73cc65472a02e40742496b91c67e",
+        "decoded_audio_unchanged": true
+      }
+    },
+    "sound/3245.wav": {
+      "path": "/assets/audio/3245.wav",
+      "mime": "audio/wav",
+      "sha256": "96adc82e049166e0569069347c5697cc1976e3ba5bbf3d3a9fac337222d4ecb4",
+      "source": {
+        "path": "sound/3245.wav",
+        "sha256": "d5a3fe333d6a697406efac9826789b5e95f613c7e154d0e98e7d6e5399209cd6",
+        "bytes": 359468,
+        "header_hex": "52494646e06a050057415645666d7420",
+        "declared_extension": ".wav",
+        "observed_encoding": "RIFF/WAVE PCM"
+      },
+      "audio": {
+        "codec": "pcm_s16le",
+        "sample_rate": 44100,
+        "channels": 2,
+        "bits_per_sample": 16,
+        "duration_seconds": 2.012494
+      },
+      "export": {
+        "method": "canonical PCM RIFF rewrap",
+        "decoded_pcm_md5": "MD5=788f44a221b51d9a329dd73bd8169567",
+        "decoded_audio_unchanged": true
+      }
+    },
+    "sound/3246.wav": {
+      "path": "/assets/audio/3246.wav",
+      "mime": "audio/wav",
+      "sha256": "01163f3dec44ed1bb539706871a314c0977a60e49c6c0699336e27beb014aaa7",
+      "source": {
+        "path": "sound/3246.wav",
+        "sha256": "d1edf6b9e7616c64572bf66367289b03fd1a0f11716f39d38d631e9c7bfcce46",
+        "bytes": 331820,
+        "header_hex": "52494646e0fe040057415645666d7420",
+        "declared_extension": ".wav",
+        "observed_encoding": "RIFF/WAVE PCM"
+      },
+      "audio": {
+        "codec": "pcm_s16le",
+        "sample_rate": 44100,
+        "channels": 2,
+        "bits_per_sample": 16,
+        "duration_seconds": 1.85576
+      },
+      "export": {
+        "method": "canonical PCM RIFF rewrap",
+        "decoded_pcm_md5": "MD5=dddbf45ab015b0ecc5f04b5c4020b23e",
+        "decoded_audio_unchanged": true
+      }
+    },
+    "sound/3231.WAV": {
+      "path": "/assets/audio/3231.mp3",
+      "mime": "audio/mpeg",
+      "sha256": "b2fd927536dcaef0ea29f9a05c274ccec6fe61b391a9f46568216da99c1fbe15",
+      "source": {
+        "path": "sound/3231.WAV",
+        "sha256": "b2fd927536dcaef0ea29f9a05c274ccec6fe61b391a9f46568216da99c1fbe15",
+        "bytes": 12538,
+        "header_hex": "fffba000000000000000000000000000",
+        "declared_extension": ".WAV",
+        "observed_encoding": "MPEG Layer III"
+      },
+      "audio": {
+        "codec": "mp3",
+        "sample_rate": 44100,
+        "channels": 2,
+        "bits_per_sample": 0,
+        "duration_seconds": 0.544059
+      },
+      "export": {
+        "method": "byte-preserving MPEG suffix correction",
+        "decoded_pcm_md5": "MD5=f0c3b9f990c401ee31c27685ec42470c",
+        "decoded_audio_unchanged": true
+      }
+    },
+    "sound/3006.WAV": {
+      "path": "/assets/audio/3006.mp3",
+      "mime": "audio/mpeg",
+      "sha256": "17cfec37cbd49c4f7f638954851870173749b375f1cba7f40b4540aab9f55093",
+      "source": {
+        "path": "sound/3006.WAV",
+        "sha256": "17cfec37cbd49c4f7f638954851870173749b375f1cba7f40b4540aab9f55093",
+        "bytes": 5224,
+        "header_hex": "fffba000000000000000000000000000",
+        "declared_extension": ".WAV",
+        "observed_encoding": "MPEG Layer III"
+      },
+      "audio": {
+        "codec": "mp3",
+        "sample_rate": 44100,
+        "channels": 2,
+        "bits_per_sample": 0,
+        "duration_seconds": 0.182472
+      },
+      "export": {
+        "method": "byte-preserving MPEG suffix correction",
+        "decoded_pcm_md5": "MD5=7952f78d72ad7c6c93f77ad0f1beb9e5",
+        "decoded_audio_unchanged": true
+      }
+    },
+    "sound/3232.WAV": {
+      "path": "/assets/audio/3232.wav",
+      "mime": "audio/wav",
+      "sha256": "dff8e532d87124947448d75bb372b3530b7600ee3cb51a18f1d7fb3e502bfcc5",
+      "source": {
+        "path": "sound/3232.WAV",
+        "sha256": "d91e2c8e9f7fdbc91cac04ed5462d6b5d5bdb2779a96a14f204ca72f9f4007f5",
+        "bytes": 271916,
+        "header_hex": "52494646e014040057415645666d7420",
+        "declared_extension": ".WAV",
+        "observed_encoding": "RIFF/WAVE PCM"
+      },
+      "audio": {
+        "codec": "pcm_s16le",
+        "sample_rate": 44100,
+        "channels": 2,
+        "bits_per_sample": 16,
+        "duration_seconds": 1.516168
+      },
+      "export": {
+        "method": "canonical PCM RIFF rewrap",
+        "decoded_pcm_md5": "MD5=5e6a2e3b82a5ebfae67563adc3406558",
+        "decoded_audio_unchanged": true
+      }
+    },
+    "sound/3234.wav": {
+      "path": "/assets/audio/3234.mp3",
+      "mime": "audio/mpeg",
+      "sha256": "7c428a66bfa8450d8a87df0d855f24746305b692a2a92f827a988dcc5131a206",
+      "source": {
+        "path": "sound/3234.wav",
+        "sha256": "7c428a66bfa8450d8a87df0d855f24746305b692a2a92f827a988dcc5131a206",
+        "bytes": 66873,
+        "header_hex": "fffba000000000000000000000000000",
+        "declared_extension": ".wav",
+        "observed_encoding": "MPEG Layer III"
+      },
+      "audio": {
+        "codec": "mp3",
+        "sample_rate": 44100,
+        "channels": 2,
+        "bits_per_sample": 0,
+        "duration_seconds": 3.255261
+      },
+      "export": {
+        "method": "byte-preserving MPEG suffix correction",
+        "decoded_pcm_md5": "MD5=770a0e5ebe83d586113b8d14486a8ac1",
+        "decoded_audio_unchanged": true
+      }
+    },
+    "sound/3235.wav": {
+      "path": "/assets/audio/3235.mp3",
+      "mime": "audio/mpeg",
+      "sha256": "a207cd546f90bd73341bed67cb09a92efda5deefb4e95b7fb68e4a6da2759de7",
+      "source": {
+        "path": "sound/3235.wav",
+        "sha256": "a207cd546f90bd73341bed67cb09a92efda5deefb4e95b7fb68e4a6da2759de7",
+        "bytes": 74710,
+        "header_hex": "fffba000000000000000000000000000",
+        "declared_extension": ".wav",
+        "observed_encoding": "MPEG Layer III"
+      },
+      "audio": {
+        "codec": "mp3",
+        "sample_rate": 44100,
+        "channels": 2,
+        "bits_per_sample": 0,
+        "duration_seconds": 3.663061
+      },
+      "export": {
+        "method": "byte-preserving MPEG suffix correction",
+        "decoded_pcm_md5": "MD5=ff5dc8405d29bf01cff7ec63531814b3",
+        "decoded_audio_unchanged": true
+      }
+    },
+    "sound/3236.wav": {
+      "path": "/assets/audio/3236.mp3",
+      "mime": "audio/mpeg",
+      "sha256": "cb156f97107694eb6e343fb978cbd8915344fdc2017a23b46d3701b7628190e0",
+      "source": {
+        "path": "sound/3236.wav",
+        "sha256": "cb156f97107694eb6e343fb978cbd8915344fdc2017a23b46d3701b7628190e0",
+        "bytes": 83591,
+        "header_hex": "fffba000000000000000000000000000",
+        "declared_extension": ".wav",
+        "observed_encoding": "MPEG Layer III"
+      },
+      "audio": {
+        "codec": "mp3",
+        "sample_rate": 44100,
+        "channels": 2,
+        "bits_per_sample": 0,
+        "duration_seconds": 4.111519
+      },
+      "export": {
+        "method": "byte-preserving MPEG suffix correction",
+        "decoded_pcm_md5": "MD5=8bbcbf3bac8d7094227afd1439458a5f",
+        "decoded_audio_unchanged": true
+      }
+    },
     "sound/iReHealth.wav": {
       "path": "/assets/audio/iReHealth.mp3",
       "mime": "audio/mpeg",
@@ -1826,9 +2951,64 @@
         "decoded_pcm_md5": "MD5=2a1c10a1f7dbf1612faa123d74c1a5b9",
         "decoded_audio_unchanged": true
       }
+    },
+    "sound/_iReSTfz.wav": {
+      "path": "/assets/audio/_iReSTfz.mp3",
+      "mime": "audio/mpeg",
+      "sha256": "3020b9d319a91e52383a5db6e84fc4dafc342f15773c3b2ec5658f4a2f8638f6",
+      "source": {
+        "path": "sound/_iReSTfz.wav",
+        "sha256": "3020b9d319a91e52383a5db6e84fc4dafc342f15773c3b2ec5658f4a2f8638f6",
+        "bytes": 57469,
+        "header_hex": "fffba000000000000000000000000000",
+        "declared_extension": ".wav",
+        "observed_encoding": "MPEG Layer III"
+      },
+      "audio": {
+        "codec": "mp3",
+        "sample_rate": 44100,
+        "channels": 2,
+        "bits_per_sample": 0,
+        "duration_seconds": 2.80127
+      },
+      "export": {
+        "method": "byte-preserving MPEG suffix correction",
+        "decoded_pcm_md5": "MD5=fdd6b8dd078a116ffd4ba58284164ce2",
+        "decoded_audio_unchanged": true
+      }
     }
   },
   "maps": {
+    "M01050": {
+      "clip": "sound/mn010-1.wav",
+      "source": {
+        "path": "Map/m01050.dat",
+        "sha256": "48ae98e95e9ea414e716c85440d381a5bc29cc2ec00ccd3b30c2ef314d4145fc",
+        "offset": 68,
+        "bytes": 64,
+        "token": "mn010-1.wav"
+      },
+      "evidence": [
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_fb1d8a60f17d0b5c8e09e62e979f4b3423b50e534accacd8eb02e43655054579"
+      ],
+      "confidence": "source DAT+0x44 and confirmed native same-track/load branch"
+    },
+    "M03039": {
+      "clip": "sound/mn030-1.wav",
+      "source": {
+        "path": "Map/m03039.dat",
+        "sha256": "c3c01fb5773dda464c2a5bfa0b46520031f2dc9bd363e4a1978c99950b0dcaf2",
+        "offset": 68,
+        "bytes": 64,
+        "token": "mn030-1.wav"
+      },
+      "evidence": [
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_fb1d8a60f17d0b5c8e09e62e979f4b3423b50e534accacd8eb02e43655054579"
+      ],
+      "confidence": "source DAT+0x44 and confirmed native same-track/load branch"
+    },
     "M01010": {
       "clip": "sound/mn010-1.wav",
       "source": {
@@ -1948,6 +3128,261 @@
         "ev_fb1d8a60f17d0b5c8e09e62e979f4b3423b50e534accacd8eb02e43655054579"
       ],
       "confidence": "source DAT+0x44 and confirmed native same-track/load branch"
+    },
+    "M17011": {
+      "clip": "sound/mn170-1.wav",
+      "source": {
+        "path": "Map/m17011.dat",
+        "sha256": "1b9c624e9093b4e7cbd4a62259607ed313359e3601ae48555c705d808d19bfc4",
+        "offset": 68,
+        "bytes": 64,
+        "token": "mn170-1.wav"
+      },
+      "evidence": [
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_fb1d8a60f17d0b5c8e09e62e979f4b3423b50e534accacd8eb02e43655054579"
+      ],
+      "confidence": "source DAT+0x44 and confirmed native same-track/load branch"
+    },
+    "M17012": {
+      "clip": "sound/mn170-1.wav",
+      "source": {
+        "path": "Map/m17012.dat",
+        "sha256": "db0f4709ae4a86c8af819eda867bfb87bed2d4d4bbaa48af4dad31bd3ce5b847",
+        "offset": 68,
+        "bytes": 64,
+        "token": "mn170-1.wav"
+      },
+      "evidence": [
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_fb1d8a60f17d0b5c8e09e62e979f4b3423b50e534accacd8eb02e43655054579"
+      ],
+      "confidence": "source DAT+0x44 and confirmed native same-track/load branch"
+    },
+    "M17013": {
+      "clip": "sound/mn170-1.wav",
+      "source": {
+        "path": "Map/m17013.dat",
+        "sha256": "1c1bdd0e8f26c8b2ee3b137d0049bfab10ae87f0e5dc76dfa44fc7f61096afcc",
+        "offset": 68,
+        "bytes": 64,
+        "token": "mn170-1.wav"
+      },
+      "evidence": [
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_fb1d8a60f17d0b5c8e09e62e979f4b3423b50e534accacd8eb02e43655054579"
+      ],
+      "confidence": "source DAT+0x44 and confirmed native same-track/load branch"
+    },
+    "M17014": {
+      "clip": "sound/mn170-1.wav",
+      "source": {
+        "path": "Map/m17014.dat",
+        "sha256": "6128bf9d9940a8176c6d53c8e421132a9f2f2ead6e4a907fac6bce4fd0c135ff",
+        "offset": 68,
+        "bytes": 64,
+        "token": "mn170-1.wav"
+      },
+      "evidence": [
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_fb1d8a60f17d0b5c8e09e62e979f4b3423b50e534accacd8eb02e43655054579"
+      ],
+      "confidence": "source DAT+0x44 and confirmed native same-track/load branch"
+    },
+    "M17015": {
+      "clip": "sound/mn170-1.wav",
+      "source": {
+        "path": "Map/m17015.dat",
+        "sha256": "e396282ce0dbf14a02d91dca28af4b0d1914cee1c1b8a1b7b3c8e0089f6d8b0e",
+        "offset": 68,
+        "bytes": 64,
+        "token": "mn170-1.wav"
+      },
+      "evidence": [
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_fb1d8a60f17d0b5c8e09e62e979f4b3423b50e534accacd8eb02e43655054579"
+      ],
+      "confidence": "source DAT+0x44 and confirmed native same-track/load branch"
+    },
+    "M17016": {
+      "clip": "sound/mn170-1.wav",
+      "source": {
+        "path": "Map/m17016.dat",
+        "sha256": "2771831ca2de861d7d368357e0faac2f0cda04b02a362a0d3775ce4940afba2d",
+        "offset": 68,
+        "bytes": 64,
+        "token": "mn170-1.wav"
+      },
+      "evidence": [
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_fb1d8a60f17d0b5c8e09e62e979f4b3423b50e534accacd8eb02e43655054579"
+      ],
+      "confidence": "source DAT+0x44 and confirmed native same-track/load branch"
+    },
+    "M17021": {
+      "clip": "sound/mn170-2.wav",
+      "source": {
+        "path": "Map/m17021.dat",
+        "sha256": "8936daaa7ae9a874a41d9afabf1180677fe02c5d9640a0585792092357fd0ec5",
+        "offset": 68,
+        "bytes": 64,
+        "token": "mn170-2.wav"
+      },
+      "evidence": [
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_fb1d8a60f17d0b5c8e09e62e979f4b3423b50e534accacd8eb02e43655054579"
+      ],
+      "confidence": "source DAT+0x44 and confirmed native same-track/load branch"
+    },
+    "M17022": {
+      "clip": "sound/mn170-2.wav",
+      "source": {
+        "path": "Map/m17022.dat",
+        "sha256": "777949c861b8666b85162b90e5b0451b2c9e6b3d64089f0e5d780e6caab6492a",
+        "offset": 68,
+        "bytes": 64,
+        "token": "mn170-2.wav"
+      },
+      "evidence": [
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_fb1d8a60f17d0b5c8e09e62e979f4b3423b50e534accacd8eb02e43655054579"
+      ],
+      "confidence": "source DAT+0x44 and confirmed native same-track/load branch"
+    },
+    "M17023": {
+      "clip": "sound/mn170-2.wav",
+      "source": {
+        "path": "Map/m17023.dat",
+        "sha256": "d9f2021f1f24558f8ead877cc77612c7fa2263b8225a10d630f308384ef857f9",
+        "offset": 68,
+        "bytes": 64,
+        "token": "mn170-2.wav"
+      },
+      "evidence": [
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_fb1d8a60f17d0b5c8e09e62e979f4b3423b50e534accacd8eb02e43655054579"
+      ],
+      "confidence": "source DAT+0x44 and confirmed native same-track/load branch"
+    },
+    "M17024": {
+      "clip": "sound/mn170-2.wav",
+      "source": {
+        "path": "Map/m17024.dat",
+        "sha256": "18b33b069a469365ed75b531aa6346c58112f0c6a64c7a59ae1c6108318ef599",
+        "offset": 68,
+        "bytes": 64,
+        "token": "mn170-2.wav"
+      },
+      "evidence": [
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_fb1d8a60f17d0b5c8e09e62e979f4b3423b50e534accacd8eb02e43655054579"
+      ],
+      "confidence": "source DAT+0x44 and confirmed native same-track/load branch"
+    },
+    "M17025": {
+      "clip": "sound/mn170-1.wav",
+      "source": {
+        "path": "Map/m17025.dat",
+        "sha256": "266c901c9784665d27034f4531c1918fbea96815d14ec68fb1f6699d6d3fa3cd",
+        "offset": 68,
+        "bytes": 64,
+        "token": "mn170-1.wav"
+      },
+      "evidence": [
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_fb1d8a60f17d0b5c8e09e62e979f4b3423b50e534accacd8eb02e43655054579"
+      ],
+      "confidence": "source DAT+0x44 and confirmed native same-track/load branch"
+    },
+    "M17027": {
+      "clip": "sound/mn170-1.wav",
+      "source": {
+        "path": "Map/m17027.dat",
+        "sha256": "7c0278bfe4a52f6a1977bb8493fa1ba1d40833b2dce142c42e75d7e2e67c0459",
+        "offset": 68,
+        "bytes": 64,
+        "token": "mn170-1.wav"
+      },
+      "evidence": [
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_fb1d8a60f17d0b5c8e09e62e979f4b3423b50e534accacd8eb02e43655054579"
+      ],
+      "confidence": "source DAT+0x44 and confirmed native same-track/load branch"
+    },
+    "M17028": {
+      "clip": "sound/mn170-1.wav",
+      "source": {
+        "path": "Map/m17028.dat",
+        "sha256": "ec1d36649bf8fce856a0e93daf08128ebb099f7b30c59648a5903742f372aeff",
+        "offset": 68,
+        "bytes": 64,
+        "token": "mn170-1.wav"
+      },
+      "evidence": [
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_fb1d8a60f17d0b5c8e09e62e979f4b3423b50e534accacd8eb02e43655054579"
+      ],
+      "confidence": "source DAT+0x44 and confirmed native same-track/load branch"
+    },
+    "M17030-1": {
+      "clip": "sound/mn170-2.wav",
+      "source": {
+        "path": "Map/m17030-1.dat",
+        "sha256": "85f2b0ea6398a9cf759183892cf9967e9b690dc57b5fb240e58969f69ae77e6b",
+        "offset": 68,
+        "bytes": 64,
+        "token": "mn170-2.wav"
+      },
+      "evidence": [
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_fb1d8a60f17d0b5c8e09e62e979f4b3423b50e534accacd8eb02e43655054579"
+      ],
+      "confidence": "source DAT+0x44 and confirmed native same-track/load branch"
+    },
+    "M17030-2": {
+      "clip": "sound/mn170-2.wav",
+      "source": {
+        "path": "Map/m17030-2.dat",
+        "sha256": "19c9e32a7cc32da40da096e67aa6b318e18570b29bc784130ad7d07d4430dfe6",
+        "offset": 68,
+        "bytes": 64,
+        "token": "mn170-2.wav"
+      },
+      "evidence": [
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_fb1d8a60f17d0b5c8e09e62e979f4b3423b50e534accacd8eb02e43655054579"
+      ],
+      "confidence": "source DAT+0x44 and confirmed native same-track/load branch"
+    },
+    "M17030": {
+      "clip": "sound/mn170-2.wav",
+      "source": {
+        "path": "Map/m17030.dat",
+        "sha256": "bbe0b8b99a59f775f1647b7e5e01f7ea12208f4422d1272fe62655c6e41d5bc4",
+        "offset": 68,
+        "bytes": 64,
+        "token": "mn170-2.wav"
+      },
+      "evidence": [
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_fb1d8a60f17d0b5c8e09e62e979f4b3423b50e534accacd8eb02e43655054579"
+      ],
+      "confidence": "source DAT+0x44 and confirmed native same-track/load branch"
+    },
+    "M17032": {
+      "clip": "sound/mn170-2.wav",
+      "source": {
+        "path": "Map/m17032.dat",
+        "sha256": "fec9023611123ba7557cf0a186317c808a5c041a6ec8d0fd52b30c8576f09bfe",
+        "offset": 68,
+        "bytes": 64,
+        "token": "mn170-2.wav"
+      },
+      "evidence": [
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_fb1d8a60f17d0b5c8e09e62e979f4b3423b50e534accacd8eb02e43655054579"
+      ],
+      "confidence": "source DAT+0x44 and confirmed native same-track/load branch"
     }
   },
   "battles": {
@@ -1963,6 +3398,26 @@
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
         "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_943b0b73f1e96b42f7c10b51e88dc4d7863d2f2860e0306b9f3676596bf34686",
+        "ev_41dbecbb5de336ab7cf9abcf164a76f83318e136296b4f919c4df5ba7318b756"
+      ],
+      "confidence": "source SCN field and confirmed native fallback pool",
+      "pool": [
+        "sound/Fight/FightBGM01.wav",
+        "sound/Fight/FightBGM02.wav"
+      ],
+      "selection": "source default pool; fresh browser random selection"
+    },
+    "stage12.scn": {
+      "clip": null,
+      "source": {
+        "path": "Fight_Bk/stage12.scn",
+        "sha256": "b96b95637c056cbfc07432c58343a63684d551f2291d4aa55aaee7bb6f7f968b",
+        "offset": 28,
+        "bytes": 20,
+        "token": ""
+      },
+      "evidence": [
         "ev_943b0b73f1e96b42f7c10b51e88dc4d7863d2f2860e0306b9f3676596bf34686",
         "ev_41dbecbb5de336ab7cf9abcf164a76f83318e136296b4f919c4df5ba7318b756"
       ],
@@ -2123,9 +3578,35 @@
     "OS02-10.wav": null,
     "OS02-14.wav": "sound/OS02-14.wav",
     "OS02-15.wav": "sound/OS02-15.wav",
+    "OS02-11.wav": null,
+    "OS04-16.wav": "sound/OS04-16.wav",
+    "OS04-15.wav": "sound/OS04-15.wav",
+    "OS04-11.wav": "sound/OS04-11.wav",
+    "OS04-12.wav": "sound/OS04-12.wav",
+    "OS04-14.wav": "sound/OS04-14.wav",
+    "OS04-13.wav": "sound/OS04-13.wav",
+    "OS04-3-2.wav": null,
+    "OS05-02.wav": "sound/OS05-02.wav",
+    "OS05-03.wav": "sound/OS05-03.wav",
+    "OS05-05.wav": "sound/OS05-05.wav",
+    "OS05-07.wav": "sound/OS05-07.wav",
+    "OS05-09.wav": "sound/OS05-09.wav",
+    "OS05-06.wav": "sound/OS05-06.wav",
+    "OS05-11.wav": "sound/OS05-11.wav",
+    "OS05-17.wav": "sound/OS05-17.wav",
+    "A00008.wav": "sound/A00008.wav",
+    "OS05-15.wav": "sound/OS05-15.wav",
+    "OS05-16.wav": "sound/OS05-16.wav",
+    "OS06-12.wav": null,
     "3009.wav": "sound/3009.wav",
     "3005.wav": "sound/3005.wav",
-    "3051.wav": "sound/3051.wav"
+    "3051.wav": "sound/3051.wav",
+    "3252.wav": "sound/3252.wav",
+    "3249.wav": "sound/3249.wav",
+    "3250.wav": "sound/3250.wav",
+    "3244.wav": "sound/3244.wav",
+    "3245.wav": "sound/3245.wav",
+    "3246.wav": "sound/3246.wav"
   },
   "frame_sounds": {
     "001": {
@@ -2309,6 +3790,23 @@
           "offset": 5227,
           "bytes": 172,
           "raw_sha256": "348cdfb0a09cc8d4fa0ce545ffbe2f99606be688e9e6478a33380db88d0de78f",
+          "token_offset": 86,
+          "logical_frame_offset": 106
+        },
+        "evidence": [
+          "ev_99d6444a46b055b74bb78dbc5f846de62ed5d13dcfe781320f5e9e3117b5c9aa"
+        ]
+      },
+      "36": {
+        "clip": "sound/01-OA.wav",
+        "token": "01-OA.wav",
+        "logical_frame": 1,
+        "source": {
+          "path": "Fight_Role/001.dgp",
+          "sha256": "df86e4089870c720beee6c8fb216ee1f85156b061c69433a6ce767ce9dee6b49",
+          "offset": 6259,
+          "bytes": 172,
+          "raw_sha256": "754e6003dad34e80df53ad151fe52fd37e1d3d1d8525c33f742f8b76f781f105",
           "token_offset": 86,
           "logical_frame_offset": 106
         },
@@ -2541,6 +4039,590 @@
       }
     },
     "003": {},
+    "004": {
+      "6": {
+        "clip": "sound/01-G08.wav",
+        "token": "01-G08.wav",
+        "logical_frame": 1,
+        "source": {
+          "path": "Fight_Role/004.dgp",
+          "sha256": "ac1d4776b36b055c141524262d0dec201b85832155ed2dc4fc99f3ecda215d8b",
+          "offset": 1099,
+          "bytes": 172,
+          "raw_sha256": "145e3b2ce0e4a8e5f2804e9f964c6cabf6713ad4185e414c1872f09cc5fe9bab",
+          "token_offset": 86,
+          "logical_frame_offset": 106
+        },
+        "evidence": [
+          "ev_99d6444a46b055b74bb78dbc5f846de62ed5d13dcfe781320f5e9e3117b5c9aa"
+        ]
+      },
+      "9": {
+        "clip": "sound/A00006.wav",
+        "token": "A00006.wav",
+        "logical_frame": 1,
+        "source": {
+          "path": "Fight_Role/004.dgp",
+          "sha256": "ac1d4776b36b055c141524262d0dec201b85832155ed2dc4fc99f3ecda215d8b",
+          "offset": 1615,
+          "bytes": 172,
+          "raw_sha256": "bd932a56a5ac0ae38939f94d9f99568b08e40ba7d94e9cb32f8f930ff166636f",
+          "token_offset": 86,
+          "logical_frame_offset": 106
+        },
+        "evidence": [
+          "ev_99d6444a46b055b74bb78dbc5f846de62ed5d13dcfe781320f5e9e3117b5c9aa"
+        ]
+      },
+      "10": {
+        "clip": "sound/A00008.wav",
+        "token": "A00008.wav",
+        "logical_frame": 1,
+        "source": {
+          "path": "Fight_Role/004.dgp",
+          "sha256": "ac1d4776b36b055c141524262d0dec201b85832155ed2dc4fc99f3ecda215d8b",
+          "offset": 1787,
+          "bytes": 172,
+          "raw_sha256": "533387c4201a141c76e1fc5adaaacc0d74907154be6744b0c20562bdf90ffe23",
+          "token_offset": 86,
+          "logical_frame_offset": 106
+        },
+        "evidence": [
+          "ev_99d6444a46b055b74bb78dbc5f846de62ed5d13dcfe781320f5e9e3117b5c9aa"
+        ]
+      },
+      "13": {
+        "clip": "sound/01-G08.wav",
+        "token": "01-G08.wav",
+        "logical_frame": 1,
+        "source": {
+          "path": "Fight_Role/004.dgp",
+          "sha256": "ac1d4776b36b055c141524262d0dec201b85832155ed2dc4fc99f3ecda215d8b",
+          "offset": 2303,
+          "bytes": 172,
+          "raw_sha256": "9124086377fa8ca0efc4305ef5a19f0b3b5bd43428fda5d822f29d8ec8e0c072",
+          "token_offset": 86,
+          "logical_frame_offset": 106
+        },
+        "evidence": [
+          "ev_99d6444a46b055b74bb78dbc5f846de62ed5d13dcfe781320f5e9e3117b5c9aa"
+        ]
+      },
+      "14": {
+        "clip": "sound/04-G14.wav",
+        "token": "04-G14.wav",
+        "logical_frame": 1,
+        "source": {
+          "path": "Fight_Role/004.dgp",
+          "sha256": "ac1d4776b36b055c141524262d0dec201b85832155ed2dc4fc99f3ecda215d8b",
+          "offset": 2475,
+          "bytes": 172,
+          "raw_sha256": "773ffebf8a429665507be9bc8378b97626692e0d2eea6f3040dcf888b8ca076c",
+          "token_offset": 86,
+          "logical_frame_offset": 106
+        },
+        "evidence": [
+          "ev_99d6444a46b055b74bb78dbc5f846de62ed5d13dcfe781320f5e9e3117b5c9aa"
+        ]
+      },
+      "18": {
+        "clip": "sound/01-G20.wav",
+        "token": "01-G20.wav",
+        "logical_frame": 1,
+        "source": {
+          "path": "Fight_Role/004.dgp",
+          "sha256": "ac1d4776b36b055c141524262d0dec201b85832155ed2dc4fc99f3ecda215d8b",
+          "offset": 3163,
+          "bytes": 172,
+          "raw_sha256": "7aa85dc5080fb5453d9a01d5ea43dde4ba98d465d9744bfa8dbeb90aaddde051",
+          "token_offset": 86,
+          "logical_frame_offset": 106
+        },
+        "evidence": [
+          "ev_99d6444a46b055b74bb78dbc5f846de62ed5d13dcfe781320f5e9e3117b5c9aa"
+        ]
+      },
+      "19": {
+        "clip": "sound/04-G21-1.wav",
+        "token": "04-G21-1.wav",
+        "logical_frame": 1,
+        "source": {
+          "path": "Fight_Role/004.dgp",
+          "sha256": "ac1d4776b36b055c141524262d0dec201b85832155ed2dc4fc99f3ecda215d8b",
+          "offset": 3335,
+          "bytes": 172,
+          "raw_sha256": "a6fbf40024b4c3c0e3fa033fb564707d4ed3093dde124087234f99a7e76c9b57",
+          "token_offset": 86,
+          "logical_frame_offset": 106
+        },
+        "evidence": [
+          "ev_99d6444a46b055b74bb78dbc5f846de62ed5d13dcfe781320f5e9e3117b5c9aa"
+        ]
+      },
+      "20": {
+        "clip": "sound/01-G22.wav",
+        "token": "01-G22.wav",
+        "logical_frame": 1,
+        "source": {
+          "path": "Fight_Role/004.dgp",
+          "sha256": "ac1d4776b36b055c141524262d0dec201b85832155ed2dc4fc99f3ecda215d8b",
+          "offset": 3507,
+          "bytes": 172,
+          "raw_sha256": "6e570374e4f1bb58bb210d2663d1750086d9fa4ca6abc8cab259189267a97c43",
+          "token_offset": 86,
+          "logical_frame_offset": 106
+        },
+        "evidence": [
+          "ev_99d6444a46b055b74bb78dbc5f846de62ed5d13dcfe781320f5e9e3117b5c9aa"
+        ]
+      },
+      "22": {
+        "clip": "sound/04-MA.wav",
+        "token": "04-MA.wav",
+        "logical_frame": 1,
+        "source": {
+          "path": "Fight_Role/004.dgp",
+          "sha256": "ac1d4776b36b055c141524262d0dec201b85832155ed2dc4fc99f3ecda215d8b",
+          "offset": 3851,
+          "bytes": 172,
+          "raw_sha256": "0a319629e3b85d82e238b2572b136001f7f9c33997498580df072190a72d44d9",
+          "token_offset": 86,
+          "logical_frame_offset": 106
+        },
+        "evidence": [
+          "ev_99d6444a46b055b74bb78dbc5f846de62ed5d13dcfe781320f5e9e3117b5c9aa"
+        ]
+      }
+    },
+    "005": {
+      "2": {
+        "clip": "sound/_Duty2.wav",
+        "token": "_Duty2.wav",
+        "logical_frame": 1,
+        "source": {
+          "path": "Fight_Role/005.dgp",
+          "sha256": "f78b0fc6ea0b0319b85079948323df7392bc6a941b3cd3d7ca5a8ca73c4d3029",
+          "offset": 411,
+          "bytes": 172,
+          "raw_sha256": "0035cbb9db7d09733d299e0cb2d703480bd888cfc6f1956c3479d41c8715673a",
+          "token_offset": 86,
+          "logical_frame_offset": 106
+        },
+        "evidence": [
+          "ev_99d6444a46b055b74bb78dbc5f846de62ed5d13dcfe781320f5e9e3117b5c9aa"
+        ]
+      },
+      "3": {
+        "clip": "sound/_Duty2.wav",
+        "token": "_Duty2.wav",
+        "logical_frame": 1,
+        "source": {
+          "path": "Fight_Role/005.dgp",
+          "sha256": "f78b0fc6ea0b0319b85079948323df7392bc6a941b3cd3d7ca5a8ca73c4d3029",
+          "offset": 583,
+          "bytes": 172,
+          "raw_sha256": "2b99cf83e444f1c208cc857524017c992657a5ee2eb018e7ac3d5dc223b158b1",
+          "token_offset": 86,
+          "logical_frame_offset": 106
+        },
+        "evidence": [
+          "ev_99d6444a46b055b74bb78dbc5f846de62ed5d13dcfe781320f5e9e3117b5c9aa"
+        ]
+      },
+      "6": {
+        "clip": "sound/02-G07.wav",
+        "token": "02-G07.wav",
+        "logical_frame": 1,
+        "source": {
+          "path": "Fight_Role/005.dgp",
+          "sha256": "f78b0fc6ea0b0319b85079948323df7392bc6a941b3cd3d7ca5a8ca73c4d3029",
+          "offset": 1099,
+          "bytes": 172,
+          "raw_sha256": "b4ac1bf206d5f0668aada29672730d6041adf06f6ba6f3eade4a9caa88c7fe96",
+          "token_offset": 86,
+          "logical_frame_offset": 106
+        },
+        "evidence": [
+          "ev_99d6444a46b055b74bb78dbc5f846de62ed5d13dcfe781320f5e9e3117b5c9aa"
+        ]
+      },
+      "11": {
+        "clip": "sound/05-G09-1.wav",
+        "token": "05-G09-1.wav",
+        "logical_frame": 1,
+        "source": {
+          "path": "Fight_Role/005.dgp",
+          "sha256": "f78b0fc6ea0b0319b85079948323df7392bc6a941b3cd3d7ca5a8ca73c4d3029",
+          "offset": 1959,
+          "bytes": 172,
+          "raw_sha256": "98f80fd177a8ebde14ddacf3e7fb17eee6329210c7740f2cad02f0f85be9ce04",
+          "token_offset": 86,
+          "logical_frame_offset": 106
+        },
+        "evidence": [
+          "ev_99d6444a46b055b74bb78dbc5f846de62ed5d13dcfe781320f5e9e3117b5c9aa"
+        ]
+      },
+      "15": {
+        "clip": "sound/05-G13.wav",
+        "token": "05-G13.wav",
+        "logical_frame": 1,
+        "source": {
+          "path": "Fight_Role/005.dgp",
+          "sha256": "f78b0fc6ea0b0319b85079948323df7392bc6a941b3cd3d7ca5a8ca73c4d3029",
+          "offset": 2647,
+          "bytes": 172,
+          "raw_sha256": "afdd3b852bc48e8bcab1069a0d8d16149ff52c77a0f7254b79be89e24f04593a",
+          "token_offset": 86,
+          "logical_frame_offset": 106
+        },
+        "evidence": [
+          "ev_99d6444a46b055b74bb78dbc5f846de62ed5d13dcfe781320f5e9e3117b5c9aa"
+        ]
+      },
+      "16": {
+        "clip": "sound/05-G14.wav",
+        "token": "05-G14.wav",
+        "logical_frame": 1,
+        "source": {
+          "path": "Fight_Role/005.dgp",
+          "sha256": "f78b0fc6ea0b0319b85079948323df7392bc6a941b3cd3d7ca5a8ca73c4d3029",
+          "offset": 2819,
+          "bytes": 172,
+          "raw_sha256": "353cad59273e8e21ff06ff1feede13a2fa080fd786ebb2d06ab5b0c9c7791575",
+          "token_offset": 86,
+          "logical_frame_offset": 106
+        },
+        "evidence": [
+          "ev_99d6444a46b055b74bb78dbc5f846de62ed5d13dcfe781320f5e9e3117b5c9aa"
+        ]
+      },
+      "20": {
+        "clip": "sound/01-G20.wav",
+        "token": "01-G20.wav",
+        "logical_frame": 1,
+        "source": {
+          "path": "Fight_Role/005.dgp",
+          "sha256": "f78b0fc6ea0b0319b85079948323df7392bc6a941b3cd3d7ca5a8ca73c4d3029",
+          "offset": 3507,
+          "bytes": 172,
+          "raw_sha256": "1e21ad3978b3e3b6db1b770f0f128d264caaa84dbb072aa52f820ea9b5933321",
+          "token_offset": 86,
+          "logical_frame_offset": 106
+        },
+        "evidence": [
+          "ev_99d6444a46b055b74bb78dbc5f846de62ed5d13dcfe781320f5e9e3117b5c9aa"
+        ]
+      },
+      "21": {
+        "clip": "sound/01-G22.wav",
+        "token": "01-G22.wav",
+        "logical_frame": 1,
+        "source": {
+          "path": "Fight_Role/005.dgp",
+          "sha256": "f78b0fc6ea0b0319b85079948323df7392bc6a941b3cd3d7ca5a8ca73c4d3029",
+          "offset": 3679,
+          "bytes": 172,
+          "raw_sha256": "9ed7dccc733d7d3d75099b8533ac9f036fb959e43e081c19a1273b4d32a0af05",
+          "token_offset": 86,
+          "logical_frame_offset": 106
+        },
+        "evidence": [
+          "ev_99d6444a46b055b74bb78dbc5f846de62ed5d13dcfe781320f5e9e3117b5c9aa"
+        ]
+      },
+      "23": {
+        "clip": "sound/05-1A.wav",
+        "token": "05-1A.wav",
+        "logical_frame": 1,
+        "source": {
+          "path": "Fight_Role/005.dgp",
+          "sha256": "f78b0fc6ea0b0319b85079948323df7392bc6a941b3cd3d7ca5a8ca73c4d3029",
+          "offset": 4023,
+          "bytes": 172,
+          "raw_sha256": "22f55b83eb083e29c6eb759e70a822ac4d23c146a1cde507c378c9e89ed3fa38",
+          "token_offset": 86,
+          "logical_frame_offset": 106
+        },
+        "evidence": [
+          "ev_99d6444a46b055b74bb78dbc5f846de62ed5d13dcfe781320f5e9e3117b5c9aa"
+        ]
+      },
+      "24": {
+        "clip": "sound/05-1B.wav",
+        "token": "05-1B.wav",
+        "logical_frame": 1,
+        "source": {
+          "path": "Fight_Role/005.dgp",
+          "sha256": "f78b0fc6ea0b0319b85079948323df7392bc6a941b3cd3d7ca5a8ca73c4d3029",
+          "offset": 4195,
+          "bytes": 172,
+          "raw_sha256": "161dcf98ec8bc4b55b7baf7b15ee025b0f6f7aaff364d3dac8dae3d2d735dcf7",
+          "token_offset": 86,
+          "logical_frame_offset": 106
+        },
+        "evidence": [
+          "ev_99d6444a46b055b74bb78dbc5f846de62ed5d13dcfe781320f5e9e3117b5c9aa"
+        ]
+      },
+      "25": {
+        "clip": "sound/05-1C.wav",
+        "token": "05-1C.wav",
+        "logical_frame": 1,
+        "source": {
+          "path": "Fight_Role/005.dgp",
+          "sha256": "f78b0fc6ea0b0319b85079948323df7392bc6a941b3cd3d7ca5a8ca73c4d3029",
+          "offset": 4367,
+          "bytes": 172,
+          "raw_sha256": "5ac717f2a0db64240499c313ac729692f96ebd46ace3e438e74b02e011234fec",
+          "token_offset": 86,
+          "logical_frame_offset": 106
+        },
+        "evidence": [
+          "ev_99d6444a46b055b74bb78dbc5f846de62ed5d13dcfe781320f5e9e3117b5c9aa"
+        ]
+      },
+      "26": {
+        "clip": "sound/05-1D.wav",
+        "token": "05-1D.wav",
+        "logical_frame": 1,
+        "source": {
+          "path": "Fight_Role/005.dgp",
+          "sha256": "f78b0fc6ea0b0319b85079948323df7392bc6a941b3cd3d7ca5a8ca73c4d3029",
+          "offset": 4539,
+          "bytes": 172,
+          "raw_sha256": "21954fac606b2e63719d2a8da8ee4a9cd7afc546c32bb58ffc029255337e4801",
+          "token_offset": 86,
+          "logical_frame_offset": 106
+        },
+        "evidence": [
+          "ev_99d6444a46b055b74bb78dbc5f846de62ed5d13dcfe781320f5e9e3117b5c9aa"
+        ]
+      }
+    },
+    "006": {
+      "6": {
+        "clip": "sound/06-G07.wav",
+        "token": "06-G07.wav",
+        "logical_frame": 1,
+        "source": {
+          "path": "Fight_Role/006.dgp",
+          "sha256": "3eec3a8b10fda36ae95a42730634fc1241a2b6bf6a05a56469346d1bbcd7c92d",
+          "offset": 1099,
+          "bytes": 172,
+          "raw_sha256": "fd666b25522c488fc85d7af61d915e4f0d2a7e48b5efa283f7506ad3435e57f7",
+          "token_offset": 86,
+          "logical_frame_offset": 106
+        },
+        "evidence": [
+          "ev_99d6444a46b055b74bb78dbc5f846de62ed5d13dcfe781320f5e9e3117b5c9aa"
+        ]
+      },
+      "11": {
+        "clip": "sound/A00008.wav",
+        "token": "A00008.wav",
+        "logical_frame": 1,
+        "source": {
+          "path": "Fight_Role/006.dgp",
+          "sha256": "3eec3a8b10fda36ae95a42730634fc1241a2b6bf6a05a56469346d1bbcd7c92d",
+          "offset": 1959,
+          "bytes": 172,
+          "raw_sha256": "4e2231f072ee9f169dfacdf94083bb8a82f3e19736e413b6789c66ba19ebf15e",
+          "token_offset": 86,
+          "logical_frame_offset": 106
+        },
+        "evidence": [
+          "ev_99d6444a46b055b74bb78dbc5f846de62ed5d13dcfe781320f5e9e3117b5c9aa"
+        ]
+      },
+      "12": {
+        "clip": "sound/A00009.wav",
+        "token": "A00009.wav",
+        "logical_frame": 1,
+        "source": {
+          "path": "Fight_Role/006.dgp",
+          "sha256": "3eec3a8b10fda36ae95a42730634fc1241a2b6bf6a05a56469346d1bbcd7c92d",
+          "offset": 2131,
+          "bytes": 172,
+          "raw_sha256": "5f1106d35ce0b2375ffc87e10a9e51619023daed9eb09d70d67f4c4336b3e2ba",
+          "token_offset": 86,
+          "logical_frame_offset": 106
+        },
+        "evidence": [
+          "ev_99d6444a46b055b74bb78dbc5f846de62ed5d13dcfe781320f5e9e3117b5c9aa"
+        ]
+      },
+      "15": {
+        "clip": "sound/01-G08.wav",
+        "token": "01-G08.wav",
+        "logical_frame": 1,
+        "source": {
+          "path": "Fight_Role/006.dgp",
+          "sha256": "3eec3a8b10fda36ae95a42730634fc1241a2b6bf6a05a56469346d1bbcd7c92d",
+          "offset": 2647,
+          "bytes": 172,
+          "raw_sha256": "82ee4b1261260093397a5d566007c4e92fc491c6bb11d58705f7989ccfc12232",
+          "token_offset": 86,
+          "logical_frame_offset": 106
+        },
+        "evidence": [
+          "ev_99d6444a46b055b74bb78dbc5f846de62ed5d13dcfe781320f5e9e3117b5c9aa"
+        ]
+      },
+      "16": {
+        "clip": "sound/06-1A.wav",
+        "token": "06-1A.wav",
+        "logical_frame": 1,
+        "source": {
+          "path": "Fight_Role/006.dgp",
+          "sha256": "3eec3a8b10fda36ae95a42730634fc1241a2b6bf6a05a56469346d1bbcd7c92d",
+          "offset": 2819,
+          "bytes": 172,
+          "raw_sha256": "10b5884b336a6e9c19b2babc6470cea93c3e6cab284699f31115da35000efa73",
+          "token_offset": 86,
+          "logical_frame_offset": 106
+        },
+        "evidence": [
+          "ev_99d6444a46b055b74bb78dbc5f846de62ed5d13dcfe781320f5e9e3117b5c9aa"
+        ]
+      },
+      "21": {
+        "clip": "sound/01-G20.wav",
+        "token": "01-G20.wav",
+        "logical_frame": 1,
+        "source": {
+          "path": "Fight_Role/006.dgp",
+          "sha256": "3eec3a8b10fda36ae95a42730634fc1241a2b6bf6a05a56469346d1bbcd7c92d",
+          "offset": 3679,
+          "bytes": 172,
+          "raw_sha256": "5122cd09a77fff9f0b4869bacb4e04db7036af584c1764f14d80fe3d08314fc7",
+          "token_offset": 86,
+          "logical_frame_offset": 106
+        },
+        "evidence": [
+          "ev_99d6444a46b055b74bb78dbc5f846de62ed5d13dcfe781320f5e9e3117b5c9aa"
+        ]
+      },
+      "23": {
+        "clip": "sound/01-G22.wav",
+        "token": "01-G22.wav",
+        "logical_frame": 1,
+        "source": {
+          "path": "Fight_Role/006.dgp",
+          "sha256": "3eec3a8b10fda36ae95a42730634fc1241a2b6bf6a05a56469346d1bbcd7c92d",
+          "offset": 4023,
+          "bytes": 172,
+          "raw_sha256": "aa8e829a72e5326758f9e010fd42a44641ebfd7adaff9b09f64bd511d6c6048d",
+          "token_offset": 86,
+          "logical_frame_offset": 106
+        },
+        "evidence": [
+          "ev_99d6444a46b055b74bb78dbc5f846de62ed5d13dcfe781320f5e9e3117b5c9aa"
+        ]
+      },
+      "30": {
+        "clip": "sound/06-1A.wav",
+        "token": "06-1A.wav",
+        "logical_frame": 1,
+        "source": {
+          "path": "Fight_Role/006.dgp",
+          "sha256": "3eec3a8b10fda36ae95a42730634fc1241a2b6bf6a05a56469346d1bbcd7c92d",
+          "offset": 5227,
+          "bytes": 172,
+          "raw_sha256": "d9d169223e1f6fee1e518c6c03e142485e8efaca8f8cdffe7a1b8a959b3e917d",
+          "token_offset": 86,
+          "logical_frame_offset": 106
+        },
+        "evidence": [
+          "ev_99d6444a46b055b74bb78dbc5f846de62ed5d13dcfe781320f5e9e3117b5c9aa"
+        ]
+      },
+      "31": {
+        "clip": "sound/06-1A.wav",
+        "token": "06-1A.wav",
+        "logical_frame": 1,
+        "source": {
+          "path": "Fight_Role/006.dgp",
+          "sha256": "3eec3a8b10fda36ae95a42730634fc1241a2b6bf6a05a56469346d1bbcd7c92d",
+          "offset": 5399,
+          "bytes": 172,
+          "raw_sha256": "31c45fbe76364bb9481c1d46ae9726f943e8013f46563c712b6cb57d42c29dd2",
+          "token_offset": 86,
+          "logical_frame_offset": 106
+        },
+        "evidence": [
+          "ev_99d6444a46b055b74bb78dbc5f846de62ed5d13dcfe781320f5e9e3117b5c9aa"
+        ]
+      },
+      "32": {
+        "clip": "sound/06-1C.wav",
+        "token": "06-1C.wav",
+        "logical_frame": 1,
+        "source": {
+          "path": "Fight_Role/006.dgp",
+          "sha256": "3eec3a8b10fda36ae95a42730634fc1241a2b6bf6a05a56469346d1bbcd7c92d",
+          "offset": 5571,
+          "bytes": 172,
+          "raw_sha256": "9785d6e7f8e710947cc31378112e5ea9792fa31bef983b4af4adbabb89d33c96",
+          "token_offset": 86,
+          "logical_frame_offset": 106
+        },
+        "evidence": [
+          "ev_99d6444a46b055b74bb78dbc5f846de62ed5d13dcfe781320f5e9e3117b5c9aa"
+        ]
+      },
+      "33": {
+        "clip": "sound/06-1D.wav",
+        "token": "06-1D.wav",
+        "logical_frame": 1,
+        "source": {
+          "path": "Fight_Role/006.dgp",
+          "sha256": "3eec3a8b10fda36ae95a42730634fc1241a2b6bf6a05a56469346d1bbcd7c92d",
+          "offset": 5743,
+          "bytes": 172,
+          "raw_sha256": "7bbc999e42906800673bf1e00a64e1e68ee41c03fd30ff0bd13c869b48fcc517",
+          "token_offset": 86,
+          "logical_frame_offset": 106
+        },
+        "evidence": [
+          "ev_99d6444a46b055b74bb78dbc5f846de62ed5d13dcfe781320f5e9e3117b5c9aa"
+        ]
+      },
+      "34": {
+        "clip": "sound/06-1C.wav",
+        "token": "06-1C.wav",
+        "logical_frame": 1,
+        "source": {
+          "path": "Fight_Role/006.dgp",
+          "sha256": "3eec3a8b10fda36ae95a42730634fc1241a2b6bf6a05a56469346d1bbcd7c92d",
+          "offset": 5915,
+          "bytes": 172,
+          "raw_sha256": "f59110024e42dc888825597574a6ac7aa6a4f36e679d87f57a0d907a58780ab9",
+          "token_offset": 86,
+          "logical_frame_offset": 106
+        },
+        "evidence": [
+          "ev_99d6444a46b055b74bb78dbc5f846de62ed5d13dcfe781320f5e9e3117b5c9aa"
+        ]
+      },
+      "35": {
+        "clip": "sound/06-1C.wav",
+        "token": "06-1C.wav",
+        "logical_frame": 1,
+        "source": {
+          "path": "Fight_Role/006.dgp",
+          "sha256": "3eec3a8b10fda36ae95a42730634fc1241a2b6bf6a05a56469346d1bbcd7c92d",
+          "offset": 6087,
+          "bytes": 172,
+          "raw_sha256": "fdf6736622bc29ed3f3a30d0d8ca52ae204a7678f0d72acc9ab6baacd64f907c",
+          "token_offset": 86,
+          "logical_frame_offset": 106
+        },
+        "evidence": [
+          "ev_99d6444a46b055b74bb78dbc5f846de62ed5d13dcfe781320f5e9e3117b5c9aa"
+        ]
+      }
+    },
     "011": {
       "1": {
         "clip": "sound/3060.wav",
@@ -2988,6 +5070,110 @@
           "ev_99d6444a46b055b74bb78dbc5f846de62ed5d13dcfe781320f5e9e3117b5c9aa"
         ]
       }
+    },
+    "032": {
+      "2": {
+        "clip": "sound/3231.WAV",
+        "token": "3231.WAV",
+        "logical_frame": 1,
+        "source": {
+          "path": "Fight_Role/032.dgp",
+          "sha256": "945ca46f49dcd4a8802eced780342ace8eab6e595abdaa155a1725bb999d4604",
+          "offset": 411,
+          "bytes": 172,
+          "raw_sha256": "12bdef58f130645075f23b94d2342d3648748a874f3f900565e8b20085e75aea",
+          "token_offset": 86,
+          "logical_frame_offset": 106
+        },
+        "evidence": [
+          "ev_99d6444a46b055b74bb78dbc5f846de62ed5d13dcfe781320f5e9e3117b5c9aa"
+        ]
+      },
+      "4": {
+        "clip": "sound/3006.WAV",
+        "token": "3006.WAV",
+        "logical_frame": 1,
+        "source": {
+          "path": "Fight_Role/032.dgp",
+          "sha256": "945ca46f49dcd4a8802eced780342ace8eab6e595abdaa155a1725bb999d4604",
+          "offset": 755,
+          "bytes": 172,
+          "raw_sha256": "dec85f54f223ab8e18110620217c1b4a6a1b0ba2d3391083f0f6b884a8db5150",
+          "token_offset": 86,
+          "logical_frame_offset": 106
+        },
+        "evidence": [
+          "ev_99d6444a46b055b74bb78dbc5f846de62ed5d13dcfe781320f5e9e3117b5c9aa"
+        ]
+      },
+      "5": {
+        "clip": "sound/3232.WAV",
+        "token": "3232.WAV",
+        "logical_frame": 1,
+        "source": {
+          "path": "Fight_Role/032.dgp",
+          "sha256": "945ca46f49dcd4a8802eced780342ace8eab6e595abdaa155a1725bb999d4604",
+          "offset": 927,
+          "bytes": 172,
+          "raw_sha256": "ef810d722ff21e90bd12dc535f9959dc194429c6b9119eef64c14d8873670437",
+          "token_offset": 86,
+          "logical_frame_offset": 106
+        },
+        "evidence": [
+          "ev_99d6444a46b055b74bb78dbc5f846de62ed5d13dcfe781320f5e9e3117b5c9aa"
+        ]
+      },
+      "7": {
+        "clip": "sound/3234.wav",
+        "token": "3234.wav",
+        "logical_frame": 7,
+        "source": {
+          "path": "Fight_Role/032.dgp",
+          "sha256": "945ca46f49dcd4a8802eced780342ace8eab6e595abdaa155a1725bb999d4604",
+          "offset": 1271,
+          "bytes": 172,
+          "raw_sha256": "f7fe9032b37be22196a46c39a9bf035958e518c809f6989159f5d7fe09ceaf7d",
+          "token_offset": 86,
+          "logical_frame_offset": 106
+        },
+        "evidence": [
+          "ev_99d6444a46b055b74bb78dbc5f846de62ed5d13dcfe781320f5e9e3117b5c9aa"
+        ]
+      },
+      "8": {
+        "clip": "sound/3235.wav",
+        "token": "3235.wav",
+        "logical_frame": 1,
+        "source": {
+          "path": "Fight_Role/032.dgp",
+          "sha256": "945ca46f49dcd4a8802eced780342ace8eab6e595abdaa155a1725bb999d4604",
+          "offset": 1443,
+          "bytes": 172,
+          "raw_sha256": "fe5104bbf2d87a7b35c4c89010002006e6c431e22ff71249b1dc0cb469e69db1",
+          "token_offset": 86,
+          "logical_frame_offset": 106
+        },
+        "evidence": [
+          "ev_99d6444a46b055b74bb78dbc5f846de62ed5d13dcfe781320f5e9e3117b5c9aa"
+        ]
+      },
+      "9": {
+        "clip": "sound/3236.wav",
+        "token": "3236.wav",
+        "logical_frame": 1,
+        "source": {
+          "path": "Fight_Role/032.dgp",
+          "sha256": "945ca46f49dcd4a8802eced780342ace8eab6e595abdaa155a1725bb999d4604",
+          "offset": 1615,
+          "bytes": 172,
+          "raw_sha256": "76729697c65530149f0e7c278e6474a33eeedd0c4e638f35d5c7a8c0a28b92d4",
+          "token_offset": 86,
+          "logical_frame_offset": 106
+        },
+        "evidence": [
+          "ev_99d6444a46b055b74bb78dbc5f846de62ed5d13dcfe781320f5e9e3117b5c9aa"
+        ]
+      }
     }
   },
   "effect_sounds": {
@@ -3022,6 +5208,26 @@
         "offset": 67,
         "bytes": 172,
         "raw_sha256": "f2c55671af30f08600f31e8218b74f569b98b1654bf91dd7646f77f19ba0abf7",
+        "token_offset": 86,
+        "logical_frame_offset": 106
+      },
+      "evidence": [
+        "ev_0c237df7043928c88bbdebd562f666aa4b7f4201a779c0a793b1483939fd71d2",
+        "ev_8a5106859a74859307743cb5be1794a453316af2b92ccfc05d4705257ef5ea6c"
+      ],
+      "confidence": "source DGP sound fields; playback filtered by source effect logical frame"
+    },
+    "_iReSTfz": {
+      "clip": "sound/_iReSTfz.wav",
+      "token": "_iReSTfz.wav",
+      "logical_frame": 1,
+      "interval_ms": 80,
+      "source": {
+        "path": "Fight_Role/Effect/_iReSTfz.dgp",
+        "sha256": "269c9b87881b43c72c2590980acf1b50c539ea606a1d9f83b7a358368954492a",
+        "offset": 67,
+        "bytes": 172,
+        "raw_sha256": "b0c6b54451537aa4f3c650a6ac205cd6066ac8440480ba957eb61c5bb0c3310c",
         "token_offset": 86,
         "logical_frame_offset": 106
       },
@@ -3074,11 +5280,25 @@
       "evidence": [
         "ev_4ad9019da5e0945f74684bdf2d2c6ee7429b3a2a2e7bb84eee812d448c861eac"
       ]
+    },
+    "272": {
+      "effect_id": "_iReSTfz",
+      "source": {
+        "path": "SYSTEM/Object.ITM",
+        "sha256": "9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8",
+        "record_offset": 261453,
+        "record_sha256": "2195a04f1f0afe1c32f70861dab57ff6277fb0791483a8e7e11606ffaa3a0825",
+        "effect_field_offset": 294,
+        "effect_field_bytes": 20
+      },
+      "evidence": [
+        "ev_4ad9019da5e0945f74684bdf2d2c6ee7429b3a2a2e7bb84eee812d448c861eac"
+      ]
     }
   },
   "reference_hashes": {
-    "remake/runtime/web/data/party_battle_view.json": "f040a7201a4a4f1788465ac827d70f1d4425e8eeb12006be696f46cfe3296fbe",
-    "remake/runtime/web/data/item_presentation.json": "2337e0d0fc12bc50804ad0d1047767cc62ea61e999c5f715db8fe75cf282cb29"
+    "remake/runtime/web/data/party_battle_view.json": "0fabe2a56176062862ade8afeb3de5cecccd320ffbbb69800839dde998351e1f",
+    "remake/runtime/web/data/item_presentation.json": "746c04e8a7d21b2280b57885f210aa6a348fa358cbf58ee4135ea9ddfea4d5bc"
   },
   "action_sources": [
     {
@@ -3407,6 +5627,422 @@
       "logical_frame": 0
     },
     {
+      "role_id": "002",
+      "skill_index": 30,
+      "record_index": 1,
+      "source_path": "Fight_Role/002.CHR",
+      "source_sha256": "854aed104fa990aa3f5fbf9d926724e0d8ae3ca73a5aabbc7a27a10ec91447e3",
+      "offset": 58070,
+      "raw_sha256": "9b528b187119e22872015a2aa271ea9654e1936174194874d00281e3c39714d3",
+      "token_offset": 122,
+      "token": "OS02-11.wav",
+      "logical_frame_offset": 142,
+      "logical_frame": 1
+    },
+    {
+      "role_id": "002",
+      "skill_index": 31,
+      "record_index": 1,
+      "source_path": "Fight_Role/002.CHR",
+      "source_sha256": "854aed104fa990aa3f5fbf9d926724e0d8ae3ca73a5aabbc7a27a10ec91447e3",
+      "offset": 60179,
+      "raw_sha256": "9b528b187119e22872015a2aa271ea9654e1936174194874d00281e3c39714d3",
+      "token_offset": 122,
+      "token": "OS02-11.wav",
+      "logical_frame_offset": 142,
+      "logical_frame": 1
+    },
+    {
+      "role_id": "004",
+      "skill_index": 1,
+      "record_index": 0,
+      "source_path": "Fight_Role/004.CHR",
+      "source_sha256": "2b964b7c3065d1520f7fe354f9e1fe6e213e9fcb3f586056eafa7f63fb88b50d",
+      "offset": 3069,
+      "raw_sha256": "f80bf71223ee7903ece83a4c0aab5270f119eedf9040108d2d0b32cb0c8f9653",
+      "token_offset": 122,
+      "token": "OS04-16.wav",
+      "logical_frame_offset": 142,
+      "logical_frame": 1
+    },
+    {
+      "role_id": "004",
+      "skill_index": 2,
+      "record_index": 0,
+      "source_path": "Fight_Role/004.CHR",
+      "source_sha256": "2b964b7c3065d1520f7fe354f9e1fe6e213e9fcb3f586056eafa7f63fb88b50d",
+      "offset": 4298,
+      "raw_sha256": "17a791821c5de70f859f2d58d04b6c644495516cc474ea969c813303c22de4fe",
+      "token_offset": 122,
+      "token": "OS04-15.wav",
+      "logical_frame_offset": 142,
+      "logical_frame": 3
+    },
+    {
+      "role_id": "004",
+      "skill_index": 12,
+      "record_index": 0,
+      "source_path": "Fight_Role/004.CHR",
+      "source_sha256": "2b964b7c3065d1520f7fe354f9e1fe6e213e9fcb3f586056eafa7f63fb88b50d",
+      "offset": 17644,
+      "raw_sha256": "6f5e4125ff2dbf5773942b4ac82b7ba46c0df679902e3a0f69565426a353fc88",
+      "token_offset": 122,
+      "token": "OS04-11.wav",
+      "logical_frame_offset": 142,
+      "logical_frame": 6
+    },
+    {
+      "role_id": "004",
+      "skill_index": 15,
+      "record_index": 0,
+      "source_path": "Fight_Role/004.CHR",
+      "source_sha256": "2b964b7c3065d1520f7fe354f9e1fe6e213e9fcb3f586056eafa7f63fb88b50d",
+      "offset": 24147,
+      "raw_sha256": "ea480050d4e4dd4a6b66bfd61f15403b2b9c5e646a633ecba82bd26d6a76752f",
+      "token_offset": 122,
+      "token": "OS04-12.wav",
+      "logical_frame_offset": 142,
+      "logical_frame": 11
+    },
+    {
+      "role_id": "004",
+      "skill_index": 16,
+      "record_index": 0,
+      "source_path": "Fight_Role/004.CHR",
+      "source_sha256": "2b964b7c3065d1520f7fe354f9e1fe6e213e9fcb3f586056eafa7f63fb88b50d",
+      "offset": 25552,
+      "raw_sha256": "41ee16bd30184c8fa374e063dcdc476d8608a0717fc7b68e41534291dfd2757e",
+      "token_offset": 122,
+      "token": "OS04-14.wav",
+      "logical_frame_offset": 142,
+      "logical_frame": 1
+    },
+    {
+      "role_id": "004",
+      "skill_index": 17,
+      "record_index": 1,
+      "source_path": "Fight_Role/004.CHR",
+      "source_sha256": "2b964b7c3065d1520f7fe354f9e1fe6e213e9fcb3f586056eafa7f63fb88b50d",
+      "offset": 27309,
+      "raw_sha256": "0ae583bc1eaa8b391429be5b59d5abd3bcf5625d0ae98672b8ac0b027e0efeaf",
+      "token_offset": 122,
+      "token": "OS04-13.wav",
+      "logical_frame_offset": 142,
+      "logical_frame": 0
+    },
+    {
+      "role_id": "004",
+      "skill_index": 27,
+      "record_index": 1,
+      "source_path": "Fight_Role/004.CHR",
+      "source_sha256": "2b964b7c3065d1520f7fe354f9e1fe6e213e9fcb3f586056eafa7f63fb88b50d",
+      "offset": 56495,
+      "raw_sha256": "10a30d68604f38408518c1531fdc81b673540c3ee8557a2d68450b427b20d2ff",
+      "token_offset": 122,
+      "token": "OS04-3-2.wav",
+      "logical_frame_offset": 142,
+      "logical_frame": 1
+    },
+    {
+      "role_id": "004",
+      "skill_index": 29,
+      "record_index": 1,
+      "source_path": "Fight_Role/004.CHR",
+      "source_sha256": "2b964b7c3065d1520f7fe354f9e1fe6e213e9fcb3f586056eafa7f63fb88b50d",
+      "offset": 65289,
+      "raw_sha256": "10a30d68604f38408518c1531fdc81b673540c3ee8557a2d68450b427b20d2ff",
+      "token_offset": 122,
+      "token": "OS04-3-2.wav",
+      "logical_frame_offset": 142,
+      "logical_frame": 1
+    },
+    {
+      "role_id": "004",
+      "skill_index": 31,
+      "record_index": 1,
+      "source_path": "Fight_Role/004.CHR",
+      "source_sha256": "2b964b7c3065d1520f7fe354f9e1fe6e213e9fcb3f586056eafa7f63fb88b50d",
+      "offset": 74083,
+      "raw_sha256": "10a30d68604f38408518c1531fdc81b673540c3ee8557a2d68450b427b20d2ff",
+      "token_offset": 122,
+      "token": "OS04-3-2.wav",
+      "logical_frame_offset": 142,
+      "logical_frame": 1
+    },
+    {
+      "role_id": "004",
+      "skill_index": 33,
+      "record_index": 1,
+      "source_path": "Fight_Role/004.CHR",
+      "source_sha256": "2b964b7c3065d1520f7fe354f9e1fe6e213e9fcb3f586056eafa7f63fb88b50d",
+      "offset": 82877,
+      "raw_sha256": "10a30d68604f38408518c1531fdc81b673540c3ee8557a2d68450b427b20d2ff",
+      "token_offset": 122,
+      "token": "OS04-3-2.wav",
+      "logical_frame_offset": 142,
+      "logical_frame": 1
+    },
+    {
+      "role_id": "004",
+      "skill_index": 38,
+      "record_index": 1,
+      "source_path": "Fight_Role/004.CHR",
+      "source_sha256": "2b964b7c3065d1520f7fe354f9e1fe6e213e9fcb3f586056eafa7f63fb88b50d",
+      "offset": 105742,
+      "raw_sha256": "10a30d68604f38408518c1531fdc81b673540c3ee8557a2d68450b427b20d2ff",
+      "token_offset": 122,
+      "token": "OS04-3-2.wav",
+      "logical_frame_offset": 142,
+      "logical_frame": 1
+    },
+    {
+      "role_id": "005",
+      "skill_index": 1,
+      "record_index": 0,
+      "source_path": "Fight_Role/005.CHR",
+      "source_sha256": "9e06bcbedaf821a6e4c1d08dc0cff31d916c3ae2d00fdc20c37e758d25e09580",
+      "offset": 3069,
+      "raw_sha256": "0d6bf0a2ea33ea3046e4fbf741e0500bd7de84c366d3530c7c92912f0f9546b6",
+      "token_offset": 122,
+      "token": "OS05-02.wav",
+      "logical_frame_offset": 142,
+      "logical_frame": 0
+    },
+    {
+      "role_id": "005",
+      "skill_index": 2,
+      "record_index": 0,
+      "source_path": "Fight_Role/005.CHR",
+      "source_sha256": "9e06bcbedaf821a6e4c1d08dc0cff31d916c3ae2d00fdc20c37e758d25e09580",
+      "offset": 4298,
+      "raw_sha256": "71721168f3e166aef69b5dd43015424b56d63bec6b5e3b790be3c8cdffff2ee9",
+      "token_offset": 122,
+      "token": "OS05-03.wav",
+      "logical_frame_offset": 142,
+      "logical_frame": 0
+    },
+    {
+      "role_id": "005",
+      "skill_index": 3,
+      "record_index": 0,
+      "source_path": "Fight_Role/005.CHR",
+      "source_sha256": "9e06bcbedaf821a6e4c1d08dc0cff31d916c3ae2d00fdc20c37e758d25e09580",
+      "offset": 5527,
+      "raw_sha256": "25a3e9c784d7e37b7bc51610b067ae98f6dffd5e6059ccaa41ed41fc28e70802",
+      "token_offset": 122,
+      "token": "OS05-05.wav",
+      "logical_frame_offset": 142,
+      "logical_frame": 0
+    },
+    {
+      "role_id": "005",
+      "skill_index": 12,
+      "record_index": 0,
+      "source_path": "Fight_Role/005.CHR",
+      "source_sha256": "9e06bcbedaf821a6e4c1d08dc0cff31d916c3ae2d00fdc20c37e758d25e09580",
+      "offset": 18876,
+      "raw_sha256": "c2835e07b87f17212eaabf332839c9929e80ff33d573361fa95a1d274eadfd2c",
+      "token_offset": 122,
+      "token": "OS05-07.wav",
+      "logical_frame_offset": 142,
+      "logical_frame": 0
+    },
+    {
+      "role_id": "005",
+      "skill_index": 17,
+      "record_index": 0,
+      "source_path": "Fight_Role/005.CHR",
+      "source_sha256": "9e06bcbedaf821a6e4c1d08dc0cff31d916c3ae2d00fdc20c37e758d25e09580",
+      "offset": 28189,
+      "raw_sha256": "4c99828aeea4fdc626dac3a66dbf68f4dacc50814014b52f397462488a10bb28",
+      "token_offset": 122,
+      "token": "OS05-09.wav",
+      "logical_frame_offset": 142,
+      "logical_frame": 0
+    },
+    {
+      "role_id": "005",
+      "skill_index": 18,
+      "record_index": 1,
+      "source_path": "Fight_Role/005.CHR",
+      "source_sha256": "9e06bcbedaf821a6e4c1d08dc0cff31d916c3ae2d00fdc20c37e758d25e09580",
+      "offset": 29946,
+      "raw_sha256": "0b4e8be03e11205cbc28fa38fde1fccca0b797cbf23d38fee14b819c13ff033e",
+      "token_offset": 122,
+      "token": "OS05-06.wav",
+      "logical_frame_offset": 142,
+      "logical_frame": 0
+    },
+    {
+      "role_id": "005",
+      "skill_index": 19,
+      "record_index": 0,
+      "source_path": "Fight_Role/005.CHR",
+      "source_sha256": "9e06bcbedaf821a6e4c1d08dc0cff31d916c3ae2d00fdc20c37e758d25e09580",
+      "offset": 31351,
+      "raw_sha256": "b44acecb45d44bb5327f2d346145410faebcca999edb9a8c146468a931d03093",
+      "token_offset": 122,
+      "token": "OS05-11.wav",
+      "logical_frame_offset": 142,
+      "logical_frame": 0
+    },
+    {
+      "role_id": "005",
+      "skill_index": 19,
+      "record_index": 2,
+      "source_path": "Fight_Role/005.CHR",
+      "source_sha256": "9e06bcbedaf821a6e4c1d08dc0cff31d916c3ae2d00fdc20c37e758d25e09580",
+      "offset": 31703,
+      "raw_sha256": "e9fd9941b859afb456d6611daa8e9c3470e8b4a4b534d2147cc99ed7cabc4ad7",
+      "token_offset": 122,
+      "token": "OS05-17.wav",
+      "logical_frame_offset": 142,
+      "logical_frame": 0
+    },
+    {
+      "role_id": "005",
+      "skill_index": 19,
+      "record_index": 3,
+      "source_path": "Fight_Role/005.CHR",
+      "source_sha256": "9e06bcbedaf821a6e4c1d08dc0cff31d916c3ae2d00fdc20c37e758d25e09580",
+      "offset": 31879,
+      "raw_sha256": "50ca1c66959b2621e7a5ffe1069933fad589273d908b36d34d797f18e9b3c94b",
+      "token_offset": 122,
+      "token": "A00008.wav",
+      "logical_frame_offset": 142,
+      "logical_frame": 4
+    },
+    {
+      "role_id": "005",
+      "skill_index": 20,
+      "record_index": 0,
+      "source_path": "Fight_Role/005.CHR",
+      "source_sha256": "9e06bcbedaf821a6e4c1d08dc0cff31d916c3ae2d00fdc20c37e758d25e09580",
+      "offset": 33636,
+      "raw_sha256": "b44acecb45d44bb5327f2d346145410faebcca999edb9a8c146468a931d03093",
+      "token_offset": 122,
+      "token": "OS05-11.wav",
+      "logical_frame_offset": 142,
+      "logical_frame": 0
+    },
+    {
+      "role_id": "005",
+      "skill_index": 20,
+      "record_index": 2,
+      "source_path": "Fight_Role/005.CHR",
+      "source_sha256": "9e06bcbedaf821a6e4c1d08dc0cff31d916c3ae2d00fdc20c37e758d25e09580",
+      "offset": 33988,
+      "raw_sha256": "c077f26dcfc461398a238995780f22b603d99200c86c1463d55480110d66b996",
+      "token_offset": 122,
+      "token": "OS05-17.wav",
+      "logical_frame_offset": 142,
+      "logical_frame": 0
+    },
+    {
+      "role_id": "005",
+      "skill_index": 20,
+      "record_index": 3,
+      "source_path": "Fight_Role/005.CHR",
+      "source_sha256": "9e06bcbedaf821a6e4c1d08dc0cff31d916c3ae2d00fdc20c37e758d25e09580",
+      "offset": 34164,
+      "raw_sha256": "50ca1c66959b2621e7a5ffe1069933fad589273d908b36d34d797f18e9b3c94b",
+      "token_offset": 122,
+      "token": "A00008.wav",
+      "logical_frame_offset": 142,
+      "logical_frame": 4
+    },
+    {
+      "role_id": "005",
+      "skill_index": 21,
+      "record_index": 0,
+      "source_path": "Fight_Role/005.CHR",
+      "source_sha256": "9e06bcbedaf821a6e4c1d08dc0cff31d916c3ae2d00fdc20c37e758d25e09580",
+      "offset": 35921,
+      "raw_sha256": "b44acecb45d44bb5327f2d346145410faebcca999edb9a8c146468a931d03093",
+      "token_offset": 122,
+      "token": "OS05-11.wav",
+      "logical_frame_offset": 142,
+      "logical_frame": 0
+    },
+    {
+      "role_id": "005",
+      "skill_index": 21,
+      "record_index": 2,
+      "source_path": "Fight_Role/005.CHR",
+      "source_sha256": "9e06bcbedaf821a6e4c1d08dc0cff31d916c3ae2d00fdc20c37e758d25e09580",
+      "offset": 36273,
+      "raw_sha256": "b6a708c2f7d9d1a3549ec08ab1aaf8638b324c9a0342f55af63258fbde7e24e1",
+      "token_offset": 122,
+      "token": "OS05-15.wav",
+      "logical_frame_offset": 142,
+      "logical_frame": 1
+    },
+    {
+      "role_id": "005",
+      "skill_index": 21,
+      "record_index": 3,
+      "source_path": "Fight_Role/005.CHR",
+      "source_sha256": "9e06bcbedaf821a6e4c1d08dc0cff31d916c3ae2d00fdc20c37e758d25e09580",
+      "offset": 36449,
+      "raw_sha256": "50ca1c66959b2621e7a5ffe1069933fad589273d908b36d34d797f18e9b3c94b",
+      "token_offset": 122,
+      "token": "A00008.wav",
+      "logical_frame_offset": 142,
+      "logical_frame": 4
+    },
+    {
+      "role_id": "005",
+      "skill_index": 22,
+      "record_index": 0,
+      "source_path": "Fight_Role/005.CHR",
+      "source_sha256": "9e06bcbedaf821a6e4c1d08dc0cff31d916c3ae2d00fdc20c37e758d25e09580",
+      "offset": 38206,
+      "raw_sha256": "b44acecb45d44bb5327f2d346145410faebcca999edb9a8c146468a931d03093",
+      "token_offset": 122,
+      "token": "OS05-11.wav",
+      "logical_frame_offset": 142,
+      "logical_frame": 0
+    },
+    {
+      "role_id": "005",
+      "skill_index": 22,
+      "record_index": 2,
+      "source_path": "Fight_Role/005.CHR",
+      "source_sha256": "9e06bcbedaf821a6e4c1d08dc0cff31d916c3ae2d00fdc20c37e758d25e09580",
+      "offset": 38558,
+      "raw_sha256": "c1c955acd0b205e97045f84408834798f174b0d70853f76c2c0f7695411b5bf1",
+      "token_offset": 122,
+      "token": "OS05-16.wav",
+      "logical_frame_offset": 142,
+      "logical_frame": 0
+    },
+    {
+      "role_id": "005",
+      "skill_index": 22,
+      "record_index": 3,
+      "source_path": "Fight_Role/005.CHR",
+      "source_sha256": "9e06bcbedaf821a6e4c1d08dc0cff31d916c3ae2d00fdc20c37e758d25e09580",
+      "offset": 38734,
+      "raw_sha256": "50ca1c66959b2621e7a5ffe1069933fad589273d908b36d34d797f18e9b3c94b",
+      "token_offset": 122,
+      "token": "A00008.wav",
+      "logical_frame_offset": 142,
+      "logical_frame": 4
+    },
+    {
+      "role_id": "006",
+      "skill_index": 12,
+      "record_index": 0,
+      "source_path": "Fight_Role/006.CHR",
+      "source_sha256": "27b29fb5cc1073014faea7553d0175559714c18dbbc5132ca1c549e4a9d8e15b",
+      "offset": 18876,
+      "raw_sha256": "c001d8deaa0bdd4a703111940b0a0d6ddeba68c50ac2b54b96c445941fe69f6c",
+      "token_offset": 122,
+      "token": "OS06-12.wav",
+      "logical_frame_offset": 142,
+      "logical_frame": 1
+    },
+    {
       "role_id": "011",
       "skill_index": 14,
       "record_index": 0,
@@ -3522,12 +6158,158 @@
       "token": "3005.wav",
       "logical_frame_offset": 142,
       "logical_frame": 5
+    },
+    {
+      "role_id": "032",
+      "skill_index": 1,
+      "record_index": 0,
+      "source_path": "Fight_Role/032.CHR",
+      "source_sha256": "e081f7db9f51ac59c0bbd5b43f82a5894b3e707dd7512eb43aef574e1ec35f9f",
+      "offset": 3069,
+      "raw_sha256": "e1cdc599451294e35624b9deb714d645a3358408c44370da1e5145f1b8eddacc",
+      "token_offset": 122,
+      "token": "3252.wav",
+      "logical_frame_offset": 142,
+      "logical_frame": 1
+    },
+    {
+      "role_id": "032",
+      "skill_index": 5,
+      "record_index": 0,
+      "source_path": "Fight_Role/032.CHR",
+      "source_sha256": "e081f7db9f51ac59c0bbd5b43f82a5894b3e707dd7512eb43aef574e1ec35f9f",
+      "offset": 8337,
+      "raw_sha256": "c61dc6279390c88e6e6e0cc55c683bfb0cf8dfdc47eacd593fff36d6a2318d72",
+      "token_offset": 122,
+      "token": "3249.wav",
+      "logical_frame_offset": 142,
+      "logical_frame": 1
+    },
+    {
+      "role_id": "032",
+      "skill_index": 6,
+      "record_index": 1,
+      "source_path": "Fight_Role/032.CHR",
+      "source_sha256": "e081f7db9f51ac59c0bbd5b43f82a5894b3e707dd7512eb43aef574e1ec35f9f",
+      "offset": 10094,
+      "raw_sha256": "715f479038278085a3e05123be1ee8be0d66de08ad8091a135549a69a82cc679",
+      "token_offset": 122,
+      "token": "3250.wav",
+      "logical_frame_offset": 142,
+      "logical_frame": 1
+    },
+    {
+      "role_id": "032",
+      "skill_index": 7,
+      "record_index": 1,
+      "source_path": "Fight_Role/032.CHR",
+      "source_sha256": "e081f7db9f51ac59c0bbd5b43f82a5894b3e707dd7512eb43aef574e1ec35f9f",
+      "offset": 11675,
+      "raw_sha256": "b30765d90a0c66881b30a3bb70624c4ae7d44c047a02308eb6175e1b375fcf12",
+      "token_offset": 122,
+      "token": "3244.wav",
+      "logical_frame_offset": 142,
+      "logical_frame": 1
+    },
+    {
+      "role_id": "032",
+      "skill_index": 7,
+      "record_index": 3,
+      "source_path": "Fight_Role/032.CHR",
+      "source_sha256": "e081f7db9f51ac59c0bbd5b43f82a5894b3e707dd7512eb43aef574e1ec35f9f",
+      "offset": 12027,
+      "raw_sha256": "8c2307aedfc90dfc9c2c13647c52b5457403298def04ac6f95ae10dfc0e82e4c",
+      "token_offset": 122,
+      "token": "3244.wav",
+      "logical_frame_offset": 142,
+      "logical_frame": 1
+    },
+    {
+      "role_id": "032",
+      "skill_index": 8,
+      "record_index": 1,
+      "source_path": "Fight_Role/032.CHR",
+      "source_sha256": "e081f7db9f51ac59c0bbd5b43f82a5894b3e707dd7512eb43aef574e1ec35f9f",
+      "offset": 14312,
+      "raw_sha256": "5f0db0d7db166ef5a3d7a8202f042e53632f15e0532bec6c544ef9de60a1a753",
+      "token_offset": 122,
+      "token": "3245.wav",
+      "logical_frame_offset": 142,
+      "logical_frame": 1
+    },
+    {
+      "role_id": "032",
+      "skill_index": 8,
+      "record_index": 3,
+      "source_path": "Fight_Role/032.CHR",
+      "source_sha256": "e081f7db9f51ac59c0bbd5b43f82a5894b3e707dd7512eb43aef574e1ec35f9f",
+      "offset": 14664,
+      "raw_sha256": "b357e403a7d0153204e7f52ceb96c1736016e44ec22dae7a3110fd8df295ecbd",
+      "token_offset": 122,
+      "token": "3245.wav",
+      "logical_frame_offset": 142,
+      "logical_frame": 1
+    },
+    {
+      "role_id": "032",
+      "skill_index": 9,
+      "record_index": 1,
+      "source_path": "Fight_Role/032.CHR",
+      "source_sha256": "e081f7db9f51ac59c0bbd5b43f82a5894b3e707dd7512eb43aef574e1ec35f9f",
+      "offset": 17301,
+      "raw_sha256": "b30765d90a0c66881b30a3bb70624c4ae7d44c047a02308eb6175e1b375fcf12",
+      "token_offset": 122,
+      "token": "3244.wav",
+      "logical_frame_offset": 142,
+      "logical_frame": 1
+    },
+    {
+      "role_id": "032",
+      "skill_index": 9,
+      "record_index": 3,
+      "source_path": "Fight_Role/032.CHR",
+      "source_sha256": "e081f7db9f51ac59c0bbd5b43f82a5894b3e707dd7512eb43aef574e1ec35f9f",
+      "offset": 17653,
+      "raw_sha256": "8c2307aedfc90dfc9c2c13647c52b5457403298def04ac6f95ae10dfc0e82e4c",
+      "token_offset": 122,
+      "token": "3244.wav",
+      "logical_frame_offset": 142,
+      "logical_frame": 1
+    },
+    {
+      "role_id": "032",
+      "skill_index": 10,
+      "record_index": 1,
+      "source_path": "Fight_Role/032.CHR",
+      "source_sha256": "e081f7db9f51ac59c0bbd5b43f82a5894b3e707dd7512eb43aef574e1ec35f9f",
+      "offset": 19938,
+      "raw_sha256": "5f0db0d7db166ef5a3d7a8202f042e53632f15e0532bec6c544ef9de60a1a753",
+      "token_offset": 122,
+      "token": "3245.wav",
+      "logical_frame_offset": 142,
+      "logical_frame": 1
+    },
+    {
+      "role_id": "032",
+      "skill_index": 11,
+      "record_index": 1,
+      "source_path": "Fight_Role/032.CHR",
+      "source_sha256": "e081f7db9f51ac59c0bbd5b43f82a5894b3e707dd7512eb43aef574e1ec35f9f",
+      "offset": 22927,
+      "raw_sha256": "439b6d13636a117bcc47007d3a759e9e01438cc75abb2313cc519ba604443b24",
+      "token_offset": 122,
+      "token": "3246.wav",
+      "logical_frame_offset": 142,
+      "logical_frame": 1
     }
   ],
   "source_hashes": {
     "GAME.exe": "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18",
-    "Map/m01010.dat": "bc9d00fdb68d95238c3b0730fa96bd99f209b906e43d03bb501ffb04d078aa7e",
+    "Map/m01050.dat": "48ae98e95e9ea414e716c85440d381a5bc29cc2ec00ccd3b30c2ef314d4145fc",
     "sound/mn010-1.wav": "3fa5580f5e44744c4415d8b3d3e5f96a635da4172d448b98d7d038546d8cf11b",
+    "Map/m03039.dat": "c3c01fb5773dda464c2a5bfa0b46520031f2dc9bd363e4a1978c99950b0dcaf2",
+    "sound/mn030-1.wav": "1e534c345abab78c5d65b59a06d777afea1745cd0bee8b5a76c72764c8fcf4dd",
+    "Map/m01010.dat": "bc9d00fdb68d95238c3b0730fa96bd99f209b906e43d03bb501ffb04d078aa7e",
     "Map/m01030.dat": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
     "Map/m17010.dat": "634a1eea243656b16341d9e217578a42a5d58f82f00af9aa0f8a0f805e83515a",
     "sound/mn170-1.wav": "4418361a56a7888b2ff82035785c45c2c0de6a0bd279adc5d60be87ef9c09729",
@@ -3538,9 +6320,28 @@
     "sound/mn700-1.wav": "6e155dfb66419d7967d9b0d9f90da79f3f19c09d8fb1ccd22d24eac375f13ef3",
     "Map/m72061.dat": "f618ebc0e77203eae589201d4b83ccfebd3b019a9c3dceff760fa0cc6521e9a6",
     "sound/mn720-2.wav": "49a3f3441f4d0367ea8406012530dab6bda7ff32067a061668247fa038dbd73d",
+    "Map/m17011.dat": "1b9c624e9093b4e7cbd4a62259607ed313359e3601ae48555c705d808d19bfc4",
+    "Map/m17012.dat": "db0f4709ae4a86c8af819eda867bfb87bed2d4d4bbaa48af4dad31bd3ce5b847",
+    "Map/m17013.dat": "1c1bdd0e8f26c8b2ee3b137d0049bfab10ae87f0e5dc76dfa44fc7f61096afcc",
+    "Map/m17014.dat": "6128bf9d9940a8176c6d53c8e421132a9f2f2ead6e4a907fac6bce4fd0c135ff",
+    "Map/m17015.dat": "e396282ce0dbf14a02d91dca28af4b0d1914cee1c1b8a1b7b3c8e0089f6d8b0e",
+    "Map/m17016.dat": "2771831ca2de861d7d368357e0faac2f0cda04b02a362a0d3775ce4940afba2d",
+    "Map/m17021.dat": "8936daaa7ae9a874a41d9afabf1180677fe02c5d9640a0585792092357fd0ec5",
+    "sound/mn170-2.wav": "4136aaec38d9f7055f85f88c6a6347d28c79b3bd6d0a9c1d0b14a0fe6b34924f",
+    "Map/m17022.dat": "777949c861b8666b85162b90e5b0451b2c9e6b3d64089f0e5d780e6caab6492a",
+    "Map/m17023.dat": "d9f2021f1f24558f8ead877cc77612c7fa2263b8225a10d630f308384ef857f9",
+    "Map/m17024.dat": "18b33b069a469365ed75b531aa6346c58112f0c6a64c7a59ae1c6108318ef599",
+    "Map/m17025.dat": "266c901c9784665d27034f4531c1918fbea96815d14ec68fb1f6699d6d3fa3cd",
+    "Map/m17027.dat": "7c0278bfe4a52f6a1977bb8493fa1ba1d40833b2dce142c42e75d7e2e67c0459",
+    "Map/m17028.dat": "ec1d36649bf8fce856a0e93daf08128ebb099f7b30c59648a5903742f372aeff",
+    "Map/m17030-1.dat": "85f2b0ea6398a9cf759183892cf9967e9b690dc57b5fb240e58969f69ae77e6b",
+    "Map/m17030-2.dat": "19c9e32a7cc32da40da096e67aa6b318e18570b29bc784130ad7d07d4430dfe6",
+    "Map/m17030.dat": "bbe0b8b99a59f775f1647b7e5e01f7ea12208f4422d1272fe62655c6e41d5bc4",
+    "Map/m17032.dat": "fec9023611123ba7557cf0a186317c808a5c041a6ec8d0fd52b30c8576f09bfe",
     "Fight_Bk/stage13.scn": "0b5d76614e7ceb0dfcb1346785cdc944e584517bbe32eabcb1ae3db2bd0d1d99",
     "sound/Fight/FightBGM01.wav": "b1bb0bb926ea46f31a021727f93286ffa475af42c99a32936f36b001b74612ed",
     "sound/Fight/FightBGM02.wav": "456ad307a8e512b13a66909461e141112f3f8ffe509de3a2bbdfcdec1c9a4124",
+    "Fight_Bk/stage12.scn": "b96b95637c056cbfc07432c58343a63684d551f2291d4aa55aaee7bb6f7f968b",
     "sound/menu/mDecide.wav": "b00c648481200c701dbabcf5b28fdeb0037fca58a47a8c4c3ba43ff0fb69143d",
     "sound/menu/cancel.wav": "36576792ac0749e34ee7ae5fa8ef0344eefa1de5aa4d90f0bfe02852f5d7cc12",
     "sound/menu/decide.wav": "6b9acda323c0d120aff25f0030757293311f5929859db339d2e57d44a470fba7",
@@ -3554,8 +6355,15 @@
     "Fight_Role/002.dgp": "1e25e940b0f814a22576facf390157b8be6a5fb04a77c6a8680c81ca041982ca",
     "Fight_Role/003.CHR": "85f462f3598309fc47ceccef998ab07ccd34a5389ef3fee0146f8a0bca984fe0",
     "Fight_Role/003.dgp": "ed9b15190e0385f8383f5aa42c4ae5327944c1ba25cfe24cb3af5f116a2cd1c2",
+    "Fight_Role/004.CHR": "2b964b7c3065d1520f7fe354f9e1fe6e213e9fcb3f586056eafa7f63fb88b50d",
+    "Fight_Role/004.dgp": "ac1d4776b36b055c141524262d0dec201b85832155ed2dc4fc99f3ecda215d8b",
+    "Fight_Role/005.CHR": "9e06bcbedaf821a6e4c1d08dc0cff31d916c3ae2d00fdc20c37e758d25e09580",
+    "Fight_Role/005.dgp": "f78b0fc6ea0b0319b85079948323df7392bc6a941b3cd3d7ca5a8ca73c4d3029",
+    "Fight_Role/006.CHR": "27b29fb5cc1073014faea7553d0175559714c18dbbc5132ca1c549e4a9d8e15b",
+    "Fight_Role/006.dgp": "3eec3a8b10fda36ae95a42730634fc1241a2b6bf6a05a56469346d1bbcd7c92d",
     "Fight_Role/Effect/_iReHP.dgp": "5bd93a7c082369b4094296e47d83282bb0cc9772dddcd4190cd114941ee9fde1",
     "Fight_Role/Effect/_iReMP.dgp": "e6d521d471109c0e2c472c0052f30129ebb428e97101b04a64b4a9b3efade3b1",
+    "Fight_Role/Effect/_iReSTfz.dgp": "269c9b87881b43c72c2590980acf1b50c539ea606a1d9f83b7a358368954492a",
     "sound/OS01-03.wav": "0d9e34e70a8535ce9c2ec762a6fb21f2ddcfabb6933ed5dd20605c232c958b43",
     "sound/OS01-05.wav": "9194dfad8959be4e25f3129d600f4b915e70ad0dfcc03e54cd1c6d48310c682c",
     "sound/OS01-04.wav": "ff533dd461bd63016600c6cbc05905a7ec5d3cb4bdb6e3a8c1ce9c7f42fc4c37",
@@ -3576,6 +6384,7 @@
     "sound/01-1A-1.wav": "cb7d507cd84dd16d9c9a9281b04d3740026176fbdc5270143ac144de840ee66e",
     "sound/01-1B.wav": "237bdb37e04aaab1a4e4c616ac28d7b477529fa459a6d9e0399f2e0a5ac234e0",
     "sound/01-1D.wav": "0a694b7c612ad1c5718ceaac2c21a34e3f069dd323cb139328be80710dc27157",
+    "sound/01-OA.wav": "0b2ec0ccc500b213f8584d0123160d796adebf7564e7a69a858fa9702a783383",
     "sound/OS02-02.wav": "cb5a8a6f50dd4946257937fbfe6888ee30732d6294dbd9815cc268ce35602cb7",
     "sound/OS02-03.wav": "8309b233305c718b4a192c347f2f0ed6f2b38328f7952b22985d36e1eb14b515",
     "sound/OS02-04.wav": "9dfd7b3b4bcefd654e024a67f1dcb375226a2fb20a5fb058da7b4e7395dcb7cf",
@@ -3592,6 +6401,36 @@
     "sound/02-1C.wav": "d451ed33fd93ff5c32f5250e199d478d049a8ab39d2eb2fd1813027cbaced0d0",
     "sound/02-1D.wav": "127ff2d34ed8cb812d13ef6e2948f8b388db3e655d1aa18356fad1c1701c2ae5",
     "sound/02-1E.wav": "f3a87e649315f1cbb849257ec72b8bb6304a7986cb7d3f4db45322f4ac8d20de",
+    "sound/OS04-16.wav": "6415a1cbeb79133e851beee08b82b296a4fd7c1a9e280b0eec0d62a4755d0d99",
+    "sound/OS04-15.wav": "f8b06f7c6886ebd6073299a649e299b6efe378512a650fc67a48f0c903380b44",
+    "sound/OS04-11.wav": "06ef1a904300f2b7638f2f39d02e3904d1b1ff87fb4099eab88358572023cfa9",
+    "sound/OS04-12.wav": "22166a403e65d7ccb90c32f314ca580ebac9ee06530879a3ca3dde6f9a40fb05",
+    "sound/OS04-14.wav": "b67291438f7ad60b05c8feb211b242346992f86418ebd87157900ea5841c7b81",
+    "sound/OS04-13.wav": "e4864e32102fed132c0c6601bf98ce3326279818a1ae6bbf2fbd18bfcea912f8",
+    "sound/04-G14.wav": "002c980a2571ff1492254d66652c67d7c828b0bab0d2ff0eba783ce5c457be45",
+    "sound/04-G21-1.wav": "214f0a8e74b2688f4a0f994a755aeab766906a2d1a7a4c8f5670bfaad1644d56",
+    "sound/04-MA.wav": "82f0a954a554939da30ef847240e5fc4ee4b8e7328f2f4a3dcabba735cc5cc0b",
+    "sound/OS05-02.wav": "036e65fc9047d37321623f9a6ac3af6d86fd96adca11a1d3be47a2c5ade17cdd",
+    "sound/OS05-03.wav": "512551d0106ed1d7df201ac35ad1cb84afd0afa3eb07c1a35e0d7e85ebfb1aeb",
+    "sound/OS05-05.wav": "b6e47e966a7891cb154ca1e06a9ed907bd052232d43f2b8a97dfe0a93155cb68",
+    "sound/OS05-07.wav": "7e20888e17bac22e164899c83b491564b1a6e9aed0410e00e046855b29b41dbf",
+    "sound/OS05-09.wav": "f092f67ed16f4790e2febcbccb015d928083a444120064073de5efa96c1b7e55",
+    "sound/OS05-06.wav": "bb3d1852b7d94216a196aabf7b286daa8467402e52713fdb3eaaf1ec50b35497",
+    "sound/OS05-11.wav": "a96328f9a7d64b4d94bc7c9072daa52ca329bb719a4d58c767eeffd06f51fdd0",
+    "sound/OS05-17.wav": "8f6df9581c704372bbe58cae5368f61b45a8fecc1686c257c7273b5294e119b3",
+    "sound/OS05-15.wav": "dbb9d24a1d8f625d675dbb8dbc2737a56864644907842670b5e447972b2001f4",
+    "sound/OS05-16.wav": "c54f40483c8bee196701f3a5fcd9c0928e4cefcd19407ad193259dacfc0f43a7",
+    "sound/05-G09-1.wav": "a9dc162d71d38c408d48b172497b2cac4ea29d348e9fdd50ac664f8b25e26b3a",
+    "sound/05-G13.wav": "f9d5d7bd81c386b023a7dafa5838ef949fcee3803453c65c458d7b7dd7da1ed9",
+    "sound/05-G14.wav": "dd578e3f022707469c754524672c1c2a45a8466ae2cb91becdff00e5d4879a53",
+    "sound/05-1A.wav": "04caaa711fea4a89d1f36cabe86207eacdee5e23d0eb31da84175957f3d2f2a4",
+    "sound/05-1B.wav": "173cfdf89848118e240d1b1d3e92684ba854bead18bb4852fbb9129025545fbe",
+    "sound/05-1C.wav": "0ca7f7047f44b627bb17d89249432e42cb4fe4a1946ffa2342d3e7595adb48e4",
+    "sound/05-1D.wav": "0febf2fcdeeeae582d42a9775de96e8460154b9379fcb7870659f020be0839d2",
+    "sound/06-G07.wav": "cf3810fff86062682bfbcd30921a6ec2aa80a2607f67094d66a9ab662d901a42",
+    "sound/06-1A.wav": "f571970a1c8439ae1662d19418488859a727d70be7ec64934f7ce24c0fee58c7",
+    "sound/06-1C.wav": "68fd22d1f2401a21bf0dd1cbf45ba5f1aa4cf8b4711166ab4ba83447cc1feb48",
+    "sound/06-1D.wav": "4524c7f91c972ce5e62f74f7bae46dda9091b909c6b01d6f4fea1732ccef0c4b",
     "Fight_Role/011.CHR": "01625263cd7226760c8bb11067878285c5835ba4a43efbcab68020201c698ec4",
     "sound/3009.wav": "c98e502e512b5ffae10f3563fcff84b2cfd598d05bf8d40501d7555050140aca",
     "sound/3005.wav": "9de2472e7adf7fab6ee8f87f8de83dde5b317abf15f7426dfbb10428d82d9a00",
@@ -3621,8 +6460,23 @@
     "sound/3040.wav": "c5019f633e1f6d4536447261f83e98f2c1c3769f47fb4398bca07b755ff933ef",
     "sound/3043.wav": "36b7149067ebe84ab4284d2152842962e2dbbba66fd299f7088ecfe0bed36628",
     "sound/3044.wav": "b8a72be079cbc60068bf7afc10ee8267c05798edc5c65b3d75c565c8044f592e",
+    "Fight_Role/032.CHR": "e081f7db9f51ac59c0bbd5b43f82a5894b3e707dd7512eb43aef574e1ec35f9f",
+    "sound/3252.wav": "cf970214637703106dd61f39ccdad23e2fed87389e54ddbe7c92aaba4adcabec",
+    "sound/3249.wav": "418500d7ce762c45f1e1d732914d17459422731c54b83917ec92de2455b2b0c5",
+    "sound/3250.wav": "473786cab9b9c04292084665fc99dcdd7ff17352c3028e8362bbff1d7f3cb0a8",
+    "sound/3244.wav": "375ebc66a456db26887ea813b835d61c68ed6e75fdea2cfff6c0cae71ad9d0a6",
+    "sound/3245.wav": "d5a3fe333d6a697406efac9826789b5e95f613c7e154d0e98e7d6e5399209cd6",
+    "sound/3246.wav": "d1edf6b9e7616c64572bf66367289b03fd1a0f11716f39d38d631e9c7bfcce46",
+    "Fight_Role/032.dgp": "945ca46f49dcd4a8802eced780342ace8eab6e595abdaa155a1725bb999d4604",
+    "sound/3231.WAV": "b2fd927536dcaef0ea29f9a05c274ccec6fe61b391a9f46568216da99c1fbe15",
+    "sound/3006.WAV": "17cfec37cbd49c4f7f638954851870173749b375f1cba7f40b4540aab9f55093",
+    "sound/3232.WAV": "d91e2c8e9f7fdbc91cac04ed5462d6b5d5bdb2779a96a14f204ca72f9f4007f5",
+    "sound/3234.wav": "7c428a66bfa8450d8a87df0d855f24746305b692a2a92f827a988dcc5131a206",
+    "sound/3235.wav": "a207cd546f90bd73341bed67cb09a92efda5deefb4e95b7fb68e4a6da2759de7",
+    "sound/3236.wav": "cb156f97107694eb6e343fb978cbd8915344fdc2017a23b46d3701b7628190e0",
     "sound/iReHealth.wav": "0a16c50349228642ae590cec447dbb9062a2040cc88e68138137240d18c6f808",
-    "sound/_iReMP.wav": "00b238cc6d0ad55d7a76e556b64b4b32c9c068ca060aa2acd1414ea373aaccea"
+    "sound/_iReMP.wav": "00b238cc6d0ad55d7a76e556b64b4b32c9c068ca060aa2acd1414ea373aaccea",
+    "sound/_iReSTfz.wav": "3020b9d319a91e52383a5db6e84fc4dafc342f15773c3b2ec5658f4a2f8638f6"
   },
   "native_evidence": {
     "0x4c1d47": "ev_135e674e383177689c3308139312f8aee1e32e569385ed90883b7b95d0700e11",
@@ -3653,7 +6507,10 @@
     "sound/menu/close.wav",
     "sound/OS01-12.wav",
     "sound/OS02-09.wav",
-    "sound/OS02-10.wav"
+    "sound/OS02-10.wav",
+    "sound/OS02-11.wav",
+    "sound/OS04-3-2.wav",
+    "sound/OS06-12.wav"
   ],
   "limitations": [
     "Static source reconstruction; original GAME.exe audio playback has not been observed.",

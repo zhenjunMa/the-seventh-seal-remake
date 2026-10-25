@@ -27,6 +27,14 @@
         {
           "index": 26,
           "handler": "direct"
+        },
+        {
+          "index": 35,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 36,
+          "handler": "effect-carrier"
         }
       ],
       "field_skills": [
@@ -64,6 +72,14 @@
           "index": 23,
           "id": "kai_duanyan",
           "handler": "direct"
+        },
+        {
+          "index": 30,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 31,
+          "handler": "effect-carrier"
         }
       ],
       "field_skills": [],
@@ -95,9 +111,107 @@
         {
           "index": 34,
           "handler": "effect-carrier"
+        },
+        {
+          "index": 33,
+          "handler": "effect-carrier"
         }
       ],
       "primary_skill": 21
+    },
+    "004": {
+      "side": "player",
+      "battle_skills": [
+        {
+          "index": 18,
+          "handler": "direct"
+        },
+        {
+          "index": 19,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 21,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 25,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 27,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 29,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 31,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 33,
+          "handler": "native-support"
+        },
+        {
+          "index": 38,
+          "handler": "native-support"
+        }
+      ],
+      "primary_skill": 18
+    },
+    "005": {
+      "side": "player",
+      "battle_skills": [
+        {
+          "index": 19,
+          "handler": "direct"
+        },
+        {
+          "index": 20,
+          "handler": "direct"
+        },
+        {
+          "index": 21,
+          "handler": "direct"
+        },
+        {
+          "index": 22,
+          "handler": "direct"
+        }
+      ],
+      "primary_skill": 19
+    },
+    "006": {
+      "side": "player",
+      "battle_skills": [
+        {
+          "index": 19,
+          "handler": "direct"
+        },
+        {
+          "index": 20,
+          "handler": "direct"
+        },
+        {
+          "index": 21,
+          "handler": "direct"
+        },
+        {
+          "index": 22,
+          "handler": "direct"
+        },
+        {
+          "index": 23,
+          "handler": "direct"
+        },
+        {
+          "index": 24,
+          "handler": "direct"
+        }
+      ],
+      "primary_skill": 19
     },
     "011": {
       "side": "enemy",
@@ -112,6 +226,9 @@
       }
     },
     "013": {
+      "side": "enemy"
+    },
+    "032": {
       "side": "enemy"
     }
   },
@@ -135,6 +252,9 @@
       "schema": "seventh-seal-forest-stage",
       "asset_prefix": "assets/forest_stage/"
     },
+    "stage12": {
+      "export": "source"
+    },
     "TestStage": {
       "path": "data/skill_test_stage.json",
       "schema": "seventh-seal-battle-stage",
@@ -142,11 +262,32 @@
     }
   },
   "programs": [
+    "m01050-1",
+    "m01050-2",
     "m17029-1",
     "m17026-1",
-    "m17010-1"
+    "m17010-1",
+    "m17010-4",
+    "m17010-5",
+    "m17010-6",
+    "m17014-1",
+    "m17020-1",
+    "m17028",
+    "m17010-2",
+    "m17030-1",
+    "m17010-3"
   ],
   "maps": {
+    "M01050": {
+      "npcs": [
+        15
+      ]
+    },
+    "M03039": {
+      "npcs": [
+        11
+      ]
+    },
     "M01010": {
       "export": {
         "assets": "existing",
@@ -160,6 +301,9 @@
       }
     },
     "M17010": {
+      "triggers": [
+        31
+      ],
       "routes": [
         {
           "record_id": 48,
@@ -174,12 +318,38 @@
       ],
       "export": {
         "assets": "existing"
-      }
+      },
+      "npcs": [
+        10,
+        13,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26
+      ],
+      "setup": true,
+      "entry": true
     },
     "M17020": {
       "export": {
         "assets": "existing"
-      }
+      },
+      "npcs": [
+        20,
+        21,
+        25,
+        26,
+        27,
+        28,
+        29
+      ],
+      "setup": true
     },
     "M17026": {
       "objects": [
@@ -192,11 +362,24 @@
         {
           "descriptor_id": 2
         }
+      ],
+      "npcs": [
+        10
       ]
     },
     "M17029": {
       "triggers": [
         31
+      ],
+      "npcs": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
       ]
     },
     "M70010": {
@@ -210,10 +393,127 @@
         "assets": "existing",
         "story": false
       }
+    },
+    "M17011": {
+      "npcs": [
+        10,
+        11,
+        12,
+        13
+      ]
+    },
+    "M17012": {
+      "npcs": [
+        10,
+        11
+      ]
+    },
+    "M17013": {
+      "npcs": [
+        10,
+        11,
+        12
+      ]
+    },
+    "M17014": {
+      "npcs": [
+        10
+      ]
+    },
+    "M17015": {
+      "npcs": [
+        10,
+        11
+      ]
+    },
+    "M17016": {
+      "export": {
+        "story": false
+      },
+      "npcs": []
+    },
+    "M17021": {
+      "export": {
+        "story": false
+      },
+      "npcs": []
+    },
+    "M17022": {
+      "export": {
+        "story": false
+      },
+      "npcs": []
+    },
+    "M17023": {
+      "npcs": [
+        10
+      ]
+    },
+    "M17024": {
+      "npcs": [
+        10
+      ]
+    },
+    "M17025": {
+      "npcs": [
+        10,
+        11
+      ]
+    },
+    "M17027": {
+      "npcs": [
+        10,
+        11
+      ]
+    },
+    "M17028": {
+      "npcs": [
+        10
+      ],
+      "setup": true
+    },
+    "M17030-1": {
+      "npcs": [
+        10
+      ]
+    },
+    "M17030-2": {
+      "npcs": [
+        10,
+        56,
+        57,
+        58
+      ]
+    },
+    "M17030": {
+      "npcs": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        23,
+        24,
+        25
+      ]
+    },
+    "M17032": {
+      "npcs": [],
+      "triggers": [
+        1,
+        2
+      ]
     }
   },
   "story": {
-    "events": ["data/events/detective.json"],
-    "quests": ["content/quests/fire-valley.json"]
+    "events": [
+      "data/events/detective.json"
+    ],
+    "quests": [
+      "content/quests/fire-valley.json"
+    ]
   }
 }

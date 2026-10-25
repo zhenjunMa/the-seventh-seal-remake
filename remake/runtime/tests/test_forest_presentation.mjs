@@ -4,10 +4,13 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {BattleView,compileActionTimeline,validateBattleViewMetadata} from '../web/battle_view.mjs';
+import {runtimeContent} from '../web/core/content_registry.mjs';
 const root=new URL('../../../',import.meta.url),base=new URL('../',import.meta.url);
 const read=async p=>JSON.parse(await readFile(new URL('web/data/'+p,base)));
 const meta=await read('forest_battle_view.json'),yantu=await read('yantu_layers.json'),xuanying=await read('xuanying_layers.json');
 const clone=v=>structuredClone(v);
+// This fixture deliberately retains the four-role historical first-contact manifest.
+const content=clone(runtimeContent);content.battle_rosters['forest-source-group']=meta.roles.map(role=>role.id);
 function canvas(){
  const calls=[],stack=[];
  const ctx={globalAlpha:1,globalCompositeOperation:'source-over',setTransform(){},clearRect(){},fillRect(){},beginPath(){},rect(){},clip(){},moveTo(){},lineTo(){},stroke(){},ellipse(){},fill(){},fillText(){},createLinearGradient:()=>({addColorStop(){}}),
@@ -25,18 +28,18 @@ const roster=[{id:'001',side:'player'}, {id:'enemy-0',resource_id:'012',side:'en
 const skills={yantu:{id:'yantu',actor_id:'001'},yanci:{id:'yanci',actor_id:'001'},snow:{id:'snow',actor_id:'enemy-0'},hunter1:{id:'hunter1',actor_id:'enemy-1'},hunter2:{id:'hunter2',actor_id:'enemy-2'}};
 const snapshot={actors:roster.map(a=>({...a,hp:{current:1000},alive:true}))};
 async function fixture(extra={}){
- const target=canvas(),view=new BattleView({canvas:target,metadataPath:'/data/forest_battle_view.json',jsonLoader:async p=>clone(p.includes('forest_battle_view')?meta:p.includes('xuanying')?xuanying:yantu),assetLoader:assets,...extra});
+ const target=canvas(),view=new BattleView({canvas:target,content,metadataPath:'/data/forest_battle_view.json',jsonLoader:async p=>clone(p.includes('forest_battle_view')?meta:p.includes('xuanying')?xuanying:yantu),assetLoader:assets,...extra});
  await view.prepare();view.setRoster(roster,skills);return {view,target};
 }
 const result=(actor_id='001',target_id='enemy-1',skill_id='yanci',hit=true)=>({actor_id,target_id,skill_id,hit,damage:hit?200:0,remainingHp:800});
 const position=(call,role)=>[call.coordinates[4]+role.anchor.x*meta.policy.sprite_scale,call.coordinates[5]+role.anchor.y*meta.policy.sprite_scale];
 test('Xuanyingzhan binds 36 source pairs, nine intrinsic frames and one source326 contact',()=>{
- const t=compileActionTimeline(meta,yantu,'001','yanci',xuanying);
+ const t=compileActionTimeline(meta,yantu,'001','yanci',xuanying,content);
  assert.equal(t.length,36);assert.equal(t.filter(s=>s.pair.intrinsic.active).length,9);
  assert.deepEqual(t.filter(s=>s.pair.intrinsic.active).map(s=>s.source_frame),[323,324,325,326,327,328,329,330,331]);
  assert.equal(t.find(s=>s.event).source_frame,326);
  const wrong=clone(xuanying);wrong.frames[17].source_frame++;
- assert.throws(()=>compileActionTimeline(meta,yantu,'001','yanci',wrong),/同一个源帧/);
+ assert.throws(()=>compileActionTimeline(meta,yantu,'001','yanci',wrong,content),/同一个源帧/);
 });
 test('actual renderer draws Xuanying main/intrinsic together and target fire only at source contact',async()=>{
  const {view,target}=await fixture();let impacts=0;const done=view.playAction(result(),{onImpact:()=>impacts++});
@@ -71,10 +74,10 @@ test('player approaches the selected living hunter row rather than a fixed x-onl
  assert.deepEqual(position(main,player),[387.2,413.65]);view.draw(snapshot,2600);await done;
 });
 test('Xuanying layer asset failure leaves no ready command or partial impact',async()=>{
- const target=canvas(),view=new BattleView({canvas:target,metadataPath:'/data/forest_battle_view.json',jsonLoader:async p=>clone(p.includes('forest_battle_view')?meta:p.includes('xuanying')?xuanying:yantu),assetLoader:async a=>{if(a.path.includes('xuanying/frame_0326_intrinsic'))throw Error('missing intrinsic');return assets(a);}});
+ const target=canvas(),view=new BattleView({canvas:target,content,metadataPath:'/data/forest_battle_view.json',jsonLoader:async p=>clone(p.includes('forest_battle_view')?meta:p.includes('xuanying')?xuanying:yantu),assetLoader:async a=>{if(a.path.includes('xuanying/frame_0326_intrinsic'))throw Error('missing intrinsic');return assets(a);}});
  await assert.rejects(view.prepare(),/missing intrinsic/);assert.equal(view.ready,false);
  await assert.rejects(view.playAction(result(),{onImpact(){}}),/准备好/);
- const invalid=clone(meta);invalid.roles[0].alternate_skills[0].segments[3].effects[0].asset_id='missing';assert.throws(()=>validateBattleViewMetadata(invalid),/效果事件/);
+ const invalid=clone(meta);invalid.roles[0].alternate_skills[0].segments[3].effects[0].asset_id='missing';assert.throws(()=>validateBattleViewMetadata(invalid,content),/效果事件/);
 });
 test('slow RAF visits Xuanying source event once and cancelled frames never replay it',async()=>{
  const {view}=await fixture();let impacts=0;const done=view.playAction(result(),{onImpact:()=>impacts++});

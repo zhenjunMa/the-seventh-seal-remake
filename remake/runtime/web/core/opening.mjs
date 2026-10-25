@@ -102,7 +102,7 @@ export function validateOpeningProgram(program) {
     switch (record.opcode) {
       case 10: {
         const filename = new TextDecoder().decode(bytes.slice(54)).split('\0')[0];
-        fail(record.filename === filename && /^M\d{5}\.DAT$/i.test(filename) && record.u32_plus5 === 0,
+        fail(record.filename === filename && /^M\d{5}(?:-\d+)?\.DAT$/i.test(filename) && record.u32_plus5 === 0,
           `${context}: unsupported map entry variant`);
         mapId = filename.slice(0, -4).toUpperCase();
         fail(program.maps?.includes(mapId), `${context}: map resource missing`);

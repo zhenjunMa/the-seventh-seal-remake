@@ -8,10 +8,10 @@ import {NativeAssemblyOracle} from './native_assembly_oracle.mjs';
 import {createNativeRng} from '../web/core/combat_rules.mjs';
 import {applyContactReaction,finalizeNativeDeath,validateForestReactionsData} from '../web/core/battle_reactions.mjs';
 const clone=structuredClone,hash=b=>createHash('sha256').update(b).digest('hex');
-const data=JSON.parse(await readFile(new URL('../web/data/forest_reactions.json',import.meta.url)));
+const data=JSON.parse(await readFile(new URL('../web/data/enemy_reactions.json',import.meta.url)));
 const instructions=JSON.parse(await readFile(new URL('../evidence/forest_reactions_instructions_20261011.json',import.meta.url)));
 const native=JSON.parse(await readFile(new URL('../evidence/forest_death_reactions_native_20261011.json',import.meta.url)));
-const sample=JSON.parse(await readFile(new URL('../web/data/combat_sample.json',import.meta.url))),roles=Object.values(data.roles),checks=[];
+const sample=JSON.parse(await readFile(new URL('../web/data/combat_sample.json',import.meta.url))),roles=['001','011','012','013'].map(id=>data.roles[id]),checks=[];
 const report={schema:'seventh-seal-forest-reactions-verification',version:1,passed:false,original_game_execution_observed:false,
   comparison:'Pure descriptors versus original 0x51C640/0x50B520/0x41EF00/0x50B770/0x5016B0/0x4FFE90/0x4FFD40 x86 instruction replay',checks,
   case_counts:{normal:0,guard:0,dodge:0,stream:0,death:0},
@@ -19,7 +19,7 @@ const report={schema:'seventh-seal-forest-reactions-verification',version:1,pass
     'Each original skill table is placed at a synthetic address; native 0x5016B0 scans it with native cached-id counts zero, preserving lookup RNG even at count1.',
     'Display, path-cancel and debug-stack calls are bounded no-op hooks; original rendering/OS is not executed.',
     'Death finalization status reset follows retained 0x507E20 memset ranges; loot collection and victory dispatch remain explicit external hooks.'],
-  limits:['Guard/dodge require grounded special gate0; original nonzero Z/F692 dispatch through 0x51CC00 is rejected explicitly.',
+  limits:['These retained reaction cases focus on grounded contacts; original nonzero Z/F692 dispatch is covered by the separate 51CC00 instruction-replay tests.',
     'Death finalization clears existing status fields and returns a status-slot-clear directive; the status lifecycle module clears its serialized slots.',
     'HP/status contact submission, inventory/victory dispatch and preview timing are validated separately; descriptors do not execute contacts or animation.']};
 function makeActor(role,id,overrides={}){
@@ -141,11 +141,11 @@ test('outer skipped/rejected/zero contacts and dead/immune normal gates consume 
   for(const patch of [{immune_raw:1},{state_raw:5}])assert.equal(applyContactReaction({attacker:a,target:{...t,...patch},result:{damage:1,reaction:0,native_return:1},record:record(),data,rng}),null);
   assert.equal(calls,0);checks.push('Rejected/skipped/no-damage and unavailable normal targets do not add RNG');
 });
-test('unknown airborne/special dispatch and missing raw fields reject explicitly before RNG',()=>{
+test('missing reaction fields still reject before RNG after the source airborne dispatcher is available',()=>{
   const a=makeActor(data.roles['001'],'attacker'),t=makeActor(data.roles['013'],'target');let calls=0;const rng=()=>{calls++;return 0;};
-  for(const patch of [{native_z_raw:1},{reaction_special_gate_raw:1},{reaction_special_gate_raw:undefined},{native_active:undefined},{current_target_id:undefined}])assert.throws(()=>applyContactReaction({attacker:a,target:{...t,...patch},result:{damage:0,reaction:1,native_return:0},record:record(),data,rng}));
+  for(const patch of [{native_z_raw:undefined},{reaction_special_gate_raw:undefined},{native_active:undefined},{current_target_id:undefined}])assert.throws(()=>applyContactReaction({attacker:a,target:{...t,...patch},result:{damage:0,reaction:1,native_return:0},record:record(),data,rng}));
   const invalid=clone(t);delete invalid.status_by_address['0x0521f5a9'];assert.throws(()=>applyContactReaction({attacker:a,target:invalid,result:{damage:0,reaction:2,native_return:0},record:record(),data,rng}));
-  assert.equal(calls,0);checks.push('Unknown airborne/special dispatch and incomplete native snapshots fail before RNG');
+  assert.equal(calls,0);checks.push('Incomplete native reaction snapshots fail before RNG; airborne/special branches have separate original-instruction comparisons');
 });
 test('native newly lethal setter draws nothing, then category4 normal reaction still draws lookup',()=>{
   for(const r of roles){const a=makeActor(data.roles['001'],'attacker'),t=makeActor(r,'target',{settled_raw:1,reaction_special_gate_raw:99});
@@ -180,7 +180,7 @@ test('finalized deaths draw nothing, live/airborne death requests reject without
   assert.equal(calls,0);checks.push('Finalized/live/airborne death dispatch guards add no RNG or resource mutation');
 });
 test.after(async()=>{
-  report.passed=checks.length===14;report.fingerprints={};for(const path of ['../web/core/battle_reactions.mjs','../tools/export_forest_reactions.py','../web/data/forest_reactions.json','../evidence/forest_reactions_instructions_20261011.json','test_battle_reactions.mjs'])report.fingerprints[path]=hash(await readFile(new URL(path,import.meta.url)));
+  report.passed=checks.length===14;report.fingerprints={};for(const path of ['../web/core/battle_reactions.mjs','../tools/export_forest_reactions.py','../web/data/enemy_reactions.json','../evidence/forest_reactions_instructions_20261011.json','test_battle_reactions.mjs'])report.fingerprints[path]=hash(await readFile(new URL(path,import.meta.url)));
   report.source_hashes=data.source_hashes;
   await writeFile(new URL('../evidence/forest_reactions_verification_20261011.json',import.meta.url),JSON.stringify(report,null,2)+'\n');
   await writeFile(new URL('../evidence/forest_reactions_verification_20261011.txt',import.meta.url),`白木森林命中后反应验证\n结果：${report.passed?'通过':'失败'}\n原指令对照：${JSON.stringify(report.case_counts)}\n原版运行未观察；此处仅对照反应描述、源技能索引与RNG流。\n`);

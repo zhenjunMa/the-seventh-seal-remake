@@ -6,7 +6,8 @@ const flagIndex=n=>Number.isInteger(n)&&n>=0&&n<2000;
 const flagBit=n=>Number.isInteger(n)&&n>=1&&n<=32;
 const OPS=new Set(['record','say','choice','if_flag','test_flag_bit','test_all_flag_bits',
   'set_flag','add_flag','set_flag_bit','clear_flag_bit','set_object','jump','end','wait',
-  'animation','give_item','restore_party','request_save','set_native_object','unsupported']);
+  'animation','give_item','restore_party','request_save','set_native_object','test_native_condition',
+  'learn_native_skill','native_noop','unlock_recipe','world_map_command','transfer_native_map','native_battle','restore_native_resources','unsupported']);
 export function validateStoryFlow(flow){
   need(flow?.schema==='seventh-seal-story-flow'&&flow.version===1&&typeof flow.id==='string'
     &&Array.isArray(flow.commands)&&flow.commands.length>0&&flow.commands.length<=50000,'版本或命令表无效');
@@ -29,7 +30,7 @@ export function validateStoryFlow(flow){
   for(const target of Object.values(flow.entries??{}))need(ids.has(target),'记录入口缺失');
   for(const command of flow.commands){
     const targets=command.op==='jump'||command.op==='if_flag'?[command.target]
-      :['test_flag_bit','test_all_flag_bits'].includes(command.op)?[command.if_true,command.if_false]
+      :['test_flag_bit','test_all_flag_bits','test_native_condition'].includes(command.op)?[command.if_true,command.if_false]
       :command.op==='choice'?command.choices.map(row=>row.target):[];
     for(const target of targets)need(ids.has(target),`${command.id} 跳转 ${target} 缺失`);
   }
@@ -86,6 +87,7 @@ export class StoryFlowRunner {
         case 'if_flag':if(compare(draft.flags[command.index],command)){pc=positions.get(command.target);continue;}break;
         case 'test_flag_bit':pc=positions.get(bitSet(draft,command.index,command.bit)?command.if_true:command.if_false);continue;
         case 'test_all_flag_bits':pc=positions.get(command.conditions.every(row=>bitSet(draft,row.index,row.bit))?command.if_true:command.if_false);continue;
+        case 'test_native_condition':pc=positions.get(await call(command.op,command)?command.if_true:command.if_false);continue;
         case 'set_flag':mutate(next=>{next.flags[command.index]=command.value;});break;
         case 'add_flag':mutate(next=>{next.flags[command.index]=(next.flags[command.index]+command.value)>>>0;});break;
         case 'set_flag_bit':mutate(next=>{next.flags[command.index]=(next.flags[command.index]|(1<<(command.bit-1)))>>>0;});break;

@@ -16,12 +16,12 @@ RUNTIME = Path(__file__).resolve().parents[1]
 ROOT = RUNTIME.parents[1]
 WEB = RUNTIME / 'web'
 sys.path.insert(0, str(RUNTIME / 'tools'))
-from content_registration import role_ids
+from content_registration import role_ids, definition
 from source.combat_resources import CHR, GAME_SHA256
 from source.dgp import DGP
 from export_forest_ai import role_record
 import export_combat_sample as combat
-from export_party_skills import source_role, export_role_assets, enrich_sequence
+from export_party_skills import source_role, export_role_assets, enrich_sequence, extend_status_descriptors, source_status_block, export_effect_assets
 from export_battle_view import sequence
 
 
@@ -38,6 +38,42 @@ def save(path, value):
     path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n', 'utf-8')
 
 
+def player_status_blocks():
+    """Read source bindings directly; no generated combat/catalog dependency."""
+    blocks = {}
+    for ident, binding in definition()['roles'].items():
+        if binding['side'] != 'player':
+            continue
+        character = CHR(ROOT / f'Fight_Role/{ident}.CHR')
+        for row in binding['battle_skills']:
+            index = row['index']
+            blocks[f'{ident}:{index}'] = source_status_block(character, index)
+    return blocks
+
+
+def source_files():
+    """Status-table owner fingerprints every selected player/enemy CHR."""
+    paths = {'GAME.exe'}
+    for ident in role_ids('enemy'):
+        paths.update(f'Fight_Role/{ident}.{suffix}' for suffix in ('CHR', 'dgp'))
+        character = CHR(ROOT / f'Fight_Role/{ident}.CHR')
+        for index in role_record(character)['learned_indices']:
+            for action in character.skills[index]['actions']:
+                raw = bytes.fromhex(action['raw_hex'])
+                for offset in (9, 0x4e):
+                    token = raw[offset:offset + 20].split(b'\0')[0].decode('ascii')
+                    if token.lower().endswith('.dgp'):
+                        paths.add(f'Fight_Role/Effect/{token}')
+            fixed = bytes.fromhex(character.skills[index]['fixed_raw_hex'])
+            if fixed[0x16c]:
+                paths.add(f'Fight_Role/Status/{fixed[0x16c]:03d}.dgp')
+    for block in player_status_blocks().values():
+        paths.add(block['source']['path'])
+        if block['effect_id_raw']:
+            paths.add(f"Fight_Role/Status/{block['effect_id_raw']:03d}.dgp")
+    return tuple(sorted(paths))
+
+
 def prepare_role(ident, status):
     c, d = CHR(ROOT / f'Fight_Role/{ident}.CHR'), DGP(ROOT / f'Fight_Role/{ident}.dgp')
     if c.parsed_end != len(c.data) or c.header[0x19] != 0:
@@ -50,9 +86,23 @@ def prepare_role(ident, status):
         skill = c.skills[index]
         fixed = bytes.fromhex(skill['fixed_raw_hex'])
         effect = fixed[0x16b:0x231]
-        if effect[0xb] != 0 or effect[1] and effect.hex() != status['status43']['effect_raw_hex']:
+        if effect[0xb] not in (0, 2) or effect[1] > 100 or effect[0x10] not in (0, 1):
             raise ValueError(f'Enemy {ident} skill {index}: unsupported status handler {effect[1]} / mode {effect[0xb]}')
-        view = sequence(c, d, index)  # Reject unsupported action commands here.
+        commands = [(a['type_raw'], a['u32_at_0x01_raw']) for a in skill['actions'] if a['type_raw']]
+        carrier = any(group != 11 for _, group in commands)
+        if any(kind != 1 or group not in ((0, 4, 6, 7, 8, 11) if carrier else (11,)) for kind, group in commands):
+            raise ValueError(f'Enemy {ident} skill {index}: unsupported native action command')
+        handler = 'effect-carrier' if carrier else 'direct'
+        retained = ai['skills'][index]
+        retained['battle_handler'] = handler
+        if carrier:
+            if fixed[0x25] != 0 or fixed[0x32] & 15 not in (2, 3):
+                raise ValueError(f'Enemy {ident} skill {index}: unsupported carrier recovery targeting')
+            retained['effect_context'] = dict(effect_token=1, effect_source_skill_index=index,
+                effect_lookup='same-index-source-table',
+                evidence=['ev_dc019d336cb98549ccba8bab90528f5d4cb8a1d34fea55c99639941e188b6763',
+                          'ev_c9bbdef1c8377c5cb768f67c055aa4189564ec176aa68cd9b38b398e47bb0b9b'])
+        view = enrich_sequence(c, d, index, handler=handler)
         for segment in view['segments']:
             segment['raw_hex'] = skill['actions'][segment['chr_record_index']]['raw_hex']
             segment['source_skill_index'] = index
@@ -87,6 +137,12 @@ def export():
     ai, data, status, scheduler = (read(n) for n in ('forest_ai', 'forest_combat', 'forest_status', 'battle_scheduler'))
     meta, reactions = read('forest_full_battle_view'), read('forest_reactions')
     prepared = {ident: prepare_role(ident, status) for ident in ids}
+    # 509E10 gets each status's interval/frame count from its own Status DGP.
+    # Preserve the old status43 descriptor while extending the same table.
+    status['skills'] = {}
+    player_blocks = player_status_blocks()
+    extend_status_descriptors(status, {**player_blocks, **{key: block for value in prepared.values() for key, block in value[4].items()}}, sources)
+    sources.update({block['source']['path']: block['source']['sha256'] for block in player_blocks.values()})
     # All source rules above are checked before image writes or metadata changes.
     ai['roles'], data['actors'], data['skills'] = {}, {}, {}
     meta['roles'] = [row for row in meta['roles'] if row['id'] in role_ids('player')]
@@ -108,6 +164,7 @@ def export():
         # Use the same independently audited image/layer implementation as players.
         banks.append(export_role_assets(view, c, d, sources, checks, group='enemy'))
         meta['roles'].append(view)
+    export_effect_assets(meta, sources, checks, asset_group='enemy')
     for name, value in [('forest_ai', ai), ('forest_combat', data), ('forest_status', status), ('battle_scheduler', scheduler)]:
         # Existing fields/evidence remain, while CHR provenance is refreshed.
         if 'source_hashes' in value:
@@ -118,8 +175,8 @@ def export():
     meta['extra_layer_banks'] = banks
     meta['policy']['roster'] = 'forest-source-group'
     meta['policy']['complete_contacts'] = True
-    # Effects not already present are exported by the shared party presentation
-    # pass, which scans every selected enemy and player view.
+    # Enemy-owned effects are complete before publishing this manifest.
+    # The party pass reuses these references and owns only additional effects.
     values = dict(forest_ai=ai, forest_combat=data, forest_status=status,
                   battle_scheduler=scheduler, enemy_reactions=reactions, enemy_battle_view=meta)
     for p, h in sources.items():
@@ -128,14 +185,14 @@ def export():
     for name, value in values.items():
         path = WEB / f'data/{name}.json'; save(path, value); outputs.append(path)
     outputs += [WEB / f'data/enemy_role_layers_{ident}.json' for ident in ids]
-    for group in ('enemy_roles', 'enemy_layers'):
+    for group in ('enemy_roles', 'enemy_layers', 'enemy_effects'):
         outputs += list((WEB / f'assets/{group}').rglob('*.png'))
     save(RUNTIME / 'evidence/enemy_content_export.json', dict(schema='seventh-seal-enemy-content-export', version=1,
         passed=True, source_unchanged=True, source_hashes=sources, role_ids=list(ids),
         learned_indices={ident: row[2]['learned_indices'] for ident, row in prepared.items()},
         frame_checks=checks, output_hashes={p.relative_to(RUNTIME).as_posix(): sha(p) for p in outputs},
         original_game_execution_observed=False,
-        limits=['Registered learned direct skills using recovered commands/status43 only.',
+        limits=['Registered learned direct/effect-carrier skills use recovered commands and source status clocks.',
                 'Reward export and encounter selection are separate build steps; export does not enable unregistered mechanics.']))
     print(json.dumps(dict(passed=True, roles=list(ids), frame_checks=len(checks))))
 

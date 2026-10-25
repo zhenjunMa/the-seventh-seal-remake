@@ -109,6 +109,53 @@ class MapObjects:
                         if not self.occupancy[k] or raw[0x109]:
                             self.occupancy[k] = index + 1
 
+    def resource_relative_base(self):
+        """The native header's ordinary-resource directory, never the map slug."""
+        raw = self.resource_base_raw.replace('\\', '/')
+        match = re.fullmatch(r'(?:\./)?mapm/([A-Za-z0-9_-]+)/?', raw, re.IGNORECASE)
+        if not match:
+            raise MapObjectError(f'Object resource base is not a confined native Mapm directory: {self.resource_base_raw!r}')
+        return 'mapm/' + match[1].lower()
+
+    def resource_source(self, identifier):
+        if type(identifier) is not int or identifier <= 0 or identifier > 0x7fffffff:
+            raise MapObjectError('Only positive native ordinary resource identifiers are prepared')
+        return f'{self.resource_relative_base()}/{identifier:03d}.dgp'
+
+    def resource_paths(self, root):
+        """Resolve only referenced native basenames under the DAT header base.
+
+        Both the Mapm root and each final file stay inside the supplied game
+        root, including when a directory or file is a symbolic link.
+        """
+        if not self.objects:
+            return {}
+        root = Path(root).resolve()
+        directory = root.joinpath(*self.resource_relative_base().split('/')).resolve()
+        mapm = (root / 'mapm').resolve()
+        if not mapm.is_relative_to(root) or not directory.is_relative_to(mapm):
+            raise MapObjectError('Object resource directory escapes the local Mapm root')
+        result = {}
+        for item in self.objects:
+            if item['library_raw']:
+                raise MapObjectError('Only ordinary map resource libraries are prepared')
+            filename = Path(self.resource_source(item['resource_identifier_raw'])).name
+            path = directory / filename
+            if not path.is_file() and directory.is_dir():
+                # Native Windows lookup is case insensitive; still require the
+                # exact basename in the one source-declared directory.
+                matches = [candidate for candidate in directory.iterdir()
+                           if candidate.name.lower() == filename and candidate.is_file()]
+                if len(matches) == 1:
+                    path = matches[0]
+            path = path.resolve()
+            if not path.is_relative_to(directory) or not path.is_relative_to(mapm):
+                raise MapObjectError('Object resource file escapes the native Mapm directory')
+            if not path.is_file():
+                raise MapObjectError(f'Missing exact native object resource: {self.resource_source(item["resource_identifier_raw"])}')
+            result[filename] = path
+        return result
+
     def prepare_graphics(self, resources):
         """Bind exact observed resource basenames to supplied, parsed DGPs.
 
@@ -149,8 +196,7 @@ class MapObjects:
             # Runtime DGP +0x81/+0x85 == file extra-header +0x10/+0x14.
             anchor_x, anchor_y = i32(dgp.extra_header, 16), i32(dgp.extra_header, 20)
             item_graphic = dict(index=item['index'], resource_filename=filename,
-                                source=(self.resource_base_raw.replace('\\', '/').lstrip('./').rstrip('/')
-                                        + '/' + filename).lower(),
+                                source=self.resource_source(item['resource_identifier_raw']),
                                 resource_sha256=dgp.sha256, initial_frame=frame, frame=frame,
                                 x_native=x_native, y_native=y_native,
                                 x_world=x_world, y_world=y_world,

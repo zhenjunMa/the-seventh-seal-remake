@@ -30,7 +30,7 @@ export function resolveContentDefinition(definition,{seed,forest,story,maps}){
   }));
   const resolvedMaps={};
   for(const [id,row]of Object.entries(definition.maps)){
-    keys(row,['triggers','objects','rests','routes','entry','npcs','export'],`地图 ${id}`);
+    keys(row,['triggers','objects','rests','routes','entry','setup','npcs','export'],`地图 ${id}`);
     if(row.export){
       keys(row.export,['assets','story'],`地图导出 ${id}`);
       need(row.export.assets===undefined||['chapter','existing'].includes(row.export.assets),`地图 ${id} 素材导出器无效`);
@@ -52,7 +52,9 @@ export function resolveContentDefinition(definition,{seed,forest,story,maps}){
       return {descriptor_id:rest.descriptor_id,record_id:record.id,restore_records,choices};
     });
     need(row.entry===undefined||typeof row.entry==='boolean',`地图 ${id} entry 必须为布尔值`);
-    if(row.entry)need(Number.isInteger(table?.header_entry_tlk_raw)&&table.header_entry_tlk_raw>0,`地图 ${id} 缺少 DAT +0x11E 进入剧情`);
+    need(row.setup===undefined||typeof row.setup==='boolean',`地图 ${id} setup 必须为布尔值`);
+    if(row.setup)need(Number.isInteger(table?.header_setup_tlk_raw)&&table.header_setup_tlk_raw>0,`地图 ${id} 缺少 DAT +0x8A 加载布置`);
+    if(row.entry)need(Number.isInteger(table?.header_entry_tlk_raw)&&table.header_entry_tlk_raw>0,`地图 ${id} 缺少 DAT +0x13A 进入剧情`);
     const routes=(row.routes??[]).map(route=>{
       keys(route,['descriptor_id','record_id','requires_flag','animation','denial_record_id','speaker_role_id'],`出口 ${id}`);
       const descriptor=table?.descriptors.find(d=>route.descriptor_id===undefined?d.state_raw===2&&d.field_26_raw===route.record_id:d.id===route.descriptor_id);
@@ -63,6 +65,7 @@ export function resolveContentDefinition(definition,{seed,forest,story,maps}){
     const flag_index=table?.map_flag_index??map.map_flag_index??map.flag_index;
     resolvedMaps[id]={path:`data/maps/${id.toLowerCase()}.json`,triggers:copy(row.triggers??[]),objects:copy(row.objects??[]),rests,routes,
       ...(row.entry?{entry_record:table.header_entry_tlk_raw}:{}),
+      ...(row.setup?{setup_record:table.header_setup_tlk_raw}:{}),
       ...(row.npcs===undefined?{}:{npcs:copy(row.npcs)}),
       ...(flag_index===undefined?{}:{flag_index})};
   }

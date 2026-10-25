@@ -12,7 +12,9 @@ function parameters(value){
     const range=value[field];fields(range,['minimum','maximum_exclusive'],field);
     integer(range.minimum,`${field}.minimum`,field==='physical_multiplier_percent'?0:-2147483648);
     integer(range.maximum_exclusive,`${field}.maximum_exclusive`,field==='physical_multiplier_percent'?0:-2147483648);
-    requireValue(range.minimum<=range.maximum_exclusive&&range.maximum_exclusive-range.minimum<=2147483647,`${field}范围无效`);
+    // 41D990/41C610 sample only when low < high. Equal or reversed
+    // endpoints use low verbatim without RNG, including source003:33 (200,0).
+    requireValue(range.maximum_exclusive-range.minimum<=2147483647,`${field}范围无效`);
   }
   requireValue(Array.isArray(value.element_power)&&value.element_power.length===6,'element_power必须是原六槽');
   value.element_power.forEach((n,i)=>integer(n,`element_power[${i}]`,0));

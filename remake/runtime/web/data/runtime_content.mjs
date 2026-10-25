@@ -28,6 +28,14 @@ export const definition = {
         {
           "index": 26,
           "handler": "direct"
+        },
+        {
+          "index": 35,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 36,
+          "handler": "effect-carrier"
         }
       ],
       "field_skills": [
@@ -65,6 +73,14 @@ export const definition = {
           "index": 23,
           "id": "kai_duanyan",
           "handler": "direct"
+        },
+        {
+          "index": 30,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 31,
+          "handler": "effect-carrier"
         }
       ],
       "field_skills": [],
@@ -96,9 +112,107 @@ export const definition = {
         {
           "index": 34,
           "handler": "effect-carrier"
+        },
+        {
+          "index": 33,
+          "handler": "effect-carrier"
         }
       ],
       "primary_skill": 21
+    },
+    "004": {
+      "side": "player",
+      "battle_skills": [
+        {
+          "index": 18,
+          "handler": "direct"
+        },
+        {
+          "index": 19,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 21,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 25,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 27,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 29,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 31,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 33,
+          "handler": "native-support"
+        },
+        {
+          "index": 38,
+          "handler": "native-support"
+        }
+      ],
+      "primary_skill": 18
+    },
+    "005": {
+      "side": "player",
+      "battle_skills": [
+        {
+          "index": 19,
+          "handler": "direct"
+        },
+        {
+          "index": 20,
+          "handler": "direct"
+        },
+        {
+          "index": 21,
+          "handler": "direct"
+        },
+        {
+          "index": 22,
+          "handler": "direct"
+        }
+      ],
+      "primary_skill": 19
+    },
+    "006": {
+      "side": "player",
+      "battle_skills": [
+        {
+          "index": 19,
+          "handler": "direct"
+        },
+        {
+          "index": 20,
+          "handler": "direct"
+        },
+        {
+          "index": 21,
+          "handler": "direct"
+        },
+        {
+          "index": 22,
+          "handler": "direct"
+        },
+        {
+          "index": 23,
+          "handler": "direct"
+        },
+        {
+          "index": 24,
+          "handler": "direct"
+        }
+      ],
+      "primary_skill": 19
     },
     "011": {
       "side": "enemy",
@@ -113,6 +227,9 @@ export const definition = {
       }
     },
     "013": {
+      "side": "enemy"
+    },
+    "032": {
       "side": "enemy"
     }
   },
@@ -136,6 +253,9 @@ export const definition = {
       "schema": "seventh-seal-forest-stage",
       "asset_prefix": "assets/forest_stage/"
     },
+    "stage12": {
+      "export": "source"
+    },
     "TestStage": {
       "path": "data/skill_test_stage.json",
       "schema": "seventh-seal-battle-stage",
@@ -143,11 +263,32 @@ export const definition = {
     }
   },
   "programs": [
+    "m01050-1",
+    "m01050-2",
     "m17029-1",
     "m17026-1",
-    "m17010-1"
+    "m17010-1",
+    "m17010-4",
+    "m17010-5",
+    "m17010-6",
+    "m17014-1",
+    "m17020-1",
+    "m17028",
+    "m17010-2",
+    "m17030-1",
+    "m17010-3"
   ],
   "maps": {
+    "M01050": {
+      "npcs": [
+        15
+      ]
+    },
+    "M03039": {
+      "npcs": [
+        11
+      ]
+    },
     "M01010": {
       "export": {
         "assets": "existing",
@@ -161,6 +302,9 @@ export const definition = {
       }
     },
     "M17010": {
+      "triggers": [
+        31
+      ],
       "routes": [
         {
           "record_id": 48,
@@ -175,12 +319,38 @@ export const definition = {
       ],
       "export": {
         "assets": "existing"
-      }
+      },
+      "npcs": [
+        10,
+        13,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26
+      ],
+      "setup": true,
+      "entry": true
     },
     "M17020": {
       "export": {
         "assets": "existing"
-      }
+      },
+      "npcs": [
+        20,
+        21,
+        25,
+        26,
+        27,
+        28,
+        29
+      ],
+      "setup": true
     },
     "M17026": {
       "objects": [
@@ -193,11 +363,24 @@ export const definition = {
         {
           "descriptor_id": 2
         }
+      ],
+      "npcs": [
+        10
       ]
     },
     "M17029": {
       "triggers": [
         31
+      ],
+      "npcs": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
       ]
     },
     "M70010": {
@@ -211,6 +394,119 @@ export const definition = {
         "assets": "existing",
         "story": false
       }
+    },
+    "M17011": {
+      "npcs": [
+        10,
+        11,
+        12,
+        13
+      ]
+    },
+    "M17012": {
+      "npcs": [
+        10,
+        11
+      ]
+    },
+    "M17013": {
+      "npcs": [
+        10,
+        11,
+        12
+      ]
+    },
+    "M17014": {
+      "npcs": [
+        10
+      ]
+    },
+    "M17015": {
+      "npcs": [
+        10,
+        11
+      ]
+    },
+    "M17016": {
+      "export": {
+        "story": false
+      },
+      "npcs": []
+    },
+    "M17021": {
+      "export": {
+        "story": false
+      },
+      "npcs": []
+    },
+    "M17022": {
+      "export": {
+        "story": false
+      },
+      "npcs": []
+    },
+    "M17023": {
+      "npcs": [
+        10
+      ]
+    },
+    "M17024": {
+      "npcs": [
+        10
+      ]
+    },
+    "M17025": {
+      "npcs": [
+        10,
+        11
+      ]
+    },
+    "M17027": {
+      "npcs": [
+        10,
+        11
+      ]
+    },
+    "M17028": {
+      "npcs": [
+        10
+      ],
+      "setup": true
+    },
+    "M17030-1": {
+      "npcs": [
+        10
+      ]
+    },
+    "M17030-2": {
+      "npcs": [
+        10,
+        56,
+        57,
+        58
+      ]
+    },
+    "M17030": {
+      "npcs": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        23,
+        24,
+        25
+      ]
+    },
+    "M17032": {
+      "npcs": [],
+      "triggers": [
+        1,
+        2
+      ]
     }
   },
   "story": {
@@ -259,6 +555,16 @@ export default {
           "index": 26,
           "handler": "direct",
           "id": "001_26"
+        },
+        {
+          "index": 35,
+          "handler": "effect-carrier",
+          "id": "001_35"
+        },
+        {
+          "index": 36,
+          "handler": "effect-carrier",
+          "id": "001_36"
         }
       ],
       "field_skills": [
@@ -301,6 +607,16 @@ export default {
           "index": 23,
           "id": "kai_duanyan",
           "handler": "direct"
+        },
+        {
+          "index": 30,
+          "handler": "effect-carrier",
+          "id": "002_30"
+        },
+        {
+          "index": 31,
+          "handler": "effect-carrier",
+          "id": "002_31"
         }
       ],
       "field_skills": [],
@@ -343,10 +659,146 @@ export default {
           "index": 34,
           "handler": "effect-carrier",
           "id": "003_34"
+        },
+        {
+          "index": 33,
+          "handler": "effect-carrier",
+          "id": "003_33"
         }
       ],
       "field_skills": [],
       "primary_skill": 21
+    },
+    "004": {
+      "side": "player",
+      "source": {
+        "path": "Fight_Role/004.CHR",
+        "sha256": "2b964b7c3065d1520f7fe354f9e1fe6e213e9fcb3f586056eafa7f63fb88b50d"
+      },
+      "native_slot": 3,
+      "battle_skills": [
+        {
+          "index": 18,
+          "handler": "direct",
+          "id": "004_18"
+        },
+        {
+          "index": 19,
+          "handler": "effect-carrier",
+          "id": "004_19"
+        },
+        {
+          "index": 21,
+          "handler": "effect-carrier",
+          "id": "004_21"
+        },
+        {
+          "index": 25,
+          "handler": "effect-carrier",
+          "id": "004_25"
+        },
+        {
+          "index": 27,
+          "handler": "effect-carrier",
+          "id": "004_27"
+        },
+        {
+          "index": 29,
+          "handler": "effect-carrier",
+          "id": "004_29"
+        },
+        {
+          "index": 31,
+          "handler": "effect-carrier",
+          "id": "004_31"
+        },
+        {
+          "index": 33,
+          "handler": "native-support",
+          "id": "004_33"
+        },
+        {
+          "index": 38,
+          "handler": "native-support",
+          "id": "004_38"
+        }
+      ],
+      "field_skills": [],
+      "primary_skill": 18
+    },
+    "005": {
+      "side": "player",
+      "source": {
+        "path": "Fight_Role/005.CHR",
+        "sha256": "9e06bcbedaf821a6e4c1d08dc0cff31d916c3ae2d00fdc20c37e758d25e09580"
+      },
+      "native_slot": 4,
+      "battle_skills": [
+        {
+          "index": 19,
+          "handler": "direct",
+          "id": "005_19"
+        },
+        {
+          "index": 20,
+          "handler": "direct",
+          "id": "005_20"
+        },
+        {
+          "index": 21,
+          "handler": "direct",
+          "id": "005_21"
+        },
+        {
+          "index": 22,
+          "handler": "direct",
+          "id": "005_22"
+        }
+      ],
+      "field_skills": [],
+      "primary_skill": 19
+    },
+    "006": {
+      "side": "player",
+      "source": {
+        "path": "Fight_Role/006.CHR",
+        "sha256": "27b29fb5cc1073014faea7553d0175559714c18dbbc5132ca1c549e4a9d8e15b"
+      },
+      "native_slot": 5,
+      "battle_skills": [
+        {
+          "index": 19,
+          "handler": "direct",
+          "id": "006_19"
+        },
+        {
+          "index": 20,
+          "handler": "direct",
+          "id": "006_20"
+        },
+        {
+          "index": 21,
+          "handler": "direct",
+          "id": "006_21"
+        },
+        {
+          "index": 22,
+          "handler": "direct",
+          "id": "006_22"
+        },
+        {
+          "index": 23,
+          "handler": "direct",
+          "id": "006_23"
+        },
+        {
+          "index": 24,
+          "handler": "direct",
+          "id": "006_24"
+        }
+      ],
+      "field_skills": [],
+      "primary_skill": 19
     },
     "011": {
       "side": "enemy",
@@ -374,6 +826,13 @@ export default {
         "path": "Fight_Role/013.CHR",
         "sha256": "5e3a7e65761a52b1653a40bc20ae130072af5c4f704b0cb389bbb239a1cd8ef6"
       }
+    },
+    "032": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/032.CHR",
+        "sha256": "e081f7db9f51ac59c0bbd5b43f82a5894b3e707dd7512eb43aef574e1ec35f9f"
+      }
     }
   },
   "battle_rosters": {
@@ -385,15 +844,20 @@ export default {
       "001",
       "011",
       "012",
-      "013"
+      "013",
+      "032"
     ],
     "party-source-group": [
       "001",
       "002",
       "003",
+      "004",
+      "005",
+      "006",
       "011",
       "012",
-      "013"
+      "013",
+      "032"
     ]
   },
   "stages": {
@@ -402,6 +866,11 @@ export default {
       "schema": "seventh-seal-forest-stage",
       "asset_prefix": "assets/forest_stage/"
     },
+    "stage12": {
+      "path": "data/stages/stage12.json",
+      "schema": "seventh-seal-battle-stage",
+      "asset_prefix": "assets/stages/stage12/"
+    },
     "TestStage": {
       "path": "data/skill_test_stage.json",
       "schema": "seventh-seal-battle-stage",
@@ -409,6 +878,16 @@ export default {
     }
   },
   "programs": {
+    "m01050-1": {
+      "path": "Animate/m01050-1.anm",
+      "sha256": "c483d0ee85a01072afa8f8e80697220b922fa3e0ad971ee5affcedf12c88f819",
+      "bytes": 1399
+    },
+    "m01050-2": {
+      "path": "Animate/m01050-2.anm",
+      "sha256": "19a173b2d01c4e6335a16d4283084ee2f896165f9e35374d45663b5e11a63782",
+      "bytes": 3323
+    },
     "m17029-1": {
       "path": "Animate/m17029-1.anm",
       "sha256": "2298d02eabc62ea6b0838379968e3fb998afcc22f45b48ce74b08de0a728319b",
@@ -423,9 +902,76 @@ export default {
       "path": "Animate/m17010-1.anm",
       "sha256": "da273e16d2de10d4516a1e75465af71caef250fcef80b2540187aa18645a231a",
       "bytes": 659
+    },
+    "m17010-4": {
+      "path": "Animate/m17010-4.anm",
+      "sha256": "fd7975603e201fd5847098265c3a87657f1facce81994be3a048562dd43d8eef",
+      "bytes": 1399
+    },
+    "m17010-5": {
+      "path": "Animate/m17010-5.anm",
+      "sha256": "c13968a45985feeb23ae2d338c0560b610918081626379735a660bda7459d2f5",
+      "bytes": 1695
+    },
+    "m17010-6": {
+      "path": "Animate/m17010-6.anm",
+      "sha256": "615394315cba49db021353243f2b4985832a6a3c72830683754957bcb7089654",
+      "bytes": 2287
+    },
+    "m17014-1": {
+      "path": "Animate/m17014-1.anm",
+      "sha256": "f8d6bf53af068c324ff03e99727005a74a234e59501848211d8c4f61da08775e",
+      "bytes": 511
+    },
+    "m17020-1": {
+      "path": "Animate/m17020-1.anm",
+      "sha256": "34c72c0bc84e0e50d46a55faadc1d018a8efbe3f847c85dfa28de0bebae343e7",
+      "bytes": 1917
+    },
+    "m17028": {
+      "path": "Animate/m17028.anm",
+      "sha256": "e9d6e1df1c4c40c267adcb9ee711c587b6fe03adc0343d4435853ef2b45c26e6",
+      "bytes": 511
+    },
+    "m17010-2": {
+      "path": "Animate/m17010-2.anm",
+      "sha256": "4496da411c6c8adc76e464efbd866e34a0ce02d2ba66a5cfc42abe902325230c",
+      "bytes": 1769
+    },
+    "m17030-1": {
+      "path": "Animate/m17030-1.anm",
+      "sha256": "209c86f42cda1a513c21d38512acea8470508910f44127977b9b7b1738df9df2",
+      "bytes": 13831
+    },
+    "m17010-3": {
+      "path": "Animate/m17010-3.anm",
+      "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+      "bytes": 5025
     }
   },
   "maps": {
+    "M01050": {
+      "path": "data/maps/m01050.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        15
+      ],
+      "flag_index": 5
+    },
+    "M03039": {
+      "path": "data/maps/m03039.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        11
+      ],
+      "flag_index": 426
+    },
     "M01010": {
       "path": "data/maps/m01010.json",
       "triggers": [],
@@ -444,7 +990,9 @@ export default {
     },
     "M17010": {
       "path": "data/maps/m17010.json",
-      "triggers": [],
+      "triggers": [
+        31
+      ],
       "objects": [],
       "rests": [],
       "routes": [
@@ -459,6 +1007,22 @@ export default {
           "speaker_role_id": "001"
         }
       ],
+      "entry_record": 90,
+      "setup_record": 69,
+      "npcs": [
+        10,
+        13,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26
+      ],
       "flag_index": 10
     },
     "M17020": {
@@ -467,6 +1031,16 @@ export default {
       "objects": [],
       "rests": [],
       "routes": [],
+      "setup_record": 10,
+      "npcs": [
+        20,
+        21,
+        25,
+        26,
+        27,
+        28,
+        29
+      ],
       "flag_index": 382
     },
     "M17026": {
@@ -500,6 +1074,9 @@ export default {
         }
       ],
       "routes": [],
+      "npcs": [
+        10
+      ],
       "flag_index": 48
     },
     "M17029": {
@@ -510,6 +1087,16 @@ export default {
       "objects": [],
       "rests": [],
       "routes": [],
+      "npcs": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
       "flag_index": 51
     },
     "M70010": {
@@ -527,6 +1114,211 @@ export default {
       "rests": [],
       "routes": [],
       "flag_index": 388
+    },
+    "M17011": {
+      "path": "data/maps/m17011.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10,
+        11,
+        12,
+        13
+      ],
+      "flag_index": 18
+    },
+    "M17012": {
+      "path": "data/maps/m17012.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10,
+        11
+      ],
+      "flag_index": 73
+    },
+    "M17013": {
+      "path": "data/maps/m17013.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10,
+        11,
+        12
+      ],
+      "flag_index": 15
+    },
+    "M17014": {
+      "path": "data/maps/m17014.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10
+      ],
+      "flag_index": 16
+    },
+    "M17015": {
+      "path": "data/maps/m17015.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10,
+        11
+      ],
+      "flag_index": 17
+    },
+    "M17016": {
+      "path": "data/maps/m17016.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 19
+    },
+    "M17021": {
+      "path": "data/maps/m17021.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 41
+    },
+    "M17022": {
+      "path": "data/maps/m17022.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 42
+    },
+    "M17023": {
+      "path": "data/maps/m17023.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10
+      ],
+      "flag_index": 47
+    },
+    "M17024": {
+      "path": "data/maps/m17024.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10
+      ],
+      "flag_index": 43
+    },
+    "M17025": {
+      "path": "data/maps/m17025.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10,
+        11
+      ],
+      "flag_index": 46
+    },
+    "M17027": {
+      "path": "data/maps/m17027.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10,
+        11
+      ],
+      "flag_index": 49
+    },
+    "M17028": {
+      "path": "data/maps/m17028.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "setup_record": 22,
+      "npcs": [
+        10
+      ],
+      "flag_index": 50
+    },
+    "M17030-1": {
+      "path": "data/maps/m17030-1.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10
+      ],
+      "flag_index": 471
+    },
+    "M17030-2": {
+      "path": "data/maps/m17030-2.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10,
+        56,
+        57,
+        58
+      ],
+      "flag_index": 469
+    },
+    "M17030": {
+      "path": "data/maps/m17030.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        23,
+        24,
+        25
+      ],
+      "flag_index": 11
+    },
+    "M17032": {
+      "path": "data/maps/m17032.json",
+      "triggers": [
+        1,
+        2
+      ],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 470
     }
   },
   "story": {

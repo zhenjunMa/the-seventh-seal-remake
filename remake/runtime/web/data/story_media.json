@@ -1,0 +1,163 @@
+{
+  "schema": "seventh-seal-story-media",
+  "version": 1,
+  "videos": {
+    "20.bik": {
+      "path": "/assets/video/story/20.mp4",
+      "sha256": "c8e59fd0af3d07a59bd3b2dea2cd1b19846ffcf109a3abd962f59c11be9ff076",
+      "bytes": 3519545,
+      "mime": "video/mp4",
+      "width": 640,
+      "height": 480,
+      "fps": "30",
+      "frames": 214,
+      "duration_seconds": 7.133333,
+      "lossy_conversion": true,
+      "audio": {
+        "playback_gain": 2,
+        "encode_gain": 0.5,
+        "codec": "aac",
+        "sample_rate": 32000,
+        "channels": 2
+      },
+      "source": {
+        "path": "Animate/20.bik",
+        "sha256": "082eb4613b1678e6ed825e4854262d2033e17010994121b89ecc3ce1f4782a8c",
+        "bytes": 3286004
+      },
+      "referenced_by": [
+        {
+          "program_id": "m17030-1",
+          "selection_authority": "runtime-registered",
+          "command_index": 96,
+          "opcode": 60,
+          "mode_raw": 0,
+          "source": {
+            "path": "Animate/m17030-1.anm",
+            "sha256": "209c86f42cda1a513c21d38512acea8470508910f44127977b9b7b1738df9df2",
+            "bytes": 13831,
+            "offset": 7171
+          },
+          "filename_raw": "20.bik",
+          "raw_hex": "3c000000000000000000000000000000000000000000000000000000000000000100d50100000000000000000000000000000000000032302e62696b0000000000000000000000000000"
+        }
+      ]
+    },
+    "24.bik": {
+      "path": "/assets/video/story/24.mp4",
+      "sha256": "7d3c033699c75817296a7cfe8f9f9f591aafd5d58506118b8330398cb94c3806",
+      "bytes": 24630925,
+      "mime": "video/mp4",
+      "width": 640,
+      "height": 480,
+      "fps": "30",
+      "frames": 931,
+      "duration_seconds": 31.033333,
+      "lossy_conversion": true,
+      "audio": {
+        "playback_gain": 2,
+        "encode_gain": 0.5,
+        "codec": "aac",
+        "sample_rate": 44100,
+        "channels": 2
+      },
+      "source": {
+        "path": "Animate/24.bik",
+        "sha256": "ae1b1814effed6d2ca519806e6d38d9af7f93845acf7e7d835c0764de430305f",
+        "bytes": 76623824
+      },
+      "referenced_by": [
+        {
+          "program_id": "m17030-1",
+          "selection_authority": "runtime-registered",
+          "command_index": 107,
+          "opcode": 60,
+          "mode_raw": 0,
+          "source": {
+            "path": "Animate/m17030-1.anm",
+            "sha256": "209c86f42cda1a513c21d38512acea8470508910f44127977b9b7b1738df9df2",
+            "bytes": 13831,
+            "offset": 7985
+          },
+          "filename_raw": "24.bik",
+          "raw_hex": "3c000000000000000000000000000000000000000000000000000000000000000000d50100000000000000000000000000000000000032342e62696b0000000000000000000000000000"
+        }
+      ]
+    },
+    "25.bik": {
+      "path": "/assets/video/story/25.mp4",
+      "sha256": "58f1803239089c9938635178a5019fe6b414f8a615c44bb63c0c55a4926cb5b7",
+      "bytes": 60586875,
+      "mime": "video/mp4",
+      "width": 640,
+      "height": 300,
+      "fps": "30",
+      "frames": 10341,
+      "duration_seconds": 344.7,
+      "lossy_conversion": true,
+      "audio": {
+        "playback_gain": 2,
+        "encode_gain": 0.5,
+        "codec": "aac",
+        "sample_rate": 44100,
+        "channels": 2
+      },
+      "source": {
+        "path": "Animate/25.bik",
+        "sha256": "beb57cd64db108e4f82f5a1407d0d241bc048a5727f5e14280eb8e34377ec294",
+        "bytes": 101145332
+      },
+      "referenced_by": [
+        {
+          "program_id": "m17030-1",
+          "selection_authority": "runtime-registered",
+          "command_index": 182,
+          "opcode": 60,
+          "mode_raw": 0,
+          "source": {
+            "path": "Animate/m17030-1.anm",
+            "sha256": "209c86f42cda1a513c21d38512acea8470508910f44127977b9b7b1738df9df2",
+            "bytes": 13831,
+            "offset": 13535
+          },
+          "filename_raw": "25.bik",
+          "raw_hex": "3c0000000000000000000000000000000000000000000000000000000000000000002f0000000000000000000000000000000000000032352e62696b0000000000000000000000000000"
+        }
+      ]
+    }
+  },
+  "sounds": {
+    "manyanshort.wav": {
+      "path": "/assets/audio/story/manyanshort.mp3",
+      "sha256": "ac494d317edda9a7078aa0a99924d16a65ab92ce4bc76017c577dbfb6ec7434a",
+      "bytes": 570412,
+      "mime": "audio/mpeg",
+      "sample_rate": 22050,
+      "channels": 1,
+      "source": {
+        "path": "sound/MANYANSHORT.wav",
+        "sha256": "ac494d317edda9a7078aa0a99924d16a65ab92ce4bc76017c577dbfb6ec7434a",
+        "bytes": 570412
+      },
+      "referenced_by": [
+        {
+          "program_id": "m17030-1",
+          "selection_authority": "runtime-registered",
+          "command_index": 62,
+          "opcode": 62,
+          "mode_raw": 2,
+          "source": {
+            "path": "Animate/m17030-1.anm",
+            "sha256": "209c86f42cda1a513c21d38512acea8470508910f44127977b9b7b1738df9df2",
+            "bytes": 13831,
+            "offset": 4655
+          },
+          "filename_raw": "MANYANSHORT.wav",
+          "raw_hex": "3e000000000000000000000000080000003000000000000000000000000200000000d5010000000000000000000000000000000000004d414e59414e53484f52542e7761760000000000"
+        }
+      ]
+    }
+  },
+  "export_evidence": "remake/runtime/evidence/story_media_export.json",
+  "authority": "Source ANM operand extraction and complete media decode/quality verification only."
+}

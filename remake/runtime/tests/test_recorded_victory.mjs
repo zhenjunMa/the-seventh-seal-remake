@@ -33,6 +33,9 @@ test('recorded three-enemy victory preserves its rewards, native RNG and one-tim
   const world=new WorldStore(log.world,(await read('catalog')).maps.map(m=>m.id));
   const battle=new BattleController({world,resourcesForWorld:partyResourcesForWorld});
   battle.state=structuredClone(log.current_battle);battle.running=false;battle.expectedRevision=world.value.revision;
+  // The old observation serializes outcome/resources, not modern ephemeral
+  // source-run ownership. Its completed battle has no remaining carriers/Z.
+  Object.assign(battle,{pendingCarriers:new Set(),verticalClocks:new Map(),pendingSourceEnds:new Set(),lockedOutcome:null,lifecycleEnabled:false,testMode:false,rewardPlan:null});
   battle.rewardData=configured.rewards;battle.rng=createNativeRng(beforeRewards);
   const state={world,battle,battleNatural:true,battleRng:battle.rng,battleHistory:[],battleView:{stop(){}},
     view:{},battleCheckpoint:log.world.location,scenes:{phase:'battle-result',setPhase(p){this.phase=p;}}};
