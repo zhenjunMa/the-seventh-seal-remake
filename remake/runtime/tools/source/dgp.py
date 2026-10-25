@@ -171,25 +171,55 @@ class DGP:
                                      first_frame=u32(raw, 0x72), identifier_raw=u32(raw, 0x7e),
                                      raw_hex=raw.hex()))
         self.anchor_raw = [u32(self.extra_header, i) for i in (16, 20, 24)]
+        self.sparse_row_layouts = {}
 
-    def rows(self, index: int, secondary: bool = False):
+    def stored_rows(self, index: int, secondary: bool = False):
+        """Strict complete frame rows, including any native geometry clipping.
+
+        Native52AE7F reads geometry+2's height, not all frame bytes. Some
+        shipped frames retain complete rows below that geometry. Parse and
+        retain every such row through exact declared EOF; never call it padding
+        or enlarge the displayed canvas. See m01050_dgp_draw_native.json.
+        """
         frame = self.frames[index]
         source = self.secondary if secondary else self.primary
         if source is None:
             raise DGPError('No secondary pixel stream')
         r = Reader(source[frame.offset:frame.offset + frame.size])
-        for y in range(self.height):
+        y = 0
+        visible_end = None
+        while y < self.height or r.pos < len(r.data):
+            if y >= 8192:
+                raise DGPError(f'Frame {index}: stored row count exceeds decoder bound')
             count = u16(r.take(2), 0)
-            spans = []
+            spans, cursor = [], 0
             if count != 0xffff:
                 if count > self.width:
                     raise DGPError(f"Frame {index}, row {y}: excessive span count {count}")
                 for _ in range(count):
                     skip, size = struct.unpack('<HH', r.take(4))
+                    if skip < cursor or skip + size > self.width:
+                        raise DGPError(f"Frame {index}, row {y}: span outside width / overlaps ({skip}, {size})")
                     spans.append((skip, size, r.take(size * 2)))
+                    cursor = skip + size
+            if y + 1 == self.height:
+                visible_end = r.pos
             yield y, spans
-        if r.pos != len(r.data):
-            raise DGPError(f"Frame {index}: unread bytes {len(r.data) - r.pos}")
+            y += 1
+        # Reader.take, the height minimum and the loop's exact boundary reject
+        # truncated visible rows and partial/malformed retained rows alike.
+        stream = 'secondary' if secondary else 'primary'
+        self.sparse_row_layouts[(stream, index)] = dict(frame=index, stream=stream,
+            geometry_rows=self.height, stored_rows=y, visible_bytes=visible_end,
+            retained_rows=y - self.height, retained_offset=self.payload_start +
+                (self.payload_bytes if secondary else 0) + frame.offset + visible_end,
+            retained_bytes=len(r.data) - visible_end,
+            retained_sha256=hashlib.sha256(r.data[visible_end:]).hexdigest())
+
+    def rows(self, index: int, secondary: bool = False):
+        for y, spans in self.stored_rows(index, secondary):
+            if y < self.height:
+                yield y, spans
 
     def decode(self, index: int, span_mode: str = 'absolute') -> Image.Image:
         pixels = bytearray(self.width * self.height * 4)
@@ -253,7 +283,7 @@ class DGP:
             return dict(present=False, checked_pixels=0)
         checked = 0
         for i in range(self.frame_count):
-            for (y, rows565), (_, rows555) in zip(self.rows(i), self.rows(i, True), strict=True):
+            for (y, rows565), (_, rows555) in zip(self.stored_rows(i), self.stored_rows(i, True), strict=True):
                 if len(rows565) != len(rows555):
                     raise DGPError(f"Secondary frame {i}, row {y}: different row structure")
                 for a, b in zip(rows565, rows555, strict=True):
@@ -274,6 +304,7 @@ class DGP:
                     optional_blocks=self.optional_blocks, payload_offset=self.payload_start,
                     payload_bytes=self.payload_bytes, dual_pixel_stream=self.secondary is not None,
                     indexed_auxiliary=self.indexed_auxiliary,
+                    sparse_row_tails=[row for _, row in sorted(self.sparse_row_layouts.items()) if row['retained_rows']],
                     shadow_stream_present=bool(self.shadow_blobs),
                     indexed_auxiliary_limit='Header[19] is a separately loaded auxiliary stream. Its effects/rendering semantics are not implemented; main 16-bit spans remain the decoded pixels.',
                     anchor_raw=self.anchor_raw, actions=self.actions,

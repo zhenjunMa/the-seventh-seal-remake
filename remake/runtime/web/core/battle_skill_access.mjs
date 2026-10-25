@@ -2,6 +2,7 @@
 // learned source indices; this does not grant or infer unlocks from level/name.
 import {nativeRevivalSkillSupported} from './battle_revival.mjs';
 import {applySavedSkillProgress} from './battle_skill_growth.mjs';
+import {allPartyRoles} from './party_roster.mjs';
 const need=(ok,message)=>{if(!ok)throw new Error(message);};
 export function validateBattleSkillProgress(value){
   need(value&&[1,2].includes(value.version)&&Object.keys(value).sort().join(',')===(value.version===1?'learned_indices,version':'learned_indices,records,version')&&Array.isArray(value.learned_indices), '角色已学技巧记录无效');
@@ -15,7 +16,7 @@ export function validateBattleSkillProgress(value){
 export {applySavedSkillProgress};
 /** Read-only source facade for menus, bindings and displayed proficiency. */
 export function effectiveSkillSource(commands,world){
-  const out=structuredClone(commands),roles=new Map(world.party.map(role=>{if(role.skill_progress)validateBattleSkillProgress(role.skill_progress);return [role.id,role];}));
+  const out=structuredClone(commands),roles=new Map(allPartyRoles(world).map(role=>{if(role.skill_progress)validateBattleSkillProgress(role.skill_progress);return [role.id,role];}));
   for(const [id,role]of Object.entries(out.roles??{}))if(roles.has(id)){
     role.skills=role.skills.map(skill=>applySavedSkillProgress(skill,roles.get(id)));role.learned_indices=role.skills.filter(s=>s.learned_raw).map(s=>s.original_skill_index);
   }

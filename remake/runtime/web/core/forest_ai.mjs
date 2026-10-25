@@ -3,6 +3,7 @@
  * caller-owned native fields, separately initialized from reaction recovery.
  */
 import {runtimeContent,requireRegisteredRoles} from './content_registry.mjs';
+import {nativeLoadedSkillCodes} from './native_skill_loading.mjs';
 const clone=value=>structuredClone(value);
 function requireValue(ok,message){if(!ok)throw new TypeError(message);}
 function integer(value,name,min=0,max=0xffffffff){requireValue(Number.isInteger(value)&&value>=min&&value<=max,`Invalid ${name}`);return value;}
@@ -11,10 +12,11 @@ function fixedView(skill){
   const bytes=Uint8Array.from(skill.fixed_raw_hex.match(/../g),h=>parseInt(h,16)),view=new DataView(bytes.buffer);
   return {index:integer(skill.index??skill.original_skill_index,'skill index',0,127),code:bytes[0x19],learned:bytes[0x23],target_side:bytes[0x25],weight:bytes[0x27],type:view.getUint32(0x32,true)&15};
 }
-function roleView(role){
+function roleView(role,loadModeRaw=0){
   const count=integer(role?.skill_count,'skill count',0,127);
   requireValue(Array.isArray(role.skills)&&role.skills.length===count,'AI original skill table incomplete');
-  const skills=role.skills.map(fixedView);
+  const codes=nativeLoadedSkillCodes(role.skills,{modeRaw:loadModeRaw});
+  const skills=role.skills.map((skill,index)=>({...fixedView(skill),code:codes[index]}));
   requireValue(skills.every((s,i)=>s.index===i),'AI source index ordering invalid');
   return skills;
 }
@@ -52,8 +54,8 @@ export function validateForestAIData(data,content=runtimeContent){
   requireValue(data.policy?.combination_parameter_skill_index===0,'AI combination parameter unsupported');
   return data;
 }
-export function selectNativeSkills({actor,role,rng}){
-  const input=selectionActor(actor),skills=roleView(role),trace=[],draw=draws(rng,trace);
+export function selectNativeSkills({actor,role,rng,load_mode_raw=0}){
+  const input=selectionActor(actor),skills=roleView(role,load_mode_raw),trace=[],draw=draws(rng,trace);
   const eligible=skill=>skill.learned&&(!(input.flags&2)||skill.type!==2);
   // This draw happens even when no skill can be selected.
   const combinationChance=role.ai_parameters?.combination_chance_percent??20;
@@ -94,14 +96,14 @@ export function selectNativeTarget({actors,actor_id,target_side_raw,rng}){
   const chosen=candidates[draw(candidates.length,'target')];
   return {target_id:chosen.id,target_index:chosen.index,candidates,trace};
 }
-export function planForestEnemyAction({actors,actor_id,data,rng}){
+export function planForestEnemyAction({actors,actor_id,data,rng,load_mode_raw=0}){
   validateForestAIData(data);
   requireValue(Array.isArray(actors),'AI actor roster missing');
   const actor=actors.find(a=>a.id===actor_id),role=data.roles[actor?.resource_id??actor?.id];
   requireValue(role,'AI forest actor source missing');
   // Complete target snapshot is validated before the first selection RNG draw.
   targetRoster(actors);selectionActor(actor);draws(rng,[]);
-  const selection=selectNativeSkills({actor,role,rng});
+  const selection=selectNativeSkills({actor,role,rng,load_mode_raw});
   if(selection.kind==='none')return {...selection,actor_id,target_id:null,target_index:-1,candidates:[]};
   const target=selectNativeTarget({actors,actor_id,target_side_raw:selection.target_side_raw,rng});
   return {...selection,...target,actor_id,trace:[...clone(selection.trace),...clone(target.trace)]};

@@ -26,6 +26,13 @@ from content_registration import registration,role_ids,skill_bindings
 COMMANDS = {}
 FIELD_COMMANDS = {}
 RESPONSE_IDS = (1, 2, 3, 9, 12, 18, 19)
+EFFECT_LAYER_EVIDENCE = [
+    'ev_933340f95b60e313671e7e94cd437e581060c7d1b55e337a07505a4785ea22d9',  # 515FB0 carrier passes
+    'ev_8742bac48db84c1a41d0f484e0a65f166747220758a7659523a8940d01f4c32c',  # 54F68B main
+    'ev_c650a80b15b29e80c4625d568bdf0ffd867f3c795604430a1bb4ad1cf3fe2f74',  # 54F456 copies main
+    'ev_26ca5e077ad2fcdfb6fc3f460728a9f39cd90cda58ba0c38249d09f8b1f9a731',  # 5458CD indexed add
+    'ev_7515c2967c274d7710d9bc0107185694d39d193b99f5f69e4996a99cf61fd752',  # 53ECAA shadow
+]
 
 
 def sha(path):
@@ -91,9 +98,9 @@ def source_role(c):
                              for i in (0, 1, 2, 3, 9, 12, 18, 19)})
 
 
-def enrich_sequence(c, d, index, runtime_id=None):
-    binding=next((row for row in registration()['roles'].get(c.path.stem,{}).get('battle_skills',[]) if row['index']==index),{})
-    if binding.get('handler') == 'effect-carrier':
+def enrich_sequence(c, d, index, runtime_id=None, handler=None):
+    binding=next((row for row in registration()['roles'].get(c.path.stem,{}).get('battle_skills',[]) if row['index']==index),{}) if runtime_id is not None and handler is None else {}
+    if (handler or binding.get('handler')) in ('effect-carrier', 'native-support', 'native-revival'):
         # 5130D0 command4 creates an independent effect carrier; it is not a
         # character DGP action4 and +1D means wait, not image reversal.
         s = c.skills[index]
@@ -106,12 +113,14 @@ def enrich_sequence(c, d, index, runtime_id=None):
             if raw[0] == 0:
                 start, end = struct.unpack_from('<II', raw, 0x26)
                 segments.append(dict(chr_record_index=entry['index'], action_index=group,
-                    source=origin, frames=native_frame_sequence(d.raw_actions[group], start, end, raw[0x1d]),
+                    source=origin, frames=native_frame_sequence(d.raw_actions[group], start, end, raw[0x1d], total_frames=d.frame_count),
                     start=start, end_exclusive=end, reverse_raw=raw[0x1d], interval_raw=d.actions[group]['interval_raw'],
                     movement_step_raw=0, movement_source_field='0x1e', movement_flag_raw=0,
                     event=None, effects=[], evidence=[NATIVE_IDS['range']]))
             else:
-                assert raw[0] == 1 and group in (0, 4, 6, 11)
+                assert raw[0] == 1 and group in (0, 4, 6, 7, 8, 11)
+                if group == 7 and raw[0x47] not in (1, 7) or group == 8 and raw[0x47] not in (1, 2, 3, 4, 5, 6, 7, 9):
+                    raise ValueError('Native appearance/disappearance renderer mode is not recovered')
                 descriptor = dict(chr_record_index=entry['index'], type_raw=1, command_raw=group,
                     source=origin, raw_hex=raw.hex(), immediate=group != 4 or not raw[0x1d])
                 if group == 4:
@@ -144,16 +153,20 @@ def export_role_assets(role, c, d, sources, checks, group='party'):
     for index in used:
         action = d.actions[index]
         assert action['directions'] == 1
+        referenced = [frame for segment in segments if segment['action_index'] == index for frame in segment['frames']]
+        sheet_frames = max(action['frames_per_direction'], max(referenced, default=-1) + 1)
+        if action['first_frame'] + sheet_frames > d.frame_count:
+            raise ValueError(f"Role {role['id']} action {index} leaves its DGP global frame pool")
         out = WEB / f'assets/{group}_roles/{role["id"]}/action_{index:02}.png'
         out.parent.mkdir(parents=True, exist_ok=True)
-        sheet = Image.new('RGBA', (d.width * action['frames_per_direction'], d.height))
-        for frame in range(action['frames_per_direction']):
+        sheet = Image.new('RGBA', (d.width * sheet_frames, d.height))
+        for frame in range(sheet_frames):
             sheet.paste(d.decode(action['first_frame'] + frame), (frame * d.width, 0))
         sheet.save(out)
         with Image.open(out) as stored:
             assert stored.convert('RGBA').tobytes() == sheet.tobytes()
         role['actions'].append(dict(index=index, sheet='/' + out.relative_to(WEB).as_posix(),
-            sha256=sha(out), frame_count=action['frames_per_direction'], directions=1,
+            sha256=sha(out), frame_count=sheet_frames, source_frame_count=action['frames_per_direction'], directions=1,
             first_frame=action['first_frame'], native_raw_hex=d.raw_actions[index].hex()))
     # Include every used physical frame, including native death id12, in a
     # role-specific bank. Frame numbers overlap between characters.
@@ -185,6 +198,105 @@ def export_role_assets(role, c, d, sources, checks, group='party'):
         limits=['Source main and intrinsic layers share one physical frame and origin.',
                 'Canvas additive blending and wall-clock timing are preview policies.']))
     return dict(path='/' + path.relative_to(WEB).as_posix(), sha256=sha(path))
+
+
+def source_status_block(c, index):
+    skill = c.skills[index]
+    fixed = bytes.fromhex(skill['fixed_raw_hex'])
+    block = fixed[0x16b:0x231]
+    if block[0xb] not in (0, 2) or block[0x10] not in (0, 1):
+        raise ValueError(f'{c.path.stem}:{index}: unsupported native status mode')
+    return dict(actor_id=c.path.stem, original_skill_index=index, name=skill['name_cp936'],
+        fixed_raw_hex=fixed.hex(), effect_raw_hex=block.hex(), effect_id_raw=block[1], mode_raw=block[0xb],
+        source=dict(path=c.path.relative_to(ROOT).as_posix(), sha256=c.sha256, fixed_offset=skill['offset'],
+            block_offset=skill['offset'] + 0x16b, fixed_bytes=0x41d, effect_bytes=0xc6))
+
+
+def extend_status_descriptors(status, blocks, sources):
+    status['effects'] = dict(status.get('effects', {}))
+    for effect_id in sorted({row['effect_id_raw'] for row in blocks.values() if row['effect_id_raw']}):
+        path = ROOT / f'Fight_Role/Status/{effect_id:03d}.dgp'
+        graphics = DGP(path)
+        if len(graphics.actions) != 1 or graphics.actions[0]['directions'] != 1:
+            raise ValueError(f'Status {effect_id}: unsupported action table')
+        sources[path.relative_to(ROOT).as_posix()] = graphics.sha256
+        status['effects'][str(effect_id)] = dict(id_raw=effect_id,
+            interval_ms=graphics.actions[0]['interval_raw'], frame_count=graphics.actions[0]['frames_per_direction'],
+            source=dict(path=path.relative_to(ROOT).as_posix(), sha256=graphics.sha256, action_raw_hex=graphics.raw_actions[0].hex()))
+    status['skills'].update(blocks)
+
+
+def export_effect_assets(meta, sources, checks, asset_group='party'):
+    known_effects = {e['id'] for e in meta['effects']}
+    for role in meta['roles']:
+        for view in [role['skill']] + role.get('alternate_skills', []) + role.get('response_skills', []):
+            carrier_segments=[]
+            for s in view.get('command_effects',[]):
+                if s['command_raw'] != 4: continue
+                events=[dict(asset_id=s['effect_asset_id'])]
+                target=bytes.fromhex(s['raw_hex'])[0x4e:0x62].split(b'\0')[0].decode('ascii')
+                if target: events.append(dict(asset_id=Path(target).stem))
+                carrier_segments.append(dict(effects=events))
+            for segment in view['segments']+carrier_segments:
+                for event in segment['effects']:
+                    ident = event['asset_id']
+                    if ident in known_effects:
+                        continue
+                    p = ROOT / f'Fight_Role/Effect/{ident}.dgp'
+                    d = DGP(p)
+                    sources[p.relative_to(ROOT).as_posix()] = sha(p)
+                    audit = SourceAudit(d.data)
+                    assert len(d.actions) == 1 and d.actions[0]['directions'] == 1
+                    assert (audit.width, audit.height, audit.count, audit.anchor) == (
+                        d.width, d.height, d.frame_count, d.anchor_raw)
+                    assert d.actions[0]['first_frame'] == 0 and d.actions[0]['frames_per_direction'] == d.frame_count
+                    # DGP +B1 primary pixels and +C5 indexed contributions are
+                    # independent passes, even for a command4 effect carrier.
+                    # Retain the old action_00/sheet as the intrinsic pass;
+                    # main is separately source-over, never additive.
+                    main_sheet = Image.new('RGBA', (d.width * d.frame_count, d.height))
+                    intrinsic_sheet = Image.new('RGBA', (d.width * d.frame_count, d.height))
+                    shadow_sheet = Image.new('RGBA', (d.width * d.frame_count, d.height))
+                    for f in range(d.frame_count):
+                        main = d.decode(f)
+                        intrinsic = indexed_contribution(d, f)[0] if d.indexed_auxiliary else Image.new('RGBA', (d.width, d.height))
+                        shadow = d.decode_shadow(f) if d.shadow_blobs else Image.new('RGBA', (d.width, d.height))
+                        main_rgba, main_check = audit.sparse(f, False)
+                        intrinsic_rgba, intrinsic_check = audit.sparse(f, True)
+                        shadow_rgba, shadow_check = audit.shadow(f)
+                        intrinsic_check.setdefault('rgba_sha256', hash_bytes(intrinsic_rgba))
+                        assert main.tobytes() == main_rgba
+                        assert intrinsic.tobytes() == intrinsic_rgba
+                        assert shadow.tobytes() == shadow_rgba
+                        main_sheet.paste(main, (f * d.width, 0))
+                        intrinsic_sheet.paste(intrinsic, (f * d.width, 0))
+                        shadow_sheet.paste(shadow, (f * d.width, 0))
+                        checks.append(dict(effect_id=ident, source_frame=f,
+                            main=main_check, intrinsic=intrinsic_check, shadow=shadow_check))
+                    out = WEB / f'assets/{asset_group}_effects/{ident}/action_00.png'
+                    out.parent.mkdir(parents=True, exist_ok=True)
+                    main_out = out.with_name('action_00_main.png')
+                    shadow_out = out.with_name('action_00_shadow.png')
+                    for image, path in ((shadow_sheet, shadow_out), (main_sheet, main_out), (intrinsic_sheet, out)):
+                        image.save(path)
+                        with Image.open(path) as stored:
+                            assert stored.convert('RGBA').tobytes() == image.tobytes()
+                    meta['effects'].append(dict(id=ident, source=p.relative_to(ROOT).as_posix(), source_sha256=sha(p),
+                        frame_width=d.width, frame_height=d.height, frame_count=d.frame_count,
+                        anchor=dict(x=d.anchor_raw[0], y=d.anchor_raw[1]),
+                        sheet='/' + out.relative_to(WEB).as_posix(), sha256=sha(out),
+                        main_sheet='/' + main_out.relative_to(WEB).as_posix(), main_sha256=sha(main_out),
+                        main_rgba_sha256=hash_bytes(main_sheet.tobytes()), main_blend='source-over',
+                        intrinsic_sheet='/' + out.relative_to(WEB).as_posix(), intrinsic_sha256=sha(out),
+                        intrinsic_rgba_sha256=hash_bytes(intrinsic_sheet.tobytes()), intrinsic_blend='lighter',
+                        shadow_sheet='/' + shadow_out.relative_to(WEB).as_posix(), shadow_sha256=sha(shadow_out),
+                        shadow_rgba_sha256=hash_bytes(shadow_sheet.tobytes()), shadow_blend='source-over',
+                        shadow_alpha=128, shadow_native='RGB565/555 destination channel floor-half; 8-bit alpha128 presentation',
+                        layer_order=['shadow', 'main', 'intrinsic'], interval_ms=d.actions[0]['interval_raw'],
+                        frames=native_frame_sequence(d.raw_actions[0], 0, d.frame_count, 0), native_raw_hex=d.raw_actions[0].hex(),
+                        blend='lighter', evidence=[NATIVE_IDS['indexed_draw'], NATIVE_IDS['effect_action'], *EFFECT_LAYER_EVIDENCE]))
+                    known_effects.add(ident)
+                    known_effects.add(ident)
 
 
 def main():
@@ -219,9 +331,9 @@ def main():
             skill = dict(role['skills'][index])
             # Admission and learning progress are independent. Unlearned source
             # attacks can be exported now and become usable after native unlock.
-            assert skill['type_raw'] in (1, 2)
+            assert skill['type_raw'] in (1, 2, 3)
             skill['battle_handler'] = next(row['handler'] for row in registration()['roles'][ident]['battle_skills'] if row['index']==index)
-            if next(row for row in registration()['roles'][ident]['battle_skills'] if row['index']==index)['handler']=='effect-carrier':
+            if skill['battle_handler'] in ('effect-carrier', 'native-support'):
                 assert all(a['type_raw'] == 0 or a['u32_at_0x01_raw'] in (0,4,6,11) for a in skill['actions'])
                 magic = read(RUNTIME / 'evidence/party_magic_native.json')
                 proof = {r['parameters'].get('procedure','').lower(): r['evidence_id'] for r in magic['records'] if r['operation']=='procedure_assembly'}
@@ -231,7 +343,14 @@ def main():
                         evidence=[proof['0x519a80'],proof['0x501930']],
                         localalloc_documentation='https://learn.microsoft.com/windows/win32/api/winbase/nf-winbase-localalloc'),
                     policy='Bounded fresh actor allocation; the declared source index must be outside the target loaded skill count. Remake token1 names the damage carrier, while native queue indices are ephemeral. Source attack target+25=0 does not apply recovery +143.')
+                if skill['type_flags_u32_0x32'] != 0x1102 or any(row['skill_count'] > index for row in read(WEB/'data/forest_ai.json')['roles'].values()):
+                    skill['effect_context'] = dict(effect_token=1, effect_source_skill_index=index, effect_lookup='same-index-source-table',
+                        evidence=[proof['0x501930'], proof['0x512430']])
                 skill['magic_native_bundle'] = dict(path='evidence/party_magic_native.json',sha256=sha(RUNTIME / 'evidence/party_magic_native.json'))
+                if skill['battle_handler'] == 'native-support':
+                    fixed = bytes.fromhex(skill['fixed_raw_hex'])
+                    assert fixed[0x24] == 0 and fixed[0x25] == 1 and not any(fixed[0x16b:0x231]) and fixed[0x23c] in (0, 5)
+                    skill.pop('effect_context', None)
             else:
                 assert skill['mp_cost'] >= 0 and skill['charge_i32_0x2e'] >= 0
                 assert all(a['type_raw'] == 0 or a['u32_at_0x01_raw'] == 11 for a in skill['actions'])
@@ -249,6 +368,12 @@ def main():
             skill['field_handler'] = 'flat-resource-recovery'
             skill['field_evidence'] = ['0x450a20', '0x45c100', '0x426fe0', '0x426ac0']
             field_commands[runtime_id] = skill
+    status = read(WEB / 'data/forest_status.json')
+    blocks = {f'{ident}:{index}': source_status_block(definitions[ident], index) for ident, indices in COMMANDS.items() for index in indices}
+    for key, block in blocks.items():
+        retained = status['skills'].get(key)
+        if not retained or retained['fixed_raw_hex'] != block['fixed_raw_hex'] or retained['effect_raw_hex'] != block['effect_raw_hex']:
+            raise ValueError(f'{key}: source status table must be rebuilt by enemies before party-skills')
     native_ref = dict(path=native.relative_to(RUNTIME).as_posix(), sha256=sha(native))
     save(WEB / 'data/party_skills.json', dict(schema='seventh-seal-party-skills', version=1,
         skills=commands, field_skills=field_commands, roles=roles, idle_skills=idles, source_hashes=sources,
@@ -292,45 +417,7 @@ def main():
             role['alternate_skills'][0]['layers'] = old['alternate_skills'][0]['layers']
         banks.append(export_role_assets(role, c, d, sources, checks))
         meta['roles'] = [r for r in meta['roles'] if r['id'] != ident] + [role]
-    known_effects = {e['id'] for e in meta['effects']}
-    for role in meta['roles']:
-        for view in [role['skill']] + role.get('alternate_skills', []) + role.get('response_skills', []):
-            carrier_segments=[]
-            for s in view.get('command_effects',[]):
-                if s['command_raw'] != 4: continue
-                events=[dict(asset_id=s['effect_asset_id'])]
-                target=bytes.fromhex(s['raw_hex'])[0x4e:0x62].split(b'\0')[0].decode('ascii')
-                if target: events.append(dict(asset_id=Path(target).stem))
-                carrier_segments.append(dict(effects=events))
-            for segment in view['segments']+carrier_segments:
-                for event in segment['effects']:
-                    ident = event['asset_id']
-                    if ident in known_effects:
-                        continue
-                    p = ROOT / f'Fight_Role/Effect/{ident}.dgp'
-                    d = DGP(p)
-                    sources[p.relative_to(ROOT).as_posix()] = sha(p)
-                    audit = SourceAudit(d.data)
-                    assert len(d.actions) == 1 and d.actions[0]['directions'] == 1
-                    assert sum(n for f in range(d.frame_count) for _, spans in d.rows(f) for _, n, _ in spans) == 0
-                    sheet = Image.new('RGBA', (d.width * d.frame_count, d.height))
-                    for f in range(d.frame_count):
-                        indexed = bool(d.indexed_auxiliary)
-                        image = indexed_contribution(d, f)[0] if indexed else d.decode(f)
-                        rgba, check = audit.sparse(f, indexed)
-                        assert image.tobytes() == rgba
-                        sheet.paste(image, (f * d.width, 0))
-                        checks.append(dict(effect_id=ident, source_frame=f, intrinsic=check))
-                    out = WEB / f'assets/party_effects/{ident}/action_00.png'
-                    out.parent.mkdir(parents=True, exist_ok=True)
-                    sheet.save(out)
-                    meta['effects'].append(dict(id=ident, source=p.relative_to(ROOT).as_posix(), source_sha256=sha(p),
-                        frame_width=d.width, frame_height=d.height, frame_count=d.frame_count,
-                        anchor=dict(x=d.anchor_raw[0], y=d.anchor_raw[1]),
-                        sheet='/' + out.relative_to(WEB).as_posix(), sha256=sha(out),
-                        frames=native_frame_sequence(d.raw_actions[0], 0, d.frame_count, 0), native_raw_hex=d.raw_actions[0].hex(),
-                        blend='lighter', evidence=[NATIVE_IDS['indexed_draw'], NATIVE_IDS['effect_action']]))
-                    known_effects.add(ident)
+    export_effect_assets(meta, sources, checks)
     meta['roles'].sort(key=lambda r: r['id'])
     meta['extra_layer_banks'] = banks
     meta.pop('extra_layers', None)

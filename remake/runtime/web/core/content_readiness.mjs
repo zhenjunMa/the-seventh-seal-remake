@@ -3,9 +3,26 @@
 import {chapterChoices,chapterRestChoices,initializeChapterItem} from './chapter.mjs';
 import {validateChapterAnimation} from './chapter_animation.mjs';
 import {validateRouteRecord} from './route.mjs';
-import {chapterRouteExits} from './map_connections.mjs';
+import {chapterRouteExits,nativeMapTransfer} from './map_connections.mjs';
+import {validateNativeStoryCondition} from './native_story_conditions.mjs';
+import {validateNativeStoryMutation} from './native_story_mutations.mjs';
+import {nativeScriptedBattle} from './scripted_battle.mjs';
 const need=(ok,message)=>{if(!ok)throw new Error(message);};
 const flagIndex=n=>Number.isInteger(n)&&n>=0&&n<2000;
+
+export function requireLearningRewardReadiness(record,content,roleDefinitions){
+  if(record.mutation_type!==14)return null;
+  const id=String(record.mutation_index+1).padStart(3,'0'),definition=roleDefinitions?.[id];
+  need(definition,`学习奖励角色 ${id} 缺少原技能源定义`);
+  const source=definition.skills.find(skill=>skill.id===record.mutation_bit);
+  // The native helper has no effect on a missing source ID. A source type0
+  // record remains absent from the native menu after its learned bit is set.
+  if(!source||!source.has_menu_type)return source??null;
+  const role=content.roles[id],bindings=[...role?.battle_skills??[],...role?.field_skills??[]];
+  need(bindings.some(binding=>binding.index===source.index),
+    `学习奖励 ${id}／原ID${record.mutation_bit}（索引${source.index}）尚无已接入技能处理器`);
+  return source;
+}
 
 export function inspectContentReadiness(content,story,resources){
   const errors=[],warnings=[],entrances=[];
@@ -13,6 +30,7 @@ export function inspectContentReadiness(content,story,resources){
     const table=story.maps[mapId];
     const roots=[];
     if(binding.entry_record)roots.push({kind:'entry',id:binding.entry_record});
+    if(binding.setup_record)roots.push({kind:'setup',id:binding.setup_record});
     for(const id of binding.triggers){
       const row=resources.trigger_regions[mapId]?.find(row=>row.id===id);
       roots.push({kind:'trigger',id:row?.field_26_raw,label:id});
@@ -30,14 +48,17 @@ export function inspectContentReadiness(content,story,resources){
       const seen=new Set(),programs=new Set(),queue=[{mapId,id:root.id,route:root.kind==='route',explicit:root.explicit}];
       const target=root.advisory?warnings:errors;
       let opensWorldMap=false;
-      const add=(id,options={})=>{if(id)queue.push({mapId,id,explicit:root.explicit,...options});};
+      let activeMap=mapId;
+      const add=(id,options={})=>{if(id)queue.push({mapId:activeMap,id,explicit:root.explicit,...options});};
       try{
         need(Number.isInteger(root.id)&&root.id>0,'缺少原始剧情入口');
-        if(root.kind==='entry')need(table.header_entry_tlk_raw===root.id,'进入剧情与 DAT +0x11E 不同');
+        if(root.kind==='entry')need(table.header_entry_tlk_raw===root.id,'进入剧情与 DAT +0x13A 不同');
+        if(root.kind==='setup')need(table.header_setup_tlk_raw===root.id,'加载布置与 DAT +0x8A 不同');
         if(root.kind==='route')chapterRouteExits(mapId,story,resources,content);
       }catch(error){target.push(diagnostic(root.id,error.message));continue;}
       while(queue.length){
         const item=queue.shift(),key=`${item.mapId}:${item.id}:${Boolean(item.route)}:${Boolean(item.falseOnly)}`;
+        activeMap=item.mapId;
         if(seen.has(key))continue;seen.add(key);
         const current=story.maps[item.mapId],record=current?.records.find(row=>row.id===item.id);
         try{
@@ -54,9 +75,10 @@ export function inspectContentReadiness(content,story,resources){
             }else add(record.next,{route:true});
             continue;
           }
-          need(record.condition_type===0,`剧情条件 ${record.condition_type} 尚未实现`);
+          if(record.condition_type!==0)validateNativeStoryCondition(record,current);
+          if(root.kind==='setup')need(record.condition_type===0&&record.mutation_type===0&&record.mutation_bit===0,'加载入口只能包含布局与旗标判断');
           const bit=record.condition_bit|0,index=record.condition_index||current.map_flag_index;
-          need(bit===0||bit>=1&&bit<=32&&flagIndex(index),'剧情旗标条件未支持');
+          if(record.condition_type===0)need(bit===0||bit>=1&&bit<=32&&flagIndex(index),'剧情旗标条件未支持');
           switch(record.mutation_type){
             case 0:{
               const mutation=record.mutation_bit|0;
@@ -70,12 +92,20 @@ export function inspectContentReadiness(content,story,resources){
               need(item.explicit&&record.mutation_index===0&&record.mutation_bit===0,'存档分支需要主动交互入口');break;
             case 5:{
               const definition=story.item_definitions?.[record.mutation_bit];
-              need(record.mutation_index===0&&definition?.source?.sha256===story.source_hashes[definition.source.path],'道具变更来源或处理器缺失');
-              initializeChapterItem(definition);break;
+              if(record.mutation_index===0){
+                need(definition?.source?.sha256===story.source_hashes[definition.source.path],'道具变更来源或处理器缺失');
+                initializeChapterItem(definition);
+              }else need(record.mutation_bit>=0&&record.mutation_bit<=416,'移除道具来源编号无效');
+              break;
             }
+            case 10:case 11:case 14:case 16:case 17:
+              validateNativeStoryMutation(record,{roleDefinitions:story.role_definitions});
+              requireLearningRewardReadiness(record,content,story.role_definitions);break;
+            case 9:need(record.region_byte_raw>=0&&record.region_byte_raw<2&&record.mutation_index>=0&&record.mutation_index<=2
+              &&record.mutation_bit>=0&&record.mutation_bit<7,'大地图状态命令未支持');break;
             default:throw new Error(`剧情变更 ${record.mutation_type} 尚未实现`);
           }
-          if(bit&&!item.falseOnly)add(record.if_true);
+          if((bit||record.condition_type!==0)&&record.kind!==2&&!item.falseOnly)add(record.if_true);
           if(record.kind===0){
             const choiceBytes=record.raw_hex?.slice(0x537*2);
             if(record.style===1&&choiceBytes&&/[^0]/.test(choiceBytes)){
@@ -87,13 +117,27 @@ export function inspectContentReadiness(content,story,resources){
             const name=record.text_raw.replace(/\.anm$/i,'').toLowerCase(),program=story.programs[name];
             need(program&&content.programs[name],`演出 ${name} 尚未登记`);
             validateChapterAnimation(program,content);
-            need(program.expected.control_map===item.mapId,`演出 ${name} 跨控制地图尚未支持`);
+            if(root.kind==='setup')need(program.commands.every(command=>[10,16,30,35].includes(command.opcode)
+              &&(command.opcode!==10||command.filename.toUpperCase()===`${item.mapId}.DAT`)),'加载演出只能布置当前地图');
             if(!programs.has(name)){
               programs.add(name);
-              for(const command of program.commands)if(command.opcode===14)add(command.u32_plus5);
+              let controlMap=item.mapId;
+              for(const command of program.commands){
+                if(command.opcode===10&&command.u32_plus5===0)controlMap=command.filename.replace(/\.dat$/i,'').toUpperCase();
+                if(command.opcode===14)add(command.u32_plus5,{mapId:controlMap});
+              }
             }
             add(record.next);
-          }else throw new Error(`对白类型 ${record.kind} 尚未实现`);
+          }else if(record.kind===2){
+            need(root.kind==='trigger'&&item.mapId===mapId,'地图跳转需要原地形触发器上下文');
+            const destination=nativeMapTransfer(current,record,{triggerId:root.label,triggerRecordId:root.id},content);
+            const targetTable=story.maps[destination.map_id];
+            need(targetTable?.entry_markers?.[destination.entry_marker]?.length,'目标地图原进入标记缺失');
+            const entry=content.maps[destination.map_id].entry_record;
+            if(entry)add(entry,{mapId:destination.map_id});
+            add(record.next);
+          }else if(record.kind===5){nativeScriptedBattle(current,record,content);add(record.next);}
+          else throw new Error(`对白类型 ${record.kind} 尚未实现`);
         }catch(error){target.push(diagnostic(item.id,error.message));}
       }
       if(root.kind==='route'&&!opensWorldMap)target.push(diagnostic(root.id,'出口可达分支未产生大地图入口命令'));

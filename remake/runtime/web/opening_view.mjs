@@ -7,6 +7,7 @@ import {ActorEffectView} from './actor_effect_view.mjs';
 import {drawMapSprite} from './map_sprite.mjs';
 import {runtimeContent} from './core/content_registry.mjs';
 import {DistanceGait,mapMotionProfile,mapTravelDistance} from './core/map_locomotion.mjs';
+import {nativeNpcActionBindings} from './core/map_npcs.mjs';
 
 export function physicalFrame(action, logicalIndex) {
   const frame = action.uses_sequence ? action.sequence_raw[logicalIndex] : logicalIndex;
@@ -15,8 +16,11 @@ export function physicalFrame(action, logicalIndex) {
   return frame;
 }
 export class OpeningView {
-  constructor({resources, prepared, prepare, install, camera, say, shade, log, program,staging={},effects={},nativeViewport=false,clock=null}) {
-    Object.assign(this, {resources, prepared, prepare, install, camera, say, shade, log,staging,effects,nativeViewport,clock});
+  constructor({resources, prepared, prepare, install, camera, say, shade, log, program,staging={},effects={},nativeViewport=false,clock=null,
+    initialActor=0,content=runtimeContent,cameraRenderMode=0}) {
+    Object.assign(this, {resources, prepared, prepare, install, camera, say, shade, log,staging,effects,nativeViewport,clock,content});
+    this.controlledActor=initialActor;
+    this.cameraRenderMode=cameraRenderMode;
     this.actors = new Map(); this.active = false; this.focus = null;
     this.controller=new AbortController();
     this.directArrivals=directArrivalMoves(program,staging);
@@ -38,9 +42,10 @@ export class OpeningView {
     const actor = this.getActor(this.focus);
     if(this.nativeViewport){
       const at=openingCamera(actor,this.scene.bitmap.width,this.scene.bitmap.height);
-      this.camera(at.x,at.y);
-    }else this.camera(actor.x + 16, actor.y);
+      this.setCamera(at.x,at.y);
+    }else this.setCamera(actor.x + 16, actor.y);
   }
+  setCamera(x,y){this.cameraAt={x,y};this.camera(x,y);}
   snapshot(type,extra={}) {
     this.log?.({type,map_id:this.mapId,...extra,actors:[...this.actors.entries()].map(([slot,a])=>
       ({slot,visible:a.visible,direction:a.direction,x:a.x,y:a.y,action:a.action,frame:a.frame}))});
@@ -81,9 +86,10 @@ export class OpeningView {
         this.actors.set(0, {x: 0, y: 0, direction: 1, role: this.resources.roles['001'], visible: false, action: 0, frame: 0, alpha: 1});
         if(initialLocation){
           Object.assign(this.actors.get(0),{...initialLocation,visible:true});
-          for(const [id,definition]of Object.entries(runtimeContent.roles))if(definition.side==='player'&&definition.native_slot!==0&&this.resources.roles[id])
+          for(const [id,definition]of Object.entries(this.content.roles))if(definition.side==='player'&&definition.native_slot!==0&&this.resources.roles[id])
             this.actors.set(definition.native_slot,{...initialLocation,role:this.resources.roles[id],visible:false,action:0,frame:0,alpha:1});
-          this.focus=0;
+          this.getActor(0).visible=this.controlledActor===0;this.getActor(this.controlledActor).visible=true;
+          this.focus=this.controlledActor;
         }
         this.install(scene);
         this.updateCamera();
@@ -94,7 +100,20 @@ export class OpeningView {
       },
       actor: async payload => {
         const {kind, signal} = payload;
-        if (kind === 'restore') { const hero = this.getActor(0); hero.action = 0; hero.frame = 0; return; }
+        if (kind === 'restore') {
+          for(const [slot,actor]of this.actors)if(slot<10)actor.visible=false;
+          this.controlledActor=payload.controlledActor??this.controlledActor;
+          const hero=this.getActor(this.controlledActor);hero.action=0;hero.frame=0;hero.visible=true;return;
+        }
+        if(kind==='control'){
+          const previous=this.getActor(payload.previousActor),next=this.getActor(payload.actor);
+          // 4B6720 mode3 copies +6F/+73 position only. The destination's
+          // initialized direction and pose are not copied from the old actor.
+          Object.assign(next,{x:previous.x,y:previous.y,visible:true});
+          if(previous!==next)previous.visible=false;
+          this.controlledActor=payload.actor;if(this.focus===payload.previousActor)this.focus=payload.actor;
+          this.updateCamera();return;
+        }
         const actor = this.getActor(payload.actor);
         // Native opcode35's hide branch only changes visibility. Its pose and
         // coordinates do not relocate or rotate an already loaded actor.
@@ -113,10 +132,13 @@ export class OpeningView {
           if (!action) throw new Error(`角色 ${payload.actor} 缺少动作 ${payload.actionId}`);
           // Native writes zero-based start/end. The last sentinel frame and
           // exact busy-state boundary still need native runtime comparison.
-          const indices = Array.from({length: payload.frameEnd - payload.frameStart}, (_, i) => i + payload.frameStart - 1);
+          const start=payload.frameStart||1,end=payload.frameEnd||(action.logical_count??(action.uses_sequence?action.sequence_length_raw:action.frame_count));
+          if(!Number.isInteger(end)||end<start)throw new Error('剧情原动作默认帧范围无效');
+          const indices = Array.from({length:end-start},(_,i)=>i+start-1);
           const frames = indices.map(index => physicalFrame(action, index));
           actor.action = action.index;
-          const interval = Math.max(16, action.interval_raw), total = frames.length * payload.repetitions;
+          if(!frames.length){actor.frame=physicalFrame(action,start-1);return;}
+          const interval = Math.max(16, action.interval_raw), total = frames.length * (payload.repetitions||1);
           await this.tween(interval * total, t => { actor.frame = frames[Math.min(total - 1, Math.floor(t * total)) % frames.length]; }, signal);
           this.snapshot('opening-animation-complete',{actor:payload.actor,command:payload.command?.index});
           return;
@@ -151,7 +173,9 @@ export class OpeningView {
         }
         const axisApproach=!arrival&&this.staging[this.mapId]?.axis_approach;
         const source=this.scene.npcRuntime?.actors.get(actor.id)?.source;
-        const action = actor.role.actions.find(a => a.index === (actionRaw||(source?.bindings[1]??1)));
+        if(source&&!source.bindings_initialized)throw new Error(`角色 ${id} 的原动作绑定尚未初始化`);
+        const bindings=source?.bindings??nativeNpcActionBindings(actor.role);
+        const action = actor.role.actions.find(a => a.index === (actionRaw||bindings[1]));
         if (!action) throw new Error(`角色 ${id} 缺少移动动作`);
         if(!Number.isInteger(arrivalFacingRaw)||arrivalFacingRaw<0||arrivalFacingRaw>8)throw new Error('剧情到达朝向无效');
         const motion=mapMotionProfile(action,this.scene.data.movement,'',source?.speedBias??0);
@@ -172,13 +196,47 @@ export class OpeningView {
           }
         };
         if(distance)await this.tween(duration,update,signal);
-        actor.action = 0; actor.frame = 0;
+        actor.action = bindings[0]; actor.frame = 0;
         if(arrival)actor.direction=arrival.arrivalDirection;
         else if(arrivalFacingRaw)actor.direction=arrivalFacingRaw-1;
         this.snapshot('opening-move-complete',{actor:id,command:command?.index,
           presentation:arrival?'direct-arrival':'source-move',motion_frames:motionFrames});
       },
-      camera: async ({actor}) => { this.focus = actor; this.updateCamera(); },
+      camera: async ({kind,actor,x,y,modeRaw,signal,cycles,amplitude}) => {
+        if(kind==='shake'){
+          if(!Number.isInteger(cycles)||cycles<0||cycles>10000||!Number.isFinite(amplitude))throw new Error('剧情原镜头摇动参数无效');
+          const origin={...this.cameraAt},focus=this.focus;this.focus=null;
+          try{
+            for(let index=0;index<cycles;index++){
+              signal?.throwIfAborted();
+              const offset=this.cameraRenderMode===0?{x:modeRaw?-amplitude:amplitude,y:amplitude}
+                :modeRaw?{x:amplitude,y:0}:{x:0,y:amplitude};
+              this.setCamera(origin.x+offset.x,origin.y+offset.y);
+              await this.tween(16,()=>{},signal);this.setCamera(origin.x,origin.y);
+              await this.tween(16,()=>{},signal);
+            }
+          }finally{
+            // A disposed view no longer owns the camera. A late rejection
+            // must not move a newly installed scene or restore stale focus.
+            if(!this.controller.signal.aborted){this.focus=focus;this.setCamera(origin.x,origin.y);}
+          }
+          return;
+        }
+        if(kind!=='position'){this.focus=actor;this.updateCamera();return;}
+        this.focus=null;
+        const movement=this.scene.data.movement,shift=movement.native_camera_step_shift;
+        if(!Number.isInteger(shift)||shift<0||shift>30)throw new Error('地图缺少原镜头步长');
+        const quantum=2**shift*(movement.native_to_pixel_scale??2),round=value=>Math.floor(value/quantum)*quantum;
+        const target=openingCamera({x:round(x)+16,y:round(y)+16},this.scene.bitmap.width,this.scene.bitmap.height);
+        if(modeRaw===1){this.setCamera(target.x,target.y);return;}
+        const from=this.cameraAt??target,dx=target.x-from.x,dy=target.y-from.y;
+        const steps=Math.ceil(Math.max(Math.abs(dx),Math.abs(dy))/quantum);
+        if(!steps){this.setCamera(target.x,target.y);return;}
+        await this.tween(steps*(modeRaw===0?16:40),progress=>{
+          const distance=Math.floor(progress*steps+1e-9)*quantum;
+          this.setCamera(from.x+Math.sign(dx)*Math.min(Math.abs(dx),distance),from.y+Math.sign(dy)*Math.min(Math.abs(dy),distance));
+        },signal);
+      },
       fade: async ({kind, signal}) => this.tween(450, t => this.shade(kind === 'out' ? t : 1 - t), signal),
       say: async ({records,signal}) => {
         this.snapshot('opening-dialogue-stage',{records:records.map(r=>r.id)});

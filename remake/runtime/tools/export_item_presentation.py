@@ -37,9 +37,92 @@ def sheet_asset(path, image):
         assert saved.convert('RGBA').tobytes() == image.tobytes()
     return dict(sheet='/' + path.relative_to(WEB).as_posix(), sha256=sha(path.read_bytes()))
 
+def source_files():
+    """Watch native ordinary ID17 effects before generated admission exists.
+
+    This is a cache/source-protection inventory, not permission to use an item.
+    Export admission still requires the registered catalog's recovered effect.
+    """
+    itm = (ROOT / 'SYSTEM/Object.ITM').read_bytes()
+    count = struct.unpack_from('<I', itm, 0x20)[0]
+    assert len(itm) == 0x61c + count * 0x3bf
+    tokens = set()
+    for index in range(count):
+        raw = itm[0x61c + index * 0x3bf:0x61c + (index + 1) * 0x3bf]
+        if raw[0x24:0x26] != b'\x05\x01' or struct.unpack_from('<I', raw, 0x142)[0] != 17 or raw[0x156:0x158] != b'\x00\x01':
+            continue
+        filename = token(raw, 0x126)
+        if filename:
+            assert Path(filename).name == filename and filename.lower().endswith('.dgp')
+            tokens.add(filename)
+    return ('GAME.exe', 'SYSTEM/Object.ITM',
+            *tuple(f'Fight_Role/{ident}.{suffix}' for ident in role_ids('player') for suffix in ('CHR', 'dgp')),
+            *tuple(f'Fight_Role/Effect/{filename}' for filename in sorted(tokens)))
+
+
+def item_presentations(data, itm):
+    """Registered usable definitions own admission; every visual field stays ITM."""
+    assert data['schema'] == 'seventh-seal-chapter-items' and data['version'] == 1
+    digest = sha(itm)
+    assert data['source_hashes']['SYSTEM/Object.ITM'] == digest
+    items = {}
+    for key, definition in data['definitions'].items():
+        if not isinstance(definition.get('effect'), dict):
+            continue
+        assert definition.get('behavior', {}).get('status') == 'recovered', 'item behavior is not admitted'
+        ident = int(key)
+        at = 0x61c + (ident - 1) * 0x3bf
+        raw = itm[at:at + 0x3bf]
+        assert len(raw) == 0x3bf and struct.unpack_from('<I', raw)[0] == ident
+        assert definition['raw_hex'] == raw.hex()
+        assert definition['source']['sha256'] == digest and definition['source']['record_offset'] == at
+        filename = token(raw, 0x126)
+        assert filename and Path(filename).name == filename and filename.lower().endswith('.dgp')
+        assert struct.unpack_from('<I', raw, 0x142)[0] == 17, 'item animation is not supported ID17'
+        assert raw[0x156] == 0 and raw[0x157] == 1, 'item target scope is not supported single ally'
+        items[key] = dict(id=ident, name=definition['name'], animation_skill_id_raw_142=17,
+            effect_id=Path(filename).stem, effect_token_raw_126=filename,
+            source=dict(path='SYSTEM/Object.ITM', sha256=digest, record_offset=at,
+                        record_sha256=sha(raw), effect_field_offset=0x126, effect_field_bytes=20))
+    return items
+
+
+def export_item_effect(filename, checks, generated, preview_cells):
+    p = ROOT / f'Fight_Role/Effect/{filename}'
+    d = DGP(p)
+    audit = SourceAudit(d.data)
+    assert len(d.actions) == 1 and d.actions[0]['directions'] == 1
+    assert (audit.width, audit.height, audit.count, audit.anchor) == (d.width, d.height, d.frame_count, d.anchor_raw)
+    # These effects contain only the indexed additive layer. A newly admitted
+    # main/shadow effect requires its native rendering path, never silent loss.
+    assert sum(n for f in range(d.frame_count) for _, spans in d.rows(f) for _, n, _ in spans) == 0
+    assert sum(n for f in range(d.frame_count) for _, spans in d.shadow_rows(f) for _, n in spans) == 0
+    action = d.actions[0]
+    assert d.frame_count > 0 and action['frames_per_direction'] == d.frame_count and action['interval_raw'] > 0
+    sheet = Image.new('RGBA', (d.width * d.frame_count, d.height))
+    for f in range(d.frame_count):
+        intrinsic = indexed_contribution(d, f)[0]
+        rgba, check = audit.sparse(f, True)
+        assert intrinsic.tobytes() == rgba
+        sheet.paste(intrinsic, (f * d.width, 0))
+        checks.append(dict(effect_id=p.stem, source_frame=f, intrinsic=check))
+        if f in [0, d.frame_count // 2, d.frame_count - 1]:
+            preview_cells.append((f'{p.stem}: frame{f}', intrinsic))
+    out = WEB / f'assets/item_presentation/effects/{p.stem}/action_00.png'
+    generated.append(out)
+    return dict(id=p.stem, source=p.relative_to(ROOT).as_posix(), source_sha256=d.sha256,
+        frame_width=d.width, frame_height=d.height, anchor=dict(x=d.anchor_raw[0], y=d.anchor_raw[1]),
+        **sheet_asset(out, sheet), frames=native_frame_sequence(d.raw_actions[0], 0, d.frame_count, 0),
+        frame_count=d.frame_count, native_raw_hex=d.raw_actions[0].hex(), interval_raw=action['interval_raw'],
+        sound_token_raw_56=token(d.raw_actions[0], 0x56), blend='lighter',
+        evidence=[NATIVE_IDS['indexed_draw'], NATIVE_IDS['effect_action']])
+
+
 def main():
+    items = item_presentations(read(WEB / 'data/items.json'), (ROOT / 'SYSTEM/Object.ITM').read_bytes())
+    effect_tokens = {item['effect_token_raw_126'] for item in items.values()}
     original_paths = ['GAME.exe', 'SYSTEM/Object.ITM', *[f'Fight_Role/{ident}.{suffix}' for ident in role_ids('player') for suffix in ('CHR','dgp')],
-                      'Fight_Role/Effect/_iReHP.dgp', 'Fight_Role/Effect/_iReMP.dgp']
+                      *[f'Fight_Role/Effect/{filename}' for filename in sorted(effect_tokens)]]
     before = {p: sha((ROOT / p).read_bytes()) for p in original_paths}
     assert before['GAME.exe'] == GAME_SHA256
     shared = [WEB / f'data/{name}.json' for name in ['party_skills', 'party_battle_view', *[f'party_role_layers_{ident}' for ident in role_ids('player')]]]
@@ -117,48 +200,11 @@ def main():
             sound_token_raw_56=token(d.raw_actions[action_index], 0x56),
             source=dict(chr_path=c.path.relative_to(ROOT).as_posix(), chr_sha256=c.sha256,
                         dgp_path=d.path.relative_to(ROOT).as_posix(), dgp_sha256=d.sha256)))
-    itm = (ROOT / 'SYSTEM/Object.ITM').read_bytes()
-    items, effect_tokens = {}, set()
-    for ident in [8, 11, 12]:
-        at = 0x61c + (ident - 1) * 0x3bf
-        raw = itm[at:at + 0x3bf]
-        filename = token(raw, 0x126)
-        assert struct.unpack_from('<I', raw)[0] == ident and struct.unpack_from('<I', raw, 0x142)[0] == 17
-        assert filename == ('_iReMP.dgp' if ident == 12 else '_iReHP.dgp')
-        assert raw[0x156] == 0 and raw[0x157] == 1
-        items[str(ident)] = dict(id=ident, name=raw[4:28].split(b'\0')[0].decode('cp936'),
-            animation_skill_id_raw_142=17, effect_id=Path(filename).stem,
-            effect_token_raw_126=filename,
-            source=dict(path='SYSTEM/Object.ITM', sha256=before['SYSTEM/Object.ITM'],
-                        record_offset=at, record_sha256=sha(raw), effect_field_offset=0x126, effect_field_bytes=20),
-            settlement=dict(source_field='0x49', frame_source='acting role CHR sequence', effect_slot='target',
-                            only_after_accepted_target=True,
-                            evidence=evidence['native_recovery_effect']))
-        effect_tokens.add(filename)
-    effects = []
-    for filename in sorted(effect_tokens):
-        p = ROOT / f'Fight_Role/Effect/{filename}'
-        d = DGP(p)
-        audit = SourceAudit(d.data)
-        assert len(d.actions) == 1 and d.actions[0]['directions'] == 1
-        assert sum(n for f in range(d.frame_count) for _, spans in d.rows(f) for _, n, _ in spans) == 0
-        assert d.frame_count == 19 and d.actions[0]['interval_raw'] == 80
-        sheet = Image.new('RGBA', (d.width * d.frame_count, d.height))
-        for f in range(d.frame_count):
-            intrinsic = indexed_contribution(d, f)[0]
-            rgba, check = audit.sparse(f, True)
-            assert intrinsic.tobytes() == rgba
-            sheet.paste(intrinsic, (f * d.width, 0))
-            checks.append(dict(effect_id=p.stem, source_frame=f, intrinsic=check))
-            if f in [0, 9, 18]: preview_cells.append((f'{p.stem}: frame{f}', intrinsic))
-        out = WEB / f'assets/item_presentation/effects/{p.stem}/action_00.png'
-        effects.append(dict(id=p.stem, source=p.relative_to(ROOT).as_posix(), source_sha256=d.sha256,
-            frame_width=d.width, frame_height=d.height, anchor=dict(x=d.anchor_raw[0], y=d.anchor_raw[1]),
-            **sheet_asset(out, sheet), frames=native_frame_sequence(d.raw_actions[0], 0, d.frame_count, 0),
-            frame_count=d.frame_count, native_raw_hex=d.raw_actions[0].hex(), interval_raw=80,
-            sound_token_raw_56=token(d.raw_actions[0], 0x56), blend='lighter',
-            evidence=[NATIVE_IDS['indexed_draw'], NATIVE_IDS['effect_action']]))
-        generated.append(out)
+    for item in items.values():
+        item['settlement'] = dict(source_field='0x49', frame_source='acting role CHR sequence', effect_slot='target',
+            only_after_accepted_target=True, effect_even_without_native_success=True,
+            consume_only_on_native_success=True, evidence=evidence['native_recovery_effect'])
+    effects = [export_item_effect(filename, checks, generated, preview_cells) for filename in sorted(effect_tokens)]
     output = WEB / 'data/item_presentation.json'
     save(output, dict(schema='seventh-seal-item-presentation', version=1, roles=roles, items=items, effects=effects,
         source_hashes=before, evidence=evidence,
@@ -175,7 +221,7 @@ def main():
     generated.append(output)
     # Compact visual audit on a dark background; source frames are unchanged.
     from PIL import ImageDraw
-    preview = Image.new('RGB', (720, 240 * 4), '#10131b')
+    preview = Image.new('RGB', (720, 240 * max(1, (len(preview_cells) + 2) // 3)), '#10131b')
     drawing = ImageDraw.Draw(preview)
     for index, (label, rgba) in enumerate(preview_cells):
         col, row = index % 3, index // 3

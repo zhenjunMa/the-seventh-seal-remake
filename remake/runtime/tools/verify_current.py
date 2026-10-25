@@ -12,6 +12,7 @@ from datetime import datetime, timezone
 RUNTIME = Path(__file__).resolve().parents[1]
 REMAKE = RUNTIME.parent
 ROOT = REMAKE.parent
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 WEB = RUNTIME/'web'
 EVIDENCE = RUNTIME/'evidence'
 REPORT = EVIDENCE/'current_validation.json'
@@ -28,17 +29,65 @@ def exported_path(name):
     return ROOT/name
 
 
-def current_export(filename, step):
+def registered_report_steps(steps=None):
+    if steps is None:
+        from build_runtime import STEPS
+        steps = STEPS
+    owners = {}
+    for step, definition in steps.items():
+        for report in definition.reports:
+            if report in owners and owners[report] != step:
+                raise ValueError(f'Export report has multiple registered owners: {report}')
+            owners[report] = step
+    return owners
+
+
+def current_export(filename, step=None, *, steps=None):
     # The build entry keeps dated evidence immutable and writes changed reports
     # under a successful run. Validate against that export, not an old baseline.
+    owners = registered_report_steps(steps)
+    owner = owners.get(filename)
+    if owner is None or step is not None and step != owner:
+        raise ValueError(f'Export report/step is not registered: {filename} / {step}')
+    step = owner
     for directory in sorted((EVIDENCE/'builds').glob('*'), reverse=True):
         run=directory/'run.json'
-        report=directory/step/'generated-evidence'/Path(filename).name
-        if report.is_file() and run.is_file():
+        generated = directory/step/'generated-evidence'
+        if run.is_file():
             summary=read(run)
             if summary.get('passed') and any(row.get('name')==step and row.get('status')=='exported' for row in summary.get('steps', [])):
-                return read(report)
+                # The latest completed export is authoritative even when its
+                # report equals the immutable baseline (and has no copy), or
+                # is an undated/nested report written in its live location.
+                # preserve_evidence stores each top-level dated report using
+                # its basename. Support a relative-path layout too, but only
+                # after exact report ownership has been resolved above. An
+                # unrelated step's same-basename export is never a candidate.
+                report = generated/filename
+                flattened = generated/Path(filename).name
+                basename_is_unique = sum(1 for name, candidate in owners.items()
+                                         if candidate == owner and Path(name).name == Path(filename).name) == 1
+                if not report.is_file() and basename_is_unique and flattened.is_file():
+                    report = flattened
+                return read(report if report.is_file() else EVIDENCE/filename)
     return read(EVIDENCE/filename)
+
+
+def verify_retained_asset(name, expected, *, root=None, migration=None):
+    """Accept an exact historical digest or one explicitly declared migration."""
+    root = ROOT if root is None else root
+    actual = sha(root/name)
+    if actual == expected:
+        return None
+    if migration is None:
+        migration = read(RUNTIME/'tools/layout_migration.json')
+    assert migration.get('schema') == 'seventh-seal-layout-migration' and migration.get('version') == 1, 'Layout migration schema changed'
+    rows = [row for row in migration.get('runtime_manifests', []) if row.get('path') == name]
+    assert len(rows) == 1 and rows[0].get('previous_sha256') == expected, f'Retained source/asset changed without matching migration: {name}'
+    row = rows[0]
+    assert re.fullmatch(r'[a-f0-9]{64}', row.get('sha256', '')) and actual == row['sha256'], f'Retained migrated asset changed: {name}'
+    return dict(row)
+
 
 def verify():
     baseline = read(EVIDENCE/'forest_combat_four_steps_delivery_20261011.json')
@@ -67,7 +116,7 @@ def verify():
         assert sha(path) == expected, f'Chapter asset changed: {name}'
     party_sources, party_outputs = {}, {}
     for filename in ['party_combat_export.json', 'party_rewards_export.json', 'party_skills_export.json']:
-        export = read(EVIDENCE/filename)
+        export = current_export(filename)
         assert export.get('passed', export.get('source_bytes_unchanged', False))
         party_sources.update(export['source_hashes'])
         party_outputs.update(export.get('output_hashes', {export.get('output_path',''):export.get('output_sha256','')}))
@@ -78,13 +127,13 @@ def verify():
         assert sha(path) == expected, f'Party asset changed: {name}'
     system_sources, system_outputs = {}, {}
     for filename in ['enemy_content_export.json', 'enemy_rewards_export.json', 'encounter_export.json', 'chapter_items_export.json', 'chapter_recovery_export_20261011.json', 'item_presentation_export.json', 'forest_stage_export.json', 'operation_menu_resources.json', 'battle_ui_resources.json','battle_lifecycle_20261015/export.json','skill_test_20261020/export.json','battle_result_20261020/export.json','startup_menu_export_20261020.json','prologue_routes_20261020/export.json','dialogue_alignment_20261021/source_audit.json','battle_loading_20261021/pack_export.json','map_effects_20261021/export.json','movement_optimization_20261023/shadow_export.json']:
-        export = read(EVIDENCE/filename)
+        export = current_export(filename)
         assert export.get('passed', export.get('source_bytes_unchanged', export.get('source_unchanged', False)))
         system_sources.update(export['source_hashes'])
         if export.get('output_hashes'): system_outputs.update(export['output_hashes'])
         elif export.get('output_path'): system_outputs[export['output_path']] = export['output_sha256']
     audio = read(WEB/'data/audio.json')
-    audio_export = read(EVIDENCE/'audio_export.json')
+    audio_export = current_export('audio_export.json')
     assert audio_export['success'] and audio_export['original_source_unchanged']
     assert sha(WEB/'data/audio.json') == audio_export['manifest_sha256']
     system_sources.update(audio_export['source_hashes'])
@@ -99,7 +148,7 @@ def verify():
     for name, expected in system_sources.items(): assert sha(ROOT/name) == expected, f'System input changed: {name}'
     for name, expected in system_outputs.items(): assert sha(exported_path(name)) == expected, f'System asset changed: {name}'
     menu_rules = read(EVIDENCE/'operation_menu_rules.json')
-    techniques_export=read(EVIDENCE/'menu_technique_export_20261013.json')
+    techniques_export=current_export('menu_technique_export_20261013.json')
     assert techniques_export['original_inputs_unchanged']
     system_sources.update(techniques_export['source_hashes'])
     system_outputs.update(techniques_export['output_hashes'])
@@ -139,8 +188,11 @@ def verify():
                      for skill in party_commands['skills'].values() if 'magic_native_bundle' in skill]]
     for row in native_bundles:
         assert sha(RUNTIME/row['path']) == row['sha256'], f'Party native evidence changed: {row["path"]}'
+    retained_migrations = []
     for name, expected in baseline['asset_hashes'].items():
-        assert sha(ROOT/name) == expected, f'Retained source/asset changed: {name}'
+        migration = verify_retained_asset(name, expected)
+        if migration:
+            retained_migrations.append(migration)
     extraction_names = ['combat_sample', 'forest_combat', 'forest_ai', 'forest_rewards',
                         'battle_scheduler', 'forest_reactions', 'forest_status', 'skills']
     for name in extraction_names:
@@ -259,9 +311,9 @@ def verify():
     current = [*tests, *RUNTIME.glob('tests/test_*.py'), RUNTIME/'tools/build_runtime.py', *WEB.glob('*.html'), *WEB.glob('*.css'), *WEB.glob('*.js'), *WEB.glob('*.mjs'), *WEB.glob('core/*.mjs'), *WEB.glob('controllers/*.mjs'), *WEB.glob('data/config/*.json'),
                *WEB.glob('phaser/**/*.mjs'), *WEB.glob('vendor/phaser/*'), RUNTIME/'tools/verify_phaser.mjs',
                WEB/'data/catalog.json', WEB/'data/runtime_content.json', WEB/'data/runtime_content.mjs',
-               RUNTIME/'tools/export_content_registry.mjs', RUNTIME/'tools/content_registration.py', RUNTIME/'tests/preserve_history.mjs', Path(__file__),
+               RUNTIME/'tools/export_content_registry.mjs', RUNTIME/'tools/content_registration.py', RUNTIME/'tools/layout_migration.json', RUNTIME/'tests/preserve_history.mjs', Path(__file__),
                REMAKE/'archive/restore_snapshot.py', *[REMAKE/name for name in docs], *[exported_path(name) for name in system_outputs if exported_path(name).suffix=='.json']]
-    browser_path = next((EVIDENCE/name for name in ['battle_loading_browser_validation_20261021.json','dialogue_alignment_browser_validation_20261021.json','prologue_routes_browser_validation_20261021.json','prologue_routes_browser_validation_20261020.json','prologue_sequence_browser_validation_20261020.json','prologue_browser_validation_20261020.json','startup_save_preview_browser_validation_20261020.json','startup_alignment_browser_validation_20261020.json','battle_wheel_closed_browser_validation_20261020.json','battle_result_text_browser_validation_20261020.json','battle_result_browser_validation_20261020.json','skill_test_browser_validation_20261020.json','battle_lifecycle_browser_validation_20261015.json','battle_render_browser_validation_20261015.json','battle_alignment_browser_validation_20261015.json','roster_focus_browser_validation_20261014.json','menu_audio_browser_validation_20261014.json','technique_list_browser_validation_20261014_v2.json','technique_list_browser_validation_20261014.json','menu_focus_browser_validation_20261014.json','technique_replace_browser_validation_20261014.json','menu_finish_browser_validation_20261014.json','menu_socket_browser_validation_20261014.json','menu_detail_browser_validation_20261014.json','refactor_browser_validation.json', 'operation_menu_original_browser_validation.json', 'operation_menu_fidelity_browser_validation.json', 'operation_menu_browser_validation.json', 'chapter_systems_browser_validation.json', 'skill_config_browser_validation.json', 'party_browser_validation.json']
+    browser_path = next((EVIDENCE/name for name in ['fire_valley_20261025/browser_validation.json','battle_loading_browser_validation_20261021.json','dialogue_alignment_browser_validation_20261021.json','prologue_routes_browser_validation_20261021.json','prologue_routes_browser_validation_20261020.json','prologue_sequence_browser_validation_20261020.json','prologue_browser_validation_20261020.json','startup_save_preview_browser_validation_20261020.json','startup_alignment_browser_validation_20261020.json','battle_wheel_closed_browser_validation_20261020.json','battle_result_text_browser_validation_20261020.json','battle_result_browser_validation_20261020.json','skill_test_browser_validation_20261020.json','battle_lifecycle_browser_validation_20261015.json','battle_render_browser_validation_20261015.json','battle_alignment_browser_validation_20261015.json','roster_focus_browser_validation_20261014.json','menu_audio_browser_validation_20261014.json','technique_list_browser_validation_20261014_v2.json','technique_list_browser_validation_20261014.json','menu_focus_browser_validation_20261014.json','technique_replace_browser_validation_20261014.json','menu_finish_browser_validation_20261014.json','menu_socket_browser_validation_20261014.json','menu_detail_browser_validation_20261014.json','refactor_browser_validation.json', 'operation_menu_original_browser_validation.json', 'operation_menu_fidelity_browser_validation.json', 'operation_menu_browser_validation.json', 'chapter_systems_browser_validation.json', 'skill_config_browser_validation.json', 'party_browser_validation.json']
                          if (EVIDENCE/name).is_file()), EVIDENCE/'party_browser_validation.json')
     browser = read(browser_path) if browser_path.exists() else None
     observation_path = ROOT/browser.get('observation_path', 'remake/runtime/evidence/party_browser_observation.json') if browser else EVIDENCE/'party_browser_observation.json'
@@ -274,6 +326,7 @@ def verify():
         and sha(observation_path) == browser.get('observation_sha256'))
     return dict(tests=counts, test_files=len(tests), content_registration=content_summary, python_syntax_checks=len(python_paths), http_checks=sorted(refs),
                 original_input_sha256=original_inputs, retained_sources_assets_checked=len(baseline['asset_hashes']),
+                retained_layout_migrations=retained_migrations,
                 extraction_baselines_checked=extraction_names,
                 archive=dict(documents_checked=len(archived_docs), snapshots_checked=len(rows), zip_sha256=sha(zip_path),
                              restored_snapshots=restored, bytes_reclaimed_at_cleanup=cleanup['bytes_reclaimed'],

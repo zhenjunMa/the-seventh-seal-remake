@@ -1,6 +1,7 @@
 // Equipped instances are mutable world state. The original initial equipment
 // remains immutable provenance and supplies a fallback for legacy v1 saves.
 import {configuredEquipmentHex} from './item_registry.mjs';
+import {allPartyRoles} from './party_roster.mjs';
 const copy = structuredClone;
 const need = (ok, message) => { if (!ok) throw new Error(message); };
 const bytes = raw => {
@@ -93,6 +94,6 @@ export function migrateEquipment(draft, attributes, itemData) {
         id:row.item_id,name:def.name,source_raw_hex:row.source_raw_hex,slot_id:def.slot_id},1);
     });
   }
-  validateEquipmentState(draft.equipment, draft.party);
+  validateEquipmentState(draft.equipment, allPartyRoles(draft));
   return draft.equipment;
 }

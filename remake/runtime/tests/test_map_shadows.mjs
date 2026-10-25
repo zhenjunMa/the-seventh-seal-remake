@@ -17,10 +17,28 @@ test('export independently verifies all selected source mask frames and leaves o
   assert.equal(report.passed,true);assert.equal(report.independent_source_mask_replay,true);
   assert.equal(report.source_bytes_unchanged,true);assert.equal(report.main_and_light_pngs_unchanged,true);
   assert.equal(report.compact_atlas_reconstruction_verified,true);
-  assert.ok(report.compact_atlas_rgba_bytes<100*1048576);
   assert.ok(report.compact_atlas_rgba_bytes<report.full_frame_rgba_bytes*.15);
-  assert.equal(report.frame_checks.length,7079);
-  assert.deepEqual(['001','002','003','070'].map(id=>Boolean(manifest.roles[id])),[true,true,true,true]);
+  // Regional content expands the atlas. Require exact coverage of every
+  // admitted physical mask rather than the old four-map frame/memory count.
+  const selected=new Map();
+  for(const name of ['opening_map_resources','chapter_map_resources'])
+    for(const [id,role] of Object.entries((await read(`web/data/${name}.json`)).roles))selected.set(id,role);
+  const expected=new Set(),actual=new Set();let compactBytes=0,fullBytes=0;
+  for(const [id,role] of Object.entries(manifest.roles)){
+    const omitted=report.empty_actions_omitted.filter(row=>row.role===id).map(row=>selected.get(id).actions.find(action=>action.index===row.action));
+    for(const action of [...role.actions,...omitted]){
+      assert.ok(action,`${id} omitted action has no source selection`);
+      fullBytes+=action.frame_count*action.directions*role.frame_width*role.frame_height*4;
+      if(action.shadow_geometry)compactBytes+=action.frame_count*action.directions*action.shadow_geometry.width*action.shadow_geometry.height*4;
+      for(let direction=0;direction<action.directions;direction++)for(let frame=0;frame<action.frame_count;frame++)
+        expected.add(`${id}:${action.index}:${direction}:${action.first_frame+direction*action.frame_count+frame}`);
+    }
+  }
+  for(const row of report.frame_checks)actual.add(`${row.role}:${row.action}:${row.direction}:${row.physical_frame}`);
+  assert.equal(actual.size,report.frame_checks.length,'no repeated mask checks');assert.deepEqual(actual,expected);
+  assert.equal(report.compact_atlas_rgba_bytes,compactBytes);assert.equal(report.full_frame_rgba_bytes,fullBytes);
+  assert.deepEqual(Object.keys(manifest.roles).sort(),report.roles.toSorted());
+  assert.deepEqual(['001','002','003','005','012','013','014','015','016','027','029','030','031','032','033','034','070','183','213','216'].map(id=>Boolean(manifest.roles[id])),Array(20).fill(true));
   assert.equal(manifest.roles['070'].event_only,true);
   assert.equal(manifest.alpha,128);
   for(const [path,hash] of Object.entries(report.output_hashes))

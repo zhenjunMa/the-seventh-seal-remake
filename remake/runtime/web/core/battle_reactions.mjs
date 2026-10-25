@@ -17,6 +17,34 @@ function bytes(raw,size,label){
 }
 function fixed(skill){return bytes(skill?.fixed_raw_hex,0x41d,'reaction skill');}
 function roleFor(data,actor){const r=data.roles[actor?.resource_id??actor?.id];requireValue(r,'Reaction actor source missing');return r;}
+/** Preflight every source normal-response variant without lookup RNG. A queued
+ * command must remain safe if another actor changes the victim's current pose.
+ * The recovered actor-Z modes2/3 retain their source records. Camera modes
+ * remain a separate executor and must still fail before command dispatch.
+ */
+export function nativeReactionTargetAvailability({skill,target,data}){
+  if(!data||!skill?.fixed_raw_hex||['native-support','native-revival'].includes(skill.battle_handler))return {available:true};
+  const role=roleFor(data,target),ids=new Set(role.skills.map(source=>fixed(source)[0])),blocked=new Set();
+  for(const action of skill.actions??[]){
+    const raw=bytes(action.raw_hex,0xb0,'contact action'),view=new DataView(raw.buffer,raw.byteOffset,raw.byteLength);
+    if(!view.getUint32(0x49,true))continue;
+    const ident=raw[0x62];
+    if(ident>=role.skill_count)return {available:false,reason:'该目标的原版受击动作尚未接入，当前不能使用这招。',code:'source-reaction-index'};
+    const argumentId=fixed(role.skills[ident])[0];
+    for(const current of ids){
+      let wanted=ident;
+      if([3,8,4].includes(current))wanted=argumentId===5?ident:3;
+      else if([2,6,5].includes(current))wanted=argumentId===5?5:(argumentId===11||current===11?11:2);
+      let selected=role.skills.filter(source=>fixed(source)[0]===wanted);
+      if(!selected.length&&[2,6,5].includes(current))selected=role.skills.filter(source=>fixed(source)[0]===5);
+      if(!selected.length)selected=role.skills.filter(source=>fixed(source)[0]===1);
+      for(const source of selected)if(source.actions.some(record=>{
+        const b=bytes(record.raw_hex,0xb0,'reaction action');return b[0]===1&&new DataView(b.buffer,b.byteOffset,b.byteLength).getUint32(1,true)===3&&![2,3].includes(b[0x47]);
+      }))blocked.add(source.original_skill_index);
+    }
+  }
+  return blocked.size?{available:false,reason:'这招对该目标的击退效果暂不可用。',code:'source-vertical-reaction',source_skill_indices:[...blocked]}:{available:true};
+}
 function actorFlags(actor){
   const a=actor.status_flags_raw,b=actor.status_by_address?.['0x0521f52a'];
   requireValue(a!==undefined||b!==undefined,'Reaction status flags missing');
@@ -40,7 +68,9 @@ export function validateForestReactionsData(data,content=runtimeContent){
       const f=fixed(s);requireValue(s.original_skill_index===sidx&&s.original_id_raw===f[0]&&Array.isArray(s.actions)&&s.actions.length,'Reaction original skill ordering invalid');
       s.actions.forEach(a=>bytes(a.raw_hex,0xb0,'reaction action'));
     }
-    for(const ident of [0,1,2,3,9,18,19])requireValue(r.skills.some(s=>s.original_id_raw===ident),'Required reaction id missing');
+    // 032 has no native id2/id3. 51C640 explicitly falls back through id5/id1
+    // when those lookups fail; source absence must reach that same branch.
+    for(const ident of [0,1,9,18,19])requireValue(r.skills.some(s=>s.original_id_raw===ident),'Required reaction id missing');
   }
   for(const address of ['0x50b520','0x41ef00','0x50b770','0x5016b0','0x51c640','0x50b3e0'])requireValue(data.evidence?.[address],'Reaction procedure evidence missing');
   requireValue(Object.values(data.roles).filter(r=>content.roles[r.id].side==='player').every(r=>r.skills.some(s=>s.original_id_raw===12))&&data.evidence?.['0x4ffe90'],'Death source evidence missing');
@@ -67,7 +97,96 @@ function descriptor(target,skill,policy,targetId,trace,data,reason,after=resetAf
     skill:selected,source_skill_index:selected?.original_skill_index??null,target_id:targetId,target_policy:policy,
     reason,after,trace,evidence:Object.values(data.evidence)};
 }
-function requireGrounded(t){if(t.special!==0||t.z!==0)throw new RangeError('Native 0x51CC00 airborne/special reaction dispatch is outside the grounded forest slice');}
+function landingPatch(actor,{forceAccelerated=false}={}){
+  if(actor.native_z_raw===0)return {};
+  const acceleration=integer(actor.native_vertical_acceleration_raw??actor.native_after_raw?.['0x0524a642']??0,'vertical acceleration',0,255);
+  let velocity=integer(actor.native_vertical_velocity_raw??actor.native_after_raw?.['0x0524a63e']??0,'vertical velocity');
+  if(acceleration){if(forceAccelerated||velocity<1)velocity=1;}
+  else if(velocity<0)velocity=(-velocity)|0;else if(velocity===0)velocity=10;
+  return {native_vertical_target_raw:0,native_vertical_counter_raw:0,native_vertical_velocity_raw:velocity,
+    native_after_raw:{'0x0524a63a':0,'0x0524a636':0,'0x0524a63e':velocity}};
+}
+/** 51CC00, including its 519FA0 return-motion and 519DD0 idle tail.
+ * Call at the native source end with native_active still intact. Hooks are
+ * synchronous transactions at the original 5002B0/42FE40 call boundaries;
+ * they return an actor snapshot, so later source lookups see their mutations.
+ */
+export function selectNativeAfterSourceReaction({actor,data,rng,threshold,onFinalizeDeath,onDispatch}){
+  validateForestReactionsData(data);inputActor(actor);
+  const role=roleFor(data,actor),trace=[],draw=drawFactory(rng,trace),after={native_after_raw:{}},effects=[];
+  let current=clone(actor),selected=null;
+  const patch=change=>{
+    const oldRaw=after.native_after_raw;Object.assign(after,change);after.native_after_raw={...oldRaw,...change.native_after_raw};
+    const raw={...current.native_after_raw,...change.native_after_raw};Object.assign(current,clone(change));current.native_after_raw=raw;
+  };
+  const output=reason=>({kind:selected?(selected.original_id_raw===0?'idle':'response'):'none',actor_id:actor.id,
+    skill:selected?clone(selected):null,source_skill_index:selected?.original_skill_index??null,
+    target_id:current.current_target_id,target_policy:'preserve',reason,after,trace,effects,
+    evidence:[...Object.values(data.evidence),'ev_17c4b3199dc1b5cb6278ffab2686449d8098e5784dd2ff814a562d148b7ddea0',
+      'ev_f85520dace8aea1bc83b2b93d1098640e01cbd89689b5eaeb66d0326f390cb9b',
+      'ev_88760cd8ca1b59ea22d1b7fee8a768daf8537a2ea0dad0faa4db7b09198f89b5']});
+  const lookup=(ident,active=true)=>{
+    selected=sourceLookup(role,ident,draw);
+    patch({current_skill:clone(selected??role.skills[0]),native_after_raw:{'0x0524a656':selected?.original_skill_index??0}});
+    if(!selected)return false;
+    patch({native_active:active,class_raw:selected.actions[0].class_raw,action_mask_raw:selected.actions[0].action_mask_raw,
+      native_after_raw:{'0x0521a778':Number(active),'0x0524a657':0,'0x0521a7a1':0,'0x0521a7a5':0,'0x0521f6b2':0}});
+    return true;
+  };
+  const hook=(callback,name)=>{
+    requireValue(typeof callback==='function',`Native ${name} transaction hook missing`);
+    const result=callback({actor:clone(current)});
+    requireValue(result?.actor?.id===actor.id&&!result?.then,`Native ${name} must return a synchronous actor snapshot`);
+    patch(result.actor);if(result.trace)trace.push(...clone(result.trace));if(result.descriptor)effects.push(clone(result.descriptor));
+  };
+  patch(landingPatch(current));
+  if(current.reaction_special_gate_raw!==0||(actorFlags(current)&0xe0))return output('source-end-status-gate');
+  if([2,8,3].includes(fixed(current.current_skill)[0])&&lookup(4))return output('source-end-landing');
+  if(fixed(current.current_skill)[0]===5&&lookup(8))return output('source-end-airborne');
+  if(current.state_raw===4){
+    if(current.native_z_raw===0)hook(onFinalizeDeath,'5002B0 death');
+    if(fixed(current.current_skill)[0]!==4)lookup(4);
+    return output('source-end-death');
+  }
+  if(current.state_raw>=5)return output('source-end-inactive-state');
+  if(fixed(current.current_skill)[0]===4){
+    const found=lookup(6);patch({settled_raw:0,native_after_raw:{'0x0521f69d':0}});
+    if(found)return output('source-end-get-up');
+  }
+  // 519FA0 returns1 only when it starts the original return-position id10.
+  if(!current.native_active){
+    if(current.native_z_raw!==0)patch(landingPatch(current));
+    else{
+      const busy=integer(current.reaction_busy_raw,'reaction busy',0,255);
+      if(!busy){
+        const x=integer(current.native_x_raw,'native x'),y=integer(current.native_y_raw,'native y'),
+          homeX=integer(current.native_home_x_raw,'native home x'),homeY=integer(current.native_home_y_raw,'native home y');
+        if((x!==homeX||y!==homeY)&&lookup(10)){
+          patch({native_after_raw:{'0x0524a64b':0,'0x0521f5f6':0}});return output('source-end-return-position');
+        }
+      }
+      if(current.state_raw===10)patch({state_raw:0,native_after_raw:{'0x0521a77b':0}});
+    }
+  }
+  // 51CC00 always calls 519DD0 after optional scheduler-command redispatch.
+  const recoveryTicks=integer(current.charge?.recovery_ticks??current.native_after_raw?.['0x0521f6a2']??0,'recovery ticks',0,0xffffffff);
+  if(recoveryTicks>99){
+    const value=Math.floor((Math.imul(integer(threshold,'scheduler threshold',1),recoveryTicks)>>>0)/100);
+    patch({reaction_inhibit_raw:value,charge:{...current.charge,recovery:value,recovery_ticks:0},
+      native_after_raw:{'0x0521f69e':value,'0x0521f6a2':0,'0x0521a7c6':6}});
+    hook(onDispatch,'42FE40 command');
+  }
+  if(fixed(current.current_skill)[0]===12)patch({state_raw:7,native_after_raw:{'0x0521a77b':7}});
+  patch({native_active:false,native_after_raw:{'0x0521a778':0}});
+  if(![4,5].includes(current.state_raw)){
+    effects.push({kind:'clear-native-chain',actor_id:actor.id,source:'0x504b80'});
+    patch({reaction_special_gate_raw:0,native_after_raw:{'0x0521f692':0}});lookup(0,false);
+    patch({native_after_raw:{'0x0524a657':0,'0x0521a7a1':0,'0x0521a7a5':0}});
+  }
+  patch({native_after_raw:{'0x0524a647':0,'0x0524a64b':0,'0x0521f6b1':0,'0x0521f6b2':0,'0x0521f5f7':0}});
+  effects.push({kind:'release-active-owner',actor_id:actor.id,source:'0x055df754'});
+  return output('source-end-idle');
+}
 /** 4FE300 is called in roster order by 50AC80. Lookup id11 once in the
  * controller, including the native draw for a singleton source candidate.
  * The actor's entry immunity/category block charging until its source ends.
@@ -90,44 +209,59 @@ export function selectNativeRevivalAnimation({actor,data,rng}){
   requireValue(skill,'Native revival animation id14 is missing');
   return {...descriptor(actor,skill,'preserve',actor.current_target_id,trace,data,'native-mode3-revival',{native_after_raw:{}}),kind:'revive'};
 }
+/** 51C640 is also called by periodic effect pulses, without an attacker.
+ * Its argument remains the source reaction selector, including its source
+ * index reads before the original ID lookup and fallback RNG draws.
+ */
+export function selectNativeNormalReaction({actor,ident,data,rng}){
+  validateForestReactionsData(data);const t=inputActor(actor),role=roleFor(data,actor),trace=[],draw=drawFactory(rng,trace);
+  integer(ident,'normal reaction selector',0,255);
+  if(t.immune||t.state>4||ident===5&&(t.flags&0xe0))return null;
+  requireValue(ident<role.skill_count,'Normal reaction source index invalid');
+  const argumentId=fixed(role.skills[ident])[0];let wanted=ident;
+  if([3,8,4].includes(t.current))wanted=argumentId===5?ident:3;
+  else if([2,6,5].includes(t.current))wanted=argumentId===5?5:(argumentId===11||t.current===11?11:2);
+  let selected=sourceLookup(role,wanted,draw);
+  if(!selected&&[2,6,5].includes(t.current))selected=sourceLookup(role,5,draw);
+  if(!selected)selected=sourceLookup(role,1,draw);
+  requireValue(selected,'Normal native idle fallback is not implemented');
+  const after=resetAfter(actor);after.current_target_id=null;after.native_after_raw['0x0521f68e']=-1;
+  const landing=argumentId!==5?landingPatch(actor,{forceAccelerated:true}):{};
+  return descriptor(actor,selected,'clear',null,trace,data,'normal-contact',{
+    ...after,...landing,native_after_raw:{...after.native_after_raw,...landing.native_after_raw}});
+}
 /** Caller commits returned after fields. Guard retains F68E including null;
  * dodge sets it to attacker even if its random counter check fails. No HP,
  * MP, gauge, target identity or caller-owned source record is mutated here.
  */
-export function applyContactReaction({attacker,target,result,record,data,rng}){
+export function applyContactReaction({attacker,target,result,record,data,rng,threshold,onFinalizeDeath,onDispatch}){
   validateForestReactionsData(data);
   const a=inputActor(attacker),t=inputActor(target),role=roleFor(data,target),raw=bytes(record?.raw_hex,0xb0,'contact action'),trace=[],draw=drawFactory(rng,trace);
   integer(result?.damage,'resolved damage',0,2147483647);
   if(result.skipped||result.native_return===-1)return null;
   const reaction=integer(result.reaction,'outReaction',0,2),specialBranch=reaction!==0&&t.state<4;
+  const sourceAfter=()=>{
+    const before=resetAfter(target),next=selectNativeAfterSourceReaction({actor:{...clone(target),...before,
+      native_after_raw:{...target.native_after_raw,...before.native_after_raw}},data,rng,threshold,onFinalizeDeath,onDispatch});
+    return {...next,after:{...before,...next.after,native_after_raw:{...before.native_after_raw,...next.after.native_after_raw}},trace:[...trace,...next.trace]};
+  };
   if(!specialBranch){
     if(result.damage===0||t.immune||t.state>4)return null;
     // Current forest contacts have +0x62=1; other source ids retain the same
     // normal selector, with original source index reads for the id5/id11 test.
-    const ident=raw[0x62];requireValue(ident<role.skill_count,'Normal reaction source index invalid');
-    if(ident===5&&(t.flags&0xe0))return null;
-    requireGrounded({...t,special:0});
-    const argumentId=fixed(role.skills[ident])[0];let wanted=ident;
-    if([3,8,4].includes(t.current))wanted=argumentId===5?ident:3;
-    else if([2,6,5].includes(t.current))wanted=argumentId===5?5:(argumentId===11||t.current===11?11:2);
-    let selected=sourceLookup(role,wanted,draw);
-    if(!selected&&[2,6,5].includes(t.current))selected=sourceLookup(role,5,draw);
-    if(!selected)selected=sourceLookup(role,1,draw);
-    requireValue(selected,'Normal native idle fallback is not implemented');
-    const after=resetAfter(target);after.current_target_id=null;after.native_after_raw['0x0521f68e']=-1;
-    return descriptor(target,selected,'clear',null,trace,data,'normal-contact',after);
+    return selectNativeNormalReaction({actor:target,ident:raw[0x62],data,rng});
   }
   if(reaction===1){
     const after=resetAfter(target),ident=raw[0x77];
     if(ident===0||t.current===19)return descriptor(target,null,'preserve',target.current_target_id,trace,data,'guard-current-skill-preserved',after);
-    requireGrounded(t);
+    if(t.special!==0||t.z!==0)return sourceAfter();
     const wanted=draw(10,'guard-response-choice')<7?ident:19,selected=sourceLookup(role,wanted,draw);
     requireValue(selected,'Guard native idle fallback is not implemented');
     return descriptor(target,selected,'preserve',target.current_target_id,trace,data,'guard-contact',after);
   }
   // 41EF00 evaluates the current target skill before 50B770 dispatch. The
   // source call is suppressed by action +0x48, without its probability draw.
-  requireGrounded(t);let counter=0;
+  let counter=0;
   if(raw[0x48]===0){
     const status=integer(target.status_by_address?.['0x0521f5a9'],'native counter status 0x0521f5a9');
     const side=integer(target.side_raw,'side_raw',0,255),link=integer(target.role_link_raw,'role_link_raw',0,2147483647);
@@ -138,7 +272,8 @@ export function applyContactReaction({attacker,target,result,record,data,rng}){
     const roll=draw(100,'dodge-counter'),blocked=[2,3,4,5,8].includes(t.current);
     counter=Number(roll<=threshold&&!blocked);trace.push({kind:'counter',term3:effective.term3,threshold,roll,blocked,counter});
   }
-  if(t.immune)return descriptor(target,null,'attacker',attacker.id,trace,data,'dodge-immune-gate',{current_target_id:attacker.id,native_after_raw:{}});
+  if(t.immune)return descriptor(target,null,'preserve',target.current_target_id,trace,data,'dodge-immune-gate',{native_after_raw:{}});
+  if(t.special!==0||t.z!==0)return sourceAfter();
   let wanted=counter?19:18;
   if(counter&&attacker.native_active&&a.current===19)wanted=18;
   const selected=sourceLookup(role,wanted,draw);requireValue(selected,'Dodge native idle fallback is not implemented');

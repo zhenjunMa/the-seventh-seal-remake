@@ -14,6 +14,7 @@ import {validateProgram} from '../web/core/events.mjs';
 import {validateQuests} from '../web/core/story_quests.mjs';
 import {STORY_RESOURCE_TABLES,storyTextId,validateStorySelection,hydrateStoryTable} from '../web/core/story_packages.mjs';
 import {compileTlkFlow,compileEventFlow} from '../web/core/story_flow_compiler.mjs';
+import {scriptedBattleSource} from '../web/core/scripted_battle.mjs';
 
 const web=fileURLToPath(new URL('../web/',import.meta.url));
 const need=(ok,message)=>{if(!ok)throw new Error(`剧情构建：${message}`);};
@@ -35,6 +36,7 @@ function compileTable(mapId,source,texts){
   table.records=table.records.map(record=>{
     const raw=Uint8Array.from(record.raw_hex.match(/../g),part=>parseInt(part,16));
     const {raw_hex,evidence,header_bytes_2_to14_raw,text_raw,...row}=record;
+    if(record.kind===5)row.scripted_battle=scriptedBattleSource(record);
     row.text_id=storyTextId(mapId,record.id);row.portrait_id=raw[2];putText(texts,row.text_id,text_raw);
     row.choices=record.kind===0&&record.style===1?chapterChoices(record).map(({text,...choice})=>{
       const text_id=`${row.text_id}:choice:${choice.index}`;putText(texts,text_id,text);return {...choice,text_id};
@@ -147,7 +149,7 @@ export async function compileStoryPackages({content=runtimeContent,definition:co
   for(const [id,map]of Object.entries(maps)){
     const texts={};
     const chapter=story.maps[id]?compileTable(id,story.maps[id],texts):null;
-    const programs=Object.fromEntries(Object.entries(story.programs).filter(([,value])=>value.expected.control_map===id).map(([key,value])=>{
+    const programs=Object.fromEntries(Object.entries(story.programs).filter(([,value])=>value.maps.includes(id)).map(([key,value])=>{
       const {dialogues,...program}=structuredClone(value);return [key,program];
     }));
     const flows={},events=[];

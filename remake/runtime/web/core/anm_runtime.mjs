@@ -2,13 +2,21 @@
 // TLK interpretation and persistent writes remain with their owning runner.
 import {linkPlaybackAbort,playbackTask} from './story_playback.mjs';
 
-export const COMMON_ANM_OPCODES = new Set([16,17,30,31,32,33,35,48,49]);
+export const COMMON_ANM_OPCODES = new Set([11,16,17,30,31,32,33,35,48,49,60,62,63,255]);
+
+export function anmFilename(command){
+  const bytes=Uint8Array.from(command.raw_hex.match(/../g),value=>parseInt(value,16));
+  return new TextDecoder().decode(bytes.slice(54,74)).split('\0')[0];
+}
 
 export class AnmActions {
   constructor({hooks, context, positions, controller = new AbortController(),
-    describeError = error => error, nativeMetadata = false, playback = null}) {
+    describeError = error => error, nativeMetadata = false, playback = null,visualState={}}) {
     Object.assign(this, {hooks, context, positions, controller, describeError, nativeMetadata, playback});
     this.pending = [];
+    // Original data-segment defaults at679244/679248. Parameter0 preserves
+    // the current playback-session value, rather than inventing a reset.
+    this.visualState={shakeCycles:10,shakeAmplitudeNative:4,...visualState};
     this.error = null;
     this.failure = new Promise((resolve, reject) => { this.rejectFailure = reject; });
     this.failure.catch(() => {});
@@ -24,6 +32,7 @@ export class AnmActions {
   call(hook, command, payload = {}) {
     const invoke=()=>{
       this.check();
+      if(typeof this.hooks[hook]!=='function')throw new Error(`剧情演出接口缺失：${hook}`);
       return playbackTask(this.hooks[hook]({command, source:command.source,...this.context(),
         signal:this.controller.signal,...payload}),this.controller.signal);
     };
@@ -58,15 +67,30 @@ export class AnmActions {
     const recordPosition = () => this.positions.set(actor, {
       map_id:this.context().mapId, x:position.x, y:position.y});
     switch (command.opcode) {
+      case 11: {
+        const payload={kind:'position',x:position.x,y:position.y,modeRaw:command.byte_plus29};
+        // Native mode0 scrolls synchronously; mode1 sets immediately; other
+        // modes start 433E90's asynchronous camera motion (40ms per step).
+        if(command.byte_plus29>=2)this.launch('camera',command,payload);
+        else await this.call('camera',command,payload);
+        break;
+      }
       case 16:
         await this.frame(command, command.u32_plus25 + 1); break;
       case 17:
-        if (typeof this.hooks.fade !== 'function') throw new Error('剧情淡入淡出接口缺失');
-        await this.call('fade', command, {kind:command.byte_plus29 ? 'out':'in', effectRaw:actor});
+        if(actor===3){
+          if(command.u32_plus13)this.visualState.shakeCycles=command.u32_plus13<<1;
+          if(command.u32_plus17)this.visualState.shakeAmplitudeNative=command.u32_plus17|0;
+          await this.call('camera',command,{kind:'shake',modeRaw:command.byte_plus29,
+            cycles:this.visualState.shakeCycles,amplitude:this.visualState.shakeAmplitudeNative*2});
+        }else{
+          if (typeof this.hooks.fade !== 'function') throw new Error('剧情淡入淡出接口缺失');
+          await this.call('fade', command, {kind:command.byte_plus29 ? 'out':'in', effectRaw:actor});
+        }
         await this.frame(command); break;
       case 30:
         await this.flush();
-        await this.call('actor', command, {kind:'restore', actor:null, controlledActor:0}); break;
+        await this.call('actor', command, {kind:'restore', actor:null, controlledActor:this.context().controlledActor??0}); break;
       case 31: {
         const pendingCount = await this.flush();
         await this.call('wait', command, {kind:'barrier', frames:1,
@@ -95,6 +119,16 @@ export class AnmActions {
         this.launch('actor', command, {kind:'facing', actor, blendModeRaw:command.byte_plus29,
           nativeStateRaw:command.byte_plus29 + 1, nativeField:'0x4bd',
           motionModeRaw:command.u32_plus1, ...(this.nativeMetadata ? {hidden:false}: {})}); break;
+      case 60:
+        await this.call('media',command,{filename:anmFilename(command)});break;
+      case 62:
+        await this.call('sound',command,{kind:command.byte_plus29===1?'restore-music':'play',
+          filename:anmFilename(command),persistent:command.byte_plus29===2,modeRaw:command.byte_plus29});break;
+      case 63:
+        await this.call('sound',command,{kind:'release',modeRaw:command.byte_plus29});break;
+      // 473E30's default returns zero. 255 is a shipped annotation record;
+      // execution continues through subsequent map and dialogue commands.
+      case 255:break;
       default: throw new Error(`ANM指令${command.opcode}不属于共用执行核心`);
     }
   }

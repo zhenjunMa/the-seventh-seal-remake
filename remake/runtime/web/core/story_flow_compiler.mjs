@@ -1,5 +1,6 @@
 // Source adapters produce one runtime format; neither adapter executes events.
 import {validateStoryFlow} from './story_flow.mjs';
+import {NATIVE_STORY_CONDITION_TYPES,nativeConditionByte} from './native_story_conditions.mjs';
 const copy=structuredClone;
 const nativeFlowId=mapId=>`${mapId}:tlk`;
 export {nativeFlowId};
@@ -20,12 +21,17 @@ export function compileTlkFlow(table,{choices}){
       if(!flagIndex(index)||bit<-32||bit>32)add('unsupported',{reason:'剧情旗标变更无效'});
       else add(bit>0?'set_flag_bit':'clear_flag_bit',{index,bit:Math.abs(bit)});
     }else if(type!==0){
-      const op={1:'set_native_object',2:'restore_party',4:'request_save',5:'give_item'}[type];
+      const op={1:'set_native_object',2:'restore_party',4:'request_save',5:'give_item',9:'world_map_command',10:'restore_native_resources',11:'restore_native_resources',14:'learn_native_skill',16:'native_noop',17:'unlock_recipe'}[type];
       add(op??'unsupported',op?{}:{reason:`剧情变更 ${type} 尚未接入`});
     }
-    if(record.condition_type!==0)add('unsupported',{reason:`剧情条件 ${record.condition_type} 尚未接入`});
+    if(record.condition_type!==0){
+      if(NATIVE_STORY_CONDITION_TYPES.has(record.condition_type))add('test_native_condition',{
+        condition_type:record.condition_type,condition_index:record.condition_index,condition_bit:record.condition_bit,
+        condition_byte_raw_0b:nativeConditionByte(record),if_true:at(record.if_true),if_false:`${entry}:${sequence+1}`});
+      else add('unsupported',{reason:`剧情条件 ${record.condition_type} 尚未接入`});
+    }
     const testBit=record.condition_bit|0,testIndex=record.condition_index||table.map_flag_index;
-    if(testBit){
+    if(record.condition_type===0&&testBit){
       if(!flagIndex(testIndex)||testBit<1||testBit>32)add('unsupported',{reason:'剧情旗标条件无效'});
       else add('test_flag_bit',{index:testIndex,bit:testBit,if_true:at(record.if_true),if_false:`${entry}:${sequence+1}`});
     }
@@ -36,6 +42,8 @@ export function compileTlkFlow(table,{choices}){
       if(options.length)add('choice',{...dialogue,choices:options.map(row=>({...copy(row),target:at(row.recordId)}))});
       else if(record.text_raw)add('say',dialogue);
     }else if(record.kind===1)add('animation',{program_id:record.text_raw.replace(/\.anm$/i,'').toLowerCase()});
+    else if(record.kind===2)add('transfer_native_map');
+    else if(record.kind===5)add('native_battle');
     else add('unsupported',{reason:`对白类型 ${record.kind} 尚未接入`});
     add('jump',{target:at(record.next)});
   }

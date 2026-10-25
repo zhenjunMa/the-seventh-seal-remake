@@ -44,7 +44,12 @@ export function deriveRuntimeConfiguration(data){
     items};
 }
 
-function validateRange(v,label,min=0){fields(v,['minimum','maximum_exclusive'],label);integer(v.minimum,label,min);integer(v.maximum_exclusive,label,min);fail(v.minimum<=v.maximum_exclusive&&v.maximum_exclusive-v.minimum<=0x7fffffff,`${label}上下限无效`);}
+function validateRange(v,label,min=0,{ordered=false}={}){
+  fields(v,['minimum','maximum_exclusive'],label);integer(v.minimum,label,min);integer(v.maximum_exclusive,label,min);
+  // 41C610 attack/defense retain low when high <= low. The scheduler's
+  // separate speed sampler requires an ordered range in this runtime.
+  fail((!ordered||v.minimum<=v.maximum_exclusive)&&v.maximum_exclusive-v.minimum<=0x7fffffff,`${label}上下限无效`);
+}
 
 function expandBundle(baseline,bundle){
   fields(bundle,['manifest',...Object.keys(CONFIG_FILES)],'配置文件集合');
@@ -73,8 +78,8 @@ function validateParameters(section,id,p,baseline,data,owner){
     if(id==='scheduler'){integer(p.average_speed_factor,'average_speed_factor',1,10000);integer(p.default_preparation_delay,'default_preparation_delay',1,1000000);}
     else if(id.startsWith('enemy_')){
       integer(p.hp_maximum,`${id}.hp_maximum`,1,1000000);integer(p.mp_maximum,`${id}.mp_maximum`,0,1000000);
-      for(const k of ['attack','defense','speed'])validateRange(p[k],`${id}.${k}`,k==='speed'?1:0);
-      for(const k of ['attack','defense','speed'])fail(p[k].maximum_exclusive<=1000000,`${id}.${k}超出当前运行范围`);
+      for(const k of ['attack','defense','speed'])validateRange(p[k],`${id}.${k}`,k==='speed'?1:0,{ordered:k==='speed'});
+      for(const k of ['attack','defense','speed'])fail(p[k].minimum<=1000000&&p[k].maximum_exclusive<=1000000,`${id}.${k}超出当前运行范围`);
       fail(Array.isArray(p.element_resistance)&&p.element_resistance.length===6,`${id}.element_resistance须为六槽`);p.element_resistance.forEach(n=>integer(n,`${id}.element_resistance`,0,1000000));
     }else{
       integer(p.combination_chance_percent,`${id}.combination_chance_percent`,0,100);

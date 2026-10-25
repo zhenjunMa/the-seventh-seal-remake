@@ -31,19 +31,33 @@ export function composeNativeSequence(skills,indices){
 export function directSequence(skill){return {kind:'single',handler:skill.battle_handler??'direct',skill_indices:[skill.index??skill.original_skill_index],records:skill.actions.map(a=>({raw_hex:a.raw_hex,source:clone(skill.source),source_skill_index:skill.index??skill.original_skill_index,source_action_index:a.index,source_offset:a.offset,source_raw_hex:a.raw_hex}))};}
 export function compileNativeSequence(meta,roleId,plan,layers=[]){
  const role=meta.roles.find(r=>r.id===roleId);fail(role&&Array.isArray(plan.records),'原组合表现资源缺失');
+ const independent=plan.records.some(record=>{const b=recordBytes(record.raw_hex),v=view(b);return b[0]===1&&v.getUint32(1,true)===4&&!b[0x1d]&&v.getUint32(0x49,true)!==0;});
+ const verticalClock=plan.records.some(record=>{const b=recordBytes(record.raw_hex);return b[0]===1&&view(b).getUint32(1,true)===3;});
  const pairs=new Map(layers.filter(l=>l.role_id===roleId).flatMap(l=>l.frames).map(p=>[p.source_frame,p])),steps=[],segments=[];
  for(let ri=0;ri<plan.records.length;ri++){
   const record=plan.records[ri],b=recordBytes(record.raw_hex),v=view(b),group=v.getUint32(1,true);
   if(b[0]!==0){
-   const magic=plan.kind==='single'&&['effect-carrier','native-revival'].includes(plan.handler);
-   fail(b[0]===1&&(group===11||magic&&[0,4,6].includes(group)),'原组合类型命令未支持');
+   const vertical=group===3&&[2,3].includes(b[0x47]);
+   const magic=vertical||plan.kind==='single'&&['effect-carrier','native-revival','native-support'].includes(plan.handler);
+   fail(b[0]===1&&(group===11||vertical||magic&&[0,4,6,7,8].includes(group)),'原组合类型命令未支持');
    if(!magic)continue;
    const previous=steps.findLast(s=>!s.command_raw&&s.command_raw!==0),visual=previous?.visual??previous??null;
    const base={segment_index:visual?.segment_index??0,plan_record_index:ri,chr_record_index:record.source_action_index,
     source_skill_index:plan.skill_indices[0],class_raw:b[0x24],action_mask_raw:b[0x78],source:clone(record),
     command_raw:group,visual:visual?{action_index:visual.action_index,action_frame:visual.action_frame,source_frame:visual.source_frame,pair:clone(visual.pair)}:null};
    if(group!==4){steps.push({...base,index:steps.length,logical_frame:0,event:null,effects:[],duration_ms:0,
-    control:{mode_raw:b[0x47],step_i32_raw:v.getInt32(0x1e,true),amount_i32_raw:v.getInt32(5,true)}});continue;}
+    control:{mode_raw:b[0x47],step_i32_raw:v.getInt32(0x1e,true),amount_i32_raw:v.getInt32(5,true)},...(vertical?{vertical_raw_hex:record.raw_hex}:{})});
+    if(group===7||group===8){
+     const mode=b[0x47],ticks=group===7?({1:7,7:39}[mode]):({1:30,2:30,3:30,4:30,5:30,6:30,7:30,9:39}[mode]);
+     fail(Number.isInteger(ticks),'原角色显隐模式尚未恢复');
+     const previous=steps.findLast(step=>step.command_raw===undefined),nativeAction=role.actions.find(action=>action.index===previous?.action_index);
+     const clock=group===7?60:new DataView(Uint8Array.from(nativeAction.native_raw_hex.match(/../g),h=>parseInt(h,16)).buffer).getUint32(1,true);
+     fail(clock>0,'原角色显隐时钟缺失');
+     const step=steps.at(-1);step.duration_ms=ticks*clock;step.visibility={kind:group===7?'appear':'disappear',mode,complete_ticks:ticks,clock_ms:clock};
+     steps.push({...base,index:steps.length,logical_frame:1,event:null,effects:[],duration_ms:0,
+       visibility_end:true,control:clone(step.control),visibility:clone(step.visibility)});
+    }
+    continue;}
    const token=new TextDecoder().decode(b.slice(9,29)).split('\0')[0].replace(/\.dgp$/i,''),asset=meta.effects.find(e=>e.id===token);
    // 51FCC4 failed CreateFile -> 505400/505990 return before allocating a
    // carrier or setting F5F6 wait. 5130D0 then advances the source record.
@@ -54,16 +68,29 @@ export function compileNativeSequence(meta,roleId,plan,layers=[]){
    fail(asset&&asset.native_raw_hex,'原类型4效果动作缺失');
    const d=Uint8Array.from(asset.native_raw_hex.match(/../g),h=>parseInt(h,16)),dv=view(d);
    const start=v.getUint32(0x26,true),end=v.getUint32(0x2a,true)||asset.frames.length,contact=v.getUint32(0x49,true),wait=b[0x1d]!==0;
-   fail(start>=0&&end>start&&end<=asset.frames.length&&(!contact||wait&&contact>=start&&contact<end),'原特效接触范围未支持');
+   fail(start>=0&&end>start&&end<=asset.frames.length&&(!contact||contact>start&&contact<end),'原特效接触范围未支持');
    const frames=Array.from({length:end-start},(_,i)=>(d[0xd]&15)?start+i:d[0x16+start+i]);
    const slot=b[0x22]?'target':'actor',targetEffect=new TextDecoder().decode(b.slice(0x4e,0x62)).split('\0')[0].replace(/\.dgp$/i,'');
+   if(!wait){
+    const interval=dv.getUint32(1,true);fail(interval>0,'原独立特效时钟缺失');
+    // 505990 copies the source index/target and leaves +3FE0 zero. 507930
+    // visits live carriers in allocation order; 5074C0 increments the logical
+    // cursor before contact and end checks. No F5F6 wait is set for +1D=0.
+    const carrierSteps=Array.from({length:end-start},(_,i)=>{const logical=start+i+1,hit=logical===contact&&logical<end;
+     return {...base,independent_carrier:true,logical_frame:logical,carrier_asset_id:token,
+      carrier_source_frame:logical<end?frames[i+1]:null,carrier_end:logical===end,
+      effect_contact:hit,effect_token:hit?1:0,event:hit?{frame:logical,field:'0x49'}:null,
+      effects:hit&&targetEffect?[{asset_id:targetEffect,frame:logical,slot:'target'}]:[],duration_ms:interval};});
+    steps.push({...base,index:steps.length,logical_frame:start,event:null,effects:[],duration_ms:0,
+     carrier_spawn:{asset_id:token,slot,start,end_exclusive:end,frames,interval_ms:interval,steps:carrierSteps}});continue;
+   }
    const visit=wait?frames:[frames[0]];
    visit.forEach((frame,i)=>{const logical=start+i,effects=[];
     if(i===0)effects.push({asset_id:token,frame:logical,slot,unconditional:true,frame_count:end-start});
     if(contact&&logical===contact&&targetEffect)effects.push({asset_id:targetEffect,frame:logical,slot:'target'});
     steps.push({...base,index:steps.length,logical_frame:logical,carrier_asset_id:token,carrier_source_frame:frame,
      effect_contact:contact!==0&&logical===contact,effect_token:contact!==0&&logical===contact?1:0,
-     event:contact!==0&&logical===contact?{frame:logical,field:'0x49'}:null,effects,duration_ms:wait?(plan.handler==='native-revival'?dv.getUint32(1,true):undefined):0});
+     event:contact!==0&&logical===contact?{frame:logical,field:'0x49'}:null,effects,duration_ms:wait?(['native-revival','native-support'].includes(plan.handler)?dv.getUint32(1,true):undefined):0});
    });continue;
   }
   const action=role.actions.find(a=>a.index===group);fail(action&&action.native_raw_hex,'原组合DGP动作缺失');
@@ -82,8 +109,8 @@ export function compileNativeSequence(meta,roleId,plan,layers=[]){
    const logical=b[0x1d]?end-1-i:start+i,contact=v.getUint32(0x49,true),source_frame=action.first_frame+frame;
    steps.push({index:steps.length,segment_index:si,plan_record_index:ri,chr_record_index:record.source_action_index,action_index:group,action_frame:frame,logical_frame:logical,source_frame,
     source_skill_index:combo?b[0x92]:plan.skill_indices[0],class_raw:b[0x24],action_mask_raw:b[0x78],source:clone(record),event:contact!==0&&contact===logical?{frame:logical,field:'0x49'}:null,
-    effects:effectList.filter(e=>e.frame===logical),pair:clone(pairs.get(source_frame)??null),...(plan.kind==='single'&&plan.handler==='native-revival'?{duration_ms:dv.getUint32(1,true)}:{})});
+    effects:effectList.filter(e=>e.frame===logical),pair:clone(pairs.get(source_frame)??null),...(independent||verticalClock||plan.kind==='single'&&['native-revival','native-support'].includes(plan.handler)?{duration_ms:dv.getUint32(1,true)}:{})});
   });
  }
- fail(steps.length>0&&(plan.allow_no_contacts||steps.some(s=>s.event)),'原完整技能缺少接触事件');return {steps,segments};
+ fail(steps.length>0&&(plan.allow_no_contacts||steps.some(s=>s.event||s.carrier_spawn?.steps.some(c=>c.event))),'原完整技能缺少接触事件');return {steps,segments,independent_carriers:independent};
 }

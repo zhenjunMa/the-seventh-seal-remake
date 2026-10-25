@@ -1,7 +1,7 @@
 {
   "schema": "seventh-seal-chapter-content-checklist",
   "version": 1,
-  "scope": "真实新游戏至首次白木森林探索、战斗、返回及存读档的可玩循环；implemented表示代码已接入，当前验收状态与待办见remake/assessment/validation_design.txt，所列浏览器证据仅说明各自记录的范围",
+  "scope": "真实新游戏至首次白木森林循环，以及火之谷地图、NPC与原旗标重访的分阶段接入；implemented表示代码已接入，当前验收状态与待办见remake/assessment/validation_design.txt，所列浏览器证据仅说明各自记录的范围",
   "browser_evidence": "remake/runtime/evidence/chapter_systems_browser_validation.json",
   "operation_menu_browser_evidence": "remake/runtime/evidence/operation_menu_browser_validation.json",
   "original_game_execution_observed": false,
@@ -25,8 +25,11 @@
     {"id":"audio","kind":"required-presentation","status":"implemented","sources":["GAME.exe","Fight_Bk/stage13.scn","sound/mn170-1.wav","sound/mn700-1.wav"],"tests":["test_audio.mjs"],"description":"地图、世界地图、战斗音乐，人物/药品动作音效、音量、静音和清理"},
     {"id":"forest-background","kind":"required-presentation","status":"implemented","sources":["GAME.exe","Fight_Bk/stage13.scn","Fight_Bk/FS13A.DGP","Fight_Bk/FG13A.DGP","Fight_Bk/FB13A.DGP"],"tests":["test_forest_stage.mjs"],"description":"默认640×480构图与地面裁剪、天空帧、场景物件深度排序；动态镜头和实时原时钟仍待对照"},
     {"id":"save-load","kind":"required-system","status":"implemented","sources":["GAME.exe","Map/m17010.TLK"],"tests":["test_runtime.mjs","test_items.mjs","test_chapter.mjs","test_save_menu.mjs","test_save_controller.mjs","test_save_storage.mjs","test_save_files.py"],"description":"通讯水晶原始选择／存档指令、00–19栏位与覆盖确认、F4快速保存／F5快速读取；重制JSON写入remake/saves，保留旧单档及浏览器存档迁移，原存档只读且不直接兼容"},
-    {"id":"village-dialogues","kind":"optional","status":"implemented-bounded","sources":["Map/m17020.TLK"],"tests":["test_chapter.mjs"],"description":"已覆盖普通文本和type0旗标分支；不扩充新主线前置条件"},
-    {"id":"later-story","kind":"later-story","status":"deferred","sources":["Map/m17010.TLK","Map/m17020.TLK"],"tests":["test_chapter.mjs"],"description":"flag12/16后续ANM、援攻72和特殊败北TLK；未恢复分支明确拒绝，当前待办以remake/assessment/validation_design.txt为准"},
+    {"id":"fire-valley-index","kind":"optional-source","status":"implemented","sources":["Map/m17010.dat","Map/m17030.dat","Map/m17030-1.dat","Map/m17030-2.dat"],"tests":["test_fire_valley_index.py"],"description":"全21地图／147NPC／361TLK来源、旗标读写、加载／到达入口和ANM关联；索引完整不等于全部后期主线可玩"},
+    {"id":"fire-valley-layout","kind":"required-system","status":"implemented","sources":["GAME.exe","Map/m17010.dat","Map/m17020.dat","Map/m17028.dat","Animate/m17010-4.anm","Animate/m17010-5.anm"],"tests":["test_map_stage.mjs","test_native_map_entry.py","test_native_map_variants.mjs"],"description":"原加载8A与到达13A分离；按真实存档旗标投影首次／重访显隐站位，读档与缩略图不重播剧情，变体保留独立身份"},
+    {"id":"village-dialogues","kind":"required","status":"implemented","sources":["Map/m17020.TLK","Map/m17024.TLK","Map/m17028.TLK"],"tests":["test_fire_valley_npc_interactions.mjs","test_native_story_conditions.mjs","test_native_story_mutations.mjs"],"description":"63个原NPC对白入口显式登记，旗标／物件／物品／队员条件与水晶赠礼去重，学习与配方原变更保留并原子提交"},
+    {"id":"jute-join","kind":"required-system","status":"implemented","sources":["Fight_Role/005.CHR","Fight_Role/005.dgp","Animate/m17010-2.anm"],"tests":["test_jute_source_readiness.py"],"description":"005原攻击19–22、全局帧池读取、原入队／重复入队及菜单／伤害RNG契约；完整后期主线另列"},
+    {"id":"later-story","kind":"later-story","status":"deferred","sources":["Map/m17032.TLK","Map/m17030-2.TLK","Animate/m17010-3.anm","Animate/m17030-1.anm"],"tests":["test_chapter.mjs"],"description":"祭坛完整演出、stage12剧情战斗、候补／离队和媒体指令尚未贯通；未恢复分支明确阻断，当前待办以remake/assessment/validation_design.txt为准"},
     {"id":"exact-presentation","kind":"fidelity","status":"deferred","sources":["GAME.exe"],"tests":[],"description":"原程序实玩对照、镜头/位移/时钟/混色/字体与尚未覆盖的声音；目前源素材及浏览器预览不冒称完全复刻"}
   ]
 }

@@ -103,6 +103,35 @@ export function elementalTerms(attacker,target,skill) {
   relationship=Math.max(0,relationship);
   return {index,power,resistance,relationship,evidence:COMBAT_RULES_EVIDENCE.elements};
 }
+/** 501930 uses the carrier's skill index in each actor's own 200-slot table.
+ * Loaded slots retain their CHR record; only slots beyond skill_count are zero.
+ * This source lookup is independent of the target's currently playing pose.
+ */
+export function nativeEffectContextForTarget(skill,target,roles){
+  const context=structuredClone(skill.effect_context??{});
+  if(context.effect_lookup!=='same-index-source-table')return context;
+  const id=target.resource_id??target.id,role=roles?.[id],index=skill.original_skill_index;
+  if(!role||!Array.isArray(role.skills)||role.skills.length!==role.skill_count||index<0||index>=200||
+      role.source?.path!==`Fight_Role/${id}.CHR`||role.source.sha256!==target.source?.sha256)
+    throw new RangeError('Effect-token target original skill table is missing or differs from its actor');
+  const source=role.skills[index];
+  if(index<role.skill_count&&(!source||source.original_skill_index!==index||source.source?.path!==role.source.path||source.source.sha256!==role.source.sha256))
+    throw new RangeError('Effect-token target original skill index differs');
+  context.effect_target_skill={fixed_raw_hex:source?.fixed_raw_hex??'00'.repeat(0x41d),initialized_slots:200,
+    source_skill_count_by_role:{[id]:role.skill_count},source:structuredClone(role.source),source_skill_index:index};
+  return context;
+}
+export function validateNativeEffectBinding(skill,roles){
+  const context=skill.effect_context,index=skill.original_skill_index;
+  if(skill.battle_handler!=='effect-carrier'||context?.effect_token!==1||context.effect_source_skill_index!==index||index<0||index>=200)
+    throw new RangeError('Effect-token source binding differs');
+  if(context.effect_lookup==='same-index-source-table'){
+    for(const [id,role]of Object.entries(roles))if(role.source?.path!==`Fight_Role/${id}.CHR`||!Array.isArray(role.skills)||role.skills.length!==role.skill_count||role.skills.some((s,i)=>s.original_skill_index!==i||s.source?.sha256!==role.source.sha256))
+      throw new RangeError('Effect-token target source table is incomplete');
+  }else for(const [id,role]of Object.entries(roles))if(role.skill_count>index||context.effect_target_skill?.source_skill_count_by_role?.[id]!==role.skill_count)
+    throw new RangeError('Effect-token source is outside the fresh registered carrier scope');
+  return true;
+}
 /** Pure result. Controller commits HP and mp_cost once, then may update
  * target.settled_raw with after_settled_raw. target.current_skill is mandatory.
  * Current scope admits direct token0 and registered fresh-slot carriers. The
@@ -115,11 +144,14 @@ export function resolveAction({attacker,target,skill,rng,context={}}) {
   const a=actorView(attacker),t=actorView(target),s=skillView(skill),ts=skillView(target.current_skill);
   const token=integer(context.effect_token??0,'effect_token',0,200),effect=token!==0;
   const effectIndex=context.effect_source_skill_index,targetSkillCount=context.effect_target_skill?.source_skill_count_by_role?.[target.resource_id??target.id];
+  const sameIndex=context.effect_lookup==='same-index-source-table',targetId=target.resource_id??target.id;
+  const sourceOwner=skill.source?.path?.match(/^Fight_Role\/(\d{3})\.CHR$/)?.[1];
   if(effect&&(token!==1||skill.battle_handler!=='effect-carrier'||!Number.isInteger(effectIndex)||effectIndex<0||effectIndex>=200||effectIndex!==skill.original_skill_index||
-      (attacker.resource_id??attacker.id)!==skill.actor_id||
-      s.u32(0x32)!==0x1102||context.effect_target_skill?.initialized_slots!==200||
-      !Number.isInteger(targetSkillCount)||targetSkillCount<0||targetSkillCount>effectIndex||
-      context.effect_target_skill?.fixed_raw_hex!=='00'.repeat(0x41d)))throw new RangeError('Effect-token source is outside the fresh registered carrier scope');
+      (attacker.resource_id??attacker.id)!==(sameIndex?sourceOwner:skill.actor_id)||
+      (sameIndex?![2,3].includes(s.u32(0x32)&15):s.u32(0x32)!==0x1102)||context.effect_target_skill?.initialized_slots!==200||
+      !Number.isInteger(targetSkillCount)||targetSkillCount<0||targetSkillCount>200||
+      (sameIndex?(context.effect_target_skill.source?.path!==`Fight_Role/${targetId}.CHR`||context.effect_target_skill.source.sha256!==target.source?.sha256||context.effect_target_skill.source_skill_index!==effectIndex):
+        targetSkillCount>effectIndex||context.effect_target_skill?.fixed_raw_hex!=='00'.repeat(0x41d))))throw new RangeError('Effect-token source is outside the fresh registered carrier scope');
   const globalGate=integer(context.global_055ee004??0,'global_055ee004');
   const mp_cost=integer(skill.mp_cost,'source-backed MP cost',0,2147483647),trace=[];
   const evidence=Object.values(COMBAT_RULES_EVIDENCE),finish=(x)=>({mp_cost,trace,evidence,...(skill.configuration?{configuration:structuredClone(skill.configuration)}:{}),...x});

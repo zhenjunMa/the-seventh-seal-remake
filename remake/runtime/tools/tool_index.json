@@ -1,8 +1,8 @@
 {
   "schema": "seventh-seal-tool-index",
   "version": 1,
-  "updated": "2026-10-23",
-  "registered_steps": 39,
+  "updated": "2026-10-25",
+  "registered_steps": 41,
   "content_plan": [
     "chapter-maps",
     "chapter-story",
@@ -37,6 +37,7 @@
     "prologue-presentation",
     "opening-maps",
     "map-effects",
+    "story-media",
     "content"
   ],
   "tools": [
@@ -110,7 +111,8 @@
         "export_operation_menu.py",
         "export_party_combat.py",
         "export_party_rewards.py",
-        "export_party_skills.py"
+        "export_party_skills.py",
+        "export_story_media.py"
       ]
     },
     {
@@ -332,13 +334,25 @@
       "build_targets": [
         "enemies"
       ],
-      "imported_by": []
+      "imported_by": [
+        "build_runtime.py"
+      ]
     },
     {
       "path": "export_events.py",
       "role": "independent-source-export",
       "build_targets": [],
       "imported_by": []
+    },
+    {
+      "path": "export_fire_valley_index.py",
+      "role": "registered-build",
+      "build_targets": [
+        "fire-valley-index"
+      ],
+      "imported_by": [
+        "build_runtime.py"
+      ]
     },
     {
       "path": "export_forest_ai.py",
@@ -624,7 +638,9 @@
       "build_targets": [
         "startup-media"
       ],
-      "imported_by": []
+      "imported_by": [
+        "export_story_media.py"
+      ]
     },
     {
       "path": "export_startup_menu.py",
@@ -633,6 +649,16 @@
         "startup-menu"
       ],
       "imported_by": []
+    },
+    {
+      "path": "export_story_media.py",
+      "role": "registered-build",
+      "build_targets": [
+        "story-media"
+      ],
+      "imported_by": [
+        "build_runtime.py"
+      ]
     },
     {
       "path": "export_story_packages.mjs",
@@ -680,7 +706,8 @@
       "build_targets": [],
       "imported_by": [
         "export_chapter_maps.py",
-        "export_opening_maps.py"
+        "export_opening_maps.py",
+        "export_fire_valley_index.py"
       ]
     },
     {
@@ -738,7 +765,8 @@
       "imported_by": [
         "export_chapter_maps.py",
         "export_chapter_story.py",
-        "export_opening_maps.py"
+        "export_opening_maps.py",
+        "export_fire_valley_index.py"
       ]
     },
     {

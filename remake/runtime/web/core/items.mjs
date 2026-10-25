@@ -1,5 +1,6 @@
 import {createPartyActors,partyResourcesForWorld} from './party_attributes.mjs';
 import {migrateEquipment,withItemQuantity,validateItemInstance} from './equipment.mjs';
+import {removeNativeStatus} from './battle_status.mjs';
 const copy=structuredClone;
 const need=(ok,message)=>{if(!ok)throw new Error(message);};
 
@@ -31,13 +32,18 @@ export function consumeInventoryItem(inventory,instanceId,data) {
   if(item.quantity===1)next.splice(index,1);else next[index]=withItemQuantity(item,item.quantity-1);
   return {inventory:next,item:copy(item)};
 }
-export function restoreActorWithItem(actor,item,data,{scope='battle'}={}) {
+export function restoreActorWithItem(actor,item,data,{scope='battle',statusData,content}={}) {
   const def=data.definitions[String(item.id)];validateItemInstance(item,def);
   need(def.effect,'此物品不能作为药品使用');
   need(['field','battle'].includes(scope)&&def.runtime_enabled!==false&&def[`use_in_${scope}`]!==false,'此物品在当前场合被配置禁用');
   need(actor?.side==='player','药品目标不属于队伍');
-  need(scope==='field'||actor.hp.current>0&&actor.state_raw<4&&!actor.immune_raw,'战斗中此药品不能用于倒下或免疫的角色');
-  const next=copy(actor),changes={};
+  need(scope==='field'||actor.state_raw>=0&&actor.state_raw<4&&!actor.immune_raw,'战斗中此药品不能用于倒下或免疫的角色');
+  let next=copy(actor);const changes={},trace=[];let status=null;
+  if(def.behavior?.kind==='status-cure'){
+    need(scope==='battle'&&def.status_cure?.mode_raw===1,'此解除状态物品仅在战斗中有效');
+    status=removeNativeStatus({actor:next,effect_raw_hex:def.status_cure.effect_raw_hex,data:statusData,content});
+    next=status.actor;trace.push(...status.trace);
+  }
   for(const resource of ['hp','mp']){
     const effect=def.effect,amount=(effect[`restore_${resource}_flat`]??0)+Math.trunc(next[`raw_${resource}_maximum`]*(effect[`restore_${resource}_percent`]??0)/100);
     const raw=amount>0?Math.min(next[`raw_${resource}_maximum`],next[`raw_${resource}`]+amount):next[`raw_${resource}`];
@@ -47,13 +53,16 @@ export function restoreActorWithItem(actor,item,data,{scope='battle'}={}) {
     next[`raw_${resource}`]=raw;next[`effective_${resource}_raw`]=raw+next.resource_bonuses[`${resource}_current`];next.raw_by_address[resource==='hp'?'0x0524a701':'0x0524a709']=raw;
   }
   if(scope==='field')next.state_raw=next.hp.current>0?0:4;
-  return {actor:next,changes,name:def.name};
+  const resourceApplied=['hp','mp'].some(resource=>(def.effect[`restore_${resource}_flat`]??0)!==0||(def.effect[`restore_${resource}_percent`]??0)!==0);
+  const applied=Boolean(resourceApplied||status?.applied);
+  return {actor:next,changes,name:def.name,applied,native_return:applied?1:0,effect_requested:true,cancel_command:status?.cancel_command??false,trace};
 }
 
 export function useWorldItem(world,attributes,data,{instanceId,targetId,expectedRevision=world.value.revision}) {
   need(world.value.revision===expectedRevision,'操作期间进度已变化');
   const target=createPartyActors(world.snapshot(),attributes,{},data).find(a=>a.id===targetId);
   const consumed=consumeInventoryItem(world.value.inventory,instanceId,data),result=restoreActorWithItem(target,consumed.item,data,{scope:'field'});
+  if(!result.applied)return {...result,targetId,world_revision:world.value.revision};
   const resources=partyResourcesForWorld(result.actor);
   world.transact(draft=>{draft.inventory=consumed.inventory;const role=draft.party.find(r=>r.id===targetId);role.hp.current=resources.hp;role.mp.current=resources.mp;});
   return {...result,targetId,world_revision:world.value.revision};

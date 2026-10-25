@@ -6,6 +6,7 @@
     "Fight_Role/011.CHR": "01625263cd7226760c8bb11067878285c5835ba4a43efbcab68020201c698ec4",
     "Fight_Role/012.CHR": "4c9d1ef867222a8ffbdfea2e231f7500f30e0d7fec4fbfa1ab18b2dc874061a0",
     "Fight_Role/013.CHR": "5e3a7e65761a52b1653a40bc20ae130072af5c4f704b0cb389bbb239a1cd8ef6",
+    "Fight_Role/032.CHR": "e081f7db9f51ac59c0bbd5b43f82a5894b3e707dd7512eb43aef574e1ec35f9f",
     "GAME.exe": "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18"
   },
   "entries": {
@@ -35,6 +36,14 @@
     },
     "ai_013": {
       "name": "森林狩猎者选招",
+      "parameters": {}
+    },
+    "enemy_032": {
+      "name": "唯爱拉",
+      "parameters": {}
+    },
+    "ai_032": {
+      "name": "唯爱拉选招",
       "parameters": {}
     }
   }

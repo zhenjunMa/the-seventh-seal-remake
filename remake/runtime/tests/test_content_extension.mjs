@@ -80,7 +80,8 @@ test('third and fourth party members join idempotently, retain formation/RNG and
   const actor=consumePartyMp(actors[2],1,content);assert.equal(partyResourcesForWorld(actor,{content}).mp,65);
   next.party[2].mp.current=65;
   assert.deepEqual(await decodeSave(await encodeSave(next)),next);
-  assert.throws(()=>createPartyActors(next,attributes),/未登记/);
+  const unregistered=copy(runtimeContent);delete unregistered.roles['003'];
+  assert.throws(()=>createPartyActors(next,attributes,{},null,unregistered),/未登记/);
 });
 
 test('same chest handler works on another registered map and rolls back failed animation',async()=>{
@@ -99,10 +100,12 @@ test('same chest handler works on another registered map and rolls back failed a
 test('new program registration accepts the supported bytecode and still rejects unknown opcodes or source drift',()=>{
   const c=copy(runtimeContent),program=copy(story.programs['m17029-1']);program.id='m99001-1';program.source.path='Animate/m99001-1.anm';
   for(const command of program.commands)command.source.path=program.source.path;
+  for(const command of program.context_sources.map_commands)command.source.path=program.source.path;
   c.programs[program.id]=copy(program.source);validateChapterAnimation(program,c);
   assert.throws(()=>validateChapterAnimation(program),/来源不兼容/);
-  program.commands[0].opcode=254;assert.throws(()=>validateChapterAnimation(program,c),/未支持/);
-  program.commands[0].opcode=10;program.source.sha256='f'.repeat(64);assert.throws(()=>validateChapterAnimation(program,c),/来源不兼容/);
+  const command=program.commands.find(command=>command.opcode!==10),opcode=command.opcode;
+  command.opcode=254;assert.throws(()=>validateChapterAnimation(program,c),/未支持/);
+  command.opcode=opcode;program.source.sha256='f'.repeat(64);assert.throws(()=>validateChapterAnimation(program,c),/来源不兼容/);
 });
 
 test('rest handler accepts different map/descriptor/record IDs and keeps explicit interaction and choice-source guards',async()=>{
@@ -131,7 +134,8 @@ test('rest handler accepts different map/descriptor/record IDs and keeps explici
 test('cross-file audit admits current content and rejects a registered enemy with missing dependencies',async()=>{
   const names={catalog:'catalog',seed:'opening_seed',story:'chapter_story',resources:'chapter_map_resources',party:'party_combat',commands:'party_skills',forest:'forest_combat',ai:'forest_ai',rewards:'party_rewards',reactions:'party_reactions',status:'forest_status',encounters:'encounters',view:'party_battle_view',itemView:'item_presentation',lifecycle:'battle_lifecycle',menu:'operation_menu'};
   const data=Object.fromEntries(await Promise.all(Object.entries(names).map(async([key,name])=>[key,await read(name)])));
-  assert.deepEqual(validateContentDependencies(runtimeContent,data),{roles:6,maps:8,programs:3});
+  assert.deepEqual(validateContentDependencies(runtimeContent,data),{
+    roles:Object.keys(runtimeContent.roles).length,maps:Object.keys(runtimeContent.maps).length,programs:Object.keys(runtimeContent.programs).length});
   const missingMenu=copy(data);delete missingMenu.menu.actor_panels['003'];
   assert.throws(()=>validateContentDependencies(runtimeContent,missingMenu),/菜单人物条/);
   const staleTiming=copy(data);staleTiming.menu.standing_actors['003'].interval_ms=120;

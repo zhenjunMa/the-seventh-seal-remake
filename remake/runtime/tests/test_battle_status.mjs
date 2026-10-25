@@ -59,7 +59,7 @@ function compareTick(a,threshold,now){
   report.case_counts.tick++;return result;
 }
 test('all eight original blocks and every retained instruction match immutable sources',async()=>{
-  validateForestStatusData(data);assert.equal(Object.values(data.skills).filter(s=>s.effect_id_raw!==0).length,1);
+  validateForestStatusData(data);assert.equal(Object.values(data.skills).filter(s=>s.effect_id_raw===43).length,1);
   assert.ok(Object.isFrozen(data)&&Object.isFrozen(data.skills)&&Object.isFrozen(data.skills['012:14'])&&Object.isFrozen(data.aggregation));
   const changed=clone(data);changed.skills['012:14'].effect_id_raw=0;assert.throws(()=>validateForestStatusData(changed),/mismatch/);
   for(const s of Object.values(data.skills)){const original=await readFile(new URL('../../../'+s.source.path,import.meta.url));assert.equal(sha(original),s.source.sha256);

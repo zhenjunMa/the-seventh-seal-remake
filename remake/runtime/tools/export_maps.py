@@ -238,8 +238,7 @@ def export_map(map_id: str, parsed: dict, output_files: dict) -> dict:
         rows.append("".join(row))
     descriptors, triggers = transition_descriptors(bg)
     table = MapObjects(dat_path)
-    resources = {Path(key).name.lower(): value for key, value in parsed.items()
-                 if key.lower().startswith(f"mapm/{slug}/")}
+    resources = {filename: parsed[source_path(path)] for filename, path in table.resource_paths(ROOT).items()}
     graphics = table.prepare_graphics(resources)
     objects = []
     saved = set()
@@ -257,6 +256,7 @@ def export_map(map_id: str, parsed: dict, output_files: dict) -> dict:
                     source=source_path(dat_path), source_sha256=sha(dat_path),
                     width=bg.width, height=bg.height, cell_size=16,
                     native_coordinate_shift=3, native_to_pixel_scale=2, native_step_shift=bg.data[0x144],
+                    native_camera_step_shift=bg.data[0x145],
                     terrain_rows=rows, triggers=triggers,
                     terrain_rule="cell byte +0x20 == 0 permits terrain entry",
                     transition_rule="0x4A80E0: +0x38 reference, descriptor[0]==0 and descriptor[0x11]!=0 is path-gated",
@@ -278,6 +278,8 @@ def export_map(map_id: str, parsed: dict, output_files: dict) -> dict:
                   role_layer_preview=2,
                   role_layer_note="Runtime render policy; native role +0xF3 initial value remains unverified",
                   source=dict(path=source_path(dat_path), sha256=sha(dat_path), bytes=len(bg.data),
+                              object_resource_base_raw=table.resource_base_raw,
+                              object_resource_base=table.resource_relative_base() if table.objects else None,
                               object_table_start=table.object_start, object_table_end=table.object_end,
                               unknown_tail_bytes=len(bg.data) - table.object_end,
                               native_evidence=EVIDENCE, object_native_evidence=table.metadata()["evidence"]),
@@ -303,7 +305,7 @@ def main() -> int:
         bg = MapBackground(ROOT / "Map" / (slug + ".dat"))
         sources.add(f"Map/{slug}.dat")
         sources.update(background_names(bg))
-        sources.update(source_path(p) for p in (ROOT / "mapm" / slug).glob("*.dgp"))
+        sources.update(source_path(p) for p in MapObjects(ROOT / "Map" / (slug + ".dat")).resource_paths(ROOT).values())
     sources = sorted(sources)
     before = {source: sha(ROOT / source) for source in sources}
     if before["GAME.exe"] != GAME_SHA:

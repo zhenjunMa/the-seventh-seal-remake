@@ -187,6 +187,8 @@
         "payload_bytes": 361216,
         "dual_pixel_stream": false,
         "indexed_auxiliary": [],
+        "sparse_row_tails": [],
+        "shadow_stream_present": false,
         "indexed_auxiliary_limit": "Header[19] is a separately loaded auxiliary stream. Its effects/rendering semantics are not implemented; main 16-bit spans remain the decoded pixels.",
         "anchor_raw": [
           32,
@@ -340,6 +342,8 @@
         "payload_bytes": 32688,
         "dual_pixel_stream": false,
         "indexed_auxiliary": [],
+        "sparse_row_tails": [],
+        "shadow_stream_present": false,
         "indexed_auxiliary_limit": "Header[19] is a separately loaded auxiliary stream. Its effects/rendering semantics are not implemented; main 16-bit spans remain the decoded pixels.",
         "anchor_raw": [
           32,
@@ -2198,6 +2202,8 @@
             "end_offset": 2818955
           }
         ],
+        "sparse_row_tails": [],
+        "shadow_stream_present": true,
         "indexed_auxiliary_limit": "Header[19] is a separately loaded auxiliary stream. Its effects/rendering semantics are not implemented; main 16-bit spans remain the decoded pixels.",
         "anchor_raw": [
           32,

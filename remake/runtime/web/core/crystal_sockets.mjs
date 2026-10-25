@@ -4,6 +4,7 @@
 import {equipmentRows, validateItemInstance, withItemQuantity} from './equipment.mjs';
 import {configuredEquipmentHex} from './item_registry.mjs';
 import {isCrystalDefinition, isSupportedCrystalDefinition} from './crystal_catalog.mjs';
+import {allPartyRoles} from './party_roster.mjs';
 export {isCrystalDefinition, isSupportedCrystalDefinition} from './crystal_catalog.mjs';
 
 export const CRYSTAL_SOCKET_COUNT = 6;
@@ -79,7 +80,7 @@ export function crystalSocketCount(world, attributes, itemData, roleId) {
 
 export function crystalSocketRows(world, attributes, itemData, roleId, {visibleOnly = false} = {}) {
   if (world.crystal_sockets) {
-    validateCrystalSocketState(world.crystal_sockets, world.party);
+    validateCrystalSocketState(world.crystal_sockets, allPartyRoles(world));
     validateCrystalSocketDefinitions(world.crystal_sockets, itemData);
   }
   const count = crystalSocketCount(world, attributes, itemData, roleId);
@@ -106,7 +107,7 @@ export function migrateCrystalSockets(draft) {
   need(draft.source.kind === 'native-new-game', '当前样本未提供晶石孔位来源');
   draft.crystal_sockets ??= {version:1, roles:{}};
   for (const role of draft.party) draft.crystal_sockets.roles[role.id] ??= Array(6).fill(null);
-  validateCrystalSocketState(draft.crystal_sockets, draft.party);
+  validateCrystalSocketState(draft.crystal_sockets, allPartyRoles(draft));
   return draft.crystal_sockets;
 }
 
@@ -149,7 +150,7 @@ function preflight({worldStore, attributes, itemData, roleId, socketIndex, expec
   need(Number.isInteger(socketIndex) && socketIndex >= 1
     && socketIndex <= crystalSocketCount(worldStore.value, attributes, itemData, roleId), '当前法器没有此孔位');
   if (worldStore.value.crystal_sockets) {
-    validateCrystalSocketState(worldStore.value.crystal_sockets, worldStore.value.party, occupiedIds(worldStore.value));
+    validateCrystalSocketState(worldStore.value.crystal_sockets, allPartyRoles(worldStore.value), occupiedIds(worldStore.value));
     validateCrystalSocketDefinitions(worldStore.value.crystal_sockets, itemData);
   }
 }
@@ -171,7 +172,7 @@ export function insertCrystal(options) {
     if (returned) returnCrystal(draft.inventory, returned, itemData);
     consumeFirstMatchingId(draft.inventory, selected.id, itemData);
     slots[socketIndex - 1] = installed;
-    validateCrystalSocketState(draft.crystal_sockets, draft.party, occupiedIds(draft));
+    validateCrystalSocketState(draft.crystal_sockets, allPartyRoles(draft), occupiedIds(draft));
     validateCrystalSocketDefinitions(draft.crystal_sockets, itemData);
     socketEquipmentRows(draft, attributes, itemData, roleId);
   });
@@ -189,7 +190,7 @@ export function removeCrystal(options) {
     const slots = migrateCrystalSockets(draft).roles[roleId];
     returnCrystal(draft.inventory, old, itemData);
     slots[socketIndex - 1] = null;
-    validateCrystalSocketState(draft.crystal_sockets, draft.party, occupiedIds(draft));
+    validateCrystalSocketState(draft.crystal_sockets, allPartyRoles(draft), occupiedIds(draft));
     socketEquipmentRows(draft, attributes, itemData, roleId);
   });
   return {role_id:roleId, socket_index:socketIndex, removed:copy(old), world_revision:worldStore.value.revision};

@@ -153,7 +153,39 @@ export function applyRegisteredSkillParameters(skill,row,mode){
  */
 export function upgradeSkillConfiguration(data,config){
   const defaults=deriveSkillConfiguration(data);
-  if(isParameterOverrideFile(config))return expandParameterOverrides(defaults,config,{allowNewEntries:true});
+  if(isParameterOverrideFile(config)){
+    // A newly implemented enemy retains its canonical source-catalog ID.
+    // Validate the old source-only owner/defaults before promoting that same
+    // source record; never accept arbitrary owner or fingerprint changes.
+    const previous=copy(defaults),promoted=[];
+    for(const [id,row]of Object.entries(config.entries??{})){
+      const target=defaults.entries[id];
+      if(row.owner?.side!=='source'||target?.owner?.side!=='enemy')continue;
+      const original=data.source_skills?.skills?.[id];
+      fail(original&&id===`${target.owner.role_id}_${target.owner.skill_index}`
+        &&same(original.source,target.source)&&row.name===original.name
+        &&same(row.owner,{...target.owner,side:'source'}),`${id}来源接入迁移身份不匹配`);
+      const parameters=sourceOnlySkillParameters(original);
+      previous.entries[id]={...copy(target),owner:copy(row.owner),original:copy(parameters),parameters:copy(parameters)};
+      promoted.push(id);
+    }
+    const expanded=expandParameterOverrides(previous,config,{allowNewEntries:true});
+    for(const id of promoted){
+      const old=expanded.entries[id],target=copy(defaults.entries[id]),parameters={};
+      fail(old.parameters.enabled===false,`${id}未接入来源不能提前启用`);
+      for(const key of Object.keys(target.original)){
+        if(key==='mp_cost'){
+          const delta=old.parameters.mp_delta_raw;
+          fail(Number.isInteger(delta)&&(delta<=0||delta===old.original.mp_delta_raw),`${id}正向MP增量修改无法映射为战斗耗蓝`);
+          parameters[key]=delta===old.original.mp_delta_raw?target.original.mp_cost:-delta;
+        }else{
+          fail(Object.hasOwn(old.parameters,key),`${id}来源参数缺失：${key}`);parameters[key]=copy(old.parameters[key]);
+        }
+      }
+      target.parameters=parameters;expanded.entries[id]=target;
+    }
+    return expanded;
+  }
   fields(config,['schema','version','notes','entries'],'skills.json');
   fail(config.schema===defaults.schema&&[1,2].includes(config.version)&&typeof config.notes==='string'&&object(config.entries),'技能配置版本不兼容');
   const legacy={yantu:data.combat.skills.yantu,...data.forest.player_skills,...enemySkills(data)};

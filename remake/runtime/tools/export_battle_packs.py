@@ -24,7 +24,9 @@ def local(url):
 
 def build():
     result = subprocess.run(['node', str(RUNTIME / 'tools/battle_pack_inventory.mjs')],
-                            cwd=ROOT, capture_output=True, check=True)
+                            cwd=ROOT, capture_output=True, text=True, encoding='utf-8')
+    if result.returncode:
+        raise RuntimeError('Battle pack inventory failed:\n'+result.stdout+result.stderr)
     inventory = json.loads(result.stdout)
     sources = {}
     images = {}

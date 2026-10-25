@@ -5,7 +5,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
-import {validateScheduler,initializeScheduler,chargeActor,selectReady,dispatchCharge} from '../web/core/battle_scheduler.mjs';
+import {validateScheduler,initializeScheduler,chargeActor,isActorReady,selectReady,dispatchCharge} from '../web/core/battle_scheduler.mjs';
 import {BattleController} from '../web/core/combat.mjs';
 import {WorldStore,encodeSave,decodeSave} from '../web/core/world.mjs';
 import {createNativeRng,resolveAction,applyNativeDamage} from '../web/core/combat_rules.mjs';
@@ -30,7 +30,7 @@ class SchedulerOracle extends NativeAssemblyOracle {
 }
 function oracle(actors,scheduler,rng){const o=new SchedulerOracle(asm.functions,actors,rng);
  o.write(0x55df74c,actors.length);o.write(0x679c6c,0);o.write(0x679c74,scheduler.threshold);o.write(0x55df75c,scheduler.side_priority);
- actors.forEach((a,i)=>{const n=i*0x30274;o.write(0x521a770+n,1);o.write(0x521a7b9+n,a.charge.gauge);o.write(0x521a7bd+n,a.charge.delay);o.write(0x521f69e+n,a.charge.recovery||a.reaction_inhibit_raw);o.write(0x521f6a2+n,a.charge.recovery_ticks);o.write(0x521f52a+n,a.status_flags_raw);o.write(0x521a7c5+n,a.side==='player'&&scheduler.pending?1:0,1);});return o;}
+ actors.forEach((a,i)=>{const n=i*0x30274;o.write(0x521a770+n,1);o.write(0x521a778+n,Number(Boolean(a.native_active)),1);o.write(0x521a7b9+n,a.charge.gauge);o.write(0x521a7bd+n,a.charge.delay);o.write(0x521f69e+n,a.charge.recovery||a.reaction_inhibit_raw);o.write(0x521f6a2+n,a.charge.recovery_ticks);o.write(0x521f52a+n,a.status_flags_raw);o.write(0x521a7c5+n,a.side==='player'&&scheduler.pending?1:0,1);});return o;}
 function fixture(ids=['012','013','013'],extra={}){
  const world=new WorldStore(clone(seed),mapIds),s=sample(ids,world.snapshot()),logs=[];let time=0,battle;
  battle=new BattleController({world,id:()=> 'scheduler',now:()=>time,waitTick:async()=>{time+=20;},log:e=>logs.push(e),
@@ -65,7 +65,7 @@ test('ranged speed consumes one draw, exclusive upper bound; zero bound uses80 a
 test('ready selection and side alternation match original candidate-position access even with gaps',()=>{
  for(let i=0;i<96;i++){
   const {actors,scheduler}=prepared();scheduler.side_priority=i%2;if(i%3===0)scheduler.pending=null;
-  actors.forEach((a,j)=>{a.charge.gauge=10400+((i+j)%4)*51;if((i+j)%7===0)a.charge.gauge=10399;if((i+j)%11===0)a.charge.delay=1;if((i+j)%13===0){a.state_raw=4;a.hp.current=0;}if((i+j)%17===0)a.status_flags_raw=0x20;});
+  actors.forEach((a,j)=>{a.charge.gauge=10400+((i+j)%4)*51;if((i+j)%7===0)a.charge.gauge=10399;if((i+j)%11===0)a.charge.delay=1;if((i+j)%13===0){a.state_raw=4;a.hp.current=0;}if((i+j)%17===0)a.status_flags_raw=0x20;if((i+j)%19===0)a.native_active=true;});
   const o=oracle(clone(actors),clone(scheduler),()=>{throw Error('Selection must not draw');}),ported=selectReady(actors,scheduler);
   try{o.run(0x5036d0,[]);}catch(e){if(e!==signal)throw e;}
   assert.equal(ported.actor_id,o.selected===undefined?null:actors[o.selected].id,`selection ${i}`);assert.equal(scheduler.side_priority,o.read(0x55df75c),`priority ${i}`);
@@ -75,6 +75,17 @@ test('dispatch resets gauge before threshold subtraction and adds raw preparatio
  const {actors,scheduler,skills}=prepared();const a=actors[0];a.charge.gauge=11000;
  const d=dispatchCharge(a,skills.yanci,scheduler);assert.equal(d.before.gauge,11000);assert.equal(a.charge.gauge,-10400);assert.equal(a.charge.delay,800);
  dispatchCharge(a,skillFields(skills.yanci,{0x2e:0}),scheduler);assert.equal(a.charge.delay,1600);assert.equal(a.charge.gauge,-10400);
+});
+
+test('a source response remains ineligible while other actors can act beside a detached carrier',()=>{
+ const {actors,scheduler}=prepared(['012']),player=actors[0],enemy=actors[1];
+ for(const actor of actors)actor.charge={gauge:scheduler.threshold,delay:0,recovery:0,recovery_ticks:0};
+ player.native_active=true;
+ assert.equal(isActorReady(player,scheduler),false);
+ assert.equal(isActorReady(enemy,scheduler),true);
+ assert.equal(selectReady(actors,scheduler).actor_id,enemy.id);
+ player.native_active=false;
+ assert.equal(isActorReady(player,scheduler),true);
 });
 test('20ms clock runs before input and in every command layer without elapsed-time catchup',async()=>{
  const g=fixture(['012']);

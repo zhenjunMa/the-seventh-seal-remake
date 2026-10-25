@@ -8,6 +8,8 @@ import {validateTechniqueBindingsState,validateTechniqueCombinationState} from '
 import {validateFormationSlots} from './party_formation.mjs';
 import {validateCrystalSocketState} from './crystal_sockets.mjs';
 import {validateBattleSkillProgress} from './battle_skill_access.mjs';
+import {validateNativeStoryMutationState} from './native_story_mutations.mjs';
+import {allPartyRoles} from './party_roster.mjs';
 const copy = value => structuredClone(value);
 const object = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 function requireValue(ok, message) { if (!ok) throw new Error(message); }
@@ -35,8 +37,9 @@ export function validateWorldMapState(value) {
 
 export function validateWorld(value, mapIds = null) {
   requireValue(object(value) && value.schema === WORLD_SCHEMA && value.version === WORLD_VERSION, '存档格式或版本不兼容');
-  const allowed = new Set(['schema','version','revision','location','leader_id','party','inventory','flags','event_records','object_states','source','world_map','encounters','money','reward_records','opening','equipment','skill_shortcuts','technique_bindings','technique_combinations','formation_slots','crystal_sockets']);
+  const allowed = new Set(['schema','version','revision','location','leader_id','party','reserve_party','inventory','flags','event_records','object_states','source','world_map','encounters','money','reward_records','opening','equipment','skill_shortcuts','technique_bindings','technique_combinations','formation_slots','crystal_sockets','native_pending_skill_unlocks','recipe_unlock_indices']);
   requireValue(Object.keys(value).every(key => allowed.has(key)), '存档包含未支持的世界字段');
+  validateNativeStoryMutationState(value);
   // Optional v1 extension. Legacy saves keep their existing progress and do
   // not acquire a pending prologue simply because they predate this field.
   if ('opening' in value) {
@@ -50,8 +53,18 @@ export function validateWorld(value, mapIds = null) {
   requireValue(Number.isFinite(at.x) && Number.isFinite(at.y) && at.x >= 0 && at.y >= 0, '存档位置无效');
   requireValue(Number.isInteger(at.direction) && at.direction >= 0 && at.direction < 8, '存档朝向无效');
   requireValue(Array.isArray(value.party) && value.party.length > 0 && value.party.length <= 10, '队伍数据无效');
+  if('reserve_party' in value){
+    requireValue(Array.isArray(value.reserve_party)&&value.reserve_party.length+value.party.length<=10,'离队角色数据无效');
+    for(const entry of value.reserve_party){
+      requireValue(object(entry)&&Object.keys(entry).every(key=>['role','encounter_progress'].includes(key))&&object(entry.role),'离队角色记录无效');
+      if('encounter_progress' in entry)requireValue(object(entry.encounter_progress)&&Object.keys(entry.encounter_progress).sort().join(',')==='counter,remainder'
+        &&Number.isInteger(entry.encounter_progress.counter)&&entry.encounter_progress.counter>=0&&entry.encounter_progress.counter<=255
+        &&Number.isFinite(entry.encounter_progress.remainder)&&entry.encounter_progress.remainder>=0&&entry.encounter_progress.remainder<16,'离队遇敌进度无效');
+    }
+  }
+  const owned=allPartyRoles(value);
   const ids = new Set();
-  for (const role of value.party) {
+  for (const role of owned) {
     requireValue(object(role) && safeKey(role.id) && !ids.has(role.id) && text(role.name), '队伍角色无效'); ids.add(role.id);
     if('skill_progress' in role)validateBattleSkillProgress(role.skill_progress);
     for (const field of ['hp','mp']) {
@@ -66,13 +79,13 @@ export function validateWorld(value, mapIds = null) {
       for(const [name,at] of [['attack',0x40],['defense',0x48]])requireValue(role.attributes_stored?.[name]?.current===v.getInt32(at,true)&&role.attributes_stored?.[name]?.base===v.getInt32(at+4,true),'角色成长与保存属性不一致');
     }
   }
-  requireValue(ids.has(value.leader_id), '当前角色不在队伍中');
+  requireValue(value.party.some(role=>role.id===value.leader_id), '当前角色不在队伍中');
   if('formation_slots' in value)validateFormationSlots(value.formation_slots,value.party);
-  if('skill_shortcuts' in value)validateSkillShortcutState(value.skill_shortcuts,value.party);
-  if('technique_bindings' in value)validateTechniqueBindingsState(value.technique_bindings,value.party);
-  if('technique_combinations' in value)validateTechniqueCombinationState(value.technique_combinations,value.party);
+  if('skill_shortcuts' in value)validateSkillShortcutState(value.skill_shortcuts,owned);
+  if('technique_bindings' in value)validateTechniqueBindingsState(value.technique_bindings,owned);
+  if('technique_combinations' in value)validateTechniqueCombinationState(value.technique_combinations,owned);
   if ('equipment' in value) {
-    validateEquipmentState(value.equipment, value.party);
+    validateEquipmentState(value.equipment, owned);
     const equippedIds = new Set(Object.values(value.equipment.roles).flat().map(row=>row.instance_id));
     requireValue(Array.isArray(value.inventory)&&!value.inventory.some(row=>equippedIds.has(row.instance_id)), '同一实例不能同时在背包和装备栏');
   }
@@ -93,7 +106,7 @@ export function validateWorld(value, mapIds = null) {
     instances.add(item.instance_id); uint(item.id, '道具编号'); uint(item.quantity, '道具数量');
     requireValue(typeof item.source_raw_hex === 'string' && /^[0-9a-f]{458}$/.test(item.source_raw_hex), '道具原始实例缺失');
   }
-  if('crystal_sockets' in value)validateCrystalSocketState(value.crystal_sockets,value.party,[...instances,...Object.values(value.equipment?.roles??{}).flat().map(row=>row.instance_id)]);
+  if('crystal_sockets' in value)validateCrystalSocketState(value.crystal_sockets,owned,[...instances,...Object.values(value.equipment?.roles??{}).flat().map(row=>row.instance_id)]);
   requireValue(object(value.object_states) && Object.keys(value.object_states).length <= 10000, '场景对象状态无效');
   for (const [key, state] of Object.entries(value.object_states)) {
     requireValue(safeKey(key) && object(state), '场景对象状态键无效');

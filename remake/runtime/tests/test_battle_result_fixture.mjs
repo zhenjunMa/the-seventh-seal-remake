@@ -6,7 +6,7 @@ import {readFile} from 'node:fs/promises';
 import {decodeSave,encodeSave} from '../web/core/world.mjs';
 import {progressHeaderForRole} from '../web/core/battle_rewards.mjs';
 import {BattleResultSequence} from '../web/core/battle_result.mjs';
-import {replayFixture} from '../evidence/battle_result_20261020/fixtures/replay_fixture.mjs';
+import {replayFixture} from './helpers/battle_result_fixture.mjs';
 const read=async path=>JSON.parse(await readFile(new URL('../'+path,import.meta.url),'utf8'));
 
 test('controlled report input retains source, inventory, encounter stream and all non-party world fields',async()=>{

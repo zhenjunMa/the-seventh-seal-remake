@@ -1,5 +1,5 @@
 第七封印重制 · 文档导航
-更新：2026-10-23
+更新：2026-10-25
 
 项目概览、环境准备与素材前置条件见../README.md。
 Windows快速启动：双击start.cmd；macOS/Linux与其他启动方式见runtime/README.txt。
@@ -12,13 +12,15 @@ runtime/config_guide.txt             内容登记、技能／道具调参与新�
 runtime/tools/README.txt             构建、导出和验证命令
 assessment/validation_design.txt     当前计划、未完成事项和完成标准
 assessment/menu_alignment_workflow.txt  界面与动态表现验收方法
+assessment/region_remake_workflow.txt   全区域／跨阶段接入方法、来源陷阱与交接经验
+runtime/story_guide.txt              地图、NPC、对白、任务与剧情运行包接入
 prototype/README.md                  实验入口与正式模块复用
 local_materials.txt                 本地素材、来源证据、历史归档的准备与缺失处理
 AGENTS.md                           工作目录与维护约定
 
 按任务阅读
 旧环境升级：先看runtime/tools/README.txt的“旧环境升级”，再按local_materials.txt准备媒体与来源证据。
-扩充地图／剧情：按runtime/config_guide.txt登记内容，结合runtime/architecture.txt定位实现，按runtime/tools/README.txt构建。
+扩充地图／剧情：先看assessment/region_remake_workflow.txt确定来源边界与阶段矩阵，按runtime/story_guide.txt和config_guide.txt接入，再按runtime/tools/README.txt构建。
 核对完成情况：以assessment/validation_design.txt的当前范围、待办与验收标准为准。
 
 维护分工

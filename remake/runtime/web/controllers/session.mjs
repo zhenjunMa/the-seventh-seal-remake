@@ -7,15 +7,33 @@ import {OpeningView} from "../opening_view.mjs";
 import {playbackTask} from "../core/story_playback.mjs";
 import {validateSourceSkillShortcuts} from "../core/skill_shortcuts.mjs";
 import {techniqueSlots,techniqueCombinations} from "../core/menu_techniques.mjs";
+import {hasNativeStoryCompletion,loadStoryCompletion,saveStoryCompletion,STORY_COMPLETION_EVIDENCE} from '../core/story_completion.mjs';
 
-export function createSessionController({state, actions, $, canvas, ctx}) {
+export function createSessionController({state, actions, $, canvas, ctx,completionStorage}) {
+  let storage=completionStorage;try{if(storage===undefined)storage=globalThis.localStorage;}catch{}
+  const completion=loadStoryCompletion(storage);if(completion){state.completionMetadata=completion;state.nativeMenuCodeUnlocked=true;}
   function showTitle({allowResume=false}={}){
     if(state.saveOperation&&state.scenes.phase==='save-io')throw new Error('正在存取进度，请稍候');
     state.audio?.suspend();
     state.scenes.setPhase('menu');
+    if(state.nativeMenuCodeUnlocked&&hasNativeStoryCompletion(state.world?.value))allowResume=false;
     $('menuResume').hidden=!allowResume;
     state.startupView.showMenu({allowResume});
     actions.status(allowResume?'左右选择，空格确认；离开选项可继续当前游戏。':'左右选择，空格／Enter确认，Esc返回上一层。');
+  }
+  function finishStoryCompletion(){
+    const ticket=state.pendingStoryCompletion;if(!ticket)return false;
+    if(state.world!==ticket.world||state.scenes.request!==ticket.sceneRequest){state.pendingStoryCompletion=null;return false;}
+    if(!hasNativeStoryCompletion(state.world.value)||JSON.stringify(state.world.snapshot())!==JSON.stringify(ticket.expected))return false;
+    state.pendingStoryCompletion=null;state.nativeMenuCodeUnlocked=true;
+    const saved=saveStoryCompletion(storage);state.completionMetadata=saved.metadata;
+    // Lock exploration first. A title presentation failure must not expose a
+    // post-ending map, and cannot undo the already successful world commit.
+    state.scenes.setPhase('story-complete');showTitle({allowResume:false});
+    actions.log?.({type:'story-complete',...ticket.request,evidence:STORY_COMPLETION_EVIDENCE,
+      menu_code:1,metadata_persisted:saved.persisted,metadata_error:saved.error,automatic_game_save:false,
+      extras_interface_restored:false,continuation:'title-load-or-new-game'});
+    actions.status('故事已经结束。可以读取存档，或开始新游戏。');return true;
   }
   function resumeExploration(){
     if(state.scenes.phase!=='menu'||$('menuResume').hidden)return;
@@ -118,5 +136,5 @@ export function createSessionController({state, actions, $, canvas, ctx}) {
     $('gameOver').hidden=true;showTitle();actions.status('全队倒下。请载入已保存的进度，或开始新游戏。');
     actions.log({type:'game-over',policy,movie:'/assets/video/go02.mp4',playback_error:playbackError});
   }
-  return {showTitle, resumeExploration, beginOpening, restore, openSaveCrystal,openSaveMenu,closeSaveMenu,selectSaveSlot, presentGameOver};
+  return {showTitle, finishStoryCompletion,resumeExploration, beginOpening, restore, openSaveCrystal,openSaveMenu,closeSaveMenu,selectSaveSlot, presentGameOver};
 }

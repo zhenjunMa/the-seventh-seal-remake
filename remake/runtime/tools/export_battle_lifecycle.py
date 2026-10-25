@@ -37,6 +37,9 @@ NATIVE = {
  'renderer_clear':('remake/runtime/evidence/forest_stage_native.json','ev_5b7111bef94d84d0b13d5977a201ad2d9595de8a70f9458dc568aeb20865f72f'),
  'source_clock':('remake/runtime/evidence/forest_scheduler_native_20261011.json','ev_8e3ec5a4b14b1aa3628f2b1ea4e90e43ca550b15e065c57deac7a65f003216b5'),
  'sprite_effect_gate':('remake/runtime/evidence/source/combat_animation_native_20261011.json','ev_15074ba1e716dbee5de449c6c18c8af0dfb570150803f5138f7f9fe4991fe96f'),
+ 'after_source':('remake/runtime/evidence/forest_scheduler_native_20261011.json','ev_17c4b3199dc1b5cb6278ffab2686449d8098e5784dd2ff814a562d148b7ddea0'),
+ 'return_motion':('remake/runtime/evidence/fire_valley_20261025/vertical_519fa0_assembly.json','ev_f85520dace8aea1bc83b2b93d1098640e01cbd89689b5eaeb66d0326f390cb9b'),
+ 'idle_tail':('remake/runtime/evidence/fire_valley_20261025/vertical_519dd0_assembly.json','ev_21a9d5bdd4837f53c97499ff0f4005b8539e84c51c0509e1cb7d63cf629db951'),
 }
 RENDERER_BUNDLE=RUNTIME/'evidence/battle_lifecycle_renderer_native_20261015.json'
 RENDERER_FINDINGS=EVIDENCE/'renderer_static_findings.json'
@@ -101,7 +104,7 @@ def retained_native():
     for topic,(name,ident) in NATIVE.items():
         path=ROOT/name
         bundle=json.loads(path.read_text('utf-8'))
-        record=next(r for r in bundle['records'] if r['evidence_id']==ident)
+        record=next(r for r in (bundle['records'] if 'records' in bundle else [bundle]) if r.get('evidence_id')==ident)
         if record['subject']['digest']['sha256']!=GAME_SHA256:
             raise ValueError('Retained lifecycle evidence belongs to another executable')
         records.append(dict(topic=topic,retained_from=name,retained_file_sha256=sha(path.read_bytes()),record=record))
@@ -128,7 +131,7 @@ def export_sequence(c,d,skill):
             offset=entry['offset'],bytes=len(raw),record_sha256=sha(raw),raw_hex=raw.hex())
         if raw[0]==0:
             start,end=struct.unpack_from('<II',raw,0x26)
-            frames=native_frame_sequence(d.raw_actions[group],start,end,raw[0x1d])
+            frames=native_frame_sequence(d.raw_actions[group],start,end,raw[0x1d],total_frames=d.frame_count)
             segment=dict(chr_record_index=entry['index'],action_index=group,source=source,
                 start=start,end_exclusive=end,reverse_raw=raw[0x1d],frames=frames,
                 interval_raw=d.actions[group]['interval_raw'],
@@ -145,14 +148,22 @@ def export_sequence(c,d,skill):
             for frame in frames:
                 timeline.append(dict(kind='sprite',chr_record_index=entry['index'],action_index=group,
                     action_frame=frame,source_frame=d.actions[group]['first_frame']+frame,
-                    interval_raw=segment['interval_raw']))
+                    interval_raw=segment['interval_raw'],raw_hex=raw.hex(),source=source))
         elif raw[0]==1:
-            if group not in (0,4,6,7,11):
+            if group not in (0,3,4,6,7,11):
                 raise ValueError(f'Uncovered lifecycle command {group}; preserve before implementing')
             command=dict(chr_record_index=entry['index'],type_raw=1,command_raw=group,
                 mode_raw_0x47=raw[0x47],u32_at_0x05=struct.unpack_from('<I',raw,5)[0],source=source,
                 raw_hex=raw.hex(),immediate=group!=4 or not raw[0x1d])
-            if group==7:
+            if group==3:
+                command.update(
+                    vertical_speed_raw=struct.unpack_from('<I',raw,5)[0],
+                    vertical_height_multiplier_raw=struct.unpack_from('<I',raw,0x1e)[0],
+                    vertical_mode_raw=raw[0x47],
+                    vertical_wait_raw=raw[0x1d],vertical_acceleration_raw=raw[0x23],
+                    semantics='5130D0 case3 initializes the independent native vertical clock; preserve source wait and both original command records.',
+                    evidence=NATIVE['command7'][1])
+            elif group==7:
                 command.update(
                 semantics='5130D0 case7: F666=byte+0x47; when zero select [1,5,7] using native RNG; F66E=0; A7B1=60.',
                 appearance_fields=dict(mode_address='0x0521f666',elapsed_address='0x0521f66e',clock_address='0x0521a7b1',clock_raw=60),
@@ -179,7 +190,7 @@ def export_sequence(c,d,skill):
                         limit='Original literal file is absent. The source loader-failure branch creates no carrier or new wait and returns to normal CHR record advancement; never substitute a different effect.')
             commands.append(command)
             ordered.append(dict(kind='command',command_index=len(commands)-1,chr_record_index=entry['index']))
-            timeline.append(dict(kind='command',command_index=len(commands)-1,chr_record_index=entry['index'],command_raw=group,mode_raw_0x47=raw[0x47]))
+            timeline.append(dict(kind='command',command_index=len(commands)-1,chr_record_index=entry['index'],command_raw=group,mode_raw_0x47=raw[0x47],raw_hex=raw.hex(),source=source))
             records.append(dict(command))
         else:
             raise ValueError('Lifecycle source has an unsupported record type')
@@ -200,13 +211,22 @@ def export_sequence(c,d,skill):
         last_pose_limit='This is the final source sprite frame. Holding it for a corpse is a presentation policy until final native state/renderer handling is corroborated.')
 
 
+def lifecycle_skills(character):
+    # 51CC00 follows hit/launch through landing, getting up and returning to
+    # the original position. Missing source IDs remain absent and use the
+    # native lookup/fallback rule; never invent an ID5 for the stage12 boss.
+    wanted=(1,2,3,4,5,6,8,10,11,12,14)
+    return wanted, [skill for skill in character.skills
+        if skill['id_raw'] in wanted or bytes.fromhex(skill['fixed_raw_hex'])[0x23c]==3]
+
+
 def export_role(ident,checks):
     c=CHR(ROOT/f'Fight_Role/{ident}.CHR')
     d=DGP(ROOT/f'Fight_Role/{ident}.dgp')
     if c.parsed_end!=len(c.data):
         raise ValueError('Lifecycle CHR EOF mismatch')
-    wanted=(2,11,12,14)
-    skills=[export_sequence(c,d,s) for s in c.skills if s['id_raw'] in wanted or bytes.fromhex(s['fixed_raw_hex'])[0x23c]==3]
+    wanted, selected=lifecycle_skills(c)
+    skills=[export_sequence(c,d,skill) for skill in selected]
     by_id={str(n):[s['chr_skill_index'] for s in skills if s['skill_id_raw']==n] for n in wanted}
     used=sorted({s['action_index'] for v in skills for s in v['segments']})
     physical=sorted({d.actions[s['action_index']]['first_frame']+f for v in skills for s in v['segments'] for f in s['frames']})
@@ -247,8 +267,13 @@ def export_role(ident,checks):
             raise ValueError('Lifecycle source has unhandled directions')
         # Atlas only needs source physical group order; ordered CHR reversal
         # and ranges stay in each sequence instead of modifying source pixels.
-        sheet=Image.new('RGBA',(d.width*action['frames_per_direction'],d.height))
-        for frame in range(action['frames_per_direction']):
+        referenced=[frame for skill in skills for segment in skill['segments']
+                    if segment['action_index']==index for frame in segment['frames']]
+        sheet_frames=max(action['frames_per_direction'],max(referenced,default=-1)+1)
+        if action['first_frame']+sheet_frames>d.frame_count:
+            raise ValueError('Lifecycle atlas leaves the DGP global frame pool')
+        sheet=Image.new('RGBA',(d.width*sheet_frames,d.height))
+        for frame in range(sheet_frames):
             image=source_images.get(action['first_frame']+frame)
             if image is None:
                 image=d.decode(action['first_frame']+frame)
@@ -256,18 +281,19 @@ def export_role(ident,checks):
         out=OUT/ident/f'action_{index:02}.png'
         record=save_image(out,sheet)
         actions.append(dict(index=index,sheet='/'+record['path'],sha256=record['sha256'],
-            frame_count=action['frames_per_direction'],first_frame=action['first_frame'],directions=1,
+            frame_count=sheet_frames,source_frame_count=action['frames_per_direction'],first_frame=action['first_frame'],directions=1,
             interval_raw=action['interval_raw'],native_raw_hex=d.raw_actions[index].hex()))
     layer_file=WEB/f'data/battle_lifecycle_layers_{ident}.json'
     save_json(layer_file,dict(schema='seventh-seal-native-layer-bank',version=1,role_id=ident,
-        frame_width=d.width,frame_height=d.height,anchor=dict(x=d.anchor_raw[0],y=d.anchor_raw[1]),frames=frames,
+        frame_width=d.width,frame_height=d.height,anchor=dict(x=d.anchor_raw[0],y=d.anchor_raw[1]),
+        source_frame_pool_count=d.frame_count,frames=frames,
         source_hashes={f'Fight_Role/{ident}.CHR':c.sha256,f'Fight_Role/{ident}.dgp':d.sha256,'GAME.exe':GAME_SHA256},
         limits=['Layer coverage and pixels are audited independently from original bytes; native game execution is not observed.',
             'Indexed contributions use additive coverage and must composite against the underlying scene.']))
     return dict(id=ident,name=c.name,side=registration()['roles'][ident]['side'],
         frame_width=d.width,frame_height=d.height,anchor=dict(x=d.anchor_raw[0],y=d.anchor_raw[1]),mirror=False,direction=0,
         source_chr=f'Fight_Role/{ident}.CHR',source_chr_sha256=c.sha256,
-        source_dgp=f'Fight_Role/{ident}.dgp',source_dgp_sha256=d.sha256,
+        source_dgp=f'Fight_Role/{ident}.dgp',source_dgp_sha256=d.sha256,source_frame_pool_count=d.frame_count,
         skills=skills,skill_indices_by_id=by_id,entry_skill_indices=by_id['11'],death_skill_indices=by_id['12'],
         fallback_death_skill_indices=by_id['2'],revive_skill_indices=by_id['14'],actions=actions,
         layer_bank=dict(path='/'+layer_file.relative_to(WEB).as_posix(),sha256=sha(layer_file.read_bytes())),

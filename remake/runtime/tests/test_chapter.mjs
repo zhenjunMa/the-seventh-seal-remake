@@ -146,10 +146,22 @@ test('Legacy v1 saves remain valid and do not synthesize a new party or opening 
   assert.equal(kai.combat_progress.header_raw_hex, initial.source.role_definitions['002'].header_raw_hex);
 });
 
-test('Unsupported later story mutations fail explicitly and retain loaded progress', async () => {
-  const world = store(), before = world.snapshot(), event = runner(world);
-  await assert.rejects(event.runTlk({mapId:'M17010',recordId:93}), /变更 14 尚未接入/);
-  assert.deepEqual(world.snapshot(), before);
+test('Original aid unlock learns source72 for active001/002 and retains future005 once', async () => {
+  const world = store();
+  world.transact(draft=>{draft.party.push(chapterRoleFromDefinition(initial.source.role_definitions['002']));});
+  const before=world.snapshot(),event=runner(world);
+  const result=await event.runTlk({mapId:'M17010',recordId:93});
+  assert.deepEqual(result.traversed,[93,94,95]);
+  assert.deepEqual(world.value.party.find(role=>role.id==='001').skill_progress,{version:1,learned_indices:[36]});
+  assert.deepEqual(world.value.party.find(role=>role.id==='002').skill_progress,{version:1,learned_indices:[31]});
+  assert.deepEqual(world.value.native_pending_skill_unlocks,[{role_id:'005',source_skill_id:72}]);
+  assert.deepEqual(world.value.flags,before.flags);assert.deepEqual(world.value.inventory,before.inventory);
+  assert.deepEqual(world.value.source,before.source);
+  const saved=await decodeSave(await encodeSave(world.snapshot()));
+  assert.deepEqual(saved.native_pending_skill_unlocks,world.value.native_pending_skill_unlocks);
+  const learned=copy(world.value.party),pending=copy(world.value.native_pending_skill_unlocks);
+  await event.runTlk({mapId:'M17010',recordId:93});
+  assert.deepEqual(world.value.party,learned);assert.deepEqual(world.value.native_pending_skill_unlocks,pending);
 });
 
 function home({kai = false} = {}) {

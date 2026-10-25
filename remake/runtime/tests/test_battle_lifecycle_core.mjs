@@ -9,12 +9,15 @@ import {WorldStore} from '../web/core/world.mjs';
 import {createForestSample} from '../web/forest_sample.mjs';
 import {selectNativeTarget} from '../web/core/forest_ai.mjs';
 const read=async name=>JSON.parse(await readFile(new URL('../web/data/'+name,import.meta.url)));
-const [seed,base,forest,scheduler,reactions]=await Promise.all(['route_seed.json','combat_sample.json','forest_combat.json','battle_scheduler.json','forest_reactions.json'].map(read));
+const [seed,base,forest,scheduler,reactions]=await Promise.all(['route_seed.json','combat_sample.json','forest_combat.json','battle_scheduler.json','enemy_reactions.json'].map(read));
 const copy=structuredClone;
 function fixture({enabled=true,enemies=1,damage=99999,savedKo=false,playAction=async(_,{onImpact})=>onImpact()}={}){
   const world=new WorldStore(copy(seed),['M17010','M70010']),sample=createForestSample(world.snapshot(),base,forest,{map_id:'M70010',members:Array.from({length:enemies},()=>({id:'012'}))},null,scheduler),draws=[],logs=[];let now=0;
   if(savedKo){const actor={...copy(sample.actors[0]),id:'002',resource_id:'001',hp:{current:0,maximum:900},state_raw:0};sample.actors.splice(1,0,actor);sample.order=sample.actors.map(a=>a.id);}
-  const battle=new BattleController({world,id:()=> 'lifecycle-fixture',now:()=>now,waitTick:async()=>{now+=20;},log:e=>logs.push(e),playAction,
+  const battle=new BattleController({world,id:()=> 'lifecycle-fixture',now:()=>now,waitTick:async()=>{now+=20;},log:e=>logs.push(e),
+    // This fixture uses the old one-impact adapter, not a native CHR runner.
+    // Return the synthetic action's ownership only after its animation ends.
+    playAction:async(event,hooks)=>{await playAction(event,hooks);battle.actor(event.actor_id).native_active=false;},
     resolveAction:({skill})=>({hit:true,damage,mp_cost:skill.mp_cost}),
     applyDamage:(actor,result)=>{const hp=Math.max(0,actor.hp.current-result.damage);return {...actor,hp:{...actor.hp,current:hp},state_raw:hp?actor.state_raw:4};}});
   battle.start({...sample,reaction_data:reactions,lifecycle_enabled:enabled,rng:()=>{draws.push(0);return 0;}});

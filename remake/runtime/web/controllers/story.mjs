@@ -1,8 +1,11 @@
 // story adapters. Persistent state belongs to the shared runtime context.
 import {OpeningView} from "../opening_view.mjs";
 import {ChapterAnimationRunner} from "../core/chapter_animation.mjs";
+import {StoryMediaView} from '../story_media_view.mjs';
 import {StoryPlayback,storyCancelled,playbackTask,playbackFrame} from '../core/story_playback.mjs';
 import {runtimeContent,storyBindings} from "../core/content_registry.mjs";
+import {worldMapEntry} from '../core/map_connections.mjs';
+import {hasNativeStoryCompletion} from '../core/story_completion.mjs';
 
 export function createStoryController({state, actions, $, canvas, ctx}) {
   let session=null,sequence=0;
@@ -11,15 +14,40 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
   const inputSuspended=()=>Boolean(state.engine?.paused||state.storyPlayback?.paused||state.storyPlayback?.signal.aborted);
   async function playStory(work){
     if(state.storyPlayback)throw new Error('当前剧情尚未结束');
+    const before={world:state.world,value:state.world?.value,revision:state.world?.value?.revision,
+      hasPriority:Object.hasOwn(state,'sidePriority'),sidePriority:state.sidePriority,
+      visualState:state.anmVisualState,visualSnapshot:state.anmVisualState?structuredClone(state.anmVisualState):null};
     const playback=new StoryPlayback({clock:state.engine?.exploration.clock});state.storyPlayback=playback;
     actions.log?.({type:'story-playback-start'});
     try{
-      const result=await work(playback);playback.complete();return result;
-    }catch(error){playback.fail(error);throw error;}
+      const result=await work(playback);playback.complete();
+      if(playback.nativeCompletion&&state.storyPlayback===playback){
+        const {draft,...request}=playback.nativeCompletion,expected=structuredClone(draft);
+        expected.revision=(before.revision+1)>>>0;
+        state.pendingStoryCompletion={world:before.world,sceneRequest:state.scenes?.request,expected,request};
+        if(actions.finishStoryCompletion?.()&&result&&typeof result==='object')result.story_completed=true;
+      }
+      return result;
+    }catch(error){
+      playback.fail(error);
+      // A complete event shares one transaction. Successful inner battles and
+      // ANMs must not leave transient scheduling/camera globals behind when a
+      // later command fails. A replaced world or owner belongs to a new run.
+      if(state.storyPlayback===playback&&state.world===before.world&&state.world?.value===before.value
+        &&state.world?.value?.revision===before.revision){
+        if(before.hasPriority)state.sidePriority=before.sidePriority;else delete state.sidePriority;
+        if(before.visualState&&state.anmVisualState===before.visualState){
+          for(const key of Object.keys(before.visualState))delete before.visualState[key];
+          Object.assign(before.visualState,before.visualSnapshot);
+        }
+      }
+      throw error;
+    }
     finally{
-      try{clearDialogue();state.openingView?.dispose();state.openingView=null;state.objectPreview=null;releaseDialogueKeys();state.keys?.clear();}
+      const ownsState=state.storyPlayback===playback;
+      try{if(ownsState){clearDialogue();state.openingView?.dispose();state.openingView=null;state.objectPreview=null;releaseDialogueKeys();state.keys?.clear();}}
       finally{
-        state.storyPlayback=null;playback.dispose();
+        if(ownsState)state.storyPlayback=null;playback.dispose();
         actions.log?.({type:'story-playback-end',status:playback.phase});
       }
     }
@@ -131,21 +159,64 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
     if(definition)return definition.name;
     return (state.chapterResources?.npcs_by_map?.[mapId]??[]).find(npc=>npc.speaker_slot_one_based===record.speaker)?.name??'';
   }
-  async function animateChapter({program,mapId,draft,runTlk,joinActor,playback,signal}){
-    const scene=await playbackTask(actions.prepareMap(mapId,{world:draft}),signal);
-    if(playback?.paused)await playback.ready();playback?.check();
-    if(state.scenes.current?.data.id===mapId)scene.npcRuntime?.inherit(state.scenes.current.npcRuntime);
-    const prepared=new Map([[mapId,scene]]);
-    state.openingView=new OpeningView({resources:state.openingResources,prepared,nativeViewport:true,clock:state.engine?.exploration.clock,
-      install:scene=>{state.scenes.current=scene;actions.commitView(scene,draft.location);state.view.follow=false;},
-      camera:(x,y)=>{state.view.x=x;state.view.y=y;},say,log: actions.log,shade:()=>{}});
-    const animation=new ChapterAnimationRunner({program,hooks:state.openingView.hooks(),runTlk,joinActor,initialLocation:draft.location,playback});
-    const result=await animation.run();playback?.check();const hero=state.openingView.getActor(0);
-    draft.location={...result.location,direction:hero.direction};
-    actions.validateEntry(state.scenes.current,draft.location);
-    state.scenes.current.npcRuntime?.adoptActors(state.openingView.actors);state.openingView.dispose();
-    actions.log({type:'chapter-animation-complete',program:program.id,...result,
-      limitations:['Browser paths/timing/blending are previews; original execution not observed.']});
+  async function animateChapter({program,mapId,draft,runTlk,joinActor,leaveActor,flagCommand,playback,signal}){
+    signal??=playback?.signal;
+    const previous={scene:state.scenes.current,view:state.scenes.captureView?.(),shadeHidden:$('openingShade').hidden,shadeOpacity:$('openingShade').style.opacity},prepared=new Map();
+    let lease,view,media;
+    const prepare=async(id,requestSignal)=>{
+      const scene=await playbackTask(actions.prepareMap(id,{world:draft}),requestSignal);
+      if(playback?.paused)await playback.ready();requestSignal?.throwIfAborted();playback?.check();
+      if(state.scenes.current?.data.id===id)scene.npcRuntime?.inherit(state.scenes.current.npcRuntime);
+      return scene;
+    };
+    try{
+      lease=await state.storyRepository?.ensureProgram(program.id,{callerMap:mapId,signal});
+      if(lease)program=lease.program;
+      prepared.set(mapId,await prepare(mapId,signal));
+      const content=state.storyRepository?.content??runtimeContent;
+      const initialActor=content.roles[draft.leader_id]?.native_slot;
+      if(!Number.isInteger(initialActor))throw new Error('剧情控制角色来源缺失');
+      view=new OpeningView({resources:state.openingResources,prepared,prepare,nativeViewport:true,clock:state.engine?.exploration.clock,
+        content,initialActor,
+        install:scene=>{state.scenes.current=scene;actions.commitView(scene,draft.location);state.view.follow=false;},
+        camera:(x,y)=>{state.view.x=x;state.view.y=y;},say,log:actions.log,
+        shade:alpha=>{$('openingShade').hidden=false;$('openingShade').style.opacity=String(alpha);}});
+      state.openingView=view;
+      if(program.commands.some(command=>[60,62,63].includes(command.opcode))){
+        const manifest=await playbackTask(actions.json('data/story_media.json'),signal);
+        if(playback?.paused)await playback.ready();signal?.throwIfAborted();playback?.check();
+        media=new StoryMediaView({manifest,root:$('screen'),audio:state.audio,playback});
+      }
+      const nestedTlk=async args=>{
+        // A battle or nested event sees the actual current map/controlled pose,
+        // while the outer world remains uncommitted until the ANM completes.
+        const hero=view.getActor(view.controlledActor);
+        draft.location={map_id:args.mapId,x:hero.x,y:hero.y,direction:hero.direction};
+        return runTlk(args);
+      };
+      const animation=new ChapterAnimationRunner({program,hooks:{...view.hooks(),...media?.hooks()},runTlk:nestedTlk,joinActor,leaveActor,flagCommand,initialActor,initialLocation:draft.location,playback,
+        visualState:state.anmVisualState,
+        content});
+      const result=await animation.run();signal?.throwIfAborted();playback?.check();const hero=view.getActor(result.controlled_actor);
+      const location={...result.location,direction:hero.direction};
+      if(state.scenes.current?.data.id!==location.map_id)throw new Error('剧情结束地图与当前场景不同');
+      const terminal=hasNativeStoryCompletion(draft);
+      if(terminal){
+        if(!playback||typeof actions.finishStoryCompletion!=='function')throw new Error('终章提交后的标题菜单接口缺失');
+        // 477330 checks the ending flag after ANM cleanup and enters the title.
+        // A hidden controlled actor need not have an exploration landing on the
+        // last cinematic map. Keep its source pose; never invent a teleport.
+        playback.nativeCompletion={draft,program_id:program.id,source:program.source};
+      }else actions.validateEntry(state.scenes.current,location);
+      draft.location=location;
+      if(!terminal)state.scenes.current.npcRuntime?.adoptActors(view.actors);
+      actions.log({type:'chapter-animation-complete',program:program.id,...result,
+        limitations:['Browser paths/timing/blending are previews; original execution not observed.']});
+    }catch(error){
+      state.scenes.current=previous.scene;
+      if(previous.view!==undefined)state.scenes.rollbackView?.(previous.view);
+      throw error;
+    }finally{media?.dispose();view?.dispose();lease?.release();$('openingShade').hidden=previous.shadeHidden;$('openingShade').style.opacity=previous.shadeOpacity;}
   }
   async function runChapter(args){
     if(state.scenes.phase!=='map')return;
@@ -154,13 +225,41 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
       const result=await playStory(async playback=>{
         try{
           const result=args.event?await state.chapterRunner.runEvent(args.event,{playback}):args.rest?await state.chapterRunner.runRest({explicitInteraction:true,descriptorId:args.descriptorId??null,playback}):args.objectIndex===undefined?await state.chapterRunner.runTlk({...args,playback}):await state.chapterRunner.runObject({...args,playback});
-          actions.commitView(state.scenes.current,state.world.location);actions.buildHud();actions.updateNearest();return result;
+          if(!playback.nativeCompletion){actions.commitView(state.scenes.current,state.world.location);actions.buildHud();actions.updateNearest();}
+          return result;
         }catch(error){state.scenes.current=previous.scene;state.scenes.rollbackView(previous.view);throw error;}
       });
+      if(result.story_completed)return result;
       actions.status(result.already_done?'箱子里的装备已经领取。':'可以继续探索。');
       if(result.save_requested)await actions.openSaveCrystal();
-    }catch(error){actions.status(error.message,true);}
+      if(result.world_map_requested)state.worldMap.open(result.world_map_requested.area);
+    }catch(error){if(error.gameOverPolicy)await actions.presentGameOver(error.gameOverPolicy);else actions.status(error.message,true);}
     finally{canvas.focus({preventScroll:true});}
+  }
+  async function transferChapter({mapId,destination,draft,playback,signal=playback?.signal}){
+    const previous={scene:state.scenes.current,view:state.scenes.captureView?.(),entryDraft:state.sceneEntryDraft};
+    const revision=state.world.value.revision,releases=[];let installed=false,released=false;
+    const check=()=>{signal?.throwIfAborted();playback?.check();if(state.world.value.revision!==revision)throw new Error('地图跳转期间世界状态已变化');};
+    const release=({failed=false}={})=>{
+      if(released)return;released=true;
+      if(failed&&installed){state.scenes.current=previous.scene;if(previous.view!==undefined)state.scenes.rollbackView?.(previous.view);}
+      state.sceneEntryDraft=previous.entryDraft;
+      for(const detach of releases.reverse())detach();state.storyRepository?.trim();
+    };
+    try{
+      const repository=state.storyRepository;
+      if(!repository)throw new Error('地图跳转剧情资料库未准备');
+      releases.push(repository.retainMap(mapId),repository.retainMap(destination.map_id));
+      await playbackTask(repository.ensureMap(destination.map_id,{protect:[mapId,destination.map_id]}),signal);check();
+      const scene=await playbackTask(actions.prepareMap(destination.map_id,{world:draft}),signal);
+      if(playback?.paused)await playback.ready();check();
+      const location=worldMapEntry(scene,destination,state.chapterStory);actions.validateEntry(scene,location);check();
+      state.sceneEntryDraft=draft;installed=true;state.scenes.current=scene;
+      const committed=actions.commitView(scene,location,'exit');
+      if(committed&&typeof committed.then==='function')throw new Error('地图跳转视图提交必须同步');
+      check();actions.log?.({type:'chapter-map-transfer',from:mapId,to:destination.map_id,source:destination.source});
+      return {location,release};
+    }catch(error){release({failed:true});throw error;}
   }
   async function enterMap(scene,draft,reason){
     const recordId=storyBindings(scene.data.id).entry_record;
@@ -170,8 +269,9 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
     try{return await playStory(async playback=>{
       await state.chapterRunner.runTlk({mapId:scene.data.id,recordId,draft,playback});
       if(playback.paused)await playback.ready();playback.check();
-      actions.validateEntry(state.scenes.current,draft.location);
-      actions.log({type:'map-entry-story',map_id:scene.data.id,record_id:recordId});return true;
+      if(!playback.nativeCompletion)actions.validateEntry(state.scenes.current,draft.location);
+      actions.log({type:'map-entry-story',map_id:scene.data.id,record_id:recordId});
+      return playback.nativeCompletion?{resume_exploration:false}:true;
     });}finally{state.sceneEntryDraft=null;}
   }
   async function animateChapterObject({mapId,objectIndex,signal,playback}){
@@ -194,5 +294,5 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
       }while(now-start<interval*frames.length);
     }finally{state.objectPreview=null;}
   }
-  return {playStory,cancelStoryPlayback,say, clearDialogue, chooseChapter, chooseDialogue, advanceDialogue, dialogueKey, dialogueKeyUp, releaseDialogueKeys, interact, chapterSpeaker, animateChapter, runChapter, enterMap, animateChapterObject};
+  return {playStory,cancelStoryPlayback,say, clearDialogue, chooseChapter, chooseDialogue, advanceDialogue, dialogueKey, dialogueKeyUp, releaseDialogueKeys, interact, chapterSpeaker, animateChapter, transferChapter, runChapter, enterMap, animateChapterObject};
 }

@@ -14,7 +14,7 @@ const read=async path=>JSON.parse(await readFile(new URL(`../web/${path}`,import
 
 function elements(){
   const nodes=new Map();
-  return id=>{if(!nodes.has(id))nodes.set(id,{hidden:false,dataset:{},replaceChildren(){},focus(){}});return nodes.get(id);};
+  return id=>{if(!nodes.has(id))nodes.set(id,{hidden:false,dataset:{},style:{opacity:''},replaceChildren(){},focus(){}});return nodes.get(id);};
 }
 function acceleratedPresentation(){
   const document=globalThis.document,tween=OpeningView.prototype.tween;
@@ -136,7 +136,7 @@ test('same-map chapter ANM inherits roaming poses and adopts actors before dispo
     scene.npcRuntime.adoptActors(new Map([[npc.slot_zero_based,{x:npc.x+32,y:npc.y+16,
       direction:npc.direction,visible:true,action:0,frame:0}]]));
     const expected={x:npc.x,y:npc.y,direction:npc.direction};
-    const draft={location:{map_id:'M17029',x:640,y:592,direction:4}};
+    const draft={leader_id:'001',location:{map_id:'M17029',x:640,y:592,direction:4}};
     Object.assign(actions,{prepareMap:map.prepareMap,commitView(){},validateEntry:map.validateEntry,log(){}});
     const controller=createStoryController({state,actions,$,canvas:{focus(){}}});
     await controller.animateChapter({program:state.chapterStory.programs['m17029-1'],mapId:'M17029',draft,runTlk:async()=>{},joinActor:async()=>{}});

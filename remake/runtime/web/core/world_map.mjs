@@ -8,6 +8,17 @@ function requireValue(ok, message) { if (!ok) throw new Error(message); }
 const source = value => (object(value) && Object.keys(value).length > 0) || (typeof value === 'string' && value.length > 0);
 const evidence = value => Array.isArray(value) && value.length > 0 && value.every(item => typeof item === 'string' && item.length > 0);
 
+export function applyWorldMapCommandToDraft(draft,{mode,area,destination},{initialState}={}){
+  requireValue(Number.isInteger(mode)&&mode>=0&&mode<=2&&Number.isInteger(area)&&area>=0&&area<2
+    &&Number.isInteger(destination)&&destination>=0&&destination<7,'大地图状态命令未支持');
+  if(!draft.world_map){requireValue(typeof initialState==='function','大地图初始来源未准备');draft.world_map=copy(initialState());}
+  validateWorldMapState(draft.world_map);
+  const target=draft.world_map.areas.find(row=>row.id===area);requireValue(target,'大地图区域未准备');
+  target.statuses[destination]=mode===2?2:0;
+  if(mode===0)target.selected_index=destination;
+  return mode===0?{area}:null;
+}
+
 export function validateWorldMapData(data) {
   requireValue(object(data) && source(data.source) && evidence(data.evidence), '大地图数据缺少来源');
   validateWorldMapState({areas: data.areas?.map(area => ({id: area.id, selected_index: area.selected_index, statuses: area.statuses}))});

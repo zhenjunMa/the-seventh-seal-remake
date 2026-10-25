@@ -17,6 +17,12 @@ from uuid import uuid4
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from content_registration import definition, map_ids, role_ids, program_ids, stage_exports
 from export_battle_stages import source_files as stage_source_files
+from export_fire_valley_index import source_files as fire_valley_source_files
+from export_enemy_content import source_files as enemy_source_files
+from export_story_media import source_files as story_media_source_files
+from export_chapter_items import source_files as item_source_files
+from export_item_presentation import source_files as item_presentation_source_files
+from export_battle_lifecycle import NATIVE as LIFECYCLE_NATIVE, RENDERER_BUNDLE, RENDERER_FINDINGS, FAILURE_FINDINGS, FAILURE_RECORDS
 from migrate_local_materials import relocated_path
 
 RUNTIME = Path(__file__).resolve().parents[1]
@@ -47,14 +53,24 @@ STEPS = {
     'party-combat': Step('export_party_combat.py', ('data/party_combat.json',), reports=('party_combat_export.json',)),
     'party-skills': Step('export_party_skills.py', ('data/party_skills.json', 'data/party_reactions.json', 'data/party_battle_view.json', 'assets/party_layers', 'assets/party_roles', 'assets/party_effects'), ('party-combat',), ('party_skills_export.json',)),
     'party-rewards': Step('export_party_rewards.py', ('data/party_rewards.json',), ('party-combat',), ('party_rewards_export.json',)),
-    'items': Step('export_chapter_items.py', ('data/items.json',), reports=('chapter_items_export.json',)),
+    'items': Step('export_chapter_items.py', ('data/items.json',), ('opening-seed','chapter-story','enemy-rewards'),
+        reports=('chapter_items_export.json',), inputs=('data/opening_seed.json','data/chapter_story.json',
+            'data/runtime_content.json','data/forest_rewards.json','../tools/content_registration.py',
+            '../tools/export_source_catalog.py','../tools/source/__init__.py',
+            '../tools/source/catalog_chr.py','../tools/source/combat_resources.py',
+            '../evidence/chapter_items_native.json','../evidence/forest_scheduler_native_20261011.json',
+            '../evidence/forest_rewards_native_20261011.json',
+            '../evidence/fire_valley_20261024/stage12_status_apply.json',
+            '../../../save_analysis_20261010/native_item_init.py'), sources=item_source_files()),
     'item-presentation': Step('export_item_presentation.py', ('data/item_presentation.json', 'assets/item_presentation'), ('items',), ('item_presentation_export.json',)),
     'recovery': Step('export_chapter_recovery.py', ('../evidence/chapter_recovery_export_20261011.json',), reports=('chapter_recovery_export_20261011.json',)),
     'audio': Step('export_audio.py', ('data/audio.json', 'assets/audio'), reports=('audio_export.json',)),
     'forest-stage': Step('export_forest_stage.py', ('data/forest_stage.json', 'assets/forest_stage'), reports=('forest_stage_export.json',)),
     'menu': Step('export_operation_menu.py', ('data/operation_menu.json', 'assets/menu'), ('items','party-skills'), ('operation_menu_resources.json',), ('data/party_battle_view.json',)),
     'battle-ui': Step('export_battle_ui.py', ('data/battle_ui.json', 'assets/battle_ui', '../evidence/battle_ui_native_retained.json'), reports=('battle_ui_resources.json',), inputs=('../evidence/party_native.json','../evidence/operation_menu_native.json')),
-    'battle-lifecycle': Step('export_battle_lifecycle.py', ('data/battle_lifecycle.json', *tuple('data/battle_lifecycle_layers_'+i+'.json' for i in REGISTERED_ROLE_IDS), 'assets/battle_lifecycle'), reports=('battle_lifecycle_20261015/export.json',)),
+    'battle-lifecycle': Step('export_battle_lifecycle.py', ('data/battle_lifecycle.json', *tuple('data/battle_lifecycle_layers_'+i+'.json' for i in REGISTERED_ROLE_IDS), 'assets/battle_lifecycle'), reports=('battle_lifecycle_20261015/export.json',),
+        inputs=tuple(dict.fromkeys('../evidence/'+Path(name).relative_to('remake/runtime/evidence').as_posix() for name,_ in LIFECYCLE_NATIVE.values()))
+            +tuple('../'+path.relative_to(RUNTIME).as_posix() for path in (RENDERER_BUNDLE,RENDERER_FINDINGS,FAILURE_FINDINGS,FAILURE_RECORDS))),
     'skill-test': Step('export_skill_test.py', ('data/skill_test.json','data/skill_test_stage.json','assets/skill_test_stage'), reports=('skill_test_20261020/export.json',), inputs=('../evidence/skill_test_20261020/native_evidence.json','../evidence/forest_stage_native.json','../evidence/menu_technique_native_20261013.json')),
     'battle-result': Step('export_battle_result.py', ('data/battle_result.json','assets/battle_result'), reports=('battle_result_20261020/export.json',), inputs=('../evidence/battle_result_20261020/native_evidence.json',)),
     'battle-packs': Step('export_battle_packs.py', ('data/battle_packs.json','assets/battle_packs'), ('party-skills','item-presentation','forest-stage','battle-ui','battle-lifecycle','skill-test','battle-result'), ('battle_loading_20261021/pack_export.json',), ('battle_view.mjs','forest_stage.mjs','data/battle_view.json','data/forest_full_battle_view.json','data/enemy_battle_view.json','../tools/battle_pack_inventory.mjs')),
@@ -71,10 +87,10 @@ STEPS = {
 }
 
 # Selection comes from authoring JSON, before generated maps/enemies exist.
-enemy_sources = ('GAME.exe', *tuple(f'Fight_Role/{ident}.{suffix}' for ident in role_ids('enemy') for suffix in ('CHR', 'dgp')))
+enemy_sources = enemy_source_files()
 STEPS['enemies'] = Step('export_enemy_content.py',
     ('data/forest_combat.json','data/forest_ai.json','data/forest_status.json','data/battle_scheduler.json',
-     'data/enemy_reactions.json','data/enemy_battle_view.json','assets/enemy_roles','assets/enemy_layers',
+     'data/enemy_reactions.json','data/enemy_battle_view.json','assets/enemy_roles','assets/enemy_layers','assets/enemy_effects',
      *tuple(f'data/enemy_role_layers_{ident}.json' for ident in role_ids('enemy'))),
     reports=('enemy_content_export.json',), inputs=('data/runtime_content.json','data/forest_full_battle_view.json','data/forest_reactions.json'), sources=enemy_sources)
 STEPS['enemy-rewards'] = Step('export_forest_rewards.py', ('data/forest_rewards.json',),
@@ -118,12 +134,14 @@ for target, dependencies in {
 }.items():
     STEPS[target]=replace(STEPS[target],depends=dependencies)
 STEPS['chapter-maps']=replace(STEPS['chapter-maps'],inputs=('data/runtime_content.json','data/opening_map_resources.json'))
+STEPS['audio']=replace(STEPS['audio'],inputs=(*STEPS['audio'].inputs,'data/runtime_content.json'))
 STEPS['map-effects']=replace(STEPS['map-effects'],inputs=(*STEPS['map-effects'].inputs,'data/catalog.json'))
 STEPS['party-combat']=replace(STEPS['party-combat'],inputs=(*STEPS['party-combat'].inputs,'data/opening_seed.json'))
 STEPS['catalog']=replace(STEPS['catalog'],inputs=(*STEPS['catalog'].inputs,'data/chapter_map_resources.json'))
 STEPS['party-rewards']=replace(STEPS['party-rewards'],inputs=(*STEPS['party-rewards'].inputs,'../evidence/content_workflow_20261021/growth_native.json'))
 STEPS['party-skills']=replace(STEPS['party-skills'],outputs=(*STEPS['party-skills'].outputs,*tuple(f'data/party_role_layers_{ident}.json' for ident in REGISTERED_PLAYER_IDS)))
-STEPS['item-presentation']=replace(STEPS['item-presentation'],outputs=(*STEPS['item-presentation'].outputs,*tuple(f'data/item_role_layers_{ident}.json' for ident in REGISTERED_PLAYER_IDS)))
+STEPS['item-presentation']=replace(STEPS['item-presentation'],outputs=(*STEPS['item-presentation'].outputs,*tuple(f'data/item_role_layers_{ident}.json' for ident in REGISTERED_PLAYER_IDS)),
+    inputs=(*STEPS['item-presentation'].inputs,'data/items.json'), sources=item_presentation_source_files())
 STEPS['content']=replace(STEPS['content'],outputs=(*STEPS['content'].outputs,'data/story'),
     inputs=(*STEPS['content'].inputs,'data/operation_menu.json','content','data/events',
             'data/opening_program.json','data/route_events.json'))
@@ -161,6 +179,18 @@ STEPS['configuration']=replace(STEPS['configuration'],
     inputs=(*STEPS['configuration'].inputs,'data/library/magic.json'))
 STEPS['content-library']=replace(STEPS['content-library'],
     inputs=(*STEPS['content-library'].inputs,'data/library/magic.json','data/party_skills.json','data/forest_ai.json'))
+STEPS['fire-valley-index']=Step('export_fire_valley_index.py',
+    ('data/library/fire_valley.json','../evidence/fire_valley_20261024/source_index.json'),
+    reports=('fire_valley_20261024/source_index.json',),
+    inputs=('../tools/route_extract_resources.py','../tools/map_npc_fields.py',
+            'core/chapter_animation.mjs','core/story_flow_compiler.mjs'),
+    sources=fire_valley_source_files())
+STEPS['story-media']=Step('export_story_media.py',
+    ('data/story_media.json','assets/video/story','assets/audio/story'),
+    reports=('story_media_export.json',),
+    inputs=('data/runtime_content.json','../tools/export_startup_media.py'),
+    sources=story_media_source_files())
+STEPS['content']=replace(STEPS['content'],depends=(*STEPS['content'].depends,'story-media'))
 
 
 def sha(path):

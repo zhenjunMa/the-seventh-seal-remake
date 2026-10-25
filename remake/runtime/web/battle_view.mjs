@@ -61,7 +61,7 @@ export function validateBattleViewMetadata(meta,content=runtimeContent) {
     for(const skill of role.alternate_skills??[])if(skill.role_id!==role.id||(meta.policy.complete_contacts?!/^[A-Za-z0-9_]+$/.test(skill.runtime_skill_id):skill.runtime_skill_id!=='yanci')||!skill.segments.length||(meta.policy.complete_contacts?contactCount(skill)<1:contactCount(skill)!==1)||
       (skill.layers&&(!urlAllowed(skill.layers.path)||!/^[a-f0-9]{64}$/.test(skill.layers.sha256))))throw new Error('追加技能表现未支持');
     for(const skill of skillsOf(role))for(const c of skill.command_effects??[]){
-      if(![0,4,6,11].includes(c.command_raw)||c.type_raw!==1)throw new Error('原类型命令范围未支持');
+      if(![0,4,6,7,8,11].includes(c.command_raw)||c.type_raw!==1)throw new Error('原类型命令范围未支持');
       if(c.command_raw===4&&!c.missing_source_file&&(!meta.effects.some(e=>e.id===c.effect_asset_id)||![0,1].includes(c.wait_raw)||!['actor','target'].includes(c.slot)||!Array.isArray(c.frames)||!c.frames.length||c.end_exclusive-c.start!==c.frames.length||c.event&&(c.event.frame<c.start||c.event.frame>=c.end_exclusive)))throw new Error('原类型4效果范围无效');
     }
   }
@@ -73,6 +73,11 @@ export function validateBattleViewMetadata(meta,content=runtimeContent) {
         effect.blend !== 'lighter' || !Number.isFinite(effect.anchor?.x) || !Number.isFinite(effect.anchor?.y)) {
       throw new Error('原作效果图集无效');
     }
+    if(effect.layer_order){
+      if(effect.layer_order.join(',')!=='shadow,main,intrinsic'||effect.shadow_blend!=='source-over'||effect.main_blend!=='source-over'||effect.intrinsic_blend!=='lighter'||effect.shadow_alpha!==128||!(effect.interval_ms>0))throw new Error('原特效分层或时钟无效');
+      for(const layer of ['shadow','main','intrinsic'])if(!urlAllowed(effect[`${layer}_sheet`])||!/^[a-f0-9]{64}$/.test(effect[`${layer}_sha256`]))throw new Error('原特效分层资源缺失');
+      if(effect.sheet!==effect.intrinsic_sheet||effect.sha256!==effect.intrinsic_sha256)throw new Error('原特效兼容层绑定不一致');
+    }
   }
   const effectIds = new Set(meta.effects.map(effect => effect.id));
   for (const role of meta.roles) for (const skill of [...skillsOf(role),...(role.response_skills??[])]) for (const segment of skill.segments) for (const effect of segment.effects) {
@@ -82,6 +87,56 @@ export function validateBattleViewMetadata(meta,content=runtimeContent) {
   if (!(meta.policy?.frame_ms > 0 && meta.policy.frame_ms <= 1000) ||
       !(meta.policy.tail_ms >= 0 && meta.policy.tail_ms <= 3000)) throw new Error('预览时钟无效');
   return meta;
+}
+
+// A CHR sequence may address the next physical DGP frames beyond an action's
+// nominal count. Both atlases still map column n to first_frame+n; only their
+// coverage differs. Admission requires the original file and action identities.
+export function mergeNativeActionAtlases(role, sourceRole, sourceHashes) {
+  const fail=()=>{throw new Error('战斗入场死亡动作冲突：原始动作或帧池不一致');};
+  const dgp=`Fight_Role/${role.id}.dgp`,chr=`Fight_Role/${role.id}.CHR`;
+  if(sourceRole.id!==role.id||sourceRole.source_dgp!==dgp||sourceRole.source_chr!==chr||
+      !/^[a-f0-9]{64}$/.test(sourceRole.source_dgp_sha256)||
+      !/^[a-f0-9]{64}$/.test(sourceRole.source_chr_sha256)||
+      sourceHashes?.[dgp]!==sourceRole.source_dgp_sha256||
+      sourceHashes?.[chr]!==sourceRole.source_chr_sha256||
+      !integer(sourceRole.source_frame_pool_count,1))fail();
+  const pool=sourceRole.source_frame_pool_count,actions=new Map(),required=new Set();
+  for(const action of sourceRole.actions){
+    if(actions.has(action.index)||!integer(action.index)||!/^[a-f0-9]{344}$/.test(action.native_raw_hex))fail();
+    const raw=Uint8Array.from(action.native_raw_hex.match(/../g),byte=>parseInt(byte,16)),view=new DataView(raw.buffer);
+    if(action.first_frame!==view.getUint32(0x72,true)||action.source_frame_count!==raw[14]||
+        action.directions!==Math.max(1,raw[0])||action.directions!==1||
+        action.interval_raw!==view.getUint32(1,true)||!integer(action.frame_count,1)||
+        action.frame_count<action.source_frame_count||action.first_frame+action.frame_count>pool)fail();
+    actions.set(action.index,{action,frames:new Set()});
+  }
+  const reference=(index,frame,physical)=>{
+    const entry=actions.get(index);if(!entry||!integer(frame)||frame>=entry.action.frame_count||
+      physical!==undefined&&physical!==entry.action.first_frame+frame)fail();
+    entry.frames.add(frame);required.add(entry.action.first_frame+frame);
+  };
+  for(const skill of sourceRole.skills){
+    for(const segment of skill.segments)for(const frame of segment.frames)reference(segment.action_index,frame);
+    for(const step of skill.timeline)if(step.kind==='sprite')reference(step.action_index,step.action_frame,step.source_frame);
+  }
+  for(const {action,frames} of actions.values()){
+    if(action.frame_count!==Math.max(action.source_frame_count,...[...frames].map(frame=>frame+1)))fail();
+    const existing=role.actions.find(row=>row.index===action.index);
+    if(existing){
+      const segments=[role.skill,...(role.alternate_skills??[]),...(role.response_skills??[])].flatMap(skill=>skill.segments??[])
+        .concat(role.idle_sequence?.segments??[role.idle],role.reaction);
+      const referenced=segments.filter(segment=>segment?.action_index===existing.index).flatMap(segment=>segment.frames);
+      if(existing.frame_count!==Math.max(action.source_frame_count,...referenced.map(frame=>frame+1)))fail();
+      if(existing.native_raw_hex!==action.native_raw_hex||existing.source_frame_count!==action.source_frame_count||
+          existing.first_frame!==action.first_frame||existing.directions!==action.directions||
+          !integer(existing.frame_count,1)||existing.frame_count<existing.source_frame_count||
+          existing.first_frame+existing.frame_count>pool||
+          existing.interval_raw!==undefined&&existing.interval_raw!==action.interval_raw)fail();
+      if(action.frame_count>existing.frame_count)Object.assign(existing,clone(action));
+    }else role.actions.push(clone(action));
+  }
+  return required;
 }
 
 function validateLayers(layers, meta, skillId = 'yantu') {
@@ -159,6 +214,7 @@ export class BattleView {
     this.alternateLayers = new Map();
     this.timelines = new Map();
     this.run = null;
+    this.detachedRuns = [];
     this.damageTexts = [];
     this.damageTextSerial = 0;
     this.ready = false;
@@ -189,18 +245,17 @@ export class BattleView {
       validateBattleViewMetadata(meta,this.content);
     }
     let lifecycleMeta=null;
+    const lifecycleFrames=new Map();
     if(this.lifecycleMetadataPath){
       lifecycleMeta=await this.jsonLoader(this.lifecycleMetadataPath);
       if(lifecycleMeta?.schema!=='seventh-seal-battle-lifecycle'||![1,2].includes(lifecycleMeta.version)||!Array.isArray(lifecycleMeta.roles))throw new Error('战斗入场死亡清单无效');
       for(const row of lifecycleMeta.roles){
         const role=meta.roles.find(r=>r.id===row.id);if(!role)continue;
         if(role.frame_width!==row.frame_width||role.frame_height!==row.frame_height||role.anchor.x!==row.anchor.x||role.anchor.y!==row.anchor.y)throw new Error('战斗入场死亡坐标不一致');
-        for(const action of row.actions){const existing=role.actions.find(a=>a.index===action.index);
-          if(existing){if(existing.native_raw_hex!==action.native_raw_hex||existing.frame_count!==action.frame_count)throw new Error('战斗入场死亡动作冲突');}
-          else role.actions.push(clone(action));
-        }
-        for(const skill of row.skills.filter(s=>s.source_skill?.original_skill_index===43&&s.source_skill?.actor_id==='001')){
-          role.alternate_skills??=[];role.alternate_skills.push({...clone(skill),runtime_skill_id:'001_43',segments:skill.segments.map(segment=>({...clone(segment),movement_source_field:'0x1e'}))});
+        for(const source of [row.source_chr,row.source_dgp])if(lifecycleMeta.source_hashes?.[source]!==meta.source_hashes?.[source])throw new Error('战斗入场死亡来源不一致');
+        lifecycleFrames.set(row.layer_bank.path,{row,required:mergeNativeActionAtlases(role,row,meta.source_hashes)});
+        for(const skill of row.skills.filter(s=>s.source_skill?.battle_handler==='native-revival')){
+          role.alternate_skills??=[];role.alternate_skills.push({...clone(skill),runtime_skill_id:`${row.id}_${skill.source_skill.original_skill_index}`,segments:skill.segments.map(segment=>({...clone(segment),movement_source_field:'0x1e'}))});
         }
         meta.extra_layer_banks=[...(meta.extra_layer_banks??[]),clone(row.layer_bank)];
       }
@@ -211,11 +266,24 @@ export class BattleView {
     check();
     const layers = validateLayers(await this.jsonLoader(meta.layers.path, meta.layers.sha256), meta);
     check();
-    const alternateLayers = new Map();
+    const alternateLayers = new Map(),physicalLayers=new Map();
     for(const descriptor of [meta.extra_layers,...(meta.extra_layer_banks??[])].filter(Boolean)){
-      const bank=await this.jsonLoader(descriptor.path,descriptor.sha256),role=meta.roles.find(r=>r.id===bank.role_id);
+      const bank=await this.jsonLoader(descriptor.path,descriptor.sha256),role=meta.roles.find(r=>r.id===bank.role_id),lifecycle=lifecycleFrames.get(descriptor.path);
       if(bank.schema!=='seventh-seal-native-layer-bank'||bank.version!==1||!role||bank.frame_width!==role.frame_width||bank.frame_height!==role.frame_height||!Array.isArray(bank.frames))throw new Error('反击本体图层清单无效');
-      for(const p of bank.frames)if(!integer(p.source_frame)||[p.main,p.intrinsic].some(l=>!urlAllowed('/'+l.path)||!/^[a-f0-9]{64}$/.test(l.sha256)))throw new Error('反击本体源帧无效');
+      if(lifecycle&&(bank.role_id!==lifecycle.row.id||bank.source_frame_pool_count!==lifecycle.row.source_frame_pool_count||
+          bank.anchor?.x!==role.anchor.x||bank.anchor?.y!==role.anchor.y||
+          [lifecycle.row.source_chr,lifecycle.row.source_dgp].some(source=>bank.source_hashes?.[source]!==meta.source_hashes[source])))throw new Error('战斗入场死亡图层来源不一致');
+      const frames=new Set();
+      for(const p of bank.frames){
+        if(!integer(p.source_frame)||frames.has(p.source_frame)||lifecycle&&p.source_frame>=lifecycle.row.source_frame_pool_count||
+            [p.main,p.intrinsic].some(l=>!urlAllowed('/'+l?.path)||!/^[a-f0-9]{64}$/.test(l?.sha256)||
+              (lifecycle||l.width!==undefined)&&l.width!==role.frame_width||(lifecycle||l.height!==undefined)&&l.height!==role.frame_height))throw new Error('反击本体源帧无效');
+        frames.add(p.source_frame);
+        const key=`${bank.role_id}:${p.source_frame}`,previous=physicalLayers.get(key);
+        if(previous&&['main','intrinsic'].some(layer=>previous[layer].sha256!==p[layer].sha256))throw new Error('同一原始帧的本体图层冲突');
+        physicalLayers.set(key,p);
+      }
+      if(lifecycle&&[...lifecycle.required].some(frame=>!frames.has(frame)))throw new Error('战斗入场死亡图层缺少原始帧');
       alternateLayers.set(`${bank.role_id}:bank:${descriptor.path}`,bank);check();
     }
     for (const role of meta.roles) for (const skill of role.alternate_skills ?? []) if (skill.layers) {
@@ -232,7 +300,10 @@ export class BattleView {
     for (const role of meta.roles) for (const action of role.actions) {
       add(action.sheet, action.sha256, role.frame_width * action.frame_count, role.frame_height * action.directions,role.id);
     }
-    for (const effect of meta.effects) add(effect.sheet, effect.sha256, effect.frame_width * effect.frame_count, effect.frame_height);
+    for (const effect of meta.effects) {
+      if(effect.layer_order)for(const layer of effect.layer_order)add(effect[`${layer}_sheet`],effect[`${layer}_sha256`],effect.frame_width*effect.frame_count,effect.frame_height);
+      else add(effect.sheet,effect.sha256,effect.frame_width*effect.frame_count,effect.frame_height);
+    }
     for (const source of [layers,...alternateLayers.values()]) for (const pair of source.frames) for (const layer of [pair.main, pair.intrinsic]) {
       add('/' + layer.path, layer.sha256, source.frame_width, source.frame_height,source.role_id);
     }
@@ -261,7 +332,7 @@ export class BattleView {
     this.alternateLayers = alternateLayers;
     this.lifecyclePairs=new Map([...alternateLayers.values()].flatMap(bank=>bank.frames.map(pair=>[`${bank.role_id}:${pair.source_frame}`,pair])));
     this.lifecycleBounds=new Map();
-    this.lifecycle=lifecycleMeta?new BattleLifecyclePlayback(lifecycleMeta,{appearanceBounds:(roleId,pose)=>this._appearanceBounds(roleId,pose)}):null;
+    this.lifecycle=lifecycleMeta?new BattleLifecyclePlayback(lifecycleMeta,{appearanceBounds:(roleId,pose)=>this._appearanceBounds(roleId,pose),nativeBridge:actorId=>this._nativeBridge(actorId)}):null;
     this.assetDescriptors=assets;
     this.images = packedImages??new Map(loaded);
     this.timelines = new Map(meta.roles.map(role => [role.id, compileActionTimeline(meta, layers, role.id,null,null,this.content)]));
@@ -292,12 +363,20 @@ export class BattleView {
     });
   }
 
-  playSequence(result,{onContact,onRecord,onReactionContact,onReactionRecord,onReactionEnd,onPrimaryEnd,onFrame}={}){
+  _nativeBridge(actorId,control=this.nativeControl,guard=this.nativeControlIsCurrent){
+    const check=()=>{if(!control||this.nativeControl!==control||guard&&!guard())throw abortError('原动作控制器已失效');};
+    return {begin:(raw,at)=>{check();return control.beginNativeVertical(actorId,raw,at);},
+      state:()=>{check();return control.nativeVerticalFor(actorId);},
+      record:raw=>{check();control.nativeSourceRecord(actorId,raw);},
+      advance:at=>{check();control.advanceNativeVerticals(at);}};
+  }
+
+  playSequence(result,{onContact,onRecord,onReactionContact,onReactionRecord,onReactionEnd,onPrimaryEnd,onFrame,onCarrierStart,onCarrierEnd,onDetachedError}={}){
     if(!this.ready||this.destroyed||this.run)return Promise.reject(new Error('完整技能表现尚未就绪或上一行动未结束'));
     const actor=this.roster.find(a=>a.id===result.actor_id),target=this.roster.find(a=>a.id===result.target_id);
     if(!this.meta.policy.complete_contacts||!actor||!target||typeof onContact!=='function'||typeof onRecord!=='function')return Promise.reject(new Error('完整技能序列或接触回调缺失'));
     let compiled;try{compiled=compileNativeSequence(this.meta,actor.resource_id,result.plan,[this.layers,...this.alternateLayers.values()]);}catch(e){return Promise.reject(e);}
-    return new Promise((resolve,reject)=>{this.run={sequence:true,result:clone(result),steps:compiled.steps,segments:compiled.segments,resolve,reject,onContact,onRecord,onReactionContact,onReactionRecord,onReactionEnd,onPrimaryEnd,onFrame,children:[],main_done:false,death_until:0,
+    return new Promise((resolve,reject)=>{this.run={sequence:true,native_control:this.nativeControl,native_guard:this.nativeControlIsCurrent,result:clone(result),steps:compiled.steps,segments:compiled.segments,resolve,reject,onContact,onRecord,onReactionContact,onReactionRecord,onReactionEnd,onPrimaryEnd,onFrame,onCarrierStart,onCarrierEnd,onDetachedError,children:[],carriers:[],independent_carriers:compiled.independent_carriers,main_done:false,death_until:0,
       started:null,elapsed:0,cursor:0,visited:-1,next_at:0,record_visited:-1,impact_called:false,impact_done:false,impact_elapsed:null,effects:[],generation:this.generation,
       observations:{draws:0,origin_slot:null,last_slot:null,contact_slot:null,bounds:null,intrinsic_source_frames:[],effect_ids:[],contacts:[],authority:'Actual remake Canvas draws with all source contacts; preview animation clock'}};});
   }
@@ -340,7 +419,8 @@ export class BattleView {
     ++this.generation;
     this.damageTexts=[];
     this.lifecycle?.reset();
-    if (this.run) {const run = this.run; this.run = null; run.reject(abortError(reason));}
+    for(const run of [this.run,...this.detachedRuns].filter(Boolean))if(!run.primary_resolved)run.reject(abortError(reason));
+    this.run=null;this.detachedRuns=[];
     if(this.resourcePool&&this.resourcePool.scopes.get('battle-actors')===this.resourceLease)this.resourcePool.release('battle-actors');
   }
 
@@ -354,13 +434,15 @@ export class BattleView {
   }
 
   _fail(run, error) {
-    if (this.run === run) {this.run = null; run.reject(error);}
+    if(this.run===run)this.run=null;
+    this.detachedRuns=this.detachedRuns.filter(old=>old!==run);
+    if(run.primary_resolved)run.onDetachedError?.(error);else run.reject(error);
   }
 
   _advance(now) {
+    if(this.detachedRuns.length||this.run?.sequence||this.nativeControl&&(!this.nativeControlIsCurrent||this.nativeControlIsCurrent())&&Number.isFinite(this.nativeControl.nextNativeVerticalAt()))return this._advanceSequenceRuns(now);
     const run = this.run;
     if (!run) return null;
-    if(run.sequence)return this._advanceSequence(now);
     if (run.started === null) run.started = now;
     run.elapsed = Math.max(run.elapsed, now - run.started);
     const ms = this.meta.policy.frame_ms;
@@ -398,54 +480,112 @@ export class BattleView {
     return run;
   }
 
-  _advanceSequence(now){
-    const run=this.run;if(run.started===null)run.started=now;run.elapsed=Math.max(run.elapsed,now-run.started);
+  _sequenceChannels(run){return [...run.carriers,run,...run.children];}
+
+  _advanceSequenceRuns(now){
+    const roots=()=>[...this.detachedRuns,this.run].filter(run=>run?.sequence);
+    for(const root of roots()){root.started??=now;root.elapsed=Math.max(root.elapsed,now-root.started);}
+    // Merge every detached carrier with the current action before callbacks.
+    // A later command cannot consume RNG ahead of an earlier carrier contact
+    // merely because RAF delivered both in one render frame.
+    for(let visits=0;visits<30000;visits++){
+      let root=null,at=Infinity,carrierFirst=false;
+      for(const candidate of roots())for(const channel of this._sequenceChannels(candidate)){
+        if(channel.done||channel===candidate&&candidate.main_done)continue;
+        const end=channel.visited+1>=channel.steps.length,tail=end&&!channel.carrier&&!candidate.independent_carriers?this.meta.policy.tail_ms:0;
+        const due=candidate.started+channel.next_at+tail;
+        if(due<at||due===at&&channel.carrier&&!carrierFirst){root=candidate;at=due;carrierFirst=Boolean(channel.carrier);}
+      }
+      const control=this.nativeControl,valid=control&&(!this.nativeControlIsCurrent||this.nativeControlIsCurrent());
+      const verticalAt=valid?control.nextNativeVerticalAt():Infinity;
+      if(verticalAt<=now&&(verticalAt<at||verticalAt===at&&!carrierFirst)){control.advanceNativeVerticals(verticalAt);continue;}
+      if(!root||at>now)break;
+      this._advanceSequence(now,root,1);
+      if(visits===29999)throw new Error('独立特效访问超出范围');
+    }
+    for(const root of roots())this._advanceSequence(now,root,0);
+    return this.run??this.detachedRuns[0]??null;
+  }
+
+  _advanceSequence(now,run=this.run,limit=20000){if(run.started===null)run.started=now;run.elapsed=Math.max(run.elapsed,now-run.started);
     const ms=run.frame_ms??this.meta.policy.frame_ms;
     try{
+      if(run.native_control&&(this.nativeControl!==run.native_control||run.native_guard&&!run.native_guard()))throw abortError('原行动控制器已失效');
       // Merge parent/reaction frame visits by preview time; a slow RAF preserves
       // contact ordering and cannot collapse an entire counter into one callback.
       let iterations=0;
       while(true){
-        if(++iterations>20000)throw new Error('完整技能序列超出帧访问范围');
-        const channels=[run,...run.children];let selected=null,at=Infinity,ending=false;
-        for(const channel of channels){if(channel.done||(channel===run&&run.main_done))continue;const end=channel.visited+1>=channel.steps.length,due=channel.next_at+(end?this.meta.policy.tail_ms:0);if(due<at){selected=channel;at=due;ending=end;}}
-        if(!selected||at>run.elapsed)break;const channel=selected,child=channel!==run;
-        if(ending){if(child){channel.done=true;run.onReactionEnd?.(clone(channel.descriptor),true,run.started+at);}else{run.main_done=true;run.onPrimaryEnd?.(run.started+at);}continue;}
+        if(iterations++>=limit)break;
+        const channels=this._sequenceChannels(run);let selected=null,at=Infinity,ending=false;
+        for(const channel of channels){if(channel.done||(channel===run&&run.main_done))continue;const end=channel.visited+1>=channel.steps.length,due=channel.next_at+(end&&!channel.carrier&&!run.independent_carriers?this.meta.policy.tail_ms:0);if(due<at){selected=channel;at=due;ending=end;}}
+        if(!selected||at>run.elapsed)break;const channel=selected,child=Boolean(channel.descriptor),carrier=Boolean(channel.carrier);
+        if(channel.vertical_wait){
+          const bridge=this._nativeBridge(channel.result.actor_id,run.native_control,run.native_guard);
+          if(bridge.state().waiting){channel.next_at=at+20;continue;}channel.vertical_wait=false;
+        }
+        if(ending){if(carrier)channel.done=true;else if(child){channel.done=true;run.onReactionEnd?.(clone(channel.descriptor),true,run.started+at);}else{run.main_done=true;run.onPrimaryEnd?.(run.started+at);}continue;}
         const i=channel.visited+1,step=channel.steps[i];
-        run.onFrame?.({...clone(step),actor_id:channel.result.actor_id,target_id:channel.result.target_id,channel_id:child?channel.channel_id:'main'});
+        if(!carrier)run.onFrame?.({...clone(step),actor_id:channel.result.actor_id,target_id:channel.result.target_id,channel_id:child?channel.channel_id:'main'});
         channel.cursor=i;
-        if(step.plan_record_index!==channel.record_visited){if(child)run.onReactionRecord?.(clone(step),clone(channel.descriptor));else run.onRecord(clone(step));channel.record_visited=step.plan_record_index;}
+        if(!carrier&&(step.plan_record_index!==channel.record_visited||step.visibility_end)){if(child)run.onReactionRecord?.({...clone(step),presentation_time_ms:run.started+at},clone(channel.descriptor));else run.onRecord({...clone(step),presentation_time_ms:run.started+at});channel.record_visited=step.plan_record_index;}
+        if(step.vertical_raw_hex){
+          const bridge=this._nativeBridge(channel.result.actor_id,run.native_control,run.native_guard),state=bridge.begin(step.vertical_raw_hex,run.started+at);
+          channel.vertical_wait=state.waiting;
+        }
+        if(step.carrier_spawn){
+          const source=step.carrier_spawn,id=`carrier-${run.carriers.length}`,firstAt=Math.max(at,source.interval_ms-run.started);
+          const carrier={carrier:true,channel_id:id,descriptor:channel.descriptor??null,result:clone(channel.result),steps:clone(source.steps),segments:[],
+            at,next_at:firstAt,elapsed:0,cursor:0,visited:-1,record_visited:-1,effects:[],done:false};
+          carrier.effects.push({asset_id:source.asset_id,slot:source.slot,unconditional:true,frame_count:source.frames.length,
+            source_frames:clone(source.frames),frame_ms:source.interval_ms,at:firstAt-at-source.interval_ms,visited_frame:-1});
+          run.carriers.push(carrier);run.onCarrierStart?.({carrier_id:id,source:clone(step),actor_id:channel.result.actor_id});
+        }
+        if(step.carrier_end){channel.done=true;run.onCarrierEnd?.({carrier_id:channel.channel_id,source:clone(step),actor_id:channel.result.actor_id},run.started+at);}
+        if(step.visibility)channel.visibility={...clone(step.visibility),started:step.visibility_end?channel.visibility?.started??at:at,complete:Boolean(step.visibility_end)};
         if(step.event){
-          const detail={...clone(step),presentation_time_ms:run.started+at,contact_key:`${child?channel.channel_id:'main'}:${step.plan_record_index}:${step.logical_frame}`,actor_id:channel.result.actor_id,target_id:channel.result.target_id,skill_id:channel.result.skill_id,
+          const detail={...clone(step),presentation_time_ms:run.started+at,contact_key:`${carrier||child?channel.channel_id:'main'}:${step.plan_record_index}:${step.logical_frame}`,actor_id:channel.result.actor_id,target_id:channel.result.target_id,skill_id:channel.result.skill_id,
             basis:'Original logical CHR contact position; original composition and DGP frame table, preview animation clock'};
           const response=child?run.onReactionContact?.(detail,clone(channel.descriptor)):run.onContact(detail);if(!response||typeof response.then==='function')throw new Error('完整接触结算必须同步返回原结算结果');
           channel.result={...channel.result,skipped:null,...clone(response)};channel.impact_called=true;channel.impact_done=true;channel.impact_elapsed=at-(channel.at??0);
-          this._queueDamageText(channel,response,now);
-          if(response.item_used&&run.item_effect_id){const asset=this.meta.effects.find(e=>e.id===run.item_effect_id);if(!asset)throw new Error('药品恢复特效缺失');
+          for(const hit of response.group_results??[response])this._queueDamageText({...channel,result:{...channel.result,target_id:hit.target_id??channel.result.target_id}},hit,now);
+          if((response.item_effect??response.item_used)&&run.item_effect_id){const asset=this.meta.effects.find(e=>e.id===run.item_effect_id);if(!asset)throw new Error('药品恢复特效缺失');
             channel.effects.push({asset_id:asset.id,slot:'target',unconditional:true,at:at-(channel.at??0),frame_ms:asset.interval_raw,visited_frame:-1});}
           // Native killer F5F9 doubles the current record interval; entering
           // the next source record clears it. Base65ms remains a preview policy.
           if(response.killer_frame_factor===2&&!step.effect_contact)channel.slow_record=step.plan_record_index;
           if(response.death)run.death_until=Math.max(run.death_until,at+520);
-          run.observations.contacts.push({...detail,hit:response.hit,damage:response.damage,remainingHp:response.remainingHp,skipped:response.skipped??null});
+          for(const hit of response.group_results??[response])run.observations.contacts.push({...detail,target_id:hit.target_id??detail.target_id,hit:hit.hit,damage:hit.damage,remainingHp:hit.remainingHp,skipped:hit.skipped??null});
           if(response.interrupt_actor_id===run.result.actor_id)run.main_done=true;
           for(const old of run.children)if(!old.done&&old.result.actor_id===response.interrupt_actor_id){old.done=true;run.onReactionEnd?.(clone(old.descriptor),false);}
-          if(response.reaction_descriptor){
-            const descriptor=clone(response.reaction_descriptor),role=this._role(descriptor.actor_id),plan=clone(descriptor.plan);plan.allow_no_contacts=true;
+          for(const hit of response.group_results??[response])if(hit.reaction_descriptor){
+            const descriptor=clone(hit.reaction_descriptor),role=this._role(descriptor.actor_id),plan=clone(descriptor.plan);plan.allow_no_contacts=true;
             const compiled=compileNativeSequence(this.meta,role.id,plan,[this.layers,...this.alternateLayers.values()]);
             for(const old of run.children)if(!old.done&&old.result.actor_id===descriptor.actor_id){old.done=true;run.onReactionEnd?.(clone(old.descriptor),false);}
             run.children.push({sequence:true,result:{actor_id:descriptor.actor_id,target_id:descriptor.target_id,skill_id:descriptor.skill.id,plan},descriptor,steps:compiled.steps,segments:compiled.segments,
               channel_id:`reaction-${run.children.length}`,at,next_at:at,elapsed:0,cursor:0,visited:-1,record_visited:-1,impact_called:false,impact_done:false,impact_elapsed:null,effects:[],done:false});
           }
         }
-        for(const effect of step.effects){if(effect.slot==='target'&&!effect.unconditional&&(!channel.result.target_id||!this._damaging(channel.result)))continue;channel.effects.push({...clone(effect),...(step.duration_ms>0?{frame_ms:step.duration_ms}:{}),at:at-(channel.at??0)});}
+        for(const effect of step.effects){
+          const hits=effect.slot==='target'&&channel.result.group_results?channel.result.group_results:[channel.result];
+          for(const hit of hits){if(effect.slot==='target'&&!effect.unconditional&&(!(hit.target_id??channel.result.target_id)||!this._damaging(hit)))continue;
+            channel.effects.push({...clone(effect),...(effect.slot==='target'?{target_id:hit.target_id??channel.result.target_id}:{}),...(step.duration_ms>0?{frame_ms:step.duration_ms}:{}),at:at-(channel.at??0)});}
+        }
         channel.visited=i;channel.next_at=at+(step.duration_ms??ms)*(channel.slow_record===step.plan_record_index?2:1);
       }
-      for(const c of run.children)c.elapsed=Math.max(0,run.elapsed-c.at);
-      for(const channel of [run,...run.children])for(const effect of channel.effects){const asset=this.meta.effects.find(e=>e.id===effect.asset_id),cursor=Math.min(asset.frames.length-1,Math.floor((channel.elapsed-effect.at)/(effect.frame_ms??ms)));
+      for(const c of [...run.children,...run.carriers])c.elapsed=Math.max(0,run.elapsed-c.at);
+      for(const channel of this._sequenceChannels(run))for(const effect of channel.effects){const asset=this.meta.effects.find(e=>e.id===effect.asset_id),cursor=Math.min(asset.frames.length-1,Math.floor((channel.elapsed-effect.at)/(effect.frame_ms??ms)));
         for(let frame=(effect.visited_frame??-1)+1;frame<=cursor;frame++)run.onEffectFrame?.({asset_id:asset.id,logical_frame:frame});effect.visited_frame=Math.max(effect.visited_frame??-1,cursor);}
-      const visualEnd=Math.max(0,...[run,...run.children].flatMap(c=>c.effects.filter(e=>e.unconditional).map(e=>(c.at??0)+e.at+(e.frame_count??this.meta.effects.find(a=>a.id===e.asset_id).frames.length)*(e.frame_ms??ms))));
-      if(run.main_done&&run.children.every(c=>c.done)&&run.elapsed>=Math.max(run.death_until,visualEnd)){this.run=null;run.resolve({completed:true,impact_committed:run.observations.contacts.length>0,contact_count:run.observations.contacts.length,observations:clone(run.observations)});return null;}
+      const visualEnd=Math.max(0,...this._sequenceChannels(run).flatMap(c=>c.effects.filter(e=>e.unconditional).map(e=>(c.at??0)+e.at+(e.frame_count??this.meta.effects.find(a=>a.id===e.asset_id).frames.length)*(e.frame_ms??ms))));
+      const foregroundDone=run.main_done&&run.children.every(c=>c.done);
+      if(foregroundDone&&run.independent_carriers&&!run.primary_resolved){
+        run.primary_resolved=true;if(this.run===run)this.run=null;
+        if(!this.detachedRuns.includes(run))this.detachedRuns.push(run);
+        run.resolve({completed:true,interrupted:Boolean(run.interrupted),carriers_pending:run.carriers.some(c=>!c.done),impact_committed:run.observations.contacts.length>0,contact_count:run.observations.contacts.length,observations:clone(run.observations)});
+      }
+      if(foregroundDone&&run.carriers.every(c=>c.done)&&run.elapsed>=Math.max(run.death_until,visualEnd)){
+        if(this.run===run)this.run=null;this.detachedRuns=this.detachedRuns.filter(old=>old!==run);
+        if(!run.primary_resolved)run.resolve({completed:true,interrupted:Boolean(run.interrupted),impact_committed:run.observations.contacts.length>0,contact_count:run.observations.contacts.length,observations:clone(run.observations)});return null;
+      }
       return run;
     }catch(error){this._fail(run,error);return null;}
   }
@@ -453,13 +593,13 @@ export class BattleView {
   _damaging(result) {return result.hit !== false && result.hit !== 'miss' && result.hit !== 'MISS' && Number(result.damage) > 0;}
 
   _queueDamageText(channel,result,now){
-    if(result.skipped||result.item_used||result.revived)return;
+    if(result.skipped||result.item_used||result.item_effect||result.revived||result.supported&&!(result.hp_delta>0))return;
     const miss=result.hit===false||['miss','MISS'].includes(result.hit);
     if(!miss&&!(Number.isFinite(result.damage)&&result.damage>=0))return;
     const targetId=channel.result.target_id,slot=this._slots(channel)[targetId];if(!slot)return;
     this.damageTexts=this.damageTexts.filter(e=>now-e.created_at<900);
     const lane=this.damageTexts.filter(e=>e.target_id===targetId).length;
-    this.damageTexts.push({id:++this.damageTextSerial,target_id:targetId,text:miss?'MISS':String(result.damage),miss,created_at:now,
+    this.damageTexts.push({id:++this.damageTextSerial,target_id:targetId,text:miss?'MISS':result.supported?`+${result.hp_delta}`:String(result.damage),miss,healed:Boolean(result.supported),created_at:now,
       x:Math.max(this.stageMeta?140:20,Math.min(this.stageMeta?820:940,slot[0]+34+Math.floor(lane/4)*28)),
       y:Math.max(28,slot[1]-70-(lane%4)*24)});
   }
@@ -468,7 +608,7 @@ export class BattleView {
     this.damageTexts=this.damageTexts.filter(e=>now-e.created_at<900);
     const c=this.context;
     for(const e of this.damageTexts){const age=Math.max(0,now-e.created_at);
-      c.save();c.globalAlpha=1-age/900;c.textAlign='center';c.font='bold 28px "Microsoft YaHei", sans-serif';c.fillStyle=e.miss?'#e2e8e7':'#ffda91';
+      c.save();c.globalAlpha=1-age/900;c.textAlign='center';c.font='bold 28px "Microsoft YaHei", sans-serif';c.fillStyle=e.miss?'#e2e8e7':e.healed?'#9df7ac':'#ffda91';
       c.lineWidth=3;c.lineJoin='round';c.strokeStyle='#24190e';c.strokeText?.(e.text,e.x,e.y-age/60);
       c.fillText(e.text,e.x,e.y-age/60);c.restore();
     }
@@ -589,9 +729,21 @@ export class BattleView {
       ctx.strokeStyle = '#759a9a35'; ctx.beginPath(); ctx.moveTo(0, 384); ctx.lineTo(960, 384); ctx.stroke();
     }
     if (!this.ready){ctx.restore();return;}
-    const run = this._advance(now), slots = this._slots(run),groundSlots=this._slots(run,true);
+    // Periodic source responses and deaths can replace a playing CHR record
+    // between render frames. Retire its future contacts before replaying RAF
+    // catch-up; the independent lifecycle channel owns the new source pose.
+    if(this.run?.sequence&&snapshot?.lifecycle_events){
+      const active=this.run;active.external_interrupts??=new Set();
+      for(const event of snapshot.lifecycle_events){
+        if(!['response','death','revive'].includes(event.kind)||active.external_interrupts.has(event.token))continue;
+        active.external_interrupts.add(event.token);
+        if(active.result.actor_id===event.actor_id){active.main_done=true;active.interrupted=true;}
+        for(const child of active.children)if(!child.done&&child.result.actor_id===event.actor_id){child.done=true;active.onReactionEnd?.(clone(child.descriptor),false);}
+      }
+    }
+    const run = this._advance(now), roots=[...this.detachedRuns,...(this.run?[this.run]:[])],slots = this._slots(run),groundSlots=this._slots(run,true);
     if(snapshot?.actors)this.lifecycle?.advance(snapshot,this.roster,now);
-    if(run?.sequence)for(const c of run.children.filter(c=>!c.done)){slots[c.result.actor_id]=this._slots(c)[c.result.actor_id];groundSlots[c.result.actor_id]=this._slots(c,true)[c.result.actor_id];}
+    if(run?.sequence)for(const c of roots.flatMap(root=>[...root.children,...(!root.main_done?[root]:[])]).filter(c=>!c.done)){slots[c.result.actor_id]=this._slots(c)[c.result.actor_id];groundSlots[c.result.actor_id]=this._slots(c,true)[c.result.actor_id];}
     if (run) {
       const o=run.observations,slot=slots[run.result.actor_id];o.draws++;
       o.origin_slot??=clone(this._slots(null)[run.result.actor_id]);o.last_slot=clone(slot);
@@ -603,14 +755,16 @@ export class BattleView {
     if(this.stageMeta)queue.sort((a,b)=>a.depth_y-b.depth_y);
     for (const {id} of queue) {
       const role = this._role(id), actor = actors.get(id), slot = slots[id];
+      const nativeZ=this.nativeControl&&(!this.nativeControlIsCurrent||this.nativeControlIsCurrent())?this.nativeControl.actor(id)?.native_z_raw:actor?.native_z_raw;
+      if(Number.isFinite(nativeZ))slot[1]+=nativeZ*(this.stageMeta?1.125:this.meta.policy.sprite_scale);
       if(actor?.escaped||actor?.state_raw===11)continue;
       if(this.lifecycle?.hidden(id))continue;
       const dead = actor?.alive === false || actor?.hp?.current === 0;
       let alpha = 1, segment = role.idle, frame = poseFrame(segment,now,true), pair = null;
       const idlePose=actor?.idle_pose??(role.idle_sequence?idlePoseAt(role.idle_sequence.segments,now):null);
       if(idlePose){segment={action_index:idlePose.action_index};frame=idlePose.action_frame;}
-      const acting=run?.sequence?[...run.children].reverse().find(c=>!c.done&&c.result.actor_id===id)??(!run.main_done&&run.result.actor_id===id?run:null):run?.result.actor_id===id?run:null;
-      const impacting=run?.sequence?[run,...run.children].filter(c=>c.result.target_id===id&&c.impact_called&&this._damaging(c.result)).sort((a,b)=>(b.at??0)+(b.impact_elapsed??0)-(a.at??0)-(a.impact_elapsed??0))[0]:run?.result.target_id===id&&run.impact_called&&this._damaging(run.result)?run:null;
+      const acting=run?.sequence?roots.flatMap(root=>[...root.children,...(!root.main_done?[root]:[])]).reverse().find(c=>!c.done&&c.result.actor_id===id):run?.result.actor_id===id?run:null;
+      const impacting=run?.sequence?roots.flatMap(root=>this._sequenceChannels(root)).filter(c=>c.result.target_id===id&&c.impact_called&&this._damaging(c.result)).sort((a,b)=>(b.at??0)+(b.impact_elapsed??0)-(a.at??0)-(a.impact_elapsed??0))[0]:run?.result.target_id===id&&run.impact_called&&this._damaging(run.result)?run:null;
       const lifePose=this.lifecycle?.pose(id);
       if(lifePose){segment={action_index:lifePose.action_index};frame=lifePose.action_frame;alpha=lifePose.alpha??1;
         pair=this.lifecyclePairs.get(`${role.id}:${lifePose.source_frame}`)??null;
@@ -633,6 +787,9 @@ export class BattleView {
         if(!this.lifecycle)continue;
         segment=role.reaction;frame=segment.frames.at(-1);
       }
+      const visibility=acting?.visibility;
+      if(visibility){const progress=visibility.complete?1:Math.min(1,Math.max(0,run.elapsed-visibility.started)/(visibility.complete_ticks*visibility.clock_ms));alpha*=visibility.kind==='appear'?progress:1-progress;}
+      else if(actor?.native_visibility?.complete&&actor.native_visibility.kind==='disappear')alpha=0;
       if(!lifePose)alpha*=this.lifecycle?.alpha(id)??1;
       if(!actor?.defending)this.defendClocks?.delete(id);
       ctx.save(); ctx.globalAlpha = alpha * .4; ctx.fillStyle = '#071315'; ctx.beginPath();
@@ -641,16 +798,19 @@ export class BattleView {
       if(acting&&pair?.intrinsic.active&&!run.observations.intrinsic_source_frames.includes(pair.source_frame))run.observations.intrinsic_source_frames.push(pair.source_frame);
     }
     if (run) {
-      for (const [channel,effect] of (run.sequence?[run,...run.children]:[run]).flatMap(c=>c.effects.map(e=>[c,e]))) {
+      for (const [channel,effect] of (run.sequence?roots.flatMap(root=>this._sequenceChannels(root)):[run]).flatMap(c=>c.effects.map(e=>[c,e]))) {
         const asset = this.meta.effects.find(item => item.id === effect.asset_id);
         const cursor = Math.floor((channel.elapsed - effect.at) / (effect.frame_ms??run.frame_ms??this.meta.policy.frame_ms));
         if (cursor < 0 || cursor >= (effect.frame_count??asset.frames.length)) continue;
-        const slot = slots[effect.slot === 'actor' ? channel.result.actor_id : channel.result.target_id];if(!slot)continue;
+        const slot = slots[effect.slot === 'actor' ? channel.result.actor_id : effect.target_id??channel.result.target_id];if(!slot)continue;
         const scale = this.meta.policy.sprite_scale;
-        ctx.save(); ctx.globalCompositeOperation = asset.blend;
-        drawBattleImage(ctx,this.images.get(asset.sheet), asset.frames[cursor] * asset.frame_width, 0,
-          asset.frame_width, asset.frame_height, slot[0] - asset.anchor.x * scale, slot[1] - asset.anchor.y * scale,
-          asset.frame_width * scale, asset.frame_height * scale); ctx.restore();
+        ctx.save();
+        for(const layer of asset.layer_order??[null]){
+          ctx.globalCompositeOperation=layer?asset[`${layer}_blend`]:asset.blend;
+          drawBattleImage(ctx,this.images.get(layer?asset[`${layer}_sheet`]:asset.sheet), (effect.source_frames??asset.frames)[cursor]*asset.frame_width,0,
+            asset.frame_width,asset.frame_height,slot[0]-asset.anchor.x*scale,slot[1]-asset.anchor.y*scale,asset.frame_width*scale,asset.frame_height*scale);
+        }
+        ctx.restore();
         if(!run.observations.effect_ids.includes(asset.id))run.observations.effect_ids.push(asset.id);
       }
     }

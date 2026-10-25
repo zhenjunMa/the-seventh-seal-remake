@@ -5,7 +5,8 @@ import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {pathToFileURL} from 'node:url';
 import {deriveRuntimeConfiguration,compileRuntimeConfiguration,compactRuntimeConfiguration} from '../web/core/runtime_config.mjs';
-import {createSkillRegistry,upgradeSkillConfiguration} from '../web/core/skill_registry.mjs';
+import {createSkillRegistry,deriveSkillConfiguration,upgradeSkillConfiguration} from '../web/core/skill_registry.mjs';
+import {compactParameterConfiguration} from '../web/core/config_overrides.mjs';
 import {exportRuntimeConfiguration,inspectRuntimeConfiguration} from '../tools/export_runtime_config.mjs';
 
 const copy=structuredClone,read=async name=>JSON.parse(await readFile(new URL(`../web/data/${name}.json`,import.meta.url),'utf8'));
@@ -15,7 +16,8 @@ function catalogFixture(){
   const template=original.party_skills.skills.yantu;
   const source=(actor,index)=>{
     const s=copy(template);s.actor_id=actor;s.id=`${actor}_${index}`;s.index=s.original_skill_index=index;
-    s.source={path:`Fight_Role/${actor}.CHR`,sha256:'a'.repeat(64),fixed_record_offset:1000+index*1053,fixed_bytes:1053};
+    const sourcePath=`Fight_Role/${actor}.CHR`;
+    s.source={path:sourcePath,sha256:original.party_skills.source_hashes[sourcePath]??'a'.repeat(64),fixed_record_offset:1000+index*1053,fixed_bytes:1053};
     const raw=Buffer.from(s.fixed_raw_hex,'hex');raw.writeInt32LE(40,0x14f);raw.writeInt32LE(20,0xcb);raw.writeInt32LE(10,0xcf);raw.writeInt32LE(-1,0x2e);s.fixed_raw_hex=raw.toString('hex');
     delete s.mp_cost;return s;
   };
@@ -24,6 +26,29 @@ function catalogFixture(){
   return {schema:'seventh-seal-source-skills',version:1,source_hashes:Object.fromEntries(records.map(s=>[s.source.path,s.source.sha256])),skills:Object.fromEntries(records.map(s=>[s.id,s]))};
 }
 function fixture(){return {...copy(original),source_skills:catalogFixture()};}
+
+test('admitting a source-catalog enemy promotes only the verified owner and preserves every existing numeric edit',async()=>{
+  const data={...copy(original),source_skills:await read('library/skills')};
+  assert.ok(data.ai.roles['032']);
+  const oldData=copy(data);delete oldData.ai.roles['032'];
+  const previous=compactParameterConfiguration(deriveSkillConfiguration(oldData));
+  assert.equal(previous.entries['032_7'].owner.side,'source');
+  previous.entries['032_7'].parameters.element_power=[1300,0,0,0,0,0];
+  previous.entries['032_7'].parameters.mp_delta_raw=-9;
+  previous.entries.yantu.parameters.mp_cost=7;
+  const before=copy(previous),upgraded=upgradeSkillConfiguration(data,previous);
+  assert.deepEqual(upgraded.entries['032_7'].owner,{role_id:'032',skill_index:7,side:'enemy'});
+  assert.deepEqual(upgraded.entries['032_7'].parameters.element_power,[1300,0,0,0,0,0]);
+  assert.equal(upgraded.entries['032_7'].parameters.mp_cost,9);
+  assert.equal(upgraded.entries.yantu.parameters.mp_cost,7);assert.deepEqual(previous,before);
+  assert.equal(Object.hasOwn(upgraded.entries['032_7'].parameters,'enabled'),false);
+  assert.equal(Object.hasOwn(upgraded.entries['032_7'].parameters,'mp_delta_raw'),false);
+  for(const mutate of [c=>c.entries['032_7'].owner.role_id='031',c=>c.entries['032_7'].owner.side='player',
+    c=>c.entries['032_7'].parameters.enabled=true,c=>c.entries['032_7'].parameters.mp_cost=2,
+    c=>c.source_hashes['Fight_Role/032.CHR']='0'.repeat(64),c=>c.entries['032_7'].parameters.mp_delta_raw=5]){
+    const bad=copy(previous);mutate(bad);assert.throws(()=>upgradeSkillConfiguration(data,bad),/配置|技能/);
+  }
+});
 
 test('complete extracted CHR catalog has exactly one configuration binding for every source record while execution remains unchanged',async()=>{
   const catalog=await read('library/skills'),data={...original,source_skills:catalog},config=deriveRuntimeConfiguration(data),registry=createSkillRegistry(data);

@@ -50,7 +50,7 @@ def sequence(role: CHR, dgp: DGP, index: int) -> dict:
                                  evidence=[NATIVE_IDS['terminal_command'], NATIVE_IDS['terminal_cleanup']]))
             continue
         start, end = u32(raw, 0x26), u32(raw, 0x2a)
-        frames = native_frame_sequence(dgp.raw_actions[group], start, end, raw[0x1d])
+        frames = native_frame_sequence(dgp.raw_actions[group], start, end, raw[0x1d], total_frames=dgp.frame_count)
         event = u32(raw, 0x49)
         effects = []
         for field, event_field, slot in ((9, 5, 'actor'), (0x4e, 0x49, 'target')):

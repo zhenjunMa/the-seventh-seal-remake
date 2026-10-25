@@ -18,7 +18,9 @@ test('each bounded chapter animation matches every original byte and rejects an 
     assert.equal(createHash('sha256').update(raw).digest('hex'),program.source.sha256);
     for(const c of program.commands)assert.equal(c.raw_hex,raw.subarray(c.source.offset,c.source.offset+74).toString('hex'));
   }
-  const bad=structuredClone(story.programs['m17029-1']);bad.commands[0].opcode=254;
+  // Leave map-loading commands intact so the source-context contract remains
+  // valid and this negative case reaches the unsupported-opcode check.
+  const bad=structuredClone(story.programs['m17029-1']);bad.commands.find(command=>command.opcode!==10).opcode=254;
   assert.throws(()=>validateChapterAnimation(bad),/未支持/);
 });
 test('source王厅 animation preserves arrival facing0, nested TLK24 and native actor1 join in source order',async()=>{

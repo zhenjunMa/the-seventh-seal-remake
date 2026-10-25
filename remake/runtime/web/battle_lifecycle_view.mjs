@@ -24,7 +24,8 @@ export const FADE_ALPHA_ADAPTER=Object.freeze({
   pixels:'8-bit alpha adapter uses original elapsed30 hard stop; original particles can finish earlier',
 });
 export class BattleLifecyclePlayback {
-  constructor(manifest,{appearanceBounds=null}={}){
+  constructor(manifest,{appearanceBounds=null,nativeBridge=null}={}){
+    this.nativeBridge=nativeBridge;
     need(appearanceBounds===null||typeof appearanceBounds==='function','Lifecycle appearance bounds provider invalid');this.appearanceBounds=appearanceBounds;
     need(Array.isArray(manifest?.roles),'Lifecycle manifest roles missing');this.roles=new Map();
     for(const role of manifest.roles){
@@ -54,7 +55,7 @@ export class BattleLifecyclePlayback {
     const skill=index===null||index===undefined?null:role.skills.get(index);
     need(index===null||index===undefined||skill,'Exact selected lifecycle source skill missing');
     if(skill&&event.source_id_raw!==null&&event.source_id_raw!==undefined)need(skill.id===event.source_id_raw,'Lifecycle selected source ID differs');
-    const channel={event:copy(event),actor_id:actor.id,resource_id:roleId,role,side:roster?.side??actor.side??role.side,skill,cursor:0,pose:null,deadline:now,started:now,appearance:null,blocked:null,mode:'sequence'};
+    const channel={event:copy(event),actor_id:actor.id,resource_id:roleId,role,side:roster?.side??actor.side??role.side,skill,cursor:0,pose:null,deadline:now,started:now,appearance:null,blocked:null,mode:'sequence',nativeBridge:this.nativeBridge?.(actor.id)??null,vertical_wait:false,record_visited:-1};
     if(!skill){
       const fadeMode=event.fade_mode_raw??event.fade_increment_raw;
       if(event.kind==='death'&&integer(fadeMode,1)&&fadeMode<=7){
@@ -86,6 +87,10 @@ export class BattleLifecyclePlayback {
       this.alphas.set(channel.actor_id,1-Math.min(1,elapsed/limit));if(elapsed>=limit)this._finish(channel);return;
     }
     while(now>=channel.deadline){
+      if(channel.vertical_wait){
+        need(channel.nativeBridge,'Lifecycle native vertical controller missing');channel.nativeBridge.advance(channel.deadline);
+        if(channel.nativeBridge.state().waiting){channel.deadline+=20;continue;}channel.vertical_wait=false;
+      }
       if(channel.appearance){
         const appearance=channel.appearance,limit=APPEARANCE_ALPHA_ADAPTER.complete_elapsed_raw[appearance.mode];
         appearance.elapsed_raw=Math.floor(Math.max(0,now-appearance.started)/APPEARANCE_ALPHA_ADAPTER.source_clock_ms);
@@ -121,8 +126,12 @@ export class BattleLifecyclePlayback {
       }
       if(channel.cursor>=channel.skill.timeline.length){this._finish(channel);return;}
       const step=channel.skill.timeline[channel.cursor++];
+      if(step.raw_hex&&step.chr_record_index!==channel.record_visited){channel.nativeBridge?.record(step.raw_hex);channel.record_visited=step.chr_record_index;}
       if(step.kind==='sprite'){
         channel.pose={action_index:step.action_index,action_frame:step.action_frame,source_frame:step.source_frame};channel.deadline+=step.interval_raw;
+      }else if(step.command_raw===3){
+        need(channel.nativeBridge&&step.raw_hex,'Lifecycle source vertical command missing');
+        const vertical=channel.nativeBridge.begin(step.raw_hex,channel.deadline);channel.vertical_wait=vertical.waiting;
       }else if(step.command_raw===7){
         const mode=step.mode_raw_0x47??step.mode_raw47;
         if(!integer(mode,1)){channel.blocked='appearance-mode-requires-controller-rng';channel.mode='blocked';return;}
@@ -140,7 +149,7 @@ export class BattleLifecyclePlayback {
     for(const actor of snapshot.actors)if(members.has(actor.id)&&!this.epochs.has(actor.id))this.epochs.set(actor.id,actor.life_epoch??0);
     const latest=new Map();for(const event of snapshot.lifecycle_events??[]){
       const actor=actors.get(event.actor_id);if(!actor||!members.has(actor.id)||(actor.life_epoch??0)!==event.life_epoch)continue;
-      need(typeof event.token==='string'&&event.token.length>0&&integer(event.life_epoch)&&['entry','death','revive'].includes(event.kind),'Lifecycle event invalid');latest.set(actor.id,event);
+      need(typeof event.token==='string'&&event.token.length>0&&integer(event.life_epoch)&&['entry','death','revive','response'].includes(event.kind),'Lifecycle event invalid');latest.set(actor.id,event);
     }
     for(const[id,channel]of this.channels){const event=latest.get(id);if(!event||event.token!==channel.event.token||event.life_epoch!==channel.event.life_epoch)this._cancel(id);}
     for(const[id,event]of latest){

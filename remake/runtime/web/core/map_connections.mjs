@@ -2,6 +2,21 @@
 import {runtimeContent,storyBindings} from './content_registry.mjs';
 const need=(ok,message)=>{if(!ok)throw new Error(`地图接入：${message}`);};
 
+// 4A81D0 keeps descriptor+2A as the placement sort code. A kind2 TLK
+// replaces only the entry marker with record+2F before 4A5110 scans it.
+export function nativeMapTransfer(table,record,{triggerId,triggerRecordId}={},content=runtimeContent){
+  need(record?.kind===2&&record.condition_type===0&&record.condition_bit===0,'地图跳转记录类型或条件未恢复');
+  need(/^m\d{5}(?:-\d+)?\.dat$/i.test(record.text_raw??''),'地图跳转文件名无效');
+  const mapId=record.text_raw.slice(0,-4).toUpperCase(),descriptor=table?.descriptors?.find(row=>row.id===triggerId);
+  need(content.maps[mapId],'地图跳转目标尚未登记');
+  need(Number.isInteger(record.if_true)&&record.if_true>=1&&record.if_true<=255,'地图跳转原入口标记无效');
+  need(descriptor?.state_raw===2&&descriptor.field_26_raw===triggerRecordId
+    &&storyBindings(table.id,content).triggers.includes(triggerId),'地图跳转缺少当前原触发器上下文');
+  need(Number.isInteger(descriptor.field_2a_raw)&&descriptor.field_2a_raw>=0&&descriptor.field_2a_raw<=8,'地图跳转原排序无效');
+  return {map_id:mapId,entry_marker:record.if_true,sort_code:descriptor.field_2a_raw,
+    source:{record:record.source??table.source,descriptor:descriptor.source??descriptor}};
+}
+
 export function chapterRouteExits(mapId,story,resources,content=runtimeContent){
   return storyBindings(mapId,content).routes.map(binding=>{
     const descriptor=resources.trigger_regions[mapId]?.find(row=>binding.descriptor_id===undefined

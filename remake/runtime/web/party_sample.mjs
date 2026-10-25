@@ -20,7 +20,7 @@ export function createPartySample(world,attributes,commands,configured=null,item
       original.source.sha256===commands.source_hashes[original.source.path], '队伍技能与角色来源不同');
     const raw=fixed(original);
     if(!battleSkillEligibility(world,original).available)continue;
-    need(original.id===id&&(raw[0x32]&15)!==0&&(raw[0x25]===0||original.battle_handler==='native-revival'),
+    need(original.id===id&&(raw[0x32]&15)!==0&&(raw[0x25]===0||['native-revival','native-support'].includes(original.battle_handler)),
       '队伍命令未学会或目标规则尚未接入');
     need(world.source.source_hashes?.[original.source.path]===commands.source_hashes[original.source.path], '队伍技能源指纹不同');
     let skill=copy(original);

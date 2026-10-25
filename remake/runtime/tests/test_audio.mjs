@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {readFileSync} from 'node:fs';
+import {readFileSync,existsSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {createAudioController, validateAudioManifest} from '../web/core/audio.mjs';
 
@@ -73,7 +73,11 @@ test('audio export binds real content, source digests and action fields, retaini
     assert.equal(digest(record),source.record_sha256);
     assert.equal(record.subarray(source.effect_field_offset,source.effect_field_offset+source.effect_field_bytes).toString().split('\0')[0],entry.effect_id+'.dgp');
   }
-  assert.deepEqual(data.missing_original_files,['sound/menu/close.wav','sound/OS01-12.wav','sound/OS02-09.wav','sound/OS02-10.wav']);
+  assert.deepEqual(data.missing_original_files,['sound/menu/close.wav','sound/OS01-12.wav','sound/OS02-09.wav','sound/OS02-10.wav','sound/OS02-11.wav','sound/OS04-3-2.wav','sound/OS06-12.wav']);
+  for(const source of data.missing_original_files){
+    assert.equal(existsSync(new URL('../../../'+source,import.meta.url)),false,source);
+    assert.equal(Object.values(data.clips).some(clip=>clip.source.path.toLowerCase()===source.toLowerCase()),false,'missing originals must never become fabricated clips');
+  }
   assert.equal(data.battles['stage13.scn'].clip,null);
   assert.deepEqual(data.battles['stage13.scn'].pool,['sound/Fight/FightBGM01.wav','sound/Fight/FightBGM02.wav']);
 });
