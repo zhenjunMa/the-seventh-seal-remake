@@ -88,6 +88,7 @@ DialogueView管理原对话板、画像、打字、滚动／换页与选择，Op
 encounters从登记地图的原DAT频率和STG池生成来源表；运行端按成功移动步长、可保存RNG及A／B池生成敌组。
 party_sample／forest_sample组装本场来源，party_attributes组合当前人物、装备与晶石派生属性；skill_registry／runtime_config应用同一配置快照。
 combat、combat_rules、forest_ai、battle_scheduler等core模块负责原公式、抽随机、选招、20ms充槽、目标与动作仲裁。技能学习、人物等级和实现处理器分别门控。
+core/battle_techniques将保存的编成记录映射为本场命令，只引用各成员已编译的技能，不另建数值配置。轮盘和招式列表共用命令资格／目标检查；combat按原顺序合并成员动作，准备量和MP合计、熟练度逐招记录，动作与独立特效接触读取各自的成员属性。未接入或等级不足的成员保留存档并显式禁用该组合。
 native_skill_loading在不可变CHR来源上派生4FED00加载后的技能code，正常战斗使用真实入口4451C0设置的模式0；forest_ai消费派生值并保留原选招RNG次序，不直接将文件code当作组合资格。
 类型恢复、受击／反击、状态、死亡／起身、技能成长、奖励池与结算各有独立core模块；BattleController连接它们并保持单次资源提交。
 BattleView消费时间线和只读表现数据，不修改HP／MP或抽战斗随机。场景、角色和效果共用640×480逻辑坐标。

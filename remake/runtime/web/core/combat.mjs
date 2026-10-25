@@ -216,15 +216,45 @@ export class BattleController {
     if(!this.state?.scheduler)return this.state?.phase==='command'?this.players().filter(a=>a.hp.current>0).map(a=>a.id):[];
     return this.players().filter(a=>a.id!==this.state.scheduler.active_actor_id&&!this.state.lifecycle_events?.some(e=>e.actor_id===a.id)&&isActorReady(a,this.state.scheduler)).map(a=>a.id);
   }
-  reactionTargetAvailability(skill,target) { return nativeReactionTargetAvailability({skill,target,data:this.reactionData}); }
+  commandSkills(skill) { return skill?.battle_handler==='combination'?skill.component_skill_ids.map(id=>this.skills[id]):skill?[skill]:[]; }
+  sequenceSkill(actor,index) {
+    if(actor.side==='enemy')return this.nativeAiData?.roles[actor.resource_id]?.skills[index];
+    return Object.values(this.skills??{}).find(skill=>skill.actor_id===actor.id&&skill.original_skill_index===index)
+      ??this.skillGrowthData?.roles[actor.resource_id??actor.id]?.skills[index]
+      ??(this.schedulerData?.idle_skills[actor.resource_id??actor.id]?.original_skill_index===index?this.schedulerData.idle_skills[actor.resource_id??actor.id]:null);
+  }
+  reactionTargetAvailability(skill,target) {
+    if(skill?.battle_handler==='combination'){
+      for(const member of this.commandSkills(skill)){
+        if(!member)return {available:false,reason:skill.unavailable_reason||'组合中的招式当前不可用。'};
+        const result=this.reactionTargetAvailability(member,target);if(!result.available)return result;
+      }
+      return {available:true};
+    }
+    return nativeReactionTargetAvailability({skill,target,data:this.reactionData});
+  }
   skillUnavailableReason(skillId) {
-    const skill=this.skills?.[skillId],caster=skill&&this.state&&this.actor(skill.actor_id);if(!caster||!this.reactionData)return '';
+    const skill=this.skills?.[skillId],caster=skill&&this.state&&this.actor(skill.actor_id);
+    if(skill?.unavailable_reason)return skill.unavailable_reason;
+    if(skill?.battle_handler==='combination'&&caster){
+      if(!this.completeContacts||typeof this.playSequence!=='function')return '当前战斗缺少组合动作执行器。';
+      const members=this.commandSkills(skill);
+      if(!members.length||members.some(member=>!member||member.actor_id!==caster.id))return '组合中的招式当前不可用。';
+      if(members.some(member=>(caster.level??0)<requiredSkillLevel(member)))return '角色等级不足，无法使用此组合。';
+      if(members.some(member=>silenced(caster,member)))return '沉默状态下不能施放包含法术的组合。';
+      if(caster.mp.current<skill.mp_cost)return `MP不足，需要 ${skill.mp_cost}。`;
+    }
+    if(!caster||!this.reactionData)return '';
     const targets=this.state.actors.filter(actor=>actor.side!==caster.side&&actor.hp.current>0&&actor.state_raw<4&&!actor.escaped);
     const results=targets.map(target=>this.reactionTargetAvailability(skill,target));
     return results.length&&results.every(result=>!result.available)?results[0].reason:'';
   }
   targetIdsForSkill(skillId) {
     const skill=this.skills?.[skillId],caster=skill&&this.state&&this.actor(skill.actor_id);if(!caster)return [];
+    if(skill.battle_handler==='combination'){
+      const members=this.commandSkills(skill);if(!members.length||members.some(member=>!member))return [];
+      return this.targetIdsForSkill(members[0].id).filter(id=>members.every(member=>this.targetIdsForSkill(member.id).includes(id)));
+    }
     if(skill.battle_handler==='native-support')return this.state.actors.filter(actor=>actor.side===caster.side&&supportTargetEligibility(actor,skill).available).map(actor=>actor.id);
     if(skill.battle_handler==='native-revival')return this.state.actors.filter(actor=>actor.side===caster.side&&revivalTargetEligibility(actor,skill).available).map(actor=>actor.id);
     return this.state.actors.filter(actor=>actor.side!==caster.side&&actor.hp.current>0&&actor.state_raw<4&&!actor.escaped&&this.reactionTargetAvailability(skill,actor).available).map(actor=>actor.id);
@@ -246,7 +276,7 @@ export class BattleController {
   }
   canChoose(skillId) {
     const skill=this.skills?.[skillId], player=this.state && this.actor(this.state.player_id);
-    return !this.skillUnavailableReason(skillId) && this.canCommand() && skill?.actor_id===player.id && (!skill.fixed_raw_hex||(player.level??0)>=requiredSkillLevel(skill)) && player.mp.current>=skill.mp_cost&&!silenced(player,skill)&&(!['native-revival','native-support'].includes(skill.battle_handler)||this.targetIdsForSkill(skillId).length>0);
+    return !this.skillUnavailableReason(skillId) && this.canCommand() && skill?.actor_id===player.id && (!skill.fixed_raw_hex||(player.level??0)>=requiredSkillLevel(skill)) && player.mp.current>=skill.mp_cost&&!silenced(player,skill)&&(!['native-revival','native-support','combination'].includes(skill.battle_handler)||this.targetIdsForSkill(skillId).length>0);
   }
   reservedItems(instanceId){return pendingCommands(this.state?.scheduler).filter(command=>command.item_instance_id===instanceId).length+(this.activeItemInstanceId===instanceId?1:0);}
   items() { return this.itemData&&this.state?.inventory?copy(usableItems(this.state.inventory,this.itemData)).map(item=>({...item,quantity:item.quantity-this.reservedItems(item.instance_id)})).filter(item=>item.quantity>0):[]; }
@@ -392,7 +422,8 @@ export class BattleController {
       const support=this.reactionTargetAvailability(skill,target);if(support.available)return target;
       this.cancelQueuedCommand(pending,'target-reaction-unavailable',{reason:support.reason});return null;
     }
-    const fixed=skill?.fixed_raw_hex?Uint8Array.from(skill.fixed_raw_hex.match(/../g),x=>parseInt(x,16)):null;
+    const targetSkill=skill?.battle_handler==='combination'?this.commandSkills(skill)[0]:skill;
+    const fixed=targetSkill?.fixed_raw_hex?Uint8Array.from(targetSkill.fixed_raw_hex.match(/../g),x=>parseInt(x,16)):null;
     // The opposite-side fallback is bound to ordinary direct attacks;
     // mode3 revival has its own same-side admission branch above.
     if(target&&target.side!==attacker.side&&target.state_raw>=4&&target.state_raw<8&&fixed){
@@ -467,6 +498,7 @@ export class BattleController {
       skill={id:`item:${consumed.item.id}`,actor_id:player.id,mp_cost:0};
     }
     requireValue(skill?.actor_id===player.id&&player.hp.current>0,'玩家命令无效');
+    if(skill.battle_handler==='combination')requireValue(this.canChoose(skill.id),this.skillUnavailableReason(skill.id)||'组合中的招式或目标当前不可用。');
     requireValue(!silenced(player,skill), '沉默状态下不能施放法术');
     requireValue(player.mp.current>=skill.mp_cost,'资源不足，无法施放');
     const revival=skill.battle_handler==='native-revival',support=skill.battle_handler==='native-support';
@@ -521,22 +553,26 @@ export class BattleController {
           this.checkWorld();requireValue(committed,'道具原动作没有触发使用事件');
           s.active_actor_id=null;setIdleSkill(attacker,this.schedulerData,this.now());this.state.round++;break;
         }
-        const nativePlan=this.completeContacts?(attacker.side==='player'?{kind:'single',skill_indices:[skill.original_skill_index],target_id:target.id,trace:[]}:planForestEnemyAction({actors:this.state.actors,actor_id:attacker.id,data:this.nativeAiData,rng:this.rng})):null;
+        const playerSkills=attacker.side==='player'?this.commandSkills(skill):null;
+        if(playerSkills&&(playerSkills.some(member=>!member||silenced(attacker,member)||member.fixed_raw_hex&&(attacker.level??0)<requiredSkillLevel(member))||attacker.mp.current<skill.mp_cost)){
+          this.cancelQueuedCommand(pending,'skill-no-longer-available');break;
+        }
+        const nativePlan=this.completeContacts?(attacker.side==='player'?{kind:skill.battle_handler==='combination'?'combination':'single',skill_indices:playerSkills.map(member=>member.original_skill_index),target_id:target.id,trace:[]}:planForestEnemyAction({actors:this.state.actors,actor_id:attacker.id,data:this.nativeAiData,rng:this.rng})):null;
         requireValue(!nativePlan||nativePlan.target_id,'原选招未产生可行动目标');
-        const selectedList=nativePlan?(attacker.side==='player'?[skill]:nativePlan.skill_indices.map(i=>this.skills[this.enemySkillTables[attacker.id][i]])):[this.skills[attacker.side==='player'?skillId:this.state.enemy_skill_ids[attacker.id]]];
+        const selectedList=nativePlan?(attacker.side==='player'?playerSkills:nativePlan.skill_indices.map(i=>this.skills[this.enemySkillTables[attacker.id][i]])):[this.skills[attacker.side==='player'?skillId:this.state.enemy_skill_ids[attacker.id]]];
         requireValue(selectedList.length&&selectedList.every(Boolean),'原选招对应技能尚未导出');const selected=selectedList[0];
         const victim=nativePlan?this.actor(nativePlan.target_id):attacker.side==='player'?target:player;
         const revival=selected.battle_handler==='native-revival',support=selected.battle_handler==='native-support';
         requireValue(revival?revivalTargetEligibility(victim,selected).available:support?supportTargetEligibility(victim,selected).available:victim.hp.current>0,'预定目标已倒下或不再可复活');
         requireValue(attacker.mp.current>=selected.mp_cost,'当前固定行动资源不足，完整后备选招未接入');
         attacker.current_skill=copy(selected);attacker.class_raw=selected.class_raw;attacker.action_mask_raw=selected.action_mask_raw;
-        const plan=nativePlan?(nativePlan.kind==='combination'?composeNativeSequence(this.nativeAiData.roles[attacker.resource_id].skills,nativePlan.skill_indices):directSequence(selected)):revival||support?directSequence(selected):null;
+        const plan=nativePlan?(nativePlan.kind==='combination'?composeNativeSequence(attacker.side==='player'?selectedList:this.nativeAiData.roles[attacker.resource_id].skills,nativePlan.skill_indices):directSequence(selected)):revival||support?directSequence(selected):null;
         if(this.skillGrowthData&&attacker.side==='player')for(const source of selectedList){const practice=recordNativeSkillPractice(this.skillPractice,attacker,source,selectedList.length);this.log({type:'battle-skill-practice',battle_id:this.state.id,...practice});}
         const charge=dispatchCharge(attacker,selectedList,s);this.state.phase='action';if(this.lifecycleEnabled)attacker.native_active=true;
         this.log({type:'battle-scheduled',battle_id:this.state.id,actor_id:attacker.id,skill_id:selected.id,target_id:victim.id,
           ticks:s.ticks,threshold:s.threshold,selection,native_plan:nativePlan?copy(nativePlan):null,charge,gauges:this.state.actors.map(a=>({id:a.id,...copy(a.charge)}))});
         if(this.state.reward_ledger)resetNativeChain(this.state.reward_ledger,attacker.id);
-        this.publish();if(plan)await this.performSequence(attacker,victim,selected,plan);else await this.performAction(attacker,victim,selected);this.checkWorld();
+        this.publish();if(plan)await this.performSequence(attacker,victim,selected,plan,{command:attacker.side==='player'?skill:selected,members:selectedList});else await this.performAction(attacker,victim,selected);this.checkWorld();
         s.active_actor_id=null;if(attacker.hp.current>0&&!this.state.lifecycle_events?.some(event=>event.actor_id===attacker.id)&&!attacker.native_active){
           if(attacker.current_skill?.id!==this.schedulerData.idle_skills[attacker.resource_id??attacker.id].id)setIdleSkill(attacker,this.schedulerData,this.now());}
         if(this.lifecycleEnabled)for(const actor of this.state.actors)if(actor.state_raw===4&&this.canFinalizeDeath(actor))this.finalizeDeath(actor);
@@ -551,17 +587,17 @@ export class BattleController {
       this.interrupt(error);throw error;
     }
   }
-  async performSequence(attacker,target,selected,plan){
+  async performSequence(attacker,target,selected,plan,{command=selected,members=[selected]}={}){
     this.checkWorld();const support=this.reactionTargetAvailability(selected,target);requireValue(support.available,support.reason);
     if(Object.hasOwn(attacker,'settled_raw'))attacker.settled_raw=0;
     // 0x501AA0 charges a negative source MP delta only outside skill-test.
-    if(attacker.side==='player'&&!this.testMode)Object.assign(attacker,this.consumeResources(copy(attacker),selected.mp_cost));
-    const actionId=`${this.state.id}:${++this.state.action_count}`,entry={action_id:actionId,actor_id:attacker.id,target_id:target.id,skill_id:selected.id,round:this.state.round,plan:copy(plan),contacts:[],impact:false,result:{hit:true,damage:0},before:copy({attacker,target}),after:null};
+    if(attacker.side==='player'&&!this.testMode)Object.assign(attacker,this.consumeResources(copy(attacker),members.reduce((sum,member)=>sum+member.mp_cost,0)));
+    const actionId=`${this.state.id}:${++this.state.action_count}`,entry={action_id:actionId,actor_id:attacker.id,target_id:target.id,skill_id:command.id,round:this.state.round,plan:copy(plan),contacts:[],impact:false,result:{hit:true,damage:0},before:copy({attacker,target}),after:null};
     this.state.history.push(entry);this.log({type:'battle-action',battle_id:this.state.id,...copy(entry)});this.publish();
     const seen=new Map(),controlsSeen=new Set(),primaryToken=actionId;let reactionCount=0;
     attacker.native_active=true;attacker.current_target_id=target.id;attacker.native_sequence_token=primaryToken;
     const onRecord=(step,descriptor=null)=>{const actor=descriptor?this.actor(descriptor.actor_id):attacker;if(actor.state_raw>=5)return;
-      const source=descriptor?descriptor.skill:plan.kind==='single'?selected:this.nativeAiData.roles[actor.resource_id].skills[step.source_skill_index];
+      const source=descriptor?descriptor.skill:plan.kind==='single'?selected:this.sequenceSkill(actor,step.source_skill_index);
       requireValue(source,'原组合技能属性来源无效');actor.current_skill=copy(source);actor.class_raw=step.class_raw;actor.action_mask_raw=step.action_mask_raw;
       if(step.visibility){
         const key=`${actor.id}:${step.plan_record_index}:${step.visibility_end?'end':'begin'}`;
@@ -584,7 +620,7 @@ export class BattleController {
       // 5055D0 retains the source index in each carrier. A later owner idle,
       // reaction or command never changes an already allocated effect's skill
       // and its contact must not restore the owner's previous CHR record.
-      const source=copy(step.independent_carrier?(descriptor?descriptor.skill:plan.kind==='single'?selected:this.nativeAiData.roles[striker.resource_id].skills[step.source_skill_index]):striker.current_skill),before=copy({attacker:striker,target:victim??null}),fixed=Uint8Array.from(source.fixed_raw_hex.match(/../g),x=>parseInt(x,16));
+      const source=copy(step.independent_carrier?(descriptor?descriptor.skill:plan.kind==='single'?selected:this.sequenceSkill(striker,step.source_skill_index)):striker.current_skill),before=copy({attacker:striker,target:victim??null}),fixed=Uint8Array.from(source.fixed_raw_hex.match(/../g),x=>parseInt(x,16));
       const isRevival=source.battle_handler==='native-revival',isSupport=source.battle_handler==='native-support';
       if(!isRevival&&!isSupport)requireValue(!step.effect_contact||source.effect_context?.effect_token===step.effect_token,'法术特效接触来源缺失');
       const targetFixed=victim?Uint8Array.from(victim.current_skill.fixed_raw_hex.match(/../g),x=>parseInt(x,16)):null;
@@ -637,7 +673,7 @@ export class BattleController {
         hit:result.hit,damage:result.damage,skipped:result.skipped??null,hp_before:before.target?.hp.current??null,hp_after:victim?.hp.current??null,mp_before:before.attacker.mp.current,mp_after:striker.mp.current,trace:copy(result.trace??[]),status:copy(presented.status),reaction:reaction?{kind:reaction.kind,source_skill_index:reaction.source_skill_index,target_id:reaction.target_id,trace:copy(reaction.trace)}:null,presentation:copy(step)});this.publish();return presented;
     };
     const contactTargets=step=>{
-      const fixed=Uint8Array.from(selected.fixed_raw_hex.match(/../g),x=>parseInt(x,16));
+      const source=plan.kind==='single'?selected:this.sequenceSkill(attacker,step.source_skill_index),fixed=Uint8Array.from(source.fixed_raw_hex.match(/../g),x=>parseInt(x,16));
       if(!step.effect_contact||!fixed[0x24])return [target.id];
       return this.state.actors.filter(actor=>fixed[0x25]?actor.side_raw===attacker.side_raw:actor.side_raw!==attacker.side_raw).map(actor=>actor.id);
     };
@@ -648,7 +684,7 @@ export class BattleController {
       const primary=results.find(row=>row.target_id===target.id)??results[0];
       return {...primary,group_results:results};
     };
-    const playback=await this.playSequence({actor_id:attacker.id,target_id:target.id,skill_id:selected.id,action_id:actionId,plan:copy(plan)},{onContact:onSourceContact,onRecord,
+    const playback=await this.playSequence({actor_id:attacker.id,target_id:target.id,skill_id:command.id,action_id:actionId,plan:copy(plan)},{onContact:onSourceContact,onRecord,
       onCarrierStart:({carrier_id})=>{this.pendingCarriers.add(`${actionId}:${carrier_id}`);},
       onCarrierEnd:({carrier_id})=>{this.pendingCarriers.delete(`${actionId}:${carrier_id}`);this.refreshCommandState();this.publish();},
       onDetachedError:error=>this.interrupt(error),
