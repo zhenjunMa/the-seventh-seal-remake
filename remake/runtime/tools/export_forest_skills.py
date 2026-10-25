@@ -19,6 +19,7 @@ def main():
     sources=dict(meta['source_hashes']);checks=[];response_layers=None
     for role in meta['roles']:
         ident=role['id'];cp=ROOT/f'Fight_Role/{ident}.CHR';dp=ROOT/f'Fight_Role/{ident}.dgp';c=CHR(cp);d=DGP(dp)
+        role['cursor_height_raw']=d.cursor_height_raw
         sources[cp.relative_to(ROOT).as_posix()]=sha(cp);sources[dp.relative_to(ROOT).as_posix()]=sha(dp)
         if ident!='001':
             indices=[14,15] if ident in ['011','012'] else [15,16]

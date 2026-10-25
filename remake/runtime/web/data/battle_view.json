@@ -432,7 +432,8 @@
           }
         ]
       },
-      "reaction_basis": "original category 1 image sequence projected for the bounded normal surviving reaction branch"
+      "reaction_basis": "original category 1 image sequence projected for the bounded normal surviving reaction branch",
+      "cursor_height_raw": 95
     },
     {
       "id": "012",
@@ -693,7 +694,8 @@
           }
         ]
       },
-      "reaction_basis": "original category 1 image sequence projected for the bounded normal surviving reaction branch"
+      "reaction_basis": "original category 1 image sequence projected for the bounded normal surviving reaction branch",
+      "cursor_height_raw": 40
     }
   ],
   "effects": [

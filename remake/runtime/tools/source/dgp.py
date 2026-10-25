@@ -170,6 +170,9 @@ class DGP:
                                      loop_raw=raw[13], frames_per_direction=raw[14],
                                      first_frame=u32(raw, 0x72), identifier_raw=u32(raw, 0x7e),
                                      raw_hex=raw.hex()))
+        # GAME.exe 0x516B1F reads loaded DGP+0x7D (extra_header+0x0C)
+        # before placing a battle cursor 64 pixels above this height.
+        self.cursor_height_raw = struct.unpack_from('<i', self.extra_header, 0x0c)[0]
         self.anchor_raw = [u32(self.extra_header, i) for i in (16, 20, 24)]
         self.sparse_row_layouts = {}
 

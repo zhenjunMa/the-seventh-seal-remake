@@ -5297,7 +5297,7 @@
     }
   },
   "reference_hashes": {
-    "remake/runtime/web/data/party_battle_view.json": "0fabe2a56176062862ade8afeb3de5cecccd320ffbbb69800839dde998351e1f",
+    "remake/runtime/web/data/party_battle_view.json": "4957c19d683fa2fa9ed7819cf5aad857c036f9f2f1871444eac02055ba0044d4",
     "remake/runtime/web/data/item_presentation.json": "746c04e8a7d21b2280b57885f210aa6a348fa358cbf58ee4135ea9ddfea4d5bc"
   },
   "action_sources": [

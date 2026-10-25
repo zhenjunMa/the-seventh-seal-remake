@@ -1218,13 +1218,15 @@
             }
           ]
         }
-      ]
+      ],
+      "cursor_height_raw": 95
     },
     {
       "id": "011",
       "name": "角鹰",
       "frame_width": 539,
       "frame_height": 439,
+      "cursor_height_raw": 135,
       "anchor": {
         "x": 266,
         "y": 324
@@ -2502,6 +2504,7 @@
       "name": "雪泥怪",
       "frame_width": 539,
       "frame_height": 439,
+      "cursor_height_raw": 40,
       "anchor": {
         "x": 266,
         "y": 324
@@ -3793,6 +3796,7 @@
       "name": "森林狩猎者",
       "frame_width": 539,
       "frame_height": 439,
+      "cursor_height_raw": 105,
       "anchor": {
         "x": 266,
         "y": 324
@@ -5066,6 +5070,7 @@
       "name": "唯爱拉",
       "frame_width": 539,
       "frame_height": 439,
+      "cursor_height_raw": 130,
       "anchor": {
         "x": 266,
         "y": 324

@@ -120,6 +120,7 @@ def prepare_role(ident, status):
                  if skill['id_raw'] in (1, 2, 3, 9, 12, 18, 19)]
     idle = enrich_sequence(c, d, 0)
     role = dict(id=ident, name=c.name, frame_width=d.width, frame_height=d.height,
+        cursor_height_raw=d.cursor_height_raw,
         anchor=dict(x=d.anchor_raw[0], y=d.anchor_raw[1]), mirror=False, direction=0,
         idle=idle['segments'][0], idle_sequence=idle, reaction=pose(1), skill=views[0], alternate_skills=views[1:], response_skills=responses)
     primary = copy.deepcopy(ai['skills'][ai['learned_indices'][0]])

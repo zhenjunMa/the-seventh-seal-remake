@@ -351,6 +351,7 @@ export class BattleView {
 
   setRoster(actors,skills){
     this.stageStarted=null;
+    this.drawnSlots=null;
     this.lifecycle?.reset();
     this.defendClocks=new Map();
     this.damageTexts=[];
@@ -418,6 +419,7 @@ export class BattleView {
 
   stop(reason = '战斗表现已取消') {
     ++this.generation;
+    this.drawnSlots=null;
     this.damageTexts=[];
     this.lifecycle?.reset();
     for(const run of [this.run,...this.detachedRuns].filter(Boolean))if(!run.primary_resolved)run.reject(abortError(reason));
@@ -684,8 +686,10 @@ export class BattleView {
 
   actorPositions(){
     if(!this.meta)return null;
-    return Object.fromEntries(Object.entries(this._slots(this.run)).map(([id,[x,y]])=>[id,this.stageMeta?[(x-120)/1.125,y/1.125]:[x*640/960,y*480/540]]));
+    return Object.fromEntries(Object.entries(this.drawnSlots??this._slots(this.run)).map(([id,[x,y]])=>[id,this.stageMeta?[(x-120)/1.125,y/1.125]:[x*640/960,y*480/540]]));
   }
+
+  actorCursorHeight(id){return this._role(id)?.cursor_height_raw;}
 
   drainLifecycleCompleted(){return this.lifecycle?.drainCompleted()??[];}
   lifecycleSnapshot(){return this.lifecycle?.snapshot()??null;}
@@ -751,6 +755,9 @@ export class BattleView {
       if(run.impact_called&&!o.contact_slot)o.contact_slot=clone(slot);
       o.bounds??=[...slot,...slot];o.bounds=[Math.min(o.bounds[0],slot[0]),Math.min(o.bounds[1],slot[1]),Math.max(o.bounds[2],slot[0]),Math.max(o.bounds[3],slot[1])];
     }
+    // The HUD consumes this frame's positions, including reaction-channel
+    // movement and native altitude, rather than reconstructing formation slots.
+    this.drawnSlots=slots;
     const actors = new Map((snapshot?.actors || []).map(actor => [actor.id, actor]));
     const queue=[...this.roster.filter(a=>a.side==='enemy'),...this.roster.filter(a=>a.side==='player')].map(a=>({...a,depth_y:groundSlots[a.id][1]}));
     if(this.stageMeta)queue.sort((a,b)=>a.depth_y-b.depth_y);

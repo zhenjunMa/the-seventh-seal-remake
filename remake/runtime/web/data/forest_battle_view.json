@@ -758,7 +758,8 @@
             "sha256": "d1f73eaf29c0b14880ef6d195ff191283a20f2acb0fd87936347d01af40df0b8"
           }
         }
-      ]
+      ],
+      "cursor_height_raw": 95
     },
     {
       "id": "011",
@@ -1255,7 +1256,8 @@
           }
         ],
         "runtime_skill_id": "011_attack"
-      }
+      },
+      "cursor_height_raw": 135
     },
     {
       "id": "012",
@@ -1523,7 +1525,8 @@
           }
         ],
         "runtime_skill_id": "012_attack"
-      }
+      },
+      "cursor_height_raw": 40
     },
     {
       "id": "013",
@@ -1970,7 +1973,8 @@
           }
         ],
         "runtime_skill_id": "013_attack"
-      }
+      },
+      "cursor_height_raw": 105
     }
   ],
   "effects": [

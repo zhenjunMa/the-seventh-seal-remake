@@ -7,6 +7,7 @@
       "name": "英格妮",
       "frame_width": 539,
       "frame_height": 439,
+      "cursor_height_raw": 95,
       "anchor": {
         "x": 266,
         "y": 324,
@@ -2577,6 +2578,7 @@
       "name": "凯",
       "frame_width": 539,
       "frame_height": 439,
+      "cursor_height_raw": 110,
       "anchor": {
         "x": 268,
         "y": 324,
@@ -5214,6 +5216,7 @@
       "name": "娃蒂",
       "frame_width": 539,
       "frame_height": 439,
+      "cursor_height_raw": 95,
       "anchor": {
         "x": 266,
         "y": 324,
@@ -8041,6 +8044,7 @@
       "name": "佛兰珂",
       "frame_width": 539,
       "frame_height": 439,
+      "cursor_height_raw": 100,
       "anchor": {
         "x": 266,
         "y": 324,
@@ -11849,6 +11853,7 @@
       "name": "朱特",
       "frame_width": 539,
       "frame_height": 439,
+      "cursor_height_raw": 100,
       "anchor": {
         "x": 266,
         "y": 324,
@@ -13612,6 +13617,7 @@
       "name": "赛拉飞尔",
       "frame_width": 539,
       "frame_height": 439,
+      "cursor_height_raw": 120,
       "anchor": {
         "x": 266,
         "y": 324,
@@ -16160,6 +16166,7 @@
       "name": "角鹰",
       "frame_width": 539,
       "frame_height": 439,
+      "cursor_height_raw": 135,
       "anchor": {
         "x": 266,
         "y": 324
@@ -17437,6 +17444,7 @@
       "name": "雪泥怪",
       "frame_width": 539,
       "frame_height": 439,
+      "cursor_height_raw": 40,
       "anchor": {
         "x": 266,
         "y": 324
@@ -18728,6 +18736,7 @@
       "name": "森林狩猎者",
       "frame_width": 539,
       "frame_height": 439,
+      "cursor_height_raw": 105,
       "anchor": {
         "x": 266,
         "y": 324
@@ -20001,6 +20010,7 @@
       "name": "唯爱拉",
       "frame_width": 539,
       "frame_height": 439,
+      "cursor_height_raw": 130,
       "anchor": {
         "x": 266,
         "y": 324

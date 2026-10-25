@@ -17,8 +17,8 @@ const wheelNavigation={
 
 // Stable transparent controls over the original source pixels. No world writes.
 export class BattleMenuView{
-  constructor({root,manifest,battle,getSettings,getBindings=null,playCue,onReturn,onStage=()=>{},textRenderer=null,memory=null,returnLabel=null,resultManifest=null,onResultEvent=()=>{},now=()=>performance.now(),reuseReturnButton=true}){
-    Object.assign(this,{root,manifest,battle,getSettings,getBindings,playCue,onReturn,onStage,textRenderer,returnLabel});
+  constructor({root,manifest,battle,getSettings,getBindings=null,getCursorHeight,playCue,onReturn,onStage=()=>{},textRenderer=null,memory=null,returnLabel=null,resultManifest=null,onResultEvent=()=>{},now=()=>performance.now(),reuseReturnButton=true}){
+    Object.assign(this,{root,manifest,battle,getSettings,getBindings,getCursorHeight,playCue,onReturn,onStage,textRenderer,returnLabel});
     this.doc=root.ownerDocument;this.images=new Map();this.players=new Map();this.targets=new Map();this.memory=memory??new Map();this.textCache=new Map();this.ballCache=new Map();this.fontOptions=new WeakMap();this.stage='waiting';this.focusIndex=0;this.listIndex=0;this.listOffset=0;this.draft=null;this.message='';this.epoch=0;this.cueSequence=0;
     this.menus=new Map(manifest.menus.map(m=>[m.id,m]));
     this.frame=this.doc.createElement('div');this.frame.className='battle-interface-frame';this.frame.tabIndex=-1;this.root.replaceChildren(this.frame);
@@ -173,7 +173,15 @@ export class BattleMenuView{
     if(this.stage!=='result')this.drawWheel(now);
     if(['skills','items'].includes(this.stage))this.drawList();
     const selected=this.snapshot.actors.find(a=>a.id===this.snapshot.player_id),pointer=this.stage==='target'?this.snapshot.actors.find(a=>a.id===this.targetId):this.ready().includes(selected?.id)?selected:null;
-    if(pointer){const [x,y]=(positions??battleActorPositions(this.snapshot.actors))[pointer.id]??[0,0],id=pointer.side==='enemy'?'fight_cursor2':'fight_cursor1',a=this.manifest.assets[id];this.asset(id,Math.floor(now/(a.actions[0]?.interval_raw??120)),x-a.anchor_raw[0],y-130-a.anchor_raw[1]);}
+    if(pointer){
+      const height=this.getCursorHeight?.(pointer.id);
+      if(Number.isFinite(height)){
+        const [x,y]=(positions??battleActorPositions(this.snapshot.actors))[pointer.id]??[0,0],id=pointer.side==='enemy'?'fight_cursor2':'fight_cursor1',a=this.manifest.assets[id];
+        // GAME.exe 0x516AF5..0x516B39 / 0x5189F0: current draw position,
+        // minus this actor's DGP height, 64, then the cursor's own anchor.
+        this.asset(id,Math.floor(now/(a.actions[0]?.interval_raw??120)),x-a.anchor_raw[0],y-height-64-a.anchor_raw[1]);
+      }
+    }
   }
   drawWheel(now){
     this.image(this.menus.get('game002d').images[0].image,490,340);

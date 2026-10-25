@@ -16279,7 +16279,8 @@
         113,
         0
       ],
-      "limit": "Native cursor anchor placement relative to actor height remains in caller investigation."
+      "placement": "GAME.exe 0x516AF5..0x516B39 / 0x5189F0: current actor draw position minus (0, DGP extra_header+0x0C + 64), then subtract cursor anchor.",
+      "evidence": "ev_f1296cfec0192d25c150c262cca1758339d6115e458959778a58b6f137de2eb9"
     },
     "target_cursor": {
       "asset": "fight_cursor2",
@@ -16291,7 +16292,8 @@
         117,
         0
       ],
-      "limit": "Native cursor anchor placement relative to target height remains in caller investigation."
+      "placement": "GAME.exe 0x516B43..0x516B87 / 0x5189F0: current target draw position minus (0, DGP extra_header+0x0C + 64), then subtract cursor anchor.",
+      "evidence": "ev_f1296cfec0192d25c150c262cca1758339d6115e458959778a58b6f137de2eb9"
     },
     "technique_panel": {
       "menu": "fight001",

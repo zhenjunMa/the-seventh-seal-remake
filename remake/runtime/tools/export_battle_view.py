@@ -157,7 +157,7 @@ def main() -> None:
             actions.append(dict(index=item['index'], sheet='/' + item['sheet'], sha256=item['sheet_sha256'],
                 frame_count=item['frames_per_direction'], directions=item['directions'], first_frame=item['first_frame']))
         roles.append(dict(id=ident, name=src['name'], frame_width=src['frame_width'], frame_height=src['frame_height'],
-            anchor=src['anchor'], mirror=False, direction=0,
+            anchor=src['anchor'], cursor_height_raw=dgp.cursor_height_raw, mirror=False, direction=0,
             idle=idle, reaction=reaction, actions=actions, skill=skill,
             reaction_basis='original category 1 image sequence projected for the bounded normal surviving reaction branch'))
     player = roles[0]['skill']
