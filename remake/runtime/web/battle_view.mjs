@@ -357,7 +357,8 @@ export class BattleView {
     if(!this.ready||this.run)throw new Error('战斗资源尚未就绪或正在行动');
     if(!Array.isArray(actors)||actors.length<2||actors.length>8||new Set(actors.map(a=>a.id)).size!==actors.length||actors.filter(a=>a.side==='player').length<1||actors.filter(a=>a.side==='player').length>4||actors.filter(a=>a.side==='enemy').length<1||actors.filter(a=>a.side==='enemy').length>4)throw new Error('战斗表现角色表无效');
     this.roster=actors.map(actor=>{
-      const resource_id=actor.resource_id??actor.id,role=this.meta.roles.find(r=>r.id===resource_id),selected=Object.values(skills).filter(s=>s.actor_id===actor.id);
+      // Compositions reuse their member sequences and have no separate atlas.
+      const resource_id=actor.resource_id??actor.id,role=this.meta.roles.find(r=>r.id===resource_id),selected=Object.values(skills).filter(s=>s.actor_id===actor.id&&s.battle_handler!=='combination');
       if(!role||!selected.length||actor.side!==this.content.roles[resource_id]?.side||selected.some(s=>actor.side==='player'&&s.id!==(role.skill.runtime_skill_id??'yantu')&&!(role.alternate_skills??[]).some(a=>a.runtime_skill_id===s.id)))throw new Error('战斗人物或技能表现尚未接入');
       return {id:actor.id,resource_id,side:actor.side,party_slot_zero_based:actor.party_slot_zero_based,skill_id:selected[0].id,skill_ids:selected.map(s=>s.id)};
     });

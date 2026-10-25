@@ -6,7 +6,7 @@ export const recordBytes=hex=>{fail(/^(?:[0-9a-f]{2}){176}$/i.test(hex),'原动�
 const hex=b=>Array.from(b,x=>x.toString(16).padStart(2,'0')).join('');
 const view=b=>new DataView(b.buffer,b.byteOffset,b.byteLength);
 export function composeNativeSequence(skills,indices){
- fail(Array.isArray(indices)&&indices.length>0&&indices.length<=5,'原技能组合数量未支持');
+ fail(Array.isArray(indices)&&indices.length>0&&indices.length<=7,'原技能组合数量未支持');
  const selected=indices.map(i=>{const s=skills.find(s=>(s.index??s.original_skill_index)===i);fail(s&&Array.isArray(s.actions)&&s.actions.length,'组合源技能缺失');return s;});
  const records=[];let movement=false,bodies=0;
  const add=(skill,action,rebind)=>{const b=recordBytes(action.raw_hex);if(rebind)b[0x92]=skill.index??skill.original_skill_index;records.push({raw_hex:hex(b),source:clone(skill.source),source_skill_index:skill.index??skill.original_skill_index,source_action_index:action.index,source_offset:action.offset,source_raw_hex:action.raw_hex});};
@@ -26,7 +26,9 @@ export function composeNativeSequence(skills,indices){
   if(b[0x2e]&&!bodyRun){v.setInt32(0x2f,v.getInt32(0x37,true),true);v.setInt32(0x33,v.getInt32(0x3b,true),true);bodyRun=true;r.raw_hex=hex(b);}
   else if(!b[0x2e]&&bodyRun){const previous=recordBytes(records[i-1].raw_hex),p=view(previous);p.setInt32(0x2f,p.getInt32(0x3f,true),true);p.setInt32(0x33,p.getInt32(0x43,true),true);records[i-1].raw_hex=hex(previous);bodyRun=false;}
  });
- return {kind:'combination',skill_indices:[...indices],records,body_count:bodies,evidence:['ev_83211444e38be8006ea27651f70345eacf6b681907e03ef2386c58dcd58028e5','ev_2ba5ba98c31056a99780bfa1b4e343ec5aa47cce71e34b29cae6c9510cfff685']};
+ return {kind:'combination',skill_indices:[...indices],records,body_count:bodies,
+  skill_handlers:Object.fromEntries(selected.filter(s=>s.battle_handler).map(s=>[s.index??s.original_skill_index,s.battle_handler])),
+  evidence:['ev_83211444e38be8006ea27651f70345eacf6b681907e03ef2386c58dcd58028e5','ev_2ba5ba98c31056a99780bfa1b4e343ec5aa47cce71e34b29cae6c9510cfff685']};
 }
 export function directSequence(skill){return {kind:'single',handler:skill.battle_handler??'direct',skill_indices:[skill.index??skill.original_skill_index],records:skill.actions.map(a=>({raw_hex:a.raw_hex,source:clone(skill.source),source_skill_index:skill.index??skill.original_skill_index,source_action_index:a.index,source_offset:a.offset,source_raw_hex:a.raw_hex}))};}
 export function compileNativeSequence(meta,roleId,plan,layers=[]){
@@ -38,12 +40,13 @@ export function compileNativeSequence(meta,roleId,plan,layers=[]){
   const record=plan.records[ri],b=recordBytes(record.raw_hex),v=view(b),group=v.getUint32(1,true);
   if(b[0]!==0){
    const vertical=group===3&&[2,3].includes(b[0x47]);
-   const magic=vertical||plan.kind==='single'&&['effect-carrier','native-revival','native-support'].includes(plan.handler);
+   const handler=plan.kind==='single'?plan.handler:plan.skill_handlers?.[record.source_skill_index];
+   const magic=vertical||['effect-carrier','native-revival','native-support'].includes(handler);
    fail(b[0]===1&&(group===11||vertical||magic&&[0,4,6,7,8].includes(group)),'原组合类型命令未支持');
    if(!magic)continue;
    const previous=steps.findLast(s=>!s.command_raw&&s.command_raw!==0),visual=previous?.visual??previous??null;
    const base={segment_index:visual?.segment_index??0,plan_record_index:ri,chr_record_index:record.source_action_index,
-    source_skill_index:plan.skill_indices[0],class_raw:b[0x24],action_mask_raw:b[0x78],source:clone(record),
+    source_skill_index:plan.kind==='combination'?b[0x92]:plan.skill_indices[0],class_raw:b[0x24],action_mask_raw:b[0x78],source:clone(record),
     command_raw:group,visual:visual?{action_index:visual.action_index,action_frame:visual.action_frame,source_frame:visual.source_frame,pair:clone(visual.pair)}:null};
    if(group!==4){steps.push({...base,index:steps.length,logical_frame:0,event:null,effects:[],duration_ms:0,
     control:{mode_raw:b[0x47],step_i32_raw:v.getInt32(0x1e,true),amount_i32_raw:v.getInt32(5,true)},...(vertical?{vertical_raw_hex:record.raw_hex}:{})});

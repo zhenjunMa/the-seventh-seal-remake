@@ -39,9 +39,9 @@ export function changeSkillShortcuts(world,source,{roleId,indices,expectedRevisi
   return [...slots];
 }
 export function battleMenuSkillOrder(world,source,skills,roleId){
-  const candidates=Object.values(skills).filter(skill=>skill.actor_id===roleId&&battleSkillEligibility(world,skill).available),slots=skillShortcuts(world,source,roleId);
+  const candidates=Object.values(skills).filter(skill=>skill.actor_id===roleId&&(skill.battle_handler==='combination'||battleSkillEligibility(world,skill).available)),slots=skillShortcuts(world,source,roleId);
   // An unsupported source slot stays saved and does not synthesize an attack.
-  const indices=world.technique_bindings?techniqueSlots(world,source,roleId).filter(slot=>slot.type===0).map(slot=>slot.index_one_based-1):slots;
-  const bound=indices.map(index=>candidates.find(skill=>skill.original_skill_index===index)?.id).filter(Boolean);
+  const bindings=world.technique_bindings?techniqueSlots(world,source,roleId):slots.map(index=>({type:0,index_one_based:index+1}));
+  const bound=bindings.map(slot=>candidates.find(skill=>slot.type===0?skill.original_skill_index===slot.index_one_based-1:slot.type===1&&skill.technique_index_one_based===slot.index_one_based)?.id).filter(Boolean);
   return [...new Set([...bound,...candidates.map(skill=>skill.id)])];
 }

@@ -10,7 +10,8 @@ import {createPartySample} from "../party_sample.mjs";
 import {partyResourcesForWorld, consumePartyMp} from "../core/party_attributes.mjs";
 import {battleStage} from "../core/content_registry.mjs";
 import {planPartyDefeat} from "../core/recovery.mjs";
-import {techniqueSlots,techniqueSlotName,techniqueCombinations} from "../core/menu_techniques.mjs";
+import {techniqueSlots,techniqueSlotName} from "../core/menu_techniques.mjs";
+import {battleTechniqueId} from "../core/battle_techniques.mjs";
 import {WorldStore} from "../core/world.mjs";
 import {createSkillTestSample} from "../skill_test_sample.mjs";
 import {commitSkillTestResources} from "../core/skill_test_commit.mjs";
@@ -82,7 +83,7 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
     const bindingSource=newParty?effectiveSkillSource(state.partySkills,world.value):null;
     const host=$('battleHud'),root=owner?host.ownerDocument.createElement('div'):host;
     const menu=new BattleMenuView({root,manifest:uiManifest,battle,returnLabel,reuseReturnButton:!owner,
-      getSettings:()=>state.menuSettings?.snapshot()??{},getBindings:newParty?id=>techniqueSlots(world.value,bindingSource,id).map(slot=>({...slot,name:slot.type===1?techniqueCombinations(world.value,bindingSource,id)[slot.index_one_based-1]?.name:techniqueSlotName(bindingSource,id,slot)})):null,
+      getSettings:()=>state.menuSettings?.snapshot()??{},getBindings:newParty?id=>techniqueSlots(world.value,bindingSource,id).map(slot=>({...slot,name:slot.type===1?battle.skills[battleTechniqueId(id,slot.index_one_based)]?.name:techniqueSlotName(bindingSource,id,slot)})):null,
       playCue:(...args)=>state.audio?.playCue(...args),onReturn:actions.guarded(returnFromBattle),onStage:stage=>{if(state.battle===battle)battle.setCommandStage?.(stage);},textRenderer:state.operationMenu?.textRenderer,memory:state.battleCursorMemory,resultManifest,onResultEvent:actions.log,
       now:()=>state.engine?.battle.clock.time??performance.now()});
     if(owner)owner.menu=menu;else state.battleMenu=menu;
@@ -140,7 +141,7 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
       const configured=await actions.readConfiguredData();state.itemData=configured.items;
       progress({completed:10,total:100});
       const newScheduler={...configured.scheduler,policy:{...configured.scheduler.policy,commands:'Frame-driven charging and queued ready-player commands; menu selection and other actors animations continue charging.'},...(newParty?{idle_skills:{...configured.scheduler.idle_skills,...state.partySkills.idle_skills}}:{})};
-      sample=newParty?assembleForestSample(createPartySample(state.world.snapshot(),state.partyCombat,state.partySkills,configured,state.itemData),configured.forest,group,newScheduler,configured.ai,configured.rewards,state.partyReactions,state.statusData):group?createForestSample(state.world.snapshot(),configured.combat,configured.forest,group,null,newScheduler,configured.ai,configured.rewards,state.reactionData,state.statusData):createBattleSample(state.world.snapshot(),configured.combat);
+      sample=newParty?assembleForestSample(createPartySample(state.world.snapshot(),state.partyCombat,state.partySkills,configured,state.itemData,state.operationMenu?.techniques?.supplement?.name_charset),configured.forest,group,newScheduler,configured.ai,configured.rewards,state.partyReactions,state.statusData):group?createForestSample(state.world.snapshot(),configured.combat,configured.forest,group,null,newScheduler,configured.ai,configured.rewards,state.reactionData,state.statusData):createBattleSample(state.world.snapshot(),configured.combat);
       if(sample.actors.filter(actor=>actor.side==='player').every(actor=>actor.hp.current===0))throw new Error('队伍已经倒下，请载入进度后继续。');
       const mode=newParty?'party':group?'forest':'sample';state.battleView=await prepareView({mode,newParty,stagePath:group?'/'+battleStage(group.stage).path:null,lifecycle:Boolean(group),actors:sample.actors,onProgress:p=>progress({completed:10+75*p.completed/p.total,total:100})});state.battleView.setRoster(sample.actors,sample.skills);
       state.battle=createCombat(state.world,newParty,state.battleView);
@@ -180,7 +181,7 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
       check();if(!state.battleData){const data=await playbackTask(actions.json(state.catalog.combat_sample??'data/combat_sample.json'),signal);check();state.battleData=data;}
       const configured=await playbackTask(actions.readConfiguredData(),signal);check();state.itemData=configured.items;
       const scheduler={...configured.scheduler,idle_skills:{...configured.scheduler.idle_skills,...state.partySkills.idle_skills}};
-      const sample=assembleForestSample(createPartySample(simulation.world.snapshot(),state.partyCombat,state.partySkills,configured,state.itemData),
+      const sample=assembleForestSample(createPartySample(simulation.world.snapshot(),state.partyCombat,state.partySkills,configured,state.itemData,state.operationMenu?.techniques?.supplement?.name_charset),
         configured.forest,group,scheduler,configured.ai,configured.rewards,state.partyReactions,state.statusData);
       if(sample.actors.filter(actor=>actor.side==='player').every(actor=>actor.hp.current===0))throw new Error('队伍已经倒下，无法进入剧情战斗');
       const preparedView=await playbackTask(prepareView({mode:'scripted',newParty:true,stagePath:'/'+battleStage(group.stage).path,lifecycle:true,actors:sample.actors}),signal);check();
@@ -242,7 +243,7 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
       state.itemData=configured.items;
       progress({completed:10,total:100});
       const world=new WorldStore(session.mapWorld.snapshot(),session.mapWorld.mapIds);
-      sample=createSkillTestSample(world.snapshot(),state.partyCombat,state.partySkills,configured,state.itemData,rules,state.partyReactions,state.statusData);
+      sample=createSkillTestSample(world.snapshot(),state.partyCombat,state.partySkills,configured,state.itemData,rules,state.partyReactions,state.statusData,state.operationMenu?.techniques?.supplement?.name_charset);
       session.view=state.battleView=await prepareView({mode:'skill-test',newParty:true,stagePath:rules.stage.path,lifecycle:true,actors:sample.actors,onProgress:p=>progress({completed:10+75*p.completed/p.total,total:100})});
       session.view.setRoster(sample.actors,sample.skills);
       if(state.world!==session.mapWorld||state.world.value.revision!==session.revision)throw new Error('资源加载期间世界状态已变化');

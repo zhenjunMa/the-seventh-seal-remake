@@ -56,7 +56,7 @@ export class BattleMenuView{
   ready(){return this.battle.readyPlayerIds?.()??(this.snapshot?.phase==='command'?[this.snapshot.player_id]:[]);}
   available(id=this.snapshot?.player_id){return this.battle.canCommand?.(id)??this.snapshot?.phase==='command';}
   skills(){const id=this.snapshot.player_id,order=this.snapshot.source.player_command_order?.[id]??[];return Object.values(this.battle.skills).filter(s=>s.actor_id===id).sort((a,b)=>(order.indexOf(a.id)<0?999:order.indexOf(a.id))-(order.indexOf(b.id)<0?999:order.indexOf(b.id)));}
-  slots(){const skills=this.skills(),bindings=this.getBindings?.(this.snapshot.player_id);return (bindings??[...Array.from({length:3},(_,i)=>({type:0,index_one_based:(skills[i]?.original_skill_index??i)+1})),...[1,2,3,4].map(n=>({type:2,index_one_based:n,icon:n-1,color:0}))]).map((slot,i)=>{const skill=slot.type===0?(bindings?skills.find(s=>s.original_skill_index===slot.index_one_based-1):skills[i]):null;return {...slot,skill,name:slot.type===2?['使用招式','使用物品','防御','逃跑'][slot.index_one_based-1]:skill?.name??slot.name??(slot.type===1?'编成技巧':'当前不可用')};});}
+  slots(){const skills=this.skills(),bindings=this.getBindings?.(this.snapshot.player_id);return (bindings??[...Array.from({length:3},(_,i)=>({type:0,index_one_based:(skills[i]?.original_skill_index??i)+1})),...[1,2,3,4].map(n=>({type:2,index_one_based:n,icon:n-1,color:0}))]).map((slot,i)=>{const skill=slot.type===0?(bindings?skills.find(s=>s.original_skill_index===slot.index_one_based-1):skills[i]):slot.type===1?skills.find(s=>s.technique_index_one_based===slot.index_one_based):null;return {...slot,skill,name:slot.type===2?['使用招式','使用物品','防御','逃跑'][slot.index_one_based-1]:skill?.name??slot.name??(slot.type===1?'编成技巧':'当前不可用')};});}
   remember(){if(this.snapshot)this.memory.set(this.snapshot.player_id,{wheel:this.focusIndex,list:this.listIndex,target:this.targetId});}
   update(snapshot){
     if(this.disposed)return;const previous=this.snapshot;this.snapshot=snapshot;this.root.dataset.phase=snapshot.phase;this.root.dataset.actorId=snapshot.player_id;this.root.dataset.ticks=String(snapshot.scheduler?.ticks??0);this.root.dataset.readyIds=this.ready().join(',');
@@ -82,7 +82,7 @@ export class BattleMenuView{
   }
   syncWheel(){
     const slots=this.slots();this.commandSlots=slots;
-    this.wheelButtons.forEach((b,i)=>{const slot=slots[i],skill=slot?.skill;b.hidden=this.stage!=='wheel';b.setAttribute('aria-label',slot?.name??'空快捷栏');b.dataset.skill=skill?.id??'';const supported=slot?.type===0?Boolean(skill)&&this.battle.canChoose(skill.id):slot?.type===2?[Boolean(this.skills().length),Boolean(this.battle.itemData&&this.battle.items().length),typeof this.battle.chooseDefend==='function',typeof this.battle.chooseEscape==='function'][slot.index_one_based-1]:false;b.setAttribute('aria-disabled',String(!this.available()||!supported));});
+    this.wheelButtons.forEach((b,i)=>{const slot=slots[i],skill=slot?.skill;b.hidden=this.stage!=='wheel';b.setAttribute('aria-label',slot?.name??'空快捷栏');b.dataset.skill=skill?.id??'';const supported=[0,1].includes(slot?.type)?Boolean(skill)&&this.battle.canChoose(skill.id):slot?.type===2?[Boolean(this.skills().length),Boolean(this.battle.itemData&&this.battle.items().length),typeof this.battle.chooseDefend==='function',typeof this.battle.chooseEscape==='function'][slot.index_one_based-1]:false;b.setAttribute('aria-disabled',String(!this.available()||!supported));});
   }
   selectActor(id){if(!this.available(id)){this.reject('此角色尚不能输入新指令。');return;}if(id===this.snapshot.player_id)return;this.remember();this.battle.selectPlayer(id);this.cue('menuSelect');}
   cycleActor(direction=1){const ids=this.ready().filter(id=>this.available(id));if(!ids.length)return;const current=ids.indexOf(this.snapshot.player_id);this.selectActor(ids[current<0?(direction<0?ids.length-1:0):(current+direction+ids.length)%ids.length]);}
@@ -91,7 +91,7 @@ export class BattleMenuView{
     if(this.stage!=='wheel')return;
     if(!this.available()){this.reject('请等待行动槽充满。');return;}this.focusIndex=index;this.remember();
     const slot=this.commandSlots[index];
-    if(slot?.type===0){const skill=slot.skill;if(!skill||!this.battle.canChoose(skill.id)){this.reject(this.battle.skillUnavailableReason?.(skill?.id)||'资源不足或招式当前不可用。');return;}this.chooseSkill(skill,'wheel');}
+    if([0,1].includes(slot?.type)){const skill=slot.skill;if(!skill||!this.battle.canChoose(skill.id)){this.reject(this.battle.skillUnavailableReason?.(skill?.id)||'资源不足或招式当前不可用。');return;}this.chooseSkill(skill,'wheel');}
     else if(slot?.type===2&&slot.index_one_based===2)this.openItems();
     else if(slot?.type===2&&slot.index_one_based===1)this.openSkills();
     else if(slot?.type===2&&slot.index_one_based===3&&this.battle.chooseDefend)this.commitFixed('defend');
