@@ -369,30 +369,37 @@ export class BattleController {
     const s=this.state?.scheduler;
     if(!s||!['command','charging','action'].includes(this.state.phase))return false;
     try {
-      for(const actor of this.state.actors)advanceIdleSkill(actor,this.schedulerData,now);
-      if(now-this.chargeClock<20)return false;
-      this.checkWorld();this.chargeClock=now;s.ticks++;s.elapsed_ms+=20;
-      for(const actor of this.state.actors){chargeActor(actor,this.rng);if(actor.state_raw===4&&this.reactionData&&this.canFinalizeDeath(actor))this.finalizeDeath(actor);}
-      if(this.statusData)for(const actor of this.state.actors){
-        if(!actor.native_status_slots.some(slot=>slot.raw_hex.slice(2,4)!=='00'))continue;
-        const update=tickNativeStatuses({actor,threshold:s.threshold,now:s.elapsed_ms,data:this.statusData,rng:this.rng,...this.nativeContext(),
-          onPeriodicEffect:({actor:pulsed,effect,damageResult,reaction_requested})=>{
-            if(damageResult.death_requested){Object.assign(actor,copy(pulsed));if(this.canFinalizeDeath(actor))this.finalizeDeath(actor);return {actor:copy(actor),trace:[]};}
-            if(!reaction_requested||!this.reactionData)return {actor:pulsed,trace:[]};
-            const response=selectNativeNormalReaction({actor:pulsed,ident:effect.reaction_argument_raw,data:this.reactionData,rng:this.rng});
-            return response?{actor:{...pulsed,...copy(response.after),native_sequence_token:`${this.state.id}:status:${actor.id}:${s.elapsed_ms}`},trace:response.trace,descriptor:response}:{actor:pulsed,trace:[]};
-          }});
-        Object.assign(actor,update.actor);
-        for(const response of update.periodic_reactions??[])if(this.lifecycleEnabled&&response.skill){
-          this.state.lifecycle_events=this.state.lifecycle_events.filter(event=>event.actor_id!==actor.id);
-          this.queueLifecycle(actor,{...response,kind:'response'});
+      requireValue(Number.isFinite(now),'战斗时钟无效');let advanced=false;
+      // Keep the sub-tick remainder and replay every elapsed source step.
+      // Charging, status effects and arbitration must not depend on render FPS.
+      while(now-this.chargeClock>=20&&this.state.scheduler===s&&['command','charging','action'].includes(this.state.phase)){
+        this.checkWorld();this.chargeClock+=20;s.ticks++;s.elapsed_ms+=20;advanced=true;
+        for(const actor of this.state.actors)advanceIdleSkill(actor,this.schedulerData,this.chargeClock);
+        for(const actor of this.state.actors){chargeActor(actor,this.rng);if(actor.state_raw===4&&this.reactionData&&this.canFinalizeDeath(actor))this.finalizeDeath(actor);}
+        if(this.statusData)for(const actor of this.state.actors){
+          if(!actor.native_status_slots.some(slot=>slot.raw_hex.slice(2,4)!=='00'))continue;
+          const update=tickNativeStatuses({actor,threshold:s.threshold,now:s.elapsed_ms,data:this.statusData,rng:this.rng,...this.nativeContext(),
+            onPeriodicEffect:({actor:pulsed,effect,damageResult,reaction_requested})=>{
+              if(damageResult.death_requested){Object.assign(actor,copy(pulsed));if(this.canFinalizeDeath(actor))this.finalizeDeath(actor);return {actor:copy(actor),trace:[]};}
+              if(!reaction_requested||!this.reactionData)return {actor:pulsed,trace:[]};
+              const response=selectNativeNormalReaction({actor:pulsed,ident:effect.reaction_argument_raw,data:this.reactionData,rng:this.rng});
+              return response?{actor:{...pulsed,...copy(response.after),native_sequence_token:`${this.state.id}:status:${actor.id}:${s.elapsed_ms}`},trace:response.trace,descriptor:response}:{actor:pulsed,trace:[]};
+            }});
+          Object.assign(actor,update.actor);
+          for(const response of update.periodic_reactions??[])if(this.lifecycleEnabled&&response.skill){
+            this.state.lifecycle_events=this.state.lifecycle_events.filter(event=>event.actor_id!==actor.id);
+            this.queueLifecycle(actor,{...response,kind:'response'});
+          }
+          if(update.cancel_command){const command=commandForActor(s,actor.id);if(command)this.cancelQueuedCommand(command,'actor-status');}
+          if(update.expired.length)this.log({type:'battle-status-expired',battle_id:this.state.id,actor_id:actor.id,slots:update.expired});
         }
-        if(update.cancel_command){const command=commandForActor(s,actor.id);if(command)this.cancelQueuedCommand(command,'actor-status');}
-        if(update.expired.length)this.log({type:'battle-status-expired',battle_id:this.state.id,actor_id:actor.id,slots:update.expired});
+        for(const actorId of [...this.pendingSourceEnds])this.completeNativeSource(this.actor(actorId),this.chargeClock);
+        this.refreshCommandState();this.publish();this.scheduleReady();
       }
-      for(const actorId of [...this.pendingSourceEnds])this.completeNativeSource(this.actor(actorId),now);
-      this.refreshCommandState();this.publish();
-      this.scheduleReady();return true;
+      // Poses still follow the exact scene time, including frames without a
+      // charge tick. A synchronous action hook may already have advanced time.
+      for(const actor of this.state.actors)advanceIdleSkill(actor,this.schedulerData,Math.max(now,this.chargeClock));
+      return advanced;
     }catch(error){this.interrupt(error);return false;}
   }
   interrupt(error) {
