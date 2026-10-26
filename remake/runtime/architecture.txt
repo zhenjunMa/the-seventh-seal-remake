@@ -31,6 +31,7 @@ vendor/phaser：固定版本运行库、许可及manifest.json。controllers、c
 时钟与暂停边界
 PhaserRuntime按原因集合管理页面隐藏、手动暂停和错误挂起，全部原因解除后才恢复；场景休眠／暂停时，其update及ActionClock不推进。探索／战斗唤醒或恢复，以及runtime时钟恢复的首帧丢弃该次delta。
 正式ANM、物件演出、DialogueView文字／画像、CaptionView字幕及事件wait使用exploration.clock，战斗动作／充槽／生命周期使用battle.clock，共享入战转场与默认加载展示使用runtime.clock；序章加载显式使用探索时钟。这些时钟由Phaser的delta推进，暂停时不消费等待时长。
+战斗调度按累计场景时间逐个执行20ms逻辑步，保留不足20ms的余量；充槽、状态效果及行动仲裁随每个逻辑步推进，卡顿不丢步，战斗结束或中断立即停止补步。待机绘制仍采样当前场景时间，暂停／恢复沿用场景时钟及首帧丢弃delta的规则。
 controllers/story.playStory为序章、地图入口剧情、NPC、物件和休息事件建立唯一StoryPlayback会话，传递同一个取消信号；嵌套TLK／ANM复用会话。暂停不接收对白确认／选择，恢复首帧不补算后台经过时间；成功、失败及中止分别收尾，统一清理对白、字幕、临时演员、物件预览与按键。取消／错误会阻止后续指令和世界提交，正常事件仍由原事务完成一次提交；pagehide与引擎错误会中止当前会话。
 视图无注入时钟时保留独立展示／工具的浏览器计时退路，正式入口始终注入场景时钟。菜单和启动页的tick仍接收Phaser传入的now，媒体也有独立生命周期；全局暂停剩余边界与完成标准见../assessment/validation_design.txt。本轮不提供剧情快进或跳过。
 
