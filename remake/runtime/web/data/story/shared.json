@@ -12,44 +12,53 @@
       "Fight_Role/005.CHR": "9e06bcbedaf821a6e4c1d08dc0cff31d916c3ae2d00fdc20c37e758d25e09580",
       "Fight_Role/006.CHR": "27b29fb5cc1073014faea7553d0175559714c18dbbc5132ca1c549e4a9d8e15b",
       "Map/m01050.dat": "48ae98e95e9ea414e716c85440d381a5bc29cc2ec00ccd3b30c2ef314d4145fc",
-      "Map/m01050.TLK": "6c5d2be29f120977d70c500abd11c8d76f11abba650be689e2dc44f4ae1dc182",
       "Map/m03039.dat": "c3c01fb5773dda464c2a5bfa0b46520031f2dc9bd363e4a1978c99950b0dcaf2",
-      "Map/m03039.TLK": "b95cbf37de9e4d723a9830d97454b5ece2bc7bf352a51199f0e630aacdb8694a",
       "Map/m17010.dat": "634a1eea243656b16341d9e217578a42a5d58f82f00af9aa0f8a0f805e83515a",
-      "Map/m17010.TLK": "04fc3299206a21504ac500a8797e4c96bf9ccee6fa104e41a3c8960861479f58",
       "Map/m17020.dat": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
-      "Map/m17020.TLK": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
       "Map/m17026.dat": "087ccf781d85f63249a2e1bce48ee71382d2587cdf857c47e575caaae54a646c",
-      "Map/m17026.TLK": "9e363538b3b51f2ec5a0074d4fdcaf3c3e3dbba6d4043f1d1ac06db3124b78ee",
       "Map/m17029.dat": "57851abbfe75121b806268f5bce8c778ec4e5d82ebb7dfa623fbd6952977c314",
-      "Map/m17029.TLK": "ca5d31b51ba3faf0118ba2626be0fb374671641821f59f166171e324c61e6269",
+      "Map/m70010.dat": "c00a06d1c19f3c1bb9b11ae00caa3b8ba70fa11aa802faa202aef49db6f9827a",
+      "Map/m70020.dat": "c8737dc799873825f78f3c254e1911753acdfc588caea815b61348d94717388f",
+      "Map/m70030.dat": "f3eac7c795aed2cc42603d0db486d804737097b5aea53b841eed4ebf07093890",
+      "Map/m70040.dat": "c50b0ef237252e42e74a436fc7c8fab5b8c222d98d5beb0475ff8b54342dda2a",
+      "Map/m70050.dat": "e3f18aa3e3af2dd1cd71d1dafb13f5ce61023588b4185c500aebdd62e6afe551",
+      "Map/m70060.dat": "efe442af65f53752e33d5c583215ff3538136abff133b97018ad19cda6696dbe",
       "Map/m17011.dat": "1b9c624e9093b4e7cbd4a62259607ed313359e3601ae48555c705d808d19bfc4",
-      "Map/m17011.TLK": "49e0a9ce55d37dd4e50884ffc5fe5df26bc29a7a49502b348612b146aadd3f74",
       "Map/m17012.dat": "db0f4709ae4a86c8af819eda867bfb87bed2d4d4bbaa48af4dad31bd3ce5b847",
-      "Map/m17012.TLK": "f96b5f0c8f7e1839f2e567d99873f9993e5586c2fbe3ee4754dbd313fe4aca77",
       "Map/m17013.dat": "1c1bdd0e8f26c8b2ee3b137d0049bfab10ae87f0e5dc76dfa44fc7f61096afcc",
-      "Map/m17013.TLK": "16a7530aa4aa4905ac6712cda3f3f26e41da22fdceb14595ef5ed8bdde6b7322",
       "Map/m17014.dat": "6128bf9d9940a8176c6d53c8e421132a9f2f2ead6e4a907fac6bce4fd0c135ff",
-      "Map/m17014.TLK": "263de44239d54fed81b82a93c1442132501246a5f5859c3dbd70247886e9e40b",
       "Map/m17015.dat": "e396282ce0dbf14a02d91dca28af4b0d1914cee1c1b8a1b7b3c8e0089f6d8b0e",
-      "Map/m17015.TLK": "f0d223d713ad8ea7f0163c2deb72f1a6afbe9e75a91eef4a559e4173881d7a59",
       "Map/m17023.dat": "d9f2021f1f24558f8ead877cc77612c7fa2263b8225a10d630f308384ef857f9",
-      "Map/m17023.TLK": "7ce268d3445ea63766feea2db1cc761aabadec53f86cc30520fa9fcc826bd9a2",
       "Map/m17024.dat": "18b33b069a469365ed75b531aa6346c58112f0c6a64c7a59ae1c6108318ef599",
-      "Map/m17024.TLK": "32f2b52a24570801178553a208770f315a3dce8006abe6db1a86d958d59132f4",
       "Map/m17025.dat": "266c901c9784665d27034f4531c1918fbea96815d14ec68fb1f6699d6d3fa3cd",
-      "Map/m17025.TLK": "5c2ee8a36d83e199ff27b24dce28d57c61bb673111bdc46608fb220559347ed1",
       "Map/m17027.dat": "7c0278bfe4a52f6a1977bb8493fa1ba1d40833b2dce142c42e75d7e2e67c0459",
-      "Map/m17027.TLK": "e4c88998a7d9f67fb0d57a7536c6c737b151eba0441659ea6a8c756145a8bd05",
       "Map/m17028.dat": "ec1d36649bf8fce856a0e93daf08128ebb099f7b30c59648a5903742f372aeff",
-      "Map/m17028.TLK": "d0efacd1c3d4b3a620fb5d0789eb08f01117d691b35b07b6f5d436fbd1d50f3b",
       "Map/m17030-1.dat": "85f2b0ea6398a9cf759183892cf9967e9b690dc57b5fb240e58969f69ae77e6b",
-      "Map/m17030-1.TLK": "c1c480cd76f90a1c5141bcad913ebeb5d2f03f087acff96f5fab14d606946a39",
       "Map/m17030-2.dat": "19c9e32a7cc32da40da096e67aa6b318e18570b29bc784130ad7d07d4430dfe6",
-      "Map/m17030-2.TLK": "22af2e5e273d36c9f8963139ab98dbc7d06b44a3b572ad5dd006ea8e58dce3d9",
       "Map/m17030.dat": "bbe0b8b99a59f775f1647b7e5e01f7ea12208f4422d1272fe62655c6e41d5bc4",
-      "Map/m17030.TLK": "9f8c48b9e0381ea5adddf79325219c3f6eefee315b0df153cb6539e2b575c21f",
       "Map/m17032.dat": "fec9023611123ba7557cf0a186317c808a5c041a6ec8d0fd52b30c8576f09bfe",
+      "Map/m01050.TLK": "6c5d2be29f120977d70c500abd11c8d76f11abba650be689e2dc44f4ae1dc182",
+      "Map/m03039.TLK": "b95cbf37de9e4d723a9830d97454b5ece2bc7bf352a51199f0e630aacdb8694a",
+      "Map/m17010.TLK": "04fc3299206a21504ac500a8797e4c96bf9ccee6fa104e41a3c8960861479f58",
+      "Map/m17020.TLK": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
+      "Map/m17026.TLK": "9e363538b3b51f2ec5a0074d4fdcaf3c3e3dbba6d4043f1d1ac06db3124b78ee",
+      "Map/m17029.TLK": "ca5d31b51ba3faf0118ba2626be0fb374671641821f59f166171e324c61e6269",
+      "Map/m70010.TLK": "223979cd995a89ee5a4bdfac3339294857933a757711f99709b82149bf079583",
+      "Map/m70030.TLK": "1c257003f538ed0db956c23034cf68803fae5773ee076ae53f436122b1dab8ec",
+      "Map/m70060.TLK": "a3e84d8e2cba253d1b5e527841169768c5408a4b87b2aabcc331eb09bd3a6696",
+      "Map/m17011.TLK": "49e0a9ce55d37dd4e50884ffc5fe5df26bc29a7a49502b348612b146aadd3f74",
+      "Map/m17012.TLK": "f96b5f0c8f7e1839f2e567d99873f9993e5586c2fbe3ee4754dbd313fe4aca77",
+      "Map/m17013.TLK": "16a7530aa4aa4905ac6712cda3f3f26e41da22fdceb14595ef5ed8bdde6b7322",
+      "Map/m17014.TLK": "263de44239d54fed81b82a93c1442132501246a5f5859c3dbd70247886e9e40b",
+      "Map/m17015.TLK": "f0d223d713ad8ea7f0163c2deb72f1a6afbe9e75a91eef4a559e4173881d7a59",
+      "Map/m17023.TLK": "7ce268d3445ea63766feea2db1cc761aabadec53f86cc30520fa9fcc826bd9a2",
+      "Map/m17024.TLK": "32f2b52a24570801178553a208770f315a3dce8006abe6db1a86d958d59132f4",
+      "Map/m17025.TLK": "5c2ee8a36d83e199ff27b24dce28d57c61bb673111bdc46608fb220559347ed1",
+      "Map/m17027.TLK": "e4c88998a7d9f67fb0d57a7536c6c737b151eba0441659ea6a8c756145a8bd05",
+      "Map/m17028.TLK": "d0efacd1c3d4b3a620fb5d0789eb08f01117d691b35b07b6f5d436fbd1d50f3b",
+      "Map/m17030-1.TLK": "c1c480cd76f90a1c5141bcad913ebeb5d2f03f087acff96f5fab14d606946a39",
+      "Map/m17030-2.TLK": "22af2e5e273d36c9f8963139ab98dbc7d06b44a3b572ad5dd006ea8e58dce3d9",
+      "Map/m17030.TLK": "9f8c48b9e0381ea5adddf79325219c3f6eefee315b0df153cb6539e2b575c21f",
       "Map/m17032.TLK": "240e0b23357f2d1ec6a90485841e7d0f5542cea39e6b02616aef20676e734542",
       "Animate/m01050-1.anm": "c483d0ee85a01072afa8f8e80697220b922fa3e0ad971ee5affcedf12c88f819",
       "Animate/m01050-2.anm": "19a173b2d01c4e6335a16d4283084ee2f896165f9e35374d45663b5e11a63782",
@@ -64,7 +73,9 @@
       "Animate/m17028.anm": "e9d6e1df1c4c40c267adcb9ee711c587b6fe03adc0343d4435853ef2b45c26e6",
       "Animate/m17010-2.anm": "4496da411c6c8adc76e464efbd866e34a0ce02d2ba66a5cfc42abe902325230c",
       "Animate/m17030-1.anm": "209c86f42cda1a513c21d38512acea8470508910f44127977b9b7b1738df9df2",
-      "Animate/m17010-3.anm": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e"
+      "Animate/m17010-3.anm": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+      "Animate/m70010-1.anm": "7f4c67d00ce8d1b6b3ce5b280c52074de4abcd82b932300849e756133a8f4e7c",
+      "Animate/m70030-1.anm": "a5a6e002bea13b92735b33a5bf7d866cda47020776bbab2f4f6cfc539ca11a3f"
     },
     "item_definitions": {
       "4": {
@@ -1586,6 +1597,223 @@
           "This is a definition record, not an initialized or awarded inventory instance."
         ]
       },
+      "127": {
+        "id": 127,
+        "name": "回转之钥",
+        "raw_hex": "7f000000bbd8d7aad6aed4bf0000000000000000000000000000000009000000580000000205c4dcbfaac6f4cda8cdf9b5d8d3fcb5c4b4f3c3c5d6aed4bfa3acc8c3cbc0d5dfb7b5bbd8cac0bce4d6aeb1a6c6f70000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000983a000000000000000000010000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003b23fffffffff40100000006000000000100000000000000000000000000000000000046000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "record_sha256": "b2bb7a01ae8ae3cba2da1442b696148727d2a5e57fd44bea6fc3aef59c36fb78",
+        "instance_byte9_raw": 0,
+        "type_raw_24": 2,
+        "allowed_role_mask_raw_13e": 0,
+        "initializer_value_pairs": [
+          {
+            "instance_offset": 13,
+            "definition_offset": 382,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 17,
+            "definition_offset": 390,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 21,
+            "definition_offset": 398,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 25,
+            "definition_offset": 406,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 29,
+            "definition_offset": 414,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 33,
+            "definition_offset": 422,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 37,
+            "definition_offset": 430,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 41,
+            "definition_offset": 438,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 45,
+            "definition_offset": 462,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 49,
+            "definition_offset": 490,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 53,
+            "definition_offset": 498,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 57,
+            "definition_offset": 506,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 61,
+            "definition_offset": 514,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 65,
+            "definition_offset": 522,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 69,
+            "definition_offset": 530,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 73,
+            "definition_offset": 538,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 77,
+            "definition_offset": 546,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 81,
+            "definition_offset": 666,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 85,
+            "definition_offset": 554,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 89,
+            "definition_offset": 562,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 93,
+            "definition_offset": 570,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 97,
+            "definition_offset": 578,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 101,
+            "definition_offset": 586,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 105,
+            "definition_offset": 594,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 109,
+            "definition_offset": 602,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 113,
+            "definition_offset": 610,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 117,
+            "definition_offset": 618,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 121,
+            "definition_offset": 626,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 125,
+            "definition_offset": 634,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 129,
+            "definition_offset": 642,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 133,
+            "definition_offset": 650,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 137,
+            "definition_offset": 658,
+            "minimum": 0,
+            "maximum": 0
+          }
+        ],
+        "deterministic_initializer_ranges": true,
+        "source": {
+          "path": "SYSTEM/Object.ITM",
+          "sha256": "9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8",
+          "record_bytes": 959,
+          "record_id": 127,
+          "offset": 122398
+        },
+        "native_evidence": [
+          "ev_059378b70e0c3d2d6a7d89406c901bd8453f733aa06817ae33106d860a16fa22"
+        ],
+        "limitations": [
+          "This is a definition record, not an initialized or awarded inventory instance."
+        ]
+      },
       "150": {
         "id": 150,
         "name": "红水晶",
@@ -2012,6 +2240,1091 @@
           "record_bytes": 959,
           "record_id": 156,
           "offset": 150209
+        },
+        "native_evidence": [
+          "ev_059378b70e0c3d2d6a7d89406c901bd8453f733aa06817ae33106d860a16fa22"
+        ],
+        "limitations": [
+          "This is a definition record, not an initialized or awarded inventory instance."
+        ]
+      },
+      "158": {
+        "id": 158,
+        "name": "珍珠",
+        "raw_hex": "9e000000d5e4d6e90000000000000000000000000000000000000000260000000f0000000301cbaecaf4d0d4a3aba3b3a3b0b5e3a3acbbf0caf4d0d4a3ada3b1a3b0b5e3000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000030000000000000000000000000000000000d007000000000000000000010000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000f6fffffff6ffffff1e0000001e000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "record_sha256": "044575c131444ed8efe95fa9fd33b30b1b216c4e5e034cd80dd548b2406ff00f",
+        "instance_byte9_raw": 0,
+        "type_raw_24": 3,
+        "allowed_role_mask_raw_13e": 0,
+        "initializer_value_pairs": [
+          {
+            "instance_offset": 13,
+            "definition_offset": 382,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 17,
+            "definition_offset": 390,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 21,
+            "definition_offset": 398,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 25,
+            "definition_offset": 406,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 29,
+            "definition_offset": 414,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 33,
+            "definition_offset": 422,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 37,
+            "definition_offset": 430,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 41,
+            "definition_offset": 438,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 45,
+            "definition_offset": 462,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 49,
+            "definition_offset": 490,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 53,
+            "definition_offset": 498,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 57,
+            "definition_offset": 506,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 61,
+            "definition_offset": 514,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 65,
+            "definition_offset": 522,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 69,
+            "definition_offset": 530,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 73,
+            "definition_offset": 538,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 77,
+            "definition_offset": 546,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 81,
+            "definition_offset": 666,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 85,
+            "definition_offset": 554,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 89,
+            "definition_offset": 562,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 93,
+            "definition_offset": 570,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 97,
+            "definition_offset": 578,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 101,
+            "definition_offset": 586,
+            "minimum": -10,
+            "maximum": -10
+          },
+          {
+            "instance_offset": 105,
+            "definition_offset": 594,
+            "minimum": 30,
+            "maximum": 30
+          },
+          {
+            "instance_offset": 109,
+            "definition_offset": 602,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 113,
+            "definition_offset": 610,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 117,
+            "definition_offset": 618,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 121,
+            "definition_offset": 626,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 125,
+            "definition_offset": 634,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 129,
+            "definition_offset": 642,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 133,
+            "definition_offset": 650,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 137,
+            "definition_offset": 658,
+            "minimum": 0,
+            "maximum": 0
+          }
+        ],
+        "deterministic_initializer_ranges": true,
+        "source": {
+          "path": "SYSTEM/Object.ITM",
+          "sha256": "9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8",
+          "record_bytes": 959,
+          "record_id": 158,
+          "offset": 152127
+        },
+        "native_evidence": [
+          "ev_059378b70e0c3d2d6a7d89406c901bd8453f733aa06817ae33106d860a16fa22"
+        ],
+        "limitations": [
+          "This is a definition record, not an initialized or awarded inventory instance."
+        ]
+      },
+      "159": {
+        "id": 159,
+        "name": "螺纹石",
+        "raw_hex": "9f000000c2ddcec6caaf00000000000000000000000000000000000027000000100000000301b5d8caf4d0d4a3aba3b3a3b0b5e3a3acb7e7caf4d0d4a3ada3b1a3b0b5e3000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000030000000000000000000000000000000000d00700000000000000000001000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000f6fffffff6ffffff1e0000001e0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "record_sha256": "2ce698df15b6d8f730c303f4d2587289673a8a224bf8d88394ec8af8f3d6e414",
+        "instance_byte9_raw": 0,
+        "type_raw_24": 3,
+        "allowed_role_mask_raw_13e": 0,
+        "initializer_value_pairs": [
+          {
+            "instance_offset": 13,
+            "definition_offset": 382,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 17,
+            "definition_offset": 390,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 21,
+            "definition_offset": 398,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 25,
+            "definition_offset": 406,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 29,
+            "definition_offset": 414,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 33,
+            "definition_offset": 422,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 37,
+            "definition_offset": 430,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 41,
+            "definition_offset": 438,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 45,
+            "definition_offset": 462,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 49,
+            "definition_offset": 490,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 53,
+            "definition_offset": 498,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 57,
+            "definition_offset": 506,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 61,
+            "definition_offset": 514,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 65,
+            "definition_offset": 522,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 69,
+            "definition_offset": 530,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 73,
+            "definition_offset": 538,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 77,
+            "definition_offset": 546,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 81,
+            "definition_offset": 666,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 85,
+            "definition_offset": 554,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 89,
+            "definition_offset": 562,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 93,
+            "definition_offset": 570,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 97,
+            "definition_offset": 578,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 101,
+            "definition_offset": 586,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 105,
+            "definition_offset": 594,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 109,
+            "definition_offset": 602,
+            "minimum": -10,
+            "maximum": -10
+          },
+          {
+            "instance_offset": 113,
+            "definition_offset": 610,
+            "minimum": 30,
+            "maximum": 30
+          },
+          {
+            "instance_offset": 117,
+            "definition_offset": 618,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 121,
+            "definition_offset": 626,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 125,
+            "definition_offset": 634,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 129,
+            "definition_offset": 642,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 133,
+            "definition_offset": 650,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 137,
+            "definition_offset": 658,
+            "minimum": 0,
+            "maximum": 0
+          }
+        ],
+        "deterministic_initializer_ranges": true,
+        "source": {
+          "path": "SYSTEM/Object.ITM",
+          "sha256": "9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8",
+          "record_bytes": 959,
+          "record_id": 159,
+          "offset": 153086
+        },
+        "native_evidence": [
+          "ev_059378b70e0c3d2d6a7d89406c901bd8453f733aa06817ae33106d860a16fa22"
+        ],
+        "limitations": [
+          "This is a definition record, not an initialized or awarded inventory instance."
+        ]
+      },
+      "161": {
+        "id": 161,
+        "name": "月眠石",
+        "raw_hex": "a1000000d4c2c3dfcaaf00000000000000000000000000000000000029000000120000000301d4c2caf4d0d4a3aba3b3a3b0b5e3a3acc8d5caf4d0d4a3ada3b1a3b0b5e3000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000030000000000000000000000000000000000c4090000000000000000000100000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000f6fffffff6ffffff1e0000001e00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "record_sha256": "2ff6d69efbec21bb635c82f5c0ef81bd61cf96a8915535c302e783139716bee6",
+        "instance_byte9_raw": 0,
+        "type_raw_24": 3,
+        "allowed_role_mask_raw_13e": 0,
+        "initializer_value_pairs": [
+          {
+            "instance_offset": 13,
+            "definition_offset": 382,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 17,
+            "definition_offset": 390,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 21,
+            "definition_offset": 398,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 25,
+            "definition_offset": 406,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 29,
+            "definition_offset": 414,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 33,
+            "definition_offset": 422,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 37,
+            "definition_offset": 430,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 41,
+            "definition_offset": 438,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 45,
+            "definition_offset": 462,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 49,
+            "definition_offset": 490,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 53,
+            "definition_offset": 498,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 57,
+            "definition_offset": 506,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 61,
+            "definition_offset": 514,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 65,
+            "definition_offset": 522,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 69,
+            "definition_offset": 530,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 73,
+            "definition_offset": 538,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 77,
+            "definition_offset": 546,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 81,
+            "definition_offset": 666,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 85,
+            "definition_offset": 554,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 89,
+            "definition_offset": 562,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 93,
+            "definition_offset": 570,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 97,
+            "definition_offset": 578,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 101,
+            "definition_offset": 586,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 105,
+            "definition_offset": 594,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 109,
+            "definition_offset": 602,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 113,
+            "definition_offset": 610,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 117,
+            "definition_offset": 618,
+            "minimum": -10,
+            "maximum": -10
+          },
+          {
+            "instance_offset": 121,
+            "definition_offset": 626,
+            "minimum": 30,
+            "maximum": 30
+          },
+          {
+            "instance_offset": 125,
+            "definition_offset": 634,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 129,
+            "definition_offset": 642,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 133,
+            "definition_offset": 650,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 137,
+            "definition_offset": 658,
+            "minimum": 0,
+            "maximum": 0
+          }
+        ],
+        "deterministic_initializer_ranges": true,
+        "source": {
+          "path": "SYSTEM/Object.ITM",
+          "sha256": "9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8",
+          "record_bytes": 959,
+          "record_id": 161,
+          "offset": 155004
+        },
+        "native_evidence": [
+          "ev_059378b70e0c3d2d6a7d89406c901bd8453f733aa06817ae33106d860a16fa22"
+        ],
+        "limitations": [
+          "This is a definition record, not an initialized or awarded inventory instance."
+        ]
+      },
+      "170": {
+        "id": 170,
+        "name": "紫龙晶",
+        "raw_hex": "aa000000d7cfc1fabea7000000000000000000000000000000000000320000001b0000000301bbecc2d2d7b4ccacb7c0d3f90000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000300000000000000000000000000000000007017000000000000000000010000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000e06fffffffff4010000000600000000003c00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004090100004b010000e60000003501000000000000000000000000000000000000000000000000000000000000",
+        "record_sha256": "9486d2607a29597c382e270e8c6b1fc7e27c8d79aa144c72e7c185fd6f2345c2",
+        "instance_byte9_raw": 0,
+        "type_raw_24": 3,
+        "allowed_role_mask_raw_13e": 0,
+        "initializer_value_pairs": [
+          {
+            "instance_offset": 13,
+            "definition_offset": 382,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 17,
+            "definition_offset": 390,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 21,
+            "definition_offset": 398,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 25,
+            "definition_offset": 406,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 29,
+            "definition_offset": 414,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 33,
+            "definition_offset": 422,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 37,
+            "definition_offset": 430,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 41,
+            "definition_offset": 438,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 45,
+            "definition_offset": 462,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 49,
+            "definition_offset": 490,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 53,
+            "definition_offset": 498,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 57,
+            "definition_offset": 506,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 61,
+            "definition_offset": 514,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 65,
+            "definition_offset": 522,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 69,
+            "definition_offset": 530,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 73,
+            "definition_offset": 538,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 77,
+            "definition_offset": 546,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 81,
+            "definition_offset": 666,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 85,
+            "definition_offset": 554,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 89,
+            "definition_offset": 562,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 93,
+            "definition_offset": 570,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 97,
+            "definition_offset": 578,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 101,
+            "definition_offset": 586,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 105,
+            "definition_offset": 594,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 109,
+            "definition_offset": 602,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 113,
+            "definition_offset": 610,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 117,
+            "definition_offset": 618,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 121,
+            "definition_offset": 626,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 125,
+            "definition_offset": 634,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 129,
+            "definition_offset": 642,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 133,
+            "definition_offset": 650,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 137,
+            "definition_offset": 658,
+            "minimum": 0,
+            "maximum": 0
+          }
+        ],
+        "deterministic_initializer_ranges": true,
+        "source": {
+          "path": "SYSTEM/Object.ITM",
+          "sha256": "9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8",
+          "record_bytes": 959,
+          "record_id": 170,
+          "offset": 163635
+        },
+        "native_evidence": [
+          "ev_059378b70e0c3d2d6a7d89406c901bd8453f733aa06817ae33106d860a16fa22"
+        ],
+        "limitations": [
+          "This is a definition record, not an initialized or awarded inventory instance."
+        ]
+      },
+      "271": {
+        "id": 271,
+        "name": "紫晶簇",
+        "raw_hex": "0f010000d7cfbea7b4d800000000000000000000000000000000000015000000220000000302b6cdd4ecd4adc1cfa3acbeadb9fdbacfb3c9b5c4b8dfbaacc1bfd7cfbea7bff300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000050000000000000000000000000000000000e80300000000000000000001000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "record_sha256": "19605c4bc8ff2b3797a8d53fec6e37dda8c437fb953f20bcf65cb1e5715ffbab",
+        "instance_byte9_raw": 0,
+        "type_raw_24": 3,
+        "allowed_role_mask_raw_13e": 0,
+        "initializer_value_pairs": [
+          {
+            "instance_offset": 13,
+            "definition_offset": 382,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 17,
+            "definition_offset": 390,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 21,
+            "definition_offset": 398,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 25,
+            "definition_offset": 406,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 29,
+            "definition_offset": 414,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 33,
+            "definition_offset": 422,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 37,
+            "definition_offset": 430,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 41,
+            "definition_offset": 438,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 45,
+            "definition_offset": 462,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 49,
+            "definition_offset": 490,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 53,
+            "definition_offset": 498,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 57,
+            "definition_offset": 506,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 61,
+            "definition_offset": 514,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 65,
+            "definition_offset": 522,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 69,
+            "definition_offset": 530,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 73,
+            "definition_offset": 538,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 77,
+            "definition_offset": 546,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 81,
+            "definition_offset": 666,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 85,
+            "definition_offset": 554,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 89,
+            "definition_offset": 562,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 93,
+            "definition_offset": 570,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 97,
+            "definition_offset": 578,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 101,
+            "definition_offset": 586,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 105,
+            "definition_offset": 594,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 109,
+            "definition_offset": 602,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 113,
+            "definition_offset": 610,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 117,
+            "definition_offset": 618,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 121,
+            "definition_offset": 626,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 125,
+            "definition_offset": 634,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 129,
+            "definition_offset": 642,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 133,
+            "definition_offset": 650,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 137,
+            "definition_offset": 658,
+            "minimum": 0,
+            "maximum": 0
+          }
+        ],
+        "deterministic_initializer_ranges": true,
+        "source": {
+          "path": "SYSTEM/Object.ITM",
+          "sha256": "9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8",
+          "record_bytes": 959,
+          "record_id": 271,
+          "offset": 260494
         },
         "native_evidence": [
           "ev_059378b70e0c3d2d6a7d89406c901bd8453f733aa06817ae33106d860a16fa22"
@@ -2671,6 +3984,1308 @@
           "This is a definition record, not an initialized or awarded inventory instance."
         ]
       },
+      "333": {
+        "id": 333,
+        "name": "风之键",
+        "raw_hex": "4d010000b7e7d6aebcfc00000000000000000000000000000000000004000000140000000502d3c3c0b4bde2bfaab7e7c4a7bea7b5c4b7e2d3a1a3acc8a1b5c3b2d8d4dac0efc3e6b5c4ceefc6b70000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000070000000000000000000000000000000000010000000000000000000001000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "record_sha256": "e5abce95a06913fe0b4e53f64936a27d74c21afde21ac073ff10c60f7a065c2f",
+        "instance_byte9_raw": 0,
+        "type_raw_24": 5,
+        "allowed_role_mask_raw_13e": 0,
+        "initializer_value_pairs": [
+          {
+            "instance_offset": 13,
+            "definition_offset": 382,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 17,
+            "definition_offset": 390,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 21,
+            "definition_offset": 398,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 25,
+            "definition_offset": 406,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 29,
+            "definition_offset": 414,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 33,
+            "definition_offset": 422,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 37,
+            "definition_offset": 430,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 41,
+            "definition_offset": 438,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 45,
+            "definition_offset": 462,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 49,
+            "definition_offset": 490,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 53,
+            "definition_offset": 498,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 57,
+            "definition_offset": 506,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 61,
+            "definition_offset": 514,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 65,
+            "definition_offset": 522,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 69,
+            "definition_offset": 530,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 73,
+            "definition_offset": 538,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 77,
+            "definition_offset": 546,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 81,
+            "definition_offset": 666,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 85,
+            "definition_offset": 554,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 89,
+            "definition_offset": 562,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 93,
+            "definition_offset": 570,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 97,
+            "definition_offset": 578,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 101,
+            "definition_offset": 586,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 105,
+            "definition_offset": 594,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 109,
+            "definition_offset": 602,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 113,
+            "definition_offset": 610,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 117,
+            "definition_offset": 618,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 121,
+            "definition_offset": 626,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 125,
+            "definition_offset": 634,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 129,
+            "definition_offset": 642,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 133,
+            "definition_offset": 650,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 137,
+            "definition_offset": 658,
+            "minimum": 0,
+            "maximum": 0
+          }
+        ],
+        "deterministic_initializer_ranges": true,
+        "source": {
+          "path": "SYSTEM/Object.ITM",
+          "sha256": "9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8",
+          "record_bytes": 959,
+          "record_id": 333,
+          "offset": 319952
+        },
+        "native_evidence": [
+          "ev_059378b70e0c3d2d6a7d89406c901bd8453f733aa06817ae33106d860a16fa22"
+        ],
+        "limitations": [
+          "This is a definition record, not an initialized or awarded inventory instance."
+        ]
+      },
+      "334": {
+        "id": 334,
+        "name": "水之键",
+        "raw_hex": "4e010000cbaed6aebcfc00000000000000000000000000000000000004000000150000000502d3c3c0b4bde2bfaacbaec4a7bea7b5c4b7e2d3a1a3acc8a1b5c3b2d8d4dac0efc3e6b5c4ceefc6b70000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000070000000000000000000000000000000000010000000000000000000001000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "record_sha256": "4f6634665bdf30f7da834e4c4756847368f7be8a223d88a7fd89e45fb0f32222",
+        "instance_byte9_raw": 0,
+        "type_raw_24": 5,
+        "allowed_role_mask_raw_13e": 0,
+        "initializer_value_pairs": [
+          {
+            "instance_offset": 13,
+            "definition_offset": 382,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 17,
+            "definition_offset": 390,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 21,
+            "definition_offset": 398,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 25,
+            "definition_offset": 406,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 29,
+            "definition_offset": 414,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 33,
+            "definition_offset": 422,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 37,
+            "definition_offset": 430,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 41,
+            "definition_offset": 438,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 45,
+            "definition_offset": 462,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 49,
+            "definition_offset": 490,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 53,
+            "definition_offset": 498,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 57,
+            "definition_offset": 506,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 61,
+            "definition_offset": 514,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 65,
+            "definition_offset": 522,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 69,
+            "definition_offset": 530,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 73,
+            "definition_offset": 538,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 77,
+            "definition_offset": 546,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 81,
+            "definition_offset": 666,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 85,
+            "definition_offset": 554,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 89,
+            "definition_offset": 562,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 93,
+            "definition_offset": 570,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 97,
+            "definition_offset": 578,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 101,
+            "definition_offset": 586,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 105,
+            "definition_offset": 594,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 109,
+            "definition_offset": 602,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 113,
+            "definition_offset": 610,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 117,
+            "definition_offset": 618,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 121,
+            "definition_offset": 626,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 125,
+            "definition_offset": 634,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 129,
+            "definition_offset": 642,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 133,
+            "definition_offset": 650,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 137,
+            "definition_offset": 658,
+            "minimum": 0,
+            "maximum": 0
+          }
+        ],
+        "deterministic_initializer_ranges": true,
+        "source": {
+          "path": "SYSTEM/Object.ITM",
+          "sha256": "9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8",
+          "record_bytes": 959,
+          "record_id": 334,
+          "offset": 320911
+        },
+        "native_evidence": [
+          "ev_059378b70e0c3d2d6a7d89406c901bd8453f733aa06817ae33106d860a16fa22"
+        ],
+        "limitations": [
+          "This is a definition record, not an initialized or awarded inventory instance."
+        ]
+      },
+      "335": {
+        "id": 335,
+        "name": "地之键",
+        "raw_hex": "4f010000b5d8d6aebcfc00000000000000000000000000000000000004000000160000000502d3c3c0b4bde2bfaab5d8c4a7bea7b5c4b7e2d3a1a3acc8a1b5c3b2d8d4dac0efc3e6b5c4ceefc6b70000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000070000000000000000000000000000000000010000000000000000000001000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "record_sha256": "fd1bf2a467f778f18401f60fdc65701f11ca44d1fe66d44107c5ba2e078f38b0",
+        "instance_byte9_raw": 0,
+        "type_raw_24": 5,
+        "allowed_role_mask_raw_13e": 0,
+        "initializer_value_pairs": [
+          {
+            "instance_offset": 13,
+            "definition_offset": 382,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 17,
+            "definition_offset": 390,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 21,
+            "definition_offset": 398,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 25,
+            "definition_offset": 406,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 29,
+            "definition_offset": 414,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 33,
+            "definition_offset": 422,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 37,
+            "definition_offset": 430,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 41,
+            "definition_offset": 438,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 45,
+            "definition_offset": 462,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 49,
+            "definition_offset": 490,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 53,
+            "definition_offset": 498,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 57,
+            "definition_offset": 506,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 61,
+            "definition_offset": 514,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 65,
+            "definition_offset": 522,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 69,
+            "definition_offset": 530,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 73,
+            "definition_offset": 538,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 77,
+            "definition_offset": 546,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 81,
+            "definition_offset": 666,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 85,
+            "definition_offset": 554,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 89,
+            "definition_offset": 562,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 93,
+            "definition_offset": 570,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 97,
+            "definition_offset": 578,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 101,
+            "definition_offset": 586,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 105,
+            "definition_offset": 594,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 109,
+            "definition_offset": 602,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 113,
+            "definition_offset": 610,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 117,
+            "definition_offset": 618,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 121,
+            "definition_offset": 626,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 125,
+            "definition_offset": 634,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 129,
+            "definition_offset": 642,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 133,
+            "definition_offset": 650,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 137,
+            "definition_offset": 658,
+            "minimum": 0,
+            "maximum": 0
+          }
+        ],
+        "deterministic_initializer_ranges": true,
+        "source": {
+          "path": "SYSTEM/Object.ITM",
+          "sha256": "9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8",
+          "record_bytes": 959,
+          "record_id": 335,
+          "offset": 321870
+        },
+        "native_evidence": [
+          "ev_059378b70e0c3d2d6a7d89406c901bd8453f733aa06817ae33106d860a16fa22"
+        ],
+        "limitations": [
+          "This is a definition record, not an initialized or awarded inventory instance."
+        ]
+      },
+      "336": {
+        "id": 336,
+        "name": "日之键",
+        "raw_hex": "50010000c8d5d6aebcfc00000000000000000000000000000000000004000000170000000502d3c3c0b4bde2bfaac8d5c4a7bea7b5c4b7e2d3a1a3acc8a1b5c3b2d8d4dac0efc3e6b5c4ceefc6b70000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000070000000000000000000000000000000000010000000000000000000001000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "record_sha256": "b019986f15826f6c3814e593f4d0b97028ca103762bb18b5d853b825080c5de5",
+        "instance_byte9_raw": 0,
+        "type_raw_24": 5,
+        "allowed_role_mask_raw_13e": 0,
+        "initializer_value_pairs": [
+          {
+            "instance_offset": 13,
+            "definition_offset": 382,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 17,
+            "definition_offset": 390,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 21,
+            "definition_offset": 398,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 25,
+            "definition_offset": 406,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 29,
+            "definition_offset": 414,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 33,
+            "definition_offset": 422,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 37,
+            "definition_offset": 430,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 41,
+            "definition_offset": 438,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 45,
+            "definition_offset": 462,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 49,
+            "definition_offset": 490,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 53,
+            "definition_offset": 498,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 57,
+            "definition_offset": 506,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 61,
+            "definition_offset": 514,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 65,
+            "definition_offset": 522,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 69,
+            "definition_offset": 530,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 73,
+            "definition_offset": 538,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 77,
+            "definition_offset": 546,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 81,
+            "definition_offset": 666,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 85,
+            "definition_offset": 554,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 89,
+            "definition_offset": 562,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 93,
+            "definition_offset": 570,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 97,
+            "definition_offset": 578,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 101,
+            "definition_offset": 586,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 105,
+            "definition_offset": 594,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 109,
+            "definition_offset": 602,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 113,
+            "definition_offset": 610,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 117,
+            "definition_offset": 618,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 121,
+            "definition_offset": 626,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 125,
+            "definition_offset": 634,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 129,
+            "definition_offset": 642,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 133,
+            "definition_offset": 650,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 137,
+            "definition_offset": 658,
+            "minimum": 0,
+            "maximum": 0
+          }
+        ],
+        "deterministic_initializer_ranges": true,
+        "source": {
+          "path": "SYSTEM/Object.ITM",
+          "sha256": "9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8",
+          "record_bytes": 959,
+          "record_id": 336,
+          "offset": 322829
+        },
+        "native_evidence": [
+          "ev_059378b70e0c3d2d6a7d89406c901bd8453f733aa06817ae33106d860a16fa22"
+        ],
+        "limitations": [
+          "This is a definition record, not an initialized or awarded inventory instance."
+        ]
+      },
+      "337": {
+        "id": 337,
+        "name": "月之键",
+        "raw_hex": "51010000d4c2d6aebcfc00000000000000000000000000000000000004000000180000000502d3c3c0b4bde2bfaad4c2c4a7bea7b5c4b7e2d3a1a3acc8a1b5c3b2d8d4dac0efc3e6b5c4ceefc6b70000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000070000000000000000000000000000000000010000000000000000000001000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "record_sha256": "fa5defe399ca886d4c7fb2347cbeab2b84e46ace503d73791c3069ba96962b45",
+        "instance_byte9_raw": 0,
+        "type_raw_24": 5,
+        "allowed_role_mask_raw_13e": 0,
+        "initializer_value_pairs": [
+          {
+            "instance_offset": 13,
+            "definition_offset": 382,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 17,
+            "definition_offset": 390,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 21,
+            "definition_offset": 398,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 25,
+            "definition_offset": 406,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 29,
+            "definition_offset": 414,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 33,
+            "definition_offset": 422,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 37,
+            "definition_offset": 430,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 41,
+            "definition_offset": 438,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 45,
+            "definition_offset": 462,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 49,
+            "definition_offset": 490,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 53,
+            "definition_offset": 498,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 57,
+            "definition_offset": 506,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 61,
+            "definition_offset": 514,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 65,
+            "definition_offset": 522,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 69,
+            "definition_offset": 530,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 73,
+            "definition_offset": 538,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 77,
+            "definition_offset": 546,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 81,
+            "definition_offset": 666,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 85,
+            "definition_offset": 554,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 89,
+            "definition_offset": 562,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 93,
+            "definition_offset": 570,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 97,
+            "definition_offset": 578,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 101,
+            "definition_offset": 586,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 105,
+            "definition_offset": 594,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 109,
+            "definition_offset": 602,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 113,
+            "definition_offset": 610,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 117,
+            "definition_offset": 618,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 121,
+            "definition_offset": 626,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 125,
+            "definition_offset": 634,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 129,
+            "definition_offset": 642,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 133,
+            "definition_offset": 650,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 137,
+            "definition_offset": 658,
+            "minimum": 0,
+            "maximum": 0
+          }
+        ],
+        "deterministic_initializer_ranges": true,
+        "source": {
+          "path": "SYSTEM/Object.ITM",
+          "sha256": "9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8",
+          "record_bytes": 959,
+          "record_id": 337,
+          "offset": 323788
+        },
+        "native_evidence": [
+          "ev_059378b70e0c3d2d6a7d89406c901bd8453f733aa06817ae33106d860a16fa22"
+        ],
+        "limitations": [
+          "This is a definition record, not an initialized or awarded inventory instance."
+        ]
+      },
+      "338": {
+        "id": 338,
+        "name": "黄晶簇",
+        "raw_hex": "52010000bbc6bea7b4d800000000000000000000000000000000000015000000230000000302b6cdd4ecd4adc1cfa3acbeadb9fdbacfb3c9b5c4b8dfbaacc1bfbbc6bea7bff300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000050000000000000000000000000000000000e80300000000000000000001000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "record_sha256": "03f500c414f0510a4c7036894398714d6da3356eb07491f0f017838a541bb0cf",
+        "instance_byte9_raw": 0,
+        "type_raw_24": 3,
+        "allowed_role_mask_raw_13e": 0,
+        "initializer_value_pairs": [
+          {
+            "instance_offset": 13,
+            "definition_offset": 382,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 17,
+            "definition_offset": 390,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 21,
+            "definition_offset": 398,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 25,
+            "definition_offset": 406,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 29,
+            "definition_offset": 414,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 33,
+            "definition_offset": 422,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 37,
+            "definition_offset": 430,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 41,
+            "definition_offset": 438,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 45,
+            "definition_offset": 462,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 49,
+            "definition_offset": 490,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 53,
+            "definition_offset": 498,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 57,
+            "definition_offset": 506,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 61,
+            "definition_offset": 514,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 65,
+            "definition_offset": 522,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 69,
+            "definition_offset": 530,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 73,
+            "definition_offset": 538,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 77,
+            "definition_offset": 546,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 81,
+            "definition_offset": 666,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 85,
+            "definition_offset": 554,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 89,
+            "definition_offset": 562,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 93,
+            "definition_offset": 570,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 97,
+            "definition_offset": 578,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 101,
+            "definition_offset": 586,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 105,
+            "definition_offset": 594,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 109,
+            "definition_offset": 602,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 113,
+            "definition_offset": 610,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 117,
+            "definition_offset": 618,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 121,
+            "definition_offset": 626,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 125,
+            "definition_offset": 634,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 129,
+            "definition_offset": 642,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 133,
+            "definition_offset": 650,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 137,
+            "definition_offset": 658,
+            "minimum": 0,
+            "maximum": 0
+          }
+        ],
+        "deterministic_initializer_ranges": true,
+        "source": {
+          "path": "SYSTEM/Object.ITM",
+          "sha256": "9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8",
+          "record_bytes": 959,
+          "record_id": 338,
+          "offset": 324747
+        },
+        "native_evidence": [
+          "ev_059378b70e0c3d2d6a7d89406c901bd8453f733aa06817ae33106d860a16fa22"
+        ],
+        "limitations": [
+          "This is a definition record, not an initialized or awarded inventory instance."
+        ]
+      },
       "342": {
         "id": 342,
         "name": "雷纹石",
@@ -3097,6 +5712,440 @@
           "record_bytes": 959,
           "record_id": 348,
           "offset": 334337
+        },
+        "native_evidence": [
+          "ev_059378b70e0c3d2d6a7d89406c901bd8453f733aa06817ae33106d860a16fa22"
+        ],
+        "limitations": [
+          "This is a definition record, not an initialized or awarded inventory instance."
+        ]
+      },
+      "353": {
+        "id": 353,
+        "name": "七色鸟羽",
+        "raw_hex": "61010000c6dfc9abc4f1d3f000000000000000000000000000000000150000002e0000000302b6cdd4ecd4adc1cfa3acceaac1cbd7b0cacebcc0cbbec5dbb6f8d2d4c4a7b7a8c8bec9abb5c4d3f0c3ab000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000070000000000000000000000000000000000d00700000000000000000001000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "record_sha256": "de55713f334df997416140afaa1c1043c50fec651503f76c18600f071b8b0fd0",
+        "instance_byte9_raw": 0,
+        "type_raw_24": 3,
+        "allowed_role_mask_raw_13e": 0,
+        "initializer_value_pairs": [
+          {
+            "instance_offset": 13,
+            "definition_offset": 382,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 17,
+            "definition_offset": 390,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 21,
+            "definition_offset": 398,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 25,
+            "definition_offset": 406,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 29,
+            "definition_offset": 414,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 33,
+            "definition_offset": 422,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 37,
+            "definition_offset": 430,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 41,
+            "definition_offset": 438,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 45,
+            "definition_offset": 462,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 49,
+            "definition_offset": 490,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 53,
+            "definition_offset": 498,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 57,
+            "definition_offset": 506,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 61,
+            "definition_offset": 514,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 65,
+            "definition_offset": 522,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 69,
+            "definition_offset": 530,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 73,
+            "definition_offset": 538,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 77,
+            "definition_offset": 546,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 81,
+            "definition_offset": 666,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 85,
+            "definition_offset": 554,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 89,
+            "definition_offset": 562,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 93,
+            "definition_offset": 570,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 97,
+            "definition_offset": 578,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 101,
+            "definition_offset": 586,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 105,
+            "definition_offset": 594,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 109,
+            "definition_offset": 602,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 113,
+            "definition_offset": 610,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 117,
+            "definition_offset": 618,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 121,
+            "definition_offset": 626,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 125,
+            "definition_offset": 634,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 129,
+            "definition_offset": 642,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 133,
+            "definition_offset": 650,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 137,
+            "definition_offset": 658,
+            "minimum": 0,
+            "maximum": 0
+          }
+        ],
+        "deterministic_initializer_ranges": true,
+        "source": {
+          "path": "SYSTEM/Object.ITM",
+          "sha256": "9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8",
+          "record_bytes": 959,
+          "record_id": 353,
+          "offset": 339132
+        },
+        "native_evidence": [
+          "ev_059378b70e0c3d2d6a7d89406c901bd8453f733aa06817ae33106d860a16fa22"
+        ],
+        "limitations": [
+          "This is a definition record, not an initialized or awarded inventory instance."
+        ]
+      },
+      "354": {
+        "id": 354,
+        "name": "乌蚕之丝",
+        "raw_hex": "62010000cedab2cfd6aecbbf00000000000000000000000000000000150000002f0000000302b6cdd4ecd4adc1cfa3acc9fab3a4d4da8997d0c7bafeb5d7cedab2cfcbf9cdc2b5c4cbbf000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000070000000000000000000000000000000000e80300000000000000000001000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "record_sha256": "0e03e9098b0bd6b636345ae8bb107e26f2c37ada0a8d3fec122fee2f28d5692d",
+        "instance_byte9_raw": 0,
+        "type_raw_24": 3,
+        "allowed_role_mask_raw_13e": 0,
+        "initializer_value_pairs": [
+          {
+            "instance_offset": 13,
+            "definition_offset": 382,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 17,
+            "definition_offset": 390,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 21,
+            "definition_offset": 398,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 25,
+            "definition_offset": 406,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 29,
+            "definition_offset": 414,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 33,
+            "definition_offset": 422,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 37,
+            "definition_offset": 430,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 41,
+            "definition_offset": 438,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 45,
+            "definition_offset": 462,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 49,
+            "definition_offset": 490,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 53,
+            "definition_offset": 498,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 57,
+            "definition_offset": 506,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 61,
+            "definition_offset": 514,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 65,
+            "definition_offset": 522,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 69,
+            "definition_offset": 530,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 73,
+            "definition_offset": 538,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 77,
+            "definition_offset": 546,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 81,
+            "definition_offset": 666,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 85,
+            "definition_offset": 554,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 89,
+            "definition_offset": 562,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 93,
+            "definition_offset": 570,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 97,
+            "definition_offset": 578,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 101,
+            "definition_offset": 586,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 105,
+            "definition_offset": 594,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 109,
+            "definition_offset": 602,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 113,
+            "definition_offset": 610,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 117,
+            "definition_offset": 618,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 121,
+            "definition_offset": 626,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 125,
+            "definition_offset": 634,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 129,
+            "definition_offset": 642,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 133,
+            "definition_offset": 650,
+            "minimum": 0,
+            "maximum": 0
+          },
+          {
+            "instance_offset": 137,
+            "definition_offset": 658,
+            "minimum": 0,
+            "maximum": 0
+          }
+        ],
+        "deterministic_initializer_ranges": true,
+        "source": {
+          "path": "SYSTEM/Object.ITM",
+          "sha256": "9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8",
+          "record_bytes": 959,
+          "record_id": 354,
+          "offset": 340091
         },
         "native_evidence": [
           "ev_059378b70e0c3d2d6a7d89406c901bd8453f733aa06817ae33106d860a16fa22"
@@ -33472,6 +36521,353 @@
           "index": 1,
           "sheet": "/assets/chapter_roles/054/action_01.png",
           "sha256": "1996be0ba8878f0d6cc8807d31557ba8d046760a3a8ecca2de2e305bf971f6c8",
+          "frame_count": 10,
+          "directions": 8,
+          "first_frame": 80,
+          "interval_raw": 280,
+          "loop_raw": 1,
+          "raw_hex": "08180100000000000000000000010a00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000050000000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "sequence_length_raw": 0,
+          "sequence_raw": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "uses_sequence": false,
+          "logical_count": 10,
+          "logical_frames": [
+            {
+              "logical_index": 0,
+              "physical_frame": 0,
+              "hold_interval_raw": 280
+            },
+            {
+              "logical_index": 1,
+              "physical_frame": 1,
+              "hold_interval_raw": 280
+            },
+            {
+              "logical_index": 2,
+              "physical_frame": 2,
+              "hold_interval_raw": 280
+            },
+            {
+              "logical_index": 3,
+              "physical_frame": 3,
+              "hold_interval_raw": 280
+            },
+            {
+              "logical_index": 4,
+              "physical_frame": 4,
+              "hold_interval_raw": 280
+            },
+            {
+              "logical_index": 5,
+              "physical_frame": 5,
+              "hold_interval_raw": 280
+            },
+            {
+              "logical_index": 6,
+              "physical_frame": 6,
+              "hold_interval_raw": 280
+            },
+            {
+              "logical_index": 7,
+              "physical_frame": 7,
+              "hold_interval_raw": 280
+            },
+            {
+              "logical_index": 8,
+              "physical_frame": 8,
+              "hold_interval_raw": 280
+            },
+            {
+              "logical_index": 9,
+              "physical_frame": 9,
+              "hold_interval_raw": 280
+            }
+          ],
+          "sequence_rule": "(raw+0x0D &0x0F)==0 selects byte+0x16+logical_index; otherwise logical_index. Add first_frame and direction*physical_frame_count.",
+          "sequence_evidence": [
+            "ev_0ffb771246c6d16325580fe6f266e66f57fbb84cfe7a3be766ff48234043fbab"
+          ],
+          "source_offset": 239
+        }
+      ],
+      "limitation": "DGP action indexes are zero-based; exact native blend/timing remains unobserved"
+    },
+    "061": {
+      "id": "061",
+      "name": "男術士飄",
+      "source": {
+        "path": "ROLE/061.dgp",
+        "sha256": "6be56cf03f42a1de75a7e5178b36ba0c449252741bf9b65f442bdf4967aafaed"
+      },
+      "frame_width": 189,
+      "frame_height": 164,
+      "anchor": {
+        "x": 94,
+        "y": 125
+      },
+      "actions": [
+        {
+          "index": 0,
+          "sheet": "/assets/chapter_roles/061/action_00.png",
+          "sha256": "0074a12485fb5e54b2717aaf45771b00d648b2a413476526afab770651b336d3",
+          "frame_count": 10,
+          "directions": 8,
+          "first_frame": 0,
+          "interval_raw": 180,
+          "loop_raw": 1,
+          "raw_hex": "08b40000000000000000000000010a00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "sequence_length_raw": 0,
+          "sequence_raw": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "uses_sequence": false,
+          "logical_count": 10,
+          "logical_frames": [
+            {
+              "logical_index": 0,
+              "physical_frame": 0,
+              "hold_interval_raw": 180
+            },
+            {
+              "logical_index": 1,
+              "physical_frame": 1,
+              "hold_interval_raw": 180
+            },
+            {
+              "logical_index": 2,
+              "physical_frame": 2,
+              "hold_interval_raw": 180
+            },
+            {
+              "logical_index": 3,
+              "physical_frame": 3,
+              "hold_interval_raw": 180
+            },
+            {
+              "logical_index": 4,
+              "physical_frame": 4,
+              "hold_interval_raw": 180
+            },
+            {
+              "logical_index": 5,
+              "physical_frame": 5,
+              "hold_interval_raw": 180
+            },
+            {
+              "logical_index": 6,
+              "physical_frame": 6,
+              "hold_interval_raw": 180
+            },
+            {
+              "logical_index": 7,
+              "physical_frame": 7,
+              "hold_interval_raw": 180
+            },
+            {
+              "logical_index": 8,
+              "physical_frame": 8,
+              "hold_interval_raw": 180
+            },
+            {
+              "logical_index": 9,
+              "physical_frame": 9,
+              "hold_interval_raw": 180
+            }
+          ],
+          "sequence_rule": "(raw+0x0D &0x0F)==0 selects byte+0x16+logical_index; otherwise logical_index. Add first_frame and direction*physical_frame_count.",
+          "sequence_evidence": [
+            "ev_0ffb771246c6d16325580fe6f266e66f57fbb84cfe7a3be766ff48234043fbab"
+          ],
+          "source_offset": 67
+        },
+        {
+          "index": 1,
+          "sheet": "/assets/chapter_roles/061/action_01.png",
+          "sha256": "e489984cf44beb210630fb6f12e3e46ba20c13d7593b16550e580fedb83d5bfb",
           "frame_count": 10,
           "directions": 8,
           "first_frame": 80,

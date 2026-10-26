@@ -121,9 +121,10 @@ class CF1MapPixels(unittest.TestCase):
             regional = {key: value for key, value in manifest['maps'].items() if key.startswith('M17')}
             self.assertEqual(sum(len(row['objects']) for row in regional.values()), 32)
             # Keep the established region/baseline scope intact. The minimal
-            # M01050 caller adds original scenery, not more Fire Valley maps.
+            # M01050 caller and outer forest scenery have their own source sets.
+            baseline_maps = {'M01010', 'M01030'} | set(regional)
             self.assertEqual(sum(obj['behavior_raw_cf'] == 1
-                                 for map_id, row in manifest['maps'].items() if map_id != 'M01050'
+                                 for map_id, row in manifest['maps'].items() if map_id in baseline_maps
                                  for obj in row['objects']), 56)
             city = manifest['maps']['M01050']['objects']
             table = MapObjects(ROOT / 'Map/m01050.dat')
@@ -164,11 +165,80 @@ class CF1MapPixels(unittest.TestCase):
                                              (frame + 1) * raster.width, raster.height)).tobytes()
                         self.assertEqual(actual, raster.pixels(frame, intrinsic=channel == 'intrinsic'))
                 added_frames += raster.count
-            self.assertEqual(len(report['frame_checks']), 147)
+            legacy_sources = {bank['source']['path'] for bank in manifest['roles'].values()}
+            legacy_sources.update(manifest['object_banks'][obj['bank']]['source']['path']
+                                  for obj in manifest['maps']['M70010']['objects'])
+            self.assertEqual(sum(row['source'] in legacy_sources for row in report['frame_checks']), 147)
             city_checks = [row for row in report['cf1_frame_checks'] if row['source'].startswith('mapm/m01050/')]
-            self.assertEqual(len(report['cf1_frame_checks']) - len(city_checks), 120)
+            baseline_cf1_sources = {manifest['object_banks'][obj['bank']]['source']['path']
+                                    for map_id in baseline_maps for obj in manifest['maps'][map_id]['objects']
+                                    if obj['behavior_raw_cf'] == 1}
+            baseline_checks = [row for row in report['cf1_frame_checks'] if row['source'] in baseline_cf1_sources]
+            self.assertEqual(len(baseline_checks), 120)
             self.assertEqual(len(city_checks), added_frames)
             self.assertEqual(added_frames, 4)
+            # Verify every one of the 39 new placements against its actual DAT
+            # entry, then rasterize both channels of all four source banks.
+            # These are separate from the retained 56-object/120-frame baseline.
+            forest_counts = {'M70010': 0, 'M70020': 0, 'M70030': 9,
+                             'M70040': 13, 'M70050': 5, 'M70060': 12}
+            forest_banks = set()
+            for map_id, count in forest_counts.items():
+                table = MapObjects(ROOT / f'Map/{map_id.lower()}.dat')
+                expected = []
+                for obj in table.objects:
+                    raw = bytes.fromhex(obj['raw_hex'])
+                    relative = table.resource_source(struct.unpack_from('<I', raw, 0x1e)[0])
+                    if raw[0xcf] == 1 and (ROOT / relative).read_bytes()[2]:
+                        expected.append(obj['index'])
+                actual = [obj for obj in manifest['maps'][map_id]['objects'] if obj['behavior_raw_cf'] == 1]
+                self.assertEqual(len(expected), count, map_id)
+                self.assertEqual([obj['index'] for obj in actual], expected, map_id)
+                for obj in actual:
+                    original = table.objects[obj['index']]
+                    self.assertEqual(obj['source_record_raw_hex'], original['raw_hex'])
+                    self.assertEqual(obj['source_record_offset'], original['offset'])
+                    self.assertEqual(obj['map_id'], map_id)
+                    raw = bytes.fromhex(original['raw_hex'])
+                    self.assertEqual(manifest['object_banks'][obj['bank']]['source']['path'],
+                                     table.resource_source(struct.unpack_from('<I', raw, 0x1e)[0]))
+                    forest_banks.add(obj['bank'])
+            self.assertEqual(sum(forest_counts.values()), 39)
+            forest_sources = {manifest['object_banks'][key]['source']['path'] for key in forest_banks}
+            self.assertEqual(forest_sources, {'mapm/m70030/015.dgp', 'mapm/m70040/016.dgp',
+                                             'mapm/m70050/013.dgp', 'mapm/m70060/017.dgp'})
+            forest_frames = 0
+            for key in forest_banks:
+                bank = manifest['object_banks'][key]
+                source = ROOT / bank['source']['path']
+                before_source = source.read_bytes()
+                self.assertEqual(hashlib.sha256(before_source).hexdigest(), bank['source']['sha256'])
+                raster = FileRaster(before_source)
+                self.assertEqual(raster.count, 2)
+                self.assertEqual(len(bank['actions']), 1)
+                action = bank['actions'][0]
+                self.assertEqual(action['source_action_raw_hex'], before_source[67:239].hex())
+                self.assertEqual((action['first_frame'], action['frame_count'], action['directions']), (0, 2, 1))
+                checks = [row for row in report['cf1_frame_checks'] if row['source'] == bank['source']['path']]
+                self.assertEqual([row['frame'] for row in checks], [0, 1])
+                for channel in ['main', 'intrinsic']:
+                    atlas = Image.open(web / action[channel + '_sheet'].lstrip('/')).convert('RGBA')
+                    self.assertEqual(atlas.size, (raster.width * raster.count, raster.height))
+                    for frame in range(raster.count):
+                        expected = raster.pixels(frame, intrinsic=channel == 'intrinsic')
+                        actual = atlas.crop((frame * raster.width, 0,
+                                             (frame + 1) * raster.width, raster.height)).tobytes()
+                        self.assertEqual(actual, expected, (bank['source']['path'], frame, channel))
+                        self.assertEqual(checks[frame][channel]['covered_pixels'],
+                                         sum(bool(expected[i]) for i in range(3, len(expected), 4)))
+                        if channel == 'main':
+                            self.assertEqual(checks[frame][channel]['rgba_sha256'], hashlib.sha256(expected).hexdigest())
+                forest_frames += raster.count
+                self.assertEqual(source.read_bytes(), before_source)
+            self.assertEqual(forest_frames, 8)
+            forest_checks = [row for row in report['cf1_frame_checks'] if row['source'] in forest_sources]
+            self.assertEqual(len(forest_checks), forest_frames)
+            self.assertEqual(len(report['cf1_frame_checks']), len(baseline_checks) + len(city_checks) + len(forest_checks))
             self.assertNotIn('M17030', manifest['maps'], 'the zero-action static crystal is not animated/collectable')
             for map_id, data in regional.items():
                 for row in data['objects']:

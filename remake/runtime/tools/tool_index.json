@@ -1,8 +1,8 @@
 {
   "schema": "seventh-seal-tool-index",
   "version": 1,
-  "updated": "2026-10-25",
-  "registered_steps": 41,
+  "updated": "2026-10-26",
+  "registered_steps": 42,
   "content_plan": [
     "chapter-maps",
     "chapter-story",
@@ -351,7 +351,8 @@
         "fire-valley-index"
       ],
       "imported_by": [
-        "build_runtime.py"
+        "build_runtime.py",
+        "export_white_forest_index.py"
       ]
     },
     {
@@ -361,6 +362,14 @@
       "imported_by": [
         "export_enemy_content.py"
       ]
+    },
+    {
+      "path": "export_white_forest_index.py",
+      "role": "registered-build",
+      "build_targets": [
+        "white-forest-index"
+      ],
+      "imported_by": []
     },
     {
       "path": "export_forest_presentation.py",

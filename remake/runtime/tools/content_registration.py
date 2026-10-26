@@ -31,9 +31,11 @@ def map_exports(value=None):
 
 
 def map_ids(kind=None, value=None):
+    value = definition() if value is None else value
     return tuple(ident for ident, row in map_exports(value).items()
                  if kind is None or kind == 'assets' and row['assets'] == 'chapter'
-                 or kind == 'story' and row['story'])
+                 or kind == 'story' and row['story']
+                 or kind == 'story-data' and (row['story'] or value['maps'][ident].get('objects')))
 
 
 def program_ids():

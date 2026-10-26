@@ -12,6 +12,7 @@
       "sha256": "240e0b23357f2d1ec6a90485841e7d0f5542cea39e6b02616aef20676e734542",
       "bytes": 32025
     },
+    "dialogue_status": "parsed",
     "map_source": {
       "path": "Map/m17032.dat",
       "sha256": "fec9023611123ba7557cf0a186317c808a5c041a6ec8d0fd52b30c8576f09bfe",

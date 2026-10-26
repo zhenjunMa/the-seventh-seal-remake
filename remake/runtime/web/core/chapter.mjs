@@ -17,6 +17,7 @@ import {compileTlkFlow,nativeFlowId} from './story_flow_compiler.mjs';
 import {playbackDelay} from './story_playback.mjs';
 import {nativeMapTransfer} from './map_connections.mjs';
 import {nativeScriptedBattle} from './scripted_battle.mjs';
+import {nativeKeyedChest,canOpenNativeChest} from './native_map_chests.mjs';
 
 const copy = value => structuredClone(value);
 const need = (ok, message) => { if (!ok) throw new Error(message); };
@@ -75,6 +76,16 @@ function setObjectEventState(draft, mapFlagIndex, objectIndex, state) {
 export function validateChapterStory(data) {
   need(data?.schema === 'seventh-seal-chapter-story' && [1,2].includes(data.version) && data.maps, '剧情版本不兼容');
   for (const [mapId, table] of Object.entries(data.maps)) {
+    if(table.dialogue_status==='source-file-absent'){
+      need(/^M\d{5}(?:-\d+)?$/.test(mapId)&&flagIndex(table.map_flag_index)
+        &&table.source===null&&Array.isArray(table.records)&&table.records.length===0
+        &&table.record_count===0&&table.index_count===0
+        &&table.header_setup_tlk_raw===0&&table.header_entry_tlk_raw===0
+        &&table.map_source?.path?.toLowerCase()===`map/${mapId.toLowerCase()}.dat`
+        &&/^[0-9a-f]{64}$/.test(table.map_source.sha256)
+        &&data.source_hashes?.[table.map_source.path]===table.map_source.sha256,'无对白地图来源无效');
+      continue;
+    }
     need(/^M\d{5}(?:-\d+)?$/.test(mapId) && flagIndex(table.map_flag_index) && Array.isArray(table.records)
       && table.records.length > 0 && table.records.length <= 10000, '火之谷对白表无效');
     need(table.source?.path?.toLowerCase() === `map/${mapId.toLowerCase()}.tlk`
@@ -139,7 +150,7 @@ export class ChapterRunner {
   constructor({world, data, say, choose = null, animate, transfer, battle, objectData = null, objectAnimation = async () => {}, wait=playbackDelay, setPhase = () => {}, log = () => {},content=runtimeContent,worldMapState}) {
     validateChapterStory(data);
     Object.assign(this, {world, data:data.version===2?data:copy(data), objectData:data.version===2?objectData:copy(objectData), objectAnimation, say, choose, animate, transfer, battle, wait, setPhase, log,content,worldMapState});
-    if(data.version===1)this.data.flows=Object.fromEntries(Object.values(this.data.maps).map(table=>{
+    if(data.version===1)this.data.flows=Object.fromEntries(Object.values(this.data.maps).filter(table=>table.dialogue_status!=='source-file-absent').map(table=>{
       const flow=compileTlkFlow(table,{choices:chapterChoices});return [flow.id,flow];
     }));
     this.flowRunner=new StoryFlowRunner(Object.fromEntries(['record','say','choice','animation','give_item','restore_party','request_save','set_native_object','wait',
@@ -210,38 +221,56 @@ export class ChapterRunner {
     }
   }
   objectFor(mapId, objectIndex) {
-    need(storyBindings(mapId,this.content).objects.some(row=>row.index===objectIndex&&row.handler==='stationary-chest'), '剧情物件行为尚未接入');
+    const binding=storyBindings(mapId,this.content).objects.find(row=>row.index===objectIndex);
+    need(binding&&['stationary-chest','keyed-chest'].includes(binding.handler), '剧情物件行为尚未接入');
     const table = this.data.maps[mapId], object = table?.objects.find(row => row.index === objectIndex);
     need(object, '剧情物件来源缺失');
     const b = bytes(object.raw_hex, 0x112, '剧情物件'), v = view(b);
-    need(object.source?.sha256 === this.data.source_hashes[object.source.path]
-      && b[0xcf] === 3 && b[0x109] === 0 && table.records.some(row=>row.id===v.getUint32(0xf6,true)), '剧情箱子来源或状态类型无效');
+    need(object.source?.sha256 === this.data.source_hashes[object.source.path], '剧情箱子来源无效');
+    const chest=binding.handler==='keyed-chest'?nativeKeyedChest(object):null;
+    if(!chest)need(b[0xcf] === 3 && b[0x109] === 0 && table.records.some(row=>row.id===v.getUint32(0xf6,true)), '剧情箱子来源或状态类型无效');
     if (this.objectData) {
       const manifest = this.objectData[mapId]?.find(row => row.object_index_zero_based === objectIndex);
       need(manifest?.source?.path === object.source.path && manifest.source.offset === object.source.offset
         && manifest.source.sha256 === object.source.sha256 && manifest.source.raw_hex === object.raw_hex,
         '剧情物件清单与原始地图不一致');
     }
-    return {table, object, recordId:v.getUint32(0xf6, true)};
+    return {table, object, recordId:v.getUint32(0xf6, true),chest};
   }
   async runObject({mapId, objectIndex, playback} = {}) {
     need(!this.running, '火之谷剧情正在执行');
-    const {table, object, recordId} = this.objectFor(mapId, objectIndex);
+    const {table, object, recordId,chest} = this.objectFor(mapId, objectIndex);
     need(this.world.location.map_id === mapId, '剧情物件不在当前地图');
     const initialState = chapterObjectState(this.world.snapshot(), mapId, objectIndex, this.data);
     if (initialState === 3) return {mapId, objectIndex, already_done:true, state:3, world:this.world.snapshot()};
     need([0,1,2].includes(initialState), '剧情物件保存状态尚未接入');
+    if(chest&&initialState!==2&&!canOpenNativeChest(this.world.snapshot(),chest))
+      return {mapId,objectIndex,locked:true,key_id:chest.keyId,state:initialState,world:this.world.snapshot()};
     return this.atomic({mapId, recordId, objectIndex, playback}, async draft => {
       let result = {traversed:[], dialogueIds:[]};
       // Source 0x4137C0 clears pending state1 before dispatching +F6.
       // Saved state2 means its event already ran: finish the animation only.
-      if (initialState === 1) setObjectEventState(draft, table.map_flag_index, objectIndex, 0);
-      if (initialState !== 2) result = await this.walkTlk({mapId, recordId, draft,context:{steps:0,playback}});
+      if(chest)setObjectEventState(draft,table.map_flag_index,objectIndex,2);
+      else{
+        if (initialState === 1) setObjectEventState(draft, table.map_flag_index, objectIndex, 0);
+        if (initialState !== 2) result = await this.walkTlk({mapId, recordId, draft,context:{steps:0,playback}});
+      }
       let state = chapterObjectState(draft, mapId, objectIndex, this.data);
       if (state === 2) {
         playback?.check();
         await this.objectAnimation({mapId, objectIndex, draft, source:object.source, fromState:2, toState:3,playback,signal:playback?.signal});
         playback?.check();
+        if(chest){
+          for(const reward of chest.rewards){
+            // Reward work stays inside the existing atomic-success policy.
+            // A full inventory cannot silently consume a direct chest here.
+            need(draft.inventory.length<1000||draft.inventory.some(row=>row.id===0
+              ||row.id===reward.id&&bytes(row.source_raw_hex,0xe5,'背包')[0x0c]===0),'背包已满，宝箱奖励无法接收');
+            this.applyMutation(draft,table,{id:`object-${objectIndex}-${reward.slot}`,mutation_type:5,mutation_index:0,mutation_bit:reward.id},
+              {itemInitializationSource:'native-object-447DE0-47BCF0-469820-47BFF0-47BDC0'});
+          }
+          result.rewards=copy(chest.rewards);
+        }
         setObjectEventState(draft, table.map_flag_index, objectIndex, 3);
         state = 3;
       }
@@ -382,7 +411,7 @@ export class ChapterRunner {
         const row = {instance_id:slot?.instance_id ?? `chapter-${table.id}-${record.id}-${draft.revision}-${inventory.length}`,
           id:definition.id, name:definition.name, quantity:1, source_raw_hex:hex(template),
           source_definition:copy(definition.source),
-          initialization_source:'native-TLK-case5-0xCC-buffer-0x47B3C0-0x47BDC0'};
+          initialization_source:context.itemInitializationSource??'native-TLK-case5-0xCC-buffer-0x47B3C0-0x47BDC0'};
         if (slot) Object.assign(slot, row); else inventory.push(row);
       } else this.log({type:'chapter-inventory-full', id:definition.id, native_capacity:1000});
       return;

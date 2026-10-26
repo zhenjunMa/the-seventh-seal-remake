@@ -42,7 +42,7 @@ const setup = (rows = [instance(156, 3)], Store = AtomicStore) => {
 };
 
 test('catalog support is the proven 21 stat-only crystals, with immutable ITM source bytes', () => {
-  assert.deepEqual(Object.values(source.definitions).filter(isSupportedCrystalDefinition).map(d => d.id),
+  assert.deepEqual(Object.values(source.definitions).filter(d=>!d.equipment_passive&&isSupportedCrystalDefinition(d)).map(d => d.id),
     [7,145,146,147,148,149,150,151,152,153,154,155,156,157,158,159,160,161,201,204,206]);
   assert.equal(Object.values(source.definitions).filter(isCrystalDefinition).length, 66);
   const bytes = readFileSync(new URL('../../../SYSTEM/Object.ITM', import.meta.url));

@@ -75,5 +75,15 @@ export function nativeMapMovement(movement,table){
     if(value>30||movement[key]!==undefined&&movement[key]!==value)throw new Error('地图移动步长与来源不一致');
     result[key]=value;
   }
+  // 4A5110 selects source markers without checking terrain. Continuous
+  // movement may leave such a landing cell, but ordinary paths cannot enter it.
+  const cells=new Map();
+  for(const markers of Object.values(table.entry_markers??{}))for(const cell of markers){
+    if(!Number.isInteger(cell.x)||!Number.isInteger(cell.y)||cell.x<0||cell.y<0
+      ||cell.x>=movement.width||cell.y>=movement.height
+      ||cell.offset!==0x172+(cell.y*movement.width+cell.x)*64)throw new Error('地图原入口格与来源不一致');
+    if(movement.terrain_rows[cell.y][cell.x]==='1')cells.set(`${cell.x},${cell.y}`,{x:cell.x,y:cell.y});
+  }
+  if(cells.size)result.native_entry_cells=[...cells.values()];
   return result;
 }

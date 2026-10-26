@@ -179,7 +179,9 @@ def source_files(registration=None):
     return ('GAME.exe', 'SYSTEM/Object.ITM',
             *tuple(f'Fight_Role/{ident}.CHR' for ident, row in registration['roles'].items()
                    if row['side'] == 'player'),
-            *tuple(f'Map/{ident.lower()}{suffix}' for ident in map_ids('story', registration) for suffix in ('.dat', '.TLK')),
+            *tuple(f'Map/{ident.lower()}.dat' for ident in map_ids('story-data', registration)),
+            *tuple(f'Map/{ident.lower()}.TLK' for ident in map_ids('story-data', registration)
+                   if (ROOT/f'Map/{ident.lower()}.TLK').is_file()),
             *tuple(f'Animate/{ident}.anm' for ident in registration['programs']))
 
 
@@ -209,6 +211,8 @@ def registered_tlk_reachability(story, registration, original, hashes, require):
             require(slot in slots, f'{map_id} NPC {slot} TLK index')
             add(map_id, slots[slot], 'npc', npc_slot=slot)
         for index in binding.get('objects', []):
+            if index['handler'] == 'keyed-chest':
+                continue  # Direct DAT rewards have no fabricated TLK root.
             obj = next((row for row in table['objects'] if row['index'] == index['index']), None)
             require(obj is not None, f'{map_id} object {index}')
             at = obj['source']['offset']; raw = data[at:at + 0x112]
@@ -407,6 +411,27 @@ def admit_registered_equipment(definitions, seed, story, registration):
         origin = reachable.get(f"{grant['map_id']}:{grant['record_id']}")
         if origin:
             sources.setdefault(str(grant['mutation_bit']), []).append(dict(**grant, entrance=deepcopy(origin)))
+    for map_id in map_ids('story-data', registration):
+        table = story['maps'][map_id]
+        path = f'Map/{map_id.lower()}.dat'
+        for selected in registration['maps'][map_id].get('objects', []):
+            if selected['handler'] != 'keyed-chest':
+                continue
+            obj = next((row for row in table['objects'] if row['index'] == selected['index']), None)
+            require(obj is not None, f'{map_id} keyed chest {selected["index"]}')
+            at = obj['source']['offset']; raw = original[path][at:at + 0x112]
+            require(raw.hex() == obj['raw_hex'] and obj['source']['sha256'] == hashes[path]
+                    and table['map_source']['sha256'] == hashes[path]
+                    and raw[0xCF] == 4 and u32(raw, 0xF6) == 0, f'{map_id} keyed chest source')
+            for slot in range(10):
+                ident = u32(raw, 0x54 + slot * 4)
+                if not ident:
+                    continue
+                item(ident)
+                sources.setdefault(str(ident), []).append(dict(kind='registered-map-chest-grant',
+                    map_id=map_id, object_index=selected['index'], reward_slot=slot,
+                    source=dict(path=path, sha256=hashes[path], offset=at + 0x54 + slot * 4,
+                                bytes=4, raw_hex=raw[0x54 + slot * 4:0x58 + slot * 4].hex())))
     promoted, previous, rejected = [], {}, []
     for ident in sorted(sources, key=int):
         row = definitions[ident]
@@ -471,6 +496,49 @@ def admit_registered_status_cures(definitions, equipment_admission):
         battle_scope='41B3C0 calls 508BB0 mode1 then displays the source effect; consumes only on a successful status removal or recovery.')
 
 
+def equipment_immunity_supported(row):
+    """47A6A0/508BB0 mode6 only; 509E10 skips its periodic and visual payload."""
+    raw = bytes.fromhex(row['raw_hex'])
+    block = raw[0x2a8:0x36e]
+    return bool(row['record_status'] == 'defined'
+        and (raw[0x24] in (1, 2) or raw[0x24:0x26] == b'\x03\x01')
+        and row['initialization']['deterministic'] and row['validation']['all_value_ranges_ordered']
+        and block[1] != 0 and block[0xb] == 6 and block[0x10] <= 1
+        and i32(block, 2) == -1 and u32(block, 0xb8) == 0
+        and (block[0x10] == 1 or not any(block[0x23:0xb8]))
+        and not any(raw[0x126:0x13a]) and i32(raw, 0x142) == 0 and i32(raw, 0x3a7) == 0)
+
+
+def admit_registered_equipment_passives(definitions, equipment_admission, capabilities):
+    sources = {}
+    for ident, provenance in equipment_admission['sources'].items():
+        row = definitions[ident]
+        if not equipment_immunity_supported(row):
+            continue
+        sources[ident] = deepcopy(provenance)
+        capabilities['previous_definitions'][ident] = {
+            key: deepcopy(row[key]) for key in ('availability', 'behavior')}
+        raw = bytes.fromhex(row['raw_hex'])
+        crystal = raw[0x24:0x26] == b'\x03\x01'
+        row['behavior'] = dict(kind='status-immunity-crystal' if crystal else 'equip', status='recovered',
+            implemented_scope=(['crystal-socketing', 'instance-attribute-linking'] if crystal
+                else ['equipment-slot-transfer', 'instance-attribute-linking']) + ['battle-mode6-status-immunity'],
+            unverified_scope=['crafting'] if crystal else [])
+        row['availability'] = dict(enabled=True, chapter_enabled=True, catalog_visible=True,
+            default_enabled=True, reasons=['registered-source-grant; native-equipment-mode6-immunity-recovered'])
+        row['equipment_passive'] = dict(kind='status-immunity', effect_id_raw=raw[0x2a9], mode_raw=6,
+            effect_raw_hex=raw[0x2a8:0x36e].hex(), definition_offset=0x2a8, effect_bytes=0xc6,
+            application_chance_raw=raw[0x2b9],
+            evidence='ev_3896095f57f082ad42c4995b1b3ba73f5f5609d82426b7ab65f7767e8e10445b')
+    capabilities['passive_sources'] = sources
+    capabilities['passive_item_ids'] = sorted(map(int, sources))
+    capabilities['promoted_item_ids'] = sorted(set(capabilities['promoted_item_ids']) | set(map(int, sources)))
+    capabilities['passive_scope'] = ('4451C0 -> 47A6A0 scans equipment and retained sockets in native group/entry order; '
+        '508BB0 preserves duplicate-before-RNG and inclusive chance. Mode6 blocks only matching incoming status IDs, '
+        'never ticks or renders, and does not revive or apply its dormant numeric payload.')
+    return capabilities
+
+
 def export():
     registration = content_definition()
     paths = source_files(registration)
@@ -504,6 +572,15 @@ def export():
     evidence['status_removal'] = dict(evidence_id=status_proof['evidence_id'], procedure='0x508bb0',
         operation=status_proof['operation'], bundle=status_path.relative_to(ROOT).as_posix(),
         branch='0x508c45..0x508d11 mode1 first matching ID removal; success1/no-match0; no RNG')
+    passive_path = RUNTIME / 'evidence/white_forest_20261026/reward_passives/native_bundle.json'
+    passive_records = json.loads(passive_path.read_text('utf-8'))['records']
+    for label, procedure in [('equipment_passive_load', '0x47a6a0'), ('equipment_passive_apply', '0x508bb0'),
+                             ('equipment_passive_tick', '0x509e10')]:
+        record = next(r for r in passive_records if r['operation'] == 'procedure_assembly'
+                      and r['parameters']['procedure'] == procedure)
+        assert record['subject']['digest']['sha256'] == GAME_SHA
+        evidence[label] = dict(evidence_id=record['evidence_id'], procedure=procedure,
+            operation=record['operation'], bundle=passive_path.relative_to(ROOT).as_posix())
     scheduler_path = RUNTIME / 'evidence/forest_scheduler_native_20261011.json'
     scheduler_records = json.loads(scheduler_path.read_text('utf-8'))['records']
     dispatch_record = next(r for r in scheduler_records if r['operation'] == 'procedure_assembly'
@@ -550,6 +627,7 @@ def export():
     admission = admit_registered_equipment(definitions, json.loads(inputs['opening_seed.json']),
         json.loads(inputs['chapter_story.json']), registration)
     capabilities = admit_registered_status_cures(definitions, admission)
+    admit_registered_equipment_passives(definitions, admission, capabilities)
     admission['generated_input_hashes'] = {f'data/{name}': sha(raw) for name, raw in inputs.items()}
     enabled_ids = [row['id'] for row in definitions.values() if row['availability']['enabled']]
     forest = json.loads((RUNTIME / 'web/data/forest_rewards.json').read_text('utf-8'))['items']
@@ -600,7 +678,7 @@ def export():
                     random_initialization_item_ids=variable_ids,
                     classification_counts=dict(Counter(r['category'] for r in definitions.values())),
                     behavior_counts=dict(Counter(r['behavior']['kind'] for r in definitions.values())),
-                    compatibility='The original eight chapter IDs retain their contracts. Registered source initial/gift equipment enables verified plain numeric equip/linking; registered cure grants enable native mode1 removal. Neither policy grants inventory.',
+                    compatibility='The original eight chapter IDs retain their contracts. Registered source grants enable verified numeric equipment, native mode1 cures, and mode6 equipment/crystal immunity. Admission never grants inventory.',
                     unknown_fields='Prices, crafting recipes, crystal insertion/removal and special effects are not assigned semantics from names; original bytes remain in raw_hex.'),
                  equipment_resource_policy='preserve-raw',
                  consumable_resource_policy='raw-add-clamp-to-raw-maximum',
@@ -627,9 +705,9 @@ def export():
                              limitations=['Static shipped binary evidence; original execution was not observed.',
                                           'Battle item gauge and zero added preparation debt are native verified; live menu timing and animation completion remain remake adapters.',
                                           'Default capability includes the original chapter set, registered source plain equipment, and registered native mode1 cure grants. Other records remain disabled by default unless an independent recovered handler admits them.',
-                                          'Crystal socketing, crafting, special passive abilities, growth/revival and other item handlers remain unverified.',
+                                          'Only registered-source mode6 immunity passives and stat crystals are recovered; crafting, other passives and growth/revival item handlers remain unverified.',
                                           'ID31 has a variable range and ID36 has a reversed range in the shipped source; they are retained rather than silently repaired.',
-                                          'Special slot label is a remake UI label for source category5; its catalog records are present but none is enabled by default.']))
+                                          'Special slot label is a remake UI label for source category5; each enabled definition requires registered source provenance.']))
     write(output, value)
     assert all((ROOT / p).read_bytes() == raw for p, raw in original.items())
     assert all((RUNTIME / 'web/data' / name).read_bytes() == raw for name, raw in inputs.items())

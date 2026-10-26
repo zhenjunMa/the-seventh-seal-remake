@@ -109,7 +109,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
     }
     return scene;
   }
-  function validateEntry(scene,at) { if(scene.movement.at(at.x,at.y).blocked) throw new Error(`目标位置不在可通行格：${at.map_id} ${at.x},${at.y}`); }
+  function validateEntry(scene,at) { if(!scene.movement.validEntry(at.x,at.y)) throw new Error(`目标位置不在可通行格：${at.map_id} ${at.x},${at.y}`); }
   function commitView(scene,at) {
     gait.reset();gaitScene=scene;gaitRole=state.selectedRole;
     state.view.action=0;state.view.frame=0;state.view.follow=true;state.view.zoom=1;
@@ -140,17 +140,19 @@ export function createMapController({state, actions, $, canvas, ctx}) {
       if(!npc.event&&admitted&&!admitted.includes(npc.slot_zero_based))continue;
       const distance=Math.hypot(npc.x-at.x,npc.y-at.y);if(distance<64&&(!state.nearest||distance<state.nearest.distance))state.nearest={...npc,distance};}
     for(const object of state.chapterStory.maps[at.map_id]?.objects??[]){
-      if(!storyBindings(at.map_id).objects.some(row=>row.index===object.index))continue;
-      if(object.behavior_raw_cf!==3||!object.interaction_record_raw_f6)continue;
+      const binding=storyBindings(at.map_id).objects.find(row=>row.index===object.index);
+      if(!binding)continue;
+      if(binding.handler==='stationary-chest'&&(object.behavior_raw_cf!==3||!object.interaction_record_raw_f6))continue;
+      if(binding.handler==='keyed-chest'&&object.behavior_raw_cf!==4)continue;
       const distance=Math.hypot(object.x_native*2-at.x,object.y_native*2-at.y);
-      if(distance<64&&(!state.nearest||distance<state.nearest.distance))state.nearest={...object,kind:'object',name:'装备箱',distance};
+      if(distance<64&&(!state.nearest||distance<state.nearest.distance))state.nearest={...object,kind:'object',name:binding.handler==='keyed-chest'?'宝箱':'装备箱',distance};
     }
     for(const binding of storyBindings(at.map_id).rests){
       const bed=state.chapterStory.maps[at.map_id]?.descriptors?.find(row=>row.id===binding.descriptor_id);
       if(bed){const distance=Math.min(...bed.cells.map(cell=>Math.hypot((cell.x+.5)*16-at.x,(cell.y+.5)*16-at.y)));if(distance<40&&(!state.nearest||distance<state.nearest.distance))state.nearest={kind:'rest',name:'床铺',descriptorId:bed.id,distance};}
     }
     $('interactionHint').hidden=!state.nearest||state.scenes.phase!=='map';
-    if(state.nearest)$('interactionHint').textContent=state.nearest.kind==='rest'?'E · 休息':state.nearest.kind==='object'?'E · 查看装备箱':`E · 与${state.nearest.name??'人物'}交谈`;
+    if(state.nearest)$('interactionHint').textContent=state.nearest.kind==='rest'?'E · 休息':state.nearest.kind==='object'?`E · 查看${state.nearest.name}`:`E · 与${state.nearest.name??'人物'}交谈`;
   }
   function objectBitmap(scene,obj,world=state.world.value,live=true){
     if(live&&state.objectPreview?.mapId===scene.data.id&&state.objectPreview.objectIndex===obj.index)return state.objectPreview.bitmap;

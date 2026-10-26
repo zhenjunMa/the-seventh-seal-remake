@@ -88,7 +88,8 @@ export class StoryRepository {
     const flows=Object.fromEntries(Object.entries(value.flows).map(([key,source])=>{
       const flow=hydrateStoryFlow(source,value.texts);need(flow.id===key&&flow.map_id===id,'流程归属无效');return [key,flow];
     }));
-    if(table)need(flows[table.flow_id]&&table.records.every(row=>flows[table.flow_id].entries?.[row.id]),'原剧情流程入口缺失');
+    if(table?.records.length)need(flows[table.flow_id]&&table.records.every(row=>flows[table.flow_id].entries?.[row.id]),'原剧情流程入口缺失');
+    else if(table)need(table.dialogue_status==='source-file-absent'&&table.flow_id===undefined,'无对白地图不能包含虚构流程');
     for(const event of events)need(event.schema==='seventh-seal-story-event-binding'&&event.flow_id===event.id&&flows[event.flow_id]
       &&event.program===undefined&&event.commit_policy===undefined,'NPC 流程入口无效');
     const resources={roles:this.resources.roles};

@@ -43607,22 +43607,18 @@
         "status": "recovered",
         "implemented_scope": [
           "equipment-slot-transfer",
-          "instance-attribute-linking"
+          "instance-attribute-linking",
+          "battle-mode6-status-immunity"
         ],
-        "unverified_scope": [
-          "special-passive",
-          "crystal-socketing",
-          "crafting",
-          "attack-or-state-effect"
-        ]
+        "unverified_scope": []
       },
       "availability": {
-        "enabled": false,
-        "chapter_enabled": false,
+        "enabled": true,
+        "chapter_enabled": true,
         "catalog_visible": true,
-        "default_enabled": false,
+        "default_enabled": true,
         "reasons": [
-          "outside-default-chapter-item-set"
+          "registered-source-grant; native-equipment-mode6-immunity-recovered"
         ]
       },
       "raw_fields": {
@@ -43706,7 +43702,17 @@
       "initialized_raw_hex": "7f000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
       "initialized_sha256": "59ea801211490825518d1790a5f59cddcbe477a5d1abc7f99d69021182757ab4",
       "slot_id": "special",
-      "group_index": 5
+      "group_index": 5,
+      "equipment_passive": {
+        "kind": "status-immunity",
+        "effect_id_raw": 35,
+        "mode_raw": 6,
+        "effect_raw_hex": "3b23fffffffff40100000006000000000100000000000000000000000000000000000046000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "definition_offset": 680,
+        "effect_bytes": 198,
+        "application_chance_raw": 0,
+        "evidence": "ev_3896095f57f082ad42c4995b1b3ba73f5f5609d82426b7ab65f7767e8e10445b"
+      }
     },
     "128": {
       "id": 128,
@@ -58526,24 +58532,24 @@
         "drop_rate_in_native_range": true
       },
       "behavior": {
-        "kind": "source-only",
-        "status": "unverified",
-        "implemented_scope": [],
-        "unverified_scope": [
-          "special-passive",
+        "kind": "status-immunity-crystal",
+        "status": "recovered",
+        "implemented_scope": [
           "crystal-socketing",
-          "crafting",
-          "attack-or-state-effect"
+          "instance-attribute-linking",
+          "battle-mode6-status-immunity"
+        ],
+        "unverified_scope": [
+          "crafting"
         ]
       },
       "availability": {
-        "enabled": false,
-        "chapter_enabled": false,
+        "enabled": true,
+        "chapter_enabled": true,
         "catalog_visible": true,
-        "default_enabled": false,
+        "default_enabled": true,
         "reasons": [
-          "outside-default-chapter-item-set",
-          "usage-handler-not-recovered"
+          "registered-source-grant; native-equipment-mode6-immunity-recovered"
         ]
       },
       "raw_fields": {
@@ -58640,6 +58646,16 @@
         "crafting_status": "unverified",
         "direct_use_status": "unverified",
         "extraction_status": "source-fields-complete; no mechanics enabled"
+      },
+      "equipment_passive": {
+        "kind": "status-immunity",
+        "effect_id_raw": 6,
+        "mode_raw": 6,
+        "effect_raw_hex": "0e06fffffffff4010000000600000000003c000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "definition_offset": 680,
+        "effect_bytes": 198,
+        "application_chance_raw": 60,
+        "evidence": "ev_3896095f57f082ad42c4995b1b3ba73f5f5609d82426b7ab65f7767e8e10445b"
       }
     },
     "171": {
@@ -148484,44 +148500,53 @@
     "Fight_Role/005.CHR": "9e06bcbedaf821a6e4c1d08dc0cff31d916c3ae2d00fdc20c37e758d25e09580",
     "Fight_Role/006.CHR": "27b29fb5cc1073014faea7553d0175559714c18dbbc5132ca1c549e4a9d8e15b",
     "Map/m01050.dat": "48ae98e95e9ea414e716c85440d381a5bc29cc2ec00ccd3b30c2ef314d4145fc",
-    "Map/m01050.TLK": "6c5d2be29f120977d70c500abd11c8d76f11abba650be689e2dc44f4ae1dc182",
     "Map/m03039.dat": "c3c01fb5773dda464c2a5bfa0b46520031f2dc9bd363e4a1978c99950b0dcaf2",
-    "Map/m03039.TLK": "b95cbf37de9e4d723a9830d97454b5ece2bc7bf352a51199f0e630aacdb8694a",
     "Map/m17010.dat": "634a1eea243656b16341d9e217578a42a5d58f82f00af9aa0f8a0f805e83515a",
-    "Map/m17010.TLK": "04fc3299206a21504ac500a8797e4c96bf9ccee6fa104e41a3c8960861479f58",
     "Map/m17020.dat": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
-    "Map/m17020.TLK": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
     "Map/m17026.dat": "087ccf781d85f63249a2e1bce48ee71382d2587cdf857c47e575caaae54a646c",
-    "Map/m17026.TLK": "9e363538b3b51f2ec5a0074d4fdcaf3c3e3dbba6d4043f1d1ac06db3124b78ee",
     "Map/m17029.dat": "57851abbfe75121b806268f5bce8c778ec4e5d82ebb7dfa623fbd6952977c314",
-    "Map/m17029.TLK": "ca5d31b51ba3faf0118ba2626be0fb374671641821f59f166171e324c61e6269",
+    "Map/m70010.dat": "c00a06d1c19f3c1bb9b11ae00caa3b8ba70fa11aa802faa202aef49db6f9827a",
+    "Map/m70020.dat": "c8737dc799873825f78f3c254e1911753acdfc588caea815b61348d94717388f",
+    "Map/m70030.dat": "f3eac7c795aed2cc42603d0db486d804737097b5aea53b841eed4ebf07093890",
+    "Map/m70040.dat": "c50b0ef237252e42e74a436fc7c8fab5b8c222d98d5beb0475ff8b54342dda2a",
+    "Map/m70050.dat": "e3f18aa3e3af2dd1cd71d1dafb13f5ce61023588b4185c500aebdd62e6afe551",
+    "Map/m70060.dat": "efe442af65f53752e33d5c583215ff3538136abff133b97018ad19cda6696dbe",
     "Map/m17011.dat": "1b9c624e9093b4e7cbd4a62259607ed313359e3601ae48555c705d808d19bfc4",
-    "Map/m17011.TLK": "49e0a9ce55d37dd4e50884ffc5fe5df26bc29a7a49502b348612b146aadd3f74",
     "Map/m17012.dat": "db0f4709ae4a86c8af819eda867bfb87bed2d4d4bbaa48af4dad31bd3ce5b847",
-    "Map/m17012.TLK": "f96b5f0c8f7e1839f2e567d99873f9993e5586c2fbe3ee4754dbd313fe4aca77",
     "Map/m17013.dat": "1c1bdd0e8f26c8b2ee3b137d0049bfab10ae87f0e5dc76dfa44fc7f61096afcc",
-    "Map/m17013.TLK": "16a7530aa4aa4905ac6712cda3f3f26e41da22fdceb14595ef5ed8bdde6b7322",
     "Map/m17014.dat": "6128bf9d9940a8176c6d53c8e421132a9f2f2ead6e4a907fac6bce4fd0c135ff",
-    "Map/m17014.TLK": "263de44239d54fed81b82a93c1442132501246a5f5859c3dbd70247886e9e40b",
     "Map/m17015.dat": "e396282ce0dbf14a02d91dca28af4b0d1914cee1c1b8a1b7b3c8e0089f6d8b0e",
-    "Map/m17015.TLK": "f0d223d713ad8ea7f0163c2deb72f1a6afbe9e75a91eef4a559e4173881d7a59",
     "Map/m17023.dat": "d9f2021f1f24558f8ead877cc77612c7fa2263b8225a10d630f308384ef857f9",
-    "Map/m17023.TLK": "7ce268d3445ea63766feea2db1cc761aabadec53f86cc30520fa9fcc826bd9a2",
     "Map/m17024.dat": "18b33b069a469365ed75b531aa6346c58112f0c6a64c7a59ae1c6108318ef599",
-    "Map/m17024.TLK": "32f2b52a24570801178553a208770f315a3dce8006abe6db1a86d958d59132f4",
     "Map/m17025.dat": "266c901c9784665d27034f4531c1918fbea96815d14ec68fb1f6699d6d3fa3cd",
-    "Map/m17025.TLK": "5c2ee8a36d83e199ff27b24dce28d57c61bb673111bdc46608fb220559347ed1",
     "Map/m17027.dat": "7c0278bfe4a52f6a1977bb8493fa1ba1d40833b2dce142c42e75d7e2e67c0459",
-    "Map/m17027.TLK": "e4c88998a7d9f67fb0d57a7536c6c737b151eba0441659ea6a8c756145a8bd05",
     "Map/m17028.dat": "ec1d36649bf8fce856a0e93daf08128ebb099f7b30c59648a5903742f372aeff",
-    "Map/m17028.TLK": "d0efacd1c3d4b3a620fb5d0789eb08f01117d691b35b07b6f5d436fbd1d50f3b",
     "Map/m17030-1.dat": "85f2b0ea6398a9cf759183892cf9967e9b690dc57b5fb240e58969f69ae77e6b",
-    "Map/m17030-1.TLK": "c1c480cd76f90a1c5141bcad913ebeb5d2f03f087acff96f5fab14d606946a39",
     "Map/m17030-2.dat": "19c9e32a7cc32da40da096e67aa6b318e18570b29bc784130ad7d07d4430dfe6",
-    "Map/m17030-2.TLK": "22af2e5e273d36c9f8963139ab98dbc7d06b44a3b572ad5dd006ea8e58dce3d9",
     "Map/m17030.dat": "bbe0b8b99a59f775f1647b7e5e01f7ea12208f4422d1272fe62655c6e41d5bc4",
-    "Map/m17030.TLK": "9f8c48b9e0381ea5adddf79325219c3f6eefee315b0df153cb6539e2b575c21f",
     "Map/m17032.dat": "fec9023611123ba7557cf0a186317c808a5c041a6ec8d0fd52b30c8576f09bfe",
+    "Map/m01050.TLK": "6c5d2be29f120977d70c500abd11c8d76f11abba650be689e2dc44f4ae1dc182",
+    "Map/m03039.TLK": "b95cbf37de9e4d723a9830d97454b5ece2bc7bf352a51199f0e630aacdb8694a",
+    "Map/m17010.TLK": "04fc3299206a21504ac500a8797e4c96bf9ccee6fa104e41a3c8960861479f58",
+    "Map/m17020.TLK": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
+    "Map/m17026.TLK": "9e363538b3b51f2ec5a0074d4fdcaf3c3e3dbba6d4043f1d1ac06db3124b78ee",
+    "Map/m17029.TLK": "ca5d31b51ba3faf0118ba2626be0fb374671641821f59f166171e324c61e6269",
+    "Map/m70010.TLK": "223979cd995a89ee5a4bdfac3339294857933a757711f99709b82149bf079583",
+    "Map/m70030.TLK": "1c257003f538ed0db956c23034cf68803fae5773ee076ae53f436122b1dab8ec",
+    "Map/m70060.TLK": "a3e84d8e2cba253d1b5e527841169768c5408a4b87b2aabcc331eb09bd3a6696",
+    "Map/m17011.TLK": "49e0a9ce55d37dd4e50884ffc5fe5df26bc29a7a49502b348612b146aadd3f74",
+    "Map/m17012.TLK": "f96b5f0c8f7e1839f2e567d99873f9993e5586c2fbe3ee4754dbd313fe4aca77",
+    "Map/m17013.TLK": "16a7530aa4aa4905ac6712cda3f3f26e41da22fdceb14595ef5ed8bdde6b7322",
+    "Map/m17014.TLK": "263de44239d54fed81b82a93c1442132501246a5f5859c3dbd70247886e9e40b",
+    "Map/m17015.TLK": "f0d223d713ad8ea7f0163c2deb72f1a6afbe9e75a91eef4a559e4173881d7a59",
+    "Map/m17023.TLK": "7ce268d3445ea63766feea2db1cc761aabadec53f86cc30520fa9fcc826bd9a2",
+    "Map/m17024.TLK": "32f2b52a24570801178553a208770f315a3dce8006abe6db1a86d958d59132f4",
+    "Map/m17025.TLK": "5c2ee8a36d83e199ff27b24dce28d57c61bb673111bdc46608fb220559347ed1",
+    "Map/m17027.TLK": "e4c88998a7d9f67fb0d57a7536c6c737b151eba0441659ea6a8c756145a8bd05",
+    "Map/m17028.TLK": "d0efacd1c3d4b3a620fb5d0789eb08f01117d691b35b07b6f5d436fbd1d50f3b",
+    "Map/m17030-1.TLK": "c1c480cd76f90a1c5141bcad913ebeb5d2f03f087acff96f5fab14d606946a39",
+    "Map/m17030-2.TLK": "22af2e5e273d36c9f8963139ab98dbc7d06b44a3b572ad5dd006ea8e58dce3d9",
+    "Map/m17030.TLK": "9f8c48b9e0381ea5adddf79325219c3f6eefee315b0df153cb6539e2b575c21f",
     "Map/m17032.TLK": "240e0b23357f2d1ec6a90485841e7d0f5542cea39e6b02616aef20676e734542",
     "Animate/m01050-1.anm": "c483d0ee85a01072afa8f8e80697220b922fa3e0ad971ee5affcedf12c88f819",
     "Animate/m01050-2.anm": "19a173b2d01c4e6335a16d4283084ee2f896165f9e35374d45663b5e11a63782",
@@ -148536,7 +148561,9 @@
     "Animate/m17028.anm": "e9d6e1df1c4c40c267adcb9ee711c587b6fe03adc0343d4435853ef2b45c26e6",
     "Animate/m17010-2.anm": "4496da411c6c8adc76e464efbd866e34a0ce02d2ba66a5cfc42abe902325230c",
     "Animate/m17030-1.anm": "209c86f42cda1a513c21d38512acea8470508910f44127977b9b7b1738df9df2",
-    "Animate/m17010-3.anm": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e"
+    "Animate/m17010-3.anm": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+    "Animate/m70010-1.anm": "7f4c67d00ce8d1b6b3ce5b280c52074de4abcd82b932300849e756133a8f4e7c",
+    "Animate/m70030-1.anm": "a5a6e002bea13b92735b33a5bf7d866cda47020776bbab2f4f6cfc539ca11a3f"
   },
   "evidence": {
     "initialize": {
@@ -148642,6 +148669,24 @@
       "bundle": "remake/runtime/evidence/fire_valley_20261024/stage12_status_apply.json",
       "branch": "0x508c45..0x508d11 mode1 first matching ID removal; success1/no-match0; no RNG"
     },
+    "equipment_passive_load": {
+      "evidence_id": "ev_3896095f57f082ad42c4995b1b3ba73f5f5609d82426b7ab65f7767e8e10445b",
+      "procedure": "0x47a6a0",
+      "operation": "procedure_assembly",
+      "bundle": "remake/runtime/evidence/white_forest_20261026/reward_passives/native_bundle.json"
+    },
+    "equipment_passive_apply": {
+      "evidence_id": "ev_97ec8a4973a03d24fc9d677b8d1acfd7fc3b8c511557a0775ef44ea5805b5994",
+      "procedure": "0x508bb0",
+      "operation": "procedure_assembly",
+      "bundle": "remake/runtime/evidence/white_forest_20261026/reward_passives/native_bundle.json"
+    },
+    "equipment_passive_tick": {
+      "evidence_id": "ev_ea1b3b3a6c300baa92fa8f582405a40063f242f86f3575ec090085b7705c12f0",
+      "procedure": "0x509e10",
+      "operation": "procedure_assembly",
+      "bundle": "remake/runtime/evidence/white_forest_20261026/reward_passives/native_bundle.json"
+    },
     "battle_gauge_dispatch": {
       "evidence_id": "ev_8144fc16b1d9d5d07db75171c36c29c2b6364a5da0cc8346cb2c68498a27ff4c",
       "procedure": "0x5036d0",
@@ -148727,6 +148772,8 @@
       50,
       51,
       61,
+      127,
+      170,
       272
     ],
     "original_chapter_item_ids": [
@@ -149168,6 +149215,29 @@
             }
           }
         ],
+        "170": [
+          {
+            "kind": "registered-story-item-grant",
+            "map_id": "M70030",
+            "record_id": 8,
+            "source": {
+              "path": "Map/m70030.TLK",
+              "sha256": "1c257003f538ed0db956c23034cf68803fae5773ee076ae53f436122b1dab8ec",
+              "record_id": 8,
+              "record_bytes": 1647,
+              "offset": 13555
+            },
+            "mutation_type": 5,
+            "mutation_index": 0,
+            "mutation_bit": 170,
+            "entrance": {
+              "map_id": "M70030",
+              "record_id": 3,
+              "kind": "npc",
+              "npc_slot": 10
+            }
+          }
+        ],
         "8": [
           {
             "kind": "registered-story-item-grant",
@@ -149386,6 +149456,191 @@
               "kind": "npc",
               "npc_slot": 10
             }
+          },
+          {
+            "kind": "registered-map-chest-grant",
+            "map_id": "M70020",
+            "object_index": 4,
+            "reward_slot": 0,
+            "source": {
+              "path": "Map/m70020.dat",
+              "sha256": "c8737dc799873825f78f3c254e1911753acdfc588caea815b61348d94717388f",
+              "offset": 251118,
+              "bytes": 4,
+              "raw_hex": "9c000000"
+            }
+          },
+          {
+            "kind": "registered-map-chest-grant",
+            "map_id": "M70050",
+            "object_index": 12,
+            "reward_slot": 0,
+            "source": {
+              "path": "Map/m70050.dat",
+              "sha256": "e3f18aa3e3af2dd1cd71d1dafb13f5ce61023588b4185c500aebdd62e6afe551",
+              "offset": 227966,
+              "bytes": 4,
+              "raw_hex": "9c000000"
+            }
+          }
+        ],
+        "159": [
+          {
+            "kind": "registered-map-chest-grant",
+            "map_id": "M70010",
+            "object_index": 8,
+            "reward_slot": 0,
+            "source": {
+              "path": "Map/m70010.dat",
+              "sha256": "c00a06d1c19f3c1bb9b11ae00caa3b8ba70fa11aa802faa202aef49db6f9827a",
+              "offset": 252214,
+              "bytes": 4,
+              "raw_hex": "9f000000"
+            }
+          },
+          {
+            "kind": "registered-map-chest-grant",
+            "map_id": "M70040",
+            "object_index": 10,
+            "reward_slot": 0,
+            "source": {
+              "path": "Map/m70040.dat",
+              "sha256": "c50b0ef237252e42e74a436fc7c8fab5b8c222d98d5beb0475ff8b54342dda2a",
+              "offset": 774234,
+              "bytes": 4,
+              "raw_hex": "9f000000"
+            }
+          }
+        ],
+        "353": [
+          {
+            "kind": "registered-map-chest-grant",
+            "map_id": "M70010",
+            "object_index": 10,
+            "reward_slot": 0,
+            "source": {
+              "path": "Map/m70010.dat",
+              "sha256": "c00a06d1c19f3c1bb9b11ae00caa3b8ba70fa11aa802faa202aef49db6f9827a",
+              "offset": 252762,
+              "bytes": 4,
+              "raw_hex": "61010000"
+            }
+          }
+        ],
+        "127": [
+          {
+            "kind": "registered-map-chest-grant",
+            "map_id": "M70020",
+            "object_index": 3,
+            "reward_slot": 0,
+            "source": {
+              "path": "Map/m70020.dat",
+              "sha256": "c8737dc799873825f78f3c254e1911753acdfc588caea815b61348d94717388f",
+              "offset": 250844,
+              "bytes": 4,
+              "raw_hex": "7f000000"
+            }
+          }
+        ],
+        "354": [
+          {
+            "kind": "registered-map-chest-grant",
+            "map_id": "M70030",
+            "object_index": 8,
+            "reward_slot": 0,
+            "source": {
+              "path": "Map/m70030.dat",
+              "sha256": "f3eac7c795aed2cc42603d0db486d804737097b5aea53b841eed4ebf07093890",
+              "offset": 155446,
+              "bytes": 4,
+              "raw_hex": "62010000"
+            }
+          },
+          {
+            "kind": "registered-map-chest-grant",
+            "map_id": "M70040",
+            "object_index": 11,
+            "reward_slot": 0,
+            "source": {
+              "path": "Map/m70040.dat",
+              "sha256": "c50b0ef237252e42e74a436fc7c8fab5b8c222d98d5beb0475ff8b54342dda2a",
+              "offset": 774508,
+              "bytes": 4,
+              "raw_hex": "62010000"
+            }
+          }
+        ],
+        "158": [
+          {
+            "kind": "registered-map-chest-grant",
+            "map_id": "M70030",
+            "object_index": 9,
+            "reward_slot": 0,
+            "source": {
+              "path": "Map/m70030.dat",
+              "sha256": "f3eac7c795aed2cc42603d0db486d804737097b5aea53b841eed4ebf07093890",
+              "offset": 155720,
+              "bytes": 4,
+              "raw_hex": "9e000000"
+            }
+          }
+        ],
+        "271": [
+          {
+            "kind": "registered-map-chest-grant",
+            "map_id": "M70040",
+            "object_index": 9,
+            "reward_slot": 0,
+            "source": {
+              "path": "Map/m70040.dat",
+              "sha256": "c50b0ef237252e42e74a436fc7c8fab5b8c222d98d5beb0475ff8b54342dda2a",
+              "offset": 773960,
+              "bytes": 4,
+              "raw_hex": "0f010000"
+            }
+          },
+          {
+            "kind": "registered-map-chest-grant",
+            "map_id": "M70050",
+            "object_index": 6,
+            "reward_slot": 0,
+            "source": {
+              "path": "Map/m70050.dat",
+              "sha256": "e3f18aa3e3af2dd1cd71d1dafb13f5ce61023588b4185c500aebdd62e6afe551",
+              "offset": 226322,
+              "bytes": 4,
+              "raw_hex": "0f010000"
+            }
+          }
+        ],
+        "161": [
+          {
+            "kind": "registered-map-chest-grant",
+            "map_id": "M70060",
+            "object_index": 8,
+            "reward_slot": 0,
+            "source": {
+              "path": "Map/m70060.dat",
+              "sha256": "efe442af65f53752e33d5c583215ff3538136abff133b97018ad19cda6696dbe",
+              "offset": 215350,
+              "bytes": 4,
+              "raw_hex": "a1000000"
+            }
+          }
+        ],
+        "338": [
+          {
+            "kind": "registered-map-chest-grant",
+            "map_id": "M70060",
+            "object_index": 9,
+            "reward_slot": 0,
+            "source": {
+              "path": "Map/m70060.dat",
+              "sha256": "efe442af65f53752e33d5c583215ff3538136abff133b97018ad19cda6696dbe",
+              "offset": 215624,
+              "bytes": 4,
+              "raw_hex": "52010000"
+            }
           }
         ]
       },
@@ -149453,12 +149708,42 @@
           "reason": "not-recovered-plain-numeric-equipment"
         },
         {
+          "item_id": 127,
+          "behavior": "equip",
+          "reason": "not-recovered-plain-numeric-equipment"
+        },
+        {
           "item_id": 150,
           "behavior": "source-only",
           "reason": "not-recovered-plain-numeric-equipment"
         },
         {
           "item_id": 156,
+          "behavior": "source-only",
+          "reason": "not-recovered-plain-numeric-equipment"
+        },
+        {
+          "item_id": 158,
+          "behavior": "source-only",
+          "reason": "not-recovered-plain-numeric-equipment"
+        },
+        {
+          "item_id": 159,
+          "behavior": "source-only",
+          "reason": "not-recovered-plain-numeric-equipment"
+        },
+        {
+          "item_id": 161,
+          "behavior": "source-only",
+          "reason": "not-recovered-plain-numeric-equipment"
+        },
+        {
+          "item_id": 170,
+          "behavior": "source-only",
+          "reason": "not-recovered-plain-numeric-equipment"
+        },
+        {
+          "item_id": 271,
           "behavior": "source-only",
           "reason": "not-recovered-plain-numeric-equipment"
         },
@@ -149473,12 +149758,27 @@
           "reason": "not-recovered-plain-numeric-equipment"
         },
         {
+          "item_id": 338,
+          "behavior": "source-only",
+          "reason": "not-recovered-plain-numeric-equipment"
+        },
+        {
           "item_id": 342,
           "behavior": "source-only",
           "reason": "not-recovered-plain-numeric-equipment"
         },
         {
           "item_id": 348,
+          "behavior": "source-only",
+          "reason": "not-recovered-plain-numeric-equipment"
+        },
+        {
+          "item_id": 353,
+          "behavior": "source-only",
+          "reason": "not-recovered-plain-numeric-equipment"
+        },
+        {
+          "item_id": 354,
           "behavior": "source-only",
           "reason": "not-recovered-plain-numeric-equipment"
         },
@@ -149718,6 +150018,64 @@
           "record_id": 25,
           "kind": "trigger",
           "descriptor_id": 31
+        },
+        {
+          "map_id": "M70010",
+          "record_id": 11,
+          "kind": "setup"
+        },
+        {
+          "map_id": "M70010",
+          "record_id": 2,
+          "kind": "npc",
+          "npc_slot": 10
+        },
+        {
+          "map_id": "M70010",
+          "record_id": 8,
+          "kind": "npc",
+          "npc_slot": 11
+        },
+        {
+          "map_id": "M70010",
+          "record_id": 4,
+          "kind": "npc",
+          "npc_slot": 12
+        },
+        {
+          "map_id": "M70010",
+          "record_id": 10,
+          "kind": "npc",
+          "npc_slot": 13
+        },
+        {
+          "map_id": "M70010",
+          "record_id": 6,
+          "kind": "npc",
+          "npc_slot": 14
+        },
+        {
+          "map_id": "M70010",
+          "record_id": 1,
+          "kind": "trigger",
+          "descriptor_id": 4
+        },
+        {
+          "map_id": "M70030",
+          "record_id": 1,
+          "kind": "setup"
+        },
+        {
+          "map_id": "M70030",
+          "record_id": 3,
+          "kind": "npc",
+          "npc_slot": 10
+        },
+        {
+          "map_id": "M70060",
+          "record_id": 1,
+          "kind": "trigger",
+          "descriptor_id": 2
         },
         {
           "map_id": "M17011",
@@ -150318,7 +150676,7 @@
           "command_index": 50
         }
       ],
-      "reachable_tlk_record_count": 392,
+      "reachable_tlk_record_count": 428,
       "source_hashes": {
         "GAME.exe": "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18",
         "SYSTEM/Object.ITM": "9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8",
@@ -150329,44 +150687,53 @@
         "Fight_Role/005.CHR": "9e06bcbedaf821a6e4c1d08dc0cff31d916c3ae2d00fdc20c37e758d25e09580",
         "Fight_Role/006.CHR": "27b29fb5cc1073014faea7553d0175559714c18dbbc5132ca1c549e4a9d8e15b",
         "Map/m01050.dat": "48ae98e95e9ea414e716c85440d381a5bc29cc2ec00ccd3b30c2ef314d4145fc",
-        "Map/m01050.TLK": "6c5d2be29f120977d70c500abd11c8d76f11abba650be689e2dc44f4ae1dc182",
         "Map/m03039.dat": "c3c01fb5773dda464c2a5bfa0b46520031f2dc9bd363e4a1978c99950b0dcaf2",
-        "Map/m03039.TLK": "b95cbf37de9e4d723a9830d97454b5ece2bc7bf352a51199f0e630aacdb8694a",
         "Map/m17010.dat": "634a1eea243656b16341d9e217578a42a5d58f82f00af9aa0f8a0f805e83515a",
-        "Map/m17010.TLK": "04fc3299206a21504ac500a8797e4c96bf9ccee6fa104e41a3c8960861479f58",
         "Map/m17020.dat": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
-        "Map/m17020.TLK": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
         "Map/m17026.dat": "087ccf781d85f63249a2e1bce48ee71382d2587cdf857c47e575caaae54a646c",
-        "Map/m17026.TLK": "9e363538b3b51f2ec5a0074d4fdcaf3c3e3dbba6d4043f1d1ac06db3124b78ee",
         "Map/m17029.dat": "57851abbfe75121b806268f5bce8c778ec4e5d82ebb7dfa623fbd6952977c314",
-        "Map/m17029.TLK": "ca5d31b51ba3faf0118ba2626be0fb374671641821f59f166171e324c61e6269",
+        "Map/m70010.dat": "c00a06d1c19f3c1bb9b11ae00caa3b8ba70fa11aa802faa202aef49db6f9827a",
+        "Map/m70020.dat": "c8737dc799873825f78f3c254e1911753acdfc588caea815b61348d94717388f",
+        "Map/m70030.dat": "f3eac7c795aed2cc42603d0db486d804737097b5aea53b841eed4ebf07093890",
+        "Map/m70040.dat": "c50b0ef237252e42e74a436fc7c8fab5b8c222d98d5beb0475ff8b54342dda2a",
+        "Map/m70050.dat": "e3f18aa3e3af2dd1cd71d1dafb13f5ce61023588b4185c500aebdd62e6afe551",
+        "Map/m70060.dat": "efe442af65f53752e33d5c583215ff3538136abff133b97018ad19cda6696dbe",
         "Map/m17011.dat": "1b9c624e9093b4e7cbd4a62259607ed313359e3601ae48555c705d808d19bfc4",
-        "Map/m17011.TLK": "49e0a9ce55d37dd4e50884ffc5fe5df26bc29a7a49502b348612b146aadd3f74",
         "Map/m17012.dat": "db0f4709ae4a86c8af819eda867bfb87bed2d4d4bbaa48af4dad31bd3ce5b847",
-        "Map/m17012.TLK": "f96b5f0c8f7e1839f2e567d99873f9993e5586c2fbe3ee4754dbd313fe4aca77",
         "Map/m17013.dat": "1c1bdd0e8f26c8b2ee3b137d0049bfab10ae87f0e5dc76dfa44fc7f61096afcc",
-        "Map/m17013.TLK": "16a7530aa4aa4905ac6712cda3f3f26e41da22fdceb14595ef5ed8bdde6b7322",
         "Map/m17014.dat": "6128bf9d9940a8176c6d53c8e421132a9f2f2ead6e4a907fac6bce4fd0c135ff",
-        "Map/m17014.TLK": "263de44239d54fed81b82a93c1442132501246a5f5859c3dbd70247886e9e40b",
         "Map/m17015.dat": "e396282ce0dbf14a02d91dca28af4b0d1914cee1c1b8a1b7b3c8e0089f6d8b0e",
-        "Map/m17015.TLK": "f0d223d713ad8ea7f0163c2deb72f1a6afbe9e75a91eef4a559e4173881d7a59",
         "Map/m17023.dat": "d9f2021f1f24558f8ead877cc77612c7fa2263b8225a10d630f308384ef857f9",
-        "Map/m17023.TLK": "7ce268d3445ea63766feea2db1cc761aabadec53f86cc30520fa9fcc826bd9a2",
         "Map/m17024.dat": "18b33b069a469365ed75b531aa6346c58112f0c6a64c7a59ae1c6108318ef599",
-        "Map/m17024.TLK": "32f2b52a24570801178553a208770f315a3dce8006abe6db1a86d958d59132f4",
         "Map/m17025.dat": "266c901c9784665d27034f4531c1918fbea96815d14ec68fb1f6699d6d3fa3cd",
-        "Map/m17025.TLK": "5c2ee8a36d83e199ff27b24dce28d57c61bb673111bdc46608fb220559347ed1",
         "Map/m17027.dat": "7c0278bfe4a52f6a1977bb8493fa1ba1d40833b2dce142c42e75d7e2e67c0459",
-        "Map/m17027.TLK": "e4c88998a7d9f67fb0d57a7536c6c737b151eba0441659ea6a8c756145a8bd05",
         "Map/m17028.dat": "ec1d36649bf8fce856a0e93daf08128ebb099f7b30c59648a5903742f372aeff",
-        "Map/m17028.TLK": "d0efacd1c3d4b3a620fb5d0789eb08f01117d691b35b07b6f5d436fbd1d50f3b",
         "Map/m17030-1.dat": "85f2b0ea6398a9cf759183892cf9967e9b690dc57b5fb240e58969f69ae77e6b",
-        "Map/m17030-1.TLK": "c1c480cd76f90a1c5141bcad913ebeb5d2f03f087acff96f5fab14d606946a39",
         "Map/m17030-2.dat": "19c9e32a7cc32da40da096e67aa6b318e18570b29bc784130ad7d07d4430dfe6",
-        "Map/m17030-2.TLK": "22af2e5e273d36c9f8963139ab98dbc7d06b44a3b572ad5dd006ea8e58dce3d9",
         "Map/m17030.dat": "bbe0b8b99a59f775f1647b7e5e01f7ea12208f4422d1272fe62655c6e41d5bc4",
-        "Map/m17030.TLK": "9f8c48b9e0381ea5adddf79325219c3f6eefee315b0df153cb6539e2b575c21f",
         "Map/m17032.dat": "fec9023611123ba7557cf0a186317c808a5c041a6ec8d0fd52b30c8576f09bfe",
+        "Map/m01050.TLK": "6c5d2be29f120977d70c500abd11c8d76f11abba650be689e2dc44f4ae1dc182",
+        "Map/m03039.TLK": "b95cbf37de9e4d723a9830d97454b5ece2bc7bf352a51199f0e630aacdb8694a",
+        "Map/m17010.TLK": "04fc3299206a21504ac500a8797e4c96bf9ccee6fa104e41a3c8960861479f58",
+        "Map/m17020.TLK": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
+        "Map/m17026.TLK": "9e363538b3b51f2ec5a0074d4fdcaf3c3e3dbba6d4043f1d1ac06db3124b78ee",
+        "Map/m17029.TLK": "ca5d31b51ba3faf0118ba2626be0fb374671641821f59f166171e324c61e6269",
+        "Map/m70010.TLK": "223979cd995a89ee5a4bdfac3339294857933a757711f99709b82149bf079583",
+        "Map/m70030.TLK": "1c257003f538ed0db956c23034cf68803fae5773ee076ae53f436122b1dab8ec",
+        "Map/m70060.TLK": "a3e84d8e2cba253d1b5e527841169768c5408a4b87b2aabcc331eb09bd3a6696",
+        "Map/m17011.TLK": "49e0a9ce55d37dd4e50884ffc5fe5df26bc29a7a49502b348612b146aadd3f74",
+        "Map/m17012.TLK": "f96b5f0c8f7e1839f2e567d99873f9993e5586c2fbe3ee4754dbd313fe4aca77",
+        "Map/m17013.TLK": "16a7530aa4aa4905ac6712cda3f3f26e41da22fdceb14595ef5ed8bdde6b7322",
+        "Map/m17014.TLK": "263de44239d54fed81b82a93c1442132501246a5f5859c3dbd70247886e9e40b",
+        "Map/m17015.TLK": "f0d223d713ad8ea7f0163c2deb72f1a6afbe9e75a91eef4a559e4173881d7a59",
+        "Map/m17023.TLK": "7ce268d3445ea63766feea2db1cc761aabadec53f86cc30520fa9fcc826bd9a2",
+        "Map/m17024.TLK": "32f2b52a24570801178553a208770f315a3dce8006abe6db1a86d958d59132f4",
+        "Map/m17025.TLK": "5c2ee8a36d83e199ff27b24dce28d57c61bb673111bdc46608fb220559347ed1",
+        "Map/m17027.TLK": "e4c88998a7d9f67fb0d57a7536c6c737b151eba0441659ea6a8c756145a8bd05",
+        "Map/m17028.TLK": "d0efacd1c3d4b3a620fb5d0789eb08f01117d691b35b07b6f5d436fbd1d50f3b",
+        "Map/m17030-1.TLK": "c1c480cd76f90a1c5141bcad913ebeb5d2f03f087acff96f5fab14d606946a39",
+        "Map/m17030-2.TLK": "22af2e5e273d36c9f8963139ab98dbc7d06b44a3b572ad5dd006ea8e58dce3d9",
+        "Map/m17030.TLK": "9f8c48b9e0381ea5adddf79325219c3f6eefee315b0df153cb6539e2b575c21f",
         "Map/m17032.TLK": "240e0b23357f2d1ec6a90485841e7d0f5542cea39e6b02616aef20676e734542",
         "Animate/m01050-1.anm": "c483d0ee85a01072afa8f8e80697220b922fa3e0ad971ee5affcedf12c88f819",
         "Animate/m01050-2.anm": "19a173b2d01c4e6335a16d4283084ee2f896165f9e35374d45663b5e11a63782",
@@ -150381,7 +150748,9 @@
         "Animate/m17028.anm": "e9d6e1df1c4c40c267adcb9ee711c587b6fe03adc0343d4435853ef2b45c26e6",
         "Animate/m17010-2.anm": "4496da411c6c8adc76e464efbd866e34a0ce02d2ba66a5cfc42abe902325230c",
         "Animate/m17030-1.anm": "209c86f42cda1a513c21d38512acea8470508910f44127977b9b7b1738df9df2",
-        "Animate/m17010-3.anm": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e"
+        "Animate/m17010-3.anm": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
+        "Animate/m70010-1.anm": "7f4c67d00ce8d1b6b3ce5b280c52074de4abcd82b932300849e756133a8f4e7c",
+        "Animate/m70030-1.anm": "a5a6e002bea13b92735b33a5bf7d866cda47020776bbab2f4f6cfc539ca11a3f"
       },
       "native_bootstrap": {
         "procedure": "0x47ae20",
@@ -150400,13 +150769,15 @@
       "scope": "Menu equip/link capability only; no inventory grant, party ownership or special passive is inferred.",
       "generated_input_hashes": {
         "data/opening_seed.json": "d22cac66f87121e147518fd1e9833ad7a98667cde923ca141194e5363cc8f3d3",
-        "data/chapter_story.json": "c2900e4e23fe971f9aea4f9e5cc221c9b340f124b3c99af37b19e2cbbe379bf3",
-        "data/runtime_content.json": "5484c54a7a2c8bb3f45b21a5c9f76396a935e5842b11c9e233b76a604e1577b8"
+        "data/chapter_story.json": "e09085aa9ea37faf57a9aad4425efef01f1ecc53337c4cb6b0b928b5646223ef",
+        "data/runtime_content.json": "1ee43ea92d6710185fbfdde13322ac7e690f53b580957e46a814d07cff3a2c20"
       }
     },
     "item_capability_admission": {
       "policy": "registered-source-item-capabilities-v1",
       "promoted_item_ids": [
+        127,
+        170,
         272
       ],
       "sources": {
@@ -150499,10 +150870,103 @@
               "attack-or-state-effect"
             ]
           }
+        },
+        "170": {
+          "availability": {
+            "enabled": false,
+            "chapter_enabled": false,
+            "catalog_visible": true,
+            "default_enabled": false,
+            "reasons": [
+              "outside-default-chapter-item-set",
+              "usage-handler-not-recovered"
+            ]
+          },
+          "behavior": {
+            "kind": "source-only",
+            "status": "unverified",
+            "implemented_scope": [],
+            "unverified_scope": [
+              "special-passive",
+              "crystal-socketing",
+              "crafting",
+              "attack-or-state-effect"
+            ]
+          }
+        },
+        "127": {
+          "availability": {
+            "enabled": false,
+            "chapter_enabled": false,
+            "catalog_visible": true,
+            "default_enabled": false,
+            "reasons": [
+              "outside-default-chapter-item-set"
+            ]
+          },
+          "behavior": {
+            "kind": "equip",
+            "status": "recovered",
+            "implemented_scope": [
+              "equipment-slot-transfer",
+              "instance-attribute-linking"
+            ],
+            "unverified_scope": [
+              "special-passive",
+              "crystal-socketing",
+              "crafting",
+              "attack-or-state-effect"
+            ]
+          }
         }
       },
       "field_scope": "47D960 has zero initialized fields for these cures; field use cannot succeed or consume.",
-      "battle_scope": "41B3C0 calls 508BB0 mode1 then displays the source effect; consumes only on a successful status removal or recovery."
+      "battle_scope": "41B3C0 calls 508BB0 mode1 then displays the source effect; consumes only on a successful status removal or recovery.",
+      "passive_sources": {
+        "170": [
+          {
+            "kind": "registered-story-item-grant",
+            "map_id": "M70030",
+            "record_id": 8,
+            "source": {
+              "path": "Map/m70030.TLK",
+              "sha256": "1c257003f538ed0db956c23034cf68803fae5773ee076ae53f436122b1dab8ec",
+              "record_id": 8,
+              "record_bytes": 1647,
+              "offset": 13555
+            },
+            "mutation_type": 5,
+            "mutation_index": 0,
+            "mutation_bit": 170,
+            "entrance": {
+              "map_id": "M70030",
+              "record_id": 3,
+              "kind": "npc",
+              "npc_slot": 10
+            }
+          }
+        ],
+        "127": [
+          {
+            "kind": "registered-map-chest-grant",
+            "map_id": "M70020",
+            "object_index": 3,
+            "reward_slot": 0,
+            "source": {
+              "path": "Map/m70020.dat",
+              "sha256": "c8737dc799873825f78f3c254e1911753acdfc588caea815b61348d94717388f",
+              "offset": 250844,
+              "bytes": 4,
+              "raw_hex": "7f000000"
+            }
+          }
+        ]
+      },
+      "passive_item_ids": [
+        127,
+        170
+      ],
+      "passive_scope": "4451C0 -> 47A6A0 scans equipment and retained sockets in native group/entry order; 508BB0 preserves duplicate-before-RNG and inclusive chance. Mode6 blocks only matching incoming status IDs, never ticks or renders, and does not revive or apply its dormant numeric payload."
     },
     "simple_restore_item_ids": [
       8,
@@ -150535,11 +150999,12 @@
     },
     "behavior_counts": {
       "equip": 115,
-      "source-only": 297,
+      "source-only": 296,
       "simple-restore": 3,
+      "status-immunity-crystal": 1,
       "status-cure": 1
     },
-    "compatibility": "The original eight chapter IDs retain their contracts. Registered source initial/gift equipment enables verified plain numeric equip/linking; registered cure grants enable native mode1 removal. Neither policy grants inventory.",
+    "compatibility": "The original eight chapter IDs retain their contracts. Registered source grants enable verified numeric equipment, native mode1 cures, and mode6 equipment/crystal immunity. Admission never grants inventory.",
     "unknown_fields": "Prices, crafting recipes, crystal insertion/removal and special effects are not assigned semantics from names; original bytes remain in raw_hex."
   },
   "equipment_resource_policy": "preserve-raw",
@@ -150572,9 +151037,9 @@
       "Static shipped binary evidence; original execution was not observed.",
       "Battle item gauge and zero added preparation debt are native verified; live menu timing and animation completion remain remake adapters.",
       "Default capability includes the original chapter set, registered source plain equipment, and registered native mode1 cure grants. Other records remain disabled by default unless an independent recovered handler admits them.",
-      "Crystal socketing, crafting, special passive abilities, growth/revival and other item handlers remain unverified.",
+      "Only registered-source mode6 immunity passives and stat crystals are recovered; crafting, other passives and growth/revival item handlers remain unverified.",
       "ID31 has a variable range and ID36 has a reversed range in the shipped source; they are retained rather than silently repaired.",
-      "Special slot label is a remake UI label for source category5; its catalog records are present but none is enabled by default."
+      "Special slot label is a remake UI label for source category5; each enabled definition requires registered source provenance."
     ]
   }
 }

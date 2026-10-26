@@ -29,7 +29,7 @@
       "face_resolved": "宋体",
       "height": 19,
       "image": "assets/prologue/caption19.png",
-      "sha256": "9d1309c863d1848f980139fb9767c058c5bda94656354876574b2e6f6bbc538a",
+      "sha256": "bf234c8746e0eb12f50021844cbece7556bc7670cf95cd7a62a980fbbadb2179",
       "atlas_width": 1024,
       "atlas_height": 128,
       "glyphs": {
@@ -798,8 +798,17 @@
           "offset_y": 0,
           "advance": 19
         },
-        "红": {
+        "紫": {
           "x": 672,
+          "y": 64,
+          "width": 17,
+          "height": 18,
+          "offset_x": 1,
+          "offset_y": 0,
+          "advance": 19
+        },
+        "红": {
+          "x": 704,
           "y": 64,
           "width": 17,
           "height": 16,
@@ -808,7 +817,7 @@
           "advance": 19
         },
         "终": {
-          "x": 704,
+          "x": 736,
           "y": 64,
           "width": 18,
           "height": 16,
@@ -817,7 +826,7 @@
           "advance": 19
         },
         "维": {
-          "x": 736,
+          "x": 768,
           "y": 64,
           "width": 17,
           "height": 18,
@@ -826,7 +835,7 @@
           "advance": 19
         },
         "英": {
-          "x": 768,
+          "x": 800,
           "y": 64,
           "width": 17,
           "height": 17,
@@ -835,15 +844,6 @@
           "advance": 19
         },
         "茶": {
-          "x": 800,
-          "y": 64,
-          "width": 17,
-          "height": 18,
-          "offset_x": 1,
-          "offset_y": 0,
-          "advance": 19
-        },
-        "草": {
           "x": 832,
           "y": 64,
           "width": 17,
@@ -852,16 +852,16 @@
           "offset_y": 0,
           "advance": 19
         },
-        "药": {
+        "草": {
           "x": 864,
           "y": 64,
           "width": 17,
-          "height": 17,
+          "height": 18,
           "offset_x": 1,
-          "offset_y": 1,
+          "offset_y": 0,
           "advance": 19
         },
-        "获": {
+        "药": {
           "x": 896,
           "y": 64,
           "width": 17,
@@ -870,7 +870,7 @@
           "offset_y": 1,
           "advance": 19
         },
-        "蜥": {
+        "获": {
           "x": 928,
           "y": 64,
           "width": 17,
@@ -879,8 +879,17 @@
           "offset_y": 1,
           "advance": 19
         },
-        "血": {
+        "蜥": {
           "x": 960,
+          "y": 64,
+          "width": 17,
+          "height": 17,
+          "offset_x": 1,
+          "offset_y": 1,
+          "advance": 19
+        },
+        "血": {
+          "x": 992,
           "y": 64,
           "width": 17,
           "height": 16,
@@ -889,8 +898,8 @@
           "advance": 19
         },
         "装": {
-          "x": 992,
-          "y": 64,
+          "x": 0,
+          "y": 96,
           "width": 17,
           "height": 18,
           "offset_x": 1,
@@ -898,7 +907,7 @@
           "advance": 19
         },
         "西": {
-          "x": 0,
+          "x": 32,
           "y": 96,
           "width": 17,
           "height": 17,
@@ -907,7 +916,7 @@
           "advance": 19
         },
         "角": {
-          "x": 32,
+          "x": 64,
           "y": 96,
           "width": 16,
           "height": 18,
@@ -916,7 +925,7 @@
           "advance": 19
         },
         "醉": {
-          "x": 64,
+          "x": 96,
           "y": 96,
           "width": 17,
           "height": 18,
@@ -925,7 +934,7 @@
           "advance": 19
         },
         "银": {
-          "x": 96,
+          "x": 128,
           "y": 96,
           "width": 18,
           "height": 17,
@@ -934,7 +943,7 @@
           "advance": 19
         },
         "键": {
-          "x": 128,
+          "x": 160,
           "y": 96,
           "width": 18,
           "height": 17,
@@ -943,7 +952,7 @@
           "advance": 19
         },
         "队": {
-          "x": 160,
+          "x": 192,
           "y": 96,
           "width": 16,
           "height": 17,
@@ -952,15 +961,6 @@
           "advance": 19
         },
         "颗": {
-          "x": 192,
-          "y": 96,
-          "width": 17,
-          "height": 17,
-          "offset_x": 1,
-          "offset_y": 1,
-          "advance": 19
-        },
-        "香": {
           "x": 224,
           "y": 96,
           "width": 17,
@@ -969,8 +969,26 @@
           "offset_y": 1,
           "advance": 19
         },
-        "！": {
+        "香": {
           "x": 256,
+          "y": 96,
+          "width": 17,
+          "height": 17,
+          "offset_x": 1,
+          "offset_y": 1,
+          "advance": 19
+        },
+        "龙": {
+          "x": 288,
+          "y": 96,
+          "width": 17,
+          "height": 18,
+          "offset_x": 1,
+          "offset_y": 0,
+          "advance": 19
+        },
+        "！": {
+          "x": 320,
           "y": 96,
           "width": 3,
           "height": 12,

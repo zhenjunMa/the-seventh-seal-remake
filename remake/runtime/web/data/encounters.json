@@ -70,6 +70,351 @@
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
         "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a"
       ]
+    },
+    "M70020": {
+      "frequency": 1,
+      "stage": "stage13.scn",
+      "members": [
+        {
+          "id": "011",
+          "name": "角鹰",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m70020.STG",
+            "sha256": "6a6a64c32c360ac222ca26dc8365fd59b2bb953dad402a820cb6775719e9b478",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/011.CHR",
+            "sha256": "01625263cd7226760c8bb11067878285c5835ba4a43efbcab68020201c698ec4",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "012",
+          "name": "雪泥怪",
+          "pool": "B",
+          "class_raw": 0,
+          "source": {
+            "path": "Map/m70020.STG",
+            "sha256": "6a6a64c32c360ac222ca26dc8365fd59b2bb953dad402a820cb6775719e9b478",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/012.CHR",
+            "sha256": "4c9d1ef867222a8ffbdfea2e231f7500f30e0d7fec4fbfa1ab18b2dc874061a0",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "013",
+          "name": "森林狩猎者",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m70020.STG",
+            "sha256": "6a6a64c32c360ac222ca26dc8365fd59b2bb953dad402a820cb6775719e9b478",
+            "filename_offset": 250
+          },
+          "chr_source": {
+            "path": "Fight_Role/013.CHR",
+            "sha256": "5e3a7e65761a52b1653a40bc20ae130072af5c4f704b0cb389bbb239a1cd8ef6",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m70020.dat",
+          "sha256": "c8737dc799873825f78f3c254e1911753acdfc588caea815b61348d94717388f",
+          "frequency_offset": 320
+        },
+        {
+          "path": "Map/m70020.STG",
+          "sha256": "6a6a64c32c360ac222ca26dc8365fd59b2bb953dad402a820cb6775719e9b478"
+        }
+      ],
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a"
+      ]
+    },
+    "M70030": {
+      "frequency": 1,
+      "stage": "stage13.scn",
+      "members": [
+        {
+          "id": "011",
+          "name": "角鹰",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m70030.STG",
+            "sha256": "6a6a64c32c360ac222ca26dc8365fd59b2bb953dad402a820cb6775719e9b478",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/011.CHR",
+            "sha256": "01625263cd7226760c8bb11067878285c5835ba4a43efbcab68020201c698ec4",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "012",
+          "name": "雪泥怪",
+          "pool": "B",
+          "class_raw": 0,
+          "source": {
+            "path": "Map/m70030.STG",
+            "sha256": "6a6a64c32c360ac222ca26dc8365fd59b2bb953dad402a820cb6775719e9b478",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/012.CHR",
+            "sha256": "4c9d1ef867222a8ffbdfea2e231f7500f30e0d7fec4fbfa1ab18b2dc874061a0",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "013",
+          "name": "森林狩猎者",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m70030.STG",
+            "sha256": "6a6a64c32c360ac222ca26dc8365fd59b2bb953dad402a820cb6775719e9b478",
+            "filename_offset": 250
+          },
+          "chr_source": {
+            "path": "Fight_Role/013.CHR",
+            "sha256": "5e3a7e65761a52b1653a40bc20ae130072af5c4f704b0cb389bbb239a1cd8ef6",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m70030.dat",
+          "sha256": "f3eac7c795aed2cc42603d0db486d804737097b5aea53b841eed4ebf07093890",
+          "frequency_offset": 320
+        },
+        {
+          "path": "Map/m70030.STG",
+          "sha256": "6a6a64c32c360ac222ca26dc8365fd59b2bb953dad402a820cb6775719e9b478"
+        }
+      ],
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a"
+      ]
+    },
+    "M70040": {
+      "frequency": 1,
+      "stage": "stage13.scn",
+      "members": [
+        {
+          "id": "011",
+          "name": "角鹰",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m70040.STG",
+            "sha256": "6a6a64c32c360ac222ca26dc8365fd59b2bb953dad402a820cb6775719e9b478",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/011.CHR",
+            "sha256": "01625263cd7226760c8bb11067878285c5835ba4a43efbcab68020201c698ec4",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "012",
+          "name": "雪泥怪",
+          "pool": "B",
+          "class_raw": 0,
+          "source": {
+            "path": "Map/m70040.STG",
+            "sha256": "6a6a64c32c360ac222ca26dc8365fd59b2bb953dad402a820cb6775719e9b478",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/012.CHR",
+            "sha256": "4c9d1ef867222a8ffbdfea2e231f7500f30e0d7fec4fbfa1ab18b2dc874061a0",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "013",
+          "name": "森林狩猎者",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m70040.STG",
+            "sha256": "6a6a64c32c360ac222ca26dc8365fd59b2bb953dad402a820cb6775719e9b478",
+            "filename_offset": 250
+          },
+          "chr_source": {
+            "path": "Fight_Role/013.CHR",
+            "sha256": "5e3a7e65761a52b1653a40bc20ae130072af5c4f704b0cb389bbb239a1cd8ef6",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m70040.dat",
+          "sha256": "c50b0ef237252e42e74a436fc7c8fab5b8c222d98d5beb0475ff8b54342dda2a",
+          "frequency_offset": 320
+        },
+        {
+          "path": "Map/m70040.STG",
+          "sha256": "6a6a64c32c360ac222ca26dc8365fd59b2bb953dad402a820cb6775719e9b478"
+        }
+      ],
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a"
+      ]
+    },
+    "M70050": {
+      "frequency": 1,
+      "stage": "stage13.scn",
+      "members": [
+        {
+          "id": "011",
+          "name": "角鹰",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m70050.STG",
+            "sha256": "6a6a64c32c360ac222ca26dc8365fd59b2bb953dad402a820cb6775719e9b478",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/011.CHR",
+            "sha256": "01625263cd7226760c8bb11067878285c5835ba4a43efbcab68020201c698ec4",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "012",
+          "name": "雪泥怪",
+          "pool": "B",
+          "class_raw": 0,
+          "source": {
+            "path": "Map/m70050.STG",
+            "sha256": "6a6a64c32c360ac222ca26dc8365fd59b2bb953dad402a820cb6775719e9b478",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/012.CHR",
+            "sha256": "4c9d1ef867222a8ffbdfea2e231f7500f30e0d7fec4fbfa1ab18b2dc874061a0",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "013",
+          "name": "森林狩猎者",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m70050.STG",
+            "sha256": "6a6a64c32c360ac222ca26dc8365fd59b2bb953dad402a820cb6775719e9b478",
+            "filename_offset": 250
+          },
+          "chr_source": {
+            "path": "Fight_Role/013.CHR",
+            "sha256": "5e3a7e65761a52b1653a40bc20ae130072af5c4f704b0cb389bbb239a1cd8ef6",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m70050.dat",
+          "sha256": "e3f18aa3e3af2dd1cd71d1dafb13f5ce61023588b4185c500aebdd62e6afe551",
+          "frequency_offset": 320
+        },
+        {
+          "path": "Map/m70050.STG",
+          "sha256": "6a6a64c32c360ac222ca26dc8365fd59b2bb953dad402a820cb6775719e9b478"
+        }
+      ],
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a"
+      ]
+    },
+    "M70060": {
+      "frequency": 1,
+      "stage": "stage13.scn",
+      "members": [
+        {
+          "id": "011",
+          "name": "角鹰",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m70060.STG",
+            "sha256": "6a6a64c32c360ac222ca26dc8365fd59b2bb953dad402a820cb6775719e9b478",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/011.CHR",
+            "sha256": "01625263cd7226760c8bb11067878285c5835ba4a43efbcab68020201c698ec4",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "012",
+          "name": "雪泥怪",
+          "pool": "B",
+          "class_raw": 0,
+          "source": {
+            "path": "Map/m70060.STG",
+            "sha256": "6a6a64c32c360ac222ca26dc8365fd59b2bb953dad402a820cb6775719e9b478",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/012.CHR",
+            "sha256": "4c9d1ef867222a8ffbdfea2e231f7500f30e0d7fec4fbfa1ab18b2dc874061a0",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "013",
+          "name": "森林狩猎者",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m70060.STG",
+            "sha256": "6a6a64c32c360ac222ca26dc8365fd59b2bb953dad402a820cb6775719e9b478",
+            "filename_offset": 250
+          },
+          "chr_source": {
+            "path": "Fight_Role/013.CHR",
+            "sha256": "5e3a7e65761a52b1653a40bc20ae130072af5c4f704b0cb389bbb239a1cd8ef6",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m70060.dat",
+          "sha256": "efe442af65f53752e33d5c583215ff3538136abff133b97018ad19cda6696dbe",
+          "frequency_offset": 320
+        },
+        {
+          "path": "Map/m70060.STG",
+          "sha256": "6a6a64c32c360ac222ca26dc8365fd59b2bb953dad402a820cb6775719e9b478"
+        }
+      ],
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a"
+      ]
     }
   },
   "compositions": [

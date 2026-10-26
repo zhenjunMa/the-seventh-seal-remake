@@ -3,7 +3,8 @@
 import {idiv} from './combat_rules.mjs';
 import {equipmentRows} from './equipment.mjs';
 import {partyFormationSlots} from './party_formation.mjs';
-import {socketEquipmentRows,validateCrystalSocketDefinitions} from './crystal_sockets.mjs';
+import {socketEquipmentRows,crystalSocketRows,validateCrystalSocketDefinitions} from './crystal_sockets.mjs';
+import {equipmentPassiveRows} from './item_passives.mjs';
 import {runtimeContent,requireRegisteredRoles} from './content_registry.mjs';
 const copy = value => structuredClone(value);
 const addr = n => `0x${n.toString(16).padStart(8, '0')}`;
@@ -94,6 +95,12 @@ export function createPartyActors(world, data, selectedSkills = {}, itemData = n
     const {b,v,at} = savedHeader(role, template), actor = copy(template);
     const entries = equipmentRows(world, data, itemData, role.id).concat(socketEquipmentRows(world,data,itemData,role.id));
     recalculateLinked(actor,v,entries);
+    // 47A6A0 scans all entries even without category entry0. Numeric linking
+    // instead skips hidden crystals when no weapon exists (47CC30).
+    const passiveEntries = equipmentRows(world,data,itemData,role.id).concat(itemData
+      ? crystalSocketRows(world,data,itemData,role.id).filter(row=>row.item).map(row=>({
+        item_id:row.item.id,group_index:0,entry_index:row.socket_index})) : []);
+    actor.equipment_passives = equipmentPassiveRows(passiveEntries,itemData);
     actor.level = role.level; actor.party_slot_zero_based = formation.indexOf(role.id); actor.header_raw_hex = hex(b);
     for (const key of Object.keys(actor.raw_by_address)) actor.raw_by_address[key] = at(Number(key) - 0x0524a6d1);
     actor.raw_hp = u32(role.hp.current, 'HP') | 0; actor.raw_mp = u32(role.mp.current, 'MP') | 0;

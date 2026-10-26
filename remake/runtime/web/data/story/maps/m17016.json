@@ -84,6 +84,8 @@
           "target_sha256": "634a1eea243656b16341d9e217578a42a5d58f82f00af9aa0f8a0f805e83515a",
           "target_entry_marker": 10,
           "entry_sort_code": 2,
+          "entry_terrain_raw": 0,
+          "entry_trigger_raw": 0,
           "entry_scan_cells": [
             {
               "x": 90,
@@ -156,6 +158,8 @@
           "target_sha256": "634a1eea243656b16341d9e217578a42a5d58f82f00af9aa0f8a0f805e83515a",
           "target_entry_marker": 6,
           "entry_sort_code": 5,
+          "entry_terrain_raw": 0,
+          "entry_trigger_raw": 0,
           "entry_scan_cells": [
             {
               "x": 82,

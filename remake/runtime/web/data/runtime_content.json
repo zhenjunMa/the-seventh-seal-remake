@@ -275,7 +275,9 @@
     "m17028",
     "m17010-2",
     "m17030-1",
-    "m17010-3"
+    "m17010-3",
+    "m70010-1",
+    "m70030-1"
   ],
   "maps": {
     "M01050": {
@@ -384,9 +386,37 @@
     },
     "M70010": {
       "export": {
-        "assets": "existing",
-        "story": false
-      }
+        "assets": "existing"
+      },
+      "npcs": [10, 11, 12, 13, 14],
+      "objects": [{"index": 8, "handler": "keyed-chest"}, {"index": 10, "handler": "keyed-chest"}],
+      "setup": true,
+      "triggers": [4]
+    },
+    "M70020": {
+      "export": {"story": false},
+      "objects": [{"index": 3, "handler": "keyed-chest"}, {"index": 4, "handler": "keyed-chest"}],
+      "npcs": []
+    },
+    "M70030": {
+      "npcs": [10],
+      "objects": [{"index": 8, "handler": "keyed-chest"}, {"index": 9, "handler": "keyed-chest"}],
+      "setup": true
+    },
+    "M70040": {
+      "export": {"story": false},
+      "objects": [{"index": 9, "handler": "keyed-chest"}, {"index": 10, "handler": "keyed-chest"}, {"index": 11, "handler": "keyed-chest"}],
+      "npcs": []
+    },
+    "M70050": {
+      "export": {"story": false},
+      "objects": [{"index": 6, "handler": "keyed-chest"}, {"index": 12, "handler": "keyed-chest"}],
+      "npcs": []
+    },
+    "M70060": {
+      "npcs": [],
+      "objects": [{"index": 8, "handler": "keyed-chest"}, {"index": 9, "handler": "keyed-chest"}],
+      "triggers": [2]
     },
     "M72061": {
       "export": {

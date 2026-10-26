@@ -12,6 +12,7 @@
       "sha256": "04fc3299206a21504ac500a8797e4c96bf9ccee6fa104e41a3c8960861479f58",
       "bytes": 320250
     },
+    "dialogue_status": "parsed",
     "map_source": {
       "path": "Map/m17010.dat",
       "sha256": "634a1eea243656b16341d9e217578a42a5d58f82f00af9aa0f8a0f805e83515a",
@@ -15746,6 +15747,8 @@
           "target_sha256": "db0f4709ae4a86c8af819eda867bfb87bed2d4d4bbaa48af4dad31bd3ce5b847",
           "target_entry_marker": 1,
           "entry_sort_code": 1,
+          "entry_terrain_raw": 0,
+          "entry_trigger_raw": 0,
           "entry_scan_cells": [
             {
               "x": 13,
@@ -15810,6 +15813,8 @@
           "target_sha256": "db0f4709ae4a86c8af819eda867bfb87bed2d4d4bbaa48af4dad31bd3ce5b847",
           "target_entry_marker": 2,
           "entry_sort_code": 4,
+          "entry_terrain_raw": 0,
+          "entry_trigger_raw": 0,
           "entry_scan_cells": [
             {
               "x": 6,
@@ -15878,6 +15883,8 @@
           "target_sha256": "1b9c624e9093b4e7cbd4a62259607ed313359e3601ae48555c705d808d19bfc4",
           "target_entry_marker": 1,
           "entry_sort_code": 3,
+          "entry_terrain_raw": 0,
+          "entry_trigger_raw": 0,
           "entry_scan_cells": [
             {
               "x": 41,
@@ -15946,6 +15953,8 @@
           "target_sha256": "1b9c624e9093b4e7cbd4a62259607ed313359e3601ae48555c705d808d19bfc4",
           "target_entry_marker": 2,
           "entry_sort_code": 2,
+          "entry_terrain_raw": 0,
+          "entry_trigger_raw": 0,
           "entry_scan_cells": [
             {
               "x": 35,
@@ -16014,6 +16023,8 @@
           "target_sha256": "e396282ce0dbf14a02d91dca28af4b0d1914cee1c1b8a1b7b3c8e0089f6d8b0e",
           "target_entry_marker": 1,
           "entry_sort_code": 3,
+          "entry_terrain_raw": 0,
+          "entry_trigger_raw": 0,
           "entry_scan_cells": [
             {
               "x": 34,
@@ -16086,6 +16097,8 @@
           "target_sha256": "1c1bdd0e8f26c8b2ee3b137d0049bfab10ae87f0e5dc76dfa44fc7f61096afcc",
           "target_entry_marker": 1,
           "entry_sort_code": 4,
+          "entry_terrain_raw": 0,
+          "entry_trigger_raw": 0,
           "entry_scan_cells": [
             {
               "x": 9,
@@ -16162,6 +16175,8 @@
           "target_sha256": "6128bf9d9940a8176c6d53c8e421132a9f2f2ead6e4a907fac6bce4fd0c135ff",
           "target_entry_marker": 1,
           "entry_sort_code": 1,
+          "entry_terrain_raw": 0,
+          "entry_trigger_raw": 0,
           "entry_scan_cells": [
             {
               "x": 17,
@@ -16230,6 +16245,8 @@
           "target_sha256": "2771831ca2de861d7d368357e0faac2f0cda04b02a362a0d3775ce4940afba2d",
           "target_entry_marker": 2,
           "entry_sort_code": 4,
+          "entry_terrain_raw": 0,
+          "entry_trigger_raw": 0,
           "entry_scan_cells": [
             {
               "x": 9,
@@ -16302,6 +16319,8 @@
           "target_sha256": "2771831ca2de861d7d368357e0faac2f0cda04b02a362a0d3775ce4940afba2d",
           "target_entry_marker": 1,
           "entry_sort_code": 5,
+          "entry_terrain_raw": 0,
+          "entry_trigger_raw": 0,
           "entry_scan_cells": [
             {
               "x": 42,
@@ -16430,6 +16449,8 @@
           "target_sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
           "target_entry_marker": 1,
           "entry_sort_code": 5,
+          "entry_terrain_raw": 0,
+          "entry_trigger_raw": 0,
           "entry_scan_cells": [
             {
               "x": 46,

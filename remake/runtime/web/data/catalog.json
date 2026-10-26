@@ -17,7 +17,7 @@
     {
       "id": "M01050",
       "path": "data/maps/m01050.json",
-      "sha256": "c36b08d8b62a0368cca358ae19c19f67e653c4a7d375368d920bef91eb3b338c"
+      "sha256": "0cb31f6ec4e3130e6a1420b469e6bc2fa6b291259ae85e5d5c90c45d81c49934"
     },
     {
       "id": "M03039",
@@ -32,32 +32,32 @@
     {
       "id": "M17011",
       "path": "data/maps/m17011.json",
-      "sha256": "2dfb356ebcb1aea501ef3bf738d5f296296b3e4cfcc3586eebaf13d0e5f56310"
+      "sha256": "18b4a53290669123385d998b14733be89e66fa9402625ab5c36ce05530c2b3fd"
     },
     {
       "id": "M17012",
       "path": "data/maps/m17012.json",
-      "sha256": "48fc6b5c9ddb6477f4cf0b9509117bd5f7fcf3be5db32ad2ba31bb03b4a64780"
+      "sha256": "2efdf202c6792342432a5e5afcdfe9bae7b2486dfc35c2cda85b9a2ee3c8a8a5"
     },
     {
       "id": "M17013",
       "path": "data/maps/m17013.json",
-      "sha256": "24623d99a76e7f5d97d90328ef7a2a658b5cfcdcbf60580b75d7aa6d960c04af"
+      "sha256": "e849173752464fec3e55b72696aabe2a479646475c123600db100b58ef67fd20"
     },
     {
       "id": "M17014",
       "path": "data/maps/m17014.json",
-      "sha256": "24632ccbd37b3c33f410c006cddb3a03c043c07f58dc1a3fbbedaeb19202599d"
+      "sha256": "0e82d550f8e4bc8bfceb8dc03ffad72488ce91fcf4a9d993f32c04b715e68e88"
     },
     {
       "id": "M17015",
       "path": "data/maps/m17015.json",
-      "sha256": "29566163eac55796af215d4be00c418f5decb50c28334b3b607c035c719f2944"
+      "sha256": "e7becd3dc18054f6c8b44622247d835b8a0aa2bc16b96c3ceef5c66345fb95c6"
     },
     {
       "id": "M17016",
       "path": "data/maps/m17016.json",
-      "sha256": "4c55178b1590a53523c3445a81b449e4faef19ef54f51af9bc18f6ba022a50cb"
+      "sha256": "00274e09c98ce10d23371f7d2b639c1d7614e4e0013c31f4ef7d05338db1ade9"
     },
     {
       "id": "M17020",
@@ -67,62 +67,62 @@
     {
       "id": "M17021",
       "path": "data/maps/m17021.json",
-      "sha256": "b0f788ff186355ed3af08d0375e190f8cfd045884bb0a9db0511766c03ca0cda"
+      "sha256": "5c912032d2aaaee498461af6ba66992374f5cb48cf248ead3857ca569eed6cc5"
     },
     {
       "id": "M17022",
       "path": "data/maps/m17022.json",
-      "sha256": "8888247e6b851f40d8a8e1462cb1161032a7ae0563e53faea92e4e47c63d9e00"
+      "sha256": "fdbda10aed4091cf93918489be0a28fe898e00ce2c3bb281de82f383a86a7078"
     },
     {
       "id": "M17023",
       "path": "data/maps/m17023.json",
-      "sha256": "b7c7a416cfb7ded5a71a7465681e5f457f136e850623b9c9d3d9e003f86f6b3b"
+      "sha256": "3530d76bca28d5d989282ed31a49a702a44caa1880f74bf8be74b727f10020ad"
     },
     {
       "id": "M17024",
       "path": "data/maps/m17024.json",
-      "sha256": "904db2927ecd313b7e6ab9ecf78df74a46522ded0fb36d306fb7f1b4e8d86d88"
+      "sha256": "0e0e3fa4f64594d2b915d655faa73ea7f0513dafece87c9c8debc1c3a3298ebf"
     },
     {
       "id": "M17025",
       "path": "data/maps/m17025.json",
-      "sha256": "91c8605612cbec11d9a413ceb9fb475505fab52b7393293fdc0dcb9e40577bd8"
+      "sha256": "e9a7867c51e126cc33ddb2399ac485f50e75582f9549f7ae32dc1312205fe150"
     },
     {
       "id": "M17026",
       "path": "data/maps/m17026.json",
-      "sha256": "275fc5aa785927facdb48528c92db64228674bb6a7be2bf4473e5fb99151bbf1"
+      "sha256": "260b27c48f83a3f9d4cd80e8c94b9a03f509daea8ec567c26ebadbe5971206ac"
     },
     {
       "id": "M17027",
       "path": "data/maps/m17027.json",
-      "sha256": "2a20864ab4743f64a1fd0a542eb795664a4dc553a8000504937cc093e132cf73"
+      "sha256": "26159381d3adc686f0aff4751cee13c6743637cb3c868e72b31e28290a3248f8"
     },
     {
       "id": "M17028",
       "path": "data/maps/m17028.json",
-      "sha256": "7044afa8705e0992b7567d1ff5762d18111839ba33fbe317a1cb1692ce68b484"
+      "sha256": "3903759318d0e5ada8ddd059d15ed815c486aeb7bd28c822ce94e19b9feecd20"
     },
     {
       "id": "M17029",
       "path": "data/maps/m17029.json",
-      "sha256": "eb6c62da00ac86fa4dc3b5e339464a5bac0eeacc985ed5d633414de0ed104ee0"
+      "sha256": "78db121eca8bbca24f21a8ef19db35692bae41bc51a9282fc0e6925ae9f6d4c3"
     },
     {
       "id": "M17030-1",
       "path": "data/maps/m17030-1.json",
-      "sha256": "b2ebc78040b649fb9171effd0e96a42bb2947ac441993585545da7c9af81ad87"
+      "sha256": "cbb0a96846e7a1c7c0737e8324571a89d37ecabf6182e735dac112528ab117b2"
     },
     {
       "id": "M17030-2",
       "path": "data/maps/m17030-2.json",
-      "sha256": "dec94a9550dae5c3f4a3f80ed5902c222ad69d7eb91fe9b868eb57fa7ed31120"
+      "sha256": "1c6af4d46fbf6233f6fee1548ebfac2f4b1c7b91207e1898f3d9f0fff7295670"
     },
     {
       "id": "M17030",
       "path": "data/maps/m17030.json",
-      "sha256": "3d1cb4a0a84d96f989a88527a467ac368c5daef70b45d14dda9eb99b4ab5db1c"
+      "sha256": "d3b12a7668da23cfd0545a17b01bc757e71e51af6f74103b615035f546b247b1"
     },
     {
       "id": "M17032",
@@ -133,6 +133,31 @@
       "id": "M70010",
       "path": "data/maps/m70010.json",
       "sha256": "f742cb4fa3194f3fcffb8ed494a90d1428ff41a1f873b9569efee401508fbaad"
+    },
+    {
+      "id": "M70020",
+      "path": "data/maps/m70020.json",
+      "sha256": "8ea9b7dfa712c1edc8429a3f02c5cb982684a4fe9ade4b0b902d0c7f26e1be52"
+    },
+    {
+      "id": "M70030",
+      "path": "data/maps/m70030.json",
+      "sha256": "dd68bb60f6ec730f6591b06b6b678a61d24ee13c628849a06ae60226552818fb"
+    },
+    {
+      "id": "M70040",
+      "path": "data/maps/m70040.json",
+      "sha256": "c68fb409278248bf5a18fe33b7eb527b59b49f22c654baa0a84f13fc8e94eb81"
+    },
+    {
+      "id": "M70050",
+      "path": "data/maps/m70050.json",
+      "sha256": "582068f89ce1af67d3152fefbc6450241a315bbee6ddcfd3b8693aa006da7ed5"
+    },
+    {
+      "id": "M70060",
+      "path": "data/maps/m70060.json",
+      "sha256": "68437b5c9cbe125cfd611d30edb2be090cfdb9ef41f42b1ba6c2f60608fa3280"
     },
     {
       "id": "M72061",
@@ -2398,7 +2423,7 @@
   "forest_battle_view": "data/enemy_battle_view.json",
   "scope": {
     "official_runtime_started": true,
-    "ready_exits": 31,
+    "ready_exits": 38,
     "source_backed_events": 1,
     "one_on_one_turn_sample": true,
     "full_combat": false,

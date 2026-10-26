@@ -12,6 +12,7 @@
       "sha256": "6c5d2be29f120977d70c500abd11c8d76f11abba650be689e2dc44f4ae1dc182",
       "bytes": 412482
     },
+    "dialogue_status": "parsed",
     "map_source": {
       "path": "Map/m01050.dat",
       "sha256": "48ae98e95e9ea414e716c85440d381a5bc29cc2ec00ccd3b30c2ef314d4145fc",
@@ -13153,6 +13154,8 @@
           "target_sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
           "target_entry_marker": 2,
           "entry_sort_code": 5,
+          "entry_terrain_raw": 0,
+          "entry_trigger_raw": 0,
           "entry_scan_cells": [
             {
               "x": 71,

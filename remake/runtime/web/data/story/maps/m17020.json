@@ -12,6 +12,7 @@
       "sha256": "967c41731199690e77c592015c282bca2c53a4bd687dc7ad5274ed8a8ea11d39",
       "bytes": 40260
     },
+    "dialogue_status": "parsed",
     "map_source": {
       "path": "Map/m17020.dat",
       "sha256": "06be6b7edc30ed41c84158c997a94b9134f8f3e6a4cffd41cb9cf110e149fdd8",
@@ -6043,6 +6044,8 @@
           "target_sha256": "634a1eea243656b16341d9e217578a42a5d58f82f00af9aa0f8a0f805e83515a",
           "target_entry_marker": 11,
           "entry_sort_code": 6,
+          "entry_terrain_raw": 0,
+          "entry_trigger_raw": 0,
           "entry_scan_cells": [
             {
               "x": 68,
@@ -6115,6 +6118,8 @@
           "target_sha256": "57851abbfe75121b806268f5bce8c778ec4e5d82ebb7dfa623fbd6952977c314",
           "target_entry_marker": 1,
           "entry_sort_code": 3,
+          "entry_terrain_raw": 0,
+          "entry_trigger_raw": 0,
           "entry_scan_cells": [
             {
               "x": 40,
@@ -6195,6 +6200,8 @@
           "target_sha256": "7c0278bfe4a52f6a1977bb8493fa1ba1d40833b2dce142c42e75d7e2e67c0459",
           "target_entry_marker": 1,
           "entry_sort_code": 4,
+          "entry_terrain_raw": 0,
+          "entry_trigger_raw": 0,
           "entry_scan_cells": [
             {
               "x": 4,
@@ -6291,6 +6298,8 @@
           "target_sha256": "266c901c9784665d27034f4531c1918fbea96815d14ec68fb1f6699d6d3fa3cd",
           "target_entry_marker": 1,
           "entry_sort_code": 2,
+          "entry_terrain_raw": 0,
+          "entry_trigger_raw": 0,
           "entry_scan_cells": [
             {
               "x": 39,
@@ -6387,6 +6396,8 @@
           "target_sha256": "087ccf781d85f63249a2e1bce48ee71382d2587cdf857c47e575caaae54a646c",
           "target_entry_marker": 1,
           "entry_sort_code": 5,
+          "entry_terrain_raw": 0,
+          "entry_trigger_raw": 0,
           "entry_scan_cells": [
             {
               "x": 17,
@@ -6467,6 +6478,8 @@
           "target_sha256": "ec1d36649bf8fce856a0e93daf08128ebb099f7b30c59648a5903742f372aeff",
           "target_entry_marker": 1,
           "entry_sort_code": 4,
+          "entry_terrain_raw": 0,
+          "entry_trigger_raw": 0,
           "entry_scan_cells": [
             {
               "x": 7,
@@ -6539,6 +6552,8 @@
           "target_sha256": "e396282ce0dbf14a02d91dca28af4b0d1914cee1c1b8a1b7b3c8e0089f6d8b0e",
           "target_entry_marker": 2,
           "entry_sort_code": 2,
+          "entry_terrain_raw": 0,
+          "entry_trigger_raw": 0,
           "entry_scan_cells": [
             {
               "x": 33,
@@ -6659,6 +6674,8 @@
           "target_sha256": "8936daaa7ae9a874a41d9afabf1180677fe02c5d9640a0585792092357fd0ec5",
           "target_entry_marker": 1,
           "entry_sort_code": 6,
+          "entry_terrain_raw": 0,
+          "entry_trigger_raw": 0,
           "entry_scan_cells": [
             {
               "x": 11,

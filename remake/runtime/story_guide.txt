@@ -8,7 +8,11 @@ web/content/events/适合存放自行编写的独立NPC事件，web/content/ques
 web/data/story/是自动生成的运行包。不要直接修改其中台词或跳转；修改来源或编辑文件后重新构建。
 队友、道具和技能引用先查web/data/library/index.json；它将原角色编号、原item_id和技能原索引关联到唯一配置。使用tools/build_content_library.mjs --query或core/content_library.mjs查询；同名对象必须选具体编号。MAG原ID有重复，使用system_magic_原零基记录索引。runtime_registered=false表示仅有来源，新增剧情不能绕过接入检查直接执行该技能或安排未接入角色入队。完整规范见config_guide.txt的“全量来源与引用索引”。
 
-火之谷来源查询与重访
+区域来源查询与重访
+外层白木森林使用同一内容管线，来源索引为web/data/library/white_forest.json，构建目标white-forest-index。原名精确为“白木森林”的M70010／20／30／40／50／60属于本轮；“里白木森林”独立保留。query／map／flag参数与火之谷索引相同，入口脚本为tools/export_white_forest_index.py。
+CF4直接奖励箱登记handler:keyed-chest，以DAT原对象索引识别；F2按原持有条件检查钥匙，+54起十个DWORD保留奖励顺序，不能把会重建的+48缓存当作元素类别。它不需要TLK入口。无TLK地图的DAT来源表显式标明缺失，对白records保持空，不生成虚构对白流程。
+加载演出的31等待同步与32镜头聚焦只影响临时呈现；只读布局投影使用共同的已恢复指令校验，保留NPC变化，存档玩家坐标始终优先。4A5110允许原入口标记处于障碍格；这种原落点不改地形，普通路径仍不能走入。
+
 web/data/library/fire_valley.json是独立于运行登记的只读来源索引；tools/export_fire_valley_index.py从原DAT／TLK／ANM生成，覆盖报告为evidence/fire_valley_20261024/source_index.json。使用build_runtime.py --target fire-valley-index --run刷新；直接执行export_fire_valley_index.py --check只核对来源和产物，--query 英格妮检索名称／台词，--map M17030-2查看指定原地图，--flag 471:1反查跨地图旗标。
 NPC以地图ID＋原槽区分；原名或共用图集不用于合并人物。祭坛M17030、M17030-1、M17030-2保留各自NPC表与地图旗标，共用背景不代表同一状态，也不能按文件后缀推断发生顺序。地图NPC坐标／隐藏字段只是加载默认值，后续ANM的place／hide／move／reveal和旗标条件一并保留。
 DAT+0x8A的加载TLK入口与+0x13A的到达TLK入口分别索引；slot499是来源索引项，不自动视为上述任一入口。potential_call_roots包含所有分支的静态可达入口，不表示某个存档状态一定可达。新增重访剧情需同时核对加载布局、到达事件、对白条件、跨区域写入和存读档；不复制一套按“第几次进入”计数的区域状态。

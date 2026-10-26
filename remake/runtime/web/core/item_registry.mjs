@@ -1,5 +1,6 @@
 // One editable item catalog; source records and saved rolls stay immutable.
 import {isSupportedCrystalDefinition} from './crystal_catalog.mjs';
+import {hasEquipmentPassiveSource,isSupportedItemPassiveDefinition} from './item_passives.mjs';
 import {expandParameterOverrides,isParameterOverrideFile} from './config_overrides.mjs';
 const copy=structuredClone;
 const object=v=>v!==null&&typeof v==='object'&&!Array.isArray(v);
@@ -57,6 +58,8 @@ export function compileItemConfiguration(data,cfg,mode){
     integer(p.drop_rate,`${id}.drop_rate`,-1,100);need(typeof p.enabled==='boolean',`${id}.enabled须为布尔值`);
     const crystal=isSupportedCrystalDefinition(def);
     need(!p.enabled||def.behavior.kind!=='source-only'||crystal,`${id}作用未还原，不能启用`);
+    need(!p.enabled||def.behavior.kind!=='equip'||!hasEquipmentPassiveSource(def)
+      ||isSupportedItemPassiveDefinition(def)||def.availability.enabled===true,`${id}装备被动作用未还原，不能启用`);
     if(def.behavior.kind==='equip'||crystal){
       if(def.behavior.kind==='equip')integer(p.allowed_role_mask,`${id}.allowed_role_mask`,0,255);
       fields(p.attributes,Object.keys(b.original.attributes),`${id}.attributes`);
@@ -104,20 +107,31 @@ export function upgradeItemConfiguration(data,existing){
     if(capabilities){
       need(capabilities.policy==='registered-source-item-capabilities-v1','道具能力准入来源版本不兼容');
       for(const [id,previous]of Object.entries(capabilities.previous_definitions??{})){
-        need(capabilities.promoted_item_ids.includes(Number(id))&&former.definitions[id]?.behavior.kind==='status-cure'&&
-          previous.behavior.kind==='source-only'&&previous.availability.enabled===false,`${id}道具能力旧基线无效`);
+        need(capabilities.promoted_item_ids.includes(Number(id))&&['status-cure','equip','status-immunity-crystal'].includes(former.definitions[id]?.behavior.kind)&&
+          ['source-only','equip'].includes(previous.behavior.kind)&&previous.availability.enabled===false,`${id}道具能力旧基线无效`);
         Object.assign(former.definitions[id],copy(previous));
+        delete former.definitions[id].equipment_passive;
       }
     }
     const legacyEquipment=deriveItemConfiguration(former);
     for(const [id,row]of Object.entries(existing.entries)){
       need(next.entries[id],`${id}编号未登记`);
-      if(capabilities?.previous_definitions?.[id]&&!same(row.original,next.entries[id].original)){
+      if(isSupportedCrystalDefinition(data.definitions[id])&&!same(row.original,next.entries[id].original)
+        &&same(row.original,legacy.entries[id].original)){
+        // This exact source/current-catalog format predates socket parameters,
+        // independently of the older source-only capability baseline below.
+        fields(row,['name','owner','source','catalog','original','parameters'],id);
+        for(const key of ['name','owner','source','catalog','original'])need(same(row[key],legacy.entries[id][key]),`${id}.${key}旧晶石来源或基线不匹配`);
+        fields(row.parameters,['drop_rate','enabled'],`${id}.parameters`);integer(row.parameters.drop_rate,`${id}.drop_rate`,-1,100);need(typeof row.parameters.enabled==='boolean',`${id}.enabled须为布尔值`);
+        next.entries[id].parameters.drop_rate=row.parameters.drop_rate;
+        next.entries[id].parameters.enabled=row.parameters.enabled===row.original.enabled?next.entries[id].original.enabled:row.parameters.enabled;
+      }else if(capabilities?.previous_definitions?.[id]&&!same(row.original,next.entries[id].original)){
         fields(row,['name','owner','source','catalog','original','parameters'],id);
         for(const key of ['name','owner','source','catalog','original'])need(same(row[key],legacyEquipment.entries[id][key]),`${id}.${key}旧道具来源或基线不匹配`);
-        fields(row.parameters,['drop_rate','enabled'],`${id}.parameters`);integer(row.parameters.drop_rate,`${id}.drop_rate`,-1,100);
+        fields(row.parameters,Object.keys(legacyEquipment.entries[id].original),`${id}.parameters`);integer(row.parameters.drop_rate,`${id}.drop_rate`,-1,100);
         need(row.parameters.enabled===false,`${id}旧配置不能启用未恢复道具`);
-        next.entries[id].parameters.drop_rate=row.parameters.drop_rate;
+        for(const key of Object.keys(next.entries[id].original))if(key!=='enabled'&&key in row.parameters)
+          next.entries[id].parameters[key]=copy(row.parameters[key]);
       }else if(admission?.previous_availability?.[id]&&!same(row.original,next.entries[id].original)){
         fields(row,['name','owner','source','catalog','original','parameters'],id);
         for(const key of ['name','owner','source','catalog','original'])need(same(row[key],legacyEquipment.entries[id][key]),`${id}.${key}旧装备来源或基线不匹配`);

@@ -3,7 +3,7 @@ import {pathToFileURL} from 'node:url';
 import {createHash} from 'node:crypto';
 import {resolveContentDefinition} from '../../web/core/content_definition.mjs';
 import {admitPartyMember} from '../../web/core/party_members.mjs';
-import {initializeChapterItem,chapterChoices} from '../../web/core/chapter.mjs';
+import {initializeChapterItem,chapterChoices,validateChapterStory} from '../../web/core/chapter.mjs';
 import {compileTlkFlow} from '../../web/core/story_flow_compiler.mjs';
 const web=new URL('../../web/',import.meta.url),original=new URL('../../../../',import.meta.url);
 const isolated=process.env.FIRST_RETURN_RUNTIME?new URL('web/',pathToFileURL(process.env.FIRST_RETURN_RUNTIME.replace(/[/\\]?$/,'/'))):null;
@@ -24,7 +24,9 @@ export async function firstReturnSource(){
     return [id,await firstReturnRead(`data/maps/${id.toLowerCase()}.json`)];
   })));
   const content=resolveContentDefinition(definition,{seed,forest,story,maps});
-  story.flows=Object.fromEntries(Object.values(story.maps).map(table=>{const flow=compileTlkFlow(table,{choices:chapterChoices});return [flow.id,flow];}));
+  validateChapterStory(story);
+  story.flows=Object.fromEntries(Object.values(story.maps).filter(table=>table.records.length)
+    .map(table=>{const flow=compileTlkFlow(table,{choices:chapterChoices});return [flow.id,flow];}));
   return {story,seed,definition,content};
 }
 export function firstReturnWorld({story,seed,content},{returnedItem=true,accepted=true}={}){

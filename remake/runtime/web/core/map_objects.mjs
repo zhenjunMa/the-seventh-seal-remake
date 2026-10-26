@@ -39,6 +39,15 @@ export class MapObjectRuntime {
       const object=objects.find(object=>object.index===index);
       if(!object)throw new Error('地图光效没有对应物件');
       const actor={object,resource,behavior:behavior_raw_cf,state:null,frame:0,elapsed:0,loaded:false};
+      if(behavior_raw_cf===4){
+        const {raw}=sourceBytes(row.source_record_raw_hex,0x112,'CF4地图物件');
+        if(raw[0xcf]!==4||raw[0xce]>3)throw new Error('CF4地图物件源类型或绘制层无效');
+        actor.sourceLayer=raw[0xce];
+        const action=resource.actions.find(action=>action.index===1);
+        const {raw:completed}=sourceBytes(action?.source_action_raw_hex??action?.raw_hex,0xac,'CF4完成动作');
+        actor.restoredLayer=[2,3,1][completed[13]>>>4];
+        if(actor.restoredLayer===undefined)throw new Error('CF4恢复绘制层模式尚未接入');
+      }
       if(source){
         // 410850 draws FF first, but resets logical +22 and displayed +3C to0.
         // FF is retained native metadata, not the initial displayed frame.
@@ -54,7 +63,13 @@ export class MapObjectRuntime {
     const action=actor.resource.actions.find(action=>action.index===(actor.behavior===4&&state===3?1:0));
     if(!action)throw new Error('地图物件动作缺失');
     actor.state=state;
-    if(actor.behavior===4&&state===3)actor.frame=action.logical_frames.length-1;
+    if(actor.behavior===4){
+      // Live 4137C0 completion hard-writes CE=1. Save load 40CFE0 instead
+      // maps the completed action+0D high nibble through [2,3,1]. The scoped
+      // forest resources restore layer2; retain that actual source difference.
+      actor.object.layer=state===3?(actor.restoredCompleted?actor.restoredLayer:1):actor.sourceLayer;
+      if(state===3)actor.frame=action.logical_frames.length-1;
+    }
     actor.object.motion={main:action.main_bitmap,intrinsic:action.intrinsic_bitmap,
       width:actor.resource.frame_width,height:actor.resource.frame_height,
       frame:action.logical_frames[actor.frame]};
@@ -81,10 +96,12 @@ export class MapObjectRuntime {
         }
         this.project(actor,state);continue;
       }
+      if(!actor.loaded){actor.loaded=true;actor.restoredCompleted=state===3;}
+      else if(state!==3)actor.restoredCompleted=false;
       if(state!==actor.state){actor.frame=0;actor.elapsed=0;}
       if(![0,1,3].includes(state)){
         // Active collection has its own event playback; do not fabricate it.
-        actor.state=state;actor.object.motion=null;actor.elapsed=0;continue;
+        actor.state=state;actor.object.layer=actor.sourceLayer;actor.object.motion=null;actor.elapsed=0;continue;
       }
       const action=this.project(actor,state);
       if(paused||delta>250){actor.elapsed=0;continue;}

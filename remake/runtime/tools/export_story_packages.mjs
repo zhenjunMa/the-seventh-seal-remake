@@ -153,7 +153,7 @@ export async function compileStoryPackages({content=runtimeContent,definition:co
       const {dialogues,...program}=structuredClone(value);return [key,program];
     }));
     const flows={},events=[];
-    if(chapter){
+    if(chapter?.records.length){
       const flow=compileTlkFlow(hydrateStoryTable(chapter,texts),{choices:chapterChoices});
       chapter.flow_id=flow.id;flows[flow.id]=packFlow(flow);
     }

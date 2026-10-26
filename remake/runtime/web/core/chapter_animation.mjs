@@ -66,6 +66,18 @@ export function validateChapterAnimation(program,content=runtimeContent) {
   }
   return program;
 }
+// Loader ANMs may include camera focus and a barrier around their placements.
+// Those affect the transient presentation only; map-stage projection consumes
+// the same validated program while retaining the saved player and camera state.
+export function validateChapterSetupAnimation(program,mapId,content=runtimeContent){
+  validateChapterAnimation(program,content);
+  const layoutOpcodes=new Set([10,16,30,31,32,35]);
+  for(const command of program.commands){
+    need(layoutOpcodes.has(command.opcode),`布局演出 ${program.id}:${command.index} 含非布局指令 ${command.opcode}`);
+    if(command.opcode===10)need(command.u32_plus5===0&&command.filename.toUpperCase()===`${mapId}.DAT`,'布局演出不能切换地图');
+  }
+  return program;
+}
 export class ChapterAnimationRunner {
   constructor({program,hooks,runTlk,joinActor,leaveActor,flagCommand,initialLocation,initialActor=0,playback=null,content=runtimeContent,visualState={}}) {
     validateChapterAnimation(program,content);

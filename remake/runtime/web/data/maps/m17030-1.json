@@ -569,6 +569,8 @@
         "target_sha256": "fec9023611123ba7557cf0a186317c808a5c041a6ec8d0fd52b30c8576f09bfe",
         "target_entry_marker": 2,
         "entry_sort_code": 2,
+        "entry_terrain_raw": 0,
+        "entry_trigger_raw": 0,
         "entry_scan_cells": [
           {
             "x": 96,

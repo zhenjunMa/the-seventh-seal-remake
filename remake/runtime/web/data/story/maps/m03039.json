@@ -12,6 +12,7 @@
       "sha256": "b95cbf37de9e4d723a9830d97454b5ece2bc7bf352a51199f0e630aacdb8694a",
       "bytes": 56730
     },
+    "dialogue_status": "parsed",
     "map_source": {
       "path": "Map/m03039.dat",
       "sha256": "c3c01fb5773dda464c2a5bfa0b46520031f2dc9bd363e4a1978c99950b0dcaf2",

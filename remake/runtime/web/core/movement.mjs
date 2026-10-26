@@ -10,6 +10,12 @@ export class MovementMap {
     }
     this.width = data.width; this.height = data.height; this.cellSize = data.cell_size;
     this.rows = data.terrain_rows; this.triggers = new Map();
+    this.entryCells=new Set();
+    for(const cell of data.native_entry_cells??[]){
+      if(!Number.isInteger(cell.x)||!Number.isInteger(cell.y)||cell.x<0||cell.y<0
+        ||cell.x>=this.width||cell.y>=this.height||this.rows[cell.y][cell.x]!=='1')throw new Error('地图原入口格无效');
+      this.entryCells.add(`${cell.x},${cell.y}`);
+    }
     for (const trigger of data.triggers ?? []) {
       if (!Number.isInteger(trigger.x) || !Number.isInteger(trigger.y) ||
           trigger.x < 0 || trigger.y < 0 || trigger.x >= this.width || trigger.y >= this.height ||
@@ -28,11 +34,12 @@ export class MovementMap {
     return {blocked: false, x, y, trigger};
   }
   at(x, y) { return this.cell(Math.floor(x / this.cellSize), Math.floor(y / this.cellSize)); }
+  validEntry(x,y){const hit=this.at(x,y);return !hit.blocked||hit.reason==='terrain'&&this.entryCells.has(`${hit.x},${hit.y}`);}
   // Traverse every grid boundary on the segment. Endpoint-only checks tunnel
   // through thin walls during running or a slow frame.
   move(x, y, dx, dy) {
     if (![x, y, dx, dy].every(Number.isFinite)) throw new Error('移动坐标无效');
-    if (this.at(x, y).blocked) return {x, y, moved: false, blocked: true, hit: this.at(x, y)};
+    if (!this.validEntry(x,y)) return {x, y, moved: false, blocked: true, hit: this.at(x, y)};
     const distance = Math.hypot(dx, dy);
     if (!distance) return {x, y, moved: false, blocked: false};
     const size = this.cellSize, sx = Math.sign(dx), sy = Math.sign(dy);

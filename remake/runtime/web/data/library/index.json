@@ -32716,7 +32716,7 @@
         "definition": "data/items.json#/definitions/170",
         "configuration": "data/config/items.json#/entries/170",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "status-immunity-crystal"
       },
       "171": {
         "id": 171,
@@ -46167,8 +46167,8 @@
     "data/library/roles.json": "c88f1459169e56a333ca0376a56bb66e7c6c9a18c5d2e8bf1b77b3c9d394d8a6",
     "data/library/skills.json": "91517d541e4d0fc36ffe3334c975634d718a2dcdd6af9f71a08019d4fcaa47e4",
     "data/library/magic.json": "2a0784270dcd6661e267c84caae37f959a1813045da44da46c3c8fde666d5812",
-    "data/items.json": "c505331517749af3d2278bf90827a4d33080337ee6ed5821e450612da03fdbd2",
-    "data/runtime_content.json": "5484c54a7a2c8bb3f45b21a5c9f76396a935e5842b11c9e233b76a604e1577b8",
+    "data/items.json": "be8b04b015fade3ff1c10d2618dbefd54ba4945244dcbea12431d9b4b16bb530",
+    "data/runtime_content.json": "1ee43ea92d6710185fbfdde13322ac7e690f53b580957e46a814d07cff3a2c20",
     "data/party_skills.json": "f2df4edb5471b12f85b404af26e78a4f8e354b2f39bad3625827ec43647e9fce",
     "data/forest_ai.json": "80fd3b93fda75b52b53a5c660f2bfa25ad065355f3fe1d57097ebc02ceb9c6db",
     "data/config/skills.json": "16941b22ee21448c2b87df7fdf401f1db13b8ec3820d5139dcad3de237219302",

@@ -2084,6 +2084,45 @@
         }
       ]
     },
+    "061": {
+      "source": {
+        "path": "ROLE/061.dgp",
+        "sha256": "6be56cf03f42a1de75a7e5178b36ba0c449252741bf9b65f442bdf4967aafaed"
+      },
+      "frame_width": 189,
+      "frame_height": 164,
+      "event_only": false,
+      "actions": [
+        {
+          "index": 0,
+          "first_frame": 0,
+          "frame_count": 10,
+          "directions": 8,
+          "shadow_sheet": "/assets/map_shadows/061/action_00_shadow.png",
+          "shadow_geometry": {
+            "x": 70,
+            "y": 129,
+            "width": 37,
+            "height": 18
+          },
+          "sha256": "ea0444f13b896a7a6ad67de823d5010445536afee1f80fbd9770dbe03fdbbf0c"
+        },
+        {
+          "index": 1,
+          "first_frame": 80,
+          "frame_count": 10,
+          "directions": 8,
+          "shadow_sheet": "/assets/map_shadows/061/action_01_shadow.png",
+          "shadow_geometry": {
+            "x": 55,
+            "y": 126,
+            "width": 64,
+            "height": 32
+          },
+          "sha256": "e28cef8a0d41786f58d497508ee35477c3bd4ffae2fd44741d90b47695f78958"
+        }
+      ]
+    },
     "070": {
       "source": {
         "path": "ROLE/070.DGP",

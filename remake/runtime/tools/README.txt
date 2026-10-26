@@ -10,6 +10,7 @@
 补全原版角色／技能来源目录：python3 -B remake/runtime/tools/build_runtime.py --target source-catalog source-magic --run
 生成全量引用索引：node remake/runtime/tools/build_content_library.mjs
 生成火之谷地图／NPC／剧情来源索引：python3 -B remake/runtime/tools/build_runtime.py --target fire-valley-index --run
+生成外层白木森林来源索引：python3 -B remake/runtime/tools/build_runtime.py --target white-forest-index --run
 只读核对火之谷索引与覆盖报告：python3 -B remake/runtime/tools/export_fire_valley_index.py --check
 按名称／台词查询火之谷来源：python3 -B remake/runtime/tools/export_fire_valley_index.py --query 英格妮 --limit 20
 查询具体原地图：python3 -B remake/runtime/tools/export_fire_valley_index.py --map M17030-2
@@ -42,6 +43,8 @@ runtime_content.json为唯一运行接入选择；运行素材导出器直接读
 fire-valley-index独立于运行登记扫描Map/*.dat、Map/*.TLK及Animate/*.anm（扩展名不区分大小写）；中文来源地图名提名种子，DAT真实连接确认同来源族内地图，编号前缀只限定候选范围。生成web/data/library/fire_valley.json和evidence/fire_valley_20261024/source_index.json，不执行剧情或开放地图。索引保留地图变体、NPC原槽／加载站位／可见性、TLK分支／选项、跨地图旗标和ANM位置变更；DAT+0x8A加载入口与+0x13A到达入口独立登记。能力缺口按原字段／指令定位，完整可玩程度仍由正式登记、预检查和实际流程验收决定。
 story-media从登记ANM及显式来源准备集合m17010-3／m17030-1的原74字节指令读取opcode60视频、opcode62非空声音；--source-program可追加只准备不登记的ANM。生成data/story_media.json与evidence/story_media_export.json，保留原文件名小写键及逐指令引用，不推断剧情可达或演出时序。BIK转浏览器视频逐帧完整解码核对尺寸／帧率／帧数／时长与SSIM，音频核对完整PCM；原.wav若实为MP3，字节复制至真实.mp3后缀。--reuse-existing仍执行完整验证；--verify-only只读重核来源、清单、媒体SHA和完整解码，不重写媒体或报告。
 chapter-maps按maps.export归属准备地图、NPC、物件和源物理出口；chapter-story按story和programs准备TLK／ANM、被引用道具与登记玩家初值。
+white-forest-index复用来源解析与跨区域调用扫描，以原地图名称精确匹配“白木森林”，输出data/library/white_forest.json及evidence/white_forest_20261026/source_index.json；不纳入“里白木森林”。索引保留全部96个原物件记录与原字节。export_white_forest_index.py同样支持--check／--query／--map／--flag，只读查询不开放运行内容。
+地图没有TLK但登记了keyed-chest时，chapter-story仍导出真实DAT物件／入口表，明确dialogue_status=source-file-absent、source=null与零条对白；不虚构TLK或空剧情流程。物件奖励与钥匙定义从已登记CF4的原F2与十个奖励槽推导。
 story-check在源表、初始角色和怪物准备后检查已登记的进入剧情、触发器、箱子、休息、出口和显式NPC的可达分支，报告地图／入口／记录号，阻断未实现机制；最终content再次检查。
 battle-stages按stages选择新舞台的SCN／DGP，默认ID路径，不维护每个舞台的素材名单。当前支持SCN v2／mode4及已恢复的零镜头规则；专用旧产物默认existing，可显式export:"source"使用通用导出。
 enemies按登记敌人实际学习表生成属性／AI／反应／状态／图层；enemy-rewards读取经验和奖励槽；encounters读取登记地图的DAT／STG池。音频按登记地图及动作生成。
@@ -157,6 +160,7 @@ content-library: build_content_library.mjs; 依赖=configuration
 source-magic: export_source_magic.py; 依赖=无声明依赖
 fire-valley-index: export_fire_valley_index.py; 依赖=无声明依赖
 story-media: export_story_media.py; 依赖=无声明依赖
+white-forest-index: export_white_forest_index.py; 依赖=无声明依赖
 [自动生成：构建目标结束]
 
 当前检查覆盖什么

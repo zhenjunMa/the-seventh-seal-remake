@@ -11,6 +11,11 @@ const copy=structuredClone;
 const story=JSON.parse(await readFile(new URL('../web/data/chapter_story.json',import.meta.url),'utf8'));
 const table=story.maps.M01050,record=table.records.find(row=>row.id===103);
 const expected={stage_file:'stage01.scn',enemy_files:['031A1.dgp','','031B2.dgp','','','']};
+// Keep the original27-map compilation baseline explicit while requiring every
+// currently registered map, including source-absent direct-object packages.
+const legacyMaps=['M01050','M03039','M01010','M01030','M17010','M17020','M17026','M17029','M70010','M72061',
+  'M17011','M17012','M17013','M17014','M17015','M17016','M17021','M17022','M17023','M17024','M17025','M17027',
+  'M17028','M17030-1','M17030-2','M17030','M17032'];
 
 test('real M01050:r103 keeps the complete original source basenames without admitting the external battle',async()=>{
   const bytes=await readFile(new URL('../../../Map/m01050.TLK',import.meta.url));
@@ -26,9 +31,13 @@ test('real M01050:r103 keeps the complete original source basenames without admi
   assert.throws(()=>nativeScriptedBattle(table,record,stageOnly),/敌人尚未登记/,'031A1 is never truncated or inferred to be registered031');
 });
 
-test('all27 registered map packages compile read-only and actual compact M01050:r103 retains names and rejects execution',async()=>{
+test('all current map packages retain the original27-map baseline and compact M01050:r103 names without admitting execution',async()=>{
   const {definition,content}=await auditContentFiles(),before=copy(content),compiled=await compileStoryPackages({definition,content});
-  assert.equal(compiled.report.maps,27);
+  assert.equal(legacyMaps.length,27);
+  const currentMaps=Object.keys(definition.maps).sort(),packedMaps=[...compiled.output.keys()]
+    .filter(path=>/^data\/story\/maps\/[^/]+\.json$/.test(path)).map(path=>path.split('/').at(-1).slice(0,-5).toUpperCase()).sort();
+  assert.equal(compiled.report.maps,currentMaps.length);assert.deepEqual(packedMaps,currentMaps);
+  for(const id of legacyMaps)assert.ok(packedMaps.includes(id),`${id} legacy source package retained`);
   const pack=JSON.parse(compiled.output.get('data/story/maps/m01050.json'));
   const compact=pack.chapter.records.find(row=>row.id===103);
   assert.equal(compact.raw_hex,undefined);assert.deepEqual(compact.scripted_battle,expected);

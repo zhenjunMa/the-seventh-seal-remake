@@ -6,6 +6,7 @@ import {StoryPlayback,storyCancelled,playbackTask,playbackFrame} from '../core/s
 import {runtimeContent,storyBindings} from "../core/content_registry.mjs";
 import {worldMapEntry} from '../core/map_connections.mjs';
 import {hasNativeStoryCompletion} from '../core/story_completion.mjs';
+import {nativeChestAnimation} from '../core/native_map_chests.mjs';
 
 export function createStoryController({state, actions, $, canvas, ctx}) {
   let session=null,sequence=0;
@@ -230,7 +231,7 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
         }catch(error){state.scenes.current=previous.scene;state.scenes.rollbackView(previous.view);throw error;}
       });
       if(result.story_completed)return result;
-      actions.status(result.already_done?'箱子里的装备已经领取。':'可以继续探索。');
+      actions.status(result.locked?'需要对应元素钥匙。':result.already_done?'宝箱已打开。':'可以继续探索。');
       if(result.save_requested)await actions.openSaveCrystal();
       if(result.world_map_requested)state.worldMap.open(result.world_map_requested.area);
     }catch(error){if(error.gameOverPolicy)await actions.presentGameOver(error.gameOverPolicy);else actions.status(error.message,true);}
@@ -277,10 +278,12 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
   async function animateChapterObject({mapId,objectIndex,signal,playback}){
     const resource=state.chapterResources.object_animations[mapId]?.find(row=>row.object_index_zero_based===objectIndex);
     if(!resource)throw new Error('物件动作资源尚未准备');
-    const frames=await playbackTask(Promise.all(resource.frames.map(frame=>actions.image(frame.image, `map:${mapId}`))),signal);
+    const object=state.chapterStory.maps[mapId]?.objects.find(row=>row.index===objectIndex);
+    const {action,frameIndices}=nativeChestAnimation(resource,object?.behavior_raw_cf);
+    const frames=await playbackTask(Promise.all(frameIndices.map(index=>actions.image(resource.frames.find(frame=>frame.index===index).image, `map:${mapId}`))),signal);
     if(playback?.paused)await playback.ready();signal?.throwIfAborted();playback?.check();
     state.objectPreview={mapId,objectIndex,bitmap:frames[0]};
-    const start=performance.now(),interval=resource.actions[0].interval_raw;
+    const start=performance.now(),interval=action.interval_raw;
     if(state.engine){
       try{await state.engine.exploration.clock.tween(interval*frames.length,t=>{
         state.objectPreview.bitmap=frames[Math.min(frames.length-1,Math.floor(t*frames.length))];

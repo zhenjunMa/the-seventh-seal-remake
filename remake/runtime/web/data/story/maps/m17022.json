@@ -88,6 +88,8 @@
           "target_sha256": "8936daaa7ae9a874a41d9afabf1180677fe02c5d9640a0585792092357fd0ec5",
           "target_entry_marker": 2,
           "entry_sort_code": 6,
+          "entry_terrain_raw": 0,
+          "entry_trigger_raw": 0,
           "entry_scan_cells": [
             {
               "x": 37,
@@ -156,6 +158,8 @@
           "target_sha256": "d9f2021f1f24558f8ead877cc77612c7fa2263b8225a10d630f308384ef857f9",
           "target_entry_marker": 1,
           "entry_sort_code": 3,
+          "entry_terrain_raw": 0,
+          "entry_trigger_raw": 0,
           "entry_scan_cells": [
             {
               "x": 46,
@@ -228,6 +232,8 @@
           "target_sha256": "18b33b069a469365ed75b531aa6346c58112f0c6a64c7a59ae1c6108318ef599",
           "target_entry_marker": 1,
           "entry_sort_code": 1,
+          "entry_terrain_raw": 0,
+          "entry_trigger_raw": 0,
           "entry_scan_cells": [
             {
               "x": 16,
