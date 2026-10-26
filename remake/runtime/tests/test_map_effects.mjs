@@ -33,7 +33,9 @@ test('map light export covers actual native save point and forest crystals with 
   assert.deepEqual(manifest.maps.M70010.objects.map(row=>row.index),[8,10]);
   const report=await read('evidence/map_effects_20261021/export.json');
   assert.equal(report.passed,true);assert.equal(report.source_bytes_unchanged,true);
-  assert.equal(report.frame_checks.length,147);
+  const originalSources=new Set(['ROLE/013.dgp','ROLE/183.dgp','mapm/m70010/016.dgp','mapm/m70010/017.dgp']);
+  assert.equal(report.frame_checks.filter(row=>originalSources.has(row.source)).length,147,
+    'the original save-point/role/forest-entry pixel baseline remains intact as maps are added');
   assert.ok(report.frame_checks.some(row=>row.source==='ROLE/183.dgp'&&row.intrinsic.covered_pixels>0));
   for(const [path,hash] of Object.entries(report.output_hashes)){
     assert.equal(createHash('sha256').update(await readFile(new URL('web'+path,root))).digest('hex'),hash,path);

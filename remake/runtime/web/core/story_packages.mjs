@@ -15,6 +15,13 @@ export function validateStorySelection(selection={events:[],quests:[]}){
   return selection;
 }
 export function validateCompactRecords(table){
+  if(table?.dialogue_status==='source-file-absent'){
+    need(/^M\d{5}(?:-\d+)?$/.test(table.id)&&table.source===null&&Array.isArray(table.records)
+      &&table.records.length===0&&table.record_count===0&&table.index_count===0
+      &&table.index_nonzero?.length===0&&/^[a-f0-9]{64}$/.test(table.map_source?.sha256??'')
+      &&table.map_source.path?.toLowerCase()===`map/${table.id.toLowerCase()}.dat`,'无对白地图来源无效');
+    return table;
+  }
   need(table&&/^M\d{5}(?:-\d+)?$/.test(table.id)&&Array.isArray(table.records)&&table.records.length>0&&table.records.length<=10000,'对白表无效');
   const ids=new Set();
   for(const row of table.records){

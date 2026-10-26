@@ -26,7 +26,7 @@ GAME_SHA = "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18"
 VM_EVIDENCE = "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
 COMPACT_EVIDENCE = "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a"
 TLK_EVIDENCE = "ev_e14d28c11ec31e5eebdf4c08a994a900102658650d8e5364d58b848cbd114ea7"
-from content_registration import map_ids, program_ids, role_ids
+from content_registration import map_ids, program_ids, role_ids, definition, map_exports
 
 
 def sha(data):
@@ -86,10 +86,12 @@ def program_control_map(commands, maps, ident):
 
 
 def export():
-    MAP_IDS, ANM_IDS = map_ids('story'), program_ids()
+    MAP_IDS, ANM_IDS = map_ids('story-data'), program_ids()
     PLAYER_IDS = role_ids('player')
     names = ["GAME.exe", "SYSTEM/Object.ITM", *[f'Fight_Role/{ident}.CHR' for ident in PLAYER_IDS]]
-    names += [f"Map/{ident.lower()}{extension}" for ident in MAP_IDS for extension in [".dat", ".TLK"]]
+    names += [f"Map/{ident.lower()}.dat" for ident in MAP_IDS]
+    names += [f"Map/{ident.lower()}.TLK" for ident in MAP_IDS
+              if (ROOT / f"Map/{ident.lower()}.TLK").is_file()]
     names += [f"Animate/{ident}.anm" for ident in ANM_IDS]
     original = {name: (ROOT / name).read_bytes() for name in names}
     hashes = {name: sha(data) for name, data in original.items()}
@@ -98,7 +100,12 @@ def export():
     for ident in MAP_IDS:
         name = ident.lower()
         dat = map_record(ROOT / f"Map/{name}.dat", detailed=True)
-        tlk = tlk_record(ROOT / f"Map/{name}.TLK")
+        tlk_path = ROOT / f"Map/{name}.TLK"
+        if not tlk_path.is_file() and map_exports()[ident]['story']:
+            raise FileNotFoundError(f"Registered story map {ident} has no TLK source")
+        tlk = tlk_record(tlk_path) if tlk_path.is_file() else dict(
+            records=[], index_nonzero=[], index_count=0, record_base=None,
+            record_bytes=0x66F, record_count=0, trailing_bytes=0, trailing_sha256=sha(b""))
         data = original[dat["path"]]
         for record in tlk["records"]:
             record["source"] = source(tlk["path"], tlk["sha256"], record["offset"],
@@ -146,7 +153,8 @@ def export():
                 source=source(dat["path"], dat["sha256"], offset, bytes=0x112)))
         maps[ident] = dict(id=ident, name=dat["name"], flag_index=dat["flag_index"],
             map_flag_index=dat["flag_index"],
-            source=source(tlk["path"], tlk["sha256"], bytes=tlk["bytes"]),
+            source=source(tlk["path"], tlk["sha256"], bytes=tlk["bytes"]) if tlk_path.is_file() else None,
+            dialogue_status="parsed" if tlk_path.is_file() else "source-file-absent",
             map_source=source(dat["path"], dat["sha256"], bytes=dat["bytes"]),
             index_nonzero=tlk["index_nonzero"], index_count=tlk["index_count"],
             record_base=tlk["record_base"], record_bytes=tlk["record_bytes"],
@@ -204,6 +212,19 @@ def export():
     # Grant targets are source facts, not a second author-maintained item list.
     ITEM_IDS = sorted({r['mutation_bit'] for m in maps.values() for r in m['records']
                        if r['mutation_type'] == 5 and r['mutation_bit'] > 0})
+    item_ids = set(ITEM_IDS)
+    for ident, binding in definition()['maps'].items():
+        if ident not in maps:
+            continue  # A scoped export only admits grants from its selected maps.
+        for selected in binding.get('objects', []):
+            if selected['handler'] != 'keyed-chest':
+                continue
+            obj = next(row for row in maps[ident]['objects'] if row['index'] == selected['index'])
+            raw = bytes.fromhex(obj['raw_hex'])
+            if raw[0xCF] != 4 or u32(raw, 0xF6):
+                raise ValueError(f'Not a native direct-reward CF4 chest: {ident}:{selected["index"]}')
+            item_ids.update(u32(raw, at) for at in [0xF2, *range(0x54, 0x7C, 4)] if u32(raw, at))
+    ITEM_IDS = sorted(item_ids)
     definitions = {}
     for ident in ITEM_IDS:
         if not 1 <= ident <= 416: raise ValueError(f'Invalid story item ID: {ident}')

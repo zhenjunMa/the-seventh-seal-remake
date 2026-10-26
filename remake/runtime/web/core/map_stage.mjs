@@ -3,12 +3,11 @@
 // progress or plays arrival dialogue (+0x13A).
 import {StoryFlowRunner} from './story_flow.mjs';
 import {nativeFlowId} from './story_flow_compiler.mjs';
-import {validateChapterAnimation} from './chapter_animation.mjs';
+import {validateChapterSetupAnimation} from './chapter_animation.mjs';
 import {storyBindings,runtimeContent} from './content_registry.mjs';
 
 const need=(ok,message)=>{if(!ok)throw new Error(`地图布置：${message}`);};
 const PURE_COMMANDS=new Set(['record','test_flag_bit','jump','end','animation']);
-const SETUP_OPCODES=new Set([10,16,30,35]);
 
 export async function projectMapStage({mapId,world,story,npcs,roles,content=runtimeContent}){
   const result=structuredClone(npcs),binding=storyBindings(mapId,content);
@@ -24,10 +23,8 @@ export async function projectMapStage({mapId,world,story,npcs,roles,content=runt
     animation(command){
       const program=story.programs[command.program_id];
       need(program,`布局演出 ${command.program_id} 未准备`);
-      validateChapterAnimation(program,content);
+      validateChapterSetupAnimation(program,mapId,content);
       for(const c of program.commands){
-        need(SETUP_OPCODES.has(c.opcode),`布局演出 ${program.id}:${c.index} 含非布局指令 ${c.opcode}`);
-        if(c.opcode===10){need(c.u32_plus5===0&&c.filename.toUpperCase()===`${mapId}.DAT`,'布局演出不能切换地图');continue;}
         if(c.opcode!==35)continue;
         // Party placement in the source loader is transient: saved/selected
         // player location remains authoritative. NPC instances are projected.

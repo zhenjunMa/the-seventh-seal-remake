@@ -61,6 +61,7 @@ STEPS = {
             '../evidence/chapter_items_native.json','../evidence/forest_scheduler_native_20261011.json',
             '../evidence/forest_rewards_native_20261011.json',
             '../evidence/fire_valley_20261024/stage12_status_apply.json',
+            '../evidence/white_forest_20261026/reward_passives/native_bundle.json',
             '../../../save_analysis_20261010/native_item_init.py'), sources=item_source_files()),
     'item-presentation': Step('export_item_presentation.py', ('data/item_presentation.json', 'assets/item_presentation'), ('items',), ('item_presentation_export.json',)),
     'recovery': Step('export_chapter_recovery.py', ('../evidence/chapter_recovery_export_20261011.json',), reports=('chapter_recovery_export_20261011.json',)),
@@ -105,7 +106,9 @@ STEPS['chapter-maps'] = replace(STEPS['chapter-maps'],
     sources=('GAME.exe', *tuple(f'Map/{ident.lower()}.dat' for ident in map_ids())))
 STEPS['chapter-story'] = replace(STEPS['chapter-story'],
     inputs=('data/runtime_content.json',), sources=('GAME.exe','SYSTEM/Object.ITM',
-        *tuple(f'Map/{ident.lower()}{suffix}' for ident in map_ids('story') for suffix in ('.dat','.TLK')),
+        *tuple(f'Map/{ident.lower()}.dat' for ident in map_ids('story-data')),
+        *tuple(f'Map/{ident.lower()}.TLK' for ident in map_ids('story-data')
+               if (ROOT/f'Map/{ident.lower()}.TLK').is_file()),
         *tuple(f'Animate/{ident}.anm' for ident in program_ids()),
         *tuple(f'Fight_Role/{ident}.CHR' for ident in role_ids('player'))))
 
@@ -191,6 +194,12 @@ STEPS['story-media']=Step('export_story_media.py',
     inputs=('data/runtime_content.json','../tools/export_startup_media.py'),
     sources=story_media_source_files())
 STEPS['content']=replace(STEPS['content'],depends=(*STEPS['content'].depends,'story-media'))
+STEPS['white-forest-index']=Step('export_white_forest_index.py',
+    ('data/library/white_forest.json','../evidence/white_forest_20261026/source_index.json'),
+    reports=('white_forest_20261026/source_index.json',),
+    inputs=('../tools/export_fire_valley_index.py','../tools/route_extract_resources.py',
+            '../tools/map_npc_fields.py','core/chapter_animation.mjs','core/story_flow_compiler.mjs'),
+    sources=fire_valley_source_files())
 
 
 def sha(path):

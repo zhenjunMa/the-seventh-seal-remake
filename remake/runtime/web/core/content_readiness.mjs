@@ -1,12 +1,13 @@
 // Audit only admitted entrances as build gates. Legacy implicit NPC dialogue is
 // inventoried separately so existing bounded content does not gain new promises.
 import {chapterChoices,chapterRestChoices,initializeChapterItem} from './chapter.mjs';
-import {validateChapterAnimation} from './chapter_animation.mjs';
+import {validateChapterAnimation,validateChapterSetupAnimation} from './chapter_animation.mjs';
 import {validateRouteRecord} from './route.mjs';
 import {chapterRouteExits,nativeMapTransfer} from './map_connections.mjs';
 import {validateNativeStoryCondition} from './native_story_conditions.mjs';
 import {validateNativeStoryMutation} from './native_story_mutations.mjs';
 import {nativeScriptedBattle} from './scripted_battle.mjs';
+import {nativeKeyedChest,nativeChestAnimation} from './native_map_chests.mjs';
 const need=(ok,message)=>{if(!ok)throw new Error(message);};
 const flagIndex=n=>Number.isInteger(n)&&n>=0&&n<2000;
 
@@ -35,7 +36,9 @@ export function inspectContentReadiness(content,story,resources){
       const row=resources.trigger_regions[mapId]?.find(row=>row.id===id);
       roots.push({kind:'trigger',id:row?.field_26_raw,label:id});
     }
-    for(const row of binding.objects)roots.push({kind:'object',id:table?.objects.find(obj=>obj.index===row.index)?.interaction_record_raw_f6,label:row.index});
+    for(const row of binding.objects)roots.push(row.handler==='keyed-chest'
+      ?{kind:'direct-object',id:row.index,label:row.index}
+      :{kind:'object',id:table?.objects.find(obj=>obj.index===row.index)?.interaction_record_raw_f6,label:row.index});
     for(const row of binding.rests)roots.push({kind:'rest',id:row.record_id,label:row.descriptor_id,explicit:true});
     for(const row of binding.routes)roots.push({kind:'route',id:row.record_id,label:row.descriptor_id});
     const npcSlots=binding.npcs??(resources.npcs_by_map[mapId]??[]).map(npc=>npc.slot_zero_based);
@@ -50,6 +53,21 @@ export function inspectContentReadiness(content,story,resources){
       let opensWorldMap=false;
       let activeMap=mapId;
       const add=(id,options={})=>{if(id)queue.push({mapId:activeMap,id,explicit:root.explicit,...options});};
+      if(root.kind==='direct-object'){
+        try{
+          const object=table?.objects.find(row=>row.index===root.id),chest=nativeKeyedChest(object);
+          need(object.source?.sha256===story.source_hashes[object.source.path],'宝箱原地图来源缺失');
+          for(const reward of chest.rewards){
+            const definition=story.item_definitions?.[reward.id];
+            need(definition?.source?.sha256===story.source_hashes[definition.source.path],'宝箱奖励道具来源缺失');
+            initializeChapterItem(definition);
+          }
+          const animation=resources.object_animations[mapId]?.find(row=>row.object_index_zero_based===root.id);
+          need(animation,'宝箱动作资源缺失');nativeChestAnimation(animation,4);
+          entrances.push({map_id:mapId,kind:root.kind,id:root.id,records:0,advisory:false});
+        }catch(error){target.push(diagnostic(null,error.message));}
+        continue;
+      }
       try{
         need(Number.isInteger(root.id)&&root.id>0,'缺少原始剧情入口');
         if(root.kind==='entry')need(table.header_entry_tlk_raw===root.id,'进入剧情与 DAT +0x13A 不同');
@@ -117,8 +135,7 @@ export function inspectContentReadiness(content,story,resources){
             const name=record.text_raw.replace(/\.anm$/i,'').toLowerCase(),program=story.programs[name];
             need(program&&content.programs[name],`演出 ${name} 尚未登记`);
             validateChapterAnimation(program,content);
-            if(root.kind==='setup')need(program.commands.every(command=>[10,16,30,35].includes(command.opcode)
-              &&(command.opcode!==10||command.filename.toUpperCase()===`${item.mapId}.DAT`)),'加载演出只能布置当前地图');
+            if(root.kind==='setup')validateChapterSetupAnimation(program,item.mapId,content);
             if(!programs.has(name)){
               programs.add(name);
               let controlMap=item.mapId;

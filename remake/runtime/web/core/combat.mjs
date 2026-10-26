@@ -108,7 +108,7 @@ export class BattleController {
     if(complete_contacts)requireValue(this.nativeAiData&&this.enemySkillTables&&typeof this.playSequence==='function','完整技能序列执行器缺失');
     if(this.rewardData)this.state.reward_ledger=createRewardLedger(this.state.id,next);
     this.reactionData=reaction_data;this.statusData=status_data;
-    if(this.statusData)for(const actor of next)Object.assign(actor,initializeNativeStatuses(actor,this.statusData));
+    if(this.statusData)for(const actor of next)Object.assign(actor,initializeNativeStatuses(actor,this.statusData,undefined,this.rng));
     this.lifecycleEnabled=Boolean(lifecycle_enabled);this.lifecycleSequence=0;
     if(this.lifecycleEnabled){
       this.state.lifecycle_events=[];

@@ -76,9 +76,10 @@ def descriptors(parsed):
     return result
 
 
-def discover_maps(catalog, details):
+def discover_maps(catalog, details, region_label=REGION_LABEL, exact_label=False):
     """Return content/link-supported members and the exact admission reason."""
-    seeds = {ident for ident, row in catalog.items() if REGION_LABEL in row.get("name", "")}
+    seeds = {ident for ident, row in catalog.items()
+             if (row.get("name") == region_label if exact_label else region_label in row.get("name", ""))}
     selected = set(seeds)
     edges = [(ident, d["target_map_id"], d["source_id"])
              for ident, row in details.items() for d in descriptors(row) if d["target_map_id"]]
@@ -153,7 +154,7 @@ def reachable_records(records, entry):
     return sorted(seen)
 
 
-def physical_map_graph(maps):
+def physical_map_graph(maps, region_label=REGION_LABEL):
     edges = [{"origin": ident, "destination": descriptor["target_map_id"],
               "descriptor_id": descriptor["id"], "source_id": descriptor["source_id"],
               "cell_count": len(descriptor["cells"]), "source": descriptor["source"]}
@@ -182,7 +183,7 @@ def physical_map_graph(maps):
         component = visit(undirected, min(remaining))
         components.append(component)
         remaining.difference_update(component)
-    entries = [ident for ident, row in maps.items() if row["name"] == REGION_LABEL + "入口"]
+    entries = [ident for ident, row in maps.items() if row["name"] == region_label + "入口"]
     return {"physical_exit_count": len(edges), "edges": edges, "undirected_components": components,
             "directed_reachable_from": reachable,
             "source_label_entry_maps": entries,
@@ -229,7 +230,7 @@ def source_files(root=ROOT):
                         if path.is_file() and path.suffix.lower() in suffixes))
 
 
-def build_index():
+def build_index(region_label=REGION_LABEL, region_id="fire-valley", exact_label=False):
     catalog, hashes, failures = {}, {}, []
     paths = sorted(path for path in (ROOT / "Map").iterdir() if path.suffix.lower() == ".dat")
     for path in paths:
@@ -242,9 +243,10 @@ def build_index():
             key = path.relative_to(ROOT).as_posix()
             hashes[key] = sha(raw)
             failures.append({"path": key, "error": str(error)})
-    seeds = [ident for ident, row in catalog.items() if REGION_LABEL in row.get("name", "")]
+    seeds = [ident for ident, row in catalog.items()
+             if (row.get("name") == region_label if exact_label else region_label in row.get("name", ""))]
     if not seeds:
-        raise ValueError("No source map label nominates Fire Valley")
+        raise ValueError(f"No source map label nominates {region_label}")
     # Prefix is only a bounded candidate search. Every admitted member requires
     # a matching source label or a DAT edge to an established member.
     families = {ident[:4] for ident in seeds}
@@ -258,7 +260,7 @@ def build_index():
                 details[ident] = parsed
             except (ValueError, struct.error) as error:
                 failures.append({"path": row["path"], "error": str(error)})
-    members, evidence = discover_maps(catalog, details)
+    members, evidence = discover_maps(catalog, details, region_label, exact_label)
     animation_code = RUNTIME / "web/core/chapter_animation.mjs"
     compiler_code = RUNTIME / "web/core/story_flow_compiler.mjs"
     match = re.search(r"const OPCODES\s*=\s*new Set\(\[([\d,\s]+)\]\)", animation_code.read_text("utf-8"))
@@ -303,6 +305,18 @@ def build_index():
             if "animation_reference" in record:
                 animation_refs[record["animation_reference"]].append(record["source_id"])
         header = bytes.fromhex(parsed["header_hex"])
+        raw_dat = (ROOT / parsed["path"]).read_bytes()
+        object_table = parsed["object_table"]
+        objects = []
+        for index in range(object_table["count"]):
+            offset = object_table["offset"] + index * object_table["record_bytes"]
+            raw = raw_dat[offset:offset + object_table["record_bytes"]]
+            if len(raw) != 0x112:
+                raise ValueError(f"Truncated regional object {ident}:{index}")
+            objects.append({"index": index, "source_id": f"{ident}:DAT:object:{index}",
+                            "resource_id_raw": u32(raw, 0x1E), "behavior_raw_cf": raw[0xCF],
+                            "state_raw_d0": raw[0xD0], "interaction_record_raw_f6": u32(raw, 0xF6),
+                            "raw_hex": raw.hex(), "source": provenance(parsed, offset, len(raw))})
         maps[ident] = {"id": ident, "name": parsed["name"], "membership_evidence": evidence[ident],
                        "source": provenance(parsed), "map_flag_index": parsed["flag_index"],
                        "width_cells": parsed["width_cells"], "height_cells": parsed["height_cells"],
@@ -315,6 +329,7 @@ def build_index():
                        "map_load_source": provenance(parsed, 0x8A, 4),
                        "map_load_evidence": [ENTRY_EVIDENCE[0]],
                        "header_11e_raw": u32(header, 0x11E), "npcs": npcs, "descriptors": links,
+                       "objects": objects,
                        "dialogue": {"status": "parsed" if tlk else "source-file-absent",
                                     "source": provenance(tlk) if tlk else None,
                                     "index_nonzero": tlk["index_nonzero"] if tlk else [], "records": records,
@@ -458,10 +473,10 @@ def build_index():
     capabilities["anm_opcode"] = {str(value): {"count": sum(c["opcode_raw"] == value for c in all_commands), "unresolved": value not in supported,
                                               "source_ids": [c["source_id"] for c in all_commands if c["opcode_raw"] == value]}
                                    for value in sorted({c["opcode_raw"] for c in all_commands})}
-    graph = physical_map_graph(maps)
+    graph = physical_map_graph(maps, region_label)
     if any(sha((ROOT / path).read_bytes()) != digest for path, digest in hashes.items()):
         raise ValueError("Read-only source changed during indexing")
-    return {"schema": "seventh-seal-source-region-index", "version": 1, "id": "fire-valley",
+    return {"schema": "seventh-seal-source-region-index", "version": 1, "id": region_id,
             "source_hashes": dict(sorted(hashes.items())),
             "provenance": {"parser_paths": ["remake/runtime/tools/route_extract_resources.py", "remake/runtime/tools/map_npc_fields.py"],
                            "extractor": {"path": Path(__file__).relative_to(ROOT).as_posix(), "sha256": sha(Path(__file__).read_bytes())},
@@ -479,6 +494,7 @@ def build_index():
                                                         "kind2_scope": "Handler accepts a registered destination, literal DAT filename, entry marker 1..255 and an admitted current state2 trigger with source sort code 0..8. Handler availability does not admit all source records or paths."}},
             "coverage": {"map_headers_scanned": len(paths), "tlk_files_scanned": len(tlks),
                          "anm_files_scanned": len(all_programs), "maps": len(maps), "npc_instances": sum(len(m["npcs"]) for m in maps.values()),
+                         "map_objects": sum(len(m["objects"]) for m in maps.values()),
                          "npc_instances_with_tlk_entry": sum(npc["dialogue_index_entry"] is not None for m in maps.values() for npc in m["npcs"]),
                          "npc_instances_without_tlk_entry": sum(npc["dialogue_index_entry"] is None for m in maps.values() for npc in m["npcs"]),
                          "maps_with_tlk": sum(m["dialogue"]["status"] == "parsed" for m in maps.values()),
@@ -487,7 +503,8 @@ def build_index():
                          "physical_exits": graph["physical_exit_count"],
                          "shared_flags": len(flag_index), "source_bytes_unchanged": True,
                          "unlinked_candidates": sorted(set(details) - set(members)), "parse_failures": failures},
-            "discovery": {"region_label": REGION_LABEL, "label_seed_maps": sorted(seeds),
+            "discovery": {"region_label": region_label, "label_seed_maps": sorted(seeds),
+                          "label_match": "exact" if exact_label else "contains",
                           "candidate_filename_families": sorted(families),
                           "rule": "Source-label seeds plus undirected DAT descriptor links within candidate families. Prefix nominates candidates only.",
                           "map_catalog": {ident: row for ident, row in sorted(catalog.items())}},
@@ -533,7 +550,7 @@ def query_index(data, text=None, map_id=None, flag=None, limit=50):
     return {"total_matches": len(matches), "limit": limit, "matches": matches[:limit]}
 
 
-def coverage_report(data, index_bytes):
+def coverage_report(data, index_bytes, output=OUTPUT):
     unsupported_records = sorted({source_id for field in ["kind", "condition_type", "mutation_type"]
                                   for value in data["capability_summary"][field].values() if value["unresolved"]
                                   for source_id in value["source_ids"]})
@@ -541,7 +558,7 @@ def coverage_report(data, index_bytes):
                                    if value["unresolved"] for source_id in value["source_ids"]})
     return {"schema": "seventh-seal-source-region-coverage", "version": 1, "id": data["id"],
             "scope": "Static source index; runtime registration, branch execution and full playability are not certified.",
-            "index": {"path": OUTPUT.relative_to(ROOT).as_posix(), "sha256": sha(index_bytes)},
+            "index": {"path": output.relative_to(ROOT).as_posix(), "sha256": sha(index_bytes)},
             "source_inventory_sha256": sha(encoded(data["source_hashes"])),
             "coverage": data["coverage"], "variant_groups": data["variant_groups"],
             "physical_map_graph": {key: data["physical_map_graph"][key] for key in ["physical_exit_count", "undirected_components", "source_label_entry_maps", "entry_unreachable_by_physical_exit", "limits"]},
@@ -564,7 +581,8 @@ def coverage_report(data, index_bytes):
             "provenance": data["provenance"], "limits": data["limits"]}
 
 
-def main():
+def main(region_label=REGION_LABEL, region_id="fire-valley", exact_label=False,
+         output=OUTPUT, report_output=REPORT_OUTPUT):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true", help="Verify deterministic output without writing")
     parser.add_argument("--query", help="Search existing index for map, NPC or dialogue text")
@@ -575,11 +593,11 @@ def main():
     if args.limit < 1:
         parser.error("--limit must be positive")
     if args.query is not None or args.map_id or args.flag:
-        print(json.dumps(query_index(json.loads(OUTPUT.read_text("utf-8")), args.query, args.map_id, args.flag, args.limit), ensure_ascii=False))
+        print(json.dumps(query_index(json.loads(output.read_text("utf-8")), args.query, args.map_id, args.flag, args.limit), ensure_ascii=False))
         return
-    data = build_index()
+    data = build_index(region_label, region_id, exact_label)
     raw = encoded(data)
-    outputs = {OUTPUT: raw, REPORT_OUTPUT: encoded(coverage_report(data, raw))}
+    outputs = {output: raw, report_output: encoded(coverage_report(data, raw, output))}
     for path, value in outputs.items():
         if args.check:
             if not path.exists() or path.read_bytes() != value:

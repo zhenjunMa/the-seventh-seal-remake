@@ -77,7 +77,8 @@ export function equipmentRows(world, attributes, itemData, roleId) {
       const mask = definition.allowed_role_mask_raw_13e;
       need(mask === 0 || (mask & (1 << (Number(roleId)-1))) !== 0, '角色不能装备此物品');
       return {role_id:roleId, item_id:row.id, source_raw_hex:row.source_raw_hex,
-        effective_raw_hex:configuredEquipmentHex(row.source_raw_hex,definition),slot_id:row.slot_id};
+        effective_raw_hex:configuredEquipmentHex(row.source_raw_hex,definition),slot_id:row.slot_id,
+        group_index:definition.group_index,entry_index:0};
     });
   }
   return retained.map(row=>({...copy(row),effective_raw_hex:configuredEquipmentHex(row.source_raw_hex,itemData?.definitions[String(row.item_id)])}));

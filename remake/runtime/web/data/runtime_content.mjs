@@ -276,7 +276,9 @@ export const definition = {
     "m17028",
     "m17010-2",
     "m17030-1",
-    "m17010-3"
+    "m17010-3",
+    "m70010-1",
+    "m70030-1"
   ],
   "maps": {
     "M01050": {
@@ -385,9 +387,113 @@ export const definition = {
     },
     "M70010": {
       "export": {
-        "assets": "existing",
+        "assets": "existing"
+      },
+      "npcs": [
+        10,
+        11,
+        12,
+        13,
+        14
+      ],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 10,
+          "handler": "keyed-chest"
+        }
+      ],
+      "setup": true,
+      "triggers": [
+        4
+      ]
+    },
+    "M70020": {
+      "export": {
         "story": false
-      }
+      },
+      "objects": [
+        {
+          "index": 3,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 4,
+          "handler": "keyed-chest"
+        }
+      ],
+      "npcs": []
+    },
+    "M70030": {
+      "npcs": [
+        10
+      ],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 9,
+          "handler": "keyed-chest"
+        }
+      ],
+      "setup": true
+    },
+    "M70040": {
+      "export": {
+        "story": false
+      },
+      "objects": [
+        {
+          "index": 9,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 10,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 11,
+          "handler": "keyed-chest"
+        }
+      ],
+      "npcs": []
+    },
+    "M70050": {
+      "export": {
+        "story": false
+      },
+      "objects": [
+        {
+          "index": 6,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ],
+      "npcs": []
+    },
+    "M70060": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 9,
+          "handler": "keyed-chest"
+        }
+      ],
+      "triggers": [
+        2
+      ]
     },
     "M72061": {
       "export": {
@@ -947,6 +1053,16 @@ export default {
       "path": "Animate/m17010-3.anm",
       "sha256": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
       "bytes": 5025
+    },
+    "m70010-1": {
+      "path": "Animate/m70010-1.anm",
+      "sha256": "7f4c67d00ce8d1b6b3ce5b280c52074de4abcd82b932300849e756133a8f4e7c",
+      "bytes": 881
+    },
+    "m70030-1": {
+      "path": "Animate/m70030-1.anm",
+      "sha256": "a5a6e002bea13b92735b33a5bf7d866cda47020776bbab2f4f6cfc539ca11a3f",
+      "bytes": 437
     }
   },
   "maps": {
@@ -1101,11 +1217,129 @@ export default {
     },
     "M70010": {
       "path": "data/maps/m70010.json",
-      "triggers": [],
-      "objects": [],
+      "triggers": [
+        4
+      ],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 10,
+          "handler": "keyed-chest"
+        }
+      ],
       "rests": [],
       "routes": [],
+      "setup_record": 11,
+      "npcs": [
+        10,
+        11,
+        12,
+        13,
+        14
+      ],
       "flag_index": 114
+    },
+    "M70020": {
+      "path": "data/maps/m70020.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 3,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 4,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 115
+    },
+    "M70030": {
+      "path": "data/maps/m70030.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 9,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "setup_record": 1,
+      "npcs": [
+        10
+      ],
+      "flag_index": 111
+    },
+    "M70040": {
+      "path": "data/maps/m70040.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 9,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 10,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 11,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 401
+    },
+    "M70050": {
+      "path": "data/maps/m70050.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 6,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 402
+    },
+    "M70060": {
+      "path": "data/maps/m70060.json",
+      "triggers": [
+        2
+      ],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 9,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 403
     },
     "M72061": {
       "path": "data/maps/m72061.json",

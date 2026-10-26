@@ -175,7 +175,9 @@ test('pre-socket v2 migration enables only source-confirmed plain crystals and p
   const before=copy(legacy),next=upgradeItemConfiguration(data,legacy);
   assert.deepEqual(legacy,before);assert.equal(next.entries['156'].parameters.enabled,true);assert.equal(next.entries['156'].parameters.drop_rate,77);
   assert.deepEqual(next.entries['4'].parameters.attributes.speed_flat,{minimum:40,maximum_exclusive:40});
-  assert.equal(Object.values(data.definitions).filter(isSupportedCrystalDefinition).length,21);
+  assert.equal(Object.values(data.definitions).filter(row=>!row.equipment_passive&&isSupportedCrystalDefinition(row)).length,21);
+  assert.equal(legacy.entries['170'].catalog.behavior.kind,'status-immunity-crystal');
+  assert.equal(next.entries['170'].parameters.enabled,true);assert.ok(next.entries['170'].parameters.attributes);
   for(const [id,definition]of Object.entries(data.definitions))if(definition.category==='crystal'&&!isSupportedCrystalDefinition(definition))assert.equal(next.entries[id].parameters.enabled,false);
   assert.deepEqual(upgradeItemConfiguration(data,next),next);const forged=copy(legacy);forged.entries['156'].catalog.description='changed';assert.throws(()=>upgradeItemConfiguration(data,forged),/来源/);
 });

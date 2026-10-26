@@ -6,6 +6,9 @@ import {createHash} from 'node:crypto';
 import {WorldStore,encodeSave,decodeSave} from '../web/core/world.mjs';
 import {EventRunner,validateProgram} from '../web/core/events.mjs';
 import {MovementMap} from '../web/core/movement.mjs';
+import {nativeMapMovement} from '../web/core/map_locomotion.mjs';
+import {chapterRouteExits} from '../web/core/map_connections.mjs';
+import {runtimeContent,storyBindings} from '../web/core/content_registry.mjs';
 
 const runtime=new URL('../',import.meta.url),root=new URL('../../../',import.meta.url);
 const read=async path=>JSON.parse(await readFile(new URL(path,runtime),'utf8'));
@@ -54,11 +57,21 @@ test('real detective source bytes, first/repeat state, map round trip and save r
   checks.push({name:'source-backed-detective-replay',passed:true,first:[19,20,21,22,23,24,25],repeat:[26],flag_index:3,mask:4,unknown_branches_rejected:[83,65,28]});
 });
 test('real map descriptors, entry markers and runtime coverage gates',async()=>{
+  const [story,resources]=await Promise.all(['chapter_story','chapter_map_resources'].map(name=>read(`web/data/${name}.json`)));
+  const blockedNativeLandings=[];let physicalExits=0,registeredTriggers=0;
+  for(const id of ['M01010','M01030'])assert.ok(catalog.maps.some(map=>map.id===id),`${id} original slice retained`);
   for(const item of catalog.maps){
     const scene=await read('web/'+item.path),bytes=await readFile(new URL(scene.source.path,root));
     assert.equal(hash(bytes),scene.source.sha256);
-    const readyCells=new Set(scene.exits.flatMap(e=>e.cells.map(c=>`${c.x},${c.y}`)));
-    const movement=new MovementMap({...scene.movement,triggers:scene.movement.triggers.map(t=>({...t,path_gate:!readyCells.has(`${t.x},${t.y}`)}))});
+    // The formal map controller overlays current source physical exits and
+    // registered story triggers on maps retained by legacy asset producers.
+    const extraExits=[...(resources.exits_by_map[scene.id]??[]),...chapterRouteExits(scene.id,story,resources,runtimeContent)];
+    const exits=[...(scene.exits??[]).filter(exit=>!extraExits.some(extra=>extra.id===exit.id)),...extraExits];
+    const triggers=(resources.trigger_regions[scene.id]??[]).filter(row=>storyBindings(scene.id).triggers.includes(row.id));
+    const readyCells=new Set([...exits.filter(exit=>exit.state==='ready').flatMap(e=>e.cells.map(c=>`${c.x},${c.y}`)),
+      ...triggers.flatMap(trigger=>trigger.cells.map(c=>`${c.x},${c.y}`))]);
+    const nativeMovement=nativeMapMovement(scene.movement,story.maps[scene.id]);
+    const movement=new MovementMap({...nativeMovement,triggers:nativeMovement.triggers.map(t=>({...t,path_gate:!readyCells.has(`${t.x},${t.y}`)}))});
     const recordBytes=bytes.readUInt32LE(0x18)===1?0x42:0x2b;
     const checkExitCells=exit=>{
       assert.ok(exit.cells.some(cell=>!movement.cell(cell.x,cell.y).blocked),`${scene.id} exit${exit.id} has a usable source cell`);
@@ -68,7 +81,7 @@ test('real map descriptors, entry markers and runtime coverage gates',async()=>{
         if(hit.blocked)assert.equal(hit.reason,'terrain');
       }
     };
-    for(const exit of scene.exits){
+    for(const exit of exits){
       if(exit.kind==='world-map-event'){
         const q=exit.source.offset;assert.equal(bytes[q],2);assert.equal(bytes.readUInt32LE(q+0x26),exit.record_id);
         checkExitCells(exit);continue;
@@ -83,11 +96,28 @@ test('real map descriptors, entry markers and runtime coverage gates',async()=>{
       const targetBytes=await readFile(new URL(target.source.path,root));
       const cell=exit.entry.cell_y*target.movement.width+exit.entry.cell_x;
       assert.equal(targetBytes[0x172+cell*64+0x21],exit.source.target_entry_marker);
-      assert.equal(new MovementMap(target.movement).at(exit.entry.x,exit.entry.y).blocked,false);
+      const targetMovement=new MovementMap(nativeMapMovement(target.movement,story.maps[exit.target_map]));
+      const terrain=targetBytes[0x172+cell*64+0x20];
+      assert.equal(target.movement.terrain_rows[exit.entry.cell_y][exit.entry.cell_x],String(terrain));
+      assert.equal(targetMovement.at(exit.entry.x,exit.entry.y).blocked,terrain===1);
+      assert.equal(targetMovement.validEntry(exit.entry.x,exit.entry.y),true);
+      if(terrain===1)blockedNativeLandings.push({from:scene.id,to:exit.target_map,marker:exit.source.target_entry_marker,x:exit.entry.x,y:exit.entry.y});
+      physicalExits++;
+    }
+    for(const trigger of triggers){
+      const sourceDescriptor=story.maps[scene.id].descriptors.find(row=>row.id===trigger.id);assert.ok(sourceDescriptor);
+      assert.equal(sourceDescriptor.state_raw,2);assert.ok(runtimeContent.maps[scene.id].triggers.includes(trigger.id));
+      for(const cell of trigger.cells){
+        assert.equal(bytes.readUInt32LE(0x172+(cell.y*scene.movement.width+cell.x)*64+0x38),trigger.id);
+        assert.equal(movement.cell(cell.x,cell.y).blocked,scene.movement.terrain_rows[cell.y][cell.x]==='1');
+      }
+      registeredTriggers++;
     }
     for(const t of scene.movement.triggers){if(!readyCells.has(`${t.x},${t.y}`))assert.equal(movement.cell(t.x,t.y).blocked,true);}
   }
-  checks.push({name:'source-backed-map-entry-and-coverage-guard',passed:true,maps:catalog.maps.map(m=>m.id),ready_exits:catalog.scope.ready_exits});
+  assert.deepEqual(blockedNativeLandings,[{from:'M70020',to:'M70010',marker:2,x:288,y:288}]);
+  checks.push({name:'source-backed-map-entry-and-coverage-guard',passed:true,maps:catalog.maps.map(m=>m.id),ready_exits:catalog.scope.ready_exits,
+    physical_exits_checked:physicalExits,registered_story_triggers_checked:registeredTriggers,blocked_native_landings:blockedNativeLandings});
 });
 test.after(async()=>{
   await writeFile(new URL('evidence/current_slice_verification.json',runtime),JSON.stringify({schema:'seventh-seal-source-slice-verification',version:1,checks,

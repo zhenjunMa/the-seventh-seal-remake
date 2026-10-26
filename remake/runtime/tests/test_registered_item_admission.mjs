@@ -75,7 +75,9 @@ test('all actual Fire Valley mutation5 grants have a recovered enabled equipment
 
 test('recovered status-cure migrates exact old source-only v2 rows but preserves sparse disabled and numeric edits',()=>{
   const former=structuredClone(items),previous=former.catalog.item_capability_admission.previous_definitions;
-  for(const [id,row]of Object.entries(previous))Object.assign(former.definitions[id],structuredClone(row));
+  for(const [id,row]of Object.entries(previous)){
+    Object.assign(former.definitions[id],structuredClone(row));delete former.definitions[id].equipment_passive;
+  }
   delete former.catalog.item_capability_admission;
   const old=deriveItemConfiguration(former);old.entries['272'].parameters.drop_rate=73;
   const next=upgradeItemConfiguration(items,old);assert.equal(next.entries['272'].parameters.enabled,true);assert.equal(next.entries['272'].parameters.drop_rate,73);

@@ -64,6 +64,7 @@ function slots(actor,data){
   flags(actor);
   let templates=templateCache.get(data);
   if(!templates){templates=Object.values(data.skills).map(skill=>rawView(skill.effect_raw_hex));templateCache.set(data,templates);}
+  const passiveTemplates=(actor.equipment_passives??[]).map(passive=>passiveBlock(passive));
   const empty=rawView(ZERO);
   return actor.native_status_slots.map((record,index)=>{
     // This read-only local view is shared by empty slots. Writers replace a
@@ -72,7 +73,7 @@ function slots(actor,data){
     const b=rawView(record?.raw_hex);
     if(b.raw[1]===0)need(record.raw_hex===ZERO||(b.view.getInt32(2,true)===-1&&b.raw.every((value,at)=>at>=2&&at<=5||value===0)),
       'Empty effect slot contains unsupported residual bytes');
-    else need(templates.some(template=>b.raw[1]===template.raw[1]&&b.raw[0xb]===template.raw[0xb]&&templateEquals(b.raw,template.raw)
+    else need([...templates,...passiveTemplates].some(template=>b.raw[1]===template.raw[1]&&b.raw[0xb]===template.raw[0xb]&&templateEquals(b.raw,template.raw)
       &&(template.view.getInt32(2,true)>0?b.view.getInt32(2,true)>0&&b.view.getInt32(2,true)<=template.view.getInt32(2,true):b.view.getInt32(2,true)<=template.view.getInt32(2,true))),
       `Unsupported native effect at slot ${index}; source id/mode${b.raw[0xb]} is not admitted`);
     return b;
@@ -112,7 +113,27 @@ export function clearNativeStatuses(actor,data,content=runtimeContent){
   validateForestStatusData(data,content);need(actor&&typeof actor==='object','Native actor missing');
   const out=clone(actor);out.status_by_address??={};out.native_status_slots=Array.from({length:100},()=>({raw_hex:ZERO}));resetAggregate(out,data);return out;
 }
-export function initializeNativeStatuses(actor,data,content=runtimeContent){return clearNativeStatuses(actor,data,content);}
+function passiveBlock(passive){
+  const block=rawView(passive?.effect_raw_hex);
+  need(passive.kind==='status-immunity'&&passive.mode_raw===6&&passive.effect_id_raw===block.raw[1]
+    &&block.raw[1]!==0&&block.raw[0xb]===6&&block.raw[0x10]<=1&&block.view.getInt32(2,true)===-1
+    &&block.view.getUint32(0xb8,true)===0&&(block.raw[0x10]===1||!block.raw.slice(0x23,0xb8).some(Boolean)),
+    'Native equipment passive source is not implemented');
+  return block;
+}
+export function initializeNativeStatuses(actor,data,content=runtimeContent,rng){
+  let out=clearNativeStatuses(actor,data,content);
+  const trace=[];
+  for(const passive of out.equipment_passives??[]){
+    const block=passiveBlock(passive),result=applyNativeBlock({actor:out,data,rng,
+      records:slots(out,data),block,id:block.raw[1],mode:6,trace:[],remove_on_contact:false});
+    out=result.actor;trace.push({kind:'equipment-passive',item_id:passive.item_id,
+      group_index:passive.group_index,entry_index:passive.entry_index,reason:result.reason,
+      native_return:result.native_return,trace:result.trace});
+  }
+  if(trace.length)out.equipment_passive_initialization=trace;
+  return out;
+}
 /** 508BB0 mode1: remove only the first matching source ID, then 508300.
  * Item contacts call this directly, without 50FA00's preceding 508A90 roll.
  * Removal needs no effect animation/tick metadata for the removed ID: all
@@ -136,14 +157,17 @@ export function removeNativeStatus({actor,effect_raw_hex,data,content=runtimeCon
 /** 50FA00 calls 508A90 before 508BB0, including dormant id0 contacts. */
 export function applyNativeSkillStatus({actor,skill,data,rng,now,content=runtimeContent}){
   validateForestStatusData(data,content);integer(now,'native elapsed time');
-  const records=slots(actor,data),out=clone(actor),trace=[];let cancel_command=false;
   const {block,id,mode}=validateNativeSkillStatus(skill,data);
+  return applyNativeBlock({actor,data,rng,records:slots(actor,data),block,id,mode,trace:[],remove_on_contact:true});
+}
+function applyNativeBlock({actor,data,rng,records,block,id,mode,trace,remove_on_contact}){
+  const out=clone(actor);let cancel_command=false;
   const result=(native_return,reason,applied=false)=>({actor:out,native_return,reason,applied,cancel_command,trace,evidence:data.evidence['0x508bb0']});
   const next=typeof rng==='function'?rng:rng?.next?.bind(rng);
   const rollFor=label=>{need(next,'Explicit native RNG provider required');const raw=integer(next(),'native RNG output',0,32767),result=raw%100;
     trace.push({kind:'rng',label,raw,modulus:100,result});return result;};
   const remove=index=>{records[index]=rawView(ZERO);out.native_status_slots[index]={raw_hex:ZERO};cancel_command=recalculate(out,records,data)||cancel_command;};
-  for(let index=0;index<records.length;index++){
+  if(remove_on_contact)for(let index=0;index<records.length;index++){
     const existing=records[index];if(!existing.raw[1]||existing.raw[0xb]!==2)continue;
     const roll=rollFor('status-removal-chance'),chance=existing.raw[0x12];
     if(chance===0||roll<=chance){remove(index);trace.push({kind:'status-removed-on-contact',slot:index});}

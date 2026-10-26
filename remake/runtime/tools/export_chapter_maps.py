@@ -164,8 +164,8 @@ def exit_record(origin, ident, destination, bg, detail):
         raise DGPError("Chapter entry sort code not covered")
     cell = placement[0]
     b = bg[destination].data
-    if b[cell["offset"] + 0x20] != 0 or u32(b, cell["offset"] + 0x38) != 0:
-        raise DGPError("Exact chapter entry is terrain/transition blocked")
+    # 4A5110 places the party on the exact marker without a terrain test.
+    # Keep source terrain intact, including markers on blocked cells.
     return dict(id=ident, state="ready", cells=descriptor["cells"], target_map=destination,
                 entry=dict(x=cell["x"] * 16, y=cell["y"] * 16, direction=direction,
                            cell_x=cell["x"], cell_y=cell["y"],
@@ -176,6 +176,8 @@ def exit_record(origin, ident, destination, bg, detail):
                   compact_field_expansion_evidence=descriptor["field_expansion_evidence"],
                   target_path=detail[destination]["path"], target_sha256=detail[destination]["sha256"],
                   target_entry_marker=marker, entry_sort_code=code,
+                  entry_terrain_raw=b[cell["offset"] + 0x20],
+                  entry_trigger_raw=u32(b, cell["offset"] + 0x38),
                   entry_scan_cells=[dict(x=c["x"], y=c["y"], offset=c["offset"]) for c in scanned],
                   entry_sorted_cells=[dict(x=c["x"], y=c["y"]) for c in placement], entry_sort=order,
                   default_direction_assembly="0x4A5144: MOV byte ptr [EBP-0x28],0x2",
@@ -237,6 +239,12 @@ def export():
     for ident in NEW_MAPS:
         sources.update(export_maps.background_names(bg[ident]))
         sources.update(export_maps.source_path(p) for p in MapObjects(ROOT / detail[ident]["path"]).resource_paths(ROOT).values())
+    for ident in IDS:
+        table = MapObjects(ROOT / detail[ident]["path"])
+        paths = table.resource_paths(ROOT)
+        sources.update(export_maps.source_path(paths[f'{obj["resource_identifier_raw"]:03}.dgp'])
+                       for obj in table.objects if bytes.fromhex(obj['raw_hex'])[0xCF] >= 2
+                       or u32(bytes.fromhex(obj['raw_hex']), 0xF6))
     before = {name: export_maps.sha(ROOT / name) for name in sorted(sources)}
     if before["GAME.exe"] != export_maps.GAME_SHA:
         raise DGPError("Chapter executable differs from retained native evidence")
@@ -301,7 +309,7 @@ def export():
                 source=dict(path=detail[ident]["path"], sha256=detail[ident]["sha256"],
                             offset=obj["offset"], bytes=0x112, raw_hex=obj["raw_hex"]),
                 status="Raw interactive-object candidates; native selection/TLK/state timing must be corroborated"))
-        if ident in NEW_MAPS:
+        if ident in NEW_MAPS or interactive_objects[ident]:
             object_animations[ident] = []
             for obj in interactive_objects[ident]:
                 name = export_maps.source_path(object_paths[f"{obj['resource_id']}.dgp"])

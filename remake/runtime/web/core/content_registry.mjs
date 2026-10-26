@@ -45,7 +45,7 @@ export function validateContentRegistration(content){
     for(const key of ['triggers','objects','rests','routes'])need(Array.isArray(row[key]),`地图 ${id} 缺少 ${key}`);
     for(const [rows,key]of [[row.triggers.map(id=>({id})),'id'],[row.objects,'index'],[row.rests,'descriptor_id'],[row.routes,'record_id']])
       need(rows.every(r=>Number.isInteger(r[key])&&r[key]>=0)&&new Set(rows.map(r=>r[key])).size===rows.length,`地图 ${id} 入口重复或无效`);
-    need(row.objects.every(r=>r.handler==='stationary-chest'),'物件处理器尚未实现');
+    need(row.objects.every(r=>['stationary-chest','keyed-chest'].includes(r.handler)),'物件处理器尚未实现');
     need(row.rests.every(r=>Number.isInteger(r.record_id)&&r.record_id>0&&Array.isArray(r.restore_records)&&r.restore_records.length>0&&r.restore_records.every(n=>Number.isInteger(n)&&n>0)&&Array.isArray(r.choices)&&r.choices.length>=1&&r.choices.length<=3&&r.choices.every(c=>Number.isInteger(c.index)&&c.index>=0&&c.index<3&&typeof c.text==='string'&&Number.isInteger(c.record_id)&&c.record_id>=0)),'休息入口无效');
     if(row.entry_record!==undefined)need(Number.isInteger(row.entry_record)&&row.entry_record>0,'进入剧情记录无效');
     if(row.setup_record!==undefined)need(Number.isInteger(row.setup_record)&&row.setup_record>0,'加载布置记录无效');

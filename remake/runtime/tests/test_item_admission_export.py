@@ -98,6 +98,26 @@ class ItemAdmissionExport(unittest.TestCase):
             change(value)
             self.assertFalse(producer.plain_equipment_supported(value))
 
+    def test_mode6_capability_requires_registered_source_and_preserves_exact_blocks(self):
+        definitions = self.source_definitions()
+        no_sources = {'sources': {}}
+        capabilities = producer.admit_registered_status_cures(definitions, no_sources)
+        producer.admit_registered_equipment_passives(definitions, no_sources, capabilities)
+        self.assertEqual(capabilities['passive_item_ids'], [])
+        for ident in (127, 170):
+            self.assertTrue(producer.equipment_immunity_supported(definitions[str(ident)]))
+            self.assertFalse(definitions[str(ident)]['availability']['enabled'])
+        admission = producer.admit_registered_equipment(definitions, self.seed, self.story, self.registration)
+        capabilities = producer.admit_registered_status_cures(definitions, admission)
+        producer.admit_registered_equipment_passives(definitions, admission, capabilities)
+        self.assertEqual(capabilities['passive_item_ids'], [127, 170])
+        self.assertEqual(capabilities['passive_sources']['127'][0]['kind'], 'registered-map-chest-grant')
+        self.assertEqual(capabilities['passive_sources']['170'][0]['map_id'], 'M70030')
+        self.assertEqual(capabilities['passive_sources']['170'][0]['record_id'], 8)
+        for ident in (127, 170):
+            row = definitions[str(ident)]
+            self.assertEqual(row['equipment_passive']['effect_raw_hex'], bytes.fromhex(row['raw_hex'])[0x2a8:0x36e].hex())
+
     def test_only_registered_reachable_gifts_admit_gear_not_other_npcs_in_the_same_tlk(self):
         registration = copy.deepcopy(self.registration)
         registration['maps']['M17025']['npcs'] = []
@@ -138,7 +158,8 @@ class ItemAdmissionExport(unittest.TestCase):
                 shutil.copyfile(RUNTIME / 'web/data' / name, path)
             shutil.copyfile(self.story_root / 'web/data/chapter_story.json', target / 'web/data/chapter_story.json')
             for name in ['chapter_items_native.json', 'forest_scheduler_native_20261011.json',
-                         'forest_rewards_native_20261011.json', 'fire_valley_20261024/stage12_status_apply.json']:
+                         'forest_rewards_native_20261011.json', 'fire_valley_20261024/stage12_status_apply.json',
+                         'white_forest_20261026/reward_passives/native_bundle.json']:
                 path = target / 'evidence' / name
                 path.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copyfile(RUNTIME / 'evidence' / name, path)
@@ -152,14 +173,16 @@ class ItemAdmissionExport(unittest.TestCase):
             output = target / 'web/data/items.json'
             exported = json.loads(output.read_text('utf-8'))
             self.assertEqual(exported['catalog']['equipment_admission']['promoted_item_ids'], [39, 40, 41, 42, 50])
-            self.assertEqual(exported['catalog']['default_enabled_item_ids'], [1, 4, 8, 10, 11, 12, 39, 40, 41, 42, 50, 51, 61, 272])
-            self.assertEqual(exported['catalog']['item_capability_admission']['promoted_item_ids'], [272])
+            self.assertEqual(exported['catalog']['default_enabled_item_ids'], [1, 4, 8, 10, 11, 12, 39, 40, 41, 42, 50, 51, 61, 127, 170, 272])
+            self.assertEqual(exported['catalog']['item_capability_admission']['promoted_item_ids'], [127, 170, 272])
+            self.assertEqual(exported['catalog']['item_capability_admission']['passive_item_ids'], [127, 170])
             self.assertEqual(exported['definitions']['272']['behavior']['kind'], 'status-cure')
             environment = dict(os.environ, SEVENTH_SEAL_ITEM_TEST_CATALOG=str(output))
             result = subprocess.run(['node', '--import', './remake/runtime/tests/preserve_history.mjs', '--test',
                 'remake/runtime/tests/test_registered_item_admission.mjs',
                 'remake/runtime/tests/test_item_status_cure.mjs',
-                'remake/runtime/tests/test_item_status_cure_battle.mjs'], cwd=ROOT, env=environment,
+                'remake/runtime/tests/test_item_status_cure_battle.mjs',
+                'remake/runtime/tests/test_equipment_passives.mjs'], cwd=ROOT, env=environment,
                 capture_output=True, text=True, encoding='utf-8')
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         self.assertEqual({path: path.read_bytes() for path in live_paths}, before)
@@ -207,7 +230,7 @@ class ItemAdmissionExport(unittest.TestCase):
             self.assertEqual(output.read_bytes(), expected)
             exported = json.loads(expected)
             self.assertEqual(exported['catalog']['equipment_admission']['promoted_item_ids'], [39, 40, 41, 42, 50])
-            self.assertEqual(exported['catalog']['item_capability_admission']['promoted_item_ids'], [272])
+            self.assertEqual(exported['catalog']['item_capability_admission']['promoted_item_ids'], [127, 170, 272])
         self.assertEqual({path: path.read_bytes() for path in live}, before)
 
 

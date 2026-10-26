@@ -1,5 +1,5 @@
 第七封印重制 · 本地素材、证据与历史资料
-更新：2026-10-25；路径以仓库根目录为基准。
+更新：2026-10-26；路径以仓库根目录为基准。
 本文件随代码维护，说明资料用途、准备方式和缺失时的处理。实际媒体、来源台账、观察副本和历史归档不随仓库提供。
 
 运行素材
@@ -15,6 +15,8 @@ save_analysis_20261010中四个共享解析模块随代码提供，但原存档�
 remake/runtime/tools/build_runtime.py目前用于已有基础内容上的增量生产。仅有原版文件还不足以保证完成首次构建；环境依赖、命令和缺失处理见remake/runtime/tools/README.txt，打通任务见remake/assessment/validation_design.txt。
 
 证据与构建记录
+外层白木森林资料在remake/runtime/evidence/white_forest_20261026：source_index.json为六图全来源扫描，native_bundle.json／entry_native_bundle.json为原物件更新与入口静态证据，chest_native_bundle.json／chest_source.json为13箱钥匙及奖励来源。prepare_phase_fixtures.mjs、phase_fixture_manifest.json及phase_fixtures目录保存11份开发交接档与输入SHA，复用时验证原字节，不改saved_at。原版GAME.exe未由这些静态提取／开发档执行；实际页面观察须另绑当次指纹。该目录整体被Git忽略，交接时连同原材料、脚本、报告与SHA保存。
+chest_validation.json为13箱的生产动画控制器／事务回放，map_source_validation.json为独立原DAT／DGP逐像素核对，均不冒称页面实玩。chest_browser_fixture_manifest.json、prepare_chest_browser_fixtures.mjs与chest_browser_fixtures保存26份有效／缺钥匙的页面导入档；其中钥匙是明确声明的开发准备，全游戏TLK检索的外区原授予者另保留。reward_passives/native_bundle.json与findings.json保存127／170的原装备入战状态初始化、x86限定回放与规则验证；items构建声明该原生证据输入，不据道具名称推测效果。
 remake/runtime/evidence保存来源SHA、像素核对、原生观察、导出台账、构建日志和浏览器记录；该目录整体被Git排除。
 新导出记录由remake/runtime/tools/build_runtime.py写入remake/runtime/evidence/builds/<UTC时间-唯一ID>/；成功步骤及generated-evidence可用于核对当次产物，具体来源选择仍以检查器代码为准。
 火之谷来源索引由fire-valley-index目标从全游戏DAT／TLK／ANM重建，输出data/library/fire_valley.json及evidence/fire_valley_20261024/source_index.json。20261024目录保存最初索引、阶段布局／物品／返回传送的浏览器定向记录；20261025目录保存后续ANM镜头／媒体／队伍原生证据。日期目录内资料以各自记录范围为准，不能合并宣称完整区域实玩。
