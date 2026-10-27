@@ -185,6 +185,8 @@ native_skill_loading在不可变CHR来源上派生4FED00加载后的技能code�
 
 BattleView消费时间线和只读表现数据，不修改HP／MP或抽战斗随机。场景、角色和效果共用640×480逻辑坐标。
 
+`BattleController.presentationSnapshot`供逐帧绘制及HUD通知使用，不读取或复制行动历史。实际接触／用药时增量维护`impact_count`和`last_impact`；计数沿用已发生接触的行动条数，多段接触只计该行动一次，最近项沿历史追加顺序选择，旧异步载体的迟到接触不覆盖后续行动。完整历史仍由`snapshot()`提供给诊断、导出和战斗归档，不改变世界存档或奖励去重记录。
+
 战斗头顶光标使用同帧人物绘制坐标（含反击通道位移和native_z_raw），Y为人物Y－DGP extra_header+0x0C高度－64－光标自身锚点Y；高度随资源编号导出，并同步battle_packs内嵌清单，不按队伍索引或姓名配置。原调用分支的保留指令见`tests/fixtures/battle_cursor_native.json`。
 
 正式BattleView注入`phaser/rendering/battle_surface`提供的绘制接口。已有源图集裁切、平移、缩放、加色和文本命令转为复用的Phaser Sprite／Graphics／Text；不将整场旧Canvas逐帧上传为背景。BattleResources原SHA、尺寸、分片和资源租约检查继续生效。

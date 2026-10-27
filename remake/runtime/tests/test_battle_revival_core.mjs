@@ -98,4 +98,6 @@ test('Core revival preserves type14 lookup before configured recovery RNG and re
   assert.deepEqual(f.battle.state.history[0].contacts[0].result.trace.filter(row=>row.kind==='rng').map(row=>row.raw),[7,5]);
   assert.deepEqual(f.logs.find(event=>event.type==='battle-source-completed'&&event.actor_id==='001').descriptor.trace.filter(row=>row.kind==='rng').map(row=>[row.label,row.raw]),[['reaction-id-0',11]]);
   assert.deepEqual(values,[]);
+  assert.equal(f.battle.state.history[0].contacts.length,2);assert.equal(f.battle.presentationSnapshot().impact_count,1);
+  assert.equal(f.battle.presentationSnapshot().last_impact.actor_id,'001');
 });

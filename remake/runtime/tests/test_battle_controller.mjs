@@ -6,9 +6,13 @@ import {createServicesController} from '../web/controllers/services.mjs';
 test('battle start notifications cannot unfreeze the loading phase before entry animation completes',()=>{
   const elements=new Map(),$=id=>{if(!elements.has(id))elements.set(id,{dataset:{}});return elements.get(id);};
   const state={battleEntryPending:true,scenes:{phase:'battle-loading',setPhase(p){this.phase=p;}},world:{value:{source:{kind:'native-new-game'}}}};
-  const controller=createBattleController({state,actions:{},$,canvas:{}}),snapshot={phase:'charging',round:1,history:[]};
+  const controller=createBattleController({state,actions:{},$,canvas:{}}),snapshot={phase:'charging',round:1,impact_count:0,last_impact:null};
   controller.updateBattle(snapshot);assert.equal(state.scenes.phase,'battle-loading');
   state.battleEntryPending=false;controller.updateBattle(snapshot);assert.equal(state.scenes.phase,'battle-charging');
+  assert.equal($('battleCommands').dataset.impactCount,0);assert.equal($('battleCommands').dataset.impactFrame,'');
+  controller.updateBattle({...snapshot,impact_count:3,last_impact:{actor_id:'001',source_frame:17}});
+  assert.equal($('battleCommands').dataset.impactCount,3);assert.equal($('battleCommands').dataset.impactFrame,17);
+  assert.equal($('battleCommands').dataset.impactActor,'001');
 });
 
 test('battle preparation retains the map without either loading overlay, blocks reentry and rolls back on failure',async()=>{

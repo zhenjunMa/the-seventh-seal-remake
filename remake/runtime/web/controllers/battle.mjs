@@ -27,10 +27,10 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
     if(!state.battleEntryPending&&state.scenes.phase!==phase)state.scenes.setPhase(phase);
     const node=$('battleCommands');node.dataset.phase=snapshot.phase;node.dataset.round=snapshot.round;
     node.dataset.mode=state.skillTestSession?'skill-test':'battle';
-    const impacted=snapshot.history.findLast(entry=>entry.impact);
-    node.dataset.impactFrame=impacted?.presentation?.source_frame??'';
+    const impacted=snapshot.last_impact;
+    node.dataset.impactFrame=impacted?.source_frame??'';
     node.dataset.impactActor=impacted?.actor_id??'';
-    node.dataset.impactCount=snapshot.history.filter(entry=>entry.impact).length;
+    node.dataset.impactCount=snapshot.impact_count;
     $('battleMessage').textContent=snapshot.phase==='victory'?'战斗胜利':snapshot.phase==='defeat'?'队伍已经倒下':snapshot.phase==='escaped'?'已经逃离战斗':snapshot.phase==='interrupted'?snapshot.error:snapshot.phase==='action'?'正在行动':snapshot.phase==='command'?'选择行动':'行动槽充能中';
     state.battleMenu?.update(snapshot);
     if(state.scriptedBattleSession){
