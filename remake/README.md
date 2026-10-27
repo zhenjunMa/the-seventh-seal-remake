@@ -14,7 +14,7 @@
 | [构建、导出与验证工具](runtime/tools/README.md) | 构建、导出和验证命令 |
 | [当前开发计划](assessment/validation_design.md) | 当前范围、未完成事项和完成标准 |
 | [界面和动态表现验收方法](assessment/menu_alignment_workflow.md) | 通用检查矩阵与证据要求 |
-| [全区域重制工作方法](assessment/region_remake_workflow.md) | 全区域／跨阶段接入、来源陷阱与交接经验 |
+| [全区域重制工作方法](assessment/region_remake_workflow.md) | 区域全量盘点、按剧情阶段实现、连续主线验收与来源经验 |
 | [实验目录说明](prototype/README.md) | 实验入口与正式模块复用 |
 | [本地素材、证据与历史资料](local_materials.md) | 本地资料的准备、交接与缺失处理 |
 | [目录维护约定](AGENTS.md) | 工作目录与维护规则 |
@@ -23,7 +23,7 @@
 
 - **运行游戏**：从[项目说明](../README.md)确认素材前置条件，再看[运行与操作](runtime/README.md)。
 - **旧环境升级**：先看[旧环境升级步骤](runtime/tools/README.md#旧环境升级)，再按[本地资料说明](local_materials.md)准备媒体与来源证据。
-- **扩充地图／剧情**：先看[区域工作方法](assessment/region_remake_workflow.md)确定来源边界与阶段矩阵，按[剧情指南](runtime/story_guide.md)和[配置指南](runtime/config_guide.md)接入，再按[工具说明](runtime/tools/README.md)构建。
+- **扩充地图／剧情**：先看[区域工作方法](assessment/region_remake_workflow.md)全量盘点区域与外部依赖，在[开发计划](assessment/validation_design.md)选择承接连续主线的阶段和完整事件链，按[剧情指南](runtime/story_guide.md)和[配置指南](runtime/config_guide.md)接入，再按[工具说明](runtime/tools/README.md)构建；不要求先穷尽同一区域的所有后期内容。
 - **核对完成情况**：以[当前开发计划](assessment/validation_design.md)的范围、待办与验收标准为准。
 
 ## 维护分工
