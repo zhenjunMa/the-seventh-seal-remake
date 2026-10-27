@@ -3,7 +3,8 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
-import {BattleView} from '../web/battle_view.mjs';
+import {BattleView,selectBattleAssets} from '../web/battle_view.mjs';
+import {runtimeContent,runtimeContentDefinition,validateContentRegistration} from '../web/core/content_registry.mjs';
 import {readContentDefinition} from './resolve_content_definition.mjs';
 
 const runtime=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
@@ -12,7 +13,18 @@ const canonical=p=>'/'+p.replace(/^\/+/, '');
 const local=p=>path.join(web,p.replace(/^\//,''));
 const hash=b=>createHash('sha256').update(b).digest('hex');
 const manifests={},assets=new Map();
-const {content}=await readContentDefinition();
+const args=process.argv.slice(2),planning=args.includes('--plan');
+const option=name=>{const at=args.indexOf(name);if(at<0)return null;if(!args[at+1]||args[at+1].startsWith('--'))throw Error(`Missing ${name}`);return args[at+1];};
+const roleIds=option('--roles')?.split(','),stageId=option('--stage');
+if((roleIds||stageId)&&(!planning||!roleIds||!stageId))throw Error('--roles and --stage require --plan and must be supplied together');
+let content,packed;
+if(planning){
+  content=validateContentRegistration(runtimeContent);
+  if(JSON.stringify(JSON.parse(await fs.readFile(path.join(web,'data/runtime_content.json'))))!==JSON.stringify(runtimeContentDefinition))throw Error('Rebuild content registration before planning');
+  packed=JSON.parse(await fs.readFile(path.join(web,'data/battle_packs.json')));
+  if(roleIds&&(!content.stages[stageId]||!roleIds.length||new Set(roleIds).size!==roleIds.length||roleIds.some(id=>!content.roles[id])))throw Error('Unknown or duplicate battle roles / stage');
+}else ({content}=await readContentDefinition());
+let selection=null;
 async function jsonLoader(p,expected){
   const bytes=await fs.readFile(local(p)),sha256=hash(bytes);
   if(expected&&expected!==sha256)throw Error('Manifest fingerprint mismatch: '+p);
@@ -21,7 +33,8 @@ async function jsonLoader(p,expected){
 function add(row){
   const previous=assets.get(row.path);
   if(previous&&(previous.sha256!==row.sha256||previous.width!==row.width||previous.height!==row.height))throw Error('Conflicting image: '+row.path);
-  assets.set(row.path,{...previous,...row});
+  if(previous?.group&&row.group&&previous.group!==row.group)throw Error('Conflicting packing group: '+row.path);
+  assets.set(row.path,{...previous,...row,owners:[...new Set([...(previous?.owners??[]),...(row.owners??[])])]});
 }
 for(const [metadataPath,itemMetadataPath,stageMetadataPath,lifecycleMetadataPath]of [
   ...Object.values(content.stages).map(stage=>['/data/party_battle_view.json','/data/item_presentation.json','/'+stage.path,'/data/battle_lifecycle.json']),
@@ -38,19 +51,32 @@ for(const [metadataPath,itemMetadataPath,stageMetadataPath,lifecycleMetadataPath
   await view.prepare();
   for(const role of view.meta.roles)for(const action of role.actions)add({...assets.get(action.sheet),group:'role-'+role.id,tile_width:role.frame_width,tile_height:role.frame_height});
   for(const effect of view.meta.effects)for(const sheet of effect.layer_order?effect.layer_order.map(layer=>effect[`${layer}_sheet`]):[effect.sheet])
-    add({...assets.get(sheet),group:'effects',tile_width:effect.frame_width,tile_height:effect.frame_height});
+    add({...assets.get(sheet),group:'effect-'+effect.id,tile_width:effect.frame_width,tile_height:effect.frame_height});
   for(const bank of [view.layers,...view.alternateLayers.values()])for(const pair of bank.frames)for(const layer of [pair.main,pair.intrinsic]){
     const p='/'+layer.path;add({...assets.get(p),group:'role-'+bank.role_id,tile_width:bank.frame_width,tile_height:bank.frame_height});
+  }
+  if(view.stageMeta)for(const asset of view.stageMeta.layers.flatMap(layer=>layer.frames.map(frame=>canonical(frame.path))))
+    add({...assets.get(asset),group:'stage-'+view.stageMeta.stage_id});
+  if(roleIds&&metadataPath==='/data/party_battle_view.json'&&view.stageMeta?.stage_id===stageId){
+    const paths=selectBattleAssets(view.assetDescriptors,roleIds.map(id=>({id}))).map(asset=>asset.path);
+    const allEffects=view.meta.effects.flatMap(effect=>effect.layer_order?effect.layer_order.map(layer=>effect[`${layer}_sheet`]):[effect.sheet]);
+    selection={role_ids:roleIds,stage_id:stageId,paths,legacy_paths:[...new Set([...paths,...allEffects])]};
   }
 }
 for(const [p,group]of [['/data/battle_ui.json','hud'],['/data/battle_result.json','result']]){
   const manifest=await jsonLoader(p),paths=new Set();
   for(const menu of manifest.menus??[])for(const image of menu.images)paths.add(image.image);
   for(const a of Object.values(manifest.assets))for(const f of a.frames)for(const image of [f.image,f.indexed_image,f.inverse_mask_image,f.render_image].filter(Boolean))paths.add(image);
-  for(const image of paths){const p=canonical(image),bytes=await fs.readFile(local(p));add({path:p,sha256:hash(bytes),width:bytes.readUInt32BE(16),height:bytes.readUInt32BE(20),group,trim:group!=='hud'});}
+  for(const image of paths){
+    const p=canonical(image);
+    const bytes=planning?null:await fs.readFile(local(p)),retained=packed?.images[p];
+    if(planning&&!retained)throw Error('Image absent from retained atlas: '+p);
+    add({path:p,sha256:retained?.sha256??hash(bytes),width:retained?.width??bytes.readUInt32BE(16),height:retained?.height??bytes.readUInt32BE(20),group,trim:group!=='hud'});
+  }
 }
 for(const row of assets.values()){
-  row.group??=row.path.includes('skill_test_stage')?'test-stage':'forest-stage';
+  if(!row.group)throw Error('Image has no packing group: '+row.path);
   row.tile_width??=row.width;row.tile_height??=row.height;
 }
-process.stdout.write(JSON.stringify({manifests,assets:[...assets.values()]}));
+if(roleIds&&!selection)throw Error('No matching runtime battle view');
+process.stdout.write(JSON.stringify({manifests,assets:[...assets.values()],...(selection?{selection}:{})}));
