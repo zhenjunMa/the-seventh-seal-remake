@@ -8,5 +8,5 @@
     "rewards": "rewards.json",
     "items": "items.json"
   },
-  "notes": "只在parameters填写修改项；空对象沿用来源默认值。source_hashes用于核对，默认值用--reference查看。original模式禁止数值差异，debug模式应用调参。每次入口重新读取并保留快照。"
+  "notes": "只在parameters填写修改项；空对象沿用来源默认值。source_hashes用于核对，默认值用--reference查看。original模式禁止数值差异，debug模式应用调参。游戏页面启动时读取并编译一次，修改配置后刷新页面生效。"
 }

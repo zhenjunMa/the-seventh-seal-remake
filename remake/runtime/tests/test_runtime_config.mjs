@@ -5,7 +5,9 @@ import {readFile,writeFile,mkdtemp,rm} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {pathToFileURL} from 'node:url';
-import {compileRuntimeConfiguration,loadRuntimeConfiguration,expandRuntimeConfiguration} from '../web/core/runtime_config.mjs';
+import {compileRuntimeConfiguration,loadRuntimeConfiguration,expandRuntimeConfiguration,createRuntimeConfigurationSession} from '../web/core/runtime_config.mjs';
+import {createServicesController} from '../web/controllers/services.mjs';
+import {createPartyActors} from '../web/core/party_attributes.mjs';
 import {exportRuntimeConfiguration} from '../tools/export_runtime_config.mjs';
 import {createBattleSample,consumeBattleMp,resourcesForWorld} from '../web/combat_sample.mjs';
 import {createForestSample} from '../web/forest_sample.mjs';
@@ -33,6 +35,81 @@ test('config loader uses one manifest and four dedicated files, rejects arbitrar
   assert.deepEqual(loaded,config);assert.deepEqual(requests,['data/config/index.json','data/config/skills.json','data/config/battle.json','data/config/rewards.json','data/config/items.json']);
   assert.deepEqual(options,Array.from({length:5},()=>({cache:'no-store'})));
   await assert.rejects(loadRuntimeConfiguration(async()=>({...config.manifest,files:{...config.manifest.files,skills:'../skills.json'}})),/路径/);
+});
+test('startup session preserves both reward profiles and isolates every returned runtime snapshot',async()=>{
+  const partyRewards=await read('party_rewards.json'),cfg=copy(config);cfg.manifest.mode='debug';
+  cfg.skills.entries.yantu.parameters.mp_cost=5;
+  cfg.rewards.entries['013'].parameters={experience:123,money:25,drop_item_ids:[242,242]};
+  cfg.items.entries['242'].parameters.drop_rate=100;
+  const session=createRuntimeConfigurationSession(data,cfg,partyRewards);
+  const legacy=compileRuntimeConfiguration(data,cfg),native=compileRuntimeConfiguration({...data,rewards:partyRewards},cfg);
+  assert.deepEqual(session.snapshot('legacy'),legacy);
+  assert.deepEqual(session.snapshot('native-new-game'),native);
+  const first=session.snapshot('native-new-game');
+  first.skill_registry.yantu.mp_cost=999;first.forest.actors['012'].hp.current=0;
+  first.items.definitions['242'].drop_rate=-1;first.rewards.enemies['013'].reward_slots.fill(0);
+  first.rewards.initial_roles['001'].header_raw_hex='00';first.rewards.tables.growth_rows[0][0]=999;
+  assert.deepEqual(session.snapshot('native-new-game'),native);
+  assert.deepEqual(session.snapshot('legacy'),legacy);
+  const drift=copy(partyRewards);drift.enemies['013'].experience++;
+  assert.throws(()=>createRuntimeConfigurationSession(data,cfg,drift),/奖励来源不同/);
+  drift.enemies=partyRewards.enemies;drift.source_hashes['GAME.exe']='0'.repeat(64);
+  assert.throws(()=>createRuntimeConfigurationSession(data,cfg,drift),/奖励来源指纹不同/);
+});
+test('services read configuration once at startup; rewards and restored progress stay live until page refresh reloads edits',async t=>{
+  const files=copy(config);files.manifest.mode='debug';files.skills.entries.yantu.parameters.mp_cost=5;
+  files.rewards.entries['013'].parameters={experience:1,money:25,drop_item_ids:[242,242]};
+  files.items.entries['242'].parameters.drop_rate=100;
+  const requests=[],byPath=()=>Object.fromEntries(Object.entries({manifest:'index',skills:'skills',battle:'battle',rewards:'rewards',items:'items'})
+    .map(([key,name])=>[`data/config/${name}.json`,files[key]]));
+  t.mock.method(globalThis,'fetch',async(path,options)=>{requests.push({path,options});return {ok:true,json:async()=>copy(byPath()[path])};});
+  const nativeSeed=await read('opening_seed.json'),attributes=await read('party_combat.json');
+  const state={catalog:{},world:new WorldStore(nativeSeed,['M72061']),battleData:data.combat,forestData:data.forest,
+    schedulerData:data.scheduler,aiData:data.ai,rewardData:data.rewards,partyRewards:await read('party_rewards.json'),
+    partySkills:data.party_skills,sourceItemData:data.items,sourceSkills:data.source_skills,sourceMagic:data.source_magic};
+  const services=createServicesController({state,actions:{}});
+  await assert.rejects(services.readConfiguredData(),/尚未初始化/);
+  const [initial,concurrent]=await Promise.all([services.initializeRuntimeConfiguration(),services.initializeRuntimeConfiguration()]);
+  assert.equal(requests.length,5);assert.notEqual(initial,concurrent);
+  assert.equal(initial.skill_registry.yantu.mp_cost,5);
+  const beforeHp=createPartyActors(state.world.snapshot(),attributes,{},initial.items)[0].hp.current;
+  const actors=[{id:'001',side:'player',hp:{current:beforeHp},state_raw:0,immune_raw:0},
+    {id:'enemy-0',resource_id:'013',side:'enemy',hp:{current:0},state_raw:5}],ledger=createRewardLedger('cached-rewards',actors);
+  collectEnemyDefeat(ledger,actors[1],{data:initial.rewards});
+  const plan=planVictoryRewards({world:state.world.snapshot(),ledger,data:initial.rewards,rng:draws([99,99]),actors});
+  state.world.transact(next=>{Object.assign(next,plan.world_patch);next.reward_records=[plan.reward_record];next.party[0].hp.current-=3;});
+  state.world=new WorldStore(await decodeSave(await encodeSave(state.world.snapshot()),['M72061']),['M72061']);
+  files.skills.entries.yantu.parameters.mp_cost=9;
+  initial.skill_registry.yantu.mp_cost=777;
+  const next=await services.readConfiguredData();
+  assert.equal(requests.length,5);assert.equal(next.skill_registry.yantu.mp_cost,5);
+  assert.equal(state.world.value.inventory.find(item=>item.id===242).quantity,2);
+  assert.equal(createPartyActors(state.world.snapshot(),attributes,{},next.items)[0].hp.current,beforeHp-3);
+  const nativeWorld=state.world;state.world={value:{source:{kind:'legacy'}}};
+  assert.equal((await services.readConfiguredData()).rewards.schema,'seventh-seal-forest-rewards');
+  state.world=nativeWorld;assert.equal((await services.readConfiguredData()).rewards.schema,'seventh-seal-party-rewards');
+  assert.equal(requests.length,5);
+  // A fresh controller represents a refreshed page. Title/new-game/load reuse
+  // the existing controller and therefore never opt into the edited files.
+  const refreshed=createServicesController({state,actions:{}}),afterRefresh=await refreshed.initializeRuntimeConfiguration();
+  assert.equal(requests.length,10);assert.equal(afterRefresh.skill_registry.yantu.mp_cost,9);
+});
+test('failed startup exposes no configuration and requires a refreshed owner after files are corrected',async t=>{
+  const files=copy(config),requests=[];files.skills.source_hashes['Fight_Role/001.CHR']='0'.repeat(64);
+  const byPath=Object.fromEntries(Object.entries({manifest:'index',skills:'skills',battle:'battle',rewards:'rewards',items:'items'})
+    .map(([key,name])=>[`data/config/${name}.json`,key]));
+  t.mock.method(globalThis,'fetch',async path=>{requests.push(path);return {ok:true,json:async()=>copy(files[byPath[path]])};});
+  const state={catalog:{},world:{value:{source:{kind:'native-new-game'}}},battleData:data.combat,forestData:data.forest,
+    schedulerData:data.scheduler,aiData:data.ai,rewardData:data.rewards,partyRewards:await read('party_rewards.json'),
+    partySkills:data.party_skills,sourceItemData:data.items,sourceSkills:data.source_skills,sourceMagic:data.source_magic};
+  const services=createServicesController({state,actions:{}});
+  await assert.rejects(services.initializeRuntimeConfiguration(),/来源指纹/);
+  files.skills=copy(config.skills);
+  await assert.rejects(services.readConfiguredData(),/来源指纹/);
+  await assert.rejects(services.initializeRuntimeConfiguration(),/来源指纹/);
+  assert.equal(requests.length,5);
+  const refreshed=createServicesController({state,actions:{}});
+  assert.equal((await refreshed.initializeRuntimeConfiguration()).audit.mode,'original');assert.equal(requests.length,10);
 });
 test('default profile covers all admitted skills, three enemies, six drops and retains numeric source bytes',()=>{
   const before=copy(data),cfgBefore=copy(config),d=compileRuntimeConfiguration(data,config);

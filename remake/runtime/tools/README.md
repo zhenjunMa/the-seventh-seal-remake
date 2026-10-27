@@ -200,6 +200,8 @@ python3 -B remake/runtime/tools/export_map_shadows.py
 
 配置导出自动迁移旧完整格式，当前skills／items为v3、battle／rewards为v2：只保存身份与修改项，来源指纹在文件级集中登记。普通导出补齐新增角色／怪物的技能、属性、AI及奖励，保留旧调参并剔除等于默认值的冗余项；未知编号、身份或来源漂移在任何写入前拒绝。`--reference` <skills|battle|rewards|items> [编号]只读显示来源默认值与生效值，不生成或修改配置。配置`--reset`清空修改项并恢复original模式。
 
+正式游戏页面仅在启动时读取并编译配置，菜单、战斗与技巧测试复用启动快照并取得独立副本。修改参数或切换original／debug模式后刷新页面；返回标题、开始新游戏和读档不会重新加载。导出／reference工具每次调用仍读取当前文件。
+
 `--check`须与`--run`一起使用，在成功后执行verify_current；8767服务需要先开启。
 
 `--preflight`独立使用，检查已有源表的接入能力，不导出、不写报告、不核验原媒体；新地图没有源表时先构建chapter-story。显式入口发现未知能力返回非零退出码；旧隐式NPC仅提示，显式npcs进入阻断检查。
