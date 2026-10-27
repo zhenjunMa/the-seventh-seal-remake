@@ -1,11 +1,12 @@
 // services adapters. Persistent state belongs to the shared runtime context.
 import {encodeSave} from "../core/world.mjs";
 import {createPartyActors} from "../core/party_attributes.mjs";
-import {loadRuntimeConfiguration, compileRuntimeConfiguration} from "../core/runtime_config.mjs";
+import {loadRuntimeConfiguration, createRuntimeConfigurationSession} from "../core/runtime_config.mjs";
 import {attachSavePreview} from "../core/save_preview.mjs";
 import {MANUAL_SAVE_SLOTS,normalizeSaveSlot,saveSlotLabel} from "../core/save_slots.mjs";
 
 export function createServicesController({state, actions, $, canvas, ctx}) {
+  let configurationReady;
   function status(message, error=false) { $('status').textContent=message; $('status').classList.toggle('error',error); }
   function log(event) {
     const entry={sequence:state.logs.length+1,at:new Date().toISOString(),...event}; state.logs.push(entry);
@@ -18,11 +19,21 @@ export function createServicesController({state, actions, $, canvas, ctx}) {
     $('eventLog').append(item); while($('eventLog').children.length>50) $('eventLog').firstChild.remove();
   }
   async function json(path,{cache='no-cache'}={}) { const response=await fetch(path,{cache}); if(!response.ok) throw new Error(`资源加载失败：${path}（${response.status}）`); return response.json(); }
+  async function initializeRuntimeConfiguration(){
+    // Coalesce startup calls, including a failed startup. Refreshing the page
+    // creates a new owner; menu/battle/save operations never reload this input.
+    configurationReady??=(async()=>{
+      const config=await loadRuntimeConfiguration(json,state.catalog.runtime_config??'data/config/index.json');
+      return createRuntimeConfigurationSession({combat:state.battleData,forest:state.forestData,scheduler:state.schedulerData,ai:state.aiData,
+        rewards:state.rewardData,party_skills:state.partySkills,items:state.sourceItemData,
+        ...(state.sourceSkills?{source_skills:state.sourceSkills}:{}),...(state.sourceMagic?{source_magic:state.sourceMagic}:{})},config,state.partyRewards);
+    })();
+    return readConfiguredData();
+  }
   async function readConfiguredData(){
-    const config=await loadRuntimeConfiguration(json,state.catalog.runtime_config??'data/config/index.json');
-    return compileRuntimeConfiguration({combat:state.battleData,forest:state.forestData,scheduler:state.schedulerData,ai:state.aiData,
-      rewards:state.world.value.source.kind==='native-new-game'?state.partyRewards:state.rewardData,party_skills:state.partySkills,items:state.sourceItemData,
-      ...(state.sourceSkills?{source_skills:state.sourceSkills}:{}),...(state.sourceMagic?{source_magic:state.sourceMagic}:{})},config);
+    if(!configurationReady)throw new Error('运行配置尚未初始化，请刷新游戏页面');
+    const configuration=await configurationReady;
+    return configuration.snapshot(state.world.value.source.kind);
   }
   function image(path, scope = 'shared') { return state.resources.load(path, scope); }
   function busy(phase) {
@@ -88,5 +99,5 @@ export function createServicesController({state, actions, $, canvas, ctx}) {
   function releaseInput(){
     state.keys.clear();actions.releaseDialogueKeys?.();actions.battleKeyUp?.(' ');
   }
-  return {status, log, json, readConfiguredData, image, busy, download, guarded, saveEnvelope, withSaveOperation,saveProgress,loadProgress,refreshSaveSlots,saveEntries,option,updateInterface,releaseInput};
+  return {status, log, json, initializeRuntimeConfiguration, readConfiguredData, image, busy, download, guarded, saveEnvelope, withSaveOperation,saveProgress,loadProgress,refreshSaveSlots,saveEntries,option,updateInterface,releaseInput};
 }

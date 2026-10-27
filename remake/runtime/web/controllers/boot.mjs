@@ -75,7 +75,7 @@ export function createBootController({state, actions, $, canvas, ctx}) {
     state.sourceItemData=validateItemData(await actions.json('data/items.json'));
     if(state.catalog.source_skills)state.sourceSkills=await actions.json(state.catalog.source_skills);
     if(state.catalog.source_magic)state.sourceMagic=await actions.json(state.catalog.source_magic);
-    state.itemData=(await actions.readConfiguredData()).items;
+    state.itemData=(await actions.initializeRuntimeConfiguration()).items;
     const operationManifest=await actions.json('data/operation_menu.json');
     state.saveMenu=await SaveMenuView.create({manifest:await actions.json('data/save_menu.json'),root:$('saveMenu'),image:actions.image,getPreview:actions.loadSavePreview,onConfirm:actions.selectSaveSlot,onClose:actions.closeSaveMenu,log:actions.log});
     await Promise.all(['assets/menu/main.png','assets/menu/actor_bar.png',...['game001d','game001a','game001a_2','game002a','game002_1','game003a','game003_1','game005'].map(id=>operationManifest.menus.find(menu=>menu.id===id).composed)].map(actions.image));

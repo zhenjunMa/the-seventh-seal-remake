@@ -37,7 +37,7 @@ export function deriveRuntimeConfiguration(data){
     {experience:e.experience,money:e.reward_slots.filter(n=>n<0).reduce((sum,n)=>sum-n,0),drop_item_ids:e.reward_slots.filter(n=>n>0)})]));
   const items=deriveItemConfiguration(data.items);
   return {manifest:{schema:'seventh-seal-runtime-config',version:1,mode:'original',files:copy(CONFIG_FILES),
-    notes:'只在parameters填写修改项；空对象沿用来源默认值。source_hashes用于核对，默认值用--reference查看。original模式禁止数值差异，debug模式应用调参。每次入口重新读取并保留快照。'},
+    notes:'只在parameters填写修改项；空对象沿用来源默认值。source_hashes用于核对，默认值用--reference查看。original模式禁止数值差异，debug模式应用调参。游戏页面启动时读取并编译一次，修改配置后刷新页面生效。'},
     skills,
     battle:category('battle',battle,'敌人属性为生成时初值，不覆盖玩家存档。speed为原充能属性范围；调度保持20ms单tick。AI权重保留原加权与后备选招规则；组合长度仍为3～5招。'),
     rewards:category('rewards',rewards,'每种敌人经验、金钱和掉落候选。drop_item_ids允许重复，保留候选顺序；每次候选抽签的概率在items.json。候选与非零金钱合计最多六槽。只发一次由代码保证。'),
@@ -165,10 +165,26 @@ export function compileRuntimeConfiguration(data,bundle){
 
 export async function loadRuntimeConfiguration(readJson,manifestPath='data/config/index.json'){
   // A restored file can have an older Last-Modified value than the browser's
-  // cached debug profile. Every battle must read bytes rather than revalidate
-  // that cache with a conditional request.
+  // cached debug profile. Startup reads current bytes; a running page retains
+  // its compiled configuration until the page is refreshed.
   const fresh={cache:'no-store'},manifest=await readJson(manifestPath,fresh);
   fail(manifest?.schema==='seventh-seal-runtime-config'&&manifest.version===1&&same(manifest.files,CONFIG_FILES),'配置入口版本或路径无效');
   const directory=manifestPath.slice(0,manifestPath.lastIndexOf('/')+1),sections=await Promise.all(Object.entries(CONFIG_FILES).map(async([key,file])=>[key,await readJson(directory+file,fresh)]));
   return {manifest,...Object.fromEntries(sections)};
+}
+
+// One private compiled baseline per game page. Reward parameters are shared,
+// while native-new-game and historical samples retain their own growth tables.
+// Callers only receive copies, never the reusable baseline or source records.
+export function createRuntimeConfigurationSession(data,bundle,partyRewards){
+  fail(partyRewards?.schema==='seventh-seal-party-rewards'&&partyRewards.version===1,'新游戏奖励来源缺失');
+  for(const field of ['enemies','items'])
+    fail(same(partyRewards[field],data.rewards[field]),`新游戏与历史样本的${field}奖励来源不同`);
+  for(const [path,hash]of Object.entries(data.rewards.source_hashes))
+    fail(partyRewards.source_hashes?.[path]===hash,`新游戏与历史样本的奖励来源指纹不同：${path}`);
+  const compiled=compileRuntimeConfiguration(data,bundle);
+  const nativeRewards={...copy(partyRewards),enemies:compiled.rewards.enemies,items:compiled.rewards.items};
+  return {snapshot(sourceKind){
+    return copy({...compiled,rewards:sourceKind==='native-new-game'?nativeRewards:compiled.rewards});
+  }};
 }
