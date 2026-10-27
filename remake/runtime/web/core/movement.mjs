@@ -1,4 +1,35 @@
-// DAT terrain is recovered; continuous keyboard motion is a preview policy.
+// DAT terrain is recovered. Exploration uses a kinematic foot box: stop the
+// normal component at contact and consume the remaining tangent displacement.
+export const MAP_FOOTPRINT=Object.freeze({halfWidth:4,halfHeight:3});
+const SKIN=1e-5,EPS=1e-9;
+
+function sweepBox(x,y,dx,dy,box,footprint){
+  const left=box.left-footprint.halfWidth,right=box.right+footprint.halfWidth;
+  const top=box.top-footprint.halfHeight,bottom=box.bottom+footprint.halfHeight;
+  // Old saves and source entrances can start touching/inside a footprint.
+  // Permit escape and tangent travel, never push the persistent position out.
+  if(x>left+EPS&&x<right-EPS&&y>top+EPS&&y<bottom-EPS){
+    const nx=x>=box.right-EPS?1:x<=box.left+EPS?-1:0;
+    const ny=y>=box.bottom-EPS?1:y<=box.top+EPS?-1:0;
+    if(nx||ny){
+      const blockX=nx&&dx*nx<-EPS?nx:0,blockY=!nx&&dy*ny<-EPS?ny:0;
+      return blockX||blockY?{t:0,nx:blockX,ny:blockY,hit:box.hit}:null;
+    }
+    const edges=[{depth:x-left,nx:-1,ny:0},{depth:right-x,nx:1,ny:0},
+      {depth:y-top,nx:0,ny:-1},{depth:bottom-y,nx:0,ny:1}];
+    const nearest=edges.sort((a,b)=>a.depth-b.depth)[0];
+    return dx*nearest.nx+dy*nearest.ny<-EPS?{t:0,...nearest,hit:box.hit}:null;
+  }
+  if(!dx&&(x<=left+EPS||x>=right-EPS)||!dy&&(y<=top+EPS||y>=bottom-EPS))return null;
+  const tx0=dx?(left-x)/dx:-Infinity,tx1=dx?(right-x)/dx:Infinity;
+  const ty0=dy?(top-y)/dy:-Infinity,ty1=dy?(bottom-y)/dy:Infinity;
+  const enterX=Math.min(tx0,tx1),enterY=Math.min(ty0,ty1);
+  const enter=Math.max(enterX,enterY),leave=Math.min(Math.max(tx0,tx1),Math.max(ty0,ty1));
+  if(enter<-EPS||enter>1+EPS||leave<=Math.max(0,enter)+EPS)return null;
+  return {t:Math.max(0,enter),nx:enterX>=enterY-EPS?-Math.sign(dx):0,
+    ny:enterY>=enterX-EPS?-Math.sign(dy):0,hit:box.hit};
+}
+
 export class MovementMap {
   constructor(data) {
     if (data?.schema !== 'seventh-seal-map-movement' || data.version !== 1 ||
@@ -35,6 +66,76 @@ export class MovementMap {
   }
   at(x, y) { return this.cell(Math.floor(x / this.cellSize), Math.floor(y / this.cellSize)); }
   validEntry(x,y){const hit=this.at(x,y);return !hit.blocked||hit.reason==='terrain'&&this.entryCells.has(`${hit.x},${hit.y}`);}
+  moveAndSlide(x,y,dx,dy,{footprint=MAP_FOOTPRINT,obstacles=[]}={}){
+    if(![x,y,dx,dy,footprint.halfWidth,footprint.halfHeight].every(Number.isFinite)
+      ||footprint.halfWidth<0||footprint.halfHeight<0)throw new Error('移动坐标或脚底范围无效');
+    if(!this.validEntry(x,y))return {x,y,moved:false,blocked:true,hit:this.at(x,y),contacts:[]};
+    const start={x,y},contacts=[],segments=[];
+    let rx=dx,ry=dy;
+    // A source marker may deliberately land inside terrain. Ignore only that
+    // starting tile until the centre leaves it; all surrounding walls remain.
+    const entry=this.at(x,y),escape=entry.blocked&&entry.reason==='terrain'?entry:null;
+    // Source grid anchors may overlap the edge of a whole continuous wall.
+    // Remember only faces actually overlapped at the start; permit travel
+    // along that face across tile seams until the feet leave it naturally.
+    const escapeFaces=[],size=this.cellSize,hw=footprint.halfWidth,hh=footprint.halfHeight;
+    for(let cy=Math.max(0,Math.floor((y-hh)/size));cy<=Math.min(this.height-1,Math.floor((y+hh)/size));cy++)
+      for(let cx=Math.max(0,Math.floor((x-hw)/size));cx<=Math.min(this.width-1,Math.floor((x+hw)/size));cx++){
+        if(this.cell(cx,cy).reason!=='terrain')continue;
+        const left=cx*size,right=left+size,top=cy*size,bottom=top+size;
+        if(x+hw<=left+EPS||x-hw>=right-EPS||y+hh<=top+EPS||y-hh>=bottom-EPS)continue;
+        if(x>=right-EPS)escapeFaces.push({edge:right,sign:1,axis:'x'});
+        else if(x<=left+EPS)escapeFaces.push({edge:left,sign:-1,axis:'x'});
+        else if(y>=bottom-EPS)escapeFaces.push({edge:bottom,sign:1,axis:'y'});
+        else if(y<=top+EPS)escapeFaces.push({edge:top,sign:-1,axis:'y'});
+      }
+    for(let iteration=0;iteration<4&&(Math.abs(rx)>EPS||Math.abs(ry)>EPS);iteration++){
+      let first=1,hits=[];
+      const consider=hit=>{if(!hit||hit.t>first+EPS)return;
+        if(hit.t<first-EPS){first=hit.t;hits=[];}hits.push(hit);};
+      const size=this.cellSize,hw=footprint.halfWidth,hh=footprint.halfHeight;
+      const x0=Math.max(0,Math.floor((Math.min(x,x+rx)-hw)/size));
+      const x1=Math.min(this.width-1,Math.floor((Math.max(x,x+rx)+hw)/size));
+      const y0=Math.max(0,Math.floor((Math.min(y,y+ry)-hh)/size));
+      const y1=Math.min(this.height-1,Math.floor((Math.max(y,y+ry)+hh)/size));
+      for(let cy=y0;cy<=y1;cy++)for(let cx=x0;cx<=x1;cx++){
+        const hit=this.cell(cx,cy);
+        if(!hit.blocked||escape&&cx===escape.x&&cy===escape.y)continue;
+        if(hit.reason==='terrain'&&escapeFaces.some(face=>face.axis==='x'
+          ?face.edge===(face.sign>0?cx+1:cx)*size&&rx*face.sign>=0
+          :face.edge===(face.sign>0?cy+1:cy)*size&&ry*face.sign>=0))continue;
+        // Gates use the logical centre so a covered exit can actually be
+        // reached; terrain alone has physical thickness around the feet.
+        consider(sweepBox(x,y,rx,ry,{left:cx*size,right:(cx+1)*size,top:cy*size,bottom:(cy+1)*size,hit},
+          hit.reason==='transition'?{halfWidth:0,halfHeight:0}:footprint));
+      }
+      for(const obstacle of obstacles)consider(sweepBox(x,y,rx,ry,obstacle,footprint));
+      const bound=(value,delta,low,high,axis)=>{
+        if(delta<0&&value+delta<low)consider({t:Math.max(0,(low-value)/delta),nx:axis==='x'?1:0,ny:axis==='y'?1:0,hit:{blocked:true,reason:'bounds'}});
+        if(delta>0&&value+delta>high)consider({t:Math.max(0,(high-value)/delta),nx:axis==='x'?-1:0,ny:axis==='y'?-1:0,hit:{blocked:true,reason:'bounds'}});
+      };
+      bound(x,rx,Math.min(start.x,hw),Math.max(start.x,this.width*size-hw-SKIN),'x');
+      bound(y,ry,Math.min(start.y,hh),Math.max(start.y,this.height*size-hh-SKIN),'y');
+      // Leave skin only on the blocked axes; shortening the whole vector
+      // loses tangent distance once per frame and makes sliding frame-dependent.
+      const blockX=hits.some(hit=>hit.nx),blockY=hits.some(hit=>hit.ny);
+      const sx=rx*first-(blockX?Math.sign(rx)*Math.min(Math.abs(rx*first),SKIN):0);
+      const sy=ry*first-(blockY?Math.sign(ry)*Math.min(Math.abs(ry*first),SKIN):0);x+=sx;y+=sy;
+      if(sx||sy)segments.push({x:x-sx,y:y-sy,dx:sx,dy:sy});
+      if(!hits.length)break;
+      contacts.push(...hits);
+      rx*=1-first;ry*=1-first;
+      if(blockX)rx=0;
+      if(blockY)ry=0;
+    }
+    return {x,y,moved:Math.hypot(x-start.x,y-start.y)>SKIN,blocked:contacts.length>0,
+      hit:contacts[0]?.hit,contacts,segments};
+  }
+  // Visible actors use the same foot extent as the player. Callers filter
+  // story visibility; image dimensions and decorative map objects are ignored.
+  actorObstacles(actors){return actors.map(actor=>({left:actor.x-MAP_FOOTPRINT.halfWidth,
+    right:actor.x+MAP_FOOTPRINT.halfWidth,top:actor.y-MAP_FOOTPRINT.halfHeight,
+    bottom:actor.y+MAP_FOOTPRINT.halfHeight,hit:{blocked:true,reason:'actor',id:actor.id}}));}
   // Traverse every grid boundary on the segment. Endpoint-only checks tunnel
   // through thin walls during running or a slow frame.
   move(x, y, dx, dy) {

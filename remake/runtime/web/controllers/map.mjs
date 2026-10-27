@@ -13,10 +13,10 @@ import {projectMapStage} from "../core/map_stage.mjs";
 import {MapObjectRuntime} from "../core/map_objects.mjs";
 import {storyBindings,registeredRoles} from "../core/content_registry.mjs";
 import {chapterRouteExits} from "../core/map_connections.mjs";
-import {DistanceGait,mapMotionProfile,nativeMapMovement} from "../core/map_locomotion.mjs";
+import {DistanceGait,CollisionFeedback,mapMotionProfile,nativeMapMovement} from "../core/map_locomotion.mjs";
 
 export function createMapController({state, actions, $, canvas, ctx}) {
-  const gait=new DistanceGait();let gaitScene=null,gaitRole=null;
+  const gait=new DistanceGait(),collisionFeedback=new CollisionFeedback();let gaitScene=null,gaitRole=null;
   function role() { return state.catalog.roles.find(role=>role.id===state.selectedRole); }
   function sheetAction(index=state.view.action) { return role().actions.find(action=>action.index===index); }
   function buildHud() {
@@ -111,7 +111,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
   }
   function validateEntry(scene,at) { if(!scene.movement.validEntry(at.x,at.y)) throw new Error(`目标位置不在可通行格：${at.map_id} ${at.x},${at.y}`); }
   function commitView(scene,at) {
-    gait.reset();gaitScene=scene;gaitRole=state.selectedRole;
+    gait.reset();collisionFeedback.reset();state.view.collisionFeedback=null;gaitScene=scene;gaitRole=state.selectedRole;
     state.view.action=0;state.view.frame=0;state.view.follow=true;state.view.zoom=1;
     Object.assign(state.view,openingCamera(at,scene.bitmap.width,scene.bitmap.height));
     state.clock=0;state.nearest=null;state.lastExit='';
@@ -213,7 +213,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
   function renderSavePreview(scene,world,{view=null,action=null}={}){
     const r=state.catalog.roles.find(role=>role.id===world.leader_id),a=action??r?.actions.find(action=>action.index===0);
     if(!r||!a?.bitmap)throw new Error('存档人物图像未准备');
-    const camera=view??{zoom:1,frame:0,...openingCamera(world.location,scene.bitmap.width,scene.bitmap.height)};
+    const camera={...(view??{zoom:1,frame:0,...openingCamera(world.location,scene.bitmap.width,scene.bitmap.height)}),collisionFeedback:null};
     const frame=document.createElement('canvas');frame.width=640;frame.height=480;const drawing=frame.getContext('2d');drawing.imageSmoothingEnabled=false;
     drawGameScene(drawing,{scene,world,role:r,action:a,view:camera,width:640,height:480,time:0,objectBitmap:(scene,obj)=>objectBitmap(scene,obj,world,false)});
     const thumbnail=document.createElement('canvas');thumbnail.width=SAVE_PREVIEW_WIDTH;thumbnail.height=SAVE_PREVIEW_HEIGHT;
@@ -253,17 +253,21 @@ export function createMapController({state, actions, $, canvas, ctx}) {
       reconcileResources();
       const dx=Number(state.keys.has('ArrowRight')||state.keys.has('d'))-Number(state.keys.has('ArrowLeft')||state.keys.has('a'));
       const dy=Number(state.keys.has('ArrowDown')||state.keys.has('s'))-Number(state.keys.has('ArrowUp')||state.keys.has('w'));
-      const at=state.world.location;let action=0,travelX=0,travelY=0,motion=null;
+      const at=state.world.location;let action=0,travelX=0,travelY=0,motion=null,moved=null,running=false;
       if(gaitScene!==state.scenes.current||gaitRole!==state.selectedRole||state.view.action!==gait.action){
-        gait.reset();gaitScene=state.scenes.current;gaitRole=state.selectedRole;
+        gait.reset();collisionFeedback.reset();gaitScene=state.scenes.current;gaitRole=state.selectedRole;
       }
       const active=state.world.value.party.find(actor=>actor.id===state.selectedRole),effectivePlayer=state.mapVitals.get(state.selectedRole)??active;
-      if((dx||dy)&&effectivePlayer.hp.current>0){const length=Math.hypot(dx,dy),running=state.keys.has('Shift');
+      if((dx||dy)&&effectivePlayer.hp.current>0){const length=Math.hypot(dx,dy);running=state.keys.has('Shift');
         motion=mapMotionProfile(sheetAction(running?2:1),state.scenes.current.data.movement,
           state.chapterStory.maps[at.map_id]?.header_raw_hex);
-        const moved=state.scenes.current.movement.move(at.x,at.y,dx/length*motion.speed*delta,dy/length*motion.speed*delta),choice=locomotion({dx,dy,running},moved.moved);
+        const movement=state.scenes.current.movement;
+        moved=movement.moveAndSlide(at.x,at.y,dx/length*motion.speed*delta,dy/length*motion.speed*delta,
+          {obstacles:movement.actorObstacles(state.scenes.current.npcs.filter(npcAvailable))});
         travelX=moved.x-at.x;travelY=moved.y-at.y;
-        state.world.setPosition(moved.x,moved.y,choice.direction);action=choice.action;state.view.follow=true;
+        const choice=locomotion({dx:moved.moved?(Math.abs(travelX)>1e-4?travelX:0):dx,
+          dy:moved.moved?(Math.abs(travelY)>1e-4?travelY:0):dy,running},moved.moved);
+        state.world.setPosition(moved.x,moved.y,choice.direction??at.direction);action=choice.action;state.view.follow=true;
         const reached=state.scenes.current.movement.at(moved.x,moved.y),exit=reached.trigger?transitionFor(reached):null;
         const storyTrigger=state.scenes.current.data.story_triggers.find(trigger=>trigger.cells.some(cell=>cell.x===reached.x&&cell.y===reached.y));
         if(storyTrigger){
@@ -285,9 +289,10 @@ export function createMapController({state, actions, $, canvas, ctx}) {
       }
       state.view.action=action;
       state.view.frame=gait.advance(sheetAction(),{dx:travelX,dy:travelY,elapsedMs:delta*1000,stride:motion?.stride});
+      state.view.collisionFeedback=collisionFeedback.advance(moved,{dx,dy,running,elapsedMs:delta*1000});
       state.clock=gait.elapsed;
       if(state.view.follow)follow();updateNearest();
-    }
+    }else {collisionFeedback.reset();state.view.collisionFeedback=null;}
     paint();
   }
   return {role, sheetAction, buildHud, prepareMap, validateEntry, commitView, changeMap, follow, fit, resize, npcAvailable, updateNearest, objectBitmap, transitionFor, renderWorldMap,selectWorldMapDestination,closeWorldMap, routeExit, drawCollision, paint, updateExploration,captureScene,captureSavePreview,loadSavePreview};

@@ -12,9 +12,11 @@ const actions=[{index:0,interval_raw:180,frames_per_direction:10},
   {index:1,interval_raw:250,frames_per_direction:10},{index:2,interval_raw:130,frames_per_direction:12}];
 
 function fixture({wall=false,roleId='001'}={}) {
-  const role=catalog.roles.find(role=>role.id===roleId),at={map_id:'M17020',x:wall?396:300,y:300,direction:1};
+  const role=catalog.roles.find(role=>role.id===roleId),at={map_id:'M17020',x:wall?392:300,y:300,direction:1};
   const value={location:at,party:[{id:roleId,hp:{current:1}}],flags:[],object_states:{}};
-  const world={value,get location(){return this.value.location;},setPosition(x,y,direction){this.value.location={...this.location,x,y,direction};}};
+  const world={value,get location(){return this.value.location;},setPosition(x,y,direction){
+    assert.ok(Number.isInteger(direction)&&direction>=0&&direction<8,'WorldStore requires an eight-way heading');
+    this.value.location={...this.location,x,y,direction};}};
   const rows=Array(100).fill(wall?'0'.repeat(25)+'1'+'0'.repeat(74):'0'.repeat(100));
   const movement={schema:'seventh-seal-map-movement',version:1,width:100,height:100,terrain_rows:rows,triggers:[],...geometry};
   const scene={data:{id:'M17020',movement,story_triggers:[]},bitmap:{width:1600,height:1600},
@@ -72,6 +74,45 @@ test('partial wall contact counts accepted distance only and sustained blockage 
   assert.equal(f.state.world.location.x,x);assert.equal(f.state.view.action,0);
   f.state.keys.clear();f.state.keys.add('ArrowLeft');f.step(16);
   assert.equal(f.state.view.action,1);assert.equal(f.state.view.frame,0);assert.ok(f.state.world.location.x<x);
+});
+
+test('controller slides with actual heading and stable gait at 30/60/120Hz without wall oscillation',()=>{
+  const results=[];
+  for(const hz of [30,60,120]){
+    const f=fixture({wall:true});f.state.keys=new Set(['ArrowRight','ArrowDown','Shift']);
+    for(let n=0;n<hz;n++)f.step(1000/hz);
+    const at=f.state.world.location;
+    assert.ok(at.x>395.99&&at.x<396);assert.equal(at.direction,7);assert.equal(f.state.view.action,2);
+    assert.ok(Math.abs(at.y-300-250/Math.SQRT2)<1e-4);
+    results.push({x:at.x,y:at.y,frame:f.state.view.frame});
+  }
+  for(const r of results){assert.ok(Math.abs(r.x-results[0].x)<1e-4);assert.ok(Math.abs(r.y-results[0].y)<1e-4);assert.equal(r.frame,results[0].frame);}
+});
+
+test('visible NPC feet block the player; hidden actors do not',()=>{
+  for(const hidden of [false,true]){
+    const f=fixture();f.state.scenes.current.npcs.push({id:'guard',x:320,y:300,hidden,event:{conditions:[]}});
+    f.state.keys.add('ArrowRight');for(let i=0;i<20;i++)f.step(16);
+    assert.equal(f.state.world.location.x<312,!hidden);
+    if(!hidden){assert.equal(f.state.view.action,0);assert.equal(f.state.nearest.id,'guard');}
+  }
+});
+
+test('subpixel travel into a wall keeps a valid heading when the direction filter removes both components',()=>{
+  const f=fixture({wall:true});f.state.world.value.location={...f.state.world.location,x:395.99997,direction:3};
+  f.state.keys.add('ArrowRight');f.step(16);
+  assert.ok(f.state.world.location.x>395.99997);assert.equal(f.state.world.location.direction,3);
+  f.step(16);assert.equal(f.state.world.location.direction,1);assert.equal(f.state.view.action,0);
+});
+
+test('one wall impact moves only the rendered body and expires while held; release and phase change clear it',()=>{
+  const f=fixture({wall:true});f.state.keys=new Set(['ArrowRight','Shift']);
+  f.step(40);const at={...f.state.world.location};f.step(40);
+  assert.deepEqual(f.state.world.location,at);assert.ok(f.state.view.collisionFeedback.x<0);
+  for(let i=0;i<30;i++)f.step(16);
+  assert.deepEqual(f.state.world.location,at);assert.ok(Math.abs(f.state.view.collisionFeedback.x)<1e-8);
+  f.state.keys.clear();f.step(16);assert.ok(Math.abs(f.state.view.collisionFeedback.x)<1e-8);
+  f.state.scenes.phase='event';f.step(16);assert.equal(f.state.view.collisionFeedback,null);
 });
 
 test('release stops immediately; pause/role/scene resets never replay accumulated travel',()=>{

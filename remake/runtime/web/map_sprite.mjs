@@ -7,12 +7,13 @@ export function shadowRectangle(sx,sy,width,height,geometry,scaleX=1,scaleY=1) {
   return {sx:sx/width*crop.width,sy:sy/height*crop.height,width:crop.width,height:crop.height,
     x:crop.x*scaleX,y:crop.y*scaleY,displayWidth:crop.width*scaleX,displayHeight:crop.height*scaleY};
 }
-export function drawMapSprite(ctx,main,intrinsic,sx,sy,width,height,x,y,shadow=null,shadowGeometry=null) {
+export function drawMapSprite(ctx,main,intrinsic,sx,sy,width,height,x,y,shadow=null,shadowGeometry=null,bodyOffset=null) {
   if(shadow){const rect=shadowRectangle(sx,sy,width,height,shadowGeometry);
     ctx.drawImage(shadow,rect.sx,rect.sy,rect.width,rect.height,x+rect.x,y+rect.y,rect.displayWidth,rect.displayHeight);}
-  ctx.drawImage(main,sx,sy,width,height,x,y,width,height);
+  const bodyX=x+(bodyOffset?.x??0),bodyY=y+(bodyOffset?.y??0);
+  ctx.drawImage(main,sx,sy,width,height,bodyX,bodyY,width,height);
   if(intrinsic){
     ctx.save();ctx.globalCompositeOperation='lighter';
-    ctx.drawImage(intrinsic,sx,sy,width,height,x,y,width,height);ctx.restore();
+    ctx.drawImage(intrinsic,sx,sy,width,height,bodyX,bodyY,width,height);ctx.restore();
   }
 }
