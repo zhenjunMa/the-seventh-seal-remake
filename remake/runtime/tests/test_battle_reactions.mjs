@@ -2,7 +2,7 @@
 // 0x5016B0 lookup draws. No second JavaScript reaction formula is an oracle.
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {readFile,writeFile} from 'node:fs/promises';
+import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {NativeAssemblyOracle} from './native_assembly_oracle.mjs';
 import {createNativeRng} from '../web/core/combat_rules.mjs';
@@ -179,9 +179,4 @@ test('finalized deaths draw nothing, live/airborne death requests reject without
   for(const patch of [{state_raw:0},{state_raw:4,native_z_raw:1}])assert.throws(()=>finalizeNativeDeath({actor:{...actor,...patch},data,rng}));
   assert.equal(calls,0);checks.push('Finalized/live/airborne death dispatch guards add no RNG or resource mutation');
 });
-test.after(async()=>{
-  report.passed=checks.length===14;report.fingerprints={};for(const path of ['../web/core/battle_reactions.mjs','../tools/export_forest_reactions.py','../web/data/enemy_reactions.json','../evidence/forest_reactions_instructions_20261011.json','test_battle_reactions.mjs'])report.fingerprints[path]=hash(await readFile(new URL(path,import.meta.url)));
-  report.source_hashes=data.source_hashes;
-  await writeFile(new URL('../evidence/forest_reactions_verification_20261011.json',import.meta.url),JSON.stringify(report,null,2)+'\n');
-  await writeFile(new URL('../evidence/forest_reactions_verification_20261011.txt',import.meta.url),`白木森林命中后反应验证\n结果：${report.passed?'通过':'失败'}\n原指令对照：${JSON.stringify(report.case_counts)}\n原版运行未观察；此处仅对照反应描述、源技能索引与RNG流。\n`);
-});
+test.after(()=>assert.equal(checks.length,14));

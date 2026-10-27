@@ -1,7 +1,7 @@
 // Replay exported source-backed rules in our runtime. These checks do not run GAME.exe.
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {readFile,writeFile} from 'node:fs/promises';
+import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {WorldStore,encodeSave,decodeSave} from '../web/core/world.mjs';
 import {EventRunner,validateProgram} from '../web/core/events.mjs';
@@ -119,8 +119,8 @@ test('real map descriptors, entry markers and runtime coverage gates',async()=>{
   checks.push({name:'source-backed-map-entry-and-coverage-guard',passed:true,maps:catalog.maps.map(m=>m.id),ready_exits:catalog.scope.ready_exits,
     physical_exits_checked:physicalExits,registered_story_triggers_checked:registeredTriggers,blocked_native_landings:blockedNativeLandings});
 });
-test.after(async()=>{
-  await writeFile(new URL('evidence/current_slice_verification.json',runtime),JSON.stringify({schema:'seventh-seal-source-slice-verification',version:1,checks,
-    authority:'original resource bytes plus recovered static rules replayed by the reconstruction',original_game_execution_observed:false,
-    source_sha256:event.source.sha256,seed_sha256:hash(await readFile(new URL('web/data/world_seed.json',runtime)))},null,2));
+
+test('historical world seed retains its declared original input fingerprint',async()=>{
+  const seed=await read('web/data/world_seed.json');
+  assert.equal(hash(await readFile(new URL(seed.source.path,root))),seed.source.sha256);
 });

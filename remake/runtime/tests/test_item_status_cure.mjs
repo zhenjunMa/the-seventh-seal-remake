@@ -9,7 +9,7 @@ import {restoreActorWithItem,usableItems,useWorldItem} from '../web/core/items.m
 import {compileItemConfiguration} from '../web/core/item_registry.mjs';
 import {withItemQuantity} from '../web/core/equipment.mjs';
 import {WorldStore,encodeSave,decodeSave} from '../web/core/world.mjs';
-import {preparePhaseFixtures,headlessRunner} from '../evidence/fire_valley_20261025/prepare_phase_fixtures.mjs';
+import {fireValleyPartyFixture,headlessRunner} from './helpers/fire_valley_world.mjs';
 const json=async path=>JSON.parse(await readFile(new URL(`../${path}`,import.meta.url),'utf8'));
 const [published,statusData,sample,instructions,proof,overrides,attributes]=await Promise.all([
   'web/data/items.json','web/data/forest_status.json','web/data/combat_sample.json',
@@ -104,7 +104,7 @@ test('normal item helper cures frozen target without HP/MP changes; absent statu
 });
 
 test('actual M17027 gift grants three cure instances, field scope cannot consume them, and save/load preserves source bytes',async()=>{
-  const {worlds}=await preparePhaseFixtures({write:false}),world=new WorldStore(worlds.after_incoming),runner=headlessRunner(world).runner;
+  const {worlds}=await fireValleyPartyFixture(),world=new WorldStore(worlds.after_incoming),runner=headlessRunner(world).runner;
   const result=await runner.runTlk({mapId:'M17027',recordId:7,context:{explicitInteraction:true,steps:0}});
   assert.deepEqual(result.traversed,[7,8,9,10,11,12]);const item=world.value.inventory.find(row=>row.id===272);assert.equal(item.quantity,3);
   const before=world.snapshot();assert.equal(usableItems(world.value.inventory,itemData,'battle').some(row=>row.id===272),true);

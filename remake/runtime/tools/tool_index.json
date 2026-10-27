@@ -1,7 +1,7 @@
 {
   "schema": "seventh-seal-tool-index",
   "version": 1,
-  "updated": "2026-10-26",
+  "updated": "2026-10-27",
   "registered_steps": 42,
   "content_plan": [
     "chapter-maps",
@@ -1130,9 +1130,11 @@
     },
     {
       "path": "verify_tests.py",
-      "role": "specialized-evidence-check",
+      "role": "daily-entry",
       "build_targets": [],
-      "imported_by": []
+      "imported_by": [
+        "verify_current.py"
+      ]
     },
     {
       "path": "verify_turn_browser.py",

@@ -17,3 +17,5 @@
 - 持续维护的说明、设计、计划和操作指南统一使用UTF-8的Markdown（`.md`），命令使用代码块，文档导航使用相对链接；文档迁移同步当前脚本及索引引用。`requirements.txt`等依赖清单、机器输出、原始资料和历史证据保留原格式与原字节。
 - 地图／NPC／对白／任务接入见runtime/story_guide.md。runtime_content.story显式登记独立事件和任务，web/content保存编辑内容，web/data/story由export_story_packages.mjs生成；保留原TLK／ANM来源台账，正式浏览器按地图加载运行包。任务读取既有世界状态，奖励仍在剧情事务中提交，不另存重复进度。
 - TLK、测试片段和自行编写的NPC事件统一编译为StoryFlow，通过StoryFlowRunner执行，ChapterRunner提供共同事务与游戏行为适配。不得为炎城或其他区域新增独立剧情VM；旧EventRunner仅为来源核对适配，正式入口不使用native-entry提交。
+
+- 回归统一使用 `runtime/tools/verify_tests.py`：默认 daily 只检查运行规则，内容变更补 content，原版来源／真实媒体／集成／历史复核分别按 source／assets／integration／history 执行；交付在前置齐全环境跑 all，并另做正式浏览器实玩。新增或迁移测试同步 `runtime/tests/suites.json`，用 `--check` 核对遗漏和重复。同机制内容优先扩充数据与共享案例，确需新通用机制或高风险行为保障时再扩充测试；常规辅助代码必须入库放 tests/helpers，不导入 evidence 下执行代码。测试不写日期报告、不拦截文件系统写入；本次报告由统一入口 --report 写新目录，历史重生成依赖仅限 history。

@@ -2,7 +2,7 @@
 // below are synthetic browser boundaries, not original-game runtime evidence.
 import test, {after} from 'node:test';
 import assert from 'node:assert/strict';
-import {readFile, writeFile} from 'node:fs/promises';
+import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {OpeningRunner, validateOpeningProgram} from '../web/core/opening.mjs';
 
@@ -11,7 +11,6 @@ const root = new URL('../../../', import.meta.url);
 const sourceBytes = await readFile(new URL(program.source.path, root));
 const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
 const initialSourceHash = sha256(sourceBytes);
-const checks = [];
 const clone = value => structuredClone(value);
 const tick = () => new Promise(resolve => setImmediate(resolve));
 function deferred() {
@@ -30,15 +29,7 @@ function harness(overrides = {}) {
   return {events, hooks, runner: new OpeningRunner({program, hooks})};
 }
 function contract(name, run) {
-  test(name, {concurrency: false}, async () => {
-    try {
-      await run();
-      checks.push({name, passed: true, scope: 'source-bound player with synthetic hooks'});
-    } catch (error) {
-      checks.push({name, passed: false, error: error.message});
-      throw error;
-    }
-  });
+  test(name, {concurrency: false}, run);
 }
 
 contract('opening export is byte-for-byte bound to the original ANM and selected TLK records', async () => {
@@ -200,17 +191,5 @@ contract('field tampering and an unsupported dialogue mutation fail before playb
 });
 
 after(async () => {
-  const finalHash = sha256(await readFile(new URL(program.source.path, root)));
-  assert.equal(finalHash, initialSourceHash, 'the original ANM must remain read-only');
-  await writeFile(new URL('../evidence/opening_runner_validation.json', import.meta.url), JSON.stringify({
-    schema: 'seventh-seal-opening-runner-validation',
-    authority: 'source-bound unit tests with synthetic browser hooks',
-    source: {...program.source, sha256_before: initialSourceHash, sha256_after: finalHash},
-    command_count: program.commands.length,
-    test_count: checks.length,
-    passed: checks.filter(check => check.passed).length,
-    failed: checks.filter(check => !check.passed).length,
-    native_runtime_observed: false,
-    checks,
-  }, null, 2) + '\n');
+  assert.equal(sha256(await readFile(new URL(program.source.path, root))), initialSourceHash, 'the original ANM must remain read-only');
 });
