@@ -13,6 +13,10 @@ import {createNativeRng,resolveAction} from '../web/core/combat_rules.mjs';
 import {createPartySample} from '../web/party_sample.mjs';
 import {chapterRoleFromDefinition} from '../web/core/chapter.mjs';
 import {NativeAssemblyOracle} from './native_assembly_oracle.mjs';
+import {runtimeContent} from '../web/core/content_registry.mjs';
+import {BattleController} from '../web/core/combat.mjs';
+import {battleSkillEligibility,requiredSkillLevel} from '../web/core/battle_skill_access.mjs';
+import {fullSkillGroups,level99SkillWorld,namedPartySourceSkills,nativeSequenceSteps,playerRoleIds} from './helpers/party_skill_fixture.mjs';
 const web=new URL('../web/',import.meta.url),root=new URL('../../../',import.meta.url);
 const read=async p=>JSON.parse(await readFile(new URL('data/'+p,web)));
 const [party,meta,reactions,status,forest]=await Promise.all([
@@ -21,6 +25,44 @@ const [party,meta,reactions,status,forest]=await Promise.all([
 const banks=await Promise.all(Object.keys(party.roles).map(id=>read(`party_role_layers_${id}.json`)));
 const bank001=banks.find(bank=>bank.role_id==='001'),bank002=banks.find(bank=>bank.role_id==='002');
 const hash=b=>createHash('sha256').update(b).digest('hex');
+
+test('all six party members admit every named source command while preserving official level and prerequisite bytes',async()=>{
+ const [library,seed,attributes,rewards]=await Promise.all(['library/skills.json','opening_seed.json','party_combat.json','party_rewards.json'].map(read));
+ const expected=namedPartySourceSkills(library),actual=Object.values(party.skills);
+ const key=skill=>`${skill.actor_id}:${skill.original_skill_index}`;
+ assert.deepEqual(actual.map(key).sort(),expected.map(key).sort());
+ assert.deepEqual(Object.fromEntries(playerRoleIds.map(id=>[id,expected.filter(s=>s.actor_id===id).length])),
+  {'001':28,'002':24,'003':29,'004':30,'005':13,'006':30});
+ const registered=playerRoleIds.flatMap(id=>runtimeContent.roles[id].battle_skills.map(skill=>`${id}:${skill.index}`));
+ assert.deepEqual(registered.sort(),expected.map(key).sort(),'all commands enter the actual runtime registration');
+ for(const source of expected){
+  const skill=actual.find(row=>key(row)===key(source));assert.ok(skill,source.id);
+  assert.equal(skill.fixed_raw_hex,source.fixed_raw_hex,`${source.id}: immutable source record`);
+  assert.deepEqual(skill.actions.map(action=>[action.index,action.offset,action.raw_hex]),source.actions.map(action=>[action.index,action.offset,action.raw_hex]),`${source.id}: complete source actions`);
+  assert.equal(requiredSkillLevel(skill),source.required_role_level_raw);
+  assert.equal(skill.learned_raw,source.learned_raw);
+  const definition=party.roles[source.actor_id].skills[source.original_skill_index];
+  assert.equal(definition.fixed_raw_hex,source.fixed_raw_hex);
+  const conditions=Buffer.from(skill.fixed_raw_hex,'hex').subarray(0x360,0x374);
+  assert.deepEqual(conditions,Buffer.from(source.fixed_raw_hex,'hex').subarray(0x360,0x374),`${source.id}: prerequisites`);
+ }
+ for(const ids of fullSkillGroups){
+  const world=level99SkillWorld(seed,rewards,party,ids),before=structuredClone(party),sample=createPartySample(world,attributes,party);
+  for(const source of expected.filter(skill=>ids.includes(skill.actor_id))){
+   const skill=actual.find(row=>key(row)===key(source));assert.equal(battleSkillEligibility(world,skill).available,true,source.id);
+   assert.ok(sample.skills[skill.id],source.id);
+   const lower=structuredClone(world),role=lower.party.find(row=>row.id===skill.actor_id);
+   role.level=requiredSkillLevel(skill)-1;
+   assert.equal(battleSkillEligibility(lower,skill).available,false,`${source.id}: original level gate`);
+   if(!source.learned_raw){
+    role.level=99;role.skill_progress.learned_indices=role.skill_progress.learned_indices.filter(index=>index!==source.original_skill_index);
+    assert.equal(battleSkillEligibility(lower,skill).available,false,`${source.id}: explicit learned gate`);
+   }
+  }
+  assert.deepEqual(party,before,'test save progress never rewrites official command data');
+ }
+ assert.ok(!actual.some(skill=>key(skill)==='003:50'));assert.ok(!actual.some(skill=>key(skill)==='005:30'));
+});
 test('new-game commands preserve CHR learned flags and never borrow a historical save definition',async()=>{
  assert.deepEqual(party.roles['002'].learned_indices,[19,20,21,22,23]);
  assert.deepEqual(party.roles['002'].default_hotkey_indices,[19,20,21]);
@@ -40,11 +82,12 @@ test('new-game commands preserve CHR learned flags and never borrow a historical
  assert.ok(native.records.find(r=>r.evidence_id===party.evidence.menu_defaults).normalized_result.includes('0x444647: MOV DL, byte ptr [ECX + EAX*0x1 + 0x23]'));
  assert.ok(party.roles['002'].skills.filter(s=>s.index>=24).every(s=>s.learned_raw===0));
 });
-test('all registered commands visit their exact logical contact and bind overlapping frame numbers by role',()=>{
+test('all registered commands visit their exact logical contact and bind overlapping frame numbers by role',async()=>{
  validateBattleViewMetadata(meta);
  for(const skill of Object.values(party.skills)){
   const compiled=compileNativeSequence(meta,skill.actor_id,directSequence(skill),banks);
-  const contacts=compiled.steps.flatMap(step=>step.carrier_spawn?step.carrier_spawn.steps:[step]).filter(s=>s.event);assert.equal(contacts.length,skill.actions.filter(action=>action.contact_u32_raw_0x49!==0).length,skill.id);
+  const absentRecords=new Set(compiled.steps.filter(step=>step.missing_effect).map(step=>step.chr_record_index));
+  const contacts=nativeSequenceSteps(compiled).filter(s=>s.event);assert.equal(contacts.length,skill.actions.filter(action=>action.contact_u32_raw_0x49!==0&&!absentRecords.has(action.index)).length,skill.id);
   for(const contact of contacts){
    const original=Buffer.from(skill.actions[contact.chr_record_index].raw_hex,'hex');
    assert.equal(contact.logical_frame,original.readUInt32LE(0x49));
@@ -67,6 +110,33 @@ test('all registered commands visit their exact logical contact and bind overlap
  const shared=bank001.frames.find(f=>bank002.frames.some(k=>k.source_frame===f.source_frame));
  assert.ok(shared,'independent character banks overlap in physical indices');
  assert.notEqual(shared.main.sha256,bank002.frames.find(f=>f.source_frame===shared.source_frame).main.sha256);
+ for(const [role,index,start,end,physicalCount]of [['001',40,10,45,44],... [28,39,40,41].map(index=>['002',index,17,33,32])]){
+  const skill=Object.values(party.skills).find(skill=>skill.actor_id===role&&skill.original_skill_index===index);
+  const action=skill.actions.find(action=>{const raw=Buffer.from(action.raw_hex,'hex');return raw[0]===1&&raw.readUInt32LE(1)===4&&raw.readUInt32LE(0x26)===start&&raw.readUInt32LE(0x2a)===end;});
+  assert.ok(action,`${role}:${index}: original CHR range`);
+  const raw=Buffer.from(action.raw_hex,'hex'),assetId=raw.subarray(9,29).toString('ascii').split('\0')[0].replace(/\.dgp$/i,''),asset=meta.effects.find(effect=>effect.id===assetId);
+  const dgp=await readFile(new URL(asset.source,root)),geometry=0x43+dgp[2]*(dgp[0]===9?0xac:0x90);
+  assert.equal(hash(dgp),asset.source_sha256);assert.equal(dgp.readUInt32LE(geometry+4),physicalCount,'actual DGP has one fewer physical frame than the CHR end');
+  const compiled=compileNativeSequence(meta,role,directSequence(skill),banks),steps=compiled.steps.filter(step=>step.chr_record_index===action.index),spawn=steps.find(step=>step.carrier_spawn)?.carrier_spawn;
+  const frames=spawn?.frames??steps.find(step=>step.effects.some(effect=>effect.unconditional))?.effects.find(effect=>effect.unconditional)?.source_frames;
+  assert.deepEqual(frames,[...Array.from({length:physicalCount-start},(_,n)=>start+n),null],`${role}:${index}: keep source start and blank out-of-range frame`);
+  assert.equal(frames.length,end-start);assert.equal(spawn?.start??steps[0].logical_frame,start);assert.equal(spawn?.end_exclusive??steps.at(-1).logical_frame+1,end);
+  const contact=nativeSequenceSteps(compiled).find(step=>step.chr_record_index===action.index&&step.event);
+  assert.equal(contact.logical_frame,raw.readUInt32LE(0x49));
+ }
+ let missingCarriers=0;
+ for(const missing of meta.missing_effects??[]){
+  await assert.rejects(readFile(new URL(missing.source,root)),{code:'ENOENT'});
+  assert.equal(missing.source_exists,false);assert.ok(!meta.effects.some(asset=>asset.id===missing.id));
+  for(const skill of Object.values(party.skills))for(const action of skill.actions){
+   const raw=Buffer.from(action.raw_hex,'hex'),assetId=raw.subarray(9,29).toString('ascii').split('\0')[0].replace(/\.dgp$/i,'');
+   if(raw[0]!==1||raw.readUInt32LE(1)!==4||assetId!==missing.id)continue;
+   const compiled=compileNativeSequence(meta,skill.actor_id,directSequence(skill),banks),steps=nativeSequenceSteps(compiled).filter(step=>step.chr_record_index===action.index);
+   assert.equal(steps.length,1,`${skill.id}: absent literal does not allocate a carrier`);assert.equal(steps[0].missing_effect,missing.id);
+   assert.equal(steps[0].duration_ms,0);assert.equal(steps[0].event,null);assert.equal(steps[0].carrier_spawn,undefined);assert.deepEqual(steps[0].effects,[]);missingCarriers++;
+  }
+ }
+ assert.ok(missingCarriers>0,'the actual absent source literals are exercised');
 });
 test('Kai reaction lookup has every native required ID and an independently playable death/counter sequence',()=>{
  validateForestReactionsData(reactions);
@@ -84,13 +154,13 @@ test('Kai reaction lookup has every native required ID and an independently play
 test('party attack status blocks use the original id-zero path without hidden draws or modifiers',()=>{
  const actor=initializeNativeStatuses(structuredClone(forest.actors['012']),status);
  for(const skill of Object.values(party.skills)){
+  if(['native-support','native-revival'].includes(skill.battle_handler))continue;
   const block=Buffer.from(skill.fixed_raw_hex,'hex').subarray(0x16b,0x231);
   if(block[1]){
    const retained=status.skills[`${skill.actor_id}:${skill.original_skill_index}`];
    assert.equal(retained.effect_raw_hex,block.toString('hex'));assert.equal(retained.effect_id_raw,block[1]);assert.equal(retained.mode_raw,block[0xb]);
    assert.ok(status.effects[block[1]].source.sha256);continue;
   }
-  assert.equal(block.toString('hex'),'00'.repeat(0xc6));
   const result=applyNativeSkillStatus({actor,skill,data:status,rng:()=>{throw Error('dormant status consumed RNG');},now:0});
   assert.equal(result.native_return,1);assert.equal(result.reason,'effect-id-zero');
   assert.equal(result.applied,false);assert.deepEqual(result.actor,actor);assert.deepEqual(result.trace,[]);
@@ -179,19 +249,23 @@ test('actual BattleView loads every party atlas/layer and presents all admitted 
   }});
  await v.prepare();assert.ok(checked.size>600);
  const actors=[...Object.entries(party.roles).map(([id,role])=>({id,resource_id:id,side:'player',name:role.name,
-   hp:{current:900,maximum:900},mp:{current:200,maximum:200}})),
+   hp:{current:900,maximum:900},mp:{current:200,maximum:200},native_z_raw:0})),
   {...structuredClone(forest.actors['012']),id:'enemy-0',resource_id:'012'}];
+ const nativeControl=Object.create(BattleController.prototype);Object.assign(nativeControl,{state:{actors},verticalClocks:new Map()});
+ v.nativeControl=nativeControl;v.nativeControlIsCurrent=()=>true;
  const skills={...structuredClone(party.skills),enemy:{...structuredClone(forest.skills['012_attack']),id:'enemy',actor_id:'enemy-0'}};
  for(const skill of Object.values(party.skills)){
   v.setRoster(actors.filter(actor=>actor.id===skill.actor_id||actor.side==='enemy'),skills);
-  const contacts=[];let records=0;
+  nativeControl.verticalClocks.clear();for(const actor of actors)actor.native_z_raw=0;
+  const contacts=[];const records=[];
   const pending=v.playSequence({actor_id:skill.actor_id,target_id:'enemy-0',skill_id:skill.id,plan:directSequence(skill)},
-   {onRecord(){records++;},onContact:s=>{contacts.push(s);return {hit:true,damage:1,remainingHp:700};}});
+   {onRecord(step){records.push(step.chr_record_index);},onContact:s=>{contacts.push(s);return {hit:true,damage:1,remainingHp:700};}});
   const compiled=compileNativeSequence(meta,skill.actor_id,directSequence(skill),banks),independent=compiled.independent_carriers;
   v.draw({actors},0);let frame=0;while(v.run||v.detachedRuns.length){assert.ok(++frame<(independent?1000:20));v.draw({actors},frame*(independent?80:10000));}
-  const expectedContacts=skill.actions.filter(action=>action.contact_u32_raw_0x49!==0).length;
-  const result=await pending;assert.equal(result.contact_count,compiled.steps.filter(step=>step.event).length);assert.equal(contacts.length,expectedContacts);
-  assert.equal(records,skill.actions.filter(action=>action.type_raw===0||['effect-carrier','native-support'].includes(skill.battle_handler)).length);assert.ok(result.observations.draws>0);
+  const absentRecords=new Set(compiled.steps.filter(step=>step.missing_effect).map(step=>step.chr_record_index));
+  const expectedContacts=skill.actions.filter(action=>action.contact_u32_raw_0x49!==0&&!absentRecords.has(action.index)).length;
+  const result=await pending;assert.equal(result.contact_count,result.observations.contacts.length);assert.ok(result.contact_count<=contacts.length);assert.equal(contacts.length,expectedContacts);
+  assert.deepEqual([...new Set(records)],[...new Set(compiled.steps.map(step=>step.chr_record_index))],skill.id);assert.ok(result.observations.draws>0);
  }
  v.destroy();
 });

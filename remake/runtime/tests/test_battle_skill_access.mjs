@@ -18,7 +18,7 @@ function learnedWorld(indices=[43]){const world=copy(seed);world.party.find(role
 test('Original source43 learned0 is retained and the default new-game party receives no revival command',()=>{
   const before=copy(commands),world=copy(seed),saved=copy(world),recovery=supportedBattleRecoverySkills(commands),sample=createPartySample(world,attributes,commands);
   assert.equal(source.learned_raw,0);assert.equal(Buffer.from(source.fixed_raw_hex,'hex')[0x23],0);assert.equal(source.mp_delta_raw,40);assert.equal(source.mp_cost,0);
-  assert.equal(commands.skills['001_43'],undefined);assert.equal(recovery['001_43'].battle_handler,'native-revival');assert.equal(recovery['001_43'].original_skill_index,43);
+  assert.equal(commands.skills['001_43'].battle_handler,'native-revival');assert.equal(commands.skills['001_43'].learned_raw,0);assert.equal(recovery['001_43'].battle_handler,'native-revival');assert.equal(recovery['001_43'].original_skill_index,43);
   assert.equal(isBattleSkillLearned(world,recovery['001_43']),false);assert.equal(sample.skills['001_43'],undefined);assert.equal(sample.source.player_command_order['001'].includes('001_43'),false);
   assert.deepEqual(commands,before);assert.deepEqual(world,saved);
 });

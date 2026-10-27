@@ -78,6 +78,7 @@
         "test_fire_valley_npc_interactions.mjs",
         "test_npc_visibility_export.py",
         "test_party_skill_configuration.mjs",
+        "test_party_skill_sample.mjs",
         "test_registered_item_admission.mjs",
         "test_source_skill_configuration.mjs",
         "test_white_forest_packages.mjs"

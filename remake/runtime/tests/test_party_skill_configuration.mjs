@@ -32,7 +32,11 @@ test('unified catalog owns every implemented player/enemy skill and original mod
   const before=copy(data),bundle=copy(config),compiled=compileRuntimeConfiguration(data,bundle);
   assert.equal(bundle.skills.version,3);assert.equal(Object.keys(bundle.skills.entries).length,Object.keys(data.source_skills.skills).length+Object.keys(data.source_magic.magic).length);
   const counts={};for(const id of Object.keys(compiled.skill_registry)){const row=bundle.skills.entries[id];counts[row.owner.role_id]=(counts[row.owner.role_id]??0)+1;}
-  for(const [id,count]of Object.entries({'001':9,'002':7,'003':7,'005':4,'011':2,'012':2,'013':2}))assert.equal(counts[id],count,id);
+  for(const [id,role]of Object.entries(data.party_skills.roles)){
+    const implemented=Object.values({...data.party_skills.skills,...data.party_skills.field_skills,...supportedBattleRecoverySkills(data.party_skills)}).filter(skill=>skill.actor_id===id).length;
+    assert.equal(counts[id],implemented,id);
+  }
+  for(const [id,role]of Object.entries(data.ai.roles))assert.equal(counts[id],role.learned_indices.length,id);
   const expectedIds=[...Object.keys({...data.party_skills.skills,...data.party_skills.field_skills,...supportedBattleRecoverySkills(data.party_skills)}),
     ...Object.entries(data.ai.roles).flatMap(([id,role])=>role.learned_indices.map(index=>`${id}_${index}`))];
   assert.deepEqual(Object.keys(compiled.skill_registry).sort(),expectedIds.sort());
@@ -158,6 +162,12 @@ test('export migrates v1 source identities, adds new skills and preserves all ed
     await assert.rejects(exportRuntimeConfiguration({dataDirectory:directory,outputDirectory:output}),/配置/);
     assert.deepEqual(await Promise.all(files.map(name=>readFile(new URL(name+'.json',output),'utf8'))),bytesBefore);
     await writeFile(new URL('skills.json',output),'{broken json');
-    await exportRuntimeConfiguration({dataDirectory:directory,outputDirectory:output,reset:true});assert.equal((await readTemp('index')).mode,'original');assert.deepEqual((await readTemp('skills')).entries.kai_mieyan.parameters,{});
+    await exportRuntimeConfiguration({dataDirectory:directory,outputDirectory:output,reset:true});assert.equal((await readTemp('index')).mode,'original');
+    const reset=await readTemp('skills');assert.deepEqual(reset.entries.kai_mieyan.parameters,{});
+    for(const skill of Object.values(data.party_skills.skills)){
+      const row=reset.entries[skill.id];assert.ok(row,`${skill.id}: reset retains every admitted party command`);
+      assert.deepEqual(row.owner,{role_id:skill.actor_id,skill_index:skill.original_skill_index,side:'player'});
+      assert.equal(reset.source_hashes[skill.source.path],skill.source.sha256);assert.deepEqual(row.parameters,{},`${skill.id}: reset uses official defaults`);
+    }
   }finally{assert.ok(path.resolve(temporary).startsWith(path.resolve(tmpdir())+path.sep));await rm(temporary,{recursive:true,force:true});}
 });

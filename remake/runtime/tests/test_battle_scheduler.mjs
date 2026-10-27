@@ -62,6 +62,39 @@ test('ranged speed consumes one draw, exclusive upper bound; zero bound uses80 a
   assert.equal(a.charge.gauge,o.read(0x521a7b9));assert.deepEqual(used,o.rng_calls);assert.equal(a.charge.gauge,min?min+n%7+3:83);
  }
 });
+test('zero and negative effective speed preserve native signed gauge/debt and unsigned recovery boundaries',()=>{
+ const cases=[];
+ for(const speed of [0,-1,-2,-3,-100,-2147483648])for(const delay of [0,1,800,-1,speed,speed-1]){
+  if(delay< -2147483648)continue;
+  for(const recovery of [0,1,0x7fffffff,-1])cases.push({speed,delay,recovery});
+ }
+ for(const [index,{speed,delay,recovery}]of cases.entries()){
+  const {actors,scheduler}=prepared(['012']),a=actors[0],rng=createNativeRng(index),nativeRng=createNativeRng(index);
+  // A positive source range stays intact; the additive status can cancel or
+  // exceed it, exactly as the original00640/41 speed-reduction blocks do.
+  a.status_by_address['0x0521f56d']=(speed-51)|0;
+  a.charge={gauge:index%2?-10400:0x7fffffff,delay,recovery,recovery_ticks:[0,1,7,-1][index%4]};
+  const o=oracle(clone(actors),scheduler,nativeRng),actualSpeed=chargeActor(a,rng);o.run(0x502f30,[0]);
+  assert.equal(actualSpeed,speed,`speed case${index}`);
+  assert.deepEqual(a.charge,{gauge:o.read(0x521a7b9),delay:o.read(0x521a7bd),recovery:o.read(0x521f69e),recovery_ticks:o.read(0x521f6a2)},`case${index}: speed${speed}, delay${delay}, recovery${recovery}`);
+  assert.deepEqual(o.rng_calls,[]);assert.equal(rng.state,nativeRng.state);
+ }
+});
+test('ranged sampling precedes slowing statuses and retains continuous native RNG when speed becomes nonpositive',()=>{
+ for(const type of [0,4,7]){
+  const {actors,scheduler}=prepared(['012']),a=actors[0],rng=createNativeRng(0x20261027),nativeRng=createNativeRng(0x20261027);
+  a.raw_by_address['0x0524a729']=51;a.raw_by_address['0x0524a72d']=58;
+  a.current_skill=skillFields(a.current_skill,{0xe3:51,0xe7:58});const raw=Buffer.from(a.current_skill.fixed_raw_hex,'hex');raw[0]=type;a.current_skill.fixed_raw_hex=raw.toString('hex');
+  a.charge={gauge:100,delay:800,recovery:50,recovery_ticks:7};
+  for(let tick=0;tick<18;tick++){
+   a.status_by_address['0x0521f56d']=[-51,-57,-100][tick%3];
+   const o=oracle(clone(actors),scheduler,nativeRng),calls=[],actualSpeed=chargeActor(a,()=>{const n=rng();calls.push(n);return n;});o.run(0x502f30,[0]);
+   assert.deepEqual(a.charge,{gauge:o.read(0x521a7b9),delay:o.read(0x521a7bd),recovery:o.read(0x521f69e),recovery_ticks:o.read(0x521f6a2)},`type${type} tick${tick}`);
+   assert.deepEqual(calls,o.rng_calls);assert.equal(calls.length,1);assert.equal(rng.state,nativeRng.state);
+   assert.equal(actualSpeed,51+calls[0]%7+a.status_by_address['0x0521f56d']);
+  }
+ }
+});
 test('ready selection and side alternation match original candidate-position access even with gaps',()=>{
  for(let i=0;i<96;i++){
   const {actors,scheduler}=prepared();scheduler.side_priority=i%2;if(i%3===0)scheduler.pending=null;

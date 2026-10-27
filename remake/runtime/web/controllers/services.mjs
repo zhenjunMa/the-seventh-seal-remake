@@ -43,7 +43,7 @@ export function createServicesController({state, actions, $, canvas, ctx}) {
     $('loading').hidden=!['loading','boot'].includes(phase);
     $('partyMenuOpen').disabled=phase!=='map'||state.world?.value.source.kind!=='native-new-game';
     $('interactionHint').hidden=phase!=='map'||!state.nearest;
-    for(const id of ['save','load','role','jumpProbe','resetEventSample','exportSave','importSave','layerOpen','battleOpen','zoomOut','zoomIn','fit','follow','collision','probe','routeSample','citySample','contentSample']) $(id).disabled=phase!=='map';
+    for(const id of ['save','load','role','jumpProbe','resetEventSample','exportSave','importSave','layerOpen','battleOpen','zoomOut','zoomIn','fit','follow','collision','probe','routeSample','citySample','contentSample','partySkillSampleA','partySkillSampleB']) $(id).disabled=phase!=='map';
     $('battleOpen').disabled=phase!=='map'||Boolean(state.battleUnavailable)||state.world?.value.source.kind==='native-new-game';
     $('newGame').disabled=!['map','menu'].includes(phase);
     $('menuNew').disabled=phase!=='menu';$('menuLoad').disabled=phase!=='menu';

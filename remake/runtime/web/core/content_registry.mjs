@@ -12,7 +12,7 @@ export function validateContentRegistration(content){
   // Four active formation positions are a recovered rule, not a content option.
   need(content.party_limit===4,'当前只实现四个参战队列位置');
   need(content.roles&&Object.keys(content.roles).length>0,'角色表缺失');
-  const slots=new Set(),skillIds=new Set();
+  const slots=new Set(),skillIds=new Map();
   for(const [id,role]of Object.entries(content.roles)){
     need(roleId(id)&&['player','enemy'].includes(role.side),'角色编号或阵营无效');
     need(role.source?.path===`Fight_Role/${id}.CHR`&&sourceHash(role.source.sha256),`角色 ${id} 来源无效`);
@@ -23,10 +23,11 @@ export function validateContentRegistration(content){
       for(const rows of [role.battle_skills,role.field_skills??[]]){
         need(new Set(rows.map(row=>row.index)).size===rows.length,'角色技能索引重复');
         for(const skill of rows){
-          need(Number.isInteger(skill.index)&&skill.index>=0&&skill.index<200&&/^[A-Za-z0-9_]+$/.test(skill.id)&&!skillIds.has(skill.id),'技能源索引或ID无效');skillIds.add(skill.id);
+          const owner=`${id}:${skill.index}`;
+          need(Number.isInteger(skill.index)&&skill.index>=0&&skill.index<200&&/^[A-Za-z0-9_]+$/.test(skill.id)&&(!skillIds.has(skill.id)||skillIds.get(skill.id)===owner),'技能源索引或ID无效');skillIds.set(skill.id,owner);
         }
       }
-      need(role.battle_skills.every(skill=>['direct','effect-carrier','native-support'].includes(skill.handler)),'战斗技能处理器尚未实现');
+      need(role.battle_skills.every(skill=>['direct','effect-carrier','native-support','native-revival'].includes(skill.handler)),'战斗技能处理器尚未实现');
     }
   }
   for(const [name,ids]of Object.entries(content.battle_rosters??{})){

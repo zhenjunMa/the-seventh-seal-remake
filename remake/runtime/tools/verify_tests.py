@@ -106,7 +106,10 @@ def run_suites(suites=('daily',), patterns=(), timeout=300):
         commands.append(('javascript', javascript, [shutil.which('node'), '--test', '--test-reporter=tap',
                                                    *[str(TESTS/name) for name in javascript]]))
     if python:
-        commands.append(('python', python, [sys.executable, '-B', '-m', 'unittest',
+        # Embedded/isolated Python may omit cwd from sys.path. Pass the chosen
+        # test directory explicitly so discovery does not depend on host setup.
+        loader = 'import sys, unittest; sys.path.insert(0, sys.argv[1]); unittest.main(module=None, argv=[sys.argv[0], *sys.argv[2:]])'
+        commands.append(('python', python, [sys.executable, '-B', '-c', loader, str(TESTS),
                                            *[name.removesuffix('.py') for name in python]]))
     for language, files, command in commands:
         started = time.monotonic()

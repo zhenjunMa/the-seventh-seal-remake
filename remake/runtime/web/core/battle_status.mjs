@@ -23,18 +23,24 @@ function templateEquals(raw,template){
 }
 function effectMetadata(data,id){return id===43?data.status43:data.effects?.[String(id)];}
 export function validateNativeSkillStatus(skill,data){
-  const fixed=bytes(skill?.fixed_raw_hex,0x41d,'skill'),block=rawView(hex(fixed.slice(0x16b,0x231))),id=block.raw[1],mode=block.raw[0xb];
+  return validateSkillBlock(skill,data,0x16b,[0,2]);
+}
+function validateSkillBlock(skill,data,offset,modes){
+  const fixed=bytes(skill?.fixed_raw_hex,0x41d,'skill'),block=rawView(hex(fixed.slice(offset,offset+0xc6))),id=block.raw[1],mode=block.raw[0xb];
   if(skill.effect_raw_hex!==undefined)need(skill.effect_raw_hex===hex(block.raw),'Original effect block mismatch');
   if(skill.effect_id_raw!==undefined)need(skill.effect_id_raw===id,'Original effect block mismatch');
   if(skill.mode_raw!==undefined)need(skill.mode_raw===mode,'Original effect block mismatch');
-  need([0,2].includes(mode),'Native status application mode is not implemented');
-  if(id){
+  // Preserve dormant primary blocks belonging to allied/revival records;
+  // the active entry point separately checks which native branch it invokes.
+  need(id===0||modes.includes(mode),'Native status application mode is not implemented');
+  if(id&&[0,2].includes(mode)){
     const metadata=effectMetadata(data,id);need(metadata&&metadata.id_raw===id,'Status effect handler/source metadata is not implemented');
     integer(metadata.interval_ms,'status interval',1,2147483647);integer(metadata.frame_count,'status frame count',0,2147483647);
     need(block.raw[0x10]<=1,'Native periodic status mode is not implemented');
   }
   return {id,mode,block};
 }
+export function validateNativeSupportStatus(skill,data){return validateSkillBlock(skill,data,0x231,[0,1,3,5]);}
 export function validateForestStatusData(data,content=runtimeContent){
   if(data&&typeof data==='object'&&validatedData.get(data)===content)return data;
   need(data?.schema==='seventh-seal-forest-status'&&data.version===1&&data.slots===100&&data.effect_bytes===0xc6&&data.skill_block_offset===0x16b,'Forest status metadata incompatible');
@@ -43,6 +49,10 @@ export function validateForestStatusData(data,content=runtimeContent){
   for(const[key,skill]of Object.entries(data.skills)){
     const [role,index]=key.split(':');need(content.roles[role]&&/^\d+$/.test(index)&&Number(index)<200,'Status skill owner is not registered');
     const {id}=validateNativeSkillStatus(skill,data);if(id===43)active.push(key);
+  }
+  for(const[key,skill]of Object.entries(data.support_skills??{})){
+    const [role,index]=key.split(':');need(content.roles[role]&&/^\d+$/.test(index)&&Number(index)<200,'Status skill owner is not registered');
+    validateNativeSupportStatus(skill,data);
   }
   const s=data.status43,b=rawView(s?.effect_raw_hex),v=b.view;
   need(s.id_raw===43&&s.mode_raw===0&&s.interval_ms===80&&s.frame_count===10&&b.raw[1]===43&&b.raw[0xb]===0&&b.raw[0x10]===0&&b.raw[0x11]===80&&v.getInt32(2,true)===10&&v.getInt32(6,true)===500&&v.getInt32(0x17,true)===0&&v.getInt32(0x1b,true)===0&&v.getInt32(0x8f,true)===200&&v.getInt32(0xb8,true)===0,'Status43 source fields incompatible');
@@ -63,7 +73,8 @@ function slots(actor,data){
   need(actor&&typeof actor==='object'&&actor.status_by_address&&Array.isArray(actor.native_status_slots)&&actor.native_status_slots.length===100,'Native status slots must be explicitly initialized');
   flags(actor);
   let templates=templateCache.get(data);
-  if(!templates){templates=Object.values(data.skills).map(skill=>rawView(skill.effect_raw_hex));templateCache.set(data,templates);}
+  if(!templates){templates=[...Object.values(data.skills),...Object.values(data.support_skills??{})]
+    .filter(skill=>[0,2].includes(skill.mode_raw)).map(skill=>rawView(skill.effect_raw_hex));templateCache.set(data,templates);}
   const passiveTemplates=(actor.equipment_passives??[]).map(passive=>passiveBlock(passive));
   const empty=rawView(ZERO);
   return actor.native_status_slots.map((record,index)=>{
@@ -158,7 +169,26 @@ export function removeNativeStatus({actor,effect_raw_hex,data,content=runtimeCon
 export function applyNativeSkillStatus({actor,skill,data,rng,now,content=runtimeContent}){
   validateForestStatusData(data,content);integer(now,'native elapsed time');
   const {block,id,mode}=validateNativeSkillStatus(skill,data);
+  need([0,2].includes(mode),'Native hostile-contact status mode is not implemented');
   return applyNativeBlock({actor,data,rng,records:slots(actor,data),block,id,mode,trace:[],remove_on_contact:true});
+}
+/** 50FA00's allied +231 block calls 508BB0 without the hostile-contact
+ * 508A90 removal pass. Cure and clear operate before the separate 41E950
+ * recovery call; even an absent cure/duplicate effect does not skip recovery.
+ */
+export function applyNativeSupportStatus({actor,skill,data,rng,content=runtimeContent}){
+  validateForestStatusData(data,content);const {block,id,mode}=validateNativeSupportStatus(skill,data);
+  if(mode===1)return removeNativeStatus({actor,effect_raw_hex:hex(block.raw),data,content});
+  if(mode===5){
+    need(id===0,'Nonzero clear-all status IDs are not implemented');
+    return {actor:clearNativeStatuses(actor,data,content),native_return:1,applied:true,cancel_command:false,
+      reason:'statuses-cleared',trace:[],evidence:data.evidence['0x507e20']};
+  }
+  need(mode===0,'Revival requires its own native recovery and animation lifecycle');
+  // ID0 bypasses every slot, probability, immunity and payload operation.
+  if(id===0)return {actor:clone(actor),native_return:1,applied:false,cancel_command:false,
+    reason:'effect-id-zero',trace:[],evidence:data.evidence['0x508bb0']};
+  return applyNativeBlock({actor,data,rng,records:slots(actor,data),block,id,mode,trace:[],remove_on_contact:false});
 }
 function applyNativeBlock({actor,data,rng,records,block,id,mode,trace,remove_on_contact}){
   const out=clone(actor);let cancel_command=false;
@@ -180,10 +210,10 @@ function applyNativeBlock({actor,data,rng,records,block,id,mode,trace,remove_on_
   if(records.some(existing=>existing.raw[0xb]===7||(existing.raw[1]===id&&mode!==6&&existing.raw[0xb]===6)))return result(0,'effect-immunity');
   if(id===1&&(flags(out)&0x40)){
     const index=records.findIndex(existing=>existing.raw[1]&&(existing.view.getUint32(0xb8,true)&0x40));
-    if(index>=0){remove(index);return result(0,'opposing-effect-removed');}
+    if(index>=0){remove(index);return result(1,'opposing-effect-removed');}
   }
   if(block.view.getUint32(0xb8,true)&0x40){const index=records.findIndex(existing=>existing.raw[1]===1);
-    if(index>=0){remove(index);return result(0,'opposing-effect-removed');}}
+    if(index>=0){remove(index);return result(1,'opposing-effect-removed');}}
   if(flags(out)&0x2e0)return result(0,'target-status-flags');
   if(records.some(existing=>existing.raw[1]===10))return result(0,'effect10-immunity');
   const index=records.findIndex(s=>s.raw[1]===0||(s.raw[1]===id&&s.raw[0xb]!==mode));

@@ -35,6 +35,91 @@
         {
           "index": 36,
           "handler": "effect-carrier"
+        },
+        {
+          "index": 24,
+          "handler": "direct"
+        },
+        {
+          "index": 25,
+          "handler": "direct"
+        },
+        {
+          "index": 27,
+          "handler": "direct"
+        },
+        {
+          "index": 28,
+          "handler": "direct"
+        },
+        {
+          "index": 29,
+          "handler": "direct"
+        },
+        {
+          "index": 30,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 31,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 32,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 33,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 34,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 38,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 39,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 40,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 41,
+          "handler": "native-support",
+          "id": "yannuan"
+        },
+        {
+          "index": 42,
+          "handler": "native-support"
+        },
+        {
+          "index": 43,
+          "handler": "native-revival"
+        },
+        {
+          "index": 44,
+          "handler": "direct"
+        },
+        {
+          "index": 45,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 46,
+          "handler": "direct"
+        },
+        {
+          "index": 47,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 48,
+          "handler": "effect-carrier"
         }
       ],
       "field_skills": [
@@ -80,6 +165,74 @@
         {
           "index": 31,
           "handler": "effect-carrier"
+        },
+        {
+          "index": 24,
+          "handler": "direct"
+        },
+        {
+          "index": 25,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 26,
+          "handler": "direct"
+        },
+        {
+          "index": 27,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 28,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 29,
+          "handler": "direct"
+        },
+        {
+          "index": 32,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 33,
+          "handler": "direct"
+        },
+        {
+          "index": 34,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 35,
+          "handler": "direct"
+        },
+        {
+          "index": 36,
+          "handler": "direct"
+        },
+        {
+          "index": 37,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 38,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 39,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 40,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 41,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 42,
+          "handler": "direct"
         }
       ],
       "field_skills": [],
@@ -115,9 +268,103 @@
         {
           "index": 33,
           "handler": "effect-carrier"
+        },
+        {
+          "index": 26,
+          "handler": "direct"
+        },
+        {
+          "index": 27,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 28,
+          "handler": "direct"
+        },
+        {
+          "index": 29,
+          "handler": "direct"
+        },
+        {
+          "index": 30,
+          "handler": "direct"
+        },
+        {
+          "index": 31,
+          "handler": "direct"
+        },
+        {
+          "index": 32,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 35,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 36,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 37,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 38,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 39,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 40,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 41,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 42,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 43,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 44,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 45,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 46,
+          "handler": "native-support",
+          "id": "003_46"
+        },
+        {
+          "index": 47,
+          "handler": "native-support"
+        },
+        {
+          "index": 48,
+          "handler": "native-support"
+        },
+        {
+          "index": 51,
+          "handler": "effect-carrier"
         }
       ],
-      "primary_skill": 21
+      "primary_skill": 21,
+      "field_skills": [
+        {
+          "index": 46
+        }
+      ]
     },
     "004": {
       "side": "player",
@@ -152,14 +399,108 @@
         },
         {
           "index": 33,
-          "handler": "native-support"
+          "handler": "native-support",
+          "id": "004_33"
         },
         {
           "index": 38,
           "handler": "native-support"
+        },
+        {
+          "index": 20,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 22,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 23,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 24,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 26,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 28,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 30,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 32,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 34,
+          "handler": "native-support"
+        },
+        {
+          "index": 35,
+          "handler": "native-support",
+          "id": "004_35"
+        },
+        {
+          "index": 36,
+          "handler": "native-support"
+        },
+        {
+          "index": 37,
+          "handler": "native-support"
+        },
+        {
+          "index": 39,
+          "handler": "native-support"
+        },
+        {
+          "index": 40,
+          "handler": "native-revival"
+        },
+        {
+          "index": 41,
+          "handler": "native-revival"
+        },
+        {
+          "index": 42,
+          "handler": "native-support"
+        },
+        {
+          "index": 43,
+          "handler": "native-support"
+        },
+        {
+          "index": 44,
+          "handler": "native-support"
+        },
+        {
+          "index": 45,
+          "handler": "native-support"
+        },
+        {
+          "index": 46,
+          "handler": "native-support"
+        },
+        {
+          "index": 47,
+          "handler": "native-support"
         }
       ],
-      "primary_skill": 18
+      "primary_skill": 18,
+      "field_skills": [
+        {
+          "index": 33
+        },
+        {
+          "index": 35
+        }
+      ]
     },
     "005": {
       "side": "player",
@@ -179,9 +520,46 @@
         {
           "index": 22,
           "handler": "direct"
+        },
+        {
+          "index": 23,
+          "handler": "direct"
+        },
+        {
+          "index": 24,
+          "handler": "direct"
+        },
+        {
+          "index": 25,
+          "handler": "direct"
+        },
+        {
+          "index": 26,
+          "handler": "direct"
+        },
+        {
+          "index": 27,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 28,
+          "handler": "direct"
+        },
+        {
+          "index": 31,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 32,
+          "handler": "direct"
+        },
+        {
+          "index": 33,
+          "handler": "direct"
         }
       ],
-      "primary_skill": 19
+      "primary_skill": 19,
+      "field_skills": []
     },
     "006": {
       "side": "player",
@@ -209,9 +587,106 @@
         {
           "index": 24,
           "handler": "direct"
+        },
+        {
+          "index": 25,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 26,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 27,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 28,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 29,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 30,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 31,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 32,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 33,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 34,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 35,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 36,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 37,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 38,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 39,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 40,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 41,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 42,
+          "handler": "native-support"
+        },
+        {
+          "index": 43,
+          "handler": "native-support"
+        },
+        {
+          "index": 44,
+          "handler": "native-support"
+        },
+        {
+          "index": 45,
+          "handler": "native-support"
+        },
+        {
+          "index": 46,
+          "handler": "native-support"
+        },
+        {
+          "index": 47,
+          "handler": "native-support"
+        },
+        {
+          "index": 48,
+          "handler": "effect-carrier"
         }
       ],
-      "primary_skill": 19
+      "primary_skill": 19,
+      "field_skills": []
     },
     "011": {
       "side": "enemy",
@@ -388,35 +863,111 @@
       "export": {
         "assets": "existing"
       },
-      "npcs": [10, 11, 12, 13, 14],
-      "objects": [{"index": 8, "handler": "keyed-chest"}, {"index": 10, "handler": "keyed-chest"}],
+      "npcs": [
+        10,
+        11,
+        12,
+        13,
+        14
+      ],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 10,
+          "handler": "keyed-chest"
+        }
+      ],
       "setup": true,
-      "triggers": [4]
+      "triggers": [
+        4
+      ]
     },
     "M70020": {
-      "export": {"story": false},
-      "objects": [{"index": 3, "handler": "keyed-chest"}, {"index": 4, "handler": "keyed-chest"}],
+      "export": {
+        "story": false
+      },
+      "objects": [
+        {
+          "index": 3,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 4,
+          "handler": "keyed-chest"
+        }
+      ],
       "npcs": []
     },
     "M70030": {
-      "npcs": [10],
-      "objects": [{"index": 8, "handler": "keyed-chest"}, {"index": 9, "handler": "keyed-chest"}],
+      "npcs": [
+        10
+      ],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 9,
+          "handler": "keyed-chest"
+        }
+      ],
       "setup": true
     },
     "M70040": {
-      "export": {"story": false},
-      "objects": [{"index": 9, "handler": "keyed-chest"}, {"index": 10, "handler": "keyed-chest"}, {"index": 11, "handler": "keyed-chest"}],
+      "export": {
+        "story": false
+      },
+      "objects": [
+        {
+          "index": 9,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 10,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 11,
+          "handler": "keyed-chest"
+        }
+      ],
       "npcs": []
     },
     "M70050": {
-      "export": {"story": false},
-      "objects": [{"index": 6, "handler": "keyed-chest"}, {"index": 12, "handler": "keyed-chest"}],
+      "export": {
+        "story": false
+      },
+      "objects": [
+        {
+          "index": 6,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ],
       "npcs": []
     },
     "M70060": {
       "npcs": [],
-      "objects": [{"index": 8, "handler": "keyed-chest"}, {"index": 9, "handler": "keyed-chest"}],
-      "triggers": [2]
+      "objects": [
+        {
+          "index": 8,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 9,
+          "handler": "keyed-chest"
+        }
+      ],
+      "triggers": [
+        2
+      ]
     },
     "M72061": {
       "export": {

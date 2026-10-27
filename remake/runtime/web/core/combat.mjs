@@ -647,6 +647,7 @@ export class BattleController {
         else{
           const support=applyNativeSupport({target:victim,skill:source,rng:this.rng,statusData:this.statusData});
           if(support.applied)Object.assign(victim,support.actor);
+          if(support.cancel_command){const pending=commandForActor(this.state.scheduler,victim.id);if(pending)this.cancelQueuedCommand(pending,'actor-status');}
           result={hit:support.applied,damage:0,native_return:support.native_return,mp_cost:source.mp_cost,supported:support.applied,hp_delta:support.hp_delta??0,mp_delta:support.mp_delta??0,cleared_statuses:support.cleared_statuses??false,trace:copy(support.trace??[])};
         }
       }else if(isRevival){
@@ -690,23 +691,37 @@ export class BattleController {
         hit:result.hit,damage:result.damage,skipped:result.skipped??null,hp_before:before.target?.hp.current??null,hp_after:victim?.hp.current??null,mp_before:before.attacker.mp.current,mp_after:striker.mp.current,trace:copy(result.trace??[]),status:copy(presented.status),reaction:reaction?{kind:reaction.kind,source_skill_index:reaction.source_skill_index,target_id:reaction.target_id,trace:copy(reaction.trace)}:null,presentation:copy(step)});this.publish();return presented;
     };
     const contactTargets=step=>{
+      if(step.carrier_target_ids)return step.carrier_target_ids;
       const source=plan.kind==='single'?selected:this.sequenceSkill(attacker,step.source_skill_index),fixed=Uint8Array.from(source.fixed_raw_hex.match(/../g),x=>parseInt(x,16));
-      if(!step.effect_contact||!fixed[0x24])return [target.id];
+      if(!fixed[0x24])return [target.id];
       return this.state.actors.filter(actor=>fixed[0x25]?actor.side_raw===attacker.side_raw:actor.side_raw!==attacker.side_raw).map(actor=>actor.id);
     };
     const onSourceContact=(step,descriptor=null)=>{
       if(descriptor)return onContact(step,descriptor);
-      const ids=contactTargets(step);if(ids.length===1)return onContact({...step,target_id:ids[0]});
+      const ids=contactTargets(step);if(ids.length===1)return {target_id:ids[0],...onContact({...step,target_id:ids[0]})};
       const results=ids.map(id=>({target_id:id,...onContact({...step,target_id:id,contact_key:`${step.contact_key}:${id}`})}));
       const primary=results.find(row=>row.target_id===target.id)??results[0];
-      return {...primary,group_results:results};
+      return {...(primary??{hit:false,damage:0,skipped:'no-native-carrier-target',remainingHp:0}),group_results:results};
     };
     const playback=await this.playSequence({actor_id:attacker.id,target_id:target.id,skill_id:command.id,action_id:actionId,plan:copy(plan)},{onContact:onSourceContact,onRecord,
+      onCarrierTargets:(step,descriptor=null)=>{
+        const caster=descriptor?this.actor(descriptor.actor_id):attacker,primary=descriptor?this.actor(descriptor.target_id):target;
+        const source=descriptor?descriptor.skill:plan.kind==='single'?selected:this.sequenceSkill(caster,step.source_skill_index);
+        const fixed=Uint8Array.from(source.fixed_raw_hex.match(/../g),x=>parseInt(x,16));
+        const group=Boolean(fixed[0x24]&&!step.full_screen_effect),revival=fixed[0x176]===3||fixed[0x23c]===3;
+        const ids=group?this.state.actors.filter(actor=>{
+          if(actor.immune_raw)return false;
+          if(fixed[0x25])return actor.side_raw===caster.side_raw&&(revival?actor.state_raw>=4&&actor.state_raw<=7:actor.state_raw<4);
+          return actor.side_raw!==caster.side_raw&&!actor.escaped&&parseInt(actor.current_skill.fixed_raw_hex.slice(0,2),16)!==19;
+        }).map(actor=>actor.id):primary&&!primary.immune_raw?[primary.id]:[];
+        if(!ids.length)entry.empty_carrier_allocation=true;
+        return {target_ids:ids,group};
+      },
       onCarrierStart:({carrier_id})=>{this.pendingCarriers.add(`${actionId}:${carrier_id}`);},
       onCarrierEnd:({carrier_id})=>{this.pendingCarriers.delete(`${actionId}:${carrier_id}`);this.refreshCommandState();this.publish();},
       onDetachedError:error=>this.interrupt(error),
       onReactionContact:onContact,onReactionRecord:onRecord,onReactionEnd:(descriptor,completed,now)=>{if(completed)end(this.actor(descriptor.actor_id),descriptor.token,now);},onPrimaryEnd:now=>end(attacker,primaryToken,now)});this.checkWorld();
-    requireValue(entry.contacts.length>0||playback?.interrupted||playback?.carriers_pending,'完整技能结束却没有接触结算');
+    requireValue(entry.contacts.length>0||entry.empty_carrier_allocation||playback?.interrupted||playback?.carriers_pending,'完整技能结束却没有接触结算');
     for(const actor of this.state.actors)if(actor.state_raw===4&&this.canFinalizeDeath(actor))this.finalizeDeath(actor);
     if(this.state.reward_ledger)resetNativeChain(this.state.reward_ledger,attacker.id);
   }

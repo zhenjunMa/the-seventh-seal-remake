@@ -3,7 +3,8 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {WorldStore,encodeSave,decodeSave} from '../web/core/world.mjs';
 import {createTechniqueCombination,changeTechniqueSlot,techniqueSlots} from '../web/core/menu_techniques.mjs';
-import {battleTechniqueId} from '../web/core/battle_techniques.mjs';
+import {battleTechniqueId,createBattleTechniques} from '../web/core/battle_techniques.mjs';
+import {effectiveSkillSource} from '../web/core/battle_skill_access.mjs';
 import {deriveRuntimeConfiguration,compileRuntimeConfiguration} from '../web/core/runtime_config.mjs';
 import {createPartySample} from '../web/party_sample.mjs';
 import {assembleForestSample} from '../web/forest_sample.mjs';
@@ -89,10 +90,18 @@ test('MP, silence, level and actor ownership reject a whole combination atomical
   assert.deepEqual(f.consumed,[]);assert.equal(f.battle.state.history.length,0);
 });
 
-test('unsupported source members retain their saved composition and show an unavailable reason instead of inventing an attack',()=>{
-  const f=fixture({indices:[21,24]});assert.equal(f.battle.canChoose(f.id),false);
+test('newly admitted source members compose, while a missing runtime member preserves the saved record and explains unavailability',()=>{
+  const f=fixture({indices:[21,24]});assert.equal(f.battle.canChoose(f.id),true);
+  assert.deepEqual(f.battle.skills[f.id].component_skill_ids,['yanci','001_24']);
+  const before=f.world.snapshot();
+  // A deliberately incomplete adapter must still fail closed, even though
+  // the official registry now implements every named source command.
+  delete f.battle.skills['001_24'];
+  Object.assign(f.battle.skills,createBattleTechniques(f.world.value,effectiveSkillSource(source,f.world.value),f.battle.skills,ui.name_charset));
+  assert.equal(f.battle.canChoose(f.id),false);
   assert.match(f.battle.skillUnavailableReason(f.id),/尚未接入战斗/);
   assert.deepEqual(f.world.value.technique_combinations.roles['001'][0].indices,[21,24]);assert.equal(f.battle.skills[f.id].component_skill_ids[1],null);
+  assert.deepEqual(f.world.snapshot(),before);
 });
 
 test('skill-test uses the same mixed sequence and MP admission but preserves HP and MP',async()=>{
@@ -143,13 +152,15 @@ test('all registered composable pairs compile their actual source bodies, includ
   for(const role of Object.values(source.roles)){
     const skills=Object.values(source.skills).filter(skill=>skill.actor_id===role.id&&(skill.type_flags_u32_0x32&256));
     for(const first of skills)for(const second of skills){if(first.id===second.id)continue;
+      const units=skill=>Buffer.from(skill.fixed_raw_hex,'hex').readUInt32LE(0x36);
+      if(units(first)+units(second)>7)continue; // Original seven-unit menu capacity.
       const indices=[first.original_skill_index,second.original_skill_index],plan=composeNativeSequence(skills,indices),compiled=compileNativeSequence(meta,role.id,plan);
       const contacts=compiled.steps.flatMap(step=>step.carrier_spawn?.steps??[step]).filter(step=>step.event);
       assert.ok(contacts.some(step=>step.source_skill_index===indices[0]),first.id+' -> '+second.id);
       assert.ok(contacts.some(step=>step.source_skill_index===indices[1]),first.id+' -> '+second.id);pairs++;
     }
   }
-  assert.ok(pairs>100);
+  assert.equal(pairs,1812);
 });
 
 test('a queued composition retargets a fallen opponent through the same native selector as a direct command',()=>{

@@ -6,7 +6,7 @@ import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {applyNativeSupport,nativeSupportSkillSupported,supportTargetEligibility,supportSkillAvailability} from '../web/core/battle_support.mjs';
 import {applyNativeRevival,nativeRevivalSkillSupported} from '../web/core/battle_revival.mjs';
-import {clearNativeStatuses} from '../web/core/battle_status.mjs';
+import {clearNativeStatuses,applyNativeSupportStatus,tickNativeStatuses,validateForestStatusData} from '../web/core/battle_status.mjs';
 import {runtimeContent} from '../web/core/content_registry.mjs';
 import {createNativeRng} from '../web/core/combat_rules.mjs';
 import {createForestSample} from '../web/forest_sample.mjs';
@@ -21,7 +21,7 @@ const [seed,base,forest,skills,scheduler,statusData,statusEvidence,recoveryEvide
 function collect(value,records=[]){if(value&&typeof value==='object'){if(value.operation==='procedure_assembly')records.push(value);for(const child of Object.values(value))collect(child,records);}return records;}
 const records=[...collect(statusEvidence),...collect(recoveryEvidence),...collect(lifecycleEvidence)],functions={...numeric.functions,
   '0x507e20':clearEvidence.normalized_result.assembly};
-for(const address of ['0x50fa00','0x508bb0','0x508300','0x41bfb0','0x41e950','0x401aaa']){
+for(const address of ['0x50fa00','0x508bb0','0x508300','0x509e10','0x41bfb0','0x41e950','0x401aaa']){
   const record=records.find(row=>row.parameters?.procedure?.toLowerCase()===address);assert.ok(record,address);functions[address]=record.normalized_result.trim().split(/\r?\n/);
 }
 // The retained50FA00 assembly calls40147E, whereas the recovery bundle stores
@@ -51,9 +51,32 @@ for(let index=0;index<original.readUInt32LE(8);index++){
 }
 assert.equal(offset,original.length);
 const source032=await readFile(new URL('../../../Fight_Role/032.CHR',import.meta.url)),mode2=source032.subarray(10446+0x16b,10446+0x231).toString('hex');
-function fixture(skill){
+// The support fixtures come directly from every companion's immutable CHR,
+// independently of the generated runtime skill selection.
+const alliedSource={},expandedStatusData=copy(statusData);expandedStatusData.support_skills={};expandedStatusData.effects??={};
+for(const role of ['001','002','003','004','005','006']){
+  const raw=await readFile(new URL(`../../../Fight_Role/${role}.CHR`,import.meta.url));let at=8+0x30b;
+  for(let index=0;index<raw.readUInt32LE(8);index++){
+    const fixed=raw.subarray(at,at+0x41d),effect=fixed.subarray(0x231,0x2f7);
+    if(fixed[0x25]===1){
+      const key=`${role}:${index}`,skill={id:`${role}_${index}`,actor_id:role,original_skill_index:index,index,
+        fixed_raw_hex:fixed.toString('hex'),effect_raw_hex:effect.toString('hex'),effect_id_raw:effect[1],mode_raw:effect[0xb]};
+      alliedSource[key]=skill;expandedStatusData.support_skills[key]=skill;
+      if(effect[1]&&effect[0xb]===0){
+        const path=`Fight_Role/Status/${String(effect[1]).padStart(3,'0')}.dgp`,dgp=await readFile(new URL('../../../'+path,import.meta.url));
+        assert.ok([8,9].includes(dgp[0]));assert.equal(dgp[2],1);
+        expandedStatusData.effects[String(effect[1])]={id_raw:effect[1],interval_ms:dgp.readInt32LE(0x43+1),frame_count:dgp[0x43+14],
+          source:{path,sha256:createHash('sha256').update(dgp).digest('hex')}};
+      }
+    }
+    at+=0x41d+fixed.readUInt32LE(0x15)*0xb0;
+  }
+  assert.equal(at,raw.length);
+}
+validateForestStatusData(expandedStatusData);
+function fixture(skill,data=statusData){
   const sample=createForestSample(seed,base,forest,{map_id:'M70010',members:[{id:'012'}]},skills,scheduler);initializeScheduler(sample.actors,scheduler);
-  const caster=clearNativeStatuses(sample.actors[0],statusData),target=copy(caster);caster.current_skill=copy(skill);target.id='support-target';target.state_raw=0;
+  const caster=clearNativeStatuses(sample.actors[0],data),target=copy(caster);caster.current_skill=copy(skill);target.id='support-target';target.state_raw=0;
   target.raw_hp=20;target.raw_by_address[addr(0x524a701)]=20;target.hp.current=20+target.resource_bonuses.hp_current;
   return {caster,target};
 }
@@ -62,11 +85,15 @@ function writeSlots(oracle,target,index=1){
   oracle.write(0x521f52a+shift,target.status_flags_raw);
 }
 class SupportOracle extends NativeAssemblyOracle{
+  regRead(name){if(name==='BL')return this.reg.EBX&255;return super.regRead(name);}
+  regWrite(name,value){if(name==='BL'){this.reg.EBX=(this.reg.EBX&~255)|(value&255);return;}return super.regWrite(name,value);}
   external(target){const arg=i=>this.read(this.reg.ESP+i*4);
     if(target===0x40121c){this.reg.EAX=0;return;} // 41B3C0 action/dispatch guard: this contact has already been admitted.
     if(target===0x570a40){for(let at=0;at<arg(2);at++)this.write(arg(0)+at,arg(1),1);this.reg.EAX=arg(0);return;}
+    if(target===0x570d10){const values=Array.from({length:arg(2)},(_,at)=>this.read(arg(1)+at,1));values.forEach((value,at)=>this.write(arg(0)+at,value,1));this.reg.EAX=arg(0);return;}
     if(target===0x507c60){this.write(arg(0),(this.read(arg(0))|(arg(1)&0x3ff))>>>0);return;}
     if(target===0x50e3a0){this.animation_type=arg(1);return;}
+    if(target===0x401609){this.command_cancellations=(this.command_cancellations??0)+1;return;} // 42FE40 UI/queued-command dispatch is surfaced separately.
     return super.external(target);
   }
 }
@@ -145,7 +172,7 @@ test('id0 mode0/5 ignores secondary HP/MP/max payload exactly as508BB0, without 
     compare(actual.actor,expected.oracle);assert.deepEqual(expected.oracle.rng_calls,[]);assert.equal(rng.state,expected.rng.state);
   }
   const active=Buffer.from(source[33].fixed_raw_hex,'hex');active[0x232]=43;
-  assert.equal(nativeSupportSkillSupported({...source[33],fixed_raw_hex:active.toString('hex')}),false,'nonzero status ids need an implemented status-application handler');
+  assert.equal(nativeSupportSkillSupported({...source[33],fixed_raw_hex:active.toString('hex')}),true,'nonzero IDs use the shared status handler');
   const mode=Buffer.from(source[33].fixed_raw_hex,'hex');mode[0x23c]=4;
   assert.equal(nativeSupportSkillSupported({...source[33],fixed_raw_hex:mode.toString('hex')}),false,'escape/reaction mode4 cannot become recovery');
 });
@@ -172,5 +199,61 @@ test('actual00440 revival reuses the original mode3 branch and recovery instruct
     target.raw_hp=-target.resource_bonuses.hp_current;target.raw_by_address[addr(0x524a701)]=target.raw_hp;target.hp.current=0;
     const before=copy(target),rng=createNativeRng(n),actual=applyNativeRevival({target,skill,rng}),expected=native(caster,target,n);
     compare(actual.actor,expected.oracle);assert.deepEqual(actual.trace.filter(row=>row.kind==='rng').map(row=>row.raw),expected.oracle.rng_calls);assert.equal(rng.state,expected.rng.state);assert.deepEqual(target,before);
+  }
+});
+test('every companion allied support source matches original50FA00 for application, recovery, duplicates and RNG order',()=>{
+  assert.equal(Object.keys(alliedSource).length,27);
+  for(const[key,skill]of Object.entries(alliedSource)){
+    const revival=skill.mode_raw===3;assert.equal(revival?nativeRevivalSkillSupported(skill):nativeSupportSkillSupported(skill),true,key);
+    for(const seedValue of [0,12345,214013]){
+      let {caster,target}=fixture(skill,expandedStatusData);
+      if(revival){target.state_raw=4;target.raw_hp=-target.resource_bonuses.hp_current;target.raw_by_address[addr(0x524a701)]=target.raw_hp;target.hp.current=0;}
+      const group=Buffer.from(skill.fixed_raw_hex,'hex')[0x24]===1,actors=group?[caster,target]:[target],rng=createNativeRng(seedValue),before=copy(actors),
+        results=actors.map(target=>revival?applyNativeRevival({target,skill,rng}):applyNativeSupport({target,skill,rng,statusData:expandedStatusData})),expected=native(caster,target,seedValue);
+      results.forEach((actual,index)=>compare(actual.actor,expected.oracle,group?index:1));assert.deepEqual(results.flatMap(actual=>actual.trace.filter(row=>row.kind==='rng').map(row=>row.raw)),expected.oracle.rng_calls,key);assert.equal(rng.state,expected.rng.state,key);assert.deepEqual(actors,before);
+      if(!revival&&skill.mode_raw===0&&skill.effect_id_raw){
+        const updated=results.map(row=>row.actor),duplicateRng=createNativeRng(seedValue),duplicates=updated.map(target=>applyNativeSupport({target,skill,rng:duplicateRng,statusData:expandedStatusData})),duplicateExpected=native(group?updated[0]:caster,updated.at(-1),seedValue);
+        duplicates.forEach((duplicate,index)=>{compare(duplicate.actor,duplicateExpected.oracle,group?index:1);assert.equal(duplicate.status_native_return,0,key);assert.equal(duplicate.status_reason,'duplicate-id-and-mode');});
+        assert.deepEqual(duplicateExpected.oracle.rng_calls,[]);assert.equal(duplicateRng.state,duplicateExpected.rng.state);
+      }
+    }
+  }
+});
+test('actual00141 cures only the first matching status and still recovers HP when no status can be removed',()=>{
+  const skill=alliedSource['001:41'],payload=Buffer.from(skill.effect_raw_hex,'hex');payload[0xb]=0;
+  for(const mode of ['absent','single','two','duplicate-removal-mode']){
+    const {caster,target}=fixture(skill,expandedStatusData);
+    if(mode!=='absent')target.native_status_slots[2]={raw_hex:payload.toString('hex')};
+    if(mode==='two')target.native_status_slots[7]={raw_hex:payload.toString('hex')};
+    if(mode==='duplicate-removal-mode')target.native_status_slots[7]={raw_hex:skill.effect_raw_hex};
+    target.native_status_slots[11]={raw_hex:mode2};
+    const rng=createNativeRng(35),actual=applyNativeSupport({target,skill,rng,statusData:expandedStatusData}),expected=native(caster,target,35);
+    compare(actual.actor,expected.oracle);assert.deepEqual(expected.oracle.rng_calls,[]);assert.equal(rng.state,expected.rng.state);
+    assert.equal(actual.cleared_statuses,['single','two'].includes(mode)?1:0);assert.equal(actual.hp_delta,300);assert.equal(actual.actor.native_status_slots[11].raw_hex,mode2,'allied cures do not trigger508A90 contact-removal');
+    if(mode==='two')assert.equal(actual.actor.native_status_slots[7].raw_hex,payload.toString('hex'));
+  }
+});
+test('actual00444/45 retain dormant ID0 numerical bytes without inventing an elemental buff',()=>{
+  for(const key of ['004:44','004:45']){
+    const skill=alliedSource[key],{caster,target}=fixture(skill,expandedStatusData),before=copy(target),rng=createNativeRng(12345);
+    assert.equal(skill.effect_id_raw,0);assert.ok(Buffer.from(skill.effect_raw_hex,'hex').subarray(0x8b,0xa3).some(Boolean));
+    const actual=applyNativeSupport({target,skill,rng,statusData:expandedStatusData}),expected=native(caster,target,12345);
+    compare(actual.actor,expected.oracle);assert.deepEqual(actual.actor.native_status_slots,before.native_status_slots);assert.deepEqual(actual.actor.status_by_address,before.status_by_address);
+    assert.equal(actual.hp_delta,0);assert.equal(actual.mp_delta,0);assert.equal(actual.status_reason,'effect-id-zero');assert.deepEqual(expected.oracle.rng_calls,[]);assert.equal(rng.state,expected.rng.state);
+  }
+});
+test('actual00436/37 periodic HP recovery, source duration and final slot expiry match509E10 instruction replay',()=>{
+  for(const key of ['004:36','004:37']){
+    const skill=alliedSource[key],{target}=fixture(skill,expandedStatusData),applied=applyNativeSupport({target,skill,rng:createNativeRng(0),statusData:expandedStatusData});let actor=applied.actor;
+    for(let tick=1;tick<=20;tick++){
+      const oracle=new SupportOracle(functions,[actor],()=>{throw Error('Healing tick must not draw RNG');});writeSlots(oracle,actor,0);oracle.write(0x679c74,500);
+      for(const metadata of Object.values(expandedStatusData.effects)){
+        const id=metadata.id_raw,action=0x30000000+id*0x100;oracle.write(0x55eb0c3+(id-1)*0xeb,action);oracle.write(0x55eb0cb+(id-1)*0xeb,metadata.frame_count);oracle.write(action+1,metadata.interval_ms);
+      }
+      const actual=tickNativeStatuses({actor,data:expandedStatusData,threshold:500,now:tick*80});oracle.run(0x509e10,[tick*80,0]);compare(actual.actor,oracle,0);
+      assert.equal(actual.ticks,1);assert.equal(actual.death_requested,false);assert.deepEqual(oracle.rng_calls,[]);actor=actual.actor;
+      assert.equal(Buffer.from(actor.native_status_slots[0].raw_hex,'hex').readInt32LE(2),tick===20?0:20-tick);
+    }
+    assert.ok(actor.native_status_slots.every(slot=>slot.raw_hex===ZERO));
   }
 });
