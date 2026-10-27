@@ -20,7 +20,7 @@ export class StartupView {
     Object.assign(this,{manifest,media,$,image,audio,onNew,onLoad,onResume,onStage,refreshSaves,isBusy,getPreview,status,log});
     this.readSaves=getSaves??(()=>{const envelope=getSave?.();return envelope?[{slot:'manual',label:'普通存档',envelope}]:[];});
     this.root=$('startMenu');this.canvas=$('startupCanvas');this.ctx=this.canvas.getContext('2d');
-    this.video=$('startupVideo');this.images=new Map();this.allowResume=false;this.pending=false;this.previewRequest=0;this.previewCache=null;this.previewImage=null;
+    this.video=$('startupVideo');this.images=new Map();this.allowResume=false;this.pending=false;this.previewRequest=0;this.previewCache=new Map();
     this.sequence=new StartupSequence(snapshot=>this.changeStage(snapshot));
     this.root.addEventListener('pointerdown',event=>{
       if(this.sequence.stage==='menu')return;
@@ -51,7 +51,7 @@ export class StartupView {
   hide(){this.sequence.close();}
   stopMedia(){this.video.onended=null;this.video.onerror=null;this.video.pause();this.video.removeAttribute('src');this.video.load();}
   changeStage({stage,epoch}) {
-    this.previewRequest++;this.previewImage=null;
+    this.previewRequest++;this.previewCache.clear();this.root.dataset.preview='';
     this.stopMedia();this.pending=false;this.rotation=null;this.root.hidden=stage==='closed';
     this.root.dataset.stage=stage;
     if(stage==='closed')return;
@@ -105,7 +105,7 @@ export class StartupView {
     this.syncVideoAudio(true);
     if(this.sequence.stage!=='menu')return this.sequence.key(key,repeat);
     if(repeat||this.pending||this.isBusy()||this.rotation)return true;
-    if(key==='Escape'){if(this.submenu){this.previewRequest++;this.cue('cancel');this.submenu=null;this.draw();this.renderOptions();this.updateButtons();}return true;}
+    if(key==='Escape'){if(this.submenu){this.previewRequest++;this.previewCache.clear();this.root.dataset.preview='';this.cue('cancel');this.submenu=null;this.draw();this.renderOptions();this.updateButtons();}return true;}
     if(this.submenu){
       if(this.submenu==='read'&&['ArrowUp','ArrowDown','PageUp','PageDown','Home','End'].includes(key)){
         const next={ArrowUp:this.subIndex-1,ArrowDown:this.subIndex+1,PageUp:this.subIndex-visibleSaveRows,PageDown:this.subIndex+visibleSaveRows,Home:0,End:this.optionCount()-1}[key];
@@ -162,8 +162,11 @@ export class StartupView {
     this.asset('menuhlp'+this.selected+this.plaqueIndex,0,this.helpX??0,400);
     if(this.panelType==='read'&&this.panelX>-432){
       this.asset('menulbk',0,this.panelX-8,60);
-      this.visibleSaves().forEach((_entry,row)=>this.asset('menulbx',0,this.panelX,81+108*row));
-      if(this.previewImage)c.drawImage(this.previewImage,this.panelX+17,97+108*(this.subIndex-this.listTop),SAVE_PREVIEW_WIDTH,SAVE_PREVIEW_HEIGHT);
+      this.visibleSaves().forEach((entry,row)=>{
+        this.asset('menulbx',0,this.panelX,81+108*row);
+        const preview=this.previewCache.get(this.previewKey(entry.envelope));
+        if(preview?.image)c.drawImage(preview.image,this.panelX+17,97+108*row,SAVE_PREVIEW_WIDTH,SAVE_PREVIEW_HEIGHT);
+      });
     }
     if(this.panelType==='extras'&&this.panelX>-432){
       this.asset('specialback',0,this.panelX-8,70);
@@ -180,7 +183,7 @@ export class StartupView {
   selectRead(index){
     const count=this.optionCount(),next=Math.max(0,Math.min(count-1,index));
     if(!count||next===this.subIndex)return;
-    this.previewRequest++;this.previewImage=null;this.subIndex=next;
+    this.subIndex=next;
     if(next<this.listTop)this.listTop=next;
     else if(next>=this.listTop+visibleSaveRows)this.listTop=next-visibleSaveRows+1;
     this.listTop=Math.max(0,Math.min(Math.max(0,count-visibleSaveRows),this.listTop));
@@ -189,39 +192,41 @@ export class StartupView {
   getSave(){return this.saveEntries()[this.subIndex]?.envelope??null;}
   optionCount(){return this.submenu==='read'?this.saveEntries().length:this.submenu==='extras'?(this.manifest.audio.gallery?.length??0):0;}
   previewKey(save){return `${save?.sha256??''}:${save?.payload??''}:${save?.saved_at??''}:${save?.preview?.png??''}`;}
+  updatePreviewState(){this.root.dataset.preview=this.previewCache.get(this.previewKey(this.getSave()))?.source??'';}
   requestPreview(save){
     if(!this.getPreview)return;
-    const key=this.previewKey(save),request=++this.previewRequest,epoch=this.sequence.epoch;
-    if(this.previewCache?.key===key){this.previewImage=this.previewCache.image;this.root.dataset.preview=this.previewCache.source;this.draw();return;}
-    this.previewImage=null;this.root.dataset.preview='loading';
+    const key=this.previewKey(save),request=this.previewRequest,epoch=this.sequence.epoch;
+    if(this.previewCache.has(key))return;
+    this.previewCache.set(key,{source:'loading'});
     Promise.resolve().then(()=>this.getPreview(save)).then(result=>{
-      if(request!==this.previewRequest||epoch!==this.sequence.epoch||this.sequence.stage!=='menu'||this.submenu!=='read'||this.previewKey(this.getSave())!==key)return;
+      if(request!==this.previewRequest||epoch!==this.sequence.epoch||this.sequence.stage!=='menu'||this.submenu!=='read')return;
       if(!result?.image)throw new Error('存档截图未生成');
-      this.previewImage=result.image;this.previewCache={key,...result};this.root.dataset.preview=result.source;
+      this.previewCache.set(key,result);this.updatePreviewState();
       this.log({type:'save-preview-ready',source:result.source,map_id:result.map_id,payload_sha256:save.sha256});this.draw();
     }).catch(error=>{
       if(request!==this.previewRequest||epoch!==this.sequence.epoch||this.submenu!=='read')return;
-      this.root.dataset.preview='failed';this.log({type:'save-preview-failed',error:error.message});
+      this.previewCache.set(key,{source:'failed'});this.updatePreviewState();this.log({type:'save-preview-failed',error:error.message});
     });
   }
   renderOptions(){
     const holder=this.$('startupOptions');holder.replaceChildren();holder.hidden=false;
     const add=(text,x,y,w,h,index,handler)=>{const button=document.createElement('button');button.textContent=text;button.type='button';button.tabIndex=-1;
       button.setAttribute('aria-current',String(index===this.subIndex));Object.assign(button.style,{left:x+'px',top:y+'px',width:w+'px',height:h+'px'});
-      button.onclick=()=>{if(this.submenu==='read'&&this.subIndex!==index){this.previewRequest++;this.previewImage=null;}this.subIndex=index;handler();};holder.append(button);return button;};
+      button.onclick=()=>{this.subIndex=index;handler();};holder.append(button);return button;};
     const captions=this.selected===3?['离开','回到游戏']:[labels[this.selected]];
     for(let i=0;i<this.plaqueCount();i++){
       const button=add('',450,100+50*i,184,51,i,()=>{if(!this.submenu){this.plaqueIndex=i;this.confirm();}});
       button.setAttribute('aria-label','确认'+captions[i]);button.className='startup-plaque';button.dataset.row=String(i);
     }
     if(this.submenu==='read'){
-      const entries=this.saveEntries(),selected=this.getSave();
-      if(selected)this.requestPreview(selected);
+      const entries=this.saveEntries();
       for(const [row,entry] of this.visibleSaves().entries()){const index=this.listTop+row,save=entry.envelope;let world={};try{world=JSON.parse(save.payload);}catch{}
+        this.requestPreview(save);
         const date=save.saved_at?new Date(save.saved_at).toLocaleString('zh-CN',{timeZone:'Asia/Shanghai'}):'';
         const party=(world.party??[]).map(actor=>actor.name).join('　');
         add(`${entry.label}　${party}\n${date}\n${world.location?.map_id??''}`,147,99+108*row,265,78,index,()=>{this.draw();this.renderOptions();this.confirm();}).className='startup-save panel-row';
       }
+      this.updatePreviewState();
       if(!entries.length)this.announce('尚无重制存档，Esc返回');
     }else if(this.submenu==='extras'){
       for(let i=0;i<7;i++){const index=this.listTop+i;if(index>=this.optionCount())break;

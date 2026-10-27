@@ -102,9 +102,9 @@ test('read preview uses the native thumbnail rectangle and ignores completion af
   resolve({image,source:'reconstructed',map_id:'M01010'});await new Promise(done=>setImmediate(done));
   assert.equal($('startMenu').dataset.preview,'reconstructed');
   assert.ok(draws.some(args=>args[0]===image&&args.slice(1).join(',')==='17,97,104,76'));
-  view.previewCache=null;view.requestPreview(view.getSave());await Promise.resolve();
-  view.previewImage=null;view.key('Escape');resolve({image,source:'stored'});await new Promise(done=>setImmediate(done));
-  assert.equal(view.submenu,null);assert.equal(view.previewImage,null);
+  view.previewCache.clear();view.requestPreview(view.getSave());await Promise.resolve();
+  view.key('Escape');draws.length=0;resolve({image,source:'stored'});await new Promise(done=>setImmediate(done));
+  assert.equal(view.submenu,null);assert.equal(view.previewCache.size,0);assert.ok(!draws.some(args=>args[0]===image));
 });
 
 test('title lists ordinary and quick files, refreshes on entry and loads the selected slot',async()=>{
@@ -160,21 +160,31 @@ test('read wheel only scrolls the read panel and a visible row click loads its f
   view.submenu='extras';wheel(event);assert.equal(prevented,before);
 });
 
-test('late read previews cannot replace another slot and the selected thumbnail stays in its visible row',async()=>{
+test('read previews fill every visible row, survive selection changes and stay with their slots when scrolling',async()=>{
   const entries=numberedSaves(),requests=[];
-  const {view,draws}=setup({getSaves:()=>entries,getPreview:save=>new Promise(resolve=>requests.push({save,resolve}))});
+  const {view,$,draws}=setup({getSaves:()=>entries,getPreview:save=>new Promise(resolve=>requests.push({save,resolve}))});
+  const finish=async(slot,image,source='stored')=>{requests.find(request=>request.save.sha256===slot).resolve({image,source});await new Promise(done=>setImmediate(done));};
+  const thumbnails=()=>draws.filter(args=>args[0]?.name?.startsWith('thumbnail-')).map(args=>[args[0].name,...args.slice(1)]);
+  const first={name:'thumbnail-00'},second={name:'thumbnail-01'},third={name:'thumbnail-02'},quick={name:'thumbnail-quick'};
   view.showMenu();settle(view);await view.confirm();settle(view);await Promise.resolve();
+  assert.deepEqual(requests.map(request=>request.save.sha256),['00','01','02']);
+  await finish('01',second);await finish('02',third,'reconstructed');
+  assert.equal($('startMenu').dataset.preview,'loading');
+  draws.length=0;view.draw();
+  assert.deepEqual(thumbnails(),[['thumbnail-01',17,205,104,76],['thumbnail-02',17,313,104,76]]);
+  view.key('ArrowDown');await Promise.resolve();assert.equal(requests.length,3);assert.equal($('startMenu').dataset.preview,'stored');
   view.key('End');await Promise.resolve();
-  const stale={name:'slot00'},quick={name:'quick'};
-  requests[0].resolve({image:stale,source:'stored'});await new Promise(done=>setImmediate(done));
-  assert.equal(view.previewImage,null);
-  requests.at(-1).resolve({image:quick,source:'stored'});await new Promise(done=>setImmediate(done));
-  assert.equal(view.previewImage,quick);
-  assert.ok(draws.some(args=>args[0]===quick&&args.slice(1).join(',')==='17,313,104,76'));
-  assert.ok(!draws.some(args=>args[0]===stale));
-  view.key('ArrowUp');await Promise.resolve();assert.equal(view.previewImage,null);
-  const ordinary={name:'slot19'};requests.at(-1).resolve({image:ordinary,source:'stored'});await new Promise(done=>setImmediate(done));
-  assert.ok(draws.some(args=>args[0]===ordinary&&args.slice(1).join(',')==='17,205,104,76'));
+  assert.deepEqual(requests.map(request=>request.save.sha256),['00','01','02','18','19','quick']);
+  draws.length=0;await finish('00',first);assert.deepEqual(thumbnails(),[]);
+  await finish('quick',quick);assert.equal($('startMenu').dataset.preview,'stored');
+  view.key('ArrowUp');await Promise.resolve();assert.equal($('startMenu').dataset.preview,'loading');
+  await finish('18',{name:'thumbnail-18'});assert.equal($('startMenu').dataset.preview,'loading');
+  await finish('19',{name:'thumbnail-19'});assert.equal($('startMenu').dataset.preview,'stored');
+  draws.length=0;view.draw();
+  assert.deepEqual(thumbnails(),[['thumbnail-18',17,97,104,76],['thumbnail-19',17,205,104,76],['thumbnail-quick',17,313,104,76]]);
+  view.key('Home');await Promise.resolve();assert.equal(requests.length,6);
+  draws.length=0;view.draw();
+  assert.deepEqual(thumbnails(),[['thumbnail-00',17,97,104,76],['thumbnail-01',17,205,104,76],['thumbnail-02',17,313,104,76]]);
 });
 
 test('an external quick load locks title keyboard, mouse confirmation and new game until it finishes',async()=>{
