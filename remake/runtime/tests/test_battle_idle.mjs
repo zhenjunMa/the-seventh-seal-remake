@@ -68,11 +68,11 @@ test('each record boundary and loop use the source class, including independent 
   advanceIdleSkill(a,scheduler,90000+starts[2]);assert.equal(a.class_raw,0);
 });
 
-test('all registered physical attacks can damage open snow poses and still reject closed poses using the native instruction oracle',async()=>{
+test('all registered class3-blocked physical attacks can damage open snow poses and still reject closed poses using the native instruction oracle',async()=>{
   const assembly=JSON.parse(await readFile(new URL('../evidence/turn_rules_assembly_20261011.json',import.meta.url),'utf8'));
   const {sample:party}=sample();
   let count=0;
-  for(const skill of Object.values(party.skills).filter(s=>s.actor_id!=='enemy-0'&&s.battle_handler!=='effect-carrier')){
+  for(const skill of Object.values(party.skills).filter(s=>s.actor_id!=='enemy-0'&&!['effect-carrier','native-revival','native-support'].includes(s.battle_handler)&&Boolean(s.actions.find(a=>a.contact_u32_raw_0x49)?.action_mask_raw&4))){
     for(const i of [0,2,3,4,7,8]){
       const attacker=clone(party.actors.find(a=>a.id===skill.actor_id)),target=clone(forest.actors['012']);
       target.resource_id='012';setIdleSkill(target,scheduler,0);advanceIdleSkill(target,scheduler,starts[i]);

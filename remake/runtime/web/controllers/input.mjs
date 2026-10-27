@@ -4,6 +4,7 @@ import {changeSkillShortcuts} from "../core/skill_shortcuts.mjs";
 import {availableFieldSkills, useWorldSkill} from "../core/field_skills.mjs";
 import {effectiveSkillSource} from "../core/battle_skill_access.mjs";
 import {createContentSample} from "../core/content_sample.mjs";
+import {createPartySkillSample,PARTY_SKILL_SAMPLE_ROSTERS} from "../core/party_skill_sample.mjs";
 import {createFullscreenController} from "./fullscreen.mjs";
 
 export function createInputController({state, actions, $, canvas, ctx}) {
@@ -42,6 +43,16 @@ export function createInputController({state, actions, $, canvas, ctx}) {
       await actions.changeMap(sample.location,'development-sample',sample);
       actions.log({type:'content-extension-sample',party:sample.party.map(role=>({id:role.id,level:role.level})),development_granted_skill:'001_26',persistent_save_written:false});
       actions.status('已进入三人扩展样本：英格妮12级、凯、娃蒂；燕落为测试授予，行走即可遇敌。');
+    });
+    for(const group of ['A','B'])$('partySkillSample'+group).onclick=actions.guarded(async()=>{
+      if(state.scenes.phase!=='map')return;
+      const [initial,forest]=await Promise.all([actions.json('data/opening_seed.json'),actions.json('data/maps/m70010.json')]);
+      const {x,y,direction}=forest.route_entry;
+      const sample=createPartySkillSample(initial,state.partyRewards,state.partySkills,{map_id:forest.id,x,y,direction},{activeRoleIds:PARTY_SKILL_SAMPLE_ROSTERS[group]});
+      await actions.changeMap(sample.location,'development-sample',sample);
+      actions.log({type:'party-skill-test-sample',group,party:sample.party.map(role=>({id:role.id,level:role.level})),persistent_save_written:false});
+      actions.status(`已进入全技能测试${group}组：六人99级，当前出战${sample.party.map(role=>role.name).join('、')}。`);
+      canvas.focus();
     });
     $('role').onchange=()=>{state.selectedRole=$('role').value;state.world.transact(draft=>{draft.leader_id=state.selectedRole;});state.view.action=0;state.view.frame=0;state.clock=0;canvas.focus();};
     $('zoomOut').onclick=()=>{state.view.zoom=Math.max(.15,state.view.zoom/1.2);};$('zoomIn').onclick=()=>{state.view.zoom=Math.min(3,state.view.zoom*1.2);};$('fit').onclick=actions.fit;$('follow').onclick=()=>{state.view.zoom=1;state.view.follow=true;canvas.focus();};

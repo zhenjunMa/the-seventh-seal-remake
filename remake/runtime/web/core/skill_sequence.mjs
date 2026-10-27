@@ -5,6 +5,12 @@ const fail=(v,m)=>{if(!v)throw new Error(m);};
 export const recordBytes=hex=>{fail(/^(?:[0-9a-f]{2}){176}$/i.test(hex),'原动作记录缺失');return Uint8Array.from(hex.match(/../g),h=>parseInt(h,16));};
 const hex=b=>Array.from(b,x=>x.toString(16).padStart(2,'0')).join('');
 const view=b=>new DataView(b.buffer,b.byteOffset,b.byteLength);
+// Native 505990 uses the original 640x480 viewport, including the DGP
+// half-size fullscreen flag. It does not use the preview canvas dimensions.
+export function nativeEffectIsFullScreen(asset){
+ const width=asset.frame_width,height=asset.frame_height,raw=asset.native_raw_hex;
+ return width===640&&height===480||width===320&&height===240&&Boolean(raw&&parseInt(raw.slice(0x91*2,0x92*2),16));
+}
 export function composeNativeSequence(skills,indices){
  fail(Array.isArray(indices)&&indices.length>0&&indices.length<=7,'原技能组合数量未支持');
  const selected=indices.map(i=>{const s=skills.find(s=>(s.index??s.original_skill_index)===i);fail(s&&Array.isArray(s.actions)&&s.actions.length,'组合源技能缺失');return s;});
@@ -69,10 +75,11 @@ export function compileNativeSequence(meta,roleId,plan,layers=[]){
     steps.push({...base,index:steps.length,logical_frame:0,event:null,effects:[],duration_ms:0,missing_effect:token});continue;
    }
    fail(asset&&asset.native_raw_hex,'原类型4效果动作缺失');
+   base.full_screen_effect=nativeEffectIsFullScreen(asset);
    const d=Uint8Array.from(asset.native_raw_hex.match(/../g),h=>parseInt(h,16)),dv=view(d);
    const start=v.getUint32(0x26,true),end=v.getUint32(0x2a,true)||asset.frames.length,contact=v.getUint32(0x49,true),wait=b[0x1d]!==0;
-   fail(start>=0&&end>start&&end<=asset.frames.length&&(!contact||contact>start&&contact<end),'原特效接触范围未支持');
-   const frames=Array.from({length:end-start},(_,i)=>(d[0xd]&15)?start+i:d[0x16+start+i]);
+   fail(start>=0&&end>start&&end-start<=300&&((d[0xd]&15)||end<=asset.frames.length)&&(!contact||contact>start&&contact<end),'原特效接触范围未支持');
+   const frames=Array.from({length:end-start},(_,i)=>{const frame=(d[0xd]&15)?start+i:d[0x16+start+i];return frame<asset.frame_count?frame:null;});
    const slot=b[0x22]?'target':'actor',targetEffect=new TextDecoder().decode(b.slice(0x4e,0x62)).split('\0')[0].replace(/\.dgp$/i,'');
    if(!wait){
     const interval=dv.getUint32(1,true);fail(interval>0,'原独立特效时钟缺失');
@@ -89,7 +96,7 @@ export function compileNativeSequence(meta,roleId,plan,layers=[]){
    }
    const visit=wait?frames:[frames[0]];
    visit.forEach((frame,i)=>{const logical=start+i,effects=[];
-    if(i===0)effects.push({asset_id:token,frame:logical,slot,unconditional:true,frame_count:end-start});
+    if(i===0)effects.push({asset_id:token,frame:logical,slot,unconditional:true,frame_count:end-start,source_frames:clone(frames),full_screen_effect:base.full_screen_effect});
     if(contact&&logical===contact&&targetEffect)effects.push({asset_id:targetEffect,frame:logical,slot:'target'});
     steps.push({...base,index:steps.length,logical_frame:logical,carrier_asset_id:token,carrier_source_frame:frame,
      effect_contact:contact!==0&&logical===contact,effect_token:contact!==0&&logical===contact?1:0,
@@ -112,7 +119,7 @@ export function compileNativeSequence(meta,roleId,plan,layers=[]){
    const logical=b[0x1d]?end-1-i:start+i,contact=v.getUint32(0x49,true),source_frame=action.first_frame+frame;
    steps.push({index:steps.length,segment_index:si,plan_record_index:ri,chr_record_index:record.source_action_index,action_index:group,action_frame:frame,logical_frame:logical,source_frame,
     source_skill_index:combo?b[0x92]:plan.skill_indices[0],class_raw:b[0x24],action_mask_raw:b[0x78],source:clone(record),event:contact!==0&&contact===logical?{frame:logical,field:'0x49'}:null,
-    effects:effectList.filter(e=>e.frame===logical),pair:clone(pairs.get(source_frame)??null),...(independent||verticalClock||plan.kind==='single'&&['native-revival','native-support'].includes(plan.handler)?{duration_ms:dv.getUint32(1,true)}:{})});
+    effects:effectList.filter(e=>e.frame===logical&&!meta.missing_effects?.some(row=>row.id===e.asset_id&&row.source_exists===false)),pair:clone(pairs.get(source_frame)??null),...(independent||verticalClock||plan.kind==='single'&&['native-revival','native-support'].includes(plan.handler)?{duration_ms:dv.getUint32(1,true)}:{})});
   });
  }
  fail(steps.length>0&&(plan.allow_no_contacts||steps.some(s=>s.event||s.carrier_spawn?.steps.some(c=>c.event))),'原完整技能缺少接触事件');return {steps,segments,independent_carriers:independent};

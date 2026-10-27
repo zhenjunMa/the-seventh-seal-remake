@@ -73,7 +73,9 @@ export function chargeActor(actor,rng){
   if(!min||!max)speed=80;
   else {speed=min;if(min!==max){const n=rng();fail(Number.isInteger(n)&&n>=0&&n<=32767,'充能随机值无效');speed=(speed+n%(max-min))|0;}}
   speed=(speed+status(actor,'0x0521f56d'))|0;
-  fail(speed>0,'当前样本未接非正充能速度');
+  // 502F30 adds status speed with signed32 wrap and does not clamp zero or
+  // negative results. Gauge/debt use signed arithmetic; recovery compares
+  // its unsigned counter against the unsigned bit pattern of SAR(speed,1).
   // Fresh forest slice has no cast-reaction override @521F692. Retain the
   // recovery arithmetic and exact strict debt comparison from 0x502F30.
   if(actor.state_raw>=4)return speed;

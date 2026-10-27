@@ -36,7 +36,10 @@ function effectReferences(value, result = new Set()) {
       const target = new TextDecoder().decode(raw.slice(0x4e, 0x62)).split('\0')[0].replace(/\.dgp$/i, '');
       if (target) result.add(target);
     }
-    for (const child of Object.values(value)) if (child && typeof child === 'object') effectReferences(child, result);
+    // Historical first-contact views retain non-executable source effects
+    // separately. They do not request pixels until an executable plan admits
+    // them; scanning that evidence as a live dependency expands old rosters.
+    for (const [key,child] of Object.entries(value)) if (key!=='deferred_effects'&&child && typeof child === 'object') effectReferences(child, result);
   }
   return result;
 }
@@ -126,8 +129,11 @@ export function validateBattleViewMetadata(meta,content=runtimeContent) {
   }
   const effectIds = new Set(meta.effects.map(effect => effect.id));
   for (const role of meta.roles) for (const skill of [...skillsOf(role),...(role.response_skills??[])]) for (const segment of skill.segments) for (const effect of segment.effects) {
-    if (!effectIds.has(effect.asset_id) || !integer(effect.frame) || effect.frame < segment.start ||
-        effect.frame >= segment.end_exclusive || !['actor', 'target'].includes(effect.slot)) throw new Error('效果事件无法绑定源帧');
+    // Shipped actions retain unused visual triggers outside their visited
+    // range (often frame0 with a nonzero start). Compilation visits only the
+    // original range; retaining such a trigger does not make it executable.
+    if ((!effectIds.has(effect.asset_id)&&!meta.missing_effects?.some(row=>row.id===effect.asset_id&&row.source_exists===false)) || !integer(effect.frame) || effect.frame < 0 ||
+        !['actor', 'target'].includes(effect.slot)) throw new Error('效果事件无法绑定源帧');
   }
   if (!(meta.policy?.frame_ms > 0 && meta.policy.frame_ms <= 1000) ||
       !(meta.policy.tail_ms >= 0 && meta.policy.tail_ms <= 3000)) throw new Error('预览时钟无效');
@@ -305,7 +311,7 @@ export class BattleView {
         meta.extra_layer_banks=[...(meta.extra_layer_banks??[]),clone(row.layer_bank)];
       }
       for(const effect of lifecycleMeta.effects)if(!meta.effects.some(e=>e.id===effect.id))meta.effects.push(clone(effect));
-      meta.missing_effects=clone(lifecycleMeta.missing_effects??[]);
+      meta.missing_effects=[...new Map([...(meta.missing_effects??[]),...(lifecycleMeta.missing_effects??[])].map(row=>[row.id,clone(row)])).values()];
       validateBattleViewMetadata(meta,this.content);
     }
     check();
@@ -424,12 +430,12 @@ export class BattleView {
       advance:at=>{check();control.advanceNativeVerticals(at);}};
   }
 
-  playSequence(result,{onContact,onRecord,onReactionContact,onReactionRecord,onReactionEnd,onPrimaryEnd,onFrame,onCarrierStart,onCarrierEnd,onDetachedError}={}){
+  playSequence(result,{onContact,onRecord,onReactionContact,onReactionRecord,onReactionEnd,onPrimaryEnd,onFrame,onCarrierStart,onCarrierEnd,onCarrierTargets,onDetachedError}={}){
     if(!this.ready||this.destroyed||this.run)return Promise.reject(new Error('完整技能表现尚未就绪或上一行动未结束'));
     const actor=this.roster.find(a=>a.id===result.actor_id),target=this.roster.find(a=>a.id===result.target_id);
     if(!this.meta.policy.complete_contacts||!actor||!target||typeof onContact!=='function'||typeof onRecord!=='function')return Promise.reject(new Error('完整技能序列或接触回调缺失'));
     let compiled;try{compiled=compileNativeSequence(this.meta,actor.resource_id,result.plan,[this.layers,...this.alternateLayers.values()]);}catch(e){return Promise.reject(e);}
-    return new Promise((resolve,reject)=>{this.run={sequence:true,native_control:this.nativeControl,native_guard:this.nativeControlIsCurrent,result:clone(result),steps:compiled.steps,segments:compiled.segments,resolve,reject,onContact,onRecord,onReactionContact,onReactionRecord,onReactionEnd,onPrimaryEnd,onFrame,onCarrierStart,onCarrierEnd,onDetachedError,children:[],carriers:[],independent_carriers:compiled.independent_carriers,main_done:false,death_until:0,
+    return new Promise((resolve,reject)=>{this.run={sequence:true,native_control:this.nativeControl,native_guard:this.nativeControlIsCurrent,result:clone(result),steps:compiled.steps,segments:compiled.segments,resolve,reject,onContact,onRecord,onReactionContact,onReactionRecord,onReactionEnd,onPrimaryEnd,onFrame,onCarrierStart,onCarrierEnd,onCarrierTargets,onDetachedError,children:[],carriers:[],independent_carriers:compiled.independent_carriers,main_done:false,death_until:0,
       started:null,elapsed:0,cursor:0,visited:-1,next_at:0,record_visited:-1,impact_called:false,impact_done:false,impact_elapsed:null,effects:[],generation:this.generation,
       observations:{draws:0,origin_slot:null,last_slot:null,contact_slot:null,bounds:null,intrinsic_source_frames:[],effect_ids:[],contacts:[],authority:'Actual remake Canvas draws with all source contacts; preview animation clock'}};});
   }
@@ -581,23 +587,28 @@ export class BattleView {
         const i=channel.visited+1,step=channel.steps[i];
         if(!carrier)run.onFrame?.({...clone(step),actor_id:channel.result.actor_id,target_id:channel.result.target_id,channel_id:child?channel.channel_id:'main'});
         channel.cursor=i;
-        if(!carrier&&(step.plan_record_index!==channel.record_visited||step.visibility_end)){if(child)run.onReactionRecord?.({...clone(step),presentation_time_ms:run.started+at},clone(channel.descriptor));else run.onRecord({...clone(step),presentation_time_ms:run.started+at});channel.record_visited=step.plan_record_index;}
+        if(!carrier&&(step.plan_record_index!==channel.record_visited||step.visibility_end)){
+          if(child)run.onReactionRecord?.({...clone(step),presentation_time_ms:run.started+at},clone(channel.descriptor));else run.onRecord({...clone(step),presentation_time_ms:run.started+at});
+          channel.carrier_targets=step.command_raw===4?run.onCarrierTargets?.(clone(step),channel.descriptor?clone(channel.descriptor):null):null;
+          channel.record_visited=step.plan_record_index;
+        }
+        if(!carrier&&step.command_raw===4&&channel.carrier_targets?.target_ids.length===0){channel.visited=i;channel.next_at=at;continue;}
         if(step.vertical_raw_hex){
           const bridge=this._nativeBridge(channel.result.actor_id,run.native_control,run.native_guard),state=bridge.begin(step.vertical_raw_hex,run.started+at);
           channel.vertical_wait=state.waiting;
         }
         if(step.carrier_spawn){
           const source=step.carrier_spawn,id=`carrier-${run.carriers.length}`,firstAt=Math.max(at,source.interval_ms-run.started);
-          const carrier={carrier:true,channel_id:id,descriptor:channel.descriptor??null,result:clone(channel.result),steps:clone(source.steps),segments:[],
+          const carrier={carrier:true,channel_id:id,descriptor:channel.descriptor??null,result:clone(channel.result),steps:clone(source.steps),segments:[],carrier_targets:clone(channel.carrier_targets??null),
             at,next_at:firstAt,elapsed:0,cursor:0,visited:-1,record_visited:-1,effects:[],done:false};
-          carrier.effects.push({asset_id:source.asset_id,slot:source.slot,unconditional:true,frame_count:source.frames.length,
+          for(const target_id of carrier.carrier_targets?.group?carrier.carrier_targets.target_ids:[null])carrier.effects.push({asset_id:source.asset_id,slot:target_id?'target':source.slot,...(target_id?{target_id}:{}),unconditional:true,full_screen_effect:step.full_screen_effect,frame_count:source.frames.length,
             source_frames:clone(source.frames),frame_ms:source.interval_ms,at:firstAt-at-source.interval_ms,visited_frame:-1});
           run.carriers.push(carrier);run.onCarrierStart?.({carrier_id:id,source:clone(step),actor_id:channel.result.actor_id});
         }
         if(step.carrier_end){channel.done=true;run.onCarrierEnd?.({carrier_id:channel.channel_id,source:clone(step),actor_id:channel.result.actor_id},run.started+at);}
         if(step.visibility)channel.visibility={...clone(step.visibility),started:step.visibility_end?channel.visibility?.started??at:at,complete:Boolean(step.visibility_end)};
         if(step.event){
-          const detail={...clone(step),presentation_time_ms:run.started+at,contact_key:`${carrier||child?channel.channel_id:'main'}:${step.plan_record_index}:${step.logical_frame}`,actor_id:channel.result.actor_id,target_id:channel.result.target_id,skill_id:channel.result.skill_id,
+          const detail={...clone(step),...(channel.carrier_targets?.group?{carrier_target_ids:clone(channel.carrier_targets.target_ids)}:{}),presentation_time_ms:run.started+at,contact_key:`${carrier||child?channel.channel_id:'main'}:${step.plan_record_index}:${step.logical_frame}`,actor_id:channel.result.actor_id,target_id:channel.result.target_id,skill_id:channel.result.skill_id,
             basis:'Original logical CHR contact position; original composition and DGP frame table, preview animation clock'};
           const response=child?run.onReactionContact?.(detail,clone(channel.descriptor)):run.onContact(detail);if(!response||typeof response.then==='function')throw new Error('完整接触结算必须同步返回原结算结果');
           channel.result={...channel.result,skipped:null,...clone(response)};channel.impact_called=true;channel.impact_done=true;channel.impact_elapsed=at-(channel.at??0);
@@ -620,9 +631,12 @@ export class BattleView {
           }
         }
         for(const effect of step.effects){
-          const hits=effect.slot==='target'&&channel.result.group_results?channel.result.group_results:[channel.result];
+          const allocation=effect.unconditional&&step.command_raw===4&&channel.carrier_targets?.group;
+          const hits=effect.unconditional&&step.command_raw===4?
+            allocation?channel.carrier_targets.target_ids.map(target_id=>({target_id})):[channel.result]:
+            effect.slot==='target'&&channel.result.group_results?channel.result.group_results:[channel.result];
           for(const hit of hits){if(effect.slot==='target'&&!effect.unconditional&&(!(hit.target_id??channel.result.target_id)||!this._damaging(hit)))continue;
-            channel.effects.push({...clone(effect),...(effect.slot==='target'?{target_id:hit.target_id??channel.result.target_id}:{}),...(step.duration_ms>0?{frame_ms:step.duration_ms}:{}),at:at-(channel.at??0)});}
+            channel.effects.push({...clone(effect),...(allocation?{slot:'target'}:{}),...(allocation||effect.slot==='target'?{target_id:hit.target_id??channel.result.target_id}:{}),...(step.duration_ms>0?{frame_ms:step.duration_ms}:{}),at:at-(channel.at??0)});}
         }
         channel.visited=i;channel.next_at=at+(step.duration_ms??ms)*(channel.slow_record===step.plan_record_index?2:1);
       }
@@ -861,13 +875,19 @@ export class BattleView {
         const asset = this.meta.effects.find(item => item.id === effect.asset_id);
         const cursor = Math.floor((channel.elapsed - effect.at) / (effect.frame_ms??run.frame_ms??this.meta.policy.frame_ms));
         if (cursor < 0 || cursor >= (effect.frame_count??asset.frames.length)) continue;
-        const slot = slots[effect.slot === 'actor' ? channel.result.actor_id : effect.target_id??channel.result.target_id];if(!slot)continue;
+        const slot = slots[effect.slot === 'actor' ? channel.result.actor_id : effect.target_id??channel.result.target_id];if(!slot&&!effect.full_screen_effect)continue;
         const scale = this.meta.policy.sprite_scale;
+        const sourceFrame=(effect.source_frames??asset.frames)[cursor];
+        // 52AE7F/54F68B reject a frame beyond the physical DGP pool while
+        // 5074C0 continues to the original CHR end. Keep that blank visit.
+        if(!Number.isInteger(sourceFrame)||sourceFrame<0||sourceFrame>=asset.frame_count)continue;
         ctx.save();
+        if(effect.full_screen_effect)ctx.setTransform(1,0,0,1,0,0);
         for(const layer of asset.layer_order??[null]){
           ctx.globalCompositeOperation=layer?asset[`${layer}_blend`]:asset.blend;
-          drawBattleImage(ctx,this.images.get(layer?asset[`${layer}_sheet`]:asset.sheet), (effect.source_frames??asset.frames)[cursor]*asset.frame_width,0,
-            asset.frame_width,asset.frame_height,slot[0]-asset.anchor.x*scale,slot[1]-asset.anchor.y*scale,asset.frame_width*scale,asset.frame_height*scale);
+          drawBattleImage(ctx,this.images.get(layer?asset[`${layer}_sheet`]:asset.sheet), sourceFrame*asset.frame_width,0,
+            asset.frame_width,asset.frame_height,effect.full_screen_effect?viewport.x:slot[0]-asset.anchor.x*scale,effect.full_screen_effect?viewport.y:slot[1]-asset.anchor.y*scale,
+            effect.full_screen_effect?viewport.width:asset.frame_width*scale,effect.full_screen_effect?viewport.height:asset.frame_height*scale);
         }
         ctx.restore();
         if(!run.observations.effect_ids.includes(asset.id))run.observations.effect_ids.push(asset.id);

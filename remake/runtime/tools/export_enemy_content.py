@@ -51,6 +51,28 @@ def player_status_blocks():
     return blocks
 
 
+def player_support_blocks():
+    """The same status table retains allied +231 application templates."""
+    blocks = {}
+    for ident, binding in definition()['roles'].items():
+        if binding['side'] != 'player':
+            continue
+        character = CHR(ROOT / f'Fight_Role/{ident}.CHR')
+        for row in binding['battle_skills']:
+            if row['handler'] not in ('native-support', 'native-revival'):
+                continue
+            skill = character.skills[row['index']]
+            fixed = bytes.fromhex(skill['fixed_raw_hex'])
+            effect = fixed[0x231:0x2f7]
+            blocks[f'{ident}:{row["index"]}'] = dict(actor_id=ident, original_skill_index=row['index'],
+                name=skill['name_cp936'], fixed_raw_hex=fixed.hex(), effect_raw_hex=effect.hex(),
+                effect_id_raw=effect[1], mode_raw=effect[0xb],
+                source=dict(path=f'Fight_Role/{ident}.CHR', sha256=character.sha256,
+                    fixed_offset=skill['offset'], block_offset=skill['offset']+0x231,
+                    fixed_bytes=0x41d, effect_bytes=0xc6))
+    return blocks
+
+
 def source_files():
     """Status-table owner fingerprints every selected player/enemy CHR."""
     paths = {'GAME.exe'}
@@ -70,6 +92,10 @@ def source_files():
     for block in player_status_blocks().values():
         paths.add(block['source']['path'])
         if block['effect_id_raw']:
+            paths.add(f"Fight_Role/Status/{block['effect_id_raw']:03d}.dgp")
+    for block in player_support_blocks().values():
+        paths.add(block['source']['path'])
+        if block['effect_id_raw'] and block['mode_raw'] in (0, 2):
             paths.add(f"Fight_Role/Status/{block['effect_id_raw']:03d}.dgp")
     return tuple(sorted(paths))
 
@@ -143,6 +169,12 @@ def export():
     status['skills'] = {}
     player_blocks = player_status_blocks()
     extend_status_descriptors(status, {**player_blocks, **{key: block for value in prepared.values() for key, block in value[4].items()}}, sources)
+    support_blocks = player_support_blocks()
+    extend_status_descriptors(status, {key: block for key, block in support_blocks.items()
+        if block['effect_id_raw'] and block['mode_raw'] in (0, 2)}, sources)
+    # +231 is a separate contact payload and must not replace +16B records.
+    status['skills'].update(player_blocks)
+    status['support_skills'] = support_blocks
     sources.update({block['source']['path']: block['source']['sha256'] for block in player_blocks.values()})
     # All source rules above are checked before image writes or metadata changes.
     ai['roles'], data['actors'], data['skills'] = {}, {}, {}

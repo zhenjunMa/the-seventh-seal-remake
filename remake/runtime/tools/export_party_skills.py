@@ -112,11 +112,17 @@ def enrich_sequence(c, d, index, runtime_id=None, handler=None):
                           bytes=len(raw), raw_sha256=hash_bytes(raw))
             if raw[0] == 0:
                 start, end = struct.unpack_from('<II', raw, 0x26)
+                effects = []
+                for field, event_field, slot in ((9, 5, 'actor'), (0x4e, 0x49, 'target')):
+                    token = raw[field:field + 20].split(b'\0')[0].decode('ascii')
+                    if token:
+                        effects.append(dict(asset_id=Path(token).stem, frame=struct.unpack_from('<I', raw, event_field)[0], slot=slot))
+                event = struct.unpack_from('<I', raw, 0x49)[0]
                 segments.append(dict(chr_record_index=entry['index'], action_index=group,
                     source=origin, frames=native_frame_sequence(d.raw_actions[group], start, end, raw[0x1d], total_frames=d.frame_count),
                     start=start, end_exclusive=end, reverse_raw=raw[0x1d], interval_raw=d.actions[group]['interval_raw'],
-                    movement_step_raw=0, movement_source_field='0x1e', movement_flag_raw=0,
-                    event=None, effects=[], evidence=[NATIVE_IDS['range']]))
+                    movement_step_raw=struct.unpack_from('<i', raw, 0x1e)[0], movement_source_field='0x1e', movement_flag_raw=raw[0x25],
+                    event=dict(frame=event, field='0x49') if event else None, effects=effects, evidence=[NATIVE_IDS['range']]))
             else:
                 assert raw[0] == 1 and group in (0, 4, 6, 7, 8, 11)
                 if group == 7 and raw[0x47] not in (1, 7) or group == 8 and raw[0x47] not in (1, 2, 3, 4, 5, 6, 7, 9):
@@ -125,12 +131,24 @@ def enrich_sequence(c, d, index, runtime_id=None, handler=None):
                     source=origin, raw_hex=raw.hex(), immediate=group != 4 or not raw[0x1d])
                 if group == 4:
                     token=raw[9:29].split(b'\0')[0].decode('ascii')
-                    effect=DGP(ROOT / f'Fight_Role/Effect/{token}')
+                    path=ROOT / f'Fight_Role/Effect/{token}'
+                    if not path.is_file():
+                        descriptor.update(effect_asset_id=Path(token).stem, missing_source_file=True)
+                        controls.append(descriptor)
+                        continue
+                    effect=DGP(path)
                     start, end=struct.unpack_from('<II', raw, 0x26)
                     if end == 0: end=effect.frame_count
+                    # 5074C0 keeps the CHR end even past the DGP pool. The
+                    # renderers reject the missing physical frame without
+                    # shortening the carrier clock or wrapping its image.
+                    if effect.raw_actions[0][0x0d] & 15:
+                        frames=[frame if frame < effect.frame_count else None for frame in range(start, end)]
+                    else:
+                        frames=native_frame_sequence(effect.raw_actions[0], start, end, 0)
                     descriptor.update(effect_asset_id=Path(token).stem, wait_raw=raw[0x1d],
                         slot='target' if raw[0x22] else 'actor', start=start, end_exclusive=end,
-                        frames=native_frame_sequence(effect.raw_actions[0], start, end, 0),
+                        frames=frames,
                         event=dict(frame=struct.unpack_from('<I', raw, 0x49)[0], field='0x49') if raw[0x49] else None)
                 controls.append(descriptor)
         v=dict(role_id=c.path.stem, chr_skill_index=index, skill_id_raw=s['id_raw'],
@@ -204,7 +222,7 @@ def source_status_block(c, index):
     skill = c.skills[index]
     fixed = bytes.fromhex(skill['fixed_raw_hex'])
     block = fixed[0x16b:0x231]
-    if block[0xb] not in (0, 2) or block[0x10] not in (0, 1):
+    if block[1] and (block[0xb] not in (0, 2) or block[0x10] not in (0, 1)):
         raise ValueError(f'{c.path.stem}:{index}: unsupported native status mode')
     return dict(actor_id=c.path.stem, original_skill_index=index, name=skill['name_cp936'],
         fixed_raw_hex=fixed.hex(), effect_raw_hex=block.hex(), effect_id_raw=block[1], mode_raw=block[0xb],
@@ -228,6 +246,7 @@ def extend_status_descriptors(status, blocks, sources):
 
 def export_effect_assets(meta, sources, checks, asset_group='party'):
     known_effects = {e['id'] for e in meta['effects']}
+    missing = {row['id']: row for row in meta.get('missing_effects', [])}
     for role in meta['roles']:
         for view in [role['skill']] + role.get('alternate_skills', []) + role.get('response_skills', []):
             carrier_segments=[]
@@ -243,6 +262,10 @@ def export_effect_assets(meta, sources, checks, asset_group='party'):
                     if ident in known_effects:
                         continue
                     p = ROOT / f'Fight_Role/Effect/{ident}.dgp'
+                    if not p.is_file():
+                        missing[ident] = dict(id=ident, source=p.relative_to(ROOT).as_posix(), source_exists=False,
+                            policy='Original literal file absent; native effect allocation returns without a carrier or pixels.')
+                        continue
                     d = DGP(p)
                     sources[p.relative_to(ROOT).as_posix()] = sha(p)
                     audit = SourceAudit(d.data)
@@ -296,7 +319,7 @@ def export_effect_assets(meta, sources, checks, asset_group='party'):
                         frames=native_frame_sequence(d.raw_actions[0], 0, d.frame_count, 0), native_raw_hex=d.raw_actions[0].hex(),
                         blend='lighter', evidence=[NATIVE_IDS['indexed_draw'], NATIVE_IDS['effect_action'], *EFFECT_LAYER_EVIDENCE]))
                     known_effects.add(ident)
-                    known_effects.add(ident)
+    meta['missing_effects'] = list(missing.values())
 
 
 def main():
@@ -333,8 +356,8 @@ def main():
             # attacks can be exported now and become usable after native unlock.
             assert skill['type_raw'] in (1, 2, 3)
             skill['battle_handler'] = next(row['handler'] for row in registration()['roles'][ident]['battle_skills'] if row['index']==index)
-            if skill['battle_handler'] in ('effect-carrier', 'native-support'):
-                assert all(a['type_raw'] == 0 or a['u32_at_0x01_raw'] in (0,4,6,11) for a in skill['actions'])
+            if skill['battle_handler'] in ('effect-carrier', 'native-support', 'native-revival'):
+                assert all(a['type_raw'] == 0 or a['u32_at_0x01_raw'] in (0,4,6,7,8,11) for a in skill['actions'])
                 magic = read(RUNTIME / 'evidence/party_magic_native.json')
                 proof = {r['parameters'].get('procedure','').lower(): r['evidence_id'] for r in magic['records'] if r['operation']=='procedure_assembly'}
                 skill['effect_context'] = dict(effect_token=1, effect_source_skill_index=index,
@@ -347,9 +370,9 @@ def main():
                     skill['effect_context'] = dict(effect_token=1, effect_source_skill_index=index, effect_lookup='same-index-source-table',
                         evidence=[proof['0x501930'], proof['0x512430']])
                 skill['magic_native_bundle'] = dict(path='evidence/party_magic_native.json',sha256=sha(RUNTIME / 'evidence/party_magic_native.json'))
-                if skill['battle_handler'] == 'native-support':
+                if skill['battle_handler'] in ('native-support', 'native-revival'):
                     fixed = bytes.fromhex(skill['fixed_raw_hex'])
-                    assert fixed[0x24] == 0 and fixed[0x25] == 1 and not any(fixed[0x16b:0x231]) and fixed[0x23c] in (0, 5)
+                    assert fixed[0x24] in (0, 1) and fixed[0x25] == 1 and fixed[0x16c] == 0 and fixed[0x23c] in (0, 1, 3, 5)
                     skill.pop('effect_context', None)
             else:
                 assert skill['mp_cost'] >= 0 and skill['charge_i32_0x2e'] >= 0
@@ -363,9 +386,12 @@ def main():
         idles[ident]['id'] = ident + '_idle'
         for index, runtime_id in FIELD_COMMANDS.get(ident, {}).items():
             skill = dict(role['skills'][index])
-            assert skill['learned_raw'] and skill['type_flags_u32_0x32'] & (1 << 13)
+            assert skill['type_flags_u32_0x32'] & (1 << 13)
             skill['id'] = runtime_id
             skill['field_handler'] = 'flat-resource-recovery'
+            if runtime_id in commands:
+                skill['battle_handler'] = commands[runtime_id]['battle_handler']
+                skill['magic_native_bundle'] = commands[runtime_id]['magic_native_bundle']
             skill['field_evidence'] = ['0x450a20', '0x45c100', '0x426fe0', '0x426ac0']
             field_commands[runtime_id] = skill
     status = read(WEB / 'data/forest_status.json')
@@ -384,7 +410,7 @@ def main():
             original_game_execution_observed=False),
         limits=['技能接入范围以runtime_content.json为准；保留完整CHR技能用于来源核对，不表示全部技能已实现。',
                 '登记未学习技能不会自动解锁；开发样本的显式技能授予只作用于该样本。',
-                '七槽绑定与组合记录编辑由操作菜单模块实现；组合攻击执行尚未恢复，当前实现与验收范围见remake/assessment/validation_design.md。']))
+                '七槽绑定、组合编辑与执行复用已接入技能；原type0及空白记录保留来源资格。当前验收范围见remake/assessment/validation_design.md。']))
     reactions = read(WEB / 'data/enemy_reactions.json')
     reactions['roles'].update(roles)
     reactions['source_hashes'].update({p: sources[p] for p in original_paths if p.endswith('.CHR')})
@@ -423,8 +449,8 @@ def main():
     meta['extra_layer_banks'] = banks
     meta.pop('extra_layers', None)
     meta['source_hashes'].update(sources)
-    meta['limits'] = ['Source sprites, logical contacts, reaction/death actions and main/intrinsic layers for 001/002 plus forest enemies.',
-        '001 two learned attacks and skill37 commands0/4/6/11; 002 all five learned direct attacks; other commands remain outside this manifest.',
+    meta['limits'] = ['Source sprites, logical contacts, reaction/death actions and main/intrinsic layers for every registered player and enemy.',
+        'All six players retain their own source command records, learning gates and effect ranges; absent literal files and out-of-pool frames follow native no-draw behavior.',
         'Coordinate projection, interpolation, sprite-scale and additive Canvas remain remake presentation policies; original renderer and clocks were not executed.']
     save(WEB / 'data/party_battle_view.json', meta)
     assert all(sha(ROOT / p) == v for p, v in meta['source_hashes'].items())

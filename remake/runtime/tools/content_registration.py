@@ -92,7 +92,7 @@ def skill_bindings(field=False):
     for role in registration()['roles'].values():
         if role['side'] == 'player':
             assert role.get('battle_skills') and any(row['index'] == role['primary_skill'] for row in role['battle_skills'])
-            assert all(row['handler'] in ('direct', 'effect-carrier', 'native-support') for row in role['battle_skills'])
+            assert all(row['handler'] in ('direct', 'effect-carrier', 'native-support', 'native-revival') for row in role['battle_skills'])
     return {ident: {row['index']: row['id'] for row in role.get(key, [])}
             for ident, role in registration()['roles'].items()
             if role['side'] == 'player' and (not field or role.get(key))}

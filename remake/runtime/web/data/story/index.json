@@ -1,7 +1,7 @@
 {
   "schema": "seventh-seal-story-index",
   "version": 2,
-  "definition_sha256": "2030cf0df9e1a511593fc9f1d0185ea5d92056cf986da7e0d01e63633a2e144d",
+  "definition_sha256": "c206d59b85cf701327979a74e3522a33c8fb31f71a4f9665ef0c0d1b5736ec5c",
   "shared": {
     "path": "data/story/shared.json",
     "sha256": "c1215529993c594a129a4b33172c29a311bd1b12b94a8b1468eceb0f5647cfe5"

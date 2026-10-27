@@ -117,7 +117,8 @@ test('default profile covers all admitted skills, three enemies, six drops and r
   const expectedIds=[...Object.keys({...data.party_skills.skills,...data.party_skills.field_skills,...supportedBattleRecoverySkills(data.party_skills)}),
     ...Object.entries(data.ai.roles).flatMap(([id,role])=>role.learned_indices.map(index=>`${id}_${index}`))];
   assert.deepEqual(Object.keys(d.skill_registry).sort(),expectedIds.sort());assert.deepEqual(Object.keys(config.rewards.entries).sort(),Object.keys(forest.actors).sort());assert.equal(Object.keys(config.items.entries).length,416);
-  assert.deepEqual(Object.values(d.skill_registry).filter(s=>s.actor_id==='005').map(s=>s.original_skill_index).sort((a,b)=>a-b),[19,20,21,22]);
+  assert.deepEqual(Object.values(d.skill_registry).filter(s=>s.actor_id==='005').map(s=>s.original_skill_index).sort((a,b)=>a-b),
+    Object.values(data.party_skills.skills).filter(s=>s.actor_id==='005').map(s=>s.original_skill_index).sort((a,b)=>a-b));
   assert.deepEqual(d.audit.differences,[]);
   for(const [id,s]of Object.entries(data.party_skills.skills))assert.equal(d.party_skills.skills[id].fixed_raw_hex,s.fixed_raw_hex);
   for(const [id,s]of Object.entries(base.skills))assert.equal(d.combat.skills[id].fixed_raw_hex,s.fixed_raw_hex);

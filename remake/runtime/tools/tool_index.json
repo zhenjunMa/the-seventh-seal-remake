@@ -158,6 +158,12 @@
       "imported_by": []
     },
     {
+      "path": "create_party_skill_fixtures.mjs",
+      "role": "fixture-or-observation-preparation",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
       "path": "export_audio.py",
       "role": "registered-build",
       "build_targets": [

@@ -70,8 +70,8 @@ test('all eight original blocks and every retained instruction match immutable s
   assert.equal(instruction.evidence['0x509e10'],'ev_ea1b3b3a6c300baa92fa8f582405a40063f242f86f3575ec090085b7705c12f0');
   report.checks.push('8 original C6 blocks / original status43 action / retained x86 instructions and source hashes');
 });
-test('seven dormant id0 skill blocks return1 without RNG or payload application',()=>{
-  for(const[key,s]of Object.entries(data.skills))if(s.effect_id_raw===0){const a=actor(),{result}=compareApply(a,key,[]);assert.deepEqual(result.actor,a);assert.equal(result.applied,false);assert.equal(result.reason,'effect-id-zero');}
+test('dormant id0 mode0/2 skill blocks return1 without RNG or payload application',()=>{
+  for(const[key,s]of Object.entries(data.skills))if(s.effect_id_raw===0&&[0,2].includes(s.mode_raw)){const a=actor(),{result}=compareApply(a,key,[]);assert.deepEqual(result.actor,a);assert.equal(result.applied,false);assert.equal(result.reason,'effect-id-zero');}
   report.checks.push('Hunter dormant nonzero bytes and all other id0 blocks consume no RNG and do not change stats');
 });
 test('inclusive chance boundaries, post-roll target flags and category4 match native application',()=>{

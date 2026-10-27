@@ -71,7 +71,13 @@ export function createSkillRegistry(data){
     runtimeSkillParameters(skill); // Validate the retained numeric record before registration.
     owners.add(key);registry[id]={skill,owner};
   };
-  for(const [id,skill]of Object.entries({...party.skills,...party.field_skills,...supportedBattleRecoverySkills(party)})){
+  const playerSkills={...party.skills};
+  for(const [id,field]of Object.entries(party.field_skills??{})){
+    const battle=playerSkills[id];
+    if(battle)fail(skillOwnerKey(field)===skillOwnerKey(battle)&&same(field.source,battle.source)&&field.fixed_raw_hex===battle.fixed_raw_hex,`${id}战斗与场外来源不一致`);
+    playerSkills[id]={...field,...battle};
+  }
+  for(const [id,skill]of Object.entries({...playerSkills,...supportedBattleRecoverySkills(party)})){
     fail(id===skill.id&&skill.index===skill.original_skill_index,`${id}源技能ID或索引不同`);add(id,skill,'player',party.source_hashes);
   }
   for(const [id,skill]of Object.entries(enemySkills(data)))add(id,skill,'enemy',data.ai.source_hashes);
@@ -160,11 +166,14 @@ export function upgradeSkillConfiguration(data,config){
     const previous=copy(defaults),promoted=[];
     for(const [id,row]of Object.entries(config.entries??{})){
       const target=defaults.entries[id];
-      if(row.owner?.side!=='source'||target?.owner?.side!=='enemy')continue;
+      const enemyPromotion=row.owner?.side==='source'&&target?.owner?.side==='enemy';
+      const playerPromotion=row.owner?.side==='player'&&target?.owner?.side==='player'&&
+        !Object.hasOwn(target.original,'enabled')&&['enabled','mp_delta_raw'].some(key=>Object.hasOwn(row.parameters??{},key));
+      if(!enemyPromotion&&!playerPromotion)continue;
       const original=data.source_skills?.skills?.[id];
       fail(original&&id===`${target.owner.role_id}_${target.owner.skill_index}`
         &&same(original.source,target.source)&&row.name===original.name
-        &&same(row.owner,{...target.owner,side:'source'}),`${id}来源接入迁移身份不匹配`);
+        &&same(row.owner,{...target.owner,side:enemyPromotion?'source':'player'}),`${id}来源接入迁移身份不匹配`);
       const parameters=sourceOnlySkillParameters(original);
       previous.entries[id]={...copy(target),owner:copy(row.owner),original:copy(parameters),parameters:copy(parameters)};
       promoted.push(id);

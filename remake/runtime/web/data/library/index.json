@@ -16,7 +16,7 @@
     "chr_skills": 1948,
     "system_magic": 41,
     "items": 416,
-    "runtime_skills": 55
+    "runtime_skills": 165
   },
   "entries": {
     "roles": {
@@ -3516,9 +3516,9 @@
         "definition": "data/library/skills.json#/skills/001_24",
         "configuration_id": "001_24",
         "configuration": "data/config/skills.json#/entries/001_24",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "direct"
       },
       "001_25": {
         "id": "001_25",
@@ -3530,9 +3530,9 @@
         "definition": "data/library/skills.json#/skills/001_25",
         "configuration_id": "001_25",
         "configuration": "data/config/skills.json#/entries/001_25",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "direct"
       },
       "001_26": {
         "id": "001_26",
@@ -3558,9 +3558,9 @@
         "definition": "data/library/skills.json#/skills/001_27",
         "configuration_id": "001_27",
         "configuration": "data/config/skills.json#/entries/001_27",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "direct"
       },
       "001_28": {
         "id": "001_28",
@@ -3572,9 +3572,9 @@
         "definition": "data/library/skills.json#/skills/001_28",
         "configuration_id": "001_28",
         "configuration": "data/config/skills.json#/entries/001_28",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "direct"
       },
       "001_29": {
         "id": "001_29",
@@ -3586,9 +3586,9 @@
         "definition": "data/library/skills.json#/skills/001_29",
         "configuration_id": "001_29",
         "configuration": "data/config/skills.json#/entries/001_29",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "direct"
       },
       "001_30": {
         "id": "001_30",
@@ -3600,9 +3600,9 @@
         "definition": "data/library/skills.json#/skills/001_30",
         "configuration_id": "001_30",
         "configuration": "data/config/skills.json#/entries/001_30",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "001_31": {
         "id": "001_31",
@@ -3614,9 +3614,9 @@
         "definition": "data/library/skills.json#/skills/001_31",
         "configuration_id": "001_31",
         "configuration": "data/config/skills.json#/entries/001_31",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "001_32": {
         "id": "001_32",
@@ -3628,9 +3628,9 @@
         "definition": "data/library/skills.json#/skills/001_32",
         "configuration_id": "001_32",
         "configuration": "data/config/skills.json#/entries/001_32",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "001_33": {
         "id": "001_33",
@@ -3642,9 +3642,9 @@
         "definition": "data/library/skills.json#/skills/001_33",
         "configuration_id": "001_33",
         "configuration": "data/config/skills.json#/entries/001_33",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "001_34": {
         "id": "001_34",
@@ -3656,9 +3656,9 @@
         "definition": "data/library/skills.json#/skills/001_34",
         "configuration_id": "001_34",
         "configuration": "data/config/skills.json#/entries/001_34",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "001_35": {
         "id": "001_35",
@@ -3712,9 +3712,9 @@
         "definition": "data/library/skills.json#/skills/001_38",
         "configuration_id": "001_38",
         "configuration": "data/config/skills.json#/entries/001_38",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "001_39": {
         "id": "001_39",
@@ -3726,9 +3726,9 @@
         "definition": "data/library/skills.json#/skills/001_39",
         "configuration_id": "001_39",
         "configuration": "data/config/skills.json#/entries/001_39",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "001_40": {
         "id": "001_40",
@@ -3740,9 +3740,9 @@
         "definition": "data/library/skills.json#/skills/001_40",
         "configuration_id": "001_40",
         "configuration": "data/config/skills.json#/entries/001_40",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "001_41": {
         "id": "001_41",
@@ -3756,7 +3756,7 @@
         "configuration": "data/config/skills.json#/entries/yannuan",
         "runtime_registered": true,
         "authored_binding": true,
-        "handler": null
+        "handler": "native-support"
       },
       "001_42": {
         "id": "001_42",
@@ -3768,9 +3768,9 @@
         "definition": "data/library/skills.json#/skills/001_42",
         "configuration_id": "001_42",
         "configuration": "data/config/skills.json#/entries/001_42",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "native-support"
       },
       "001_43": {
         "id": "001_43",
@@ -3783,8 +3783,8 @@
         "configuration_id": "001_43",
         "configuration": "data/config/skills.json#/entries/001_43",
         "runtime_registered": true,
-        "authored_binding": false,
-        "handler": null
+        "authored_binding": true,
+        "handler": "native-revival"
       },
       "001_44": {
         "id": "001_44",
@@ -3796,9 +3796,9 @@
         "definition": "data/library/skills.json#/skills/001_44",
         "configuration_id": "001_44",
         "configuration": "data/config/skills.json#/entries/001_44",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "direct"
       },
       "001_45": {
         "id": "001_45",
@@ -3810,9 +3810,9 @@
         "definition": "data/library/skills.json#/skills/001_45",
         "configuration_id": "001_45",
         "configuration": "data/config/skills.json#/entries/001_45",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "001_46": {
         "id": "001_46",
@@ -3824,9 +3824,9 @@
         "definition": "data/library/skills.json#/skills/001_46",
         "configuration_id": "001_46",
         "configuration": "data/config/skills.json#/entries/001_46",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "direct"
       },
       "001_47": {
         "id": "001_47",
@@ -3838,9 +3838,9 @@
         "definition": "data/library/skills.json#/skills/001_47",
         "configuration_id": "001_47",
         "configuration": "data/config/skills.json#/entries/001_47",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "001_48": {
         "id": "001_48",
@@ -3852,9 +3852,9 @@
         "definition": "data/library/skills.json#/skills/001_48",
         "configuration_id": "001_48",
         "configuration": "data/config/skills.json#/entries/001_48",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "002_0": {
         "id": "002_0",
@@ -4202,9 +4202,9 @@
         "definition": "data/library/skills.json#/skills/002_24",
         "configuration_id": "002_24",
         "configuration": "data/config/skills.json#/entries/002_24",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "direct"
       },
       "002_25": {
         "id": "002_25",
@@ -4216,9 +4216,9 @@
         "definition": "data/library/skills.json#/skills/002_25",
         "configuration_id": "002_25",
         "configuration": "data/config/skills.json#/entries/002_25",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "002_26": {
         "id": "002_26",
@@ -4230,9 +4230,9 @@
         "definition": "data/library/skills.json#/skills/002_26",
         "configuration_id": "002_26",
         "configuration": "data/config/skills.json#/entries/002_26",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "direct"
       },
       "002_27": {
         "id": "002_27",
@@ -4244,9 +4244,9 @@
         "definition": "data/library/skills.json#/skills/002_27",
         "configuration_id": "002_27",
         "configuration": "data/config/skills.json#/entries/002_27",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "002_28": {
         "id": "002_28",
@@ -4258,9 +4258,9 @@
         "definition": "data/library/skills.json#/skills/002_28",
         "configuration_id": "002_28",
         "configuration": "data/config/skills.json#/entries/002_28",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "002_29": {
         "id": "002_29",
@@ -4272,9 +4272,9 @@
         "definition": "data/library/skills.json#/skills/002_29",
         "configuration_id": "002_29",
         "configuration": "data/config/skills.json#/entries/002_29",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "direct"
       },
       "002_30": {
         "id": "002_30",
@@ -4314,9 +4314,9 @@
         "definition": "data/library/skills.json#/skills/002_32",
         "configuration_id": "002_32",
         "configuration": "data/config/skills.json#/entries/002_32",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "002_33": {
         "id": "002_33",
@@ -4328,9 +4328,9 @@
         "definition": "data/library/skills.json#/skills/002_33",
         "configuration_id": "002_33",
         "configuration": "data/config/skills.json#/entries/002_33",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "direct"
       },
       "002_34": {
         "id": "002_34",
@@ -4342,9 +4342,9 @@
         "definition": "data/library/skills.json#/skills/002_34",
         "configuration_id": "002_34",
         "configuration": "data/config/skills.json#/entries/002_34",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "002_35": {
         "id": "002_35",
@@ -4356,9 +4356,9 @@
         "definition": "data/library/skills.json#/skills/002_35",
         "configuration_id": "002_35",
         "configuration": "data/config/skills.json#/entries/002_35",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "direct"
       },
       "002_36": {
         "id": "002_36",
@@ -4370,9 +4370,9 @@
         "definition": "data/library/skills.json#/skills/002_36",
         "configuration_id": "002_36",
         "configuration": "data/config/skills.json#/entries/002_36",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "direct"
       },
       "002_37": {
         "id": "002_37",
@@ -4384,9 +4384,9 @@
         "definition": "data/library/skills.json#/skills/002_37",
         "configuration_id": "002_37",
         "configuration": "data/config/skills.json#/entries/002_37",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "002_38": {
         "id": "002_38",
@@ -4398,9 +4398,9 @@
         "definition": "data/library/skills.json#/skills/002_38",
         "configuration_id": "002_38",
         "configuration": "data/config/skills.json#/entries/002_38",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "002_39": {
         "id": "002_39",
@@ -4412,9 +4412,9 @@
         "definition": "data/library/skills.json#/skills/002_39",
         "configuration_id": "002_39",
         "configuration": "data/config/skills.json#/entries/002_39",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "002_40": {
         "id": "002_40",
@@ -4426,9 +4426,9 @@
         "definition": "data/library/skills.json#/skills/002_40",
         "configuration_id": "002_40",
         "configuration": "data/config/skills.json#/entries/002_40",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "002_41": {
         "id": "002_41",
@@ -4440,9 +4440,9 @@
         "definition": "data/library/skills.json#/skills/002_41",
         "configuration_id": "002_41",
         "configuration": "data/config/skills.json#/entries/002_41",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "002_42": {
         "id": "002_42",
@@ -4454,9 +4454,9 @@
         "definition": "data/library/skills.json#/skills/002_42",
         "configuration_id": "002_42",
         "configuration": "data/config/skills.json#/entries/002_42",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "direct"
       },
       "003_0": {
         "id": "003_0",
@@ -4832,9 +4832,9 @@
         "definition": "data/library/skills.json#/skills/003_26",
         "configuration_id": "003_26",
         "configuration": "data/config/skills.json#/entries/003_26",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "direct"
       },
       "003_27": {
         "id": "003_27",
@@ -4846,9 +4846,9 @@
         "definition": "data/library/skills.json#/skills/003_27",
         "configuration_id": "003_27",
         "configuration": "data/config/skills.json#/entries/003_27",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "003_28": {
         "id": "003_28",
@@ -4860,9 +4860,9 @@
         "definition": "data/library/skills.json#/skills/003_28",
         "configuration_id": "003_28",
         "configuration": "data/config/skills.json#/entries/003_28",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "direct"
       },
       "003_29": {
         "id": "003_29",
@@ -4874,9 +4874,9 @@
         "definition": "data/library/skills.json#/skills/003_29",
         "configuration_id": "003_29",
         "configuration": "data/config/skills.json#/entries/003_29",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "direct"
       },
       "003_30": {
         "id": "003_30",
@@ -4888,9 +4888,9 @@
         "definition": "data/library/skills.json#/skills/003_30",
         "configuration_id": "003_30",
         "configuration": "data/config/skills.json#/entries/003_30",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "direct"
       },
       "003_31": {
         "id": "003_31",
@@ -4902,9 +4902,9 @@
         "definition": "data/library/skills.json#/skills/003_31",
         "configuration_id": "003_31",
         "configuration": "data/config/skills.json#/entries/003_31",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "direct"
       },
       "003_32": {
         "id": "003_32",
@@ -4916,9 +4916,9 @@
         "definition": "data/library/skills.json#/skills/003_32",
         "configuration_id": "003_32",
         "configuration": "data/config/skills.json#/entries/003_32",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "003_33": {
         "id": "003_33",
@@ -4958,9 +4958,9 @@
         "definition": "data/library/skills.json#/skills/003_35",
         "configuration_id": "003_35",
         "configuration": "data/config/skills.json#/entries/003_35",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "003_36": {
         "id": "003_36",
@@ -4972,9 +4972,9 @@
         "definition": "data/library/skills.json#/skills/003_36",
         "configuration_id": "003_36",
         "configuration": "data/config/skills.json#/entries/003_36",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "003_37": {
         "id": "003_37",
@@ -4986,9 +4986,9 @@
         "definition": "data/library/skills.json#/skills/003_37",
         "configuration_id": "003_37",
         "configuration": "data/config/skills.json#/entries/003_37",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "003_38": {
         "id": "003_38",
@@ -5000,9 +5000,9 @@
         "definition": "data/library/skills.json#/skills/003_38",
         "configuration_id": "003_38",
         "configuration": "data/config/skills.json#/entries/003_38",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "003_39": {
         "id": "003_39",
@@ -5014,9 +5014,9 @@
         "definition": "data/library/skills.json#/skills/003_39",
         "configuration_id": "003_39",
         "configuration": "data/config/skills.json#/entries/003_39",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "003_40": {
         "id": "003_40",
@@ -5028,9 +5028,9 @@
         "definition": "data/library/skills.json#/skills/003_40",
         "configuration_id": "003_40",
         "configuration": "data/config/skills.json#/entries/003_40",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "003_41": {
         "id": "003_41",
@@ -5042,9 +5042,9 @@
         "definition": "data/library/skills.json#/skills/003_41",
         "configuration_id": "003_41",
         "configuration": "data/config/skills.json#/entries/003_41",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "003_42": {
         "id": "003_42",
@@ -5056,9 +5056,9 @@
         "definition": "data/library/skills.json#/skills/003_42",
         "configuration_id": "003_42",
         "configuration": "data/config/skills.json#/entries/003_42",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "003_43": {
         "id": "003_43",
@@ -5070,9 +5070,9 @@
         "definition": "data/library/skills.json#/skills/003_43",
         "configuration_id": "003_43",
         "configuration": "data/config/skills.json#/entries/003_43",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "003_44": {
         "id": "003_44",
@@ -5084,9 +5084,9 @@
         "definition": "data/library/skills.json#/skills/003_44",
         "configuration_id": "003_44",
         "configuration": "data/config/skills.json#/entries/003_44",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "003_45": {
         "id": "003_45",
@@ -5098,9 +5098,9 @@
         "definition": "data/library/skills.json#/skills/003_45",
         "configuration_id": "003_45",
         "configuration": "data/config/skills.json#/entries/003_45",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "003_46": {
         "id": "003_46",
@@ -5112,9 +5112,9 @@
         "definition": "data/library/skills.json#/skills/003_46",
         "configuration_id": "003_46",
         "configuration": "data/config/skills.json#/entries/003_46",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "native-support"
       },
       "003_47": {
         "id": "003_47",
@@ -5126,9 +5126,9 @@
         "definition": "data/library/skills.json#/skills/003_47",
         "configuration_id": "003_47",
         "configuration": "data/config/skills.json#/entries/003_47",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "native-support"
       },
       "003_48": {
         "id": "003_48",
@@ -5140,9 +5140,9 @@
         "definition": "data/library/skills.json#/skills/003_48",
         "configuration_id": "003_48",
         "configuration": "data/config/skills.json#/entries/003_48",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "native-support"
       },
       "003_49": {
         "id": "003_49",
@@ -5182,9 +5182,9 @@
         "definition": "data/library/skills.json#/skills/003_51",
         "configuration_id": "003_51",
         "configuration": "data/config/skills.json#/entries/003_51",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "004_0": {
         "id": "004_0",
@@ -5476,9 +5476,9 @@
         "definition": "data/library/skills.json#/skills/004_20",
         "configuration_id": "004_20",
         "configuration": "data/config/skills.json#/entries/004_20",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "004_21": {
         "id": "004_21",
@@ -5504,9 +5504,9 @@
         "definition": "data/library/skills.json#/skills/004_22",
         "configuration_id": "004_22",
         "configuration": "data/config/skills.json#/entries/004_22",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "004_23": {
         "id": "004_23",
@@ -5518,9 +5518,9 @@
         "definition": "data/library/skills.json#/skills/004_23",
         "configuration_id": "004_23",
         "configuration": "data/config/skills.json#/entries/004_23",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "004_24": {
         "id": "004_24",
@@ -5532,9 +5532,9 @@
         "definition": "data/library/skills.json#/skills/004_24",
         "configuration_id": "004_24",
         "configuration": "data/config/skills.json#/entries/004_24",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "004_25": {
         "id": "004_25",
@@ -5560,9 +5560,9 @@
         "definition": "data/library/skills.json#/skills/004_26",
         "configuration_id": "004_26",
         "configuration": "data/config/skills.json#/entries/004_26",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "004_27": {
         "id": "004_27",
@@ -5588,9 +5588,9 @@
         "definition": "data/library/skills.json#/skills/004_28",
         "configuration_id": "004_28",
         "configuration": "data/config/skills.json#/entries/004_28",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "004_29": {
         "id": "004_29",
@@ -5616,9 +5616,9 @@
         "definition": "data/library/skills.json#/skills/004_30",
         "configuration_id": "004_30",
         "configuration": "data/config/skills.json#/entries/004_30",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "004_31": {
         "id": "004_31",
@@ -5644,9 +5644,9 @@
         "definition": "data/library/skills.json#/skills/004_32",
         "configuration_id": "004_32",
         "configuration": "data/config/skills.json#/entries/004_32",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "004_33": {
         "id": "004_33",
@@ -5672,9 +5672,9 @@
         "definition": "data/library/skills.json#/skills/004_34",
         "configuration_id": "004_34",
         "configuration": "data/config/skills.json#/entries/004_34",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "native-support"
       },
       "004_35": {
         "id": "004_35",
@@ -5686,9 +5686,9 @@
         "definition": "data/library/skills.json#/skills/004_35",
         "configuration_id": "004_35",
         "configuration": "data/config/skills.json#/entries/004_35",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "native-support"
       },
       "004_36": {
         "id": "004_36",
@@ -5700,9 +5700,9 @@
         "definition": "data/library/skills.json#/skills/004_36",
         "configuration_id": "004_36",
         "configuration": "data/config/skills.json#/entries/004_36",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "native-support"
       },
       "004_37": {
         "id": "004_37",
@@ -5714,9 +5714,9 @@
         "definition": "data/library/skills.json#/skills/004_37",
         "configuration_id": "004_37",
         "configuration": "data/config/skills.json#/entries/004_37",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "native-support"
       },
       "004_38": {
         "id": "004_38",
@@ -5742,9 +5742,9 @@
         "definition": "data/library/skills.json#/skills/004_39",
         "configuration_id": "004_39",
         "configuration": "data/config/skills.json#/entries/004_39",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "native-support"
       },
       "004_40": {
         "id": "004_40",
@@ -5757,8 +5757,8 @@
         "configuration_id": "004_40",
         "configuration": "data/config/skills.json#/entries/004_40",
         "runtime_registered": true,
-        "authored_binding": false,
-        "handler": null
+        "authored_binding": true,
+        "handler": "native-revival"
       },
       "004_41": {
         "id": "004_41",
@@ -5771,8 +5771,8 @@
         "configuration_id": "004_41",
         "configuration": "data/config/skills.json#/entries/004_41",
         "runtime_registered": true,
-        "authored_binding": false,
-        "handler": null
+        "authored_binding": true,
+        "handler": "native-revival"
       },
       "004_42": {
         "id": "004_42",
@@ -5784,9 +5784,9 @@
         "definition": "data/library/skills.json#/skills/004_42",
         "configuration_id": "004_42",
         "configuration": "data/config/skills.json#/entries/004_42",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "native-support"
       },
       "004_43": {
         "id": "004_43",
@@ -5798,9 +5798,9 @@
         "definition": "data/library/skills.json#/skills/004_43",
         "configuration_id": "004_43",
         "configuration": "data/config/skills.json#/entries/004_43",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "native-support"
       },
       "004_44": {
         "id": "004_44",
@@ -5812,9 +5812,9 @@
         "definition": "data/library/skills.json#/skills/004_44",
         "configuration_id": "004_44",
         "configuration": "data/config/skills.json#/entries/004_44",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "native-support"
       },
       "004_45": {
         "id": "004_45",
@@ -5826,9 +5826,9 @@
         "definition": "data/library/skills.json#/skills/004_45",
         "configuration_id": "004_45",
         "configuration": "data/config/skills.json#/entries/004_45",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "native-support"
       },
       "004_46": {
         "id": "004_46",
@@ -5840,9 +5840,9 @@
         "definition": "data/library/skills.json#/skills/004_46",
         "configuration_id": "004_46",
         "configuration": "data/config/skills.json#/entries/004_46",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "native-support"
       },
       "004_47": {
         "id": "004_47",
@@ -5854,9 +5854,9 @@
         "definition": "data/library/skills.json#/skills/004_47",
         "configuration_id": "004_47",
         "configuration": "data/config/skills.json#/entries/004_47",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "native-support"
       },
       "005_0": {
         "id": "005_0",
@@ -6190,9 +6190,9 @@
         "definition": "data/library/skills.json#/skills/005_23",
         "configuration_id": "005_23",
         "configuration": "data/config/skills.json#/entries/005_23",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "direct"
       },
       "005_24": {
         "id": "005_24",
@@ -6204,9 +6204,9 @@
         "definition": "data/library/skills.json#/skills/005_24",
         "configuration_id": "005_24",
         "configuration": "data/config/skills.json#/entries/005_24",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "direct"
       },
       "005_25": {
         "id": "005_25",
@@ -6218,9 +6218,9 @@
         "definition": "data/library/skills.json#/skills/005_25",
         "configuration_id": "005_25",
         "configuration": "data/config/skills.json#/entries/005_25",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "direct"
       },
       "005_26": {
         "id": "005_26",
@@ -6232,9 +6232,9 @@
         "definition": "data/library/skills.json#/skills/005_26",
         "configuration_id": "005_26",
         "configuration": "data/config/skills.json#/entries/005_26",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "direct"
       },
       "005_27": {
         "id": "005_27",
@@ -6246,9 +6246,9 @@
         "definition": "data/library/skills.json#/skills/005_27",
         "configuration_id": "005_27",
         "configuration": "data/config/skills.json#/entries/005_27",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "005_28": {
         "id": "005_28",
@@ -6260,9 +6260,9 @@
         "definition": "data/library/skills.json#/skills/005_28",
         "configuration_id": "005_28",
         "configuration": "data/config/skills.json#/entries/005_28",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "direct"
       },
       "005_29": {
         "id": "005_29",
@@ -6302,9 +6302,9 @@
         "definition": "data/library/skills.json#/skills/005_31",
         "configuration_id": "005_31",
         "configuration": "data/config/skills.json#/entries/005_31",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "005_32": {
         "id": "005_32",
@@ -6316,9 +6316,9 @@
         "definition": "data/library/skills.json#/skills/005_32",
         "configuration_id": "005_32",
         "configuration": "data/config/skills.json#/entries/005_32",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "direct"
       },
       "005_33": {
         "id": "005_33",
@@ -6330,9 +6330,9 @@
         "definition": "data/library/skills.json#/skills/005_33",
         "configuration_id": "005_33",
         "configuration": "data/config/skills.json#/entries/005_33",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "direct"
       },
       "006_0": {
         "id": "006_0",
@@ -6694,9 +6694,9 @@
         "definition": "data/library/skills.json#/skills/006_25",
         "configuration_id": "006_25",
         "configuration": "data/config/skills.json#/entries/006_25",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "006_26": {
         "id": "006_26",
@@ -6708,9 +6708,9 @@
         "definition": "data/library/skills.json#/skills/006_26",
         "configuration_id": "006_26",
         "configuration": "data/config/skills.json#/entries/006_26",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "006_27": {
         "id": "006_27",
@@ -6722,9 +6722,9 @@
         "definition": "data/library/skills.json#/skills/006_27",
         "configuration_id": "006_27",
         "configuration": "data/config/skills.json#/entries/006_27",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "006_28": {
         "id": "006_28",
@@ -6736,9 +6736,9 @@
         "definition": "data/library/skills.json#/skills/006_28",
         "configuration_id": "006_28",
         "configuration": "data/config/skills.json#/entries/006_28",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "006_29": {
         "id": "006_29",
@@ -6750,9 +6750,9 @@
         "definition": "data/library/skills.json#/skills/006_29",
         "configuration_id": "006_29",
         "configuration": "data/config/skills.json#/entries/006_29",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "006_30": {
         "id": "006_30",
@@ -6764,9 +6764,9 @@
         "definition": "data/library/skills.json#/skills/006_30",
         "configuration_id": "006_30",
         "configuration": "data/config/skills.json#/entries/006_30",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "006_31": {
         "id": "006_31",
@@ -6778,9 +6778,9 @@
         "definition": "data/library/skills.json#/skills/006_31",
         "configuration_id": "006_31",
         "configuration": "data/config/skills.json#/entries/006_31",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "006_32": {
         "id": "006_32",
@@ -6792,9 +6792,9 @@
         "definition": "data/library/skills.json#/skills/006_32",
         "configuration_id": "006_32",
         "configuration": "data/config/skills.json#/entries/006_32",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "006_33": {
         "id": "006_33",
@@ -6806,9 +6806,9 @@
         "definition": "data/library/skills.json#/skills/006_33",
         "configuration_id": "006_33",
         "configuration": "data/config/skills.json#/entries/006_33",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "006_34": {
         "id": "006_34",
@@ -6820,9 +6820,9 @@
         "definition": "data/library/skills.json#/skills/006_34",
         "configuration_id": "006_34",
         "configuration": "data/config/skills.json#/entries/006_34",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "006_35": {
         "id": "006_35",
@@ -6834,9 +6834,9 @@
         "definition": "data/library/skills.json#/skills/006_35",
         "configuration_id": "006_35",
         "configuration": "data/config/skills.json#/entries/006_35",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "006_36": {
         "id": "006_36",
@@ -6848,9 +6848,9 @@
         "definition": "data/library/skills.json#/skills/006_36",
         "configuration_id": "006_36",
         "configuration": "data/config/skills.json#/entries/006_36",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "006_37": {
         "id": "006_37",
@@ -6862,9 +6862,9 @@
         "definition": "data/library/skills.json#/skills/006_37",
         "configuration_id": "006_37",
         "configuration": "data/config/skills.json#/entries/006_37",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "006_38": {
         "id": "006_38",
@@ -6876,9 +6876,9 @@
         "definition": "data/library/skills.json#/skills/006_38",
         "configuration_id": "006_38",
         "configuration": "data/config/skills.json#/entries/006_38",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "006_39": {
         "id": "006_39",
@@ -6890,9 +6890,9 @@
         "definition": "data/library/skills.json#/skills/006_39",
         "configuration_id": "006_39",
         "configuration": "data/config/skills.json#/entries/006_39",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "006_40": {
         "id": "006_40",
@@ -6904,9 +6904,9 @@
         "definition": "data/library/skills.json#/skills/006_40",
         "configuration_id": "006_40",
         "configuration": "data/config/skills.json#/entries/006_40",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "006_41": {
         "id": "006_41",
@@ -6918,9 +6918,9 @@
         "definition": "data/library/skills.json#/skills/006_41",
         "configuration_id": "006_41",
         "configuration": "data/config/skills.json#/entries/006_41",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "006_42": {
         "id": "006_42",
@@ -6932,9 +6932,9 @@
         "definition": "data/library/skills.json#/skills/006_42",
         "configuration_id": "006_42",
         "configuration": "data/config/skills.json#/entries/006_42",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "native-support"
       },
       "006_43": {
         "id": "006_43",
@@ -6946,9 +6946,9 @@
         "definition": "data/library/skills.json#/skills/006_43",
         "configuration_id": "006_43",
         "configuration": "data/config/skills.json#/entries/006_43",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "native-support"
       },
       "006_44": {
         "id": "006_44",
@@ -6960,9 +6960,9 @@
         "definition": "data/library/skills.json#/skills/006_44",
         "configuration_id": "006_44",
         "configuration": "data/config/skills.json#/entries/006_44",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "native-support"
       },
       "006_45": {
         "id": "006_45",
@@ -6974,9 +6974,9 @@
         "definition": "data/library/skills.json#/skills/006_45",
         "configuration_id": "006_45",
         "configuration": "data/config/skills.json#/entries/006_45",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "native-support"
       },
       "006_46": {
         "id": "006_46",
@@ -6988,9 +6988,9 @@
         "definition": "data/library/skills.json#/skills/006_46",
         "configuration_id": "006_46",
         "configuration": "data/config/skills.json#/entries/006_46",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "native-support"
       },
       "006_47": {
         "id": "006_47",
@@ -7002,9 +7002,9 @@
         "definition": "data/library/skills.json#/skills/006_47",
         "configuration_id": "006_47",
         "configuration": "data/config/skills.json#/entries/006_47",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "native-support"
       },
       "006_48": {
         "id": "006_48",
@@ -7016,9 +7016,9 @@
         "definition": "data/library/skills.json#/skills/006_48",
         "configuration_id": "006_48",
         "configuration": "data/config/skills.json#/entries/006_48",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "011_0": {
         "id": "011_0",
@@ -46167,11 +46167,11 @@
     "data/library/roles.json": "c88f1459169e56a333ca0376a56bb66e7c6c9a18c5d2e8bf1b77b3c9d394d8a6",
     "data/library/skills.json": "91517d541e4d0fc36ffe3334c975634d718a2dcdd6af9f71a08019d4fcaa47e4",
     "data/library/magic.json": "2a0784270dcd6661e267c84caae37f959a1813045da44da46c3c8fde666d5812",
-    "data/items.json": "be8b04b015fade3ff1c10d2618dbefd54ba4945244dcbea12431d9b4b16bb530",
-    "data/runtime_content.json": "1ee43ea92d6710185fbfdde13322ac7e690f53b580957e46a814d07cff3a2c20",
-    "data/party_skills.json": "f2df4edb5471b12f85b404af26e78a4f8e354b2f39bad3625827ec43647e9fce",
+    "data/items.json": "b786f209b62821f780ef9fce494b2456af7ff8da85adf1a0534ece800e6305a5",
+    "data/runtime_content.json": "b4da2b2a6096fc1af840eb6c6778a18bc7cf194d373f0fbc506fc429ad9c4889",
+    "data/party_skills.json": "27a9e58d7e3a16076182014ecb61c826cc2f4b5a24545cb9c7ddbb29b1077ba0",
     "data/forest_ai.json": "80fd3b93fda75b52b53a5c660f2bfa25ad065355f3fe1d57097ebc02ceb9c6db",
-    "data/config/skills.json": "16941b22ee21448c2b87df7fdf401f1db13b8ec3820d5139dcad3de237219302",
+    "data/config/skills.json": "0a05191f24afdc1d9bcb279ecd4a3befe170b8e0c5c74d099603a9f4ba5c5715",
     "data/config/items.json": "7103f7356567dfd41ecdb1ec9286d93f3ae45a6673eb565873018711055bfb23"
   }
 }

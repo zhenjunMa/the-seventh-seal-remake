@@ -36,6 +36,91 @@ export const definition = {
         {
           "index": 36,
           "handler": "effect-carrier"
+        },
+        {
+          "index": 24,
+          "handler": "direct"
+        },
+        {
+          "index": 25,
+          "handler": "direct"
+        },
+        {
+          "index": 27,
+          "handler": "direct"
+        },
+        {
+          "index": 28,
+          "handler": "direct"
+        },
+        {
+          "index": 29,
+          "handler": "direct"
+        },
+        {
+          "index": 30,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 31,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 32,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 33,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 34,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 38,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 39,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 40,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 41,
+          "handler": "native-support",
+          "id": "yannuan"
+        },
+        {
+          "index": 42,
+          "handler": "native-support"
+        },
+        {
+          "index": 43,
+          "handler": "native-revival"
+        },
+        {
+          "index": 44,
+          "handler": "direct"
+        },
+        {
+          "index": 45,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 46,
+          "handler": "direct"
+        },
+        {
+          "index": 47,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 48,
+          "handler": "effect-carrier"
         }
       ],
       "field_skills": [
@@ -81,6 +166,74 @@ export const definition = {
         {
           "index": 31,
           "handler": "effect-carrier"
+        },
+        {
+          "index": 24,
+          "handler": "direct"
+        },
+        {
+          "index": 25,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 26,
+          "handler": "direct"
+        },
+        {
+          "index": 27,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 28,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 29,
+          "handler": "direct"
+        },
+        {
+          "index": 32,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 33,
+          "handler": "direct"
+        },
+        {
+          "index": 34,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 35,
+          "handler": "direct"
+        },
+        {
+          "index": 36,
+          "handler": "direct"
+        },
+        {
+          "index": 37,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 38,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 39,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 40,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 41,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 42,
+          "handler": "direct"
         }
       ],
       "field_skills": [],
@@ -116,9 +269,103 @@ export const definition = {
         {
           "index": 33,
           "handler": "effect-carrier"
+        },
+        {
+          "index": 26,
+          "handler": "direct"
+        },
+        {
+          "index": 27,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 28,
+          "handler": "direct"
+        },
+        {
+          "index": 29,
+          "handler": "direct"
+        },
+        {
+          "index": 30,
+          "handler": "direct"
+        },
+        {
+          "index": 31,
+          "handler": "direct"
+        },
+        {
+          "index": 32,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 35,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 36,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 37,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 38,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 39,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 40,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 41,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 42,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 43,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 44,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 45,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 46,
+          "handler": "native-support",
+          "id": "003_46"
+        },
+        {
+          "index": 47,
+          "handler": "native-support"
+        },
+        {
+          "index": 48,
+          "handler": "native-support"
+        },
+        {
+          "index": 51,
+          "handler": "effect-carrier"
         }
       ],
-      "primary_skill": 21
+      "primary_skill": 21,
+      "field_skills": [
+        {
+          "index": 46
+        }
+      ]
     },
     "004": {
       "side": "player",
@@ -153,14 +400,108 @@ export const definition = {
         },
         {
           "index": 33,
-          "handler": "native-support"
+          "handler": "native-support",
+          "id": "004_33"
         },
         {
           "index": 38,
           "handler": "native-support"
+        },
+        {
+          "index": 20,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 22,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 23,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 24,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 26,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 28,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 30,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 32,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 34,
+          "handler": "native-support"
+        },
+        {
+          "index": 35,
+          "handler": "native-support",
+          "id": "004_35"
+        },
+        {
+          "index": 36,
+          "handler": "native-support"
+        },
+        {
+          "index": 37,
+          "handler": "native-support"
+        },
+        {
+          "index": 39,
+          "handler": "native-support"
+        },
+        {
+          "index": 40,
+          "handler": "native-revival"
+        },
+        {
+          "index": 41,
+          "handler": "native-revival"
+        },
+        {
+          "index": 42,
+          "handler": "native-support"
+        },
+        {
+          "index": 43,
+          "handler": "native-support"
+        },
+        {
+          "index": 44,
+          "handler": "native-support"
+        },
+        {
+          "index": 45,
+          "handler": "native-support"
+        },
+        {
+          "index": 46,
+          "handler": "native-support"
+        },
+        {
+          "index": 47,
+          "handler": "native-support"
         }
       ],
-      "primary_skill": 18
+      "primary_skill": 18,
+      "field_skills": [
+        {
+          "index": 33
+        },
+        {
+          "index": 35
+        }
+      ]
     },
     "005": {
       "side": "player",
@@ -180,9 +521,46 @@ export const definition = {
         {
           "index": 22,
           "handler": "direct"
+        },
+        {
+          "index": 23,
+          "handler": "direct"
+        },
+        {
+          "index": 24,
+          "handler": "direct"
+        },
+        {
+          "index": 25,
+          "handler": "direct"
+        },
+        {
+          "index": 26,
+          "handler": "direct"
+        },
+        {
+          "index": 27,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 28,
+          "handler": "direct"
+        },
+        {
+          "index": 31,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 32,
+          "handler": "direct"
+        },
+        {
+          "index": 33,
+          "handler": "direct"
         }
       ],
-      "primary_skill": 19
+      "primary_skill": 19,
+      "field_skills": []
     },
     "006": {
       "side": "player",
@@ -210,9 +588,106 @@ export const definition = {
         {
           "index": 24,
           "handler": "direct"
+        },
+        {
+          "index": 25,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 26,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 27,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 28,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 29,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 30,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 31,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 32,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 33,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 34,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 35,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 36,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 37,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 38,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 39,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 40,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 41,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 42,
+          "handler": "native-support"
+        },
+        {
+          "index": 43,
+          "handler": "native-support"
+        },
+        {
+          "index": 44,
+          "handler": "native-support"
+        },
+        {
+          "index": 45,
+          "handler": "native-support"
+        },
+        {
+          "index": 46,
+          "handler": "native-support"
+        },
+        {
+          "index": 47,
+          "handler": "native-support"
+        },
+        {
+          "index": 48,
+          "handler": "effect-carrier"
         }
       ],
-      "primary_skill": 19
+      "primary_skill": 19,
+      "field_skills": []
     },
     "011": {
       "side": "enemy",
@@ -671,6 +1146,111 @@ export default {
           "index": 36,
           "handler": "effect-carrier",
           "id": "001_36"
+        },
+        {
+          "index": 24,
+          "handler": "direct",
+          "id": "001_24"
+        },
+        {
+          "index": 25,
+          "handler": "direct",
+          "id": "001_25"
+        },
+        {
+          "index": 27,
+          "handler": "direct",
+          "id": "001_27"
+        },
+        {
+          "index": 28,
+          "handler": "direct",
+          "id": "001_28"
+        },
+        {
+          "index": 29,
+          "handler": "direct",
+          "id": "001_29"
+        },
+        {
+          "index": 30,
+          "handler": "effect-carrier",
+          "id": "001_30"
+        },
+        {
+          "index": 31,
+          "handler": "effect-carrier",
+          "id": "001_31"
+        },
+        {
+          "index": 32,
+          "handler": "effect-carrier",
+          "id": "001_32"
+        },
+        {
+          "index": 33,
+          "handler": "effect-carrier",
+          "id": "001_33"
+        },
+        {
+          "index": 34,
+          "handler": "effect-carrier",
+          "id": "001_34"
+        },
+        {
+          "index": 38,
+          "handler": "effect-carrier",
+          "id": "001_38"
+        },
+        {
+          "index": 39,
+          "handler": "effect-carrier",
+          "id": "001_39"
+        },
+        {
+          "index": 40,
+          "handler": "effect-carrier",
+          "id": "001_40"
+        },
+        {
+          "index": 41,
+          "handler": "native-support",
+          "id": "yannuan"
+        },
+        {
+          "index": 42,
+          "handler": "native-support",
+          "id": "001_42"
+        },
+        {
+          "index": 43,
+          "handler": "native-revival",
+          "id": "001_43"
+        },
+        {
+          "index": 44,
+          "handler": "direct",
+          "id": "001_44"
+        },
+        {
+          "index": 45,
+          "handler": "effect-carrier",
+          "id": "001_45"
+        },
+        {
+          "index": 46,
+          "handler": "direct",
+          "id": "001_46"
+        },
+        {
+          "index": 47,
+          "handler": "effect-carrier",
+          "id": "001_47"
+        },
+        {
+          "index": 48,
+          "handler": "effect-carrier",
+          "id": "001_48"
         }
       ],
       "field_skills": [
@@ -723,6 +1303,91 @@ export default {
           "index": 31,
           "handler": "effect-carrier",
           "id": "002_31"
+        },
+        {
+          "index": 24,
+          "handler": "direct",
+          "id": "002_24"
+        },
+        {
+          "index": 25,
+          "handler": "effect-carrier",
+          "id": "002_25"
+        },
+        {
+          "index": 26,
+          "handler": "direct",
+          "id": "002_26"
+        },
+        {
+          "index": 27,
+          "handler": "effect-carrier",
+          "id": "002_27"
+        },
+        {
+          "index": 28,
+          "handler": "effect-carrier",
+          "id": "002_28"
+        },
+        {
+          "index": 29,
+          "handler": "direct",
+          "id": "002_29"
+        },
+        {
+          "index": 32,
+          "handler": "effect-carrier",
+          "id": "002_32"
+        },
+        {
+          "index": 33,
+          "handler": "direct",
+          "id": "002_33"
+        },
+        {
+          "index": 34,
+          "handler": "effect-carrier",
+          "id": "002_34"
+        },
+        {
+          "index": 35,
+          "handler": "direct",
+          "id": "002_35"
+        },
+        {
+          "index": 36,
+          "handler": "direct",
+          "id": "002_36"
+        },
+        {
+          "index": 37,
+          "handler": "effect-carrier",
+          "id": "002_37"
+        },
+        {
+          "index": 38,
+          "handler": "effect-carrier",
+          "id": "002_38"
+        },
+        {
+          "index": 39,
+          "handler": "effect-carrier",
+          "id": "002_39"
+        },
+        {
+          "index": 40,
+          "handler": "effect-carrier",
+          "id": "002_40"
+        },
+        {
+          "index": 41,
+          "handler": "effect-carrier",
+          "id": "002_41"
+        },
+        {
+          "index": 42,
+          "handler": "direct",
+          "id": "002_42"
         }
       ],
       "field_skills": [],
@@ -770,9 +1435,124 @@ export default {
           "index": 33,
           "handler": "effect-carrier",
           "id": "003_33"
+        },
+        {
+          "index": 26,
+          "handler": "direct",
+          "id": "003_26"
+        },
+        {
+          "index": 27,
+          "handler": "effect-carrier",
+          "id": "003_27"
+        },
+        {
+          "index": 28,
+          "handler": "direct",
+          "id": "003_28"
+        },
+        {
+          "index": 29,
+          "handler": "direct",
+          "id": "003_29"
+        },
+        {
+          "index": 30,
+          "handler": "direct",
+          "id": "003_30"
+        },
+        {
+          "index": 31,
+          "handler": "direct",
+          "id": "003_31"
+        },
+        {
+          "index": 32,
+          "handler": "effect-carrier",
+          "id": "003_32"
+        },
+        {
+          "index": 35,
+          "handler": "effect-carrier",
+          "id": "003_35"
+        },
+        {
+          "index": 36,
+          "handler": "effect-carrier",
+          "id": "003_36"
+        },
+        {
+          "index": 37,
+          "handler": "effect-carrier",
+          "id": "003_37"
+        },
+        {
+          "index": 38,
+          "handler": "effect-carrier",
+          "id": "003_38"
+        },
+        {
+          "index": 39,
+          "handler": "effect-carrier",
+          "id": "003_39"
+        },
+        {
+          "index": 40,
+          "handler": "effect-carrier",
+          "id": "003_40"
+        },
+        {
+          "index": 41,
+          "handler": "effect-carrier",
+          "id": "003_41"
+        },
+        {
+          "index": 42,
+          "handler": "effect-carrier",
+          "id": "003_42"
+        },
+        {
+          "index": 43,
+          "handler": "effect-carrier",
+          "id": "003_43"
+        },
+        {
+          "index": 44,
+          "handler": "effect-carrier",
+          "id": "003_44"
+        },
+        {
+          "index": 45,
+          "handler": "effect-carrier",
+          "id": "003_45"
+        },
+        {
+          "index": 46,
+          "handler": "native-support",
+          "id": "003_46"
+        },
+        {
+          "index": 47,
+          "handler": "native-support",
+          "id": "003_47"
+        },
+        {
+          "index": 48,
+          "handler": "native-support",
+          "id": "003_48"
+        },
+        {
+          "index": 51,
+          "handler": "effect-carrier",
+          "id": "003_51"
         }
       ],
-      "field_skills": [],
+      "field_skills": [
+        {
+          "index": 46,
+          "id": "003_46"
+        }
+      ],
       "primary_skill": 21
     },
     "004": {
@@ -827,9 +1607,123 @@ export default {
           "index": 38,
           "handler": "native-support",
           "id": "004_38"
+        },
+        {
+          "index": 20,
+          "handler": "effect-carrier",
+          "id": "004_20"
+        },
+        {
+          "index": 22,
+          "handler": "effect-carrier",
+          "id": "004_22"
+        },
+        {
+          "index": 23,
+          "handler": "effect-carrier",
+          "id": "004_23"
+        },
+        {
+          "index": 24,
+          "handler": "effect-carrier",
+          "id": "004_24"
+        },
+        {
+          "index": 26,
+          "handler": "effect-carrier",
+          "id": "004_26"
+        },
+        {
+          "index": 28,
+          "handler": "effect-carrier",
+          "id": "004_28"
+        },
+        {
+          "index": 30,
+          "handler": "effect-carrier",
+          "id": "004_30"
+        },
+        {
+          "index": 32,
+          "handler": "effect-carrier",
+          "id": "004_32"
+        },
+        {
+          "index": 34,
+          "handler": "native-support",
+          "id": "004_34"
+        },
+        {
+          "index": 35,
+          "handler": "native-support",
+          "id": "004_35"
+        },
+        {
+          "index": 36,
+          "handler": "native-support",
+          "id": "004_36"
+        },
+        {
+          "index": 37,
+          "handler": "native-support",
+          "id": "004_37"
+        },
+        {
+          "index": 39,
+          "handler": "native-support",
+          "id": "004_39"
+        },
+        {
+          "index": 40,
+          "handler": "native-revival",
+          "id": "004_40"
+        },
+        {
+          "index": 41,
+          "handler": "native-revival",
+          "id": "004_41"
+        },
+        {
+          "index": 42,
+          "handler": "native-support",
+          "id": "004_42"
+        },
+        {
+          "index": 43,
+          "handler": "native-support",
+          "id": "004_43"
+        },
+        {
+          "index": 44,
+          "handler": "native-support",
+          "id": "004_44"
+        },
+        {
+          "index": 45,
+          "handler": "native-support",
+          "id": "004_45"
+        },
+        {
+          "index": 46,
+          "handler": "native-support",
+          "id": "004_46"
+        },
+        {
+          "index": 47,
+          "handler": "native-support",
+          "id": "004_47"
         }
       ],
-      "field_skills": [],
+      "field_skills": [
+        {
+          "index": 33,
+          "id": "004_33"
+        },
+        {
+          "index": 35,
+          "id": "004_35"
+        }
+      ],
       "primary_skill": 18
     },
     "005": {
@@ -859,6 +1753,51 @@ export default {
           "index": 22,
           "handler": "direct",
           "id": "005_22"
+        },
+        {
+          "index": 23,
+          "handler": "direct",
+          "id": "005_23"
+        },
+        {
+          "index": 24,
+          "handler": "direct",
+          "id": "005_24"
+        },
+        {
+          "index": 25,
+          "handler": "direct",
+          "id": "005_25"
+        },
+        {
+          "index": 26,
+          "handler": "direct",
+          "id": "005_26"
+        },
+        {
+          "index": 27,
+          "handler": "effect-carrier",
+          "id": "005_27"
+        },
+        {
+          "index": 28,
+          "handler": "direct",
+          "id": "005_28"
+        },
+        {
+          "index": 31,
+          "handler": "effect-carrier",
+          "id": "005_31"
+        },
+        {
+          "index": 32,
+          "handler": "direct",
+          "id": "005_32"
+        },
+        {
+          "index": 33,
+          "handler": "direct",
+          "id": "005_33"
         }
       ],
       "field_skills": [],
@@ -901,6 +1840,126 @@ export default {
           "index": 24,
           "handler": "direct",
           "id": "006_24"
+        },
+        {
+          "index": 25,
+          "handler": "effect-carrier",
+          "id": "006_25"
+        },
+        {
+          "index": 26,
+          "handler": "effect-carrier",
+          "id": "006_26"
+        },
+        {
+          "index": 27,
+          "handler": "effect-carrier",
+          "id": "006_27"
+        },
+        {
+          "index": 28,
+          "handler": "effect-carrier",
+          "id": "006_28"
+        },
+        {
+          "index": 29,
+          "handler": "effect-carrier",
+          "id": "006_29"
+        },
+        {
+          "index": 30,
+          "handler": "effect-carrier",
+          "id": "006_30"
+        },
+        {
+          "index": 31,
+          "handler": "effect-carrier",
+          "id": "006_31"
+        },
+        {
+          "index": 32,
+          "handler": "effect-carrier",
+          "id": "006_32"
+        },
+        {
+          "index": 33,
+          "handler": "effect-carrier",
+          "id": "006_33"
+        },
+        {
+          "index": 34,
+          "handler": "effect-carrier",
+          "id": "006_34"
+        },
+        {
+          "index": 35,
+          "handler": "effect-carrier",
+          "id": "006_35"
+        },
+        {
+          "index": 36,
+          "handler": "effect-carrier",
+          "id": "006_36"
+        },
+        {
+          "index": 37,
+          "handler": "effect-carrier",
+          "id": "006_37"
+        },
+        {
+          "index": 38,
+          "handler": "effect-carrier",
+          "id": "006_38"
+        },
+        {
+          "index": 39,
+          "handler": "effect-carrier",
+          "id": "006_39"
+        },
+        {
+          "index": 40,
+          "handler": "effect-carrier",
+          "id": "006_40"
+        },
+        {
+          "index": 41,
+          "handler": "effect-carrier",
+          "id": "006_41"
+        },
+        {
+          "index": 42,
+          "handler": "native-support",
+          "id": "006_42"
+        },
+        {
+          "index": 43,
+          "handler": "native-support",
+          "id": "006_43"
+        },
+        {
+          "index": 44,
+          "handler": "native-support",
+          "id": "006_44"
+        },
+        {
+          "index": 45,
+          "handler": "native-support",
+          "id": "006_45"
+        },
+        {
+          "index": 46,
+          "handler": "native-support",
+          "id": "006_46"
+        },
+        {
+          "index": 47,
+          "handler": "native-support",
+          "id": "006_47"
+        },
+        {
+          "index": 48,
+          "handler": "effect-carrier",
+          "id": "006_48"
         }
       ],
       "field_skills": [],

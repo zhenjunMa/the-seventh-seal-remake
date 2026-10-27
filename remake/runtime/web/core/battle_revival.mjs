@@ -23,7 +23,7 @@ export function isNativeRevivalSkill(skill){
 }
 export function nativeRevivalSkillSupported(skill){
   try{
-    const {bytes,view}=skillView(skill);if(bytes[0x23c]!==3||bytes[0x24]!==0||bytes[0x25]!==1||bytes[0x16c]!==0)return false;
+    const {bytes,view}=skillView(skill);if(bytes[0x23c]!==3||![0,1].includes(bytes[0x24])||bytes[0x25]!==1||bytes[0x16c]!==0)return false;
     const block=new DataView(bytes.slice(0x231,0x2f7).buffer);
     return block.getInt32(0x23,true)>=0&&block.getInt32(0x43,true)>=0&&
       view.getInt32(0xab,true)>=0&&view.getInt32(0xaf,true)>=view.getInt32(0xab,true)&&view.getInt32(0xbb,true)>=0&&view.getInt32(0xbf,true)>=view.getInt32(0xbb,true);
