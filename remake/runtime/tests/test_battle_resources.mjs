@@ -50,12 +50,32 @@ test('cancelled preparation and a throwing progress callback cannot take scope o
 });
 test('prepared BattleView switches actor sets without re-reading metadata or loading absent roles',async()=>{
   let jsonReads=0;const selections=[],scopes=new Map();
-  const view=new BattleView({canvas:{getContext:()=>({})},metadataPath:'/data/party_battle_view.json',lifecycleMetadataPath:'/data/battle_lifecycle.json',
+  const view=new BattleView({canvas:{getContext:()=>({})},metadataPath:'/data/party_battle_view.json',itemMetadataPath:'/data/item_presentation.json',lifecycleMetadataPath:'/data/battle_lifecycle.json',
     jsonLoader:async path=>{jsonReads++;return JSON.parse(await readFile(new URL('../web'+path,import.meta.url),'utf8'));},assetLoader:async()=>{throw Error('individual PNG path should not run');}});
   view.resourcePool={scopes,prepare:async descriptors=>{selections.push(descriptors);scopes.set('battle-actors',new Set());return new Map(descriptors.map(a=>[a.path,{width:a.width,height:a.height}]));}};
   await view.prepare({actors:[{id:'001'},{id:'enemy',resource_id:'012'}]});const count=jsonReads;
   assert.ok(selections[0].some(a=>a.owners.includes('001')));assert.ok(selections[0].some(a=>a.owners.includes('012')));
   assert.ok(!selections[0].some(a=>a.owners.length===1&&['002','011','013'].includes(a.owners[0])));
+  const selectedPaths=()=>new Set(selections.at(-1).map(asset=>asset.path));
+  const effectPaths=id=>{
+    const effect=view.meta.effects.find(effect=>effect.id===id);
+    return effect.layer_order?effect.layer_order.map(layer=>effect[`${layer}_sheet`]):[effect.sheet];
+  };
+  for(const id of ['m32Awz01','m32Awz02','m32Awz03','m32Awz04','m04Swz11']){
+    assert.ok(effectPaths(id).every(path=>!selectedPaths().has(path)),`${id} belongs to an absent caster`);
+  }
+  for(const id of ['BFr01_Up','_iRelife','_iReHP','_iReMP','_iReSTfz']){
+    assert.ok(effectPaths(id).every(path=>selectedPaths().has(path)),`${id} must survive contact/revival/item closure`);
+  }
+  assert.ok(selections[0].every(asset=>!asset.owners.includes('shared')),'effects are owned references, not battle-global');
+  const sharedEffect=selections[0].find(asset=>asset.path===effectPaths('_DutyN')[0]);
+  assert.ok(sharedEffect.owners.includes('001')&&sharedEffect.owners.includes('002'));
   await view.prepare({actors:[{id:'002'},{id:'enemy',resource_id:'013'}]});assert.equal(jsonReads,count);
   assert.ok(selections[1].some(a=>a.owners.includes('013')));
+  assert.ok(effectPaths('m01Awz02').every(path=>!selectedPaths().has(path)),'switching roster removes the previous caster effect');
+  assert.ok(effectPaths('_DutyN').every(path=>selectedPaths().has(path)),'another owner retains a shared effect');
+  await view.prepare({actors:[{id:'004'},{id:'enemy',resource_id:'032'}]});assert.equal(jsonReads,count);
+  for(const id of ['m32Awz01','m04Swz11','BSn02_Nu','_iRelife']){
+    assert.ok(effectPaths(id).every(path=>selectedPaths().has(path)),`${id} is restored for its actual caster`);
+  }
 });

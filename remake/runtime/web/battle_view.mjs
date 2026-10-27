@@ -23,6 +23,51 @@ const poseFrame=(segment,elapsed,loop=false)=>{
   return segment.frames[loop?step%segment.frames.length:Math.min(segment.frames.length-1,step)];
 };
 
+// Follow the executable plans, including command4's contact effect. Merely
+// appearing in the global effect bank never makes an image battle-global.
+function effectReferences(value, result = new Set()) {
+  if (Array.isArray(value)) value.forEach(row => effectReferences(row, result));
+  else if (value && typeof value === 'object' && !value.missing_source_file) {
+    for (const key of ['asset_id','effect_asset_id','effect_id','carrier_asset_id']) {
+      if (typeof value[key] === 'string') result.add(value[key]);
+    }
+    if (value.command_raw === 4 && /^(?:[a-f0-9]{2}){176}$/i.test(value.raw_hex ?? '')) {
+      const raw = Uint8Array.from(value.raw_hex.match(/../g), byte => parseInt(byte, 16));
+      const target = new TextDecoder().decode(raw.slice(0x4e, 0x62)).split('\0')[0].replace(/\.dgp$/i, '');
+      if (target) result.add(target);
+    }
+    for (const child of Object.values(value)) if (child && typeof child === 'object') effectReferences(child, result);
+  }
+  return result;
+}
+
+function effectOwners(meta, itemMeta, lifecycleMeta) {
+  const owners = new Map(meta.effects.map(effect => [effect.id, new Set()]));
+  const roles = new Set(meta.roles.map(role => role.id));
+  const missing = new Set((meta.missing_effects ?? []).filter(row => row.source_exists === false).map(row => row.id));
+  const add = (source, ids) => {
+    for (const id of effectReferences(source)) {
+      if (missing.has(id) && !owners.has(id)) continue;
+      if (!owners.has(id)) throw new Error(`战斗特效依赖缺失：${id}`);
+      for (const roleId of ids) owners.get(id).add(roleId);
+    }
+  };
+  for (const role of meta.roles) add(role, [role.id]);
+  for (const role of lifecycleMeta?.roles ?? []) if (roles.has(role.id)) add(role, [role.id]);
+  for (const role of itemMeta?.roles ?? []) if (roles.has(role.id)) add(role, [role.id]);
+  // All admitted medicines remain available to each participating item user;
+  // temporary HP/MP, death or silence must not remove a later-needed effect.
+  const itemUsers = (itemMeta?.roles ?? []).filter(role => roles.has(role.id)).map(role => role.id);
+  if (itemUsers.length) add(itemMeta.items, itemUsers);
+  return owners;
+}
+
+export function selectBattleAssets(descriptors, actors = null) {
+  if (actors === null) return descriptors; // Full source inventory for exporters.
+  const ids = new Set(actors.map(actor => actor.resource_id ?? actor.id));
+  return descriptors.filter(asset => asset.owners.includes('shared') || asset.owners.some(id => ids.has(id)));
+}
+
 export function validateBattleViewMetadata(meta,content=runtimeContent) {
   if (meta?.schema !== 'seventh-seal-battle-view' || meta.version !== 1 ||
       !Array.isArray(meta.roles) || !Array.isArray(meta.effects) ||
@@ -227,7 +272,7 @@ export class BattleView {
     if (this.run) throw new Error('行动播放期间不能重新准备战斗');
     if (this.ready) {
       const generation=++this.generation;
-      if(this.resourcePool)this.images=await this._preparePackedImages(this.assetDescriptors,actors,onProgress,()=>!this.destroyed&&generation===this.generation);
+      this.images=await this._prepareImages(this.assetDescriptors,actors,onProgress,()=>!this.destroyed&&generation===this.generation);
       return clone(this.meta);
     }
     const generation = ++this.generation;
@@ -292,7 +337,7 @@ export class BattleView {
     }
     const descriptors = new Map();
     const add = (path, sha256, width, height,owner='shared') => {
-      const previous=descriptors.get(path),owners=[...new Set([...(previous?.owners??[]),owner])];
+      const previous=descriptors.get(path),owners=[...new Set([...(previous?.owners??[]),...(Array.isArray(owner)?owner:[owner])])];
       descriptors.set(path, {path, sha256, width, height,owners});
     };
     const stageMeta=this.stageMetadataPath?validateForestStage(await this.jsonLoader(this.stageMetadataPath),this.content):null;
@@ -300,30 +345,21 @@ export class BattleView {
     for (const role of meta.roles) for (const action of role.actions) {
       add(action.sheet, action.sha256, role.frame_width * action.frame_count, role.frame_height * action.directions,role.id);
     }
+    const ownersByEffect=effectOwners(meta,itemMeta,lifecycleMeta),seenEffects=new Set();
     for (const effect of meta.effects) {
-      if(effect.layer_order)for(const layer of effect.layer_order)add(effect[`${layer}_sheet`],effect[`${layer}_sha256`],effect.frame_width*effect.frame_count,effect.frame_height);
-      else add(effect.sheet,effect.sha256,effect.frame_width*effect.frame_count,effect.frame_height);
+      // Rendering resolves the first matching ID. Retain later source variants
+      // for export/oracle checks without decoding them for every actor roster.
+      const owners=seenEffects.has(effect.id)?[]:[...ownersByEffect.get(effect.id)];seenEffects.add(effect.id);
+      if(effect.layer_order)for(const layer of effect.layer_order)add(effect[`${layer}_sheet`],effect[`${layer}_sha256`],effect.frame_width*effect.frame_count,effect.frame_height,owners);
+      else add(effect.sheet,effect.sha256,effect.frame_width*effect.frame_count,effect.frame_height,owners);
     }
     for (const source of [layers,...alternateLayers.values()]) for (const pair of source.frames) for (const layer of [pair.main, pair.intrinsic]) {
       add('/' + layer.path, layer.sha256, source.frame_width, source.frame_height,source.role_id);
     }
     // Commit readiness only after every actor, reaction, effect and intrinsic PNG
     // has decoded successfully. A failed batch leaves no partly ready command.
-    const assets=[...descriptors.values()],loaded=new Array(assets.length);let nextAsset=0;
-    // Hundreds of verified body/intrinsic frames can exceed the local server's
-    // connection backlog when fetched together. Bound requests and decoding,
-    // while readiness still waits for every source asset.
-    let packedImages;
-    if(this.resourcePool)packedImages=await this._preparePackedImages(assets,actors,onProgress,()=>!this.destroyed&&generation===this.generation);
-    else await Promise.all(Array.from({length:Math.min(12,assets.length)},async()=>{
-      while(nextAsset<assets.length){const index=nextAsset++,asset=assets[index];
-        const result=await this.assetLoader(clone(asset));check();
-        const image=result?.image||result;
-        if((image?.naturalWidth||image?.width)!==asset.width||(image?.naturalHeight||image?.height)!==asset.height||
-          (result?.sha256&&result.sha256!==asset.sha256))throw new Error(`战斗图片尺寸或指纹不符：${asset.path}`);
-        loaded[index]=[asset.path,image];
-      }
-    }));
+    const assets=[...descriptors.values()];
+    const images=await this._prepareImages(assets,actors,onProgress,()=>!this.destroyed&&generation===this.generation);
     check();
     this.meta = clone(meta);
     this.itemMeta=clone(itemMeta);
@@ -334,19 +370,34 @@ export class BattleView {
     this.lifecycleBounds=new Map();
     this.lifecycle=lifecycleMeta?new BattleLifecyclePlayback(lifecycleMeta,{appearanceBounds:(roleId,pose)=>this._appearanceBounds(roleId,pose),nativeBridge:actorId=>this._nativeBridge(actorId)}):null;
     this.assetDescriptors=assets;
-    this.images = packedImages??new Map(loaded);
+    this.images = images;
     this.timelines = new Map(meta.roles.map(role => [role.id, compileActionTimeline(meta, layers, role.id,null,null,this.content)]));
     for(const role of meta.roles)for(const skill of role.alternate_skills??[])this.timelines.set(`${role.id}:${skill.runtime_skill_id}`,compileActionTimeline(meta,layers,role.id,skill.runtime_skill_id,alternateLayers.get(`${role.id}:${skill.runtime_skill_id}`),this.content));
     this.ready = true;
     return clone(meta);
   }
 
-  async _preparePackedImages(descriptors,actors,onProgress,isCurrent){
-    const ids=actors?new Set(actors.map(a=>a.resource_id??a.id)):null;
-    const selected=descriptors.filter(a=>!ids||a.owners.includes('shared')||a.owners.some(id=>ids.has(id)));
-    const images=await this.resourcePool.prepare(selected,{scope:'battle-actors',onProgress,isCurrent});
-    this.resourceLease=this.resourcePool.scopes.get('battle-actors');
-    return images;
+  async _prepareImages(descriptors,actors,onProgress,isCurrent){
+    const selected=selectBattleAssets(descriptors,actors);
+    if(this.resourcePool){
+      const images=await this.resourcePool.prepare(selected,{scope:'battle-actors',onProgress,isCurrent});
+      this.resourceLease=this.resourcePool.scopes.get('battle-actors');return images;
+    }
+    const images=new Map();let next=0;
+    const workers=await Promise.allSettled(Array.from({length:Math.min(12,selected.length)},async()=>{
+      while(next<selected.length){
+        if(!isCurrent())throw abortError();
+        const asset=selected[next++],cached=this.images.get(asset.path);
+        const result=cached??await this.assetLoader(clone(asset));
+        if(!isCurrent())throw abortError();
+        const image=result?.image||result;
+        if((image?.naturalWidth||image?.width)!==asset.width||(image?.naturalHeight||image?.height)!==asset.height||
+          (result?.sha256&&result.sha256!==asset.sha256))throw new Error(`战斗图片尺寸或指纹不符：${asset.path}`);
+        images.set(asset.path,image);onProgress({completed:images.size,total:selected.length});
+      }
+    }));
+    const failure=workers.find(result=>result.status==='rejected');if(failure)throw failure.reason;
+    if(!isCurrent())throw abortError();return images;
   }
 
   setRoster(actors,skills){
