@@ -15,6 +15,7 @@
 
 - 当前指南按职责重写维护，不继续累加逐次修复日志；历史过程放有日期的evidence或archive并建索引。工具导航见runtime/tools/tool_index.json，本地资料与缺失处理见local_materials.md；新增或迁移工具同步其分类、导入关系及引用，构建派生清单用runtime/tools/sync_tool_docs.py生成并以--check核对。清理临时文件先核对引用，保留原路径／SHA与恢复映射；构建日志、原生证据及观察材料不能仅按日期删除。
 - 持续维护的说明、设计、计划和操作指南统一使用UTF-8的Markdown（`.md`），命令使用代码块，文档导航使用相对链接；文档迁移同步当前脚本及索引引用。`requirements.txt`等依赖清单、机器输出、原始资料和历史证据保留原格式与原字节。
+- 后续区域按“区域全量盘点、按剧情阶段实现、沿连续主线集成验收”推进；任务以“区域＋剧情阶段＋完整事件链”为单位，优先延长正常主线，不要求先完成同一区域全部后期重访与结局。方法与验收口径见 `assessment/region_remake_workflow.md`，阶段范围、外部依赖、暂缓项和完成状态只在 `assessment/validation_design.md` 维护。阶段名不新增运行状态；已登记入口的全部可达分支仍须通过能力检查，不能用当前旗标或开发样本绕过。保留火之谷／白木森林既有成果，开发交接验收与自然贯通分别记录，正常前置接通后补跨区域复验。
 - 地图／NPC／对白／任务接入见runtime/story_guide.md。runtime_content.story显式登记独立事件和任务，web/content保存编辑内容，web/data/story由export_story_packages.mjs生成；保留原TLK／ANM来源台账，正式浏览器按地图加载运行包。任务读取既有世界状态，奖励仍在剧情事务中提交，不另存重复进度。
 - TLK、测试片段和自行编写的NPC事件统一编译为StoryFlow，通过StoryFlowRunner执行，ChapterRunner提供共同事务与游戏行为适配。不得为炎城或其他区域新增独立剧情VM；旧EventRunner仅为来源核对适配，正式入口不使用native-entry提交。
 
