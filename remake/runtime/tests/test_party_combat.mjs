@@ -157,6 +157,8 @@ test('The last medicine stays reserved through queueing and its use animation wi
   assert.equal(battle.state.inventory[0].quantity,1);assert.deepEqual(battle.items(),[]);
   await assert.rejects(battle.chooseItem(tea.instance_id,'002'),/占用/);use();await itemTask;
   assert.deepEqual(battle.state.inventory,[]);assert.equal(battle.state.history.filter(h=>h.item_id===12).length,1);
+  assert.equal(battle.presentationSnapshot().impact_count,battle.state.history.filter(h=>h.impact).length);
+  assert.deepEqual(battle.presentationSnapshot().last_impact,{actor_id:'001',source_frame:undefined});
 });
 
 test('A fallen extra command is removed without losing another actor command; victory clears every remaining reservation',async()=>{
@@ -294,6 +296,6 @@ test('Failed escape spends the selected gauge without changing HP, MP, targets, 
   const a=battle.actor('001'),b=battle.actor('002'),before=structuredClone({hp:a.hp,mp:a.mp,b:b.charge}),saved=world.snapshot();
   await battle.chooseEscape();assert.equal(a.state_raw,0);assert.equal(a.charge.gauge,0);assert.equal(a.charge.delay,0);
   assert.deepEqual(a.hp,before.hp);assert.deepEqual(a.mp,before.mp);assert.deepEqual(b.charge,before.b);assert.deepEqual(world.snapshot(),saved);
-  const entry=battle.presentationSnapshot().history.at(-1);assert.equal(entry.command_kind,'escape');assert.equal(entry.result.success,false);assert.equal(entry.impact,false);
+  const entry=battle.snapshot().history.at(-1);assert.equal(entry.command_kind,'escape');assert.equal(entry.result.success,false);assert.equal(entry.impact,false);
   assert.equal(battle.state.player_id,'002');assert.equal(battle.canCommand('002'),true);
 });

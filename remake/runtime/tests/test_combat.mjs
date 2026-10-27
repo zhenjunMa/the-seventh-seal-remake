@@ -22,19 +22,41 @@ function fixture(options={}) {
   return {world,battle,config,logs,calls};
 }
 
-test('Frame and HUD snapshots stay isolated and omit growing native history and configuration evidence',async()=>{
-  const f=fixture();assert.equal(f.battle.presentationSnapshot(),null);f.battle.start(f.config);
+test('Frame and HUD snapshots never read history and keep isolated incremental impact summaries',async()=>{
+  const f=fixture({playAction:async(_,{onImpact})=>{assert.equal(onImpact({source_frame:17}),true);assert.equal(onImpact({source_frame:99}),false);}});
+  assert.equal(f.battle.presentationSnapshot(),null);f.battle.start(f.config);
+  assert.equal(f.battle.presentationSnapshot().impact_count,0);assert.equal(f.battle.presentationSnapshot().last_impact,null);
+  await f.battle.choose('yantu');
+  const full=f.battle.snapshot();assert.equal(full.history.length,2);assert.equal(full.history[0].result.damage,30);
+  assert.equal(full.history[1].presentation.source_frame,17);
   f.battle.state.source.runtime_configuration={mode:'debug',parameters:()=>{throw new Error('large source must not be traversed');}};
   Object.defineProperty(f.battle.actor('001'),'native_status_slots',{get(){throw new Error('raw status must not be traversed');}});
-  f.battle.state.history.push({action_id:'contact',actor_id:'001',target_id:'012',skill_id:'yantu',round:1,impact:true,
-    before:()=>{},after:()=>{},result:{hit:true,damage:30,raw_evidence:()=>{}},presentation:{source_frame:17}});
+  const history=f.battle.state.history;
+  Object.defineProperty(f.battle.state,'history',{get(){throw new Error('frame/HUD must not read history');}});
   const snapshot=f.battle.presentationSnapshot();assert.ok(JSON.stringify(snapshot).length<2000);
-  assert.equal(snapshot.source.runtime_configuration.mode,'debug');assert.equal(snapshot.history[0].result.damage,30);
-  assert.equal(snapshot.history[0].presentation.source_frame,17);
-  snapshot.actors[0].hp.current=0;snapshot.history[0].result.damage=0;
-  assert.equal(f.battle.actor('001').hp.current,100);assert.equal(f.battle.state.history[0].result.damage,30);
+  assert.equal(Object.hasOwn(snapshot,'history'),false);assert.equal(snapshot.source.runtime_configuration.mode,'debug');
+  assert.equal(snapshot.impact_count,2);assert.deepEqual(snapshot.last_impact,{actor_id:'012',source_frame:17});
+  snapshot.actors[0].hp.current=0;snapshot.last_impact.actor_id='mutated';
+  assert.equal(f.battle.actor('001').hp.current,90);assert.equal(history[0].result.damage,30);
   let published;f.battle.notify=value=>{published=value;};f.battle.publish();
-  assert.equal(published.actors[0].hp.current,100);assert.equal(published.history[0].result.damage,30);
+  assert.equal(published.actors[0].hp.current,90);assert.equal(published.impact_count,2);
+  assert.deepEqual(published.last_impact,{actor_id:'012',source_frame:17});assert.equal(Object.hasOwn(published,'history'),false);
+});
+
+test('a late older action keeps the most recently appended impacted action in the display summary',async()=>{
+  const contacts=[],f=fixture({playAction:async(_,{onImpact})=>{const gate=deferred();contacts.push({onImpact,gate});await gate.promise;}});
+  f.battle.start(f.config);const player=f.battle.actor('001'),enemy=f.battle.actor('012');
+  player.current_skill=f.battle.skills.yantu;enemy.current_skill=f.battle.skills.snow_attack;
+  const older=f.battle.performAction(player,enemy,f.battle.skills.yantu);
+  const newer=f.battle.performAction(enemy,player,f.battle.skills.snow_attack);
+  assert.equal(contacts[1].onImpact({source_frame:22}),true);contacts[1].gate.resolve();await newer;
+  assert.equal(f.battle.presentationSnapshot().impact_count,1);
+  assert.deepEqual(f.battle.presentationSnapshot().last_impact,{actor_id:'012',source_frame:22});
+  assert.equal(contacts[0].onImpact({source_frame:11}),true);assert.equal(contacts[0].onImpact({source_frame:99}),false);
+  contacts[0].gate.resolve();await older;
+  assert.equal(f.battle.presentationSnapshot().impact_count,2);
+  assert.deepEqual(f.battle.presentationSnapshot().last_impact,{actor_id:'012',source_frame:22});
+  assert.deepEqual(f.battle.snapshot().history.map(entry=>entry.presentation.source_frame),[11,22]);
 });
 
 test('two automatic actions settle once and advance a round; world changes only on return',async()=>{
@@ -114,4 +136,5 @@ test('native signed raw death bits survive unsigned world save and restore',asyn
 test('a closed controller can start a fresh independent battle',async()=>{
   const f=fixture();f.battle.start(f.config);await f.battle.choose('yantu');f.battle.finish();f.battle.start(f.config);
   assert.equal(f.battle.snapshot().history.length,0);assert.equal(f.battle.snapshot().round,1);assert.equal(f.battle.canChoose('yantu'),true);
+  assert.equal(f.battle.presentationSnapshot().impact_count,0);assert.equal(f.battle.presentationSnapshot().last_impact,null);
 });

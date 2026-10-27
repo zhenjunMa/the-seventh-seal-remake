@@ -48,8 +48,8 @@ export class BattleController {
     this.state = null; this.running = false; this.completed = null; this.actionTask = null;
   }
   snapshot() { return this.state ? copy(this.state) : null; }
-  // The frame loop and HUD need only visible state. Full contact records retain
-  // raw CHR/status/configuration evidence and grow throughout a long battle.
+  // Frame/HUD snapshots never traverse action history. Contact summaries are
+  // maintained when actions settle; snapshot() retains the full diagnostic log.
   presentationSnapshot() {
     const state=this.state;if(!state)return null;
     const {id,phase,round,player_id,enemy_id,error,outcome,scheduler,rewards,test_mode}=state;
@@ -59,9 +59,17 @@ export class BattleController {
       ready_player_ids:this.readyPlayerIds(),command_available:this.canCommand(),input_busy:Boolean(commandForActor(scheduler,player_id))||this.running&&scheduler?.active_actor_id===player_id,action_busy:this.running,
       source:{runtime_configuration:{mode},player_command_order:state.source.player_command_order},
       actors:state.actors.map(({id,name,side,hp,mp,alive,charge,state_raw,defense_half_raw,party_slot_zero_based,life_epoch,idle_pose,native_z_raw,native_vertical_render_z_raw})=>({id,name,side,hp,mp,alive,charge,state_raw,party_slot_zero_based,life_epoch,idle_pose,native_z_raw,native_vertical_render_z_raw,defending:Boolean(defense_half_raw),escaped:state_raw===11})),
-      history:state.history.map(({action_id,actor_id,target_id,skill_id,round,result,impact,presentation,command_kind})=>({
-        action_id,actor_id,target_id,skill_id,round,impact,presentation,command_kind,
-        result:result?{hit:result.hit,damage:result.damage,...(result.success!==undefined?{success:result.success}:{})}:undefined}))});
+      impact_count:this.impactSummary?.count??0,
+      last_impact:this.impactSummary?.last?{actor_id:this.impactSummary.last.actor_id,
+        source_frame:this.impactSummary.last.presentation?.source_frame}:null});
+  }
+  recordImpact(entry,historyIndex) {
+    const summary=this.impactSummary??={count:0,last:null,index:-1};
+    if(!entry.impact)summary.count++;
+    entry.impact=true;
+    // Count each impacted action once, and retain history order even when an
+    // older detached carrier contacts after a more recently appended action.
+    if(historyIndex>=summary.index){summary.index=historyIndex;summary.last=entry;}
   }
   publish() { if(this.notify)this.notify(this.presentationSnapshot()); }
   checkWorld() { requireValue(this.world.value.revision === this.expectedRevision, '战斗期间世界状态已变化，当前结果不能覆盖新进度'); }
@@ -89,6 +97,7 @@ export class BattleController {
     requireValue(Object.keys(enemySkills).length===enemies.length&&enemies.every(actor=>skills[enemySkills[actor.id]]?.actor_id===actor.id), '敌方行动不匹配');
     requireValue(typeof rng==='function' && source, '随机或战斗样本来源缺失');
     this.skills=copy(skills); this.rng=rng; this.expectedRevision=this.world.value.revision; this.completed=null;this.testMode=test_mode;
+    this.impactSummary={count:0,last:null,index:-1};
     this.state={id:this.id(),phase:'command',round:1,actors:next,order:[...order],player_id:player.id,player_ids:players.map(a=>a.id),enemy_id:enemy.id,
       enemy_skill_id:enemySkills[enemy.id],enemy_skill_ids:copy(enemySkills),enemy_ids:enemies.map(a=>a.id),action_count:0,source:copy(source),history:[],error:null,outcome:null,test_mode};
     if(this.itemData)this.state.inventory=copy(this.world.value.inventory);
@@ -550,9 +559,10 @@ export class BattleController {
               if(result.applied){Object.assign(target,result.actor);this.state.inventory=consumed.inventory;}
               if(result.cancel_command){const command=commandForActor(s,target.id);if(command)this.cancelQueuedCommand(command,'actor-status');}
               committed=true;this.activeItemInstanceId=null;this.state.action_count++;
-              const entry={action_id:actionId,actor_id:attacker.id,target_id:target.id,skill_id:skillId,item_id:consumed.item.id,round:this.state.round,impact:true,
+              const entry={action_id:actionId,actor_id:attacker.id,target_id:target.id,skill_id:skillId,item_id:consumed.item.id,round:this.state.round,impact:false,
                 result:{hit:true,damage:0,changes:result.changes,native_return:result.native_return,item_used:result.applied,item_effect:result.effect_requested,trace:result.trace},before,after:copy(target)};
-              this.state.history.push(entry);this.log({type:'battle-item-used',battle_id:this.state.id,...copy(entry),name:result.name,charge});this.publish();}
+              const historyIndex=this.state.history.push(entry)-1;this.recordImpact(entry,historyIndex);
+              this.log({type:'battle-item-used',battle_id:this.state.id,...copy(entry),name:result.name,charge});this.publish();}
             return {hit:true,damage:0,item_used:result.applied,item_effect:result.effect_requested,native_return:result.native_return,
               ...(!result.effect_requested?{skipped:'item-target-unavailable'}:{}),remainingHp:target.hp.current};
           };
@@ -600,7 +610,7 @@ export class BattleController {
     // 0x501AA0 charges a negative source MP delta only outside skill-test.
     if(attacker.side==='player'&&!this.testMode)Object.assign(attacker,this.consumeResources(copy(attacker),members.reduce((sum,member)=>sum+member.mp_cost,0)));
     const actionId=`${this.state.id}:${++this.state.action_count}`,entry={action_id:actionId,actor_id:attacker.id,target_id:target.id,skill_id:command.id,round:this.state.round,plan:copy(plan),contacts:[],impact:false,result:{hit:true,damage:0},before:copy({attacker,target}),after:null};
-    this.state.history.push(entry);this.log({type:'battle-action',battle_id:this.state.id,...copy(entry)});this.publish();
+    const historyIndex=this.state.history.push(entry)-1;this.log({type:'battle-action',battle_id:this.state.id,...copy(entry)});this.publish();
     const seen=new Map(),controlsSeen=new Set(),primaryToken=actionId;let reactionCount=0;
     attacker.native_active=true;attacker.current_target_id=target.id;attacker.native_sequence_token=primaryToken;
     const onRecord=(step,descriptor=null)=>{const actor=descriptor?this.actor(descriptor.actor_id):attacker;if(actor.state_raw>=5)return;
@@ -674,7 +684,7 @@ export class BattleController {
       }
       const presented={...copy(result),remainingHp:victim?.hp.current??0,death:lethal,killer_frame_factor:lethal?2:1,status:status?{applied:status.applied,reason:status.reason,trace:status.trace}:null,
         reaction_descriptor:reaction?.skill?copy(reaction):null,interrupt_actor_id:lethal||reaction?.skill?victim?.id:null};
-      const contact={key:step.contact_key,source:copy(step),result:presented,before,after:copy({attacker:striker,target:victim??null})};seen.set(step.contact_key,presented);entry.contacts.push(contact);entry.result=copy(result);entry.impact=true;entry.presentation=copy(step);entry.after=copy({attacker:striker,target:victim??null});
+      const contact={key:step.contact_key,source:copy(step),result:presented,before,after:copy({attacker:striker,target:victim??null})};seen.set(step.contact_key,presented);entry.contacts.push(contact);entry.result=copy(result);this.recordImpact(entry,historyIndex);entry.presentation=copy(step);entry.after=copy({attacker:striker,target:victim??null});
       this.log({type:'battle-impact',battle_id:this.state.id,action_id:actionId,contact_key:step.contact_key,actor_id:striker.id,target_id:victim?.id??null,skill_id:source.id,source_skill_index:step.source_skill_index,
         effect_token:step.effect_contact?step.effect_token:0,
         hit:result.hit,damage:result.damage,skipped:result.skipped??null,hp_before:before.target?.hp.current??null,hp_after:victim?.hp.current??null,mp_before:before.attacker.mp.current,mp_after:striker.mp.current,trace:copy(result.trace??[]),status:copy(presented.status),reaction:reaction?{kind:reaction.kind,source_skill_index:reaction.source_skill_index,target_id:reaction.target_id,trace:copy(reaction.trace)}:null,presentation:copy(step)});this.publish();return presented;
@@ -730,7 +740,7 @@ export class BattleController {
         let impacted=false;
         const entry={action_id:actionId,actor_id:attacker.id,target_id:target.id,skill_id:selected.id,round:this.state.round,
           result:copy(result),before,impact:false,after:null};
-        this.state.history.push(entry);
+        const historyIndex=this.state.history.push(entry)-1;
         this.log({type:'battle-action',battle_id:this.state.id,...copy(entry)}); this.publish();
         const onImpact=(presentation)=>{
           if(impacted || this.state.phase==='closed')return false;
@@ -738,7 +748,7 @@ export class BattleController {
           const applied=this.applyDamage(copy(target),copy(result),this.nativeContext()); actorShape(applied);
           requireValue(applied.id===target.id && applied.side===target.side && applied.mp.current===target.mp.current && applied.mp.maximum===target.mp.maximum && applied.hp.maximum===target.hp.maximum, 'HP提交改变了非目标资源');
           requireValue(applied.hp.current<=target.hp.current, '本样本伤害提交不能增加HP');
-          Object.assign(target,applied); impacted=true; entry.impact=true;
+          Object.assign(target,applied); impacted=true; this.recordImpact(entry,historyIndex);
           if(this.lifecycleEnabled&&before.target.hp.current>0&&target.hp.current===0){
             target.killer_actor_id=attacker.id;
             if(target.charge)Object.assign(target.charge,{gauge:0,delay:0,recovery:0,recovery_ticks:0});
