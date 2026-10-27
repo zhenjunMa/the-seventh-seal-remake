@@ -38,6 +38,7 @@
         "test_items.mjs",
         "test_learning_reward_readiness.mjs",
         "test_map_locomotion.mjs",
+        "test_map_collision.mjs",
         "test_map_npc_integration.mjs",
         "test_map_npcs.mjs",
         "test_map_viewport.mjs",

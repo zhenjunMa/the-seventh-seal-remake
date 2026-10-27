@@ -61,6 +61,27 @@ export class DistanceGait {
     return action.uses_sequence?action.sequence_raw[logical]:logical;
   }
 }
+
+// Contact feedback has no world displacement or independent render clock.
+// Hold a contact until it is released, so RAF frequency / tile seams cannot
+// repeatedly restart the recoil while the player keeps pressing a wall.
+export class CollisionFeedback {
+  constructor(){this.reset();}
+  reset(){this.contact=false;this.age=Infinity;this.cooldown=0;this.normal={x:0,y:0};this.amplitude=0;}
+  advance(result,{dx=0,dy=0,running=false,elapsedMs=0}={}){
+    const dt=Math.max(0,elapsedMs);this.age+=dt;this.cooldown=Math.max(0,this.cooldown-dt);
+    const hits=result?.contacts??[],contact=hits.length>0&&(dx!==0||dy!==0);
+    if(contact&&!this.contact&&!this.cooldown){
+      const x=hits[0].nx,y=hits[0].ny,length=Math.hypot(x,y)||1;
+      this.normal={x:x/length,y:y/length};this.amplitude=running?2.5:1;
+      this.age=0;this.cooldown=220;
+    }
+    this.contact=contact;
+    if(!dx&&!dy){this.age=Infinity;this.amplitude=0;}
+    const phase=Math.min(1,this.age/160),amount=this.amplitude*Math.sin(phase*Math.PI);
+    return {x:this.normal.x*amount,y:this.normal.y*amount};
+  }
+}
 // Older route assets retain their original exporter. The verified story table
 // already carries the complete DAT header; recover its two movement bytes
 // without rebuilding pixels, modifying the asset file, or guessing a default.
