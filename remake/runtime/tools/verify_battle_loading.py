@@ -19,7 +19,7 @@ FILES = [
     'tools/prepare_battle_loading_fixture.mjs', 'tools/verify_battle_loading.py',
     'tools/build_runtime.py', 'tools/verify_current.py',
     'tests/test_battle_resources.mjs', 'tests/test_battle_transition.mjs',
-    'tests/test_battle_controller.mjs', 'tests/test_party_skills.mjs', 'architecture.txt', 'tools/README.txt',
+    'tests/test_battle_controller.mjs', 'tests/test_party_skills.mjs', 'architecture.md', 'tools/README.md',
 ]
 
 

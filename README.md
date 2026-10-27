@@ -6,7 +6,7 @@
 
 当前代码已接入序章、火之谷21图及外层白木森林6图，以及战斗、操作菜单、成长和存读档。白木森林包含原对白、13个元素箱、旗标控制的重访布局与两端大地图出口；里白木森林不在当前范围。娃蒂作为第三名队友接入开发样本；正式主线的入队剧情尚未添加。
 
-正式入口已接入 Phaser 3.90.0：主循环、探索场景、人物显示和战斗绘制使用 Phaser，已有规则、配置、存档及菜单／对白保持原有契约。运行库随代码提供，无需 npm 安装或 CDN。各区域真实素材观察与未覆盖范围见[开发计划](remake/assessment/validation_design.txt)；区域外完整主线尚未贯通，后期区域分支使用注明来源的开发交接档验收。
+正式入口已接入 Phaser 3.90.0：主循环、探索场景、人物显示和战斗绘制使用 Phaser，已有规则、配置、存档及菜单／对白保持原有契约。运行库随代码提供，无需 npm 安装或 CDN。各区域真实素材观察与未覆盖范围见[开发计划](remake/assessment/validation_design.md)；区域外完整主线尚未贯通，后期区域分支使用注明来源的开发交接档验收。
 
 **当前发布的是代码与配置基线。干净克隆后，仅凭原版文件生成全部素材的首次构建流程尚未打通。** 现有导出入口用于增量构建，部分步骤仍依赖本地来源台账、原生验证记录和历史样本；这些记录和样本不在仓库中。首次构建准备完成前，运行游戏需要本地已生成的资源，不能直接把克隆仓库视为完整可运行安装包。
 
@@ -19,7 +19,7 @@
 - `remake/assessment/`：当前开发计划和验收方法。
 - `save_analysis_20261010/`：导出器仍引用的四个共享 Python 解析模块，只提交代码。
 
-正式移动模块位于 `remake/runtime/web/core/movement.mjs`，正式媒体统一位于 `remake/runtime/web/assets/`，基础导出清单位于 `remake/runtime/web/data/source/`。已有旧版素材时，先运行 `python3 -B remake/runtime/tools/migrate_local_materials.py` 盘点，加 `--run` 复制；原目录和文件指纹保留。完整升级步骤和跨目录交接命令见[构建工具说明](remake/runtime/tools/README.txt)中的“旧环境升级”；迁移映射见 `remake/runtime/tools/layout_migration.json`。
+正式移动模块位于 `remake/runtime/web/core/movement.mjs`，正式媒体统一位于 `remake/runtime/web/assets/`，基础导出清单位于 `remake/runtime/web/data/source/`。已有旧版素材时，先运行 `python3 -B remake/runtime/tools/migrate_local_materials.py` 盘点，加 `--run` 复制；原目录和文件指纹保留。完整升级步骤和跨目录交接命令见[构建工具说明](remake/runtime/tools/README.md)中的“旧环境升级”；迁移映射见 `remake/runtime/tools/layout_migration.json`。
 
 `.gitignore` 排除原版程序与资源、提取素材、存档、观察副本、证据报告、历史备份和缓存。`remake/runtime/web/data/` 中的 JSON 是运行定义或结构化资源描述，随代码提交；媒体文件本身不提交。
 
@@ -51,20 +51,21 @@ python3 -B remake/runtime/serve.py
 
 代码与资源预检查：`node remake/runtime/tools/verify_phaser.mjs`。素材持有者使用 `node remake/runtime/tools/verify_phaser.mjs --assets` 核对资源是否齐全及已有指纹／尺寸。检查通过后仍需实际验证剧情、战斗和存读档。
 
-运行静态服务需要 Python 3；代码预检查需要 Node.js。构建工具另外使用 Pillow、NumPy、FFmpeg/FFprobe，GDI 字体导出需要 Windows；具体前置条件与命令见[工具说明](remake/runtime/tools/README.txt)。统一依赖安装和首次构建仍是未完成任务，不能把增量构建命令当作首次安装流程。
+运行静态服务需要 Python 3；代码预检查需要 Node.js。构建工具另外使用 Pillow、NumPy、FFmpeg/FFprobe，GDI 字体导出需要 Windows；具体前置条件与命令见[工具说明](remake/runtime/tools/README.md)。统一依赖安装和首次构建仍是未完成任务，不能把增量构建命令当作首次安装流程。
 
 ## 配置与开发文档
 
-- [重制文档导航](remake/README.txt)
-- [运行与操作说明](remake/runtime/README.txt)
-- [代码架构](remake/runtime/architecture.txt)
-- [配置与内容扩展](remake/runtime/config_guide.txt)
-- [地图、NPC、对白与任务接入](remake/runtime/story_guide.txt)
-- [导出与验证工具](remake/runtime/tools/README.txt)
-- [当前计划](remake/assessment/validation_design.txt)
-- [界面与动态表现验收方法](remake/assessment/menu_alignment_workflow.txt)
-- [本地素材、证据与历史资料](remake/local_materials.txt)
+- [重制文档导航](remake/README.md)
+- [运行与操作说明](remake/runtime/README.md)
+- [代码架构](remake/runtime/architecture.md)
+- [配置与内容扩展](remake/runtime/config_guide.md)
+- [地图、NPC、对白与任务接入](remake/runtime/story_guide.md)
+- [导出与验证工具](remake/runtime/tools/README.md)
+- [当前计划](remake/assessment/validation_design.md)
+- [界面与动态表现验收方法](remake/assessment/menu_alignment_workflow.md)
+- [全区域重制工作方法](remake/assessment/region_remake_workflow.md)
+- [本地素材、证据与历史资料](remake/local_materials.md)
 
 技能、道具、战斗和奖励数值统一维护在 `remake/runtime/web/data/config/`。只在 `parameters` 填写修改项，空对象沿用来源默认值；文件级 `source_hashes` 和身份字段只读。默认值及生效值可用 `node remake/runtime/tools/export_runtime_config.mjs --reference skills yantu` 查询。`original` 模式要求原版参数一致，应用修改使用 `debug` 模式；普通导出迁移旧格式、补齐新增内容并保留调参，显式重置才恢复原值。
 
-素材、来源台账和历史观察的用途、交接方式与缺失处理统一见[本地资料说明](remake/local_materials.txt)。历史报告只说明对应阶段的验收范围，不代表当前 Phaser 版或干净克隆的构建已通过。
+素材、来源台账和历史观察的用途、交接方式与缺失处理统一见[本地资料说明](remake/local_materials.md)。历史报告只说明对应阶段的验收范围，不代表当前 Phaser 版或干净克隆的构建已通过。

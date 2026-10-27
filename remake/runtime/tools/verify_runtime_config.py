@@ -74,9 +74,9 @@ def main():
 
     paths = [*WEB.glob('*.js'), *WEB.glob('*.mjs'), *WEB.glob('core/*.mjs'), *WEB.glob('data/config/*.json'), WEB/'data/catalog.json',
              RUNTIME/'tools/export_runtime_config.mjs', RUNTIME/'tools/export_skill_config.py', RUNTIME/'tools/build_catalog.py', Path(__file__),
-             *tests, RUNTIME/'tests/preserve_history.mjs', RUNTIME/'config_guide.txt',
-             RUNTIME/'README.txt', RUNTIME.parent/'README.txt', RUNTIME.parent/'assessment/menu_alignment_workflow.txt',
-             RUNTIME.parent/'assessment/validation_design.txt',
+             *tests, RUNTIME/'tests/preserve_history.mjs', RUNTIME/'config_guide.md',
+             RUNTIME/'README.md', RUNTIME.parent/'README.md', RUNTIME.parent/'assessment/menu_alignment_workflow.md',
+             RUNTIME.parent/'assessment/validation_design.md',
              *EVIDENCE.glob('runtime_config_browser*'), EVIDENCE/'runtime_config_before_browser_20261011.json']
     hashes = {path.relative_to(ROOT).as_posix():sha(path) for path in paths}
     report = dict(schema='seventh-seal-runtime-config-delivery', version=1, passed=True, tests=count, new_configuration_tests=14,
@@ -104,7 +104,7 @@ def main():
              '普通生成保留已有修改；首次创建迁移旧两招参数；显式--reset恢复新五文件。旧data/skills.json仅留历史基线。', '',
              '未扩展：敌方非零扣费与后备、道具使用／装备定义／商店、任意新道具初始化；严格拒绝未支持字段。',
              '技能动作／多段接触、公式、死亡中断与奖励去重仍在代码及原动作记录，不通过JSON表达式控制。',
-             '使用说明：runtime/config_guide.txt；证据：runtime/evidence/runtime_config_delivery_20261011.json、runtime_config_tests_20261011.tap、runtime_config_browser*。',
+             '使用说明：runtime/config_guide.md；证据：runtime/evidence/runtime_config_delivery_20261011.json、runtime_config_tests_20261011.tap、runtime_config_browser*。',
              '复做：node remake/runtime/tools/export_runtime_config.mjs；python -B remake/runtime/tools/verify_runtime_config.py（8767服务需已启动）。',
              '森林四步和更早日期报告保留当时指纹；本轮静态／适配器测试不称原游戏运行对照。']
     (EVIDENCE/'runtime_config_recheck.txt').write_text('\n'.join(lines)+'\n', encoding='utf-8')
