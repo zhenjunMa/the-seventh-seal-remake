@@ -76,7 +76,7 @@ def main():
     current = sorted(p for p in WEB.rglob('*') if p.is_file() and p.suffix in {'.mjs','.js','.css','.html','.json'})
     current += sorted((RUNTIME/'tests').glob('test_*.mjs'))
     current += [Path(__file__), RUNTIME/'tools/verify_current.py',
-                ROOT/'remake/assessment/validation_design.txt', RUNTIME/'tools/README.txt']
+                ROOT/'remake/assessment/validation_design.md', RUNTIME/'tools/README.md']
     evidence = sorted(p for p in CASES.iterdir() if p.is_file()) + [fixture]
     report = dict(schema='seventh-seal-roster-focus-browser-validation', version=1,
                   checked_utc=datetime.now(timezone.utc).isoformat(), passed=True, cases=len(cases), checks=checks,

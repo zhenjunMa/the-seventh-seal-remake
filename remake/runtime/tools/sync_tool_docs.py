@@ -12,9 +12,9 @@ from build_runtime import STEPS, plan
 
 TOOLS = Path(__file__).resolve().parent
 INDEX = TOOLS / 'tool_index.json'
-README = TOOLS / 'README.txt'
-BEGIN = '[自动生成：构建目标开始]'
-END = '[自动生成：构建目标结束]'
+README = TOOLS / 'README.md'
+BEGIN = '<!-- 自动生成：构建目标开始 -->'
+END = '<!-- 自动生成：构建目标结束 -->'
 
 
 def generated_files():
@@ -40,14 +40,16 @@ def generated_files():
 
     readme = README.read_text(encoding='utf-8')
     if readme.count(BEGIN) != 1 or readme.count(END) != 1:
-        raise ValueError('README.txt 必须有唯一的构建清单起止标记')
+        raise ValueError('README.md 必须有唯一的构建清单起止标记')
     before, rest = readme.split(BEGIN)
     _, after = rest.split(END)
-    lines = [f'{name}: {step.tool}; 依赖={",".join(step.depends) or "无声明依赖"}'
-             for name, step in STEPS.items()]
+    lines = ['| 构建目标 | 工具 | 直接依赖 |', '| --- | --- | --- |']
+    for name, step in STEPS.items():
+        depends = '、'.join(f'`{dependency}`' for dependency in step.depends) or '无声明依赖'
+        lines.append(f'| `{name}` | [{step.tool}]({step.tool}) | {depends} |')
     return {
         INDEX: json.dumps(index, ensure_ascii=False, indent=2) + '\n',
-        README: before + BEGIN + '\n' + '\n'.join(lines) + '\n' + END + after,
+        README: before + BEGIN + '\n\n' + '\n'.join(lines) + '\n\n' + END + after,
     }
 
 

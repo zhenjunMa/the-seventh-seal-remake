@@ -132,8 +132,8 @@ def main():
     current = sorted(p for p in WEB.rglob('*') if p.is_file() and p.suffix in {'.mjs', '.js', '.css', '.html', '.json'})
     current += sorted((RUNTIME/'tests').glob('test_*.mjs'))
     current += [Path(__file__), RUNTIME/'tools/verify_current.py', RUNTIME/'tools/build_runtime.py', RUNTIME/'tools/export_audio.py',
-                *[RUNTIME.parent/name for name in ['README.txt', 'assessment/validation_design.txt', 'runtime/README.txt',
-                 'runtime/architecture.txt', 'runtime/config_guide.txt', 'runtime/tools/README.txt']]]
+                *[RUNTIME.parent/name for name in ['README.md', 'assessment/validation_design.md', 'runtime/README.md',
+                 'runtime/architecture.md', 'runtime/config_guide.md', 'runtime/tools/README.md']]]
     evidence = sorted(p for p in CASES.iterdir() if p.suffix in {'.json', '.jpg', '.png'})
     evidence += [audit_path, native_path, fixture_path, EVIDENCE/'audio_export.json',
                  *[WEB/clip['path'].lstrip('/') for clip in manifest['clips'].values()]]

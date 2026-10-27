@@ -58,7 +58,7 @@ else:
     browser=dict(success=True,scope='One actual natural-encounter browser round: Xuanyingzhan against selected hunter, snow attack and both hunters approach/attack/return; no original executable run.',
         presentations=presentations,console_warning_error_count=0,screenshot_sha256=screenshots,log_sha256=sha(E/'forest_presentation_browser_log_20261011.json'),current_code_hashes=suite['code_data_hashes'])
     save('forest_presentation_browser_20261011.json',browser)
-    docs=['remake/runtime/README.txt','remake/README.txt','remake/archive/20261011_before_chapter/assessment/runtime_forest_presentation_fix_20261011.txt','remake/assessment/menu_alignment_workflow.txt','remake/assessment/validation_design.txt']
+    docs=['remake/runtime/README.md','remake/README.md','remake/archive/20261011_before_chapter/assessment/runtime_forest_presentation_fix_20261011.txt','remake/assessment/menu_alignment_workflow.md','remake/assessment/validation_design.md']
     save('forest_presentation_delivery_20261011.json',dict(success=True,created_utc=datetime.now(timezone.utc).isoformat(),tests=suite['counts'],http=len(suite['http']),
          source_hashes=sources,asset_hashes=assets,code_data_hashes=suite['code_data_hashes'],document_hashes={p:sha(ROOT/p) for p in docs},browser=browser,
          pixel_frames=dict(player_pairs=pixels['player_frames'],active_intrinsic=len(pixels['active_intrinsic_frames']),new_effect_frames=len(pixels['effect_frame_checks'])),
