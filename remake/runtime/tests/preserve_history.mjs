@@ -1,10 +1,4 @@
-// Existing test after-hooks write their historical report names. A new route
-// suite keeps those files intact and records a separate aggregate report.
-import fs from 'node:fs/promises';
-import {syncBuiltinESMExports} from 'node:module';
-const original=fs.writeFile;
-fs.writeFile=async function(path,...args){
-  if(String(path).replaceAll('\\','/').includes('/runtime/evidence/'))return;
-  return original.call(this,path,...args);
-};
-syncBuiltinESMExports();
+// Compatibility preload for historical commands. Tests no longer write reports.
+// Intentionally leaves Node's filesystem APIs unchanged; current summaries are
+// emitted by tools/verify_tests.py into a fresh run directory only on request.
+export {};

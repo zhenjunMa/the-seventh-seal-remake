@@ -108,7 +108,7 @@ m17030-1:c7读取23:1：真分支目标为原命令12（零基c11），假分支
 
 原4BBAC0在此路径尝试写HKLM\\SOFTWARE\\SnowWolf的MenuCode=DWORD1；重制用独立版本化的浏览器completion元数据承接，不写原注册表或原存档。它不等于完整特典界面开放。运行先等待整条剧情成功、world提交，再处理终章请求；地图进入剧情由`SceneController.afterCommit`承接。失败、取消、存储拒写及过期世界不能导致提前切标题或覆盖新进度。来源函数和保留证据见`evidence/fire_valley_20261025/ending_*.json`，规则见`core/story_completion.mjs`。
 
-复用这些事实时，以`web/data/library/fire_valley.json`的原路径、记录偏移、SHA及raw字段回查。详细阶段矩阵和外部调用来源保存在`evidence/fire_valley_20261025/phase_handoffs.json`；开发存档的逐项准备、限制及入口操作见同目录`phase_fixture_manifest.json`／`prepare_phase_fixtures.mjs`，回归在`tests/test_fire_valley_phase_fixtures.mjs`。开发存档使用encodeSave但不属于原存档，不证明外部主线、奖励、成长或装备历史已重放。
+复用这些事实时，以`web/data/library/fire_valley.json`的原路径、记录偏移、SHA及raw字段回查。详细阶段矩阵和外部调用来源保存在`evidence/fire_valley_20261025/phase_handoffs.json`；开发存档的逐项准备、限制及入口操作见同目录`phase_fixture_manifest.json`／`prepare_phase_fixtures.mjs`，当前入口和队伍规则回归在`tests/test_fire_valley_phase_fixtures.mjs`，使用已提交的`tests/helpers/fire_valley_world.mjs`；精确重生成旧交接档的检查在`tests/test_region_phase_history.mjs`，归入history组。开发存档使用encodeSave但不属于原存档，不证明外部主线、奖励、成长或装备历史已重放。
 
 ## 运行结构
 

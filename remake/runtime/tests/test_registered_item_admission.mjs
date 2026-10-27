@@ -6,13 +6,13 @@ import {WorldStore,encodeSave,decodeSave} from '../web/core/world.mjs';
 import {compileItemConfiguration,upgradeItemConfiguration,deriveItemConfiguration} from '../web/core/item_registry.mjs';
 import {changeEquipment,canEquipItem} from '../web/core/items.mjs';
 import {isSupportedCrystalDefinition} from '../web/core/crystal_catalog.mjs';
-import {preparePhaseFixtures,headlessRunner} from '../evidence/fire_valley_20261025/prepare_phase_fixtures.mjs';
+import {fireValleyPartyFixture,headlessRunner} from './helpers/fire_valley_world.mjs';
 const read=async name=>JSON.parse(await readFile(new URL(`../web/data/${name}.json`,import.meta.url),'utf8'));
 // Optional isolated official-producer output, used before the unified asset
 // build. Normal test runs read only the published catalog.
 const items=process.env.SEVENTH_SEAL_ITEM_TEST_CATALOG?JSON.parse(await readFile(process.env.SEVENTH_SEAL_ITEM_TEST_CATALOG,'utf8')):await read('items');
 const [attributes,overrides]=await Promise.all(['party_combat','config/items'].map(read));
-const {worlds}=await preparePhaseFixtures({write:false});
+const {worlds}=await fireValleyPartyFixture();
 
 test('source-owned003/004/005 initial gear can be unequipped and reequipped in original mode then survives save/load',async()=>{
   const configured=compileItemConfiguration(items,overrides,'original');assert.deepEqual(configured.differences,[]);

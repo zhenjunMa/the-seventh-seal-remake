@@ -14,6 +14,7 @@
 - [基础导出入口](#基础导出入口)
 - [工具导航](#工具导航)
 - [当前构建目标与直接依赖](#当前构建目标与直接依赖)
+- [测试职责与运行](#测试职责与运行)
 - [当前检查覆盖什么](#当前检查覆盖什么)
 - [常见问题](#常见问题)
 - [资料维护](#资料维护)
@@ -400,6 +401,44 @@ independent-source-export：独立基础来源或旧样本生产入口，可能�
 | `white-forest-index` | [export_white_forest_index.py](export_white_forest_index.py) | 无声明依赖 |
 
 <!-- 自动生成：构建目标结束 -->
+
+## 测试职责与运行
+
+日常回归使用统一入口，默认只运行 `runtime`，不需要原版安装、媒体、历史证据或图像库：
+
+```console
+python3 -B remake/runtime/tools/verify_tests.py
+```
+
+职责清单位于 [tests/suites.json](../tests/suites.json)。每个测试文件只登记一次，`daily` 是 `runtime` 的别名；运行前始终检查清单是否遗漏、重复或引用已删除文件。
+
+| 组 | 适用改动与前置 |
+| --- | --- |
+| `runtime`／`daily` | 战斗、事务、时钟、菜单、存档状态与运行配置规则；只使用提交的代码和结构化数据 |
+| `content` | 地图／NPC阶段矩阵、内容登记、配置迁移与运行包；只使用提交的数据，包含耗时较长的区域遍历 |
+| `source` | 原版字节、独立解码和原指令差分；需要原版输入及各文件声明的本地证据，部分 Python 检查需要 Pillow／NumPy |
+| `assets` | 真实媒体加载与绘制合同；需要生成媒体，不能替代浏览器实玩 |
+| `integration` | 本地 HTTP／磁盘存档和构建器集成；需要允许监听回环端口，构建模块当前还依赖原版输入及图像库 |
+| `history` | 历史录制与区域交接档重新生成核对；需要保留的报告、存档与当时生成器，不代表当前版本的新观察 |
+| `all` | 上述全部组，交付时在前置齐全的环境执行；任一失败或跳过均不算完整通过 |
+
+按改动组合执行，或在已选组内用文件名通配符缩小范围：
+
+```console
+python3 -B remake/runtime/tools/verify_tests.py --suite content
+python3 -B remake/runtime/tools/verify_tests.py --suite runtime --suite content --match '*battle*'
+python3 -B remake/runtime/tools/verify_tests.py --suite source --list
+python3 -B remake/runtime/tools/verify_tests.py --suite all --report
+python3 -B remake/runtime/tools/verify_tests.py --check
+```
+
+`--match` 适合定向反馈，不能代替跨模块修改或交付所需的相关整组检查。已声明的前置缺失时，入口先合并列出缺项并非零退出，不执行部分测试后冒称整组通过；来源检查内部仍会核对具体原文件与指纹。清单声明的是环境与已知入口材料，不能替代导出器的完整来源审计。
+
+默认只输出结果。`--report` 在 `runtime/evidence/test_runs` 创建新的运行目录，保存摘要、源码／数据指纹和 JS／Python 日志；运行期间指纹变化则本次结果无效。测试本身不写固定日期报告，`preserve_history.mjs` 仅保留旧命令的兼容入口，不修改文件系统 API。当前完整检查 `verify_current.py` 复用同一清单，另写其现有 current 汇总文件，不再用固定测试数量作门槛。
+
+新增同机制地图、NPC、箱子或技能时，优先扩充内容与共享案例表；新通用机制、高风险回归或跨模块边界需要新的行为断言时，再扩充对应测试。常规测试辅助代码放在已提交的 `tests/helpers`，不得导入被忽略的历史目录中的执行代码。精确重放旧交接档的生成器依赖仅限 `history`，其原字节与前置需保留。独立来源解码器与规则／视图／集成边界分别保护不同风险，不按文件名相似或代码行数合并删除。
+
+浏览器验收继续从正式 `/` 入口完成计划要求的剧情、战斗、退出与存读档，并保留当版源码／配置／媒体指纹。上述自动测试和旧观察复核均不自动完成这一步。
 
 ## 当前检查覆盖什么
 

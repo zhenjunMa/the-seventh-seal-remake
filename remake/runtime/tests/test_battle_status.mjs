@@ -2,7 +2,7 @@
 // Resource allocation/copy/debug calls are explicit bounded hooks only.
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {readFile,writeFile} from 'node:fs/promises';
+import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {NativeAssemblyOracle} from './native_assembly_oracle.mjs';
 import {createNativeRng,elementalTerms} from '../web/core/combat_rules.mjs';
@@ -21,7 +21,6 @@ const report={schema:'seventh-seal-forest-status-verification',version:1,passed:
     'Display, OS clocks and debug stack checks are not executed.'],
   limits:['Other game effect ids/modes, mode2 removal, controlling statuses and periodic HP effects are unsupported.',
     'Status43 numeric life cycle is retained; its original overlay sprite is not rendered here.'],original_game_execution_observed:false};
-await writeFile(new URL('../evidence/forest_status_verification_20261011.json',import.meta.url),JSON.stringify(report,null,2)+'\n');
 function actor(){const a=clone(sample.actors[0]);a.status_flags_raw=0;return initializeNativeStatuses(a,data);}
 function draw(values){let at=0;const fn=()=>{assert.ok(at<values.length,'Unexpected RNG consumption');return values[at++];};Object.defineProperty(fn,'calls',{get:()=>at});return fn;}
 function blockArgs(block){const b=Buffer.alloc(0xc8);Buffer.from(block,'hex').copy(b);return [0,...Array.from({length:50},(_,i)=>b.readInt32LE(i*4))];}
@@ -133,4 +132,4 @@ test('native continuous RNG stream parity and unsupported mode2 fail explicitly'
   assert.throws(()=>tickNativeStatuses({actor:a,threshold:500,now:80,data}),/mode2/);
   report.checks.push('Continuous CRT RNG state parity; mode2 cannot silently omit native removal draws');
 });
-test('write verification ledger',async()=>{assert.equal(report.checks.length,8);report.passed=true;await writeFile(new URL('../evidence/forest_status_verification_20261011.json',import.meta.url),JSON.stringify(report,null,2)+'\n');});
+test.after(()=>assert.equal(report.checks.length,8));

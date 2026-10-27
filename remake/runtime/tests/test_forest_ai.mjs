@@ -1,7 +1,7 @@
 // AI selection is compared with retained x86 instructions, not a second formula port.
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {readFile,writeFile} from 'node:fs/promises';
+import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {createNativeRng} from '../web/core/combat_rules.mjs';
 import {NativeAssemblyOracle} from './native_assembly_oracle.mjs';
@@ -178,10 +178,4 @@ test('invalid source snapshots reject before RNG, recovery and busy flags stay d
   assert.deepEqual(selectNativeSkills({actor:addressOnly,role:data.roles['011'],rng:scripted([20,0])}).skill_indices,[14]);
   checks.push('invalid fields fail before RNG and native flag representations are explicit');
 });
-test.after(async()=>{
-  report.passed=checks.length===11;
-  report.fingerprints={};for(const path of ['../web/core/forest_ai.mjs','../tools/export_forest_ai.py','../web/data/forest_ai.json','../evidence/forest_ai_instructions_20261011.json','test_forest_ai.mjs'])report.fingerprints[path]=hash(await readFile(new URL(path,import.meta.url)));
-  report.source_hashes=data.source_hashes;
-  await writeFile(new URL('../evidence/forest_ai_verification_20261011.json',import.meta.url),JSON.stringify(report,null,2)+'\n');
-  await writeFile(new URL('../evidence/forest_ai_verification_20261011.txt',import.meta.url),`白木森林敌方 AI 选择验证\n结果：${report.passed?'通过':'失败'}\n原指令选招对照：${report.case_counts.skill_instruction_comparisons}\n原指令目标对照：${report.case_counts.target_instruction_comparisons}\n完整随机流对照：${report.case_counts.stream_plan_comparisons}\n原版运行未观察；组合编译/数值/表现验证由独立报告覆盖。\n`);
-});
+test.after(()=>assert.equal(checks.length,11));

@@ -292,18 +292,17 @@ def verify():
                                    cwd=ROOT, capture_output=True, text=True, encoding='utf-8')
     assert content_check.returncode == 0, content_check.stdout + content_check.stderr
     content_summary = json.loads(content_check.stdout)
-    tests = sorted((RUNTIME/'tests').glob('test_*.mjs'))
-    result = subprocess.run(['node', '--import', (RUNTIME/'tests/preserve_history.mjs').as_uri(),
-                             '--test', '--test-reporter=tap', *map(str, tests)],
-                            cwd=ROOT, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, encoding='utf-8')
-    (EVIDENCE/'current_validation.tap').write_text(result.stdout, encoding='utf-8')
-    assert result.returncode == 0, result.stdout[-12000:]
-    counts = {key:int(re.search(r'^# '+key+r' (\d+)', result.stdout, re.M).group(1)) for key in ['tests', 'pass', 'fail', 'skipped']}
-    assert counts['tests'] == counts['pass'] >= 196 and counts['fail'] == counts['skipped'] == 0
-    python_tests = subprocess.run([sys.executable, '-X', 'utf8', '-B', '-m', 'unittest', 'discover', '-s', str(RUNTIME/'tests'), '-p', 'test_*.py'],
-                                  cwd=ROOT, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, encoding='utf-8')
-    (EVIDENCE/'current_python_tests.log').write_text(python_tests.stdout, encoding='utf-8')
-    assert python_tests.returncode == 0, python_tests.stdout
+    from verify_tests import run_suites
+    regression = run_suites(('all',))
+    if regression['missing']:
+        raise AssertionError('测试前置缺失：' + '、'.join(regression['missing']))
+    runs = {run['language']: run for run in regression['runs']}
+    (EVIDENCE/'current_validation.tap').write_text(runs['javascript']['output'], encoding='utf-8')
+    (EVIDENCE/'current_python_tests.log').write_text(runs['python']['output'], encoding='utf-8')
+    assert regression['passed'], ('\n'.join(run['output'][-12000:] for run in regression['runs'] if not run['passed'])
+                                  or '测试期间输入变化：'+'、'.join(regression.get('changed_inputs', [])))
+    tests = [RUNTIME/'tests'/name for name in runs['javascript']['files']]
+    counts = runs['javascript']['counts']
     for name, expected in original_inputs.items(): assert sha(ROOT/name) == expected, f'Original input changed during checks: {name}'
     for name, expected in opening_sources.items(): assert sha(ROOT/name) == expected, f'Opening input changed during checks: {name}'
     for name, expected in party_sources.items(): assert sha(ROOT/name) == expected, f'Party input changed during checks: {name}'
@@ -311,7 +310,8 @@ def verify():
     current = [*tests, *RUNTIME.glob('tests/test_*.py'), RUNTIME/'tools/build_runtime.py', *WEB.glob('*.html'), *WEB.glob('*.css'), *WEB.glob('*.js'), *WEB.glob('*.mjs'), *WEB.glob('core/*.mjs'), *WEB.glob('controllers/*.mjs'), *WEB.glob('data/config/*.json'),
                *WEB.glob('phaser/**/*.mjs'), *WEB.glob('vendor/phaser/*'), RUNTIME/'tools/verify_phaser.mjs',
                WEB/'data/catalog.json', WEB/'data/runtime_content.json', WEB/'data/runtime_content.mjs',
-               RUNTIME/'tools/export_content_registry.mjs', RUNTIME/'tools/content_registration.py', RUNTIME/'tools/layout_migration.json', RUNTIME/'tests/preserve_history.mjs', Path(__file__),
+               RUNTIME/'tools/export_content_registry.mjs', RUNTIME/'tools/content_registration.py', RUNTIME/'tools/layout_migration.json', RUNTIME/'tests/preserve_history.mjs', RUNTIME/'tests/suites.json', RUNTIME/'tools/verify_tests.py',
+               *RUNTIME.glob('tests/helpers/*.mjs'), Path(__file__),
                REMAKE/'archive/restore_snapshot.py', *[REMAKE/name for name in docs], *[exported_path(name) for name in system_outputs if exported_path(name).suffix=='.json']]
     browser_path = next((EVIDENCE/name for name in ['white_forest_20261026/browser_validation.json','fire_valley_20261025/browser_validation.json','battle_loading_browser_validation_20261021.json','dialogue_alignment_browser_validation_20261021.json','prologue_routes_browser_validation_20261021.json','prologue_routes_browser_validation_20261020.json','prologue_sequence_browser_validation_20261020.json','prologue_browser_validation_20261020.json','startup_save_preview_browser_validation_20261020.json','startup_alignment_browser_validation_20261020.json','battle_wheel_closed_browser_validation_20261020.json','battle_result_text_browser_validation_20261020.json','battle_result_browser_validation_20261020.json','skill_test_browser_validation_20261020.json','battle_lifecycle_browser_validation_20261015.json','battle_render_browser_validation_20261015.json','battle_alignment_browser_validation_20261015.json','roster_focus_browser_validation_20261014.json','menu_audio_browser_validation_20261014.json','technique_list_browser_validation_20261014_v2.json','technique_list_browser_validation_20261014.json','menu_focus_browser_validation_20261014.json','technique_replace_browser_validation_20261014.json','menu_finish_browser_validation_20261014.json','menu_socket_browser_validation_20261014.json','menu_detail_browser_validation_20261014.json','refactor_browser_validation.json', 'operation_menu_original_browser_validation.json', 'operation_menu_fidelity_browser_validation.json', 'operation_menu_browser_validation.json', 'chapter_systems_browser_validation.json', 'skill_config_browser_validation.json', 'party_browser_validation.json']
                          if (EVIDENCE/name).is_file()), EVIDENCE/'party_browser_validation.json')
@@ -342,7 +342,7 @@ def verify():
                                                matches_current_files=browser_matches,
                                                checked_utc=browser.get('checked_utc') if browser else None),
                 python_regression=dict(passed=True, test_files=len(list((RUNTIME/'tests').glob('test_*.py'))),
-                                       tests=int(re.search(r'Ran (\d+) tests?', python_tests.stdout).group(1))),
+                                       tests=runs['python']['counts']['tests']),
                 actual_browser_flow_checked_this_run=False, original_game_execution_observed=False,
                 limits=['This validates the current existing slice and workspace integrity; it does not complete the chapter.',
                         'Historical browser observations are retained and are not claimed as a fresh UI replay.',

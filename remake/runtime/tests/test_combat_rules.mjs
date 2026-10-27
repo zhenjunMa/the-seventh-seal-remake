@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {readFile,writeFile} from 'node:fs/promises';
+import {readFile} from 'node:fs/promises';
 import {createNativeRng,buildEffectiveAttributes,elementalTerms,resolveAction,applyNativeDamage,idiv,i32} from '../web/core/combat_rules.mjs';
 import {NativeAssemblyOracle} from './native_assembly_oracle.mjs';
 import {createBattleSample,resourcesForWorld} from '../web/combat_sample.mjs';
@@ -46,4 +46,4 @@ test('real exported player and snow skills agree with original bytes and native 
   const revivedView=createBattleSample(deadWorld,data).actors.find(a=>a.id==='001');assert.equal(revivedView.hp.current,0);assert.equal(revivedView.state_raw,4);
   report.real_sample_probes=paired;report.checks.push('Original fixed/impact bytes for both skills, 32 native numeric replays, linked death DWORD round-trip');
 });
-test.after(async()=>{report.passed=report.checks.length===9;await writeFile(new URL('../evidence/turn_rules_verification_20261011.json',import.meta.url),`${JSON.stringify(report,null,2)}\n`);});
+test.after(()=>assert.equal(report.checks.length,9));

@@ -1,8 +1,8 @@
 // Real exported frame metadata and PNG fingerprints; synthetic canvas/clock.
 // This verifies renderer contracts, not original-game animation execution.
-import test, {after} from 'node:test';
+import test from 'node:test';
 import assert from 'node:assert/strict';
-import {readFile, writeFile, mkdir} from 'node:fs/promises';
+import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {BattleView, compileActionTimeline} from '../web/battle_view.mjs';
 
@@ -10,7 +10,7 @@ const base = new URL('../', import.meta.url), root = new URL('../../../', import
 const meta = JSON.parse(await readFile(new URL('web/data/battle_view.json', base)));
 const layers = JSON.parse(await readFile(new URL('web/data/yantu_layers.json', base)));
 const clone = value => structuredClone(value);
-const results = [], assetChecks = new Map();
+const assetChecks = new Map();
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const snapshot = () => ({phase: 'battle', round: 1, actors: [
   {id: '001', side: 'player', hp: {current: 960, maximum: 960}, alive: true},
@@ -53,10 +53,7 @@ async function viewFixture(options = {}) {
 }
 
 function contract(name, run) {
-  test(name, {concurrency: false}, async () => {
-    try {const observations = await run(); results.push({name, passed: true, observations: observations ?? {}});}
-    catch (error) {results.push({name, passed: false, error: error.message}); throw error;}
-  });
+  test(name, {concurrency: false}, run);
 }
 
 contract('source timelines bind both Yantu layers and original logical event positions', async () => {
@@ -193,18 +190,4 @@ contract('external commit error rejects playback and destroy cancels an unfinish
   release(); await gate; await Promise.resolve();
   assert.equal(view.ready, false); assert.equal(view.images.size, 0); assert.equal(view.playback, null);
   return {commit_error_propagated: true, stale_async_completion_discarded: true};
-});
-
-after(async () => {
-  const evidence = new URL('evidence/battle_view_tests_20261011.json', base);
-  await mkdir(new URL('evidence/', base), {recursive: true});
-  await writeFile(evidence, JSON.stringify({schema: 'seventh-seal-battle-view-contract-verification', version: 1,
-    source: 'real battle_view/yantu metadata and PNGs; synthetic canvas, clock and damage values',
-    original_game_execution_observed: false, passed: results.every(result => result.passed),
-    test_count: results.length, results, actual_assets_checked: [...assetChecks.values()],
-    fingerprints: {battle_view: hash(await readFile(new URL('web/battle_view.mjs', base))),
-      metadata: hash(await readFile(new URL('web/data/battle_view.json', base))),
-      yantu_layers: hash(await readFile(new URL('web/data/yantu_layers.json', base)))},
-    limits: ['Numeric damage values in these view tests are synthetic display fixtures.',
-      'Canvas main/intrinsic alignment is tested; native RGB565 destination saturation and original stage choreography remain unknown.']}, null, 2) + '\n');
 });
