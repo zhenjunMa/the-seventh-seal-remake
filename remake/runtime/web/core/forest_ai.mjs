@@ -3,14 +3,13 @@
  * caller-owned native fields, separately initialized from reaction recovery.
  */
 import {runtimeContent,requireRegisteredRoles} from './content_registry.mjs';
-import {nativeLoadedSkillCodes} from './native_skill_loading.mjs';
+import {nativeLoadedSkillCodes,nativeSkillSelectionFields} from './native_skill_loading.mjs';
 const clone=value=>structuredClone(value);
 function requireValue(ok,message){if(!ok)throw new TypeError(message);}
 function integer(value,name,min=0,max=0xffffffff){requireValue(Number.isInteger(value)&&value>=min&&value<=max,`Invalid ${name}`);return value;}
 function fixedView(skill){
-  requireValue(typeof skill?.fixed_raw_hex==='string'&&/^([0-9a-f]{2}){1053}$/i.test(skill.fixed_raw_hex),'AI skill requires original fixed bytes');
-  const bytes=Uint8Array.from(skill.fixed_raw_hex.match(/../g),h=>parseInt(h,16)),view=new DataView(bytes.buffer);
-  return {index:integer(skill.index??skill.original_skill_index,'skill index',0,127),code:bytes[0x19],learned:bytes[0x23],target_side:bytes[0x25],weight:bytes[0x27],type:view.getUint32(0x32,true)&15};
+  const {code,learned,target_side,weight,flags}=nativeSkillSelectionFields(skill);
+  return {index:integer(skill.index??skill.original_skill_index,'skill index',0,127),code,learned,target_side,weight,type:flags&15};
 }
 function roleView(role,loadModeRaw=0){
   const count=integer(role?.skill_count,'skill count',0,127);
