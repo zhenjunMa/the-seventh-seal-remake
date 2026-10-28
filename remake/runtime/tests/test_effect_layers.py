@@ -208,6 +208,25 @@ class EffectLayerTests(unittest.TestCase):
                     self.assertEqual(image.crop((frame * raw.width, 0, (frame + 1) * raw.width, raw.height)).tobytes(), raw.decode(frame, True)[0])
             self.assertEqual(sum(row['main']['covered_pixels'] for row in checks), 0)
             self.assertEqual(sum(row['intrinsic']['covered_pixels'] for row in checks), 163009)
+            paths=[web/effect[f'{layer}_sheet'][1:] for layer in ('main','intrinsic','shadow')]
+            before={path:path.stat().st_mtime_ns for path in paths}
+            again, cached_checks=metadata(['_DutyN']), []
+            with patch.object(exporter,'WEB',web), patch.object(exporter,'DGP',side_effect=AssertionError('Unchanged effect decoded again')):
+                exporter.export_effect_assets(again,{},cached_checks)
+            self.assertEqual(again['effects'],meta['effects'])
+            self.assertEqual(cached_checks,checks)
+            self.assertEqual(before,{path:path.stat().st_mtime_ns for path in paths})
+            shared=metadata(['_DutyN'])
+            with patch.object(exporter,'WEB',web), patch.object(exporter,'DGP',side_effect=AssertionError('Shared effect decoded again')):
+                exporter.export_effect_assets(shared,{},[],asset_group='enemy')
+            self.assertEqual(shared['effects'],meta['effects'])
+            self.assertFalse((web/'assets/enemy_effects').exists())
+            damaged=paths[0]; damaged.write_bytes(b'broken')
+            with patch.object(exporter,'WEB',web):
+                repaired=metadata(['_DutyN']); exporter.export_effect_assets(repaired,{},[])
+            self.assertEqual(repaired['effects'],meta['effects'])
+            self.assertEqual({path:before[path] for path in paths[1:]},
+                             {path:path.stat().st_mtime_ns for path in paths[1:]})
 
     def test_actual_five_type3_reward_actions_reference_both_multilayer_carriers(self):
         seen = set()

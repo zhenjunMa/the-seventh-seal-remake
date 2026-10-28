@@ -12,6 +12,7 @@ sys.dont_write_bytecode = True
 RUNTIME = Path(__file__).resolve().parents[1]
 ROOT = RUNTIME.parents[1]
 sys.path.insert(0, str(ROOT / "remake/runtime/tools"))
+from incremental import save_png, write_json as incremental_json
 from PIL import Image, ImageDraw, ImageChops, ImageOps
 from source.dgp import DGP
 from export_combat_presentation import indexed_contribution, native_frame_sequence
@@ -70,11 +71,11 @@ def retain_native():
             records.append(dict(retained_from=name,record=lookup[ident]))
         sources.append(dict(path=p.relative_to(RUNTIME).as_posix(),sha256=sha(p.read_bytes()),evidence_ids=identifiers))
     out = RUNTIME/'evidence/battle_ui_native_retained.json'
-    out.write_text(json.dumps(dict(evidence_type='historical-native-static-retained',
+    incremental_json(out, dict(evidence_type='historical-native-static-retained',
         original_game_execution_observed=False,rea_analysis_rerun_this_export=False,
         game_sha256=game_hash,sources=sources,records=records,
         limits=['Records are copied verbatim from existing static REA evidence, not newly decompiled or runtime observed.',
-            'Some historical query parameters are interior addresses; normalized_result function names identify the recovered entry.']),ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+            'Some historical query parameters are interior addresses; normalized_result function names identify the recovered entry.']))
     return out
 
 
@@ -176,7 +177,7 @@ def bindings(result):
 
 def image_output(image, path):
     path.parent.mkdir(parents=True, exist_ok=True)
-    image.save(path)
+    save_png(image, path)
     with Image.open(path) as saved:
         if saved.convert('RGBA').tobytes() != image.convert('RGBA').tobytes():
             raise ValueError('PNG pixel roundtrip differs')
@@ -332,7 +333,7 @@ def main():
         raise ValueError('Original source changed during export')
     result['original_inputs_unchanged'] = True
     dest = WEB/'data/battle_ui.json'
-    dest.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+    incremental_json(dest, result)
     hashes = {p.relative_to(ROOT).as_posix():sha(p.read_bytes()) for p in sorted(OUT.rglob('*.png'))}
     hashes[dest.relative_to(ROOT).as_posix()] = sha(dest.read_bytes())
     hashes[native_path.relative_to(ROOT).as_posix()] = sha(native_path.read_bytes())
@@ -342,7 +343,7 @@ def main():
         dgp_frames=sum(a['frame_count'] for a in result['assets'].values()),
         eof_verified=all(a['eof_verified'] for a in result['menus']),
         png_roundtrip_verified=True,original_game_execution_observed=False,limitations=result['limitations'])
-    (RUNTIME/'evidence/battle_ui_resources.json').write_text(json.dumps(ev,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+    incremental_json(RUNTIME/'evidence/battle_ui_resources.json', ev)
     print(json.dumps({k:ev[k] for k in ('passed','menus','asset_count','mnu_images','dgp_frames','eof_verified')},ensure_ascii=False))
 
 

@@ -14,6 +14,7 @@ RUNTIME = Path(__file__).resolve().parents[1]
 ROOT = RUNTIME.parents[1]
 WEB = RUNTIME / 'web'
 sys.path.insert(0, str(ROOT / "remake/runtime/tools"))
+from incremental import save_png, write_json as incremental_json, resource, recipe_hash
 from source.dgp import DGP, DGPError
 from source.map_objects import MapObjects
 from export_combat_presentation import indexed_contribution, native_frame_sequence, NATIVE_IDS
@@ -27,7 +28,7 @@ def sha(path):
 
 def write(path, data):
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+    incremental_json(path, data)
 
 
 def validate_cf1_action(dgp):
@@ -61,6 +62,23 @@ def validate_cf1_action(dgp):
 
 
 def export_bank(dgp, source, key, include_main, *, force_main=False, web=None, checks=None, outputs=None):
+    web = WEB if web is None else Path(web)
+    tools = Path(__file__).parent
+    def produce():
+        local_checks, local_outputs = [], {}
+        bank = _export_bank(dgp, source, key, include_main, force_main=force_main,
+                            web=web, checks=local_checks, outputs=local_outputs)
+        return {'bank':bank,'checks':local_checks,'outputs':local_outputs}, [web/name.lstrip('/') for name in local_outputs]
+    cache_root = RUNTIME if web.resolve() == (RUNTIME/'web').resolve() else web
+    cached = resource(cache_root,'map-effect/'+key,
+        {'source':dgp.sha256,'path':source,'include_main':include_main,'force_main':force_main},
+        recipe_hash([Path(__file__),tools/'source/dgp.py',tools/'export_skill_layers.py',tools/'export_combat_presentation.py']),produce)
+    if checks is not None: checks.extend(cached['checks'])
+    if outputs is not None: outputs.update(cached['outputs'])
+    return cached['bank']
+
+
+def _export_bank(dgp, source, key, include_main, *, force_main=False, web=None, checks=None, outputs=None):
     """Write one source-bound atlas bank; callers may use an isolated temp web."""
     web = WEB if web is None else Path(web)
     checks = [] if checks is None else checks
@@ -107,7 +125,7 @@ def export_bank(dgp, source, key, include_main, *, force_main=False, web=None, c
                 continue
             out = web / f'assets/map_effects/{key}/action_{action["index"]:02}_{channel}.png'
             out.parent.mkdir(parents=True, exist_ok=True)
-            atlas.save(out)
+            save_png(atlas, out)
             assert Image.open(out).convert('RGBA').tobytes() == atlas.tobytes()
             item[channel + '_sheet'] = '/' + out.relative_to(web).as_posix()
             outputs[item[channel + '_sheet']] = sha(out)

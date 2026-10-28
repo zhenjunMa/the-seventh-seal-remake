@@ -14,6 +14,7 @@ WEB = RUNTIME/'web'
 OUT = WEB/'assets/dialogue_ui'
 REPORT = RUNTIME/'evidence/dialogue_alignment_20261021'
 sys.path.insert(0,str(ROOT/'remake/runtime/tools'))
+from incremental import write_json as incremental_json, recipe_hash, cached_png
 sys.path.insert(0,str(Path(__file__).resolve().parent))
 from source.dgp import DGP
 import export_menu_font_gdi as gdi
@@ -26,7 +27,7 @@ def sha(path):
 
 def write(path, value):
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(value,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+    incremental_json(path, value)
 
 
 def main():
@@ -41,7 +42,7 @@ def main():
         frames = []
         for i in range(d.frame_count):
             target = OUT/f'{key}_{i:03}.png'
-            d.decode(i).save(target)
+            cached_png(RUNTIME, target, d.sha256, {'frame':i}, recipe_hash([Path(__file__),Path(__file__).parent/'source/dgp.py']), lambda: d.decode(i))
             frames.append({'index':i,'image':'/'+target.relative_to(WEB).as_posix(),'sha256':sha(target)})
         resources[key] = {'source':name,'source_sha256':d.sha256,'width':d.width,'height':d.height,
             'frames':frames,'interval_ms':d.actions[0]['interval_raw'] if d.actions else None,

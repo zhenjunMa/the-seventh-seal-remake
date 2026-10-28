@@ -16,6 +16,7 @@ sys.dont_write_bytecode = True
 RUNTIME = Path(__file__).resolve().parents[1]
 ROOT = RUNTIME.parents[1]
 sys.path.insert(0, str(RUNTIME / "tools"))
+from incremental import save_png
 import export_maps
 from route_export_maps import RouteMapBackground
 from route_extract_resources import map_record
@@ -62,7 +63,7 @@ def export():
                                 (frame * dgp.width, direction * dgp.height))
             target = RUNTIME / f"web/assets/opening_roles/{role_id}/action_{action['index']:02}.png"
             target.parent.mkdir(parents=True, exist_ok=True)
-            sheet.save(target)
+            save_png(sheet, target)
             outputs[export_maps.web_url(target)] = export_maps.sha(target)
             raw_action = dgp.raw_actions[action["index"]]
             uses_sequence = (raw_action[0x0D] & 0x0F) == 0

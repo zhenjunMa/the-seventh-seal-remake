@@ -15,6 +15,7 @@ RUNTIME = Path(__file__).resolve().parents[1]
 ROOT = RUNTIME.parents[1]
 WEB = RUNTIME / 'web'
 sys.path.insert(0, str(ROOT / "remake/runtime/tools"))
+from incremental import resource, recipe_hash, write_json, save_png
 from PIL import Image
 from source.combat_resources import CHR, GAME_SHA256
 from source.dgp import DGP
@@ -49,8 +50,13 @@ def read(path):
 
 def save(path, data):
     assert path.resolve().is_relative_to(RUNTIME)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', 'utf-8')
+    write_json(path, data)
+
+
+def pixel_rules():
+    tools = Path(__file__).parent
+    return recipe_hash([Path(__file__), tools/'source/dgp.py', tools/'export_skill_layers.py',
+                        tools/'export_combat_presentation.py'])
 
 
 def source_skill(c, s):
@@ -168,6 +174,7 @@ def export_role_assets(role, c, d, sources, checks, group='party'):
     segments = [s for v in views for s in v['segments']] + role.get('idle_sequence', {}).get('segments', [role['idle']]) + [role['reaction']]
     used = sorted({s['action_index'] for s in segments})
     role['actions'] = []
+    rules = pixel_rules()
     for index in used:
         action = d.actions[index]
         assert action['directions'] == 1
@@ -176,15 +183,18 @@ def export_role_assets(role, c, d, sources, checks, group='party'):
         if action['first_frame'] + sheet_frames > d.frame_count:
             raise ValueError(f"Role {role['id']} action {index} leaves its DGP global frame pool")
         out = WEB / f'assets/{group}_roles/{role["id"]}/action_{index:02}.png'
-        out.parent.mkdir(parents=True, exist_ok=True)
-        sheet = Image.new('RGBA', (d.width * sheet_frames, d.height))
-        for frame in range(sheet_frames):
-            sheet.paste(d.decode(action['first_frame'] + frame), (frame * d.width, 0))
-        sheet.save(out)
-        with Image.open(out) as stored:
-            assert stored.convert('RGBA').tobytes() == sheet.tobytes()
+        def produce_action():
+            sheet = Image.new('RGBA', (d.width * sheet_frames, d.height))
+            for frame in range(sheet_frames):
+                sheet.paste(d.decode(action['first_frame'] + frame), (frame * d.width, 0))
+            save_png(sheet, out)
+            with Image.open(out) as stored:
+                assert stored.convert('RGBA').tobytes() == sheet.tobytes()
+            return sha(out), [out]
+        output_hash = resource(RUNTIME, f'{group}/role/{role["id"]}/action/{index}',
+            {'source': d.sha256, 'frames': sheet_frames}, rules, produce_action)
         role['actions'].append(dict(index=index, sheet='/' + out.relative_to(WEB).as_posix(),
-            sha256=sha(out), frame_count=sheet_frames, source_frame_count=action['frames_per_direction'], directions=1,
+            sha256=output_hash, frame_count=sheet_frames, source_frame_count=action['frames_per_direction'], directions=1,
             first_frame=action['first_frame'], native_raw_hex=d.raw_actions[index].hex()))
     # Include every used physical frame, including native death id12, in a
     # role-specific bank. Frame numbers overlap between characters.
@@ -196,17 +206,21 @@ def export_role_assets(role, c, d, sources, checks, group='party'):
     frames = []
     for source_frame in physical:
         prefix = WEB / f'assets/{group}_layers/{role["id"]}/frame_{source_frame:04}'
-        prefix.parent.mkdir(parents=True, exist_ok=True)
-        main_rgba, main_check = audit.sparse(source_frame, False)
-        intrinsic_rgba, intrinsic_check = audit.sparse(source_frame, True)
-        main = save_layer(d.decode(source_frame), Path(str(prefix) + '_main.png'), main_rgba, main_check)
-        intrinsic_image = indexed_contribution(d, source_frame)[0] if d.indexed_auxiliary else Image.new('RGBA', (d.width, d.height))
-        intrinsic = save_layer(intrinsic_image,
-            Path(str(prefix) + '_intrinsic.png'), intrinsic_rgba, intrinsic_check)
-        intrinsic['active'] = bool(d.indexed_auxiliary and d.indexed_auxiliary[source_frame]['active_raw'])
-        frames.append(dict(source_frame=source_frame, main=main, intrinsic=intrinsic))
-        checks.append(dict(role_id=role['id'], source_frame=source_frame,
-            main=main_check, intrinsic=intrinsic_check))
+        def produce_frame():
+            main_rgba, main_check = audit.sparse(source_frame, False)
+            intrinsic_rgba, intrinsic_check = audit.sparse(source_frame, True)
+            main_path, intrinsic_path = Path(str(prefix)+'_main.png'), Path(str(prefix)+'_intrinsic.png')
+            main = save_layer(d.decode(source_frame), main_path, main_rgba, main_check, web=WEB)
+            intrinsic_image = indexed_contribution(d, source_frame)[0] if d.indexed_auxiliary else Image.new('RGBA', (d.width, d.height))
+            intrinsic = save_layer(intrinsic_image, intrinsic_path, intrinsic_rgba, intrinsic_check, web=WEB)
+            intrinsic['active'] = bool(d.indexed_auxiliary and d.indexed_auxiliary[source_frame]['active_raw'])
+            return {'frame': dict(source_frame=source_frame, main=main, intrinsic=intrinsic),
+                    'check': dict(role_id=role['id'], source_frame=source_frame,
+                                  main=main_check, intrinsic=intrinsic_check)}, [main_path, intrinsic_path]
+        cached = resource(RUNTIME, f'{group}/role/{role["id"]}/frame/{source_frame}',
+                          {'source': d.sha256}, rules, produce_frame)
+        frames.append(cached['frame'])
+        checks.append(cached['check'])
     path = WEB / f'data/{group}_role_layers_{role["id"]}.json'
     save(path, dict(schema='seventh-seal-native-layer-bank', version=1,
         role_id=role['id'], frame_width=d.width, frame_height=d.height,
@@ -244,8 +258,70 @@ def extend_status_descriptors(status, blocks, sources):
     status['skills'].update(blocks)
 
 
+def export_one_effect(ident, p, asset_group):
+    sources, effect_checks = {}, []
+    def produce():
+        d = DGP(p)
+        sources[p.relative_to(ROOT).as_posix()] = sha(p)
+        audit = SourceAudit(d.data)
+        assert len(d.actions) == 1 and d.actions[0]['directions'] == 1
+        assert (audit.width, audit.height, audit.count, audit.anchor) == (
+            d.width, d.height, d.frame_count, d.anchor_raw)
+        assert d.actions[0]['first_frame'] == 0 and d.actions[0]['frames_per_direction'] == d.frame_count
+        # DGP +B1 primary pixels and +C5 indexed contributions are
+        # independent passes, even for a command4 effect carrier.
+        # Retain the old action_00/sheet as the intrinsic pass;
+        # main is separately source-over, never additive.
+        main_sheet = Image.new('RGBA', (d.width * d.frame_count, d.height))
+        intrinsic_sheet = Image.new('RGBA', (d.width * d.frame_count, d.height))
+        shadow_sheet = Image.new('RGBA', (d.width * d.frame_count, d.height))
+        for f in range(d.frame_count):
+            main = d.decode(f)
+            intrinsic = indexed_contribution(d, f)[0] if d.indexed_auxiliary else Image.new('RGBA', (d.width, d.height))
+            shadow = d.decode_shadow(f) if d.shadow_blobs else Image.new('RGBA', (d.width, d.height))
+            main_rgba, main_check = audit.sparse(f, False)
+            intrinsic_rgba, intrinsic_check = audit.sparse(f, True)
+            shadow_rgba, shadow_check = audit.shadow(f)
+            intrinsic_check.setdefault('rgba_sha256', hash_bytes(intrinsic_rgba))
+            assert main.tobytes() == main_rgba
+            assert intrinsic.tobytes() == intrinsic_rgba
+            assert shadow.tobytes() == shadow_rgba
+            main_sheet.paste(main, (f * d.width, 0))
+            intrinsic_sheet.paste(intrinsic, (f * d.width, 0))
+            shadow_sheet.paste(shadow, (f * d.width, 0))
+            effect_checks.append(dict(effect_id=ident, source_frame=f,
+                main=main_check, intrinsic=intrinsic_check, shadow=shadow_check))
+        out = WEB / f'assets/{asset_group}_effects/{ident}/action_00.png'
+        out.parent.mkdir(parents=True, exist_ok=True)
+        main_out = out.with_name('action_00_main.png')
+        shadow_out = out.with_name('action_00_shadow.png')
+        for image, path in ((shadow_sheet, shadow_out), (main_sheet, main_out), (intrinsic_sheet, out)):
+            save_png(image, path)
+            with Image.open(path) as stored:
+                assert stored.convert('RGBA').tobytes() == image.tobytes()
+        descriptor = dict(id=ident, source=p.relative_to(ROOT).as_posix(), source_sha256=sha(p),
+            frame_width=d.width, frame_height=d.height, frame_count=d.frame_count,
+            anchor=dict(x=d.anchor_raw[0], y=d.anchor_raw[1]),
+            sheet='/' + out.relative_to(WEB).as_posix(), sha256=sha(out),
+            main_sheet='/' + main_out.relative_to(WEB).as_posix(), main_sha256=sha(main_out),
+            main_rgba_sha256=hash_bytes(main_sheet.tobytes()), main_blend='source-over',
+            intrinsic_sheet='/' + out.relative_to(WEB).as_posix(), intrinsic_sha256=sha(out),
+            intrinsic_rgba_sha256=hash_bytes(intrinsic_sheet.tobytes()), intrinsic_blend='lighter',
+            shadow_sheet='/' + shadow_out.relative_to(WEB).as_posix(), shadow_sha256=sha(shadow_out),
+            shadow_rgba_sha256=hash_bytes(shadow_sheet.tobytes()), shadow_blend='source-over',
+            shadow_alpha=128, shadow_native='RGB565/555 destination channel floor-half; 8-bit alpha128 presentation',
+            layer_order=['shadow', 'main', 'intrinsic'], interval_ms=d.actions[0]['interval_raw'],
+            frames=native_frame_sequence(d.raw_actions[0], 0, d.frame_count, 0), native_raw_hex=d.raw_actions[0].hex(),
+            blend='lighter', evidence=[NATIVE_IDS['indexed_draw'], NATIVE_IDS['effect_action'], *EFFECT_LAYER_EVIDENCE])
+        return {'descriptor': descriptor, 'checks': effect_checks}, [out, main_out, shadow_out]
+    cache_root = RUNTIME if WEB.resolve().is_relative_to(RUNTIME.resolve()) else WEB
+    return resource(cache_root, f'effect/{ident}',
+                    {'source': sha(p)}, pixel_rules(), produce)
+
+
 def export_effect_assets(meta, sources, checks, asset_group='party'):
     known_effects = {e['id'] for e in meta['effects']}
+    checked_effects = set()
     missing = {row['id']: row for row in meta.get('missing_effects', [])}
     for role in meta['roles']:
         for view in [role['skill']] + role.get('alternate_skills', []) + role.get('response_skills', []):
@@ -259,65 +335,32 @@ def export_effect_assets(meta, sources, checks, asset_group='party'):
             for segment in view['segments']+carrier_segments:
                 for event in segment['effects']:
                     ident = event['asset_id']
-                    if ident in known_effects:
+                    if ident in checked_effects:
                         continue
+                    checked_effects.add(ident)
                     p = ROOT / f'Fight_Role/Effect/{ident}.dgp'
+                    if ident in known_effects:
+                        retained = next(row for row in meta['effects'] if row['id'] == ident)
+                        fields = [('sheet','sha256'),('main_sheet','main_sha256'),
+                                  ('intrinsic_sheet','intrinsic_sha256'),('shadow_sheet','shadow_sha256')]
+                        valid = p.is_file() and retained.get('source_sha256') == sha(p)
+                        for field, hash_field in fields:
+                            if field in retained:
+                                output = WEB/retained[field].lstrip('/')
+                                valid = valid and output.is_file() and sha(output) == retained[hash_field]
+                        if valid:
+                            continue
+                        meta['effects'] = [row for row in meta['effects'] if row['id'] != ident]
+                        known_effects.remove(ident)
                     if not p.is_file():
                         missing[ident] = dict(id=ident, source=p.relative_to(ROOT).as_posix(), source_exists=False,
                             policy='Original literal file absent; native effect allocation returns without a carrier or pixels.')
                         continue
-                    d = DGP(p)
                     sources[p.relative_to(ROOT).as_posix()] = sha(p)
-                    audit = SourceAudit(d.data)
-                    assert len(d.actions) == 1 and d.actions[0]['directions'] == 1
-                    assert (audit.width, audit.height, audit.count, audit.anchor) == (
-                        d.width, d.height, d.frame_count, d.anchor_raw)
-                    assert d.actions[0]['first_frame'] == 0 and d.actions[0]['frames_per_direction'] == d.frame_count
-                    # DGP +B1 primary pixels and +C5 indexed contributions are
-                    # independent passes, even for a command4 effect carrier.
-                    # Retain the old action_00/sheet as the intrinsic pass;
-                    # main is separately source-over, never additive.
-                    main_sheet = Image.new('RGBA', (d.width * d.frame_count, d.height))
-                    intrinsic_sheet = Image.new('RGBA', (d.width * d.frame_count, d.height))
-                    shadow_sheet = Image.new('RGBA', (d.width * d.frame_count, d.height))
-                    for f in range(d.frame_count):
-                        main = d.decode(f)
-                        intrinsic = indexed_contribution(d, f)[0] if d.indexed_auxiliary else Image.new('RGBA', (d.width, d.height))
-                        shadow = d.decode_shadow(f) if d.shadow_blobs else Image.new('RGBA', (d.width, d.height))
-                        main_rgba, main_check = audit.sparse(f, False)
-                        intrinsic_rgba, intrinsic_check = audit.sparse(f, True)
-                        shadow_rgba, shadow_check = audit.shadow(f)
-                        intrinsic_check.setdefault('rgba_sha256', hash_bytes(intrinsic_rgba))
-                        assert main.tobytes() == main_rgba
-                        assert intrinsic.tobytes() == intrinsic_rgba
-                        assert shadow.tobytes() == shadow_rgba
-                        main_sheet.paste(main, (f * d.width, 0))
-                        intrinsic_sheet.paste(intrinsic, (f * d.width, 0))
-                        shadow_sheet.paste(shadow, (f * d.width, 0))
-                        checks.append(dict(effect_id=ident, source_frame=f,
-                            main=main_check, intrinsic=intrinsic_check, shadow=shadow_check))
-                    out = WEB / f'assets/{asset_group}_effects/{ident}/action_00.png'
-                    out.parent.mkdir(parents=True, exist_ok=True)
-                    main_out = out.with_name('action_00_main.png')
-                    shadow_out = out.with_name('action_00_shadow.png')
-                    for image, path in ((shadow_sheet, shadow_out), (main_sheet, main_out), (intrinsic_sheet, out)):
-                        image.save(path)
-                        with Image.open(path) as stored:
-                            assert stored.convert('RGBA').tobytes() == image.tobytes()
-                    meta['effects'].append(dict(id=ident, source=p.relative_to(ROOT).as_posix(), source_sha256=sha(p),
-                        frame_width=d.width, frame_height=d.height, frame_count=d.frame_count,
-                        anchor=dict(x=d.anchor_raw[0], y=d.anchor_raw[1]),
-                        sheet='/' + out.relative_to(WEB).as_posix(), sha256=sha(out),
-                        main_sheet='/' + main_out.relative_to(WEB).as_posix(), main_sha256=sha(main_out),
-                        main_rgba_sha256=hash_bytes(main_sheet.tobytes()), main_blend='source-over',
-                        intrinsic_sheet='/' + out.relative_to(WEB).as_posix(), intrinsic_sha256=sha(out),
-                        intrinsic_rgba_sha256=hash_bytes(intrinsic_sheet.tobytes()), intrinsic_blend='lighter',
-                        shadow_sheet='/' + shadow_out.relative_to(WEB).as_posix(), shadow_sha256=sha(shadow_out),
-                        shadow_rgba_sha256=hash_bytes(shadow_sheet.tobytes()), shadow_blend='source-over',
-                        shadow_alpha=128, shadow_native='RGB565/555 destination channel floor-half; 8-bit alpha128 presentation',
-                        layer_order=['shadow', 'main', 'intrinsic'], interval_ms=d.actions[0]['interval_raw'],
-                        frames=native_frame_sequence(d.raw_actions[0], 0, d.frame_count, 0), native_raw_hex=d.raw_actions[0].hex(),
-                        blend='lighter', evidence=[NATIVE_IDS['indexed_draw'], NATIVE_IDS['effect_action'], *EFFECT_LAYER_EVIDENCE]))
+                    missing.pop(ident, None)
+                    cached = export_one_effect(ident, p, asset_group)
+                    meta['effects'].append(cached['descriptor'])
+                    checks.extend(cached['checks'])
                     known_effects.add(ident)
     meta['missing_effects'] = list(missing.values())
 

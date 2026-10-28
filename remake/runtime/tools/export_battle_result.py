@@ -12,6 +12,7 @@ import sys
 from PIL import Image
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+from incremental import write_json as incremental_json, write_bytes
 import export_battle_ui as ui
 from export_skill_layers import SourceAudit
 
@@ -28,7 +29,7 @@ def sha(data):
 def save(path, data):
     assert path.resolve().is_relative_to(RUNTIME.resolve())
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(data, ensure_ascii=True, indent=2) + '\n', 'utf-8')
+    incremental_json(path, data)
 
 
 def main():
@@ -108,7 +109,7 @@ def main():
     assert raw_sound[:2] == b'\xff\xfb'
     sound_path = OUT / 'audio/victorb1.mp3'
     sound_path.parent.mkdir(parents=True, exist_ok=True)
-    sound_path.write_bytes(raw_sound)
+    write_bytes(sound_path, raw_sound)
     action = bytes.fromhex(assets['victor']['actions'][0]['raw_hex'])
     token = action[0x56:0x6a].split(b'\0')[0].decode('ascii')
     assert token == 'victorb1.wav'

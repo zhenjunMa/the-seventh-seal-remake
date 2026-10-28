@@ -4,6 +4,7 @@ import hashlib
 import json
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+from incremental import write_json as incremental_json
 from export_operation_menu import parse
 
 RUNTIME = Path(__file__).resolve().parents[1]
@@ -24,7 +25,7 @@ def main():
                     limits=['Static MNU pixels and hit rectangles; original game execution not observed.',
                             'Remake files use two-digit JSON slot names; native filename template is SaveGame%d.Dat.'])
     output = RUNTIME / 'web/data/save_menu.json'
-    output.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+    incremental_json(output, manifest)
     outputs = [output] + [p for name in NAMES for p in (RUNTIME / 'web/assets/menu' / name).rglob('*') if p.is_file()]
     unchanged = hashes == {p.relative_to(ROOT).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest() for p in inputs}
     report = dict(passed=unchanged, source_hashes=hashes,
@@ -32,7 +33,7 @@ def main():
                   menus=len(menus), limits=manifest['limits'])
     destination = RUNTIME / 'evidence/save_slots_20261023/resource_export.json'
     destination.parent.mkdir(parents=True, exist_ok=True)
-    destination.write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+    incremental_json(destination, report)
     assert unchanged
     print(json.dumps(dict(passed=True, menus=len(menus), images=sum(len(m['images']) for m in menus))))
 

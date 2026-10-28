@@ -1156,6 +1156,49 @@
       "role": "specialized-evidence-check",
       "build_targets": [],
       "imported_by": []
+    },
+    {
+      "path": "incremental.py",
+      "role": "shared-helper",
+      "build_targets": [],
+      "imported_by": [
+        "build_catalog.py",
+        "build_runtime.py",
+        "export_audio.py",
+        "export_battle_lifecycle.py",
+        "export_battle_packs.py",
+        "export_battle_result.py",
+        "export_battle_stages.py",
+        "export_battle_ui.py",
+        "export_chapter_maps.py",
+        "export_dialogue_ui.py",
+        "export_enemy_content.py",
+        "export_forest_stage.py",
+        "export_item_presentation.py",
+        "export_map_effects.py",
+        "export_map_shadows.py",
+        "export_maps.py",
+        "export_menu_font_gdi.py",
+        "export_menu_techniques.py",
+        "export_menu_text_gdi.py",
+        "export_opening_maps.py",
+        "export_operation_menu.py",
+        "export_party_skills.py",
+        "export_prologue_presentation.py",
+        "export_save_menu.py",
+        "export_skill_layers.py",
+        "export_skill_test.py",
+        "export_story_media.py",
+        "incremental_atlas.py"
+      ]
+    },
+    {
+      "path": "incremental_atlas.py",
+      "role": "shared-helper",
+      "build_targets": [],
+      "imported_by": [
+        "export_battle_packs.py"
+      ]
     }
   ],
   "notes": [

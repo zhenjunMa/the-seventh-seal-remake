@@ -57,6 +57,13 @@ class ItemPresentationExport(unittest.TestCase):
                 items = presentation.item_presentations(self.catalog, self.itm)
                 effects = [presentation.export_item_effect(name, checks, generated, previews)
                            for name in sorted({item['effect_token_raw_126'] for item in items.values()})]
+            # A warm cache for one output root must never supply paths for a
+            # different export root, even when both live under runtime/tests.
+            with tempfile.TemporaryDirectory(prefix='item-effect-other-', dir=RUNTIME/'tests') as other:
+                alternate=Path(other)
+                with patch.object(presentation,'WEB',alternate):
+                    copied=presentation.export_item_effect('_iReHP.dgp',[],[],[])
+                self.assertTrue((alternate/copied['sheet'].lstrip('/')).is_file())
             self.assertEqual(len(checks), 3 * 19)
             for effect in effects:
                 original = DGP(ROOT / effect['source'])

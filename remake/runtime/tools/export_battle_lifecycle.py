@@ -17,6 +17,7 @@ WEB = RUNTIME/'web'
 OUT = WEB/'assets/battle_lifecycle'
 EVIDENCE = RUNTIME/'evidence/battle_lifecycle_20261015'
 sys.path.insert(0,str(ROOT/'remake/runtime/tools'))
+from incremental import resource, recipe_hash, write_json, save_png
 from PIL import Image
 from source.combat_resources import CHR, GAME_SHA256
 from source.dgp import DGP
@@ -97,13 +98,12 @@ def sha(data):
 def save_json(path,value):
     if not path.resolve().is_relative_to(RUNTIME):
         raise ValueError('Lifecycle outputs must remain inside runtime')
-    path.parent.mkdir(parents=True,exist_ok=True)
-    path.write_text(json.dumps(value,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+    write_json(path,value)
 
 
 def save_image(path,image):
     path.parent.mkdir(parents=True,exist_ok=True)
-    image.save(path)
+    save_png(image,path)
     with Image.open(path) as stored:
         if stored.convert('RGBA').tobytes()!=image.convert('RGBA').tobytes():
             raise ValueError('Lifecycle PNG roundtrip differs')
@@ -234,6 +234,25 @@ def lifecycle_skills(character):
 
 
 def export_role(ident,checks):
+    tools=Path(__file__).parent
+    rules=recipe_hash([Path(__file__),tools/'source/dgp.py',tools/'source/combat_resources.py',tools/'export_skill_layers.py',
+                       tools/'export_combat_presentation.py',tools/'export_party_skills.py'])
+    inputs={suffix:sha((ROOT/f'Fight_Role/{ident}.{suffix}').read_bytes()) for suffix in ('CHR','dgp')}
+    inputs['side']=registration()['roles'][ident]['side']
+    def produce():
+        local_checks=[]
+        role=_export_role(ident,local_checks)
+        bank=WEB/role['layer_bank']['path'].lstrip('/')
+        frames=json.loads(bank.read_text('utf-8'))['frames']
+        outputs=[bank,*[WEB/action['sheet'].lstrip('/') for action in role['actions']],
+                 *[WEB/pair[layer]['path'] for pair in frames for layer in ('main','intrinsic')]]
+        return {'role':role,'checks':local_checks},outputs
+    cached=resource(RUNTIME,'lifecycle/role/'+ident,inputs,rules,produce)
+    checks.extend(cached['checks'])
+    return cached['role']
+
+
+def _export_role(ident,checks):
     c=CHR(ROOT/f'Fight_Role/{ident}.CHR')
     d=DGP(ROOT/f'Fight_Role/{ident}.dgp')
     if c.parsed_end!=len(c.data):
@@ -323,6 +342,20 @@ def export_role(ident,checks):
 
 
 def export_effect(ident,checks):
+    tools=Path(__file__).parent
+    rules=recipe_hash([Path(__file__),tools/'source/dgp.py',tools/'export_skill_layers.py',
+                       tools/'export_combat_presentation.py'])
+    def produce():
+        local_checks=[]
+        effect=_export_effect(ident,local_checks)
+        return {'effect':effect,'checks':local_checks},[WEB/effect['sheet'].lstrip('/')]
+    cached=resource(RUNTIME,'lifecycle/effect/'+ident,
+        {'source':sha((ROOT/f'Fight_Role/Effect/{ident}.dgp').read_bytes())},rules,produce)
+    checks.extend(cached['checks'])
+    return cached['effect']
+
+
+def _export_effect(ident,checks):
     path=ROOT/f'Fight_Role/Effect/{ident}.dgp'
     d=DGP(path)
     audit=SourceAudit(d.data)

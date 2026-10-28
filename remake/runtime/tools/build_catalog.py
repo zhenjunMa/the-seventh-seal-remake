@@ -4,6 +4,7 @@ import hashlib
 import json
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+from incremental import write_json as incremental_json
 from content_registration import role_ids, definition
 
 RUNTIME = Path(__file__).resolve().parents[1]
@@ -49,7 +50,7 @@ def build():
                              scope=event['sample_initial_flags_scope'])
         events.append(event)
     event_count=len(events)
-    (WEB/'data/events.json').write_text(json.dumps(events,ensure_ascii=False,indent=2),encoding='utf-8')
+    incremental_json(WEB/'data/events.json', events)
     route=(WEB/'data/route_seed.json').exists()
     catalog=dict(schema='seventh-seal-runtime-catalog',version=1,title='第七封印 · 重制 0.8',
                  seed='data/opening_seed.json',maps=maps,roles=roles,runtime_content='data/runtime_content.json',story='data/story/index.json',
@@ -72,7 +73,7 @@ def build():
                  introduction='新游戏从神殿序章开始，王厅找凯并入队，回住处领取装备，离谷进入白木森林探索与战斗。',
                  boundaries='0.8：新游戏主线、双人森林战斗、物品使用、按人物／部位换装、住处休息、败北电影与主菜单、基础音乐音效和存读档已接入。后续剧情及原版镜头、轨迹、混色、字体的精确对照仍待完善。')
     catalog['scope'].update(item_use=True,equipment_menu=True,home_rest=True,forest_game_over=True,audio=True)
-    (WEB/'data/catalog.json').write_text(json.dumps(catalog,ensure_ascii=False,indent=2),encoding='utf-8')
+    incremental_json(WEB/'data/catalog.json', catalog)
     print(json.dumps({'maps':[m['id'] for m in maps],'ready_exits':ready,'source_backed_events':event_count},ensure_ascii=False))
 
 if __name__=='__main__':build()

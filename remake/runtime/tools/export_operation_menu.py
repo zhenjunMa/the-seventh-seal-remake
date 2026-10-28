@@ -14,6 +14,7 @@ from PIL import Image, ImageDraw, ImageChops, ImageOps
 RUNTIME = Path(__file__).resolve().parents[1]
 ROOT = RUNTIME.parents[1]
 sys.path.insert(0, str(ROOT / "remake/runtime/tools"))
+from incremental import save_png, write_json as incremental_json, resource, recipe_hash, cached_png
 from content_registration import role_ids
 from source.dgp import DGP, Reader, u16
 
@@ -66,6 +67,23 @@ def decode_rows(data, width, height, rgb555=False):
 
 
 def parse(path, export=True):
+    if not export:
+        return _parse(path, export=False)
+    path=Path(path)
+    cap=path.with_suffix('.CAP')
+    def produce():
+        menu=_parse(path, export=True)
+        web=RUNTIME/'web'
+        outputs=[web/menu['composed'],web/menu['sensor']['image']]
+        outputs.extend(web/image[key] for image in menu['images'] for key in ('image','rgb_image','alpha_image') if image[key])
+        if path.stem.lower()=='game001': outputs.append(OUT/'main.png')
+        return menu, outputs
+    return resource(RUNTIME,'menu/'+path.stem.lower(),
+        {'source':sha(path.read_bytes()),'cap':sha(cap.read_bytes()) if cap.is_file() else None},
+        recipe_hash([Path(__file__)]),produce)
+
+
+def _parse(path, export=True):
     data = path.read_bytes()
     if u32(data, 0) != 3 or u32(data, 4) != 1:
         raise ValueError('Only supplied MNU v3 variant is supported')
@@ -91,7 +109,7 @@ def parse(path, export=True):
     target = OUT / path.stem.lower()
     if export:
         target.mkdir(parents=True, exist_ok=True)
-        Image.frombytes('L', (width, height), sensor).save(target / 'sensor.png')
+        save_png(Image.frombytes('L', (width, height), sensor), target / 'sensor.png')
     images = []
     groups = []
     cursor = sensor_start + len(sensor)
@@ -133,12 +151,12 @@ def parse(path, export=True):
             if export:
                 if alpha_size:
                     rgb_path = target / f'image_{len(images):03d}_rgb.png'
-                    image.save(rgb_path)
+                    save_png(image, rgb_path)
                     alpha_path = target / f'image_{len(images):03d}_alpha.png'
                     transparency = Image.frombytes('L', (w,h), alpha)
-                    transparency.save(alpha_path)
+                    save_png(transparency, alpha_path)
                     image.putalpha(ImageChops.multiply(image.getchannel('A'),ImageOps.invert(transparency)))
-                image.save(opaque_path)
+                save_png(image, opaque_path)
             rec = dict(index=len(images), group=group['index'], frame=frame, name=name,
                 source_offset=frame_start, width=w, height=h, stream_bytes=size, alpha_bytes=alpha_size,
                 alpha_range=[min(alpha), max(alpha)] if alpha else None,
@@ -165,8 +183,8 @@ def parse(path, export=True):
                 composed.alpha_composite(Image.open(RUNTIME/'web'/widget['normal_images'][0]),
                     (widget['draw_point_raw']['x'],widget['draw_point_raw']['y']))
             composed = composed.crop((0,0,640,480))
-            composed.save(OUT/'main.png')
-        composed.save(composed_path)
+            save_png(composed, OUT/'main.png')
+        save_png(composed, composed_path)
     cap = path.with_suffix('.CAP')
     cap_refs = []
     if cap.exists():
@@ -252,7 +270,7 @@ def export_actor_menu_resources(result):
     board_frames = []
     for i in range(board.frame_count):
         dest = target/f'frame_{i:03}.png'
-        board.decode(i).save(dest)
+        cached_png(RUNTIME, dest, board.sha256, {'frame':i}, recipe_hash([Path(__file__),Path(__file__).parent/'source/dgp.py']), lambda: board.decode(i))
         board_frames.append(dest.relative_to(RUNTIME/'web').as_posix())
     result['actor_panel_source'] = dict(source=source.relative_to(ROOT).as_posix(),
         sha256=board.sha256,width=board.width,height=board.height,frames=board_frames,
@@ -284,7 +302,7 @@ def export_actor_menu_resources(result):
         frames = []
         for i in range(dgp.frame_count):
             dest = target/f'frame_{i:03}.png'
-            dgp.decode(i).save(dest)
+            cached_png(RUNTIME, dest, dgp.sha256, {'frame':i}, recipe_hash([Path(__file__),Path(__file__).parent/'source/dgp.py']), lambda: dgp.decode(i))
             frames.append(dest.relative_to(RUNTIME/'web').as_posix())
         action = dgp.actions[0]
         idle_interval = battle_roles[role]['idle']['interval_raw']
@@ -308,7 +326,7 @@ def export_actor_menu_resources(result):
     rect = [pic['left'],pic['top'],pic['right']+1,pic['bottom']+1]
     card = Image.open(RUNTIME/'web'/item_menu['images'][0]['image']).crop(rect)
     dest = OUT/'item_card_back.png'
-    card.save(dest)
+    save_png(card, dest)
     result['item_card_back'] = dict(image=dest.relative_to(RUNTIME/'web').as_posix(),
         width=card.width,height=card.height,source=item_menu['source'],source_frame=0,
         source_rect_exclusive=rect,confidence='source-pixel-and-reference-match',
@@ -320,7 +338,7 @@ def export_actor_menu_resources(result):
     icon_frames = []
     for index in range(icons.frame_count):
         dest = target/f'frame_{index:03}.png'
-        icons.decode(index).save(dest)
+        cached_png(RUNTIME, dest, icons.sha256, {'frame':index}, recipe_hash([Path(__file__),Path(__file__).parent/'source/dgp.py']), lambda: icons.decode(index))
         icon_frames.append(dest.relative_to(RUNTIME/'web').as_posix())
     result['item_row_icons'] = dict(frames=icon_frames,width=icons.width,height=icons.height,
         source=source.relative_to(ROOT).as_posix(),source_sha256=icons.sha256,
@@ -334,7 +352,7 @@ def export_actor_menu_resources(result):
             behavior='Use definition u32+0x1C as the ordinary frame. If the row is selected and its ordinary frame is 1..21, add 95. Grey rows retain the ordinary source frame. The same source bank is used for crystal/device icons.'))
     for name,index in [('ordinary',1),('active',96)]:
         dest = target/f'{name}.png'
-        icons.decode(index).save(dest)
+        cached_png(RUNTIME, dest, icons.sha256, {'frame':index}, recipe_hash([Path(__file__),Path(__file__).parent/'source/dgp.py']), lambda: icons.decode(index))
         result['item_row_icons'][name] = dict(image=dest.relative_to(RUNTIME/'web').as_posix(),
             width=icons.width,height=icons.height,source=source.relative_to(ROOT).as_posix(),
             source_sha256=icons.sha256,source_frame=index,
@@ -348,7 +366,7 @@ def export_actor_menu_resources(result):
         frames = []
         for index in range(dgp.frame_count):
             dest = target/f'frame_{index:03}.png'
-            dgp.decode(index).save(dest)
+            cached_png(RUNTIME, dest, dgp.sha256, {'frame':index}, recipe_hash([Path(__file__),Path(__file__).parent/'source/dgp.py']), lambda: dgp.decode(index))
             frames.append(dest.relative_to(RUNTIME/'web').as_posix())
         result[key] = dict(frames=frames,width=dgp.width,height=dgp.height,
             anchor=dgp.anchor_raw,source=source.relative_to(ROOT).as_posix(),
@@ -442,7 +460,7 @@ def main():
         binding_limit='Labels are read from the decoded frame pixels; native item-slot action binding is a separate requirement.')
     for i in range(slot_dgp.frame_count):
         dest = slot_dir/f'frame_{i:03}.png'
-        slot_dgp.decode(i).save(dest)
+        cached_png(RUNTIME, dest, slot_dgp.sha256, {'frame':i}, recipe_hash([Path(__file__),Path(__file__).parent/'source/dgp.py']), lambda: slot_dgp.decode(i))
         result['slot_icons']['frames'].append(dest.relative_to(RUNTIME/'web').as_posix())
     result['item_card_assets'] = []
     for name in card_names:
@@ -455,7 +473,7 @@ def main():
             secondary_verification=dgp.verify_secondary(),images=[])
         for i in range(dgp.frame_count):
             dest = card_dir/f'frame_{i:03}.png'
-            dgp.decode(i).save(dest)
+            cached_png(RUNTIME, dest, dgp.sha256, {'frame':i}, recipe_hash([Path(__file__),Path(__file__).parent/'source/dgp.py']), lambda: dgp.decode(i))
             record['images'].append(dest.relative_to(RUNTIME/'web').as_posix())
         result['item_card_assets'].append(record)
         print(f'{name}: {dgp.frame_count} source item-card frames')
@@ -473,16 +491,16 @@ def main():
     sheet = Image.new('RGB',(1700,((len(thumbs)+4)//5)*255))
     for i,tile in enumerate(thumbs):
         sheet.paste(tile,((i%5)*340,(i//5)*255))
-    sheet.save(RUNTIME/'evidence/operation_menu_contact_sheet.png')
+    save_png(sheet, RUNTIME/'evidence/operation_menu_contact_sheet.png')
     after = {str(p.relative_to(ROOT)):sha(p.read_bytes()) for p in original_inputs}
     result['original_inputs_unchanged'] = before == after
     dest = RUNTIME / 'web/data/operation_menu.json'
-    dest.write_text(json.dumps(result, ensure_ascii=False, indent=2),encoding='utf-8')
+    incremental_json(dest, result)
     output_hashes = {path.relative_to(ROOT).as_posix():sha(path.read_bytes())
         for path in sorted(OUT.rglob('*')) if path.is_file()}
     output_hashes[dest.relative_to(ROOT).as_posix()] = sha(dest.read_bytes())
     evidence = RUNTIME / 'evidence/operation_menu_resources.json'
-    evidence.write_text(json.dumps(dict(passed=before == after, source_hashes=before,
+    incremental_json(evidence, dict(passed=before == after, source_hashes=before,
         output_hashes=output_hashes,
         menus=len(result['menus']), images=sum(len(m['images']) for m in result['menus']),
         item_card_frames=sum(c['frame_count'] for c in result['item_card_assets']),
@@ -496,7 +514,7 @@ def main():
         mnu_bitmap_groups=sum(len(m['groups']) for m in result['menus']),
         mnu_blend_modes=sorted({g['blend_mode_raw_24'] for m in result['menus'] for g in m['groups']}),
         eof_verified=all(m['eof_verified'] for m in result['menus']),
-        limits=result['limitations']),ensure_ascii=False,indent=2),encoding='utf-8')
+        limits=result['limitations']))
     return 0 if before == after else 1
 
 

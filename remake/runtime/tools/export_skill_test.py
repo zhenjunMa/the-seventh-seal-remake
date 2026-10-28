@@ -17,6 +17,7 @@ WEB = RUNTIME/'web'
 EVIDENCE = RUNTIME/'evidence/skill_test_20261020'
 ASSETS = WEB/'assets/skill_test_stage'
 sys.path.insert(0, str(ROOT / "remake/runtime/tools"))
+from incremental import write_json as incremental_json
 from PIL import Image
 from source.combat_resources import CHR, GAME_SHA256
 from source.dgp import DGP
@@ -36,7 +37,7 @@ def save(path,value):
     if not path.resolve().is_relative_to(RUNTIME.resolve()):
         raise ValueError('Skill-test output must remain in runtime')
     path.parent.mkdir(parents=True,exist_ok=True)
-    path.write_text(json.dumps(value,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+    incremental_json(path, value)
 
 
 def proof(bundle,address,operation='procedure_pseudo_code'):

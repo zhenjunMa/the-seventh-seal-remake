@@ -15,6 +15,7 @@ RUNTIME = Path(__file__).resolve().parents[1]
 ROOT = RUNTIME.parents[1]
 WEB = RUNTIME / 'web'
 sys.path.insert(0, str(RUNTIME / 'tools'))
+from incremental import resource, recipe_hash, write_json as incremental_json
 from content_registration import stage_exports
 
 RECORD_START, RECORD_BYTES = 0x62c4, 0x47
@@ -139,16 +140,24 @@ def export():
             graphics, raw = row['graphics'], row['raw']
             frames = []
             for frame in range(graphics.frame_count):
-                image = graphics.decode(frame)
-                rgba, check = row['audit'].sparse(frame, False)
                 output = WEB / entry['asset_prefix'] / row['id'] / f'frame_{frame:03}.png'
-                output.parent.mkdir(parents=True, exist_ok=True)
-                asset = save_layer(image, output, rgba, check)
+                def produce_frame():
+                    image = graphics.decode(frame)
+                    rgba, check = row['audit'].sparse(frame, False)
+                    output.parent.mkdir(parents=True, exist_ok=True)
+                    asset = save_layer(image, output, rgba, check, web=WEB)
+                    return {'asset':asset,'check':check}, [output]
+                tools=Path(__file__).parent
+                cached=resource(RUNTIME,'stage/'+ident+'/'+row['id']+'/'+str(frame),
+                    {'source':graphics.sha256,'output':str(output.relative_to(WEB))},
+                    recipe_hash([Path(__file__),tools/'source/dgp.py',tools/'export_skill_layers.py']),produce_frame)
+                asset, check = cached['asset'], cached['check']
                 generated.append(output)
                 frames.append(dict(index=frame, **asset))
                 checks.append(dict(stage=ident, layer=row['id'], frame=frame, **check))
                 if frame == u32(raw, 0x1d):
-                    initial[row['id']] = image
+                    with Image.open(output) as opened:
+                        initial[row['id']] = opened.convert('RGBA')
             layers.append(dict(id=row['id'], role='sky' if index == 0 else 'ground' if index == 1 else 'scene_object',
                 source=dict(path=graphics.path.relative_to(ROOT).as_posix(), sha256=graphics.sha256,
                     width=graphics.width, height=graphics.height, frame_count=graphics.frame_count,
@@ -181,7 +190,7 @@ def export():
             limitations=['Recovered SCN v2/mode4 zero-camera layout only; dynamic camera, non-sky animation and exact native blending require additional handlers.'])
         output = WEB / entry['path']
         output.parent.mkdir(parents=True, exist_ok=True)
-        output.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n', 'utf-8')
+        incremental_json(output, value)
         generated.append(output)
     if before != {name: sha((ROOT / name).read_bytes()) for name in before}:
         raise ValueError('Original stage sources changed during export')
@@ -191,7 +200,7 @@ def export():
         original_game_execution_observed=False)
     evidence = RUNTIME / 'evidence'
     evidence.mkdir(parents=True, exist_ok=True)
-    (evidence / 'battle_stages_export.json').write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n', 'utf-8')
+    incremental_json(evidence / 'battle_stages_export.json', report)
     print(json.dumps(dict(passed=True, stages=list(selected), pixel_checks=len(checks))))
 
 

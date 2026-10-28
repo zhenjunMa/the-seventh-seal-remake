@@ -13,12 +13,14 @@ from pathlib import Path
 import re
 import shutil
 import struct
+import subprocess
 import sys
 import tempfile
 
 import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+from incremental import resource, recipe_hash, write_json as incremental_json, write_bytes
 from content_registration import program_ids
 from export_startup_media import sha, run, probe, video_frames, video_comparison
 
@@ -205,11 +207,7 @@ def export_sound(ffmpeg, ffprobe, source, output_stem, reuse=False):
 
 
 def write_json(path, data):
-    assert path.resolve().is_relative_to(RUNTIME.resolve())
-    path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_suffix(path.suffix + '.partial')
-    temporary.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', 'utf-8')
-    temporary.replace(path)
+    incremental_json(path, data)
 
 
 def main():
@@ -258,6 +256,7 @@ def main():
                          'Native wav keys retain literal script identity; MPEG carriers use a truthful mp3 output suffix.']}
     manifest = {'schema': 'seventh-seal-story-media', 'version': 1, 'videos': {}, 'sounds': {},
                 'export_evidence': REPORT.relative_to(ROOT).as_posix(), 'authority': report['authority']}
+    encoders = {tool: subprocess.run([getattr(args,tool), '-version'], check=True, capture_output=True, text=True).stdout.splitlines()[0] for tool in ('ffmpeg','ffprobe')}
     try:
         for kind in ('videos', 'sounds'):
             directory = WEB / ('assets/video/story' if kind == 'videos' else 'assets/audio/story')
@@ -265,27 +264,44 @@ def main():
             for key, row in selected[kind].items():
                 source = ROOT / row['source_path']
                 print(f'Preparing and fully verifying {kind}: {row["source_path"]}', flush=True)
-                if kind == 'videos':
-                    output = directory / (Path(key).stem + '.mp4')
-                    original = probe(args.ffprobe, source)
-                    audio = [stream for stream in original['streams'] if stream['codec_type'] == 'audio']
-                    if not (args.reuse_existing and output.exists()):
-                        command = [args.ffmpeg, '-v', 'error', '-xerror', '-y', '-i', str(source), '-map', '0:v:0',
-                                   '-c:v', 'libx264', '-preset', 'slow', '-crf', '12', '-profile:v', 'high', '-pix_fmt', 'yuv420p', '-fps_mode', 'passthrough']
-                        command += ['-map', '0:a:0', '-af', 'volume=0.5', '-c:a', 'aac', '-b:a', '384k'] if audio else ['-an']
-                        run([*command, '-movflags', '+faststart', str(output)])
-                    verification = verify_video(args.ffmpeg, args.ffprobe, source, output)
-                    stream = next(stream for stream in verification['source_probe']['streams'] if stream['codec_type'] == 'video')
-                    properties = {'mime': 'video/mp4', 'width': stream['width'], 'height': stream['height'],
-                                  'fps': str(Fraction(stream['r_frame_rate'])), 'frames': int(stream['nb_read_frames']),
-                                  'duration_seconds': float(stream['duration']), 'lossy_conversion': True,
-                                  'audio': None if not audio else {'playback_gain': AUDIO_PLAYBACK_GAIN,
-                                      'encode_gain': 1 / AUDIO_PLAYBACK_GAIN, 'codec': 'aac',
-                                      'sample_rate': int(audio[0]['sample_rate']), 'channels': audio[0]['channels']}}
-                else:
-                    output, verification = export_sound(args.ffmpeg, args.ffprobe, source, directory / Path(key).stem, args.reuse_existing)
-                    properties = {'mime': verification['mime'], 'sample_rate': int(verification['source_probe']['streams'][0]['sample_rate']),
-                                  'channels': verification['source_probe']['streams'][0]['channels']}
+                def produce_media():
+                    with tempfile.TemporaryDirectory(prefix='.encoding-',dir=directory) as temporary:
+                        work = Path(temporary)
+                        if args.reuse_existing:
+                            for suffix in ('.mp4','.mp3','.wav'):
+                                old = directory/(Path(key).stem+suffix)
+                                if old.is_file(): shutil.copyfile(old,work/old.name)
+                        if kind == 'videos':
+                            output = work / (Path(key).stem + '.mp4')
+                            original = probe(args.ffprobe, source)
+                            audio = [stream for stream in original['streams'] if stream['codec_type'] == 'audio']
+                            if not (args.reuse_existing and output.exists()):
+                                command = [args.ffmpeg, '-v', 'error', '-xerror', '-y', '-i', str(source), '-map', '0:v:0',
+                                           '-c:v', 'libx264', '-preset', 'slow', '-crf', '12', '-profile:v', 'high', '-pix_fmt', 'yuv420p', '-fps_mode', 'passthrough']
+                                command += ['-map', '0:a:0', '-af', 'volume=0.5', '-c:a', 'aac', '-b:a', '384k'] if audio else ['-an']
+                                run([*command, '-movflags', '+faststart', str(output)])
+                            verification = verify_video(args.ffmpeg, args.ffprobe, source, output)
+                            stream = next(stream for stream in verification['source_probe']['streams'] if stream['codec_type'] == 'video')
+                            properties = {'mime': 'video/mp4', 'width': stream['width'], 'height': stream['height'],
+                                          'fps': str(Fraction(stream['r_frame_rate'])), 'frames': int(stream['nb_read_frames']),
+                                          'duration_seconds': float(stream['duration']), 'lossy_conversion': True,
+                                          'audio': None if not audio else {'playback_gain': AUDIO_PLAYBACK_GAIN,
+                                              'encode_gain': 1 / AUDIO_PLAYBACK_GAIN, 'codec': 'aac',
+                                              'sample_rate': int(audio[0]['sample_rate']), 'channels': audio[0]['channels']}}
+                        else:
+                            output, verification = export_sound(args.ffmpeg, args.ffprobe, source, work / Path(key).stem, args.reuse_existing)
+                            properties = {'mime': verification['mime'], 'sample_rate': int(verification['source_probe']['streams'][0]['sample_rate']),
+                                          'channels': verification['source_probe']['streams'][0]['channels']}
+                        published = directory/output.name
+                        write_bytes(published,output.read_bytes())
+                        if 'filename' in verification.get('output_probe',{}).get('format',{}):
+                            verification['output_probe']['format']['filename'] = str(published)
+                        output = published
+                    return {'output':output.relative_to(WEB).as_posix(),'verification':verification,'properties':properties}, [output]
+                cached = resource(RUNTIME,'story-media/'+kind+'/'+key,
+                    {'source':source_hashes[row['source_path']],'encoding':report['audio_encoding'],'encoders':encoders},
+                    recipe_hash([Path(__file__),Path(__file__).with_name('export_startup_media.py')]),produce_media)
+                output, verification, properties = WEB/cached['output'], cached['verification'], cached['properties']
                 source_reference = {'path': row['source_path'], 'sha256': source_hashes[row['source_path']], 'bytes': source.stat().st_size}
                 output_reference = {'path': '/' + output.relative_to(WEB).as_posix(), 'sha256': sha(output), 'bytes': output.stat().st_size}
                 manifest[kind][key] = {**output_reference, **properties, 'source': source_reference, 'referenced_by': row['referenced_by']}

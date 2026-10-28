@@ -1,6 +1,6 @@
 # 第七封印 · 构建、导出与验证工具
 
-更新：2026-10-24；所有命令从仓库根目录执行。正文中的web/、tools/、evidence/以runtime为基准；remake/开头的路径以仓库根目录为基准。示例使用python3；Windows可换为指向Python 3的python或py -3。
+更新：2026-10-28；所有命令从仓库根目录执行。正文中的web/、tools/、evidence/以runtime为基准；remake/开头的路径以仓库根目录为基准。示例使用python3；Windows可换为指向Python 3的python或py -3。
 
 ## 目录
 
@@ -203,7 +203,27 @@ python3 -B remake/runtime/tools/export_map_shadows.py
 
 不加`--run`只列计划。`--validate`检查工具、既有来源台账与产物，记录当前指纹到`evidence/export_inventory.json`；不执行导出，也不等于原输入已经与历史来源逐项一致。
 
-`--run`按依赖执行，命中缓存仍核对产物存在及SHA。缺失、手改或输入变化会触发重建；每个成功步骤即时保存，失败可续跑。
+`--run`按依赖执行，命中缓存仍核对产物存在及SHA。缺失、手改或输入变化会触发对应任务；每个成功步骤即时保存，失败可续跑。调度依赖仅决定顺序，缓存按声明的实际输入与导出器的本地导入链计算，不再把全部工具及全部core模块纳入每个步骤。地图／玩家／舞台等登记按对应字段计算指纹，新增地图不会仅因共用runtime_content.json使玩家素材失效。
+
+资源缓存位于`evidence/resource_cache`：角色动作／图层帧、技能特效、地图／地图人物／物件帧、阴影、生命周期、道具表现、舞台帧、MNU页面及菜单／对白源帧、音频和剧情媒体各自登记来源／配方指纹、描述与输出SHA。命中后跳过解码、转码与原像素重审，复用首次成功的验证记录；源或规则变化才重新生成，缺失／损坏产物按该资源修复。GDI字体仍按所需字符集生成；所有已接入的PNG／JSON写入均保留内容相同的旧文件及修改时间。总清单按当前登记合并，生成结果不变时不写盘。
+
+旧步骤缓存首次切换为v2时需要重新核验并登记资源缓存；这次初始化可能仍有解码／验证耗时，但相同PNG和清单保持原字节与修改时间。后续重复构建直接复用。不要仅凭文件存在接纳未核验产物，也不要删除现有缓存来开始日常构建。
+
+只读查看选定依赖链的缓存状态：
+
+```console
+python3 -B remake/runtime/tools/build_runtime.py --target content --explain
+```
+
+原因显示`no-cache`／`inputs-changed`／`outputs-changed`／`cached`；实际运行另记资源的`new-resource`／`source-or-recipe-changed`／`missing-or-modified-output`及生成／复用数量。构建入口使用系统文件锁，避免两个统一构建同时写同一份清单；进程退出后自动释放。
+
+战斗图集默认追加：校验旧页面SHA并复用旧图块坐标，新像素只生成新增页面；新角色共享旧特效时复用旧页，不因使用者集合变化移动旧图块。首次从既有图集建立图块索引会读取旧页面；索引命中后不再逐页解码。缺失／损坏页面从保留源图与原坐标恢复并核对原SHA。旧页面及暂时无引用的文件不会自动删除；需要集中整理时显式执行：
+
+```console
+python3 -B remake/runtime/tools/export_battle_packs.py --repack
+```
+
+追加会保留一些空余空间和旧页，`--repack`才重新排版；日常接入不使用。新／变化图像逐像素重构核对，`--force`另对全部源图执行重构检查，同时保留页面布局。
 
 `--force`与`--run`一起强制重建，仍保留当前parameters。配置`--reset`才恢复原值，正常接入不使用。
 
@@ -215,7 +235,7 @@ python3 -B remake/runtime/tools/export_map_shadows.py
 
 `--preflight`独立使用，检查已有源表的接入能力，不导出、不写报告、不核验原媒体；新地图没有源表时先构建chapter-story。显式入口发现未知能力返回非零退出码；旧隐式NPC仅提示，显式npcs进入阻断检查。
 
-只有明确需要整体重建时才用`--target` all `--run`，日常文档维护无需重导素材。
+`--target all --run`选择所有目标，仍按缓存复用；`--force`才强制执行。日常文档维护无需重导素材。
 
 ## 登记驱动的生产
 
@@ -263,7 +283,7 @@ content目标贯通玩家、怪物、地图、剧情、配置、资源图集、�
 
 旧台账中的已迁移源码、清单、素材和证据路径按`layout_migration.json`解析到正式目录；原记录及SHA保持不变，迁移映射也参与构建签名。
 
-声明依赖与签名由`build_runtime.py`维护，状态写`evidence/build_state.json`；每次运行在`evidence/builds/`<UTC时间-唯一ID>/记录`run.json`和实际步骤日志。
+声明依赖与签名由`build_runtime.py`维护，状态写`evidence/build_state.json`；每次运行在`evidence/builds/`<UTC时间-唯一ID>/记录`run.json`、实际步骤日志及`步骤.resources.json`资源明细。状态、单资源缓存和运行清单以临时文件原子替换；失败不会登记为已完成资源。
 
 历史来源清单位于`web/data/source`，保留原字节与历史引用；当前正式清单使用/assets路径。迁移映射在`layout_migration.json`，旧原型证据迁到`evidence/source`。
 

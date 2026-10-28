@@ -14,6 +14,7 @@ WEB = RUNTIME/'web'
 OUT = WEB/'assets/prologue'
 REPORT = RUNTIME/'evidence/prologue_routes_20261020'
 sys.path.insert(0,str(ROOT/'remake/runtime/tools'))
+from incremental import save_png, write_json as incremental_json
 sys.path.insert(0,str(Path(__file__).resolve().parent))
 from source.dgp import DGP
 import export_menu_font_gdi as gdi
@@ -26,7 +27,7 @@ def sha(path):
 
 def write(path,value):
     path.parent.mkdir(parents=True,exist_ok=True)
-    path.write_text(json.dumps(value,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+    incremental_json(path, value)
 
 
 def main():
@@ -38,7 +39,7 @@ def main():
     for key,name in [('ends','SysMsessageA'),('lines','SysMsessageB'),('wait','MessageWait1')]:
         path=ROOT/f'SYSTEM/{name}.dgp';d=DGP(path);frames=[]
         for i in range(d.frame_count):
-            target=OUT/f'{key}_{i:02}.png';d.decode(i).save(target)
+            target=OUT/f'{key}_{i:02}.png';save_png(d.decode(i), target)
             frames.append({'image':'/'+target.relative_to(WEB).as_posix(),'sha256':sha(target)})
         resources[key]={'source':path.relative_to(ROOT).as_posix(),'source_sha256':d.sha256,
             'width':d.width,'height':d.height,'frames':frames,
@@ -69,7 +70,7 @@ def main():
     loading_dir=WEB/'assets/prologue_loading';loading_dir.mkdir(parents=True,exist_ok=True)
     progress=DGP(ROOT/'SYSTEM/Progress01.dgp');backgrounds=[]
     for i in range(progress.frame_count):
-        target=loading_dir/f'background_{i:02}.png';progress.decode(i).save(target)
+        target=loading_dir/f'background_{i:02}.png';save_png(progress.decode(i), target)
         backgrounds.append({'image':'/'+target.relative_to(WEB).as_posix(),'sha256':sha(target)})
     old_ui_out=ui.OUT
     try:

@@ -19,6 +19,7 @@ RUNTIME = Path(__file__).resolve().parents[1]
 ROOT = RUNTIME.parents[1]
 WEB = RUNTIME / 'web'
 sys.path.insert(0, str(RUNTIME / 'tools'))
+from incremental import resource, recipe_hash, write_json, write_bytes
 GAME_SHA = 'fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18'
 from source.combat_resources import CHR
 
@@ -26,8 +27,7 @@ from source.combat_resources import CHR
 def sha(raw): return hashlib.sha256(raw).hexdigest()
 def save(path, value):
     assert path.resolve().is_relative_to(RUNTIME.resolve())
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n', 'utf-8')
+    write_json(path, value)
 
 
 def original_text(raw, offset, size):
@@ -49,6 +49,8 @@ def main():
     parser = argparse.ArgumentParser(); parser.add_argument('--ffmpeg', default=shutil.which('ffmpeg'))
     parser.add_argument('--ffprobe', default=shutil.which('ffprobe')); args = parser.parse_args()
     assert args.ffmpeg and args.ffprobe, 'Existing ffmpeg and ffprobe are required; no dependency installation is performed'
+    encoders = {tool: subprocess.run([getattr(args,tool), '-version'], check=True,
+                capture_output=True, text=True).stdout.splitlines()[0] for tool in ('ffmpeg','ffprobe')}
     sources = {}
     def read(path):
         p = ROOT / path; raw = p.read_bytes(); sources[path] = sha(raw); return raw
@@ -89,30 +91,40 @@ def main():
         if not p.is_file():
             if source not in missing: missing.append(source)
             return None
-        raw = read(source); actual = media_probe(p)
-        is_riff = raw.startswith(b'RIFF') and raw[8:12] == b'WAVE'
-        is_mpeg = raw.startswith(b'ID3') or len(raw)>1 and raw[0]==0xff and raw[1]&0xe0==0xe0
-        assert is_riff or is_mpeg, f'Unrecognized original encoding {source}'
-        if is_mpeg:
-            assert actual['codec'] == 'mp3'
-            extension, mime = '.mp3', 'audio/mpeg'
-        else:
-            assert actual['codec'].startswith('pcm_')
-            extension, mime = '.wav', 'audio/wav'
-        out = WEB/'assets/audio'/Path(source).relative_to('sound').with_suffix(extension)
-        out.parent.mkdir(parents=True, exist_ok=True)
-        if is_mpeg: out.write_bytes(raw)
-        else:
-            subprocess.run([args.ffmpeg, '-v', 'error', '-y', '-i', str(p), '-map', '0:a:0', '-vn', '-c:a', 'pcm_s16le', str(out)], check=True)
-        decoded_source, decoded_output = pcm_digest(p), pcm_digest(out)
-        assert decoded_source == decoded_output, f'Decoded audio changed: {source}'
-        if is_mpeg: assert out.read_bytes() == raw
-        exported_probe = media_probe(out)
-        clips[source] = dict(path='/'+out.relative_to(WEB).as_posix(), mime=mime, sha256=sha(out.read_bytes()),
-            source=dict(path=source, sha256=sha(raw), bytes=len(raw), header_hex=raw[:16].hex(), declared_extension=p.suffix,
-                        observed_encoding='MPEG Layer III' if is_mpeg else 'RIFF/WAVE PCM'),
-            audio=exported_probe, export=dict(method='byte-preserving MPEG suffix correction' if is_mpeg else 'canonical PCM RIFF rewrap',
-                                             decoded_pcm_md5=decoded_output, decoded_audio_unchanged=True))
+        raw = read(source)
+        def produce_clip():
+            actual = media_probe(p)
+            is_riff = raw.startswith(b'RIFF') and raw[8:12] == b'WAVE'
+            is_mpeg = raw.startswith(b'ID3') or len(raw)>1 and raw[0]==0xff and raw[1]&0xe0==0xe0
+            assert is_riff or is_mpeg, f'Unrecognized original encoding {source}'
+            if is_mpeg:
+                assert actual['codec'] == 'mp3'
+                extension, mime = '.mp3', 'audio/mpeg'
+            else:
+                assert actual['codec'].startswith('pcm_')
+                extension, mime = '.wav', 'audio/wav'
+            out = WEB/'assets/audio'/Path(source).relative_to('sound').with_suffix(extension)
+            out.parent.mkdir(parents=True, exist_ok=True)
+            if is_mpeg: write_bytes(out, raw)
+            else:
+                temporary = out.with_name(out.stem + '.encoding.wav')
+                try:
+                    subprocess.run([args.ffmpeg, '-v', 'error', '-y', '-i', str(p), '-map', '0:a:0', '-vn', '-c:a', 'pcm_s16le', str(temporary)], check=True)
+                    write_bytes(out, temporary.read_bytes())
+                finally:
+                    temporary.unlink(missing_ok=True)
+            decoded_source, decoded_output = pcm_digest(p), pcm_digest(out)
+            assert decoded_source == decoded_output, f'Decoded audio changed: {source}'
+            if is_mpeg: assert out.read_bytes() == raw
+            exported_probe = media_probe(out)
+            descriptor = dict(path='/'+out.relative_to(WEB).as_posix(), mime=mime, sha256=sha(out.read_bytes()),
+                source=dict(path=source, sha256=sha(raw), bytes=len(raw), header_hex=raw[:16].hex(), declared_extension=p.suffix,
+                            observed_encoding='MPEG Layer III' if is_mpeg else 'RIFF/WAVE PCM'),
+                audio=exported_probe, export=dict(method='byte-preserving MPEG suffix correction' if is_mpeg else 'canonical PCM RIFF rewrap',
+                                                 decoded_pcm_md5=decoded_output, decoded_audio_unchanged=True))
+            return descriptor, [out]
+        clips[source] = resource(RUNTIME, 'audio/'+source, {'source':sha(raw),'encoders':encoders},
+            recipe_hash([Path(__file__)]), produce_clip)
         return source
     maps = {}
     from content_registration import map_ids, stage_exports
