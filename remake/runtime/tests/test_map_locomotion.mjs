@@ -66,14 +66,15 @@ test('diagonal travel has no speed boost and animation measures accepted per-axi
   assert.equal(at.direction,0);assert.equal(diagonal.state.view.frame,1);
 });
 
-test('partial wall contact counts accepted distance only and sustained blockage cannot keep walking',()=>{
+test('wall contact stops travel but preserves slow stepping until release, with phase retained on departure',()=>{
   const f=fixture({wall:true});f.state.keys.add('ArrowRight');f.step(80);
   assert.ok(f.state.world.location.x<400);assert.equal(f.state.view.action,1);assert.equal(f.state.view.frame,0);
-  f.step(80);assert.equal(f.state.view.action,0);
-  const x=f.state.world.location.x;for(let n=0;n<60;n++)f.step(1000/60);
-  assert.equal(f.state.world.location.x,x);assert.equal(f.state.view.action,0);
+  f.step(80);assert.equal(f.state.view.action,1);
+  const x=f.state.world.location.x,frames=new Set();for(let n=0;n<60;n++){f.step(1000/60);frames.add(f.state.view.frame);}
+  assert.equal(f.state.world.location.x,x);assert.equal(f.state.view.action,1);assert.ok(frames.size>1);
   f.state.keys.clear();f.state.keys.add('ArrowLeft');f.step(16);
-  assert.equal(f.state.view.action,1);assert.equal(f.state.view.frame,0);assert.ok(f.state.world.location.x<x);
+  assert.equal(f.state.view.action,1);assert.ok(f.state.world.location.x<x);
+  f.state.keys.clear();f.step(16);assert.equal(f.state.view.action,0);
 });
 
 test('controller slides with actual heading and stable gait at 30/60/120Hz without wall oscillation',()=>{
@@ -94,25 +95,37 @@ test('visible NPC feet block the player; hidden actors do not',()=>{
     const f=fixture();f.state.scenes.current.npcs.push({id:'guard',x:320,y:300,hidden,event:{conditions:[]}});
     f.state.keys.add('ArrowRight');for(let i=0;i<20;i++)f.step(16);
     assert.equal(f.state.world.location.x<312,!hidden);
-    if(!hidden){assert.equal(f.state.view.action,0);assert.equal(f.state.nearest.id,'guard');}
+    if(!hidden){assert.equal(f.state.view.action,1);assert.equal(f.state.nearest.id,'guard');}
   }
 });
 
 test('subpixel travel into a wall keeps a valid heading when the direction filter removes both components',()=>{
   const f=fixture({wall:true});f.state.world.value.location={...f.state.world.location,x:395.99997,direction:3};
   f.state.keys.add('ArrowRight');f.step(16);
-  assert.ok(f.state.world.location.x>395.99997);assert.equal(f.state.world.location.direction,3);
-  f.step(16);assert.equal(f.state.world.location.direction,1);assert.equal(f.state.view.action,0);
+  assert.ok(f.state.world.location.x>395.99997);assert.equal(f.state.world.location.direction,1);
+  f.step(16);assert.equal(f.state.world.location.direction,1);assert.equal(f.state.view.action,1);
 });
 
-test('one wall impact moves only the rendered body and expires while held; release and phase change clear it',()=>{
+test('wall impact moves only the body, finishes after release and clears on a phase change',()=>{
   const f=fixture({wall:true});f.state.keys=new Set(['ArrowRight','Shift']);
   f.step(40);const at={...f.state.world.location};f.step(40);
   assert.deepEqual(f.state.world.location,at);assert.ok(f.state.view.collisionFeedback.x<0);
+  assert.equal(f.state.view.action,1,'running becomes walking only while fully blocked');
+  f.state.keys.clear();f.step(16);assert.deepEqual(f.state.world.location,at);
+  assert.equal(f.state.view.action,0);assert.ok(f.state.view.collisionFeedback.x<0,'release does not snap the body back');
   for(let i=0;i<30;i++)f.step(16);
   assert.deepEqual(f.state.world.location,at);assert.ok(Math.abs(f.state.view.collisionFeedback.x)<1e-8);
   f.state.keys.clear();f.step(16);assert.ok(Math.abs(f.state.view.collisionFeedback.x)<1e-8);
   f.state.scenes.phase='event';f.step(16);assert.equal(f.state.view.collisionFeedback,null);
+});
+
+test('NPC collision and interaction distance follow its displayed feet rather than a leading source coordinate',()=>{
+  const f=fixture(),npc={id:'guard',x:340,y:300,motion:{x:320,y:300,direction:5},event:{conditions:[]}};
+  f.state.scenes.current.npcs.push(npc);f.state.keys.add('ArrowRight');
+  for(let i=0;i<20;i++)f.step(16);
+  assert.ok(f.state.world.location.x<312&&f.state.world.location.x>311.99);
+  assert.equal(f.state.nearest.x,320);assert.ok(Math.abs(f.state.nearest.distance-8)<1e-4);
+  assert.equal(npc.x,340);
 });
 
 test('release stops immediately; pause/role/scene resets never replay accumulated travel',()=>{

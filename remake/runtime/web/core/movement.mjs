@@ -30,6 +30,21 @@ function sweepBox(x,y,dx,dy,box,footprint){
     ny:enterY>=enterX-EPS?-Math.sign(dy):0,hit:box.hit};
 }
 
+// The displayed ground position is also the continuous actor collider. Native
+// NPC route coordinates can lead this position by one or more source visits.
+export function mapActorPosition(actor){return actor.motion?.x===undefined?actor:actor.motion;}
+
+// Preserve an NPC's chosen route vector: stop at contact rather than sliding
+// it onto a new path. Terrain and source occupancy remain the route planner's
+// responsibility; this sweep also works for actors whose source route flies.
+export function moveActorAgainst(x,y,dx,dy,obstacles,footprint=MAP_FOOTPRINT){
+  let first=1,hit=null;
+  for(const box of obstacles){const contact=sweepBox(x,y,dx,dy,box,footprint);
+    if(contact&&contact.t<=first){first=contact.t;hit=contact;}}
+  const length=Math.hypot(dx,dy),ratio=hit?Math.max(0,first-SKIN/(length||1)):1;
+  return {x:x+dx*ratio,y:y+dy*ratio,blocked:Boolean(hit),hit};
+}
+
 // Original 48EB70 admits a terrain0 diagonal destination without testing its
 // two side cells. A rectangular footprint would disconnect those shipped
 // passages. Bevel only the two terrain1 corners at such a contact; a separate
@@ -165,9 +180,10 @@ export class MovementMap {
   }
   // Visible actors use the same foot extent as the player. Callers filter
   // story visibility; image dimensions and decorative map objects are ignored.
-  actorObstacles(actors){return actors.map(actor=>({left:actor.x-MAP_FOOTPRINT.halfWidth,
-    right:actor.x+MAP_FOOTPRINT.halfWidth,top:actor.y-MAP_FOOTPRINT.halfHeight,
-    bottom:actor.y+MAP_FOOTPRINT.halfHeight,hit:{blocked:true,reason:'actor',id:actor.id}}));}
+  actorObstacles(actors){return actors.map(actor=>{const at=mapActorPosition(actor);
+    return {left:at.x-MAP_FOOTPRINT.halfWidth,right:at.x+MAP_FOOTPRINT.halfWidth,
+      top:at.y-MAP_FOOTPRINT.halfHeight,bottom:at.y+MAP_FOOTPRINT.halfHeight,
+      hit:{blocked:true,reason:'actor',id:actor.id}};});}
   // Traverse every grid boundary on the segment. Endpoint-only checks tunnel
   // through thin walls during running or a slow frame.
   move(x, y, dx, dy) {

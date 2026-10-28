@@ -3,6 +3,7 @@
 // goals, paths and RNG belong to this scene, never to WorldStore or encounters.
 import {createNativeRng} from './combat_rules.mjs';
 import {DistanceGait,mapStepGeometry,mapMotionProfile} from './map_locomotion.mjs';
+import {moveActorAgainst} from './movement.mjs';
 
 const EXPAND=[[-1,0],[-1,-1],[-1,1],[0,-1],[0,1],[1,0],[1,-1],[1,1]];
 const BACKTRACK=[[0,-1],[0,1],[-1,0],[1,0],[-1,-1],[-1,1],[1,-1],[1,1]];
@@ -90,7 +91,8 @@ export class MapNpcRuntime {
       if(!idle)throw new Error('人物缺少源初始化待机动作');
       const a={npc,source,role,home:{x:npc.x,y:npc.y},goal:{x:npc.x,y:npc.y},path:[],step:null,
         wait:source.wait,waitLatch:source.waitLatch,logicalFrame:0,action:idle.index,interval:80,
-        elapsed:0,animationCountdown:0,visual:{x:npc.x,y:npc.y,direction:npc.direction},gait:new DistanceGait()};
+        elapsed:0,animationCountdown:0,contactBlocked:false,
+        visual:{x:npc.x,y:npc.y,direction:npc.direction},gait:new DistanceGait()};
       this.actors.set(npc.id,a);this.project(a);
     }
   }
@@ -101,22 +103,26 @@ export class MapNpcRuntime {
     if(a.action!==action.index){a.action=action.index;a.logicalFrame=0;}
     return action;
   }
-  project(a,delta=0){
+  project(a,delta=0,player=null){
     const action=a.role.actions.find(action=>action.index===a.action),count=this.logicalCount(action);
     a.logicalFrame=((a.logicalFrame%count)+count)%count;
     const walk=this.action(a,1),motion=walk?mapMotionProfile(walk,this.movement,'',a.source.speedBias):null;
     const dx=a.npc.x-a.visual.x,dy=a.npc.y-a.visual.y;
     // Smooth only accepted logical travel, at the source per-axis speed.
-    // Collision, occupancy, RNG and scene handoff keep the logical position.
+    // Source occupancy/RNG retain the logical route. The accepted visual
+    // ground path is swept against the player and used for both colliders.
     const travel=Math.max(Math.abs(dx),Math.abs(dy));
     const amount=this.held.has(a.npc.id)?0:Math.min(1,travel&&motion?motion.speed*delta/1000/travel:0);
-    const movedX=dx*amount,movedY=dy*amount;
-    a.visual.x+=movedX;a.visual.y+=movedY;
+    const accepted=moveActorAgainst(a.visual.x,a.visual.y,dx*amount,dy*amount,
+      player?this.scene.movement.actorObstacles([player]):[]);
+    const movedX=accepted.x-a.visual.x,movedY=accepted.y-a.visual.y;
+    a.visual.x=accepted.x;a.visual.y=accepted.y;
+    if(delta>0)a.contactBlocked=accepted.blocked;
     if(movedX||movedY)a.visual.direction=direction(movedX,movedY);
-    const walking=walk&&!this.held.has(a.npc.id)&&(movedX||movedY||a.action===walk.index);
-    const display=walking?walk:action;
+    const walking=walk&&!this.held.has(a.npc.id)&&(movedX||movedY||a.action===walk.index&&!a.contactBlocked);
+    const display=walking?walk:a.contactBlocked?this.action(a,0):action;
     const frame=walking?a.gait.advance(walk,{dx:movedX,dy:movedY,stride:motion.stride})
-      :action.uses_sequence?action.sequence_raw[a.logicalFrame]:a.logicalFrame;
+      :display.uses_sequence?display.sequence_raw[a.logicalFrame%this.logicalCount(display)]:a.logicalFrame%this.logicalCount(display);
     if(!walking){a.gait.reset();a.visual.direction=a.npc.direction;}
     a.npc.motion={role:a.role,action:display.index,frame,...a.visual};
   }
@@ -191,13 +197,15 @@ export class MapNpcRuntime {
     if(paused||delta>250){for(const a of this.actors.values())a.elapsed=0;return;}
     for(const a of this.actors.values()){
       if(!visible(a.npc)){a.elapsed=0;continue;}
-      a.elapsed+=delta;
+      // A body waiting at contact must not accumulate a route backlog. Keep
+      // its current goal/step and retry the continuous path every display frame.
+      a.elapsed=a.contactBlocked?0:a.elapsed+delta;
       // Run the native actor clock independently of the display RAF rate.
       // Long suspension was discarded above; bounded normal frame deltas can
       // contain multiple 10ms visits without changing source step sizes.
       let visits=0;
       while(a.elapsed>=a.interval&&visits++<32){a.elapsed-=a.interval;this.tick(a,player);}
-      this.project(a,delta);
+      this.project(a,delta,player);
     }
   }
   hold(id){
@@ -211,7 +219,7 @@ export class MapNpcRuntime {
     this.rng=createNativeRng(other.rng.state);
     for(const [id,a] of this.actors){const previous=other.actors.get(id);if(!previous)continue;
       for(const key of ['home','goal','path','step'])a[key]=structuredClone(previous[key]);
-      for(const key of ['wait','waitLatch','logicalFrame','action','interval','elapsed','animationCountdown'])a[key]=previous[key];
+      for(const key of ['wait','waitLatch','logicalFrame','action','interval','elapsed','animationCountdown','contactBlocked'])a[key]=previous[key];
       for(const key of ['x','y','direction','hidden'])a.npc[key]=previous.npc[key];
       a.visual={...previous.visual};Object.assign(a.gait,previous.gait);this.project(a);
     }
@@ -220,7 +228,7 @@ export class MapNpcRuntime {
     for(const a of this.actors.values()){
       const actor=actors.get(a.source.slot);if(!actor)continue;
       a.npc.x=actor.x;a.npc.y=actor.y;a.npc.direction=actor.direction;a.npc.hidden=!actor.visible;
-      a.goal={x:actor.x,y:actor.y};a.path=[];a.step=null;a.elapsed=0;
+      a.goal={x:actor.x,y:actor.y};a.path=[];a.step=null;a.elapsed=0;a.contactBlocked=false;
       a.action=actor.action;
       const action=a.role.actions.find(action=>action.index===a.action);
       a.logicalFrame=action?.uses_sequence?Math.max(0,action.sequence_raw.indexOf(actor.frame)):actor.frame;

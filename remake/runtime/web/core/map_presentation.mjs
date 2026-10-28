@@ -1,3 +1,5 @@
+import {mapActorPosition} from './movement.mjs';
+
 // Shared source geometry for the live Phaser scene and read-only save previews.
 // Producing entries never advances animation, RNG, or persistent world state.
 export function mapPresentation({scene,world,role,action,view,
@@ -14,7 +16,7 @@ export function mapPresentation({scene,world,role,action,view,
     });
   for(const [npcIndex,npc]of (opening?[]:scene.npcs).entries()){
     const motion=npc.motion,actorRole=motion?.role,actorAction=actorRole?.actions.find(a=>a.index===motion.action);
-    const position=motion?.x===undefined?npc:motion;
+    const position=mapActorPosition(npc);
     const bitmap=actorAction?.bitmap??npc.bitmap;
     if(!bitmap||npc.hidden||!(npc.event?.conditions??[]).every(c=>world.flags[c.index]===c.value))continue;
     const resource=actorAction?.bitmap?{frame_width:actorRole.frame_width,frame_height:actorRole.frame_height,

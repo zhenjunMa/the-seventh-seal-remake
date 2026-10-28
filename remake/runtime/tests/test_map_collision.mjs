@@ -211,10 +211,14 @@ test('continuous small steps traverse the whole forest east route and all six in
   }
 });
 
-test('collision recoil triggers once per contact, resets on release, and has no movement of its own',()=>{
+test('collision recoil triggers once per normal, blends new walls, and finishes after release',()=>{
   const feedback=new CollisionFeedback(),contact={contacts:[{nx:-1,ny:0}]};
+  assert.ok(feedback.advance(contact,{dx:1,running:true,elapsedMs:16}).x<0,'short taps get an immediate response');
+  const peak=feedback.advance(contact,{dx:1,running:true,elapsedMs:64});near(peak.x,-2.5);
+  assert.ok(feedback.advance(null,{elapsedMs:16}).x<0,'release lets the envelope finish');
   feedback.advance(contact,{dx:1,running:true,elapsedMs:16});
-  const peak=feedback.advance(contact,{dx:1,running:true,elapsedMs:80});near(peak.x,-2.5);
+  const corner=feedback.advance({contacts:[{nx:-1,ny:0},{nx:0,ny:-1}]},{dx:1,dy:1,running:true,elapsedMs:16});
+  assert.ok(corner.x<0&&corner.y<0,'a newly blocked direction responds while the first contact is held');
   for(let i=0;i<120;i++)feedback.advance(contact,{dx:1,running:true,elapsedMs:16});
   near(feedback.advance(contact,{dx:1,running:true,elapsedMs:16}).x,0);
   feedback.advance(null,{elapsedMs:16});feedback.advance(contact,{dx:1,running:true,elapsedMs:16});
