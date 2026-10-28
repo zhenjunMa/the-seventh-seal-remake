@@ -373,6 +373,7 @@ export class BattleView {
     this.layers = clone(layers);
     this.alternateLayers = alternateLayers;
     this.lifecyclePairs=new Map([...alternateLayers.values()].flatMap(bank=>bank.frames.map(pair=>[`${bank.role_id}:${pair.source_frame}`,pair])));
+    this.groundFootprints=new Map();
     this.lifecycleBounds=new Map();
     this.lifecycle=lifecycleMeta?new BattleLifecyclePlayback(lifecycleMeta,{appearanceBounds:(roleId,pose)=>this._appearanceBounds(roleId,pose),nativeBridge:actorId=>this._nativeBridge(actorId)}):null;
     this.assetDescriptors=assets;
@@ -640,7 +641,9 @@ export class BattleView {
           for(const hit of hits){if(effect.slot==='target'&&!effect.unconditional&&(!(hit.target_id??channel.result.target_id)||!this._damaging(hit)))continue;
             channel.effects.push({...clone(effect),...(allocation?{slot:'target'}:{}),...(allocation||effect.slot==='target'?{target_id:hit.target_id??channel.result.target_id}:{}),...(step.duration_ms>0?{frame_ms:step.duration_ms}:{}),at:at-(channel.at??0)});}
         }
-        channel.visited=i;channel.next_at=at+(step.duration_ms??ms)*(channel.slow_record===step.plan_record_index?2:1);
+        const interval=(step.duration_ms??ms)*(channel.slow_record===step.plan_record_index?2:1);
+        channel.frame_started_at=at-(channel.at??0);channel.frame_duration_ms=interval;
+        channel.visited=i;channel.next_at=at+interval;
       }
       for(const c of [...run.children,...run.carriers])c.elapsed=Math.max(0,run.elapsed-c.at);
       for(const channel of this._sequenceChannels(run))for(const effect of channel.effects){const asset=this.meta.effects.find(e=>e.id===effect.asset_id),cursor=Math.min(asset.frames.length-1,Math.floor((channel.elapsed-effect.at)/(effect.frame_ms??ms)));
@@ -704,20 +707,39 @@ export class BattleView {
     ctx.restore();
   }
 
+  _groundFootprint(role){
+    const cached=this.groundFootprints?.get(role.id);if(cached)return cached;
+    // A fixed idle reference keeps breathing, weapons and attack frames from
+    // moving the ground contact. Bounds retain the original DGP frame space.
+    const poses=role.idle_sequence?.segments??[role.idle],bounds=poses.flatMap(segment=>{
+      const action=role.actions.find(row=>row.index===segment.action_index);
+      return segment.frames.map(frame=>this.lifecyclePairs?.get(`${role.id}:${action.first_frame+frame}`)?.main.bounds).filter(Boolean);
+    });
+    const median=values=>{values.sort((a,b)=>a-b);const middle=Math.floor(values.length/2);return values.length%2?values[middle]:(values[middle-1]+values[middle])/2;};
+    const scale=this.meta.policy.sprite_scale,groundOffset=this.content.roles[role.id]?.presentation?.ground_offset;
+    const x=bounds.length?(median(bounds.map(b=>(b[0]+b[2])/2))-role.anchor.x)*scale:0;
+    const y=groundOffset!==undefined?groundOffset*1.125:bounds.length?(median(bounds.map(b=>b[3]))-role.anchor.y)*scale:32*1.125;
+    const radius=bounds.length?Math.max(12,Math.min(82,median(bounds.map(b=>b[2]-b[0]))*scale*.45)):82;
+    const footprint={x,y,radius_x:radius,radius_y:Math.min(15,radius*.2)};
+    this.groundFootprints??=new Map();this.groundFootprints.set(role.id,footprint);return footprint;
+  }
+
   _slots(run,ground=false) {
     const policy = this.meta.policy;
     const enemies=this.roster.filter(a=>a.side==='enemy'),players=this.roster.filter(a=>a.side==='player');
     const slots=Object.fromEntries(this.roster.map(a=>[a.id,a.side==='player'?[policy.player_slot[0]+(players.indexOf(a)%2)*95,policy.player_slot[1]+Math.floor(players.indexOf(a)/2)*100+(players.indexOf(a)%2)*65]:
       [policy.enemy_slot[0]+(enemies.indexOf(a)%2)*145,policy.enemy_slot[1]+(Math.floor(enemies.indexOf(a)/2)-(enemies.length>2?.5:0))*125]]));
     if(this.stageMeta)for(const [id,[x,y]]of Object.entries(battleActorPositions(this.roster)))slots[id]=[120+x*1.125,y*1.125];
-    // Keep the existing preview feet/flight offsets on a separate ground
-    // plane. Approach/return interpolate ground depth between both actors;
-    // the target's visual altitude must not change actor ordering or shadows.
-    if(ground&&this.stageMeta)for(const actor of this.roster)slots[actor.id][1]+=(this.content.roles[actor.resource_id]?.presentation?.ground_offset??32)*1.125;
-    if (!run||run.main_done||run.done) return slots;
+    // Interpolate one ground path, then recover each body's own source origin.
+    // A target's different anchor or flight height must not stretch the gap
+    // between the attacker's feet and shadow during approach and return.
+    const footprints=this.stageMeta?new Map(this.roster.map(actor=>[actor.id,this._groundFootprint(this._role(actor.id))])):null;
+    if(footprints)for(const [id,foot]of footprints){slots[id][0]+=foot.x;slots[id][1]+=foot.y;}
+    const project=()=>{if(footprints&&!ground)for(const [id,foot]of footprints){slots[id][0]-=foot.x;slots[id][1]-=foot.y;}return slots;};
+    if (!run||run.main_done||run.done) return project();
     const actingRole=this._role(run.result.actor_id),skill=(actingRole.alternate_skills??[]).find(s=>s.runtime_skill_id===run.result.skill_id)??actingRole.skill;
     const step = run.steps[run.cursor], segments = run.segments??skill.segments;
-    if(step.command_raw!==undefined)return slots;
+    if(step.command_raw!==undefined)return project();
     let progress = 0;
     if (this.content.roles[actingRole.id]?.presentation?.legacy_motion==='bounce'&&!run.sequence) {
       if (step.segment_index === 0) progress = 0;
@@ -727,7 +749,7 @@ export class BattleView {
       } else progress = 0;
       const amount = Math.max(0, Math.min(1, progress));
       slots[run.result.actor_id][0] += policy.approach_distance * amount;
-      return slots;
+      return project();
     }
     // Native +0x1e's sign identifies outward/return records. Legacy metadata
     // lacks that field and retains its two previously tagged movement records.
@@ -735,8 +757,16 @@ export class BattleView {
     const tagged = segments.map((s,i) => s.movement_flag_raw ? i : -1).filter(i => i>=0);
     const outward = signed ? segments.findIndex(s => s.movement_step_raw>0) : tagged[0]??-1;
     const returning = signed ? segments.findIndex((s,i) => i>outward && s.movement_step_raw<0) : tagged.at(-1)??-1;
-    if (outward<0 || returning<=outward) return slots;
-    const fraction = Math.max(0,Math.min(1,(step.logical_frame-segments[step.segment_index].start + (run.elapsed % policy.frame_ms)/policy.frame_ms + 1)/segments[step.segment_index].frames.length));
+    if (outward<0 || returning<=outward) return project();
+    // Move from the beginning of the current visited frame, not one frame
+    // ahead. A one-frame return must still travel for that frame's duration.
+    // Reaction channels and source-specific intervals own their local clocks;
+    // reversed source frame numbers never reverse the direction of travel.
+    const first=run.steps.findIndex(row=>row.command_raw===undefined&&row.segment_index===step.segment_index);
+    const interval=run.frame_duration_ms??policy.frame_ms;
+    const elapsed=run.sequence?run.elapsed-(run.frame_started_at??0):run.elapsed%interval;
+    const phase=Math.max(0,Math.min(1,elapsed/interval));
+    const fraction = Math.max(0,Math.min(1,(run.cursor-first+phase)/segments[step.segment_index].frames.length));
     if (step.segment_index===outward) progress=fraction;
     else if (step.segment_index>outward && step.segment_index<returning) progress=1;
     else if (step.segment_index===returning) progress=1-fraction;
@@ -746,7 +776,7 @@ export class BattleView {
     const gap = policy.contact_gap ?? 110;
     origin[0] += (target[0]-direction*gap-origin[0])*amount;
     origin[1] += (target[1]+(policy.contact_y_offset??0)-origin[1])*amount;
-    return slots;
+    return project();
   }
 
   paintIdle(snapshot, now = performance.now()) {return this.draw(snapshot, now);}
@@ -868,7 +898,8 @@ export class BattleView {
       if(!lifePose)alpha*=this.lifecycle?.alpha(id)??1;
       if(!actor?.defending)this.defendClocks?.delete(id);
       ctx.save(); ctx.globalAlpha = alpha * .4; ctx.fillStyle = '#071315'; ctx.beginPath();
-      const shadow=this.stageMeta?groundSlots[id]:[slot[0],slot[1]+24];ctx.ellipse(shadow[0],shadow[1],82,15,0,0,Math.PI*2);ctx.fill();ctx.restore();
+      const shadow=this.stageMeta?groundSlots[id]:[slot[0],slot[1]+24],footprint=this.stageMeta?this._groundFootprint(role):null;
+      ctx.ellipse(shadow[0],shadow[1],footprint?.radius_x??82,footprint?.radius_y??15,0,0,Math.PI*2);ctx.fill();ctx.restore();
       this._sprite(role, segment.action_index, frame, slot[0], slot[1], alpha, pair);
       if(acting&&pair?.intrinsic.active&&!run.observations.intrinsic_source_frames.includes(pair.source_frame))run.observations.intrinsic_source_frames.push(pair.source_frame);
     }
