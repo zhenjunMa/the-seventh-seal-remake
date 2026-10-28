@@ -77,7 +77,7 @@
 
 Phaser `3.90.0`已接入主循环、分场景update、休眠／唤醒、暂停／恢复、人物显示和按场景推进的源动作时钟。剧情会话、对白／字幕和事件wait已接入同一探索时钟与取消信号；实际边界见[architecture.md](../runtime/architecture.md)。
 
-玩家探索碰撞已改为小脚底范围的连续扫描与稳定滑墙，可见NPC参与阻挡；实际位移驱动朝向／步态，首次撞击的轻微显示回缩不改变位置、阴影、遇敌或存档预览。保留原通行数据、出口触发、特殊障碍入口落点和普通NPC原自主规则；翠碧湖连续路线核对时发现M70060原八邻窄口被正面积脚底封住，现仅为原对角接点保留身体余量，逻辑中心仍检查完整原地形。原版逻辑调查与现代化手感改造分别记录，先前来源与页面范围见[碰撞优化验证](../runtime/evidence/movement_collision_optimization_20261028/validation.md)，本轮补充见`../runtime/evidence/jade_lake_20261028/natural_route_movement_resolution.json`；各自范围不替代完整主线实玩。
+玩家探索碰撞使用小脚底范围的连续扫描与稳定滑墙，可见NPC参与双向阻挡，NPC绘制／碰撞／交互距离共用连续显示位置；NPC被玩家挡住时暂停推进，保留原目标与路径，让开后继续。移动时实际位移驱动朝向／步态，完全受阻但仍输入时慢速行走，松键待机；回缩首帧响应、松键自然收尾，新增阻挡方向独立响应，持续顶墙不重复回缩，显示反馈不改变位置、阴影、遇敌或存档预览。保留原通行数据、出口触发、特殊障碍入口落点和普通NPC原自主规则；翠碧湖连续路线核对时发现M70060原八邻窄口被正面积脚底封住，现仅为原对角接点保留身体余量，逻辑中心仍检查完整原地形。原版逻辑调查与现代化手感改造分别记录，先前来源与页面范围见[碰撞优化验证](../runtime/evidence/movement_collision_optimization_20261028/validation.md)，翠碧湖补充见`../runtime/evidence/jade_lake_20261028/natural_route_movement_resolution.json`；本次无素材环境的逻辑／占位预览核对见[接触与受阻反馈验证](../runtime/evidence/movement_contact_refinement_20261028/validation.md)，正式素材下的视觉调校与完整主线实玩仍待补充。
 
 ## 验收状态
 

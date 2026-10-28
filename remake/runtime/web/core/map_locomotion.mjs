@@ -1,3 +1,5 @@
+import {locomotion} from './movement.mjs';
+
 // Native 46CED0 scales the movement visit interval, not the final atlas frame
 // period. Keyboard motion stays continuous; gait phase follows accepted travel.
 export function mapStepGeometry(movement={},headerRawHex='') {
@@ -40,7 +42,7 @@ function logicalCount(action) {
 export class DistanceGait {
   constructor(){this.reset();}
   reset(){this.action=0;this.phase=0;this.elapsed=0;}
-  advance(action,{dx=0,dy=0,elapsedMs=0,stride=1}={}) {
+  advance(action,{dx=0,dy=0,elapsedMs=0,stride=1,inPlaceSpeed=0}={}) {
     const count=logicalCount(action),moving=action.index!==0;
     if(this.action!==action.index){
       if(!moving||this.action===0)this.phase=0;
@@ -49,7 +51,8 @@ export class DistanceGait {
     if(moving){
       // Native diagonal steps change both axes by stepSize. The controller
       // normalizes speed; using per-axis travel also scales diagonal gait.
-      this.phase+=Math.max(Math.abs(dx),Math.abs(dy))/(stride*count);
+      const travel=Math.max(Math.abs(dx),Math.abs(dy))||Math.max(0,inPlaceSpeed)*Math.max(0,elapsedMs)/1000;
+      this.phase+=travel/(stride*count);
     }else {
       const interval=Math.max(20,action.interval_raw??action.interval_ms_preview??180);
       this.elapsed+=Math.max(0,elapsedMs);
@@ -63,23 +66,56 @@ export class DistanceGait {
 }
 
 // Contact feedback has no world displacement or independent render clock.
-// Hold a contact until it is released, so RAF frequency / tile seams cannot
-// repeatedly restart the recoil while the player keeps pressing a wall.
+// Track contact normals rather than tile identities, so seams cannot restart
+// a held impact but a second wall can. Pulses finish after release and blend
+// when a new direction is hit; neither input release nor reversal snaps a pose.
 export class CollisionFeedback {
   constructor(){this.reset();}
-  reset(){this.contact=false;this.age=Infinity;this.cooldown=0;this.normal={x:0,y:0};this.amplitude=0;}
+  reset(){this.contacts=new Set();this.time=0;this.lastImpact=new Map();this.pulses=[];}
   advance(result,{dx=0,dy=0,running=false,elapsedMs=0}={}){
-    const dt=Math.max(0,elapsedMs);this.age+=dt;this.cooldown=Math.max(0,this.cooldown-dt);
-    const hits=result?.contacts??[],contact=hits.length>0&&(dx!==0||dy!==0);
-    if(contact&&!this.contact&&!this.cooldown){
-      const x=hits[0].nx,y=hits[0].ny,length=Math.hypot(x,y)||1;
-      this.normal={x:x/length,y:y/length};this.amplitude=running?2.5:1;
-      this.age=0;this.cooldown=220;
+    const dt=Math.max(0,elapsedMs);this.time+=dt;
+    const contacts=new Map();
+    for(const hit of dx||dy?result?.contacts??[]:[]){
+      if(hit.nx)contacts.set(`${hit.nx},0`,{x:hit.nx,y:0});
+      if(hit.ny)contacts.set(`0,${hit.ny}`,{x:0,y:hit.ny});
     }
-    this.contact=contact;
-    if(!dx&&!dy){this.age=Infinity;this.amplitude=0;}
-    const phase=Math.min(1,this.age/160),amount=this.amplitude*Math.sin(phase*Math.PI);
-    return {x:this.normal.x*amount,y:this.normal.y*amount};
+    let nx=0,ny=0;
+    for(const [key,normal]of contacts){
+      if(this.contacts.has(key)||this.time-(this.lastImpact.get(key)??-Infinity)<220)continue;
+      nx+=normal.x;ny+=normal.y;this.lastImpact.set(key,this.time);
+    }
+    if(nx||ny){const length=Math.hypot(nx,ny),approach=Math.max(0,-dx*nx-dy*ny)/(Math.hypot(dx,dy)*length||1);
+      this.pulses.push({x:nx/length,y:ny/length,amplitude:(running?2.5:1)*approach,age:0});}
+    this.contacts=new Set(contacts.keys());
+    let x=0,y=0;
+    for(const pulse of this.pulses){pulse.age+=dt;
+      const amount=pulse.amplitude*Math.sin(Math.min(1,pulse.age/160)*Math.PI);
+      x+=pulse.x*amount;y+=pulse.y*amount;}
+    this.pulses=this.pulses.filter(pulse=>pulse.age<160);
+    for(const [key,time]of this.lastImpact)if(this.time-time>=220)this.lastImpact.delete(key);
+    const scale=Math.min(1,2.5/(Math.hypot(x,y)||1));
+    return {x:x*scale,y:y*scale};
+  }
+}
+
+// Shared exploration presentation for the formal controller and asset-free
+// preview. Only accepted travel reaches world rules; blocked stepping is an
+// explicit, slower visual clock and never contributes encounter distance.
+export class MapLocomotion {
+  constructor(){this.gait=new DistanceGait();this.feedback=new CollisionFeedback();}
+  get action(){return this.gait.action;}
+  reset(){this.gait.reset();this.feedback.reset();}
+  advance(result,{from,dx=0,dy=0,running=false,elapsedMs=0,role,movement,headerRawHex=''}={}){
+    const travelX=result?result.x-from.x:0,travelY=result?result.y-from.y:0;
+    const moving=Math.hypot(travelX,travelY)>1e-4,blocked=Boolean((dx||dy)&&result?.blocked&&!moving);
+    const choice=locomotion({dx:moving?(Math.abs(travelX)>1e-4?travelX:0):dx,
+      dy:moving?(Math.abs(travelY)>1e-4?travelY:0):dy,running:running&&!blocked},moving||blocked);
+    const action=role.actions.find(action=>action.index===choice.action);
+    const profile=choice.action?mapMotionProfile(action,movement,headerRawHex):null;
+    const frame=this.gait.advance(action,{dx:travelX,dy:travelY,elapsedMs,stride:profile?.stride,
+      inPlaceSpeed:blocked?profile.speed*.45:0});
+    return {...choice,frame,blocked,elapsed:this.gait.elapsed,
+      feedback:this.feedback.advance(result,{dx,dy,running,elapsedMs})};
   }
 }
 // Older route assets retain their original exporter. The verified story table

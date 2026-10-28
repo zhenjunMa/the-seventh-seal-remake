@@ -1,5 +1,5 @@
 // map adapters. Persistent state belongs to the shared runtime context.
-import {MovementMap, locomotion} from "../core/movement.mjs";
+import {MovementMap,mapActorPosition} from "../core/movement.mjs";
 import {createBattleSample} from "../combat_sample.mjs";
 import {planRouteExit} from "../core/route.mjs";
 import {initialEncounterState, previewMovement} from "../core/encounters.mjs";
@@ -13,10 +13,10 @@ import {projectMapStage} from "../core/map_stage.mjs";
 import {MapObjectRuntime} from "../core/map_objects.mjs";
 import {storyBindings,registeredRoles} from "../core/content_registry.mjs";
 import {chapterRouteExits} from "../core/map_connections.mjs";
-import {DistanceGait,CollisionFeedback,mapMotionProfile,nativeMapMovement} from "../core/map_locomotion.mjs";
+import {MapLocomotion,mapMotionProfile,nativeMapMovement} from "../core/map_locomotion.mjs";
 
 export function createMapController({state, actions, $, canvas, ctx}) {
-  const gait=new DistanceGait(),collisionFeedback=new CollisionFeedback();let gaitScene=null,gaitRole=null;
+  const motionState=new MapLocomotion();let gaitScene=null,gaitRole=null;
   function role() { return state.catalog.roles.find(role=>role.id===state.selectedRole); }
   function sheetAction(index=state.view.action) { return role().actions.find(action=>action.index===index); }
   function buildHud() {
@@ -111,7 +111,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
   }
   function validateEntry(scene,at) { if(!scene.movement.validEntry(at.x,at.y)) throw new Error(`目标位置不在可通行格：${at.map_id} ${at.x},${at.y}`); }
   function commitView(scene,at) {
-    gait.reset();collisionFeedback.reset();state.view.collisionFeedback=null;gaitScene=scene;gaitRole=state.selectedRole;
+    motionState.reset();state.view.collisionFeedback=null;gaitScene=scene;gaitRole=state.selectedRole;
     state.view.action=0;state.view.frame=0;state.view.follow=true;state.view.zoom=1;
     Object.assign(state.view,openingCamera(at,scene.bitmap.width,scene.bitmap.height));
     state.clock=0;state.nearest=null;state.lastExit='';
@@ -138,7 +138,8 @@ export function createMapController({state, actions, $, canvas, ctx}) {
     for(const npc of state.scenes.current.npcs){if(!npcAvailable(npc))continue;
       const admitted=storyBindings(at.map_id).npcs;
       if(!npc.event&&admitted&&!admitted.includes(npc.slot_zero_based))continue;
-      const distance=Math.hypot(npc.x-at.x,npc.y-at.y);if(distance<64&&(!state.nearest||distance<state.nearest.distance))state.nearest={...npc,distance};}
+      const position=mapActorPosition(npc),distance=Math.hypot(position.x-at.x,position.y-at.y);
+      if(distance<64&&(!state.nearest||distance<state.nearest.distance))state.nearest={...npc,x:position.x,y:position.y,direction:position.direction??npc.direction,distance};}
     for(const object of state.chapterStory.maps[at.map_id]?.objects??[]){
       const binding=storyBindings(at.map_id).objects.find(row=>row.index===object.index);
       if(!binding)continue;
@@ -253,21 +254,20 @@ export function createMapController({state, actions, $, canvas, ctx}) {
       reconcileResources();
       const dx=Number(state.keys.has('ArrowRight')||state.keys.has('d'))-Number(state.keys.has('ArrowLeft')||state.keys.has('a'));
       const dy=Number(state.keys.has('ArrowDown')||state.keys.has('s'))-Number(state.keys.has('ArrowUp')||state.keys.has('w'));
-      const at=state.world.location;let action=0,travelX=0,travelY=0,motion=null,moved=null,running=false;
-      if(gaitScene!==state.scenes.current||gaitRole!==state.selectedRole||state.view.action!==gait.action){
-        gait.reset();collisionFeedback.reset();gaitScene=state.scenes.current;gaitRole=state.selectedRole;
+      const at=state.world.location;let pose=null;
+      if(gaitScene!==state.scenes.current||gaitRole!==state.selectedRole||state.view.action!==motionState.action){
+        motionState.reset();gaitScene=state.scenes.current;gaitRole=state.selectedRole;
       }
       const active=state.world.value.party.find(actor=>actor.id===state.selectedRole),effectivePlayer=state.mapVitals.get(state.selectedRole)??active;
-      if((dx||dy)&&effectivePlayer.hp.current>0){const length=Math.hypot(dx,dy);running=state.keys.has('Shift');
-        motion=mapMotionProfile(sheetAction(running?2:1),state.scenes.current.data.movement,
-          state.chapterStory.maps[at.map_id]?.header_raw_hex);
+      if((dx||dy)&&effectivePlayer.hp.current>0){const length=Math.hypot(dx,dy),running=state.keys.has('Shift');
+        const headerRawHex=state.chapterStory.maps[at.map_id]?.header_raw_hex;
+        const motion=mapMotionProfile(sheetAction(running?2:1),state.scenes.current.data.movement,headerRawHex);
         const movement=state.scenes.current.movement;
-        moved=movement.moveAndSlide(at.x,at.y,dx/length*motion.speed*delta,dy/length*motion.speed*delta,
+        const moved=movement.moveAndSlide(at.x,at.y,dx/length*motion.speed*delta,dy/length*motion.speed*delta,
           {obstacles:movement.actorObstacles(state.scenes.current.npcs.filter(npcAvailable))});
-        travelX=moved.x-at.x;travelY=moved.y-at.y;
-        const choice=locomotion({dx:moved.moved?(Math.abs(travelX)>1e-4?travelX:0):dx,
-          dy:moved.moved?(Math.abs(travelY)>1e-4?travelY:0):dy,running},moved.moved);
-        state.world.setPosition(moved.x,moved.y,choice.direction??at.direction);action=choice.action;state.view.follow=true;
+        pose=motionState.advance(moved,{from:at,dx,dy,running,elapsedMs:delta*1000,
+          role:role(),movement:state.scenes.current.data.movement,headerRawHex});
+        state.world.setPosition(moved.x,moved.y,pose.direction??at.direction);state.view.follow=true;
         const reached=state.scenes.current.movement.at(moved.x,moved.y),exit=reached.trigger?transitionFor(reached):null;
         const storyTrigger=state.scenes.current.data.story_triggers.find(trigger=>trigger.cells.some(cell=>cell.x===reached.x&&cell.y===reached.y));
         if(storyTrigger){
@@ -287,12 +287,11 @@ export function createMapController({state, actions, $, canvas, ctx}) {
           else if(preview.steps||moved.x!==at.x||moved.y!==at.y)state.world.setEncounterState(preview.state);
         }
       }
-      state.view.action=action;
-      state.view.frame=gait.advance(sheetAction(),{dx:travelX,dy:travelY,elapsedMs:delta*1000,stride:motion?.stride});
-      state.view.collisionFeedback=collisionFeedback.advance(moved,{dx,dy,running,elapsedMs:delta*1000});
-      state.clock=gait.elapsed;
+      pose??=motionState.advance(null,{from:at,role:role(),elapsedMs:delta*1000});
+      state.view.action=pose.action;state.view.frame=pose.frame;
+      state.view.collisionFeedback=pose.feedback;state.clock=pose.elapsed;
       if(state.view.follow)follow();updateNearest();
-    }else {collisionFeedback.reset();state.view.collisionFeedback=null;}
+    }else {motionState.reset();state.view.collisionFeedback=null;}
     paint();
   }
   return {role, sheetAction, buildHud, prepareMap, validateEntry, commitView, changeMap, follow, fit, resize, npcAvailable, updateNearest, objectBitmap, transitionFor, renderWorldMap,selectWorldMapDestination,closeWorldMap, routeExit, drawCollision, paint, updateExploration,captureScene,captureSavePreview,loadSavePreview};

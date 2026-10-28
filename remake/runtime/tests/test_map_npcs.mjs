@@ -121,3 +121,22 @@ test('ordinary NPC visual travel is bounded by source speed, shares distance gai
     release();runtime.update(5016);assert.ok(Math.abs(npc.motion.x-held.x)<=4/43*16+1e-8);
   }
 });
+
+test('continuous NPC feet stop at a nearby player without route backlog and resume when the player moves away',()=>{
+  for(const hz of [30,60,120]){
+    const {runtime,npc,scene}=fixture(),a=runtime.actors.get(npc.id),player={x:651,y:640};
+    a.path=Array.from({length:8},(_,i)=>({x:41+i,y:40}));a.wait=0;a.interval=43;
+    runtime.update(0,{player});
+    for(let n=1;n<=hz;n++){
+      runtime.update(n*1000/hz,{player});
+      assert.ok(npc.motion.x<=643+1e-8,'NPC body cannot enter the player foot box');
+      const collider=scene.movement.actorObstacles([npc])[0];assert.equal(collider.left,npc.motion.x-4);
+    }
+    assert.ok(a.contactBlocked);const stopped=npc.motion.x,logical=npc.x;
+    for(let n=hz+1;n<=hz*3;n++)runtime.update(n*1000/hz,{player});
+    assert.equal(npc.motion.x,stopped);assert.equal(npc.x,logical,'waiting cannot accumulate hidden source travel');
+    player.y+=32;runtime.update((hz*3+1)*1000/hz,{player});
+    assert.ok(npc.motion.x>stopped);assert.ok(npc.motion.x-stopped<=4/43*1000/hz+1e-8);
+    assert.equal(a.contactBlocked,false);assert.equal(a.goal.x,640,'contact does not choose a new random goal');
+  }
+});
