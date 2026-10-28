@@ -122,7 +122,7 @@ test('the wheel and skill list both select a saved composition and pass through 
 
 test('the actual battle renderer admits compositions through their existing member atlases and still rejects unknown direct skills',()=>{
   const f=fixture(),view=Object.create(BattleView.prototype);
-  Object.assign(view,{ready:true,run:null,meta,content:runtimeContent});
+  Object.assign(view,{ready:true,run:null,meta,content:runtimeContent,lastActorPoses:new Map()});
   view.setRoster(f.battle.state.actors,f.battle.skills);
   assert.ok(view.roster.find(actor=>actor.id==='001').skill_ids.includes('yanci'));
   assert.equal(view.roster.find(actor=>actor.id==='001').skill_ids.includes(f.id),false);

@@ -4,6 +4,7 @@
  * Source: ev_6a97d55ce2cda38f5a9cacf245900414d96566b052c7e04fb96bac9a431a6764,
  * ev_e7ebc40b1eb0efaa9d96ff7f3e6fc290955d8807dff0dc831ad32c06ceb45a70.
  */
+import {DeathParticlePlayback} from './death_particles.mjs';
 const need=(ok,message)=>{if(!ok)throw new TypeError(message);};
 const copy=value=>structuredClone(value);
 const integer=(value,min=0)=>Number.isInteger(value)&&value>=min;
@@ -19,14 +20,11 @@ export const APPEARANCE_ALPHA_ADAPTER=Object.freeze({
 });
 // F66A is a disappearance MODE selected by rand()%7+1, despite the legacy
 // event field name fade_increment_raw. It is never an opacity speed.
-export const FADE_ALPHA_ADAPTER=Object.freeze({
-  complete_elapsed_raw:Object.freeze({1:30,2:30,3:30,4:30,5:30,6:30,7:30}),
-  pixels:'8-bit alpha adapter uses original elapsed30 hard stop; original particles can finish earlier',
-});
 export class BattleLifecyclePlayback {
-  constructor(manifest,{appearanceBounds=null,nativeBridge=null,onFrame=null}={}){
+  constructor(manifest,{appearanceBounds=null,disappearanceEffect=null,nativeBridge=null,onFrame=null}={}){
     this.onFrame=onFrame;
     this.nativeBridge=nativeBridge;
+    this.disappearanceEffect=disappearanceEffect;
     need(appearanceBounds===null||typeof appearanceBounds==='function','Lifecycle appearance bounds provider invalid');this.appearanceBounds=appearanceBounds;
     need(Array.isArray(manifest?.roles),'Lifecycle manifest roles missing');this.roles=new Map();
     for(const role of manifest.roles){
@@ -61,7 +59,11 @@ export class BattleLifecyclePlayback {
       const fadeMode=event.fade_mode_raw??event.fade_increment_raw;
       if(event.kind==='death'&&integer(fadeMode,1)&&fadeMode<=7){
         const clock=event.fade_clock_raw??role.fadeClock;
-        if(integer(clock,1)){channel.mode='fade';channel.fade_mode_raw=fadeMode;channel.fade_clock_ms=clock;}
+        if(integer(clock,1)){
+          channel.mode='fade';channel.fade_mode_raw=fadeMode;channel.fade_clock_ms=clock;
+          const effect=this.disappearanceEffect?.(actor.id,roleId,fadeMode,event)??null;
+          channel.particles=new DeathParticlePlayback({mode:fadeMode,clock_ms:clock,started:now,effect});
+        }
         else{channel.mode='blocked';channel.blocked='missing-source-fade-clock';}
       }
       else{channel.mode='blocked';channel.blocked='missing-source-lifecycle-presentation';}
@@ -81,11 +83,9 @@ export class BattleLifecyclePlayback {
   _advanceChannel(channel,now){
     if(channel.mode==='blocked')return;
     if(channel.mode==='fade'){
-      const limit=FADE_ALPHA_ADAPTER.complete_elapsed_raw[channel.fade_mode_raw];
-      if(limit===null||limit===undefined){channel.blocked='fade-renderer-threshold-unresolved';return;}
-      const elapsed=Math.floor(Math.max(0,now-channel.started)/channel.fade_clock_ms);
-      channel.fade_elapsed_raw=elapsed;
-      this.alphas.set(channel.actor_id,1-Math.min(1,elapsed/limit));if(elapsed>=limit)this._finish(channel);return;
+      const active=channel.particles.advance(now);
+      channel.fade_elapsed_raw=channel.particles.elapsed;
+      if(!active)this._finish(channel);return;
     }
     while(now>=channel.deadline){
       if(channel.vertical_wait){
@@ -177,11 +177,17 @@ export class BattleLifecyclePlayback {
   alpha(actorId){return this.alphas.get(actorId)??1;}
   pose(actorId){const pose=this.channels.get(actorId)?.pose??this.held.get(actorId)?.pose;return pose?{...pose,alpha:this.alpha(actorId)}:null;}
   hidden(actorId){return this.hiddenActors.has(actorId);}
+  drawDisappearance(actorId,context,x,y){
+    const effect=this.channels.get(actorId)?.particles?.effect;
+    if(!effect?.draw)return false;effect.draw(context,x,y);return true;
+  }
   drainCompleted(){const rows=this.completed;this.completed=[];return rows.map(copy);}
   snapshot(){
     return {active:[...this.channels.values()].map(channel=>({actor_id:channel.actor_id,token:channel.event.token,life_epoch:channel.event.life_epoch,kind:channel.event.kind,
       source_skill_index:channel.skill?.index??null,cursor:channel.cursor,frame:channel.pose?.source_frame??null,alpha:this.alpha(channel.actor_id),mode:channel.mode,blocked:channel.blocked,
-      fade:channel.mode==='fade'?{mode:channel.fade_mode_raw,clock_raw:channel.fade_clock_ms,elapsed_raw:channel.fade_elapsed_raw??0,completion_adapter:'source elapsed30 hard stop; earlier original particle completion not reproduced'}:null,
+      fade:channel.mode==='fade'?{mode:channel.fade_mode_raw,clock_raw:channel.fade_clock_ms,elapsed_raw:channel.fade_elapsed_raw??0,
+        render_calls:channel.particles.calls,pixels:channel.particles.effect?.visible.length??null,
+        completion_adapter:'source particle lifetime; fixed60Hz presentation; local visual RNG'}:null,
       appearance:channel.appearance?{mode:channel.appearance.mode,clock_raw:channel.appearance.clock_raw,elapsed_raw:channel.appearance.elapsed_raw,
         render_calls:channel.appearance.render_calls,render_limit:channel.appearance.render_limit,geometry_source:channel.appearance.geometry_source}:null})),
       held:[...this.held].map(([actor_id,row])=>({actor_id,token:row.event.token,life_epoch:row.event.life_epoch,frame:row.pose.source_frame})),hidden:[...this.hiddenActors],completed_count:this.completed.length};

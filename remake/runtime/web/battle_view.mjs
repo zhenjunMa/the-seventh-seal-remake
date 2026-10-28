@@ -6,6 +6,7 @@
 import {compileNativeSequence} from './core/skill_sequence.mjs';
 import {idlePoseAt} from './core/battle_scheduler.mjs';
 import {BattleLifecyclePlayback} from './battle_lifecycle_view.mjs';
+import {createDeathParticleSurface} from './death_particles.mjs';
 import {battleViewport,battleActorPositions} from './core/battle_layout.mjs';
 import {battleResources,drawBattleImage} from './core/battle_resources.mjs';
 import {runtimeContent,requireRegisteredRoles} from './core/content_registry.mjs';
@@ -258,6 +259,7 @@ export class BattleView {
     this.itemMetadataPath=itemMetadataPath;this.itemMeta=null;
     this.stageMetadataPath=stageMetadataPath;this.stageMeta=null;this.stageStarted=null;
     this.lifecycleMetadataPath=lifecycleMetadataPath;this.lifecycle=null;
+    this.lastActorPoses=new Map();
     this.roster=[{id:'001',resource_id:'001',side:'player',skill_id:'yantu'},{id:'012',resource_id:'012',side:'enemy',skill_id:'snow_attack'}];
     this.images = new Map();
     this.meta = null;
@@ -375,7 +377,9 @@ export class BattleView {
     this.lifecyclePairs=new Map([...alternateLayers.values()].flatMap(bank=>bank.frames.map(pair=>[`${bank.role_id}:${pair.source_frame}`,pair])));
     this.groundFootprints=new Map();
     this.lifecycleBounds=new Map();
-    this.lifecycle=lifecycleMeta?new BattleLifecyclePlayback(lifecycleMeta,{appearanceBounds:(roleId,pose)=>this._appearanceBounds(roleId,pose),nativeBridge:actorId=>this._nativeBridge(actorId),onFrame:step=>this.onLifecycleFrame?.(step)}):null;
+    this.lifecycle=lifecycleMeta?new BattleLifecyclePlayback(lifecycleMeta,{appearanceBounds:(roleId,pose)=>this._appearanceBounds(roleId,pose),
+      disappearanceEffect:(actorId,roleId,mode,event)=>this._disappearanceEffect(actorId,roleId,mode,event),
+      nativeBridge:actorId=>this._nativeBridge(actorId),onFrame:step=>this.onLifecycleFrame?.(step)}):null;
     this.assetDescriptors=assets;
     this.images = images;
     this.timelines = new Map(meta.roles.map(role => [role.id, compileActionTimeline(meta, layers, role.id,null,null,this.content)]));
@@ -408,6 +412,7 @@ export class BattleView {
   }
 
   setRoster(actors,skills){
+    this.lastActorPoses.clear();
     this.stageStarted=null;
     this.drawnSlots=null;
     this.lifecycle?.reset();
@@ -478,6 +483,7 @@ export class BattleView {
   }
 
   stop(reason = '战斗表现已取消') {
+    this.lastActorPoses.clear();
     ++this.generation;
     this.drawnSlots=null;
     this.damageTexts=[];
@@ -792,6 +798,19 @@ export class BattleView {
   drainLifecycleCompleted(){return this.lifecycle?.drainCompleted()??[];}
   lifecycleSnapshot(){return this.lifecycle?.snapshot()??null;}
 
+  _disappearanceEffect(actorId,roleId,mode,event){
+    if(!globalThis.document?.createElement)return null; // headless timing adapter
+    const role=this.meta.roles.find(r=>r.id===roleId),pose=this.lastActorPoses.get(actorId);
+    const action=role.actions.find(a=>a.index===(pose?.action_index??role.reaction.action_index));
+    const frame=pose?.action_frame??role.reaction.frames.at(-1),pair=this.lifecyclePairs.get(`${roleId}:${action.first_frame+frame}`);
+    const image=this.images.get(pair?'/'+pair.main.path:action.sheet),scale=this.meta.policy.sprite_scale;
+    const source=document.createElement('canvas');source.width=Math.ceil(role.frame_width*scale);source.height=Math.ceil(role.frame_height*scale);
+    const c=source.getContext('2d',{willReadFrequently:true});c.imageSmoothingEnabled=false;
+    drawBattleImage(c,image,pair?0:frame*role.frame_width,pair?0:role.direction*role.frame_height,role.frame_width,role.frame_height,0,0,source.width,source.height);
+    return createDeathParticleSurface({rgba:c.getImageData(0,0,source.width,source.height).data,width:source.width,height:source.height,
+      anchor:{x:role.anchor.x*scale,y:role.anchor.y*scale},mode,seed:`${this.lifecycle?.battleId}:${event.life_epoch}:${event.token}`});
+  }
+
   _appearanceBounds(roleId,pose){
     const role=this.meta.roles.find(r=>r.id===roleId),action=role.actions.find(a=>a.index===(pose?.action_index??role.idle.action_index));
     const frame=pose?.action_frame??role.idle.frames[0],key=`${roleId}:${action.index}:${frame}`;
@@ -901,7 +920,8 @@ export class BattleView {
       ctx.save(); ctx.globalAlpha = alpha * .4; ctx.fillStyle = '#071315'; ctx.beginPath();
       const shadow=this.stageMeta?groundSlots[id]:[slot[0],slot[1]+24],footprint=this.stageMeta?this._groundFootprint(role):null;
       ctx.ellipse(shadow[0],shadow[1],footprint?.radius_x??82,footprint?.radius_y??15,0,0,Math.PI*2);ctx.fill();ctx.restore();
-      this._sprite(role, segment.action_index, frame, slot[0], slot[1], alpha, pair);
+      if(!this.lifecycle?.drawDisappearance(id,ctx,slot[0],slot[1]))this._sprite(role, segment.action_index, frame, slot[0], slot[1], alpha, pair);
+      this.lastActorPoses.set(id,{action_index:segment.action_index,action_frame:frame});
       if(acting&&pair?.intrinsic.active&&!run.observations.intrinsic_source_frames.includes(pair.source_frame))run.observations.intrinsic_source_frames.push(pair.source_frame);
     }
     if (run) {
