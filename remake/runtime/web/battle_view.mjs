@@ -425,6 +425,8 @@ export class BattleView {
   _nativeBridge(actorId,control=this.nativeControl,guard=this.nativeControlIsCurrent){
     const check=()=>{if(!control||this.nativeControl!==control||guard&&!guard())throw abortError('原动作控制器已失效');};
     return {begin:(raw,at)=>{check();return control.beginNativeVertical(actorId,raw,at);},
+      appearance:raw=>{check();return control.beginNativeAppearance(actorId,raw);},
+      appearanceComplete:()=>{check();control.completeNativeAppearance(actorId);},
       state:()=>{check();return control.nativeVerticalFor(actorId);},
       record:raw=>{check();control.nativeSourceRecord(actorId,raw);},
       advance:at=>{check();control.advanceNativeVerticals(at);}};
@@ -768,14 +770,14 @@ export class BattleView {
     // The appearance pixel motion is an alpha adapter; its completion follows
     // the occupied-pixel coordinates of the sprite at the renderer's scale.
     const sourcePose={action_index:action.index,action_frame:frame,source_frame:action.first_frame+frame};
-    if(!globalThis.document?.createElement)return {min_x:0,max_y:Math.floor((role.frame_height-1)*scale),empty:false,pose:sourcePose};
+    if(!globalThis.document?.createElement)return {min_x:0,max_x:Math.floor((role.frame_width-1)*scale),max_y:Math.floor((role.frame_height-1)*scale),empty:false,pose:sourcePose};
     const pair=this.lifecyclePairs.get(`${roleId}:${action.first_frame+frame}`),image=this.images.get(pair?'/'+pair.main.path:action.sheet);
     const surface=document.createElement('canvas');surface.width=role.frame_width;surface.height=role.frame_height;
     const c=surface.getContext('2d',{willReadFrequently:true});
     drawBattleImage(c,image,pair?0:frame*role.frame_width,0,role.frame_width,role.frame_height,0,0,role.frame_width,role.frame_height);
-    const rgba=c.getImageData(0,0,surface.width,surface.height).data;let minX=surface.width,maxY=-1;
-    for(let y=0;y<surface.height;y++)for(let x=0;x<surface.width;x++)if(rgba[(y*surface.width+x)*4+3]){minX=Math.min(minX,x);maxY=Math.max(maxY,y);}
-    const bounds={min_x:Math.floor(minX*scale),max_y:Math.floor(maxY*scale),empty:maxY<0,pose:sourcePose};this.lifecycleBounds.set(key,bounds);return bounds;
+    const rgba=c.getImageData(0,0,surface.width,surface.height).data;let minX=surface.width,maxX=-1,maxY=-1;
+    for(let y=0;y<surface.height;y++)for(let x=0;x<surface.width;x++)if(rgba[(y*surface.width+x)*4+3]){minX=Math.min(minX,x);maxX=Math.max(maxX,x);maxY=Math.max(maxY,y);}
+    const bounds={min_x:Math.floor(minX*scale),max_x:Math.floor(maxX*scale),max_y:Math.floor(maxY*scale),empty:maxY<0,pose:sourcePose};this.lifecycleBounds.set(key,bounds);return bounds;
   }
 
   draw(snapshot, now = performance.now()) {

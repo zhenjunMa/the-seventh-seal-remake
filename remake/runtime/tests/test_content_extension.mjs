@@ -49,17 +49,18 @@ test('another registered map keeps its own encounter identity and seeded movemen
 });
 
 test('registered new enemy uses existing AI and view contracts, unregistered identity remains rejected',()=>{
-  const c=copy(runtimeContent),data=copy(ai),meta=copy(view);
-  c.roles['014']={...copy(c.roles['013']),source:{...copy(c.roles['013'].source),path:'Fight_Role/014.CHR'}};
-  c.battle_rosters['party-source-group'].push('014');
-  data.roles['014']={...copy(data.roles['013']),id:'014',source:copy(c.roles['014'].source)};
+  const c=copy(runtimeContent),data=copy(ai),meta=copy(view),id='990';
+  assert.equal(c.roles[id],undefined,'extension fixture identity must remain unregistered');
+  c.roles[id]={...copy(c.roles['013']),source:{...copy(c.roles['013'].source),path:`Fight_Role/${id}.CHR`}};
+  c.battle_rosters['party-source-group'].push(id);
+  data.roles[id]={...copy(data.roles['013']),id,source:copy(c.roles[id].source)};
   validateForestAIData(data,c);
-  const role={...copy(meta.roles.find(row=>row.id==='013')),id:'014'};
-  for(const skill of [role.skill,...role.alternate_skills??[],...role.response_skills??[]])skill.role_id='014';
+  const role={...copy(meta.roles.find(row=>row.id==='013')),id};
+  for(const skill of [role.skill,...role.alternate_skills??[],...role.response_skills??[]])skill.role_id=id;
   meta.roles.push(role);validateBattleViewMetadata(meta,c);
   const renderer=new BattleView({canvas:{getContext:()=>({})},content:c});renderer.meta=meta;renderer.ready=true;
-  renderer.setRoster([{id:'001',side:'player'},{id:'enemy-new',resource_id:'014',side:'enemy'}],{yantu:{id:'yantu',actor_id:'001'},test:{id:'test',actor_id:'enemy-new'}});
-  assert.equal(renderer.roster[1].resource_id,'014');
+  renderer.setRoster([{id:'001',side:'player'},{id:'enemy-new',resource_id:id,side:'enemy'}],{yantu:{id:'yantu',actor_id:'001'},test:{id:'test',actor_id:'enemy-new'}});
+  assert.equal(renderer.roster[1].resource_id,id);
   assert.throws(()=>validateForestAIData(data),/未登记/);
   assert.throws(()=>validateBattleViewMetadata(meta),/未登记/);
 });
@@ -142,7 +143,8 @@ test('cross-file audit admits current content and rejects a registered enemy wit
   assert.throws(()=>validateContentDependencies(runtimeContent,staleTiming),/菜单与战斗待机时序不一致/);
   const wrongTimingRole=copy(data);wrongTimingRole.menu.standing_actors['003'].timing_source.role_id='001';
   assert.throws(()=>validateContentDependencies(runtimeContent,wrongTimingRole),/菜单与战斗待机时序不一致/);
-  const c=copy(runtimeContent);c.roles['014']={...copy(c.roles['013']),source:{...copy(c.roles['013'].source),path:'Fight_Role/014.CHR'}};
+  const c=copy(runtimeContent),id='990';assert.equal(c.roles[id],undefined);
+  c.roles[id]={...copy(c.roles['013']),source:{...copy(c.roles['013'].source),path:`Fight_Role/${id}.CHR`}};
   assert.throws(()=>validateContentDependencies(c,data),/资源角色表/);
   const changed=copy(runtimeContent);changed.maps.M17029.triggers.push(999);
   assert.throws(()=>validateStoryBindings(changed,story,resources),/触发器 999/);

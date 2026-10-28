@@ -703,6 +703,12 @@
     "013": {
       "side": "enemy"
     },
+    "014": {
+      "side": "enemy"
+    },
+    "022": {
+      "side": "enemy"
+    },
     "032": {
       "side": "enemy"
     }
@@ -722,6 +728,9 @@
     ]
   },
   "stages": {
+    "stage07": {
+      "export": "source"
+    },
     "stage13": {
       "path": "data/forest_stage.json",
       "schema": "seventh-seal-forest-stage",
@@ -752,9 +761,71 @@
     "m17030-1",
     "m17010-3",
     "m70010-1",
-    "m70030-1"
+    "m70030-1",
+    "m71014-1",
+    "m71050-1"
   ],
   "maps": {
+    "M01060": {
+      "npcs": [19],
+      "triggers": [6]
+    },
+    "M01065": {
+      "npcs": [],
+      "triggers": [31]
+    },
+    "M71010": {
+      "export": {"story": false},
+      "npcs": []
+    },
+    "M71011": {
+      "export": {"story": false},
+      "npcs": []
+    },
+    "M71011-1": {
+      "export": {"story": false},
+      "npcs": []
+    },
+    "M71012": {
+      "export": {"story": false},
+      "npcs": []
+    },
+    "M71012-1": {
+      "export": {"story": false},
+      "npcs": []
+    },
+    "M71012-2": {
+      "export": {"story": false},
+      "npcs": []
+    },
+    "M71013": {
+      "npcs": [],
+      "triggers": [1, 2]
+    },
+    "M71014": {
+      "npcs": [10],
+      "triggers": [1, 2, 3]
+    },
+    "M71020": {
+      "export": {"story": false},
+      "npcs": []
+    },
+    "M71030": {
+      "export": {"story": false},
+      "npcs": []
+    },
+    "M71040": {
+      "export": {"story": false},
+      "npcs": []
+    },
+    "M71050": {
+      "npcs": [],
+      "triggers": [3]
+    },
+    "M71060": {
+      "export": {"story": false},
+      "npcs": []
+    },
     "M01050": {
       "npcs": [
         15

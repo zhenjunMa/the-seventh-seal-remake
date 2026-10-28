@@ -60,10 +60,24 @@ test('explicit disabled overrides and source-only/out-of-region rows retain thei
 
 test('all actual Fire Valley mutation5 grants have a recovered enabled equipment, medicine or crystal capability',async()=>{
   const [story,index]=await Promise.all(['chapter_story','library/fire_valley'].map(read)),configured=compileItemConfiguration(items,overrides,'original').data;
-  const records=Object.entries(index.maps).flatMap(([mapId,map])=>{
-    if(map.dialogue.status==='source-file-absent'){assert.deepEqual(map.dialogue.records,[]);assert.equal(story.maps[mapId],undefined);return [];}
-    assert.ok(story.maps[mapId],`${mapId} source TLK must be registered`);return story.maps[mapId].records;
-  });
+  const records=[],datOnly=[];
+  for(const [mapId,map]of Object.entries(index.maps)){
+    const table=story.maps[mapId];
+    if(map.dialogue.status==='source-file-absent'){
+      datOnly.push(mapId);assert.deepEqual(map.dialogue.records,[]);assert.equal(map.dialogue.source,null);
+      await assert.rejects(readFile(new URL(`../../../Map/${mapId.toLowerCase()}.TLK`,import.meta.url)),{code:'ENOENT'});
+      // DAT source tables retain physical markers and exits without creating
+      // a TLK source, reward records or a compiled story flow.
+      assert.ok(table,`${mapId} must retain its DAT source table`);
+      assert.equal(table.dialogue_status,'source-file-absent');assert.equal(table.source,null);
+      assert.deepEqual(table.map_source,map.source);assert.deepEqual(table.records,[]);assert.equal(table.record_count,0);
+      const packaged=await read(`story/maps/${mapId.toLowerCase()}`);
+      assert.equal(packaged.chapter.flow_id,undefined);assert.deepEqual(packaged.flows,{});
+      continue;
+    }
+    assert.ok(table,`${mapId} source TLK must be registered`);records.push(...table.records);
+  }
+  assert.deepEqual(datOnly,['M17016','M17021','M17022']);
   const ids=[...new Set(records.filter(row=>row.mutation_type===5&&row.mutation_index===0).map(row=>row.mutation_bit))].sort((a,b)=>a-b);
   assert.deepEqual(ids,[4,8,12,50,51,61,150,156,272]);
   for(const id of ids){

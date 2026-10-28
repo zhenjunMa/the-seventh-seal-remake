@@ -30,6 +30,32 @@ function sweepBox(x,y,dx,dy,box,footprint){
     ny:enterY>=enterX-EPS?-Math.sign(dy):0,hit:box.hit};
 }
 
+// Original 48EB70 admits a terrain0 diagonal destination without testing its
+// two side cells. A rectangular footprint would disconnect those shipped
+// passages. Bevel only the two terrain1 corners at such a contact; a separate
+// centre sweep against the original tile still forbids entering terrain1.
+// This is a continuous-collision adaptation, not native movement/rendering.
+function diagonalTerrainBoxes(map,x,y,footprint){
+  const open=(cx,cy)=>map.rows[cy]?.[cx]==='0'&&!map.cell(cx,cy).blocked;
+  const wall=(cx,cy)=>map.rows[cy]?.[cx]==='1';
+  const corners=[
+    open(x,y-1)&&open(x-1,y)&&wall(x-1,y-1),
+    open(x,y-1)&&open(x+1,y)&&wall(x+1,y-1),
+    open(x,y+1)&&open(x+1,y)&&wall(x+1,y+1),
+    open(x,y+1)&&open(x-1,y)&&wall(x-1,y+1)
+  ];
+  const size=map.cellSize,cut=Math.min(size/2-SKIN*2,footprint.halfWidth+footprint.halfHeight+SKIN*2);
+  if(!corners.some(Boolean)||cut<=SKIN*2)return null;
+  const xs=[x*size,x*size+cut,(x+1)*size-cut,(x+1)*size];
+  const ys=[y*size,y*size+cut,(y+1)*size-cut,(y+1)*size],boxes=[];
+  for(let iy=0;iy<3;iy++)for(let ix=0;ix<3;ix++){
+    if(ix===0&&iy===0&&corners[0]||ix===2&&iy===0&&corners[1]
+      ||ix===2&&iy===2&&corners[2]||ix===0&&iy===2&&corners[3])continue;
+    boxes.push({left:xs[ix],right:xs[ix+1],top:ys[iy],bottom:ys[iy+1]});
+  }
+  return boxes;
+}
+
 export class MovementMap {
   constructor(data) {
     if (data?.schema !== 'seventh-seal-map-movement' || data.version !== 1 ||
@@ -106,8 +132,14 @@ export class MovementMap {
           :face.edge===(face.sign>0?cy+1:cy)*size&&ry*face.sign>=0))continue;
         // Gates use the logical centre so a covered exit can actually be
         // reached; terrain alone has physical thickness around the feet.
-        consider(sweepBox(x,y,rx,ry,{left:cx*size,right:(cx+1)*size,top:cy*size,bottom:(cy+1)*size,hit},
-          hit.reason==='transition'?{halfWidth:0,halfHeight:0}:footprint));
+        const box={left:cx*size,right:(cx+1)*size,top:cy*size,bottom:(cy+1)*size,hit};
+        const diagonal=hit.reason==='terrain'?diagonalTerrainBoxes(this,cx,cy,footprint):null;
+        if(diagonal){
+          for(const part of diagonal)consider(sweepBox(x,y,rx,ry,{...part,hit},footprint));
+          // The bevel grants body clearance only. Logical terrain and unknown
+          // transition gates continue to constrain the player's centre.
+          consider(sweepBox(x,y,rx,ry,box,{halfWidth:0,halfHeight:0}));
+        }else consider(sweepBox(x,y,rx,ry,box,hit.reason==='transition'?{halfWidth:0,halfHeight:0}:footprint));
       }
       for(const obstacle of obstacles)consider(sweepBox(x,y,rx,ry,obstacle,footprint));
       const bound=(value,delta,low,high,axis)=>{

@@ -37,6 +37,33 @@ async function sourceMap(mapId){
 }
 const mapIds=[...new Set(audit.summary.missing_visible_cf1_animation_placements.map(row=>row.map_id)), 'M17010','M17020','M17024'];
 const maps=await Promise.all([...new Set(mapIds)].map(sourceMap));
+async function handoffSourceMap(mapId,expectedSha){
+  const bytes=await readFile(new URL(`Map/${mapId.toLowerCase()}.dat`,root));assert.equal(hash(bytes),expectedSha);
+  const width=bytes.readUInt32LE(0x146),height=bytes.readUInt32LE(0x14a),descriptorBytes=bytes.readUInt32LE(0x18)===1?0x42:0x2b;
+  const start=0x172+width*height*64+32*(0x2a+descriptorBytes+0x1b+0x110),count=bytes.readUInt32LE(0x82);
+  const base=bytes.subarray(0x14e,0x16e).toString('ascii').split('\0')[0].replaceAll('\\','/').replace(/^\.\//,'').replace(/\/+$/,'').toLowerCase();
+  assert.equal(base,`mapm/${mapId.toLowerCase()}`);
+  const native=[],resources=[];
+  for(let index=0;index<count;index++){
+    const offset=start+index*274,raw=bytes.subarray(offset,offset+274),path=`${base}/${String(raw.readUInt32LE(0x1e)).padStart(3,'0')}.dgp`;
+    const dgp=await readFile(new URL(path,root));native.push({raw,dgp});
+    if(raw[0xcf]!==1||!dgp[2])continue;
+    assert.equal(dgp[0],9);assert.equal(dgp[2],1);
+    const a=dgp.subarray(67,239),physical=a.readUInt32LE(14),logical=a[13]===0?a.readUInt32LE(0x12):physical;
+    const geometry=67+dgp[2]*172;
+    resources.push({index,behavior_raw_cf:1,map_id:mapId,source_record_offset:offset,
+      source_record_raw_hex:raw.toString('hex'),fixed_clock_raw_b4:raw[0xb4],initial_frame_raw:raw.readUInt32LE(0x3c),
+      resource:{source:{path,sha256:hash(dgp)},frame_width:dgp.readUInt16LE(geometry),frame_height:dgp.readUInt16LE(geometry+2),
+        actions:[{index:0,frame_count:physical,directions:1,interval_raw:a.readUInt32LE(1),first_frame:a.readUInt32LE(0x72),
+          source_action_raw_hex:a.toString('hex'),logical_frames:a[13]===0?[...a.subarray(0x16,0x16+logical)]:Array.from({length:logical},(_,i)=>i),
+          main_bitmap:{source:path,channel:'main'},intrinsic_bitmap:{source:path,channel:'intrinsic'}}]}});
+  }
+  return {mapId,mapFlagIndex:bytes.readUInt32LE(0x92),native,resources};
+}
+const handoffs=await Promise.all([
+  handoffSourceMap('M01060','5ff8f2a3c43649fff1efc4eccd878f4a662d905f6ba3404948e47ec9240a3826'),
+  handoffSourceMap('M01065','2ca9d09e6c3b42814d0e6112ea17384e3796bbbe3660aa25c61503b407cb9aa5'),
+]);
 const make=(map,seed=1,resources=map.resources)=>{
   const rng=createNativeRng(seed),world={revision:6,event_records:[],object_states:{},flags:[],encounter_state:{rng_state:123}},objects=resources.map(row=>({index:row.index}));
   const model=new MapObjectRuntime({objects,resources:structuredClone(resources),mapFlagIndex:map.mapFlagIndex,mapId:map.mapId,random:rng});
@@ -84,6 +111,89 @@ test('4137C0 real single-action frames match every native visit including oversh
     }
   }
   assert.equal(compared,2240);
+});
+
+test('M01060 CF1 sources retain logical FF modulus and every 4137C0 explicit-table visit with unchanged RNG',()=>{
+  assert.deepEqual(handoffs.map(map=>map.resources.length),[26,7]);
+  const explicit=handoffs[0].resources.filter(row=>Buffer.from(row.resource.actions[0].source_action_raw_hex,'hex')[13]===0);
+  assert.equal(explicit.length,10);
+  for(const row of explicit){
+    assert.equal(row.resource.actions[0].frame_count,5);
+    assert.deepEqual(row.resource.actions[0].logical_frames,[0,1,2,3,4,3,2,1,0]);
+  }
+  let compared=0;
+  // M01060's actual animation queue is entirely CF1. M01065 additionally
+  // initializes a CF7 object; its wider global CRT schedule is outside
+  // this CF1 scene-local adaptation and is not silently stubbed from this run.
+  for(const map of handoffs.filter(map=>map.mapId==='M01060'))for(const seed of [0,1,7,42,0x12345678,0xffffffff]){
+    const actual=make(map,seed,[...map.resources].reverse()),native=oracleFor(map,seed);let now=0;
+    actual.model.update(now,{world:actual.world});
+    for(const actor of actual.model.actors){
+      const base=0x22000000+actor.object.index*274;
+      assert.equal(actor.ffRaw,native.oracle.read(base+0xff,1));
+      assert.equal(actor.interval,native.oracle.read(base+0xd9)>>>0);
+      assert.equal(actor.object.motion.frame,0);
+    }
+    assert.equal(actual.rng.state,native.rng.state);
+    assert.equal(native.oracle.rng_calls.length,map.resources.length*2);
+    for(let visit=0;visit<45;visit++){
+      now+=[37,89,123,249,1][visit%5];actual.model.update(now,{world:actual.world});
+      for(const actor of actual.model.actors){
+        const base=0x22000000+actor.object.index*274;
+        native.oracle.run(0x4137c0,[actor.object.index,now]);
+        assert.equal(actor.frame,native.oracle.read(base+0x22),`${map.mapId}/${actor.object.index}/${now}/logical`);
+        assert.equal(actor.object.motion.frame,native.oracle.read(base+0x3c),`${map.mapId}/${actor.object.index}/${now}/physical`);compared++;
+      }
+      assert.equal(actual.rng.state,native.rng.state,'single-action wraps do not draw more CRT values');
+      assert.equal(native.oracle.rng_calls.length,map.resources.length*2);
+    }
+  }
+  assert.equal(compared,7020);
+});
+
+test('real nine-step CF1 sequence preserves its return leg, hidden updates, pause, and source save reconstruction',()=>{
+  const map=handoffs[0],single=structuredClone(map.resources.filter(row=>row.index===13)),actual=make(map,77327,single),actor=actual.model.actors[0];
+  const before=structuredClone(actual.world),rng=actual.rng.state,sequence=[0];let now=0;
+  actual.model.update(0,{world:actual.world});
+  for(let step=0;step<18;step++){
+    now+=actor.interval;actual.model.update(now,{world:actual.world});sequence.push(actor.object.motion.frame);
+  }
+  assert.deepEqual(sequence,[0,1,2,3,4,3,2,1,0,0,1,2,3,4,3,2,1,0,0]);
+  actor.object.hidden=true;now+=actor.interval;actual.model.update(now,{world:actual.world});assert.equal(actor.object.motion.frame,1);
+  const logical=actor.frame;now+=actor.interval;actual.model.update(now,{world:actual.world,paused:true});assert.equal(actor.frame,logical);
+  actual.model.update(now+10000,{world:actual.world});assert.equal(actor.frame,logical);
+  assert.equal(actual.rng.state,rng);assert.deepEqual(actual.world,before);
+  const restored=make(map,91,single),restoredActor=restored.model.actors[0];restored.world=structuredClone(before);
+  restored.model.update(0,{world:restored.world});assert.equal(restoredActor.frame,0);assert.equal(restoredActor.object.motion.frame,0);
+  // Retained 40CFE0 ev_491fb7... restores +22 to logical_count-1, maps
+  // action+16 to its physical frame, and maps +0D's high nibble to layer2.
+  const completed=make(map,91,single),last=completed.model.actors[0];completed.world.event_records[map.mapFlagIndex]=[];
+  completed.world.event_records[map.mapFlagIndex][last.object.index]='0300000000000000000000000000';
+  const saved=structuredClone(completed.world);completed.model.update(0,{world:completed.world});
+  assert.equal(last.frame,8);assert.equal(last.object.motion.frame,0);assert.equal(last.object.layer,2);
+  completed.model.update(last.interval,{world:completed.world});assert.equal(last.frame,0);assert.equal(last.object.motion.frame,0);
+  completed.model.update(last.interval*2,{world:completed.world});assert.equal(last.object.motion.frame,1);
+  assert.deepEqual(completed.world,saved);
+});
+
+test('explicit sequence validation rejects raw-table bounds, physical references and generated metadata drift',()=>{
+  const map=handoffs[0],source=map.resources.find(row=>row.index===13);
+  for(const mutate of [
+    (a,v)=>v.setUint32(0x12,0,true),(a,v)=>v.setUint32(0x12,0x5d,true),(a)=>{a[0x16]=5;},
+    (a,v,row)=>{row.resource.actions[0].logical_frames[5]=4;},
+  ]){
+    const row=structuredClone(source),bytes=Uint8Array.from(Buffer.from(row.resource.actions[0].source_action_raw_hex,'hex'));
+    mutate(bytes,new DataView(bytes.buffer),row);row.resource.actions[0].source_action_raw_hex=Buffer.from(bytes).toString('hex');
+    assert.throws(()=>make(map,1,[row]),/CF1/);
+  }
+  // Initialization writes displayed +3C=0 independently of action+16[0].
+  // A bounded alternate source table therefore starts at0 until its first
+  // clock visit; the logical visit still advances to table entry1.
+  const alternate=structuredClone(source),raw=Buffer.from(alternate.resource.actions[0].source_action_raw_hex,'hex');
+  raw[0x16]=2;alternate.resource.actions[0].source_action_raw_hex=raw.toString('hex');alternate.resource.actions[0].logical_frames[0]=2;
+  const actual=make(map,1,[alternate]),actor=actual.model.actors[0];assert.equal(actor.object.motion.frame,0);
+  actual.model.update(0,{world:actual.world});assert.equal(actor.object.motion.frame,0);
+  actual.model.update(actor.interval,{world:actual.world});assert.equal(actor.object.motion.frame,1);
 });
 
 test('pause and background suspension discard time; render-hidden objects still update; scenes remain independent',()=>{

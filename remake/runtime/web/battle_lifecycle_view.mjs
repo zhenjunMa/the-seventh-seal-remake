@@ -13,7 +13,7 @@ const integer=(value,min=0)=>Number.isInteger(value)&&value>=min;
 // initialization repeats while source elapsed==0. Completion has no fixed
 // elapsed threshold. Pixel geometry is supplied by the owning source renderer.
 export const APPEARANCE_ALPHA_ADAPTER=Object.freeze({
-  source_clock_ms:60,complete_elapsed_raw:Object.freeze({1:7,5:null,7:null}),
+  source_clock_ms:60,complete_elapsed_raw:Object.freeze({1:7,5:null,6:null,7:39}),
   particle_step_raw:8,particle_target_raw:255,
   pixels:'8-bit alpha adapter; original scanline mask not reproduced',
 });
@@ -94,21 +94,24 @@ export class BattleLifecyclePlayback {
       if(channel.appearance){
         const appearance=channel.appearance,limit=APPEARANCE_ALPHA_ADAPTER.complete_elapsed_raw[appearance.mode];
         appearance.elapsed_raw=Math.floor(Math.max(0,now-appearance.started)/APPEARANCE_ALPHA_ADAPTER.source_clock_ms);
-        if(appearance.mode===5){
+        if(appearance.mode===5||appearance.mode===6){
           if(appearance.render_limit===null){
             let geometry=this.appearanceBounds?.(channel.resource_id,channel.pose?copy(channel.pose):null);
             if(geometry===null||geometry===undefined){
               // Source canvas bounds are a declared conservative adapter when
               // no decoded alpha-pixel bounds are available (e.g. fake canvas).
               need(integer(channel.role.frame_width,1)&&integer(channel.role.frame_height,1),'Lifecycle source canvas dimensions missing');
-              geometry={min_x:0,max_y:channel.role.frame_height-1,empty:false};appearance.geometry_source='source-canvas-conservative-adapter';
+              geometry={min_x:0,max_x:channel.role.frame_width-1,max_y:channel.role.frame_height-1,empty:false};appearance.geometry_source='source-canvas-conservative-adapter';
             }else appearance.geometry_source='displayed-source-pixel-bounds';
-            need(typeof geometry.empty==='boolean'&&(geometry.empty||Number.isInteger(geometry.min_x)&&Number.isInteger(geometry.max_y)),'Lifecycle source pixel bounds invalid');
+            const maximum=appearance.mode===6?geometry.max_x:geometry.max_y;
+            need(typeof geometry.empty==='boolean'&&(geometry.empty||Number.isInteger(geometry.min_x)&&Number.isInteger(maximum)),'Lifecycle source pixel bounds invalid');
             if(!channel.pose&&geometry.pose){
               need(['action_index','action_frame','source_frame'].every(key=>integer(geometry.pose[key])),'Lifecycle source appearance pose invalid');
               channel.pose={action_index:geometry.pose.action_index,action_frame:geometry.pose.action_frame,source_frame:geometry.pose.source_frame};
             }
-            appearance.render_limit=geometry.empty?1:Math.max(1,Math.ceil((255+geometry.max_y-geometry.min_x)/8));
+            // 551F03 mode6 starts current=minX-x; mode5 starts minX-y.
+            // Both renderer loops advance +8 and use the same strict bound.
+            appearance.render_limit=geometry.empty?1:Math.max(1,Math.ceil((255+maximum-geometry.min_x)/8));
           }
           if(appearance.elapsed_raw===0)appearance.render_calls=0;
           appearance.render_calls++;this.alphas.set(channel.actor_id,Math.min(1,appearance.render_calls/appearance.render_limit));
@@ -122,7 +125,7 @@ export class BattleLifecyclePlayback {
           if(appearance.elapsed_raw<limit)return;
           channel.deadline=appearance.started+limit*APPEARANCE_ALPHA_ADAPTER.source_clock_ms;
         }
-        channel.appearance=null;channel.blocked=null;this.alphas.set(channel.actor_id,1);
+        channel.nativeBridge?.appearanceComplete?.();channel.appearance=null;channel.blocked=null;this.alphas.set(channel.actor_id,1);
       }
       if(channel.cursor>=channel.skill.timeline.length){this._finish(channel);return;}
       const step=channel.skill.timeline[channel.cursor++];
@@ -133,7 +136,8 @@ export class BattleLifecyclePlayback {
         need(channel.nativeBridge&&step.raw_hex,'Lifecycle source vertical command missing');
         const vertical=channel.nativeBridge.begin(step.raw_hex,channel.deadline);channel.vertical_wait=vertical.waiting;
       }else if(step.command_raw===7){
-        const mode=step.mode_raw_0x47??step.mode_raw47;
+        const sourceMode=step.mode_raw_0x47??step.mode_raw47;
+        const mode=channel.nativeBridge?.appearance&&step.raw_hex?channel.nativeBridge.appearance(step.raw_hex).mode:sourceMode;
         if(!integer(mode,1)){channel.blocked='appearance-mode-requires-controller-rng';channel.mode='blocked';return;}
         channel.appearance={mode,clock_raw:60,elapsed_raw:0,started:channel.deadline,render_calls:0,render_limit:null,geometry_source:null};this.alphas.set(channel.actor_id,0);
       }else{channel.blocked=`unsupported-lifecycle-command-${step.command_raw}`;channel.mode='blocked';return;}

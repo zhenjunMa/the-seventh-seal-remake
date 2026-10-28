@@ -39,6 +39,21 @@ test('Native entry id11 lookup preserves source candidate order, one RNG draw an
   assert.equal(descriptor.after.state_raw,10);assert.equal(descriptor.after.immune_raw,1);assert.equal(descriptor.after.native_active,true);
 });
 
+test('command7 zero mode draws once at execution and renderer completion clears exact source gates',()=>{
+  const f=fixture({enabled:false}),actor=f.battle.actor('001'),raw=Buffer.alloc(176);raw[0]=1;raw.writeUInt32LE(7,1);
+  const before=f.draws.length;
+  for(const [draw,expected]of [[0,1],[1,5],[2,7],[32767,5]]){
+    let calls=0;f.battle.rng=()=>{calls++;return draw;};actor.immune_raw=1;
+    assert.deepEqual(f.battle.beginNativeAppearance('001',raw.toString('hex')),{mode:expected,clock_raw:60});
+    assert.equal(calls,1);assert.equal(actor.immune_raw,1);assert.equal(actor.native_after_raw['0x0521f666'],expected);
+    assert.equal(actor.native_after_raw['0x0521f66e'],0);assert.equal(actor.native_after_raw['0x0521a7b1'],60);
+    f.battle.completeNativeAppearance('001');assert.equal(actor.immune_raw,0);assert.equal(actor.native_after_raw['0x0521f666'],0);assert.equal(actor.native_after_raw['0x0521a7b1'],0);
+  }
+  f.battle.rng=()=>assert.fail('fixed appearance must not consume native RNG');
+  for(const mode of [1,5,6,7]){raw[0x47]=mode;assert.equal(f.battle.beginNativeAppearance('001',raw.toString('hex')).mode,mode);}
+  raw[0x47]=4;const actorBefore=copy(actor);assert.throws(()=>f.battle.beginNativeAppearance('001',raw.toString('hex')),/模式尚未接入/);assert.deepEqual(actor,actorBefore);assert.equal(f.draws.length,before);
+});
+
 test('Lifecycle remains opt-in; enabled entries draw in roster order and cannot charge before individual completion',async()=>{
   const legacy=fixture({enabled:false});assert.equal(legacy.draws.length,0);assert.deepEqual(legacy.battle.presentationSnapshot().lifecycle_events,[]);
   const f=fixture({enemies:2}),initial=entries(f.battle);assert.deepEqual(initial.map(e=>e.actor_id),f.battle.state.actors.map(a=>a.id));assert.equal(f.draws.length,3);
