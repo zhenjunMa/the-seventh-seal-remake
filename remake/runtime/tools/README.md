@@ -390,7 +390,7 @@ independent-source-export：独立基础来源或旧样本生产入口，可能�
 | `items` | [export_chapter_items.py](export_chapter_items.py) | `opening-seed`、`chapter-story`、`enemy-rewards` |
 | `item-presentation` | [export_item_presentation.py](export_item_presentation.py) | `items`、`party-skills` |
 | `recovery` | [export_chapter_recovery.py](export_chapter_recovery.py) | 无声明依赖 |
-| `audio` | [export_audio.py](export_audio.py) | `party-skills`、`item-presentation`、`chapter-maps`、`encounters` |
+| `audio` | [export_audio.py](export_audio.py) | `party-skills`、`item-presentation`、`battle-lifecycle`、`chapter-maps`、`encounters` |
 | `forest-stage` | [export_forest_stage.py](export_forest_stage.py) | 无声明依赖 |
 | `menu` | [export_operation_menu.py](export_operation_menu.py) | `items`、`party-skills` |
 | `battle-ui` | [export_battle_ui.py](export_battle_ui.py) | 无声明依赖 |

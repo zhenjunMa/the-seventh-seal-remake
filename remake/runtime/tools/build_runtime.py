@@ -131,13 +131,13 @@ for target, dependencies in {
     'configuration': ('party-skills','enemy-rewards','encounters'),
     'catalog': ('configuration','chapter-maps'),
     'item-presentation': ('items','party-skills'),
-    'audio': ('party-skills','item-presentation','chapter-maps','encounters'),
+    'audio': ('party-skills','item-presentation','battle-lifecycle','chapter-maps','encounters'),
     'content': ('catalog','party-rewards','battle-packs','audio','menu-fonts','save-menu','dialogue-ui','prologue-presentation','map-effects'),
     'party-rewards': ('party-combat','enemy-rewards'),
 }.items():
     STEPS[target]=replace(STEPS[target],depends=dependencies)
 STEPS['chapter-maps']=replace(STEPS['chapter-maps'],inputs=('data/runtime_content.json','data/opening_map_resources.json'))
-STEPS['audio']=replace(STEPS['audio'],inputs=(*STEPS['audio'].inputs,'data/runtime_content.json'))
+STEPS['audio']=replace(STEPS['audio'],inputs=(*STEPS['audio'].inputs,'data/runtime_content.json','../evidence/party_magic_native.json'))
 STEPS['map-effects']=replace(STEPS['map-effects'],inputs=(*STEPS['map-effects'].inputs,'data/catalog.json'))
 STEPS['party-combat']=replace(STEPS['party-combat'],inputs=(*STEPS['party-combat'].inputs,'data/opening_seed.json'))
 STEPS['catalog']=replace(STEPS['catalog'],inputs=(*STEPS['catalog'].inputs,'data/chapter_map_resources.json'))

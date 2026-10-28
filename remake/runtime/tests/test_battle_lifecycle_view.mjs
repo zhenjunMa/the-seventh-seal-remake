@@ -100,3 +100,29 @@ test('all connected original entry variants finish with source mode RNG owned by
     }
   }finally{Math.random=random;}
 });
+
+test('lifecycle sound visits use source logical cursors, survive slow RAF and retire on reset without replay',()=>{
+ const frames=[],{roster,snapshot}=fixture(),playback=new BattleLifecyclePlayback(manifest,{onFrame:step=>frames.push(step)});
+ snapshot.lifecycle_events=[event('party-1','death',13,12)];playback.advance(snapshot,roster,0);playback.advance(snapshot,roster,100000);
+ const selected=skill('001',13),expected=[];
+ for(const record of selected.source_skill.actions){
+  const raw=Buffer.from(record.raw_hex,'hex');if(raw[0]!==0)continue;
+  const start=raw.readUInt32LE(0x26),end=raw.readUInt32LE(0x2a),range=Array.from({length:end-start},(_,i)=>start+i);
+  expected.push(...(raw[0x1d]?range.reverse():range));
+ }
+ assert.deepEqual(frames.map(f=>f.logical_frame),expected);assert.equal(frames.length,sprites(selected).length);
+ assert.ok(frames.every(f=>f.resource_id==='001'&&f.lifecycle_token===snapshot.lifecycle_events[0].token&&f.battle_id===snapshot.id));
+ const count=frames.length;playback.advance(snapshot,roster,100001);assert.equal(frames.length,count);
+ playback.reset();snapshot.lifecycle_events=[];playback.advance(snapshot,roster,100002);assert.equal(frames.length,count);
+});
+
+test('entry audio observes live immunity clearing at appearance completion before visiting the following source frames',()=>{
+ const control=new BattleController({});control.state={actors:[{id:'member',immune_raw:1}]};control.rng=()=>2;
+ const frames=[],playback=new BattleLifecyclePlayback(manifest,{onFrame:step=>frames.push({...step,inhibited:Boolean(control.actor('member').immune_raw)}),
+  nativeBridge:()=>({record:raw=>control.nativeSourceRecord('member',raw),appearance:raw=>control.beginNativeAppearance('member',raw),appearanceComplete:()=>control.completeNativeAppearance('member')})});
+ const roster=[{id:'member',resource_id:'001',side:'player'}],snapshot={id:'entry-sounds',actors:[{id:'member',life_epoch:0}],lifecycle_events:[event('member','entry',11,11,{life_epoch:0})]};
+ for(let now=0;now<=10000;now+=20)playback.advance(snapshot,roster,now);
+ assert.equal(frames[0].inhibited,true);assert.ok(frames.some(f=>!f.inhibited));
+ assert.equal(frames.find(f=>f.plan_record_index===2&&f.logical_frame===1).inhibited,false);
+ assert.equal(playback.snapshot().active.length,0);
+});

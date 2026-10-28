@@ -73,8 +73,10 @@ test('audio export binds real content, source digests and action fields, retaini
     assert.equal(digest(record),source.record_sha256);
     assert.equal(record.subarray(source.effect_field_offset,source.effect_field_offset+source.effect_field_bytes).toString().split('\0')[0],entry.effect_id+'.dgp');
   }
-  const expectedMissing=new Set(['sound/menu/close.wav',...data.action_sources.map(entry=>'sound/'+entry.token)
-    .filter(source=>!existsSync(new URL('../../../'+source,import.meta.url)))]);
+  const expectedMissing=new Set(['sound/menu/close.wav',...data.action_sources.map(entry=>'sound/'+entry.token),
+    ...Object.values(data.frame_sounds).flatMap(cues=>Object.values(cues)).filter(entry=>entry.token).map(entry=>'sound/'+entry.token),
+    ...Object.values(data.effect_sounds).filter(entry=>entry.token).map(entry=>'sound/'+entry.token)]
+    .filter(source=>!existsSync(new URL('../../../'+source,import.meta.url))));
   assert.deepEqual([...data.missing_original_files].sort(),[...expectedMissing].sort());
   for(const source of data.missing_original_files){
     assert.equal(existsSync(new URL('../../../'+source,import.meta.url)),false,source);
@@ -82,6 +84,46 @@ test('audio export binds real content, source digests and action fields, retaini
   }
   assert.equal(data.battles['stage13.scn'].clip,null);
   assert.deepEqual(data.battles['stage13.scn'].pool,['sound/Fight/FightBGM01.wav','sound/Fight/FightBGM02.wav']);
+});
+
+test('every integrated skill, revival and item effect and lifecycle sound field is exported from its real source',()=>{
+  for(const name of ['party_battle_view','battle_lifecycle','item_presentation']){
+    const meta=JSON.parse(readFileSync(new URL(`../web/data/${name}.json`,import.meta.url)));
+    for(const effect of meta.effects){
+      const cue=data.effect_sounds[effect.id];assert.ok(cue,`${name}:${effect.id}`);
+      assert.equal(cue.source.sha256,effect.source_sha256);assert.ok(cue.evidence.includes(data.native_evidence['0x5074c0']));
+    }
+    if(name!=='battle_lifecycle')continue;
+    for(const role of meta.roles){const dgp=readFileSync(new URL('../../../'+role.source_dgp,import.meta.url));
+      for(const skill of role.skills)for(const step of skill.timeline){
+      if(step.kind!=='sprite')continue;
+      const raw=Buffer.from(step.raw_hex,'hex'),token=raw.subarray(0x7a,0x8e).toString().split('\0')[0];
+      if(token)assert.ok(Object.hasOwn(data.action_tokens,token),`${role.id}:${skill.chr_skill_index}:${token}`);
+      const offset=0x43+step.action_index*0xac;
+      const dgpToken=dgp.subarray(offset+0x56,offset+0x6a).toString().split('\0')[0];
+      if(dgpToken)assert.equal(data.frame_sounds[role.id][step.action_index].token,dgpToken);
+    }}
+  }
+});
+
+test('aid, impact and revival effects play once per instance at their source frame and respect the shared audio lifecycle',async()=>{
+  const {audio}=setup();audio.unlock();
+  const ids=['BFr01_Nm','BFr01_Up','BFr01_Nd','BFr01_Dn','cvt_p001','cvt_p002','_iRelife'];
+  for(const id of ids){
+    const cue=data.effect_sounds[id];assert.ok(cue.clip,id);
+    assert.equal(audio.playEffect(id,`aid:${id}`,cue.logical_frame+1),false);
+    assert.equal(audio.playEffect(id,`aid:${id}`,cue.logical_frame),true);
+    assert.equal(audio.playEffect(id,`aid:${id}`,cue.logical_frame),false);
+  }
+  await tick();assert.equal(audio.snapshot().stats.effects_started,ids.length);
+  assert.deepEqual(audio.snapshot().effect_events.map(e=>[e.clip,e.started]),ids.map(id=>[data.effect_sounds[id].clip,true]));
+  const cue=data.effect_sounds.BFr01_Nm;
+  assert.equal(audio.playEffect('BFr01_Nm','next-action',cue.logical_frame),true);
+  audio.setChannelMuted('effects',true);assert.equal(audio.snapshot().effects.length,0);
+  assert.equal(audio.playEffect('BFr01_Nm','muted',cue.logical_frame),false);
+  audio.setChannelMuted('effects',false);assert.equal(audio.playEffect('BFr01_Nm','after-mute',cue.logical_frame),true);
+  audio.setScene({mapId:'M17010'});assert.equal(audio.snapshot().effects.length,0);
+  audio.dispose();assert.equal(audio.playEffect('BFr01_Nm','disposed',cue.logical_frame),false);
 });
 
 test('operation cues use the separate native table and preserve missing close without substituting another clip',()=>{
