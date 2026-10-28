@@ -7,10 +7,10 @@ export class CaptionView {
     await Promise.all(Object.entries(manifest.resources).map(async([key,value])=>{
       resources[key]={...value,bitmaps:await Promise.all(value.frames.map(frame=>image(frame.image)))};
     }));
-    return new CaptionView({...options,manifest,resources,textRenderer:await createMenuTextRenderer(fonts)});
+    return new CaptionView({...options,manifest,resources,font:fonts.fonts.caption19,textRenderer:await createMenuTextRenderer(fonts)});
   }
-  constructor({root,manifest,resources,textRenderer,onAdvance,log,clock=null}) {
-    Object.assign(this,{root,manifest,resources,textRenderer,onAdvance,log,clock});
+  constructor({root,manifest,resources,font,textRenderer,onAdvance,log,clock=null}) {
+    Object.assign(this,{root,manifest,resources,font,textRenderer,onAdvance,log,clock});
     this.canvas=root.querySelector('canvas');this.context=this.canvas.getContext('2d');
     this.button=root.querySelector('button');this.label=root.querySelector('p');
     this.ink=document.createElement('canvas');this.active=false;this.epoch=0;
@@ -26,7 +26,9 @@ export class CaptionView {
   }
   show(text) {
     this.close();this.active=true;this.root.hidden=false;this.label.textContent=text;
-    this.layout=captionLayout(text,this.manifest.font_height);
+    this.layout=captionLayout(text,this.manifest.font_height,{
+      font:this.font,characterStep:this.manifest.character_step,
+      waitWidth:this.resources.wait.width,waitHeight:this.resources.wait.height});
     this.playback=new CaptionPlayback(text,this.now(),this.manifest.character_interval_ms);
     this.lastText=null;this.resize();this.button.focus({preventScroll:true});
     const epoch=this.epoch;

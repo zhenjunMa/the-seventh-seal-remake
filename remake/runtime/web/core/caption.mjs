@@ -1,12 +1,24 @@
-// Original style3: 45F2D0 / 460360 / 4B9020. Coordinate plane is 640x480.
-export function captionLayout(text, height=19) {
-  const characters=[...text];
-  const byteLength=characters.reduce((n,char)=>n+(char.codePointAt(0)>127?2:1),0);
-  const textWidth=(byteLength*height)>>1;
-  const x=(640-textWidth-30)>>1,y=(480-height)>>1;
-  return {text:{x:x-1,y:y-1},
-    shade:{x:x-5,y:y-5,width:textWidth+70,height:height+16},
-    wait:{x:x+characters.length*(height+2)+2,y:y+height-29}};
+// Style3 keeps a 640x480 plane, with the final text centered in its shade.
+export function captionLayout(text, height=19, {font=null,characterStep=height+2,waitWidth=31,waitHeight=29}={}) {
+  let width=0,left=Infinity,top=Infinity,right=-Infinity,bottom=-Infinity;
+  for(const char of text){
+    const glyph=font?.glyphs[char];
+    if(glyph?.width&&glyph?.height){
+      left=Math.min(left,width+glyph.offset_x);top=Math.min(top,glyph.offset_y);
+      right=Math.max(right,width+glyph.offset_x+glyph.width+1);
+      bottom=Math.max(bottom,glyph.offset_y+glyph.height+1);
+    }
+    width+=char.codePointAt(0)>127?characterStep:(glyph?.advance??Math.ceil(height/2));
+  }
+  const ink=Number.isFinite(left)?{left,top,width:right-left,height:bottom-top}:{left:0,top:0,width,height};
+  // Mirror the continuation marker's space on the left so the text itself
+  // stays centered, including while it is still being revealed.
+  const shade={width:Math.ceil(Math.max(width,ink.width))+2*(waitWidth+4),height:Math.max(height+16,ink.height+16,waitHeight+4)};
+  shade.x=Math.floor((640-shade.width)/2);shade.y=Math.floor((480-shade.height)/2);
+  const x=shade.x+Math.floor((shade.width-ink.width)/2)-ink.left;
+  const y=shade.y+Math.floor((shade.height-ink.height)/2)-ink.top;
+  return {text:{x,y},shade,
+    wait:{x:x+ink.left+ink.width+2,y:shade.y+Math.floor((shade.height-waitHeight)/2)}};
 }
 
 export class CaptionPlayback {
