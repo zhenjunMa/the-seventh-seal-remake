@@ -10,11 +10,12 @@ export class TextureCache {
     let entry=this.sources.get(source);
     if(!entry){
       const key=`seal:${++serial}`;
-      const texture=this.scene.textures.addImage(key,source);
+      const texture=source.battleParticleRevision!==undefined?this.scene.textures.addCanvas(key,source):this.scene.textures.addImage(key,source);
       if(!texture)throw new Error(`Phaser 无法建立纹理：${key}`);
       texture.setFilter(1); // Phaser.Textures.FilterMode.NEAREST; preserve source pixels.
-      entry={key,texture,source,used:this.frame};this.sources.set(source,entry);this.entries.add(entry);
+      entry={key,texture,source,used:this.frame,revision:source.battleParticleRevision};this.sources.set(source,entry);this.entries.add(entry);
     }
+    if(source.battleParticleRevision!==undefined&&entry.revision!==source.battleParticleRevision){entry.texture.refresh();entry.revision=source.battleParticleRevision;}
     entry.used=this.frame;return entry;
   }
   region(source,x=0,y=0,width=source.width,height=source.height,name=`${x},${y},${width},${height}`){

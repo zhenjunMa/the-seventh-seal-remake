@@ -38,11 +38,11 @@ test('a newer event token cancels prior playback without acknowledging or restar
   snapshot.lifecycle_events=[second];playback.advance(snapshot,roster,140);assert.equal(playback.pose('party-1').source_frame,sprites(skill('001',13))[0].source_frame);
   snapshot.lifecycle_events=[first];playback.advance(snapshot,roster,5000);assert.equal(playback.snapshot().active.length,0);assert.deepEqual(playback.drainCompleted(),[]);
 });
-test('the legacy fade increment field is a source mode and never an invented alpha speed',()=>{
+test('the legacy fade increment selects particles; render completion does not wait thirty220ms steps',()=>{
   const {playback,roster,snapshot}=fixture(),death=event('enemy-A','death',null,null,{fade_increment_raw:7});snapshot.lifecycle_events=[death];playback.advance(snapshot,roster,100);assert.equal(playback.pose('enemy-A'),null);assert.equal(playback.alpha('enemy-A'),1);
-  assert.equal(role('012').death_policy.enemy_fade_fields.clock_raw,220);playback.advance(snapshot,roster,320);assert.equal(playback.alpha('enemy-A'),1-1/30);assert.equal(playback.hidden('enemy-A'),false);assert.deepEqual(playback.drainCompleted(),[]);
-  assert.equal(playback.snapshot().active[0].fade.mode,7);playback.advance(snapshot,roster,100+30*220-1);assert.equal(playback.hidden('enemy-A'),false);
-  playback.advance(snapshot,roster,100+30*220);assert.equal(playback.alpha('enemy-A'),0);assert.equal(playback.hidden('enemy-A'),true);assert.deepEqual(playback.drainCompleted().map(row=>row.token),[death.token]);
+  assert.equal(role('012').death_policy.enemy_fade_fields.clock_raw,220);playback.advance(snapshot,roster,320);assert.equal(playback.alpha('enemy-A'),1);assert.equal(playback.hidden('enemy-A'),false);assert.deepEqual(playback.drainCompleted(),[]);
+  assert.equal(playback.snapshot().active[0].fade.mode,7);playback.advance(snapshot,roster,700);assert.equal(playback.hidden('enemy-A'),false);
+  playback.advance(snapshot,roster,850);assert.equal(playback.alpha('enemy-A'),0);assert.equal(playback.hidden('enemy-A'),true);assert.deepEqual(playback.drainCompleted().map(row=>row.token),[death.token]);
 });
 test('absent death source and absent fade do not create guessed fade or early acknowledgement',()=>{
   const {playback,roster,snapshot}=fixture();snapshot.lifecycle_events=[event('enemy-A','death',null,null)];playback.advance(snapshot,roster,0);playback.advance(snapshot,roster,100000);

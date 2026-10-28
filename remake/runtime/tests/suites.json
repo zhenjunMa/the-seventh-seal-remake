@@ -31,6 +31,7 @@
         "test_combat.mjs",
         "test_combat_sample.mjs",
         "test_dialogue.mjs",
+        "test_death_particles.mjs",
         "test_field_skills.mjs",
         "test_fullscreen.mjs",
         "test_image_resources.mjs",
