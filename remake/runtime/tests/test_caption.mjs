@@ -4,11 +4,15 @@ import fs from 'node:fs/promises';
 import {CaptionPlayback,captionLayout} from '../web/core/caption.mjs';
 const {createStoryController}=await import('../web/controllers/story.mjs');
 
-test('style3 matches the original caption crop without ornamental borders',()=>{
-  const layout=captionLayout('一万八千年后………………');
-  assert.deepEqual(layout.text,{x:190,y:229});
-  assert.deepEqual(layout.shade,{x:186,y:225,width:298,height:35});
-  assert.equal(layout.wait.x,445);
+test('style3 centers text in its shade and leaves room for the continuation marker',async()=>{
+  const fonts=JSON.parse(await fs.readFile(new URL('../web/data/prologue_fonts.json',import.meta.url),'utf8'));
+  const layout=captionLayout('一万八千年后………………',19,{font:fonts.fonts.caption19});
+  assert.deepEqual(layout.text,{x:195,y:230});
+  assert.deepEqual(layout.shade,{x:159,y:222,width:322,height:35});
+  assert.equal(layout.text.x+1+248/2,layout.shade.x+layout.shade.width/2);
+  assert.equal(layout.text.y+19/2,layout.shade.y+layout.shade.height/2);
+  assert.equal(layout.wait.x,446);
+  assert.ok(layout.wait.x+31<layout.shade.x+layout.shade.width);
 });
 
 test('caption advances at120ms; early confirmation completes text and next closes once',()=>{
