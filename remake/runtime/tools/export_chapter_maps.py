@@ -16,6 +16,7 @@ sys.dont_write_bytecode = True
 RUNTIME = Path(__file__).resolve().parents[1]
 ROOT = RUNTIME.parents[1]
 sys.path.insert(0, str(RUNTIME / "tools"))
+from incremental import resource, recipe_hash, save_png, cached_png
 import export_maps
 from route_export_maps import RouteMapBackground
 from route_extract_resources import map_record, tlk_record
@@ -100,6 +101,19 @@ def npcs(detail):
 
 
 def role_graphics(role_id, outputs):
+    tools = Path(__file__).parent
+    rules = recipe_hash([Path(__file__), tools/'source/dgp.py'])
+    def produce():
+        generated = {}
+        role = _role_graphics(role_id, generated)
+        return {'role': role, 'outputs': generated}, [RUNTIME/'web'/name.lstrip('/') for name in generated]
+    cached = resource(RUNTIME, 'map-role/'+role_id,
+                      {'source': export_maps.sha(ROOT/f'ROLE/{role_id}.dgp')}, rules, produce)
+    outputs.update(cached['outputs'])
+    return cached['role']
+
+
+def _role_graphics(role_id, outputs):
     name = f"ROLE/{role_id}.dgp"
     dgp = DGP(ROOT / name)
     actions = []
@@ -114,7 +128,7 @@ def role_graphics(role_id, outputs):
                             (frame * dgp.width, direction * dgp.height))
         target = RUNTIME / f"web/assets/chapter_roles/{role_id}/action_{action['index']:02}.png"
         target.parent.mkdir(parents=True, exist_ok=True)
-        sheet.save(target)
+        save_png(sheet, target)
         outputs[export_maps.web_url(target)] = export_maps.sha(target)
         raw = dgp.raw_actions[action["index"]]
         uses_sequence = (raw[0x0D] & 0x0F) == 0
@@ -318,8 +332,9 @@ def export():
                 for frame in range(dgp.frame_count):
                     target = RUNTIME / f"web/assets/chapter_objects/{ident.lower()}/{obj['resource_id']}/frame_{frame:03}.png"
                     target.parent.mkdir(parents=True, exist_ok=True)
-                    dgp.decode(frame).save(target)
-                    outputs[export_maps.web_url(target)] = export_maps.sha(target)
+                    outputs[export_maps.web_url(target)] = cached_png(RUNTIME, target, dgp.sha256,
+                        {'frame': frame}, recipe_hash([Path(__file__),Path(__file__).parent/'source/dgp.py']),
+                        lambda: dgp.decode(frame))
                     frame_records.append(dict(index=frame, image=export_maps.web_url(target),
                                               sha256=outputs[export_maps.web_url(target)]))
                 object_animations[ident].append(dict(object_index_zero_based=obj["object_index_zero_based"],

@@ -1,5 +1,7 @@
 """Lossless, source-checked cropped battle atlases. Existing exports stay untouched."""
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 from collections import defaultdict
 import argparse
 import hashlib
@@ -130,108 +132,41 @@ def plan(roles=None, stage=None):
     return report
 
 
-def build():
-    from PIL import Image, ImageChops
-
+def build(repack=False):
+    from incremental_atlas import build_atlas
+    from incremental import write_json
     data = inventory()
-    sources = {}
-    images = {}
-    groups = defaultdict(dict)
-    input_pixels = 0
-    for asset in data['assets']:
-        source = local(asset['path'])
-        raw = source.read_bytes()
-        assert sha(raw) == asset['sha256'], asset['path']
-        sources[source.relative_to(ROOT).as_posix()] = sha(raw)
-        with Image.open(source) as opened:
-            image = opened.convert('RGBA')
-        assert image.size == (asset['width'], asset['height']), asset['path']
-        input_pixels += image.width * image.height
-        row = dict(sha256=asset['sha256'], width=image.width, height=image.height, regions=[])
-        images[asset['path']] = row
-        for y in range(0, image.height, asset['tile_height']):
-            for x in range(0, image.width, asset['tile_width']):
-                tile = image.crop((x, y, min(image.width, x + asset['tile_width']), min(image.height, y + asset['tile_height'])))
-                bounds = tile.getchannel('A').getbbox() if asset.get('trim', True) else (0, 0, tile.width, tile.height)
-                if bounds is None:
-                    continue
-                crop = tile.crop(bounds)
-                assert crop.width + 2 <= PAGE and crop.height + 2 <= PAGE, asset['path']
-                key = sha(crop.width.to_bytes(4, 'little') + crop.height.to_bytes(4, 'little') + crop.tobytes())
-                group = groups[packing_family(asset)]
-                if key not in group:
-                    group[key] = dict(image=crop, width=crop.width, height=crop.height, references=[], owners=set())
-                region = [x + bounds[0], y + bounds[1], crop.width, crop.height, None, None, None]
-                row['regions'].append(region)
-                group[key]['references'].append(region)
-                group[key]['owners'].update(asset.get('owners', []))
-    groups = dependency_groups(groups)
+    manifest, sources, output_hashes, counters = build_atlas(data, runtime=RUNTIME, web=WEB, out=OUT,
+        layout_pages=layout_pages, packing_family=packing_family, dependency_groups=dependency_groups, repack=repack)
     for name, entry in data['manifests'].items():
-        sources[local(name).relative_to(ROOT).as_posix()] = entry['sha256']
-    OUT.mkdir(parents=True, exist_ok=True)
-    pages = []
-    output_hashes = {}
-    unique_tiles = 0
-    for group_name, tiles in sorted(groups.items()):
-        for placed, width, height in layout_pages(tiles.values()):
-            atlas = Image.new('RGBA', (width, height))
-            for tile, x, y in placed:
-                atlas.paste(tile['image'], (x, y))
-            # Name pages by actual encoded content, allowing immutable HTTP cache.
-            import io
-            encoded = io.BytesIO()
-            atlas.save(encoded, format='PNG', compress_level=6)
-            raw = encoded.getvalue()
-            digest = sha(raw)
-            target = OUT / (digest[:24] + '.png')
-            if not target.exists() or target.read_bytes() != raw:
-                target.write_bytes(raw)
-            page_index = len(pages)
-            pages.append(dict(path='/' + target.relative_to(WEB).as_posix(), sha256=digest,
-                              width=atlas.width, height=atlas.height, group=group_name, bytes=len(raw)))
-            output_hashes[target.relative_to(ROOT).as_posix()] = digest
-            for tile, px, py in placed:
-                for region in tile['references']:
-                    region[4:] = [page_index, px, py]
-            unique_tiles += len(placed)
-    # Decode generated pages and reconstruct every original tile. Alpha-zero RGB
-    # is immaterial to Canvas source-over/lighter; HUD masks are kept untrimmed.
-    decoded = [Image.open(local(p['path'])).convert('RGBA') for p in pages]
-    for asset in data['assets']:
-        row = images[asset['path']]
-        restored = Image.new('RGBA', (row['width'], row['height']))
-        for ox, oy, w, h, page, px, py in row['regions']:
-            restored.paste(decoded[page].crop((px, py, px+w, py+h)), (ox, oy))
-        with Image.open(local(asset['path'])) as opened:
-            original = opened.convert('RGBA')
-        assert original.getchannel('A').tobytes() == restored.getchannel('A').tobytes(), asset['path']
-        difference = ImageChops.difference(original.convert('RGB'), restored.convert('RGB'))
-        occupied = original.getchannel('A').point(lambda value: 255 if value else 0).convert('RGB')
-        assert ImageChops.multiply(difference, occupied).getbbox() is None, asset['path']
-    manifest = dict(schema='seventh-seal-battle-packs', version=1, pages=pages, images=images,
-                    manifests=data['manifests'])
-    target = WEB / 'data/battle_packs.json'
-    target.write_text(json.dumps(manifest, ensure_ascii=False, separators=(',', ':')), encoding='utf-8')
-    output_hashes[target.relative_to(ROOT).as_posix()] = sha(target.read_bytes())
-    assert all(sha((ROOT / name).read_bytes()) == digest for name, digest in sources.items())
+        path = local(name)
+        if sha(path.read_bytes()) != entry['sha256']:
+            raise ValueError('Manifest changed during atlas export: '+name)
+        sources[path.relative_to(ROOT).as_posix()] = entry['sha256']
+    pages, images = manifest['pages'], manifest['images']
+    unique_tiles = len({(region[4],region[5],region[6],region[2],region[3])
+                        for image in images.values() for region in image['regions']})
     report = dict(schema='seventh-seal-battle-pack-export', version=1, source_unchanged=True,
-                  source_hashes=sources, output_hashes=output_hashes, images=len(images), pages=len(pages),
-                  unique_tiles=unique_tiles, source_rgba_bytes=input_pixels * 4,
-                  atlas_rgba_bytes=sum(p['width'] * p['height'] * 4 for p in pages),
-                  png_bytes=sum(p['bytes'] for p in pages), pixel_reconstruction_passed=True,
-                  policy='Lossless visible RGBA, source alpha, original geometry and source hashes retained. HUD masks remain full rectangles.')
-    REPORT.parent.mkdir(parents=True, exist_ok=True)
-    REPORT.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding='utf-8')
-    print(json.dumps({k: report[k] for k in ['images', 'pages', 'unique_tiles', 'source_rgba_bytes', 'atlas_rgba_bytes', 'png_bytes', 'pixel_reconstruction_passed']}), flush=True)
+        source_hashes=sources, output_hashes=output_hashes, images=len(images), pages=len(pages),
+        unique_tiles=unique_tiles, source_rgba_bytes=sum(a['width']*a['height']*4 for a in data['assets']),
+        atlas_rgba_bytes=sum(p['width']*p['height']*4 for p in pages),
+        png_bytes=sum(p['bytes'] for p in pages), pixel_reconstruction_passed=True,
+        **counters, policy='Append verified new tiles; freeze existing pages and coordinates. Explicit --repack compacts the library.')
+    write_json(REPORT, report)
+    print(json.dumps({k: report[k] for k in ['images','pages','unique_tiles','pixel_reconstruction_passed',*counters]}), flush=True)
+    return report
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--repack', action='store_true', help='Explicitly repack all pages instead of appending new tiles')
     parser.add_argument('--plan', action='store_true', help='只用已有清单估算依赖分组，不读媒体或生成图集')
     parser.add_argument('--roles', help='计划中本场角色资源编号，以逗号分隔')
     parser.add_argument('--stage', help='计划中本场舞台编号；与 --roles 同时提供')
     parser.add_argument('--report', type=Path, help='将计划写入 evidence 下的新 JSON 文件')
     args = parser.parse_args()
+    if args.repack and args.plan:
+        parser.error('--repack cannot be combined with --plan')
     if bool(args.roles) != bool(args.stage) or (args.roles or args.stage or args.report) and not args.plan:
         parser.error('--roles / --stage 必须配对，且仅在 --plan 时使用；--report 也仅用于计划')
     if args.plan:
@@ -244,4 +179,4 @@ if __name__ == '__main__':
             target.write_text(json.dumps(report, ensure_ascii=False, indent=2)+'\n', encoding='utf-8')
         print(json.dumps(report, ensure_ascii=False, indent=2))
     else:
-        build()
+        build(repack=args.repack)

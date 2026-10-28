@@ -11,6 +11,7 @@ from pathlib import Path
 import sys
 
 sys.path.insert(0,str(Path(__file__).resolve().parent))
+from incremental import write_json as incremental_json
 from export_menu_font_gdi import export, RUNTIME, MANIFEST
 
 
@@ -78,7 +79,7 @@ def main():
         current,sources=collect_text_charset()
         recipe['text_characters']+=''.join(c for c in current if c not in recipe['text_characters'])
         recipe['text_sources']=sources
-        RECIPE.write_text(json.dumps(recipe,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+        incremental_json(RECIPE, recipe)
     characters,sources=recipe['text_characters'],recipe['text_sources']
     numeric=[(r['key'],r['face'],r['height']) for r in recipe['fonts'] if r['kind']=='numeric']
     text_fonts=[(r['key'],r['face'],r['height']) for r in recipe['fonts'] if r['kind']=='text']
@@ -100,12 +101,12 @@ def main():
         'coordinates':'Widget rect (raw+0x29..0x35) plus menu origin, not draw_point_raw.'}
     manifest['export_recipe']={'path':RECIPE.relative_to(RUNTIME).as_posix(),
         'sha256':hashlib.sha256(RECIPE.read_bytes()).hexdigest(),'single_command':'python remake/runtime/tools/export_menu_text_gdi.py'}
-    MANIFEST.write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
-    evidence.write_text(json.dumps({'evidence_type':'source-parameter-derived-local-GDI','runtime_original_observed':False,
+    incremental_json(MANIFEST, manifest)
+    incremental_json(evidence, {'evidence_type':'source-parameter-derived-local-GDI','runtime_original_observed':False,
         'character_count':len(characters),'charset_sha256':manifest['text_charset']['sha256'],
         'fonts':{k:{'requested':v['face_requested'],'resolved':v['face_resolved'],'height':v['height'],
             'image_sha256':v['sha256']} for k,v in manifest['fonts'].items() if k.endswith(('_text','_mnu'))},
-        'sources':sources,'limitations':manifest['limitations']},ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+        'sources':sources,'limitations':manifest['limitations']})
     print(json.dumps({'character_count':len(characters),'manifest':str(MANIFEST),'evidence':str(evidence)},ensure_ascii=False))
 
 

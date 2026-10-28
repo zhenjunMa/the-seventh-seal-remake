@@ -19,6 +19,7 @@ RUNTIME = Path(__file__).resolve().parents[1]
 ROOT = RUNTIME.parents[1]
 SOURCE_TOOLS = RUNTIME / "tools"
 sys.path.insert(0, str(SOURCE_TOOLS))
+from incremental import resource, recipe_hash, write_json as incremental_json, save_png
 from source.dgp import DGP, DGPError, u32
 from source.map_data import MapBackground
 from source.map_objects import MapObjects
@@ -42,8 +43,7 @@ def sha(path: Path) -> str:
 
 
 def write_json(path: Path, value) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    incremental_json(path, value)
 
 
 def source_path(path: Path) -> str:
@@ -213,6 +213,23 @@ def transition_descriptors(map_data: MapBackground) -> tuple[list[dict], list[di
 
 
 def export_map(map_id: str, parsed: dict, output_files: dict) -> dict:
+    dat = ROOT/'Map'/(map_id.lower()+'.dat')
+    bg = MapBackground(dat)
+    paths = [ROOT/name for name in background_names(bg)]
+    paths.extend(MapObjects(dat).resource_paths(ROOT).values())
+    inputs = {source_path(path): sha(path) for path in [dat, *paths]}
+    rules = recipe_hash([Path(__file__), Path(sys.modules[MapBackground.__module__].__file__),
+                         SOURCE_TOOLS/'source/dgp.py', SOURCE_TOOLS/'source/map_objects.py', SOURCE_TOOLS/'source/map_data.py'])
+    def produce():
+        outputs = {}
+        record = _export_map(map_id, parsed, outputs)
+        return {'record': record, 'outputs': outputs}, [RUNTIME/'web'/name.lstrip('/') for name in outputs]
+    cached = resource(RUNTIME, 'map/'+map_id, inputs, rules, produce)
+    output_files.update(cached['outputs'])
+    return cached['record']
+
+
+def _export_map(map_id: str, parsed: dict, output_files: dict) -> dict:
     slug = map_id.lower()
     dat_path = ROOT / "Map" / (slug + ".dat")
     bg = MapBackground(dat_path)
@@ -224,7 +241,7 @@ def export_map(map_id: str, parsed: dict, output_files: dict) -> dict:
     target = RUNTIME / "web/assets/maps" / slug
     target.mkdir(parents=True, exist_ok=True)
     background_png = target / "background.png"
-    image.save(background_png)
+    save_png(image, background_png)
     output_files[web_url(background_png)] = sha(background_png)
 
     rows = []
@@ -247,7 +264,7 @@ def export_map(map_id: str, parsed: dict, output_files: dict) -> dict:
         object_png = target / "objects" / f'{Path(graphic["source"]).stem}_frame_{graphic["frame"]:03d}.png'
         if object_png not in saved:
             object_png.parent.mkdir(parents=True, exist_ok=True)
-            dgp.decode(graphic["frame"]).save(object_png)
+            save_png(dgp.decode(graphic["frame"]), object_png)
             output_files[web_url(object_png)] = sha(object_png)
             saved.add(object_png)
         objects.append({**graphic, "image": web_url(object_png),

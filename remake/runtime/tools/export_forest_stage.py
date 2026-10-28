@@ -14,6 +14,7 @@ RUNTIME = Path(__file__).resolve().parents[1]
 ROOT = RUNTIME.parents[1]
 WEB = RUNTIME / 'web'
 sys.path.insert(0, str(ROOT / "remake/runtime/tools"))
+from incremental import save_png, write_json as incremental_json
 from PIL import Image
 from source.combat_resources import GAME_SHA256
 from source.dgp import DGP
@@ -25,11 +26,11 @@ def i32(raw, at): return struct.unpack_from('<i', raw, at)[0]
 def save(path, data):
     assert path.resolve().is_relative_to(RUNTIME.resolve())
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', 'utf-8')
+    incremental_json(path, data)
 def image_asset(image, path):
     assert path.resolve().is_relative_to(RUNTIME.resolve())
     path.parent.mkdir(parents=True, exist_ok=True)
-    image.save(path)
+    save_png(image, path)
     with Image.open(path) as saved:
         assert saved.convert('RGBA').tobytes() == image.tobytes()
     return dict(path='/' + path.relative_to(WEB).as_posix(), sha256=sha(path.read_bytes()),

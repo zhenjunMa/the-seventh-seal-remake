@@ -4,6 +4,7 @@ import hashlib
 import json
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+from incremental import write_json as incremental_json, recipe_hash, cached_png
 from export_operation_menu import ROOT, RUNTIME, OUT, parse, DGP
 
 
@@ -38,7 +39,7 @@ def main():
         frames = []
         for i in range(bank.frame_count):
             dest = target / f'frame_{i:03}.png'
-            bank.decode(i).save(dest)
+            cached_png(RUNTIME, dest, bank.sha256, {'frame':i}, recipe_hash([Path(__file__),Path(__file__).parent/'source/dgp.py']), lambda: bank.decode(i))
             frames.append(dest.relative_to(RUNTIME / 'web').as_posix())
         result['icons'][name] = dict(source=source.relative_to(ROOT).as_posix(),
             sha256=bank.sha256, width=bank.width, height=bank.height,
@@ -50,16 +51,15 @@ def main():
         raise ValueError('Original input changed during export')
     result['original_inputs_unchanged'] = True
     data = RUNTIME / 'web/data/operation_techniques.json'
-    data.write_text(json.dumps(result, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+    incremental_json(data, result)
     evidence = RUNTIME / 'evidence/menu_technique_export_20261013.json'
     output_files=[data,*[p for directory in [OUT/'techniques',OUT/'game002d',OUT/'game002e',OUT/'game004'] for p in directory.rglob('*') if p.is_file()]]
-    evidence.write_text(json.dumps(dict(input_sha256=before, original_inputs_unchanged=True,
+    incremental_json(evidence, dict(input_sha256=before, original_inputs_unchanged=True,
         source_hashes={Path(path).relative_to(ROOT).as_posix():value for path,value in before.items()},
         output_hashes={p.relative_to(ROOT).as_posix():hashlib.sha256(p.read_bytes()).hexdigest() for p in output_files},
         manifest='web/data/operation_techniques.json',
         manifest_sha256=hashlib.sha256(data.read_bytes()).hexdigest(),
-        limitations=['No original files are edited.', 'Source sprites do not establish battle handlers.']),
-        ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+        limitations=['No original files are edited.', 'Source sprites do not establish battle handlers.']))
 
 
 if __name__ == '__main__':

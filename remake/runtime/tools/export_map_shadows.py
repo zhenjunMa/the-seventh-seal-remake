@@ -16,6 +16,7 @@ RUNTIME = Path(__file__).resolve().parents[1]
 ROOT = RUNTIME.parents[1]
 WEB = RUNTIME / 'web'
 sys.path.insert(0, str(ROOT / "remake/runtime/tools"))
+from incremental import save_png, write_json as incremental_json, resource, recipe_hash
 from source.dgp import DGP, DGPError
 from PIL import Image
 
@@ -35,7 +36,7 @@ def read(path):
 
 def write(path, value):
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+    incremental_json(path, value)
 
 
 def audit_mask(blob, width, height):
@@ -62,6 +63,80 @@ def audit_mask(blob, width, height):
     if offset != len(blob):
         raise DGPError('Independent shadow audit: trailing bytes')
     return bytes(mask)
+
+
+def export_shadow_role(ident, choice):
+    tools = Path(__file__).parent
+    def produce():
+        outputs, checks, empty_actions = {}, [], []
+        full_rgba_bytes = compact_rgba_bytes = 0
+        if len(ident) != 3 or not ident.isdecimal() or Path(choice['source']).stem != ident:
+            raise DGPError('Shadow role must use its original three-digit ROLE resource ID')
+        dgp = DGP(ROOT / choice['source'])
+
+        if not dgp.shadow_blobs:
+            return {'role':None,'outputs':{},'checks':[],'full':0,'compact':0,'empty':[]}, []
+        actions = []
+        for index in sorted(choice['actions']):
+            action = dgp.actions[index]
+            target = WEB / f'assets/map_shadows/{ident}/action_{index:02}_shadow.png'
+            n, dirs = action['frames_per_direction'], action['directions']
+            if n <= 0 or dirs <= 0:
+                raise DGPError('Shadow action has an empty physical frame group')
+            sheet = Image.new('RGBA', (n * dgp.width, dirs * dgp.height))
+            bounds = []
+            for direction in range(dirs):
+                for frame in range(n):
+                    physical = action['first_frame'] + direction * n + frame
+                    image = dgp.decode_shadow(physical)
+                    expected = audit_mask(dgp.shadow_blobs[physical], dgp.width, dgp.height)
+                    if image.getchannel('A').tobytes() != expected or image.convert('RGB').getbbox():
+                        raise DGPError('Shadow decoder differs from the independent source mask replay')
+                    if image.getbbox():
+                        bounds.append(image.getbbox())
+                    sheet.paste(image, (frame * dgp.width, direction * dgp.height))
+                    checks.append(dict(role=ident, action=index, direction=direction, physical_frame=physical,
+                                       covered_pixels=expected.count(128), blob_bytes=len(dgp.shadow_blobs[physical]),
+                                       blob_sha256=hashlib.sha256(dgp.shadow_blobs[physical]).hexdigest()))
+            full_rgba_bytes += n * dirs * dgp.width * dgp.height * 4
+            if not bounds:
+                empty_actions.append(dict(role=ident, action=index))
+                pass  # Unreferenced old files are retained until explicit cleanup.
+                continue
+            left, top = min(b[0] for b in bounds), min(b[1] for b in bounds)
+            right, bottom = max(b[2] for b in bounds), max(b[3] for b in bounds)
+            width, height = right - left, bottom - top
+            compact = Image.new('RGBA', (n * width, dirs * height))
+            for direction in range(dirs):
+                for frame in range(n):
+                    physical = action['first_frame'] + direction * n + frame
+                    x, y = frame * dgp.width, direction * dgp.height
+                    cropped = sheet.crop((x + left, y + top, x + right, y + bottom))
+                    compact.paste(cropped, (frame * width, direction * height))
+                    restored = Image.new('RGBA', (dgp.width, dgp.height))
+                    restored.paste(cropped, (left, top))
+                    if restored.getchannel('A').tobytes() != audit_mask(dgp.shadow_blobs[physical], dgp.width, dgp.height):
+                        raise DGPError('Compact shadow atlas cannot reconstruct the independent original mask')
+            compact_rgba_bytes += compact.width * compact.height * 4
+            sheet = compact
+            target.parent.mkdir(parents=True, exist_ok=True)
+            save_png(sheet, target)
+            with Image.open(target) as stored:
+                if stored.convert('RGBA').tobytes() != sheet.tobytes():
+                    raise DGPError('Shadow atlas PNG round-trip differs')
+            url = '/' + target.relative_to(WEB).as_posix()
+            outputs[url] = sha(target)
+            actions.append(dict(index=index, first_frame=action['first_frame'], frame_count=n, directions=dirs,
+                                shadow_sheet=url, shadow_geometry=dict(x=left, y=top, width=width, height=height),
+                                sha256=outputs[url]))
+        role = dict(source=dict(path=choice['source'], sha256=dgp.sha256),
+                            frame_width=dgp.width, frame_height=dgp.height,
+                            event_only=choice['event_only'], actions=actions)
+        return {'role':role,'outputs':outputs,'checks':checks,'full':full_rgba_bytes,
+                'compact':compact_rgba_bytes,'empty':empty_actions}, [WEB/name.lstrip('/') for name in outputs]
+    return resource(RUNTIME,'map-shadow/'+ident,
+        {'source':sha(ROOT/choice['source']),'actions':sorted(choice['actions']),'event_only':choice['event_only']},
+        recipe_hash([Path(__file__),tools/'source/dgp.py']),produce)
 
 
 def export():
@@ -106,68 +181,12 @@ def export():
     roles, outputs, checks = {}, {}, []
     full_rgba_bytes, compact_rgba_bytes, empty_actions = 0, 0, []
     for ident, choice in sorted(selected.items()):
-        if len(ident) != 3 or not ident.isdecimal() or Path(choice['source']).stem != ident:
-            raise DGPError('Shadow role must use its original three-digit ROLE resource ID')
-        dgp = DGP(ROOT / choice['source'])
-        sources[choice['source']] = dgp.sha256
-        if not dgp.shadow_blobs:
-            continue
-        actions = []
-        for index in sorted(choice['actions']):
-            action = dgp.actions[index]
-            target = WEB / f'assets/map_shadows/{ident}/action_{index:02}_shadow.png'
-            n, dirs = action['frames_per_direction'], action['directions']
-            if n <= 0 or dirs <= 0:
-                raise DGPError('Shadow action has an empty physical frame group')
-            sheet = Image.new('RGBA', (n * dgp.width, dirs * dgp.height))
-            bounds = []
-            for direction in range(dirs):
-                for frame in range(n):
-                    physical = action['first_frame'] + direction * n + frame
-                    image = dgp.decode_shadow(physical)
-                    expected = audit_mask(dgp.shadow_blobs[physical], dgp.width, dgp.height)
-                    if image.getchannel('A').tobytes() != expected or image.convert('RGB').getbbox():
-                        raise DGPError('Shadow decoder differs from the independent source mask replay')
-                    if image.getbbox():
-                        bounds.append(image.getbbox())
-                    sheet.paste(image, (frame * dgp.width, direction * dgp.height))
-                    checks.append(dict(role=ident, action=index, direction=direction, physical_frame=physical,
-                                       covered_pixels=expected.count(128), blob_bytes=len(dgp.shadow_blobs[physical]),
-                                       blob_sha256=hashlib.sha256(dgp.shadow_blobs[physical]).hexdigest()))
-            full_rgba_bytes += n * dirs * dgp.width * dgp.height * 4
-            if not bounds:
-                empty_actions.append(dict(role=ident, action=index))
-                target.unlink(missing_ok=True)
-                continue
-            left, top = min(b[0] for b in bounds), min(b[1] for b in bounds)
-            right, bottom = max(b[2] for b in bounds), max(b[3] for b in bounds)
-            width, height = right - left, bottom - top
-            compact = Image.new('RGBA', (n * width, dirs * height))
-            for direction in range(dirs):
-                for frame in range(n):
-                    physical = action['first_frame'] + direction * n + frame
-                    x, y = frame * dgp.width, direction * dgp.height
-                    cropped = sheet.crop((x + left, y + top, x + right, y + bottom))
-                    compact.paste(cropped, (frame * width, direction * height))
-                    restored = Image.new('RGBA', (dgp.width, dgp.height))
-                    restored.paste(cropped, (left, top))
-                    if restored.getchannel('A').tobytes() != audit_mask(dgp.shadow_blobs[physical], dgp.width, dgp.height):
-                        raise DGPError('Compact shadow atlas cannot reconstruct the independent original mask')
-            compact_rgba_bytes += compact.width * compact.height * 4
-            sheet = compact
-            target.parent.mkdir(parents=True, exist_ok=True)
-            sheet.save(target)
-            with Image.open(target) as stored:
-                if stored.convert('RGBA').tobytes() != sheet.tobytes():
-                    raise DGPError('Shadow atlas PNG round-trip differs')
-            url = '/' + target.relative_to(WEB).as_posix()
-            outputs[url] = sha(target)
-            actions.append(dict(index=index, first_frame=action['first_frame'], frame_count=n, directions=dirs,
-                                shadow_sheet=url, shadow_geometry=dict(x=left, y=top, width=width, height=height),
-                                sha256=outputs[url]))
-        roles[ident] = dict(source=dict(path=choice['source'], sha256=dgp.sha256),
-                            frame_width=dgp.width, frame_height=dgp.height,
-                            event_only=choice['event_only'], actions=actions)
+        cached = export_shadow_role(ident, choice)
+        if cached['role'] is not None: roles[ident] = cached['role']
+        sources[choice['source']] = sha(ROOT/choice['source'])
+        outputs.update(cached['outputs']); checks.extend(cached['checks'])
+        full_rgba_bytes += cached['full']; compact_rgba_bytes += cached['compact']
+        empty_actions.extend(cached['empty'])
     manifest = WEB / 'data/map_shadows.json'
     write(manifest, dict(schema='seventh-seal-map-shadows', version=1, roles=roles,
                          alpha=128, blend='source-over', evidence=EVIDENCE,

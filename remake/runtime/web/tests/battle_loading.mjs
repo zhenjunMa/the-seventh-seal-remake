@@ -5,7 +5,7 @@ import {LoadingView} from '../loading_view.mjs';
 import {BattleTransitionView} from '../battle_transition_view.mjs';
 import {battleResources,drawBattleImage} from '../core/battle_resources.mjs';
 const $=id=>document.getElementById(id),json=async p=>{const r=await fetch('/'+p.replace(/^\//,''),{cache:'no-store'});if(!r.ok)throw Error(p);return r.json();};
-const names={battleData:'combat_sample',forestData:'forest_combat',schedulerData:'battle_scheduler',aiData:'forest_ai',partyRewards:'party_rewards',partySkills:'party_skills',partyCombat:'party_combat',partyReactions:'party_reactions',statusData:'forest_status',sourceItemData:'items'};
+const names={battleData:'combat_sample',forestData:'forest_combat',schedulerData:'battle_scheduler',aiData:'forest_ai',partyRewards:'party_rewards',partySkills:'party_skills',partyCombat:'party_combat',partyReactions:'party_reactions',statusData:'forest_status',sourceItemData:'items',sourceSkills:'library/skills',sourceMagic:'library/magic'};
 const state={...Object.fromEntries(await Promise.all(Object.entries(names).map(async([k,v])=>[k,await json('data/'+v+'.json')]))),catalog:{party_battle_view:'data/party_battle_view.json'},
   view:{x:0,y:0},battleViews:new Map(),battleHistory:[],battleCursorMemory:new Map(),selectedRole:'001',sidePriority:0,
   scenes:{phase:'map',setPhase(phase){this.phase=phase;$('phase').textContent=phase;}}};
@@ -16,7 +16,7 @@ const log=e=>{const {type,kind,elapsed_ms,mode,cache,frames,actor_id,action_id,e
 state.loadingView=await LoadingView.create({root:$('sceneLoading'),manifest:(await json('data/prologue_presentation.json')).loading,image:async p=>{const i=new Image();i.src=p;await i.decode();return i;},log});
 state.battleTransition=new BattleTransitionView({loadingView:state.loadingView,log});
 const actions={json,log,status:message=>{$('phase').textContent=message;},guarded:fn=>async()=>{try{await fn();}catch(e){checks.push({error:e.message});report();}},resize(){},buildHud(){},updateNearest(){},refreshPartyMenu(){},
-  readConfiguredData:async()=>compileRuntimeConfiguration({combat:state.battleData,forest:state.forestData,scheduler:state.schedulerData,ai:state.aiData,rewards:state.partyRewards,party_skills:state.partySkills,items:state.sourceItemData},await loadRuntimeConfiguration(json)),
+  readConfiguredData:async()=>compileRuntimeConfiguration({combat:state.battleData,forest:state.forestData,scheduler:state.schedulerData,ai:state.aiData,rewards:state.partyRewards,party_skills:state.partySkills,items:state.sourceItemData,source_skills:state.sourceSkills,source_magic:state.sourceMagic},await loadRuntimeConfiguration(json)),
   beginTechniqueTestMenu(){state.menuContext=null;return {};},resumeTechniqueTestMenu(){state.menuContext={combat:false,page:'skills'};state.scenes.setPhase('party-menu');}};
 Object.assign(actions,createBattleController({state,actions,$,canvas,ctx:canvas.getContext('2d')}));
 function reset(){state.battleView?.stop('QA reset');state.battleMenu?.dispose();state.battle=null;state.battleMenu=null;state.skillTestSession=null;state.battlePresentationError=null;state.world=new WorldStore(structuredClone(seed));state.scenes.setPhase('map');canvas.hidden=false;
@@ -35,7 +35,7 @@ async function pixels(){
   reset();
   const data=await battleResources.catalog();
   const paths=[Object.keys(data.images).find(p=>p.includes('party_roles/001')),Object.keys(data.images).find(p=>p.includes('party_layers/001')&&p.endsWith('_main.png')),
-    Object.keys(data.images).find(p=>p.includes('party_effects/')),Object.keys(data.images).find(p=>p.includes('forest_stage/')),
+    Object.keys(data.images).find(p=>p.includes('_effects/')&&data.images[p].regions.length),Object.keys(data.images).find(p=>p.includes('forest_stage/')),
     Object.keys(data.images).find(p=>p.includes('battle_ui/')&&data.images[p].width>20),Object.keys(data.images).find(p=>p.includes('battle_result/'))].filter(Boolean);
   const images=await battleResources.preparePaths(paths,{scope:'qa-pixel-check'});
   for(const path of paths){const row=data.images[path],region=row.regions[0];if(!region)continue;const [x,y,w,h]=region;

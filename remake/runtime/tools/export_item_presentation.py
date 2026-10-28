@@ -14,6 +14,7 @@ RUNTIME = Path(__file__).resolve().parents[1]
 ROOT = RUNTIME.parents[1]
 WEB = RUNTIME / 'web'
 sys.path.insert(0, str(ROOT / "remake/runtime/tools"))
+from incremental import save_png, write_json as incremental_json, resource, recipe_hash
 from PIL import Image
 from source.combat_resources import CHR, GAME_SHA256
 from source.dgp import DGP
@@ -27,12 +28,12 @@ def read(path): return json.loads(path.read_text('utf-8'))
 def save(path, data):
     assert path.resolve().is_relative_to(RUNTIME)
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', 'utf-8')
+    incremental_json(path, data)
 def token(raw, at): return raw[at:at + 20].split(b'\0')[0].decode('ascii')
 
 def sheet_asset(path, image):
     path.parent.mkdir(parents=True, exist_ok=True)
-    image.save(path)
+    save_png(image, path)
     with Image.open(path) as saved:
         assert saved.convert('RGBA').tobytes() == image.tobytes()
     return dict(sheet='/' + path.relative_to(WEB).as_posix(), sha256=sha(path.read_bytes()))
@@ -88,6 +89,25 @@ def item_presentations(data, itm):
 
 
 def export_item_effect(filename, checks, generated, preview_cells):
+    tools = Path(__file__).parent
+    def produce():
+        local_checks, local_generated = [], []
+        effect = _export_item_effect(filename, local_checks, local_generated, [])
+        return {'effect':effect,'checks':local_checks,'generated':[p.relative_to(WEB).as_posix() for p in local_generated]}, local_generated
+    cache_root = RUNTIME if WEB.resolve() == (RUNTIME/'web').resolve() else WEB
+    cached = resource(cache_root,'item/effect/'+filename,
+        {'source':sha((ROOT/f'Fight_Role/Effect/{filename}').read_bytes())},
+        recipe_hash([Path(__file__),tools/'source/dgp.py',tools/'export_skill_layers.py',tools/'export_combat_presentation.py']), produce)
+    effect = cached['effect']
+    checks.extend(cached['checks']); generated.extend(WEB/name for name in cached['generated'])
+    with Image.open(WEB/effect['sheet'].lstrip('/')) as opened:
+        for frame in [0,effect['frame_count']//2,effect['frame_count']-1]:
+            x=frame*effect['frame_width']
+            preview_cells.append((f'{Path(filename).stem}: frame{frame}',opened.crop((x,0,x+effect['frame_width'],effect['frame_height'])).convert('RGBA')))
+    return effect
+
+
+def _export_item_effect(filename, checks, generated, preview_cells):
     p = ROOT / f'Fight_Role/Effect/{filename}'
     d = DGP(p)
     audit = SourceAudit(d.data)
@@ -118,26 +138,10 @@ def export_item_effect(filename, checks, generated, preview_cells):
         evidence=[NATIVE_IDS['indexed_draw'], NATIVE_IDS['effect_action']])
 
 
-def main():
-    items = item_presentations(read(WEB / 'data/items.json'), (ROOT / 'SYSTEM/Object.ITM').read_bytes())
-    effect_tokens = {item['effect_token_raw_126'] for item in items.values()}
-    original_paths = ['GAME.exe', 'SYSTEM/Object.ITM', *[f'Fight_Role/{ident}.{suffix}' for ident in role_ids('player') for suffix in ('CHR','dgp')],
-                      *[f'Fight_Role/Effect/{filename}' for filename in sorted(effect_tokens)]]
-    before = {p: sha((ROOT / p).read_bytes()) for p in original_paths}
-    assert before['GAME.exe'] == GAME_SHA256
-    shared = [WEB / f'data/{name}.json' for name in ['party_skills', 'party_battle_view', *[f'party_role_layers_{ident}' for ident in role_ids('player')]]]
-    protected = {p.relative_to(ROOT).as_posix(): sha(p.read_bytes()) for p in shared}
-    native_path = RUNTIME / 'evidence/chapter_items_native.json'
-    records = read(native_path)['records']
-    proof = {r['parameters'].get('procedure'): r for r in records if r['operation'] == 'procedure_pseudo_code'}
-    evidence = {name: dict(procedure=procedure, evidence_id=proof[procedure]['evidence_id'],
-                          bundle=native_path.relative_to(ROOT).as_posix())
-                for name, procedure in [('native_item_animation', '0x50e808'),
-                                        ('native_recovery_effect', '0x41b3e9'),
-                                        ('native_animation_selection', '0x50e3a0')]}
-    roles, checks, generated = [], [], []
-    preview_cells = []
-    for ident in role_ids('player'):
+def export_item_role(ident, before):
+    tools = Path(__file__).parent
+    def produce():
+        checks, generated, preview_refs = [], [], []
         c = CHR(ROOT / f'Fight_Role/{ident}.CHR')
         d = DGP(ROOT / f'Fight_Role/{ident}.dgp')
         matches = [s for s in c.skills if s['id_raw'] == 17]
@@ -171,15 +175,15 @@ def main():
             prefix = WEB / f'assets/item_presentation/roles/{ident}/frame_{physical:04}'
             prefix.parent.mkdir(parents=True, exist_ok=True)
             main_path, intrinsic_path = Path(str(prefix) + '_main.png'), Path(str(prefix) + '_intrinsic.png')
-            main_asset = save_layer(main, main_path, main_rgba, main_check)
-            intrinsic_asset = save_layer(intrinsic, intrinsic_path, intrinsic_rgba, intrinsic_check)
+            main_asset = save_layer(main, main_path, main_rgba, main_check, web=WEB)
+            intrinsic_asset = save_layer(intrinsic, intrinsic_path, intrinsic_rgba, intrinsic_check, web=WEB)
             intrinsic_asset['active'] = bool(d.indexed_auxiliary[physical]['active_raw'])
             bank_frames.append(dict(source_frame=physical, main=main_asset, intrinsic=intrinsic_asset))
             generated += [main_path, intrinsic_path]
             checks.append(dict(role_id=ident, action_frame=f, source_frame=physical,
                                main=main_check, intrinsic=intrinsic_check))
             sheet.paste(main, (f * d.width, 0))
-            if f in [0, action['frames_per_direction']//2, action['frames_per_direction']-1]: preview_cells.append((f'{ident}: action{action_index} frame{f}', main))
+            if f in [0, action['frames_per_direction']//2, action['frames_per_direction']-1]: preview_refs.append([f'{ident}: action{action_index} frame{f}', main_path.relative_to(WEB).as_posix()])
         action_path = WEB / f'assets/item_presentation/roles/{ident}/action_{action_index:02}.png'
         action_asset = dict(index=action_index, **sheet_asset(action_path, sheet),
                            frame_count=action['frames_per_direction'], directions=1,
@@ -192,14 +196,50 @@ def main():
             source_hashes={p: h for p, h in before.items() if p in ['GAME.exe', f'Fight_Role/{ident}.CHR', f'Fight_Role/{ident}.dgp']},
             evidence=[NATIVE_IDS['range'], NATIVE_IDS['indexed_draw'], NATIVE_IDS['pixel_format']]))
         generated.append(bank_path)
-        roles.append(dict(id=ident, name=c.name, animation_skill_id_raw=17,
+        role = dict(id=ident, name=c.name, animation_skill_id_raw=17,
             chr_skill_index=index, frame_width=d.width, frame_height=d.height,
             anchor=dict(x=d.anchor_raw[0], y=d.anchor_raw[1]), direction=0, mirror=False,
             actions=[action_asset], sequence=sequence, source_plan=plan,
             layer_bank=dict(path='/' + bank_path.relative_to(WEB).as_posix(), sha256=sha(bank_path.read_bytes())),
             sound_token_raw_56=token(d.raw_actions[action_index], 0x56),
             source=dict(chr_path=c.path.relative_to(ROOT).as_posix(), chr_sha256=c.sha256,
-                        dgp_path=d.path.relative_to(ROOT).as_posix(), dgp_sha256=d.sha256)))
+                        dgp_path=d.path.relative_to(ROOT).as_posix(), dgp_sha256=d.sha256))
+        return {'role':role,'checks':checks,'generated':[p.relative_to(WEB).as_posix() for p in generated],
+                'previews':preview_refs}, generated
+    inputs = {p:h for p,h in before.items() if p in ['GAME.exe',f'Fight_Role/{ident}.CHR',f'Fight_Role/{ident}.dgp']}
+    rules = recipe_hash([Path(__file__),tools/'source/dgp.py',tools/'source/combat_resources.py',
+                         tools/'export_party_skills.py',tools/'export_skill_layers.py',tools/'export_combat_presentation.py'])
+    cache_root = RUNTIME if WEB.resolve() == (RUNTIME/'web').resolve() else WEB
+    return resource(cache_root,'item/role/'+ident,inputs,rules,produce)
+
+
+def main():
+    items = item_presentations(read(WEB / 'data/items.json'), (ROOT / 'SYSTEM/Object.ITM').read_bytes())
+    effect_tokens = {item['effect_token_raw_126'] for item in items.values()}
+    original_paths = ['GAME.exe', 'SYSTEM/Object.ITM', *[f'Fight_Role/{ident}.{suffix}' for ident in role_ids('player') for suffix in ('CHR','dgp')],
+                      *[f'Fight_Role/Effect/{filename}' for filename in sorted(effect_tokens)]]
+    before = {p: sha((ROOT / p).read_bytes()) for p in original_paths}
+    assert before['GAME.exe'] == GAME_SHA256
+    shared = [WEB / f'data/{name}.json' for name in ['party_skills', 'party_battle_view', *[f'party_role_layers_{ident}' for ident in role_ids('player')]]]
+    protected = {p.relative_to(ROOT).as_posix(): sha(p.read_bytes()) for p in shared}
+    native_path = RUNTIME / 'evidence/chapter_items_native.json'
+    records = read(native_path)['records']
+    proof = {r['parameters'].get('procedure'): r for r in records if r['operation'] == 'procedure_pseudo_code'}
+    evidence = {name: dict(procedure=procedure, evidence_id=proof[procedure]['evidence_id'],
+                          bundle=native_path.relative_to(ROOT).as_posix())
+                for name, procedure in [('native_item_animation', '0x50e808'),
+                                        ('native_recovery_effect', '0x41b3e9'),
+                                        ('native_animation_selection', '0x50e3a0')]}
+    roles, checks, generated = [], [], []
+    preview_cells = []
+    for ident in role_ids('player'):
+        cached = export_item_role(ident, before)
+        roles.append(cached['role'])
+        checks.extend(cached['checks'])
+        generated.extend(WEB/name for name in cached['generated'])
+        for label, name in cached['previews']:
+            with Image.open(WEB/name) as opened:
+                preview_cells.append((label, opened.convert('RGBA')))
     for item in items.values():
         item['settlement'] = dict(source_field='0x49', frame_source='acting role CHR sequence', effect_slot='target',
             only_after_accepted_target=True, effect_even_without_native_success=True,
@@ -230,7 +270,7 @@ def main():
         preview.paste(tile, (col * 240 + (240 - tile.width) // 2, row * 240 + 23), tile)
         drawing.text((col * 240 + 8, row * 240 + 6), label, fill='white')
     preview_path = RUNTIME / 'evidence/item_presentation_preview.png'
-    preview.save(preview_path)
+    save_png(preview, preview_path)
     assert before == {p: sha((ROOT / p).read_bytes()) for p in original_paths}
     assert protected == {p.relative_to(ROOT).as_posix(): sha(p.read_bytes()) for p in shared}
     report_path = RUNTIME / 'evidence/item_presentation_export.json'

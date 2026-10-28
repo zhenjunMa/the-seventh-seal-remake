@@ -9,9 +9,11 @@ The original font directory has no bundled font files. Font resolution and
 import ctypes as C
 from ctypes import wintypes as W
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from incremental import save_png, write_json as incremental_json
 import hashlib
 import json
-import sys
 
 from PIL import Image
 
@@ -97,13 +99,13 @@ def export(font_specs=None, charset=None, preserve=False, cell_width=80, cell_he
                         # 0x5341A1/0x53434C measure ASCII groups with this
                         # value; TextOut itself still has charExtra=1.
                         glyphs[char]['char_width']=char_width.value
-                dest=OUT/(key+'.png');atlas.save(dest)
+                dest=OUT/(key+'.png');save_png(atlas, dest)
                 result['fonts'][key]={'face_requested':face,'face_resolved':actual.value,'height':size,
                     'image':dest.relative_to(RUNTIME/'web').as_posix(),'sha256':hashlib.sha256(dest.read_bytes()).hexdigest(),
                     'atlas_width':atlas.width,'atlas_height':atlas.height,'glyphs':glyphs}
             finally:gdi.SelectObject(dc,oldfont);gdi.DeleteObject(font)
     finally:gdi.SelectObject(dc,oldbitmap);gdi.DeleteObject(bitmap);gdi.DeleteDC(dc)
-    MANIFEST.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+    incremental_json(MANIFEST, result)
     print(json.dumps({'manifest':str(MANIFEST),'fonts':{k:v['face_resolved'] for k,v in result['fonts'].items()}},ensure_ascii=False))
 
 

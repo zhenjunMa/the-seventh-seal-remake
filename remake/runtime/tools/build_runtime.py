@@ -10,11 +10,13 @@ from datetime import datetime, timezone
 import argparse
 import hashlib
 import json
+import os
 import re
 import subprocess
 import sys
 from uuid import uuid4
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+from incremental import local_modules, write_json, build_lock
 from content_registration import definition, map_ids, role_ids, program_ids, stage_exports
 from export_battle_stages import source_files as stage_source_files
 from export_fire_valley_index import source_files as fire_valley_source_files
@@ -41,6 +43,9 @@ class Step:
     reports: tuple[str, ...] = ()
     inputs: tuple[str, ...] = ()
     sources: tuple[str, ...] = ()
+    # None retains the full definition. Selectors apply only to the authoring
+    # JSON; upstream inputs remain explicitly fingerprinted below.
+    registration: tuple[str, ...] | None = None
 
 
 STEPS = {
@@ -207,6 +212,52 @@ STEPS['jade-lake-index']=Step('export_jade_lake_index.py',
             '../tools/map_npc_fields.py','core/chapter_animation.mjs','core/story_flow_compiler.mjs'),
     sources=fire_valley_source_files())
 
+# Registration has independent domains; adding a map must not invalidate art
+# for an unchanged party. ID-only selectors omit skill/parameter bindings.
+for target, selectors in {
+    'chapter-maps': ('maps', 'player-ids'),
+    'chapter-story': ('maps', 'programs', 'roles'),
+    'enemies': ('roles',),
+    'enemy-rewards': ('roles',),
+    'party-combat': ('player-ids',),
+    'party-skills': ('players',),
+    'party-rewards': ('players',),
+    'item-presentation': ('players', 'items'),
+    'battle-lifecycle': ('role-ids',),
+    'encounters': ('maps', 'stages'),
+    'battle-stages': ('stages',),
+    'story-media': ('maps', 'programs', 'story'),
+}.items():
+    STEPS[target] = replace(STEPS[target], registration=selectors)
+
+# These are the values consumed by exporters, independent of scheduling edges.
+for target, inputs in {
+    'party-skills': ('data/party_combat.json','data/forest_ai.json','data/forest_status.json',
+                     'data/enemy_reactions.json','data/enemy_battle_view.json',
+                     '../evidence/party_magic_native.json'),
+    'party-rewards': ('data/forest_rewards.json',),
+    'chapter-story': ('data/chapter_map_resources.json',
+                      *tuple(f'data/maps/{ident.lower()}.json' for ident in map_ids())),
+    'item-presentation': ('data/party_skills.json','data/party_battle_view.json',
+                         *tuple(f'data/party_role_layers_{ident}.json' for ident in REGISTERED_PLAYER_IDS)),
+    'menu': ('data/items.json','data/party_skills.json'),
+    'menu-techniques': ('data/operation_menu.json','data/party_skills.json'),
+    'audio': ('data/party_battle_view.json','data/item_presentation.json','data/battle_lifecycle.json',
+              'data/encounters.json','data/menu_audio_rules.json'),
+    'battle-packs': ('data/party_battle_view.json','data/item_presentation.json',
+                     'data/forest_stage.json','data/battle_ui.json','data/battle_lifecycle.json',
+                     'data/battle_result.json',
+                     *tuple(f'data/{prefix}_role_layers_{ident}.json'
+                            for prefix, ids in [('party',REGISTERED_PLAYER_IDS),('enemy',role_ids('enemy'))]
+                            for ident in ids),
+                     *tuple(f'data/item_role_layers_{ident}.json' for ident in REGISTERED_PLAYER_IDS),
+                     *tuple(f'data/battle_lifecycle_layers_{ident}.json' for ident in REGISTERED_ROLE_IDS),
+                     *tuple(row['path'] for row in stage_exports().values())),
+    'catalog': ('data/runtime_content.json',),
+}.items():
+    STEPS[target] = replace(STEPS[target], inputs=tuple(dict.fromkeys((*STEPS[target].inputs, *inputs))))
+STEPS['menu'] = replace(STEPS['menu'], outputs=('data/operation_menu.json',), registration=('player-ids',))
+
 
 def sha(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
@@ -221,6 +272,26 @@ def hashes(paths):
             if file.is_file() and '__pycache__' not in file.parts:
                 result[str(file.resolve())] = sha(file)
     return result
+
+
+def output_hashes(step):
+    paths = [WEB/item for item in step.outputs]
+    # Manifests can reuse an effect produced by another group. Track those
+    # actual files too, so a missing shared PNG cannot hide behind a cache hit.
+    def references(value):
+        if isinstance(value, dict):
+            for child in value.values(): references(child)
+        elif isinstance(value, list):
+            for child in value: references(child)
+        elif isinstance(value, str) and re.fullmatch(r'/?assets/[A-Za-z0-9_./-]+\.(?:png|mp3|wav|mp4)', value):
+            path = (WEB/value.lstrip('/')).resolve()
+            if not path.is_relative_to(WEB.resolve()):
+                raise ValueError('Output reference leaves web: '+value)
+            paths.append(path)
+    for path in list(paths):
+        if path.is_file() and path.suffix == '.json':
+            references(json.loads(path.read_text('utf-8-sig')))
+    return hashes(paths)
 
 
 def plan(names, steps=None):
@@ -279,12 +350,49 @@ def source_paths(step):
     return paths
 
 
+def registration_input(step, path):
+    value = json.loads(path.read_text('utf-8'))
+    if step.registration is None:
+        return value
+    result = {}
+    for selector in step.registration:
+        if selector in ('players', 'player-ids', 'role-ids'):
+            roles = value.get('roles', {})
+            result[selector] = {ident: (row if selector == 'players' else row['side'])
+                for ident, row in roles.items() if selector == 'role-ids' or row['side'] == 'player'}
+        else:
+            result[selector] = value.get(selector)
+    return result
+
+
+def input_fingerprints(step):
+    tools = local_modules(RUNTIME/'tools'/step.tool, RUNTIME)
+    tools.add(Path(__file__).with_name('layout_migration.json'))
+    # depends controls ordering; only declared consumed data invalidates a step.
+    # Never fingerprint every PNG in an upstream step merely for ordering.
+    paths = [*tools, *source_paths(step), *[WEB/name for name in step.inputs]]
+    inputs = {}
+    for path in paths:
+        if path.resolve() == (WEB/'data/runtime_content.json').resolve():
+            payload = json.dumps(registration_input(step, path), sort_keys=True)
+            inputs[str(path.resolve())] = hashlib.sha256(payload.encode()).hexdigest()
+        else:
+            inputs.update(hashes([path]))
+    # An absent literal sound/effect becoming available must invalidate the
+    # previous absence decision, even though it had no source hash before.
+    for report in step.reports:
+        ledger = EVIDENCE/report
+        if ledger.is_file():
+            value = json.loads(ledger.read_text('utf-8-sig'))
+            for name in value.get('missing_original_files', []):
+                path = ROOT/name
+                inputs[str(path.resolve())] = sha(path) if path.is_file() else 'missing'
+    return inputs
+
+
 def signature(step):
-    tools = [Path(__file__), Path(__file__).with_name('layout_migration.json'), *RUNTIME.glob('tools/*.py'), *RUNTIME.glob('tools/*.mjs'),
-             *RUNTIME.glob('tools/source/*.py'), *WEB.glob('core/*.mjs')]
-    dependencies = [WEB / item for name in step.depends for item in STEPS[name].outputs]
-    inputs = hashes([*tools, *source_paths(step), *dependencies, *[WEB / name for name in step.inputs]])
-    payload = json.dumps({'tool':step.tool, 'inputs':inputs, 'outputs':step.outputs}, sort_keys=True)
+    inputs = input_fingerprints(step)
+    payload = json.dumps({'version':2, 'tool':step.tool, 'inputs':inputs, 'outputs':step.outputs}, sort_keys=True)
     return hashlib.sha256(payload.encode()).hexdigest()
 
 
@@ -303,8 +411,14 @@ def preserve_evidence(before, destination):
 
 
 def execute(names, force=False, run_command=None):
+    with build_lock(EVIDENCE):
+        return _execute(names, force, run_command)
+
+
+def _execute(names, force=False, run_command=None):
     state_path = EVIDENCE / 'build_state.json'
     state = json.loads(state_path.read_text(encoding='utf-8')) if state_path.exists() else {'version':1, 'steps':{}}
+    state['version'] = 2
     # Windows clocks can return the same timestamp for consecutive builds.
     # Each invocation owns a separate immutable evidence directory.
     run_id = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ') + '-' + uuid4().hex
@@ -317,8 +431,8 @@ def execute(names, force=False, run_command=None):
             fingerprint = signature(step)
             previous = state['steps'].get(name)
             try:
-                outputs = hashes(WEB / item for item in step.outputs)
-            except FileNotFoundError:
+                outputs = output_hashes(step)
+            except (FileNotFoundError, ValueError):
                 outputs = None
             if not force and previous and previous['signature'] == fingerprint and previous['outputs'] == outputs:
                 report['steps'].append({'name':name, 'status':'cached', 'outputs_checked':len(outputs)})
@@ -328,12 +442,16 @@ def execute(names, force=False, run_command=None):
             originals = hashes(protected_sources)
             history = dated_evidence()
             command = ['node', str(RUNTIME/'tools'/step.tool)] if step.tool.endswith('.mjs') else [sys.executable, '-B', str(RUNTIME/'tools'/step.tool)]
-            print(f'{name}: exporting', flush=True)
+            reason = ('forced' if force else 'no-cache' if not previous else
+                      'inputs-changed' if previous['signature'] != fingerprint else 'outputs-changed')
+            print(f'{name}: exporting ({reason})', flush=True)
             try:
                 if run_command:
                     run_command(command, name)
                 else:
-                    result = subprocess.run(command, cwd=ROOT, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+                    environment = dict(os.environ, SEVENTH_SEAL_FORCE_EXPORT='1' if force else '0',
+                                       SEVENTH_SEAL_RESOURCE_REPORT=str(directory/f'{name}.resources.json'))
+                    result = subprocess.run(command, cwd=ROOT, env=environment, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
                     (directory/f'{name}.log').write_bytes(result.stdout)
                     if result.returncode:
                         raise RuntimeError(f'{name} failed; see {directory/name}.log')
@@ -343,10 +461,13 @@ def execute(names, force=False, run_command=None):
             # the same protected files, rather than comparing different sets.
             if hashes(protected_sources) != originals:
                 raise RuntimeError(f'{name} changed original inputs')
-            outputs = hashes(WEB / item for item in step.outputs)
+            outputs = output_hashes(step)
             state['steps'][name] = {'signature':signature(step), 'outputs':outputs}
-            state_path.write_text(json.dumps(state, ensure_ascii=False, indent=2), encoding='utf-8')
-            report['steps'].append({'name':name, 'status':'exported', 'outputs_checked':len(outputs)})
+            write_json(state_path, state)
+            resources = directory/f'{name}.resources.json'
+            counts = json.loads(resources.read_text('utf-8'))['counts'] if resources.is_file() else {}
+            report['steps'].append({'name':name, 'status':'exported', 'reason':reason,
+                                    'outputs_checked':len(outputs), 'resources':counts})
         report['passed'] = True
         return report
     except BaseException as error:
@@ -354,7 +475,7 @@ def execute(names, force=False, run_command=None):
         raise
     finally:
         report['finished_utc'] = datetime.now(timezone.utc).isoformat()
-        (directory/'run.json').write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding='utf-8')
+        write_json(directory/'run.json', report)
 
 
 def main():
@@ -364,6 +485,7 @@ def main():
     parser.add_argument('--validate', action='store_true', help='Audit selected tools, input sources and existing outputs without regenerating assets')
     parser.add_argument('--force', action='store_true', help='Rebuild selected exports, preserving configuration parameters')
     parser.add_argument('--check', action='store_true', help='Run verify_current.py after successful exports')
+    parser.add_argument('--explain', action='store_true', help='Read-only cache status for the selected plan')
     parser.add_argument('--preflight', action='store_true', help='Read-only story capability check using existing exported source records')
     args = parser.parse_args()
     if args.preflight:
@@ -372,13 +494,28 @@ def main():
         subprocess.run(['node', str(RUNTIME/'tools/check_content.mjs')], cwd=ROOT, check=True)
         return
     names = list(STEPS) if 'all' in args.target else args.target
+    if args.explain:
+        if args.run or args.force:
+            parser.error('--explain is read-only and cannot be combined with --run or --force')
+        path = EVIDENCE/'build_state.json'
+        state = json.loads(path.read_text('utf-8')) if path.is_file() else {'steps':{}}
+        for name in plan(names):
+            step, previous = STEPS[name], state['steps'].get(name)
+            try:
+                outputs = output_hashes(step)
+            except (FileNotFoundError, ValueError):
+                outputs = None
+            reason = ('no-cache' if not previous else 'inputs-changed' if signature(step) != previous['signature']
+                      else 'outputs-changed' if outputs != previous['outputs'] else 'cached')
+            print(f'{name}: {reason}')
+        return
     if args.validate:
         rows = []
         for name in plan(names):
             step = STEPS[name]
             if not (RUNTIME/'tools'/step.tool).is_file():
                 raise FileNotFoundError(step.tool)
-            outputs = hashes(WEB/item for item in step.outputs)
+            outputs = output_hashes(step)
             rows.append({'name':name, 'signature':signature(step), 'outputs_checked':len(outputs), 'source_files_checked':len(source_paths(step))})
         report = {'schema':'seventh-seal-export-inventory', 'version':1, 'checked_utc':datetime.now(timezone.utc).isoformat(), 'passed':True, 'steps':rows, 'exporters_executed':False}
         (EVIDENCE/'export_inventory.json').write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding='utf-8')

@@ -17,6 +17,7 @@ REMAKE = RUNTIME.parent
 ROOT = REMAKE.parent
 sys.path.insert(0, str(RUNTIME / 'tools'))
 
+from incremental import save_png
 from PIL import Image, ImageDraw
 from source.combat_resources import CHR, GAME_SHA256
 from source.dgp import DGP, DGPError
@@ -278,14 +279,14 @@ class SourceAudit:
             bounds=bounds if covered else None, rows=self.height, rgba_sha256=sha(rgba), **source)
 
 
-def save_layer(image: Image.Image, path: Path, audit_rgba: bytes, check: dict) -> dict:
+def save_layer(image: Image.Image, path: Path, audit_rgba: bytes, check: dict, *, web=None) -> dict:
     if image.tobytes() != audit_rgba:
         raise DGPError(f"Independent source span decode disagrees: {path.name}")
-    image.save(path)
+    save_png(image, path)
     with Image.open(path) as loaded:
         if loaded.convert("RGBA").tobytes() != audit_rgba:
             raise DGPError(f"Stored PNG disagrees with independent input bytes: {path.name}")
-    return dict(path=path.relative_to(WEB).as_posix(), sha256=sha(path.read_bytes()),
+    return dict(path=path.relative_to(WEB if web is None else web).as_posix(), sha256=sha(path.read_bytes()),
                 rgba_sha256=sha(audit_rgba), bounds=check["bounds"],
                 covered_pixels=check["covered_pixels"], transparent_pixels=check["transparent_pixels"])
 
@@ -437,7 +438,7 @@ def main() -> None:
             draw.text((column * 270 + 8, row * 246 + 5),
                       f"source {source_frame}: {['main', 'intrinsic', 'RGB565 fixture'][column]}", fill="white")
     preview_path = EVIDENCE / "yantu_layers_contact_sheet_20261011.png"
-    preview.save(preview_path)
+    save_png(preview, preview_path)
     verification = dict(schema="seventh-seal-skill-layer-verification", version=1,
                         method="Independent file-layout and sparse-row decoder, source bytes compared to both production RGBA and stored PNG; no DGP helpers used by audit",
                         source_hashes_before=before, source_hashes_after=after, original_inputs_unchanged=True,

@@ -16,6 +16,7 @@ RUNTIME = Path(__file__).resolve().parents[1]
 ROOT = RUNTIME.parents[1]
 WEB = RUNTIME / 'web'
 sys.path.insert(0, str(RUNTIME / 'tools'))
+from incremental import write_json as incremental_json
 from content_registration import role_ids, definition
 from source.combat_resources import CHR, GAME_SHA256
 from source.dgp import DGP
@@ -35,7 +36,7 @@ def read(name):
 
 def save(path, value):
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n', 'utf-8')
+    incremental_json(path, value)
 
 
 def player_status_blocks():
