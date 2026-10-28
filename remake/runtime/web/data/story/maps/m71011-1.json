@@ -1,0 +1,623 @@
+{
+  "schema": "seventh-seal-story-map",
+  "version": 2,
+  "map_id": "M71011-1",
+  "chapter": {
+    "id": "M71011-1",
+    "name": "翠碧湖湖岸",
+    "flag_index": 395,
+    "map_flag_index": 395,
+    "source": null,
+    "dialogue_status": "source-file-absent",
+    "map_source": {
+      "path": "Map/m71011-1.dat",
+      "sha256": "721a116c57ca1e1686b0de33d5ff2c7c01298a5b348823a9c3d7bfdb7ef39685",
+      "bytes": 261074
+    },
+    "index_nonzero": [],
+    "index_count": 0,
+    "record_base": null,
+    "record_bytes": 1647,
+    "record_count": 0,
+    "records": [],
+    "trailing_bytes": 0,
+    "trailing_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "header_raw_hex": "3344a661b9cfb8eaaec6286329596f6b690000000600000001000000b4e4b1ccbafebafeb0b60000000000000000000000000000000000000000000000000000000000006d6e3731302d312e776176000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000202000000000000010000000000000000008b010000010000004d37313031312d312e4447500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000102020300010140000000360000002e5c4d41504d5c4d30313035315c0000000000000000000000020000b001000000010100",
+    "compatibility_variant": 1,
+    "descriptors": [
+      {
+        "id": 1,
+        "state_raw": 0,
+        "filename_raw": "m71014.dat",
+        "field_26_raw": 2,
+        "field_2a_raw": 6,
+        "field_2e_raw": 0,
+        "record_bytes": 66,
+        "raw_hex": "00000000000000000000000000000000006d37313031342e646174000000000000000000000002000000060000000000000000000000000000000000000000000000",
+        "cells": [
+          {
+            "x": 6,
+            "y": 51,
+            "offset": 209650
+          },
+          {
+            "x": 7,
+            "y": 51,
+            "offset": 209714
+          },
+          {
+            "x": 8,
+            "y": 51,
+            "offset": 209778
+          },
+          {
+            "x": 9,
+            "y": 51,
+            "offset": 209842
+          },
+          {
+            "x": 10,
+            "y": 51,
+            "offset": 209906
+          },
+          {
+            "x": 11,
+            "y": 51,
+            "offset": 209970
+          },
+          {
+            "x": 12,
+            "y": 51,
+            "offset": 210034
+          },
+          {
+            "x": 13,
+            "y": 51,
+            "offset": 210098
+          },
+          {
+            "x": 14,
+            "y": 51,
+            "offset": 210162
+          },
+          {
+            "x": 15,
+            "y": 51,
+            "offset": 210226
+          },
+          {
+            "x": 16,
+            "y": 51,
+            "offset": 210290
+          },
+          {
+            "x": 17,
+            "y": 51,
+            "offset": 210354
+          },
+          {
+            "x": 18,
+            "y": 51,
+            "offset": 210418
+          },
+          {
+            "x": 19,
+            "y": 51,
+            "offset": 210482
+          },
+          {
+            "x": 20,
+            "y": 51,
+            "offset": 210546
+          },
+          {
+            "x": 21,
+            "y": 51,
+            "offset": 210610
+          },
+          {
+            "x": 22,
+            "y": 51,
+            "offset": 210674
+          },
+          {
+            "x": 23,
+            "y": 51,
+            "offset": 210738
+          },
+          {
+            "x": 24,
+            "y": 51,
+            "offset": 210802
+          },
+          {
+            "x": 25,
+            "y": 51,
+            "offset": 210866
+          },
+          {
+            "x": 26,
+            "y": 51,
+            "offset": 210930
+          },
+          {
+            "x": 27,
+            "y": 51,
+            "offset": 210994
+          },
+          {
+            "x": 28,
+            "y": 51,
+            "offset": 211058
+          },
+          {
+            "x": 29,
+            "y": 51,
+            "offset": 211122
+          },
+          {
+            "x": 30,
+            "y": 51,
+            "offset": 211186
+          },
+          {
+            "x": 31,
+            "y": 51,
+            "offset": 211250
+          },
+          {
+            "x": 32,
+            "y": 51,
+            "offset": 211314
+          }
+        ],
+        "source": {
+          "path": "Map/m71011-1.dat",
+          "sha256": "721a116c57ca1e1686b0de33d5ff2c7c01298a5b348823a9c3d7bfdb7ef39685",
+          "descriptor_id": 1,
+          "bytes": 66,
+          "offset": 222898
+        },
+        "evidence": [
+          "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a"
+        ],
+        "field_expansion": "Native 0x42-byte descriptor fields"
+      },
+      {
+        "id": 2,
+        "state_raw": 0,
+        "filename_raw": "m71010.dat",
+        "field_26_raw": 1,
+        "field_2a_raw": 1,
+        "field_2e_raw": 0,
+        "record_bytes": 66,
+        "raw_hex": "00000000000000000000000000000000006d37313031302e646174000000000000000000000001000000010000000000000000000000000000000000000000000000",
+        "cells": [
+          {
+            "x": 58,
+            "y": 39,
+            "offset": 163826
+          },
+          {
+            "x": 59,
+            "y": 39,
+            "offset": 163890
+          },
+          {
+            "x": 58,
+            "y": 40,
+            "offset": 167922
+          },
+          {
+            "x": 59,
+            "y": 40,
+            "offset": 167986
+          },
+          {
+            "x": 58,
+            "y": 41,
+            "offset": 172018
+          },
+          {
+            "x": 59,
+            "y": 41,
+            "offset": 172082
+          }
+        ],
+        "source": {
+          "path": "Map/m71011-1.dat",
+          "sha256": "721a116c57ca1e1686b0de33d5ff2c7c01298a5b348823a9c3d7bfdb7ef39685",
+          "descriptor_id": 2,
+          "bytes": 66,
+          "offset": 222964
+        },
+        "evidence": [
+          "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a"
+        ],
+        "field_expansion": "Native 0x42-byte descriptor fields"
+      },
+      {
+        "id": 31,
+        "state_raw": 2,
+        "filename_raw": "",
+        "field_26_raw": 1,
+        "field_2a_raw": 0,
+        "field_2e_raw": 0,
+        "record_bytes": 66,
+        "raw_hex": "020000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000",
+        "cells": [],
+        "source": {
+          "path": "Map/m71011-1.dat",
+          "sha256": "721a116c57ca1e1686b0de33d5ff2c7c01298a5b348823a9c3d7bfdb7ef39685",
+          "descriptor_id": 31,
+          "bytes": 66,
+          "offset": 224878
+        },
+        "evidence": [
+          "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a"
+        ],
+        "field_expansion": "Native 0x42-byte descriptor fields"
+      }
+    ],
+    "objects": [],
+    "npc_records": [],
+    "entry_markers": {
+      "1": [
+        {
+          "x": 24,
+          "y": 46,
+          "offset": 190322
+        },
+        {
+          "x": 25,
+          "y": 46,
+          "offset": 190386
+        },
+        {
+          "x": 24,
+          "y": 47,
+          "offset": 194418
+        },
+        {
+          "x": 25,
+          "y": 47,
+          "offset": 194482
+        }
+      ],
+      "2": [
+        {
+          "x": 50,
+          "y": 40,
+          "offset": 167410
+        },
+        {
+          "x": 51,
+          "y": 40,
+          "offset": 167474
+        },
+        {
+          "x": 50,
+          "y": 41,
+          "offset": 171506
+        },
+        {
+          "x": 51,
+          "y": 41,
+          "offset": 171570
+        }
+      ]
+    },
+    "default_object_index_slot": 499,
+    "default_object_record": 0,
+    "header_entry_tlk_raw": 0,
+    "header_entry_tlk_source": {
+      "path": "Map/m71011-1.dat",
+      "sha256": "721a116c57ca1e1686b0de33d5ff2c7c01298a5b348823a9c3d7bfdb7ef39685",
+      "bytes": 4,
+      "offset": 314
+    },
+    "header_setup_tlk_raw": 0,
+    "header_setup_tlk_source": {
+      "path": "Map/m71011-1.dat",
+      "sha256": "721a116c57ca1e1686b0de33d5ff2c7c01298a5b348823a9c3d7bfdb7ef39685",
+      "bytes": 4,
+      "offset": 138
+    },
+    "evidence": [
+      "ev_e14d28c11ec31e5eebdf4c08a994a900102658650d8e5364d58b848cbd114ea7",
+      "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a"
+    ],
+    "limitations": [
+      "Index slot499 is retained as the object default TLK entry; it must not be used as an automatic map-load event. Header +0x8A controls map setup; +0x13A controls map-entry TLK.",
+      "TLK record kind/mutation numbers are raw native values; dialogue text alone does not define their behavior."
+    ]
+  },
+  "programs": {},
+  "flows": {},
+  "events": [],
+  "resources": {
+    "npcs_by_map": [],
+    "exits_by_map": [
+      {
+        "id": 1,
+        "state": "ready",
+        "cells": [
+          {
+            "x": 6,
+            "y": 51
+          },
+          {
+            "x": 7,
+            "y": 51
+          },
+          {
+            "x": 8,
+            "y": 51
+          },
+          {
+            "x": 9,
+            "y": 51
+          },
+          {
+            "x": 10,
+            "y": 51
+          },
+          {
+            "x": 11,
+            "y": 51
+          },
+          {
+            "x": 12,
+            "y": 51
+          },
+          {
+            "x": 13,
+            "y": 51
+          },
+          {
+            "x": 14,
+            "y": 51
+          },
+          {
+            "x": 15,
+            "y": 51
+          },
+          {
+            "x": 16,
+            "y": 51
+          },
+          {
+            "x": 17,
+            "y": 51
+          },
+          {
+            "x": 18,
+            "y": 51
+          },
+          {
+            "x": 19,
+            "y": 51
+          },
+          {
+            "x": 20,
+            "y": 51
+          },
+          {
+            "x": 21,
+            "y": 51
+          },
+          {
+            "x": 22,
+            "y": 51
+          },
+          {
+            "x": 23,
+            "y": 51
+          },
+          {
+            "x": 24,
+            "y": 51
+          },
+          {
+            "x": 25,
+            "y": 51
+          },
+          {
+            "x": 26,
+            "y": 51
+          },
+          {
+            "x": 27,
+            "y": 51
+          },
+          {
+            "x": 28,
+            "y": 51
+          },
+          {
+            "x": 29,
+            "y": 51
+          },
+          {
+            "x": 30,
+            "y": 51
+          },
+          {
+            "x": 31,
+            "y": 51
+          },
+          {
+            "x": 32,
+            "y": 51
+          }
+        ],
+        "target_map": "M71014",
+        "entry": {
+          "x": 368,
+          "y": 144,
+          "direction": 7,
+          "cell_x": 23,
+          "cell_y": 9,
+          "native_x": 184,
+          "native_y": 72
+        },
+        "conditions": [],
+        "source": {
+          "path": "Map/m71011-1.dat",
+          "sha256": "721a116c57ca1e1686b0de33d5ff2c7c01298a5b348823a9c3d7bfdb7ef39685",
+          "descriptor_offset": 222898,
+          "descriptor_bytes": 66,
+          "descriptor_hex": "00000000000000000000000000000000006d37313031342e646174000000000000000000000002000000060000000000000000000000000000000000000000000000",
+          "compact_field_expansion_evidence": null,
+          "target_path": "Map/m71014.dat",
+          "target_sha256": "79cc464383e62b0caa9d2ac1c01abc5297ca325e483525f75c559b71cf7cf7b8",
+          "target_entry_marker": 2,
+          "entry_sort_code": 6,
+          "entry_terrain_raw": 0,
+          "entry_trigger_raw": 0,
+          "entry_scan_cells": [
+            {
+              "x": 23,
+              "y": 9,
+              "offset": 28338
+            }
+          ],
+          "entry_sorted_cells": [
+            {
+              "x": 23,
+              "y": 9
+            }
+          ],
+          "entry_sort": "y descending; stable ties",
+          "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
+          "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
+          "native_evidence": {
+            "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+            "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+            "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+            "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+          }
+        },
+        "execution": "Native transition descriptor only; map-entry TLK/ANM and their once-only checks must complete separately.",
+        "limitations": [
+          "Static source/code evidence; original timing not observed",
+          "Continuous keyboard movement is runtime policy"
+        ]
+      },
+      {
+        "id": 2,
+        "state": "ready",
+        "cells": [
+          {
+            "x": 58,
+            "y": 39
+          },
+          {
+            "x": 59,
+            "y": 39
+          },
+          {
+            "x": 58,
+            "y": 40
+          },
+          {
+            "x": 59,
+            "y": 40
+          },
+          {
+            "x": 58,
+            "y": 41
+          },
+          {
+            "x": 59,
+            "y": 41
+          }
+        ],
+        "target_map": "M71010",
+        "entry": {
+          "x": 672,
+          "y": 1456,
+          "direction": 2,
+          "cell_x": 42,
+          "cell_y": 91,
+          "native_x": 336,
+          "native_y": 728
+        },
+        "conditions": [],
+        "source": {
+          "path": "Map/m71011-1.dat",
+          "sha256": "721a116c57ca1e1686b0de33d5ff2c7c01298a5b348823a9c3d7bfdb7ef39685",
+          "descriptor_offset": 222964,
+          "descriptor_bytes": 66,
+          "descriptor_hex": "00000000000000000000000000000000006d37313031302e646174000000000000000000000001000000010000000000000000000000000000000000000000000000",
+          "compact_field_expansion_evidence": null,
+          "target_path": "Map/m71010.dat",
+          "target_sha256": "7bb0e54f6777634165bc0f093402bc651dff40c18e180d2cabeded1921676cae",
+          "target_entry_marker": 1,
+          "entry_sort_code": 1,
+          "entry_terrain_raw": 0,
+          "entry_trigger_raw": 0,
+          "entry_scan_cells": [
+            {
+              "x": 42,
+              "y": 91,
+              "offset": 597106
+            },
+            {
+              "x": 43,
+              "y": 91,
+              "offset": 597170
+            },
+            {
+              "x": 42,
+              "y": 92,
+              "offset": 603634
+            },
+            {
+              "x": 43,
+              "y": 92,
+              "offset": 603698
+            }
+          ],
+          "entry_sorted_cells": [
+            {
+              "x": 42,
+              "y": 91
+            },
+            {
+              "x": 43,
+              "y": 91
+            },
+            {
+              "x": 42,
+              "y": 92
+            },
+            {
+              "x": 43,
+              "y": 92
+            }
+          ],
+          "entry_sort": "row-major scan; first four; missing followers repeat last observed cell",
+          "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
+          "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
+          "native_evidence": {
+            "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+            "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+            "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+            "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+          }
+        },
+        "execution": "Native transition descriptor only; map-entry TLK/ANM and their once-only checks must complete separately.",
+        "limitations": [
+          "Static source/code evidence; original timing not observed",
+          "Continuous keyboard movement is runtime policy"
+        ]
+      }
+    ],
+    "trigger_regions": [],
+    "interactive_objects": [],
+    "object_animations": []
+  },
+  "route": null,
+  "texts": {}
+}

@@ -2,6 +2,754 @@
   "schema": "seventh-seal-encounters",
   "version": 1,
   "maps": {
+    "M71010": {
+      "frequency": 1,
+      "stage": "stage07.scn",
+      "members": [
+        {
+          "id": "011",
+          "name": "角鹰",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m71010.STG",
+            "sha256": "760e1b5dff86d3d5abfd74a63afdb04274dfd7fc24b53753017b578a07ec674f",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/011.CHR",
+            "sha256": "01625263cd7226760c8bb11067878285c5835ba4a43efbcab68020201c698ec4",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "012",
+          "name": "雪泥怪",
+          "pool": "B",
+          "class_raw": 0,
+          "source": {
+            "path": "Map/m71010.STG",
+            "sha256": "760e1b5dff86d3d5abfd74a63afdb04274dfd7fc24b53753017b578a07ec674f",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/012.CHR",
+            "sha256": "4c9d1ef867222a8ffbdfea2e231f7500f30e0d7fec4fbfa1ab18b2dc874061a0",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "013",
+          "name": "森林狩猎者",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m71010.STG",
+            "sha256": "760e1b5dff86d3d5abfd74a63afdb04274dfd7fc24b53753017b578a07ec674f",
+            "filename_offset": 250
+          },
+          "chr_source": {
+            "path": "Fight_Role/013.CHR",
+            "sha256": "5e3a7e65761a52b1653a40bc20ae130072af5c4f704b0cb389bbb239a1cd8ef6",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m71010.dat",
+          "sha256": "7bb0e54f6777634165bc0f093402bc651dff40c18e180d2cabeded1921676cae",
+          "frequency_offset": 320
+        },
+        {
+          "path": "Map/m71010.STG",
+          "sha256": "760e1b5dff86d3d5abfd74a63afdb04274dfd7fc24b53753017b578a07ec674f"
+        }
+      ],
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a"
+      ]
+    },
+    "M71011": {
+      "frequency": 2,
+      "stage": "stage07.scn",
+      "members": [
+        {
+          "id": "022",
+          "name": "刽齿蛟",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m71011.STG",
+            "sha256": "6172b90cca24f698b06f11a4a4856764e9ceebf6f4e6bc3f0d310f3be5c3a736",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/022.CHR",
+            "sha256": "1d993fbcd562db44c2f515f3b9e3e1bfa4d2ad99924ad543b62ca8226b3f4455",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "014",
+          "name": "雷兽",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m71011.STG",
+            "sha256": "6172b90cca24f698b06f11a4a4856764e9ceebf6f4e6bc3f0d310f3be5c3a736",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/014.CHR",
+            "sha256": "3dda77cf7ff3513c652bdf2224517fc48f5d5a2a948170cad7ac252efac7bf28",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m71011.dat",
+          "sha256": "8183576be5149e05c016aaf54f58a0ddabedea156f18385e78f7344ebf143948",
+          "frequency_offset": 320
+        },
+        {
+          "path": "Map/m71011.STG",
+          "sha256": "6172b90cca24f698b06f11a4a4856764e9ceebf6f4e6bc3f0d310f3be5c3a736"
+        }
+      ],
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a"
+      ]
+    },
+    "M71011-1": {
+      "frequency": 2,
+      "stage": "stage07.scn",
+      "members": [
+        {
+          "id": "012",
+          "name": "雪泥怪",
+          "pool": "B",
+          "class_raw": 0,
+          "source": {
+            "path": "Map/m71011-1.STG",
+            "sha256": "d071b70fdd06744682ca2f3caa265765bd4704b8fb5977a31e126f1b1b73547e",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/012.CHR",
+            "sha256": "4c9d1ef867222a8ffbdfea2e231f7500f30e0d7fec4fbfa1ab18b2dc874061a0",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "014",
+          "name": "雷兽",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m71011-1.STG",
+            "sha256": "d071b70fdd06744682ca2f3caa265765bd4704b8fb5977a31e126f1b1b73547e",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/014.CHR",
+            "sha256": "3dda77cf7ff3513c652bdf2224517fc48f5d5a2a948170cad7ac252efac7bf28",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "022",
+          "name": "刽齿蛟",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m71011-1.STG",
+            "sha256": "d071b70fdd06744682ca2f3caa265765bd4704b8fb5977a31e126f1b1b73547e",
+            "filename_offset": 250
+          },
+          "chr_source": {
+            "path": "Fight_Role/022.CHR",
+            "sha256": "1d993fbcd562db44c2f515f3b9e3e1bfa4d2ad99924ad543b62ca8226b3f4455",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m71011-1.dat",
+          "sha256": "721a116c57ca1e1686b0de33d5ff2c7c01298a5b348823a9c3d7bfdb7ef39685",
+          "frequency_offset": 320
+        },
+        {
+          "path": "Map/m71011-1.STG",
+          "sha256": "d071b70fdd06744682ca2f3caa265765bd4704b8fb5977a31e126f1b1b73547e"
+        }
+      ],
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a"
+      ]
+    },
+    "M71012": {
+      "frequency": 2,
+      "stage": "stage07.scn",
+      "members": [
+        {
+          "id": "022",
+          "name": "刽齿蛟",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m71012.STG",
+            "sha256": "6172b90cca24f698b06f11a4a4856764e9ceebf6f4e6bc3f0d310f3be5c3a736",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/022.CHR",
+            "sha256": "1d993fbcd562db44c2f515f3b9e3e1bfa4d2ad99924ad543b62ca8226b3f4455",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "014",
+          "name": "雷兽",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m71012.STG",
+            "sha256": "6172b90cca24f698b06f11a4a4856764e9ceebf6f4e6bc3f0d310f3be5c3a736",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/014.CHR",
+            "sha256": "3dda77cf7ff3513c652bdf2224517fc48f5d5a2a948170cad7ac252efac7bf28",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m71012.dat",
+          "sha256": "91ce6ea17ad2d282585ad285270936a5b37cfd9b5b5f08e4383cb8412d4be28c",
+          "frequency_offset": 320
+        },
+        {
+          "path": "Map/m71012.STG",
+          "sha256": "6172b90cca24f698b06f11a4a4856764e9ceebf6f4e6bc3f0d310f3be5c3a736"
+        }
+      ],
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a"
+      ]
+    },
+    "M71012-1": {
+      "frequency": 2,
+      "stage": "stage07.scn",
+      "members": [
+        {
+          "id": "022",
+          "name": "刽齿蛟",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m71012-1.STG",
+            "sha256": "6172b90cca24f698b06f11a4a4856764e9ceebf6f4e6bc3f0d310f3be5c3a736",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/022.CHR",
+            "sha256": "1d993fbcd562db44c2f515f3b9e3e1bfa4d2ad99924ad543b62ca8226b3f4455",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "014",
+          "name": "雷兽",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m71012-1.STG",
+            "sha256": "6172b90cca24f698b06f11a4a4856764e9ceebf6f4e6bc3f0d310f3be5c3a736",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/014.CHR",
+            "sha256": "3dda77cf7ff3513c652bdf2224517fc48f5d5a2a948170cad7ac252efac7bf28",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m71012-1.dat",
+          "sha256": "26c272f572cfb58472f60d505ae6497009681303729ac6d98cdf468f5f7196cb",
+          "frequency_offset": 320
+        },
+        {
+          "path": "Map/m71012-1.STG",
+          "sha256": "6172b90cca24f698b06f11a4a4856764e9ceebf6f4e6bc3f0d310f3be5c3a736"
+        }
+      ],
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a"
+      ]
+    },
+    "M71012-2": {
+      "frequency": 2,
+      "stage": "stage07.scn",
+      "members": [
+        {
+          "id": "022",
+          "name": "刽齿蛟",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m71012-2.STG",
+            "sha256": "6172b90cca24f698b06f11a4a4856764e9ceebf6f4e6bc3f0d310f3be5c3a736",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/022.CHR",
+            "sha256": "1d993fbcd562db44c2f515f3b9e3e1bfa4d2ad99924ad543b62ca8226b3f4455",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "014",
+          "name": "雷兽",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m71012-2.STG",
+            "sha256": "6172b90cca24f698b06f11a4a4856764e9ceebf6f4e6bc3f0d310f3be5c3a736",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/014.CHR",
+            "sha256": "3dda77cf7ff3513c652bdf2224517fc48f5d5a2a948170cad7ac252efac7bf28",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m71012-2.dat",
+          "sha256": "8fc98a05e2874dc98fc888f1ae163dce6b2243390aa6add65bd5a71fb07cbb35",
+          "frequency_offset": 320
+        },
+        {
+          "path": "Map/m71012-2.STG",
+          "sha256": "6172b90cca24f698b06f11a4a4856764e9ceebf6f4e6bc3f0d310f3be5c3a736"
+        }
+      ],
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a"
+      ]
+    },
+    "M71013": {
+      "frequency": 2,
+      "stage": "stage07.scn",
+      "members": [
+        {
+          "id": "022",
+          "name": "刽齿蛟",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m71013.STG",
+            "sha256": "6172b90cca24f698b06f11a4a4856764e9ceebf6f4e6bc3f0d310f3be5c3a736",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/022.CHR",
+            "sha256": "1d993fbcd562db44c2f515f3b9e3e1bfa4d2ad99924ad543b62ca8226b3f4455",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "014",
+          "name": "雷兽",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m71013.STG",
+            "sha256": "6172b90cca24f698b06f11a4a4856764e9ceebf6f4e6bc3f0d310f3be5c3a736",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/014.CHR",
+            "sha256": "3dda77cf7ff3513c652bdf2224517fc48f5d5a2a948170cad7ac252efac7bf28",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m71013.dat",
+          "sha256": "207b1046c24aee33baa9c03fb645238a01c6a4a292c3340c4a3c6b286989cb5b",
+          "frequency_offset": 320
+        },
+        {
+          "path": "Map/m71013.STG",
+          "sha256": "6172b90cca24f698b06f11a4a4856764e9ceebf6f4e6bc3f0d310f3be5c3a736"
+        }
+      ],
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a"
+      ]
+    },
+    "M71020": {
+      "frequency": 1,
+      "stage": "stage07.scn",
+      "members": [
+        {
+          "id": "014",
+          "name": "雷兽",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m71020.STG",
+            "sha256": "633d50aa2f89ac51546edeed80b48075ae519c65cd215f889f3834089372fdd5",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/014.CHR",
+            "sha256": "3dda77cf7ff3513c652bdf2224517fc48f5d5a2a948170cad7ac252efac7bf28",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "012",
+          "name": "雪泥怪",
+          "pool": "B",
+          "class_raw": 0,
+          "source": {
+            "path": "Map/m71020.STG",
+            "sha256": "633d50aa2f89ac51546edeed80b48075ae519c65cd215f889f3834089372fdd5",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/012.CHR",
+            "sha256": "4c9d1ef867222a8ffbdfea2e231f7500f30e0d7fec4fbfa1ab18b2dc874061a0",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "022",
+          "name": "刽齿蛟",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m71020.STG",
+            "sha256": "633d50aa2f89ac51546edeed80b48075ae519c65cd215f889f3834089372fdd5",
+            "filename_offset": 250
+          },
+          "chr_source": {
+            "path": "Fight_Role/022.CHR",
+            "sha256": "1d993fbcd562db44c2f515f3b9e3e1bfa4d2ad99924ad543b62ca8226b3f4455",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m71020.dat",
+          "sha256": "fef4580830dff6d7366a3402787c4faf958b3d2140c80d3e81977563cc1434b3",
+          "frequency_offset": 320
+        },
+        {
+          "path": "Map/m71020.STG",
+          "sha256": "633d50aa2f89ac51546edeed80b48075ae519c65cd215f889f3834089372fdd5"
+        }
+      ],
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a"
+      ]
+    },
+    "M71030": {
+      "frequency": 1,
+      "stage": "stage07.scn",
+      "members": [
+        {
+          "id": "012",
+          "name": "雪泥怪",
+          "pool": "B",
+          "class_raw": 0,
+          "source": {
+            "path": "Map/m71030.STG",
+            "sha256": "d071b70fdd06744682ca2f3caa265765bd4704b8fb5977a31e126f1b1b73547e",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/012.CHR",
+            "sha256": "4c9d1ef867222a8ffbdfea2e231f7500f30e0d7fec4fbfa1ab18b2dc874061a0",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "014",
+          "name": "雷兽",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m71030.STG",
+            "sha256": "d071b70fdd06744682ca2f3caa265765bd4704b8fb5977a31e126f1b1b73547e",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/014.CHR",
+            "sha256": "3dda77cf7ff3513c652bdf2224517fc48f5d5a2a948170cad7ac252efac7bf28",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "022",
+          "name": "刽齿蛟",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m71030.STG",
+            "sha256": "d071b70fdd06744682ca2f3caa265765bd4704b8fb5977a31e126f1b1b73547e",
+            "filename_offset": 250
+          },
+          "chr_source": {
+            "path": "Fight_Role/022.CHR",
+            "sha256": "1d993fbcd562db44c2f515f3b9e3e1bfa4d2ad99924ad543b62ca8226b3f4455",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m71030.dat",
+          "sha256": "666b2ca9f89d242095a516a6f30433552d5d3a147cbb402c2296d5f1f1b7d4de",
+          "frequency_offset": 320
+        },
+        {
+          "path": "Map/m71030.STG",
+          "sha256": "d071b70fdd06744682ca2f3caa265765bd4704b8fb5977a31e126f1b1b73547e"
+        }
+      ],
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a"
+      ]
+    },
+    "M71040": {
+      "frequency": 1,
+      "stage": "stage07.scn",
+      "members": [
+        {
+          "id": "012",
+          "name": "雪泥怪",
+          "pool": "B",
+          "class_raw": 0,
+          "source": {
+            "path": "Map/m71040.STG",
+            "sha256": "d071b70fdd06744682ca2f3caa265765bd4704b8fb5977a31e126f1b1b73547e",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/012.CHR",
+            "sha256": "4c9d1ef867222a8ffbdfea2e231f7500f30e0d7fec4fbfa1ab18b2dc874061a0",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "014",
+          "name": "雷兽",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m71040.STG",
+            "sha256": "d071b70fdd06744682ca2f3caa265765bd4704b8fb5977a31e126f1b1b73547e",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/014.CHR",
+            "sha256": "3dda77cf7ff3513c652bdf2224517fc48f5d5a2a948170cad7ac252efac7bf28",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "022",
+          "name": "刽齿蛟",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m71040.STG",
+            "sha256": "d071b70fdd06744682ca2f3caa265765bd4704b8fb5977a31e126f1b1b73547e",
+            "filename_offset": 250
+          },
+          "chr_source": {
+            "path": "Fight_Role/022.CHR",
+            "sha256": "1d993fbcd562db44c2f515f3b9e3e1bfa4d2ad99924ad543b62ca8226b3f4455",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m71040.dat",
+          "sha256": "7701485c301abf1c9fdd4435842d44fcef7e93efb57128e25d90381bcfbb480e",
+          "frequency_offset": 320
+        },
+        {
+          "path": "Map/m71040.STG",
+          "sha256": "d071b70fdd06744682ca2f3caa265765bd4704b8fb5977a31e126f1b1b73547e"
+        }
+      ],
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a"
+      ]
+    },
+    "M71050": {
+      "frequency": 1,
+      "stage": "stage07.scn",
+      "members": [
+        {
+          "id": "012",
+          "name": "雪泥怪",
+          "pool": "B",
+          "class_raw": 0,
+          "source": {
+            "path": "Map/m71050.STG",
+            "sha256": "d071b70fdd06744682ca2f3caa265765bd4704b8fb5977a31e126f1b1b73547e",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/012.CHR",
+            "sha256": "4c9d1ef867222a8ffbdfea2e231f7500f30e0d7fec4fbfa1ab18b2dc874061a0",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "014",
+          "name": "雷兽",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m71050.STG",
+            "sha256": "d071b70fdd06744682ca2f3caa265765bd4704b8fb5977a31e126f1b1b73547e",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/014.CHR",
+            "sha256": "3dda77cf7ff3513c652bdf2224517fc48f5d5a2a948170cad7ac252efac7bf28",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "022",
+          "name": "刽齿蛟",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m71050.STG",
+            "sha256": "d071b70fdd06744682ca2f3caa265765bd4704b8fb5977a31e126f1b1b73547e",
+            "filename_offset": 250
+          },
+          "chr_source": {
+            "path": "Fight_Role/022.CHR",
+            "sha256": "1d993fbcd562db44c2f515f3b9e3e1bfa4d2ad99924ad543b62ca8226b3f4455",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m71050.dat",
+          "sha256": "87b18fffc22ebfbdf001113335b57ec1ba62a3a52f8876f79a0d369e4f772716",
+          "frequency_offset": 320
+        },
+        {
+          "path": "Map/m71050.STG",
+          "sha256": "d071b70fdd06744682ca2f3caa265765bd4704b8fb5977a31e126f1b1b73547e"
+        }
+      ],
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a"
+      ]
+    },
+    "M71060": {
+      "frequency": 1,
+      "stage": "stage07.scn",
+      "members": [
+        {
+          "id": "012",
+          "name": "雪泥怪",
+          "pool": "B",
+          "class_raw": 0,
+          "source": {
+            "path": "Map/m71060.STG",
+            "sha256": "d071b70fdd06744682ca2f3caa265765bd4704b8fb5977a31e126f1b1b73547e",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/012.CHR",
+            "sha256": "4c9d1ef867222a8ffbdfea2e231f7500f30e0d7fec4fbfa1ab18b2dc874061a0",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "014",
+          "name": "雷兽",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m71060.STG",
+            "sha256": "d071b70fdd06744682ca2f3caa265765bd4704b8fb5977a31e126f1b1b73547e",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/014.CHR",
+            "sha256": "3dda77cf7ff3513c652bdf2224517fc48f5d5a2a948170cad7ac252efac7bf28",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "022",
+          "name": "刽齿蛟",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m71060.STG",
+            "sha256": "d071b70fdd06744682ca2f3caa265765bd4704b8fb5977a31e126f1b1b73547e",
+            "filename_offset": 250
+          },
+          "chr_source": {
+            "path": "Fight_Role/022.CHR",
+            "sha256": "1d993fbcd562db44c2f515f3b9e3e1bfa4d2ad99924ad543b62ca8226b3f4455",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m71060.dat",
+          "sha256": "4dea45c3e65b2aca906a55a0c6dc7b31749574577cc6d1400812433787cc9daf",
+          "frequency_offset": 320
+        },
+        {
+          "path": "Map/m71060.STG",
+          "sha256": "d071b70fdd06744682ca2f3caa265765bd4704b8fb5977a31e126f1b1b73547e"
+        }
+      ],
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a"
+      ]
+    },
     "M70010": {
       "frequency": 1,
       "stage": "stage13.scn",

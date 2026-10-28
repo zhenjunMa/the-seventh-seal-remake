@@ -35,7 +35,10 @@ def map_ids(kind=None, value=None):
     return tuple(ident for ident, row in map_exports(value).items()
                  if kind is None or kind == 'assets' and row['assets'] == 'chapter'
                  or kind == 'story' and row['story']
-                 or kind == 'story-data' and (row['story'] or value['maps'][ident].get('objects')))
+                 # DAT-only chapter maps still supply native transfer markers,
+                 # movement and object provenance even without a TLK or chest.
+                 or kind == 'story-data' and (row['story'] or row['assets'] == 'chapter'
+                                               or value['maps'][ident].get('objects')))
 
 
 def program_ids():

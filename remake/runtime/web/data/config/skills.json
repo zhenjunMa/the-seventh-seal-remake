@@ -1546,6 +1546,42 @@
       },
       "parameters": {}
     },
+    "014_12": {
+      "name": "雷角突击",
+      "owner": {
+        "role_id": "014",
+        "skill_index": 12,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "014_13": {
+      "name": "电角猛击",
+      "owner": {
+        "role_id": "014",
+        "skill_index": 13,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "022_14": {
+      "name": "骨顶",
+      "owner": {
+        "role_id": "022",
+        "skill_index": 14,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "022_15": {
+      "name": "急速狙杀",
+      "owner": {
+        "role_id": "022",
+        "skill_index": 15,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
     "032_7": {
       "name": "怒炎",
       "owner": {
@@ -3310,24 +3346,6 @@
       },
       "parameters": {}
     },
-    "014_12": {
-      "name": "雷角突击",
-      "owner": {
-        "role_id": "014",
-        "skill_index": 12,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "014_13": {
-      "name": "电角猛击",
-      "owner": {
-        "role_id": "014",
-        "skill_index": 13,
-        "side": "source"
-      },
-      "parameters": {}
-    },
     "014_14": {
       "name": "雷角倒击",
       "owner": {
@@ -4575,24 +4593,6 @@
       "owner": {
         "role_id": "022",
         "skill_index": 13,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "022_14": {
-      "name": "骨顶",
-      "owner": {
-        "role_id": "022",
-        "skill_index": 14,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "022_15": {
-      "name": "急速狙杀",
-      "owner": {
-        "role_id": "022",
-        "skill_index": 15,
         "side": "source"
       },
       "parameters": {}

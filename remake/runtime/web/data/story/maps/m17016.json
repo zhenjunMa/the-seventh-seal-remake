@@ -2,7 +2,238 @@
   "schema": "seventh-seal-story-map",
   "version": 2,
   "map_id": "M17016",
-  "chapter": null,
+  "chapter": {
+    "id": "M17016",
+    "name": "火之谷通路",
+    "flag_index": 19,
+    "map_flag_index": 19,
+    "source": null,
+    "dialogue_status": "source-file-absent",
+    "map_source": {
+      "path": "Map/m17016.dat",
+      "sha256": "2771831ca2de861d7d368357e0faac2f0cda04b02a362a0d3775ce4940afba2d",
+      "bytes": 187382
+    },
+    "index_nonzero": [],
+    "index_count": 0,
+    "record_base": null,
+    "record_bytes": 1647,
+    "record_count": 0,
+    "records": [],
+    "trailing_bytes": 0,
+    "trailing_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "header_raw_hex": "3344a661b9cfb8eaaec6286329596f6b690000000600000001000000bbf0d6aeb9c8cda8c2b70000000000000000000000000000000000000000000000000000000000006d6e3137302d312e7761760000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001010200000000000100000000000000000013000000010000004d31373031362e44475000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000020300010138000000290000002e5c4d41504d5c4d31373031365c00000000000000000000900100009001000000010100",
+    "compatibility_variant": 1,
+    "descriptors": [
+      {
+        "id": 1,
+        "state_raw": 0,
+        "filename_raw": "m17010.dat",
+        "field_26_raw": 10,
+        "field_2a_raw": 2,
+        "field_2e_raw": 0,
+        "record_bytes": 66,
+        "raw_hex": "00000000000000000000000000000000006d31373031302e64617400000000000000000000000a000000020000000000000000000000000000000000000000000000",
+        "cells": [
+          {
+            "x": 39,
+            "y": 33,
+            "offset": 121138
+          },
+          {
+            "x": 40,
+            "y": 33,
+            "offset": 121202
+          },
+          {
+            "x": 41,
+            "y": 33,
+            "offset": 121266
+          },
+          {
+            "x": 42,
+            "y": 33,
+            "offset": 121330
+          },
+          {
+            "x": 43,
+            "y": 33,
+            "offset": 121394
+          },
+          {
+            "x": 44,
+            "y": 33,
+            "offset": 121458
+          },
+          {
+            "x": 39,
+            "y": 34,
+            "offset": 124722
+          },
+          {
+            "x": 40,
+            "y": 34,
+            "offset": 124786
+          },
+          {
+            "x": 41,
+            "y": 34,
+            "offset": 124850
+          },
+          {
+            "x": 42,
+            "y": 34,
+            "offset": 124914
+          },
+          {
+            "x": 43,
+            "y": 34,
+            "offset": 124978
+          },
+          {
+            "x": 44,
+            "y": 34,
+            "offset": 125042
+          }
+        ],
+        "source": {
+          "path": "Map/m17016.dat",
+          "sha256": "2771831ca2de861d7d368357e0faac2f0cda04b02a362a0d3775ce4940afba2d",
+          "descriptor_id": 1,
+          "bytes": 66,
+          "offset": 148658
+        },
+        "evidence": [
+          "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a"
+        ],
+        "field_expansion": "Native 0x42-byte descriptor fields"
+      },
+      {
+        "id": 2,
+        "state_raw": 0,
+        "filename_raw": "m17010.dat",
+        "field_26_raw": 6,
+        "field_2a_raw": 5,
+        "field_2e_raw": 0,
+        "record_bytes": 66,
+        "raw_hex": "00000000000000000000000000000000006d31373031302e646174000000000000000000000006000000050000000000000000000000000000000000000000000000",
+        "cells": [
+          {
+            "x": 3,
+            "y": 13,
+            "offset": 47154
+          },
+          {
+            "x": 4,
+            "y": 13,
+            "offset": 47218
+          },
+          {
+            "x": 5,
+            "y": 13,
+            "offset": 47282
+          },
+          {
+            "x": 6,
+            "y": 13,
+            "offset": 47346
+          }
+        ],
+        "source": {
+          "path": "Map/m17016.dat",
+          "sha256": "2771831ca2de861d7d368357e0faac2f0cda04b02a362a0d3775ce4940afba2d",
+          "descriptor_id": 2,
+          "bytes": 66,
+          "offset": 148724
+        },
+        "evidence": [
+          "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a"
+        ],
+        "field_expansion": "Native 0x42-byte descriptor fields"
+      }
+    ],
+    "objects": [
+      {
+        "index": 0,
+        "slot_one_based": 1,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d31373031365c3030312e444750010000000000000050000000e8000000010000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 80,
+        "y_native": 232,
+        "resource_id_raw": 1,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m17016.dat",
+          "sha256": "2771831ca2de861d7d368357e0faac2f0cda04b02a362a0d3775ce4940afba2d",
+          "bytes": 274,
+          "offset": 160338
+        }
+      },
+      {
+        "index": 1,
+        "slot_one_based": 2,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d31373031365c3030322e444750020000000000000020000000b0000000010000000100000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 32,
+        "y_native": 176,
+        "resource_id_raw": 2,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m17016.dat",
+          "sha256": "2771831ca2de861d7d368357e0faac2f0cda04b02a362a0d3775ce4940afba2d",
+          "bytes": 274,
+          "offset": 160612
+        }
+      }
+    ],
+    "npc_records": [],
+    "entry_markers": {
+      "1": [
+        {
+          "x": 42,
+          "y": 22,
+          "offset": 81906
+        }
+      ],
+      "2": [
+        {
+          "x": 9,
+          "y": 18,
+          "offset": 65458
+        }
+      ]
+    },
+    "default_object_index_slot": 499,
+    "default_object_record": 0,
+    "header_entry_tlk_raw": 0,
+    "header_entry_tlk_source": {
+      "path": "Map/m17016.dat",
+      "sha256": "2771831ca2de861d7d368357e0faac2f0cda04b02a362a0d3775ce4940afba2d",
+      "bytes": 4,
+      "offset": 314
+    },
+    "header_setup_tlk_raw": 0,
+    "header_setup_tlk_source": {
+      "path": "Map/m17016.dat",
+      "sha256": "2771831ca2de861d7d368357e0faac2f0cda04b02a362a0d3775ce4940afba2d",
+      "bytes": 4,
+      "offset": 138
+    },
+    "evidence": [
+      "ev_e14d28c11ec31e5eebdf4c08a994a900102658650d8e5364d58b848cbd114ea7",
+      "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a"
+    ],
+    "limitations": [
+      "Index slot499 is retained as the object default TLK entry; it must not be used as an automatic map-load event. Header +0x8A controls map setup; +0x13A controls map-entry TLK.",
+      "TLK record kind/mutation numbers are raw native values; dialogue text alone does not define their behavior."
+    ]
+  },
   "programs": {},
   "flows": {},
   "events": [],

@@ -109,6 +109,7 @@ class ContentExporterTests(unittest.TestCase):
     def test_first_export_selection_needs_no_generated_outputs(self):
         value = copy.deepcopy(content.definition())
         value['maps']['M70020'] = {}
+        value['maps']['M71011'] = {'export': {'story': False}, 'npcs': []}
         value['roles']['014'] = {'side': 'enemy'}
         value['programs'].append('m70020-2')
         with tempfile.TemporaryDirectory() as temporary:
@@ -117,6 +118,9 @@ class ContentExporterTests(unittest.TestCase):
             with patch.object(content, 'REGISTRATION', path), patch.object(content.subprocess, 'run', side_effect=AssertionError('Generated content resolver called')):
                 self.assertIn('M70020', content.map_ids('assets'))
                 self.assertIn('M70020', content.map_ids('story'))
+                self.assertIn('M71011', content.map_ids('story-data'))
+                self.assertNotIn('M71011', content.map_ids('story'))
+                self.assertNotIn('M01010', content.map_ids('story-data'))
                 self.assertIn('014', content.role_ids('enemy'))
                 self.assertIn('m70020-2', content.program_ids())
                 self.assertNotIn('M17020', content.map_ids('assets'))

@@ -200,6 +200,12 @@ STEPS['white-forest-index']=Step('export_white_forest_index.py',
     inputs=('../tools/export_fire_valley_index.py','../tools/route_extract_resources.py',
             '../tools/map_npc_fields.py','core/chapter_animation.mjs','core/story_flow_compiler.mjs'),
     sources=fire_valley_source_files())
+STEPS['jade-lake-index']=Step('export_jade_lake_index.py',
+    ('data/library/jade_lake.json','../evidence/jade_lake_20261028/source_index.json'),
+    reports=('jade_lake_20261028/source_index.json',),
+    inputs=('../tools/export_fire_valley_index.py','../tools/route_extract_resources.py',
+            '../tools/map_npc_fields.py','core/chapter_animation.mjs','core/story_flow_compiler.mjs'),
+    sources=fire_valley_source_files())
 
 
 def sha(path):

@@ -148499,6 +148499,21 @@
     "Fight_Role/004.CHR": "2b964b7c3065d1520f7fe354f9e1fe6e213e9fcb3f586056eafa7f63fb88b50d",
     "Fight_Role/005.CHR": "9e06bcbedaf821a6e4c1d08dc0cff31d916c3ae2d00fdc20c37e758d25e09580",
     "Fight_Role/006.CHR": "27b29fb5cc1073014faea7553d0175559714c18dbbc5132ca1c549e4a9d8e15b",
+    "Map/m01060.dat": "5ff8f2a3c43649fff1efc4eccd878f4a662d905f6ba3404948e47ec9240a3826",
+    "Map/m01065.dat": "2ca9d09e6c3b42814d0e6112ea17384e3796bbbe3660aa25c61503b407cb9aa5",
+    "Map/m71010.dat": "7bb0e54f6777634165bc0f093402bc651dff40c18e180d2cabeded1921676cae",
+    "Map/m71011.dat": "8183576be5149e05c016aaf54f58a0ddabedea156f18385e78f7344ebf143948",
+    "Map/m71011-1.dat": "721a116c57ca1e1686b0de33d5ff2c7c01298a5b348823a9c3d7bfdb7ef39685",
+    "Map/m71012.dat": "91ce6ea17ad2d282585ad285270936a5b37cfd9b5b5f08e4383cb8412d4be28c",
+    "Map/m71012-1.dat": "26c272f572cfb58472f60d505ae6497009681303729ac6d98cdf468f5f7196cb",
+    "Map/m71012-2.dat": "8fc98a05e2874dc98fc888f1ae163dce6b2243390aa6add65bd5a71fb07cbb35",
+    "Map/m71013.dat": "207b1046c24aee33baa9c03fb645238a01c6a4a292c3340c4a3c6b286989cb5b",
+    "Map/m71014.dat": "79cc464383e62b0caa9d2ac1c01abc5297ca325e483525f75c559b71cf7cf7b8",
+    "Map/m71020.dat": "fef4580830dff6d7366a3402787c4faf958b3d2140c80d3e81977563cc1434b3",
+    "Map/m71030.dat": "666b2ca9f89d242095a516a6f30433552d5d3a147cbb402c2296d5f1f1b7d4de",
+    "Map/m71040.dat": "7701485c301abf1c9fdd4435842d44fcef7e93efb57128e25d90381bcfbb480e",
+    "Map/m71050.dat": "87b18fffc22ebfbdf001113335b57ec1ba62a3a52f8876f79a0d369e4f772716",
+    "Map/m71060.dat": "4dea45c3e65b2aca906a55a0c6dc7b31749574577cc6d1400812433787cc9daf",
     "Map/m01050.dat": "48ae98e95e9ea414e716c85440d381a5bc29cc2ec00ccd3b30c2ef314d4145fc",
     "Map/m03039.dat": "c3c01fb5773dda464c2a5bfa0b46520031f2dc9bd363e4a1978c99950b0dcaf2",
     "Map/m17010.dat": "634a1eea243656b16341d9e217578a42a5d58f82f00af9aa0f8a0f805e83515a",
@@ -148516,6 +148531,9 @@
     "Map/m17013.dat": "1c1bdd0e8f26c8b2ee3b137d0049bfab10ae87f0e5dc76dfa44fc7f61096afcc",
     "Map/m17014.dat": "6128bf9d9940a8176c6d53c8e421132a9f2f2ead6e4a907fac6bce4fd0c135ff",
     "Map/m17015.dat": "e396282ce0dbf14a02d91dca28af4b0d1914cee1c1b8a1b7b3c8e0089f6d8b0e",
+    "Map/m17016.dat": "2771831ca2de861d7d368357e0faac2f0cda04b02a362a0d3775ce4940afba2d",
+    "Map/m17021.dat": "8936daaa7ae9a874a41d9afabf1180677fe02c5d9640a0585792092357fd0ec5",
+    "Map/m17022.dat": "777949c861b8666b85162b90e5b0451b2c9e6b3d64089f0e5d780e6caab6492a",
     "Map/m17023.dat": "d9f2021f1f24558f8ead877cc77612c7fa2263b8225a10d630f308384ef857f9",
     "Map/m17024.dat": "18b33b069a469365ed75b531aa6346c58112f0c6a64c7a59ae1c6108318ef599",
     "Map/m17025.dat": "266c901c9784665d27034f4531c1918fbea96815d14ec68fb1f6699d6d3fa3cd",
@@ -148525,6 +148543,11 @@
     "Map/m17030-2.dat": "19c9e32a7cc32da40da096e67aa6b318e18570b29bc784130ad7d07d4430dfe6",
     "Map/m17030.dat": "bbe0b8b99a59f775f1647b7e5e01f7ea12208f4422d1272fe62655c6e41d5bc4",
     "Map/m17032.dat": "fec9023611123ba7557cf0a186317c808a5c041a6ec8d0fd52b30c8576f09bfe",
+    "Map/m01060.TLK": "8e71ad04dacc1155c6e7adcf5dbf50e1cffbd049a53aa2610a1769f10bbd0bee",
+    "Map/m01065.TLK": "59737a03d554b6d1850c301ef5d395c70fd8e5df525df22a8447d118b09ec48b",
+    "Map/m71013.TLK": "da89b10163c8a8374dd4b59e292a68a145f34034a52f8c96fc4bad1e8ed9b944",
+    "Map/m71014.TLK": "e63c029a1d8c560c5e3cdeac89bee62c41e2b34afb3c59076a8ec1ad72724fbe",
+    "Map/m71050.TLK": "dd2ba0aafcc40ad4767400a8745035187dac8b4e46a59a867e4259ce69e46864",
     "Map/m01050.TLK": "6c5d2be29f120977d70c500abd11c8d76f11abba650be689e2dc44f4ae1dc182",
     "Map/m03039.TLK": "b95cbf37de9e4d723a9830d97454b5ece2bc7bf352a51199f0e630aacdb8694a",
     "Map/m17010.TLK": "04fc3299206a21504ac500a8797e4c96bf9ccee6fa104e41a3c8960861479f58",
@@ -148563,7 +148586,9 @@
     "Animate/m17030-1.anm": "209c86f42cda1a513c21d38512acea8470508910f44127977b9b7b1738df9df2",
     "Animate/m17010-3.anm": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
     "Animate/m70010-1.anm": "7f4c67d00ce8d1b6b3ce5b280c52074de4abcd82b932300849e756133a8f4e7c",
-    "Animate/m70030-1.anm": "a5a6e002bea13b92735b33a5bf7d866cda47020776bbab2f4f6cfc539ca11a3f"
+    "Animate/m70030-1.anm": "a5a6e002bea13b92735b33a5bf7d866cda47020776bbab2f4f6cfc539ca11a3f",
+    "Animate/m71014-1.anm": "b4788169b65d163448b33c449818bc38cac40efe2d10c8bc0c1c613fa5ca3c56",
+    "Animate/m71050-1.anm": "dbbef9d0067bd2ced4d7750b392af11de3e05e206c172e009157ad5fb4090a38"
   },
   "evidence": {
     "initialize": {
@@ -149790,6 +149815,66 @@
       ],
       "admitted_tlk_roots": [
         {
+          "map_id": "M01060",
+          "record_id": 61,
+          "kind": "npc",
+          "npc_slot": 19
+        },
+        {
+          "map_id": "M01060",
+          "record_id": 56,
+          "kind": "trigger",
+          "descriptor_id": 6
+        },
+        {
+          "map_id": "M01065",
+          "record_id": 65,
+          "kind": "trigger",
+          "descriptor_id": 31
+        },
+        {
+          "map_id": "M71013",
+          "record_id": 1,
+          "kind": "trigger",
+          "descriptor_id": 1
+        },
+        {
+          "map_id": "M71013",
+          "record_id": 14,
+          "kind": "trigger",
+          "descriptor_id": 2
+        },
+        {
+          "map_id": "M71014",
+          "record_id": 15,
+          "kind": "npc",
+          "npc_slot": 10
+        },
+        {
+          "map_id": "M71014",
+          "record_id": 13,
+          "kind": "trigger",
+          "descriptor_id": 1
+        },
+        {
+          "map_id": "M71014",
+          "record_id": 9,
+          "kind": "trigger",
+          "descriptor_id": 2
+        },
+        {
+          "map_id": "M71014",
+          "record_id": 7,
+          "kind": "trigger",
+          "descriptor_id": 3
+        },
+        {
+          "map_id": "M71050",
+          "record_id": 1,
+          "kind": "trigger",
+          "descriptor_id": 3
+        },
+        {
           "map_id": "M01050",
           "record_id": 17,
           "kind": "npc",
@@ -150674,9 +150759,30 @@
           "kind": "anm-talk",
           "program_id": "m17010-3",
           "command_index": 50
+        },
+        {
+          "map_id": "M71014",
+          "record_id": 1,
+          "kind": "anm-talk",
+          "program_id": "m71014-1",
+          "command_index": 6
+        },
+        {
+          "map_id": "M01065",
+          "record_id": 46,
+          "kind": "anm-talk",
+          "program_id": "m71050-1",
+          "command_index": 10
+        },
+        {
+          "map_id": "M01065",
+          "record_id": 47,
+          "kind": "anm-talk",
+          "program_id": "m71050-1",
+          "command_index": 14
         }
       ],
-      "reachable_tlk_record_count": 428,
+      "reachable_tlk_record_count": 471,
       "source_hashes": {
         "GAME.exe": "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18",
         "SYSTEM/Object.ITM": "9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8",
@@ -150686,6 +150792,21 @@
         "Fight_Role/004.CHR": "2b964b7c3065d1520f7fe354f9e1fe6e213e9fcb3f586056eafa7f63fb88b50d",
         "Fight_Role/005.CHR": "9e06bcbedaf821a6e4c1d08dc0cff31d916c3ae2d00fdc20c37e758d25e09580",
         "Fight_Role/006.CHR": "27b29fb5cc1073014faea7553d0175559714c18dbbc5132ca1c549e4a9d8e15b",
+        "Map/m01060.dat": "5ff8f2a3c43649fff1efc4eccd878f4a662d905f6ba3404948e47ec9240a3826",
+        "Map/m01065.dat": "2ca9d09e6c3b42814d0e6112ea17384e3796bbbe3660aa25c61503b407cb9aa5",
+        "Map/m71010.dat": "7bb0e54f6777634165bc0f093402bc651dff40c18e180d2cabeded1921676cae",
+        "Map/m71011.dat": "8183576be5149e05c016aaf54f58a0ddabedea156f18385e78f7344ebf143948",
+        "Map/m71011-1.dat": "721a116c57ca1e1686b0de33d5ff2c7c01298a5b348823a9c3d7bfdb7ef39685",
+        "Map/m71012.dat": "91ce6ea17ad2d282585ad285270936a5b37cfd9b5b5f08e4383cb8412d4be28c",
+        "Map/m71012-1.dat": "26c272f572cfb58472f60d505ae6497009681303729ac6d98cdf468f5f7196cb",
+        "Map/m71012-2.dat": "8fc98a05e2874dc98fc888f1ae163dce6b2243390aa6add65bd5a71fb07cbb35",
+        "Map/m71013.dat": "207b1046c24aee33baa9c03fb645238a01c6a4a292c3340c4a3c6b286989cb5b",
+        "Map/m71014.dat": "79cc464383e62b0caa9d2ac1c01abc5297ca325e483525f75c559b71cf7cf7b8",
+        "Map/m71020.dat": "fef4580830dff6d7366a3402787c4faf958b3d2140c80d3e81977563cc1434b3",
+        "Map/m71030.dat": "666b2ca9f89d242095a516a6f30433552d5d3a147cbb402c2296d5f1f1b7d4de",
+        "Map/m71040.dat": "7701485c301abf1c9fdd4435842d44fcef7e93efb57128e25d90381bcfbb480e",
+        "Map/m71050.dat": "87b18fffc22ebfbdf001113335b57ec1ba62a3a52f8876f79a0d369e4f772716",
+        "Map/m71060.dat": "4dea45c3e65b2aca906a55a0c6dc7b31749574577cc6d1400812433787cc9daf",
         "Map/m01050.dat": "48ae98e95e9ea414e716c85440d381a5bc29cc2ec00ccd3b30c2ef314d4145fc",
         "Map/m03039.dat": "c3c01fb5773dda464c2a5bfa0b46520031f2dc9bd363e4a1978c99950b0dcaf2",
         "Map/m17010.dat": "634a1eea243656b16341d9e217578a42a5d58f82f00af9aa0f8a0f805e83515a",
@@ -150703,6 +150824,9 @@
         "Map/m17013.dat": "1c1bdd0e8f26c8b2ee3b137d0049bfab10ae87f0e5dc76dfa44fc7f61096afcc",
         "Map/m17014.dat": "6128bf9d9940a8176c6d53c8e421132a9f2f2ead6e4a907fac6bce4fd0c135ff",
         "Map/m17015.dat": "e396282ce0dbf14a02d91dca28af4b0d1914cee1c1b8a1b7b3c8e0089f6d8b0e",
+        "Map/m17016.dat": "2771831ca2de861d7d368357e0faac2f0cda04b02a362a0d3775ce4940afba2d",
+        "Map/m17021.dat": "8936daaa7ae9a874a41d9afabf1180677fe02c5d9640a0585792092357fd0ec5",
+        "Map/m17022.dat": "777949c861b8666b85162b90e5b0451b2c9e6b3d64089f0e5d780e6caab6492a",
         "Map/m17023.dat": "d9f2021f1f24558f8ead877cc77612c7fa2263b8225a10d630f308384ef857f9",
         "Map/m17024.dat": "18b33b069a469365ed75b531aa6346c58112f0c6a64c7a59ae1c6108318ef599",
         "Map/m17025.dat": "266c901c9784665d27034f4531c1918fbea96815d14ec68fb1f6699d6d3fa3cd",
@@ -150712,6 +150836,11 @@
         "Map/m17030-2.dat": "19c9e32a7cc32da40da096e67aa6b318e18570b29bc784130ad7d07d4430dfe6",
         "Map/m17030.dat": "bbe0b8b99a59f775f1647b7e5e01f7ea12208f4422d1272fe62655c6e41d5bc4",
         "Map/m17032.dat": "fec9023611123ba7557cf0a186317c808a5c041a6ec8d0fd52b30c8576f09bfe",
+        "Map/m01060.TLK": "8e71ad04dacc1155c6e7adcf5dbf50e1cffbd049a53aa2610a1769f10bbd0bee",
+        "Map/m01065.TLK": "59737a03d554b6d1850c301ef5d395c70fd8e5df525df22a8447d118b09ec48b",
+        "Map/m71013.TLK": "da89b10163c8a8374dd4b59e292a68a145f34034a52f8c96fc4bad1e8ed9b944",
+        "Map/m71014.TLK": "e63c029a1d8c560c5e3cdeac89bee62c41e2b34afb3c59076a8ec1ad72724fbe",
+        "Map/m71050.TLK": "dd2ba0aafcc40ad4767400a8745035187dac8b4e46a59a867e4259ce69e46864",
         "Map/m01050.TLK": "6c5d2be29f120977d70c500abd11c8d76f11abba650be689e2dc44f4ae1dc182",
         "Map/m03039.TLK": "b95cbf37de9e4d723a9830d97454b5ece2bc7bf352a51199f0e630aacdb8694a",
         "Map/m17010.TLK": "04fc3299206a21504ac500a8797e4c96bf9ccee6fa104e41a3c8960861479f58",
@@ -150750,7 +150879,9 @@
         "Animate/m17030-1.anm": "209c86f42cda1a513c21d38512acea8470508910f44127977b9b7b1738df9df2",
         "Animate/m17010-3.anm": "bfbbf9c6b8b0fb04225c449ce55dc54b3286923950a71ddd5d410c2eab5d492e",
         "Animate/m70010-1.anm": "7f4c67d00ce8d1b6b3ce5b280c52074de4abcd82b932300849e756133a8f4e7c",
-        "Animate/m70030-1.anm": "a5a6e002bea13b92735b33a5bf7d866cda47020776bbab2f4f6cfc539ca11a3f"
+        "Animate/m70030-1.anm": "a5a6e002bea13b92735b33a5bf7d866cda47020776bbab2f4f6cfc539ca11a3f",
+        "Animate/m71014-1.anm": "b4788169b65d163448b33c449818bc38cac40efe2d10c8bc0c1c613fa5ca3c56",
+        "Animate/m71050-1.anm": "dbbef9d0067bd2ced4d7750b392af11de3e05e206c172e009157ad5fb4090a38"
       },
       "native_bootstrap": {
         "procedure": "0x47ae20",
@@ -150769,8 +150900,8 @@
       "scope": "Menu equip/link capability only; no inventory grant, party ownership or special passive is inferred.",
       "generated_input_hashes": {
         "data/opening_seed.json": "d22cac66f87121e147518fd1e9833ad7a98667cde923ca141194e5363cc8f3d3",
-        "data/chapter_story.json": "e09085aa9ea37faf57a9aad4425efef01f1ecc53337c4cb6b0b928b5646223ef",
-        "data/runtime_content.json": "b4da2b2a6096fc1af840eb6c6778a18bc7cf194d373f0fbc506fc429ad9c4889"
+        "data/chapter_story.json": "0ae166eff29a85a2f18944f55bea4f31d10ce32f2677657b415400cde8cb9595",
+        "data/runtime_content.json": "78ce209bdbf65392d7f8b1bf1f9c8c7facc91939fb8b0bfae6a26c3520df1791"
       }
     },
     "item_capability_admission": {

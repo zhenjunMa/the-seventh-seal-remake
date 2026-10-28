@@ -704,6 +704,12 @@ export const definition = {
     "013": {
       "side": "enemy"
     },
+    "014": {
+      "side": "enemy"
+    },
+    "022": {
+      "side": "enemy"
+    },
     "032": {
       "side": "enemy"
     }
@@ -723,6 +729,9 @@ export const definition = {
     ]
   },
   "stages": {
+    "stage07": {
+      "export": "source"
+    },
     "stage13": {
       "path": "data/forest_stage.json",
       "schema": "seventh-seal-forest-stage",
@@ -753,9 +762,108 @@ export const definition = {
     "m17030-1",
     "m17010-3",
     "m70010-1",
-    "m70030-1"
+    "m70030-1",
+    "m71014-1",
+    "m71050-1"
   ],
   "maps": {
+    "M01060": {
+      "npcs": [
+        19
+      ],
+      "triggers": [
+        6
+      ]
+    },
+    "M01065": {
+      "npcs": [],
+      "triggers": [
+        31
+      ]
+    },
+    "M71010": {
+      "export": {
+        "story": false
+      },
+      "npcs": []
+    },
+    "M71011": {
+      "export": {
+        "story": false
+      },
+      "npcs": []
+    },
+    "M71011-1": {
+      "export": {
+        "story": false
+      },
+      "npcs": []
+    },
+    "M71012": {
+      "export": {
+        "story": false
+      },
+      "npcs": []
+    },
+    "M71012-1": {
+      "export": {
+        "story": false
+      },
+      "npcs": []
+    },
+    "M71012-2": {
+      "export": {
+        "story": false
+      },
+      "npcs": []
+    },
+    "M71013": {
+      "npcs": [],
+      "triggers": [
+        1,
+        2
+      ]
+    },
+    "M71014": {
+      "npcs": [
+        10
+      ],
+      "triggers": [
+        1,
+        2,
+        3
+      ]
+    },
+    "M71020": {
+      "export": {
+        "story": false
+      },
+      "npcs": []
+    },
+    "M71030": {
+      "export": {
+        "story": false
+      },
+      "npcs": []
+    },
+    "M71040": {
+      "export": {
+        "story": false
+      },
+      "npcs": []
+    },
+    "M71050": {
+      "npcs": [],
+      "triggers": [
+        3
+      ]
+    },
+    "M71060": {
+      "export": {
+        "story": false
+      },
+      "npcs": []
+    },
     "M01050": {
       "npcs": [
         15
@@ -1992,6 +2100,20 @@ export default {
         "sha256": "5e3a7e65761a52b1653a40bc20ae130072af5c4f704b0cb389bbb239a1cd8ef6"
       }
     },
+    "014": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/014.CHR",
+        "sha256": "3dda77cf7ff3513c652bdf2224517fc48f5d5a2a948170cad7ac252efac7bf28"
+      }
+    },
+    "022": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/022.CHR",
+        "sha256": "1d993fbcd562db44c2f515f3b9e3e1bfa4d2ad99924ad543b62ca8226b3f4455"
+      }
+    },
     "032": {
       "side": "enemy",
       "source": {
@@ -2010,6 +2132,8 @@ export default {
       "011",
       "012",
       "013",
+      "014",
+      "022",
       "032"
     ],
     "party-source-group": [
@@ -2022,10 +2146,17 @@ export default {
       "011",
       "012",
       "013",
+      "014",
+      "022",
       "032"
     ]
   },
   "stages": {
+    "stage07": {
+      "path": "data/stages/stage07.json",
+      "schema": "seventh-seal-battle-stage",
+      "asset_prefix": "assets/stages/stage07/"
+    },
     "stage13": {
       "path": "data/forest_stage.json",
       "schema": "seventh-seal-forest-stage",
@@ -2122,9 +2253,171 @@ export default {
       "path": "Animate/m70030-1.anm",
       "sha256": "a5a6e002bea13b92735b33a5bf7d866cda47020776bbab2f4f6cfc539ca11a3f",
       "bytes": 437
+    },
+    "m71014-1": {
+      "path": "Animate/m71014-1.anm",
+      "sha256": "b4788169b65d163448b33c449818bc38cac40efe2d10c8bc0c1c613fa5ca3c56",
+      "bytes": 1251
+    },
+    "m71050-1": {
+      "path": "Animate/m71050-1.anm",
+      "sha256": "dbbef9d0067bd2ced4d7750b392af11de3e05e206c172e009157ad5fb4090a38",
+      "bytes": 2213
     }
   },
   "maps": {
+    "M01060": {
+      "path": "data/maps/m01060.json",
+      "triggers": [
+        6
+      ],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        19
+      ],
+      "flag_index": 6
+    },
+    "M01065": {
+      "path": "data/maps/m01065.json",
+      "triggers": [
+        31
+      ],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 384
+    },
+    "M71010": {
+      "path": "data/maps/m71010.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 404
+    },
+    "M71011": {
+      "path": "data/maps/m71011.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 389
+    },
+    "M71011-1": {
+      "path": "data/maps/m71011-1.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 395
+    },
+    "M71012": {
+      "path": "data/maps/m71012.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 390
+    },
+    "M71012-1": {
+      "path": "data/maps/m71012-1.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 391
+    },
+    "M71012-2": {
+      "path": "data/maps/m71012-2.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 392
+    },
+    "M71013": {
+      "path": "data/maps/m71013.json",
+      "triggers": [
+        1,
+        2
+      ],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 393
+    },
+    "M71014": {
+      "path": "data/maps/m71014.json",
+      "triggers": [
+        1,
+        2,
+        3
+      ],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10
+      ],
+      "flag_index": 394
+    },
+    "M71020": {
+      "path": "data/maps/m71020.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 121
+    },
+    "M71030": {
+      "path": "data/maps/m71030.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 122
+    },
+    "M71040": {
+      "path": "data/maps/m71040.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 123
+    },
+    "M71050": {
+      "path": "data/maps/m71050.json",
+      "triggers": [
+        3
+      ],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 124
+    },
+    "M71060": {
+      "path": "data/maps/m71060.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 125
+    },
     "M01050": {
       "path": "data/maps/m01050.json",
       "triggers": [],

@@ -76,6 +76,15 @@ python3 -B remake/runtime/tools/build_runtime.py --target fire-valley-index --ru
 python3 -B remake/runtime/tools/build_runtime.py --target white-forest-index --run
 ```
 
+生成翠碧湖全时期来源索引（13图，不含研究所遗迹）：
+
+```console
+python3 -B remake/runtime/tools/build_runtime.py --target jade-lake-index --run
+python3 -B remake/runtime/tools/export_jade_lake_index.py --check
+```
+
+翠碧湖的`--query`、`--map`、`--flag`及`--limit`参数与下方火之谷示例相同。索引保留全部原始阶段，运行开放及验收按开发计划分期。
+
 只读核对火之谷索引与覆盖报告：
 
 ```console
@@ -216,7 +225,7 @@ fire-valley-index独立于运行登记扫描`Map/*.dat`、`Map/*.TLK`及`Animate
 
 story-media从登记ANM及显式来源准备集合m17010-3／m17030-1的原74字节指令读取opcode60视频、opcode62非空声音；`--source-program`可追加只准备不登记的ANM。生成`data/story_media.json`与`evidence/story_media_export.json`，保留原文件名小写键及逐指令引用，不推断剧情可达或演出时序。BIK转浏览器视频逐帧完整解码核对尺寸／帧率／帧数／时长与SSIM，音频核对完整PCM；原.wav若实为MP3，字节复制至真实.mp3后缀。`--reuse-existing`仍执行完整验证；`--verify-only`只读重核来源、清单、媒体SHA和完整解码，不重写媒体或报告。
 
-chapter-maps按`maps.export`归属准备地图、NPC、物件和源物理出口；chapter-story按story和programs准备TLK／ANM、被引用道具与登记玩家初值。
+chapter-maps按`maps.export`归属准备地图、NPC、物件和源物理出口；chapter-story保留全部chapter资产地图的DAT表，按story和programs准备TLK／ANM、被引用道具与登记玩家初值。无TLK且无物件的通路同样需要原入口标记；records为空，不生成虚构对白或自动开放入口。
 
 white-forest-index复用来源解析与跨区域调用扫描，以原地图名称精确匹配“白木森林”，输出`data/library/white_forest.json`及`evidence/white_forest_20261026/source_index.json`；不纳入“里白木森林”。索引保留全部96个原物件记录与原字节。`export_white_forest_index.py`同样支持`--check`／`--query`／`--map`／`--flag`，只读查询不开放运行内容。
 
@@ -411,6 +420,7 @@ independent-source-export：独立基础来源或旧样本生产入口，可能�
 | `fire-valley-index` | [export_fire_valley_index.py](export_fire_valley_index.py) | 无声明依赖 |
 | `story-media` | [export_story_media.py](export_story_media.py) | 无声明依赖 |
 | `white-forest-index` | [export_white_forest_index.py](export_white_forest_index.py) | 无声明依赖 |
+| `jade-lake-index` | [export_jade_lake_index.py](export_jade_lake_index.py) | 无声明依赖 |
 
 <!-- 自动生成：构建目标结束 -->
 

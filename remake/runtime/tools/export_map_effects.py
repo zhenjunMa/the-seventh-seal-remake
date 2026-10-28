@@ -38,13 +38,25 @@ def validate_cf1_action(dgp):
     count = struct.unpack_from('<I', raw, 0x0e)[0]
     first = struct.unpack_from('<I', raw, 0x72)[0]
     interval = struct.unpack_from('<I', raw, 1)[0]
-    if raw[0] != 0 or raw[0x0d] != 1 or not 0 < count <= 255 or first != 0 or count > dgp.frame_count:
+    if raw[0] != 0 or raw[0x0d] not in (0, 1) or not 0 < count <= 255 or first != 0 or count > dgp.frame_count:
         raise DGPError('CF1 map action direction/sequence mode is not recovered')
+    logical_count = struct.unpack_from('<I', raw, 0x12)[0] if raw[0x0d] == 0 else count
+    if not logical_count:
+        raise DGPError('CF1 map action requires a nonempty native logical sequence')
+    # 410850 uses this logical count for FF's initial modulo. 4137C0 wraps
+    # +22 at that count, then resolves explicit mode0 through action+16.
+    # Atlas columns remain physical frames; repeated sequence entries are not
+    # expanded into duplicate pixels or mistaken for extra physical frames.
+    native_frame_sequence(raw, 0, logical_count, 0)
     if interval == 1 or interval > 0x7fffffff:
         raise DGPError('CF1 source clock cannot be sampled safely')
     if any(raw[0x56:0x6a]) or raw[0x84]:
         raise DGPError('CF1 source sound/drawing effect is not recovered')
-    if dgp.shadow_blobs:
+    # Some intrinsic-only light resources retain one empty shadow row per
+    # geometry line. Parse every mask strictly; absent coverage has no visual
+    # responsibility. Any actual animated shadow remains outside this adapter.
+    if dgp.shadow_blobs and any(size for frame in range(dgp.frame_count)
+                               for _, spans in dgp.shadow_rows(frame) for _, size in spans):
         raise DGPError('CF1 animated shadow presentation is not recovered')
 
 

@@ -46945,7 +46945,7 @@
     }
   },
   "runtime_dependencies": {
-    "data/party_battle_view.json": "3fb4cb430b6fcc0331ca819e7a575502d8a271f1f41bd4e2edf574fabea2d840"
+    "data/party_battle_view.json": "e78ca07d3351e166101ca69234a4be42545a5603fb5f90702c11d025a3f1682b"
   },
   "item_card_back": {
     "image": "assets/menu/item_card_back.png",

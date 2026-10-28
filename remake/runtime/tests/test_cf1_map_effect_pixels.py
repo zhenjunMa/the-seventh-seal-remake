@@ -40,9 +40,11 @@ class FileRaster:
             for _ in range(self.count):
                 count, = struct.unpack_from('<I', data, position)
                 position += 4 + count * 8
+        self.shadows = []
         if data[geometry + 41]:
             for _ in range(self.count):
                 count, = struct.unpack_from('<I', data, position)
+                self.shadows.append((position + 4, count))
                 position += 4 + count
         self.indexed = []
         if data[19]:
@@ -58,6 +60,25 @@ class FileRaster:
         assert position == self.payload
         assert sum(length for _, length in self.frames) == size
         assert len(data) == self.payload + size * (1 if data[21] else 2)
+
+    def shadow_mask(self, index):
+        position, size = self.shadows[index]
+        end = position + size
+        mask = bytearray(self.width * self.height)
+        for y in range(self.height):
+            count, = struct.unpack_from('<H', self.data, position)
+            position += 2
+            if count == 65535:
+                continue
+            previous = 0
+            for _ in range(count):
+                x, length = struct.unpack_from('<HH', self.data, position)
+                position += 4
+                assert previous <= x <= x + length <= self.width and position <= end
+                mask[y * self.width + x:y * self.width + x + length] = bytes([128]) * length
+                previous = x + length
+        assert position == end
+        return bytes(mask)
 
     def pixels(self, index, intrinsic=False):
         rgba = bytearray(self.width * self.height * 4)
@@ -100,6 +121,98 @@ class FileRaster:
 
 
 class CF1MapPixels(unittest.TestCase):
+    def check_jade_lake_handoff_cf1_sources(self, manifest, report, web):
+        """Two new caller maps keep their own raw DAT and per-path pixels."""
+        specs = {
+            'M01060': (list(range(13, 39)), {'016': 5, '017': 5, '018': 5, '020': 2}),
+            'M01065': ([0, 2, 3, 4, 5, 6, 7], {'001': 15, '003': 2}),
+        }
+        banks_by_source, before_sources = {}, {}
+        for map_id, (indices, source_counts) in specs.items():
+            dat_path = ROOT / f'Map/{map_id.lower()}.dat'
+            dat = dat_path.read_bytes()
+            width, height = struct.unpack_from('<II', dat, 0x146)
+            descriptor_bytes = 0x42 if struct.unpack_from('<I', dat, 0x18)[0] == 1 else 0x2b
+            object_start = 0x172 + width * height * 64 + 32 * (0x2a + descriptor_bytes + 0x1b + 0x110)
+            count, = struct.unpack_from('<I', dat, 0x82)
+            base = dat[0x14e:0x16e].split(b'\0')[0].decode('ascii').replace('\\', '/').removeprefix('./').rstrip('/').lower()
+            self.assertEqual(base, f'mapm/{map_id.lower()}')
+            expected = []
+            for index in range(count):
+                offset = object_start + index * 0x112
+                raw = dat[offset:offset + 0x112]
+                self.assertEqual(len(raw), 0x112)
+                resource_id, = struct.unpack_from('<I', raw, 0x1e)
+                relative = f'{base}/{resource_id:03}.dgp'
+                source = (ROOT / relative).read_bytes()
+                before_sources[relative] = source
+                if raw[0xcf] == 1 and source[2]:
+                    expected.append((index, offset, raw, relative))
+            self.assertEqual([row[0] for row in expected], indices, map_id)
+            actual = [row for row in manifest['maps'][map_id]['objects'] if row['behavior_raw_cf'] == 1]
+            self.assertEqual([row['index'] for row in actual], indices, map_id)
+            expected_sources = {f'{base}/{stem}.dgp': frames for stem, frames in source_counts.items()}
+            observed_sources = set()
+            for obj, (index, offset, raw, relative) in zip(actual, expected):
+                self.assertEqual(obj['source_record_raw_hex'], raw.hex())
+                self.assertEqual(obj['source_record_offset'], offset)
+                self.assertEqual(obj['map_id'], map_id)
+                self.assertEqual(obj['initial_frame_raw'], struct.unpack_from('<I', raw, 0x3c)[0])
+                self.assertEqual(obj['fixed_clock_raw_b4'], raw[0xb4])
+                bank = manifest['object_banks'][obj['bank']]
+                self.assertEqual(bank['source']['path'], relative)
+                self.assertEqual(bank['source']['sha256'], hashlib.sha256(before_sources[relative]).hexdigest())
+                self.assertEqual(obj['bank'], f'{map_id.lower()}_{Path(relative).stem}')
+                observed_sources.add(relative)
+                banks_by_source[relative] = obj['bank']
+            self.assertEqual(observed_sources, set(expected_sources))
+            self.assertEqual(dat_path.read_bytes(), dat)
+
+        frame_total = 0
+        for relative, key in sorted(banks_by_source.items()):
+            bank = manifest['object_banks'][key]
+            source = before_sources[relative]
+            raster = FileRaster(source)
+            map_id = Path(relative).parent.name.upper()
+            expected_count = specs[map_id][1][Path(relative).stem]
+            self.assertEqual(raster.count, expected_count)
+            for frame in range(len(raster.shadows)):
+                self.assertEqual(raster.shadow_mask(frame), bytes(raster.width * raster.height), (relative, frame, 'source shadow is empty'))
+            self.assertEqual((bank['frame_width'], bank['frame_height']), (raster.width, raster.height))
+            self.assertEqual(len(bank['actions']), source[2])
+            self.assertEqual(len(bank['actions']), 1)
+            action = bank['actions'][0]
+            self.assertEqual(action['source_action_raw_hex'], source[67:239].hex())
+            self.assertEqual((action['first_frame'], action['frame_count'], action['directions']), (0, expected_count, 1))
+            self.assertEqual(action['interval_raw'], struct.unpack_from('<I', source, 68)[0])
+            logical_count = struct.unpack_from('<I', source, 67 + 0x12)[0] if source[67 + 13] == 0 else expected_count
+            logical_frames = list(source[67 + 0x16:67 + 0x16 + logical_count]) if source[67 + 13] == 0 else list(range(expected_count))
+            self.assertEqual(action['logical_frames'], logical_frames)
+            if source[67 + 13] == 0:
+                self.assertEqual(logical_frames, [0, 1, 2, 3, 4, 3, 2, 1, 0])
+            checks = [row for row in report['cf1_frame_checks'] if row['source'] == relative]
+            self.assertEqual([row['frame'] for row in checks], list(range(expected_count)))
+            for channel in ['main', 'intrinsic']:
+                atlas = Image.open(web / action[channel + '_sheet'].lstrip('/')).convert('RGBA')
+                self.assertEqual(atlas.size, (raster.width * expected_count, raster.height))
+                for frame in range(expected_count):
+                    expected = raster.pixels(frame, intrinsic=channel == 'intrinsic')
+                    actual = atlas.crop((frame * raster.width, 0, (frame + 1) * raster.width, raster.height)).tobytes()
+                    self.assertEqual(actual, expected, (relative, channel, frame))
+                    self.assertEqual(checks[frame][channel]['covered_pixels'], sum(bool(expected[i]) for i in range(3, len(expected), 4)))
+                    if channel == 'main':
+                        self.assertEqual(checks[frame][channel]['rgba_sha256'], hashlib.sha256(expected).hexdigest())
+            frame_total += expected_count
+        self.assertEqual(len(banks_by_source), 6)
+        self.assertEqual(frame_total, 34)
+        # These two source paths have identical bytes, but belong to different
+        # native DAT directories. Preserve both identities and both audits.
+        self.assertEqual(before_sources['mapm/m01060/020.dgp'], before_sources['mapm/m01065/003.dgp'])
+        self.assertNotEqual(banks_by_source['mapm/m01060/020.dgp'], banks_by_source['mapm/m01065/003.dgp'])
+        for relative, source in before_sources.items():
+            self.assertEqual((ROOT / relative).read_bytes(), source)
+        return [row for row in report['cf1_frame_checks'] if row['source'] in banks_by_source]
+
     def test_complete_export_entry_covers_all_registered_cf1_objects_without_writing_live_assets_or_evidence(self):
         observed = [RUNTIME / 'web/data/map_effects.json', RUNTIME / 'evidence/map_effects_20261021/export.json']
         before = [path.read_bytes() for path in observed]
@@ -238,7 +351,9 @@ class CF1MapPixels(unittest.TestCase):
             self.assertEqual(forest_frames, 8)
             forest_checks = [row for row in report['cf1_frame_checks'] if row['source'] in forest_sources]
             self.assertEqual(len(forest_checks), forest_frames)
-            self.assertEqual(len(report['cf1_frame_checks']), len(baseline_checks) + len(city_checks) + len(forest_checks))
+            handoff_checks = self.check_jade_lake_handoff_cf1_sources(manifest, report, web)
+            self.assertEqual(len(handoff_checks), 34)
+            self.assertEqual(len(report['cf1_frame_checks']), len(baseline_checks) + len(city_checks) + len(forest_checks) + len(handoff_checks))
             self.assertNotIn('M17030', manifest['maps'], 'the zero-action static crystal is not animated/collectable')
             for map_id, data in regional.items():
                 for row in data['objects']:
@@ -327,6 +442,27 @@ class CF1MapPixels(unittest.TestCase):
         dgp.raw_actions.append(dgp.raw_actions[0])
         with self.assertRaises(DGPError):
             exporter.validate_cf1_action(dgp)
+        # Real mode0 light sources have five physical frames and nine logical
+        # visits. Reject empty/oversized tables and references outside that
+        # physical group without writing any output.
+        path = ROOT / 'mapm/m01060/016.dgp'
+        for offset, value in [(0x12, 0), (0x12, 0x5d), (0x16, 5)]:
+            dgp = DGP(path)
+            changed = bytearray(dgp.raw_actions[0])
+            changed[offset] = value
+            dgp.raw_actions[0] = bytes(changed)
+            with tempfile.TemporaryDirectory() as folder:
+                with self.assertRaises(DGPError):
+                    exporter.export_bank(dgp, 'mapm/m01060/016.dgp', 'invalid_sequence', True, force_main=True, web=folder)
+                self.assertEqual(list(Path(folder).rglob('*')), [])
+        dgp = DGP(path)
+        # Retain the exact geometry and make one otherwise empty source mask
+        # cover one pixel. The unsupported visible-shadow case must still fail.
+        dgp.shadow_blobs[0] = struct.pack('<3H', 1, 0, 1) + bytes(dgp.height * 2 - 2)
+        with tempfile.TemporaryDirectory() as folder:
+            with self.assertRaisesRegex(DGPError, 'animated shadow'):
+                exporter.export_bank(dgp, 'mapm/m01060/016.dgp', 'visible_shadow', True, force_main=True, web=folder)
+            self.assertEqual(list(Path(folder).rglob('*')), [])
 
 
 if __name__ == '__main__':

@@ -20,6 +20,16 @@
       "sha256": "0cb31f6ec4e3130e6a1420b469e6bc2fa6b291259ae85e5d5c90c45d81c49934"
     },
     {
+      "id": "M01060",
+      "path": "data/maps/m01060.json",
+      "sha256": "f5815f178bd60f2b25c8509b38425355d89e8af2ad1c52480acfa979d60c4a0b"
+    },
+    {
+      "id": "M01065",
+      "path": "data/maps/m01065.json",
+      "sha256": "20f5c4b39de6e0e1e83c12ca1768be56cf0f9724f3859c2debf4c8911b90e72e"
+    },
+    {
       "id": "M03039",
       "path": "data/maps/m03039.json",
       "sha256": "63eadca1aa1f4a0ee48bc7299799b2e6742675c5ac8b10014a47d47e0570fa0b"
@@ -158,6 +168,71 @@
       "id": "M70060",
       "path": "data/maps/m70060.json",
       "sha256": "68437b5c9cbe125cfd611d30edb2be090cfdb9ef41f42b1ba6c2f60608fa3280"
+    },
+    {
+      "id": "M71010",
+      "path": "data/maps/m71010.json",
+      "sha256": "d0ed270f685f2c1f1c92b1afdc7ecd6665fcf320e7af8eddc645687e5f025749"
+    },
+    {
+      "id": "M71011-1",
+      "path": "data/maps/m71011-1.json",
+      "sha256": "e8694617fd2307f404c9d2efabb731bc28080f4811f34cdbadf738cf91a9f037"
+    },
+    {
+      "id": "M71011",
+      "path": "data/maps/m71011.json",
+      "sha256": "5bd1b7d869194a1c44e110c389e950e984ea8f222bcfe5972e5cc68a85aaa479"
+    },
+    {
+      "id": "M71012-1",
+      "path": "data/maps/m71012-1.json",
+      "sha256": "1804e87cbd45ae8fb6920567da4fa8549edc2733983127eb5a9d4517789c1e1e"
+    },
+    {
+      "id": "M71012-2",
+      "path": "data/maps/m71012-2.json",
+      "sha256": "a6c661951176d5f5fd6e6f74784973e309f6d98b4a7da73e76e60a4089da512a"
+    },
+    {
+      "id": "M71012",
+      "path": "data/maps/m71012.json",
+      "sha256": "24c8c1f9607dc949247068c7ccbef54f1e632582feaa82514859e8e2de809d9b"
+    },
+    {
+      "id": "M71013",
+      "path": "data/maps/m71013.json",
+      "sha256": "5f45013e8bdb197e5b2719093bdfc4465eda66bae2755564266d928e3121cc28"
+    },
+    {
+      "id": "M71014",
+      "path": "data/maps/m71014.json",
+      "sha256": "2680375ddf8827293ef5d4c5e2335f94fe350bf836adc7922dc563516b64d20d"
+    },
+    {
+      "id": "M71020",
+      "path": "data/maps/m71020.json",
+      "sha256": "25bf63508dcf56ecae1d283758c19f248bb399115ab5365c955da0aee2276576"
+    },
+    {
+      "id": "M71030",
+      "path": "data/maps/m71030.json",
+      "sha256": "534d77810551483a3bd44e295592c334e66263892be58ae2b76e0ebe4eb3f7ae"
+    },
+    {
+      "id": "M71040",
+      "path": "data/maps/m71040.json",
+      "sha256": "b45b0f25df8eebfa4174a2a581fc3a1e5bc098a601c7783339b17a470d795ffb"
+    },
+    {
+      "id": "M71050",
+      "path": "data/maps/m71050.json",
+      "sha256": "b5e3b57df295dbe7b436815d6c4521cbc8e2e2d4cd637f8bb027942ea6621ad5"
+    },
+    {
+      "id": "M71060",
+      "path": "data/maps/m71060.json",
+      "sha256": "176529e30d781fa33a38b24f5dc7a3af80291e9eaa708199eb0e730ec31735c9"
     },
     {
       "id": "M72061",
@@ -2423,7 +2498,7 @@
   "forest_battle_view": "data/enemy_battle_view.json",
   "scope": {
     "official_runtime_started": true,
-    "ready_exits": 38,
+    "ready_exits": 66,
     "source_backed_events": 1,
     "one_on_one_turn_sample": true,
     "full_combat": false,

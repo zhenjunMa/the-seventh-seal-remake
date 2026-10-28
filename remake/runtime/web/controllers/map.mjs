@@ -25,7 +25,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
     let effective=[];state.battleUnavailable='';
     const newParty=snapshot.source.kind==='native-new-game';
     if(state.battleData)try{effective=newParty?createPartyActors(snapshot,state.partyCombat,{},state.itemData):createBattleSample(snapshot,state.battleData).actors;if(!effective.some(a=>a.side==='player'&&a.hp.current>0))state.battleUnavailable='队伍已经倒下，请载入进度。';}catch(error){state.battleUnavailable=error.message;}
-    $('battleOpen').disabled=state.scenes.phase!=='map'||Boolean(state.battleUnavailable)||newParty;$('battleOpen').title=newParty?'新游戏请在白木森林中行走遇敌。':state.battleUnavailable;
+    $('battleOpen').disabled=state.scenes.phase!=='map'||Boolean(state.battleUnavailable)||newParty;$('battleOpen').title=newParty?'新游戏请在野外行走遇敌。':state.battleUnavailable;
     state.mapVitals.clear();for(const actor of effective)state.mapVitals.set(actor.id,{hp:{...actor.hp},mp:{...actor.mp}});
     state.selectedRole=snapshot.leader_id;
     $('role').replaceChildren(...snapshot.party.map(actor=>{const option=document.createElement('option');option.value=actor.id;option.textContent=actor.name;return option;}));

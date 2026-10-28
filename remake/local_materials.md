@@ -1,6 +1,6 @@
 # 第七封印重制 · 本地素材、证据与历史资料
 
-更新：2026-10-26；路径以仓库根目录为基准。
+更新：2026-10-28；路径以仓库根目录为基准。
 
 本文件随代码维护，说明资料用途、准备方式和缺失时的处理。实际媒体、来源台账、观察副本和历史归档不随仓库提供。
 
@@ -25,6 +25,20 @@ save_analysis_20261010中四个共享解析模块随代码提供，但原存档�
 `remake/runtime/tools/build_runtime.py`目前用于已有基础内容上的增量生产。仅有原版文件还不足以保证完成首次构建；环境依赖、命令和缺失处理见[README.md](runtime/tools/README.md)，打通任务见[validation_design.md](assessment/validation_design.md)。
 
 ## 证据与构建记录
+
+### 翠碧湖来源索引
+
+翠碧湖索引由jade-lake-index目标从只读原DAT／TLK／ANM重建，输出`remake/runtime/web/data/library/jade_lake.json`及`remake/runtime/evidence/jade_lake_20261028/source_index.json`。包含13张全时期地图、41条TLK记录、两份ANM的94条命令、原物件／NPC及区域外旗标与演出调用关系，不包含同前缀的研究所遗迹。索引及报告记录原输入SHA和产物SHA；接收环境用同版本原版Map／Animate目录运行该目标，再以`export_jade_lake_index.py --check`核对确定性。构建台账在`evidence/builds`另存输入指纹与只读检查结果；缺少原输入时保留现有索引，不能把来源覆盖作为流程验收。
+
+`remake/runtime/evidence/jade_lake_assessment_20261028`保存此前排期评估的`source_index.json`与`assessment.json`，保留原字节作为历史依据。本轮正式来源报告单独放在jade_lake_20261028，不覆盖评估快照；两个目录均被Git忽略，交接时一并保留。静态来源导出未执行原GAME.exe，也不代表第一阶段或后期剧情已完成页面实玩。
+
+`jade_lake_20261028/verify_map_sources.py`对13张湖图及M01060／M01065交接图按原DAT和独立DGP解码核背景、初始物件、地形、入口、NPC默认值；`map_source_validation_initial.json`保存初次静态结果，最终包含CF1双通道图集的结果使用新的`map_source_validation.json`，以其实际存在及绑定SHA为准。`cf1_sequence_recovery.json`保存M01060显式9步帧表、FF随机取模、重进默认值和空阴影的来源解释，关联既有410850／4137C0原指令及40CFE0证据；定向回归本体通过与统一报告是否有效分别记录。`test_cf1_map_effect_pixels_before_handoff.py`保留初始源图报告所绑定的旧独立解码器版本，不作为正式测试入口。
+
+`jade_lake_20261028/cf7_idle_recovery.json`补记M01065原物件1的CF7默认／保存待机规则、全8物件队列及两动作16帧双通道核对，绑定定向测试报告。它明确更正此前`cf1_sequence_recovery.json`把这个额外物件称作CF3的分类错误：实际DAT +CF为7，旧报告保持原字节。CF1像素覆盖不能代替整图prepare；浏览器发现的载入异常及修复后的页面验证另记当次证据，不以Node控制器准备检查冒称画面实玩。
+
+`jade_lake_20261028/browser_observation.json`与`browser_validation.json`保存本轮按用户要求“直接改档、只测新增部分”的正式页面验收；`phase_fixture_manifest.json`、`battle_fixtures`及`postevent_fixture_manifest.json`分别说明阶段前置、原成长30级胜利样本和实际演出输出仅改位置的重进档。截图、实际输出档、奖励、运行日志及CF7修复前后输入差异在`browser`。`test_save_delivery.json`绑定当前本地`remake/saves/SaveGame19.json`入口档，旧00～02栏与快速档的未改SHA另行核对；样本和证据不随Git自动分发。相关定向报告列在观察记录中，不把更早发现旧登记假设失败的all记录改写为最终全量通过。
+
+`remake/runtime/evidence/jade_lake_battle_20261028`保存014雷兽／022刽齿蛟的`admission.json`及入场模式原生证据`appearance_native.json`；014原随机显现按[1,5,7]单次抽取，022的横向显现与command-only入场保留原完成条件。`anm36_native.json`另保留473E30／4B6720／45E400／518800调用证据：本轮mode1与mode0同走入队，只有mode3切控制，命令XY不作为传送。交接时这些文件须与构建依赖一并保留；原生静态指令差分、重制规则与浏览器表现分别说明，显现沿既有alpha适配，不声称RGB16像素变换完全相同。
 
 ### 白木森林来源与页面记录
 

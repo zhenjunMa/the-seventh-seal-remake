@@ -997,7 +997,7 @@
     "save_state_imported": false,
     "capability_reference": {
       "path": "remake/runtime/web/core/chapter_animation.mjs",
-      "sha256": "5a439e6020435ec922b09162c3914f53733274116dcecb3728c39a022d3c19b2",
+      "sha256": "c1944bf67a08f8d07532c2964596014c8a19a18862b226b38100773960c12e0f",
       "declared_anm_opcodes": [
         10,
         11,

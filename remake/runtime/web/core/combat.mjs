@@ -143,6 +143,23 @@ export class BattleController {
     Object.assign(actor,verticalActorPatch(state,actor));this.verticalClocks.set(actorId,{at,state});return copy(state);
   }
   nativeVerticalFor(actorId){return nativeVerticalState(this.actor(actorId));}
+  beginNativeAppearance(actorId,raw){
+    requireValue(typeof raw==='string'&&/^[0-9a-f]{352}$/i.test(raw),'原入场动作记录缺失');
+    const b=Uint8Array.from(raw.match(/../g),x=>parseInt(x,16)),actor=this.actor(actorId),view=new DataView(b.buffer);
+    requireValue(actor&&b[0]===1&&view.getUint32(1,true)===7&&[0,1,5,6,7].includes(b[0x47]),'原入场动作模式尚未接入');
+    let mode=b[0x47],draw=null;
+    // 5130D0 command7 draws only when its source mode is zero, at this
+    // source cursor after entry selection; presentation never owns RNG.
+    if(mode===0){draw=this.rng();requireValue(Number.isInteger(draw)&&draw>=0&&draw<=32767,'原入场随机值无效');mode=[1,5,7][draw%3];}
+    actor.native_appearance_mode_raw=mode;actor.native_after_raw={...actor.native_after_raw,'0x0521f666':mode,'0x0521f66e':0,'0x0521a7b1':60};
+    this.log({type:'battle-native-appearance',actor_id:actorId,source_mode_raw:b[0x47],mode_raw:mode,rng_raw:draw});return {mode,clock_raw:60};
+  }
+  completeNativeAppearance(actorId){
+    const actor=this.actor(actorId);requireValue(actor,'原入场动作角色缺失');
+    // 51661E clears these fields only after the appearance renderer returns0.
+    actor.native_appearance_mode_raw=0;actor.immune_raw=0;
+    actor.native_after_raw={...actor.native_after_raw,'0x0521f666':0,'0x0521f5f5':0,'0x0521a7b1':0};
+  }
   nextNativeVerticalAt(){
     let due=Infinity;
     for(const [id,clock]of this.verticalClocks){const state=nativeVerticalState(this.actor(id));if(state.active)due=Math.min(due,clock.at+20-(clock.state.tick_remainder_ms??0));}

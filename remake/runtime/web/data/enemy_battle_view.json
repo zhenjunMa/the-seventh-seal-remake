@@ -5066,6 +5066,2392 @@
       ]
     },
     {
+      "id": "014",
+      "name": "雷兽",
+      "frame_width": 539,
+      "frame_height": 439,
+      "cursor_height_raw": 75,
+      "anchor": {
+        "x": 311,
+        "y": 324
+      },
+      "mirror": false,
+      "direction": 0,
+      "idle": {
+        "chr_record_index": 0,
+        "action_index": 0,
+        "source": {
+          "source": "Fight_Role/014.CHR",
+          "offset": 1840,
+          "bytes": 176,
+          "raw_sha256": "069dd34629c95eb7c89329b3814156681ad9fca09e86407af7e9b737957a0293"
+        },
+        "frames": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "start": 0,
+        "end_exclusive": 10,
+        "reverse_raw": 0,
+        "interval_raw": 120,
+        "movement_flag_raw": 0,
+        "movement_step_raw": 0,
+        "movement_source_field": "0x1e",
+        "event": null,
+        "reaction_class_raw": 0,
+        "effects": [],
+        "evidence": [
+          "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+          "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+          "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+        ],
+        "raw_hex": "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000a00000000000000000a000000000000000a000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "source_skill_index": 0
+      },
+      "idle_sequence": {
+        "role_id": "014",
+        "chr_skill_index": 0,
+        "skill_id_raw": 0,
+        "name": "",
+        "segments": [
+          {
+            "chr_record_index": 0,
+            "action_index": 0,
+            "source": {
+              "source": "Fight_Role/014.CHR",
+              "offset": 1840,
+              "bytes": 176,
+              "raw_sha256": "069dd34629c95eb7c89329b3814156681ad9fca09e86407af7e9b737957a0293"
+            },
+            "frames": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9
+            ],
+            "start": 0,
+            "end_exclusive": 10,
+            "reverse_raw": 0,
+            "interval_raw": 120,
+            "movement_flag_raw": 0,
+            "movement_step_raw": 0,
+            "movement_source_field": "0x1e",
+            "event": null,
+            "reaction_class_raw": 0,
+            "effects": [],
+            "evidence": [
+              "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+              "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+              "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+            ],
+            "raw_hex": "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000a00000000000000000a000000000000000a000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+            "source_skill_index": 0
+          }
+        ],
+        "terminal_commands": []
+      },
+      "reaction": {
+        "chr_record_index": 0,
+        "action_index": 1,
+        "source": {
+          "source": "Fight_Role/014.CHR",
+          "offset": 3069,
+          "bytes": 176,
+          "raw_sha256": "60abc94ab722035462dedd881491deb360de3c03825e077a9754aa592abf6cec"
+        },
+        "frames": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "start": 0,
+        "end_exclusive": 10,
+        "reverse_raw": 0,
+        "interval_raw": 70,
+        "movement_flag_raw": 0,
+        "movement_step_raw": 0,
+        "movement_source_field": "0x1e",
+        "event": null,
+        "reaction_class_raw": 0,
+        "effects": [],
+        "evidence": [
+          "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+          "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+          "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+        ]
+      },
+      "skill": {
+        "role_id": "014",
+        "chr_skill_index": 12,
+        "skill_id_raw": 25,
+        "name": "雷角突击",
+        "segments": [
+          {
+            "chr_record_index": 0,
+            "action_index": 7,
+            "source": {
+              "source": "Fight_Role/014.CHR",
+              "offset": 17644,
+              "bytes": 176,
+              "raw_sha256": "7eb68d87ef59a169f5c69308659a83f891e2743a11e694f332a6caa1ae4f0bd0"
+            },
+            "frames": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9
+            ],
+            "start": 0,
+            "end_exclusive": 10,
+            "reverse_raw": 0,
+            "interval_raw": 90,
+            "movement_flag_raw": 0,
+            "movement_step_raw": 0,
+            "movement_source_field": "0x1e",
+            "event": null,
+            "reaction_class_raw": 0,
+            "effects": [
+              {
+                "asset_id": "_DutyE3",
+                "frame": 2,
+                "slot": "actor",
+                "condition": "source nonempty actor effect",
+                "source_field": "0x9",
+                "source_event_field": "0x5"
+              }
+            ],
+            "evidence": [
+              "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+              "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+              "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+            ],
+            "raw_hex": "0007000000020000005f4475747945332e646770000000000000000000000000000000000000000000000a00000000000000000a000000000000000a000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+            "source_skill_index": 12
+          },
+          {
+            "chr_record_index": 1,
+            "action_index": 9,
+            "source": {
+              "source": "Fight_Role/014.CHR",
+              "offset": 17820,
+              "bytes": 176,
+              "raw_sha256": "1bc5dc54aa35acaa8eff2233923fe3e61694d17cca4324496e0c37364ef3cae8"
+            },
+            "frames": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "start": 0,
+            "end_exclusive": 6,
+            "reverse_raw": 0,
+            "interval_raw": 60,
+            "movement_flag_raw": 0,
+            "movement_step_raw": 2,
+            "movement_source_field": "0x1e",
+            "event": null,
+            "reaction_class_raw": 0,
+            "effects": [],
+            "evidence": [
+              "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+              "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+              "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+            ],
+            "raw_hex": "000900000003000000004475747945622e646770000000000000000000000200000001000000000000000600000000000000000600000000000000060000000000000006000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+            "source_skill_index": 12
+          },
+          {
+            "chr_record_index": 2,
+            "action_index": 8,
+            "source": {
+              "source": "Fight_Role/014.CHR",
+              "offset": 17996,
+              "bytes": 176,
+              "raw_sha256": "ef911275df95aa978fb64c726d12564864db94f840bc11cc89ac4c5821853147"
+            },
+            "frames": [
+              6,
+              5,
+              4,
+              3,
+              2,
+              1,
+              0
+            ],
+            "start": 0,
+            "end_exclusive": 7,
+            "reverse_raw": 1,
+            "interval_raw": 90,
+            "movement_flag_raw": 0,
+            "movement_step_raw": 0,
+            "movement_source_field": "0x1e",
+            "event": null,
+            "reaction_class_raw": 0,
+            "effects": [],
+            "evidence": [
+              "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+              "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+              "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+            ],
+            "raw_hex": "000800000000000000004475747945672e646770000000000000000000010000000000000000000000000700000000000000000700000000000000070000000000000007000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+            "source_skill_index": 12
+          },
+          {
+            "chr_record_index": 3,
+            "action_index": 14,
+            "source": {
+              "source": "Fight_Role/014.CHR",
+              "offset": 18172,
+              "bytes": 176,
+              "raw_sha256": "38c6607fce554382bb7f1c51c0f72ee402b5db0c0a780bea7ad52d2a7ca02ff5"
+            },
+            "frames": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8
+            ],
+            "start": 0,
+            "end_exclusive": 9,
+            "reverse_raw": 0,
+            "interval_raw": 80,
+            "movement_flag_raw": 0,
+            "movement_step_raw": 0,
+            "movement_source_field": "0x1e",
+            "event": {
+              "frame": 3,
+              "field": "0x49",
+              "evidence": [
+                "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01",
+                "ev_7199407875fd945ae708cfdfaabfd31e75f0148dd8b57f794f1095e39d526c30"
+              ]
+            },
+            "reaction_class_raw": 1,
+            "effects": [
+              {
+                "asset_id": "BTB01_Nm",
+                "frame": 3,
+                "slot": "target",
+                "condition": "accepted nonzero damage in bounded normal branch",
+                "source_field": "0x4e",
+                "source_event_field": "0x49"
+              }
+            ],
+            "evidence": [
+              "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+              "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+              "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+            ],
+            "raw_hex": "000e0000000000000000000000000000000000000000000000000000000000000000000000000000000009000000010000000009000000000000000900000000000000090000000000030000000042544230315f4e6d2e6467700000000000000000010000000000000000000000000000000000000000090400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+            "source_skill_index": 12
+          },
+          {
+            "chr_record_index": 4,
+            "action_index": 8,
+            "source": {
+              "source": "Fight_Role/014.CHR",
+              "offset": 18348,
+              "bytes": 176,
+              "raw_sha256": "d76e477102446b16671e2aa8e21b03fcc1b677c857a853660ad00b3cdc254148"
+            },
+            "frames": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "start": 0,
+            "end_exclusive": 7,
+            "reverse_raw": 0,
+            "interval_raw": 90,
+            "movement_flag_raw": 0,
+            "movement_step_raw": 0,
+            "movement_source_field": "0x1e",
+            "event": null,
+            "reaction_class_raw": 0,
+            "effects": [],
+            "evidence": [
+              "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+              "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+              "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+            ],
+            "raw_hex": "0008000000000000000000000000000000000000000000000000000000000000000000000000000000000700000000000000000700000000000000070000000000000007000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000333136372e77617600000000000000000000000005000000000000000000000000000000000000000000000000000000000000000000",
+            "source_skill_index": 12
+          },
+          {
+            "chr_record_index": 5,
+            "action_index": 10,
+            "source": {
+              "source": "Fight_Role/014.CHR",
+              "offset": 18524,
+              "bytes": 176,
+              "raw_sha256": "fe1ea1c17ee0633fa172ff28581d3050f47ff9f46c6c849844b6bdcdc7ffb642"
+            },
+            "frames": [
+              0
+            ],
+            "start": 0,
+            "end_exclusive": 1,
+            "reverse_raw": 0,
+            "interval_raw": 60,
+            "movement_flag_raw": 1,
+            "movement_step_raw": -2,
+            "movement_source_field": "0x1e",
+            "event": null,
+            "reaction_class_raw": 0,
+            "effects": [],
+            "evidence": [
+              "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+              "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+              "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+            ],
+            "raw_hex": "000a00000000000000000000000000000000000000000000000000000000feffffff01010001000000000100000000000000000100000000000000010000000000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+            "source_skill_index": 12
+          },
+          {
+            "chr_record_index": 6,
+            "action_index": 8,
+            "source": {
+              "source": "Fight_Role/014.CHR",
+              "offset": 18700,
+              "bytes": 176,
+              "raw_sha256": "4214a2851a7628df1dc46290ed4c49d3699af4d631f8b933516086e97e0777ba"
+            },
+            "frames": [
+              6,
+              5,
+              4,
+              3,
+              2,
+              1,
+              0
+            ],
+            "start": 0,
+            "end_exclusive": 7,
+            "reverse_raw": 1,
+            "interval_raw": 90,
+            "movement_flag_raw": 0,
+            "movement_step_raw": 0,
+            "movement_source_field": "0x1e",
+            "event": null,
+            "reaction_class_raw": 0,
+            "effects": [
+              {
+                "asset_id": "_DutyE2",
+                "frame": 6,
+                "slot": "actor",
+                "condition": "source nonempty actor effect",
+                "source_field": "0x9",
+                "source_event_field": "0x5"
+              }
+            ],
+            "evidence": [
+              "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+              "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+              "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+            ],
+            "raw_hex": "0008000000060000005f4475747945322e646770000000000000000000010000000000000000000000000700000000000000000700000000000000070000000000000007000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+            "source_skill_index": 12
+          }
+        ],
+        "terminal_commands": [
+          {
+            "type_raw": 1,
+            "command_raw": 11,
+            "source": {
+              "source": "Fight_Role/014.CHR",
+              "offset": 18876,
+              "bytes": 176,
+              "raw_sha256": "dff3f3bab490d107e665e7b58e0ebdaf706736ca7c4974bfa57e383d67c4bc4a"
+            },
+            "evidence": [
+              "ev_28368650259f3980bb37bf5b679f3a547aa66aa025d16e78432827d87efb27ab",
+              "ev_edcb55141827495dc256b7857ff40d1ab90f34d1605e9a9bb3d1e93130eb5e95"
+            ]
+          }
+        ],
+        "runtime_skill_id": "014_skill_12"
+      },
+      "alternate_skills": [
+        {
+          "role_id": "014",
+          "chr_skill_index": 13,
+          "skill_id_raw": 26,
+          "name": "电角猛击",
+          "segments": [
+            {
+              "chr_record_index": 0,
+              "action_index": 7,
+              "source": {
+                "source": "Fight_Role/014.CHR",
+                "offset": 20105,
+                "bytes": 176,
+                "raw_sha256": "7eb68d87ef59a169f5c69308659a83f891e2743a11e694f332a6caa1ae4f0bd0"
+              },
+              "frames": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9
+              ],
+              "start": 0,
+              "end_exclusive": 10,
+              "reverse_raw": 0,
+              "interval_raw": 90,
+              "movement_flag_raw": 0,
+              "movement_step_raw": 0,
+              "movement_source_field": "0x1e",
+              "event": null,
+              "reaction_class_raw": 0,
+              "effects": [
+                {
+                  "asset_id": "_DutyE3",
+                  "frame": 2,
+                  "slot": "actor",
+                  "condition": "source nonempty actor effect",
+                  "source_field": "0x9",
+                  "source_event_field": "0x5"
+                }
+              ],
+              "evidence": [
+                "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+                "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+                "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+              ],
+              "raw_hex": "0007000000020000005f4475747945332e646770000000000000000000000000000000000000000000000a00000000000000000a000000000000000a000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+              "source_skill_index": 13
+            },
+            {
+              "chr_record_index": 1,
+              "action_index": 9,
+              "source": {
+                "source": "Fight_Role/014.CHR",
+                "offset": 20281,
+                "bytes": 176,
+                "raw_sha256": "ec976dc970a14ce050c14d68977130678da3985cb9b2f4adcc1ca88a04a233b3"
+              },
+              "frames": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5
+              ],
+              "start": 0,
+              "end_exclusive": 6,
+              "reverse_raw": 0,
+              "interval_raw": 60,
+              "movement_flag_raw": 0,
+              "movement_step_raw": 2,
+              "movement_source_field": "0x1e",
+              "event": null,
+              "reaction_class_raw": 0,
+              "effects": [],
+              "evidence": [
+                "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+                "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+                "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+              ],
+              "raw_hex": "0009000000000000000075747945332e64677000000000000000000000000200000001000000000000000600000000000000000600000000000000060000000000000006000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+              "source_skill_index": 13
+            },
+            {
+              "chr_record_index": 2,
+              "action_index": 8,
+              "source": {
+                "source": "Fight_Role/014.CHR",
+                "offset": 20457,
+                "bytes": 176,
+                "raw_sha256": "05bba45887663e2ec40dfa2f783ae476190a47a8b98eb3f5d6f4a57c98210a7d"
+              },
+              "frames": [
+                6,
+                5,
+                4,
+                3,
+                2,
+                1,
+                0
+              ],
+              "start": 0,
+              "end_exclusive": 7,
+              "reverse_raw": 1,
+              "interval_raw": 90,
+              "movement_flag_raw": 0,
+              "movement_step_raw": 0,
+              "movement_source_field": "0x1e",
+              "event": null,
+              "reaction_class_raw": 0,
+              "effects": [],
+              "evidence": [
+                "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+                "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+                "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+              ],
+              "raw_hex": "0008000000000000000000000000000000000000000000000000000000010000000000000000000000000700000000000000000700000000000000070000000000000007000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+              "source_skill_index": 13
+            },
+            {
+              "chr_record_index": 3,
+              "action_index": 15,
+              "source": {
+                "source": "Fight_Role/014.CHR",
+                "offset": 20633,
+                "bytes": 176,
+                "raw_sha256": "3b202a91e5f84da212c8e18cab20d1b5242bdd41879d53ef9a994cc16c5083a0"
+              },
+              "frames": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14
+              ],
+              "start": 0,
+              "end_exclusive": 15,
+              "reverse_raw": 0,
+              "interval_raw": 80,
+              "movement_flag_raw": 0,
+              "movement_step_raw": 0,
+              "movement_source_field": "0x1e",
+              "event": {
+                "frame": 9,
+                "field": "0x49",
+                "evidence": [
+                  "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01",
+                  "ev_7199407875fd945ae708cfdfaabfd31e75f0148dd8b57f794f1095e39d526c30"
+                ]
+              },
+              "reaction_class_raw": 1,
+              "effects": [
+                {
+                  "asset_id": "BTB01_Nm",
+                  "frame": 9,
+                  "slot": "target",
+                  "condition": "accepted nonzero damage in bounded normal branch",
+                  "source_field": "0x4e",
+                  "source_event_field": "0x49"
+                }
+              ],
+              "evidence": [
+                "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+                "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+                "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+              ],
+              "raw_hex": "000f000000000000000000000000000000000000000000000000000000000000000000000000000000000f00000001000000000f000000000000000f000000000000000f0000000000090000000042544230315f4e6d2e6467700000000000000000010000000000000000000000000000000000000000090400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+              "source_skill_index": 13
+            },
+            {
+              "chr_record_index": 4,
+              "action_index": 8,
+              "source": {
+                "source": "Fight_Role/014.CHR",
+                "offset": 20809,
+                "bytes": 176,
+                "raw_sha256": "d76e477102446b16671e2aa8e21b03fcc1b677c857a853660ad00b3cdc254148"
+              },
+              "frames": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ],
+              "start": 0,
+              "end_exclusive": 7,
+              "reverse_raw": 0,
+              "interval_raw": 90,
+              "movement_flag_raw": 0,
+              "movement_step_raw": 0,
+              "movement_source_field": "0x1e",
+              "event": null,
+              "reaction_class_raw": 0,
+              "effects": [],
+              "evidence": [
+                "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+                "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+                "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+              ],
+              "raw_hex": "0008000000000000000000000000000000000000000000000000000000000000000000000000000000000700000000000000000700000000000000070000000000000007000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000333136372e77617600000000000000000000000005000000000000000000000000000000000000000000000000000000000000000000",
+              "source_skill_index": 13
+            },
+            {
+              "chr_record_index": 5,
+              "action_index": 10,
+              "source": {
+                "source": "Fight_Role/014.CHR",
+                "offset": 20985,
+                "bytes": 176,
+                "raw_sha256": "4bc9be734580676801e57f92f420bb69aa23f2149ae3fd0bfc00a7b0fc3b987a"
+              },
+              "frames": [
+                0
+              ],
+              "start": 0,
+              "end_exclusive": 1,
+              "reverse_raw": 0,
+              "interval_raw": 60,
+              "movement_flag_raw": 1,
+              "movement_step_raw": -2,
+              "movement_source_field": "0x1e",
+              "event": null,
+              "reaction_class_raw": 0,
+              "effects": [],
+              "evidence": [
+                "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+                "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+                "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+              ],
+              "raw_hex": "000a000000000000000075747945322e6467700000000000000000000000feffffff01010001000000000100000000000000000100000000000000010000000000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+              "source_skill_index": 13
+            },
+            {
+              "chr_record_index": 6,
+              "action_index": 8,
+              "source": {
+                "source": "Fight_Role/014.CHR",
+                "offset": 21161,
+                "bytes": 176,
+                "raw_sha256": "e9a88e5c1e48ff2195074c7ad86398c3667e0b9d6d3389d553d9d6766401c0d3"
+              },
+              "frames": [
+                6,
+                5,
+                4,
+                3,
+                2,
+                1,
+                0
+              ],
+              "start": 0,
+              "end_exclusive": 7,
+              "reverse_raw": 1,
+              "interval_raw": 90,
+              "movement_flag_raw": 0,
+              "movement_step_raw": 0,
+              "movement_source_field": "0x1e",
+              "event": null,
+              "reaction_class_raw": 0,
+              "effects": [
+                {
+                  "asset_id": "_DutyE2",
+                  "frame": 6,
+                  "slot": "actor",
+                  "condition": "source nonempty actor effect",
+                  "source_field": "0x9",
+                  "source_event_field": "0x5"
+                }
+              ],
+              "evidence": [
+                "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+                "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+                "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+              ],
+              "raw_hex": "0008000000060000005f4475747945322e646770000000000000000000010000000000000000000000000700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+              "source_skill_index": 13
+            }
+          ],
+          "terminal_commands": [
+            {
+              "type_raw": 1,
+              "command_raw": 11,
+              "source": {
+                "source": "Fight_Role/014.CHR",
+                "offset": 21337,
+                "bytes": 176,
+                "raw_sha256": "dff3f3bab490d107e665e7b58e0ebdaf706736ca7c4974bfa57e383d67c4bc4a"
+              },
+              "evidence": [
+                "ev_28368650259f3980bb37bf5b679f3a547aa66aa025d16e78432827d87efb27ab",
+                "ev_edcb55141827495dc256b7857ff40d1ab90f34d1605e9a9bb3d1e93130eb5e95"
+              ]
+            }
+          ],
+          "runtime_skill_id": "014_skill_13"
+        }
+      ],
+      "response_skills": [
+        {
+          "role_id": "014",
+          "chr_skill_index": 1,
+          "skill_id_raw": 1,
+          "name": "",
+          "segments": [
+            {
+              "chr_record_index": 0,
+              "action_index": 1,
+              "source": {
+                "source": "Fight_Role/014.CHR",
+                "offset": 3069,
+                "bytes": 176,
+                "raw_sha256": "60abc94ab722035462dedd881491deb360de3c03825e077a9754aa592abf6cec"
+              },
+              "frames": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9
+              ],
+              "start": 0,
+              "end_exclusive": 10,
+              "reverse_raw": 0,
+              "interval_raw": 70,
+              "movement_flag_raw": 0,
+              "movement_step_raw": 0,
+              "movement_source_field": "0x1e",
+              "event": null,
+              "reaction_class_raw": 0,
+              "effects": [],
+              "evidence": [
+                "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+                "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+                "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+              ]
+            }
+          ],
+          "terminal_commands": []
+        },
+        {
+          "role_id": "014",
+          "chr_skill_index": 2,
+          "skill_id_raw": 2,
+          "name": "",
+          "segments": [
+            {
+              "chr_record_index": 0,
+              "action_index": 2,
+              "source": {
+                "source": "Fight_Role/014.CHR",
+                "offset": 4298,
+                "bytes": 176,
+                "raw_sha256": "e7511e632a7f2128cb8f932bc1e3af5eb696f6cb6d27da4a8d1ad8021621b98f"
+              },
+              "frames": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5
+              ],
+              "start": 0,
+              "end_exclusive": 6,
+              "reverse_raw": 0,
+              "interval_raw": 60,
+              "movement_flag_raw": 0,
+              "movement_step_raw": 0,
+              "movement_source_field": "0x1e",
+              "event": null,
+              "reaction_class_raw": 0,
+              "effects": [],
+              "evidence": [
+                "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+                "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+                "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+              ]
+            }
+          ],
+          "terminal_commands": []
+        },
+        {
+          "role_id": "014",
+          "chr_skill_index": 3,
+          "skill_id_raw": 3,
+          "name": "",
+          "segments": [
+            {
+              "chr_record_index": 0,
+              "action_index": 3,
+              "source": {
+                "source": "Fight_Role/014.CHR",
+                "offset": 5527,
+                "bytes": 176,
+                "raw_sha256": "214d9c750d92ab06345d10f90297a53b86c1d77f178923d610b8b0c175aeff7d"
+              },
+              "frames": [
+                0,
+                1,
+                2,
+                3
+              ],
+              "start": 0,
+              "end_exclusive": 4,
+              "reverse_raw": 0,
+              "interval_raw": 70,
+              "movement_flag_raw": 0,
+              "movement_step_raw": 0,
+              "movement_source_field": "0x1e",
+              "event": null,
+              "reaction_class_raw": 0,
+              "effects": [],
+              "evidence": [
+                "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+                "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+                "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+              ]
+            }
+          ],
+          "terminal_commands": []
+        },
+        {
+          "role_id": "014",
+          "chr_skill_index": 7,
+          "skill_id_raw": 9,
+          "name": "",
+          "segments": [
+            {
+              "chr_record_index": 0,
+              "action_index": 6,
+              "source": {
+                "source": "Fight_Role/014.CHR",
+                "offset": 10443,
+                "bytes": 176,
+                "raw_sha256": "5a36402f9afeed1b6529dccf33f470a4dc390146b43bd0f05bc1d564a6bdc6cc"
+              },
+              "frames": [
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1
+              ],
+              "start": 0,
+              "end_exclusive": 14,
+              "reverse_raw": 0,
+              "interval_raw": 40,
+              "movement_flag_raw": 0,
+              "movement_step_raw": 0,
+              "movement_source_field": "0x1e",
+              "event": null,
+              "reaction_class_raw": 0,
+              "effects": [],
+              "evidence": [
+                "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+                "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+                "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+              ]
+            }
+          ],
+          "terminal_commands": []
+        },
+        {
+          "role_id": "014",
+          "chr_skill_index": 10,
+          "skill_id_raw": 18,
+          "name": "",
+          "segments": [
+            {
+              "chr_record_index": 0,
+              "action_index": 12,
+              "source": {
+                "source": "Fight_Role/014.CHR",
+                "offset": 14482,
+                "bytes": 176,
+                "raw_sha256": "95512fa545a74a96bd099e9a3e5fa01c93f854affac1b996676fad5d794b1439"
+              },
+              "frames": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                4
+              ],
+              "start": 0,
+              "end_exclusive": 6,
+              "reverse_raw": 0,
+              "interval_raw": 60,
+              "movement_flag_raw": 0,
+              "movement_step_raw": 0,
+              "movement_source_field": "0x1e",
+              "event": null,
+              "reaction_class_raw": 0,
+              "effects": [],
+              "evidence": [
+                "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+                "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+                "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+              ]
+            },
+            {
+              "chr_record_index": 1,
+              "action_index": 12,
+              "source": {
+                "source": "Fight_Role/014.CHR",
+                "offset": 14658,
+                "bytes": 176,
+                "raw_sha256": "69189291cff492ae7b3f836bedf745f0899ec070126b243057ab302a4eb739ae"
+              },
+              "frames": [
+                4,
+                4,
+                3,
+                2,
+                1,
+                0
+              ],
+              "start": 0,
+              "end_exclusive": 6,
+              "reverse_raw": 1,
+              "interval_raw": 60,
+              "movement_flag_raw": 0,
+              "movement_step_raw": 0,
+              "movement_source_field": "0x1e",
+              "event": null,
+              "reaction_class_raw": 0,
+              "effects": [],
+              "evidence": [
+                "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+                "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+                "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+              ]
+            }
+          ],
+          "terminal_commands": [
+            {
+              "type_raw": 1,
+              "command_raw": 11,
+              "source": {
+                "source": "Fight_Role/014.CHR",
+                "offset": 14834,
+                "bytes": 176,
+                "raw_sha256": "dff3f3bab490d107e665e7b58e0ebdaf706736ca7c4974bfa57e383d67c4bc4a"
+              },
+              "evidence": [
+                "ev_28368650259f3980bb37bf5b679f3a547aa66aa025d16e78432827d87efb27ab",
+                "ev_edcb55141827495dc256b7857ff40d1ab90f34d1605e9a9bb3d1e93130eb5e95"
+              ]
+            }
+          ]
+        },
+        {
+          "role_id": "014",
+          "chr_skill_index": 11,
+          "skill_id_raw": 19,
+          "name": "",
+          "segments": [
+            {
+              "chr_record_index": 0,
+              "action_index": 12,
+              "source": {
+                "source": "Fight_Role/014.CHR",
+                "offset": 16063,
+                "bytes": 176,
+                "raw_sha256": "95512fa545a74a96bd099e9a3e5fa01c93f854affac1b996676fad5d794b1439"
+              },
+              "frames": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                4
+              ],
+              "start": 0,
+              "end_exclusive": 6,
+              "reverse_raw": 0,
+              "interval_raw": 60,
+              "movement_flag_raw": 0,
+              "movement_step_raw": 0,
+              "movement_source_field": "0x1e",
+              "event": null,
+              "reaction_class_raw": 0,
+              "effects": [],
+              "evidence": [
+                "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+                "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+                "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+              ]
+            },
+            {
+              "chr_record_index": 1,
+              "action_index": 13,
+              "source": {
+                "source": "Fight_Role/014.CHR",
+                "offset": 16239,
+                "bytes": 176,
+                "raw_sha256": "958054db15baddb1003b1bec7030836a29e0754c20761fab9ef5af21e6cc58b4"
+              },
+              "frames": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11
+              ],
+              "start": 0,
+              "end_exclusive": 12,
+              "reverse_raw": 0,
+              "interval_raw": 60,
+              "movement_flag_raw": 0,
+              "movement_step_raw": 0,
+              "movement_source_field": "0x1e",
+              "event": {
+                "frame": 5,
+                "field": "0x49",
+                "evidence": [
+                  "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01",
+                  "ev_7199407875fd945ae708cfdfaabfd31e75f0148dd8b57f794f1095e39d526c30"
+                ]
+              },
+              "reaction_class_raw": 5,
+              "effects": [
+                {
+                  "asset_id": "BNo01_Nm",
+                  "frame": 5,
+                  "slot": "target",
+                  "condition": "accepted nonzero damage in bounded normal branch",
+                  "source_field": "0x4e",
+                  "source_event_field": "0x49"
+                }
+              ],
+              "evidence": [
+                "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+                "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+                "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+              ]
+            }
+          ],
+          "terminal_commands": [
+            {
+              "type_raw": 1,
+              "command_raw": 11,
+              "source": {
+                "source": "Fight_Role/014.CHR",
+                "offset": 16415,
+                "bytes": 176,
+                "raw_sha256": "dff3f3bab490d107e665e7b58e0ebdaf706736ca7c4974bfa57e383d67c4bc4a"
+              },
+              "evidence": [
+                "ev_28368650259f3980bb37bf5b679f3a547aa66aa025d16e78432827d87efb27ab",
+                "ev_edcb55141827495dc256b7857ff40d1ab90f34d1605e9a9bb3d1e93130eb5e95"
+              ]
+            }
+          ]
+        }
+      ],
+      "actions": [
+        {
+          "index": 0,
+          "sheet": "/assets/enemy_roles/014/action_00.png",
+          "sha256": "56525bf7917212ab262a8fd3953103d0b7a651ccc30c75b596515356f7dc676a",
+          "frame_count": 10,
+          "source_frame_count": 10,
+          "directions": 1,
+          "first_frame": 0,
+          "native_raw_hex": "00780000000000000000000000010a00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000019000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+        },
+        {
+          "index": 1,
+          "sheet": "/assets/enemy_roles/014/action_01.png",
+          "sha256": "aace35c438a67492e4097c336df63fb7d614906d69d91211896f6dde9b603228",
+          "frame_count": 10,
+          "source_frame_count": 10,
+          "directions": 1,
+          "first_frame": 10,
+          "native_raw_hex": "00460000000000000000000000010a0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000333032312e77617600000000000000000000000001000000010000000a00000000000000000000001d000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+        },
+        {
+          "index": 2,
+          "sheet": "/assets/enemy_roles/014/action_02.png",
+          "sha256": "60869ceb4e9f01a389f12eb0ce749b1ff18f31a73f5e8b501ccc7976c91b1a9e",
+          "frame_count": 6,
+          "source_frame_count": 6,
+          "directions": 1,
+          "first_frame": 20,
+          "native_raw_hex": "003c000000000000000000000001060000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000333032322e77617600000000000000000000000001000000020000001400000000000000000000001e000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+        },
+        {
+          "index": 3,
+          "sheet": "/assets/enemy_roles/014/action_03.png",
+          "sha256": "5d71fe7549138cd8d4580ff1c34d86701757df5b2e44f073624c7b51aa99f116",
+          "frame_count": 4,
+          "source_frame_count": 4,
+          "directions": 1,
+          "first_frame": 26,
+          "native_raw_hex": "0046000000000000000000000001040000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000333032332e77617600000000000000000000000001000000030000001a00000000000000000000001f000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+        },
+        {
+          "index": 6,
+          "sheet": "/assets/enemy_roles/014/action_06.png",
+          "sha256": "902b4b2cf69c1a8b0c0413eae6d7e12ef22eb62d9f12ec66de732f6f62ea1638",
+          "frame_count": 2,
+          "source_frame_count": 2,
+          "directions": 1,
+          "first_frame": 39,
+          "native_raw_hex": "0028000000000000000000000000020000000e00000000010001000100010001000100010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000333030332e776176000000000000000000000000010000000e00000027000000000000000000000022000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+        },
+        {
+          "index": 7,
+          "sheet": "/assets/enemy_roles/014/action_07.png",
+          "sha256": "4998d373409e0fff54b8b33557b19bedad8e4ecd5fa1459f6327dcf13afc75a3",
+          "frame_count": 10,
+          "source_frame_count": 10,
+          "directions": 1,
+          "first_frame": 41,
+          "native_raw_hex": "005a0000000000000000000000010a0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000333032352e776176000000000000000000000000010000000600000029000000000000000000000023000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+        },
+        {
+          "index": 8,
+          "sheet": "/assets/enemy_roles/014/action_08.png",
+          "sha256": "a164eeab038d8e3f6aff2aeca71973a68825c78c5dc8611eab3eb29de4e40efc",
+          "frame_count": 7,
+          "source_frame_count": 7,
+          "directions": 1,
+          "first_frame": 51,
+          "native_raw_hex": "005a000000000000000000000001070000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000333032382e776176000000000000000000000000010000000700000033000000000000000000000024000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+        },
+        {
+          "index": 9,
+          "sheet": "/assets/enemy_roles/014/action_09.png",
+          "sha256": "9af28d2aaaae2535fdb4445695fa8d9df7292270d2d6ce9c7dc5143abfeedf32",
+          "frame_count": 6,
+          "source_frame_count": 6,
+          "directions": 1,
+          "first_frame": 58,
+          "native_raw_hex": "003c000000000000000000000001060000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000333032362e77617600000000000000000000000001000000080000003a000000000000000000000027000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+        },
+        {
+          "index": 10,
+          "sheet": "/assets/enemy_roles/014/action_10.png",
+          "sha256": "9cade101d873f1417a7c7eddc07186ec4393f27f213c209d1ce68c2007920704",
+          "frame_count": 1,
+          "source_frame_count": 1,
+          "directions": 1,
+          "first_frame": 64,
+          "native_raw_hex": "003c0000000000000000000000010100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000000000000000000028000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+        },
+        {
+          "index": 12,
+          "sheet": "/assets/enemy_roles/014/action_12.png",
+          "sha256": "ab6c25ae53e86eeda496e854442861ec92454da78247fe5723e9f51f6354df42",
+          "frame_count": 5,
+          "source_frame_count": 5,
+          "directions": 1,
+          "first_frame": 75,
+          "native_raw_hex": "003c000000000000000000000000050000000600000000010203040400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000333030362e776176000000000000000000000000010000000f0000004b00000000000000000000002b000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+        },
+        {
+          "index": 13,
+          "sheet": "/assets/enemy_roles/014/action_13.png",
+          "sha256": "d162c8f9e9a9c49399f7e6e53385c4fef40d6727ebe02a900ce3bcb86c2a6f46",
+          "frame_count": 12,
+          "source_frame_count": 12,
+          "directions": 1,
+          "first_frame": 80,
+          "native_raw_hex": "003c0000000000000000000000010c0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000333032372e776176000000000000000000000000010000000a0000005000000000000000000000002c000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+        },
+        {
+          "index": 14,
+          "sheet": "/assets/enemy_roles/014/action_14.png",
+          "sha256": "22b45b4f93b0d55a1838830bcfe5b7293ffaed3013bf189a9053bfb43599fc38",
+          "frame_count": 9,
+          "source_frame_count": 9,
+          "directions": 1,
+          "first_frame": 92,
+          "native_raw_hex": "0050000000000000000000000001090000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000333032392e776176000000000000000000000000010000000b0000005c00000000000000000000003a000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+        },
+        {
+          "index": 15,
+          "sheet": "/assets/enemy_roles/014/action_15.png",
+          "sha256": "ef34e031ba2197e13b2a8a31df2f1072c67297b7d6f6b847aedea98f8b954672",
+          "frame_count": 15,
+          "source_frame_count": 15,
+          "directions": 1,
+          "first_frame": 101,
+          "native_raw_hex": "00500000000000000000000000010f0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000333033302e776176000000000000000000000000010000000c0000006500000000000000000000003b000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+        }
+      ]
+    },
+    {
+      "id": "022",
+      "name": "刽齿蛟",
+      "frame_width": 449,
+      "frame_height": 349,
+      "cursor_height_raw": 75,
+      "anchor": {
+        "x": 261,
+        "y": 239
+      },
+      "mirror": false,
+      "direction": 0,
+      "idle": {
+        "chr_record_index": 0,
+        "action_index": 0,
+        "source": {
+          "source": "Fight_Role/022.CHR",
+          "offset": 1840,
+          "bytes": 176,
+          "raw_sha256": "ee564bb3d77e70df81376c1f4a1f7fe57e223c749fa1e6f515d2e9d904cc6b7b"
+        },
+        "frames": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11
+        ],
+        "start": 0,
+        "end_exclusive": 12,
+        "reverse_raw": 0,
+        "interval_raw": 120,
+        "movement_flag_raw": 0,
+        "movement_step_raw": 0,
+        "movement_source_field": "0x1e",
+        "event": null,
+        "reaction_class_raw": 0,
+        "effects": [],
+        "evidence": [
+          "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+          "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+          "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+        ],
+        "raw_hex": "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000c00000000000000000c000000000000000c000000000000000c000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "source_skill_index": 0
+      },
+      "idle_sequence": {
+        "role_id": "022",
+        "chr_skill_index": 0,
+        "skill_id_raw": 0,
+        "name": "",
+        "segments": [
+          {
+            "chr_record_index": 0,
+            "action_index": 0,
+            "source": {
+              "source": "Fight_Role/022.CHR",
+              "offset": 1840,
+              "bytes": 176,
+              "raw_sha256": "ee564bb3d77e70df81376c1f4a1f7fe57e223c749fa1e6f515d2e9d904cc6b7b"
+            },
+            "frames": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11
+            ],
+            "start": 0,
+            "end_exclusive": 12,
+            "reverse_raw": 0,
+            "interval_raw": 120,
+            "movement_flag_raw": 0,
+            "movement_step_raw": 0,
+            "movement_source_field": "0x1e",
+            "event": null,
+            "reaction_class_raw": 0,
+            "effects": [],
+            "evidence": [
+              "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+              "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+              "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+            ],
+            "raw_hex": "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000c00000000000000000c000000000000000c000000000000000c000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+            "source_skill_index": 0
+          }
+        ],
+        "terminal_commands": []
+      },
+      "reaction": {
+        "chr_record_index": 0,
+        "action_index": 1,
+        "source": {
+          "source": "Fight_Role/022.CHR",
+          "offset": 3069,
+          "bytes": 176,
+          "raw_sha256": "9778eef53bceba4f1b0fbac93d4b6695a1f4d1d8e23911ccadc78fbdbae1f385"
+        },
+        "frames": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "start": 0,
+        "end_exclusive": 8,
+        "reverse_raw": 0,
+        "interval_raw": 70,
+        "movement_flag_raw": 0,
+        "movement_step_raw": 0,
+        "movement_source_field": "0x1e",
+        "event": null,
+        "reaction_class_raw": 0,
+        "effects": [],
+        "evidence": [
+          "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+          "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+          "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+        ]
+      },
+      "skill": {
+        "role_id": "022",
+        "chr_skill_index": 14,
+        "skill_id_raw": 25,
+        "name": "骨顶",
+        "segments": [
+          {
+            "chr_record_index": 0,
+            "action_index": 8,
+            "source": {
+              "source": "Fight_Role/022.CHR",
+              "offset": 20454,
+              "bytes": 176,
+              "raw_sha256": "32b5a15f45fdbe891d7818cf12d7cbbac2ec9c759c1581b8bdf82d389e0778d6"
+            },
+            "frames": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "start": 0,
+            "end_exclusive": 8,
+            "reverse_raw": 0,
+            "interval_raw": 60,
+            "movement_flag_raw": 0,
+            "movement_step_raw": 2,
+            "movement_source_field": "0x1e",
+            "event": null,
+            "reaction_class_raw": 0,
+            "effects": [],
+            "evidence": [
+              "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+              "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+              "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+            ],
+            "raw_hex": "0008000000000000000000000000000000000000000000000000000000000200000001000000000000000800000000000000000800000000000000080000000000000008000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+            "source_skill_index": 14
+          },
+          {
+            "chr_record_index": 1,
+            "action_index": 15,
+            "source": {
+              "source": "Fight_Role/022.CHR",
+              "offset": 20630,
+              "bytes": 176,
+              "raw_sha256": "ed453185f62fdf8ac22fe372e99dbeafb33ae3b9ffd9df282e16b4e429b0d8f4"
+            },
+            "frames": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14
+            ],
+            "start": 0,
+            "end_exclusive": 15,
+            "reverse_raw": 0,
+            "interval_raw": 80,
+            "movement_flag_raw": 0,
+            "movement_step_raw": 0,
+            "movement_source_field": "0x1e",
+            "event": {
+              "frame": 10,
+              "field": "0x49",
+              "evidence": [
+                "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01",
+                "ev_7199407875fd945ae708cfdfaabfd31e75f0148dd8b57f794f1095e39d526c30"
+              ]
+            },
+            "reaction_class_raw": 1,
+            "effects": [
+              {
+                "asset_id": "_DutyE",
+                "frame": 14,
+                "slot": "actor",
+                "condition": "source nonempty actor effect",
+                "source_field": "0x9",
+                "source_event_field": "0x5"
+              },
+              {
+                "asset_id": "BNo01_Nd",
+                "frame": 10,
+                "slot": "target",
+                "condition": "accepted nonzero damage in bounded normal branch",
+                "source_field": "0x4e",
+                "source_event_field": "0x49"
+              }
+            ],
+            "evidence": [
+              "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+              "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+              "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+            ],
+            "raw_hex": "000f0000000e0000005f44757479452e64677000000000000000000000000000000000000000000000000f00000001000000000f000000000000000f000000000000000f00000000000a00000000424e6f30315f4e642e6467700000000000000000010000000000000000000000000000000000000000090400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+            "source_skill_index": 14
+          },
+          {
+            "chr_record_index": 2,
+            "action_index": 7,
+            "source": {
+              "source": "Fight_Role/022.CHR",
+              "offset": 20806,
+              "bytes": 176,
+              "raw_sha256": "dbdb80379f344e9315dbed887a6ef174ef328998099f4da599084e11099f42cd"
+            },
+            "frames": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "start": 0,
+            "end_exclusive": 8,
+            "reverse_raw": 0,
+            "interval_raw": 90,
+            "movement_flag_raw": 0,
+            "movement_step_raw": 0,
+            "movement_source_field": "0x1e",
+            "event": null,
+            "reaction_class_raw": 0,
+            "effects": [],
+            "evidence": [
+              "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+              "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+              "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+            ],
+            "raw_hex": "0007000000000000000000000000000000000000000000000000000000000000000000000000000000000800000000000000000800000000000000080000000000000008000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+            "source_skill_index": 14
+          },
+          {
+            "chr_record_index": 3,
+            "action_index": 9,
+            "source": {
+              "source": "Fight_Role/022.CHR",
+              "offset": 20982,
+              "bytes": 176,
+              "raw_sha256": "0676484c5bfd087de23748e5efeb79e5135fd508914c0404af2cdb0a16bf4cae"
+            },
+            "frames": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "start": 0,
+            "end_exclusive": 8,
+            "reverse_raw": 0,
+            "interval_raw": 60,
+            "movement_flag_raw": 0,
+            "movement_step_raw": -2,
+            "movement_source_field": "0x1e",
+            "event": null,
+            "reaction_class_raw": 0,
+            "effects": [],
+            "evidence": [
+              "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+              "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+              "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+            ],
+            "raw_hex": "000900000000000000000000000000000000000000000000000000000000feffffff01000000000000000800000000000000000800000000000000080000000000000008000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+            "source_skill_index": 14
+          },
+          {
+            "chr_record_index": 4,
+            "action_index": 7,
+            "source": {
+              "source": "Fight_Role/022.CHR",
+              "offset": 21158,
+              "bytes": 176,
+              "raw_sha256": "17c3cecce108eacb1938cde6053fa75e5a0660e0959021a8960c4b801b066575"
+            },
+            "frames": [
+              7,
+              6,
+              5,
+              4,
+              3,
+              2,
+              1,
+              0
+            ],
+            "start": 0,
+            "end_exclusive": 8,
+            "reverse_raw": 1,
+            "interval_raw": 90,
+            "movement_flag_raw": 0,
+            "movement_step_raw": 0,
+            "movement_source_field": "0x1e",
+            "event": null,
+            "reaction_class_raw": 0,
+            "effects": [],
+            "evidence": [
+              "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+              "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+              "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+            ],
+            "raw_hex": "0007000000000000000000000000000000000000000000000000000000010000000000000000000000000800000000000000000800000000000000080000000000000008000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+            "source_skill_index": 14
+          }
+        ],
+        "terminal_commands": [
+          {
+            "type_raw": 1,
+            "command_raw": 11,
+            "source": {
+              "source": "Fight_Role/022.CHR",
+              "offset": 21334,
+              "bytes": 176,
+              "raw_sha256": "dff3f3bab490d107e665e7b58e0ebdaf706736ca7c4974bfa57e383d67c4bc4a"
+            },
+            "evidence": [
+              "ev_28368650259f3980bb37bf5b679f3a547aa66aa025d16e78432827d87efb27ab",
+              "ev_edcb55141827495dc256b7857ff40d1ab90f34d1605e9a9bb3d1e93130eb5e95"
+            ]
+          }
+        ],
+        "runtime_skill_id": "022_skill_14"
+      },
+      "alternate_skills": [
+        {
+          "role_id": "022",
+          "chr_skill_index": 15,
+          "skill_id_raw": 26,
+          "name": "急速狙杀",
+          "segments": [
+            {
+              "chr_record_index": 0,
+              "action_index": 8,
+              "source": {
+                "source": "Fight_Role/022.CHR",
+                "offset": 22563,
+                "bytes": 176,
+                "raw_sha256": "32b5a15f45fdbe891d7818cf12d7cbbac2ec9c759c1581b8bdf82d389e0778d6"
+              },
+              "frames": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ],
+              "start": 0,
+              "end_exclusive": 8,
+              "reverse_raw": 0,
+              "interval_raw": 60,
+              "movement_flag_raw": 0,
+              "movement_step_raw": 2,
+              "movement_source_field": "0x1e",
+              "event": null,
+              "reaction_class_raw": 0,
+              "effects": [],
+              "evidence": [
+                "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+                "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+                "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+              ],
+              "raw_hex": "0008000000000000000000000000000000000000000000000000000000000200000001000000000000000800000000000000000800000000000000080000000000000008000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+              "source_skill_index": 15
+            },
+            {
+              "chr_record_index": 1,
+              "action_index": 16,
+              "source": {
+                "source": "Fight_Role/022.CHR",
+                "offset": 22739,
+                "bytes": 176,
+                "raw_sha256": "6753f9433736ce92282277f08f152847c94971366c8cab9ab6d48b7964b11cfa"
+              },
+              "frames": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8
+              ],
+              "start": 0,
+              "end_exclusive": 9,
+              "reverse_raw": 0,
+              "interval_raw": 80,
+              "movement_flag_raw": 0,
+              "movement_step_raw": 0,
+              "movement_source_field": "0x1e",
+              "event": {
+                "frame": 4,
+                "field": "0x49",
+                "evidence": [
+                  "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01",
+                  "ev_7199407875fd945ae708cfdfaabfd31e75f0148dd8b57f794f1095e39d526c30"
+                ]
+              },
+              "reaction_class_raw": 1,
+              "effects": [
+                {
+                  "asset_id": "BDL01_Nd",
+                  "frame": 4,
+                  "slot": "target",
+                  "condition": "accepted nonzero damage in bounded normal branch",
+                  "source_field": "0x4e",
+                  "source_event_field": "0x49"
+                }
+              ],
+              "evidence": [
+                "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+                "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+                "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+              ],
+              "raw_hex": "00100000000000000000000000000000000000000000000000000000000000000000000000000000000009000000010000000009000000000000000900000000000000090000000000040000000042444c30315f4e642e6467700000000000000000010000000000000000000000000000000000000000090400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+              "source_skill_index": 15
+            },
+            {
+              "chr_record_index": 2,
+              "action_index": 7,
+              "source": {
+                "source": "Fight_Role/022.CHR",
+                "offset": 22915,
+                "bytes": 176,
+                "raw_sha256": "dbdb80379f344e9315dbed887a6ef174ef328998099f4da599084e11099f42cd"
+              },
+              "frames": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ],
+              "start": 0,
+              "end_exclusive": 8,
+              "reverse_raw": 0,
+              "interval_raw": 90,
+              "movement_flag_raw": 0,
+              "movement_step_raw": 0,
+              "movement_source_field": "0x1e",
+              "event": null,
+              "reaction_class_raw": 0,
+              "effects": [],
+              "evidence": [
+                "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+                "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+                "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+              ],
+              "raw_hex": "0007000000000000000000000000000000000000000000000000000000000000000000000000000000000800000000000000000800000000000000080000000000000008000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+              "source_skill_index": 15
+            },
+            {
+              "chr_record_index": 3,
+              "action_index": 9,
+              "source": {
+                "source": "Fight_Role/022.CHR",
+                "offset": 23091,
+                "bytes": 176,
+                "raw_sha256": "0676484c5bfd087de23748e5efeb79e5135fd508914c0404af2cdb0a16bf4cae"
+              },
+              "frames": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ],
+              "start": 0,
+              "end_exclusive": 8,
+              "reverse_raw": 0,
+              "interval_raw": 60,
+              "movement_flag_raw": 0,
+              "movement_step_raw": -2,
+              "movement_source_field": "0x1e",
+              "event": null,
+              "reaction_class_raw": 0,
+              "effects": [],
+              "evidence": [
+                "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+                "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+                "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+              ],
+              "raw_hex": "000900000000000000000000000000000000000000000000000000000000feffffff01000000000000000800000000000000000800000000000000080000000000000008000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+              "source_skill_index": 15
+            },
+            {
+              "chr_record_index": 4,
+              "action_index": 7,
+              "source": {
+                "source": "Fight_Role/022.CHR",
+                "offset": 23267,
+                "bytes": 176,
+                "raw_sha256": "17c3cecce108eacb1938cde6053fa75e5a0660e0959021a8960c4b801b066575"
+              },
+              "frames": [
+                7,
+                6,
+                5,
+                4,
+                3,
+                2,
+                1,
+                0
+              ],
+              "start": 0,
+              "end_exclusive": 8,
+              "reverse_raw": 1,
+              "interval_raw": 90,
+              "movement_flag_raw": 0,
+              "movement_step_raw": 0,
+              "movement_source_field": "0x1e",
+              "event": null,
+              "reaction_class_raw": 0,
+              "effects": [],
+              "evidence": [
+                "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+                "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+                "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+              ],
+              "raw_hex": "0007000000000000000000000000000000000000000000000000000000010000000000000000000000000800000000000000000800000000000000080000000000000008000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+              "source_skill_index": 15
+            }
+          ],
+          "terminal_commands": [
+            {
+              "type_raw": 1,
+              "command_raw": 11,
+              "source": {
+                "source": "Fight_Role/022.CHR",
+                "offset": 23443,
+                "bytes": 176,
+                "raw_sha256": "dff3f3bab490d107e665e7b58e0ebdaf706736ca7c4974bfa57e383d67c4bc4a"
+              },
+              "evidence": [
+                "ev_28368650259f3980bb37bf5b679f3a547aa66aa025d16e78432827d87efb27ab",
+                "ev_edcb55141827495dc256b7857ff40d1ab90f34d1605e9a9bb3d1e93130eb5e95"
+              ]
+            }
+          ],
+          "runtime_skill_id": "022_skill_15"
+        }
+      ],
+      "response_skills": [
+        {
+          "role_id": "022",
+          "chr_skill_index": 1,
+          "skill_id_raw": 1,
+          "name": "",
+          "segments": [
+            {
+              "chr_record_index": 0,
+              "action_index": 1,
+              "source": {
+                "source": "Fight_Role/022.CHR",
+                "offset": 3069,
+                "bytes": 176,
+                "raw_sha256": "9778eef53bceba4f1b0fbac93d4b6695a1f4d1d8e23911ccadc78fbdbae1f385"
+              },
+              "frames": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ],
+              "start": 0,
+              "end_exclusive": 8,
+              "reverse_raw": 0,
+              "interval_raw": 70,
+              "movement_flag_raw": 0,
+              "movement_step_raw": 0,
+              "movement_source_field": "0x1e",
+              "event": null,
+              "reaction_class_raw": 0,
+              "effects": [],
+              "evidence": [
+                "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+                "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+                "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+              ]
+            }
+          ],
+          "terminal_commands": []
+        },
+        {
+          "role_id": "022",
+          "chr_skill_index": 2,
+          "skill_id_raw": 2,
+          "name": "",
+          "segments": [
+            {
+              "chr_record_index": 0,
+              "action_index": 2,
+              "source": {
+                "source": "Fight_Role/022.CHR",
+                "offset": 4298,
+                "bytes": 176,
+                "raw_sha256": "d8292d48fe9f34f200eabb0d7f5fa6cba954543a972a633f54658bd1d55b32e8"
+              },
+              "frames": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ],
+              "start": 0,
+              "end_exclusive": 5,
+              "reverse_raw": 0,
+              "interval_raw": 60,
+              "movement_flag_raw": 0,
+              "movement_step_raw": 0,
+              "movement_source_field": "0x1e",
+              "event": null,
+              "reaction_class_raw": 0,
+              "effects": [
+                {
+                  "asset_id": "_DutyE2",
+                  "frame": 4,
+                  "slot": "actor",
+                  "condition": "source nonempty actor effect",
+                  "source_field": "0x9",
+                  "source_event_field": "0x5"
+                }
+              ],
+              "evidence": [
+                "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+                "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+                "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+              ]
+            }
+          ],
+          "terminal_commands": []
+        },
+        {
+          "role_id": "022",
+          "chr_skill_index": 3,
+          "skill_id_raw": 3,
+          "name": "",
+          "segments": [
+            {
+              "chr_record_index": 0,
+              "action_index": 3,
+              "source": {
+                "source": "Fight_Role/022.CHR",
+                "offset": 5527,
+                "bytes": 176,
+                "raw_sha256": "214d9c750d92ab06345d10f90297a53b86c1d77f178923d610b8b0c175aeff7d"
+              },
+              "frames": [
+                0,
+                1,
+                2,
+                3
+              ],
+              "start": 0,
+              "end_exclusive": 4,
+              "reverse_raw": 0,
+              "interval_raw": 70,
+              "movement_flag_raw": 0,
+              "movement_step_raw": 0,
+              "movement_source_field": "0x1e",
+              "event": null,
+              "reaction_class_raw": 0,
+              "effects": [],
+              "evidence": [
+                "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+                "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+                "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+              ]
+            }
+          ],
+          "terminal_commands": []
+        },
+        {
+          "role_id": "022",
+          "chr_skill_index": 9,
+          "skill_id_raw": 9,
+          "name": "",
+          "segments": [
+            {
+              "chr_record_index": 0,
+              "action_index": 6,
+              "source": {
+                "source": "Fight_Role/022.CHR",
+                "offset": 13253,
+                "bytes": 176,
+                "raw_sha256": "5a36402f9afeed1b6529dccf33f470a4dc390146b43bd0f05bc1d564a6bdc6cc"
+              },
+              "frames": [
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1,
+                0,
+                1
+              ],
+              "start": 0,
+              "end_exclusive": 14,
+              "reverse_raw": 0,
+              "interval_raw": 40,
+              "movement_flag_raw": 0,
+              "movement_step_raw": 0,
+              "movement_source_field": "0x1e",
+              "event": null,
+              "reaction_class_raw": 0,
+              "effects": [],
+              "evidence": [
+                "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+                "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+                "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+              ]
+            }
+          ],
+          "terminal_commands": []
+        },
+        {
+          "role_id": "022",
+          "chr_skill_index": 12,
+          "skill_id_raw": 18,
+          "name": "",
+          "segments": [
+            {
+              "chr_record_index": 0,
+              "action_index": 12,
+              "source": {
+                "source": "Fight_Role/022.CHR",
+                "offset": 17292,
+                "bytes": 176,
+                "raw_sha256": "b1a3c87d7c93cc9f429f43d65eab0a625aac10940b1b02e5c717d8626e3ed32b"
+              },
+              "frames": [
+                0,
+                1,
+                2,
+                3,
+                3
+              ],
+              "start": 0,
+              "end_exclusive": 5,
+              "reverse_raw": 0,
+              "interval_raw": 60,
+              "movement_flag_raw": 0,
+              "movement_step_raw": 0,
+              "movement_source_field": "0x1e",
+              "event": null,
+              "reaction_class_raw": 0,
+              "effects": [],
+              "evidence": [
+                "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+                "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+                "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+              ]
+            },
+            {
+              "chr_record_index": 1,
+              "action_index": 12,
+              "source": {
+                "source": "Fight_Role/022.CHR",
+                "offset": 17468,
+                "bytes": 176,
+                "raw_sha256": "ba1882aa40914c3157bc7836a4c7e481bc017d5e453ad5e1a8beda1942e8cf5a"
+              },
+              "frames": [
+                3,
+                3,
+                2,
+                1,
+                0
+              ],
+              "start": 0,
+              "end_exclusive": 5,
+              "reverse_raw": 1,
+              "interval_raw": 60,
+              "movement_flag_raw": 0,
+              "movement_step_raw": 0,
+              "movement_source_field": "0x1e",
+              "event": null,
+              "reaction_class_raw": 0,
+              "effects": [],
+              "evidence": [
+                "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+                "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+                "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+              ]
+            }
+          ],
+          "terminal_commands": [
+            {
+              "type_raw": 1,
+              "command_raw": 11,
+              "source": {
+                "source": "Fight_Role/022.CHR",
+                "offset": 17644,
+                "bytes": 176,
+                "raw_sha256": "dff3f3bab490d107e665e7b58e0ebdaf706736ca7c4974bfa57e383d67c4bc4a"
+              },
+              "evidence": [
+                "ev_28368650259f3980bb37bf5b679f3a547aa66aa025d16e78432827d87efb27ab",
+                "ev_edcb55141827495dc256b7857ff40d1ab90f34d1605e9a9bb3d1e93130eb5e95"
+              ]
+            }
+          ]
+        },
+        {
+          "role_id": "022",
+          "chr_skill_index": 13,
+          "skill_id_raw": 19,
+          "name": "",
+          "segments": [
+            {
+              "chr_record_index": 0,
+              "action_index": 12,
+              "source": {
+                "source": "Fight_Role/022.CHR",
+                "offset": 18873,
+                "bytes": 176,
+                "raw_sha256": "b1a3c87d7c93cc9f429f43d65eab0a625aac10940b1b02e5c717d8626e3ed32b"
+              },
+              "frames": [
+                0,
+                1,
+                2,
+                3,
+                3
+              ],
+              "start": 0,
+              "end_exclusive": 5,
+              "reverse_raw": 0,
+              "interval_raw": 60,
+              "movement_flag_raw": 0,
+              "movement_step_raw": 0,
+              "movement_source_field": "0x1e",
+              "event": null,
+              "reaction_class_raw": 0,
+              "effects": [],
+              "evidence": [
+                "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+                "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+                "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+              ]
+            },
+            {
+              "chr_record_index": 1,
+              "action_index": 13,
+              "source": {
+                "source": "Fight_Role/022.CHR",
+                "offset": 19049,
+                "bytes": 176,
+                "raw_sha256": "d4fb2d399161a64de4a9ca2c86718b45fda30318283826ef6dc6a844ec0408c7"
+              },
+              "frames": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ],
+              "start": 0,
+              "end_exclusive": 5,
+              "reverse_raw": 0,
+              "interval_raw": 60,
+              "movement_flag_raw": 0,
+              "movement_step_raw": 0,
+              "movement_source_field": "0x1e",
+              "event": {
+                "frame": 2,
+                "field": "0x49",
+                "evidence": [
+                  "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01",
+                  "ev_7199407875fd945ae708cfdfaabfd31e75f0148dd8b57f794f1095e39d526c30"
+                ]
+              },
+              "reaction_class_raw": 1,
+              "effects": [
+                {
+                  "asset_id": "BDL01_Nd",
+                  "frame": 2,
+                  "slot": "target",
+                  "condition": "accepted nonzero damage in bounded normal branch",
+                  "source_field": "0x4e",
+                  "source_event_field": "0x49"
+                }
+              ],
+              "evidence": [
+                "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+                "ev_66f82c795bc2c5392a4af502e71da424a6f4e6b2c796a8bcc66a61f2d38eec29",
+                "ev_0da74f80c4ef0fd4c6d105745a0341196c94b5a7d7f5cdff899ed375790c4e01"
+              ]
+            }
+          ],
+          "terminal_commands": [
+            {
+              "type_raw": 1,
+              "command_raw": 11,
+              "source": {
+                "source": "Fight_Role/022.CHR",
+                "offset": 19225,
+                "bytes": 176,
+                "raw_sha256": "dff3f3bab490d107e665e7b58e0ebdaf706736ca7c4974bfa57e383d67c4bc4a"
+              },
+              "evidence": [
+                "ev_28368650259f3980bb37bf5b679f3a547aa66aa025d16e78432827d87efb27ab",
+                "ev_edcb55141827495dc256b7857ff40d1ab90f34d1605e9a9bb3d1e93130eb5e95"
+              ]
+            }
+          ]
+        }
+      ],
+      "actions": [
+        {
+          "index": 0,
+          "sheet": "/assets/enemy_roles/022/action_00.png",
+          "sha256": "7762b22e6bbb0740f5bb7b87cd5d80dfe078f045a9a4c1dcdd1f070981fe5485",
+          "frame_count": 12,
+          "source_frame_count": 12,
+          "directions": 1,
+          "first_frame": 0,
+          "native_raw_hex": "00780000000000000000000000010c00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000019000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+        },
+        {
+          "index": 1,
+          "sheet": "/assets/enemy_roles/022/action_01.png",
+          "sha256": "d524d5a916373c7441d31da6c4197200f91c9edd53291a4f2906580e9859d758",
+          "frame_count": 8,
+          "source_frame_count": 8,
+          "directions": 1,
+          "first_frame": 12,
+          "native_raw_hex": "0046000000000000000000000001080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000333131382e77617600000000000000000000000001000000010000000c00000000000000000000001d000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+        },
+        {
+          "index": 2,
+          "sheet": "/assets/enemy_roles/022/action_02.png",
+          "sha256": "f49176ca55132a53ac5591ea08bacf47663241a460ab044ee3501db5e22f8aa9",
+          "frame_count": 5,
+          "source_frame_count": 5,
+          "directions": 1,
+          "first_frame": 20,
+          "native_raw_hex": "003c000000000000000000000001050000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000333131392e77617600000000000000000000000001000000020000001400000000000000000000001e000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+        },
+        {
+          "index": 3,
+          "sheet": "/assets/enemy_roles/022/action_03.png",
+          "sha256": "e6d1a4587287459d4ec36ea0b28395d268ab53a689daeabbe47e94cca4a7b4e2",
+          "frame_count": 4,
+          "source_frame_count": 4,
+          "directions": 1,
+          "first_frame": 25,
+          "native_raw_hex": "0046000000000000000000000001040000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000333132302e77617600000000000000000000000001000000030000001900000000000000000000001f000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+        },
+        {
+          "index": 6,
+          "sheet": "/assets/enemy_roles/022/action_06.png",
+          "sha256": "2fed8201bd94572b705b6ed0d77dfec3efdda1b744c83514fe90d15ebda767fb",
+          "frame_count": 2,
+          "source_frame_count": 2,
+          "directions": 1,
+          "first_frame": 38,
+          "native_raw_hex": "0028000000000000000000000000020000000e00000000010001000100010001000100010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000333030332e776176000000000000000000000000010000001000000026000000000000000000000022000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+        },
+        {
+          "index": 7,
+          "sheet": "/assets/enemy_roles/022/action_07.png",
+          "sha256": "ae5627ae904974b25e959eb7eced7643fc98f4653df29761343cc30e4a86b1df",
+          "frame_count": 8,
+          "source_frame_count": 8,
+          "directions": 1,
+          "first_frame": 40,
+          "native_raw_hex": "005a0000000000000000000000010800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000028000000000000000000000023000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+        },
+        {
+          "index": 8,
+          "sheet": "/assets/enemy_roles/022/action_08.png",
+          "sha256": "dfa64e18c4ff057ac2cb78a18e75f713ee021df5cbe2282e7d80de2bbd71d76f",
+          "frame_count": 8,
+          "source_frame_count": 8,
+          "directions": 1,
+          "first_frame": 48,
+          "native_raw_hex": "003c000000000000000000000001080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000333132312e776176000000000000000000000000010000000700000030000000000000000000000027000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+        },
+        {
+          "index": 9,
+          "sheet": "/assets/enemy_roles/022/action_09.png",
+          "sha256": "3cc7c8c73a337a010b1ba44c21b37260295a12d9632e6b6b64606da3acd50e50",
+          "frame_count": 8,
+          "source_frame_count": 8,
+          "directions": 1,
+          "first_frame": 56,
+          "native_raw_hex": "003c000000000000000000000001080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000333132322e776176000000000000000000000000010000000800000038000000000000000000000028000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+        },
+        {
+          "index": 12,
+          "sheet": "/assets/enemy_roles/022/action_12.png",
+          "sha256": "46bca11368fe9b0341d6fb3836ebc39b1e9b24782805bdf910270f3293c00231",
+          "frame_count": 4,
+          "source_frame_count": 4,
+          "directions": 1,
+          "first_frame": 85,
+          "native_raw_hex": "003c000000000000000000000000040000000500000000010203030000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000333030362e77617600000000000000000000000001000000110000005500000000000000000000002b000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+        },
+        {
+          "index": 13,
+          "sheet": "/assets/enemy_roles/022/action_13.png",
+          "sha256": "b944d622fbfd933152e9b51632d445e04c8a9a40825ffcef0708addf2ea12ad8",
+          "frame_count": 5,
+          "source_frame_count": 5,
+          "directions": 1,
+          "first_frame": 89,
+          "native_raw_hex": "003c000000000000000000000001050000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000333132332e776176000000000000000000000000010000000b0000005900000000000000000000002c000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+        },
+        {
+          "index": 15,
+          "sheet": "/assets/enemy_roles/022/action_15.png",
+          "sha256": "0f85ae17b653d57145f865c42e40e9229660b15e408355bc7dce70708c823367",
+          "frame_count": 15,
+          "source_frame_count": 15,
+          "directions": 1,
+          "first_frame": 98,
+          "native_raw_hex": "00500000000000000000000000010f0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000333132342e776176000000000000000000000000010000000c0000006200000000000000000000003a000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+        },
+        {
+          "index": 16,
+          "sheet": "/assets/enemy_roles/022/action_16.png",
+          "sha256": "8758d9321483d6fc11bf6d57d78c4c49dbbbed4d27104b584feb6809cffc7637",
+          "frame_count": 9,
+          "source_frame_count": 9,
+          "directions": 1,
+          "first_frame": 113,
+          "native_raw_hex": "0050000000000000000000000001090000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000333132332e776176000000000000000000000000030000000d0000007100000000000000000000003b000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+        }
+      ]
+    },
+    {
       "id": "032",
       "name": "唯爱拉",
       "frame_width": 539,
@@ -7695,6 +10081,293 @@
       ]
     },
     {
+      "id": "_DutyE3",
+      "source": "Fight_Role/Effect/_DutyE3.dgp",
+      "source_sha256": "9ba08da38a43d84eea83f044c0196b3cc0f6539f2db7de7b1d4d340f6fb92ff3",
+      "frame_width": 343,
+      "frame_height": 239,
+      "frame_count": 12,
+      "anchor": {
+        "x": 311,
+        "y": 119
+      },
+      "sheet": "/assets/enemy_effects/_DutyE3/action_00.png",
+      "sha256": "5e9bfbb3d518fe53497da9f09f8c980680354f5e437e33e7b9781a8c51830b39",
+      "main_sheet": "/assets/enemy_effects/_DutyE3/action_00_main.png",
+      "main_sha256": "4547883964deb75acce262ca764331cc66833c4462f4f0b0e259b01720396a77",
+      "main_rgba_sha256": "6926ad4f7566d3e6b07db6260c6fff0f406d296a108e27680d8f700e4add76c3",
+      "main_blend": "source-over",
+      "intrinsic_sheet": "/assets/enemy_effects/_DutyE3/action_00.png",
+      "intrinsic_sha256": "5e9bfbb3d518fe53497da9f09f8c980680354f5e437e33e7b9781a8c51830b39",
+      "intrinsic_rgba_sha256": "007cbff76585a2b147d4fbd8c210acf770a903c17a44e7add7809129481b2f42",
+      "intrinsic_blend": "lighter",
+      "shadow_sheet": "/assets/enemy_effects/_DutyE3/action_00_shadow.png",
+      "shadow_sha256": "4547883964deb75acce262ca764331cc66833c4462f4f0b0e259b01720396a77",
+      "shadow_rgba_sha256": "6926ad4f7566d3e6b07db6260c6fff0f406d296a108e27680d8f700e4add76c3",
+      "shadow_blend": "source-over",
+      "shadow_alpha": 128,
+      "shadow_native": "RGB565/555 destination channel floor-half; 8-bit alpha128 presentation",
+      "layer_order": [
+        "shadow",
+        "main",
+        "intrinsic"
+      ],
+      "interval_ms": 50,
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "native_raw_hex": "00320000000000000000000000010c00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000044757479312e77617600000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "blend": "lighter",
+      "evidence": [
+        "ev_0c237df7043928c88bbdebd562f666aa4b7f4201a779c0a793b1483939fd71d2",
+        "ev_8a5106859a74859307743cb5be1794a453316af2b92ccfc05d4705257ef5ea6c",
+        "ev_933340f95b60e313671e7e94cd437e581060c7d1b55e337a07505a4785ea22d9",
+        "ev_8742bac48db84c1a41d0f484e0a65f166747220758a7659523a8940d01f4c32c",
+        "ev_c650a80b15b29e80c4625d568bdf0ffd867f3c795604430a1bb4ad1cf3fe2f74",
+        "ev_26ca5e077ad2fcdfb6fc3f460728a9f39cd90cda58ba0c38249d09f8b1f9a731",
+        "ev_7515c2967c274d7710d9bc0107185694d39d193b99f5f69e4996a99cf61fd752"
+      ]
+    },
+    {
+      "id": "BTB01_Nm",
+      "source": "Fight_Role/Effect/BTB01_Nm.dgp",
+      "source_sha256": "e87ce31df8965bec8d7d4f075a7158758dd248ab75676408cf2c68302850a29b",
+      "frame_width": 559,
+      "frame_height": 519,
+      "frame_count": 8,
+      "anchor": {
+        "x": 281,
+        "y": 344
+      },
+      "sheet": "/assets/enemy_effects/BTB01_Nm/action_00.png",
+      "sha256": "7159d557da23af4a35f2fd086f069665f66ff4c9e2e0ac83f41f2d8159733ae2",
+      "main_sheet": "/assets/enemy_effects/BTB01_Nm/action_00_main.png",
+      "main_sha256": "b5d4b387a2b277efd67a3676902d1b0b8d33702b29f418697c2f76dc960ee40f",
+      "main_rgba_sha256": "c91cb77f809d243a954619782ac1c270ea045c7bd564025ba22d534c662c7ade",
+      "main_blend": "source-over",
+      "intrinsic_sheet": "/assets/enemy_effects/BTB01_Nm/action_00.png",
+      "intrinsic_sha256": "7159d557da23af4a35f2fd086f069665f66ff4c9e2e0ac83f41f2d8159733ae2",
+      "intrinsic_rgba_sha256": "a2d1fa625d642576fd94d19d598a8d489b39ec8d352b1573412538e7abf0ab54",
+      "intrinsic_blend": "lighter",
+      "shadow_sheet": "/assets/enemy_effects/BTB01_Nm/action_00_shadow.png",
+      "shadow_sha256": "b5d4b387a2b277efd67a3676902d1b0b8d33702b29f418697c2f76dc960ee40f",
+      "shadow_rgba_sha256": "c91cb77f809d243a954619782ac1c270ea045c7bd564025ba22d534c662c7ade",
+      "shadow_blend": "source-over",
+      "shadow_alpha": 128,
+      "shadow_native": "RGB565/555 destination channel floor-half; 8-bit alpha128 presentation",
+      "layer_order": [
+        "shadow",
+        "main",
+        "intrinsic"
+      ],
+      "interval_ms": 40,
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "native_raw_hex": "0028000000000000000000000001080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000333037312e776176000000000000000000000000010000000200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "blend": "lighter",
+      "evidence": [
+        "ev_0c237df7043928c88bbdebd562f666aa4b7f4201a779c0a793b1483939fd71d2",
+        "ev_8a5106859a74859307743cb5be1794a453316af2b92ccfc05d4705257ef5ea6c",
+        "ev_933340f95b60e313671e7e94cd437e581060c7d1b55e337a07505a4785ea22d9",
+        "ev_8742bac48db84c1a41d0f484e0a65f166747220758a7659523a8940d01f4c32c",
+        "ev_c650a80b15b29e80c4625d568bdf0ffd867f3c795604430a1bb4ad1cf3fe2f74",
+        "ev_26ca5e077ad2fcdfb6fc3f460728a9f39cd90cda58ba0c38249d09f8b1f9a731",
+        "ev_7515c2967c274d7710d9bc0107185694d39d193b99f5f69e4996a99cf61fd752"
+      ]
+    },
+    {
+      "id": "_DutyE2",
+      "source": "Fight_Role/Effect/_DutyE2.dgp",
+      "source_sha256": "59da1a8367f878f7fc24f634ada125ce687b253ddd337902c8dbf3bbc87ad4bf",
+      "frame_width": 319,
+      "frame_height": 239,
+      "frame_count": 12,
+      "anchor": {
+        "x": 221,
+        "y": 119
+      },
+      "sheet": "/assets/enemy_effects/_DutyE2/action_00.png",
+      "sha256": "36e3da768f3880812c3f880392f63ab2e883813bc4225032489ae67988f5cfe1",
+      "main_sheet": "/assets/enemy_effects/_DutyE2/action_00_main.png",
+      "main_sha256": "59b3c90aa5866320d2f84563dc23a0d40fa42593cae17494f81e24744dcaabcd",
+      "main_rgba_sha256": "1107e64ed479bf957aaecff3c89d9f27eee4960a605a4a56c871314d4d980835",
+      "main_blend": "source-over",
+      "intrinsic_sheet": "/assets/enemy_effects/_DutyE2/action_00.png",
+      "intrinsic_sha256": "36e3da768f3880812c3f880392f63ab2e883813bc4225032489ae67988f5cfe1",
+      "intrinsic_rgba_sha256": "1e829c76406218d86903458b8571991dbd009c288e5bd1f1dbda17dcaf6a41a8",
+      "intrinsic_blend": "lighter",
+      "shadow_sheet": "/assets/enemy_effects/_DutyE2/action_00_shadow.png",
+      "shadow_sha256": "59b3c90aa5866320d2f84563dc23a0d40fa42593cae17494f81e24744dcaabcd",
+      "shadow_rgba_sha256": "1107e64ed479bf957aaecff3c89d9f27eee4960a605a4a56c871314d4d980835",
+      "shadow_blend": "source-over",
+      "shadow_alpha": 128,
+      "shadow_native": "RGB565/555 destination channel floor-half; 8-bit alpha128 presentation",
+      "layer_order": [
+        "shadow",
+        "main",
+        "intrinsic"
+      ],
+      "interval_ms": 50,
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "native_raw_hex": "00320000000000000000000000010c00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000044757479312e77617600000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "blend": "lighter",
+      "evidence": [
+        "ev_0c237df7043928c88bbdebd562f666aa4b7f4201a779c0a793b1483939fd71d2",
+        "ev_8a5106859a74859307743cb5be1794a453316af2b92ccfc05d4705257ef5ea6c",
+        "ev_933340f95b60e313671e7e94cd437e581060c7d1b55e337a07505a4785ea22d9",
+        "ev_8742bac48db84c1a41d0f484e0a65f166747220758a7659523a8940d01f4c32c",
+        "ev_c650a80b15b29e80c4625d568bdf0ffd867f3c795604430a1bb4ad1cf3fe2f74",
+        "ev_26ca5e077ad2fcdfb6fc3f460728a9f39cd90cda58ba0c38249d09f8b1f9a731",
+        "ev_7515c2967c274d7710d9bc0107185694d39d193b99f5f69e4996a99cf61fd752"
+      ]
+    },
+    {
+      "id": "_DutyE",
+      "source": "Fight_Role/Effect/_DutyE.dgp",
+      "source_sha256": "fd125b849ffc58a3a340023b85661fddb7303ebf40137941e52a8921a14b8f2f",
+      "frame_width": 319,
+      "frame_height": 239,
+      "frame_count": 12,
+      "anchor": {
+        "x": 166,
+        "y": 119
+      },
+      "sheet": "/assets/enemy_effects/_DutyE/action_00.png",
+      "sha256": "36e3da768f3880812c3f880392f63ab2e883813bc4225032489ae67988f5cfe1",
+      "main_sheet": "/assets/enemy_effects/_DutyE/action_00_main.png",
+      "main_sha256": "59b3c90aa5866320d2f84563dc23a0d40fa42593cae17494f81e24744dcaabcd",
+      "main_rgba_sha256": "1107e64ed479bf957aaecff3c89d9f27eee4960a605a4a56c871314d4d980835",
+      "main_blend": "source-over",
+      "intrinsic_sheet": "/assets/enemy_effects/_DutyE/action_00.png",
+      "intrinsic_sha256": "36e3da768f3880812c3f880392f63ab2e883813bc4225032489ae67988f5cfe1",
+      "intrinsic_rgba_sha256": "1e829c76406218d86903458b8571991dbd009c288e5bd1f1dbda17dcaf6a41a8",
+      "intrinsic_blend": "lighter",
+      "shadow_sheet": "/assets/enemy_effects/_DutyE/action_00_shadow.png",
+      "shadow_sha256": "59b3c90aa5866320d2f84563dc23a0d40fa42593cae17494f81e24744dcaabcd",
+      "shadow_rgba_sha256": "1107e64ed479bf957aaecff3c89d9f27eee4960a605a4a56c871314d4d980835",
+      "shadow_blend": "source-over",
+      "shadow_alpha": 128,
+      "shadow_native": "RGB565/555 destination channel floor-half; 8-bit alpha128 presentation",
+      "layer_order": [
+        "shadow",
+        "main",
+        "intrinsic"
+      ],
+      "interval_ms": 50,
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "native_raw_hex": "00320000000000000000000000010c00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000044757479312e77617600000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "blend": "lighter",
+      "evidence": [
+        "ev_0c237df7043928c88bbdebd562f666aa4b7f4201a779c0a793b1483939fd71d2",
+        "ev_8a5106859a74859307743cb5be1794a453316af2b92ccfc05d4705257ef5ea6c",
+        "ev_933340f95b60e313671e7e94cd437e581060c7d1b55e337a07505a4785ea22d9",
+        "ev_8742bac48db84c1a41d0f484e0a65f166747220758a7659523a8940d01f4c32c",
+        "ev_c650a80b15b29e80c4625d568bdf0ffd867f3c795604430a1bb4ad1cf3fe2f74",
+        "ev_26ca5e077ad2fcdfb6fc3f460728a9f39cd90cda58ba0c38249d09f8b1f9a731",
+        "ev_7515c2967c274d7710d9bc0107185694d39d193b99f5f69e4996a99cf61fd752"
+      ]
+    },
+    {
+      "id": "BDL01_Nd",
+      "source": "Fight_Role/Effect/BDL01_Nd.dgp",
+      "source_sha256": "95b5292c070fab0fed272d6dc626c786b905237fb1e1cb41b20b8f4f99030f88",
+      "frame_width": 559,
+      "frame_height": 519,
+      "frame_count": 8,
+      "anchor": {
+        "x": 281,
+        "y": 294
+      },
+      "sheet": "/assets/enemy_effects/BDL01_Nd/action_00.png",
+      "sha256": "441359dfb8458980c145aaee8f6b509c94ef472af5103dc102bf3cf63cdf3f4a",
+      "main_sheet": "/assets/enemy_effects/BDL01_Nd/action_00_main.png",
+      "main_sha256": "b5d4b387a2b277efd67a3676902d1b0b8d33702b29f418697c2f76dc960ee40f",
+      "main_rgba_sha256": "c91cb77f809d243a954619782ac1c270ea045c7bd564025ba22d534c662c7ade",
+      "main_blend": "source-over",
+      "intrinsic_sheet": "/assets/enemy_effects/BDL01_Nd/action_00.png",
+      "intrinsic_sha256": "441359dfb8458980c145aaee8f6b509c94ef472af5103dc102bf3cf63cdf3f4a",
+      "intrinsic_rgba_sha256": "35b1c40ff6567ec085d62f9486ad6dfd848f38140fd40995ffe5e45668479991",
+      "intrinsic_blend": "lighter",
+      "shadow_sheet": "/assets/enemy_effects/BDL01_Nd/action_00_shadow.png",
+      "shadow_sha256": "b5d4b387a2b277efd67a3676902d1b0b8d33702b29f418697c2f76dc960ee40f",
+      "shadow_rgba_sha256": "c91cb77f809d243a954619782ac1c270ea045c7bd564025ba22d534c662c7ade",
+      "shadow_blend": "source-over",
+      "shadow_alpha": 128,
+      "shadow_native": "RGB565/555 destination channel floor-half; 8-bit alpha128 presentation",
+      "layer_order": [
+        "shadow",
+        "main",
+        "intrinsic"
+      ],
+      "interval_ms": 40,
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "native_raw_hex": "0028000000000000000000000001080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000333133382e776176000000000000000000000000010000000200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "blend": "lighter",
+      "evidence": [
+        "ev_0c237df7043928c88bbdebd562f666aa4b7f4201a779c0a793b1483939fd71d2",
+        "ev_8a5106859a74859307743cb5be1794a453316af2b92ccfc05d4705257ef5ea6c",
+        "ev_933340f95b60e313671e7e94cd437e581060c7d1b55e337a07505a4785ea22d9",
+        "ev_8742bac48db84c1a41d0f484e0a65f166747220758a7659523a8940d01f4c32c",
+        "ev_c650a80b15b29e80c4625d568bdf0ffd867f3c795604430a1bb4ad1cf3fe2f74",
+        "ev_26ca5e077ad2fcdfb6fc3f460728a9f39cd90cda58ba0c38249d09f8b1f9a731",
+        "ev_7515c2967c274d7710d9bc0107185694d39d193b99f5f69e4996a99cf61fd752"
+      ]
+    },
+    {
       "id": "m32Awz01",
       "source": "Fight_Role/Effect/m32Awz01.dgp",
       "source_sha256": "6568e648358ac01f5a98134fac43c6189df4516f43bbbdd27f80e84bf75d12d9",
@@ -8451,8 +11124,17 @@
     "Fight_Role/004.CHR": "2b964b7c3065d1520f7fe354f9e1fe6e213e9fcb3f586056eafa7f63fb88b50d",
     "Fight_Role/005.CHR": "9e06bcbedaf821a6e4c1d08dc0cff31d916c3ae2d00fdc20c37e758d25e09580",
     "Fight_Role/006.CHR": "27b29fb5cc1073014faea7553d0175559714c18dbbc5132ca1c549e4a9d8e15b",
+    "Fight_Role/014.CHR": "3dda77cf7ff3513c652bdf2224517fc48f5d5a2a948170cad7ac252efac7bf28",
+    "Fight_Role/014.dgp": "144d623270b0b79846f81385c7a3136be411f9ba7d87a647e9d061c3d6c00b72",
+    "Fight_Role/022.CHR": "1d993fbcd562db44c2f515f3b9e3e1bfa4d2ad99924ad543b62ca8226b3f4455",
+    "Fight_Role/022.dgp": "160b791a45b177fee9aba23f3e84c2c930065f3cfee795147cbbda9a723c0a0f",
     "Fight_Role/032.CHR": "e081f7db9f51ac59c0bbd5b43f82a5894b3e707dd7512eb43aef574e1ec35f9f",
     "Fight_Role/032.dgp": "945ca46f49dcd4a8802eced780342ace8eab6e595abdaa155a1725bb999d4604",
+    "Fight_Role/Effect/_DutyE3.dgp": "9ba08da38a43d84eea83f044c0196b3cc0f6539f2db7de7b1d4d340f6fb92ff3",
+    "Fight_Role/Effect/BTB01_Nm.dgp": "e87ce31df8965bec8d7d4f075a7158758dd248ab75676408cf2c68302850a29b",
+    "Fight_Role/Effect/_DutyE2.dgp": "59da1a8367f878f7fc24f634ada125ce687b253ddd337902c8dbf3bbc87ad4bf",
+    "Fight_Role/Effect/_DutyE.dgp": "fd125b849ffc58a3a340023b85661fddb7303ebf40137941e52a8921a14b8f2f",
+    "Fight_Role/Effect/BDL01_Nd.dgp": "95b5292c070fab0fed272d6dc626c786b905237fb1e1cb41b20b8f4f99030f88",
     "Fight_Role/Effect/m32Awz01.dgp": "6568e648358ac01f5a98134fac43c6189df4516f43bbbdd27f80e84bf75d12d9",
     "Fight_Role/Effect/_Blank68.dgp": "59c62c58e436cb4e55808b6668caa14ab42a360fd427d91183a94ded946cc96a",
     "Fight_Role/Effect/m32Awz04.dgp": "9434f4be5594c61fa09daa0ef25387ef34f6fc49a6d3adc2682e7ad256adc4d9",
@@ -8522,6 +11204,14 @@
     {
       "path": "/data/enemy_role_layers_013.json",
       "sha256": "b9761a5b93aa938924560b2481e369978a99f5ded28c1db71c6fd5281d6e9113"
+    },
+    {
+      "path": "/data/enemy_role_layers_014.json",
+      "sha256": "816bc1a088bb78f619fafa700e6c3caa031f5d322ad3b9ade27fd65abbb8a675"
+    },
+    {
+      "path": "/data/enemy_role_layers_022.json",
+      "sha256": "09d5ec7247916c11c09a4c3d33e292dc408a32186402b7ae84f2c43371883751"
     },
     {
       "path": "/data/enemy_role_layers_032.json",

@@ -45,7 +45,7 @@ export function validateChapterAnimation(program,content=runtimeContent) {
     // Native 0x473E30 case0x21 selects the explicit DGP action when +29 is nonzero.
     if (c.opcode === 33) need([0,1,2].includes(c.byte_plus29) && (c.u32_plus25&255) <= 8, '剧情移动模式／到达朝向未支持');
     if(c.opcode===17)need([0,3].includes(c.u32_plus5)&&c.byte_plus29<=1,'剧情画面效果模式未支持');
-    if (c.opcode === 36) need(Object.values(content.roles).some(role=>role.side==='player'&&role.native_slot===c.u32_plus5)&&[0,3].includes(c.byte_plus29), '剧情队伍操作未支持');
+    if (c.opcode === 36) need(Object.values(content.roles).some(role=>role.side==='player'&&role.native_slot===c.u32_plus5)&&[0,1,3].includes(c.byte_plus29), '剧情队伍操作未支持');
     if (c.opcode === 37) need(Object.values(content.roles).some(role=>role.side==='player'&&role.native_slot===c.u32_plus5), '剧情离队人物未接入');
     if(c.opcode===20){
       need(c.u32_plus5<2000&&c.u32_plus25<=32,'剧情旗标索引或位无效');

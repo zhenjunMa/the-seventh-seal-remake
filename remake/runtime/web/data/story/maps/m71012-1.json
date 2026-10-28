@@ -1,0 +1,1048 @@
+{
+  "schema": "seventh-seal-story-map",
+  "version": 2,
+  "map_id": "M71012-1",
+  "chapter": {
+    "id": "M71012-1",
+    "name": "翠碧湖湖上",
+    "flag_index": 391,
+    "map_flag_index": 391,
+    "source": null,
+    "dialogue_status": "source-file-absent",
+    "map_source": {
+      "path": "Map/m71012-1.dat",
+      "sha256": "26c272f572cfb58472f60d505ae6497009681303729ac6d98cdf468f5f7196cb",
+      "bytes": 261074
+    },
+    "index_nonzero": [],
+    "index_count": 0,
+    "record_base": null,
+    "record_bytes": 1647,
+    "record_count": 0,
+    "records": [],
+    "trailing_bytes": 0,
+    "trailing_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "header_raw_hex": "3344a661b9cfb8eaaec6286329596f6b690000000600000001000000b4e4b1ccbafebafec9cf0000000000000000000000000000000000000000000000000000000000006d6e3731302d312e7761760000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002020000000000000100000000000000000087010000010000004d37313031322e44475000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000102020300010140000000360000002e5c4d41504d5c4d30313033305c0000000000000000000000020000b001000000010100",
+    "compatibility_variant": 1,
+    "descriptors": [
+      {
+        "id": 1,
+        "state_raw": 0,
+        "filename_raw": "m71012.dat",
+        "field_26_raw": 2,
+        "field_2a_raw": 6,
+        "field_2e_raw": 0,
+        "record_bytes": 66,
+        "raw_hex": "00000000000000000000000000000000006d37313031322e646174000000000000000000000002000000060000000000000000000000000000000000000000000000",
+        "cells": [
+          {
+            "x": 8,
+            "y": 49,
+            "offset": 201586
+          },
+          {
+            "x": 9,
+            "y": 49,
+            "offset": 201650
+          },
+          {
+            "x": 10,
+            "y": 49,
+            "offset": 201714
+          },
+          {
+            "x": 11,
+            "y": 49,
+            "offset": 201778
+          },
+          {
+            "x": 12,
+            "y": 49,
+            "offset": 201842
+          },
+          {
+            "x": 13,
+            "y": 49,
+            "offset": 201906
+          },
+          {
+            "x": 14,
+            "y": 49,
+            "offset": 201970
+          },
+          {
+            "x": 15,
+            "y": 49,
+            "offset": 202034
+          },
+          {
+            "x": 16,
+            "y": 49,
+            "offset": 202098
+          },
+          {
+            "x": 17,
+            "y": 49,
+            "offset": 202162
+          },
+          {
+            "x": 18,
+            "y": 49,
+            "offset": 202226
+          },
+          {
+            "x": 19,
+            "y": 49,
+            "offset": 202290
+          },
+          {
+            "x": 20,
+            "y": 49,
+            "offset": 202354
+          },
+          {
+            "x": 21,
+            "y": 49,
+            "offset": 202418
+          },
+          {
+            "x": 22,
+            "y": 49,
+            "offset": 202482
+          },
+          {
+            "x": 23,
+            "y": 49,
+            "offset": 202546
+          },
+          {
+            "x": 24,
+            "y": 49,
+            "offset": 202610
+          },
+          {
+            "x": 25,
+            "y": 49,
+            "offset": 202674
+          },
+          {
+            "x": 26,
+            "y": 49,
+            "offset": 202738
+          },
+          {
+            "x": 27,
+            "y": 49,
+            "offset": 202802
+          },
+          {
+            "x": 28,
+            "y": 49,
+            "offset": 202866
+          },
+          {
+            "x": 29,
+            "y": 49,
+            "offset": 202930
+          },
+          {
+            "x": 30,
+            "y": 49,
+            "offset": 202994
+          },
+          {
+            "x": 31,
+            "y": 49,
+            "offset": 203058
+          },
+          {
+            "x": 32,
+            "y": 49,
+            "offset": 203122
+          },
+          {
+            "x": 33,
+            "y": 49,
+            "offset": 203186
+          },
+          {
+            "x": 34,
+            "y": 49,
+            "offset": 203250
+          },
+          {
+            "x": 35,
+            "y": 49,
+            "offset": 203314
+          },
+          {
+            "x": 36,
+            "y": 49,
+            "offset": 203378
+          },
+          {
+            "x": 37,
+            "y": 49,
+            "offset": 203442
+          },
+          {
+            "x": 38,
+            "y": 49,
+            "offset": 203506
+          },
+          {
+            "x": 39,
+            "y": 49,
+            "offset": 203570
+          },
+          {
+            "x": 40,
+            "y": 49,
+            "offset": 203634
+          },
+          {
+            "x": 41,
+            "y": 49,
+            "offset": 203698
+          },
+          {
+            "x": 42,
+            "y": 49,
+            "offset": 203762
+          },
+          {
+            "x": 43,
+            "y": 49,
+            "offset": 203826
+          },
+          {
+            "x": 44,
+            "y": 49,
+            "offset": 203890
+          },
+          {
+            "x": 45,
+            "y": 49,
+            "offset": 203954
+          },
+          {
+            "x": 46,
+            "y": 49,
+            "offset": 204018
+          },
+          {
+            "x": 47,
+            "y": 49,
+            "offset": 204082
+          },
+          {
+            "x": 48,
+            "y": 49,
+            "offset": 204146
+          },
+          {
+            "x": 49,
+            "y": 49,
+            "offset": 204210
+          },
+          {
+            "x": 50,
+            "y": 49,
+            "offset": 204274
+          },
+          {
+            "x": 51,
+            "y": 49,
+            "offset": 204338
+          },
+          {
+            "x": 52,
+            "y": 49,
+            "offset": 204402
+          },
+          {
+            "x": 53,
+            "y": 49,
+            "offset": 204466
+          },
+          {
+            "x": 54,
+            "y": 49,
+            "offset": 204530
+          },
+          {
+            "x": 55,
+            "y": 49,
+            "offset": 204594
+          },
+          {
+            "x": 56,
+            "y": 49,
+            "offset": 204658
+          },
+          {
+            "x": 57,
+            "y": 49,
+            "offset": 204722
+          }
+        ],
+        "source": {
+          "path": "Map/m71012-1.dat",
+          "sha256": "26c272f572cfb58472f60d505ae6497009681303729ac6d98cdf468f5f7196cb",
+          "descriptor_id": 1,
+          "bytes": 66,
+          "offset": 222898
+        },
+        "evidence": [
+          "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a"
+        ],
+        "field_expansion": "Native 0x42-byte descriptor fields"
+      },
+      {
+        "id": 2,
+        "state_raw": 0,
+        "filename_raw": "m71012-2.dat",
+        "field_26_raw": 1,
+        "field_2a_raw": 5,
+        "field_2e_raw": 0,
+        "record_bytes": 66,
+        "raw_hex": "00000000000000000000000000000000006d37313031322d322e64617400000000000000000001000000050000000000000000000000000000000000000000000000",
+        "cells": [
+          {
+            "x": 14,
+            "y": 2,
+            "offset": 9458
+          },
+          {
+            "x": 15,
+            "y": 2,
+            "offset": 9522
+          },
+          {
+            "x": 16,
+            "y": 2,
+            "offset": 9586
+          },
+          {
+            "x": 17,
+            "y": 2,
+            "offset": 9650
+          },
+          {
+            "x": 18,
+            "y": 2,
+            "offset": 9714
+          },
+          {
+            "x": 19,
+            "y": 2,
+            "offset": 9778
+          },
+          {
+            "x": 20,
+            "y": 2,
+            "offset": 9842
+          },
+          {
+            "x": 21,
+            "y": 2,
+            "offset": 9906
+          },
+          {
+            "x": 22,
+            "y": 2,
+            "offset": 9970
+          },
+          {
+            "x": 23,
+            "y": 2,
+            "offset": 10034
+          },
+          {
+            "x": 24,
+            "y": 2,
+            "offset": 10098
+          },
+          {
+            "x": 25,
+            "y": 2,
+            "offset": 10162
+          },
+          {
+            "x": 26,
+            "y": 2,
+            "offset": 10226
+          },
+          {
+            "x": 27,
+            "y": 2,
+            "offset": 10290
+          },
+          {
+            "x": 28,
+            "y": 2,
+            "offset": 10354
+          },
+          {
+            "x": 29,
+            "y": 2,
+            "offset": 10418
+          },
+          {
+            "x": 30,
+            "y": 2,
+            "offset": 10482
+          },
+          {
+            "x": 31,
+            "y": 2,
+            "offset": 10546
+          },
+          {
+            "x": 32,
+            "y": 2,
+            "offset": 10610
+          },
+          {
+            "x": 33,
+            "y": 2,
+            "offset": 10674
+          },
+          {
+            "x": 34,
+            "y": 2,
+            "offset": 10738
+          },
+          {
+            "x": 35,
+            "y": 2,
+            "offset": 10802
+          },
+          {
+            "x": 36,
+            "y": 2,
+            "offset": 10866
+          },
+          {
+            "x": 37,
+            "y": 2,
+            "offset": 10930
+          },
+          {
+            "x": 38,
+            "y": 2,
+            "offset": 10994
+          },
+          {
+            "x": 39,
+            "y": 2,
+            "offset": 11058
+          },
+          {
+            "x": 40,
+            "y": 2,
+            "offset": 11122
+          },
+          {
+            "x": 41,
+            "y": 2,
+            "offset": 11186
+          },
+          {
+            "x": 42,
+            "y": 2,
+            "offset": 11250
+          },
+          {
+            "x": 43,
+            "y": 2,
+            "offset": 11314
+          },
+          {
+            "x": 44,
+            "y": 2,
+            "offset": 11378
+          },
+          {
+            "x": 45,
+            "y": 2,
+            "offset": 11442
+          },
+          {
+            "x": 46,
+            "y": 2,
+            "offset": 11506
+          },
+          {
+            "x": 47,
+            "y": 2,
+            "offset": 11570
+          },
+          {
+            "x": 48,
+            "y": 2,
+            "offset": 11634
+          },
+          {
+            "x": 49,
+            "y": 2,
+            "offset": 11698
+          },
+          {
+            "x": 50,
+            "y": 2,
+            "offset": 11762
+          },
+          {
+            "x": 51,
+            "y": 2,
+            "offset": 11826
+          },
+          {
+            "x": 52,
+            "y": 2,
+            "offset": 11890
+          }
+        ],
+        "source": {
+          "path": "Map/m71012-1.dat",
+          "sha256": "26c272f572cfb58472f60d505ae6497009681303729ac6d98cdf468f5f7196cb",
+          "descriptor_id": 2,
+          "bytes": 66,
+          "offset": 222964
+        },
+        "evidence": [
+          "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a"
+        ],
+        "field_expansion": "Native 0x42-byte descriptor fields"
+      }
+    ],
+    "objects": [],
+    "npc_records": [],
+    "entry_markers": {
+      "1": [
+        {
+          "x": 30,
+          "y": 40,
+          "offset": 166130
+        }
+      ],
+      "2": [
+        {
+          "x": 30,
+          "y": 8,
+          "offset": 35058
+        }
+      ]
+    },
+    "default_object_index_slot": 499,
+    "default_object_record": 0,
+    "header_entry_tlk_raw": 0,
+    "header_entry_tlk_source": {
+      "path": "Map/m71012-1.dat",
+      "sha256": "26c272f572cfb58472f60d505ae6497009681303729ac6d98cdf468f5f7196cb",
+      "bytes": 4,
+      "offset": 314
+    },
+    "header_setup_tlk_raw": 0,
+    "header_setup_tlk_source": {
+      "path": "Map/m71012-1.dat",
+      "sha256": "26c272f572cfb58472f60d505ae6497009681303729ac6d98cdf468f5f7196cb",
+      "bytes": 4,
+      "offset": 138
+    },
+    "evidence": [
+      "ev_e14d28c11ec31e5eebdf4c08a994a900102658650d8e5364d58b848cbd114ea7",
+      "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a"
+    ],
+    "limitations": [
+      "Index slot499 is retained as the object default TLK entry; it must not be used as an automatic map-load event. Header +0x8A controls map setup; +0x13A controls map-entry TLK.",
+      "TLK record kind/mutation numbers are raw native values; dialogue text alone does not define their behavior."
+    ]
+  },
+  "programs": {},
+  "flows": {},
+  "events": [],
+  "resources": {
+    "npcs_by_map": [],
+    "exits_by_map": [
+      {
+        "id": 1,
+        "state": "ready",
+        "cells": [
+          {
+            "x": 8,
+            "y": 49
+          },
+          {
+            "x": 9,
+            "y": 49
+          },
+          {
+            "x": 10,
+            "y": 49
+          },
+          {
+            "x": 11,
+            "y": 49
+          },
+          {
+            "x": 12,
+            "y": 49
+          },
+          {
+            "x": 13,
+            "y": 49
+          },
+          {
+            "x": 14,
+            "y": 49
+          },
+          {
+            "x": 15,
+            "y": 49
+          },
+          {
+            "x": 16,
+            "y": 49
+          },
+          {
+            "x": 17,
+            "y": 49
+          },
+          {
+            "x": 18,
+            "y": 49
+          },
+          {
+            "x": 19,
+            "y": 49
+          },
+          {
+            "x": 20,
+            "y": 49
+          },
+          {
+            "x": 21,
+            "y": 49
+          },
+          {
+            "x": 22,
+            "y": 49
+          },
+          {
+            "x": 23,
+            "y": 49
+          },
+          {
+            "x": 24,
+            "y": 49
+          },
+          {
+            "x": 25,
+            "y": 49
+          },
+          {
+            "x": 26,
+            "y": 49
+          },
+          {
+            "x": 27,
+            "y": 49
+          },
+          {
+            "x": 28,
+            "y": 49
+          },
+          {
+            "x": 29,
+            "y": 49
+          },
+          {
+            "x": 30,
+            "y": 49
+          },
+          {
+            "x": 31,
+            "y": 49
+          },
+          {
+            "x": 32,
+            "y": 49
+          },
+          {
+            "x": 33,
+            "y": 49
+          },
+          {
+            "x": 34,
+            "y": 49
+          },
+          {
+            "x": 35,
+            "y": 49
+          },
+          {
+            "x": 36,
+            "y": 49
+          },
+          {
+            "x": 37,
+            "y": 49
+          },
+          {
+            "x": 38,
+            "y": 49
+          },
+          {
+            "x": 39,
+            "y": 49
+          },
+          {
+            "x": 40,
+            "y": 49
+          },
+          {
+            "x": 41,
+            "y": 49
+          },
+          {
+            "x": 42,
+            "y": 49
+          },
+          {
+            "x": 43,
+            "y": 49
+          },
+          {
+            "x": 44,
+            "y": 49
+          },
+          {
+            "x": 45,
+            "y": 49
+          },
+          {
+            "x": 46,
+            "y": 49
+          },
+          {
+            "x": 47,
+            "y": 49
+          },
+          {
+            "x": 48,
+            "y": 49
+          },
+          {
+            "x": 49,
+            "y": 49
+          },
+          {
+            "x": 50,
+            "y": 49
+          },
+          {
+            "x": 51,
+            "y": 49
+          },
+          {
+            "x": 52,
+            "y": 49
+          },
+          {
+            "x": 53,
+            "y": 49
+          },
+          {
+            "x": 54,
+            "y": 49
+          },
+          {
+            "x": 55,
+            "y": 49
+          },
+          {
+            "x": 56,
+            "y": 49
+          },
+          {
+            "x": 57,
+            "y": 49
+          }
+        ],
+        "target_map": "M71012",
+        "entry": {
+          "x": 480,
+          "y": 128,
+          "direction": 7,
+          "cell_x": 30,
+          "cell_y": 8,
+          "native_x": 240,
+          "native_y": 64
+        },
+        "conditions": [],
+        "source": {
+          "path": "Map/m71012-1.dat",
+          "sha256": "26c272f572cfb58472f60d505ae6497009681303729ac6d98cdf468f5f7196cb",
+          "descriptor_offset": 222898,
+          "descriptor_bytes": 66,
+          "descriptor_hex": "00000000000000000000000000000000006d37313031322e646174000000000000000000000002000000060000000000000000000000000000000000000000000000",
+          "compact_field_expansion_evidence": null,
+          "target_path": "Map/m71012.dat",
+          "target_sha256": "91ce6ea17ad2d282585ad285270936a5b37cfd9b5b5f08e4383cb8412d4be28c",
+          "target_entry_marker": 2,
+          "entry_sort_code": 6,
+          "entry_terrain_raw": 0,
+          "entry_trigger_raw": 0,
+          "entry_scan_cells": [
+            {
+              "x": 30,
+              "y": 8,
+              "offset": 35058
+            }
+          ],
+          "entry_sorted_cells": [
+            {
+              "x": 30,
+              "y": 8
+            }
+          ],
+          "entry_sort": "y descending; stable ties",
+          "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
+          "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
+          "native_evidence": {
+            "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+            "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+            "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+            "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+          }
+        },
+        "execution": "Native transition descriptor only; map-entry TLK/ANM and their once-only checks must complete separately.",
+        "limitations": [
+          "Static source/code evidence; original timing not observed",
+          "Continuous keyboard movement is runtime policy"
+        ]
+      },
+      {
+        "id": 2,
+        "state": "ready",
+        "cells": [
+          {
+            "x": 14,
+            "y": 2
+          },
+          {
+            "x": 15,
+            "y": 2
+          },
+          {
+            "x": 16,
+            "y": 2
+          },
+          {
+            "x": 17,
+            "y": 2
+          },
+          {
+            "x": 18,
+            "y": 2
+          },
+          {
+            "x": 19,
+            "y": 2
+          },
+          {
+            "x": 20,
+            "y": 2
+          },
+          {
+            "x": 21,
+            "y": 2
+          },
+          {
+            "x": 22,
+            "y": 2
+          },
+          {
+            "x": 23,
+            "y": 2
+          },
+          {
+            "x": 24,
+            "y": 2
+          },
+          {
+            "x": 25,
+            "y": 2
+          },
+          {
+            "x": 26,
+            "y": 2
+          },
+          {
+            "x": 27,
+            "y": 2
+          },
+          {
+            "x": 28,
+            "y": 2
+          },
+          {
+            "x": 29,
+            "y": 2
+          },
+          {
+            "x": 30,
+            "y": 2
+          },
+          {
+            "x": 31,
+            "y": 2
+          },
+          {
+            "x": 32,
+            "y": 2
+          },
+          {
+            "x": 33,
+            "y": 2
+          },
+          {
+            "x": 34,
+            "y": 2
+          },
+          {
+            "x": 35,
+            "y": 2
+          },
+          {
+            "x": 36,
+            "y": 2
+          },
+          {
+            "x": 37,
+            "y": 2
+          },
+          {
+            "x": 38,
+            "y": 2
+          },
+          {
+            "x": 39,
+            "y": 2
+          },
+          {
+            "x": 40,
+            "y": 2
+          },
+          {
+            "x": 41,
+            "y": 2
+          },
+          {
+            "x": 42,
+            "y": 2
+          },
+          {
+            "x": 43,
+            "y": 2
+          },
+          {
+            "x": 44,
+            "y": 2
+          },
+          {
+            "x": 45,
+            "y": 2
+          },
+          {
+            "x": 46,
+            "y": 2
+          },
+          {
+            "x": 47,
+            "y": 2
+          },
+          {
+            "x": 48,
+            "y": 2
+          },
+          {
+            "x": 49,
+            "y": 2
+          },
+          {
+            "x": 50,
+            "y": 2
+          },
+          {
+            "x": 51,
+            "y": 2
+          },
+          {
+            "x": 52,
+            "y": 2
+          }
+        ],
+        "target_map": "M71012-2",
+        "entry": {
+          "x": 480,
+          "y": 640,
+          "direction": 2,
+          "cell_x": 30,
+          "cell_y": 40,
+          "native_x": 240,
+          "native_y": 320
+        },
+        "conditions": [],
+        "source": {
+          "path": "Map/m71012-1.dat",
+          "sha256": "26c272f572cfb58472f60d505ae6497009681303729ac6d98cdf468f5f7196cb",
+          "descriptor_offset": 222964,
+          "descriptor_bytes": 66,
+          "descriptor_hex": "00000000000000000000000000000000006d37313031322d322e64617400000000000000000001000000050000000000000000000000000000000000000000000000",
+          "compact_field_expansion_evidence": null,
+          "target_path": "Map/m71012-2.dat",
+          "target_sha256": "8fc98a05e2874dc98fc888f1ae163dce6b2243390aa6add65bd5a71fb07cbb35",
+          "target_entry_marker": 1,
+          "entry_sort_code": 5,
+          "entry_terrain_raw": 0,
+          "entry_trigger_raw": 0,
+          "entry_scan_cells": [
+            {
+              "x": 30,
+              "y": 40,
+              "offset": 166130
+            }
+          ],
+          "entry_sorted_cells": [
+            {
+              "x": 30,
+              "y": 40
+            }
+          ],
+          "entry_sort": "row-major scan; first four; missing followers repeat last observed cell",
+          "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
+          "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
+          "native_evidence": {
+            "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+            "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+            "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+            "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+          }
+        },
+        "execution": "Native transition descriptor only; map-entry TLK/ANM and their once-only checks must complete separately.",
+        "limitations": [
+          "Static source/code evidence; original timing not observed",
+          "Continuous keyboard movement is runtime policy"
+        ]
+      }
+    ],
+    "trigger_regions": [],
+    "interactive_objects": [],
+    "object_animations": []
+  },
+  "route": null,
+  "texts": {}
+}

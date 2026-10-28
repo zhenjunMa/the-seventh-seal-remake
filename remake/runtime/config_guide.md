@@ -183,6 +183,8 @@ item-presentation步骤读取`data/items.json`已恢复定义决定实际药品�
 
 - **`maps.export`**：默认{assets:"chapter",story:true}。assets="existing"保留已有开场／路线导出器的素材产物；story=false表示尚未接入该图TLK。新地图一般省略export。该字段只控制生产，不开放剧情。
 
+  assets="chapter"的地图始终保留DAT来源表、入口标记及物件，即使story=false且没有宝箱。无TLK源时records为空，不生成虚构对白；kind2跳转仍必须从目标原DAT取得标记，不能因地图没有对白而缺失来源。
+
 ## 新增地图和剧情
 
 先按[区域工作方法](../assessment/region_remake_workflow.md)全量盘点区域，再选择承接连续主线的剧情阶段与完整事件链；本轮范围和暂缓的后期依赖记录在唯一开发计划。此划分用于排期与验收，runtime_content的原入口、旗标和完整依赖契约不变。

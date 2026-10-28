@@ -419,12 +419,15 @@ export class ChapterRunner {
     throw new Error(`剧情行为 ${record.mutation_type} 尚未接入`);
   }
   joinActor({actorSlot, modeRaw, draft}) {
-    // GAME.exe 0x4B6720 mode0 -> 0x45E400. The helper returns when the
+    // GAME.exe 0x4B6720 modes0/1 -> 0x45E400 (only mode3 switches control).
+    // m71014-1:c12 uses mode1; its XY fields are not read by this branch.
+    // Native proof: evidence/jade_lake_battle_20261028/anm36_native.json.
+    // The helper returns when the
     // character is already active; it never resets their HP/MP or progress.
     // Evidence ev_fd3e9e25a462ab6603ac334f9da52bed0b8b6590039f4b9655186099bc542eda
     // and ev_12df7bc4462bc0b911805dff6085f4bc98d698f681847adf18ee0aca472088f9.
     const id=Object.keys(this.content.roles).find(id=>this.content.roles[id].side==='player'&&this.content.roles[id].native_slot===actorSlot);
-    need(id && [0,3].includes(modeRaw) && draft, '剧情入队角色或模式尚未接入');
+    need(id && [0,1,3].includes(modeRaw) && draft, '剧情入队角色或模式尚未接入');
     if(modeRaw===3){
       const result=controlPartyActor(draft,id,{content:this.content});
       this.log({type:'chapter-control',actorSlot,modeRaw,...result});return result;
