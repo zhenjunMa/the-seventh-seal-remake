@@ -24,7 +24,8 @@ export const FADE_ALPHA_ADAPTER=Object.freeze({
   pixels:'8-bit alpha adapter uses original elapsed30 hard stop; original particles can finish earlier',
 });
 export class BattleLifecyclePlayback {
-  constructor(manifest,{appearanceBounds=null,nativeBridge=null}={}){
+  constructor(manifest,{appearanceBounds=null,nativeBridge=null,onFrame=null}={}){
+    this.onFrame=onFrame;
     this.nativeBridge=nativeBridge;
     need(appearanceBounds===null||typeof appearanceBounds==='function','Lifecycle appearance bounds provider invalid');this.appearanceBounds=appearanceBounds;
     need(Array.isArray(manifest?.roles),'Lifecycle manifest roles missing');this.roles=new Map();
@@ -129,8 +130,17 @@ export class BattleLifecyclePlayback {
       }
       if(channel.cursor>=channel.skill.timeline.length){this._finish(channel);return;}
       const step=channel.skill.timeline[channel.cursor++];
-      if(step.raw_hex&&step.chr_record_index!==channel.record_visited){channel.nativeBridge?.record(step.raw_hex);channel.record_visited=step.chr_record_index;}
+      if(step.raw_hex&&step.chr_record_index!==channel.record_visited){channel.nativeBridge?.record(step.raw_hex);channel.record_visited=step.chr_record_index;channel.record_frame=0;}
       if(step.kind==='sprite'){
+        // DGP explicit frame tables can repeat/reorder physical frames. Sound
+        // fields refer to the CHR logical cursor, including reverse records.
+        if(this.onFrame&&step.raw_hex){
+          const raw=Uint8Array.from(step.raw_hex.match(/../g),part=>parseInt(part,16)),v=new DataView(raw.buffer);
+          const logical=raw[0x1d]?v.getUint32(0x2a,true)-1-channel.record_frame:v.getUint32(0x26,true)+channel.record_frame;
+          this.onFrame({...copy(step),actor_id:channel.actor_id,resource_id:channel.resource_id,battle_id:this.battleId,
+            lifecycle_token:channel.event.token,source_skill_index:channel.skill.index,plan_record_index:step.chr_record_index,logical_frame:logical});
+        }
+        channel.record_frame++;
         channel.pose={action_index:step.action_index,action_frame:step.action_frame,source_frame:step.source_frame};channel.deadline+=step.interval_raw;
       }else if(step.command_raw===3){
         need(channel.nativeBridge&&step.raw_hex,'Lifecycle source vertical command missing');

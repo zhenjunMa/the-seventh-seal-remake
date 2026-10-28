@@ -28,6 +28,7 @@ function launch(view,s,events,label){
   onPrimaryEnd(time){events.push({kind:'primary-end',label,time});},
   onCarrierStart({carrier_id}){events.push({kind:'spawn',label,carrier_id});},
   onCarrierEnd({carrier_id},time){events.push({kind:'carrier-end',label,carrier_id,time});},
+  onEffectFrame(step){events.push({kind:'effect-frame',label,...step});},
   onContact(step){events.push({kind:'contact',label,time:step.presentation_time_ms,record:step.plan_record_index,frame:step.logical_frame,key:step.contact_key});return {hit:true,damage:1,remainingHp:1000};}});
  return {promise,compiled};
 }
@@ -75,6 +76,16 @@ test('a carrier retains its source contact after an external owner response inte
  const detached=view.detachedRuns[0];detached.interrupted=true;detached.main_done=true;
  view._advance(5000);assert.deepEqual(events.filter(e=>e.kind==='contact').map(e=>e.frame),[7,10,12]);
  assert.equal(events.filter(e=>e.kind==='spawn').length,3);
+});
+
+test('aid sound callbacks retain every independent carrier frame and instance after a slow RAF without replaying',async()=>{
+ const view=fixture(),events=[],started=launch(view,skill('001',36),events,'audio');
+ view._advance(0);view._advance(1280);await started.promise;
+ view._advance(10000);
+ const frames=events.filter(e=>e.kind==='effect-frame');
+ for(const id of ['BFr01_Nm','BFr01_Nd','BFr01_Dn','cvt_p002'])assert.ok(frames.some(e=>e.asset_id===id&&e.logical_frame===1),id);
+ assert.equal(new Set(frames.map(e=>`${e.channel_id}:${e.effect_index}:${e.logical_frame}`)).size,frames.length);
+ const count=events.length;view._advance(10000);view._advance(20000);assert.equal(events.length,count);
 });
 
 test('carrier scheduling merges equal-time allocations before a new action contact and cancels every detached callback on stop',async()=>{

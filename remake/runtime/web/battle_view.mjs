@@ -375,7 +375,7 @@ export class BattleView {
     this.lifecyclePairs=new Map([...alternateLayers.values()].flatMap(bank=>bank.frames.map(pair=>[`${bank.role_id}:${pair.source_frame}`,pair])));
     this.groundFootprints=new Map();
     this.lifecycleBounds=new Map();
-    this.lifecycle=lifecycleMeta?new BattleLifecyclePlayback(lifecycleMeta,{appearanceBounds:(roleId,pose)=>this._appearanceBounds(roleId,pose),nativeBridge:actorId=>this._nativeBridge(actorId)}):null;
+    this.lifecycle=lifecycleMeta?new BattleLifecyclePlayback(lifecycleMeta,{appearanceBounds:(roleId,pose)=>this._appearanceBounds(roleId,pose),nativeBridge:actorId=>this._nativeBridge(actorId),onFrame:step=>this.onLifecycleFrame?.(step)}):null;
     this.assetDescriptors=assets;
     this.images = images;
     this.timelines = new Map(meta.roles.map(role => [role.id, compileActionTimeline(meta, layers, role.id,null,null,this.content)]));
@@ -433,12 +433,12 @@ export class BattleView {
       advance:at=>{check();control.advanceNativeVerticals(at);}};
   }
 
-  playSequence(result,{onContact,onRecord,onReactionContact,onReactionRecord,onReactionEnd,onPrimaryEnd,onFrame,onCarrierStart,onCarrierEnd,onCarrierTargets,onDetachedError}={}){
+  playSequence(result,{onContact,onRecord,onReactionContact,onReactionRecord,onReactionEnd,onPrimaryEnd,onFrame,onEffectFrame,onCarrierStart,onCarrierEnd,onCarrierTargets,onDetachedError}={}){
     if(!this.ready||this.destroyed||this.run)return Promise.reject(new Error('完整技能表现尚未就绪或上一行动未结束'));
     const actor=this.roster.find(a=>a.id===result.actor_id),target=this.roster.find(a=>a.id===result.target_id);
     if(!this.meta.policy.complete_contacts||!actor||!target||typeof onContact!=='function'||typeof onRecord!=='function')return Promise.reject(new Error('完整技能序列或接触回调缺失'));
     let compiled;try{compiled=compileNativeSequence(this.meta,actor.resource_id,result.plan,[this.layers,...this.alternateLayers.values()]);}catch(e){return Promise.reject(e);}
-    return new Promise((resolve,reject)=>{this.run={sequence:true,native_control:this.nativeControl,native_guard:this.nativeControlIsCurrent,result:clone(result),steps:compiled.steps,segments:compiled.segments,resolve,reject,onContact,onRecord,onReactionContact,onReactionRecord,onReactionEnd,onPrimaryEnd,onFrame,onCarrierStart,onCarrierEnd,onCarrierTargets,onDetachedError,children:[],carriers:[],independent_carriers:compiled.independent_carriers,main_done:false,death_until:0,
+    return new Promise((resolve,reject)=>{this.run={sequence:true,native_control:this.nativeControl,native_guard:this.nativeControlIsCurrent,result:clone(result),steps:compiled.steps,segments:compiled.segments,resolve,reject,onContact,onRecord,onReactionContact,onReactionEnd,onPrimaryEnd,onFrame,onEffectFrame,onCarrierStart,onCarrierEnd,onCarrierTargets,onDetachedError,children:[],carriers:[],independent_carriers:compiled.independent_carriers,main_done:false,death_until:0,
       started:null,elapsed:0,cursor:0,visited:-1,next_at:0,record_visited:-1,impact_called:false,impact_done:false,impact_elapsed:null,effects:[],generation:this.generation,
       observations:{draws:0,origin_slot:null,last_slot:null,contact_slot:null,bounds:null,intrinsic_source_frames:[],effect_ids:[],contacts:[],authority:'Actual remake Canvas draws with all source contacts; preview animation clock'}};});
   }
@@ -446,8 +446,8 @@ export class BattleView {
   playItem(result,{onUse,onFrame,onEffectFrame}={}){
     const actor=this.roster.find(a=>a.id===result.actor_id),role=this.itemMeta?.roles.find(r=>r.id===actor?.resource_id),item=this.itemMeta?.items[String(result.item_id)];
     if(!role||!item||typeof onUse!=='function')return Promise.reject(new Error('道具原动作或提交回调缺失'));
-    const promise=this.playSequence({...result,plan:clone(role.source_plan),hit:true,damage:0},{onContact:onUse,onRecord:()=>{},onFrame});
-    if(this.run){this.run.item_effect_id=item.effect_id;this.run.onEffectFrame=onEffectFrame;
+    const promise=this.playSequence({...result,plan:clone(role.source_plan),hit:true,damage:0},{onContact:onUse,onRecord:()=>{},onFrame,onEffectFrame});
+    if(this.run){this.run.item_effect_id=item.effect_id;
       // Source intervals are retained; the browser RAF remains a preview clock.
       this.run.frame_ms=new DataView(Uint8Array.from(role.actions[0].native_raw_hex.match(/../g),h=>parseInt(h,16)).buffer).getUint32(1,true);
     }
@@ -605,7 +605,7 @@ export class BattleView {
           const carrier={carrier:true,channel_id:id,descriptor:channel.descriptor??null,result:clone(channel.result),steps:clone(source.steps),segments:[],carrier_targets:clone(channel.carrier_targets??null),
             at,next_at:firstAt,elapsed:0,cursor:0,visited:-1,record_visited:-1,effects:[],done:false};
           for(const target_id of carrier.carrier_targets?.group?carrier.carrier_targets.target_ids:[null])carrier.effects.push({asset_id:source.asset_id,slot:target_id?'target':source.slot,...(target_id?{target_id}:{}),unconditional:true,full_screen_effect:step.full_screen_effect,frame_count:source.frames.length,
-            source_frames:clone(source.frames),frame_ms:source.interval_ms,at:firstAt-at-source.interval_ms,visited_frame:-1});
+            source_frames:clone(source.frames),logical_start:source.start,frame_ms:source.interval_ms,at:firstAt-at-source.interval_ms,visited_frame:0});
           run.carriers.push(carrier);run.onCarrierStart?.({carrier_id:id,source:clone(step),actor_id:channel.result.actor_id});
         }
         if(step.carrier_end){channel.done=true;run.onCarrierEnd?.({carrier_id:channel.channel_id,source:clone(step),actor_id:channel.result.actor_id},run.started+at);}
@@ -639,15 +639,16 @@ export class BattleView {
             allocation?channel.carrier_targets.target_ids.map(target_id=>({target_id})):[channel.result]:
             effect.slot==='target'&&channel.result.group_results?channel.result.group_results:[channel.result];
           for(const hit of hits){if(effect.slot==='target'&&!effect.unconditional&&(!(hit.target_id??channel.result.target_id)||!this._damaging(hit)))continue;
-            channel.effects.push({...clone(effect),...(allocation?{slot:'target'}:{}),...(allocation||effect.slot==='target'?{target_id:hit.target_id??channel.result.target_id}:{}),...(step.duration_ms>0?{frame_ms:step.duration_ms}:{}),at:at-(channel.at??0)});}
+            channel.effects.push({...clone(effect),...(effect.unconditional&&step.command_raw===4?{logical_start:step.logical_frame,visited_frame:0}:{}),...(allocation?{slot:'target'}:{}),...(allocation||effect.slot==='target'?{target_id:hit.target_id??channel.result.target_id}:{}),...(step.duration_ms>0?{frame_ms:step.duration_ms}:{}),at:at-(channel.at??0)});}
         }
         const interval=(step.duration_ms??ms)*(channel.slow_record===step.plan_record_index?2:1);
         channel.frame_started_at=at-(channel.at??0);channel.frame_duration_ms=interval;
         channel.visited=i;channel.next_at=at+interval;
       }
       for(const c of [...run.children,...run.carriers])c.elapsed=Math.max(0,run.elapsed-c.at);
-      for(const channel of this._sequenceChannels(run))for(const effect of channel.effects){const asset=this.meta.effects.find(e=>e.id===effect.asset_id),cursor=Math.min(asset.frames.length-1,Math.floor((channel.elapsed-effect.at)/(effect.frame_ms??ms)));
-        for(let frame=(effect.visited_frame??-1)+1;frame<=cursor;frame++)run.onEffectFrame?.({asset_id:asset.id,logical_frame:frame});effect.visited_frame=Math.max(effect.visited_frame??-1,cursor);}
+      for(const channel of this._sequenceChannels(run))for(const [index,effect]of channel.effects.entries()){const asset=this.meta.effects.find(e=>e.id===effect.asset_id),cursor=Math.min((effect.frame_count??asset.frames.length)-1,Math.floor((channel.elapsed-effect.at)/(effect.frame_ms??ms)));
+        for(let frame=(effect.visited_frame??-1)+1;frame<=cursor;frame++)run.onEffectFrame?.({asset_id:asset.id,logical_frame:(effect.logical_start??0)+frame,
+          actor_id:channel.result.actor_id,target_id:effect.target_id??channel.result.target_id,channel_id:channel.channel_id??'main',effect_index:index});effect.visited_frame=Math.max(effect.visited_frame??-1,cursor);}
       const visualEnd=Math.max(0,...this._sequenceChannels(run).flatMap(c=>c.effects.filter(e=>e.unconditional).map(e=>(c.at??0)+e.at+(e.frame_count??this.meta.effects.find(a=>a.id===e.asset_id).frames.length)*(e.frame_ms??ms))));
       const foregroundDone=run.main_done&&run.children.every(c=>c.done);
       if(foregroundDone&&run.independent_carriers&&!run.primary_resolved){

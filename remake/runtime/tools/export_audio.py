@@ -1,4 +1,4 @@
-"""Read-only export of confirmed first-chapter music and source action sounds.
+"""Read-only export of registered music, battle actions and effect sounds.
 
 The original .wav suffix is not an encoding claim: music and several battle
 sounds contain MPEG frames/ID3. MP3 is copied byte-for-byte with a truthful
@@ -60,6 +60,9 @@ def main():
     native_paths = ['remake/runtime/evidence/opening_native.json', 'remake/runtime/evidence/source/combat_presentation_native_20261011.json',
                     'remake/runtime/evidence/chapter_map_native.json', 'remake/runtime/evidence/forest_ai_rules_native_20261011.json']
     native_ref = {p:sha((ROOT/p).read_bytes()) for p in native_paths}
+    carrier_bundle = 'remake/runtime/evidence/party_magic_native.json'
+    native.append(evidence_record(carrier_bundle, '0x5074c0'))
+    native_ref[carrier_bundle] = sha((ROOT/carrier_bundle).read_bytes())
     extra_path = RUNTIME / 'evidence/audio_native.json'
     if extra_path.exists():
         extra = json.loads(extra_path.read_text('utf-8'))
@@ -155,8 +158,12 @@ def main():
     world_map = dict(clip=clip('sound/mworld.wav'),evidence=[evidence['0x49ffa0']],source_string='%smworld.wav',
                      confidence='native world-map open/close pauses/resumes map music')
     meta_path=WEB/'data/party_battle_view.json'; meta=json.loads(meta_path.read_text('utf-8')); action_sources=[]; frame_sounds={}
+    lifecycle_path=WEB/'data/battle_lifecycle.json';lifecycle_meta=json.loads(lifecycle_path.read_text('utf-8'))
+    assert lifecycle_meta['schema']=='seventh-seal-battle-lifecycle' and lifecycle_meta['version']==2
+    lifecycle_roles={role['id']:role for role in lifecycle_meta['roles']}
     item_path=WEB/'data/item_presentation.json';item_meta=json.loads(item_path.read_text('utf-8')) if item_path.exists() else None
     reference_hashes={meta_path.relative_to(ROOT).as_posix():sha(meta_path.read_bytes())}
+    reference_hashes[lifecycle_path.relative_to(ROOT).as_posix()]=sha(lifecycle_path.read_bytes())
     item_roles={}
     if item_meta:
         assert item_meta['schema']=='seventh-seal-item-presentation' and item_meta['version']==1
@@ -167,6 +174,10 @@ def main():
     for role in meta['roles']:
         path=f"Fight_Role/{role['id']}.CHR"; read(path); chr_=CHR(ROOT/path)
         indices={s['chr_skill_index'] for s in [role['skill'],*role.get('alternate_skills',[]),*role.get('response_skills',[])]}
+        lifecycle_role=lifecycle_roles.get(role['id'])
+        if lifecycle_role:
+            assert lifecycle_role['source_chr_sha256']==chr_.sha256
+            indices.update(skill['chr_skill_index'] for skill in lifecycle_role['skills'])
         if role['id'] in item_roles:indices.add(item_roles[role['id']]['chr_skill_index'])
         groups={action['index'] for action in item_roles.get(role['id'],{}).get('actions',[])}
         for index in sorted(indices):
@@ -192,16 +203,20 @@ def main():
                 evidence=[evidence['0x50f377']])
         frame_sounds[role['id']]=role_sounds
     effect_sounds={};item_effects={}
-    if item_meta:
-        for effect in item_meta['effects']:
+    for presentation in [meta,lifecycle_meta,*([item_meta] if item_meta else [])]:
+        for effect in presentation['effects']:
             path=effect['source'];raw=read(path);assert sha(raw)==effect['source_sha256'] and raw[0]==9 and raw[2]==1
-            record=raw[0x43:0x43+0xac];assert record.hex()==effect['native_raw_hex']
+            record=raw[0x43:0x43+0xac]
+            if 'native_raw_hex' in effect:assert record.hex()==effect['native_raw_hex']
             token=original_text(record,0x56,20)
-            assert token==effect['sound_token_raw_56']
-            effect_sounds[effect['id']]=dict(clip=clip('sound/'+token) if token else None,token=token,
-                logical_frame=struct.unpack_from('<I',record,0x6a)[0],interval_ms=effect['interval_raw'],
+            if 'sound_token_raw_56' in effect:assert token==effect['sound_token_raw_56']
+            entry=dict(clip=clip('sound/'+token) if token else None,token=token,
+                logical_frame=struct.unpack_from('<I',record,0x6a)[0],interval_ms=struct.unpack_from('<I',record,1)[0],
                 source=dict(path=path,sha256=sha(raw),offset=0x43,bytes=0xac,raw_sha256=sha(record),token_offset=0x56,logical_frame_offset=0x6a),
-                evidence=effect['evidence'],confidence='source DGP sound fields; playback filtered by source effect logical frame')
+                evidence=[*effect['evidence'],evidence['0x5074c0']],confidence='source DGP+0x56/+0x6A and native 5074C0 carrier audio; playback follows visited logical frames')
+            if effect['id'] in effect_sounds:assert effect_sounds[effect['id']]['source']==entry['source']
+            effect_sounds[effect['id']]=entry
+    if item_meta:
         for item_id,item in item_meta['items'].items():
             source=item['source'];raw=read(source['path']);assert sha(raw)==source['sha256']
             record=raw[source['record_offset']:source['record_offset']+0x3bf];assert sha(record)==source['record_sha256']
@@ -212,6 +227,7 @@ def main():
         'Browser looping, global volume, mute, eight transient voices and resume position are remake policies.',
         'Empty stage13 music uses the confirmed original Fight WAV pool; deterministic sorted enumeration and fresh browser RNG do not reproduce original rand state or Windows enumeration order.',
         'CHR and actor DGP filenames/logical frames are retained; exact original mixer scheduling, voice priorities and inhibited-actor flag transitions remain outside the browser adapter.',
+        'Skill/carrier, item and lifecycle audio share the source-backed controller; lifecycle callbacks observe live entry immunity and use CHR logical cursors rather than physical DGP frame-table values.',
         'Missing original voice clips are recorded and skipped; no replacement sound is fabricated.',
         'Operation menu open/select/confirm/cancel use the confirmed native five-entry table. Missing close.wav is retained as unavailable, without substituting _close.wav or close.mp3.',
         'Browser feedback coalesces keyboard/click handling to one cue per gesture; exact original nested-panel mixer timing is not reproduced.']

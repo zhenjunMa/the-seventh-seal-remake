@@ -66,14 +66,16 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
   function createCombat(world,newParty,view){
     let battle;
     const actionSound=(result,step)=>state.audio?.playAction({...step,sound_inhibited:Boolean(battle.actor(step.actor_id).immune_raw)},`${result.action_id}:${step.channel_id}:${step.plan_record_index}:${step.logical_frame}`);
-    const present=method=>async(result,options)=>{const played=await view[method](result,{...options,onFrame:step=>actionSound(result,step)});actions.log({type:'battle-presentation',action_id:result.action_id,actor_id:result.actor_id,skill_id:result.skill_id,observations:played.observations});return played;};
+    const effectSound=(result,step)=>state.audio?.playEffect(step.asset_id,`${result.action_id}:${step.channel_id}:${step.effect_index}`,step.logical_frame);
+    const present=method=>async(result,options)=>{const played=await view[method](result,{...options,onFrame:step=>actionSound(result,step),onEffectFrame:step=>effectSound(result,step)});actions.log({type:'battle-presentation',action_id:result.action_id,actor_id:result.actor_id,skill_id:result.skill_id,observations:played.observations});return played;};
     battle=new BattleController({world,resolveAction,applyDamage:applyNativeDamage,playAction:present('playAction'),playSequence:present('playSequence'),
       now:()=>state.engine?.battle.clock.time??performance.now(),
       resourcesForWorld:newParty?partyResourcesForWorld:resourcesForWorld,consumeResources:newParty?consumePartyMp:consumeBattleMp,
       notify:snapshot=>{if(state.battle===battle)updateBattle(snapshot);},log:actions.log,itemData:newParty?state.itemData:null,
-      playItem:async(event,hooks)=>{actions.status(`${event.name} → ${battle.actor(event.target_id).name}`);const played=await view.playItem(event,{...hooks,onFrame:step=>actionSound(event,step),onEffectFrame:step=>state.audio?.playItemEffect(event.item_id,`${event.action_id}:effect:${step.logical_frame}`,step.logical_frame)});actions.log({type:'battle-item-presentation',action_id:event.action_id,item_id:event.item_id,observations:played.observations});}});
+      playItem:async(event,hooks)=>{actions.status(`${event.name} → ${battle.actor(event.target_id).name}`);const played=await view.playItem(event,{...hooks,onFrame:step=>actionSound(event,step),onEffectFrame:step=>effectSound(event,step)});actions.log({type:'battle-item-presentation',action_id:event.action_id,item_id:event.item_id,observations:played.observations});}});
     view.nativeControl=battle;
     view.nativeControlIsCurrent=()=>state.battle===battle;
+    view.onLifecycleFrame=step=>{if(state.battle===battle)actionSound({action_id:`${step.battle_id}:${step.lifecycle_token}`},{...step,channel_id:'lifecycle'});};
     return battle;
   }
   async function prepareHud(newParty,{returnLabel=null,onProgress,world=state.world,battle=state.battle,owner=null,signal}={}){
