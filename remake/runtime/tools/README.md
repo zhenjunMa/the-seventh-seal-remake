@@ -85,6 +85,15 @@ python3 -B remake/runtime/tools/export_jade_lake_index.py --check
 
 翠碧湖的`--query`、`--map`、`--flag`及`--limit`参数与下方火之谷示例相同。索引保留全部原始阶段，运行开放及验收按开发计划分期。
 
+生成炎城全量来源索引（28图），并只读核对：
+
+```console
+python3 -B remake/runtime/tools/build_runtime.py --target ember-city-index --run
+python3 -B remake/runtime/tools/export_ember_city_index.py --check
+```
+
+炎城索引同样支持`--query 小吉`、`--map M01020A`和`--flag 4:12`。生成原商店／锻造／合成菜单素材使用`native-services`目标；该目标已包含在`content`构建中，输出独立的`data/native_services.json`及`assets/native_services`。源菜单仅提供像素和控件位置，服务价格、配方、库存及提交由运行规则决定。
+
 只读核对火之谷索引与覆盖报告：
 
 ```console
@@ -427,7 +436,7 @@ independent-source-export：独立基础来源或旧样本生产入口，可能�
 | `world-map-ui` | [export_world_map_ui.py](export_world_map_ui.py) | 无声明依赖 |
 | `configuration` | [export_runtime_config.mjs](export_runtime_config.mjs) | `party-skills`、`enemy-rewards`、`encounters`、`source-catalog`、`items`、`source-magic` |
 | `catalog` | [build_catalog.py](build_catalog.py) | `configuration`、`chapter-maps`、`content-library` |
-| `content` | [export_content_registry.mjs](export_content_registry.mjs) | `catalog`、`party-rewards`、`battle-packs`、`audio`、`menu-fonts`、`save-menu`、`dialogue-ui`、`prologue-presentation`、`map-effects`、`story-media` |
+| `content` | [export_content_registry.mjs](export_content_registry.mjs) | `catalog`、`party-rewards`、`battle-packs`、`audio`、`menu-fonts`、`save-menu`、`dialogue-ui`、`prologue-presentation`、`map-effects`、`story-media`、`native-services` |
 | `enemies` | [export_enemy_content.py](export_enemy_content.py) | 无声明依赖 |
 | `enemy-rewards` | [export_forest_rewards.py](export_forest_rewards.py) | 无声明依赖 |
 | `encounters` | [export_encounters.py](export_encounters.py) | 无声明依赖 |
@@ -441,6 +450,8 @@ independent-source-export：独立基础来源或旧样本生产入口，可能�
 | `story-media` | [export_story_media.py](export_story_media.py) | 无声明依赖 |
 | `white-forest-index` | [export_white_forest_index.py](export_white_forest_index.py) | 无声明依赖 |
 | `jade-lake-index` | [export_jade_lake_index.py](export_jade_lake_index.py) | 无声明依赖 |
+| `ember-city-index` | [export_ember_city_index.py](export_ember_city_index.py) | 无声明依赖 |
+| `native-services` | [export_native_services.py](export_native_services.py) | 无声明依赖 |
 
 <!-- 自动生成：构建目标结束 -->
 
@@ -470,7 +481,7 @@ python3 -B remake/runtime/tools/verify_tests.py
 python3 -B remake/runtime/tools/verify_tests.py --suite content
 python3 -B remake/runtime/tools/verify_tests.py --suite runtime --suite content --match '*battle*'
 python3 -B remake/runtime/tools/verify_tests.py --suite source --list
-python3 -B remake/runtime/tools/verify_tests.py --suite all --report
+python3 -B remake/runtime/tools/verify_tests.py --suite all --timeout 1800 --report
 python3 -B remake/runtime/tools/verify_tests.py --check
 ```
 

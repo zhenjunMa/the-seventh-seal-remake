@@ -127,7 +127,7 @@ drop_rate=-1不抽签、0走原特殊必掉落分支、1～100走基础概率并
 
 `parameters.enabled`只开放已实现行为；`data/items.json`中definition的behavior及来源字段说明未恢复范围。
 
-默认装备准入由已登记player的原47AE20初装，以及已登记入口可达的TLK `mutation5/index0`真实授予推导；只接纳确定初始化、已恢复装备槽／链接属性且特殊效果块、遭遇修饰、动画技能与效果token均为零的纯数值装备。NPC只走已登记槽，另遍历已登记trigger／物件／进入／加载／休息／出口及ANM14调用的分支；导出整张TLK不会开放该图未登记NPC的赠礼。来源证明保存在`data/items.json`的`catalog.equipment_admission`；登记只开放菜单能力，不发放物品或队员。区域外开发装备、配方解锁、任务材料和内部掉落记录不因此开放。
+默认准入由已登记player的原47AE20初装，以及已登记入口可达的TLK真实授予、kind8货架及mutation17配方产物推导。装备只接纳确定初始化、已恢复装备槽／链接属性的纯数值记录；除已解读的ITM+0x392／+0x393配方区外，未知特殊块、遭遇修饰、动画技能及效果token继续阻断。NPC只走已登记槽，另遍历已登记trigger／物件／进入／加载／休息／出口及ANM14调用的分支；导出整张TLK不会开放未登记NPC的奖励。证明保存在`catalog.equipment_admission`与`catalog.item_capability_admission`；登记只开放已恢复能力，不发放物品、配方或队员。
 
 items构建先生成opening-seed／chapter-story／enemy-rewards，再核对原`GAME.exe`、`Object.ITM`、已登记角色CHR与TLK原字节及生成来源指纹。新增默认准入不改用户数值parameters；稀疏配置显式enabled:false继续拒绝装配。旧v2全量配置只有只读来源和旧基线精确匹配才迁移，保留数值编辑；旧默认false随能力恢复转为true，显式禁用请使用现行稀疏enabled:false。
 
@@ -141,15 +141,17 @@ attributes使用已参与getter的26个字段及原范围；其余原字段留�
 
 换装保留raw HP／MP；派生属性包含装备和晶石链接，原充槽仍读raw速度。
 
-药品use_in_field／use_in_battle控制场合，effect控制已恢复HP／MP固定／百分比恢复。普通药品不复活，不绕过倒下／免疫目标限制；战斗消耗一次行动。
+药品use_in_field／use_in_battle控制场合，effect控制已恢复HP／MP固定／百分比恢复。普通恢复药不复活；真实mode3复活药使用`revival-item`，投掷状态药使用`status-attack`，与`status-cure`共用原ITM阵营／目标状态判定。菜单、排队、派发和接触读取相同目标规则，原接触才抽状态／复活动作随机并消费物品，不增加额外抽签。
 
 已登记剧情授予的单体同阵营mode1解除状态药，由原ITM及508BB0分派推导到`catalog.item_capability_admission`。火蜥之血272解除首个ID5冻结状态，不清其它状态、不抽随机；有效目标即使无匹配状态仍演出原光效，但不消耗道具。原47D960对其数值全零，因此场外不可用，也不消耗；仅凭enabled不能开放场外范围。森林状态表仍由enemies步骤唯一生成，解除处理器不登记区域外怪物或状态技能。
+
+清状态道具使用`status-clear`通用规则：保留原mode5／id0与敌方单体目标，命中后清空原状态槽；331由042真实掉落槽准入，不按名称添加效果。免疫或无有效目标时不消费，资源使用仍沿现有同一实例的消费事务。
 
 item-presentation步骤读取`data/items.json`已恢复定义决定实际药品动作及effect token；缓存依赖另观测原ITM单体同阵营动画17所引用的DGP源集合，首次新增token也能被哈希检查。这项观测不扩大道具准入或导出范围。
 
 纯数值晶石通过通用镶嵌处理器支持，属性也在`items.json`。人物保存六槽，当前武器只决定可操作孔数；替换先返还，换武器不丢隐藏槽。关闭enabled后已有晶石仍保留属性并可卸除。
 
-特殊晶石被动、合成、商店、未知初始化或特殊药品需按真实内容恢复，不能仅修改enabled。
+真实来源的纯材料使用`crafting-material`，可保存、买卖及按原配方消耗，不进入用药菜单。商店与锻造／合成服务的来源字段和提交规则见[story_guide.md](story_guide.md#城镇服务与金钱)。特殊晶石被动、未知初始化或其他特殊药品仍需先恢复处理器，不能仅修改enabled。
 
 已登记原奖励可按ITM+0x2A8的C6原块恢复mode6状态免疫，来源定义的equipment_passive保留原字节，数值仍在同一items配置。运行按原装备组／槽顺序初始化100状态槽，保留原成功率、重复guard与CRT消耗；关闭enabled不删除已保存装备或晶石及其卸除能力。127回转之钥是原35号免疫，原mode6不执行周期恢复，不能从名称推断自动复活；170紫龙晶按原入战rand()%100<=60装入6号免疫。其他特殊块继续阻断，不能泛启用全部mode或晶石。
 

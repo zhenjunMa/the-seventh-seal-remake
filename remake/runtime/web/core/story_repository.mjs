@@ -4,6 +4,7 @@ import {hydrateStoryFlow} from './story_flow.mjs';
 import {validateQuests,questJournal} from './story_quests.mjs';
 import {playbackTask} from './story_playback.mjs';
 import {chapterAnimationContext} from './chapter_animation.mjs';
+import {isNativeMapId} from './native_map_identity.mjs';
 
 const need=(ok,message)=>{if(!ok)throw new Error(`剧情加载：${message}`);};
 // One repository admits both TLK maps and standalone NPC events. A failed load
@@ -51,7 +52,7 @@ export class StoryRepository {
     return this.openingData;
   }
   async ensureMap(id,{protect=[]}={}){
-    need(/^M\d{5}(?:-\d+)?$/.test(id)&&Object.hasOwn(this.index.maps,id),`地图 ${id} 尚未登记`);
+    need(isNativeMapId(id)&&Object.hasOwn(this.index.maps,id),`地图 ${id} 尚未登记`);
     this.protected=new Set([...protect,id]);
     if(this.loaded.has(id)){
       const value=this.loaded.get(id);this.loaded.delete(id);this.loaded.set(id,value);this.trim();return value;

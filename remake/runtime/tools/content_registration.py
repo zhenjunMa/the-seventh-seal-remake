@@ -3,6 +3,7 @@ from pathlib import Path
 import json
 import subprocess
 from functools import lru_cache
+from source.map_identity import is_native_map_id
 
 REGISTRATION = Path(__file__).resolve().parents[1] / 'web/data/runtime_content.json'
 
@@ -18,9 +19,8 @@ def definition():
 def map_exports(value=None):
     value = definition() if value is None else value
     result = {}
-    import re
     for ident, row in value['maps'].items():
-        if not re.fullmatch(r'M[0-9]{5}(?:-[0-9]+)?', ident):
+        if not is_native_map_id(ident):
             raise ValueError(f'Invalid map identity: {ident}')
         policy = row.get('export', {})
         if (set(policy) - {'assets', 'story'} or policy.get('assets', 'chapter') not in ('chapter', 'existing')

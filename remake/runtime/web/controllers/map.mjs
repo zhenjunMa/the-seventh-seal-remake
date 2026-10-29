@@ -72,7 +72,8 @@ export function createMapController({state, actions, $, canvas, ctx}) {
       state.events.filter(e=>e.map_id===id&&e.npc?.resource?.shadow_sheet).length+
       [...actorIds].reduce((n,roleId)=>n+(state.openingResources.roles[roleId]?.actions??[])
         .reduce((count,action)=>count+1+Number(Boolean(action.intrinsic_sheet))+Number(Boolean(action.shadow_sheet)),0),0)+completedAnimations.length+
-      effectObjects.reduce((count,obj)=>count+state.mapEffects.object_banks[obj.bank].actions.length*2,0);
+      effectObjects.reduce((count,obj)=>count+state.mapEffects.object_banks[obj.bank].actions
+        .reduce((n,action)=>n+2+Number(Boolean(action.shadow_sheet)),0),0);
     let completed=0;onProgress?.({completed,total});
     const step=async promise=>{const value=await promise;onProgress?.({completed:++completed,total});return value;};
     const bitmap=await step(actions.image(typeof data.background==='string'?data.background:data.background.image, `map:${id}`));
@@ -99,12 +100,18 @@ export function createMapController({state, actions, $, canvas, ctx}) {
     if(effectObjects.length){
       const resources=await Promise.all(effectObjects.map(async obj=>{
         const source=state.mapEffects.object_banks[obj.bank],resource={...source,actions:source.actions.map(action=>({...action}))};
-        await Promise.all(resource.actions.flatMap(action=>['main','intrinsic'].map(async channel=>{
+        await Promise.all(resource.actions.flatMap(action=>['main','intrinsic',...(action.shadow_sheet?['shadow']:[])].map(async channel=>{
           action[channel+'_bitmap']=await step(actions.image(action[channel+'_sheet'],`map:${id}`));
         })));
         return {...obj,resource};
       }));
-      scene.objectRuntime=new MapObjectRuntime({objects,resources,mapFlagIndex:effectMap.map_flag_index,mapId:id});
+      scene.objectRuntime=new MapObjectRuntime({objects,resources,mapFlagIndex:effectMap.map_flag_index,mapId:id,
+        onSound:({token,x,y})=>{
+          const listener=state.openingView?.active?state.openingView.cameraAt:state.world.location;
+          const shift=data.movement.native_coordinate_shift;
+          state.audio?.playClip('sound/'+token,null,{singleVoice:true,
+            position:{dx:((Math.trunc(listener.x/2)-x)>>shift)<<1,dy:((y-Math.trunc(listener.y/2))>>shift)<<1}});
+        }});
       scene.objectRuntime.update(0,{world,paused:true});
     }
     return scene;
@@ -120,9 +127,9 @@ export function createMapController({state, actions, $, canvas, ctx}) {
     $('probe').replaceChildren(...scene.probes.map((p,i)=>{const opt=document.createElement('option');opt.value=i;opt.textContent=p.name;return opt;}));
     $('resetEventSample').hidden=!state.events.some(event=>event.map_id===scene.data.id&&event.sample?.clear_bits);
   }
-  async function changeMap(at,reason='exit',restoredWorld=null) {
+  async function changeMap(at,reason='exit',restoredWorld=null,nativeSortCode) {
     const from=state.world.location.map_id;
-    try { await state.scenes.loadLocation(at,{reason,restoredWorld});if(state.scenes.phase!=='map')return; buildHud(); updateNearest(); actions.log({type:'scene-enter',from,map_id:at.map_id,x:at.x,y:at.y,reason}); actions.status(reason==='restore'?'进度已载入，可以继续探索。':'已进入场景。'); canvas.focus({preventScroll:true}); }
+    try { await state.scenes.loadLocation(at,{reason,restoredWorld,nativeSortCode});if(state.scenes.phase!=='map')return; buildHud(); updateNearest(); actions.log({type:'scene-enter',from,map_id:at.map_id,x:at.x,y:at.y,reason}); actions.status(reason==='restore'?'进度已载入，可以继续探索。':'已进入场景。'); canvas.focus({preventScroll:true}); }
     catch(error){actions.log({type:'scene-failed',error:error.message,from,to:at.map_id});if(error.gameOverPolicy)await actions.presentGameOver(error.gameOverPolicy);else actions.status(`${error.message}，当前场景已保留。`,true);}
   }
   function follow() {const im=state.scenes.current.bitmap;Object.assign(state.view,openingCamera(state.world.location,im.width,im.height));}
@@ -276,7 +283,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
         }else state.lastStoryTrigger='';
         if(exit){
           const tag=`${at.map_id}:${exit.id}`;
-          if(tag!==state.lastExit){state.lastExit=tag;if(exit.kind==='world-map-event')routeExit(exit);else changeMap({map_id:exit.target_map,...exit.entry},'exit');}
+          if(tag!==state.lastExit){state.lastExit=tag;if(exit.kind==='world-map-event')routeExit(exit);else changeMap({map_id:exit.target_map,...exit.entry},'exit',null,exit.source?.entry_sort_code);}
         }
         else if(moved.blocked&&moved.hit?.trigger){if(state.lastBoundary!==`${at.map_id}:${moved.hit.trigger.id}`){state.lastBoundary=`${at.map_id}:${moved.hit.trigger.id}`;actions.status('这条出口的执行规则尚未纳入当前片段。');}}
         else {state.lastBoundary='';state.lastExit='';}

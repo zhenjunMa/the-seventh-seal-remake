@@ -54,6 +54,12 @@ export function validateForestStatusData(data,content=runtimeContent){
     const [role,index]=key.split(':');need(content.roles[role]&&/^\d+$/.test(index)&&Number(index)<200,'Status skill owner is not registered');
     validateNativeSupportStatus(skill,data);
   }
+  for(const[id,effect]of Object.entries(data.item_effects??{})){
+    const block=rawView(effect.effect_raw_hex);
+    need(String(effect.item_id)===id&&effect.effect_id_raw===block.raw[1]&&effect.mode_raw===block.raw[0xb]
+      &&[0,2].includes(block.raw[0xb])&&block.raw[0x10]<=1,'Item status template is not implemented');
+    const metadata=effectMetadata(data,block.raw[1]);need(metadata?.id_raw===block.raw[1],'Item status source metadata missing');
+  }
   const s=data.status43,b=rawView(s?.effect_raw_hex),v=b.view;
   need(s.id_raw===43&&s.mode_raw===0&&s.interval_ms===80&&s.frame_count===10&&b.raw[1]===43&&b.raw[0xb]===0&&b.raw[0x10]===0&&b.raw[0x11]===80&&v.getInt32(2,true)===10&&v.getInt32(6,true)===500&&v.getInt32(0x17,true)===0&&v.getInt32(0x1b,true)===0&&v.getInt32(0x8f,true)===200&&v.getInt32(0xb8,true)===0,'Status43 source fields incompatible');
   need(active.every(key=>data.skills[key].effect_raw_hex===s.effect_raw_hex),'Status43 source identity differs');
@@ -73,7 +79,7 @@ function slots(actor,data){
   need(actor&&typeof actor==='object'&&actor.status_by_address&&Array.isArray(actor.native_status_slots)&&actor.native_status_slots.length===100,'Native status slots must be explicitly initialized');
   flags(actor);
   let templates=templateCache.get(data);
-  if(!templates){templates=[...Object.values(data.skills),...Object.values(data.support_skills??{})]
+  if(!templates){templates=[...Object.values(data.skills),...Object.values(data.support_skills??{}),...Object.values(data.item_effects??{})]
     .filter(skill=>[0,2].includes(skill.mode_raw)).map(skill=>rawView(skill.effect_raw_hex));templateCache.set(data,templates);}
   const passiveTemplates=(actor.equipment_passives??[]).map(passive=>passiveBlock(passive));
   const empty=rawView(ZERO);
@@ -171,6 +177,15 @@ export function applyNativeSkillStatus({actor,skill,data,rng,now,content=runtime
   const {block,id,mode}=validateNativeSkillStatus(skill,data);
   need([0,2].includes(mode),'Native hostile-contact status mode is not implemented');
   return applyNativeBlock({actor,data,rng,records:slots(actor,data),block,id,mode,trace:[],remove_on_contact:true});
+}
+/**41B3C0 calls508BB0 directly for thrown items, without508A90's
+ * remove-on-contact pass. The exact ITM template shares normal status clocks.
+ */
+export function applyNativeItemStatus({actor,item_id,data,rng,content=runtimeContent}){
+  validateForestStatusData(data,content);
+  const source=data.item_effects?.[String(item_id)];need(source,'Native item status source missing');
+  const block=rawView(source.effect_raw_hex);
+  return applyNativeBlock({actor,data,rng,records:slots(actor,data),block,id:block.raw[1],mode:block.raw[0xb],trace:[],remove_on_contact:false});
 }
 /** 50FA00's allied +231 block calls 508BB0 without the hostile-contact
  * 508A90 removal pass. Cure and clear operate before the separate 41E950

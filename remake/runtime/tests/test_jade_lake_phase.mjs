@@ -44,7 +44,8 @@ test('all lake maps retain their actual source roots and the city handoff does n
   assert.equal(source.story.maps.M01060.descriptors.find(row=>row.id===31).cells.length,0);
   assert.ok(!runtimeContent.maps.M01060.triggers.includes(31));
   assert.deepEqual(runtimeContent.maps.M71013.npcs,[]);
-  assert.ok(!runtimeContent.programs['m01060-2'],'the rescue event remains a separate complete event chain');
+  assert.equal(generated.programs['m01060-2'].commands.length,78,'the admitted rescue event keeps its complete source chain');
+  assert.ok(runtimeContent.maps.M01060.npcs.includes(11),'the rescue is reached through the actual city NPC root');
 });
 
 test('the initial lake entrance and its return preserve both original route variants',async()=>{

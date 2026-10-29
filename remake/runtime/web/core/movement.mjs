@@ -167,8 +167,16 @@ export class MovementMap {
       // loses tangent distance once per frame and makes sliding frame-dependent.
       const blockX=hits.some(hit=>hit.nx),blockY=hits.some(hit=>hit.ny);
       const sx=rx*first-(blockX?Math.sign(rx)*Math.min(Math.abs(rx*first),SKIN):0);
-      const sy=ry*first-(blockY?Math.sign(ry)*Math.min(Math.abs(ry*first),SKIN):0);x+=sx;y+=sy;
-      if(sx||sy)segments.push({x:x-sx,y:y-sy,dx:sx,dy:sy});
+      const sy=ry*first-(blockY?Math.sign(ry)*Math.min(Math.abs(ry*first),SKIN):0);
+      // Keep the approach ray through source-open diagonal corners intact.
+      // Axis-only skin is a short correction near contact, not a change to
+      // the whole approach direction. Final position/tangent travel stay exact.
+      const approach=Math.max(0,first-Math.max(blockX&&rx?Math.min(Math.abs(rx*first),SKIN)/Math.abs(rx):0,
+        blockY&&ry?Math.min(Math.abs(ry*first),SKIN)/Math.abs(ry):0));
+      const ax=rx*approach,ay=ry*approach;
+      if(ax||ay)segments.push({x,y,dx:ax,dy:ay});
+      if(sx!==ax||sy!==ay)segments.push({x:x+ax,y:y+ay,dx:sx-ax,dy:sy-ay});
+      x+=sx;y+=sy;
       if(!hits.length)break;
       contacts.push(...hits);
       rx*=1-first;ry*=1-first;

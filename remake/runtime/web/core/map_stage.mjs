@@ -5,13 +5,14 @@ import {StoryFlowRunner} from './story_flow.mjs';
 import {nativeFlowId} from './story_flow_compiler.mjs';
 import {validateChapterSetupAnimation} from './chapter_animation.mjs';
 import {storyBindings,runtimeContent} from './content_registry.mjs';
+import {restoreMapNpcState} from './map_npc_state.mjs';
 
 const need=(ok,message)=>{if(!ok)throw new Error(`地图布置：${message}`);};
 const PURE_COMMANDS=new Set(['record','test_flag_bit','jump','end','animation']);
 
 export async function projectMapStage({mapId,world,story,npcs,roles,content=runtimeContent}){
   const result=structuredClone(npcs),binding=storyBindings(mapId,content);
-  if(!binding.setup_record)return result;
+  if(!binding.setup_record)return restoreMapNpcState(result,world,mapId);
   const table=story.maps[mapId],flow=story.flows?.[nativeFlowId(mapId)];
   need(table?.header_setup_tlk_raw===binding.setup_record&&flow?.entries?.[binding.setup_record],`${mapId} 缺少原加载入口`);
   const bySlot=new Map(result.map(npc=>[npc.slot_zero_based,npc]));
@@ -42,5 +43,5 @@ export async function projectMapStage({mapId,world,story,npcs,roles,content=runt
   });
   await runner.execute(flow,{entry:flow.entries[binding.setup_record],draft:structuredClone(world),
     onCommand(command){need(PURE_COMMANDS.has(command.op),`加载入口不能执行 ${command.op}`);}});
-  return result;
+  return restoreMapNpcState(result,world,mapId);
 }

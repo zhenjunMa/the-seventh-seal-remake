@@ -83,7 +83,7 @@ test('fullscreen Escape still reaches the existing game cancel handler once and 
   try{
     let cancelled=0,closed=0;
     const state={keys:new Set(),engine:{paused:false},scenes:{phase:'menu'},menuContext:{},operationMenu:{escape(){cancelled++;return true;}}};
-    const actions={guarded:fn=>fn,menuOperation:fn=>fn,closePartyMenu(){closed++;},releaseInput(){},resize(){}};
+    const actions={guarded:fn=>fn,menuOperation:fn=>fn,nativeServiceKey:()=>false,closePartyMenu(){closed++;},releaseInput(){},resize(){}};
     const canvas={addEventListener(){}};
     const controller=createInputController({state,actions,$,canvas});controller.wire();
     for(const repeat of [false,true]){

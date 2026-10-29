@@ -52,7 +52,9 @@ test('explicit disabled overrides and source-only/out-of-region rows retain thei
   const returned=store.value.inventory.find(row=>row.id===39),before=store.snapshot();
   assert.throws(()=>changeEquipment(store,attributes,configured,{roleId:'003',slotId:'weapon',instanceId:returned.instance_id}),/不能装备/);
   assert.deepEqual(store.snapshot(),before);
-  for(const id of [99,257,347])assert.equal(compileItemConfiguration(items,overrides,'original').data.definitions[id].runtime_enabled,false,String(id));
+  for(const id of [99,347])assert.equal(compileItemConfiguration(items,overrides,'original').data.definitions[id].runtime_enabled,false,String(id));
+  assert.equal(compileItemConfiguration(items,overrides,'original').data.definitions[257].runtime_enabled,true);
+  assert.equal(items.catalog.equipment_admission.sources['257'][0].kind,'registered-recipe-product');
   const sparse=structuredClone(overrides);sparse.entries['50'].parameters={enabled:false,drop_rate:73};
   const upgraded=upgradeItemConfiguration(items,sparse);assert.equal(upgraded.entries['50'].parameters.enabled,false);
   assert.equal(upgraded.entries['50'].parameters.drop_rate,73);
@@ -114,7 +116,8 @@ test('new admitted equipment defaults preserve non-default numeric edits through
 
 test('exact former full equipment baseline migrates recovered defaults, retains numeric edits and rejects readonly drift',()=>{
   const former=structuredClone(items),admission=former.catalog.equipment_admission;
-  assert.deepEqual(admission.promoted_item_ids,[39,40,41,42,50]);
+  const legacy=admission.promoted_item_ids.filter(id=>admission.sources[id].some(row=>['registered-player-native-initial-equipment','registered-story-item-grant'].includes(row.kind)));
+  assert.deepEqual(legacy,[39,40,41,42,50]);
   for(const [id,availability]of Object.entries(admission.previous_availability))former.definitions[id].availability=structuredClone(availability);
   delete former.catalog.equipment_admission;
   const old=deriveItemConfiguration(former);assert.equal(old.entries['39'].original.enabled,false);

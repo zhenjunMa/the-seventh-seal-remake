@@ -6,13 +6,16 @@ export class SceneController {
     this.current = null; this.phase = 'boot'; this.request = 0;
   }
   setPhase(phase) { this.phase = phase; this.onPhase(phase); }
-  async loadLocation(location, {restoredWorld = null, reason = 'exit'} = {}) {
+  async loadLocation(location, {restoredWorld = null, reason = 'exit',nativeSortCode} = {}) {
     if (!['boot','map'].includes(this.phase)) throw new Error('当前操作尚未完成');
     const request = ++this.request, previous = this.current, checkpoint = this.captureView(), before = this.world.snapshot();
     const checkCurrent = () => {
       if (request !== this.request || this.world.value.revision !== before.revision) throw new Error('场景加载期间世界状态已变化');
     };
     let viewAttempted = false,prepared,resumeExploration = true;
+    // Ordinary entry reloads DAT/setup. Only a restored world supplies an
+    // actor snapshot; a snapshot never follows the player to another map.
+    if(!restoredWorld)delete before.map_npc_state;
     this.setPhase('loading');
     try {
       prepared = await this.prepare(location.map_id,{world:restoredWorld??before});
@@ -20,6 +23,7 @@ export class SceneController {
       this.validateEntry(prepared, location);
       const next = structuredClone(restoredWorld ?? before);
       next.location = {...location};
+      if(nativeSortCode!==undefined)next.native_map_sort_code=nativeSortCode;
       if (!restoredWorld) next.revision = (next.revision + 1) >>> 0;
       validateWorld(next, this.world.mapIds);
       // commitView must be synchronous and must not mutate persistent data.

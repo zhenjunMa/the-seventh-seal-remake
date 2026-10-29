@@ -8,6 +8,8 @@ import {validateNativeStoryCondition} from './native_story_conditions.mjs';
 import {validateNativeStoryMutation} from './native_story_mutations.mjs';
 import {nativeScriptedBattle} from './scripted_battle.mjs';
 import {nativeKeyedChest,nativeChestAnimation} from './native_map_chests.mjs';
+import {nativeCombinationConditions} from './native_story_combinations.mjs';
+import {readNativeService} from './native_economy.mjs';
 const need=(ok,message)=>{if(!ok)throw new Error(message);};
 const flagIndex=n=>Number.isInteger(n)&&n>=0&&n<2000;
 
@@ -93,10 +95,11 @@ export function inspectContentReadiness(content,story,resources){
             }else add(record.next,{route:true});
             continue;
           }
-          if(record.condition_type!==0)validateNativeStoryCondition(record,current);
+          if(record.kind!==4&&record.condition_type!==0)validateNativeStoryCondition(record,current);
+          if(record.kind===4)nativeCombinationConditions(record,current);
           if(root.kind==='setup')need(record.condition_type===0&&record.mutation_type===0&&record.mutation_bit===0,'加载入口只能包含布局与旗标判断');
           const bit=record.condition_bit|0,index=record.condition_index||current.map_flag_index;
-          if(record.condition_type===0)need(bit===0||bit>=1&&bit<=32&&flagIndex(index),'剧情旗标条件未支持');
+          if(record.kind!==4&&record.condition_type===0)need(bit===0||bit>=1&&bit<=32&&flagIndex(index),'剧情旗标条件未支持');
           switch(record.mutation_type){
             case 0:{
               const mutation=record.mutation_bit|0;
@@ -105,7 +108,7 @@ export function inspectContentReadiness(content,story,resources){
             case 1:
               need(record.region_byte_raw===0&&record.mutation_index===0&&binding.objects.some(row=>row.index===record.mutation_bit-1&&row.handler==='stationary-chest'),'物件状态变更处理器尚未接入');break;
             case 2:
-              need(item.explicit&&record.mutation_index===0&&record.mutation_bit===0&&binding.rests.some(row=>row.restore_records.includes(record.id)),'恢复分支需要已登记的主动休息入口');break;
+              need(item.explicit&&record.mutation_index===0&&record.mutation_bit===0,'恢复分支需要已登记的主动休息入口');break;
             case 4:
               need(item.explicit&&record.mutation_index===0&&record.mutation_bit===0,'存档分支需要主动交互入口');break;
             case 5:{
@@ -116,14 +119,19 @@ export function inspectContentReadiness(content,story,resources){
               }else need(record.mutation_bit>=0&&record.mutation_bit<=416,'移除道具来源编号无效');
               break;
             }
-            case 10:case 11:case 14:case 16:case 17:
+            case 3:case 10:case 11:case 14:case 16:case 17:
               validateNativeStoryMutation(record,{roleDefinitions:story.role_definitions});
+              if(record.mutation_type===17&&record.mutation_bit){
+                const definition=story.item_definitions?.[record.mutation_bit];
+                need(definition?.source?.sha256===story.source_hashes[definition.source.path],'配方产物来源缺失');
+                initializeChapterItem(definition,{allowWeapon:true});
+              }
               requireLearningRewardReadiness(record,content,story.role_definitions);break;
             case 9:need(record.region_byte_raw>=0&&record.region_byte_raw<2&&record.mutation_index>=0&&record.mutation_index<=2
               &&record.mutation_bit>=0&&record.mutation_bit<7,'大地图状态命令未支持');break;
             default:throw new Error(`剧情变更 ${record.mutation_type} 尚未实现`);
           }
-          if((bit||record.condition_type!==0)&&record.kind!==2&&!item.falseOnly)add(record.if_true);
+          if((bit||record.condition_type!==0||record.kind===4)&&record.kind!==2&&!item.falseOnly)add(record.if_true);
           if(record.kind===0){
             const choiceBytes=record.raw_hex?.slice(0x537*2);
             if(record.style===1&&choiceBytes&&/[^0]/.test(choiceBytes)){
@@ -146,14 +154,25 @@ export function inspectContentReadiness(content,story,resources){
             }
             add(record.next);
           }else if(record.kind===2){
-            need(root.kind==='trigger'&&item.mapId===mapId,'地图跳转需要原地形触发器上下文');
-            const destination=nativeMapTransfer(current,record,{triggerId:root.label,triggerRecordId:root.id},content);
+            need(['trigger','npc'].includes(root.kind)&&item.mapId===mapId,'地图跳转需要原地形或NPC交互上下文');
+            const destination=nativeMapTransfer(current,record,root.kind==='npc'?{npcSlot:root.label}:
+              {triggerId:root.label,triggerRecordId:root.id},content);
             const targetTable=story.maps[destination.map_id];
             need(targetTable?.entry_markers?.[destination.entry_marker]?.length,'目标地图原进入标记缺失');
             const entry=content.maps[destination.map_id].entry_record;
             if(entry)add(entry,{mapId:destination.map_id});
             add(record.next);
-          }else if(record.kind===5){nativeScriptedBattle(current,record,content);add(record.next);}
+          }else if(record.kind===4)add(record.next);
+          else if(record.kind===5){nativeScriptedBattle(current,record,content);add(record.next);}
+          else if(record.kind===8){
+            need(item.explicit,'商店服务需要已登记的主动入口');
+            for(const id of readNativeService(record,current).goods){
+              const definition=story.item_definitions?.[id];
+              need(definition?.source?.sha256===story.source_hashes[definition.source.path],'商店商品来源缺失');
+              initializeChapterItem(definition,{allowWeapon:true});
+            }
+            add(record.next);
+          }
           else throw new Error(`对白类型 ${record.kind} 尚未实现`);
         }catch(error){target.push(diagnostic(item.id,error.message));}
       }

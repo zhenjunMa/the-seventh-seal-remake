@@ -29,7 +29,7 @@ export function deriveItemConfiguration(data,{socketSupport=true}={}){
         const r=def.value_ranges.find(r=>r.instance_offset===offset);
         return [name,{minimum:r.minimum,maximum_exclusive:r.maximum}];
       }));
-    }else if(['simple-restore','status-cure'].includes(def.behavior.kind)){
+    }else if(['simple-restore','status-cure','status-attack','status-clear','revival-item'].includes(def.behavior.kind)){
       parameters.use_in_field=def.use_in_field??true;parameters.use_in_battle=def.use_in_battle??true;
       parameters.effect=copy(def.effect);
     }
@@ -72,12 +72,12 @@ export function compileItemConfiguration(data,cfg,mode){
       if(def.behavior.kind==='equip')def.allowed_role_mask_raw_13e=p.allowed_role_mask;
       def.runtime_attributes=copy(p.attributes);
       if(crystal)def.runtime_socket_supported=true;
-    }else if(['simple-restore','status-cure'].includes(def.behavior.kind)){
+    }else if(['simple-restore','status-cure','status-attack','status-clear','revival-item'].includes(def.behavior.kind)){
       need(typeof p.use_in_field==='boolean'&&typeof p.use_in_battle==='boolean',`${id}使用场景须为布尔值`);
-      if(def.behavior.kind==='status-cure')need(p.use_in_field===false,`${id}原解除状态仅支持战斗场景`);
+      if(['status-cure','status-attack','status-clear'].includes(def.behavior.kind))need(p.use_in_field===false,`${id}原状态道具仅支持战斗场景`);
       fields(p.effect,Object.keys(b.original.effect),`${id}.effect`);
       for(const [key,n]of Object.entries(p.effect))if(key!=='revive')integer(n,`${id}.${key}`,0,1000000);
-      need(p.effect.revive===false,`${id}复活专用行为尚未还原`);
+      need(p.effect.revive===(def.behavior.kind==='revival-item'),`${id}复活行为与原来源不符`);
       def.effect=copy(p.effect);def.use_in_field=p.use_in_field;def.use_in_battle=p.use_in_battle;
     }
     def.drop_rate=p.drop_rate;def.runtime_enabled=p.enabled;
@@ -107,7 +107,7 @@ export function upgradeItemConfiguration(data,existing){
     if(capabilities){
       need(capabilities.policy==='registered-source-item-capabilities-v1','道具能力准入来源版本不兼容');
       for(const [id,previous]of Object.entries(capabilities.previous_definitions??{})){
-        need(capabilities.promoted_item_ids.includes(Number(id))&&['status-cure','equip','status-immunity-crystal'].includes(former.definitions[id]?.behavior.kind)&&
+        need(capabilities.promoted_item_ids.includes(Number(id))&&['simple-restore','status-cure','status-attack','status-clear','revival-item','crafting-material','equip','status-immunity-crystal'].includes(former.definitions[id]?.behavior.kind)&&
           ['source-only','equip'].includes(previous.behavior.kind)&&previous.availability.enabled===false,`${id}道具能力旧基线无效`);
         Object.assign(former.definitions[id],copy(previous));
         delete former.definitions[id].equipment_passive;

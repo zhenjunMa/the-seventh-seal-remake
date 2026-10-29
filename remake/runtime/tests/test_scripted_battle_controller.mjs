@@ -54,7 +54,13 @@ function fixture({jsonGate=null,configGate=null,viewGate=null}={}){
   const playback=new StoryPlayback(),controller=createBattleController({state,actions,$,canvas});
   return {state,previous,world,draft,canvas,events,$,oldButton,cached,playback,controller,actions,run:(options={})=>controller.startScriptedBattle({group,draft,playback,...options})};
 }
-async function until(predicate){for(let turn=0;turn<250;turn++){if(predicate())return;await new Promise(resolve=>setImmediate(resolve));}throw Error('controller fixture did not reach its checkpoint');}
+async function until(predicate){
+  // Real manifest reads need I/O time; a fixed number of immediate turns can
+  // expire before the filesystem callback during the full source suite.
+  const deadline=Date.now()+10000;
+  while(Date.now()<deadline){if(predicate())return;await new Promise(resolve=>setTimeout(resolve,10));}
+  throw Error('controller fixture did not reach its checkpoint');
+}
 async function cancel(f,running){f.playback.cancel();await assert.rejects(running,{name:'AbortError'});assert.equal(f.state.scenes.phase,'event');assert.equal(f.state.scriptedBattleSession,null);}
 test('cancellation settles while JSON/configuration resources remain unresolved and late completion cannot install state',async()=>{
   for(const kind of ['json','config']){

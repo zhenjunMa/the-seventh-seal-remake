@@ -10,6 +10,7 @@ import {validateCrystalSocketState} from './crystal_sockets.mjs';
 import {validateBattleSkillProgress} from './battle_skill_access.mjs';
 import {validateNativeStoryMutationState} from './native_story_mutations.mjs';
 import {allPartyRoles} from './party_roster.mjs';
+import {validateMapNpcState} from './map_npc_state.mjs';
 const copy = value => structuredClone(value);
 const object = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 function requireValue(ok, message) { if (!ok) throw new Error(message); }
@@ -37,9 +38,11 @@ export function validateWorldMapState(value) {
 
 export function validateWorld(value, mapIds = null) {
   requireValue(object(value) && value.schema === WORLD_SCHEMA && value.version === WORLD_VERSION, '存档格式或版本不兼容');
-  const allowed = new Set(['schema','version','revision','location','leader_id','party','reserve_party','inventory','flags','event_records','object_states','source','world_map','encounters','money','reward_records','opening','equipment','skill_shortcuts','technique_bindings','technique_combinations','formation_slots','crystal_sockets','native_pending_skill_unlocks','recipe_unlock_indices']);
+  const allowed = new Set(['schema','version','revision','location','leader_id','party','reserve_party','inventory','flags','event_records','object_states','source','world_map','encounters','money','reward_records','opening','equipment','skill_shortcuts','technique_bindings','technique_combinations','formation_slots','crystal_sockets','native_pending_skill_unlocks','recipe_unlock_indices','native_map_sort_code','map_npc_state']);
   requireValue(Object.keys(value).every(key => allowed.has(key)), '存档包含未支持的世界字段');
   validateNativeStoryMutationState(value);
+  if('native_map_sort_code' in value)requireValue(Number.isInteger(value.native_map_sort_code)&&value.native_map_sort_code>=0&&value.native_map_sort_code<=8,'原地图入口排序无效');
+  if('map_npc_state' in value)validateMapNpcState(value.map_npc_state);
   // Optional v1 extension. Legacy saves keep their existing progress and do
   // not acquire a pending prologue simply because they predate this field.
   if ('opening' in value) {

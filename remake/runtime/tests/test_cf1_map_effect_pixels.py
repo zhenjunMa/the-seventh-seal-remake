@@ -121,6 +121,52 @@ class FileRaster:
 
 
 class CF1MapPixels(unittest.TestCase):
+    def test_city_dialogue_cf1_state0_exports_all_eighty_source_frames_without_registering_interaction(self):
+        specs = {'M01031': [10, 11], 'M01032': [16, 17, 18], 'M01061': [8, 13, 14]}
+        frames = 0
+        shadow_banks = []
+        with tempfile.TemporaryDirectory() as folder:
+            for map_id, indices in specs.items():
+                table = MapObjects(ROOT / f'Map/{map_id.lower()}.dat')
+                before_dat = table.data
+                for index in indices:
+                    raw = bytes.fromhex(table.objects[index]['raw_hex'])
+                    self.assertEqual((raw[0xcf], raw[0xd0]), (1, 0))
+                    self.assertNotEqual(struct.unpack_from('<I', raw, 0xf6)[0], 0)
+                    relative = table.resource_source(struct.unpack_from('<I', raw, 0x1e)[0])
+                    path = ROOT / relative
+                    before = path.read_bytes()
+                    raster = FileRaster(before)
+                    checks = []
+                    bank = exporter.export_bank(DGP(path), relative, f'{map_id.lower()}_{index}', True,
+                                                force_main=True, web=folder, checks=checks)
+                    action = bank['actions'][0]
+                    self.assertEqual(action['source_action_raw_hex'], before[67:239].hex())
+                    self.assertEqual(raster.count, 10)
+                    self.assertEqual(len(checks), raster.count)
+                    self.assertNotIn('interaction', bank)
+                    has_shadow = any(any(raster.shadow_mask(frame)) for frame in range(raster.count))
+                    self.assertEqual('shadow_sheet' in action, has_shadow)
+                    if has_shadow:
+                        shadow_banks.append(relative)
+                    for channel in ['main', 'intrinsic'] + (['shadow'] if has_shadow else []):
+                        atlas = Image.open(Path(folder) / action[channel + '_sheet'].lstrip('/')).convert('RGBA')
+                        for frame in range(raster.count):
+                            actual = atlas.crop((frame * raster.width, 0, (frame + 1) * raster.width, raster.height)).tobytes()
+                            if channel == 'shadow':
+                                expected = bytearray(raster.width * raster.height * 4)
+                                expected[3::4] = raster.shadow_mask(frame)
+                                self.assertEqual(checks[frame]['shadow']['rgba_sha256'], hashlib.sha256(expected).hexdigest())
+                            else:
+                                expected = raster.pixels(frame, intrinsic=channel == 'intrinsic')
+                            self.assertEqual(actual, expected,
+                                             (relative, frame, channel))
+                    frames += raster.count
+                    self.assertEqual(path.read_bytes(), before)
+                self.assertEqual((ROOT / f'Map/{map_id.lower()}.dat').read_bytes(), before_dat)
+        self.assertEqual(frames, 80)
+        self.assertEqual(shadow_banks, ['mapm/m01031/013.dgp', 'mapm/m01032/017.dgp', 'mapm/m01061/011.dgp'])
+
     def check_jade_lake_handoff_cf1_sources(self, manifest, report, web):
         """Two new caller maps keep their own raw DAT and per-path pixels."""
         specs = {
@@ -226,6 +272,9 @@ class CF1MapPixels(unittest.TestCase):
             evidence.mkdir(parents=True)
             for name in ['object_queue.json', 'object_queue_assembly.json', 'object_tick_4137c0_assembly.json']:
                 shutil.copyfile(RUNTIME / 'evidence/fire_valley_20261025' / name, evidence / name)
+            shadow_evidence = runtime / 'evidence/movement_audit_20261023'
+            shadow_evidence.mkdir(parents=True)
+            shutil.copyfile(RUNTIME / 'evidence/movement_audit_20261023/native_evidence.json', shadow_evidence / 'native_evidence.json')
             with patch.object(exporter, 'RUNTIME', runtime), patch.object(exporter, 'WEB', web), \
                  patch('export_map_shadows.export'):
                 exporter.export()
@@ -353,7 +402,30 @@ class CF1MapPixels(unittest.TestCase):
             self.assertEqual(len(forest_checks), forest_frames)
             handoff_checks = self.check_jade_lake_handoff_cf1_sources(manifest, report, web)
             self.assertEqual(len(handoff_checks), 34)
-            self.assertEqual(len(report['cf1_frame_checks']), len(baseline_checks) + len(city_checks) + len(forest_checks) + len(handoff_checks))
+            covered = {row['source'] for row in baseline_checks + city_checks + forest_checks + handoff_checks}
+            extra = [row for row in report['cf1_frame_checks'] if row['source'] not in covered]
+            self.assertEqual(len(extra), 176)
+            added_banks = {obj['bank'] for current in manifest['maps'].values() for obj in current['objects']
+                           if obj['behavior_raw_cf'] == 1 and manifest['object_banks'][obj['bank']]['source']['path'] not in covered}
+            for key in added_banks:
+                bank = manifest['object_banks'][key]
+                source = (ROOT / bank['source']['path']).read_bytes()
+                self.assertEqual(hashlib.sha256(source).hexdigest(), bank['source']['sha256'])
+                raster = FileRaster(source)
+                action = bank['actions'][0]
+                self.assertEqual(action['source_action_raw_hex'], source[67:239].hex())
+                self.assertEqual(len([row for row in extra if row['source'] == bank['source']['path']]), raster.count)
+                has_shadow = bool(raster.shadows) and any(any(raster.shadow_mask(frame)) for frame in range(raster.count))
+                self.assertEqual(bool(action.get('shadow_sheet')), has_shadow, bank['source']['path'])
+                for channel in ['main', 'intrinsic'] + (['shadow'] if action.get('shadow_sheet') else []):
+                    atlas = Image.open(web / action[channel + '_sheet'].lstrip('/')).convert('RGBA')
+                    for frame in range(raster.count):
+                        expected = bytearray(raster.width * raster.height * 4) if channel == 'shadow' else raster.pixels(frame, intrinsic=channel == 'intrinsic')
+                        if channel == 'shadow':
+                            expected[3::4] = raster.shadow_mask(frame)
+                        actual = atlas.crop((frame * raster.width, 0, (frame + 1) * raster.width, raster.height)).tobytes()
+                        self.assertEqual(actual, expected, (bank['source']['path'], frame, channel))
+            self.assertEqual(len(report['cf1_frame_checks']), len(baseline_checks) + len(city_checks) + len(forest_checks) + len(handoff_checks) + len(extra))
             self.assertNotIn('M17030', manifest['maps'], 'the zero-action static crystal is not animated/collectable')
             for map_id, data in regional.items():
                 for row in data['objects']:
@@ -456,11 +528,11 @@ class CF1MapPixels(unittest.TestCase):
                     exporter.export_bank(dgp, 'mapm/m01060/016.dgp', 'invalid_sequence', True, force_main=True, web=folder)
                 self.assertEqual(list(Path(folder).rglob('*')), [])
         dgp = DGP(path)
-        # Retain the exact geometry and make one otherwise empty source mask
-        # cover one pixel. The unsupported visible-shadow case must still fail.
-        dgp.shadow_blobs[0] = struct.pack('<3H', 1, 0, 1) + bytes(dgp.height * 2 - 2)
+        # A malformed source shadow still fails before any atlas is written.
+        # Valid nonempty source masks are covered by the city pixel audit.
+        dgp.shadow_blobs[0] = b'\x01'
         with tempfile.TemporaryDirectory() as folder:
-            with self.assertRaisesRegex(DGPError, 'animated shadow'):
+            with self.assertRaises(DGPError):
                 exporter.export_bank(dgp, 'mapm/m01060/016.dgp', 'visible_shadow', True, force_main=True, web=folder)
             self.assertEqual(list(Path(folder).rglob('*')), [])
 

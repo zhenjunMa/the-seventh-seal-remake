@@ -21,6 +21,7 @@ from route_extract_resources import anm_record, map_record, tlk_record
 from native_item_init import VALUE_PAIRS
 from source.combat_resources import CHR
 from save_format import character_at_header
+from source.map_identity import native_map_id_from_filename
 
 GAME_SHA = "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18"
 VM_EVIDENCE = "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
@@ -56,9 +57,9 @@ def program_map_context(commands, maps, ident):
         if command['opcode'] != 10:
             continue
         filename = command.get('filename', '')
-        if command['u32_plus5'] != 0 or not re.fullmatch(r'M[0-9]{5}(?:-[0-9]+)?\.DAT', filename, re.IGNORECASE):
+        map_id = native_map_id_from_filename(filename)
+        if command['u32_plus5'] != 0 or map_id is None:
             raise ValueError(f'ANM {ident} has an unsupported opcode10 map reference: {filename}')
-        map_id = filename[:-4].upper()
         if map_id not in maps:
             raise ValueError(f'ANM {ident} has an unregistered control map: {map_id}')
         loads.append(dict(map_id=map_id, command_index=command.get('index'), source=command.get('source')))
@@ -213,6 +214,24 @@ def export():
     ITEM_IDS = sorted({r['mutation_bit'] for m in maps.values() for r in m['records']
                        if r['mutation_type'] == 5 and r['mutation_bit'] > 0})
     item_ids = set(ITEM_IDS)
+    for table in maps.values():
+        for record in table['records']:
+            if record['kind'] == 8:
+                raw = bytes.fromhex(record['raw_hex'])
+                item_ids.update(value for value in struct.unpack_from('<32H', raw, 0x37) if value)
+            if record['mutation_type'] == 17 and record['mutation_bit']:
+                item_ids.add(record['mutation_bit'])
+    pending = list(item_ids)
+    while pending:
+        ident = pending.pop()
+        raw = itm[0x61C + (ident - 1) * 0x3BF:0x61C + ident * 0x3BF]
+        if not 1 <= ident <= 416 or raw[0x392] > 5:
+            raise ValueError(f'Invalid service recipe source: {ident}')
+        for i in range(raw[0x392]):
+            component = u32(raw, 0x393 + i * 4)
+            if component and component not in item_ids:
+                item_ids.add(component)
+                pending.append(component)
     for ident, binding in definition()['maps'].items():
         if ident not in maps:
             continue  # A scoped export only admits grants from its selected maps.

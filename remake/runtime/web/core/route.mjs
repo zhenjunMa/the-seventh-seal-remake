@@ -1,6 +1,7 @@
 // Registered exit TLK chains share the recovered handlers. Preparation happens
 // before applying commands; unsupported records do not partly change the menu.
 import {runtimeContent,storyBindings} from './content_registry.mjs';
+import {isNativeMapId} from './native_map_identity.mjs';
 export function validateRouteRecord(r,map_id,content=runtimeContent){
   if(r.condition_type!==0||!Number.isInteger(r.condition_bit)||r.condition_bit<0||r.condition_bit>32)throw new Error('出口剧情条件未支持');
   const index=r.condition_index||content.maps[map_id]?.flag_index;
@@ -18,7 +19,7 @@ export function validateRouteRecord(r,map_id,content=runtimeContent){
   return index;
 }
 export function planRouteExit(world,map_id,record_id,data,content=runtimeContent){
-  const table=data?.[map_id];if(!table||!/^M\d{5}(?:-\d+)?$/.test(map_id))throw new Error('出口剧情尚未接入');
+  const table=data?.[map_id];if(!table||!isNativeMapId(map_id))throw new Error('出口剧情尚未接入');
   const records=new Map(table.records.map(r=>[r.id,r])),commands=[],visited=new Set();let id=record_id;
   while(id){
     if(visited.has(id)||visited.size>20)throw new Error('出口剧情链循环');visited.add(id);

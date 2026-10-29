@@ -1,5 +1,6 @@
 import {AnmActions, COMMON_ANM_OPCODES} from './anm_runtime.mjs';
 import {validateCompactRecords} from './story_packages.mjs';
+import {nativeMapIdFromFilename} from './native_map_identity.mjs';
 // Bounded Resurrect.ANM playback. Native authority: GAME.exe 0x473e30
 // (ev_021cb8364fd8c2778f25fa267a76fa12a34176836d4cba37ae4610b05af773bc),
 // outer tick 0x477330, and new-game caller 0x4a8960. This module does not
@@ -102,7 +103,7 @@ export function validateOpeningProgram(program) {
     switch (record.opcode) {
       case 10: {
         const filename = new TextDecoder().decode(bytes.slice(54)).split('\0')[0];
-        fail(record.filename === filename && /^M\d{5}(?:-\d+)?\.DAT$/i.test(filename) && record.u32_plus5 === 0,
+        fail(record.filename === filename && nativeMapIdFromFilename(filename)!==null && record.u32_plus5 === 0,
           `${context}: unsupported map entry variant`);
         mapId = filename.slice(0, -4).toUpperCase();
         fail(program.maps?.includes(mapId), `${context}: map resource missing`);
@@ -214,10 +215,6 @@ export class OpeningRunner {
             dialogueIds.push(...records.map(entry => `${mapId}:${entry.id}`));
             await actions.frame(command); break;
           }
-          case 41:
-            actions.launch('actor', command, {kind:'behavior', actor, behaviorModeRaw:command.byte_plus29,
-              nativeField:'0x4be', nativeStateRaw:command.byte_plus29 + 1,
-              hidden:false, motionModeRaw:command.u32_plus1}); break;
           case 255: break;
           default: throw new Error(`Opening command ${command.index}: unsupported opcode ${command.opcode}`);
         }

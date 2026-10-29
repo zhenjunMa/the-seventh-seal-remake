@@ -19,8 +19,9 @@ function native(role,template=Buffer.alloc(1221)){
   const oracle=new NativeAssemblyOracle({'0x469f50':assembly.normalized_result.split(/\r?\n/)},[],()=>{throw Error('469F50 must not draw RNG');});
   const base=0x22000000,id=Number(role.id),table=0x23000000;
   template.forEach((value,i)=>oracle.write(base+i,value,1));oracle.write(base+0x28,id);
-  oracle.write(0x51dd91a+(id-1)*235,role.actions.length,1);oracle.write(0x51dd95b+(id-1)*235,table);
-  for(const action of role.actions)Buffer.from(action.raw_hex,'hex').forEach((value,i)=>oracle.write(table+action.index*172+i,value,1));
+  const actions=role.source_actions??role.actions;
+  oracle.write(0x51dd91a+(id-1)*235,actions.length,1);oracle.write(0x51dd95b+(id-1)*235,table);
+  for(const action of actions)Buffer.from(action.raw_hex,'hex').forEach((value,i)=>oracle.write(table+action.index*172+i,value,1));
   oracle.run(0x469f50,[base]);
   return Array.from({length:20},(_,i)=>{const value=oracle.read(base+0x46+i,1);return value===255?-1:value;});
 }
@@ -28,8 +29,9 @@ function native(role,template=Buffer.alloc(1221)){
 test('all exported source ROLE actions retain exact DGP SHA/bytes and match native469F50 across20 channels',async()=>{
   for(const role of Object.values(resources.roles)){
     const dgp=await readFile(new URL(role.source.path,root));assert.equal(digest(dgp),role.source.sha256);
-    assert.equal(dgp[0],9);assert.equal(dgp[2],role.actions.length);
-    for(const action of role.actions)assert.equal(action.raw_hex,dgp.subarray(67+action.index*172,67+(action.index+1)*172).toString('hex'));
+    const actions=role.source_actions??role.actions;
+    assert.equal(dgp[0],9);assert.equal(dgp[2],actions.length);
+    for(const action of actions)assert.equal(action.raw_hex,dgp.subarray(67+action.index*172,67+(action.index+1)*172).toString('hex'));
     assert.deepEqual(nativeNpcActionBindings(role),native(role),role.id);
   }
 });

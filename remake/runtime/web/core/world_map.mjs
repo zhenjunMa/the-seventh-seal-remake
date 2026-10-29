@@ -104,7 +104,9 @@ export class WorldMapController {
       const location = prepared?.location;
       requireValue(object(location) && location.map_id === destination.map_id && Object.keys(location).length === 4 && Object.keys(location).every(key => ['map_id','x','y','direction'].includes(key)), '大地图目的地进入位置无效');
       const next = copy(before);
+      delete next.map_npc_state;
       next.world_map.areas.find(item => item.id === area).selected_index = index;
+      if(destination.sort_code!==undefined)next.native_map_sort_code=destination.sort_code;
       next.location = {...location}; next.revision = (before.revision + 1) >>> 0;
       validateWorld(next, this.world.mapIds);
       // load is the same kind of synchronous view commit as SceneController's

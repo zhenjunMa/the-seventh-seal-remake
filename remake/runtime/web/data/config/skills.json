@@ -1627,6 +1627,42 @@
       },
       "parameters": {}
     },
+    "042_14": {
+      "name": "",
+      "owner": {
+        "role_id": "042",
+        "skill_index": 14,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "042_15": {
+      "name": "烈爪突击",
+      "owner": {
+        "role_id": "042",
+        "skill_index": 15,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "042_16": {
+      "name": "盾面突击",
+      "owner": {
+        "role_id": "042",
+        "skill_index": 16,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "042_19": {
+      "name": "升狼爪击－昏迷",
+      "owner": {
+        "role_id": "042",
+        "skill_index": 19,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
     "001_0": {
       "name": "",
       "owner": {
@@ -8503,33 +8539,6 @@
       },
       "parameters": {}
     },
-    "042_14": {
-      "name": "",
-      "owner": {
-        "role_id": "042",
-        "skill_index": 14,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "042_15": {
-      "name": "烈爪突击",
-      "owner": {
-        "role_id": "042",
-        "skill_index": 15,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "042_16": {
-      "name": "盾面突击",
-      "owner": {
-        "role_id": "042",
-        "skill_index": 16,
-        "side": "source"
-      },
-      "parameters": {}
-    },
     "042_17": {
       "name": "猛狼突击",
       "owner": {
@@ -8544,15 +8553,6 @@
       "owner": {
         "role_id": "042",
         "skill_index": 18,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "042_19": {
-      "name": "升狼爪击－昏迷",
-      "owner": {
-        "role_id": "042",
-        "skill_index": 19,
         "side": "source"
       },
       "parameters": {}

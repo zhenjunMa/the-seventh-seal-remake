@@ -9,6 +9,7 @@
     "Fight_Role/014.CHR": "3dda77cf7ff3513c652bdf2224517fc48f5d5a2a948170cad7ac252efac7bf28",
     "Fight_Role/022.CHR": "1d993fbcd562db44c2f515f3b9e3e1bfa4d2ad99924ad543b62ca8226b3f4455",
     "Fight_Role/032.CHR": "e081f7db9f51ac59c0bbd5b43f82a5894b3e707dd7512eb43aef574e1ec35f9f",
+    "Fight_Role/042.CHR": "e6165e6a8c0099485543a521e978e8943aef7f9c5b17711c64a7d4c7fc8c169b",
     "GAME.exe": "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18"
   },
   "entries": {
@@ -62,6 +63,14 @@
     },
     "ai_032": {
       "name": "唯爱拉选招",
+      "parameters": {}
+    },
+    "enemy_042": {
+      "name": "猎杀者",
+      "parameters": {}
+    },
+    "ai_042": {
+      "name": "猎杀者选招",
       "parameters": {}
     }
   }

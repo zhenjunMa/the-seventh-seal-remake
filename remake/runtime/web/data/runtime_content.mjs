@@ -712,6 +712,9 @@ export const definition = {
     },
     "032": {
       "side": "enemy"
+    },
+    "042": {
+      "side": "enemy"
     }
   },
   "battle_rosters": {
@@ -747,6 +750,18 @@ export const definition = {
     }
   },
   "programs": [
+    "m01010-2",
+    "m01010-3",
+    "m01020a-1",
+    "m01020a-2",
+    "m01020a-3",
+    "m01031-1",
+    "m01040-1",
+    "m01040-2",
+    "m01040-3",
+    "m01051-1",
+    "m01060-2",
+    "m01063-1",
     "m01050-1",
     "m01050-2",
     "m17029-1",
@@ -769,16 +784,148 @@ export const definition = {
   "maps": {
     "M01060": {
       "npcs": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
         19
       ],
       "triggers": [
-        6
+        6,
+        30
       ]
     },
     "M01065": {
       "npcs": [],
       "triggers": [
         31
+      ]
+    },
+    "M01020A": {
+      "npcs": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "triggers": [
+        29,
+        31
+      ]
+    },
+    "M01031": {
+      "npcs": [
+        10,
+        11
+      ]
+    },
+    "M01032": {
+      "npcs": [
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ]
+    },
+    "M01033": {
+      "npcs": [
+        10,
+        11,
+        13,
+        14
+      ]
+    },
+    "M01040": {
+      "npcs": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23
+      ],
+      "entry": true
+    },
+    "M01041": {
+      "npcs": [
+        11,
+        12,
+        13,
+        14,
+        15
+      ]
+    },
+    "M01042": {
+      "npcs": [
+        10,
+        12
+      ]
+    },
+    "M01051": {
+      "npcs": [
+        10,
+        11,
+        12,
+        13
+      ]
+    },
+    "M01052": {
+      "npcs": [
+        10,
+        11
+      ],
+      "triggers": [
+        2
+      ]
+    },
+    "M01061": {
+      "npcs": [
+        10,
+        11,
+        12,
+        13,
+        14
+      ]
+    },
+    "M01062": {
+      "npcs": [
+        10,
+        11
+      ]
+    },
+    "M01063": {
+      "npcs": [
+        10,
+        11,
+        12,
+        13
+      ],
+      "setup": true
+    },
+    "M01064": {
+      "npcs": [
+        10
       ]
     },
     "M71010": {
@@ -865,8 +1012,18 @@ export const definition = {
       "npcs": []
     },
     "M01050": {
+      "triggers": [
+        31
+      ],
       "npcs": [
-        15
+        10,
+        11,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
       ]
     },
     "M03039": {
@@ -875,16 +1032,44 @@ export const definition = {
       ]
     },
     "M01010": {
-      "export": {
-        "assets": "existing",
-        "story": false
-      }
+      "npcs": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "triggers": [
+        31
+      ]
     },
     "M01030": {
-      "export": {
-        "assets": "existing",
-        "story": false
-      }
+      "npcs": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        21,
+        22,
+        23,
+        24,
+        26,
+        27,
+        28,
+        34,
+        35,
+        36,
+        37
+      ],
+      "triggers": [
+        31
+      ]
     },
     "M17010": {
       "triggers": [
@@ -1199,9 +1384,7 @@ export const definition = {
     }
   },
   "story": {
-    "events": [
-      "data/events/detective.json"
-    ],
+    "events": [],
     "quests": [
       "content/quests/fire-valley.json"
     ]
@@ -2120,6 +2303,13 @@ export default {
         "path": "Fight_Role/032.CHR",
         "sha256": "e081f7db9f51ac59c0bbd5b43f82a5894b3e707dd7512eb43aef574e1ec35f9f"
       }
+    },
+    "042": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/042.CHR",
+        "sha256": "e6165e6a8c0099485543a521e978e8943aef7f9c5b17711c64a7d4c7fc8c169b"
+      }
     }
   },
   "battle_rosters": {
@@ -2134,7 +2324,8 @@ export default {
       "013",
       "014",
       "022",
-      "032"
+      "032",
+      "042"
     ],
     "party-source-group": [
       "001",
@@ -2148,7 +2339,8 @@ export default {
       "013",
       "014",
       "022",
-      "032"
+      "032",
+      "042"
     ]
   },
   "stages": {
@@ -2174,6 +2366,66 @@ export default {
     }
   },
   "programs": {
+    "m01010-2": {
+      "path": "Animate/m01010-2.anm",
+      "sha256": "c55c3523db4a73b52be4c41207759c85875887ecaf59466e2116ecfbedd54eef",
+      "bytes": 511
+    },
+    "m01010-3": {
+      "path": "Animate/m01010-3.anm",
+      "sha256": "746051dea82ced51cd73ef4c30e952d82b8e4b009583e88d47e000b950ba7238",
+      "bytes": 511
+    },
+    "m01020a-1": {
+      "path": "Animate/m01020a-1.anm",
+      "sha256": "2b9cc2ad10eae8674d95e12bd252b8c71b4a1d63f18aa96839ad71f48575caba",
+      "bytes": 2139
+    },
+    "m01020a-2": {
+      "path": "Animate/m01020a-2.anm",
+      "sha256": "4c8cd75afaebe28a8a685333dd1debf2d122524e6000a5ee2d64424356c696aa",
+      "bytes": 659
+    },
+    "m01020a-3": {
+      "path": "Animate/m01020a-3.anm",
+      "sha256": "31c166e4dc40f17e7178a80edcff869093a5fcbcb49d39d60939259d5e9cda9f",
+      "bytes": 659
+    },
+    "m01031-1": {
+      "path": "Animate/m01031-1.anm",
+      "sha256": "a72fa20e9b04549a72f9a8c43a3e7e0440a517e9fdbc0f0405ed3d049bb731e7",
+      "bytes": 1251
+    },
+    "m01040-1": {
+      "path": "Animate/m01040-1.anm",
+      "sha256": "68cdd9aec9b18b48c716a963ae259c13cdf9071235e9f942a2a647cf5c330b02",
+      "bytes": 659
+    },
+    "m01040-2": {
+      "path": "Animate/m01040-2.anm",
+      "sha256": "bad4eeb5dc3586793748087f7aaf1286e65c7de3a8210ad0fe4a8c7fe098830e",
+      "bytes": 659
+    },
+    "m01040-3": {
+      "path": "Animate/m01040-3.anm",
+      "sha256": "1b2a3301db8ec7e2adb414c101911714af5ee4d5c96c9321cea58893c371e4de",
+      "bytes": 659
+    },
+    "m01051-1": {
+      "path": "Animate/m01051-1.anm",
+      "sha256": "81be0e63a719a12a1eee48bbff3b9911f66ad8bdb0d3696333295d8477a6a14d",
+      "bytes": 1251
+    },
+    "m01060-2": {
+      "path": "Animate/m01060-2.anm",
+      "sha256": "2fc3e75c7d75ed70baa2421f75e2d9afd0e04d6ea405f2f0a2dc8f21da21aa5b",
+      "bytes": 5839
+    },
+    "m01063-1": {
+      "path": "Animate/m01063-1.anm",
+      "sha256": "252a8481688406275c9573363260c8ecc0f593294e5036503ac58ab13f887892",
+      "bytes": 437
+    },
     "m01050-1": {
       "path": "Animate/m01050-1.anm",
       "sha256": "c483d0ee85a01072afa8f8e80697220b922fa3e0ad971ee5affcedf12c88f819",
@@ -2269,12 +2521,22 @@ export default {
     "M01060": {
       "path": "data/maps/m01060.json",
       "triggers": [
-        6
+        6,
+        30
       ],
       "objects": [],
       "rests": [],
       "routes": [],
       "npcs": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
         19
       ],
       "flag_index": 6
@@ -2289,6 +2551,204 @@ export default {
       "routes": [],
       "npcs": [],
       "flag_index": 384
+    },
+    "M01020A": {
+      "path": "data/maps/m01020a.json",
+      "triggers": [
+        29,
+        31
+      ],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "flag_index": 2
+    },
+    "M01031": {
+      "path": "data/maps/m01031.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10,
+        11
+      ],
+      "flag_index": 7
+    },
+    "M01032": {
+      "path": "data/maps/m01032.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "flag_index": 8
+    },
+    "M01033": {
+      "path": "data/maps/m01033.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10,
+        11,
+        13,
+        14
+      ],
+      "flag_index": 35
+    },
+    "M01040": {
+      "path": "data/maps/m01040.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "entry_record": 100,
+      "npcs": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23
+      ],
+      "flag_index": 4
+    },
+    "M01041": {
+      "path": "data/maps/m01041.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "flag_index": 33
+    },
+    "M01042": {
+      "path": "data/maps/m01042.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10,
+        12
+      ],
+      "flag_index": 386
+    },
+    "M01051": {
+      "path": "data/maps/m01051.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10,
+        11,
+        12,
+        13
+      ],
+      "flag_index": 31
+    },
+    "M01052": {
+      "path": "data/maps/m01052.json",
+      "triggers": [
+        2
+      ],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10,
+        11
+      ],
+      "flag_index": 34
+    },
+    "M01061": {
+      "path": "data/maps/m01061.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10,
+        11,
+        12,
+        13,
+        14
+      ],
+      "flag_index": 27
+    },
+    "M01062": {
+      "path": "data/maps/m01062.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10,
+        11
+      ],
+      "flag_index": 28
+    },
+    "M01063": {
+      "path": "data/maps/m01063.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "setup_record": 5,
+      "npcs": [
+        10,
+        11,
+        12,
+        13
+      ],
+      "flag_index": 29
+    },
+    "M01064": {
+      "path": "data/maps/m01064.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10
+      ],
+      "flag_index": 30
     },
     "M71010": {
       "path": "data/maps/m71010.json",
@@ -2420,12 +2880,21 @@ export default {
     },
     "M01050": {
       "path": "data/maps/m01050.json",
-      "triggers": [],
+      "triggers": [
+        31
+      ],
       "objects": [],
       "rests": [],
       "routes": [],
       "npcs": [
-        15
+        10,
+        11,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
       ],
       "flag_index": 5
     },
@@ -2442,18 +2911,52 @@ export default {
     },
     "M01010": {
       "path": "data/maps/m01010.json",
-      "triggers": [],
+      "triggers": [
+        31
+      ],
       "objects": [],
       "rests": [],
       "routes": [],
+      "npcs": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
       "flag_index": 1
     },
     "M01030": {
       "path": "data/maps/m01030.json",
-      "triggers": [],
+      "triggers": [
+        31
+      ],
       "objects": [],
       "rests": [],
       "routes": [],
+      "npcs": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        21,
+        22,
+        23,
+        24,
+        26,
+        27,
+        28,
+        34,
+        35,
+        36,
+        37
+      ],
       "flag_index": 3
     },
     "M17010": {
@@ -2908,9 +3411,7 @@ export default {
     }
   },
   "story": {
-    "events": [
-      "data/events/detective.json"
-    ],
+    "events": [],
     "quests": [
       "content/quests/fire-valley.json"
     ]

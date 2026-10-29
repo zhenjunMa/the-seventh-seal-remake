@@ -2,7 +2,7 @@
 // TLK interpretation and persistent writes remain with their owning runner.
 import {linkPlaybackAbort,playbackTask} from './story_playback.mjs';
 
-export const COMMON_ANM_OPCODES = new Set([11,16,17,30,31,32,33,35,48,49,60,62,63,255]);
+export const COMMON_ANM_OPCODES = new Set([11,16,17,30,31,32,33,35,41,48,49,60,62,63,255]);
 
 export function anmFilename(command){
   const bytes=Uint8Array.from(command.raw_hex.match(/../g),value=>parseInt(value,16));
@@ -114,6 +114,11 @@ export class AnmActions {
         this.launch('actor', command, {kind:'animation', actor, actionId:command.byte_plus29,
           frameStart:command.u32_plus13, frameEnd:command.u32_plus17,
           repetitions:command.u32_plus25, motionModeRaw:command.u32_plus1}); break;
+      case 41:
+        // 473E30: actor+4BE=byte29+1; +4BF=0; +F0=mode+1.
+        // The barrier joins this transient actor effect like opcode48/49.
+        this.launch('actor',command,{kind:'behavior',actor,behaviorModeRaw:command.byte_plus29,nativeStateRaw:command.byte_plus29+1,
+          motionModeRaw:command.u32_plus1,nativeField:'0x4be',...(this.nativeMetadata?{hidden:false}:{})});break;
       case 49:
         // This writes +4bd rather than changing eight-direction facing.
         this.launch('actor', command, {kind:'facing', actor, blendModeRaw:command.byte_plus29,

@@ -71,7 +71,15 @@ test('audio export binds real content, source digests and action fields, retaini
     assert.equal(digest(raw),source.sha256);
     const record=raw.subarray(source.record_offset,source.record_offset+0x3bf);
     assert.equal(digest(record),source.record_sha256);
-    assert.equal(record.subarray(source.effect_field_offset,source.effect_field_offset+source.effect_field_bytes).toString().split('\0')[0],entry.effect_id+'.dgp');
+    assert.equal(record.subarray(source.effect_field_offset,source.effect_field_offset+source.effect_field_bytes).toString().split('\0')[0],entry.effect_id===null?'':entry.effect_id+'.dgp');
+  }
+  assert.deepEqual(data.object_sounds.map(entry=>[entry.map_id,entry.object_index,entry.clip]),[['M01042',8,'sound/E015.wav']]);
+  for(const entry of data.object_sounds){
+    const object=readFileSync(new URL('../../../'+entry.object_source.path,import.meta.url)).subarray(entry.object_source.offset,entry.object_source.offset+0x112);
+    const action=readFileSync(new URL('../../../'+entry.action_source.path,import.meta.url)).subarray(entry.action_source.offset,entry.action_source.offset+0xac);
+    assert.equal(digest(object),entry.object_source.raw_sha256);assert.equal(object.readUInt32LE(0x9e),entry.object_source.sound_enabled_raw);
+    assert.equal(digest(action),entry.action_source.raw_sha256);assert.equal(action.subarray(0x56,0x6a).toString().split('\0')[0],entry.token);
+    assert.equal(action.readUInt32LE(0x6a),entry.logical_frame);assert.equal(entry.logical_frame,1);
   }
   const expectedMissing=new Set(['sound/menu/close.wav',...data.action_sources.map(entry=>'sound/'+entry.token),
     ...Object.values(data.frame_sounds).flatMap(cues=>Object.values(cues)).filter(entry=>entry.token).map(entry=>'sound/'+entry.token),
@@ -84,6 +92,31 @@ test('audio export binds real content, source digests and action fields, retaini
   }
   assert.equal(data.battles['stage13.scn'].clip,null);
   assert.deepEqual(data.battles['stage13.scn'].pool,['sound/Fight/FightBGM01.wav','sound/Fight/FightBGM02.wav']);
+});
+
+test('positioned source sounds preserve native distance/pan, existing channel gain, active single-voice playback and node cleanup',async()=>{
+  const voices=[],nodes=[],panners=[];let closed=0;
+  const context={state:'running',destination:{},createMediaElementSource(media){const node={media,connected:null,disconnects:0,connect(target){this.connected=target;},disconnect(){this.disconnects++;}};nodes.push(node);return node;},
+    createStereoPanner(){const node={pan:{value:0},connected:null,disconnects:0,connect(target){this.connected=target;},disconnect(){this.disconnects++;}};panners.push(node);return node;},close(){closed++;}};
+  const audio=createAudioController(data,{createMedia:path=>{const media=new Media(path);voices.push(media);return media;},createAudioContext:()=>context});
+  const clip=data.cues.menuConfirm.clip;audio.unlock();
+  const positions=[{dx:0,dy:0},{dx:8,dy:-6},{dx:-8,dy:6},{dx:64,dy:0},{dx:-65,dy:0}];
+  const volume=[127,97,97,0,0],pan=[64,56,72,0,127];
+  for(const position of positions)assert.equal(audio.playClip(clip,null,{position,singleVoice:false}),true);
+  await tick();assert.equal(voices.length,5);
+  assert.deepEqual(audio.snapshot().effect_events.map(event=>event.volume_native),volume);
+  assert.deepEqual(audio.snapshot().effect_events.map(event=>event.pan_native),pan);
+  assert.deepEqual(panners.map(node=>node.pan.value),[0,-8/64,8/63,-1,1]);
+  assert.deepEqual(voices.map(media=>media.volume),volume.map(value=>value/127));
+  audio.setChannelVolume('effects',.5);assert.deepEqual(voices.map(media=>media.volume),volume.map(value=>64/127*value/127));
+  assert.equal(audio.playClip(clip,null,{position:{dx:32,dy:0},singleVoice:true}),true);assert.equal(voices.length,5);
+  assert.equal(voices[0].playCalls,1);assert.equal(voices[0].volume,64/127*31/127);assert.equal(panners[0].pan.value,-.5);
+  assert.equal(audio.snapshot().stats.effect_play_attempts,5);assert.equal(audio.snapshot().effect_events.length,5);
+  audio.setChannelVolume('effects',1);assert.equal(voices[0].volume,31/127,'later channel changes retain the updated spatial gain');
+  for(const media of voices)media.emit('ended');
+  assert.deepEqual(nodes.map(node=>node.disconnects),[1,1,1,1,1]);assert.deepEqual(panners.map(node=>node.disconnects),[1,1,1,1,1]);
+  assert.equal(audio.playClip(clip,null,{position:{dx:0,dy:0},singleVoice:true}),true);assert.equal(voices.length,6);
+  audio.dispose();assert.equal(closed,1);assert.equal(nodes.at(-1).disconnects,1);assert.equal(panners.at(-1).disconnects,1);
 });
 
 test('every integrated skill, revival and item effect and lifecycle sound field is exported from its real source',()=>{

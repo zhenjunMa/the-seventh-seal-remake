@@ -50,7 +50,7 @@ def source_files():
     tokens = set()
     for index in range(count):
         raw = itm[0x61c + index * 0x3bf:0x61c + (index + 1) * 0x3bf]
-        if raw[0x24:0x26] != b'\x05\x01' or struct.unpack_from('<I', raw, 0x142)[0] != 17 or raw[0x156:0x158] != b'\x00\x01':
+        if raw[0x24] != 5 or raw[0x25] not in (1, 3, 4) or struct.unpack_from('<I', raw, 0x142)[0] != 17 or raw[0x156] != 0 or raw[0x157] not in (0, 1):
             continue
         filename = token(raw, 0x126)
         if filename:
@@ -78,11 +78,11 @@ def item_presentations(data, itm):
         assert definition['raw_hex'] == raw.hex()
         assert definition['source']['sha256'] == digest and definition['source']['record_offset'] == at
         filename = token(raw, 0x126)
-        assert filename and Path(filename).name == filename and filename.lower().endswith('.dgp')
+        assert not filename or Path(filename).name == filename and filename.lower().endswith('.dgp')
         assert struct.unpack_from('<I', raw, 0x142)[0] == 17, 'item animation is not supported ID17'
-        assert raw[0x156] == 0 and raw[0x157] == 1, 'item target scope is not supported single ally'
+        assert raw[0x156] == 0 and raw[0x157] in (0, 1), 'item target scope is not supported single target'
         items[key] = dict(id=ident, name=definition['name'], animation_skill_id_raw_142=17,
-            effect_id=Path(filename).stem, effect_token_raw_126=filename,
+            effect_id=Path(filename).stem if filename else None, effect_token_raw_126=filename,
             source=dict(path='SYSTEM/Object.ITM', sha256=digest, record_offset=at,
                         record_sha256=sha(raw), effect_field_offset=0x126, effect_field_bytes=20))
     return items
@@ -215,7 +215,7 @@ def export_item_role(ident, before):
 
 def main():
     items = item_presentations(read(WEB / 'data/items.json'), (ROOT / 'SYSTEM/Object.ITM').read_bytes())
-    effect_tokens = {item['effect_token_raw_126'] for item in items.values()}
+    effect_tokens = {item['effect_token_raw_126'] for item in items.values() if item['effect_token_raw_126']}
     original_paths = ['GAME.exe', 'SYSTEM/Object.ITM', *[f'Fight_Role/{ident}.{suffix}' for ident in role_ids('player') for suffix in ('CHR','dgp')],
                       *[f'Fight_Role/Effect/{filename}' for filename in sorted(effect_tokens)]]
     before = {p: sha((ROOT / p).read_bytes()) for p in original_paths}

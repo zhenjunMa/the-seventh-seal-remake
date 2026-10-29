@@ -25,6 +25,7 @@ test('export independently verifies all selected source mask frames and leaves o
     for(const [id,role] of Object.entries((await read(`web/data/${name}.json`)).roles))selected.set(id,role);
   const expected=new Set(),actual=new Set();let compactBytes=0,fullBytes=0;
   for(const [id,role] of Object.entries(manifest.roles)){
+    assert.equal(role.event_only,!selected.has(id),`${id} source selection determines event-only status`);
     const omitted=report.empty_actions_omitted.filter(row=>row.role===id).map(row=>selected.get(id).actions.find(action=>action.index===row.action));
     for(const action of [...role.actions,...omitted]){
       assert.ok(action,`${id} omitted action has no source selection`);
@@ -39,7 +40,6 @@ test('export independently verifies all selected source mask frames and leaves o
   assert.equal(report.compact_atlas_rgba_bytes,compactBytes);assert.equal(report.full_frame_rgba_bytes,fullBytes);
   assert.deepEqual(Object.keys(manifest.roles).sort(),report.roles.toSorted());
   assert.deepEqual(['001','002','003','005','012','013','014','015','016','027','029','030','031','032','033','034','070','183','213','216'].map(id=>Boolean(manifest.roles[id])),Array(20).fill(true));
-  assert.equal(manifest.roles['070'].event_only,true);
   assert.equal(manifest.alpha,128);
   for(const [path,hash] of Object.entries(report.output_hashes))
     assert.equal(createHash('sha256').update(await readFile(new URL('web'+path,root))).digest('hex'),hash,path);
@@ -101,7 +101,7 @@ test('event NPC shadow uses its separate source atlas and ANM emits the same mas
   assert.deepEqual(calls[1].args.slice(1),calls[2].args.slice(1));
 });
 
-test('Phaser keeps mask below the body in the same container and hides it when a pose has no mask',()=>{
+test('Phaser object pose keeps its same-frame mask below the body and hides it when a pose has no mask',()=>{
   const sprites=[],containers=[],regions=[];
   const scene={add:{sprite(){const sprite={};
     for(const method of ['setOrigin','setPosition','setBlendMode','setTexture','setDisplaySize','setVisible'])sprite[method]=function(...args){this[method.slice(3)]=args;return this;};
@@ -109,15 +109,16 @@ test('Phaser keeps mask below the body in the same container and hides it when a
     for(const method of ['setPosition','setDepth','setAlpha','setVisible'])container[method]=function(...args){this[method.slice(3)]=args;return this;};
     containers.push(container);return container;}}};
   const textures={region(...args){regions.push(args);return {key:args[0].name,frame:'source'};}};
-  const actor=new MapActor(scene,textures,'leader'),entry=mapPresentation(fixture())[0];
+  const options=fixture();options.scene.objects[0].motion={main:image('object'),intrinsic:image('object-light'),shadow:image('object-shadow'),width:160,height:160,frame:4};
+  const actor=new MapActor(scene,textures,'object:0'),entry=mapPresentation(options).find(row=>row.key==='object:0');
   actor.sync({...entry,alpha:.75},9);
   assert.deepEqual(containers[0].children,[actor.pose.shadow,actor.pose.body,actor.pose.light]);
   assert.deepEqual(containers[0].Depth,[9]);assert.deepEqual(containers[0].Alpha,[.75]);
-  assert.deepEqual(actor.pose.shadow.Visible,[true]);assert.deepEqual(actor.pose.shadow.Texture,['leader-shadow','source']);
+  assert.deepEqual(actor.pose.shadow.Visible,[true]);assert.deepEqual(actor.pose.shadow.Texture,['object-shadow','source']);
   assert.deepEqual(regions[0].slice(1),regions[1].slice(1));
-  actor.pose.apply({...entry.pose,sx:7*160,sy:6*160,displayWidth:320,displayHeight:80,
+  const start=regions.length;actor.pose.apply({...entry.pose,sx:7*160,sy:6*160,displayWidth:320,displayHeight:80,
     shadow_geometry:{x:50,y:100,width:30,height:16}});
-  assert.deepEqual(regions.at(-2).slice(1),[210,96,30,16]);
+  assert.deepEqual(regions[start].slice(1),[210,96,30,16]);
   assert.deepEqual(actor.pose.shadow.Position,[100,50]);
   assert.deepEqual(actor.pose.shadow.DisplaySize,[60,8]);
   actor.sync({...entry,blend:'lighter',pose:{...entry.pose,shadow:null}},9);

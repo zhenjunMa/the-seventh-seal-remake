@@ -7,21 +7,29 @@ import {StoryRepository} from '../web/core/story_repository.mjs';
 import {validateQuests} from '../web/core/story_quests.mjs';
 import {createAudioController} from '../web/core/audio.mjs';
 import {planRouteExit} from '../web/core/route.mjs';
+import {nativeMapIdFromFilename} from '../web/core/native_map_identity.mjs';
 
-const variants=['M17030','M17030-1','M17030-2'];
+const variants=['M17030','M17030-1','M17030-2','M01020A','M70074_2','M03012_1F','M70078-1_1','M71076-1-03','M72010-0-A'];
 const binding=id=>({path:`data/maps/${id.toLowerCase()}.json`,triggers:[],objects:[],rests:[],routes:[]});
-const invalidIds=['../M17030-1','M17030-1/../M17020','M17030-x','M17030-','M17030-1-2','m17030-1'];
+const invalidIds=['../M17030-1','M17030-1/../M17020','M17030-x','M17030-','M17030__2','m17030-1',
+  'M01020AA','M01020A.dat','M01020A\n','M01020A\r','M01020A\u2028','M01020A\0','M01020A\\x','M70074_2/','M70074_2?x','M70074_%32'];
 
 test('native map variants are separate admitted identities and reject invalid paths',()=>{
   const content=structuredClone(runtimeContent);
   for(const id of variants){assert.equal(mapId(id),true);content.maps[id]=binding(id);}
   validateContentRegistration(content);
-  assert.deepEqual(variants.map(id=>content.maps[id].path),['data/maps/m17030.json','data/maps/m17030-1.json','data/maps/m17030-2.json']);
+  assert.equal(new Set(variants.map(id=>content.maps[id].path)).size,variants.length);
   for(const id of invalidIds){
     assert.equal(mapId(id),false,id);
     const invalid=structuredClone(content);invalid.maps[id]=binding(id);
     assert.throws(()=>validateContentRegistration(invalid),/地图路径无效/);
   }
+});
+
+test('original DAT basenames normalize case without accepting path or extension tricks',()=>{
+  for(const id of variants)assert.equal(nativeMapIdFromFilename(`${id.toLowerCase()}.dAt`),id);
+  for(const value of ['M01020A.DAT/..','Map/M01020A.DAT','M01020A.DAT\n','M01020A.DAT.exe','M01020A.DAT\0','M01020A..DAT',null,15])
+    assert.equal(nativeMapIdFromFilename(value),null,String(value));
 });
 
 test('variant compact TLK tables keep exact map and text identities',()=>{
@@ -49,13 +57,14 @@ test('repository loads variant packages independently and quest references retai
   for(const id of variants)maps[id]=await reference(`data/story/maps/${id.toLowerCase()}.json`,{
     schema:'seventh-seal-story-map',version:2,map_id:id,chapter:null,texts:{},events:[],flows:{},programs:{},
     resources:Object.fromEntries(STORY_RESOURCE_TABLES.map(key=>[key,[]]))});
-  const repository=await StoryRepository.create({read:async path=>structuredClone(files.get(path)),content,definition,capacity:3,
+  const repository=await StoryRepository.create({read:async path=>structuredClone(files.get(path)),content,definition,capacity:variants.length,
     index:{schema:'seventh-seal-story-index',version:2,definition_sha256:await storyDigest(definition),shared,maps}});
   for(const id of variants)await repository.ensureMap(id);
   assert.deepEqual([...repository.loaded.keys()],variants);
   assert.deepEqual(Object.keys(repository.resources.npcs_by_map),variants);
   assert.deepEqual(repository.journal({flags:[],party:[]})[0].maps,variants);
   for(const id of invalidIds)await assert.rejects(repository.ensureMap(id),/尚未登记/);
+  await assert.rejects(repository.ensureMap('M99999A'),/尚未登记/);
 });
 
 test('variant music and exit route selection do not collapse to the base map',()=>{

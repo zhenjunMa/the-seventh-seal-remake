@@ -2,7 +2,7 @@
 // This only reads a world snapshot; it never awards items or changes progress.
 const need=(ok,message)=>{if(!ok)throw new Error(`原剧情条件：${message}`);};
 const uint=value=>Number.isInteger(value)&&value>=0&&value<=0xffffffff;
-export const NATIVE_STORY_CONDITION_TYPES=new Set([1,4,10]);
+export const NATIVE_STORY_CONDITION_TYPES=new Set([1,2,4,10]);
 export const NATIVE_STORY_CONDITION_EVIDENCE={
   dispatch:'ev_e14d28c11ec31e5eebdf4c08a994a900102658650d8e5364d58b848cbd114ea7',
   object:'ev_ae80938b5372bbdb5a8910aed7225ecd370a8f09ab420dfa11092554bcbd6dac',
@@ -29,6 +29,8 @@ export function validateNativeStoryCondition(record,table){
     const index=record.condition_index||table?.map_flag_index;
     need(Number.isInteger(index)&&index>=0&&index<2000&&record.condition_bit>=1&&record.condition_bit<=1000,'物件事件索引无效');
     nativeConditionByte(record);
+  }else if(type===2){
+    // Native 4630xx compares the signed money DWORD with +1B.
   }else if(type===4){
     // 462600 calls 47B0C0(index,itemId,0): mode0 includes equipment
     // for every native role as well as inventory, regardless of active party.
@@ -48,6 +50,7 @@ function retainedEquipment(world){
 export function evaluateNativeStoryCondition(record,world,table){
   validateNativeStoryCondition(record,table);
   switch(record.condition_type){
+    case 2:return ((world.money??0)|0)>=(record.condition_index|0);
     case 1:{
       const index=record.condition_index||table.map_flag_index;
       const raw=world.event_records?.[index]?.[record.condition_bit-1];

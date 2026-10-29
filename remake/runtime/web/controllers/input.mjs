@@ -80,6 +80,7 @@ export function createInputController({state, actions, $, canvas, ctx}) {
       const key=event.key.length===1?event.key.toLowerCase():event.key;
       if(saveKey(key,event.repeat)){event.preventDefault();return;}
       if(state.engine?.paused)return;
+      if(actions.nativeServiceKey(key,event.repeat)){event.preventDefault();return;}
       if(state.saveMenu?.key(key,event.repeat)){event.preventDefault();return;}
       if(state.startupView?.key(key,event.repeat)){event.preventDefault();return;}
       if(['event','opening'].includes(state.scenes?.phase)&&actions.dialogueKey(key,event.repeat)){event.preventDefault();return;}

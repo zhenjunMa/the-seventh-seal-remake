@@ -7,6 +7,7 @@ import {runtimeContent,storyBindings} from "../core/content_registry.mjs";
 import {worldMapEntry} from '../core/map_connections.mjs';
 import {hasNativeStoryCompletion} from '../core/story_completion.mjs';
 import {nativeChestAnimation} from '../core/native_map_chests.mjs';
+import {captureMapNpcState} from '../core/map_npc_state.mjs';
 
 export function createStoryController({state, actions, $, canvas, ctx}) {
   let session=null,sequence=0;
@@ -147,7 +148,7 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
       if(!state.nearest.event){
         const table=state.chapterStory.maps[state.world.location.map_id],slot=state.nearest.slot_zero_based;
         const entry=table?.index_nonzero.find(row=>row.slot===slot);
-        if(entry){await runChapter({mapId:state.world.location.map_id,recordId:entry.record,context:{steps:0,explicitInteraction:true}});return;}
+        if(entry){await runChapter({mapId:state.world.location.map_id,recordId:entry.record,context:{steps:0,explicitInteraction:true,npcMapId:state.world.location.map_id,npcSlot:slot}});return;}
         actions.status('这里暂时没有可执行的对白。');return;
       }
       await runChapter({event:state.nearest.event});
@@ -162,7 +163,8 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
   }
   async function animateChapter({program,mapId,draft,runTlk,joinActor,leaveActor,flagCommand,playback,signal}){
     signal??=playback?.signal;
-    const previous={scene:state.scenes.current,view:state.scenes.captureView?.(),shadeHidden:$('openingShade').hidden,shadeOpacity:$('openingShade').style.opacity},prepared=new Map();
+    const previous={scene:state.scenes.current,view:state.scenes.captureView?.(),shadeHidden:$('openingShade').hidden,shadeOpacity:$('openingShade').style.opacity,
+      hasNpcState:Object.hasOwn(draft,'map_npc_state'),npcState:draft.map_npc_state},prepared=new Map();
     let lease,view,media;
     const prepare=async(id,requestSignal)=>{
       const scene=await playbackTask(actions.prepareMap(id,{world:draft}),requestSignal);
@@ -183,6 +185,8 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
         camera:(x,y)=>{state.view.x=x;state.view.y=y;},say,log:actions.log,
         shade:alpha=>{$('openingShade').hidden=false;$('openingShade').style.opacity=String(alpha);}});
       state.openingView=view;
+      const captureActors=()=>captureMapNpcState(draft,view.mapId,[...view.actors].filter(([slot])=>slot>=10)
+        .map(([slot,actor])=>({...actor,slot_zero_based:slot,hidden:!actor.visible})));
       if(program.commands.some(command=>[60,62,63].includes(command.opcode))){
         const manifest=await playbackTask(actions.json('data/story_media.json'),signal);
         if(playback?.paused)await playback.ready();signal?.throwIfAborted();playback?.check();
@@ -193,9 +197,12 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
         // while the outer world remains uncommitted until the ANM completes.
         const hero=view.getActor(view.controlledActor);
         draft.location={map_id:args.mapId,x:hero.x,y:hero.y,direction:hero.direction};
+        captureActors();
         return runTlk(args);
       };
-      const animation=new ChapterAnimationRunner({program,hooks:{...view.hooks(),...media?.hooks()},runTlk:nestedTlk,joinActor,leaveActor,flagCommand,initialActor,initialLocation:draft.location,playback,
+      const hooks=view.hooks();
+      for(const name of ['map','actor','move']){const invoke=hooks[name];hooks[name]=async payload=>{await invoke(payload);captureActors();};}
+      const animation=new ChapterAnimationRunner({program,hooks:{...hooks,...media?.hooks()},runTlk:nestedTlk,joinActor,leaveActor,flagCommand,initialActor,initialLocation:draft.location,playback,
         visualState:state.anmVisualState,
         content});
       const result=await animation.run();signal?.throwIfAborted();playback?.check();const hero=view.getActor(result.controlled_actor);
@@ -211,11 +218,13 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
       }else actions.validateEntry(state.scenes.current,location);
       draft.location=location;
       if(!terminal)state.scenes.current.npcRuntime?.adoptActors(view.actors);
+      captureActors();
       actions.log({type:'chapter-animation-complete',program:program.id,...result,
         limitations:['Browser paths/timing/blending are previews; original execution not observed.']});
     }catch(error){
       state.scenes.current=previous.scene;
       if(previous.view!==undefined)state.scenes.rollbackView?.(previous.view);
+      if(previous.hasNpcState)draft.map_npc_state=previous.npcState;else delete draft.map_npc_state;
       throw error;
     }finally{media?.dispose();view?.dispose();lease?.release();$('openingShade').hidden=previous.shadeHidden;$('openingShade').style.opacity=previous.shadeOpacity;}
   }
@@ -252,10 +261,12 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
       if(!repository)throw new Error('地图跳转剧情资料库未准备');
       releases.push(repository.retainMap(mapId),repository.retainMap(destination.map_id));
       await playbackTask(repository.ensureMap(destination.map_id,{protect:[mapId,destination.map_id]}),signal);check();
-      const scene=await playbackTask(actions.prepareMap(destination.map_id,{world:draft}),signal);
+      const targetWorld=structuredClone(draft);delete targetWorld.map_npc_state;
+      const scene=await playbackTask(actions.prepareMap(destination.map_id,{world:targetWorld}),signal);
       if(playback?.paused)await playback.ready();check();
       const location=worldMapEntry(scene,destination,state.chapterStory);actions.validateEntry(scene,location);check();
       state.sceneEntryDraft=draft;installed=true;state.scenes.current=scene;
+      delete draft.map_npc_state;
       const committed=actions.commitView(scene,location,'exit');
       if(committed&&typeof committed.then==='function')throw new Error('地图跳转视图提交必须同步');
       check();actions.log?.({type:'chapter-map-transfer',from:mapId,to:destination.map_id,source:destination.source});

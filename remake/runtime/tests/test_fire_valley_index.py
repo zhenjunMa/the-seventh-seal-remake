@@ -32,6 +32,16 @@ class SourceProjectionTests(unittest.TestCase):
         self.assertIn("data/library/fire_valley.json", step.outputs)
         self.assertIn("../evidence/fire_valley_20261024/source_index.json", step.outputs)
 
+    def test_ember_city_is_an_independent_registered_source_target(self):
+        import build_runtime as build
+        step = build.STEPS['ember-city-index']
+        self.assertEqual(build.plan(['ember-city-index']), ['ember-city-index'])
+        self.assertEqual(step.tool, 'export_ember_city_index.py')
+        self.assertEqual(step.sources, index.source_files())
+        self.assertNotIn('data/runtime_content.json', step.inputs)
+        self.assertIn('data/library/ember_city.json', step.outputs)
+        self.assertIn('../evidence/ember_city_20261028/source_index.json', step.outputs)
+
     def test_choice_targets_include_all_native_slots_even_empty_label(self):
         raw = bytearray(0x66F)
         raw[0x537:0x53A] = b"yes"
@@ -200,6 +210,49 @@ class ShippedFireValleyIndex(unittest.TestCase):
                 self.assertEqual(value["count"], len(value["source_ids"]))
                 self.assertIn("potential_call_roots", value["representative"])
         self.assertTrue({"20", "37", "60", "62", "63", "255"} <= set(summary["anm_opcode"]))
+
+
+@unittest.skipUnless((ROOT / 'Map/m01020a.dat').exists(), 'Original Ember City source unavailable')
+class ShippedEmberCityIndex(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        import export_ember_city_index as ember
+        cls.output, cls.report_output = ember.OUTPUT, ember.REPORT_OUTPUT
+        cls.data = index.build_index(region_label='炎城', region_id='ember-city')
+
+    def test_full_source_counts_and_formal_outputs_are_deterministic(self):
+        raw = index.encoded(self.data)
+        self.assertEqual(self.output.read_bytes(), raw)
+        self.assertEqual(self.report_output.read_bytes(), index.encoded(index.coverage_report(self.data, raw, self.output)))
+        coverage = self.data['coverage']
+        self.assertEqual({key: coverage[key] for key in ['maps', 'npc_instances', 'map_objects', 'tlk_records', 'programs', 'anm_commands']},
+                         dict(maps=28, npc_instances=195, map_objects=562, tlk_records=1008, programs=34, anm_commands=1660))
+        self.assertEqual(coverage['parse_failures'], [])
+        self.assertTrue(coverage['source_bytes_unchanged'])
+        self.assertFalse(self.data['provenance']['original_game_execution_observed'])
+
+    def test_alpha_map_absent_tlk_and_source_candidates_remain_explicit(self):
+        self.assertIn('M01020A', self.data['maps'])
+        self.assertEqual(self.data['maps']['M01020']['dialogue']['status'], 'source-file-absent')
+        self.assertEqual(self.data['maps']['M01020']['dialogue']['records'], [])
+        self.assertEqual(self.data['maps']['M01060']['map_entry_record_raw'], 0)
+        self.assertEqual(self.data['maps']['M01060']['map_load_record_raw'], 0)
+        self.assertTrue(index.query_index(self.data, text='小吉')['total_matches'])
+        self.assertTrue(index.query_index(self.data, flag='4:12')['references'])
+        self.assertTrue(any(d['target_map_id'] == 'M01020A' for d in self.data['maps']['M01030']['descriptors']))
+
+    def test_all_city_npc_object_dialogue_and_animation_bytes_match_sources(self):
+        documents = [row for table in self.data['maps'].values()
+                     for rows in [table['npcs'], table['objects'], table['dialogue']['records']] for row in rows]
+        documents += [row for program in self.data['programs'].values() for row in program['commands']]
+        files = {}
+        for row in documents:
+            source = row['source']
+            if source['path'] not in files:
+                files[source['path']] = (ROOT / source['path']).read_bytes()
+            raw = files[source['path']]
+            self.assertEqual(index.sha(raw), source['sha256'])
+            self.assertEqual(bytes.fromhex(row['raw_hex']), raw[source['offset']:source['offset'] + source['bytes']])
 
 
 if __name__ == "__main__":

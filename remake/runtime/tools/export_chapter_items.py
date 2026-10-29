@@ -177,8 +177,7 @@ def catalog_indexes(definitions):
 def source_files(registration=None):
     registration = content_definition() if registration is None else registration
     return ('GAME.exe', 'SYSTEM/Object.ITM',
-            *tuple(f'Fight_Role/{ident}.CHR' for ident, row in registration['roles'].items()
-                   if row['side'] == 'player'),
+            *tuple(f'Fight_Role/{ident}.CHR' for ident in registration['roles']),
             *tuple(f'Map/{ident.lower()}.dat' for ident in map_ids('story-data', registration)),
             *tuple(f'Map/{ident.lower()}.TLK' for ident in map_ids('story-data', registration)
                    if (ROOT/f'Map/{ident.lower()}.TLK').is_file()),
@@ -277,7 +276,7 @@ def registered_tlk_reachability(story, registration, original, hashes, require):
         table = story['maps'][map_id]
         require(0 < record_id <= len(table['records']), f'{key} reachable record')
         row = table['records'][record_id - 1]; raw = bytes.fromhex(row['raw_hex']); reachable[key] = origin
-        if raw[0] != 2 and (u32(raw, 0x17) or u32(raw, 0x1f)):
+        if raw[0] != 2 and (raw[0] == 4 or u32(raw, 0x17) or u32(raw, 0x1f)):
             queue.append((map_id, u32(raw, 0x2f), origin))
         queue.append((map_id, u32(raw, 0x33), origin))
         if raw[0] == 0 and raw[1] == 1:
@@ -300,7 +299,9 @@ def plain_equipment_supported(row):
                 and row.get('slot_id') in {slot['id'] for slot in SLOTS}
                 and row.get('initialization', {}).get('deterministic') is True
                 and row.get('validation', {}).get('all_value_ranges_ordered') is True
-                and len(payload) == 0x117 and not any(payload)
+                and len(payload) == 0x117 and not any(payload[:0xea]) and not any(payload[0xff:])
+                and payload[0xea] <= 5
+                and all(1 <= u32(payload, 0xeb + index * 4) <= 416 for index in range(payload[0xea]))
                 and fields.get('effect_kind_raw_2b3') == 0
                 and fields.get('encounter_modifier_raw_3a7') == 0
                 and fields.get('animation_skill_id_raw_142') == 0
@@ -411,6 +412,53 @@ def admit_registered_equipment(definitions, seed, story, registration):
         origin = reachable.get(f"{grant['map_id']}:{grant['record_id']}")
         if origin:
             sources.setdefault(str(grant['mutation_bit']), []).append(dict(**grant, entrance=deepcopy(origin)))
+    # A shop's exact 32 WORD slots and an unlocked recipe are acquisition
+    # sources. Admission still inspects the item's recovered use below.
+    for key, entrance in reachable.items():
+        map_id, record_id = key.rsplit(':', 1)
+        record = story['maps'][map_id]['records'][int(record_id) - 1]
+        raw = bytes.fromhex(record['raw_hex'])
+        if record['kind'] == 5:
+            # 4FF480 derives CHR names from the literal six DGP slots. Only
+            # registered enemies in a reachable battle can admit their loot.
+            for enemy_slot in range(6):
+                token = text_field(raw, 0x4b + enemy_slot * 20, 20, 'ascii')
+                if not token:
+                    continue
+                ident = Path(token).stem
+                if registration['roles'].get(ident, {}).get('side') != 'enemy':
+                    continue
+                path = f'Fight_Role/{ident}.CHR'
+                role = original[path]
+                require(u32(role, 0) == 8 and len(role) >= 8 + 0x30b, f'{ident} reward header')
+                for reward_slot in range(6):
+                    at = 8 + 0xe8 + reward_slot * 4
+                    reward_id = u32(role, at)
+                    if not reward_id:
+                        continue
+                    item(reward_id)
+                    sources.setdefault(str(reward_id), []).append(dict(kind='registered-enemy-reward',
+                        map_id=map_id, record_id=record['id'], enemy_id=ident, enemy_slot=enemy_slot,
+                        reward_slot=reward_slot, entrance=deepcopy(entrance),
+                        battle_source=deepcopy(record['source']),
+                        source=dict(path=path, sha256=hashes[path], offset=at, bytes=4,
+                            raw_hex=role[at:at + 4].hex())))
+        if record['kind'] == 8:
+            for slot in range(32):
+                ident = struct.unpack_from('<H', raw, 0x37 + slot * 2)[0]
+                if not ident:
+                    continue
+                item(ident)
+                sources.setdefault(str(ident), []).append(dict(kind='tlk-shop-item', map_id=map_id,
+                    record_id=record['id'], slot=slot, entrance=deepcopy(entrance),
+                    source=dict(path=record['source']['path'], sha256=record['source']['sha256'],
+                        offset=record['offset'] + 0x37 + slot * 2, bytes=2,
+                        raw_hex=raw[0x37 + slot * 2:0x39 + slot * 2].hex())))
+        if record['mutation_type'] == 17 and record['mutation_bit']:
+            ident = record['mutation_bit']
+            item(ident)
+            sources.setdefault(str(ident), []).append(dict(kind='registered-recipe-product', map_id=map_id,
+                record_id=record['id'], source=deepcopy(record['source']), entrance=deepcopy(entrance)))
     for map_id in map_ids('story-data', registration):
         table = story['maps'][map_id]
         path = f'Map/{map_id.lower()}.dat'
@@ -464,12 +512,118 @@ def status_cure_supported(row):
         and row['raw_fields']['effect_token_raw_126'] != '')
 
 
+def simple_restore_supported(row):
+    """The same proven47D960 branch as8/11/12, selected by source fields."""
+    raw = bytes.fromhex(row['raw_hex'])
+    values = {pair['instance_offset']: pair['minimum'] for pair in row['value_ranges']}
+    return bool(row['record_status'] == 'defined' and raw[0x24:0x26] == b'\x05\x01'
+        and row['initialization']['deterministic'] and row['validation']['all_value_ranges_ordered']
+        and all(value == 0 for at, value in values.items() if at not in (0xd, 0x15))
+        and values[0xd] >= 0 and values[0x15] >= 0 and values[0xd] + values[0x15] > 0
+        and raw[0x156:0x158] == b'\x00\x01' and i32(raw, 0x142) == 17
+        and not any(raw[0x2a8:]) and row['raw_fields']['effect_token_raw_126'] != '')
+
+
+def status_attack_supported(row):
+    raw = bytes.fromhex(row['raw_hex'])
+    block = raw[0x2a8:0x36e]
+    return bool(row['record_status'] == 'defined' and raw[0x24:0x26] == b'\x05\x03'
+        and row['initialization']['deterministic']
+        and all(pair['minimum'] == pair['maximum'] == 0 for pair in row['value_ranges'])
+        and raw[0x156:0x158] == b'\x00\x00' and i32(raw, 0x142) == 17
+        and 0 < block[1] <= 100 and block[0xb] in (0, 2) and block[0x10] <= 1
+        and not any(raw[0x36e:]))
+
+
+def revival_item_supported(row):
+    raw = bytes.fromhex(row['raw_hex'])
+    block = raw[0x2a8:0x36e]
+    values = {pair['instance_offset']: pair['minimum'] for pair in row['value_ranges']}
+    return bool(row['record_status'] == 'defined' and raw[0x24:0x26] == b'\x05\x01'
+        and row['initialization']['deterministic'] and row['validation']['all_value_ranges_ordered']
+        and all(value == 0 for at, value in values.items() if at not in (0xd, 0x15, 0x31, 0x39))
+        and all(values[at] >= 0 for at in (0xd, 0x15, 0x31, 0x39))
+        and raw[0x156:0x158] == b'\x00\x01' and i32(raw, 0x142) == 17
+        and block[0xb] == 3 and not any(block[0xc:]) and not any(raw[0x36e:])
+        and row['raw_fields']['effect_token_raw_126'] != '')
+
+
+def status_clear_supported(row):
+    raw = bytes.fromhex(row['raw_hex'])
+    block = raw[0x2a8:0x36e]
+    return bool(row['record_status'] == 'defined' and raw[0x24:0x26] == b'\x05\x04'
+        and row['initialization']['deterministic']
+        and all(pair['minimum'] == pair['maximum'] == 0 for pair in row['value_ranges'])
+        and raw[0x156:0x158] == b'\x00\x00' and i32(raw, 0x142) == 17
+        and block[1] == 0 and block[0xb] == 5 and not any(raw[0x36e:]))
+
+
 def admit_registered_status_cures(definitions, equipment_admission):
     # Provenance has already passed the original-byte checks above. Do not
     # enable all cure records merely because the interpreter supports mode1.
     sources, previous = {}, {}
     for ident, provenance in equipment_admission['sources'].items():
         row = definitions[ident]
+        raw = bytes.fromhex(row['raw_hex'])
+        if (row['record_status'] == 'defined' and raw[0x24:0x26] == b'\x03\x02'
+                and row['initialization']['deterministic']
+                and all(pair['minimum'] == pair['maximum'] == 0 for pair in row['value_ranges'])
+                and not any(raw[0x126:0x13a]) and i32(raw, 0x142) == 0
+                and not any(raw[0x2a8:0x392]) and not any(raw[0x3a7:])
+                and raw[0x392] <= 5
+                and all(1 <= u32(raw, 0x393 + index * 4) <= 416 for index in range(raw[0x392]))):
+            sources[ident] = deepcopy(provenance)
+            previous[ident] = {key: deepcopy(row[key]) for key in ('availability', 'behavior')}
+            row['behavior'] = dict(kind='crafting-material', status='recovered',
+                implemented_scope=['inventory-stack', 'native-service-material-input-output'], unverified_scope=[])
+            row['availability'] = dict(enabled=True, chapter_enabled=True, catalog_visible=True, default_enabled=True,
+                reasons=['registered-source-acquisition; native-material-exchange-recovered'])
+            continue
+        if simple_restore_supported(row):
+            if row['availability']['enabled'] and row['behavior']['kind'] == 'simple-restore':
+                continue
+            sources[ident] = deepcopy(provenance)
+            previous[ident] = {key: deepcopy(row[key]) for key in ('availability', 'behavior')}
+            values = {pair['instance_offset']: pair['minimum'] for pair in row['value_ranges']}
+            row['behavior'] = dict(kind='simple-restore', status='recovered',
+                implemented_scope=['single-target-flat-hp-mp-restore'], unverified_scope=[])
+            row['availability'] = dict(enabled=True, chapter_enabled=True, catalog_visible=True,
+                default_enabled=True, reasons=['registered-source-acquisition; native-flat-resource-restoration-recovered'])
+            row['effect'] = dict(restore_hp_flat=values[0xd], restore_mp_flat=values[0x15],
+                restore_hp_percent=0, restore_mp_percent=0, revive=False)
+            row['use_in_field'], row['use_in_battle'] = True, True
+            row['battle'] = dict(animation_skill_id_raw_142=17, all_targets_raw_156=0, same_side_raw_157=1,
+                effect_kind_raw_2b3=0, preparation_delay_added=0, target_state_max_exclusive=4,
+                target_immune_must_be_zero=True, consume_only_on_native_success=True)
+            continue
+        attack, revival, clear = status_attack_supported(row), revival_item_supported(row), status_clear_supported(row)
+        if attack or revival or clear:
+            raw = bytes.fromhex(row['raw_hex'])
+            sources[ident] = deepcopy(provenance)
+            previous[ident] = {key: deepcopy(row[key]) for key in ('availability', 'behavior')}
+            row['behavior'] = dict(kind='status-attack' if attack else 'status-clear' if clear else 'revival-item', status='recovered',
+                implemented_scope=['battle-single-enemy-source-status'] if attack else ['battle-mode5-all-status-removal'] if clear else ['battle-mode3-revival', 'field-resource-restoration'],
+                unverified_scope=[])
+            row['availability'] = dict(enabled=True, chapter_enabled=True, catalog_visible=True, default_enabled=True,
+                reasons=['registered-source-acquisition; native-item-status-or-revival-recovered'])
+            values = {pair['instance_offset']: pair['minimum'] for pair in row['value_ranges']}
+            row['effect'] = dict(restore_hp_flat=values[0xd], restore_mp_flat=values[0x15],
+                restore_hp_percent=values[0x31], restore_mp_percent=values[0x39], revive=revival)
+            if revival:
+                row['revival'] = dict(effect_raw_hex=raw[0x2a8:0x36e].hex(), effect_id_raw=raw[0x2a9], mode_raw=3,
+                    definition_offset=0x2a8, effect_bytes=0xc6)
+            elif clear:
+                row['status_clear'] = dict(effect_raw_hex=raw[0x2a8:0x36e].hex(), effect_id_raw=0, mode_raw=5,
+                    definition_offset=0x2a8, effect_bytes=0xc6)
+            else:
+                row['status_attack'] = dict(effect_raw_hex=raw[0x2a8:0x36e].hex(), effect_id_raw=raw[0x2a9], mode_raw=raw[0x2b3],
+                    definition_offset=0x2a8, effect_bytes=0xc6)
+            row['use_in_field'], row['use_in_battle'] = revival, True
+            row['battle'] = dict(animation_skill_id_raw_142=17, all_targets_raw_156=0, same_side_raw_157=raw[0x157],
+                effect_kind_raw_2b3=raw[0x2b3], preparation_delay_added=0,
+                target_state_max_exclusive=8 if revival else 4, target_immune_must_be_zero=True,
+                consume_only_on_native_success=True)
+            continue
         if not status_cure_supported(row):
             continue
         sources[ident] = deepcopy(provenance)
@@ -492,8 +646,8 @@ def admit_registered_status_cures(definitions, equipment_admission):
             target_immune_must_be_zero=True, consume_only_on_native_success=True)
     return dict(policy='registered-source-item-capabilities-v1', promoted_item_ids=sorted(map(int, sources)),
         sources=sources, previous_definitions=previous,
-        field_scope='47D960 has zero initialized fields for these cures; field use cannot succeed or consume.',
-        battle_scope='41B3C0 calls 508BB0 mode1 then displays the source effect; consumes only on a successful status removal or recovery.')
+        field_scope='47D960 restores admitted deterministic HP/MP fields; zero-field status cures cannot succeed or consume in the field.',
+        battle_scope='41B3C0 calls 508BB0 then displays the source effect; consumes only on successful status removal or recovery.')
 
 
 def equipment_immunity_supported(row):
@@ -646,7 +800,8 @@ def export():
     assert range_issues == {'36': [dict(kind='reversed-source-range', instance_offset=0x7d,
                                       definition_offset=0x27a, minimum=768, maximum=0)]}
     assert variable_ids == [31]
-    assert {k for k, r in definitions.items() if 'effect' in r} == {'8', '11', '12'} | set(capabilities['sources'])
+    assert {k for k, r in definitions.items() if 'effect' in r} == {'8', '11', '12'} | {
+        ident for ident in capabilities['sources'] if definitions[ident]['behavior']['kind'] != 'crafting-material'}
     assert all(len(row['value_ranges']) == 32 and row['source']['record_sha256'] == sha(bytes.fromhex(row['raw_hex']))
                and row['validation']['drop_rate_in_native_range'] and row['validation']['target_flags_are_boolean']
                for row in definitions.values())
@@ -673,7 +828,7 @@ def export():
                         availability='Source indexes are independent of runtime activation. config/items.json remains the only editable parameter catalog.'),
                     default_enabled_item_ids=enabled_ids, original_chapter_item_ids=IDS,
                     equipment_admission=admission, item_capability_admission=capabilities,
-                    simple_restore_item_ids=SIMPLE_RESTORE_IDS,
+                    simple_restore_item_ids=sorted(int(ident) for ident, row in definitions.items() if row['behavior']['kind'] == 'simple-restore'),
                     source_value_ranges_per_record=32, source_range_issues=range_issues,
                     random_initialization_item_ids=variable_ids,
                     classification_counts=dict(Counter(r['category'] for r in definitions.values())),

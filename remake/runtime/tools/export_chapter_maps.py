@@ -116,11 +116,22 @@ def role_graphics(role_id, outputs):
 def _role_graphics(role_id, outputs):
     name = f"ROLE/{role_id}.dgp"
     dgp = DGP(ROOT / name)
-    actions = []
+    actions, unexported = [], []
     for action in dgp.actions:
         frames, dirs = action["frames_per_direction"], action["directions"]
         if frames <= 0 or dirs <= 0:
             raise DGPError("Chapter role has an empty action group")
+        raw = dgp.raw_actions[action["index"]]
+        if action['first_frame'] + frames * dirs > dgp.frame_count:
+            # 469F50 binds each channel to its first source action. Some ROLE
+            # files retain a later duplicate whose frame base is beyond EOF;
+            # preserve that source record without inventing an atlas for it.
+            previous = next((row for row in actions if bytes.fromhex(row['raw_hex'])[0x7e] == raw[0x7e]), None)
+            if previous is None or raw[0x7e] >= 20:
+                raise DGPError(f"{name} action {action['index']} exceeds physical frame pool {dgp.frame_count}")
+            unexported.append(dict(**action, shadowed_by_action=previous['index'],
+                reason='Source frame range exceeds the physical pool; native469F50 selects the earlier action for this channel'))
+            continue
         sheet = Image.new("RGBA", (dgp.width * frames, dgp.height * dirs))
         for direction in range(dirs):
             for frame in range(frames):
@@ -130,7 +141,6 @@ def _role_graphics(role_id, outputs):
         target.parent.mkdir(parents=True, exist_ok=True)
         save_png(sheet, target)
         outputs[export_maps.web_url(target)] = export_maps.sha(target)
-        raw = dgp.raw_actions[action["index"]]
         uses_sequence = (raw[0x0D] & 0x0F) == 0
         count = u32(raw, 0x12) if uses_sequence else frames
         sequence = list(raw[0x16:0x72])
@@ -149,10 +159,15 @@ def _role_graphics(role_id, outputs):
                             sequence_rule="(raw+0x0D &0x0F)==0 selects byte+0x16+logical_index; otherwise logical_index. Add first_frame and direction*physical_frame_count.",
                             sequence_evidence=["ev_0ffb771246c6d16325580fe6f266e66f57fbb84cfe7a3be766ff48234043fbab"],
                             source_offset=0x43 + action["index"] * 0xAC))
-    return dict(id=role_id, name=dgp.metadata()["name_cp950"],
+    result = dict(id=role_id, name=dgp.metadata()["name_cp950"],
                 source=dict(path=name, sha256=dgp.sha256), frame_width=dgp.width,
                 frame_height=dgp.height, anchor=dict(x=dgp.anchor_raw[0], y=dgp.anchor_raw[1]),
                 actions=actions, limitation="DGP action indexes are zero-based; exact native blend/timing remains unobserved")
+    if unexported:
+        result.update(source_actions=dgp.actions, source_frame_pool=dgp.frame_count,
+            unexported_actions=unexported,
+            binding_authority='GAME469F50 first matching byte+7E; evidence/fire_valley_20261025/npc_bindings_469f50_assembly.json')
+    return result
 
 
 def exit_record(origin, ident, destination, bg, detail):

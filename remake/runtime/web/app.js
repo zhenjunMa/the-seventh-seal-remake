@@ -8,6 +8,7 @@ import {createBattleController} from './controllers/battle.mjs';
 import {createInspectionController} from './controllers/inspection.mjs';
 import {createInputController} from './controllers/input.mjs';
 import {createBootController} from './controllers/boot.mjs';
+import {createNativeServicesController} from './controllers/native_services.mjs';
 import {PhaserRuntime} from './phaser/runtime.mjs';
 
 const $ = id => document.getElementById(id), canvas = $('stage'), ctx = canvas.getContext('2d');
@@ -17,7 +18,7 @@ const state = createRuntimeState($);
 const actions = {};
 const context = {state, actions, $, canvas, ctx};
 for (const create of [createServicesController, createMapController,
-  createStoryController, createMenuController, createSessionController,
+  createStoryController, createNativeServicesController, createMenuController, createSessionController,
   createBattleController, createInspectionController, createInputController,
   createBootController]) Object.assign(actions, create(context));
 

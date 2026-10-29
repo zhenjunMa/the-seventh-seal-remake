@@ -64,16 +64,29 @@ const handoffs=await Promise.all([
   handoffSourceMap('M01060','5ff8f2a3c43649fff1efc4eccd878f4a662d905f6ba3404948e47ec9240a3826'),
   handoffSourceMap('M01065','2ca9d09e6c3b42814d0e6112ea17384e3796bbbe3660aa25c61503b407cb9aa5'),
 ]);
+const cityIdle=await Promise.all([
+  handoffSourceMap('M01031','0d83b35cd0cfbbbad0cca2fa99e8abf3d53426e89843b2ffd45841a1472ac77b'),
+  handoffSourceMap('M01032','9e6ea3cd8773af049e8e8356e18fed018fa05871ab3f166b04f6b1a33d972486'),
+  handoffSourceMap('M01061','a1cb424688f96f9cd9fec6d35f60bcf612ce53fe585af5bb5583ef3eeac3347c'),
+]);
+const citySounds=await Promise.all([
+  handoffSourceMap('M01042','1db3c0d509c377efe9b327a2560f58e28ac0d4eedfc2be0894d5b0fc9a285cc3'),
+  handoffSourceMap('M01062','8ddf978ff4aad805202a918dd9aa69b30a521d66121babd9659f4ffc817f143f'),
+  handoffSourceMap('M01063','8b92d18e32ccc48d79219d71d5efdd217740be974d1e5c8a16526fd43c175bbf'),
+]);
 const make=(map,seed=1,resources=map.resources)=>{
   const rng=createNativeRng(seed),world={revision:6,event_records:[],object_states:{},flags:[],encounter_state:{rng_state:123}},objects=resources.map(row=>({index:row.index}));
   const model=new MapObjectRuntime({objects,resources:structuredClone(resources),mapFlagIndex:map.mapFlagIndex,mapId:map.mapId,random:rng});
   return {model,world,objects,rng};
 };
-function oracleFor(map,seed){
+function oracleFor(map,seed,sounds=null){
   const rng=createNativeRng(seed),oracle=new NativeAssemblyOracle(functions,[],rng),baseExternal=oracle.external.bind(oracle);
   // Queue reset, zero saved-state projection, and occupancy rebuild are outside
   // the numeric clock. These actual fixtures have no links/saved records.
-  oracle.external=target=>[0x401019,0x401113,0x40173a].includes(target)?undefined:baseExternal(target);
+  oracle.external=target=>{
+    if(target===0x4013d4&&sounds){sounds.push([0,1,2].map(i=>oracle.read(oracle.reg.ESP+i*4)));return;}
+    return [0x401019,0x401113,0x40173a].includes(target)?undefined:baseExternal(target);
+  };
   oracle.write(0x518c800,0,1);oracle.write(0x504b24a,map.native.length);oracle.write(0x2b7ba88,0x22000000);
   for(const [index,{raw,dgp}]of map.native.entries()){
     raw.forEach((value,i)=>oracle.write(0x22000000+index*274+i,value,1));
@@ -218,11 +231,68 @@ test('load reconstruction redraws interval/FF and starts at0 or the native compl
   assert.notEqual(a.rng.state,b.rng.state,'separate load draws a new visual clock, independent of save RNG');
 });
 
+test('eight real city CF1 dialogue objects retain state0 native clocks and do not automatically run TLK',async()=>{
+  const expected={M01031:[[10,5],[11,4]],M01032:[[16,6],[17,4],[18,7]],M01061:[[8,3],[13,8],[14,7]]};
+  let compared=0;
+  for(const map of cityIdle){
+    const scripted=map.resources.filter(row=>Buffer.from(row.source_record_raw_hex,'hex').readUInt32LE(0xf6));
+    assert.deepEqual(scripted.map(row=>[row.index,Buffer.from(row.source_record_raw_hex,'hex').readUInt32LE(0xf6)]),expected[map.mapId]);
+    const tlk=await readFile(new URL(`Map/${map.mapId.toLowerCase()}.tlk`,root)),base=26+tlk.readUInt32LE(2)*4;
+    for(const row of scripted){
+      const raw=Buffer.from(row.source_record_raw_hex,'hex'),record=raw.readUInt32LE(0xf6),dialogue=tlk.subarray(base+(record-1)*1647,base+record*1647);
+      assert.equal(raw[0xd0],0);assert.equal(raw[0x109],0);
+      for(const field of [0xe3,0xe7,0xb6,0x4c])assert.equal(raw.readUInt32LE(field),0);
+      assert.equal(dialogue[0],0);assert.equal(dialogue.readUInt32LE(0x17),0);assert.equal(dialogue.readUInt32LE(0x23),0);
+    }
+    for(const seed of [1,42]){
+      const actual=make(map,seed),native=oracleFor(map,seed),before=structuredClone(actual.world);let now=0;
+      actual.model.update(now,{world:actual.world});
+      for(let visit=0;visit<45;visit++){
+        now+=[37,89,123,249,1][visit%5];actual.model.update(now,{world:actual.world});
+        for(const actor of actual.model.actors){
+          const address=0x22000000+actor.object.index*274;
+          native.oracle.run(0x4137c0,[actor.object.index,now]);
+          assert.equal(actor.object.motion.frame,native.oracle.read(address+0x3c),`${map.mapId}/${actor.object.index}/${now}`);
+          assert.equal(native.oracle.read(address+0xd0,1),0);compared++;
+        }
+        assert.equal(actual.rng.state,native.rng.state);
+        assert.equal(native.oracle.read(0x504aafc),0);assert.equal(native.oracle.read(0x679230),0);
+      }
+      assert.deepEqual(actual.world,before);
+    }
+    for(const row of scripted)for(const state of [1,2,3,4]){
+      const actual=make(map,1,[row]);actual.world.event_records[map.mapFlagIndex]=[];
+      actual.world.event_records[map.mapFlagIndex][row.index]=state.toString(16).padStart(2,'0')+'00000000000000000000000000';
+      assert.throws(()=>actual.model.update(0,{world:actual.world}),/CF1.*主动交互状态/);
+    }
+  }
+  assert.ok(compared>=8*45*2);
+});
+
+test('actual forge CF1 DAT sound enable and DGP logical marker match each 4137C0 sound dispatch; identical disabled metadata stays silent',()=>{
+  const eventsByMap=[];
+  for(const map of citySounds){
+    const actual=make(map,42),sounds=[],native=oracleFor(map,42,sounds),events=[];
+    actual.model.onSound=event=>events.push(event);let now=0;
+    actual.model.update(0,{world:actual.world});assert.equal(events.length,0);
+    for(let visit=0;visit<150;visit++){
+      now+=[37,89,123,249,1][visit%5];actual.model.update(now,{world:actual.world});
+      for(const actor of actual.model.actors)native.oracle.run(0x4137c0,[actor.object.index,now]);
+      assert.deepEqual(events.map(event=>[event.x,event.y,1]),sounds);
+      for(const event of events){assert.equal(event.token,'E015.wav');assert.equal(event.frame,1);}
+      assert.equal(actual.rng.state,native.rng.state);
+    }
+    const before=events.length;
+    actual.model.update(now+100,{world:actual.world,paused:true});actual.model.update(now+10000,{world:actual.world});
+    assert.equal(events.length,before);eventsByMap.push([map.mapId,events.length]);
+  }
+  assert.ok(eventsByMap[0][1]>1);assert.deepEqual(eventsByMap.slice(1),[['M01062',0],['M01063',0]]);
+});
+
 test('source binding rejects unsupported multi-action/mode/sequence/sound/interval and metadata drift',()=>{
   const map=maps.find(map=>map.mapId==='M17023');
   const alter=(row,offset,value)=>{const raw=Buffer.from(row.resource.actions[0].source_action_raw_hex,'hex');raw[offset]=value;row.resource.actions[0].source_action_raw_hex=raw.toString('hex');};
   for(const change of [r=>delete r.source_record_raw_hex,r=>{r.fixed_clock_raw_b4=1;},r=>{r.resource.actions.push(structuredClone(r.resource.actions[0]));},
-    r=>{const raw=Buffer.from(r.source_record_raw_hex,'hex');raw.writeUInt32LE(1,0xf6);r.source_record_raw_hex=raw.toString('hex');},
     r=>alter(r,13,0),r=>alter(r,0,1),r=>alter(r,1,1),r=>alter(r,0x56,65),r=>alter(r,0x84,1),r=>alter(r,0x72,1),
     r=>{r.resource.actions[0].logical_frames[0]=2;},r=>{r.map_id='M17030';}]){
     const resources=structuredClone(map.resources);change(resources[0]);assert.throws(()=>make(map,1,resources),/地图|CF1/);

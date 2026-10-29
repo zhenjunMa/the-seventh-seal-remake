@@ -1,6 +1,6 @@
 # 第七封印 · 当前实现架构
 
-更新：2026-10-23；路径以runtime为基准。
+更新：2026-10-29；路径以runtime为基准。
 
 ## 目录
 
@@ -23,7 +23,7 @@
 
 Phaser `3.90.0`运行库固定在`web/vendor/phaser`，保留MIT许可和SHA清单；直接随静态服务提供，不依赖CDN或npm安装。
 
-`web/app.js`创建共享state和actions，装配services、map、story、menu、session、battle、inspection、input、boot控制器，再调用boot。
+`web/app.js`创建共享state和actions，装配services、native_services、map、story、menu、session、battle、inspection、input、boot控制器，再调用boot。
 
 app先创建`phaser/runtime.mjs`中的PhaserRuntime。runtime场景只推进共享转场与界面；exploration和battle分别在自己的update中调用探索／战斗适配器并绘制，地图控制器不再推进战斗。原SceneController继续负责世界地点准备／提交／回滚。
 
@@ -79,7 +79,7 @@ PhaserRuntime按原因集合管理页面隐藏、手动暂停和错误挂起，�
 
 ## 三个状态边界
 
-- **WorldStore持有可保存世界**：地点、人物资源／成长、背包／装备、旗标、事件、队列、技巧／晶石、遇敌RNG与奖励去重记录。变更通过草稿及revision提交，避免异步加载覆盖期间的新操作。
+- **WorldStore持有可保存世界**：地点、人物资源／成长、背包／装备、旗标、事件、队列、技巧／晶石、当前地图NPC布置、遇敌RNG与奖励去重记录。变更通过草稿及revision提交，避免异步加载覆盖期间的新操作。
 
 - SceneController管理地图准备、切换和回滚；先准备必需资源，再提交地点／图层／NPC状态，失败恢复原场景。
 
@@ -220,6 +220,8 @@ BattleView按本场resource_id选择人物动作及本体图层；特效归属�
 battle-stages按登记读取原SCN／DGP生产同格式背景，复用来源解码／像素审计和默认镜头规则；战斗背景与音乐按本场实际stage选择。旧专用舞台产物继续由原导出器维护。
 
 ## 菜单、保存与声音
+
+城镇kind8服务沿同一StoryFlow和外层剧情草稿运行：`controllers/native_services`连接原Boss菜单视图与`core/native_economy`，交易／配方／物品资格不写入视图。窗口关闭后继续原对白，完整交互成功才提交金钱、原料、产物与装备。来源及边界见[story_guide.md](story_guide.md#城镇服务与金钱)。
 
 菜单、对白、字幕、加载及像素转场沿用已有DOM／局部Canvas视图；这些界面保持现有输入层级、字体和音频控制。Phaser不安装第二套键盘和音频系统。输入在运行挂起时清除按键，事件监听通过AbortController在退出时解绑。
 

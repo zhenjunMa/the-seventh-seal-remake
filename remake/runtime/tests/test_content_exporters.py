@@ -17,6 +17,7 @@ import export_battle_lifecycle as lifecycle
 from source.combat_resources import CHR
 from source.dgp import DGP
 from export_skill_layers import SourceAudit
+from source.map_identity import is_native_map_id, native_map_id_from_filename
 
 
 class ContentExporterTests(unittest.TestCase):
@@ -120,7 +121,8 @@ class ContentExporterTests(unittest.TestCase):
                 self.assertIn('M70020', content.map_ids('story'))
                 self.assertIn('M71011', content.map_ids('story-data'))
                 self.assertNotIn('M71011', content.map_ids('story'))
-                self.assertNotIn('M01010', content.map_ids('story-data'))
+                self.assertIn('M01010', content.map_ids('story-data'))
+                self.assertIn('M01010', content.map_ids('story'))
                 self.assertIn('014', content.role_ids('enemy'))
                 self.assertIn('m70020-2', content.program_ids())
                 self.assertNotIn('M17020', content.map_ids('assets'))
@@ -138,15 +140,64 @@ class ContentExporterTests(unittest.TestCase):
 
     def test_native_map_variants_keep_distinct_source_identities(self):
         value = copy.deepcopy(content.definition())
-        for ident in ('M17030', 'M17030-1', 'M17030-2'):
+        variants = ('M17030', 'M17030-1', 'M17030-2', 'M01020A', 'M70074_2',
+                    'M03012_1F', 'M70078-1_1', 'M71076-1-03', 'M72010-0-A')
+        for ident in variants:
             value['maps'][ident] = {}
         selected = content.map_exports(value)
-        self.assertTrue(all(ident in selected for ident in ('M17030', 'M17030-1', 'M17030-2')))
-        for ident in ('M17030-', 'M17030-x', 'M17030-1-2', 'M17030-1/../M17020', '../M17030-1'):
+        self.assertTrue(all(ident in selected for ident in variants))
+        for ident in ('M17030-', 'M17030-x', 'M17030__2', 'M17030-1/../M17020', '../M17030-1',
+                      'M01020AA', 'M01020A\n', 'M70074_2\x00', 'M70074_%32', 'm01020a'):
             invalid = copy.deepcopy(value)
             invalid['maps'][ident] = {}
             with self.subTest(ident=ident), self.assertRaisesRegex(ValueError, 'map identity'):
                 content.map_exports(invalid)
+
+    def test_actual_npc_duplicate_walk_record_retains_source_without_an_invented_atlas(self):
+        source = DGP(RUNTIME.parents[1] / 'ROLE/106.dgp')
+        self.assertEqual(source.frame_count, 120)
+        self.assertEqual([(a['first_frame'], a['frames_per_direction'], a['directions'], a['identifier_raw']) for a in source.actions],
+                         [(0, 5, 8, 0), (40, 10, 8, 1), (120, 10, 8, 1)])
+        with tempfile.TemporaryDirectory(prefix='map-role-', dir=RUNTIME / 'tests') as temporary:
+            target = Path(temporary)
+            with patch.object(maps, 'RUNTIME', target), patch.object(maps.export_maps, 'RUNTIME', target):
+                outputs = {}
+                role = maps._role_graphics('106', outputs)
+            self.assertEqual(role['source_actions'], source.actions)
+            self.assertEqual([action['index'] for action in role['actions']], [0, 1])
+            self.assertEqual(role['unexported_actions'][0]['index'], 2)
+            self.assertEqual(role['unexported_actions'][0]['shadowed_by_action'], 1)
+            from PIL import Image
+            for action in role['actions']:
+                with Image.open(target / 'web' / action['sheet'].lstrip('/')) as sheet:
+                    for direction in range(action['directions']):
+                        for frame in range(action['frame_count']):
+                            rect=(frame*source.width,direction*source.height,(frame+1)*source.width,(direction+1)*source.height)
+                            self.assertEqual(sheet.crop(rect).convert('RGBA').tobytes(),
+                                             source.decode(action['first_frame']+direction*action['frame_count']+frame).tobytes())
+            self.assertFalse((target / 'web/assets/chapter_roles/106/action_02.png').exists())
+
+    def test_map_filename_syntax_is_source_supported_and_path_safe(self):
+        root = RUNTIME.parents[1]
+        # Every shipped numeric M-family DAT variant remains a distinct source.
+        for path in (root / 'Map').glob('*'):
+            if path.suffix.lower() == '.dat' and path.stem[:1].lower() == 'm' and path.stem[1:6].isdigit():
+                self.assertTrue(is_native_map_id(path.stem.upper()), path.name)
+                self.assertEqual(native_map_id_from_filename(path.name), path.stem.upper())
+        for value in ('Map/M01020A.DAT', 'M01020A.DAT\n', 'M01020A..DAT', 'M01020A.DAT.exe',
+                      'M01020A\\x.DAT', 'M01020A\x00.DAT', None, 15):
+            self.assertIsNone(native_map_id_from_filename(value), value)
+
+    def test_anm_letter_and_underscore_maps_require_exact_registration(self):
+        commands = [dict(opcode=10, u32_plus5=0, filename='m01020a.dat'),
+                    dict(opcode=10, u32_plus5=0, filename='M70074_2.DAT')]
+        context = story.program_map_context(commands, {'M01020A': {}, 'M70074_2': {}}, 'source-map-variants')
+        self.assertEqual(context['control_maps'], ['M01020A', 'M70074_2'])
+        with self.assertRaisesRegex(ValueError, 'unregistered control map'):
+            story.program_map_context(commands, {'M01020A': {}}, 'source-map-variants')
+        for filename in ('../M01020A.DAT', 'M01020A.DAT\n'):
+            with self.assertRaisesRegex(ValueError, 'unsupported opcode10 map reference'):
+                story.program_map_context([dict(opcode=10, u32_plus5=0, filename=filename)], {}, 'bad-map')
 
     def test_passage_without_tlk_has_no_fabricated_dialogue(self):
         with tempfile.TemporaryDirectory() as temporary:

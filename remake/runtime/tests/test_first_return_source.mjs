@@ -18,7 +18,7 @@ function fixture(options={}){
 }
 test('NPC15 actual root and all three source material choices consume299 once, then execute the full first return and the regional005 join',async()=>{
   assert.equal(data.story.maps.M01050.index_nonzero.find(row=>row.slot===15).record,17);
-  assert.deepEqual(data.content.maps.M01050.npcs,[15]);assert.equal(Object.keys(data.content.maps).filter(id=>id.startsWith('M170')).length,21);
+  assert.ok(data.content.maps.M01050.npcs.includes(15));assert.equal(Object.keys(data.content.maps).filter(id=>id.startsWith('M170')).length,21);
   assert.equal(data.story.programs['m01050-1'].commands.length,18);assert.equal(data.story.programs['m01050-2'].commands.length,44);
   for(const [choice,id]of [[0,358],[1,348],[2,342]]){
     const f=fixture({choice}),before=f.world.snapshot();

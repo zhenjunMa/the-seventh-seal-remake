@@ -6,7 +6,7 @@ import {restoreNativeStoryResources} from './recovery.mjs';
 const need=(ok,message)=>{if(!ok)throw new Error(`原剧情变更：${message}`);};
 const uint=value=>Number.isInteger(value)&&value>=0&&value<=0xffffffff;
 const roleId=slot=>String(slot+1).padStart(3,'0');
-export const NATIVE_STORY_MUTATION_TYPES=new Set([10,11,14,16,17]);
+export const NATIVE_STORY_MUTATION_TYPES=new Set([3,10,11,14,16,17]);
 export const NATIVE_STORY_MUTATION_EVIDENCE={
   restoreResources:'ev_f5b336470c325748b8696f702dd1babb487b4e55109ad82d9a04fb904683770d',
   learn:'ev_b81f3b90a966881565f8fafb6e081714c775bca83167ec9eff4199d7a3facf83',
@@ -79,6 +79,12 @@ export function applyNativeStoryMutation(draft,record,{roleDefinitions={}}={}){
   const definitions={...draft.source?.role_definitions,...roleDefinitions};
   validateNativeStoryMutation(record,{roleDefinitions:definitions});
   validateNativeStoryMutationState(draft);
+  if(record.mutation_type===3){
+    // 4618DA adds signed TLK +27 with 32-bit wrap, then clamps negatives.
+    const before=draft.money??0,delta=record.mutation_index|0;
+    draft.money=Math.max(0,(before+delta)|0);
+    return {mutation_type:3,money_before:before,money_after:draft.money,delta};
+  }
   if(record.mutation_type===10||record.mutation_type===11){
     // These native branches never read TLK mutation_index/mutation_bit.
     const resource=record.mutation_type===10?'hp':'mp';

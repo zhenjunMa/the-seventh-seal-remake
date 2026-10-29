@@ -74,9 +74,34 @@ def player_support_blocks():
     return blocks
 
 
+def item_status_blocks():
+    """Retain hostile ITM508BB0 templates for the shared status-table owner.
+
+    Source metadata does not enable a menu item. Actual acquisition and item
+    handler admission remain in the item catalog, produced after this table.
+    """
+    path = ROOT / 'SYSTEM/Object.ITM'
+    raw = path.read_bytes()
+    blocks = {}
+    count = struct.unpack_from('<I', raw, 0x20)[0]
+    if len(raw) != 0x61c + count * 0x3bf:
+        raise ValueError('Invalid original item table boundary')
+    for index in range(count):
+        at = 0x61c + index * 0x3bf
+        record = raw[at:at + 0x3bf]
+        effect = record[0x2a8:0x36e]
+        if record[0x24:0x26] != b'\x05\x03' or effect[0xb] not in (0, 2) or not effect[1] or effect[1] > 100 or effect[0x10] > 1:
+            continue
+        blocks[str(index + 1)] = dict(item_id=index + 1, effect_raw_hex=effect.hex(),
+            effect_id_raw=effect[1], mode_raw=effect[0xb],
+            source=dict(path='SYSTEM/Object.ITM', sha256=sha(path), record_offset=at,
+                block_offset=at + 0x2a8, effect_bytes=0xc6))
+    return blocks
+
+
 def source_files():
     """Status-table owner fingerprints every selected player/enemy CHR."""
-    paths = {'GAME.exe'}
+    paths = {'GAME.exe', 'SYSTEM/Object.ITM'}
     for ident in role_ids('enemy'):
         paths.update(f'Fight_Role/{ident}.{suffix}' for suffix in ('CHR', 'dgp'))
         character = CHR(ROOT / f'Fight_Role/{ident}.CHR')
@@ -98,7 +123,10 @@ def source_files():
         paths.add(block['source']['path'])
         if block['effect_id_raw'] and block['mode_raw'] in (0, 2):
             paths.add(f"Fight_Role/Status/{block['effect_id_raw']:03d}.dgp")
-    return tuple(sorted(paths))
+    for block in item_status_blocks().values():
+        paths.add(f"Fight_Role/Status/{block['effect_id_raw']:03d}.dgp")
+    return tuple(sorted(path for path in paths if (ROOT / path).is_file()
+        or not path.startswith(('Fight_Role/Effect/', 'Fight_Role/Status/'))))
 
 
 def prepare_role(ident, status):
@@ -176,6 +204,10 @@ def export():
     # +231 is a separate contact payload and must not replace +16B records.
     status['skills'].update(player_blocks)
     status['support_skills'] = support_blocks
+    item_blocks = item_status_blocks()
+    extend_status_descriptors(status, item_blocks, sources, retain_skills=False)
+    status['item_effects'] = item_blocks
+    sources['SYSTEM/Object.ITM'] = sha(ROOT / 'SYSTEM/Object.ITM')
     sources.update({block['source']['path']: block['source']['sha256'] for block in player_blocks.values()})
     # All source rules above are checked before image writes or metadata changes.
     ai['roles'], data['actors'], data['skills'] = {}, {}, {}
@@ -225,6 +257,8 @@ def export():
         passed=True, source_unchanged=True, source_hashes=sources, role_ids=list(ids),
         learned_indices={ident: row[2]['learned_indices'] for ident, row in prepared.items()},
         frame_checks=checks, output_hashes={p.relative_to(RUNTIME).as_posix(): sha(p) for p in outputs},
+        missing_original_files=sorted({row['source'] for row in meta.get('missing_effects', [])}
+            | {row['source']['path'] for row in status['effects'].values() if row.get('source', {}).get('source_exists') is False}),
         original_game_execution_observed=False,
         limits=['Registered learned direct/effect-carrier skills use recovered commands and source status clocks.',
                 'Reward export and encounter selection are separate build steps; export does not enable unregistered mechanics.']))

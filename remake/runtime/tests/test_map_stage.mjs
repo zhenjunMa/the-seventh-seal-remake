@@ -133,6 +133,18 @@ test('restoring late flags prepares their NPC layout from the saved world and sk
   assert.deepEqual(store.snapshot(),savedBefore);assert.deepEqual(saved,savedBefore);assert.deepEqual(value,sourceBefore);
 });
 
+test('saved current-map actors override pure setup on restore, and ordinary entry reloads DAT/setup',async()=>{
+  const value=await fixture('M17010',['m17010-4','m17010-5']);value.world.flags[12]|=1;
+  value.world.map_npc_state={map_id:'M17010',actors:[{slot:28,x:1400,y:900,direction:3,hidden:true,action:0,frame:0}]};
+  const restored=await projectMapStage(value);assert.deepEqual([slot(restored,28).x,slot(restored,28).y,slot(restored,28).hidden],[1400,900,true]);
+  const store=new WorldStore(value.world),controller=new SceneController({world:store,
+    prepare:async(id,{world})=>({data:{id},npcs:await projectMapStage({...value,world})}),validateEntry(){},commitView(){}});
+  controller.current={data:{id:'M17010'},npcs:restored};controller.setPhase('map');
+  await controller.loadLocation(value.world.location);
+  assert.deepEqual([slot(controller.current.npcs,28).x,slot(controller.current.npcs,28).y,slot(controller.current.npcs,28).hidden],[1024,1054,false]);
+  assert.equal('map_npc_state' in store.value,false,'ordinary entry does not retain a permanent per-map cache');
+});
+
 test('a failed restore of the late NPC layout rolls back the early scene, view and world',async()=>{
   const value=await fixture('M17010',['m17010-4','m17010-5']),store=new WorldStore(copy(value.world));
   const saved=copy(value.world);saved.flags[12]|=1;saved.location={map_id:'M17010',x:1199,y:801,direction:2};
