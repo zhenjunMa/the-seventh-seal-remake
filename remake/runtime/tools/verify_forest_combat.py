@@ -94,7 +94,7 @@ def main():
         http.append(ref)
     fingerprints={}
     paths=[*WEB.glob('*.js'),*WEB.glob('*.mjs'),*WEB.glob('*.html'),*WEB.glob('*.css'),*WEB.glob('core/*.mjs'),*WEB.glob('data/*.json'),*RUNTIME.glob('tools/export_battle_scheduler.py'),*RUNTIME.glob('tools/*forest*.py'),RUNTIME/'tools/build_catalog.py',RUNTIME/'tests/native_assembly_oracle.mjs',RUNTIME/'tests/preserve_history.mjs',WEB/'core/movement.mjs',*tests,
-           ROOT/'README.md',RUNTIME/'README.md',REMAKE/'assessment/validation_design.md',REMAKE/'assessment/testing_strategy.md']
+           ROOT/'README.md',REMAKE/'assessment/validation_design.md',REMAKE/'assessment/testing_strategy.md']
     paths+=list(EVIDENCE.glob('forest_combat_four_steps_browser*'))
     for path in paths:fingerprints[str(path.relative_to(ROOT)).replace('\\','/')]=digest(path)
     report={'schema':'seventh-seal-forest-four-step-delivery','version':1,'passed':True,'tests':count,'http_checks':http,'source_hashes':source_checks,'assets_checked':len(asset_checks),'asset_hashes':asset_checks,'current_fingerprints':fingerprints,
@@ -116,7 +116,7 @@ def main():
            '边界：一名历史玩家、两玩家招与六森林敌招；命令边界暂停、65ms Canvas预览／轨迹／混色未逐项原版对齐；空中／特殊反应、其他状态、完整队伍、技能熟练度与新游戏开场待恢复。',
            'F68E按已证分配memset=0；角色载入是否另覆盖仍未核定。grounded死亡最终化采用20ms更新与序列收尾，原空中占用生命周期未完整还原。',
            '下一步：火之谷新游戏初值、王厅／住处ANM、装备／入队与真实主线，继续同条件原版运行对照。',
-           '复做：python -B remake/runtime/tools/verify_forest_combat.py；启动与导出命令见runtime/README.md。']
+           '复做：python -B remake/runtime/tools/verify_forest_combat.py；启动命令见仓库根README.md，导出命令见runtime/tools/README.md。']
     (EVIDENCE/'forest_combat_recheck.txt').write_text('\n'.join(lines)+'\n',encoding='utf-8')
     print(json.dumps({'passed':True,'tests':count,'http':len(http),'assets_checked':len(asset_checks),'sources_checked':len(source_checks),'browser_outcome':result['outcome']},ensure_ascii=False))
 

@@ -14,7 +14,7 @@
 python3 -B remake/runtime/serve.py
 ```
 
-Windows 可用 `python -B remake/runtime/serve.py`，或双击 `remake/start.cmd`。访问 <http://127.0.0.1:8767/>；服务将重制存档写入 `remake/saves/`。
+Windows 可用 `python -B remake/runtime/serve.py`，或双击 `remake/start.cmd`。访问 <http://127.0.0.1:8767/>；服务将重制存档写入 `remake/saves/`，与原版二进制存档不直接兼容。具体操作以游戏内提示为准。
 
 没有媒体时，可访问 <http://127.0.0.1:8767/phaser-preview.html>，用示意图检查探索、缩放和战斗。预览不读写正式存档，其结果不代表原作画面或主线验收。
 
@@ -30,7 +30,6 @@ node remake/runtime/tools/verify_phaser.mjs
 
 | 要做的事 | 唯一说明入口 |
 | --- | --- |
-| 启动、按键、菜单、战斗、保存 | [运行与操作](remake/runtime/README.md) |
 | 查当前范围、待办和验收状态 | [当前开发计划](remake/assessment/validation_design.md) |
 | 理解模块、状态、事务和时钟 | [实现架构](remake/runtime/architecture.md) |
 | 调整数值，接入角色、技能、怪物 | [配置与内容登记](remake/runtime/config_guide.md) |

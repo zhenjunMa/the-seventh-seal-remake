@@ -75,7 +75,7 @@ def main():
     paths = [*WEB.glob('*.js'), *WEB.glob('*.mjs'), *WEB.glob('core/*.mjs'), *WEB.glob('data/config/*.json'), WEB/'data/catalog.json',
              RUNTIME/'tools/export_runtime_config.mjs', RUNTIME/'tools/export_skill_config.py', RUNTIME/'tools/build_catalog.py', Path(__file__),
              *tests, RUNTIME/'tests/preserve_history.mjs', RUNTIME/'config_guide.md',
-             RUNTIME/'README.md', ROOT/'README.md', RUNTIME.parent/'assessment/testing_strategy.md',
+             ROOT/'README.md', RUNTIME.parent/'assessment/testing_strategy.md',
              RUNTIME.parent/'assessment/validation_design.md',
              *EVIDENCE.glob('runtime_config_browser*'), EVIDENCE/'runtime_config_before_browser_20261011.json']
     hashes = {path.relative_to(ROOT).as_posix():sha(path) for path in paths}

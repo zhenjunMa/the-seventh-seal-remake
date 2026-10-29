@@ -127,8 +127,7 @@ def main():
     current = sorted(p for p in WEB.rglob('*') if p.is_file() and p.suffix in {'.mjs', '.js', '.css', '.html', '.json'})
     current += sorted((RUNTIME/'tests').glob('test_*.mjs'))
     current += [Path(__file__), RUNTIME/'tools/verify_current.py', RUNTIME/'tools/build_runtime.py',
-                ROOT/'README.md', *[RUNTIME.parent/name for name in ['assessment/validation_design.md', 'runtime/README.md',
-                 'runtime/architecture.md', 'runtime/config_guide.md', 'runtime/tools/README.md']]]
+                ROOT/'README.md', *[RUNTIME.parent/name for name in ['assessment/validation_design.md', 'runtime/architecture.md', 'runtime/config_guide.md', 'runtime/tools/README.md']]]
     evidence = sorted(p for p in CASES.iterdir() if p.suffix in {'.json', '.jpg', '.png'})
     evidence += [audit_path, native_path, fixture_path, EVIDENCE/'menu_technique_export_20261013.json',
                  *[WEB/frame for frame in sorted(source_frames)]]

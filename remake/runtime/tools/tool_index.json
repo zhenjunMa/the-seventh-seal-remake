@@ -1275,6 +1275,16 @@
       "sha256": "c8424eade72736286b864913afbbe139b724c17a054a22a107ff781c26567a03",
       "replacement": "remake/assessment/testing_strategy.md",
       "recovery_commit": "858f5ddacac9de3f27681817eafbdd46b83e06c7"
+    },
+    {
+      "path": "remake/runtime/README.md",
+      "sha256": "407de67fa7ee4d6074017a10443fbd9607c2acb653c93f468a890b3390bf2eb8",
+      "replacement": "README.md",
+      "recovery_commit": "2633f17d24e051d18ba74fd948ff9108b9e23a8e",
+      "local_snapshot": {
+        "path": "remake/archive/20261029_runtime_readme_removal/README.md",
+        "sha256": "d46a06204bcc3ec0dc9b32a6438e6b0cd74c47f9b323e1962f300973fd969476"
+      }
     }
   ]
 }
