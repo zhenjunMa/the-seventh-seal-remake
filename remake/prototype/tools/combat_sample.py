@@ -1,8 +1,8 @@
 """Prepare role-state references and a user-reported combat-sample plan.
 
 This does not load the game, modify a save, or assert a reproducible battle.
-It reuses save_analysis_20261010 parsers and records unresolved runtime steps.
-Run with python -B to avoid import caches in the read-only analysis directory.
+It reuses the runtime source parsers and records unresolved runtime steps.
+Historical saves and analysis evidence remain separate, read-only inputs.
 """
 from __future__ import annotations
 
@@ -15,10 +15,11 @@ import sys
 
 sys.dont_write_bytecode = True
 ROOT = Path(__file__).resolve().parents[3]
-ANALYSIS = ROOT / "save_analysis_20261010"
-sys.path.insert(0, str(ANALYSIS))
-from save_format import complete_layout, inventory  # noqa: E402
-from inspect_equipment import describe_equipment  # noqa: E402
+HISTORICAL_INPUTS = ROOT / "save_analysis_20261010"
+TOOLS = ROOT / "remake/runtime/tools"
+sys.path.insert(0, str(TOOLS))
+from source.save_format import complete_layout, inventory  # noqa: E402
+from source.inspect_equipment import describe_equipment  # noqa: E402
 
 SAVES = (
     ("verified_level12_SaveGame0.Dat", "verified_level12_results.json", "source_sha256"),
@@ -71,9 +72,9 @@ def object_observation(data: bytes, offset: int, dynamic_index: int) -> dict:
 
 
 def describe_candidate(filename: str, report_name: str, digest_key: str) -> dict:
-    path = ANALYSIS / filename
+    path = HISTORICAL_INPUTS / filename
     data = path.read_bytes()
-    report = json.loads((ANALYSIS / report_name).read_text(encoding="utf-8-sig"))
+    report = json.loads((HISTORICAL_INPUTS / report_name).read_text(encoding="utf-8-sig"))
     digest = hashlib.sha256(data).hexdigest()
     if digest != report[digest_key]:
         raise ValueError(f"Previously verified snapshot digest changed: {filename}")
@@ -109,7 +110,7 @@ def describe_candidate(filename: str, report_name: str, digest_key: str) -> dict
         "allowed_use": "Digest-bound character, equipment and inventory reference only.",
         "combat_exclusion": {"evidence_type": "user_reported",
                              "claim": "运炎河右岸 is a city and does not trigger ordinary encounters; encounters occur as movement-triggered hidden battles."},
-        "prior_verification_report": (ANALYSIS / report_name).relative_to(ROOT).as_posix(),
+        "prior_verification_report": (HISTORICAL_INPUTS / report_name).relative_to(ROOT).as_posix(),
         "prior_verification_digest_matches": True,
         "prior_user_verification_scope": (
             "level12 and YanLuo menu/use" if "level12" in filename
@@ -142,21 +143,21 @@ def describe_candidate(filename: str, report_name: str, digest_key: str) -> dict
 
 def build_report() -> dict:
     inputs = [ROOT / "GAME.exe", ROOT / "SYSTEM" / "Object.ITM",
-              ANALYSIS / "save_format.py", ANALYSIS / "read_inventory.py",
-              ANALYSIS / "inspect_equipment.py", ANALYSIS / "rea_format_evidence.json",
-              ANALYSIS / "SaveGame0.full_parsed.json"]
+              TOOLS / "source/save_format.py", TOOLS / "source/read_inventory.py",
+              TOOLS / "source/inspect_equipment.py", HISTORICAL_INPUTS / "rea_format_evidence.json",
+              HISTORICAL_INPUTS / "SaveGame0.full_parsed.json"]
     for filename, report_name, _ in SAVES:
-        inputs.extend([ANALYSIS / filename, ANALYSIS / report_name])
+        inputs.extend([HISTORICAL_INPUTS / filename, HISTORICAL_INPUTS / report_name])
     # Bounded shallow header inspection: no full-disk search or game loading.
-    header_paths = sorted(ANALYSIS.glob("*.Dat"))
+    header_paths = sorted(HISTORICAL_INPUTS.glob("*.Dat"))
     header_paths.extend(p for p in (ROOT / "SaveGame0.Dat", ROOT / "SaveGame1.Dat") if p.is_file())
     inputs.extend(header_paths)
     inputs = list(dict.fromkeys(inputs))
     before = [fingerprint(p) for p in inputs]
-    native = json.loads((ANALYSIS / "rea_format_evidence.json").read_text(encoding="utf-8-sig"))
+    native = json.loads((HISTORICAL_INPUTS / "rea_format_evidence.json").read_text(encoding="utf-8-sig"))
     if before[0]["sha256"] != native["artifact"]["sha256"]:
         raise ValueError("GAME.exe no longer matches reused native evidence.")
-    cached = json.loads((ANALYSIS / "SaveGame0.full_parsed.json").read_text(encoding="utf-8-sig"))
+    cached = json.loads((HISTORICAL_INPUTS / "SaveGame0.full_parsed.json").read_text(encoding="utf-8-sig"))
     candidates = [describe_candidate(*entry) for entry in SAVES]
     headers = []
     for path in header_paths:
@@ -175,8 +176,8 @@ def build_report() -> dict:
         "scope": "Read-only historical-save inspection. No game execution, save load/install, save write, or new REA session.",
         "inputs_before": before, "inputs_after": after, "all_inputs_unchanged": True,
         "reused_sources": {
-            "parser": "save_analysis_20261010/save_format.py",
-            "equipment_parser": "save_analysis_20261010/inspect_equipment.py",
+            "parser": "remake/runtime/tools/source/save_format.py",
+            "equipment_parser": "remake/runtime/tools/source/inspect_equipment.py",
             "native_serialization": "save_analysis_20261010/rea_format_evidence.json",
             "cached_layout": {"path": "save_analysis_20261010/SaveGame0.full_parsed.json",
                               "reported_size": cached["length"],

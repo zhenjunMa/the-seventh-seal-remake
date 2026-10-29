@@ -37,6 +37,7 @@ node remake/runtime/tools/verify_phaser.mjs
 | 盘点新区、选择阶段、核对交接 | [区域重制方法](remake/assessment/region_remake_workflow.md) |
 | 选择检查范围、核对界面和动态表现 | [测试与验收规范](remake/assessment/testing_strategy.md) |
 | 构建、导出、排错、旧环境升级 | [工具说明](remake/runtime/tools/README.md) |
+| 分析原版存档、背包和装备 | [存档分析工具](remake/runtime/tools/README.md#原版存档分析) |
 | 准备媒体、来源证据和恢复旧资料 | [本地资料](remake/local_materials.md) |
 | 使用早期演示与定向检查 | [实验目录](remake/prototype/README.md) |
 | 修改项目前先读维护约束 | [目录约定](remake/AGENTS.md) |
@@ -46,11 +47,10 @@ node remake/runtime/tools/verify_phaser.mjs
 | 路径 | 职责 |
 | --- | --- |
 | `remake/runtime/web/` | 正式代码、内容登记和生成的运行定义；媒体在被 Git 忽略的 `assets/` |
-| `remake/runtime/tools/` | 构建、提取、验证；`source/` 为共享只读解码器 |
+| `remake/runtime/tools/` | 构建、提取、验证；`source/` 为共享原版资源与存档解析、道具初始化模块 |
 | `remake/runtime/tests/` | 自动检查及已提交的辅助代码 |
 | `remake/assessment/` | 当前计划、区域方法、测试规范 |
 | `remake/prototype/` | 复用正式实现的实验页面，正式游戏不依赖它 |
-| `save_analysis_20261010/` | 导出器仍使用的四个共享 Python 解析模块 |
 
 原版 `GAME.exe`、`Map/`、`Fight_Role/`、`SYSTEM/` 等输入放在仓库根目录，由工具只读访问，不提交。`.gitignore` 同时排除提取媒体、原存档、观察副本、证据、归档和缓存。
 

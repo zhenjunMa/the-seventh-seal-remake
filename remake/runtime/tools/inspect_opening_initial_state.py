@@ -13,10 +13,9 @@ import sys
 sys.dont_write_bytecode = True
 ROOT = Path(__file__).resolve().parents[3]
 EVIDENCE = ROOT / 'remake/runtime/evidence'
-sys.path.insert(0, str(ROOT / 'save_analysis_20261010'))
 sys.path.insert(0, str(ROOT / "remake/runtime/tools"))
-from save_format import complete_layout, inventory, character_at_header
-from inspect_equipment import describe_equipment
+from source.save_format import complete_layout, inventory, character_at_header
+from source.inspect_equipment import describe_equipment
 from source.combat_resources import CHR
 
 EXPECTED = {
@@ -56,9 +55,9 @@ def actor_fields(data, actor):
 def audit():
     source_paths = list(EXPECTED) + [
         'SYSTEM/System.MAG', 'SYSTEM/System.TXT', 'SYSTEM/Object.TXT',
-        'save_analysis_20261010/save_format.py',
-        'save_analysis_20261010/inspect_equipment.py',
-        'save_analysis_20261010/read_inventory.py',
+        'remake/runtime/tools/source/save_format.py',
+        'remake/runtime/tools/source/inspect_equipment.py',
+        'remake/runtime/tools/source/read_inventory.py',
         'save_analysis_20261010/rea_format_evidence.json',
         'remake/runtime/tools/source/combat_resources.py',
         'remake/runtime/evidence/route_resources_20261011.json',

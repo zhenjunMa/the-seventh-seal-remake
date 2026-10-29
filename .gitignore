@@ -27,14 +27,6 @@
 !/.gitattributes
 !/README.md
 !/remake/
-!/save_analysis_20261010/
-
-# Keep only the shared source modules used by the remake exporters.
-/save_analysis_20261010/*
-!/save_analysis_20261010/save_format.py
-!/save_analysis_20261010/native_item_init.py
-!/save_analysis_20261010/read_inventory.py
-!/save_analysis_20261010/inspect_equipment.py
 
 # Extracted media, source observations, reports, and historical snapshots.
 /remake/**/assets/

@@ -13,10 +13,9 @@ sys.dont_write_bytecode = True
 ROOT = Path(__file__).resolve().parents[3]
 RUNTIME = ROOT / 'remake/runtime'
 sys.path.insert(0, str(ROOT / "remake/runtime/tools"))
-sys.path.insert(0, str(ROOT / 'save_analysis_20261010'))
 from source.combat_resources import CHR
-from save_format import character_at_header
-from native_item_init import initialize_existing_instance
+from source.save_format import character_at_header
+from source.native_item_init import initialize_existing_instance
 
 GAME_SHA = 'fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18'
 ITM_SHA = '9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8'

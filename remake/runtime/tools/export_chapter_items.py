@@ -21,8 +21,7 @@ RUNTIME = ROOT / 'remake/runtime'
 # Embedded/isolated Python excludes the script directory from sys.path. Resolve
 # sibling tools explicitly, just as the other standalone runtime exporters do.
 sys.path.insert(0, str(RUNTIME / 'tools'))
-sys.path.insert(0, str(ROOT / 'save_analysis_20261010'))
-from native_item_init import initialize_existing_instance, VALUE_PAIRS
+from source.native_item_init import initialize_existing_instance, VALUE_PAIRS
 from content_registration import definition as content_definition, map_ids
 from export_source_catalog import exe_bytes_at_va
 

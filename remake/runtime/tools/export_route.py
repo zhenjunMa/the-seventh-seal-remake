@@ -16,7 +16,7 @@ from source.dgp import DGP
 from PIL import Image
 import export_combat_sample as combat
 from export_battle_view import sequence
-from save_format import complete_layout
+from source.save_format import complete_layout
 
 def sha(b):return hashlib.sha256(b).hexdigest()
 def read(p):return json.loads(p.read_text('utf-8'))

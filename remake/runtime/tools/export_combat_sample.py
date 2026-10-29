@@ -15,10 +15,9 @@ sys.dont_write_bytecode = True
 ROOT = Path(__file__).resolve().parents[3]
 RUNTIME = ROOT / 'remake/runtime'
 sys.path.insert(0, str(ROOT / "remake/runtime/tools"))
-sys.path.insert(0, str(ROOT / 'save_analysis_20261010'))
 from source.combat_resources import CHR
-from save_format import complete_layout
-from inspect_equipment import describe_equipment
+from source.save_format import complete_layout
+from source.inspect_equipment import describe_equipment
 
 EXPECTED = {
     'GAME.exe': 'fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18',

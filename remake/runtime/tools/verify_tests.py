@@ -107,7 +107,7 @@ def dependencies(path, parsed):
                            else [alias.name for alias in node.names] if isinstance(node, ast.Import) else [])
                 for module in modules:
                     relative = Path(*module.split('.')).with_suffix('.py')
-                    for base in (path.parent, RUNTIME/'tools', ROOT/'save_analysis_20261010'):
+                    for base in (path.parent, RUNTIME/'tools'):
                         candidate = base/relative
                         if candidate.is_file():
                             found.add(candidate.resolve())

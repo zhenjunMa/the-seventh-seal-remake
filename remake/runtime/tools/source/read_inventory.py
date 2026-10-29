@@ -9,7 +9,7 @@ import json
 import struct
 import sys
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parents[4]
 BASELINE_SHA = '25e0f6508ae1edd618a8da9f3175d616e16066d990bb02638061f06b801e5647'
 DEFINITIONS_SHA = '9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8'
 

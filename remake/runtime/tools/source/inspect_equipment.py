@@ -9,9 +9,9 @@ import json
 import struct
 import sys
 
-sys.path.insert(0, str(Path(__file__).resolve().parent))
-from save_format import complete_layout
-from read_inventory import definitions
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from source.save_format import complete_layout
+from source.read_inventory import definitions
 
 
 def describe_equipment(path):

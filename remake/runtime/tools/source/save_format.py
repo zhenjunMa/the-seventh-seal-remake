@@ -6,8 +6,8 @@ Unparsed sections are preserved; no writes are performed by this module.
 from pathlib import Path
 import struct
 import sys
-sys.path.insert(0, str(Path(__file__).resolve().parent))
-from read_inventory import definitions
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from source.read_inventory import definitions
 
 def u32(b, p):
     if p < 0 or p+4 > len(b):

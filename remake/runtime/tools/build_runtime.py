@@ -68,7 +68,7 @@ STEPS = {
             '../evidence/forest_rewards_native_20261011.json',
             '../evidence/fire_valley_20261024/stage12_status_apply.json',
             '../evidence/white_forest_20261026/reward_passives/native_bundle.json',
-            '../../../save_analysis_20261010/native_item_init.py'), sources=item_source_files()),
+            '../tools/source/native_item_init.py'), sources=item_source_files()),
     'item-presentation': Step('export_item_presentation.py', ('data/item_presentation.json', 'assets/item_presentation'), ('items',), ('item_presentation_export.json',)),
     'recovery': Step('export_chapter_recovery.py', ('../evidence/chapter_recovery_export_20261011.json',), reports=('chapter_recovery_export_20261011.json',)),
     'audio': Step('export_audio.py', ('data/audio.json', 'assets/audio'), reports=('audio_export.json',)),
