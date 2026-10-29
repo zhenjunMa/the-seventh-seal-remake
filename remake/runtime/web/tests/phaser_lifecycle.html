@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Phaser 场景生命周期验证</title>
+<style>
+body{background:#15191e;color:#e2e7ec;font:16px/1.7 system-ui;margin:24px}button{padding:8px 18px}#stage{width:640px;height:480px;max-width:100%;background:#000}pre{white-space:pre-wrap}canvas{max-width:100%}
+</style>
+<h1>Phaser 场景生命周期验证</h1>
+<p>使用正式 PhaserRuntime、场景时钟和纹理缓存，验证实际 Canvas 场景。无需原版素材，不读写玩家存档；正式剧情与游戏体验另行验收。</p>
+<button id="run">运行检查</button>
+<pre id="result" role="status">等待运行</pre>
+<div id="stage" tabindex="0"></div>
+<script src="../vendor/phaser/phaser-3.90.0.min.js"></script>
+<script type="module">
+import {PhaserRuntime} from '../phaser/runtime.mjs';
+const stage=document.querySelector('#stage'),output=document.querySelector('#result'),button=document.querySelector('#run');
+const frame=()=>new Promise(resolve=>requestAnimationFrame(resolve));
+const assert=(condition,message)=>{if(!condition)throw new Error(message);};
+async function until(predicate,message){
+  const deadline=performance.now()+5000;
+  while(!predicate()){assert(performance.now()<deadline,message);await frame();}
+}
+async function check(){
+  button.disabled=true;output.textContent='正在运行';const checks=[];let runtime;
+  const record=message=>{checks.push(message);output.textContent=checks.join('\n');};
+  try{
+    for(let round=0;round<2;round++){
+      runtime=await PhaserRuntime.create({parent:stage,focusTarget:stage,onError:error=>{throw error;}});
+      runtime.start({phase:'map',exploration(){},battle(){}});
+      await until(()=>runtime.exploration.clock.time>runtime.battle.clock.time,'探索时钟没有推进');
+      assert(runtime.game.renderer.type===Phaser.CANVAS,'没有使用正式 Canvas 渲染器');
+      assert(runtime.battle.sys.isSleeping(),'探索时战斗场景没有休眠');
+      runtime.pause('manual');const held=runtime.exploration.clock.time;
+      await frame();await frame();await frame();
+      assert(runtime.exploration.clock.time===held,'暂停期间场景时钟仍在推进');
+      runtime.pause('visibility');runtime.resume('manual');await frame();
+      assert(runtime.paused&&runtime.exploration.clock.time===held,'多个暂停原因被提前解除');
+      runtime.resume('visibility');
+      await until(()=>runtime.exploration.clock.time>held,'恢复后探索时钟没有推进');
+      const wakeListeners=runtime.exploration.events.listenerCount('wake');
+      for(let index=0;index<3;index++){
+        runtime.setPhase('battle-active');
+        assert(runtime.exploration.sys.isSleeping()&&runtime.battle.sys.isActive(),'探索到战斗的场景状态错误');
+        const battleTime=runtime.battle.clock.time;
+        await until(()=>runtime.battle.clock.time>battleTime,'战斗时钟没有推进');
+        runtime.setPhase('map');assert(runtime.exploration.sys.isActive()&&runtime.battle.sys.isSleeping(),'战斗返回探索失败');
+      }
+      assert(runtime.exploration.events.listenerCount('wake')===wakeListeners,'重复切换叠加了唤醒监听器');
+      const image=document.createElement('canvas');image.width=8;image.height=8;
+      const cache=runtime.battle.surface.textures,texture=cache.texture(image);
+      assert(runtime.game.textures.exists(texture.key)&&cache.snapshot().resident===1,'正式纹理缓存未建立真实纹理');
+      const canvas=runtime.canvas;runtime.destroy();
+      await until(()=>!canvas.isConnected,'引擎销毁后 Canvas 没有移除');
+      assert(runtime.exploration.clock.closed&&runtime.battle.clock.closed,'场景销毁没有关闭时钟');
+      assert(cache.snapshot().resident===0,'场景销毁没有释放自有纹理');
+      record(`第 ${round+1} 轮通过：Canvas、暂停原因、探索战斗切换、监听器与纹理清理`);
+      runtime=null;
+    }
+    document.body.dataset.result='passed';record('全部通过。范围：合成素材的实际 Phaser 集成，不代表正式游戏流程通过。');
+  }catch(error){
+    document.body.dataset.result='failed';output.textContent+='\n失败：'+error.stack;
+  }finally{runtime?.destroy();button.disabled=false;}
+}
+button.addEventListener('click',check);
+</script>
+</html>

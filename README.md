@@ -51,7 +51,7 @@ python3 -B remake/runtime/serve.py
 
 代码与资源预检查：`node remake/runtime/tools/verify_phaser.mjs`。素材持有者使用 `node remake/runtime/tools/verify_phaser.mjs --assets` 核对资源是否齐全及已有指纹／尺寸。检查通过后仍需实际验证剧情、战斗和存读档。
 
-日常规则回归：`python3 -B remake/runtime/tools/verify_tests.py`，不需要原版素材或历史证据。内容接入、来源核对、媒体与交付检查按[测试职责与运行](remake/runtime/tools/README.md#测试职责与运行)选择对应组；跨模块改动组合执行，完整交付仍需素材环境与正式流程实玩。
+日常任务验收：`python3 -B remake/runtime/tools/verify_tests.py`，默认按工作区改动选择便携检查，输入未变的成功结果可复用；先加 `--list --explain` 查看范围。区域阶段、版本交付及来源审计分别使用 `--profile phase`、`release`、`audit`，前置与浏览器范围见[测试职责与运行](remake/runtime/tools/README.md#测试职责与运行)。
 
 运行静态服务需要 Python 3；代码预检查需要 Node.js。构建工具另外使用 Pillow、NumPy、FFmpeg/FFprobe，GDI 字体导出需要 Windows；具体前置条件与命令见[工具说明](remake/runtime/tools/README.md)。统一依赖安装和首次构建仍是未完成任务，不能把增量构建命令当作首次安装流程。
 

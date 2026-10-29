@@ -1,6 +1,6 @@
 {
   "schema": "seventh-seal-test-suites",
-  "version": 1,
+  "version": 2,
   "aliases": {
     "daily": [
       "runtime"
@@ -30,16 +30,16 @@
         "test_chapter.mjs",
         "test_combat.mjs",
         "test_combat_sample.mjs",
-        "test_dialogue.mjs",
         "test_death_particles.mjs",
+        "test_dialogue.mjs",
         "test_field_skills.mjs",
         "test_fullscreen.mjs",
         "test_image_resources.mjs",
         "test_item_configuration.mjs",
         "test_items.mjs",
         "test_learning_reward_readiness.mjs",
-        "test_map_locomotion.mjs",
         "test_map_collision.mjs",
+        "test_map_locomotion.mjs",
         "test_map_npc_integration.mjs",
         "test_map_npcs.mjs",
         "test_map_viewport.mjs",
@@ -71,7 +71,9 @@
         "test_vertical_death_integration.mjs",
         "test_vertical_playback.mjs",
         "test_world_map_view.mjs"
-      ]
+      ],
+      "layer": "component",
+      "cache": true
     },
     "content": {
       "description": "已提交内容、配置与构建合同检查",
@@ -85,7 +87,9 @@
         "test_registered_item_admission.mjs",
         "test_source_skill_configuration.mjs",
         "test_white_forest_packages.mjs"
-      ]
+      ],
+      "layer": "content",
+      "cache": true
     },
     "source": {
       "description": "原版字节、独立解码和原指令差分核对",
@@ -125,7 +129,6 @@
         "test_ember_city_battle_source.py",
         "test_ember_city_items.py",
         "test_ember_city_story_source.mjs",
-        "test_native_economy.mjs",
         "test_equipment_passives.mjs",
         "test_finale_defeat_recovery.mjs",
         "test_finale_opening_view.mjs",
@@ -146,21 +149,23 @@
         "test_jade_lake_battle_source.py",
         "test_jade_lake_phase.mjs",
         "test_jute_source_readiness.py",
+        "test_map_collision_source.mjs",
         "test_map_effects.mjs",
         "test_map_object_resources.py",
         "test_map_shadows.mjs",
         "test_map_stage.mjs",
         "test_menu_navigation.mjs",
         "test_menu_techniques.mjs",
-        "test_native_services.py",
         "test_native_after_source.mjs",
         "test_native_anm_extended.mjs",
         "test_native_configuration_ranges.mjs",
+        "test_native_economy.mjs",
         "test_native_map_chest_closure.mjs",
         "test_native_map_chests.mjs",
         "test_native_map_entry.py",
         "test_native_map_transfer.mjs",
         "test_native_npc_bindings.mjs",
+        "test_native_services.py",
         "test_native_skill_loading.mjs",
         "test_native_story_conditions.mjs",
         "test_native_story_inventory.mjs",
@@ -201,7 +206,9 @@
       ],
       "requires": [
         "GAME.exe"
-      ]
+      ],
+      "layer": "source",
+      "cache": false
     },
     "assets": {
       "description": "使用真实导出媒体的加载与绘制合同；仍需另做浏览器实玩",
@@ -210,7 +217,9 @@
         "test_ember_city_battle_replay.mjs",
         "test_first_return_opening_view.mjs",
         "test_forest_stage.mjs"
-      ]
+      ],
+      "layer": "component",
+      "cache": false
     },
     "integration": {
       "description": "本地 HTTP 与磁盘存档集成；需允许监听回环端口",
@@ -218,14 +227,37 @@
         "test_build_runtime.py",
         "test_current_export_reports.py",
         "test_save_files.py"
-      ]
+      ],
+      "layer": "component",
+      "cache": false
     },
     "history": {
       "description": "历史录制与交接档复核；不作为当前版本的新实玩证据",
       "files": [
         "test_recorded_victory.mjs",
         "test_region_phase_history.mjs"
-      ]
+      ],
+      "layer": "history",
+      "cache": false
+    },
+    "content-full": {
+      "description": "区域入口的完整动态遍历；阶段与版本验收显式执行",
+      "files": [
+        "test_fire_valley_npc_sweep.mjs"
+      ],
+      "layer": "content",
+      "regions": [
+        "fire-valley"
+      ],
+      "cache": true
+    },
+    "tooling": {
+      "description": "测试选择、前置和结果复用的行为保障",
+      "files": [
+        "test_verify_tests.py"
+      ],
+      "layer": "component",
+      "cache": false
     }
   },
   "requirements": {
@@ -306,6 +338,177 @@
     "test_story_media.py": ["python:PIL", "python:numpy"],
     "test_white_forest_index.py": ["python:PIL"],
     "test_white_forest_maps.py": ["python:PIL", "remake/runtime/evidence/white_forest_20261026/map_source_validation.json"],
-    "test_world_map.mjs": ["remake/runtime/evidence/route_native_20261011.json"]
+    "test_world_map.mjs": ["remake/runtime/evidence/route_native_20261011.json"],
+    "test_map_collision_source.mjs": ["Map/m01063.dat", "Map/m70060.dat", "Map/m71014.dat", "Map/m71011.dat", "Map/m71012.dat", "Map/m71012-1.dat", "Map/m71012-2.dat", "Map/m71013.dat"]
+  },
+  "profiles": {
+    "task": [
+      "runtime",
+      "content",
+      "tooling"
+    ],
+    "phase": [
+      "runtime",
+      "content",
+      "tooling",
+      "content-full"
+    ],
+    "release": [
+      "runtime",
+      "content",
+      "source",
+      "assets",
+      "integration",
+      "content-full",
+      "tooling"
+    ],
+    "audit": [
+      "source",
+      "assets",
+      "integration",
+      "history"
+    ]
+  },
+  "smoke": [
+    "test_runtime.mjs",
+    "test_battle_clock.mjs",
+    "test_save_storage.mjs"
+  ],
+  "domains": {
+    "battle": {
+      "modules": [
+        "web/core/battle*.mjs",
+        "web/core/combat*.mjs",
+        "web/core/*skill*.mjs",
+        "web/battle*.mjs",
+        "web/phaser/rendering/battle*.mjs",
+        "web/controllers/battle.mjs"
+      ],
+      "tests": [
+        "test_battle*",
+        "test_combat*",
+        "test_party_combat*",
+        "test_scripted_battle*"
+      ]
+    },
+    "story": {
+      "modules": [
+        "web/core/chapter*.mjs",
+        "web/core/story*.mjs",
+        "web/core/anm*.mjs",
+        "web/controllers/story.mjs"
+      ],
+      "tests": [
+        "test_*story*",
+        "test_*chapter*",
+        "test_*opening*",
+        "test_fire_valley_npc*"
+      ]
+    },
+    "movement": {
+      "modules": [
+        "web/core/movement.mjs",
+        "web/core/map*.mjs",
+        "web/core/scenes.mjs",
+        "web/controllers/map.mjs"
+      ],
+      "tests": [
+        "test_map*",
+        "test_scripted_locomotion*"
+      ]
+    },
+    "save": {
+      "modules": [
+        "web/core/world.mjs",
+        "web/core/*save*.mjs",
+        "web/controllers/save*.mjs",
+        "serve.py"
+      ],
+      "tests": [
+        "test_save*",
+        "test_recovery*"
+      ]
+    },
+    "menu": {
+      "modules": [
+        "web/*menu*.mjs",
+        "web/core/*menu*.mjs",
+        "web/controllers/menu.mjs"
+      ],
+      "tests": [
+        "test_menu*",
+        "test_operation*"
+      ]
+    },
+    "engine": {
+      "modules": [
+        "web/phaser/*",
+        "web/core/*clock*.mjs",
+        "web/core/*resources*.mjs",
+        "web/core/*playback*.mjs",
+        "web/*resources*.mjs"
+      ],
+      "tests": [
+        "test_battle_clock*",
+        "test_image_resources*",
+        "test_death_particles*",
+        "test_map_npc_integration*"
+      ]
+    },
+    "build": {
+      "modules": [
+        "tools/*",
+        "tests/suites.json"
+      ],
+      "tests": [
+        "test_verify_tests.py",
+        "test_build_runtime.py",
+        "test_content_exporters.py",
+        "test_current_export_reports.py"
+      ]
+    }
+  },
+  "regions": {
+    "fire-valley": {
+      "maps": [
+        "m170*"
+      ],
+      "tests": [
+        "test_fire_valley*",
+        "test_first_return*",
+        "test_finale*"
+      ]
+    },
+    "white-forest": {
+      "maps": [
+        "m700*"
+      ],
+      "tests": [
+        "test_white_forest*"
+      ]
+    },
+    "jade-lake": {
+      "maps": [
+        "m710*"
+      ],
+      "tests": [
+        "test_jade_lake*"
+      ]
+    },
+    "ember-city": {
+      "maps": [
+        "m010*"
+      ],
+      "tests": [
+        "test_ember_city*"
+      ]
+    }
+  },
+  "browser": {
+    "path": "/tests/phaser_lifecycle.html",
+    "domains": [
+      "engine"
+    ],
+    "description": "实际 Phaser Canvas 场景的暂停、切换、重进和资源清理；需在浏览器另行执行"
   }
 }

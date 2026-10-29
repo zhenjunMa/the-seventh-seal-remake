@@ -240,12 +240,14 @@ node remake/runtime/tools/verify_phaser.mjs --assets
 
 每个阶段记录：来源条件与外部写入者；实际入口；地图变体；队伍及NPC差异；对白／选项；奖励及使用链；战斗／演出；退出／重进；保存／恢复；失败／取消；对应证据路径与指纹。自然路线、来源交接开发档、规则回放和仅渲染检查分别标注。
 
-修改规则后运行真正覆盖来源分支的定向测试，再做一次最终构建与完整检查；不要在每次小修改后全量重建。日常回归使用默认daily，阶段内容变化补content，其他职责按工具说明选择；定向筛选仍使用统一入口，例如：
+修改规则后使用统一入口执行受影响的规则与组件；内容变化保留全部已登记入口的能力准入。普通任务默认task，不把完成一个任务等同版本交付；区域阶段收口用phase和区域参数，执行对应完整动态遍历，相关来源与真实媒体另按其职责核对。代码／数据／环境未变的便携成功结果可复用；构建收口后完成自动检查，再操作正式页面，相关输入未变就结束，不机械补all。
 
 ```console
-python3 -B remake/runtime/tools/verify_tests.py --suite runtime --suite content --match '*chapter*'
+python3 -B remake/runtime/tools/verify_tests.py --list --explain
+python3 -B remake/runtime/tools/verify_tests.py --report
+python3 -B remake/runtime/tools/verify_tests.py --profile phase --region ember-city --report
 ```
 
-素材及历史材料完整、服务在8767运行时执行python -B `remake/runtime/tools/verify_current.py`。缺少材料则记录准确缺项并运行可执行的限定检查；不修改旧SHA以获得passed。
+明确版本交付时使用 `verify_current.py` 默认release汇总，并另做正式浏览器实玩；旧工作区及归档审计仅显式使用`--legacy-audit`。缺少材料准确记录所选范围的缺项，不修改旧SHA获得passed。分层及执行边界见[测试体系设计方案](testing_strategy.md)，具体命令与缓存语义见[工具说明](../runtime/tools/README.md#测试职责与运行)。
 
 最后操作正式页面：从真实入口或明确声明的阶段交接点完成整段，保存新观察。记录本轮延长的自然主线路径与结束存档；只从开发交接点完成的阶段保留局部验收标记，待自然前置接通后补集成复验。自然主线推进到旧区域时复验对应重访、队伍与进出链，不因曾做过局部验收而省略。关闭当前卡点必须同时更新唯一工作计划、稳定指南中受影响的规则、dated证据及本地资料索引；完成报告列出未覆盖范围和外部缺项，不把测试总数当作区域覆盖率。

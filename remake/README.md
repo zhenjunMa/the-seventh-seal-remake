@@ -15,6 +15,7 @@
 | [当前开发计划](assessment/validation_design.md) | 当前范围、未完成事项和完成标准 |
 | [界面和动态表现验收方法](assessment/menu_alignment_workflow.md) | 通用检查矩阵与证据要求 |
 | [全区域重制工作方法](assessment/region_remake_workflow.md) | 区域全量盘点、按剧情阶段实现、连续主线验收与来源经验 |
+| [测试体系设计方案](assessment/testing_strategy.md) | 测试分层、任务范围、Phaser 验收与现有测试迁移 |
 | [实验目录说明](prototype/README.md) | 实验入口与正式模块复用 |
 | [本地素材、证据与历史资料](local_materials.md) | 本地资料的准备、交接与缺失处理 |
 | [目录维护约定](AGENTS.md) | 工作目录与维护规则 |

@@ -459,41 +459,69 @@ independent-source-export：独立基础来源或旧样本生产入口，可能�
 
 ## 测试职责与运行
 
-日常回归使用统一入口，默认只运行 `runtime`，不需要原版安装、媒体、历史证据或图像库：
+普通任务默认使用 `task`，按相对 HEAD 的工作区、暂存和未跟踪文件选择检查；仅文档变化不启动游戏回归。执行前可以只查看范围和原因：
 
 ```console
-python3 -B remake/runtime/tools/verify_tests.py
+python3 -B remake/runtime/tools/verify_tests.py --list --explain
+python3 -B remake/runtime/tools/verify_tests.py --report
+python3 -B remake/runtime/tools/verify_tests.py --since HEAD~1 --list --explain
+python3 -B remake/runtime/tools/verify_tests.py --changed remake/runtime/web/core/movement.mjs --explain
 ```
 
-职责清单位于 [tests/suites.json](../tests/suites.json)。每个测试文件只登记一次，`daily` 是 `runtime` 的别名；运行前始终检查清单是否遗漏、重复或引用已删除文件。
+`--changed` 可重复，表示本次验收的显式改动范围；应列全本轮相关变化。`--domain battle` 等参数在实际改动上追加系统范围，可用于干净工作区。代码 import 递归匹配，未识别运行改动保守扩大为便携组；动态内容数据变化第一版仍检查整个便携组，并完整执行已登记入口的能力准入，不按当前旗标删分支。原版解析器变化会额外选来源组并检查其前置。
 
-| 组 | 适用改动与前置 |
+| 档位 | 自动检查范围 |
 | --- | --- |
-| `runtime`／`daily` | 战斗、事务、时钟、菜单、存档状态与运行配置规则；只使用提交的代码和结构化数据 |
-| `content` | 地图／NPC阶段矩阵、内容登记、配置迁移与运行包；只使用提交的数据，包含耗时较长的区域遍历 |
-| `source` | 原版字节、独立解码和原指令差分；需要原版输入及各文件声明的本地证据，部分 Python 检查需要 Pillow／NumPy |
-| `assets` | 真实媒体加载与绘制合同；需要生成媒体，不能替代浏览器实玩 |
-| `integration` | 本地 HTTP／磁盘存档和构建器集成；需要允许监听回环端口，构建模块当前还依赖原版输入及图像库 |
-| `history` | 历史录制与区域交接档重新生成核对；需要保留的报告、存档与当时生成器，不代表当前版本的新观察 |
-| `all` | 上述全部组，交付时在前置齐全的环境执行；任一失败或跳过均不算完整通过 |
-
-按改动组合执行，或在已选组内用文件名通配符缩小范围：
+| `task` 默认 | 受影响的 runtime、content、tooling；共享剧情执行机制变化额外执行 content-full |
+| `phase` | runtime、content、tooling，加对应区域的 content-full；不指定区域时保留全部阶段遍历 |
+| `release` | 除 history 外全部职责组；仍需素材环境及正式浏览器实玩 |
+| `audit` | source、assets、integration、history，需对应原版输入与本地证据 |
 
 ```console
-python3 -B remake/runtime/tools/verify_tests.py --suite content
-python3 -B remake/runtime/tools/verify_tests.py --suite runtime --suite content --match '*battle*'
-python3 -B remake/runtime/tools/verify_tests.py --suite source --list
-python3 -B remake/runtime/tools/verify_tests.py --suite all --timeout 1800 --report
+python3 -B remake/runtime/tools/verify_tests.py --profile phase --region fire-valley --report
+python3 -B remake/runtime/tools/verify_tests.py --profile release --timeout 1800 --report
+python3 -B remake/runtime/tools/verify_tests.py --profile audit --list
 python3 -B remake/runtime/tools/verify_tests.py --check
 ```
 
-`--match` 适合定向反馈，不能代替跨模块修改或交付所需的相关整组检查。已声明的前置缺失时，入口先合并列出缺项并非零退出，不执行部分测试后冒称整组通过；来源检查内部仍会核对具体原文件与指纹。清单声明的是环境与已知入口材料，不能替代导出器的完整来源审计。
+当前支持区域为 fire-valley、white-forest、jade-lake、ember-city。第一版区域参数选择已登记的完整动态遍历，仍保留共享便携规则；它不自动建立阶段事件链，也不代替来源、真实媒体或正式页面验收。
 
-默认只输出结果。`--report` 在 `runtime/evidence/test_runs` 创建新的运行目录，保存摘要、源码／数据指纹和 JS／Python 日志；运行期间指纹变化则本次结果无效。测试本身不写固定日期报告，`preserve_history.mjs` 仅保留旧命令的兼容入口，不修改文件系统 API。当前完整检查 `verify_current.py` 复用同一清单，另写其现有 current 汇总文件，不再用固定测试数量作门槛。
+职责清单位于 [tests/suites.json](../tests/suites.json) v2，每个文件只登记一次，并声明层级、缓存资格和环境。保留显式组入口：
 
-新增同机制地图、NPC、箱子或技能时，优先扩充内容与共享案例表；新通用机制、高风险回归或跨模块边界需要新的行为断言时，再扩充对应测试。常规测试辅助代码放在已提交的 `tests/helpers`，不得导入被忽略的历史目录中的执行代码。精确重放旧交接档的生成器依赖仅限 `history`，其原字节与前置需保留。独立来源解码器与规则／视图／集成边界分别保护不同风险，不按文件名相似或代码行数合并删除。
+| 组 | 范围与前置 |
+| --- | --- |
+| `runtime`／`daily` | 运行规则、事务、菜单、时钟和控制器整组；不需要原版安装或真实媒体 |
+| `content` | 内容、配置、运行包及区域关键行为；不含旧区域全部 NPC 的多态遍历 |
+| `content-full` | 区域完整动态遍历；保留全部既有断言 |
+| `tooling` | 验收范围、前置缺失、失败与缓存失效的隔离行为检查 |
+| `source` | 原版字节、独立解码、指令差分与真实地形路线；需要原版输入与声明证据 |
+| `assets` | 真实导出媒体的加载与绘制合同 |
+| `integration` | HTTP、磁盘存档和构建集成；需要对应环境和回环端口 |
+| `history` | 旧录制、交接档及当时生成器复核，不代表本版新实玩 |
+| `all` | 全部组，包含 history；只在明确需要全职责审计时使用 |
 
-浏览器验收继续从正式 `/` 入口完成计划要求的剧情、战斗、退出与存读档，并保留当版源码／配置／媒体指纹。上述自动测试和旧观察复核均不自动完成这一步。
+```console
+python3 -B remake/runtime/tools/verify_tests.py --suite daily
+python3 -B remake/runtime/tools/verify_tests.py --suite content
+python3 -B remake/runtime/tools/verify_tests.py --suite source --match '*map_collision*' --list
+```
+
+`--suite` 和 profile 范围参数分别使用，避免混淆；`--match` 是显式定向筛选，报告不把它冒称完整档位通过。前置缺失时整次选中范围不执行、不用 skip 冒称通过。
+
+runtime、content、content-full 的成功结果按文件保存在被 Git 忽略的 `runtime/.cache/test_results`。第一版缓存保守绑定全部便携代码、测试辅助代码、结构化数据和环境，任何相关输入变化都会失效；文档、报告和缓存自身不使结果失效。它暂未实现分地图语义摘要，因此内容增长后的更细粒度失效仍属于后续优化。来源、真实媒体、HTTP、历史和验收工具自身的检查始终执行。`--fresh` 忽略成功结果重新执行，失败、跳过、损坏缓存和运行期间输入变化都不会生成可复用通过结果。
+
+`--jobs` 限制文件并发，默认 4；`--timeout` 是每个文件或内容准入命令的上限。报告区分执行与复用数量，显示本次实际总耗时；语言分组的 seconds 是本次执行文件耗时之和，不是并发墙钟时间。`--report` 写新的 `evidence/test_runs` 目录，保留计划、选择原因、指纹与输出，不覆盖日期证据。
+
+版本汇总使用 `verify_current.py`，默认 release，与上述入口共用便携结果；阶段／版本汇总另执行 `verify_phaser.mjs --assets`。旧工作区及归档审计显式使用 `verify_current.py --legacy-audit`，不再强制进入每个任务的收尾。
+
+```console
+python3 -B remake/runtime/tools/verify_current.py --profile release
+python3 -B remake/runtime/tools/verify_current.py --legacy-audit
+```
+
+浏览器验收仍从正式 `/` 完成本次受影响的流程，并记录代码、配置与媒体身份。新增 [Phaser 生命周期检查页](../web/tests/phaser_lifecycle.html)，访问 `/tests/phaser_lifecycle.html` 点击运行，验证实际 Canvas、暂停原因、探索／战斗切换、重复创建销毁和纹理清理；使用合成资源，不读写玩家存档。此页通过不等于正式游戏或真实素材已验收。
+
+同机制内容优先扩充数据与共享案例；新通用机制、高风险故障或跨系统边界才扩充行为测试。辅助代码放已提交的 tests/helpers，不导入被忽略 evidence 的执行代码。完整分层、迁移方法和第一版边界见 [测试体系设计方案](../../assessment/testing_strategy.md)。
 
 ## 当前检查覆盖什么
 
@@ -505,11 +533,11 @@ Phaser无素材预检查：node `remake/runtime/tools/verify_phaser.mjs`。核�
 
 无素材时默认命令可在`code.passed`=true、`assets.passed`=false时成功退出；`--assets`在素材缺失时失败。两者都不表示完整主线已通过实玩验收。
 
-verify_current检查JS／Python回归、Python语法、原输入、保留资产、现有导出台账、配置／登记、HTTP资源和归档，写`current_validation.json`、`current_validation.tap`和`current_python_tests.log`。
+verify_current默认汇总release自动检查与正式资源完整性，写新的test_runs报告及带scope的current_validation.json；passed仅表示该自动范围通过，actual_browser_flow_checked_this_run仍为false。原输入、旧资产／台账、HTTP和归档的旧工作区审计保留在--legacy-audit，其历史兼容输出仍为current_validation.tap与current_python_tests.log。
 
 检查需要8767服务，数量和时间以报告为准。它核对历史浏览器观察及指纹，不重播UI，不运行原`GAME.exe`，不会自动完成后续剧情。
 
-缺少原版输入／历史evidence时，verify_current可能在来源核对阶段终止；不沿用旧current_validation作为当前Phaser通过记录，应另存本轮预检查与限定范围浏览器结果。
+release缺少原版输入／所选来源前置时明确未通过；--legacy-audit还可能因旧evidence缺失终止。普通task不以这些历史材料为前置，不沿用旧current_validation冒称本版Phaser或浏览器通过。
 
 规则／事务变化运行对应回归；实际页面／动画变化另做浏览器观察。独立页面在`web/tests`，包括`battle_loading.html`、`dialogue_alignment.html`和`startup_storage.html`，各有其限定范围。
 
