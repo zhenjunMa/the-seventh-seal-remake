@@ -8,8 +8,8 @@ import sys
 sys.dont_write_bytecode = True
 ROOT = Path(__file__).resolve().parents[3]
 RUNTIME = ROOT / 'remake/runtime'
-sys.path.insert(0, str(ROOT / 'save_analysis_20261010'))
-from save_format import complete_layout, inventory
+sys.path.insert(0, str(RUNTIME / 'tools'))
+from source.save_format import complete_layout, inventory
 
 SOURCE = ROOT / 'save_analysis_20261010/verified_level12_SaveGame0.Dat'
 EXPECTED = 'f720fdd2eb0353f67b3acdb598bb3e2cbf24be438bca96a13967da71bec70706'

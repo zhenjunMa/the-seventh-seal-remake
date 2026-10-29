@@ -131,9 +131,29 @@ plan只用已提交元数据及既有图集区域，不读PNG或写正式产物�
 | fixture-or-observation-preparation／source-observation | 隔离样本准备、原版观察及只读记录 |
 | independent-source-export | 基础来源或旧样本生产，分类不代表可以删除 |
 
-基础导出器extract、export_movement、export_combat_lab、export_combat_presentation已在本目录；正式生产不引用prototype。各自仍需原输入及保留证据，使用前核范围。共享解码器在`source/`，媒体统一`web/assets/`。
+基础导出器extract、export_movement、export_combat_lab、export_combat_presentation已在本目录；正式生产不引用prototype。各自仍需原输入及保留证据，使用前核范围。共享原版资源与存档解析、道具初始化模块在`source/`，通过`source.<模块名>`导入；媒体统一`web/assets/`。
 
 每份共享生成表只有一个生产者；例如状态表由enemies生成，party-skills只校验引用。content贯通地图、剧情、怪物、玩家、配置、表现、声音、字体和最终登记。独立原城镇菜单素材使用native-services目标，已经包含在content中。
+
+### 原版存档分析
+
+| 目的 | 工具 |
+| --- | --- |
+| 解析原版存档结构、背包、角色属性和技能 | [source/save_format.py](source/save_format.py) |
+| 解析存档中的角色装备实例 | [source/inspect_equipment.py](source/inspect_equipment.py) |
+| 读取原版道具定义、检查历史基准样本的背包 | [source/read_inventory.py](source/read_inventory.py) |
+| 复用原版道具确定性初始化逻辑 | [source/native_item_init.py](source/native_item_init.py)，供导出器导入 |
+
+从仓库根目录执行；两条命令只读输入，并将解析结果以JSON输出到标准输出：
+
+```console
+python3 -B remake/runtime/tools/source/save_format.py /path/to/SaveGame0.Dat
+python3 -B remake/runtime/tools/source/inspect_equipment.py /path/to/SaveGame0.Dat
+```
+
+存档和装备解析还需要仓库根目录下的`SYSTEM/Object.ITM`；工具会校验其版本指纹。分析指定存档的背包使用`save_format.py`；直接执行`read_inventory.py`只检查其绑定的历史基准样本。
+
+上述源码已从根目录的`save_analysis_20261010/`迁入；旧目录只保留历史本地输入含义，样本与证据准备见[本地资料](../../local_materials.md)。
 
 ## 构建目标与直接依赖
 

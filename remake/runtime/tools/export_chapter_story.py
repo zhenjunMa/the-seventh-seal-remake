@@ -16,11 +16,10 @@ sys.dont_write_bytecode = True
 RUNTIME = Path(__file__).resolve().parents[1]
 ROOT = RUNTIME.parents[1]
 sys.path.insert(0, str(RUNTIME / "tools"))
-sys.path.insert(0, str(ROOT / "save_analysis_20261010"))
 from route_extract_resources import anm_record, map_record, tlk_record
-from native_item_init import VALUE_PAIRS
+from source.native_item_init import VALUE_PAIRS
 from source.combat_resources import CHR
-from save_format import character_at_header
+from source.save_format import character_at_header
 from source.map_identity import native_map_id_from_filename
 
 GAME_SHA = "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18"

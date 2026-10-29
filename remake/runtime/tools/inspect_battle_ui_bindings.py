@@ -8,8 +8,8 @@ import sys
 sys.dont_write_bytecode = True
 RUNTIME = Path(__file__).resolve().parents[1]
 ROOT = RUNTIME.parents[1]
-sys.path.insert(0, str(ROOT/'save_analysis_20261010'))
-from save_format import complete_layout
+sys.path.insert(0, str(RUNTIME / 'tools'))
+from source.save_format import complete_layout
 
 
 def sha(data):

@@ -907,6 +907,19 @@
       "recovery_commit": "1ee90804fc1d1ad1a2b56d3dac56dab30bf6f634"
     },
     {
+      "path": "source/inspect_equipment.py",
+      "role": "source-decoder",
+      "build_targets": [],
+      "imported_by": [
+        "../../prototype/tools/combat_sample.py",
+        "export_combat_sample.py",
+        "inspect_opening_initial_state.py"
+      ],
+      "previous_path": "save_analysis_20261010/inspect_equipment.py",
+      "previous_sha256": "3f5e2d32f1a161a6f84c1e67781d309378a53a0f6f91b92c331323057105e47a",
+      "recovery_commit": "01165c09cbc05c81cbe6d305899ae985492a4367"
+    },
+    {
       "path": "source/map_data.py",
       "role": "source-decoder",
       "build_targets": [],
@@ -942,6 +955,54 @@
       "previous_path": "remake/prototype/tools/map_objects.py",
       "previous_sha256": "c4714d279ea85d26db583fcc58c0865f079cfc09469cd905bf746dd83fb4125e",
       "recovery_commit": "1ee90804fc1d1ad1a2b56d3dac56dab30bf6f634"
+    },
+    {
+      "path": "source/native_item_init.py",
+      "role": "shared-helper",
+      "build_targets": [],
+      "imported_by": [
+        "export_chapter_items.py",
+        "export_chapter_story.py",
+        "export_forest_rewards.py",
+        "export_opening_seed.py",
+        "export_party_combat.py"
+      ],
+      "previous_path": "save_analysis_20261010/native_item_init.py",
+      "previous_sha256": "58f847f78adc3be6b2df6f33c53d2e3b65044a39fb7caaa77710225a74746c7c",
+      "recovery_commit": "01165c09cbc05c81cbe6d305899ae985492a4367"
+    },
+    {
+      "path": "source/read_inventory.py",
+      "role": "source-decoder",
+      "build_targets": [],
+      "imported_by": [
+        "source/inspect_equipment.py",
+        "source/save_format.py"
+      ],
+      "previous_path": "save_analysis_20261010/read_inventory.py",
+      "previous_sha256": "76471ba0bfa12d07a55667a7805f58a8b830b360615e8a3a4ef0738f3d9280c5",
+      "recovery_commit": "01165c09cbc05c81cbe6d305899ae985492a4367"
+    },
+    {
+      "path": "source/save_format.py",
+      "role": "source-decoder",
+      "build_targets": [],
+      "imported_by": [
+        "../../prototype/tools/combat_sample.py",
+        "export_battle_scheduler.py",
+        "export_chapter_story.py",
+        "export_combat_sample.py",
+        "export_forest_rewards.py",
+        "export_opening_seed.py",
+        "export_route.py",
+        "export_seed.py",
+        "inspect_battle_ui_bindings.py",
+        "inspect_opening_initial_state.py",
+        "source/inspect_equipment.py"
+      ],
+      "previous_path": "save_analysis_20261010/save_format.py",
+      "previous_sha256": "9b7b751d21ad62626f84cb2cc30625f6e1aa1d204c779a15a3c333828de09800",
+      "recovery_commit": "01165c09cbc05c81cbe6d305899ae985492a4367"
     },
     {
       "path": "sync_tool_docs.py",

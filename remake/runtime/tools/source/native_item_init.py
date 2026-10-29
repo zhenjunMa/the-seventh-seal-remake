@@ -2,7 +2,8 @@
 
 Only recreates the fields the native initializer writes. Other bytes remain
 intact. All min/max pairs must match: random initialization is unsupported.
-Source: rea_format_evidence.json inventory_init (GAME.exe SHA-256 fc6c0194...).
+Source: save_analysis_20261010/rea_format_evidence.json inventory_init
+(GAME.exe SHA-256 fc6c0194...).
 """
 import struct
 
