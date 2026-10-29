@@ -95,7 +95,7 @@ Phaser `3.90.0`已接入主循环、分场景update、休眠／唤醒、暂停�
 
 后续全游戏验收范围：区域外完整自然主线、原`GAME.exe`动态对照、精确字体／混色／全局时钟及更长流程资源释放，按下述优先二执行。火之谷各源入口／分支的规则检查、实际流程与仅渲染恢复在报告中分开，未人工逐条走完44条物理出口或每个NPC选项。
 
-本地完整检查结果为`../runtime/evidence/current_validation.json`，可能缺失或passed=false；命令、前置条件和结果解读见[README.md](../runtime/tools/README.md)。测试数量不在计划中重复维护。
+验收入口已按[测试体系设计方案](testing_strategy.md)落地第一版：普通任务按改动选择便携检查并复用有效结果，阶段完整遍历、版本交付及历史审计分别执行；碰撞原DAT核对已与日常规则分离，并有实际Phaser生命周期检查页。动态数据与缓存失效目前仍保守覆盖全部便携输入，阶段案例和细粒度数据依赖尚未统一。`../runtime/evidence/current_validation.json`按scope解释自动检查范围，可能缺失或passed=false，不能代替正式浏览器实玩；命令和前置见[工具说明](../runtime/tools/README.md#测试职责与运行)。
 
 ## 优先一：打通干净克隆后的首次构建
 

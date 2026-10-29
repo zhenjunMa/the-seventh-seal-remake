@@ -5,7 +5,7 @@
 - 当前实现连接见 `runtime/architecture.md`：`web/app.js` 只组装共享状态与控制器；浏览器流程放 `web/controllers`，规则／事务放 `web/core`，绘制沿用对应视图。当前待办只在工作计划维护；配置说明放 `runtime/config_guide.md`，导出／验证命令放 `runtime/tools/README.md`。
 - Phaser运行层放`runtime/web/phaser`：场景在scenes，临时人物显示在actors，可组合姿态／时钟在components，纹理与战斗绘制适配在rendering。复用已有世界／剧情／战斗规则和素材契约，不在Sprite中复制存档状态或另起命中时钟；菜单／对白沿用对应视图。固定运行库及许可在web/vendor/phaser，修改后核对manifest.json。
 - `prototype` 只保留实验页面与定向验证，可复用 `runtime` 的正式模块与素材；正式运行及构建不引用实验目录。共享移动模块在 `runtime/web/core/movement.mjs`，解码器在 `runtime/tools/source`，基础导出器在 `runtime/tools`，媒体统一在 `runtime/web/assets`。基础来源清单在 `runtime/web/data/source`，保留其历史来源字节；迁移映射见 `runtime/tools/layout_migration.json`，旧素材／证据用 `migrate_local_materials.py` 核对并复制。历史方案／阶段报告与压缩会话快照归 `archive`，不要把历史限制当作当前进展。
-- 来源与历史资料齐全时使用 `runtime/tools/verify_current.py`，写当前完整检查结果；旧日期报告只保留对应阶段，不再累加当前结论。该工具核对已有浏览器证据，不重新操作浏览器；新观察需单独记录范围与当时指纹。
+- 明确进行版本交付时使用 `runtime/tools/verify_current.py`，默认 release，汇总同一测试入口并复用输入未变的便携结果，另核对真实运行资源；不自动完成正式浏览器实玩。历史来源、旧工作区与归档复核仅在专项审计使用 `--legacy-audit`；普通任务和区域接入不以旧历史证据齐全为前置。旧日期报告保留原范围，新观察单独记录当时指纹。
 - 无原版素材／历史来源材料时，先运行`runtime/tools/verify_phaser.mjs`核对代码和资源引用，用`web/phaser-preview.html`做示意图验证；素材交接加`--assets`并补正式流程实玩。完整来源检查受阻时明确原因，不能把旧current_validation当作Phaser迁移通过记录。
 - 已注册导出统一入口是 `runtime/tools/build_runtime.py`，依赖既有基础内容与来源台账。文档维护优先盘点／核对；普通导出保留参数，`--force` 不等于配置 `--reset`。
 - 原版游戏输入位于上一级游戏目录，已有独立存档分析位于上一级的 `save_analysis_20261010`。工具应只读这些输入；修改原作程序、资源或存档需有用户对应的任务授权。
@@ -19,4 +19,4 @@
 - 地图／NPC／对白／任务接入见runtime/story_guide.md。runtime_content.story显式登记独立事件和任务，web/content保存编辑内容，web/data/story由export_story_packages.mjs生成；保留原TLK／ANM来源台账，正式浏览器按地图加载运行包。任务读取既有世界状态，奖励仍在剧情事务中提交，不另存重复进度。
 - TLK、测试片段和自行编写的NPC事件统一编译为StoryFlow，通过StoryFlowRunner执行，ChapterRunner提供共同事务与游戏行为适配。不得为炎城或其他区域新增独立剧情VM；旧EventRunner仅为来源核对适配，正式入口不使用native-entry提交。
 
-- 回归统一使用 `runtime/tools/verify_tests.py`：默认 daily 只检查运行规则，内容变更补 content，原版来源／真实媒体／集成／历史复核分别按 source／assets／integration／history 执行；交付在前置齐全环境跑 all，并另做正式浏览器实玩。新增或迁移测试同步 `runtime/tests/suites.json`，用 `--check` 核对遗漏和重复。同机制内容优先扩充数据与共享案例，确需新通用机制或高风险行为保障时再扩充测试；常规辅助代码必须入库放 tests/helpers，不导入 evidence 下执行代码。测试不写日期报告、不拦截文件系统写入；本次报告由统一入口 --report 写新目录，历史重生成依赖仅限 history。
+- 回归统一使用 `runtime/tools/verify_tests.py`，默认 task，按工作区改动和代码依赖选择；用 `--list --explain`预览原因，`--since`指定基线，`--changed`显式登记改动。区域阶段收口使用 `--profile phase --region 区域名`，明确版本交付使用 release，来源／媒体／历史专项使用 audit 或对应职责组；普通任务完成不自动升级为全量交付。`--suite daily`保留运行规则整组兼容入口，完整区域动态遍历归 content-full。成功便携结果仅在代码／结构化数据／环境指纹一致时复用，`--fresh`强制执行；来源、真实媒体、HTTP和历史检查不缓存。先收口构建和自动检查，再做受影响的正式浏览器验收；相关输入未变且本次范围通过即结束，不机械追加 all。新增或迁移测试同步 `runtime/tests/suites.json`并用 `--check`核对。同机制内容扩充数据与共享案例，新机制或高风险边界才增加行为测试；辅助代码放 tests/helpers，不导入 evidence 下执行代码。报告仅由统一入口 --report 写新目录。设计与第一版边界见 `assessment/testing_strategy.md`，命令语义见 `runtime/tools/README.md`。

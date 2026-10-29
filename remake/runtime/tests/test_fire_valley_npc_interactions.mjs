@@ -1,49 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {readFile} from 'node:fs/promises';
-import {ChapterRunner} from '../web/core/chapter.mjs';
-import {ChapterAnimationRunner} from '../web/core/chapter_animation.mjs';
 import {WorldStore,encodeSave,decodeSave} from '../web/core/world.mjs';
 import {runtimeContent} from '../web/core/content_registry.mjs';
 import {compileItemConfiguration} from '../web/core/item_registry.mjs';
 import {insertCrystal,crystalSocketCandidates} from '../web/core/crystal_sockets.mjs';
 import {createPartyActors} from '../web/core/party_attributes.mjs';
-const read=async file=>JSON.parse(await readFile(new URL(file,import.meta.url),'utf8'));
-const [story,seed,mapData]=await Promise.all([read('../web/data/chapter_story.json'),read('../web/data/opening_seed.json'),read('../web/data/world_map.json')]);
-const maps=Object.keys(runtimeContent.maps),regional=maps.filter(id=>id.startsWith('M170'));
-function world(mapId,{returnVisit=false,arrivalComplete=false}={}){
-  const value=structuredClone(seed);value.opening.status='complete';value.location={map_id:mapId,x:0,y:0,direction:1};
-  value.flags[12]=returnVisit?value.flags[12]|1:value.flags[12]&~1;
-  value.flags[10]=arrivalComplete?value.flags[10]|16:value.flags[10]&~16;
-  return new WorldStore(value,maps);
-}
-function runner(value,extra={}){
-  return new ChapterRunner({world:value,data:story,content:runtimeContent,say:async()=>{},
-    choose:async({choices})=>choices[0].index,
-    worldMapState:()=>({areas:mapData.areas.map(({id,selected_index,statuses})=>({id,selected_index,statuses:[...statuses]}))}),
-    // Rules-only execution. Visual timing and real traversal are verified in
-    // browser separately; the hooks here never claim original gameplay.
-    animate:async({program,runTlk,joinActor,draft})=>{
-      const result=await new ChapterAnimationRunner({program,runTlk,joinActor,initialLocation:draft.location,
-        hooks:Object.fromEntries(['map','actor','move','camera','wait','fade'].map(key=>[key,async()=>{}]))}).run();
-      draft.location=result.location;
-    },...extra});
-}
-
-test('all 21 admitted Fire Valley maps retain native identities and every NPC entry executes under three source flag states',async()=>{
-  assert.equal(regional.length,21);let checks=0;
-  for(const phase of [{},{returnVisit:true},{returnVisit:true,arrivalComplete:true}])for(const mapId of regional){
-    const binding=runtimeContent.maps[mapId],table=story.maps[mapId];
-    assert.ok(Array.isArray(binding.npcs),`${mapId} must explicitly admit its dialogue slots`);
-    for(const slot of binding.npcs){
-      const entry=table.index_nonzero.find(row=>row.slot===slot);assert.ok(entry,`${mapId}:${slot}`);
-      const value=world(mapId,phase);
-      await assert.doesNotReject(runner(value).runTlk({mapId,recordId:entry.record,context:{steps:0,explicitInteraction:true}}),`${mapId} NPC ${slot} ${JSON.stringify(phase)}`);
-      checks++;
-    }
-  }
-  assert.ok(checks>=150,'all admitted NPC entries must be exercised in each phase');
-});
+import {read,story,maps,world,runner} from './helpers/fire_valley_case.mjs';
 
 for(const [mapId,itemId]of [['M17024',150],['M17028',156]])test(`${mapId} source crystal gift ${itemId} is saved once and a failed dialogue rolls it back`,async()=>{
   const binding=runtimeContent.maps[mapId],table=story.maps[mapId];
