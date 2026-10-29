@@ -1,6 +1,6 @@
 import {battleViewport,battleActorPositions,battleBallState} from './core/battle_layout.mjs';
 import {operationMnuTextOptions} from './core/menu_presentation.mjs';
-import {TECHNIQUE_CATEGORIES} from './core/menu_techniques.mjs';
+import {TECHNIQUE_CATEGORIES,TECHNIQUE_WHEEL_NAVIGATION} from './core/menu_techniques.mjs';
 import {BattleResultView} from './battle_result_view.mjs';
 import {battleResources,drawBattleImage} from './core/battle_resources.mjs';
 
@@ -12,15 +12,6 @@ const skillCategory=skill=>{
   const type=(skill?.type_flags_u32_0x32??skill?.type_raw??parseInt(skill?.fixed_raw_hex?.slice(0x64,0x66),16))&15;
   return {2:1,1:2,3:3}[type]??2;
 };
-// GAME.exe 0x429c10: top, upper-left, lower-left, bottom, lower-right,
-// upper-right, center. Native navigation keeps unavailable slots focusable.
-const wheelNavigation={
-  ArrowLeft:[1,1,2,2,3,6,1],
-  ArrowUp:[0,0,1,6,5,0,0],
-  ArrowRight:[5,6,3,4,4,5,5],
-  ArrowDown:[6,2,3,3,3,4,3]
-};
-
 // Stable transparent controls over the original source pixels. No world writes.
 export class BattleMenuView{
   constructor({root,manifest,battle,getSettings,getBindings=null,getCursorHeight,playCue,onReturn,onStage=()=>{},textRenderer=null,memory=null,returnLabel=null,resultManifest=null,onResultEvent=()=>{},now=()=>performance.now(),reuseReturnButton=true,deferResult=false,prepareResources=work=>work(),onResourcesPrepared=()=>{},prefetchCommand=()=>{},onResourceError=()=>{}}){
@@ -149,7 +140,7 @@ export class BattleMenuView{
   }
   escape(){if(this.stage==='target'){this.draft=null;this.setStage(this.returnStage??'wheel');this.syncWheel();if(['skills','items'].includes(this.stage)){this.syncList();this.listButtons[this.listIndex-this.listOffset]?.focus({preventScroll:true});}else this.wheelButtons[this.focusIndex]?.focus({preventScroll:true});}else if(['skills','items'].includes(this.stage)){this.entries=null;this.setStage('wheel');this.syncWheel();this.wheelButtons[this.focusIndex]?.focus({preventScroll:true});}else if(this.stage==='wheel'&&this.snapshot.actors.filter(a=>a.side==='player'&&!a.escaped&&a.state_raw!==11).length>1){this.setStage('actors');this.syncWheel();this.players.get(this.snapshot.player_id)?.focus({preventScroll:true});}else return;this.syncTargets();this.syncList();this.cue('menuCancel');this.setInfo('');}
   moveWheel(key){
-    const next=wheelNavigation[key]?.[this.focusIndex];
+    const next=TECHNIQUE_WHEEL_NAVIGATION[key]?.[this.focusIndex];
     if(next===undefined||next===this.focusIndex)return;
     this.focusIndex=next;this.wheelButtons[next].focus({preventScroll:true});this.cue('menuSelect');
   }

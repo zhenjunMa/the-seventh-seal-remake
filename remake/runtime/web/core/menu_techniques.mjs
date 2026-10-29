@@ -6,6 +6,14 @@ const object=v=>Boolean(v)&&typeof v==='object'&&!Array.isArray(v);
 const keys=(value,expected)=>object(value)&&Object.keys(value).sort().join(',')===[...expected].sort().join(',');
 export const TECHNIQUE_COMMANDS=['使用招式','使用物品','防御','逃跑'];
 export const TECHNIQUE_CATEGORIES=['编成技巧','魔法技巧','一般技巧','特殊技巧','其他技巧','????'];
+// GAME.exe 0x429c10: top, upper-left, lower-left, bottom, lower-right,
+// upper-right, center. Native navigation keeps unavailable slots focusable.
+export const TECHNIQUE_WHEEL_NAVIGATION={
+  ArrowLeft:[1,1,2,2,3,6,1],
+  ArrowUp:[0,0,1,6,5,0,0],
+  ArrowRight:[5,6,3,4,4,5,5],
+  ArrowDown:[6,2,3,3,3,4,3]
+};
 const sourceRole=(source,id)=>{const role=source.roles?.[id];need(role,'技巧角色来源缺失');return role;};
 const rawView=skill=>new DataView(Uint8Array.from(skill.fixed_raw_hex.match(/../g),v=>parseInt(v,16)).buffer);
 
