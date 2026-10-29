@@ -160,7 +160,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
       if(bed){const distance=Math.min(...bed.cells.map(cell=>Math.hypot((cell.x+.5)*16-at.x,(cell.y+.5)*16-at.y)));if(distance<40&&(!state.nearest||distance<state.nearest.distance))state.nearest={kind:'rest',name:'床铺',descriptorId:bed.id,distance};}
     }
     $('interactionHint').hidden=!state.nearest||state.scenes.phase!=='map';
-    if(state.nearest)$('interactionHint').textContent=state.nearest.kind==='rest'?'E · 休息':state.nearest.kind==='object'?`E · 查看${state.nearest.name}`:`E · 与${state.nearest.name??'人物'}交谈`;
+    if(state.nearest)$('interactionHint').textContent=state.nearest.kind==='rest'?'空格 · 休息':state.nearest.kind==='object'?`空格 · 查看${state.nearest.name}`:`空格 · 与${state.nearest.name??'人物'}交谈`;
   }
   function objectBitmap(scene,obj,world=state.world.value,live=true){
     if(live&&state.objectPreview?.mapId===scene.data.id&&state.objectPreview.objectIndex===obj.index)return state.objectPreview.bitmap;

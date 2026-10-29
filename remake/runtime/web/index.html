@@ -8,7 +8,7 @@
       <div class="scene-bar"><div><span class="eyebrow">第七封印 · 场景片段</span><strong id="mapName">正在进入…</strong></div><span id="scenePhase" role="status">准备资源</span></div>
       <div class="screen phaser-enabled" id="screen">
         <div id="phaserHost" class="phaser-host"></div>
-        <canvas id="stage" tabindex="0" aria-label="游戏地图，方向键移动，E交互，Tab操作界面，F4快速保存，F5快速读取"></canvas>
+        <canvas id="stage" tabindex="0" aria-label="游戏地图，方向键移动，空格交互，Tab操作界面，F4快速保存，F5快速读取"></canvas>
         <canvas id="battleCanvas" aria-label="队伍与敌人的战斗" hidden></canvas>
         <div id="battleHud" class="battle-interface" aria-label="战斗操作界面" hidden></div>
         <div id="battleCommands" class="sr-only" hidden><span id="battleMessage" role="status"></span><button id="battleReturn" hidden>返回地图</button></div>
@@ -69,7 +69,7 @@
         <div id="dialogue" class="dialogue" role="dialog" aria-modal="true" aria-labelledby="speaker" aria-describedby="dialogueText" hidden><div class="dialogue-viewport"><canvas width="640" height="480" aria-hidden="true"></canvas><strong id="speaker" class="sr-only"></strong><p id="dialogueText" class="sr-only"></p><button id="dialogueNext" aria-label="继续对话"></button><div id="dialogueChoices" role="group" aria-label="对话选择" hidden></div></div></div>
         <div id="fullscreenControls" class="fullscreen-controls" hidden><span id="fullscreenHint" role="status"></span><button id="fullscreenExit" type="button">退出全屏</button></div>
       </div>
-      <div class="game-controls"><span><kbd>WASD</kbd> / 方向键移动　<kbd>Shift</kbd> 跑步　<kbd>E</kbd> 交互　<kbd>Tab</kbd> 操作界面　<kbd>F4</kbd> 快速保存　<kbd>F5</kbd> 快速读取</span><div><button id="zoomOut" aria-label="缩小">−</button><span id="zoomValue">100%</span><button id="zoomIn" aria-label="放大">＋</button><button id="fit">全图</button><button id="follow">跟随</button><button id="fullscreen">全屏</button></div></div>
+      <div class="game-controls"><span><kbd>WASD</kbd> / 方向键移动　<kbd>Shift</kbd> 跑步　<kbd>空格</kbd> 交互　<kbd>Tab</kbd> 操作界面　<kbd>F4</kbd> 快速保存　<kbd>F5</kbd> 快速读取</span><div><button id="zoomOut" aria-label="缩小">−</button><span id="zoomValue">100%</span><button id="zoomIn" aria-label="放大">＋</button><button id="fit">全图</button><button id="follow">跟随</button><button id="fullscreen">全屏</button></div></div>
       <p id="status" role="status" class="status">正在准备世界状态…</p>
     </section>
     <aside>

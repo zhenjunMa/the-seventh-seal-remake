@@ -90,7 +90,7 @@ export function createInputController({state, actions, $, canvas, ctx}) {
       if(state.scenes?.phase==='map'&&state.world.value.source.kind==='native-new-game'&&key==='Tab'&&!event.shiftKey){event.preventDefault();if(!event.repeat)actions.openPartyMenu();return;}
       if(['INPUT','SELECT','TEXTAREA','BUTTON'].includes(document.activeElement?.tagName))return;
       if(state.scenes?.phase!=='map')return;
-      if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','w','a','s','d','Shift','e'].includes(key)){event.preventDefault();if(key==='e'){if(!event.repeat)actions.interact();}else state.keys.add(key);}
+      if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','w','a','s','d','Shift',' '].includes(key)){event.preventDefault();if(key===' '){if(!event.repeat)actions.interact();}else state.keys.add(key);}
     },options);
     window.addEventListener('keyup',event=>{if(actions.dialogueKeyUp(event.key))event.preventDefault();if(state.scenes?.phase.startsWith('battle-')){actions.battleKeyUp?.(event.key);if(event.key===' ')event.preventDefault();}if(state.menuContext&&event.key===' '&&$('menuShortcutEditor').hidden&&state.menuContext.page!=='system')event.preventDefault();state.keys.delete(event.key.length===1?event.key.toLowerCase():event.key);},options);
     window.addEventListener('blur',actions.releaseInput,options);
