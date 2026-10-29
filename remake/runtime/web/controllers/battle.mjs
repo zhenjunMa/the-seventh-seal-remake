@@ -42,8 +42,9 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
   function battleKey(key,repeat=false){return state.battleMenu?.key(key,repeat)??false;}
   function battleKeyUp(key){state.battleMenu?.keyup(key);}
   function updateBattleFrame(now){
-    if(state.battleEntryPending||state.battlePresentationError)return;
+    if(state.battleEntryPending||state.battlePresentationError||state.battleResourceWaits?.size)return;
     try{
+      now=state.battleView?.resourceTime?.()??now;
       state.battle?.advanceClock(now);
       state.battleView?.draw(state.battle?.presentationSnapshot(),now);drawBattleInterface(now);
     }catch(error){
@@ -56,23 +57,46 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
     const battle=state.battle,completed=state.battleView?.drainLifecycleCompleted()??[];
     if(completed.length)queueMicrotask(()=>{if(state.battle===battle)for(const event of completed)battle.ackLifecycle(event);});
   }state.engine?.battle.surface.endFrame();}
-  async function prepareView({mode,newParty,stagePath=null,lifecycle=false,actors,onProgress}){
+  async function prepareView({mode,newParty,stagePath=null,lifecycle=false,actors,skills,inventory,onProgress,signal}){
     mode=`${mode}:${stagePath??''}`;
     if(!state.battleViews.has(mode))state.battleViews.set(mode,new BattleView({canvas:state.engine?.battle.surface.canvas??$('battleCanvas'),
       metadataPath:newParty?'/'+state.catalog.party_battle_view:stagePath?'/'+state.catalog.forest_battle_view:'/data/battle_view.json',
       itemMetadataPath:newParty?'/data/item_presentation.json':null,stageMetadataPath:stagePath,lifecycleMetadataPath:lifecycle?'/data/battle_lifecycle.json':null}));
-    const view=state.battleViews.get(mode);await view.prepare({actors,onProgress});return view;
+    const view=state.battleViews.get(mode);
+    view.onResourcesPrepared=images=>state.engine?.battle.surface.prepareImages?.(images);
+    view.onResourceError=error=>actions.log({type:'battle-resource-prefetch-failed',error:error.message});
+    const cancel=()=>view.cancelPreparation?.('战斗准备已取消');signal?.throwIfAborted();signal?.addEventListener('abort',cancel,{once:true});
+    try{await view.prepare({actors,skills,inventory,staged:true,onProgress});}finally{signal?.removeEventListener('abort',cancel);}
+    if(view.images)view.onResourcesPrepared(view.entryLease?.images??view.images);return view;
   }
   function createCombat(world,newParty,view){
-    let battle;
+    let battle,waits=0,waitStarted=0,waitTotal=0;
+    const now=()=>state.engine?.battle.clock.time??performance.now()-waitTotal-(waits?performance.now()-waitStarted:0);
+    const withResources=async(work,wait=true)=>{
+      const reason=Symbol('battle-resources'),generation=view.generation,started=performance.now();
+      if(wait){if(!waits++)waitStarted=performance.now();(state.battleResourceWaits??=new Set()).add(reason);state.engine?.pause(reason);}
+      const signal=view.resourceController?.signal;
+      try{const result=await playbackTask(work(),signal);if(state.battle!==battle||view.destroyed||view.generation!==generation){result?.release?.();throw new Error('战斗资源会话已失效');}if(wait)actions.log({type:'battle-resource-wait-complete',elapsed_ms:performance.now()-started,cache:battleResources.snapshot()});return result;}
+      finally{if(wait){if(!--waits)waitTotal+=performance.now()-waitStarted;state.battleResourceWaits.delete(reason);state.engine?.resume(reason);}}
+    };
+    view.withResources=withResources;view.resourceTime=now;
+    const play=async(method,result,options)=>{
+      let lease;
+      try{
+        if(view.prepareAction){lease=await withResources(()=>view.prepareAction(result),!view.actionResourcesReady(result));if(lease)view.onResourcesPrepared?.(lease.images);}
+        const playback=view[method](result,options);
+        if(view.run)view.run.resourceLease=lease;else lease?.release();
+        return await playback;
+      }catch(error){lease?.release();throw error;}
+    };
     const actionSound=(result,step)=>state.audio?.playAction({...step,sound_inhibited:Boolean(battle.actor(step.actor_id).immune_raw)},`${result.action_id}:${step.channel_id}:${step.plan_record_index}:${step.logical_frame}`);
     const effectSound=(result,step)=>state.audio?.playEffect(step.asset_id,`${result.action_id}:${step.channel_id}:${step.effect_index}`,step.logical_frame);
-    const present=method=>async(result,options)=>{const played=await view[method](result,{...options,onFrame:step=>actionSound(result,step),onEffectFrame:step=>effectSound(result,step)});actions.log({type:'battle-presentation',action_id:result.action_id,actor_id:result.actor_id,skill_id:result.skill_id,observations:played.observations});return played;};
+    const present=method=>async(result,options)=>{const played=await play(method,result,{...options,onFrame:step=>actionSound(result,step),onEffectFrame:step=>effectSound(result,step)});actions.log({type:'battle-presentation',action_id:result.action_id,actor_id:result.actor_id,skill_id:result.skill_id,observations:played.observations});return played;};
     battle=new BattleController({world,resolveAction,applyDamage:applyNativeDamage,playAction:present('playAction'),playSequence:present('playSequence'),
-      now:()=>state.engine?.battle.clock.time??performance.now(),
+      now,
       resourcesForWorld:newParty?partyResourcesForWorld:resourcesForWorld,consumeResources:newParty?consumePartyMp:consumeBattleMp,
       notify:snapshot=>{if(state.battle===battle)updateBattle(snapshot);},log:actions.log,itemData:newParty?state.itemData:null,
-      playItem:async(event,hooks)=>{actions.status(`${event.name} → ${battle.actor(event.target_id).name}`);const played=await view.playItem(event,{...hooks,onFrame:step=>actionSound(event,step),onEffectFrame:step=>effectSound(event,step)});actions.log({type:'battle-item-presentation',action_id:event.action_id,item_id:event.item_id,observations:played.observations});}});
+      playItem:async(event,hooks)=>{actions.status(`${event.name} → ${battle.actor(event.target_id).name}`);const played=await play('playItem',event,{...hooks,onFrame:step=>actionSound(event,step),onEffectFrame:step=>effectSound(event,step)});actions.log({type:'battle-item-presentation',action_id:event.action_id,item_id:event.item_id,observations:played.observations});}});
     view.nativeControl=battle;
     view.nativeControlIsCurrent=()=>state.battle===battle;
     view.onLifecycleFrame=step=>{if(state.battle===battle)actionSound({action_id:`${step.battle_id}:${step.lifecycle_token}`},{...step,channel_id:'lifecycle'});};
@@ -88,7 +112,10 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
       getCursorHeight:id=>view.actorCursorHeight(id),
       getSettings:()=>state.menuSettings?.snapshot()??{},getBindings:newParty?id=>techniqueSlots(world.value,bindingSource,id).map(slot=>({...slot,name:slot.type===1?battle.skills[battleTechniqueId(id,slot.index_one_based)]?.name:techniqueSlotName(bindingSource,id,slot)})):null,
       playCue:(...args)=>state.audio?.playCue(...args),onReturn:actions.guarded(returnFromBattle),onStage:stage=>{if(state.battle===battle)battle.setCommandStage?.(stage);},textRenderer:state.operationMenu?.textRenderer,memory:state.battleCursorMemory,resultManifest,onResultEvent:actions.log,
-      now:()=>state.engine?.battle.clock.time??performance.now()});
+      now:view.resourceTime??(()=>state.engine?.battle.clock.time??performance.now()),deferResult:true,
+      prepareResources:work=>view.withResources(work),onResourcesPrepared:view.onResourcesPrepared,
+      prefetchCommand:command=>{void view.prefetchCommand?.(command);},
+      onResourceError:error=>{if(state.battle===battle){battle.interrupt(error);actions.status(error.message,true);}}});
     if(owner)owner.menu=menu;else state.battleMenu=menu;
     try{
       await playbackTask(menu.prepare({onProgress}),signal);check();
@@ -146,7 +173,7 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
       const newScheduler={...configured.scheduler,policy:{...configured.scheduler.policy,commands:'Frame-driven charging and queued ready-player commands; menu selection and other actors animations continue charging.'},...(newParty?{idle_skills:{...configured.scheduler.idle_skills,...state.partySkills.idle_skills}}:{})};
       sample=newParty?assembleForestSample(createPartySample(state.world.snapshot(),state.partyCombat,state.partySkills,configured,state.itemData,state.operationMenu?.techniques?.supplement?.name_charset),configured.forest,group,newScheduler,configured.ai,configured.rewards,state.partyReactions,state.statusData):group?createForestSample(state.world.snapshot(),configured.combat,configured.forest,group,null,newScheduler,configured.ai,configured.rewards,state.reactionData,state.statusData):createBattleSample(state.world.snapshot(),configured.combat);
       if(sample.actors.filter(actor=>actor.side==='player').every(actor=>actor.hp.current===0))throw new Error('队伍已经倒下，请载入进度后继续。');
-      const mode=newParty?'party':group?'forest':'sample';state.battleView=await prepareView({mode,newParty,stagePath:group?'/'+battleStage(group.stage).path:null,lifecycle:Boolean(group),actors:sample.actors,onProgress:p=>progress({completed:10+75*p.completed/p.total,total:100})});state.battleView.setRoster(sample.actors,sample.skills);
+      const mode=newParty?'party':group?'forest':'sample';state.battleView=await prepareView({mode,newParty,stagePath:group?'/'+battleStage(group.stage).path:null,lifecycle:Boolean(group),actors:sample.actors,skills:sample.skills,inventory:state.world.value.inventory,onProgress:p=>progress({completed:10+75*p.completed/p.total,total:100})});state.battleView.setRoster(sample.actors,sample.skills);
       state.battle=createCombat(state.world,newParty,state.battleView);
       await prepareHud(newParty,{onProgress:p=>progress({completed:(p.stage==='result'?95:85)+5*p.completed/p.total,total:100})});
       progress({completed:100,total:100});
@@ -161,7 +188,7 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
       state.audio?.setScene({mapId:state.world.location.map_id,battle:true,stageId:group?.stage??null});
       if(group)actions.log({type:'field-encounter',group,location:state.world.location,counter_after:state.world.value.encounters.counters[state.selectedRole]});
       actions.status('满槽后选择招式和目标。Esc 收起轮盘，方向键切换人物，空格打开轮盘；也可用 Tab / X / Z 切换满槽人物。');
-    }catch(error){state.battleMenu?.dispose();state.battleMenu=null;canvas.hidden=false;for(const id of ['battleCanvas','battleHud','battleCommands'])$(id).hidden=true;Object.assign(state.view,state.battleCheckpoint);state.scenes.setPhase('map');throw error;}
+    }catch(error){state.battleView?.stop('战斗启动失败');state.battleMenu?.dispose();state.battleMenu=null;canvas.hidden=false;for(const id of ['battleCanvas','battleHud','battleCommands'])$(id).hidden=true;Object.assign(state.view,state.battleCheckpoint);state.scenes.setPhase('map');throw error;}
   }
   async function startScriptedBattle({group,draft,playback,signal=playback?.signal}){
     if(state.scriptedBattleSession||state.skillTestSession||state.scenes.phase!=='event')throw new Error('剧情战斗入口状态无效');
@@ -187,7 +214,7 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
       const sample=assembleForestSample(createPartySample(simulation.world.snapshot(),state.partyCombat,state.partySkills,configured,state.itemData,state.operationMenu?.techniques?.supplement?.name_charset),
         configured.forest,group,scheduler,configured.ai,configured.rewards,state.partyReactions,state.statusData);
       if(sample.actors.filter(actor=>actor.side==='player').every(actor=>actor.hp.current===0))throw new Error('队伍已经倒下，无法进入剧情战斗');
-      const preparedView=await playbackTask(prepareView({mode:'scripted',newParty:true,stagePath:'/'+battleStage(group.stage).path,lifecycle:true,actors:sample.actors}),signal);check();
+      const preparedView=await playbackTask(prepareView({mode:'scripted',newParty:true,stagePath:'/'+battleStage(group.stage).path,lifecycle:true,actors:sample.actors,skills:sample.skills,inventory:simulation.world.value.inventory,signal}),signal);check();
       session.view=state.battleView=preparedView;
       session.view.setRoster(sample.actors,sample.skills);
       session.battle=state.battle=createCombat(simulation.world,true,session.view);state.battleRng=simulation.rng;
@@ -247,7 +274,7 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
       progress({completed:10,total:100});
       const world=new WorldStore(session.mapWorld.snapshot(),session.mapWorld.mapIds);
       sample=createSkillTestSample(world.snapshot(),state.partyCombat,state.partySkills,configured,state.itemData,rules,state.partyReactions,state.statusData,state.operationMenu?.techniques?.supplement?.name_charset);
-      session.view=state.battleView=await prepareView({mode:'skill-test',newParty:true,stagePath:rules.stage.path,lifecycle:true,actors:sample.actors,onProgress:p=>progress({completed:10+75*p.completed/p.total,total:100})});
+      session.view=state.battleView=await prepareView({mode:'skill-test',newParty:true,stagePath:rules.stage.path,lifecycle:true,actors:sample.actors,skills:sample.skills,inventory:world.value.inventory,onProgress:p=>progress({completed:10+75*p.completed/p.total,total:100})});
       session.view.setRoster(sample.actors,sample.skills);
       if(state.world!==session.mapWorld||state.world.value.revision!==session.revision)throw new Error('资源加载期间世界状态已变化');
       session.battle=state.battle=createCombat(world,true,session.view);
@@ -275,7 +302,7 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
   }
   async function returnFromBattle(){
     if(!state.scenes.phase.startsWith('battle-')||!state.battle)return;
-    if(state.battleMenu?.resultView?.active&&!state.battleMenu.resultView.complete)return;
+    if(state.battleMenu?.resultPreparing||state.battleMenu?.resultView?.active&&!state.battleMenu.resultView.complete)return;
     if(state.scriptedBattleSession){
       const session=state.scriptedBattleSession;if(session.returnPending)return;session.returnPending=true;
       try{

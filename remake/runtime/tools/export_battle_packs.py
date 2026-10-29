@@ -128,7 +128,9 @@ def plan(roles=None, stage=None):
                                selected_images=len(selection['paths']),
                                before=footprint(existing(selection['legacy_paths']), retained['pages']),
                                filtered_existing_atlas=footprint(existing(selection['paths']), retained['pages']),
-                               planned=footprint({index for path in selection['paths'] for index in image_pages[path]}, pages))
+                               planned=footprint({index for path in selection['paths'] for index in image_pages[path]}, pages),
+                               entry_existing_atlas=footprint(existing(selection['entry_paths']), retained['pages']),
+                               entry_planned=footprint({index for path in selection['entry_paths'] for index in image_pages[path]}, pages))
     return report
 
 

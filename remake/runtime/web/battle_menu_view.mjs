@@ -23,7 +23,9 @@ const wheelNavigation={
 
 // Stable transparent controls over the original source pixels. No world writes.
 export class BattleMenuView{
-  constructor({root,manifest,battle,getSettings,getBindings=null,getCursorHeight,playCue,onReturn,onStage=()=>{},textRenderer=null,memory=null,returnLabel=null,resultManifest=null,onResultEvent=()=>{},now=()=>performance.now(),reuseReturnButton=true}){
+  constructor({root,manifest,battle,getSettings,getBindings=null,getCursorHeight,playCue,onReturn,onStage=()=>{},textRenderer=null,memory=null,returnLabel=null,resultManifest=null,onResultEvent=()=>{},now=()=>performance.now(),reuseReturnButton=true,deferResult=false,prepareResources=work=>work(),onResourcesPrepared=()=>{},prefetchCommand=()=>{},onResourceError=()=>{}}){
+    Object.assign(this,{deferResult,prepareResources,onResourcesPrepared,prefetchCommand,onResourceError});
+    this.resourceScope=battleResources.createScope('battle-hud');
     Object.assign(this,{root,manifest,battle,getSettings,getBindings,getCursorHeight,playCue,onReturn,onStage,textRenderer,returnLabel});
     this.doc=root.ownerDocument;this.images=new Map();this.players=new Map();this.targets=new Map();this.memory=memory??new Map();this.textCache=new Map();this.ballCache=new Map();this.fontOptions=new WeakMap();this.stage='waiting';this.focusIndex=0;this.listIndex=0;this.listOffset=0;this.draft=null;this.message='';this.epoch=0;this.cueSequence=0;
     this.menus=new Map(manifest.menus.map(m=>[m.id,m]));
@@ -59,8 +61,9 @@ export class BattleMenuView{
     const paths=new Set();
     for(const menu of this.manifest.menus)for(const image of menu.images)paths.add(image.image);
     for(const asset of Object.values(this.manifest.assets))for(const f of asset.frames){paths.add(f.image);if(f.indexed_image)paths.add(f.indexed_image);if(f.inverse_mask_image)paths.add(f.inverse_mask_image);}
-    this.images=await battleResources.preparePaths([...paths],{scope:'battle-hud',onProgress:p=>onProgress({...p,stage:'hud'})});
-    await this.resultView?.prepare({onProgress:p=>onProgress({...p,stage:'result'})});
+    this.images=await this.resourceScope.preparePaths([...paths],{onProgress:p=>onProgress({...p,stage:'hud'})});
+    this.onResourcesPrepared(this.images);
+    if(!this.deferResult)await this.resultView?.prepare({onProgress:p=>onProgress({...p,stage:'result'})});
   }
   cue(name){this.playCue?.(name,`battle-menu:${this.epoch}:${++this.cueSequence}`);}
   setInfo(message){this.message=message;this.info.textContent=message;}
@@ -75,7 +78,7 @@ export class BattleMenuView{
     if(this.disposed)return;const previous=this.snapshot;this.snapshot=snapshot;this.root.dataset.phase=snapshot.phase;this.root.dataset.actorId=snapshot.player_id;this.root.dataset.ticks=String(snapshot.scheduler?.ticks??0);this.root.dataset.readyIds=this.ready().join(',');
     const changed=previous?.player_id!==snapshot.player_id;
     if(changed){this.draft=null;this.entries=null;this.listIndex=0;this.listOffset=0;this.setStage(this.available()?(this.stage==='actors'?'actors':'wheel'):'waiting');const memory=this.getSettings?.().battleCursor==='memory'?this.memory.get(snapshot.player_id):null;this.focusIndex=memory?.wheel??0;this.targetId=memory?.target??null;}
-    if(terminal(snapshot.phase)){this.draft=null;this.setStage('result');this.setInfo(snapshot.phase==='victory'?'战斗胜利':snapshot.phase==='defeat'?'队伍已经倒下':snapshot.phase==='escaped'?'已经逃离战斗':snapshot.error??'战斗结束');this.resultView?.open(snapshot);}
+    if(terminal(snapshot.phase)){this.draft=null;this.setStage('result');this.setInfo(snapshot.phase==='victory'?'战斗胜利':snapshot.phase==='defeat'?'队伍已经倒下':snapshot.phase==='escaped'?'已经逃离战斗':snapshot.error??'战斗结束');this.openResult(snapshot);}
     else if(!this.available()){this.draft=null;if(this.stage!=='waiting')this.setStage('waiting');this.setInfo('');}
     else if(this.stage==='waiting'){this.focusIndex=this.getSettings?.().battleCursor==='memory'?(this.memory.get(snapshot.player_id)?.wheel??0):0;this.setStage('wheel');this.needsFocus=true;this.setInfo(snapshot.actors.find(a=>a.id===snapshot.player_id)?.name??'');}
     if(this.stage==='items')this.refreshItems();
@@ -86,8 +89,17 @@ export class BattleMenuView{
     }
     this.syncPlayers();this.syncWheel();this.syncList();this.syncTargets();
     this.actorLayer.hidden=this.targetLayer.hidden=Boolean(this.resultView?.active);
-    this.returnButton.hidden=this.stage!=='result'||Boolean(this.resultView?.active);this.returnButton.disabled=false;this.returnButton.textContent=this.returnLabel??(snapshot.phase==='defeat'?'返回主菜单':'返回地图');
+    this.returnButton.hidden=this.stage!=='result'||Boolean(this.resultView?.active)||Boolean(this.resultPreparing);this.returnButton.disabled=false;this.returnButton.textContent=this.returnLabel??(snapshot.phase==='defeat'?'返回主菜单':'返回地图');
     if((changed||this.needsFocus)&&this.available()){this.needsFocus=false;(this.stage==='actors'?this.players.get(snapshot.player_id):this.wheelButtons[this.focusIndex])?.focus({preventScroll:true});}
+  }
+  openResult(snapshot){
+    if(!this.resultView)return;
+    if(!this.deferResult||this.resultView.ready){this.resultView.open(snapshot);return;}
+    if(snapshot.phase!=='victory'||!snapshot.rewards||this.resultPreparing)return;
+    this.resultPreparing=true;
+    this.prepareResources(async()=>{await this.resultView.prepare();this.onResourcesPrepared(this.resultView.images);})
+      .then(()=>{if(!this.disposed){this.resultPreparing=false;this.update(this.battle.presentationSnapshot());}})
+      .catch(error=>{if(!this.disposed){this.resultPreparing=false;this.onResourceError(error);}});
   }
   syncPlayers(){
     const party=this.snapshot.actors.filter(a=>a.side==='player');const ready=this.ready();
@@ -124,8 +136,8 @@ export class BattleMenuView{
   openList(stage){this.setStage(stage);this.draft=null;const memory=this.getSettings?.().battleCursor==='memory'?this.memory.get(this.snapshot.player_id):null;this.listIndex=Math.min(memory?.list??0,Math.max(0,this.entries.length-1));this.listOffset=Math.max(0,this.listIndex-5);this.cue('menuOpen');this.syncWheel();this.syncList();this.focusListEntry();}
   syncList(){const show=['skills','items'].includes(this.stage),menu=this.menus.get(this.stage==='items'?'fight002':'fight001');this.categoryButtons?.forEach((b,index)=>{b.hidden=this.stage!=='skills';b.setAttribute('aria-pressed',String(index===this.skillCategory));b.setAttribute('aria-disabled',String(!this.available()));});this.listButtons.forEach((b,i)=>{const entry=this.entries?.[this.listOffset+i];b.hidden=!show||!entry;if(!show||!entry)return;const w=menu.widgets.find(w=>w.name.toLowerCase()==='list'+(i+1)),r=w.rect;this.place(b,467+r.left,274+r.top,r.right-r.left+1,r.bottom-r.top+1);b.dataset.entryId=entry.id;b.setAttribute('aria-label',entry.name+(entry.quantity!==undefined?` ×${entry.quantity}`:''));b.setAttribute('aria-disabled',String(!entry.available||!this.available()));});this.previous.hidden=this.next.hidden=!show;this.previous.setAttribute('aria-disabled',String(this.listOffset===0));this.next.setAttribute('aria-disabled',String(this.listOffset+6>=(this.entries?.length??0)));}
   moveList(amount){if(!this.entries?.length)return;const before=this.listIndex;this.listIndex=Math.max(0,Math.min(this.entries.length-1,this.listIndex+amount));if(before===this.listIndex)return;this.listOffset=Math.max(0,Math.min(this.listOffset,this.listIndex));if(this.listIndex>=this.listOffset+6)this.listOffset=this.listIndex-5;this.syncList();this.listButtons[this.listIndex-this.listOffset]?.focus({preventScroll:true});this.cue('menuSelect');}
-  selectEntry(index){const entry=this.entries?.[index];if(!entry?.available||!this.available()){this.reject(this.stage==='skills'&&this.battle.skillUnavailableReason?.(entry?.id)||'此项当前无法使用。');return;}this.listIndex=index;this.remember();if(this.stage==='skills')this.chooseSkill(entry.skill,'skills');else{this.draft={kind:'item',instanceId:entry.id,actorId:this.snapshot.player_id,name:entry.name};this.openTarget('items');}}
-  chooseSkill(skill,from){this.draft={kind:'skill',skillId:skill.id,actorId:this.snapshot.player_id,name:skill.name};this.openTarget(from);}
+  selectEntry(index){const entry=this.entries?.[index];if(!entry?.available||!this.available()){this.reject(this.stage==='skills'&&this.battle.skillUnavailableReason?.(entry?.id)||'此项当前无法使用。');return;}this.listIndex=index;this.remember();if(this.stage==='skills')this.chooseSkill(entry.skill,'skills');else{this.prefetchCommand({actor_id:this.snapshot.player_id,item_id:entry.item.id});this.draft={kind:'item',instanceId:entry.id,actorId:this.snapshot.player_id,name:entry.name};this.openTarget('items');}}
+  chooseSkill(skill,from){this.prefetchCommand({actor_id:this.snapshot.player_id,skill_id:skill.id});this.draft={kind:'skill',skillId:skill.id,actorId:this.snapshot.player_id,name:skill.name};this.openTarget(from);}
   targetActors(){if(this.draft?.kind==='item'&&this.battle.itemTargetIds){const ids=this.battle.itemTargetIds(this.draft.instanceId);return this.snapshot.actors.filter(a=>ids.includes(a.id));}if(this.draft?.kind==='skill'&&this.battle.targetIdsForSkill){const ids=this.battle.targetIdsForSkill(this.draft.skillId);return this.snapshot.actors.filter(a=>ids.includes(a.id));}const side=this.draft?.kind==='item'?'player':'enemy';return this.snapshot.actors.filter(a=>a.side===side&&a.hp.current>0&&!a.escaped&&a.state_raw!==11);}
   openTarget(from){this.returnStage=from;this.setStage('target');const actors=this.targetActors();const remembered=this.getSettings?.().battleCursor==='memory'?this.memory.get(this.snapshot.player_id)?.target:null;this.targetId=actors.some(a=>a.id===remembered)?remembered:actors[0]?.id;this.cue('menuConfirm');this.setInfo(this.draft.name);this.syncWheel();this.syncList();this.syncTargets();this.targets.get(this.targetId)?.focus({preventScroll:true});}
   syncTargets(){const active=this.stage==='target',candidates=active?this.targetActors():[],positions=this.positions??battleActorPositions(this.snapshot.actors);for(const a of this.snapshot.actors){let b=this.targets.get(a.id);if(!b){b=this.button('battle-target-hit',()=>{this.targetId=a.id;this.commit();});b.dataset.targetId=a.id;b.onfocus=()=>{if(this.stage==='target'){this.targetId=a.id;this.remember();this.setInfo(a.name);}};this.targets.set(a.id,b);this.targetLayer.append(b);}b.hidden=!active||!candidates.some(c=>c.id===a.id);const [x,y]=positions[a.id]??[0,0];this.place(b,x-35,y-95,70,105);b.setAttribute('aria-label',`选择目标：${a.name}`);b.setAttribute('aria-disabled',String(!this.available()));}}
@@ -152,6 +164,7 @@ export class BattleMenuView{
     return false;
   }
   key(key,repeat=false){
+    if(this.resultPreparing)return true;
     if(this.resultView?.active)return this.resultView.key(key,repeat);
     if(this.disposed)return false;if(['Enter',' ','Escape'].includes(key)&&repeat)return true;
     if(key==='Escape'){this.escape();return true;}if(key==='Tab'||key==='x'||key==='z'){this.cycleActor(key==='z'?-1:1);return true;}
@@ -224,5 +237,5 @@ export class BattleMenuView{
     });
   }
   drawList(){const menu=this.menus.get(this.stage==='items'?'fight002':'fight001'),x=467,y=274;this.image(menu.images[0].image,x,y);if(this.stage==='skills'){const w=menu.widgets.find(w=>w.name===String(this.skillCategory+1).padStart(3,'0'));this.image(w.selected_images.at(-1)??w.active_images.at(-1),x+w.draw_point_raw.x,y+w.draw_point_raw.y);}this.listButtons.forEach((b,i)=>{const entry=this.entries?.[this.listOffset+i];if(!entry)return;const w=menu.widgets.find(w=>w.name.toLowerCase()==='list'+(i+1));if(this.listIndex===this.listOffset+i)this.image(w.active_images[0],x+w.draw_point_raw.x,y+w.draw_point_raw.y);this.text(entry.name,x+w.rect.left+6,y+w.rect.top,{font:'12px SimSun',color:entry.available?this.listIndex===this.listOffset+i?'#ffff44':'#fff':'#777',width:entry.quantity===undefined?124:104});if(entry.quantity!==undefined)this.text(entry.quantity,x+140,y+w.rect.top,{font:'11px Arial',align:'right'});});}
-  dispose(){this.disposed=true;this.epoch++;this.draft=null;this.resultView?.dispose();this.resizeObserver.disconnect();this.root.replaceChildren();this.images.clear();this.textCache.clear();this.ballCache.clear();}
+  dispose(){this.resourceScope.release();this.disposed=true;this.epoch++;this.draft=null;this.resultView?.dispose();this.resizeObserver.disconnect();this.root.replaceChildren();this.images.clear();this.textCache.clear();this.ballCache.clear();}
 }

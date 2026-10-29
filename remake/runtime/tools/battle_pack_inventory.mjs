@@ -4,6 +4,7 @@ import path from 'node:path';
 import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 import {BattleView,selectBattleAssets} from '../web/battle_view.mjs';
+import {BattleAssetPlan} from '../web/core/battle_asset_plan.mjs';
 import {runtimeContent,runtimeContentDefinition,validateContentRegistration} from '../web/core/content_registry.mjs';
 import {readContentDefinition} from './resolve_content_definition.mjs';
 
@@ -60,7 +61,9 @@ for(const [metadataPath,itemMetadataPath,stageMetadataPath,lifecycleMetadataPath
   if(roleIds&&metadataPath==='/data/party_battle_view.json'&&view.stageMeta?.stage_id===stageId){
     const paths=selectBattleAssets(view.assetDescriptors,roleIds.map(id=>({id}))).map(asset=>asset.path);
     const allEffects=view.meta.effects.flatMap(effect=>effect.layer_order?effect.layer_order.map(layer=>effect[`${layer}_sheet`]):[effect.sheet]);
-    selection={role_ids:roleIds,stage_id:stageId,paths,legacy_paths:[...new Set([...paths,...allEffects])]};
+    const entry=new BattleAssetPlan({meta:view.meta,itemMeta:view.itemMeta,lifecycleMeta:view.lifecycleMeta,
+      descriptors:view.assetDescriptors,layers:[view.layers,...view.alternateLayers.values()],actors:roleIds.map(id=>({id})),skills:{},inventory:[]});
+    selection={role_ids:roleIds,stage_id:stageId,paths,entry_paths:[...entry.base],legacy_paths:[...new Set([...paths,...allEffects])]};
   }
 }
 for(const [p,group]of [['/data/battle_ui.json','hud'],['/data/battle_result.json','result']]){
