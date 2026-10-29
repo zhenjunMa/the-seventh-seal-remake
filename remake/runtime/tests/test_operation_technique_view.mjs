@@ -167,6 +167,25 @@ test('seven-slot setting renders exactly one original gold ring which moves with
   view.escape();assert.equal(view.element.querySelector('[data-shortcut-cursor]'),null);assert.equal(JSON.stringify(world.value),before);
 });
 
+test('setting wheel arrows follow the seven-slot layout, stop at edges and only move the pending cursor',()=>{
+  const {view,world,doc}=fixture(),before=JSON.stringify(world.value);
+  view.action='set';view.category=1;view.stage='candidates';view.confirmEntry(view.candidateEntries()[0]);
+  const keys=['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'];
+  const expected=[[0,6,1,5],[0,2,1,6],[1,3,2,3],[6,3,2,4],[5,3,3,4],[0,4,6,5],[0,3,1,5]];
+  for(let slot=0;slot<7;slot++)for(let direction=0;direction<keys.length;direction++){
+    view.element.querySelector('[data-technique-key="slot-'+slot+'"]').focus();
+    assert.equal(view.key(keys[direction]),true);
+    assert.equal(view.slotIndex,expected[slot][direction],`slot ${slot} ${keys[direction]}`);
+    assert.equal(doc.activeElement.dataset.techniqueKey,'slot-'+expected[slot][direction]);
+    assert.equal(view.element.querySelectorAll('[data-shortcut-cursor]').length,1);
+    assert.equal(view.stage,'slot-confirm');assert.ok(view.pending);
+  }
+  view.element.querySelector('[data-technique-key="slot-5"]').focus();
+  for(let count=0;count<12;count++)view.key('ArrowLeft',count>0);
+  assert.equal(view.slotIndex,1);assert.equal(doc.activeElement.dataset.techniqueKey,'slot-1');
+  view.escape();assert.equal(view.stage,'candidates');assert.equal(JSON.stringify(world.value),before);
+});
+
 test('the setting wheel belongs to the active setting flow and disappears on returning to actions or another header',()=>{
   const {view,world,doc}=fixture(),before=JSON.stringify(world.value);
   view.action='set';view.stage='categories';view.paint();view.focusCategory();

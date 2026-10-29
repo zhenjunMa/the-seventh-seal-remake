@@ -1,4 +1,4 @@
-import {techniqueSlots,sourceTechniqueSlot,techniqueSlotName,techniqueCandidates,TECHNIQUE_CATEGORIES,techniqueCombinations,techniqueCombinationName} from './core/menu_techniques.mjs';
+import {techniqueSlots,sourceTechniqueSlot,techniqueSlotName,techniqueCandidates,TECHNIQUE_CATEGORIES,TECHNIQUE_WHEEL_NAVIGATION,techniqueCombinations,techniqueCombinationName} from './core/menu_techniques.mjs';
 import {operationSummaryFields} from './core/menu_presentation.mjs';
 
 const position=(node,x,y,w=null,h=null)=>Object.assign(node.style,{position:'absolute',left:x+'px',top:y+'px',...(w===null?{}:{width:w+'px'}),...(h===null?{}:{height:h+'px'})});
@@ -250,6 +250,7 @@ export class OperationTechniqueView{
     }
     if(this.stage==='candidates'&&['x','X','z','Z'].includes(key)&&['compose','set'].includes(this.action)){const choices=this.action==='compose'?[1,2,3]:[0,1,2,3,4],at=choices.indexOf(this.category);this.category=choices[(at+(['x','X'].includes(key)?1:choices.length-1))%choices.length];this.preview=null;this.listOffset=0;this.paint();this.focus('content');return true;}
     if(this.mode==='sub'){const index=['use','edit','test'].indexOf(this.section);this.focus('sub',index+(['ArrowLeft','ArrowUp'].includes(key)?-1:1));return true;}
+    if(this.stage==='slot-confirm'&&key.startsWith('Arrow')){const next=TECHNIQUE_WHEEL_NAVIGATION[key][this.slotIndex];this.element.querySelector('[data-technique-key="slot-'+next+'"]')?.focus({preventScroll:true});return true;}
     const group=this.controls('content'),index=Math.max(0,group.indexOf(document.activeElement));
     if(key==='PageUp'||key==='PageDown'){this.listOffset=Math.max(0,this.listOffset+(key==='PageUp'?-6:6));this.paint();this.focus('content',this.section==='edit'?4:0);return true;}
     if(this.stage==='categories'&&document.activeElement?.dataset.techniqueCategory){const current=Number(document.activeElement.dataset.techniqueCategory),delta=key==='ArrowUp'?-2:key==='ArrowDown'?2:key==='ArrowLeft'?-1:1,next=Math.max(0,Math.min(5,current+delta));if(this.allowedCategory(next))this.element.querySelector('[data-technique-key="category-'+next+'"]')?.focus();return true;}
