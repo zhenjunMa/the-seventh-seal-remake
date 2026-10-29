@@ -55,6 +55,13 @@ export class BattleLifecyclePlayback {
     need(index===null||index===undefined||skill,'Exact selected lifecycle source skill missing');
     if(skill&&event.source_id_raw!==null&&event.source_id_raw!==undefined)need(skill.id===event.source_id_raw,'Lifecycle selected source ID differs');
     const channel={event:copy(event),actor_id:actor.id,resource_id:roleId,role,side:roster?.side??actor.side??role.side,skill,cursor:0,pose:null,deadline:now,started:now,appearance:null,blocked:null,mode:'sequence',nativeBridge:this.nativeBridge?.(actor.id)??null,vertical_wait:false,record_visited:-1};
+    if(event.kind==='escape'){
+      // 50E4B0 reverses the 51D960 eight-pixel path with cursor step -10.
+      // The fixed 640px battle plane retains the existing camera adapter.
+      const origin=actor.native_x_raw,edge=channel.side==='player'?920:-920;
+      need(Number.isFinite(origin),'Escape source position missing');
+      channel.escape={distance:Math.abs(edge-origin),direction:Math.sign(edge-origin),cursor:Math.ceil(Math.abs(edge-origin)/8),step:-10,from:0,to:0,at:now,interval:1};
+    }
     if(!skill){
       const fadeMode=event.fade_mode_raw??event.fade_increment_raw;
       if(event.kind==='death'&&integer(fadeMode,1)&&fadeMode<=7){
@@ -77,6 +84,7 @@ export class BattleLifecyclePlayback {
       if(event.hold_final_frame&&channel.side==='player'&&channel.pose)this.held.set(actor_id,{event:copy(event),pose:copy(channel.pose)});
       else if(channel.side==='enemy')this.hiddenActors.add(actor_id);
     }
+    if(event.kind==='escape')this.hiddenActors.add(actor_id);
     this.alphas.set(actor_id,this.hiddenActors.has(actor_id)?0:1);
     this.completed.push({token:event.token,actor_id,life_epoch:event.life_epoch});
   }
@@ -141,6 +149,20 @@ export class BattleLifecyclePlayback {
             lifecycle_token:channel.event.token,source_skill_index:channel.skill.index,plan_record_index:step.chr_record_index,logical_frame:logical});
         }
         channel.record_frame++;
+        if(channel.escape){
+          const path=channel.escape;
+          path.from=path.to;path.at=channel.deadline;path.interval=step.interval_raw;
+          path.cursor=Math.max(0,path.cursor+path.step);
+          if(path.step<-8&&(path.cursor&3)===0)path.step>>=1;
+          path.to=(path.distance-Math.min(path.distance,path.cursor*8))*path.direction;
+          // Keep the source running record cycling until the path reaches
+          // its destination, then hide only after that frame is displayed.
+          const next=channel.skill.timeline[channel.cursor];
+          if(path.cursor===0)channel.cursor=channel.skill.timeline.length;
+          else if(!next||step.movement_step_raw<0&&next.chr_record_index!==step.chr_record_index){
+            channel.cursor=channel.skill.timeline.findIndex(row=>row.chr_record_index===step.chr_record_index);channel.record_frame=0;
+          }
+        }
         channel.pose={action_index:step.action_index,action_frame:step.action_frame,source_frame:step.source_frame};channel.deadline+=step.interval_raw;
       }else if(step.command_raw===3){
         need(channel.nativeBridge&&step.raw_hex,'Lifecycle source vertical command missing');
@@ -163,7 +185,7 @@ export class BattleLifecyclePlayback {
     for(const actor of snapshot.actors)if(members.has(actor.id)&&!this.epochs.has(actor.id))this.epochs.set(actor.id,actor.life_epoch??0);
     const latest=new Map();for(const event of snapshot.lifecycle_events??[]){
       const actor=actors.get(event.actor_id);if(!actor||!members.has(actor.id)||(actor.life_epoch??0)!==event.life_epoch)continue;
-      need(typeof event.token==='string'&&event.token.length>0&&integer(event.life_epoch)&&['entry','death','revive','response'].includes(event.kind),'Lifecycle event invalid');latest.set(actor.id,event);
+      need(typeof event.token==='string'&&event.token.length>0&&integer(event.life_epoch)&&['entry','death','revive','response','escape'].includes(event.kind),'Lifecycle event invalid');latest.set(actor.id,event);
     }
     for(const[id,channel]of this.channels){const event=latest.get(id);if(!event||event.token!==channel.event.token||event.life_epoch!==channel.event.life_epoch)this._cancel(id);}
     for(const[id,event]of latest){
@@ -175,7 +197,8 @@ export class BattleLifecyclePlayback {
     return this.snapshot();
   }
   alpha(actorId){return this.alphas.get(actorId)??1;}
-  pose(actorId){const pose=this.channels.get(actorId)?.pose??this.held.get(actorId)?.pose;return pose?{...pose,alpha:this.alpha(actorId)}:null;}
+  pose(actorId){const channel=this.channels.get(actorId),pose=channel?.pose??this.held.get(actorId)?.pose,path=channel?.escape;
+    return pose?{...pose,alpha:this.alpha(actorId),...(path?{offset_x:path.from+(path.to-path.from)*Math.min(1,Math.max(0,this.lastNow-path.at)/path.interval)}:{})}:null;}
   hidden(actorId){return this.hiddenActors.has(actorId);}
   drawDisappearance(actorId,context,x,y){
     const effect=this.channels.get(actorId)?.particles?.effect;

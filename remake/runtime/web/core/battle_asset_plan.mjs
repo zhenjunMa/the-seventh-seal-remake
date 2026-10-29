@@ -34,6 +34,7 @@ export class BattleAssetPlan {
     for (const id of new Set(this.actors.values())) {
       const role = this.roles.get(id);
       if (!role) throw new Error(`战斗资源计划缺少角色：${id}`);
+      if (role.shadow) this.base.add(role.shadow.sheet);
       this.sequence(role, {segments: role.idle_sequence?.segments ?? [role.idle, role.reaction]}, this.base);
       this.sequence(role, {segments: [role.reaction]}, this.base);
       for (const skill of role.response_skills ?? []) this.sequence(role, skill, this.base);

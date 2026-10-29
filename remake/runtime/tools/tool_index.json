@@ -468,6 +468,7 @@
       "role": "shared-current",
       "build_targets": [],
       "imported_by": [
+        "export_battle_lifecycle.py",
         "export_map_effects.py"
       ]
     },

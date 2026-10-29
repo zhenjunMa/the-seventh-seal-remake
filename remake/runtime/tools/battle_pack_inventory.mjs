@@ -51,6 +51,7 @@ for(const [metadataPath,itemMetadataPath,stageMetadataPath,lifecycleMetadataPath
     assetLoader:async a=>{add(a);return {image:{width:a.width,height:a.height},sha256:a.sha256};}});
   await view.prepare();
   for(const role of view.meta.roles)for(const action of role.actions)add({...assets.get(action.sheet),group:'role-'+role.id,tile_width:role.frame_width,tile_height:role.frame_height});
+  for(const role of view.meta.roles)if(role.shadow)add({...assets.get(role.shadow.sheet),group:'role-'+role.id,tile_width:role.shadow.frame_width,tile_height:role.shadow.frame_height});
   for(const effect of view.meta.effects)for(const sheet of effect.layer_order?effect.layer_order.map(layer=>effect[`${layer}_sheet`]):[effect.sheet])
     add({...assets.get(sheet),group:'effect-'+effect.id,tile_width:effect.frame_width,tile_height:effect.frame_height});
   for(const bank of [view.layers,...view.alternateLayers.values()])for(const pair of bank.frames)for(const layer of [pair.main,pair.intrinsic]){
