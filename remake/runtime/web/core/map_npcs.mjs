@@ -15,7 +15,7 @@ const direction=(dx,dy)=>dy<0?(dx>0?2:dx<0?4:3):dy>0?(dx>0?0:dx<0?6:7):dx>0?1:5;
 // 469F50 initializes all20 channels from the first DGP action whose +7E
 // identifier matches. DAT +46..59 bytes are a source template, not live state.
 export function nativeNpcActionBindings(role) {
-  const actions=role?.actions;
+  const actions=role?.source_actions??role?.actions;
   if(!Array.isArray(actions)||!actions.length)throw new Error('人物原动作表缺失');
   const ordered=[...actions].sort((a,b)=>a.index-b.index),bindings=Array(20).fill(-1);
   const seen=new Set();
@@ -87,12 +87,14 @@ export class MapNpcRuntime {
       let source=decodeNpcBehavior(sources.get(npc.slot_zero_based));const role=roles?.[npc.resource_id];
       if(!source||!role)continue;
       source={...source,bindings_raw:[...source.bindings],bindings:nativeNpcActionBindings(role),bindings_initialized:true};
-      const idle=role.actions.find(action=>action.index===source.bindings[0]);
+      const idle=role.actions.find(action=>action.index===(npc.stage_action??source.bindings[0]));
       if(!idle)throw new Error('人物缺少源初始化待机动作');
       const a={npc,source,role,home:{x:npc.x,y:npc.y},goal:{x:npc.x,y:npc.y},path:[],step:null,
-        wait:source.wait,waitLatch:source.waitLatch,logicalFrame:0,action:idle.index,interval:80,
+        wait:source.wait,waitLatch:source.waitLatch,logicalFrame:idle.uses_sequence?Math.max(0,idle.sequence_raw.indexOf(npc.stage_frame??0)):npc.stage_frame??0,action:idle.index,interval:80,
         elapsed:0,animationCountdown:0,contactBlocked:false,
         visual:{x:npc.x,y:npc.y,direction:npc.direction},gait:new DistanceGait()};
+      const walk=this.action(a,1);
+      if(a.action===walk?.index)Object.assign(a.gait,{action:a.action,phase:a.logicalFrame/this.logicalCount(walk)});
       this.actors.set(npc.id,a);this.project(a);
     }
   }

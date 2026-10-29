@@ -4,6 +4,7 @@ import {createPartyActors} from "../core/party_attributes.mjs";
 import {loadRuntimeConfiguration, createRuntimeConfigurationSession} from "../core/runtime_config.mjs";
 import {attachSavePreview} from "../core/save_preview.mjs";
 import {MANUAL_SAVE_SLOTS,normalizeSaveSlot,saveSlotLabel} from "../core/save_slots.mjs";
+import {captureMapNpcState} from '../core/map_npc_state.mjs';
 
 export function createServicesController({state, actions, $, canvas, ctx}) {
   let configurationReady;
@@ -51,7 +52,7 @@ export function createServicesController({state, actions, $, canvas, ctx}) {
   }
   function download(value,filename){const url=URL.createObjectURL(new Blob([JSON.stringify(value,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
   function guarded(fn){return async()=>{try{await fn();}catch(error){status(error.message,true);log({type:'operation-failed',error:error.message});}};}
-  async function saveEnvelope(){if(!state.scenes.canSave()&&!(state.saveOperation?.kind==='save'&&state.scenes.current&&(state.saveOperation.phase==='map'||state.saveMenuContext?.originPhase==='map'&&state.saveMenuContext.mode==='save')))throw new Error('请在地图探索状态保存');const world=state.world.snapshot();if(world.source.kind==='native-new-game')createPartyActors(world,state.partyCombat,{},state.itemData);const preview=actions.captureSavePreview(world);return attachSavePreview(await encodeSave(world),preview);}
+  async function saveEnvelope(){if(!state.scenes.canSave()&&!(state.saveOperation?.kind==='save'&&state.scenes.current&&(state.saveOperation.phase==='map'||state.saveMenuContext?.originPhase==='map'&&state.saveMenuContext.mode==='save')))throw new Error('请在地图探索状态保存');const world=state.world.snapshot();if(state.scenes.current?.npcs)captureMapNpcState(world,state.scenes.current.data.id,state.scenes.current.npcs);if(world.source.kind==='native-new-game')createPartyActors(world,state.partyCombat,{},state.itemData);const preview=actions.captureSavePreview(world);return attachSavePreview(await encodeSave(world),preview);}
   async function withSaveOperation(kind,work,{fromMenu=false}={}){
     if(state.saveOperation)throw new Error('正在存取进度，请稍候');
     const phase=state.scenes.phase;

@@ -984,6 +984,230 @@
         }
       }
     },
+    "13": {
+      "id": 13,
+      "name": "清心饮",
+      "animation_skill_id_raw_142": 17,
+      "effect_id": "_iReMP",
+      "effect_token_raw_126": "_iReMP.dgp",
+      "source": {
+        "path": "SYSTEM/Object.ITM",
+        "sha256": "9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8",
+        "record_offset": 13072,
+        "record_sha256": "4a7a3f5798a0c2dce655b0b27e592b0ca892000876ddc9404ba9d36e5d569441",
+        "effect_field_offset": 294,
+        "effect_field_bytes": 20
+      },
+      "settlement": {
+        "source_field": "0x49",
+        "frame_source": "acting role CHR sequence",
+        "effect_slot": "target",
+        "only_after_accepted_target": true,
+        "effect_even_without_native_success": true,
+        "consume_only_on_native_success": true,
+        "evidence": {
+          "procedure": "0x41b3e9",
+          "evidence_id": "ev_4ad9019da5e0945f74684bdf2d2c6ee7429b3a2a2e7bb84eee812d448c861eac",
+          "bundle": "remake/runtime/evidence/chapter_items_native.json"
+        }
+      }
+    },
+    "21": {
+      "id": 21,
+      "name": "火凤之卵",
+      "animation_skill_id_raw_142": 17,
+      "effect_id": "_iRelife",
+      "effect_token_raw_126": "_iRelife.dgp",
+      "source": {
+        "path": "SYSTEM/Object.ITM",
+        "sha256": "9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8",
+        "record_offset": 20744,
+        "record_sha256": "253cbf2dc42dc8cb059234b47a8b20d82d03fc08f80403c0200004a330c343c7",
+        "effect_field_offset": 294,
+        "effect_field_bytes": 20
+      },
+      "settlement": {
+        "source_field": "0x49",
+        "frame_source": "acting role CHR sequence",
+        "effect_slot": "target",
+        "only_after_accepted_target": true,
+        "effect_even_without_native_success": true,
+        "consume_only_on_native_success": true,
+        "evidence": {
+          "procedure": "0x41b3e9",
+          "evidence_id": "ev_4ad9019da5e0945f74684bdf2d2c6ee7429b3a2a2e7bb84eee812d448c861eac",
+          "bundle": "remake/runtime/evidence/chapter_items_native.json"
+        }
+      }
+    },
+    "23": {
+      "id": 23,
+      "name": "锯嘴鸟之翼",
+      "animation_skill_id_raw_142": 17,
+      "effect_id": "_iReSTfr",
+      "effect_token_raw_126": "_iReSTfr.dgp",
+      "source": {
+        "path": "SYSTEM/Object.ITM",
+        "sha256": "9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8",
+        "record_offset": 22662,
+        "record_sha256": "5f9d632a8ce325e6431995ab3cfc740ded3ff69d78472621c9812f41ddbc2355",
+        "effect_field_offset": 294,
+        "effect_field_bytes": 20
+      },
+      "settlement": {
+        "source_field": "0x49",
+        "frame_source": "acting role CHR sequence",
+        "effect_slot": "target",
+        "only_after_accepted_target": true,
+        "effect_even_without_native_success": true,
+        "consume_only_on_native_success": true,
+        "evidence": {
+          "procedure": "0x41b3e9",
+          "evidence_id": "ev_4ad9019da5e0945f74684bdf2d2c6ee7429b3a2a2e7bb84eee812d448c861eac",
+          "bundle": "remake/runtime/evidence/chapter_items_native.json"
+        }
+      }
+    },
+    "24": {
+      "id": 24,
+      "name": "麝香",
+      "animation_skill_id_raw_142": 17,
+      "effect_id": "_iReSTBM",
+      "effect_token_raw_126": "_iReSTBM.dgp",
+      "source": {
+        "path": "SYSTEM/Object.ITM",
+        "sha256": "9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8",
+        "record_offset": 23621,
+        "record_sha256": "3deef46ed9dd51aaf7668660769a0282061320070ba377bfed0264614ead9124",
+        "effect_field_offset": 294,
+        "effect_field_bytes": 20
+      },
+      "settlement": {
+        "source_field": "0x49",
+        "frame_source": "acting role CHR sequence",
+        "effect_slot": "target",
+        "only_after_accepted_target": true,
+        "effect_even_without_native_success": true,
+        "consume_only_on_native_success": true,
+        "evidence": {
+          "procedure": "0x41b3e9",
+          "evidence_id": "ev_4ad9019da5e0945f74684bdf2d2c6ee7429b3a2a2e7bb84eee812d448c861eac",
+          "bundle": "remake/runtime/evidence/chapter_items_native.json"
+        }
+      }
+    },
+    "25": {
+      "id": 25,
+      "name": "气虚酒",
+      "animation_skill_id_raw_142": 17,
+      "effect_id": "_iReSTn",
+      "effect_token_raw_126": "_iReSTn.dgp",
+      "source": {
+        "path": "SYSTEM/Object.ITM",
+        "sha256": "9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8",
+        "record_offset": 24580,
+        "record_sha256": "1b8dba0b6ed333db7b0d5c42bbc8046f99e46761c34e84a5cbd90f23aac3a776",
+        "effect_field_offset": 294,
+        "effect_field_bytes": 20
+      },
+      "settlement": {
+        "source_field": "0x49",
+        "frame_source": "acting role CHR sequence",
+        "effect_slot": "target",
+        "only_after_accepted_target": true,
+        "effect_even_without_native_success": true,
+        "consume_only_on_native_success": true,
+        "evidence": {
+          "procedure": "0x41b3e9",
+          "evidence_id": "ev_4ad9019da5e0945f74684bdf2d2c6ee7429b3a2a2e7bb84eee812d448c861eac",
+          "bundle": "remake/runtime/evidence/chapter_items_native.json"
+        }
+      }
+    },
+    "26": {
+      "id": 26,
+      "name": "琉璃玲",
+      "animation_skill_id_raw_142": 17,
+      "effect_id": "_iReSTSS",
+      "effect_token_raw_126": "_iReSTSS.dgp",
+      "source": {
+        "path": "SYSTEM/Object.ITM",
+        "sha256": "9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8",
+        "record_offset": 25539,
+        "record_sha256": "82cb3db185932fffdb302a8e71c378c49d358a0541bb4ea48e1a6d5c88e2a22d",
+        "effect_field_offset": 294,
+        "effect_field_bytes": 20
+      },
+      "settlement": {
+        "source_field": "0x49",
+        "frame_source": "acting role CHR sequence",
+        "effect_slot": "target",
+        "only_after_accepted_target": true,
+        "effect_even_without_native_success": true,
+        "consume_only_on_native_success": true,
+        "evidence": {
+          "procedure": "0x41b3e9",
+          "evidence_id": "ev_4ad9019da5e0945f74684bdf2d2c6ee7429b3a2a2e7bb84eee812d448c861eac",
+          "bundle": "remake/runtime/evidence/chapter_items_native.json"
+        }
+      }
+    },
+    "27": {
+      "id": 27,
+      "name": "腾蛇胆",
+      "animation_skill_id_raw_142": 17,
+      "effect_id": "_iReSTn",
+      "effect_token_raw_126": "_iReSTn.dgp",
+      "source": {
+        "path": "SYSTEM/Object.ITM",
+        "sha256": "9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8",
+        "record_offset": 26498,
+        "record_sha256": "0c38e5c554739cb7f4ed6d1134b8028bd8e5f1382c234050923891caf2ca637a",
+        "effect_field_offset": 294,
+        "effect_field_bytes": 20
+      },
+      "settlement": {
+        "source_field": "0x49",
+        "frame_source": "acting role CHR sequence",
+        "effect_slot": "target",
+        "only_after_accepted_target": true,
+        "effect_even_without_native_success": true,
+        "consume_only_on_native_success": true,
+        "evidence": {
+          "procedure": "0x41b3e9",
+          "evidence_id": "ev_4ad9019da5e0945f74684bdf2d2c6ee7429b3a2a2e7bb84eee812d448c861eac",
+          "bundle": "remake/runtime/evidence/chapter_items_native.json"
+        }
+      }
+    },
+    "28": {
+      "id": 28,
+      "name": "太阳花",
+      "animation_skill_id_raw_142": 17,
+      "effect_id": "_iReSTn",
+      "effect_token_raw_126": "_iReSTn.dgp",
+      "source": {
+        "path": "SYSTEM/Object.ITM",
+        "sha256": "9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8",
+        "record_offset": 27457,
+        "record_sha256": "18a9b197f3fa80004285358d9db13a1d392a422b518aef89c4698f259e473646",
+        "effect_field_offset": 294,
+        "effect_field_bytes": 20
+      },
+      "settlement": {
+        "source_field": "0x49",
+        "frame_source": "acting role CHR sequence",
+        "effect_slot": "target",
+        "only_after_accepted_target": true,
+        "effect_even_without_native_success": true,
+        "consume_only_on_native_success": true,
+        "evidence": {
+          "procedure": "0x41b3e9",
+          "evidence_id": "ev_4ad9019da5e0945f74684bdf2d2c6ee7429b3a2a2e7bb84eee812d448c861eac",
+          "bundle": "remake/runtime/evidence/chapter_items_native.json"
+        }
+      }
+    },
     "272": {
       "id": 272,
       "name": "火蜥之血",
@@ -1011,9 +1235,1163 @@
           "bundle": "remake/runtime/evidence/chapter_items_native.json"
         }
       }
+    },
+    "273": {
+      "id": 273,
+      "name": "炎鸟之羽",
+      "animation_skill_id_raw_142": 17,
+      "effect_id": "_iAtSTfr",
+      "effect_token_raw_126": "_iAtSTfr.dgp",
+      "source": {
+        "path": "SYSTEM/Object.ITM",
+        "sha256": "9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8",
+        "record_offset": 262412,
+        "record_sha256": "5e6d17134670d26a5298b620ba88a7693163b1bb865caf43365ab02f58446bb3",
+        "effect_field_offset": 294,
+        "effect_field_bytes": 20
+      },
+      "settlement": {
+        "source_field": "0x49",
+        "frame_source": "acting role CHR sequence",
+        "effect_slot": "target",
+        "only_after_accepted_target": true,
+        "effect_even_without_native_success": true,
+        "consume_only_on_native_success": true,
+        "evidence": {
+          "procedure": "0x41b3e9",
+          "evidence_id": "ev_4ad9019da5e0945f74684bdf2d2c6ee7429b3a2a2e7bb84eee812d448c861eac",
+          "bundle": "remake/runtime/evidence/chapter_items_native.json"
+        }
+      }
+    },
+    "274": {
+      "id": 274,
+      "name": "百年陈酿",
+      "animation_skill_id_raw_142": 17,
+      "effect_id": "_iAtSTbr",
+      "effect_token_raw_126": "_iAtSTbr.dgp",
+      "source": {
+        "path": "SYSTEM/Object.ITM",
+        "sha256": "9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8",
+        "record_offset": 263371,
+        "record_sha256": "1ed48b6b8805211d0273984d9d83bb54a82307c02575533ada41719e5cbd45a2",
+        "effect_field_offset": 294,
+        "effect_field_bytes": 20
+      },
+      "settlement": {
+        "source_field": "0x49",
+        "frame_source": "acting role CHR sequence",
+        "effect_slot": "target",
+        "only_after_accepted_target": true,
+        "effect_even_without_native_success": true,
+        "consume_only_on_native_success": true,
+        "evidence": {
+          "procedure": "0x41b3e9",
+          "evidence_id": "ev_4ad9019da5e0945f74684bdf2d2c6ee7429b3a2a2e7bb84eee812d448c861eac",
+          "bundle": "remake/runtime/evidence/chapter_items_native.json"
+        }
+      }
+    },
+    "275": {
+      "id": 275,
+      "name": "罗兰草",
+      "animation_skill_id_raw_142": 17,
+      "effect_id": "_iAtSTwk",
+      "effect_token_raw_126": "_iAtSTwk.dgp",
+      "source": {
+        "path": "SYSTEM/Object.ITM",
+        "sha256": "9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8",
+        "record_offset": 264330,
+        "record_sha256": "6d4126303b366c7241d01499b17f3a1dab47a8a9b2862759f490c635b7100bc5",
+        "effect_field_offset": 294,
+        "effect_field_bytes": 20
+      },
+      "settlement": {
+        "source_field": "0x49",
+        "frame_source": "acting role CHR sequence",
+        "effect_slot": "target",
+        "only_after_accepted_target": true,
+        "effect_even_without_native_success": true,
+        "consume_only_on_native_success": true,
+        "evidence": {
+          "procedure": "0x41b3e9",
+          "evidence_id": "ev_4ad9019da5e0945f74684bdf2d2c6ee7429b3a2a2e7bb84eee812d448c861eac",
+          "bundle": "remake/runtime/evidence/chapter_items_native.json"
+        }
+      }
+    },
+    "276": {
+      "id": 276,
+      "name": "香木屑",
+      "animation_skill_id_raw_142": 17,
+      "effect_id": "_iAtSTsl",
+      "effect_token_raw_126": "_iAtSTsl.dgp",
+      "source": {
+        "path": "SYSTEM/Object.ITM",
+        "sha256": "9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8",
+        "record_offset": 265289,
+        "record_sha256": "d3bf141fbfcc73a2a3244927f2fc0399931c8821cf4e0d804e677f2274137272",
+        "effect_field_offset": 294,
+        "effect_field_bytes": 20
+      },
+      "settlement": {
+        "source_field": "0x49",
+        "frame_source": "acting role CHR sequence",
+        "effect_slot": "target",
+        "only_after_accepted_target": true,
+        "effect_even_without_native_success": true,
+        "consume_only_on_native_success": true,
+        "evidence": {
+          "procedure": "0x41b3e9",
+          "evidence_id": "ev_4ad9019da5e0945f74684bdf2d2c6ee7429b3a2a2e7bb84eee812d448c861eac",
+          "bundle": "remake/runtime/evidence/chapter_items_native.json"
+        }
+      }
+    },
+    "278": {
+      "id": 278,
+      "name": "毒蜜",
+      "animation_skill_id_raw_142": 17,
+      "effect_id": "_iAtSTps",
+      "effect_token_raw_126": "_iAtSTps.dgp",
+      "source": {
+        "path": "SYSTEM/Object.ITM",
+        "sha256": "9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8",
+        "record_offset": 267207,
+        "record_sha256": "85db3eb572f11d9a0ad39521307a4c4789811c5d284daf8c205fc5cd2db013bd",
+        "effect_field_offset": 294,
+        "effect_field_bytes": 20
+      },
+      "settlement": {
+        "source_field": "0x49",
+        "frame_source": "acting role CHR sequence",
+        "effect_slot": "target",
+        "only_after_accepted_target": true,
+        "effect_even_without_native_success": true,
+        "consume_only_on_native_success": true,
+        "evidence": {
+          "procedure": "0x41b3e9",
+          "evidence_id": "ev_4ad9019da5e0945f74684bdf2d2c6ee7429b3a2a2e7bb84eee812d448c861eac",
+          "bundle": "remake/runtime/evidence/chapter_items_native.json"
+        }
+      }
+    },
+    "279": {
+      "id": 279,
+      "name": "巨蛙涎",
+      "animation_skill_id_raw_142": 17,
+      "effect_id": null,
+      "effect_token_raw_126": "",
+      "source": {
+        "path": "SYSTEM/Object.ITM",
+        "sha256": "9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8",
+        "record_offset": 268166,
+        "record_sha256": "a1a9d3fbf26e5e107355003082734ed266e87d38f8baf0dcf2e883fc8c030045",
+        "effect_field_offset": 294,
+        "effect_field_bytes": 20
+      },
+      "settlement": {
+        "source_field": "0x49",
+        "frame_source": "acting role CHR sequence",
+        "effect_slot": "target",
+        "only_after_accepted_target": true,
+        "effect_even_without_native_success": true,
+        "consume_only_on_native_success": true,
+        "evidence": {
+          "procedure": "0x41b3e9",
+          "evidence_id": "ev_4ad9019da5e0945f74684bdf2d2c6ee7429b3a2a2e7bb84eee812d448c861eac",
+          "bundle": "remake/runtime/evidence/chapter_items_native.json"
+        }
+      }
+    },
+    "280": {
+      "id": 280,
+      "name": "风之泪",
+      "animation_skill_id_raw_142": 17,
+      "effect_id": "_iReSTrs",
+      "effect_token_raw_126": "_iReSTrs.dgp",
+      "source": {
+        "path": "SYSTEM/Object.ITM",
+        "sha256": "9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8",
+        "record_offset": 269125,
+        "record_sha256": "17c1a5b4c6198b729898b31c147014ebd9205cbbafec2bc9245157698fb7c489",
+        "effect_field_offset": 294,
+        "effect_field_bytes": 20
+      },
+      "settlement": {
+        "source_field": "0x49",
+        "frame_source": "acting role CHR sequence",
+        "effect_slot": "target",
+        "only_after_accepted_target": true,
+        "effect_even_without_native_success": true,
+        "consume_only_on_native_success": true,
+        "evidence": {
+          "procedure": "0x41b3e9",
+          "evidence_id": "ev_4ad9019da5e0945f74684bdf2d2c6ee7429b3a2a2e7bb84eee812d448c861eac",
+          "bundle": "remake/runtime/evidence/chapter_items_native.json"
+        }
+      }
+    },
+    "283": {
+      "id": 283,
+      "name": "玄冰",
+      "animation_skill_id_raw_142": 17,
+      "effect_id": "_iAtSTfz",
+      "effect_token_raw_126": "_iAtSTfz.dgp",
+      "source": {
+        "path": "SYSTEM/Object.ITM",
+        "sha256": "9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8",
+        "record_offset": 272002,
+        "record_sha256": "b936149aacb0ef0d37d33d3d9deb93cff3efedef47ab6c76397cf9e4eb9d44bc",
+        "effect_field_offset": 294,
+        "effect_field_bytes": 20
+      },
+      "settlement": {
+        "source_field": "0x49",
+        "frame_source": "acting role CHR sequence",
+        "effect_slot": "target",
+        "only_after_accepted_target": true,
+        "effect_even_without_native_success": true,
+        "consume_only_on_native_success": true,
+        "evidence": {
+          "procedure": "0x41b3e9",
+          "evidence_id": "ev_4ad9019da5e0945f74684bdf2d2c6ee7429b3a2a2e7bb84eee812d448c861eac",
+          "bundle": "remake/runtime/evidence/chapter_items_native.json"
+        }
+      }
+    },
+    "284": {
+      "id": 284,
+      "name": "角兽之刺",
+      "animation_skill_id_raw_142": 17,
+      "effect_id": "_iAtSTrs",
+      "effect_token_raw_126": "_iAtSTrs.dgp",
+      "source": {
+        "path": "SYSTEM/Object.ITM",
+        "sha256": "9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8",
+        "record_offset": 272961,
+        "record_sha256": "1da6290262418065889be99c498e2ca4f9c75d4d226478c297901c6a40a0ef87",
+        "effect_field_offset": 294,
+        "effect_field_bytes": 20
+      },
+      "settlement": {
+        "source_field": "0x49",
+        "frame_source": "acting role CHR sequence",
+        "effect_slot": "target",
+        "only_after_accepted_target": true,
+        "effect_even_without_native_success": true,
+        "consume_only_on_native_success": true,
+        "evidence": {
+          "procedure": "0x41b3e9",
+          "evidence_id": "ev_4ad9019da5e0945f74684bdf2d2c6ee7429b3a2a2e7bb84eee812d448c861eac",
+          "bundle": "remake/runtime/evidence/chapter_items_native.json"
+        }
+      }
+    },
+    "285": {
+      "id": 285,
+      "name": "炎鸟之眼",
+      "animation_skill_id_raw_142": 17,
+      "effect_id": "_iAtSTeb",
+      "effect_token_raw_126": "_iAtSTeb.dgp",
+      "source": {
+        "path": "SYSTEM/Object.ITM",
+        "sha256": "9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8",
+        "record_offset": 273920,
+        "record_sha256": "711eb5051b56bb3682720cfe4147b4f650f7ba5718b2a10548f43589477d543b",
+        "effect_field_offset": 294,
+        "effect_field_bytes": 20
+      },
+      "settlement": {
+        "source_field": "0x49",
+        "frame_source": "acting role CHR sequence",
+        "effect_slot": "target",
+        "only_after_accepted_target": true,
+        "effect_even_without_native_success": true,
+        "consume_only_on_native_success": true,
+        "evidence": {
+          "procedure": "0x41b3e9",
+          "evidence_id": "ev_4ad9019da5e0945f74684bdf2d2c6ee7429b3a2a2e7bb84eee812d448c861eac",
+          "bundle": "remake/runtime/evidence/chapter_items_native.json"
+        }
+      }
+    },
+    "307": {
+      "id": 307,
+      "name": "月晕石",
+      "animation_skill_id_raw_142": 17,
+      "effect_id": "_iAtSTbw",
+      "effect_token_raw_126": "_iAtSTbw.dgp",
+      "source": {
+        "path": "SYSTEM/Object.ITM",
+        "sha256": "9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8",
+        "record_offset": 295018,
+        "record_sha256": "f8d201ca24294f8578582110e2e6ba97231f0ae3f3f5284aee3715b9064ceec5",
+        "effect_field_offset": 294,
+        "effect_field_bytes": 20
+      },
+      "settlement": {
+        "source_field": "0x49",
+        "frame_source": "acting role CHR sequence",
+        "effect_slot": "target",
+        "only_after_accepted_target": true,
+        "effect_even_without_native_success": true,
+        "consume_only_on_native_success": true,
+        "evidence": {
+          "procedure": "0x41b3e9",
+          "evidence_id": "ev_4ad9019da5e0945f74684bdf2d2c6ee7429b3a2a2e7bb84eee812d448c861eac",
+          "bundle": "remake/runtime/evidence/chapter_items_native.json"
+        }
+      }
+    },
+    "308": {
+      "id": 308,
+      "name": "禁咒之书",
+      "animation_skill_id_raw_142": 17,
+      "effect_id": "_iAtSTsn",
+      "effect_token_raw_126": "_iAtSTsn.dgp",
+      "source": {
+        "path": "SYSTEM/Object.ITM",
+        "sha256": "9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8",
+        "record_offset": 295977,
+        "record_sha256": "ac7112e64fd41d994635172b0b31494fdae250d74f7e8cd717a9d5c6a9bbfe45",
+        "effect_field_offset": 294,
+        "effect_field_bytes": 20
+      },
+      "settlement": {
+        "source_field": "0x49",
+        "frame_source": "acting role CHR sequence",
+        "effect_slot": "target",
+        "only_after_accepted_target": true,
+        "effect_even_without_native_success": true,
+        "consume_only_on_native_success": true,
+        "evidence": {
+          "procedure": "0x41b3e9",
+          "evidence_id": "ev_4ad9019da5e0945f74684bdf2d2c6ee7429b3a2a2e7bb84eee812d448c861eac",
+          "bundle": "remake/runtime/evidence/chapter_items_native.json"
+        }
+      }
+    },
+    "309": {
+      "id": 309,
+      "name": "萝莉的诱惑",
+      "animation_skill_id_raw_142": 17,
+      "effect_id": "_iAtSTmz",
+      "effect_token_raw_126": "_iAtSTmz.dgp",
+      "source": {
+        "path": "SYSTEM/Object.ITM",
+        "sha256": "9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8",
+        "record_offset": 296936,
+        "record_sha256": "dc0a512a922d1e3e58359595db093b213a95c51bd43333e87c52c84dfba24a96",
+        "effect_field_offset": 294,
+        "effect_field_bytes": 20
+      },
+      "settlement": {
+        "source_field": "0x49",
+        "frame_source": "acting role CHR sequence",
+        "effect_slot": "target",
+        "only_after_accepted_target": true,
+        "effect_even_without_native_success": true,
+        "consume_only_on_native_success": true,
+        "evidence": {
+          "procedure": "0x41b3e9",
+          "evidence_id": "ev_4ad9019da5e0945f74684bdf2d2c6ee7429b3a2a2e7bb84eee812d448c861eac",
+          "bundle": "remake/runtime/evidence/chapter_items_native.json"
+        }
+      }
+    },
+    "310": {
+      "id": 310,
+      "name": "魔丑眼",
+      "animation_skill_id_raw_142": 17,
+      "effect_id": "_iAt018",
+      "effect_token_raw_126": "_iAt018.dgp",
+      "source": {
+        "path": "SYSTEM/Object.ITM",
+        "sha256": "9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8",
+        "record_offset": 297895,
+        "record_sha256": "9040ebf12ea64bc2a727ddfb8a3c820993675625b277a57757cc5ffac3a22451",
+        "effect_field_offset": 294,
+        "effect_field_bytes": 20
+      },
+      "settlement": {
+        "source_field": "0x49",
+        "frame_source": "acting role CHR sequence",
+        "effect_slot": "target",
+        "only_after_accepted_target": true,
+        "effect_even_without_native_success": true,
+        "consume_only_on_native_success": true,
+        "evidence": {
+          "procedure": "0x41b3e9",
+          "evidence_id": "ev_4ad9019da5e0945f74684bdf2d2c6ee7429b3a2a2e7bb84eee812d448c861eac",
+          "bundle": "remake/runtime/evidence/chapter_items_native.json"
+        }
+      }
+    },
+    "311": {
+      "id": 311,
+      "name": "逆月镜",
+      "animation_skill_id_raw_142": 17,
+      "effect_id": "_iAtSTdh",
+      "effect_token_raw_126": "_iAtSTdh.dgp",
+      "source": {
+        "path": "SYSTEM/Object.ITM",
+        "sha256": "9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8",
+        "record_offset": 298854,
+        "record_sha256": "f745368df6c50e9de959e59a9d9a3fffb409ebdc8c79b3844619623d80a7d5b0",
+        "effect_field_offset": 294,
+        "effect_field_bytes": 20
+      },
+      "settlement": {
+        "source_field": "0x49",
+        "frame_source": "acting role CHR sequence",
+        "effect_slot": "target",
+        "only_after_accepted_target": true,
+        "effect_even_without_native_success": true,
+        "consume_only_on_native_success": true,
+        "evidence": {
+          "procedure": "0x41b3e9",
+          "evidence_id": "ev_4ad9019da5e0945f74684bdf2d2c6ee7429b3a2a2e7bb84eee812d448c861eac",
+          "bundle": "remake/runtime/evidence/chapter_items_native.json"
+        }
+      }
+    },
+    "315": {
+      "id": 315,
+      "name": "夜光贝",
+      "animation_skill_id_raw_142": 17,
+      "effect_id": "_iReSTeb",
+      "effect_token_raw_126": "_iReSTeb.dgp",
+      "source": {
+        "path": "SYSTEM/Object.ITM",
+        "sha256": "9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8",
+        "record_offset": 302690,
+        "record_sha256": "b4fc6f3e2bf840d626202b3a3e5b82fb5d8342a1f6b05e8d7a222f6338ec7a67",
+        "effect_field_offset": 294,
+        "effect_field_bytes": 20
+      },
+      "settlement": {
+        "source_field": "0x49",
+        "frame_source": "acting role CHR sequence",
+        "effect_slot": "target",
+        "only_after_accepted_target": true,
+        "effect_even_without_native_success": true,
+        "consume_only_on_native_success": true,
+        "evidence": {
+          "procedure": "0x41b3e9",
+          "evidence_id": "ev_4ad9019da5e0945f74684bdf2d2c6ee7429b3a2a2e7bb84eee812d448c861eac",
+          "bundle": "remake/runtime/evidence/chapter_items_native.json"
+        }
+      }
+    },
+    "320": {
+      "id": 320,
+      "name": "海盐",
+      "animation_skill_id_raw_142": 17,
+      "effect_id": "_iReSTn",
+      "effect_token_raw_126": "_iReSTn.dgp",
+      "source": {
+        "path": "SYSTEM/Object.ITM",
+        "sha256": "9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8",
+        "record_offset": 307485,
+        "record_sha256": "2145be01ee8ea526f8b2abb6aaddc9754c4318a08040b8b6fb400b878f2d0f2b",
+        "effect_field_offset": 294,
+        "effect_field_bytes": 20
+      },
+      "settlement": {
+        "source_field": "0x49",
+        "frame_source": "acting role CHR sequence",
+        "effect_slot": "target",
+        "only_after_accepted_target": true,
+        "effect_even_without_native_success": true,
+        "consume_only_on_native_success": true,
+        "evidence": {
+          "procedure": "0x41b3e9",
+          "evidence_id": "ev_4ad9019da5e0945f74684bdf2d2c6ee7429b3a2a2e7bb84eee812d448c861eac",
+          "bundle": "remake/runtime/evidence/chapter_items_native.json"
+        }
+      }
+    },
+    "321": {
+      "id": 321,
+      "name": "祭司法典",
+      "animation_skill_id_raw_142": 17,
+      "effect_id": "_iReSTSC",
+      "effect_token_raw_126": "_iReSTSC.dgp",
+      "source": {
+        "path": "SYSTEM/Object.ITM",
+        "sha256": "9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8",
+        "record_offset": 308444,
+        "record_sha256": "e3ab678651b1e8d44a3e3435f513becc674fb7f74682aa4c05ff191ca2e253c8",
+        "effect_field_offset": 294,
+        "effect_field_bytes": 20
+      },
+      "settlement": {
+        "source_field": "0x49",
+        "frame_source": "acting role CHR sequence",
+        "effect_slot": "target",
+        "only_after_accepted_target": true,
+        "effect_even_without_native_success": true,
+        "consume_only_on_native_success": true,
+        "evidence": {
+          "procedure": "0x41b3e9",
+          "evidence_id": "ev_4ad9019da5e0945f74684bdf2d2c6ee7429b3a2a2e7bb84eee812d448c861eac",
+          "bundle": "remake/runtime/evidence/chapter_items_native.json"
+        }
+      }
+    },
+    "323": {
+      "id": 323,
+      "name": "神香",
+      "animation_skill_id_raw_142": 17,
+      "effect_id": "_iReSTBM",
+      "effect_token_raw_126": "_iReSTBM.dgp",
+      "source": {
+        "path": "SYSTEM/Object.ITM",
+        "sha256": "9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8",
+        "record_offset": 310362,
+        "record_sha256": "c9b00979c2c145d3b046b1e44fa9d00094b968eefd3b71e3e3d50274a2aeee0b",
+        "effect_field_offset": 294,
+        "effect_field_bytes": 20
+      },
+      "settlement": {
+        "source_field": "0x49",
+        "frame_source": "acting role CHR sequence",
+        "effect_slot": "target",
+        "only_after_accepted_target": true,
+        "effect_even_without_native_success": true,
+        "consume_only_on_native_success": true,
+        "evidence": {
+          "procedure": "0x41b3e9",
+          "evidence_id": "ev_4ad9019da5e0945f74684bdf2d2c6ee7429b3a2a2e7bb84eee812d448c861eac",
+          "bundle": "remake/runtime/evidence/chapter_items_native.json"
+        }
+      }
+    },
+    "324": {
+      "id": 324,
+      "name": "海蟑螂粉",
+      "animation_skill_id_raw_142": 17,
+      "effect_id": "_iReSTn",
+      "effect_token_raw_126": "_iReSTn.dgp",
+      "source": {
+        "path": "SYSTEM/Object.ITM",
+        "sha256": "9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8",
+        "record_offset": 311321,
+        "record_sha256": "cc68d08aafe0357cd64f8f55f22053f92db3ba27b38fb3861157ff893ca021e0",
+        "effect_field_offset": 294,
+        "effect_field_bytes": 20
+      },
+      "settlement": {
+        "source_field": "0x49",
+        "frame_source": "acting role CHR sequence",
+        "effect_slot": "target",
+        "only_after_accepted_target": true,
+        "effect_even_without_native_success": true,
+        "consume_only_on_native_success": true,
+        "evidence": {
+          "procedure": "0x41b3e9",
+          "evidence_id": "ev_4ad9019da5e0945f74684bdf2d2c6ee7429b3a2a2e7bb84eee812d448c861eac",
+          "bundle": "remake/runtime/evidence/chapter_items_native.json"
+        }
+      }
+    },
+    "331": {
+      "id": 331,
+      "name": "封印之石",
+      "animation_skill_id_raw_142": 17,
+      "effect_id": null,
+      "effect_token_raw_126": "",
+      "source": {
+        "path": "SYSTEM/Object.ITM",
+        "sha256": "9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8",
+        "record_offset": 318034,
+        "record_sha256": "c0fcc82de1a1ea9df2f20274535215b988d9efb1408c9f755230f166172ea950",
+        "effect_field_offset": 294,
+        "effect_field_bytes": 20
+      },
+      "settlement": {
+        "source_field": "0x49",
+        "frame_source": "acting role CHR sequence",
+        "effect_slot": "target",
+        "only_after_accepted_target": true,
+        "effect_even_without_native_success": true,
+        "consume_only_on_native_success": true,
+        "evidence": {
+          "procedure": "0x41b3e9",
+          "evidence_id": "ev_4ad9019da5e0945f74684bdf2d2c6ee7429b3a2a2e7bb84eee812d448c861eac",
+          "bundle": "remake/runtime/evidence/chapter_items_native.json"
+        }
+      }
     }
   },
   "effects": [
+    {
+      "id": "_iAt018",
+      "source": "Fight_Role/Effect/_iAt018.dgp",
+      "source_sha256": "113f4232e854ebd67724aeaac5416b8c779c70d0fca409a346cde696478e6ca9",
+      "frame_width": 359,
+      "frame_height": 279,
+      "anchor": {
+        "x": 171,
+        "y": 189
+      },
+      "sheet": "/assets/item_presentation/effects/_iAt018/action_00.png",
+      "sha256": "0b91ca363af74fa50fd933fabb8751f8745d8e7ed92fcb0482ea2c5d98d54803",
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "frame_count": 19,
+      "native_raw_hex": "0050000000000000000000000001130000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000333333342e776176000000000000000000000000010000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "interval_raw": 80,
+      "sound_token_raw_56": "3334.wav",
+      "blend": "lighter",
+      "evidence": [
+        "ev_0c237df7043928c88bbdebd562f666aa4b7f4201a779c0a793b1483939fd71d2",
+        "ev_8a5106859a74859307743cb5be1794a453316af2b92ccfc05d4705257ef5ea6c"
+      ]
+    },
+    {
+      "id": "_iAtSTbr",
+      "source": "Fight_Role/Effect/_iAtSTbr.dgp",
+      "source_sha256": "151eb27cbaf3476a5a0dfea689812b79c462bde552058c0527dbe91cc3034f25",
+      "frame_width": 449,
+      "frame_height": 349,
+      "anchor": {
+        "x": 221,
+        "y": 249
+      },
+      "sheet": "/assets/item_presentation/effects/_iAtSTbr/action_00.png",
+      "sha256": "ebda2958b834009bbb799f0c0c152860e4e4ff7f0e9e0e042d3de003747af6bd",
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "frame_count": 19,
+      "native_raw_hex": "00500000000000000000000000011300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005f694174535462722e7761760000000000000000010000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "interval_raw": 80,
+      "sound_token_raw_56": "_iAtSTbr.wav",
+      "blend": "lighter",
+      "evidence": [
+        "ev_0c237df7043928c88bbdebd562f666aa4b7f4201a779c0a793b1483939fd71d2",
+        "ev_8a5106859a74859307743cb5be1794a453316af2b92ccfc05d4705257ef5ea6c"
+      ]
+    },
+    {
+      "id": "_iAtSTbw",
+      "source": "Fight_Role/Effect/_iAtSTbw.dgp",
+      "source_sha256": "69ccc705ff93e1a4bf870257f79bf3e7774c0d4ec5974d4d699b3897dead6216",
+      "frame_width": 449,
+      "frame_height": 349,
+      "anchor": {
+        "x": 221,
+        "y": 249
+      },
+      "sheet": "/assets/item_presentation/effects/_iAtSTbw/action_00.png",
+      "sha256": "d063bb09a99be9e080aacc8f5566a22331f6a1d63d31ad531ca8ccd7c4c4e871",
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22
+      ],
+      "frame_count": 23,
+      "native_raw_hex": "00500000000000000000000000011700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005f694174535462772e7761760000000000000000010000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "interval_raw": 80,
+      "sound_token_raw_56": "_iAtSTbw.wav",
+      "blend": "lighter",
+      "evidence": [
+        "ev_0c237df7043928c88bbdebd562f666aa4b7f4201a779c0a793b1483939fd71d2",
+        "ev_8a5106859a74859307743cb5be1794a453316af2b92ccfc05d4705257ef5ea6c"
+      ]
+    },
+    {
+      "id": "_iAtSTdh",
+      "source": "Fight_Role/Effect/_iAtSTdh.dgp",
+      "source_sha256": "2b6e6bcdee37ebe4b9b93b71e1f3e8dfe34fab4b7d1ff53023ca9a4fcff4fc88",
+      "frame_width": 449,
+      "frame_height": 349,
+      "anchor": {
+        "x": 221,
+        "y": 249
+      },
+      "sheet": "/assets/item_presentation/effects/_iAtSTdh/action_00.png",
+      "sha256": "9e72a3a0f6754d1e6be94fd2d33478cb6800d198060422ca84494c30f3e87836",
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "frame_count": 20,
+      "native_raw_hex": "00500000000000000000000000011400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005f694174537464682e7761760000000000000000010000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "interval_raw": 80,
+      "sound_token_raw_56": "_iAtStdh.wav",
+      "blend": "lighter",
+      "evidence": [
+        "ev_0c237df7043928c88bbdebd562f666aa4b7f4201a779c0a793b1483939fd71d2",
+        "ev_8a5106859a74859307743cb5be1794a453316af2b92ccfc05d4705257ef5ea6c"
+      ]
+    },
+    {
+      "id": "_iAtSTeb",
+      "source": "Fight_Role/Effect/_iAtSTeb.dgp",
+      "source_sha256": "c8eb92df9002065991b265dce0fa9dfe334aef635d4548d17a9a63e924f4e330",
+      "frame_width": 449,
+      "frame_height": 349,
+      "anchor": {
+        "x": 221,
+        "y": 249
+      },
+      "sheet": "/assets/item_presentation/effects/_iAtSTeb/action_00.png",
+      "sha256": "60c1fc18b3cfe8a796726ce00691861277ae5ef246cfbe57e242aafcf9e1b773",
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23
+      ],
+      "frame_count": 24,
+      "native_raw_hex": "00500000000000000000000000011800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005f694174535465622e7761760000000000000000010000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "interval_raw": 80,
+      "sound_token_raw_56": "_iAtSTeb.wav",
+      "blend": "lighter",
+      "evidence": [
+        "ev_0c237df7043928c88bbdebd562f666aa4b7f4201a779c0a793b1483939fd71d2",
+        "ev_8a5106859a74859307743cb5be1794a453316af2b92ccfc05d4705257ef5ea6c"
+      ]
+    },
+    {
+      "id": "_iAtSTfr",
+      "source": "Fight_Role/Effect/_iAtSTfr.dgp",
+      "source_sha256": "c0bb03170723178f5ba7f4d65bc59d9924ebe6e50b57c5e72acd75052d06e5d3",
+      "frame_width": 449,
+      "frame_height": 349,
+      "anchor": {
+        "x": 221,
+        "y": 249
+      },
+      "sheet": "/assets/item_presentation/effects/_iAtSTfr/action_00.png",
+      "sha256": "b4d011e512ce6e23ca56fe653cc6d50ba555de451ebb3b5f2f29a287e0401f6c",
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "frame_count": 20,
+      "native_raw_hex": "00500000000000000000000000011400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005f694174535466722e7761760000000000000000010000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "interval_raw": 80,
+      "sound_token_raw_56": "_iAtSTfr.wav",
+      "blend": "lighter",
+      "evidence": [
+        "ev_0c237df7043928c88bbdebd562f666aa4b7f4201a779c0a793b1483939fd71d2",
+        "ev_8a5106859a74859307743cb5be1794a453316af2b92ccfc05d4705257ef5ea6c"
+      ]
+    },
+    {
+      "id": "_iAtSTfz",
+      "source": "Fight_Role/Effect/_iAtSTfz.dgp",
+      "source_sha256": "39060f7e60b5be848814c575383201fcf62d3d7df33a4a7ab40441538ecaf975",
+      "frame_width": 449,
+      "frame_height": 349,
+      "anchor": {
+        "x": 221,
+        "y": 249
+      },
+      "sheet": "/assets/item_presentation/effects/_iAtSTfz/action_00.png",
+      "sha256": "ac8dd0f5c5dde474532b3820d68f4382148b3f2fa8712f96f73980ec2d9db1a0",
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "frame_count": 9,
+      "native_raw_hex": "00500000000000000000000000010900000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005f6941745354667a2e7761760000000000000000010000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "interval_raw": 80,
+      "sound_token_raw_56": "_iAtSTfz.wav",
+      "blend": "lighter",
+      "evidence": [
+        "ev_0c237df7043928c88bbdebd562f666aa4b7f4201a779c0a793b1483939fd71d2",
+        "ev_8a5106859a74859307743cb5be1794a453316af2b92ccfc05d4705257ef5ea6c"
+      ]
+    },
+    {
+      "id": "_iAtSTmz",
+      "source": "Fight_Role/Effect/_iAtSTmz.dgp",
+      "source_sha256": "05ebaa29f16f113b5e4522d6585803379cf83f90270902a23303e01bb579c2d8",
+      "frame_width": 449,
+      "frame_height": 349,
+      "anchor": {
+        "x": 221,
+        "y": 289
+      },
+      "sheet": "/assets/item_presentation/effects/_iAtSTmz/action_00.png",
+      "sha256": "36bd071a33df2762d471f0e608bf04e93fde152c8b853a7d0e40b2d967755129",
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "frame_count": 20,
+      "native_raw_hex": "00500000000000000000000000011400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005f69417453546d7a2e7761760000000000000000010000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "interval_raw": 80,
+      "sound_token_raw_56": "_iAtSTmz.wav",
+      "blend": "lighter",
+      "evidence": [
+        "ev_0c237df7043928c88bbdebd562f666aa4b7f4201a779c0a793b1483939fd71d2",
+        "ev_8a5106859a74859307743cb5be1794a453316af2b92ccfc05d4705257ef5ea6c"
+      ]
+    },
+    {
+      "id": "_iAtSTps",
+      "source": "Fight_Role/Effect/_iAtSTps.dgp",
+      "source_sha256": "9f0879684764978442f38f08d72d9d7c0cc1c56b9476347319015fc24d9aefef",
+      "frame_width": 319,
+      "frame_height": 319,
+      "anchor": {
+        "x": 151,
+        "y": 259
+      },
+      "sheet": "/assets/item_presentation/effects/_iAtSTps/action_00.png",
+      "sha256": "b2e6fbd27e204cd70239994874851183abb03b1625c0f675c025948b23394941",
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "frame_count": 20,
+      "native_raw_hex": "00500000000000000000000000011400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005f694174535470732e7761760000000000000000010000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "interval_raw": 80,
+      "sound_token_raw_56": "_iAtSTps.wav",
+      "blend": "lighter",
+      "evidence": [
+        "ev_0c237df7043928c88bbdebd562f666aa4b7f4201a779c0a793b1483939fd71d2",
+        "ev_8a5106859a74859307743cb5be1794a453316af2b92ccfc05d4705257ef5ea6c"
+      ]
+    },
+    {
+      "id": "_iAtSTrs",
+      "source": "Fight_Role/Effect/_iAtSTrs.dgp",
+      "source_sha256": "99d7902749eccb688474dd5f568ad8d3721e0c1980622ee83593550065ef13d5",
+      "frame_width": 449,
+      "frame_height": 349,
+      "anchor": {
+        "x": 211,
+        "y": 259
+      },
+      "sheet": "/assets/item_presentation/effects/_iAtSTrs/action_00.png",
+      "sha256": "a95a928fcf49343972d2bd7c827470425321ab6780215bfdb863e80a02464d4a",
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "frame_count": 12,
+      "native_raw_hex": "00500000000000000000000000010c00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005f694174535472732e7761760000000000000000010000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "interval_raw": 80,
+      "sound_token_raw_56": "_iAtSTrs.wav",
+      "blend": "lighter",
+      "evidence": [
+        "ev_0c237df7043928c88bbdebd562f666aa4b7f4201a779c0a793b1483939fd71d2",
+        "ev_8a5106859a74859307743cb5be1794a453316af2b92ccfc05d4705257ef5ea6c"
+      ]
+    },
+    {
+      "id": "_iAtSTsl",
+      "source": "Fight_Role/Effect/_iAtSTsl.dgp",
+      "source_sha256": "5fb6a702605331d781f65a38b5177eca1b2278fd1f919b40ca424973695d239a",
+      "frame_width": 449,
+      "frame_height": 349,
+      "anchor": {
+        "x": 221,
+        "y": 249
+      },
+      "sheet": "/assets/item_presentation/effects/_iAtSTsl/action_00.png",
+      "sha256": "3b9268d6c266ddeb2dc3eeb7efc6f7e943aae663802ce129fe7a526f3412064e",
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "frame_count": 16,
+      "native_raw_hex": "00500000000000000000000000011000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005f6941745354736c2e7761760000000000000000010000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "interval_raw": 80,
+      "sound_token_raw_56": "_iAtSTsl.wav",
+      "blend": "lighter",
+      "evidence": [
+        "ev_0c237df7043928c88bbdebd562f666aa4b7f4201a779c0a793b1483939fd71d2",
+        "ev_8a5106859a74859307743cb5be1794a453316af2b92ccfc05d4705257ef5ea6c"
+      ]
+    },
+    {
+      "id": "_iAtSTsn",
+      "source": "Fight_Role/Effect/_iAtSTsn.dgp",
+      "source_sha256": "2c57ab80e5241fe8de1b3aa528be15bec00cecb943cf3802318fdfeb3ed0a64a",
+      "frame_width": 449,
+      "frame_height": 349,
+      "anchor": {
+        "x": 221,
+        "y": 249
+      },
+      "sheet": "/assets/item_presentation/effects/_iAtSTsn/action_00.png",
+      "sha256": "e25f15da51ba22626b535bc2847431e4c2d53ec693f6edad3403b53ac031eeef",
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20
+      ],
+      "frame_count": 21,
+      "native_raw_hex": "00500000000000000000000000011500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005f6941745354736e2e7761760000000000000000010000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "interval_raw": 80,
+      "sound_token_raw_56": "_iAtSTsn.wav",
+      "blend": "lighter",
+      "evidence": [
+        "ev_0c237df7043928c88bbdebd562f666aa4b7f4201a779c0a793b1483939fd71d2",
+        "ev_8a5106859a74859307743cb5be1794a453316af2b92ccfc05d4705257ef5ea6c"
+      ]
+    },
+    {
+      "id": "_iAtSTwk",
+      "source": "Fight_Role/Effect/_iAtSTwk.dgp",
+      "source_sha256": "be15a12c12c21fa2c13554bdd47b2c1a6cb293c875eb35263a7bd92f32d8188e",
+      "frame_width": 449,
+      "frame_height": 349,
+      "anchor": {
+        "x": 221,
+        "y": 249
+      },
+      "sheet": "/assets/item_presentation/effects/_iAtSTwk/action_00.png",
+      "sha256": "27ff0f9a9b1a17415a14d5f9874e1055fcfc9183d8ab2e3b662a345b06964565",
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30
+      ],
+      "frame_count": 31,
+      "native_raw_hex": "00500000000000000000000000011f00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005f6941745354776b2e7761760000000000000000010000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "interval_raw": 80,
+      "sound_token_raw_56": "_iAtSTwk.wav",
+      "blend": "lighter",
+      "evidence": [
+        "ev_0c237df7043928c88bbdebd562f666aa4b7f4201a779c0a793b1483939fd71d2",
+        "ev_8a5106859a74859307743cb5be1794a453316af2b92ccfc05d4705257ef5ea6c"
+      ]
+    },
     {
       "id": "_iReHP",
       "source": "Fight_Role/Effect/_iReHP.dgp",
@@ -1101,6 +2479,220 @@
       ]
     },
     {
+      "id": "_iReSTBM",
+      "source": "Fight_Role/Effect/_iReSTBM.dgp",
+      "source_sha256": "c54ed3c195dc0d7bf6282eb3a8a32eb5c6801fd8a8bcd7a5161873f14d18163b",
+      "frame_width": 449,
+      "frame_height": 349,
+      "anchor": {
+        "x": 221,
+        "y": 249
+      },
+      "sheet": "/assets/item_presentation/effects/_iReSTBM/action_00.png",
+      "sha256": "d3c6eb182dc327cdd6f6f1a65d9317b0d58d2c8c80cd6d183fd6f3b7fd428fb6",
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "frame_count": 19,
+      "native_raw_hex": "00500000000000000000000000011300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005f6952655354524d2e7761760000000000000000010000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "interval_raw": 80,
+      "sound_token_raw_56": "_iReSTRM.wav",
+      "blend": "lighter",
+      "evidence": [
+        "ev_0c237df7043928c88bbdebd562f666aa4b7f4201a779c0a793b1483939fd71d2",
+        "ev_8a5106859a74859307743cb5be1794a453316af2b92ccfc05d4705257ef5ea6c"
+      ]
+    },
+    {
+      "id": "_iReSTSC",
+      "source": "Fight_Role/Effect/_iReSTSC.dgp",
+      "source_sha256": "7ac0d0c7772329f56298bd4c0e8c5a97f7c736dc2d34c959eb6a13dbc346a92c",
+      "frame_width": 449,
+      "frame_height": 349,
+      "anchor": {
+        "x": 221,
+        "y": 249
+      },
+      "sheet": "/assets/item_presentation/effects/_iReSTSC/action_00.png",
+      "sha256": "0f8df4dd110cca60b3069a7c90c21c590f7ba5bf7b94731787d5b805426d1ba5",
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13
+      ],
+      "frame_count": 14,
+      "native_raw_hex": "00500000000000000000000000010e00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005f695265535453432e7761760000000000000000010000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "interval_raw": 80,
+      "sound_token_raw_56": "_iReSTSC.wav",
+      "blend": "lighter",
+      "evidence": [
+        "ev_0c237df7043928c88bbdebd562f666aa4b7f4201a779c0a793b1483939fd71d2",
+        "ev_8a5106859a74859307743cb5be1794a453316af2b92ccfc05d4705257ef5ea6c"
+      ]
+    },
+    {
+      "id": "_iReSTSS",
+      "source": "Fight_Role/Effect/_iReSTSS.dgp",
+      "source_sha256": "39275ebf3613d3d115679416ad1227451fd33c9df87a2788f71dfb9b8dfdcebf",
+      "frame_width": 449,
+      "frame_height": 349,
+      "anchor": {
+        "x": 221,
+        "y": 249
+      },
+      "sheet": "/assets/item_presentation/effects/_iReSTSS/action_00.png",
+      "sha256": "13538061d55d8cc748bd3869d7f20db3f35632b2a959c50906e70a8e099b3259",
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "frame_count": 19,
+      "native_raw_hex": "00500000000000000000000000011300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005f695265535453532e7761760000000000000000010000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "interval_raw": 80,
+      "sound_token_raw_56": "_iReSTSS.wav",
+      "blend": "lighter",
+      "evidence": [
+        "ev_0c237df7043928c88bbdebd562f666aa4b7f4201a779c0a793b1483939fd71d2",
+        "ev_8a5106859a74859307743cb5be1794a453316af2b92ccfc05d4705257ef5ea6c"
+      ]
+    },
+    {
+      "id": "_iReSTeb",
+      "source": "Fight_Role/Effect/_iReSTeb.dgp",
+      "source_sha256": "291b912f3eed6b86988f1f8a2da9d83cdbe84a2a395942ca3114744199bc5e58",
+      "frame_width": 449,
+      "frame_height": 349,
+      "anchor": {
+        "x": 221,
+        "y": 249
+      },
+      "sheet": "/assets/item_presentation/effects/_iReSTeb/action_00.png",
+      "sha256": "e080e998bc051926a6f9c61ae14750abc816aa558a15be4c025488ac62483b4f",
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22
+      ],
+      "frame_count": 23,
+      "native_raw_hex": "00500000000000000000000000011700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005f695265535465622e7761760000000000000000010000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "interval_raw": 80,
+      "sound_token_raw_56": "_iReSTeb.wav",
+      "blend": "lighter",
+      "evidence": [
+        "ev_0c237df7043928c88bbdebd562f666aa4b7f4201a779c0a793b1483939fd71d2",
+        "ev_8a5106859a74859307743cb5be1794a453316af2b92ccfc05d4705257ef5ea6c"
+      ]
+    },
+    {
+      "id": "_iReSTfr",
+      "source": "Fight_Role/Effect/_iReSTfr.dgp",
+      "source_sha256": "7940ec36a4c69f9daaa3ba61417c548a0e1f2a23873199c8bbb6cd9e6a9527f4",
+      "frame_width": 449,
+      "frame_height": 349,
+      "anchor": {
+        "x": 211,
+        "y": 259
+      },
+      "sheet": "/assets/item_presentation/effects/_iReSTfr/action_00.png",
+      "sha256": "775841f1b448ddfd75f68cf63a879fa88480af7c73aa2b3847fb6e934e7826b1",
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "frame_count": 19,
+      "native_raw_hex": "00500000000000000000000000011300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005f695265535466722e7761760000000000000000010000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "interval_raw": 80,
+      "sound_token_raw_56": "_iReSTfr.wav",
+      "blend": "lighter",
+      "evidence": [
+        "ev_0c237df7043928c88bbdebd562f666aa4b7f4201a779c0a793b1483939fd71d2",
+        "ev_8a5106859a74859307743cb5be1794a453316af2b92ccfc05d4705257ef5ea6c"
+      ]
+    },
+    {
       "id": "_iReSTfz",
       "source": "Fight_Role/Effect/_iReSTfz.dgp",
       "source_sha256": "269c9b87881b43c72c2590980acf1b50c539ea606a1d9f83b7a358368954492a",
@@ -1142,6 +2734,154 @@
         "ev_0c237df7043928c88bbdebd562f666aa4b7f4201a779c0a793b1483939fd71d2",
         "ev_8a5106859a74859307743cb5be1794a453316af2b92ccfc05d4705257ef5ea6c"
       ]
+    },
+    {
+      "id": "_iReSTn",
+      "source": "Fight_Role/Effect/_iReSTn.dgp",
+      "source_sha256": "e86f86bad63fe7af7a8ce532ec1c467e696c95178afee0bd77d1a3ea675cd96d",
+      "frame_width": 449,
+      "frame_height": 349,
+      "anchor": {
+        "x": 221,
+        "y": 249
+      },
+      "sheet": "/assets/item_presentation/effects/_iReSTn/action_00.png",
+      "sha256": "49ae4f395c7096b0a2222f7b220eb9ae61b7048bc324bc09bb9d14ba59160dee",
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "frame_count": 20,
+      "native_raw_hex": "00500000000000000000000000011400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005f69526553546e2e776176000000000000000000010000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "interval_raw": 80,
+      "sound_token_raw_56": "_iReSTn.wav",
+      "blend": "lighter",
+      "evidence": [
+        "ev_0c237df7043928c88bbdebd562f666aa4b7f4201a779c0a793b1483939fd71d2",
+        "ev_8a5106859a74859307743cb5be1794a453316af2b92ccfc05d4705257ef5ea6c"
+      ]
+    },
+    {
+      "id": "_iReSTrs",
+      "source": "Fight_Role/Effect/_iReSTrs.dgp",
+      "source_sha256": "99c47e21daa9629760413bd06f3bfb068c612ce62ae32b392b6db01c72bb42c2",
+      "frame_width": 449,
+      "frame_height": 349,
+      "anchor": {
+        "x": 221,
+        "y": 249
+      },
+      "sheet": "/assets/item_presentation/effects/_iReSTrs/action_00.png",
+      "sha256": "c8ef31ddfe5666fce86d27064d8d430c6f2f90bb28740e20dcf649bdcc9b648e",
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22
+      ],
+      "frame_count": 23,
+      "native_raw_hex": "00500000000000000000000000011700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005f695265535472732e7761760000000000000000010000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "interval_raw": 80,
+      "sound_token_raw_56": "_iReSTrs.wav",
+      "blend": "lighter",
+      "evidence": [
+        "ev_0c237df7043928c88bbdebd562f666aa4b7f4201a779c0a793b1483939fd71d2",
+        "ev_8a5106859a74859307743cb5be1794a453316af2b92ccfc05d4705257ef5ea6c"
+      ]
+    },
+    {
+      "id": "_iRelife",
+      "source": "Fight_Role/Effect/_iRelife.dgp",
+      "source_sha256": "d9753ef56ac5658c9d976f81426f6a196ff992b0e126aadc18eec1459f2b431f",
+      "frame_width": 449,
+      "frame_height": 449,
+      "anchor": {
+        "x": 221,
+        "y": 329
+      },
+      "sheet": "/assets/item_presentation/effects/_iRelife/action_00.png",
+      "sha256": "b03cf11676a5cc60e202d3389aed358b59638a8d9a06db7f1d5cd8047fb67b5d",
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32
+      ],
+      "frame_count": 33,
+      "native_raw_hex": "00500000000000000000000000012100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005f6952656c6966652e7761760000000000000000010000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "interval_raw": 80,
+      "sound_token_raw_56": "_iRelife.wav",
+      "blend": "lighter",
+      "evidence": [
+        "ev_0c237df7043928c88bbdebd562f666aa4b7f4201a779c0a793b1483939fd71d2",
+        "ev_8a5106859a74859307743cb5be1794a453316af2b92ccfc05d4705257ef5ea6c"
+      ]
     }
   ],
   "source_hashes": {
@@ -1159,9 +2899,30 @@
     "Fight_Role/005.dgp": "f78b0fc6ea0b0319b85079948323df7392bc6a941b3cd3d7ca5a8ca73c4d3029",
     "Fight_Role/006.CHR": "27b29fb5cc1073014faea7553d0175559714c18dbbc5132ca1c549e4a9d8e15b",
     "Fight_Role/006.dgp": "3eec3a8b10fda36ae95a42730634fc1241a2b6bf6a05a56469346d1bbcd7c92d",
+    "Fight_Role/Effect/_iAt018.dgp": "113f4232e854ebd67724aeaac5416b8c779c70d0fca409a346cde696478e6ca9",
+    "Fight_Role/Effect/_iAtSTbr.dgp": "151eb27cbaf3476a5a0dfea689812b79c462bde552058c0527dbe91cc3034f25",
+    "Fight_Role/Effect/_iAtSTbw.dgp": "69ccc705ff93e1a4bf870257f79bf3e7774c0d4ec5974d4d699b3897dead6216",
+    "Fight_Role/Effect/_iAtSTdh.dgp": "2b6e6bcdee37ebe4b9b93b71e1f3e8dfe34fab4b7d1ff53023ca9a4fcff4fc88",
+    "Fight_Role/Effect/_iAtSTeb.dgp": "c8eb92df9002065991b265dce0fa9dfe334aef635d4548d17a9a63e924f4e330",
+    "Fight_Role/Effect/_iAtSTfr.dgp": "c0bb03170723178f5ba7f4d65bc59d9924ebe6e50b57c5e72acd75052d06e5d3",
+    "Fight_Role/Effect/_iAtSTfz.dgp": "39060f7e60b5be848814c575383201fcf62d3d7df33a4a7ab40441538ecaf975",
+    "Fight_Role/Effect/_iAtSTmz.dgp": "05ebaa29f16f113b5e4522d6585803379cf83f90270902a23303e01bb579c2d8",
+    "Fight_Role/Effect/_iAtSTps.dgp": "9f0879684764978442f38f08d72d9d7c0cc1c56b9476347319015fc24d9aefef",
+    "Fight_Role/Effect/_iAtSTrs.dgp": "99d7902749eccb688474dd5f568ad8d3721e0c1980622ee83593550065ef13d5",
+    "Fight_Role/Effect/_iAtSTsl.dgp": "5fb6a702605331d781f65a38b5177eca1b2278fd1f919b40ca424973695d239a",
+    "Fight_Role/Effect/_iAtSTsn.dgp": "2c57ab80e5241fe8de1b3aa528be15bec00cecb943cf3802318fdfeb3ed0a64a",
+    "Fight_Role/Effect/_iAtSTwk.dgp": "be15a12c12c21fa2c13554bdd47b2c1a6cb293c875eb35263a7bd92f32d8188e",
     "Fight_Role/Effect/_iReHP.dgp": "5bd93a7c082369b4094296e47d83282bb0cc9772dddcd4190cd114941ee9fde1",
     "Fight_Role/Effect/_iReMP.dgp": "e6d521d471109c0e2c472c0052f30129ebb428e97101b04a64b4a9b3efade3b1",
-    "Fight_Role/Effect/_iReSTfz.dgp": "269c9b87881b43c72c2590980acf1b50c539ea606a1d9f83b7a358368954492a"
+    "Fight_Role/Effect/_iReSTBM.dgp": "c54ed3c195dc0d7bf6282eb3a8a32eb5c6801fd8a8bcd7a5161873f14d18163b",
+    "Fight_Role/Effect/_iReSTSC.dgp": "7ac0d0c7772329f56298bd4c0e8c5a97f7c736dc2d34c959eb6a13dbc346a92c",
+    "Fight_Role/Effect/_iReSTSS.dgp": "39275ebf3613d3d115679416ad1227451fd33c9df87a2788f71dfb9b8dfdcebf",
+    "Fight_Role/Effect/_iReSTeb.dgp": "291b912f3eed6b86988f1f8a2da9d83cdbe84a2a395942ca3114744199bc5e58",
+    "Fight_Role/Effect/_iReSTfr.dgp": "7940ec36a4c69f9daaa3ba61417c548a0e1f2a23873199c8bbb6cd9e6a9527f4",
+    "Fight_Role/Effect/_iReSTfz.dgp": "269c9b87881b43c72c2590980acf1b50c539ea606a1d9f83b7a358368954492a",
+    "Fight_Role/Effect/_iReSTn.dgp": "e86f86bad63fe7af7a8ce532ec1c467e696c95178afee0bd77d1a3ea675cd96d",
+    "Fight_Role/Effect/_iReSTrs.dgp": "99c47e21daa9629760413bd06f3bfb068c612ce62ae32b392b6db01c72bb42c2",
+    "Fight_Role/Effect/_iRelife.dgp": "d9753ef56ac5658c9d976f81426f6a196ff992b0e126aadc18eec1459f2b431f"
   },
   "evidence": {
     "native_item_animation": {

@@ -2,7 +2,7 @@
   "schema": "seventh-seal-tool-index",
   "version": 1,
   "updated": "2026-10-28",
-  "registered_steps": 43,
+  "registered_steps": 45,
   "content_plan": [
     "chapter-maps",
     "chapter-story",
@@ -38,6 +38,7 @@
     "opening-maps",
     "map-effects",
     "story-media",
+    "native-services",
     "content"
   ],
   "tools": [
@@ -345,6 +346,14 @@
       ]
     },
     {
+      "path": "export_ember_city_index.py",
+      "role": "registered-build",
+      "build_targets": [
+        "ember-city-index"
+      ],
+      "imported_by": []
+    },
+    {
       "path": "export_events.py",
       "role": "independent-source-export",
       "build_targets": [],
@@ -358,6 +367,7 @@
       ],
       "imported_by": [
         "build_runtime.py",
+        "export_ember_city_index.py",
         "export_jade_lake_index.py",
         "export_white_forest_index.py"
       ]
@@ -523,6 +533,14 @@
       "imported_by": []
     },
     {
+      "path": "export_native_services.py",
+      "role": "registered-build",
+      "build_targets": [
+        "native-services"
+      ],
+      "imported_by": []
+    },
+    {
       "path": "export_opening_seed.py",
       "role": "registered-build",
       "build_targets": [
@@ -539,6 +557,7 @@
       "imported_by": [
         "export_battle_ui.py",
         "export_menu_techniques.py",
+        "export_native_services.py",
         "export_save_menu.py",
         "export_world_map_ui.py"
       ]
@@ -899,6 +918,15 @@
       "previous_path": "remake/prototype/tools/map_data.py",
       "previous_sha256": "f43beeb4cc4f4a6d8a7d2bdf2f661454efa59aab2def9471f09a0860ad4de8bf",
       "recovery_commit": "1ee90804fc1d1ad1a2b56d3dac56dab30bf6f634"
+    },
+    {
+      "path": "source/map_identity.py",
+      "role": "shared-current",
+      "build_targets": [],
+      "imported_by": [
+        "content_registration.py",
+        "export_chapter_story.py"
+      ]
     },
     {
       "path": "source/map_objects.py",

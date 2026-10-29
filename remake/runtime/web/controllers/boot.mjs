@@ -138,11 +138,11 @@ export function createBootController({state, actions, $, canvas, ctx}) {
       rollbackView:checkpoint=>{Object.assign(state.view,checkpoint.view);$('mapName').textContent=checkpoint.name;$('probe').replaceChildren(...checkpoint.probes);$('resetEventSample').hidden=checkpoint.resetHidden;state.nearest=checkpoint.nearest;state.audio?.setScene({mapId:state.world.location.map_id,battle:false});}});
     state.chapterRunner=new ChapterRunner({world: state.world,data:state.chapterStory,objectData:state.chapterResources.interactive_objects,
       worldMapState:()=>state.worldMap.initialState(),
-      choose:actions.chooseChapter,
+      choose:actions.chooseChapter,service:actions.openNativeService,
       say:({mapId,record,signal})=>actions.say(actions.chapterSpeaker(mapId,record),record.text_raw,record.style,{mapId,record,signal}),
       animate:actions.animateChapter,transfer:actions.transferChapter,battle:actions.startScriptedBattle,objectAnimation:actions.animateChapterObject,log: actions.log,setPhase:phase=>state.scenes.setPhase(phase)});
     state.worldMap=new WorldMapController({world: state.world,data:worldMapData,
-      prepare:async destination=>{const scene=await actions.prepareMap(destination.map_id),location=worldMapEntry(scene,destination,state.chapterStory);
+      prepare:async destination=>{const draft=state.world.snapshot();delete draft.map_npc_state;const scene=await actions.prepareMap(destination.map_id,{world:draft}),location=worldMapEntry(scene,destination,state.chapterStory);
         actions.validateEntry(scene,location);return {scene,location};},
       load:(prepared,location)=>{actions.commitView(prepared.scene,location);state.scenes.current=prepared.scene;},
       enter:async(prepared,draft,reason)=>{const played=await actions.enterMap(prepared.scene,draft,reason);if(played)prepared.scene=state.scenes.current;return played;},

@@ -3,6 +3,7 @@ from pathlib import Path
 import copy
 import contextlib
 import io
+import hashlib
 import json
 import os
 import shutil
@@ -22,6 +23,26 @@ import build_runtime as build
 
 
 class ItemAdmissionExport(unittest.TestCase):
+    def test_actual_kind4_true_branch_is_in_reachable_reward_closure(self):
+        dat_path, tlk_path = 'Map/m01040.dat', 'Map/m01040.TLK'
+        original = {name: (ROOT / name).read_bytes() for name in (dat_path, tlk_path)}
+        hashes = {name: hashlib.sha256(raw).hexdigest() for name, raw in original.items()}
+        dat = original[dat_path]
+        table = story_producer.tlk_record(ROOT / tlk_path)
+        table.update(id='M01040', map_flag_index=producer.u32(dat, 0x92),
+                     map_source={'path': dat_path, 'sha256': hashes[dat_path]},
+                     header_entry_tlk_raw=producer.u32(dat, 0x13a),
+                     header_setup_tlk_raw=producer.u32(dat, 0x8a), objects=[], descriptors=[], npc_records=[])
+        registration = {'maps': {'M01040': {'npcs': [20]}}, 'programs': []}
+        def require(ok, message):
+            self.assertTrue(ok, message)
+        reachable, roots = producer.registered_tlk_reachability(
+            {'maps': {'M01040': table}}, registration, original, hashes, require)
+        self.assertEqual(roots[0]['record_id'], 102)
+        self.assertIn('M01040:4', reachable)
+        self.assertIn('M01040:32', reachable, 'kind4 +2F is a true branch even with zero header condition fields')
+        self.assertIn('M01040:28', reachable)
+
     @classmethod
     def setUpClass(cls):
         cls.items = json.loads((RUNTIME / 'web/data/items.json').read_text('utf-8'))
@@ -48,23 +69,87 @@ class ItemAdmissionExport(unittest.TestCase):
                                                    index, 0x61c + (index - 1) * 959)[0]
                 for index in range(1, 417)}
 
+    def assert_current_admission(self, exported):
+        admission = exported['catalog']['equipment_admission']
+        legacy = [39, 40, 41, 42, 50]
+        historical = [ident for ident in admission['promoted_item_ids']
+            if any(row['kind'] in ('registered-player-native-initial-equipment', 'registered-story-item-grant')
+                for row in admission['sources'][str(ident)])]
+        self.assertEqual(historical, legacy)
+        raw = bytes.fromhex(self.story['maps']['M01063']['records'][1]['raw_hex'])
+        goods = [int.from_bytes(raw[0x37 + i * 2:0x39 + i * 2], 'little') for i in range(32)]
+        goods = [ident for ident in goods if ident]
+        self.assertEqual(goods, [60, 61, 62, 63, 65, 66, 3, 77, 78, 79, 80, 81, 82, 4, 92, 93, 94, 95, 96, 97])
+        city = {int(ident) for ident, sources in admission['sources'].items()
+            if any(row['kind'] == 'tlk-shop-item' and row['map_id'] == 'M01063' and row['record_id'] == 2 for row in sources)}
+        self.assertEqual(city, set(goods))
+        recipes = {int(ident) for ident, sources in admission['sources'].items()
+            if exported['definitions'][ident]['type_raw_24'] == 1
+            and any(row['kind'] == 'registered-recipe-product' for row in sources)}
+        self.assertEqual(recipes, {253, 254, 256, 257})
+        self.assertEqual(set(admission['promoted_item_ids']), set(legacy) | city - set(producer.IDS) | recipes)
+        materials = {int(ident) for ident in admission['sources']
+            if exported['definitions'][ident]['type_raw_24'] == 3 and exported['definitions'][ident]['subtype_raw_25'] == 2}
+        medicine = {13, 21, *range(23, 29), *range(272, 277), *range(278, 281),
+            *range(283, 286), *range(307, 312), 315, 320, 321, 323, 324, 331}
+        self.assertEqual(set(exported['catalog']['item_capability_admission']['promoted_item_ids']), medicine | materials | {127, 170})
+        old_enabled = {1, 4, 8, 10, 11, 12, 39, 40, 41, 42, 50, 51, 61, 127, 170, 272}
+        self.assertEqual(set(exported['catalog']['default_enabled_item_ids']), old_enabled | city | recipes | medicine | materials)
+        for ident in materials:
+            self.assertEqual(exported['definitions'][str(ident)]['behavior']['kind'], 'crafting-material')
+            self.assertNotIn('effect', exported['definitions'][str(ident)])
+        # Every source-exposed commodity has an inventory/equip/use handler;
+        # a source catalog row or successful purchase alone cannot admit it.
+        for ident, sources in admission['sources'].items():
+            if not any(source['kind'] in ('tlk-shop-item', 'registered-recipe-product') for source in sources):
+                continue
+            definition = exported['definitions'][ident]
+            self.assertTrue(definition['availability']['enabled'], ident)
+            kind = definition['behavior']['kind']
+            if kind == 'equip':
+                self.assertIn(definition['slot_id'], {slot['id'] for slot in exported['slots']})
+            elif kind == 'crafting-material':
+                self.assertIn('native-service-material-input-output', definition['behavior']['implemented_scope'])
+            else:
+                self.assertIn(kind, ('simple-restore', 'status-cure', 'status-attack', 'revival-item', 'status-clear'))
+                self.assertIn('effect', definition)
+                if kind == 'simple-restore':
+                    # The original baseline restorers omit the optional flag;
+                    # deriveItemConfiguration gives them the native true default.
+                    self.assertTrue(definition.get('use_in_battle', True))
+                else:
+                    self.assertTrue(definition['use_in_battle'])
+
     def test_registered_initial_equipment_and_real_tlk_grants_promote_only_recovered_plain_numeric_gear(self):
         definitions = self.source_definitions()
         original = copy.deepcopy((self.seed, self.story, self.registration))
         admission = producer.admit_registered_equipment(definitions, self.seed, self.story, self.registration)
-        self.assertEqual(admission['promoted_item_ids'], [39, 40, 41, 42, 50])
+        historical = [ident for ident in admission['promoted_item_ids']
+            if any(row['kind'] in ('registered-player-native-initial-equipment', 'registered-story-item-grant')
+                for row in admission['sources'][str(ident)])]
+        self.assertEqual(historical, [39, 40, 41, 42, 50])
         for ident in admission['promoted_item_ids']:
             row = definitions[str(ident)]
             self.assertEqual(row['behavior']['kind'], 'equip')
             self.assertTrue(row['availability']['enabled'])
             self.assertTrue(row['initialization']['deterministic'])
-            self.assertFalse(any(bytes.fromhex(row['raw_fields']['special_effect_block']['raw_hex'])))
+            payload = bytes.fromhex(row['raw_fields']['special_effect_block']['raw_hex'])
+            self.assertFalse(any(payload[:0xea]))
+            self.assertFalse(any(payload[0xff:]))
+            self.assertLessEqual(payload[0xea], 5)
             self.assertEqual(row['raw_fields']['encounter_modifier_raw_3a7'], 0)
         self.assertEqual(admission['sources']['50'][0]['map_id'], 'M17025')
         self.assertEqual(admission['sources']['50'][0]['record_id'], 3)
         self.assertEqual(admission['sources']['39'][0]['role_id'], '003')
-        for ident in [99, 257, 272, 347]:
+        for ident in [99, 272, 347]:
             self.assertFalse(definitions[str(ident)]['availability']['enabled'])
+        self.assertTrue(definitions['257']['availability']['enabled'])
+        self.assertEqual(admission['sources']['257'][0]['kind'], 'registered-recipe-product')
+        reward = admission['sources']['331'][0]
+        self.assertEqual((reward['kind'], reward['map_id'], reward['record_id'], reward['enemy_id'], reward['reward_slot']),
+            ('registered-enemy-reward', 'M71013', 5, '042', 0))
+        self.assertEqual(reward['source'], dict(path='Fight_Role/042.CHR', sha256=producer.sha((ROOT/'Fight_Role/042.CHR').read_bytes()),
+            offset=8+0xe8, bytes=4, raw_hex='4b010000'))
         self.assertEqual((self.seed, self.story, self.registration), original)
 
     def test_source_drift_or_unregistered_provenance_cannot_open_an_item(self):
@@ -86,6 +171,13 @@ class ItemAdmissionExport(unittest.TestCase):
         admitted = self.source_definitions()
         producer.admit_registered_equipment(admitted, self.seed, self.story, unregistered)
         self.assertFalse(admitted['39']['availability']['enabled'])
+        unregistered = copy.deepcopy(self.registration)
+        unregistered['roles'].pop('042')
+        admitted = self.source_definitions()
+        acquisition = producer.admit_registered_equipment(admitted, self.seed, self.story, unregistered)
+        producer.admit_registered_status_cures(admitted, acquisition)
+        self.assertNotIn('331', acquisition['sources'])
+        self.assertFalse(admitted['331']['availability']['enabled'])
 
     def test_nonzero_special_effect_or_encounter_payload_is_not_plain_numeric_admission(self):
         row = self.source_definitions()['50']
@@ -172,9 +264,7 @@ class ItemAdmissionExport(unittest.TestCase):
                 producer.RUNTIME = previous
             output = target / 'web/data/items.json'
             exported = json.loads(output.read_text('utf-8'))
-            self.assertEqual(exported['catalog']['equipment_admission']['promoted_item_ids'], [39, 40, 41, 42, 50])
-            self.assertEqual(exported['catalog']['default_enabled_item_ids'], [1, 4, 8, 10, 11, 12, 39, 40, 41, 42, 50, 51, 61, 127, 170, 272])
-            self.assertEqual(exported['catalog']['item_capability_admission']['promoted_item_ids'], [127, 170, 272])
+            self.assert_current_admission(exported)
             self.assertEqual(exported['catalog']['item_capability_admission']['passive_item_ids'], [127, 170])
             self.assertEqual(exported['definitions']['272']['behavior']['kind'], 'status-cure')
             environment = dict(os.environ, SEVENTH_SEAL_ITEM_TEST_CATALOG=str(output))
@@ -229,8 +319,7 @@ class ItemAdmissionExport(unittest.TestCase):
             self.assertEqual(isolated.returncode, 0, isolated.stdout + isolated.stderr)
             self.assertEqual(output.read_bytes(), expected)
             exported = json.loads(expected)
-            self.assertEqual(exported['catalog']['equipment_admission']['promoted_item_ids'], [39, 40, 41, 42, 50])
-            self.assertEqual(exported['catalog']['item_capability_admission']['promoted_item_ids'], [127, 170, 272])
+            self.assert_current_admission(exported)
         self.assertEqual({path: path.read_bytes() for path in live}, before)
 
 

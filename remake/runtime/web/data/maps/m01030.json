@@ -28,7 +28,8 @@
       "rows": 45,
       "resource_count": 2,
       "animation_frame": 0,
-      "assembly": "DAT even-cell frame/resource -> indexed header DGP; 0x4A3770 rectangular branch"
+      "assembly": "DAT even-cell frame/resource -> indexed header DGP; 0x4A3770 rectangular branch",
+      "odd_size_policy": "Native tile-origin loops; clip beyond exact DAT dimensions"
     }
   },
   "movement": {
@@ -42,6 +43,8 @@
     "cell_size": 16,
     "native_coordinate_shift": 3,
     "native_to_pixel_scale": 2,
+    "native_step_shift": 1,
+    "native_camera_step_shift": 1,
     "terrain_rows": [
       "1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111",
       "1111111111111111111111111111111111111111111111111111111111000000000000111111111111111111111111111111111111111111111111111111111111",
@@ -532,8 +535,7 @@
     "transition_rule": "0x4A80E0: +0x38 reference, descriptor[0]==0 and descriptor[0x11]!=0 is path-gated",
     "policy": "Unimplemented native transition gates block. Runtime enables only separately verified exits.",
     "role_occupancy_rule": "+0x14 is runtime role index + 1, not static terrain",
-    "object_lookup_rule": "+0x2B is runtime object index + 1, not a second collision mask",
-    "native_step_shift": 1
+    "object_lookup_rule": "+0x2B is runtime object index + 1, not a second collision mask"
   },
   "objects": [
     {
@@ -1989,6 +1991,224 @@
   ],
   "exits": [
     {
+      "id": 1,
+      "state": "ready",
+      "cells": [
+        {
+          "x": 1,
+          "y": 33
+        },
+        {
+          "x": 1,
+          "y": 34
+        },
+        {
+          "x": 1,
+          "y": 35
+        },
+        {
+          "x": 1,
+          "y": 36
+        },
+        {
+          "x": 1,
+          "y": 37
+        }
+      ],
+      "target_map": "M01040",
+      "entry": {
+        "x": 1696,
+        "y": 704,
+        "direction": 5,
+        "cell_x": 106,
+        "cell_y": 44,
+        "native_x": 848,
+        "native_y": 352
+      },
+      "conditions": [],
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "descriptor_offset": 750514,
+        "descriptor_bytes": 66,
+        "descriptor_hex": "00000000000000000000000000000000006d30313034302e646174000000000000000000000003000000070000000000000000000000000000000000000000000000",
+        "compact_field_expansion_evidence": null,
+        "target_path": "Map/m01040.dat",
+        "target_sha256": "6e26d1f0f043cdf760b04b012745ad9dd2545c4e6c8ebc55b129bd15728406cb",
+        "target_entry_marker": 3,
+        "entry_sort_code": 7,
+        "entry_terrain_raw": 0,
+        "entry_trigger_raw": 0,
+        "entry_scan_cells": [
+          {
+            "x": 106,
+            "y": 44,
+            "offset": 333810
+          },
+          {
+            "x": 107,
+            "y": 44,
+            "offset": 333874
+          },
+          {
+            "x": 106,
+            "y": 45,
+            "offset": 341234
+          },
+          {
+            "x": 107,
+            "y": 45,
+            "offset": 341298
+          }
+        ],
+        "entry_sorted_cells": [
+          {
+            "x": 106,
+            "y": 44
+          },
+          {
+            "x": 106,
+            "y": 45
+          },
+          {
+            "x": 107,
+            "y": 44
+          },
+          {
+            "x": 107,
+            "y": 45
+          }
+        ],
+        "entry_sort": "x ascending; stable ties",
+        "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
+        "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
+        "native_evidence": {
+          "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+          "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+          "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+          "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+        }
+      },
+      "execution": "Native transition descriptor only; map-entry TLK/ANM and their once-only checks must complete separately.",
+      "limitations": [
+        "Static source/code evidence; original timing not observed",
+        "Continuous keyboard movement is runtime policy"
+      ]
+    },
+    {
+      "id": 2,
+      "state": "ready",
+      "cells": [
+        {
+          "x": 66,
+          "y": 86
+        },
+        {
+          "x": 67,
+          "y": 86
+        },
+        {
+          "x": 68,
+          "y": 86
+        },
+        {
+          "x": 69,
+          "y": 86
+        },
+        {
+          "x": 70,
+          "y": 86
+        },
+        {
+          "x": 71,
+          "y": 86
+        },
+        {
+          "x": 72,
+          "y": 86
+        }
+      ],
+      "target_map": "M01050",
+      "entry": {
+        "x": 1696,
+        "y": 112,
+        "direction": 7,
+        "cell_x": 106,
+        "cell_y": 7,
+        "native_x": 848,
+        "native_y": 56
+      },
+      "conditions": [],
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "descriptor_offset": 750580,
+        "descriptor_bytes": 66,
+        "descriptor_hex": "00000000000000000000000000000000006d30313035302e646174000000000000000000000002000000060000000000000000000000000000000000000000000000",
+        "compact_field_expansion_evidence": null,
+        "target_path": "Map/m01050.dat",
+        "target_sha256": "48ae98e95e9ea414e716c85440d381a5bc29cc2ec00ccd3b30c2ef314d4145fc",
+        "target_entry_marker": 2,
+        "entry_sort_code": 6,
+        "entry_terrain_raw": 0,
+        "entry_trigger_raw": 0,
+        "entry_scan_cells": [
+          {
+            "x": 106,
+            "y": 6,
+            "offset": 52466
+          },
+          {
+            "x": 107,
+            "y": 6,
+            "offset": 52530
+          },
+          {
+            "x": 106,
+            "y": 7,
+            "offset": 60018
+          },
+          {
+            "x": 107,
+            "y": 7,
+            "offset": 60082
+          }
+        ],
+        "entry_sorted_cells": [
+          {
+            "x": 106,
+            "y": 7
+          },
+          {
+            "x": 107,
+            "y": 7
+          },
+          {
+            "x": 106,
+            "y": 6
+          },
+          {
+            "x": 107,
+            "y": 6
+          }
+        ],
+        "entry_sort": "y descending; stable ties",
+        "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
+        "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
+        "native_evidence": {
+          "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+          "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+          "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+          "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+        }
+      },
+      "execution": "Native transition descriptor only; map-entry TLK/ANM and their once-only checks must complete separately.",
+      "limitations": [
+        "Static source/code evidence; original timing not observed",
+        "Continuous keyboard movement is runtime policy"
+      ]
+    },
+    {
       "id": 3,
       "state": "ready",
       "cells": [
@@ -2052,37 +2272,39 @@
         "native_y": 624
       },
       "conditions": [],
-      "native_global_guards": {
-        "DAT_04EDD404": 0,
-        "DAT_04B49F0C": 0,
-        "DAT_02B906CC": 0,
-        "DAT_05020CEC": 0
-      },
       "source": {
         "path": "Map/m01030.dat",
         "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
         "descriptor_offset": 750646,
+        "descriptor_bytes": 66,
         "descriptor_hex": "00000000000000000000000000000000006d30313031302e646174000000000000000000000004000000070000000000000000000000000000000000000000000000",
+        "compact_field_expansion_evidence": null,
         "target_path": "Map/m01010.dat",
         "target_sha256": "bc9d00fdb68d95238c3b0730fa96bd99f209b906e43d03bb501ffb04d078aa7e",
         "target_entry_marker": 4,
         "entry_sort_code": 7,
+        "entry_terrain_raw": 0,
+        "entry_trigger_raw": 0,
         "entry_scan_cells": [
           {
             "x": 72,
-            "y": 78
+            "y": 78,
+            "offset": 404338
           },
           {
             "x": 73,
-            "y": 78
+            "y": 78,
+            "offset": 404402
           },
           {
             "x": 72,
-            "y": 79
+            "y": 79,
+            "offset": 409458
           },
           {
             "x": 73,
-            "y": 79
+            "y": 79,
+            "offset": 409522
           }
         ],
         "entry_sorted_cells": [
@@ -2103,8 +2325,9 @@
             "y": 79
           }
         ],
-        "entry_sort": "x ascending, stable ties",
-        "coordinate_rule": "first sorted cell << header+0x142; native coordinate × 2 to world pixels; no center offset",
+        "entry_sort": "x ascending; stable ties",
+        "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
+        "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
         "native_evidence": {
           "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
           "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
@@ -2112,99 +2335,15 @@
           "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
         }
       },
-      "execution": "At exploration movement completion, enter the true exit cell and load the target at its native entry marker. Clear held input during scene loading.",
+      "execution": "Native transition descriptor only; map-entry TLK/ANM and their once-only checks must complete separately.",
       "limitations": [
-        "Continuous keyboard speed/delta is runtime policy; original discrete movement timing remains unobserved.",
-        "Native guard symbols are retained without guessing every subsystem's meaning; runtime permits exits only during exploration."
+        "Static source/code evidence; original timing not observed",
+        "Continuous keyboard movement is runtime policy"
       ]
-    }
-  ],
-  "unresolved_triggers": [
-    {
-      "id": 1,
-      "offset": 750514,
-      "bytes": 66,
-      "state_raw": 0,
-      "filename_raw": "m01040.dat",
-      "field_26_raw": 3,
-      "field_2a_raw": 7,
-      "field_2e_raw": 0,
-      "cells": [
-        {
-          "x": 1,
-          "y": 33
-        },
-        {
-          "x": 1,
-          "y": 34
-        },
-        {
-          "x": 1,
-          "y": 35
-        },
-        {
-          "x": 1,
-          "y": 36
-        },
-        {
-          "x": 1,
-          "y": 37
-        }
-      ],
-      "path_gate": true,
-      "descriptor_hex": "00000000000000000000000000000000006d30313034302e646174000000000000000000000003000000070000000000000000000000000000000000000000000000"
-    },
-    {
-      "id": 2,
-      "offset": 750580,
-      "bytes": 66,
-      "state_raw": 0,
-      "filename_raw": "m01050.dat",
-      "field_26_raw": 2,
-      "field_2a_raw": 6,
-      "field_2e_raw": 0,
-      "cells": [
-        {
-          "x": 66,
-          "y": 86
-        },
-        {
-          "x": 67,
-          "y": 86
-        },
-        {
-          "x": 68,
-          "y": 86
-        },
-        {
-          "x": 69,
-          "y": 86
-        },
-        {
-          "x": 70,
-          "y": 86
-        },
-        {
-          "x": 71,
-          "y": 86
-        },
-        {
-          "x": 72,
-          "y": 86
-        }
-      ],
-      "path_gate": true,
-      "descriptor_hex": "00000000000000000000000000000000006d30313035302e646174000000000000000000000002000000060000000000000000000000000000000000000000000000"
     },
     {
       "id": 4,
-      "offset": 750712,
-      "bytes": 66,
-      "state_raw": 0,
-      "filename_raw": "m01020a.dat",
-      "field_26_raw": 1,
-      "field_2a_raw": 5,
-      "field_2e_raw": 0,
+      "state": "ready",
       "cells": [
         {
           "x": 127,
@@ -2255,18 +2394,89 @@
           "y": 15
         }
       ],
-      "path_gate": true,
-      "descriptor_hex": "00000000000000000000000000000000006d3031303230612e6461740000000000000000000001000000050000000000000000000000000000000000000000000000"
+      "target_map": "M01020A",
+      "entry": {
+        "x": 800,
+        "y": 960,
+        "direction": 2,
+        "cell_x": 50,
+        "cell_y": 60,
+        "native_x": 400,
+        "native_y": 480
+      },
+      "conditions": [],
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "descriptor_offset": 750712,
+        "descriptor_bytes": 66,
+        "descriptor_hex": "00000000000000000000000000000000006d3031303230612e6461740000000000000000000001000000050000000000000000000000000000000000000000000000",
+        "compact_field_expansion_evidence": null,
+        "target_path": "Map/m01020a.dat",
+        "target_sha256": "6020fed7cc22db1587cedcc5eb6b48183976ee16ae68ad2da028ba6c7129b8ab",
+        "target_entry_marker": 1,
+        "entry_sort_code": 5,
+        "entry_terrain_raw": 0,
+        "entry_trigger_raw": 0,
+        "entry_scan_cells": [
+          {
+            "x": 50,
+            "y": 60,
+            "offset": 241650
+          },
+          {
+            "x": 51,
+            "y": 60,
+            "offset": 241714
+          },
+          {
+            "x": 50,
+            "y": 61,
+            "offset": 245618
+          },
+          {
+            "x": 51,
+            "y": 61,
+            "offset": 245682
+          }
+        ],
+        "entry_sorted_cells": [
+          {
+            "x": 50,
+            "y": 60
+          },
+          {
+            "x": 51,
+            "y": 60
+          },
+          {
+            "x": 50,
+            "y": 61
+          },
+          {
+            "x": 51,
+            "y": 61
+          }
+        ],
+        "entry_sort": "row-major scan; first four; missing followers repeat last observed cell",
+        "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
+        "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
+        "native_evidence": {
+          "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+          "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+          "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+          "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+        }
+      },
+      "execution": "Native transition descriptor only; map-entry TLK/ANM and their once-only checks must complete separately.",
+      "limitations": [
+        "Static source/code evidence; original timing not observed",
+        "Continuous keyboard movement is runtime policy"
+      ]
     },
     {
       "id": 5,
-      "offset": 750778,
-      "bytes": 66,
-      "state_raw": 0,
-      "filename_raw": "m01031.dat",
-      "field_26_raw": 1,
-      "field_2a_raw": 1,
-      "field_2e_raw": 0,
+      "state": "ready",
       "cells": [
         {
           "x": 32,
@@ -2281,45 +2491,266 @@
           "y": 65
         }
       ],
-      "path_gate": true,
-      "descriptor_hex": "00000000000000000000000000000000006d30313033312e646174000000000000000000000001000000010000000000000000000000000000000000000000000000"
+      "target_map": "M01031",
+      "entry": {
+        "x": 128,
+        "y": 368,
+        "direction": 2,
+        "cell_x": 8,
+        "cell_y": 23,
+        "native_x": 64,
+        "native_y": 184
+      },
+      "conditions": [],
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "descriptor_offset": 750778,
+        "descriptor_bytes": 66,
+        "descriptor_hex": "00000000000000000000000000000000006d30313033312e646174000000000000000000000001000000010000000000000000000000000000000000000000000000",
+        "compact_field_expansion_evidence": null,
+        "target_path": "Map/m01031.dat",
+        "target_sha256": "0d83b35cd0cfbbbad0cca2fa99e8abf3d53426e89843b2ffd45841a1472ac77b",
+        "target_entry_marker": 1,
+        "entry_sort_code": 1,
+        "entry_terrain_raw": 0,
+        "entry_trigger_raw": 0,
+        "entry_scan_cells": [
+          {
+            "x": 8,
+            "y": 23,
+            "offset": 68594
+          },
+          {
+            "x": 9,
+            "y": 23,
+            "offset": 68658
+          },
+          {
+            "x": 8,
+            "y": 24,
+            "offset": 71538
+          },
+          {
+            "x": 9,
+            "y": 24,
+            "offset": 71602
+          }
+        ],
+        "entry_sorted_cells": [
+          {
+            "x": 8,
+            "y": 23
+          },
+          {
+            "x": 9,
+            "y": 23
+          },
+          {
+            "x": 8,
+            "y": 24
+          },
+          {
+            "x": 9,
+            "y": 24
+          }
+        ],
+        "entry_sort": "row-major scan; first four; missing followers repeat last observed cell",
+        "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
+        "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
+        "native_evidence": {
+          "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+          "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+          "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+          "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+        }
+      },
+      "execution": "Native transition descriptor only; map-entry TLK/ANM and their once-only checks must complete separately.",
+      "limitations": [
+        "Static source/code evidence; original timing not observed",
+        "Continuous keyboard movement is runtime policy"
+      ]
     },
     {
       "id": 6,
-      "offset": 750844,
-      "bytes": 66,
-      "state_raw": 0,
-      "filename_raw": "m01032.dat",
-      "field_26_raw": 1,
-      "field_2a_raw": 3,
-      "field_2e_raw": 0,
+      "state": "ready",
       "cells": [
         {
           "x": 63,
           "y": 47
         }
       ],
-      "path_gate": true,
-      "descriptor_hex": "00000000000000000000000000000000006d30313033322e646174000000000000000000000001000000030000000000000000000000000000000000000000000000"
+      "target_map": "M01032",
+      "entry": {
+        "x": 544,
+        "y": 432,
+        "direction": 4,
+        "cell_x": 34,
+        "cell_y": 27,
+        "native_x": 272,
+        "native_y": 216
+      },
+      "conditions": [],
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "descriptor_offset": 750844,
+        "descriptor_bytes": 66,
+        "descriptor_hex": "00000000000000000000000000000000006d30313033322e646174000000000000000000000001000000030000000000000000000000000000000000000000000000",
+        "compact_field_expansion_evidence": null,
+        "target_path": "Map/m01032.dat",
+        "target_sha256": "9e6ea3cd8773af049e8e8356e18fed018fa05871ab3f166b04f6b1a33d972486",
+        "target_entry_marker": 1,
+        "entry_sort_code": 3,
+        "entry_terrain_raw": 0,
+        "entry_trigger_raw": 0,
+        "entry_scan_cells": [
+          {
+            "x": 34,
+            "y": 27,
+            "offset": 80306
+          },
+          {
+            "x": 35,
+            "y": 27,
+            "offset": 80370
+          },
+          {
+            "x": 34,
+            "y": 28,
+            "offset": 83186
+          },
+          {
+            "x": 35,
+            "y": 28,
+            "offset": 83250
+          }
+        ],
+        "entry_sorted_cells": [
+          {
+            "x": 34,
+            "y": 27
+          },
+          {
+            "x": 34,
+            "y": 28
+          },
+          {
+            "x": 35,
+            "y": 27
+          },
+          {
+            "x": 35,
+            "y": 28
+          }
+        ],
+        "entry_sort": "x ascending; stable ties",
+        "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
+        "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
+        "native_evidence": {
+          "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+          "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+          "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+          "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+        }
+      },
+      "execution": "Native transition descriptor only; map-entry TLK/ANM and their once-only checks must complete separately.",
+      "limitations": [
+        "Static source/code evidence; original timing not observed",
+        "Continuous keyboard movement is runtime policy"
+      ]
     },
     {
       "id": 7,
-      "offset": 750910,
-      "bytes": 66,
-      "state_raw": 0,
-      "filename_raw": "m01033.dat",
-      "field_26_raw": 1,
-      "field_2a_raw": 3,
-      "field_2e_raw": 0,
+      "state": "ready",
       "cells": [
         {
           "x": 68,
           "y": 75
         }
       ],
-      "path_gate": true,
-      "descriptor_hex": "00000000000000000000000000000000006d30313033332e646174000000000000000000000001000000030000000000000000000000000000000000000000000000"
-    },
+      "target_map": "M01033",
+      "entry": {
+        "x": 576,
+        "y": 416,
+        "direction": 4,
+        "cell_x": 36,
+        "cell_y": 26,
+        "native_x": 288,
+        "native_y": 208
+      },
+      "conditions": [],
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "descriptor_offset": 750910,
+        "descriptor_bytes": 66,
+        "descriptor_hex": "00000000000000000000000000000000006d30313033332e646174000000000000000000000001000000030000000000000000000000000000000000000000000000",
+        "compact_field_expansion_evidence": null,
+        "target_path": "Map/m01033.dat",
+        "target_sha256": "b0e9f84295df5d379b62e6d9d7e70c2e97fbad18e8f390ff951a3b52c9263df3",
+        "target_entry_marker": 1,
+        "entry_sort_code": 3,
+        "entry_terrain_raw": 0,
+        "entry_trigger_raw": 0,
+        "entry_scan_cells": [
+          {
+            "x": 36,
+            "y": 26,
+            "offset": 75890
+          },
+          {
+            "x": 37,
+            "y": 26,
+            "offset": 75954
+          },
+          {
+            "x": 36,
+            "y": 27,
+            "offset": 78706
+          },
+          {
+            "x": 37,
+            "y": 27,
+            "offset": 78770
+          }
+        ],
+        "entry_sorted_cells": [
+          {
+            "x": 36,
+            "y": 26
+          },
+          {
+            "x": 36,
+            "y": 27
+          },
+          {
+            "x": 37,
+            "y": 26
+          },
+          {
+            "x": 37,
+            "y": 27
+          }
+        ],
+        "entry_sort": "x ascending; stable ties",
+        "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
+        "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
+        "native_evidence": {
+          "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+          "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+          "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+          "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+        }
+      },
+      "execution": "Native transition descriptor only; map-entry TLK/ANM and their once-only checks must complete separately.",
+      "limitations": [
+        "Static source/code evidence; original timing not observed",
+        "Continuous keyboard movement is runtime policy"
+      ]
+    }
+  ],
+  "unresolved_triggers": [
     {
       "id": 31,
       "offset": 752494,
@@ -2329,6 +2760,8 @@
       "field_26_raw": 63,
       "field_2a_raw": 0,
       "field_2e_raw": 1,
+      "compact_source_offsets": null,
+      "field_expansion_evidence": null,
       "cells": [
         {
           "x": 10,
@@ -2373,6 +2806,8 @@
     "path": "Map/m01030.dat",
     "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
     "bytes": 836578,
+    "object_resource_base_raw": ".\\MAPM\\M01030\\",
+    "object_resource_base": "mapm/m01030",
     "object_table_start": 762194,
     "object_table_end": 775894,
     "unknown_tail_bytes": 60684,
@@ -2403,15 +2838,1916 @@
     "Static resource/code evidence; original-game entry/transition timing is not observed.",
     "Background uses its initial animation frame; background animation is not advanced.",
     "Initial static objects; script changes and object animation are not reconstructed.",
-    "Role depth and continuous keyboard movement are runtime policies."
+    "Role depth and continuous keyboard movement are runtime policies.",
+    "NPC source defaults require chapter TLK/ANM changes; asset export executes no story"
   ],
-  "probes": [
+  "chapter_npcs": [
     {
-      "name": "返回升焰高冕 · 向上",
-      "x": 1048,
-      "y": 56,
+      "id": "M01030-role-10",
+      "slot_zero_based": 10,
+      "speaker_slot_one_based": 11,
+      "name": "商人齊克留",
+      "resource_id": "082",
+      "x": 1184,
+      "y": 720,
+      "x_native": 592,
+      "y_native": 360,
+      "direction": 6,
+      "direction_raw_45": 6,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 50,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 775894,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-11",
+      "slot_zero_based": 11,
+      "speaker_slot_one_based": 12,
+      "name": "胖女役者2",
+      "resource_id": "084",
+      "x": 48,
+      "y": 960,
+      "x_native": 24,
+      "y_native": 480,
+      "direction": 0,
+      "direction_raw_45": 0,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 51,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 777115,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-12",
+      "slot_zero_based": 12,
+      "speaker_slot_one_based": 13,
+      "name": "女魔導士炎",
+      "resource_id": "057",
+      "x": 1264,
+      "y": 976,
+      "x_native": 632,
+      "y_native": 488,
       "direction": 3,
-      "purpose": "Development relocation at an open approach cell, not the original map entry"
+      "direction_raw_45": 3,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 52,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 778336,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-13",
+      "slot_zero_based": 13,
+      "speaker_slot_one_based": 14,
+      "name": "炎城守衛",
+      "resource_id": "050",
+      "x": 1008,
+      "y": 288,
+      "x_native": 504,
+      "y_native": 144,
+      "direction": 1,
+      "direction_raw_45": 1,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 53,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 779557,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-14",
+      "slot_zero_based": 14,
+      "speaker_slot_one_based": 15,
+      "name": "炎城守衛",
+      "resource_id": "050",
+      "x": 1184,
+      "y": 224,
+      "x_native": 592,
+      "y_native": 112,
+      "direction": 6,
+      "direction_raw_45": 6,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 54,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 780778,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-15",
+      "slot_zero_based": 15,
+      "speaker_slot_one_based": 16,
+      "name": "封印師",
+      "resource_id": "056",
+      "x": 864,
+      "y": 784,
+      "x_native": 432,
+      "y_native": 392,
+      "direction": 1,
+      "direction_raw_45": 1,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 55,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 2,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 781999,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-16",
+      "slot_zero_based": 16,
+      "speaker_slot_one_based": 17,
+      "name": "酒店服務炎",
+      "resource_id": "052",
+      "x": 1072,
+      "y": 768,
+      "x_native": 536,
+      "y_native": 384,
+      "direction": 6,
+      "direction_raw_45": 6,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 56,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 783220,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-17",
+      "slot_zero_based": 17,
+      "speaker_slot_one_based": 18,
+      "name": "女小孩1",
+      "resource_id": "089",
+      "x": 1280,
+      "y": 752,
+      "x_native": 640,
+      "y_native": 376,
+      "direction": 4,
+      "direction_raw_45": 4,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 57,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 784441,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-18",
+      "slot_zero_based": 18,
+      "speaker_slot_one_based": 19,
+      "name": "女小孩2",
+      "resource_id": "090",
+      "x": 1264,
+      "y": 736,
+      "x_native": 632,
+      "y_native": 368,
+      "direction": 0,
+      "direction_raw_45": 0,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 58,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 785662,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-19",
+      "slot_zero_based": 19,
+      "speaker_slot_one_based": 20,
+      "name": "調查員",
+      "resource_id": "070",
+      "x": 1680,
+      "y": 448,
+      "x_native": 840,
+      "y_native": 224,
+      "direction": 6,
+      "direction_raw_45": 6,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 59,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 786883,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-20",
+      "slot_zero_based": 20,
+      "speaker_slot_one_based": 21,
+      "name": "女役者1",
+      "resource_id": "071",
+      "x": 128,
+      "y": 992,
+      "x_native": 64,
+      "y_native": 496,
+      "direction": 2,
+      "direction_raw_45": 2,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 60,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 788104,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-21",
+      "slot_zero_based": 21,
+      "speaker_slot_one_based": 22,
+      "name": "老役者1",
+      "resource_id": "074",
+      "x": 336,
+      "y": 1056,
+      "x_native": 168,
+      "y_native": 528,
+      "direction": 6,
+      "direction_raw_45": 6,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 61,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 789325,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-22",
+      "slot_zero_based": 22,
+      "speaker_slot_one_based": 23,
+      "name": "旅人",
+      "resource_id": "098",
+      "x": 992,
+      "y": 48,
+      "x_native": 496,
+      "y_native": 24,
+      "direction": 7,
+      "direction_raw_45": 7,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 62,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 0,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 790546,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-23",
+      "slot_zero_based": 23,
+      "speaker_slot_one_based": 24,
+      "name": "旅人",
+      "resource_id": "096",
+      "x": 2000,
+      "y": 160,
+      "x_native": 1000,
+      "y_native": 80,
+      "direction": 6,
+      "direction_raw_45": 6,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 63,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 0,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 791767,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-24",
+      "slot_zero_based": 24,
+      "speaker_slot_one_based": 25,
+      "name": "旅人",
+      "resource_id": "105",
+      "x": 2000,
+      "y": 224,
+      "x_native": 1000,
+      "y_native": 112,
+      "direction": 6,
+      "direction_raw_45": 6,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 64,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 0,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 792988,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-25",
+      "slot_zero_based": 25,
+      "speaker_slot_one_based": 26,
+      "name": "",
+      "resource_id": "140",
+      "x": 32,
+      "y": 576,
+      "x_native": 16,
+      "y_native": 288,
+      "direction": 7,
+      "direction_raw_45": 7,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 65,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 0,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 794209,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-26",
+      "slot_zero_based": 26,
+      "speaker_slot_one_based": 27,
+      "name": "女旅人",
+      "resource_id": "141",
+      "x": 2016,
+      "y": 256,
+      "x_native": 1008,
+      "y_native": 128,
+      "direction": 6,
+      "direction_raw_45": 6,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 66,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 0,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 795430,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-27",
+      "slot_zero_based": 27,
+      "speaker_slot_one_based": 28,
+      "name": "旅人1",
+      "resource_id": "095",
+      "x": 944,
+      "y": 32,
+      "x_native": 472,
+      "y_native": 16,
+      "direction": 0,
+      "direction_raw_45": 0,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 67,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 0,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 796651,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-28",
+      "slot_zero_based": 28,
+      "speaker_slot_one_based": 29,
+      "name": "旅人",
+      "resource_id": "093",
+      "x": 1056,
+      "y": 32,
+      "x_native": 528,
+      "y_native": 16,
+      "direction": 7,
+      "direction_raw_45": 7,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 68,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 0,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 797872,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-29",
+      "slot_zero_based": 29,
+      "speaker_slot_one_based": 30,
+      "name": "獨腳蝠鳥",
+      "resource_id": "186",
+      "x": 992,
+      "y": 880,
+      "x_native": 496,
+      "y_native": 440,
+      "direction": 3,
+      "direction_raw_45": 3,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 69,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 0,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 799093,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-30",
+      "slot_zero_based": 30,
+      "speaker_slot_one_based": 31,
+      "name": "獨腳蝠鳥",
+      "resource_id": "186",
+      "x": 1344,
+      "y": 1088,
+      "x_native": 672,
+      "y_native": 544,
+      "direction": 3,
+      "direction_raw_45": 3,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 70,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 0,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 800314,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-31",
+      "slot_zero_based": 31,
+      "speaker_slot_one_based": 32,
+      "name": "獨腳蝠鳥",
+      "resource_id": "186",
+      "x": 1392,
+      "y": 560,
+      "x_native": 696,
+      "y_native": 280,
+      "direction": 1,
+      "direction_raw_45": 1,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 71,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 0,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 801535,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-32",
+      "slot_zero_based": 32,
+      "speaker_slot_one_based": 33,
+      "name": "獨腳蝠鳥",
+      "resource_id": "186",
+      "x": 448,
+      "y": 672,
+      "x_native": 224,
+      "y_native": 336,
+      "direction": 5,
+      "direction_raw_45": 5,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 72,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 0,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 802756,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-33",
+      "slot_zero_based": 33,
+      "speaker_slot_one_based": 34,
+      "name": "拉斯毛獸",
+      "resource_id": "189",
+      "x": 912,
+      "y": 768,
+      "x_native": 456,
+      "y_native": 384,
+      "direction": 6,
+      "direction_raw_45": 6,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 73,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 803977,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-34",
+      "slot_zero_based": 34,
+      "speaker_slot_one_based": 35,
+      "name": "p360男老",
+      "resource_id": "151",
+      "x": 400,
+      "y": 1072,
+      "x_native": 200,
+      "y_native": 536,
+      "direction": 6,
+      "direction_raw_45": 6,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 74,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 805198,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-35",
+      "slot_zero_based": 35,
+      "speaker_slot_one_based": 36,
+      "name": "飼養師",
+      "resource_id": "153",
+      "x": 880,
+      "y": 816,
+      "x_native": 440,
+      "y_native": 408,
+      "direction": 3,
+      "direction_raw_45": 3,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 75,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 2,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 806419,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-36",
+      "slot_zero_based": 36,
+      "speaker_slot_one_based": 37,
+      "name": "p304男",
+      "resource_id": "095",
+      "x": 1728,
+      "y": 672,
+      "x_native": 864,
+      "y_native": 336,
+      "direction": 2,
+      "direction_raw_45": 2,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 76,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 2,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 807640,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-37",
+      "slot_zero_based": 37,
+      "speaker_slot_one_based": 38,
+      "name": "男魔導士炎",
+      "resource_id": "056",
+      "x": 1760,
+      "y": 656,
+      "x_native": 880,
+      "y_native": 328,
+      "direction": 6,
+      "direction_raw_45": 6,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 77,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 2,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 808861,
+        "bytes": 1221
+      }
     }
-  ]
+  ],
+  "opening_npcs": [
+    {
+      "id": "M01030-role-10",
+      "slot_zero_based": 10,
+      "speaker_slot_one_based": 11,
+      "name": "商人齊克留",
+      "resource_id": "082",
+      "x": 1184,
+      "y": 720,
+      "x_native": 592,
+      "y_native": 360,
+      "direction": 6,
+      "direction_raw_45": 6,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 50,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 775894,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-11",
+      "slot_zero_based": 11,
+      "speaker_slot_one_based": 12,
+      "name": "胖女役者2",
+      "resource_id": "084",
+      "x": 48,
+      "y": 960,
+      "x_native": 24,
+      "y_native": 480,
+      "direction": 0,
+      "direction_raw_45": 0,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 51,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 777115,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-12",
+      "slot_zero_based": 12,
+      "speaker_slot_one_based": 13,
+      "name": "女魔導士炎",
+      "resource_id": "057",
+      "x": 1264,
+      "y": 976,
+      "x_native": 632,
+      "y_native": 488,
+      "direction": 3,
+      "direction_raw_45": 3,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 52,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 778336,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-13",
+      "slot_zero_based": 13,
+      "speaker_slot_one_based": 14,
+      "name": "炎城守衛",
+      "resource_id": "050",
+      "x": 1008,
+      "y": 288,
+      "x_native": 504,
+      "y_native": 144,
+      "direction": 1,
+      "direction_raw_45": 1,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 53,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 779557,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-14",
+      "slot_zero_based": 14,
+      "speaker_slot_one_based": 15,
+      "name": "炎城守衛",
+      "resource_id": "050",
+      "x": 1184,
+      "y": 224,
+      "x_native": 592,
+      "y_native": 112,
+      "direction": 6,
+      "direction_raw_45": 6,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 54,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 780778,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-15",
+      "slot_zero_based": 15,
+      "speaker_slot_one_based": 16,
+      "name": "封印師",
+      "resource_id": "056",
+      "x": 864,
+      "y": 784,
+      "x_native": 432,
+      "y_native": 392,
+      "direction": 1,
+      "direction_raw_45": 1,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 55,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 2,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 781999,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-16",
+      "slot_zero_based": 16,
+      "speaker_slot_one_based": 17,
+      "name": "酒店服務炎",
+      "resource_id": "052",
+      "x": 1072,
+      "y": 768,
+      "x_native": 536,
+      "y_native": 384,
+      "direction": 6,
+      "direction_raw_45": 6,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 56,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 783220,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-17",
+      "slot_zero_based": 17,
+      "speaker_slot_one_based": 18,
+      "name": "女小孩1",
+      "resource_id": "089",
+      "x": 1280,
+      "y": 752,
+      "x_native": 640,
+      "y_native": 376,
+      "direction": 4,
+      "direction_raw_45": 4,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 57,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 784441,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-18",
+      "slot_zero_based": 18,
+      "speaker_slot_one_based": 19,
+      "name": "女小孩2",
+      "resource_id": "090",
+      "x": 1264,
+      "y": 736,
+      "x_native": 632,
+      "y_native": 368,
+      "direction": 0,
+      "direction_raw_45": 0,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 58,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 785662,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-19",
+      "slot_zero_based": 19,
+      "speaker_slot_one_based": 20,
+      "name": "調查員",
+      "resource_id": "070",
+      "x": 1680,
+      "y": 448,
+      "x_native": 840,
+      "y_native": 224,
+      "direction": 6,
+      "direction_raw_45": 6,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 59,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 786883,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-20",
+      "slot_zero_based": 20,
+      "speaker_slot_one_based": 21,
+      "name": "女役者1",
+      "resource_id": "071",
+      "x": 128,
+      "y": 992,
+      "x_native": 64,
+      "y_native": 496,
+      "direction": 2,
+      "direction_raw_45": 2,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 60,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 788104,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-21",
+      "slot_zero_based": 21,
+      "speaker_slot_one_based": 22,
+      "name": "老役者1",
+      "resource_id": "074",
+      "x": 336,
+      "y": 1056,
+      "x_native": 168,
+      "y_native": 528,
+      "direction": 6,
+      "direction_raw_45": 6,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 61,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 789325,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-22",
+      "slot_zero_based": 22,
+      "speaker_slot_one_based": 23,
+      "name": "旅人",
+      "resource_id": "098",
+      "x": 992,
+      "y": 48,
+      "x_native": 496,
+      "y_native": 24,
+      "direction": 7,
+      "direction_raw_45": 7,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 62,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 0,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 790546,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-23",
+      "slot_zero_based": 23,
+      "speaker_slot_one_based": 24,
+      "name": "旅人",
+      "resource_id": "096",
+      "x": 2000,
+      "y": 160,
+      "x_native": 1000,
+      "y_native": 80,
+      "direction": 6,
+      "direction_raw_45": 6,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 63,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 0,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 791767,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-24",
+      "slot_zero_based": 24,
+      "speaker_slot_one_based": 25,
+      "name": "旅人",
+      "resource_id": "105",
+      "x": 2000,
+      "y": 224,
+      "x_native": 1000,
+      "y_native": 112,
+      "direction": 6,
+      "direction_raw_45": 6,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 64,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 0,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 792988,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-25",
+      "slot_zero_based": 25,
+      "speaker_slot_one_based": 26,
+      "name": "",
+      "resource_id": "140",
+      "x": 32,
+      "y": 576,
+      "x_native": 16,
+      "y_native": 288,
+      "direction": 7,
+      "direction_raw_45": 7,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 65,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 0,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 794209,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-26",
+      "slot_zero_based": 26,
+      "speaker_slot_one_based": 27,
+      "name": "女旅人",
+      "resource_id": "141",
+      "x": 2016,
+      "y": 256,
+      "x_native": 1008,
+      "y_native": 128,
+      "direction": 6,
+      "direction_raw_45": 6,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 66,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 0,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 795430,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-27",
+      "slot_zero_based": 27,
+      "speaker_slot_one_based": 28,
+      "name": "旅人1",
+      "resource_id": "095",
+      "x": 944,
+      "y": 32,
+      "x_native": 472,
+      "y_native": 16,
+      "direction": 0,
+      "direction_raw_45": 0,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 67,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 0,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 796651,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-28",
+      "slot_zero_based": 28,
+      "speaker_slot_one_based": 29,
+      "name": "旅人",
+      "resource_id": "093",
+      "x": 1056,
+      "y": 32,
+      "x_native": 528,
+      "y_native": 16,
+      "direction": 7,
+      "direction_raw_45": 7,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 68,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 0,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 797872,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-29",
+      "slot_zero_based": 29,
+      "speaker_slot_one_based": 30,
+      "name": "獨腳蝠鳥",
+      "resource_id": "186",
+      "x": 992,
+      "y": 880,
+      "x_native": 496,
+      "y_native": 440,
+      "direction": 3,
+      "direction_raw_45": 3,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 69,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 0,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 799093,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-30",
+      "slot_zero_based": 30,
+      "speaker_slot_one_based": 31,
+      "name": "獨腳蝠鳥",
+      "resource_id": "186",
+      "x": 1344,
+      "y": 1088,
+      "x_native": 672,
+      "y_native": 544,
+      "direction": 3,
+      "direction_raw_45": 3,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 70,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 0,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 800314,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-31",
+      "slot_zero_based": 31,
+      "speaker_slot_one_based": 32,
+      "name": "獨腳蝠鳥",
+      "resource_id": "186",
+      "x": 1392,
+      "y": 560,
+      "x_native": 696,
+      "y_native": 280,
+      "direction": 1,
+      "direction_raw_45": 1,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 71,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 0,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 801535,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-32",
+      "slot_zero_based": 32,
+      "speaker_slot_one_based": 33,
+      "name": "獨腳蝠鳥",
+      "resource_id": "186",
+      "x": 448,
+      "y": 672,
+      "x_native": 224,
+      "y_native": 336,
+      "direction": 5,
+      "direction_raw_45": 5,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 72,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 0,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 802756,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-33",
+      "slot_zero_based": 33,
+      "speaker_slot_one_based": 34,
+      "name": "拉斯毛獸",
+      "resource_id": "189",
+      "x": 912,
+      "y": 768,
+      "x_native": 456,
+      "y_native": 384,
+      "direction": 6,
+      "direction_raw_45": 6,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 73,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 803977,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-34",
+      "slot_zero_based": 34,
+      "speaker_slot_one_based": 35,
+      "name": "p360男老",
+      "resource_id": "151",
+      "x": 400,
+      "y": 1072,
+      "x_native": 200,
+      "y_native": 536,
+      "direction": 6,
+      "direction_raw_45": 6,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 74,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 805198,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-35",
+      "slot_zero_based": 35,
+      "speaker_slot_one_based": 36,
+      "name": "飼養師",
+      "resource_id": "153",
+      "x": 880,
+      "y": 816,
+      "x_native": 440,
+      "y_native": 408,
+      "direction": 3,
+      "direction_raw_45": 3,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 75,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 2,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 806419,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-36",
+      "slot_zero_based": 36,
+      "speaker_slot_one_based": 37,
+      "name": "p304男",
+      "resource_id": "095",
+      "x": 1728,
+      "y": 672,
+      "x_native": 864,
+      "y_native": 336,
+      "direction": 2,
+      "direction_raw_45": 2,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 76,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 2,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 807640,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M01030-role-37",
+      "slot_zero_based": 37,
+      "speaker_slot_one_based": 38,
+      "name": "男魔導士炎",
+      "resource_id": "056",
+      "x": 1760,
+      "y": 656,
+      "x_native": 880,
+      "y_native": 328,
+      "direction": 6,
+      "direction_raw_45": 6,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 77,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 2,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m01030.dat",
+        "sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+        "offset": 808861,
+        "bytes": 1221
+      }
+    }
+  ],
+  "map_flag_index": 3
 }

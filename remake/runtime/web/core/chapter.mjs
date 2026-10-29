@@ -18,6 +18,8 @@ import {playbackDelay} from './story_playback.mjs';
 import {nativeMapTransfer} from './map_connections.mjs';
 import {nativeScriptedBattle} from './scripted_battle.mjs';
 import {nativeKeyedChest,canOpenNativeChest} from './native_map_chests.mjs';
+import {evaluateNativeStoryCombination} from './native_story_combinations.mjs';
+import {isNativeMapId} from './native_map_identity.mjs';
 
 const copy = value => structuredClone(value);
 const need = (ok, message) => { if (!ok) throw new Error(message); };
@@ -38,9 +40,9 @@ const VALUE_PAIRS = [[0x0d,0x17e],[0x11,0x186],[0x15,0x18e],[0x19,0x196],
   ...Array.from({length:10}, (_, i) => [0x65 + i * 4, 0x24a + i * 8])];
 const ZERO_EVENT = '00'.repeat(14);
 
-export function initializeChapterItem(definition) {
+export function initializeChapterItem(definition,{allowWeapon=false}={}) {
   const b = bytes(definition?.raw_hex, 0x3bf, '剧情道具定义'), v = view(b);
-  need(v.getUint32(0, true) === definition.id && [2,3,5].includes(b[0x24]), '剧情道具类别尚未接入');
+  need(v.getUint32(0, true) === definition.id && (allowWeapon?[1,2,3,5]:[2,3,5]).includes(b[0x24]), '剧情道具类别尚未接入');
   // TLK case5 uses the 0xCC-filled 0x461780 local buffer, not a fabricated
   // zeroed native instance. 0x47B3C0 only overwrites the fields below;
   // 0x47BDC0 writes quantity when the buffer enters inventory.
@@ -77,7 +79,7 @@ export function validateChapterStory(data) {
   need(data?.schema === 'seventh-seal-chapter-story' && [1,2].includes(data.version) && data.maps, '剧情版本不兼容');
   for (const [mapId, table] of Object.entries(data.maps)) {
     if(table.dialogue_status==='source-file-absent'){
-      need(/^M\d{5}(?:-\d+)?$/.test(mapId)&&flagIndex(table.map_flag_index)
+      need(isNativeMapId(mapId)&&flagIndex(table.map_flag_index)
         &&table.source===null&&Array.isArray(table.records)&&table.records.length===0
         &&table.record_count===0&&table.index_count===0
         &&table.header_setup_tlk_raw===0&&table.header_entry_tlk_raw===0
@@ -86,7 +88,7 @@ export function validateChapterStory(data) {
         &&data.source_hashes?.[table.map_source.path]===table.map_source.sha256,'无对白地图来源无效');
       continue;
     }
-    need(/^M\d{5}(?:-\d+)?$/.test(mapId) && flagIndex(table.map_flag_index) && Array.isArray(table.records)
+    need(isNativeMapId(mapId) && flagIndex(table.map_flag_index) && Array.isArray(table.records)
       && table.records.length > 0 && table.records.length <= 10000, '火之谷对白表无效');
     need(table.source?.path?.toLowerCase() === `map/${mapId.toLowerCase()}.tlk`
       && /^[0-9a-f]{64}$/.test(table.source.sha256)
@@ -102,7 +104,9 @@ export function validateChapterStory(data) {
         need(record[field] === v.getUint32(offset, true), `对白 ${mapId}:${record.id} 字段 ${field} 与原始记录不同`);
       need(record.kind === b[0] && record.style === b[1] && (record.region_byte_raw ?? b[7]) === b[7], '火之谷对白类型与原始记录不同');
       const rawText = b.slice(0x37, 0x137), end = rawText.indexOf(0);
-      const text = new TextDecoder('gbk', {fatal:true}).decode(end < 0 ? rawText : rawText.slice(0, end));
+      // kind8 overlays the text area with ushort goods IDs; its retained text
+      // projection uses the source exporter's replacement decoding.
+      const text = new TextDecoder('gbk', {fatal:record.kind!==8}).decode(end < 0 ? rawText : rawText.slice(0, end));
       need(record.text_raw === text, '火之谷对白文字与原始记录不同');
       if (record.source) need(record.source.path === table.source.path && record.source.offset === record.offset
         && record.source.sha256 === table.source.sha256 && record.source.record_id === record.id,
@@ -147,14 +151,14 @@ export function chapterRestChoices(record,binding=null) {
 }
 
 export class ChapterRunner {
-  constructor({world, data, say, choose = null, animate, transfer, battle, objectData = null, objectAnimation = async () => {}, wait=playbackDelay, setPhase = () => {}, log = () => {},content=runtimeContent,worldMapState}) {
+  constructor({world, data, say, choose = null, animate, transfer, battle, service, objectData = null, objectAnimation = async () => {}, wait=playbackDelay, setPhase = () => {}, log = () => {},content=runtimeContent,worldMapState}) {
     validateChapterStory(data);
-    Object.assign(this, {world, data:data.version===2?data:copy(data), objectData:data.version===2?objectData:copy(objectData), objectAnimation, say, choose, animate, transfer, battle, wait, setPhase, log,content,worldMapState});
+    Object.assign(this, {world, data:data.version===2?data:copy(data), objectData:data.version===2?objectData:copy(objectData), objectAnimation, say, choose, animate, transfer, battle, service, wait, setPhase, log,content,worldMapState});
     if(data.version===1)this.data.flows=Object.fromEntries(Object.values(this.data.maps).filter(table=>table.dialogue_status!=='source-file-absent').map(table=>{
       const flow=compileTlkFlow(table,{choices:chapterChoices});return [flow.id,flow];
     }));
     this.flowRunner=new StoryFlowRunner(Object.fromEntries(['record','say','choice','animation','give_item','restore_party','request_save','set_native_object','wait',
-      'test_native_condition','learn_native_skill','native_noop','unlock_recipe','world_map_command','transfer_native_map','native_battle','restore_native_resources']
+      'test_native_condition','test_native_combination','change_native_money','native_service','learn_native_skill','native_noop','unlock_recipe','world_map_command','transfer_native_map','native_battle','restore_native_resources']
       .map(op=>[op,(command,execution)=>this.applyFlowCommand(op,command,execution)])));
     this.running = false;
   }
@@ -301,8 +305,10 @@ export class ChapterRunner {
       this.log({type:'chapter-record',mapId,recordId:record.id,source:command.source});return;
     }
     if(op==='transfer_native_map'){
-      need(native&&record&&context.transition?.mapId===mapId,'地图跳转缺少原地形触发器');
-      const destination=nativeMapTransfer(table,record,context.transition,this.content);
+      const transition=context.transition?.mapId===mapId?context.transition:
+        context.explicitInteraction&&context.npcMapId===mapId?{npcSlot:context.npcSlot,sortCode:draft.native_map_sort_code??1}:null;
+      need(native&&record&&transition,'地图跳转缺少原地形触发器或NPC交互');
+      const destination=nativeMapTransfer(table,record,transition,this.content);
       need(typeof this.transfer==='function','地图跳转显示接口缺失');
       return (async()=>{
         playback?.check();
@@ -310,7 +316,7 @@ export class ChapterRunner {
         if(result?.release)(context.transferReleases??=[]).push(result.release);
         playback?.check();
         need(result?.location?.map_id===destination.map_id,'地图跳转未返回原目标位置');
-        draft.location=copy(result.location);
+        draft.location=copy(result.location);draft.native_map_sort_code=destination.sort_code;
         const entry=storyBindings(destination.map_id,this.content).entry_record;
         if(entry)await this.runTlk({mapId:destination.map_id,recordId:entry,draft,context,playback});
         return destination;
@@ -319,6 +325,18 @@ export class ChapterRunner {
     if(op==='test_native_condition'){
       need(native&&record,'条件缺少原剧情来源');
       return evaluateNativeStoryCondition(record,draft,table);
+    }
+    if(op==='test_native_combination'){
+      need(native&&record,'组合条件缺少原剧情来源');
+      return evaluateNativeStoryCombination(record,draft,table);
+    }
+    if(op==='native_service'){
+      need(native&&record&&context.explicitInteraction===true&&typeof this.service==='function','原商店服务接口缺失或没有主动交互入口');
+      return (async()=>{
+        playback?.check();
+        const result=await this.service({mapId,table,record,draft,playback,signal:playback?.signal});
+        playback?.check();return result;
+      })();
     }
     if(op==='native_battle'){
       need(native&&record&&typeof this.battle==='function','原剧情战斗接口缺失');
@@ -352,7 +370,7 @@ export class ChapterRunner {
     this.applyMutation(draft,table,record,context);
   }
   applyMutation(draft, table, record, context={}) {
-    if([10,11,14,16,17].includes(record.mutation_type))return applyNativeStoryMutation(draft,record,{roleDefinitions:this.data.role_definitions});
+    if([3,10,11,14,16,17].includes(record.mutation_type))return applyNativeStoryMutation(draft,record,{roleDefinitions:this.data.role_definitions});
     if(record.mutation_type===9){
       const request=applyWorldMapCommandToDraft(draft,{mode:record.mutation_index,area:record.region_byte_raw,destination:record.mutation_bit},
         {initialState:this.worldMapState});
@@ -369,7 +387,7 @@ export class ChapterRunner {
       return;
     }
     if (record.mutation_type === 2) {
-      need(storyBindings(table.id,this.content).rests.some(row=>row.restore_records.includes(record.id)) && record.mutation_index === 0
+      need((context.explicitInteraction===true||storyBindings(table.id,this.content).rests.some(row=>row.restore_records.includes(record.id))) && record.mutation_index === 0
         && record.mutation_bit === 0, '剧情恢复行为尚未接入');
       const resources = restorePartyAfterRest(draft);
       this.log({type:'chapter-restored', mapId:table.id, recordId:record.id, resources,

@@ -105,9 +105,8 @@ export function recoverSkill(actor,view,rng,trace,label='revival'){
  * dispatch and one-contact commitment belong to the calling transaction.
  * Charge, status slots and status flags are preserved by this native branch.
  */
-export function applyNativeRevival({target,skill,rng,selectAnimation=null}){
-  resources(target);const {bytes,view}=skillView(skill);need(bytes[0x23c]===3,'Only native revival mode3 supported');
-  const effect=bytes.slice(0x231,0x2f7),effectHex=Array.from(effect,n=>n.toString(16).padStart(2,'0')).join('');
+export function applyNativeRevivalEffect({target,effect_raw_hex,rng,selectAnimation=null}){
+  resources(target);const effect=rawView(effect_raw_hex,0xc6).bytes;need(effect[0xb]===3,'Only native revival mode3 supported');
   const slots=target.native_status_slots;need(Array.isArray(slots)&&slots.length===100,'Revival requires the explicit native status slots');
   const out=copy(target),trace=[],evidence=Object.values(REVIVAL_EVIDENCE),result=(applied,native_return,reason,extra={})=>({actor:out,applied,native_return,reason,trace,evidence,...extra});
   if(slots.some(slot=>{const b=rawView(slot.raw_hex,0xc6).bytes;return effect[1]!==0&&b[1]===effect[1]&&b[0xb]===3;}))return result(false,0,'duplicate-effect-id-and-mode');
@@ -118,8 +117,17 @@ export function applyNativeRevival({target,skill,rng,selectAnimation=null}){
   // even with one candidate. The controller injects that established selector
   // here so its draws precede any 41E950 recovery-range draws.
   const animation=selectAnimation?selectAnimation(out,{animation_type_raw:14,rng}):null;
-  const recovered=applyNativeRevivalRecoveryBlock({actor:out,effect_raw_hex:effectHex});Object.assign(out,recovered.actor);
-  const before=target.hp.current,deltas=recoverSkill(out,view,rng,trace);
-  trace.push({kind:'revival-contact',state_before:target.state_raw,state_after:0,hp_before:before,hp_after:out.hp.current,flat_hp:deltas.hp,flat_mp:deltas.mp});
-  return result(true,1,'revived',{animation_type_raw:14,animation,hp_delta:out.hp.current-before,recovery_block_raw_hex:effectHex});
+  const recovered=applyNativeRevivalRecoveryBlock({actor:out,effect_raw_hex});Object.assign(out,recovered.actor);
+  return result(true,1,'revived',{animation_type_raw:14,animation,hp_delta:out.hp.current-target.hp.current,recovery_block_raw_hex:effect_raw_hex});
+}
+export function applyNativeRevival({target,skill,rng,selectAnimation=null}){
+  const {bytes,view}=skillView(skill);need(bytes[0x23c]===3,'Only native revival mode3 supported');
+  const effectHex=Array.from(bytes.slice(0x231,0x2f7),n=>n.toString(16).padStart(2,'0')).join('');
+  const result=applyNativeRevivalEffect({target,effect_raw_hex:effectHex,rng,selectAnimation});
+  if(!result.applied)return result;
+  const deltas=recoverSkill(result.actor,view,rng,result.trace);
+  result.hp_delta=result.actor.hp.current-target.hp.current;
+  result.trace.push({kind:'revival-contact',state_before:target.state_raw,state_after:0,hp_before:target.hp.current,
+    hp_after:result.actor.hp.current,flat_hp:deltas.hp,flat_mp:deltas.mp});
+  return result;
 }

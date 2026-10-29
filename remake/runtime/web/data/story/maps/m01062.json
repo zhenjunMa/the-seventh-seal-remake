@@ -1,0 +1,3293 @@
+{
+  "schema": "seventh-seal-story-map",
+  "version": 2,
+  "map_id": "M01062",
+  "chapter": {
+    "id": "M01062",
+    "name": "合成工房",
+    "flag_index": 28,
+    "map_flag_index": 28,
+    "source": {
+      "path": "Map/m01062.TLK",
+      "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+      "bytes": 116022
+    },
+    "dialogue_status": "parsed",
+    "map_source": {
+      "path": "Map/m01062.dat",
+      "sha256": "8ddf978ff4aad805202a918dd9aa69b30a521d66121babd9659f4ffc817f143f",
+      "bytes": 156368
+    },
+    "index_nonzero": [
+      {
+        "slot": 0,
+        "offset": 26,
+        "record": 2
+      },
+      {
+        "slot": 10,
+        "offset": 66,
+        "record": 1
+      },
+      {
+        "slot": 11,
+        "offset": 70,
+        "record": 12
+      },
+      {
+        "slot": 499,
+        "offset": 2022,
+        "record": 6
+      }
+    ],
+    "index_count": 500,
+    "record_base": 2026,
+    "record_bytes": 1647,
+    "record_count": 34,
+    "records": [
+      {
+        "id": 1,
+        "offset": 2026,
+        "kind": 0,
+        "style": 2,
+        "region_byte_raw": 0,
+        "speaker": 11,
+        "condition_type": 0,
+        "condition_index": 386,
+        "condition_bit": 2,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 6,
+        "next": 2,
+        "source": {
+          "path": "Map/m01062.TLK",
+          "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+          "record_id": 1,
+          "record_bytes": 1647,
+          "offset": 2026
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01062:TLK:1",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 2,
+        "offset": 3673,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 1,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 3,
+        "source": {
+          "path": "Map/m01062.TLK",
+          "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+          "record_id": 2,
+          "record_bytes": 1647,
+          "offset": 3673
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01062:TLK:2",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 3,
+        "offset": 5320,
+        "kind": 0,
+        "style": 2,
+        "region_byte_raw": 0,
+        "speaker": 11,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 0,
+        "source": {
+          "path": "Map/m01062.TLK",
+          "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+          "record_id": 3,
+          "record_bytes": 1647,
+          "offset": 5320
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01062:TLK:3",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 4,
+        "offset": 6967,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 11,
+        "condition_type": 0,
+        "condition_index": 386,
+        "condition_bit": 6,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 15,
+        "next": 0,
+        "source": {
+          "path": "Map/m01062.TLK",
+          "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+          "record_id": 4,
+          "record_bytes": 1647,
+          "offset": 6967
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01062:TLK:4",
+        "portrait_id": 0,
+        "choices": [
+          {
+            "index": 0,
+            "recordId": 11,
+            "text_id": "M01062:TLK:4:choice:0"
+          },
+          {
+            "index": 1,
+            "recordId": 5,
+            "text_id": "M01062:TLK:4:choice:1"
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "offset": 8614,
+        "kind": 0,
+        "style": 2,
+        "region_byte_raw": 0,
+        "speaker": 11,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 0,
+        "source": {
+          "path": "Map/m01062.TLK",
+          "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+          "record_id": 5,
+          "record_bytes": 1647,
+          "offset": 8614
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01062:TLK:5",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 6,
+        "offset": 10261,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 1,
+        "mutation_type": 17,
+        "mutation_index": 0,
+        "mutation_bit": 216,
+        "if_true": 4,
+        "next": 7,
+        "source": {
+          "path": "Map/m01062.TLK",
+          "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+          "record_id": 6,
+          "record_bytes": 1647,
+          "offset": 10261
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01062:TLK:6",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 7,
+        "offset": 11908,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 17,
+        "mutation_index": 0,
+        "mutation_bit": 217,
+        "if_true": 0,
+        "next": 8,
+        "source": {
+          "path": "Map/m01062.TLK",
+          "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+          "record_id": 7,
+          "record_bytes": 1647,
+          "offset": 11908
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01062:TLK:7",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 8,
+        "offset": 13555,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 17,
+        "mutation_index": 0,
+        "mutation_bit": 218,
+        "if_true": 0,
+        "next": 9,
+        "source": {
+          "path": "Map/m01062.TLK",
+          "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+          "record_id": 8,
+          "record_bytes": 1647,
+          "offset": 13555
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01062:TLK:8",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 9,
+        "offset": 15202,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 17,
+        "mutation_index": 0,
+        "mutation_bit": 220,
+        "if_true": 0,
+        "next": 10,
+        "source": {
+          "path": "Map/m01062.TLK",
+          "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+          "record_id": 9,
+          "record_bytes": 1647,
+          "offset": 15202
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01062:TLK:9",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 10,
+        "offset": 16849,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 1,
+        "if_true": 0,
+        "next": 4,
+        "source": {
+          "path": "Map/m01062.TLK",
+          "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+          "record_id": 10,
+          "record_bytes": 1647,
+          "offset": 16849
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01062:TLK:10",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 11,
+        "offset": 18496,
+        "kind": 8,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 11,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 0,
+        "source": {
+          "path": "Map/m01062.TLK",
+          "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+          "record_id": 11,
+          "record_bytes": 1647,
+          "offset": 18496
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "native_service": {
+          "kind": 3,
+          "goods": [],
+          "title": "男魔導士炎",
+          "allowedModes": [
+            "synthesize"
+          ]
+        },
+        "text_id": "M01062:TLK:11",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 12,
+        "offset": 20143,
+        "kind": 0,
+        "style": 2,
+        "region_byte_raw": 0,
+        "speaker": 12,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 0,
+        "source": {
+          "path": "Map/m01062.TLK",
+          "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+          "record_id": 12,
+          "record_bytes": 1647,
+          "offset": 20143
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01062:TLK:12",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 13,
+        "offset": 21790,
+        "kind": 1,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 12,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 14,
+        "source": {
+          "path": "Map/m01062.TLK",
+          "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+          "record_id": 13,
+          "record_bytes": 1647,
+          "offset": 21790
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01062:TLK:13",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 14,
+        "offset": 23437,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 12,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 0,
+        "source": {
+          "path": "Map/m01062.TLK",
+          "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+          "record_id": 14,
+          "record_bytes": 1647,
+          "offset": 23437
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01062:TLK:14",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 15,
+        "offset": 25084,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 2,
+        "mutation_type": 17,
+        "mutation_index": 0,
+        "mutation_bit": 219,
+        "if_true": 23,
+        "next": 16,
+        "source": {
+          "path": "Map/m01062.TLK",
+          "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+          "record_id": 15,
+          "record_bytes": 1647,
+          "offset": 25084
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01062:TLK:15",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 16,
+        "offset": 26731,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 17,
+        "mutation_index": 0,
+        "mutation_bit": 221,
+        "if_true": 0,
+        "next": 17,
+        "source": {
+          "path": "Map/m01062.TLK",
+          "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+          "record_id": 16,
+          "record_bytes": 1647,
+          "offset": 26731
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01062:TLK:16",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 17,
+        "offset": 28378,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 17,
+        "mutation_index": 0,
+        "mutation_bit": 222,
+        "if_true": 0,
+        "next": 18,
+        "source": {
+          "path": "Map/m01062.TLK",
+          "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+          "record_id": 17,
+          "record_bytes": 1647,
+          "offset": 28378
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01062:TLK:17",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 18,
+        "offset": 30025,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 17,
+        "mutation_index": 0,
+        "mutation_bit": 223,
+        "if_true": 0,
+        "next": 19,
+        "source": {
+          "path": "Map/m01062.TLK",
+          "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+          "record_id": 18,
+          "record_bytes": 1647,
+          "offset": 30025
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01062:TLK:18",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 19,
+        "offset": 31672,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 17,
+        "mutation_index": 0,
+        "mutation_bit": 224,
+        "if_true": 0,
+        "next": 20,
+        "source": {
+          "path": "Map/m01062.TLK",
+          "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+          "record_id": 19,
+          "record_bytes": 1647,
+          "offset": 31672
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01062:TLK:19",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 20,
+        "offset": 33319,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 17,
+        "mutation_index": 0,
+        "mutation_bit": 225,
+        "if_true": 0,
+        "next": 21,
+        "source": {
+          "path": "Map/m01062.TLK",
+          "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+          "record_id": 20,
+          "record_bytes": 1647,
+          "offset": 33319
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01062:TLK:20",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 21,
+        "offset": 34966,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 17,
+        "mutation_index": 0,
+        "mutation_bit": 226,
+        "if_true": 0,
+        "next": 22,
+        "source": {
+          "path": "Map/m01062.TLK",
+          "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+          "record_id": 21,
+          "record_bytes": 1647,
+          "offset": 34966
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01062:TLK:21",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 22,
+        "offset": 36613,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 2,
+        "if_true": 0,
+        "next": 23,
+        "source": {
+          "path": "Map/m01062.TLK",
+          "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+          "record_id": 22,
+          "record_bytes": 1647,
+          "offset": 36613
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01062:TLK:22",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 23,
+        "offset": 38260,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 11,
+        "condition_type": 0,
+        "condition_index": 386,
+        "condition_bit": 9,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 24,
+        "next": 0,
+        "source": {
+          "path": "Map/m01062.TLK",
+          "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+          "record_id": 23,
+          "record_bytes": 1647,
+          "offset": 38260
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01062:TLK:23",
+        "portrait_id": 0,
+        "choices": [
+          {
+            "index": 0,
+            "recordId": 11,
+            "text_id": "M01062:TLK:23:choice:0"
+          },
+          {
+            "index": 1,
+            "recordId": 5,
+            "text_id": "M01062:TLK:23:choice:1"
+          }
+        ]
+      },
+      {
+        "id": 24,
+        "offset": 39907,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 3,
+        "mutation_type": 17,
+        "mutation_index": 0,
+        "mutation_bit": 230,
+        "if_true": 30,
+        "next": 25,
+        "source": {
+          "path": "Map/m01062.TLK",
+          "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+          "record_id": 24,
+          "record_bytes": 1647,
+          "offset": 39907
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01062:TLK:24",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 25,
+        "offset": 41554,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 17,
+        "mutation_index": 0,
+        "mutation_bit": 231,
+        "if_true": 0,
+        "next": 26,
+        "source": {
+          "path": "Map/m01062.TLK",
+          "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+          "record_id": 25,
+          "record_bytes": 1647,
+          "offset": 41554
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01062:TLK:25",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 26,
+        "offset": 43201,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 17,
+        "mutation_index": 0,
+        "mutation_bit": 236,
+        "if_true": 0,
+        "next": 27,
+        "source": {
+          "path": "Map/m01062.TLK",
+          "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+          "record_id": 26,
+          "record_bytes": 1647,
+          "offset": 43201
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01062:TLK:26",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 27,
+        "offset": 44848,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 17,
+        "mutation_index": 0,
+        "mutation_bit": 237,
+        "if_true": 0,
+        "next": 28,
+        "source": {
+          "path": "Map/m01062.TLK",
+          "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+          "record_id": 27,
+          "record_bytes": 1647,
+          "offset": 44848
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01062:TLK:27",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 28,
+        "offset": 46495,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 17,
+        "mutation_index": 0,
+        "mutation_bit": 238,
+        "if_true": 0,
+        "next": 29,
+        "source": {
+          "path": "Map/m01062.TLK",
+          "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+          "record_id": 28,
+          "record_bytes": 1647,
+          "offset": 46495
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01062:TLK:28",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 29,
+        "offset": 48142,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 3,
+        "if_true": 0,
+        "next": 30,
+        "source": {
+          "path": "Map/m01062.TLK",
+          "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+          "record_id": 29,
+          "record_bytes": 1647,
+          "offset": 48142
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01062:TLK:29",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 30,
+        "offset": 49789,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 11,
+        "condition_type": 0,
+        "condition_index": 419,
+        "condition_bit": 3,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 31,
+        "next": 0,
+        "source": {
+          "path": "Map/m01062.TLK",
+          "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+          "record_id": 30,
+          "record_bytes": 1647,
+          "offset": 49789
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01062:TLK:30",
+        "portrait_id": 0,
+        "choices": [
+          {
+            "index": 0,
+            "recordId": 11,
+            "text_id": "M01062:TLK:30:choice:0"
+          },
+          {
+            "index": 1,
+            "recordId": 5,
+            "text_id": "M01062:TLK:30:choice:1"
+          }
+        ]
+      },
+      {
+        "id": 31,
+        "offset": 51436,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 11,
+        "condition_type": 0,
+        "condition_index": 419,
+        "condition_bit": 5,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 32,
+        "next": 0,
+        "source": {
+          "path": "Map/m01062.TLK",
+          "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+          "record_id": 31,
+          "record_bytes": 1647,
+          "offset": 51436
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01062:TLK:31",
+        "portrait_id": 0,
+        "choices": [
+          {
+            "index": 0,
+            "recordId": 11,
+            "text_id": "M01062:TLK:31:choice:0"
+          },
+          {
+            "index": 1,
+            "recordId": 5,
+            "text_id": "M01062:TLK:31:choice:1"
+          }
+        ]
+      },
+      {
+        "id": 32,
+        "offset": 53083,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 11,
+        "condition_type": 0,
+        "condition_index": 419,
+        "condition_bit": 7,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 33,
+        "next": 0,
+        "source": {
+          "path": "Map/m01062.TLK",
+          "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+          "record_id": 32,
+          "record_bytes": 1647,
+          "offset": 53083
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01062:TLK:32",
+        "portrait_id": 0,
+        "choices": [
+          {
+            "index": 0,
+            "recordId": 11,
+            "text_id": "M01062:TLK:32:choice:0"
+          },
+          {
+            "index": 1,
+            "recordId": 5,
+            "text_id": "M01062:TLK:32:choice:1"
+          }
+        ]
+      },
+      {
+        "id": 33,
+        "offset": 54730,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 11,
+        "condition_type": 0,
+        "condition_index": 419,
+        "condition_bit": 9,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 34,
+        "next": 0,
+        "source": {
+          "path": "Map/m01062.TLK",
+          "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+          "record_id": 33,
+          "record_bytes": 1647,
+          "offset": 54730
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01062:TLK:33",
+        "portrait_id": 0,
+        "choices": [
+          {
+            "index": 0,
+            "recordId": 11,
+            "text_id": "M01062:TLK:33:choice:0"
+          },
+          {
+            "index": 1,
+            "recordId": 5,
+            "text_id": "M01062:TLK:33:choice:1"
+          }
+        ]
+      },
+      {
+        "id": 34,
+        "offset": 56377,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 11,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 0,
+        "source": {
+          "path": "Map/m01062.TLK",
+          "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+          "record_id": 34,
+          "record_bytes": 1647,
+          "offset": 56377
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01062:TLK:34",
+        "portrait_id": 0,
+        "choices": [
+          {
+            "index": 0,
+            "recordId": 11,
+            "text_id": "M01062:TLK:34:choice:0"
+          },
+          {
+            "index": 1,
+            "recordId": 5,
+            "text_id": "M01062:TLK:34:choice:1"
+          }
+        ]
+      }
+    ],
+    "trailing_bytes": 57998,
+    "trailing_sha256": "dc37e7a48eb00c69d2bb309668105c16cac203e28b34c4a6c72c3e869677078e",
+    "header_raw_hex": "3344a661b9cfb8eaaec6286329596f6b690000000600000001000000bacfb3c9b9a4b7bf00000000000000000000000000000000000000000000000000000000000000006d6e3031302d312e7761760000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003030a0000000200010000000000000000001c000000020000004d30313036322e444750000000000000000000004d3031303632412e4447500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002030001012f000000250000002e5c4d41504d5c4d30313036325c00000000000000000000900100009001000000010100",
+    "compatibility_variant": 1,
+    "descriptors": [
+      {
+        "id": 1,
+        "state_raw": 0,
+        "filename_raw": "m01060.dat",
+        "field_26_raw": 4,
+        "field_2a_raw": 4,
+        "field_2e_raw": 0,
+        "record_bytes": 66,
+        "raw_hex": "00000000000000000000000000000000006d30313036302e646174000000000000000000000004000000040000000000000000000000000000000000000000000000",
+        "cells": [
+          {
+            "x": 43,
+            "y": 20,
+            "offset": 63282
+          },
+          {
+            "x": 44,
+            "y": 20,
+            "offset": 63346
+          },
+          {
+            "x": 44,
+            "y": 21,
+            "offset": 66354
+          }
+        ],
+        "source": {
+          "path": "Map/m01062.dat",
+          "sha256": "8ddf978ff4aad805202a918dd9aa69b30a521d66121babd9659f4ffc817f143f",
+          "descriptor_id": 1,
+          "bytes": 66,
+          "offset": 113010
+        },
+        "evidence": [
+          "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a"
+        ],
+        "field_expansion": "Native 0x42-byte descriptor fields"
+      }
+    ],
+    "objects": [
+      {
+        "index": 0,
+        "slot_one_based": 1,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d30313036325c3030312e444750010000000000000040010000e0000000010000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 320,
+        "y_native": 224,
+        "resource_id_raw": 1,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m01062.dat",
+          "sha256": "8ddf978ff4aad805202a918dd9aa69b30a521d66121babd9659f4ffc817f143f",
+          "bytes": 274,
+          "offset": 124690
+        }
+      },
+      {
+        "index": 1,
+        "slot_one_based": 2,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d30313036325c3030322e4447500200000000000000a000000010010000010000000100000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 160,
+        "y_native": 272,
+        "resource_id_raw": 2,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m01062.dat",
+          "sha256": "8ddf978ff4aad805202a918dd9aa69b30a521d66121babd9659f4ffc817f143f",
+          "bytes": 274,
+          "offset": 124964
+        }
+      },
+      {
+        "index": 2,
+        "slot_one_based": 3,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d30313036325c3030332e444750030000000000000020000000e0000000010000000100000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 32,
+        "y_native": 224,
+        "resource_id_raw": 3,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m01062.dat",
+          "sha256": "8ddf978ff4aad805202a918dd9aa69b30a521d66121babd9659f4ffc817f143f",
+          "bytes": 274,
+          "offset": 125238
+        }
+      },
+      {
+        "index": 3,
+        "slot_one_based": 4,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d30313036325c3030342e44475004000000000000004000000010010000010000000100000000000000000000000000000000000300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 64,
+        "y_native": 272,
+        "resource_id_raw": 4,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m01062.dat",
+          "sha256": "8ddf978ff4aad805202a918dd9aa69b30a521d66121babd9659f4ffc817f143f",
+          "bytes": 274,
+          "offset": 125512
+        }
+      },
+      {
+        "index": 4,
+        "slot_one_based": 5,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d30313036325c3030352e4447500500000000000000e000000010010000010000000100000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 224,
+        "y_native": 272,
+        "resource_id_raw": 5,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m01062.dat",
+          "sha256": "8ddf978ff4aad805202a918dd9aa69b30a521d66121babd9659f4ffc817f143f",
+          "bytes": 274,
+          "offset": 125786
+        }
+      },
+      {
+        "index": 5,
+        "slot_one_based": 6,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d30313036325c3030362e444750060000000000000040010000f0000000010000000100000000000000000000000000000000000500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 320,
+        "y_native": 240,
+        "resource_id_raw": 6,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m01062.dat",
+          "sha256": "8ddf978ff4aad805202a918dd9aa69b30a521d66121babd9659f4ffc817f143f",
+          "bytes": 274,
+          "offset": 126060
+        }
+      },
+      {
+        "index": 6,
+        "slot_one_based": 7,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d30313036325c3030372e444750070000000000000070000000e8000000010000000100000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 112,
+        "y_native": 232,
+        "resource_id_raw": 7,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m01062.dat",
+          "sha256": "8ddf978ff4aad805202a918dd9aa69b30a521d66121babd9659f4ffc817f143f",
+          "bytes": 274,
+          "offset": 126334
+        }
+      },
+      {
+        "index": 7,
+        "slot_one_based": 8,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d30313036325c3030382e44475008000000000000006001000010010000010000000100000000000000000000000000000000000700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 352,
+        "y_native": 272,
+        "resource_id_raw": 8,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m01062.dat",
+          "sha256": "8ddf978ff4aad805202a918dd9aa69b30a521d66121babd9659f4ffc817f143f",
+          "bytes": 274,
+          "offset": 126608
+        }
+      },
+      {
+        "index": 8,
+        "slot_one_based": 9,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d30313036325c3030392e444750090000000000000090000000a8000000010000000100000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000100000000000000f400000000000000000000000000000000000000000000000000000000000000005f0000000006000000000000000000000000000000000000",
+        "x_native": 144,
+        "y_native": 168,
+        "resource_id_raw": 9,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m01062.dat",
+          "sha256": "8ddf978ff4aad805202a918dd9aa69b30a521d66121babd9659f4ffc817f143f",
+          "bytes": 274,
+          "offset": 126882
+        }
+      },
+      {
+        "index": 9,
+        "slot_one_based": 10,
+        "raw_hex": "433a5c534556454e5c2e5c4d41504d5c4d30313036325c3031302e4447500a00000000000000720000008b000000010000000100000000000000000000000000000000000900000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000453031332e77617600000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000030000000201000100000000000000880000000000000000000000000000000000000000000000000000000000000000260000000000000000000000000000000000000000000000",
+        "x_native": 114,
+        "y_native": 139,
+        "resource_id_raw": 10,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m01062.dat",
+          "sha256": "8ddf978ff4aad805202a918dd9aa69b30a521d66121babd9659f4ffc817f143f",
+          "bytes": 274,
+          "offset": 127156
+        }
+      }
+    ],
+    "npc_records": [
+      {
+        "slot_zero_based": 10,
+        "offset": 127430,
+        "resource_id": 56,
+        "name_cp950": "男魔導士炎",
+        "x_native": 160,
+        "y_native": 160,
+        "direction": 0,
+        "raw_hex": "3035360000000000000000000000000000000000a86bc55dbec9a468aaa2000000000000000000003800000007000000a0000000a00000000000000000000000000a000000000001ff0101ffffffffffffffffffffffffffffff000000000000000000000000000000000000000000a0000000a00000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000bb000000a6000000000000000000000000000000000000000000000000000000000000000000000000001600000000000000000000000000000000000000000000000000000000020001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000050000000a0000000200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000"
+      },
+      {
+        "slot_zero_based": 11,
+        "offset": 128651,
+        "resource_id": 57,
+        "name_cp950": "合成魔導士",
+        "x_native": 80,
+        "y_native": 208,
+        "direction": 0,
+        "raw_hex": "3035370000000000000000000000000000000000a658a6a8c55dbec9a46800000000000000000000390000000000000050000000d00000000000000000000000000b000000000001ff0101ffffffffffffffffffffffffffffff00000000000000000000000000000000000000000050000000d00000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000cf000000b4000000000000000000000000000000000000000000000000000000000000000000000000001600000000000000000000000000000000000000000000000000000000020001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000050000000a0000000200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000"
+      }
+    ],
+    "entry_markers": {
+      "1": [
+        {
+          "x": 35,
+          "y": 20,
+          "offset": 62770
+        },
+        {
+          "x": 36,
+          "y": 20,
+          "offset": 62834
+        },
+        {
+          "x": 35,
+          "y": 21,
+          "offset": 65778
+        },
+        {
+          "x": 36,
+          "y": 21,
+          "offset": 65842
+        }
+      ]
+    },
+    "default_object_index_slot": 499,
+    "default_object_record": 6,
+    "header_entry_tlk_raw": 0,
+    "header_entry_tlk_source": {
+      "path": "Map/m01062.dat",
+      "sha256": "8ddf978ff4aad805202a918dd9aa69b30a521d66121babd9659f4ffc817f143f",
+      "bytes": 4,
+      "offset": 314
+    },
+    "header_setup_tlk_raw": 0,
+    "header_setup_tlk_source": {
+      "path": "Map/m01062.dat",
+      "sha256": "8ddf978ff4aad805202a918dd9aa69b30a521d66121babd9659f4ffc817f143f",
+      "bytes": 4,
+      "offset": 138
+    },
+    "evidence": [
+      "ev_e14d28c11ec31e5eebdf4c08a994a900102658650d8e5364d58b848cbd114ea7",
+      "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a"
+    ],
+    "limitations": [
+      "Index slot499 is retained as the object default TLK entry; it must not be used as an automatic map-load event. Header +0x8A controls map setup; +0x13A controls map-entry TLK.",
+      "TLK record kind/mutation numbers are raw native values; dialogue text alone does not define their behavior."
+    ],
+    "flow_id": "M01062:tlk"
+  },
+  "programs": {},
+  "flows": {
+    "M01062:tlk": {
+      "schema": "seventh-seal-story-flow",
+      "version": 1,
+      "id": "M01062:tlk",
+      "map_id": "M01062",
+      "entry": "M01062:tlk:1",
+      "entries": {
+        "1": "M01062:tlk:1",
+        "2": "M01062:tlk:2",
+        "3": "M01062:tlk:3",
+        "4": "M01062:tlk:4",
+        "5": "M01062:tlk:5",
+        "6": "M01062:tlk:6",
+        "7": "M01062:tlk:7",
+        "8": "M01062:tlk:8",
+        "9": "M01062:tlk:9",
+        "10": "M01062:tlk:10",
+        "11": "M01062:tlk:11",
+        "12": "M01062:tlk:12",
+        "13": "M01062:tlk:13",
+        "14": "M01062:tlk:14",
+        "15": "M01062:tlk:15",
+        "16": "M01062:tlk:16",
+        "17": "M01062:tlk:17",
+        "18": "M01062:tlk:18",
+        "19": "M01062:tlk:19",
+        "20": "M01062:tlk:20",
+        "21": "M01062:tlk:21",
+        "22": "M01062:tlk:22",
+        "23": "M01062:tlk:23",
+        "24": "M01062:tlk:24",
+        "25": "M01062:tlk:25",
+        "26": "M01062:tlk:26",
+        "27": "M01062:tlk:27",
+        "28": "M01062:tlk:28",
+        "29": "M01062:tlk:29",
+        "30": "M01062:tlk:30",
+        "31": "M01062:tlk:31",
+        "32": "M01062:tlk:32",
+        "33": "M01062:tlk:33",
+        "34": "M01062:tlk:34"
+      },
+      "commands": [
+        {
+          "id": "M01062:tlk:1",
+          "op": "record",
+          "record_id": 1,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 1,
+            "record_bytes": 1647,
+            "offset": 2026
+          }
+        },
+        {
+          "id": "M01062:tlk:1:1",
+          "op": "test_flag_bit",
+          "record_id": 1,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 1,
+            "record_bytes": 1647,
+            "offset": 2026
+          },
+          "index": 386,
+          "bit": 2,
+          "if_true": "M01062:tlk:6",
+          "if_false": "M01062:tlk:1:2"
+        },
+        {
+          "id": "M01062:tlk:1:2",
+          "op": "say",
+          "record_id": 1,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 1,
+            "record_bytes": 1647,
+            "offset": 2026
+          },
+          "text_id": "M01062:TLK:1",
+          "presentation": {
+            "speaker": 11,
+            "style": 2,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M01062:tlk:1:3",
+          "op": "jump",
+          "record_id": 1,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 1,
+            "record_bytes": 1647,
+            "offset": 2026
+          },
+          "target": "M01062:tlk:2"
+        },
+        {
+          "id": "M01062:tlk:2",
+          "op": "record",
+          "record_id": 2,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 2,
+            "record_bytes": 1647,
+            "offset": 3673
+          }
+        },
+        {
+          "id": "M01062:tlk:2:1",
+          "op": "say",
+          "record_id": 2,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 2,
+            "record_bytes": 1647,
+            "offset": 3673
+          },
+          "text_id": "M01062:TLK:2",
+          "presentation": {
+            "speaker": 1,
+            "style": 1,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M01062:tlk:2:2",
+          "op": "jump",
+          "record_id": 2,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 2,
+            "record_bytes": 1647,
+            "offset": 3673
+          },
+          "target": "M01062:tlk:3"
+        },
+        {
+          "id": "M01062:tlk:3",
+          "op": "record",
+          "record_id": 3,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 3,
+            "record_bytes": 1647,
+            "offset": 5320
+          }
+        },
+        {
+          "id": "M01062:tlk:3:1",
+          "op": "say",
+          "record_id": 3,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 3,
+            "record_bytes": 1647,
+            "offset": 5320
+          },
+          "text_id": "M01062:TLK:3",
+          "presentation": {
+            "speaker": 11,
+            "style": 2,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M01062:tlk:3:2",
+          "op": "jump",
+          "record_id": 3,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 3,
+            "record_bytes": 1647,
+            "offset": 5320
+          },
+          "target": "M01062:tlk:end"
+        },
+        {
+          "id": "M01062:tlk:4",
+          "op": "record",
+          "record_id": 4,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 4,
+            "record_bytes": 1647,
+            "offset": 6967
+          }
+        },
+        {
+          "id": "M01062:tlk:4:1",
+          "op": "test_flag_bit",
+          "record_id": 4,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 4,
+            "record_bytes": 1647,
+            "offset": 6967
+          },
+          "index": 386,
+          "bit": 6,
+          "if_true": "M01062:tlk:15",
+          "if_false": "M01062:tlk:4:2"
+        },
+        {
+          "id": "M01062:tlk:4:2",
+          "op": "choice",
+          "record_id": 4,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 4,
+            "record_bytes": 1647,
+            "offset": 6967
+          },
+          "text_id": "M01062:TLK:4",
+          "presentation": {
+            "speaker": 11,
+            "style": 1,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          },
+          "choices": [
+            {
+              "index": 0,
+              "recordId": 11,
+              "text_id": "M01062:TLK:4:choice:0",
+              "target": "M01062:tlk:11"
+            },
+            {
+              "index": 1,
+              "recordId": 5,
+              "text_id": "M01062:TLK:4:choice:1",
+              "target": "M01062:tlk:5"
+            }
+          ]
+        },
+        {
+          "id": "M01062:tlk:4:3",
+          "op": "jump",
+          "record_id": 4,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 4,
+            "record_bytes": 1647,
+            "offset": 6967
+          },
+          "target": "M01062:tlk:end"
+        },
+        {
+          "id": "M01062:tlk:5",
+          "op": "record",
+          "record_id": 5,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 5,
+            "record_bytes": 1647,
+            "offset": 8614
+          }
+        },
+        {
+          "id": "M01062:tlk:5:1",
+          "op": "say",
+          "record_id": 5,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 5,
+            "record_bytes": 1647,
+            "offset": 8614
+          },
+          "text_id": "M01062:TLK:5",
+          "presentation": {
+            "speaker": 11,
+            "style": 2,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M01062:tlk:5:2",
+          "op": "jump",
+          "record_id": 5,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 5,
+            "record_bytes": 1647,
+            "offset": 8614
+          },
+          "target": "M01062:tlk:end"
+        },
+        {
+          "id": "M01062:tlk:6",
+          "op": "record",
+          "record_id": 6,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 6,
+            "record_bytes": 1647,
+            "offset": 10261
+          }
+        },
+        {
+          "id": "M01062:tlk:6:1",
+          "op": "unlock_recipe",
+          "record_id": 6,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 6,
+            "record_bytes": 1647,
+            "offset": 10261
+          }
+        },
+        {
+          "id": "M01062:tlk:6:2",
+          "op": "test_flag_bit",
+          "record_id": 6,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 6,
+            "record_bytes": 1647,
+            "offset": 10261
+          },
+          "index": 28,
+          "bit": 1,
+          "if_true": "M01062:tlk:4",
+          "if_false": "M01062:tlk:6:3"
+        },
+        {
+          "id": "M01062:tlk:6:3",
+          "op": "jump",
+          "record_id": 6,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 6,
+            "record_bytes": 1647,
+            "offset": 10261
+          },
+          "target": "M01062:tlk:7"
+        },
+        {
+          "id": "M01062:tlk:7",
+          "op": "record",
+          "record_id": 7,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 7,
+            "record_bytes": 1647,
+            "offset": 11908
+          }
+        },
+        {
+          "id": "M01062:tlk:7:1",
+          "op": "unlock_recipe",
+          "record_id": 7,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 7,
+            "record_bytes": 1647,
+            "offset": 11908
+          }
+        },
+        {
+          "id": "M01062:tlk:7:2",
+          "op": "jump",
+          "record_id": 7,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 7,
+            "record_bytes": 1647,
+            "offset": 11908
+          },
+          "target": "M01062:tlk:8"
+        },
+        {
+          "id": "M01062:tlk:8",
+          "op": "record",
+          "record_id": 8,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 8,
+            "record_bytes": 1647,
+            "offset": 13555
+          }
+        },
+        {
+          "id": "M01062:tlk:8:1",
+          "op": "unlock_recipe",
+          "record_id": 8,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 8,
+            "record_bytes": 1647,
+            "offset": 13555
+          }
+        },
+        {
+          "id": "M01062:tlk:8:2",
+          "op": "jump",
+          "record_id": 8,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 8,
+            "record_bytes": 1647,
+            "offset": 13555
+          },
+          "target": "M01062:tlk:9"
+        },
+        {
+          "id": "M01062:tlk:9",
+          "op": "record",
+          "record_id": 9,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 9,
+            "record_bytes": 1647,
+            "offset": 15202
+          }
+        },
+        {
+          "id": "M01062:tlk:9:1",
+          "op": "unlock_recipe",
+          "record_id": 9,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 9,
+            "record_bytes": 1647,
+            "offset": 15202
+          }
+        },
+        {
+          "id": "M01062:tlk:9:2",
+          "op": "jump",
+          "record_id": 9,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 9,
+            "record_bytes": 1647,
+            "offset": 15202
+          },
+          "target": "M01062:tlk:10"
+        },
+        {
+          "id": "M01062:tlk:10",
+          "op": "record",
+          "record_id": 10,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 10,
+            "record_bytes": 1647,
+            "offset": 16849
+          }
+        },
+        {
+          "id": "M01062:tlk:10:1",
+          "op": "set_flag_bit",
+          "record_id": 10,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 10,
+            "record_bytes": 1647,
+            "offset": 16849
+          },
+          "index": 28,
+          "bit": 1
+        },
+        {
+          "id": "M01062:tlk:10:2",
+          "op": "jump",
+          "record_id": 10,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 10,
+            "record_bytes": 1647,
+            "offset": 16849
+          },
+          "target": "M01062:tlk:4"
+        },
+        {
+          "id": "M01062:tlk:11",
+          "op": "record",
+          "record_id": 11,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 11,
+            "record_bytes": 1647,
+            "offset": 18496
+          }
+        },
+        {
+          "id": "M01062:tlk:11:1",
+          "op": "native_service",
+          "record_id": 11,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 11,
+            "record_bytes": 1647,
+            "offset": 18496
+          }
+        },
+        {
+          "id": "M01062:tlk:11:2",
+          "op": "jump",
+          "record_id": 11,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 11,
+            "record_bytes": 1647,
+            "offset": 18496
+          },
+          "target": "M01062:tlk:end"
+        },
+        {
+          "id": "M01062:tlk:12",
+          "op": "record",
+          "record_id": 12,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 12,
+            "record_bytes": 1647,
+            "offset": 20143
+          }
+        },
+        {
+          "id": "M01062:tlk:12:1",
+          "op": "say",
+          "record_id": 12,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 12,
+            "record_bytes": 1647,
+            "offset": 20143
+          },
+          "text_id": "M01062:TLK:12",
+          "presentation": {
+            "speaker": 12,
+            "style": 2,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M01062:tlk:12:2",
+          "op": "jump",
+          "record_id": 12,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 12,
+            "record_bytes": 1647,
+            "offset": 20143
+          },
+          "target": "M01062:tlk:end"
+        },
+        {
+          "id": "M01062:tlk:13",
+          "op": "record",
+          "record_id": 13,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 13,
+            "record_bytes": 1647,
+            "offset": 21790
+          }
+        },
+        {
+          "id": "M01062:tlk:13:1",
+          "op": "animation",
+          "record_id": 13,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 13,
+            "record_bytes": 1647,
+            "offset": 21790
+          },
+          "program_id": "music1"
+        },
+        {
+          "id": "M01062:tlk:13:2",
+          "op": "jump",
+          "record_id": 13,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 13,
+            "record_bytes": 1647,
+            "offset": 21790
+          },
+          "target": "M01062:tlk:14"
+        },
+        {
+          "id": "M01062:tlk:14",
+          "op": "record",
+          "record_id": 14,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 14,
+            "record_bytes": 1647,
+            "offset": 23437
+          }
+        },
+        {
+          "id": "M01062:tlk:14:1",
+          "op": "say",
+          "record_id": 14,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 14,
+            "record_bytes": 1647,
+            "offset": 23437
+          },
+          "text_id": "M01062:TLK:14",
+          "presentation": {
+            "speaker": 12,
+            "style": 1,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M01062:tlk:14:2",
+          "op": "jump",
+          "record_id": 14,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 14,
+            "record_bytes": 1647,
+            "offset": 23437
+          },
+          "target": "M01062:tlk:end"
+        },
+        {
+          "id": "M01062:tlk:15",
+          "op": "record",
+          "record_id": 15,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 15,
+            "record_bytes": 1647,
+            "offset": 25084
+          }
+        },
+        {
+          "id": "M01062:tlk:15:1",
+          "op": "unlock_recipe",
+          "record_id": 15,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 15,
+            "record_bytes": 1647,
+            "offset": 25084
+          }
+        },
+        {
+          "id": "M01062:tlk:15:2",
+          "op": "test_flag_bit",
+          "record_id": 15,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 15,
+            "record_bytes": 1647,
+            "offset": 25084
+          },
+          "index": 28,
+          "bit": 2,
+          "if_true": "M01062:tlk:23",
+          "if_false": "M01062:tlk:15:3"
+        },
+        {
+          "id": "M01062:tlk:15:3",
+          "op": "jump",
+          "record_id": 15,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 15,
+            "record_bytes": 1647,
+            "offset": 25084
+          },
+          "target": "M01062:tlk:16"
+        },
+        {
+          "id": "M01062:tlk:16",
+          "op": "record",
+          "record_id": 16,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 16,
+            "record_bytes": 1647,
+            "offset": 26731
+          }
+        },
+        {
+          "id": "M01062:tlk:16:1",
+          "op": "unlock_recipe",
+          "record_id": 16,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 16,
+            "record_bytes": 1647,
+            "offset": 26731
+          }
+        },
+        {
+          "id": "M01062:tlk:16:2",
+          "op": "jump",
+          "record_id": 16,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 16,
+            "record_bytes": 1647,
+            "offset": 26731
+          },
+          "target": "M01062:tlk:17"
+        },
+        {
+          "id": "M01062:tlk:17",
+          "op": "record",
+          "record_id": 17,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 17,
+            "record_bytes": 1647,
+            "offset": 28378
+          }
+        },
+        {
+          "id": "M01062:tlk:17:1",
+          "op": "unlock_recipe",
+          "record_id": 17,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 17,
+            "record_bytes": 1647,
+            "offset": 28378
+          }
+        },
+        {
+          "id": "M01062:tlk:17:2",
+          "op": "jump",
+          "record_id": 17,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 17,
+            "record_bytes": 1647,
+            "offset": 28378
+          },
+          "target": "M01062:tlk:18"
+        },
+        {
+          "id": "M01062:tlk:18",
+          "op": "record",
+          "record_id": 18,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 18,
+            "record_bytes": 1647,
+            "offset": 30025
+          }
+        },
+        {
+          "id": "M01062:tlk:18:1",
+          "op": "unlock_recipe",
+          "record_id": 18,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 18,
+            "record_bytes": 1647,
+            "offset": 30025
+          }
+        },
+        {
+          "id": "M01062:tlk:18:2",
+          "op": "jump",
+          "record_id": 18,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 18,
+            "record_bytes": 1647,
+            "offset": 30025
+          },
+          "target": "M01062:tlk:19"
+        },
+        {
+          "id": "M01062:tlk:19",
+          "op": "record",
+          "record_id": 19,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 19,
+            "record_bytes": 1647,
+            "offset": 31672
+          }
+        },
+        {
+          "id": "M01062:tlk:19:1",
+          "op": "unlock_recipe",
+          "record_id": 19,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 19,
+            "record_bytes": 1647,
+            "offset": 31672
+          }
+        },
+        {
+          "id": "M01062:tlk:19:2",
+          "op": "jump",
+          "record_id": 19,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 19,
+            "record_bytes": 1647,
+            "offset": 31672
+          },
+          "target": "M01062:tlk:20"
+        },
+        {
+          "id": "M01062:tlk:20",
+          "op": "record",
+          "record_id": 20,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 20,
+            "record_bytes": 1647,
+            "offset": 33319
+          }
+        },
+        {
+          "id": "M01062:tlk:20:1",
+          "op": "unlock_recipe",
+          "record_id": 20,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 20,
+            "record_bytes": 1647,
+            "offset": 33319
+          }
+        },
+        {
+          "id": "M01062:tlk:20:2",
+          "op": "jump",
+          "record_id": 20,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 20,
+            "record_bytes": 1647,
+            "offset": 33319
+          },
+          "target": "M01062:tlk:21"
+        },
+        {
+          "id": "M01062:tlk:21",
+          "op": "record",
+          "record_id": 21,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 21,
+            "record_bytes": 1647,
+            "offset": 34966
+          }
+        },
+        {
+          "id": "M01062:tlk:21:1",
+          "op": "unlock_recipe",
+          "record_id": 21,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 21,
+            "record_bytes": 1647,
+            "offset": 34966
+          }
+        },
+        {
+          "id": "M01062:tlk:21:2",
+          "op": "jump",
+          "record_id": 21,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 21,
+            "record_bytes": 1647,
+            "offset": 34966
+          },
+          "target": "M01062:tlk:22"
+        },
+        {
+          "id": "M01062:tlk:22",
+          "op": "record",
+          "record_id": 22,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 22,
+            "record_bytes": 1647,
+            "offset": 36613
+          }
+        },
+        {
+          "id": "M01062:tlk:22:1",
+          "op": "set_flag_bit",
+          "record_id": 22,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 22,
+            "record_bytes": 1647,
+            "offset": 36613
+          },
+          "index": 28,
+          "bit": 2
+        },
+        {
+          "id": "M01062:tlk:22:2",
+          "op": "jump",
+          "record_id": 22,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 22,
+            "record_bytes": 1647,
+            "offset": 36613
+          },
+          "target": "M01062:tlk:23"
+        },
+        {
+          "id": "M01062:tlk:23",
+          "op": "record",
+          "record_id": 23,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 23,
+            "record_bytes": 1647,
+            "offset": 38260
+          }
+        },
+        {
+          "id": "M01062:tlk:23:1",
+          "op": "test_flag_bit",
+          "record_id": 23,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 23,
+            "record_bytes": 1647,
+            "offset": 38260
+          },
+          "index": 386,
+          "bit": 9,
+          "if_true": "M01062:tlk:24",
+          "if_false": "M01062:tlk:23:2"
+        },
+        {
+          "id": "M01062:tlk:23:2",
+          "op": "choice",
+          "record_id": 23,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 23,
+            "record_bytes": 1647,
+            "offset": 38260
+          },
+          "text_id": "M01062:TLK:23",
+          "presentation": {
+            "speaker": 11,
+            "style": 1,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          },
+          "choices": [
+            {
+              "index": 0,
+              "recordId": 11,
+              "text_id": "M01062:TLK:23:choice:0",
+              "target": "M01062:tlk:11"
+            },
+            {
+              "index": 1,
+              "recordId": 5,
+              "text_id": "M01062:TLK:23:choice:1",
+              "target": "M01062:tlk:5"
+            }
+          ]
+        },
+        {
+          "id": "M01062:tlk:23:3",
+          "op": "jump",
+          "record_id": 23,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 23,
+            "record_bytes": 1647,
+            "offset": 38260
+          },
+          "target": "M01062:tlk:end"
+        },
+        {
+          "id": "M01062:tlk:24",
+          "op": "record",
+          "record_id": 24,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 24,
+            "record_bytes": 1647,
+            "offset": 39907
+          }
+        },
+        {
+          "id": "M01062:tlk:24:1",
+          "op": "unlock_recipe",
+          "record_id": 24,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 24,
+            "record_bytes": 1647,
+            "offset": 39907
+          }
+        },
+        {
+          "id": "M01062:tlk:24:2",
+          "op": "test_flag_bit",
+          "record_id": 24,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 24,
+            "record_bytes": 1647,
+            "offset": 39907
+          },
+          "index": 28,
+          "bit": 3,
+          "if_true": "M01062:tlk:30",
+          "if_false": "M01062:tlk:24:3"
+        },
+        {
+          "id": "M01062:tlk:24:3",
+          "op": "jump",
+          "record_id": 24,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 24,
+            "record_bytes": 1647,
+            "offset": 39907
+          },
+          "target": "M01062:tlk:25"
+        },
+        {
+          "id": "M01062:tlk:25",
+          "op": "record",
+          "record_id": 25,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 25,
+            "record_bytes": 1647,
+            "offset": 41554
+          }
+        },
+        {
+          "id": "M01062:tlk:25:1",
+          "op": "unlock_recipe",
+          "record_id": 25,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 25,
+            "record_bytes": 1647,
+            "offset": 41554
+          }
+        },
+        {
+          "id": "M01062:tlk:25:2",
+          "op": "jump",
+          "record_id": 25,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 25,
+            "record_bytes": 1647,
+            "offset": 41554
+          },
+          "target": "M01062:tlk:26"
+        },
+        {
+          "id": "M01062:tlk:26",
+          "op": "record",
+          "record_id": 26,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 26,
+            "record_bytes": 1647,
+            "offset": 43201
+          }
+        },
+        {
+          "id": "M01062:tlk:26:1",
+          "op": "unlock_recipe",
+          "record_id": 26,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 26,
+            "record_bytes": 1647,
+            "offset": 43201
+          }
+        },
+        {
+          "id": "M01062:tlk:26:2",
+          "op": "jump",
+          "record_id": 26,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 26,
+            "record_bytes": 1647,
+            "offset": 43201
+          },
+          "target": "M01062:tlk:27"
+        },
+        {
+          "id": "M01062:tlk:27",
+          "op": "record",
+          "record_id": 27,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 27,
+            "record_bytes": 1647,
+            "offset": 44848
+          }
+        },
+        {
+          "id": "M01062:tlk:27:1",
+          "op": "unlock_recipe",
+          "record_id": 27,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 27,
+            "record_bytes": 1647,
+            "offset": 44848
+          }
+        },
+        {
+          "id": "M01062:tlk:27:2",
+          "op": "jump",
+          "record_id": 27,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 27,
+            "record_bytes": 1647,
+            "offset": 44848
+          },
+          "target": "M01062:tlk:28"
+        },
+        {
+          "id": "M01062:tlk:28",
+          "op": "record",
+          "record_id": 28,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 28,
+            "record_bytes": 1647,
+            "offset": 46495
+          }
+        },
+        {
+          "id": "M01062:tlk:28:1",
+          "op": "unlock_recipe",
+          "record_id": 28,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 28,
+            "record_bytes": 1647,
+            "offset": 46495
+          }
+        },
+        {
+          "id": "M01062:tlk:28:2",
+          "op": "jump",
+          "record_id": 28,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 28,
+            "record_bytes": 1647,
+            "offset": 46495
+          },
+          "target": "M01062:tlk:29"
+        },
+        {
+          "id": "M01062:tlk:29",
+          "op": "record",
+          "record_id": 29,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 29,
+            "record_bytes": 1647,
+            "offset": 48142
+          }
+        },
+        {
+          "id": "M01062:tlk:29:1",
+          "op": "set_flag_bit",
+          "record_id": 29,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 29,
+            "record_bytes": 1647,
+            "offset": 48142
+          },
+          "index": 28,
+          "bit": 3
+        },
+        {
+          "id": "M01062:tlk:29:2",
+          "op": "jump",
+          "record_id": 29,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 29,
+            "record_bytes": 1647,
+            "offset": 48142
+          },
+          "target": "M01062:tlk:30"
+        },
+        {
+          "id": "M01062:tlk:30",
+          "op": "record",
+          "record_id": 30,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 30,
+            "record_bytes": 1647,
+            "offset": 49789
+          }
+        },
+        {
+          "id": "M01062:tlk:30:1",
+          "op": "test_flag_bit",
+          "record_id": 30,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 30,
+            "record_bytes": 1647,
+            "offset": 49789
+          },
+          "index": 419,
+          "bit": 3,
+          "if_true": "M01062:tlk:31",
+          "if_false": "M01062:tlk:30:2"
+        },
+        {
+          "id": "M01062:tlk:30:2",
+          "op": "choice",
+          "record_id": 30,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 30,
+            "record_bytes": 1647,
+            "offset": 49789
+          },
+          "text_id": "M01062:TLK:30",
+          "presentation": {
+            "speaker": 11,
+            "style": 1,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          },
+          "choices": [
+            {
+              "index": 0,
+              "recordId": 11,
+              "text_id": "M01062:TLK:30:choice:0",
+              "target": "M01062:tlk:11"
+            },
+            {
+              "index": 1,
+              "recordId": 5,
+              "text_id": "M01062:TLK:30:choice:1",
+              "target": "M01062:tlk:5"
+            }
+          ]
+        },
+        {
+          "id": "M01062:tlk:30:3",
+          "op": "jump",
+          "record_id": 30,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 30,
+            "record_bytes": 1647,
+            "offset": 49789
+          },
+          "target": "M01062:tlk:end"
+        },
+        {
+          "id": "M01062:tlk:31",
+          "op": "record",
+          "record_id": 31,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 31,
+            "record_bytes": 1647,
+            "offset": 51436
+          }
+        },
+        {
+          "id": "M01062:tlk:31:1",
+          "op": "test_flag_bit",
+          "record_id": 31,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 31,
+            "record_bytes": 1647,
+            "offset": 51436
+          },
+          "index": 419,
+          "bit": 5,
+          "if_true": "M01062:tlk:32",
+          "if_false": "M01062:tlk:31:2"
+        },
+        {
+          "id": "M01062:tlk:31:2",
+          "op": "choice",
+          "record_id": 31,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 31,
+            "record_bytes": 1647,
+            "offset": 51436
+          },
+          "text_id": "M01062:TLK:31",
+          "presentation": {
+            "speaker": 11,
+            "style": 1,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          },
+          "choices": [
+            {
+              "index": 0,
+              "recordId": 11,
+              "text_id": "M01062:TLK:31:choice:0",
+              "target": "M01062:tlk:11"
+            },
+            {
+              "index": 1,
+              "recordId": 5,
+              "text_id": "M01062:TLK:31:choice:1",
+              "target": "M01062:tlk:5"
+            }
+          ]
+        },
+        {
+          "id": "M01062:tlk:31:3",
+          "op": "jump",
+          "record_id": 31,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 31,
+            "record_bytes": 1647,
+            "offset": 51436
+          },
+          "target": "M01062:tlk:end"
+        },
+        {
+          "id": "M01062:tlk:32",
+          "op": "record",
+          "record_id": 32,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 32,
+            "record_bytes": 1647,
+            "offset": 53083
+          }
+        },
+        {
+          "id": "M01062:tlk:32:1",
+          "op": "test_flag_bit",
+          "record_id": 32,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 32,
+            "record_bytes": 1647,
+            "offset": 53083
+          },
+          "index": 419,
+          "bit": 7,
+          "if_true": "M01062:tlk:33",
+          "if_false": "M01062:tlk:32:2"
+        },
+        {
+          "id": "M01062:tlk:32:2",
+          "op": "choice",
+          "record_id": 32,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 32,
+            "record_bytes": 1647,
+            "offset": 53083
+          },
+          "text_id": "M01062:TLK:32",
+          "presentation": {
+            "speaker": 11,
+            "style": 1,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          },
+          "choices": [
+            {
+              "index": 0,
+              "recordId": 11,
+              "text_id": "M01062:TLK:32:choice:0",
+              "target": "M01062:tlk:11"
+            },
+            {
+              "index": 1,
+              "recordId": 5,
+              "text_id": "M01062:TLK:32:choice:1",
+              "target": "M01062:tlk:5"
+            }
+          ]
+        },
+        {
+          "id": "M01062:tlk:32:3",
+          "op": "jump",
+          "record_id": 32,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 32,
+            "record_bytes": 1647,
+            "offset": 53083
+          },
+          "target": "M01062:tlk:end"
+        },
+        {
+          "id": "M01062:tlk:33",
+          "op": "record",
+          "record_id": 33,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 33,
+            "record_bytes": 1647,
+            "offset": 54730
+          }
+        },
+        {
+          "id": "M01062:tlk:33:1",
+          "op": "test_flag_bit",
+          "record_id": 33,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 33,
+            "record_bytes": 1647,
+            "offset": 54730
+          },
+          "index": 419,
+          "bit": 9,
+          "if_true": "M01062:tlk:34",
+          "if_false": "M01062:tlk:33:2"
+        },
+        {
+          "id": "M01062:tlk:33:2",
+          "op": "choice",
+          "record_id": 33,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 33,
+            "record_bytes": 1647,
+            "offset": 54730
+          },
+          "text_id": "M01062:TLK:33",
+          "presentation": {
+            "speaker": 11,
+            "style": 1,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          },
+          "choices": [
+            {
+              "index": 0,
+              "recordId": 11,
+              "text_id": "M01062:TLK:33:choice:0",
+              "target": "M01062:tlk:11"
+            },
+            {
+              "index": 1,
+              "recordId": 5,
+              "text_id": "M01062:TLK:33:choice:1",
+              "target": "M01062:tlk:5"
+            }
+          ]
+        },
+        {
+          "id": "M01062:tlk:33:3",
+          "op": "jump",
+          "record_id": 33,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 33,
+            "record_bytes": 1647,
+            "offset": 54730
+          },
+          "target": "M01062:tlk:end"
+        },
+        {
+          "id": "M01062:tlk:34",
+          "op": "record",
+          "record_id": 34,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 34,
+            "record_bytes": 1647,
+            "offset": 56377
+          }
+        },
+        {
+          "id": "M01062:tlk:34:1",
+          "op": "choice",
+          "record_id": 34,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 34,
+            "record_bytes": 1647,
+            "offset": 56377
+          },
+          "text_id": "M01062:TLK:34",
+          "presentation": {
+            "speaker": 11,
+            "style": 1,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          },
+          "choices": [
+            {
+              "index": 0,
+              "recordId": 11,
+              "text_id": "M01062:TLK:34:choice:0",
+              "target": "M01062:tlk:11"
+            },
+            {
+              "index": 1,
+              "recordId": 5,
+              "text_id": "M01062:TLK:34:choice:1",
+              "target": "M01062:tlk:5"
+            }
+          ]
+        },
+        {
+          "id": "M01062:tlk:34:2",
+          "op": "jump",
+          "record_id": 34,
+          "source": {
+            "path": "Map/m01062.TLK",
+            "sha256": "e54bff3918fd9bb8bbf61d1bd766e903ffc1dfed2af1a56b76cfcf2eeec1b2e1",
+            "record_id": 34,
+            "record_bytes": 1647,
+            "offset": 56377
+          },
+          "target": "M01062:tlk:end"
+        },
+        {
+          "id": "M01062:tlk:end",
+          "op": "end"
+        }
+      ]
+    }
+  },
+  "events": [],
+  "resources": {
+    "npcs_by_map": [
+      {
+        "id": "M01062-role-10",
+        "slot_zero_based": 10,
+        "speaker_slot_one_based": 11,
+        "name": "男魔導士炎",
+        "resource_id": "056",
+        "x": 320,
+        "y": 320,
+        "x_native": 160,
+        "y_native": 160,
+        "direction": 0,
+        "direction_raw_45": 0,
+        "hidden": false,
+        "hidden_raw_97": 0,
+        "hidden_on_load_raw_2ac": 0,
+        "initial_visibility_evidence": [
+          "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+        ],
+        "raw_field_41": 10,
+        "action_mode_raw_2f": 0,
+        "animation_index_raw_83": 0,
+        "frame_index_raw_7b": 0,
+        "actor_mode_raw_f0": 0,
+        "behavior_raw_c5": 0,
+        "behavior_state_raw_f5": 1,
+        "movement_direction_raw_2b1": 0,
+        "blend_mode_raw_4bd": 0,
+        "source": {
+          "path": "Map/m01062.dat",
+          "sha256": "8ddf978ff4aad805202a918dd9aa69b30a521d66121babd9659f4ffc817f143f",
+          "offset": 127430,
+          "bytes": 1221
+        }
+      },
+      {
+        "id": "M01062-role-11",
+        "slot_zero_based": 11,
+        "speaker_slot_one_based": 12,
+        "name": "合成魔導士",
+        "resource_id": "057",
+        "x": 160,
+        "y": 416,
+        "x_native": 80,
+        "y_native": 208,
+        "direction": 0,
+        "direction_raw_45": 0,
+        "hidden": false,
+        "hidden_raw_97": 0,
+        "hidden_on_load_raw_2ac": 0,
+        "initial_visibility_evidence": [
+          "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+        ],
+        "raw_field_41": 11,
+        "action_mode_raw_2f": 0,
+        "animation_index_raw_83": 0,
+        "frame_index_raw_7b": 0,
+        "actor_mode_raw_f0": 0,
+        "behavior_raw_c5": 0,
+        "behavior_state_raw_f5": 1,
+        "movement_direction_raw_2b1": 0,
+        "blend_mode_raw_4bd": 0,
+        "source": {
+          "path": "Map/m01062.dat",
+          "sha256": "8ddf978ff4aad805202a918dd9aa69b30a521d66121babd9659f4ffc817f143f",
+          "offset": 128651,
+          "bytes": 1221
+        }
+      }
+    ],
+    "exits_by_map": [
+      {
+        "id": 1,
+        "state": "ready",
+        "cells": [
+          {
+            "x": 43,
+            "y": 20
+          },
+          {
+            "x": 44,
+            "y": 20
+          },
+          {
+            "x": 44,
+            "y": 21
+          }
+        ],
+        "target_map": "M01060",
+        "entry": {
+          "x": 736,
+          "y": 800,
+          "direction": 0,
+          "cell_x": 46,
+          "cell_y": 50,
+          "native_x": 368,
+          "native_y": 400
+        },
+        "conditions": [],
+        "source": {
+          "path": "Map/m01062.dat",
+          "sha256": "8ddf978ff4aad805202a918dd9aa69b30a521d66121babd9659f4ffc817f143f",
+          "descriptor_offset": 113010,
+          "descriptor_bytes": 66,
+          "descriptor_hex": "00000000000000000000000000000000006d30313036302e646174000000000000000000000004000000040000000000000000000000000000000000000000000000",
+          "compact_field_expansion_evidence": null,
+          "target_path": "Map/m01060.dat",
+          "target_sha256": "5ff8f2a3c43649fff1efc4eccd878f4a662d905f6ba3404948e47ec9240a3826",
+          "target_entry_marker": 4,
+          "entry_sort_code": 4,
+          "entry_terrain_raw": 0,
+          "entry_trigger_raw": 0,
+          "entry_scan_cells": [
+            {
+              "x": 46,
+              "y": 50,
+              "offset": 278514
+            }
+          ],
+          "entry_sorted_cells": [
+            {
+              "x": 46,
+              "y": 50
+            }
+          ],
+          "entry_sort": "x descending; stable ties",
+          "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
+          "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
+          "native_evidence": {
+            "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+            "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+            "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+            "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+          }
+        },
+        "execution": "Native transition descriptor only; map-entry TLK/ANM and their once-only checks must complete separately.",
+        "limitations": [
+          "Static source/code evidence; original timing not observed",
+          "Continuous keyboard movement is runtime policy"
+        ]
+      }
+    ],
+    "trigger_regions": [],
+    "interactive_objects": [],
+    "object_animations": []
+  },
+  "route": null,
+  "texts": {
+    "M01062:TLK:1": "多姆：这里是合成工会位于研发工房的合成处，但我们只替工会会员服务，若是你想合成物品，请先加入会员。",
+    "M01062:TLK:2": "加入会员？请问到哪边加入呢？",
+    "M01062:TLK:3": "多姆：请到合成工会找我们会长克姆罗斯，他会告诉你怎样可以加入工会。",
+    "M01062:TLK:4": "多姆：喔，你是合成工会火钳级会员，目前我可以帮你合成精铁、精刚、白银和黄金，要我替你服务的吗？",
+    "M01062:TLK:4:choice:0": "我要合成物品！",
+    "M01062:TLK:4:choice:1": "目前不用！",
+    "M01062:TLK:5": "想要合成物品再来找我！愿合成的花火与你同在。",
+    "M01062:TLK:6": "",
+    "M01062:TLK:7": "",
+    "M01062:TLK:8": "",
+    "M01062:TLK:9": "",
+    "M01062:TLK:10": "",
+    "M01062:TLK:11": "",
+    "M01062:TLK:12": "最近生意越来越冷清了。",
+    "M01062:TLK:13": "music1.anm",
+    "M01062:TLK:14": "不管有没有唱歌,都执行过动画了!",
+    "M01062:TLK:15": "",
+    "M01062:TLK:16": "",
+    "M01062:TLK:17": "",
+    "M01062:TLK:18": "",
+    "M01062:TLK:19": "",
+    "M01062:TLK:20": "",
+    "M01062:TLK:21": "",
+    "M01062:TLK:22": "",
+    "M01062:TLK:23": "多姆：你已经是铁钻级会员，除了之前基本合成物品外，我现在可以帮你合成赤金、白金、乌金、铂母、赤金之精、铬丝白金和铂丝乌金。需要服务吗？",
+    "M01062:TLK:23:choice:0": "我要合成物品！",
+    "M01062:TLK:23:choice:1": "目前不用！",
+    "M01062:TLK:24": "",
+    "M01062:TLK:25": "",
+    "M01062:TLK:26": "",
+    "M01062:TLK:27": "",
+    "M01062:TLK:28": "",
+    "M01062:TLK:29": "",
+    "M01062:TLK:30": "多姆：你已经是烈焰级会员，除了之前的合成物品外，我现在可以再帮你合成合金A、合金B、合金C、合金D及合金E。需要服务吗？",
+    "M01062:TLK:30:choice:0": "我要合成物品！",
+    "M01062:TLK:30:choice:1": "目前不用！",
+    "M01062:TLK:31": "多姆：你好，巨锤级会员，除了之前可合成的东西，目前我还可以再帮你合成火山水晶、云雾水晶、深海水晶及苔藓水晶！需要服务吗？",
+    "M01062:TLK:31:choice:0": "我要合成物品！",
+    "M01062:TLK:31:choice:1": "目前不用！",
+    "M01062:TLK:32": "多姆：你好，神钻级会员，除了之前可以合成的项目外，目前你的等级我可以再帮你合成血石、珊瑚大珠、冰晶、刚宝钻石、紫龙晶、通灵水晶、茶晶水晶、浑天晶、雷晶、绿贝水晶和烈焰水晶！需要服务吗？",
+    "M01062:TLK:32:choice:0": "我要合成物品！",
+    "M01062:TLK:32:choice:1": "目前不用！",
+    "M01062:TLK:33": "多姆：你好，神炎级会员，除了之前可以合成的项目外，目前你的等级我可以再帮你合成嗔火珠、赤月水晶、琉璃水晶、蚀日水晶、幻影水晶、芙蓉水晶、镇兽水晶、甲壳水晶、烟晶、水晶球和水晶簇！需要服务吗？",
+    "M01062:TLK:33:choice:0": "我要合成物品！",
+    "M01062:TLK:33:choice:1": "目前不用！",
+    "M01062:TLK:34": "多姆：你好，神锤级会员，目前你的等级我可以帮你合成所有的物品。需要服务吗？",
+    "M01062:TLK:34:choice:0": "我要合成物品！",
+    "M01062:TLK:34:choice:1": "目前不用！"
+  }
+}

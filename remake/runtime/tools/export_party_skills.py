@@ -244,10 +244,19 @@ def source_status_block(c, index):
             block_offset=skill['offset'] + 0x16b, fixed_bytes=0x41d, effect_bytes=0xc6))
 
 
-def extend_status_descriptors(status, blocks, sources):
+def extend_status_descriptors(status, blocks, sources, *, retain_skills=True):
     status['effects'] = dict(status.get('effects', {}))
     for effect_id in sorted({row['effect_id_raw'] for row in blocks.values() if row['effect_id_raw']}):
         path = ROOT / f'Fight_Role/Status/{effect_id:03d}.dgp'
+        if not path.is_file():
+            #507AA0 zeros each status frame count before51FCC4. Missing files
+            #leave it zero;509E10 uses80ms and skips visual-frame advancement.
+            status['effects'][str(effect_id)] = dict(id_raw=effect_id, interval_ms=80, frame_count=0,
+                source=dict(path=path.relative_to(ROOT).as_posix(), source_exists=False),
+                evidence=['ev_1c8d0a0767a10475883a351f8834c495e46431f1056ef9b80babf2cb4eb73df3',
+                    'ev_9abd5ba6645433c0752e35b69015a7f998c9c9b054862a5afdfadc7499e40962'],
+                policy='Original missing status DGP: preserve zero frames and native80ms status clock; no replacement art.')
+            continue
         graphics = DGP(path)
         if len(graphics.actions) != 1 or graphics.actions[0]['directions'] != 1:
             raise ValueError(f'Status {effect_id}: unsupported action table')
@@ -255,7 +264,8 @@ def extend_status_descriptors(status, blocks, sources):
         status['effects'][str(effect_id)] = dict(id_raw=effect_id,
             interval_ms=graphics.actions[0]['interval_raw'], frame_count=graphics.actions[0]['frames_per_direction'],
             source=dict(path=path.relative_to(ROOT).as_posix(), sha256=graphics.sha256, action_raw_hex=graphics.raw_actions[0].hex()))
-    status['skills'].update(blocks)
+    if retain_skills:
+        status['skills'].update(blocks)
 
 
 def export_one_effect(ident, p, asset_group):

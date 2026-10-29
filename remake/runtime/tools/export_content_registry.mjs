@@ -15,10 +15,15 @@ const local=value=>path.join(web,value.replace(/^\//,''));
 async function read(name){const raw=await readFile(local(name));inputs[name]=digest(raw);return JSON.parse(raw);}
 export async function auditContentFiles(){
   const {definition,content,input_sha256}=await readContentDefinition();Object.assign(inputs,input_sha256);
-  const names={catalog:'catalog',seed:'opening_seed',story:'chapter_story',resources:'chapter_map_resources',party:'party_combat',commands:'party_skills',forest:'forest_combat',ai:'forest_ai',rewards:'party_rewards',reactions:'party_reactions',status:'forest_status',encounters:'encounters',view:'party_battle_view',itemView:'item_presentation',lifecycle:'battle_lifecycle',menu:'operation_menu'};
+  const names={catalog:'catalog',seed:'opening_seed',story:'chapter_story',resources:'chapter_map_resources',party:'party_combat',commands:'party_skills',forest:'forest_combat',ai:'forest_ai',rewards:'party_rewards',reactions:'party_reactions',status:'forest_status',encounters:'encounters',view:'party_battle_view',items:'items',itemView:'item_presentation',lifecycle:'battle_lifecycle',menu:'operation_menu'};
   const data=Object.fromEntries(await Promise.all(Object.entries(names).map(async([key,name])=>[key,await read(`data/${name}.json`)])));
   const counts=validateContentDependencies(content,data),checked=new Set();
   const readiness=requireContentReadiness(content,data.story,data.resources);
+  for(const [id,sources]of Object.entries(data.items.catalog.equipment_admission.sources)){
+    if(sources.some(source=>['tlk-shop-item','registered-recipe-product'].includes(source.kind))
+      &&data.items.definitions[id].behavior.kind==='source-only')
+      throw new Error(`商店商品或配方产物 ${id} 的实际用途尚未恢复`);
+  }
   for(const source of [...Object.values(content.roles).map(role=>role.source),...Object.values(content.programs)]){
     const raw=await readFile(path.join(original,source.path));
     if(digest(raw)!==source.sha256)throw new Error(`原输入与内容登记不同：${source.path}`);

@@ -3575,6 +3575,7 @@
         "byte_plus7_raw": 0,
         "byte_plus8_raw": 0,
         "condition_byte_raw_0b": 0,
+        "native_combination_hex": "00008c010000000100000000008201000000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
         "text_id": "M01050:TLK:119",
         "portrait_id": 0,
         "choices": []
@@ -12384,7 +12385,7 @@
         },
         {
           "id": "M01050:tlk:119:1",
-          "op": "unsupported",
+          "op": "test_native_combination",
           "record_id": 119,
           "source": {
             "path": "Map/m01050.TLK",
@@ -12393,20 +12394,8 @@
             "record_bytes": 1647,
             "offset": 196372
           },
-          "reason": "对白类型 4 尚未接入"
-        },
-        {
-          "id": "M01050:tlk:119:2",
-          "op": "jump",
-          "record_id": 119,
-          "source": {
-            "path": "Map/m01050.TLK",
-            "sha256": "6c5d2be29f120977d70c500abd11c8d76f11abba650be689e2dc44f4ae1dc182",
-            "record_id": 119,
-            "record_bytes": 1647,
-            "offset": 196372
-          },
-          "target": "M01050:tlk:end"
+          "if_true": "M01050:tlk:120",
+          "if_false": "M01050:tlk:end"
         },
         {
           "id": "M01050:tlk:120",
@@ -13100,6 +13089,119 @@
     ],
     "exits_by_map": [
       {
+        "id": 1,
+        "state": "ready",
+        "cells": [
+          {
+            "x": 2,
+            "y": 36
+          },
+          {
+            "x": 3,
+            "y": 36
+          },
+          {
+            "x": 2,
+            "y": 37
+          },
+          {
+            "x": 2,
+            "y": 38
+          },
+          {
+            "x": 2,
+            "y": 39
+          },
+          {
+            "x": 2,
+            "y": 40
+          },
+          {
+            "x": 2,
+            "y": 41
+          }
+        ],
+        "target_map": "M01040",
+        "entry": {
+          "x": 1216,
+          "y": 1232,
+          "direction": 4,
+          "cell_x": 76,
+          "cell_y": 77,
+          "native_x": 608,
+          "native_y": 616
+        },
+        "conditions": [],
+        "source": {
+          "path": "Map/m01050.dat",
+          "sha256": "48ae98e95e9ea414e716c85440d381a5bc29cc2ec00ccd3b30c2ef314d4145fc",
+          "descriptor_offset": 636082,
+          "descriptor_bytes": 66,
+          "descriptor_hex": "00000000000000000000000000000000006d30313034302e646174000000000000000000000002000000030000000000000000000000000000000000000000000000",
+          "compact_field_expansion_evidence": null,
+          "target_path": "Map/m01040.dat",
+          "target_sha256": "6e26d1f0f043cdf760b04b012745ad9dd2545c4e6c8ebc55b129bd15728406cb",
+          "target_entry_marker": 2,
+          "entry_sort_code": 3,
+          "entry_terrain_raw": 0,
+          "entry_trigger_raw": 0,
+          "entry_scan_cells": [
+            {
+              "x": 76,
+              "y": 77,
+              "offset": 576882
+            },
+            {
+              "x": 77,
+              "y": 77,
+              "offset": 576946
+            },
+            {
+              "x": 76,
+              "y": 78,
+              "offset": 584306
+            },
+            {
+              "x": 77,
+              "y": 78,
+              "offset": 584370
+            }
+          ],
+          "entry_sorted_cells": [
+            {
+              "x": 76,
+              "y": 77
+            },
+            {
+              "x": 76,
+              "y": 78
+            },
+            {
+              "x": 77,
+              "y": 77
+            },
+            {
+              "x": 77,
+              "y": 78
+            }
+          ],
+          "entry_sort": "x ascending; stable ties",
+          "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
+          "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
+          "native_evidence": {
+            "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+            "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+            "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+            "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+          }
+        },
+        "execution": "Native transition descriptor only; map-entry TLK/ANM and their once-only checks must complete separately.",
+        "limitations": [
+          "Static source/code evidence; original timing not observed",
+          "Continuous keyboard movement is runtime policy"
+        ]
+      },
+      {
         "id": 2,
         "state": "ready",
         "cells": [
@@ -13170,6 +13272,169 @@
             }
           ],
           "entry_sort": "row-major scan; first four; missing followers repeat last observed cell",
+          "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
+          "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
+          "native_evidence": {
+            "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+            "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+            "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+            "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+          }
+        },
+        "execution": "Native transition descriptor only; map-entry TLK/ANM and their once-only checks must complete separately.",
+        "limitations": [
+          "Static source/code evidence; original timing not observed",
+          "Continuous keyboard movement is runtime policy"
+        ]
+      },
+      {
+        "id": 3,
+        "state": "ready",
+        "cells": [
+          {
+            "x": 53,
+            "y": 38
+          },
+          {
+            "x": 54,
+            "y": 38
+          }
+        ],
+        "target_map": "M01051",
+        "entry": {
+          "x": 512,
+          "y": 416,
+          "direction": 4,
+          "cell_x": 32,
+          "cell_y": 26,
+          "native_x": 256,
+          "native_y": 208
+        },
+        "conditions": [],
+        "source": {
+          "path": "Map/m01050.dat",
+          "sha256": "48ae98e95e9ea414e716c85440d381a5bc29cc2ec00ccd3b30c2ef314d4145fc",
+          "descriptor_offset": 636214,
+          "descriptor_bytes": 66,
+          "descriptor_hex": "00000000000000000000000000000000006d30313035312e646174000000000000000000000001000000030000000000000000000000000000000000000000000000",
+          "compact_field_expansion_evidence": null,
+          "target_path": "Map/m01051.dat",
+          "target_sha256": "8308a293a4f3efba144faabfe3f1a143f3aee3c81b47b9d87109e135b204f20f",
+          "target_entry_marker": 1,
+          "entry_sort_code": 3,
+          "entry_terrain_raw": 0,
+          "entry_trigger_raw": 0,
+          "entry_scan_cells": [
+            {
+              "x": 32,
+              "y": 26,
+              "offset": 73970
+            }
+          ],
+          "entry_sorted_cells": [
+            {
+              "x": 32,
+              "y": 26
+            }
+          ],
+          "entry_sort": "x ascending; stable ties",
+          "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
+          "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
+          "native_evidence": {
+            "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+            "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+            "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+            "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+          }
+        },
+        "execution": "Native transition descriptor only; map-entry TLK/ANM and their once-only checks must complete separately.",
+        "limitations": [
+          "Static source/code evidence; original timing not observed",
+          "Continuous keyboard movement is runtime policy"
+        ]
+      },
+      {
+        "id": 4,
+        "state": "ready",
+        "cells": [
+          {
+            "x": 76,
+            "y": 36
+          },
+          {
+            "x": 75,
+            "y": 37
+          },
+          {
+            "x": 76,
+            "y": 37
+          }
+        ],
+        "target_map": "M01052",
+        "entry": {
+          "x": 560,
+          "y": 384,
+          "direction": 4,
+          "cell_x": 35,
+          "cell_y": 24,
+          "native_x": 280,
+          "native_y": 192
+        },
+        "conditions": [],
+        "source": {
+          "path": "Map/m01050.dat",
+          "sha256": "48ae98e95e9ea414e716c85440d381a5bc29cc2ec00ccd3b30c2ef314d4145fc",
+          "descriptor_offset": 636280,
+          "descriptor_bytes": 66,
+          "descriptor_hex": "00000000000000000000000000000000006d30313035322e646174000000000000000000000001000000030000000000000000000000000000000000000000000000",
+          "compact_field_expansion_evidence": null,
+          "target_path": "Map/m01052.dat",
+          "target_sha256": "987ade8946d2970e682621bc631b242b8cdb6dc622f03b56b0d29818ff8f287c",
+          "target_entry_marker": 1,
+          "entry_sort_code": 3,
+          "entry_terrain_raw": 0,
+          "entry_trigger_raw": 0,
+          "entry_scan_cells": [
+            {
+              "x": 35,
+              "y": 24,
+              "offset": 68658
+            },
+            {
+              "x": 36,
+              "y": 24,
+              "offset": 68722
+            },
+            {
+              "x": 35,
+              "y": 25,
+              "offset": 71410
+            },
+            {
+              "x": 36,
+              "y": 25,
+              "offset": 71474
+            }
+          ],
+          "entry_sorted_cells": [
+            {
+              "x": 35,
+              "y": 24
+            },
+            {
+              "x": 35,
+              "y": 25
+            },
+            {
+              "x": 36,
+              "y": 24
+            },
+            {
+              "x": 36,
+              "y": 25
+            }
+          ],
+          "entry_sort": "x ascending; stable ties",
           "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
           "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
           "native_evidence": {

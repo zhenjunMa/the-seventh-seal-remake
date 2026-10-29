@@ -6,6 +6,7 @@ against the independent sparse decoder before atlas assembly.
 from pathlib import Path
 import hashlib
 import json
+import re
 import struct
 import sys
 
@@ -19,6 +20,7 @@ from source.dgp import DGP, DGPError
 from source.map_objects import MapObjects
 from export_combat_presentation import indexed_contribution, native_frame_sequence, NATIVE_IDS
 from export_skill_layers import SourceAudit
+from export_map_shadows import audit_mask, EVIDENCE as SHADOW_EVIDENCE
 from PIL import Image
 
 
@@ -51,14 +53,11 @@ def validate_cf1_action(dgp):
     native_frame_sequence(raw, 0, logical_count, 0)
     if interval == 1 or interval > 0x7fffffff:
         raise DGPError('CF1 source clock cannot be sampled safely')
-    if any(raw[0x56:0x6a]) or raw[0x84]:
-        raise DGPError('CF1 source sound/drawing effect is not recovered')
-    # Some intrinsic-only light resources retain one empty shadow row per
-    # geometry line. Parse every mask strictly; absent coverage has no visual
-    # responsibility. Any actual animated shadow remains outside this adapter.
-    if dgp.shadow_blobs and any(size for frame in range(dgp.frame_count)
-                               for _, spans in dgp.shadow_rows(frame) for _, size in spans):
-        raise DGPError('CF1 animated shadow presentation is not recovered')
+    token = raw[0x56:0x6a].split(b'\0')[0]
+    if token and not re.fullmatch(rb'[A-Za-z0-9_-]+\.wav', token, re.IGNORECASE):
+        raise DGPError('CF1 source sound filename is not recovered')
+    if raw[0x84]:
+        raise DGPError('CF1 source drawing effect is not recovered')
 
 
 def export_bank(dgp, source, key, include_main, *, force_main=False, web=None, checks=None, outputs=None):
@@ -72,7 +71,7 @@ def export_bank(dgp, source, key, include_main, *, force_main=False, web=None, c
     cache_root = RUNTIME if web.resolve() == (RUNTIME/'web').resolve() else web
     cached = resource(cache_root,'map-effect/'+key,
         {'source':dgp.sha256,'path':source,'include_main':include_main,'force_main':force_main},
-        recipe_hash([Path(__file__),tools/'source/dgp.py',tools/'export_skill_layers.py',tools/'export_combat_presentation.py']),produce)
+        recipe_hash([Path(__file__),tools/'source/dgp.py',tools/'export_skill_layers.py',tools/'export_combat_presentation.py',tools/'export_map_shadows.py']),produce)
     if checks is not None: checks.extend(cached['checks'])
     if outputs is not None: outputs.update(cached['outputs'])
     return cached['bank']
@@ -97,6 +96,7 @@ def _export_bank(dgp, source, key, include_main, *, force_main=False, web=None, 
             continue
         main = Image.new('RGBA', (dgp.width * n, dgp.height * dirs)) if include_main else None
         light = Image.new('RGBA', (dgp.width * n, dgp.height * dirs))
+        shadow = Image.new('RGBA', (dgp.width * n, dgp.height * dirs)) if force_main and dgp.shadow_blobs else None
         for direction in range(dirs):
             for frame in range(n):
                 physical = action['first_frame'] + direction * n + frame
@@ -113,6 +113,15 @@ def _export_bank(dgp, source, key, include_main, *, force_main=False, web=None, 
                     assert image.tobytes() == main_pixels
                     main.paste(image, (frame * dgp.width, direction * dgp.height))
                     check['main'] = main_check
+                if shadow is not None:
+                    mask = dgp.decode_shadow(physical)
+                    expected = audit_mask(dgp.shadow_blobs[physical], dgp.width, dgp.height)
+                    if mask.getchannel('A').tobytes() != expected or mask.convert('RGB').getbbox():
+                        raise DGPError('Map object shadow differs from independent native mask replay')
+                    shadow.paste(mask, (frame * dgp.width, direction * dgp.height))
+                    check['shadow'] = dict(covered_pixels=expected.count(128),
+                        rgba_sha256=hashlib.sha256(mask.tobytes()).hexdigest(),
+                        blob_sha256=hashlib.sha256(dgp.shadow_blobs[physical]).hexdigest())
                 checks.append(check)
         item = dict(index=action['index'], frame_count=n, directions=dirs,
                     interval_raw=action['interval_raw'], first_frame=action['first_frame'],
@@ -120,7 +129,9 @@ def _export_bank(dgp, source, key, include_main, *, force_main=False, web=None, 
                     logical_frames=native_frame_sequence(dgp.raw_actions[action['index']], 0,
                         struct.unpack_from('<I', dgp.raw_actions[action['index']], 0x12)[0]
                         if dgp.raw_actions[action['index']][0x0d] & 15 == 0 else n, 0))
-        for channel, atlas in [('main', main), ('intrinsic', light)]:
+        if shadow is not None and not shadow.getbbox():
+            shadow = None
+        for channel, atlas in [('main', main), ('intrinsic', light), ('shadow', shadow)]:
             if atlas is None:
                 continue
             out = web / f'assets/map_effects/{key}/action_{action["index"]:02}_{channel}.png'
@@ -152,6 +163,10 @@ def export():
         record = json.loads((RUNTIME / 'evidence/fire_valley_20261025' / filename).read_text(encoding='utf-8'))
         native_records.append(record)
         wanted.add(record['evidence_id'])
+    shadow_native = json.loads((RUNTIME / 'evidence/movement_audit_20261023/native_evidence.json').read_text(encoding='utf-8'))
+    native_records.extend(row for row in shadow_native['records'] if row['evidence_id'] in SHADOW_EVIDENCE)
+    wanted.update(SHADOW_EVIDENCE)
+    assert {row['evidence_id'] for row in native_records} == wanted
     assert all(row['subject']['digest']['sha256'] == sources['GAME.exe'] for row in native_records)
 
     def bank(source, key, include_main, *, force_main=False):
@@ -190,8 +205,10 @@ def export():
                 continue
             source = current['source']['path']
             sources[source] = sha(ROOT / source)
-            if cf1 and struct.unpack_from('<I', raw, 0xf6)[0]:
-                raise DGPError('CF1 scripted interaction has not been recovered')
+            # 410850 queues F6 interactions without changing D0. 4137C0
+            # reads F6 only in state1; ordinary state0 uses the same idle clock.
+            if cf1 and struct.unpack_from('<I', raw, 0xf6)[0] and raw[0xd0] != 0:
+                raise DGPError('CF1 scripted interaction state has not been recovered')
             objects.append(dict(index=obj['index'], bank=current['id'].lower() + '_' + Path(obj['source']).stem,
                 behavior_raw_cf=raw[0xcf], source_record_offset=table.objects[obj['index']]['offset'],
                 map_id=current['id'], source_record_raw_hex=raw.hex(), fixed_clock_raw_b4=raw[0xb4],
@@ -203,6 +220,7 @@ def export():
     write(manifest, dict(schema='seventh-seal-map-effects', version=1, roles=roles, maps=maps,
         object_banks=object_banks, blend='lighter', evidence=sorted(wanted),
         limits=['Canvas additive RGB is an 8-bit presentation adaptation of native RGB565/555.',
+                'Source black alpha128 map-object shadow masks approximate native RGB565/555 destination component halving.',
                 'CF1 visual clocks use scene-local CRT; the original full global CRT stream has not been observed. World/encounter RNG is unchanged.',
                 'No original executable execution or pixel/time-identical comparison is claimed.']))
     outputs['/' + manifest.relative_to(WEB).as_posix()] = sha(manifest)

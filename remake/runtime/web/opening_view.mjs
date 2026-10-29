@@ -151,8 +151,8 @@ export class OpeningView {
             const ticks=this.effects.reveal_ticks??40;actor.alpha=15/255;
             await this.tween(ticks*tickMs,t=>{actor.alpha=Math.min(1,(15+6*Math.floor(t*ticks))/255);},signal);
             actor.alpha=1;
-          }else if(payload.nativeStateRaw===2){
-            actor.effect=new ActorEffectView(actor,kind==='behavior'?'rise':'fall');
+          }else if(payload.nativeStateRaw===2||kind==='behavior'&&payload.nativeStateRaw===1){
+            actor.effect=new ActorEffectView(actor,payload.nativeStateRaw===1?'scatter':kind==='behavior'?'rise':'fall');
             try{await this.tween(particleTicks*tickMs,t=>actor.effect.update(Math.min(particleTicks-1,Math.floor(t*particleTicks))),signal);}
             finally{actor.effect=null;}
             if(kind==='behavior')actor.visible=false;
@@ -249,8 +249,8 @@ export class OpeningView {
     return [...this.actors.entries()].filter(([,a]) => a.visible).map(([slot,actor]) => {
       const r=actor.role,a=r.actions.find(a=>a.index===actor.action);
       return {key:`opening:${slot}`,layer,sort_y:actor.y+32,alpha:actor.alpha,
-      blend:actor.effect?.kind==='rise'?'lighter':'source-over',
-      pose:actor.effect?{image:actor.effect.canvas,x:actor.x+16-r.anchor.x,y:actor.y-r.anchor.y-160}
+      blend:actor.effect&&['rise','scatter'].includes(actor.effect.kind)?'lighter':'source-over',
+      pose:actor.effect?{image:actor.effect.canvas,x:actor.x+16-r.anchor.x-(actor.effect.offsetX??0),y:actor.y-r.anchor.y-160}
         :{image:a.bitmap,light:a.intrinsic_bitmap,shadow:a.shadow_bitmap,shadow_geometry:a.shadow_geometry,sx:actor.frame*r.frame_width,sy:actor.direction*r.frame_height,
           width:r.frame_width,height:r.frame_height,x:actor.x+16-r.anchor.x,y:actor.y-r.anchor.y},
       draw: ctx => {

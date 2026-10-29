@@ -4,6 +4,7 @@ import {readFileSync} from 'node:fs';
 import {MapNpcRuntime,decodeNpcBehavior,npcPath} from '../web/core/map_npcs.mjs';
 import {MovementMap} from '../web/core/movement.mjs';
 import {createNativeRng} from '../web/core/combat_rules.mjs';
+import {captureMapNpcState,restoreMapNpcState} from '../web/core/map_npc_state.mjs';
 
 const read=name=>JSON.parse(readFileSync(new URL('../web/data/'+name+'.json',import.meta.url),'utf8'));
 const story=read('chapter_story'),resources=read('chapter_map_resources'),village=read('maps/m17020');
@@ -85,6 +86,15 @@ test('scene inheritance and ANM handoff preserve live positions without sharing 
   assert.equal(next.npc.motion.frame,2);assert.deepEqual(first.runtime.snapshot(),before);
   next.runtime.adoptActors(new Map([[10,{x:810,y:824,direction:3,visible:true,action:1,frame:6}]]));
   assert.equal(next.npc.motion.frame,6);assert.deepEqual([next.npc.motion.x,next.npc.motion.y],[810,824]);
+});
+
+test('saved NPC pose initializes the same action, physical frame and facing in an ordinary map runtime',()=>{
+  const first=fixture();first.runtime.adoptActors(new Map([[10,{x:810,y:824,direction:3,visible:true,action:1,frame:6}]]));
+  const saved={};captureMapNpcState(saved,'M17020',first.scene.npcs);
+  const next=fixture();restoreMapNpcState(next.scene.npcs,saved,'M17020');
+  const runtime=new MapNpcRuntime({scene:next.scene,table:story.maps.M17020,roles:resources.roles});
+  assert.deepEqual([next.npc.x,next.npc.y,next.npc.direction,next.npc.hidden,next.npc.motion.action,next.npc.motion.frame],[810,824,3,false,1,6]);
+  assert.deepEqual(runtime.snapshot().map(row=>[row.action,row.frame]),[[1,6]]);
 });
 
 test('NPC movement does not access persistent world resources, RNG, or revision and previews stay isolated',()=>{

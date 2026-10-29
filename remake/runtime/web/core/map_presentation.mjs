@@ -10,7 +10,7 @@ export function mapPresentation({scene,world,role,action,view,
     .map(obj=>{
       const bitmap=objectBitmap(scene,obj),motion=obj.motion;
       const pose=motion&&bitmap===obj.bitmap
-        ?{image:motion.main,light:motion.intrinsic,sx:motion.frame*motion.width,sy:0,width:motion.width,height:motion.height,x:obj.draw_x,y:obj.draw_y}
+        ?{image:motion.main,light:motion.intrinsic,shadow:motion.shadow,sx:motion.frame*motion.width,sy:0,width:motion.width,height:motion.height,x:obj.draw_x,y:obj.draw_y}
         :{image:bitmap,x:obj.draw_x,y:obj.draw_y};
       return {key:`object:${obj.index}`,layer:obj.layer??0,sort_y:obj.sort_y??0,pose};
     });

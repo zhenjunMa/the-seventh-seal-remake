@@ -1,6 +1,8 @@
 // Shared package contracts. Source TLK/ANM validation belongs to the compiler;
 // the browser validates compact records, references and package fingerprints.
 import {isNativeScriptedBattleNames} from './native_battle_filenames.mjs';
+import {isNativeMapId} from './native_map_identity.mjs';
+import {nativeCombinationHex} from './native_story_combinations.mjs';
 export const STORY_RESOURCE_TABLES=['npcs_by_map','exits_by_map','trigger_regions','interactive_objects','object_animations'];
 export const storyTextId=(mapId,recordId)=>`${mapId}:TLK:${recordId}`;
 const need=(ok,message)=>{if(!ok)throw new Error(`剧情包：${message}`);};
@@ -16,19 +18,27 @@ export function validateStorySelection(selection={events:[],quests:[]}){
 }
 export function validateCompactRecords(table){
   if(table?.dialogue_status==='source-file-absent'){
-    need(/^M\d{5}(?:-\d+)?$/.test(table.id)&&table.source===null&&Array.isArray(table.records)
+    need(isNativeMapId(table.id)&&table.source===null&&Array.isArray(table.records)
       &&table.records.length===0&&table.record_count===0&&table.index_count===0
       &&table.index_nonzero?.length===0&&/^[a-f0-9]{64}$/.test(table.map_source?.sha256??'')
       &&table.map_source.path?.toLowerCase()===`map/${table.id.toLowerCase()}.dat`,'无对白地图来源无效');
     return table;
   }
-  need(table&&/^M\d{5}(?:-\d+)?$/.test(table.id)&&Array.isArray(table.records)&&table.records.length>0&&table.records.length<=10000,'对白表无效');
+  need(table&&isNativeMapId(table.id)&&Array.isArray(table.records)&&table.records.length>0&&table.records.length<=10000,'对白表无效');
   const ids=new Set();
   for(const row of table.records){
     need(Number.isInteger(row.id)&&row.id>0&&!ids.has(row.id)&&row.text_id===storyTextId(table.id,row.id),'对白编号重复或文本编号无效');ids.add(row.id);
     need(typeof row.text_raw==='string'&&['kind','style','region_byte_raw','speaker','condition_type','condition_index','condition_bit','mutation_type','mutation_index','mutation_bit','if_true','next'].every(key=>Number.isInteger(row[key])&&row[key]>=0&&row[key]<=0xffffffff),'对白字段无效');
     need(row.raw_hex===undefined,'运行对白不能携带原始 TLK 字节');
     if(row.kind===5)need(isNativeScriptedBattleNames(row.scripted_battle),'原剧情战斗文件名缺失');
+    if(row.kind===4)nativeCombinationHex(row);
+    if(row.kind===8){
+      const service=row.native_service;
+      need(service&&Number.isInteger(service.kind)&&service.kind>=0&&service.kind<=4&&typeof service.title==='string'
+        &&Array.isArray(service.goods)&&service.goods.length<=32&&service.goods.every(id=>Number.isInteger(id)&&id>=1&&id<=416)
+        &&Array.isArray(service.allowedModes)&&service.allowedModes.length>=1&&service.allowedModes.length<=4
+        &&service.allowedModes.every(mode=>['buy','sell','forge','synthesize'].includes(mode)),'原商店服务字段缺失或无效');
+    }
     need(Array.isArray(row.choices)&&row.choices.length<=3&&new Set(row.choices.map(choice=>choice.index)).size===row.choices.length,'选择表无效');
     for(const choice of row.choices)need(Number.isInteger(choice.index)&&choice.index>=0&&choice.index<3&&typeof choice.text==='string'
       &&choice.text_id===`${row.text_id}:choice:${choice.index}`&&Number.isInteger(choice.recordId)&&choice.recordId>=0,'选择字段无效');

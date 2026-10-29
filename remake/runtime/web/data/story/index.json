@@ -1,19 +1,71 @@
 {
   "schema": "seventh-seal-story-index",
   "version": 2,
-  "definition_sha256": "4298601e2650415c75bd7d844d27da639d6a5004473d21e6c3153171719001be",
+  "definition_sha256": "a6641ad3818be5aed60cee2b9f161a30815ca91c50fd601c0ad032eb78613930",
   "shared": {
     "path": "data/story/shared.json",
-    "sha256": "3fe53538a180f26a7da295b0b233b30a896a3731a691e25906a3bdb46ba38e4d"
+    "sha256": "bac53248eaeb3e39dc87e172c23492fe67ab96cf4c03d3155dfa8e58fc0f797e"
   },
   "maps": {
     "M01060": {
       "path": "data/story/maps/m01060.json",
-      "sha256": "1e41192a6ef07db9de6609baaeeca13f66ff336c7d22fdc30f82ba6e6069c827"
+      "sha256": "eb0edbb0fb31a519f76b1c03b75a56fcd091238a197b36349ae7c9c3955f0623"
     },
     "M01065": {
       "path": "data/story/maps/m01065.json",
       "sha256": "bfba36c1b0c89bd888c4db12c0ec6213dc12d4c1e8a5aaa28599195e2b661fc7"
+    },
+    "M01020A": {
+      "path": "data/story/maps/m01020a.json",
+      "sha256": "6eabbb502003378eee91c711e85e4bb82e1a0307558beb3106c15cc651cec8be"
+    },
+    "M01031": {
+      "path": "data/story/maps/m01031.json",
+      "sha256": "a9a1a2d2ba3c172567f8bf2965861784e1e216519de5b944a7a5ec70643d4b47"
+    },
+    "M01032": {
+      "path": "data/story/maps/m01032.json",
+      "sha256": "cba100b94262872236ef03933d00f1a35070db78782f96a71c182001868be22b"
+    },
+    "M01033": {
+      "path": "data/story/maps/m01033.json",
+      "sha256": "ddb03f18a0a4661779b30f2eaf6f83de37833cc49fcda8182c109cad6a3d38bf"
+    },
+    "M01040": {
+      "path": "data/story/maps/m01040.json",
+      "sha256": "74ece929286cd94ab561d7465ae68245b30411e06fc1814a940a0ea2140f2663"
+    },
+    "M01041": {
+      "path": "data/story/maps/m01041.json",
+      "sha256": "edc94a86cc2c1671727af73d3ccc62f9c28bd7e62784a4e884c3b9f7797bbcbe"
+    },
+    "M01042": {
+      "path": "data/story/maps/m01042.json",
+      "sha256": "2b91ad17071bcf8c2a4970e943891d323a8482a1e5ebbdd9e835826fe14477b4"
+    },
+    "M01051": {
+      "path": "data/story/maps/m01051.json",
+      "sha256": "589187d414f6456619d9199c319baa4afe5837c49388ea247ffec2aba12a7a9f"
+    },
+    "M01052": {
+      "path": "data/story/maps/m01052.json",
+      "sha256": "1a0cca0ee4ef4b71697d233c319b21d5c72f5fe2300b58987597487512bd56f0"
+    },
+    "M01061": {
+      "path": "data/story/maps/m01061.json",
+      "sha256": "bc38f8f24efdbd50e812c36eadcc3a9ebddbd8009961e816efe7e385187c12d3"
+    },
+    "M01062": {
+      "path": "data/story/maps/m01062.json",
+      "sha256": "df9d27748668005dbc29aeb6109256d76faadd3407cdcf82ca281bb0973d72b7"
+    },
+    "M01063": {
+      "path": "data/story/maps/m01063.json",
+      "sha256": "a664e76888e451e17778d27079143d1d16ade55bbcd373e9cd516107d6d43488"
+    },
+    "M01064": {
+      "path": "data/story/maps/m01064.json",
+      "sha256": "22e56332da01e9b0d4b1364461e532b6c4d240071ff90a1e77c3b535115665b8"
     },
     "M71010": {
       "path": "data/story/maps/m71010.json",
@@ -41,7 +93,7 @@
     },
     "M71013": {
       "path": "data/story/maps/m71013.json",
-      "sha256": "56c13f2ab453e9489d6be4ee8ab023c97e20f78d86455003f933e2b2bb0cce02"
+      "sha256": "1cb839843fc40ff2d4b18f855d9e76cf71f6ee37d8560a23e19b4cc476e81482"
     },
     "M71014": {
       "path": "data/story/maps/m71014.json",
@@ -69,7 +121,7 @@
     },
     "M01050": {
       "path": "data/story/maps/m01050.json",
-      "sha256": "e2b5e004ae0329d8d3546fc034e66f3e5737de3d37eee514a1d8f631e57a33c1"
+      "sha256": "568a8ce042a0d9a3264663de7cc38294b11df642c803d3da0654c4f3d3538666"
     },
     "M03039": {
       "path": "data/story/maps/m03039.json",
@@ -77,11 +129,11 @@
     },
     "M01010": {
       "path": "data/story/maps/m01010.json",
-      "sha256": "46d9e4c9923a4a6c1c596921040a96386bbe484484f7fcfa5a71718da6412734"
+      "sha256": "edb15b5219a4cfec4a6bc436c231abfa87092762309373a98cfb4216ca459e31"
     },
     "M01030": {
       "path": "data/story/maps/m01030.json",
-      "sha256": "c5b00efc4ce7d9bad17e982754c5d89e67e570c0bc3943047ebac48f2d8e859f"
+      "sha256": "c68f2a2723a4089e2b681f7600267403b16c17e5d5540b5a23c6a3461ff653ea"
     },
     "M17010": {
       "path": "data/story/maps/m17010.json",

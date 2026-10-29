@@ -1,0 +1,5775 @@
+{
+  "schema": "seventh-seal-story-map",
+  "version": 2,
+  "map_id": "M01042",
+  "chapter": {
+    "id": "M01042",
+    "name": "锻造合成工会",
+    "flag_index": 386,
+    "map_flag_index": 386,
+    "source": {
+      "path": "Map/m01042.TLK",
+      "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+      "bytes": 218136
+    },
+    "dialogue_status": "parsed",
+    "map_source": {
+      "path": "Map/m01042.dat",
+      "sha256": "1db3c0d509c377efe9b327a2560f58e28ac0d4eedfc2be0894d5b0fc9a285cc3",
+      "bytes": 142037
+    },
+    "index_nonzero": [
+      {
+        "slot": 0,
+        "offset": 26,
+        "record": 35
+      },
+      {
+        "slot": 10,
+        "offset": 66,
+        "record": 8
+      },
+      {
+        "slot": 11,
+        "offset": 70,
+        "record": 10
+      },
+      {
+        "slot": 12,
+        "offset": 74,
+        "record": 31
+      },
+      {
+        "slot": 499,
+        "offset": 2022,
+        "record": 65
+      }
+    ],
+    "index_count": 500,
+    "record_base": 2026,
+    "record_bytes": 1647,
+    "record_count": 65,
+    "records": [
+      {
+        "id": 1,
+        "offset": 2026,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 11,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 0,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 1,
+          "record_bytes": 1647,
+          "offset": 2026
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:1",
+        "portrait_id": 0,
+        "choices": [
+          {
+            "index": 0,
+            "recordId": 9,
+            "text_id": "M01042:TLK:1:choice:0"
+          },
+          {
+            "index": 1,
+            "recordId": 0,
+            "text_id": "M01042:TLK:1:choice:1"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "offset": 3673,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 11,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 0,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 2,
+          "record_bytes": 1647,
+          "offset": 3673
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:2",
+        "portrait_id": 0,
+        "choices": [
+          {
+            "index": 0,
+            "recordId": 5,
+            "text_id": "M01042:TLK:2:choice:0"
+          },
+          {
+            "index": 1,
+            "recordId": 0,
+            "text_id": "M01042:TLK:2:choice:1"
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "offset": 5320,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 11,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 0,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 3,
+          "record_bytes": 1647,
+          "offset": 5320
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:3",
+        "portrait_id": 0,
+        "choices": [
+          {
+            "index": 0,
+            "recordId": 9,
+            "text_id": "M01042:TLK:3:choice:0"
+          },
+          {
+            "index": 1,
+            "recordId": 0,
+            "text_id": "M01042:TLK:3:choice:1"
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "offset": 6967,
+        "kind": 0,
+        "style": 2,
+        "region_byte_raw": 0,
+        "speaker": 11,
+        "condition_type": 2,
+        "condition_index": 1000,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 5,
+        "next": 64,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 4,
+          "record_bytes": 1647,
+          "offset": 6967
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:4",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 5,
+        "offset": 8614,
+        "kind": 0,
+        "style": 2,
+        "region_byte_raw": 0,
+        "speaker": 11,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 6,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 5,
+          "record_bytes": 1647,
+          "offset": 8614
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:5",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 6,
+        "offset": 10261,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 11,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 17,
+        "mutation_index": 2,
+        "mutation_bit": 253,
+        "if_true": 0,
+        "next": 55,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 6,
+          "record_bytes": 1647,
+          "offset": 10261
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:6",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 7,
+        "offset": 11908,
+        "kind": 8,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 11,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 0,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 7,
+          "record_bytes": 1647,
+          "offset": 11908
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "native_service": {
+          "kind": 2,
+          "goods": [],
+          "title": "女術士炎",
+          "allowedModes": [
+            "forge"
+          ]
+        },
+        "text_id": "M01042:TLK:7",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 8,
+        "offset": 13555,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 11,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 2,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 2,
+        "next": 1,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 8,
+          "record_bytes": 1647,
+          "offset": 13555
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:8",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 9,
+        "offset": 15202,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 11,
+        "condition_type": 2,
+        "condition_index": 500000,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 5,
+        "next": 64,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 9,
+          "record_bytes": 1647,
+          "offset": 15202
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:9",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 10,
+        "offset": 16849,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 12,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 1,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 23,
+        "next": 11,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 10,
+          "record_bytes": 1647,
+          "offset": 16849
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:10",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 11,
+        "offset": 18496,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 12,
+        "condition_type": 4,
+        "condition_index": 0,
+        "condition_bit": 297,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 12,
+        "next": 0,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 11,
+          "record_bytes": 1647,
+          "offset": 18496
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:11",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 12,
+        "offset": 20143,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 1,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 13,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 12,
+          "record_bytes": 1647,
+          "offset": 20143
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:12",
+        "portrait_id": 27,
+        "choices": []
+      },
+      {
+        "id": 13,
+        "offset": 21790,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 12,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 14,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 13,
+          "record_bytes": 1647,
+          "offset": 21790
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:13",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 14,
+        "offset": 23437,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 12,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 15,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 14,
+          "record_bytes": 1647,
+          "offset": 23437
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:14",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 15,
+        "offset": 25084,
+        "kind": 1,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 0,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 15,
+          "record_bytes": 1647,
+          "offset": 25084
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:15",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 16,
+        "offset": 26731,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 12,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 17,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 16,
+          "record_bytes": 1647,
+          "offset": 26731
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:16",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 17,
+        "offset": 28378,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 12,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 18,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 17,
+          "record_bytes": 1647,
+          "offset": 28378
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:17",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 18,
+        "offset": 30025,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 5,
+        "mutation_index": 1,
+        "mutation_bit": 295,
+        "if_true": 0,
+        "next": 19,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 18,
+          "record_bytes": 1647,
+          "offset": 30025
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:18",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 19,
+        "offset": 31672,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 5,
+        "mutation_index": 1,
+        "mutation_bit": 296,
+        "if_true": 0,
+        "next": 20,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 19,
+          "record_bytes": 1647,
+          "offset": 31672
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:19",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 20,
+        "offset": 33319,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 5,
+        "mutation_index": 1,
+        "mutation_bit": 297,
+        "if_true": 0,
+        "next": 21,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 20,
+          "record_bytes": 1647,
+          "offset": 33319
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:20",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 21,
+        "offset": 34966,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 5,
+        "mutation_index": 0,
+        "mutation_bit": 298,
+        "if_true": 0,
+        "next": 22,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 21,
+          "record_bytes": 1647,
+          "offset": 34966
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:21",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 22,
+        "offset": 36613,
+        "kind": 0,
+        "style": 3,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 1,
+        "if_true": 0,
+        "next": 0,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 22,
+          "record_bytes": 1647,
+          "offset": 36613
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:22",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 23,
+        "offset": 38260,
+        "kind": 0,
+        "style": 2,
+        "region_byte_raw": 0,
+        "speaker": 12,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 0,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 23,
+          "record_bytes": 1647,
+          "offset": 38260
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:23",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 24,
+        "offset": 39907,
+        "kind": 0,
+        "style": 2,
+        "region_byte_raw": 0,
+        "speaker": 13,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 2,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 32,
+        "next": 25,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 24,
+          "record_bytes": 1647,
+          "offset": 39907
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:24",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 25,
+        "offset": 41554,
+        "kind": 0,
+        "style": 2,
+        "region_byte_raw": 0,
+        "speaker": 1,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 26,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 25,
+          "record_bytes": 1647,
+          "offset": 41554
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:25",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 26,
+        "offset": 43201,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 13,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 0,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 26,
+          "record_bytes": 1647,
+          "offset": 43201
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:26",
+        "portrait_id": 0,
+        "choices": [
+          {
+            "index": 0,
+            "recordId": 28,
+            "text_id": "M01042:TLK:26:choice:0"
+          },
+          {
+            "index": 1,
+            "recordId": 27,
+            "text_id": "M01042:TLK:26:choice:1"
+          }
+        ]
+      },
+      {
+        "id": 27,
+        "offset": 44848,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 13,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 0,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 27,
+          "record_bytes": 1647,
+          "offset": 44848
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:27",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 28,
+        "offset": 46495,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 13,
+        "condition_type": 2,
+        "condition_index": 1000,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 29,
+        "next": 57,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 28,
+          "record_bytes": 1647,
+          "offset": 46495
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:28",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 29,
+        "offset": 48142,
+        "kind": 0,
+        "style": 2,
+        "region_byte_raw": 0,
+        "speaker": 13,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 3,
+        "mutation_index": 4294966296,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 30,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 29,
+          "record_bytes": 1647,
+          "offset": 48142
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:29",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 30,
+        "offset": 49789,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 2,
+        "if_true": 0,
+        "next": 58,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 30,
+          "record_bytes": 1647,
+          "offset": 49789
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:30",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 31,
+        "offset": 51436,
+        "kind": 0,
+        "style": 2,
+        "region_byte_raw": 0,
+        "speaker": 13,
+        "condition_type": 0,
+        "condition_index": 31,
+        "condition_bit": 2,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 24,
+        "next": 0,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 31,
+          "record_bytes": 1647,
+          "offset": 51436
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:31",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 32,
+        "offset": 53083,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 13,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 4,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 37,
+        "next": 0,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 32,
+          "record_bytes": 1647,
+          "offset": 53083
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:32",
+        "portrait_id": 0,
+        "choices": [
+          {
+            "index": 0,
+            "recordId": 34,
+            "text_id": "M01042:TLK:32:choice:0"
+          },
+          {
+            "index": 1,
+            "recordId": 33,
+            "text_id": "M01042:TLK:32:choice:1"
+          }
+        ]
+      },
+      {
+        "id": 33,
+        "offset": 54730,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 13,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 0,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 33,
+          "record_bytes": 1647,
+          "offset": 54730
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:33",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 34,
+        "offset": 56377,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 13,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 3,
+        "if_true": 0,
+        "next": 35,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 34,
+          "record_bytes": 1647,
+          "offset": 56377
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:34",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 35,
+        "offset": 58024,
+        "kind": 0,
+        "style": 3,
+        "region_byte_raw": 0,
+        "speaker": 1,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 5,
+        "mutation_index": 0,
+        "mutation_bit": 226,
+        "if_true": 0,
+        "next": 36,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 35,
+          "record_bytes": 1647,
+          "offset": 58024
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:35",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 36,
+        "offset": 59671,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 4,
+        "if_true": 0,
+        "next": 0,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 36,
+          "record_bytes": 1647,
+          "offset": 59671
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:36",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 37,
+        "offset": 61318,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 13,
+        "condition_type": 0,
+        "condition_index": 29,
+        "condition_bit": 2,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 39,
+        "next": 0,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 37,
+          "record_bytes": 1647,
+          "offset": 61318
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:37",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 38,
+        "offset": 62965,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 13,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 5,
+        "if_true": 0,
+        "next": 0,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 38,
+          "record_bytes": 1647,
+          "offset": 62965
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:38",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 39,
+        "offset": 64612,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 5,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 41,
+        "next": 38,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 39,
+          "record_bytes": 1647,
+          "offset": 64612
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:39",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 40,
+        "offset": 66259,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 13,
+        "condition_type": 4,
+        "condition_index": 0,
+        "condition_bit": 170,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 42,
+        "next": 0,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 40,
+          "record_bytes": 1647,
+          "offset": 66259
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:40",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 41,
+        "offset": 67906,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 6,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 44,
+        "next": 40,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 41,
+          "record_bytes": 1647,
+          "offset": 67906
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:41",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 42,
+        "offset": 69553,
+        "kind": 0,
+        "style": 2,
+        "region_byte_raw": 0,
+        "speaker": 13,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 5,
+        "mutation_index": 1,
+        "mutation_bit": 170,
+        "if_true": 0,
+        "next": 43,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 42,
+          "record_bytes": 1647,
+          "offset": 69553
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:42",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 43,
+        "offset": 71200,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 6,
+        "if_true": 0,
+        "next": 0,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 43,
+          "record_bytes": 1647,
+          "offset": 71200
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:43",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 44,
+        "offset": 72847,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 13,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 7,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 49,
+        "next": 0,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 44,
+          "record_bytes": 1647,
+          "offset": 72847
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:44",
+        "portrait_id": 0,
+        "choices": [
+          {
+            "index": 0,
+            "recordId": 33,
+            "text_id": "M01042:TLK:44:choice:0"
+          },
+          {
+            "index": 1,
+            "recordId": 45,
+            "text_id": "M01042:TLK:44:choice:1"
+          }
+        ]
+      },
+      {
+        "id": 45,
+        "offset": 74494,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 13,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 47,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 45,
+          "record_bytes": 1647,
+          "offset": 74494
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:45",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 46,
+        "offset": 76141,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 5,
+        "mutation_index": 0,
+        "mutation_bit": 335,
+        "if_true": 0,
+        "next": 48,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 46,
+          "record_bytes": 1647,
+          "offset": 76141
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:46",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 47,
+        "offset": 77788,
+        "kind": 0,
+        "style": 2,
+        "region_byte_raw": 0,
+        "speaker": 13,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 46,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 47,
+          "record_bytes": 1647,
+          "offset": 77788
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:47",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 48,
+        "offset": 79435,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 7,
+        "if_true": 0,
+        "next": 0,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 48,
+          "record_bytes": 1647,
+          "offset": 79435
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:48",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 49,
+        "offset": 81082,
+        "kind": 0,
+        "style": 2,
+        "region_byte_raw": 0,
+        "speaker": 13,
+        "condition_type": 0,
+        "condition_index": 616,
+        "condition_bit": 1,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 50,
+        "next": 0,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 49,
+          "record_bytes": 1647,
+          "offset": 81082
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:49",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 50,
+        "offset": 82729,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 13,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 8,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 52,
+        "next": 51,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 50,
+          "record_bytes": 1647,
+          "offset": 82729
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:50",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 51,
+        "offset": 84376,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 13,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 8,
+        "if_true": 0,
+        "next": 0,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 51,
+          "record_bytes": 1647,
+          "offset": 84376
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:51",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 52,
+        "offset": 86023,
+        "kind": 0,
+        "style": 2,
+        "region_byte_raw": 0,
+        "speaker": 13,
+        "condition_type": 0,
+        "condition_index": 396,
+        "condition_bit": 2,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 53,
+        "next": 0,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 52,
+          "record_bytes": 1647,
+          "offset": 86023
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:52",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 53,
+        "offset": 87670,
+        "kind": 0,
+        "style": 2,
+        "region_byte_raw": 0,
+        "speaker": 13,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 9,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 54,
+        "next": 65,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 53,
+          "record_bytes": 1647,
+          "offset": 87670
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:53",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 54,
+        "offset": 89317,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 13,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 0,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 54,
+          "record_bytes": 1647,
+          "offset": 89317
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:54",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 55,
+        "offset": 90964,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 7,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 55,
+          "record_bytes": 1647,
+          "offset": 90964
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 4,
+        "text_id": "M01042:TLK:55",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 56,
+        "offset": 92611,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 17,
+        "mutation_index": 0,
+        "mutation_bit": 257,
+        "if_true": 0,
+        "next": 7,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 56,
+          "record_bytes": 1647,
+          "offset": 92611
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:56",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 57,
+        "offset": 94258,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 13,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 0,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 57,
+          "record_bytes": 1647,
+          "offset": 94258
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:57",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 58,
+        "offset": 95905,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 17,
+        "mutation_index": 0,
+        "mutation_bit": 251,
+        "if_true": 0,
+        "next": 59,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 58,
+          "record_bytes": 1647,
+          "offset": 95905
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:58",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 59,
+        "offset": 97552,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 17,
+        "mutation_index": 0,
+        "mutation_bit": 252,
+        "if_true": 0,
+        "next": 60,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 59,
+          "record_bytes": 1647,
+          "offset": 97552
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:59",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 60,
+        "offset": 99199,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 17,
+        "mutation_index": 0,
+        "mutation_bit": 265,
+        "if_true": 0,
+        "next": 61,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 60,
+          "record_bytes": 1647,
+          "offset": 99199
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:60",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 61,
+        "offset": 100846,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 17,
+        "mutation_index": 0,
+        "mutation_bit": 266,
+        "if_true": 0,
+        "next": 62,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 61,
+          "record_bytes": 1647,
+          "offset": 100846
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:61",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 62,
+        "offset": 102493,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 17,
+        "mutation_index": 0,
+        "mutation_bit": 267,
+        "if_true": 0,
+        "next": 63,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 62,
+          "record_bytes": 1647,
+          "offset": 102493
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:62",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 63,
+        "offset": 104140,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 17,
+        "mutation_index": 0,
+        "mutation_bit": 268,
+        "if_true": 0,
+        "next": 0,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 63,
+          "record_bytes": 1647,
+          "offset": 104140
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:63",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 64,
+        "offset": 105787,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 11,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 0,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 64,
+          "record_bytes": 1647,
+          "offset": 105787
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:64",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 65,
+        "offset": 107434,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 9,
+        "if_true": 0,
+        "next": 0,
+        "source": {
+          "path": "Map/m01042.TLK",
+          "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+          "record_id": 65,
+          "record_bytes": 1647,
+          "offset": 107434
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01042:TLK:65",
+        "portrait_id": 0,
+        "choices": []
+      }
+    ],
+    "trailing_bytes": 109055,
+    "trailing_sha256": "558190bc1cca651c1238ba26b2e529d900cf4fe0e95f1495d6fee722b2c9b3b6",
+    "header_raw_hex": "3344a661b9cfb8eaaec6286329596f6b690000000600000001000000b6cdd4ecbacfb3c9b9a4bbe1000000000000000000000000000000000000000000000000000000006d6e3031302d312e7761760000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003030a00000003000100000000000000000082010000020000004d30313034322e444750000000000000000000004d3031303432412e4447500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002030001012c000000220000002e5c4d41504d5c4d30313034325c00000000000000000000900100009001000000010100",
+    "compatibility_variant": 1,
+    "descriptors": [
+      {
+        "id": 1,
+        "state_raw": 0,
+        "filename_raw": "m01040.dat",
+        "field_26_raw": 5,
+        "field_2a_raw": 4,
+        "field_2e_raw": 0,
+        "record_bytes": 66,
+        "raw_hex": "00000000000000000000000000000000006d30313034302e646174000000000000000000000005000000040000000000000000000000000000000000000000000000",
+        "cells": [
+          {
+            "x": 41,
+            "y": 28,
+            "offset": 81842
+          },
+          {
+            "x": 40,
+            "y": 29,
+            "offset": 84594
+          },
+          {
+            "x": 41,
+            "y": 29,
+            "offset": 84658
+          },
+          {
+            "x": 39,
+            "y": 30,
+            "offset": 87346
+          },
+          {
+            "x": 40,
+            "y": 30,
+            "offset": 87410
+          },
+          {
+            "x": 41,
+            "y": 30,
+            "offset": 87474
+          }
+        ],
+        "source": {
+          "path": "Map/m01042.dat",
+          "sha256": "1db3c0d509c377efe9b327a2560f58e28ac0d4eedfc2be0894d5b0fc9a285cc3",
+          "descriptor_id": 1,
+          "bytes": 66,
+          "offset": 97458
+        },
+        "evidence": [
+          "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a"
+        ],
+        "field_expansion": "Native 0x42-byte descriptor fields"
+      }
+    ],
+    "objects": [
+      {
+        "index": 0,
+        "slot_one_based": 1,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d30313034325c3030312e4447500100000000000000c000000080000000010000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 192,
+        "y_native": 128,
+        "resource_id_raw": 1,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m01042.dat",
+          "sha256": "1db3c0d509c377efe9b327a2560f58e28ac0d4eedfc2be0894d5b0fc9a285cc3",
+          "bytes": 274,
+          "offset": 109138
+        }
+      },
+      {
+        "index": 1,
+        "slot_one_based": 2,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d30313034325c3030322e444750020000000000000050010000c8000000010000000100000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 336,
+        "y_native": 200,
+        "resource_id_raw": 2,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m01042.dat",
+          "sha256": "1db3c0d509c377efe9b327a2560f58e28ac0d4eedfc2be0894d5b0fc9a285cc3",
+          "bytes": 274,
+          "offset": 109412
+        }
+      },
+      {
+        "index": 2,
+        "slot_one_based": 3,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d30313034325c3030332e44475003000000000000001f000000f0000000010000000100000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 31,
+        "y_native": 240,
+        "resource_id_raw": 3,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m01042.dat",
+          "sha256": "1db3c0d509c377efe9b327a2560f58e28ac0d4eedfc2be0894d5b0fc9a285cc3",
+          "bytes": 274,
+          "offset": 109686
+        }
+      },
+      {
+        "index": 3,
+        "slot_one_based": 4,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d30313034325c3030342e444750040000000000000030000000d8000000010000000100000000000000000000000000000000000300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 48,
+        "y_native": 216,
+        "resource_id_raw": 4,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m01042.dat",
+          "sha256": "1db3c0d509c377efe9b327a2560f58e28ac0d4eedfc2be0894d5b0fc9a285cc3",
+          "bytes": 274,
+          "offset": 109960
+        }
+      },
+      {
+        "index": 4,
+        "slot_one_based": 5,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d30313034325c3030352e44475005000000000000001001000098000000010000000100000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 272,
+        "y_native": 152,
+        "resource_id_raw": 5,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m01042.dat",
+          "sha256": "1db3c0d509c377efe9b327a2560f58e28ac0d4eedfc2be0894d5b0fc9a285cc3",
+          "bytes": 274,
+          "offset": 110234
+        }
+      },
+      {
+        "index": 5,
+        "slot_one_based": 6,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d30313034325c3030362e44475006000000000000001000000098000000010000000100000000000000000000000000000000000500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 16,
+        "y_native": 152,
+        "resource_id_raw": 6,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m01042.dat",
+          "sha256": "1db3c0d509c377efe9b327a2560f58e28ac0d4eedfc2be0894d5b0fc9a285cc3",
+          "bytes": 274,
+          "offset": 110508
+        }
+      },
+      {
+        "index": 6,
+        "slot_one_based": 7,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d30313034325c3030372e4447500700000000000000e0000000f0000000010000000100000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 224,
+        "y_native": 240,
+        "resource_id_raw": 7,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m01042.dat",
+          "sha256": "1db3c0d509c377efe9b327a2560f58e28ac0d4eedfc2be0894d5b0fc9a285cc3",
+          "bytes": 274,
+          "offset": 110782
+        }
+      },
+      {
+        "index": 7,
+        "slot_one_based": 8,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d30313034325c3030382e44475008000000000000003001000078000000010000000100000000000000000000000000000000000700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 304,
+        "y_native": 120,
+        "resource_id_raw": 8,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m01042.dat",
+          "sha256": "1db3c0d509c377efe9b327a2560f58e28ac0d4eedfc2be0894d5b0fc9a285cc3",
+          "bytes": 274,
+          "offset": 111056
+        }
+      },
+      {
+        "index": 8,
+        "slot_one_based": 9,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d30313034325c3030392e44475009000000000000001001000088000000010000000100000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000100000000000000b40000000000000000000000000000000000000000000000000000000000000000490000000007000000000000000000000000000000000000",
+        "x_native": 272,
+        "y_native": 136,
+        "resource_id_raw": 9,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m01042.dat",
+          "sha256": "1db3c0d509c377efe9b327a2560f58e28ac0d4eedfc2be0894d5b0fc9a285cc3",
+          "bytes": 274,
+          "offset": 111330
+        }
+      },
+      {
+        "index": 9,
+        "slot_one_based": 10,
+        "raw_hex": "433a5c534556454e5c2e5c4d41504d5c4d30313034325c3031302e4447500a00000000000000270100006d000000010000000100000000000000000000000000000000000900000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000453031332e77617600000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000020000000201000100000000000000000000000000000000000000000000000000000000000000000000000000000000260000000000000000000000000000000000000000000000",
+        "x_native": 295,
+        "y_native": 109,
+        "resource_id_raw": 10,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m01042.dat",
+          "sha256": "1db3c0d509c377efe9b327a2560f58e28ac0d4eedfc2be0894d5b0fc9a285cc3",
+          "bytes": 274,
+          "offset": 111604
+        }
+      }
+    ],
+    "npc_records": [
+      {
+        "slot_zero_based": 10,
+        "offset": 111878,
+        "resource_id": 55,
+        "name_cp950": "女術士炎",
+        "x_native": 136,
+        "y_native": 160,
+        "direction": 0,
+        "raw_hex": "3035350000000000000000000000000000000000a46bb34ea468aaa2000000000000000000000000370000000600000088000000a00000000000000000000000000a000000000001ff0101ffffffffffffffffffffffffffffff00000000000000000000000000000000000000000088000000a00000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000c3000000ab000000000000000000000000000000000000000000000000000000000000000000000000001600000000000000000000000000000000000000000000000000000000020002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000050000000a00000002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000"
+      },
+      {
+        "slot_zero_based": 11,
+        "offset": 113099,
+        "resource_id": 57,
+        "name_cp950": "女魔導士炎",
+        "x_native": 32,
+        "y_native": 136,
+        "direction": 2,
+        "raw_hex": "3035370000000000000000000000000000000000a46bc55dbec9a468aaa200000000000000000000390000000000000020000000880000000000000000000000000b000000020001ff0101ffffffffffffffffffffffffffffff00000000000000000000000000000000000000000020000000880000000000000000000000020000000000000000000000140000000100000000000000000000000000000000000000000000000000000000b9000000a1000000000000000000000000000000000000000000000000000000000000000000000000001600000000000000000000000000000000000000000000000000000000020001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000050000000a00000002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000"
+      },
+      {
+        "slot_zero_based": 12,
+        "offset": 114320,
+        "resource_id": 58,
+        "name_cp950": "老魔導士炎",
+        "x_native": 72,
+        "y_native": 184,
+        "direction": 0,
+        "raw_hex": "3035380000000000000000000000000000000000a6d1c55dbec9a468aaa2000000000000000000003a0000000500000048000000b80000000000000000000000000c000000000001ff0101ffffffffffffffffffffffffffffff00000000000000000000000000000000000000000048000000b80000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000b7000000a0000000000000000000000000000000000000000000000000000000000000000000000000001600000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000050000000a00000002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005802000001000000000000000000000000000000"
+      }
+    ],
+    "entry_markers": {
+      "1": [
+        {
+          "x": 33,
+          "y": 23,
+          "offset": 67250
+        },
+        {
+          "x": 34,
+          "y": 23,
+          "offset": 67314
+        },
+        {
+          "x": 33,
+          "y": 24,
+          "offset": 70066
+        },
+        {
+          "x": 34,
+          "y": 24,
+          "offset": 70130
+        }
+      ]
+    },
+    "default_object_index_slot": 499,
+    "default_object_record": 65,
+    "header_entry_tlk_raw": 0,
+    "header_entry_tlk_source": {
+      "path": "Map/m01042.dat",
+      "sha256": "1db3c0d509c377efe9b327a2560f58e28ac0d4eedfc2be0894d5b0fc9a285cc3",
+      "bytes": 4,
+      "offset": 314
+    },
+    "header_setup_tlk_raw": 0,
+    "header_setup_tlk_source": {
+      "path": "Map/m01042.dat",
+      "sha256": "1db3c0d509c377efe9b327a2560f58e28ac0d4eedfc2be0894d5b0fc9a285cc3",
+      "bytes": 4,
+      "offset": 138
+    },
+    "evidence": [
+      "ev_e14d28c11ec31e5eebdf4c08a994a900102658650d8e5364d58b848cbd114ea7",
+      "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a"
+    ],
+    "limitations": [
+      "Index slot499 is retained as the object default TLK entry; it must not be used as an automatic map-load event. Header +0x8A controls map setup; +0x13A controls map-entry TLK.",
+      "TLK record kind/mutation numbers are raw native values; dialogue text alone does not define their behavior."
+    ],
+    "flow_id": "M01042:tlk"
+  },
+  "programs": {},
+  "flows": {
+    "M01042:tlk": {
+      "schema": "seventh-seal-story-flow",
+      "version": 1,
+      "id": "M01042:tlk",
+      "map_id": "M01042",
+      "entry": "M01042:tlk:1",
+      "entries": {
+        "1": "M01042:tlk:1",
+        "2": "M01042:tlk:2",
+        "3": "M01042:tlk:3",
+        "4": "M01042:tlk:4",
+        "5": "M01042:tlk:5",
+        "6": "M01042:tlk:6",
+        "7": "M01042:tlk:7",
+        "8": "M01042:tlk:8",
+        "9": "M01042:tlk:9",
+        "10": "M01042:tlk:10",
+        "11": "M01042:tlk:11",
+        "12": "M01042:tlk:12",
+        "13": "M01042:tlk:13",
+        "14": "M01042:tlk:14",
+        "15": "M01042:tlk:15",
+        "16": "M01042:tlk:16",
+        "17": "M01042:tlk:17",
+        "18": "M01042:tlk:18",
+        "19": "M01042:tlk:19",
+        "20": "M01042:tlk:20",
+        "21": "M01042:tlk:21",
+        "22": "M01042:tlk:22",
+        "23": "M01042:tlk:23",
+        "24": "M01042:tlk:24",
+        "25": "M01042:tlk:25",
+        "26": "M01042:tlk:26",
+        "27": "M01042:tlk:27",
+        "28": "M01042:tlk:28",
+        "29": "M01042:tlk:29",
+        "30": "M01042:tlk:30",
+        "31": "M01042:tlk:31",
+        "32": "M01042:tlk:32",
+        "33": "M01042:tlk:33",
+        "34": "M01042:tlk:34",
+        "35": "M01042:tlk:35",
+        "36": "M01042:tlk:36",
+        "37": "M01042:tlk:37",
+        "38": "M01042:tlk:38",
+        "39": "M01042:tlk:39",
+        "40": "M01042:tlk:40",
+        "41": "M01042:tlk:41",
+        "42": "M01042:tlk:42",
+        "43": "M01042:tlk:43",
+        "44": "M01042:tlk:44",
+        "45": "M01042:tlk:45",
+        "46": "M01042:tlk:46",
+        "47": "M01042:tlk:47",
+        "48": "M01042:tlk:48",
+        "49": "M01042:tlk:49",
+        "50": "M01042:tlk:50",
+        "51": "M01042:tlk:51",
+        "52": "M01042:tlk:52",
+        "53": "M01042:tlk:53",
+        "54": "M01042:tlk:54",
+        "55": "M01042:tlk:55",
+        "56": "M01042:tlk:56",
+        "57": "M01042:tlk:57",
+        "58": "M01042:tlk:58",
+        "59": "M01042:tlk:59",
+        "60": "M01042:tlk:60",
+        "61": "M01042:tlk:61",
+        "62": "M01042:tlk:62",
+        "63": "M01042:tlk:63",
+        "64": "M01042:tlk:64",
+        "65": "M01042:tlk:65"
+      },
+      "commands": [
+        {
+          "id": "M01042:tlk:1",
+          "op": "record",
+          "record_id": 1,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 1,
+            "record_bytes": 1647,
+            "offset": 2026
+          }
+        },
+        {
+          "id": "M01042:tlk:1:1",
+          "op": "choice",
+          "record_id": 1,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 1,
+            "record_bytes": 1647,
+            "offset": 2026
+          },
+          "text_id": "M01042:TLK:1",
+          "presentation": {
+            "speaker": 11,
+            "style": 1,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          },
+          "choices": [
+            {
+              "index": 0,
+              "recordId": 9,
+              "text_id": "M01042:TLK:1:choice:0",
+              "target": "M01042:tlk:9"
+            },
+            {
+              "index": 1,
+              "recordId": 0,
+              "text_id": "M01042:TLK:1:choice:1",
+              "target": "M01042:tlk:end"
+            }
+          ]
+        },
+        {
+          "id": "M01042:tlk:1:2",
+          "op": "jump",
+          "record_id": 1,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 1,
+            "record_bytes": 1647,
+            "offset": 2026
+          },
+          "target": "M01042:tlk:end"
+        },
+        {
+          "id": "M01042:tlk:2",
+          "op": "record",
+          "record_id": 2,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 2,
+            "record_bytes": 1647,
+            "offset": 3673
+          }
+        },
+        {
+          "id": "M01042:tlk:2:1",
+          "op": "choice",
+          "record_id": 2,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 2,
+            "record_bytes": 1647,
+            "offset": 3673
+          },
+          "text_id": "M01042:TLK:2",
+          "presentation": {
+            "speaker": 11,
+            "style": 1,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          },
+          "choices": [
+            {
+              "index": 0,
+              "recordId": 5,
+              "text_id": "M01042:TLK:2:choice:0",
+              "target": "M01042:tlk:5"
+            },
+            {
+              "index": 1,
+              "recordId": 0,
+              "text_id": "M01042:TLK:2:choice:1",
+              "target": "M01042:tlk:end"
+            }
+          ]
+        },
+        {
+          "id": "M01042:tlk:2:2",
+          "op": "jump",
+          "record_id": 2,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 2,
+            "record_bytes": 1647,
+            "offset": 3673
+          },
+          "target": "M01042:tlk:end"
+        },
+        {
+          "id": "M01042:tlk:3",
+          "op": "record",
+          "record_id": 3,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 3,
+            "record_bytes": 1647,
+            "offset": 5320
+          }
+        },
+        {
+          "id": "M01042:tlk:3:1",
+          "op": "choice",
+          "record_id": 3,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 3,
+            "record_bytes": 1647,
+            "offset": 5320
+          },
+          "text_id": "M01042:TLK:3",
+          "presentation": {
+            "speaker": 11,
+            "style": 1,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          },
+          "choices": [
+            {
+              "index": 0,
+              "recordId": 9,
+              "text_id": "M01042:TLK:3:choice:0",
+              "target": "M01042:tlk:9"
+            },
+            {
+              "index": 1,
+              "recordId": 0,
+              "text_id": "M01042:TLK:3:choice:1",
+              "target": "M01042:tlk:end"
+            }
+          ]
+        },
+        {
+          "id": "M01042:tlk:3:2",
+          "op": "jump",
+          "record_id": 3,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 3,
+            "record_bytes": 1647,
+            "offset": 5320
+          },
+          "target": "M01042:tlk:end"
+        },
+        {
+          "id": "M01042:tlk:4",
+          "op": "record",
+          "record_id": 4,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 4,
+            "record_bytes": 1647,
+            "offset": 6967
+          }
+        },
+        {
+          "id": "M01042:tlk:4:1",
+          "op": "test_native_condition",
+          "record_id": 4,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 4,
+            "record_bytes": 1647,
+            "offset": 6967
+          },
+          "condition_type": 2,
+          "condition_index": 1000,
+          "condition_bit": 0,
+          "condition_byte_raw_0b": 0,
+          "if_true": "M01042:tlk:5",
+          "if_false": "M01042:tlk:4:2"
+        },
+        {
+          "id": "M01042:tlk:4:2",
+          "op": "jump",
+          "record_id": 4,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 4,
+            "record_bytes": 1647,
+            "offset": 6967
+          },
+          "target": "M01042:tlk:64"
+        },
+        {
+          "id": "M01042:tlk:5",
+          "op": "record",
+          "record_id": 5,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 5,
+            "record_bytes": 1647,
+            "offset": 8614
+          }
+        },
+        {
+          "id": "M01042:tlk:5:1",
+          "op": "say",
+          "record_id": 5,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 5,
+            "record_bytes": 1647,
+            "offset": 8614
+          },
+          "text_id": "M01042:TLK:5",
+          "presentation": {
+            "speaker": 11,
+            "style": 2,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M01042:tlk:5:2",
+          "op": "jump",
+          "record_id": 5,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 5,
+            "record_bytes": 1647,
+            "offset": 8614
+          },
+          "target": "M01042:tlk:6"
+        },
+        {
+          "id": "M01042:tlk:6",
+          "op": "record",
+          "record_id": 6,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 6,
+            "record_bytes": 1647,
+            "offset": 10261
+          }
+        },
+        {
+          "id": "M01042:tlk:6:1",
+          "op": "unlock_recipe",
+          "record_id": 6,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 6,
+            "record_bytes": 1647,
+            "offset": 10261
+          }
+        },
+        {
+          "id": "M01042:tlk:6:2",
+          "op": "jump",
+          "record_id": 6,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 6,
+            "record_bytes": 1647,
+            "offset": 10261
+          },
+          "target": "M01042:tlk:55"
+        },
+        {
+          "id": "M01042:tlk:7",
+          "op": "record",
+          "record_id": 7,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 7,
+            "record_bytes": 1647,
+            "offset": 11908
+          }
+        },
+        {
+          "id": "M01042:tlk:7:1",
+          "op": "native_service",
+          "record_id": 7,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 7,
+            "record_bytes": 1647,
+            "offset": 11908
+          }
+        },
+        {
+          "id": "M01042:tlk:7:2",
+          "op": "jump",
+          "record_id": 7,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 7,
+            "record_bytes": 1647,
+            "offset": 11908
+          },
+          "target": "M01042:tlk:end"
+        },
+        {
+          "id": "M01042:tlk:8",
+          "op": "record",
+          "record_id": 8,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 8,
+            "record_bytes": 1647,
+            "offset": 13555
+          }
+        },
+        {
+          "id": "M01042:tlk:8:1",
+          "op": "test_flag_bit",
+          "record_id": 8,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 8,
+            "record_bytes": 1647,
+            "offset": 13555
+          },
+          "index": 386,
+          "bit": 2,
+          "if_true": "M01042:tlk:2",
+          "if_false": "M01042:tlk:8:2"
+        },
+        {
+          "id": "M01042:tlk:8:2",
+          "op": "jump",
+          "record_id": 8,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 8,
+            "record_bytes": 1647,
+            "offset": 13555
+          },
+          "target": "M01042:tlk:1"
+        },
+        {
+          "id": "M01042:tlk:9",
+          "op": "record",
+          "record_id": 9,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 9,
+            "record_bytes": 1647,
+            "offset": 15202
+          }
+        },
+        {
+          "id": "M01042:tlk:9:1",
+          "op": "test_native_condition",
+          "record_id": 9,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 9,
+            "record_bytes": 1647,
+            "offset": 15202
+          },
+          "condition_type": 2,
+          "condition_index": 500000,
+          "condition_bit": 0,
+          "condition_byte_raw_0b": 0,
+          "if_true": "M01042:tlk:5",
+          "if_false": "M01042:tlk:9:2"
+        },
+        {
+          "id": "M01042:tlk:9:2",
+          "op": "jump",
+          "record_id": 9,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 9,
+            "record_bytes": 1647,
+            "offset": 15202
+          },
+          "target": "M01042:tlk:64"
+        },
+        {
+          "id": "M01042:tlk:10",
+          "op": "record",
+          "record_id": 10,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 10,
+            "record_bytes": 1647,
+            "offset": 16849
+          }
+        },
+        {
+          "id": "M01042:tlk:10:1",
+          "op": "test_flag_bit",
+          "record_id": 10,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 10,
+            "record_bytes": 1647,
+            "offset": 16849
+          },
+          "index": 386,
+          "bit": 1,
+          "if_true": "M01042:tlk:23",
+          "if_false": "M01042:tlk:10:2"
+        },
+        {
+          "id": "M01042:tlk:10:2",
+          "op": "say",
+          "record_id": 10,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 10,
+            "record_bytes": 1647,
+            "offset": 16849
+          },
+          "text_id": "M01042:TLK:10",
+          "presentation": {
+            "speaker": 12,
+            "style": 1,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M01042:tlk:10:3",
+          "op": "jump",
+          "record_id": 10,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 10,
+            "record_bytes": 1647,
+            "offset": 16849
+          },
+          "target": "M01042:tlk:11"
+        },
+        {
+          "id": "M01042:tlk:11",
+          "op": "record",
+          "record_id": 11,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 11,
+            "record_bytes": 1647,
+            "offset": 18496
+          }
+        },
+        {
+          "id": "M01042:tlk:11:1",
+          "op": "test_native_condition",
+          "record_id": 11,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 11,
+            "record_bytes": 1647,
+            "offset": 18496
+          },
+          "condition_type": 4,
+          "condition_index": 0,
+          "condition_bit": 297,
+          "condition_byte_raw_0b": 0,
+          "if_true": "M01042:tlk:12",
+          "if_false": "M01042:tlk:11:2"
+        },
+        {
+          "id": "M01042:tlk:11:2",
+          "op": "jump",
+          "record_id": 11,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 11,
+            "record_bytes": 1647,
+            "offset": 18496
+          },
+          "target": "M01042:tlk:end"
+        },
+        {
+          "id": "M01042:tlk:12",
+          "op": "record",
+          "record_id": 12,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 12,
+            "record_bytes": 1647,
+            "offset": 20143
+          }
+        },
+        {
+          "id": "M01042:tlk:12:1",
+          "op": "say",
+          "record_id": 12,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 12,
+            "record_bytes": 1647,
+            "offset": 20143
+          },
+          "text_id": "M01042:TLK:12",
+          "presentation": {
+            "speaker": 1,
+            "style": 1,
+            "portrait_id": 27,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M01042:tlk:12:2",
+          "op": "jump",
+          "record_id": 12,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 12,
+            "record_bytes": 1647,
+            "offset": 20143
+          },
+          "target": "M01042:tlk:13"
+        },
+        {
+          "id": "M01042:tlk:13",
+          "op": "record",
+          "record_id": 13,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 13,
+            "record_bytes": 1647,
+            "offset": 21790
+          }
+        },
+        {
+          "id": "M01042:tlk:13:1",
+          "op": "say",
+          "record_id": 13,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 13,
+            "record_bytes": 1647,
+            "offset": 21790
+          },
+          "text_id": "M01042:TLK:13",
+          "presentation": {
+            "speaker": 12,
+            "style": 1,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M01042:tlk:13:2",
+          "op": "jump",
+          "record_id": 13,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 13,
+            "record_bytes": 1647,
+            "offset": 21790
+          },
+          "target": "M01042:tlk:14"
+        },
+        {
+          "id": "M01042:tlk:14",
+          "op": "record",
+          "record_id": 14,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 14,
+            "record_bytes": 1647,
+            "offset": 23437
+          }
+        },
+        {
+          "id": "M01042:tlk:14:1",
+          "op": "say",
+          "record_id": 14,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 14,
+            "record_bytes": 1647,
+            "offset": 23437
+          },
+          "text_id": "M01042:TLK:14",
+          "presentation": {
+            "speaker": 12,
+            "style": 1,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M01042:tlk:14:2",
+          "op": "jump",
+          "record_id": 14,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 14,
+            "record_bytes": 1647,
+            "offset": 23437
+          },
+          "target": "M01042:tlk:15"
+        },
+        {
+          "id": "M01042:tlk:15",
+          "op": "record",
+          "record_id": 15,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 15,
+            "record_bytes": 1647,
+            "offset": 25084
+          }
+        },
+        {
+          "id": "M01042:tlk:15:1",
+          "op": "animation",
+          "record_id": 15,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 15,
+            "record_bytes": 1647,
+            "offset": 25084
+          },
+          "program_id": "m01042-1"
+        },
+        {
+          "id": "M01042:tlk:15:2",
+          "op": "jump",
+          "record_id": 15,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 15,
+            "record_bytes": 1647,
+            "offset": 25084
+          },
+          "target": "M01042:tlk:end"
+        },
+        {
+          "id": "M01042:tlk:16",
+          "op": "record",
+          "record_id": 16,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 16,
+            "record_bytes": 1647,
+            "offset": 26731
+          }
+        },
+        {
+          "id": "M01042:tlk:16:1",
+          "op": "say",
+          "record_id": 16,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 16,
+            "record_bytes": 1647,
+            "offset": 26731
+          },
+          "text_id": "M01042:TLK:16",
+          "presentation": {
+            "speaker": 12,
+            "style": 1,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M01042:tlk:16:2",
+          "op": "jump",
+          "record_id": 16,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 16,
+            "record_bytes": 1647,
+            "offset": 26731
+          },
+          "target": "M01042:tlk:17"
+        },
+        {
+          "id": "M01042:tlk:17",
+          "op": "record",
+          "record_id": 17,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 17,
+            "record_bytes": 1647,
+            "offset": 28378
+          }
+        },
+        {
+          "id": "M01042:tlk:17:1",
+          "op": "say",
+          "record_id": 17,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 17,
+            "record_bytes": 1647,
+            "offset": 28378
+          },
+          "text_id": "M01042:TLK:17",
+          "presentation": {
+            "speaker": 12,
+            "style": 1,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M01042:tlk:17:2",
+          "op": "jump",
+          "record_id": 17,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 17,
+            "record_bytes": 1647,
+            "offset": 28378
+          },
+          "target": "M01042:tlk:18"
+        },
+        {
+          "id": "M01042:tlk:18",
+          "op": "record",
+          "record_id": 18,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 18,
+            "record_bytes": 1647,
+            "offset": 30025
+          }
+        },
+        {
+          "id": "M01042:tlk:18:1",
+          "op": "give_item",
+          "record_id": 18,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 18,
+            "record_bytes": 1647,
+            "offset": 30025
+          }
+        },
+        {
+          "id": "M01042:tlk:18:2",
+          "op": "jump",
+          "record_id": 18,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 18,
+            "record_bytes": 1647,
+            "offset": 30025
+          },
+          "target": "M01042:tlk:19"
+        },
+        {
+          "id": "M01042:tlk:19",
+          "op": "record",
+          "record_id": 19,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 19,
+            "record_bytes": 1647,
+            "offset": 31672
+          }
+        },
+        {
+          "id": "M01042:tlk:19:1",
+          "op": "give_item",
+          "record_id": 19,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 19,
+            "record_bytes": 1647,
+            "offset": 31672
+          }
+        },
+        {
+          "id": "M01042:tlk:19:2",
+          "op": "jump",
+          "record_id": 19,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 19,
+            "record_bytes": 1647,
+            "offset": 31672
+          },
+          "target": "M01042:tlk:20"
+        },
+        {
+          "id": "M01042:tlk:20",
+          "op": "record",
+          "record_id": 20,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 20,
+            "record_bytes": 1647,
+            "offset": 33319
+          }
+        },
+        {
+          "id": "M01042:tlk:20:1",
+          "op": "give_item",
+          "record_id": 20,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 20,
+            "record_bytes": 1647,
+            "offset": 33319
+          }
+        },
+        {
+          "id": "M01042:tlk:20:2",
+          "op": "jump",
+          "record_id": 20,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 20,
+            "record_bytes": 1647,
+            "offset": 33319
+          },
+          "target": "M01042:tlk:21"
+        },
+        {
+          "id": "M01042:tlk:21",
+          "op": "record",
+          "record_id": 21,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 21,
+            "record_bytes": 1647,
+            "offset": 34966
+          }
+        },
+        {
+          "id": "M01042:tlk:21:1",
+          "op": "give_item",
+          "record_id": 21,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 21,
+            "record_bytes": 1647,
+            "offset": 34966
+          }
+        },
+        {
+          "id": "M01042:tlk:21:2",
+          "op": "jump",
+          "record_id": 21,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 21,
+            "record_bytes": 1647,
+            "offset": 34966
+          },
+          "target": "M01042:tlk:22"
+        },
+        {
+          "id": "M01042:tlk:22",
+          "op": "record",
+          "record_id": 22,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 22,
+            "record_bytes": 1647,
+            "offset": 36613
+          }
+        },
+        {
+          "id": "M01042:tlk:22:1",
+          "op": "set_flag_bit",
+          "record_id": 22,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 22,
+            "record_bytes": 1647,
+            "offset": 36613
+          },
+          "index": 386,
+          "bit": 1
+        },
+        {
+          "id": "M01042:tlk:22:2",
+          "op": "say",
+          "record_id": 22,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 22,
+            "record_bytes": 1647,
+            "offset": 36613
+          },
+          "text_id": "M01042:TLK:22",
+          "presentation": {
+            "speaker": 500,
+            "style": 3,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M01042:tlk:22:3",
+          "op": "jump",
+          "record_id": 22,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 22,
+            "record_bytes": 1647,
+            "offset": 36613
+          },
+          "target": "M01042:tlk:end"
+        },
+        {
+          "id": "M01042:tlk:23",
+          "op": "record",
+          "record_id": 23,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 23,
+            "record_bytes": 1647,
+            "offset": 38260
+          }
+        },
+        {
+          "id": "M01042:tlk:23:1",
+          "op": "say",
+          "record_id": 23,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 23,
+            "record_bytes": 1647,
+            "offset": 38260
+          },
+          "text_id": "M01042:TLK:23",
+          "presentation": {
+            "speaker": 12,
+            "style": 2,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M01042:tlk:23:2",
+          "op": "jump",
+          "record_id": 23,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 23,
+            "record_bytes": 1647,
+            "offset": 38260
+          },
+          "target": "M01042:tlk:end"
+        },
+        {
+          "id": "M01042:tlk:24",
+          "op": "record",
+          "record_id": 24,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 24,
+            "record_bytes": 1647,
+            "offset": 39907
+          }
+        },
+        {
+          "id": "M01042:tlk:24:1",
+          "op": "test_flag_bit",
+          "record_id": 24,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 24,
+            "record_bytes": 1647,
+            "offset": 39907
+          },
+          "index": 386,
+          "bit": 2,
+          "if_true": "M01042:tlk:32",
+          "if_false": "M01042:tlk:24:2"
+        },
+        {
+          "id": "M01042:tlk:24:2",
+          "op": "say",
+          "record_id": 24,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 24,
+            "record_bytes": 1647,
+            "offset": 39907
+          },
+          "text_id": "M01042:TLK:24",
+          "presentation": {
+            "speaker": 13,
+            "style": 2,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M01042:tlk:24:3",
+          "op": "jump",
+          "record_id": 24,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 24,
+            "record_bytes": 1647,
+            "offset": 39907
+          },
+          "target": "M01042:tlk:25"
+        },
+        {
+          "id": "M01042:tlk:25",
+          "op": "record",
+          "record_id": 25,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 25,
+            "record_bytes": 1647,
+            "offset": 41554
+          }
+        },
+        {
+          "id": "M01042:tlk:25:1",
+          "op": "say",
+          "record_id": 25,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 25,
+            "record_bytes": 1647,
+            "offset": 41554
+          },
+          "text_id": "M01042:TLK:25",
+          "presentation": {
+            "speaker": 1,
+            "style": 2,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M01042:tlk:25:2",
+          "op": "jump",
+          "record_id": 25,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 25,
+            "record_bytes": 1647,
+            "offset": 41554
+          },
+          "target": "M01042:tlk:26"
+        },
+        {
+          "id": "M01042:tlk:26",
+          "op": "record",
+          "record_id": 26,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 26,
+            "record_bytes": 1647,
+            "offset": 43201
+          }
+        },
+        {
+          "id": "M01042:tlk:26:1",
+          "op": "choice",
+          "record_id": 26,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 26,
+            "record_bytes": 1647,
+            "offset": 43201
+          },
+          "text_id": "M01042:TLK:26",
+          "presentation": {
+            "speaker": 13,
+            "style": 1,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          },
+          "choices": [
+            {
+              "index": 0,
+              "recordId": 28,
+              "text_id": "M01042:TLK:26:choice:0",
+              "target": "M01042:tlk:28"
+            },
+            {
+              "index": 1,
+              "recordId": 27,
+              "text_id": "M01042:TLK:26:choice:1",
+              "target": "M01042:tlk:27"
+            }
+          ]
+        },
+        {
+          "id": "M01042:tlk:26:2",
+          "op": "jump",
+          "record_id": 26,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 26,
+            "record_bytes": 1647,
+            "offset": 43201
+          },
+          "target": "M01042:tlk:end"
+        },
+        {
+          "id": "M01042:tlk:27",
+          "op": "record",
+          "record_id": 27,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 27,
+            "record_bytes": 1647,
+            "offset": 44848
+          }
+        },
+        {
+          "id": "M01042:tlk:27:1",
+          "op": "say",
+          "record_id": 27,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 27,
+            "record_bytes": 1647,
+            "offset": 44848
+          },
+          "text_id": "M01042:TLK:27",
+          "presentation": {
+            "speaker": 13,
+            "style": 1,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M01042:tlk:27:2",
+          "op": "jump",
+          "record_id": 27,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 27,
+            "record_bytes": 1647,
+            "offset": 44848
+          },
+          "target": "M01042:tlk:end"
+        },
+        {
+          "id": "M01042:tlk:28",
+          "op": "record",
+          "record_id": 28,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 28,
+            "record_bytes": 1647,
+            "offset": 46495
+          }
+        },
+        {
+          "id": "M01042:tlk:28:1",
+          "op": "test_native_condition",
+          "record_id": 28,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 28,
+            "record_bytes": 1647,
+            "offset": 46495
+          },
+          "condition_type": 2,
+          "condition_index": 1000,
+          "condition_bit": 0,
+          "condition_byte_raw_0b": 0,
+          "if_true": "M01042:tlk:29",
+          "if_false": "M01042:tlk:28:2"
+        },
+        {
+          "id": "M01042:tlk:28:2",
+          "op": "jump",
+          "record_id": 28,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 28,
+            "record_bytes": 1647,
+            "offset": 46495
+          },
+          "target": "M01042:tlk:57"
+        },
+        {
+          "id": "M01042:tlk:29",
+          "op": "record",
+          "record_id": 29,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 29,
+            "record_bytes": 1647,
+            "offset": 48142
+          }
+        },
+        {
+          "id": "M01042:tlk:29:1",
+          "op": "change_native_money",
+          "record_id": 29,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 29,
+            "record_bytes": 1647,
+            "offset": 48142
+          }
+        },
+        {
+          "id": "M01042:tlk:29:2",
+          "op": "say",
+          "record_id": 29,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 29,
+            "record_bytes": 1647,
+            "offset": 48142
+          },
+          "text_id": "M01042:TLK:29",
+          "presentation": {
+            "speaker": 13,
+            "style": 2,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M01042:tlk:29:3",
+          "op": "jump",
+          "record_id": 29,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 29,
+            "record_bytes": 1647,
+            "offset": 48142
+          },
+          "target": "M01042:tlk:30"
+        },
+        {
+          "id": "M01042:tlk:30",
+          "op": "record",
+          "record_id": 30,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 30,
+            "record_bytes": 1647,
+            "offset": 49789
+          }
+        },
+        {
+          "id": "M01042:tlk:30:1",
+          "op": "set_flag_bit",
+          "record_id": 30,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 30,
+            "record_bytes": 1647,
+            "offset": 49789
+          },
+          "index": 386,
+          "bit": 2
+        },
+        {
+          "id": "M01042:tlk:30:2",
+          "op": "jump",
+          "record_id": 30,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 30,
+            "record_bytes": 1647,
+            "offset": 49789
+          },
+          "target": "M01042:tlk:58"
+        },
+        {
+          "id": "M01042:tlk:31",
+          "op": "record",
+          "record_id": 31,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 31,
+            "record_bytes": 1647,
+            "offset": 51436
+          }
+        },
+        {
+          "id": "M01042:tlk:31:1",
+          "op": "test_flag_bit",
+          "record_id": 31,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 31,
+            "record_bytes": 1647,
+            "offset": 51436
+          },
+          "index": 31,
+          "bit": 2,
+          "if_true": "M01042:tlk:24",
+          "if_false": "M01042:tlk:31:2"
+        },
+        {
+          "id": "M01042:tlk:31:2",
+          "op": "say",
+          "record_id": 31,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 31,
+            "record_bytes": 1647,
+            "offset": 51436
+          },
+          "text_id": "M01042:TLK:31",
+          "presentation": {
+            "speaker": 13,
+            "style": 2,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M01042:tlk:31:3",
+          "op": "jump",
+          "record_id": 31,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 31,
+            "record_bytes": 1647,
+            "offset": 51436
+          },
+          "target": "M01042:tlk:end"
+        },
+        {
+          "id": "M01042:tlk:32",
+          "op": "record",
+          "record_id": 32,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 32,
+            "record_bytes": 1647,
+            "offset": 53083
+          }
+        },
+        {
+          "id": "M01042:tlk:32:1",
+          "op": "test_flag_bit",
+          "record_id": 32,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 32,
+            "record_bytes": 1647,
+            "offset": 53083
+          },
+          "index": 386,
+          "bit": 4,
+          "if_true": "M01042:tlk:37",
+          "if_false": "M01042:tlk:32:2"
+        },
+        {
+          "id": "M01042:tlk:32:2",
+          "op": "choice",
+          "record_id": 32,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 32,
+            "record_bytes": 1647,
+            "offset": 53083
+          },
+          "text_id": "M01042:TLK:32",
+          "presentation": {
+            "speaker": 13,
+            "style": 1,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          },
+          "choices": [
+            {
+              "index": 0,
+              "recordId": 34,
+              "text_id": "M01042:TLK:32:choice:0",
+              "target": "M01042:tlk:34"
+            },
+            {
+              "index": 1,
+              "recordId": 33,
+              "text_id": "M01042:TLK:32:choice:1",
+              "target": "M01042:tlk:33"
+            }
+          ]
+        },
+        {
+          "id": "M01042:tlk:32:3",
+          "op": "jump",
+          "record_id": 32,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 32,
+            "record_bytes": 1647,
+            "offset": 53083
+          },
+          "target": "M01042:tlk:end"
+        },
+        {
+          "id": "M01042:tlk:33",
+          "op": "record",
+          "record_id": 33,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 33,
+            "record_bytes": 1647,
+            "offset": 54730
+          }
+        },
+        {
+          "id": "M01042:tlk:33:1",
+          "op": "say",
+          "record_id": 33,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 33,
+            "record_bytes": 1647,
+            "offset": 54730
+          },
+          "text_id": "M01042:TLK:33",
+          "presentation": {
+            "speaker": 13,
+            "style": 1,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M01042:tlk:33:2",
+          "op": "jump",
+          "record_id": 33,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 33,
+            "record_bytes": 1647,
+            "offset": 54730
+          },
+          "target": "M01042:tlk:end"
+        },
+        {
+          "id": "M01042:tlk:34",
+          "op": "record",
+          "record_id": 34,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 34,
+            "record_bytes": 1647,
+            "offset": 56377
+          }
+        },
+        {
+          "id": "M01042:tlk:34:1",
+          "op": "set_flag_bit",
+          "record_id": 34,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 34,
+            "record_bytes": 1647,
+            "offset": 56377
+          },
+          "index": 386,
+          "bit": 3
+        },
+        {
+          "id": "M01042:tlk:34:2",
+          "op": "say",
+          "record_id": 34,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 34,
+            "record_bytes": 1647,
+            "offset": 56377
+          },
+          "text_id": "M01042:TLK:34",
+          "presentation": {
+            "speaker": 13,
+            "style": 1,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M01042:tlk:34:3",
+          "op": "jump",
+          "record_id": 34,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 34,
+            "record_bytes": 1647,
+            "offset": 56377
+          },
+          "target": "M01042:tlk:35"
+        },
+        {
+          "id": "M01042:tlk:35",
+          "op": "record",
+          "record_id": 35,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 35,
+            "record_bytes": 1647,
+            "offset": 58024
+          }
+        },
+        {
+          "id": "M01042:tlk:35:1",
+          "op": "give_item",
+          "record_id": 35,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 35,
+            "record_bytes": 1647,
+            "offset": 58024
+          }
+        },
+        {
+          "id": "M01042:tlk:35:2",
+          "op": "say",
+          "record_id": 35,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 35,
+            "record_bytes": 1647,
+            "offset": 58024
+          },
+          "text_id": "M01042:TLK:35",
+          "presentation": {
+            "speaker": 1,
+            "style": 3,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M01042:tlk:35:3",
+          "op": "jump",
+          "record_id": 35,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 35,
+            "record_bytes": 1647,
+            "offset": 58024
+          },
+          "target": "M01042:tlk:36"
+        },
+        {
+          "id": "M01042:tlk:36",
+          "op": "record",
+          "record_id": 36,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 36,
+            "record_bytes": 1647,
+            "offset": 59671
+          }
+        },
+        {
+          "id": "M01042:tlk:36:1",
+          "op": "set_flag_bit",
+          "record_id": 36,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 36,
+            "record_bytes": 1647,
+            "offset": 59671
+          },
+          "index": 386,
+          "bit": 4
+        },
+        {
+          "id": "M01042:tlk:36:2",
+          "op": "jump",
+          "record_id": 36,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 36,
+            "record_bytes": 1647,
+            "offset": 59671
+          },
+          "target": "M01042:tlk:end"
+        },
+        {
+          "id": "M01042:tlk:37",
+          "op": "record",
+          "record_id": 37,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 37,
+            "record_bytes": 1647,
+            "offset": 61318
+          }
+        },
+        {
+          "id": "M01042:tlk:37:1",
+          "op": "test_flag_bit",
+          "record_id": 37,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 37,
+            "record_bytes": 1647,
+            "offset": 61318
+          },
+          "index": 29,
+          "bit": 2,
+          "if_true": "M01042:tlk:39",
+          "if_false": "M01042:tlk:37:2"
+        },
+        {
+          "id": "M01042:tlk:37:2",
+          "op": "say",
+          "record_id": 37,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 37,
+            "record_bytes": 1647,
+            "offset": 61318
+          },
+          "text_id": "M01042:TLK:37",
+          "presentation": {
+            "speaker": 13,
+            "style": 1,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M01042:tlk:37:3",
+          "op": "jump",
+          "record_id": 37,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 37,
+            "record_bytes": 1647,
+            "offset": 61318
+          },
+          "target": "M01042:tlk:end"
+        },
+        {
+          "id": "M01042:tlk:38",
+          "op": "record",
+          "record_id": 38,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 38,
+            "record_bytes": 1647,
+            "offset": 62965
+          }
+        },
+        {
+          "id": "M01042:tlk:38:1",
+          "op": "set_flag_bit",
+          "record_id": 38,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 38,
+            "record_bytes": 1647,
+            "offset": 62965
+          },
+          "index": 386,
+          "bit": 5
+        },
+        {
+          "id": "M01042:tlk:38:2",
+          "op": "say",
+          "record_id": 38,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 38,
+            "record_bytes": 1647,
+            "offset": 62965
+          },
+          "text_id": "M01042:TLK:38",
+          "presentation": {
+            "speaker": 13,
+            "style": 1,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M01042:tlk:38:3",
+          "op": "jump",
+          "record_id": 38,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 38,
+            "record_bytes": 1647,
+            "offset": 62965
+          },
+          "target": "M01042:tlk:end"
+        },
+        {
+          "id": "M01042:tlk:39",
+          "op": "record",
+          "record_id": 39,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 39,
+            "record_bytes": 1647,
+            "offset": 64612
+          }
+        },
+        {
+          "id": "M01042:tlk:39:1",
+          "op": "test_flag_bit",
+          "record_id": 39,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 39,
+            "record_bytes": 1647,
+            "offset": 64612
+          },
+          "index": 386,
+          "bit": 5,
+          "if_true": "M01042:tlk:41",
+          "if_false": "M01042:tlk:39:2"
+        },
+        {
+          "id": "M01042:tlk:39:2",
+          "op": "jump",
+          "record_id": 39,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 39,
+            "record_bytes": 1647,
+            "offset": 64612
+          },
+          "target": "M01042:tlk:38"
+        },
+        {
+          "id": "M01042:tlk:40",
+          "op": "record",
+          "record_id": 40,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 40,
+            "record_bytes": 1647,
+            "offset": 66259
+          }
+        },
+        {
+          "id": "M01042:tlk:40:1",
+          "op": "test_native_condition",
+          "record_id": 40,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 40,
+            "record_bytes": 1647,
+            "offset": 66259
+          },
+          "condition_type": 4,
+          "condition_index": 0,
+          "condition_bit": 170,
+          "condition_byte_raw_0b": 0,
+          "if_true": "M01042:tlk:42",
+          "if_false": "M01042:tlk:40:2"
+        },
+        {
+          "id": "M01042:tlk:40:2",
+          "op": "say",
+          "record_id": 40,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 40,
+            "record_bytes": 1647,
+            "offset": 66259
+          },
+          "text_id": "M01042:TLK:40",
+          "presentation": {
+            "speaker": 13,
+            "style": 1,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M01042:tlk:40:3",
+          "op": "jump",
+          "record_id": 40,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 40,
+            "record_bytes": 1647,
+            "offset": 66259
+          },
+          "target": "M01042:tlk:end"
+        },
+        {
+          "id": "M01042:tlk:41",
+          "op": "record",
+          "record_id": 41,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 41,
+            "record_bytes": 1647,
+            "offset": 67906
+          }
+        },
+        {
+          "id": "M01042:tlk:41:1",
+          "op": "test_flag_bit",
+          "record_id": 41,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 41,
+            "record_bytes": 1647,
+            "offset": 67906
+          },
+          "index": 386,
+          "bit": 6,
+          "if_true": "M01042:tlk:44",
+          "if_false": "M01042:tlk:41:2"
+        },
+        {
+          "id": "M01042:tlk:41:2",
+          "op": "jump",
+          "record_id": 41,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 41,
+            "record_bytes": 1647,
+            "offset": 67906
+          },
+          "target": "M01042:tlk:40"
+        },
+        {
+          "id": "M01042:tlk:42",
+          "op": "record",
+          "record_id": 42,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 42,
+            "record_bytes": 1647,
+            "offset": 69553
+          }
+        },
+        {
+          "id": "M01042:tlk:42:1",
+          "op": "give_item",
+          "record_id": 42,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 42,
+            "record_bytes": 1647,
+            "offset": 69553
+          }
+        },
+        {
+          "id": "M01042:tlk:42:2",
+          "op": "say",
+          "record_id": 42,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 42,
+            "record_bytes": 1647,
+            "offset": 69553
+          },
+          "text_id": "M01042:TLK:42",
+          "presentation": {
+            "speaker": 13,
+            "style": 2,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M01042:tlk:42:3",
+          "op": "jump",
+          "record_id": 42,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 42,
+            "record_bytes": 1647,
+            "offset": 69553
+          },
+          "target": "M01042:tlk:43"
+        },
+        {
+          "id": "M01042:tlk:43",
+          "op": "record",
+          "record_id": 43,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 43,
+            "record_bytes": 1647,
+            "offset": 71200
+          }
+        },
+        {
+          "id": "M01042:tlk:43:1",
+          "op": "set_flag_bit",
+          "record_id": 43,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 43,
+            "record_bytes": 1647,
+            "offset": 71200
+          },
+          "index": 386,
+          "bit": 6
+        },
+        {
+          "id": "M01042:tlk:43:2",
+          "op": "jump",
+          "record_id": 43,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 43,
+            "record_bytes": 1647,
+            "offset": 71200
+          },
+          "target": "M01042:tlk:end"
+        },
+        {
+          "id": "M01042:tlk:44",
+          "op": "record",
+          "record_id": 44,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 44,
+            "record_bytes": 1647,
+            "offset": 72847
+          }
+        },
+        {
+          "id": "M01042:tlk:44:1",
+          "op": "test_flag_bit",
+          "record_id": 44,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 44,
+            "record_bytes": 1647,
+            "offset": 72847
+          },
+          "index": 386,
+          "bit": 7,
+          "if_true": "M01042:tlk:49",
+          "if_false": "M01042:tlk:44:2"
+        },
+        {
+          "id": "M01042:tlk:44:2",
+          "op": "choice",
+          "record_id": 44,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 44,
+            "record_bytes": 1647,
+            "offset": 72847
+          },
+          "text_id": "M01042:TLK:44",
+          "presentation": {
+            "speaker": 13,
+            "style": 1,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          },
+          "choices": [
+            {
+              "index": 0,
+              "recordId": 33,
+              "text_id": "M01042:TLK:44:choice:0",
+              "target": "M01042:tlk:33"
+            },
+            {
+              "index": 1,
+              "recordId": 45,
+              "text_id": "M01042:TLK:44:choice:1",
+              "target": "M01042:tlk:45"
+            }
+          ]
+        },
+        {
+          "id": "M01042:tlk:44:3",
+          "op": "jump",
+          "record_id": 44,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 44,
+            "record_bytes": 1647,
+            "offset": 72847
+          },
+          "target": "M01042:tlk:end"
+        },
+        {
+          "id": "M01042:tlk:45",
+          "op": "record",
+          "record_id": 45,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 45,
+            "record_bytes": 1647,
+            "offset": 74494
+          }
+        },
+        {
+          "id": "M01042:tlk:45:1",
+          "op": "say",
+          "record_id": 45,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 45,
+            "record_bytes": 1647,
+            "offset": 74494
+          },
+          "text_id": "M01042:TLK:45",
+          "presentation": {
+            "speaker": 13,
+            "style": 1,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M01042:tlk:45:2",
+          "op": "jump",
+          "record_id": 45,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 45,
+            "record_bytes": 1647,
+            "offset": 74494
+          },
+          "target": "M01042:tlk:47"
+        },
+        {
+          "id": "M01042:tlk:46",
+          "op": "record",
+          "record_id": 46,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 46,
+            "record_bytes": 1647,
+            "offset": 76141
+          }
+        },
+        {
+          "id": "M01042:tlk:46:1",
+          "op": "give_item",
+          "record_id": 46,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 46,
+            "record_bytes": 1647,
+            "offset": 76141
+          }
+        },
+        {
+          "id": "M01042:tlk:46:2",
+          "op": "jump",
+          "record_id": 46,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 46,
+            "record_bytes": 1647,
+            "offset": 76141
+          },
+          "target": "M01042:tlk:48"
+        },
+        {
+          "id": "M01042:tlk:47",
+          "op": "record",
+          "record_id": 47,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 47,
+            "record_bytes": 1647,
+            "offset": 77788
+          }
+        },
+        {
+          "id": "M01042:tlk:47:1",
+          "op": "say",
+          "record_id": 47,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 47,
+            "record_bytes": 1647,
+            "offset": 77788
+          },
+          "text_id": "M01042:TLK:47",
+          "presentation": {
+            "speaker": 13,
+            "style": 2,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M01042:tlk:47:2",
+          "op": "jump",
+          "record_id": 47,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 47,
+            "record_bytes": 1647,
+            "offset": 77788
+          },
+          "target": "M01042:tlk:46"
+        },
+        {
+          "id": "M01042:tlk:48",
+          "op": "record",
+          "record_id": 48,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 48,
+            "record_bytes": 1647,
+            "offset": 79435
+          }
+        },
+        {
+          "id": "M01042:tlk:48:1",
+          "op": "set_flag_bit",
+          "record_id": 48,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 48,
+            "record_bytes": 1647,
+            "offset": 79435
+          },
+          "index": 386,
+          "bit": 7
+        },
+        {
+          "id": "M01042:tlk:48:2",
+          "op": "say",
+          "record_id": 48,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 48,
+            "record_bytes": 1647,
+            "offset": 79435
+          },
+          "text_id": "M01042:TLK:48",
+          "presentation": {
+            "speaker": 500,
+            "style": 1,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M01042:tlk:48:3",
+          "op": "jump",
+          "record_id": 48,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 48,
+            "record_bytes": 1647,
+            "offset": 79435
+          },
+          "target": "M01042:tlk:end"
+        },
+        {
+          "id": "M01042:tlk:49",
+          "op": "record",
+          "record_id": 49,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 49,
+            "record_bytes": 1647,
+            "offset": 81082
+          }
+        },
+        {
+          "id": "M01042:tlk:49:1",
+          "op": "test_flag_bit",
+          "record_id": 49,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 49,
+            "record_bytes": 1647,
+            "offset": 81082
+          },
+          "index": 616,
+          "bit": 1,
+          "if_true": "M01042:tlk:50",
+          "if_false": "M01042:tlk:49:2"
+        },
+        {
+          "id": "M01042:tlk:49:2",
+          "op": "say",
+          "record_id": 49,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 49,
+            "record_bytes": 1647,
+            "offset": 81082
+          },
+          "text_id": "M01042:TLK:49",
+          "presentation": {
+            "speaker": 13,
+            "style": 2,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M01042:tlk:49:3",
+          "op": "jump",
+          "record_id": 49,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 49,
+            "record_bytes": 1647,
+            "offset": 81082
+          },
+          "target": "M01042:tlk:end"
+        },
+        {
+          "id": "M01042:tlk:50",
+          "op": "record",
+          "record_id": 50,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 50,
+            "record_bytes": 1647,
+            "offset": 82729
+          }
+        },
+        {
+          "id": "M01042:tlk:50:1",
+          "op": "test_flag_bit",
+          "record_id": 50,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 50,
+            "record_bytes": 1647,
+            "offset": 82729
+          },
+          "index": 386,
+          "bit": 8,
+          "if_true": "M01042:tlk:52",
+          "if_false": "M01042:tlk:50:2"
+        },
+        {
+          "id": "M01042:tlk:50:2",
+          "op": "say",
+          "record_id": 50,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 50,
+            "record_bytes": 1647,
+            "offset": 82729
+          },
+          "text_id": "M01042:TLK:50",
+          "presentation": {
+            "speaker": 13,
+            "style": 1,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M01042:tlk:50:3",
+          "op": "jump",
+          "record_id": 50,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 50,
+            "record_bytes": 1647,
+            "offset": 82729
+          },
+          "target": "M01042:tlk:51"
+        },
+        {
+          "id": "M01042:tlk:51",
+          "op": "record",
+          "record_id": 51,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 51,
+            "record_bytes": 1647,
+            "offset": 84376
+          }
+        },
+        {
+          "id": "M01042:tlk:51:1",
+          "op": "set_flag_bit",
+          "record_id": 51,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 51,
+            "record_bytes": 1647,
+            "offset": 84376
+          },
+          "index": 386,
+          "bit": 8
+        },
+        {
+          "id": "M01042:tlk:51:2",
+          "op": "say",
+          "record_id": 51,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 51,
+            "record_bytes": 1647,
+            "offset": 84376
+          },
+          "text_id": "M01042:TLK:51",
+          "presentation": {
+            "speaker": 13,
+            "style": 1,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M01042:tlk:51:3",
+          "op": "jump",
+          "record_id": 51,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 51,
+            "record_bytes": 1647,
+            "offset": 84376
+          },
+          "target": "M01042:tlk:end"
+        },
+        {
+          "id": "M01042:tlk:52",
+          "op": "record",
+          "record_id": 52,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 52,
+            "record_bytes": 1647,
+            "offset": 86023
+          }
+        },
+        {
+          "id": "M01042:tlk:52:1",
+          "op": "test_flag_bit",
+          "record_id": 52,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 52,
+            "record_bytes": 1647,
+            "offset": 86023
+          },
+          "index": 396,
+          "bit": 2,
+          "if_true": "M01042:tlk:53",
+          "if_false": "M01042:tlk:52:2"
+        },
+        {
+          "id": "M01042:tlk:52:2",
+          "op": "say",
+          "record_id": 52,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 52,
+            "record_bytes": 1647,
+            "offset": 86023
+          },
+          "text_id": "M01042:TLK:52",
+          "presentation": {
+            "speaker": 13,
+            "style": 2,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M01042:tlk:52:3",
+          "op": "jump",
+          "record_id": 52,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 52,
+            "record_bytes": 1647,
+            "offset": 86023
+          },
+          "target": "M01042:tlk:end"
+        },
+        {
+          "id": "M01042:tlk:53",
+          "op": "record",
+          "record_id": 53,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 53,
+            "record_bytes": 1647,
+            "offset": 87670
+          }
+        },
+        {
+          "id": "M01042:tlk:53:1",
+          "op": "test_flag_bit",
+          "record_id": 53,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 53,
+            "record_bytes": 1647,
+            "offset": 87670
+          },
+          "index": 386,
+          "bit": 9,
+          "if_true": "M01042:tlk:54",
+          "if_false": "M01042:tlk:53:2"
+        },
+        {
+          "id": "M01042:tlk:53:2",
+          "op": "say",
+          "record_id": 53,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 53,
+            "record_bytes": 1647,
+            "offset": 87670
+          },
+          "text_id": "M01042:TLK:53",
+          "presentation": {
+            "speaker": 13,
+            "style": 2,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M01042:tlk:53:3",
+          "op": "jump",
+          "record_id": 53,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 53,
+            "record_bytes": 1647,
+            "offset": 87670
+          },
+          "target": "M01042:tlk:65"
+        },
+        {
+          "id": "M01042:tlk:54",
+          "op": "record",
+          "record_id": 54,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 54,
+            "record_bytes": 1647,
+            "offset": 89317
+          }
+        },
+        {
+          "id": "M01042:tlk:54:1",
+          "op": "say",
+          "record_id": 54,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 54,
+            "record_bytes": 1647,
+            "offset": 89317
+          },
+          "text_id": "M01042:TLK:54",
+          "presentation": {
+            "speaker": 13,
+            "style": 1,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M01042:tlk:54:2",
+          "op": "jump",
+          "record_id": 54,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 54,
+            "record_bytes": 1647,
+            "offset": 89317
+          },
+          "target": "M01042:tlk:end"
+        },
+        {
+          "id": "M01042:tlk:55",
+          "op": "record",
+          "record_id": 55,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 55,
+            "record_bytes": 1647,
+            "offset": 90964
+          }
+        },
+        {
+          "id": "M01042:tlk:55:1",
+          "op": "jump",
+          "record_id": 55,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 55,
+            "record_bytes": 1647,
+            "offset": 90964
+          },
+          "target": "M01042:tlk:7"
+        },
+        {
+          "id": "M01042:tlk:56",
+          "op": "record",
+          "record_id": 56,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 56,
+            "record_bytes": 1647,
+            "offset": 92611
+          }
+        },
+        {
+          "id": "M01042:tlk:56:1",
+          "op": "unlock_recipe",
+          "record_id": 56,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 56,
+            "record_bytes": 1647,
+            "offset": 92611
+          }
+        },
+        {
+          "id": "M01042:tlk:56:2",
+          "op": "jump",
+          "record_id": 56,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 56,
+            "record_bytes": 1647,
+            "offset": 92611
+          },
+          "target": "M01042:tlk:7"
+        },
+        {
+          "id": "M01042:tlk:57",
+          "op": "record",
+          "record_id": 57,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 57,
+            "record_bytes": 1647,
+            "offset": 94258
+          }
+        },
+        {
+          "id": "M01042:tlk:57:1",
+          "op": "say",
+          "record_id": 57,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 57,
+            "record_bytes": 1647,
+            "offset": 94258
+          },
+          "text_id": "M01042:TLK:57",
+          "presentation": {
+            "speaker": 13,
+            "style": 1,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M01042:tlk:57:2",
+          "op": "jump",
+          "record_id": 57,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 57,
+            "record_bytes": 1647,
+            "offset": 94258
+          },
+          "target": "M01042:tlk:end"
+        },
+        {
+          "id": "M01042:tlk:58",
+          "op": "record",
+          "record_id": 58,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 58,
+            "record_bytes": 1647,
+            "offset": 95905
+          }
+        },
+        {
+          "id": "M01042:tlk:58:1",
+          "op": "unlock_recipe",
+          "record_id": 58,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 58,
+            "record_bytes": 1647,
+            "offset": 95905
+          }
+        },
+        {
+          "id": "M01042:tlk:58:2",
+          "op": "jump",
+          "record_id": 58,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 58,
+            "record_bytes": 1647,
+            "offset": 95905
+          },
+          "target": "M01042:tlk:59"
+        },
+        {
+          "id": "M01042:tlk:59",
+          "op": "record",
+          "record_id": 59,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 59,
+            "record_bytes": 1647,
+            "offset": 97552
+          }
+        },
+        {
+          "id": "M01042:tlk:59:1",
+          "op": "unlock_recipe",
+          "record_id": 59,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 59,
+            "record_bytes": 1647,
+            "offset": 97552
+          }
+        },
+        {
+          "id": "M01042:tlk:59:2",
+          "op": "jump",
+          "record_id": 59,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 59,
+            "record_bytes": 1647,
+            "offset": 97552
+          },
+          "target": "M01042:tlk:60"
+        },
+        {
+          "id": "M01042:tlk:60",
+          "op": "record",
+          "record_id": 60,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 60,
+            "record_bytes": 1647,
+            "offset": 99199
+          }
+        },
+        {
+          "id": "M01042:tlk:60:1",
+          "op": "unlock_recipe",
+          "record_id": 60,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 60,
+            "record_bytes": 1647,
+            "offset": 99199
+          }
+        },
+        {
+          "id": "M01042:tlk:60:2",
+          "op": "jump",
+          "record_id": 60,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 60,
+            "record_bytes": 1647,
+            "offset": 99199
+          },
+          "target": "M01042:tlk:61"
+        },
+        {
+          "id": "M01042:tlk:61",
+          "op": "record",
+          "record_id": 61,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 61,
+            "record_bytes": 1647,
+            "offset": 100846
+          }
+        },
+        {
+          "id": "M01042:tlk:61:1",
+          "op": "unlock_recipe",
+          "record_id": 61,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 61,
+            "record_bytes": 1647,
+            "offset": 100846
+          }
+        },
+        {
+          "id": "M01042:tlk:61:2",
+          "op": "jump",
+          "record_id": 61,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 61,
+            "record_bytes": 1647,
+            "offset": 100846
+          },
+          "target": "M01042:tlk:62"
+        },
+        {
+          "id": "M01042:tlk:62",
+          "op": "record",
+          "record_id": 62,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 62,
+            "record_bytes": 1647,
+            "offset": 102493
+          }
+        },
+        {
+          "id": "M01042:tlk:62:1",
+          "op": "unlock_recipe",
+          "record_id": 62,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 62,
+            "record_bytes": 1647,
+            "offset": 102493
+          }
+        },
+        {
+          "id": "M01042:tlk:62:2",
+          "op": "jump",
+          "record_id": 62,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 62,
+            "record_bytes": 1647,
+            "offset": 102493
+          },
+          "target": "M01042:tlk:63"
+        },
+        {
+          "id": "M01042:tlk:63",
+          "op": "record",
+          "record_id": 63,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 63,
+            "record_bytes": 1647,
+            "offset": 104140
+          }
+        },
+        {
+          "id": "M01042:tlk:63:1",
+          "op": "unlock_recipe",
+          "record_id": 63,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 63,
+            "record_bytes": 1647,
+            "offset": 104140
+          }
+        },
+        {
+          "id": "M01042:tlk:63:2",
+          "op": "jump",
+          "record_id": 63,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 63,
+            "record_bytes": 1647,
+            "offset": 104140
+          },
+          "target": "M01042:tlk:end"
+        },
+        {
+          "id": "M01042:tlk:64",
+          "op": "record",
+          "record_id": 64,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 64,
+            "record_bytes": 1647,
+            "offset": 105787
+          }
+        },
+        {
+          "id": "M01042:tlk:64:1",
+          "op": "say",
+          "record_id": 64,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 64,
+            "record_bytes": 1647,
+            "offset": 105787
+          },
+          "text_id": "M01042:TLK:64",
+          "presentation": {
+            "speaker": 11,
+            "style": 1,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M01042:tlk:64:2",
+          "op": "jump",
+          "record_id": 64,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 64,
+            "record_bytes": 1647,
+            "offset": 105787
+          },
+          "target": "M01042:tlk:end"
+        },
+        {
+          "id": "M01042:tlk:65",
+          "op": "record",
+          "record_id": 65,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 65,
+            "record_bytes": 1647,
+            "offset": 107434
+          }
+        },
+        {
+          "id": "M01042:tlk:65:1",
+          "op": "set_flag_bit",
+          "record_id": 65,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 65,
+            "record_bytes": 1647,
+            "offset": 107434
+          },
+          "index": 386,
+          "bit": 9
+        },
+        {
+          "id": "M01042:tlk:65:2",
+          "op": "jump",
+          "record_id": 65,
+          "source": {
+            "path": "Map/m01042.TLK",
+            "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+            "record_id": 65,
+            "record_bytes": 1647,
+            "offset": 107434
+          },
+          "target": "M01042:tlk:end"
+        },
+        {
+          "id": "M01042:tlk:end",
+          "op": "end"
+        }
+      ]
+    }
+  },
+  "events": [],
+  "resources": {
+    "npcs_by_map": [
+      {
+        "id": "M01042-role-10",
+        "slot_zero_based": 10,
+        "speaker_slot_one_based": 11,
+        "name": "女術士炎",
+        "resource_id": "055",
+        "x": 272,
+        "y": 320,
+        "x_native": 136,
+        "y_native": 160,
+        "direction": 0,
+        "direction_raw_45": 0,
+        "hidden": false,
+        "hidden_raw_97": 0,
+        "hidden_on_load_raw_2ac": 0,
+        "initial_visibility_evidence": [
+          "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+        ],
+        "raw_field_41": 10,
+        "action_mode_raw_2f": 0,
+        "animation_index_raw_83": 0,
+        "frame_index_raw_7b": 0,
+        "actor_mode_raw_f0": 0,
+        "behavior_raw_c5": 0,
+        "behavior_state_raw_f5": 2,
+        "movement_direction_raw_2b1": 0,
+        "blend_mode_raw_4bd": 0,
+        "source": {
+          "path": "Map/m01042.dat",
+          "sha256": "1db3c0d509c377efe9b327a2560f58e28ac0d4eedfc2be0894d5b0fc9a285cc3",
+          "offset": 111878,
+          "bytes": 1221
+        }
+      },
+      {
+        "id": "M01042-role-11",
+        "slot_zero_based": 11,
+        "speaker_slot_one_based": 12,
+        "name": "女魔導士炎",
+        "resource_id": "057",
+        "x": 64,
+        "y": 272,
+        "x_native": 32,
+        "y_native": 136,
+        "direction": 2,
+        "direction_raw_45": 2,
+        "hidden": false,
+        "hidden_raw_97": 0,
+        "hidden_on_load_raw_2ac": 0,
+        "initial_visibility_evidence": [
+          "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+        ],
+        "raw_field_41": 11,
+        "action_mode_raw_2f": 0,
+        "animation_index_raw_83": 0,
+        "frame_index_raw_7b": 0,
+        "actor_mode_raw_f0": 0,
+        "behavior_raw_c5": 0,
+        "behavior_state_raw_f5": 1,
+        "movement_direction_raw_2b1": 0,
+        "blend_mode_raw_4bd": 0,
+        "source": {
+          "path": "Map/m01042.dat",
+          "sha256": "1db3c0d509c377efe9b327a2560f58e28ac0d4eedfc2be0894d5b0fc9a285cc3",
+          "offset": 113099,
+          "bytes": 1221
+        }
+      },
+      {
+        "id": "M01042-role-12",
+        "slot_zero_based": 12,
+        "speaker_slot_one_based": 13,
+        "name": "老魔導士炎",
+        "resource_id": "058",
+        "x": 144,
+        "y": 368,
+        "x_native": 72,
+        "y_native": 184,
+        "direction": 0,
+        "direction_raw_45": 0,
+        "hidden": false,
+        "hidden_raw_97": 0,
+        "hidden_on_load_raw_2ac": 0,
+        "initial_visibility_evidence": [
+          "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+        ],
+        "raw_field_41": 12,
+        "action_mode_raw_2f": 0,
+        "animation_index_raw_83": 0,
+        "frame_index_raw_7b": 0,
+        "actor_mode_raw_f0": 0,
+        "behavior_raw_c5": 0,
+        "behavior_state_raw_f5": 0,
+        "movement_direction_raw_2b1": 0,
+        "blend_mode_raw_4bd": 0,
+        "source": {
+          "path": "Map/m01042.dat",
+          "sha256": "1db3c0d509c377efe9b327a2560f58e28ac0d4eedfc2be0894d5b0fc9a285cc3",
+          "offset": 114320,
+          "bytes": 1221
+        }
+      }
+    ],
+    "exits_by_map": [
+      {
+        "id": 1,
+        "state": "ready",
+        "cells": [
+          {
+            "x": 41,
+            "y": 28
+          },
+          {
+            "x": 40,
+            "y": 29
+          },
+          {
+            "x": 41,
+            "y": 29
+          },
+          {
+            "x": 39,
+            "y": 30
+          },
+          {
+            "x": 40,
+            "y": 30
+          },
+          {
+            "x": 41,
+            "y": 30
+          }
+        ],
+        "target_map": "M01040",
+        "entry": {
+          "x": 1216,
+          "y": 640,
+          "direction": 0,
+          "cell_x": 76,
+          "cell_y": 40,
+          "native_x": 608,
+          "native_y": 320
+        },
+        "conditions": [],
+        "source": {
+          "path": "Map/m01042.dat",
+          "sha256": "1db3c0d509c377efe9b327a2560f58e28ac0d4eedfc2be0894d5b0fc9a285cc3",
+          "descriptor_offset": 97458,
+          "descriptor_bytes": 66,
+          "descriptor_hex": "00000000000000000000000000000000006d30313034302e646174000000000000000000000005000000040000000000000000000000000000000000000000000000",
+          "compact_field_expansion_evidence": null,
+          "target_path": "Map/m01040.dat",
+          "target_sha256": "6e26d1f0f043cdf760b04b012745ad9dd2545c4e6c8ebc55b129bd15728406cb",
+          "target_entry_marker": 5,
+          "entry_sort_code": 4,
+          "entry_terrain_raw": 0,
+          "entry_trigger_raw": 0,
+          "entry_scan_cells": [
+            {
+              "x": 76,
+              "y": 40,
+              "offset": 302194
+            }
+          ],
+          "entry_sorted_cells": [
+            {
+              "x": 76,
+              "y": 40
+            }
+          ],
+          "entry_sort": "x descending; stable ties",
+          "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
+          "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
+          "native_evidence": {
+            "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+            "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+            "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+            "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+          }
+        },
+        "execution": "Native transition descriptor only; map-entry TLK/ANM and their once-only checks must complete separately.",
+        "limitations": [
+          "Static source/code evidence; original timing not observed",
+          "Continuous keyboard movement is runtime policy"
+        ]
+      }
+    ],
+    "trigger_regions": [],
+    "interactive_objects": [],
+    "object_animations": []
+  },
+  "route": null,
+  "texts": {
+    "M01042:TLK:1": "店员：你好，本店拥有炎城内最优秀的合成师，可以合成物品与锻造法器，锻造手工精美，收取价钱合理，非合成工会会员只要500000库伦，请问你们需要吗？",
+    "M01042:TLK:1:choice:0": "是的。",
+    "M01042:TLK:1:choice:1": "不用。",
+    "M01042:TLK:2": "店员：你们已经是合成工会会员，所以我们可以免费让你们在这里锻造。",
+    "M01042:TLK:2:choice:0": "锻造。",
+    "M01042:TLK:2:choice:1": "不用。",
+    "M01042:TLK:3": "店员：那么收取您们1000库伦的锻造费。",
+    "M01042:TLK:3:choice:0": "好的",
+    "M01042:TLK:3:choice:1": "不用",
+    "M01042:TLK:4": "",
+    "M01042:TLK:5": "店员：那么客人想要锻造什么呢？",
+    "M01042:TLK:6": "",
+    "M01042:TLK:7": "",
+    "M01042:TLK:8": "",
+    "M01042:TLK:9": "",
+    "M01042:TLK:10": "合成师：为了维持炎城第一合成师的称号，我必须要继续研究更高深的合成知识，如果你们有什么古怪的物品可以给我研究，我愿意免费帮你们合成。",
+    "M01042:TLK:11": "",
+    "M01042:TLK:12": "我们这边有三件法器，可不可以请妳帮我们组合起来呢？",
+    "M01042:TLK:13": "合成师：真的吗？给我看看吧！",
+    "M01042:TLK:14": "合成师：这个法器看起来并不像是这个时代所锻造的，组合起来可能需要点时间，我得研究一下，请你们在这边等等吧！",
+    "M01042:TLK:15": "m01042-1.anm",
+    "M01042:TLK:16": "合成师：这的确是相当久远的法器了，在组合后散发出相当大的能量，大概是组合前的十几倍，令我感到相当的讶异，用法器互相组合产生共鸣，发挥比原来更大的能量，这是我以前所没有学过的知识，感谢你们带来这个法器，让我了解到这个知识。",
+    "M01042:TLK:17": "合成师：这就是组合好的法器。",
+    "M01042:TLK:18": "",
+    "M01042:TLK:19": "",
+    "M01042:TLK:20": "",
+    "M01042:TLK:21": "",
+    "M01042:TLK:22": "取得法雷斯剑。",
+    "M01042:TLK:23": "合成师：感谢你们，我会继续研究这项技术的！",
+    "M01042:TLK:24": "克姆罗斯：嗯，锻材店老板已经告诉我你帮了他一个大忙，证明你对工会有所贡献，你已经符合加入工会的资格！",
+    "M01042:TLK:25": "那接下来我要怎么做呢？",
+    "M01042:TLK:26": "克姆罗斯：喔，很简单，现在你只要付1000库伦的会员费，就能成为基本的火钳级会员，但若要成为更高阶的铁钻级或是烈焰级会员，则必须替工会做事来表现你对工会的贡献，这样，我就会提升你的会员阶级，也就能够享受更高阶物品合成的服务，你想加入会员吗？",
+    "M01042:TLK:26:choice:0": "是！",
+    "M01042:TLK:26:choice:1": "否，目前不想！",
+    "M01042:TLK:27": "克姆罗斯：若想加入合成工会再来找我！",
+    "M01042:TLK:28": "",
+    "M01042:TLK:29": "克姆罗斯：恭喜你，你现在是合成工会基本火钳会员，在研发工房中的多姆将会为你服务！",
+    "M01042:TLK:30": "",
+    "M01042:TLK:31": "克姆罗斯：我是合成工会的会长，若你想成为我们的会员，那你必须先证明自己的能力和提高自己的声望，例如得到其它会员的认同与推荐，那我就可以让你加入合成工会！成为会员之后，就可以享受合成物品的服务！",
+    "M01042:TLK:32": "克姆罗斯：亲爱的会员，你有事找我？",
+    "M01042:TLK:32:choice:0": "我想提升阶级！",
+    "M01042:TLK:32:choice:1": "没事。",
+    "M01042:TLK:33": "克姆罗斯：愿合成的火花与你同在。",
+    "M01042:TLK:34": "克姆罗斯：你想提升阶级？嗯，好的，工会的会员哈吉贝向工会要求合成一个铂丝乌金，现在合成好了，你帮我送去给他，完成后再回来找我！他目前应该在防具店闲晃！",
+    "M01042:TLK:35": "取得铂丝乌金！",
+    "M01042:TLK:36": "",
+    "M01042:TLK:37": "克姆罗斯：把我交给你的铂丝乌金送去给哈吉贝了吗？他应该在防具店吧！",
+    "M01042:TLK:38": "克姆罗斯：喔，你把东西交给哈吉贝了呀，很好很好！嗯，对了，上次伊斯坦想要合成幻影水晶，但是要合成的时候发现他送来的锻材少了一项紫龙晶，去宿屋找找看他在不在，然后把紫龙晶带回来！",
+    "M01042:TLK:39": "",
+    "M01042:TLK:40": "克姆罗斯：你还没拿回紫龙晶吗？伊斯坦人应该在宿屋吧！",
+    "M01042:TLK:41": "",
+    "M01042:TLK:42": "克姆罗斯：嗯！你拿回紫龙晶了，很好，那依照约定，现在我授与你铁钻级合成工会会员的资格，合成工会将提供你更多的合成项目。",
+    "M01042:TLK:43": "",
+    "M01042:TLK:44": "克姆罗斯：你好，工会会员，有事吗？",
+    "M01042:TLK:44:choice:0": "没事！",
+    "M01042:TLK:44:choice:1": "我想提升会员阶级！",
+    "M01042:TLK:45": "克姆罗斯：喔？你想成为烈焰级的会员？嗯，那这有件棘手的事就交给你去办，工会会员也是魔导士的爱尔希家中突然闯入了一群禁咒师，欲抢夺爱尔希所拥有的珍贵\"闇晶\"，还好爱尔希即时逃出，并且用地的能量将房子封住，让那些可恶的禁咒师无法逃出，但是现在也没人敢进去......",
+    "M01042:TLK:46": "",
+    "M01042:TLK:47": "克姆罗斯：这里有一把地之键，可以解除封锁住房子的地结界，也可以用来开启地宝箱，你就拿去吧，祝你成功！",
+    "M01042:TLK:48": "取得地之键！",
+    "M01042:TLK:49": "克姆罗斯：你去过爱尔西家了吗？她家在运河右岸的桥上。",
+    "M01042:TLK:50": "克姆罗斯：真是太好了，想不到禁咒师也不是你的对手，你的能力对工会提供了很大的贡献，不过，你也知道，最近炎城很不平静，很多锻材和合成的材质或珍贵的水晶都纷纷遗失或被偷走，有人说是魔物作祟，也有人说是有飞贼隐身群众之中......",
+    "M01042:TLK:51": "克姆罗斯：若你能把事情的真相查出，我就授与你烈焰级工会会员的地位。",
+    "M01042:TLK:52": "克姆罗斯：你查出最近炎城中锻材纷纷被窃或遗失的真相了吗？",
+    "M01042:TLK:53": "克姆罗斯：什么，原来下水道真的聚集了一群搜刮锻材的鲁卡神信徒，多亏你查出幕后真相，否则大家都会损失惨重，你对大家做出了这么大的贡献，我现在很高兴的宣布，你已是本合成工会的烈焰级会员！",
+    "M01042:TLK:54": "克姆罗斯：你已是烈焰级的会员了，以我炎城合成工会会长的身份，已经无法再帮你提升等级，若你想再提升至巨锤以上的会员等级，必须去找飘城水晶工会的会长，魔导士阿雷斯长老，他也是我的老师，你可以去‘法王城的藏书阁’找他时可以说我推荐你过去，这样他就会帮你了！",
+    "M01042:TLK:55": "",
+    "M01042:TLK:56": "",
+    "M01042:TLK:57": "克姆罗斯：抱歉，你身上的钱不够！等你有1000库伦再来找我！",
+    "M01042:TLK:58": "",
+    "M01042:TLK:59": "",
+    "M01042:TLK:60": "",
+    "M01042:TLK:61": "",
+    "M01042:TLK:62": "",
+    "M01042:TLK:63": "",
+    "M01042:TLK:64": "店员：您身上没有足够的金钱，请下次再来。",
+    "M01042:TLK:65": ""
+  }
+}

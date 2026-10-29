@@ -22,6 +22,9 @@ sys.path.insert(0, str(RUNTIME / 'tools'))
 from incremental import resource, recipe_hash, write_json, write_bytes
 GAME_SHA = 'fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18'
 from source.combat_resources import CHR
+from source.dgp import DGP
+from source.map_objects import MapObjects
+from content_registration import map_ids
 
 
 def sha(raw): return hashlib.sha256(raw).hexdigest()
@@ -45,6 +48,26 @@ def evidence_record(filename, procedure):
     return preferred
 
 
+def source_files():
+    """Track active CF1 sound inputs before the first export ledger exists."""
+    paths = set()
+    for ident in map_ids():
+        relative = f'Map/{ident.lower()}.dat'
+        paths.add(relative)
+        table = MapObjects(ROOT / relative)
+        for obj in table.objects:
+            raw = bytes.fromhex(obj['raw_hex'])
+            if raw[0xcf] != 1 or not struct.unpack_from('<I', raw, 0x9e)[0]:
+                continue
+            path = table.resource_source(struct.unpack_from('<I', raw, 0x1e)[0])
+            paths.add(path)
+            dgp = DGP(ROOT / path)
+            token = original_text(dgp.raw_actions[0], 0x56, 20)
+            if token and (ROOT / ('sound/' + token)).is_file():
+                paths.add('sound/' + token)
+    return tuple(sorted(paths))
+
+
 def main():
     parser = argparse.ArgumentParser(); parser.add_argument('--ffmpeg', default=shutil.which('ffmpeg'))
     parser.add_argument('--ffprobe', default=shutil.which('ffprobe')); args = parser.parse_args()
@@ -62,6 +85,15 @@ def main():
     native_paths = ['remake/runtime/evidence/opening_native.json', 'remake/runtime/evidence/source/combat_presentation_native_20261011.json',
                     'remake/runtime/evidence/chapter_map_native.json', 'remake/runtime/evidence/forest_ai_rules_native_20261011.json']
     native_ref = {p:sha((ROOT/p).read_bytes()) for p in native_paths}
+    object_tick_path = 'remake/runtime/evidence/fire_valley_20261025/object_tick_4137c0_assembly.json'
+    object_tick = json.loads((ROOT / object_tick_path).read_text('utf-8'))
+    assert object_tick['subject']['digest']['sha256'] == GAME_SHA
+    native.append(object_tick);native_ref[object_tick_path] = sha((ROOT / object_tick_path).read_bytes())
+    for name in ['dispatch','position','play','pan','volume','distance','distance_impl']:
+        filename=f'remake/runtime/evidence/ember_city_20261028/native_cf1_sound_{name}.json'
+        record=json.loads((ROOT / filename).read_text('utf-8'))
+        assert record['subject']['digest']['sha256'] == GAME_SHA
+        native.append(record);native_ref[filename]=sha((ROOT / filename).read_bytes())
     carrier_bundle = 'remake/runtime/evidence/party_magic_native.json'
     native.append(evidence_record(carrier_bundle, '0x5074c0'))
     native_ref[carrier_bundle] = sha((ROOT/carrier_bundle).read_bytes())
@@ -126,13 +158,27 @@ def main():
         clips[source] = resource(RUNTIME, 'audio/'+source, {'source':sha(raw),'encoders':encoders},
             recipe_hash([Path(__file__)]), produce_clip)
         return source
-    maps = {}
+    maps, object_sounds = {}, []
     from content_registration import map_ids, stage_exports
     for ident in map_ids():
         path = f'Map/{ident.lower()}.dat'; raw = read(path); assert struct.unpack_from('<I', raw, 0x14)[0] == 6
         token = original_text(raw, 0x44, 0x40); assert token.lower().endswith('.wav')
         maps[ident] = dict(clip=clip('sound/'+token), source=dict(path=path, sha256=sha(raw), offset=0x44, bytes=0x40, token=token),
             evidence=[evidence['0x4a5f00'],evidence['0x4a09c0']], confidence='source DAT+0x44 and confirmed native same-track/load branch')
+        table = MapObjects(ROOT / path)
+        for obj in table.objects:
+            object_raw = bytes.fromhex(obj['raw_hex'])
+            if object_raw[0xcf] != 1 or not struct.unpack_from('<I', object_raw, 0x9e)[0]:
+                continue
+            dgp_path = table.resource_source(struct.unpack_from('<I', object_raw, 0x1e)[0])
+            dgp = DGP(ROOT / dgp_path);read(dgp_path)
+            action = dgp.raw_actions[0]
+            sound_token = original_text(action, 0x56, 20)
+            object_sounds.append(dict(map_id=ident, object_index=obj['index'], clip=clip('sound/'+sound_token) if sound_token else None,
+                token=sound_token, logical_frame=struct.unpack_from('<I', action, 0x6a)[0],
+                object_source=dict(path=path, sha256=sha(raw), offset=obj['offset'], raw_sha256=sha(object_raw), sound_enabled_raw=struct.unpack_from('<I', object_raw, 0x9e)[0]),
+                action_source=dict(path=dgp_path, sha256=dgp.sha256, offset=67, raw_sha256=sha(action)),
+                evidence=[object_tick['evidence_id']] ))
     encounters = json.loads((WEB/'data/encounters.json').read_text('utf-8'))
     battles = {}
     stage_sources={entry['stage']:entry['evidence'] for entry in encounters['maps'].values()}
@@ -233,18 +279,21 @@ def main():
             source=item['source'];raw=read(source['path']);assert sha(raw)==source['sha256']
             record=raw[source['record_offset']:source['record_offset']+0x3bf];assert sha(record)==source['record_sha256']
             token=original_text(record,source['effect_field_offset'],source['effect_field_bytes'])
-            assert token==item['effect_token_raw_126'] and Path(token).stem==item['effect_id'] and item['effect_id'] in effect_sounds
+            assert token==item['effect_token_raw_126']
+            assert (Path(token).stem==item['effect_id'] and item['effect_id'] in effect_sounds) if token else item['effect_id'] is None
             item_effects[item_id]=dict(effect_id=item['effect_id'],source=source,evidence=[item['settlement']['evidence']['evidence_id']])
     limitations=['Static source reconstruction; original GAME.exe audio playback has not been observed.',
         'Browser looping, global volume, mute, eight transient voices and resume position are remake policies.',
         'Empty stage13 music uses the confirmed original Fight WAV pool; deterministic sorted enumeration and fresh browser RNG do not reproduce original rand state or Windows enumeration order.',
         'CHR and actor DGP filenames/logical frames are retained; exact original mixer scheduling, voice priorities and inhibited-actor flag transitions remain outside the browser adapter.',
+        'CF1 object sound timing uses the DAT action0 enable field and DGP logical-frame sound marker; scene-local animation clocks remain a browser adaptation.',
+        'Positioned CF1 sounds retain native distance volume and centered 0..127 pan through HTMLAudio volume/WebAudio StereoPanner; the browser stereo law and ANM camera coordinates are presentation adaptations.',
         'Skill/carrier, item and lifecycle audio share the source-backed controller; lifecycle callbacks observe live entry immunity and use CHR logical cursors rather than physical DGP frame-table values.',
         'Missing original voice clips are recorded and skipped; no replacement sound is fabricated.',
         'Operation menu open/select/confirm/cancel use the confirmed native five-entry table. Missing close.wav is retained as unavailable, without substituting _close.wav or close.mp3.',
         'Browser feedback coalesces keyboard/click handling to one cue per gesture; exact original nested-panel mixer timing is not reproduced.']
     manifest=dict(schema='seventh-seal-audio',version=1,clips=clips,maps=maps,battles=battles,cues=cues,world_map=world_map,action_tokens=tokens,frame_sounds=frame_sounds,
-        effect_sounds=effect_sounds,item_effects=item_effects,reference_hashes=reference_hashes,
+        effect_sounds=effect_sounds,item_effects=item_effects,object_sounds=object_sounds,reference_hashes=reference_hashes,
         action_sources=action_sources,source_hashes=sources,native_evidence=evidence,native_bundle_hashes=native_ref,
         missing_original_files=missing,limitations=limitations)
     save(WEB/'data/audio.json',manifest)

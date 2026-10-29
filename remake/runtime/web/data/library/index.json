@@ -16,7 +16,7 @@
     "chr_skills": 1948,
     "system_magic": 41,
     "items": 416,
-    "runtime_skills": 169
+    "runtime_skills": 173
   },
   "entries": {
     "roles": {
@@ -1969,8 +1969,8 @@
         "source": "Fight_Role/042.CHR",
         "definition": "data/library/roles.json#/roles/042",
         "native_slot": null,
-        "registered": false,
-        "runtime_side": null,
+        "registered": true,
+        "runtime_side": "enemy",
         "skills": [
           "042_0",
           "042_1",
@@ -16242,7 +16242,7 @@
         "definition": "data/library/skills.json#/skills/042_14",
         "configuration_id": "042_14",
         "configuration": "data/config/skills.json#/entries/042_14",
-        "runtime_registered": false,
+        "runtime_registered": true,
         "authored_binding": false,
         "handler": null
       },
@@ -16256,7 +16256,7 @@
         "definition": "data/library/skills.json#/skills/042_15",
         "configuration_id": "042_15",
         "configuration": "data/config/skills.json#/entries/042_15",
-        "runtime_registered": false,
+        "runtime_registered": true,
         "authored_binding": false,
         "handler": null
       },
@@ -16270,7 +16270,7 @@
         "definition": "data/library/skills.json#/skills/042_16",
         "configuration_id": "042_16",
         "configuration": "data/config/skills.json#/entries/042_16",
-        "runtime_registered": false,
+        "runtime_registered": true,
         "authored_binding": false,
         "handler": null
       },
@@ -16312,7 +16312,7 @@
         "definition": "data/library/skills.json#/skills/042_19",
         "configuration_id": "042_19",
         "configuration": "data/config/skills.json#/entries/042_19",
-        "runtime_registered": false,
+        "runtime_registered": true,
         "authored_binding": false,
         "handler": null
       },
@@ -31146,7 +31146,7 @@
         "definition": "data/items.json#/definitions/13",
         "configuration": "data/config/items.json#/entries/13",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "simple-restore"
       },
       "14": {
         "id": 14,
@@ -31226,7 +31226,7 @@
         "definition": "data/items.json#/definitions/21",
         "configuration": "data/config/items.json#/entries/21",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "revival-item"
       },
       "22": {
         "id": 22,
@@ -31246,7 +31246,7 @@
         "definition": "data/items.json#/definitions/23",
         "configuration": "data/config/items.json#/entries/23",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "status-cure"
       },
       "24": {
         "id": 24,
@@ -31256,7 +31256,7 @@
         "definition": "data/items.json#/definitions/24",
         "configuration": "data/config/items.json#/entries/24",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "status-cure"
       },
       "25": {
         "id": 25,
@@ -31266,7 +31266,7 @@
         "definition": "data/items.json#/definitions/25",
         "configuration": "data/config/items.json#/entries/25",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "status-cure"
       },
       "26": {
         "id": 26,
@@ -31276,7 +31276,7 @@
         "definition": "data/items.json#/definitions/26",
         "configuration": "data/config/items.json#/entries/26",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "status-cure"
       },
       "27": {
         "id": 27,
@@ -31286,7 +31286,7 @@
         "definition": "data/items.json#/definitions/27",
         "configuration": "data/config/items.json#/entries/27",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "status-cure"
       },
       "28": {
         "id": 28,
@@ -31296,7 +31296,7 @@
         "definition": "data/items.json#/definitions/28",
         "configuration": "data/config/items.json#/entries/28",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "status-cure"
       },
       "29": {
         "id": 29,
@@ -33116,7 +33116,7 @@
         "definition": "data/items.json#/definitions/210",
         "configuration": "data/config/items.json#/entries/210",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "211": {
         "id": 211,
@@ -33126,7 +33126,7 @@
         "definition": "data/items.json#/definitions/211",
         "configuration": "data/config/items.json#/entries/211",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "212": {
         "id": 212,
@@ -33136,7 +33136,7 @@
         "definition": "data/items.json#/definitions/212",
         "configuration": "data/config/items.json#/entries/212",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "213": {
         "id": 213,
@@ -33146,7 +33146,7 @@
         "definition": "data/items.json#/definitions/213",
         "configuration": "data/config/items.json#/entries/213",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "214": {
         "id": 214,
@@ -33156,7 +33156,7 @@
         "definition": "data/items.json#/definitions/214",
         "configuration": "data/config/items.json#/entries/214",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "215": {
         "id": 215,
@@ -33166,7 +33166,7 @@
         "definition": "data/items.json#/definitions/215",
         "configuration": "data/config/items.json#/entries/215",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "216": {
         "id": 216,
@@ -33176,7 +33176,7 @@
         "definition": "data/items.json#/definitions/216",
         "configuration": "data/config/items.json#/entries/216",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "217": {
         "id": 217,
@@ -33186,7 +33186,7 @@
         "definition": "data/items.json#/definitions/217",
         "configuration": "data/config/items.json#/entries/217",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "218": {
         "id": 218,
@@ -33196,7 +33196,7 @@
         "definition": "data/items.json#/definitions/218",
         "configuration": "data/config/items.json#/entries/218",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "219": {
         "id": 219,
@@ -33206,7 +33206,7 @@
         "definition": "data/items.json#/definitions/219",
         "configuration": "data/config/items.json#/entries/219",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "220": {
         "id": 220,
@@ -33216,7 +33216,7 @@
         "definition": "data/items.json#/definitions/220",
         "configuration": "data/config/items.json#/entries/220",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "221": {
         "id": 221,
@@ -33226,7 +33226,7 @@
         "definition": "data/items.json#/definitions/221",
         "configuration": "data/config/items.json#/entries/221",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "222": {
         "id": 222,
@@ -33236,7 +33236,7 @@
         "definition": "data/items.json#/definitions/222",
         "configuration": "data/config/items.json#/entries/222",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "223": {
         "id": 223,
@@ -33246,7 +33246,7 @@
         "definition": "data/items.json#/definitions/223",
         "configuration": "data/config/items.json#/entries/223",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "224": {
         "id": 224,
@@ -33256,7 +33256,7 @@
         "definition": "data/items.json#/definitions/224",
         "configuration": "data/config/items.json#/entries/224",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "225": {
         "id": 225,
@@ -33266,7 +33266,7 @@
         "definition": "data/items.json#/definitions/225",
         "configuration": "data/config/items.json#/entries/225",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "226": {
         "id": 226,
@@ -33276,7 +33276,7 @@
         "definition": "data/items.json#/definitions/226",
         "configuration": "data/config/items.json#/entries/226",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "227": {
         "id": 227,
@@ -33286,7 +33286,7 @@
         "definition": "data/items.json#/definitions/227",
         "configuration": "data/config/items.json#/entries/227",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "228": {
         "id": 228,
@@ -33296,7 +33296,7 @@
         "definition": "data/items.json#/definitions/228",
         "configuration": "data/config/items.json#/entries/228",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "229": {
         "id": 229,
@@ -33306,7 +33306,7 @@
         "definition": "data/items.json#/definitions/229",
         "configuration": "data/config/items.json#/entries/229",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "230": {
         "id": 230,
@@ -33316,7 +33316,7 @@
         "definition": "data/items.json#/definitions/230",
         "configuration": "data/config/items.json#/entries/230",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "231": {
         "id": 231,
@@ -33326,7 +33326,7 @@
         "definition": "data/items.json#/definitions/231",
         "configuration": "data/config/items.json#/entries/231",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "232": {
         "id": 232,
@@ -33376,7 +33376,7 @@
         "definition": "data/items.json#/definitions/236",
         "configuration": "data/config/items.json#/entries/236",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "237": {
         "id": 237,
@@ -33386,7 +33386,7 @@
         "definition": "data/items.json#/definitions/237",
         "configuration": "data/config/items.json#/entries/237",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "238": {
         "id": 238,
@@ -33396,7 +33396,7 @@
         "definition": "data/items.json#/definitions/238",
         "configuration": "data/config/items.json#/entries/238",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "239": {
         "id": 239,
@@ -33526,7 +33526,7 @@
         "definition": "data/items.json#/definitions/251",
         "configuration": "data/config/items.json#/entries/251",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "252": {
         "id": 252,
@@ -33536,7 +33536,7 @@
         "definition": "data/items.json#/definitions/252",
         "configuration": "data/config/items.json#/entries/252",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "253": {
         "id": 253,
@@ -33666,7 +33666,7 @@
         "definition": "data/items.json#/definitions/265",
         "configuration": "data/config/items.json#/entries/265",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "266": {
         "id": 266,
@@ -33676,7 +33676,7 @@
         "definition": "data/items.json#/definitions/266",
         "configuration": "data/config/items.json#/entries/266",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "267": {
         "id": 267,
@@ -33686,7 +33686,7 @@
         "definition": "data/items.json#/definitions/267",
         "configuration": "data/config/items.json#/entries/267",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "268": {
         "id": 268,
@@ -33696,7 +33696,7 @@
         "definition": "data/items.json#/definitions/268",
         "configuration": "data/config/items.json#/entries/268",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "269": {
         "id": 269,
@@ -33706,7 +33706,7 @@
         "definition": "data/items.json#/definitions/269",
         "configuration": "data/config/items.json#/entries/269",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "270": {
         "id": 270,
@@ -33716,7 +33716,7 @@
         "definition": "data/items.json#/definitions/270",
         "configuration": "data/config/items.json#/entries/270",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "271": {
         "id": 271,
@@ -33726,7 +33726,7 @@
         "definition": "data/items.json#/definitions/271",
         "configuration": "data/config/items.json#/entries/271",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "272": {
         "id": 272,
@@ -33746,7 +33746,7 @@
         "definition": "data/items.json#/definitions/273",
         "configuration": "data/config/items.json#/entries/273",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "status-attack"
       },
       "274": {
         "id": 274,
@@ -33756,7 +33756,7 @@
         "definition": "data/items.json#/definitions/274",
         "configuration": "data/config/items.json#/entries/274",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "status-attack"
       },
       "275": {
         "id": 275,
@@ -33766,7 +33766,7 @@
         "definition": "data/items.json#/definitions/275",
         "configuration": "data/config/items.json#/entries/275",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "status-attack"
       },
       "276": {
         "id": 276,
@@ -33776,7 +33776,7 @@
         "definition": "data/items.json#/definitions/276",
         "configuration": "data/config/items.json#/entries/276",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "status-attack"
       },
       "277": {
         "id": 277,
@@ -33796,7 +33796,7 @@
         "definition": "data/items.json#/definitions/278",
         "configuration": "data/config/items.json#/entries/278",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "status-attack"
       },
       "279": {
         "id": 279,
@@ -33806,7 +33806,7 @@
         "definition": "data/items.json#/definitions/279",
         "configuration": "data/config/items.json#/entries/279",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "status-attack"
       },
       "280": {
         "id": 280,
@@ -33816,7 +33816,7 @@
         "definition": "data/items.json#/definitions/280",
         "configuration": "data/config/items.json#/entries/280",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "status-cure"
       },
       "281": {
         "id": 281,
@@ -33846,7 +33846,7 @@
         "definition": "data/items.json#/definitions/283",
         "configuration": "data/config/items.json#/entries/283",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "status-attack"
       },
       "284": {
         "id": 284,
@@ -33856,7 +33856,7 @@
         "definition": "data/items.json#/definitions/284",
         "configuration": "data/config/items.json#/entries/284",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "status-attack"
       },
       "285": {
         "id": 285,
@@ -33866,7 +33866,7 @@
         "definition": "data/items.json#/definitions/285",
         "configuration": "data/config/items.json#/entries/285",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "status-attack"
       },
       "286": {
         "id": 286,
@@ -34086,7 +34086,7 @@
         "definition": "data/items.json#/definitions/307",
         "configuration": "data/config/items.json#/entries/307",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "status-attack"
       },
       "308": {
         "id": 308,
@@ -34096,7 +34096,7 @@
         "definition": "data/items.json#/definitions/308",
         "configuration": "data/config/items.json#/entries/308",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "status-attack"
       },
       "309": {
         "id": 309,
@@ -34106,7 +34106,7 @@
         "definition": "data/items.json#/definitions/309",
         "configuration": "data/config/items.json#/entries/309",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "status-attack"
       },
       "310": {
         "id": 310,
@@ -34116,7 +34116,7 @@
         "definition": "data/items.json#/definitions/310",
         "configuration": "data/config/items.json#/entries/310",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "status-attack"
       },
       "311": {
         "id": 311,
@@ -34126,7 +34126,7 @@
         "definition": "data/items.json#/definitions/311",
         "configuration": "data/config/items.json#/entries/311",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "status-attack"
       },
       "312": {
         "id": 312,
@@ -34166,7 +34166,7 @@
         "definition": "data/items.json#/definitions/315",
         "configuration": "data/config/items.json#/entries/315",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "status-cure"
       },
       "316": {
         "id": 316,
@@ -34216,7 +34216,7 @@
         "definition": "data/items.json#/definitions/320",
         "configuration": "data/config/items.json#/entries/320",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "status-cure"
       },
       "321": {
         "id": 321,
@@ -34226,7 +34226,7 @@
         "definition": "data/items.json#/definitions/321",
         "configuration": "data/config/items.json#/entries/321",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "status-cure"
       },
       "322": {
         "id": 322,
@@ -34246,7 +34246,7 @@
         "definition": "data/items.json#/definitions/323",
         "configuration": "data/config/items.json#/entries/323",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "status-cure"
       },
       "324": {
         "id": 324,
@@ -34256,7 +34256,7 @@
         "definition": "data/items.json#/definitions/324",
         "configuration": "data/config/items.json#/entries/324",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "status-cure"
       },
       "325": {
         "id": 325,
@@ -34326,7 +34326,7 @@
         "definition": "data/items.json#/definitions/331",
         "configuration": "data/config/items.json#/entries/331",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "status-clear"
       },
       "332": {
         "id": 332,
@@ -34396,7 +34396,7 @@
         "definition": "data/items.json#/definitions/338",
         "configuration": "data/config/items.json#/entries/338",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "339": {
         "id": 339,
@@ -34406,7 +34406,7 @@
         "definition": "data/items.json#/definitions/339",
         "configuration": "data/config/items.json#/entries/339",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "340": {
         "id": 340,
@@ -34416,7 +34416,7 @@
         "definition": "data/items.json#/definitions/340",
         "configuration": "data/config/items.json#/entries/340",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "341": {
         "id": 341,
@@ -34426,7 +34426,7 @@
         "definition": "data/items.json#/definitions/341",
         "configuration": "data/config/items.json#/entries/341",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "342": {
         "id": 342,
@@ -34436,7 +34436,7 @@
         "definition": "data/items.json#/definitions/342",
         "configuration": "data/config/items.json#/entries/342",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "343": {
         "id": 343,
@@ -34446,7 +34446,7 @@
         "definition": "data/items.json#/definitions/343",
         "configuration": "data/config/items.json#/entries/343",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "344": {
         "id": 344,
@@ -34496,7 +34496,7 @@
         "definition": "data/items.json#/definitions/348",
         "configuration": "data/config/items.json#/entries/348",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "349": {
         "id": 349,
@@ -34506,7 +34506,7 @@
         "definition": "data/items.json#/definitions/349",
         "configuration": "data/config/items.json#/entries/349",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "350": {
         "id": 350,
@@ -34516,7 +34516,7 @@
         "definition": "data/items.json#/definitions/350",
         "configuration": "data/config/items.json#/entries/350",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "351": {
         "id": 351,
@@ -34526,7 +34526,7 @@
         "definition": "data/items.json#/definitions/351",
         "configuration": "data/config/items.json#/entries/351",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "352": {
         "id": 352,
@@ -34536,7 +34536,7 @@
         "definition": "data/items.json#/definitions/352",
         "configuration": "data/config/items.json#/entries/352",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "353": {
         "id": 353,
@@ -34546,7 +34546,7 @@
         "definition": "data/items.json#/definitions/353",
         "configuration": "data/config/items.json#/entries/353",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "354": {
         "id": 354,
@@ -34556,7 +34556,7 @@
         "definition": "data/items.json#/definitions/354",
         "configuration": "data/config/items.json#/entries/354",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "355": {
         "id": 355,
@@ -34566,7 +34566,7 @@
         "definition": "data/items.json#/definitions/355",
         "configuration": "data/config/items.json#/entries/355",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "356": {
         "id": 356,
@@ -34576,7 +34576,7 @@
         "definition": "data/items.json#/definitions/356",
         "configuration": "data/config/items.json#/entries/356",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "357": {
         "id": 357,
@@ -34586,7 +34586,7 @@
         "definition": "data/items.json#/definitions/357",
         "configuration": "data/config/items.json#/entries/357",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "358": {
         "id": 358,
@@ -34596,7 +34596,7 @@
         "definition": "data/items.json#/definitions/358",
         "configuration": "data/config/items.json#/entries/358",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "359": {
         "id": 359,
@@ -34606,7 +34606,7 @@
         "definition": "data/items.json#/definitions/359",
         "configuration": "data/config/items.json#/entries/359",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "360": {
         "id": 360,
@@ -46167,11 +46167,11 @@
     "data/library/roles.json": "c88f1459169e56a333ca0376a56bb66e7c6c9a18c5d2e8bf1b77b3c9d394d8a6",
     "data/library/skills.json": "91517d541e4d0fc36ffe3334c975634d718a2dcdd6af9f71a08019d4fcaa47e4",
     "data/library/magic.json": "2a0784270dcd6661e267c84caae37f959a1813045da44da46c3c8fde666d5812",
-    "data/items.json": "38142f1feabe7ca6177606d6792842ee64602bc4d41f95b5c68d4fc564786024",
-    "data/runtime_content.json": "78ce209bdbf65392d7f8b1bf1f9c8c7facc91939fb8b0bfae6a26c3520df1791",
-    "data/party_skills.json": "63a0f8556147590eab48082e6566d2e9fdf2489e1146d821fa3cbfc941773c58",
-    "data/forest_ai.json": "0ecf737fe1cf05adefc2dc246f7d39b8f990fe51783799887b11f86deb265088",
-    "data/config/skills.json": "9dffcb0a5e48d6a82c1fefbfedc35157517de607189870140b3e6ab902cc4dc9",
+    "data/items.json": "ea14e353cfbf7b71fc72ab27f0aefcf4e4efb2a7554a88ed43d3c72816d1d0dc",
+    "data/runtime_content.json": "d212c2eb05379da6141c6883bfb2372d6b331980ea8e52e430742e5d8856caff",
+    "data/party_skills.json": "3d7b183df3a54c7e5757a3b7e125510924a8926b4e202a42a805fee1708fbaab",
+    "data/forest_ai.json": "40310ef434e32acd06c12c94cdb22a1019e22fddb9d83f07f23981d3759018c9",
+    "data/config/skills.json": "476e7c6b4dd6821a3ac24fbd38ac9dbde60a76a61f7450022a00e8b9b973af6b",
     "data/config/items.json": "7103f7356567dfd41ecdb1ec9286d93f3ae45a6673eb565873018711055bfb23"
   }
 }

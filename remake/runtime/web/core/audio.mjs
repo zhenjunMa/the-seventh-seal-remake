@@ -1,6 +1,7 @@
 // Source-backed clips with a browser-owned playback policy. The operation menu
 // has master, music and effects controls. Native 0x45D1B0 mixes their 0..64
 // integer values into 1..127 gain; the browser media backend is still an adapter.
+import {isNativeMapId} from './native_map_identity.mjs';
 const requireValue = (ok, message) => { if (!ok) throw new Error(message); };
 const clone = value => structuredClone(value);
 const clipPath = value => typeof value === 'string' && /^\/assets\/(?:audio|startup\/audio)\/[A-Za-z0-9_./-]+\.(?:mp3|wav)$/.test(value)
@@ -21,7 +22,7 @@ export function validateAudioManifest(data) {
     requireValue(entry && (entry.clip === null || data.clips[entry.clip]) && Number.isInteger(entry.logical_frame) && entry.logical_frame >= 0
       && digest(entry.source?.sha256) && digest(entry.source?.raw_sha256), '原动作音效字段无效');
   }
-  for (const entry of Object.values(data.item_effects ?? {})) requireValue(data.effect_sounds?.[entry.effect_id] && digest(entry.source?.sha256), '道具特效声音映射无效');
+  for (const entry of Object.values(data.item_effects ?? {})) requireValue((entry.effect_id===null||data.effect_sounds?.[entry.effect_id]) && digest(entry.source?.sha256), '道具特效声音映射无效');
   return data;
 }
 
@@ -44,6 +45,7 @@ export function createAudioController(manifest, options = {}) {
     Math.floor(2 * Math.round(channels.master.volume * 64) * Math.round(channels[name].volume * 64) / 64))) / 127;
   const channelMuted = name => channels.master.muted || channels[name].muted;
   let unlocked = false, disposed = false, storyMusicSuppressed=false;
+  let positionalContext = null;
   const musicVolume=()=>storyMusicSuppressed?0:channelVolume('music');
   let scene = {mapId:null, battle:false, stageId:null, worldMap:false}, desired = null, music = null, cleanupUnlock = null;
   let nextId = 0;
@@ -103,7 +105,7 @@ export function createAudioController(manifest, options = {}) {
     music = entry; restorePosition(); playMusic();
   }
   function setScene(next) {
-    requireValue(next && typeof next.mapId === 'string' && /^M\d{5}(?:-\d+)?$/.test(next.mapId), '音乐场景地图无效');
+    requireValue(next && isNativeMapId(next.mapId), '音乐场景地图无效');
     const nextScene = {mapId:next.mapId, battle:next.battle === true, stageId:next.stageId ?? null, worldMap:next.worldMap === true};
     const changed = Object.keys(nextScene).some(key => scene[key] !== nextScene[key]);
     if (changed) { stopEffects(); seen.clear(); }
@@ -123,7 +125,9 @@ export function createAudioController(manifest, options = {}) {
   }
   function unlock() {
     if (disposed) return false;
-    stats.unlock_attempts++; unlocked = true; syncMusic(); return true;
+    stats.unlock_attempts++; unlocked = true; syncMusic();
+    if(positionalContext?.state==='suspended')positionalContext.resume().catch(error=>errorRecord(error,'positioned-effect',null));
+    return true;
   }
   function attachUnlock(target = globalThis.document) {
     requireValue(target?.addEventListener && target?.removeEventListener, '音频解锁事件目标无效');
@@ -133,22 +137,42 @@ export function createAudioController(manifest, options = {}) {
     cleanupUnlock = () => { target.removeEventListener('pointerdown', listener, true); target.removeEventListener('keydown', listener, true); };
     return cleanupUnlock;
   }
-  function playClip(clipId, eventKey = null) {
+  function playClip(clipId, eventKey = null, {position=null,singleVoice=false}={}) {
     if (disposed || channelMuted('effects')) return false;
     if (!unlocked) { stats.suppressed_before_unlock++; return false; }
     if (!manifest.clips[clipId]) { stats.missing_clips++; return false; }
+    const volumeNative=position?Math.max(0,Math.min(127,127-3*Math.trunc(Math.hypot(position.dx,position.dy)))):127;
+    const panNative=position?Math.max(0,Math.min(127,64-position.dx)):64,gain=volumeNative/127;
+    const pan=panNative<64?(panNative-64)/64:(panNative-64)/63;
+    // 52D938/52D8A8 apply new levels before 52D74A checks quick_status.
+    // An active handle moves in the stereo field without restarting its clip.
+    if(singleVoice){const current=[...effects].find(entry=>entry.clip===clipId);
+      if(current){current.gain=gain;current.media.volume=channelVolume('effects')*gain;
+        if(current.panner)current.panner.pan.value=pan;
+        return true;
+      }
+    }
     if (eventKey !== null && seen.has(eventKey)) { stats.suppressed_duplicate++; return false; }
     if (eventKey !== null) { seen.add(eventKey); if (seen.size > 2048) seen.delete(seen.values().next().value); }
     // Keep transient sound voices bounded and retire their load/play listeners.
     if (effects.size >= 8) { const oldest = effects.values().next().value; oldest.clean(); retire(oldest.media); effects.delete(oldest); }
     const media = createMedia(manifest.clips[clipId].path);
-    media.preload = 'auto'; media.loop = false; media.volume = channelVolume('effects'); media.muted = channelMuted('effects');
-    const entry = {id:++nextId, clip:clipId, media, started:false, clean:() => {}};
-    const event={clip:clipId,event_key:eventKey,started:false};effectEvents.push(event);if(effectEvents.length>256)effectEvents.shift();
+    let cleanSpatial=()=>{},panner=null;
+    if(position){
+      positionalContext??=(options.createAudioContext??(()=>new (globalThis.AudioContext??globalThis.webkitAudioContext)()))();
+      const source=positionalContext.createMediaElementSource(media);panner=positionalContext.createStereoPanner();
+      panner.pan.value=pan;
+      source.connect(panner);panner.connect(positionalContext.destination);
+      cleanSpatial=()=>{source.disconnect();panner.disconnect();};
+      if(positionalContext.state==='suspended')positionalContext.resume().catch(error=>errorRecord(error,'positioned-effect',clipId));
+    }
+    media.preload = 'auto'; media.loop = false; media.volume = channelVolume('effects')*gain; media.muted = channelMuted('effects');
+    const entry = {id:++nextId, clip:clipId, media, gain,panner,started:false, clean:() => {}};
+    const event={clip:clipId,event_key:eventKey,started:false,...(position?{position:{...position},volume_native:volumeNative,pan_native:panNative}:{})};effectEvents.push(event);if(effectEvents.length>256)effectEvents.shift();
     const finish = () => { entry.clean(); effects.delete(entry); retire(media); };
     const failed = () => { if (effects.has(entry)) errorRecord(media.error ?? new Error('音效加载失败'), 'effect', clipId); finish(); };
     media.addEventListener?.('ended', finish); media.addEventListener?.('error', failed);
-    entry.clean = () => { media.removeEventListener?.('ended', finish); media.removeEventListener?.('error', failed); };
+    entry.clean = () => { media.removeEventListener?.('ended', finish); media.removeEventListener?.('error', failed);cleanSpatial(); };
     effects.add(entry); stats.effect_play_attempts++;
     let result;
     try { result = media.play(); } catch (error) { result = Promise.reject(error); }
@@ -195,7 +219,7 @@ export function createAudioController(manifest, options = {}) {
   }
   function refreshLevels() {
     if (music) { music.media.volume = musicVolume(); music.media.muted = channelMuted('music'); }
-    for (const entry of effects) { entry.media.volume = channelVolume('effects'); entry.media.muted = channelMuted('effects'); }
+    for (const entry of effects) { entry.media.volume = channelVolume('effects')*entry.gain; entry.media.muted = channelMuted('effects'); }
     if (channelMuted('effects')) stopEffects();
   }
   function setChannelVolume(name, value) {
@@ -220,7 +244,7 @@ export function createAudioController(manifest, options = {}) {
       effects:[...effects].map(entry => ({clip:entry.clip, started:entry.started, paused:entry.media.paused})), cue_events:cueEvents, effect_events:effectEvents, stats});
   }
   function suspend() { desired = null; clearMusic(); stopEffects(); seen.clear(); return snapshot(); }
-  function dispose() { if (disposed) return; disposed = true; cleanupUnlock?.(); cleanupUnlock = null; clearMusic(); stopEffects(); seen.clear(); }
+  function dispose() { if (disposed) return; disposed = true; cleanupUnlock?.(); cleanupUnlock = null; clearMusic(); stopEffects(); seen.clear();positionalContext?.close(); }
   return {setScene, setMusic, unlock, attachUnlock, playCue, playClip, playAction, playEffect, playItemEffect, setMuted, setVolume,
     setChannelMuted, setChannelVolume,setStoryMusicSuppressed, stopEffects, suspend, snapshot, dispose};
 }

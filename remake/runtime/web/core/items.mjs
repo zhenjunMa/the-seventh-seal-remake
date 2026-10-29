@@ -1,6 +1,7 @@
 import {createPartyActors,partyResourcesForWorld} from './party_attributes.mjs';
 import {migrateEquipment,withItemQuantity,validateItemInstance} from './equipment.mjs';
-import {removeNativeStatus} from './battle_status.mjs';
+import {removeNativeStatus,applyNativeItemStatus,clearNativeStatuses} from './battle_status.mjs';
+import {applyNativeRevivalEffect} from './battle_revival.mjs';
 const copy=structuredClone;
 const need=(ok,message)=>{if(!ok)throw new Error(message);};
 
@@ -32,17 +33,31 @@ export function consumeInventoryItem(inventory,instanceId,data) {
   if(item.quantity===1)next.splice(index,1);else next[index]=withItemQuantity(item,item.quantity-1);
   return {inventory:next,item:copy(item)};
 }
-export function restoreActorWithItem(actor,item,data,{scope='battle',statusData,content}={}) {
+export function itemTargetEligible(actor,definition,caster=null){
+  const sameSide=definition?.battle?.same_side_raw_157!==0,side=caster?.side??'player';
+  return Boolean(actor&&(sameSide?actor.side===side:actor.side!==side)&&!actor.immune_raw&&!actor.escaped
+    &&(definition?.behavior?.kind==='revival-item'?actor.state_raw>=4&&actor.state_raw<=7:actor.state_raw>=0&&actor.state_raw<4));
+}
+export function restoreActorWithItem(actor,item,data,{scope='battle',statusData,content,caster,rng,selectAnimation}={}) {
   const def=data.definitions[String(item.id)];validateItemInstance(item,def);
   need(def.effect,'此物品不能作为药品使用');
   need(['field','battle'].includes(scope)&&def.runtime_enabled!==false&&def[`use_in_${scope}`]!==false,'此物品在当前场合被配置禁用');
-  need(actor?.side==='player','药品目标不属于队伍');
-  need(scope==='field'||actor.state_raw>=0&&actor.state_raw<4&&!actor.immune_raw,'战斗中此药品不能用于倒下或免疫的角色');
+  need(scope==='battle'||actor?.side==='player','药品目标不属于队伍');
+  need(scope==='field'||itemTargetEligible(actor,def,caster),'战斗中此药品不能用于倒下或免疫的角色，或目标阵营不符');
   let next=copy(actor);const changes={},trace=[];let status=null;
   if(def.behavior?.kind==='status-cure'){
     need(scope==='battle'&&def.status_cure?.mode_raw===1,'此解除状态物品仅在战斗中有效');
     status=removeNativeStatus({actor:next,effect_raw_hex:def.status_cure.effect_raw_hex,data:statusData,content});
     next=status.actor;trace.push(...status.trace);
+  }else if(scope==='battle'&&def.behavior?.kind==='status-attack'){
+    status=applyNativeItemStatus({actor:next,item_id:def.id,data:statusData,rng,content});
+    next=status.actor;trace.push(...status.trace);
+  }else if(scope==='battle'&&def.behavior?.kind==='status-clear'){
+    next=clearNativeStatuses(next,statusData,content);
+    status={native_return:1};trace.push({kind:'status-clear',mode_raw:5,effect_id_raw:0});
+  }else if(scope==='battle'&&def.behavior?.kind==='revival-item'){
+    status=applyNativeRevivalEffect({target:next,effect_raw_hex:def.revival.effect_raw_hex,rng,selectAnimation});
+    next=status.actor;trace.push(...(status.animation?.trace??[]),...status.trace);
   }
   for(const resource of ['hp','mp']){
     const effect=def.effect,amount=(effect[`restore_${resource}_flat`]??0)+Math.trunc(next[`raw_${resource}_maximum`]*(effect[`restore_${resource}_percent`]??0)/100);
@@ -54,8 +69,9 @@ export function restoreActorWithItem(actor,item,data,{scope='battle',statusData,
   }
   if(scope==='field')next.state_raw=next.hp.current>0?0:4;
   const resourceApplied=['hp','mp'].some(resource=>(def.effect[`restore_${resource}_flat`]??0)!==0||(def.effect[`restore_${resource}_percent`]??0)!==0);
-  const applied=Boolean(resourceApplied||status?.applied);
-  return {actor:next,changes,name:def.name,applied,native_return:applied?1:0,effect_requested:true,cancel_command:status?.cancel_command??false,trace};
+  const applied=Boolean(resourceApplied||status?.native_return===1);
+  return {actor:next,changes,name:def.name,applied,native_return:applied?1:0,effect_requested:true,
+    revived:status?.reason==='revived',animation:status?.animation??null,cancel_command:status?.cancel_command??false,trace};
 }
 
 export function useWorldItem(world,attributes,data,{instanceId,targetId,expectedRevision=world.value.revision}) {

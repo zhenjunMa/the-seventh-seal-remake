@@ -1,6 +1,7 @@
 // Source adapters produce one runtime format; neither adapter executes events.
 import {validateStoryFlow} from './story_flow.mjs';
 import {NATIVE_STORY_CONDITION_TYPES,nativeConditionByte} from './native_story_conditions.mjs';
+import {nativeCombinationConditions} from './native_story_combinations.mjs';
 const copy=structuredClone;
 const nativeFlowId=mapId=>`${mapId}:tlk`;
 export {nativeFlowId};
@@ -21,8 +22,15 @@ export function compileTlkFlow(table,{choices}){
       if(!flagIndex(index)||bit<-32||bit>32)add('unsupported',{reason:'剧情旗标变更无效'});
       else add(bit>0?'set_flag_bit':'clear_flag_bit',{index,bit:Math.abs(bit)});
     }else if(type!==0){
-      const op={1:'set_native_object',2:'restore_party',4:'request_save',5:'give_item',9:'world_map_command',10:'restore_native_resources',11:'restore_native_resources',14:'learn_native_skill',16:'native_noop',17:'unlock_recipe'}[type];
+      const op={1:'set_native_object',2:'restore_party',3:'change_native_money',4:'request_save',5:'give_item',9:'world_map_command',10:'restore_native_resources',11:'restore_native_resources',14:'learn_native_skill',16:'native_noop',17:'unlock_recipe'}[type];
       add(op??'unsupported',op?{}:{reason:`剧情变更 ${type} 尚未接入`});
+    }
+    // Kind4 bypasses the ordinary header condition/presentation dispatch.
+    // Mutation still runs on entry, before the six AND predicates.
+    if(record.kind===4){
+      try{nativeCombinationConditions(record,table);add('test_native_combination',{if_true:at(record.if_true),if_false:at(record.next)});}
+      catch(error){add('unsupported',{reason:error.message});}
+      continue;
     }
     if(record.condition_type!==0){
       if(NATIVE_STORY_CONDITION_TYPES.has(record.condition_type))add('test_native_condition',{
@@ -44,6 +52,7 @@ export function compileTlkFlow(table,{choices}){
     }else if(record.kind===1)add('animation',{program_id:record.text_raw.replace(/\.anm$/i,'').toLowerCase()});
     else if(record.kind===2)add('transfer_native_map');
     else if(record.kind===5)add('native_battle');
+    else if(record.kind===8)add('native_service');
     else add('unsupported',{reason:`对白类型 ${record.kind} 尚未接入`});
     add('jump',{target:at(record.next)});
   }

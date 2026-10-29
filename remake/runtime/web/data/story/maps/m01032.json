@@ -1,0 +1,2555 @@
+{
+  "schema": "seventh-seal-story-map",
+  "version": 2,
+  "map_id": "M01032",
+  "chapter": {
+    "id": "M01032",
+    "name": "酒店百里香",
+    "flag_index": 8,
+    "map_flag_index": 8,
+    "source": {
+      "path": "Map/m01032.TLK",
+      "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+      "bytes": 53436
+    },
+    "dialogue_status": "parsed",
+    "map_source": {
+      "path": "Map/m01032.dat",
+      "sha256": "9e6ea3cd8773af049e8e8356e18fed018fa05871ab3f166b04f6b1a33d972486",
+      "bytes": 156212
+    },
+    "index_nonzero": [
+      {
+        "slot": 10,
+        "offset": 66,
+        "record": 1
+      },
+      {
+        "slot": 11,
+        "offset": 70,
+        "record": 8
+      },
+      {
+        "slot": 12,
+        "offset": 74,
+        "record": 9
+      },
+      {
+        "slot": 13,
+        "offset": 78,
+        "record": 10
+      },
+      {
+        "slot": 14,
+        "offset": 82,
+        "record": 13
+      },
+      {
+        "slot": 15,
+        "offset": 86,
+        "record": 14
+      },
+      {
+        "slot": 16,
+        "offset": 90,
+        "record": 11
+      },
+      {
+        "slot": 17,
+        "offset": 94,
+        "record": 12
+      },
+      {
+        "slot": 499,
+        "offset": 2022,
+        "record": 4
+      }
+    ],
+    "index_count": 500,
+    "record_base": 2026,
+    "record_bytes": 1647,
+    "record_count": 15,
+    "records": [
+      {
+        "id": 1,
+        "offset": 2026,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 11,
+        "condition_type": 0,
+        "condition_index": 33,
+        "condition_bit": 2,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 2,
+        "next": 0,
+        "source": {
+          "path": "Map/m01032.TLK",
+          "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+          "record_id": 1,
+          "record_bytes": 1647,
+          "offset": 2026
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01032:TLK:1",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 2,
+        "offset": 3673,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 11,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 3,
+        "source": {
+          "path": "Map/m01032.TLK",
+          "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+          "record_id": 2,
+          "record_bytes": 1647,
+          "offset": 3673
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01032:TLK:2",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 3,
+        "offset": 5320,
+        "kind": 2,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 11,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 1,
+        "next": 0,
+        "source": {
+          "path": "Map/m01032.TLK",
+          "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+          "record_id": 3,
+          "record_bytes": 1647,
+          "offset": 5320
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01032:TLK:3",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 4,
+        "offset": 6967,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 0,
+        "source": {
+          "path": "Map/m01032.TLK",
+          "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+          "record_id": 4,
+          "record_bytes": 1647,
+          "offset": 6967
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01032:TLK:4",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 5,
+        "offset": 8614,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 0,
+        "source": {
+          "path": "Map/m01032.TLK",
+          "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+          "record_id": 5,
+          "record_bytes": 1647,
+          "offset": 8614
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01032:TLK:5",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 6,
+        "offset": 10261,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 0,
+        "source": {
+          "path": "Map/m01032.TLK",
+          "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+          "record_id": 6,
+          "record_bytes": 1647,
+          "offset": 10261
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01032:TLK:6",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 7,
+        "offset": 11908,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 500,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 0,
+        "source": {
+          "path": "Map/m01032.TLK",
+          "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+          "record_id": 7,
+          "record_bytes": 1647,
+          "offset": 11908
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01032:TLK:7",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 8,
+        "offset": 13555,
+        "kind": 0,
+        "style": 2,
+        "region_byte_raw": 0,
+        "speaker": 12,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 0,
+        "source": {
+          "path": "Map/m01032.TLK",
+          "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+          "record_id": 8,
+          "record_bytes": 1647,
+          "offset": 13555
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01032:TLK:8",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 9,
+        "offset": 15202,
+        "kind": 0,
+        "style": 2,
+        "region_byte_raw": 0,
+        "speaker": 13,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 0,
+        "source": {
+          "path": "Map/m01032.TLK",
+          "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+          "record_id": 9,
+          "record_bytes": 1647,
+          "offset": 15202
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01032:TLK:9",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 10,
+        "offset": 16849,
+        "kind": 0,
+        "style": 2,
+        "region_byte_raw": 0,
+        "speaker": 14,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 0,
+        "source": {
+          "path": "Map/m01032.TLK",
+          "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+          "record_id": 10,
+          "record_bytes": 1647,
+          "offset": 16849
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01032:TLK:10",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 11,
+        "offset": 18496,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 17,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 0,
+        "source": {
+          "path": "Map/m01032.TLK",
+          "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+          "record_id": 11,
+          "record_bytes": 1647,
+          "offset": 18496
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01032:TLK:11",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 12,
+        "offset": 20143,
+        "kind": 0,
+        "style": 2,
+        "region_byte_raw": 0,
+        "speaker": 18,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 7,
+        "source": {
+          "path": "Map/m01032.TLK",
+          "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+          "record_id": 12,
+          "record_bytes": 1647,
+          "offset": 20143
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01032:TLK:12",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 13,
+        "offset": 21790,
+        "kind": 0,
+        "style": 1,
+        "region_byte_raw": 0,
+        "speaker": 15,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 14,
+        "source": {
+          "path": "Map/m01032.TLK",
+          "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+          "record_id": 13,
+          "record_bytes": 1647,
+          "offset": 21790
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01032:TLK:13",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 14,
+        "offset": 23437,
+        "kind": 0,
+        "style": 2,
+        "region_byte_raw": 0,
+        "speaker": 16,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 15,
+        "source": {
+          "path": "Map/m01032.TLK",
+          "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+          "record_id": 14,
+          "record_bytes": 1647,
+          "offset": 23437
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01032:TLK:14",
+        "portrait_id": 0,
+        "choices": []
+      },
+      {
+        "id": 15,
+        "offset": 25084,
+        "kind": 0,
+        "style": 2,
+        "region_byte_raw": 0,
+        "speaker": 13,
+        "condition_type": 0,
+        "condition_index": 0,
+        "condition_bit": 0,
+        "mutation_type": 0,
+        "mutation_index": 0,
+        "mutation_bit": 0,
+        "if_true": 0,
+        "next": 0,
+        "source": {
+          "path": "Map/m01032.TLK",
+          "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+          "record_id": 15,
+          "record_bytes": 1647,
+          "offset": 25084
+        },
+        "byte_plus7_raw": 0,
+        "byte_plus8_raw": 0,
+        "condition_byte_raw_0b": 0,
+        "text_id": "M01032:TLK:15",
+        "portrait_id": 0,
+        "choices": []
+      }
+    ],
+    "trailing_bytes": 26705,
+    "trailing_sha256": "160e5485c0e232ef225bbeb54ba93b9f615ae4908c43378c3f3a0cbda8658fc8",
+    "header_raw_hex": "3344a661b9cfb8eaaec6286329596f6b690000000600000001000000bec6b5eab0d9c0efcfe30000000000000000000000000000000000000000000000000000000000006d6e3031302d312e7761760000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003031500000008000100000000000000000008000000020000004d30313033322e444750000000000000000000004d3031303332412e4447500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002030001012d000000230000002e5c4d41504d5c4d30313033325c00000000000000000000900100009001000000010100",
+    "compatibility_variant": 1,
+    "descriptors": [
+      {
+        "id": 1,
+        "state_raw": 0,
+        "filename_raw": "m01030.dat",
+        "field_26_raw": 6,
+        "field_2a_raw": 4,
+        "field_2e_raw": 0,
+        "record_bytes": 66,
+        "raw_hex": "00000000000000000000000000000000006d30313033302e646174000000000000000000000006000000040000000000000000000000000000000000000000000000",
+        "cells": [
+          {
+            "x": 41,
+            "y": 28,
+            "offset": 83634
+          },
+          {
+            "x": 41,
+            "y": 29,
+            "offset": 86514
+          },
+          {
+            "x": 41,
+            "y": 30,
+            "offset": 89394
+          },
+          {
+            "x": 37,
+            "y": 31,
+            "offset": 92018
+          },
+          {
+            "x": 38,
+            "y": 31,
+            "offset": 92082
+          },
+          {
+            "x": 39,
+            "y": 31,
+            "offset": 92146
+          },
+          {
+            "x": 40,
+            "y": 31,
+            "offset": 92210
+          },
+          {
+            "x": 41,
+            "y": 31,
+            "offset": 92274
+          }
+        ],
+        "source": {
+          "path": "Map/m01032.dat",
+          "sha256": "9e6ea3cd8773af049e8e8356e18fed018fa05871ab3f166b04f6b1a33d972486",
+          "descriptor_id": 1,
+          "bytes": 66,
+          "offset": 102514
+        },
+        "evidence": [
+          "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a"
+        ],
+        "field_expansion": "Native 0x42-byte descriptor fields"
+      }
+    ],
+    "objects": [
+      {
+        "index": 0,
+        "slot_one_based": 1,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d30313033325c3030312e44475001000000000000000001000040000000010000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 256,
+        "y_native": 64,
+        "resource_id_raw": 1,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m01032.dat",
+          "sha256": "9e6ea3cd8773af049e8e8356e18fed018fa05871ab3f166b04f6b1a33d972486",
+          "bytes": 274,
+          "offset": 114194
+        }
+      },
+      {
+        "index": 1,
+        "slot_one_based": 2,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d30313033325c3030322e44475002000000000000001001000068000000010000000100000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 272,
+        "y_native": 104,
+        "resource_id_raw": 2,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m01032.dat",
+          "sha256": "9e6ea3cd8773af049e8e8356e18fed018fa05871ab3f166b04f6b1a33d972486",
+          "bytes": 274,
+          "offset": 114468
+        }
+      },
+      {
+        "index": 2,
+        "slot_one_based": 3,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d30313033325c3030332e444750030000000000000070000000f8000000010000000100000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000005000000000000000000000000000000000000000000010000000000",
+        "x_native": 112,
+        "y_native": 248,
+        "resource_id_raw": 3,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 5,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m01032.dat",
+          "sha256": "9e6ea3cd8773af049e8e8356e18fed018fa05871ab3f166b04f6b1a33d972486",
+          "bytes": 274,
+          "offset": 114742
+        }
+      },
+      {
+        "index": 3,
+        "slot_one_based": 4,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d30313033325c3030342e444750040000000000000010000000e8000000010000000100000000000000000000000000000000000300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 16,
+        "y_native": 232,
+        "resource_id_raw": 4,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m01032.dat",
+          "sha256": "9e6ea3cd8773af049e8e8356e18fed018fa05871ab3f166b04f6b1a33d972486",
+          "bytes": 274,
+          "offset": 115016
+        }
+      },
+      {
+        "index": 4,
+        "slot_one_based": 5,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d30313033325c3030352e444750050000000000000040000000e0000000010000000100000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 64,
+        "y_native": 224,
+        "resource_id_raw": 5,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m01032.dat",
+          "sha256": "9e6ea3cd8773af049e8e8356e18fed018fa05871ab3f166b04f6b1a33d972486",
+          "bytes": 274,
+          "offset": 115290
+        }
+      },
+      {
+        "index": 5,
+        "slot_one_based": 6,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d30313033325c3030362e444750060000000000000050000000c8000000010000000100000000000000000000000000000000000500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 80,
+        "y_native": 200,
+        "resource_id_raw": 6,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m01032.dat",
+          "sha256": "9e6ea3cd8773af049e8e8356e18fed018fa05871ab3f166b04f6b1a33d972486",
+          "bytes": 274,
+          "offset": 115564
+        }
+      },
+      {
+        "index": 6,
+        "slot_one_based": 7,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d30313033325c3030372e444750070000000000000050000000b8000000010000000100000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 80,
+        "y_native": 184,
+        "resource_id_raw": 7,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m01032.dat",
+          "sha256": "9e6ea3cd8773af049e8e8356e18fed018fa05871ab3f166b04f6b1a33d972486",
+          "bytes": 274,
+          "offset": 115838
+        }
+      },
+      {
+        "index": 7,
+        "slot_one_based": 8,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d30313033325c3030382e444750080000000000000050010000b8000000010000000100000000000000000000000000000000000700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 336,
+        "y_native": 184,
+        "resource_id_raw": 8,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m01032.dat",
+          "sha256": "9e6ea3cd8773af049e8e8356e18fed018fa05871ab3f166b04f6b1a33d972486",
+          "bytes": 274,
+          "offset": 116112
+        }
+      },
+      {
+        "index": 8,
+        "slot_one_based": 9,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d30313033325c3030392e4447500900000000000000d0000000c8000000010000000100000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 208,
+        "y_native": 200,
+        "resource_id_raw": 9,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m01032.dat",
+          "sha256": "9e6ea3cd8773af049e8e8356e18fed018fa05871ab3f166b04f6b1a33d972486",
+          "bytes": 274,
+          "offset": 116386
+        }
+      },
+      {
+        "index": 9,
+        "slot_one_based": 10,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d30313033325c3031302e4447500a0000000000000010010000a9000000010000000100000000000000000000000000000000000900000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 272,
+        "y_native": 169,
+        "resource_id_raw": 10,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m01032.dat",
+          "sha256": "9e6ea3cd8773af049e8e8356e18fed018fa05871ab3f166b04f6b1a33d972486",
+          "bytes": 274,
+          "offset": 116660
+        }
+      },
+      {
+        "index": 10,
+        "slot_one_based": 11,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d30313033325c3031312e4447500b00000000000000d0000000b8000000010000000100000000000000000000000000000000000a00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 208,
+        "y_native": 184,
+        "resource_id_raw": 11,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m01032.dat",
+          "sha256": "9e6ea3cd8773af049e8e8356e18fed018fa05871ab3f166b04f6b1a33d972486",
+          "bytes": 274,
+          "offset": 116934
+        }
+      },
+      {
+        "index": 11,
+        "slot_one_based": 12,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d30313033325c3031322e4447500c000000000000002000000000010000010000000100000000000000000000000000000000000b00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 32,
+        "y_native": 256,
+        "resource_id_raw": 12,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m01032.dat",
+          "sha256": "9e6ea3cd8773af049e8e8356e18fed018fa05871ab3f166b04f6b1a33d972486",
+          "bytes": 274,
+          "offset": 117208
+        }
+      },
+      {
+        "index": 12,
+        "slot_one_based": 13,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d30313033325c3031342e4447500e00000000000000f000000088000000010000000100000000000000000000000000000000000c00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000101000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010000000000",
+        "x_native": 240,
+        "y_native": 136,
+        "resource_id_raw": 14,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 1,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m01032.dat",
+          "sha256": "9e6ea3cd8773af049e8e8356e18fed018fa05871ab3f166b04f6b1a33d972486",
+          "bytes": 274,
+          "offset": 117482
+        }
+      },
+      {
+        "index": 13,
+        "slot_one_based": 14,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d30313033325c3031332e4447500d0000000000000010000000a8000000010000000100000000000000000000000000000000000d00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 16,
+        "y_native": 168,
+        "resource_id_raw": 13,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m01032.dat",
+          "sha256": "9e6ea3cd8773af049e8e8356e18fed018fa05871ab3f166b04f6b1a33d972486",
+          "bytes": 274,
+          "offset": 117756
+        }
+      },
+      {
+        "index": 14,
+        "slot_one_based": 15,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d30313033325c3031352e4447500f000000000000002001000000010000010000000100000000000000000000000000000000000e00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 288,
+        "y_native": 256,
+        "resource_id_raw": 15,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m01032.dat",
+          "sha256": "9e6ea3cd8773af049e8e8356e18fed018fa05871ab3f166b04f6b1a33d972486",
+          "bytes": 274,
+          "offset": 118030
+        }
+      },
+      {
+        "index": 15,
+        "slot_one_based": 16,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d30313033325c3031362e444750100000000000000070000000f8000000010000000100000000000000000000000000000000000f00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000100000000000000b40000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 112,
+        "y_native": 248,
+        "resource_id_raw": 16,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m01032.dat",
+          "sha256": "9e6ea3cd8773af049e8e8356e18fed018fa05871ab3f166b04f6b1a33d972486",
+          "bytes": 274,
+          "offset": 118304
+        }
+      },
+      {
+        "index": 16,
+        "slot_one_based": 17,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d30313033325c3031372e4447501100000000000000e800000080000000010000000100000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000100000000000000b400000000000000000000000000000000000000000000000000000000060000003d0000000000000000000000000000000000000000000000",
+        "x_native": 232,
+        "y_native": 128,
+        "resource_id_raw": 17,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 6,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m01032.dat",
+          "sha256": "9e6ea3cd8773af049e8e8356e18fed018fa05871ab3f166b04f6b1a33d972486",
+          "bytes": 274,
+          "offset": 118578
+        }
+      },
+      {
+        "index": 17,
+        "slot_one_based": 18,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d30313033325c3031382e4447501200000000000000c000000080000000010000000100000000000000000000000000000000001100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000100000000000000b400000000000000000000000000000000000000000000000000000000040000004f0000000000000000000000000000000000000000000000",
+        "x_native": 192,
+        "y_native": 128,
+        "resource_id_raw": 18,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 4,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m01032.dat",
+          "sha256": "9e6ea3cd8773af049e8e8356e18fed018fa05871ab3f166b04f6b1a33d972486",
+          "bytes": 274,
+          "offset": 118852
+        }
+      },
+      {
+        "index": 18,
+        "slot_one_based": 19,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d30313033325c3031392e4447501300000000000000e8000000c0000000010000000100000000000000000000000000000000001200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000100000000000000b40000000000000000000000000000000000000000000000000000000007000000400000000000000000000000000000000000000000000000",
+        "x_native": 232,
+        "y_native": 192,
+        "resource_id_raw": 19,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 7,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m01032.dat",
+          "sha256": "9e6ea3cd8773af049e8e8356e18fed018fa05871ab3f166b04f6b1a33d972486",
+          "bytes": 274,
+          "offset": 119126
+        }
+      },
+      {
+        "index": 19,
+        "slot_one_based": 20,
+        "raw_hex": "433a5c736576656e5c2e5c4d41504d5c4d30313033325c3032302e444750140000000000000020000000e0000000010000000100000000000000000000000000000000001300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 32,
+        "y_native": 224,
+        "resource_id_raw": 20,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m01032.dat",
+          "sha256": "9e6ea3cd8773af049e8e8356e18fed018fa05871ab3f166b04f6b1a33d972486",
+          "bytes": 274,
+          "offset": 119400
+        }
+      },
+      {
+        "index": 20,
+        "slot_one_based": 21,
+        "raw_hex": "433a5c534556454e5c2e5c4d41504d5c4d30313033325c3032312e44475015000000000000007a00000077000000010000000100000000000000000000000000000000001400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000453031342e77617600000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010000000201000100000000000000000000000000000000000000000000000000000000000000000000000000000000260000000000000000000000000000000000000000000000",
+        "x_native": 122,
+        "y_native": 119,
+        "resource_id_raw": 21,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m01032.dat",
+          "sha256": "9e6ea3cd8773af049e8e8356e18fed018fa05871ab3f166b04f6b1a33d972486",
+          "bytes": 274,
+          "offset": 119674
+        }
+      }
+    ],
+    "npc_records": [
+      {
+        "slot_zero_based": 10,
+        "offset": 119948,
+        "resource_id": 116,
+        "name_cp950": "賭場看守者",
+        "x_native": 200,
+        "y_native": 40,
+        "direction": 0,
+        "raw_hex": "3131360000000000000000000000000000000000bde4b3f5acdda675aacc000000000000000000007400000000000000c80000002800000000000000000000000015000000000001ff0101ffffffffffffffffffffffffffffff000000000000000000000000000000000000000000c80000002800000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000005a00000082000000000000000000000000000000000000000000000000000000000000000000000000001600000000000000000000000000000000000000000000000000000000020001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000050000000a00000002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000"
+      },
+      {
+        "slot_zero_based": 11,
+        "offset": 121169,
+        "resource_id": 54,
+        "name_cp950": "男術士炎",
+        "x_native": 48,
+        "y_native": 192,
+        "direction": 0,
+        "raw_hex": "3035340000000000000000000000000000000000a86bb34ea468aaa2000000000000000000000000360000000000000030000000c000000000000000000000000016000000000001ff0101ffffffffffffffffffffffffffffff00000000000000000000000000000000000000000030000000c00000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000bc000000a5000000000000000000000000000000000000000000000000000000000000000000000000001600000000000000000000000000000000000000000000000000000000020001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000050000000a00000002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000"
+      },
+      {
+        "slot_zero_based": 12,
+        "offset": 122390,
+        "resource_id": 52,
+        "name_cp950": "酒店服務炎",
+        "x_native": 88,
+        "y_native": 200,
+        "direction": 1,
+        "raw_hex": "3035320000000000000000000000000000000000b073a9b1aa41b0c8aaa200000000000000000000340000000000000058000000c800000000000000000000000017000000010001ff0101ffffffffffffffffffffffffffffff00000000000000000000000000000000000000000058000000c80000000000000000000000010000000000000000000000050000000100000000000000000000000000000000000000000000000000000000b100000099000000000000000000000000000000000000000000000000000000000000000000000000001600000000000000000000000000000000000000000000000000000000020001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000050000000a00000002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000"
+      },
+      {
+        "slot_zero_based": 13,
+        "offset": 123611,
+        "resource_id": 52,
+        "name_cp950": "門口服務炎",
+        "x_native": 232,
+        "y_native": 216,
+        "direction": 0,
+        "raw_hex": "3035320000000000000000000000000000000000aaf9a466aa41b0c8aaa2000000000000000000003400000000000000e8000000d800000000000000000000000018000000000001ff0101ffffffffffffffffffffffffffffff000000000000000000000000000000000000000000e8000000d80000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000b100000099000000000000000000000000000000000000000000000000000000000000000000000000001600000000000000000000000000000000000000000000000000000000020001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000050000000a00000002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000"
+      },
+      {
+        "slot_zero_based": 14,
+        "offset": 124832,
+        "resource_id": 100,
+        "name_cp950": "p309男",
+        "x_native": 112,
+        "y_native": 192,
+        "direction": 6,
+        "raw_hex": "313030000000000000000000000000000000000070333039a86b0000000000000000000000000000640000000000000070000000c000000000000000000000000019000000060001ff0101ffffffffffffffffffffffffffffff00000000000000000000000000000000000000000070000000c000000000000000000000000600000000000000000000001e00000001000000000000000000000000000000000000000000000000000000005000000081000000000000000000000000000000000000000000000000000000000000000000000000001600000000000000000000000000000000000000000000000000000000020001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000050000000a00000002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000"
+      },
+      {
+        "slot_zero_based": 15,
+        "offset": 126053,
+        "resource_id": 101,
+        "name_cp950": "p310男",
+        "x_native": 104,
+        "y_native": 208,
+        "direction": 4,
+        "raw_hex": "313031000000000000000000000000000000000070333130a86b0000000000000000000000000000650000000000000068000000d00000000000000000000000001a000000040001ff0101ffffffffffffffffffffffffffffff00000000000000000000000000000000000000000068000000d000000000000000000000000400000000000000000000001400000001000000000000000000000000000000000000000000000000000000005a00000084000000000000000000000000000000000000000000000000000000000000000000000000001600000000000000000000000000000000000000000000000000000000020001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000050000000a00000002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000"
+      },
+      {
+        "slot_zero_based": 16,
+        "offset": 127274,
+        "resource_id": 104,
+        "name_cp950": "忘記男",
+        "x_native": 232,
+        "y_native": 40,
+        "direction": 6,
+        "raw_hex": "3130340000000000000000000000000000000000a7d1b04fa86b00000000000000000000000000006800000000000000e8000000280000000000000000000000001b000000060001ff0101ffffffffffffffffffffffffffffff000000000000000000000000000000000000000000e80000002800000000000000000000000600000000000000000000001e00000001000000000000000000000000000000000000000000000000000000005a0000007c000000000000000000000000000000000000000000000000000000000000000000000000001600000000000000000000000000000000000000000000000000000000020002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000050000000a00000002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000"
+      },
+      {
+        "slot_zero_based": 17,
+        "offset": 128495,
+        "resource_id": 118,
+        "name_cp950": "叫醒男",
+        "x_native": 240,
+        "y_native": 192,
+        "direction": 4,
+        "raw_hex": "3131380000000000000000000000000000000000a573bff4a86b00000000000000000000000000007600000000000000f0000000c00000000000000000000000001c000000040001ff0101ffffffffffffffffffffffffffffff000000000000000000000000000000000000000000f0000000c000000000000000000000000400000000000000000000001400000001000000000000000000000000000000000000000000000000000000005a00000082000000000000000000000000000000000000000000000000000000000000000000000000001600000000000000000000000000000000000000000000000000000000020002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000050000000a00000002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000"
+      }
+    ],
+    "entry_markers": {
+      "1": [
+        {
+          "x": 34,
+          "y": 27,
+          "offset": 80306
+        },
+        {
+          "x": 35,
+          "y": 27,
+          "offset": 80370
+        },
+        {
+          "x": 34,
+          "y": 28,
+          "offset": 83186
+        },
+        {
+          "x": 35,
+          "y": 28,
+          "offset": 83250
+        }
+      ],
+      "2": [
+        {
+          "x": 29,
+          "y": 6,
+          "offset": 19506
+        }
+      ]
+    },
+    "default_object_index_slot": 499,
+    "default_object_record": 4,
+    "header_entry_tlk_raw": 0,
+    "header_entry_tlk_source": {
+      "path": "Map/m01032.dat",
+      "sha256": "9e6ea3cd8773af049e8e8356e18fed018fa05871ab3f166b04f6b1a33d972486",
+      "bytes": 4,
+      "offset": 314
+    },
+    "header_setup_tlk_raw": 0,
+    "header_setup_tlk_source": {
+      "path": "Map/m01032.dat",
+      "sha256": "9e6ea3cd8773af049e8e8356e18fed018fa05871ab3f166b04f6b1a33d972486",
+      "bytes": 4,
+      "offset": 138
+    },
+    "evidence": [
+      "ev_e14d28c11ec31e5eebdf4c08a994a900102658650d8e5364d58b848cbd114ea7",
+      "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a"
+    ],
+    "limitations": [
+      "Index slot499 is retained as the object default TLK entry; it must not be used as an automatic map-load event. Header +0x8A controls map setup; +0x13A controls map-entry TLK.",
+      "TLK record kind/mutation numbers are raw native values; dialogue text alone does not define their behavior."
+    ],
+    "flow_id": "M01032:tlk"
+  },
+  "programs": {},
+  "flows": {
+    "M01032:tlk": {
+      "schema": "seventh-seal-story-flow",
+      "version": 1,
+      "id": "M01032:tlk",
+      "map_id": "M01032",
+      "entry": "M01032:tlk:1",
+      "entries": {
+        "1": "M01032:tlk:1",
+        "2": "M01032:tlk:2",
+        "3": "M01032:tlk:3",
+        "4": "M01032:tlk:4",
+        "5": "M01032:tlk:5",
+        "6": "M01032:tlk:6",
+        "7": "M01032:tlk:7",
+        "8": "M01032:tlk:8",
+        "9": "M01032:tlk:9",
+        "10": "M01032:tlk:10",
+        "11": "M01032:tlk:11",
+        "12": "M01032:tlk:12",
+        "13": "M01032:tlk:13",
+        "14": "M01032:tlk:14",
+        "15": "M01032:tlk:15"
+      },
+      "commands": [
+        {
+          "id": "M01032:tlk:1",
+          "op": "record",
+          "record_id": 1,
+          "source": {
+            "path": "Map/m01032.TLK",
+            "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+            "record_id": 1,
+            "record_bytes": 1647,
+            "offset": 2026
+          }
+        },
+        {
+          "id": "M01032:tlk:1:1",
+          "op": "test_flag_bit",
+          "record_id": 1,
+          "source": {
+            "path": "Map/m01032.TLK",
+            "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+            "record_id": 1,
+            "record_bytes": 1647,
+            "offset": 2026
+          },
+          "index": 33,
+          "bit": 2,
+          "if_true": "M01032:tlk:2",
+          "if_false": "M01032:tlk:1:2"
+        },
+        {
+          "id": "M01032:tlk:1:2",
+          "op": "say",
+          "record_id": 1,
+          "source": {
+            "path": "Map/m01032.TLK",
+            "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+            "record_id": 1,
+            "record_bytes": 1647,
+            "offset": 2026
+          },
+          "text_id": "M01032:TLK:1",
+          "presentation": {
+            "speaker": 11,
+            "style": 1,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M01032:tlk:1:3",
+          "op": "jump",
+          "record_id": 1,
+          "source": {
+            "path": "Map/m01032.TLK",
+            "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+            "record_id": 1,
+            "record_bytes": 1647,
+            "offset": 2026
+          },
+          "target": "M01032:tlk:end"
+        },
+        {
+          "id": "M01032:tlk:2",
+          "op": "record",
+          "record_id": 2,
+          "source": {
+            "path": "Map/m01032.TLK",
+            "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+            "record_id": 2,
+            "record_bytes": 1647,
+            "offset": 3673
+          }
+        },
+        {
+          "id": "M01032:tlk:2:1",
+          "op": "say",
+          "record_id": 2,
+          "source": {
+            "path": "Map/m01032.TLK",
+            "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+            "record_id": 2,
+            "record_bytes": 1647,
+            "offset": 3673
+          },
+          "text_id": "M01032:TLK:2",
+          "presentation": {
+            "speaker": 11,
+            "style": 1,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M01032:tlk:2:2",
+          "op": "jump",
+          "record_id": 2,
+          "source": {
+            "path": "Map/m01032.TLK",
+            "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+            "record_id": 2,
+            "record_bytes": 1647,
+            "offset": 3673
+          },
+          "target": "M01032:tlk:3"
+        },
+        {
+          "id": "M01032:tlk:3",
+          "op": "record",
+          "record_id": 3,
+          "source": {
+            "path": "Map/m01032.TLK",
+            "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+            "record_id": 3,
+            "record_bytes": 1647,
+            "offset": 5320
+          }
+        },
+        {
+          "id": "M01032:tlk:3:1",
+          "op": "transfer_native_map",
+          "record_id": 3,
+          "source": {
+            "path": "Map/m01032.TLK",
+            "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+            "record_id": 3,
+            "record_bytes": 1647,
+            "offset": 5320
+          }
+        },
+        {
+          "id": "M01032:tlk:3:2",
+          "op": "jump",
+          "record_id": 3,
+          "source": {
+            "path": "Map/m01032.TLK",
+            "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+            "record_id": 3,
+            "record_bytes": 1647,
+            "offset": 5320
+          },
+          "target": "M01032:tlk:end"
+        },
+        {
+          "id": "M01032:tlk:4",
+          "op": "record",
+          "record_id": 4,
+          "source": {
+            "path": "Map/m01032.TLK",
+            "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+            "record_id": 4,
+            "record_bytes": 1647,
+            "offset": 6967
+          }
+        },
+        {
+          "id": "M01032:tlk:4:1",
+          "op": "say",
+          "record_id": 4,
+          "source": {
+            "path": "Map/m01032.TLK",
+            "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+            "record_id": 4,
+            "record_bytes": 1647,
+            "offset": 6967
+          },
+          "text_id": "M01032:TLK:4",
+          "presentation": {
+            "speaker": 500,
+            "style": 1,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M01032:tlk:4:2",
+          "op": "jump",
+          "record_id": 4,
+          "source": {
+            "path": "Map/m01032.TLK",
+            "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+            "record_id": 4,
+            "record_bytes": 1647,
+            "offset": 6967
+          },
+          "target": "M01032:tlk:end"
+        },
+        {
+          "id": "M01032:tlk:5",
+          "op": "record",
+          "record_id": 5,
+          "source": {
+            "path": "Map/m01032.TLK",
+            "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+            "record_id": 5,
+            "record_bytes": 1647,
+            "offset": 8614
+          }
+        },
+        {
+          "id": "M01032:tlk:5:1",
+          "op": "say",
+          "record_id": 5,
+          "source": {
+            "path": "Map/m01032.TLK",
+            "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+            "record_id": 5,
+            "record_bytes": 1647,
+            "offset": 8614
+          },
+          "text_id": "M01032:TLK:5",
+          "presentation": {
+            "speaker": 500,
+            "style": 1,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M01032:tlk:5:2",
+          "op": "jump",
+          "record_id": 5,
+          "source": {
+            "path": "Map/m01032.TLK",
+            "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+            "record_id": 5,
+            "record_bytes": 1647,
+            "offset": 8614
+          },
+          "target": "M01032:tlk:end"
+        },
+        {
+          "id": "M01032:tlk:6",
+          "op": "record",
+          "record_id": 6,
+          "source": {
+            "path": "Map/m01032.TLK",
+            "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+            "record_id": 6,
+            "record_bytes": 1647,
+            "offset": 10261
+          }
+        },
+        {
+          "id": "M01032:tlk:6:1",
+          "op": "say",
+          "record_id": 6,
+          "source": {
+            "path": "Map/m01032.TLK",
+            "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+            "record_id": 6,
+            "record_bytes": 1647,
+            "offset": 10261
+          },
+          "text_id": "M01032:TLK:6",
+          "presentation": {
+            "speaker": 500,
+            "style": 1,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M01032:tlk:6:2",
+          "op": "jump",
+          "record_id": 6,
+          "source": {
+            "path": "Map/m01032.TLK",
+            "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+            "record_id": 6,
+            "record_bytes": 1647,
+            "offset": 10261
+          },
+          "target": "M01032:tlk:end"
+        },
+        {
+          "id": "M01032:tlk:7",
+          "op": "record",
+          "record_id": 7,
+          "source": {
+            "path": "Map/m01032.TLK",
+            "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+            "record_id": 7,
+            "record_bytes": 1647,
+            "offset": 11908
+          }
+        },
+        {
+          "id": "M01032:tlk:7:1",
+          "op": "say",
+          "record_id": 7,
+          "source": {
+            "path": "Map/m01032.TLK",
+            "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+            "record_id": 7,
+            "record_bytes": 1647,
+            "offset": 11908
+          },
+          "text_id": "M01032:TLK:7",
+          "presentation": {
+            "speaker": 500,
+            "style": 1,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M01032:tlk:7:2",
+          "op": "jump",
+          "record_id": 7,
+          "source": {
+            "path": "Map/m01032.TLK",
+            "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+            "record_id": 7,
+            "record_bytes": 1647,
+            "offset": 11908
+          },
+          "target": "M01032:tlk:end"
+        },
+        {
+          "id": "M01032:tlk:8",
+          "op": "record",
+          "record_id": 8,
+          "source": {
+            "path": "Map/m01032.TLK",
+            "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+            "record_id": 8,
+            "record_bytes": 1647,
+            "offset": 13555
+          }
+        },
+        {
+          "id": "M01032:tlk:8:1",
+          "op": "say",
+          "record_id": 8,
+          "source": {
+            "path": "Map/m01032.TLK",
+            "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+            "record_id": 8,
+            "record_bytes": 1647,
+            "offset": 13555
+          },
+          "text_id": "M01032:TLK:8",
+          "presentation": {
+            "speaker": 12,
+            "style": 2,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M01032:tlk:8:2",
+          "op": "jump",
+          "record_id": 8,
+          "source": {
+            "path": "Map/m01032.TLK",
+            "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+            "record_id": 8,
+            "record_bytes": 1647,
+            "offset": 13555
+          },
+          "target": "M01032:tlk:end"
+        },
+        {
+          "id": "M01032:tlk:9",
+          "op": "record",
+          "record_id": 9,
+          "source": {
+            "path": "Map/m01032.TLK",
+            "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+            "record_id": 9,
+            "record_bytes": 1647,
+            "offset": 15202
+          }
+        },
+        {
+          "id": "M01032:tlk:9:1",
+          "op": "say",
+          "record_id": 9,
+          "source": {
+            "path": "Map/m01032.TLK",
+            "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+            "record_id": 9,
+            "record_bytes": 1647,
+            "offset": 15202
+          },
+          "text_id": "M01032:TLK:9",
+          "presentation": {
+            "speaker": 13,
+            "style": 2,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M01032:tlk:9:2",
+          "op": "jump",
+          "record_id": 9,
+          "source": {
+            "path": "Map/m01032.TLK",
+            "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+            "record_id": 9,
+            "record_bytes": 1647,
+            "offset": 15202
+          },
+          "target": "M01032:tlk:end"
+        },
+        {
+          "id": "M01032:tlk:10",
+          "op": "record",
+          "record_id": 10,
+          "source": {
+            "path": "Map/m01032.TLK",
+            "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+            "record_id": 10,
+            "record_bytes": 1647,
+            "offset": 16849
+          }
+        },
+        {
+          "id": "M01032:tlk:10:1",
+          "op": "say",
+          "record_id": 10,
+          "source": {
+            "path": "Map/m01032.TLK",
+            "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+            "record_id": 10,
+            "record_bytes": 1647,
+            "offset": 16849
+          },
+          "text_id": "M01032:TLK:10",
+          "presentation": {
+            "speaker": 14,
+            "style": 2,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M01032:tlk:10:2",
+          "op": "jump",
+          "record_id": 10,
+          "source": {
+            "path": "Map/m01032.TLK",
+            "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+            "record_id": 10,
+            "record_bytes": 1647,
+            "offset": 16849
+          },
+          "target": "M01032:tlk:end"
+        },
+        {
+          "id": "M01032:tlk:11",
+          "op": "record",
+          "record_id": 11,
+          "source": {
+            "path": "Map/m01032.TLK",
+            "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+            "record_id": 11,
+            "record_bytes": 1647,
+            "offset": 18496
+          }
+        },
+        {
+          "id": "M01032:tlk:11:1",
+          "op": "say",
+          "record_id": 11,
+          "source": {
+            "path": "Map/m01032.TLK",
+            "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+            "record_id": 11,
+            "record_bytes": 1647,
+            "offset": 18496
+          },
+          "text_id": "M01032:TLK:11",
+          "presentation": {
+            "speaker": 17,
+            "style": 1,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M01032:tlk:11:2",
+          "op": "jump",
+          "record_id": 11,
+          "source": {
+            "path": "Map/m01032.TLK",
+            "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+            "record_id": 11,
+            "record_bytes": 1647,
+            "offset": 18496
+          },
+          "target": "M01032:tlk:end"
+        },
+        {
+          "id": "M01032:tlk:12",
+          "op": "record",
+          "record_id": 12,
+          "source": {
+            "path": "Map/m01032.TLK",
+            "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+            "record_id": 12,
+            "record_bytes": 1647,
+            "offset": 20143
+          }
+        },
+        {
+          "id": "M01032:tlk:12:1",
+          "op": "say",
+          "record_id": 12,
+          "source": {
+            "path": "Map/m01032.TLK",
+            "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+            "record_id": 12,
+            "record_bytes": 1647,
+            "offset": 20143
+          },
+          "text_id": "M01032:TLK:12",
+          "presentation": {
+            "speaker": 18,
+            "style": 2,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M01032:tlk:12:2",
+          "op": "jump",
+          "record_id": 12,
+          "source": {
+            "path": "Map/m01032.TLK",
+            "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+            "record_id": 12,
+            "record_bytes": 1647,
+            "offset": 20143
+          },
+          "target": "M01032:tlk:7"
+        },
+        {
+          "id": "M01032:tlk:13",
+          "op": "record",
+          "record_id": 13,
+          "source": {
+            "path": "Map/m01032.TLK",
+            "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+            "record_id": 13,
+            "record_bytes": 1647,
+            "offset": 21790
+          }
+        },
+        {
+          "id": "M01032:tlk:13:1",
+          "op": "say",
+          "record_id": 13,
+          "source": {
+            "path": "Map/m01032.TLK",
+            "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+            "record_id": 13,
+            "record_bytes": 1647,
+            "offset": 21790
+          },
+          "text_id": "M01032:TLK:13",
+          "presentation": {
+            "speaker": 15,
+            "style": 1,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M01032:tlk:13:2",
+          "op": "jump",
+          "record_id": 13,
+          "source": {
+            "path": "Map/m01032.TLK",
+            "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+            "record_id": 13,
+            "record_bytes": 1647,
+            "offset": 21790
+          },
+          "target": "M01032:tlk:14"
+        },
+        {
+          "id": "M01032:tlk:14",
+          "op": "record",
+          "record_id": 14,
+          "source": {
+            "path": "Map/m01032.TLK",
+            "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+            "record_id": 14,
+            "record_bytes": 1647,
+            "offset": 23437
+          }
+        },
+        {
+          "id": "M01032:tlk:14:1",
+          "op": "say",
+          "record_id": 14,
+          "source": {
+            "path": "Map/m01032.TLK",
+            "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+            "record_id": 14,
+            "record_bytes": 1647,
+            "offset": 23437
+          },
+          "text_id": "M01032:TLK:14",
+          "presentation": {
+            "speaker": 16,
+            "style": 2,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M01032:tlk:14:2",
+          "op": "jump",
+          "record_id": 14,
+          "source": {
+            "path": "Map/m01032.TLK",
+            "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+            "record_id": 14,
+            "record_bytes": 1647,
+            "offset": 23437
+          },
+          "target": "M01032:tlk:15"
+        },
+        {
+          "id": "M01032:tlk:15",
+          "op": "record",
+          "record_id": 15,
+          "source": {
+            "path": "Map/m01032.TLK",
+            "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+            "record_id": 15,
+            "record_bytes": 1647,
+            "offset": 25084
+          }
+        },
+        {
+          "id": "M01032:tlk:15:1",
+          "op": "say",
+          "record_id": 15,
+          "source": {
+            "path": "Map/m01032.TLK",
+            "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+            "record_id": 15,
+            "record_bytes": 1647,
+            "offset": 25084
+          },
+          "text_id": "M01032:TLK:15",
+          "presentation": {
+            "speaker": 13,
+            "style": 2,
+            "portrait_id": 0,
+            "region_byte_raw": 0
+          }
+        },
+        {
+          "id": "M01032:tlk:15:2",
+          "op": "jump",
+          "record_id": 15,
+          "source": {
+            "path": "Map/m01032.TLK",
+            "sha256": "b9dd123a6c4ba6fbecaecc6d719549d5acea2b3c4a8b6cbae67156e5a6dcd9dd",
+            "record_id": 15,
+            "record_bytes": 1647,
+            "offset": 25084
+          },
+          "target": "M01032:tlk:end"
+        },
+        {
+          "id": "M01032:tlk:end",
+          "op": "end"
+        }
+      ]
+    }
+  },
+  "events": [],
+  "resources": {
+    "npcs_by_map": [
+      {
+        "id": "M01032-role-10",
+        "slot_zero_based": 10,
+        "speaker_slot_one_based": 11,
+        "name": "賭場看守者",
+        "resource_id": "116",
+        "x": 400,
+        "y": 80,
+        "x_native": 200,
+        "y_native": 40,
+        "direction": 0,
+        "direction_raw_45": 0,
+        "hidden": false,
+        "hidden_raw_97": 0,
+        "hidden_on_load_raw_2ac": 0,
+        "initial_visibility_evidence": [
+          "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+        ],
+        "raw_field_41": 21,
+        "action_mode_raw_2f": 0,
+        "animation_index_raw_83": 0,
+        "frame_index_raw_7b": 0,
+        "actor_mode_raw_f0": 0,
+        "behavior_raw_c5": 0,
+        "behavior_state_raw_f5": 1,
+        "movement_direction_raw_2b1": 0,
+        "blend_mode_raw_4bd": 0,
+        "source": {
+          "path": "Map/m01032.dat",
+          "sha256": "9e6ea3cd8773af049e8e8356e18fed018fa05871ab3f166b04f6b1a33d972486",
+          "offset": 119948,
+          "bytes": 1221
+        }
+      },
+      {
+        "id": "M01032-role-11",
+        "slot_zero_based": 11,
+        "speaker_slot_one_based": 12,
+        "name": "男術士炎",
+        "resource_id": "054",
+        "x": 96,
+        "y": 384,
+        "x_native": 48,
+        "y_native": 192,
+        "direction": 0,
+        "direction_raw_45": 0,
+        "hidden": false,
+        "hidden_raw_97": 0,
+        "hidden_on_load_raw_2ac": 0,
+        "initial_visibility_evidence": [
+          "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+        ],
+        "raw_field_41": 22,
+        "action_mode_raw_2f": 0,
+        "animation_index_raw_83": 0,
+        "frame_index_raw_7b": 0,
+        "actor_mode_raw_f0": 0,
+        "behavior_raw_c5": 0,
+        "behavior_state_raw_f5": 1,
+        "movement_direction_raw_2b1": 0,
+        "blend_mode_raw_4bd": 0,
+        "source": {
+          "path": "Map/m01032.dat",
+          "sha256": "9e6ea3cd8773af049e8e8356e18fed018fa05871ab3f166b04f6b1a33d972486",
+          "offset": 121169,
+          "bytes": 1221
+        }
+      },
+      {
+        "id": "M01032-role-12",
+        "slot_zero_based": 12,
+        "speaker_slot_one_based": 13,
+        "name": "酒店服務炎",
+        "resource_id": "052",
+        "x": 176,
+        "y": 400,
+        "x_native": 88,
+        "y_native": 200,
+        "direction": 1,
+        "direction_raw_45": 1,
+        "hidden": false,
+        "hidden_raw_97": 0,
+        "hidden_on_load_raw_2ac": 0,
+        "initial_visibility_evidence": [
+          "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+        ],
+        "raw_field_41": 23,
+        "action_mode_raw_2f": 0,
+        "animation_index_raw_83": 0,
+        "frame_index_raw_7b": 0,
+        "actor_mode_raw_f0": 0,
+        "behavior_raw_c5": 0,
+        "behavior_state_raw_f5": 1,
+        "movement_direction_raw_2b1": 0,
+        "blend_mode_raw_4bd": 0,
+        "source": {
+          "path": "Map/m01032.dat",
+          "sha256": "9e6ea3cd8773af049e8e8356e18fed018fa05871ab3f166b04f6b1a33d972486",
+          "offset": 122390,
+          "bytes": 1221
+        }
+      },
+      {
+        "id": "M01032-role-13",
+        "slot_zero_based": 13,
+        "speaker_slot_one_based": 14,
+        "name": "門口服務炎",
+        "resource_id": "052",
+        "x": 464,
+        "y": 432,
+        "x_native": 232,
+        "y_native": 216,
+        "direction": 0,
+        "direction_raw_45": 0,
+        "hidden": false,
+        "hidden_raw_97": 0,
+        "hidden_on_load_raw_2ac": 0,
+        "initial_visibility_evidence": [
+          "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+        ],
+        "raw_field_41": 24,
+        "action_mode_raw_2f": 0,
+        "animation_index_raw_83": 0,
+        "frame_index_raw_7b": 0,
+        "actor_mode_raw_f0": 0,
+        "behavior_raw_c5": 0,
+        "behavior_state_raw_f5": 1,
+        "movement_direction_raw_2b1": 0,
+        "blend_mode_raw_4bd": 0,
+        "source": {
+          "path": "Map/m01032.dat",
+          "sha256": "9e6ea3cd8773af049e8e8356e18fed018fa05871ab3f166b04f6b1a33d972486",
+          "offset": 123611,
+          "bytes": 1221
+        }
+      },
+      {
+        "id": "M01032-role-14",
+        "slot_zero_based": 14,
+        "speaker_slot_one_based": 15,
+        "name": "p309男",
+        "resource_id": "100",
+        "x": 224,
+        "y": 384,
+        "x_native": 112,
+        "y_native": 192,
+        "direction": 6,
+        "direction_raw_45": 6,
+        "hidden": false,
+        "hidden_raw_97": 0,
+        "hidden_on_load_raw_2ac": 0,
+        "initial_visibility_evidence": [
+          "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+        ],
+        "raw_field_41": 25,
+        "action_mode_raw_2f": 0,
+        "animation_index_raw_83": 0,
+        "frame_index_raw_7b": 0,
+        "actor_mode_raw_f0": 0,
+        "behavior_raw_c5": 0,
+        "behavior_state_raw_f5": 1,
+        "movement_direction_raw_2b1": 0,
+        "blend_mode_raw_4bd": 0,
+        "source": {
+          "path": "Map/m01032.dat",
+          "sha256": "9e6ea3cd8773af049e8e8356e18fed018fa05871ab3f166b04f6b1a33d972486",
+          "offset": 124832,
+          "bytes": 1221
+        }
+      },
+      {
+        "id": "M01032-role-15",
+        "slot_zero_based": 15,
+        "speaker_slot_one_based": 16,
+        "name": "p310男",
+        "resource_id": "101",
+        "x": 208,
+        "y": 416,
+        "x_native": 104,
+        "y_native": 208,
+        "direction": 4,
+        "direction_raw_45": 4,
+        "hidden": false,
+        "hidden_raw_97": 0,
+        "hidden_on_load_raw_2ac": 0,
+        "initial_visibility_evidence": [
+          "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+        ],
+        "raw_field_41": 26,
+        "action_mode_raw_2f": 0,
+        "animation_index_raw_83": 0,
+        "frame_index_raw_7b": 0,
+        "actor_mode_raw_f0": 0,
+        "behavior_raw_c5": 0,
+        "behavior_state_raw_f5": 1,
+        "movement_direction_raw_2b1": 0,
+        "blend_mode_raw_4bd": 0,
+        "source": {
+          "path": "Map/m01032.dat",
+          "sha256": "9e6ea3cd8773af049e8e8356e18fed018fa05871ab3f166b04f6b1a33d972486",
+          "offset": 126053,
+          "bytes": 1221
+        }
+      },
+      {
+        "id": "M01032-role-16",
+        "slot_zero_based": 16,
+        "speaker_slot_one_based": 17,
+        "name": "忘記男",
+        "resource_id": "104",
+        "x": 464,
+        "y": 80,
+        "x_native": 232,
+        "y_native": 40,
+        "direction": 6,
+        "direction_raw_45": 6,
+        "hidden": false,
+        "hidden_raw_97": 0,
+        "hidden_on_load_raw_2ac": 0,
+        "initial_visibility_evidence": [
+          "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+        ],
+        "raw_field_41": 27,
+        "action_mode_raw_2f": 0,
+        "animation_index_raw_83": 0,
+        "frame_index_raw_7b": 0,
+        "actor_mode_raw_f0": 0,
+        "behavior_raw_c5": 0,
+        "behavior_state_raw_f5": 2,
+        "movement_direction_raw_2b1": 0,
+        "blend_mode_raw_4bd": 0,
+        "source": {
+          "path": "Map/m01032.dat",
+          "sha256": "9e6ea3cd8773af049e8e8356e18fed018fa05871ab3f166b04f6b1a33d972486",
+          "offset": 127274,
+          "bytes": 1221
+        }
+      },
+      {
+        "id": "M01032-role-17",
+        "slot_zero_based": 17,
+        "speaker_slot_one_based": 18,
+        "name": "叫醒男",
+        "resource_id": "118",
+        "x": 480,
+        "y": 384,
+        "x_native": 240,
+        "y_native": 192,
+        "direction": 4,
+        "direction_raw_45": 4,
+        "hidden": false,
+        "hidden_raw_97": 0,
+        "hidden_on_load_raw_2ac": 0,
+        "initial_visibility_evidence": [
+          "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+        ],
+        "raw_field_41": 28,
+        "action_mode_raw_2f": 0,
+        "animation_index_raw_83": 0,
+        "frame_index_raw_7b": 0,
+        "actor_mode_raw_f0": 0,
+        "behavior_raw_c5": 0,
+        "behavior_state_raw_f5": 2,
+        "movement_direction_raw_2b1": 0,
+        "blend_mode_raw_4bd": 0,
+        "source": {
+          "path": "Map/m01032.dat",
+          "sha256": "9e6ea3cd8773af049e8e8356e18fed018fa05871ab3f166b04f6b1a33d972486",
+          "offset": 128495,
+          "bytes": 1221
+        }
+      }
+    ],
+    "exits_by_map": [
+      {
+        "id": 1,
+        "state": "ready",
+        "cells": [
+          {
+            "x": 41,
+            "y": 28
+          },
+          {
+            "x": 41,
+            "y": 29
+          },
+          {
+            "x": 41,
+            "y": 30
+          },
+          {
+            "x": 37,
+            "y": 31
+          },
+          {
+            "x": 38,
+            "y": 31
+          },
+          {
+            "x": 39,
+            "y": 31
+          },
+          {
+            "x": 40,
+            "y": 31
+          },
+          {
+            "x": 41,
+            "y": 31
+          }
+        ],
+        "target_map": "M01030",
+        "entry": {
+          "x": 1056,
+          "y": 768,
+          "direction": 0,
+          "cell_x": 66,
+          "cell_y": 48,
+          "native_x": 528,
+          "native_y": 384
+        },
+        "conditions": [],
+        "source": {
+          "path": "Map/m01032.dat",
+          "sha256": "9e6ea3cd8773af049e8e8356e18fed018fa05871ab3f166b04f6b1a33d972486",
+          "descriptor_offset": 102514,
+          "descriptor_bytes": 66,
+          "descriptor_hex": "00000000000000000000000000000000006d30313033302e646174000000000000000000000006000000040000000000000000000000000000000000000000000000",
+          "compact_field_expansion_evidence": null,
+          "target_path": "Map/m01030.dat",
+          "target_sha256": "85b4dc4e8d7d2e8698461ced1d7b3655edf1608e35f1c865400c36b6a685ae72",
+          "target_entry_marker": 6,
+          "entry_sort_code": 4,
+          "entry_terrain_raw": 0,
+          "entry_trigger_raw": 0,
+          "entry_scan_cells": [
+            {
+              "x": 66,
+              "y": 48,
+              "offset": 403954
+            }
+          ],
+          "entry_sorted_cells": [
+            {
+              "x": 66,
+              "y": 48
+            }
+          ],
+          "entry_sort": "x descending; stable ties",
+          "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
+          "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
+          "native_evidence": {
+            "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+            "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+            "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+            "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+          }
+        },
+        "execution": "Native transition descriptor only; map-entry TLK/ANM and their once-only checks must complete separately.",
+        "limitations": [
+          "Static source/code evidence; original timing not observed",
+          "Continuous keyboard movement is runtime policy"
+        ]
+      }
+    ],
+    "trigger_regions": [],
+    "interactive_objects": [
+      {
+        "object_index_zero_based": 2,
+        "object_number_one_based": 3,
+        "resource_id": "003",
+        "x": 224,
+        "y": 496,
+        "behavior_raw_cf": 1,
+        "state_raw_d0": 0,
+        "field_f6_raw": 5,
+        "field_fa_raw": 0,
+        "source": {
+          "path": "Map/m01032.dat",
+          "sha256": "9e6ea3cd8773af049e8e8356e18fed018fa05871ab3f166b04f6b1a33d972486",
+          "offset": 114742,
+          "bytes": 274,
+          "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d30313033325c3030332e444750030000000000000070000000f8000000010000000100000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000005000000000000000000000000000000000000000000010000000000"
+        },
+        "status": "Raw interactive-object candidates; native selection/TLK/state timing must be corroborated"
+      },
+      {
+        "object_index_zero_based": 16,
+        "object_number_one_based": 17,
+        "resource_id": "017",
+        "x": 464,
+        "y": 256,
+        "behavior_raw_cf": 1,
+        "state_raw_d0": 0,
+        "field_f6_raw": 6,
+        "field_fa_raw": 61,
+        "source": {
+          "path": "Map/m01032.dat",
+          "sha256": "9e6ea3cd8773af049e8e8356e18fed018fa05871ab3f166b04f6b1a33d972486",
+          "offset": 118578,
+          "bytes": 274,
+          "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d30313033325c3031372e4447501100000000000000e800000080000000010000000100000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000100000000000000b400000000000000000000000000000000000000000000000000000000060000003d0000000000000000000000000000000000000000000000"
+        },
+        "status": "Raw interactive-object candidates; native selection/TLK/state timing must be corroborated"
+      },
+      {
+        "object_index_zero_based": 17,
+        "object_number_one_based": 18,
+        "resource_id": "018",
+        "x": 384,
+        "y": 256,
+        "behavior_raw_cf": 1,
+        "state_raw_d0": 0,
+        "field_f6_raw": 4,
+        "field_fa_raw": 79,
+        "source": {
+          "path": "Map/m01032.dat",
+          "sha256": "9e6ea3cd8773af049e8e8356e18fed018fa05871ab3f166b04f6b1a33d972486",
+          "offset": 118852,
+          "bytes": 274,
+          "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d30313033325c3031382e4447501200000000000000c000000080000000010000000100000000000000000000000000000000001100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000100000000000000b400000000000000000000000000000000000000000000000000000000040000004f0000000000000000000000000000000000000000000000"
+        },
+        "status": "Raw interactive-object candidates; native selection/TLK/state timing must be corroborated"
+      },
+      {
+        "object_index_zero_based": 18,
+        "object_number_one_based": 19,
+        "resource_id": "019",
+        "x": 464,
+        "y": 384,
+        "behavior_raw_cf": 1,
+        "state_raw_d0": 0,
+        "field_f6_raw": 7,
+        "field_fa_raw": 64,
+        "source": {
+          "path": "Map/m01032.dat",
+          "sha256": "9e6ea3cd8773af049e8e8356e18fed018fa05871ab3f166b04f6b1a33d972486",
+          "offset": 119126,
+          "bytes": 274,
+          "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d30313033325c3031392e4447501300000000000000e8000000c0000000010000000100000000000000000000000000000000001200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000100000000000000b40000000000000000000000000000000000000000000000000000000007000000400000000000000000000000000000000000000000000000"
+        },
+        "status": "Raw interactive-object candidates; native selection/TLK/state timing must be corroborated"
+      }
+    ],
+    "object_animations": [
+      {
+        "object_index_zero_based": 2,
+        "object_number_one_based": 3,
+        "resource_id": "003",
+        "source": {
+          "path": "mapm/m01032/003.dgp",
+          "sha256": "ae4274e72c9f27f34e721234bfa8f290abb8d85474a3226636b6f9b25bf26f79"
+        },
+        "frames": [
+          {
+            "index": 0,
+            "image": "/assets/chapter_objects/m01032/003/frame_000.png",
+            "sha256": "6d592ee6992d05ad55c7a61b8fa3aa4796885605d6f7869e2b244ade487ec5bf"
+          }
+        ],
+        "frame_width": 236,
+        "frame_height": 121,
+        "actions": [],
+        "completed_last_frame": 0,
+        "evidence": [
+          "ev_7ff7092a0522a10920b1c81430af56c62cb116c3d66a5af86a35ecb5e9498a5c"
+        ],
+        "authority": "Original DGP physical frames; retained 0x4137C0 proves CF3 state2 progresses to state3 at its final animation frame; exact clock phase remains unobserved"
+      },
+      {
+        "object_index_zero_based": 16,
+        "object_number_one_based": 17,
+        "resource_id": "017",
+        "source": {
+          "path": "mapm/m01032/017.dgp",
+          "sha256": "f60ea11d364976fa20ed6bb8494336b8f70d842cdbd5c52f4efb250593dad418"
+        },
+        "frames": [
+          {
+            "index": 0,
+            "image": "/assets/chapter_objects/m01032/017/frame_000.png",
+            "sha256": "c316dcb38911b203b4b9a504261fe29e398850b731da9e369a7d5b9b23445a1d"
+          },
+          {
+            "index": 1,
+            "image": "/assets/chapter_objects/m01032/017/frame_001.png",
+            "sha256": "566eaa6c4ac130667d366f01cf9a2808aeb726cb6574a9f3b94e46cd06614afb"
+          },
+          {
+            "index": 2,
+            "image": "/assets/chapter_objects/m01032/017/frame_002.png",
+            "sha256": "f3ea63aeadadc70c4d43df5dc325d68540c7aeef9fce258715a67ef36665c671"
+          },
+          {
+            "index": 3,
+            "image": "/assets/chapter_objects/m01032/017/frame_003.png",
+            "sha256": "b406c619fa334d0c9b2459935115eb64bb48bdf0825bffc486e517254840c7b6"
+          },
+          {
+            "index": 4,
+            "image": "/assets/chapter_objects/m01032/017/frame_004.png",
+            "sha256": "c70c5d6e8cc757bab4a0ad0e4d1b197978599973da67c6333209679c6fee9278"
+          },
+          {
+            "index": 5,
+            "image": "/assets/chapter_objects/m01032/017/frame_005.png",
+            "sha256": "c26d62df8db21749e7fcaf6602a5f64a118d7ba9200754463088df937db2247c"
+          },
+          {
+            "index": 6,
+            "image": "/assets/chapter_objects/m01032/017/frame_006.png",
+            "sha256": "4f340ccc49b45ce38c4079b88d7f3baaa9ee10c0b3c04474d6ca96210642471c"
+          },
+          {
+            "index": 7,
+            "image": "/assets/chapter_objects/m01032/017/frame_007.png",
+            "sha256": "bd8b3dc42f441c4875c454e44e557a7e3fb4a9ca484a7fa0f3e9d689023724ee"
+          },
+          {
+            "index": 8,
+            "image": "/assets/chapter_objects/m01032/017/frame_008.png",
+            "sha256": "6b668ed7210d277aaf608590ffe38d32c86fba840fc3fe2367e0652f96de24e9"
+          },
+          {
+            "index": 9,
+            "image": "/assets/chapter_objects/m01032/017/frame_009.png",
+            "sha256": "388ee5494ac006aaff6e151f842e295bfa67e12fa3866faed6721be28e3c9249"
+          }
+        ],
+        "frame_width": 88,
+        "frame_height": 93,
+        "actions": [
+          {
+            "index": 0,
+            "directions": 1,
+            "directions_raw": 0,
+            "interval_raw": 180,
+            "loop_raw": 1,
+            "frames_per_direction": 10,
+            "first_frame": 0,
+            "identifier_raw": 0,
+            "raw_hex": "00b40000000000000000000000010a00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+          }
+        ],
+        "completed_last_frame": 9,
+        "evidence": [
+          "ev_7ff7092a0522a10920b1c81430af56c62cb116c3d66a5af86a35ecb5e9498a5c"
+        ],
+        "authority": "Original DGP physical frames; retained 0x4137C0 proves CF3 state2 progresses to state3 at its final animation frame; exact clock phase remains unobserved"
+      },
+      {
+        "object_index_zero_based": 17,
+        "object_number_one_based": 18,
+        "resource_id": "018",
+        "source": {
+          "path": "mapm/m01032/018.dgp",
+          "sha256": "a1c4c71fe558e75b8fc2fc68881350d0fbf0135d1fbd60deee0b8604185d050e"
+        },
+        "frames": [
+          {
+            "index": 0,
+            "image": "/assets/chapter_objects/m01032/018/frame_000.png",
+            "sha256": "7c6ae49282b9ad2f69dd3d6e48ad50e19132d55603e09b548647a521e052c5d6"
+          },
+          {
+            "index": 1,
+            "image": "/assets/chapter_objects/m01032/018/frame_001.png",
+            "sha256": "bac173a99e8c2d2e20388af3af842066ab57109613cce89fbe63c6575a742b56"
+          },
+          {
+            "index": 2,
+            "image": "/assets/chapter_objects/m01032/018/frame_002.png",
+            "sha256": "b06750c65281035d30d8dabd92f9e12eab978011ad48e720e82d556038ff4c0b"
+          },
+          {
+            "index": 3,
+            "image": "/assets/chapter_objects/m01032/018/frame_003.png",
+            "sha256": "9c9d5ef7c5fcd6c43720059fc4c1a196094a6f3757e058844ad2ba9304125967"
+          },
+          {
+            "index": 4,
+            "image": "/assets/chapter_objects/m01032/018/frame_004.png",
+            "sha256": "92c3b27ee74c5a9e04ead3ef5b4d3b8d44d32a3ed92ea085ff368ac8955ddeca"
+          },
+          {
+            "index": 5,
+            "image": "/assets/chapter_objects/m01032/018/frame_005.png",
+            "sha256": "a0d7257ffc5a5922b0807c44a970ef6db16b1dbe72d20a6c9a61fdd053eccb47"
+          },
+          {
+            "index": 6,
+            "image": "/assets/chapter_objects/m01032/018/frame_006.png",
+            "sha256": "c90cc0eddb7798ab9217218317509495f966aeed82730e8270e6d83bbb22126b"
+          },
+          {
+            "index": 7,
+            "image": "/assets/chapter_objects/m01032/018/frame_007.png",
+            "sha256": "dee481c8ecbcd15b6734200dedcd9052c572d970eb403acf5c152f239aaaf6ae"
+          },
+          {
+            "index": 8,
+            "image": "/assets/chapter_objects/m01032/018/frame_008.png",
+            "sha256": "5fa0e23d9d656ae652da7d353142a4216297f19e4273ef51bdc7c22da205986f"
+          },
+          {
+            "index": 9,
+            "image": "/assets/chapter_objects/m01032/018/frame_009.png",
+            "sha256": "ebc8bc577d98bcb875f7dab85fab1facb02904e12b7236109688a700774d0d25"
+          }
+        ],
+        "frame_width": 64,
+        "frame_height": 111,
+        "actions": [
+          {
+            "index": 0,
+            "directions": 1,
+            "directions_raw": 0,
+            "interval_raw": 180,
+            "loop_raw": 1,
+            "frames_per_direction": 10,
+            "first_frame": 0,
+            "identifier_raw": 0,
+            "raw_hex": "00b40000000000000000000000010a00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+          }
+        ],
+        "completed_last_frame": 9,
+        "evidence": [
+          "ev_7ff7092a0522a10920b1c81430af56c62cb116c3d66a5af86a35ecb5e9498a5c"
+        ],
+        "authority": "Original DGP physical frames; retained 0x4137C0 proves CF3 state2 progresses to state3 at its final animation frame; exact clock phase remains unobserved"
+      },
+      {
+        "object_index_zero_based": 18,
+        "object_number_one_based": 19,
+        "resource_id": "019",
+        "source": {
+          "path": "mapm/m01032/019.dgp",
+          "sha256": "181af334fcafc38a15695423ed15dd14ad79502e6e0fa672b64043adafb67af4"
+        },
+        "frames": [
+          {
+            "index": 0,
+            "image": "/assets/chapter_objects/m01032/019/frame_000.png",
+            "sha256": "e9f9b6a7716e38c1a56a01c3601d8e3a56c261f553bc64ed60dcabf0884c251d"
+          },
+          {
+            "index": 1,
+            "image": "/assets/chapter_objects/m01032/019/frame_001.png",
+            "sha256": "e2c561906447634028839ad5d8d684e2da09e8eb2cc854426ddc3ea8bf7c69c6"
+          },
+          {
+            "index": 2,
+            "image": "/assets/chapter_objects/m01032/019/frame_002.png",
+            "sha256": "c6a1b3f19d7e1504d423e7f95747361fac44245e8606c90fddc7a061a79b0b1c"
+          },
+          {
+            "index": 3,
+            "image": "/assets/chapter_objects/m01032/019/frame_003.png",
+            "sha256": "0a799d1881d1ddae8f7111b96ce8e9f1dea853fe7b043322ee8b8640d315e38c"
+          },
+          {
+            "index": 4,
+            "image": "/assets/chapter_objects/m01032/019/frame_004.png",
+            "sha256": "dd9064298830069dc1f33b0b8bf9720f7cb300f729355937b99d4d51fb39bb0b"
+          },
+          {
+            "index": 5,
+            "image": "/assets/chapter_objects/m01032/019/frame_005.png",
+            "sha256": "c7df4ed7a68e4eaff162e858a83928604bbc6e50ec2baab27f3de581b4412352"
+          },
+          {
+            "index": 6,
+            "image": "/assets/chapter_objects/m01032/019/frame_006.png",
+            "sha256": "597778e8b851c967a73ebc01aa8cda3b51d767f65a1bd42e1c4d9d805600345b"
+          },
+          {
+            "index": 7,
+            "image": "/assets/chapter_objects/m01032/019/frame_007.png",
+            "sha256": "3f6687b2078e8ef621201d37d95e5a4a70b5b2727279378f8157fe19cff0d20b"
+          },
+          {
+            "index": 8,
+            "image": "/assets/chapter_objects/m01032/019/frame_008.png",
+            "sha256": "d190a510889f4d31f9674693943761036cddde558970e5245bf1a3563d57f48a"
+          },
+          {
+            "index": 9,
+            "image": "/assets/chapter_objects/m01032/019/frame_009.png",
+            "sha256": "7f4e6f3228189bb3990b7b37c9e8856cef5da4b8e0a589930b3b2850d11a1fcc"
+          }
+        ],
+        "frame_width": 73,
+        "frame_height": 96,
+        "actions": [
+          {
+            "index": 0,
+            "directions": 1,
+            "directions_raw": 0,
+            "interval_raw": 180,
+            "loop_raw": 1,
+            "frames_per_direction": 10,
+            "first_frame": 0,
+            "identifier_raw": 0,
+            "raw_hex": "00b40000000000000000000000010a00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+          }
+        ],
+        "completed_last_frame": 9,
+        "evidence": [
+          "ev_7ff7092a0522a10920b1c81430af56c62cb116c3d66a5af86a35ecb5e9498a5c"
+        ],
+        "authority": "Original DGP physical frames; retained 0x4137C0 proves CF3 state2 progresses to state3 at its final animation frame; exact clock phase remains unobserved"
+      }
+    ]
+  },
+  "route": null,
+  "texts": {
+    "M01032:TLK:1": "嘿！别接近这个门好吗？这里是只有会员才能进去的，没事请离开。",
+    "M01032:TLK:2": "喔！‘阿坎杜雷根’是正确的暗号，进去吧！希望你玩的高兴。",
+    "M01032:TLK:3": "m01032-1.dat",
+    "M01032:TLK:4": "最近又快到了一年一度的火之祭典，所有的火妖精们都聚集到火之谷的四周，除此之外也有许多能力高强的索摩族会来参加此盛会，或许可以向他们请教一些比较深奥的魔法知识。",
+    "M01032:TLK:5": "现在所有人都在讨论那什么吉托的预言十三，我一点都不担心，天下本无事，庸人自扰之。",
+    "M01032:TLK:6": "听说有一种异兽叫做‘翼蛟’，形状像是一只大形的有翅膀的龙，爪牙非常坚利，是用来做为武器的上好材料，可惜一直没有人看到牠在那里出没，所以一直是传说中的一个谜，不知有谁能解开这个谜题。",
+    "M01032:TLK:7": "别吵我～～～",
+    "M01032:TLK:8": "酒店老板：你好！欢迎光临，本店有着各色的佳酿，能让你在疲劳之余恢复精神，欢迎你们常来小店坐坐。",
+    "M01032:TLK:9": "酒店服务员：需要什么服务尽管跟我们说喔！",
+    "M01032:TLK:10": "酒店服务员：需要什么服务尽管跟我们说喔！",
+    "M01032:TLK:11": "我明明就记得是‘黄道之龙’这个密语，为什么不对呢？难道那群小鬼诓我！",
+    "M01032:TLK:12": "起床啦！！别霸着座位不放，要睡回家去睡。",
+    "M01032:TLK:13": "最近我们城里可真是不安全啊！女孩子家可得小心点。",
+    "M01032:TLK:14": "待会下了班我们俩护送你一程吧！",
+    "M01032:TLK:15": "酒店服务员：不用啦！！谢谢两位的关心。"
+  }
+}

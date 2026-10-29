@@ -26,6 +26,18 @@ save_analysis_20261010中四个共享解析模块随代码提供，但原存档�
 
 ## 证据与构建记录
 
+### 炎城首批实现与源审计
+
+`runtime/evidence/ember_city_20261028`保存正式28图索引、18图运行范围、原kind4／金钱／交易／配方／NPC保存块／042与331的来源证据。`registration_scope.json`为初始登记选择，不能用其中旧的未执行状态替代最终`implementation_closure.json`；`final_preflight.json`为实际运行登记的能力检查。浏览器使用该目录下的独立`browser_saves`，交接来源、测试资金及战斗成长范围见`browser_fixture_manifest.json`；未修改原GAME、原版存档或用户普通存档。
+
+ROLE106原DGP120帧内含同ID后备动作，其尾部越界动作按469F50首个ID匹配不会被选中；审计保留全部原动作及异常，不补画帧。CF1全量181个放置、48个bank、7组非空阴影与F6 state0规则见`cf1_idle_scope.json`及`cf1_capability_scan.json`，声音的原逻辑帧／距离音量／声像／同handle不重播见`native_cf1_sound_*.json`。所需DutyEg与Status源文件精确缺失时沿原0帧／80ms回退或空音效，不改用近名文件。当前规则和配置用法见对应runtime指南，不在证据目录维护待办。
+
+### 炎城接入前静态范围评估
+
+`remake/runtime/evidence/ember_city_assessment_20261028`保存本次炎城排期的`source_index.json`、`source_coverage.json`、`assessment.json`及复核脚本`inspect_scope.py`。复用既有区域扫描器，覆盖28图、195个NPC实例、1008条TLK与34份相关ANM（含未证实调用的候选）；另记录里白木森林349／299及三法器箱的原DAT偏移、钥匙、奖励槽与SHA，以及当前编号校验／剧情能力缺口。实际实施范围与阶段任务只维护在[开发计划](assessment/validation_design.md)。
+
+目录整体被Git忽略，交接时保留全部文件及`assessment.json`中的相对路径／SHA。原输入版本一致时，从仓库根运行`python -B remake/runtime/evidence/ember_city_assessment_20261028/inspect_scope.py`：已有索引先逐个核对原文件SHA，缺索引时从只读Map／Animate重建；复核时也需与评估所绑定的源码／登记指纹一致，不能把新代码生成的不同结果冒称旧快照。首次静态评估未登记运行内容、未构建媒体、未做新增入口preflight或浏览器实玩，也未执行原GAME.exe；来源收录与完成验收分开表述。
+
 ### 翠碧湖来源索引
 
 翠碧湖索引由jade-lake-index目标从只读原DAT／TLK／ANM重建，输出`remake/runtime/web/data/library/jade_lake.json`及`remake/runtime/evidence/jade_lake_20261028/source_index.json`。包含13张全时期地图、41条TLK记录、两份ANM的94条命令、原物件／NPC及区域外旗标与演出调用关系，不包含同前缀的研究所遗迹。索引及报告记录原输入SHA和产物SHA；接收环境用同版本原版Map／Animate目录运行该目标，再以`export_jade_lake_index.py --check`核对确定性。构建台账在`evidence/builds`另存输入指纹与只读检查结果；缺少原输入时保留现有索引，不能把来源覆盖作为流程验收。

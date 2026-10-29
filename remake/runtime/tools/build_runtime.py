@@ -24,6 +24,7 @@ from export_enemy_content import source_files as enemy_source_files
 from export_story_media import source_files as story_media_source_files
 from export_chapter_items import source_files as item_source_files
 from export_item_presentation import source_files as item_presentation_source_files
+from export_audio import source_files as audio_source_files
 from export_battle_lifecycle import NATIVE as LIFECYCLE_NATIVE, RENDERER_BUNDLE, RENDERER_FINDINGS, FAILURE_FINDINGS, FAILURE_RECORDS
 from migrate_local_materials import relocated_path
 
@@ -61,7 +62,7 @@ STEPS = {
     'items': Step('export_chapter_items.py', ('data/items.json',), ('opening-seed','chapter-story','enemy-rewards'),
         reports=('chapter_items_export.json',), inputs=('data/opening_seed.json','data/chapter_story.json',
             'data/runtime_content.json','data/forest_rewards.json','../tools/content_registration.py',
-            '../tools/export_source_catalog.py','../tools/source/__init__.py',
+            '../tools/export_source_catalog.py','../tools/source/__init__.py','../tools/source/map_identity.py',
             '../tools/source/catalog_chr.py','../tools/source/combat_resources.py',
             '../evidence/chapter_items_native.json','../evidence/forest_scheduler_native_20261011.json',
             '../evidence/forest_rewards_native_20261011.json',
@@ -89,7 +90,7 @@ STEPS = {
     'world-map-ui': Step('export_world_map_ui.py', ('data/world_map_ui.json','assets/world_map'), reports=('world_map_alignment_20261021/export.json',), inputs=('data/world_map.json','../evidence/route_native_20261011.json','../evidence/operation_menu_native.json')),
     'configuration': Step('export_runtime_config.mjs', ('data/config',), inputs=('data/combat_sample.json', 'data/forest_combat.json', 'data/battle_scheduler.json', 'data/forest_ai.json', 'data/forest_rewards.json', 'data/party_skills.json', 'data/items.json', 'data/config')),
     'catalog': Step('build_catalog.py', ('data/catalog.json', 'data/events.json'), ('configuration',), inputs=('data/maps', 'data/events', 'data/source/manifest.json')),
-    'content': Step('export_content_registry.mjs', ('data/runtime_content.mjs',), ('catalog',), inputs=('data/runtime_content.json','data/catalog.json','data/chapter_story.json','data/chapter_map_resources.json','data/party_combat.json','data/party_skills.json','data/forest_combat.json','data/forest_ai.json','data/party_rewards.json','data/party_reactions.json','data/forest_status.json','data/encounters.json','data/party_battle_view.json','data/item_presentation.json','data/battle_lifecycle.json','data/maps')),
+    'content': Step('export_content_registry.mjs', ('data/runtime_content.mjs',), ('catalog',), inputs=('data/runtime_content.json','data/catalog.json','data/chapter_story.json','data/chapter_map_resources.json','data/party_combat.json','data/party_skills.json','data/forest_combat.json','data/forest_ai.json','data/party_rewards.json','data/party_reactions.json','data/forest_status.json','data/encounters.json','data/party_battle_view.json','data/items.json','data/item_presentation.json','data/battle_lifecycle.json','data/maps')),
 }
 
 # Selection comes from authoring JSON, before generated maps/enemies exist.
@@ -142,7 +143,10 @@ for target, dependencies in {
 }.items():
     STEPS[target]=replace(STEPS[target],depends=dependencies)
 STEPS['chapter-maps']=replace(STEPS['chapter-maps'],inputs=('data/runtime_content.json','data/opening_map_resources.json'))
-STEPS['audio']=replace(STEPS['audio'],inputs=(*STEPS['audio'].inputs,'data/runtime_content.json','../evidence/party_magic_native.json'))
+STEPS['audio']=replace(STEPS['audio'],inputs=(*STEPS['audio'].inputs,'data/runtime_content.json','../evidence/party_magic_native.json',
+    '../evidence/fire_valley_20261025/object_tick_4137c0_assembly.json',
+    *tuple(f'../evidence/ember_city_20261028/native_cf1_sound_{name}.json'
+           for name in ['dispatch','position','play','pan','volume','distance','distance_impl'])),sources=audio_source_files())
 STEPS['map-effects']=replace(STEPS['map-effects'],inputs=(*STEPS['map-effects'].inputs,'data/catalog.json'))
 STEPS['party-combat']=replace(STEPS['party-combat'],inputs=(*STEPS['party-combat'].inputs,'data/opening_seed.json'))
 STEPS['catalog']=replace(STEPS['catalog'],inputs=(*STEPS['catalog'].inputs,'data/chapter_map_resources.json'))
@@ -211,6 +215,20 @@ STEPS['jade-lake-index']=Step('export_jade_lake_index.py',
     inputs=('../tools/export_fire_valley_index.py','../tools/route_extract_resources.py',
             '../tools/map_npc_fields.py','core/chapter_animation.mjs','core/story_flow_compiler.mjs'),
     sources=fire_valley_source_files())
+STEPS['ember-city-index']=Step('export_ember_city_index.py',
+    ('data/library/ember_city.json','../evidence/ember_city_20261028/source_index.json'),
+    reports=('ember_city_20261028/source_index.json',),
+    inputs=('../tools/export_fire_valley_index.py','../tools/route_extract_resources.py',
+            '../tools/map_npc_fields.py','core/chapter_animation.mjs','core/story_flow_compiler.mjs'),
+    sources=fire_valley_source_files())
+STEPS['native-services']=Step('export_native_services.py',
+    ('data/native_services.json','assets/native_services'),
+    reports=('ember_city_20261028/service_export.json',),
+    sources=tuple(f'SYSTEM/{name}{suffix}'
+        for name in ('boss_main','boss_text_01','boss_text_02','boss_text_03',
+                     'boss_buy_01','boss_buy_02','boss_buy_03','boss_buy','boss_buy_03a')
+        for suffix in ('.mnu','.CAP') if (ROOT/f'SYSTEM/{name}{suffix}').is_file()))
+STEPS['content']=replace(STEPS['content'],depends=(*STEPS['content'].depends,'native-services'))
 
 # Registration has independent domains; adding a map must not invalidate art
 # for an unchanged party. ID-only selectors omit skill/parameter bindings.

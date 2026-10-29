@@ -29,9 +29,9 @@
       "face_resolved": "宋体",
       "height": 19,
       "image": "assets/prologue/caption19.png",
-      "sha256": "26dfae36bb82c67c49fbbedfdf320e0c4ea599f87affcaf1cdf2884213f02ea8",
+      "sha256": "2165015fe88013437b3e4e3f7b5112a4f58ae5594a4629df45f1a928da016679",
       "atlas_width": 1024,
-      "atlas_height": 128,
+      "atlas_height": 160,
       "glyphs": {
         "-": {
           "x": 0,
@@ -115,8 +115,17 @@
           "offset_y": 2,
           "advance": 19
         },
-        "中": {
+        "丝": {
           "x": 288,
+          "y": 0,
+          "width": 17,
+          "height": 16,
+          "offset_x": 1,
+          "offset_y": 1,
+          "advance": 19
+        },
+        "中": {
+          "x": 320,
           "y": 0,
           "width": 15,
           "height": 18,
@@ -125,7 +134,7 @@
           "advance": 19
         },
         "之": {
-          "x": 320,
+          "x": 352,
           "y": 0,
           "width": 18,
           "height": 16,
@@ -133,8 +142,17 @@
           "offset_y": 1,
           "advance": 19
         },
+        "乌": {
+          "x": 384,
+          "y": 0,
+          "width": 16,
+          "height": 18,
+          "offset_x": 1,
+          "offset_y": 0,
+          "advance": 19
+        },
         "了": {
-          "x": 352,
+          "x": 416,
           "y": 0,
           "width": 15,
           "height": 17,
@@ -143,7 +161,7 @@
           "advance": 19
         },
         "于": {
-          "x": 384,
+          "x": 448,
           "y": 0,
           "width": 17,
           "height": 17,
@@ -152,7 +170,7 @@
           "advance": 19
         },
         "五": {
-          "x": 416,
+          "x": 480,
           "y": 0,
           "width": 17,
           "height": 17,
@@ -160,8 +178,17 @@
           "offset_y": 1,
           "advance": 19
         },
+        "交": {
+          "x": 512,
+          "y": 0,
+          "width": 17,
+          "height": 18,
+          "offset_x": 1,
+          "offset_y": 0,
+          "advance": 19
+        },
         "人": {
-          "x": 448,
+          "x": 544,
           "y": 0,
           "width": 17,
           "height": 17,
@@ -170,7 +197,7 @@
           "advance": 19
         },
         "令": {
-          "x": 480,
+          "x": 576,
           "y": 0,
           "width": 17,
           "height": 18,
@@ -178,8 +205,17 @@
           "offset_y": 0,
           "advance": 19
         },
+        "任": {
+          "x": 608,
+          "y": 0,
+          "width": 18,
+          "height": 18,
+          "offset_x": 0,
+          "offset_y": 0,
+          "advance": 19
+        },
         "份": {
-          "x": 512,
+          "x": 640,
           "y": 0,
           "width": 17,
           "height": 17,
@@ -188,7 +224,7 @@
           "advance": 19
         },
         "伍": {
-          "x": 544,
+          "x": 672,
           "y": 0,
           "width": 18,
           "height": 18,
@@ -197,7 +233,7 @@
           "advance": 19
         },
         "休": {
-          "x": 576,
+          "x": 704,
           "y": 0,
           "width": 18,
           "height": 18,
@@ -206,7 +242,7 @@
           "advance": 19
         },
         "众": {
-          "x": 608,
+          "x": 736,
           "y": 0,
           "width": 18,
           "height": 18,
@@ -215,7 +251,7 @@
           "advance": 19
         },
         "会": {
-          "x": 640,
+          "x": 768,
           "y": 0,
           "width": 17,
           "height": 18,
@@ -224,7 +260,16 @@
           "advance": 19
         },
         "传": {
-          "x": 672,
+          "x": 800,
+          "y": 0,
+          "width": 17,
+          "height": 17,
+          "offset_x": 1,
+          "offset_y": 1,
+          "advance": 19
+        },
+        "何": {
+          "x": 832,
           "y": 0,
           "width": 17,
           "height": 17,
@@ -233,7 +278,7 @@
           "advance": 19
         },
         "候": {
-          "x": 704,
+          "x": 864,
           "y": 0,
           "width": 17,
           "height": 18,
@@ -241,8 +286,17 @@
           "offset_y": 0,
           "advance": 19
         },
+        "像": {
+          "x": 896,
+          "y": 0,
+          "width": 18,
+          "height": 18,
+          "offset_x": 1,
+          "offset_y": 0,
+          "advance": 19
+        },
         "儿": {
-          "x": 736,
+          "x": 928,
           "y": 0,
           "width": 17,
           "height": 16,
@@ -251,7 +305,7 @@
           "advance": 19
         },
         "充": {
-          "x": 768,
+          "x": 960,
           "y": 0,
           "width": 17,
           "height": 18,
@@ -260,7 +314,7 @@
           "advance": 19
         },
         "入": {
-          "x": 800,
+          "x": 992,
           "y": 0,
           "width": 19,
           "height": 16,
@@ -269,8 +323,17 @@
           "advance": 19
         },
         "八": {
-          "x": 832,
-          "y": 0,
+          "x": 0,
+          "y": 32,
+          "width": 17,
+          "height": 17,
+          "offset_x": 1,
+          "offset_y": 1,
+          "advance": 19
+        },
+        "具": {
+          "x": 32,
+          "y": 32,
           "width": 17,
           "height": 17,
           "offset_x": 1,
@@ -278,8 +341,8 @@
           "advance": 19
         },
         "凯": {
-          "x": 864,
-          "y": 0,
+          "x": 64,
+          "y": 32,
           "width": 17,
           "height": 18,
           "offset_x": 1,
@@ -287,8 +350,8 @@
           "advance": 19
         },
         "出": {
-          "x": 896,
-          "y": 0,
+          "x": 96,
+          "y": 32,
           "width": 15,
           "height": 17,
           "offset_x": 2,
@@ -296,8 +359,8 @@
           "advance": 19
         },
         "分": {
-          "x": 928,
-          "y": 0,
+          "x": 128,
+          "y": 32,
           "width": 17,
           "height": 17,
           "offset_x": 1,
@@ -305,8 +368,8 @@
           "advance": 19
         },
         "到": {
-          "x": 960,
-          "y": 0,
+          "x": 160,
+          "y": 32,
           "width": 17,
           "height": 17,
           "offset_x": 1,
@@ -314,16 +377,25 @@
           "advance": 19
         },
         "前": {
-          "x": 992,
-          "y": 0,
+          "x": 192,
+          "y": 32,
           "width": 17,
           "height": 18,
           "offset_x": 1,
           "offset_y": 0,
           "advance": 19
         },
+        "剑": {
+          "x": 224,
+          "y": 32,
+          "width": 16,
+          "height": 18,
+          "offset_x": 1,
+          "offset_y": 0,
+          "advance": 19
+        },
         "办": {
-          "x": 0,
+          "x": 256,
           "y": 32,
           "width": 17,
           "height": 18,
@@ -332,7 +404,7 @@
           "advance": 19
         },
         "加": {
-          "x": 32,
+          "x": 288,
           "y": 32,
           "width": 18,
           "height": 18,
@@ -341,7 +413,7 @@
           "advance": 19
         },
         "化": {
-          "x": 64,
+          "x": 320,
           "y": 32,
           "width": 17,
           "height": 17,
@@ -350,7 +422,7 @@
           "advance": 19
         },
         "千": {
-          "x": 96,
+          "x": 352,
           "y": 32,
           "width": 17,
           "height": 17,
@@ -359,7 +431,7 @@
           "advance": 19
         },
         "卫": {
-          "x": 128,
+          "x": 384,
           "y": 32,
           "width": 17,
           "height": 16,
@@ -368,7 +440,7 @@
           "advance": 19
         },
         "去": {
-          "x": 160,
+          "x": 416,
           "y": 32,
           "width": 17,
           "height": 17,
@@ -376,8 +448,17 @@
           "offset_y": 0,
           "advance": 19
         },
+        "反": {
+          "x": 448,
+          "y": 32,
+          "width": 18,
+          "height": 17,
+          "offset_x": 1,
+          "offset_y": 1,
+          "advance": 19
+        },
         "发": {
-          "x": 192,
+          "x": 480,
           "y": 32,
           "width": 17,
           "height": 18,
@@ -386,7 +467,7 @@
           "advance": 19
         },
         "取": {
-          "x": 224,
+          "x": 512,
           "y": 32,
           "width": 17,
           "height": 17,
@@ -395,7 +476,7 @@
           "advance": 19
         },
         "受": {
-          "x": 256,
+          "x": 544,
           "y": 32,
           "width": 17,
           "height": 17,
@@ -404,7 +485,7 @@
           "advance": 19
         },
         "同": {
-          "x": 288,
+          "x": 576,
           "y": 32,
           "width": 15,
           "height": 17,
@@ -413,7 +494,7 @@
           "advance": 19
         },
         "后": {
-          "x": 320,
+          "x": 608,
           "y": 32,
           "width": 17,
           "height": 17,
@@ -422,7 +503,7 @@
           "advance": 19
         },
         "员": {
-          "x": 352,
+          "x": 640,
           "y": 32,
           "width": 16,
           "height": 17,
@@ -431,7 +512,7 @@
           "advance": 19
         },
         "呼": {
-          "x": 384,
+          "x": 672,
           "y": 32,
           "width": 17,
           "height": 17,
@@ -440,7 +521,7 @@
           "advance": 19
         },
         "和": {
-          "x": 416,
+          "x": 704,
           "y": 32,
           "width": 17,
           "height": 17,
@@ -449,7 +530,7 @@
           "advance": 19
         },
         "咻": {
-          "x": 448,
+          "x": 736,
           "y": 32,
           "width": 17,
           "height": 17,
@@ -457,8 +538,17 @@
           "offset_y": 1,
           "advance": 19
         },
+        "品": {
+          "x": 768,
+          "y": 32,
+          "width": 15,
+          "height": 16,
+          "offset_x": 2,
+          "offset_y": 1,
+          "advance": 19
+        },
         "增": {
-          "x": 480,
+          "x": 800,
           "y": 32,
           "width": 17,
           "height": 18,
@@ -467,7 +557,7 @@
           "advance": 19
         },
         "备": {
-          "x": 512,
+          "x": 832,
           "y": 32,
           "width": 17,
           "height": 18,
@@ -475,8 +565,26 @@
           "offset_y": 0,
           "advance": 19
         },
+        "失": {
+          "x": 864,
+          "y": 32,
+          "width": 17,
+          "height": 18,
+          "offset_x": 1,
+          "offset_y": 0,
+          "advance": 19
+        },
+        "好": {
+          "x": 896,
+          "y": 32,
+          "width": 17,
+          "height": 17,
+          "offset_x": 1,
+          "offset_y": 1,
+          "advance": 19
+        },
         "妖": {
-          "x": 544,
+          "x": 928,
           "y": 32,
           "width": 18,
           "height": 18,
@@ -485,7 +593,7 @@
           "advance": 19
         },
         "妮": {
-          "x": 576,
+          "x": 960,
           "y": 32,
           "width": 17,
           "height": 18,
@@ -494,7 +602,7 @@
           "advance": 19
         },
         "守": {
-          "x": 608,
+          "x": 992,
           "y": 32,
           "width": 17,
           "height": 18,
@@ -503,8 +611,8 @@
           "advance": 19
         },
         "安": {
-          "x": 640,
-          "y": 32,
+          "x": 0,
+          "y": 64,
           "width": 17,
           "height": 18,
           "offset_x": 1,
@@ -512,8 +620,8 @@
           "advance": 19
         },
         "宝": {
-          "x": 672,
-          "y": 32,
+          "x": 32,
+          "y": 64,
           "width": 17,
           "height": 18,
           "offset_x": 1,
@@ -521,8 +629,8 @@
           "advance": 19
         },
         "已": {
-          "x": 704,
-          "y": 32,
+          "x": 64,
+          "y": 64,
           "width": 15,
           "height": 15,
           "offset_x": 3,
@@ -530,8 +638,8 @@
           "advance": 19
         },
         "带": {
-          "x": 736,
-          "y": 32,
+          "x": 96,
+          "y": 64,
           "width": 17,
           "height": 17,
           "offset_x": 1,
@@ -539,26 +647,53 @@
           "advance": 19
         },
         "年": {
-          "x": 768,
-          "y": 32,
+          "x": 128,
+          "y": 64,
           "width": 17,
           "height": 18,
           "offset_x": 1,
           "offset_y": 0,
+          "advance": 19
+        },
+        "应": {
+          "x": 160,
+          "y": 64,
+          "width": 18,
+          "height": 18,
+          "offset_x": 0,
+          "offset_y": 0,
+          "advance": 19
+        },
+        "开": {
+          "x": 192,
+          "y": 64,
+          "width": 17,
+          "height": 17,
+          "offset_x": 1,
+          "offset_y": 1,
           "advance": 19
         },
         "式": {
-          "x": 800,
-          "y": 32,
+          "x": 224,
+          "y": 64,
           "width": 17,
           "height": 18,
           "offset_x": 1,
           "offset_y": 0,
           "advance": 19
         },
+        "引": {
+          "x": 256,
+          "y": 64,
+          "width": 14,
+          "height": 17,
+          "offset_x": 2,
+          "offset_y": 1,
+          "advance": 19
+        },
         "律": {
-          "x": 832,
-          "y": 32,
+          "x": 288,
+          "y": 64,
           "width": 17,
           "height": 18,
           "offset_x": 1,
@@ -566,8 +701,8 @@
           "advance": 19
         },
         "得": {
-          "x": 864,
-          "y": 32,
+          "x": 320,
+          "y": 64,
           "width": 17,
           "height": 18,
           "offset_x": 1,
@@ -575,8 +710,8 @@
           "advance": 19
         },
         "心": {
-          "x": 896,
-          "y": 32,
+          "x": 352,
+          "y": 64,
           "width": 17,
           "height": 14,
           "offset_x": 1,
@@ -584,8 +719,8 @@
           "advance": 19
         },
         "息": {
-          "x": 928,
-          "y": 32,
+          "x": 384,
+          "y": 64,
           "width": 17,
           "height": 17,
           "offset_x": 1,
@@ -593,8 +728,8 @@
           "advance": 19
         },
         "感": {
-          "x": 960,
-          "y": 32,
+          "x": 416,
+          "y": 64,
           "width": 17,
           "height": 17,
           "offset_x": 1,
@@ -602,8 +737,8 @@
           "advance": 19
         },
         "我": {
-          "x": 992,
-          "y": 32,
+          "x": 448,
+          "y": 64,
           "width": 18,
           "height": 17,
           "offset_x": 1,
@@ -611,7 +746,7 @@
           "advance": 19
         },
         "拉": {
-          "x": 0,
+          "x": 480,
           "y": 64,
           "width": 17,
           "height": 17,
@@ -620,7 +755,7 @@
           "advance": 19
         },
         "招": {
-          "x": 32,
+          "x": 512,
           "y": 64,
           "width": 17,
           "height": 17,
@@ -629,7 +764,7 @@
           "advance": 19
         },
         "援": {
-          "x": 64,
+          "x": 544,
           "y": 64,
           "width": 17,
           "height": 17,
@@ -638,7 +773,16 @@
           "advance": 19
         },
         "攻": {
-          "x": 96,
+          "x": 576,
+          "y": 64,
+          "width": 17,
+          "height": 18,
+          "offset_x": 1,
+          "offset_y": 0,
+          "advance": 19
+        },
+        "斯": {
+          "x": 608,
           "y": 64,
           "width": 17,
           "height": 18,
@@ -647,7 +791,7 @@
           "advance": 19
         },
         "新": {
-          "x": 128,
+          "x": 640,
           "y": 64,
           "width": 17,
           "height": 17,
@@ -656,7 +800,7 @@
           "advance": 19
         },
         "旋": {
-          "x": 160,
+          "x": 672,
           "y": 64,
           "width": 17,
           "height": 17,
@@ -665,7 +809,7 @@
           "advance": 19
         },
         "时": {
-          "x": 192,
+          "x": 704,
           "y": 64,
           "width": 17,
           "height": 18,
@@ -674,7 +818,7 @@
           "advance": 19
         },
         "是": {
-          "x": 224,
+          "x": 736,
           "y": 64,
           "width": 17,
           "height": 17,
@@ -683,7 +827,7 @@
           "advance": 19
         },
         "晶": {
-          "x": 256,
+          "x": 768,
           "y": 64,
           "width": 16,
           "height": 17,
@@ -692,7 +836,7 @@
           "advance": 19
         },
         "有": {
-          "x": 288,
+          "x": 800,
           "y": 64,
           "width": 17,
           "height": 18,
@@ -701,7 +845,7 @@
           "advance": 19
         },
         "木": {
-          "x": 320,
+          "x": 832,
           "y": 64,
           "width": 17,
           "height": 17,
@@ -710,7 +854,7 @@
           "advance": 19
         },
         "朱": {
-          "x": 352,
+          "x": 864,
           "y": 64,
           "width": 17,
           "height": 18,
@@ -719,7 +863,7 @@
           "advance": 19
         },
         "来": {
-          "x": 384,
+          "x": 896,
           "y": 64,
           "width": 17,
           "height": 18,
@@ -728,7 +872,7 @@
           "advance": 19
         },
         "林": {
-          "x": 416,
+          "x": 928,
           "y": 64,
           "width": 17,
           "height": 18,
@@ -737,7 +881,7 @@
           "advance": 19
         },
         "格": {
-          "x": 448,
+          "x": 960,
           "y": 64,
           "width": 17,
           "height": 18,
@@ -746,7 +890,7 @@
           "advance": 19
         },
         "森": {
-          "x": 480,
+          "x": 992,
           "y": 64,
           "width": 17,
           "height": 18,
@@ -755,8 +899,8 @@
           "advance": 19
         },
         "此": {
-          "x": 512,
-          "y": 64,
+          "x": 0,
+          "y": 96,
           "width": 17,
           "height": 17,
           "offset_x": 1,
@@ -764,8 +908,8 @@
           "advance": 19
         },
         "水": {
-          "x": 544,
-          "y": 64,
+          "x": 32,
+          "y": 96,
           "width": 17,
           "height": 17,
           "offset_x": 1,
@@ -773,8 +917,8 @@
           "advance": 19
         },
         "沈": {
-          "x": 576,
-          "y": 64,
+          "x": 64,
+          "y": 96,
           "width": 17,
           "height": 17,
           "offset_x": 1,
@@ -782,8 +926,8 @@
           "advance": 19
         },
         "沙": {
-          "x": 608,
-          "y": 64,
+          "x": 96,
+          "y": 96,
           "width": 17,
           "height": 16,
           "offset_x": 1,
@@ -791,8 +935,8 @@
           "advance": 19
         },
         "没": {
-          "x": 640,
-          "y": 64,
+          "x": 128,
+          "y": 96,
           "width": 17,
           "height": 17,
           "offset_x": 1,
@@ -800,8 +944,8 @@
           "advance": 19
         },
         "法": {
-          "x": 672,
-          "y": 64,
+          "x": 160,
+          "y": 96,
           "width": 17,
           "height": 17,
           "offset_x": 1,
@@ -809,8 +953,8 @@
           "advance": 19
         },
         "洋": {
-          "x": 704,
-          "y": 64,
+          "x": 192,
+          "y": 96,
           "width": 17,
           "height": 17,
           "offset_x": 1,
@@ -818,168 +962,24 @@
           "advance": 19
         },
         "海": {
-          "x": 736,
-          "y": 64,
+          "x": 224,
+          "y": 96,
           "width": 18,
           "height": 18,
           "offset_x": 0,
+          "offset_y": 0,
+          "advance": 19
+        },
+        "清": {
+          "x": 256,
+          "y": 96,
+          "width": 17,
+          "height": 18,
+          "offset_x": 1,
           "offset_y": 0,
           "advance": 19
         },
         "火": {
-          "x": 768,
-          "y": 64,
-          "width": 17,
-          "height": 18,
-          "offset_x": 1,
-          "offset_y": 0,
-          "advance": 19
-        },
-        "爱": {
-          "x": 800,
-          "y": 64,
-          "width": 17,
-          "height": 18,
-          "offset_x": 1,
-          "offset_y": 0,
-          "advance": 19
-        },
-        "特": {
-          "x": 832,
-          "y": 64,
-          "width": 18,
-          "height": 18,
-          "offset_x": 0,
-          "offset_y": 0,
-          "advance": 19
-        },
-        "琳": {
-          "x": 864,
-          "y": 64,
-          "width": 17,
-          "height": 18,
-          "offset_x": 1,
-          "offset_y": 0,
-          "advance": 19
-        },
-        "白": {
-          "x": 896,
-          "y": 64,
-          "width": 14,
-          "height": 17,
-          "offset_x": 3,
-          "offset_y": 1,
-          "advance": 19
-        },
-        "的": {
-          "x": 928,
-          "y": 64,
-          "width": 16,
-          "height": 18,
-          "offset_x": 2,
-          "offset_y": 0,
-          "advance": 19
-        },
-        "石": {
-          "x": 960,
-          "y": 64,
-          "width": 17,
-          "height": 17,
-          "offset_x": 1,
-          "offset_y": 1,
-          "advance": 19
-        },
-        "砂": {
-          "x": 992,
-          "y": 64,
-          "width": 17,
-          "height": 17,
-          "offset_x": 1,
-          "offset_y": 1,
-          "advance": 19
-        },
-        "硃": {
-          "x": 0,
-          "y": 96,
-          "width": 17,
-          "height": 17,
-          "offset_x": 1,
-          "offset_y": 1,
-          "advance": 19
-        },
-        "碧": {
-          "x": 32,
-          "y": 96,
-          "width": 17,
-          "height": 18,
-          "offset_x": 1,
-          "offset_y": 0,
-          "advance": 19
-        },
-        "精": {
-          "x": 64,
-          "y": 96,
-          "width": 18,
-          "height": 18,
-          "offset_x": 0,
-          "offset_y": 0,
-          "advance": 19
-        },
-        "紫": {
-          "x": 96,
-          "y": 96,
-          "width": 17,
-          "height": 18,
-          "offset_x": 1,
-          "offset_y": 0,
-          "advance": 19
-        },
-        "红": {
-          "x": 128,
-          "y": 96,
-          "width": 17,
-          "height": 16,
-          "offset_x": 1,
-          "offset_y": 1,
-          "advance": 19
-        },
-        "终": {
-          "x": 160,
-          "y": 96,
-          "width": 18,
-          "height": 16,
-          "offset_x": 1,
-          "offset_y": 1,
-          "advance": 19
-        },
-        "经": {
-          "x": 192,
-          "y": 96,
-          "width": 17,
-          "height": 16,
-          "offset_x": 1,
-          "offset_y": 1,
-          "advance": 19
-        },
-        "维": {
-          "x": 224,
-          "y": 96,
-          "width": 17,
-          "height": 18,
-          "offset_x": 1,
-          "offset_y": 0,
-          "advance": 19
-        },
-        "英": {
-          "x": 256,
-          "y": 96,
-          "width": 17,
-          "height": 17,
-          "offset_x": 1,
-          "offset_y": 1,
-          "advance": 19
-        },
-        "茶": {
           "x": 288,
           "y": 96,
           "width": 17,
@@ -988,7 +988,7 @@
           "offset_y": 0,
           "advance": 19
         },
-        "草": {
+        "爱": {
           "x": 320,
           "y": 96,
           "width": 17,
@@ -997,53 +997,62 @@
           "offset_y": 0,
           "advance": 19
         },
-        "药": {
+        "物": {
           "x": 352,
           "y": 96,
           "width": 17,
-          "height": 17,
+          "height": 18,
           "offset_x": 1,
-          "offset_y": 1,
+          "offset_y": 0,
           "advance": 19
         },
-        "获": {
+        "特": {
           "x": 384,
           "y": 96,
-          "width": 17,
-          "height": 17,
-          "offset_x": 1,
-          "offset_y": 1,
+          "width": 18,
+          "height": 18,
+          "offset_x": 0,
+          "offset_y": 0,
           "advance": 19
         },
-        "蜥": {
+        "琳": {
           "x": 416,
           "y": 96,
           "width": 17,
-          "height": 17,
+          "height": 18,
           "offset_x": 1,
-          "offset_y": 1,
+          "offset_y": 0,
           "advance": 19
         },
-        "血": {
+        "瓶": {
           "x": 448,
           "y": 96,
           "width": 17,
-          "height": 16,
-          "offset_x": 1,
-          "offset_y": 1,
-          "advance": 19
-        },
-        "装": {
-          "x": 480,
-          "y": 96,
-          "width": 17,
           "height": 18,
           "offset_x": 1,
           "offset_y": 0,
           "advance": 19
         },
-        "西": {
+        "白": {
+          "x": 480,
+          "y": 96,
+          "width": 14,
+          "height": 17,
+          "offset_x": 3,
+          "offset_y": 1,
+          "advance": 19
+        },
+        "的": {
           "x": 512,
+          "y": 96,
+          "width": 16,
+          "height": 18,
+          "offset_x": 2,
+          "offset_y": 0,
+          "advance": 19
+        },
+        "石": {
+          "x": 544,
           "y": 96,
           "width": 17,
           "height": 17,
@@ -1051,34 +1060,25 @@
           "offset_y": 1,
           "advance": 19
         },
-        "角": {
-          "x": 544,
-          "y": 96,
-          "width": 16,
-          "height": 18,
-          "offset_x": 1,
-          "offset_y": 0,
-          "advance": 19
-        },
-        "过": {
+        "砂": {
           "x": 576,
           "y": 96,
           "width": 17,
           "height": 17,
           "offset_x": 1,
-          "offset_y": 0,
+          "offset_y": 1,
           "advance": 19
         },
-        "都": {
+        "硃": {
           "x": 608,
           "y": 96,
           "width": 17,
-          "height": 18,
+          "height": 17,
           "offset_x": 1,
-          "offset_y": 0,
+          "offset_y": 1,
           "advance": 19
         },
-        "醉": {
+        "碧": {
           "x": 640,
           "y": 96,
           "width": 17,
@@ -1087,62 +1087,17 @@
           "offset_y": 0,
           "advance": 19
         },
-        "银": {
+        "精": {
           "x": 672,
           "y": 96,
           "width": 18,
-          "height": 17,
-          "offset_x": 1,
-          "offset_y": 1,
-          "advance": 19
-        },
-        "键": {
-          "x": 704,
-          "y": 96,
-          "width": 18,
-          "height": 17,
+          "height": 18,
           "offset_x": 0,
-          "offset_y": 1,
+          "offset_y": 0,
           "advance": 19
         },
-        "队": {
-          "x": 736,
-          "y": 96,
-          "width": 16,
-          "height": 17,
-          "offset_x": 2,
-          "offset_y": 1,
-          "advance": 19
-        },
-        "面": {
-          "x": 768,
-          "y": 96,
-          "width": 17,
-          "height": 17,
-          "offset_x": 1,
-          "offset_y": 1,
-          "advance": 19
-        },
-        "颗": {
-          "x": 800,
-          "y": 96,
-          "width": 17,
-          "height": 17,
-          "offset_x": 1,
-          "offset_y": 1,
-          "advance": 19
-        },
-        "香": {
-          "x": 832,
-          "y": 96,
-          "width": 17,
-          "height": 17,
-          "offset_x": 1,
-          "offset_y": 1,
-          "advance": 19
-        },
-        "默": {
-          "x": 864,
+        "紫": {
+          "x": 704,
           "y": 96,
           "width": 17,
           "height": 18,
@@ -1150,7 +1105,52 @@
           "offset_y": 0,
           "advance": 19
         },
-        "龙": {
+        "红": {
+          "x": 736,
+          "y": 96,
+          "width": 17,
+          "height": 16,
+          "offset_x": 1,
+          "offset_y": 1,
+          "advance": 19
+        },
+        "终": {
+          "x": 768,
+          "y": 96,
+          "width": 18,
+          "height": 16,
+          "offset_x": 1,
+          "offset_y": 1,
+          "advance": 19
+        },
+        "经": {
+          "x": 800,
+          "y": 96,
+          "width": 17,
+          "height": 16,
+          "offset_x": 1,
+          "offset_y": 1,
+          "advance": 19
+        },
+        "维": {
+          "x": 832,
+          "y": 96,
+          "width": 17,
+          "height": 18,
+          "offset_x": 1,
+          "offset_y": 0,
+          "advance": 19
+        },
+        "英": {
+          "x": 864,
+          "y": 96,
+          "width": 17,
+          "height": 17,
+          "offset_x": 1,
+          "offset_y": 1,
+          "advance": 19
+        },
+        "茶": {
           "x": 896,
           "y": 96,
           "width": 17,
@@ -1159,9 +1159,261 @@
           "offset_y": 0,
           "advance": 19
         },
-        "！": {
+        "草": {
           "x": 928,
           "y": 96,
+          "width": 17,
+          "height": 18,
+          "offset_x": 1,
+          "offset_y": 0,
+          "advance": 19
+        },
+        "药": {
+          "x": 960,
+          "y": 96,
+          "width": 17,
+          "height": 17,
+          "offset_x": 1,
+          "offset_y": 1,
+          "advance": 19
+        },
+        "获": {
+          "x": 992,
+          "y": 96,
+          "width": 17,
+          "height": 17,
+          "offset_x": 1,
+          "offset_y": 1,
+          "advance": 19
+        },
+        "蚕": {
+          "x": 0,
+          "y": 128,
+          "width": 17,
+          "height": 16,
+          "offset_x": 1,
+          "offset_y": 1,
+          "advance": 19
+        },
+        "蜥": {
+          "x": 32,
+          "y": 128,
+          "width": 17,
+          "height": 17,
+          "offset_x": 1,
+          "offset_y": 1,
+          "advance": 19
+        },
+        "血": {
+          "x": 64,
+          "y": 128,
+          "width": 17,
+          "height": 16,
+          "offset_x": 1,
+          "offset_y": 1,
+          "advance": 19
+        },
+        "装": {
+          "x": 96,
+          "y": 128,
+          "width": 17,
+          "height": 18,
+          "offset_x": 1,
+          "offset_y": 0,
+          "advance": 19
+        },
+        "西": {
+          "x": 128,
+          "y": 128,
+          "width": 17,
+          "height": 17,
+          "offset_x": 1,
+          "offset_y": 1,
+          "advance": 19
+        },
+        "角": {
+          "x": 160,
+          "y": 128,
+          "width": 16,
+          "height": 18,
+          "offset_x": 1,
+          "offset_y": 0,
+          "advance": 19
+        },
+        "过": {
+          "x": 192,
+          "y": 128,
+          "width": 17,
+          "height": 17,
+          "offset_x": 1,
+          "offset_y": 0,
+          "advance": 19
+        },
+        "道": {
+          "x": 224,
+          "y": 128,
+          "width": 17,
+          "height": 17,
+          "offset_x": 1,
+          "offset_y": 0,
+          "advance": 19
+        },
+        "都": {
+          "x": 256,
+          "y": 128,
+          "width": 17,
+          "height": 18,
+          "offset_x": 1,
+          "offset_y": 0,
+          "advance": 19
+        },
+        "醉": {
+          "x": 288,
+          "y": 128,
+          "width": 17,
+          "height": 18,
+          "offset_x": 1,
+          "offset_y": 0,
+          "advance": 19
+        },
+        "金": {
+          "x": 320,
+          "y": 128,
+          "width": 17,
+          "height": 18,
+          "offset_x": 1,
+          "offset_y": 0,
+          "advance": 19
+        },
+        "铂": {
+          "x": 352,
+          "y": 128,
+          "width": 17,
+          "height": 18,
+          "offset_x": 1,
+          "offset_y": 0,
+          "advance": 19
+        },
+        "银": {
+          "x": 384,
+          "y": 128,
+          "width": 18,
+          "height": 17,
+          "offset_x": 1,
+          "offset_y": 1,
+          "advance": 19
+        },
+        "键": {
+          "x": 416,
+          "y": 128,
+          "width": 18,
+          "height": 17,
+          "offset_x": 0,
+          "offset_y": 1,
+          "advance": 19
+        },
+        "门": {
+          "x": 448,
+          "y": 128,
+          "width": 14,
+          "height": 17,
+          "offset_x": 3,
+          "offset_y": 1,
+          "advance": 19
+        },
+        "队": {
+          "x": 480,
+          "y": 128,
+          "width": 16,
+          "height": 17,
+          "offset_x": 2,
+          "offset_y": 1,
+          "advance": 19
+        },
+        "雕": {
+          "x": 512,
+          "y": 128,
+          "width": 18,
+          "height": 18,
+          "offset_x": 0,
+          "offset_y": 0,
+          "advance": 19
+        },
+        "雷": {
+          "x": 544,
+          "y": 128,
+          "width": 17,
+          "height": 17,
+          "offset_x": 1,
+          "offset_y": 1,
+          "advance": 19
+        },
+        "面": {
+          "x": 576,
+          "y": 128,
+          "width": 17,
+          "height": 17,
+          "offset_x": 1,
+          "offset_y": 1,
+          "advance": 19
+        },
+        "颗": {
+          "x": 608,
+          "y": 128,
+          "width": 17,
+          "height": 17,
+          "offset_x": 1,
+          "offset_y": 1,
+          "advance": 19
+        },
+        "风": {
+          "x": 640,
+          "y": 128,
+          "width": 17,
+          "height": 16,
+          "offset_x": 1,
+          "offset_y": 2,
+          "advance": 19
+        },
+        "饮": {
+          "x": 672,
+          "y": 128,
+          "width": 18,
+          "height": 17,
+          "offset_x": 1,
+          "offset_y": 1,
+          "advance": 19
+        },
+        "香": {
+          "x": 704,
+          "y": 128,
+          "width": 17,
+          "height": 17,
+          "offset_x": 1,
+          "offset_y": 1,
+          "advance": 19
+        },
+        "默": {
+          "x": 736,
+          "y": 128,
+          "width": 17,
+          "height": 18,
+          "offset_x": 1,
+          "offset_y": 0,
+          "advance": 19
+        },
+        "龙": {
+          "x": 768,
+          "y": 128,
+          "width": 17,
+          "height": 18,
+          "offset_x": 1,
+          "offset_y": 0,
+          "advance": 19
+        },
+        "！": {
+          "x": 800,
+          "y": 128,
           "width": 3,
           "height": 12,
           "offset_x": 4,
@@ -1169,8 +1421,8 @@
           "advance": 19
         },
         "，": {
-          "x": 960,
-          "y": 96,
+          "x": 832,
+          "y": 128,
           "width": 3,
           "height": 5,
           "offset_x": 3,

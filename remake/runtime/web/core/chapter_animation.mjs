@@ -1,8 +1,9 @@
 import {AnmActions, COMMON_ANM_OPCODES,anmFilename} from './anm_runtime.mjs';
 import {runtimeContent,mapId as validMapId} from './content_registry.mjs';
+import {nativeMapIdFromFilename} from './native_map_identity.mjs';
 // Registered source programs share the recovered opcode handlers. Unknown
 // opcodes/modes remain errors; TLK and joining use the caller's world draft.
-const OPCODES = new Set([10,11,14,16,17,20,30,31,32,33,35,36,37,48,49,60,62,63,255]);
+const OPCODES = new Set([10,11,14,16,17,20,30,31,32,33,35,36,37,41,48,49,60,62,63,255]);
 const need = (value, message) => { if (!value) throw new Error(message); };
 export function chapterAnimationContext(program){
   const loadedMaps=(program.commands??[]).filter(command=>command.opcode===10).map(command=>command.filename?.slice(0,-4).toUpperCase());
@@ -38,8 +39,8 @@ export function validateChapterAnimation(program,content=runtimeContent) {
       && c.source.sha256 === program.source.sha256 && c.source.path === program.source.path, '剧情动画记录来源不符');
     for (const offset of [1,5,9,13,17,21,25]) need(c[`u32_plus${offset}`] === v.getUint32(offset,true), '剧情动画字段不符');
     for (const offset of [29,30,31,32,33]) need(c[`byte_plus${offset}`] === b[offset], '剧情动画字节不符');
-    if ([32,33,35,36,37,48,49].includes(c.opcode)) need(c.u32_plus5>=10||Object.values(content.roles).some(role=>role.side==='player'&&role.native_slot===c.u32_plus5), '剧情动画人物未接入');
-    if (c.opcode === 10) need(/^M\d{5}(?:-\d+)?\.DAT$/i.test(c.filename??'')
+    if ([32,33,35,36,37,41,48,49].includes(c.opcode)) need(c.u32_plus5>=10||Object.values(content.roles).some(role=>role.side==='player'&&role.native_slot===c.u32_plus5), '剧情动画人物未接入');
+    if (c.opcode === 10) need(nativeMapIdFromFilename(c.filename)!==null
       &&c.filename===new TextDecoder().decode(b.slice(54,74)).split('\0')[0]
       &&maps.includes(c.filename.slice(0,-4).toUpperCase())&&c.u32_plus5 === 0, '剧情动画地图入口未支持');
     // Native 0x473E30 case0x21 selects the explicit DGP action when +29 is nonzero.
@@ -47,6 +48,7 @@ export function validateChapterAnimation(program,content=runtimeContent) {
     if(c.opcode===17)need([0,3].includes(c.u32_plus5)&&c.byte_plus29<=1,'剧情画面效果模式未支持');
     if (c.opcode === 36) need(Object.values(content.roles).some(role=>role.side==='player'&&role.native_slot===c.u32_plus5)&&[0,1,3].includes(c.byte_plus29), '剧情队伍操作未支持');
     if (c.opcode === 37) need(Object.values(content.roles).some(role=>role.side==='player'&&role.native_slot===c.u32_plus5), '剧情离队人物未接入');
+    if(c.opcode===41)need([0,1].includes(c.byte_plus29)&&[0,1,2].includes(c.u32_plus1),'剧情人物消散模式未恢复');
     if(c.opcode===20){
       need(c.u32_plus5<2000&&c.u32_plus25<=32,'剧情旗标索引或位无效');
       if(c.byte_plus29>=2)for(const target of [c.u32_plus13,c.u32_plus17])need(target>=0&&target<=program.commands.length,'剧情旗标跳转越界');

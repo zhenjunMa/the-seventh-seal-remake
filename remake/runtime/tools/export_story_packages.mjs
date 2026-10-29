@@ -15,6 +15,8 @@ import {validateQuests} from '../web/core/story_quests.mjs';
 import {STORY_RESOURCE_TABLES,storyTextId,validateStorySelection,hydrateStoryTable} from '../web/core/story_packages.mjs';
 import {compileTlkFlow,compileEventFlow} from '../web/core/story_flow_compiler.mjs';
 import {scriptedBattleSource} from '../web/core/scripted_battle.mjs';
+import {nativeCombinationHex} from '../web/core/native_story_combinations.mjs';
+import {readNativeService} from '../web/core/native_economy.mjs';
 
 const web=fileURLToPath(new URL('../web/',import.meta.url));
 const need=(ok,message)=>{if(!ok)throw new Error(`剧情构建：${message}`);};
@@ -37,6 +39,8 @@ function compileTable(mapId,source,texts){
     const raw=Uint8Array.from(record.raw_hex.match(/../g),part=>parseInt(part,16));
     const {raw_hex,evidence,header_bytes_2_to14_raw,text_raw,...row}=record;
     if(record.kind===5)row.scripted_battle=scriptedBattleSource(record);
+    if(record.kind===4)row.native_combination_hex=nativeCombinationHex(record);
+    if(record.kind===8)row.native_service=readNativeService(record,table);
     row.text_id=storyTextId(mapId,record.id);row.portrait_id=raw[2];putText(texts,row.text_id,text_raw);
     row.choices=record.kind===0&&record.style===1?chapterChoices(record).map(({text,...choice})=>{
       const text_id=`${row.text_id}:choice:${choice.index}`;putText(texts,text_id,text);return {...choice,text_id};

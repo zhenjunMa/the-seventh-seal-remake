@@ -5,7 +5,7 @@ import {composeNativeSequence,directSequence} from './skill_sequence.mjs';
 import {createRewardLedger,collectEnemyDefeat,recordNativeContact,resetNativeChain,planVictoryRewards} from './battle_rewards.mjs';
 import {applyContactReaction,finalizeNativeDeath,initializeNativeEntry,selectNativeRevivalAnimation,selectNativeNormalReaction,selectNativeAfterSourceReaction,nativeReactionTargetAvailability} from './battle_reactions.mjs';
 import {initializeNativeStatuses,clearNativeStatuses,applyNativeSkillStatus,tickNativeStatuses} from './battle_status.mjs';
-import {consumeInventoryItem,restoreActorWithItem,usableItems} from './items.mjs';
+import {consumeInventoryItem,restoreActorWithItem,usableItems,itemTargetEligible} from './items.mjs';
 import {dispatchDefend,resolveNativeEscape,dispatchEscapeFailure,dispatchEscapeSuccess} from './battle_commands.mjs';
 import {applyNativeRevival,revivalTargetEligibility} from './battle_revival.mjs';
 import {applyNativeSupport,supportTargetEligibility} from './battle_support.mjs';
@@ -21,7 +21,6 @@ const copy = value => structuredClone(value);
 const fallenActor = actor => actor.hp.current===0||[4,5,7].includes(actor.state_raw);
 // 41B3C0 gates ordinary single-target medicines by category and immunity,
 // without testing equipment-adjusted HP. Source mode3 revival is separate.
-const itemTargetEligible = actor => actor?.side==='player'&&actor.state_raw>=0&&actor.state_raw<4&&!actor.immune_raw&&!actor.escaped;
 function requireValue(value, message) { if (!value) throw new Error(message); }
 function resource(value, label) { requireValue(Number.isInteger(value) && value >= 0 && value <= 0x7fffffff, `${label}无效`); return value; }
 function actorShape(actor) {
@@ -306,9 +305,13 @@ export class BattleController {
   }
   reservedItems(instanceId){return pendingCommands(this.state?.scheduler).filter(command=>command.item_instance_id===instanceId).length+(this.activeItemInstanceId===instanceId?1:0);}
   items() { return this.itemData&&this.state?.inventory?copy(usableItems(this.state.inventory,this.itemData)).map(item=>({...item,quantity:item.quantity-this.reservedItems(item.instance_id)})).filter(item=>item.quantity>0):[]; }
+  itemTargetAvailable(actor,instanceId,caster=this.actor(this.state.player_id)){
+    const item=this.state.inventory.find(item=>item.instance_id===instanceId),definition=this.itemData.definitions[String(item?.id)];
+    return Boolean(definition?.effect&&definition.runtime_enabled!==false&&definition.use_in_battle!==false&&itemTargetEligible(actor,definition,caster));
+  }
   itemTargetIds(instanceId){
     if(!this.itemData||!usableItems(this.state?.inventory??[],this.itemData).some(item=>item.instance_id===instanceId))return [];
-    return this.players().filter(itemTargetEligible).map(actor=>actor.id);
+    return this.state.actors.filter(actor=>this.itemTargetAvailable(actor,instanceId)).map(actor=>actor.id);
   }
   queueCommand(command){
     const s=this.state.scheduler;
@@ -440,7 +443,7 @@ export class BattleController {
   queuedTarget(pending,attacker,skill) {
     const target=this.actor(pending.target_id);
     if(pending.item_instance_id){
-      if(itemTargetEligible(target))return target;
+      if(this.itemTargetAvailable(target,pending.item_instance_id,attacker))return target;
       this.cancelQueuedCommand(pending,'item-target-unavailable');return null;
     }
     if(skill?.battle_handler==='native-support'){
@@ -501,7 +504,7 @@ export class BattleController {
     if(this.activePlayers().length&&!victory)this.state.pending_outcome=null;
     for(const command of pendingCommands(s)){
       if(this.actor(command.actor_id)?.hp.current===0){this.cancelQueuedCommand(command,'actor-fallen');continue;}
-      if(command.item_instance_id){const target=this.actor(command.target_id);if(!itemTargetEligible(target))this.cancelQueuedCommand(command,'item-target-unavailable');}
+      if(command.item_instance_id){const target=this.actor(command.target_id);if(!this.itemTargetAvailable(target,command.item_instance_id,this.actor(command.actor_id)))this.cancelQueuedCommand(command,'item-target-unavailable');}
     }
     const ready=this.readyPlayerIds().filter(id=>this.canCommand(id));
     if(!ready.includes(this.state.player_id)&&ready.length)this.state.player_id=ready[0];
@@ -527,7 +530,7 @@ export class BattleController {
     if(itemCommand){
       const consumed=consumeInventoryItem(this.state.inventory,itemCommand.instance_id,this.itemData);
       requireValue(consumed.item.quantity>this.reservedItems(itemCommand.instance_id),'道具已被其他角色的待执行指令占用');
-      const target=this.actor(targetId??player.id);restoreActorWithItem(target,consumed.item,this.itemData,{statusData:this.statusData});
+      requireValue(this.itemTargetAvailable(this.actor(targetId??player.id),itemCommand.instance_id,player),'道具目标不可用');
       skill={id:`item:${consumed.item.id}`,actor_id:player.id,mp_cost:0};
     }
     requireValue(skill?.actor_id===player.id&&player.hp.current>0,'玩家命令无效');
@@ -538,7 +541,7 @@ export class BattleController {
     if(support)requireValue(this.statusData&&typeof this.playSequence==='function','辅助动作执行器或原状态来源缺失');
     if(revival)requireValue(this.reactionData&&typeof this.playSequence==='function','复活动作执行器或原动作来源缺失');
     const target=itemCommand?this.actor(targetId??player.id):targetId===null?this.actor(this.targetIdsForSkill(skill.id)[0]):this.actor(targetId);
-    requireValue(itemCommand?itemTargetEligible(target):revival||support?target&&this.targetIdsForSkill(skill.id).includes(target.id):target?.side==='enemy'&&target.hp.current>0&&target.state_raw!==11&&!target.escaped,'目标已经倒下、离场或阵营不匹配');
+    requireValue(itemCommand?this.itemTargetAvailable(target,itemCommand.instance_id,player):revival||support?target&&this.targetIdsForSkill(skill.id).includes(target.id):target?.side==='enemy'&&target.hp.current>0&&target.state_raw!==11&&!target.escaped,'目标已经倒下、离场或阵营不匹配');
     if(!itemCommand){const support=this.reactionTargetAvailability(skill,target);requireValue(support.available,support.reason);}
     this.queueCommand({actor_id:player.id,skill_id:skill.id,target_id:target.id,...(itemCommand?{item_instance_id:itemCommand.instance_id}:{})});
     if(!this.running){const task=this.scheduleReady();if(task)await task;}return this.snapshot();
@@ -563,7 +566,7 @@ export class BattleController {
         if(itemCommand&&attacker.id===player.id){
           const consumed=consumeInventoryItem(this.state.inventory,itemCommand.instance_id,this.itemData);
           this.activeItemInstanceId=itemCommand.instance_id;
-          let result=restoreActorWithItem(target,consumed.item,this.itemData,{statusData:this.statusData}),committed=false;
+          let result={name:this.itemData.definitions[String(consumed.item.id)].name},committed=false;
           const charge=dispatchItemCharge(attacker,s),actionId=`${this.state.id}:${this.state.action_count+1}`;
           this.state.phase='action';this.publish();
           const onUse=()=>{
@@ -571,9 +574,10 @@ export class BattleController {
               this.checkWorld();const before=copy(target);
               // A carrier/status may have invalidated the target since dispatch.
               // Native41B3C0 then skips both5058D0 and the consumption branch.
-              result=itemTargetEligible(target)?restoreActorWithItem(target,consumed.item,this.itemData,{statusData:this.statusData})
+              result=this.itemTargetAvailable(target,itemCommand.instance_id,attacker)?restoreActorWithItem(target,consumed.item,this.itemData,{statusData:this.statusData,caster:attacker,rng:this.rng,
+                selectAnimation:(actor,{rng})=>selectNativeRevivalAnimation({actor,data:this.reactionData,rng})})
                 :{actor:copy(target),name:result.name,changes:{},applied:false,native_return:0,effect_requested:false,cancel_command:false,trace:[]};
-              if(result.applied){Object.assign(target,result.actor);this.state.inventory=consumed.inventory;}
+              if(result.applied){if(result.revived)this.commitRevival(target,result);else Object.assign(target,result.actor);this.state.inventory=consumed.inventory;}
               if(result.cancel_command){const command=commandForActor(s,target.id);if(command)this.cancelQueuedCommand(command,'actor-status');}
               committed=true;this.activeItemInstanceId=null;this.state.action_count++;
               const entry={action_id:actionId,actor_id:attacker.id,target_id:target.id,skill_id:skillId,item_id:consumed.item.id,round:this.state.round,impact:false,
@@ -581,7 +585,7 @@ export class BattleController {
               const historyIndex=this.state.history.push(entry)-1;this.recordImpact(entry,historyIndex);
               this.log({type:'battle-item-used',battle_id:this.state.id,...copy(entry),name:result.name,charge});this.publish();}
             return {hit:true,damage:0,item_used:result.applied,item_effect:result.effect_requested,native_return:result.native_return,
-              ...(!result.effect_requested?{skipped:'item-target-unavailable'}:{}),remainingHp:target.hp.current};
+              ...(!result.effect_requested?{skipped:'item-target-unavailable'}:{}),revived:Boolean(result.revived),remainingHp:target.hp.current};
           };
           await this.playItem({action_id:actionId,actor_id:attacker.id,target_id:target.id,item_id:consumed.item.id,name:result.name,skill_id:skillId},{onUse});
           this.checkWorld();requireValue(committed,'道具原动作没有触发使用事件');
@@ -672,13 +676,7 @@ export class BattleController {
           result={hit:false,damage:0,native_return:-1,mp_cost:source.mp_cost,skipped:'revival-target-unavailable'};
         else{
           const revival=applyNativeRevival({target:victim,skill:source,rng:this.rng,selectAnimation:(actor,{rng})=>selectNativeRevivalAnimation({actor,data:this.reactionData,rng})});
-          if(revival.applied){
-            Object.assign(victim,revival.actor);victim.alive=victim.hp.current>0;victim.killer_actor_id=null;victim.life_epoch=(victim.life_epoch??0)+1;
-            if(this.state.lifecycle_events)this.state.lifecycle_events=this.state.lifecycle_events.filter(e=>e.actor_id!==victim.id);
-            if(revival.animation)Object.assign(victim,copy(revival.animation.after));
-            if(this.lifecycleEnabled&&revival.animation)this.queueLifecycle(victim,revival.animation);
-            else{victim.native_active=false;setIdleSkill(victim,this.schedulerData,this.now());}
-          }
+          if(revival.applied)this.commitRevival(victim,revival);
           result={hit:revival.applied,damage:0,native_return:revival.native_return,mp_cost:source.mp_cost,revived:revival.applied,hp_delta:revival.hp_delta??0,
             ...(!revival.applied?{skipped:revival.reason}:{}),trace:[...copy(revival.animation?.trace??[]),...copy(revival.trace)]};
         }
@@ -795,6 +793,13 @@ export class BattleController {
         await this.playAction({...copy(result),actor_id:attacker.id,target_id:target.id,skill_id:selected.id,
           action_id:actionId,remainingHp:this.testMode?target.hp.current:Math.max(0,target.hp.current-result.damage),death:!this.testMode&&result.hit&&result.damage>=target.hp.current},{onImpact});
         this.checkWorld(); requireValue(impacted,'表现结束却没有执行结算事件，战斗已暂停');
+  }
+  commitRevival(actor,result){
+    Object.assign(actor,result.actor);actor.alive=actor.hp.current>0;actor.killer_actor_id=null;actor.life_epoch=(actor.life_epoch??0)+1;
+    if(this.state.lifecycle_events)this.state.lifecycle_events=this.state.lifecycle_events.filter(event=>event.actor_id!==actor.id);
+    if(result.animation)Object.assign(actor,copy(result.animation.after));
+    if(this.lifecycleEnabled&&result.animation)this.queueLifecycle(actor,result.animation);
+    else{actor.native_active=false;setIdleSkill(actor,this.schedulerData,this.now());}
   }
   prepareRewards(){
     if(this.rewardPlan)return this.rewardPlan;this.checkWorld();requireValue(this.state.phase==='victory'||this.lockedOutcome==='victory','尚未胜利，不能规划奖励');

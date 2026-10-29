@@ -6,6 +6,8 @@ import {MapObjectRuntime} from '../web/core/map_objects.mjs';
 import {ImageResources} from '../web/core/image_resources.mjs';
 import {drawMapScene} from '../web/map_scene_view.mjs';
 import {createMapController} from '../web/controllers/map.mjs';
+import {StoryRepository} from '../web/core/story_repository.mjs';
+import {runtimeContent,runtimeContentDefinition} from '../web/core/content_registry.mjs';
 const {OpeningView}=await import('../web/opening_view.mjs');
 
 const root=new URL('../',import.meta.url),read=async path=>JSON.parse(await readFile(new URL(path,root),'utf8'));
@@ -85,18 +87,62 @@ test('live map emits main and same-frame light in the existing depth queue and r
   const role={frame_width:150,frame_height:170,anchor:{x:75,y:138},actions:[{index:0,bitmap:main,intrinsic_bitmap:light}]};
   const npc={id:'point',x:400,y:300,direction:0,motion:{role,action:0,frame:7}};
   const object={index:8,bitmap:staticImage,layer:2,sort_y:200,draw_x:10,draw_y:20,
-    motion:{main:{name:'crystal'},intrinsic:{name:'crystal-light'},width:96,height:128,frame:3}};
+    motion:{main:{name:'crystal'},intrinsic:{name:'crystal-light'},shadow:{name:'crystal-shadow'},width:96,height:128,frame:3}};
   const scene={data:{id:'M70010'},bitmap:{name:'map'},npcs:[npc,{...npc,id:'hidden',hidden:true}],objects:[object]};
   const world={location:{x:50,y:100,direction:0},object_states:{},flags:[]};
   const options={scene,world,role:{frame_width:16,frame_height:24,map_draw_offset:{x:0,y:0}},
     action:{bitmap:{name:'hero'}},view:{zoom:1,x:320,y:240,frame:0},width:640,height:480};
   drawMapScene(ctx,options);
   assert.deepEqual(calls.map(c=>[c.args[0].name,c.blend]),[
-    ['map','source-over'],['hero','source-over'],['crystal','source-over'],['crystal-light','lighter'],['npc','source-over'],['light','lighter']]);
-  assert.deepEqual(calls[4].args.slice(1),calls[5].args.slice(1));
-  assert.equal(calls[4].args[1],7*150);assert.equal(ctx.globalCompositeOperation,'source-over');
+    ['map','source-over'],['hero','source-over'],['crystal-shadow','source-over'],['crystal','source-over'],['crystal-light','lighter'],['npc','source-over'],['light','lighter']]);
+  assert.deepEqual(calls[2].args.slice(1),calls[3].args.slice(1));assert.deepEqual(calls[3].args.slice(1),calls[4].args.slice(1));
+  assert.deepEqual(calls[5].args.slice(1),calls[6].args.slice(1));
+  assert.equal(calls[5].args[1],7*150);assert.equal(ctx.globalCompositeOperation,'source-over');
   world.object_states['M70010:8']={visible:false};npc.hidden=true;calls.length=0;drawMapScene(ctx,options);
   assert.deepEqual(calls.map(c=>c.args[0].name),['map','hero']);
+});
+
+test('formal city prepareMap loads optional source object shadow atlases in the map scope and counts every asset',async()=>{
+  const readWeb=async path=>read('web/'+path.replace(/^\//,''));
+  const [seed,index,catalog,opening]=await Promise.all(['opening_seed','story/index','catalog','opening_map_resources'].map(path=>readWeb(`data/${path}.json`)));
+  let shadowCount=0;
+  for(const mapId of ['M01031','M01032','M01061','M01042']){
+    const world=structuredClone(seed);world.opening.status='complete';world.location={map_id:mapId,x:320,y:320,direction:2};
+    const soundEvents=[];
+    const state={catalog,openingResources:structuredClone(opening),mapEffects:structuredClone(manifest),world:{value:world,location:world.location},actorResourcesByMap:new Map(),audio:{playClip(...args){soundEvents.push(args);return true;}},
+      view:{zoom:1,frame:0},scenes:{current:null,phase:'map'},resources:{revision:0,retainScopes(){},async attach(action,sheet,_scope,key='bitmap'){return action[key]=await image(sheet);}}};
+    const loaded=new Map();
+    async function image(path,scope){
+      const bytes=await readFile(new URL('web'+(path.startsWith('/')?path:'/'+path),root));
+      const bitmap={width:bytes.readUInt32BE(16),height:bytes.readUInt32BE(20),path};loaded.set(path,{scope,bitmap});return bitmap;
+    }
+    state.storyRepository=await StoryRepository.create({read:readWeb,index,content:runtimeContent,definition:runtimeContentDefinition,currentMap:()=>null});
+    state.chapterStory=state.storyRepository.story;state.chapterResources=state.storyRepository.resources;state.events=state.storyRepository.events;
+    state.openingResources.roles={...state.openingResources.roles,...state.chapterResources.roles};
+    const before=structuredClone(world),controller=createMapController({state,actions:{json:readWeb,image},$:()=>({}),canvas:{},ctx:{}}),progress=[];
+    const scene=await controller.prepareMap(mapId,{onProgress:value=>progress.push(value)});
+    assert.equal(progress.at(-1).completed,progress.at(-1).total);
+    for(const actor of scene.objectRuntime.actors){
+      const action=actor.resource.actions[0];if(!action.shadow_sheet)continue;shadowCount++;
+      assert.equal(loaded.get(action.shadow_sheet).scope,`map:${mapId}`);
+      assert.equal(actor.object.motion.shadow,action.shadow_bitmap);
+      assert.ok(actor.object.motion.shadow.width>0);assert.ok(actor.object.motion.shadow.height>0);
+    }
+    assert.deepEqual(world,before);assert.equal(state.storyRepository.pins.size,0);
+    if(mapId==='M01042'){
+      const actor=scene.objectRuntime.actors.find(actor=>actor.object.index===8),{x,y}=actor.sound;
+      Object.assign(world.location,{x:x*2-1,y:y*2+1});let now=0;
+      const cadence=Math.min(249,actor.interval),visitsPerFrame=Math.ceil(actor.interval/cadence);
+      scene.objectRuntime.update(now,{world});
+      for(let step=0;step<visitsPerFrame;step++){now+=cadence;scene.objectRuntime.update(now,{world});}
+      assert.equal(soundEvents[0][0],'sound/E015.wav');assert.deepEqual(soundEvents[0][2],{singleVoice:true,position:{dx:-2,dy:0}});
+      const before=soundEvents.length;state.openingView={active:true,cameraAt:{x:x*2+17,y:y*2-17}};
+      const cycleVisits=actor.resource.actions[0].logical_frames.length*visitsPerFrame;
+      for(let step=0;step<cycleVisits;step++){now+=cadence;scene.objectRuntime.update(now,{world});}
+      assert.equal(soundEvents.length,before+1);assert.deepEqual(soundEvents.at(-1)[2],{singleVoice:true,position:{dx:2,dy:2}});
+    }
+  }
+  assert.equal(shadowCount,4);
 });
 
 test('ANM actor draw uses the same indexed atlas frame and anchor as exploration',async()=>{

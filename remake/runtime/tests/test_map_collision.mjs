@@ -136,6 +136,18 @@ test('real white-forest terrain marker remains escapable with the new footprint'
   assert.ok(exits.some(p=>p.moved&&!map.at(p.x,p.y).blocked),'source marker must have an escape');
 });
 
+test('source armor-shop diagonal approach keeps its ray while retaining the original contact endpoint and tangent slide',()=>{
+  const data=JSON.parse(readFileSync(new URL('../web/data/maps/m01063.json',import.meta.url),'utf8'));
+  const raw=readFileSync(new URL('../../../Map/m01063.dat',import.meta.url)),width=raw.readUInt32LE(0x146);
+  assert.equal(createHash('sha256').update(raw).digest('hex'),data.movement.source_sha256);
+  for(const [x,y,value]of [[22,14,0],[23,15,0],[22,15,1],[23,14,1]])
+    assert.equal(raw[0x172+(y*width+x)*64+0x20],value);
+  const map=new MovementMap(data.movement),result=map.moveAndSlide(360,232,80,80);
+  near(result.x,379.99999);near(result.y,268.99999);
+  assert.equal(result.segments[0].dx,result.segments[0].dy,'skin must not tilt the source diagonal approach ray');
+  assert.equal(map.at(368,240).blocked,false);
+});
+
 test('real forest point contacts accept off-centre continuous diagonal input at 30/60/120Hz in both directions',()=>{
   const data=JSON.parse(readFileSync(new URL('../web/data/maps/m70060.json',import.meta.url),'utf8'));
   const raw=readFileSync(new URL('../../../Map/m70060.dat',import.meta.url)),width=raw.readUInt32LE(0x146);
@@ -157,7 +169,7 @@ test('real forest point contacts accept off-centre continuous diagonal input at 
   }
 });
 
-test('continuous small steps traverse the whole forest east route and all six initial lake maps without altering source terrain',()=>{
+test('continuous small steps traverse the forest/lake routes and armor-shop entry to its diagonal passage without altering source terrain',()=>{
   const read=name=>JSON.parse(readFileSync(new URL('../web/data/'+name+'.json',import.meta.url),'utf8'));
   const resources=read('chapter_map_resources'),story=read('chapter_story'),definition=read('runtime_content'),worldMap=read('world_map');
   const physical=(id,target)=>resources.exits_by_map[id].find(row=>row.target_map===target);
@@ -170,7 +182,8 @@ test('continuous small steps traverse the whole forest east route and all six in
     {id:'M71012',start:physical('M71011','M71012').entry,trigger:physical('M71012','M71012-1').id},
     {id:'M71012-1',start:physical('M71012','M71012-1').entry,trigger:physical('M71012-1','M71012-2').id},
     {id:'M71012-2',start:physical('M71012-1','M71012-2').entry,trigger:physical('M71012-2','M71013').id},
-    {id:'M71013',start:physical('M71012-2','M71013').entry,trigger:1}
+    {id:'M71013',start:physical('M71012-2','M71013').entry,trigger:1},
+    {id:'M01063',start:physical('M01060','M01063').entry,target_cell:{x:22,y:14}}
   ];
   for(const link of links){
     const data=read('maps/'+link.id.toLowerCase()),raw=readFileSync(new URL(`../../../Map/${link.id.toLowerCase()}.dat`,import.meta.url));
@@ -178,7 +191,7 @@ test('continuous small steps traverse the whole forest east route and all six in
     const sourceRows=[...data.movement.terrain_rows],ready=new Set([...(resources.exits_by_map[link.id]??[]).map(row=>row.id),...(definition.maps[link.id]?.triggers??[])]);
     const movement={...nativeMapMovement(data.movement,story.maps[link.id]),triggers:data.movement.triggers.map(row=>({...row,path_gate:!ready.has(row.id)}))};
     const map=new MovementMap(movement),npcs=(resources.npcs_by_map[link.id]??[]).filter(row=>!row.hidden),obstacles=map.actorObstacles(npcs);
-    const goal=new Set(data.movement.triggers.filter(row=>row.id===link.trigger).map(row=>`${row.x},${row.y}`));
+    const goal=new Set(link.target_cell?[`${link.target_cell.x},${link.target_cell.y}`]:data.movement.triggers.filter(row=>row.id===link.trigger).map(row=>`${row.x},${row.y}`));
     const origin={x:Math.floor(link.start.x/16),y:Math.floor(link.start.y/16)},queue=[origin],previous=new Map([[`${origin.x},${origin.y}`,null]]);let found;
     for(let cursor=0;cursor<queue.length;cursor++){
       const at=queue[cursor];if(goal.has(`${at.x},${at.y}`)){found=at;break;}
@@ -204,7 +217,9 @@ test('continuous small steps traverse the whole forest east route and all six in
           assert.notEqual(map.at(at.x,at.y).reason,'terrain',link.id);
         }
       }
-      assert.equal(map.at(at.x,at.y).trigger?.id,link.trigger,`${link.id} target at ${hz}Hz`);assert.ok(frames>0);
+      if(link.target_cell)assert.deepEqual({x:map.at(at.x,at.y).x,y:map.at(at.x,at.y).y},link.target_cell,`${link.id} target at ${hz}Hz`);
+      else assert.equal(map.at(at.x,at.y).trigger?.id,link.trigger,`${link.id} target at ${hz}Hz`);
+      assert.ok(frames>0);
     }
     assert.deepEqual(data.movement.terrain_rows,sourceRows);
     for(let y=0;y<map.height;y++)for(let x=0;x<map.width;x++)assert.equal(Number(sourceRows[y][x]),raw[0x172+(y*map.width+x)*64+0x20],link.id);

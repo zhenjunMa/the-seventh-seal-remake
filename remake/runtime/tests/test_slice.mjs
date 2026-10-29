@@ -14,7 +14,8 @@ const runtime=new URL('../',import.meta.url),root=new URL('../../../',import.met
 const read=async path=>JSON.parse(await readFile(new URL(path,runtime),'utf8'));
 const hash=data=>createHash('sha256').update(data).digest('hex');
 const seed=await read('web/data/world_seed.json'),catalog=await read('web/data/catalog.json');
-const [event]=await read('web/data/events.json');
+// This historical partial event is deliberately no longer a formal entrance.
+const event=await read('web/data/events/detective.json');
 const source=await readFile(new URL(event.source.path,root));
 const checks=[];
 test('real detective source bytes, first/repeat state, map round trip and save reload',async()=>{
