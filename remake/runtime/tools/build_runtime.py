@@ -221,6 +221,12 @@ STEPS['ember-city-index']=Step('export_ember_city_index.py',
     inputs=('../tools/export_fire_valley_index.py','../tools/route_extract_resources.py',
             '../tools/map_npc_fields.py','core/chapter_animation.mjs','core/story_flow_compiler.mjs'),
     sources=fire_valley_source_files())
+STEPS['inner-white-forest-index']=Step('export_inner_white_forest_index.py',
+    ('data/library/inner_white_forest.json','../evidence/inner_white_forest_20261029/source_index.json'),
+    reports=('inner_white_forest_20261029/source_index.json',),
+    inputs=('../tools/export_fire_valley_index.py','../tools/route_extract_resources.py',
+            '../tools/map_npc_fields.py','core/chapter_animation.mjs','core/story_flow_compiler.mjs'),
+    sources=fire_valley_source_files())
 STEPS['native-services']=Step('export_native_services.py',
     ('data/native_services.json','assets/native_services'),
     reports=('ember_city_20261028/service_export.json',),

@@ -226,25 +226,28 @@ export class ChapterRunner {
   }
   objectFor(mapId, objectIndex) {
     const binding=storyBindings(mapId,this.content).objects.find(row=>row.index===objectIndex);
-    need(binding&&['stationary-chest','keyed-chest'].includes(binding.handler), '剧情物件行为尚未接入');
+    need(binding&&['stationary-chest','keyed-chest','tlk-object'].includes(binding.handler), '剧情物件行为尚未接入');
     const table = this.data.maps[mapId], object = table?.objects.find(row => row.index === objectIndex);
     need(object, '剧情物件来源缺失');
     const b = bytes(object.raw_hex, 0x112, '剧情物件'), v = view(b);
     need(object.source?.sha256 === this.data.source_hashes[object.source.path], '剧情箱子来源无效');
     const chest=binding.handler==='keyed-chest'?nativeKeyedChest(object):null;
-    if(!chest)need(b[0xcf] === 3 && b[0x109] === 0 && table.records.some(row=>row.id===v.getUint32(0xf6,true)), '剧情箱子来源或状态类型无效');
+    const repeatable=binding.handler==='tlk-object';
+    if(!chest)need(b[0xcf] === (repeatable?1:3) && b[0x109] === 0 && table.records.some(row=>row.id===v.getUint32(0xf6,true)), '剧情物件来源或状态类型无效');
     if (this.objectData) {
       const manifest = this.objectData[mapId]?.find(row => row.object_index_zero_based === objectIndex);
       need(manifest?.source?.path === object.source.path && manifest.source.offset === object.source.offset
         && manifest.source.sha256 === object.source.sha256 && manifest.source.raw_hex === object.raw_hex,
         '剧情物件清单与原始地图不一致');
     }
-    return {table, object, recordId:v.getUint32(0xf6, true),chest};
+    return {table, object, recordId:v.getUint32(0xf6, true),chest,repeatable};
   }
   async runObject({mapId, objectIndex, playback} = {}) {
     need(!this.running, '火之谷剧情正在执行');
-    const {table, object, recordId,chest} = this.objectFor(mapId, objectIndex);
+    const {table, object, recordId,chest,repeatable} = this.objectFor(mapId, objectIndex);
     need(this.world.location.map_id === mapId, '剧情物件不在当前地图');
+    if(repeatable)return this.runTlk({mapId,recordId,playback,
+      context:{steps:0,explicitInteraction:true,objectMapId:mapId,objectIndex}});
     const initialState = chapterObjectState(this.world.snapshot(), mapId, objectIndex, this.data);
     if (initialState === 3) return {mapId, objectIndex, already_done:true, state:3, world:this.world.snapshot()};
     need([0,1,2].includes(initialState), '剧情物件保存状态尚未接入');
@@ -306,8 +309,9 @@ export class ChapterRunner {
     }
     if(op==='transfer_native_map'){
       const transition=context.transition?.mapId===mapId?context.transition:
-        context.explicitInteraction&&context.npcMapId===mapId?{npcSlot:context.npcSlot,sortCode:draft.native_map_sort_code??1}:null;
-      need(native&&record&&transition,'地图跳转缺少原地形触发器或NPC交互');
+        context.explicitInteraction&&context.npcMapId===mapId?{npcSlot:context.npcSlot,sortCode:draft.native_map_sort_code??1}:
+        context.explicitInteraction&&context.objectMapId===mapId?{objectIndex:context.objectIndex,sortCode:draft.native_map_sort_code??1}:null;
+      need(native&&record&&transition,'地图跳转缺少原地形触发器或主动交互');
       const destination=nativeMapTransfer(table,record,transition,this.content);
       need(typeof this.transfer==='function','地图跳转显示接口缺失');
       return (async()=>{

@@ -67,10 +67,10 @@ testSource('Direct CF4 admission rejects a player-strike first action and linked
   assert.equal(first[0x7f],0);first[0x7f]=1;animation.actions[0].raw_hex=first.toString('hex');
   assert.equal(Buffer.from(animation.actions[1].raw_hex,'hex')[0x7f],0);
   assert.throws(()=>nativeChestAnimation(animation,4),/首动作所需人物攻击/);
-  for(const offset of [0x51,0x52]){
-    const raw=Buffer.from(fixture.object.raw_hex,'hex');assert.equal(raw[offset],0);raw[offset]=1;
-    assert.throws(()=>nativeKeyedChest({...fixture.object,raw_hex:raw.toString('hex')}),/物件联动尚未接入/);
-  }
+  const raw=Buffer.from(fixture.object.raw_hex,'hex');raw[0x52]=32;
+  assert.deepEqual(nativeKeyedChest({...fixture.object,raw_hex:raw.toString('hex')}),nativeKeyedChest(fixture.object));
+  raw[0x51]=1;
+  assert.throws(()=>nativeKeyedChest({...fixture.object,raw_hex:raw.toString('hex')}),/物件联动尚未接入/);
 });
 
 testSource('All thirteen chests project native live layer1 ordering and source action-derived saved layer2 ordering',async()=>{

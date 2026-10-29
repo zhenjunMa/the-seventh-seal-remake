@@ -214,7 +214,7 @@ def registered_tlk_reachability(story, registration, original, hashes, require):
             obj = next((row for row in table['objects'] if row['index'] == index['index']), None)
             require(obj is not None, f'{map_id} object {index}')
             at = obj['source']['offset']; raw = data[at:at + 0x112]
-            require(raw.hex() == obj['raw_hex'] and raw[0xcf] == 3, f'{map_id} object source')
+            require(raw.hex() == obj['raw_hex'] and raw[0xcf] == (1 if index['handler'] == 'tlk-object' else 3), f'{map_id} object source')
             add(map_id, u32(raw, 0xf6), 'object', object_index=index['index'])
         descriptors = {row['id']: row for row in table['descriptors']}
         selected = [(ident, 'trigger') for ident in binding.get('triggers', [])]

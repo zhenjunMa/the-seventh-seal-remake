@@ -87,7 +87,8 @@ export function createMapController({state, actions, $, canvas, ctx}) {
       .flatMap(action => [step(state.resources.attach(action, action.sheet, `role:${roleId}`)),
         ...(action.intrinsic_sheet?[step(state.resources.attach(action,action.intrinsic_sheet,`role:${roleId}`,'intrinsic_bitmap'))]:[]),
         ...(action.shadow_sheet?[step(state.resources.attach(action,action.shadow_sheet,`role:${roleId}`,'shadow_bitmap'))]:[])])));
-    await Promise.all(completedAnimations.map(animation=>step(actions.image(animation.frames[animation.completed_last_frame].image, `map:${id}`))));
+    await Promise.all(completedAnimations.filter(animation=>animation.completed_last_frame<animation.frames.length)
+      .map(animation=>step(actions.image(animation.frames[animation.completed_last_frame].image, `map:${id}`))));
     for(const npc of data.opening_npcs??[]){
       const r=state.openingResources.roles[npc.resource_id],a=r?.actions.find(a=>a.index===0);
       if(!a?.bitmap)throw new Error(`地图人物资源未准备：${npc.resource_id}`);
@@ -152,8 +153,9 @@ export function createMapController({state, actions, $, canvas, ctx}) {
       if(!binding)continue;
       if(binding.handler==='stationary-chest'&&(object.behavior_raw_cf!==3||!object.interaction_record_raw_f6))continue;
       if(binding.handler==='keyed-chest'&&object.behavior_raw_cf!==4)continue;
+      if(binding.handler==='tlk-object'&&(object.behavior_raw_cf!==1||!object.interaction_record_raw_f6))continue;
       const distance=Math.hypot(object.x_native*2-at.x,object.y_native*2-at.y);
-      if(distance<64&&(!state.nearest||distance<state.nearest.distance))state.nearest={...object,kind:'object',name:binding.handler==='keyed-chest'?'宝箱':'装备箱',distance};
+      if(distance<64&&(!state.nearest||distance<state.nearest.distance))state.nearest={...object,kind:'object',name:binding.handler==='tlk-object'?'物件':binding.handler==='keyed-chest'?'宝箱':'装备箱',distance};
     }
     for(const binding of storyBindings(at.map_id).rests){
       const bed=state.chapterStory.maps[at.map_id]?.descriptors?.find(row=>row.id===binding.descriptor_id);
@@ -167,6 +169,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
     const table=state.chapterStory.maps[scene.data.id],record=table&&world.event_records[table.map_flag_index]?.[obj.index];
     if(record?.slice(0,2)==='03'){
       const animation=state.chapterResources.object_animations[scene.data.id]?.find(row=>row.object_index_zero_based===obj.index);
+      if(animation&&animation.completed_last_frame>=animation.frames.length)return null;
       if(animation)return state.resources.peek(animation.frames[animation.completed_last_frame].image)??obj.bitmap;
     }
     return obj.bitmap;
