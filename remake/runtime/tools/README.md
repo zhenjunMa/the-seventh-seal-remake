@@ -1,409 +1,146 @@
-# 第七封印 · 构建、导出与验证工具
+# 第七封印 · 构建、导出与验证
 
-更新：2026-10-28；所有命令从仓库根目录执行。正文中的web/、tools/、evidence/以runtime为基准；remake/开头的路径以仓库根目录为基准。示例使用python3；Windows可换为指向Python 3的python或py -3。
+命令从仓库根目录执行，示例使用Python 3和Node.js；Windows可将python3换为python或py -3。正文中的web／tools／evidence相对runtime；remake开头的路径相对仓库根。
 
-## 目录
+## 环境与前置
 
-- [常用操作](#常用操作)
-- [执行语义](#执行语义)
-- [登记驱动的生产](#登记驱动的生产)
-- [前置与来源](#前置与来源)
-- [构建台账](#构建台账)
-- [目录迁移与基础来源](#目录迁移与基础来源)
-- [旧环境升级](#旧环境升级)
-- [基础导出入口](#基础导出入口)
-- [工具导航](#工具导航)
-- [当前构建目标与直接依赖](#当前构建目标与直接依赖)
-- [测试职责与运行](#测试职责与运行)
-- [当前检查覆盖什么](#当前检查覆盖什么)
-- [常见问题](#常见问题)
-- [资料维护](#资料维护)
-- [[剧情运行包]](#剧情运行包)
+| 操作 | 前置 |
+| --- | --- |
+| 静态服务 | Python 3标准库，正式媒体另备 |
+| 代码／剧情包预检查 | Node.js；`verify_phaser.mjs`默认允许媒体缺失，分别报告code与assets |
+| 素材导出 | 对应原版输入和来源台账；Pillow，部分步骤需NumPy、FFmpeg／FFprobe |
+| 原字体GDI导出、部分原版观察 | Windows及对应组件 |
+| 构建与文档同步入口 | 当前导入build_runtime声明时会读取登记敌人CHR等原输入，亦依赖Pillow；无原版环境不能保证仅列计划或sync_tool_docs可执行 |
+| 来源、真实媒体、历史专项 | 检查声明的原文件、媒体、证据与环境；HTTP／保存集成需本地服务 |
+
+**build_runtime是已有基础内容上的增量入口，首次构建尚未打通。** `--target all --run`不会补齐未声明的旧台账或历史观察；统一依赖锁定及干净首次构建任务见[开发计划](../../assessment/validation_design.md)。素材交接与恢复见[本地资料](../../local_materials.md)。
 
 ## 常用操作
 
-启动检查用服务：
+| 目的 | 命令或目标 |
+| --- | --- |
+| 启动 | `python3 -B remake/runtime/serve.py` |
+| 无媒体代码预检查 | `node remake/runtime/tools/verify_phaser.mjs` |
+| 实际媒体核对 | 同上加`--assets`，再做正式浏览器流程 |
+| 新内容完整生产 | `python3 -B remake/runtime/tools/build_runtime.py --target content --run` |
+| 仅独立事件／任务 | build_runtime目标`story-pack --run`；地图／角色／ANM变化走content |
+| 查看目标计划／缓存原因 | build_runtime加`--target content --explain`，不导出 |
+| 同步／核对派生工具文档 | `python3 -B remake/runtime/tools/sync_tool_docs.py`；只读核对加`--check` |
+| 预览日常检查范围 | `python3 -B remake/runtime/tools/verify_tests.py --list --explain` |
+
+### 新地图接入顺序
 
 ```console
-python3 -B remake/runtime/serve.py
-```
-
-新增内容：
-
-```console
+python3 -B remake/runtime/tools/build_runtime.py --target chapter-story --run
+python3 -B remake/runtime/tools/build_runtime.py --target content --preflight
 python3 -B remake/runtime/tools/build_runtime.py --target content --run
 ```
 
-已有来源只调参数：
+preflight只读已有源表，不导出、不写报告、不核原媒体；新地图须先准备来源。显式入口未知能力返回非零，旧隐式NPC只提示；正式登记与最终内容编译继续检查全部可达分支。
 
-```console
-node remake/runtime/tools/export_runtime_config.mjs
-```
-
-只读查询技能默认／生效参数：
+### 参数与内容查询
 
 ```console
 node remake/runtime/tools/export_runtime_config.mjs --reference skills yantu
-```
-
-只读查询道具默认／生效参数：
-
-```console
 node remake/runtime/tools/export_runtime_config.mjs --reference items 4
+node remake/runtime/tools/build_content_library.mjs --query roles 004
+node remake/runtime/tools/build_content_library.mjs --query search 海皇印 items
+node remake/runtime/tools/export_content_registry.mjs --check
+node remake/runtime/tools/check_content.mjs --json
 ```
 
-补全原版角色／技能来源目录：
+参数查询支持skills／battle／rewards／items，省略编号查整个类别；不导出或修改文件。普通参数导出执行`export_runtime_config.mjs`，保留现有修改。配置编辑和刷新生效规则只在[配置指南](../config_guide.md)维护。
 
-```console
-python3 -B remake/runtime/tools/build_runtime.py --target source-catalog source-magic --run
-```
+## 来源查询
 
-生成全量引用索引：
+区域来源索引独立于运行登记。用下表目标生成，对应`export_<区域>_index.py --check`核来源和产物；查询共用`--query`、`--map`、`--flag`、`--limit`。
 
-```console
-node remake/runtime/tools/build_content_library.mjs
-```
-
-生成火之谷地图／NPC／剧情来源索引：
-
-```console
-python3 -B remake/runtime/tools/build_runtime.py --target fire-valley-index --run
-```
-
-生成外层白木森林来源索引：
-
-```console
-python3 -B remake/runtime/tools/build_runtime.py --target white-forest-index --run
-```
-
-生成翠碧湖全时期来源索引（13图，不含研究所遗迹）：
-
-```console
-python3 -B remake/runtime/tools/build_runtime.py --target jade-lake-index --run
-python3 -B remake/runtime/tools/export_jade_lake_index.py --check
-```
-
-翠碧湖的`--query`、`--map`、`--flag`及`--limit`参数与下方火之谷示例相同。索引保留全部原始阶段，运行开放及验收按开发计划分期。
-
-生成炎城全量来源索引（28图），并只读核对：
+| 区域 | 构建目标 | 导出脚本 |
+| --- | --- | --- |
+| 火之谷 | fire-valley-index | export_fire_valley_index.py |
+| 外层白木森林 | white-forest-index | export_white_forest_index.py |
+| 翠碧湖 | jade-lake-index | export_jade_lake_index.py |
+| 炎城 | ember-city-index | export_ember_city_index.py |
 
 ```console
 python3 -B remake/runtime/tools/build_runtime.py --target ember-city-index --run
 python3 -B remake/runtime/tools/export_ember_city_index.py --check
+python3 -B remake/runtime/tools/export_ember_city_index.py --query 小吉 --limit 20
+python3 -B remake/runtime/tools/export_ember_city_index.py --map M01020A
+python3 -B remake/runtime/tools/export_ember_city_index.py --flag 4:12
 ```
 
-炎城索引同样支持`--query 小吉`、`--map M01020A`和`--flag 4:12`。生成原商店／锻造／合成菜单素材使用`native-services`目标；该目标已包含在`content`构建中，输出独立的`data/native_services.json`及`assets/native_services`。源菜单仅提供像素和控件位置，服务价格、配方、库存及提交由运行规则决定。
+全角色／MAG来源分别用source-catalog／source-magic，引用索引用content-library；上述步骤已纳入content依赖。索引收录不开放角色、技能或剧情。`resource_inventory.py`另盘点原目录、文件头与程序导入，输出`evidence/resource_inventory.json`。
 
-只读核对火之谷索引与覆盖报告：
+## 构建执行语义
 
-```console
-python3 -B remake/runtime/tools/export_fire_valley_index.py --check
-```
+| 选项 | 作用 |
+| --- | --- |
+| 不加`--run` | 只列依赖计划，仍需入口载入声明所要求的环境 |
+| `--run` | 按依赖生产并复用有效缓存；缺失／修改产物或输入变化触发相应步骤 |
+| `--validate` | 核工具、既有台账和产物，写`evidence/export_inventory.json`；不导出，不等于原输入与旧来源已全量一致 |
+| `--explain` | 显示no-cache／inputs-changed／outputs-changed／cached |
+| `--force --run` | 强制生产，保留parameters；配置`--reset`才重置数值 |
+| `--check --run` | 成功后调用verify_current；相应前置和8767服务需准备 |
+| `--target all --run` | 选择所有目标，仍复用缓存；通常按本次所需目标执行 |
 
-按名称／台词查询火之谷来源：
+签名按声明实际输入及导出器本地导入链计算，不把全部tools／core纳入每步；登记按消费字段计算指纹。调度依赖只决定顺序。来源／配方或产物SHA不匹配时重建，单凭文件存在不接受缓存。
 
-```console
-python3 -B remake/runtime/tools/export_fire_valley_index.py --query 英格妮 --limit 20
-```
+`evidence/resource_cache`保存逐资源指纹、输出SHA和首次验证；命中后跳过重复解码／转码／像素重审。缺失或损坏按资源修复，内容相同的PNG／JSON不重写。旧步骤缓存初次升级仍可能重新核验；日常不要清空缓存开始构建。
 
-查询具体原地图：
+统一构建使用进程文件锁；成功步骤即时保存，失败可续跑。`evidence/builds/<UTC时间-唯一ID>/`保存run.json、步骤日志、资源明细与generated-evidence。顶层日期报告被重新生成时先留新副本，再恢复旧字节；直接调用历史导出器不经过此保护，先确认其输出范围。
 
-```console
-python3 -B remake/runtime/tools/export_fire_valley_index.py --map M17030-2
-```
-
-查询跨地图旗标：
-
-```console
-python3 -B remake/runtime/tools/export_fire_valley_index.py --flag 471:1
-```
-
-按原编号查询：
-
-```console
-node remake/runtime/tools/build_content_library.mjs --query roles 004
-```
-
-按名称检索（返回所有同名原编号）：
-
-```console
-node remake/runtime/tools/build_content_library.mjs --query search 海皇印 items
-```
-
-只核对内容登记：
-
-```console
-node remake/runtime/tools/export_content_registry.mjs --check
-```
-
-完整当前检查：
-
-```console
-python3 -B remake/runtime/tools/verify_current.py
-```
-
-列全部构建计划：
-
-```console
-python3 -B remake/runtime/tools/build_runtime.py --target all
-```
-
-先准备新地图源表：
-
-```console
-python3 -B remake/runtime/tools/build_runtime.py --target chapter-story --run
-```
-
-盘点当前内容依赖：
-
-```console
-python3 -B remake/runtime/tools/build_runtime.py --target content --validate
-```
-
-只读剧情能力预检查：
-
-```console
-python3 -B remake/runtime/tools/build_runtime.py --preflight
-```
-
-结构化检查输出：
-
-```console
-node remake/runtime/tools/check_content.mjs --json
-```
-
-原版资源盘点：
-
-```console
-python3 -B remake/runtime/tools/resource_inventory.py
-```
-
-（需要本地原版资源，输出`evidence/resource_inventory.json`）
-
-战斗图集按需加载规划（不需要原版文件或PNG，使用已提交的表现元数据、已编译登记及既有`battle_packs.json`）：
+### 战斗图集与资源规划
 
 ```console
 python3 -B remake/runtime/tools/export_battle_packs.py --plan --roles 001,012 --stage stage13
 ```
 
-规划报告中的`entry_existing_atlas`／`entry_planned`为基础入战集合，`filtered_existing_atlas`／`planned`为参战角色全部表现集合；均不含HUD与结算，属于清单估算。正式运行已按技能／背包分阶段准备，实际峰值仍需浏览器素材验收。
+plan只用已提交元数据及既有图集区域，不读PNG或写正式产物。entry_existing_atlas／entry_planned估基础入战集合，filtered_existing_atlas／planned估参战角色完整表现；均不含HUD／结算。缺像素时去重可能保守高估，不能当作实际性能。可用`--report`写evidence内新路径，拒绝覆盖旧报告。
 
-`--roles`选择本场人物／敌人的原资源编号，`--stage`选择已登记舞台，两项同时提供；省略两项只盘点全库。规划比较旧公共特效加载、当前筛选沿用旧页面，以及按特效／舞台拆组后的几何体积。它使用旧区域坐标识别重复图块，缺少像素时可能保守高估去重后的体积；不会生成PNG或改写正式清单，也不能作为媒体验收。可加`--report remake/runtime/evidence/本次新目录/plan.json`写新报告，已有报告拒绝覆盖。
+正式生产走battle-packs目标：按角色、舞台、HUD／结算及特效使用者集合分组，跨特效去重可见像素。默认追加，保留旧页面和坐标，新像素增加页面；页面损坏按原坐标恢复并核SHA。`--force`重核全部源像素且保留布局，显式`export_battle_packs.py --repack`才集中重排，日常接入不使用。
 
-素材齐全后沿统一构建入口执行`python3 -B remake/runtime/tools/build_runtime.py --target battle-packs --run`，生成按`role-角色ID`、`stage-舞台ID`及HUD／结算分组的页面。特效按原ID登记后先跨特效去重相同像素，再按图块的使用者集合生成`effects-roles-角色编号集合`，相同使用范围合页，避免每个特效独占页面的碎片；无引用的来源保留在独立组。导出重构核对每份源PNG的可见像素和alpha。旧清单仍可运行，但仅修改加载筛选不能解除旧页面内无关特效的共同驻留；不要手工修改旧页面的group伪装成重建。完成后执行`verify_phaser.mjs --assets`及正式战斗实玩。
-
-同步构建文档：
-
-```console
-python3 -B remake/runtime/tools/sync_tool_docs.py
-```
-
-只读核对构建文档：
-
-```console
-python3 -B remake/runtime/tools/sync_tool_docs.py --check
-```
-
-只增量导出人物原始逐帧阴影：
-
-```console
-python3 -B remake/runtime/tools/export_map_shadows.py
-```
-
-## 执行语义
-
-不加`--run`只列计划。`--validate`检查工具、既有来源台账与产物，记录当前指纹到`evidence/export_inventory.json`；不执行导出，也不等于原输入已经与历史来源逐项一致。
-
-`--run`按依赖执行，命中缓存仍核对产物存在及SHA。缺失、手改或输入变化会触发对应任务；每个成功步骤即时保存，失败可续跑。调度依赖仅决定顺序，缓存按声明的实际输入与导出器的本地导入链计算，不再把全部工具及全部core模块纳入每个步骤。地图／玩家／舞台等登记按对应字段计算指纹，新增地图不会仅因共用runtime_content.json使玩家素材失效。
-
-资源缓存位于`evidence/resource_cache`：角色动作／图层帧、技能特效、地图／地图人物／物件帧、阴影、生命周期、道具表现、舞台帧、MNU页面及菜单／对白源帧、音频和剧情媒体各自登记来源／配方指纹、描述与输出SHA。命中后跳过解码、转码与原像素重审，复用首次成功的验证记录；源或规则变化才重新生成，缺失／损坏产物按该资源修复。GDI字体仍按所需字符集生成；所有已接入的PNG／JSON写入均保留内容相同的旧文件及修改时间。总清单按当前登记合并，生成结果不变时不写盘。
-
-旧步骤缓存首次切换为v2时需要重新核验并登记资源缓存；这次初始化可能仍有解码／验证耗时，但相同PNG和清单保持原字节与修改时间。后续重复构建直接复用。不要仅凭文件存在接纳未核验产物，也不要删除现有缓存来开始日常构建。
-
-只读查看选定依赖链的缓存状态：
-
-```console
-python3 -B remake/runtime/tools/build_runtime.py --target content --explain
-```
-
-原因显示`no-cache`／`inputs-changed`／`outputs-changed`／`cached`；实际运行另记资源的`new-resource`／`source-or-recipe-changed`／`missing-or-modified-output`及生成／复用数量。构建入口使用系统文件锁，避免两个统一构建同时写同一份清单；进程退出后自动释放。
-
-战斗图集默认追加：校验旧页面SHA并复用旧图块坐标，新像素只生成新增页面；新角色共享旧特效时复用旧页，不因使用者集合变化移动旧图块。首次从既有图集建立图块索引会读取旧页面；索引命中后不再逐页解码。缺失／损坏页面从保留源图与原坐标恢复并核对原SHA。旧页面及暂时无引用的文件不会自动删除；需要集中整理时显式执行：
-
-```console
-python3 -B remake/runtime/tools/export_battle_packs.py --repack
-```
-
-追加会保留一些空余空间和旧页，`--repack`才重新排版；日常接入不使用。新／变化图像逐像素重构核对，`--force`另对全部源图执行重构检查，同时保留页面布局。
-
-`--force`与`--run`一起强制重建，仍保留当前parameters。配置`--reset`才恢复原值，正常接入不使用。
-
-配置导出自动迁移旧完整格式，当前skills／items为v3、battle／rewards为v2：只保存身份与修改项，来源指纹在文件级集中登记。普通导出补齐新增角色／怪物的技能、属性、AI及奖励，保留旧调参并剔除等于默认值的冗余项；未知编号、身份或来源漂移在任何写入前拒绝。`--reference` <skills|battle|rewards|items> [编号]只读显示来源默认值与生效值，不生成或修改配置。配置`--reset`清空修改项并恢复original模式。
-
-正式游戏页面仅在启动时读取并编译配置，菜单、战斗与技巧测试复用启动快照并取得独立副本。修改参数或切换original／debug模式后刷新页面；返回标题、开始新游戏和读档不会重新加载。导出／reference工具每次调用仍读取当前文件。
-
-`--check`须与`--run`一起使用，在成功后执行verify_current；8767服务需要先开启。
-
-`--preflight`独立使用，检查已有源表的接入能力，不导出、不写报告、不核验原媒体；新地图没有源表时先构建chapter-story。显式入口发现未知能力返回非零退出码；旧隐式NPC仅提示，显式npcs进入阻断检查。
-
-`--target all --run`选择所有目标，仍按缓存复用；`--force`才强制执行。日常文档维护无需重导素材。
-
-## 登记驱动的生产
-
-`runtime_content.json`为唯一运行接入选择；运行素材导出器直接读取它选择地图／角色／程序，来源解析器再从已生成数据编译最终运行登记。
-
-fire-valley-index独立于运行登记扫描`Map/*.dat`、`Map/*.TLK`及`Animate/*.anm`（扩展名不区分大小写）；中文来源地图名提名种子，DAT真实连接确认同来源族内地图，编号前缀只限定候选范围。生成`web/data/library/fire_valley.json`和`evidence/fire_valley_20261024/source_index.json`，不执行剧情或开放地图。索引保留地图变体、NPC原槽／加载站位／可见性、TLK分支／选项、跨地图旗标和ANM位置变更；DAT+0x8A加载入口与+0x13A到达入口独立登记。能力缺口按原字段／指令定位，完整可玩程度仍由正式登记、预检查和实际流程验收决定。
-
-story-media从登记ANM及显式来源准备集合m17010-3／m17030-1的原74字节指令读取opcode60视频、opcode62非空声音；`--source-program`可追加只准备不登记的ANM。生成`data/story_media.json`与`evidence/story_media_export.json`，保留原文件名小写键及逐指令引用，不推断剧情可达或演出时序。BIK转浏览器视频逐帧完整解码核对尺寸／帧率／帧数／时长与SSIM，音频核对完整PCM；原.wav若实为MP3，字节复制至真实.mp3后缀。`--reuse-existing`仍执行完整验证；`--verify-only`只读重核来源、清单、媒体SHA和完整解码，不重写媒体或报告。
-
-chapter-maps按`maps.export`归属准备地图、NPC、物件和源物理出口；chapter-story保留全部chapter资产地图的DAT表，按story和programs准备TLK／ANM、被引用道具与登记玩家初值。无TLK且无物件的通路同样需要原入口标记；records为空，不生成虚构对白或自动开放入口。
-
-white-forest-index复用来源解析与跨区域调用扫描，以原地图名称精确匹配“白木森林”，输出`data/library/white_forest.json`及`evidence/white_forest_20261026/source_index.json`；不纳入“里白木森林”。索引保留全部96个原物件记录与原字节。`export_white_forest_index.py`同样支持`--check`／`--query`／`--map`／`--flag`，只读查询不开放运行内容。
-
-地图没有TLK但登记了keyed-chest时，chapter-story仍导出真实DAT物件／入口表，明确dialogue_status=source-file-absent、source=null与零条对白；不虚构TLK或空剧情流程。物件奖励与钥匙定义从已登记CF4的原F2与十个奖励槽推导。
-
-story-check在源表、初始角色和怪物准备后检查已登记的进入剧情、触发器、箱子、休息、出口和显式NPC的可达分支，报告地图／入口／记录号，阻断未实现机制；最终content再次检查。
-
-battle-stages按stages选择新舞台的SCN／DGP，默认ID路径，不维护每个舞台的素材名单。当前支持SCN v2／mode4及已恢复的零镜头规则；专用旧产物默认existing，可显式export:"source"使用通用导出。
-
-enemies按登记敌人实际学习表生成属性／AI／反应／状态／图层；enemy-rewards读取经验和奖励槽；encounters读取登记地图的DAT／STG池。音频按登记地图及动作生成。
-
-party-skills读取新enemy清单组合正式party反应／表现；敌我复用源图集和独立像素校验，历史forest_full_battle_view／forest_reactions保留。
-
-content目标贯通玩家、怪物、地图、剧情、配置、资源图集、声音、菜单／对白／字幕字体、地图光效、目录与最终登记。新增技能／道具数值仍只进入统一config。
-
-已恢复格式、未知指令／状态／掉落、局部遇敌分区和新舞台的边界见[config_guide.md](../config_guide.md)；登记不会补实现。
-
-## 前置与来源
-
-按任务准备环境：静态服务使用Python 3标准库；verify_phaser需要`Node.js`，脚本内部会调用当前Node执行语法检查。
-
-素材导出另需Pillow；startup-media／story-media还使用NumPy；音视频转换需要FFmpeg／FFprobe；GDI字体导出和部分原版观察需要Windows。完整回归还依赖当前Node的node:test／WebCrypto及各专题工具所需环境。
-
-可先运行python3 `--version`和node `--version`；涉及媒体时再核对所需Python包、FFmpeg／FFprobe或Windows组件。当前尚无统一锁定环境与已验证的跨平台首次安装命令，单个实验依赖文件不能代表全部构建环境。
-
-本入口接管已有基础内容与来源台账，不是从空目录自动重建原游戏的安装器。初始路线／基础资源提取、原资源和save_analysis仍有实际依赖；基础导出器已位于本目录，不再读取prototype。
-
-声明原输入的新步骤可建立首份台账；其他步骤需要既有来源报告。路径、哈希、原像素／解码或未知格式校验仍由对应工具负责。
-
-来源与历史材料的用途、准备及恢复统一见[local_materials.md](../../local_materials.md)。材料不足时先执行无素材预检查；仅列计划不能证明首次构建可执行，`--target` all `--run`也不会自动补齐来源。首次构建任务和完成标准见[validation_design.md](../../assessment/validation_design.md)。
-
-生成的运行表和素材不手工调参；普通配置导出迁移已核对基线并保留parameters。仅参数变化无需重建图集。
-
-## 构建台账
-
-旧台账中的已迁移源码、清单、素材和证据路径按`layout_migration.json`解析到正式目录；原记录及SHA保持不变，迁移映射也参与构建签名。
-
-声明依赖与签名由`build_runtime.py`维护，状态写`evidence/build_state.json`；每次运行在`evidence/builds/`<UTC时间-唯一ID>/记录`run.json`、实际步骤日志及`步骤.resources.json`资源明细。状态、单资源缓存和运行清单以临时文件原子替换；失败不会登记为已完成资源。
-
-历史来源清单位于`web/data/source`，保留原字节与历史引用；当前正式清单使用/assets路径。迁移映射在`layout_migration.json`，旧原型证据迁到`evidence/source`。
-
-日期命名证据如被导出器重新生成，构建入口先保存到该步骤generated-evidence，再恢复旧文件原字节。失败也保留诊断；不要将旧报告重绑成新观察。
-
-当前剧情台账为`chapter_story_export.json`，怪物为`enemy_content_export.json`／`enemy_rewards_export.json`，遭遇为`encounter_export.json`；具体reports／inputs／outputs以STEPS为准。
-
-旧五份提取基线保存在`evidence/export_tools_20261022/legacy_extractions`并按历史SHA核对，当前生成文件按新台账检查。
-
-直接执行历史导出器不经过日期保护，需要先查看其代码和输出范围。
-
-## 目录迁移与基础来源
-
-共享解析器位于`remake/runtime/tools/source`：`dgp.py`、`map_data.py`、`map_objects.py`、`combat_resources.py`。
-
-移动模块、解码器、基础导出器和三份基础清单已随代码迁移；`web/data/source`中的清单保留原始导出字节和历史引用。它们是构建来源，不是新增地图或剧情的编辑入口；内容登记仍使用`web/data/runtime_content.json`。
-
-正式素材统一使用/assets/路径。正式服务8767只挂载`remake/runtime/web`；实验单独运行python3 -B `remake/prototype/serve.py`，默认8765，复用正式模块和媒体。
+旧图集仍可运行，重新分组收益须实际重建页面；不手改group冒充。完成后核`--assets`并做正式战斗冷／热、首次行动和离场释放观察。
 
 ## 旧环境升级
 
-以下命令从新版本项目根目录执行。迁移脚本只复制本地媒体和证据，源码及基础清单由版本更新提供。
-
-1. 默认只盘点，不写文件：
+1. 在新项目根目录盘点旧媒体／来源：
 
    ```console
    python3 -B remake/runtime/tools/migrate_local_materials.py
    ```
 
-   从另一个旧项目交接时，先对该目录盘点：
+2. 确认来源后加`--run`复制；跨项目在两次命令均加`--source-root "/path/to/old-project"`。
 
-   ```console
-   python3 -B remake/runtime/tools/migrate_local_materials.py --source-root "/path/to/old-project"
-   ```
+3. 脚本将prototype旧assets复制到runtime/web/assets、旧evidence复制到runtime/evidence/source；原文件保留，同SHA复用，冲突不覆盖。记录写evidence/layout_migration，files=0只表示该来源没找到可迁移文件，不表示新环境素材齐全。
+4. 运行`verify_phaser.mjs --assets`，启动正式服务并按[运行说明](../README.md)核受影响剧情／战斗／保存。无媒体时限定代码与示意图检查；迁移不自动完成Windows实机、首次构建或全主线验收。
 
-2. 按相同来源执行复制：
+源码和三份基础清单随版本更新提供，迁移脚本不复制它们。映射见`layout_migration.json`，来源清单保留旧字节和历史路径，不作为新的手工编辑表。
 
-   ```console
-   python3 -B remake/runtime/tools/migrate_local_materials.py --run
-   ```
+## 工具导航与生产归属
 
-   跨目录交接使用：
+[tool_index.json](tool_index.json)维护工具分类、共享导入者及恢复映射。新增／迁移工具时人工核path、role、imported_by；`sync_tool_docs.py`仅从build_runtime.STEPS和plan更新目标数量、content_plan、build_targets及下方依赖表。
 
-   ```console
-   python3 -B remake/runtime/tools/migrate_local_materials.py --source-root "/path/to/old-project" --run
-   ```
+| 分类 | 用途 |
+| --- | --- |
+| daily-entry | 常用构建、检查和维护入口 |
+| registered-build | 统一构建生产步骤 |
+| shared-current／shared-helper／source-decoder | 当前复用助手与只读解析器 |
+| standalone-check | 不属于构建的独立检查 |
+| specialized-evidence-check | 旧观察及专题复核，按其原范围解释 |
+| fixture-or-observation-preparation／source-observation | 隔离样本准备、原版观察及只读记录 |
+| independent-source-export | 基础来源或旧样本生产，分类不代表可以删除 |
 
-   `remake/prototype/web/assets` → `remake/runtime/web/assets`
+基础导出器extract、export_movement、export_combat_lab、export_combat_presentation已在本目录；正式生产不引用prototype。各自仍需原输入及保留证据，使用前核范围。共享解码器在`source/`，媒体统一`web/assets/`。
 
-   `remake/prototype/evidence` → `remake/runtime/evidence/source`
+每份共享生成表只有一个生产者；例如状态表由enemies生成，party-skills只校验引用。content贯通地图、剧情、怪物、玩家、配置、表现、声音、字体和最终登记。独立原城镇菜单素材使用native-services目标，已经包含在content中。
 
-   原文件保留，同SHA目标复用；发现同名不同内容报错，不覆盖。存在旧文件时，`--run`会把来源、目标、SHA及处理状态记录到`remake/runtime/evidence/layout_migration/`<UTC时间>.json。
+## 构建目标与直接依赖
 
-   files=0表示选定来源中未找到可迁移文件；该结果不检查新目录中的素材是否齐全。迁移也不会生成缺失媒体或补全原版输入。
+自动区由sync_tool_docs.py维护，不手工改表格。
 
-3. 素材齐全的环境检查新路径、图集、指纹和尺寸：
-
-   ```console
-   node remake/runtime/tools/verify_phaser.mjs --assets
-   ```
-
-   只有代码时可省略`--assets`运行预检查，并使用正式服务的`/phaser-preview.html`；报告中的`assets.passed`仍反映素材实际情况。
-
-4. 启动正式服务，再按[README.md](../README.md)的正式路线验证剧情、战斗和存读档：
-
-   ```console
-   python3 -B remake/runtime/serve.py
-   ```
-
-   真实素材实玩、Windows启动与首次构建的完成情况见[validation_design.md](../../assessment/validation_design.md)；迁移本身不改变这些验收结论。
-
-## 基础导出入口
-
-```console
-python3 -B remake/runtime/tools/extract.py
-python3 -B remake/runtime/tools/export_movement.py
-python3 -B remake/runtime/tools/export_combat_lab.py
-python3 -B remake/runtime/tools/export_combat_presentation.py
-```
-
-这些独立入口读取对应原输入和保留来源证据，写入`remake/runtime/web/data/source`、`remake/runtime/web/assets`及`remake/runtime/evidence/source`；构建边界见“前置与来源”。新增正式内容继续使用`build_runtime.py`，不在prototype新增生产工具。
-
-## 工具导航
-
-分类见[工具索引](tool_index.json)，记录构建目标、共享导入关系及独立工具用途。新增／迁移工具时人工维护path、role、imported_by及历史恢复字段；不根据命名猜测用途。
-
-`sync_tool_docs.py`从`build_runtime.STEPS`及plan生成registered_steps、content_plan、各工具build_targets和下方依赖清单；其余字段保留。默认同步，`--check`发现过期内容或索引遗漏时非零退出，不运行导出、不改素材或证据。实际构建计划始终以`build_runtime.py`为准。
-
-daily-entry：常用构建／检查／文档维护入口；standalone-check：不属于统一构建的独立检查。
-
-registered-build：统一构建中的生产步骤。
-
-shared-current：当前步骤或检查仍导入的素材助手。source-decoder：source/中的共享只读DGP、DAT、地图物件与CHR解析器；正式导出与实验验证共用。
-
-specialized-evidence-check：专题验收和日期观察复核，按各工具代码检查范围；不是每日全部执行的命令。
-
-fixture-or-observation-preparation：创建独立样本或原版观察副本，不等于正式获取／入队流程。
-
-source-observation：只读检查或记录原版，原目录输入保持只读。
-
-`resource_inventory.py`盘点原资源目录、文件头、`GAME.exe`的PE导入和已有证据索引，不解码自定义格式；生成报告统一保存在`runtime/evidence`，不写assessment。
-
-`export_map_shadows.py`也是map-effects构建步骤的共享助手：从现有`opening/chapter`角色清单及事件NPC取动作组，只新增`assets/map_shadows`与`data/map_shadows.json`，逐帧核对DGP geometry[41]原掩码，保留人物main／intrinsic PNG。按动作全部帧／方向的非空包围盒并集裁剪，shadow_geometry保存原帧偏移及紧凑尺寸；每帧重新展开后与独立原掩码逐像素核对，全空动作跳过。独立命令写`movement_optimization_20261023/shadow_export.json`，不运行全量构建。50%黑色alpha近似原16位背景RGB分量减半；主图／阴影／加色层保持同源帧、锚点及人物depth。
-
-independent-source-export：独立基础来源或旧样本生产入口，可能仍用于初始提取；分类不表示可删除。
-
-## 当前构建目标与直接依赖
-
-下方标记内内容由`sync_tool_docs.py`生成，不手工修改。
+<details>
+<summary>展开全部构建目标</summary>
 
 <!-- 自动生成：构建目标开始 -->
 
@@ -457,9 +194,11 @@ independent-source-export：独立基础来源或旧样本生产入口，可能�
 
 <!-- 自动生成：构建目标结束 -->
 
+</details>
+
 ## 测试职责与运行
 
-普通任务默认使用 `task`，按相对 HEAD 的工作区、暂存和未跟踪文件选择检查；仅文档变化不启动游戏回归。执行前可以只查看范围和原因：
+普通任务默认task，按相对HEAD的工作区、暂存及未跟踪改动选择；先查看原因再执行：
 
 ```console
 python3 -B remake/runtime/tools/verify_tests.py --list --explain
@@ -468,115 +207,60 @@ python3 -B remake/runtime/tools/verify_tests.py --since HEAD~1 --list --explain
 python3 -B remake/runtime/tools/verify_tests.py --changed remake/runtime/web/core/movement.mjs --explain
 ```
 
-`--changed` 可重复，表示本次验收的显式改动范围；应列全本轮相关变化。`--domain battle` 等参数在实际改动上追加系统范围，可用于干净工作区。代码 import 递归匹配，未识别运行改动保守扩大为便携组；动态内容数据变化第一版仍检查整个便携组，并完整执行已登记入口的能力准入，不按当前旗标删分支。原版解析器变化会额外选来源组并检查其前置。
+`--changed`可重复，须列全相关变化；`--domain battle`追加系统范围，可用于干净工作区。动态数据依赖第一版仍保守选便携整组，原版解析器变化追加source。只改文档不启动游戏回归。
 
-| 档位 | 自动检查范围 |
+| 档位 | 当前自动范围 |
 | --- | --- |
-| `task` 默认 | 受影响的 runtime、content、tooling；共享剧情执行机制变化额外执行 content-full |
-| `phase` | runtime、content、tooling，加对应区域的 content-full；不指定区域时保留全部阶段遍历 |
-| `release` | 除 history 外全部职责组；仍需素材环境及正式浏览器实玩 |
-| `audit` | source、assets、integration、history，需对应原版输入与本地证据 |
+| task | 受影响runtime／content／tooling；共享剧情机制变化另加content-full |
+| phase | 共享便携组及指定区域content-full；不指定区域则全阶段遍历 |
+| release | 除history外全部职责组，需要对应原版／媒体／HTTP前置 |
+| audit | source／assets／integration／history |
 
 ```console
-python3 -B remake/runtime/tools/verify_tests.py --profile phase --region fire-valley --report
+python3 -B remake/runtime/tools/verify_tests.py --profile phase --region ember-city --report
 python3 -B remake/runtime/tools/verify_tests.py --profile release --timeout 1800 --report
 python3 -B remake/runtime/tools/verify_tests.py --profile audit --list
 python3 -B remake/runtime/tools/verify_tests.py --check
 ```
 
-当前支持区域为 fire-valley、white-forest、jade-lake、ember-city。第一版区域参数选择已登记的完整动态遍历，仍保留共享便携规则；它不自动建立阶段事件链，也不代替来源、真实媒体或正式页面验收。
+当前区域为fire-valley、white-forest、jade-lake、ember-city。区域参数选择已登记动态遍历，不自动生成阶段事件链或执行浏览器。
 
-职责清单位于 [tests/suites.json](../tests/suites.json) v2，每个文件只登记一次，并声明层级、缓存资格和环境。保留显式组入口：
-
-| 组 | 范围与前置 |
+| 显式组 | 范围 |
 | --- | --- |
-| `runtime`／`daily` | 运行规则、事务、菜单、时钟和控制器整组；不需要原版安装或真实媒体 |
-| `content` | 内容、配置、运行包及区域关键行为；不含旧区域全部 NPC 的多态遍历 |
-| `content-full` | 区域完整动态遍历；保留全部既有断言 |
-| `tooling` | 验收范围、前置缺失、失败与缓存失效的隔离行为检查 |
-| `source` | 原版字节、独立解码、指令差分与真实地形路线；需要原版输入与声明证据 |
-| `assets` | 真实导出媒体的加载与绘制合同 |
-| `integration` | HTTP、磁盘存档和构建集成；需要对应环境和回环端口 |
-| `history` | 旧录制、交接档及当时生成器复核，不代表本版新实玩 |
-| `all` | 全部组，包含 history；只在明确需要全职责审计时使用 |
+| runtime／daily | 运行规则、事务、菜单、时钟与控制器整组，无原安装／真实媒体 |
+| content | 内容、配置、运行包和关键区域行为 |
+| content-full | 完整区域动态遍历，保留既有保障 |
+| tooling | 选择范围、前置、失败和缓存失效的隔离行为 |
+| source | 原字节、独立解码、指令与真实地形，需要原输入及声明证据 |
+| assets | 实际媒体加载与绘制 |
+| integration | HTTP、磁盘存档及构建，需对应环境 |
+| history | 旧录制／交接生成器复核，不代表新实玩 |
+| all | 全职责含history，仅明确需要时执行 |
 
-```console
-python3 -B remake/runtime/tools/verify_tests.py --suite daily
-python3 -B remake/runtime/tools/verify_tests.py --suite content
-python3 -B remake/runtime/tools/verify_tests.py --suite source --match '*map_collision*' --list
-```
+`--suite`与profile范围参数分别使用，`--match`可定向筛文件，定向结果不冒称完整档位。例：`--suite source --match '*map_collision*' --list`。前置缺失则所选范围不执行、不以skip称通过。
 
-`--suite` 和 profile 范围参数分别使用，避免混淆；`--match` 是显式定向筛选，报告不把它冒称完整档位通过。前置缺失时整次选中范围不执行、不用 skip 冒称通过。
+便携runtime／content／content-full成功结果缓存于runtime/.cache/test_results，第一版绑定全部便携代码／数据／环境；`--fresh`强制执行。来源、真实媒体、HTTP、history及工具自身检查不缓存。`--jobs`默认4，`--timeout`为每文件或准入命令上限；报告区分执行／复用及实际墙钟时间，语言组seconds为文件耗时和。
 
-runtime、content、content-full 的成功结果按文件保存在被 Git 忽略的 `runtime/.cache/test_results`。第一版缓存保守绑定全部便携代码、测试辅助代码、结构化数据和环境，任何相关输入变化都会失效；文档、报告和缓存自身不使结果失效。它暂未实现分地图语义摘要，因此内容增长后的更细粒度失效仍属于后续优化。来源、真实媒体、HTTP、历史和验收工具自身的检查始终执行。`--fresh` 忽略成功结果重新执行，失败、跳过、损坏缓存和运行期间输入变化都不会生成可复用通过结果。
+`--report`只写新的evidence/test_runs目录。`verify_current.py`默认release，与统一入口共用便携结果并核正式资源；旧工作区／归档专项显式加`--legacy-audit`。current_validation.json按scope解读，actual_browser_flow_checked_this_run仍为false，不能代替实玩。
 
-`--jobs` 限制文件并发，默认 4；`--timeout` 是每个文件或内容准入命令的上限。报告区分执行与复用数量，显示本次实际总耗时；语言分组的 seconds 是本次执行文件耗时之和，不是并发墙钟时间。`--report` 写新的 `evidence/test_runs` 目录，保留计划、选择原因、指纹与输出，不覆盖日期证据。
+## 资源与浏览器检查
 
-版本汇总使用 `verify_current.py`，默认 release，与上述入口共用便携结果；阶段／版本汇总另执行 `verify_phaser.mjs --assets`。旧工作区及归档审计显式使用 `verify_current.py --legacy-audit`，不再强制进入每个任务的收尾。
+`verify_phaser.mjs`核固定运行库、入口模块图、JS语法及剧情包，并报告JSON中的资源引用。默认可在code.passed=true、assets.passed=false时成功退出；`--assets`要求媒体齐全且声明SHA／尺寸匹配。`--report`可写runtime/evidence内新路径。
 
-```console
-python3 -B remake/runtime/tools/verify_current.py --profile release
-python3 -B remake/runtime/tools/verify_current.py --legacy-audit
-```
+战斗单帧逻辑路径可由battle_packs解析至图集页，交付不要求重复携带单帧源PNG；地图、菜单、字体和音视频等直接加载媒体仍需提供。
 
-浏览器验收仍从正式 `/` 完成本次受影响的流程，并记录代码、配置与媒体身份。新增 [Phaser 生命周期检查页](../web/tests/phaser_lifecycle.html)，访问 `/tests/phaser_lifecycle.html` 点击运行，验证实际 Canvas、暂停原因、探索／战斗切换、重复创建销毁和纹理清理；使用合成资源，不读写玩家存档。此页通过不等于正式游戏或真实素材已验收。
+正式浏览器从`/`执行受影响流程，素材不足可用`/phaser-preview.html`限定示意检查。`/tests/phaser_lifecycle.html`用合成资源验证真实引擎，其他独立页面见web/tests。截图、时间、界面矩阵和报告要求统一见[测试与验收规范](../../assessment/testing_strategy.md#界面与动态表现)。
 
-同机制内容优先扩充数据与共享案例；新通用机制、高风险故障或跨系统边界才扩充行为测试。辅助代码放已提交的 tests/helpers，不导入被忽略 evidence 的执行代码。完整分层、迁移方法和第一版边界见 [测试体系设计方案](../../assessment/testing_strategy.md)。
+## 排错与维护
 
-## 当前检查覆盖什么
+| 现象 | 处理 |
+| --- | --- |
+| 缺原输入／来源台账 | 按报错和步骤声明恢复；不复制未知报告绕过SHA校验 |
+| 登记未编译 | content构建后刷新；仅catalog不足以编译最终登记 |
+| 未知条件、动作或物品行为 | 核原来源，先恢复共同处理器再登记，不改raw或放宽校验 |
+| original拒绝参数差异 | 恢复修改项，或明确用debug验证；模式不重置玩家进度 |
+| 媒体缺失／SHA变化 | 查本次步骤日志，针对性重建；路径迁移同步工具与索引 |
+| 历史观察指纹不同 | 保留原范围，新观察另建目录；不改旧SHA获得通过 |
+| 文档同步导入失败 | 准备Pillow及构建声明实际读取的原文件；本环境缺材料时说明未执行，自动区保持来源并静态核对 |
 
-Phaser无素材预检查：node `remake/runtime/tools/verify_phaser.mjs`。核对固定运行库指纹、正式／预览入口模块图与JS语法，并报告现有JSON所引用的素材缺失。默认允许缺失素材，输出分别标明`code.passed`与`assets.passed`。
-
-有素材交接检查：同一命令加`--assets`，要求素材齐全且已声明SHA／PNG尺寸匹配。`--report` <`runtime/evidence`内路径>可保留完整JSON报告。浏览器预览为`/phaser-preview.html`，正式流程验收仍从/进入。
-
-战斗单帧逻辑路径按`battle_packs.json`解析到实际图集页，检查沿用BattleResources的图集定义校验；运行交付无需在图集之外重复提供这些单帧源PNG。地图、菜单、字体、音视频等直接加载的媒体仍须提供。
-
-无素材时默认命令可在`code.passed`=true、`assets.passed`=false时成功退出；`--assets`在素材缺失时失败。两者都不表示完整主线已通过实玩验收。
-
-verify_current默认汇总release自动检查与正式资源完整性，写新的test_runs报告及带scope的current_validation.json；passed仅表示该自动范围通过，actual_browser_flow_checked_this_run仍为false。原输入、旧资产／台账、HTTP和归档的旧工作区审计保留在--legacy-audit，其历史兼容输出仍为current_validation.tap与current_python_tests.log。
-
-检查需要8767服务，数量和时间以报告为准。它核对历史浏览器观察及指纹，不重播UI，不运行原`GAME.exe`，不会自动完成后续剧情。
-
-release缺少原版输入／所选来源前置时明确未通过；--legacy-audit还可能因旧evidence缺失终止。普通task不以这些历史材料为前置，不沿用旧current_validation冒称本版Phaser或浏览器通过。
-
-规则／事务变化运行对应回归；实际页面／动画变化另做浏览器观察。独立页面在`web/tests`，包括`battle_loading.html`、`dialogue_alignment.html`和`startup_storage.html`，各有其限定范围。
-
-verify_*中的旧阶段门槛不能替代当前回归；写`--record`的新现场按工具说明生成，已冻结观察不重写。
-
-## 常见问题
-
-全量内容补缺：source-catalog遍历全部CHR并核对EOF／逐字节重组，source-magic保留`System.MAG`的41条原记录，items继续维护原道具目录。configuration只补齐新条目并保留旧ID及调参，content-library生成来源与统一配置的关联索引；content构建已包含这些步骤。需要保留的REA证据及边界见`evidence/source_library_20261023`，原始游戏输入只读。
-
-独立复核：`export_source_catalog.py` `--check`、`export_source_magic.py` `--check`及`build_content_library.mjs` `--check`。前两项核对当前原输入及保留原生证据，最后一项核对索引与当前来源／配置。独立工具不导出媒体、不自动开放角色／技能或改写存档。
-
-登记未编译：执行content `--run`后刷新；只运行catalog不会编译最终登记。
-
-缺少原输入或来源台账：按报错恢复对应来源／基础提取；不跳过来源校验。
-
-未知行为：先实现并验证规则，再登记；不改raw记录或放宽校验来绕过。
-
-配置原版模式拒绝差异：恢复parameters原值，或明确使用debug验证；模式不重置用户进度。
-
-生成资源缺失或指纹变化：检查对应步骤日志及产物，针对性重建。文件路径迁移必须同步工具、索引与引用。
-
-历史证据不匹配：只表示代码时点不同，需要新观察；不改旧报告使其看起来匹配。
-
-## 资料维护
-
-来源证据、现场记录及历史归档的目录、准备方式与缺失处理统一见[local_materials.md](../../local_materials.md)；可选本地索引或旧压缩包不作为当前命令的唯一说明。
-
-assessment分别维护当前计划[validation_design.md](../../assessment/validation_design.md)、界面验收方法[menu_alignment_workflow.md](../../assessment/menu_alignment_workflow.md)及区域重制经验[region_remake_workflow.md](../../assessment/region_remake_workflow.md)；旧兼容跳转页已清理。清理文件及迁移工具的原路径、SHA与Git恢复版本见`tool_index.json`的retired_documents和工具previous_path字段。
-
-`verify_runtime_config.py`的复核文字报告输出到`evidence/runtime_config_recheck.txt`，不再生成assessment下的旧跳转页。
-
-## 剧情运行包
-
-`export_story_packages.mjs`从已保留的TLK／ANM来源台账与`runtime_content.story`登记的独立事件／任务编译`web/data/story`；原字节一致性在构建时核对，地图剧情按需加载。content最终编译自动执行此步骤；只改独立事件、任务或story登记可用`build_runtime.py` `--target` story-pack `--run`，不需要原版安装。地图、角色或ANM登记变化仍需完整content构建。
-
-只读核对剧情包生成结果：
-
-```console
-node remake/runtime/tools/export_story_packages.mjs --check
-```
-
-`verify_phaser.mjs` 已包含该检查。新增文字还需相应字体构建。完整编写规范与现有任务样本见[story_guide.md](../story_guide.md)。
+文档删除／迁移在tool_index的retired_documents登记原路径、SHA、替代位置及Git恢复版本；历史资料和现行构建输入不能仅按日期删除。旧verify_*只复核其原时点，不能作为当前完整版本验收入口。

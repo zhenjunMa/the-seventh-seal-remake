@@ -234,12 +234,13 @@ def verify():
     # The cleanup's complete before/after proof is historical; current code is allowed to evolve.
     # Source resources, retained assets and archive members remain checked above.
     assert not (RUNTIME/'tools/update_forest_combat_docs.py').exists(), 'Retired document writer returned'
-    docs = ['README.md', 'AGENTS.md', 'runtime/README.md', 'runtime/architecture.md', 'runtime/config_guide.md', 'runtime/tools/README.md',
-            'prototype/README.md', 'assessment/validation_design.md', 'assessment/menu_alignment_workflow.md', 'archive/README.txt']
+    docs = ['AGENTS.md', 'runtime/README.md', 'runtime/architecture.md', 'runtime/config_guide.md', 'runtime/tools/README.md',
+            'prototype/README.md', 'assessment/validation_design.md', 'assessment/testing_strategy.md', 'archive/README.txt']
+    assert (ROOT/'README.md').is_file()
     assert all((REMAKE/name).is_file() for name in docs)
     prototype_readme = (REMAKE/'prototype/README.md').read_text(encoding='utf-8')
     for ref in re.findall(r'\]\(([^)]+)\)', prototype_readme):
-        assert (REMAKE/'prototype'/ref).resolve().is_file(), f'Broken documentation link: {ref}'
+        assert (REMAKE/'prototype'/ref.split('#', 1)[0]).resolve().is_file(), f'Broken documentation link: {ref}'
     # Python syntax validation does not regenerate __pycache__.
     python_paths = [*RUNTIME.glob('tools/*.py'), *RUNTIME.glob('tools/source/*.py'), *RUNTIME.glob('tests/test_*.py'), REMAKE/'archive/restore_snapshot.py', RUNTIME/'serve.py']
     for path in python_paths: compile(path.read_text(encoding='utf-8-sig'), str(path), 'exec')

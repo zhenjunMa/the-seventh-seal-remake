@@ -1,276 +1,120 @@
-# 第七封印 · 当前实现架构
+# 第七封印 · 实现架构
 
-更新：2026-10-29；路径以runtime为基准。
+路径以`runtime`为基准。本文维护模块、状态和生命周期边界；字段与接入步骤见[配置指南](config_guide.md)、[剧情指南](story_guide.md)，当前范围见[开发计划](../assessment/validation_design.md)。
 
-## 目录
+## 启动与模块分工
 
-- [启动与分层](#启动与分层)
-- [正式与实验的边界](#正式与实验的边界)
-- [Phaser目录（相对web）](#phaser目录相对web)
-- [时钟与暂停边界](#时钟与暂停边界)
-- [三个状态边界](#三个状态边界)
-- [内容生产与运行登记](#内容生产与运行登记)
-- [数据分工](#数据分工)
-- [地图、剧情与演出](#地图剧情与演出)
-- [战斗规则与表现](#战斗规则与表现)
-- [菜单、保存与声音](#菜单保存与声音)
-- [扩展位置](#扩展位置)
-- [当前边界与维护](#当前边界与维护)
+`serve.py`提供`web/`静态文件和固定存档接口；`web/app.js`创建共享`state/actions`并装配控制器，最后由boot加载内容、配置和视图。固定Phaser 3.90.0随代码提供，正式入口使用Canvas、640×480逻辑平面，无CDN依赖。
 
-## 启动与分层
+| 位置 | 职责 |
+| --- | --- |
+| `web/controllers/` | boot、输入、地图、剧情、菜单、经济服务、战斗、存档及诊断的浏览器连接 |
+| `web/core/` | 来源校验、规则、资格、RNG、事务和可保存状态 |
+| `web/*_view.mjs` | 菜单、对白及其他既有界面的焦点、局部Canvas／DOM与显示 |
+| `web/phaser/runtime.mjs` | 引擎、阶段到场景映射、暂停原因、缩放、同步截图和释放 |
+| `web/phaser/scenes/` | 探索与战斗场景，各自拥有update、动作时钟和显示对象 |
+| `web/phaser/actors/`、`components/` | MapActor、SpritePose和ActionClock；只持有可重建的显示状态 |
+| `web/phaser/rendering/` | 纹理引用缓存，以及将战斗绘制命令适配为Phaser对象的BattleSurface |
+| `tools/`、`tools/source/` | 构建与只读解析；输入到`web/data/`和`web/assets/`的生产链 |
 
-`serve.py`提供静态文件和固定存档接口：/只映射web；GET／PUT `/api/saves/00`至19及quick读写`../saves/SaveGame00.json`至`19.json`与`QuickSave.json`，GET `/api/saves`批量列出21个槽的存档／空／损坏状态。manual兼容00，旧`SaveGame0.json`仅作为00的后备读取来源。封装校验后在同目录临时写入并原子替换，创建及覆盖使用If-None-Match／If-Match防止并发误覆盖；仅接受本地同源请求，不提供原程序、原存档、证据目录或任意文件路径。
+Phaser关闭内建输入和音频，由既有控制器统一处理。规则不写进Sprite、view或`app.js`；实验复用方向为prototype→runtime，正式运行及构建不读取实验目录。
 
-Phaser `3.90.0`运行库固定在`web/vendor/phaser`，保留MIT许可和SHA清单；直接随静态服务提供，不依赖CDN或npm安装。
+## 状态与提交
 
-`web/app.js`创建共享state和actions，装配services、native_services、map、story、menu、session、battle、inspection、input、boot控制器，再调用boot。
+| 持有者 | 状态与提交边界 |
+| --- | --- |
+| WorldStore | 地点、队伍与候补、资源／成长、背包、旗标、队列、技巧／晶石、当前地图NPC块、遇敌RNG及奖励去重。变更由draft和revision提交。 |
+| SceneController | 目标地图准备、进入及回滚。先租用和校验资源，再提交地点／布局；失败保留原世界和场景，过期revision不得覆盖新进度。 |
+| BattleController | 本场人物、充槽、按人物保存的指令、动作、资源保留和生命周期。通过planning／commit一次性把结果交还世界。 |
+| 启动配置会话 | boot读取并编译一次配置，菜单、战斗与技巧测试取得独立副本；刷新页面才重新读取。人物当前资源及成长仍来自最新世界。 |
+| 浏览器偏好与临时视图 | 音量、光标、完成标记独立于世界；焦点、动画、租约和加载锁不进入游戏进度。 |
 
-app先创建`phaser/runtime.mjs`中的PhaserRuntime。runtime场景只推进共享转场与界面；exploration和battle分别在自己的update中调用探索／战斗适配器并绘制，地图控制器不再推进战斗。原SceneController继续负责世界地点准备／提交／回滚。
+普通与快速存档使用封装校验、临时文件和同目录原子替换；固定00～19与quick接口采用If-Match／If-None-Match防止并发覆盖。服务仅接受本地同源请求，不暴露原程序、原存档、evidence或任意文件路径。旧格式与玩家操作见[运行说明](README.md#保存和兼容)。
 
-controllers处理浏览器流程和系统连接；core处理来源校验、资格、规则与事务；视图负责输入层级和绘制。新规则不写入`app.js`或按人物名字分支。
+## 时钟、暂停与取消
 
-input连接fullscreen适配器：点击全屏后仅申请锁定Escape，短按沿用游戏返回；全屏内保留退出按钮与长按Esc提示。退出全屏／释放输入时解除锁定，不支持或拒绝权限时在画面内提示。
+| 时钟 | 正式入口的使用者 |
+| --- | --- |
+| `exploration.clock` | 地图、ANM、物件动作、对白打字／画像、字幕、剧情wait；序章加载显式使用此时钟 |
+| `battle.clock` | 充槽、动作接触、生命周期、结算演出与跳过输入 |
+| `runtime.clock` | 共享入战转场和默认加载展示 |
 
-boot读取目录、内容登记、来源数据、配置和界面清单，准备共享视图及世界／场景／战斗入口。新增控制器通过同一`state/actions`连接。
+ActionClock由所属Phaser场景的delta推进；休眠／暂停不推进，唤醒／恢复首帧丢弃delta。页面隐藏、手动暂停和错误挂起采用原因集合，全部解除才恢复。战斗按累计时间执行20ms逻辑步，保留余量、卡顿不丢步，结束或中断立即停止补步。
 
-## 正式与实验的边界
+`controllers/story.playStory`为序章、到达剧情、NPC和物件建立唯一StoryPlayback，嵌套TLK／ANM共享信号。暂停时不接受对白确认；取消／错误阻止后续指令与提交，并清理对白、字幕、临时演员和按键。异步返回须先核对会话和信号；pagehide及引擎错误中止会话。
 
-正式生产链：原版只读输入→`tools/source`解析器与tools导出器→`web/data`及`web/assets`→正式游戏。
+独立工具视图可有浏览器计时退路；正式入口注入场景时钟。菜单／启动页仍接收绝对now，媒体持有独立句柄和暂停处理，其完整全局边界按计划复验。
 
-实验复用方向：prototype→runtime的正式模块、媒体和基础清单。正式运行与构建不读取实验目录。
+## 内容生产与数据归属
 
-共享移动位于`web/core/movement.mjs`；DGP／地图／CHR只读解析位于`tools/source`；extract、export_movement、export_combat_lab和export_combat_presentation位于tools。正式媒体统一位于`web/assets`，正式素材URL使用/assets/。
+```text
+原版只读输入 → tools/source与导出器 → 来源表／媒体
+runtime_content.json＋web/content → 能力检查与内容编译 → 运行登记／剧情包
+来源表＋data/config稀疏参数 → 启动配置快照 → 世界规则与视图
+```
 
-`web/data/source`中的`manifest.json`、`combat_manifest.json`、`combat_presentation.json`是迁入的基础导出清单，保留原字节及历史来源引用；当前正式运行清单已使用新路径及匹配的文件哈希。新增内容的编辑登记仍是`web/data/runtime_content.json`，数值编辑仍在`web/data/config`。
+`data/runtime_content.json`是唯一编辑登记；`content_registration.py`直接读取它选择生产输入。chapter-maps／chapter-story准备来源，story-check遍历显式入口的完整可达分支，未知条件、变更、演出或资源能力阻断生产；最终内容编译再次检查。
 
-prototype自有服务默认8765，只读挂载正式模块、媒体和基础清单供实验复用，不提供存档写接口；正式服务默认8767，只挂载web。
+`export_content_registry.mjs`生成`data/runtime_content.mjs`，boot比较编辑定义快照并拒绝未编译登记。添加登记不自动入队、学习、发奖或实现机制。
 
-旧媒体及来源证据的迁移映射在`tools/layout_migration.json`；复制与交接步骤见[README.md](tools/README.md)的“旧环境升级”。evidence中的来源／台账仍属于当前构建依赖，目录分离不代表首次构建已打通，历史浏览器观察也不能作为当前代码重播。
+| 数据 | 职责 |
+| --- | --- |
+| `data/config/` | 唯一数值编辑位置，身份与来源指纹只读；稀疏`parameters`合并到来源默认值 |
+| `data/library/`及`data/items.json` | 全量静态来源与按原编号的配置引用；来源收录不等于可执行 |
+| `data/party_*`、`forest_*`、`enemy_*` | 来源及可执行输入；部分forest命名保留兼容，不另作手工调参表 |
+| `data/maps/`、`assets/maps/` | 地图结构与媒体；catalog保存资源身份，运行登记限制开放交互 |
+| `data/chapter_story.json`等来源表 | 保留原记录、偏移与字节，供来源及仍需原记录的运行适配核对 |
+| `web/content/`、`data/story/` | 前者为独立事件／任务编辑内容，后者为生成的共享、分地图和序章运行包 |
+| `data/source/`、`tools/layout_migration.json` | 历史基础清单与迁移映射；原字节不重写成新验收 |
 
-## Phaser目录（相对web）
+原来源／媒体和部分台账不随Git提供。生产依赖、首次构建限制与历史恢复见[本地资料](../local_materials.md)。
 
-- **`phaser/runtime.mjs`**：引擎创建、阶段到场景生命周期的映射、暂停原因、缩放、同步截图和释放。探索／战斗切换使用sleep／wake，菜单／加载保留画面并pause，主菜单与启动阶段休眠游戏场景。
+## 探索与剧情
 
-- **`phaser/scenes`**：exploration_scene与battle_scene，分别拥有update、动作时钟和显示对象；shutdown与destroy都清理自有对象、纹理引用和待执行任务。
+地图控制器提供加载、视口、移动、NPC与交互适配，由探索场景update驱动。`MovementMap`处理地形及连续脚底扫描／滑墙；`map_locomotion`统一玩家、剧情和普通NPC的源速度与按距离步伐。
 
-- **`phaser/actors/map_actor.mjs`**：可销毁重建的地图人物／物件显示组合，持有SpritePose。
+显示、碰撞和交互距离共用NPC连续显示位置。NPC被玩家阻挡时保留目标和路径、暂停源步进，玩家让开后继续；原自主选择与持久遇敌RNG分开。身体受阻反馈只影响临时显示，不改变逻辑位置、阴影、相机、出口、遇敌或存档预览。原对角接点及障碍入口的兼容规则见[区域方法](../assessment/region_remake_workflow.md#来源规则速查)。
 
-- **`phaser/components`**：sprite_pose适配原帧／光层和可选的逐帧阴影；action_clock由所属Phaser更新步的delta推进，负责源动作等待、并发和取消。探索演出用探索时钟，战斗规则与表现共用战斗时钟，共享转场用runtime时钟；Sprite不额外启动命中时钟。
+`map_presentation`产生只读显示描述；MapActor／SpritePose按地面Y组合逐帧阴影、主层与加色层。`map_scene_view`保留给缩略图和几何对照，OpeningView提供演出描述与兼容绘制。阴影alpha等现有适配不声称原16位混色等价。
 
-- **`phaser/rendering`**：texture_cache管理纹理引用，battle_surface将既有绘制命令适配为Phaser对象。
+TLK、自编事件和旧核对事件统一编译为StoryFlow，由`StoryFlowRunner`执行；ChapterRunner提供世界事务与游戏行为。`events.mjs`只保留来源核对适配，正式入口不使用旧native-entry提交。
 
-- **`phaser/preview.mjs`与`phaser-preview.html`**：独立示意素材验证入口，不进入正式内容登记。
+地图到达`maps.entry`与加载布置`maps.setup`职责不同：前者只在真实进入时与地点一起提交，后者在准备、恢复和缩略图时只读投影NPC。读档优先恢复目标存档的世界和NPC块，不重播到达事件。普通换图重新加载来源布置，不永久缓存各图NPC。
 
-- **`vendor/phaser`**：固定版本运行库、许可及`manifest.json`。controllers、core、data、assets及导出工具继续保留原位置。
+StoryRepository启动只读索引／共享包，地图与序章按需读取；四图缓存保护当前和准备中的图。多图ANM按真实加载和调用关系租用资源，共享程序在最后持有者释放后回收。任务阶段从既有世界事实推导，奖励仍在剧情事务提交。
 
-截图临时选择可见场景，完成后恢复原模式，不推进时钟或世界。
+剧情战使用私有WorldStore，正常结果合入外层draft；后续演出失败仍回滚整条事件。队友入队／离队由`party_members`统一处理，候补保留原实例与成长，四槽不压缩，满队不强制替换。
 
-## 时钟与暂停边界
+终章请求由完整演出提出，世界提交后切标题并禁止resume；到达事件经`SceneController.afterCommit`衔接。该路径可保留隐藏控制角色的原坐标，不增造归位传送；完成标记单独保存在浏览器，不自动写游戏存档。
 
-PhaserRuntime按原因集合管理页面隐藏、手动暂停和错误挂起，全部原因解除后才恢复；场景休眠／暂停时，其update及ActionClock不推进。探索／战斗唤醒或恢复，以及runtime时钟恢复的首帧丢弃该次delta。
+## 战斗与资源
 
-正式ANM、物件演出、DialogueView文字／画像、CaptionView字幕及事件wait使用`exploration.clock`，战斗动作／充槽／生命周期使用`battle.clock`，共享入战转场与默认加载展示使用`runtime.clock`；序章加载显式使用探索时钟。这些时钟由Phaser的delta推进，暂停时不消费等待时长。
+encounters按已登记地图DAT／STG与持久RNG产生敌组。属性、配置、技能和AI共用正式来源；`combat`等core模块负责公式、状态、选招、命中、成长与奖励，view只消费显示描述。
 
-战斗调度按累计场景时间逐个执行20ms逻辑步，保留不足20ms的余量；充槽、状态效果及行动仲裁随每个逻辑步推进，卡顿不丢步，战斗结束或中断立即停止补步。待机绘制仍采样当前场景时间，暂停／恢复沿用场景时钟及首帧丢弃delta的规则。
+编成引用各成员已编译技能，按保存顺序合并动作，分别使用成员的参数、消耗、熟练度和接触来源。学习状态、等级与处理器支持独立门控。指令按人物保留，道具确认时保留数量，原使用接触才消耗；不能借用其他人的指令。
 
-`controllers/story.playStory`为序章、地图入口剧情、NPC、物件和休息事件建立唯一StoryPlayback会话，传递同一个取消信号；嵌套TLK／ANM复用会话。暂停不接收对白确认／选择，恢复首帧不补算后台经过时间；成功、失败及中止分别收尾，统一清理对白、字幕、临时演员、物件预览与按键。取消／错误会阻止后续指令和世界提交，正常事件仍由原事务完成一次提交；pagehide与引擎错误会中止当前会话。
+BattleView通过BattleSurface把裁切、平移、缩放、加色及文本转换为复用的Phaser对象。背景先准备和绘制，人物按固定四槽及地面Y定位，效果／HUD分层。反击、独立载体、死亡和复活使用同一规则时钟；死亡完成才可终局，复活epoch使旧回执失效。显示HP和原死亡类别分别处理。
 
-视图无注入时钟时保留独立展示／工具的浏览器计时退路，正式入口始终注入场景时钟。菜单和启动页的tick仍接收Phaser传入的now，媒体也有独立生命周期；全局暂停剩余边界与完成标准见[validation_design.md](../assessment/validation_design.md)。本轮不提供剧情快进或跳过。
+| 资源持有者 | 职责 |
+| --- | --- |
+| BattleAssetPlan | 从本场角色、实际技能／组合和入战背包推导基础、行动、前瞻、HUD及结算依赖 |
+| BattleResources | 合并请求，核SHA／尺寸，管理位图解码、作用域租约与页面缓存；行动资源保留至独立尾部效果结束 |
+| TextureCache | 持有Phaser纹理引用；图集淘汰同步释放纹理，临时静态纹理有闲置期限与软预算 |
 
-## 三个状态边界
+选定招式／道具时预取，行动前保证依赖齐全；等待资源统一暂停游戏时钟，不推进充槽、状态或命中。取消作用域后迟到回调不能重新安装资源。原完整清单和PNG格式仍兼容；旧混装图集须真实重建才能取得分组收益。
 
-- **WorldStore持有可保存世界**：地点、人物资源／成长、背包／装备、旗标、事件、队列、技巧／晶石、当前地图NPC布置、遇敌RNG与奖励去重记录。变更通过草稿及revision提交，避免异步加载覆盖期间的新操作。
+`presentationSnapshot`提供轻量逐帧状态，完整行动历史只由诊断`snapshot()`读取。死亡粒子仅更新对应人物动态纹理。请求、解码峰值和离场释放用于真实媒体性能验收，预算及具体算法以实现为准。
 
-- SceneController管理地图准备、切换和回滚；先准备必需资源，再提交地点／图层／NPC状态，失败恢复原场景。
+## 菜单、经济与音频
 
-- BattleController持有本场参战者、资源快照、充槽、输入、按人物保存的待执行指令、动作和生命周期。`scheduler.pending`保留首条，queued_commands保存其余队员的指令；原充能／阵营仲裁选择人物，不能把某人的指令借给其他人。确认时保留道具数量，使用事件才消耗。通过planning／commit向世界一次提交本场结果，重复返回不重复扣费或发奖励。胜利演出与跳过输入统一使用战斗场景时钟。
+菜单控制器通过core事务连接装备、药品、技巧、队列和晶石；焦点及草稿由对应子视图管理。技巧测试复用正式战斗和配置，以私有票据恢复菜单页；药品等真实资源变化仍按已接入规则提交。
 
-配置快照和浏览器偏好分别独立于WorldStore；菜单焦点、预览、动画和加载锁也不写进世界进度。
+城镇kind8服务由`controllers/native_services`连接原菜单视图与`core/native_economy`，金钱、配方、物品资格都在规则层；关闭后继续原对白，整条交互成功才提交。详见[剧情指南](story_guide.md#城镇服务与金钱)。
 
-services在boot阶段读取并编译一次数值配置，私有会话只向菜单、战斗和技巧测试返回独立副本；后续入口不再读取配置文件。正式新游戏与历史开发样本共用经校验的敌人／掉落参数，分别保留各自的奖励来源及成长表，读档或切换样本不触发全量重编译。配置修改在刷新游戏页面后生效，返回标题或重新开始游戏继续使用本次启动快照。
+`core/audio`统一音量、静音与cue；menu_feedback保证单次输入／事务只发一次反馈。战斗动作和特效按源逻辑帧与实例去重，独立载体结束前保留声音访问；剧情媒体持有独立句柄／增益节点，结束恢复地图BGM并释放。缺失原文件保留空引用。
 
-## 内容生产与运行登记
+可见画布为`#phaserHost canvas`；`#stage`和`#battleCanvas`为透明兼容目标，转场截图通过`captureScene`同步绘制，不推进世界或时钟。输入监听在退出解绑，运行挂起时清除按键。
 
-唯一编辑登记是`web/data/runtime_content.json` v2；只选择角色阵营、技能原索引／处理器、资源阵容、舞台、ANM程序和地图交互。
+## 修改入口
 
-`tools/content_registration.py`直接读取编辑定义选择生产输入，不要求新地图／怪物预先有生成产物。
-
-`tools/build_runtime.py`按声明依赖导出；chapter-maps／chapter-story准备地图与剧情，enemies准备怪物，随后准备玩家、遭遇／奖励、配置、表现、音频、字体和目录。
-
-story-check读取已导出的源表，沿显式入口遍历TLK分支和ANM嵌套对白，提前阻断未实现能力。旧隐式NPC仅列提示，显式npcs作为构建门槛；最终内容编译再次执行同一检查。`--preflight`提供只读入口，不要求本次重导媒体。
-
-`core/content_definition.mjs`与`tools/resolve_content_definition.mjs`共用来源解析：展开角色身份／原槽、默认技能ID、ANM来源、地图原旗标与休息选择。
-
-`export_content_registry.mjs`核对跨文件依赖和原输入，生成`web/data/runtime_content.mjs`。boot比较其中definition快照与编辑JSON，拒绝未编译登记。
-
-运行登记不进入存档；添加登记不自动入队、学会技能、打开触发器或实现新机制。
-
-## 数据分工
-
-`web/data/config/index.json`及skills／battle／rewards／items是唯一数值配置。skills和items为v3，battle和rewards为v2；每条只保留name、必要的owner和稀疏parameters，source_hashes按原文件集中登记。默认值及完整来源保留在生成数据中，可由配置导出器`--reference`只读查询。
-
-`core/config_overrides`把修改项按字段合并到来源基线，数组整体替换，再交给既有编译器校验范围、身份及机制支持。original模式拒绝实际数值差异；编译后的审计与战斗快照仍保留完整生效参数。空parameters不表示关闭或未接入。普通导出迁移旧完整配置，补齐新角色／怪物的技能、属性、AI和奖励条目，并保留已有调参；未知编号和来源指纹变化拒绝写入。
-
-CHR／DAT／TLK／ANM和生成的`party_*`、`forest_*`、`enemy_*`等JSON保存来源及可执行输入，不作为另一套手工调参表。部分forest命名保留历史接口兼容。
-
-`library/roles.json`、`skills.json`、`magic.json`是全量静态来源，`library/index.json`将它们与既有`items.json`及统一配置关联，供内容编写按原编号引用。全量配置保留现有技能ID和参数，只追加缺项；源技能与已实现技能分别校验，`compiled.skill_registry`仍只容纳已实现处理器。原生MAG存在重复ID，按原记录索引绑定。原始全表启动时读取一次，不复制进世界或存档；查询与索引构建复用`core/content_library.mjs`。
-
-地图数据放`data/maps`，资源放`assets/maps`及角色／物件图集。catalog记录可用地图、资源入口及文件身份；content登记进一步限制已接入交互与机制。
-
-技能／道具注册按原角色ID＋技能索引、原道具ID绑定；保存实例、角色当前资源和学习进度独立于参数与原字节。
-
-详细编辑步骤与字段见[config_guide.md](config_guide.md)，构建命令和工具分类见[README.md](tools/README.md)。
-
-## 地图、剧情与演出
-
-`runtime_content.story`显式登记独立事件与任务文件；`web/content`为编辑内容，`web/data/story`为生成产物。`tools/export_story_packages.mjs`核对保留来源、可达能力和引用，生成共享包、分地图包、文本表与序章包；content编译同时生成这些产物。详细编写／快速构建入口见[story_guide.md](story_guide.md)。
-
-`core/story_flow_compiler.mjs`将原TLK和旧／自编NPC事件统一编译为StoryFlow命令图，`core/story_flow.mjs`提供唯一流程执行器。ChapterRunner提供共同事务与游戏行为适配；NPC入口只引用flow_id。炎城侦探作为开发片段保留，也采用完整成功后提交。`core/events.mjs`仅保留旧来源核对适配，调用同一个执行器，正式浏览器入口不引用它。
-
-map controller提供地图载入、视口、连续移动、NPC与交互的探索适配器，由`exploration_scene.update`调用；terrain、占格、路径、移动／遇敌规则由对应core及`core/movement.mjs`中的MovementMap处理。
-
-`core/map_locomotion`供玩家、剧情与普通NPC共用46CED0移动间隔换算和地图native_step_shift，以实际接受的轴向距离推进步伐；4984E0先减后测的计数对应行走两次步进、跑步三次步进。玩家保留连续键盘控制与斜走速度归一化，走跑／转向保留相位。MapLocomotion统一正式控制器与无素材预览的动作选择：沿墙移动按接受距离播放走跑，完全受阻但仍输入时切行走，以行走节奏的45%推进显示帧，松键回待机。受阻踏步不产生世界位移或遇敌距离。map_npcs保留源路径、占格、逐轴逻辑步进与独立RNG；visual坐标只追随已接受位置，并以相同源速度平滑，motion携带显示位置／朝向／帧，身体与阴影共用。停谈与暂停冻结显示，剧情接管从显示姿态开始；这些场景内状态不进入存档或遇敌计数。连续显示不声称原版逐帧动态等价，普通NPC斜走仍沿源逐轴步进。
-
-玩家探索通过MovementMap.moveAndSlide使用锚定原逻辑坐标的8×6像素脚底范围，沿整段位移扫描地形和可见NPC脚底，接触后只取消法向分量，继续消耗切向余量。移动朝向使用接受后的实际位移，完全受阻时朝向输入方向并慢速踏步；旧move点线段接口继续用于原通行核对。运行门控仍以逻辑中心判定，已接入出口／剧情触发沿既有地图合同执行。原版位于terrain=1的入口允许离开其来源格；旧存档在格界造成的初始脚底重叠允许沿已有墙面移出，不自动修改持久落点。mapActorPosition统一NPC绘制、玩家阻挡和交互距离所用的连续显示位置。MapNpcRuntime在发布每次显示移动前，通过moveActorAgainst扫描玩家脚底并停在接触处；受阻时暂停该NPC的来源步进累计，保留目标／当前步／路径，玩家让开后继续，不积累隐藏追赶路程，也不改变源地形与目标选择规则。
-
-CollisionFeedback使用探索更新时钟，按接触法线区分新撞击与持续接触，同方向220ms冷却避免墙面接缝重复触发；沿墙撞上另一方向时独立响应。每次轻微回缩在160ms内结束，步行最大1像素、跑步最大2.5像素，按迎撞分量缩放，重叠脉冲平滑叠加且总偏移不超过2.5像素。首帧即推进反馈，松键／反向只改变输入，已有回缩自然归零。临时body_offset只交给map_presentation、SpritePose和兼容Canvas绘制的身体／光层，阴影、地面排序、逻辑位置、相机、出口和遇敌计数不回摆；存档缩略图显式排除该偏移。切图、切换角色和非探索阶段清除对应临时反馈。此为重制手感策略，不是原版八邻方向重选的逐帧复刻。
-
-无原版素材时，phaser-preview.html以生成的墙角、人物和NPC合同复用上述正式移动模块，提供墙角／NPC接触定位、脚底范围、输入／实际位移方向和动作／回缩读数。预览不接入存档或遇敌；示意图验证不替代正式素材下的边界观感与完整流程实玩。
-
-旧地图包缺少源步长字段时，nativeMapMovement在prepare阶段使用同一DAT路径／SHA的完整370字节来源头恢复+0x144／145，并拒绝已有值冲突；不猜默认镜头速度。
-
-MapNpcRuntime在角色加载时按469F50从完整ROLE动作raw+7E派生20通道，保留DAT模板绑定；缺walk才继承idle。OpeningView复用同一初始化结果，不能把DAT的FF模板当成已加载动作，或给特定NPC写默认动作。
-
-MapObjectRuntime以地图／原物件索引绑定CF1单动作和既有CF4动作，原记录与DGP动作字节严格校验。主层与intrinsic同帧显示，透明来源也保留原队列身份。CF1按410850初始化、4137C0逐次循环；独立场景视觉CRT不写WorldStore或消耗持久遇敌RNG。隐藏物件继续走源时钟，ANM接管NPC不停止物件；加载、页面挂起及非探索场景按统一暂停策略处理。
-
-ANM33的+25低字节经anm_runtime以arrivalFacingRaw传递：0保留当前朝向，1..8在到达时减1写入方向，不参与速度计算。OpeningView按移动动作及源人物speedBias得到步进速度，用相同DistanceGait推进逻辑序列帧；直达／分轴路线沿现有舞台配置。零距离只处理到达状态，短路径按实际长度完成；原指令、并发等待和取消仍由ANM执行器管理。
-
-`core/map_presentation`生成按原图层／地面Y排序的只读显示描述。`phaser/scenes/exploration_scene`使用MapActor与SpritePose在同一深度组合人物阴影、主层和光效层，Phaser相机保持640×480原逻辑平面。阴影由map_shadows按原DGP逐帧跨度掩码导出，按动作包围框压缩图集，shadow_geometry恢复原帧内偏移；黑色alpha128近似原16位RGB分量减半。MapActor为临时显示对象，不保存HP、成长或旗标。
-
-map_scene_view保留为存档缩略图与几何对照绘制，消费同一map_presentation。OpeningView同时提供显示描述与兼容draw回调；正式ANM动作、物件动作和战斗转场由Phaser驱动的ActionClock推进，原等待、并发与取消契约不变。
-
-chapter-maps从原DAT的state0描述推导已登记地图间的物理出口；剧情型出口、前置条件和演出继续走TLK／ANM系统。
-
-TLK kind2通过同一StoryFlow的transfer_native_map处理：地形触发器明确传递原descriptor，+2A提供入口排序，TLK +2F提供目标地图marker。controller先租用／准备／校验目标地图，ChapterRunner在同一草稿和播放会话运行目标到达事件；失败／取消回滚场景与进度，成功后释放地图包，不另开场景事务。
-
-跨地图ANM依赖由真实opcode10与TLK／DAT调用来源推导，保留caller_maps、control_maps和最终地图。StoryRepository按演出显式依赖租用地图，按图加载不会递归拉取图内其他演出依赖；多图共享程序在最后一个持有图释放后才回收。DAT +14E指定Mapm物件资源目录，共用背景的地图变体不按地图文件名猜物件路径。
-
-map_connections按登记与源描述连接大地图出口，并共用原标记／排序规则推导大地图进入位置。chapter_story覆盖已登记出口来源，route_events只兼容尚未接入TLK的旧地图。
-
-`maps.entry`明确选择DAT +0x13A到达剧情；SceneController与WorldMapController通过同一enterMap钩子执行，位置和剧情共用未提交草稿。失败回滚显示及世界状态，过期revision拒绝覆盖；启动、恢复和缩略图不触发到达剧情。
-
-`maps.setup`对应DAT +0x8A的地图加载布置，由`core/map_stage.mjs`在每次prepareMap时通过共享StoryFlow投影NPC。读档先使用恢复草稿计算布局，预览使用被预览存档；不会读当前游戏的旗标替代目标存档。加载布置只读且不移动玩家或消耗一次剧情。M17030、M17030-1、M17030-2保持独立地图、NPC表和旗标身份。
-
-`core/native_story_conditions.mjs`恢复原物件状态、背包装备及队员资格判断；`core/native_story_mutations.mjs`处理按源技能ID学习、合成配方解锁与原无效果指令。缺席队友的学习请求保留在native_pending_skill_unlocks，入队时应用；recipe_unlock_indices只记录配方，不等于合成界面已经实现。可选存档字段不重写旧存档或已存技能成长。
-
-`maps.export`标记生产归属：新地图默认chapter素材和story=true；existing地图由已有专用导出器负责，story=false表示尚未接入其TLK。该选择不替代运行交互登记。
-
-chapter-story按登记读取原记录，道具定义从mutation5引用推导，角色初值按登记玩家生成；ANM地图依赖取实际TLK／DAT调用者和opcode10加载目标的并集，保留加载顺序及最终控制地图。允许多图演出，没有opcode10时继承唯一实际调用地图；未恢复格式明确拒绝。
-
-`core/chapter.mjs`适配已恢复剧情行为，保留草稿、源记录与事件状态，控制流交给StoryFlowRunner，失败不提交。`core/chapter_animation.mjs`验证受支持ANM指令；`core/anm_runtime.mjs`处理动作等待、并发、取消和过期完成。
-
-入队统一经`party_members.mjs`检查原身份、初始化和重复入队，补队列空位及遇敌计数；已有成员保留资源／成长，RNG不重置。原离队将完整成员及遇敌进度保存在可选reserve_party封装，清除对应阵型槽且不压缩；再次入队恢复原实例。party_roster提供active＋reserve归属校验，实际行动仍只使用active；opcode36 mode3单独切换控制角色。
-
-TLK kind5通过`core/scripted_battle.mjs`读取原stage＋6个固定文件字段，编译为同一个StoryFlow的native_battle。`controllers/battle`在独立WorldStore中运行本场，延续持久CRT流，不抽STG组或重置移动计数；正常返回后合入外层剧情draft并恢复ANM游标。战斗失败／取消或后续演出失败不提交整段剧情；全队败北结束当前剧情并进入原game-over策略。入战像素表现继续使用既有独立视觉随机适配，不能据此宣称全局原生RNG调度完全一致。
-
-ANM媒体由story-media目标提取，`controllers/story`按需构造StoryMediaView，显式声音句柄、BGM临时静音／恢复与媒体清理共用剧情会话。转码头部增益写在`manifest.audio.playback_gain`并由临时WebAudio GainNode恢复；不会更改保存的音量偏好。浏览器编解码、路径插值与原混色仍为适配，原音视频执行需另做观察。
-
-DialogueView管理原对话板、画像、打字、滚动／换页与选择，OpeningView及字幕／加载视图负责对应演出。空白对白、退出或失败都须完成相应等待与清理。
-
-## 战斗规则与表现
-
-encounters从登记地图的原DAT频率和STG池生成来源表；运行端按成功移动步长、可保存RNG及A／B池生成敌组。
-
-party_sample／forest_sample组装本场来源，party_attributes组合当前人物、装备与晶石派生属性；skill_registry／runtime_config应用同一配置快照。
-
-combat、combat_rules、forest_ai、battle_scheduler等core模块负责原公式、抽随机、选招、20ms充槽、目标与动作仲裁。技能学习、人物等级和实现处理器分别门控。
-
-`core/battle_techniques`将保存的编成记录映射为本场命令，只引用各成员已编译的技能，不另建数值配置。轮盘和招式列表共用命令资格／目标检查；combat按原顺序合并成员动作，准备量和MP合计、熟练度逐招记录，动作与独立特效接触读取各自的成员属性。未接入或等级不足的成员保留存档并显式禁用该组合。
-
-native_skill_loading在不可变CHR来源上派生4FED00加载后的技能code，正常战斗使用真实入口4451C0设置的模式0；forest_ai消费派生值并保留原选招RNG次序，不直接将文件code当作组合资格。
-
-类型恢复、受击／反击、状态、死亡／起身、技能成长、奖励池与结算各有独立core模块；BattleController连接它们并保持单次资源提交。
-
-BattleView消费时间线和只读表现数据，不修改HP／MP或抽战斗随机。场景、角色和效果共用640×480逻辑坐标。
-
-`BattleController.presentationSnapshot`供逐帧绘制及HUD通知使用，不读取或复制行动历史。实际接触／用药时增量维护`impact_count`和`last_impact`；计数沿用已发生接触的行动条数，多段接触只计该行动一次，最近项沿历史追加顺序选择，旧异步载体的迟到接触不覆盖后续行动。完整历史仍由`snapshot()`提供给诊断、导出和战斗归档，不改变世界存档或奖励去重记录。
-
-战斗头顶光标使用同帧人物绘制坐标（含反击通道位移和native_z_raw），Y为人物Y－DGP extra_header+0x0C高度－64－光标自身锚点Y；高度随资源编号导出，并同步battle_packs内嵌清单，不按队伍索引或姓名配置。原调用分支的保留指令见`tests/fixtures/battle_cursor_native.json`。
-
-正式BattleView注入`phaser/rendering/battle_surface`提供的绘制接口。已有源图集裁切、平移、缩放、加色和文本命令转为复用的Phaser Sprite／Graphics／Text；不将整场旧Canvas逐帧上传为背景。BattleResources原SHA、尺寸、分片和资源租约检查继续生效。
-
-第一版选择Phaser的Canvas渲染后端以衔接现有加色语义。TextureCache拥有Phaser纹理引用，BattleResources拥有战斗图集的解码、校验与驻留预算；图集淘汰会同步释放对应Phaser纹理，不按单帧显隐销毁纹理。非图集的临时静态纹理有120帧闲置期限和64MiB软预算，死亡粒子画布仍在不再绘制后及时释放。裁切Frame按源坐标复用，单纹理保留有限数量的Frame；文字样式只在变化时更新。`battle_scene.update`驱动战斗控制器与已有源时间线，动作、充槽和生命周期使用同一场景时间；休眠或暂停时均不推进，Sprite不额外启动自动播放时钟。
-
-forest_stage先完成天空、地面、全部场景贴图，再画按地面Y排序的战斗人物，最后画效果和HUD。身体与阴影共用一条地面轨迹，再按每个资源的固定脚底参考恢复身体原点；参考由源待机帧主层边界的中位值与DGP锚点计算，避免待机呼吸或攻击姿态改变地面落点。已登记的飞行离地偏移保留，升空只改变身体高度，背景纹理不与人物混排。阴影仍是按资源宽度拟合的椭圆近似，未恢复原DGP逐帧阴影跨度。
-
-battle_layout按保存的四个固定队列槽定位，不压缩空位；idle、受击和防御的已接入时序读取各自源动作。攻击前进与归位按当前已访问帧的局部起点和实际时长连续插值，不提前一帧完成位移；单帧动作仍经过完整一帧的移动，反击使用自身通道时钟，源帧倒放不反转位移方向。普通攻击／技能仍有预览时钟与轨迹适配边界。
-
-battle_lifecycle_view独立推进入场、死亡、起身，完成后回执core；死亡完成前不结算终局，复活epoch使旧回执失效。敌方无独立死亡动作时，由death_particles按原版1～7模式推进主层像素，粒子耗尽即完成；220ms状态计时与粒子绘制分开，显示按60Hz适配，局部视觉随机不消耗战斗随机流。Phaser仅上传该人物的动态纹理，离场沿既有纹理缓存释放。
-
-存活／死亡仲裁区分原rawHP、装备后的显示HP和死亡类别。正式败北返回在`core/recovery.planPartyDefeat`要求完成死亡类别7、落地、非active且无待结局／生命周期；不得再要求装备后的显示HP为0，旧无类别适配快照才沿HP0合同。复活的候选、排队、派发及接触共用原类别资格，不重复以显示HP过滤；复活只开启新生命epoch，不重置正在运行的源Z与浮空时钟。
-
-battle_packs用裁切图集保留源PNG核对关系。正式普通／剧情战斗与技巧测试通过BattleAssetPlan准备当前舞台、参战人物的待机、反应、入场、死亡与起身基础依赖，再开放战斗；HUD独立准备，结算图片延迟至胜利时准备。准备期间保留原画面，随后衔接既有转场与人物入场。全量元数据仍用于来源校验，普通动作时间线按首次使用编译；导出器和未传分阶段上下文的旧调用继续使用完整资源清单。
-
-BattleAssetPlan接收本场实际技能表、参战资源ID及背包。技能依赖通过真实技能编号匹配，组合展开成员；道具只接受入战背包中数量大于0的条目，不把整张道具表归属给所有角色。资源资格不按即时MP／沉默／死亡筛选。选定招式或道具进入目标选择时预取一份前瞻资源；实际行动开始前校验其真实组合计划，确保人物帧、特效和次级接触依赖齐全。基础人物优先使用已存在的逐物理帧主层与有效加色层，缺少分层帧时兼容旧动作图集，不重建或改写现有PNG。
-
-基础、行动、前瞻、HUD和结算各持有独立资源作用域；准备中的页面使用租约保护，取消后不能重新取得作用域。行动资源保留至其独立载体与尾部特效全部结束，当前帧的死亡取样完成后才回收。资源缺失时通过控制器暂停同一个Phaser时钟，准备并注册纹理后继续，不推进充能、状态或接触时机；无引擎适配保留相同的资源等待时间扣除。请求合并、SHA和尺寸校验沿用BattleResources；记录请求、校验、解码累计耗时、解码峰值及行动资源等待日志。
-
-图集按role-原角色ID、stage-舞台ID及独立HUD／结算分组；特效先按原资源ID登记引用、跨特效去重相同可见像素，再按每个图块的角色使用者集合分组为effects-roles-编号集合。相同使用范围的特效合页，重复像素只有一份，避免每个特效独占页面的碎片；无引用的保留来源不会自动载入。继续裁透明并以2048为页面上限，不同舞台或无关特效不再混在同一公共组。旧图集映射仍可读取，但必须真实重建页面才获得分组后的驻留收益。BattleResources继续按页面合并请求与租约保留，192MiB为解码页面缓存的软预算，不强制淘汰本场活动页面。离场／取消释放本场引用，闲置页面再按预算回收。
-
-`tools/export_battle_packs.py --plan`用已编译登记、源表现元数据和既有图集区域估算新分组；支持按本场角色／舞台比较旧加载、完整角色筛选及重分组后的页面体积，另列基础入战集合的旧图集与重分组估算；两类集合均不含HUD和结算。该入口不读取媒体或写正式图集，不替代来源、像素和浏览器验收。
-
-battle-stages按登记读取原SCN／DGP生产同格式背景，复用来源解码／像素审计和默认镜头规则；战斗背景与音乐按本场实际stage选择。旧专用舞台产物继续由原导出器维护。
-
-## 菜单、保存与声音
-
-城镇kind8服务沿同一StoryFlow和外层剧情草稿运行：`controllers/native_services`连接原Boss菜单视图与`core/native_economy`，交易／配方／物品资格不写入视图。窗口关闭后继续原对白，完整交互成功才提交金钱、原料、产物与装备。来源及边界见[story_guide.md](story_guide.md#城镇服务与金钱)。
-
-菜单、对白、字幕、加载及像素转场沿用已有DOM／局部Canvas视图；这些界面保持现有输入层级、字体和音频控制。Phaser不安装第二套键盘和音频系统。输入在运行挂起时清除按键，事件监听通过AbortController在退出时解绑。
-
-phaserHost承载可见游戏画布。stage与battleCanvas保留为透明的兼容焦点／截图目标；入战截图调用captureScene同步渲染当前Phaser显示列表，截图过程不推进世界或动作时钟。
-
-menu controller通过core事务连接装备、用药、技巧、队列和晶石；OperationMenuView及子视图管理页签、候选、焦点、取消和动画。
-
-队列formation_slots、七槽technique_bindings、组合technique_combinations、六槽crystal_sockets及技能skill_progress是可选保存状态；旧格式沿现有兼容规则读取。
-
-技巧测试复用正式战斗和同一数值配置，以私有票据保留菜单页／焦点。测试门控控制HP、MP及敌方主动派发，药品等真实资源变化仍按正常事务提交。
-
-菜单站立interval由party_battle_view中相同角色idle生成；队列、状态和装备共用，不维护第二份速度参数。原菜单DGP的120ms留作来源，并非当前统一播放策略。
-
-`core/audio`管理素材、音量、静音与cue；menu_feedback对每次输入／事务只发一次反馈，音效诊断有限保留。音频导出按登记地图、技能、生命周期动作及全部已接入特效的CHR／DGP声音字段建立清单；缺失原文件保留空引用。战斗控制器共用动作与特效音回调，独立援攻载体结束前继续访问声音帧；以行动、通道、特效实例和生命周期事件区分播放，低帧率补帧不重复播放。入场／死亡／起身沿CHR逻辑游标触发，入场禁声读取控制器实时状态，显现完成后再恢复。音量、静音及离场释放仍由同一音频控制器管理。
-
-session controller管理保存、载入、导入／导出、主菜单与缩略图。新截图绑定世界payload，旧存档预览只读重建，过期异步结果不覆盖当前页面。
-
-`core/save_slots`统一20个普通槽与快速槽身份。save_storage批量读取并隔离单槽错误，仅在空00槽迁移旧浏览器存档。services统一存取锁及save-io阶段；save-menu阶段保持画面并暂停探索，只有当前页面的选择可以发起存取。SaveMenuView使用save-menu导出的Game_Save_01／02／03原始像素及按钮矩形，显示三行、滚动选择与覆盖确认；打开／选择／取消均不写文件。标题读取页滚动显示所有已有普通档与快速档。读档复用WorldStore校验和SceneController恢复事务；偏好仍独立保存在浏览器。
-
-剧情style1选择从TLK原始三槽解码；床铺继续核对登记选择。主动NPC交互到达mutation4时只返回save_requested，剧情成功提交后再显示通讯水晶保存界面，避免在未提交草稿上落盘。
-
-终章由`core/story_completion`读取原1999:1，并维护独立版本化MenuCode等价元数据；不改世界存档格式或原注册表。成功ANM只提出收尾请求，story会话将其绑定world／完整预期快照／场景请求，session等世界提交后切标题并禁用resume；`SceneController.afterCommit`覆盖地图到达事件的外层提交。标题显示失败不能撤回已经提交的世界或重新开放探索，浏览器存储失败仍进入标题。原25影片已在ANM中播放，不额外拼一段credits。
-
-只有完整ANM产生的终章请求才声明resume_exploration:false：保持源隐藏人物位置，跳过探索落点校验、NPC姿态采用和探索HUD重建，仍校验世界结构、地图身份与提交版本。普通事件继续严格校验可通行落点；不为终章发明一次归位传送。
-
-## 扩展位置
-
-- **地图／出口**：登记、导出器、map controller、`core/scenes`／route／world_map规则和地图资源；共用`phaser/scenes/exploration_scene`显示，几何描述放`core/map_presentation`。
-
-- **剧情／演出**：chapter来源、story controller、chapter／chapter_animation／anm_runtime及OpeningView；通过`phaser/components/action_clock`同步动作，人物主层／光效由SpritePose显示。
-
-- **队友／技能**：登记、原CHR／技能动作、`party_*`导出、统一注册／配置、party_sample、菜单和表现；地图显示共用MapActor，战斗显示共用battle_scene／battle_surface及原动作时间线。content_sample只用于隔离验证。
-
-- **怪物**：enemies、enemy-rewards、encounters目标及统一配置；新增行为先补规则，再登记。
-
-- **道具／晶石**：源ITM、item_registry、items／equipment／crystal_sockets等通用处理器及界面连接。
-
-- **UI**：现有controller和view、Phaser显示场景及相应组件，原素材／字体导出及状态验收；通用方法见[menu_alignment_workflow.md](../assessment/menu_alignment_workflow.md)。
-
-## 当前边界与维护
-
-`web/phaser-preview.html`使用独立示意图和现有战斗定义，复用正式PhaserRuntime、Scene生命周期和动作时钟，支持暂停／恢复及动作中切换探索／战斗；检查探索、缩放、动作命中及截图，不写正式存档、不关闭正式素材校验。检查命令、选项与结果解读见[README.md](tools/README.md)。
-
-当前代码已接入Phaser运行与显示层；各阶段验收范围及本版待办只维护在[validation_design.md](../assessment/validation_design.md)。
-
-构建支持已恢复的矩形v6地图、全局STG池、指令、状态和掉落类型。SCN v2／mode4默认镜头支持通用舞台导出；stage13与TestStage保留专用导出器，新格式和新机制按实际内容补齐。
-
-剧情由`core/story_repository.mjs`统一提供，启动只加载索引和共享包，地图包与序章按需读取；四图缓存保护当前和正在准备的地图。`core/story_packages.mjs`管理文本编号、包指纹和紧凑对白校验，`core/story_quests.mjs`从既有世界状态推导任务阶段。能力扩展与性能待办见唯一当前计划。
-
-来源资料、报告位置和缺失处理见[local_materials.md](../local_materials.md)；检查命令见[README.md](tools/README.md)，通用验收方法见[menu_alignment_workflow.md](../assessment/menu_alignment_workflow.md)。
+新地图与剧情沿同一探索场景和StoryFlow接入；新增角色／技能／敌人沿登记、来源、配置与共同规则接入。新机制先补core及来源解释，再扩展控制器／显示适配。操作步骤不在本文重复，按[根导航](../../README.md)查对应指南。
