@@ -27,6 +27,14 @@ export class BattleSurface {
     this.textures.begin();
   }
   endFrame(){this.textures.prune();}
+  prepareImages(images){
+    const sources=new Set();
+    for(const image of images.values()){
+      if(image.packed)for(const region of image.regions){const entry=image.pool.pages.get(region[4]);if(entry)sources.add(entry.bitmap);}
+      else sources.add(image);
+    }
+    for(const source of sources)this.textures.texture(source);
+  }
   take(kind){
     const index=this.cursor[kind]++,pool=this.pools[kind];let object=pool[index];
     if(!object){
@@ -65,7 +73,7 @@ export class BattleSurface {
       width:bounds.width*target.width/sw,height:bounds.height*target.height/sh});
     if(area.width<=0||area.height<=0)return;
     const frame=this.textures.region(source,sx+(area.x-target.x)*sw/target.width,sy+(area.y-target.y)*sh/target.height,
-      area.width*sw/target.width,area.height*sh/target.height,`draw:${this.cursor.sprite}`);
+      area.width*sw/target.width,area.height*sh/target.height);
     this.take('sprite').setTexture(frame.key,frame.frame).setPosition(area.x,area.y).setDisplaySize(area.width,area.height);
   }
   createLinearGradient(...points){return {points,stops:[],addColorStop(at,color){this.stops.push([at,color]);}};}
@@ -99,8 +107,9 @@ export class BattleSurface {
   }
   text(value,x,y,outline){
     const p=this.point(x,y),text=this.take('text');
-    text.setStyle({font:this.font,color:outline?'rgba(0,0,0,0)':this.fillStyle,
-      stroke:outline?this.strokeStyle:'#000000',strokeThickness:outline?this.lineWidth:0,padding:4});
+    const style={font:this.font,color:outline?'rgba(0,0,0,0)':this.fillStyle,
+      stroke:outline?this.strokeStyle:'#000000',strokeThickness:outline?this.lineWidth:0,padding:4},key=JSON.stringify(style);
+    if(text.battleTextStyle!==key){text.setStyle(style);text.battleTextStyle=key;}
     text.setText(String(value)).setOrigin(this.textAlign==='center' ? 0.5 : this.textAlign==='right' ? 1 : 0,0)
       .setScale(this.matrix[0],this.matrix[3]);
     const baseline=text.getTextMetrics().ascent+4;

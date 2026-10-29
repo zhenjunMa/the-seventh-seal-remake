@@ -6,14 +6,14 @@ import {battleResources,drawBattleImage} from './core/battle_resources.mjs';
 export class BattleResultView{
   constructor({root,manifest,onComplete,onEvent=()=>{},textRenderer=null,now=()=>performance.now()}){
     Object.assign(this,{root,manifest:validateBattleResultManifest(manifest),onComplete,onEvent,textRenderer,now});
-    this.doc=root.ownerDocument;this.images=new Map();this.textCache=new Map();this.active=false;
+    this.doc=root.ownerDocument;this.images=new Map();this.textCache=new Map();this.active=false;this.resourceScope=battleResources.createScope('battle-result');
     this.hit=this.doc.createElement('button');this.hit.type='button';this.hit.className='battle-report-hit';
     this.hit.setAttribute('aria-label','战斗结算，按空格继续');this.hit.hidden=true;this.hit.onclick=()=>{this.advance();this.release();};root.append(this.hit);
     this.status=this.doc.createElement('div');this.status.className='sr-only';this.status.setAttribute('role','status');this.status.setAttribute('aria-live','polite');root.append(this.status);
   }
   async prepare({onProgress=()=>{}}={}){
     const paths=new Set(Object.values(this.manifest.assets).flatMap(a=>a.frames.flatMap(f=>[f.image,f.indexed_image,f.inverse_mask_image,f.render_image].filter(Boolean))));
-    this.images=await battleResources.preparePaths([...paths],{scope:'battle-result',onProgress});
+    this.images=await this.resourceScope.preparePaths([...paths],{onProgress});this.ready=true;
   }
   open(snapshot,now=this.now()){
     if(this.model?.battleId===snapshot.id)return;
@@ -80,5 +80,5 @@ export class BattleResultView{
     }
     this.publish();
   }
-  dispose(){this.active=false;this.hit.remove();this.status.remove();this.images.clear();this.textCache.clear();}
+  dispose(){this.resourceScope.release();this.active=false;this.hit.remove();this.status.remove();this.images.clear();this.textCache.clear();}
 }

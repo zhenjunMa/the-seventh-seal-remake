@@ -186,6 +186,8 @@ python3 -B remake/runtime/tools/resource_inventory.py
 python3 -B remake/runtime/tools/export_battle_packs.py --plan --roles 001,012 --stage stage13
 ```
 
+规划报告中的`entry_existing_atlas`／`entry_planned`为基础入战集合，`filtered_existing_atlas`／`planned`为参战角色全部表现集合；均不含HUD与结算，属于清单估算。正式运行已按技能／背包分阶段准备，实际峰值仍需浏览器素材验收。
+
 `--roles`选择本场人物／敌人的原资源编号，`--stage`选择已登记舞台，两项同时提供；省略两项只盘点全库。规划比较旧公共特效加载、当前筛选沿用旧页面，以及按特效／舞台拆组后的几何体积。它使用旧区域坐标识别重复图块，缺少像素时可能保守高估去重后的体积；不会生成PNG或改写正式清单，也不能作为媒体验收。可加`--report remake/runtime/evidence/本次新目录/plan.json`写新报告，已有报告拒绝覆盖。
 
 素材齐全后沿统一构建入口执行`python3 -B remake/runtime/tools/build_runtime.py --target battle-packs --run`，生成按`role-角色ID`、`stage-舞台ID`及HUD／结算分组的页面。特效按原ID登记后先跨特效去重相同像素，再按图块的使用者集合生成`effects-roles-角色编号集合`，相同使用范围合页，避免每个特效独占页面的碎片；无引用的来源保留在独立组。导出重构核对每份源PNG的可见像素和alpha。旧清单仍可运行，但仅修改加载筛选不能解除旧页面内无关特效的共同驻留；不要手工修改旧页面的group伪装成重建。完成后执行`verify_phaser.mjs --assets`及正式战斗实玩。

@@ -3,11 +3,14 @@ const canonical=path=>'/'+path.replace(/^\/+/, '');
 const need=(ok,message)=>{if(!ok)throw new Error(`战斗资源：${message}`);};
 const sha=async bytes=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),n=>n.toString(16).padStart(2,'0')).join('');
 const safe=path=>/^\/assets\/battle_packs\/[a-f0-9]{24}\.png$/.test(path);
+const bitmapOwners=new WeakMap(),evictionListeners=new Set();
+export const battleBitmapResident=bitmap=>{const owner=bitmapOwners.get(bitmap);return owner?owner.pool.pages.get(owner.index)?.bitmap===bitmap:null;};
+export function onBattleBitmapEvicted(listener){evictionListeners.add(listener);return ()=>evictionListeners.delete(listener);}
 
 export class BattleResources {
   constructor({read=fetch.bind(globalThis),decode=blob=>createImageBitmap(blob),budgetBytes=192*1024*1024}={}){
-    Object.assign(this,{read,decode,budgetBytes});this.pages=new Map();this.pending=new Map();this.scopes=new Map();this.leases=new Map();this.clock=0;
-    this.stats={page_requests:0,page_decodes:0,page_hits:0,evictions:0};
+    Object.assign(this,{read,decode,budgetBytes});this.pages=new Map();this.pending=new Map();this.requests=new Map();this.scopes=new Map();this.leases=new Map();this.preparations=new Map();this.clock=0;
+    this.stats={page_requests:0,page_decodes:0,page_hits:0,evictions:0,request_ms:0,verify_ms:0,decode_ms:0,peak_decoded_bytes:0};
   }
   async catalog(){
     if(!this.catalogPromise)this.catalogPromise=(async()=>{
@@ -32,40 +35,51 @@ export class BattleResources {
   }
   async page(index){
     if(this.pages.has(index)){const entry=this.pages.get(index);entry.used=++this.clock;this.stats.page_hits++;return entry.bitmap;}
-    if(this.pending.has(index))return this.pending.get(index);
+    if(this.pending.has(index)&&!this.requests.get(index)?.signal.aborted)return this.pending.get(index);
     const page=this.data.pages[index];
+    const controller=new AbortController();this.requests.set(index,controller);
     const promise=(async()=>{
-      this.stats.page_requests++;const response=await this.read(page.path,{cache:'force-cache'});
+      let started=performance.now();this.stats.page_requests++;const response=await this.read(page.path,{cache:'force-cache',signal:controller.signal});
       need(response.ok,'图集读取失败');const bytes=await response.arrayBuffer();
-      need(await sha(bytes)===page.sha256,'图集指纹不符');const bitmap=await this.decode(new Blob([bytes],{type:'image/png'}));
+      this.stats.request_ms+=performance.now()-started;started=performance.now();
+      need(await sha(bytes)===page.sha256,'图集指纹不符');this.stats.verify_ms+=performance.now()-started;started=performance.now();
+      const bitmap=await this.decode(new Blob([bytes],{type:'image/png'}));this.stats.decode_ms+=performance.now()-started;
+      if(controller.signal.aborted){bitmap.close?.();throw controller.signal.reason;}
       if(bitmap.width!==page.width||bitmap.height!==page.height){bitmap.close?.();throw new Error('战斗图集尺寸不符');}
-      this.stats.page_decodes++;this.pages.set(index,{bitmap,used:++this.clock,bytes:page.width*page.height*4});return bitmap;
+      this.stats.page_decodes++;this.pages.set(index,{bitmap,used:++this.clock,bytes:page.width*page.height*4});bitmapOwners.set(bitmap,{pool:this,index});
+      this.stats.peak_decoded_bytes=Math.max(this.stats.peak_decoded_bytes,[...this.pages.values()].reduce((sum,e)=>sum+e.bytes,0));return bitmap;
     })();
     this.pending.set(index,promise);
-    try{return await promise;}finally{this.pending.delete(index);}
+    try{return await promise;}finally{if(this.pending.get(index)===promise){this.pending.delete(index);this.requests.delete(index);}this.prune();}
   }
   async preparePaths(paths,{scope='battle',onProgress=()=>{},isCurrent=()=>true}={}){
     const data=await this.catalog(),required=new Set(),entries=new Map();
+    need(isCurrent(),'资源准备已取消');
     for(const path of new Set(paths)){
       const entry=data.images[canonical(path)];need(entry,`图片未登记到图集：${path}`);
       for(const region of entry.regions)required.add(region[4]);
       entries.set(path,{packed:true,path,width:entry.width,height:entry.height,regions:entry.regions,pool:this});
     }
     for(const index of required)this.leases.set(index,(this.leases.get(index)??0)+1);
+    let leased=true,cancelled=false;
+    const releaseLeases=()=>{if(!leased)return;leased=false;
+      for(const index of required){const count=this.leases.get(index)-1;if(count)this.leases.set(index,count);else this.leases.delete(index);}};
+    const operation={cancel(){cancelled=true;releaseLeases();}},current=()=>!cancelled&&isCurrent();
+    if(!this.preparations.has(scope))this.preparations.set(scope,new Set());this.preparations.get(scope).add(operation);
     let completed=0,next=0;const pages=[...required],total=Math.max(1,pages.length);
     try{
       onProgress({completed,total});
       // Keep a failed request from leaving other workers unobserved or releasing
       // their pending atlas leases before all decoding has settled.
       const workers=await Promise.allSettled(Array.from({length:Math.min(4,pages.length)},async()=>{
-        while(next<pages.length){await this.page(pages[next++]);onProgress({completed:++completed,total});}
+        while(next<pages.length){need(current(),'资源准备已取消');await this.page(pages[next++]);onProgress({completed:++completed,total});}
       }));
       const failure=workers.find(result=>result.status==='rejected');if(failure)throw failure.reason;
-      need(isCurrent(),'资源准备已取消');
+      need(current(),'资源准备已取消');
       if(!pages.length)onProgress({completed:1,total});
       this.scopes.set(scope,required);return entries;
     }finally{
-      for(const index of required){const count=this.leases.get(index)-1;if(count)this.leases.set(index,count);else this.leases.delete(index);}
+      releaseLeases();const operations=this.preparations.get(scope);operations?.delete(operation);if(!operations?.size)this.preparations.delete(scope);
       this.prune();
     }
   }
@@ -76,20 +90,31 @@ export class BattleResources {
     }
     return this.preparePaths(descriptors.map(a=>a.path),options);
   }
-  release(scope){this.scopes.delete(scope);this.prune();}
+  has(descriptors){return Boolean(this.data)&&descriptors.every(asset=>this.data.images[canonical(asset.path)]?.regions.every(region=>this.pages.has(region[4])));}
+  createScope(label='battle'){
+    const scope=Symbol(label),pool=this;let closed=false;
+    return {scope,get closed(){return closed;},
+      prepare(descriptors,options={}){need(!closed,'资源会话已关闭');const current=options.isCurrent??(()=>true);
+        return pool.prepare(descriptors,{...options,scope,isCurrent:()=>!closed&&current()});},
+      preparePaths(paths,options={}){need(!closed,'资源会话已关闭');const current=options.isCurrent??(()=>true);
+        return pool.preparePaths(paths,{...options,scope,isCurrent:()=>!closed&&current()});},
+      release(){if(closed)return;closed=true;pool.release(scope);}};
+  }
+  release(scope){this.scopes.delete(scope);for(const operation of this.preparations.get(scope)??[])operation.cancel();this.prune();}
   prune(){
     let bytes=[...this.pages.values()].reduce((sum,e)=>sum+e.bytes,0);
     const held=new Set([...this.scopes.values()].flatMap(set=>[...set]));
+    for(const [index,controller]of this.requests)if(!held.has(index)&&!this.leases.has(index))controller.abort(new Error('战斗资源请求已取消'));
     for(const [index,entry]of [...this.pages].sort((a,b)=>a[1].used-b[1].used)){
       if(bytes<=this.budgetBytes)break;
       if(held.has(index)||this.leases.has(index))continue;
-      entry.bitmap.close?.();this.pages.delete(index);bytes-=entry.bytes;this.stats.evictions++;
+      this.pages.delete(index);for(const listener of evictionListeners)listener(entry.bitmap);entry.bitmap.close?.();bytes-=entry.bytes;this.stats.evictions++;
     }
   }
   snapshot(){const held=new Set([...this.scopes.values()].flatMap(set=>[...set]));
     const bytes=[...this.pages.values()].reduce((sum,e)=>sum+e.bytes,0),active=[...this.pages].reduce((sum,[index,e])=>sum+(held.has(index)?e.bytes:0),0);
     return {...this.stats,resident_pages:this.pages.size,decoded_bytes:bytes,active_decoded_bytes:active,inactive_cache_bytes:bytes-active,budget_bytes:this.budgetBytes};}
-  dispose(){for(const entry of this.pages.values())entry.bitmap.close?.();this.pages.clear();this.scopes.clear();}
+  dispose(){for(const operations of this.preparations.values())for(const operation of operations)operation.cancel();for(const controller of this.requests.values())controller.abort(new Error('战斗资源已释放'));for(const entry of this.pages.values()){for(const listener of evictionListeners)listener(entry.bitmap);entry.bitmap.close?.();}this.pages.clear();this.scopes.clear();}
 }
 
 export const battleResources=new BattleResources();

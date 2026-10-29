@@ -89,6 +89,7 @@ function report(){return {engine:runtime.snapshot(),mode,error:lastError,
   movement:{location:{...world.location},action:viewState.action,frame:viewState.frame,blocked,
     input:{...input},travel:{...lastTravel},feedback:viewState.collisionFeedback,npcs:scene.npcs.map(npc=>({
       ...mapActorPosition(npc),role:undefined,logical:{x:npc.x,y:npc.y}}))},
+  resources:view?{...view.resourceSnapshot(),textures:runtime.battle.surface.textures.snapshot()}:null,
   battle:battle?{phase:battle.state.phase,contacts:battle.state.history.filter(h=>h.impact).length,
     hp:battle.state.actors.map(a=>({id:a.id,hp:a.hp.current,mp:a.mp.current}))}:null};}
 function drawBattle(now){view.draw(battle.presentationSnapshot(),now);runtime.battle.surface.endFrame();}
@@ -158,9 +159,15 @@ try{
   for(const effect of metadata.effects)imageHints.set(effect.sheet,{kind:'effect',width:effect.frame_width,height:effect.frame_height,anchor:effect.anchor});
   const store=new WorldStore(seed,['M01010','M01030']),sample=createBattleSample(store.snapshot(),data);
   view=new BattleView({canvas:runtime.battle.surface.canvas,assetLoader:placeholder,jsonLoader:json});
-  await view.prepare();view.setRoster(sample.actors,sample.skills);
+  await view.prepare({actors:sample.actors,skills:sample.skills,inventory:seed.inventory,staged:true});view.setRoster(sample.actors,sample.skills);
+  runtime.battle.surface.prepareImages(view.images);
   battle=new BattleController({world:store,resolveAction,applyDamage:applyNativeDamage,
-    playAction:(result,hooks)=>view.playAction(result,hooks),resourcesForWorld,consumeResources:consumeBattleMp,
+    playAction:async(result,hooks)=>{
+      const reason=Symbol('preview-resources');runtime.pause(reason);let lease;
+      try{lease=await view.prepareAction(result);runtime.battle.surface.prepareImages(lease.images);}
+      finally{runtime.resume(reason);}
+      const pending=view.playAction(result,hooks);if(view.run)view.run.resourceLease=lease;else lease.release();return pending;
+    },resourcesForWorld,consumeResources:consumeBattleMp,
     now:()=>runtime.battle.clock.time,notify:snapshot=>{if(mode==='battle')runtime.setPhase(battlePhase(snapshot.phase));}});
   battle.start({...sample,rng:createNativeRng(12345)});
   $('battle').disabled=false;Object.assign(window.phaserPreview,{battle,view});status({...report(),mapComparison:compareMap()});

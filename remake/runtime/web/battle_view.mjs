@@ -4,6 +4,7 @@
  */
 
 import {compileNativeSequence} from './core/skill_sequence.mjs';
+import {BattleAssetPlan,effectReferences} from './core/battle_asset_plan.mjs';
 import {idlePoseAt} from './core/battle_scheduler.mjs';
 import {BattleLifecyclePlayback} from './battle_lifecycle_view.mjs';
 import {createDeathParticleSurface} from './death_particles.mjs';
@@ -23,27 +24,6 @@ const poseFrame=(segment,elapsed,loop=false)=>{
   const step=Math.floor(Math.max(0,elapsed)/segment.interval_raw);
   return segment.frames[loop?step%segment.frames.length:Math.min(segment.frames.length-1,step)];
 };
-
-// Follow the executable plans, including command4's contact effect. Merely
-// appearing in the global effect bank never makes an image battle-global.
-function effectReferences(value, result = new Set()) {
-  if (Array.isArray(value)) value.forEach(row => effectReferences(row, result));
-  else if (value && typeof value === 'object' && !value.missing_source_file) {
-    for (const key of ['asset_id','effect_asset_id','effect_id','carrier_asset_id']) {
-      if (typeof value[key] === 'string') result.add(value[key]);
-    }
-    if (value.command_raw === 4 && /^(?:[a-f0-9]{2}){176}$/i.test(value.raw_hex ?? '')) {
-      const raw = Uint8Array.from(value.raw_hex.match(/../g), byte => parseInt(byte, 16));
-      const target = new TextDecoder().decode(raw.slice(0x4e, 0x62)).split('\0')[0].replace(/\.dgp$/i, '');
-      if (target) result.add(target);
-    }
-    // Historical first-contact views retain non-executable source effects
-    // separately. They do not request pixels until an executable plan admits
-    // them; scanning that evidence as a live dependency expands old rosters.
-    for (const [key,child] of Object.entries(value)) if (key!=='deferred_effects'&&child && typeof child === 'object') effectReferences(child, result);
-  }
-  return result;
-}
 
 function effectOwners(meta, itemMeta, lifecycleMeta) {
   const owners = new Map(meta.effects.map(effect => [effect.id, new Set()]));
@@ -273,15 +253,17 @@ export class BattleView {
     this.ready = false;
     this.destroyed = false;
     this.generation = 0;
+    this.resourceScopes=new Set();this.compiledSequences=new WeakMap();this.preparedAssets=new WeakMap();this.retiredLeases=[];
   }
 
-  async prepare({actors=null,onProgress=()=>{}}={}) {
+  async prepare({actors=null,skills=null,inventory=null,staged=false,onProgress=()=>{}}={}) {
     if (this.destroyed) throw new Error('战斗表现已销毁');
-    if (this.run) throw new Error('行动播放期间不能重新准备战斗');
+    if (this.run||this.detachedRuns.length) throw new Error('行动播放期间不能重新准备战斗');
+    this.resourceController?.abort(abortError('重新准备战斗'));this.resourceController=new AbortController();
     if (this.ready) {
       const generation=++this.generation;
-      this.images=await this._prepareImages(this.assetDescriptors,actors,onProgress,()=>!this.destroyed&&generation===this.generation);
-      return clone(this.meta);
+      await this._prepareEntry({actors,skills,inventory,staged,onProgress,isCurrent:()=>!this.destroyed&&generation===this.generation});
+      return staged?this.resourceSnapshot():clone(this.meta);
     }
     const generation = ++this.generation;
     const check = () => {if (generation !== this.generation || this.destroyed) throw abortError();};
@@ -367,25 +349,28 @@ export class BattleView {
     // Commit readiness only after every actor, reaction, effect and intrinsic PNG
     // has decoded successfully. A failed batch leaves no partly ready command.
     const assets=[...descriptors.values()];
-    const images=await this._prepareImages(assets,actors,onProgress,()=>!this.destroyed&&generation===this.generation);
     check();
     this.meta = clone(meta);
     this.itemMeta=clone(itemMeta);
     this.stageMeta=clone(stageMeta);
     this.layers = clone(layers);
     this.alternateLayers = alternateLayers;
-    this.lifecyclePairs=new Map([...alternateLayers.values()].flatMap(bank=>bank.frames.map(pair=>[`${bank.role_id}:${pair.source_frame}`,pair])));
+    this.lifecyclePairs=new Map([layers,...alternateLayers.values()].flatMap(bank=>bank.frames.map(pair=>[`${bank.role_id}:${pair.source_frame}`,pair])));
     this.groundFootprints=new Map();
     this.lifecycleBounds=new Map();
     this.lifecycle=lifecycleMeta?new BattleLifecyclePlayback(lifecycleMeta,{appearanceBounds:(roleId,pose)=>this._appearanceBounds(roleId,pose),
       disappearanceEffect:(actorId,roleId,mode,event)=>this._disappearanceEffect(actorId,roleId,mode,event),
       nativeBridge:actorId=>this._nativeBridge(actorId),onFrame:step=>this.onLifecycleFrame?.(step)}):null;
-    this.assetDescriptors=assets;
-    this.images = images;
-    this.timelines = new Map(meta.roles.map(role => [role.id, compileActionTimeline(meta, layers, role.id,null,null,this.content)]));
-    for(const role of meta.roles)for(const skill of role.alternate_skills??[])this.timelines.set(`${role.id}:${skill.runtime_skill_id}`,compileActionTimeline(meta,layers,role.id,skill.runtime_skill_id,alternateLayers.get(`${role.id}:${skill.runtime_skill_id}`),this.content));
+    this.assetDescriptors=assets;this.lifecycleMeta=lifecycleMeta;
+    await this._prepareEntry({actors,skills,inventory,staged,onProgress,isCurrent:()=>!this.destroyed&&generation===this.generation});
+    check();
+    this.timelines = new Map();
+    if(!staged){
+      for(const role of meta.roles)this.timelines.set(role.id,compileActionTimeline(meta,layers,role.id,null,null,this.content));
+      for(const role of meta.roles)for(const skill of role.alternate_skills??[])this.timelines.set(`${role.id}:${skill.runtime_skill_id}`,compileActionTimeline(meta,layers,role.id,skill.runtime_skill_id,alternateLayers.get(`${role.id}:${skill.runtime_skill_id}`),this.content));
+    }
     this.ready = true;
-    return clone(meta);
+    return staged?this.resourceSnapshot():clone(meta);
   }
 
   async _prepareImages(descriptors,actors,onProgress,isCurrent){
@@ -410,6 +395,56 @@ export class BattleView {
     const failure=workers.find(result=>result.status==='rejected');if(failure)throw failure.reason;
     if(!isCurrent())throw abortError();return images;
   }
+
+  async _prepareEntry({actors,skills,inventory,staged,onProgress,isCurrent}){
+    this.preparedAssets=new WeakMap();
+    this.assetPlan=staged?new BattleAssetPlan({meta:this.meta,itemMeta:this.itemMeta,lifecycleMeta:this.lifecycleMeta,
+      descriptors:this.assetDescriptors,layers:[this.layers,...this.alternateLayers.values()],actors,skills,inventory}):null;
+    if(!staged){this.images=await this._prepareImages(this.assetDescriptors,actors,onProgress,isCurrent);return;}
+    const previous=this.entryLease;
+    this.entryLease=await this._loadAssets(this.assetPlan.assets(this.assetPlan.base),'battle-base',{onProgress,isCurrent});
+    previous?.release();this.images=new Map(this.entryLease.images);this.entryImageCount=this.entryLease.images.size;
+  }
+
+  async _loadAssets(assets,label,{onProgress=()=>{},isCurrent=()=>true}={}){
+    const scope=this.resourcePool?.createScope(label);let closed=false;
+    const lease={images:null,release:()=>{if(closed)return;closed=true;scope?.release();this.resourceScopes.delete(lease);}};
+    this.resourceScopes.add(lease);
+    try{
+      lease.images=scope?await scope.prepare(assets,{onProgress,isCurrent}):await this._prepareImages(assets,null,onProgress,()=>!closed&&isCurrent());
+      if(closed||!isCurrent())throw abortError();
+      for(const [path,image]of lease.images)this.images.set(path,image);
+      return lease;
+    }catch(error){lease.release();throw error;}
+  }
+
+  actionAssets(result){
+    if(!this.assetPlan)return [];
+    if(this.preparedAssets.has(result))return this.preparedAssets.get(result);
+    let compiled=null;
+    if(result.plan){compiled=this.compiledSequences.get(result)??compileNativeSequence(this.meta,this.assetPlan.actors.get(result.actor_id),result.plan,[this.layers,...this.alternateLayers.values()]);this.compiledSequences.set(result,compiled);}
+    const assets=this.assetPlan.assets(this.assetPlan.action(result,compiled));this.preparedAssets.set(result,assets);return assets;
+  }
+  actionResourcesReady(result){return !this.assetPlan||Boolean(this.resourcePool?.has(this.actionAssets(result)));}
+  async prepareAction(result){
+    if(!this.assetPlan)return null;
+    const generation=this.generation,lease=await this._loadAssets(this.actionAssets(result),'battle-action',
+      {isCurrent:()=>!this.destroyed&&generation===this.generation});
+    this.prefetchLease?.release();this.prefetchLease=null;return lease;
+  }
+  async prefetchCommand(command){
+    if(!this.assetPlan)return;
+    const plan=this.assetPlan,generation=this.generation,ticket={};this.prefetchTicket=ticket;
+    this.prefetchLease?.release();this.prefetchLease=null;
+    try{
+      const paths=command.item_id!==undefined?plan.item(command.actor_id,command.item_id):plan.skill(command.actor_id,command.skill_id);
+      const lease=await this._loadAssets(plan.assets(paths),'battle-lookahead',
+        {isCurrent:()=>!this.destroyed&&generation===this.generation&&this.prefetchTicket===ticket});
+      this.prefetchLease=lease;this.onResourcesPrepared?.(lease.images);
+    }catch(error){if(error.name!=='AbortError'&&this.prefetchTicket===ticket&&generation===this.generation)this.onResourceError?.(error);}
+  }
+  resourceSnapshot(){return {staged:Boolean(this.assetPlan),entry_images:this.entryImageCount??this.images.size,scopes:this.resourceScopes.size};}
+  _releaseRun(run){const lease=run?.resourceLease;if(lease){if(this.drawing)this.retiredLeases.push(lease);else lease.release();run.resourceLease=null;}}
 
   setRoster(actors,skills){
     this.lastActorPoses.clear();
@@ -442,7 +477,7 @@ export class BattleView {
     if(!this.ready||this.destroyed||this.run)return Promise.reject(new Error('完整技能表现尚未就绪或上一行动未结束'));
     const actor=this.roster.find(a=>a.id===result.actor_id),target=this.roster.find(a=>a.id===result.target_id);
     if(!this.meta.policy.complete_contacts||!actor||!target||typeof onContact!=='function'||typeof onRecord!=='function')return Promise.reject(new Error('完整技能序列或接触回调缺失'));
-    let compiled;try{compiled=compileNativeSequence(this.meta,actor.resource_id,result.plan,[this.layers,...this.alternateLayers.values()]);}catch(e){return Promise.reject(e);}
+    let compiled;try{compiled=this.compiledSequences.get(result)??compileNativeSequence(this.meta,actor.resource_id,result.plan,[this.layers,...this.alternateLayers.values()]);}catch(e){return Promise.reject(e);}
     return new Promise((resolve,reject)=>{this.run={sequence:true,native_control:this.nativeControl,native_guard:this.nativeControlIsCurrent,result:clone(result),steps:compiled.steps,segments:compiled.segments,resolve,reject,onContact,onRecord,onReactionContact,onReactionEnd,onPrimaryEnd,onFrame,onEffectFrame,onCarrierStart,onCarrierEnd,onCarrierTargets,onDetachedError,children:[],carriers:[],independent_carriers:compiled.independent_carriers,main_done:false,death_until:0,
       started:null,elapsed:0,cursor:0,visited:-1,next_at:0,record_visited:-1,impact_called:false,impact_done:false,impact_elapsed:null,effects:[],generation:this.generation,
       observations:{draws:0,origin_slot:null,last_slot:null,contact_slot:null,bounds:null,intrinsic_source_frames:[],effect_ids:[],contacts:[],authority:'Actual remake Canvas draws with all source contacts; preview animation clock'}};});
@@ -466,8 +501,11 @@ export class BattleView {
     const acting=this.roster.find(a=>a.id===actor),targeting=this.roster.find(a=>a.id===target);
     if(!acting||!targeting||acting.side===targeting.side||!(acting.skill_ids??[acting.skill_id]).includes(result.skill_id))return Promise.reject(new Error('本轮技能缺少已接入的原作表现'));
     if (typeof onImpact !== 'function') return Promise.reject(new Error('行动缺少结算提交回调'));
+    const role=this.meta.roles.find(row=>row.id===acting.resource_id),alternate=role.alternate_skills?.find(skill=>skill.runtime_skill_id===result.skill_id);
+    const key=alternate?`${acting.resource_id}:${result.skill_id}`:acting.resource_id;
+    if(!this.timelines.has(key))this.timelines.set(key,compileActionTimeline(this.meta,this.layers,acting.resource_id,alternate?result.skill_id:null,alternate?this.alternateLayers.get(key):null,this.content));
     return new Promise((resolve, reject) => {
-      this.run = {result: clone(result), steps: this.timelines.get(`${acting.resource_id}:${result.skill_id}`)??this.timelines.get(acting.resource_id), resolve, reject, onImpact,
+      this.run = {result: clone(result), steps: this.timelines.get(key), resolve, reject, onImpact,
         started: null, elapsed: 0, cursor: 0, visited: -1, impact_called: false, impact_done: false,
         impact_elapsed: null, effects: [], generation: this.generation,
         observations:{draws:0,origin_slot:null,last_slot:null,contact_slot:null,bounds:null,intrinsic_source_frames:[],effect_ids:[],authority:'Actual remake Canvas draws; not original game execution'}};
@@ -482,12 +520,18 @@ export class BattleView {
       frame: clone(step), policy: 'source sequence, preview clock and choreography'};
   }
 
+  cancelPreparation(reason='战斗准备已取消'){
+    this.resourceController?.abort(abortError(reason));++this.generation;this.prefetchTicket=null;
+    for(const lease of [...this.resourceScopes])lease.release();
+  }
+
   stop(reason = '战斗表现已取消') {
+    this.cancelPreparation(reason);
     this.lastActorPoses.clear();
-    ++this.generation;
     this.drawnSlots=null;
     this.damageTexts=[];
     this.lifecycle?.reset();
+    this.prefetchTicket=null;this.prefetchLease=null;
     for(const run of [this.run,...this.detachedRuns].filter(Boolean))if(!run.primary_resolved)run.reject(abortError(reason));
     this.run=null;this.detachedRuns=[];
     if(this.resourcePool&&this.resourcePool.scopes.get('battle-actors')===this.resourceLease)this.resourcePool.release('battle-actors');
@@ -503,6 +547,7 @@ export class BattleView {
   }
 
   _fail(run, error) {
+    this._releaseRun(run);
     if(this.run===run)this.run=null;
     this.detachedRuns=this.detachedRuns.filter(old=>old!==run);
     if(run.primary_resolved)run.onDetachedError?.(error);else run.reject(error);
@@ -541,7 +586,7 @@ export class BattleView {
     run.visited = run.cursor;
     if (this.run !== run) return null;
     if (run.elapsed >= run.steps.length * ms + this.meta.policy.tail_ms && run.impact_done) {
-      this.run = null;
+      this.run = null;this._releaseRun(run);
       run.resolve({completed: true, impact_committed: true, actor_id: run.result.actor_id,
         source_frame: run.steps.find(step => step.event).source_frame,observations:clone(run.observations)});
       return null;
@@ -663,7 +708,7 @@ export class BattleView {
         run.resolve({completed:true,interrupted:Boolean(run.interrupted),carriers_pending:run.carriers.some(c=>!c.done),impact_committed:run.observations.contacts.length>0,contact_count:run.observations.contacts.length,observations:clone(run.observations)});
       }
       if(foregroundDone&&run.carriers.every(c=>c.done)&&run.elapsed>=Math.max(run.death_until,visualEnd)){
-        if(this.run===run)this.run=null;this.detachedRuns=this.detachedRuns.filter(old=>old!==run);
+        if(this.run===run)this.run=null;this.detachedRuns=this.detachedRuns.filter(old=>old!==run);this._releaseRun(run);
         if(!run.primary_resolved)run.resolve({completed:true,interrupted:Boolean(run.interrupted),impact_committed:run.observations.contacts.length>0,contact_count:run.observations.contacts.length,observations:clone(run.observations)});return null;
       }
       return run;
@@ -699,6 +744,7 @@ export class BattleView {
   _sprite(role, actionIndex, frame, x, y, alpha = 1, pair = null) {
     const ctx = this.context, action = role.actions.find(item => item.index === actionIndex);
     const scale = this.meta.policy.sprite_scale, width = role.frame_width, height = role.frame_height;
+    if(this.assetPlan&&!pair)pair=this.lifecyclePairs.get(`${role.id}:${action.first_frame+frame}`)??null;
     ctx.save(); ctx.globalAlpha = alpha; ctx.globalCompositeOperation = 'source-over';
     const dx = x - role.anchor.x * scale, dy = y - role.anchor.y * scale;
     if (pair) {
@@ -833,6 +879,8 @@ export class BattleView {
   draw(snapshot, now = performance.now()) {
     if (this.destroyed) return;
     if (!Number.isFinite(now)) throw new Error('战斗表现时钟无效');
+    this.drawing=true;
+    try{
     this.lastDrawAt=now;
     const ctx = this.context, width = this.canvas.width, height = this.canvas.height;
     ctx.beginFrame?.();
@@ -949,5 +997,6 @@ export class BattleView {
     }
     this._drawDamageTexts(now);
     ctx.restore();
+    }finally{this.drawing=false;for(const lease of this.retiredLeases.splice(0))lease.release();}
   }
 }
