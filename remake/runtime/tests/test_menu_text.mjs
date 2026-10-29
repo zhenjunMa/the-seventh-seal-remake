@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {createMenuTextRenderer} from '../web/core/menu_text.mjs';
+import {operationMnuTextOptions} from '../web/core/menu_presentation.mjs';
 
 const manifest=JSON.parse(fs.readFileSync(new URL('../web/data/menu_fonts.json',import.meta.url),'utf8'));
 function canvas() {
@@ -17,6 +18,19 @@ async function renderer() {
     makeImage:()=>({width:1280,height:1200,async decode(){}}),
   });
 }
+
+test('all connected skill and item descriptions have exported glyphs in menu and battle text profiles',async()=>{
+  const text=await renderer(),load=name=>JSON.parse(fs.readFileSync(new URL(`../web/data/${name}.json`,import.meta.url),'utf8'));
+  const menu=load('operation_menu').menus.find(m=>m.id==='game001'),battle=load('battle_ui').menus.find(m=>m.id==='fight_info');
+  const profiles=[operationMnuTextOptions(menu.widgets.find(w=>w.name==='INFO')).font,operationMnuTextOptions(battle.widgets.find(w=>w.name==='TEXT')).font,'simsun12_text'];
+  const descriptions=Object.values(load('items').definitions).flatMap(item=>[item.name,item.description??'']);
+  for(const role of Object.values(load('party_skills').roles))for(const index of new Set([...role.learned_indices,...role.exposed_indices??[]])){
+    const skill=role.skills[index],raw=Buffer.from(skill.fixed_raw_hex,'hex').subarray(0x3b,0x3b+200);
+    descriptions.push(skill.name,new TextDecoder('gbk').decode(raw.subarray(0,raw.indexOf(0))));
+  }
+  descriptions.push(' → ','　MP 999');
+  for(const font of profiles)for(const description of descriptions)assert.equal(text.supports(description,font),true,`${font}: ${description}`);
+});
 
 test('caption single lower-right shadow does not inherit both menu shadow passes',async()=>{
   const text=await renderer(),target=canvas();

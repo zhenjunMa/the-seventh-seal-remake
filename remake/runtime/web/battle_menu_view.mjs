@@ -182,8 +182,16 @@ export class BattleMenuView{
     this.root.dataset.compositeMode='canvas-source-over-lighter';
   }
   asset(id,index,x,y,{blend='source-over',mask=false}={}){const a=this.manifest.assets[id];if(!a)return;const f=a.frames[((index%a.frames.length)+a.frames.length)%a.frames.length],c=blend==='lighter'?this.glowCtx:this.ctx,image=this.images.get(mask&&f.inverse_mask_image?f.inverse_mask_image:f.image);c.save();c.globalCompositeOperation=blend;if(image)drawBattleImage(c,image,x,y);if(f.indexed_image){const indexed=this.images.get(f.indexed_image);if(indexed){this.glowCtx.save();this.glowCtx.globalCompositeOperation='lighter';drawBattleImage(this.glowCtx,indexed,x,y);this.glowCtx.restore();}}c.restore();}
-  text(value,x,y,{font='12px SimSun',color='#ffffff',align='left',width=null,widget=null}={}){
-    const c=this.ctx;value=String(value);if(widget&&this.textRenderer){try{let options=this.fontOptions.get(widget);if(!options){options=operationMnuTextOptions(widget);this.fontOptions.set(widget,options);}if(this.textRenderer.supports(value,options.font)){const key=JSON.stringify([value,options]);let canvas=this.textCache.get(key);if(!canvas){canvas=this.doc.createElement('canvas');this.textRenderer.paint(canvas,value,options);if(this.textCache.size>128)this.textCache.clear();this.textCache.set(key,canvas);}c.drawImage(canvas,x,y);return;}}catch{}}
+  text(value,x,y,{font='12px SimSun',bitmapFont='simsun12_text',color='#ffffff',align='left',width=null,widget=null}={}){
+    const c=this.ctx;value=String(value);if(!value)return;
+    if(this.textRenderer){
+      let options;if(widget){options=this.fontOptions.get(widget);if(!options){options={...operationMnuTextOptions(widget),maxLines:1};this.fontOptions.set(widget,options);}}
+      else options={font:bitmapFont,foreground:color,shadow:'#000000',align,maxWidth:width,maxLines:1};
+      const key=JSON.stringify([value,options]);let rendered=this.textCache.get(key);
+      if(!rendered){const canvas=this.doc.createElement('canvas');rendered={canvas,...this.textRenderer.paint(canvas,value,options)};if(this.textCache.size>128)this.textCache.clear();this.textCache.set(key,rendered);}
+      const anchor=!widget&&width===null?(align==='right'?1:align==='center'?.5:0)*this.textRenderer.measure(value,bitmapFont):0;
+      c.drawImage(rendered.canvas,x-anchor+rendered.offsetX,y+rendered.offsetY);return;
+    }
     c.font=font;c.textAlign=align;c.textBaseline='top';c.fillStyle='#000';c.fillText(value,x+1,y+1,width??640);c.fillStyle=color;c.fillText(value,x,y,width??640);
   }
   draw(now,positions=null){
@@ -204,7 +212,7 @@ export class BattleMenuView{
       this.asset('time_glass',0,x+16,y+1,{mask:true});
       if(actor.id===this.snapshot.player_id&&this.ready().includes(actor.id))this.asset('fight_mark',Math.floor(now/120),x-30,y-16,{blend:'lighter'});
     });
-    this.image(this.menus.get('fight_info').images[0].image,0,443);this.text(this.message,2,457,{font:'14px SimSun',width:434});
+    const info=this.menus.get('fight_info'),infoText=info.widgets.find(w=>w.name==='TEXT');this.image(info.images[0].image,0,443);this.text(this.message,infoText.rect.left,443+infoText.rect.top,{font:'14px SimSun',widget:infoText});
     if(this.stage!=='result')this.drawWheel(now);
     if(['skills','items'].includes(this.stage))this.drawList();
     const selected=this.snapshot.actors.find(a=>a.id===this.snapshot.player_id),pointer=this.stage==='target'?this.snapshot.actors.find(a=>a.id===this.targetId):this.ready().includes(selected?.id)?selected:null;
@@ -227,6 +235,6 @@ export class BattleMenuView{
       if(b.getAttribute('aria-disabled')==='true')this.asset('fight_board_disable',0,x,y);
     });
   }
-  drawList(){const menu=this.menus.get(this.stage==='items'?'fight002':'fight001'),x=467,y=274;this.image(menu.images[0].image,x,y);if(this.stage==='skills'){const w=menu.widgets.find(w=>w.name===String(this.skillCategory+1).padStart(3,'0'));this.image(w.selected_images.at(-1)??w.active_images.at(-1),x+w.draw_point_raw.x,y+w.draw_point_raw.y);}this.listButtons.forEach((b,i)=>{const entry=this.entries?.[this.listOffset+i];if(!entry)return;const w=menu.widgets.find(w=>w.name.toLowerCase()==='list'+(i+1));if(this.listIndex===this.listOffset+i)this.image(w.active_images[0],x+w.draw_point_raw.x,y+w.draw_point_raw.y);this.text(entry.name,x+w.rect.left+6,y+w.rect.top,{font:'12px SimSun',color:entry.available?this.listIndex===this.listOffset+i?'#ffff44':'#fff':'#777',width:entry.quantity===undefined?124:104});if(entry.quantity!==undefined)this.text(entry.quantity,x+140,y+w.rect.top,{font:'11px Arial',align:'right'});});}
+  drawList(){const menu=this.menus.get(this.stage==='items'?'fight002':'fight001'),x=467,y=274;this.image(menu.images[0].image,x,y);if(this.stage==='skills'){const w=menu.widgets.find(w=>w.name===String(this.skillCategory+1).padStart(3,'0'));this.image(w.selected_images.at(-1)??w.active_images.at(-1),x+w.draw_point_raw.x,y+w.draw_point_raw.y);}this.listButtons.forEach((b,i)=>{const entry=this.entries?.[this.listOffset+i];if(!entry)return;const w=menu.widgets.find(w=>w.name.toLowerCase()==='list'+(i+1));if(this.listIndex===this.listOffset+i)this.image(w.active_images[0],x+w.draw_point_raw.x,y+w.draw_point_raw.y);this.text(entry.name,x+w.rect.left+6,y+w.rect.top,{font:'12px SimSun',color:entry.available?this.listIndex===this.listOffset+i?'#ffff44':'#fff':'#777',width:entry.quantity===undefined?124:104});if(entry.quantity!==undefined)this.text(entry.quantity,x+140,y+w.rect.top,{font:'11px Arial',bitmapFont:'arial11_text',align:'right'});});}
   dispose(){this.resourceScope.release();this.disposed=true;this.epoch++;this.draft=null;this.resultView?.dispose();this.resizeObserver.disconnect();this.root.replaceChildren();this.images.clear();this.textCache.clear();this.ballCache.clear();}
 }

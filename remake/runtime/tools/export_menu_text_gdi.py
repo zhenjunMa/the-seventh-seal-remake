@@ -31,7 +31,9 @@ def collect_text_charset():
     for role in roles.values():
         add(role.get('name'))
         for index in sorted(set(role['learned_indices'])|set(role.get('exposed_indices',[]))):
-            row=role['skills'][index];add(row.get('name'));add(row.get('description'))
+            row=role['skills'][index];add(row.get('name'))
+            description=bytes.fromhex(row['fixed_raw_hex'])[0x3b:0x3b+200].split(b'\0',1)[0]
+            add(description.decode('gbk'))
     for path in sorted((data/'maps').glob('*.json')):add(load(path).get('name'))
     for row in load(data/'world_map.json').get('destinations',[]):add(row.get('name'))
     menus=load(data/'operation_menu.json')['menus']
@@ -50,13 +52,15 @@ def collect_text_charset():
         'web/core/equipment.mjs','web/core/field_items.mjs','web/core/field_skills.mjs'}
     filenames.update(p.relative_to(RUNTIME).as_posix() for p in (RUNTIME/'web').glob('operation_*_view.mjs'))
     filenames.update(p.relative_to(RUNTIME).as_posix() for p in (RUNTIME/'web/core').glob('menu_*.mjs'))
+    filenames.add('web/battle_menu_view.mjs')
+    filenames.update(p.relative_to(RUNTIME).as_posix() for pattern in ['battle_*.mjs','combat*.mjs'] for p in (RUNTIME/'web/core').glob(pattern))
     for filename in sorted(filenames):
         path=RUNTIME/filename
         if not path.exists():continue
         raw=path.read_bytes();sources.append({'path':filename,'sha256':hashlib.sha256(raw).hexdigest()})
         for match in re.finditer(r"(['\"`])([^'\"`\n]*)\1",raw.decode('utf-8')):
             if match[2] not in font_faces and re.search(r'[\u3400-\u9fff]',match[2]):add(match[2])
-    characters=''.join(sorted({c for text in texts for c in text if c.isprintable()}|set('0123456789/ -x()：，。．、!?%+')))
+    characters=''.join(sorted({c for text in texts for c in text if c.isprintable()}|set('0123456789/ -x()：，。．、!?%+→　')))
     return characters,sources
 
 
@@ -88,7 +92,7 @@ def main():
     manifest=json.loads(MANIFEST.read_text(encoding='utf-8'))
     manifest['text_charset']={'character_count':len(characters),'characters':characters,
         'sha256':hashlib.sha256(characters.encode('utf-8')).hexdigest(),'sources':sources,
-        'scope':'Current item catalog names/descriptions, exposed/learned skills of integrated roles001/002, integrated map names, all original combination naming characters, and connected operation-menu views/rule messages.',
+        'scope':'Current item catalog names/descriptions, exposed/learned skill names and raw-record descriptions of all integrated roles, integrated map names, all original combination naming characters, and connected operation/battle menu views and rule messages.',
         'original_font_boundary':'全真特黑體 is a literal MNU requested face. face_resolved records current Windows mapping; no original font file is supplied.'}
     manifest['MNU_parameters']={'procedure':'0x56DD00','draw_procedure':'0x5344F0',
         'measure_procedures':['0x5341A1','0x53434C'],
