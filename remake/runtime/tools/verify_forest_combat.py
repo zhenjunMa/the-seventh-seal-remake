@@ -94,7 +94,7 @@ def main():
         http.append(ref)
     fingerprints={}
     paths=[*WEB.glob('*.js'),*WEB.glob('*.mjs'),*WEB.glob('*.html'),*WEB.glob('*.css'),*WEB.glob('core/*.mjs'),*WEB.glob('data/*.json'),*RUNTIME.glob('tools/export_battle_scheduler.py'),*RUNTIME.glob('tools/*forest*.py'),RUNTIME/'tools/build_catalog.py',RUNTIME/'tests/native_assembly_oracle.mjs',RUNTIME/'tests/preserve_history.mjs',WEB/'core/movement.mjs',*tests,
-           REMAKE/'README.md',RUNTIME/'README.md',REMAKE/'assessment/validation_design.md',REMAKE/'assessment/menu_alignment_workflow.md']
+           ROOT/'README.md',RUNTIME/'README.md',REMAKE/'assessment/validation_design.md',REMAKE/'assessment/testing_strategy.md']
     paths+=list(EVIDENCE.glob('forest_combat_four_steps_browser*'))
     for path in paths:fingerprints[str(path.relative_to(ROOT)).replace('\\','/')]=digest(path)
     report={'schema':'seventh-seal-forest-four-step-delivery','version':1,'passed':True,'tests':count,'http_checks':http,'source_hashes':source_checks,'assets_checked':len(asset_checks),'asset_hashes':asset_checks,'current_fingerprints':fingerprints,

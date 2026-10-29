@@ -1,7 +1,7 @@
 {
   "schema": "seventh-seal-tool-index",
   "version": 1,
-  "updated": "2026-10-28",
+  "updated": "2026-10-29",
   "registered_steps": 45,
   "content_plan": [
     "chapter-maps",
@@ -1263,6 +1263,18 @@
       "sha256": "3e30039dc7fcc5173a73ebe2b71a9b9d5259069bd0c13fafdaeba6ba82b95363",
       "replacement": "remake/runtime/config_guide.md",
       "recovery_commit": "ffd529a93457bc259e86d482be3e9da4b23ebb0d"
+    },
+    {
+      "path": "remake/README.md",
+      "sha256": "eb23e841b2b86fa783d0b51d8b492f8bda10788679fc4f408aac323b830a4769",
+      "replacement": "README.md",
+      "recovery_commit": "858f5ddacac9de3f27681817eafbdd46b83e06c7"
+    },
+    {
+      "path": "remake/assessment/menu_alignment_workflow.md",
+      "sha256": "c8424eade72736286b864913afbbe139b724c17a054a22a107ff781c26567a03",
+      "replacement": "remake/assessment/testing_strategy.md",
+      "recovery_commit": "858f5ddacac9de3f27681817eafbdd46b83e06c7"
     }
   ]
 }

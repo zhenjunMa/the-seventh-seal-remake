@@ -148,8 +148,8 @@ def main():
     current += sorted((RUNTIME/'tests').glob('test_*.mjs'))
     current += [Path(__file__),RUNTIME/'tools/verify_current.py',RUNTIME/'tools/build_runtime.py',
                 RUNTIME/'tools/create_menu_finish_fixture.mjs',RUNTIME/'tools/menu_font_recipe.json',
-                RUNTIME/'tools/export_menu_text_gdi.py',*[RUNTIME.parent/name for name in
-                ['README.md','assessment/validation_design.md','runtime/README.md','runtime/architecture.md',
+                RUNTIME/'tools/export_menu_text_gdi.py',ROOT/'README.md', *[RUNTIME.parent/name for name in
+                ['assessment/validation_design.md','runtime/README.md','runtime/architecture.md',
                  'runtime/config_guide.md','runtime/tools/README.md']]]
     evidence = sorted(p for p in CASES.iterdir() if p.suffix in {'.json','.jpg','.png'})
     evidence += [EVIDENCE/name for name in ['menu_finish_native_20261014.json','menu_catalog_finish_native_20261014.json',

@@ -1,73 +1,58 @@
 # The Seventh Seal Remake
 
-《第七封印》重制项目。仓库保存游戏代码、可编辑配置、运行定义、资源导出工具和测试。音乐、图片、动画贴图等素材由使用者从自己的原版游戏文件中提取。
+《第七封印》重制项目。仓库保存浏览器游戏代码、配置、内容定义、资源导出工具和测试；图片、音乐、影片等媒体由使用者从自己的原版安装中提取。
 
-## 当前状态
+当前代码使用随仓库提供的 Phaser 3.90.0，包含探索、剧情、战斗、操作菜单和存读档。区域接入范围、自然路线与开发交接验收的区别，以及下一阶段任务，统一见[当前开发计划](remake/assessment/validation_design.md)。
 
-当前代码已接入序章、火之谷21图、外层白木森林6图及翠碧湖首次通行至运炎河右岸，以及战斗、操作菜单、成长和存读档。白木森林包含原对白、13个元素箱、旗标控制的重访布局与两端大地图出口；翠碧湖保留13张原地图的共用资源，首次通行使用6图、stage07与雷兽／刽齿蛟，融湖切图依原旗标处理。小吉完整支线、后期宝箱和炎城内部主线随下一阶段推进，具体接入与验收范围见开发计划。娃蒂作为第三名队友接入开发样本；正式主线的入队剧情尚未添加。
+## 本地运行
 
-正式入口已接入 Phaser 3.90.0：主循环、探索场景、人物显示和战斗绘制使用 Phaser，已有规则、配置、存档及菜单／对白保持原有契约。运行库随代码提供，无需 npm 安装或 CDN。各区域真实素材观察与未覆盖范围见[开发计划](remake/assessment/validation_design.md)；区域外完整主线尚未贯通，后期区域分支使用注明来源的开发交接档验收。
+**首次构建尚未打通。** 干净克隆只有代码和结构化定义；现有构建入口仍依赖部分本地来源台账和历史样本。运行正式游戏需要与当前定义匹配的已生成媒体，准备与缺失处理见[本地资料](remake/local_materials.md)。
 
-**当前发布的是代码与配置基线。干净克隆后，仅凭原版文件生成全部素材的首次构建流程尚未打通。** 现有导出入口用于增量构建，部分步骤仍依赖本地来源台账、原生验证记录和历史样本；这些记录和样本不在仓库中。首次构建准备完成前，运行游戏需要本地已生成的资源，不能直接把克隆仓库视为完整可运行安装包。
-
-## 仓库内容
-
-- `remake/runtime/web/`：正式版浏览器代码、地图与剧情定义，以及技能、道具、人物、怪物和战斗配置。
-- `remake/runtime/tools/`：正式内容构建、素材提取和验证工具；`source/` 保存共享只读解码器。
-- `remake/runtime/tests/`：自动测试；部分集成测试依赖未随仓库提供的原版文件和本地证据。
-- `remake/prototype/`：早期演示和定向验证，复用正式模块及素材；正式游戏不依赖此目录。
-- `remake/assessment/`：当前开发计划和验收方法。
-- `save_analysis_20261010/`：导出器仍引用的四个共享 Python 解析模块，只提交代码。
-
-正式移动模块位于 `remake/runtime/web/core/movement.mjs`，正式媒体统一位于 `remake/runtime/web/assets/`，基础导出清单位于 `remake/runtime/web/data/source/`。已有旧版素材时，先运行 `python3 -B remake/runtime/tools/migrate_local_materials.py` 盘点，加 `--run` 复制；原目录和文件指纹保留。完整升级步骤和跨目录交接命令见[构建工具说明](remake/runtime/tools/README.md)中的“旧环境升级”；迁移映射见 `remake/runtime/tools/layout_migration.json`。
-
-`.gitignore` 排除原版程序与资源、提取素材、存档、观察副本、证据报告、历史备份和缓存。`remake/runtime/web/data/` 中的 JSON 是运行定义或结构化资源描述，随代码提交；媒体文件本身不提交。
-
-## 本地目录与运行
-
-当前工具仍按以下布局读取原版文件：
-
-```text
-the-seventh-seal-remake/
-  GAME.exe                  # 使用者本地提供，不提交
-  Map/                      # 使用者本地提供，不提交
-  Fight_Role/               # 使用者本地提供，不提交
-  SYSTEM/                   # 以及工具需要的其他原版目录，不提交
-  remake/                   # 仓库内容
-  save_analysis_20261010/    # 共享解析代码；本地样本不提交
-```
-
-已有完整本地生成资源时，从仓库根目录启动：
+从仓库根目录启动（Python 3）：
 
 ```console
 python3 -B remake/runtime/serve.py
 ```
 
-以上命令适用于 macOS/Linux。Windows 可用 `python -B remake/runtime/serve.py`，或双击 `remake/start.cmd`；所选命令需指向 Python 3。
+Windows 可用 `python -B remake/runtime/serve.py`，或双击 `remake/start.cmd`。访问 <http://127.0.0.1:8767/>；服务将重制存档写入 `remake/saves/`。
 
-访问 <http://127.0.0.1:8767/>。本地服务同时读写 `remake/saves/` 下的普通档和快速档；仅启动服务不能补齐缺失素材。
+没有媒体时，可访问 <http://127.0.0.1:8767/phaser-preview.html>，用示意图检查探索、缩放和战斗。预览不读写正式存档，其结果不代表原作画面或主线验收。
 
-没有媒体素材时，可访问 <http://127.0.0.1:8767/phaser-preview.html>：使用程序生成的示意图体验探索、缩放和基于现有规则的战斗，不读取或覆盖正式存档。该页面不代表原素材表现或完整主线验收。
+代码与运行定义预检查需要 Node.js：
 
-代码与资源预检查：`node remake/runtime/tools/verify_phaser.mjs`。素材持有者使用 `node remake/runtime/tools/verify_phaser.mjs --assets` 核对资源是否齐全及已有指纹／尺寸。检查通过后仍需实际验证剧情、战斗和存读档。
+```console
+node remake/runtime/tools/verify_phaser.mjs
+```
 
-日常任务验收：`python3 -B remake/runtime/tools/verify_tests.py`，默认按工作区改动选择便携检查，输入未变的成功结果可复用；先加 `--list --explain` 查看范围。区域阶段、版本交付及来源审计分别使用 `--profile phase`、`release`、`audit`，前置与浏览器范围见[测试职责与运行](remake/runtime/tools/README.md#测试职责与运行)。
+素材齐全时加 `--assets` 核对资源存在性、已声明指纹和尺寸。环境依赖、增量构建和验收命令见[工具说明](remake/runtime/tools/README.md)。
 
-运行静态服务需要 Python 3；代码预检查需要 Node.js。构建工具另外使用 Pillow、NumPy、FFmpeg/FFprobe，GDI 字体导出需要 Windows；具体前置条件与命令见[工具说明](remake/runtime/tools/README.md)。统一依赖安装和首次构建仍是未完成任务，不能把增量构建命令当作首次安装流程。
+## 文档入口与维护分工
 
-## 配置与开发文档
+| 要做的事 | 唯一说明入口 |
+| --- | --- |
+| 启动、按键、菜单、战斗、保存 | [运行与操作](remake/runtime/README.md) |
+| 查当前范围、待办和验收状态 | [当前开发计划](remake/assessment/validation_design.md) |
+| 理解模块、状态、事务和时钟 | [实现架构](remake/runtime/architecture.md) |
+| 调整数值，接入角色、技能、怪物 | [配置与内容登记](remake/runtime/config_guide.md) |
+| 接入地图、NPC、对白与任务 | [剧情指南](remake/runtime/story_guide.md) |
+| 盘点新区、选择阶段、核对交接 | [区域重制方法](remake/assessment/region_remake_workflow.md) |
+| 选择检查范围、核对界面和动态表现 | [测试与验收规范](remake/assessment/testing_strategy.md) |
+| 构建、导出、排错、旧环境升级 | [工具说明](remake/runtime/tools/README.md) |
+| 准备媒体、来源证据和恢复旧资料 | [本地资料](remake/local_materials.md) |
+| 使用早期演示与定向检查 | [实验目录](remake/prototype/README.md) |
+| 修改项目前先读维护约束 | [目录约定](remake/AGENTS.md) |
 
-- [重制文档导航](remake/README.md)
-- [运行与操作说明](remake/runtime/README.md)
-- [代码架构](remake/runtime/architecture.md)
-- [配置与内容扩展](remake/runtime/config_guide.md)
-- [地图、NPC、对白与任务接入](remake/runtime/story_guide.md)
-- [导出与验证工具](remake/runtime/tools/README.md)
-- [当前计划](remake/assessment/validation_design.md)
-- [界面与动态表现验收方法](remake/assessment/menu_alignment_workflow.md)
-- [全区域重制工作方法](remake/assessment/region_remake_workflow.md)
-- [本地素材、证据与历史资料](remake/local_materials.md)
+## 仓库布局
 
-技能、道具、战斗和奖励数值统一维护在 `remake/runtime/web/data/config/`。只在 `parameters` 填写修改项，空对象沿用来源默认值；文件级 `source_hashes` 和身份字段只读。默认值及生效值可用 `node remake/runtime/tools/export_runtime_config.mjs --reference skills yantu` 查询。`original` 模式要求原版参数一致，应用修改使用 `debug` 模式；普通导出迁移旧格式、补齐新增内容并保留调参，显式重置才恢复原值。
+| 路径 | 职责 |
+| --- | --- |
+| `remake/runtime/web/` | 正式代码、内容登记和生成的运行定义；媒体在被 Git 忽略的 `assets/` |
+| `remake/runtime/tools/` | 构建、提取、验证；`source/` 为共享只读解码器 |
+| `remake/runtime/tests/` | 自动检查及已提交的辅助代码 |
+| `remake/assessment/` | 当前计划、区域方法、测试规范 |
+| `remake/prototype/` | 复用正式实现的实验页面，正式游戏不依赖它 |
+| `save_analysis_20261010/` | 导出器仍使用的四个共享 Python 解析模块 |
 
-素材、来源台账和历史观察的用途、交接方式与缺失处理统一见[本地资料说明](remake/local_materials.md)。历史报告只说明对应阶段的验收范围，不代表当前 Phaser 版或干净克隆的构建已通过。
+原版 `GAME.exe`、`Map/`、`Fight_Role/`、`SYSTEM/` 等输入放在仓库根目录，由工具只读访问，不提交。`.gitignore` 同时排除提取媒体、原存档、观察副本、证据、归档和缓存。
+
+文档描述当前职责和操作；详细开发过程留在证据记录中。变更状态只在开发计划维护，其他指南通过链接引用。

@@ -124,7 +124,7 @@ def main():
     current = sorted(p for p in WEB.rglob('*') if p.is_file() and p.suffix in {'.mjs','.js','.css','.html','.json'})
     current += sorted((RUNTIME/'tests').glob('test_*.mjs'))
     current += [Path(__file__), RUNTIME/'tools/verify_current.py', RUNTIME/'tools/create_menu_socket_fixture.mjs',
-                *[RUNTIME.parent/name for name in ['README.md','assessment/validation_design.md',
+                ROOT/'README.md', *[RUNTIME.parent/name for name in ['assessment/validation_design.md',
                   'runtime/README.md','runtime/architecture.md','runtime/config_guide.md','runtime/tools/README.md']]]
     evidence = sorted(p for p in CASES.iterdir() if p.suffix in {'.json','.jpg','.png'})
     evidence += [EVIDENCE/name for name in ['crystal_socket_audit_20261014.json','crystal_socket_native_20261014.json',
