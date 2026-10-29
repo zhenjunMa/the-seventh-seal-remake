@@ -1,6 +1,26 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
 import {BattleMenuView} from '../web/battle_menu_view.mjs';
+
+test('battle skill and item lists share exported text masks and the INFO widget keeps its native font and placement',()=>{
+  const manifest=JSON.parse(readFileSync(new URL('../web/data/battle_ui.json',import.meta.url),'utf8'));
+  const painted=[],draws=[],view=Object.create(BattleMenuView.prototype);
+  Object.assign(view,{ctx:{clearRect(){},drawImage:(...args)=>draws.push(args)},glowCtx:{clearRect(){}},
+    doc:{createElement:()=>({})},fontOptions:new WeakMap(),textCache:new Map(),
+    textRenderer:{paint(canvas,value,options){painted.push({value,options});return {offsetX:-1,offsetY:-2};},measure:value=>String(value).length*7},
+    snapshot:{actors:[],player_id:'001'},menus:new Map(manifest.menus.map(m=>[m.id,m])),
+    stage:'items',message:'回复生命',entries:[{name:'小回复剂',quantity:12,available:true}],listButtons:[{}],listIndex:0,listOffset:0,
+    image(){},syncTargets(){},drawWheel(){},ready:()=>[]});
+  view.draw(0);
+  assert.deepEqual(painted.map(row=>row.options.font),['requested_black14_mnu','simsun12_text','arial11_text']);
+  assert.equal(painted[0].options.maxWidth,436);assert.equal(painted[0].options.maxLines,1);
+  assert.equal(painted[1].options.foreground,'#ffff44');assert.equal(painted[2].options.align,'right');
+  assert.deepEqual(draws.map(row=>row.slice(1)),[[1,452],[482,330],[592,330]]);
+  view.draw(1);assert.equal(painted.length,3,'unchanged text reuses its rendered mask');
+  view.stage='skills';view.skillCategory=1;view.entries=[{name:'炎体．百里',available:false}];view.draw(2);
+  assert.equal(painted.at(-1).options.font,'simsun12_text');assert.equal(painted.at(-1).options.foreground,'#777');
+});
 
 test('HUD normal and additive pixels composite over the battle at the same 4:3 fit',()=>{
   const calls=[],normal={},glow={},root={dataset:{}},context={
