@@ -36,7 +36,7 @@
 
 当前地图NPC通过可选`map_npc_state`保存位置、方向、帧和显隐，ANM变化随剧情draft提交。恢复顺序为来源默认→加载布置→存档人物投影；普通离图清除旧图快照，重新进入加载来源。旧档无字段时保持原默认行为。
 
-物理state0出口由原DAT推导；TLK kind2使用目标marker和原排序，不能误用对白跳转号。原障碍入口允许移出但不改terrain；无cells描述符不补自选触发格。物件CF1／CF4／CF7和动作绑定的共同规则见[来源规则速查](../assessment/region_remake_workflow.md#来源规则速查)。
+物理state0出口由原DAT推导；TLK kind2使用目标marker和原排序，不能误用对白跳转号。原CF1物件可按tlk-object登记+F6入口，主动交互沿同一StoryFlow事务执行，保持可重复交互；其kind2传送继承当前原排序，目标准备失败回滚物品和旗标。原障碍入口允许移出但不改terrain；无cells描述符不补自选触发格。物件CF1／CF4／CF7和动作绑定的共同规则见[来源规则速查](../assessment/region_remake_workflow.md#来源规则速查)。
 
 ## 来源查询
 
@@ -48,6 +48,7 @@
 | 外层白木森林 | `data/library/white_forest.json`；`white-forest-index`，不含里白木森林 |
 | 翠碧湖 | `data/library/jade_lake.json`；`jade-lake-index`，不含同前缀研究所遗迹 |
 | 炎城 | `data/library/ember_city.json`；`ember-city-index`，保留M01020A等原ID |
+| 里白木森林／幻影之森／封印之森 | `data/library/inner_white_forest.json`；`inner-white-forest-index`，完整保留17图，运行准入另看`runtime_content.json` |
 
 各`tools/export_<区域>_index.py`共用`--query`、`--map`、`--flag`和`--check`查询方式，示例见[工具说明](tools/README.md#来源查询)。`external_callers`记录原调用者，`potential_call_roots`表示静态可达，二者都不保证某个存档当前能进入。
 

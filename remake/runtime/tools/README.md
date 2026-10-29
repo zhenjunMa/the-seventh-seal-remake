@@ -61,6 +61,7 @@ node remake/runtime/tools/check_content.mjs --json
 | 外层白木森林 | white-forest-index | export_white_forest_index.py |
 | 翠碧湖 | jade-lake-index | export_jade_lake_index.py |
 | 炎城 | ember-city-index | export_ember_city_index.py |
+| 里白木森林／幻影之森／封印之森 | inner-white-forest-index | export_inner_white_forest_index.py |
 
 ```console
 python3 -B remake/runtime/tools/build_runtime.py --target ember-city-index --run
@@ -210,6 +211,7 @@ python3 -B remake/runtime/tools/source/inspect_equipment.py /path/to/SaveGame0.D
 | `white-forest-index` | [export_white_forest_index.py](export_white_forest_index.py) | 无声明依赖 |
 | `jade-lake-index` | [export_jade_lake_index.py](export_jade_lake_index.py) | 无声明依赖 |
 | `ember-city-index` | [export_ember_city_index.py](export_ember_city_index.py) | 无声明依赖 |
+| `inner-white-forest-index` | [export_inner_white_forest_index.py](export_inner_white_forest_index.py) | 无声明依赖 |
 | `native-services` | [export_native_services.py](export_native_services.py) | 无声明依赖 |
 
 <!-- 自动生成：构建目标结束 -->

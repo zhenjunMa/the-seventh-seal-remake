@@ -202,6 +202,31 @@
         "decoded_audio_unchanged": true
       }
     },
+    "sound/mn700-2.wav": {
+      "path": "/assets/audio/mn700-2.mp3",
+      "mime": "audio/mpeg",
+      "sha256": "6e155dfb66419d7967d9b0d9f90da79f3f19c09d8fb1ccd22d24eac375f13ef3",
+      "source": {
+        "path": "sound/mn700-2.wav",
+        "sha256": "6e155dfb66419d7967d9b0d9f90da79f3f19c09d8fb1ccd22d24eac375f13ef3",
+        "bytes": 3366768,
+        "header_hex": "49443303000000000776000000000000",
+        "declared_extension": ".wav",
+        "observed_encoding": "MPEG Layer III"
+      },
+      "audio": {
+        "codec": "mp3",
+        "sample_rate": 44100,
+        "channels": 2,
+        "bits_per_sample": 0,
+        "duration_seconds": 168.2872
+      },
+      "export": {
+        "method": "byte-preserving MPEG suffix correction",
+        "decoded_pcm_md5": "MD5=24d9c0f8c7c2e096ee361ff27ef59b8f",
+        "decoded_audio_unchanged": true
+      }
+    },
     "sound/Fight/FightBGM01.wav": {
       "path": "/assets/audio/Fight/FightBGM01.mp3",
       "mime": "audio/mpeg",
@@ -8203,6 +8228,111 @@
         "ev_fb1d8a60f17d0b5c8e09e62e979f4b3423b50e534accacd8eb02e43655054579"
       ],
       "confidence": "source DAT+0x44 and confirmed native same-track/load branch"
+    },
+    "M70071": {
+      "clip": "sound/mn700-2.wav",
+      "source": {
+        "path": "Map/m70071.dat",
+        "sha256": "de7c2ba50e1f831d8a4e6837c7eaa6796fc4f2fa664fb9e5f0eb6ad46ccbf33f",
+        "offset": 68,
+        "bytes": 64,
+        "token": "mn700-2.wav"
+      },
+      "evidence": [
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_fb1d8a60f17d0b5c8e09e62e979f4b3423b50e534accacd8eb02e43655054579"
+      ],
+      "confidence": "source DAT+0x44 and confirmed native same-track/load branch"
+    },
+    "M70072": {
+      "clip": "sound/mn700-2.wav",
+      "source": {
+        "path": "Map/m70072.dat",
+        "sha256": "e81ee5e98081fa9143913b7797af9318c4fae69992f02c5a96df185ce0b7d82d",
+        "offset": 68,
+        "bytes": 64,
+        "token": "mn700-2.wav"
+      },
+      "evidence": [
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_fb1d8a60f17d0b5c8e09e62e979f4b3423b50e534accacd8eb02e43655054579"
+      ],
+      "confidence": "source DAT+0x44 and confirmed native same-track/load branch"
+    },
+    "M70073": {
+      "clip": "sound/mn700-2.wav",
+      "source": {
+        "path": "Map/m70073.dat",
+        "sha256": "6636d6c5d7a95a4fc64bbd5cab1fa42bb976ac8bdba98c80c8a5145bea7644cb",
+        "offset": 68,
+        "bytes": 64,
+        "token": "mn700-2.wav"
+      },
+      "evidence": [
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_fb1d8a60f17d0b5c8e09e62e979f4b3423b50e534accacd8eb02e43655054579"
+      ],
+      "confidence": "source DAT+0x44 and confirmed native same-track/load branch"
+    },
+    "M70074_1": {
+      "clip": "sound/mn700-2.wav",
+      "source": {
+        "path": "Map/m70074_1.dat",
+        "sha256": "1f7940c62ed21b86ec1fd69c3eb4d451f1cbe20f939cb66117189adba5e357b5",
+        "offset": 68,
+        "bytes": 64,
+        "token": "mn700-2.wav"
+      },
+      "evidence": [
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_fb1d8a60f17d0b5c8e09e62e979f4b3423b50e534accacd8eb02e43655054579"
+      ],
+      "confidence": "source DAT+0x44 and confirmed native same-track/load branch"
+    },
+    "M70074_2": {
+      "clip": "sound/mn700-2.wav",
+      "source": {
+        "path": "Map/m70074_2.dat",
+        "sha256": "d8ebf4d5179f28c5299c794ca2615f3c7eb7846e289141b82438fb69262005ab",
+        "offset": 68,
+        "bytes": 64,
+        "token": "mn700-2.wav"
+      },
+      "evidence": [
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_fb1d8a60f17d0b5c8e09e62e979f4b3423b50e534accacd8eb02e43655054579"
+      ],
+      "confidence": "source DAT+0x44 and confirmed native same-track/load branch"
+    },
+    "M70075": {
+      "clip": "sound/mn700-2.wav",
+      "source": {
+        "path": "Map/m70075.dat",
+        "sha256": "ce9b2c1df4565f3ba20a1e15b5736b2c94fa5323bac78055381cc967854bf8f5",
+        "offset": 68,
+        "bytes": 64,
+        "token": "mn700-2.wav"
+      },
+      "evidence": [
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_fb1d8a60f17d0b5c8e09e62e979f4b3423b50e534accacd8eb02e43655054579"
+      ],
+      "confidence": "source DAT+0x44 and confirmed native same-track/load branch"
+    },
+    "M70076": {
+      "clip": "sound/mn700-2.wav",
+      "source": {
+        "path": "Map/m70076.dat",
+        "sha256": "4a76f605d199e59f3fa6e4e4cbafde307f0b424df36fee46a9e93f0b62220702",
+        "offset": 68,
+        "bytes": 64,
+        "token": "mn700-2.wav"
+      },
+      "evidence": [
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_fb1d8a60f17d0b5c8e09e62e979f4b3423b50e534accacd8eb02e43655054579"
+      ],
+      "confidence": "source DAT+0x44 and confirmed native same-track/load branch"
     }
   },
   "battles": {
@@ -8233,6 +8363,28 @@
       "source": {
         "path": "Fight_Bk/stage13.scn",
         "sha256": "0b5d76614e7ceb0dfcb1346785cdc944e584517bbe32eabcb1ae3db2bd0d1d99",
+        "offset": 28,
+        "bytes": 20,
+        "token": ""
+      },
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_943b0b73f1e96b42f7c10b51e88dc4d7863d2f2860e0306b9f3676596bf34686",
+        "ev_41dbecbb5de336ab7cf9abcf164a76f83318e136296b4f919c4df5ba7318b756"
+      ],
+      "confidence": "source SCN field and confirmed native fallback pool",
+      "pool": [
+        "sound/Fight/FightBGM01.wav",
+        "sound/Fight/FightBGM02.wav"
+      ],
+      "selection": "source default pool; fresh browser random selection"
+    },
+    "stage03.scn": {
+      "clip": null,
+      "source": {
+        "path": "Fight_Bk/stage03.scn",
+        "sha256": "8bf94a8c6a3f9e6eab7597aa83e4b958f98ab6592ba96ea7393bdf44d31fa1a9",
         "offset": 28,
         "bytes": 20,
         "token": ""
@@ -8683,6 +8835,167 @@
       ],
       "selection": "source default pool; fresh browser random selection",
       "stage_id": "stage13.scn"
+    },
+    "M70071": {
+      "clip": null,
+      "source": {
+        "path": "Fight_Bk/stage03.scn",
+        "sha256": "8bf94a8c6a3f9e6eab7597aa83e4b958f98ab6592ba96ea7393bdf44d31fa1a9",
+        "offset": 28,
+        "bytes": 20,
+        "token": ""
+      },
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_943b0b73f1e96b42f7c10b51e88dc4d7863d2f2860e0306b9f3676596bf34686",
+        "ev_41dbecbb5de336ab7cf9abcf164a76f83318e136296b4f919c4df5ba7318b756"
+      ],
+      "confidence": "source SCN field and confirmed native fallback pool",
+      "pool": [
+        "sound/Fight/FightBGM01.wav",
+        "sound/Fight/FightBGM02.wav"
+      ],
+      "selection": "source default pool; fresh browser random selection",
+      "stage_id": "stage03.scn"
+    },
+    "M70072": {
+      "clip": null,
+      "source": {
+        "path": "Fight_Bk/stage03.scn",
+        "sha256": "8bf94a8c6a3f9e6eab7597aa83e4b958f98ab6592ba96ea7393bdf44d31fa1a9",
+        "offset": 28,
+        "bytes": 20,
+        "token": ""
+      },
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_943b0b73f1e96b42f7c10b51e88dc4d7863d2f2860e0306b9f3676596bf34686",
+        "ev_41dbecbb5de336ab7cf9abcf164a76f83318e136296b4f919c4df5ba7318b756"
+      ],
+      "confidence": "source SCN field and confirmed native fallback pool",
+      "pool": [
+        "sound/Fight/FightBGM01.wav",
+        "sound/Fight/FightBGM02.wav"
+      ],
+      "selection": "source default pool; fresh browser random selection",
+      "stage_id": "stage03.scn"
+    },
+    "M70073": {
+      "clip": null,
+      "source": {
+        "path": "Fight_Bk/stage03.scn",
+        "sha256": "8bf94a8c6a3f9e6eab7597aa83e4b958f98ab6592ba96ea7393bdf44d31fa1a9",
+        "offset": 28,
+        "bytes": 20,
+        "token": ""
+      },
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_943b0b73f1e96b42f7c10b51e88dc4d7863d2f2860e0306b9f3676596bf34686",
+        "ev_41dbecbb5de336ab7cf9abcf164a76f83318e136296b4f919c4df5ba7318b756"
+      ],
+      "confidence": "source SCN field and confirmed native fallback pool",
+      "pool": [
+        "sound/Fight/FightBGM01.wav",
+        "sound/Fight/FightBGM02.wav"
+      ],
+      "selection": "source default pool; fresh browser random selection",
+      "stage_id": "stage03.scn"
+    },
+    "M70074_1": {
+      "clip": null,
+      "source": {
+        "path": "Fight_Bk/stage03.scn",
+        "sha256": "8bf94a8c6a3f9e6eab7597aa83e4b958f98ab6592ba96ea7393bdf44d31fa1a9",
+        "offset": 28,
+        "bytes": 20,
+        "token": ""
+      },
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_943b0b73f1e96b42f7c10b51e88dc4d7863d2f2860e0306b9f3676596bf34686",
+        "ev_41dbecbb5de336ab7cf9abcf164a76f83318e136296b4f919c4df5ba7318b756"
+      ],
+      "confidence": "source SCN field and confirmed native fallback pool",
+      "pool": [
+        "sound/Fight/FightBGM01.wav",
+        "sound/Fight/FightBGM02.wav"
+      ],
+      "selection": "source default pool; fresh browser random selection",
+      "stage_id": "stage03.scn"
+    },
+    "M70074_2": {
+      "clip": null,
+      "source": {
+        "path": "Fight_Bk/stage03.scn",
+        "sha256": "8bf94a8c6a3f9e6eab7597aa83e4b958f98ab6592ba96ea7393bdf44d31fa1a9",
+        "offset": 28,
+        "bytes": 20,
+        "token": ""
+      },
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_943b0b73f1e96b42f7c10b51e88dc4d7863d2f2860e0306b9f3676596bf34686",
+        "ev_41dbecbb5de336ab7cf9abcf164a76f83318e136296b4f919c4df5ba7318b756"
+      ],
+      "confidence": "source SCN field and confirmed native fallback pool",
+      "pool": [
+        "sound/Fight/FightBGM01.wav",
+        "sound/Fight/FightBGM02.wav"
+      ],
+      "selection": "source default pool; fresh browser random selection",
+      "stage_id": "stage03.scn"
+    },
+    "M70075": {
+      "clip": null,
+      "source": {
+        "path": "Fight_Bk/stage03.scn",
+        "sha256": "8bf94a8c6a3f9e6eab7597aa83e4b958f98ab6592ba96ea7393bdf44d31fa1a9",
+        "offset": 28,
+        "bytes": 20,
+        "token": ""
+      },
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_943b0b73f1e96b42f7c10b51e88dc4d7863d2f2860e0306b9f3676596bf34686",
+        "ev_41dbecbb5de336ab7cf9abcf164a76f83318e136296b4f919c4df5ba7318b756"
+      ],
+      "confidence": "source SCN field and confirmed native fallback pool",
+      "pool": [
+        "sound/Fight/FightBGM01.wav",
+        "sound/Fight/FightBGM02.wav"
+      ],
+      "selection": "source default pool; fresh browser random selection",
+      "stage_id": "stage03.scn"
+    },
+    "M70076": {
+      "clip": null,
+      "source": {
+        "path": "Fight_Bk/stage03.scn",
+        "sha256": "8bf94a8c6a3f9e6eab7597aa83e4b958f98ab6592ba96ea7393bdf44d31fa1a9",
+        "offset": 28,
+        "bytes": 20,
+        "token": ""
+      },
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_943b0b73f1e96b42f7c10b51e88dc4d7863d2f2860e0306b9f3676596bf34686",
+        "ev_41dbecbb5de336ab7cf9abcf164a76f83318e136296b4f919c4df5ba7318b756"
+      ],
+      "confidence": "source SCN field and confirmed native fallback pool",
+      "pool": [
+        "sound/Fight/FightBGM01.wav",
+        "sound/Fight/FightBGM02.wav"
+      ],
+      "selection": "source default pool; fresh browser random selection",
+      "stage_id": "stage03.scn"
     }
   },
   "cues": {
@@ -15893,7 +16206,7 @@
   ],
   "reference_hashes": {
     "remake/runtime/web/data/party_battle_view.json": "99eb99d60d893a3a326e10180fed79ad920261c210e527145a71e390c08eb04b",
-    "remake/runtime/web/data/battle_lifecycle.json": "0b5fbf651d257286601bc3a97998bfca00e340c39107891e3f7dd08a4e0ee34f",
+    "remake/runtime/web/data/battle_lifecycle.json": "0fe0daa8033a47ab27992956499880cd648b26e7226cb1b14b8c22b386e1043b",
     "remake/runtime/web/data/item_presentation.json": "f954f7e7c328af69143daa8b61196229fdf200bde057ee48fc3f99259ff183f4"
   },
   "action_sources": [
@@ -19336,10 +19649,19 @@
     "Map/m17030-2.dat": "19c9e32a7cc32da40da096e67aa6b318e18570b29bc784130ad7d07d4430dfe6",
     "Map/m17030.dat": "bbe0b8b99a59f775f1647b7e5e01f7ea12208f4422d1272fe62655c6e41d5bc4",
     "Map/m17032.dat": "fec9023611123ba7557cf0a186317c808a5c041a6ec8d0fd52b30c8576f09bfe",
+    "Map/m70071.dat": "de7c2ba50e1f831d8a4e6837c7eaa6796fc4f2fa664fb9e5f0eb6ad46ccbf33f",
+    "sound/mn700-2.wav": "6e155dfb66419d7967d9b0d9f90da79f3f19c09d8fb1ccd22d24eac375f13ef3",
+    "Map/m70072.dat": "e81ee5e98081fa9143913b7797af9318c4fae69992f02c5a96df185ce0b7d82d",
+    "Map/m70073.dat": "6636d6c5d7a95a4fc64bbd5cab1fa42bb976ac8bdba98c80c8a5145bea7644cb",
+    "Map/m70074_1.dat": "1f7940c62ed21b86ec1fd69c3eb4d451f1cbe20f939cb66117189adba5e357b5",
+    "Map/m70074_2.dat": "d8ebf4d5179f28c5299c794ca2615f3c7eb7846e289141b82438fb69262005ab",
+    "Map/m70075.dat": "ce9b2c1df4565f3ba20a1e15b5736b2c94fa5323bac78055381cc967854bf8f5",
+    "Map/m70076.dat": "4a76f605d199e59f3fa6e4e4cbafde307f0b424df36fee46a9e93f0b62220702",
     "Fight_Bk/stage07.scn": "9e4b85a613b3e570b078abacd1ffdf85017676850c4ca2c3ea83e3359f41ecc8",
     "sound/Fight/FightBGM01.wav": "b1bb0bb926ea46f31a021727f93286ffa475af42c99a32936f36b001b74612ed",
     "sound/Fight/FightBGM02.wav": "456ad307a8e512b13a66909461e141112f3f8ffe509de3a2bbdfcdec1c9a4124",
     "Fight_Bk/stage13.scn": "0b5d76614e7ceb0dfcb1346785cdc944e584517bbe32eabcb1ae3db2bd0d1d99",
+    "Fight_Bk/stage03.scn": "8bf94a8c6a3f9e6eab7597aa83e4b958f98ab6592ba96ea7393bdf44d31fa1a9",
     "Fight_Bk/stage12.scn": "b96b95637c056cbfc07432c58343a63684d551f2291d4aa55aaee7bb6f7f968b",
     "sound/menu/mDecide.wav": "b00c648481200c701dbabcf5b28fdeb0037fca58a47a8c4c3ba43ff0fb69143d",
     "sound/menu/cancel.wav": "36576792ac0749e34ee7ae5fa8ef0344eefa1de5aa4d90f0bfe02852f5d7cc12",

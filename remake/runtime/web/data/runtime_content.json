@@ -742,6 +742,9 @@
     "stage12": {
       "export": "source"
     },
+    "stage03": {
+      "export": "source"
+    },
     "TestStage": {
       "path": "data/skill_test_stage.json",
       "schema": "seventh-seal-battle-stage",
@@ -778,7 +781,8 @@
     "m70010-1",
     "m70030-1",
     "m71014-1",
-    "m71050-1"
+    "m71050-1",
+    "m70073-1"
   ],
   "maps": {
     "M01060": {
@@ -1210,6 +1214,66 @@
       "triggers": [
         1,
         2
+      ]
+    },
+    "M70071": {
+      "npcs": [],
+      "triggers": [4],
+      "objects": [
+        {"index": 11, "handler": "keyed-chest"},
+        {"index": 12, "handler": "keyed-chest"},
+        {"index": 13, "handler": "keyed-chest"}
+      ]
+    },
+    "M70072": {
+      "npcs": [],
+      "objects": [
+        {"index": 10, "handler": "keyed-chest"},
+        {"index": 11, "handler": "keyed-chest"},
+        {"index": 12, "handler": "keyed-chest"},
+        {"index": 13, "handler": "tlk-object"}
+      ]
+    },
+    "M70073": {
+      "npcs": [10],
+      "triggers": [31],
+      "objects": [
+        {"index": 8, "handler": "keyed-chest"},
+        {"index": 9, "handler": "keyed-chest"},
+        {"index": 10, "handler": "keyed-chest"}
+      ]
+    },
+    "M70074_1": {
+      "export": {"story": false},
+      "npcs": [],
+      "objects": [
+        {"index": 8, "handler": "keyed-chest"},
+        {"index": 9, "handler": "keyed-chest"},
+        {"index": 10, "handler": "keyed-chest"},
+        {"index": 11, "handler": "keyed-chest"}
+      ]
+    },
+    "M70074_2": {
+      "export": {"story": false},
+      "npcs": [],
+      "objects": [
+        {"index": 12, "handler": "keyed-chest"},
+        {"index": 16, "handler": "keyed-chest"}
+      ]
+    },
+    "M70075": {
+      "export": {"story": false},
+      "npcs": [],
+      "objects": [
+        {"index": 7, "handler": "keyed-chest"},
+        {"index": 8, "handler": "keyed-chest"}
+      ]
+    },
+    "M70076": {
+      "npcs": [10],
+      "objects": [
+        {"index": 7, "handler": "keyed-chest"},
+        {"index": 9, "handler": "keyed-chest"}
       ]
     }
   },

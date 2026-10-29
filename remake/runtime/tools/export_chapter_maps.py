@@ -352,11 +352,16 @@ def export():
                         lambda: dgp.decode(frame))
                     frame_records.append(dict(index=frame, image=export_maps.web_url(target),
                                               sha256=outputs[export_maps.web_url(target)]))
+                completed_frame = dgp.frame_count - 1
+                if obj['behavior_raw_cf'] == 4 and dgp.raw_actions:
+                    action = dgp.raw_actions[1 if len(dgp.raw_actions) >= 2 else 0]
+                    count = u32(action, 0x12 if action[0x0D] & 15 == 0 else 0x0E)
+                    completed_frame = u32(action, 0x72) + (action[0x16 + count - 1] if action[0x0D] & 15 == 0 else count - 1)
                 object_animations[ident].append(dict(object_index_zero_based=obj["object_index_zero_based"],
                     object_number_one_based=obj["object_number_one_based"], resource_id=obj["resource_id"],
                     source=dict(path=name, sha256=dgp.sha256), frames=frame_records,
                     frame_width=dgp.width, frame_height=dgp.height, actions=dgp.actions,
-                    completed_last_frame=dgp.frame_count - 1,
+                    completed_last_frame=completed_frame,
                     evidence=[OBJECT_TICK],
                     authority="Original DGP physical frames; retained 0x4137C0 proves CF3 state2 progresses to state3 at its final animation frame; exact clock phase remains unobserved"))
     manifest = dict(schema="seventh-seal-chapter-map-resources", version=1, maps=maps,

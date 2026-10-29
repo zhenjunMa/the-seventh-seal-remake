@@ -1,0 +1,1856 @@
+{
+  "schema": "seventh-seal-story-map",
+  "version": 2,
+  "map_id": "M70075",
+  "chapter": {
+    "id": "M70075",
+    "name": "里白木森林",
+    "flag_index": 102,
+    "map_flag_index": 102,
+    "source": null,
+    "dialogue_status": "source-file-absent",
+    "map_source": {
+      "path": "Map/m70075.dat",
+      "sha256": "ce9b2c1df4565f3ba20a1e15b5736b2c94fa5323bac78055381cc967854bf8f5",
+      "bytes": 409020
+    },
+    "index_nonzero": [],
+    "index_count": 0,
+    "record_base": null,
+    "record_bytes": 1647,
+    "record_count": 0,
+    "records": [],
+    "trailing_bytes": 0,
+    "trailing_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "header_raw_hex": "3344a661b9cfb8eaaec6286329596f6b690000000600000001000000c0efb0d7c4bec9adc1d60000000000000000000000000000000000000000000000000000000000006d6e3730302d322e7761760000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003020d00000000030100000000000000000066000000010000004d37303037352e44475000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000101020300010166000000380000002e5c4d41504d5c4d37303037355c0000000000000000000030030000c001000000010100",
+    "compatibility_variant": 1,
+    "descriptors": [
+      {
+        "id": 1,
+        "state_raw": 0,
+        "filename_raw": "m70076.dat",
+        "field_26_raw": 4,
+        "field_2a_raw": 5,
+        "field_2e_raw": 0,
+        "record_bytes": 66,
+        "raw_hex": "00000000000000000000000000000000006d37303037362e646174000000000000000000000004000000050000000000000000000000000000000000000000000000",
+        "cells": [
+          {
+            "x": 46,
+            "y": 1,
+            "offset": 9842
+          },
+          {
+            "x": 47,
+            "y": 1,
+            "offset": 9906
+          },
+          {
+            "x": 48,
+            "y": 1,
+            "offset": 9970
+          },
+          {
+            "x": 49,
+            "y": 1,
+            "offset": 10034
+          },
+          {
+            "x": 50,
+            "y": 1,
+            "offset": 10098
+          },
+          {
+            "x": 51,
+            "y": 1,
+            "offset": 10162
+          },
+          {
+            "x": 52,
+            "y": 1,
+            "offset": 10226
+          }
+        ],
+        "source": {
+          "path": "Map/m70075.dat",
+          "sha256": "ce9b2c1df4565f3ba20a1e15b5736b2c94fa5323bac78055381cc967854bf8f5",
+          "descriptor_id": 1,
+          "bytes": 66,
+          "offset": 367282
+        },
+        "evidence": [
+          "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a"
+        ],
+        "field_expansion": "Native 0x42-byte descriptor fields"
+      },
+      {
+        "id": 2,
+        "state_raw": 0,
+        "filename_raw": "m70076.dat",
+        "field_26_raw": 3,
+        "field_2a_raw": 5,
+        "field_2e_raw": 0,
+        "record_bytes": 66,
+        "raw_hex": "00000000000000000000000000000000006d37303037362e646174000000000000000000000003000000050000000000000000000000000000000000000000000000",
+        "cells": [
+          {
+            "x": 64,
+            "y": 1,
+            "offset": 10994
+          },
+          {
+            "x": 65,
+            "y": 1,
+            "offset": 11058
+          },
+          {
+            "x": 66,
+            "y": 1,
+            "offset": 11122
+          },
+          {
+            "x": 67,
+            "y": 1,
+            "offset": 11186
+          },
+          {
+            "x": 68,
+            "y": 1,
+            "offset": 11250
+          },
+          {
+            "x": 69,
+            "y": 1,
+            "offset": 11314
+          }
+        ],
+        "source": {
+          "path": "Map/m70075.dat",
+          "sha256": "ce9b2c1df4565f3ba20a1e15b5736b2c94fa5323bac78055381cc967854bf8f5",
+          "descriptor_id": 2,
+          "bytes": 66,
+          "offset": 367348
+        },
+        "evidence": [
+          "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a"
+        ],
+        "field_expansion": "Native 0x42-byte descriptor fields"
+      },
+      {
+        "id": 3,
+        "state_raw": 0,
+        "filename_raw": "m70073.dat",
+        "field_26_raw": 3,
+        "field_2a_raw": 3,
+        "field_2e_raw": 0,
+        "record_bytes": 66,
+        "raw_hex": "00000000000000000000000000000000006d37303037332e646174000000000000000000000003000000030000000000000000000000000000000000000000000000",
+        "cells": [
+          {
+            "x": 2,
+            "y": 43,
+            "offset": 281202
+          },
+          {
+            "x": 2,
+            "y": 44,
+            "offset": 287730
+          }
+        ],
+        "source": {
+          "path": "Map/m70075.dat",
+          "sha256": "ce9b2c1df4565f3ba20a1e15b5736b2c94fa5323bac78055381cc967854bf8f5",
+          "descriptor_id": 3,
+          "bytes": 66,
+          "offset": 367414
+        },
+        "evidence": [
+          "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a"
+        ],
+        "field_expansion": "Native 0x42-byte descriptor fields"
+      }
+    ],
+    "objects": [
+      {
+        "index": 0,
+        "slot_one_based": 1,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d37303037355c3030312e44475001000000000000004001000040010000010000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 320,
+        "y_native": 320,
+        "resource_id_raw": 1,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m70075.dat",
+          "sha256": "ce9b2c1df4565f3ba20a1e15b5736b2c94fa5323bac78055381cc967854bf8f5",
+          "bytes": 274,
+          "offset": 378962
+        }
+      },
+      {
+        "index": 1,
+        "slot_one_based": 2,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d37303037355c3030322e444750020000000000000080020000b0000000010000000100000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 640,
+        "y_native": 176,
+        "resource_id_raw": 2,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m70075.dat",
+          "sha256": "ce9b2c1df4565f3ba20a1e15b5736b2c94fa5323bac78055381cc967854bf8f5",
+          "bytes": 274,
+          "offset": 379236
+        }
+      },
+      {
+        "index": 2,
+        "slot_one_based": 3,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d37303037355c3030342e4447500400000000000000c001000040010000010000000100000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 448,
+        "y_native": 320,
+        "resource_id_raw": 4,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m70075.dat",
+          "sha256": "ce9b2c1df4565f3ba20a1e15b5736b2c94fa5323bac78055381cc967854bf8f5",
+          "bytes": 274,
+          "offset": 379510
+        }
+      },
+      {
+        "index": 3,
+        "slot_one_based": 4,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d37303037355c3030332e444750030000000000000030000000d8000000010000000100000000000000000000000000000000000300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 48,
+        "y_native": 216,
+        "resource_id_raw": 3,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m70075.dat",
+          "sha256": "ce9b2c1df4565f3ba20a1e15b5736b2c94fa5323bac78055381cc967854bf8f5",
+          "bytes": 274,
+          "offset": 379784
+        }
+      },
+      {
+        "index": 4,
+        "slot_one_based": 5,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d37303037355c3030352e444750050000000000000000030000e0000000010000000100000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 768,
+        "y_native": 224,
+        "resource_id_raw": 5,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m70075.dat",
+          "sha256": "ce9b2c1df4565f3ba20a1e15b5736b2c94fa5323bac78055381cc967854bf8f5",
+          "bytes": 274,
+          "offset": 380058
+        }
+      },
+      {
+        "index": 5,
+        "slot_one_based": 6,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d37303037355c3030362e4447500600000000000000b001000029000000010000000100000000000000000000000000000000000500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 432,
+        "y_native": 41,
+        "resource_id_raw": 6,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m70075.dat",
+          "sha256": "ce9b2c1df4565f3ba20a1e15b5736b2c94fa5323bac78055381cc967854bf8f5",
+          "bytes": 274,
+          "offset": 380332
+        }
+      },
+      {
+        "index": 6,
+        "slot_one_based": 7,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d37303037355c3030372e44475007000000000000003002000088010000010000000100000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 560,
+        "y_native": 392,
+        "resource_id_raw": 7,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m70075.dat",
+          "sha256": "ce9b2c1df4565f3ba20a1e15b5736b2c94fa5323bac78055381cc967854bf8f5",
+          "bytes": 274,
+          "offset": 380606
+        }
+      },
+      {
+        "index": 7,
+        "slot_one_based": 8,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d37303037355c3030392e4447500900000000000000e801000020000000010000000100000000000000000000000000000000000700000001000000000000000000000025010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000204000200000000000000820000000000000000000000000000000000000000000000004c01000000000000680000000006010000000000000000000000000000000000",
+        "x_native": 488,
+        "y_native": 32,
+        "resource_id_raw": 9,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 4,
+        "source": {
+          "path": "Map/m70075.dat",
+          "sha256": "ce9b2c1df4565f3ba20a1e15b5736b2c94fa5323bac78055381cc967854bf8f5",
+          "bytes": 274,
+          "offset": 380880
+        }
+      },
+      {
+        "index": 8,
+        "slot_one_based": 9,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d37303037355c3030392e444750090000000000000058010000a0000000010000000100000000000000000000000000000000000800000000000000000000000000000096000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000204000200000000000000820000000000000000000000000000000000000000000000004c01000000000000680000000000000000000000000000000000000000000000",
+        "x_native": 344,
+        "y_native": 160,
+        "resource_id_raw": 9,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 4,
+        "source": {
+          "path": "Map/m70075.dat",
+          "sha256": "ce9b2c1df4565f3ba20a1e15b5736b2c94fa5323bac78055381cc967854bf8f5",
+          "bytes": 274,
+          "offset": 381154
+        }
+      },
+      {
+        "index": 9,
+        "slot_one_based": 10,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d37303037355c3030382e4447500800000000000000aa0000003f000000010000000100000000000000000000000000000000000900000003000000000000000000000022000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000204000200000000000000820000000000000000000000000000000000000000000000004d01000000000000470000000007010000000000000000000000000000000000",
+        "x_native": 170,
+        "y_native": 63,
+        "resource_id_raw": 8,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 4,
+        "source": {
+          "path": "Map/m70075.dat",
+          "sha256": "ce9b2c1df4565f3ba20a1e15b5736b2c94fa5323bac78055381cc967854bf8f5",
+          "bytes": 274,
+          "offset": 381428
+        }
+      },
+      {
+        "index": 10,
+        "slot_one_based": 11,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d37303037355c3030382e4447500800000000000000c60200005a010000010000000100000000000000000000000000000000000a0000000000000000000000000000000e010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000204000200000000000000820000000000000000000000000000000000000000000000004d01000000000000470000000000000000000000000000000000000000000000",
+        "x_native": 710,
+        "y_native": 346,
+        "resource_id_raw": 8,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 4,
+        "source": {
+          "path": "Map/m70075.dat",
+          "sha256": "ce9b2c1df4565f3ba20a1e15b5736b2c94fa5323bac78055381cc967854bf8f5",
+          "bytes": 274,
+          "offset": 381702
+        }
+      },
+      {
+        "index": 11,
+        "slot_one_based": 12,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d37303037355c3031302e4447500a0000000000000022020000c3000000010000000100000000000000000000000000000000000b000000000000000000000000000000c90000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000400000000000000000000000000000000000000000000000002040002000000000000008200000000000000000000000000000000000000000000000050010000000000005e0000000000000000000000000000000000000000000000",
+        "x_native": 546,
+        "y_native": 195,
+        "resource_id_raw": 10,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 4,
+        "source": {
+          "path": "Map/m70075.dat",
+          "sha256": "ce9b2c1df4565f3ba20a1e15b5736b2c94fa5323bac78055381cc967854bf8f5",
+          "bytes": 274,
+          "offset": 381976
+        }
+      },
+      {
+        "index": 12,
+        "slot_one_based": 13,
+        "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d37303037355c3031312e4447500b00000000000000f702000061000000010000000100000000000000000000000000000000000c000000000000000000000000000000d10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000400000000000000000000000000000000000000000000000002040002000000000000008200000000000000000000000000000000000000000000000051010000000000002a0000000000000000000000000000000000000000000000",
+        "x_native": 759,
+        "y_native": 97,
+        "resource_id_raw": 11,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 4,
+        "source": {
+          "path": "Map/m70075.dat",
+          "sha256": "ce9b2c1df4565f3ba20a1e15b5736b2c94fa5323bac78055381cc967854bf8f5",
+          "bytes": 274,
+          "offset": 382250
+        }
+      }
+    ],
+    "npc_records": [],
+    "entry_markers": {
+      "1": [
+        {
+          "x": 7,
+          "y": 43,
+          "offset": 281522
+        }
+      ],
+      "2": [
+        {
+          "x": 47,
+          "y": 3,
+          "offset": 22962
+        }
+      ],
+      "3": [
+        {
+          "x": 67,
+          "y": 3,
+          "offset": 24242
+        }
+      ]
+    },
+    "default_object_index_slot": 499,
+    "default_object_record": 0,
+    "header_entry_tlk_raw": 0,
+    "header_entry_tlk_source": {
+      "path": "Map/m70075.dat",
+      "sha256": "ce9b2c1df4565f3ba20a1e15b5736b2c94fa5323bac78055381cc967854bf8f5",
+      "bytes": 4,
+      "offset": 314
+    },
+    "header_setup_tlk_raw": 0,
+    "header_setup_tlk_source": {
+      "path": "Map/m70075.dat",
+      "sha256": "ce9b2c1df4565f3ba20a1e15b5736b2c94fa5323bac78055381cc967854bf8f5",
+      "bytes": 4,
+      "offset": 138
+    },
+    "evidence": [
+      "ev_e14d28c11ec31e5eebdf4c08a994a900102658650d8e5364d58b848cbd114ea7",
+      "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a"
+    ],
+    "limitations": [
+      "Index slot499 is retained as the object default TLK entry; it must not be used as an automatic map-load event. Header +0x8A controls map setup; +0x13A controls map-entry TLK.",
+      "TLK record kind/mutation numbers are raw native values; dialogue text alone does not define their behavior."
+    ]
+  },
+  "programs": {},
+  "flows": {},
+  "events": [],
+  "resources": {
+    "npcs_by_map": [],
+    "exits_by_map": [
+      {
+        "id": 1,
+        "state": "ready",
+        "cells": [
+          {
+            "x": 46,
+            "y": 1
+          },
+          {
+            "x": 47,
+            "y": 1
+          },
+          {
+            "x": 48,
+            "y": 1
+          },
+          {
+            "x": 49,
+            "y": 1
+          },
+          {
+            "x": 50,
+            "y": 1
+          },
+          {
+            "x": 51,
+            "y": 1
+          },
+          {
+            "x": 52,
+            "y": 1
+          }
+        ],
+        "target_map": "M70076",
+        "entry": {
+          "x": 1168,
+          "y": 656,
+          "direction": 2,
+          "cell_x": 73,
+          "cell_y": 41,
+          "native_x": 584,
+          "native_y": 328
+        },
+        "conditions": [],
+        "source": {
+          "path": "Map/m70075.dat",
+          "sha256": "ce9b2c1df4565f3ba20a1e15b5736b2c94fa5323bac78055381cc967854bf8f5",
+          "descriptor_offset": 367282,
+          "descriptor_bytes": 66,
+          "descriptor_hex": "00000000000000000000000000000000006d37303037362e646174000000000000000000000004000000050000000000000000000000000000000000000000000000",
+          "compact_field_expansion_evidence": null,
+          "target_path": "Map/m70076.dat",
+          "target_sha256": "4a76f605d199e59f3fa6e4e4cbafde307f0b424df36fee46a9e93f0b62220702",
+          "target_entry_marker": 4,
+          "entry_sort_code": 5,
+          "entry_terrain_raw": 0,
+          "entry_trigger_raw": 0,
+          "entry_scan_cells": [
+            {
+              "x": 73,
+              "y": 41,
+              "offset": 309426
+            }
+          ],
+          "entry_sorted_cells": [
+            {
+              "x": 73,
+              "y": 41
+            }
+          ],
+          "entry_sort": "row-major scan; first four; missing followers repeat last observed cell",
+          "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
+          "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
+          "native_evidence": {
+            "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+            "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+            "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+            "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+          }
+        },
+        "execution": "Native transition descriptor only; map-entry TLK/ANM and their once-only checks must complete separately.",
+        "limitations": [
+          "Static source/code evidence; original timing not observed",
+          "Continuous keyboard movement is runtime policy"
+        ]
+      },
+      {
+        "id": 2,
+        "state": "ready",
+        "cells": [
+          {
+            "x": 64,
+            "y": 1
+          },
+          {
+            "x": 65,
+            "y": 1
+          },
+          {
+            "x": 66,
+            "y": 1
+          },
+          {
+            "x": 67,
+            "y": 1
+          },
+          {
+            "x": 68,
+            "y": 1
+          },
+          {
+            "x": 69,
+            "y": 1
+          }
+        ],
+        "target_map": "M70076",
+        "entry": {
+          "x": 1584,
+          "y": 624,
+          "direction": 2,
+          "cell_x": 99,
+          "cell_y": 39,
+          "native_x": 792,
+          "native_y": 312
+        },
+        "conditions": [],
+        "source": {
+          "path": "Map/m70075.dat",
+          "sha256": "ce9b2c1df4565f3ba20a1e15b5736b2c94fa5323bac78055381cc967854bf8f5",
+          "descriptor_offset": 367348,
+          "descriptor_bytes": 66,
+          "descriptor_hex": "00000000000000000000000000000000006d37303037362e646174000000000000000000000003000000050000000000000000000000000000000000000000000000",
+          "compact_field_expansion_evidence": null,
+          "target_path": "Map/m70076.dat",
+          "target_sha256": "4a76f605d199e59f3fa6e4e4cbafde307f0b424df36fee46a9e93f0b62220702",
+          "target_entry_marker": 3,
+          "entry_sort_code": 5,
+          "entry_terrain_raw": 0,
+          "entry_trigger_raw": 0,
+          "entry_scan_cells": [
+            {
+              "x": 99,
+              "y": 39,
+              "offset": 296242
+            }
+          ],
+          "entry_sorted_cells": [
+            {
+              "x": 99,
+              "y": 39
+            }
+          ],
+          "entry_sort": "row-major scan; first four; missing followers repeat last observed cell",
+          "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
+          "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
+          "native_evidence": {
+            "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+            "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+            "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+            "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+          }
+        },
+        "execution": "Native transition descriptor only; map-entry TLK/ANM and their once-only checks must complete separately.",
+        "limitations": [
+          "Static source/code evidence; original timing not observed",
+          "Continuous keyboard movement is runtime policy"
+        ]
+      },
+      {
+        "id": 3,
+        "state": "ready",
+        "cells": [
+          {
+            "x": 2,
+            "y": 43
+          },
+          {
+            "x": 2,
+            "y": 44
+          }
+        ],
+        "target_map": "M70073",
+        "entry": {
+          "x": 1184,
+          "y": 832,
+          "direction": 4,
+          "cell_x": 74,
+          "cell_y": 52,
+          "native_x": 592,
+          "native_y": 416
+        },
+        "conditions": [],
+        "source": {
+          "path": "Map/m70075.dat",
+          "sha256": "ce9b2c1df4565f3ba20a1e15b5736b2c94fa5323bac78055381cc967854bf8f5",
+          "descriptor_offset": 367414,
+          "descriptor_bytes": 66,
+          "descriptor_hex": "00000000000000000000000000000000006d37303037332e646174000000000000000000000003000000030000000000000000000000000000000000000000000000",
+          "compact_field_expansion_evidence": null,
+          "target_path": "Map/m70073.dat",
+          "target_sha256": "6636d6c5d7a95a4fc64bbd5cab1fa42bb976ac8bdba98c80c8a5145bea7644cb",
+          "target_entry_marker": 3,
+          "entry_sort_code": 3,
+          "entry_terrain_raw": 0,
+          "entry_trigger_raw": 0,
+          "entry_scan_cells": [
+            {
+              "x": 74,
+              "y": 52,
+              "offset": 278002
+            }
+          ],
+          "entry_sorted_cells": [
+            {
+              "x": 74,
+              "y": 52
+            }
+          ],
+          "entry_sort": "x ascending; stable ties",
+          "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
+          "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
+          "native_evidence": {
+            "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+            "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+            "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+            "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+          }
+        },
+        "execution": "Native transition descriptor only; map-entry TLK/ANM and their once-only checks must complete separately.",
+        "limitations": [
+          "Static source/code evidence; original timing not observed",
+          "Continuous keyboard movement is runtime policy"
+        ]
+      }
+    ],
+    "trigger_regions": [],
+    "interactive_objects": [
+      {
+        "object_index_zero_based": 7,
+        "object_number_one_based": 8,
+        "resource_id": "009",
+        "x": 976,
+        "y": 64,
+        "behavior_raw_cf": 4,
+        "state_raw_d0": 0,
+        "field_f6_raw": 0,
+        "field_fa_raw": 104,
+        "source": {
+          "path": "Map/m70075.dat",
+          "sha256": "ce9b2c1df4565f3ba20a1e15b5736b2c94fa5323bac78055381cc967854bf8f5",
+          "offset": 380880,
+          "bytes": 274,
+          "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d37303037355c3030392e4447500900000000000000e801000020000000010000000100000000000000000000000000000000000700000001000000000000000000000025010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000204000200000000000000820000000000000000000000000000000000000000000000004c01000000000000680000000006010000000000000000000000000000000000"
+        },
+        "status": "Raw interactive-object candidates; native selection/TLK/state timing must be corroborated"
+      },
+      {
+        "object_index_zero_based": 8,
+        "object_number_one_based": 9,
+        "resource_id": "009",
+        "x": 688,
+        "y": 320,
+        "behavior_raw_cf": 4,
+        "state_raw_d0": 0,
+        "field_f6_raw": 0,
+        "field_fa_raw": 104,
+        "source": {
+          "path": "Map/m70075.dat",
+          "sha256": "ce9b2c1df4565f3ba20a1e15b5736b2c94fa5323bac78055381cc967854bf8f5",
+          "offset": 381154,
+          "bytes": 274,
+          "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d37303037355c3030392e444750090000000000000058010000a0000000010000000100000000000000000000000000000000000800000000000000000000000000000096000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000204000200000000000000820000000000000000000000000000000000000000000000004c01000000000000680000000000000000000000000000000000000000000000"
+        },
+        "status": "Raw interactive-object candidates; native selection/TLK/state timing must be corroborated"
+      },
+      {
+        "object_index_zero_based": 9,
+        "object_number_one_based": 10,
+        "resource_id": "008",
+        "x": 340,
+        "y": 126,
+        "behavior_raw_cf": 4,
+        "state_raw_d0": 0,
+        "field_f6_raw": 0,
+        "field_fa_raw": 71,
+        "source": {
+          "path": "Map/m70075.dat",
+          "sha256": "ce9b2c1df4565f3ba20a1e15b5736b2c94fa5323bac78055381cc967854bf8f5",
+          "offset": 381428,
+          "bytes": 274,
+          "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d37303037355c3030382e4447500800000000000000aa0000003f000000010000000100000000000000000000000000000000000900000003000000000000000000000022000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000204000200000000000000820000000000000000000000000000000000000000000000004d01000000000000470000000007010000000000000000000000000000000000"
+        },
+        "status": "Raw interactive-object candidates; native selection/TLK/state timing must be corroborated"
+      },
+      {
+        "object_index_zero_based": 10,
+        "object_number_one_based": 11,
+        "resource_id": "008",
+        "x": 1420,
+        "y": 692,
+        "behavior_raw_cf": 4,
+        "state_raw_d0": 0,
+        "field_f6_raw": 0,
+        "field_fa_raw": 71,
+        "source": {
+          "path": "Map/m70075.dat",
+          "sha256": "ce9b2c1df4565f3ba20a1e15b5736b2c94fa5323bac78055381cc967854bf8f5",
+          "offset": 381702,
+          "bytes": 274,
+          "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d37303037355c3030382e4447500800000000000000c60200005a010000010000000100000000000000000000000000000000000a0000000000000000000000000000000e010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000204000200000000000000820000000000000000000000000000000000000000000000004d01000000000000470000000000000000000000000000000000000000000000"
+        },
+        "status": "Raw interactive-object candidates; native selection/TLK/state timing must be corroborated"
+      },
+      {
+        "object_index_zero_based": 11,
+        "object_number_one_based": 12,
+        "resource_id": "010",
+        "x": 1092,
+        "y": 390,
+        "behavior_raw_cf": 4,
+        "state_raw_d0": 0,
+        "field_f6_raw": 0,
+        "field_fa_raw": 94,
+        "source": {
+          "path": "Map/m70075.dat",
+          "sha256": "ce9b2c1df4565f3ba20a1e15b5736b2c94fa5323bac78055381cc967854bf8f5",
+          "offset": 381976,
+          "bytes": 274,
+          "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d37303037355c3031302e4447500a0000000000000022020000c3000000010000000100000000000000000000000000000000000b000000000000000000000000000000c90000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000400000000000000000000000000000000000000000000000002040002000000000000008200000000000000000000000000000000000000000000000050010000000000005e0000000000000000000000000000000000000000000000"
+        },
+        "status": "Raw interactive-object candidates; native selection/TLK/state timing must be corroborated"
+      },
+      {
+        "object_index_zero_based": 12,
+        "object_number_one_based": 13,
+        "resource_id": "011",
+        "x": 1518,
+        "y": 194,
+        "behavior_raw_cf": 4,
+        "state_raw_d0": 0,
+        "field_f6_raw": 0,
+        "field_fa_raw": 42,
+        "source": {
+          "path": "Map/m70075.dat",
+          "sha256": "ce9b2c1df4565f3ba20a1e15b5736b2c94fa5323bac78055381cc967854bf8f5",
+          "offset": 382250,
+          "bytes": 274,
+          "raw_hex": "483a5c736576656e5c2e5c4d41504d5c4d37303037355c3031312e4447500b00000000000000f702000061000000010000000100000000000000000000000000000000000c000000000000000000000000000000d10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000400000000000000000000000000000000000000000000000002040002000000000000008200000000000000000000000000000000000000000000000051010000000000002a0000000000000000000000000000000000000000000000"
+        },
+        "status": "Raw interactive-object candidates; native selection/TLK/state timing must be corroborated"
+      }
+    ],
+    "object_animations": [
+      {
+        "object_index_zero_based": 7,
+        "object_number_one_based": 8,
+        "resource_id": "009",
+        "source": {
+          "path": "mapm/m70075/009.dgp",
+          "sha256": "d302c5c569cc034de70f5ff926b30b594496feb53ea4f3bef5e8f15d28cc7df0"
+        },
+        "frames": [
+          {
+            "index": 0,
+            "image": "/assets/chapter_objects/m70075/009/frame_000.png",
+            "sha256": "e760093d7fe6e275c74145ee0a6b45409b0b327d80f79f703f786e43ef7676af"
+          },
+          {
+            "index": 1,
+            "image": "/assets/chapter_objects/m70075/009/frame_001.png",
+            "sha256": "fb22899c4d68a81d761e0cb8a488471e29e43c29f641abc718d2be1157dc306f"
+          },
+          {
+            "index": 2,
+            "image": "/assets/chapter_objects/m70075/009/frame_002.png",
+            "sha256": "abc819de191b44420bb8d48cfea3798dd78e7079417a00cdbabd84af5d30251e"
+          },
+          {
+            "index": 3,
+            "image": "/assets/chapter_objects/m70075/009/frame_003.png",
+            "sha256": "b83498c7a6c5db3070657b355e5a94e6ca532dfda6ddda94aeaa657a6f595fea"
+          },
+          {
+            "index": 4,
+            "image": "/assets/chapter_objects/m70075/009/frame_004.png",
+            "sha256": "0df5a439714e12cbf1e424ca892689c8d1df06ddc35747fb84021e230ade1a6f"
+          },
+          {
+            "index": 5,
+            "image": "/assets/chapter_objects/m70075/009/frame_005.png",
+            "sha256": "4eeaacccbc3ef2fa7fde766b8449eb352c0893621bbae099dad842053b7d3740"
+          },
+          {
+            "index": 6,
+            "image": "/assets/chapter_objects/m70075/009/frame_006.png",
+            "sha256": "15cbf0ba42115afa8bfb54b41e05d2369d55cc2df0c5a2483d54801a30cf065c"
+          },
+          {
+            "index": 7,
+            "image": "/assets/chapter_objects/m70075/009/frame_007.png",
+            "sha256": "efbaa03186d4f1a0f840dee304bb0d004691107ff3ad7d40fe17c04db2e40170"
+          },
+          {
+            "index": 8,
+            "image": "/assets/chapter_objects/m70075/009/frame_008.png",
+            "sha256": "b8c9a4006d6e3ced13581e3602ec31f5cb414711ed501edcb1546324acc82177"
+          },
+          {
+            "index": 9,
+            "image": "/assets/chapter_objects/m70075/009/frame_009.png",
+            "sha256": "ed9319ef63fd0784f52c3e77daa843d3b91a9d3bfa63a2e74ba2305f1aa3e826"
+          },
+          {
+            "index": 10,
+            "image": "/assets/chapter_objects/m70075/009/frame_010.png",
+            "sha256": "42d5c5497c03ae2248a4f98cb73d1c691f459c93acbd0b186421a039146e91b9"
+          },
+          {
+            "index": 11,
+            "image": "/assets/chapter_objects/m70075/009/frame_011.png",
+            "sha256": "9b5620d9e92c99de290f4413825345ae18fa9d10a279ca02976ca6c7659c1843"
+          },
+          {
+            "index": 12,
+            "image": "/assets/chapter_objects/m70075/009/frame_012.png",
+            "sha256": "c1ccb16f924764cbe22255ddafb62b4e1031e436e97b8f6728e43bf2a1bedffa"
+          },
+          {
+            "index": 13,
+            "image": "/assets/chapter_objects/m70075/009/frame_013.png",
+            "sha256": "65b08c07e5cd603b4d6a0da9f3a8cec66a6ec2bdae1c603063e57f62aeb6e78e"
+          },
+          {
+            "index": 14,
+            "image": "/assets/chapter_objects/m70075/009/frame_014.png",
+            "sha256": "d7870f7eafd838b7d7e4567edac576689f080883061bc06df5c43da5ff013667"
+          },
+          {
+            "index": 15,
+            "image": "/assets/chapter_objects/m70075/009/frame_015.png",
+            "sha256": "4bf19306afff756e3cb07d84ca7aeb4f0ffebc5a67e388ead7e229a9d20c9b42"
+          },
+          {
+            "index": 16,
+            "image": "/assets/chapter_objects/m70075/009/frame_016.png",
+            "sha256": "3f17693441e739d0abeee2c27e828a3e9a9278afc538016c06273f08743e89c6"
+          },
+          {
+            "index": 17,
+            "image": "/assets/chapter_objects/m70075/009/frame_017.png",
+            "sha256": "2e96adcd572e60a0307e2ae4dc003dda16933477857fa1ae7b9b3528e842c411"
+          },
+          {
+            "index": 18,
+            "image": "/assets/chapter_objects/m70075/009/frame_018.png",
+            "sha256": "e91e6edb381f5ebf49a00be03a96c6f78b162b066d9322609f16cc8303e85a65"
+          },
+          {
+            "index": 19,
+            "image": "/assets/chapter_objects/m70075/009/frame_019.png",
+            "sha256": "c05871c4e189868fdd5c60f9a0c58e26adac9885e65eff26568fa80d2e6d198f"
+          },
+          {
+            "index": 20,
+            "image": "/assets/chapter_objects/m70075/009/frame_020.png",
+            "sha256": "a4a7e21d3847d745968796e9e17dacd20bc9599915d30c94b50a49adac98be3e"
+          },
+          {
+            "index": 21,
+            "image": "/assets/chapter_objects/m70075/009/frame_021.png",
+            "sha256": "f1d339e31987c9d0262241b7149e71a01bca6c4cc894561b190002878134adbe"
+          },
+          {
+            "index": 22,
+            "image": "/assets/chapter_objects/m70075/009/frame_022.png",
+            "sha256": "1806dd8b13bc8b272e404244d52243c7750c62491b3e06e500af25e4305f7040"
+          },
+          {
+            "index": 23,
+            "image": "/assets/chapter_objects/m70075/009/frame_023.png",
+            "sha256": "7baa52cf7b12ab1e9b6ee920b5033ae2d12c35732eb346f728b434b19bf2844d"
+          },
+          {
+            "index": 24,
+            "image": "/assets/chapter_objects/m70075/009/frame_024.png",
+            "sha256": "96344c91adcaf81e2c8db4fcaa6f5b5300440439c5367d4335530918b2c488c9"
+          },
+          {
+            "index": 25,
+            "image": "/assets/chapter_objects/m70075/009/frame_025.png",
+            "sha256": "8dfc448e301eace86a2f774f41777b5e13706ecf1ecb8589703a610aa5847f0c"
+          }
+        ],
+        "frame_width": 170,
+        "frame_height": 190,
+        "actions": [
+          {
+            "index": 0,
+            "directions": 1,
+            "directions_raw": 0,
+            "interval_raw": 130,
+            "loop_raw": 1,
+            "frames_per_direction": 10,
+            "first_frame": 0,
+            "identifier_raw": 0,
+            "raw_hex": "00820000000000000000000000010a00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+          },
+          {
+            "index": 1,
+            "directions": 1,
+            "directions_raw": 0,
+            "interval_raw": 110,
+            "loop_raw": 1,
+            "frames_per_direction": 16,
+            "first_frame": 10,
+            "identifier_raw": 0,
+            "raw_hex": "006e000000000000000000000001100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+          }
+        ],
+        "completed_last_frame": 25,
+        "evidence": [
+          "ev_7ff7092a0522a10920b1c81430af56c62cb116c3d66a5af86a35ecb5e9498a5c"
+        ],
+        "authority": "Original DGP physical frames; retained 0x4137C0 proves CF3 state2 progresses to state3 at its final animation frame; exact clock phase remains unobserved"
+      },
+      {
+        "object_index_zero_based": 8,
+        "object_number_one_based": 9,
+        "resource_id": "009",
+        "source": {
+          "path": "mapm/m70075/009.dgp",
+          "sha256": "d302c5c569cc034de70f5ff926b30b594496feb53ea4f3bef5e8f15d28cc7df0"
+        },
+        "frames": [
+          {
+            "index": 0,
+            "image": "/assets/chapter_objects/m70075/009/frame_000.png",
+            "sha256": "e760093d7fe6e275c74145ee0a6b45409b0b327d80f79f703f786e43ef7676af"
+          },
+          {
+            "index": 1,
+            "image": "/assets/chapter_objects/m70075/009/frame_001.png",
+            "sha256": "fb22899c4d68a81d761e0cb8a488471e29e43c29f641abc718d2be1157dc306f"
+          },
+          {
+            "index": 2,
+            "image": "/assets/chapter_objects/m70075/009/frame_002.png",
+            "sha256": "abc819de191b44420bb8d48cfea3798dd78e7079417a00cdbabd84af5d30251e"
+          },
+          {
+            "index": 3,
+            "image": "/assets/chapter_objects/m70075/009/frame_003.png",
+            "sha256": "b83498c7a6c5db3070657b355e5a94e6ca532dfda6ddda94aeaa657a6f595fea"
+          },
+          {
+            "index": 4,
+            "image": "/assets/chapter_objects/m70075/009/frame_004.png",
+            "sha256": "0df5a439714e12cbf1e424ca892689c8d1df06ddc35747fb84021e230ade1a6f"
+          },
+          {
+            "index": 5,
+            "image": "/assets/chapter_objects/m70075/009/frame_005.png",
+            "sha256": "4eeaacccbc3ef2fa7fde766b8449eb352c0893621bbae099dad842053b7d3740"
+          },
+          {
+            "index": 6,
+            "image": "/assets/chapter_objects/m70075/009/frame_006.png",
+            "sha256": "15cbf0ba42115afa8bfb54b41e05d2369d55cc2df0c5a2483d54801a30cf065c"
+          },
+          {
+            "index": 7,
+            "image": "/assets/chapter_objects/m70075/009/frame_007.png",
+            "sha256": "efbaa03186d4f1a0f840dee304bb0d004691107ff3ad7d40fe17c04db2e40170"
+          },
+          {
+            "index": 8,
+            "image": "/assets/chapter_objects/m70075/009/frame_008.png",
+            "sha256": "b8c9a4006d6e3ced13581e3602ec31f5cb414711ed501edcb1546324acc82177"
+          },
+          {
+            "index": 9,
+            "image": "/assets/chapter_objects/m70075/009/frame_009.png",
+            "sha256": "ed9319ef63fd0784f52c3e77daa843d3b91a9d3bfa63a2e74ba2305f1aa3e826"
+          },
+          {
+            "index": 10,
+            "image": "/assets/chapter_objects/m70075/009/frame_010.png",
+            "sha256": "42d5c5497c03ae2248a4f98cb73d1c691f459c93acbd0b186421a039146e91b9"
+          },
+          {
+            "index": 11,
+            "image": "/assets/chapter_objects/m70075/009/frame_011.png",
+            "sha256": "9b5620d9e92c99de290f4413825345ae18fa9d10a279ca02976ca6c7659c1843"
+          },
+          {
+            "index": 12,
+            "image": "/assets/chapter_objects/m70075/009/frame_012.png",
+            "sha256": "c1ccb16f924764cbe22255ddafb62b4e1031e436e97b8f6728e43bf2a1bedffa"
+          },
+          {
+            "index": 13,
+            "image": "/assets/chapter_objects/m70075/009/frame_013.png",
+            "sha256": "65b08c07e5cd603b4d6a0da9f3a8cec66a6ec2bdae1c603063e57f62aeb6e78e"
+          },
+          {
+            "index": 14,
+            "image": "/assets/chapter_objects/m70075/009/frame_014.png",
+            "sha256": "d7870f7eafd838b7d7e4567edac576689f080883061bc06df5c43da5ff013667"
+          },
+          {
+            "index": 15,
+            "image": "/assets/chapter_objects/m70075/009/frame_015.png",
+            "sha256": "4bf19306afff756e3cb07d84ca7aeb4f0ffebc5a67e388ead7e229a9d20c9b42"
+          },
+          {
+            "index": 16,
+            "image": "/assets/chapter_objects/m70075/009/frame_016.png",
+            "sha256": "3f17693441e739d0abeee2c27e828a3e9a9278afc538016c06273f08743e89c6"
+          },
+          {
+            "index": 17,
+            "image": "/assets/chapter_objects/m70075/009/frame_017.png",
+            "sha256": "2e96adcd572e60a0307e2ae4dc003dda16933477857fa1ae7b9b3528e842c411"
+          },
+          {
+            "index": 18,
+            "image": "/assets/chapter_objects/m70075/009/frame_018.png",
+            "sha256": "e91e6edb381f5ebf49a00be03a96c6f78b162b066d9322609f16cc8303e85a65"
+          },
+          {
+            "index": 19,
+            "image": "/assets/chapter_objects/m70075/009/frame_019.png",
+            "sha256": "c05871c4e189868fdd5c60f9a0c58e26adac9885e65eff26568fa80d2e6d198f"
+          },
+          {
+            "index": 20,
+            "image": "/assets/chapter_objects/m70075/009/frame_020.png",
+            "sha256": "a4a7e21d3847d745968796e9e17dacd20bc9599915d30c94b50a49adac98be3e"
+          },
+          {
+            "index": 21,
+            "image": "/assets/chapter_objects/m70075/009/frame_021.png",
+            "sha256": "f1d339e31987c9d0262241b7149e71a01bca6c4cc894561b190002878134adbe"
+          },
+          {
+            "index": 22,
+            "image": "/assets/chapter_objects/m70075/009/frame_022.png",
+            "sha256": "1806dd8b13bc8b272e404244d52243c7750c62491b3e06e500af25e4305f7040"
+          },
+          {
+            "index": 23,
+            "image": "/assets/chapter_objects/m70075/009/frame_023.png",
+            "sha256": "7baa52cf7b12ab1e9b6ee920b5033ae2d12c35732eb346f728b434b19bf2844d"
+          },
+          {
+            "index": 24,
+            "image": "/assets/chapter_objects/m70075/009/frame_024.png",
+            "sha256": "96344c91adcaf81e2c8db4fcaa6f5b5300440439c5367d4335530918b2c488c9"
+          },
+          {
+            "index": 25,
+            "image": "/assets/chapter_objects/m70075/009/frame_025.png",
+            "sha256": "8dfc448e301eace86a2f774f41777b5e13706ecf1ecb8589703a610aa5847f0c"
+          }
+        ],
+        "frame_width": 170,
+        "frame_height": 190,
+        "actions": [
+          {
+            "index": 0,
+            "directions": 1,
+            "directions_raw": 0,
+            "interval_raw": 130,
+            "loop_raw": 1,
+            "frames_per_direction": 10,
+            "first_frame": 0,
+            "identifier_raw": 0,
+            "raw_hex": "00820000000000000000000000010a00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+          },
+          {
+            "index": 1,
+            "directions": 1,
+            "directions_raw": 0,
+            "interval_raw": 110,
+            "loop_raw": 1,
+            "frames_per_direction": 16,
+            "first_frame": 10,
+            "identifier_raw": 0,
+            "raw_hex": "006e000000000000000000000001100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+          }
+        ],
+        "completed_last_frame": 25,
+        "evidence": [
+          "ev_7ff7092a0522a10920b1c81430af56c62cb116c3d66a5af86a35ecb5e9498a5c"
+        ],
+        "authority": "Original DGP physical frames; retained 0x4137C0 proves CF3 state2 progresses to state3 at its final animation frame; exact clock phase remains unobserved"
+      },
+      {
+        "object_index_zero_based": 9,
+        "object_number_one_based": 10,
+        "resource_id": "008",
+        "source": {
+          "path": "mapm/m70075/008.dgp",
+          "sha256": "8713c5862f236d372886298e9d1a9c7dc88eb2fea52485cfc5bac6323c5d1609"
+        },
+        "frames": [
+          {
+            "index": 0,
+            "image": "/assets/chapter_objects/m70075/008/frame_000.png",
+            "sha256": "6c576411f7949ccea4251daed50df20ebdc4eab709dbfcd94f4a4110d0d279c6"
+          },
+          {
+            "index": 1,
+            "image": "/assets/chapter_objects/m70075/008/frame_001.png",
+            "sha256": "250c11ce74a85a5dde51e5ebbab9b69252ce628d48474c1159fa5a448b8c0b33"
+          },
+          {
+            "index": 2,
+            "image": "/assets/chapter_objects/m70075/008/frame_002.png",
+            "sha256": "f40a4fec1c324ad77092c5fe55d77089a65299794d182598caa9ec10926eeb9e"
+          },
+          {
+            "index": 3,
+            "image": "/assets/chapter_objects/m70075/008/frame_003.png",
+            "sha256": "fe9dfc048f8c1a4dc2d2ed3a0c2c5e59d518784729c1ae4b93a78cfe1e7c3d89"
+          },
+          {
+            "index": 4,
+            "image": "/assets/chapter_objects/m70075/008/frame_004.png",
+            "sha256": "4cd2c40fca4e821ab3f9a747ad79b91fef56b219b752aa4fd82723efaf197696"
+          },
+          {
+            "index": 5,
+            "image": "/assets/chapter_objects/m70075/008/frame_005.png",
+            "sha256": "9dd674de569871e04aac720f65157dfef3d4e0de92cb3ba096f13963f2ebdf64"
+          },
+          {
+            "index": 6,
+            "image": "/assets/chapter_objects/m70075/008/frame_006.png",
+            "sha256": "67187d3562a590d0f97d149735a1a51be52a7fdd5b00c7e15076960820523fb7"
+          },
+          {
+            "index": 7,
+            "image": "/assets/chapter_objects/m70075/008/frame_007.png",
+            "sha256": "c380d69b7f8df7862fdda97ae7fc0424f04efc3945ce8d938b06957211fa46a1"
+          },
+          {
+            "index": 8,
+            "image": "/assets/chapter_objects/m70075/008/frame_008.png",
+            "sha256": "9a46b30d23ec8828c5313dd49b272e63b00924d662288a7f2ce8a16aa77681c8"
+          },
+          {
+            "index": 9,
+            "image": "/assets/chapter_objects/m70075/008/frame_009.png",
+            "sha256": "048c8a452c09e65872655110ae6841c752f59f168f26b188d2b29c4d903849e6"
+          },
+          {
+            "index": 10,
+            "image": "/assets/chapter_objects/m70075/008/frame_010.png",
+            "sha256": "0b9b8d4ac28fc735b25309060c452bff5030d4077def7df4330342ea7746df45"
+          },
+          {
+            "index": 11,
+            "image": "/assets/chapter_objects/m70075/008/frame_011.png",
+            "sha256": "7f780b3fe40085ed2c8ba5227bba671f190df1abc6c0f2714073de0c7b66b759"
+          },
+          {
+            "index": 12,
+            "image": "/assets/chapter_objects/m70075/008/frame_012.png",
+            "sha256": "435525a14fe112a14d7a9712e6f41fd2cfb2156882b86657a59344e90d5afc2a"
+          },
+          {
+            "index": 13,
+            "image": "/assets/chapter_objects/m70075/008/frame_013.png",
+            "sha256": "7774f36cde12bc2315dc8b399e097f4016faa05bb5b086f8b76f55468aac686e"
+          },
+          {
+            "index": 14,
+            "image": "/assets/chapter_objects/m70075/008/frame_014.png",
+            "sha256": "ba78fdbadc0e13ecd61c7c427ca3842270fbf56d53cda98dcdf85e7841e9b08d"
+          },
+          {
+            "index": 15,
+            "image": "/assets/chapter_objects/m70075/008/frame_015.png",
+            "sha256": "65eaf2d10b90fce5703859fee0409a14bf70e119a58d6b4acc736c4b478ee637"
+          },
+          {
+            "index": 16,
+            "image": "/assets/chapter_objects/m70075/008/frame_016.png",
+            "sha256": "93134e7c76713f1128f4053edfff26025535a06a827e1012e15493a69d8a69c1"
+          },
+          {
+            "index": 17,
+            "image": "/assets/chapter_objects/m70075/008/frame_017.png",
+            "sha256": "0bbf023e7c6e13e3317255c1e8747436d19dd6b7d399e9c83e46aa77aa303a7f"
+          },
+          {
+            "index": 18,
+            "image": "/assets/chapter_objects/m70075/008/frame_018.png",
+            "sha256": "2a4da48aeae821e728280f7c506aca005640b6ade0871ad3c103ebe59591c0b4"
+          },
+          {
+            "index": 19,
+            "image": "/assets/chapter_objects/m70075/008/frame_019.png",
+            "sha256": "6a3925477479eb8817159f36eb3f721567a5b5a4d56e7061aa60d3abd42e772e"
+          },
+          {
+            "index": 20,
+            "image": "/assets/chapter_objects/m70075/008/frame_020.png",
+            "sha256": "b5ff02759c2d52fca82d16f3778351286adf06bcd94f88342e4d4849bad132f6"
+          },
+          {
+            "index": 21,
+            "image": "/assets/chapter_objects/m70075/008/frame_021.png",
+            "sha256": "99619dddc1c144c39eb7086921495c6f82d4ffb964427f53b85e374dcd031831"
+          },
+          {
+            "index": 22,
+            "image": "/assets/chapter_objects/m70075/008/frame_022.png",
+            "sha256": "0221b63ba532689c614d7b138ca96519bd79c0f165b02646ee9fd5d5433f588a"
+          },
+          {
+            "index": 23,
+            "image": "/assets/chapter_objects/m70075/008/frame_023.png",
+            "sha256": "248f77897f787392c8e8e3d525f86bcecfcf8b07cddb2871f9a79fde87149bbf"
+          },
+          {
+            "index": 24,
+            "image": "/assets/chapter_objects/m70075/008/frame_024.png",
+            "sha256": "5aa122efde2f6de0d7c5f461862dad15ad68b1a19a5868d0cbc556d8bba51ebd"
+          },
+          {
+            "index": 25,
+            "image": "/assets/chapter_objects/m70075/008/frame_025.png",
+            "sha256": "5aa122efde2f6de0d7c5f461862dad15ad68b1a19a5868d0cbc556d8bba51ebd"
+          }
+        ],
+        "frame_width": 170,
+        "frame_height": 191,
+        "actions": [
+          {
+            "index": 0,
+            "directions": 1,
+            "directions_raw": 0,
+            "interval_raw": 130,
+            "loop_raw": 1,
+            "frames_per_direction": 10,
+            "first_frame": 0,
+            "identifier_raw": 0,
+            "raw_hex": "00820000000000000000000000010a00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+          },
+          {
+            "index": 1,
+            "directions": 1,
+            "directions_raw": 0,
+            "interval_raw": 110,
+            "loop_raw": 1,
+            "frames_per_direction": 16,
+            "first_frame": 10,
+            "identifier_raw": 0,
+            "raw_hex": "006e000000000000000000000001100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+          }
+        ],
+        "completed_last_frame": 25,
+        "evidence": [
+          "ev_7ff7092a0522a10920b1c81430af56c62cb116c3d66a5af86a35ecb5e9498a5c"
+        ],
+        "authority": "Original DGP physical frames; retained 0x4137C0 proves CF3 state2 progresses to state3 at its final animation frame; exact clock phase remains unobserved"
+      },
+      {
+        "object_index_zero_based": 10,
+        "object_number_one_based": 11,
+        "resource_id": "008",
+        "source": {
+          "path": "mapm/m70075/008.dgp",
+          "sha256": "8713c5862f236d372886298e9d1a9c7dc88eb2fea52485cfc5bac6323c5d1609"
+        },
+        "frames": [
+          {
+            "index": 0,
+            "image": "/assets/chapter_objects/m70075/008/frame_000.png",
+            "sha256": "6c576411f7949ccea4251daed50df20ebdc4eab709dbfcd94f4a4110d0d279c6"
+          },
+          {
+            "index": 1,
+            "image": "/assets/chapter_objects/m70075/008/frame_001.png",
+            "sha256": "250c11ce74a85a5dde51e5ebbab9b69252ce628d48474c1159fa5a448b8c0b33"
+          },
+          {
+            "index": 2,
+            "image": "/assets/chapter_objects/m70075/008/frame_002.png",
+            "sha256": "f40a4fec1c324ad77092c5fe55d77089a65299794d182598caa9ec10926eeb9e"
+          },
+          {
+            "index": 3,
+            "image": "/assets/chapter_objects/m70075/008/frame_003.png",
+            "sha256": "fe9dfc048f8c1a4dc2d2ed3a0c2c5e59d518784729c1ae4b93a78cfe1e7c3d89"
+          },
+          {
+            "index": 4,
+            "image": "/assets/chapter_objects/m70075/008/frame_004.png",
+            "sha256": "4cd2c40fca4e821ab3f9a747ad79b91fef56b219b752aa4fd82723efaf197696"
+          },
+          {
+            "index": 5,
+            "image": "/assets/chapter_objects/m70075/008/frame_005.png",
+            "sha256": "9dd674de569871e04aac720f65157dfef3d4e0de92cb3ba096f13963f2ebdf64"
+          },
+          {
+            "index": 6,
+            "image": "/assets/chapter_objects/m70075/008/frame_006.png",
+            "sha256": "67187d3562a590d0f97d149735a1a51be52a7fdd5b00c7e15076960820523fb7"
+          },
+          {
+            "index": 7,
+            "image": "/assets/chapter_objects/m70075/008/frame_007.png",
+            "sha256": "c380d69b7f8df7862fdda97ae7fc0424f04efc3945ce8d938b06957211fa46a1"
+          },
+          {
+            "index": 8,
+            "image": "/assets/chapter_objects/m70075/008/frame_008.png",
+            "sha256": "9a46b30d23ec8828c5313dd49b272e63b00924d662288a7f2ce8a16aa77681c8"
+          },
+          {
+            "index": 9,
+            "image": "/assets/chapter_objects/m70075/008/frame_009.png",
+            "sha256": "048c8a452c09e65872655110ae6841c752f59f168f26b188d2b29c4d903849e6"
+          },
+          {
+            "index": 10,
+            "image": "/assets/chapter_objects/m70075/008/frame_010.png",
+            "sha256": "0b9b8d4ac28fc735b25309060c452bff5030d4077def7df4330342ea7746df45"
+          },
+          {
+            "index": 11,
+            "image": "/assets/chapter_objects/m70075/008/frame_011.png",
+            "sha256": "7f780b3fe40085ed2c8ba5227bba671f190df1abc6c0f2714073de0c7b66b759"
+          },
+          {
+            "index": 12,
+            "image": "/assets/chapter_objects/m70075/008/frame_012.png",
+            "sha256": "435525a14fe112a14d7a9712e6f41fd2cfb2156882b86657a59344e90d5afc2a"
+          },
+          {
+            "index": 13,
+            "image": "/assets/chapter_objects/m70075/008/frame_013.png",
+            "sha256": "7774f36cde12bc2315dc8b399e097f4016faa05bb5b086f8b76f55468aac686e"
+          },
+          {
+            "index": 14,
+            "image": "/assets/chapter_objects/m70075/008/frame_014.png",
+            "sha256": "ba78fdbadc0e13ecd61c7c427ca3842270fbf56d53cda98dcdf85e7841e9b08d"
+          },
+          {
+            "index": 15,
+            "image": "/assets/chapter_objects/m70075/008/frame_015.png",
+            "sha256": "65eaf2d10b90fce5703859fee0409a14bf70e119a58d6b4acc736c4b478ee637"
+          },
+          {
+            "index": 16,
+            "image": "/assets/chapter_objects/m70075/008/frame_016.png",
+            "sha256": "93134e7c76713f1128f4053edfff26025535a06a827e1012e15493a69d8a69c1"
+          },
+          {
+            "index": 17,
+            "image": "/assets/chapter_objects/m70075/008/frame_017.png",
+            "sha256": "0bbf023e7c6e13e3317255c1e8747436d19dd6b7d399e9c83e46aa77aa303a7f"
+          },
+          {
+            "index": 18,
+            "image": "/assets/chapter_objects/m70075/008/frame_018.png",
+            "sha256": "2a4da48aeae821e728280f7c506aca005640b6ade0871ad3c103ebe59591c0b4"
+          },
+          {
+            "index": 19,
+            "image": "/assets/chapter_objects/m70075/008/frame_019.png",
+            "sha256": "6a3925477479eb8817159f36eb3f721567a5b5a4d56e7061aa60d3abd42e772e"
+          },
+          {
+            "index": 20,
+            "image": "/assets/chapter_objects/m70075/008/frame_020.png",
+            "sha256": "b5ff02759c2d52fca82d16f3778351286adf06bcd94f88342e4d4849bad132f6"
+          },
+          {
+            "index": 21,
+            "image": "/assets/chapter_objects/m70075/008/frame_021.png",
+            "sha256": "99619dddc1c144c39eb7086921495c6f82d4ffb964427f53b85e374dcd031831"
+          },
+          {
+            "index": 22,
+            "image": "/assets/chapter_objects/m70075/008/frame_022.png",
+            "sha256": "0221b63ba532689c614d7b138ca96519bd79c0f165b02646ee9fd5d5433f588a"
+          },
+          {
+            "index": 23,
+            "image": "/assets/chapter_objects/m70075/008/frame_023.png",
+            "sha256": "248f77897f787392c8e8e3d525f86bcecfcf8b07cddb2871f9a79fde87149bbf"
+          },
+          {
+            "index": 24,
+            "image": "/assets/chapter_objects/m70075/008/frame_024.png",
+            "sha256": "5aa122efde2f6de0d7c5f461862dad15ad68b1a19a5868d0cbc556d8bba51ebd"
+          },
+          {
+            "index": 25,
+            "image": "/assets/chapter_objects/m70075/008/frame_025.png",
+            "sha256": "5aa122efde2f6de0d7c5f461862dad15ad68b1a19a5868d0cbc556d8bba51ebd"
+          }
+        ],
+        "frame_width": 170,
+        "frame_height": 191,
+        "actions": [
+          {
+            "index": 0,
+            "directions": 1,
+            "directions_raw": 0,
+            "interval_raw": 130,
+            "loop_raw": 1,
+            "frames_per_direction": 10,
+            "first_frame": 0,
+            "identifier_raw": 0,
+            "raw_hex": "00820000000000000000000000010a00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+          },
+          {
+            "index": 1,
+            "directions": 1,
+            "directions_raw": 0,
+            "interval_raw": 110,
+            "loop_raw": 1,
+            "frames_per_direction": 16,
+            "first_frame": 10,
+            "identifier_raw": 0,
+            "raw_hex": "006e000000000000000000000001100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+          }
+        ],
+        "completed_last_frame": 25,
+        "evidence": [
+          "ev_7ff7092a0522a10920b1c81430af56c62cb116c3d66a5af86a35ecb5e9498a5c"
+        ],
+        "authority": "Original DGP physical frames; retained 0x4137C0 proves CF3 state2 progresses to state3 at its final animation frame; exact clock phase remains unobserved"
+      },
+      {
+        "object_index_zero_based": 11,
+        "object_number_one_based": 12,
+        "resource_id": "010",
+        "source": {
+          "path": "mapm/m70075/010.dgp",
+          "sha256": "7da1c615d424c088df6ce066336a32da1e8682c74b4460cb829ee8bf3448dee5"
+        },
+        "frames": [
+          {
+            "index": 0,
+            "image": "/assets/chapter_objects/m70075/010/frame_000.png",
+            "sha256": "2428ebe3fa09fe92bc82c6bb841c574008f668cb51f8359a220d6b5cdbe296f4"
+          },
+          {
+            "index": 1,
+            "image": "/assets/chapter_objects/m70075/010/frame_001.png",
+            "sha256": "f63be29f479878afc5f67d0304e4314afaaaf2dcf8abf0800e20a97d9fb59cdd"
+          },
+          {
+            "index": 2,
+            "image": "/assets/chapter_objects/m70075/010/frame_002.png",
+            "sha256": "73e3033539a4553213c8eaecaf682c5eef96ca812b07375bda9c3c1ad1660059"
+          },
+          {
+            "index": 3,
+            "image": "/assets/chapter_objects/m70075/010/frame_003.png",
+            "sha256": "dcdaf819c0d63257822e031c46f7de3ea1ea5885cfe74fda7b30419bcfda477b"
+          },
+          {
+            "index": 4,
+            "image": "/assets/chapter_objects/m70075/010/frame_004.png",
+            "sha256": "70de06a205f94fbd50a6c2e951354e9521209c89f4ea8d9388069ee601fa20a6"
+          },
+          {
+            "index": 5,
+            "image": "/assets/chapter_objects/m70075/010/frame_005.png",
+            "sha256": "6eccbf493378c3a93fe605f902d3650a8ebf91925088e7f7a6cceb22b5a4a870"
+          },
+          {
+            "index": 6,
+            "image": "/assets/chapter_objects/m70075/010/frame_006.png",
+            "sha256": "14ba14f47f340daf3f17d2756679a4a7dbc647d77db05e6f3cf02111a201ab79"
+          },
+          {
+            "index": 7,
+            "image": "/assets/chapter_objects/m70075/010/frame_007.png",
+            "sha256": "c122b15dc423df814a193858cbd280820dacb97d6b6840abd08786fc4cdbd9a9"
+          },
+          {
+            "index": 8,
+            "image": "/assets/chapter_objects/m70075/010/frame_008.png",
+            "sha256": "c4ac8e1b76fabd51c004fa1cdcaf15d4a85e33f51da91743538e4cb315a73cdd"
+          },
+          {
+            "index": 9,
+            "image": "/assets/chapter_objects/m70075/010/frame_009.png",
+            "sha256": "34589be8116e037ad6dd1ee7a5307513975b255694e97d81bd8765f6486986c5"
+          },
+          {
+            "index": 10,
+            "image": "/assets/chapter_objects/m70075/010/frame_010.png",
+            "sha256": "507c01c924669687c7a7f3c91755971812fce185d172c5658b0f85dd2d73b966"
+          },
+          {
+            "index": 11,
+            "image": "/assets/chapter_objects/m70075/010/frame_011.png",
+            "sha256": "309585aa8a41e39256bc37a3b009fe738fbd9a7eb1333fbdc6ec92a2059f3221"
+          },
+          {
+            "index": 12,
+            "image": "/assets/chapter_objects/m70075/010/frame_012.png",
+            "sha256": "0de34a36373026d1d072613609c6dd5f5cfd4379ce6b10d806e2f6ba55e94123"
+          },
+          {
+            "index": 13,
+            "image": "/assets/chapter_objects/m70075/010/frame_013.png",
+            "sha256": "8c1bdd52d30b5e0f614d81d51394985697a64c1368e67df41735912739da4b30"
+          },
+          {
+            "index": 14,
+            "image": "/assets/chapter_objects/m70075/010/frame_014.png",
+            "sha256": "7cb3e569a4169ce0af35f801d2d4b475013b64fda3b109d76f07799706ee1c4a"
+          },
+          {
+            "index": 15,
+            "image": "/assets/chapter_objects/m70075/010/frame_015.png",
+            "sha256": "179f0a4261647f35b4e7803cce5bf16a40d2e9c167abbdad0dbe2f673c478278"
+          },
+          {
+            "index": 16,
+            "image": "/assets/chapter_objects/m70075/010/frame_016.png",
+            "sha256": "747b392013e93fb9c110fbe384b4016bada0b881eb3e673c648f3cec0cf01e49"
+          },
+          {
+            "index": 17,
+            "image": "/assets/chapter_objects/m70075/010/frame_017.png",
+            "sha256": "9c370f396d3a99ce8871357523edd55afa0974eb85aaa594bd20b3ad541f5c82"
+          },
+          {
+            "index": 18,
+            "image": "/assets/chapter_objects/m70075/010/frame_018.png",
+            "sha256": "cb433c8eacc16c26f67d86f882e41613f8ef66068c03012dd4f807d7491cce21"
+          },
+          {
+            "index": 19,
+            "image": "/assets/chapter_objects/m70075/010/frame_019.png",
+            "sha256": "1569a0d41e6ab83ed2df65c608730a72aebd1e816ff01e2a29976a6c51fe1c23"
+          },
+          {
+            "index": 20,
+            "image": "/assets/chapter_objects/m70075/010/frame_020.png",
+            "sha256": "eecba100b509670f780b8d5ad0ec0e9f6957e35c8fb7d0f50a41e14f8e660e54"
+          },
+          {
+            "index": 21,
+            "image": "/assets/chapter_objects/m70075/010/frame_021.png",
+            "sha256": "548951e14f41f5962e1cbf96d644725fa635b901cafed1994f1102935932d7e3"
+          },
+          {
+            "index": 22,
+            "image": "/assets/chapter_objects/m70075/010/frame_022.png",
+            "sha256": "2488789ec2aa4a6cbb41fa5b9d7ad4ee0c57087f92b70837be925497aa72380a"
+          },
+          {
+            "index": 23,
+            "image": "/assets/chapter_objects/m70075/010/frame_023.png",
+            "sha256": "59c20f010b69ea42c56e6d05a89f5e827851455694dd590a01643296a189d23d"
+          },
+          {
+            "index": 24,
+            "image": "/assets/chapter_objects/m70075/010/frame_024.png",
+            "sha256": "59c20f010b69ea42c56e6d05a89f5e827851455694dd590a01643296a189d23d"
+          }
+        ],
+        "frame_width": 176,
+        "frame_height": 177,
+        "actions": [
+          {
+            "index": 0,
+            "directions": 1,
+            "directions_raw": 0,
+            "interval_raw": 130,
+            "loop_raw": 1,
+            "frames_per_direction": 10,
+            "first_frame": 0,
+            "identifier_raw": 0,
+            "raw_hex": "00820000000000000000000000010a00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+          },
+          {
+            "index": 1,
+            "directions": 1,
+            "directions_raw": 0,
+            "interval_raw": 110,
+            "loop_raw": 1,
+            "frames_per_direction": 15,
+            "first_frame": 10,
+            "identifier_raw": 0,
+            "raw_hex": "006e0000000000000000000000010f0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+          }
+        ],
+        "completed_last_frame": 24,
+        "evidence": [
+          "ev_7ff7092a0522a10920b1c81430af56c62cb116c3d66a5af86a35ecb5e9498a5c"
+        ],
+        "authority": "Original DGP physical frames; retained 0x4137C0 proves CF3 state2 progresses to state3 at its final animation frame; exact clock phase remains unobserved"
+      },
+      {
+        "object_index_zero_based": 12,
+        "object_number_one_based": 13,
+        "resource_id": "011",
+        "source": {
+          "path": "mapm/m70075/011.dgp",
+          "sha256": "07000b702216c67afee20e0e54bea0af2a42b6f028730c88363968589a4f17c3"
+        },
+        "frames": [
+          {
+            "index": 0,
+            "image": "/assets/chapter_objects/m70075/011/frame_000.png",
+            "sha256": "0146c2c04250f38339cb584203a2bc951c94496a4225aafbc67cf04485cb7cd6"
+          },
+          {
+            "index": 1,
+            "image": "/assets/chapter_objects/m70075/011/frame_001.png",
+            "sha256": "22effee67c9f2a0e7271407a589dc08bde8a1a9e2c3cdf75841f81cd90e58d49"
+          },
+          {
+            "index": 2,
+            "image": "/assets/chapter_objects/m70075/011/frame_002.png",
+            "sha256": "d61ec69036050c0ce738f1517ee0bfbc8ff2c63e251caa1d888bf02fc52c7c51"
+          },
+          {
+            "index": 3,
+            "image": "/assets/chapter_objects/m70075/011/frame_003.png",
+            "sha256": "0fd9c27888b21a9caf3005f24217110a3b64ec50a00b45c21a46d4d4ef1f0b26"
+          },
+          {
+            "index": 4,
+            "image": "/assets/chapter_objects/m70075/011/frame_004.png",
+            "sha256": "c8929aef553dd91fd7de7fd23ca059b1ffe1d7962558b0f0b20ce2f46cb4f061"
+          },
+          {
+            "index": 5,
+            "image": "/assets/chapter_objects/m70075/011/frame_005.png",
+            "sha256": "707d909dfa60348296a9808b9d6d991934220f9fe2a828e4b68b9026fdc3f513"
+          },
+          {
+            "index": 6,
+            "image": "/assets/chapter_objects/m70075/011/frame_006.png",
+            "sha256": "5b1d5714a0b4e538c4f7b284db1adefda36b5b3498274e5ad29b04b066c8304f"
+          },
+          {
+            "index": 7,
+            "image": "/assets/chapter_objects/m70075/011/frame_007.png",
+            "sha256": "f6995f7f0b624c072675319d8dce6df4520466a5b91b6c77e03610064654a3ab"
+          },
+          {
+            "index": 8,
+            "image": "/assets/chapter_objects/m70075/011/frame_008.png",
+            "sha256": "9bfe0525d82660aa6ea2608af5f1ea610395fe1c69ba3abc1bb017b7f610ed5d"
+          },
+          {
+            "index": 9,
+            "image": "/assets/chapter_objects/m70075/011/frame_009.png",
+            "sha256": "67df9189bfbdcd0f4dc3918b11cc396be1331ec8e18207e1c1f61ab34efb3897"
+          },
+          {
+            "index": 10,
+            "image": "/assets/chapter_objects/m70075/011/frame_010.png",
+            "sha256": "66111e275b7ae81e6dd85e88b0fd98d4b24e59cf3e91992aa679f73f6e2a0ad9"
+          },
+          {
+            "index": 11,
+            "image": "/assets/chapter_objects/m70075/011/frame_011.png",
+            "sha256": "5d291fbd4c6de0ab3d5486b6e57d81d522e5b8d1f09dd54c3e2b04b8f25f656a"
+          },
+          {
+            "index": 12,
+            "image": "/assets/chapter_objects/m70075/011/frame_012.png",
+            "sha256": "5877c1f7252f35215d66c323bc7a6d7144d8323faba3f9a04b4e92bcb80232ad"
+          },
+          {
+            "index": 13,
+            "image": "/assets/chapter_objects/m70075/011/frame_013.png",
+            "sha256": "0481f7ce3100c3124d5a0148bdefa084a6ca78c3ed5a5076ad30e51cfa34f34c"
+          },
+          {
+            "index": 14,
+            "image": "/assets/chapter_objects/m70075/011/frame_014.png",
+            "sha256": "574bea5092d9d87fcb5ed022cecf482ec216651b0ed44064b4d3194b68ee0d40"
+          },
+          {
+            "index": 15,
+            "image": "/assets/chapter_objects/m70075/011/frame_015.png",
+            "sha256": "3a719c274c80f158ac494f589ce7d719fe75baf2870ad73b021709478c084a29"
+          },
+          {
+            "index": 16,
+            "image": "/assets/chapter_objects/m70075/011/frame_016.png",
+            "sha256": "ef2aaf962a620655248e135620c2d27e5bd89cf4606473ffa93f351f8f0d2387"
+          },
+          {
+            "index": 17,
+            "image": "/assets/chapter_objects/m70075/011/frame_017.png",
+            "sha256": "8103718cebf69ff5db80d7f780f42c83b62797182ace1c53ec3ab5a93f092c6b"
+          },
+          {
+            "index": 18,
+            "image": "/assets/chapter_objects/m70075/011/frame_018.png",
+            "sha256": "042d64b1e32554a4c36968239a8df044883a1b6f4f7e6964680e912f9bdafb5d"
+          },
+          {
+            "index": 19,
+            "image": "/assets/chapter_objects/m70075/011/frame_019.png",
+            "sha256": "ee35dda08486159d815a960ebbf80a4277630f602f5278a64a5ef70fb41227da"
+          },
+          {
+            "index": 20,
+            "image": "/assets/chapter_objects/m70075/011/frame_020.png",
+            "sha256": "b48d816a8f32367c7c1258e84bcae0ec55289eaab8631bfd0c34a0690e2d6af4"
+          },
+          {
+            "index": 21,
+            "image": "/assets/chapter_objects/m70075/011/frame_021.png",
+            "sha256": "0910583a392591330ce29b590b766bf73411502c45cc726ecd6f4c81cdcfc94b"
+          },
+          {
+            "index": 22,
+            "image": "/assets/chapter_objects/m70075/011/frame_022.png",
+            "sha256": "5f3272445a9265f401f4ab4ba80366da2c4b24e968b1fba696b80055feb01ae3"
+          },
+          {
+            "index": 23,
+            "image": "/assets/chapter_objects/m70075/011/frame_023.png",
+            "sha256": "22c7bcd4307261f9920ccb96536171471fd58a158c763325ad900fcb5838b89d"
+          },
+          {
+            "index": 24,
+            "image": "/assets/chapter_objects/m70075/011/frame_024.png",
+            "sha256": "105e4911b0095d836f0172b420743f60e3debc9124d0c0ef2f02a44e6614559f"
+          }
+        ],
+        "frame_width": 112,
+        "frame_height": 175,
+        "actions": [
+          {
+            "index": 0,
+            "directions": 1,
+            "directions_raw": 0,
+            "interval_raw": 130,
+            "loop_raw": 1,
+            "frames_per_direction": 10,
+            "first_frame": 0,
+            "identifier_raw": 0,
+            "raw_hex": "00820000000000000000000000010a00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+          },
+          {
+            "index": 1,
+            "directions": 1,
+            "directions_raw": 0,
+            "interval_raw": 110,
+            "loop_raw": 1,
+            "frames_per_direction": 15,
+            "first_frame": 10,
+            "identifier_raw": 0,
+            "raw_hex": "006e0000000000000000000000010f0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+          }
+        ],
+        "completed_last_frame": 24,
+        "evidence": [
+          "ev_7ff7092a0522a10920b1c81430af56c62cb116c3d66a5af86a35ecb5e9498a5c"
+        ],
+        "authority": "Original DGP physical frames; retained 0x4137C0 proves CF3 state2 progresses to state3 at its final animation frame; exact clock phase remains unobserved"
+      }
+    ]
+  },
+  "route": null,
+  "texts": {}
+}

@@ -147,6 +147,7 @@
         "test_item_status_cure_battle.mjs",
         "test_item_status_cure_presentation.mjs",
         "test_jade_lake_battle_source.py",
+        "test_inner_white_forest_phase.mjs",
         "test_jade_lake_phase.mjs",
         "test_jute_source_readiness.py",
         "test_map_collision_source.mjs",
@@ -261,6 +262,7 @@
     }
   },
   "requirements": {
+    "test_inner_white_forest_phase.mjs": ["Map/m70071.dat", "Map/m70072.dat", "Map/m70073.dat", "Map/m70075.dat", "Map/m70076.dat", "Map/m70074_1.dat", "Map/m70074_2.dat", "Map/m70071.TLK", "Map/m70072.TLK", "Map/m70073.TLK", "Map/m70076.TLK", "Animate/m01051-1.anm", "Animate/m01050-1.anm", "Animate/m70073-1.anm", "Animate/m01050-2.anm", "Animate/m17010-2.anm", "SYSTEM/Object.ITM", "mapm/m70071/014.dgp"],
     "test_aid_carriers.mjs": ["remake/runtime/evidence/party_magic_native.json", "remake/runtime/evidence/turn_rules_assembly_20261011.json"],
     "test_battle_commands.mjs": ["remake/runtime/evidence/battle_alignment_20261015/native_41f070_assembly.json", "remake/runtime/evidence/forest_scheduler_instructions_20261011.json", "remake/runtime/evidence/turn_rules_assembly_20261011.json"],
     "test_battle_cursor_export.py": ["python:PIL"],
@@ -469,6 +471,10 @@
     }
   },
   "regions": {
+    "inner-white-forest": {
+      "maps": ["m7007*"],
+      "tests": ["test_inner_white_forest*"]
+    },
     "fire-valley": {
       "maps": [
         "m170*"

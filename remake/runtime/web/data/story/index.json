@@ -1,10 +1,10 @@
 {
   "schema": "seventh-seal-story-index",
   "version": 2,
-  "definition_sha256": "a6641ad3818be5aed60cee2b9f161a30815ca91c50fd601c0ad032eb78613930",
+  "definition_sha256": "d1ffc538c4d00a9c9bf081acf46ebebaf52b0abddbb79a2c0776fa5d45b25dbd",
   "shared": {
     "path": "data/story/shared.json",
-    "sha256": "bac53248eaeb3e39dc87e172c23492fe67ab96cf4c03d3155dfa8e58fc0f797e"
+    "sha256": "e83490152acec92951fa8b73c659e917dd9bcab12eebf377541ab8b9d32fe8d6"
   },
   "maps": {
     "M01060": {
@@ -246,6 +246,34 @@
     "M17032": {
       "path": "data/story/maps/m17032.json",
       "sha256": "db45a73931c2c690b15ca79f9106e94affd0d86b4140a57e1ec2c633b0027de1"
+    },
+    "M70071": {
+      "path": "data/story/maps/m70071.json",
+      "sha256": "58c5028b4f24e1a399eae1b96f39571d19a2b1f9afc7fc470ca8f31c5fa77374"
+    },
+    "M70072": {
+      "path": "data/story/maps/m70072.json",
+      "sha256": "d9b8abca35f5e871bffaf66f10d7f8ba01502249e69997778dd95579577c2d20"
+    },
+    "M70073": {
+      "path": "data/story/maps/m70073.json",
+      "sha256": "f78ff0fe94ae32a1b0e8bed04e736ee4314150d8bf9ffc1dd18299c64b7bd184"
+    },
+    "M70074_1": {
+      "path": "data/story/maps/m70074_1.json",
+      "sha256": "3b6c0c9e9283372933ae2911b87789832eca3cdc0f0405a3f87174c34ba6fb78"
+    },
+    "M70074_2": {
+      "path": "data/story/maps/m70074_2.json",
+      "sha256": "4cbe72a2c8b9b16a1ff30bfa639e4a7defe24c2bcf43323fec2aa5a9c6ecfb3a"
+    },
+    "M70075": {
+      "path": "data/story/maps/m70075.json",
+      "sha256": "bb266274f0440919b4f356925007c581901a62be34cf14b01b917676aeac28bc"
+    },
+    "M70076": {
+      "path": "data/story/maps/m70076.json",
+      "sha256": "98fe741306edc29dfdc2ae6dc0a6d00b2bd55cbe65fff1d2d5e2fb7ed3d215f1"
     }
   },
   "opening": {

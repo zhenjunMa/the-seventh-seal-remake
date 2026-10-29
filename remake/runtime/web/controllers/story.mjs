@@ -291,7 +291,8 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
     if(!resource)throw new Error('物件动作资源尚未准备');
     const object=state.chapterStory.maps[mapId]?.objects.find(row=>row.index===objectIndex);
     const {action,frameIndices}=nativeChestAnimation(resource,object?.behavior_raw_cf);
-    const frames=await playbackTask(Promise.all(frameIndices.map(index=>actions.image(resource.frames.find(frame=>frame.index===index).image, `map:${mapId}`))),signal);
+    const frames=await playbackTask(Promise.all(frameIndices.map(index=>index>=resource.frames.length?null:
+      actions.image(resource.frames.find(frame=>frame.index===index).image, `map:${mapId}`))),signal);
     if(playback?.paused)await playback.ready();signal?.throwIfAborted();playback?.check();
     state.objectPreview={mapId,objectIndex,bitmap:frames[0]};
     const start=performance.now(),interval=action.interval_raw;

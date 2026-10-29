@@ -9,11 +9,12 @@ export function mapPresentation({scene,world,role,action,view,
   const queue=scene.objects.filter(obj=>opening||world.object_states[`${scene.data.id}:${obj.index}`]?.visible!==false)
     .map(obj=>{
       const bitmap=objectBitmap(scene,obj),motion=obj.motion;
+      if(bitmap===null)return null;
       const pose=motion&&bitmap===obj.bitmap
         ?{image:motion.main,light:motion.intrinsic,shadow:motion.shadow,sx:motion.frame*motion.width,sy:0,width:motion.width,height:motion.height,x:obj.draw_x,y:obj.draw_y}
         :{image:bitmap,x:obj.draw_x,y:obj.draw_y};
       return {key:`object:${obj.index}`,layer:obj.layer??0,sort_y:obj.sort_y??0,pose};
-    });
+    }).filter(Boolean);
   for(const [npcIndex,npc]of (opening?[]:scene.npcs).entries()){
     const motion=npc.motion,actorRole=motion?.role,actorAction=actorRole?.actions.find(a=>a.index===motion.action);
     const position=mapActorPosition(npc);

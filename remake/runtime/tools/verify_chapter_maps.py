@@ -75,9 +75,16 @@ def verify():
             for frame in animation["frames"]:
                 with Image.open(WEB / frame["image"].lstrip("/")) as im:
                     assert im.size == (animation["frame_width"], animation["frame_height"])
-            with Image.open(WEB / animation["frames"][animation["completed_last_frame"]]["image"].lstrip("/")) as im:
-                boxes.append(dict(map_id=ident, object_number=animation["object_number_one_based"],
-                                  frames=len(animation["frames"]), completed_frame_transparent=im.getbbox() is None))
+            last = animation['completed_last_frame']
+            if last >= len(animation['frames']):
+                # 52AF12 rejects physical frames outside the source pool.
+                boxes.append(dict(map_id=ident, object_number=animation['object_number_one_based'],
+                                  frames=len(animation['frames']), completed_frame_transparent=True,
+                                  native_out_of_pool_frame=last))
+            else:
+                with Image.open(WEB / animation['frames'][last]['image'].lstrip('/')) as im:
+                    boxes.append(dict(map_id=ident, object_number=animation['object_number_one_based'],
+                                      frames=len(animation['frames']), completed_frame_transparent=im.getbbox() is None))
     report = dict(schema="seventh-seal-chapter-map-checks", version=1, source_hashes_match=True,
                   output_hashes_match=True, asset_hashes_and_dimensions_match=True,
                   six_physical_edges=checks, npc_count=sum(map(len, manifest["npcs_by_map"].values())),

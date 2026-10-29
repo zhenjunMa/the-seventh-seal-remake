@@ -40,7 +40,7 @@ export function inspectContentReadiness(content,story,resources){
     }
     for(const row of binding.objects)roots.push(row.handler==='keyed-chest'
       ?{kind:'direct-object',id:row.index,label:row.index}
-      :{kind:'object',id:table?.objects.find(obj=>obj.index===row.index)?.interaction_record_raw_f6,label:row.index});
+      :{kind:'object',id:table?.objects.find(obj=>obj.index===row.index)?.interaction_record_raw_f6,label:row.index,explicit:row.handler==='tlk-object'});
     for(const row of binding.rests)roots.push({kind:'rest',id:row.record_id,label:row.descriptor_id,explicit:true});
     for(const row of binding.routes)roots.push({kind:'route',id:row.record_id,label:row.descriptor_id});
     const npcSlots=binding.npcs??(resources.npcs_by_map[mapId]??[]).map(npc=>npc.slot_zero_based);
@@ -154,8 +154,9 @@ export function inspectContentReadiness(content,story,resources){
             }
             add(record.next);
           }else if(record.kind===2){
-            need(['trigger','npc'].includes(root.kind)&&item.mapId===mapId,'地图跳转需要原地形或NPC交互上下文');
+            need(['trigger','npc','object'].includes(root.kind)&&item.mapId===mapId,'地图跳转需要原地形或主动交互上下文');
             const destination=nativeMapTransfer(current,record,root.kind==='npc'?{npcSlot:root.label}:
+              root.kind==='object'?{objectIndex:root.label}:
               {triggerId:root.label,triggerRecordId:root.id},content);
             const targetTable=story.maps[destination.map_id];
             need(targetTable?.entry_markers?.[destination.entry_marker]?.length,'目标地图原进入标记缺失');

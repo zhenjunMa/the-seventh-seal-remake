@@ -50,11 +50,12 @@ export function validateStoryBindings(content,story,resources,{registeredMaps=co
       need(typeof raw==='string'&&raw.length===0x112*2,`${id} 物件 ${row.index} 缺少来源`);
       const b=Uint8Array.from(raw.match(/../g),part=>parseInt(part,16)),recordId=new DataView(b.buffer).getUint32(0xf6,true);
       if(row.handler==='keyed-chest')nativeKeyedChest(object);
-      else need(row.handler==='stationary-chest'&&b[0xcf]===3&&b[0x109]===0&&table.records.some(record=>record.id===recordId),`${id} 物件处理器与原记录不符`);
+      else need((row.handler==='stationary-chest'&&b[0xcf]===3||row.handler==='tlk-object'&&b[0xcf]===1)
+        &&b[0x109]===0&&table.records.some(record=>record.id===recordId),`${id} 物件处理器与原记录不符`);
       const animation=resources.object_animations[id]?.find(item=>item.object_index_zero_based===row.index);
       const source=resources.interactive_objects[id]?.find(item=>item.object_index_zero_based===row.index)?.source;
       need(animation?.frames.length&&source?.raw_hex===raw&&source.sha256===object.source.sha256,`${id} 物件 ${row.index} 缺少动作或来源不一致`);
-      nativeChestAnimation(animation,b[0xcf]);
+      if(row.handler!=='tlk-object')nativeChestAnimation(animation,b[0xcf]);
     }
     for(const rest of binding.rests){
       const descriptor=table.descriptors.find(row=>row.id===rest.descriptor_id),record=table.records.find(row=>row.id===rest.record_id);

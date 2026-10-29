@@ -743,6 +743,9 @@ export const definition = {
     "stage12": {
       "export": "source"
     },
+    "stage03": {
+      "export": "source"
+    },
     "TestStage": {
       "path": "data/skill_test_stage.json",
       "schema": "seventh-seal-battle-stage",
@@ -779,7 +782,8 @@ export const definition = {
     "m70010-1",
     "m70030-1",
     "m71014-1",
-    "m71050-1"
+    "m71050-1",
+    "m70073-1"
   ],
   "maps": {
     "M01060": {
@@ -1380,6 +1384,140 @@ export const definition = {
       "triggers": [
         1,
         2
+      ]
+    },
+    "M70071": {
+      "npcs": [],
+      "triggers": [
+        4
+      ],
+      "objects": [
+        {
+          "index": 11,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 13,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "M70072": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 10,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 11,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 13,
+          "handler": "tlk-object"
+        }
+      ]
+    },
+    "M70073": {
+      "npcs": [
+        10
+      ],
+      "triggers": [
+        31
+      ],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 9,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 10,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "M70074_1": {
+      "export": {
+        "story": false
+      },
+      "npcs": [],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 9,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 10,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 11,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "M70074_2": {
+      "export": {
+        "story": false
+      },
+      "npcs": [],
+      "objects": [
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 16,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "M70075": {
+      "export": {
+        "story": false
+      },
+      "npcs": [],
+      "objects": [
+        {
+          "index": 7,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 8,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "M70076": {
+      "npcs": [
+        10
+      ],
+      "objects": [
+        {
+          "index": 7,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 9,
+          "handler": "keyed-chest"
+        }
       ]
     }
   },
@@ -2359,6 +2497,11 @@ export default {
       "schema": "seventh-seal-battle-stage",
       "asset_prefix": "assets/stages/stage12/"
     },
+    "stage03": {
+      "path": "data/stages/stage03.json",
+      "schema": "seventh-seal-battle-stage",
+      "asset_prefix": "assets/stages/stage03/"
+    },
     "TestStage": {
       "path": "data/skill_test_stage.json",
       "schema": "seventh-seal-battle-stage",
@@ -2515,6 +2658,11 @@ export default {
       "path": "Animate/m71050-1.anm",
       "sha256": "dbbef9d0067bd2ced4d7750b392af11de3e05e206c172e009157ad5fb4090a38",
       "bytes": 2213
+    },
+    "m70073-1": {
+      "path": "Animate/m70073-1.anm",
+      "sha256": "40fbf5f044efb1804712d1cc6faf2b899a3e24624a8b53c74f0bd6e869da37c8",
+      "bytes": 4211
     }
   },
   "maps": {
@@ -3408,6 +3556,164 @@ export default {
       "routes": [],
       "npcs": [],
       "flag_index": 470
+    },
+    "M70071": {
+      "path": "data/maps/m70071.json",
+      "triggers": [
+        4
+      ],
+      "objects": [
+        {
+          "index": 11,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 13,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 99
+    },
+    "M70072": {
+      "path": "data/maps/m70072.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 10,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 11,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 13,
+          "handler": "tlk-object"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 97
+    },
+    "M70073": {
+      "path": "data/maps/m70073.json",
+      "triggers": [
+        31
+      ],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 9,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 10,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10
+      ],
+      "flag_index": 98
+    },
+    "M70074_1": {
+      "path": "data/maps/m70074_1.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 9,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 10,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 11,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 100
+    },
+    "M70074_2": {
+      "path": "data/maps/m70074_2.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 16,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 101
+    },
+    "M70075": {
+      "path": "data/maps/m70075.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 7,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 8,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 102
+    },
+    "M70076": {
+      "path": "data/maps/m70076.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 7,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 9,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10
+      ],
+      "flag_index": 103
     }
   },
   "story": {

@@ -14,11 +14,12 @@ export function nativeKeyedChest(object){
   // BA is an optional denial TLK and +53 chooses another possession mode.
   // Linked objects/spawns need their own recovered adapter before admission.
   need(raw[0x53]===0&&view.getUint32(0xba,true)===0
-    &&view.getUint32(0x4c,true)===0&&raw[0x51]===0&&raw[0x52]===0
+    &&view.getUint32(0x4c,true)===0&&raw[0x51]===0
     &&view.getUint32(0xe3,true)===0&&view.getUint32(0xe7,true)===0,
   '钥匙模式、拒绝剧情或物件联动尚未接入');
+  // 411A50 reads the +52 direction mask only when +51 enables a spawn.
   const keyId=view.getUint32(0xf2,true),rewards=[];
-  need(keyId>=1&&keyId<=416,'钥匙编号无效');
+  need(keyId>=0&&keyId<=416,'钥匙编号无效');
   for(let slot=0;slot<10;slot++){
     const id=view.getInt32(0x54+slot*4,true);
     need(id>=0&&id<=416,'金币或特殊掉落尚未接入');
@@ -30,7 +31,8 @@ export function nativeKeyedChest(object){
 export function canOpenNativeChest(world,chest){
   // Mode0 compares IDs across inventory and all retained native equipment;
   // it neither consumes the key nor requires it on the controlled actor.
-  return evaluateNativeStoryCondition({condition_type:4,condition_index:0xffffffff,condition_bit:chest.keyId},world);
+  // 411F7F bypasses 47B0C0 when +F2 is zero; 412136 returns success.
+  return chest.keyId===0||evaluateNativeStoryCondition({condition_type:4,condition_index:0xffffffff,condition_bit:chest.keyId},world);
 }
 export function nativeChestAnimation(resource,behavior){
   need([3,4].includes(behavior),'动画行为尚未接入');
@@ -49,7 +51,9 @@ export function nativeChestAnimation(resource,behavior){
   need(count>=1&&count<=255&&((raw[13]&15)!==0||count<=20),'开箱动作帧数无效');
   const frameIndices=Array.from({length:count},(_,i)=>first+((raw[13]&15)===0?raw[0x16+i]:i));
   need(raw[0]===0&&raw[0x7f]===0&&action.interval_raw>0&&action.interval_raw===view.getUint32(1,true)
-    &&frameIndices.every(frame=>resource.frames.some(row=>row.index===frame)),
+    &&frameIndices.every(frame=>frame>=resource.frames.length||resource.frames.some(row=>row.index===frame)),
   '开箱帧序列、人物动作或时钟模式尚未接入');
+  // 52AF12 rejects a physical frame outside the DGP pool without drawing.
+  // Preserve that logical frame and its wait; do not clamp it to the last image.
   return {action,frameIndices};
 }

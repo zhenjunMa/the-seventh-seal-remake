@@ -235,6 +235,41 @@
       "sha256": "68437b5c9cbe125cfd611d30edb2be090cfdb9ef41f42b1ba6c2f60608fa3280"
     },
     {
+      "id": "M70071",
+      "path": "data/maps/m70071.json",
+      "sha256": "7f2dfd5f392332f4015157e59995fb0691250fd093a3174b982acda396fb662e"
+    },
+    {
+      "id": "M70072",
+      "path": "data/maps/m70072.json",
+      "sha256": "f3540cd27ff1667f4ebe2bfc08d5298056b297023c7d3fd2befb3209c3d1660b"
+    },
+    {
+      "id": "M70073",
+      "path": "data/maps/m70073.json",
+      "sha256": "71c356d0c05afe8720ae79015926e54052bf06a790654bb3eccbee0746bbc1f1"
+    },
+    {
+      "id": "M70074_1",
+      "path": "data/maps/m70074_1.json",
+      "sha256": "0c6c3f26cbeaca53e72de67b1c96e9f0ad78d9dab8a8960d457f1a2cabe15b09"
+    },
+    {
+      "id": "M70074_2",
+      "path": "data/maps/m70074_2.json",
+      "sha256": "a259484e8147ca18edccb7354535f9514044ef388adf83640494ea2b91dc53da"
+    },
+    {
+      "id": "M70075",
+      "path": "data/maps/m70075.json",
+      "sha256": "91f78d104ff22fb1bb769704cbee2439f62a12f78626d9f4849008674ac83261"
+    },
+    {
+      "id": "M70076",
+      "path": "data/maps/m70076.json",
+      "sha256": "30ed60f64921b8c67eae539e05f515430d1eb422817956f8f90d2f80646294bf"
+    },
+    {
       "id": "M71010",
       "path": "data/maps/m71010.json",
       "sha256": "d0ed270f685f2c1f1c92b1afdc7ecd6665fcf320e7af8eddc645687e5f025749"
@@ -2563,7 +2598,7 @@
   "forest_battle_view": "data/enemy_battle_view.json",
   "scope": {
     "official_runtime_started": true,
-    "ready_exits": 98,
+    "ready_exits": 119,
     "source_backed_events": 0,
     "one_on_one_turn_sample": true,
     "full_combat": false,

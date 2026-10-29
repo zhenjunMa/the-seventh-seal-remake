@@ -2,7 +2,7 @@
   "schema": "seventh-seal-tool-index",
   "version": 1,
   "updated": "2026-10-29",
-  "registered_steps": 45,
+  "registered_steps": 46,
   "content_plan": [
     "chapter-maps",
     "chapter-story",
@@ -368,9 +368,18 @@
       "imported_by": [
         "build_runtime.py",
         "export_ember_city_index.py",
+        "export_inner_white_forest_index.py",
         "export_jade_lake_index.py",
         "export_white_forest_index.py"
       ]
+    },
+    {
+      "path": "export_inner_white_forest_index.py",
+      "role": "registered-build",
+      "build_targets": [
+        "inner-white-forest-index"
+      ],
+      "imported_by": []
     },
     {
       "path": "export_jade_lake_index.py",
