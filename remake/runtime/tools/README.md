@@ -113,7 +113,7 @@ plan只用已提交元数据及既有图集区域，不读PNG或写正式产物�
 2. 确认来源后加`--run`复制；跨项目在两次命令均加`--source-root "/path/to/old-project"`。
 
 3. 脚本将prototype旧assets复制到runtime/web/assets、旧evidence复制到runtime/evidence/source；原文件保留，同SHA复用，冲突不覆盖。记录写evidence/layout_migration，files=0只表示该来源没找到可迁移文件，不表示新环境素材齐全。
-4. 运行`verify_phaser.mjs --assets`，启动正式服务并按[运行说明](../README.md)核受影响剧情／战斗／保存。无媒体时限定代码与示意图检查；迁移不自动完成Windows实机、首次构建或全主线验收。
+4. 运行`verify_phaser.mjs --assets`，按[项目启动入口](../../../README.md#本地运行)运行正式服务，核受影响剧情／战斗／保存。无媒体时限定代码与示意图检查；迁移不自动完成Windows实机、首次构建或全主线验收。
 
 源码和三份基础清单随版本更新提供，迁移脚本不复制它们。映射见`layout_migration.json`，来源清单保留旧字节和历史路径，不作为新的手工编辑表。
 

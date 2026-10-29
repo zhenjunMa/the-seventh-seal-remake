@@ -234,7 +234,7 @@ def verify():
     # The cleanup's complete before/after proof is historical; current code is allowed to evolve.
     # Source resources, retained assets and archive members remain checked above.
     assert not (RUNTIME/'tools/update_forest_combat_docs.py').exists(), 'Retired document writer returned'
-    docs = ['AGENTS.md', 'runtime/README.md', 'runtime/architecture.md', 'runtime/config_guide.md', 'runtime/tools/README.md',
+    docs = ['AGENTS.md', 'runtime/architecture.md', 'runtime/config_guide.md', 'runtime/tools/README.md',
             'prototype/README.md', 'assessment/validation_design.md', 'assessment/testing_strategy.md', 'archive/README.txt']
     assert (ROOT/'README.md').is_file()
     assert all((REMAKE/name).is_file() for name in docs)
