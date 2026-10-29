@@ -199,6 +199,13 @@ export function initializeNativeEntry({actor,data,rng}){
   return {kind:'entry',actor_id:actor.id,skill:clone(skill),source_skill_index:skill.original_skill_index,target_id:actor.id,after,trace,
     evidence:['ev_058f6553bdbe4702f6c550168a98b6dc64a09c8af9b303cee8aa51e1f55f7695']};
 }
+/** 50E4B0 requests type10 through 50E3A0 after the escape decision. */
+export function selectNativeEscapeAnimation({actor,data,rng}){
+  validateForestReactionsData(data);const input=inputActor(actor),role=roleFor(data,actor),trace=[],draw=drawFactory(rng,trace);
+  const skill=input.current===10?actor.current_skill:sourceLookup(role,10,draw);
+  requireValue(skill,'Native escape animation id10 is missing');
+  return {...descriptor(actor,skill,'preserve',actor.current_target_id,trace,data,'native-escape',{native_after_raw:{}}),kind:'escape'};
+}
 /** 508BB0 mode3 requests 50E3A0(type14) before its recovery block / ranges.
  * The admitted revival transaction calls this at that exact point so its
  * source-animation lookup draw cannot trade places with recovery RNG.

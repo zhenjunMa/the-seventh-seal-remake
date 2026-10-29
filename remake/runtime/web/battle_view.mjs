@@ -288,6 +288,12 @@ export class BattleView {
         const role=meta.roles.find(r=>r.id===row.id);if(!role)continue;
         if(role.frame_width!==row.frame_width||role.frame_height!==row.frame_height||role.anchor.x!==row.anchor.x||role.anchor.y!==row.anchor.y)throw new Error('战斗入场死亡坐标不一致');
         for(const source of [row.source_chr,row.source_dgp])if(lifecycleMeta.source_hashes?.[source]!==meta.source_hashes?.[source])throw new Error('战斗入场死亡来源不一致');
+        if(row.shadow){const s=row.shadow;
+          if(!urlAllowed(s.sheet)||!/[a-f0-9]{64}/.test(s.sha256)||!['width','height','columns','frame_width','frame_height','frames'].every(k=>integer(s[k],1))||
+            s.frames!==row.source_frame_pool_count||s.width!==s.columns*s.frame_width||s.height!==Math.ceil(s.frames/s.columns)*s.frame_height||
+            !integer(s.x)||!integer(s.y)||s.x+s.frame_width>row.frame_width||s.y+s.frame_height>row.frame_height)throw new Error('战斗阴影来源或图集坐标无效');
+        }
+        role.shadow=clone(row.shadow??null);
         lifecycleFrames.set(row.layer_bank.path,{row,required:mergeNativeActionAtlases(role,row,meta.source_hashes)});
         for(const skill of row.skills.filter(s=>s.source_skill?.battle_handler==='native-revival')){
           role.alternate_skills??=[];role.alternate_skills.push({...clone(skill),runtime_skill_id:`${row.id}_${skill.source_skill.original_skill_index}`,segments:skill.segments.map(segment=>({...clone(segment),movement_source_field:'0x1e'}))});
@@ -335,6 +341,7 @@ export class BattleView {
     for (const role of meta.roles) for (const action of role.actions) {
       add(action.sheet, action.sha256, role.frame_width * action.frame_count, role.frame_height * action.directions,role.id);
     }
+    for(const role of meta.roles)if(role.shadow){const s=role.shadow;add(s.sheet,s.sha256,s.width,s.height,role.id);}
     const ownersByEffect=effectOwners(meta,itemMeta,lifecycleMeta),seenEffects=new Set();
     for (const effect of meta.effects) {
       // Rendering resolves the first matching ID. Retain later source variants
@@ -606,7 +613,7 @@ export class BattleView {
       let root=null,at=Infinity,carrierFirst=false;
       for(const candidate of roots())for(const channel of this._sequenceChannels(candidate)){
         if(channel.done||channel===candidate&&candidate.main_done)continue;
-        const end=channel.visited+1>=channel.steps.length,tail=end&&!channel.carrier&&!candidate.independent_carriers?this.meta.policy.tail_ms:0;
+        const end=channel.visited+1>=channel.steps.length,tail=end&&channel===candidate&&!candidate.independent_carriers?this.meta.policy.tail_ms:0;
         const due=candidate.started+channel.next_at+tail;
         if(due<at||due===at&&channel.carrier&&!carrierFirst){root=candidate;at=due;carrierFirst=Boolean(channel.carrier);}
       }
@@ -631,7 +638,7 @@ export class BattleView {
       while(true){
         if(iterations++>=limit)break;
         const channels=this._sequenceChannels(run);let selected=null,at=Infinity,ending=false;
-        for(const channel of channels){if(channel.done||(channel===run&&run.main_done))continue;const end=channel.visited+1>=channel.steps.length,due=channel.next_at+(end&&!channel.carrier&&!run.independent_carriers?this.meta.policy.tail_ms:0);if(due<at){selected=channel;at=due;ending=end;}}
+        for(const channel of channels){if(channel.done||(channel===run&&run.main_done))continue;const end=channel.visited+1>=channel.steps.length,due=channel.next_at+(end&&channel===run&&!run.independent_carriers?this.meta.policy.tail_ms:0);if(due<at){selected=channel;at=due;ending=end;}}
         if(!selected||at>run.elapsed)break;const channel=selected,child=Boolean(channel.descriptor),carrier=Boolean(channel.carrier);
         if(channel.vertical_wait){
           const bridge=this._nativeBridge(channel.result.actor_id,run.native_control,run.native_guard);
@@ -677,7 +684,7 @@ export class BattleView {
           if(response.interrupt_actor_id===run.result.actor_id)run.main_done=true;
           for(const old of run.children)if(!old.done&&old.result.actor_id===response.interrupt_actor_id){old.done=true;run.onReactionEnd?.(clone(old.descriptor),false);}
           for(const hit of response.group_results??[response])if(hit.reaction_descriptor){
-            const descriptor=clone(hit.reaction_descriptor),role=this._role(descriptor.actor_id),plan=clone(descriptor.plan);plan.allow_no_contacts=true;
+            const descriptor=clone(hit.reaction_descriptor),role=this._role(descriptor.actor_id),plan=clone(descriptor.plan);plan.allow_no_contacts=true;plan.handler='native-response';
             const compiled=compileNativeSequence(this.meta,role.id,plan,[this.layers,...this.alternateLayers.values()]);
             for(const old of run.children)if(!old.done&&old.result.actor_id===descriptor.actor_id){old.done=true;run.onReactionEnd?.(clone(old.descriptor),false);}
             run.children.push({sequence:true,result:{actor_id:descriptor.actor_id,target_id:descriptor.target_id,skill_id:descriptor.skill.id,plan},descriptor,steps:compiled.steps,segments:compiled.segments,
@@ -930,7 +937,9 @@ export class BattleView {
       const role = this._role(id), actor = actors.get(id), slot = slots[id];
       const nativeZ=this.nativeControl&&(!this.nativeControlIsCurrent||this.nativeControlIsCurrent())?this.nativeControl.actor(id)?.native_z_raw:actor?.native_z_raw;
       if(Number.isFinite(nativeZ))slot[1]+=nativeZ*(this.stageMeta?1.125:this.meta.policy.sprite_scale);
-      if(actor?.escaped||actor?.state_raw===11)continue;
+      const lifePose=this.lifecycle?.pose(id);
+      if((actor?.escaped||actor?.state_raw===11)&&lifePose?.offset_x===undefined)continue;
+      if(lifePose?.offset_x!==undefined){const offset=lifePose.offset_x*(this.stageMeta?1.125:this.meta.policy.sprite_scale);slot[0]+=offset;groundSlots[id][0]+=offset;}
       if(this.lifecycle?.hidden(id))continue;
       const dead = actor?.alive === false || actor?.hp?.current === 0;
       let alpha = 1, segment = role.idle, frame = poseFrame(segment,now,true), pair = null;
@@ -938,12 +947,17 @@ export class BattleView {
       if(idlePose){segment={action_index:idlePose.action_index};frame=idlePose.action_frame;}
       const acting=run?.sequence?roots.flatMap(root=>[...root.children,...(!root.main_done?[root]:[])]).reverse().find(c=>!c.done&&c.result.actor_id===id):run?.result.actor_id===id?run:null;
       const impacting=run?.sequence?roots.flatMap(root=>this._sequenceChannels(root)).filter(c=>c.result.target_id===id&&c.impact_called&&this._damaging(c.result)).sort((a,b)=>(b.at??0)+(b.impact_elapsed??0)-(a.at??0)-(a.impact_elapsed??0))[0]:run?.result.target_id===id&&run.impact_called&&this._damaging(run.result)?run:null;
-      const lifePose=this.lifecycle?.pose(id);
       if(lifePose){segment={action_index:lifePose.action_index};frame=lifePose.action_frame;alpha=lifePose.alpha??1;
         pair=this.lifecyclePairs.get(`${role.id}:${lifePose.source_frame}`)??null;
       } else if (acting) {
         const step = acting.steps[acting.cursor],visual=step.command_raw!==undefined?step.visual:step;
         if(visual){segment = {action_index: visual.action_index}; frame = visual.action_frame; pair = visual.pair;}
+      } else if(actor?.native_active&&this.lastActorPoses.has(id)){
+        // The controller selects the next landing/get-up source at this
+        // frame's completion acknowledgement. Retain the displayed pose
+        // through that handoff instead of inserting an idle frame.
+        const last=this.lastActorPoses.get(id);segment={action_index:last.action_index};frame=last.action_frame;
+        const action=role.actions.find(a=>a.index===segment.action_index);pair=this.lifecyclePairs.get(`${role.id}:${action.first_frame+frame}`)??null;
       } else if(actor?.defending&&role.response_skills?.some(s=>s.chr_skill_index===9)){
         if(!this.defendClocks.has(id))this.defendClocks.set(id,now);
         segment=role.response_skills.find(s=>s.chr_skill_index===9).segments[0];
@@ -965,9 +979,18 @@ export class BattleView {
       else if(actor?.native_visibility?.complete&&actor.native_visibility.kind==='disappear')alpha=0;
       if(!lifePose)alpha*=this.lifecycle?.alpha(id)??1;
       if(!actor?.defending)this.defendClocks?.delete(id);
-      ctx.save(); ctx.globalAlpha = alpha * .4; ctx.fillStyle = '#071315'; ctx.beginPath();
-      const shadow=this.stageMeta?groundSlots[id]:[slot[0],slot[1]+24],footprint=this.stageMeta?this._groundFootprint(role):null;
-      ctx.ellipse(shadow[0],shadow[1],footprint?.radius_x??82,footprint?.radius_y??15,0,0,Math.PI*2);ctx.fill();ctx.restore();
+      ctx.save();
+      if(role.shadow){
+        const s=role.shadow,sourceFrame=role.actions.find(a=>a.index===segment.action_index).first_frame+frame,scale=this.meta.policy.sprite_scale;
+        ctx.globalAlpha=alpha;
+        drawBattleImage(ctx,this.images.get(s.sheet),(sourceFrame%s.columns)*s.frame_width,Math.floor(sourceFrame/s.columns)*s.frame_height,s.frame_width,s.frame_height,
+          slot[0]+(s.x-role.anchor.x)*scale,slot[1]+(s.y-role.anchor.y)*scale-(Number.isFinite(nativeZ)?nativeZ*(this.stageMeta?1.125:scale):0),s.frame_width*scale,s.frame_height*scale);
+      }else if(!('shadow' in role)){
+        ctx.globalAlpha=alpha*.4;ctx.fillStyle='#071315';ctx.beginPath();
+        const shadow=this.stageMeta?groundSlots[id]:[slot[0],slot[1]+24],footprint=this.stageMeta?this._groundFootprint(role):null;
+        ctx.ellipse(shadow[0],shadow[1],footprint?.radius_x??82,footprint?.radius_y??15,0,0,Math.PI*2);ctx.fill();
+      }
+      ctx.restore();
       if(!this.lifecycle?.drawDisappearance(id,ctx,slot[0],slot[1]))this._sprite(role, segment.action_index, frame, slot[0], slot[1], alpha, pair);
       this.lastActorPoses.set(id,{action_index:segment.action_index,action_frame:frame});
       if(acting&&pair?.intrinsic.active&&!run.observations.intrinsic_source_frames.includes(pair.source_frame))run.observations.intrinsic_source_frames.push(pair.source_frame);

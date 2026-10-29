@@ -3,7 +3,7 @@ import {initializeScheduler,chargeActor,isActorReady,selectReady,dispatchCharge,
 import {planForestEnemyAction,selectNativeTarget} from './forest_ai.mjs';
 import {composeNativeSequence,directSequence} from './skill_sequence.mjs';
 import {createRewardLedger,collectEnemyDefeat,recordNativeContact,resetNativeChain,planVictoryRewards} from './battle_rewards.mjs';
-import {applyContactReaction,finalizeNativeDeath,initializeNativeEntry,selectNativeRevivalAnimation,selectNativeNormalReaction,selectNativeAfterSourceReaction,nativeReactionTargetAvailability} from './battle_reactions.mjs';
+import {applyContactReaction,finalizeNativeDeath,initializeNativeEntry,selectNativeEscapeAnimation,selectNativeRevivalAnimation,selectNativeNormalReaction,selectNativeAfterSourceReaction,nativeReactionTargetAvailability} from './battle_reactions.mjs';
 import {initializeNativeStatuses,clearNativeStatuses,applyNativeSkillStatus,tickNativeStatuses} from './battle_status.mjs';
 import {consumeInventoryItem,restoreActorWithItem,usableItems,itemTargetEligible} from './items.mjs';
 import {dispatchDefend,resolveNativeEscape,dispatchEscapeFailure,dispatchEscapeSuccess} from './battle_commands.mjs';
@@ -57,7 +57,7 @@ export class BattleController {
       lifecycle_events:state.lifecycle_events??[],pending_outcome:state.pending_outcome??null,
       ready_player_ids:this.readyPlayerIds(),command_available:this.canCommand(),input_busy:Boolean(commandForActor(scheduler,player_id))||this.running&&scheduler?.active_actor_id===player_id,action_busy:this.running,
       source:{runtime_configuration:{mode},player_command_order:state.source.player_command_order},
-      actors:state.actors.map(({id,name,side,hp,mp,alive,charge,state_raw,defense_half_raw,party_slot_zero_based,life_epoch,idle_pose,native_z_raw,native_vertical_render_z_raw})=>({id,name,side,hp,mp,alive,charge,state_raw,party_slot_zero_based,life_epoch,idle_pose,native_z_raw,native_vertical_render_z_raw,defending:Boolean(defense_half_raw),escaped:state_raw===11})),
+      actors:state.actors.map(({id,name,side,hp,mp,alive,charge,state_raw,defense_half_raw,party_slot_zero_based,life_epoch,idle_pose,native_active,native_x_raw,native_z_raw,native_vertical_render_z_raw})=>({id,name,side,hp,mp,alive,charge,state_raw,party_slot_zero_based,life_epoch,idle_pose,native_active,native_x_raw,native_z_raw,native_vertical_render_z_raw,defending:Boolean(defense_half_raw),escaped:state_raw===11})),
       impact_count:this.impactSummary?.count??0,
       last_impact:this.impactSummary?.last?{actor_id:this.impactSummary.last.actor_id,
         source_frame:this.impactSummary.last.presentation?.source_frame}:null});
@@ -228,6 +228,8 @@ export class BattleController {
       if(event.source_id_raw===12)actor.state_raw=7;
     }else if(event.kind==='revive'||event.kind==='response'){
       this.completeNativeSource(actor,this.now());
+    }else if(event.kind==='escape'){
+      actor.native_active=false;
     }
     this.log({type:'battle-lifecycle-completed',battle_id:this.state.id,event:copy(event)});
     this.refreshCommandState();this.publish();return true;
@@ -346,6 +348,12 @@ export class BattleController {
     const before=copy(player);
     const resolution=resolveNativeEscape({actor:player,actors:this.state.actors,rng:this.rng,...this.nativeContext()});
     const descriptor=resolution.success?dispatchEscapeSuccess(player):dispatchEscapeFailure(player);
+    if(resolution.success&&this.lifecycleEnabled){
+      const animation=selectNativeEscapeAnimation({actor:player,data:this.reactionData,rng:this.rng});
+      Object.assign(player,copy(animation.after));
+      this.state.lifecycle_events=this.state.lifecycle_events.filter(event=>event.actor_id!==player.id);
+      this.queueLifecycle(player,animation);
+    }
     // The requested skill-test session ends on its first escape confirmation;
     // ordinary encounters retain the source per-actor escape lifecycle.
     if(this.testMode&&resolution.success)this.state.test_exit_requested=true;
@@ -487,7 +495,7 @@ export class BattleController {
     }
     if(!this.running&&(this.lockedOutcome||!this.activePlayers().length||victory)){
       const outcome=this.lockedOutcome??(victory?'victory':this.players().some(a=>a.state_raw===11)?'escaped':'defeat');
-      if(!this.lockedOutcome&&this.lifecycleEnabled&&(this.hasLifecycle('death')||this.state.actors.some(a=>a.state_raw===4))){
+      if(!this.lockedOutcome&&this.lifecycleEnabled&&(this.hasLifecycle('death')||this.hasLifecycle('escape')||this.state.actors.some(a=>a.state_raw===4))){
         this.state.pending_outcome=outcome;this.state.phase='charging';this.clearCommands();s.command_stage='closed';return;
       }
       if(!this.lockedOutcome){

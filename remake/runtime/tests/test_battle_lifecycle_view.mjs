@@ -27,6 +27,22 @@ test('independent actor channels finish at their own source durations; enemy hid
   playback.advance(snapshot,roster,enemyDuration);assert.equal(playback.hidden('enemy-A'),true);assert.equal(playback.snapshot().active.length,1);assert.deepEqual(playback.drainCompleted().map(row=>row.token),[death.token]);
   playback.advance(snapshot,roster,reviveDuration);assert.equal(playback.pose('party-1'),null);assert.deepEqual(playback.drainCompleted().map(row=>row.token),[revive.token]);
 });
+
+test('all six party resources finish their own type10 escape path before acknowledging disappearance',()=>{
+ for(const source of manifest.roles.filter(r=>r.side==='player')){
+  const playback=new BattleLifecyclePlayback(manifest),selected=source.skills.find(s=>s.original_id_raw===10);
+  const roster=[{id:'member',resource_id:source.id,side:'player'}],escape=event('member','escape',selected.chr_skill_index,10);
+  const snapshot={id:'escape-'+source.id,actors:[{...roster[0],life_epoch:1,native_x_raw:140}],lifecycle_events:[escape]};
+  playback.advance(snapshot,roster,0);assert.equal(playback.hidden('member'),false);assert.deepEqual(playback.drainCompleted(),[]);
+  const poses=[];
+  for(let now=0;now<=5000&&!playback.hidden('member');now+=1000/60){
+    playback.advance(snapshot,roster,now);const pose=playback.pose('member');if(pose)poses.push(pose);
+    assert.equal(playback.snapshot().active[0]?.blocked??null,null);
+  }
+  assert.ok(poses.length>1,source.id);assert.ok(poses.at(-1).offset_x>poses[0].offset_x+300,source.id);
+  assert.equal(playback.hidden('member'),true,source.id);assert.deepEqual(playback.drainCompleted(),[{token:escape.token,actor_id:'member',life_epoch:1}]);
+ }
+});
 test('life epoch cancels held death and queued old acknowledgements before a revive channel starts',()=>{
   const {playback,roster,snapshot}=fixture(),death=event('party-1','death',13,12),total=duration(skill('001',13));snapshot.lifecycle_events=[death];playback.advance(snapshot,roster,0);playback.advance(snapshot,roster,total);assert.equal(playback.snapshot().completed_count,1);
   snapshot.actors[0].life_epoch=2;const revive=event('party-1','revive',16,14,{token:'party-1:revive:2',life_epoch:2});snapshot.lifecycle_events=[death,revive];playback.advance(snapshot,roster,total);

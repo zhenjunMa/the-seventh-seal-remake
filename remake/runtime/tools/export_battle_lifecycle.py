@@ -1,4 +1,4 @@
-"""Read-only entry, death and revival source export, isolated from old banks.
+"""Read-only response, entry, death, revival, escape and shadow source export.
 
 Never rewrites party_battle_view/reactions or their historical evidence. The
 controller selects native skill indices; this manifest preserves source order,
@@ -25,6 +25,7 @@ from export_combat_presentation import indexed_contribution, native_frame_sequen
 from export_skill_layers import SourceAudit
 from export_party_skills import source_skill
 from content_registration import registration,role_ids
+from export_map_shadows import audit_mask
 
 ROLE_IDS = role_ids()
 EFFECT_IDS = ('_iRelife',)
@@ -159,7 +160,7 @@ def export_sequence(c,d,skill):
             for frame in frames:
                 timeline.append(dict(kind='sprite',chr_record_index=entry['index'],action_index=group,
                     action_frame=frame,source_frame=d.actions[group]['first_frame']+frame,
-                    interval_raw=segment['interval_raw'],raw_hex=raw.hex(),source=source))
+                    interval_raw=segment['interval_raw'],movement_step_raw=segment['movement_step_raw'],raw_hex=raw.hex(),source=source))
         elif raw[0]==1:
             if group not in (0,3,4,6,7,11):
                 raise ValueError(f'Uncovered lifecycle command {group}; preserve before implementing')
@@ -236,7 +237,7 @@ def lifecycle_skills(character):
 def export_role(ident,checks):
     tools=Path(__file__).parent
     rules=recipe_hash([Path(__file__),tools/'source/dgp.py',tools/'source/combat_resources.py',tools/'export_skill_layers.py',
-                       tools/'export_combat_presentation.py',tools/'export_party_skills.py'])
+                       tools/'export_combat_presentation.py',tools/'export_party_skills.py',tools/'export_map_shadows.py'])
     inputs={suffix:sha((ROOT/f'Fight_Role/{ident}.{suffix}').read_bytes()) for suffix in ('CHR','dgp')}
     inputs['side']=registration()['roles'][ident]['side']
     def produce():
@@ -246,6 +247,8 @@ def export_role(ident,checks):
         frames=json.loads(bank.read_text('utf-8'))['frames']
         outputs=[bank,*[WEB/action['sheet'].lstrip('/') for action in role['actions']],
                  *[WEB/pair[layer]['path'] for pair in frames for layer in ('main','intrinsic')]]
+        if role.get('shadow'):
+            outputs.append(WEB/role['shadow']['sheet'].lstrip('/'))
         return {'role':role,'checks':local_checks},outputs
     cached=resource(RUNTIME,'lifecycle/role/'+ident,inputs,rules,produce)
     checks.extend(cached['checks'])
@@ -265,6 +268,32 @@ def _export_role(ident,checks):
     audit=SourceAudit(d.data)
     if (audit.width,audit.height,audit.count,audit.anchor)!=(d.width,d.height,d.frame_count,d.anchor_raw):
         raise ValueError('Independent lifecycle source geometry differs')
+    # DGP shadows are their own per-physical-frame masks. Keep blank masks
+    # blank, and use a compact grid rather than allocating full-size cells.
+    shadow=None
+    if d.shadow_blobs:
+        masks=[]
+        for frame in range(d.frame_count):
+            image=d.decode_shadow(frame)
+            expected=audit_mask(d.shadow_blobs[frame],d.width,d.height)
+            if image.getchannel('A').tobytes()!=expected:
+                raise ValueError('Battle shadow differs from independent source mask replay')
+            bounds=image.getbbox()
+            masks.append((bounds,image.crop(bounds) if bounds else None))
+        bounds=[box for box,_ in masks if box]
+        if bounds:
+            left,top=min(b[0] for b in bounds),min(b[1] for b in bounds)
+            right,bottom=max(b[2] for b in bounds),max(b[3] for b in bounds)
+            width,height=right-left,bottom-top
+            columns=min(16,d.frame_count)
+            sheet=Image.new('RGBA',(columns*width,((d.frame_count+columns-1)//columns)*height))
+            for frame,(box,image) in enumerate(masks):
+                if box:
+                    sheet.paste(image,((frame%columns)*width+box[0]-left,(frame//columns)*height+box[1]-top))
+            record=save_image(OUT/ident/'shadow.png',sheet)
+            shadow=dict(sheet='/'+record['path'],sha256=record['sha256'],width=record['width'],height=record['height'],
+                columns=columns,frame_width=width,frame_height=height,frames=d.frame_count,x=left,y=top,
+                source_rule='DGP geometry[41] physical-frame shadow mask; black alpha128 approximates native half-destination RGB565')
     frames=[]
     source_images={}
     for frame in physical:
@@ -326,7 +355,7 @@ def _export_role(ident,checks):
         frame_width=d.width,frame_height=d.height,anchor=dict(x=d.anchor_raw[0],y=d.anchor_raw[1]),mirror=False,direction=0,
         source_chr=f'Fight_Role/{ident}.CHR',source_chr_sha256=c.sha256,
         source_dgp=f'Fight_Role/{ident}.dgp',source_dgp_sha256=d.sha256,source_frame_pool_count=d.frame_count,
-        skills=skills,skill_indices_by_id=by_id,entry_skill_indices=by_id['11'],death_skill_indices=by_id['12'],
+        skills=skills,shadow=shadow,skill_indices_by_id=by_id,entry_skill_indices=by_id['11'],death_skill_indices=by_id['12'],
         fallback_death_skill_indices=by_id['2'],revive_skill_indices=by_id['14'],actions=actions,
         layer_bank=dict(path='/'+layer_file.relative_to(WEB).as_posix(),sha256=sha(layer_file.read_bytes())),
         death_policy=dict(preferred_id=12,fallback_id=2,has_death_id12=bool(by_id['12']),

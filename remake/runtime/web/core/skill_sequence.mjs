@@ -119,7 +119,7 @@ export function compileNativeSequence(meta,roleId,plan,layers=[]){
    const logical=b[0x1d]?end-1-i:start+i,contact=v.getUint32(0x49,true),source_frame=action.first_frame+frame;
    steps.push({index:steps.length,segment_index:si,plan_record_index:ri,chr_record_index:record.source_action_index,action_index:group,action_frame:frame,logical_frame:logical,source_frame,
     source_skill_index:combo?b[0x92]:plan.skill_indices[0],class_raw:b[0x24],action_mask_raw:b[0x78],source:clone(record),event:contact!==0&&contact===logical?{frame:logical,field:'0x49'}:null,
-    effects:effectList.filter(e=>e.frame===logical&&!meta.missing_effects?.some(row=>row.id===e.asset_id&&row.source_exists===false)),pair:clone(pairs.get(source_frame)??null),...(independent||verticalClock||plan.kind==='single'&&['native-revival','native-support'].includes(plan.handler)?{duration_ms:dv.getUint32(1,true)}:{})});
+    effects:effectList.filter(e=>e.frame===logical&&!meta.missing_effects?.some(row=>row.id===e.asset_id&&row.source_exists===false)),pair:clone(pairs.get(source_frame)??null),...(independent||verticalClock||plan.kind==='single'&&['native-revival','native-support','native-response'].includes(plan.handler)?{duration_ms:dv.getUint32(1,true)}:{})});
   });
  }
  fail(steps.length>0&&(plan.allow_no_contacts||steps.some(s=>s.event||s.carrier_spawn?.steps.some(c=>c.event))),'原完整技能缺少接触事件');return {steps,segments,independent_carriers:independent};
