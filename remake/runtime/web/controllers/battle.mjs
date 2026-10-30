@@ -21,6 +21,7 @@ import {playbackTask} from '../core/story_playback.mjs';
 
 export function createBattleController({state, actions, $, canvas, ctx}) {
   const captureScene=kind=>actions.captureScene?.(kind)??(kind==='battle'?$('battleCanvas'):canvas);
+  const captureTransition=(kind='exploration')=>state.engine?.captureTexture?state.engine.captureTexture(kind):state.battleTransition.capture(captureScene(kind));
   function updateBattle(snapshot){
     if(!snapshot||snapshot.phase==='closed')return;
     const entering=['command','charging'].includes(snapshot.phase)&&snapshot.lifecycle_events?.some(event=>event.kind==='entry');
@@ -154,7 +155,7 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
         state.engine?.battle.surface.endFrame();
         // Capture only the prepared battlefield. Entry records, audio and RNG
         // begin once, on the first live battle frame after the transition.
-        return state.battleTransition.capture(captureScene('battle'));
+        return captureTransition('battle');
       },transitionOptions);
       else showBattle();
     }finally{if(isCurrent())state.battleEntryPending=false;}
@@ -162,7 +163,7 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
   }
   async function startBattle(group=null,encounterState=null){
     if(state.scenes.phase!=='map')return;
-    const revision=state.world.value.revision,before=state.battleTransition?.capture(captureScene());state.battlePresentationError=null;
+    const revision=state.world.value.revision,before=(state.battleTransition?captureTransition():null);state.battlePresentationError=null;
     state.battleCheckpoint={...state.view};state.scenes.setPhase('battle-loading');
     try{
       let sample,newParty;
@@ -190,7 +191,7 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
       state.audio?.setScene({mapId:state.world.location.map_id,battle:true,stageId:group?.stage??null});
       if(group)actions.log({type:'field-encounter',group,location:state.world.location,counter_after:state.world.value.encounters.counters[state.selectedRole]});
       actions.status('满槽后选择招式和目标。Esc 收起轮盘，方向键切换人物，空格打开轮盘；也可用 Tab / X / Z 切换满槽人物。');
-    }catch(error){state.battleView?.stop('战斗启动失败');state.battleMenu?.dispose();state.battleMenu=null;canvas.hidden=false;for(const id of ['battleCanvas','battleHud','battleCommands'])$(id).hidden=true;Object.assign(state.view,state.battleCheckpoint);state.scenes.setPhase('map');throw error;}
+    }catch(error){before?.destroy?.();state.battleView?.stop('战斗启动失败');state.battleMenu?.dispose();state.battleMenu=null;canvas.hidden=false;for(const id of ['battleCanvas','battleHud','battleCommands'])$(id).hidden=true;Object.assign(state.view,state.battleCheckpoint);state.scenes.setPhase('map');throw error;}
   }
   async function startScriptedBattle({group,draft,playback,signal=playback?.signal}){
     if(state.scriptedBattleSession||state.skillTestSession||state.scenes.phase!=='event')throw new Error('剧情战斗入口状态无效');
@@ -206,7 +207,7 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
     signal?.addEventListener('abort',abort,{once:true});
     const isCurrent=()=>state.scriptedBattleSession===session&&!signal?.aborted;
     const check=()=>{signal?.throwIfAborted();playback?.check();if(state.scriptedBattleSession!==session)throw new Error('剧情战斗会话已失效');if(state.world.value.revision!==revision)throw new Error('战斗期间世界状态已变化');};
-    const before=state.battleTransition?.capture(captureScene());
+    const before=(state.battleTransition?captureTransition():null);
     state.scriptedBattleSession=session;state.battlePresentationError=null;state.battleNatural=false;
     state.battleCursorMemory=new Map(state.battleCursorMemory);state.scenes.setPhase('battle-loading');
     try{
@@ -235,7 +236,7 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
       actions.log({type:'scripted-battle-return',source:group.source,outcome:result.outcome,world_committed:false});
       return result;
     }finally{
-      signal?.removeEventListener('abort',abort);
+      before?.destroy?.();signal?.removeEventListener('abort',abort);
       const ownsState=state.scriptedBattleSession===session;if(ownsState)state.battleTransition?.cancel();
       if(session.battle?.state&&session.battle.state.phase!=='closed')session.battle.interrupt(new Error('剧情战斗会话结束'));
       if(ownsState||state.battleView!==session.view)session.view?.stop('已返回剧情');
@@ -261,7 +262,7 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
   }
   async function startTechniqueTest(){
     if(state.skillTestSession||state.scenes.phase!=='party-menu'||!state.menuContext||state.menuContext.combat)return;
-    const before=state.battleTransition?.capture(captureScene()),ticket=actions.beginTechniqueTestMenu();
+    const before=(state.battleTransition?captureTransition():null),ticket=actions.beginTechniqueTestMenu();
     const session={ticket,mapWorld:state.world,revision:state.world.value.revision,viewState:{...state.view},mapName:$('mapName').textContent,
       previous:{battle:state.battle,battleView:state.battleView,battleMenu:state.battleMenu,battleRng:state.battleRng,battleNatural:state.battleNatural,battleCursorMemory:state.battleCursorMemory,sidePriority:state.sidePriority,battlePresentationError:state.battlePresentationError,itemData:state.itemData},
       visibility:{canvas:canvas.hidden,dialogue:$('dialogue').hidden},view:null,battle:null,returnPending:false};
@@ -290,7 +291,7 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
       state.audio?.setScene({mapId:state.world.location.map_id,battle:true,stageId:rules.stage.music_stage_id??'stage13.scn'});
       actions.status('技巧测试：目标不主动攻击，技能不消耗HP／MP；道具照常消耗。选择逃跑返回技巧页面。');
       actions.log({type:'technique-test-opened',battle_id:state.battle.state.id,stage_id:rules.stage.stage_id,enemy_resources:rules.enemy_resources,world_revision:session.revision});
-    }catch(error){restoreTechniqueTest(session,'测试启动失败');throw error;}
+    }catch(error){before?.destroy?.();restoreTechniqueTest(session,'测试启动失败');throw error;}
   }
   function restoreTechniqueTest(session,reason){
     if(state.skillTestSession!==session)return;

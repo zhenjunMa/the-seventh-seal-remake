@@ -32,7 +32,7 @@ test('HUD normal and additive pixels composite over the battle at the same 4:3 f
   assert.deepEqual(draws,[{image:normal,blend:'source-over',rect:[120,0,720,540]},{image:glow,blend:'lighter',rect:[120,0,720,540]}]);
   assert.deepEqual(calls[1],['transform',1,0,0,1,0,0]);
   assert.equal(calls.at(-1),'restore');
-  assert.equal(root.dataset.compositeMode,'canvas-source-over-lighter');
+  assert.equal(root.dataset.compositeMode,'webgl-source-over-lighter');
 });
 
 test('Waiting for a command shows the original seven-cover wheel without skill icons or disable crosses',()=>{

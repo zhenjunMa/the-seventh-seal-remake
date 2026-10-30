@@ -1,3 +1,4 @@
+import {registerGlyph} from '../phaser/rendering/recorded_surface.mjs';
 // GDI-derived menu masks; see data/menu_fonts.json for source parameters.
 // Whole-string shadow passes follow native 0x5358C4 before the foreground pass.
 export async function createMenuTextRenderer(manifest, options = {}) {
@@ -57,7 +58,8 @@ export async function createMenuTextRenderer(manifest, options = {}) {
   }
   function paint(canvas,text,{font:key='simsun18',foreground='#ffffff',shadow='#222222',
       maxWidth=null,maxLines=Infinity,lineHeight=null,align='left',advanceOverride=null,boxHeight=null,verticalAlign='top',layout='textout',shadowOffsets=[[-1,-1],[1,1]]}={}) {
-    text=String(text);const font=manifest.fonts[key];
+    text=String(text);const signature=JSON.stringify([text,key,foreground,shadow,maxWidth,maxLines,lineHeight,align,advanceOverride,boxHeight,verticalAlign,layout,shadowOffsets]);
+    const font=manifest.fonts[key];
     if(!font)throw new Error('菜单字形来源不存在');
     if(maxWidth!==null&&(!Number.isFinite(maxWidth)||maxWidth<=0))throw new Error('菜单文本宽度无效');
     if(!['left','center','right'].includes(align))throw new Error('菜单文本对齐无效');
@@ -65,6 +67,8 @@ export async function createMenuTextRenderer(manifest, options = {}) {
     if(boxHeight!==null&&(!Number.isFinite(boxHeight)||boxHeight<=0))throw new Error('菜单文本区域高度无效');
     if(advanceOverride!==null&&(!Number.isFinite(advanceOverride)||advanceOverride<=0))throw new Error('菜单文本字符步长无效');
     if(!(maxLines===Infinity||Number.isInteger(maxLines)&&maxLines>0))throw new Error('菜单文本行数无效');
+    if(lineHeight!==null&&(!Number.isFinite(lineHeight)||lineHeight<=0))throw new Error('菜单文本行距无效');
+    if(canvas.menuTextSignature===signature)return canvas.menuTextBounds;
     const rows=[];
     for(const original of text.split('\n')) {
       let row=[],length=0;
@@ -129,7 +133,8 @@ export async function createMenuTextRenderer(manifest, options = {}) {
       if(shadow!==null)for(const [dx,dy] of shadowOffsets)pass(shadow,dx,dy);
       pass(foreground,0,0);
     }
-    return {width:canvas.width,height:canvas.height,offsetX,offsetY,lineCount:visible.length,truncated:rows.length>visible.length};
+    canvas.menuTextSignature=signature;canvas.menuTextBounds={width:canvas.width,height:canvas.height,offsetX,offsetY,lineCount:visible.length,truncated:rows.length>visible.length};
+    registerGlyph(canvas);return canvas.menuTextBounds;
   }
   return {paint,measure,supports};
 }

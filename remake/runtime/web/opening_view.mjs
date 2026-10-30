@@ -250,7 +250,7 @@ export class OpeningView {
       const r=actor.role,a=r.actions.find(a=>a.index===actor.action);
       return {key:`opening:${slot}`,layer,sort_y:actor.y+32,alpha:actor.alpha,
       blend:actor.effect&&['rise','scatter'].includes(actor.effect.kind)?'lighter':'source-over',
-      pose:actor.effect?{image:actor.effect.canvas,x:actor.x+16-r.anchor.x-(actor.effect.offsetX??0),y:actor.y-r.anchor.y-160}
+      pose:actor.effect?{image:actor.effect.image,x:actor.x+16-r.anchor.x-(actor.effect.offsetX??0),y:actor.y-r.anchor.y-160}
         :{image:a.bitmap,light:a.intrinsic_bitmap,shadow:a.shadow_bitmap,shadow_geometry:a.shadow_geometry,sx:actor.frame*r.frame_width,sy:actor.direction*r.frame_height,
           width:r.frame_width,height:r.frame_height,x:actor.x+16-r.anchor.x,y:actor.y-r.anchor.y},
       draw: ctx => {

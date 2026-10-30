@@ -1,3 +1,4 @@
+import {drawingContext} from './phaser/rendering/recorded_surface.mjs';
 import {StartupSequence} from './core/startup.mjs';
 import {appendSavePreview} from './save_preview_view.mjs';
 
@@ -19,7 +20,7 @@ export class StartupView {
   constructor({manifest,media,$,image,audio,onNew,onLoad,onResume,onStage,getSave,getSaves,refreshSaves,isBusy=()=>false,status,log}) {
     Object.assign(this,{manifest,media,$,image,audio,onNew,onLoad,onResume,onStage,refreshSaves,isBusy,status,log});
     this.readSaves=getSaves??(()=>{const envelope=getSave?.();return envelope?[{slot:'manual',label:'普通存档',envelope}]:[];});
-    this.root=$('startMenu');this.canvas=$('startupCanvas');this.ctx=this.canvas.getContext('2d');
+    this.root=$('startMenu');this.canvas=$('startupCanvas');this.ctx=drawingContext(this.canvas);
     this.video=$('startupVideo');this.images=new Map();this.allowResume=false;this.pending=false;
     this.sequence=new StartupSequence(snapshot=>this.changeStage(snapshot));
     this.root.addEventListener('pointerdown',event=>{

@@ -86,7 +86,7 @@ export function createBootController({state, actions, $, canvas, ctx}) {
       root:$('storyCaption'),clock:state.engine?.exploration.clock,onAdvance:()=>actions.advanceDialogue(),log:actions.log});
     state.loadingView=await LoadingView.create({manifest:state.prologuePresentation.loading,
       image:actions.image,root:$('sceneLoading'),clock:state.engine?.clock,log:actions.log});
-    state.battleTransition=new BattleTransitionView({loadingView:state.loadingView,log:actions.log,clock:state.engine?.clock});
+    state.battleTransition=new BattleTransitionView({renderer:state.engine.transitions,loadingView:state.loadingView,log:actions.log,clock:state.engine?.clock});
     const dialogueManifest=await actions.json('data/dialogue_ui.json');state.dialogueManifest=dialogueManifest;
     state.dialogueView=await DialogueView.create({manifest:dialogueManifest,fonts:await actions.json(dialogueManifest.font_manifest),
       image:actions.image,root:$('dialogue'),clock:state.engine?.exploration.clock,onAdvance:actions.advanceDialogue,onChoose:actions.chooseDialogue,log:actions.log});

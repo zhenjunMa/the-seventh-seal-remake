@@ -9,7 +9,7 @@ export function explorationScene(Phaser,runtime){
     create(){
       this.clock=new ActionClock();this.skipDelta=true;
       this.texturesAdapter=new TextureCache(this);this.actors=new Map();
-      this.background=this.add.image(0,0,'__WHITE').setOrigin(0).setDepth(-2);
+      this.background=this.add.container().setDepth(-2);this.backgroundTiles=[];
       this.collision=this.add.graphics().setDepth(-1);this.marker=this.add.graphics();this.sourceScene=null;
       this.cameras.main.setBackgroundColor('#0e191b');
       const resetDelta=()=>{this.skipDelta=true;};
@@ -27,8 +27,11 @@ export function explorationScene(Phaser,runtime){
       const {scene,view,openingQueue,nearest}=options;if(!scene)return;
       const textures=this.texturesAdapter;textures.begin();
       if(this.sourceScene!==scene){this.clearActors();this.sourceScene=scene;}
-      const background=textures.texture(scene.bitmap);
-      this.background.setTexture(background.key);
+      const tiles=textures.tiles(scene.bitmap);
+      for(let i=0;i<tiles.length;i++){const tile=tiles[i];let image=this.backgroundTiles[i];
+        if(!image){image=this.add.image(0,0,'__WHITE').setOrigin(0);this.background.add(image);this.backgroundTiles.push(image);}
+        image.setVisible(true).setPosition(tile.x,tile.y).setTexture(tile.key,tile.frame);}
+      for(let i=tiles.length;i<this.backgroundTiles.length;i++)this.backgroundTiles[i].setVisible(false);
       const zoom=options.nativeViewport?1:view.zoom;
       this.cameras.main.setZoom(zoom).setScroll(view.x-320,view.y-240);
       // Phaser zooms around the camera centre, matching the original 640x480 plane.

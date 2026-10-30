@@ -1,3 +1,4 @@
+import {drawingContext} from './phaser/rendering/recorded_surface.mjs';
 import {battleViewport,battleActorPositions,battleBallState} from './core/battle_layout.mjs';
 import {operationMnuTextOptions} from './core/menu_presentation.mjs';
 import {TECHNIQUE_CATEGORIES,TECHNIQUE_WHEEL_NAVIGATION} from './core/menu_techniques.mjs';
@@ -21,8 +22,8 @@ export class BattleMenuView{
     this.doc=root.ownerDocument;this.images=new Map();this.players=new Map();this.targets=new Map();this.memory=memory??new Map();this.textCache=new Map();this.ballCache=new Map();this.fontOptions=new WeakMap();this.stage='waiting';this.focusIndex=0;this.listIndex=0;this.listOffset=0;this.draft=null;this.message='';this.epoch=0;this.cueSequence=0;
     this.menus=new Map(manifest.menus.map(m=>[m.id,m]));
     this.frame=this.doc.createElement('div');this.frame.className='battle-interface-frame';this.frame.tabIndex=-1;this.root.replaceChildren(this.frame);
-    this.canvas=this.doc.createElement('canvas');this.canvas.width=640;this.canvas.height=480;this.canvas.className='battle-interface-pixels';this.canvas.setAttribute('aria-hidden','true');this.frame.append(this.canvas);this.ctx=this.canvas.getContext('2d');
-    this.glowCanvas=this.doc.createElement('canvas');this.glowCanvas.width=640;this.glowCanvas.height=480;this.glowCanvas.className='battle-interface-glow';this.glowCanvas.setAttribute('aria-hidden','true');this.frame.append(this.glowCanvas);this.glowCtx=this.glowCanvas.getContext('2d');
+    this.canvas=this.doc.createElement('canvas');this.canvas.width=640;this.canvas.height=480;this.canvas.className='battle-interface-pixels';this.canvas.setAttribute('aria-hidden','true');this.frame.append(this.canvas);this.ctx=drawingContext(this.canvas,{embedded:true});
+    this.glowCanvas=this.doc.createElement('canvas');this.glowCanvas.width=640;this.glowCanvas.height=480;this.glowCanvas.className='battle-interface-glow';this.glowCanvas.setAttribute('aria-hidden','true');this.frame.append(this.glowCanvas);this.glowCtx=drawingContext(this.glowCanvas,{embedded:true});
     this.actorLayer=this.doc.createElement('div');this.frame.append(this.actorLayer);
     this.targetLayer=this.doc.createElement('div');this.frame.append(this.targetLayer);
     this.wheelButtons=Array.from({length:7},(_,i)=>{
@@ -179,7 +180,7 @@ export class BattleMenuView{
     c.save();c.setTransform(1,0,0,1,0,0);c.imageSmoothingEnabled=false;
     c.globalCompositeOperation='source-over';c.drawImage(this.canvas,v.x,v.y,v.width,v.height);
     c.globalCompositeOperation='lighter';c.drawImage(this.glowCanvas,v.x,v.y,v.width,v.height);c.restore();
-    this.root.dataset.compositeMode='canvas-source-over-lighter';
+    this.root.dataset.compositeMode='webgl-source-over-lighter';
   }
   asset(id,index,x,y,{blend='source-over',mask=false}={}){const a=this.manifest.assets[id];if(!a)return;const f=a.frames[((index%a.frames.length)+a.frames.length)%a.frames.length],c=blend==='lighter'?this.glowCtx:this.ctx,image=this.images.get(mask&&f.inverse_mask_image?f.inverse_mask_image:f.image);c.save();c.globalCompositeOperation=blend;if(image)drawBattleImage(c,image,x,y);if(f.indexed_image){const indexed=this.images.get(f.indexed_image);if(indexed){this.glowCtx.save();this.glowCtx.globalCompositeOperation='lighter';drawBattleImage(this.glowCtx,indexed,x,y);this.glowCtx.restore();}}c.restore();}
   text(value,x,y,{font='12px SimSun',bitmapFont='simsun12_text',color='#ffffff',align='left',width=null,widget=null}={}){

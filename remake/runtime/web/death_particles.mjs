@@ -90,8 +90,8 @@ export class DeathParticles {
   }
 }
 
-/** Rasterize only this actor's occupied main-layer pixels, then upload one
- * small changing texture. Intrinsic light is not a second particle source.
+/** Prepare the actor's occupied source pixels once, then batch GPU geometry.
+ * Intrinsic light is not a second particle source.
  * Source sampling uses the remake's nearest-neighbour scale/anchor contract.
  */
 export function createDeathParticleSurface({rgba,width,height,anchor,mode,seed,appearance=false}){
@@ -111,26 +111,13 @@ export function createDeathParticleSurface({rgba,width,height,anchor,mode,seed,a
   // At most35 calls: translation<=175; spin stays within the source radius.
   const pad=Math.ceil(Math.max(192,Math.hypot(right-left,bottom-top)));
   left=Math.floor(left)-pad;top=Math.floor(top)-pad;
-  const canvas=document.createElement('canvas');canvas.width=Math.ceil(right-left)+pad+1;canvas.height=Math.ceil(bottom-top)+pad+1;
-  const ctx=canvas.getContext('2d'),frame=ctx.createImageData(canvas.width,canvas.height),data=frame.data;
-  const base=mode===4||appearance?document.createElement('canvas'):null;
-  if(base){base.width=canvas.width;base.height=canvas.height;base.battleParticleRevision=0;}
-  const baseCtx=base?.getContext('2d'),baseFrame=baseCtx?.createImageData(canvas.width,canvas.height);
-  canvas.battleParticleRevision=0;
+  const widthOut=Math.ceil(right-left)+pad+1,heightOut=Math.ceil(bottom-top)+pad+1;
+  const image={width:widthOut,height:heightOut,offsetX:left,offsetY:top,pixels:()=>effect.visible};
+  const base=mode===4||appearance?{...image,original:true}:null;
   effect.draw=(target,x,y)=>{
-    data.fill(0);baseFrame?.data.fill(0);
-    const put=(p,destination,additive)=>{
-      const px=Math.trunc(p.x-left),py=Math.trunc(p.y-top);if(px<0||py<0||px>=canvas.width||py>=canvas.height)return;
-      const i=(py*canvas.width+px)*4;
-      for(let k=0;k<3;k++)destination[i+k]=additive?Math.min(255,destination[i+k]+p.rgb[k]):p.rgb[k];
-      destination[i+3]=255;
-    };
-    for(const p of effect.visible){if(p.original)put(p.original,baseFrame.data,false);put(p,data,true);}
-    ctx.putImageData(frame,0,0);canvas.battleParticleRevision++;
     target.save();target.globalAlpha=1;
-    if(base){baseCtx.putImageData(baseFrame,0,0);base.battleParticleRevision++;target.globalCompositeOperation='source-over';target.drawImage(base,x+left,y+top);}
-    target.globalCompositeOperation='lighter';
-    target.drawImage(canvas,x+left,y+top);target.restore();
+    if(base){target.globalCompositeOperation='source-over';target.drawImage(base,x+left,y+top);}
+    target.globalCompositeOperation='lighter';target.drawImage(image,x+left,y+top);target.restore();
   };
   return effect;
 }

@@ -1,3 +1,4 @@
+import {drawingContext} from './phaser/rendering/recorded_surface.mjs';
 import {createMenuTextRenderer} from './core/menu_text.mjs';
 import {dialoguePages,DialoguePlayback} from './core/dialogue.mjs';
 
@@ -11,7 +12,7 @@ export class DialogueView {
   }
   constructor({root,manifest,resources,textRenderer,onAdvance,onChoose,log,clock=null}){
     Object.assign(this,{root,manifest,resources,textRenderer,onAdvance,onChoose,log,clock});
-    this.canvas=root.querySelector('canvas');this.context=this.canvas.getContext('2d');
+    this.canvas=root.querySelector('canvas');this.context=drawingContext(this.canvas);
     this.button=root.querySelector('#dialogueNext');this.speaker=root.querySelector('#speaker');
     this.label=root.querySelector('#dialogueText');this.choicesRoot=root.querySelector('#dialogueChoices');
     this.active=false;this.epoch=0;this.inkCache=new Map();

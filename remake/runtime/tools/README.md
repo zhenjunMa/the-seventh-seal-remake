@@ -267,6 +267,8 @@ python3 -B remake/runtime/tools/verify_tests.py --check
 
 ## 资源与浏览器检查
 
+引擎集成检查使用 `/tests/phaser_lifecycle.html`：覆盖实际 WebGL 场景、七类粒子、七种转场、界面合成、超长图集裁切、取消释放和上下文丢失恢复。页面使用合成素材，不代替正式媒体的主线实玩和冷／热性能验收。
+
 `verify_phaser.mjs`核固定运行库、入口模块图、JS语法及剧情包，并报告JSON中的资源引用。默认可在code.passed=true、assets.passed=false时成功退出；`--assets`要求媒体齐全且声明SHA／尺寸匹配。`--report`可写runtime/evidence内新路径。
 
 战斗单帧逻辑路径可由battle_packs解析至图集页，交付不要求重复携带单帧源PNG；地图、菜单、字体和音视频等直接加载媒体仍需提供。

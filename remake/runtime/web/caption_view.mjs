@@ -1,3 +1,4 @@
+import {drawingContext} from './phaser/rendering/recorded_surface.mjs';
 import {CaptionPlayback,captionLayout} from './core/caption.mjs';
 import {createMenuTextRenderer} from './core/menu_text.mjs';
 
@@ -11,7 +12,7 @@ export class CaptionView {
   }
   constructor({root,manifest,resources,font,textRenderer,onAdvance,log,clock=null}) {
     Object.assign(this,{root,manifest,resources,font,textRenderer,onAdvance,log,clock});
-    this.canvas=root.querySelector('canvas');this.context=this.canvas.getContext('2d');
+    this.canvas=root.querySelector('canvas');this.context=drawingContext(this.canvas);
     this.button=root.querySelector('button');this.label=root.querySelector('p');
     this.ink=document.createElement('canvas');this.active=false;this.epoch=0;
     this.button.onclick=()=>this.onAdvance();
