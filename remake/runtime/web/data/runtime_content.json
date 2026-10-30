@@ -546,6 +546,14 @@
           "handler": "direct"
         },
         {
+          "index": 29,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 30,
+          "handler": "effect-carrier"
+        },
+        {
           "index": 31,
           "handler": "effect-carrier"
         },

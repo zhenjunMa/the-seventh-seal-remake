@@ -1,7 +1,7 @@
 // One numeric configuration registry for every implemented role skill.
 // Source actions, eligibility, targeting and effect rules stay in source data.
 import {configureSkills,sourceSkillParameters} from './skill_config.mjs';
-import {supportedBattleRecoverySkills} from './battle_skill_access.mjs';
+import {partyBattleSkills} from './battle_skill_access.mjs';
 import {expandParameterOverrides,isParameterOverrideFile} from './config_overrides.mjs';
 const copy=structuredClone;
 const fail=(ok,message)=>{if(!ok)throw new Error(`技能配置：${message}`);};
@@ -21,7 +21,7 @@ export function skillOwner(skill,side){
   return {role_id,skill_index,side};
 }
 export const skillOwnerKey=skill=>`${skillOwner(skill,'player').role_id}:${skill.original_skill_index}`;
-export const runtimeSkillParameters=skill=>({...sourceSkillParameters(skill),preparation_delay_raw:view(skill).getInt32(0x2e,true)});
+export const runtimeSkillParameters=skill=>({...sourceSkillParameters(skill),preparation_delay_raw:view(skill).getInt32(0x2e,true),required_role_level:view(skill).getInt32(0x143,true)});
 
 /** Unknown commands, idle records and reactions retain their native numeric
  * slots without assigning them an executable battle/field interpretation.
@@ -71,13 +71,13 @@ export function createSkillRegistry(data){
     runtimeSkillParameters(skill); // Validate the retained numeric record before registration.
     owners.add(key);registry[id]={skill,owner};
   };
-  const playerSkills={...party.skills};
+  const playerSkills=partyBattleSkills(party);
   for(const [id,field]of Object.entries(party.field_skills??{})){
     const battle=playerSkills[id];
     if(battle)fail(skillOwnerKey(field)===skillOwnerKey(battle)&&same(field.source,battle.source)&&field.fixed_raw_hex===battle.fixed_raw_hex,`${id}战斗与场外来源不一致`);
     playerSkills[id]={...field,...battle};
   }
-  for(const [id,skill]of Object.entries({...playerSkills,...supportedBattleRecoverySkills(party)})){
+  for(const [id,skill]of Object.entries(playerSkills)){
     fail(id===skill.id&&skill.index===skill.original_skill_index,`${id}源技能ID或索引不同`);add(id,skill,'player',party.source_hashes);
   }
   for(const [id,skill]of Object.entries(enemySkills(data)))add(id,skill,'enemy',data.ai.source_hashes);
@@ -131,7 +131,7 @@ export function deriveSkillConfiguration(data){
     }
   }
   return {schema:'seventh-seal-skills-parameters',version:2,
-    notes:'全部来源技能与已接入角色技能共用此表；owner按角色编号与原技能索引绑定，已有ID保持稳定。只修改parameters；source、owner和original只读。source-only记录保留原32位数值和MP增量，enabled必须为false；登记不开放行为。已实现技能随机上限不包含；六元素槽保持原顺序。preparation_delay_raw=0使用battle.json默认准备量。动作、目标、学习条件和特效规则保留原来源；敌方耗蓝当前只支持0。',entries};
+    notes:'全部来源技能与已接入角色技能共用此表；owner按角色编号与原技能索引绑定，已有ID保持稳定。只修改parameters；source、owner和original只读。source-only记录保留原32位数值和MP增量，enabled必须为false；登记不开放行为。已实现技能随机上限不包含；六元素槽保持原顺序。preparation_delay_raw=0使用battle.json默认准备量。required_role_level为人物等级门槛，学习与使用共用；技巧前置、动作、目标和特效规则保留原来源；敌方耗蓝当前只支持0。',entries};
 }
 
 /** Compile numeric fields onto this source record, retaining its own actions.
@@ -143,9 +143,11 @@ export function applyRegisteredSkillParameters(skill,row,mode){
   fail(same(runtimeSkillParameters(skill),row.original),`${skill.id}原数值与统一配置基线不同`);
   const original=copy(row.original),parameters=copy(row.parameters);
   delete original.preparation_delay_raw;delete parameters.preparation_delay_raw;
+  delete original.required_role_level;delete parameters.required_role_level;
   const result=configureSkills({[skill.id]:skill},{schema:'seventh-seal-skill-config',version:1,mode,
     skills:{[skill.id]:{name:skill.name,source:copy(skill.source),original,parameters}}})[skill.id];
-  const raw=view(result);raw.setInt32(0x2e,row.parameters.preparation_delay_raw,true);result.fixed_raw_hex=hex(raw);
+  const raw=view(result);raw.setInt32(0x2e,row.parameters.preparation_delay_raw,true);raw.setInt32(0x143,row.parameters.required_role_level,true);result.fixed_raw_hex=hex(raw);
+  result.required_role_level_raw=row.parameters.required_role_level;
   const differences=Object.keys(row.original).filter(key=>!same(row.original[key],row.parameters[key]))
     .map(field=>({field,original:copy(row.original[field]),current:copy(row.parameters[field])}));
   result.configuration={mode,version:2,owner:copy(row.owner),source:copy(row.source),

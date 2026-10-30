@@ -11,6 +11,7 @@ import {validateChapterStory,chapterRestChoices} from './chapter.mjs';
 import {validateChapterAnimation} from './chapter_animation.mjs';
 import {validateBattleViewMetadata} from '../battle_view.mjs';
 import {nativeKeyedChest,nativeChestAnimation} from './native_map_chests.mjs';
+import {supplementalPartyCommands} from './party_skill_corrections.mjs';
 const need=(ok,message)=>{if(!ok)throw new Error(`内容依赖：${message}`);};
 
 export function validateEnemyReactionClosure(ai,reactions,content){
@@ -92,7 +93,8 @@ export function validateStoryBindings(content,story,resources,{registeredMaps=co
 
 export function validateContentDependencies(content,data){
   validateContentRegistration(content);
-  const {catalog,seed,story,resources,party,commands,forest,ai,rewards,reactions,status,encounters,view,itemView,lifecycle,menu}=data;
+  const {catalog,seed,story,resources,party,commands:sourceCommands,forest,ai,rewards,reactions,status,encounters,view,itemView,lifecycle,menu}=data;
+  const commands={...sourceCommands,skills:{...sourceCommands.skills,...supplementalPartyCommands(sourceCommands,content)}};
   requireRegisteredRoles(Object.keys(party.actors),{side:'player',complete:true},content);
   requireRegisteredRoles(Object.keys(forest.actors),{side:'enemy',complete:true},content);
   requireRegisteredRoles(Object.keys(commands.roles),{side:'player',complete:true},content);

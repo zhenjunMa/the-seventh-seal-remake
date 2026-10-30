@@ -1,8 +1,10 @@
 // Native learned bytes stay immutable. Sparse saved progress records additional
-// learned source indices; this does not grant or infer unlocks from level/name.
+// learned source indices. Learning decisions are committed by reward rules.
 import {nativeRevivalSkillSupported} from './battle_revival.mjs';
 import {applySavedSkillProgress} from './battle_skill_growth.mjs';
 import {allPartyRoles} from './party_roster.mjs';
+import {runtimeContent} from './content_registry.mjs';
+import {correctPartySkillType,supplementalPartyCommands} from './party_skill_corrections.mjs';
 const need=(ok,message)=>{if(!ok)throw new Error(message);};
 export function validateBattleSkillProgress(value){
   need(value&&[1,2].includes(value.version)&&Object.keys(value).sort().join(',')===(value.version===1?'learned_indices,version':'learned_indices,records,version')&&Array.isArray(value.learned_indices), '角色已学技巧记录无效');
@@ -17,11 +19,15 @@ export {applySavedSkillProgress};
 /** Read-only source facade for menus, bindings and displayed proficiency. */
 export function effectiveSkillSource(commands,world){
   const out=structuredClone(commands),roles=new Map(allPartyRoles(world).map(role=>{if(role.skill_progress)validateBattleSkillProgress(role.skill_progress);return [role.id,role];}));
+  Object.assign(out.skills,supplementalPartyCommands(commands,runtimeContent));
   for(const [id,role]of Object.entries(out.roles??{}))if(roles.has(id)){
-    role.skills=role.skills.map(skill=>applySavedSkillProgress(skill,roles.get(id)));role.learned_indices=role.skills.filter(s=>s.learned_raw).map(s=>s.original_skill_index);
+    role.skills=role.skills.map(skill=>correctPartySkillType(applySavedSkillProgress(skill,roles.get(id))));role.learned_indices=role.skills.filter(s=>s.learned_raw).map(s=>s.original_skill_index);
   }
-  for(const table of [out.skills,out.field_skills])for(const [id,skill]of Object.entries(table??{}))if(roles.has(skill.actor_id))table[id]=applySavedSkillProgress(skill,roles.get(skill.actor_id));
+  for(const table of [out.skills,out.field_skills])for(const [id,skill]of Object.entries(table??{}))if(roles.has(skill.actor_id))table[id]=correctPartySkillType(applySavedSkillProgress(skill,roles.get(skill.actor_id)));
   return out;
+}
+export function partyBattleSkills(commands){
+  return {...commands.skills,...supportedBattleRecoverySkills(commands),...supplementalPartyCommands(commands,runtimeContent)};
 }
 export function isBattleSkillLearned(world,skill){
   const role=world.party.find(r=>r.id===skill.actor_id);if(!role)return false;

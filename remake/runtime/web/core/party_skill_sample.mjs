@@ -13,7 +13,8 @@ export const PARTY_SKILL_SAMPLE_ROSTERS=Object.freeze({
 const need=(ok,message)=>{if(!ok)throw new Error(message);};
 
 /** All named source skills, including the two original type-0 aid records.
- * Keeping those records learned does not change their original menu type.
+ * Grants preserve the source records; runtime aid type corrections are shared
+ * with normal play rather than installed into this development save.
  */
 export function partySampleSkillIndices(sourceRole){
   need(sourceRole?.skills&&sourceRole.id,'全技巧样本缺少人物技能源记录');

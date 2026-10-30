@@ -73,6 +73,7 @@ function validateParameters(section,id,p,baseline,data,owner){
     if(Object.hasOwn(baseline,'enabled'))return validateSourceOnlySkillParameters(p,baseline,id);
     // The established skill compiler validates all existing numeric fields.
     integer(p.preparation_delay_raw,`${id}.preparation_delay_raw`,0,1000000);
+    integer(p.required_role_level,`${id}.required_role_level`,0,99);
     fail(owner.side!=='enemy'||p.mp_cost===0,`${id}敌方非零耗蓝及后备规则尚未接入`);
   }else if(section==='battle'){
     if(id==='scheduler'){integer(p.average_speed_factor,'average_speed_factor',1,10000);integer(p.default_preparation_delay,'default_preparation_delay',1,1000000);}
@@ -152,6 +153,8 @@ export function compileRuntimeConfiguration(data,bundle){
   const replace=s=>{const row=skillsByOwner.get(skillOwnerKey(s));return row?applyRegisteredSkillParameters(s,row,manifest.mode):s;};
   for(const [id,s]of Object.entries(compiled.party_skills.skills))compiled.party_skills.skills[id]=copy(compiled.skill_registry[id]);
   for(const [id,s]of Object.entries(compiled.party_skills.field_skills??{}))compiled.party_skills.field_skills[id]=copy(compiled.skill_registry[id]);
+  // Learning and menus consume the same configured source slots as combat.
+  for(const role of Object.values(compiled.party_skills.roles))role.skills=role.skills.map(replace);
   for(const dataSkills of [compiled.combat.skills,compiled.forest.skills,compiled.forest.player_skills])for(const [id,s]of Object.entries(dataSkills))dataSkills[id]=replace(s);
   for(const a of [...compiled.combat.actors,...Object.values(compiled.forest.actors)])a.current_skill=replace(a.current_skill);
   for(const role of Object.values(compiled.ai.roles))role.skills=role.skills.map(s=>{

@@ -15,7 +15,7 @@ import {chapterRoleFromDefinition} from '../web/core/chapter.mjs';
 import {NativeAssemblyOracle} from './native_assembly_oracle.mjs';
 import {runtimeContent} from '../web/core/content_registry.mjs';
 import {BattleController} from '../web/core/combat.mjs';
-import {battleSkillEligibility,requiredSkillLevel} from '../web/core/battle_skill_access.mjs';
+import {battleSkillEligibility,requiredSkillLevel,partyBattleSkills} from '../web/core/battle_skill_access.mjs';
 import {fullSkillGroups,level99SkillWorld,namedPartySourceSkills,nativeSequenceSteps,playerRoleIds} from './helpers/party_skill_fixture.mjs';
 const web=new URL('../web/',import.meta.url),root=new URL('../../../',import.meta.url);
 const read=async p=>JSON.parse(await readFile(new URL('data/'+p,web)));
@@ -28,11 +28,11 @@ const hash=b=>createHash('sha256').update(b).digest('hex');
 
 test('all six party members admit every named source command while preserving official level and prerequisite bytes',async()=>{
  const [library,seed,attributes,rewards]=await Promise.all(['library/skills.json','opening_seed.json','party_combat.json','party_rewards.json'].map(read));
- const expected=namedPartySourceSkills(library),actual=Object.values(party.skills);
+ const expected=namedPartySourceSkills(library),actual=Object.values(partyBattleSkills(party));
  const key=skill=>`${skill.actor_id}:${skill.original_skill_index}`;
  assert.deepEqual(actual.map(key).sort(),expected.map(key).sort());
  assert.deepEqual(Object.fromEntries(playerRoleIds.map(id=>[id,expected.filter(s=>s.actor_id===id).length])),
-  {'001':28,'002':24,'003':29,'004':30,'005':13,'006':30});
+  {'001':28,'002':24,'003':29,'004':30,'005':15,'006':30});
  const registered=playerRoleIds.flatMap(id=>runtimeContent.roles[id].battle_skills.map(skill=>`${id}:${skill.index}`));
  assert.deepEqual(registered.sort(),expected.map(key).sort(),'all commands enter the actual runtime registration');
  for(const source of expected){
@@ -61,7 +61,7 @@ test('all six party members admit every named source command while preserving of
   }
   assert.deepEqual(party,before,'test save progress never rewrites official command data');
  }
- assert.ok(!actual.some(skill=>key(skill)==='003:50'));assert.ok(!actual.some(skill=>key(skill)==='005:30'));
+ assert.ok(!actual.some(skill=>key(skill)==='003:50'));assert.ok(actual.some(skill=>key(skill)==='005:30'));
 });
 test('new-game commands preserve CHR learned flags and never borrow a historical save definition',async()=>{
  assert.deepEqual(party.roles['002'].learned_indices,[19,20,21,22,23]);

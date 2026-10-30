@@ -407,7 +407,9 @@ def main():
             skill = dict(role['skills'][index])
             # Admission and learning progress are independent. Unlearned source
             # attacks can be exported now and become usable after native unlock.
-            assert skill['type_raw'] in (1, 2, 3)
+            assert skill['type_raw'] in (1, 2, 3) or (
+                ident == '005' and index in (29, 30) and skill['type_raw'] == 0
+                and skill['original_id_raw'] == index + 42)
             skill['battle_handler'] = next(row['handler'] for row in registration()['roles'][ident]['battle_skills'] if row['index']==index)
             if skill['battle_handler'] in ('effect-carrier', 'native-support', 'native-revival'):
                 assert all(a['type_raw'] == 0 or a['u32_at_0x01_raw'] in (0,4,6,7,8,11) for a in skill['actions'])

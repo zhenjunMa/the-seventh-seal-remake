@@ -7,7 +7,7 @@ import path from 'node:path';
 import {pathToFileURL} from 'node:url';
 import {deriveRuntimeConfiguration,compileRuntimeConfiguration,loadRuntimeConfiguration,expandRuntimeConfiguration,compactRuntimeConfiguration} from '../web/core/runtime_config.mjs';
 import {upgradeSkillConfiguration} from '../web/core/skill_registry.mjs';
-import {supportedBattleRecoverySkills} from '../web/core/battle_skill_access.mjs';
+import {partyBattleSkills} from '../web/core/battle_skill_access.mjs';
 import {exportRuntimeConfiguration,inspectRuntimeConfiguration} from '../tools/export_runtime_config.mjs';
 import {createPartySample} from '../web/party_sample.mjs';
 import {assembleForestSample} from '../web/forest_sample.mjs';
@@ -29,22 +29,22 @@ const debug=()=>({...expandRuntimeConfiguration(data,config),manifest:{...copy(c
 async function worldFixture(){const seed=await read('opening_seed.json');seed.party.push(chapterRoleFromDefinition(seed.source.role_definitions['002']));seed.party[1].mp.current=20;seed.opening.status='complete';return new WorldStore(seed,['M72061','M70010']);}
 
 test('unified catalog owns every implemented player/enemy skill and original mode keeps all source bytes',()=>{
-  const before=copy(data),bundle=copy(config),compiled=compileRuntimeConfiguration(data,bundle);
+  const before=copy(data),previous=copy(config),bundle=compactRuntimeConfiguration(data,deriveRuntimeConfiguration(data)),compiled=compileRuntimeConfiguration(data,bundle);
   assert.equal(bundle.skills.version,3);assert.equal(Object.keys(bundle.skills.entries).length,Object.keys(data.source_skills.skills).length+Object.keys(data.source_magic.magic).length);
   const counts={};for(const id of Object.keys(compiled.skill_registry)){const row=bundle.skills.entries[id];counts[row.owner.role_id]=(counts[row.owner.role_id]??0)+1;}
   for(const [id,role]of Object.entries(data.party_skills.roles)){
-    const implemented=Object.values({...data.party_skills.skills,...data.party_skills.field_skills,...supportedBattleRecoverySkills(data.party_skills)}).filter(skill=>skill.actor_id===id).length;
+    const implemented=Object.values({...partyBattleSkills(data.party_skills),...data.party_skills.field_skills}).filter(skill=>skill.actor_id===id).length;
     assert.equal(counts[id],implemented,id);
   }
   for(const [id,role]of Object.entries(data.ai.roles))assert.equal(counts[id],role.learned_indices.length,id);
-  const expectedIds=[...Object.keys({...data.party_skills.skills,...data.party_skills.field_skills,...supportedBattleRecoverySkills(data.party_skills)}),
+  const expectedIds=[...Object.keys({...partyBattleSkills(data.party_skills),...data.party_skills.field_skills}),
     ...Object.entries(data.ai.roles).flatMap(([id,role])=>role.learned_indices.map(index=>`${id}_${index}`))];
   assert.deepEqual(Object.keys(compiled.skill_registry).sort(),expectedIds.sort());
   for(const [id,source]of Object.entries(data.party_skills.skills)){
     const next=compiled.skill_registry[id];assert.equal(next.fixed_raw_hex,source.fixed_raw_hex);assert.deepEqual(next.actions,source.actions);
     assert.equal(next.configuration.owner.role_id,source.actor_id);assert.equal(next.configuration.owner.skill_index,source.original_skill_index);
   }
-  assert.deepEqual(data,before);assert.deepEqual(config,bundle);
+  assert.deepEqual(data,before);assert.deepEqual(config,previous);
 });
 
 test('each of the six new skill overlays changes numeric fields, MP debt and charge without changing source actions or effects',async()=>{
@@ -81,7 +81,7 @@ test('foreign owner, source/index drift, duplicate bindings, missing config and 
     c=>c.skills.entries.yancui.source.sha256='0'.repeat(64),c=>c.skills.entries.yancui.parameters.target_side=1];
   const world=await worldFixture(),before=world.snapshot(),sourceBefore=copy(data);
   for(const change of mutations){const cfg=debug();change(cfg);assert.throws(()=>compileRuntimeConfiguration(data,cfg),/配置/);}
-  for(const id of newIds){const cfg=copy(config);cfg.skills.entries[id].parameters.mp_cost=deriveRuntimeConfiguration(data).skills.entries[id].original.mp_cost+1;assert.throws(()=>compileRuntimeConfiguration(data,cfg),/原版模式/);}
+  for(const id of newIds){const cfg=deriveRuntimeConfiguration(data);cfg.skills.entries[id].parameters.mp_cost++;assert.throws(()=>compileRuntimeConfiguration(data,cfg),/原版模式/);}
   const duplicates=copy(data);duplicates.party_skills.skills.duplicate={...copy(duplicates.party_skills.skills.yantu),id:'duplicate'};
   assert.throws(()=>deriveRuntimeConfiguration(duplicates),/重复登记/);
   const wrongIndex=copy(data);wrongIndex.ai.roles['011'].skills[14].original_skill_index=15;assert.throws(()=>deriveRuntimeConfiguration(wrongIndex),/源索引/);

@@ -48,7 +48,7 @@
 | 剧情战身份 | kind5为stage与最多六个20字节文件名，首NUL截断；合法031A1／031B2等basename不得截成三位ID。战斗执行仍查真实CHR、登记和处理器。 | `web/core/native_battle_filenames.mjs`、`scripted_battle.mjs` |
 | 原数值与加载派生 | 41D990／41C610上限≤下限时取下限且不抽RNG；速度采样另有规则。技能code需沿真实入口模式在不可变CHR上派生，不能用镜像初值或文件值直接替代。 | `web/core/config_overrides.mjs`、`combat_rules.mjs`、`native_skill_loading.mjs` |
 | HP、死亡与复活 | rawHP、显示HP和死亡类别分开；终局等落地及回执，复活候选／排队／接触共用资格。复活只换epoch，不清原Z和浮空时钟。 | `web/core/battle_revival.mjs`、`battle_vertical.mjs`、`recovery.mjs` |
-| 药品与被动 | 零HP／MP字段不代表无作用；mode、目标、首个状态解除、重复guard和实际接触共同决定消耗。type0援攻保持源资格，不通过改类型开放。 | `web/core/items.mjs`、`equipment.mjs`、`item_passives.mjs` |
+| 药品与被动 | 零HP／MP字段不代表无作用；mode、目标、首个状态解除、重复guard和实际接触共同决定消耗。普通type0记录保持来源资格；朱特005／29、30援攻按明确Bug修复在运行副本中纠正，原字节保留。 | `web/core/items.mjs`、`equipment.mjs`、`item_passives.mjs`、`party_skill_corrections.mjs` |
 | 独立载体 | wait0效果沿自己的源时钟继续接触，人物可进入下一行动；尾部效果保留施放时技能，不能迟到切回旧动作或改成wait-all。合并调度与通道推进使用同一绝对到期时间。 | `web/core/combat.mjs`、`battle_view.mjs`、`battle_controller.mjs`；`tests/test_battle_support.mjs` |
 | 文件名与媒体 | 原字面路径缺失不猜近名替代；扩展名不等于编码。BIK完整帧／音轨核对，浮点PCM转码要保留明确增益关系。 | `tools/export_audio.py`、`export_story_media.py`；`web/story_media_view.mjs` |
 | 菜单字库 | 按实际界面文本收集，包含已接敌人的目标名称；统一构建追加新字符并保留旧字形坐标。规则／战斗回放不能替代实际目标菜单的位图绘制验收。 | `tools/export_menu_text_gdi.py`、`web/core/menu_text.mjs`；`tests/test_menu_text.mjs` |
