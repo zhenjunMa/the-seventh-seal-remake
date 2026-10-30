@@ -547,6 +547,14 @@ export const definition = {
           "handler": "direct"
         },
         {
+          "index": 29,
+          "handler": "effect-carrier"
+        },
+        {
+          "index": 30,
+          "handler": "effect-carrier"
+        },
+        {
           "index": 31,
           "handler": "effect-carrier"
         },
@@ -2339,6 +2347,16 @@ export default {
           "index": 28,
           "handler": "direct",
           "id": "005_28"
+        },
+        {
+          "index": 29,
+          "handler": "effect-carrier",
+          "id": "005_29"
+        },
+        {
+          "index": 30,
+          "handler": "effect-carrier",
+          "id": "005_30"
         },
         {
           "index": 31,

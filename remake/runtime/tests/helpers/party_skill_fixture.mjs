@@ -1,12 +1,13 @@
 import {createPartySkillSample,PARTY_SKILL_SAMPLE_ROSTERS} from '../../web/core/party_skill_sample.mjs';
+import {hasPartySkillTypeCorrection} from '../../web/core/party_skill_corrections.mjs';
 
 export const playerRoleIds=['001','002','003','004','005','006'];
 export const fullSkillGroups=Object.values(PARTY_SKILL_SAMPLE_ROSTERS);
 
 // Use the retained library, independently of the runtime admission manifest.
-// The unnamed 003:50 animation and type0 005:30 aid record remain sources.
+// The unnamed 003:50 animation remains a source; the two type0 aids are fixed.
 export function namedPartySourceSkills(library){
-  return Object.values(library.skills).filter(skill=>playerRoleIds.includes(skill.actor_id)&&skill.name&&[1,2,3].includes(skill.type_raw));
+  return Object.values(library.skills).filter(skill=>playerRoleIds.includes(skill.actor_id)&&skill.name&&([1,2,3].includes(skill.type_raw)||hasPartySkillTypeCorrection(skill)));
 }
 
 export function level99SkillWorld(seed,rewards,commands,ids){

@@ -20,7 +20,7 @@ export function requireLearningRewardReadiness(record,content,roleDefinitions){
   const source=definition.skills.find(skill=>skill.id===record.mutation_bit);
   // The native helper has no effect on a missing source ID. A source type0
   // record remains absent from the native menu after its learned bit is set.
-  if(!source||!source.has_menu_type)return source??null;
+  if(!source||!source.has_menu_type&&!hasPartySkillTypeCorrection({...source,actor_id:id}))return source??null;
   const role=content.roles[id],bindings=[...role?.battle_skills??[],...role?.field_skills??[]];
   need(bindings.some(binding=>binding.index===source.index),
     `学习奖励 ${id}／原ID${record.mutation_bit}（索引${source.index}）尚无已接入技能处理器`);
@@ -189,3 +189,4 @@ export function requireContentReadiness(content,story,resources){
   if(!report.passed)throw new Error('内容能力预检查失败：\n'+report.errors.map(row=>`${row.map_id} ${row.entrance} ${row.entrance_id} → TLK ${row.record_id}: ${row.message}`).join('\n'));
   return report;
 }
+import {hasPartySkillTypeCorrection} from './party_skill_corrections.mjs';

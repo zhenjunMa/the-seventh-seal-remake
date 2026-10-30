@@ -5,7 +5,7 @@ import {readFile,writeFile,mkdtemp,rm} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {pathToFileURL} from 'node:url';
-import {compileRuntimeConfiguration,loadRuntimeConfiguration,expandRuntimeConfiguration,createRuntimeConfigurationSession} from '../web/core/runtime_config.mjs';
+import {compileRuntimeConfiguration,loadRuntimeConfiguration,expandRuntimeConfiguration,createRuntimeConfigurationSession,deriveRuntimeConfiguration} from '../web/core/runtime_config.mjs';
 import {createServicesController} from '../web/controllers/services.mjs';
 import {createPartyActors} from '../web/core/party_attributes.mjs';
 import {exportRuntimeConfiguration} from '../tools/export_runtime_config.mjs';
@@ -18,7 +18,7 @@ import {createRewardLedger,collectEnemyDefeat,planVictoryRewards} from '../web/c
 import {composeNativeSequence,compileNativeSequence} from '../web/core/skill_sequence.mjs';
 import {BattleController} from '../web/core/combat.mjs';
 import {BattleView} from '../web/battle_view.mjs';
-import {supportedBattleRecoverySkills} from '../web/core/battle_skill_access.mjs';
+import {partyBattleSkills} from '../web/core/battle_skill_access.mjs';
 import {WorldStore,encodeSave,decodeSave} from '../web/core/world.mjs';
 const copy=structuredClone,web=new URL('../web/',import.meta.url),read=async name=>JSON.parse(await readFile(new URL('data/'+name,web),'utf8'));
 const [base,forest,scheduler,ai,rewards,seed,meta]=await Promise.all(['combat_sample.json','forest_combat.json','battle_scheduler.json','forest_ai.json','forest_rewards.json','route_seed.json','enemy_battle_view.json'].map(read));
@@ -109,18 +109,22 @@ test('failed startup exposes no configuration and requires a refreshed owner aft
   await assert.rejects(services.initializeRuntimeConfiguration(),/来源指纹/);
   assert.equal(requests.length,5);
   const refreshed=createServicesController({state,actions:{}});
-  assert.equal((await refreshed.initializeRuntimeConfiguration()).audit.mode,'original');assert.equal(requests.length,10);
+  assert.equal((await refreshed.initializeRuntimeConfiguration()).audit.mode,config.manifest.mode);assert.equal(requests.length,10);
 });
-test('default profile covers all admitted skills, three enemies, six drops and retains numeric source bytes',()=>{
+test('shipped profile covers all admitted skills and changes only the four configured learning levels',()=>{
   const before=copy(data),cfgBefore=copy(config),d=compileRuntimeConfiguration(data,config);
   assert.equal(Object.keys(config.skills.entries).length,Object.keys(data.source_skills.skills).length+Object.keys(data.source_magic.magic).length);
-  const expectedIds=[...Object.keys({...data.party_skills.skills,...data.party_skills.field_skills,...supportedBattleRecoverySkills(data.party_skills)}),
+  const expectedIds=[...Object.keys({...partyBattleSkills(data.party_skills),...data.party_skills.field_skills}),
     ...Object.entries(data.ai.roles).flatMap(([id,role])=>role.learned_indices.map(index=>`${id}_${index}`))];
   assert.deepEqual(Object.keys(d.skill_registry).sort(),expectedIds.sort());assert.deepEqual(Object.keys(config.rewards.entries).sort(),Object.keys(forest.actors).sort());assert.equal(Object.keys(config.items.entries).length,416);
   assert.deepEqual(Object.values(d.skill_registry).filter(s=>s.actor_id==='005').map(s=>s.original_skill_index).sort((a,b)=>a-b),
-    Object.values(data.party_skills.skills).filter(s=>s.actor_id==='005').map(s=>s.original_skill_index).sort((a,b)=>a-b));
-  assert.deepEqual(d.audit.differences,[]);
-  for(const [id,s]of Object.entries(data.party_skills.skills))assert.equal(d.party_skills.skills[id].fixed_raw_hex,s.fixed_raw_hex);
+    Object.values(partyBattleSkills(data.party_skills)).filter(s=>s.actor_id==='005').map(s=>s.original_skill_index).sort((a,b)=>a-b));
+  assert.deepEqual(d.audit.differences,[['001_48',50],['003_51',53],['005_33',35],['006_35',52]].map(([id,current])=>({section:'skills',id,field:'required_role_level',original:0,current})));
+  for(const [id,s]of Object.entries(data.party_skills.skills)){
+    const expected=Buffer.from(s.fixed_raw_hex,'hex'),level=config.skills.entries[id].parameters.required_role_level;
+    if(level!==undefined)expected.writeInt32LE(level,0x143);
+    assert.equal(d.party_skills.skills[id].fixed_raw_hex,expected.toString('hex'));
+  }
   for(const [id,s]of Object.entries(base.skills))assert.equal(d.combat.skills[id].fixed_raw_hex,s.fixed_raw_hex);
   for(const id of ['011','012','013']){
     assert.deepEqual(d.forest.actors[id].raw_by_address,forest.actors[id].raw_by_address);
@@ -188,7 +192,7 @@ test('unknown fields, source drift, bad mode, invalid ranges and unsupported eff
     c=>c.items.entries['331'].parameters.drop_rate=101,c=>c.items.entries['331'].parameters.use_effect='heal',c=>c.skills.entries['011_14'].parameters.mp_cost=5,
     c=>{c.battle.entries.enemy_011.parameters.speed={minimum:1000000,maximum_exclusive:1000000};c.battle.entries.scheduler.parameters.average_speed_factor=10000;}];
   const before=copy(data);for(const mutate of mutations){const cfg=debug();mutate(cfg);assert.throws(()=>compileRuntimeConfiguration(data,cfg),/配置/);}assert.deepEqual(data,before);
-  const cfg=copy(config);cfg.items.entries['331'].parameters.drop_rate=30;assert.throws(()=>compileRuntimeConfiguration(data,cfg),/原版模式/);
+  const cfg=deriveRuntimeConfiguration(data);cfg.items.entries['331'].parameters.drop_rate=30;assert.throws(()=>compileRuntimeConfiguration(data,cfg),/原版模式/);
   const sparse=copy(config);sparse.manifest.mode='debug';sparse.skills.entries.yantu.parameters={physical_multiplier_percent:{minimum:2}};
   assert.equal(compileRuntimeConfiguration(data,sparse).audit.parameters.skills.yantu.physical_multiplier_percent.minimum,2);
   sparse.skills.source_hashes['Fight_Role/001.CHR']='0'.repeat(64);assert.throws(()=>compileRuntimeConfiguration(data,sparse),/来源指纹/);

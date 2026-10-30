@@ -356,7 +356,9 @@
         "skill_index": 48,
         "side": "player"
       },
-      "parameters": {}
+      "parameters": {
+        "required_role_level": 50
+      }
     },
     "kai_mieyan": {
       "name": "灭颜打",
@@ -833,7 +835,9 @@
         "skill_index": 51,
         "side": "player"
       },
-      "parameters": {}
+      "parameters": {
+        "required_role_level": 53
+      }
     },
     "004_18": {
       "name": "水晶杖攻击",
@@ -1220,7 +1224,9 @@
         "skill_index": 33,
         "side": "player"
       },
-      "parameters": {}
+      "parameters": {
+        "required_role_level": 35
+      }
     },
     "006_19": {
       "name": "风体．疾风脚",
@@ -1373,7 +1379,9 @@
         "skill_index": 35,
         "side": "player"
       },
-      "parameters": {}
+      "parameters": {
+        "required_role_level": 52
+      }
     },
     "006_36": {
       "name": "风驰．瘁风",
@@ -1488,6 +1496,24 @@
       "owner": {
         "role_id": "006",
         "skill_index": 48,
+        "side": "player"
+      },
+      "parameters": {}
+    },
+    "005_29": {
+      "name": "援攻．烈南",
+      "owner": {
+        "role_id": "005",
+        "skill_index": 29,
+        "side": "player"
+      },
+      "parameters": {}
+    },
+    "005_30": {
+      "name": "援攻．爱西琳",
+      "owner": {
+        "role_id": "005",
+        "skill_index": 30,
         "side": "player"
       },
       "parameters": {}
@@ -2640,24 +2666,6 @@
       "owner": {
         "role_id": "005",
         "skill_index": 18,
-        "side": "player"
-      },
-      "parameters": {}
-    },
-    "005_29": {
-      "name": "援攻．烈南",
-      "owner": {
-        "role_id": "005",
-        "skill_index": 29,
-        "side": "player"
-      },
-      "parameters": {}
-    },
-    "005_30": {
-      "name": "援攻．爱西琳",
-      "owner": {
-        "role_id": "005",
-        "skill_index": 30,
         "side": "player"
       },
       "parameters": {}

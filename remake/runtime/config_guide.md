@@ -69,7 +69,7 @@ node remake/runtime/tools/export_runtime_config.mjs --reference items 4
 
 | 文件 | 可调内容及规则 |
 | --- | --- |
-| skills | mp_cost、physical_multiplier_percent、element_power、defense_bonus、term4_bonus、hp_term_bonus、hp_max_term_bonus、preparation_delay_raw等已接入字段。动作、目标、接触、反击和状态行为仍来自源记录与处理器。 |
+| skills | mp_cost、physical_multiplier_percent、element_power、defense_bonus、term4_bonus、hp_term_bonus、hp_max_term_bonus、preparation_delay_raw、required_role_level等已接入字段。required_role_level为0～99的人物等级门槛，学习扫描、菜单及战斗使用共用；技巧前置、动作、目标、接触、反击和状态行为仍来自源记录与处理器。 |
 | battle | enemy_编号的新敌人HP／MP、attack／defense／speed／抗性；ai_编号的原技能权重与组合概率。权重不自动归一化，人物当前资源／等级不在此覆盖。 |
 | rewards | experience、money和有序drop_item_ids；重复候选保留抽签次数，掉落及非零金钱合计最多六个原槽。 |
 | items | 全部原item_id的drop_rate和已实现装备／药品／晶石参数；未恢复特殊行为不能用enabled强开。 |
@@ -120,13 +120,25 @@ runtime_content编辑格式v2只保存选择；默认路径、原旗标、角色
 
 1. 核原CHR／DGP、身份、初装、成长、技能索引、动作及需要的舞台。新机制先恢复共同处理器，不在脚本按名字特判。
 2. 在roles选择player／enemy；玩家battle_skills／field_skills登记原index与处理器，primary_skill选主要表现。技能可省略id生成原编号格式，已有ID保持兼容。
-3. battle_rosters保存明确资源身份；正式阵容可使用`$players`／`$enemies`。技能登记与剧情入队、原学习条件分别处理。
+3. battle_rosters保存明确资源身份；正式阵容可使用`$players`／`$enemies`。技能登记、剧情入队与学习进度分别处理。
 4. content构建统一生成玩家、怪物、AI／反应、状态、技能、生命周期、成长、遭遇／奖励、道具动作、声音、字体与图集，并向统一配置补项。
 5. 核队列／菜单、等级与学习门控、自然遇敌或剧情战、目标／动作／反应、胜败／奖励、保存恢复及取消。角色入队还须有真实剧情，不由登记自动发队友。
 
 敌方遭遇来自已登记地图DAT频率和全局STG池，不用配置编造。森林状态表由enemies唯一生产，party-skills及道具只校验引用；同一生成表不维护第二生产者。
 
 学习进度使用party[].skill_progress v2的learned_indices及records，旧v1兼容；原技能等级、初始学会字节和前置熟练度保留。候补恢复同一实例，离队不压缩阵形；满四人入队不写入。组合容量与晶石孔数各沿原定义，不混用。
+
+重制学习规则：有前置时同时检查人物等级和全部非空前置技巧等级；无前置的命名技能只检查人物等级，等级0表示没有额外等级门槛。援攻（队友原技能ID71／72）只由剧情授予，不参加自动学习。胜利结算先处理熟练度并扫描学习，人物升级后再按新等级扫描；满级旧档也能在下一次胜利补学，已学技能不会重复通知。朱特005／29、30援攻在运行副本中纠正为type3，原CHR字节、来源类型0及指纹保留；菜单、编成、统一配置和战斗共用纠正结果。配置original／debug仅决定数值覆盖，不切换这些修复规则。
+
+人物等级门槛统一修改`data/config/skills.json`对应编号的`parameters.required_role_level`，并将`data/config/index.json`的mode设为debug。当前四项覆盖为001_48超魔剑50级、003_51疯狂爆裂击53级、005_33崩壁35级、006_35贝鲁吉斯52级。配置在页面启动时编译，刷新后生效；原CHR记录不改写，旧档已学标记不撤销，但使用同样受新等级门槛约束。例如：
+
+```json
+"001_48": {
+  "name": "超奥义．超魔剑",
+  "owner": {"role_id": "001", "skill_index": 48, "side": "player"},
+  "parameters": {"required_role_level": 50}
+}
+```
 
 已接入处理器包括direct、effect-carrier、native-support、native-revival等，各自仅代表已恢复模式。辅助状态与攻击状态分开；越界物理帧可保留原时钟但不绘制，精确缺失特效沿原加载失败，不补替代媒体。浮空、原技能加载派生、wait0独立载体和type0资格的共同约束见[来源规则速查](../assessment/region_remake_workflow.md#来源规则速查)。
 

@@ -2,6 +2,7 @@
 // records stay immutable; saved rank and experience are replayed onto the
 // selected source/configuration snapshot, never used as another parameter file.
 import {idiv} from './combat_rules.mjs';
+import {correctPartySkillType,isStoryGrantedPartySkill} from './party_skill_corrections.mjs';
 const copy=structuredClone,need=(ok,message)=>{if(!ok)throw new Error(message);};
 const int=(n,label,min=-2147483648,max=2147483647)=>{need(Number.isInteger(n)&&n>=min&&n<=max,`${label}无效`);return n;};
 const add=(a,b)=>(a+b)|0;
@@ -67,12 +68,49 @@ export function nativeSkillPrerequisite(skills,originalId,requiredLevel){
   const found=skills.find(skill=>signed(bytes(skill)[0])===originalId);return Boolean(found&&rank(found)>=requiredLevel);
 }
 
+function learnSkills(skills,role,{allowEmpty=false}={}){
+  const notifications=[];
+  for(let index=0;index<skills.length;index++){
+    const skill=skills[index],b=bytes(skill),v=view(b);if(b[0x23]||allowEmpty&&(!skill.name?.trim()||isStoryGrantedPartySkill(skill))||v.getInt32(0x143,true)>role.level||!(v.getUint32(0x32,true)&15))continue;
+    let any=false,accepted=true;
+    for(let n=0;n<4&&accepted;n++){
+      const wanted=signed(b[0x360+n*5]);if(wanted===0)continue;
+      any=true;accepted=nativeSkillPrerequisite(skills,wanted-1,v.getInt32(0x361+n*5,true));
+    }
+    if(accepted&&(any||allowEmpty)){
+      const before={learned:false,level:b[0x2d]};b[0x23]=1;if(b[0x2d]===0)b[0x2d]=1;skills[index]=refresh(skill,b);
+      notifications.push({type:'skill-learned',actor_id:role.id,actor_name:role.name,skill_index:index,skill_name:skill.name,before,after:{learned:true,level:b[0x2d]}});
+    }
+  }
+  return notifications;
+}
+
+function saveProgress(role,source_role,skills){
+  const learned=new Set(role.skill_progress?.learned_indices??[]),records=[];
+  skills.forEach((skill,index)=>{
+    const current=bytes(skill),initial=bytes(source_role.skills[index]),v=view(current),iv=view(initial);
+    if(current[0x23]&&!initial[0x23])learned.add(index);
+    if(current[0x2d]!==initial[0x2d]||v.getInt32(0x2fb,true)!==iv.getInt32(0x2fb,true))records.push({index,level:current[0x2d],experience:v.getInt32(0x2fb,true)});
+  });
+  const next=copy(role);
+  if(records.length||learned.size||role.skill_progress)next.skill_progress={version:2,learned_indices:[...learned].sort((a,b)=>a-b),records};
+  return next;
+}
+
+/** Remake learning scan, also used after character levels. No practice is added. */
+export function learnEligiblePartySkills({role,source_role}){
+  need(source_role?.id===role.id&&source_role.skills.length===source_role.skill_count,'技巧成长角色来源无效');
+  const skills=source_role.skills.map(skill=>correctPartySkillType(applySavedSkillProgress(skill,role)));
+  const notifications=learnSkills(skills,role,{allowEmpty:true});
+  return {role:saveProgress(role,source_role,skills),skills,notifications};
+}
+
 /** 50C560: source index order, skill upgrades first, then one learning pass.
  * Skill eligibility uses the actor level BEFORE report experience is applied.
  */
-export function settleNativeSkillProgress({role,source_role,practice={},chain_bonus=0}){
+export function settleNativeSkillProgress({role,source_role,practice={},chain_bonus=0,remake=false}){
   int(chain_bonus,'连击技巧奖励',0);need(source_role?.id===role.id&&source_role.skills.length===source_role.skill_count,'技巧成长角色来源无效');
-  const skills=source_role.skills.map(skill=>applySavedSkillProgress(skill,role)),notifications=[],trace=[];let changedRank=false,practiceTotal=0;
+  const skills=source_role.skills.map(skill=>{const saved=applySavedSkillProgress(skill,role);return remake?correctPartySkillType(saved):saved;}),notifications=[],trace=[];let changedRank=false,practiceTotal=0;
   for(let index=0;index<skills.length;index++){
     let skill=skills[index],b=bytes(skill),v=view(b),required=v.getInt32(0x2f7,true);
     if(!b[0x23]||!(v.getUint32(0x32,true)&15)||required===0||b[0x2d]>=7)continue;
@@ -87,22 +125,6 @@ export function settleNativeSkillProgress({role,source_role,practice={},chain_bo
     }
     skills[index]=skill;trace.push({type:'skill-practice-settled',actor_id:role.id,skill_index:index,pending,chain_bonus,gain,level_before:before.level,level_after:rank(skill)});
   }
-  if(changedRank)for(let index=0;index<skills.length;index++){
-    const skill=skills[index],b=bytes(skill),v=view(b);if(b[0x23]||v.getInt32(0x143,true)>role.level||!(v.getUint32(0x32,true)&15))continue;
-    let any=false,accepted=true;
-    for(let n=0;n<4&&accepted;n++){
-      const wanted=signed(b[0x360+n*5]);if(wanted===0)continue;
-      accepted=nativeSkillPrerequisite(skills,wanted-1,v.getInt32(0x361+n*5,true));if(accepted)any=true;
-    }
-    if(any&&accepted){const before={learned:false,level:b[0x2d]};b[0x23]=1;if(b[0x2d]===0)b[0x2d]=1;skills[index]=refresh(skill,b);notifications.push({type:'skill-learned',actor_id:role.id,actor_name:role.name,skill_index:index,skill_name:skill.name,before,after:{learned:true,level:b[0x2d]}});}
-  }
-  const learned=new Set(role.skill_progress?.learned_indices??[]),records=[];
-  skills.forEach((skill,index)=>{
-    const current=bytes(skill),initial=bytes(source_role.skills[index]),v=view(current),iv=view(initial);
-    if(current[0x23]&&!initial[0x23])learned.add(index);
-    if(current[0x2d]!==initial[0x2d]||v.getInt32(0x2fb,true)!==iv.getInt32(0x2fb,true))records.push({index,level:current[0x2d],experience:v.getInt32(0x2fb,true)});
-  });
-  const next=copy(role);
-  if(records.length||learned.size||role.skill_progress)next.skill_progress={version:2,learned_indices:[...learned].sort((a,b)=>a-b),records};
-  return {role:next,skills,notifications,practice_total:practiceTotal,trace};
+  if(changedRank||remake)notifications.push(...learnSkills(skills,role,{allowEmpty:remake}));
+  return {role:saveProgress(role,source_role,skills),skills,notifications,practice_total:practiceTotal,trace};
 }

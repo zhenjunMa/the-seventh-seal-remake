@@ -3,6 +3,7 @@ import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {isDeepStrictEqual} from 'node:util';
 import {createPartySkillSample,PARTY_SKILL_SAMPLE_ROSTERS,partySampleSkillIndices} from '../web/core/party_skill_sample.mjs';
+import {partyBattleSkills} from '../web/core/battle_skill_access.mjs';
 import {allPartyRoles} from '../web/core/party_roster.mjs';
 import {encodeSave,decodeSave} from '../web/core/world.mjs';
 
@@ -14,7 +15,7 @@ if(process.argv.slice(2).some(arg=>arg!=='--check'))throw new Error('用法：no
 const [seed,rewards,commands,forest]=await Promise.all(['web/data/opening_seed.json','web/data/party_rewards.json','web/data/party_skills.json','web/data/maps/m70010.json'].map(read));
 const {x,y,direction}=forest.route_entry,location={map_id:forest.id,x,y,direction};
 const files=new Map(),entries=[];
-const runtimeSkills=new Map([...Object.values(commands.skills),...Object.values(commands.field_skills??{})].map(skill=>[`${skill.actor_id}_${skill.original_skill_index}`,skill]));
+const runtimeSkills=new Map([...Object.values(partyBattleSkills(commands)),...Object.values(commands.field_skills??{})].map(skill=>[`${skill.actor_id}_${skill.original_skill_index}`,skill]));
 function prerequisites(skill,role){
   const raw=Buffer.from(skill.fixed_raw_hex,'hex'),parts=[];
   for(let slot=0;slot<4;slot++){

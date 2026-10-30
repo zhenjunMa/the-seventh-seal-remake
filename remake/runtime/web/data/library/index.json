@@ -16,7 +16,7 @@
     "chr_skills": 1948,
     "system_magic": 41,
     "items": 416,
-    "runtime_skills": 182
+    "runtime_skills": 184
   },
   "entries": {
     "roles": {
@@ -6274,9 +6274,9 @@
         "definition": "data/library/skills.json#/skills/005_29",
         "configuration_id": "005_29",
         "configuration": "data/config/skills.json#/entries/005_29",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "005_30": {
         "id": "005_30",
@@ -6288,9 +6288,9 @@
         "definition": "data/library/skills.json#/skills/005_30",
         "configuration_id": "005_30",
         "configuration": "data/config/skills.json#/entries/005_30",
-        "runtime_registered": false,
-        "authored_binding": false,
-        "handler": null
+        "runtime_registered": true,
+        "authored_binding": true,
+        "handler": "effect-carrier"
       },
       "005_31": {
         "id": "005_31",
@@ -46168,10 +46168,10 @@
     "data/library/skills.json": "91517d541e4d0fc36ffe3334c975634d718a2dcdd6af9f71a08019d4fcaa47e4",
     "data/library/magic.json": "2a0784270dcd6661e267c84caae37f959a1813045da44da46c3c8fde666d5812",
     "data/items.json": "ceb5339a904f86d331ce18754a603f0f453264d1cdfeec04dd4e13c286a738e9",
-    "data/runtime_content.json": "1ef29fc9a223b695a8919638d0ae4615cfe80015be7ecaf9f1e3c0a442a6b572",
+    "data/runtime_content.json": "3f3825d9084317c9a277bbb0b685fefc89ebc8e4d130d5b743c568d8ce32fb40",
     "data/party_skills.json": "764f205f693492e89d22f5e6b27013e7aee5aca064e53b2d2b4daac1ff291110",
     "data/forest_ai.json": "24d582559e30b39ba960ca35d23658d7a0f0a74ef44ce7e60adfc4724f19ec4d",
-    "data/config/skills.json": "de2696e662f9cafecf01ae9cef6a2490958c3d07afe97776346a54b481895461",
+    "data/config/skills.json": "80f16119364b3c80b020218aa51fe4dea989c86272f6e23f2a4ef652ef36926a",
     "data/config/items.json": "7103f7356567dfd41ecdb1ec9286d93f3ae45a6673eb565873018711055bfb23"
   }
 }

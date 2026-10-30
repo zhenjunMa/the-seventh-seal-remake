@@ -4,6 +4,7 @@
  */
 
 import {compileNativeSequence} from './core/skill_sequence.mjs';
+import {addCorrectedPartyPresentations} from './core/party_skill_corrections.mjs';
 import {BattleAssetPlan,effectReferences} from './core/battle_asset_plan.mjs';
 import {idlePoseAt} from './core/battle_scheduler.mjs';
 import {BattleLifecyclePlayback} from './battle_lifecycle_view.mjs';
@@ -304,6 +305,8 @@ export class BattleView {
       meta.missing_effects=[...new Map([...(meta.missing_effects??[]),...(lifecycleMeta.missing_effects??[])].map(row=>[row.id,clone(row)])).values()];
       validateBattleViewMetadata(meta,this.content);
     }
+    addCorrectedPartyPresentations(meta,skills);
+    validateBattleViewMetadata(meta,this.content);
     check();
     const layers = validateLayers(await this.jsonLoader(meta.layers.path, meta.layers.sha256), meta);
     check();
@@ -405,6 +408,14 @@ export class BattleView {
   }
 
   async _prepareEntry({actors,skills,inventory,staged,onProgress,isCurrent}){
+    if(addCorrectedPartyPresentations(this.meta,skills)){
+      validateBattleViewMetadata(this.meta,this.content);
+      const owners=effectOwners(this.meta,this.itemMeta,this.lifecycleMeta);
+      for(const effect of this.meta.effects)for(const asset of this.assetDescriptors){
+        if([effect.sheet,effect.main_sheet,effect.intrinsic_sheet,effect.shadow_sheet].includes(asset.path))
+          asset.owners=[...new Set([...asset.owners,...owners.get(effect.id)])];
+      }
+    }
     this.preparedAssets=new WeakMap();
     this.assetPlan=staged?new BattleAssetPlan({meta:this.meta,itemMeta:this.itemMeta,lifecycleMeta:this.lifecycleMeta,
       descriptors:this.assetDescriptors,layers:[this.layers,...this.alternateLayers.values()],actors,skills,inventory}):null;

@@ -86,7 +86,9 @@ test('Victory plans keep original event ordering, report XP threshold timing and
   grown.skill_progress={version:2,learned_indices:[],records:[{index:22,level:1,experience:799},{index:37,level:1,experience:949}]};
   const enemy={id:'enemy-0',resource_id:'012',side:'enemy',hp:{current:0}},actors=[{id:'001',side:'player',hp:{current:1},state_raw:0,immune_raw:0},enemy],ledger=createRewardLedger('skill-growth-plan',actors);collectEnemyDefeat(ledger,enemy,{data:rewards});
   const plan=planVictoryRewards({world,actors,ledger,data:rewards,rng:()=>99,skill_data:skillGrowthSource(commands),skill_practice:{'001':{22:10,37:50}}});
-  assert.deepEqual(plan.summary.notifications.map(n=>n.type),['skill-level-up','skill-level-up','skill-learned','role-level-up']);assert.equal(plan.summary.practice_total,60);assert.equal(plan.summary.experience[0].levels[0].gained_at,1);assert.equal(plan.summary.notifications.at(-1).experience_gained_at,1);
+  assert.deepEqual(plan.summary.notifications.map(n=>n.type),['skill-level-up','skill-level-up','skill-learned','skill-learned','role-level-up']);
+  assert.deepEqual(plan.summary.notifications.filter(n=>n.type==='skill-learned').map(n=>n.skill_index),[26,48]);
+  assert.equal(plan.summary.practice_total,60);assert.equal(plan.summary.experience[0].levels[0].gained_at,1);assert.equal(plan.summary.notifications.at(-1).experience_gained_at,1);
   const saved={...world,...plan.world_patch,reward_records:[plan.reward_record]},store=new WorldStore(saved,['M72061','M70010']),loaded=await decodeSave(await encodeSave(store.snapshot()),store.mapIds);
   assert.deepEqual(loaded.party[0].skill_progress,plan.world_patch.party[0].skill_progress);assert.equal(loaded.party[0].skill_progress.learned_indices.includes(26),true);
   const repeat=planVictoryRewards({world:loaded,actors,ledger,data:rewards,rng:()=>assert.fail('Repeated rewards must not draw'),skill_data:skillGrowthSource(commands),skill_practice:{'001':{22:999}}});assert.equal(repeat.applied,false);assert.deepEqual(repeat.summary,plan.summary);

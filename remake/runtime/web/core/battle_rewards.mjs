@@ -1,6 +1,6 @@
 // Source-backed forest death pool, drop rolls and character experience.
 // World submission is deliberately left to the controller's atomic transaction.
-import {settleNativeSkillProgress} from './battle_skill_growth.mjs';
+import {settleNativeSkillProgress,learnEligiblePartySkills} from './battle_skill_growth.mjs';
 import {runtimeContent,requireRegisteredRoles} from './content_registry.mjs';
 const copy = value => structuredClone(value);
 const u32 = value => value >>> 0;
@@ -238,15 +238,23 @@ export function planVictoryRewards({world, ledger, data, rng, actors,skill_data=
   for(const actor of participants) {
     const i=party.findIndex(role=>role.id===actor.id); requireValue(i>=0,'奖励角色不在队伍');
     if(skill_data){
-      const growth=settleNativeSkillProgress({role:party[i],source_role:skill_data.roles[actor.id],practice:skill_practice[actor.id]??{},chain_bonus:data.skill_practice_bonuses[k]});
+      const growth=settleNativeSkillProgress({role:party[i],source_role:skill_data.roles[actor.id],practice:skill_practice[actor.id]??{},chain_bonus:data.skill_practice_bonuses[k],remake:true});
       party[i]=growth.role;notifications.push(...growth.notifications);practiceTotal=i32(practiceTotal+growth.practice_total);trace.push(...growth.trace);
     }
     // Original 0x50D1C0 sends the whole enemy experience pool to each eligible participant.
     const eligible=eligibility.get(actor.id);
     const result=applyExperience(party[i],eligible?ledger.experience:0,data,rng,trace);party[i]=result.role;experience.push(result.summary);roleNotifications.push(...result.notifications);
+    if(skill_data&&result.summary.level_after>result.summary.level_before){
+      const learned=learnEligiblePartySkills({role:party[i],source_role:skill_data.roles[actor.id]});party[i]=learned.role;
+      for(const notice of learned.notifications){
+        const required=bytes(skill_data.roles[actor.id].skills[notice.skill_index].fixed_raw_hex,0x41d),level=get(required,0x143);
+        notice.experience_gained_at=result.summary.levels.find(row=>row.level>=level)?.gained_at??result.summary.levels.at(-1).gained_at;
+        roleNotifications.push(notice);
+      }
+    }
   }
-  // Natural report ticks add one XP to each participant in actor order. Skill
-  // notifications were already queued by 50C560 before those report ticks.
+  // Practice notifications precede report ticks. Remake learning from a new
+  // actor level follows that level notice at the same report XP boundary.
   const positions=new Map(participants.map((actor,index)=>[actor.id,index]));
   roleNotifications.sort((a,b)=>a.experience_gained_at-b.experience_gained_at||positions.get(a.actor_id)-positions.get(b.actor_id));
   const practiceBonus=data.skill_practice_bonuses[k];

@@ -52,7 +52,7 @@ export function configureSkills(skills,config){
       set(low,current[field].minimum);set(high,current[field].maximum_exclusive);
     }
     current.element_power.forEach((value,index)=>set(0x105+index*4,value));set(0xab,current.hp_term_bonus);set(0xaf,current.hp_max_term_bonus);
-    set(0x14f,config.mode==='debug'?-current.mp_cost:view.getInt32(0x14f,true));
+    set(0x14f,current.mp_cost!==original.mp_cost?-current.mp_cost:view.getInt32(0x14f,true));
     const hex=Array.from(new Uint8Array(view.buffer),n=>n.toString(16).padStart(2,'0')).join('');
     compiled[id]={...copy(skill),fixed_raw_hex:hex,mp_cost:current.mp_cost,mp_delta_raw:view.getInt32(0x14f,true),
       configuration:{mode:config.mode,version:config.version,original:copy(original),parameters:copy(current),differences,

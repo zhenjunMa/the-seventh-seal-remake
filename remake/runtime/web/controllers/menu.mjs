@@ -15,7 +15,7 @@ export function createMenuController({state, actions, $, canvas, ctx}) {
   const battleItemSelections=new Map();
   let techniqueTestMenu=null;
   let skillFacade=null;
-  function currentSkills(){if(!skillFacade||skillFacade.world!==state.world||skillFacade.revision!==state.world.value.revision||skillFacade.source!==state.partySkills)skillFacade={world:state.world,revision:state.world.value.revision,source:state.partySkills,value:effectiveSkillSource(state.partySkills,state.world.value)};return skillFacade.value;}
+  function currentSkills(){const source=state.menuContext?.configured?.party_skills??state.partySkills;if(!skillFacade||skillFacade.world!==state.world||skillFacade.revision!==state.world.value.revision||skillFacade.source!==source)skillFacade={world:state.world,revision:state.world.value.revision,source,value:effectiveSkillSource(source,state.world.value)};return skillFacade.value;}
   function menuOperation(fn){return async()=>{try{const message=await (state.menuFeedback?state.menuFeedback.transaction(fn):fn());$('menuMessage').classList.remove('error');$('menuMessage').textContent=message??'';if(!state.menuFeedback)state.audio?.playCue('menuConfirm');refreshPartyMenu();}catch(error){$('menuMessage').classList.add('error');$('menuMessage').textContent=error.message;if(!state.menuFeedback)state.audio?.playCue('menuError');actions.status(error.message,true);actions.log({type:'operation-failed',error:error.message});}};}
   async function openPartyMenu(combat=false){
     if(combat?!state.battle?.canCommand():state.scenes.phase!=='map'||state.world.value.source.kind!=='native-new-game')return;

@@ -1,7 +1,7 @@
 {
   "schema": "seventh-seal-runtime-config",
   "version": 1,
-  "mode": "original",
+  "mode": "debug",
   "files": {
     "skills": "skills.json",
     "battle": "battle.json",

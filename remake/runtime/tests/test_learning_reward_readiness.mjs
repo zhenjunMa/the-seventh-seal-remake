@@ -13,11 +13,6 @@ test('every real Fire Valley learning reward resolves its source ID and requires
     const record=story.maps[mapId].records.find(row=>row.id===recordId),content=structuredClone(runtimeContent);
     content.roles[roleId].battle_skills=content.roles[roleId].battle_skills.filter(row=>row.index!==index);
     content.roles[roleId].field_skills=(content.roles[roleId].field_skills??[]).filter(row=>row.index!==index);
-    if(roleId==='005'){
-      const source=requireLearningRewardReadiness(record,content,story.role_definitions);
-      assert.equal(source.index,30);assert.equal(source.has_menu_type,false);assert.equal(source.type_flags&255,0);
-      continue;
-    }
     assert.throws(()=>requireLearningRewardReadiness(record,content,story.role_definitions),/尚无已接入技能处理器/);
     content.roles[roleId].battle_skills.push({id:`${roleId}_${index}`,index,handler:'effect-carrier'});
     assert.equal(requireLearningRewardReadiness(record,content,story.role_definitions).index,index);
