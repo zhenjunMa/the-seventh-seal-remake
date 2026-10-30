@@ -12,6 +12,7 @@ export function explorationScene(Phaser,runtime){
       this.background=this.add.container().setDepth(-2);this.backgroundTiles=[];
       this.collision=this.add.graphics().setDepth(-1);this.marker=this.add.graphics();this.sourceScene=null;
       this.cameras.main.setBackgroundColor('#0e191b');
+      runtime.configureCamera(this.cameras.main);
       const resetDelta=()=>{this.skipDelta=true;};
       this.events.on('wake',resetDelta);this.events.on('resume',resetDelta);
       const dispose=()=>{
@@ -33,7 +34,7 @@ export function explorationScene(Phaser,runtime){
         image.setVisible(true).setPosition(tile.x,tile.y).setTexture(tile.key,tile.frame);}
       for(let i=tiles.length;i<this.backgroundTiles.length;i++)this.backgroundTiles[i].setVisible(false);
       const zoom=options.nativeViewport?1:view.zoom;
-      this.cameras.main.setZoom(zoom).setScroll(view.x-320,view.y-240);
+      runtime.configureCamera(this.cameras.main,{x:view.x,y:view.y,zoom});
       // Phaser zooms around the camera centre, matching the original 640x480 plane.
       const entries=mapPresentation(options),live=new Set();
       for(let index=0;index<entries.length;index++){

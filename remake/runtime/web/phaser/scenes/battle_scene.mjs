@@ -7,6 +7,7 @@ export function battleScene(Phaser,runtime){
     create(){
       this.clock=new ActionClock();this.skipDelta=true;
       this.surface=new BattleSurface(this);this.cameras.main.setBackgroundColor('#000000');
+      runtime.configureCamera(this.cameras.main);
       const resetDelta=()=>{this.skipDelta=true;};
       this.events.on('wake',resetDelta);this.events.on('resume',resetDelta);
       const dispose=()=>{

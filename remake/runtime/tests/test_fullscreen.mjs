@@ -77,7 +77,7 @@ test('a late keyboard grant after exit or disposal cannot restore the fullscreen
 test('fullscreen Escape still reaches the existing game cancel handler once and cancels the DOM default',()=>{
   const previousDocument=globalThis.document,previousWindow=globalThis.window;
   const document=new EventTarget(),window=new EventTarget(),nodes=new Map();
-  const $=id=>{if(!nodes.has(id))nodes.set(id,{});return nodes.get(id);};
+  const $=id=>{if(!nodes.has(id))nodes.set(id,{setAttribute(){}});return nodes.get(id);};
   document.fullscreenElement=$('screen');document.activeElement={tagName:'CANVAS'};
   globalThis.document=document;globalThis.window=window;
   try{

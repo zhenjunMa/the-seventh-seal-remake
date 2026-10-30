@@ -48,6 +48,7 @@ export class BattleSurface {
     object.setVisible(true).setDepth(this.order++).setAlpha(this.globalAlpha)
       .setBlendMode(this.globalCompositeOperation==='lighter'?'ADD':'NORMAL');
     if(kind==='graphics')object.clear();
+    if(kind==='sprite'){object.smoothActor=false;object.xbrBounds=null;}
     return object;
   }
   save(){this.stack.push({matrix:[...this.matrix],clipRect:{...this.clipRect},...Object.fromEntries(properties.map(k=>[k,this[k]]))});}
@@ -62,6 +63,16 @@ export class BattleSurface {
   rectangle(x,y,width,height){const p=this.point(x,y);return {...p,width:width*this.matrix[0],height:height*this.matrix[3]};}
   // BattleView clears at the beginning of a frame; beginFrame owns disposal.
   clearRect(){}
+  drawActorImage(source,sx,sy,sw,sh,dx,dy,dw,dh){
+    const visible=intersect(this.rectangle(dx,dy,dw,dh),this.clipRect);
+    if(visible.width<=0||visible.height<=0)return;
+    const frame=this.textures.actorFrame(source,sx,sy,sw,sh);if(!frame)return;
+    const before=this.cursor.sprite;
+    this.drawImage(frame.bitmap,0,0,frame.width,frame.height,
+      dx+frame.x*dw/sw,dy+frame.y*dh/sh,frame.width*dw/sw,frame.height*dh/sh);
+    if(this.cursor.sprite>before){const sprite=this.pools.sprite[before];sprite.smoothActor=true;
+      sprite.xbrBounds={x:0,y:0,width:frame.width,height:frame.height};}
+  }
   drawImage(source,...args){
     let sx=0,sy=0,sw=source.width,sh=source.height,dx,dy,dw=sw,dh=sh;
     if(args.length===2)[dx,dy]=args;

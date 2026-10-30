@@ -56,6 +56,9 @@ export function createInputController({state, actions, $, canvas, ctx}) {
     });
     $('role').onchange=()=>{state.selectedRole=$('role').value;state.world.transact(draft=>{draft.leader_id=state.selectedRole;});state.view.action=0;state.view.frame=0;state.clock=0;canvas.focus();};
     $('zoomOut').onclick=()=>{state.view.zoom=Math.max(.15,state.view.zoom/1.2);};$('zoomIn').onclick=()=>{state.view.zoom=Math.min(3,state.view.zoom*1.2);};$('fit').onclick=actions.fit;$('follow').onclick=()=>{state.view.zoom=1;state.view.follow=true;canvas.focus();};
+    const smoothing=$('actorSmoothing');
+    const showSmoothing=()=>{const enabled=state.engine.actorSmoothing;smoothing.textContent=`人物平滑：${enabled?'开':'关'}`;smoothing.setAttribute('aria-pressed',String(enabled));};
+    showSmoothing();smoothing.onclick=()=>{state.engine.setActorSmoothing(!state.engine.actorSmoothing,{persist:true});showSmoothing();canvas.focus();};
     $('fullscreen').onclick=actions.guarded(fullscreen.toggle);
     $('fullscreenExit').onclick=actions.guarded(fullscreen.toggle);
     document.addEventListener('fullscreenchange',fullscreen.changed,options);

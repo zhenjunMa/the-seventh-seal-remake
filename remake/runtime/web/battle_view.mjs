@@ -767,15 +767,16 @@ export class BattleView {
     const scale = this.meta.policy.sprite_scale, width = role.frame_width, height = role.frame_height;
     if(this.assetPlan&&!pair)pair=this.lifecyclePairs.get(`${role.id}:${action.first_frame+frame}`)??null;
     ctx.save(); ctx.globalAlpha = alpha; ctx.globalCompositeOperation = 'source-over';
+    const drawActor=(...args)=>ctx.drawActorImage?ctx.drawActorImage(...args):drawBattleImage(ctx,...args);
     const dx = x - role.anchor.x * scale, dy = y - role.anchor.y * scale;
     if (pair) {
-      drawBattleImage(ctx,this.images.get('/' + pair.main.path), 0, 0, width, height, dx, dy, width * scale, height * scale);
+      drawActor(this.images.get('/' + pair.main.path), 0, 0, width, height, dx, dy, width * scale, height * scale);
       if (pair.intrinsic.active) {
         ctx.globalCompositeOperation = 'lighter';
         drawBattleImage(ctx,this.images.get('/' + pair.intrinsic.path), 0, 0, width, height, dx, dy, width * scale, height * scale);
       }
     } else {
-      drawBattleImage(ctx,this.images.get(action.sheet), frame * width, role.direction * height,
+      drawActor(this.images.get(action.sheet), frame * width, role.direction * height,
         width, height, dx, dy, width * scale, height * scale);
     }
     ctx.restore();
