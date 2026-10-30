@@ -130,7 +130,9 @@ def enrich_sequence(c, d, index, runtime_id=None, handler=None):
                     movement_step_raw=struct.unpack_from('<i', raw, 0x1e)[0], movement_source_field='0x1e', movement_flag_raw=raw[0x25],
                     event=dict(frame=event, field='0x49') if event else None, effects=effects, evidence=[NATIVE_IDS['range']]))
             else:
-                assert raw[0] == 1 and group in (0, 4, 6, 7, 8, 11)
+                assert raw[0] == 1 and group in (0, 1, 4, 6, 7, 8, 11)
+                if group == 1 and (raw[0x47] not in (0, 1) or raw[0x1d]):
+                    raise ValueError('Native camera shake axis is not recovered')
                 if group == 7 and raw[0x47] not in (1, 7) or group == 8 and raw[0x47] not in (1, 2, 3, 4, 5, 6, 7, 9):
                     raise ValueError('Native appearance/disappearance renderer mode is not recovered')
                 descriptor = dict(chr_record_index=entry['index'], type_raw=1, command_raw=group,

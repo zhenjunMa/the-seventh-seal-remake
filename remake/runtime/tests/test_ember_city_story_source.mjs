@@ -100,7 +100,7 @@ test('real password-shop NPC transfer retains native sort and one transaction ac
   assert.equal((await decodeSave(await encodeSave(world.snapshot()))).native_map_sort_code,1);
   world.replace({...initial,native_map_sort_code:4});fail=true;const before=world.snapshot();
   await assert.rejects(runner.runTlk(request),/password-shop preparation failed/);assert.deepEqual(world.snapshot(),before);assert.equal(trace.at(-1).sort_code,4);
-  await assert.rejects(runner.runTlk({...request,context:{steps:0}}),/缺少原地形触发器或NPC/);assert.deepEqual(world.snapshot(),before);
+  await assert.rejects(runner.runTlk({...request,context:{steps:0}}),/缺少原地形触发器或主动交互/);assert.deepEqual(world.snapshot(),before);
 });
 
 test('all four original city departure rings retain their exact source bit4 polarity and bit10 writer',async()=>{
@@ -193,7 +193,8 @@ test('dispersal renders source pixels, retains local RNG, groups neighbouring sp
     const effect=new ActorEffectView(actor,'scatter');assert.equal(effect.particles.length,3);
     assert.equal(new Set(effect.particles.map(row=>row.speed)).size,1);
     assert.deepEqual(effect.particles.map(row=>[row.dx,row.dy]),[[-2,-35],[-1,-35],[-1,-34]]);
-    assert.equal(effect.output.data.some(value=>value!==0),true);effect.update(30);assert.equal(effect.output.data.some(value=>value!==0),false);
+    assert.equal(effect.image.pixels().length,3);assert.ok(effect.image.pixels().every(pixel=>pixel.alpha===1));
+    effect.update(30);assert.equal(effect.image.pixels().length,0);
   }finally{globalThis.document=previous;}
 });
 

@@ -44,7 +44,7 @@ function cf7Source(row){
     return {count,interval,restoredLayer:[2,3,1][a[13]>>>4]};
   });
   if(resource.actions[0].first_frame!==0)throw new Error('CF7地图物件初始物理帧尚未恢复');
-  return {count:parsed[0].count,interval:parsed[0].interval,layer:raw[0xce],restoredLayer:parsed[1].restoredLayer};
+  return {count:parsed[0].count,interval:parsed[0].interval,fixed:raw[0xb4]!==0,layer:raw[0xce],restoredLayer:parsed[1].restoredLayer};
 }
 
 export class MapObjectRuntime {
@@ -82,9 +82,31 @@ export class MapObjectRuntime {
         actor.interval=source.interval+(behavior_raw_cf===1&&!source.fixed?draw()%(source.interval>>>1):0);
         actor.sourceLayer=source.layer;actor.restoredLayer=source.restoredLayer;actor.nativeDisplayZero=true;
         if(behavior_raw_cf===1){actor.interactionRecord=source.interactionRecord;actor.sound=source.sound;}
-        if(behavior_raw_cf===7){actor.actionIndex=0;actor.displayActionIndex=0;actor.displayFrame=0;}
+        if(behavior_raw_cf===7){actor.actionIndex=0;actor.displayActionIndex=0;actor.displayFrame=0;actor.fixed=source.fixed;}
       }
       this.project(actor,0);return actor;
+    });
+    this.draw=draw;
+  }
+  animate({objectIndex,state,signal}){
+    const actor=this.actors.find(actor=>actor.object.index===objectIndex);
+    if(actor?.behavior!==7||![2,5].includes(state))throw new Error('剧情物件主动类型尚未恢复');
+    if(actor.pending)throw new Error('剧情物件上一个动作尚未结束');
+    if(signal?.aborted)return Promise.reject(signal.reason);
+    // 40C5C0 starts action0 at logical0; closing CF7 restores action0's
+    // last logical cursor, leaving its displayed image until the next tick.
+    const before={commandState:actor.commandState,actionIndex:actor.actionIndex,displayActionIndex:actor.displayActionIndex,
+      displayFrame:actor.displayFrame,frame:actor.frame,state:actor.state,elapsed:actor.elapsed,interval:actor.interval};
+    actor.commandState=state;actor.actionIndex=0;
+    actor.frame=state===2?0:actor.resource.actions[0].logical_frames.length-1;
+    if(state===2){actor.displayActionIndex=0;actor.displayFrame=0;}
+    this.project(actor,state);
+    return new Promise((resolve,reject)=>{
+      const abort=()=>{
+        signal.removeEventListener('abort',abort);actor.pending=null;Object.assign(actor,before);this.project(actor,before.state);reject(signal.reason);
+      };
+      signal?.addEventListener('abort',abort,{once:true});
+      actor.pending=()=>{signal?.removeEventListener('abort',abort);actor.pending=null;resolve();};
     });
   }
   project(actor,state) {
@@ -115,9 +137,9 @@ export class MapObjectRuntime {
     const delta=this.lastTime===null?0:Math.max(0,now-this.lastTime);this.lastTime=now;
     for(const actor of this.actors){
       const record=world.event_records?.[this.mapFlagIndex]?.[actor.object.index];
-      const state=record?parseInt(record.slice(0,2),16):0;
+      const state=actor.commandState??(record?parseInt(record.slice(0,2),16):0);
       if(actor.behavior===7){
-        if(![0,3,4].includes(state))throw new Error('CF7地图物件主动交互状态尚未恢复');
+        if(![0,3,4].includes(state)&&!actor.pending)throw new Error('CF7地图物件主动交互状态尚未恢复');
         if(!actor.loaded){
           actor.loaded=true;actor.object.layer=state===3?actor.restoredLayer:actor.sourceLayer;
           if(state===3){
@@ -133,7 +155,15 @@ export class MapObjectRuntime {
           // states3/4 the first eligible visit only selects action1; its
           // displayed physical frame is retained until the following visit.
           actor.elapsed=0;
-          if(state===3||state===4){
+          if(state===2||state===5){
+            const action=actor.resource.actions[0],complete=state===2?actor.frame===action.logical_frames.length-1:actor.frame===0;
+            if(complete){
+              actor.commandState=state===2?3:0;
+              if(state===2){actor.interval=action.interval_raw+(actor.fixed?0:this.draw()%((action.interval_raw>>>4)+1));actor.actionIndex=1;}
+              actor.pending();
+            }else actor.frame+=state===2?1:-1;
+            actor.displayActionIndex=0;actor.displayFrame=action.logical_frames[actor.frame];
+          }else if(state===3||state===4){
             if(actor.actionIndex!==1)actor.actionIndex=1;
             else{
               const action=actor.resource.actions[1];actor.frame=(actor.frame+1)%action.logical_frames.length;

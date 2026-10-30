@@ -49,7 +49,7 @@ def map_pool(ident, admitted, stages):
     for index in range(b[209]):
         offset = 210 + index*20
         token = b[offset:offset+20].split(b'\0')[0].decode('ascii')
-        if not re.fullmatch(r'[0-9]{3}\.dgp', token, re.IGNORECASE): raise ValueError(f'Invalid STG member: {token}')
+        if not re.fullmatch(r'[A-Za-z0-9_-]{1,15}\.dgp', token, re.IGNORECASE): raise ValueError(f'Invalid STG member: {token}')
         role_id = Path(token).stem
         if role_id not in admitted: raise ValueError(f'Map {ident}: enemy {role_id} not registered')
         c = CHR(ROOT / f'Fight_Role/{role_id}.CHR')

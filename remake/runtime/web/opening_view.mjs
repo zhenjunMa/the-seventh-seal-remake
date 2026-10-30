@@ -2,7 +2,7 @@
 // blend-state transitions are browser approximations, not native equivalence.
 import {locomotion} from './core/movement.mjs';
 import {linkPlaybackAbort,playbackFrame,playbackTask} from './core/story_playback.mjs';
-import {openingCamera,approachPoint,directArrivalMoves} from './core/opening_presentation.mjs';
+import {openingCamera,approachPoint,directArrivalMoves,nativeActorPixelEffects} from './core/opening_presentation.mjs';
 import {ActorEffectView} from './actor_effect_view.mjs';
 import {drawMapSprite} from './map_sprite.mjs';
 import {runtimeContent} from './core/content_registry.mjs';
@@ -144,19 +144,31 @@ export class OpeningView {
           return;
         }
         if (kind === 'facing' || kind === 'behavior') {
-          const tickMs=this.effects.tick_ms??20,particleTicks=this.effects.particle_ticks??30;
+          const effect=nativeActorPixelEffects[kind][payload.nativeStateRaw],tickMs=this.effects.tick_ms??20;
+          if(!effect)throw new Error(`未支持的人物像素效果 ${kind}:${payload.nativeStateRaw}`);
           this.snapshot('opening-effect-start',{actor:payload.actor,kind,native_state:payload.nativeStateRaw,command:payload.command?.index});
           actor.awaitingAppearance=false;actor.visible=true;
-          if(kind==='facing'&&payload.nativeStateRaw===7){
-            const ticks=this.effects.reveal_ticks??40;actor.alpha=15/255;
-            await this.tween(ticks*tickMs,t=>{actor.alpha=Math.min(1,(15+6*Math.floor(t*ticks))/255);},signal);
-            actor.alpha=1;
-          }else if(payload.nativeStateRaw===2||kind==='behavior'&&payload.nativeStateRaw===1){
-            actor.effect=new ActorEffectView(actor,payload.nativeStateRaw===1?'scatter':kind==='behavior'?'rise':'fall');
+          if(effect.particles){
+            const particleTicks=this.effects.particle_ticks??effect.ticks;
+            actor.effect=new ActorEffectView(actor,effect.particles);
             try{await this.tween(particleTicks*tickMs,t=>actor.effect.update(Math.min(particleTicks-1,Math.floor(t*particleTicks))),signal);}
             finally{actor.effect=null;}
             if(kind==='behavior')actor.visible=false;
-          }else throw new Error(`未支持的人物像素效果 ${kind}:${payload.nativeStateRaw}`);
+          }else{
+            const ticks=payload.nativeStateRaw===7?(this.effects.reveal_ticks??effect.ticks):effect.ticks;
+            const update=t=>{
+              const tick=Math.min(effect.ticks-1,Math.floor(t*effect.ticks));
+              const raw=240-effect.coefficientStep*tick;
+              const coefficient=raw<=(effect.coefficientCutoff??effect.coefficientFloor)?effect.coefficientFloor:raw;
+              actor.alpha=(255-coefficient)/255;
+              actor.blendEffect={blend:effect.blend,offsetY:(effect.startY??0)+(effect.stepY??0)*tick};
+            };
+            update(0);
+            // GPU ADD/alpha keep the native coefficient and movement sequence.
+            // RGB565 destination saturation/rounding remain a browser adapter.
+            try{await this.tween(ticks*tickMs,update,signal);}
+            finally{actor.alpha=1;actor.blendEffect=null;}
+          }
           this.snapshot('opening-effect-complete',{actor:payload.actor,kind,command:payload.command?.index});
           return;
         }
@@ -249,16 +261,19 @@ export class OpeningView {
     return [...this.actors.entries()].filter(([,a]) => a.visible).map(([slot,actor]) => {
       const r=actor.role,a=r.actions.find(a=>a.index===actor.action);
       return {key:`opening:${slot}`,character:!actor.effect,layer,sort_y:actor.y+32,alpha:actor.alpha,
-      blend:actor.effect&&['rise','scatter'].includes(actor.effect.kind)?'lighter':'source-over',
+      blend:actor.blendEffect?.blend??(actor.effect&&['rise','scatter'].includes(actor.effect.kind)?'lighter':'source-over'),
       pose:actor.effect?{image:actor.effect.image,x:actor.x+16-r.anchor.x-(actor.effect.offsetX??0),y:actor.y-r.anchor.y-160}
         :{image:a.bitmap,light:a.intrinsic_bitmap,shadow:a.shadow_bitmap,shadow_geometry:a.shadow_geometry,sx:actor.frame*r.frame_width,sy:actor.direction*r.frame_height,
-          width:r.frame_width,height:r.frame_height,x:actor.x+16-r.anchor.x,y:actor.y-r.anchor.y},
+          width:r.frame_width,height:r.frame_height,x:actor.x+16-r.anchor.x,y:actor.y-r.anchor.y,
+          body_offset:{x:0,y:actor.blendEffect?.offsetY??0}},
       draw: ctx => {
         const r = actor.role, a = r.actions.find(a => a.index === actor.action);
         ctx.save(); ctx.globalAlpha = actor.alpha;
+        if(actor.blendEffect)ctx.globalCompositeOperation=actor.blendEffect.blend;
         if(actor.effect)actor.effect.draw(ctx,actor.x+16-r.anchor.x,actor.y-r.anchor.y);
         else drawMapSprite(ctx,a.bitmap,a.intrinsic_bitmap,actor.frame*r.frame_width,actor.direction*r.frame_height,
-          r.frame_width,r.frame_height,actor.x+16-r.anchor.x,actor.y-r.anchor.y,a.shadow_bitmap,a.shadow_geometry);
+          r.frame_width,r.frame_height,actor.x+16-r.anchor.x,actor.y-r.anchor.y,a.shadow_bitmap,a.shadow_geometry,
+          {x:0,y:actor.blendEffect?.offsetY??0});
         ctx.restore();
       }};});
   }

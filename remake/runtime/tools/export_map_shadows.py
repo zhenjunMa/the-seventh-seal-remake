@@ -84,10 +84,14 @@ def export_shadow_role(ident, choice):
             if n <= 0 or dirs <= 0:
                 raise DGPError('Shadow action has an empty physical frame group')
             sheet = Image.new('RGBA', (n * dgp.width, dirs * dgp.height))
-            bounds = []
+            bounds, not_drawn = [], []
             for direction in range(dirs):
                 for frame in range(n):
                     physical = action['first_frame'] + direction * n + frame
+                    if physical >= dgp.frame_count:
+                        #52AF12 rejects the frame before calling shadow draw.
+                        not_drawn.append(dict(direction=direction, frame=frame, physical_frame=physical))
+                        continue
                     image = dgp.decode_shadow(physical)
                     expected = audit_mask(dgp.shadow_blobs[physical], dgp.width, dgp.height)
                     if image.getchannel('A').tobytes() != expected or image.convert('RGB').getbbox():
@@ -115,7 +119,9 @@ def export_shadow_role(ident, choice):
                     compact.paste(cropped, (frame * width, direction * height))
                     restored = Image.new('RGBA', (dgp.width, dgp.height))
                     restored.paste(cropped, (left, top))
-                    if restored.getchannel('A').tobytes() != audit_mask(dgp.shadow_blobs[physical], dgp.width, dgp.height):
+                    expected = (audit_mask(dgp.shadow_blobs[physical], dgp.width, dgp.height)
+                                if physical < dgp.frame_count else bytes(dgp.width * dgp.height))
+                    if restored.getchannel('A').tobytes() != expected:
                         raise DGPError('Compact shadow atlas cannot reconstruct the independent original mask')
             compact_rgba_bytes += compact.width * compact.height * 4
             sheet = compact
@@ -129,6 +135,9 @@ def export_shadow_role(ident, choice):
             actions.append(dict(index=index, first_frame=action['first_frame'], frame_count=n, directions=dirs,
                                 shadow_sheet=url, shadow_geometry=dict(x=left, y=top, width=width, height=height),
                                 sha256=outputs[url]))
+            if not_drawn:
+                actions[-1].update(native_not_drawn_frames=not_drawn, source_frame_pool=dgp.frame_count,
+                    native_frame_gate_evidence='ev_5cc4b952b2f05a12a77f52ac61c63416588a1fcda1f101ebcd71f8132e2ca57b')
         role = dict(source=dict(path=choice['source'], sha256=dgp.sha256),
                             frame_width=dgp.width, frame_height=dgp.height,
                             event_only=choice['event_only'], actions=actions)

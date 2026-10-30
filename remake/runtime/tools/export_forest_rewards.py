@@ -62,7 +62,7 @@ def export():
         offset = 0x61c + (item_id - 1) * 0x3bf
         definition = item_bytes[offset:offset + 0x3bf]
         assert struct.unpack_from('<I', definition)[0] == item_id
-        assert definition[0x24] >= 3 and definition[0x14b] == 0
+        assert definition[0x24] >= 2 and definition[0x14b] == 0
         assert all(struct.unpack_from('<2i', definition, p)[0] == struct.unpack_from('<2i', definition, p)[1] for _, p in VALUE_PAIRS)
         instance = bytearray(initialize_existing_instance(bytes([0xcc]) * 0xe5, definition))
         struct.pack_into('<I', instance, 4, 1)
@@ -88,7 +88,7 @@ def export():
         chain_bonuses=[0,5,10,15,20,25,30,30,35,35,40,40,45,45,50,50,55,55,60,60]+[60]*21,
         skill_practice_bonuses=[0,10,20,30,40,50,60,70,80,90,100,120,140,200,260,320,400,480,580,700]+[700]*21,
         limits=['Only participating player 001 receives rewards; saved party member 002 is not a battle participant.',
-                'Forest items all use inventory type >=3 and deterministic initialization; unique/equipment rewards require more ports.',
+                'Registered drops use inventory type >=2 and deterministic initialization; unique and randomized rewards remain unsupported.',
                 'The original local chain bonus table admits k=0..40; higher values are rejected rather than invented.',
                 'Native proficiency rewards 0x50C560 are separate from character experience; this contract exports their bonus table but does not assert a full proficiency port.',
                 'Original game execution was not observed. Remake persistence and reward idempotency are explicit adapters.'])

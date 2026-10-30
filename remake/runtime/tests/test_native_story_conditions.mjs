@@ -53,5 +53,17 @@ test('source condition10 uses header+0B role slot even when condition_bit is zer
   assert.equal(evaluateNativeStoryCondition(compact,value,{}),true);
   assert.throws(()=>validateNativeStoryCondition({...compact,condition_byte_raw_0b:10},{}),/角色槽/);
   assert.throws(()=>validateNativeStoryCondition({...jute,condition_byte_raw_0b:0},{}),/来源不同/);
-  assert.throws(()=>validateNativeStoryCondition({...rest,condition_type:8},{}),/尚未接入/);
+  assert.throws(()=>validateNativeStoryCondition({...rest,condition_type:9},{}),/尚未接入/);
+});
+
+test('original ticket counter condition8 tests the controlled actor, independently of party presence',async()=>{
+  const record=await sourceRecord('m03023',25),value=world();
+  assert.equal(record.condition_type,8);const slot=nativeConditionByte(record),id=String(slot+1).padStart(3,'0');
+  value.party=[{id:'001'},{id}];value.leader_id=id;
+  assert.equal(evaluateNativeStoryCondition(record,value,{}),true);
+  const wide=Buffer.from(record.raw_hex,'hex');wide[0x0c]=1;
+  assert.equal(evaluateNativeStoryCondition({...record,raw_hex:wide.toString('hex')},value,{}),false,'the native DWORD comparison never truncates to byte0B');
+  value.leader_id=id==='001'?'003':'001';
+  assert.equal(evaluateNativeStoryCondition(record,value,{}),false);
+  const before=structuredClone(value);evaluateNativeStoryCondition(record,value,{});assert.deepEqual(value,before);
 });

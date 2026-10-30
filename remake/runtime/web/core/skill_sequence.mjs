@@ -46,16 +46,18 @@ export function compileNativeSequence(meta,roleId,plan,layers=[]){
   const record=plan.records[ri],b=recordBytes(record.raw_hex),v=view(b),group=v.getUint32(1,true);
   if(b[0]!==0){
    const vertical=group===3&&[2,3].includes(b[0x47]);
+   const entry=group===9&&b[0x47]===4&&plan.handler==='native-response';
    const handler=plan.kind==='single'?plan.handler:plan.skill_handlers?.[record.source_skill_index];
-   const magic=vertical||['effect-carrier','native-revival','native-support'].includes(handler);
-   fail(b[0]===1&&(group===11||vertical||magic&&[0,4,6,7,8].includes(group)),'原组合类型命令未支持');
+   const magic=vertical||entry||plan.handler==='native-response'||['effect-carrier','native-revival','native-support'].includes(handler);
+   fail(b[0]===1&&(group===11||vertical||entry||magic&&[0,1,4,6,7,8].includes(group)),'原组合类型命令未支持');
+   if(group===1)fail([0,1].includes(b[0x47])&&!b[0x1d],'原镜头抖动轴或等待模式未支持');
    if(!magic)continue;
    const previous=steps.findLast(s=>!s.command_raw&&s.command_raw!==0),visual=previous?.visual??previous??null;
    const base={segment_index:visual?.segment_index??0,plan_record_index:ri,chr_record_index:record.source_action_index,
     source_skill_index:plan.kind==='combination'?b[0x92]:plan.skill_indices[0],class_raw:b[0x24],action_mask_raw:b[0x78],source:clone(record),
     command_raw:group,visual:visual?{action_index:visual.action_index,action_frame:visual.action_frame,source_frame:visual.source_frame,pair:clone(visual.pair)}:null};
    if(group!==4){steps.push({...base,index:steps.length,logical_frame:0,event:null,effects:[],duration_ms:0,
-    control:{mode_raw:b[0x47],step_i32_raw:v.getInt32(0x1e,true),amount_i32_raw:v.getInt32(5,true)},...(vertical?{vertical_raw_hex:record.raw_hex}:{})});
+    control:{mode_raw:b[0x47],step_i32_raw:v.getInt32(0x1e,true),amount_i32_raw:v.getInt32(5,true)},...(vertical?{vertical_raw_hex:record.raw_hex}:{}),...(entry?{entry_raw_hex:record.raw_hex,entry_width:role.frame_width}:{})});
     if(group===7||group===8){
      const mode=b[0x47],ticks=group===7?({1:7,7:39}[mode]):({1:30,2:30,3:30,4:30,5:30,6:30,7:30,9:39}[mode]);
      fail(Number.isInteger(ticks),'原角色显隐模式尚未恢复');

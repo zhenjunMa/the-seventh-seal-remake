@@ -728,6 +728,12 @@
     },
     "041": {
       "side": "enemy"
+    },
+    "031A1": {
+      "side": "enemy"
+    },
+    "031B2": {
+      "side": "enemy"
     }
   },
   "battle_rosters": {
@@ -811,7 +817,13 @@
     "m71072",
     "m71073",
     "m71074",
-    "m71075"
+    "m71075",
+    "m01040-5",
+    "m01050-3",
+    "m01022-1",
+    "m01022-2",
+    "m03021",
+    "m03021-41"
   ],
   "maps": {
     "M01060": {
@@ -836,8 +848,26 @@
       "npcs": [10,11,13,14]
     },
     "M01040": {
-      "npcs": [10,11,12,13,14,15,16,17,18,19,20,21,22,23],
-      "entry": true
+      "npcs": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23
+      ],
+      "entry": true,
+      "triggers": [
+        31
+      ]
     },
     "M01041": {
       "npcs": [11,12,13,14,15]
@@ -866,8 +896,20 @@
       "npcs": [10]
     },
     "M71010": {
-      "export": {"story": false},
-      "npcs": []
+      "export": {
+        "story": false
+      },
+      "npcs": [],
+      "objects": [
+        {
+          "index": 18,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 19,
+          "handler": "keyed-chest"
+        }
+      ]
     },
     "M71011": {
       "export": {"story": false},
@@ -898,28 +940,108 @@
       "triggers": [1, 2, 3]
     },
     "M71020": {
-      "export": {"story": false},
-      "npcs": []
+      "export": {
+        "story": false
+      },
+      "npcs": [],
+      "objects": [
+        {
+          "index": 3,
+          "handler": "keyed-chest"
+        }
+      ]
     },
     "M71030": {
-      "export": {"story": false},
-      "npcs": []
+      "export": {
+        "story": false
+      },
+      "npcs": [],
+      "objects": [
+        {
+          "index": 3,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 4,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 5,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 6,
+          "handler": "keyed-chest"
+        }
+      ]
     },
     "M71040": {
-      "export": {"story": false},
-      "npcs": []
+      "export": {
+        "story": false
+      },
+      "npcs": [],
+      "objects": [
+        {
+          "index": 3,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 4,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 5,
+          "handler": "keyed-chest"
+        }
+      ]
     },
     "M71050": {
       "npcs": [],
-      "triggers": [3]
+      "triggers": [
+        3
+      ],
+      "objects": [
+        {
+          "index": 6,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 7,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 8,
+          "handler": "keyed-chest"
+        }
+      ]
     },
     "M71060": {
-      "export": {"story": false},
-      "npcs": []
+      "export": {
+        "story": false
+      },
+      "npcs": [],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "keyed-chest"
+        }
+      ]
     },
     "M01050": {
-      "triggers": [31],
-      "npcs": [10,11,13,14,15,16,17,18]
+      "triggers": [
+        29,
+        31
+      ],
+      "npcs": [
+        10,
+        11,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ]
     },
     "M03039": {
       "npcs": [10,11]
@@ -1520,6 +1642,68 @@
           "index": 9,
           "handler": "stationary-chest"
         }
+      ]
+    },
+    "M01021": {
+      "npcs": [
+        12
+      ],
+      "triggers": [
+        31
+      ]
+    },
+    "M01021-1": {
+      "npcs": []
+    },
+    "M01021-2": {
+      "npcs": []
+    },
+    "M01022": {
+      "npcs": [
+        10
+      ]
+    },
+    "M01022-1": {
+      "npcs": []
+    },
+    "M03020-1": {
+      "npcs": []
+    },
+    "M03021-2": {
+      "npcs": []
+    },
+    "M03021-3": {
+      "npcs": []
+    },
+    "M03021-4": {
+      "npcs": [
+        10,
+        11
+      ],
+      "setup": true
+    },
+    "M03023": {
+      "npcs": [
+        11
+      ]
+    },
+    "M03022": {
+      "npcs": []
+    },
+    "M03020": {
+      "npcs": []
+    },
+    "M03010": {
+      "npcs": []
+    },
+    "M29012": {
+      "npcs": [
+        11
+      ]
+    },
+    "M29011": {
+      "npcs": [
+        11
       ]
     }
   },

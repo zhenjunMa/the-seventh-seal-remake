@@ -36,7 +36,7 @@ export class NativeAssemblyOracle {
     while(pc!==0x7fffffff){if(++steps>250000)throw Error('Oracle step bound exceeded');const inst=this.code.get(pc);if(!inst)throw Error(`Missing ${pc.toString(16)}`);let next=this.next.get(pc);const [d,s,t]=inst.args.split(',').map(x=>x.trim());const v=()=>this.value(s);const left=()=>this.value(d);switch(inst.op){
       case'PUSH':this.push(left());break;case'POP':this.assign(d,this.pop());break;case'MOV':this.assign(d,v());break;
       case'LEA':this.assign(d,this.address(s.slice(1,-1)));break;case'MOVSX':{let x=v();if(s.startsWith('byte ptr')&&x&128)x-=256;this.assign(d,x);break;}
-      case'ADD':this.assign(d,(left()+v())|0);break;case'SUB':this.assign(d,(left()-v())|0);break;case'AND':this.assign(d,left()&v());break;case'OR':this.assign(d,left()|v());break;case'XOR':this.assign(d,left()^v());break;
+      case'ADD':this.assign(d,(left()+v())|0);break;case'SUB':this.assign(d,(left()-v())|0);break;case'AND':{const value=left()&v();this.assign(d,value);this.flags=BigInt(value);this.unsignedFlags=this.flags;this.zero=value===0;break;}case'OR':this.assign(d,left()|v());break;case'XOR':this.assign(d,left()^v());break;
       case'NEG':this.assign(d,(-left())|0);break;
       case'IMUL':this.assign(d,Math.imul(t?this.value(s):left(),this.value(t??s)));break;
       case'SAR':this.assign(d,left()>>v());break;case'SHR':this.assign(d,left()>>>v());break;
@@ -46,7 +46,7 @@ export class NativeAssemblyOracle {
       case'DIV':{const n=(BigInt(this.reg.EDX>>>0)<<32n)+BigInt(this.reg.EAX>>>0),den=BigInt(left()>>>0);const q=n/den,r=n%den;if(q>4294967295n)throw Error('DIV overflow');this.reg.EAX=Number(q)|0;this.reg.EDX=Number(r)|0;break;}
       case'CMP':this.flags=BigInt(left())-BigInt(v());this.unsignedFlags=BigInt(left()>>>0)-BigInt(v()>>>0);this.zero=this.flags===0n;break;case'TEST':this.flags=BigInt(left()&v());this.unsignedFlags=this.flags;this.zero=this.flags===0n;break;
       case'JC':if(this.unsignedFlags<0n)next=left()>>>0;break;case'JBE':if(this.unsignedFlags<=0n)next=left()>>>0;break;case'JA':if(this.unsignedFlags>0n)next=left()>>>0;break;case'JNC':case'JAE':if(this.unsignedFlags>=0n)next=left()>>>0;break;case'SETZ':this.assign(d,this.zero?1:0);break;case'SETNZ':this.assign(d,this.zero?0:1);break;
-      case'JMP':next=left()>>>0;break;case'JZ':if(this.zero)next=left()>>>0;break;case'JNZ':if(!this.zero)next=left()>>>0;break;case'JG':if(this.flags>0n)next=left()>>>0;break;case'JGE':if(this.flags>=0n)next=left()>>>0;break;case'JL':if(this.flags<0n)next=left()>>>0;break;case'JLE':if(this.flags<=0n)next=left()>>>0;break;
+      case'JMP':next=left()>>>0;break;case'JZ':if(this.zero)next=left()>>>0;break;case'JNZ':if(!this.zero)next=left()>>>0;break;case'JG':if(this.flags>0n)next=left()>>>0;break;case'JGE':if(this.flags>=0n)next=left()>>>0;break;case'JL':if(this.flags<0n)next=left()>>>0;break;case'JLE':if(this.flags<=0n)next=left()>>>0;break;case'JNS':if((this.flags&0x80000000n)===0n)next=left()>>>0;break;
       case'STOSD.REP':while(this.reg.ECX){this.write(this.reg.EDI,this.reg.EAX);this.reg.EDI=(this.reg.EDI+4)|0;this.reg.ECX--;}break;
       case'MOVSD.REP':while(this.reg.ECX){this.write(this.reg.EDI,this.read(this.reg.ESI));this.reg.EDI=(this.reg.EDI+4)|0;this.reg.ESI=(this.reg.ESI+4)|0;this.reg.ECX--;}break;
       case'MOVSB.REP':while(this.reg.ECX){this.write(this.reg.EDI,this.read(this.reg.ESI,1),1);this.reg.EDI++;this.reg.ESI++;this.reg.ECX--;}break;

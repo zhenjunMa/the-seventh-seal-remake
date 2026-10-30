@@ -145,7 +145,7 @@ def prepare_role(ident, status):
             raise ValueError(f'Enemy {ident} skill {index}: unsupported status handler {effect[1]} / mode {effect[0xb]}')
         commands = [(a['type_raw'], a['u32_at_0x01_raw']) for a in skill['actions'] if a['type_raw']]
         carrier = any(group != 11 for _, group in commands)
-        if any(kind != 1 or group not in ((0, 4, 6, 7, 8, 11) if carrier else (11,)) for kind, group in commands):
+        if any(kind != 1 or group not in ((0, 1, 4, 6, 7, 8, 11) if carrier else (11,)) for kind, group in commands):
             raise ValueError(f'Enemy {ident} skill {index}: unsupported native action command')
         handler = 'effect-carrier' if carrier else 'direct'
         retained = ai['skills'][index]

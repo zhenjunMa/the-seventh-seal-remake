@@ -142,6 +142,21 @@ export class BattleController {
     Object.assign(actor,verticalActorPatch(state,actor));this.verticalClocks.set(actorId,{at,state});return copy(state);
   }
   nativeVerticalFor(actorId){return nativeVerticalState(this.actor(actorId));}
+  beginNativeEntry(actorId,raw,width){
+    const actor=this.actor(actorId),b=Uint8Array.from(raw.match(/../g),x=>parseInt(x,16)),v=new DataView(b.buffer);
+    requireValue(actor&&b.length===176&&b[0]===1&&v.getUint32(1,true)===9&&b[0x47]===4&&Number.isInteger(width)&&width>0,'原入场位移来源无效');
+    const origin={x:actor.native_x_raw,y:actor.native_y_raw,z:actor.native_z_raw};
+    actor.native_x_raw=-350-width;actor.native_y_raw=actor.native_home_y_raw;actor.native_z_raw=0;actor.immune_raw=1;
+    actor.native_after_raw={...actor.native_after_raw,'0x0521a795':origin.x,'0x0521a799':origin.y,'0x0521a79d':origin.z,
+      '0x0521a77d':actor.native_x_raw,'0x0521a781':actor.native_y_raw,'0x0521a785':0,'0x0521f5f5':1,'0x0521f672':1};
+    this.log({type:'battle-native-entry-placement',actor_id:actorId,width,origin,...{x:actor.native_x_raw,y:actor.native_y_raw,z:0}});
+    return {origin_x:origin.x,x:actor.native_x_raw};
+  }
+  advanceNativeEntry(actorId,x){
+    const actor=this.actor(actorId);actor.native_x_raw=x;actor.immune_raw=0;
+    // 51E410 clears F672/immunity before constructing the source path.
+    actor.native_after_raw={...actor.native_after_raw,'0x0521a77d':x,'0x0521a79d':0,'0x0521f5f5':0,'0x0521f672':0};
+  }
   beginNativeAppearance(actorId,raw){
     requireValue(typeof raw==='string'&&/^[0-9a-f]{352}$/i.test(raw),'原入场动作记录缺失');
     const b=Uint8Array.from(raw.match(/../g),x=>parseInt(x,16)),actor=this.actor(actorId),view=new DataView(b.buffer);

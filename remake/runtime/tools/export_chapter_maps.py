@@ -119,24 +119,34 @@ def _role_graphics(role_id, outputs):
     actions, unexported = [], []
     for action in dgp.actions:
         frames, dirs = action["frames_per_direction"], action["directions"]
-        if frames <= 0 or dirs <= 0:
-            raise DGPError("Chapter role has an empty action group")
         raw = dgp.raw_actions[action["index"]]
+        if frames == 0:
+            # Keep the original zero-length descriptor and channel binding;
+            # it supplies no animation atlas. Do not synthesize a first frame.
+            unexported.append(dict(**action, reason='Source action declares zero physical frames; descriptor and native channel binding retained without an atlas'))
+            continue
+        if frames < 0 or dirs <= 0:
+            raise DGPError(f"{name} action {action['index']} has invalid frame geometry")
         if action['first_frame'] + frames * dirs > dgp.frame_count:
             # 469F50 binds each channel to its first source action. Some ROLE
             # files retain a later duplicate whose frame base is beyond EOF;
             # preserve that source record without inventing an atlas for it.
             previous = next((row for row in actions if bytes.fromhex(row['raw_hex'])[0x7e] == raw[0x7e]), None)
-            if previous is None or raw[0x7e] >= 20:
-                raise DGPError(f"{name} action {action['index']} exceeds physical frame pool {dgp.frame_count}")
-            unexported.append(dict(**action, shadowed_by_action=previous['index'],
-                reason='Source frame range exceeds the physical pool; native469F50 selects the earlier action for this channel'))
-            continue
+            if previous is not None and raw[0x7e] < 20:
+                unexported.append(dict(**action, shadowed_by_action=previous['index'],
+                    reason='Source frame range exceeds the physical pool; native469F50 selects the earlier action for this channel'))
+                continue
         sheet = Image.new("RGBA", (dgp.width * frames, dgp.height * dirs))
+        not_drawn = []
         for direction in range(dirs):
             for frame in range(frames):
-                sheet.paste(dgp.decode(action["first_frame"] + direction * frames + frame),
-                            (frame * dgp.width, direction * dgp.height))
+                physical = action["first_frame"] + direction * frames + frame
+                if physical >= dgp.frame_count:
+                    # Native52AF12 ->52AF59 returns0 before main/shadow draw.
+                    # Preserve the source time slot as a no-draw atlas cell.
+                    not_drawn.append(dict(direction=direction, frame=frame, physical_frame=physical))
+                else:
+                    sheet.paste(dgp.decode(physical), (frame * dgp.width, direction * dgp.height))
         target = RUNTIME / f"web/assets/chapter_roles/{role_id}/action_{action['index']:02}.png"
         target.parent.mkdir(parents=True, exist_ok=True)
         save_png(sheet, target)
@@ -159,6 +169,11 @@ def _role_graphics(role_id, outputs):
                             sequence_rule="(raw+0x0D &0x0F)==0 selects byte+0x16+logical_index; otherwise logical_index. Add first_frame and direction*physical_frame_count.",
                             sequence_evidence=["ev_0ffb771246c6d16325580fe6f266e66f57fbb84cfe7a3be766ff48234043fbab"],
                             source_offset=0x43 + action["index"] * 0xAC))
+        if not_drawn:
+            actions[-1].update(native_not_drawn_frames=not_drawn, source_frame_pool=dgp.frame_count,
+                native_frame_gate_evidence='ev_5cc4b952b2f05a12a77f52ac61c63416588a1fcda1f101ebcd71f8132e2ca57b')
+    if not actions:
+        raise DGPError(f"{name} has no drawable native action")
     result = dict(id=role_id, name=dgp.metadata()["name_cp950"],
                 source=dict(path=name, sha256=dgp.sha256), frame_width=dgp.width,
                 frame_height=dgp.height, anchor=dict(x=dgp.anchor_raw[0], y=dgp.anchor_raw[1]),

@@ -178,6 +178,57 @@ class ContentExporterTests(unittest.TestCase):
                                              source.decode(action['first_frame']+direction*action['frame_count']+frame).tobytes())
             self.assertFalse((target / 'web/assets/chapter_roles/106/action_02.png').exists())
 
+    def test_real_role023_preserves_out_of_pool_time_slots_as_native_no_draw(self):
+        from PIL import Image
+        import export_map_shadows as shadows
+        source = DGP(RUNTIME.parents[1] / 'ROLE/023.dgp')
+        self.assertEqual(source.frame_count, 120)
+        self.assertEqual((source.actions[1]['first_frame'], source.actions[1]['frames_per_direction'], source.actions[1]['directions']), (40, 11, 8))
+        oracle = json.loads((RUNTIME / 'tests/fixtures/dgp_geometry_blit_native.json').read_text('utf-8'))
+        self.assertEqual(oracle['game_sha256'], story.GAME_SHA)
+        self.assertIn('0x52af12: CMP ECX, dword ptr [EBP + 0x57]', oracle['blit']['normalized_result'])
+        self.assertIn('0x52af15: JNC 0x0052af59', oracle['blit']['normalized_result'])
+        with tempfile.TemporaryDirectory(prefix='map-role-', dir=RUNTIME / 'tests') as temporary:
+            target = Path(temporary)
+            with patch.object(maps, 'RUNTIME', target), patch.object(maps.export_maps, 'RUNTIME', target):
+                role = maps._role_graphics('023', {})
+            with patch.object(shadows, 'RUNTIME', target), patch.object(shadows, 'WEB', target / 'web'):
+                shadow = shadows.export_shadow_role('023', dict(source='ROLE/023.dgp', actions=[0, 1], event_only=False))['role']
+            self.assertEqual([action['index'] for action in role['actions']], [0, 1])
+            missing = [dict(direction=7, frame=frame, physical_frame=117 + frame) for frame in range(3, 11)]
+            self.assertEqual(role['actions'][1]['native_not_drawn_frames'], missing)
+            self.assertEqual(shadow['actions'][1]['native_not_drawn_frames'], missing)
+            for action, mask in zip(role['actions'], shadow['actions']):
+                geometry = mask['shadow_geometry']
+                with Image.open(target / 'web' / action['sheet'].lstrip('/')) as sheet, Image.open(target / 'web' / mask['shadow_sheet'].lstrip('/')) as atlas:
+                    for direction in range(action['directions']):
+                        for frame in range(action['frame_count']):
+                            physical = action['first_frame'] + direction * action['frame_count'] + frame
+                            rect = (frame * source.width, direction * source.height, (frame + 1) * source.width, (direction + 1) * source.height)
+                            expected = source.decode(physical) if physical < source.frame_count else Image.new('RGBA', (source.width, source.height))
+                            self.assertEqual(sheet.crop(rect).convert('RGBA').tobytes(), expected.tobytes())
+                            width, height = geometry['width'], geometry['height']
+                            restored = Image.new('RGBA', (source.width, source.height))
+                            restored.paste(atlas.crop((frame * width, direction * height, (frame + 1) * width, (direction + 1) * height)), (geometry['x'], geometry['y']))
+                            expected_alpha = shadows.audit_mask(source.shadow_blobs[physical], source.width, source.height) if physical < source.frame_count else bytes(source.width * source.height)
+                            self.assertEqual(restored.getchannel('A').tobytes(), expected_alpha)
+
+    def test_role154_zero_action_retains_its_original_channel17_descriptor(self):
+        from PIL import Image
+        source = DGP(RUNTIME.parents[1] / 'ROLE/154.dgp')
+        self.assertEqual((source.actions[13]['frames_per_direction'], source.actions[13]['first_frame'], source.actions[13]['identifier_raw']), (0, 1424, 17))
+        with tempfile.TemporaryDirectory(prefix='map-role-', dir=RUNTIME / 'tests') as temporary:
+            target = Path(temporary)
+            # This test concerns retained descriptors/bindings. Pixel replay is
+            # independently exercised above; avoid re-decoding1424 big frames.
+            with patch.object(maps, 'RUNTIME', target), patch.object(maps.export_maps, 'RUNTIME', target), patch.object(maps, 'DGP', return_value=source), patch.object(source, 'decode', return_value=Image.new('RGBA', (source.width, source.height))):
+                role = maps._role_graphics('154', {})
+            self.assertEqual(role['source_actions'], source.actions)
+            self.assertEqual([action['index'] for action in role['actions']], list(range(13)))
+            self.assertEqual(role['unexported_actions'][0]['index'], 13)
+            self.assertEqual(role['unexported_actions'][0]['raw_hex'], source.raw_actions[13].hex())
+            self.assertFalse((target / 'web/assets/chapter_roles/154/action_13.png').exists())
+
     def test_map_filename_syntax_is_source_supported_and_path_safe(self):
         root = RUNTIME.parents[1]
         # Every shipped numeric M-family DAT variant remains a distinct source.

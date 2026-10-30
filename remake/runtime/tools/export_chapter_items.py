@@ -435,10 +435,12 @@ def admit_registered_equipment(definitions, seed, story, registration):
                 require(u32(role, 0) == 8 and len(role) >= 8 + 0x30b, f'{ident} reward header')
                 for reward_slot in range(6):
                     at = 8 + 0xe8 + reward_slot * 4
-                    reward_id = u32(role, at)
-                    if not reward_id:
+                    reward_id = i32(role, at)
+                    if reward_id <= 0:
                         continue
-                    item(reward_id)
+                    reward_row, _, _ = item(reward_id)
+                    if reward_row['drop_rate'] == -1:
+                        continue
                     sources.setdefault(str(reward_id), []).append(dict(kind='registered-enemy-reward',
                         map_id=map_id, record_id=record['id'], enemy_id=ident, enemy_slot=enemy_slot,
                         reward_slot=reward_slot, entrance=deepcopy(entrance),
