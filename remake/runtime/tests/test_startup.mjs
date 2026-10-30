@@ -4,6 +4,9 @@ import {StartupSequence} from '../web/core/startup.mjs';
 import {StartupView} from '../web/startup_view.mjs';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
+import {attachSavePreview} from '../web/core/save_preview.mjs';
+
+const png='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGgAAABMCAIAAAAOQ2XWAAAAuUlEQVR4nO3SMREAIAADMUASclCCfDTwc7J3+evc5w7+rbBBuM7jIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhRvMAV4QBnCTMUicAAAAASUVORK5CYII=';
 
 test('startup source, export identity and indexed frames remain reproducible',()=>{
   const manifest=JSON.parse(readFileSync(new URL('../web/data/startup_menu.json',import.meta.url)));
@@ -47,7 +50,7 @@ test('skip, held key, obsolete completion and close do not cross state boundarie
   assert.equal(flow.complete(pending),false);assert.equal(flow.stage,'closed');
 });
 
-function setup({save=null,onNew=async()=>{},onLoad=async()=>{},getSaves,refreshSaves,isBusy,getPreview}={}){
+function setup({save=null,onNew=async()=>{},onLoad=async()=>{},getSaves,refreshSaves,isBusy}={}){
   const nodes=new Map();
   const draws=[];
   const make=()=>{const node={hidden:false,children:[],listeners:{},attributes:{},style:{setProperty(){}},dataset:{},
@@ -57,10 +60,10 @@ function setup({save=null,onNew=async()=>{},onLoad=async()=>{},getSaves,refreshS
     node.classList={contains:name=>(node.className??'').split(' ').includes(name)};return node;};
   const $=id=>{if(!nodes.has(id))nodes.set(id,make());return nodes.get(id);};
   globalThis.ResizeObserver=class {observe(){}};
-  globalThis.document={createElement:make};
+  globalThis.document={createElement:tag=>Object.assign(make(),{tagName:tag.toUpperCase()})};
   const view=new StartupView({manifest:{assets:{},timing:{button_frame_ms:10},audio:{music:'title',cues:{}}},media:{media:{gametitle:{url:'title.mp4',source:'title.bik'}}},$,
     audio:{setMusic(){},suspend(){},snapshot:()=>({unlocked:false,channels:{master:{volume:1},music:{volume:1}}})},
-    onNew,onLoad,onResume(){},onStage(){},getSave:()=>save,getSaves,refreshSaves,isBusy,getPreview,status(){},log(){}});
+    onNew,onLoad,onResume(){},onStage(){},getSave:()=>save,getSaves,refreshSaves,isBusy,status(){},log(){}});
   return {view,$,draws};
 }
 const settle=view=>view.tick(view.lastTick+1000);
@@ -95,16 +98,16 @@ test('menu rotation includes source frame zero and music groups do not mix at th
   assert.equal(view.galleryTop(17),11);assert.equal(view.galleryTop(18),18);assert.equal(view.galleryTop(29),23);
 });
 
-test('read preview uses the native thumbnail rectangle and ignores completion after Esc',async()=>{
-  const image={name:'saved-scene'};let resolve;
-  const {view,$,draws}=setup({save:{sha256:'save',payload:'{}'},getPreview:()=>new Promise(done=>resolve=done)});
-  view.showMenu();settle(view);await view.confirm();settle(view);
-  resolve({image,source:'reconstructed',map_id:'M01010'});await new Promise(done=>setImmediate(done));
-  assert.equal($('startMenu').dataset.preview,'reconstructed');
-  assert.ok(draws.some(args=>args[0]===image&&args.slice(1).join(',')==='17,97,104,76'));
-  view.previewCache.clear();view.requestPreview(view.getSave());await Promise.resolve();
-  view.key('Escape');draws.length=0;resolve({image,source:'stored'});await new Promise(done=>setImmediate(done));
-  assert.equal(view.submenu,null);assert.equal(view.previewCache.size,0);assert.ok(!draws.some(args=>args[0]===image));
+test('read preview is an inline image created with the row and removed on Esc',async()=>{
+  const save=attachSavePreview({sha256:'save',payload:'{}'},png);
+  const {view,$}=setup({save});
+  view.showMenu();settle(view);const opening=view.confirm();
+  const preview=$('startupOptions').children.find(node=>node.tagName==='IMG');
+  assert.equal(preview.tagName,'IMG');assert.equal(preview.src,png);assert.equal(preview.decoding,'sync');
+  assert.deepEqual([preview.style.left,preview.style.top,preview.width,preview.height],['17px','97px',104,76]);
+  assert.equal(preview.onload,undefined);assert.equal(preview.onerror,undefined);
+  await opening;settle(view);view.key('Escape');
+  assert.equal(view.submenu,null);assert.equal(saveButtons($).length,0);
 });
 
 test('title lists ordinary and quick files, refreshes on entry and loads the selected slot',async()=>{
@@ -160,31 +163,18 @@ test('read wheel only scrolls the read panel and a visible row click loads its f
   view.submenu='extras';wheel(event);assert.equal(prevented,before);
 });
 
-test('read previews fill every visible row, survive selection changes and stay with their slots when scrolling',async()=>{
-  const entries=numberedSaves(),requests=[];
-  const {view,$,draws}=setup({getSaves:()=>entries,getPreview:save=>new Promise(resolve=>requests.push({save,resolve}))});
-  const finish=async(slot,image,source='stored')=>{requests.find(request=>request.save.sha256===slot).resolve({image,source});await new Promise(done=>setImmediate(done));};
-  const thumbnails=()=>draws.filter(args=>args[0]?.name?.startsWith('thumbnail-')).map(args=>[args[0].name,...args.slice(1)]);
-  const first={name:'thumbnail-00'},second={name:'thumbnail-01'},third={name:'thumbnail-02'},quick={name:'thumbnail-quick'};
-  view.showMenu();settle(view);await view.confirm();settle(view);await Promise.resolve();
-  assert.deepEqual(requests.map(request=>request.save.sha256),['00','01','02']);
-  await finish('01',second);await finish('02',third,'reconstructed');
-  assert.equal($('startMenu').dataset.preview,'loading');
-  draws.length=0;view.draw();
-  assert.deepEqual(thumbnails(),[['thumbnail-01',17,205,104,76],['thumbnail-02',17,313,104,76]]);
-  view.key('ArrowDown');await Promise.resolve();assert.equal(requests.length,3);assert.equal($('startMenu').dataset.preview,'stored');
-  view.key('End');await Promise.resolve();
-  assert.deepEqual(requests.map(request=>request.save.sha256),['00','01','02','18','19','quick']);
-  draws.length=0;await finish('00',first);assert.deepEqual(thumbnails(),[]);
-  await finish('quick',quick);assert.equal($('startMenu').dataset.preview,'stored');
-  view.key('ArrowUp');await Promise.resolve();assert.equal($('startMenu').dataset.preview,'loading');
-  await finish('18',{name:'thumbnail-18'});assert.equal($('startMenu').dataset.preview,'loading');
-  await finish('19',{name:'thumbnail-19'});assert.equal($('startMenu').dataset.preview,'stored');
-  draws.length=0;view.draw();
-  assert.deepEqual(thumbnails(),[['thumbnail-18',17,97,104,76],['thumbnail-19',17,205,104,76],['thumbnail-quick',17,313,104,76]]);
-  view.key('Home');await Promise.resolve();assert.equal(requests.length,6);
-  draws.length=0;view.draw();
-  assert.deepEqual(thumbnails(),[['thumbnail-00',17,97,104,76],['thumbnail-01',17,205,104,76],['thumbnail-02',17,313,104,76]]);
+test('read rows directly show stored previews and leave legacy rows empty through scrolling',async()=>{
+  const entries=numberedSaves();
+  for(const index of [0,2,19,20])entries[index].envelope=attachSavePreview(entries[index].envelope,png);
+  const {view,$}=setup({getSaves:()=>entries});
+  const thumbnails=()=>saveButtons($).map((_button,row)=>$('startupOptions').children.find(node=>node.tagName==='IMG'&&node.style.top===97+108*row+'px')?.src??null);
+  view.showMenu();settle(view);await view.confirm();settle(view);
+  assert.deepEqual(thumbnails(),[png,null,png]);
+  view.key('ArrowDown');assert.deepEqual(thumbnails(),[png,null,png]);
+  view.key('End');assert.equal(view.listTop,18);assert.deepEqual(thumbnails(),[null,png,png]);
+  view.key('Home');assert.deepEqual(thumbnails(),[png,null,png]);
+  entries[0].envelope={...entries[0].envelope,sha256:'changed'};
+  view.renderOptions();assert.deepEqual(thumbnails(),[null,null,png]);
 });
 
 test('an external quick load locks title keyboard, mouse confirmation and new game until it finishes',async()=>{
