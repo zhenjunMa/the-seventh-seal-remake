@@ -40,7 +40,7 @@ function fragments(scene,key){
 export function transitionScene(Phaser,runtime){
   return class TransitionScene extends Phaser.Scene{
     constructor(){super({key:'transition',active:true});}
-    create(){this.sys.setVisible(false);runtime.transitions=new GpuBattleTransition(this,runtime);}
+    create(){runtime.configureCamera(this.cameras.main);this.sys.setVisible(false);runtime.transitions=new GpuBattleTransition(this,runtime);}
   };
 }
 
@@ -58,7 +58,7 @@ export class GpuBattleTransition {
     this.active=true;
     try{
       check();after=paintBattle();this.capture(before);this.capture(after);
-      objects.push(scene.add.image(0,0,after.key).setOrigin(0));
+      objects.push(scene.add.image(0,0,after.key).setOrigin(0).setDisplaySize(640,480));
       let effect,tiles=[];
       if([0,2,3].includes(kind)){
         for(let y=0;y<480;y+=4)for(let x=0;x<640;x+=4){

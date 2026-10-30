@@ -2,7 +2,8 @@ import {drawingContext,registerGlyph} from '../phaser/rendering/recorded_surface
 import {createDeathParticleSurface} from '../death_particles.mjs';
 const frame=()=>new Promise(resolve=>requestAnimationFrame(resolve));
 const assert=(condition,message)=>{if(!condition)throw new Error(message);};
-const pixel=(renderer,x,y)=>{const data=new Uint8Array(4);renderer.gl.readPixels(x,renderer.height-1-y,1,1,renderer.gl.RGBA,renderer.gl.UNSIGNED_BYTE,data);return [...data];};
+const pixel=(renderer,x,y)=>{const data=new Uint8Array(4),scale=renderer.width/640;
+  renderer.gl.readPixels(Math.floor((x+.5)*scale),renderer.height-1-Math.floor((y+.5)*scale),1,1,renderer.gl.RGBA,renderer.gl.UNSIGNED_BYTE,data);return [...data];};
 const near=(actual,expected)=>actual.every((value,index)=>Math.abs(value-expected[index])<=1);
 const flush=game=>{const r=game.renderer;r.preRender();game.scene.render(r);r.postRender();};
 async function until(test,message){for(let count=0;!test();count++){assert(count<180,message);await frame();}}

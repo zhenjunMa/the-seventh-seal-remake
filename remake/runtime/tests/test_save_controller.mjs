@@ -89,7 +89,7 @@ test('unavailable boot saves do not throw and a readable second slot remains ava
 
 test('F4 and F5 precede active views, cancel browser defaults, ignore repeats and always use the quick slot',async()=>{
   const calls=[],listeners=new Map(),nodes=new Map();
-  const $=id=>{if(!nodes.has(id))nodes.set(id,{});return nodes.get(id);};
+  const $=id=>{if(!nodes.has(id))nodes.set(id,{setAttribute(){}});return nodes.get(id);};
   const previousDocument=globalThis.document,previousWindow=globalThis.window;
   globalThis.document={activeElement:{tagName:'INPUT'},addEventListener(){}};
   globalThis.window={addEventListener:(kind,handler)=>listeners.set(kind,handler)};

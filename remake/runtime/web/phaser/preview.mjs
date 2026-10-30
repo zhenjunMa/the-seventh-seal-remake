@@ -107,17 +107,21 @@ function drawMovementOverlay(){
   $('motionStatus').textContent=`位置 ${world.location.x.toFixed(1)}, ${world.location.y.toFixed(1)} · ${blocked?'受阻踏步':['待机','行走','奔跑'][viewState.action]} · 动画帧 ${viewState.frame} · 回缩 ${(viewState.collisionFeedback?.x??0).toFixed(2)}, ${(viewState.collisionFeedback?.y??0).toFixed(2)}`;
 }
 function compareMap(){
-  const before=mode;showMap();
+  const before=mode,smoothing=runtime.actorSmoothing,renderScale=runtime.fixedRenderScale;
+  runtime.setActorSmoothing(false);runtime.fixedRenderScale=1;runtime.resize();showMap();
   const expected=canvas(640,480,c=>{c.imageSmoothingEnabled=false;drawGameScene(c,{...mapOptions(),width:640,height:480});});
   const actual=canvas(640,480);runtime.capture('exploration',actual);
   const a=actual.getContext('2d').getImageData(0,0,640,480).data,b=expected.getContext('2d').getImageData(0,0,640,480).data;
   let different=0,maxDelta=0;
   for(let i=0;i<a.length;i+=4){let diff=false;for(let c=0;c<4;c++){const delta=Math.abs(a[i+c]-b[i+c]);maxDelta=Math.max(maxDelta,delta);if(delta>1)diff=true;}if(diff)different++;}
   const result={differentPixels:different,totalPixels:640*480,maxChannelDelta:maxDelta};
-  if(before==='battle')showBattle();
+  runtime.fixedRenderScale=renderScale;runtime.resize();runtime.setActorSmoothing(smoothing);if(before==='battle')showBattle();
   status({...report(),mapComparison:result});return result;
 }
 $('map').onclick=showMap;
+$('actorSmoothing').onclick=()=>{const enabled=runtime.setActorSmoothing(!runtime.actorSmoothing);
+  $('actorSmoothing').textContent=`人物平滑：${enabled?'开':'关'}`;$('actorSmoothing').setAttribute('aria-pressed',String(enabled));status(report());};
+$('actorSmoothing').textContent=`人物平滑：${runtime.actorSmoothing?'开':'关'}`;$('actorSmoothing').setAttribute('aria-pressed',String(runtime.actorSmoothing));
 $('battle').onclick=showBattle;
 $('wallSample').onclick=()=>{movementSample('wall');showMap();};
 $('npcSample').onclick=()=>{movementSample();showMap();};

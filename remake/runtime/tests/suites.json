@@ -521,6 +521,6 @@
     "domains": [
       "engine"
     ],
-    "description": "实际 Phaser Canvas 场景的暂停、切换、重进和资源清理；需在浏览器另行执行"
+    "description": "实际 Phaser WebGL 场景的暂停、切换、重进、xBR 人物平滑与资源清理；需在浏览器另行执行"
   }
 }

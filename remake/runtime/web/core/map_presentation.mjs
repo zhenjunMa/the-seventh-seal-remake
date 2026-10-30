@@ -23,7 +23,7 @@ export function mapPresentation({scene,world,role,action,view,
     const resource=actorAction?.bitmap?{frame_width:actorRole.frame_width,frame_height:actorRole.frame_height,
       anchor_x:actorRole.anchor.x,anchor_y:actorRole.anchor.y}:npc.resource;
     const frame=actorAction?.bitmap?motion.frame:Math.floor(time/(resource.interval_ms??180))%resource.frames_per_direction;
-    queue.push({key:`npc:${npc.id??npc.slot_zero_based??npcIndex}`,layer:npc.layer??2,sort_y:position.y+32,
+    queue.push({key:`npc:${npc.id??npc.slot_zero_based??npcIndex}`,character:true,layer:npc.layer??2,sort_y:position.y+32,
       pose:{image:bitmap,light:actorAction?.intrinsic_bitmap,
         shadow:actorAction?.bitmap?actorAction.shadow_bitmap:npc.shadow_bitmap,
         shadow_geometry:actorAction?.bitmap?actorAction.shadow_geometry:resource.shadow_geometry,
@@ -33,7 +33,7 @@ export function mapPresentation({scene,world,role,action,view,
   if(opening)queue.push(...openingQueue);
   else {
     const offset=role.map_draw_offset??{x:16-(role.anchor?.x??role.anchor_raw?.[0]??0),y:-(role.anchor?.y??role.anchor_raw?.[1]??0)};
-    queue.push({key:'leader',layer:scene.data.role_layer_preview??2,sort_y:at.y+32,
+    queue.push({key:'leader',character:true,layer:scene.data.role_layer_preview??2,sort_y:at.y+32,
       pose:{image:action.bitmap,light:action.intrinsic_bitmap,shadow:action.shadow_bitmap,shadow_geometry:action.shadow_geometry,
         sx:(view.frame??0)*role.frame_width,sy:at.direction*role.frame_height,
         width:role.frame_width,height:role.frame_height,x:at.x+offset.x,y:at.y+offset.y,

@@ -4,15 +4,20 @@ import {ActionClock} from './components/action_clock.mjs';
 import {InterfaceCompositor} from './rendering/interface_compositor.mjs';
 import {transitionScene} from './rendering/battle_transition.mjs';
 import {preparePixelPipeline} from './rendering/pixel_sprite.mjs';
+import {characterPipeline,XBR_PIPELINE} from './rendering/xbr_pipeline.mjs';
+
+function savedSmoothing(){try{return localStorage.getItem('seal:actor-smoothing')!=='off';}catch{return true;}}
 
 export class PhaserRuntime {
   static async create(options){const runtime=new PhaserRuntime(options);await runtime.ready;return runtime;}
-  constructor({parent,focusTarget,onError=error=>{throw error;}}){
+  constructor({parent,focusTarget,renderScale=null,actorSmoothing,onError=error=>{throw error;}}){
     const Phaser=globalThis.Phaser;
     if(Phaser?.VERSION!=='3.90.0')throw new Error('Phaser 3.90.0 本地运行库未加载，请检查 vendor/phaser');
     this.clock=new ActionClock();this.started=false;this.onError=onError;this.parent=parent;
     this.adapters={};this.phase='boot';this.mode=null;this.pauseReasons=new Set();this.destroyed=false;
     this.listeners=new AbortController();this.snapshots=new Set();this.snapshotSerial=0;
+    this.fixedRenderScale=renderScale;this.renderScale=this.preferredRenderScale();this.cameraViews=new Map();
+    this.actorSmoothing=actorSmoothing??(new URLSearchParams(location.search).get('xbr')==='0'?false:savedSmoothing());
     const runtime=this;
     class RuntimeScene extends Phaser.Scene {
       constructor(){super({key:'runtime',active:true});}
@@ -20,7 +25,8 @@ export class PhaserRuntime {
     }
     this.ready=new Promise((resolve,reject)=>{
       this.game=new Phaser.Game({
-        type:Phaser.WEBGL,parent,width:640,height:480,antialias:false,antialiasGL:false,roundPixels:false,version:'0.9-webgl',
+        type:Phaser.WEBGL,parent,width:640*this.renderScale,height:480*this.renderScale,antialias:false,antialiasGL:false,roundPixels:false,version:'0.9-webgl',
+        pipeline:{[XBR_PIPELINE]:characterPipeline(Phaser)},defaultPipeline:XBR_PIPELINE,autoMobilePipeline:false,
         backgroundColor:'#000000',banner:false,audio:{noAudio:true},
         // The existing input controller owns repeat/focus handling; audio owns
         // native cue selection. Do not install competing keyboard/audio systems.
@@ -31,6 +37,8 @@ export class PhaserRuntime {
           try{
             this.exploration=game.scene.getScene('exploration');this.battle=game.scene.getScene('battle');
             this.canvas=game.canvas;this.canvas.setAttribute('aria-label','第七封印游戏画面');
+            game.renderer.pipelines.MULTI_PIPELINE=game.renderer.pipelines.get(XBR_PIPELINE);
+            this.setActorSmoothing(this.actorSmoothing);
             preparePixelPipeline(game.renderer);
             game.renderer.on(Phaser.Renderer.Events.LOSE_WEBGL,()=>this.pause('webgl-main'));
             game.renderer.on(Phaser.Renderer.Events.RESTORE_WEBGL,()=>{
@@ -51,6 +59,7 @@ export class PhaserRuntime {
       });
     });
     this.resizeObserver=new ResizeObserver(()=>this.resize());this.resizeObserver.observe(parent);
+    window.addEventListener('resize',()=>this.resize(),{signal:this.listeners.signal});
   }
   start(adapters){
     this.adapters=adapters;this.started=true;this.skipDelta=true;
@@ -117,11 +126,33 @@ export class PhaserRuntime {
     this.skipDelta=true;this.syncScenes();this.adapters.resume?.();
   }
   presentMap(options){this.exploration.present(options);}
-  resize(){this.game?.scale?.refresh();this.ui?.invalidate(true);}
+  preferredRenderScale(){
+    if(this.fixedRenderScale!==null)return Math.max(1,Math.min(3,Number(this.fixedRenderScale)||1));
+    const size=this.parent.getBoundingClientRect(),fit=Math.min(size.width/640,size.height/480);
+    return Math.max(1,Math.min(3,Math.ceil(fit*(globalThis.devicePixelRatio||1)*4)/4));
+  }
+  configureCamera(camera,{x=320,y=240,zoom=1}={}){
+    this.cameraViews.set(camera,{x,y,zoom});
+    camera.setZoom(zoom*this.renderScale).setScroll(x-camera.width/2,y-camera.height/2);
+  }
+  setActorSmoothing(enabled,{persist=false}={}){
+    this.actorSmoothing=Boolean(enabled);const pipeline=this.game?.renderer?.pipelines?.get(XBR_PIPELINE);
+    if(pipeline){pipeline.flush();pipeline.enabled=this.actorSmoothing;}
+    if(persist)try{localStorage.setItem('seal:actor-smoothing',enabled?'on':'off');}catch{/* Session toggle still works. */}
+    return this.actorSmoothing;
+  }
+  resize(){
+    const scale=this.preferredRenderScale();
+    if(this.game?.isBooted&&scale!==this.renderScale){
+      this.renderScale=scale;this.game.scale.setGameSize(640*scale,480*scale);
+      for(const [camera,view]of this.cameraViews)this.configureCamera(camera,view);
+    }
+    this.game?.scale?.refresh();this.ui?.invalidate(true);
+  }
   captureTexture(source='exploration'){
     if(!this.transitions.active)for(const previous of [...this.snapshots])previous.destroy();
     const scene=this[source],camera=scene.cameras.main,key=`seal:snapshot:${++this.snapshotSerial}`;
-    const texture=scene.textures.addDynamicTexture(key,640,480);texture.setFilter(1);
+    const texture=scene.textures.addDynamicTexture(key,640*this.renderScale,480*this.renderScale);texture.setFilter(1);
     texture.camera.setScroll(camera.scrollX,camera.scrollY).setZoom(camera.zoom).setRotation(camera.rotation);
     const redraw=()=>{scene.sys.displayList.depthSort();texture.clear();texture.fill(camera.backgroundColor.color,1);texture.draw(scene.children.list.filter(object=>object.willRender(camera)));};redraw();
     const snapshot={gpuTexture:true,key,width:640,height:480,redraw,destroy:()=>{if(this.snapshots.delete(snapshot))scene.textures.remove(key);}};
@@ -142,7 +173,7 @@ export class PhaserRuntime {
     }finally{this.setMode(previous);}
   }
   snapshot(){return {version:this.game.config.gameVersion,phaser:globalThis.Phaser.VERSION,renderer:'WEBGL',scene:this.mode,interface:this.ui?.snapshot(),
-    phase:this.phase,paused:this.paused,
+    phase:this.phase,paused:this.paused,renderScale:this.renderScale,actorSmoothing:this.actorSmoothing,
     scenes:Object.fromEntries(['exploration','battle'].map(key=>[key,{active:this[key].sys.isActive(),visible:this[key].sys.isVisible(),sleeping:this[key].sys.isSleeping(),paused:this[key].sys.isPaused(),time:this[key].clock.time}])),
     mapActors:this.exploration.actors.size,battleObjects:Object.fromEntries(Object.entries(this.battle.surface.pools).map(([key,pool])=>[key,pool.length]))};}
   destroy(){
@@ -150,6 +181,6 @@ export class PhaserRuntime {
     this.destroyed=true;this.started=false;this.listeners.abort();
     this.transitions?.cancel();for(const snapshot of [...this.snapshots])snapshot.destroy();this.ui?.destroy();
     this.clock.destroy();this.exploration?.clock.destroy();this.battle?.clock.destroy();
-    this.resizeObserver.disconnect();this.game.destroy(true);this.adapters={};
+    this.resizeObserver.disconnect();this.game.destroy(true);this.adapters={};this.cameraViews.clear();
   }
 }

@@ -15,7 +15,7 @@
   <h1>Phaser 迁移预览</h1>
   <p>此页使用程序生成的示意图，并读取项目现有战斗定义与规则。用于检查场景、角色、图集适配、命中回调和截图；原素材像素、真实音视频和完整剧情仍需在有素材的环境验收。正式游戏保持原有素材路径和校验。</p>
   <div id="screen"><div id="phaserHost"></div><canvas id="movementOverlay" width="640" height="480"></canvas><canvas id="focus" tabindex="0"></canvas></div>
-  <div><button id="map">探索场景</button><button id="battle" disabled>战斗场景</button><button id="attack" disabled>执行燕突</button><button id="pause">暂停运行</button><button id="compare">核对地图绘制</button><button id="capture">导出截图</button><a href="/">正式游戏</a></div>
+  <div><button id="map">探索场景</button><button id="battle" disabled>战斗场景</button><button id="attack" disabled>执行燕突</button><button id="pause">暂停运行</button><button id="actorSmoothing" aria-pressed="true">人物平滑：开</button><button id="compare">核对地图绘制</button><button id="capture">导出截图</button><a href="/">正式游戏</a></div>
   <div><button id="wallSample">定位墙角</button><button id="npcSample">定位 NPC 接触</button><label><input id="feet" type="checkbox" checked>显示脚底与方向</label></div>
   <p>探索场景使用方向键／WASD 移动，Shift 加速，滚轮缩放。红褐色区域不可通行；黄色为玩家脚底与输入方向，青色为 NPC 脚底，绿色为实际移动方向。持续顶墙会慢速踏步，NPC 接触时停步，让开后继续。此页复用正式移动与接触模块，示意图只代表几何结构。</p>
   <p id="motionStatus"></p>
