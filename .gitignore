@@ -25,6 +25,7 @@
 /*
 !/.gitignore
 !/.gitattributes
+!/LICENSE
 !/README.md
 !/remake/
 
