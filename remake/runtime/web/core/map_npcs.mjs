@@ -121,7 +121,10 @@ export class MapNpcRuntime {
     a.visual.x=accepted.x;a.visual.y=accepted.y;
     if(delta>0)a.contactBlocked=accepted.blocked;
     if(movedX||movedY)a.visual.direction=direction(movedX,movedY);
-    const walking=walk&&!this.held.has(a.npc.id)&&(movedX||movedY||a.action===walk.index&&!a.contactBlocked);
+    // Missing walk channels alias idle. Keep that animation on its native
+    // timer instead of feeding stationary actors into the distance gait.
+    const walking=walk&&walk.index!==a.source.bindings[0]&&!this.held.has(a.npc.id)
+      &&(movedX||movedY||a.action===walk.index&&!a.contactBlocked);
     const display=walking?walk:a.contactBlocked?this.action(a,0):action;
     const frame=walking?a.gait.advance(walk,{dx:movedX,dy:movedY,stride:motion.stride})
       :display.uses_sequence?display.sequence_raw[a.logicalFrame%this.logicalCount(display)]:a.logicalFrame%this.logicalCount(display);
