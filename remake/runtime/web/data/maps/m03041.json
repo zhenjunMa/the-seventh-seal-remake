@@ -1,0 +1,1086 @@
+{
+  "schema": "seventh-seal-runtime-map",
+  "version": 1,
+  "id": "M03041",
+  "name": "图书馆一楼",
+  "name_bytes_hex": "cdbccae9b9ddd2bbc2a5",
+  "width": 688,
+  "height": 528,
+  "background": {
+    "image": "/assets/maps/m03041/background.png",
+    "width": 688,
+    "height": 528,
+    "sources": [
+      {
+        "path": "M03041.DGP",
+        "sha256": "ba5b2a3aa13ba58d8a43189ed89cce649d0a23db9ab906e4e503cc7532347a52"
+      }
+    ],
+    "image_sha256": "33a5fe2a0c5c850b4868573fb4479fcb0e40b02f262f738e569877c711c33ebc",
+    "assembly": {
+      "referenced_frames": 336,
+      "empty_blocks": 0,
+      "columns": 22,
+      "rows": 17,
+      "resource_count": 1,
+      "animation_frame": 0,
+      "assembly": "DAT even-cell frame/resource -> indexed header DGP; 0x4A3770 rectangular branch",
+      "odd_size_policy": "Native tile-origin loops; clip beyond exact DAT dimensions"
+    }
+  },
+  "movement": {
+    "schema": "seventh-seal-map-movement",
+    "version": 1,
+    "map": "M03041",
+    "source": "Map/m03041.dat",
+    "source_sha256": "3d8a27bb59b5e50b4f7ef5c697199c59b5382860f0d55d9e493c4f10e43f19b5",
+    "width": 43,
+    "height": 33,
+    "cell_size": 16,
+    "native_coordinate_shift": 3,
+    "native_to_pixel_scale": 2,
+    "native_step_shift": 1,
+    "native_camera_step_shift": 1,
+    "terrain_rows": [
+      "1111111111111111111111111111111111111111111",
+      "1111111111111111111111111111111111111111111",
+      "1111111111111111111111111111111111111111111",
+      "1111111111111111111111111111111111111111111",
+      "1111111111111111111111111111111111111111111",
+      "1111111111111111111111111111111111111111111",
+      "1111111111111111111111111111111111111111111",
+      "1111111111111111111111111111111111111111111",
+      "1111111111111111111111111111111111111111111",
+      "1111111100000000001111111111111111111111111",
+      "1111000000000000000000111111111111111111111",
+      "1110000000000000000000011011111111111111111",
+      "1000000000000000000000000000000011111111111",
+      "1000000000001000000000000001100000111111111",
+      "1000000000011111000000000011111100111110111",
+      "1000000000111111111110000111111101111101111",
+      "1000000001111111111111110000111011111001111",
+      "1000000111111111111111110000000011111101111",
+      "1000000111111111111111110000000001111110111",
+      "1000011111111111111111110000000000111100111",
+      "1000011111111111111111110000000001111100011",
+      "1000000111111111111111110000000001100000111",
+      "1000000011111111111111100000000000000000111",
+      "1000000001111111111111000000000011000001111",
+      "1100000000011111111111000000000011000011111",
+      "1111000000000001111110000000000111111111111",
+      "1111100000000000111110000000001111111111111",
+      "1111111000000000111100000000001111111111111",
+      "1111111111111111111000000000011111111111111",
+      "1111111111111111110000000000011111111111111",
+      "1111111111111111110000000000011111111111111",
+      "1111111111111111111111111111111111111111111",
+      "1111111111111111111111111111111111111111111"
+    ],
+    "triggers": [
+      {
+        "x": 18,
+        "y": 30,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333034302e646174000000000000000000000003000000060000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 19,
+        "y": 30,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333034302e646174000000000000000000000003000000060000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 20,
+        "y": 30,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333034302e646174000000000000000000000003000000060000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 21,
+        "y": 30,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333034302e646174000000000000000000000003000000060000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 22,
+        "y": 30,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333034302e646174000000000000000000000003000000060000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 23,
+        "y": 30,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333034302e646174000000000000000000000003000000060000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 24,
+        "y": 30,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333034302e646174000000000000000000000003000000060000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 25,
+        "y": 30,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333034302e646174000000000000000000000003000000060000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 26,
+        "y": 30,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333034302e646174000000000000000000000003000000060000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 27,
+        "y": 30,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333034302e646174000000000000000000000003000000060000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 28,
+        "y": 30,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333034302e646174000000000000000000000003000000060000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 14,
+        "y": 25,
+        "id": 2,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333034332e646174000000000000000000000001000000080000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 14,
+        "y": 26,
+        "id": 2,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333034332e646174000000000000000000000001000000080000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 14,
+        "y": 27,
+        "id": 2,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333034332e646174000000000000000000000001000000080000000000000000000000000000000000000000000000"
+      }
+    ],
+    "terrain_rule": "cell byte +0x20 == 0 permits terrain entry",
+    "transition_rule": "0x4A80E0: +0x38 reference, descriptor[0]==0 and descriptor[0x11]!=0 is path-gated",
+    "policy": "Unimplemented native transition gates block. Runtime enables only separately verified exits.",
+    "role_occupancy_rule": "+0x14 is runtime role index + 1, not static terrain",
+    "object_lookup_rule": "+0x2B is runtime object index + 1, not a second collision mask"
+  },
+  "objects": [
+    {
+      "index": 0,
+      "resource_filename": "001.DGP",
+      "source": "mapm/m03041/001.dgp",
+      "resource_sha256": "77699d230fba8c5b881bae54aefa3a189566e7bf892669f4e7e24b97154e1693",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 128,
+      "y_native": 224,
+      "x_world": 256,
+      "y_world": 448,
+      "anchor_x": 32,
+      "anchor_y": 127,
+      "draw_x": 224,
+      "draw_y": 321,
+      "frame_width": 108,
+      "frame_height": 172,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 16,
+      "cell_y": 28,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 256,
+      "sort_y": 480,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m03041/objects/001_frame_000.png",
+      "image_sha256": "686da4d7cadeb19138676a50d71ed53d2efd9b0e353678a939333463634e5540"
+    },
+    {
+      "index": 1,
+      "resource_filename": "002.DGP",
+      "source": "mapm/m03041/002.dgp",
+      "resource_sha256": "68c982ad633e6523aa79525fdef5270e21cac98a802d881cd303b770fa260261",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 240,
+      "y_native": 120,
+      "x_world": 480,
+      "y_world": 240,
+      "anchor_x": 71,
+      "anchor_y": 60,
+      "draw_x": 409,
+      "draw_y": 180,
+      "frame_width": 103,
+      "frame_height": 92,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 30,
+      "cell_y": 15,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 480,
+      "sort_y": 272,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m03041/objects/002_frame_000.png",
+      "image_sha256": "b96b4ca83bd67b95aaadcccf6bc3b76c2393b797d1cebee067dab48840f64325"
+    },
+    {
+      "index": 2,
+      "resource_filename": "003.DGP",
+      "source": "mapm/m03041/003.dgp",
+      "resource_sha256": "dc54f7a701015503c111561dea17e68d2021bf03266ad8a78c3c6dfc615f33fa",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 288,
+      "y_native": 160,
+      "x_world": 576,
+      "y_world": 320,
+      "anchor_x": 32,
+      "anchor_y": 71,
+      "draw_x": 544,
+      "draw_y": 249,
+      "frame_width": 75,
+      "frame_height": 103,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 36,
+      "cell_y": 20,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 576,
+      "sort_y": 352,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m03041/objects/003_frame_000.png",
+      "image_sha256": "4ad9b9f130eaa35e5a1fb9deadfd98dbb1d218d4a9d651b946493a4dd1b2b53b"
+    },
+    {
+      "index": 3,
+      "resource_filename": "004.DGP",
+      "source": "mapm/m03041/004.dgp",
+      "resource_sha256": "834b713d78b839dd916e3ac50c6bafc6b249fff437104809bde0687e6d97663c",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 192,
+      "y_native": 80,
+      "x_world": 384,
+      "y_world": 160,
+      "anchor_x": 32,
+      "anchor_y": 78,
+      "draw_x": 352,
+      "draw_y": 82,
+      "frame_width": 64,
+      "frame_height": 110,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 24,
+      "cell_y": 10,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 384,
+      "sort_y": 192,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m03041/objects/004_frame_000.png",
+      "image_sha256": "45de4f798dc629a40b9123f0d1c63e1b61e18b97839eebfd08ba7860383e195b"
+    },
+    {
+      "index": 4,
+      "resource_filename": "005.DGP",
+      "source": "mapm/m03041/005.dgp",
+      "resource_sha256": "ef5f3c7758dfdbbdf5f0a2ccd7a70b1e0cfe142b7efe4f7d820c7088fb1189af",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 288,
+      "y_native": 144,
+      "x_world": 576,
+      "y_world": 288,
+      "anchor_x": 32,
+      "anchor_y": 98,
+      "draw_x": 544,
+      "draw_y": 190,
+      "frame_width": 64,
+      "frame_height": 130,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 36,
+      "cell_y": 18,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 576,
+      "sort_y": 320,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m03041/objects/005_frame_000.png",
+      "image_sha256": "fa54b2c17fbbe36c987d7c800a2ae1582c976101130f9c380da306e2c2c153dc"
+    },
+    {
+      "index": 5,
+      "resource_filename": "006.DGP",
+      "source": "mapm/m03041/006.dgp",
+      "resource_sha256": "063976701314879f5b48cf79a5ec0e6d6c2b0ddc191c72487b6108513aa942bd",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 144,
+      "y_native": 216,
+      "x_world": 288,
+      "y_world": 432,
+      "anchor_x": 32,
+      "anchor_y": 140,
+      "draw_x": 256,
+      "draw_y": 292,
+      "frame_width": 64,
+      "frame_height": 187,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 18,
+      "cell_y": 27,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 288,
+      "sort_y": 464,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m03041/objects/006_frame_000.png",
+      "image_sha256": "73cb53cfd90971fb994573db7aded11f41890d38fc95d7553dbe971a7d6a0f66"
+    },
+    {
+      "index": 6,
+      "resource_filename": "007.DGP",
+      "source": "mapm/m03041/007.dgp",
+      "resource_sha256": "d169e9788833cc74f28e5d3d3541be826b99f12139c979ff5eb5c0f926776701",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 160,
+      "y_native": 192,
+      "x_world": 320,
+      "y_world": 384,
+      "anchor_x": 32,
+      "anchor_y": 128,
+      "draw_x": 288,
+      "draw_y": 256,
+      "frame_width": 65,
+      "frame_height": 160,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 20,
+      "cell_y": 24,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 320,
+      "sort_y": 416,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m03041/objects/007_frame_000.png",
+      "image_sha256": "be8e49311653fd33a123c36099321583a889267a752e370e44a6423c60770731"
+    },
+    {
+      "index": 7,
+      "resource_filename": "008.DGP",
+      "source": "mapm/m03041/008.dgp",
+      "resource_sha256": "dd0d55bab861cc69f6cafd42709213c73b82f54ab401e9bce03253019e1ea0bf",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 176,
+      "y_native": 168,
+      "x_world": 352,
+      "y_world": 336,
+      "anchor_x": 32,
+      "anchor_y": 79,
+      "draw_x": 320,
+      "draw_y": 257,
+      "frame_width": 64,
+      "frame_height": 111,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 22,
+      "cell_y": 21,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 352,
+      "sort_y": 368,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m03041/objects/008_frame_000.png",
+      "image_sha256": "a95ee680950696519cd128f88c45628f876875b166d044b5fd42e046af32eb2f"
+    },
+    {
+      "index": 8,
+      "resource_filename": "009.DGP",
+      "source": "mapm/m03041/009.dgp",
+      "resource_sha256": "330d829ffbcac8d1442bc93fa7804eec7d9c972799af2d3052c0ca0405b6dde4",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 48,
+      "y_native": 152,
+      "x_world": 96,
+      "y_world": 304,
+      "anchor_x": 32,
+      "anchor_y": 118,
+      "draw_x": 64,
+      "draw_y": 186,
+      "frame_width": 217,
+      "frame_height": 150,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 6,
+      "cell_y": 19,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 96,
+      "sort_y": 336,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m03041/objects/009_frame_000.png",
+      "image_sha256": "769935b5fb35d1965d05d6fa93cb667d4510689e4622d658390ddf2c08284d7e"
+    },
+    {
+      "index": 9,
+      "resource_filename": "010.DGP",
+      "source": "mapm/m03041/010.dgp",
+      "resource_sha256": "3892418276f733b5a922a2ed7ef78a632f6f3ea13398de502ff1395c8c29f602",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 288,
+      "y_native": 128,
+      "x_world": 576,
+      "y_world": 256,
+      "anchor_x": 55,
+      "anchor_y": 156,
+      "draw_x": 521,
+      "draw_y": 100,
+      "frame_width": 107,
+      "frame_height": 217,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 36,
+      "cell_y": 16,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 576,
+      "sort_y": 288,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m03041/objects/010_frame_000.png",
+      "image_sha256": "0ff2c280664af2cf726c206f0471eb5e211318b097829617f40857f3f7f6b8d7"
+    },
+    {
+      "index": 10,
+      "resource_filename": "011.DGP",
+      "source": "mapm/m03041/011.dgp",
+      "resource_sha256": "9e11cf0c301c51411a471fdd774666af57da9374830aa7fb8d9919b78962b779",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 176,
+      "y_native": 136,
+      "x_world": 352,
+      "y_world": 272,
+      "anchor_x": 187,
+      "anchor_y": 93,
+      "draw_x": 165,
+      "draw_y": 179,
+      "frame_width": 219,
+      "frame_height": 160,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 22,
+      "cell_y": 17,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 352,
+      "sort_y": 304,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m03041/objects/011_frame_000.png",
+      "image_sha256": "8a9f826c4d0d9a41e7f605093cd6611d5240e2bc3bfc486b141e251ef2d07758"
+    },
+    {
+      "index": 11,
+      "resource_filename": "012.DGP",
+      "source": "mapm/m03041/012.dgp",
+      "resource_sha256": "14082a2fd8505b5ff3700754afc00764ddf6c4444bb34eb724cadf2f09a8016f",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 288,
+      "y_native": 160,
+      "x_world": 576,
+      "y_world": 320,
+      "anchor_x": 32,
+      "anchor_y": 87,
+      "draw_x": 544,
+      "draw_y": 233,
+      "frame_width": 64,
+      "frame_height": 119,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 36,
+      "cell_y": 20,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 576,
+      "sort_y": 352,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m03041/objects/012_frame_000.png",
+      "image_sha256": "2299021877371d3283b4d9b4184403d529a8c60bb666a44d5b4788d176020de7"
+    },
+    {
+      "index": 12,
+      "resource_filename": "013.DGP",
+      "source": "mapm/m03041/013.dgp",
+      "resource_sha256": "042465b57f264bb96d5e42ec18c3f33044a2ca350354c44b407d1511a1be43a4",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 320,
+      "y_native": 208,
+      "x_world": 640,
+      "y_world": 416,
+      "anchor_x": 32,
+      "anchor_y": 190,
+      "draw_x": 608,
+      "draw_y": 226,
+      "frame_width": 64,
+      "frame_height": 255,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 40,
+      "cell_y": 26,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 640,
+      "sort_y": 448,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m03041/objects/013_frame_000.png",
+      "image_sha256": "f007bd5b8470875826b1373027859e0a8f55ccc94e470062ff08f5b2f8e06bf7"
+    },
+    {
+      "index": 13,
+      "resource_filename": "014.DGP",
+      "source": "mapm/m03041/014.dgp",
+      "resource_sha256": "95a2150acc0e0bf5c8922b88fa49a77bae3101683052a2b0e29d72b8141b8c55",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 224,
+      "y_native": 240,
+      "x_world": 448,
+      "y_world": 480,
+      "anchor_x": 32,
+      "anchor_y": 185,
+      "draw_x": 416,
+      "draw_y": 295,
+      "frame_width": 148,
+      "frame_height": 217,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 28,
+      "cell_y": 30,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 448,
+      "sort_y": 512,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m03041/objects/014_frame_000.png",
+      "image_sha256": "bf9540f8b2085239ba3b3ff371ec7cb71fe169bee9c0275f70036aa479f3ee13"
+    }
+  ],
+  "exits": [
+    {
+      "id": 1,
+      "state": "ready",
+      "cells": [
+        {
+          "x": 18,
+          "y": 30
+        },
+        {
+          "x": 19,
+          "y": 30
+        },
+        {
+          "x": 20,
+          "y": 30
+        },
+        {
+          "x": 21,
+          "y": 30
+        },
+        {
+          "x": 22,
+          "y": 30
+        },
+        {
+          "x": 23,
+          "y": 30
+        },
+        {
+          "x": 24,
+          "y": 30
+        },
+        {
+          "x": 25,
+          "y": 30
+        },
+        {
+          "x": 26,
+          "y": 30
+        },
+        {
+          "x": 27,
+          "y": 30
+        },
+        {
+          "x": 28,
+          "y": 30
+        }
+      ],
+      "target_map": "M03040",
+      "entry": {
+        "x": 688,
+        "y": 368,
+        "direction": 7,
+        "cell_x": 43,
+        "cell_y": 23,
+        "native_x": 344,
+        "native_y": 184
+      },
+      "conditions": [],
+      "source": {
+        "path": "Map/m03041.dat",
+        "sha256": "3d8a27bb59b5e50b4f7ef5c697199c59b5382860f0d55d9e493c4f10e43f19b5",
+        "descriptor_offset": 92530,
+        "descriptor_bytes": 66,
+        "descriptor_hex": "00000000000000000000000000000000006d30333034302e646174000000000000000000000003000000060000000000000000000000000000000000000000000000",
+        "compact_field_expansion_evidence": null,
+        "target_path": "Map/m03040.dat",
+        "target_sha256": "9a69cbfe47b4832e5a23c91f95c2db354439efba421eab292e8b2c44690cef7b",
+        "target_entry_marker": 3,
+        "entry_sort_code": 6,
+        "entry_terrain_raw": 0,
+        "entry_trigger_raw": 0,
+        "entry_scan_cells": [
+          {
+            "x": 43,
+            "y": 22,
+            "offset": 127026
+          },
+          {
+            "x": 44,
+            "y": 22,
+            "offset": 127090
+          },
+          {
+            "x": 43,
+            "y": 23,
+            "offset": 132658
+          },
+          {
+            "x": 44,
+            "y": 23,
+            "offset": 132722
+          }
+        ],
+        "entry_sorted_cells": [
+          {
+            "x": 43,
+            "y": 23
+          },
+          {
+            "x": 44,
+            "y": 23
+          },
+          {
+            "x": 43,
+            "y": 22
+          },
+          {
+            "x": 44,
+            "y": 22
+          }
+        ],
+        "entry_sort": "y descending; stable ties",
+        "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
+        "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
+        "native_evidence": {
+          "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+          "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+          "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+          "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+        }
+      },
+      "execution": "Native transition descriptor only; map-entry TLK/ANM and their once-only checks must complete separately.",
+      "limitations": [
+        "Static source/code evidence; original timing not observed",
+        "Continuous keyboard movement is runtime policy"
+      ]
+    },
+    {
+      "id": 2,
+      "state": "ready",
+      "cells": [
+        {
+          "x": 14,
+          "y": 25
+        },
+        {
+          "x": 14,
+          "y": 26
+        },
+        {
+          "x": 14,
+          "y": 27
+        }
+      ],
+      "target_map": "M03043",
+      "entry": {
+        "x": 176,
+        "y": 352,
+        "direction": 1,
+        "cell_x": 11,
+        "cell_y": 22,
+        "native_x": 88,
+        "native_y": 176
+      },
+      "conditions": [],
+      "source": {
+        "path": "Map/m03041.dat",
+        "sha256": "3d8a27bb59b5e50b4f7ef5c697199c59b5382860f0d55d9e493c4f10e43f19b5",
+        "descriptor_offset": 92596,
+        "descriptor_bytes": 66,
+        "descriptor_hex": "00000000000000000000000000000000006d30333034332e646174000000000000000000000001000000080000000000000000000000000000000000000000000000",
+        "compact_field_expansion_evidence": null,
+        "target_path": "Map/m03043.dat",
+        "target_sha256": "9dedb4f320cc7c42baa783b3ec7f8c493fa93e74d414f17834e489db100bf5f1",
+        "target_entry_marker": 1,
+        "entry_sort_code": 8,
+        "entry_terrain_raw": 0,
+        "entry_trigger_raw": 0,
+        "entry_scan_cells": [
+          {
+            "x": 10,
+            "y": 22,
+            "offset": 58738
+          },
+          {
+            "x": 11,
+            "y": 22,
+            "offset": 58802
+          },
+          {
+            "x": 10,
+            "y": 23,
+            "offset": 61362
+          },
+          {
+            "x": 11,
+            "y": 23,
+            "offset": 61426
+          }
+        ],
+        "entry_sorted_cells": [
+          {
+            "x": 11,
+            "y": 22
+          },
+          {
+            "x": 11,
+            "y": 23
+          },
+          {
+            "x": 10,
+            "y": 22
+          },
+          {
+            "x": 10,
+            "y": 23
+          }
+        ],
+        "entry_sort": "x descending; stable ties",
+        "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
+        "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
+        "native_evidence": {
+          "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+          "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+          "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+          "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+        }
+      },
+      "execution": "Native transition descriptor only; map-entry TLK/ANM and their once-only checks must complete separately.",
+      "limitations": [
+        "Static source/code evidence; original timing not observed",
+        "Continuous keyboard movement is runtime policy"
+      ]
+    }
+  ],
+  "unresolved_triggers": [],
+  "role_layer_preview": 2,
+  "role_layer_note": "Runtime render policy; native role +0xF3 initial value remains unverified",
+  "source": {
+    "path": "Map/m03041.dat",
+    "sha256": "3d8a27bb59b5e50b4f7ef5c697199c59b5382860f0d55d9e493c4f10e43f19b5",
+    "bytes": 138205,
+    "object_resource_base_raw": ".\\MAPM\\M03041\\",
+    "object_resource_base": "mapm/m03041",
+    "object_table_start": 104210,
+    "object_table_end": 108046,
+    "unknown_tail_bytes": 30159,
+    "native_evidence": {
+      "map_loader": "ev_86fb8504826b15ccbea2b3911eaa302ef3f5cbeba7d1b233df62109a9ff38681",
+      "background_draw": "ev_2f7d67b0c8598838be7ac99150b959c5012222fdac93464caaf6732031f0b6e7",
+      "background_resource_loader": "ev_7c353572e07610a7b7e99f989466929dd711a469b13e61acb2597b40ff70e8d4",
+      "transition_path_gate": "ev_1ccb72823e262e4317968f322fcebaf8bd8724a31c215f127d8a68ac77c7b2b2",
+      "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+      "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+      "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+      "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+    },
+    "object_native_evidence": [
+      "ev_86fb8504826b15ccbea2b3911eaa302ef3f5cbeba7d1b233df62109a9ff38681",
+      "ev_6093394ea87d8eb856eef46d19eabdaf9e4735e58a8a18243c3aa798fda1feb5",
+      "ev_c0c0aa49cfd0507760600c7f4f475d3912f8210c498f1896a6fb058f80960b5b",
+      "ev_05dce0e80a25427e4e72280265291973d42f600238f7f832c0320114fed82fb7",
+      "ev_70e72b030eca65a4073731754bc443a383f4b215be5da103ed824b0c1a97727a",
+      "ev_02ca024fc6f9093e9bd38f06052ee2a4f2b2671240c4df2293cf1a50c4e2ae02",
+      "ev_813d397c0060f8bec0ba044eadc20f12cfb9fd8a36a56b19620629114d4ec9a7",
+      "ev_f32a0609558d1fb49c46e1a996c57b11aa62f681842c5ee0f86256aa7b74ffbe",
+      "ev_0781814eee25b61ac8bbd2b2ede6999858f4f7041d5b908f25c58d7a7691a89d",
+      "ev_9abd5ba6645433c0752e35b69015a7f998c9c9b054862a5afdfadc7499e40962"
+    ]
+  },
+  "limitations": [
+    "Static resource/code evidence; original-game entry/transition timing is not observed.",
+    "Background uses its initial animation frame; background animation is not advanced.",
+    "Initial static objects; script changes and object animation are not reconstructed.",
+    "Role depth and continuous keyboard movement are runtime policies.",
+    "NPC source defaults require chapter TLK/ANM changes; asset export executes no story"
+  ],
+  "chapter_npcs": [
+    {
+      "id": "M03041-role-10",
+      "slot_zero_based": 10,
+      "speaker_slot_one_based": 11,
+      "name": "女術士飄",
+      "resource_id": "062",
+      "x": 336,
+      "y": 160,
+      "x_native": 168,
+      "y_native": 80,
+      "direction": 2,
+      "direction_raw_45": 2,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 14,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 2,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m03041.dat",
+        "sha256": "3d8a27bb59b5e50b4f7ef5c697199c59b5382860f0d55d9e493c4f10e43f19b5",
+        "offset": 108046,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M03041-role-11",
+      "slot_zero_based": 11,
+      "speaker_slot_one_based": 12,
+      "name": "男術士飄",
+      "resource_id": "061",
+      "x": 288,
+      "y": 160,
+      "x_native": 144,
+      "y_native": 80,
+      "direction": 1,
+      "direction_raw_45": 1,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 15,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 2,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m03041.dat",
+        "sha256": "3d8a27bb59b5e50b4f7ef5c697199c59b5382860f0d55d9e493c4f10e43f19b5",
+        "offset": 109267,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M03041-role-12",
+      "slot_zero_based": 12,
+      "speaker_slot_one_based": 13,
+      "name": "宿屋老闆飄",
+      "resource_id": "046",
+      "x": 608,
+      "y": 240,
+      "x_native": 304,
+      "y_native": 120,
+      "direction": 5,
+      "direction_raw_45": 5,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 16,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m03041.dat",
+        "sha256": "3d8a27bb59b5e50b4f7ef5c697199c59b5382860f0d55d9e493c4f10e43f19b5",
+        "offset": 110488,
+        "bytes": 1221
+      }
+    }
+  ],
+  "opening_npcs": [
+    {
+      "id": "M03041-role-10",
+      "slot_zero_based": 10,
+      "speaker_slot_one_based": 11,
+      "name": "女術士飄",
+      "resource_id": "062",
+      "x": 336,
+      "y": 160,
+      "x_native": 168,
+      "y_native": 80,
+      "direction": 2,
+      "direction_raw_45": 2,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 14,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 2,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m03041.dat",
+        "sha256": "3d8a27bb59b5e50b4f7ef5c697199c59b5382860f0d55d9e493c4f10e43f19b5",
+        "offset": 108046,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M03041-role-11",
+      "slot_zero_based": 11,
+      "speaker_slot_one_based": 12,
+      "name": "男術士飄",
+      "resource_id": "061",
+      "x": 288,
+      "y": 160,
+      "x_native": 144,
+      "y_native": 80,
+      "direction": 1,
+      "direction_raw_45": 1,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 15,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 2,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m03041.dat",
+        "sha256": "3d8a27bb59b5e50b4f7ef5c697199c59b5382860f0d55d9e493c4f10e43f19b5",
+        "offset": 109267,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M03041-role-12",
+      "slot_zero_based": 12,
+      "speaker_slot_one_based": 13,
+      "name": "宿屋老闆飄",
+      "resource_id": "046",
+      "x": 608,
+      "y": 240,
+      "x_native": 304,
+      "y_native": 120,
+      "direction": 5,
+      "direction_raw_45": 5,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 16,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m03041.dat",
+        "sha256": "3d8a27bb59b5e50b4f7ef5c697199c59b5382860f0d55d9e493c4f10e43f19b5",
+        "offset": 110488,
+        "bytes": 1221
+      }
+    }
+  ],
+  "map_flag_index": 427
+}

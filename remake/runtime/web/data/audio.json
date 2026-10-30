@@ -227,6 +227,56 @@
         "decoded_audio_unchanged": true
       }
     },
+    "sound/mn710-2.wav": {
+      "path": "/assets/audio/mn710-2.mp3",
+      "mime": "audio/mpeg",
+      "sha256": "107057aea9c3de6b93d07591fd49b27b007b4aa209d086637e1822c1c5f2397d",
+      "source": {
+        "path": "sound/mn710-2.wav",
+        "sha256": "107057aea9c3de6b93d07591fd49b27b007b4aa209d086637e1822c1c5f2397d",
+        "bytes": 2691200,
+        "header_hex": "494433030000000009165452434b0000",
+        "declared_extension": ".wav",
+        "observed_encoding": "MPEG Layer III"
+      },
+      "audio": {
+        "codec": "mp3",
+        "sample_rate": 44100,
+        "channels": 2,
+        "bits_per_sample": 0,
+        "duration_seconds": 168.126
+      },
+      "export": {
+        "method": "byte-preserving MPEG suffix correction",
+        "decoded_pcm_md5": "MD5=879f11a204aa66d278519848a767a345",
+        "decoded_audio_unchanged": true
+      }
+    },
+    "sound/E034.wav": {
+      "path": "/assets/audio/E034.wav",
+      "mime": "audio/wav",
+      "sha256": "2d4a9b935ff855e323eacad5e49ba26c64fb258973d07a5f53b3c0bc59b5089a",
+      "source": {
+        "path": "sound/E034.wav",
+        "sha256": "e5856d4cae88112ac91bd083082252e73d81095cacceda2ad980a7335194c91c",
+        "bytes": 106028,
+        "header_hex": "524946468295010057415645666d7420",
+        "declared_extension": ".wav",
+        "observed_encoding": "RIFF/WAVE PCM"
+      },
+      "audio": {
+        "codec": "pcm_s16le",
+        "sample_rate": 22050,
+        "channels": 1,
+        "bits_per_sample": 16,
+        "duration_seconds": 2.353152
+      },
+      "export": {
+        "method": "canonical PCM RIFF rewrap",
+        "decoded_pcm_md5": "MD5=8a04bd6ec53a742c143be100aaf0a186",
+        "decoded_audio_unchanged": true
+      }
+    },
     "sound/Fight/FightBGM01.wav": {
       "path": "/assets/audio/Fight/FightBGM01.mp3",
       "mime": "audio/mpeg",
@@ -258,6 +308,31 @@
       "sha256": "456ad307a8e512b13a66909461e141112f3f8ffe509de3a2bbdfcdec1c9a4124",
       "source": {
         "path": "sound/Fight/FightBGM02.wav",
+        "sha256": "456ad307a8e512b13a66909461e141112f3f8ffe509de3a2bbdfcdec1c9a4124",
+        "bytes": 3340416,
+        "header_hex": "49443303000000000e255452434b0000",
+        "declared_extension": ".wav",
+        "observed_encoding": "MPEG Layer III"
+      },
+      "audio": {
+        "codec": "mp3",
+        "sample_rate": 44100,
+        "channels": 2,
+        "bits_per_sample": 0,
+        "duration_seconds": 166.92885
+      },
+      "export": {
+        "method": "byte-preserving MPEG suffix correction",
+        "decoded_pcm_md5": "MD5=02d3ce8c10da037f9cb4588ae4de88de",
+        "decoded_audio_unchanged": true
+      }
+    },
+    "sound/FightBGM01.wav": {
+      "path": "/assets/audio/FightBGM01.mp3",
+      "mime": "audio/mpeg",
+      "sha256": "456ad307a8e512b13a66909461e141112f3f8ffe509de3a2bbdfcdec1c9a4124",
+      "source": {
+        "path": "sound/FightBGM01.wav",
         "sha256": "456ad307a8e512b13a66909461e141112f3f8ffe509de3a2bbdfcdec1c9a4124",
         "bytes": 3340416,
         "header_hex": "49443303000000000e255452434b0000",
@@ -9083,6 +9158,262 @@
         "ev_fb1d8a60f17d0b5c8e09e62e979f4b3423b50e534accacd8eb02e43655054579"
       ],
       "confidence": "source DAT+0x44 and confirmed native same-track/load branch"
+    },
+    "M00000": {
+      "clip": null,
+      "source": {
+        "path": "Map/m00000.dat",
+        "sha256": "1dd327f969320145e281f71a5fd5f347c8818e450bffbf3fc22014f8fa0603af",
+        "offset": 68,
+        "bytes": 64,
+        "token": ""
+      },
+      "evidence": [
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_fb1d8a60f17d0b5c8e09e62e979f4b3423b50e534accacd8eb02e43655054579"
+      ],
+      "confidence": "source DAT+0x44 and confirmed native same-track/load branch",
+      "inherit": true
+    },
+    "M03034": {
+      "clip": "sound/mn030-1.wav",
+      "source": {
+        "path": "Map/m03034.dat",
+        "sha256": "0f19611a644906ecc68e14ed44dc708013adb062c5b2b5d43cede2751dc6baa5",
+        "offset": 68,
+        "bytes": 64,
+        "token": "mn030-1.wav"
+      },
+      "evidence": [
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_fb1d8a60f17d0b5c8e09e62e979f4b3423b50e534accacd8eb02e43655054579"
+      ],
+      "confidence": "source DAT+0x44 and confirmed native same-track/load branch"
+    },
+    "M03033": {
+      "clip": "sound/mn030-1.wav",
+      "source": {
+        "path": "Map/m03033.dat",
+        "sha256": "616539da059831c1c6be01cc3787d478a499df70555134b24eb672cfc34e64fe",
+        "offset": 68,
+        "bytes": 64,
+        "token": "mn030-1.wav"
+      },
+      "evidence": [
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_fb1d8a60f17d0b5c8e09e62e979f4b3423b50e534accacd8eb02e43655054579"
+      ],
+      "confidence": "source DAT+0x44 and confirmed native same-track/load branch"
+    },
+    "M03030": {
+      "clip": "sound/mn030-1.wav",
+      "source": {
+        "path": "Map/m03030.dat",
+        "sha256": "144a328084083093bb742e8dc9cc08f69568fc04ce613d37b498643f7572e89d",
+        "offset": 68,
+        "bytes": 64,
+        "token": "mn030-1.wav"
+      },
+      "evidence": [
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_fb1d8a60f17d0b5c8e09e62e979f4b3423b50e534accacd8eb02e43655054579"
+      ],
+      "confidence": "source DAT+0x44 and confirmed native same-track/load branch"
+    },
+    "M03040": {
+      "clip": "sound/mn030-1.wav",
+      "source": {
+        "path": "Map/m03040.dat",
+        "sha256": "9a69cbfe47b4832e5a23c91f95c2db354439efba421eab292e8b2c44690cef7b",
+        "offset": 68,
+        "bytes": 64,
+        "token": "mn030-1.wav"
+      },
+      "evidence": [
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_fb1d8a60f17d0b5c8e09e62e979f4b3423b50e534accacd8eb02e43655054579"
+      ],
+      "confidence": "source DAT+0x44 and confirmed native same-track/load branch"
+    },
+    "M03041": {
+      "clip": "sound/mn030-1.wav",
+      "source": {
+        "path": "Map/m03041.dat",
+        "sha256": "3d8a27bb59b5e50b4f7ef5c697199c59b5382860f0d55d9e493c4f10e43f19b5",
+        "offset": 68,
+        "bytes": 64,
+        "token": "mn030-1.wav"
+      },
+      "evidence": [
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_fb1d8a60f17d0b5c8e09e62e979f4b3423b50e534accacd8eb02e43655054579"
+      ],
+      "confidence": "source DAT+0x44 and confirmed native same-track/load branch"
+    },
+    "M03043": {
+      "clip": "sound/mn030-1.wav",
+      "source": {
+        "path": "Map/m03043.dat",
+        "sha256": "9dedb4f320cc7c42baa783b3ec7f8c493fa93e74d414f17834e489db100bf5f1",
+        "offset": 68,
+        "bytes": 64,
+        "token": "mn030-1.wav"
+      },
+      "evidence": [
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_fb1d8a60f17d0b5c8e09e62e979f4b3423b50e534accacd8eb02e43655054579"
+      ],
+      "confidence": "source DAT+0x44 and confirmed native same-track/load branch"
+    },
+    "M03043-2": {
+      "clip": "sound/mn030-1.wav",
+      "source": {
+        "path": "Map/m03043-2.dat",
+        "sha256": "e1e0cf198c61cfcf871d9f2d4138c26bb995786a8ef8bf4c4ec80409fc2ecbee",
+        "offset": 68,
+        "bytes": 64,
+        "token": "mn030-1.wav"
+      },
+      "evidence": [
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_fb1d8a60f17d0b5c8e09e62e979f4b3423b50e534accacd8eb02e43655054579"
+      ],
+      "confidence": "source DAT+0x44 and confirmed native same-track/load branch"
+    },
+    "M03043-3": {
+      "clip": "sound/mn030-1.wav",
+      "source": {
+        "path": "Map/m03043-3.dat",
+        "sha256": "85a5bed121aec3c6fd933cb5ecd9c79c6c3cdd03e28d868253ce7ee05eba5fc8",
+        "offset": 68,
+        "bytes": 64,
+        "token": "mn030-1.wav"
+      },
+      "evidence": [
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_fb1d8a60f17d0b5c8e09e62e979f4b3423b50e534accacd8eb02e43655054579"
+      ],
+      "confidence": "source DAT+0x44 and confirmed native same-track/load branch"
+    },
+    "M03043-4": {
+      "clip": "sound/mn030-1.wav",
+      "source": {
+        "path": "Map/m03043-4.dat",
+        "sha256": "3cc7843903754512bba946bad1cfca65534bf173237dbb9f2c938736846ae712",
+        "offset": 68,
+        "bytes": 64,
+        "token": "mn030-1.wav"
+      },
+      "evidence": [
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_fb1d8a60f17d0b5c8e09e62e979f4b3423b50e534accacd8eb02e43655054579"
+      ],
+      "confidence": "source DAT+0x44 and confirmed native same-track/load branch"
+    },
+    "M03043-5": {
+      "clip": "sound/mn030-1.wav",
+      "source": {
+        "path": "Map/m03043-5.dat",
+        "sha256": "9aa55e4f998c5989356cdc1cca7781cf3521f97e501cb854894028a64cd2c77c",
+        "offset": 68,
+        "bytes": 64,
+        "token": "mn030-1.wav"
+      },
+      "evidence": [
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_fb1d8a60f17d0b5c8e09e62e979f4b3423b50e534accacd8eb02e43655054579"
+      ],
+      "confidence": "source DAT+0x44 and confirmed native same-track/load branch"
+    },
+    "M03044": {
+      "clip": "sound/mn030-1.wav",
+      "source": {
+        "path": "Map/m03044.dat",
+        "sha256": "3a735b559aab3575655a5222e3d4acc025877afcf3b7f6c1bab1c061e576ae40",
+        "offset": 68,
+        "bytes": 64,
+        "token": "mn030-1.wav"
+      },
+      "evidence": [
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_fb1d8a60f17d0b5c8e09e62e979f4b3423b50e534accacd8eb02e43655054579"
+      ],
+      "confidence": "source DAT+0x44 and confirmed native same-track/load branch"
+    },
+    "M71071": {
+      "clip": "sound/mn710-2.wav",
+      "source": {
+        "path": "Map/m71071.dat",
+        "sha256": "99e6885370a8cf4a0e8519a450b00cbd3eec6dcf73692e5360c42a8088ae94b5",
+        "offset": 68,
+        "bytes": 64,
+        "token": "mn710-2.wav"
+      },
+      "evidence": [
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_fb1d8a60f17d0b5c8e09e62e979f4b3423b50e534accacd8eb02e43655054579"
+      ],
+      "confidence": "source DAT+0x44 and confirmed native same-track/load branch"
+    },
+    "M71072": {
+      "clip": "sound/mn710-2.wav",
+      "source": {
+        "path": "Map/m71072.dat",
+        "sha256": "b2564f59634bbedcb5efd553a1ea8731d5716499c5190dba565e6bac22a8b64f",
+        "offset": 68,
+        "bytes": 64,
+        "token": "mn710-2.wav"
+      },
+      "evidence": [
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_fb1d8a60f17d0b5c8e09e62e979f4b3423b50e534accacd8eb02e43655054579"
+      ],
+      "confidence": "source DAT+0x44 and confirmed native same-track/load branch"
+    },
+    "M71073": {
+      "clip": "sound/mn710-2.wav",
+      "source": {
+        "path": "Map/m71073.dat",
+        "sha256": "cd3d3749f3cf14f3ed69779852ca4eaef00db2643104fac3cc1b56bd033722f1",
+        "offset": 68,
+        "bytes": 64,
+        "token": "mn710-2.wav"
+      },
+      "evidence": [
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_fb1d8a60f17d0b5c8e09e62e979f4b3423b50e534accacd8eb02e43655054579"
+      ],
+      "confidence": "source DAT+0x44 and confirmed native same-track/load branch"
+    },
+    "M71074": {
+      "clip": "sound/mn710-2.wav",
+      "source": {
+        "path": "Map/m71074.dat",
+        "sha256": "26c66895c3a19b21ac07945f1db58de8ec670430ce9435c1c476258227fcc909",
+        "offset": 68,
+        "bytes": 64,
+        "token": "mn710-2.wav"
+      },
+      "evidence": [
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_fb1d8a60f17d0b5c8e09e62e979f4b3423b50e534accacd8eb02e43655054579"
+      ],
+      "confidence": "source DAT+0x44 and confirmed native same-track/load branch"
+    },
+    "M71075": {
+      "clip": "sound/mn710-2.wav",
+      "source": {
+        "path": "Map/m71075.dat",
+        "sha256": "94631428993317fbd6d8882c67ec7f42eec02754c7865754945211b58e4fcf60",
+        "offset": 68,
+        "bytes": 64,
+        "token": "mn710-2.wav"
+      },
+      "evidence": [
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_fb1d8a60f17d0b5c8e09e62e979f4b3423b50e534accacd8eb02e43655054579"
+      ],
+      "confidence": "source DAT+0x44 and confirmed native same-track/load branch"
     }
   },
   "battles": {
@@ -9098,6 +9429,8 @@
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
         "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9",
         "ev_943b0b73f1e96b42f7c10b51e88dc4d7863d2f2860e0306b9f3676596bf34686",
         "ev_41dbecbb5de336ab7cf9abcf164a76f83318e136296b4f919c4df5ba7318b756"
       ],
@@ -9107,6 +9440,25 @@
         "sound/Fight/FightBGM02.wav"
       ],
       "selection": "source default pool; fresh browser random selection"
+    },
+    "stage01.scn": {
+      "clip": "sound/FightBGM01.wav",
+      "source": {
+        "path": "Fight_Bk/stage01.scn",
+        "sha256": "0b0791faa1b2e14e4dcfd2c0f4df958229b38c752b62dd1b167764ef3a8ee157",
+        "offset": 28,
+        "bytes": 20,
+        "token": "FightBGM01.wav"
+      },
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9",
+        "ev_943b0b73f1e96b42f7c10b51e88dc4d7863d2f2860e0306b9f3676596bf34686",
+        "ev_41dbecbb5de336ab7cf9abcf164a76f83318e136296b4f919c4df5ba7318b756"
+      ],
+      "confidence": "source SCN field and confirmed native fallback pool"
     },
     "stage13.scn": {
       "clip": null,
@@ -9120,6 +9472,8 @@
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
         "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9",
         "ev_943b0b73f1e96b42f7c10b51e88dc4d7863d2f2860e0306b9f3676596bf34686",
         "ev_41dbecbb5de336ab7cf9abcf164a76f83318e136296b4f919c4df5ba7318b756"
       ],
@@ -9142,6 +9496,8 @@
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
         "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9",
         "ev_943b0b73f1e96b42f7c10b51e88dc4d7863d2f2860e0306b9f3676596bf34686",
         "ev_41dbecbb5de336ab7cf9abcf164a76f83318e136296b4f919c4df5ba7318b756"
       ],
@@ -9184,6 +9540,8 @@
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
         "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9",
         "ev_943b0b73f1e96b42f7c10b51e88dc4d7863d2f2860e0306b9f3676596bf34686",
         "ev_41dbecbb5de336ab7cf9abcf164a76f83318e136296b4f919c4df5ba7318b756"
       ],
@@ -9207,6 +9565,8 @@
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
         "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9",
         "ev_943b0b73f1e96b42f7c10b51e88dc4d7863d2f2860e0306b9f3676596bf34686",
         "ev_41dbecbb5de336ab7cf9abcf164a76f83318e136296b4f919c4df5ba7318b756"
       ],
@@ -9230,6 +9590,8 @@
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
         "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9",
         "ev_943b0b73f1e96b42f7c10b51e88dc4d7863d2f2860e0306b9f3676596bf34686",
         "ev_41dbecbb5de336ab7cf9abcf164a76f83318e136296b4f919c4df5ba7318b756"
       ],
@@ -9253,6 +9615,8 @@
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
         "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9",
         "ev_943b0b73f1e96b42f7c10b51e88dc4d7863d2f2860e0306b9f3676596bf34686",
         "ev_41dbecbb5de336ab7cf9abcf164a76f83318e136296b4f919c4df5ba7318b756"
       ],
@@ -9276,6 +9640,8 @@
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
         "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9",
         "ev_943b0b73f1e96b42f7c10b51e88dc4d7863d2f2860e0306b9f3676596bf34686",
         "ev_41dbecbb5de336ab7cf9abcf164a76f83318e136296b4f919c4df5ba7318b756"
       ],
@@ -9299,6 +9665,8 @@
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
         "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9",
         "ev_943b0b73f1e96b42f7c10b51e88dc4d7863d2f2860e0306b9f3676596bf34686",
         "ev_41dbecbb5de336ab7cf9abcf164a76f83318e136296b4f919c4df5ba7318b756"
       ],
@@ -9322,6 +9690,8 @@
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
         "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9",
         "ev_943b0b73f1e96b42f7c10b51e88dc4d7863d2f2860e0306b9f3676596bf34686",
         "ev_41dbecbb5de336ab7cf9abcf164a76f83318e136296b4f919c4df5ba7318b756"
       ],
@@ -9345,6 +9715,8 @@
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
         "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9",
         "ev_943b0b73f1e96b42f7c10b51e88dc4d7863d2f2860e0306b9f3676596bf34686",
         "ev_41dbecbb5de336ab7cf9abcf164a76f83318e136296b4f919c4df5ba7318b756"
       ],
@@ -9368,6 +9740,8 @@
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
         "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9",
         "ev_943b0b73f1e96b42f7c10b51e88dc4d7863d2f2860e0306b9f3676596bf34686",
         "ev_41dbecbb5de336ab7cf9abcf164a76f83318e136296b4f919c4df5ba7318b756"
       ],
@@ -9391,6 +9765,8 @@
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
         "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9",
         "ev_943b0b73f1e96b42f7c10b51e88dc4d7863d2f2860e0306b9f3676596bf34686",
         "ev_41dbecbb5de336ab7cf9abcf164a76f83318e136296b4f919c4df5ba7318b756"
       ],
@@ -9414,6 +9790,8 @@
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
         "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9",
         "ev_943b0b73f1e96b42f7c10b51e88dc4d7863d2f2860e0306b9f3676596bf34686",
         "ev_41dbecbb5de336ab7cf9abcf164a76f83318e136296b4f919c4df5ba7318b756"
       ],
@@ -9437,6 +9815,8 @@
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
         "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9",
         "ev_943b0b73f1e96b42f7c10b51e88dc4d7863d2f2860e0306b9f3676596bf34686",
         "ev_41dbecbb5de336ab7cf9abcf164a76f83318e136296b4f919c4df5ba7318b756"
       ],
@@ -9447,6 +9827,26 @@
       ],
       "selection": "source default pool; fresh browser random selection",
       "stage_id": "stage07.scn"
+    },
+    "M01050": {
+      "clip": "sound/FightBGM01.wav",
+      "source": {
+        "path": "Fight_Bk/stage01.scn",
+        "sha256": "0b0791faa1b2e14e4dcfd2c0f4df958229b38c752b62dd1b167764ef3a8ee157",
+        "offset": 28,
+        "bytes": 20,
+        "token": "FightBGM01.wav"
+      },
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9",
+        "ev_943b0b73f1e96b42f7c10b51e88dc4d7863d2f2860e0306b9f3676596bf34686",
+        "ev_41dbecbb5de336ab7cf9abcf164a76f83318e136296b4f919c4df5ba7318b756"
+      ],
+      "confidence": "source SCN field and confirmed native fallback pool",
+      "stage_id": "stage01.scn"
     },
     "M70010": {
       "clip": null,
@@ -9460,6 +9860,8 @@
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
         "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9",
         "ev_943b0b73f1e96b42f7c10b51e88dc4d7863d2f2860e0306b9f3676596bf34686",
         "ev_41dbecbb5de336ab7cf9abcf164a76f83318e136296b4f919c4df5ba7318b756"
       ],
@@ -9483,6 +9885,8 @@
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
         "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9",
         "ev_943b0b73f1e96b42f7c10b51e88dc4d7863d2f2860e0306b9f3676596bf34686",
         "ev_41dbecbb5de336ab7cf9abcf164a76f83318e136296b4f919c4df5ba7318b756"
       ],
@@ -9506,6 +9910,8 @@
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
         "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9",
         "ev_943b0b73f1e96b42f7c10b51e88dc4d7863d2f2860e0306b9f3676596bf34686",
         "ev_41dbecbb5de336ab7cf9abcf164a76f83318e136296b4f919c4df5ba7318b756"
       ],
@@ -9529,6 +9935,8 @@
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
         "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9",
         "ev_943b0b73f1e96b42f7c10b51e88dc4d7863d2f2860e0306b9f3676596bf34686",
         "ev_41dbecbb5de336ab7cf9abcf164a76f83318e136296b4f919c4df5ba7318b756"
       ],
@@ -9552,6 +9960,8 @@
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
         "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9",
         "ev_943b0b73f1e96b42f7c10b51e88dc4d7863d2f2860e0306b9f3676596bf34686",
         "ev_41dbecbb5de336ab7cf9abcf164a76f83318e136296b4f919c4df5ba7318b756"
       ],
@@ -9575,6 +9985,8 @@
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
         "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9",
         "ev_943b0b73f1e96b42f7c10b51e88dc4d7863d2f2860e0306b9f3676596bf34686",
         "ev_41dbecbb5de336ab7cf9abcf164a76f83318e136296b4f919c4df5ba7318b756"
       ],
@@ -9598,6 +10010,8 @@
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
         "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9",
         "ev_943b0b73f1e96b42f7c10b51e88dc4d7863d2f2860e0306b9f3676596bf34686",
         "ev_41dbecbb5de336ab7cf9abcf164a76f83318e136296b4f919c4df5ba7318b756"
       ],
@@ -9621,6 +10035,8 @@
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
         "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9",
         "ev_943b0b73f1e96b42f7c10b51e88dc4d7863d2f2860e0306b9f3676596bf34686",
         "ev_41dbecbb5de336ab7cf9abcf164a76f83318e136296b4f919c4df5ba7318b756"
       ],
@@ -9644,6 +10060,8 @@
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
         "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9",
         "ev_943b0b73f1e96b42f7c10b51e88dc4d7863d2f2860e0306b9f3676596bf34686",
         "ev_41dbecbb5de336ab7cf9abcf164a76f83318e136296b4f919c4df5ba7318b756"
       ],
@@ -9667,6 +10085,8 @@
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
         "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9",
         "ev_943b0b73f1e96b42f7c10b51e88dc4d7863d2f2860e0306b9f3676596bf34686",
         "ev_41dbecbb5de336ab7cf9abcf164a76f83318e136296b4f919c4df5ba7318b756"
       ],
@@ -9690,6 +10110,8 @@
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
         "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9",
         "ev_943b0b73f1e96b42f7c10b51e88dc4d7863d2f2860e0306b9f3676596bf34686",
         "ev_41dbecbb5de336ab7cf9abcf164a76f83318e136296b4f919c4df5ba7318b756"
       ],
@@ -9713,6 +10135,8 @@
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
         "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9",
         "ev_943b0b73f1e96b42f7c10b51e88dc4d7863d2f2860e0306b9f3676596bf34686",
         "ev_41dbecbb5de336ab7cf9abcf164a76f83318e136296b4f919c4df5ba7318b756"
       ],
@@ -9736,6 +10160,8 @@
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
         "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9",
         "ev_943b0b73f1e96b42f7c10b51e88dc4d7863d2f2860e0306b9f3676596bf34686",
         "ev_41dbecbb5de336ab7cf9abcf164a76f83318e136296b4f919c4df5ba7318b756"
       ],
@@ -9759,6 +10185,8 @@
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
         "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9",
         "ev_943b0b73f1e96b42f7c10b51e88dc4d7863d2f2860e0306b9f3676596bf34686",
         "ev_41dbecbb5de336ab7cf9abcf164a76f83318e136296b4f919c4df5ba7318b756"
       ],
@@ -9782,6 +10210,8 @@
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
         "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9",
         "ev_943b0b73f1e96b42f7c10b51e88dc4d7863d2f2860e0306b9f3676596bf34686",
         "ev_41dbecbb5de336ab7cf9abcf164a76f83318e136296b4f919c4df5ba7318b756"
       ],
@@ -9805,6 +10235,8 @@
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
         "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9",
         "ev_943b0b73f1e96b42f7c10b51e88dc4d7863d2f2860e0306b9f3676596bf34686",
         "ev_41dbecbb5de336ab7cf9abcf164a76f83318e136296b4f919c4df5ba7318b756"
       ],
@@ -9828,6 +10260,8 @@
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
         "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9",
         "ev_943b0b73f1e96b42f7c10b51e88dc4d7863d2f2860e0306b9f3676596bf34686",
         "ev_41dbecbb5de336ab7cf9abcf164a76f83318e136296b4f919c4df5ba7318b756"
       ],
@@ -9851,6 +10285,8 @@
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
         "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9",
         "ev_943b0b73f1e96b42f7c10b51e88dc4d7863d2f2860e0306b9f3676596bf34686",
         "ev_41dbecbb5de336ab7cf9abcf164a76f83318e136296b4f919c4df5ba7318b756"
       ],
@@ -9874,6 +10310,8 @@
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
         "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9",
         "ev_943b0b73f1e96b42f7c10b51e88dc4d7863d2f2860e0306b9f3676596bf34686",
         "ev_41dbecbb5de336ab7cf9abcf164a76f83318e136296b4f919c4df5ba7318b756"
       ],
@@ -9897,6 +10335,8 @@
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
         "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9",
         "ev_943b0b73f1e96b42f7c10b51e88dc4d7863d2f2860e0306b9f3676596bf34686",
         "ev_41dbecbb5de336ab7cf9abcf164a76f83318e136296b4f919c4df5ba7318b756"
       ],
@@ -9920,6 +10360,8 @@
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
         "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9",
         "ev_943b0b73f1e96b42f7c10b51e88dc4d7863d2f2860e0306b9f3676596bf34686",
         "ev_41dbecbb5de336ab7cf9abcf164a76f83318e136296b4f919c4df5ba7318b756"
       ],
@@ -9943,6 +10385,8 @@
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
         "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9",
         "ev_943b0b73f1e96b42f7c10b51e88dc4d7863d2f2860e0306b9f3676596bf34686",
         "ev_41dbecbb5de336ab7cf9abcf164a76f83318e136296b4f919c4df5ba7318b756"
       ],
@@ -17771,10 +18215,33 @@
       "evidence": [
         "ev_dd15ff2079d1bf58dd8007aab6eec301ed6fe8694dd6b62a10cedca8cc34ccbe"
       ]
+    },
+    {
+      "map_id": "M71071",
+      "object_index": 15,
+      "clip": "sound/E034.wav",
+      "token": "E034.wav",
+      "logical_frame": 1,
+      "object_source": {
+        "path": "Map/m71071.dat",
+        "sha256": "99e6885370a8cf4a0e8519a450b00cbd3eec6dcf73692e5360c42a8088ae94b5",
+        "offset": 338912,
+        "raw_sha256": "6b6cd76bac1a7c66937e69a9cd3bcf0638d56b215bf349d2c5b2f0180ea2a210",
+        "sound_enabled_raw": 1
+      },
+      "action_source": {
+        "path": "mapm/m71071_1f_001/017.dgp",
+        "sha256": "396d3a827b38c069a494677f8f8621b9c2d521ca76bf5b57f28f9ccf38c8a199",
+        "offset": 67,
+        "raw_sha256": "1c5931ce43fb3c16823fba82bd89d64530ed7ae00e850ed3b0d73496d7573aff"
+      },
+      "evidence": [
+        "ev_dd15ff2079d1bf58dd8007aab6eec301ed6fe8694dd6b62a10cedca8cc34ccbe"
+      ]
     }
   ],
   "reference_hashes": {
-    "remake/runtime/web/data/party_battle_view.json": "80aeac1021c0e3914c06f74691ebf945ed7a10a22f90363fa1ab38142c49e87f",
+    "remake/runtime/web/data/party_battle_view.json": "600d2e830510404a0b160b26ee0d6a23a7637a1f9919ad88265a531a237401bc",
     "remake/runtime/web/data/battle_lifecycle.json": "ea1efdb2fe824aaf8c019312cfbe2e3a7fe9a0b4ef11af3e085cb1c563da928b",
     "remake/runtime/web/data/item_presentation.json": "05656cae33d84cd42ffcc00481e56da611f9be4a05a89da811f763b9dc9c1d9c"
   },
@@ -21340,9 +21807,31 @@
     "Map/m70078-2_1.dat": "761560ea135fc837b06354f3f22cc1abb348a7e8c7636a5e3f02a0a3e32c86ad",
     "Map/m70078-3_1.dat": "0bbe4fb0fcaf58ada56a85d1cf17536340767be4212592c54e0b3c81957d45eb",
     "Map/m70078_2.dat": "5dd7156cc55765078812f7aee1196e21dd7f967ff75f36c25adab40afdaa2c1d",
+    "Map/m00000.dat": "1dd327f969320145e281f71a5fd5f347c8818e450bffbf3fc22014f8fa0603af",
+    "Map/m03034.dat": "0f19611a644906ecc68e14ed44dc708013adb062c5b2b5d43cede2751dc6baa5",
+    "Map/m03033.dat": "616539da059831c1c6be01cc3787d478a499df70555134b24eb672cfc34e64fe",
+    "Map/m03030.dat": "144a328084083093bb742e8dc9cc08f69568fc04ce613d37b498643f7572e89d",
+    "Map/m03040.dat": "9a69cbfe47b4832e5a23c91f95c2db354439efba421eab292e8b2c44690cef7b",
+    "Map/m03041.dat": "3d8a27bb59b5e50b4f7ef5c697199c59b5382860f0d55d9e493c4f10e43f19b5",
+    "Map/m03043.dat": "9dedb4f320cc7c42baa783b3ec7f8c493fa93e74d414f17834e489db100bf5f1",
+    "Map/m03043-2.dat": "e1e0cf198c61cfcf871d9f2d4138c26bb995786a8ef8bf4c4ec80409fc2ecbee",
+    "Map/m03043-3.dat": "85a5bed121aec3c6fd933cb5ecd9c79c6c3cdd03e28d868253ce7ee05eba5fc8",
+    "Map/m03043-4.dat": "3cc7843903754512bba946bad1cfca65534bf173237dbb9f2c938736846ae712",
+    "Map/m03043-5.dat": "9aa55e4f998c5989356cdc1cca7781cf3521f97e501cb854894028a64cd2c77c",
+    "Map/m03044.dat": "3a735b559aab3575655a5222e3d4acc025877afcf3b7f6c1bab1c061e576ae40",
+    "Map/m71071.dat": "99e6885370a8cf4a0e8519a450b00cbd3eec6dcf73692e5360c42a8088ae94b5",
+    "sound/mn710-2.wav": "107057aea9c3de6b93d07591fd49b27b007b4aa209d086637e1822c1c5f2397d",
+    "mapm/m71071_1f_001/017.dgp": "396d3a827b38c069a494677f8f8621b9c2d521ca76bf5b57f28f9ccf38c8a199",
+    "sound/E034.wav": "e5856d4cae88112ac91bd083082252e73d81095cacceda2ad980a7335194c91c",
+    "Map/m71072.dat": "b2564f59634bbedcb5efd553a1ea8731d5716499c5190dba565e6bac22a8b64f",
+    "Map/m71073.dat": "cd3d3749f3cf14f3ed69779852ca4eaef00db2643104fac3cc1b56bd033722f1",
+    "Map/m71074.dat": "26c66895c3a19b21ac07945f1db58de8ec670430ce9435c1c476258227fcc909",
+    "Map/m71075.dat": "94631428993317fbd6d8882c67ec7f42eec02754c7865754945211b58e4fcf60",
     "Fight_Bk/stage07.scn": "9e4b85a613b3e570b078abacd1ffdf85017676850c4ca2c3ea83e3359f41ecc8",
     "sound/Fight/FightBGM01.wav": "b1bb0bb926ea46f31a021727f93286ffa475af42c99a32936f36b001b74612ed",
     "sound/Fight/FightBGM02.wav": "456ad307a8e512b13a66909461e141112f3f8ffe509de3a2bbdfcdec1c9a4124",
+    "Fight_Bk/stage01.scn": "0b0791faa1b2e14e4dcfd2c0f4df958229b38c752b62dd1b167764ef3a8ee157",
+    "sound/FightBGM01.wav": "456ad307a8e512b13a66909461e141112f3f8ffe509de3a2bbdfcdec1c9a4124",
     "Fight_Bk/stage13.scn": "0b5d76614e7ceb0dfcb1346785cdc944e584517bbe32eabcb1ae3db2bd0d1d99",
     "Fight_Bk/stage03.scn": "8bf94a8c6a3f9e6eab7597aa83e4b958f98ab6592ba96ea7393bdf44d31fa1a9",
     "Fight_Bk/stage12.scn": "b96b95637c056cbfc07432c58343a63684d551f2291d4aa55aaee7bb6f7f968b",

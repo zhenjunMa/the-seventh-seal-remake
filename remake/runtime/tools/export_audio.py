@@ -166,9 +166,11 @@ def main():
     from content_registration import map_ids, stage_exports
     for ident in map_ids():
         path = f'Map/{ident.lower()}.dat'; raw = read(path); assert struct.unpack_from('<I', raw, 0x14)[0] == 6
-        token = original_text(raw, 0x44, 0x40); assert token.lower().endswith('.wav')
-        maps[ident] = dict(clip=clip('sound/'+token), source=dict(path=path, sha256=sha(raw), offset=0x44, bytes=0x40, token=token),
+        token = original_text(raw, 0x44, 0x40); assert not token or token.lower().endswith('.wav')
+        maps[ident] = dict(clip=clip('sound/'+token) if token else None, source=dict(path=path, sha256=sha(raw), offset=0x44, bytes=0x40, token=token),
             evidence=[evidence['0x4a5f00'],evidence['0x4a09c0']], confidence='source DAT+0x44 and confirmed native same-track/load branch')
+        if not token:
+            maps[ident]['inherit'] = True
         table = MapObjects(ROOT / path)
         for obj in table.objects:
             object_raw = bytes.fromhex(obj['raw_hex'])
@@ -185,7 +187,7 @@ def main():
                 evidence=[object_tick['evidence_id']] ))
     encounters = json.loads((WEB/'data/encounters.json').read_text('utf-8'))
     battles = {}
-    stage_sources={entry['stage']:entry['evidence'] for entry in encounters['maps'].values()}
+    stage_sources={entry['stage']:entry['evidence'] for entry in encounters['maps'].values() if entry['members']}
     for stage,row in stage_exports().items():
         if row['export']=='source':stage_sources.setdefault(stage+'.scn',[])
     for stage, stage_evidence in stage_sources.items():
@@ -199,6 +201,8 @@ def main():
             evidence=list(stage_evidence)+[evidence['0x51c48f'],evidence['0x50aacf']],
             confidence='source SCN field and confirmed native fallback pool', **(dict(pool=pool,selection='source default pool; fresh browser random selection') if pool else {}))
     for ident,entry in encounters['maps'].items():
+        if not entry['members']:
+            continue
         stage=entry['stage'];battles[ident] = dict(battles[stage], stage_id=stage)
     # Keep the older standalone menu clip, but operation MNU controls use the
     # separate five-entry native562EF0 table, not that older menu implementation.

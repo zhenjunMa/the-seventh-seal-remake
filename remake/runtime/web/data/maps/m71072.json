@@ -1,0 +1,964 @@
+{
+  "schema": "seventh-seal-runtime-map",
+  "version": 1,
+  "id": "M71072",
+  "name": "研究所遗迹",
+  "name_bytes_hex": "d1d0bebfcbf9d2c5bca3",
+  "width": 1296,
+  "height": 976,
+  "background": {
+    "image": "/assets/maps/m71072/background.png",
+    "width": 1296,
+    "height": 976,
+    "sources": [
+      {
+        "path": "M71072.DGP",
+        "sha256": "42925b15153502a546aaeaad73bfacc5cf49c6b11448cfaf8be3b26983c6f875"
+      }
+    ],
+    "image_sha256": "63cca1989adf7dd7b7469f03e5848b6421d9f77cbfff1f7871982cc0dd1f4244",
+    "assembly": {
+      "referenced_frames": 1200,
+      "empty_blocks": 0,
+      "columns": 41,
+      "rows": 31,
+      "resource_count": 1,
+      "animation_frame": 0,
+      "assembly": "DAT even-cell frame/resource -> indexed header DGP; 0x4A3770 rectangular branch",
+      "odd_size_policy": "Native tile-origin loops; clip beyond exact DAT dimensions"
+    }
+  },
+  "movement": {
+    "schema": "seventh-seal-map-movement",
+    "version": 1,
+    "map": "M71072",
+    "source": "Map/m71072.dat",
+    "source_sha256": "b2564f59634bbedcb5efd553a1ea8731d5716499c5190dba565e6bac22a8b64f",
+    "width": 81,
+    "height": 61,
+    "cell_size": 16,
+    "native_coordinate_shift": 3,
+    "native_to_pixel_scale": 2,
+    "native_step_shift": 1,
+    "native_camera_step_shift": 1,
+    "terrain_rows": [
+      "111111111111111111111111111111111111111111111111111111111111111111111111111111111",
+      "111111111111111111111111111111111111111111111111111111111111111111111111111111111",
+      "111111111111111111111111111111111111111111111111111111111111111111111111111111111",
+      "111111111111111111111111111111111111111111111111111111111111111111111111111111111",
+      "111111111111111111111111111111111111111111111111111111111111111111111111111111111",
+      "111111111111111111111111111111111111111111111111111111111111111111111111111111111",
+      "111111111111111111111111111111111111111111111111111111111111111111111111111111111",
+      "111111111111111111111111111111111111111111111111111111111111110000111111111111111",
+      "111111111111111111111111111111111111111111111111111111111111110000111111111111111",
+      "111111111111111111111111111111111111111111111111111111111111110001111111111111111",
+      "111111111100000000000000000000000000000000000000000000011111110001111111111111111",
+      "111111111100000000000000000000000000000000000000000000011100000000000111111111111",
+      "111111111000000000000000000000000000000000000000000000011100000000000111111111111",
+      "111111111000000000000000000000000000000000000000000000011100000000000111111111111",
+      "111111111000000000000000000000000000000000000000000000011100000000000011111111111",
+      "111111111111111111111111111110000000000000000000000000011100000000000011111111111",
+      "111111111111111111111111111111000001111111111111111111111110000000000011111111111",
+      "111111111111111111111111111111000011111111111111111111111110000000000011111111111",
+      "111111111111111111111111111111000111111111111111111111111110000000000011111111111",
+      "111111111111111111111111111111000111111111111111111111111110000000000011111111111",
+      "111111111000000000000000000000000111111111111111111111111111110000000001111111111",
+      "111111111000000000000000000000000000000000000000000000000111110000000001111111111",
+      "111111110000000000000000000000000000000000000000000000000000000000000001111111111",
+      "111111110000000000000000000000000000000000000000000000000000000000000001111111111",
+      "111111110000000000000000000000000000000000000000000000000000000000000001111111111",
+      "111111110000000000000111111110000001111111111111111111111111000000000001111111111",
+      "111111110000000000001111111110000011111111111111111111111111000000000001111111111",
+      "111111110000000000001111111110000111111111111111111111111111000000000001111111111",
+      "111111110000000000001111111110000111111111111111111111111111000000000001111111111",
+      "111111100000000000001111110000000000000000011111111111111111000000000000111111111",
+      "111111100000000000001111111000000000000000011111111111111111000000000000011111111",
+      "111111100000000000001111111100000000000000011111111110111111000000000000011111111",
+      "111111100000000000001111111110000000000000011111111110111111100000000000011111111",
+      "111111100000000000011111111111000000000000001111111100011111100000000000011111111",
+      "111111100000000000011111111111000000000000000000000000011111100000000000011111111",
+      "111111100000000000011111111111000000000000000000000000011111100000000000011111111",
+      "111111100000000000011111111111000000000000000000000000011111100000000000011111111",
+      "111111100000000000011111111111000000000000000000000000011111100000000000011111111",
+      "111111100000000000011111110000000000000000000000000000011111100000000000011111111",
+      "111111100000000000011111100000000000000000000000000000011111100000000000011111111",
+      "111111000000000000111111000000000000000000000000000000001111100000000000001111111",
+      "111111000000000000111111000000000000000000000000000000001111100000000000000111111",
+      "111111000000000000111111000000000000000000000000000000001111100000000000000111111",
+      "111111000000000000111111000000000000000000000000000000001111110000000000000111111",
+      "111111000000000000111111000000000000000000000000000000001111110000000000000111111",
+      "111111000000000000111111000000000000000000000000000000001111110000000000000111111",
+      "111110000000000000111111000000000000000000000000000000001111110000000000000111111",
+      "111110000000000000111111000000000000000000000000000000000111110000000000000111111",
+      "111110000000000000111111000000000000000000000000000000000111110000000000000111111",
+      "111111111000001111111111111111111111111111111111111111111111111111111111111111111",
+      "111111111000011111111111111111111111111111111111111111111111111111111111111111111",
+      "111111111000011111111111111111111111111111111111111111111111111111111111111111111",
+      "111111111000011111111111111111111111111111111111111111111111111111111111111111111",
+      "111111110000000011111111111111111111111111111111111111111111111111111111111111111",
+      "111111111111111111111111111111111111111111111111111111111111111111111111111111111",
+      "111111111111111111111111111111111111111111111111111111111111111111111111111111111",
+      "111111111111111111111111111111111111111111111111111111111111111111111111111111111",
+      "111111111111111111111111111111111111111111111111111111111111111111111111111111111",
+      "111111111111111111111111111111111111111111111111111111111111111111111111111111111",
+      "111111111111111111111111111111111111111111111111111111111111111111111111111111111",
+      "111111111111111111111111111111111111111111111111111111111111111111111111111111111"
+    ],
+    "triggers": [
+      {
+        "x": 62,
+        "y": 7,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37313037312e646174000000000000000000000002000000000000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 63,
+        "y": 7,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37313037312e646174000000000000000000000002000000000000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 64,
+        "y": 7,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37313037312e646174000000000000000000000002000000000000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 65,
+        "y": 7,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37313037312e646174000000000000000000000002000000000000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 8,
+        "y": 53,
+        "id": 2,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37313037332e646174000000000000000000000001000000060000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 9,
+        "y": 53,
+        "id": 2,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37313037332e646174000000000000000000000001000000060000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 10,
+        "y": 53,
+        "id": 2,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37313037332e646174000000000000000000000001000000060000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 11,
+        "y": 53,
+        "id": 2,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37313037332e646174000000000000000000000001000000060000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 12,
+        "y": 53,
+        "id": 2,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37313037332e646174000000000000000000000001000000060000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 13,
+        "y": 53,
+        "id": 2,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37313037332e646174000000000000000000000001000000060000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 14,
+        "y": 53,
+        "id": 2,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37313037332e646174000000000000000000000001000000060000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 15,
+        "y": 53,
+        "id": 2,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37313037332e646174000000000000000000000001000000060000000000000000000000000000000000000000000000"
+      }
+    ],
+    "terrain_rule": "cell byte +0x20 == 0 permits terrain entry",
+    "transition_rule": "0x4A80E0: +0x38 reference, descriptor[0]==0 and descriptor[0x11]!=0 is path-gated",
+    "policy": "Unimplemented native transition gates block. Runtime enables only separately verified exits.",
+    "role_occupancy_rule": "+0x14 is runtime role index + 1, not static terrain",
+    "object_lookup_rule": "+0x2B is runtime object index + 1, not a second collision mask"
+  },
+  "objects": [
+    {
+      "index": 0,
+      "resource_filename": "001.DGP",
+      "source": "mapm/m71071_2f_001/001.dgp",
+      "resource_sha256": "b2b955298d51ce4ee14a75ee8e65fac755aea19440406b3207df763fea3a7564",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 208,
+      "y_native": 408,
+      "x_world": 416,
+      "y_world": 816,
+      "anchor_x": 404,
+      "anchor_y": 183,
+      "draw_x": 12,
+      "draw_y": 633,
+      "frame_width": 777,
+      "frame_height": 215,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 26,
+      "cell_y": 51,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 416,
+      "sort_y": 848,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m71072/objects/001_frame_000.png",
+      "image_sha256": "9819391a14b495aa13f10d280e6ddf125bf0c7c863a0ad050bf72e30170eb97a"
+    },
+    {
+      "index": 1,
+      "resource_filename": "002.DGP",
+      "source": "mapm/m71071_2f_001/002.dgp",
+      "resource_sha256": "a7fcbbc1efa74f4c7355839aa0f254cb4ca67aa948cabd86e2ebbaf6c4c1d8df",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 496,
+      "y_native": 408,
+      "x_world": 992,
+      "y_world": 816,
+      "anchor_x": 273,
+      "anchor_y": 181,
+      "draw_x": 719,
+      "draw_y": 635,
+      "frame_width": 580,
+      "frame_height": 213,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 62,
+      "cell_y": 51,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 992,
+      "sort_y": 848,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m71072/objects/002_frame_000.png",
+      "image_sha256": "3fb04338d007c012aee8698de6bc284dd826f944d6581dba7de6161751bc43c3"
+    },
+    {
+      "index": 2,
+      "resource_filename": "003.DGP",
+      "source": "mapm/m71071_2f_001/003.dgp",
+      "resource_sha256": "94b815b33ad10ad2a6ad31621e5fb2dc0a8a90b39e5b0849e2a450235e30d194",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 192,
+      "y_native": 224,
+      "x_world": 384,
+      "y_world": 448,
+      "anchor_x": 53,
+      "anchor_y": 306,
+      "draw_x": 331,
+      "draw_y": 142,
+      "frame_width": 85,
+      "frame_height": 338,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 24,
+      "cell_y": 28,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 384,
+      "sort_y": 480,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m71072/objects/003_frame_000.png",
+      "image_sha256": "d5f27f8ca81daa5a43c0e8c0a1c9be044b04a9ed2f09bf0237ae65a0f2df6569"
+    },
+    {
+      "index": 3,
+      "resource_filename": "004.DGP",
+      "source": "mapm/m71071_2f_001/004.dgp",
+      "resource_sha256": "04cdfc77a0e6722aad91b4929b7c3d9e6ad29baa083afb2b73ecf3c3258a2fc5",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 480,
+      "y_native": 160,
+      "x_world": 960,
+      "y_world": 320,
+      "anchor_x": 61,
+      "anchor_y": 92,
+      "draw_x": 899,
+      "draw_y": 228,
+      "frame_width": 93,
+      "frame_height": 131,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 60,
+      "cell_y": 20,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 960,
+      "sort_y": 352,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m71072/objects/004_frame_000.png",
+      "image_sha256": "13f9674a20c49a31d69007f5f89913b65273c1a547b189e397fabec102a5ce65"
+    },
+    {
+      "index": 4,
+      "resource_filename": "005.DGP",
+      "source": "mapm/m71071_2f_001/005.dgp",
+      "resource_sha256": "677056b9e30f0f71d8a769da53b8beee995e0899a4ced2a9cba8395f41d98ef4",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 128,
+      "y_native": 144,
+      "x_world": 256,
+      "y_world": 288,
+      "anchor_x": 146,
+      "anchor_y": 162,
+      "draw_x": 110,
+      "draw_y": 126,
+      "frame_width": 561,
+      "frame_height": 194,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 16,
+      "cell_y": 18,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 256,
+      "sort_y": 320,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m71072/objects/005_frame_000.png",
+      "image_sha256": "5cadb6ab966892db38105c630a1fa07fbbad7343f502f6dd763665fcde961363"
+    },
+    {
+      "index": 5,
+      "resource_filename": "007.DGP",
+      "source": "mapm/m71071_2f_001/007.dgp",
+      "resource_sha256": "bab1c20e7fa8a53cbd18e9176936da1231fb6de455a655953abc51efdf16550f",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 512,
+      "y_native": 64,
+      "x_world": 1024,
+      "y_world": 128,
+      "anchor_x": 131,
+      "anchor_y": 127,
+      "draw_x": 893,
+      "draw_y": 1,
+      "frame_width": 223,
+      "frame_height": 188,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 64,
+      "cell_y": 8,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 1024,
+      "sort_y": 160,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m71072/objects/007_frame_000.png",
+      "image_sha256": "f068e864a3b57387f3db71e07c2c49e4c2c029f299bba926613b68811a9f3f89"
+    },
+    {
+      "index": 6,
+      "resource_filename": "008.DGP",
+      "source": "mapm/m71071_2f_001/008.dgp",
+      "resource_sha256": "38079c5c75f3f92139ab17c78f78312a4b28993c05cd4633806aa39cbfc2835d",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 208,
+      "y_native": 248,
+      "x_world": 416,
+      "y_world": 496,
+      "anchor_x": 32,
+      "anchor_y": 45,
+      "draw_x": 384,
+      "draw_y": 451,
+      "frame_width": 74,
+      "frame_height": 99,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 26,
+      "cell_y": 31,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 416,
+      "sort_y": 528,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m71072/objects/008_frame_000.png",
+      "image_sha256": "4e95ad9809e2e4852fdc632648b719435ea891d3c62cc3436b1e00b7e6c33538"
+    },
+    {
+      "index": 7,
+      "resource_filename": "009.DGP",
+      "source": "mapm/m71071_2f_001/009.dgp",
+      "resource_sha256": "ca79d2a936f048eff1c019df4959ed104780458f3b34bb8d8bec15966451e83a",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 464,
+      "y_native": 232,
+      "x_world": 928,
+      "y_world": 464,
+      "anchor_x": 44,
+      "anchor_y": 312,
+      "draw_x": 884,
+      "draw_y": 152,
+      "frame_width": 95,
+      "frame_height": 344,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 58,
+      "cell_y": 29,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 928,
+      "sort_y": 496,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m71072/objects/009_frame_000.png",
+      "image_sha256": "db63ed5abc3e5585d19d20b543f6936841da4be752a13eeadda7098438af3ecf"
+    },
+    {
+      "index": 8,
+      "resource_filename": "010.DGP",
+      "source": "mapm/m71071_2f_001/010.dgp",
+      "resource_sha256": "4bf673670ab7b9514888a95dc994a0c0393622679262bd6004fd2d17aa813a0c",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 224,
+      "y_native": 288,
+      "x_world": 448,
+      "y_world": 576,
+      "anchor_x": 32,
+      "anchor_y": 24,
+      "draw_x": 416,
+      "draw_y": 552,
+      "frame_width": 64,
+      "frame_height": 56,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 28,
+      "cell_y": 36,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 448,
+      "sort_y": 608,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m71072/objects/010_frame_000.png",
+      "image_sha256": "1a70d361fdc131309bf9da7ed862cbf2ea36dc76f375abbb5ccc55bf652c8a33"
+    },
+    {
+      "index": 9,
+      "resource_filename": "011.DGP",
+      "source": "mapm/m71071_2f_001/011.dgp",
+      "resource_sha256": "f90b7df1052792484ee0e2264d97fc419a9ed3c7e93fc86f56ec2c658737df03",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 320,
+      "y_native": 224,
+      "x_world": 640,
+      "y_world": 448,
+      "anchor_x": 287,
+      "anchor_y": 193,
+      "draw_x": 353,
+      "draw_y": 255,
+      "frame_width": 583,
+      "frame_height": 225,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 40,
+      "cell_y": 28,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 640,
+      "sort_y": 480,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m71072/objects/011_frame_000.png",
+      "image_sha256": "1ab1c8daac3f14149f0b0a0deb7c320a22c05ceaca13b226d800459cc5d4f46b"
+    },
+    {
+      "index": 10,
+      "resource_filename": "012.DGP",
+      "source": "mapm/m71071_2f_001/012.dgp",
+      "resource_sha256": "ceb7cbe5fce421648f3b1d2a3afc5f870f87196daf4f4bfb79e2e9984fff2cdc",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 384,
+      "y_native": 144,
+      "x_world": 768,
+      "y_world": 288,
+      "anchor_x": 158,
+      "anchor_y": 159,
+      "draw_x": 610,
+      "draw_y": 129,
+      "frame_width": 314,
+      "frame_height": 191,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 48,
+      "cell_y": 18,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 768,
+      "sort_y": 320,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m71072/objects/012_frame_000.png",
+      "image_sha256": "8f01144080e0e1d7b02224ea76190ef9b274685859a6e9a30751af155732401e"
+    },
+    {
+      "index": 11,
+      "resource_filename": "013.DGP",
+      "source": "mapm/m71071_2f_001/013.dgp",
+      "resource_sha256": "ddd1789f889a7c3808a72c2069898fa95954a9af05c44a2efed37563f9260ebf",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 423,
+      "y_native": 283,
+      "x_world": 846,
+      "y_world": 566,
+      "anchor_x": 32,
+      "anchor_y": 30,
+      "draw_x": 814,
+      "draw_y": 536,
+      "frame_width": 64,
+      "frame_height": 62,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 52,
+      "cell_y": 35,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 846,
+      "sort_y": 598,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m71072/objects/013_frame_000.png",
+      "image_sha256": "e64865dd52d600ef7d93d81f608f79f0eb08ed2947469971386adf2e77722d8e"
+    }
+  ],
+  "exits": [
+    {
+      "id": 1,
+      "state": "ready",
+      "cells": [
+        {
+          "x": 62,
+          "y": 7
+        },
+        {
+          "x": 63,
+          "y": 7
+        },
+        {
+          "x": 64,
+          "y": 7
+        },
+        {
+          "x": 65,
+          "y": 7
+        }
+      ],
+      "target_map": "M71071",
+      "entry": {
+        "x": 144,
+        "y": 704,
+        "direction": 2,
+        "cell_x": 9,
+        "cell_y": 44,
+        "native_x": 72,
+        "native_y": 352
+      },
+      "conditions": [],
+      "source": {
+        "path": "Map/m71072.dat",
+        "sha256": "b2564f59634bbedcb5efd553a1ea8731d5716499c5190dba565e6bac22a8b64f",
+        "descriptor_offset": 317938,
+        "descriptor_bytes": 66,
+        "descriptor_hex": "00000000000000000000000000000000006d37313037312e646174000000000000000000000002000000000000000000000000000000000000000000000000000000",
+        "compact_field_expansion_evidence": null,
+        "target_path": "Map/m71071.dat",
+        "target_sha256": "99e6885370a8cf4a0e8519a450b00cbd3eec6dcf73692e5360c42a8088ae94b5",
+        "target_entry_marker": 2,
+        "entry_sort_code": 0,
+        "entry_terrain_raw": 0,
+        "entry_trigger_raw": 0,
+        "entry_scan_cells": [
+          {
+            "x": 9,
+            "y": 44,
+            "offset": 229042
+          },
+          {
+            "x": 10,
+            "y": 44,
+            "offset": 229106
+          },
+          {
+            "x": 9,
+            "y": 45,
+            "offset": 234226
+          },
+          {
+            "x": 10,
+            "y": 45,
+            "offset": 234290
+          }
+        ],
+        "entry_sorted_cells": [
+          {
+            "x": 9,
+            "y": 44
+          },
+          {
+            "x": 10,
+            "y": 44
+          },
+          {
+            "x": 9,
+            "y": 45
+          },
+          {
+            "x": 10,
+            "y": 45
+          }
+        ],
+        "entry_sort": "row-major scan; first four; missing followers repeat last observed cell",
+        "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
+        "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
+        "native_evidence": {
+          "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+          "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+          "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+          "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+        }
+      },
+      "execution": "Native transition descriptor only; map-entry TLK/ANM and their once-only checks must complete separately.",
+      "limitations": [
+        "Static source/code evidence; original timing not observed",
+        "Continuous keyboard movement is runtime policy"
+      ]
+    },
+    {
+      "id": 2,
+      "state": "ready",
+      "cells": [
+        {
+          "x": 8,
+          "y": 53
+        },
+        {
+          "x": 9,
+          "y": 53
+        },
+        {
+          "x": 10,
+          "y": 53
+        },
+        {
+          "x": 11,
+          "y": 53
+        },
+        {
+          "x": 12,
+          "y": 53
+        },
+        {
+          "x": 13,
+          "y": 53
+        },
+        {
+          "x": 14,
+          "y": 53
+        },
+        {
+          "x": 15,
+          "y": 53
+        }
+      ],
+      "target_map": "M71073",
+      "entry": {
+        "x": 992,
+        "y": 192,
+        "direction": 7,
+        "cell_x": 62,
+        "cell_y": 12,
+        "native_x": 496,
+        "native_y": 96
+      },
+      "conditions": [],
+      "source": {
+        "path": "Map/m71072.dat",
+        "sha256": "b2564f59634bbedcb5efd553a1ea8731d5716499c5190dba565e6bac22a8b64f",
+        "descriptor_offset": 318004,
+        "descriptor_bytes": 66,
+        "descriptor_hex": "00000000000000000000000000000000006d37313037332e646174000000000000000000000001000000060000000000000000000000000000000000000000000000",
+        "compact_field_expansion_evidence": null,
+        "target_path": "Map/m71073.dat",
+        "target_sha256": "cd3d3749f3cf14f3ed69779852ca4eaef00db2643104fac3cc1b56bd033722f1",
+        "target_entry_marker": 1,
+        "entry_sort_code": 6,
+        "entry_terrain_raw": 0,
+        "entry_trigger_raw": 0,
+        "entry_scan_cells": [
+          {
+            "x": 62,
+            "y": 11,
+            "offset": 61362
+          },
+          {
+            "x": 63,
+            "y": 11,
+            "offset": 61426
+          },
+          {
+            "x": 62,
+            "y": 12,
+            "offset": 66546
+          },
+          {
+            "x": 63,
+            "y": 12,
+            "offset": 66610
+          }
+        ],
+        "entry_sorted_cells": [
+          {
+            "x": 62,
+            "y": 12
+          },
+          {
+            "x": 63,
+            "y": 12
+          },
+          {
+            "x": 62,
+            "y": 11
+          },
+          {
+            "x": 63,
+            "y": 11
+          }
+        ],
+        "entry_sort": "y descending; stable ties",
+        "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
+        "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
+        "native_evidence": {
+          "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+          "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+          "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+          "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+        }
+      },
+      "execution": "Native transition descriptor only; map-entry TLK/ANM and their once-only checks must complete separately.",
+      "limitations": [
+        "Static source/code evidence; original timing not observed",
+        "Continuous keyboard movement is runtime policy"
+      ]
+    }
+  ],
+  "unresolved_triggers": [],
+  "role_layer_preview": 2,
+  "role_layer_note": "Runtime render policy; native role +0xF3 initial value remains unverified",
+  "source": {
+    "path": "Map/m71072.dat",
+    "sha256": "b2564f59634bbedcb5efd553a1ea8731d5716499c5190dba565e6bac22a8b64f",
+    "bytes": 361844,
+    "object_resource_base_raw": ".\\MAPM\\M71071_2F_001\\",
+    "object_resource_base": "mapm/m71071_2f_001",
+    "object_table_start": 329618,
+    "object_table_end": 332906,
+    "unknown_tail_bytes": 28938,
+    "native_evidence": {
+      "map_loader": "ev_86fb8504826b15ccbea2b3911eaa302ef3f5cbeba7d1b233df62109a9ff38681",
+      "background_draw": "ev_2f7d67b0c8598838be7ac99150b959c5012222fdac93464caaf6732031f0b6e7",
+      "background_resource_loader": "ev_7c353572e07610a7b7e99f989466929dd711a469b13e61acb2597b40ff70e8d4",
+      "transition_path_gate": "ev_1ccb72823e262e4317968f322fcebaf8bd8724a31c215f127d8a68ac77c7b2b2",
+      "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+      "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+      "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+      "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+    },
+    "object_native_evidence": [
+      "ev_86fb8504826b15ccbea2b3911eaa302ef3f5cbeba7d1b233df62109a9ff38681",
+      "ev_6093394ea87d8eb856eef46d19eabdaf9e4735e58a8a18243c3aa798fda1feb5",
+      "ev_c0c0aa49cfd0507760600c7f4f475d3912f8210c498f1896a6fb058f80960b5b",
+      "ev_05dce0e80a25427e4e72280265291973d42f600238f7f832c0320114fed82fb7",
+      "ev_70e72b030eca65a4073731754bc443a383f4b215be5da103ed824b0c1a97727a",
+      "ev_02ca024fc6f9093e9bd38f06052ee2a4f2b2671240c4df2293cf1a50c4e2ae02",
+      "ev_813d397c0060f8bec0ba044eadc20f12cfb9fd8a36a56b19620629114d4ec9a7",
+      "ev_f32a0609558d1fb49c46e1a996c57b11aa62f681842c5ee0f86256aa7b74ffbe",
+      "ev_0781814eee25b61ac8bbd2b2ede6999858f4f7041d5b908f25c58d7a7691a89d",
+      "ev_9abd5ba6645433c0752e35b69015a7f998c9c9b054862a5afdfadc7499e40962"
+    ]
+  },
+  "limitations": [
+    "Static resource/code evidence; original-game entry/transition timing is not observed.",
+    "Background uses its initial animation frame; background animation is not advanced.",
+    "Initial static objects; script changes and object animation are not reconstructed.",
+    "Role depth and continuous keyboard movement are runtime policies.",
+    "NPC source defaults require chapter TLK/ANM changes; asset export executes no story"
+  ],
+  "chapter_npcs": [
+    {
+      "id": "M71072-role-10",
+      "slot_zero_based": 10,
+      "speaker_slot_one_based": 11,
+      "name": "神代研究員",
+      "resource_id": "200",
+      "x": 224,
+      "y": 320,
+      "x_native": 112,
+      "y_native": 160,
+      "direction": 4,
+      "direction_raw_45": 4,
+      "hidden": true,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 1,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 12,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 2,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m71072.dat",
+        "sha256": "b2564f59634bbedcb5efd553a1ea8731d5716499c5190dba565e6bac22a8b64f",
+        "offset": 332906,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M71072-role-11",
+      "slot_zero_based": 11,
+      "speaker_slot_one_based": 12,
+      "name": "神代研究員",
+      "resource_id": "200",
+      "x": 672,
+      "y": 496,
+      "x_native": 336,
+      "y_native": 248,
+      "direction": 1,
+      "direction_raw_45": 1,
+      "hidden": true,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 1,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 13,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 2,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m71072.dat",
+        "sha256": "b2564f59634bbedcb5efd553a1ea8731d5716499c5190dba565e6bac22a8b64f",
+        "offset": 334127,
+        "bytes": 1221
+      }
+    }
+  ],
+  "opening_npcs": [
+    {
+      "id": "M71072-role-10",
+      "slot_zero_based": 10,
+      "speaker_slot_one_based": 11,
+      "name": "神代研究員",
+      "resource_id": "200",
+      "x": 224,
+      "y": 320,
+      "x_native": 112,
+      "y_native": 160,
+      "direction": 4,
+      "direction_raw_45": 4,
+      "hidden": true,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 1,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 12,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 2,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m71072.dat",
+        "sha256": "b2564f59634bbedcb5efd553a1ea8731d5716499c5190dba565e6bac22a8b64f",
+        "offset": 332906,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M71072-role-11",
+      "slot_zero_based": 11,
+      "speaker_slot_one_based": 12,
+      "name": "神代研究員",
+      "resource_id": "200",
+      "x": 672,
+      "y": 496,
+      "x_native": 336,
+      "y_native": 248,
+      "direction": 1,
+      "direction_raw_45": 1,
+      "hidden": true,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 1,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 13,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 2,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m71072.dat",
+        "sha256": "b2564f59634bbedcb5efd553a1ea8731d5716499c5190dba565e6bac22a8b64f",
+        "offset": 334127,
+        "bytes": 1221
+      }
+    }
+  ],
+  "map_flag_index": 127
+}

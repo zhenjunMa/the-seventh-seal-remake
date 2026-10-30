@@ -10,6 +10,7 @@ import {admitPartyMember} from '../../web/core/party_members.mjs';
 import {runtimeContent} from '../../web/core/content_registry.mjs';
 import {worldMapEntry,chapterRouteExits} from '../../web/core/map_connections.mjs';
 import {WorldMapController} from '../../web/core/world_map.mjs';
+import {loadEncounterMap} from '../../web/core/encounters.mjs';
 
 globalThis.crypto??=webcrypto;
 export const innerWhiteForestMapIds=['M70071','M70072','M70073','M70075','M70076','M70074_1','M70074_2'];
@@ -17,7 +18,7 @@ const read=async name=>JSON.parse(await readFile(new URL(`../../web/data/${name}
 export const innerWhiteForestOriginal=path=>readFile(new URL(path,new URL('../../../../',import.meta.url)));
 
 export async function innerWhiteForestSource(content=runtimeContent){
-  const [story,seed,worldMap,resources,items,attributes,itemConfiguration,configuration]=await Promise.all(['chapter_story','opening_seed','world_map','chapter_map_resources','items','party_combat','config/items','config/index'].map(read));
+  const [story,seed,worldMap,resources,items,attributes,itemConfiguration,configuration,encounterData]=await Promise.all(['chapter_story','opening_seed','world_map','chapter_map_resources','items','party_combat','config/items','config/index','encounters'].map(read));
   const ids=Object.keys(content.maps);
   const maps=Object.fromEntries(await Promise.all(ids.map(async id=>{
     const map=await read(`maps/${id.toLowerCase()}`);
@@ -25,7 +26,7 @@ export async function innerWhiteForestSource(content=runtimeContent){
     map.exits=[...(map.exits??[]).filter(exit=>!extra.some(row=>row.id===exit.id)),...extra];
     return [id,map];
   })));
-  return {story,seed,worldMap,resources,items,attributes,itemConfiguration,configuration,maps,content,mapIds:ids};
+  return {story,seed,worldMap,resources,items,attributes,itemConfiguration,configuration,encounterData,maps,content,mapIds:ids};
 }
 
 export function innerWhiteForestWorld(source){
@@ -45,9 +46,10 @@ export function innerWhiteForestRunner(source,world,extra={}){
     objectAnimation:async({mapId,objectIndex})=>trace.objects.push([mapId,objectIndex]),
     battle:async payload=>{trace.battles.push(payload.group);return battle(payload);},
     worldMapState:()=>({areas:source.worldMap.areas.map(({id,selected_index,statuses})=>({id,selected_index,statuses:[...statuses]}))}),
-    transfer:async({destination})=>{trace.transfers.push(destination);return {location:worldMapEntry({},destination,source.story)};},
+    transfer:async({destination,draft})=>{loadEncounterMap(draft,destination.map_id,source.encounterData);trace.transfers.push(destination);return {location:worldMapEntry({},destination,source.story)};},
     animate:async({program,runTlk,joinActor,leaveActor,flagCommand,draft,playback})=>{
       const hooks=Object.fromEntries(['map','actor','move','camera','wait','fade','sound','media'].map(name=>[name,async()=>{}]));
+      hooks.map=async({mapId,bootstrap})=>{if(!bootstrap)loadEncounterMap(draft,mapId,source.encounterData);};
       hooks.actor=async row=>trace.actors.push({program:program.id,command:row.command.index,kind:row.kind,actor:row.actor,x:row.x,y:row.y,poseRaw:row.poseRaw});
       for(const [name,hook]of Object.entries(animationHooks)){
         const base=hooks[name];hooks[name]=async row=>{await base(row);return hook(row);};
@@ -67,13 +69,15 @@ export function innerWhiteForestRoute(source,world,...ids){
     const mapId=world.location.map_id,exit=source.maps[mapId].exits.find(row=>row.state==='ready'&&row.target_map===id);
     assert.ok(exit,`Missing admitted DAT exit ${mapId} -> ${id}`);assert.deepEqual(exit.conditions,[]);
     world.transact(draft=>{draft.location={map_id:id,x:exit.entry.x,y:exit.entry.y,direction:exit.entry.direction};
-      draft.native_map_sort_code=exit.source.entry_sort_code;delete draft.map_npc_state;});
+      draft.native_map_sort_code=exit.source.entry_sort_code;delete draft.map_npc_state;
+      loadEncounterMap(draft,id,source.encounterData);});
   }
 }
 
 export async function innerWhiteForestSelect(source,world,index){
   const controller=new WorldMapController({world,data:source.worldMap,
-    prepare:async destination=>({location:worldMapEntry({},destination,source.story)}),load(){}});
+    prepare:async destination=>({location:worldMapEntry({},destination,source.story)}),load(){},
+    enter:async(prepared,draft)=>{loadEncounterMap(draft,prepared.location.map_id,source.encounterData);}});
   controller.open(0);await controller.select(index);
 }
 

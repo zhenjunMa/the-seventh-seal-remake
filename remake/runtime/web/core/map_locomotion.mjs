@@ -121,7 +121,7 @@ export class MapLocomotion {
 // Older route assets retain their original exporter. The verified story table
 // already carries the complete DAT header; recover its two movement bytes
 // without rebuilding pixels, modifying the asset file, or guessing a default.
-export function nativeMapMovement(movement,table){
+export function nativeMapMovement(movement,table,programs={}){
   if(!table)return movement;
   const source=table.map_source,header=table.header_raw_hex;
   if(source?.sha256!==movement.source_sha256||source.path?.toLowerCase()!==movement.source?.toLowerCase()
@@ -140,6 +140,22 @@ export function nativeMapMovement(movement,table){
       ||cell.x>=movement.width||cell.y>=movement.height
       ||cell.offset!==0x172+(cell.y*movement.width+cell.x)*64)throw new Error('地图原入口格与来源不一致');
     if(movement.terrain_rows[cell.y][cell.x]==='1')cells.set(`${cell.x},${cell.y}`,{x:cell.x,y:cell.y});
+  }
+  // 473E30 case23 places actors directly, without a terrain test; case1E
+  // restores control without changing that position. Programs have already
+  // passed the story boundary's source validation. Keep their placed cells
+  // eligible for entry/restore and escape, while ordinary movement stays shut.
+  for(const program of Object.values(programs)){
+    const callers=program.expected?.caller_maps??[program.expected?.control_map];
+    let activeMap=callers.includes(table.id)?table.id:null;
+    for(const command of program.commands){
+      if(command.opcode===10)activeMap=command.filename.slice(0,-4).toUpperCase();
+      if(activeMap!==table.id||command.opcode!==35||command.u32_plus1!==0||command.u32_plus5>=10)continue;
+      const nativeX=command.u32_plus13|0,nativeY=command.u32_plus17|0;
+      if(nativeX===-1||nativeY===-1)continue;
+      const x=Math.floor(nativeX*2/movement.cell_size),y=Math.floor(nativeY*2/movement.cell_size);
+      if(movement.terrain_rows[y]?.[x]==='1')cells.set(`${x},${y}`,{x,y});
+    }
   }
   if(cells.size)result.native_entry_cells=[...cells.values()];
   return result;

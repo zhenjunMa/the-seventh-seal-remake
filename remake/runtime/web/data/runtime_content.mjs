@@ -764,7 +764,8 @@ export const definition = {
       "path": "data/skill_test_stage.json",
       "schema": "seventh-seal-battle-stage",
       "asset_prefix": "assets/skill_test_stage/"
-    }
+    },
+    "stage01": {}
   },
   "programs": [
     "m01010-2",
@@ -800,7 +801,18 @@ export const definition = {
     "m70073-1",
     "m01010-1",
     "m01042-1",
-    "m70078-1"
+    "m70078-1",
+    "m03039-1",
+    "m03034-1",
+    "m03030-1",
+    "m03044-1",
+    "m03044-2",
+    "m03044-3",
+    "m71071",
+    "m71072",
+    "m71073",
+    "m71074",
+    "m71075"
   ],
   "maps": {
     "M01060": {
@@ -1050,6 +1062,7 @@ export const definition = {
     },
     "M03039": {
       "npcs": [
+        10,
         11
       ]
     },
@@ -1078,6 +1091,7 @@ export const definition = {
         16,
         17,
         18,
+        19,
         21,
         22,
         23,
@@ -1652,6 +1666,118 @@ export const definition = {
         {
           "index": 27,
           "handler": "keyed-chest"
+        }
+      ]
+    },
+    "M00000": {
+      "npcs": []
+    },
+    "M03034": {
+      "npcs": [
+        14,
+        19
+      ],
+      "setup": true
+    },
+    "M03033": {
+      "npcs": []
+    },
+    "M03030": {
+      "npcs": [],
+      "triggers": [
+        3
+      ]
+    },
+    "M03040": {
+      "npcs": [
+        10,
+        11,
+        13,
+        14,
+        15,
+        16
+      ]
+    },
+    "M03041": {
+      "npcs": [
+        10,
+        11
+      ]
+    },
+    "M03043": {
+      "npcs": [
+        10,
+        11
+      ]
+    },
+    "M03043-2": {
+      "npcs": [
+        10,
+        11
+      ]
+    },
+    "M03043-3": {
+      "npcs": [
+        10,
+        11,
+        12
+      ]
+    },
+    "M03043-4": {
+      "npcs": [
+        11
+      ]
+    },
+    "M03043-5": {
+      "npcs": [
+        10,
+        11
+      ],
+      "triggers": [
+        31
+      ]
+    },
+    "M03044": {
+      "npcs": [
+        10,
+        11,
+        13,
+        14
+      ],
+      "triggers": [
+        2
+      ]
+    },
+    "M71071": {
+      "npcs": [
+        14
+      ],
+      "setup": true,
+      "triggers": [
+        2
+      ]
+    },
+    "M71072": {
+      "npcs": [],
+      "setup": true
+    },
+    "M71073": {
+      "npcs": [],
+      "setup": true
+    },
+    "M71074": {
+      "npcs": [],
+      "setup": true
+    },
+    "M71075": {
+      "npcs": [
+        15
+      ],
+      "setup": true,
+      "objects": [
+        {
+          "index": 9,
+          "handler": "stationary-chest"
         }
       ]
     }
@@ -2669,6 +2795,11 @@ export default {
       "path": "data/skill_test_stage.json",
       "schema": "seventh-seal-battle-stage",
       "asset_prefix": "assets/skill_test_stage/"
+    },
+    "stage01": {
+      "path": "data/stages/stage01.json",
+      "schema": "seventh-seal-battle-stage",
+      "asset_prefix": "assets/stages/stage01/"
     }
   },
   "programs": {
@@ -2841,6 +2972,61 @@ export default {
       "path": "Animate/m70078-1.anm",
       "sha256": "4842a7ac5b7f30d2231a6030ab2364d961dd69243684ae6735c16f4882dc52be",
       "bytes": 3915
+    },
+    "m03039-1": {
+      "path": "Animate/m03039-1.anm",
+      "sha256": "d3693b466ee5d9668ad56a6bf72bd6a664c40131f0be2995cda3608c627bb503",
+      "bytes": 2879
+    },
+    "m03034-1": {
+      "path": "Animate/m03034-1.anm",
+      "sha256": "5e05cd069141471555c909c14f570bdb31056e9217416977236b9ca5f32d9322",
+      "bytes": 511
+    },
+    "m03030-1": {
+      "path": "Animate/m03030-1.anm",
+      "sha256": "7d921822fc281b638965bbd4709f3a440637df383c72623dbb97f8abbe424797",
+      "bytes": 1547
+    },
+    "m03044-1": {
+      "path": "Animate/m03044-1.anm",
+      "sha256": "32e039228e65405b3de14f56c27bedc00df9ada75cadd9560851674cbae01edb",
+      "bytes": 3619
+    },
+    "m03044-2": {
+      "path": "Animate/m03044-2.anm",
+      "sha256": "51bcc1771a54a0f04443f9857276fc57e30f396be18afa208ff847b29f383a8c",
+      "bytes": 1695
+    },
+    "m03044-3": {
+      "path": "Animate/m03044-3.anm",
+      "sha256": "8c21a0092731e1fb0a8684422720c24bbe98e5075617b5539c9ecf9ef0870a89",
+      "bytes": 881
+    },
+    "m71071": {
+      "path": "Animate/m71071.anm",
+      "sha256": "2d61999726eef1d5ee42176040cc87266f74657af53a46c34b756470c93146ff",
+      "bytes": 733
+    },
+    "m71072": {
+      "path": "Animate/m71072.anm",
+      "sha256": "eed2e6d3b48cd7d27b26319e55fb4bba40abc54f3cc0e3b1c608dade771932b3",
+      "bytes": 511
+    },
+    "m71073": {
+      "path": "Animate/m71073.anm",
+      "sha256": "8811c7c8f44b58631815973ddd84b0dcb96bb7cf267d955940efc9b589700196",
+      "bytes": 659
+    },
+    "m71074": {
+      "path": "Animate/m71074.anm",
+      "sha256": "13c7bad146aabb597d3f30eb8f79835b5b24fbdc8c4045824ec0ac92475f0f51",
+      "bytes": 437
+    },
+    "m71075": {
+      "path": "Animate/m71075.anm",
+      "sha256": "25eabedb7cf66f6a08ad3f30b4f8fdcbdf486686b980f3f5d0dfa9ff1bccf422",
+      "bytes": 733
     }
   },
   "maps": {
@@ -3232,6 +3418,7 @@ export default {
       "rests": [],
       "routes": [],
       "npcs": [
+        10,
         11
       ],
       "flag_index": 426
@@ -3273,6 +3460,7 @@ export default {
         16,
         17,
         18,
+        19,
         21,
         22,
         23,
@@ -4046,6 +4234,215 @@ export default {
         10
       ],
       "flag_index": 107
+    },
+    "M00000": {
+      "path": "data/maps/m00000.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 999
+    },
+    "M03034": {
+      "path": "data/maps/m03034.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "setup_record": 26,
+      "npcs": [
+        14,
+        19
+      ],
+      "flag_index": 421
+    },
+    "M03033": {
+      "path": "data/maps/m03033.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 420
+    },
+    "M03030": {
+      "path": "data/maps/m03030.json",
+      "triggers": [
+        3
+      ],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 23
+    },
+    "M03040": {
+      "path": "data/maps/m03040.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10,
+        11,
+        13,
+        14,
+        15,
+        16
+      ],
+      "flag_index": 36
+    },
+    "M03041": {
+      "path": "data/maps/m03041.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10,
+        11
+      ],
+      "flag_index": 427
+    },
+    "M03043": {
+      "path": "data/maps/m03043.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10,
+        11
+      ],
+      "flag_index": 14
+    },
+    "M03043-2": {
+      "path": "data/maps/m03043-2.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10,
+        11
+      ],
+      "flag_index": 434
+    },
+    "M03043-3": {
+      "path": "data/maps/m03043-3.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10,
+        11,
+        12
+      ],
+      "flag_index": 434
+    },
+    "M03043-4": {
+      "path": "data/maps/m03043-4.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        11
+      ],
+      "flag_index": 434
+    },
+    "M03043-5": {
+      "path": "data/maps/m03043-5.json",
+      "triggers": [
+        31
+      ],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10,
+        11
+      ],
+      "flag_index": 434
+    },
+    "M03044": {
+      "path": "data/maps/m03044.json",
+      "triggers": [
+        2
+      ],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10,
+        11,
+        13,
+        14
+      ],
+      "flag_index": 428
+    },
+    "M71071": {
+      "path": "data/maps/m71071.json",
+      "triggers": [
+        2
+      ],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "setup_record": 16,
+      "npcs": [
+        14
+      ],
+      "flag_index": 126
+    },
+    "M71072": {
+      "path": "data/maps/m71072.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "setup_record": 1,
+      "npcs": [],
+      "flag_index": 127
+    },
+    "M71073": {
+      "path": "data/maps/m71073.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "setup_record": 1,
+      "npcs": [],
+      "flag_index": 128
+    },
+    "M71074": {
+      "path": "data/maps/m71074.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "setup_record": 1,
+      "npcs": [],
+      "flag_index": 129
+    },
+    "M71075": {
+      "path": "data/maps/m71075.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 9,
+          "handler": "stationary-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "setup_record": 9,
+      "npcs": [
+        15
+      ],
+      "flag_index": 468
     }
   },
   "story": {

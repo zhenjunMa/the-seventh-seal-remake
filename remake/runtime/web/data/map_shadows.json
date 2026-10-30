@@ -1244,6 +1244,45 @@
         }
       ]
     },
+    "011": {
+      "source": {
+        "path": "ROLE/011.dgp",
+        "sha256": "5d61a4afefc10f3325d6a4913a4cc5a44522b48cd10bdd9bdf17e62c44dc1da8"
+      },
+      "frame_width": 101,
+      "frame_height": 140,
+      "event_only": false,
+      "actions": [
+        {
+          "index": 0,
+          "first_frame": 0,
+          "frame_count": 10,
+          "directions": 8,
+          "shadow_sheet": "/assets/map_shadows/011/action_00_shadow.png",
+          "shadow_geometry": {
+            "x": 25,
+            "y": 103,
+            "width": 48,
+            "height": 25
+          },
+          "sha256": "a26afca3783b69a01f56bb9e4c081873c14461d7000869a5f2be9cab46779c7f"
+        },
+        {
+          "index": 1,
+          "first_frame": 80,
+          "frame_count": 10,
+          "directions": 8,
+          "shadow_sheet": "/assets/map_shadows/011/action_01_shadow.png",
+          "shadow_geometry": {
+            "x": 22,
+            "y": 103,
+            "width": 53,
+            "height": 28
+          },
+          "sha256": "495f8f6fcc65432b76bcbad6c950198f2e4788baf3c4996eb1927f973868acf7"
+        }
+      ]
+    },
     "012": {
       "source": {
         "path": "ROLE/012.dgp",
@@ -1576,6 +1615,98 @@
             "height": 33
           },
           "sha256": "943ec0e0725409af5b3086741a42f2262875517643e94cf9f42b47c73a20ef3c"
+        }
+      ]
+    },
+    "021": {
+      "source": {
+        "path": "ROLE/021.dgp",
+        "sha256": "33cbe69f405e28a71afa3ae93f6d6a5259a9051c1069efd87eb34f50ca97b147"
+      },
+      "frame_width": 90,
+      "frame_height": 120,
+      "event_only": false,
+      "actions": [
+        {
+          "index": 0,
+          "first_frame": 0,
+          "frame_count": 5,
+          "directions": 8,
+          "shadow_sheet": "/assets/map_shadows/021/action_00_shadow.png",
+          "shadow_geometry": {
+            "x": 26,
+            "y": 85,
+            "width": 32,
+            "height": 16
+          },
+          "sha256": "7acc6cd428e26f3fe618b0e7cfc4dd6a1430921e163f67e8c5aeeb52daaecde8"
+        },
+        {
+          "index": 1,
+          "first_frame": 40,
+          "frame_count": 10,
+          "directions": 8,
+          "shadow_sheet": "/assets/map_shadows/021/action_01_shadow.png",
+          "shadow_geometry": {
+            "x": 17,
+            "y": 26,
+            "width": 49,
+            "height": 87
+          },
+          "sha256": "a3fb84f971c805214e9f3d3e7fb2db99cae381dab81efaf5eec4684639ccb67b"
+        },
+        {
+          "index": 2,
+          "first_frame": 120,
+          "frame_count": 10,
+          "directions": 8,
+          "shadow_sheet": "/assets/map_shadows/021/action_02_shadow.png",
+          "shadow_geometry": {
+            "x": 3,
+            "y": 69,
+            "width": 78,
+            "height": 48
+          },
+          "sha256": "e385523a3f69eab3accb778ad6a5ce9c0d2949a11beae7ef02b201f95238179a"
+        }
+      ]
+    },
+    "026": {
+      "source": {
+        "path": "ROLE/026.dgp",
+        "sha256": "dbea3b33d0398389082eab29c06a7d0a5930cd17c3873054d08e4f86b559837c"
+      },
+      "frame_width": 124,
+      "frame_height": 137,
+      "event_only": false,
+      "actions": [
+        {
+          "index": 0,
+          "first_frame": 0,
+          "frame_count": 5,
+          "directions": 8,
+          "shadow_sheet": "/assets/map_shadows/026/action_00_shadow.png",
+          "shadow_geometry": {
+            "x": 38,
+            "y": 95,
+            "width": 46,
+            "height": 29
+          },
+          "sha256": "26291765b061215878d5872215bf2f07c7b7c4412fe4ac000b533c5f595dda09"
+        },
+        {
+          "index": 1,
+          "first_frame": 40,
+          "frame_count": 10,
+          "directions": 8,
+          "shadow_sheet": "/assets/map_shadows/026/action_01_shadow.png",
+          "shadow_geometry": {
+            "x": 17,
+            "y": 93,
+            "width": 88,
+            "height": 43
+          },
+          "sha256": "cb0e6cc0df5b1a059136e97a65808194a244eebb0e6561b080e332a84b9cb3b0"
         }
       ]
     },
@@ -2039,6 +2170,45 @@
         }
       ]
     },
+    "046": {
+      "source": {
+        "path": "ROLE/046.dgp",
+        "sha256": "036f12955bf1cd40922db3807483d7e3550ac1cd116db0e3f1c7d584f2495586"
+      },
+      "frame_width": 192,
+      "frame_height": 164,
+      "event_only": false,
+      "actions": [
+        {
+          "index": 0,
+          "first_frame": 0,
+          "frame_count": 5,
+          "directions": 8,
+          "shadow_sheet": "/assets/map_shadows/046/action_00_shadow.png",
+          "shadow_geometry": {
+            "x": 76,
+            "y": 130,
+            "width": 30,
+            "height": 18
+          },
+          "sha256": "fe67ef597b80da867fc947a687894b62dc367edbefe54447d29a04d93a647409"
+        },
+        {
+          "index": 1,
+          "first_frame": 40,
+          "frame_count": 10,
+          "directions": 8,
+          "shadow_sheet": "/assets/map_shadows/046/action_01_shadow.png",
+          "shadow_geometry": {
+            "x": 58,
+            "y": 129,
+            "width": 65,
+            "height": 29
+          },
+          "sha256": "dc436debf83c98d8e98bb1acd1a10ecd8b16f3e9430db8c4f667ae2398ae07db"
+        }
+      ]
+    },
     "049": {
       "source": {
         "path": "ROLE/049.dgp",
@@ -2198,6 +2368,45 @@
             "height": 56
           },
           "sha256": "ce81876ba1205f79559b765906b4a7832f395f98c5e08ed7821fe3bb971571d5"
+        }
+      ]
+    },
+    "051": {
+      "source": {
+        "path": "ROLE/051.dgp",
+        "sha256": "cdfe3fbd389966e2612d3f3999c5f08c85c80cb30691c4ebdbeded2c1c3c35ce"
+      },
+      "frame_width": 185,
+      "frame_height": 167,
+      "event_only": false,
+      "actions": [
+        {
+          "index": 0,
+          "first_frame": 0,
+          "frame_count": 10,
+          "directions": 8,
+          "shadow_sheet": "/assets/map_shadows/051/action_00_shadow.png",
+          "shadow_geometry": {
+            "x": 53,
+            "y": 131,
+            "width": 71,
+            "height": 29
+          },
+          "sha256": "95c2694c26fb2a0655ddd7da3209d4742247bb92d7236f48f8700281e6ff78f2"
+        },
+        {
+          "index": 1,
+          "first_frame": 80,
+          "frame_count": 10,
+          "directions": 8,
+          "shadow_sheet": "/assets/map_shadows/051/action_01_shadow.png",
+          "shadow_geometry": {
+            "x": 54,
+            "y": 131,
+            "width": 69,
+            "height": 28
+          },
+          "sha256": "f0bc8eea93e7e9c858527d58f4cde0aa8fad17528c9199d4408232b1fce1ab4d"
         }
       ]
     },
@@ -2471,6 +2680,240 @@
             "height": 32
           },
           "sha256": "e28cef8a0d41786f58d497508ee35477c3bd4ffae2fd44741d90b47695f78958"
+        }
+      ]
+    },
+    "062": {
+      "source": {
+        "path": "ROLE/062.dgp",
+        "sha256": "50d2efd8680cf3da348f79175f06f56871534836344cb213925123ba883617bb"
+      },
+      "frame_width": 188,
+      "frame_height": 164,
+      "event_only": false,
+      "actions": [
+        {
+          "index": 0,
+          "first_frame": 0,
+          "frame_count": 5,
+          "directions": 8,
+          "shadow_sheet": "/assets/map_shadows/062/action_00_shadow.png",
+          "shadow_geometry": {
+            "x": 66,
+            "y": 125,
+            "width": 42,
+            "height": 28
+          },
+          "sha256": "833231fb1a71946fce08753b956992e7d89b8fe7ddfc3ed9d98ce17a642a7e3b"
+        },
+        {
+          "index": 1,
+          "first_frame": 40,
+          "frame_count": 10,
+          "directions": 8,
+          "shadow_sheet": "/assets/map_shadows/062/action_01_shadow.png",
+          "shadow_geometry": {
+            "x": 56,
+            "y": 124,
+            "width": 63,
+            "height": 33
+          },
+          "sha256": "ec4c9e3a814b60c624c97cb46b5ec9cc05a4137334d84d0cd814b84f871acd48"
+        }
+      ]
+    },
+    "063": {
+      "source": {
+        "path": "ROLE/063.dgp",
+        "sha256": "51a18432260745724323f9e76469ca301af51560aa566a8cb79a35ce623a7f85"
+      },
+      "frame_width": 195,
+      "frame_height": 159,
+      "event_only": false,
+      "actions": [
+        {
+          "index": 0,
+          "first_frame": 0,
+          "frame_count": 11,
+          "directions": 8,
+          "shadow_sheet": "/assets/map_shadows/063/action_00_shadow.png",
+          "shadow_geometry": {
+            "x": 74,
+            "y": 123,
+            "width": 40,
+            "height": 22
+          },
+          "sha256": "e8640ff5da59848e0e10c7e816b73dce0dc17fbc5d91fe648a961344451c66b7"
+        },
+        {
+          "index": 1,
+          "first_frame": 88,
+          "frame_count": 10,
+          "directions": 8,
+          "shadow_sheet": "/assets/map_shadows/063/action_01_shadow.png",
+          "shadow_geometry": {
+            "x": 62,
+            "y": 120,
+            "width": 63,
+            "height": 33
+          },
+          "sha256": "b43a4faaee09063a264d240e01f6781a643ccaeb9eb19f49fe7edfe18bbff244"
+        }
+      ]
+    },
+    "064": {
+      "source": {
+        "path": "ROLE/064.dgp",
+        "sha256": "615af74236a9fd0d8d800b822490c182413b58e96a276eda177d17542e36a041"
+      },
+      "frame_width": 188,
+      "frame_height": 158,
+      "event_only": false,
+      "actions": [
+        {
+          "index": 0,
+          "first_frame": 0,
+          "frame_count": 5,
+          "directions": 8,
+          "shadow_sheet": "/assets/map_shadows/064/action_00_shadow.png",
+          "shadow_geometry": {
+            "x": 67,
+            "y": 121,
+            "width": 40,
+            "height": 25
+          },
+          "sha256": "2268652598607aa391d63a81b1c8e64587489fce782189a52c04c2f15299c1e1"
+        },
+        {
+          "index": 1,
+          "first_frame": 40,
+          "frame_count": 10,
+          "directions": 8,
+          "shadow_sheet": "/assets/map_shadows/064/action_01_shadow.png",
+          "shadow_geometry": {
+            "x": 55,
+            "y": 123,
+            "width": 63,
+            "height": 28
+          },
+          "sha256": "c20cfd9417c092046b209f751ad6a3f5218b8c3247b4bc6e8d8a46bfd60db727"
+        }
+      ]
+    },
+    "065": {
+      "source": {
+        "path": "ROLE/065.dgp",
+        "sha256": "bf4ea55d3d9ed521cbf9480cfbf2a55b171b1c94467d88c9ea9ea9dba3db4e5f"
+      },
+      "frame_width": 193,
+      "frame_height": 159,
+      "event_only": false,
+      "actions": [
+        {
+          "index": 0,
+          "first_frame": 0,
+          "frame_count": 5,
+          "directions": 8,
+          "shadow_sheet": "/assets/map_shadows/065/action_00_shadow.png",
+          "shadow_geometry": {
+            "x": 68,
+            "y": 123,
+            "width": 49,
+            "height": 25
+          },
+          "sha256": "3adb0de08ebdf1bef69fe9f0a942e26a546754ce7fa585981b77ba3e73eab103"
+        },
+        {
+          "index": 1,
+          "first_frame": 40,
+          "frame_count": 10,
+          "directions": 8,
+          "shadow_sheet": "/assets/map_shadows/065/action_01_shadow.png",
+          "shadow_geometry": {
+            "x": 66,
+            "y": 122,
+            "width": 53,
+            "height": 30
+          },
+          "sha256": "1a4862a495e10d07125ad7233245091629bdcc203a9bab0465425e759d638ab0"
+        }
+      ]
+    },
+    "066": {
+      "source": {
+        "path": "ROLE/066.dgp",
+        "sha256": "3b02a5ff42e593b314b3f8c9450be3fe6b16809f3d17a730f44e952349fdfb30"
+      },
+      "frame_width": 191,
+      "frame_height": 158,
+      "event_only": false,
+      "actions": [
+        {
+          "index": 0,
+          "first_frame": 0,
+          "frame_count": 5,
+          "directions": 8,
+          "shadow_sheet": "/assets/map_shadows/066/action_00_shadow.png",
+          "shadow_geometry": {
+            "x": 74,
+            "y": 122,
+            "width": 32,
+            "height": 17
+          },
+          "sha256": "66cf1337a5396ae7842a8a4740f9edc45648bb0ab6cdccdef4e503bb39102251"
+        },
+        {
+          "index": 1,
+          "first_frame": 40,
+          "frame_count": 10,
+          "directions": 8,
+          "shadow_sheet": "/assets/map_shadows/066/action_01_shadow.png",
+          "shadow_geometry": {
+            "x": 60,
+            "y": 122,
+            "width": 59,
+            "height": 29
+          },
+          "sha256": "51cdb42a4654f2f205579aacf460387e673d04b48366f8d37cde4c3403bc563a"
+        }
+      ]
+    },
+    "067": {
+      "source": {
+        "path": "ROLE/067.dgp",
+        "sha256": "8d545697a9dea8ea7fcfd910fde1aa1770110e1caeac8dfc1f7d66dc0d027fb4"
+      },
+      "frame_width": 183,
+      "frame_height": 159,
+      "event_only": false,
+      "actions": [
+        {
+          "index": 0,
+          "first_frame": 0,
+          "frame_count": 5,
+          "directions": 8,
+          "shadow_sheet": "/assets/map_shadows/067/action_00_shadow.png",
+          "shadow_geometry": {
+            "x": 69,
+            "y": 123,
+            "width": 33,
+            "height": 17
+          },
+          "sha256": "bcacf1685aeac729ae1f717a256403b9804b2b543c6d624a47da188f05c233b9"
+        },
+        {
+          "index": 1,
+          "first_frame": 40,
+          "frame_count": 10,
+          "directions": 8,
+          "shadow_sheet": "/assets/map_shadows/067/action_01_shadow.png",
+          "shadow_geometry": {
+            "x": 53,
+            "y": 122,
+            "width": 65,
+            "height": 31
+          },
+          "sha256": "9ecfc938d0eb8f43fd0c1d31578df42e3ac7737baa2951d6b0fdf68d2da092d9"
         }
       ]
     },
@@ -3683,6 +4126,45 @@
         }
       ]
     },
+    "112": {
+      "source": {
+        "path": "ROLE/112.dgp",
+        "sha256": "d8f3f65618ad2952a6abc995c61bcb567d3d7857e99bb6e78432c0dfa397cedb"
+      },
+      "frame_width": 90,
+      "frame_height": 130,
+      "event_only": false,
+      "actions": [
+        {
+          "index": 0,
+          "first_frame": 0,
+          "frame_count": 5,
+          "directions": 8,
+          "shadow_sheet": "/assets/map_shadows/112/action_00_shadow.png",
+          "shadow_geometry": {
+            "x": 24,
+            "y": 91,
+            "width": 46,
+            "height": 23
+          },
+          "sha256": "decc99f033a012fb142e7a0556131ce286db5db25352ca9d8299c38a3a3340f8"
+        },
+        {
+          "index": 1,
+          "first_frame": 40,
+          "frame_count": 10,
+          "directions": 8,
+          "shadow_sheet": "/assets/map_shadows/112/action_01_shadow.png",
+          "shadow_geometry": {
+            "x": 16,
+            "y": 82,
+            "width": 61,
+            "height": 41
+          },
+          "sha256": "8dfb6221d1f81e3cb7fcda289d8e4c48e67e1bd0b715c4ee62640e2936c92b6e"
+        }
+      ]
+    },
     "113": {
       "source": {
         "path": "ROLE/113.dgp",
@@ -3914,6 +4396,45 @@
             "height": 30
           },
           "sha256": "21ae1970708d6bf97a07aeb8179b8d294d4cba2354f8f452b491b36d7489f8f8"
+        }
+      ]
+    },
+    "125": {
+      "source": {
+        "path": "ROLE/125.dgp",
+        "sha256": "f949439bc3dad09356c8609654de646666a4209612726220490bb48d11b3246a"
+      },
+      "frame_width": 90,
+      "frame_height": 130,
+      "event_only": false,
+      "actions": [
+        {
+          "index": 0,
+          "first_frame": 0,
+          "frame_count": 5,
+          "directions": 8,
+          "shadow_sheet": "/assets/map_shadows/125/action_00_shadow.png",
+          "shadow_geometry": {
+            "x": 24,
+            "y": 95,
+            "width": 38,
+            "height": 20
+          },
+          "sha256": "f64c9518d6d4d41e34841330a8220d76e772562c836cf8d5bf5a191669d9e683"
+        },
+        {
+          "index": 1,
+          "first_frame": 40,
+          "frame_count": 10,
+          "directions": 8,
+          "shadow_sheet": "/assets/map_shadows/125/action_01_shadow.png",
+          "shadow_geometry": {
+            "x": 12,
+            "y": 93,
+            "width": 62,
+            "height": 30
+          },
+          "sha256": "9f8491522f5d7b42b8d6bac1996a99714a2f9682e8856f3fa8355f5a3af40168"
         }
       ]
     },
@@ -4474,6 +4995,45 @@
         }
       ]
     },
+    "187": {
+      "source": {
+        "path": "ROLE/187.dgp",
+        "sha256": "3c8ab19a605ebb87d10b80b4480b8552f3e39985a2b9d5efc5900a8d933e5199"
+      },
+      "frame_width": 100,
+      "frame_height": 130,
+      "event_only": false,
+      "actions": [
+        {
+          "index": 0,
+          "first_frame": 0,
+          "frame_count": 10,
+          "directions": 8,
+          "shadow_sheet": "/assets/map_shadows/187/action_00_shadow.png",
+          "shadow_geometry": {
+            "x": 34,
+            "y": 102,
+            "width": 32,
+            "height": 16
+          },
+          "sha256": "f72e3c179e5a8dbdd4138da0a26a683e49aca3c952a87a469e7e9d9a4dbea38b"
+        },
+        {
+          "index": 1,
+          "first_frame": 80,
+          "frame_count": 10,
+          "directions": 8,
+          "shadow_sheet": "/assets/map_shadows/187/action_01_shadow.png",
+          "shadow_geometry": {
+            "x": 32,
+            "y": 101,
+            "width": 36,
+            "height": 19
+          },
+          "sha256": "04681c56aaef6f86e13be893df718390810a376fe48d9af8c6af08d9ded17e0f"
+        }
+      ]
+    },
     "189": {
       "source": {
         "path": "ROLE/189.dgp",
@@ -4510,6 +5070,84 @@
             "height": 57
           },
           "sha256": "5ce6505db4b0d67d94ebaccb13f00df0c78e2685fd92628468f8c8713108d653"
+        }
+      ]
+    },
+    "191": {
+      "source": {
+        "path": "ROLE/191.dgp",
+        "sha256": "29901627dd8d9518828a8de1b9cc23d1e6b975583e4a92db1ef863fabef6e4f9"
+      },
+      "frame_width": 110,
+      "frame_height": 90,
+      "event_only": false,
+      "actions": [
+        {
+          "index": 0,
+          "first_frame": 0,
+          "frame_count": 10,
+          "directions": 8,
+          "shadow_sheet": "/assets/map_shadows/191/action_00_shadow.png",
+          "shadow_geometry": {
+            "x": 22,
+            "y": 55,
+            "width": 69,
+            "height": 32
+          },
+          "sha256": "1a44dcf053b06e2fe51136f53904f224a6663ea2a89a87eb0d1aede05a09044e"
+        },
+        {
+          "index": 1,
+          "first_frame": 80,
+          "frame_count": 10,
+          "directions": 8,
+          "shadow_sheet": "/assets/map_shadows/191/action_01_shadow.png",
+          "shadow_geometry": {
+            "x": 22,
+            "y": 55,
+            "width": 70,
+            "height": 33
+          },
+          "sha256": "a6dd1e8811bb740b9f938bd8cc06fed88a2c46255af0064ab5c04ce75cd76315"
+        }
+      ]
+    },
+    "200": {
+      "source": {
+        "path": "ROLE/200.dgp",
+        "sha256": "24eb533446c908e69059bcf170b28caf40158a7f80a25edc41bdb9db73cc7601"
+      },
+      "frame_width": 100,
+      "frame_height": 146,
+      "event_only": false,
+      "actions": [
+        {
+          "index": 0,
+          "first_frame": 0,
+          "frame_count": 1,
+          "directions": 8,
+          "shadow_sheet": "/assets/map_shadows/200/action_00_shadow.png",
+          "shadow_geometry": {
+            "x": 9,
+            "y": 98,
+            "width": 86,
+            "height": 47
+          },
+          "sha256": "515dd5c69a15b09695ce1f353a741aa679946ffe12b3299df25e869a8997b20e"
+        },
+        {
+          "index": 1,
+          "first_frame": 8,
+          "frame_count": 10,
+          "directions": 8,
+          "shadow_sheet": "/assets/map_shadows/200/action_01_shadow.png",
+          "shadow_geometry": {
+            "x": 6,
+            "y": 80,
+            "width": 92,
+            "height": 66
+          },
+          "sha256": "c1d730dbb949922fabe53cebc4118eeaa9f8cba960abc2f3c85bc30003330294"
         }
       ]
     },
@@ -4574,6 +5212,87 @@
             "height": 44
           },
           "sha256": "ba6142911c7219d4b77b47e09b16233cb8e22e0ff73bb8b2643d3cee9651e8a4"
+        }
+      ]
+    },
+    "212": {
+      "source": {
+        "path": "ROLE/212.dgp",
+        "sha256": "e619ea1f6edc9cd824d92d266d2ad6f7d4b4f154d52f78dbc3ac6f54f3d4f94a"
+      },
+      "frame_width": 163,
+      "frame_height": 176,
+      "event_only": false,
+      "actions": [
+        {
+          "index": 0,
+          "first_frame": 0,
+          "frame_count": 10,
+          "directions": 8,
+          "shadow_sheet": "/assets/map_shadows/212/action_00_shadow.png",
+          "shadow_geometry": {
+            "x": 68,
+            "y": 141,
+            "width": 34,
+            "height": 20
+          },
+          "sha256": "ca1b368a7292d2a29042d01fe2daee979d315dc8d9febce17cdb363cada208d1"
+        },
+        {
+          "index": 1,
+          "first_frame": 80,
+          "frame_count": 10,
+          "directions": 8,
+          "shadow_sheet": "/assets/map_shadows/212/action_01_shadow.png",
+          "shadow_geometry": {
+            "x": 54,
+            "y": 141,
+            "width": 61,
+            "height": 28
+          },
+          "sha256": "2dee5c140d973f5137e63284efa6926ce4012e9a799533a0dc8ae227c0e1e228"
+        },
+        {
+          "index": 2,
+          "first_frame": 160,
+          "frame_count": 12,
+          "directions": 8,
+          "shadow_sheet": "/assets/map_shadows/212/action_02_shadow.png",
+          "shadow_geometry": {
+            "x": 49,
+            "y": 141,
+            "width": 72,
+            "height": 30
+          },
+          "sha256": "c1a8568dd462aa84c3e7e07a3837990b21f8bb4825fa7921d641e238cb71013f"
+        },
+        {
+          "index": 3,
+          "first_frame": 256,
+          "frame_count": 15,
+          "directions": 8,
+          "shadow_sheet": "/assets/map_shadows/212/action_03_shadow.png",
+          "shadow_geometry": {
+            "x": 34,
+            "y": 141,
+            "width": 102,
+            "height": 33
+          },
+          "sha256": "556cbb2e52668afe395572724a6df8f4609e422035a8f8a91c013bef9b65fcb8"
+        },
+        {
+          "index": 4,
+          "first_frame": 376,
+          "frame_count": 15,
+          "directions": 8,
+          "shadow_sheet": "/assets/map_shadows/212/action_04_shadow.png",
+          "shadow_geometry": {
+            "x": 34,
+            "y": 141,
+            "width": 102,
+            "height": 33
+          },
+          "sha256": "556cbb2e52668afe395572724a6df8f4609e422035a8f8a91c013bef9b65fcb8"
         }
       ]
     },

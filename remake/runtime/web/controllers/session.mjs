@@ -8,6 +8,7 @@ import {playbackTask} from "../core/story_playback.mjs";
 import {validateSourceSkillShortcuts} from "../core/skill_shortcuts.mjs";
 import {techniqueSlots,techniqueCombinations} from "../core/menu_techniques.mjs";
 import {hasNativeStoryCompletion,loadStoryCompletion,saveStoryCompletion,STORY_COMPLETION_EVIDENCE} from '../core/story_completion.mjs';
+import {loadEncounterMap} from '../core/encounters.mjs';
 
 export function createSessionController({state, actions, $, canvas, ctx,completionStorage}) {
   let storage=completionStorage;try{if(storage===undefined)storage=globalThis.localStorage;}catch{}
@@ -57,7 +58,7 @@ export function createSessionController({state, actions, $, canvas, ctx,completi
           program:state.openingProgram,
           prepare:(id,signal)=>state.loadingView.run(id,onProgress=>actions.prepareMap(id,{onProgress}),{signal,clock:playback.clock}),
           staging:state.prologuePresentation.staging,effects:state.prologuePresentation.effects,nativeViewport:true,
-          install:scene=>{actions.commitView(scene,initial.location);state.scenes.current=scene;state.view.follow=false;},
+          install:scene=>{loadEncounterMap(initial,scene.data.id,state.encounterData);actions.commitView(scene,initial.location);state.scenes.current=scene;state.view.follow=false;},
           camera:(x,y)=>{state.view.x=x;state.view.y=y;},say: actions.say,log: actions.log,
           shade:alpha=>{$('openingShade').style.opacity=String(alpha);}});
         $('openingShade').hidden=false;$('openingShade').style.opacity='1';

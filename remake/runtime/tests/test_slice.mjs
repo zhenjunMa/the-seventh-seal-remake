@@ -71,7 +71,7 @@ test('real map descriptors, entry markers and runtime coverage gates',async()=>{
     const triggers=(resources.trigger_regions[scene.id]??[]).filter(row=>storyBindings(scene.id).triggers.includes(row.id));
     const readyCells=new Set([...exits.filter(exit=>exit.state==='ready').flatMap(e=>e.cells.map(c=>`${c.x},${c.y}`)),
       ...triggers.flatMap(trigger=>trigger.cells.map(c=>`${c.x},${c.y}`))]);
-    const nativeMovement=nativeMapMovement(scene.movement,story.maps[scene.id]);
+    const nativeMovement=nativeMapMovement(scene.movement,story.maps[scene.id],story.programs);
     const movement=new MovementMap({...nativeMovement,triggers:nativeMovement.triggers.map(t=>({...t,path_gate:!readyCells.has(`${t.x},${t.y}`)}))});
     const recordBytes=bytes.readUInt32LE(0x18)===1?0x42:0x2b;
     const checkExitCells=exit=>{
@@ -97,7 +97,7 @@ test('real map descriptors, entry markers and runtime coverage gates',async()=>{
       const targetBytes=await readFile(new URL(target.source.path,root));
       const cell=exit.entry.cell_y*target.movement.width+exit.entry.cell_x;
       assert.equal(targetBytes[0x172+cell*64+0x21],exit.source.target_entry_marker);
-      const targetMovement=new MovementMap(nativeMapMovement(target.movement,story.maps[exit.target_map]));
+      const targetMovement=new MovementMap(nativeMapMovement(target.movement,story.maps[exit.target_map],story.programs));
       const terrain=targetBytes[0x172+cell*64+0x20];
       assert.equal(target.movement.terrain_rows[exit.entry.cell_y][exit.entry.cell_x],String(terrain));
       assert.equal(targetMovement.at(exit.entry.x,exit.entry.y).blocked,terrain===1);

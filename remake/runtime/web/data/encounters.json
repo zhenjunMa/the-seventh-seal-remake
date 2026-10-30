@@ -2,9 +2,57 @@
   "schema": "seventh-seal-encounters",
   "version": 1,
   "maps": {
+    "M01060": {
+      "frequency": 0,
+      "global_pool_load_raw": 1,
+      "members": [],
+      "source": [
+        {
+          "path": "Map/m01060.dat",
+          "sha256": "5ff8f2a3c43649fff1efc4eccd878f4a662d905f6ba3404948e47ec9240a3826",
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
+        },
+        {
+          "path": "Map/m01060.STG",
+          "sha256": "fb8841778bdf616555a11f37cc17ef1a0afe07d5a2283d4e6bdb3e053d4845f8"
+        }
+      ],
+      "global_pool_enabled_raw": 0,
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
+      ]
+    },
+    "M01020A": {
+      "frequency": 0,
+      "global_pool_load_raw": 1,
+      "members": [],
+      "source": [
+        {
+          "path": "Map/m01020a.dat",
+          "sha256": "6020fed7cc22db1587cedcc5eb6b48183976ee16ae68ad2da028ba6c7129b8ab",
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
+        },
+        {
+          "path": "Map/m01020a.STG",
+          "sha256": "fb8841778bdf616555a11f37cc17ef1a0afe07d5a2283d4e6bdb3e053d4845f8"
+        }
+      ],
+      "global_pool_enabled_raw": 0,
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
+      ]
+    },
     "M71010": {
       "frequency": 1,
-      "stage": "stage07.scn",
+      "global_pool_load_raw": 1,
       "members": [
         {
           "id": "011",
@@ -59,21 +107,26 @@
         {
           "path": "Map/m71010.dat",
           "sha256": "7bb0e54f6777634165bc0f093402bc651dff40c18e180d2cabeded1921676cae",
-          "frequency_offset": 320
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
         },
         {
           "path": "Map/m71010.STG",
           "sha256": "760e1b5dff86d3d5abfd74a63afdb04274dfd7fc24b53753017b578a07ec674f"
         }
       ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage07.scn",
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
-        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a"
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
       ]
     },
     "M71011": {
       "frequency": 2,
-      "stage": "stage07.scn",
+      "global_pool_load_raw": 1,
       "members": [
         {
           "id": "022",
@@ -112,21 +165,26 @@
         {
           "path": "Map/m71011.dat",
           "sha256": "8183576be5149e05c016aaf54f58a0ddabedea156f18385e78f7344ebf143948",
-          "frequency_offset": 320
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
         },
         {
           "path": "Map/m71011.STG",
           "sha256": "6172b90cca24f698b06f11a4a4856764e9ceebf6f4e6bc3f0d310f3be5c3a736"
         }
       ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage07.scn",
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
-        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a"
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
       ]
     },
     "M71011-1": {
       "frequency": 2,
-      "stage": "stage07.scn",
+      "global_pool_load_raw": 1,
       "members": [
         {
           "id": "012",
@@ -181,21 +239,26 @@
         {
           "path": "Map/m71011-1.dat",
           "sha256": "721a116c57ca1e1686b0de33d5ff2c7c01298a5b348823a9c3d7bfdb7ef39685",
-          "frequency_offset": 320
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
         },
         {
           "path": "Map/m71011-1.STG",
           "sha256": "d071b70fdd06744682ca2f3caa265765bd4704b8fb5977a31e126f1b1b73547e"
         }
       ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage07.scn",
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
-        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a"
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
       ]
     },
     "M71012": {
       "frequency": 2,
-      "stage": "stage07.scn",
+      "global_pool_load_raw": 1,
       "members": [
         {
           "id": "022",
@@ -234,21 +297,26 @@
         {
           "path": "Map/m71012.dat",
           "sha256": "91ce6ea17ad2d282585ad285270936a5b37cfd9b5b5f08e4383cb8412d4be28c",
-          "frequency_offset": 320
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
         },
         {
           "path": "Map/m71012.STG",
           "sha256": "6172b90cca24f698b06f11a4a4856764e9ceebf6f4e6bc3f0d310f3be5c3a736"
         }
       ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage07.scn",
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
-        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a"
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
       ]
     },
     "M71012-1": {
       "frequency": 2,
-      "stage": "stage07.scn",
+      "global_pool_load_raw": 1,
       "members": [
         {
           "id": "022",
@@ -287,21 +355,26 @@
         {
           "path": "Map/m71012-1.dat",
           "sha256": "26c272f572cfb58472f60d505ae6497009681303729ac6d98cdf468f5f7196cb",
-          "frequency_offset": 320
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
         },
         {
           "path": "Map/m71012-1.STG",
           "sha256": "6172b90cca24f698b06f11a4a4856764e9ceebf6f4e6bc3f0d310f3be5c3a736"
         }
       ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage07.scn",
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
-        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a"
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
       ]
     },
     "M71012-2": {
       "frequency": 2,
-      "stage": "stage07.scn",
+      "global_pool_load_raw": 1,
       "members": [
         {
           "id": "022",
@@ -340,21 +413,26 @@
         {
           "path": "Map/m71012-2.dat",
           "sha256": "8fc98a05e2874dc98fc888f1ae163dce6b2243390aa6add65bd5a71fb07cbb35",
-          "frequency_offset": 320
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
         },
         {
           "path": "Map/m71012-2.STG",
           "sha256": "6172b90cca24f698b06f11a4a4856764e9ceebf6f4e6bc3f0d310f3be5c3a736"
         }
       ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage07.scn",
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
-        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a"
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
       ]
     },
     "M71013": {
       "frequency": 2,
-      "stage": "stage07.scn",
+      "global_pool_load_raw": 1,
       "members": [
         {
           "id": "022",
@@ -393,21 +471,26 @@
         {
           "path": "Map/m71013.dat",
           "sha256": "207b1046c24aee33baa9c03fb645238a01c6a4a292c3340c4a3c6b286989cb5b",
-          "frequency_offset": 320
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
         },
         {
           "path": "Map/m71013.STG",
           "sha256": "6172b90cca24f698b06f11a4a4856764e9ceebf6f4e6bc3f0d310f3be5c3a736"
         }
       ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage07.scn",
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
-        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a"
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
       ]
     },
     "M71020": {
       "frequency": 1,
-      "stage": "stage07.scn",
+      "global_pool_load_raw": 1,
       "members": [
         {
           "id": "014",
@@ -462,21 +545,26 @@
         {
           "path": "Map/m71020.dat",
           "sha256": "fef4580830dff6d7366a3402787c4faf958b3d2140c80d3e81977563cc1434b3",
-          "frequency_offset": 320
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
         },
         {
           "path": "Map/m71020.STG",
           "sha256": "633d50aa2f89ac51546edeed80b48075ae519c65cd215f889f3834089372fdd5"
         }
       ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage07.scn",
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
-        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a"
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
       ]
     },
     "M71030": {
       "frequency": 1,
-      "stage": "stage07.scn",
+      "global_pool_load_raw": 1,
       "members": [
         {
           "id": "012",
@@ -531,21 +619,26 @@
         {
           "path": "Map/m71030.dat",
           "sha256": "666b2ca9f89d242095a516a6f30433552d5d3a147cbb402c2296d5f1f1b7d4de",
-          "frequency_offset": 320
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
         },
         {
           "path": "Map/m71030.STG",
           "sha256": "d071b70fdd06744682ca2f3caa265765bd4704b8fb5977a31e126f1b1b73547e"
         }
       ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage07.scn",
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
-        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a"
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
       ]
     },
     "M71040": {
       "frequency": 1,
-      "stage": "stage07.scn",
+      "global_pool_load_raw": 1,
       "members": [
         {
           "id": "012",
@@ -600,21 +693,26 @@
         {
           "path": "Map/m71040.dat",
           "sha256": "7701485c301abf1c9fdd4435842d44fcef7e93efb57128e25d90381bcfbb480e",
-          "frequency_offset": 320
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
         },
         {
           "path": "Map/m71040.STG",
           "sha256": "d071b70fdd06744682ca2f3caa265765bd4704b8fb5977a31e126f1b1b73547e"
         }
       ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage07.scn",
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
-        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a"
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
       ]
     },
     "M71050": {
       "frequency": 1,
-      "stage": "stage07.scn",
+      "global_pool_load_raw": 1,
       "members": [
         {
           "id": "012",
@@ -669,21 +767,26 @@
         {
           "path": "Map/m71050.dat",
           "sha256": "87b18fffc22ebfbdf001113335b57ec1ba62a3a52f8876f79a0d369e4f772716",
-          "frequency_offset": 320
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
         },
         {
           "path": "Map/m71050.STG",
           "sha256": "d071b70fdd06744682ca2f3caa265765bd4704b8fb5977a31e126f1b1b73547e"
         }
       ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage07.scn",
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
-        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a"
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
       ]
     },
     "M71060": {
       "frequency": 1,
-      "stage": "stage07.scn",
+      "global_pool_load_raw": 1,
       "members": [
         {
           "id": "012",
@@ -738,21 +841,84 @@
         {
           "path": "Map/m71060.dat",
           "sha256": "4dea45c3e65b2aca906a55a0c6dc7b31749574577cc6d1400812433787cc9daf",
-          "frequency_offset": 320
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
         },
         {
           "path": "Map/m71060.STG",
           "sha256": "d071b70fdd06744682ca2f3caa265765bd4704b8fb5977a31e126f1b1b73547e"
         }
       ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage07.scn",
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
-        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a"
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
+      ]
+    },
+    "M01050": {
+      "frequency": 0,
+      "global_pool_load_raw": 1,
+      "members": [
+        {
+          "id": "013",
+          "name": "森林狩猎者",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m01050.STG",
+            "sha256": "a9d31af1489de1f4055dbd90df3dde03efc82a6fa0c2e13d50717a2335717667",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/013.CHR",
+            "sha256": "5e3a7e65761a52b1653a40bc20ae130072af5c4f704b0cb389bbb239a1cd8ef6",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "012",
+          "name": "雪泥怪",
+          "pool": "B",
+          "class_raw": 0,
+          "source": {
+            "path": "Map/m01050.STG",
+            "sha256": "a9d31af1489de1f4055dbd90df3dde03efc82a6fa0c2e13d50717a2335717667",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/012.CHR",
+            "sha256": "4c9d1ef867222a8ffbdfea2e231f7500f30e0d7fec4fbfa1ab18b2dc874061a0",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m01050.dat",
+          "sha256": "48ae98e95e9ea414e716c85440d381a5bc29cc2ec00ccd3b30c2ef314d4145fc",
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
+        },
+        {
+          "path": "Map/m01050.STG",
+          "sha256": "a9d31af1489de1f4055dbd90df3dde03efc82a6fa0c2e13d50717a2335717667"
+        }
+      ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage01.scn",
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
       ]
     },
     "M70010": {
       "frequency": 1,
-      "stage": "stage13.scn",
+      "global_pool_load_raw": 1,
       "members": [
         {
           "id": "011",
@@ -807,21 +973,26 @@
         {
           "path": "Map/m70010.dat",
           "sha256": "c00a06d1c19f3c1bb9b11ae00caa3b8ba70fa11aa802faa202aef49db6f9827a",
-          "frequency_offset": 320
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
         },
         {
           "path": "Map/m70010.STG",
           "sha256": "6a6a64c32c360ac222ca26dc8365fd59b2bb953dad402a820cb6775719e9b478"
         }
       ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage13.scn",
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
-        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a"
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
       ]
     },
     "M70020": {
       "frequency": 1,
-      "stage": "stage13.scn",
+      "global_pool_load_raw": 1,
       "members": [
         {
           "id": "011",
@@ -876,21 +1047,26 @@
         {
           "path": "Map/m70020.dat",
           "sha256": "c8737dc799873825f78f3c254e1911753acdfc588caea815b61348d94717388f",
-          "frequency_offset": 320
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
         },
         {
           "path": "Map/m70020.STG",
           "sha256": "6a6a64c32c360ac222ca26dc8365fd59b2bb953dad402a820cb6775719e9b478"
         }
       ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage13.scn",
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
-        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a"
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
       ]
     },
     "M70030": {
       "frequency": 1,
-      "stage": "stage13.scn",
+      "global_pool_load_raw": 1,
       "members": [
         {
           "id": "011",
@@ -945,21 +1121,26 @@
         {
           "path": "Map/m70030.dat",
           "sha256": "f3eac7c795aed2cc42603d0db486d804737097b5aea53b841eed4ebf07093890",
-          "frequency_offset": 320
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
         },
         {
           "path": "Map/m70030.STG",
           "sha256": "6a6a64c32c360ac222ca26dc8365fd59b2bb953dad402a820cb6775719e9b478"
         }
       ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage13.scn",
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
-        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a"
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
       ]
     },
     "M70040": {
       "frequency": 1,
-      "stage": "stage13.scn",
+      "global_pool_load_raw": 1,
       "members": [
         {
           "id": "011",
@@ -1014,21 +1195,26 @@
         {
           "path": "Map/m70040.dat",
           "sha256": "c50b0ef237252e42e74a436fc7c8fab5b8c222d98d5beb0475ff8b54342dda2a",
-          "frequency_offset": 320
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
         },
         {
           "path": "Map/m70040.STG",
           "sha256": "6a6a64c32c360ac222ca26dc8365fd59b2bb953dad402a820cb6775719e9b478"
         }
       ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage13.scn",
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
-        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a"
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
       ]
     },
     "M70050": {
       "frequency": 1,
-      "stage": "stage13.scn",
+      "global_pool_load_raw": 1,
       "members": [
         {
           "id": "011",
@@ -1083,21 +1269,26 @@
         {
           "path": "Map/m70050.dat",
           "sha256": "e3f18aa3e3af2dd1cd71d1dafb13f5ce61023588b4185c500aebdd62e6afe551",
-          "frequency_offset": 320
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
         },
         {
           "path": "Map/m70050.STG",
           "sha256": "6a6a64c32c360ac222ca26dc8365fd59b2bb953dad402a820cb6775719e9b478"
         }
       ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage13.scn",
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
-        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a"
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
       ]
     },
     "M70060": {
       "frequency": 1,
-      "stage": "stage13.scn",
+      "global_pool_load_raw": 1,
       "members": [
         {
           "id": "011",
@@ -1152,21 +1343,26 @@
         {
           "path": "Map/m70060.dat",
           "sha256": "efe442af65f53752e33d5c583215ff3538136abff133b97018ad19cda6696dbe",
-          "frequency_offset": 320
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
         },
         {
           "path": "Map/m70060.STG",
           "sha256": "6a6a64c32c360ac222ca26dc8365fd59b2bb953dad402a820cb6775719e9b478"
         }
       ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage13.scn",
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
-        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a"
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
       ]
     },
     "M70071": {
       "frequency": 1,
-      "stage": "stage03.scn",
+      "global_pool_load_raw": 1,
       "members": [
         {
           "id": "011",
@@ -1221,21 +1417,26 @@
         {
           "path": "Map/m70071.dat",
           "sha256": "de7c2ba50e1f831d8a4e6837c7eaa6796fc4f2fa664fb9e5f0eb6ad46ccbf33f",
-          "frequency_offset": 320
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
         },
         {
           "path": "Map/m70071.STG",
           "sha256": "798564eae970a568aa6d9066e73c50df52bf1cd257f971067e7cb9016748cd0c"
         }
       ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage03.scn",
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
-        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a"
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
       ]
     },
     "M70072": {
       "frequency": 1,
-      "stage": "stage03.scn",
+      "global_pool_load_raw": 1,
       "members": [
         {
           "id": "011",
@@ -1290,21 +1491,26 @@
         {
           "path": "Map/m70072.dat",
           "sha256": "e81ee5e98081fa9143913b7797af9318c4fae69992f02c5a96df185ce0b7d82d",
-          "frequency_offset": 320
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
         },
         {
           "path": "Map/m70072.STG",
           "sha256": "798564eae970a568aa6d9066e73c50df52bf1cd257f971067e7cb9016748cd0c"
         }
       ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage03.scn",
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
-        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a"
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
       ]
     },
     "M70073": {
       "frequency": 1,
-      "stage": "stage03.scn",
+      "global_pool_load_raw": 1,
       "members": [
         {
           "id": "011",
@@ -1359,21 +1565,26 @@
         {
           "path": "Map/m70073.dat",
           "sha256": "6636d6c5d7a95a4fc64bbd5cab1fa42bb976ac8bdba98c80c8a5145bea7644cb",
-          "frequency_offset": 320
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
         },
         {
           "path": "Map/m70073.STG",
           "sha256": "798564eae970a568aa6d9066e73c50df52bf1cd257f971067e7cb9016748cd0c"
         }
       ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage03.scn",
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
-        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a"
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
       ]
     },
     "M70074_1": {
       "frequency": 1,
-      "stage": "stage03.scn",
+      "global_pool_load_raw": 1,
       "members": [
         {
           "id": "011",
@@ -1428,21 +1639,26 @@
         {
           "path": "Map/m70074_1.dat",
           "sha256": "1f7940c62ed21b86ec1fd69c3eb4d451f1cbe20f939cb66117189adba5e357b5",
-          "frequency_offset": 320
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
         },
         {
           "path": "Map/m70074_1.STG",
           "sha256": "798564eae970a568aa6d9066e73c50df52bf1cd257f971067e7cb9016748cd0c"
         }
       ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage03.scn",
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
-        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a"
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
       ]
     },
     "M70074_2": {
       "frequency": 1,
-      "stage": "stage03.scn",
+      "global_pool_load_raw": 1,
       "members": [
         {
           "id": "011",
@@ -1497,21 +1713,26 @@
         {
           "path": "Map/m70074_2.dat",
           "sha256": "d8ebf4d5179f28c5299c794ca2615f3c7eb7846e289141b82438fb69262005ab",
-          "frequency_offset": 320
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
         },
         {
           "path": "Map/m70074_2.STG",
           "sha256": "798564eae970a568aa6d9066e73c50df52bf1cd257f971067e7cb9016748cd0c"
         }
       ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage03.scn",
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
-        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a"
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
       ]
     },
     "M70075": {
       "frequency": 1,
-      "stage": "stage03.scn",
+      "global_pool_load_raw": 1,
       "members": [
         {
           "id": "011",
@@ -1566,21 +1787,26 @@
         {
           "path": "Map/m70075.dat",
           "sha256": "ce9b2c1df4565f3ba20a1e15b5736b2c94fa5323bac78055381cc967854bf8f5",
-          "frequency_offset": 320
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
         },
         {
           "path": "Map/m70075.STG",
           "sha256": "798564eae970a568aa6d9066e73c50df52bf1cd257f971067e7cb9016748cd0c"
         }
       ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage03.scn",
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
-        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a"
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
       ]
     },
     "M70076": {
       "frequency": 1,
-      "stage": "stage03.scn",
+      "global_pool_load_raw": 1,
       "members": [
         {
           "id": "011",
@@ -1635,21 +1861,26 @@
         {
           "path": "Map/m70076.dat",
           "sha256": "4a76f605d199e59f3fa6e4e4cbafde307f0b424df36fee46a9e93f0b62220702",
-          "frequency_offset": 320
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
         },
         {
           "path": "Map/m70076.STG",
           "sha256": "798564eae970a568aa6d9066e73c50df52bf1cd257f971067e7cb9016748cd0c"
         }
       ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage03.scn",
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
-        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a"
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
       ]
     },
     "M70077": {
       "frequency": 1,
-      "stage": "stage03.scn",
+      "global_pool_load_raw": 1,
       "members": [
         {
           "id": "011",
@@ -1704,21 +1935,26 @@
         {
           "path": "Map/m70077.dat",
           "sha256": "1aa5847263530dc3b1cacd0920b92ee7c8ca0d5c0aaba360f5fa1845ff2da3c4",
-          "frequency_offset": 320
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
         },
         {
           "path": "Map/m70077.STG",
           "sha256": "798564eae970a568aa6d9066e73c50df52bf1cd257f971067e7cb9016748cd0c"
         }
       ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage03.scn",
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
-        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a"
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
       ]
     },
     "M70077-1": {
       "frequency": 1,
-      "stage": "stage03.scn",
+      "global_pool_load_raw": 1,
       "members": [
         {
           "id": "011",
@@ -1773,21 +2009,26 @@
         {
           "path": "Map/m70077-1.dat",
           "sha256": "920b020de7c13814911adf25e23d30f8a24fd30a81eec9117d77825feb90506a",
-          "frequency_offset": 320
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
         },
         {
           "path": "Map/m70077-1.STG",
           "sha256": "798564eae970a568aa6d9066e73c50df52bf1cd257f971067e7cb9016748cd0c"
         }
       ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage03.scn",
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
-        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a"
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
       ]
     },
     "M70077-2": {
       "frequency": 1,
-      "stage": "stage03.scn",
+      "global_pool_load_raw": 1,
       "members": [
         {
           "id": "011",
@@ -1842,21 +2083,26 @@
         {
           "path": "Map/m70077-2.dat",
           "sha256": "3c4aa96befd20277ebed8f6d8fb81d60becc547341773c7e65e5f6a2cb2ac5e7",
-          "frequency_offset": 320
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
         },
         {
           "path": "Map/m70077-2.STG",
           "sha256": "798564eae970a568aa6d9066e73c50df52bf1cd257f971067e7cb9016748cd0c"
         }
       ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage03.scn",
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
-        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a"
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
       ]
     },
     "M70077-3": {
       "frequency": 1,
-      "stage": "stage03.scn",
+      "global_pool_load_raw": 1,
       "members": [
         {
           "id": "011",
@@ -1911,21 +2157,26 @@
         {
           "path": "Map/m70077-3.dat",
           "sha256": "75009f4075bbfad0ca2a978b16713b25d824c1b48d6497e2a82749a1795bd6dd",
-          "frequency_offset": 320
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
         },
         {
           "path": "Map/m70077-3.STG",
           "sha256": "798564eae970a568aa6d9066e73c50df52bf1cd257f971067e7cb9016748cd0c"
         }
       ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage03.scn",
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
-        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a"
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
       ]
     },
     "M70077-4": {
       "frequency": 1,
-      "stage": "stage03.scn",
+      "global_pool_load_raw": 1,
       "members": [
         {
           "id": "011",
@@ -1980,21 +2231,26 @@
         {
           "path": "Map/m70077-4.dat",
           "sha256": "3e0d349a386bd8ae1132c4e83256674687b7f86a7a370d679bfaf3fe15e28214",
-          "frequency_offset": 320
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
         },
         {
           "path": "Map/m70077-4.STG",
           "sha256": "798564eae970a568aa6d9066e73c50df52bf1cd257f971067e7cb9016748cd0c"
         }
       ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage03.scn",
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
-        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a"
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
       ]
     },
     "M70078-1_1": {
       "frequency": 1,
-      "stage": "stage03.scn",
+      "global_pool_load_raw": 1,
       "members": [
         {
           "id": "011",
@@ -2049,21 +2305,26 @@
         {
           "path": "Map/m70078-1_1.dat",
           "sha256": "6997b90c8980e5ffc912dca8be8ae8044738ff8de0ed5b2a6d033e153033506e",
-          "frequency_offset": 320
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
         },
         {
           "path": "Map/m70078-1_1.STG",
           "sha256": "798564eae970a568aa6d9066e73c50df52bf1cd257f971067e7cb9016748cd0c"
         }
       ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage03.scn",
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
-        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a"
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
       ]
     },
     "M70078-2_1": {
       "frequency": 1,
-      "stage": "stage03.scn",
+      "global_pool_load_raw": 1,
       "members": [
         {
           "id": "011",
@@ -2118,21 +2379,26 @@
         {
           "path": "Map/m70078-2_1.dat",
           "sha256": "761560ea135fc837b06354f3f22cc1abb348a7e8c7636a5e3f02a0a3e32c86ad",
-          "frequency_offset": 320
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
         },
         {
           "path": "Map/m70078-2_1.STG",
           "sha256": "798564eae970a568aa6d9066e73c50df52bf1cd257f971067e7cb9016748cd0c"
         }
       ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage03.scn",
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
-        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a"
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
       ]
     },
     "M70078-3_1": {
       "frequency": 1,
-      "stage": "stage03.scn",
+      "global_pool_load_raw": 1,
       "members": [
         {
           "id": "011",
@@ -2187,21 +2453,26 @@
         {
           "path": "Map/m70078-3_1.dat",
           "sha256": "0bbe4fb0fcaf58ada56a85d1cf17536340767be4212592c54e0b3c81957d45eb",
-          "frequency_offset": 320
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
         },
         {
           "path": "Map/m70078-3_1.STG",
           "sha256": "798564eae970a568aa6d9066e73c50df52bf1cd257f971067e7cb9016748cd0c"
         }
       ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage03.scn",
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
-        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a"
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
       ]
     },
     "M70078_2": {
       "frequency": 1,
-      "stage": "stage03.scn",
+      "global_pool_load_raw": 1,
       "members": [
         {
           "id": "011",
@@ -2256,16 +2527,78 @@
         {
           "path": "Map/m70078_2.dat",
           "sha256": "5dd7156cc55765078812f7aee1196e21dd7f967ff75f36c25adab40afdaa2c1d",
-          "frequency_offset": 320
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
         },
         {
           "path": "Map/m70078_2.STG",
           "sha256": "798564eae970a568aa6d9066e73c50df52bf1cd257f971067e7cb9016748cd0c"
         }
       ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage03.scn",
       "evidence": [
         "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
-        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a"
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
+      ]
+    },
+    "M71072": {
+      "frequency": 1,
+      "global_pool_load_raw": 0,
+      "members": [],
+      "source": [
+        {
+          "path": "Map/m71072.dat",
+          "sha256": "b2564f59634bbedcb5efd553a1ea8731d5716499c5190dba565e6bac22a8b64f",
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
+        }
+      ],
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
+      ]
+    },
+    "M71073": {
+      "frequency": 2,
+      "global_pool_load_raw": 0,
+      "members": [],
+      "source": [
+        {
+          "path": "Map/m71073.dat",
+          "sha256": "cd3d3749f3cf14f3ed69779852ca4eaef00db2643104fac3cc1b56bd033722f1",
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
+        }
+      ],
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
+      ]
+    },
+    "M71074": {
+      "frequency": 3,
+      "global_pool_load_raw": 0,
+      "members": [],
+      "source": [
+        {
+          "path": "Map/m71074.dat",
+          "sha256": "26c66895c3a19b21ac07945f1db58de8ec670430ce9435c1c476258227fcc909",
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
+        }
+      ],
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
       ]
     }
   },

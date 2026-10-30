@@ -33406,7 +33406,7 @@
         "definition": "data/items.json#/definitions/239",
         "configuration": "data/config/items.json#/entries/239",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "240": {
         "id": 240,
@@ -33416,7 +33416,7 @@
         "definition": "data/items.json#/definitions/240",
         "configuration": "data/config/items.json#/entries/240",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "241": {
         "id": 241,
@@ -33426,7 +33426,7 @@
         "definition": "data/items.json#/definitions/241",
         "configuration": "data/config/items.json#/entries/241",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "242": {
         "id": 242,
@@ -33436,7 +33436,7 @@
         "definition": "data/items.json#/definitions/242",
         "configuration": "data/config/items.json#/entries/242",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "243": {
         "id": 243,
@@ -33486,7 +33486,7 @@
         "definition": "data/items.json#/definitions/247",
         "configuration": "data/config/items.json#/entries/247",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "248": {
         "id": 248,
@@ -46167,11 +46167,11 @@
     "data/library/roles.json": "c88f1459169e56a333ca0376a56bb66e7c6c9a18c5d2e8bf1b77b3c9d394d8a6",
     "data/library/skills.json": "91517d541e4d0fc36ffe3334c975634d718a2dcdd6af9f71a08019d4fcaa47e4",
     "data/library/magic.json": "2a0784270dcd6661e267c84caae37f959a1813045da44da46c3c8fde666d5812",
-    "data/items.json": "ceb5339a904f86d331ce18754a603f0f453264d1cdfeec04dd4e13c286a738e9",
-    "data/runtime_content.json": "3f3825d9084317c9a277bbb0b685fefc89ebc8e4d130d5b743c568d8ce32fb40",
-    "data/party_skills.json": "764f205f693492e89d22f5e6b27013e7aee5aca064e53b2d2b4daac1ff291110",
+    "data/items.json": "b63c0817a1cf4f0185d14b060d08557dd83aaf479ea831315af1f7f7ab1fe65d",
+    "data/runtime_content.json": "04edca7983261bf103179337935795bbbe2610629ed98a3f0b527f92420b94d9",
+    "data/party_skills.json": "2646e600a33da204187878c4fd4f2d86265cdc49c1a4973ddfc2d384bf082f77",
     "data/forest_ai.json": "24d582559e30b39ba960ca35d23658d7a0f0a74ef44ce7e60adfc4724f19ec4d",
-    "data/config/skills.json": "80f16119364b3c80b020218aa51fe4dea989c86272f6e23f2a4ef652ef36926a",
+    "data/config/skills.json": "30abcfe165fa6930044ab9fac451061f10948a824349cc8bdf73c86d329b675f",
     "data/config/items.json": "7103f7356567dfd41ecdb1ec9286d93f3ae45a6673eb565873018711055bfb23"
   }
 }

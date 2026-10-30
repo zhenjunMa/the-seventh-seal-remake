@@ -2,7 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {webcrypto} from 'node:crypto';
-import {nativeKeyedChest,canOpenNativeChest,nativeChestAnimation} from '../web/core/native_map_chests.mjs';
+import {nativeKeyedChest,nativeScriptedChest,canOpenNativeChest,nativeChestAnimation} from '../web/core/native_map_chests.mjs';
+import {runtimeContent} from '../web/core/content_registry.mjs';
 import {ChapterRunner,chapterObjectState,initializeChapterItem,validateChapterStory} from '../web/core/chapter.mjs';
 import {WorldStore,encodeSave,decodeSave} from '../web/core/world.mjs';
 import {validateStoryBindings} from '../web/core/content_dependencies.mjs';
@@ -174,4 +175,31 @@ testSource('Source-absent TLK maps admit direct objects without inventing an emp
   const report=inspectContentReadiness(content,data,resources);assert.deepEqual(report.errors,[]);assert.equal(report.entrances[0].kind,'direct-object');
   const altered=copy(data);altered.maps[fixture.map_id].source={path:'invented.tlk'};
   assert.throws(()=>validateChapterStory(altered),/无对白地图来源无效/);
+});
+
+test('real CF4 F6 script keeps its leave choice reusable and commits the seal across its return ANM',async()=>{
+ const data=read('../web/data/chapter_story.json'),object=data.maps.M71075.objects.find(row=>row.index===9);
+ assert.deepEqual(nativeScriptedChest(object),{behavior:4,recordId:1});
+ const initial=copy(seed);initial.opening.status='complete';initial.location={map_id:'M71075',x:0,y:0,direction:0};
+ const world=new WorldStore(initial);let choice=1,fail=false,interactions=0;
+ const runner=new ChapterRunner({world,data,content:runtimeContent,say:async()=>{},choose:async()=>choice,
+  objectInteraction:async()=>{interactions++;},objectAnimation:async()=>assert.fail('Unloaded source object cannot animate in the destination scene'),
+  animate:async({program,draft})=>{assert.equal(program.id,'m03044-2');if(fail)throw Error('return ANM unavailable');draft.location={map_id:'M03044',x:0,y:0,direction:0};}});
+ const leave=await runner.runObject({mapId:'M71075',objectIndex:9});assert.equal(leave.state,0);assert.equal(world.location.map_id,'M71075');
+ const before=world.snapshot();choice=0;fail=true;
+ await assert.rejects(runner.runObject({mapId:'M71075',objectIndex:9}),/return ANM unavailable/);assert.deepEqual(world.snapshot(),before);
+ fail=false;const opened=await runner.runObject({mapId:'M71075',objectIndex:9});
+ assert.equal(opened.state,3);assert.equal(world.location.map_id,'M03044');assert.equal(interactions,3);
+ assert.equal(world.value.event_records[468][9].slice(0,2),'03');
+ assert.deepEqual((await decodeSave(await encodeSave(world.snapshot()))).event_records[468],world.value.event_records[468]);
+});
+
+test('real nonzero mutation1 targets its native map flag and completes off-map without a current object binding',()=>{
+ const data=read('../web/data/chapter_story.json'),record=data.maps.M70071.records.find(row=>row.id===12),initial=copy(seed);
+ assert.deepEqual([record.mutation_type,record.mutation_index,record.mutation_bit,record.region_byte_raw],[1,468,10,0]);
+ initial.opening.status='complete';initial.location.map_id='M70071';const world=new WorldStore(initial),runner=new ChapterRunner({world,data,content:runtimeContent,say:async()=>{}});
+ const draft=world.snapshot();runner.applyMutation(draft,data.maps.M70071,record);
+ assert.equal(draft.event_records[468][9].slice(0,2),'03');assert.deepEqual(draft.event_records[99],initial.event_records[99]);
+ draft.location.map_id='M71075';draft.event_records[468]=[];runner.applyMutation(draft,data.maps.M71075,record);
+ assert.equal(draft.event_records[468][9].slice(0,2),'02');
 });

@@ -1,0 +1,858 @@
+{
+  "schema": "seventh-seal-runtime-map",
+  "version": 1,
+  "id": "M03043-3",
+  "name": "图书馆B3F",
+  "name_bytes_hex": "cdbccae9b9dd423346",
+  "width": 656,
+  "height": 544,
+  "background": {
+    "image": "/assets/maps/m03043-3/background.png",
+    "width": 656,
+    "height": 544,
+    "sources": [
+      {
+        "path": "M03043.DGP",
+        "sha256": "ae4323df7b06076e992a0b49ad95dc898e230016ec607f778e9870fb510363a0"
+      }
+    ],
+    "image_sha256": "a3dfc51ec2e85be728b5f7f95989765957463cf2dc3bd9456e89afa792d88b5b",
+    "assembly": {
+      "referenced_frames": 320,
+      "empty_blocks": 0,
+      "columns": 21,
+      "rows": 17,
+      "resource_count": 1,
+      "animation_frame": 0,
+      "assembly": "DAT even-cell frame/resource -> indexed header DGP; 0x4A3770 rectangular branch",
+      "odd_size_policy": "Native tile-origin loops; clip beyond exact DAT dimensions"
+    }
+  },
+  "movement": {
+    "schema": "seventh-seal-map-movement",
+    "version": 1,
+    "map": "M03043-3",
+    "source": "Map/m03043-3.dat",
+    "source_sha256": "85a5bed121aec3c6fd933cb5ecd9c79c6c3cdd03e28d868253ce7ee05eba5fc8",
+    "width": 41,
+    "height": 34,
+    "cell_size": 16,
+    "native_coordinate_shift": 3,
+    "native_to_pixel_scale": 2,
+    "native_step_shift": 1,
+    "native_camera_step_shift": 1,
+    "terrain_rows": [
+      "11111111111111111111111111111111111111111",
+      "11111111111111111111111111111111111111111",
+      "11111111111111111111111111111111111111111",
+      "11111111111111111111111111111111111111111",
+      "11111111111111111111111111111111111111111",
+      "11111111111111111111111111111111111111111",
+      "11111111111111111111111111111111111111111",
+      "11111111111111111111111111111111111111111",
+      "11111111111111111111111111111111111111111",
+      "11111111111111111111111111111111111111111",
+      "11111111111111111111111111111111111111111",
+      "10000000111111111111111111111111111111111",
+      "10000000000111111111111111111111111111111",
+      "10011110000000000000000011111111111111111",
+      "11111111111000000000000111110000000000011",
+      "11111111111100000000001111100000011111111",
+      "11111111111110000000001111100000011111111",
+      "11111111111110000000000000000000011111111",
+      "11111111111110000000000000000000011111111",
+      "11111111111110000000000000000000001111111",
+      "10001111111100000011000000000001111111111",
+      "10000111110000000111100000000001111111111",
+      "10000000000000001111100000000001111111111",
+      "11000000000000011111100000000000111111111",
+      "11111000000000111111000000000000000010011",
+      "11111111111111111110000000000001110000011",
+      "11111111111111111110000000001111111100011",
+      "11111111111111111100000000001111111100111",
+      "11111111111111111000000000001111111100111",
+      "11111111111111111000000000000111111001111",
+      "11111111111111111111111111111111111111111",
+      "11111111111111111111111111111111111111111",
+      "11111111111111111111111111111111111111111",
+      "11111111111111111111111111111111111111111"
+    ],
+    "triggers": [
+      {
+        "x": 1,
+        "y": 20,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333034332d322e64617400000000000000000002000000080000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 1,
+        "y": 21,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333034332d322e64617400000000000000000002000000080000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 1,
+        "y": 22,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333034332d322e64617400000000000000000002000000080000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 1,
+        "y": 11,
+        "id": 2,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333034332d342e64617400000000000000000001000000010000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 1,
+        "y": 12,
+        "id": 2,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333034332d342e64617400000000000000000001000000010000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 1,
+        "y": 13,
+        "id": 2,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333034332d342e64617400000000000000000001000000010000000000000000000000000000000000000000000000"
+      }
+    ],
+    "terrain_rule": "cell byte +0x20 == 0 permits terrain entry",
+    "transition_rule": "0x4A80E0: +0x38 reference, descriptor[0]==0 and descriptor[0x11]!=0 is path-gated",
+    "policy": "Unimplemented native transition gates block. Runtime enables only separately verified exits.",
+    "role_occupancy_rule": "+0x14 is runtime role index + 1, not static terrain",
+    "object_lookup_rule": "+0x2B is runtime object index + 1, not a second collision mask"
+  },
+  "objects": [
+    {
+      "index": 0,
+      "resource_filename": "001.DGP",
+      "source": "mapm/m03043/001.dgp",
+      "resource_sha256": "84029ad11e38655db6dbdfc97833021dd8de3beb19188051d68cfdbbbebb9ee6",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 192,
+      "y_native": 112,
+      "x_world": 384,
+      "y_world": 224,
+      "anchor_x": 32,
+      "anchor_y": 101,
+      "draw_x": 352,
+      "draw_y": 123,
+      "frame_width": 114,
+      "frame_height": 133,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 24,
+      "cell_y": 14,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 384,
+      "sort_y": 256,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m03043-3/objects/001_frame_000.png",
+      "image_sha256": "7369e991b94bfb872776b0b4801c547ad36234aed6bb7ddfa4aac470e260a795"
+    },
+    {
+      "index": 1,
+      "resource_filename": "002.DGP",
+      "source": "mapm/m03043/002.dgp",
+      "resource_sha256": "37a444cded937820d06e9d8c7d22f1311833d6d33ab6a9732e19932183bd5484",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 304,
+      "y_native": 232,
+      "x_world": 608,
+      "y_world": 464,
+      "anchor_x": 32,
+      "anchor_y": 141,
+      "draw_x": 576,
+      "draw_y": 323,
+      "frame_width": 64,
+      "frame_height": 173,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 38,
+      "cell_y": 29,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 608,
+      "sort_y": 496,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m03043-3/objects/002_frame_000.png",
+      "image_sha256": "6e6f50b29b9f93dbe05ae788dbaf2dd90f1b7ddfa840cb71b40235c433ddf5d0"
+    },
+    {
+      "index": 2,
+      "resource_filename": "003.DGP",
+      "source": "mapm/m03043/003.dgp",
+      "resource_sha256": "01f1061f4971b755df79f2b6936449e67e547bf90981b70b0c9a13831abcca2f",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 128,
+      "y_native": 208,
+      "x_world": 256,
+      "y_world": 416,
+      "anchor_x": 32,
+      "anchor_y": 161,
+      "draw_x": 224,
+      "draw_y": 255,
+      "frame_width": 64,
+      "frame_height": 193,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 16,
+      "cell_y": 26,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 256,
+      "sort_y": 448,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m03043-3/objects/003_frame_000.png",
+      "image_sha256": "be96f5134397363a5dd1797f1b7fa342718436a3cf3d76b9240a419907d20db1"
+    },
+    {
+      "index": 3,
+      "resource_filename": "004.DGP",
+      "source": "mapm/m03043/004.dgp",
+      "resource_sha256": "fda46defd2c6901641d89a9527ccb0d64dff18f7b7064409b4b03527e1513a66",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 144,
+      "y_native": 184,
+      "x_world": 288,
+      "y_world": 368,
+      "anchor_x": 32,
+      "anchor_y": 85,
+      "draw_x": 256,
+      "draw_y": 283,
+      "frame_width": 81,
+      "frame_height": 119,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 18,
+      "cell_y": 23,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 288,
+      "sort_y": 400,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m03043-3/objects/004_frame_000.png",
+      "image_sha256": "b3883d08fbaaca8dc490907a8dee1135395897fbddeaef96c992e89e07fd7de1"
+    },
+    {
+      "index": 4,
+      "resource_filename": "005.DGP",
+      "source": "mapm/m03043/005.dgp",
+      "resource_sha256": "9339a420fd43c364386d6e88ac793a2edfa107f8912d560ced1657d6fb07884a",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 272,
+      "y_native": 232,
+      "x_world": 544,
+      "y_world": 464,
+      "anchor_x": 87,
+      "anchor_y": 102,
+      "draw_x": 457,
+      "draw_y": 362,
+      "frame_width": 129,
+      "frame_height": 134,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 34,
+      "cell_y": 29,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 544,
+      "sort_y": 496,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m03043-3/objects/005_frame_000.png",
+      "image_sha256": "3e4c2c1b53cf61e2e9d7cdddf7683baf9a4e6c27429296852165de673830e57b"
+    },
+    {
+      "index": 5,
+      "resource_filename": "007.DGP",
+      "source": "mapm/m03043/007.dgp",
+      "resource_sha256": "464561e5e2a617a4c5e3bdedede86fb84955854fe08a02273ea017469860a672",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 288,
+      "y_native": 176,
+      "x_world": 576,
+      "y_world": 352,
+      "anchor_x": 75,
+      "anchor_y": 75,
+      "draw_x": 501,
+      "draw_y": 277,
+      "frame_width": 124,
+      "frame_height": 112,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 36,
+      "cell_y": 22,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 576,
+      "sort_y": 384,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m03043-3/objects/007_frame_000.png",
+      "image_sha256": "53157afecffe4b6f00da34f60088ead4fdf61ac67f199d926869986a5a6356f9"
+    },
+    {
+      "index": 6,
+      "resource_filename": "006.DGP",
+      "source": "mapm/m03043/006.dgp",
+      "resource_sha256": "271e89bce9ef5175b13c5c30750cfa8d1f1f82e066c800183447413cd12773d3",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 48,
+      "y_native": 137,
+      "x_world": 96,
+      "y_world": 274,
+      "anchor_x": 96,
+      "anchor_y": 272,
+      "draw_x": 0,
+      "draw_y": 2,
+      "frame_width": 209,
+      "frame_height": 304,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 6,
+      "cell_y": 17,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 96,
+      "sort_y": 306,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m03043-3/objects/006_frame_000.png",
+      "image_sha256": "f318cdd0e795f20ba3162ff2bb90741e1a33f0b184762df2133f9faeeb00ff69"
+    },
+    {
+      "index": 7,
+      "resource_filename": "008.DGP",
+      "source": "mapm/m03043/008.dgp",
+      "resource_sha256": "1d17bb68a0f14e7207e632e0dea00e625b03cca83e1851a65f8ca0a50f20856d",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 288,
+      "y_native": 144,
+      "x_world": 576,
+      "y_world": 288,
+      "anchor_x": 47,
+      "anchor_y": 80,
+      "draw_x": 529,
+      "draw_y": 208,
+      "frame_width": 120,
+      "frame_height": 112,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 36,
+      "cell_y": 18,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 576,
+      "sort_y": 320,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m03043-3/objects/008_frame_000.png",
+      "image_sha256": "a4b5bbdf0a1f7b0785569cdc204141c83915937bf5bccaee10349f9c26e4ca6a"
+    }
+  ],
+  "exits": [
+    {
+      "id": 1,
+      "state": "ready",
+      "cells": [
+        {
+          "x": 1,
+          "y": 20
+        },
+        {
+          "x": 1,
+          "y": 21
+        },
+        {
+          "x": 1,
+          "y": 22
+        }
+      ],
+      "target_map": "M03043-2",
+      "entry": {
+        "x": 96,
+        "y": 192,
+        "direction": 1,
+        "cell_x": 6,
+        "cell_y": 12,
+        "native_x": 48,
+        "native_y": 96
+      },
+      "conditions": [],
+      "source": {
+        "path": "Map/m03043-3.dat",
+        "sha256": "85a5bed121aec3c6fd933cb5ecd9c79c6c3cdd03e28d868253ce7ee05eba5fc8",
+        "descriptor_offset": 90930,
+        "descriptor_bytes": 66,
+        "descriptor_hex": "00000000000000000000000000000000006d30333034332d322e64617400000000000000000002000000080000000000000000000000000000000000000000000000",
+        "compact_field_expansion_evidence": null,
+        "target_path": "Map/m03043-2.dat",
+        "target_sha256": "e1e0cf198c61cfcf871d9f2d4138c26bb995786a8ef8bf4c4ec80409fc2ecbee",
+        "target_entry_marker": 2,
+        "entry_sort_code": 8,
+        "entry_terrain_raw": 0,
+        "entry_trigger_raw": 0,
+        "entry_scan_cells": [
+          {
+            "x": 6,
+            "y": 12,
+            "offset": 32242
+          }
+        ],
+        "entry_sorted_cells": [
+          {
+            "x": 6,
+            "y": 12
+          }
+        ],
+        "entry_sort": "x descending; stable ties",
+        "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
+        "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
+        "native_evidence": {
+          "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+          "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+          "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+          "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+        }
+      },
+      "execution": "Native transition descriptor only; map-entry TLK/ANM and their once-only checks must complete separately.",
+      "limitations": [
+        "Static source/code evidence; original timing not observed",
+        "Continuous keyboard movement is runtime policy"
+      ]
+    },
+    {
+      "id": 2,
+      "state": "ready",
+      "cells": [
+        {
+          "x": 1,
+          "y": 11
+        },
+        {
+          "x": 1,
+          "y": 12
+        },
+        {
+          "x": 1,
+          "y": 13
+        }
+      ],
+      "target_map": "M03043-4",
+      "entry": {
+        "x": 176,
+        "y": 352,
+        "direction": 2,
+        "cell_x": 11,
+        "cell_y": 22,
+        "native_x": 88,
+        "native_y": 176
+      },
+      "conditions": [],
+      "source": {
+        "path": "Map/m03043-3.dat",
+        "sha256": "85a5bed121aec3c6fd933cb5ecd9c79c6c3cdd03e28d868253ce7ee05eba5fc8",
+        "descriptor_offset": 90996,
+        "descriptor_bytes": 66,
+        "descriptor_hex": "00000000000000000000000000000000006d30333034332d342e64617400000000000000000001000000010000000000000000000000000000000000000000000000",
+        "compact_field_expansion_evidence": null,
+        "target_path": "Map/m03043-4.dat",
+        "target_sha256": "3cc7843903754512bba946bad1cfca65534bf173237dbb9f2c938736846ae712",
+        "target_entry_marker": 1,
+        "entry_sort_code": 1,
+        "entry_terrain_raw": 0,
+        "entry_trigger_raw": 0,
+        "entry_scan_cells": [
+          {
+            "x": 11,
+            "y": 22,
+            "offset": 58802
+          },
+          {
+            "x": 12,
+            "y": 22,
+            "offset": 58866
+          },
+          {
+            "x": 11,
+            "y": 23,
+            "offset": 61426
+          },
+          {
+            "x": 12,
+            "y": 23,
+            "offset": 61490
+          }
+        ],
+        "entry_sorted_cells": [
+          {
+            "x": 11,
+            "y": 22
+          },
+          {
+            "x": 12,
+            "y": 22
+          },
+          {
+            "x": 11,
+            "y": 23
+          },
+          {
+            "x": 12,
+            "y": 23
+          }
+        ],
+        "entry_sort": "row-major scan; first four; missing followers repeat last observed cell",
+        "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
+        "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
+        "native_evidence": {
+          "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+          "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+          "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+          "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+        }
+      },
+      "execution": "Native transition descriptor only; map-entry TLK/ANM and their once-only checks must complete separately.",
+      "limitations": [
+        "Static source/code evidence; original timing not observed",
+        "Continuous keyboard movement is runtime policy"
+      ]
+    }
+  ],
+  "unresolved_triggers": [],
+  "role_layer_preview": 2,
+  "role_layer_note": "Runtime render policy; native role +0xF3 initial value remains unverified",
+  "source": {
+    "path": "Map/m03043-3.dat",
+    "sha256": "85a5bed121aec3c6fd933cb5ecd9c79c6c3cdd03e28d868253ce7ee05eba5fc8",
+    "bytes": 136182,
+    "object_resource_base_raw": ".\\MAPM\\M03043\\",
+    "object_resource_base": "mapm/m03043",
+    "object_table_start": 102610,
+    "object_table_end": 104802,
+    "unknown_tail_bytes": 31380,
+    "native_evidence": {
+      "map_loader": "ev_86fb8504826b15ccbea2b3911eaa302ef3f5cbeba7d1b233df62109a9ff38681",
+      "background_draw": "ev_2f7d67b0c8598838be7ac99150b959c5012222fdac93464caaf6732031f0b6e7",
+      "background_resource_loader": "ev_7c353572e07610a7b7e99f989466929dd711a469b13e61acb2597b40ff70e8d4",
+      "transition_path_gate": "ev_1ccb72823e262e4317968f322fcebaf8bd8724a31c215f127d8a68ac77c7b2b2",
+      "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+      "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+      "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+      "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+    },
+    "object_native_evidence": [
+      "ev_86fb8504826b15ccbea2b3911eaa302ef3f5cbeba7d1b233df62109a9ff38681",
+      "ev_6093394ea87d8eb856eef46d19eabdaf9e4735e58a8a18243c3aa798fda1feb5",
+      "ev_c0c0aa49cfd0507760600c7f4f475d3912f8210c498f1896a6fb058f80960b5b",
+      "ev_05dce0e80a25427e4e72280265291973d42f600238f7f832c0320114fed82fb7",
+      "ev_70e72b030eca65a4073731754bc443a383f4b215be5da103ed824b0c1a97727a",
+      "ev_02ca024fc6f9093e9bd38f06052ee2a4f2b2671240c4df2293cf1a50c4e2ae02",
+      "ev_813d397c0060f8bec0ba044eadc20f12cfb9fd8a36a56b19620629114d4ec9a7",
+      "ev_f32a0609558d1fb49c46e1a996c57b11aa62f681842c5ee0f86256aa7b74ffbe",
+      "ev_0781814eee25b61ac8bbd2b2ede6999858f4f7041d5b908f25c58d7a7691a89d",
+      "ev_9abd5ba6645433c0752e35b69015a7f998c9c9b054862a5afdfadc7499e40962"
+    ]
+  },
+  "limitations": [
+    "Static resource/code evidence; original-game entry/transition timing is not observed.",
+    "Background uses its initial animation frame; background animation is not advanced.",
+    "Initial static objects; script changes and object animation are not reconstructed.",
+    "Role depth and continuous keyboard movement are runtime policies.",
+    "NPC source defaults require chapter TLK/ANM changes; asset export executes no story"
+  ],
+  "chapter_npcs": [
+    {
+      "id": "M03043-3-role-10",
+      "slot_zero_based": 10,
+      "speaker_slot_one_based": 11,
+      "name": "女術士炎",
+      "resource_id": "055",
+      "x": 512,
+      "y": 224,
+      "x_native": 256,
+      "y_native": 112,
+      "direction": 6,
+      "direction_raw_45": 6,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 8,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 2,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m03043-3.dat",
+        "sha256": "85a5bed121aec3c6fd933cb5ecd9c79c6c3cdd03e28d868253ce7ee05eba5fc8",
+        "offset": 104802,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M03043-3-role-11",
+      "slot_zero_based": 11,
+      "speaker_slot_one_based": 12,
+      "name": "女術士飄",
+      "resource_id": "062",
+      "x": 448,
+      "y": 224,
+      "x_native": 224,
+      "y_native": 112,
+      "direction": 0,
+      "direction_raw_45": 0,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 9,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 2,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m03043-3.dat",
+        "sha256": "85a5bed121aec3c6fd933cb5ecd9c79c6c3cdd03e28d868253ce7ee05eba5fc8",
+        "offset": 106023,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M03043-3-role-12",
+      "slot_zero_based": 12,
+      "speaker_slot_one_based": 13,
+      "name": "p334女",
+      "resource_id": "125",
+      "x": 480,
+      "y": 256,
+      "x_native": 240,
+      "y_native": 128,
+      "direction": 3,
+      "direction_raw_45": 3,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 10,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 2,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m03043-3.dat",
+        "sha256": "85a5bed121aec3c6fd933cb5ecd9c79c6c3cdd03e28d868253ce7ee05eba5fc8",
+        "offset": 107244,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M03043-3-role-13",
+      "slot_zero_based": 13,
+      "speaker_slot_one_based": 14,
+      "name": "女祭司飄",
+      "resource_id": "067",
+      "x": 256,
+      "y": 208,
+      "x_native": 128,
+      "y_native": 104,
+      "direction": 3,
+      "direction_raw_45": 3,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 11,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m03043-3.dat",
+        "sha256": "85a5bed121aec3c6fd933cb5ecd9c79c6c3cdd03e28d868253ce7ee05eba5fc8",
+        "offset": 108465,
+        "bytes": 1221
+      }
+    }
+  ],
+  "opening_npcs": [
+    {
+      "id": "M03043-3-role-10",
+      "slot_zero_based": 10,
+      "speaker_slot_one_based": 11,
+      "name": "女術士炎",
+      "resource_id": "055",
+      "x": 512,
+      "y": 224,
+      "x_native": 256,
+      "y_native": 112,
+      "direction": 6,
+      "direction_raw_45": 6,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 8,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 2,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m03043-3.dat",
+        "sha256": "85a5bed121aec3c6fd933cb5ecd9c79c6c3cdd03e28d868253ce7ee05eba5fc8",
+        "offset": 104802,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M03043-3-role-11",
+      "slot_zero_based": 11,
+      "speaker_slot_one_based": 12,
+      "name": "女術士飄",
+      "resource_id": "062",
+      "x": 448,
+      "y": 224,
+      "x_native": 224,
+      "y_native": 112,
+      "direction": 0,
+      "direction_raw_45": 0,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 9,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 2,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m03043-3.dat",
+        "sha256": "85a5bed121aec3c6fd933cb5ecd9c79c6c3cdd03e28d868253ce7ee05eba5fc8",
+        "offset": 106023,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M03043-3-role-12",
+      "slot_zero_based": 12,
+      "speaker_slot_one_based": 13,
+      "name": "p334女",
+      "resource_id": "125",
+      "x": 480,
+      "y": 256,
+      "x_native": 240,
+      "y_native": 128,
+      "direction": 3,
+      "direction_raw_45": 3,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 10,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 2,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m03043-3.dat",
+        "sha256": "85a5bed121aec3c6fd933cb5ecd9c79c6c3cdd03e28d868253ce7ee05eba5fc8",
+        "offset": 107244,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M03043-3-role-13",
+      "slot_zero_based": 13,
+      "speaker_slot_one_based": 14,
+      "name": "女祭司飄",
+      "resource_id": "067",
+      "x": 256,
+      "y": 208,
+      "x_native": 128,
+      "y_native": 104,
+      "direction": 3,
+      "direction_raw_45": 3,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 11,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m03043-3.dat",
+        "sha256": "85a5bed121aec3c6fd933cb5ecd9c79c6c3cdd03e28d868253ce7ee05eba5fc8",
+        "offset": 108465,
+        "bytes": 1221
+      }
+    }
+  ],
+  "map_flag_index": 434
+}

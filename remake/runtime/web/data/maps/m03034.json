@@ -1,0 +1,1684 @@
+{
+  "schema": "seventh-seal-runtime-map",
+  "version": 1,
+  "id": "M03034",
+  "name": "飘城王座厅",
+  "name_bytes_hex": "c6aeb3c7cdf5d7f9ccfc",
+  "width": 976,
+  "height": 736,
+  "background": {
+    "image": "/assets/maps/m03034/background.png",
+    "width": 976,
+    "height": 736,
+    "sources": [
+      {
+        "path": "M03034.DGP",
+        "sha256": "ac5b4d8eaf35c2e2f6dfbe9c44413a8eda10929dcbef8326ec5929c48708bd50"
+      }
+    ],
+    "image_sha256": "a5a5aa5dc5b988c9821df1994554d313434d9a90af36a13da271728d22e5600a",
+    "assembly": {
+      "referenced_frames": 690,
+      "empty_blocks": 0,
+      "columns": 31,
+      "rows": 23,
+      "resource_count": 1,
+      "animation_frame": 0,
+      "assembly": "DAT even-cell frame/resource -> indexed header DGP; 0x4A3770 rectangular branch",
+      "odd_size_policy": "Native tile-origin loops; clip beyond exact DAT dimensions"
+    }
+  },
+  "movement": {
+    "schema": "seventh-seal-map-movement",
+    "version": 1,
+    "map": "M03034",
+    "source": "Map/m03034.dat",
+    "source_sha256": "0f19611a644906ecc68e14ed44dc708013adb062c5b2b5d43cede2751dc6baa5",
+    "width": 61,
+    "height": 46,
+    "cell_size": 16,
+    "native_coordinate_shift": 3,
+    "native_to_pixel_scale": 2,
+    "native_step_shift": 1,
+    "native_camera_step_shift": 1,
+    "terrain_rows": [
+      "1111111111111111111111111111111111111111111111111111111111111",
+      "1111111111111111111111111111111111111111111111111111111111111",
+      "1111111111111111111111111111111111111111111111111111111111111",
+      "1111111111111111111111111111111111111111111111111111111111111",
+      "1111111111111111111111111111111111111111111111111111111111111",
+      "1111111111111111111111111111111111111111111111111111111111111",
+      "1111111111111111111111111111111111111111111111111111111111111",
+      "1111111111111111111111111111111111111111111111111111111111111",
+      "1111111111111111111111111111111111111111111111111111111111111",
+      "1111111111111111111111111111111111111111111111111111111111111",
+      "1111111111111111111111111111111111111111111111111111111111111",
+      "1111111111111111111111111111111111111111111111111111111111111",
+      "1111111111111111111111111111111111111111111111111111111111111",
+      "1111111111111000000000000001111110000000000000001111111111111",
+      "1111111111010000000000000001111110000000000000000111111111111",
+      "1111111111100000000000000000000000000000000000000111111111111",
+      "1111111111111111111111111110000000111111111111111111111111111",
+      "1111111111111111111111111110000000111111111111111111111111111",
+      "1111111111111111111111111100000000111111111111111111111111111",
+      "1111111111111111111111111100000000011111111111111111111111111",
+      "1111111111111111111111111100000000011111111111111111111111111",
+      "1111111111000000000000001100000000011000000000000111111111111",
+      "1111111111000000000000001100000000011000000000000111111111111",
+      "1111111111000000000000001100000000011000000000000111111111111",
+      "1111111111000000000000001100000000011000000000000111111111111",
+      "1111111111000000000000001100000000011000000000000111111111111",
+      "1111111110000000000000000000000000000000000000000011111111111",
+      "1111111110000000000000000000000000000000000000000001111111111",
+      "1111111100000000000000000000000000000000000000000001111111111",
+      "1111111100000000000000000000000000000000000000000000111111111",
+      "1111111100000000000000000000000000000000000000000000111111111",
+      "1111111100000000000000000000000000000000000000000000111111111",
+      "1111111000000000000000000000000000000000000000000000011111111",
+      "1111111111110000000000000000000000000000000000011111111111111",
+      "1111111111110000000000000000000000000000000000011111111111111",
+      "1111111111110000000000000000000000000000000000011111111111111",
+      "1111111111110000000000000000000000000000000000011111111111111",
+      "1111111111110000000000000000000000000000000000001111111111111",
+      "1111111111100000000000000000000000000000000000001111111111111",
+      "1111111111100000000000000000000000000000000000001111111111111",
+      "1111111111100000000000000000000000000000000000000111111111111",
+      "1111111111000000000000000000000000000000000000000111111111111",
+      "1111111111000000000000000000000000000000000000000111111111111",
+      "1111111111111111111111111111111111111111111111111111111111111",
+      "1111111111111111111111111111111111111111111111111111111111111",
+      "1111111111111111111111111111111111111111111111111111111111111"
+    ],
+    "triggers": [
+      {
+        "x": 10,
+        "y": 42,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333033332e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 11,
+        "y": 42,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333033332e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 12,
+        "y": 42,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333033332e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 13,
+        "y": 42,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333033332e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 14,
+        "y": 42,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333033332e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 15,
+        "y": 42,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333033332e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 16,
+        "y": 42,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333033332e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 17,
+        "y": 42,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333033332e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 18,
+        "y": 42,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333033332e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 19,
+        "y": 42,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333033332e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 20,
+        "y": 42,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333033332e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 21,
+        "y": 42,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333033332e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 22,
+        "y": 42,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333033332e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 23,
+        "y": 42,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333033332e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 24,
+        "y": 42,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333033332e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 25,
+        "y": 42,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333033332e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 26,
+        "y": 42,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333033332e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 27,
+        "y": 42,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333033332e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 28,
+        "y": 42,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333033332e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 29,
+        "y": 42,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333033332e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 30,
+        "y": 42,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333033332e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 31,
+        "y": 42,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333033332e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 32,
+        "y": 42,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333033332e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 33,
+        "y": 42,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333033332e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 34,
+        "y": 42,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333033332e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 35,
+        "y": 42,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333033332e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 36,
+        "y": 42,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333033332e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 37,
+        "y": 42,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333033332e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 38,
+        "y": 42,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333033332e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 39,
+        "y": 42,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333033332e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 40,
+        "y": 42,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333033332e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 41,
+        "y": 42,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333033332e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 42,
+        "y": 42,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333033332e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 43,
+        "y": 42,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333033332e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 44,
+        "y": 42,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333033332e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 45,
+        "y": 42,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333033332e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 46,
+        "y": 42,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333033332e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 47,
+        "y": 42,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333033332e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 48,
+        "y": 42,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333033332e646174000000000000000000000002000000020000000000000000000000000000000000000000000000"
+      },
+      {
+        "x": 10,
+        "y": 14,
+        "id": 2,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d30333033392e646174000000000000000000000001000000030000000000000000000000000000000000000000000000"
+      }
+    ],
+    "terrain_rule": "cell byte +0x20 == 0 permits terrain entry",
+    "transition_rule": "0x4A80E0: +0x38 reference, descriptor[0]==0 and descriptor[0x11]!=0 is path-gated",
+    "policy": "Unimplemented native transition gates block. Runtime enables only separately verified exits.",
+    "role_occupancy_rule": "+0x14 is runtime role index + 1, not static terrain",
+    "object_lookup_rule": "+0x2B is runtime object index + 1, not a second collision mask"
+  },
+  "objects": [
+    {
+      "index": 0,
+      "resource_filename": "001.DGP",
+      "source": "mapm/m03034/001.dgp",
+      "resource_sha256": "88cbcca6d59fb83018ccc9fbd71c4849fc55062f45fc8984a9eb548cd3c7a10d",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 128,
+      "y_native": 128,
+      "x_world": 256,
+      "y_world": 256,
+      "anchor_x": 228,
+      "anchor_y": 48,
+      "draw_x": 28,
+      "draw_y": 208,
+      "frame_width": 404,
+      "frame_height": 122,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 16,
+      "cell_y": 16,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 256,
+      "sort_y": 288,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m03034/objects/001_frame_000.png",
+      "image_sha256": "21bf295fc7072d3205eab19cbb95b5aad3f0e50618f116ee9516a9e8c6600742"
+    },
+    {
+      "index": 1,
+      "resource_filename": "002.DGP",
+      "source": "mapm/m03034/002.dgp",
+      "resource_sha256": "c13457d5b4efef118357753c8400e947c4b3a5e7fe2ea58eb4e01f76d916bc37",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 400,
+      "y_native": 280,
+      "x_world": 800,
+      "y_world": 560,
+      "anchor_x": 40,
+      "anchor_y": 354,
+      "draw_x": 760,
+      "draw_y": 206,
+      "frame_width": 215,
+      "frame_height": 386,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 50,
+      "cell_y": 35,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 800,
+      "sort_y": 592,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m03034/objects/002_frame_000.png",
+      "image_sha256": "e32811109ee3756f0f02e037f5c3c10f4eacba126d6bb4272fc77593e982065e"
+    },
+    {
+      "index": 2,
+      "resource_filename": "003.DGP",
+      "source": "mapm/m03034/003.dgp",
+      "resource_sha256": "26faf66540f99c3965101086701cba92d9c5f7ffe303382cdf5afa3ab6075f06",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 80,
+      "y_native": 280,
+      "x_world": 160,
+      "y_world": 560,
+      "anchor_x": 160,
+      "anchor_y": 359,
+      "draw_x": 0,
+      "draw_y": 201,
+      "frame_width": 192,
+      "frame_height": 391,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 10,
+      "cell_y": 35,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 160,
+      "sort_y": 592,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m03034/objects/003_frame_000.png",
+      "image_sha256": "34edcd9154ec1885e53ba712217e98ff959aeb96ca10c39ea9c35bfdd8009a75"
+    },
+    {
+      "index": 3,
+      "resource_filename": "004.DGP",
+      "source": "mapm/m03034/004.dgp",
+      "resource_sha256": "092d6018b3a27426489687316ae7c456f01848bd64a8a7406e3becc8a4345e37",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 352,
+      "y_native": 128,
+      "x_world": 704,
+      "y_world": 256,
+      "anchor_x": 177,
+      "anchor_y": 54,
+      "draw_x": 527,
+      "draw_y": 202,
+      "frame_width": 397,
+      "frame_height": 122,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 44,
+      "cell_y": 16,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 704,
+      "sort_y": 288,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m03034/objects/004_frame_000.png",
+      "image_sha256": "4a4cfece31e9f1c9a2658ebbdcd36f17b686c94f96f7fdfb229e04ef7a828797"
+    },
+    {
+      "index": 4,
+      "resource_filename": "006.DGP",
+      "source": "mapm/m03034/006.dgp",
+      "resource_sha256": "3b12b00e36f5088137bd289ba959b37b89e02eebaf1b3db583b1deaa8267ff0a",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 48,
+      "y_native": 136,
+      "x_world": 96,
+      "y_world": 272,
+      "anchor_x": 32,
+      "anchor_y": 214,
+      "draw_x": 64,
+      "draw_y": 58,
+      "frame_width": 124,
+      "frame_height": 246,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 6,
+      "cell_y": 17,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 96,
+      "sort_y": 304,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m03034/objects/006_frame_000.png",
+      "image_sha256": "22bfcdf7b20f20143a2472b1b8cdc59f1d3a683105f0884a51c0728fe1d8fa24"
+    },
+    {
+      "index": 5,
+      "resource_filename": "008.DGP",
+      "source": "mapm/m03034/008.dgp",
+      "resource_sha256": "4a80148fae1e1a4f0201472d655cabb7cf1ecdbe5b43605a54f913a842653fec",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 384,
+      "y_native": 128,
+      "x_world": 768,
+      "y_world": 256,
+      "anchor_x": 32,
+      "anchor_y": 226,
+      "draw_x": 736,
+      "draw_y": 30,
+      "frame_width": 100,
+      "frame_height": 258,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 48,
+      "cell_y": 16,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 768,
+      "sort_y": 288,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m03034/objects/008_frame_000.png",
+      "image_sha256": "2cb2c032fd6ba2ec9812681429b5687094244ac8114083e0b4e1e8e0ff3e6a79"
+    },
+    {
+      "index": 6,
+      "resource_filename": "010.DGP",
+      "source": "mapm/m03034/010.dgp",
+      "resource_sha256": "802d84afa05de6c5c6d572a1dd92d0252225dc9d2eb9553ef3eed646afbdcfc6",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 400,
+      "y_native": 136,
+      "x_world": 800,
+      "y_world": 272,
+      "anchor_x": 47,
+      "anchor_y": 211,
+      "draw_x": 753,
+      "draw_y": 61,
+      "frame_width": 125,
+      "frame_height": 243,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 50,
+      "cell_y": 17,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 800,
+      "sort_y": 304,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m03034/objects/010_frame_000.png",
+      "image_sha256": "1b2199362cbdca5d50e078ed92d180f886a14a19edc44aa62c752a752adab6f0"
+    }
+  ],
+  "exits": [
+    {
+      "id": 1,
+      "state": "ready",
+      "cells": [
+        {
+          "x": 10,
+          "y": 42
+        },
+        {
+          "x": 11,
+          "y": 42
+        },
+        {
+          "x": 12,
+          "y": 42
+        },
+        {
+          "x": 13,
+          "y": 42
+        },
+        {
+          "x": 14,
+          "y": 42
+        },
+        {
+          "x": 15,
+          "y": 42
+        },
+        {
+          "x": 16,
+          "y": 42
+        },
+        {
+          "x": 17,
+          "y": 42
+        },
+        {
+          "x": 18,
+          "y": 42
+        },
+        {
+          "x": 19,
+          "y": 42
+        },
+        {
+          "x": 20,
+          "y": 42
+        },
+        {
+          "x": 21,
+          "y": 42
+        },
+        {
+          "x": 22,
+          "y": 42
+        },
+        {
+          "x": 23,
+          "y": 42
+        },
+        {
+          "x": 24,
+          "y": 42
+        },
+        {
+          "x": 25,
+          "y": 42
+        },
+        {
+          "x": 26,
+          "y": 42
+        },
+        {
+          "x": 27,
+          "y": 42
+        },
+        {
+          "x": 28,
+          "y": 42
+        },
+        {
+          "x": 29,
+          "y": 42
+        },
+        {
+          "x": 30,
+          "y": 42
+        },
+        {
+          "x": 31,
+          "y": 42
+        },
+        {
+          "x": 32,
+          "y": 42
+        },
+        {
+          "x": 33,
+          "y": 42
+        },
+        {
+          "x": 34,
+          "y": 42
+        },
+        {
+          "x": 35,
+          "y": 42
+        },
+        {
+          "x": 36,
+          "y": 42
+        },
+        {
+          "x": 37,
+          "y": 42
+        },
+        {
+          "x": 38,
+          "y": 42
+        },
+        {
+          "x": 39,
+          "y": 42
+        },
+        {
+          "x": 40,
+          "y": 42
+        },
+        {
+          "x": 41,
+          "y": 42
+        },
+        {
+          "x": 42,
+          "y": 42
+        },
+        {
+          "x": 43,
+          "y": 42
+        },
+        {
+          "x": 44,
+          "y": 42
+        },
+        {
+          "x": 45,
+          "y": 42
+        },
+        {
+          "x": 46,
+          "y": 42
+        },
+        {
+          "x": 47,
+          "y": 42
+        },
+        {
+          "x": 48,
+          "y": 42
+        }
+      ],
+      "target_map": "M03033",
+      "entry": {
+        "x": 672,
+        "y": 368,
+        "direction": 6,
+        "cell_x": 42,
+        "cell_y": 23,
+        "native_x": 336,
+        "native_y": 184
+      },
+      "conditions": [],
+      "source": {
+        "path": "Map/m03034.dat",
+        "sha256": "0f19611a644906ecc68e14ed44dc708013adb062c5b2b5d43cede2751dc6baa5",
+        "descriptor_offset": 181298,
+        "descriptor_bytes": 66,
+        "descriptor_hex": "00000000000000000000000000000000006d30333033332e646174000000000000000000000002000000020000000000000000000000000000000000000000000000",
+        "compact_field_expansion_evidence": null,
+        "target_path": "Map/m03033.dat",
+        "target_sha256": "616539da059831c1c6be01cc3787d478a499df70555134b24eb672cfc34e64fe",
+        "target_entry_marker": 2,
+        "entry_sort_code": 2,
+        "entry_terrain_raw": 0,
+        "entry_trigger_raw": 0,
+        "entry_scan_cells": [
+          {
+            "x": 42,
+            "y": 22,
+            "offset": 91762
+          },
+          {
+            "x": 43,
+            "y": 22,
+            "offset": 91826
+          },
+          {
+            "x": 42,
+            "y": 23,
+            "offset": 95794
+          },
+          {
+            "x": 43,
+            "y": 23,
+            "offset": 95858
+          }
+        ],
+        "entry_sorted_cells": [
+          {
+            "x": 42,
+            "y": 23
+          },
+          {
+            "x": 43,
+            "y": 23
+          },
+          {
+            "x": 42,
+            "y": 22
+          },
+          {
+            "x": 43,
+            "y": 22
+          }
+        ],
+        "entry_sort": "y descending; stable ties",
+        "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
+        "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
+        "native_evidence": {
+          "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+          "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+          "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+          "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+        }
+      },
+      "execution": "Native transition descriptor only; map-entry TLK/ANM and their once-only checks must complete separately.",
+      "limitations": [
+        "Static source/code evidence; original timing not observed",
+        "Continuous keyboard movement is runtime policy"
+      ]
+    },
+    {
+      "id": 2,
+      "state": "ready",
+      "cells": [
+        {
+          "x": 10,
+          "y": 14
+        }
+      ],
+      "target_map": "M03039",
+      "entry": {
+        "x": 144,
+        "y": 480,
+        "direction": 4,
+        "cell_x": 9,
+        "cell_y": 30,
+        "native_x": 72,
+        "native_y": 240
+      },
+      "conditions": [],
+      "source": {
+        "path": "Map/m03034.dat",
+        "sha256": "0f19611a644906ecc68e14ed44dc708013adb062c5b2b5d43cede2751dc6baa5",
+        "descriptor_offset": 181364,
+        "descriptor_bytes": 66,
+        "descriptor_hex": "00000000000000000000000000000000006d30333033392e646174000000000000000000000001000000030000000000000000000000000000000000000000000000",
+        "compact_field_expansion_evidence": null,
+        "target_path": "Map/m03039.dat",
+        "target_sha256": "c3c01fb5773dda464c2a5bfa0b46520031f2dc9bd363e4a1978c99950b0dcaf2",
+        "target_entry_marker": 1,
+        "entry_sort_code": 3,
+        "entry_terrain_raw": 0,
+        "entry_trigger_raw": 0,
+        "entry_scan_cells": [
+          {
+            "x": 9,
+            "y": 30,
+            "offset": 87346
+          },
+          {
+            "x": 10,
+            "y": 30,
+            "offset": 87410
+          },
+          {
+            "x": 9,
+            "y": 31,
+            "offset": 90226
+          },
+          {
+            "x": 10,
+            "y": 31,
+            "offset": 90290
+          }
+        ],
+        "entry_sorted_cells": [
+          {
+            "x": 9,
+            "y": 30
+          },
+          {
+            "x": 9,
+            "y": 31
+          },
+          {
+            "x": 10,
+            "y": 30
+          },
+          {
+            "x": 10,
+            "y": 31
+          }
+        ],
+        "entry_sort": "x ascending; stable ties",
+        "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
+        "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
+        "native_evidence": {
+          "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+          "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+          "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+          "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+        }
+      },
+      "execution": "Native transition descriptor only; map-entry TLK/ANM and their once-only checks must complete separately.",
+      "limitations": [
+        "Static source/code evidence; original timing not observed",
+        "Continuous keyboard movement is runtime policy"
+      ]
+    }
+  ],
+  "unresolved_triggers": [],
+  "role_layer_preview": 2,
+  "role_layer_note": "Runtime render policy; native role +0xF3 initial value remains unverified",
+  "source": {
+    "path": "Map/m03034.dat",
+    "sha256": "0f19611a644906ecc68e14ed44dc708013adb062c5b2b5d43cede2751dc6baa5",
+    "bytes": 233602,
+    "object_resource_base_raw": ".\\MAPM\\M03034\\",
+    "object_resource_base": "mapm/m03034",
+    "object_table_start": 192978,
+    "object_table_end": 194896,
+    "unknown_tail_bytes": 38706,
+    "native_evidence": {
+      "map_loader": "ev_86fb8504826b15ccbea2b3911eaa302ef3f5cbeba7d1b233df62109a9ff38681",
+      "background_draw": "ev_2f7d67b0c8598838be7ac99150b959c5012222fdac93464caaf6732031f0b6e7",
+      "background_resource_loader": "ev_7c353572e07610a7b7e99f989466929dd711a469b13e61acb2597b40ff70e8d4",
+      "transition_path_gate": "ev_1ccb72823e262e4317968f322fcebaf8bd8724a31c215f127d8a68ac77c7b2b2",
+      "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+      "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+      "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+      "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+    },
+    "object_native_evidence": [
+      "ev_86fb8504826b15ccbea2b3911eaa302ef3f5cbeba7d1b233df62109a9ff38681",
+      "ev_6093394ea87d8eb856eef46d19eabdaf9e4735e58a8a18243c3aa798fda1feb5",
+      "ev_c0c0aa49cfd0507760600c7f4f475d3912f8210c498f1896a6fb058f80960b5b",
+      "ev_05dce0e80a25427e4e72280265291973d42f600238f7f832c0320114fed82fb7",
+      "ev_70e72b030eca65a4073731754bc443a383f4b215be5da103ed824b0c1a97727a",
+      "ev_02ca024fc6f9093e9bd38f06052ee2a4f2b2671240c4df2293cf1a50c4e2ae02",
+      "ev_813d397c0060f8bec0ba044eadc20f12cfb9fd8a36a56b19620629114d4ec9a7",
+      "ev_f32a0609558d1fb49c46e1a996c57b11aa62f681842c5ee0f86256aa7b74ffbe",
+      "ev_0781814eee25b61ac8bbd2b2ede6999858f4f7041d5b908f25c58d7a7691a89d",
+      "ev_9abd5ba6645433c0752e35b69015a7f998c9c9b054862a5afdfadc7499e40962"
+    ]
+  },
+  "limitations": [
+    "Static resource/code evidence; original-game entry/transition timing is not observed.",
+    "Background uses its initial animation frame; background animation is not advanced.",
+    "Initial static objects; script changes and object animation are not reconstructed.",
+    "Role depth and continuous keyboard movement are runtime policies.",
+    "NPC source defaults require chapter TLK/ANM changes; asset export executes no story"
+  ],
+  "chapter_npcs": [
+    {
+      "id": "M03034-role-10",
+      "slot_zero_based": 10,
+      "speaker_slot_one_based": 11,
+      "name": "飄城守衛",
+      "resource_id": "051",
+      "x": 384,
+      "y": 416,
+      "x_native": 192,
+      "y_native": 208,
+      "direction": 0,
+      "direction_raw_45": 0,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 7,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m03034.dat",
+        "sha256": "0f19611a644906ecc68e14ed44dc708013adb062c5b2b5d43cede2751dc6baa5",
+        "offset": 194896,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M03034-role-11",
+      "slot_zero_based": 11,
+      "speaker_slot_one_based": 12,
+      "name": "飄城守衛",
+      "resource_id": "051",
+      "x": 560,
+      "y": 416,
+      "x_native": 280,
+      "y_native": 208,
+      "direction": 6,
+      "direction_raw_45": 6,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 8,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m03034.dat",
+        "sha256": "0f19611a644906ecc68e14ed44dc708013adb062c5b2b5d43cede2751dc6baa5",
+        "offset": 196117,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M03034-role-12",
+      "slot_zero_based": 12,
+      "speaker_slot_one_based": 13,
+      "name": "飄城守衛",
+      "resource_id": "051",
+      "x": 736,
+      "y": 560,
+      "x_native": 368,
+      "y_native": 280,
+      "direction": 6,
+      "direction_raw_45": 6,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 9,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m03034.dat",
+        "sha256": "0f19611a644906ecc68e14ed44dc708013adb062c5b2b5d43cede2751dc6baa5",
+        "offset": 197338,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M03034-role-13",
+      "slot_zero_based": 13,
+      "speaker_slot_one_based": 14,
+      "name": "飄城守衛",
+      "resource_id": "051",
+      "x": 192,
+      "y": 560,
+      "x_native": 96,
+      "y_native": 280,
+      "direction": 0,
+      "direction_raw_45": 0,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 10,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m03034.dat",
+        "sha256": "0f19611a644906ecc68e14ed44dc708013adb062c5b2b5d43cede2751dc6baa5",
+        "offset": 198559,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M03034-role-14",
+      "slot_zero_based": 14,
+      "speaker_slot_one_based": 15,
+      "name": "席歐",
+      "resource_id": "026",
+      "x": 512,
+      "y": 256,
+      "x_native": 256,
+      "y_native": 128,
+      "direction": 4,
+      "direction_raw_45": 4,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 11,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m03034.dat",
+        "sha256": "0f19611a644906ecc68e14ed44dc708013adb062c5b2b5d43cede2751dc6baa5",
+        "offset": 199780,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M03034-role-15",
+      "slot_zero_based": 15,
+      "speaker_slot_one_based": 16,
+      "name": "飄城守衛",
+      "resource_id": "051",
+      "x": 176,
+      "y": 624,
+      "x_native": 88,
+      "y_native": 312,
+      "direction": 0,
+      "direction_raw_45": 0,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 12,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m03034.dat",
+        "sha256": "0f19611a644906ecc68e14ed44dc708013adb062c5b2b5d43cede2751dc6baa5",
+        "offset": 201001,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M03034-role-16",
+      "slot_zero_based": 16,
+      "speaker_slot_one_based": 17,
+      "name": "飄城守衛",
+      "resource_id": "051",
+      "x": 752,
+      "y": 624,
+      "x_native": 376,
+      "y_native": 312,
+      "direction": 6,
+      "direction_raw_45": 6,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 13,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m03034.dat",
+        "sha256": "0f19611a644906ecc68e14ed44dc708013adb062c5b2b5d43cede2751dc6baa5",
+        "offset": 202222,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M03034-role-17",
+      "slot_zero_based": 17,
+      "speaker_slot_one_based": 18,
+      "name": "飄城守衛",
+      "resource_id": "051",
+      "x": 208,
+      "y": 496,
+      "x_native": 104,
+      "y_native": 248,
+      "direction": 0,
+      "direction_raw_45": 0,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 14,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m03034.dat",
+        "sha256": "0f19611a644906ecc68e14ed44dc708013adb062c5b2b5d43cede2751dc6baa5",
+        "offset": 203443,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M03034-role-18",
+      "slot_zero_based": 18,
+      "speaker_slot_one_based": 19,
+      "name": "飄城守衛",
+      "resource_id": "051",
+      "x": 720,
+      "y": 496,
+      "x_native": 360,
+      "y_native": 248,
+      "direction": 6,
+      "direction_raw_45": 6,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 15,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m03034.dat",
+        "sha256": "0f19611a644906ecc68e14ed44dc708013adb062c5b2b5d43cede2751dc6baa5",
+        "offset": 204664,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M03034-role-19",
+      "slot_zero_based": 19,
+      "speaker_slot_one_based": 20,
+      "name": "坦多瑪",
+      "resource_id": "011",
+      "x": 480,
+      "y": 240,
+      "x_native": 240,
+      "y_native": 120,
+      "direction": 7,
+      "direction_raw_45": 7,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 16,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m03034.dat",
+        "sha256": "0f19611a644906ecc68e14ed44dc708013adb062c5b2b5d43cede2751dc6baa5",
+        "offset": 205885,
+        "bytes": 1221
+      }
+    }
+  ],
+  "opening_npcs": [
+    {
+      "id": "M03034-role-10",
+      "slot_zero_based": 10,
+      "speaker_slot_one_based": 11,
+      "name": "飄城守衛",
+      "resource_id": "051",
+      "x": 384,
+      "y": 416,
+      "x_native": 192,
+      "y_native": 208,
+      "direction": 0,
+      "direction_raw_45": 0,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 7,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m03034.dat",
+        "sha256": "0f19611a644906ecc68e14ed44dc708013adb062c5b2b5d43cede2751dc6baa5",
+        "offset": 194896,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M03034-role-11",
+      "slot_zero_based": 11,
+      "speaker_slot_one_based": 12,
+      "name": "飄城守衛",
+      "resource_id": "051",
+      "x": 560,
+      "y": 416,
+      "x_native": 280,
+      "y_native": 208,
+      "direction": 6,
+      "direction_raw_45": 6,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 8,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m03034.dat",
+        "sha256": "0f19611a644906ecc68e14ed44dc708013adb062c5b2b5d43cede2751dc6baa5",
+        "offset": 196117,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M03034-role-12",
+      "slot_zero_based": 12,
+      "speaker_slot_one_based": 13,
+      "name": "飄城守衛",
+      "resource_id": "051",
+      "x": 736,
+      "y": 560,
+      "x_native": 368,
+      "y_native": 280,
+      "direction": 6,
+      "direction_raw_45": 6,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 9,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m03034.dat",
+        "sha256": "0f19611a644906ecc68e14ed44dc708013adb062c5b2b5d43cede2751dc6baa5",
+        "offset": 197338,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M03034-role-13",
+      "slot_zero_based": 13,
+      "speaker_slot_one_based": 14,
+      "name": "飄城守衛",
+      "resource_id": "051",
+      "x": 192,
+      "y": 560,
+      "x_native": 96,
+      "y_native": 280,
+      "direction": 0,
+      "direction_raw_45": 0,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 10,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m03034.dat",
+        "sha256": "0f19611a644906ecc68e14ed44dc708013adb062c5b2b5d43cede2751dc6baa5",
+        "offset": 198559,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M03034-role-14",
+      "slot_zero_based": 14,
+      "speaker_slot_one_based": 15,
+      "name": "席歐",
+      "resource_id": "026",
+      "x": 512,
+      "y": 256,
+      "x_native": 256,
+      "y_native": 128,
+      "direction": 4,
+      "direction_raw_45": 4,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 11,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m03034.dat",
+        "sha256": "0f19611a644906ecc68e14ed44dc708013adb062c5b2b5d43cede2751dc6baa5",
+        "offset": 199780,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M03034-role-15",
+      "slot_zero_based": 15,
+      "speaker_slot_one_based": 16,
+      "name": "飄城守衛",
+      "resource_id": "051",
+      "x": 176,
+      "y": 624,
+      "x_native": 88,
+      "y_native": 312,
+      "direction": 0,
+      "direction_raw_45": 0,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 12,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m03034.dat",
+        "sha256": "0f19611a644906ecc68e14ed44dc708013adb062c5b2b5d43cede2751dc6baa5",
+        "offset": 201001,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M03034-role-16",
+      "slot_zero_based": 16,
+      "speaker_slot_one_based": 17,
+      "name": "飄城守衛",
+      "resource_id": "051",
+      "x": 752,
+      "y": 624,
+      "x_native": 376,
+      "y_native": 312,
+      "direction": 6,
+      "direction_raw_45": 6,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 13,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m03034.dat",
+        "sha256": "0f19611a644906ecc68e14ed44dc708013adb062c5b2b5d43cede2751dc6baa5",
+        "offset": 202222,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M03034-role-17",
+      "slot_zero_based": 17,
+      "speaker_slot_one_based": 18,
+      "name": "飄城守衛",
+      "resource_id": "051",
+      "x": 208,
+      "y": 496,
+      "x_native": 104,
+      "y_native": 248,
+      "direction": 0,
+      "direction_raw_45": 0,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 14,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m03034.dat",
+        "sha256": "0f19611a644906ecc68e14ed44dc708013adb062c5b2b5d43cede2751dc6baa5",
+        "offset": 203443,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M03034-role-18",
+      "slot_zero_based": 18,
+      "speaker_slot_one_based": 19,
+      "name": "飄城守衛",
+      "resource_id": "051",
+      "x": 720,
+      "y": 496,
+      "x_native": 360,
+      "y_native": 248,
+      "direction": 6,
+      "direction_raw_45": 6,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 15,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m03034.dat",
+        "sha256": "0f19611a644906ecc68e14ed44dc708013adb062c5b2b5d43cede2751dc6baa5",
+        "offset": 204664,
+        "bytes": 1221
+      }
+    },
+    {
+      "id": "M03034-role-19",
+      "slot_zero_based": 19,
+      "speaker_slot_one_based": 20,
+      "name": "坦多瑪",
+      "resource_id": "011",
+      "x": 480,
+      "y": 240,
+      "x_native": 240,
+      "y_native": 120,
+      "direction": 7,
+      "direction_raw_45": 7,
+      "hidden": false,
+      "hidden_raw_97": 0,
+      "hidden_on_load_raw_2ac": 0,
+      "initial_visibility_evidence": [
+        "ev_cc8392615a7d78e2d6d4cc2dbfbc632ed4e69ade06250acba27d0a0c5a951b2b"
+      ],
+      "raw_field_41": 16,
+      "action_mode_raw_2f": 0,
+      "animation_index_raw_83": 0,
+      "frame_index_raw_7b": 0,
+      "actor_mode_raw_f0": 0,
+      "behavior_raw_c5": 0,
+      "behavior_state_raw_f5": 1,
+      "movement_direction_raw_2b1": 0,
+      "blend_mode_raw_4bd": 0,
+      "source": {
+        "path": "Map/m03034.dat",
+        "sha256": "0f19611a644906ecc68e14ed44dc708013adb062c5b2b5d43cede2751dc6baa5",
+        "offset": 205885,
+        "bytes": 1221
+      }
+    }
+  ],
+  "map_flag_index": 421
+}

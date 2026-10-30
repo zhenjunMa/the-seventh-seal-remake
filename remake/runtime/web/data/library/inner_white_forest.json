@@ -987,7 +987,7 @@
     ],
     "extractor": {
       "path": "remake/runtime/tools/export_fire_valley_index.py",
-      "sha256": "72fe2f931199e4b176b547f9bb20ea35f6d7f77e61c705137435b1d55fdf4b88"
+      "sha256": "a925f766e67e778319bed1613b92a7c9fcebd3472e19e149208f191bb4dfea32"
     },
     "map_entry_evidence": [
       "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",

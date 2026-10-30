@@ -1,10 +1,10 @@
 {
   "schema": "seventh-seal-story-index",
   "version": 2,
-  "definition_sha256": "27b0a5ed0b0d5454a5d45983b0c9b3bfe6c5776b97dd6642b5a23e54f6f7e788",
+  "definition_sha256": "950a23d514c4f3179648062f03e824d956f8389b0bddd44d72205b95bd53f09c",
   "shared": {
     "path": "data/story/shared.json",
-    "sha256": "19a9be666886f5110a746f6c37d289838962d875f1a3760214ce2b5964da8f01"
+    "sha256": "16d08d0b013de5091c9bd0deb534d8a089664b70f1dec6e1baa32010131146ff"
   },
   "maps": {
     "M01060": {
@@ -125,7 +125,7 @@
     },
     "M03039": {
       "path": "data/story/maps/m03039.json",
-      "sha256": "fc1108daf63fb8a771a5a74f4e65ff76e77d6fac18f472dddd6f51d8b792cfb5"
+      "sha256": "22feeaf2891046a6b078e8404358294134b4edf74c6641217e2515e4b923d6e2"
     },
     "M01010": {
       "path": "data/story/maps/m01010.json",
@@ -133,7 +133,7 @@
     },
     "M01030": {
       "path": "data/story/maps/m01030.json",
-      "sha256": "c68f2a2723a4089e2b681f7600267403b16c17e5d5540b5a23c6a3461ff653ea"
+      "sha256": "5e22b1f9f199b2b776cb031518a08c4543f50ffbd4e435238960d24a5e42bc42"
     },
     "M17010": {
       "path": "data/story/maps/m17010.json",
@@ -249,7 +249,7 @@
     },
     "M70071": {
       "path": "data/story/maps/m70071.json",
-      "sha256": "58c5028b4f24e1a399eae1b96f39571d19a2b1f9afc7fc470ca8f31c5fa77374"
+      "sha256": "68e620295a9c5125959b1f2d0404769c3ad6723967c7ef72140fea4e5061e206"
     },
     "M70072": {
       "path": "data/story/maps/m70072.json",
@@ -314,6 +314,74 @@
     "M70078_2": {
       "path": "data/story/maps/m70078_2.json",
       "sha256": "f6bf6cae8618f9482075aae14dcb0e7ffcaf9ed17f371863589c9f327f77b362"
+    },
+    "M00000": {
+      "path": "data/story/maps/m00000.json",
+      "sha256": "a0ee9cda4a3a1aebcb830e005f6d8cebb474173783e11ed80b3f9596f73ebec9"
+    },
+    "M03034": {
+      "path": "data/story/maps/m03034.json",
+      "sha256": "d10ff7a9f3d13f271750b36ed2a0fc52ed04847d27aa0b5ae9958b227c4058d4"
+    },
+    "M03033": {
+      "path": "data/story/maps/m03033.json",
+      "sha256": "38dc4e27b2f9676a76c7534f4e2050cdd2cc25313cfb3df8ec8a00af7f51b5ff"
+    },
+    "M03030": {
+      "path": "data/story/maps/m03030.json",
+      "sha256": "5221cacffd8e306ff6a29f68472c026e6b0ed0e3062b1fe4aa438fbf6549b8be"
+    },
+    "M03040": {
+      "path": "data/story/maps/m03040.json",
+      "sha256": "6aefdd85faaeba08dc956d6ac511e92a54235b2917c516a7f80f67408076f55b"
+    },
+    "M03041": {
+      "path": "data/story/maps/m03041.json",
+      "sha256": "9918174c6590c4c057aa9529b893b5e12992ab420a6b3d48974d9aaff87152aa"
+    },
+    "M03043": {
+      "path": "data/story/maps/m03043.json",
+      "sha256": "404dd607b9c7c0f4cd32aa976e5380f3ff2163a534085768671b3652af803190"
+    },
+    "M03043-2": {
+      "path": "data/story/maps/m03043-2.json",
+      "sha256": "158b89adbb8f3b13c6c83460ffd23d1b10e9bea57d508e8a6bf9bab2b407817e"
+    },
+    "M03043-3": {
+      "path": "data/story/maps/m03043-3.json",
+      "sha256": "69b55d65c8a635b06af149e322b40a85e20afa6cf1678dad3d5c631cf37f8800"
+    },
+    "M03043-4": {
+      "path": "data/story/maps/m03043-4.json",
+      "sha256": "002fd2e9bb994596baed09da79339f14532c8e5470146791b19d6fdf03381a42"
+    },
+    "M03043-5": {
+      "path": "data/story/maps/m03043-5.json",
+      "sha256": "fed6183493ce1c3e2cfadd6fcbe9913b4f0a8eaa6208a55340719b3635ff53e1"
+    },
+    "M03044": {
+      "path": "data/story/maps/m03044.json",
+      "sha256": "ab26f181c0eabf52df503153ff82be532d79413cb7506f0621b1bc7f105b424a"
+    },
+    "M71071": {
+      "path": "data/story/maps/m71071.json",
+      "sha256": "511b9ea45cfdfd854f6541bb989e5c20f01572033d0a3c8b4fba588106fb870a"
+    },
+    "M71072": {
+      "path": "data/story/maps/m71072.json",
+      "sha256": "6ff7ee8c2dd1cea16796e185c785c713f3faad39ee99ede851acf03dc21f1d59"
+    },
+    "M71073": {
+      "path": "data/story/maps/m71073.json",
+      "sha256": "91b8326ca007f815ebf0a37da31f37786ddf967311e6b4d006e80bdd2ca39b5a"
+    },
+    "M71074": {
+      "path": "data/story/maps/m71074.json",
+      "sha256": "39baac5bc42e36956ef39e12a87807d64be50a3c035fbfa2e7d5dfde5d0a0671"
+    },
+    "M71075": {
+      "path": "data/story/maps/m71075.json",
+      "sha256": "cf59cd7f96d6c5e7608c4fdc13872a8980d7b5a3cd0dec6794b7ad5593c1e5a2"
     }
   },
   "opening": {

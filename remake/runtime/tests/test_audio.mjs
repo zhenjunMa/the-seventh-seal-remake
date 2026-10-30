@@ -32,6 +32,17 @@ test('title music uses registered clips, keeps channel settings and returns to s
   audio.setScene({mapId:'M70010'});await tick();assert.equal(audio.snapshot().desired_clip,original);
 });
 
+test('empty DAT music inherits the active track through the black transition map',async()=>{
+  assert.equal(data.maps.M00000.source.token,'');assert.equal(data.maps.M00000.inherit,true);
+  const {audio,voices}=setup();audio.setScene({mapId:'M01030'});audio.unlock();await tick();
+  const clip=audio.snapshot().desired_clip,media=voices[0];media.currentTime=17;
+  audio.setScene({mapId:'M00000'});await tick();
+  assert.equal(audio.snapshot().desired_clip,clip);assert.equal(voices.length,1);
+  assert.equal(media.currentTime,17);assert.equal(media.pauseCalls,0);
+  audio.setScene({mapId:'M03039'});await tick();
+  assert.equal(audio.snapshot().desired_clip,data.maps.M03039.clip);
+});
+
 test('audio export binds real content, source digests and action fields, retaining missing originals', () => {
   validateAudioManifest(data);
   for (const clip of Object.values(data.clips)) {
@@ -73,7 +84,8 @@ test('audio export binds real content, source digests and action fields, retaini
     assert.equal(digest(record),source.record_sha256);
     assert.equal(record.subarray(source.effect_field_offset,source.effect_field_offset+source.effect_field_bytes).toString().split('\0')[0],entry.effect_id===null?'':entry.effect_id+'.dgp');
   }
-  assert.deepEqual(data.object_sounds.map(entry=>[entry.map_id,entry.object_index,entry.clip]),[['M01042',8,'sound/E015.wav']]);
+  assert.deepEqual(data.object_sounds.map(entry=>[entry.map_id,entry.object_index,entry.clip]),
+    [['M01042',8,'sound/E015.wav'],['M71071',15,'sound/E034.wav']]);
   for(const entry of data.object_sounds){
     const object=readFileSync(new URL('../../../'+entry.object_source.path,import.meta.url)).subarray(entry.object_source.offset,entry.object_source.offset+0x112);
     const action=readFileSync(new URL('../../../'+entry.action_source.path,import.meta.url)).subarray(entry.action_source.offset,entry.action_source.offset+0xac);

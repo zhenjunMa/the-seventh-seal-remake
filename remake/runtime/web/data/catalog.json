@@ -5,6 +5,11 @@
   "seed": "data/opening_seed.json",
   "maps": [
     {
+      "id": "M00000",
+      "path": "data/maps/m00000.json",
+      "sha256": "899041986e6b3ff158b324694286c66078a69dafe8660f1af879682152a9ad86"
+    },
+    {
       "id": "M01010",
       "path": "data/maps/m01010.json",
       "sha256": "9edcaed256e84ffe7f4f6502a58509a408bdaad23a3b5773e842edef10b0d104"
@@ -100,9 +105,64 @@
       "sha256": "20f5c4b39de6e0e1e83c12ca1768be56cf0f9724f3859c2debf4c8911b90e72e"
     },
     {
+      "id": "M03030",
+      "path": "data/maps/m03030.json",
+      "sha256": "9d7318e5bec7c0d49ed7384fe0cce8edc2f76a05653b25d882673ee5678f9596"
+    },
+    {
+      "id": "M03033",
+      "path": "data/maps/m03033.json",
+      "sha256": "7a346f037831d8f7a823f5da9a0c29f7349fc80e98b2fe67801152b3c8b5435c"
+    },
+    {
+      "id": "M03034",
+      "path": "data/maps/m03034.json",
+      "sha256": "8aae7d507a1d6acbfd12a90d07e33b2fcb67cefce29ea04e3f7dc9b183e78fa5"
+    },
+    {
       "id": "M03039",
       "path": "data/maps/m03039.json",
-      "sha256": "63eadca1aa1f4a0ee48bc7299799b2e6742675c5ac8b10014a47d47e0570fa0b"
+      "sha256": "8b944e13080b3bbd0b2d5d0144774c326dafac8f60a48cccf5af746d716cb11d"
+    },
+    {
+      "id": "M03040",
+      "path": "data/maps/m03040.json",
+      "sha256": "a07ff5495e11bd455d546cbbbf81744b0baf99f88ab5bc935448a83b9d6bee07"
+    },
+    {
+      "id": "M03041",
+      "path": "data/maps/m03041.json",
+      "sha256": "1ae953de451a22af19b1a8a58233b9ee3c7dda9e8ebbc8af51aa75909f60b226"
+    },
+    {
+      "id": "M03043-2",
+      "path": "data/maps/m03043-2.json",
+      "sha256": "2f593bdb5b057826e3aca0c0c9aec60a7957f721ae9d1170f1c5d022494c27c5"
+    },
+    {
+      "id": "M03043-3",
+      "path": "data/maps/m03043-3.json",
+      "sha256": "9ed2d721b2d585737fdf8f2c6fed12a889ad76616bc9bc1109eb801b2738203a"
+    },
+    {
+      "id": "M03043-4",
+      "path": "data/maps/m03043-4.json",
+      "sha256": "39f6b85f3f883b2bd850bce6aee9a96889dbe0b7ab571a7d0bb1aa3e58a6fbdb"
+    },
+    {
+      "id": "M03043-5",
+      "path": "data/maps/m03043-5.json",
+      "sha256": "7a23b71e523b00357c539b2033857d6880a64b235ed4ec50fca58074956a2996"
+    },
+    {
+      "id": "M03043",
+      "path": "data/maps/m03043.json",
+      "sha256": "6cdf36220b77bdad52967611bf8111094bcf2f62bdf1ab821b3346b44a3136c2"
+    },
+    {
+      "id": "M03044",
+      "path": "data/maps/m03044.json",
+      "sha256": "b67c9681b63ad5ba70f70c10b3e9385d0f5c28e5f886fc0fd5ed91dd20fcfb08"
     },
     {
       "id": "M17010",
@@ -385,9 +445,34 @@
       "sha256": "176529e30d781fa33a38b24f5dc7a3af80291e9eaa708199eb0e730ec31735c9"
     },
     {
+      "id": "M71071",
+      "path": "data/maps/m71071.json",
+      "sha256": "f0c9cfeced832df4e7252132f8487f5d88e937ddcf341403e9f2df68831b4ea2"
+    },
+    {
+      "id": "M71072",
+      "path": "data/maps/m71072.json",
+      "sha256": "e1fd8cf26df11beed016ff261b03465d2e69a9d1756933735466ffc041ac9baf"
+    },
+    {
+      "id": "M71073",
+      "path": "data/maps/m71073.json",
+      "sha256": "2acf3c18c563a3d088ff7f4b0258b86e9242bcb49dc0cf9d28a50f7a3781c099"
+    },
+    {
+      "id": "M71074",
+      "path": "data/maps/m71074.json",
+      "sha256": "4130898e0b2fb9da1d6d12395386d04beb48faf1350c1af46a7d51fda4b4c41c"
+    },
+    {
+      "id": "M71075",
+      "path": "data/maps/m71075.json",
+      "sha256": "22ff323bfeb141a1b3839e395134ab035443c7ea3933c47868c335991f6a2dc9"
+    },
+    {
       "id": "M72061",
       "path": "data/maps/m72061.json",
-      "sha256": "17b1e09c8dbee0fa5b7138f028cbb63109998dd61ac9298ea77c947ee27f6fed"
+      "sha256": "e3be69801082c308fd3e0b5165eb085ab973669339b9eacf1c4324ae12cc32aa"
     }
   ],
   "roles": [
@@ -2648,7 +2733,7 @@
   "forest_battle_view": "data/enemy_battle_view.json",
   "scope": {
     "official_runtime_started": true,
-    "ready_exits": 129,
+    "ready_exits": 159,
     "source_backed_events": 0,
     "one_on_one_turn_sample": true,
     "full_combat": false,
