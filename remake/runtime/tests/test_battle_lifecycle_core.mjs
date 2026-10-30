@@ -21,7 +21,7 @@ function fixture({enabled=true,enemies=1,damage=99999,savedKo=false,playAction=a
     resolveAction:({skill})=>({hit:true,damage,mp_cost:skill.mp_cost}),
     applyDamage:(actor,result)=>{const hp=Math.max(0,actor.hp.current-result.damage);return {...actor,hp:{...actor.hp,current:hp},state_raw:hp?actor.state_raw:4};}});
   battle.start({...sample,reaction_data:reactions,lifecycle_enabled:enabled,rng:()=>{draws.push(0);return 0;}});
-  return {battle,world,draws,logs,async tick(){await battle.waitTick();battle.advanceClock();}};
+  return {battle,world,draws,logs,advanceTo(at){now=at;return battle.advanceClock(now);},async tick(){await battle.waitTick();battle.advanceClock();}};
 }
 const entries=b=>b.presentationSnapshot().lifecycle_events.filter(e=>e.kind==='entry');
 function ackEntries(b){for(const event of entries(b))assert.equal(b.ackLifecycle(event),true);}
@@ -54,16 +54,18 @@ test('command7 zero mode draws once at execution and renderer completion clears 
   raw[0x47]=4;const actorBefore=copy(actor);assert.throws(()=>f.battle.beginNativeAppearance('001',raw.toString('hex')),/模式尚未接入/);assert.deepEqual(actor,actorBefore);assert.equal(f.draws.length,before);
 });
 
-test('Lifecycle remains opt-in; enabled entries draw in roster order and cannot charge before individual completion',async()=>{
+test('Lifecycle remains opt-in; all entries finish before charging or commands begin',async()=>{
   const legacy=fixture({enabled:false});assert.equal(legacy.draws.length,0);assert.deepEqual(legacy.battle.presentationSnapshot().lifecycle_events,[]);
   const f=fixture({enemies:2}),initial=entries(f.battle);assert.deepEqual(initial.map(e=>e.actor_id),f.battle.state.actors.map(a=>a.id));assert.equal(f.draws.length,3);
   await f.tick();assert.ok(f.battle.state.actors.every(a=>a.charge.gauge===0));
   assert.equal(f.battle.ackLifecycle({...initial[0],life_epoch:99}),false);assert.equal(f.battle.ackLifecycle(initial[0]),true);
   const player=f.battle.actor('001');assert.equal(player.state_raw,0);assert.equal(player.immune_raw,0);
-  await f.tick();assert.ok(player.charge.gauge>0);assert.ok(f.battle.state.actors.filter(a=>a.side==='enemy').every(a=>a.charge.gauge===0));
-  f.battle.actor('enemy-0').charge.gauge=f.battle.state.scheduler.threshold;await f.tick();assert.equal(f.battle.state.history.length,0);
+  await f.tick();assert.ok(f.battle.state.actors.every(a=>a.charge.gauge===0));assert.equal(f.battle.state.scheduler.ticks,0);
+  player.charge.gauge=f.battle.state.scheduler.threshold;assert.equal(f.battle.canCommand(player.id),false);assert.deepEqual(f.battle.readyPlayerIds(),[]);player.charge.gauge=0;
+  f.advanceTo(5000);assert.equal(f.battle.state.scheduler.ticks,0);assert.equal(f.battle.state.history.length,0);
   assert.equal(f.battle.ackLifecycle(initial[0]),false);assert.equal(f.draws.length,3);assert.throws(()=>f.battle.finish());
   assert.ok(JSON.stringify(f.battle.presentationSnapshot().lifecycle_events).length<2000);assert.ok(!JSON.stringify(initial).includes('raw_hex'));
+  ackEntries(f.battle);await f.tick();assert.equal(f.battle.state.scheduler.ticks,1);assert.ok(f.battle.state.actors.every(a=>a.charge.gauge>0));
 });
 
 test('Death waits for its killer action, draws one descriptor and defers victory/finish until presentation acknowledgement',async()=>{

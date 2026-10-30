@@ -82,7 +82,8 @@ test('reset and a changed battle identity clear all visual channels, hidden acto
 });
 test('source mode1 appearance blocks subsequent sprites for seven original60ms clock steps',()=>{
   const {playback,roster,snapshot}=fixture(),entry=event('enemy-A','entry',11,11),selected=skill('012',11),frames=sprites(selected),prefix=frames[0].interval_raw,total=duration(selected)+7*60;
-  snapshot.lifecycle_events=[entry];playback.advance(snapshot,roster,0);playback.advance(snapshot,roster,prefix);assert.equal(playback.pose('enemy-A').source_frame,frames[0].source_frame);assert.equal(playback.alpha('enemy-A'),0);
+  snapshot.lifecycle_events=[entry];playback.advance(snapshot,roster,0);assert.equal(playback.alpha('enemy-A'),0);playback.advance(snapshot,roster,prefix-1);assert.equal(playback.alpha('enemy-A'),0);
+  playback.advance(snapshot,roster,prefix);assert.equal(playback.pose('enemy-A').source_frame,frames[0].source_frame);assert.equal(playback.alpha('enemy-A'),0);
   playback.advance(snapshot,roster,prefix+60);assert.equal(playback.alpha('enemy-A'),1/7);assert.equal(playback.pose('enemy-A').source_frame,frames[0].source_frame);
   playback.advance(snapshot,roster,prefix+7*60);assert.equal(playback.alpha('enemy-A'),1);assert.equal(playback.pose('enemy-A').source_frame,frames[1].source_frame);assert.deepEqual(playback.drainCompleted(),[]);
   playback.advance(snapshot,roster,total-1);assert.deepEqual(playback.drainCompleted(),[]);playback.advance(snapshot,roster,total);assert.equal(playback.pose('enemy-A'),null);assert.deepEqual(playback.drainCompleted().map(row=>row.token),[entry.token]);

@@ -9,10 +9,15 @@ test('battle start notifications cannot unfreeze the loading phase before entry 
   const controller=createBattleController({state,actions:{},$,canvas:{}}),snapshot={phase:'charging',round:1,impact_count:0,last_impact:null};
   controller.updateBattle(snapshot);assert.equal(state.scenes.phase,'battle-loading');
   state.battleEntryPending=false;controller.updateBattle(snapshot);assert.equal(state.scenes.phase,'battle-charging');
+  controller.updateBattle({...snapshot,lifecycle_events:[{kind:'entry'}]});assert.equal(state.scenes.phase,'battle-entry');assert.equal($('battleMessage').textContent,'正在入场');
+  controller.updateBattle(snapshot);assert.equal(state.scenes.phase,'battle-charging');
   assert.equal($('battleCommands').dataset.impactCount,0);assert.equal($('battleCommands').dataset.impactFrame,'');
   controller.updateBattle({...snapshot,impact_count:3,last_impact:{actor_id:'001',source_frame:17}});
   assert.equal($('battleCommands').dataset.impactCount,3);assert.equal($('battleCommands').dataset.impactFrame,17);
   assert.equal($('battleCommands').dataset.impactActor,'001');
+  let inputs=0;state.battleMenu={update(){},key(){inputs++;return true;}};
+  controller.updateBattle({...snapshot,lifecycle_events:[{kind:'entry'}]});assert.equal(controller.battleKey('Escape'),true);assert.equal(inputs,0);
+  controller.updateBattle({...snapshot,phase:'interrupted',error:'entry failed',lifecycle_events:[{kind:'entry'}]});assert.equal(controller.battleKey('Escape'),true);assert.equal(inputs,1);
 });
 
 test('battle preparation retains the map without either loading overlay, blocks reentry and rolls back on failure',async()=>{

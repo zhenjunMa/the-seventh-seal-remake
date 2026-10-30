@@ -23,7 +23,8 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
   const captureScene=kind=>actions.captureScene?.(kind)??(kind==='battle'?$('battleCanvas'):canvas);
   function updateBattle(snapshot){
     if(!snapshot||snapshot.phase==='closed')return;
-    const phase=snapshot.phase==='command'?'battle-command':snapshot.phase==='charging'?'battle-charging':snapshot.phase==='action'?'battle-action':snapshot.phase==='interrupted'?'battle-interrupted':'battle-result';
+    const entering=['command','charging'].includes(snapshot.phase)&&snapshot.lifecycle_events?.some(event=>event.kind==='entry');
+    const phase=entering?'battle-entry':snapshot.phase==='command'?'battle-command':snapshot.phase==='charging'?'battle-charging':snapshot.phase==='action'?'battle-action':snapshot.phase==='interrupted'?'battle-interrupted':'battle-result';
     if(!state.battleEntryPending&&state.scenes.phase!==phase)state.scenes.setPhase(phase);
     const node=$('battleCommands');node.dataset.phase=snapshot.phase;node.dataset.round=snapshot.round;
     node.dataset.mode=state.skillTestSession?'skill-test':'battle';
@@ -31,7 +32,7 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
     node.dataset.impactFrame=impacted?.source_frame??'';
     node.dataset.impactActor=impacted?.actor_id??'';
     node.dataset.impactCount=snapshot.impact_count;
-    $('battleMessage').textContent=snapshot.phase==='victory'?'战斗胜利':snapshot.phase==='defeat'?'队伍已经倒下':snapshot.phase==='escaped'?'已经逃离战斗':snapshot.phase==='interrupted'?snapshot.error:snapshot.phase==='action'?'正在行动':snapshot.phase==='command'?'选择行动':'行动槽充能中';
+    $('battleMessage').textContent=entering?'正在入场':snapshot.phase==='victory'?'战斗胜利':snapshot.phase==='defeat'?'队伍已经倒下':snapshot.phase==='escaped'?'已经逃离战斗':snapshot.phase==='interrupted'?snapshot.error:snapshot.phase==='action'?'正在行动':snapshot.phase==='command'?'选择行动':'行动槽充能中';
     state.battleMenu?.update(snapshot);
     if(state.scriptedBattleSession){
       if(snapshot.phase==='defeat'&&!state.scriptedBattleSession.returnPending)queueMicrotask(actions.guarded(returnFromBattle));
@@ -39,7 +40,7 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
       if(snapshot.phase==='escaped'&&!state.skillTestSession.returnPending){state.skillTestSession.returnPending=true;queueMicrotask(actions.guarded(returnFromBattle));}
     }else if(snapshot.phase==='defeat'&&state.world.value.source.kind==='native-new-game')queueMicrotask(actions.guarded(returnFromBattle));
   }
-  function battleKey(key,repeat=false){return state.battleMenu?.key(key,repeat)??false;}
+  function battleKey(key,repeat=false){if(state.battleEntryPending||state.scenes.phase==='battle-entry')return true;return state.battleMenu?.key(key,repeat)??false;}
   function battleKeyUp(key){state.battleMenu?.keyup(key);}
   function updateBattleFrame(now){
     if(state.battleEntryPending||state.battlePresentationError||state.battleResourceWaits?.size)return;
@@ -141,18 +142,19 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
     actions.log({type:'battle-resources-ready',mode,elapsed_ms:performance.now()-started,cache:battleResources.snapshot()});
     return result;
   }
-  async function revealBattle(before,sample,start,transitionOptions={},isCurrent=()=>true){
+  async function revealBattle(before,start,transitionOptions={},isCurrent=()=>true){
     state.battleEntryPending=true;
     try{
       start();
       if(state.battleTransition&&before)await state.battleTransition.run(before,()=>{
         if(!isCurrent())throw new Error('剧情战斗入场会话已失效');
-        showBattle();const snapshot=state.battle.presentationSnapshot();state.battleView.draw(snapshot,0);
-        state.battleMenu.draw(0,state.battleView.actorPositions());state.battleMenu.paintTo(state.engine?.battle.surface.canvas??$('battleCanvas'));
+        showBattle();const snapshot=state.battle.presentationSnapshot(),now=state.battleView.resourceTime?.()??0;
+        state.battleView.draw(snapshot,now,{entryPreview:true});
+        state.battleMenu.draw(now,state.battleView.actorPositions());state.battleMenu.paintTo(state.engine?.battle.surface.canvas??$('battleCanvas'));
         state.engine?.battle.surface.endFrame();
-        const after=state.battleTransition.capture(captureScene('battle'));
-        // The captured entry pose must not start lifecycle clocks during the transition.
-        state.battleView.setRoster(sample.actors,sample.skills);return after;
+        // Capture only the prepared battlefield. Entry records, audio and RNG
+        // begin once, on the first live battle frame after the transition.
+        return state.battleTransition.capture(captureScene('battle'));
       },transitionOptions);
       else showBattle();
     }finally{if(isCurrent())state.battleEntryPending=false;}
@@ -184,7 +186,7 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
       // the unknown original game's starting seed or global RNG scheduling.
       const rngSeed=group?encounterState.rng_state:0x20261011;
       state.battleRng=createNativeRng(rngSeed);state.battleNatural=Boolean(group);
-      await revealBattle(before,sample,()=>state.battle.start({...sample,lifecycle_enabled:Boolean(state.battleView.lifecycle),side_priority:state.sidePriority,rng:state.battleRng,source:{...sample.source,rng_seed:rngSeed,rng_seed_policy:group?'persistent-development-global-stream':'controlled-development-seed'}}));
+      await revealBattle(before,()=>state.battle.start({...sample,lifecycle_enabled:Boolean(state.battleView.lifecycle),side_priority:state.sidePriority,rng:state.battleRng,source:{...sample.source,rng_seed:rngSeed,rng_seed_policy:group?'persistent-development-global-stream':'controlled-development-seed'}}));
       state.audio?.setScene({mapId:state.world.location.map_id,battle:true,stageId:group?.stage??null});
       if(group)actions.log({type:'field-encounter',group,location:state.world.location,counter_after:state.world.value.encounters.counters[state.selectedRole]});
       actions.status('满槽后选择招式和目标。Esc 收起轮盘，方向键切换人物，空格打开轮盘；也可用 Tab / X / Z 切换满槽人物。');
@@ -219,7 +221,7 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
       session.view.setRoster(sample.actors,sample.skills);
       session.battle=state.battle=createCombat(simulation.world,true,session.view);state.battleRng=simulation.rng;
       await prepareHud(true,{world:simulation.world,battle:session.battle,owner:session,signal});check();
-      await playbackTask(revealBattle(before,sample,()=>state.battle.start({...sample,lifecycle_enabled:true,rng:simulation.rng,side_priority:state.sidePriority,
+      await playbackTask(revealBattle(before,()=>state.battle.start({...sample,lifecycle_enabled:true,rng:simulation.rng,side_priority:state.sidePriority,
         source:{...sample.source,scripted_battle:true,record:group.source,rng_seed:simulation.encounters.rng_state,
           rng_seed_policy:'persistent-development-global-stream',transition_draw:simulation.transitionRaw,
           transition_visual_rng_policy:'Source kind uses CRT; existing pixel-transition adapter uses its separate presentation random source.'}}),
@@ -282,7 +284,7 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
       await prepareHud(true,{returnLabel:'返回技巧测试',onProgress:p=>progress({completed:85+15*p.completed/p.total,total:100})});
       progress({completed:100,total:100});
       });
-      await revealBattle(before,sample,()=>state.battle.start({...sample,lifecycle_enabled:true,rng:state.battleRng,side_priority:state.sidePriority,
+      await revealBattle(before,()=>state.battle.start({...sample,lifecycle_enabled:true,rng:state.battleRng,side_priority:state.sidePriority,
         source:{...sample.source,rng_seed:state.battleRng.state,rng_seed_policy:'separate-technique-test-stream'}}));
       $('mapName').textContent='技巧测试';
       state.audio?.setScene({mapId:state.world.location.map_id,battle:true,stageId:rules.stage.music_stage_id??'stage13.scn'});
