@@ -25,14 +25,25 @@ test('export independently verifies all selected source mask frames and leaves o
     for(const [id,role] of Object.entries((await read(`web/data/${name}.json`)).roles))selected.set(id,role);
   const expected=new Set(),actual=new Set();let compactBytes=0,fullBytes=0;
   for(const [id,role] of Object.entries(manifest.roles)){
+    const source=await readFile(new URL('../../../'+role.source.path,import.meta.url));
+    assert.equal(createHash('sha256').update(source).digest('hex'),role.source.sha256);
+    const framePool=source.readUInt32LE(67+source[2]*(source[0]===9?172:144)+4);
     assert.equal(role.event_only,!selected.has(id),`${id} source selection determines event-only status`);
     const omitted=report.empty_actions_omitted.filter(row=>row.role===id).map(row=>selected.get(id).actions.find(action=>action.index===row.action));
     for(const action of [...role.actions,...omitted]){
       assert.ok(action,`${id} omitted action has no source selection`);
       fullBytes+=action.frame_count*action.directions*role.frame_width*role.frame_height*4;
       if(action.shadow_geometry)compactBytes+=action.frame_count*action.directions*action.shadow_geometry.width*action.shadow_geometry.height*4;
-      for(let direction=0;direction<action.directions;direction++)for(let frame=0;frame<action.frame_count;frame++)
-        expected.add(`${id}:${action.index}:${direction}:${action.first_frame+direction*action.frame_count+frame}`);
+      const notDrawn=[];
+      for(let direction=0;direction<action.directions;direction++)for(let frame=0;frame<action.frame_count;frame++){
+        const physical=action.first_frame+direction*action.frame_count+frame;
+        if(physical>=framePool)notDrawn.push({direction,frame,physical_frame:physical});
+        else expected.add(`${id}:${action.index}:${direction}:${physical}`);
+      }
+      // Native52AF12 rejects these cells before shadow decoding. They retain
+      // source timing/stride but cannot claim a nonexistent source mask blob.
+      assert.deepEqual(action.native_not_drawn_frames??[],notDrawn,`${id}/${action.index} native frame gate`);
+      if(notDrawn.length)assert.equal(action.source_frame_pool,framePool);
     }
   }
   for(const row of report.frame_checks)actual.add(`${row.role}:${row.action}:${row.direction}:${row.physical_frame}`);

@@ -3400,7 +3400,7 @@
         },
         {
           "id": "M03034:tlk:30:1",
-          "op": "unsupported",
+          "op": "test_native_condition",
           "record_id": 30,
           "source": {
             "path": "Map/m03034.TLK",
@@ -3409,7 +3409,12 @@
             "record_bytes": 1647,
             "offset": 49789
           },
-          "reason": "剧情条件 8 尚未接入"
+          "condition_type": 8,
+          "condition_index": 0,
+          "condition_bit": 0,
+          "condition_byte_raw_0b": 2,
+          "if_true": "M03034:tlk:31",
+          "if_false": "M03034:tlk:30:2"
         },
         {
           "id": "M03034:tlk:30:2",
@@ -3501,7 +3506,7 @@
         },
         {
           "id": "M03034:tlk:32:1",
-          "op": "unsupported",
+          "op": "test_native_condition",
           "record_id": 32,
           "source": {
             "path": "Map/m03034.TLK",
@@ -3510,7 +3515,12 @@
             "record_bytes": 1647,
             "offset": 53083
           },
-          "reason": "剧情条件 8 尚未接入"
+          "condition_type": 8,
+          "condition_index": 0,
+          "condition_bit": 0,
+          "condition_byte_raw_0b": 2,
+          "if_true": "M03034:tlk:31",
+          "if_false": "M03034:tlk:32:2"
         },
         {
           "id": "M03034:tlk:32:2",
@@ -3558,7 +3568,7 @@
         },
         {
           "id": "M03034:tlk:33:1",
-          "op": "unsupported",
+          "op": "test_native_condition",
           "record_id": 33,
           "source": {
             "path": "Map/m03034.TLK",
@@ -3567,7 +3577,12 @@
             "record_bytes": 1647,
             "offset": 54730
           },
-          "reason": "剧情条件 8 尚未接入"
+          "condition_type": 8,
+          "condition_index": 0,
+          "condition_bit": 0,
+          "condition_byte_raw_0b": 2,
+          "if_true": "M03034:tlk:31",
+          "if_false": "M03034:tlk:33:2"
         },
         {
           "id": "M03034:tlk:33:2",
@@ -3615,7 +3630,7 @@
         },
         {
           "id": "M03034:tlk:34:1",
-          "op": "unsupported",
+          "op": "test_native_condition",
           "record_id": 34,
           "source": {
             "path": "Map/m03034.TLK",
@@ -3624,7 +3639,12 @@
             "record_bytes": 1647,
             "offset": 56377
           },
-          "reason": "剧情条件 8 尚未接入"
+          "condition_type": 8,
+          "condition_index": 0,
+          "condition_bit": 0,
+          "condition_byte_raw_0b": 2,
+          "if_true": "M03034:tlk:31",
+          "if_false": "M03034:tlk:34:2"
         },
         {
           "id": "M03034:tlk:34:2",
@@ -3672,7 +3692,7 @@
         },
         {
           "id": "M03034:tlk:35:1",
-          "op": "unsupported",
+          "op": "test_native_condition",
           "record_id": 35,
           "source": {
             "path": "Map/m03034.TLK",
@@ -3681,7 +3701,12 @@
             "record_bytes": 1647,
             "offset": 58024
           },
-          "reason": "剧情条件 8 尚未接入"
+          "condition_type": 8,
+          "condition_index": 0,
+          "condition_bit": 0,
+          "condition_byte_raw_0b": 2,
+          "if_true": "M03034:tlk:31",
+          "if_false": "M03034:tlk:35:2"
         },
         {
           "id": "M03034:tlk:35:2",
@@ -3729,7 +3754,7 @@
         },
         {
           "id": "M03034:tlk:36:1",
-          "op": "unsupported",
+          "op": "test_native_condition",
           "record_id": 36,
           "source": {
             "path": "Map/m03034.TLK",
@@ -3738,7 +3763,12 @@
             "record_bytes": 1647,
             "offset": 59671
           },
-          "reason": "剧情条件 8 尚未接入"
+          "condition_type": 8,
+          "condition_index": 0,
+          "condition_bit": 0,
+          "condition_byte_raw_0b": 2,
+          "if_true": "M03034:tlk:31",
+          "if_false": "M03034:tlk:36:2"
         },
         {
           "id": "M03034:tlk:36:2",
@@ -3786,7 +3816,7 @@
         },
         {
           "id": "M03034:tlk:37:1",
-          "op": "unsupported",
+          "op": "test_native_condition",
           "record_id": 37,
           "source": {
             "path": "Map/m03034.TLK",
@@ -3795,7 +3825,12 @@
             "record_bytes": 1647,
             "offset": 61318
           },
-          "reason": "剧情条件 8 尚未接入"
+          "condition_type": 8,
+          "condition_index": 0,
+          "condition_bit": 0,
+          "condition_byte_raw_0b": 2,
+          "if_true": "M03034:tlk:31",
+          "if_false": "M03034:tlk:37:2"
         },
         {
           "id": "M03034:tlk:37:2",
@@ -3843,7 +3878,7 @@
         },
         {
           "id": "M03034:tlk:38:1",
-          "op": "unsupported",
+          "op": "test_native_condition",
           "record_id": 38,
           "source": {
             "path": "Map/m03034.TLK",
@@ -3852,7 +3887,12 @@
             "record_bytes": 1647,
             "offset": 62965
           },
-          "reason": "剧情条件 8 尚未接入"
+          "condition_type": 8,
+          "condition_index": 0,
+          "condition_bit": 0,
+          "condition_byte_raw_0b": 2,
+          "if_true": "M03034:tlk:31",
+          "if_false": "M03034:tlk:38:2"
         },
         {
           "id": "M03034:tlk:38:2",

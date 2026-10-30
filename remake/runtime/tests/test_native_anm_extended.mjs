@@ -47,6 +47,19 @@ test('real m17010-3 executes both camera modes and continues after source annota
   assert.ok(trace.some(row=>row.hook==='actor'&&row.command.index===65&&row.kind==='restore'));
 });
 
+test('real m03021 executes all 280 source commands, both videos and the final arriving-map sequence',async()=>{
+  const {program,content,bytes}=await sourceProgram('m03021'),trace=[];
+  assert.equal(bytes.readUInt32LE(2),280);assert.equal(bytes.length,67+280*74);
+  const result=await new ChapterAnimationRunner({program,content,hooks:hooks(trace),initialActor:2,
+    initialLocation:{map_id:program.expected.caller_maps[0],x:400,y:400,direction:0},
+    joinActor:async row=>trace.push({hook:'join',...row}),leaveActor:async()=>{},runTlk:async row=>trace.push({hook:'tlk',...row})}).run();
+  assert.deepEqual([result.commands,result.steps,result.controlled_actor,result.location.map_id],[280,280,2,'M03023']);
+  assert.deepEqual(trace.filter(row=>row.hook==='map'&&!row.bootstrap).map(row=>row.mapId),['M03020-1','M03021-2','M03021-3','M03021-4','M03023']);
+  assert.deepEqual(trace.filter(row=>row.hook==='media').map(row=>[row.command.index,row.filename]),[[68,'09.bik'],[96,'10.bik']]);
+  assert.deepEqual(trace.filter(row=>row.hook==='join').map(row=>[row.command.index,row.actorSlot,row.modeRaw]),[[269,3,0]]);
+  assert.ok(trace.some(row=>row.hook==='actor'&&row.command.index===278&&row.kind==='restore'));
+});
+
 test('real finale follows both flag23 paths and plays each original video and deferred voice command',async()=>{
   const {program,content}=await sourceProgram('m17030-1');
   for(const flag of [0,1]){

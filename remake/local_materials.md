@@ -37,6 +37,7 @@
 | 炎城 | `ember_city_20261028/registration_scope.json`、`implementation_closure.json`、`final_preflight.json`、`browser_fixture_manifest.json`及浏览器观察；原kind4、经济服务、NPC保存和042来源保留在同目录。 |
 | 实施前炎城评估 | `ember_city_assessment_20261028/source_index.json`、`assessment.json`与`inspect_scope.py`。须绑定当时源码／登记和原输入；其中“未登记／未实玩”是评估时点状态。 |
 | 共享配置与六人技能 | `source_library_20261023/`、`party_skill_alignment_20261027/`、`configuration_startup_20261027/`；A／B全技能导入档及条件表随技能目录交接，不能以其替代正式学习流程。 |
+| 融湖、追击与登舟 | `yc05_jl03_20261030/implementation_closure.json`、`automatic_validation.json`、`browser_observation_v2.json`及交接档；其中`battle_command9_native.json`是战斗入场导出器的必要原生输入，`battle_camera_native.json`与`battle_entry_native_bundle.json`是来源检查的必要输入，须按原路径和SHA一起交接。ANM像素模式的便携指令fixture在已提交测试目录，详细恢复依据另存同主题证据。 |
 | 表现与性能 | `movement_collision_optimization_20261028/`、`movement_contact_refinement_20261028/`、`battle_audio_20261028/`、`battle_streaming_20261029/`；更早材料按各自时点保留。 |
 
 保留失败和更正记录：翠碧湖CF7分类以`cf7_idle_recovery.json`更正早期报告，旧报告不覆盖；火之谷`history_report_incident.json`所记旧slice报告原字节未恢复，不能作为原验收依据。复制或修订脚本不等于已重跑；是否执行以对应目录的实际报告为准。

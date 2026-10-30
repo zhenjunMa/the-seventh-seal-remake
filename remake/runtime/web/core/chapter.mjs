@@ -4,7 +4,7 @@
 import {validateWorld} from './world.mjs';
 import {restorePartyAfterRest} from './recovery.mjs';
 import {admitPartyMember,deactivatePartyMember,controlPartyActor} from './party_members.mjs';
-import {applyNativeAnmFlagCommand} from './native_anm_commands.mjs';
+import {applyNativeAnmFlagCommand,nativeAnmObjectTarget} from './native_anm_commands.mjs';
 export {chapterRoleFromDefinition} from './party_members.mjs';
 import {runtimeContent,storyBindings} from './content_registry.mjs';
 import {validateCompactRecords} from './story_packages.mjs';
@@ -381,6 +381,14 @@ export class ChapterRunner {
         flagCommand:({command,mapId:activeMap})=>{
           const active=this.data.maps[activeMap];need(active,'剧情旗标地图来源缺失');
           return applyNativeAnmFlagCommand(draft,command,active.map_flag_index);
+        },objectCommand:({command,mapId:activeMap})=>{
+          const target=nativeAnmObjectTarget(command,activeMap,this.data);if(!target)return null;
+          const {mapId,mapFlag,objectIndex,enabled}=target;
+          if(mapId!==activeMap){setObjectEventState(draft,mapFlag,objectIndex,enabled?3:0);return null;}
+          const before=chapterObjectState(draft,mapId,objectIndex,this.data);
+          if(enabled&&before===3||!enabled&&before===0)return null;
+          const state=enabled?2:5;setObjectEventState(draft,mapFlag,objectIndex,state);
+          return {mapId,objectIndex,state,complete:()=>setObjectEventState(draft,mapFlag,objectIndex,enabled?3:0)};
         }});
     }
     if(op==='wait')return playback?playback.wait(command.ms):this.wait(command.ms);

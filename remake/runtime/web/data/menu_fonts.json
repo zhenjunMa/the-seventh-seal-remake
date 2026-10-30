@@ -1481,7 +1481,7 @@
       "face_resolved": "宋体",
       "height": 19,
       "image": "assets/menu/fonts/simsun19_text.png",
-      "sha256": "7f853758ace039149a3fcc2a5277c18065e0a8bdcaffd7853bdf63774133021c",
+      "sha256": "19a0d61f0f1e308b8b0137d8d55596b9e154c2a788bb853d16a28899a9fd2f5d",
       "atlas_width": 1280,
       "atlas_height": 1520,
       "glyphs": {
@@ -12226,6 +12226,51 @@
           "offset_x": 1,
           "offset_y": 1,
           "advance": 20
+        },
+        "休": {
+          "x": 120,
+          "y": 1480,
+          "width": 18,
+          "height": 18,
+          "offset_x": 0,
+          "offset_y": 0,
+          "advance": 20
+        },
+        "室": {
+          "x": 160,
+          "y": 1480,
+          "width": 17,
+          "height": 17,
+          "offset_x": 1,
+          "offset_y": 1,
+          "advance": 20
+        },
+        "宾": {
+          "x": 200,
+          "y": 1480,
+          "width": 16,
+          "height": 18,
+          "offset_x": 2,
+          "offset_y": 0,
+          "advance": 20
+        },
+        "广": {
+          "x": 240,
+          "y": 1480,
+          "width": 17,
+          "height": 18,
+          "offset_x": 1,
+          "offset_y": 0,
+          "advance": 20
+        },
+        "舟": {
+          "x": 280,
+          "y": 1480,
+          "width": 17,
+          "height": 18,
+          "offset_x": 1,
+          "offset_y": 0,
+          "advance": 20
         }
       }
     },
@@ -12234,7 +12279,7 @@
       "face_resolved": "宋体",
       "height": 20,
       "image": "assets/menu/fonts/simsun20_text.png",
-      "sha256": "c350c26817798fdb6c04ad99831a28597075bbc25dec05f7fa89eaaa04a466b2",
+      "sha256": "f1fa8c7403408be3ecb91298fccd10620207d7108f0917140264cd6ffcceac29",
       "atlas_width": 1280,
       "atlas_height": 1520,
       "glyphs": {
@@ -22979,6 +23024,51 @@
           "offset_x": 0,
           "offset_y": 1,
           "advance": 21
+        },
+        "休": {
+          "x": 120,
+          "y": 1480,
+          "width": 19,
+          "height": 18,
+          "offset_x": 0,
+          "offset_y": 1,
+          "advance": 21
+        },
+        "室": {
+          "x": 160,
+          "y": 1480,
+          "width": 18,
+          "height": 17,
+          "offset_x": 1,
+          "offset_y": 1,
+          "advance": 21
+        },
+        "宾": {
+          "x": 200,
+          "y": 1480,
+          "width": 17,
+          "height": 18,
+          "offset_x": 2,
+          "offset_y": 1,
+          "advance": 21
+        },
+        "广": {
+          "x": 240,
+          "y": 1480,
+          "width": 18,
+          "height": 18,
+          "offset_x": 1,
+          "offset_y": 1,
+          "advance": 21
+        },
+        "舟": {
+          "x": 280,
+          "y": 1480,
+          "width": 18,
+          "height": 18,
+          "offset_x": 1,
+          "offset_y": 1,
+          "advance": 21
         }
       }
     },
@@ -22987,7 +23077,7 @@
       "face_resolved": "宋体",
       "height": 22,
       "image": "assets/menu/fonts/simsun22_text.png",
-      "sha256": "5d802d69750c8c445948a498ac577a2d7152564629a5e05d71f605a2e0b7c12e",
+      "sha256": "9ba3af5b35751c0d32f5bee1e3838f6a5fac11db856a317a15e5b797ef5159b8",
       "atlas_width": 1280,
       "atlas_height": 1520,
       "glyphs": {
@@ -33732,6 +33822,51 @@
           "offset_x": 1,
           "offset_y": 1,
           "advance": 23
+        },
+        "休": {
+          "x": 120,
+          "y": 1480,
+          "width": 21,
+          "height": 20,
+          "offset_x": 0,
+          "offset_y": 1,
+          "advance": 23
+        },
+        "室": {
+          "x": 160,
+          "y": 1480,
+          "width": 20,
+          "height": 20,
+          "offset_x": 1,
+          "offset_y": 1,
+          "advance": 23
+        },
+        "宾": {
+          "x": 200,
+          "y": 1480,
+          "width": 19,
+          "height": 20,
+          "offset_x": 2,
+          "offset_y": 1,
+          "advance": 23
+        },
+        "广": {
+          "x": 240,
+          "y": 1480,
+          "width": 20,
+          "height": 20,
+          "offset_x": 1,
+          "offset_y": 1,
+          "advance": 23
+        },
+        "舟": {
+          "x": 280,
+          "y": 1480,
+          "width": 20,
+          "height": 20,
+          "offset_x": 1,
+          "offset_y": 1,
+          "advance": 23
         }
       }
     },
@@ -33740,7 +33875,7 @@
       "face_resolved": "宋体",
       "height": 24,
       "image": "assets/menu/fonts/simsun24_text.png",
-      "sha256": "df3cb236c6dcee2523b9d9d54d71974e4815fe7c91bbebc526c096cdd9bf7722",
+      "sha256": "5b0884568aa1d9b9be64aaf3fc421a1a47a2fd06f75d0c3c8a5843221023f07f",
       "atlas_width": 1280,
       "atlas_height": 1520,
       "glyphs": {
@@ -44485,6 +44620,51 @@
           "offset_x": 1,
           "offset_y": 1,
           "advance": 25
+        },
+        "休": {
+          "x": 120,
+          "y": 1480,
+          "width": 22,
+          "height": 22,
+          "offset_x": 1,
+          "offset_y": 1,
+          "advance": 25
+        },
+        "室": {
+          "x": 160,
+          "y": 1480,
+          "width": 22,
+          "height": 22,
+          "offset_x": 1,
+          "offset_y": 1,
+          "advance": 25
+        },
+        "宾": {
+          "x": 200,
+          "y": 1480,
+          "width": 21,
+          "height": 22,
+          "offset_x": 2,
+          "offset_y": 1,
+          "advance": 25
+        },
+        "广": {
+          "x": 240,
+          "y": 1480,
+          "width": 22,
+          "height": 22,
+          "offset_x": 1,
+          "offset_y": 1,
+          "advance": 25
+        },
+        "舟": {
+          "x": 280,
+          "y": 1480,
+          "width": 22,
+          "height": 22,
+          "offset_x": 1,
+          "offset_y": 1,
+          "advance": 25
         }
       }
     },
@@ -44493,7 +44673,7 @@
       "face_resolved": "宋体",
       "height": 20,
       "image": "assets/menu/fonts/requested_black20_text.png",
-      "sha256": "c350c26817798fdb6c04ad99831a28597075bbc25dec05f7fa89eaaa04a466b2",
+      "sha256": "f1fa8c7403408be3ecb91298fccd10620207d7108f0917140264cd6ffcceac29",
       "atlas_width": 1280,
       "atlas_height": 1520,
       "glyphs": {
@@ -55238,6 +55418,51 @@
           "offset_x": 0,
           "offset_y": 1,
           "advance": 21
+        },
+        "休": {
+          "x": 120,
+          "y": 1480,
+          "width": 19,
+          "height": 18,
+          "offset_x": 0,
+          "offset_y": 1,
+          "advance": 21
+        },
+        "室": {
+          "x": 160,
+          "y": 1480,
+          "width": 18,
+          "height": 17,
+          "offset_x": 1,
+          "offset_y": 1,
+          "advance": 21
+        },
+        "宾": {
+          "x": 200,
+          "y": 1480,
+          "width": 17,
+          "height": 18,
+          "offset_x": 2,
+          "offset_y": 1,
+          "advance": 21
+        },
+        "广": {
+          "x": 240,
+          "y": 1480,
+          "width": 18,
+          "height": 18,
+          "offset_x": 1,
+          "offset_y": 1,
+          "advance": 21
+        },
+        "舟": {
+          "x": 280,
+          "y": 1480,
+          "width": 18,
+          "height": 18,
+          "offset_x": 1,
+          "offset_y": 1,
+          "advance": 21
         }
       }
     },
@@ -55246,7 +55471,7 @@
       "face_resolved": "宋体",
       "height": 24,
       "image": "assets/menu/fonts/requested_black24_text.png",
-      "sha256": "df3cb236c6dcee2523b9d9d54d71974e4815fe7c91bbebc526c096cdd9bf7722",
+      "sha256": "5b0884568aa1d9b9be64aaf3fc421a1a47a2fd06f75d0c3c8a5843221023f07f",
       "atlas_width": 1280,
       "atlas_height": 1520,
       "glyphs": {
@@ -65991,6 +66216,51 @@
           "offset_x": 1,
           "offset_y": 1,
           "advance": 25
+        },
+        "休": {
+          "x": 120,
+          "y": 1480,
+          "width": 22,
+          "height": 22,
+          "offset_x": 1,
+          "offset_y": 1,
+          "advance": 25
+        },
+        "室": {
+          "x": 160,
+          "y": 1480,
+          "width": 22,
+          "height": 22,
+          "offset_x": 1,
+          "offset_y": 1,
+          "advance": 25
+        },
+        "宾": {
+          "x": 200,
+          "y": 1480,
+          "width": 21,
+          "height": 22,
+          "offset_x": 2,
+          "offset_y": 1,
+          "advance": 25
+        },
+        "广": {
+          "x": 240,
+          "y": 1480,
+          "width": 22,
+          "height": 22,
+          "offset_x": 1,
+          "offset_y": 1,
+          "advance": 25
+        },
+        "舟": {
+          "x": 280,
+          "y": 1480,
+          "width": 22,
+          "height": 22,
+          "offset_x": 1,
+          "offset_y": 1,
+          "advance": 25
         }
       }
     },
@@ -65999,7 +66269,7 @@
       "face_resolved": "宋体",
       "height": 19,
       "image": "assets/menu/fonts/requested_black19_mnu.png",
-      "sha256": "7f853758ace039149a3fcc2a5277c18065e0a8bdcaffd7853bdf63774133021c",
+      "sha256": "19a0d61f0f1e308b8b0137d8d55596b9e154c2a788bb853d16a28899a9fd2f5d",
       "atlas_width": 1280,
       "atlas_height": 1520,
       "glyphs": {
@@ -76744,6 +77014,51 @@
           "offset_x": 1,
           "offset_y": 1,
           "advance": 20
+        },
+        "休": {
+          "x": 120,
+          "y": 1480,
+          "width": 18,
+          "height": 18,
+          "offset_x": 0,
+          "offset_y": 0,
+          "advance": 20
+        },
+        "室": {
+          "x": 160,
+          "y": 1480,
+          "width": 17,
+          "height": 17,
+          "offset_x": 1,
+          "offset_y": 1,
+          "advance": 20
+        },
+        "宾": {
+          "x": 200,
+          "y": 1480,
+          "width": 16,
+          "height": 18,
+          "offset_x": 2,
+          "offset_y": 0,
+          "advance": 20
+        },
+        "广": {
+          "x": 240,
+          "y": 1480,
+          "width": 17,
+          "height": 18,
+          "offset_x": 1,
+          "offset_y": 0,
+          "advance": 20
+        },
+        "舟": {
+          "x": 280,
+          "y": 1480,
+          "width": 17,
+          "height": 18,
+          "offset_x": 1,
+          "offset_y": 0,
+          "advance": 20
         }
       }
     },
@@ -76752,7 +77067,7 @@
       "face_resolved": "宋体",
       "height": 23,
       "image": "assets/menu/fonts/requested_black23_mnu.png",
-      "sha256": "710c652ce27720caf049e8855e9597929fca7dea4965d5423f365f4bb853a87e",
+      "sha256": "8f96aef6dbb4b10325d03b81ca956c4b20fb8ad6cd393f93d984b35f9b00c682",
       "atlas_width": 1280,
       "atlas_height": 1520,
       "glyphs": {
@@ -87497,6 +87812,51 @@
           "offset_x": 1,
           "offset_y": 1,
           "advance": 24
+        },
+        "休": {
+          "x": 120,
+          "y": 1480,
+          "width": 21,
+          "height": 21,
+          "offset_x": 1,
+          "offset_y": 1,
+          "advance": 24
+        },
+        "室": {
+          "x": 160,
+          "y": 1480,
+          "width": 21,
+          "height": 21,
+          "offset_x": 1,
+          "offset_y": 1,
+          "advance": 24
+        },
+        "宾": {
+          "x": 200,
+          "y": 1480,
+          "width": 20,
+          "height": 21,
+          "offset_x": 2,
+          "offset_y": 1,
+          "advance": 24
+        },
+        "广": {
+          "x": 240,
+          "y": 1480,
+          "width": 21,
+          "height": 21,
+          "offset_x": 1,
+          "offset_y": 1,
+          "advance": 24
+        },
+        "舟": {
+          "x": 280,
+          "y": 1480,
+          "width": 21,
+          "height": 21,
+          "offset_x": 1,
+          "offset_y": 1,
+          "advance": 24
         }
       }
     },
@@ -87505,7 +87865,7 @@
       "face_resolved": "Arial",
       "height": 23,
       "image": "assets/menu/fonts/arial23_mnu.png",
-      "sha256": "0ee696add1edd26c82dff27de6b08dd80a4753c065909725e12cb6d107f3d05b",
+      "sha256": "6f27cc093a4f33f6a767ad7d28a51498331ee58fdeef2eff76b4a10c569fc8fa",
       "atlas_width": 1280,
       "atlas_height": 1520,
       "glyphs": {
@@ -98250,6 +98610,51 @@
           "offset_x": 0,
           "offset_y": 3,
           "advance": 21
+        },
+        "休": {
+          "x": 120,
+          "y": 1480,
+          "width": 19,
+          "height": 18,
+          "offset_x": 0,
+          "offset_y": 3,
+          "advance": 21
+        },
+        "室": {
+          "x": 160,
+          "y": 1480,
+          "width": 18,
+          "height": 17,
+          "offset_x": 1,
+          "offset_y": 3,
+          "advance": 21
+        },
+        "宾": {
+          "x": 200,
+          "y": 1480,
+          "width": 17,
+          "height": 18,
+          "offset_x": 2,
+          "offset_y": 3,
+          "advance": 21
+        },
+        "广": {
+          "x": 240,
+          "y": 1480,
+          "width": 18,
+          "height": 18,
+          "offset_x": 1,
+          "offset_y": 3,
+          "advance": 21
+        },
+        "舟": {
+          "x": 280,
+          "y": 1480,
+          "width": 18,
+          "height": 18,
+          "offset_x": 1,
+          "offset_y": 3,
+          "advance": 21
         }
       }
     },
@@ -98258,7 +98663,7 @@
       "face_resolved": "Arial",
       "height": 25,
       "image": "assets/menu/fonts/arial25_mnu.png",
-      "sha256": "466c0ba042ff2bac4ccb9c03d54e28b03afa7d616e388912d639205026c91d50",
+      "sha256": "c2c800549087fcdc2636e111160460e62accdab3e978dde36fb72b0dab67face",
       "atlas_width": 1280,
       "atlas_height": 1520,
       "glyphs": {
@@ -109003,6 +109408,51 @@
           "offset_x": 1,
           "offset_y": 2,
           "advance": 23
+        },
+        "休": {
+          "x": 120,
+          "y": 1480,
+          "width": 21,
+          "height": 20,
+          "offset_x": 0,
+          "offset_y": 2,
+          "advance": 23
+        },
+        "室": {
+          "x": 160,
+          "y": 1480,
+          "width": 20,
+          "height": 20,
+          "offset_x": 1,
+          "offset_y": 2,
+          "advance": 23
+        },
+        "宾": {
+          "x": 200,
+          "y": 1480,
+          "width": 19,
+          "height": 20,
+          "offset_x": 2,
+          "offset_y": 2,
+          "advance": 23
+        },
+        "广": {
+          "x": 240,
+          "y": 1480,
+          "width": 20,
+          "height": 20,
+          "offset_x": 1,
+          "offset_y": 2,
+          "advance": 23
+        },
+        "舟": {
+          "x": 280,
+          "y": 1480,
+          "width": 20,
+          "height": 20,
+          "offset_x": 1,
+          "offset_y": 2,
+          "advance": 23
         }
       }
     },
@@ -109011,7 +109461,7 @@
       "face_resolved": "宋体",
       "height": 12,
       "image": "assets/menu/fonts/simsun12_text.png",
-      "sha256": "2e256b2f202add30e630cfd0edb1ec221f7674f7a05bd368a2d6268f95d8b9f3",
+      "sha256": "24d03f3ea7ab577f0cbb25f8d68e4d22ea9aca3a5c67ca675980bd2b563a7519",
       "atlas_width": 1280,
       "atlas_height": 1520,
       "glyphs": {
@@ -119756,6 +120206,51 @@
           "offset_x": 0,
           "offset_y": 0,
           "advance": 13
+        },
+        "休": {
+          "x": 120,
+          "y": 1480,
+          "width": 11,
+          "height": 12,
+          "offset_x": 0,
+          "offset_y": 0,
+          "advance": 13
+        },
+        "室": {
+          "x": 160,
+          "y": 1480,
+          "width": 11,
+          "height": 12,
+          "offset_x": 0,
+          "offset_y": 0,
+          "advance": 13
+        },
+        "宾": {
+          "x": 200,
+          "y": 1480,
+          "width": 11,
+          "height": 12,
+          "offset_x": 0,
+          "offset_y": 0,
+          "advance": 13
+        },
+        "广": {
+          "x": 240,
+          "y": 1480,
+          "width": 11,
+          "height": 12,
+          "offset_x": 0,
+          "offset_y": 0,
+          "advance": 13
+        },
+        "舟": {
+          "x": 280,
+          "y": 1480,
+          "width": 11,
+          "height": 12,
+          "offset_x": 0,
+          "offset_y": 0,
+          "advance": 13
         }
       }
     },
@@ -119764,7 +120259,7 @@
       "face_resolved": "宋体",
       "height": 14,
       "image": "assets/menu/fonts/requested_black14_mnu.png",
-      "sha256": "491271af22b7cf402cb5cd10059471106d1acfbdcd456dc38c115312d6e0c151",
+      "sha256": "bbbd154160de6f5c761577fde3d56c30e3ffa7c0c11a45dc01912607008173cc",
       "atlas_width": 1280,
       "atlas_height": 1520,
       "glyphs": {
@@ -130509,26 +131004,71 @@
           "offset_x": 0,
           "offset_y": 0,
           "advance": 15
+        },
+        "休": {
+          "x": 120,
+          "y": 1480,
+          "width": 13,
+          "height": 14,
+          "offset_x": 0,
+          "offset_y": 0,
+          "advance": 15
+        },
+        "室": {
+          "x": 160,
+          "y": 1480,
+          "width": 13,
+          "height": 14,
+          "offset_x": 0,
+          "offset_y": 0,
+          "advance": 15
+        },
+        "宾": {
+          "x": 200,
+          "y": 1480,
+          "width": 13,
+          "height": 14,
+          "offset_x": 0,
+          "offset_y": 0,
+          "advance": 15
+        },
+        "广": {
+          "x": 240,
+          "y": 1480,
+          "width": 13,
+          "height": 14,
+          "offset_x": 0,
+          "offset_y": 0,
+          "advance": 15
+        },
+        "舟": {
+          "x": 280,
+          "y": 1480,
+          "width": 13,
+          "height": 14,
+          "offset_x": 0,
+          "offset_y": 0,
+          "advance": 15
         }
       }
     }
   },
   "text_charset": {
-    "character_count": 1187,
-    "characters": " !$%()+-./0123456789?CHMNP_abcdehiklmnoprstuvwxy{}·‘’、。一丁七三上下不与丑且世丝严中丹为主久义之乌乐习书乱了争事于云亚亡产人代以们价任伊伍众优会伟传伤似但位低住体何余作佩使例供信倍值假元充光入全六兰共其具典兼兽内冕冠冥冰冻减凝凡凤凯出击刀切列刚初利到制刺刻前剑力功加动助勇匕化升单博卡印即却卵厅压原去参及反发取变口古召可右号司各合吉同名后吐含启吸周呼命和咒品唐唤唱商嗔嘉嘴器回围圆土在地场均坏块坛城基堂塔增墬士壮壳处备复外多夜够大天太失头夺奇奏契套女如妖妮姆始娱子孔字存学宇守安完宙定宝实害家密寐对寻封射将尔尚尼尽尾屑展属山峰峻嵌工左巧巨已布师希帕帝带席帮常帽幅平年幻庄底度延开异式引弱弹强归当录形彩影往征徐得御循德徽心忌念态性怪恋恍恩息恶情惊惑想意慈慧戏成戒或战戴所扇手打托承技投护拉拓招拥择拳拿持指挡换据接控掷提操支收攻放效敌散数整文斗料斧斩断斯新方旋族无日时明昏星映昧是晕晖晶智暖曜曲更最月有望期木未本术机权材村杖来板极林某染标树样核根格档梦森槽樱次欲歌止此死殊残殿毁母每毒比毛气水永求沉沌沙没河泉法泪洋活流浑浪浴海消涎深混清渊游湖源满濒火灭灯灵灾灿炎炬点炼炽烁烂烈烙烟烧热焠焰然照燃燕爱片版物特状狂狄狱猛玄率玉王玛环玲珍珑珞珠球理琉琴瑛瑞璃瓦生用甲电界留疾病痹白百的皇盐盗目相盾真眠眼着睛睡矛知石矿砂破础硃碎碧祝神祭禁福种秘积称移稀稳穹空穿突竖章符等筋箭簇籽粉粹精素紫繁红级纯纳纸纹终经结绝绦继续绳绿缓编缝缺罗置美羽翅翼耀者而耗耳聚胆胧能脂腕腾臂自致舍舞般色芒芙花苏苔英范茶草药荷莉莱莲获菲萝落蒂蓉蓝蔓蕴蕾藏藓虚虹蚀蚕蛇蛋蛙蛟蜂蜃蜜蜥蝉螂螺蟑血行袍被裂装西要覆见角解言让记设诅识试语诱说诺调谜谷象貌贝负贤质贵费赛赤走超越足路身转轮较辰过运近返进远连迟迷退适逃逆选通速造遂遇道遗遭避那邪部都酒酷酿醒释里重量金钢钥钻铁铂铃铜铬银锁锡键锯锻镇镜镧镯镰镶长闇门闪间阔队防阳阴阶阻阿际陈降限除陷隔雄雅雕雪零雷雾霞青非靠面韧音项预颜颠风飓飞饮饰首香马骨高魂魄魔鸟麝麻黄黑默龙％（）＋，－．／０１２３４５６７８９：；ＡＢＣＤＥ:IΩαβγχⅠⅡⅢⅤⅩ∑∧万个九二五他令保修倒候先八关决凰刃删劈区十千卸双向吼四图圣垂型域奥容宽导序必忆快怒急总捷掌携改暗杀束正步段波测激焦煌爆牙狮直码离究第类索翔翻脚节苍菜虎补袭视认请资跑距蹴闭阵需震霸页额鬼鹭齐AS局表链gq→　「」临交仍从件份佛依停储再写冲准分划则削励勾包匠匹华南占卷受吧告固坊坐壁奉奖好威娃宿寸少尺层屋岸崩帧庇应店座弧径待忏怜恕悔悲愈慰我截房才执抗报掉描援救斜施旧暂暴朝末朱杂果栏模殉民治浮澄炉炙炫炮狼献玩现珂琳町疯瘁登盖眩瞬确磐祈祷笼算系组绘罩署群翠老背胜腐腰营融街裁规触计证话该读败赎赐赖践踢辅辑输迅这述逻配釜钟钱阈随隐集顶顺驰验鲁黯刽唯巴徒泥狩猎胄鹰齿BFf楼研迹飘馆",
-    "sha256": "c6da829e116aad5957b8081878118eb58c9cec078779bd0e91c7c98595a48a71",
+    "character_count": 1192,
+    "characters": " !$%()+-./0123456789?CHMNP_abcdehiklmnoprstuvwxy{}·‘’、。一丁七三上下不与丑且世丝严中丹为主久义之乌乐习书乱了争事于云亚亡产人代以们价任伊伍众优会伟传伤似但位低住体何余作佩使例供信倍值假元充光入全六兰共其具典兼兽内冕冠冥冰冻减凝凡凤凯出击刀切列刚初利到制刺刻前剑力功加动助勇匕化升单博卡印即却卵厅压原去参及反发取变口古召可右号司各合吉同名后吐含启吸周呼命和咒品唐唤唱商嗔嘉嘴器回围圆土在地场均坏块坛城基堂塔增墬士壮壳处备复外多夜够大天太失头夺奇奏契套女如妖妮姆始娱子孔字存学宇守安完宙定宝实害家密寐对寻封射将尔尚尼尽尾屑展属山峰峻嵌工左巧巨已布师希帕帝带席帮常帽幅平年幻庄底度延开异式引弱弹强归当录形彩影往征徐得御循德徽心忌念态性怪恋恍恩息恶情惊惑想意慈慧戏成戒或战戴所扇手打托承技投护拉拓招拥择拳拿持指挡换据接控掷提操支收攻放效敌散数整文斗料斧斩断斯新方旋族无日时明昏星映昧是晕晖晶智暖曜曲更最月有望期木未本术机权材村杖来板极林某染标树样核根格档梦森槽樱次欲歌止此死殊残殿毁母每毒比毛气水永求沉沌沙没河泉法泪洋活流浑浪浴海消涎深混清渊游湖源满濒火灭灯灵灾灿炎炬点炼炽烁烂烈烙烟烧热焠焰然照燃燕爱片版物特状狂狄狱猛玄率玉王玛环玲珍珑珞珠球理琉琴瑛瑞璃瓦生用甲电界留疾病痹白百的皇盐盗目相盾真眠眼着睛睡矛知石矿砂破础硃碎碧祝神祭禁福种秘积称移稀稳穹空穿突竖章符等筋箭簇籽粉粹精素紫繁红级纯纳纸纹终经结绝绦继续绳绿缓编缝缺罗置美羽翅翼耀者而耗耳聚胆胧能脂腕腾臂自致舍舞般色芒芙花苏苔英范茶草药荷莉莱莲获菲萝落蒂蓉蓝蔓蕴蕾藏藓虚虹蚀蚕蛇蛋蛙蛟蜂蜃蜜蜥蝉螂螺蟑血行袍被裂装西要覆见角解言让记设诅识试语诱说诺调谜谷象貌贝负贤质贵费赛赤走超越足路身转轮较辰过运近返进远连迟迷退适逃逆选通速造遂遇道遗遭避那邪部都酒酷酿醒释里重量金钢钥钻铁铂铃铜铬银锁锡键锯锻镇镜镧镯镰镶长闇门闪间阔队防阳阴阶阻阿际陈降限除陷隔雄雅雕雪零雷雾霞青非靠面韧音项预颜颠风飓飞饮饰首香马骨高魂魄魔鸟麝麻黄黑默龙％（）＋，－．／０１２３４５６７８９：；ＡＢＣＤＥ:IΩαβγχⅠⅡⅢⅤⅩ∑∧万个九二五他令保修倒候先八关决凰刃删劈区十千卸双向吼四图圣垂型域奥容宽导序必忆快怒急总捷掌携改暗杀束正步段波测激焦煌爆牙狮直码离究第类索翔翻脚节苍菜虎补袭视认请资跑距蹴闭阵需震霸页额鬼鹭齐AS局表链gq→　「」临交仍从件份佛依停储再写冲准分划则削励勾包匠匹华南占卷受吧告固坊坐壁奉奖好威娃宿寸少尺层屋岸崩帧庇应店座弧径待忏怜恕悔悲愈慰我截房才执抗报掉描援救斜施旧暂暴朝末朱杂果栏模殉民治浮澄炉炙炫炮狼献玩现珂琳町疯瘁登盖眩瞬确磐祈祷笼算系组绘罩署群翠老背胜腐腰营融街裁规触计证话该读败赎赐赖践踢辅辑输迅这述逻配釜钟钱阈随隐集顶顺驰验鲁黯刽唯巴徒泥狩猎胄鹰齿BFf楼研迹飘馆休室宾广舟",
+    "sha256": "e91ef983c421cb693e2c664844a5e8210ef1209dbcb8ab5e2ab00008728317df",
     "sources": [
       {
         "path": "web/data/items.json",
-        "sha256": "b63c0817a1cf4f0185d14b060d08557dd83aaf479ea831315af1f7f7ab1fe65d"
+        "sha256": "8240b4c5d670f130704e7dafb37f97424f4cb88abf5a04fa7ab28c20a305033f"
       },
       {
         "path": "web/data/party_skills.json",
-        "sha256": "2646e600a33da204187878c4fd4f2d86265cdc49c1a4973ddfc2d384bf082f77"
+        "sha256": "0bba525ba7b91c67e70183794c5b067302fedd48afe9287301af15a44af3302b"
       },
       {
         "path": "web/data/forest_combat.json",
-        "sha256": "8cfb38e4ac53774821010fad68cf1aa4258a48bde6ac9a929e7bed4ce950030f"
+        "sha256": "4e50d606b95291bbaadeb4df534badc0f8dddd9d2746a48a58140f43224c88c8"
       },
       {
         "path": "web/data/maps/m00000.json",
@@ -130544,7 +131084,27 @@
       },
       {
         "path": "web/data/maps/m01020a.json",
-        "sha256": "19ef58f3182a1c3b75bf11d10bf918f084cfb11ec804779f990003a617d9e222"
+        "sha256": "41d0df9d95139e4b7f4375041b20fcb4c4a2c306c9cd39a96c29a61138f34414"
+      },
+      {
+        "path": "web/data/maps/m01021-1.json",
+        "sha256": "d45e21bb54622909d42c484454a998153a03a7d2615dc36ebbda9a2b7c678273"
+      },
+      {
+        "path": "web/data/maps/m01021-2.json",
+        "sha256": "ba53b05c9fb7588e06a9709719c2b817067b3bbb45eac37c4826fd3e5c107332"
+      },
+      {
+        "path": "web/data/maps/m01021.json",
+        "sha256": "97f89526efa9002222892bf7889634ad90cb1477902209aaf5b41a22bcf66b57"
+      },
+      {
+        "path": "web/data/maps/m01022-1.json",
+        "sha256": "67968f3232902867fa773893056815053821b84271b67db0fba73df22280ec31"
+      },
+      {
+        "path": "web/data/maps/m01022.json",
+        "sha256": "cee88bfdc7e6bc5ba44354db2215a9cfdd1a8b887237c0292224d6e124897023"
       },
       {
         "path": "web/data/maps/m01030.json",
@@ -130611,6 +131171,38 @@
         "sha256": "20f5c4b39de6e0e1e83c12ca1768be56cf0f9724f3859c2debf4c8911b90e72e"
       },
       {
+        "path": "web/data/maps/m03010.json",
+        "sha256": "828316ea2560c246ad7be7cc4a7c24d0339830270a16dc4905bc4f1faf6a03ac"
+      },
+      {
+        "path": "web/data/maps/m03020-1.json",
+        "sha256": "9d8a36362db9627e31cbf7c779596bbfbb12cb6ff6a68aefb162a2b67de3390f"
+      },
+      {
+        "path": "web/data/maps/m03020.json",
+        "sha256": "207826310f4794dd093f69612c591e2a80fa52915056ac2c891ba7f9bdf6575e"
+      },
+      {
+        "path": "web/data/maps/m03021-2.json",
+        "sha256": "b6253a962bc71cd44b0e757c6e351a82f73cc17706daec57695235ca13004732"
+      },
+      {
+        "path": "web/data/maps/m03021-3.json",
+        "sha256": "0decc75ee411d47a23c5ca2a25d4a84a90019d415eb84f7279dd28abe64d3e91"
+      },
+      {
+        "path": "web/data/maps/m03021-4.json",
+        "sha256": "18039c6aff5fa37079b0d4baa1dbf13b103adf4116d42df34df9565fbeb44033"
+      },
+      {
+        "path": "web/data/maps/m03022.json",
+        "sha256": "cb29fab340307c15397cf65899f9bc6f6bb3f0106102bafed1ec0f256b8110c0"
+      },
+      {
+        "path": "web/data/maps/m03023.json",
+        "sha256": "7b0265caa36cc59b385f610487aa76e22c0f715c87592a26a3be4594745d7c38"
+      },
+      {
         "path": "web/data/maps/m03030.json",
         "sha256": "9d7318e5bec7c0d49ed7384fe0cce8edc2f76a05653b25d882673ee5678f9596"
       },
@@ -130628,7 +131220,7 @@
       },
       {
         "path": "web/data/maps/m03040.json",
-        "sha256": "a07ff5495e11bd455d546cbbbf81744b0baf99f88ab5bc935448a83b9d6bee07"
+        "sha256": "5c54db866160ea3c1d53a9de11683d7fd11d3204f15c761f6061e770dcdf8f7b"
       },
       {
         "path": "web/data/maps/m03041.json",
@@ -130741,6 +131333,14 @@
       {
         "path": "web/data/maps/m17032.json",
         "sha256": "7c2bfb5419a089f50e1d5c18db1669e6ef4ed920eb5c6e1da90a929cfccae635"
+      },
+      {
+        "path": "web/data/maps/m29011.json",
+        "sha256": "1d6683a892c1ff3d965086725c57a1f6b4346cbdcb9d5fe60d7388efe1edd173"
+      },
+      {
+        "path": "web/data/maps/m29012.json",
+        "sha256": "9d7922110f86f1d0dcbd74cc45d11f5ca58cd096be2a2a53cfa998236b81dd8d"
       },
       {
         "path": "web/data/maps/m70010.json",
@@ -130912,7 +131512,7 @@
       },
       {
         "path": "web/data/operation_menu.json",
-        "sha256": "bec95233d3893242aefb8f6f91e4b0f12a7fdb18711c46756f2a8224a7652870"
+        "sha256": "c8f56ff201ca3774b262286527c301531279b0fb0a7dc3fc3caca549dd9abe6b"
       },
       {
         "path": "web/data/operation_techniques.json",
@@ -130931,8 +131531,16 @@
         "sha256": "1ecb602e118486cdfac8dcf2c03e025fe2d8ee926e7d241a5fde475b72478cc7"
       },
       {
+        "path": "web/core/battle_camera.mjs",
+        "sha256": "21e71fa26524c73654e732b41e2b679bdab3cf9c6df49c755a4e3d7ea7ed4251"
+      },
+      {
         "path": "web/core/battle_commands.mjs",
         "sha256": "f4509fc1a05e1002e082c977e72ecdca511607eac81d541069a03061f44ffce6"
+      },
+      {
+        "path": "web/core/battle_entry.mjs",
+        "sha256": "d59f566b06ba9de25ec6e5e0ab0c8bde8ce20b982f257915f8732f1ff802c95a"
       },
       {
         "path": "web/core/battle_layout.mjs",
@@ -130956,7 +131564,7 @@
       },
       {
         "path": "web/core/battle_rewards.mjs",
-        "sha256": "57ae3b88c7770b150e55c5939533677ac6722098c9fdf920e5edfe8d6b8e33dd"
+        "sha256": "f05feb790cc52d439be03d19fba302b3d2c4e19efd23fc44ce366773bea0b2f0"
       },
       {
         "path": "web/core/battle_scheduler.mjs",
@@ -130988,11 +131596,11 @@
       },
       {
         "path": "web/core/combat.mjs",
-        "sha256": "b8eb58cde44ba632b23aed8d25ea025e4100bbd496242572d3823245b3a4a1f4"
+        "sha256": "4356b795d3965eeee58ec37a8ea471a39afd93a1c4878d7657ead1a295992509"
       },
       {
         "path": "web/core/combat_rules.mjs",
-        "sha256": "da8f5977ea1c53432e0dba60122ed161750d3a162d1fb9ec071c8bd78ca72aa6"
+        "sha256": "34f21f5918943c19a592fdf316def9aa319aaaf9c7842e67cbae20c9e0d22e0e"
       },
       {
         "path": "web/core/equipment.mjs",
@@ -131071,7 +131679,7 @@
   },
   "export_recipe": {
     "path": "tools/menu_font_recipe.json",
-    "sha256": "35c6812b580d7fcf4e43df3cea89e460d4c410738b29cf3187937aa2c14a2b07",
+    "sha256": "f211aa3d02b9d16f6b4edbb82a06910ccde6c80c6379cc2d5b1a4abffdc5fd00",
     "single_command": "python remake/runtime/tools/export_menu_text_gdi.py"
   }
 }

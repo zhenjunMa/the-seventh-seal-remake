@@ -83,6 +83,7 @@
         "test_content_library.mjs",
         "test_fire_valley_npc_interactions.mjs",
         "test_floating_city_phase.mjs",
+        "test_yc05_jl03_phase.mjs",
         "test_npc_visibility_export.py",
         "test_party_skill_configuration.mjs",
         "test_party_skill_sample.mjs",
@@ -96,6 +97,7 @@
     "source": {
       "description": "原版字节、独立解码和原指令差分核对",
       "files": [
+        "test_actor_effects_source.mjs",
         "test_aid_carriers.mjs",
         "test_audio.mjs",
         "test_battle_action_atlas_merge.mjs",
@@ -208,7 +210,9 @@
         "test_white_forest_story.mjs",
         "test_world_map.mjs",
         "test_inner_white_forest_seal.mjs",
-        "test_inner_white_forest_battle_source.py"
+        "test_inner_white_forest_battle_source.py",
+        "test_yc05_jl03_battle.mjs",
+        "test_yc05_jl03_rewards.mjs"
       ],
       "requires": [
         "GAME.exe"
@@ -268,6 +272,11 @@
     }
   },
   "requirements": {
+    "test_actor_effects_source.mjs": ["GAME.exe", "remake/runtime/tests/fixtures/anm_actor_blend_native.json", "Animate/m01060-2.anm", "Animate/m17029-1.anm", "Animate/m17030-1.anm", "Animate/m70073-1.anm", "Animate/m70078-1.anm", "Animate/m01040-5.anm", "Animate/m01050-3.anm", "Animate/m01022-1.anm", "Animate/m01022-2.anm"],
+    "test_native_story_conditions.mjs": ["Map/m03023.TLK"],
+    "test_native_anm_extended.mjs": ["Animate/m17010-3.anm", "Animate/m03021.anm", "Animate/m17030-1.anm", "Fight_Role/004.CHR", "Fight_Role/006.CHR", "remake/runtime/web/data/opening_map_resources.json"],
+    "test_yc05_jl03_battle.mjs": ["Fight_Role/031A1.CHR", "Fight_Role/031B2.CHR", "Fight_Role/031A1.dgp", "Fight_Role/031B2.dgp", "remake/runtime/evidence/yc05_jl03_20261030/battle_camera_native.json", "remake/runtime/evidence/yc05_jl03_20261030/battle_command9_native.json", "remake/runtime/evidence/yc05_jl03_20261030/battle_entry_native_bundle.json"],
+    "test_yc05_jl03_rewards.mjs": ["SYSTEM/Object.ITM", "Map/m71010.dat", "Map/m71020.dat", "Map/m71030.dat", "Map/m71040.dat", "Map/m71050.dat", "Map/m71060.dat"],
     "test_inner_white_forest_phase.mjs": ["Map/m70071.dat", "Map/m70072.dat", "Map/m70073.dat", "Map/m70075.dat", "Map/m70076.dat", "Map/m70074_1.dat", "Map/m70074_2.dat", "Map/m70071.TLK", "Map/m70072.TLK", "Map/m70073.TLK", "Map/m70076.TLK", "Animate/m01051-1.anm", "Animate/m01050-1.anm", "Animate/m70073-1.anm", "Animate/m01050-2.anm", "Animate/m17010-2.anm", "SYSTEM/Object.ITM", "mapm/m70071/014.dgp"],
     "test_aid_carriers.mjs": ["remake/runtime/evidence/party_magic_native.json", "remake/runtime/evidence/turn_rules_assembly_20261011.json"],
     "test_battle_commands.mjs": ["remake/runtime/evidence/battle_alignment_20261015/native_41f070_assembly.json", "remake/runtime/evidence/forest_scheduler_instructions_20261011.json", "remake/runtime/evidence/turn_rules_assembly_20261011.json"],
@@ -288,7 +297,7 @@
     "test_cf7_map_objects.mjs": ["GAME.exe", "Map/m01065.dat", "mapm/m01065/002.dgp", "remake/runtime/evidence/fire_valley_20261025/object_queue_assembly.json", "remake/runtime/evidence/fire_valley_20261025/object_tick_4137c0_assembly.json"],
     "test_cf7_map_pixels.py": ["python:PIL", "mapm/m01065/002.dgp", "remake/runtime/web/data/map_effects.json"],
     "test_combat_rules.mjs": ["remake/runtime/evidence/turn_rules_assembly_20261011.json"],
-    "test_content_exporters.py": ["python:PIL"],
+    "test_content_exporters.py": ["python:PIL", "ROLE/023.dgp", "ROLE/154.dgp", "remake/runtime/tests/fixtures/dgp_geometry_blit_native.json"],
     "test_content_registration.py": ["python:PIL"],
     "test_ember_city_battle_replay.mjs": ["Fight_Role/042.CHR", "remake/runtime/web/assets/enemy_roles/042", "remake/runtime/web/data/battle_lifecycle_layers_042.json"],
     "test_native_services.py": ["python:PIL", "SYSTEM/boss_main.mnu", "remake/runtime/web/data/native_services.json"],
@@ -314,13 +323,13 @@
     "test_jute_source_readiness.py": ["python:PIL", "remake/runtime/evidence/turn_rules_assembly_20261011.json"],
     "test_map_effects.mjs": ["remake/runtime/evidence/map_effects_20261021/export.json"],
     "test_map_object_resources.py": ["python:PIL"],
-    "test_map_shadows.mjs": ["remake/runtime/evidence/movement_optimization_20261023/shadow_export.json"],
+    "test_map_shadows.mjs": ["ROLE", "remake/runtime/web/data/map_shadows.json", "remake/runtime/evidence/movement_optimization_20261023/shadow_export.json"],
     "test_menu_navigation.mjs": ["remake/runtime/evidence/chapter_systems_home_save.json"],
     "test_menu_techniques.mjs": ["remake/runtime/evidence/chapter_systems_home_save.json"],
     "test_native_after_source.mjs": ["remake/runtime/evidence/fire_valley_20261025/vertical_519dd0_assembly.json", "remake/runtime/evidence/fire_valley_20261025/vertical_519fa0_assembly.json", "remake/runtime/evidence/fire_valley_20261025/vertical_51cc00_assembly.json", "remake/runtime/evidence/forest_death_reactions_native_20261011.json", "remake/runtime/evidence/forest_reactions_instructions_20261011.json"],
     "test_native_configuration_ranges.mjs": ["remake/runtime/evidence/party_magic_native.json", "remake/runtime/evidence/turn_rules_assembly_20261011.json"],
     "test_native_map_entry.py": ["python:PIL"],
-    "test_native_npc_bindings.mjs": ["remake/runtime/evidence/fire_valley_20261025/npc_bindings_469f50_assembly.json"],
+    "test_native_npc_bindings.mjs": ["ROLE", "remake/runtime/evidence/fire_valley_20261025/npc_bindings_469f50_assembly.json"],
     "test_npc_visibility.mjs": ["remake/runtime/evidence/npc_motion_20261021/native_4b4f10.json"],
     "test_operation_equipment_view.mjs": ["remake/runtime/evidence/chapter_systems_home_save.json"],
     "test_operation_menu.mjs": ["remake/runtime/evidence/chapter_systems_home_save.json"],
@@ -407,9 +416,13 @@
         "web/core/chapter*.mjs",
         "web/core/story*.mjs",
         "web/core/anm*.mjs",
-        "web/controllers/story.mjs"
+        "web/controllers/story.mjs",
+        "web/actor_effect_view.mjs",
+        "web/opening_view.mjs",
+        "web/core/opening_presentation.mjs"
       ],
       "tests": [
+        "test_actor_effects_source.mjs",
         "test_*story*",
         "test_*chapter*",
         "test_*opening*",
@@ -480,6 +493,10 @@
     }
   },
   "regions": {
+    "yc05-jl03": {
+      "maps": ["m010*", "m710*", "m030*", "m29011", "m29012"],
+      "tests": ["test_yc05_jl03*"]
+    },
     "floating-city": {
       "maps": ["m030*", "m00000", "m7107[1-5]"],
       "tests": ["test_floating_city*"]

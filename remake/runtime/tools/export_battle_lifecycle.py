@@ -30,6 +30,7 @@ from export_map_shadows import audit_mask
 ROLE_IDS = role_ids()
 EFFECT_IDS = ('_iRelife',)
 NATIVE = {
+ 'entry_placement':('remake/runtime/evidence/yc05_jl03_20261030/battle_command9_native.json','ev_91f301f02c10b365ef3c2b4578f4d0ef2d190cbc53ae3e879976ab2055174364'),
  'entry':('remake/runtime/evidence/equipment_speed_native.json','ev_058f6553bdbe4702f6c550168a98b6dc64a09c8af9b303cee8aa51e1f55f7695'),
  'death':('remake/runtime/evidence/forest_death_reactions_native_20261011.json','ev_427d6fcc14c2ce2f41ff99c7b65d9a0ded4cedf3252c2fc0512bb1c36e8b134d'),
  'grounded_death':('remake/runtime/evidence/forest_death_reactions_native_20261011.json','ev_dfd502e36e42d3d86b939d5ecc57e456ccf15f5d452b93d72d9e43a30794c2d9'),
@@ -172,12 +173,17 @@ def export_sequence(c,d,skill):
                     action_frame=frame,source_frame=d.actions[group]['first_frame']+frame,
                     interval_raw=segment['interval_raw'],movement_step_raw=segment['movement_step_raw'],raw_hex=raw.hex(),source=source))
         elif raw[0]==1:
-            if group not in (0,3,4,6,7,11):
+            if group not in (0,3,4,6,7,9,11):
                 raise ValueError(f'Uncovered lifecycle command {group}; preserve before implementing')
+            if group == 9 and raw[0x47] != 4:
+                raise ValueError('Uncovered lifecycle entry-placement mode')
             command=dict(chr_record_index=entry['index'],type_raw=1,command_raw=group,
                 mode_raw_0x47=raw[0x47],u32_at_0x05=struct.unpack_from('<I',raw,5)[0],source=source,
                 raw_hex=raw.hex(),immediate=group!=4 or not raw[0x1d])
-            if group==3:
+            if group==9:
+                command.update(semantics='512B50 mode4 saves XYZ, places X=-350-DGP width/Y=homeY/Z=0, and starts the straight source entry path.',
+                    evidence=NATIVE['entry_placement'][1])
+            elif group==3:
                 command.update(
                     vertical_speed_raw=struct.unpack_from('<I',raw,5)[0],
                     vertical_height_multiplier_raw=struct.unpack_from('<I',raw,0x1e)[0],

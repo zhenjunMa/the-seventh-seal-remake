@@ -50,3 +50,17 @@ export function particleColumns(width,seed=13) {
   return Array.from({length:width},()=>({fallSpeed:(random()&6)+4,
     fallOffset:(random()&0x6f)+40,riseSpeed:-2-(random()&3)}));
 }
+
+// Native actor+4BD (ANM49) and +4BE (ANM41), after byte29+1.
+// 55259B is a fast additive reveal; 552437 is the slow alpha reveal;
+// 5524E2 is the fast alpha reveal descending from y-120, in native pixels.
+// Keep this display capability table shared with chapter admission checks.
+export const nativeActorPixelEffects={
+  facing:{
+    1:{ticks:8,coefficientStep:32,coefficientFloor:20,blend:'lighter'},
+    2:{ticks:30,particles:'fall'},
+    7:{ticks:40,coefficientStep:6,coefficientFloor:10,blend:'source-over'},
+    8:{ticks:8,coefficientStep:32,coefficientFloor:10,coefficientCutoff:20,blend:'source-over',startY:-240,stepY:32},
+  },
+  behavior:{1:{ticks:30,particles:'scatter'},2:{ticks:30,particles:'rise'}},
+};

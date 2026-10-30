@@ -22,7 +22,32 @@
     {
       "id": "M01020A",
       "path": "data/maps/m01020a.json",
-      "sha256": "19ef58f3182a1c3b75bf11d10bf918f084cfb11ec804779f990003a617d9e222"
+      "sha256": "41d0df9d95139e4b7f4375041b20fcb4c4a2c306c9cd39a96c29a61138f34414"
+    },
+    {
+      "id": "M01021-1",
+      "path": "data/maps/m01021-1.json",
+      "sha256": "d45e21bb54622909d42c484454a998153a03a7d2615dc36ebbda9a2b7c678273"
+    },
+    {
+      "id": "M01021-2",
+      "path": "data/maps/m01021-2.json",
+      "sha256": "ba53b05c9fb7588e06a9709719c2b817067b3bbb45eac37c4826fd3e5c107332"
+    },
+    {
+      "id": "M01021",
+      "path": "data/maps/m01021.json",
+      "sha256": "97f89526efa9002222892bf7889634ad90cb1477902209aaf5b41a22bcf66b57"
+    },
+    {
+      "id": "M01022-1",
+      "path": "data/maps/m01022-1.json",
+      "sha256": "67968f3232902867fa773893056815053821b84271b67db0fba73df22280ec31"
+    },
+    {
+      "id": "M01022",
+      "path": "data/maps/m01022.json",
+      "sha256": "cee88bfdc7e6bc5ba44354db2215a9cfdd1a8b887237c0292224d6e124897023"
     },
     {
       "id": "M01030",
@@ -105,6 +130,46 @@
       "sha256": "20f5c4b39de6e0e1e83c12ca1768be56cf0f9724f3859c2debf4c8911b90e72e"
     },
     {
+      "id": "M03010",
+      "path": "data/maps/m03010.json",
+      "sha256": "828316ea2560c246ad7be7cc4a7c24d0339830270a16dc4905bc4f1faf6a03ac"
+    },
+    {
+      "id": "M03020-1",
+      "path": "data/maps/m03020-1.json",
+      "sha256": "9d8a36362db9627e31cbf7c779596bbfbb12cb6ff6a68aefb162a2b67de3390f"
+    },
+    {
+      "id": "M03020",
+      "path": "data/maps/m03020.json",
+      "sha256": "207826310f4794dd093f69612c591e2a80fa52915056ac2c891ba7f9bdf6575e"
+    },
+    {
+      "id": "M03021-2",
+      "path": "data/maps/m03021-2.json",
+      "sha256": "b6253a962bc71cd44b0e757c6e351a82f73cc17706daec57695235ca13004732"
+    },
+    {
+      "id": "M03021-3",
+      "path": "data/maps/m03021-3.json",
+      "sha256": "0decc75ee411d47a23c5ca2a25d4a84a90019d415eb84f7279dd28abe64d3e91"
+    },
+    {
+      "id": "M03021-4",
+      "path": "data/maps/m03021-4.json",
+      "sha256": "18039c6aff5fa37079b0d4baa1dbf13b103adf4116d42df34df9565fbeb44033"
+    },
+    {
+      "id": "M03022",
+      "path": "data/maps/m03022.json",
+      "sha256": "cb29fab340307c15397cf65899f9bc6f6bb3f0106102bafed1ec0f256b8110c0"
+    },
+    {
+      "id": "M03023",
+      "path": "data/maps/m03023.json",
+      "sha256": "7b0265caa36cc59b385f610487aa76e22c0f715c87592a26a3be4594745d7c38"
+    },
+    {
       "id": "M03030",
       "path": "data/maps/m03030.json",
       "sha256": "9d7318e5bec7c0d49ed7384fe0cce8edc2f76a05653b25d882673ee5678f9596"
@@ -127,7 +192,7 @@
     {
       "id": "M03040",
       "path": "data/maps/m03040.json",
-      "sha256": "a07ff5495e11bd455d546cbbbf81744b0baf99f88ab5bc935448a83b9d6bee07"
+      "sha256": "5c54db866160ea3c1d53a9de11683d7fd11d3204f15c761f6061e770dcdf8f7b"
     },
     {
       "id": "M03041",
@@ -268,6 +333,16 @@
       "id": "M17032",
       "path": "data/maps/m17032.json",
       "sha256": "7c2bfb5419a089f50e1d5c18db1669e6ef4ed920eb5c6e1da90a929cfccae635"
+    },
+    {
+      "id": "M29011",
+      "path": "data/maps/m29011.json",
+      "sha256": "1d6683a892c1ff3d965086725c57a1f6b4346cbdcb9d5fe60d7388efe1edd173"
+    },
+    {
+      "id": "M29012",
+      "path": "data/maps/m29012.json",
+      "sha256": "9d7922110f86f1d0dcbd74cc45d11f5ca58cd096be2a2a53cfa998236b81dd8d"
     },
     {
       "id": "M70010",
@@ -2733,7 +2808,7 @@
   "forest_battle_view": "data/enemy_battle_view.json",
   "scope": {
     "official_runtime_started": true,
-    "ready_exits": 159,
+    "ready_exits": 180,
     "source_backed_events": 0,
     "one_on_one_turn_sample": true,
     "full_combat": false,

@@ -154,6 +154,7 @@ export function inspectContentReadiness(content,story,resources){
               let controlMap=item.mapId;
               for(const command of program.commands){
                 if(command.opcode===10&&command.u32_plus5===0)controlMap=command.filename.replace(/\.dat$/i,'').toUpperCase();
+                if(command.opcode===12)nativeAnmObjectTarget(command,controlMap,story);
                 if(command.opcode===14)add(command.u32_plus5,{mapId:controlMap});
               }
             }
@@ -195,3 +196,4 @@ export function requireContentReadiness(content,story,resources){
   return report;
 }
 import {hasPartySkillTypeCorrection} from './party_skill_corrections.mjs';
+import {nativeAnmObjectTarget} from './native_anm_commands.mjs';

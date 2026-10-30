@@ -5,6 +5,7 @@ import {createHash} from 'node:crypto';
 import {scriptedBattleSource,nativeScriptedBattle} from '../web/core/scripted_battle.mjs';
 import {hydrateStoryTable,validateCompactRecords} from '../web/core/story_packages.mjs';
 import {isNativeBattleFilename} from '../web/core/native_battle_filenames.mjs';
+import {roleId} from '../web/core/content_registry.mjs';
 import {auditContentFiles} from '../tools/export_content_registry.mjs';
 import {compileStoryPackages} from '../tools/export_story_packages.mjs';
 const copy=structuredClone;
@@ -17,21 +18,22 @@ const legacyMaps=['M01050','M03039','M01010','M01030','M17010','M17020','M17026'
   'M17011','M17012','M17013','M17014','M17015','M17016','M17021','M17022','M17023','M17024','M17025','M17027',
   'M17028','M17030-1','M17030-2','M17030','M17032'];
 
-test('real M01050:r103 keeps the complete original source basenames without admitting the external battle',async()=>{
+test('real M01050:r103 keeps complete original source basenames and requires each exact identity',async()=>{
   const bytes=await readFile(new URL('../../../Map/m01050.TLK',import.meta.url));
   assert.equal(createHash('sha256').update(bytes).digest('hex'),table.source.sha256);
   assert.equal(bytes.subarray(record.source.offset,record.source.offset+0x66f).toString('hex'),record.raw_hex);
   assert.deepEqual(scriptedBattleSource(record),expected);
   assert.deepEqual(scriptedBattleSource({kind:5,scripted_battle:expected}),expected);
   const {content}=await auditContentFiles();
-  assert.equal(content.stages.stage01,undefined);assert.equal(content.roles['031A1'],undefined);assert.equal(content.roles['031B2'],undefined);
-  assert.throws(()=>nativeScriptedBattle(table,record,content),/未登记/);
+  const external=copy(content);delete external.roles['031A1'];delete external.roles['031B2'];
+  assert.throws(()=>nativeScriptedBattle(table,record,external),/未登记/);
   const stageOnly=copy(content);stageOnly.stages.stage01={path:'data/stages/stage01.json',schema:'seventh-seal-battle-stage',asset_prefix:'assets/stages/stage01/'};
+  delete stageOnly.roles['031A1'];delete stageOnly.roles['031B2'];
   stageOnly.roles['031']={side:'enemy',source:{path:'Fight_Role/031.CHR',sha256:'0'.repeat(64)}};
   assert.throws(()=>nativeScriptedBattle(table,record,stageOnly),/敌人尚未登记/,'031A1 is never truncated or inferred to be registered031');
 });
 
-test('all current map packages retain the original27-map baseline and compact M01050:r103 names without admitting execution',async()=>{
+test('all current map packages retain the original27-map baseline and compact M01050:r103 names without changing admission',async()=>{
   const {definition,content}=await auditContentFiles(),before=copy(content),compiled=await compileStoryPackages({definition,content});
   assert.equal(legacyMaps.length,27);
   const currentMaps=Object.keys(definition.maps).sort(),packedMaps=[...compiled.output.keys()]
@@ -43,12 +45,16 @@ test('all current map packages retain the original27-map baseline and compact M0
   assert.equal(compact.raw_hex,undefined);assert.deepEqual(compact.scripted_battle,expected);
   const hydrated=hydrateStoryTable(pack.chapter,pack.texts);validateCompactRecords(hydrated);
   assert.deepEqual(scriptedBattleSource(hydrated.records.find(row=>row.id===103)),expected);
-  assert.throws(()=>nativeScriptedBattle(hydrated,hydrated.records.find(row=>row.id===103),content),/未登记/);
+  const current=nativeScriptedBattle(hydrated,hydrated.records.find(row=>row.id===103),content);
+  assert.deepEqual(current.members.map(row=>row.id),['031A1','031B2']);
   assert.deepEqual(content,before,'source compilation does not admit outside stages/enemies');
 });
 
 test('source and compact filename validation share the20-byte ASCII/NUL/basename boundary',()=>{
   assert.equal(isNativeBattleFilename('a'.repeat(15)+'.dgp','dgp'),true);
+  assert.equal(roleId('031A1'),true);assert.equal(roleId('031B2'),true);
+  assert.equal(roleId('a'.repeat(15)),true);assert.equal(roleId('a'.repeat(16)),false);
+  assert.equal(roleId('../031A1'),false);
   const valid=scriptedBattleSource(record),raw=Buffer.from(record.raw_hex,'hex');raw.fill(65,0x37+20,0x37+40);
   assert.throws(()=>scriptedBattleSource({...record,raw_hex:raw.toString('hex')}),/NUL边界/);
   for(const name of ['a'.repeat(16)+'.dgp','../031A1.dgp','dir/031A1.dgp','dir\\031A1.dgp','031A1.dgp\0bad','031Ａ1.dgp','031A1..dgp']){

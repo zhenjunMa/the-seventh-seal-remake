@@ -1725,7 +1725,7 @@
         },
         {
           "id": "M03030:tlk:1:1",
-          "op": "unsupported",
+          "op": "test_native_condition",
           "record_id": 1,
           "source": {
             "path": "Map/m03030.TLK",
@@ -1734,7 +1734,12 @@
             "record_bytes": 1647,
             "offset": 2026
           },
-          "reason": "剧情条件 8 尚未接入"
+          "condition_type": 8,
+          "condition_index": 0,
+          "condition_bit": 0,
+          "condition_byte_raw_0b": 2,
+          "if_true": "M03030:tlk:5",
+          "if_false": "M03030:tlk:1:2"
         },
         {
           "id": "M03030:tlk:1:2",
@@ -1782,7 +1787,7 @@
         },
         {
           "id": "M03030:tlk:2:1",
-          "op": "unsupported",
+          "op": "test_native_condition",
           "record_id": 2,
           "source": {
             "path": "Map/m03030.TLK",
@@ -1791,7 +1796,12 @@
             "record_bytes": 1647,
             "offset": 3673
           },
-          "reason": "剧情条件 8 尚未接入"
+          "condition_type": 8,
+          "condition_index": 0,
+          "condition_bit": 0,
+          "condition_byte_raw_0b": 2,
+          "if_true": "M03030:tlk:5",
+          "if_false": "M03030:tlk:2:2"
         },
         {
           "id": "M03030:tlk:2:2",
@@ -1839,7 +1849,7 @@
         },
         {
           "id": "M03030:tlk:3:1",
-          "op": "unsupported",
+          "op": "test_native_condition",
           "record_id": 3,
           "source": {
             "path": "Map/m03030.TLK",
@@ -1848,7 +1858,12 @@
             "record_bytes": 1647,
             "offset": 5320
           },
-          "reason": "剧情条件 8 尚未接入"
+          "condition_type": 8,
+          "condition_index": 0,
+          "condition_bit": 0,
+          "condition_byte_raw_0b": 2,
+          "if_true": "M03030:tlk:5",
+          "if_false": "M03030:tlk:3:2"
         },
         {
           "id": "M03030:tlk:3:2",
@@ -1896,7 +1911,7 @@
         },
         {
           "id": "M03030:tlk:4:1",
-          "op": "unsupported",
+          "op": "test_native_condition",
           "record_id": 4,
           "source": {
             "path": "Map/m03030.TLK",
@@ -1905,7 +1920,12 @@
             "record_bytes": 1647,
             "offset": 6967
           },
-          "reason": "剧情条件 8 尚未接入"
+          "condition_type": 8,
+          "condition_index": 0,
+          "condition_bit": 0,
+          "condition_byte_raw_0b": 2,
+          "if_true": "M03030:tlk:5",
+          "if_false": "M03030:tlk:4:2"
         },
         {
           "id": "M03030:tlk:4:2",

@@ -9,6 +9,8 @@
     "Fight_Role/014.CHR": "3dda77cf7ff3513c652bdf2224517fc48f5d5a2a948170cad7ac252efac7bf28",
     "Fight_Role/022.CHR": "1d993fbcd562db44c2f515f3b9e3e1bfa4d2ad99924ad543b62ca8226b3f4455",
     "Fight_Role/024.CHR": "561e1defb159f9815a8538ff21a45d53916eb332837d2102f51ceae5bcde5db4",
+    "Fight_Role/031A1.CHR": "4a1c6281709b8bbdaf7e9645fa35fc5eede558145d737f6cf187e39f226f39b5",
+    "Fight_Role/031B2.CHR": "cb7a1c98be049a9d4a8575f35ede1dd6883c105ec9a0fb0c7a39cd8986d210b8",
     "Fight_Role/032.CHR": "e081f7db9f51ac59c0bbd5b43f82a5894b3e707dd7512eb43aef574e1ec35f9f",
     "Fight_Role/041.CHR": "d0427095198fb28533c2a48d8f2ce22475faf13154386c7098e44053d12e5c32",
     "Fight_Role/042.CHR": "e6165e6a8c0099485543a521e978e8943aef7f9c5b17711c64a7d4c7fc8c169b"
@@ -48,6 +50,14 @@
     },
     "041": {
       "name": "狂神信徒",
+      "parameters": {}
+    },
+    "031A1": {
+      "name": "沙帝斯typeA",
+      "parameters": {}
+    },
+    "031B2": {
+      "name": "沙帝斯typeA",
       "parameters": {}
     }
   }

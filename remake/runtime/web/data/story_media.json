@@ -2,6 +2,129 @@
   "schema": "seventh-seal-story-media",
   "version": 1,
   "videos": {
+    "06.bik": {
+      "path": "/assets/video/story/06.mp4",
+      "sha256": "254bde9c9fe051eeaa1231d0b4ea5b2fa5aaaae48cf9b96ca5eb81853ecb870c",
+      "bytes": 7779953,
+      "mime": "video/mp4",
+      "width": 640,
+      "height": 300,
+      "fps": "30",
+      "frames": 383,
+      "duration_seconds": 12.766667,
+      "lossy_conversion": true,
+      "audio": {
+        "playback_gain": 2,
+        "encode_gain": 0.5,
+        "codec": "aac",
+        "sample_rate": 44100,
+        "channels": 2
+      },
+      "source": {
+        "path": "Animate/06.bik",
+        "sha256": "981fbb6ae710f63da226698e28e70101ddcb27e8bec5250fc79b733beee4e705",
+        "bytes": 7784712
+      },
+      "referenced_by": [
+        {
+          "program_id": "m01022-2",
+          "selection_authority": "runtime-registered",
+          "command_index": 20,
+          "opcode": 60,
+          "mode_raw": 0,
+          "source": {
+            "path": "Animate/m01022-2.anm",
+            "sha256": "5efd36b46d07038114eba7390510f8059aba89631fb20ddbc5b1d04d85abf3ea",
+            "bytes": 14275,
+            "offset": 1547
+          },
+          "filename_raw": "06.bik",
+          "raw_hex": "3c0000000000000000000000000000000000000000000000000000000000000000008d0100000000000000000000000000000000000030362e62696b0000000000000000000000000000"
+        }
+      ]
+    },
+    "09.bik": {
+      "path": "/assets/video/story/09.mp4",
+      "sha256": "f3802f6c9a12cce2d555df608f8db86e59db21049c145feb951cabc1d1840d2c",
+      "bytes": 2653317,
+      "mime": "video/mp4",
+      "width": 640,
+      "height": 300,
+      "fps": "30",
+      "frames": 181,
+      "duration_seconds": 6.033333,
+      "lossy_conversion": true,
+      "audio": {
+        "playback_gain": 2,
+        "encode_gain": 0.5,
+        "codec": "aac",
+        "sample_rate": 44100,
+        "channels": 2
+      },
+      "source": {
+        "path": "Animate/09.bik",
+        "sha256": "c3b3199d0e3a5f387434d48e83c8abdddd5162609ccdaa7d66a4f1151ffb2b9d",
+        "bytes": 3731172
+      },
+      "referenced_by": [
+        {
+          "program_id": "m03021",
+          "selection_authority": "runtime-registered",
+          "command_index": 68,
+          "opcode": 60,
+          "mode_raw": 0,
+          "source": {
+            "path": "Animate/m03021.anm",
+            "sha256": "708e793c4aa5453d72c8e0bda444679ed69af897e486f648caf0af95f9c1e08e",
+            "bytes": 20787,
+            "offset": 5099
+          },
+          "filename_raw": "09.bik",
+          "raw_hex": "3c000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000030392e62696b0000000000000000000000000000"
+        }
+      ]
+    },
+    "10.bik": {
+      "path": "/assets/video/story/10.mp4",
+      "sha256": "920476d2ee4ea716e41134499c2628338882caf3318e929d1cb75f6283695e76",
+      "bytes": 2095502,
+      "mime": "video/mp4",
+      "width": 640,
+      "height": 480,
+      "fps": "30",
+      "frames": 116,
+      "duration_seconds": 3.866667,
+      "lossy_conversion": true,
+      "audio": {
+        "playback_gain": 2,
+        "encode_gain": 0.5,
+        "codec": "aac",
+        "sample_rate": 44100,
+        "channels": 2
+      },
+      "source": {
+        "path": "Animate/10.bik",
+        "sha256": "dc47adfc10d06dd871261098ccbd1a51fcd73fb12aa34d66bf3649e428b8e4e1",
+        "bytes": 9375344
+      },
+      "referenced_by": [
+        {
+          "program_id": "m03021",
+          "selection_authority": "runtime-registered",
+          "command_index": 96,
+          "opcode": 60,
+          "mode_raw": 0,
+          "source": {
+            "path": "Animate/m03021.anm",
+            "sha256": "708e793c4aa5453d72c8e0bda444679ed69af897e486f648caf0af95f9c1e08e",
+            "bytes": 20787,
+            "offset": 7171
+          },
+          "filename_raw": "10.bik",
+          "raw_hex": "3c0000000000000000000000000000000000000000000000000000000000000000009e0100000000000000000000000000000000000031302e62696b0000000000000000000000000000"
+        }
+      ]
+    },
     "20.bik": {
       "path": "/assets/video/story/20.mp4",
       "sha256": "c8e59fd0af3d07a59bd3b2dea2cd1b19846ffcf109a3abd962f59c11be9ff076",

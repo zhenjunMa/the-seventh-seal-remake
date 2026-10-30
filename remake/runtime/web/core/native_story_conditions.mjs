@@ -2,7 +2,7 @@
 // This only reads a world snapshot; it never awards items or changes progress.
 const need=(ok,message)=>{if(!ok)throw new Error(`原剧情条件：${message}`);};
 const uint=value=>Number.isInteger(value)&&value>=0&&value<=0xffffffff;
-export const NATIVE_STORY_CONDITION_TYPES=new Set([1,2,4,10]);
+export const NATIVE_STORY_CONDITION_TYPES=new Set([1,2,4,8,10]);
 export const NATIVE_STORY_CONDITION_EVIDENCE={
   dispatch:'ev_e14d28c11ec31e5eebdf4c08a994a900102658650d8e5364d58b848cbd114ea7',
   object:'ev_ae80938b5372bbdb5a8910aed7225ecd370a8f09ab420dfa11092554bcbd6dac',
@@ -35,6 +35,10 @@ export function validateNativeStoryCondition(record,table){
     // 462600 calls 47B0C0(index,itemId,0): mode0 includes equipment
     // for every native role as well as inventory, regardless of active party.
     need(record.condition_bit>=1&&record.condition_bit<=416,'道具编号无效');
+  }else if(type===8){
+    // Case8 is a DWORD equality test, not an index into the party array.
+    // Preserve all four source bytes, including operands which never match.
+    need(typeof record.raw_hex==='string','控制角色条件 DWORD 来源缺失');nativeConditionByte(record);
   }else need(nativeConditionByte(record)<10,'队伍角色槽无效');
   return record;
 }
@@ -67,6 +71,10 @@ export function evaluateNativeStoryCondition(record,world,table){
     case 10:{
       const id=String(nativeConditionByte(record)+1).padStart(3,'0');
       return (world.party??[]).some(role=>role.id===id);
+    }
+    case 8:{
+      const operand=parseInt(record.raw_hex.slice(0x0b*2,0x0f*2).match(/../g).reverse().join(''),16);
+      return Number(world.leader_id)-1===operand;
     }
   }
 }

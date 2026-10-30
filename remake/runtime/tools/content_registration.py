@@ -83,7 +83,8 @@ def role_ids(side=None):
     # Export selection must not depend on its own future output.
     import re
     roles = definition()['roles']
-    if any(not re.fullmatch(r'[0-9]{3}', ident) or row.get('side') not in ('player', 'enemy')
+    if any(not re.fullmatch(r'[A-Za-z0-9_-]{1,15}', ident) or row.get('side') not in ('player', 'enemy')
+           or row.get('side') == 'player' and not re.fullmatch(r'[0-9]{3}', ident)
            for ident, row in roles.items()):
         raise ValueError('Invalid role export identity')
     return tuple(ident for ident, role in roles.items()

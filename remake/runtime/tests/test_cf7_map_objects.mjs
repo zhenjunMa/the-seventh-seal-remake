@@ -41,6 +41,10 @@ function oracleFor(rngSeed,state=0){
   const rng=createNativeRng(rngSeed),oracle=new NativeAssemblyOracle(instructions,[],rng),baseExternal=oracle.external.bind(oracle);
   oracle.external=target=>{
     if([0x401019,0x401113,0x40173a,0x4022b6,0x40155a].includes(target))return;
+    //40C3B0 persists through the owning story draft;40ED70 rebuilds map
+    //collision. Source051/054 links are zero, so411A50/468B30 have no
+    //spawn/reward payload here. Numeric action/frame clocks remain native.
+    if([0x401884,0x401780,0x401956,0x401613].includes(target))return;
     // Passive state4 is compared with the original proximity trigger false.
     // No player selection/open/close interaction is admitted by this test.
     if(target===0x401b9f){oracle.reg.EAX=0;return;}
@@ -104,6 +108,41 @@ test('CF7 keeps state0 display, delayed action switch, hidden update, pause and 
   for(const state of [1,2,5]){
     const active=make(7,state);assert.throws(()=>active.model.update(0,{world:active.world}),/主动交互状态尚未恢复/);
   }
+});
+
+test('CF7 ANM commands follow original forward/reverse ticks and settle only at the native barrier',async()=>{
+  for(const rngSeed of [0,7,42]){
+    const actual=make(rngSeed),expected=oracleFor(rngSeed),actor=actual.model.actors.find(row=>row.behavior===7),base=0x22000000+274;
+    actual.model.update(0,{world:actual.world});
+    let now=0;
+    // 40C5C0(mode1,0) starts action0 without waiting for its clock.
+    expected.oracle.write(base+0xd0,2,1);expected.oracle.write(base+0xeb,1,1);
+    expected.oracle.write(base+0xd5,0);expected.oracle.write(base+0x22,0);expected.oracle.write(base+0x3c,0);
+    let completed=false;const forward=actual.model.animate({objectIndex:1,state:2}).then(()=>{completed=true;});
+    assert.equal(completed,false);assert.equal(actor.object.motion.frame,0);
+    const visit=()=>{
+      now+=150;actual.model.update(now,{world:actual.world});expected.oracle.run(0x4137c0,[1,now]);
+      assert.equal(actor.frame,expected.oracle.read(base+0x22));assert.equal(actor.actionIndex,expected.oracle.read(base+0xd5));
+      assert.equal(actor.resource.actions[actor.displayActionIndex].first_frame+actor.object.motion.frame,expected.oracle.read(base+0x3c));
+      assert.equal(actor.interval,expected.oracle.read(base+0xd9)>>>0);assert.equal(actual.rng.state,expected.rng.state);
+    };
+    for(let i=0;i<6;i++)visit();await forward;assert.equal(completed,true);assert.equal(actor.commandState,3);
+    visit();
+    // 40C5C0(mode6,0) restores the final action0 cursor, then reverses it.
+    expected.oracle.write(base+0xd0,5,1);expected.oracle.write(base+0xeb,1,1);
+    expected.oracle.write(base+0xd5,0);expected.oracle.write(base+0x22,5);
+    completed=false;const reverse=actual.model.animate({objectIndex:1,state:5}).then(()=>{completed=true;});
+    const shown=actor.object.motion.frame;actual.model.update(now+50,{world:actual.world,paused:true});
+    assert.equal(actor.object.motion.frame,shown);assert.equal(completed,false);
+    // Pause is the existing scene-clock adaptation; reset both DD clocks.
+    expected.oracle.write(base+0xdd,now+50);now+=50;
+    for(let i=0;i<6;i++)visit();await reverse;assert.equal(completed,true);assert.equal(actor.commandState,0);
+    assert.equal(expected.oracle.read(base+0xd0,1),0);
+  }
+  const actual=make(7),actor=actual.model.actors.find(row=>row.behavior===7),abort=new AbortController();
+  actual.model.update(0,{world:actual.world});const before=structuredClone(actual.world),running=actual.model.animate({objectIndex:1,state:2,signal:abort.signal});
+  actual.model.update(130,{world:actual.world});abort.abort(new Error('CF7 animation cancelled'));
+  await assert.rejects(running,/CF7 animation cancelled/);assert.equal(actor.pending,null);assert.deepEqual(actual.world,before);
 });
 
 test('formal prepareMap M01065 loads all CF1 and CF7 main/light banks and updates without mutating the input save',async()=>{

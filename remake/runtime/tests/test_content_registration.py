@@ -12,6 +12,20 @@ import content_registration as content
 
 
 class ContentRegistrationTests(unittest.TestCase):
+    def test_native_enemy_basenames_remain_literal_while_player_ids_keep_native_slots(self):
+        definition = dict(roles={'001': dict(side='player'), '031A1': dict(side='enemy'),
+                                 '031B2': dict(side='enemy')})
+        with patch.object(content, 'definition', return_value=definition):
+            self.assertEqual(content.role_ids('enemy'), ('031A1', '031B2'))
+            self.assertEqual(content.role_ids('player'), ('001',))
+            definition['roles']['../031A1'] = dict(side='enemy')
+            with self.assertRaises(ValueError):
+                content.role_ids()
+            del definition['roles']['../031A1']
+            definition['roles']['031A1']['side'] = 'player'
+            with self.assertRaises(ValueError):
+                content.role_ids()
+
     def test_declared_skills_preserve_existing_source_indices(self):
         registration = content.registration()
         commands = json.loads((RUNTIME / 'web/data/party_skills.json').read_text(encoding='utf-8'))

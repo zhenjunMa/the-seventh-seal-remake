@@ -47,14 +47,14 @@ export function innerWhiteForestRunner(source,world,extra={}){
     battle:async payload=>{trace.battles.push(payload.group);return battle(payload);},
     worldMapState:()=>({areas:source.worldMap.areas.map(({id,selected_index,statuses})=>({id,selected_index,statuses:[...statuses]}))}),
     transfer:async({destination,draft})=>{loadEncounterMap(draft,destination.map_id,source.encounterData);trace.transfers.push(destination);return {location:worldMapEntry({},destination,source.story)};},
-    animate:async({program,runTlk,joinActor,leaveActor,flagCommand,draft,playback})=>{
-      const hooks=Object.fromEntries(['map','actor','move','camera','wait','fade','sound','media'].map(name=>[name,async()=>{}]));
+    animate:async({program,runTlk,joinActor,leaveActor,flagCommand,objectCommand,draft,playback})=>{
+      const hooks=Object.fromEntries(['map','actor','move','camera','wait','fade','sound','media','object'].map(name=>[name,async()=>{}]));
       hooks.map=async({mapId,bootstrap})=>{if(!bootstrap)loadEncounterMap(draft,mapId,source.encounterData);};
       hooks.actor=async row=>trace.actors.push({program:program.id,command:row.command.index,kind:row.kind,actor:row.actor,x:row.x,y:row.y,poseRaw:row.poseRaw});
       for(const [name,hook]of Object.entries(animationHooks)){
         const base=hooks[name];hooks[name]=async row=>{await base(row);return hook(row);};
       }
-      const result=await new ChapterAnimationRunner({program,content:source.content,runTlk,joinActor,leaveActor,flagCommand,playback,
+      const result=await new ChapterAnimationRunner({program,content:source.content,runTlk,joinActor,leaveActor,flagCommand,objectCommand,playback,
         initialLocation:draft.location,initialActor:Number(draft.leader_id)-1,hooks}).run();
       // Facing is a presentation responsibility. Keep the incoming facing here
       // and make assertions only about source XY, actor commands and world rules.

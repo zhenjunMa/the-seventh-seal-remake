@@ -5,6 +5,7 @@
  * ev_e7ebc40b1eb0efaa9d96ff7f3e6fc290955d8807dff0dc831ad32c06ceb45a70.
  */
 import {DeathParticlePlayback} from './death_particles.mjs';
+import {nativeEntryPath,advanceNativeEntryPath,nativeEntryOffset} from './core/battle_entry.mjs';
 const need=(ok,message)=>{if(!ok)throw new TypeError(message);};
 const copy=value=>structuredClone(value);
 const integer=(value,min=0)=>Number.isInteger(value)&&value>=min;
@@ -55,7 +56,7 @@ export class BattleLifecyclePlayback {
     const skill=index===null||index===undefined?null:role.skills.get(index);
     need(index===null||index===undefined||skill,'Exact selected lifecycle source skill missing');
     if(skill&&event.source_id_raw!==null&&event.source_id_raw!==undefined)need(skill.id===event.source_id_raw,'Lifecycle selected source ID differs');
-    const channel={event:copy(event),actor_id:actor.id,resource_id:roleId,role,side:roster?.side??actor.side??role.side,skill,cursor:0,pose:null,deadline:now,started:now,appearance:null,blocked:null,mode:'sequence',nativeBridge:this.nativeBridge?.(actor.id)??null,vertical_wait:false,record_visited:-1};
+    const channel={event:copy(event),actor_id:actor.id,resource_id:roleId,role,side:roster?.side??actor.side??role.side,skill,cursor:0,pose:null,deadline:now,started:now,appearance:null,blocked:null,mode:'sequence',nativeBridge:this.nativeBridge?.(actor.id)??null,vertical_wait:false,record_visited:-1,entry_origin_x:actor.native_x_raw};
     if(event.kind==='escape'){
       // 50E4B0 reverses the 51D960 eight-pixel path with cursor step -10.
       // The fixed 640px battle plane retains the existing camera adapter.
@@ -158,6 +159,18 @@ export class BattleLifecyclePlayback {
             lifecycle_token:channel.event.token,source_skill_index:channel.skill.index,plan_record_index:step.chr_record_index,logical_frame:logical});
         }
         channel.record_frame++;
+        if(channel.entry&&step.movement_step_raw>0){
+          const path=channel.entry;
+          const complete=advanceNativeEntryPath(path,step.movement_step_raw,channel.deadline,step.interval_raw);
+          channel.nativeBridge?.entryPoint?.(path.origin+path.to);
+          const next=channel.skill.timeline[channel.cursor];
+          if(complete){
+            channel.cursor=channel.skill.timeline.findIndex((row,index)=>index>=channel.cursor&&row.chr_record_index!==step.chr_record_index);
+            if(channel.cursor<0)channel.cursor=channel.skill.timeline.length;
+          }else if(!next||next.chr_record_index!==step.chr_record_index){
+            channel.cursor=channel.skill.timeline.findIndex(row=>row.chr_record_index===step.chr_record_index);channel.record_frame=0;
+          }
+        }
         if(channel.escape){
           const path=channel.escape;
           path.from=path.to;path.at=channel.deadline;path.interval=step.interval_raw;
@@ -173,6 +186,17 @@ export class BattleLifecyclePlayback {
           }
         }
         channel.pose={action_index:step.action_index,action_frame:step.action_frame,source_frame:step.source_frame};channel.deadline+=step.interval_raw;
+      }else if(step.command_raw===9){
+        need((step.mode_raw_0x47??step.mode_raw47)===4,'Lifecycle entry-placement mode is not recovered');
+        const placement=channel.nativeBridge?.entry?.(step.raw_hex,channel.role.frame_width)
+          ??{origin_x:channel.entry_origin_x,x:-350-channel.role.frame_width};
+        need(Number.isFinite(placement.origin_x),'Lifecycle entry source position missing');
+        channel.entry=nativeEntryPath(placement,channel.deadline);
+      }else if(step.command_raw===6||step.command_raw===11){
+        // These source cursor/camera commands share the battle view's
+        // established fixed-plane camera adapter. Retain them in order;
+        // they create no appearance or sprite wait of their own.
+        channel.last_control={command_raw:step.command_raw,mode_raw:step.mode_raw_0x47,at:channel.deadline};
       }else if(step.command_raw===3){
         need(channel.nativeBridge&&step.raw_hex,'Lifecycle source vertical command missing');
         const vertical=channel.nativeBridge.begin(step.raw_hex,channel.deadline);channel.vertical_wait=vertical.waiting;
@@ -215,8 +239,8 @@ export class BattleLifecyclePlayback {
     return this.snapshot();
   }
   alpha(actorId){return this.alphas.get(actorId)??1;}
-  pose(actorId){const channel=this.channels.get(actorId),pose=channel?.pose??this.held.get(actorId)?.pose,path=channel?.escape;
-    return pose?{...pose,alpha:this.alpha(actorId),...(path?{offset_x:path.from+(path.to-path.from)*Math.min(1,Math.max(0,this.lastNow-path.at)/path.interval)}:{})}:null;}
+  pose(actorId){const channel=this.channels.get(actorId),pose=channel?.pose??this.held.get(actorId)?.pose,path=channel?.escape??channel?.entry;
+    return pose?{...pose,alpha:this.alpha(actorId),...(path?{offset_x:nativeEntryOffset(path,this.lastNow)}:{})}:null;}
   hidden(actorId){return this.hiddenActors.has(actorId);}
   drawParticles(actorId,context,x,y){
     const channel=this.channels.get(actorId),effect=channel?.particles?.effect??channel?.appearance?.particles?.effect;

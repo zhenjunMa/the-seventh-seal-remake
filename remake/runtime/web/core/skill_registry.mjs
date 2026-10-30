@@ -3,6 +3,7 @@
 import {configureSkills,sourceSkillParameters} from './skill_config.mjs';
 import {partyBattleSkills} from './battle_skill_access.mjs';
 import {expandParameterOverrides,isParameterOverrideFile} from './config_overrides.mjs';
+import {isNativeBattleFilename} from './native_battle_filenames.mjs';
 const copy=structuredClone;
 const fail=(ok,message)=>{if(!ok)throw new Error(`技能配置：${message}`);};
 const object=v=>v!==null&&typeof v==='object'&&!Array.isArray(v);
@@ -15,7 +16,7 @@ const sourceOnlyParameterCache=new WeakMap();
 
 export function skillOwner(skill,side){
   const role_id=skill?.actor_id,skill_index=skill?.original_skill_index;
-  fail(typeof role_id==='string'&&/^\d{3}$/.test(role_id),'技能角色编号无效');
+  fail(typeof role_id==='string'&&isNativeBattleFilename(`${role_id}.dgp`,'dgp'),'技能角色编号无效');
   fail(Number.isInteger(skill_index)&&skill_index>=0&&skill_index<200,'原技能索引无效');
   fail(['player','enemy'].includes(side),'技能所属阵营无效');
   return {role_id,skill_index,side};

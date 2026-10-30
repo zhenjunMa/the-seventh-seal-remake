@@ -163,7 +163,7 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
     if(definition)return definition.name;
     return (state.chapterResources?.npcs_by_map?.[mapId]??[]).find(npc=>npc.speaker_slot_one_based===record.speaker)?.name??'';
   }
-  async function animateChapter({program,mapId,draft,runTlk,joinActor,leaveActor,flagCommand,playback,signal}){
+  async function animateChapter({program,mapId,draft,runTlk,joinActor,leaveActor,flagCommand,objectCommand,playback,signal}){
     signal??=playback?.signal;
     const previous={scene:state.scenes.current,view:state.scenes.captureView?.(),shadeHidden:$('openingShade').hidden,shadeOpacity:$('openingShade').style.opacity,
       hasNpcState:Object.hasOwn(draft,'map_npc_state'),npcState:draft.map_npc_state},prepared=new Map();
@@ -203,10 +203,14 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
         return runTlk(args);
       };
       const hooks=view.hooks();
+      hooks.object=({mapId,objectIndex,state:objectState,signal})=>{
+        if(state.scenes.current?.data.id!==mapId||!state.scenes.current.objectRuntime)throw new Error('剧情物件显示来源缺失');
+        return state.scenes.current.objectRuntime.animate({objectIndex,state:objectState,signal});
+      };
       for(const name of ['map','actor','move']){const invoke=hooks[name];hooks[name]=async payload=>{
         await invoke(payload);if(name==='map')loadEncounterMap(draft,payload.mapId,state.encounterData);captureActors();
       };}
-      const animation=new ChapterAnimationRunner({program,hooks:{...hooks,...media?.hooks()},runTlk:nestedTlk,joinActor,leaveActor,flagCommand,initialActor,initialLocation:draft.location,playback,
+      const animation=new ChapterAnimationRunner({program,hooks:{...hooks,...media?.hooks()},runTlk:nestedTlk,joinActor,leaveActor,flagCommand,objectCommand,initialActor,initialLocation:draft.location,playback,
         visualState:state.anmVisualState,
         content});
       const result=await animation.run();signal?.throwIfAborted();playback?.check();const hero=view.getActor(result.controlled_actor);

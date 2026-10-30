@@ -2159,20 +2159,10 @@
         "Static source/code evidence; original timing not observed",
         "Continuous keyboard movement is runtime policy"
       ]
-    }
-  ],
-  "unresolved_triggers": [
+    },
     {
       "id": 2,
-      "offset": 279540,
-      "bytes": 66,
-      "state_raw": 0,
-      "filename_raw": "m01021.dat",
-      "field_26_raw": 1,
-      "field_2a_raw": 5,
-      "field_2e_raw": 0,
-      "compact_source_offsets": null,
-      "field_expansion_evidence": null,
+      "state": "ready",
       "cells": [
         {
           "x": 24,
@@ -2231,9 +2221,61 @@
           "y": 10
         }
       ],
-      "path_gate": true,
-      "descriptor_hex": "00000000000000000000000000000000006d30313032312e646174000000000000000000000001000000050000000000000000000000000000000000000000000000"
-    },
+      "target_map": "M01021",
+      "entry": {
+        "x": 1104,
+        "y": 1216,
+        "direction": 2,
+        "cell_x": 69,
+        "cell_y": 76,
+        "native_x": 552,
+        "native_y": 608
+      },
+      "conditions": [],
+      "source": {
+        "path": "Map/m01020a.dat",
+        "sha256": "6020fed7cc22db1587cedcc5eb6b48183976ee16ae68ad2da028ba6c7129b8ab",
+        "descriptor_offset": 279540,
+        "descriptor_bytes": 66,
+        "descriptor_hex": "00000000000000000000000000000000006d30313032312e646174000000000000000000000001000000050000000000000000000000000000000000000000000000",
+        "compact_field_expansion_evidence": null,
+        "target_path": "Map/m01021.dat",
+        "target_sha256": "f1c5a4278e304df9841e35850d6871282dff1a4b4b53b12aea6cd966fc971f6d",
+        "target_entry_marker": 1,
+        "entry_sort_code": 5,
+        "entry_terrain_raw": 0,
+        "entry_trigger_raw": 0,
+        "entry_scan_cells": [
+          {
+            "x": 69,
+            "y": 76,
+            "offset": 695474
+          }
+        ],
+        "entry_sorted_cells": [
+          {
+            "x": 69,
+            "y": 76
+          }
+        ],
+        "entry_sort": "row-major scan; first four; missing followers repeat last observed cell",
+        "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
+        "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
+        "native_evidence": {
+          "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+          "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+          "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+          "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+        }
+      },
+      "execution": "Native transition descriptor only; map-entry TLK/ANM and their once-only checks must complete separately.",
+      "limitations": [
+        "Static source/code evidence; original timing not observed",
+        "Continuous keyboard movement is runtime policy"
+      ]
+    }
+  ],
+  "unresolved_triggers": [
     {
       "id": 29,
       "offset": 281322,

@@ -1,9 +1,10 @@
 import {AnmActions, COMMON_ANM_OPCODES,anmFilename} from './anm_runtime.mjs';
 import {runtimeContent,mapId as validMapId} from './content_registry.mjs';
 import {nativeMapIdFromFilename} from './native_map_identity.mjs';
+import {nativeActorPixelEffects} from './opening_presentation.mjs';
 // Registered source programs share the recovered opcode handlers. Unknown
 // opcodes/modes remain errors; TLK and joining use the caller's world draft.
-const OPCODES = new Set([10,11,14,16,17,20,30,31,32,33,35,36,37,41,48,49,60,62,63,255]);
+const OPCODES = new Set([10,11,12,14,16,17,20,30,31,32,33,35,36,37,41,48,49,60,62,63,255]);
 const need = (value, message) => { if (!value) throw new Error(message); };
 export function chapterAnimationContext(program){
   const loadedMaps=(program.commands??[]).filter(command=>command.opcode===10).map(command=>command.filename?.slice(0,-4).toUpperCase());
@@ -16,7 +17,9 @@ export function validateChapterAnimation(program,content=runtimeContent) {
   need(program?.schema === 'seventh-seal-chapter-anm' && program.version === 1
     && program.source?.sha256 === content.programs[program.id]?.sha256
     && program.source.path.toLowerCase() === `animate/${program.id}.anm`, '剧情动画来源不兼容');
-  need(program.commands?.length > 0 && program.commands.length <= 256
+  // 477940 reads a uint32 command count at header+2, then count records.
+  // The shipped m03021 has 280 commands; 256 was never a source limit.
+  need(program.commands?.length > 0
     && program.source.bytes === 67 + program.commands.length * 74, '剧情动画长度无效');
   const {controlMaps,callerMaps,maps,finalMap}=chapterAnimationContext(program);
   need(Array.isArray(maps)&&maps.length>0&&maps.length<=256&&new Set(maps).size===maps.length&&maps.every(id=>validMapId(id)&&content.maps[id]),'剧情动画地图依赖未登记');
@@ -43,12 +46,14 @@ export function validateChapterAnimation(program,content=runtimeContent) {
     if (c.opcode === 10) need(nativeMapIdFromFilename(c.filename)!==null
       &&c.filename===new TextDecoder().decode(b.slice(54,74)).split('\0')[0]
       &&maps.includes(c.filename.slice(0,-4).toUpperCase())&&c.u32_plus5 === 0, '剧情动画地图入口未支持');
+    if(c.opcode===12)need(c.u32_plus5<2000&&c.u32_plus25<=1000,'剧情物件索引无效');
     // Native 0x473E30 case0x21 selects the explicit DGP action when +29 is nonzero.
     if (c.opcode === 33) need([0,1,2].includes(c.byte_plus29) && (c.u32_plus25&255) <= 8, '剧情移动模式／到达朝向未支持');
     if(c.opcode===17)need([0,3].includes(c.u32_plus5)&&c.byte_plus29<=1,'剧情画面效果模式未支持');
     if (c.opcode === 36) need(Object.values(content.roles).some(role=>role.side==='player'&&role.native_slot===c.u32_plus5)&&[0,1,3].includes(c.byte_plus29), '剧情队伍操作未支持');
     if (c.opcode === 37) need(Object.values(content.roles).some(role=>role.side==='player'&&role.native_slot===c.u32_plus5), '剧情离队人物未接入');
-    if(c.opcode===41)need([0,1].includes(c.byte_plus29)&&[0,1,2].includes(c.u32_plus1),'剧情人物消散模式未恢复');
+    if([41,49].includes(c.opcode))need(nativeActorPixelEffects[c.opcode===41?'behavior':'facing'][c.byte_plus29+1]
+      &&[0,1,2].includes(c.u32_plus1),'剧情人物像素效果模式未恢复');
     if(c.opcode===20){
       need(c.u32_plus5<2000&&c.u32_plus25<=32,'剧情旗标索引或位无效');
       if(c.byte_plus29>=2)for(const target of [c.u32_plus13,c.u32_plus17])need(target>=0&&target<=program.commands.length,'剧情旗标跳转越界');
@@ -81,10 +86,10 @@ export function validateChapterSetupAnimation(program,mapId,content=runtimeConte
   return program;
 }
 export class ChapterAnimationRunner {
-  constructor({program,hooks,runTlk,joinActor,leaveActor,flagCommand,initialLocation,initialActor=0,playback=null,content=runtimeContent,visualState={}}) {
+  constructor({program,hooks,runTlk,joinActor,leaveActor,flagCommand,objectCommand,initialLocation,initialActor=0,playback=null,content=runtimeContent,visualState={}}) {
     validateChapterAnimation(program,content);
     for (const name of ['map','actor','move','camera','wait']) need(typeof hooks?.[name] === 'function', `剧情动画接口缺失：${name}`);
-    Object.assign(this,{program,hooks,runTlk,joinActor,leaveActor,flagCommand,initialLocation,initialActor,playback,visualState}); this.phase = 'idle';
+    Object.assign(this,{program,hooks,runTlk,joinActor,leaveActor,flagCommand,objectCommand,initialLocation,initialActor,playback,visualState}); this.phase = 'idle';
   }
   async run() {
     need(this.phase === 'idle','剧情动画已执行'); this.phase = 'running';
@@ -110,6 +115,12 @@ export class ChapterAnimationRunner {
             await actions.call('map', c, {mapId, initialLocation:this.initialLocation}); break;
           case 14:
             await this.runTlk({mapId, recordId:c.u32_plus5}); await actions.frame(c); break;
+          case 12: {
+            need(typeof this.objectCommand==='function','剧情物件接口缺失');
+            const result=this.objectCommand({command:c,mapId});
+            if(result){const {complete,...payload}=result;actions.launch('object',c,payload,complete);}
+            break;
+          }
           case 20: {
             need(typeof this.flagCommand==='function','剧情动画旗标接口缺失');
             const result=await this.flagCommand({command:c,mapId});actions.check();
