@@ -1,0 +1,3567 @@
+{
+  "schema": "seventh-seal-native-layer-bank",
+  "version": 1,
+  "role_id": "041",
+  "frame_width": 539,
+  "frame_height": 439,
+  "anchor": {
+    "x": 266,
+    "y": 324
+  },
+  "frames": [
+    {
+      "source_frame": 0,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0000_main.png",
+        "sha256": "a27d0e23565639e029b09b855938952f1024aa2020bcd2b6e01b7762fc0016cf",
+        "rgba_sha256": "2db96cd38f7983ad4c08629f550fa04360e3045dee4a7499824acc3f3af4374e",
+        "bounds": [
+          212,
+          194,
+          324,
+          342
+        ],
+        "covered_pixels": 4925,
+        "transparent_pixels": 231696
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0000_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 1,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0001_main.png",
+        "sha256": "f21bc32b55ac49e89ff41555820b5819d8aac25005d16970d01a475c9c9b7b2f",
+        "rgba_sha256": "0953d255bab3bfcc990274cc5c0ccfc79ccb4f128fb0fbcfec4ce4b7d6852d27",
+        "bounds": [
+          212,
+          181,
+          324,
+          342
+        ],
+        "covered_pixels": 4992,
+        "transparent_pixels": 231629
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0001_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 2,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0002_main.png",
+        "sha256": "f384f7e6bcdc874945ca4b41d0a0246a60b10d64e8bc50540b0b0b9820996b3c",
+        "rgba_sha256": "36c0b38609085c74d9b095edd0e37cd3cc0426f804d3c0640daa328c594c4851",
+        "bounds": [
+          212,
+          173,
+          324,
+          342
+        ],
+        "covered_pixels": 4971,
+        "transparent_pixels": 231650
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0002_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 3,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0003_main.png",
+        "sha256": "fb16fd95c7e847cd1756ca9ce6bd052dbd8fecacb74d11b4a466981e66457442",
+        "rgba_sha256": "e999b56b5f849285c20453273c73a49e67b62e843269201420bfff5ee78eff92",
+        "bounds": [
+          212,
+          174,
+          324,
+          342
+        ],
+        "covered_pixels": 4904,
+        "transparent_pixels": 231717
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0003_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 4,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0004_main.png",
+        "sha256": "029838e1ead37500536792c1f320bee11b4c501a2868ff5f6ff59bff492e3652",
+        "rgba_sha256": "fab5a0718992b766624f35a7dc6fff1e3c7d03a7e9025981f24929fc43698390",
+        "bounds": [
+          212,
+          179,
+          323,
+          341
+        ],
+        "covered_pixels": 4904,
+        "transparent_pixels": 231717
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0004_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 5,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0005_main.png",
+        "sha256": "60b68a7cfebb872f8bf8fbef75b9d34a8d3d970a59dff6023d4deba2a5944551",
+        "rgba_sha256": "ed1100518469e65f0c4826d3bab23efdb363f53aef9eac4684a3db2944d002ed",
+        "bounds": [
+          212,
+          186,
+          322,
+          341
+        ],
+        "covered_pixels": 4919,
+        "transparent_pixels": 231702
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0005_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 6,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0006_main.png",
+        "sha256": "f91ebbb114570ac0dabc31b855e0843411ea4768628ebe4877439f51c9d0c5a5",
+        "rgba_sha256": "76074f7533c9ff353f88f29c7eb9717e6005ee262d5e8f8129ac52e5e33e5411",
+        "bounds": [
+          211,
+          190,
+          321,
+          341
+        ],
+        "covered_pixels": 4961,
+        "transparent_pixels": 231660
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0006_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 7,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0007_main.png",
+        "sha256": "55ae6377721e70360fab6cc56d1f7fbb265236b4ef2370c5eb5245b43f845ab4",
+        "rgba_sha256": "e84e53c621ebda0d4def6379f647a12184dd889efe15ae2c4666fa31ef1830e8",
+        "bounds": [
+          212,
+          181,
+          321,
+          341
+        ],
+        "covered_pixels": 5054,
+        "transparent_pixels": 231567
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0007_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 8,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0008_main.png",
+        "sha256": "2a486c12a25c7d0c9b556042ba700c29544cce5e64c7d32e55d93070ff813b7a",
+        "rgba_sha256": "bde02fa1cf90d53c5e8e88217cbd3f5927486b7f9195e82e89b2a8451ad07eef",
+        "bounds": [
+          212,
+          173,
+          322,
+          341
+        ],
+        "covered_pixels": 5143,
+        "transparent_pixels": 231478
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0008_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 9,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0009_main.png",
+        "sha256": "d97e9779a6fd82cf73704fa43fce5f9a672d0cafab2ae35a1fbc32a11d6e0a96",
+        "rgba_sha256": "29554814b978191d2b6926e6c4690d7f098f3d5bb9b91f346b3abb9418249dc1",
+        "bounds": [
+          213,
+          172,
+          323,
+          340
+        ],
+        "covered_pixels": 5130,
+        "transparent_pixels": 231491
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0009_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 10,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0010_main.png",
+        "sha256": "2b659344539d0ce7bcb8d4ca2d999cabf44948116c315b6fa11d72bc2c04b763",
+        "rgba_sha256": "38554443750d017fc626342127f8e9cd3e9a3e5491b27a24f1952a232464d833",
+        "bounds": [
+          212,
+          182,
+          323,
+          340
+        ],
+        "covered_pixels": 5016,
+        "transparent_pixels": 231605
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0010_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 11,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0011_main.png",
+        "sha256": "55618c08d087074a399a2e4fc22e4eaaad45e891b026336627988c747ae90dc7",
+        "rgba_sha256": "d720e928d2a026252136fba66cf07b186f79cbdbfedbe820cdcffb430c89a9a9",
+        "bounds": [
+          211,
+          190,
+          324,
+          342
+        ],
+        "covered_pixels": 4945,
+        "transparent_pixels": 231676
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0011_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 12,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0012_main.png",
+        "sha256": "ad39d20f7c3a0c1a970cbea1d58584bcfbdab0365b70beba9a89f29822355de3",
+        "rgba_sha256": "6afbd301c7d193e704d2c6d8d66fd3b1d06fa9310b7e11c7ad0ff3703407e561",
+        "bounds": [
+          213,
+          199,
+          320,
+          342
+        ],
+        "covered_pixels": 4535,
+        "transparent_pixels": 232086
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0012_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 13,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0013_main.png",
+        "sha256": "a48c3836ea0ed93d95f80e1c4ea9299d09b1485f1d4d04f6882d9809e191c61c",
+        "rgba_sha256": "39ed31a76b9bfcf38438de6b104d56fc5e3a8c323481c8dc73d3335d52ea84ba",
+        "bounds": [
+          212,
+          199,
+          319,
+          342
+        ],
+        "covered_pixels": 3960,
+        "transparent_pixels": 232661
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0013_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 14,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0014_main.png",
+        "sha256": "57b8e35e4ab4931674ca6b9b0b8c5c7aa6447b1f17bc040d5e98c545b50e398b",
+        "rgba_sha256": "a71fea3ee1802b82b5a5a969e7df05028334f6247fc123db2744894bac1458e6",
+        "bounds": [
+          157,
+          198,
+          305,
+          342
+        ],
+        "covered_pixels": 4406,
+        "transparent_pixels": 232215
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0014_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 15,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0015_main.png",
+        "sha256": "21ba71b861397bf6ba7a80882f4968ccc3fd0c9b6d641f0fba9c1f090f4a0c2c",
+        "rgba_sha256": "2716e144ffc30197ee2300765fbcce1578e0db9450a204eaa83fc730315a14f8",
+        "bounds": [
+          176,
+          213,
+          313,
+          342
+        ],
+        "covered_pixels": 4443,
+        "transparent_pixels": 232178
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0015_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 16,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0016_main.png",
+        "sha256": "abf32dcf34237e497fec0dc63dfce6d5ce8914d28cd1f6c2a8e0d23305e3cb8b",
+        "rgba_sha256": "3f0bd5519dc3ac8b67a95f0471a941409f5ff8d928b49402b4523985cc89aa94",
+        "bounds": [
+          204,
+          192,
+          327,
+          342
+        ],
+        "covered_pixels": 4634,
+        "transparent_pixels": 231987
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0016_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 17,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0017_main.png",
+        "sha256": "6e19cd434db1b2d887d7e4ff7964e405859166a0d0f3eb4c8fc337bab01ca04d",
+        "rgba_sha256": "da685a8c6485b33225674f72fda98ebe06c20e4b07ac8b4318cf700d6c344638",
+        "bounds": [
+          212,
+          195,
+          328,
+          342
+        ],
+        "covered_pixels": 4800,
+        "transparent_pixels": 231821
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0017_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 18,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0018_main.png",
+        "sha256": "85241b0592479e362c398a03e657c2f071c2a8f0f060accb3c325d55a3998d83",
+        "rgba_sha256": "4a988db449dfc588edd7cc37e33f92c9e6a85780834f7fcb21f7fcb82cfeddfc",
+        "bounds": [
+          199,
+          196,
+          337,
+          302
+        ],
+        "covered_pixels": 4836,
+        "transparent_pixels": 231785
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0018_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 19,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0019_main.png",
+        "sha256": "f6831fe5c52ea9b9db2fa54493ae76e09b629ae8def048213e7d598ababbd3df",
+        "rgba_sha256": "5f4f8cd765881955111415b711d845747bf261ac07ac8bc64e2b28398e44d69b",
+        "bounds": [
+          202,
+          160,
+          339,
+          275
+        ],
+        "covered_pixels": 4917,
+        "transparent_pixels": 231704
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0019_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 20,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0020_main.png",
+        "sha256": "29c5985a89aa9dbf19a5b1bebb363a9a9258dcd1bb1d6ee0a55d136ac97d5cbc",
+        "rgba_sha256": "1ce499c27dfef0c3cc09a178108875f09c4f034243bfb132a453136a4ab03063",
+        "bounds": [
+          215,
+          179,
+          349,
+          295
+        ],
+        "covered_pixels": 4643,
+        "transparent_pixels": 231978
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0020_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 21,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0021_main.png",
+        "sha256": "df941f39845da525a8253f74a435da41a90b579474022fed70c93b977f49209c",
+        "rgba_sha256": "d873d0c3d4c06098c9ff923cbfefc12de66cb00e199b08ce93c2ac18c13a491f",
+        "bounds": [
+          212,
+          225,
+          352,
+          318
+        ],
+        "covered_pixels": 4337,
+        "transparent_pixels": 232284
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0021_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 22,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0022_main.png",
+        "sha256": "491cb6bebd1c740f53b26061df34b074f3ab70226b5d58a03b9e47555cf13a70",
+        "rgba_sha256": "9cca0c001323d8f521090627431ccf8df565016fa52905b108c556b5c06d7ca0",
+        "bounds": [
+          201,
+          277,
+          352,
+          348
+        ],
+        "covered_pixels": 3390,
+        "transparent_pixels": 233231
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0022_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 23,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0023_main.png",
+        "sha256": "9b477a6a220c003a9e103081c5752ac465be5e6a9bb6625e78beadecbd7783cb",
+        "rgba_sha256": "0d61eb445f64243d715d2947b0834399d29f1b6b5c7d266549eb6384c5c8bce7",
+        "bounds": [
+          177,
+          266,
+          352,
+          332
+        ],
+        "covered_pixels": 3486,
+        "transparent_pixels": 233135
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0023_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 24,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0024_main.png",
+        "sha256": "a4ed5e1e4fbb43a4f18061c5cee5b19decb72970203c84e8a021003f314fbcf9",
+        "rgba_sha256": "b474b2ccf1dd717af43732d66e4da62ee32e86fe1da82e93073f0ac775b5284d",
+        "bounds": [
+          184,
+          228,
+          347,
+          320
+        ],
+        "covered_pixels": 4087,
+        "transparent_pixels": 232534
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0024_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 25,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0025_main.png",
+        "sha256": "bca4a6c7f5c11800f98c2edd8adb258f6e2c3036c79e52914b362ddf3bd022ea",
+        "rgba_sha256": "f8b572ce904be836922cc5ff21ec504d3cc1b3081f2f229a56a83ff77340aebb",
+        "bounds": [
+          179,
+          239,
+          351,
+          331
+        ],
+        "covered_pixels": 3873,
+        "transparent_pixels": 232748
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0025_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 26,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0026_main.png",
+        "sha256": "dd718ae3225f9afaf7dc6a7912aeb784dc8986e204ed7e160b9fca1dc6c0cde7",
+        "rgba_sha256": "7aec804801a8cb64c86e164e53d3694463b18d9c3d576b9f9bd83bb12525cd06",
+        "bounds": [
+          171,
+          265,
+          354,
+          336
+        ],
+        "covered_pixels": 3487,
+        "transparent_pixels": 233134
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0026_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 35,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0035_main.png",
+        "sha256": "cdc2451e75a343a148358fd735b0394624afb947ae5a2eec5efb30d2c20bf52c",
+        "rgba_sha256": "6b0749c7917b3b43da3b9e4c698e44b0064441e3434009838c0d03026a4357b7",
+        "bounds": [
+          207,
+          219,
+          324,
+          343
+        ],
+        "covered_pixels": 4402,
+        "transparent_pixels": 232219
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0035_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 36,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0036_main.png",
+        "sha256": "07c44b9792c0af3198e7af139dd231fe43f70047f3a0435a9d739e841ce26c71",
+        "rgba_sha256": "1343d94e0372cce30f94ac82222e035993663eeffc94d978f83435941e1d44aa",
+        "bounds": [
+          203,
+          219,
+          320,
+          343
+        ],
+        "covered_pixels": 4402,
+        "transparent_pixels": 232219
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0036_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 37,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0037_main.png",
+        "sha256": "30f4088f3949ff83a5891e0aa0964d955069693a267dad39f455fc2f95791051",
+        "rgba_sha256": "3bbc05a37e382c1f015a78e9f65f1ca4463b7a8657afc8e307e117656dbc384e",
+        "bounds": [
+          210,
+          204,
+          323,
+          338
+        ],
+        "covered_pixels": 4602,
+        "transparent_pixels": 232019
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0037_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 38,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0038_main.png",
+        "sha256": "48f7d65f15c973ebf688bb8ebbea757366bb1b1af4a2f823425860e080152486",
+        "rgba_sha256": "d7eeeb7907abc26c535c75fb005ef1de6e1e9f798409dfd74b265a05982a097b",
+        "bounds": [
+          206,
+          203,
+          322,
+          337
+        ],
+        "covered_pixels": 4371,
+        "transparent_pixels": 232250
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0038_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 39,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0039_main.png",
+        "sha256": "c08319dcb3eaeb2fa07a52d7c59e511fa8803e3b79c26f3276b33a0e5a0a1951",
+        "rgba_sha256": "1b87367f1fcb1895e6479276d93df9899425607dff39506752684a8e04ffd290",
+        "bounds": [
+          204,
+          202,
+          322,
+          342
+        ],
+        "covered_pixels": 4327,
+        "transparent_pixels": 232294
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0039_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 40,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0040_main.png",
+        "sha256": "82be9d5884bf4bd3e2805a1f6d4b69ff3698c9f4b65e8b41a2938a8fe838e124",
+        "rgba_sha256": "2b2f1b32475ec379b89f3e4d7408777ccf3a28eecfbc713131e54594fba2ff03",
+        "bounds": [
+          198,
+          207,
+          322,
+          343
+        ],
+        "covered_pixels": 4289,
+        "transparent_pixels": 232332
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0040_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 41,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0041_main.png",
+        "sha256": "d99a9146c2d19cb3c0ffcd8b54a37cad4942374645d78bc516fbeb494f71cf00",
+        "rgba_sha256": "aef633218d79ac0479c5b9be7f21fa0597255a3aaf2c1d9aa811ac59f0a24a87",
+        "bounds": [
+          188,
+          217,
+          322,
+          342
+        ],
+        "covered_pixels": 4644,
+        "transparent_pixels": 231977
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0041_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 42,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0042_main.png",
+        "sha256": "e61aa6f02244bfcb24b4f80df73c98367264c411e1e7040672badadc84ad95ea",
+        "rgba_sha256": "c418f41c9e45b788709a18614918a9162c2c186e8758c480d654e2734b228abf",
+        "bounds": [
+          165,
+          230,
+          326,
+          342
+        ],
+        "covered_pixels": 4507,
+        "transparent_pixels": 232114
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0042_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 43,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0043_main.png",
+        "sha256": "32bbaf00cf1eb6bad268443db93520e1bbd9b535492d03d84b9c9cbee06c798b",
+        "rgba_sha256": "5e9a711d574f97c2fc3eacb60fd58305d70e22947c8286bdd05cc3bf707e4dfd",
+        "bounds": [
+          190,
+          230,
+          355,
+          332
+        ],
+        "covered_pixels": 4502,
+        "transparent_pixels": 232119
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0043_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 44,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0044_main.png",
+        "sha256": "33e377e037356291e99eeb1e4043039af4061be1cf316c80fef50a2f0691b6b6",
+        "rgba_sha256": "112793768b437d6733d8fd0dac2aff9b63eeb715f2ec8896fc2625b877ccdbd5",
+        "bounds": [
+          170,
+          223,
+          343,
+          334
+        ],
+        "covered_pixels": 4456,
+        "transparent_pixels": 232165
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0044_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 67,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0067_main.png",
+        "sha256": "797b2352afdeec7eff6978e3e565cc979ea5534da35605ff4e0a88400fab46c5",
+        "rgba_sha256": "b4e2d9d56469deeb5e5a92dd8cd4e005147dc9d4e57ed5471492b1e153a1501f",
+        "bounds": [
+          206,
+          205,
+          321,
+          342
+        ],
+        "covered_pixels": 4525,
+        "transparent_pixels": 232096
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0067_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 68,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0068_main.png",
+        "sha256": "09546c1c21a6e9665f9e2201cefac81cc0a8b27fd41e349f58223d0750e0169b",
+        "rgba_sha256": "bb82c4bfc6d9cce9a73d79c438a25c2da1bc82ce1cbd1f1fe9088ae357daedd3",
+        "bounds": [
+          180,
+          217,
+          315,
+          342
+        ],
+        "covered_pixels": 4180,
+        "transparent_pixels": 232441
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0068_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 69,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0069_main.png",
+        "sha256": "66fe25f32eeccb02900df4c9c2c15ca3a671dcc2b3b49e56b0d176260c30568a",
+        "rgba_sha256": "6e2e62d3c419ae5ef0a17df5fcc6084f80871b1a40b5721c4b5df1f7f0786ec8",
+        "bounds": [
+          187,
+          225,
+          311,
+          342
+        ],
+        "covered_pixels": 3790,
+        "transparent_pixels": 232831
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0069_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 70,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0070_main.png",
+        "sha256": "3b4eed705b3dab26f54ee6dacfbd9ab647f13cfb72f8fc2d4f64a30a45b52734",
+        "rgba_sha256": "14777df53716566aa8ac982c4764941c37c9f9ed58282e5cfaf0880e90be854d",
+        "bounds": [
+          191,
+          204,
+          311,
+          342
+        ],
+        "covered_pixels": 3482,
+        "transparent_pixels": 233139
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0070_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 71,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0071_main.png",
+        "sha256": "619a573fd9439f65ab3ab5f4b2ae74b587ef2d0bc430c1d49851eb91d78e24c3",
+        "rgba_sha256": "289d6b64dd852b3b0fbee15cae6d31bb21faa67d904f45ee3554d85faa222b49",
+        "bounds": [
+          199,
+          217,
+          311,
+          342
+        ],
+        "covered_pixels": 3427,
+        "transparent_pixels": 233194
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0071_intrinsic.png",
+        "sha256": "a8120fe40ae85694fbde3c027988246ed62e52640f4f72439263cd0278f1b991",
+        "rgba_sha256": "9e5792068389e9cb7e02fe3c77cc771cb6a81a0e619cfebe901732a19026ca45",
+        "bounds": [
+          202,
+          198,
+          267,
+          245
+        ],
+        "covered_pixels": 1200,
+        "transparent_pixels": 235421,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 72,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0072_main.png",
+        "sha256": "14a0e8dfee466acdc17e738af9f7c13612fbb7ece676cb24c146d92a41c18fe1",
+        "rgba_sha256": "4cde947e53192da20dd7cb7d44fcf15b1baf2c444c1b1403a8e953c26cb2c0b4",
+        "bounds": [
+          212,
+          234,
+          423,
+          342
+        ],
+        "covered_pixels": 4337,
+        "transparent_pixels": 232284
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0072_intrinsic.png",
+        "sha256": "0a51ed01e8430da29954e0ad91101600af97289aa3551da89926f442b68b4247",
+        "rgba_sha256": "e9262a9fddfed1f90102fc4437983b753d65f5edd07aa1d226bd37fc3786cfac",
+        "bounds": [
+          205,
+          202,
+          427,
+          297
+        ],
+        "covered_pixels": 4762,
+        "transparent_pixels": 231859,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 73,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0073_main.png",
+        "sha256": "82f3d97701d275ae19726c14a947888264e51030254ca0dd641161061c263154",
+        "rgba_sha256": "60c4893e443b9492d7ff626b02e523b5ac6c3856798870962083a4a41be1522a",
+        "bounds": [
+          212,
+          238,
+          311,
+          342
+        ],
+        "covered_pixels": 3354,
+        "transparent_pixels": 233267
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0073_intrinsic.png",
+        "sha256": "2137c7c3a66c3e259118178ba3db03688fb1d893f76ee15b18a18a918dd4a50e",
+        "rgba_sha256": "650378b4481beec9e0b4734eab6bc10fdaf638b14dbf17830d8f1f0efb89a080",
+        "bounds": [
+          233,
+          217,
+          426,
+          296
+        ],
+        "covered_pixels": 1917,
+        "transparent_pixels": 234704,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 74,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0074_main.png",
+        "sha256": "f9bff16f984bbb00e640c311f3962f0b1cdc4bfe9e5dc2619db52a9ef4b90594",
+        "rgba_sha256": "8f09bb706c4882ff0409f56d80f57dcdb5e525b85d976f399dab80ef3fbdb1b7",
+        "bounds": [
+          209,
+          239,
+          311,
+          341
+        ],
+        "covered_pixels": 3500,
+        "transparent_pixels": 233121
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0074_intrinsic.png",
+        "sha256": "06eb8987c887c7c43404c987a0484aafbbbfaf65f21d4777a86b92431fa80ddb",
+        "rgba_sha256": "018ab57db0ba259ffb8edd4ecead27728457d7975158f272767e95db3a5a3889",
+        "bounds": [
+          292,
+          310,
+          314,
+          321
+        ],
+        "covered_pixels": 140,
+        "transparent_pixels": 236481,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 75,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0075_main.png",
+        "sha256": "404f05cdba0ef278f46c842b69e265857a79333b3626f29f022134e857d81800",
+        "rgba_sha256": "d1f424094e17577092528c4e426f7ed730f10f2a22864a49cd2c1495d2728e31",
+        "bounds": [
+          205,
+          239,
+          344,
+          341
+        ],
+        "covered_pixels": 3961,
+        "transparent_pixels": 232660
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0075_intrinsic.png",
+        "sha256": "fc1a284f78e21ae27486fb25de919816a3d8e0634472bfd3ba02ce61fbac8703",
+        "rgba_sha256": "ae08ca2a2d881d6e8a8666cdd705f4310e9b3a92ac85b22ae9e3c4cda5bb12b2",
+        "bounds": [
+          278,
+          303,
+          330,
+          324
+        ],
+        "covered_pixels": 470,
+        "transparent_pixels": 236151,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 76,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0076_main.png",
+        "sha256": "a681de80021167606d22b1e65fb8f6408a07875698b3014931ffaeed3d28c43b",
+        "rgba_sha256": "938c547bcb40735b0f8b6b73c0e85498da6e19bfa13575c4522a7c3a854084bd",
+        "bounds": [
+          207,
+          234,
+          318,
+          342
+        ],
+        "covered_pixels": 4120,
+        "transparent_pixels": 232501
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0076_intrinsic.png",
+        "sha256": "200cad892c01ebdcd59abab3d463e01118d10197ea26e68955995c606e4890d2",
+        "rgba_sha256": "bce956678e76388380950c29052ea8aa77eeadb5264f700fd5046d95ccefe91d",
+        "bounds": [
+          302,
+          308,
+          343,
+          326
+        ],
+        "covered_pixels": 391,
+        "transparent_pixels": 236230,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 77,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0077_main.png",
+        "sha256": "b94de8e059d3607e789df31c2d5b4648044242dcaa315e64483c36e2599a15f3",
+        "rgba_sha256": "c41a1eba48800c0cf5c239e73f3489001946cded6bb612e8b14f6ae26ee40edf",
+        "bounds": [
+          212,
+          215,
+          322,
+          342
+        ],
+        "covered_pixels": 4593,
+        "transparent_pixels": 232028
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0077_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 83,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0083_main.png",
+        "sha256": "baa39808c1100c98d31d946f2bad2d0295b25f2e620bcfe356b1b26ebe78e8e1",
+        "rgba_sha256": "11341affc3ede1173f3fff2b493ab41423e55ef68f4a4f6b87b66cf346b4c76a",
+        "bounds": [
+          212,
+          201,
+          323,
+          342
+        ],
+        "covered_pixels": 4825,
+        "transparent_pixels": 231796
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0083_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 84,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0084_main.png",
+        "sha256": "19cfa8edc660e855ed8cdecb2465598eb77aef865746b44ba85be2ea4fd2f99f",
+        "rgba_sha256": "3954436d7b922e468247a1aa589d1cd0bfefff7c8b071aa5192a8cb01d1cb832",
+        "bounds": [
+          212,
+          210,
+          323,
+          342
+        ],
+        "covered_pixels": 4819,
+        "transparent_pixels": 231802
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0084_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 85,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0085_main.png",
+        "sha256": "a786027a07775a94dff5c0f6347928efbc1260a9c7daa101c2091078b17f8fef",
+        "rgba_sha256": "4a4b6538f1f2ac0536b150c0348e1200573974906dab4e1f757a64c90446f645",
+        "bounds": [
+          207,
+          214,
+          323,
+          345
+        ],
+        "covered_pixels": 4544,
+        "transparent_pixels": 232077
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0085_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 86,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0086_main.png",
+        "sha256": "46dc05bfd85c9f59eec08367b1c65e38715533e98c901bb8d024c65f0a84cf0b",
+        "rgba_sha256": "1ccfbc163aebd47759c3216981c4d563bef57b6af43f4645ee28428c8ef53b14",
+        "bounds": [
+          205,
+          213,
+          323,
+          347
+        ],
+        "covered_pixels": 4617,
+        "transparent_pixels": 232004
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0086_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 87,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0087_main.png",
+        "sha256": "759255d40d6ce808400975ed9356fe8e1ff07c0caa76b07e0b67232d55e446ba",
+        "rgba_sha256": "fa1e79ec7cfaad15dbd638c8b696901ff6b7e9c61b138c2acb29e410c25c2181",
+        "bounds": [
+          204,
+          215,
+          323,
+          347
+        ],
+        "covered_pixels": 4738,
+        "transparent_pixels": 231883
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0087_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 88,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0088_main.png",
+        "sha256": "ea1e9dbc69f037c8f2b1457472ec8b5c50f85c40a92dd289898f4c80627758af",
+        "rgba_sha256": "41c65f58af7f6c4297df558b4b5a169eb45f288a90faed2d9d3ffb9589001f09",
+        "bounds": [
+          199,
+          215,
+          323,
+          347
+        ],
+        "covered_pixels": 4771,
+        "transparent_pixels": 231850
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0088_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 89,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0089_main.png",
+        "sha256": "874496053c09d78509422ac09cf988eb263b83fcc351b1de3e65973e87a3dc46",
+        "rgba_sha256": "4204e1a65621ffb6d057c6b6d9bcd8e1daf3368dd9a9c278572fbfe95ccd896d",
+        "bounds": [
+          196,
+          213,
+          323,
+          347
+        ],
+        "covered_pixels": 4681,
+        "transparent_pixels": 231940
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0089_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 90,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0090_main.png",
+        "sha256": "6f14efbd4ed6c337f34a6f2a3b11651b1a9445113f121da9f4feffdca9e9c498",
+        "rgba_sha256": "43ce4d806dad3bcb5d5f9f01adc9953b002a4173a35f476a39fef6432bf2c7f9",
+        "bounds": [
+          195,
+          212,
+          323,
+          347
+        ],
+        "covered_pixels": 4377,
+        "transparent_pixels": 232244
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0090_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 91,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0091_main.png",
+        "sha256": "890858d0c43428beab57bfba8e0f20ba1ebaeeced925de61a1ab30592faf8334",
+        "rgba_sha256": "b68aff0ab0298928b4569a236b2efb21b867237779c8d40416f58f789fabc7ef",
+        "bounds": [
+          198,
+          212,
+          323,
+          347
+        ],
+        "covered_pixels": 4575,
+        "transparent_pixels": 232046
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0091_intrinsic.png",
+        "sha256": "a84bd4994b2531151a79b0aadac00b6ad1cf851eaa1b58c4cca66b9d02466d89",
+        "rgba_sha256": "c8ec08943feea1209689b87666223be46608880751b0b1323e75218a43a92a85",
+        "bounds": [
+          269,
+          253,
+          300,
+          284
+        ],
+        "covered_pixels": 817,
+        "transparent_pixels": 235804,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 92,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0092_main.png",
+        "sha256": "f2f1bfc2ce8923511dcc88601ffc1fb1b2a5f6517d67011d11a1a8913080ad6c",
+        "rgba_sha256": "237e7ce2e2dc706446f46efa0fc874764510daca86e4e3634f5251abd7765fec",
+        "bounds": [
+          196,
+          214,
+          323,
+          347
+        ],
+        "covered_pixels": 4796,
+        "transparent_pixels": 231825
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0092_intrinsic.png",
+        "sha256": "4f0f39174d50261f81cb09cf0c5aadef7e350f0a469b1b782377219b84eb5f1f",
+        "rgba_sha256": "7b0d0d1c8822b98dab63e8bc0c78fdef6a19e7d3065885719312be9e33098d60",
+        "bounds": [
+          291,
+          261,
+          325,
+          295
+        ],
+        "covered_pixels": 991,
+        "transparent_pixels": 235630,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 93,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0093_main.png",
+        "sha256": "2953defddc8c790c29e3906333262621770d7e22f8ab4bf67e27b1a99bb9702b",
+        "rgba_sha256": "cc1d317e2e0d2e33d1db61f098d9fd14ad2cf903a6f5dfc67c4c152585f5963b",
+        "bounds": [
+          194,
+          209,
+          323,
+          347
+        ],
+        "covered_pixels": 4724,
+        "transparent_pixels": 231897
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0093_intrinsic.png",
+        "sha256": "8ec530fe223d41bd44bab4b18c86889090ad95d0c7c06b724cdd04a1bb6c19d6",
+        "rgba_sha256": "7dd07fdbbbfb908198af172087b6f96fb88bbfb4344ffc44bb32ff67b86f8311",
+        "bounds": [
+          291,
+          202,
+          326,
+          238
+        ],
+        "covered_pixels": 1041,
+        "transparent_pixels": 235580,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 94,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0094_main.png",
+        "sha256": "4521e2127845be651a7244e6a8b5d90e0f339ba2fffc38ca29464794822b2991",
+        "rgba_sha256": "b0a3f5acacfbd64d3864ba7e658221cef1869a2078e6d22897847ccc8ab23984",
+        "bounds": [
+          195,
+          158,
+          323,
+          347
+        ],
+        "covered_pixels": 4730,
+        "transparent_pixels": 231891
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0094_intrinsic.png",
+        "sha256": "15281f5c92db4e382344997cf5a517368d51b4b823f47e176787e6fa00c24913",
+        "rgba_sha256": "7d9b17b224da2d43dcc18bb35d6fb780751fb9834e9d5ef7de840594ffaadd4c",
+        "bounds": [
+          77,
+          6,
+          428,
+          217
+        ],
+        "covered_pixels": 22349,
+        "transparent_pixels": 214272,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 95,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0095_main.png",
+        "sha256": "10694c5a9e49252db7fa7a6be07ba830f60d6dcdc31e21c1bf91199e0378d85f",
+        "rgba_sha256": "6beba115950922a3db07c28985fcfd9264c00c9dc499eedfce2b3b353cacbcd2",
+        "bounds": [
+          197,
+          180,
+          323,
+          347
+        ],
+        "covered_pixels": 4683,
+        "transparent_pixels": 231938
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0095_intrinsic.png",
+        "sha256": "e88a1c067d2d86f2120b394776569a178467ed31f606f688736f7febe7ea794b",
+        "rgba_sha256": "fa34ccc3ba546332bbf9c68d698392323050000d2dd729da0725809d9a216838",
+        "bounds": [
+          64,
+          11,
+          442,
+          245
+        ],
+        "covered_pixels": 25133,
+        "transparent_pixels": 211488,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 96,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0096_main.png",
+        "sha256": "8834487e138ac677cb2187dfd2a094babfda18fd6576495b6e9c6f3651e95512",
+        "rgba_sha256": "9782c8df4d77f0865c1d545b38868400571c11e0db5b774bb848db4d50add34f",
+        "bounds": [
+          204,
+          202,
+          323,
+          347
+        ],
+        "covered_pixels": 4507,
+        "transparent_pixels": 232114
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0096_intrinsic.png",
+        "sha256": "ff88982c80f101ad80bc37a3df4387a48f4794fe0defce581b4565fede798bab",
+        "rgba_sha256": "cd363efc90ad6152dca06084db19a6eaabd6e69b0e00d07f5397db441dd6cbd7",
+        "bounds": [
+          49,
+          0,
+          456,
+          249
+        ],
+        "covered_pixels": 27077,
+        "transparent_pixels": 209544,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 97,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0097_main.png",
+        "sha256": "4eb1f02e8a3d4dc3e742b5b09637644a321175c415ad7ce552e0a6d10e4d896f",
+        "rgba_sha256": "735060a923274a073e6302513bf74cbbac29d8d8c62ad172a86e27751ffce372",
+        "bounds": [
+          211,
+          208,
+          323,
+          347
+        ],
+        "covered_pixels": 4688,
+        "transparent_pixels": 231933
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0097_intrinsic.png",
+        "sha256": "a95c6b023c93f51b9d27036a5c5bddc44b840a4d658eef3a299455636a4740c8",
+        "rgba_sha256": "4959f5968d967b5c4741f8c3ea5028d494e1678648ae9e06b891832673da84b5",
+        "bounds": [
+          41,
+          0,
+          465,
+          248
+        ],
+        "covered_pixels": 27583,
+        "transparent_pixels": 209038,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 98,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0098_main.png",
+        "sha256": "e34ee429395298bf8b4ea034a2e77909379a64fca110236c7eb30b110296b815",
+        "rgba_sha256": "74e4af165933abd1f1c163c9a589ac1ab859fb03511309b9ea450efd8d0fa732",
+        "bounds": [
+          209,
+          213,
+          323,
+          347
+        ],
+        "covered_pixels": 4664,
+        "transparent_pixels": 231957
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0098_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 99,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0099_main.png",
+        "sha256": "8182a17a35df3429272e9f7024b0d2e640c94e6b23e41158e780d4a939b7ee0e",
+        "rgba_sha256": "233dca623cfbb3f8fb4787dba3a04bc75f95e2ddc78f85dad6a51a05f434eee0",
+        "bounds": [
+          172,
+          216,
+          322,
+          345
+        ],
+        "covered_pixels": 4659,
+        "transparent_pixels": 231962
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0099_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 100,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0100_main.png",
+        "sha256": "8348f02a5feb5957d4351603b584132eb06a5d943df914211f48da4ffef190f0",
+        "rgba_sha256": "b5b50d8694bc06595525bdcd88153ed6569e507fb98c64d8ae58abb7d3097d86",
+        "bounds": [
+          163,
+          218,
+          322,
+          342
+        ],
+        "covered_pixels": 4525,
+        "transparent_pixels": 232096
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0100_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 101,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0101_main.png",
+        "sha256": "7f72231bd7a3d46bbfb29414ed4d31298ff048cfb90d2aaaf47b61834e007bee",
+        "rgba_sha256": "d0ee9b32cc88f58d1ce04cff31155ec8676dae7a4cf5bd57c5997cde1c481d51",
+        "bounds": [
+          212,
+          181,
+          322,
+          342
+        ],
+        "covered_pixels": 4571,
+        "transparent_pixels": 232050
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0101_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 102,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0102_main.png",
+        "sha256": "e9056cc6aa00aa8320a581c2eaae845f40041161e46220b5300caee47939ce04",
+        "rgba_sha256": "c3193cc2decef3a9ae4431f3efa95bb67cc4c33040f9aec99ef2d5bf8a1597d8",
+        "bounds": [
+          212,
+          191,
+          323,
+          342
+        ],
+        "covered_pixels": 4746,
+        "transparent_pixels": 231875
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0102_intrinsic.png",
+        "sha256": "f54727de6080e07079e7b67edb01c65dabdcd552000d3f6d629469ade502ac46",
+        "rgba_sha256": "7d2ca60c778f85329d4fd65a77d237bfa5016ff6eb90944435c710123e28c091",
+        "bounds": [
+          226,
+          271,
+          294,
+          302
+        ],
+        "covered_pixels": 1271,
+        "transparent_pixels": 235350,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 103,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0103_main.png",
+        "sha256": "48316404a18fc048cdf8f7067cb8932497f979e91bafe95dee5ccaff5d8cc67f",
+        "rgba_sha256": "bfa5219254bd44c9e672f4b074e9bb963610408c87f43d74303d434d63215633",
+        "bounds": [
+          209,
+          190,
+          323,
+          342
+        ],
+        "covered_pixels": 4604,
+        "transparent_pixels": 232017
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0103_intrinsic.png",
+        "sha256": "e31d1f1aae6c7a89fe39837b6d9b0fd24fed73cb5e4a2cb1df37d27d041c52e0",
+        "rgba_sha256": "b73092896ff44d2da4aca8c75f3bd3c268ff670bb3a7a8085755ed8c9a4990f3",
+        "bounds": [
+          211,
+          274,
+          293,
+          311
+        ],
+        "covered_pixels": 1001,
+        "transparent_pixels": 235620,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 104,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0104_main.png",
+        "sha256": "809e5ef32297859232955fd20e6932b252b3867d4beb22ff2486c74266bb4fbc",
+        "rgba_sha256": "31392839b9e28720c69feb4ec4a8156e2f33496fc5971dc9d6c87038fc1961c6",
+        "bounds": [
+          185,
+          186,
+          323,
+          342
+        ],
+        "covered_pixels": 4334,
+        "transparent_pixels": 232287
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0104_intrinsic.png",
+        "sha256": "36733dca888e37577d31ced5869e9493bc422308c4e55e9c57f2d14b654b8042",
+        "rgba_sha256": "45e35f1f4aa80e8736701f6db20e39afa7e0eebf8ae5f6be11d0fa18f5af9ec0",
+        "bounds": [
+          189,
+          288,
+          278,
+          313
+        ],
+        "covered_pixels": 1077,
+        "transparent_pixels": 235544,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 105,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0105_main.png",
+        "sha256": "24a33c83904b933071974a1039f2c0ec3f630c010e97fa9cc87f52d9effb473c",
+        "rgba_sha256": "0a05148eee655f224397c3a5e88d09704e75b19ffcbf98ac1596483f878e1e2e",
+        "bounds": [
+          159,
+          180,
+          290,
+          345
+        ],
+        "covered_pixels": 4345,
+        "transparent_pixels": 232276
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0105_intrinsic.png",
+        "sha256": "71687a96a8b3626ebbdd9467ea05e92aef4ff284b3eba099ab38ceb9e5e467e4",
+        "rgba_sha256": "41944566e64cc3ab9138e59bd0d1cdae2b675344019c9ab16b281aa1ad2128ad",
+        "bounds": [
+          163,
+          239,
+          236,
+          309
+        ],
+        "covered_pixels": 2346,
+        "transparent_pixels": 234275,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 106,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0106_main.png",
+        "sha256": "4854eb6d89b08bb946f0307d36d5c13062c14531415cec8194ffd33ee7b96163",
+        "rgba_sha256": "19ff68c2659039a47f6849e340a04f49601b7002c16c27cec3bd92668e404b24",
+        "bounds": [
+          160,
+          158,
+          247,
+          341
+        ],
+        "covered_pixels": 4103,
+        "transparent_pixels": 232518
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0106_intrinsic.png",
+        "sha256": "204c6cd6887f7ec79075dc22c616d9bfcd17b19cb940a8d052141ec8d7ecb7b4",
+        "rgba_sha256": "e77882f0699a0d70904a78566685dd24542c179946c24da1728ab22f2439e7ec",
+        "bounds": [
+          163,
+          159,
+          219,
+          296
+        ],
+        "covered_pixels": 1135,
+        "transparent_pixels": 235486,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 107,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0107_main.png",
+        "sha256": "4cb884b193c04fddbf01a9aaab4e38acf41904a6c1f3145c78492570d5934a16",
+        "rgba_sha256": "d9751a10d8530c9fb138592f8b21e61c84f5250a4542233bac1671e094eb339c",
+        "bounds": [
+          164,
+          122,
+          255,
+          340
+        ],
+        "covered_pixels": 4100,
+        "transparent_pixels": 232521
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0107_intrinsic.png",
+        "sha256": "54d6910a8bab9481a986dc3966e6c92d30556e817a3ea01b4f267424d2ca998a",
+        "rgba_sha256": "802b195b37aaccaa153be8780a89c190b79e6ec32cf9ecbedc8e4447bac22239",
+        "bounds": [
+          166,
+          126,
+          211,
+          199
+        ],
+        "covered_pixels": 642,
+        "transparent_pixels": 235979,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 108,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0108_main.png",
+        "sha256": "9ace166134c30c6b68bbbec250310f62de8ef43090ea9ef0dffab2289da5fa23",
+        "rgba_sha256": "b28711c10c331c651c2753c4c90ba0e58c064386eb426798f6336076c5cc9485",
+        "bounds": [
+          173,
+          119,
+          252,
+          340
+        ],
+        "covered_pixels": 3387,
+        "transparent_pixels": 233234
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0108_intrinsic.png",
+        "sha256": "5c6ee02b934b799d356bc5a4484a8de703ec865c31fef34d81ca37f1a272d120",
+        "rgba_sha256": "42095af9d2d060130db69391ac9ba65e44b1a169aa213f718140f9e9796355ae",
+        "bounds": [
+          175,
+          114,
+          218,
+          152
+        ],
+        "covered_pixels": 873,
+        "transparent_pixels": 235748,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 109,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0109_main.png",
+        "sha256": "41bd96248dc090ca15bfac3fa9c6ee7afb422aee6f820fe58ddc6fd7ba665730",
+        "rgba_sha256": "87fbe6534b2a79e8c6b55f9e398ceb6733702aabaf724bd80ba3f9099d1abc4c",
+        "bounds": [
+          171,
+          189,
+          322,
+          333
+        ],
+        "covered_pixels": 4379,
+        "transparent_pixels": 232242
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0109_intrinsic.png",
+        "sha256": "28a2896ea90b87f1ee2a8090f6adec63e3cdd2135e8120309a81ed45975b9364",
+        "rgba_sha256": "e11364eb15493fccf085e9678873ddae93610d6ce5cfb404d9458173d8605d60",
+        "bounds": [
+          153,
+          118,
+          217,
+          227
+        ],
+        "covered_pixels": 4588,
+        "transparent_pixels": 232033,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 110,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0110_main.png",
+        "sha256": "f087fe170414614da6679545d478e68ddef47d7d78ad5f8f7fb38191febce847",
+        "rgba_sha256": "e492ad50d6d0eb3993fd681ee6006ee1ed87f10513c625decd0a79f49e3e0f33",
+        "bounds": [
+          206,
+          164,
+          357,
+          337
+        ],
+        "covered_pixels": 5270,
+        "transparent_pixels": 231351
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0110_intrinsic.png",
+        "sha256": "52e2293d32905eb79acdbcc70f4c9b8f1d5545f7683962fb11404d6681927087",
+        "rgba_sha256": "7b83f5aff12240582d39f42dc4dad395d4b4894a246a5648d6385d6062e69ba7",
+        "bounds": [
+          157,
+          124,
+          354,
+          230
+        ],
+        "covered_pixels": 8419,
+        "transparent_pixels": 228202,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 111,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0111_main.png",
+        "sha256": "13bea341ca5b901348789022c1a44e5e6bcf9e21dd67941b58da653a3c2a3a04",
+        "rgba_sha256": "42055781e0c1f72d27b6be6dbab894a811b06cd84a31507aa63192126523c13a",
+        "bounds": [
+          222,
+          228,
+          421,
+          338
+        ],
+        "covered_pixels": 4860,
+        "transparent_pixels": 231761
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0111_intrinsic.png",
+        "sha256": "2141ef30c27731139c5edc3899b8493b043c797359746211d887b99f934803fc",
+        "rgba_sha256": "86b21522041006df0edc4ed8246817e6f1b951cb6f3df30873a88bf8698c6689",
+        "bounds": [
+          173,
+          159,
+          439,
+          334
+        ],
+        "covered_pixels": 13002,
+        "transparent_pixels": 223619,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 112,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0112_main.png",
+        "sha256": "cea426909914b8e9bbea147ef2d57f676757503f374857750e85d369feb42d1f",
+        "rgba_sha256": "dcacb47774808a9c8a19a01fdf9e57a1f985a560f2e5f64537d74b89daec2aa6",
+        "bounds": [
+          218,
+          233,
+          354,
+          342
+        ],
+        "covered_pixels": 4123,
+        "transparent_pixels": 232498
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0112_intrinsic.png",
+        "sha256": "2028ce98f08ca24485e0a3c22416d8ebb98b34629a445507813cb9dc6beff8c4",
+        "rgba_sha256": "2e00f5e8f3301867d87edeee9b8f4282ec68751f54dacd0bb297c7d16f853d6b",
+        "bounds": [
+          323,
+          166,
+          436,
+          344
+        ],
+        "covered_pixels": 4721,
+        "transparent_pixels": 231900,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 113,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0113_main.png",
+        "sha256": "c9444efdc5a9d9e766b2b4c6120b6cf7c1596131fa2f63fe236c163308eff780",
+        "rgba_sha256": "19f401f72bc4cea54c405f7a911cbc574b313b4b3b00414e1dccc204e385d099",
+        "bounds": [
+          212,
+          231,
+          352,
+          348
+        ],
+        "covered_pixels": 3964,
+        "transparent_pixels": 232657
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0113_intrinsic.png",
+        "sha256": "94608c4ad28f5a8e4ebb8be39c7b959d58bc6360fed3ba5b5bcf845789959b74",
+        "rgba_sha256": "0090db7590323e625f8bbe1a5fc127ab78136d188293820d4d3f8c511928f025",
+        "bounds": [
+          303,
+          278,
+          366,
+          328
+        ],
+        "covered_pixels": 1250,
+        "transparent_pixels": 235371,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 114,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0114_main.png",
+        "sha256": "7b55b308066a5e02797f6874e01e38aa69a43766cdc022103631781d6deb58c3",
+        "rgba_sha256": "7404a22ee3872354766503fd9a78b499fb128bcb84b3f34c305e0a98767523e1",
+        "bounds": [
+          212,
+          220,
+          363,
+          345
+        ],
+        "covered_pixels": 4269,
+        "transparent_pixels": 232352
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0114_intrinsic.png",
+        "sha256": "1065bfce809a667fc692891d5d2d3ca3f7722ceed6647fe8485f1a81f230c1b9",
+        "rgba_sha256": "60043caa11987eadcf75ed2fe6ad4ae5d6c5c84648b683664c25e3ded80d3aba",
+        "bounds": [
+          304,
+          281,
+          366,
+          332
+        ],
+        "covered_pixels": 994,
+        "transparent_pixels": 235627,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 115,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0115_main.png",
+        "sha256": "efd98142e93d861aa398aff08ff154adb28c73f8eafbcfb4503e10d8e3159713",
+        "rgba_sha256": "55a6cb8667358724102c3bc5a635ecf1aeaa311af393c412517b70fb3dc99384",
+        "bounds": [
+          212,
+          206,
+          326,
+          342
+        ],
+        "covered_pixels": 4646,
+        "transparent_pixels": 231975
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0115_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 116,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0116_main.png",
+        "sha256": "f5630efabc3af469a92f78e5f6933f24f705c8bc461c7bf87ab15ce1295629fb",
+        "rgba_sha256": "822f1bfe35c1ec4204142d850fa4102c793b41b2008a1c58a32af300a32de306",
+        "bounds": [
+          212,
+          193,
+          323,
+          342
+        ],
+        "covered_pixels": 4609,
+        "transparent_pixels": 232012
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0116_intrinsic.png",
+        "sha256": "ff225d6b910d0b607a93363b42b38b8980f9a14158f574ea1c3a391adb8d7d32",
+        "rgba_sha256": "a51bb4bb5d67836e8844e061d18b0b733557556ae6cbeb67d6044a6ac201d088",
+        "bounds": [
+          237,
+          207,
+          323,
+          292
+        ],
+        "covered_pixels": 1267,
+        "transparent_pixels": 235354,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 117,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0117_main.png",
+        "sha256": "3f54074e7ac91d98d22e4270e508978650b88111dad4fc10bb505ab1d472cffa",
+        "rgba_sha256": "ac5141d01408b82b663ba96f5256ff34b6aca907eb290255959cd38563f2bec9",
+        "bounds": [
+          212,
+          191,
+          323,
+          342
+        ],
+        "covered_pixels": 4090,
+        "transparent_pixels": 232531
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0117_intrinsic.png",
+        "sha256": "6b19ae51dcd170738b98b37928d465bcc6d643e879e249e366135fc97081bc27",
+        "rgba_sha256": "18eaabd0c52552409c3a93606ebec5628b7a8c385eed9b41727e4760d630d769",
+        "bounds": [
+          231,
+          206,
+          309,
+          290
+        ],
+        "covered_pixels": 2414,
+        "transparent_pixels": 234207,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 118,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0118_main.png",
+        "sha256": "8727cc2f3cba30d58a361e8feb93ba9a8e226ee8619c5fcaea0ee91bd83122c9",
+        "rgba_sha256": "14743decfe84311007dddf7635f20a285fd2a4af9ded4bac1d9e981dcd1d9cec",
+        "bounds": [
+          212,
+          193,
+          323,
+          342
+        ],
+        "covered_pixels": 4173,
+        "transparent_pixels": 232448
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0118_intrinsic.png",
+        "sha256": "86855941ffb50423c07940ce3c750653f8206a1300631269e265ac8caf231910",
+        "rgba_sha256": "930f5119d3dae34cb4ecccf304dea7cf8972083b7a0fd3d443df17e128342ccb",
+        "bounds": [
+          218,
+          206,
+          290,
+          275
+        ],
+        "covered_pixels": 1230,
+        "transparent_pixels": 235391,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 119,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0119_main.png",
+        "sha256": "cd18f5d57fcd3d73afe85fa27905addb31e634d1719c96f4dc585eb15ea53fcc",
+        "rgba_sha256": "0ff0eaf878066e64bc0154de8c7a1c51f6560d5e1f7598400f0a0e0e0f894ed9",
+        "bounds": [
+          212,
+          209,
+          323,
+          342
+        ],
+        "covered_pixels": 4332,
+        "transparent_pixels": 232289
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0119_intrinsic.png",
+        "sha256": "04bc12b09b85cbe46a1f90cbb85275d37b2ba7a559c8dd303bf69cb0df50d0cd",
+        "rgba_sha256": "0ac6ac3049b142421d5ce041f1b4869e66ce543ff8da18907cd9291cfc0b45f5",
+        "bounds": [
+          200,
+          207,
+          283,
+          324
+        ],
+        "covered_pixels": 4629,
+        "transparent_pixels": 231992,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 120,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0120_main.png",
+        "sha256": "7d2740de1f4fba4819dc72bfebb05c18f3c70e08615432ae2f1308ecef1eccb6",
+        "rgba_sha256": "1e7aecf52656d1438cf32d97195bec993fbd9f4276a18b96ce8dc6c27e29f188",
+        "bounds": [
+          212,
+          225,
+          387,
+          342
+        ],
+        "covered_pixels": 4172,
+        "transparent_pixels": 232449
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0120_intrinsic.png",
+        "sha256": "a27262ff8e1093e23f1b20b21fe49b8f7202d335c903f14d87d707711a2034ea",
+        "rgba_sha256": "df0f5b2a85ac13599d690b2b57434c4cd7ed4c9d46f85a9ae3095e3aa87bbce8",
+        "bounds": [
+          202,
+          210,
+          403,
+          348
+        ],
+        "covered_pixels": 10564,
+        "transparent_pixels": 226057,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 121,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0121_main.png",
+        "sha256": "8c2e14f98c1db76d55bbf977e35d3b36664344ed9fc34aa906118f2fa2807746",
+        "rgba_sha256": "aa2625bc3d140a4cdfeff389ca17ad9deefecf1b27be73a84aa9a762dd0ef46e",
+        "bounds": [
+          212,
+          229,
+          323,
+          342
+        ],
+        "covered_pixels": 4078,
+        "transparent_pixels": 232543
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0121_intrinsic.png",
+        "sha256": "05041baa8c5d7d57abc77835dfd417eddce7ada6b459c81123d2c5281cac8cf5",
+        "rgba_sha256": "e1f72e0cd50cf5500f736e73834e937764fb5c3b62563c8895291248b67d03f7",
+        "bounds": [
+          224,
+          228,
+          401,
+          327
+        ],
+        "covered_pixels": 4766,
+        "transparent_pixels": 231855,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 122,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0122_main.png",
+        "sha256": "7daccf2ae3a5dc996f98e417cf8abb4d5b88b3d735ae37e10f9de587c626016c",
+        "rgba_sha256": "9be7af17f0c35a3c97a115416b7ee1b1c9c73afcb2413481a9b406176d4fc3a9",
+        "bounds": [
+          198,
+          223,
+          336,
+          342
+        ],
+        "covered_pixels": 4590,
+        "transparent_pixels": 232031
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0122_intrinsic.png",
+        "sha256": "32250906996994c3627df04318002371bb3cc95cd0096572951453b6397315c4",
+        "rgba_sha256": "37f8d257919a915300a4137db32f07b1086d02e62c309c19091c364cf312bb6d",
+        "bounds": [
+          198,
+          222,
+          323,
+          254
+        ],
+        "covered_pixels": 1746,
+        "transparent_pixels": 234875,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 123,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0123_main.png",
+        "sha256": "c71a431a3ff6844e697087aa4d75e21d34ec95ce9c57d3d96c849fdc4f5c7ee3",
+        "rgba_sha256": "c38154564cfd63bdb21ea59fc5a47a6334f6f826e790133f163cb027e2f2a8f5",
+        "bounds": [
+          162,
+          220,
+          384,
+          342
+        ],
+        "covered_pixels": 4694,
+        "transparent_pixels": 231927
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0123_intrinsic.png",
+        "sha256": "27ed5cae75ad19c5ad72413fd523a418531f162866319c2f32e1bf60c8c10f7d",
+        "rgba_sha256": "6487e8629ece01f88e74a45bcb728fd88cc60ba175d1e7edf3c2005f8f87c3b2",
+        "bounds": [
+          186,
+          222,
+          393,
+          255
+        ],
+        "covered_pixels": 1278,
+        "transparent_pixels": 235343,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 124,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0124_main.png",
+        "sha256": "cb307cb3a2e5827a43170a16b4e7adb25539eaa6254b6bd637158d90074ddc20",
+        "rgba_sha256": "a6903b2a12a0c8dd025576491cf5485fd59850b0fd6e086d6d9a31ff0ef21a34",
+        "bounds": [
+          161,
+          222,
+          339,
+          339
+        ],
+        "covered_pixels": 3509,
+        "transparent_pixels": 233112
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0124_intrinsic.png",
+        "sha256": "4c385b4020b1332f71f1b3e2181adaf25e6f43d3a44c42d4f889dbd352b2e652",
+        "rgba_sha256": "e1a5713ca8d596f73b6d90f613a1c3a1f10a492f93479619edb2c546b0e859c1",
+        "bounds": [
+          155,
+          221,
+          391,
+          262
+        ],
+        "covered_pixels": 1002,
+        "transparent_pixels": 235619,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 125,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0125_main.png",
+        "sha256": "1e4727d158d4debead15e99958004ac35afaf3803b70abadcf8fe31c249988b7",
+        "rgba_sha256": "d0bfda8551966666690fa3430be7d9a95c909eab34e18c79d84c2d98fe590e82",
+        "bounds": [
+          199,
+          218,
+          309,
+          311
+        ],
+        "covered_pixels": 3008,
+        "transparent_pixels": 233613
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0125_intrinsic.png",
+        "sha256": "13295741dd6569002966a011ba801ff549250b6cc93769dc90cfd88be7d36eb2",
+        "rgba_sha256": "600fbb864d021fddcfb33b97521514c64301a4b45cc9235f3b4654637908d4c1",
+        "bounds": [
+          158,
+          225,
+          355,
+          302
+        ],
+        "covered_pixels": 3114,
+        "transparent_pixels": 233507,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 126,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0126_main.png",
+        "sha256": "6cf78260b26ff4b358355fafcad90986f441011cbc00bdbdd46e6af71fedda7e",
+        "rgba_sha256": "8bbec1131a57437c0fe15700b654e606dfb33fbbfcbef424f77e089c441b45f5",
+        "bounds": [
+          157,
+          214,
+          306,
+          325
+        ],
+        "covered_pixels": 4212,
+        "transparent_pixels": 232409
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0126_intrinsic.png",
+        "sha256": "3cea3931809be19fcdd8386a4a1a432c31136d9c3be33dc2ac38aa34df53ef02",
+        "rgba_sha256": "48ab366e30ed5ab30a6a51c92192452d21bc6672fd9c704ddd1fb9890099b895",
+        "bounds": [
+          173,
+          236,
+          298,
+          301
+        ],
+        "covered_pixels": 4857,
+        "transparent_pixels": 231764,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 127,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0127_main.png",
+        "sha256": "566f3a4c69aaa89c78333a232f1ddfb7f5c3b2cf79bebe503440dcfaddc0a354",
+        "rgba_sha256": "71a27089ea151201e24c605a3a273752dc3a3b662dd4388a1004bf158239bad2",
+        "bounds": [
+          193,
+          230,
+          334,
+          342
+        ],
+        "covered_pixels": 4912,
+        "transparent_pixels": 231709
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0127_intrinsic.png",
+        "sha256": "ed86574a9d5f7468cd52e763e641aa4b1cd4ea515be23a8dd613c01e8dbd98f2",
+        "rgba_sha256": "afc4e34f5307abf1325e7498036c57d20f0a0549434daf0f5dfee9de0baa970c",
+        "bounds": [
+          153,
+          251,
+          330,
+          323
+        ],
+        "covered_pixels": 4361,
+        "transparent_pixels": 232260,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 128,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0128_main.png",
+        "sha256": "4ac7804844e3b5992143fd3b04847cc3cc32c88df2a56ecce07c979c5c758bde",
+        "rgba_sha256": "487116f1b879e030dd6f5f4d2bde03e43df9157e37b1f93fa0b2d93aac3e81fb",
+        "bounds": [
+          212,
+          213,
+          338,
+          342
+        ],
+        "covered_pixels": 4403,
+        "transparent_pixels": 232218
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0128_intrinsic.png",
+        "sha256": "ca933da3da57ea03c8508a53f0881c743a682491e0e36fdfd4b57a209ada4b31",
+        "rgba_sha256": "6c122f571be9ebacba2610d49b19059bb2fc38e57004bc0aea1762d825069199",
+        "bounds": [
+          176,
+          212,
+          333,
+          333
+        ],
+        "covered_pixels": 3730,
+        "transparent_pixels": 232891,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 129,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0129_main.png",
+        "sha256": "fcb4bfb01f37637c15470f26c867e81c34cd08feb7783ba927731ca31ba10d0d",
+        "rgba_sha256": "6cf24513929c8fcd7e89271a3cc8b95c8c4bf2ae7f4efea482b291c8ee694cfe",
+        "bounds": [
+          212,
+          204,
+          333,
+          342
+        ],
+        "covered_pixels": 4639,
+        "transparent_pixels": 231982
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0129_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 130,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0130_main.png",
+        "sha256": "aae95dcd6f1562dea5cc37432c73abfb4a11719582299c3b96941c8a67cec752",
+        "rgba_sha256": "6b01775f7b7f615f66a45ebf3250bdebec2f3f4b1c5025d6d48794b2ae187bdb",
+        "bounds": [
+          211,
+          176,
+          323,
+          342
+        ],
+        "covered_pixels": 5032,
+        "transparent_pixels": 231589
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0130_intrinsic.png",
+        "sha256": "32e9a1ab9d406144dd883598467f5b4279d370d3bbc74cdbe6041a4d81add29c",
+        "rgba_sha256": "758ee996b87336f31ea2b686fddc3e4826712f19f97ac138a417270ea8f04b05",
+        "bounds": [
+          239,
+          186,
+          322,
+          293
+        ],
+        "covered_pixels": 2458,
+        "transparent_pixels": 234163,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 131,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0131_main.png",
+        "sha256": "729dcf6ae0933d1abb8fe8f20058afa681f51b035381dc6745effc1e90bdfa26",
+        "rgba_sha256": "f70562e1b4bfc7d36ac6a55a481ddcdfd1416548a96cc49cee161f8da64759ac",
+        "bounds": [
+          206,
+          171,
+          323,
+          342
+        ],
+        "covered_pixels": 5012,
+        "transparent_pixels": 231609
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0131_intrinsic.png",
+        "sha256": "9f1e7c13bd1716404595f6466d19b7ce694e3136868be7b59a0b0d5486c5604a",
+        "rgba_sha256": "fd69695f6487d323e0496c04b46b473c84625bc4eca982616a130c3ed87e6f46",
+        "bounds": [
+          246,
+          177,
+          306,
+          246
+        ],
+        "covered_pixels": 1147,
+        "transparent_pixels": 235474,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 132,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0132_main.png",
+        "sha256": "b783e1cd5d7a9286af005af5b8bd0f11af1482eed0dff95fed4d444b0ac5f063",
+        "rgba_sha256": "7cc7d960c7d00eacb46c1eccb1dd54dbe271ff117e4cd7823ed0232d2a0d45d1",
+        "bounds": [
+          205,
+          181,
+          323,
+          341
+        ],
+        "covered_pixels": 4338,
+        "transparent_pixels": 232283
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0132_intrinsic.png",
+        "sha256": "19f925df0970716765bf30ebc545da6c51ee1443b780ca03daea7991b4396756",
+        "rgba_sha256": "2d603c54ed63966c08a50710edda744c2872912dcabc8b859d8e735f034714db",
+        "bounds": [
+          244,
+          175,
+          306,
+          200
+        ],
+        "covered_pixels": 870,
+        "transparent_pixels": 235751,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 133,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0133_main.png",
+        "sha256": "d2a661154ca10f702bb4093635a5f7d260d6c1e9c3d4c849e4e57e5fbf8a50a2",
+        "rgba_sha256": "8e8faf4ef2fccc5537797e513a448936cc1f6de2fce750f187f2ba1302b118a3",
+        "bounds": [
+          212,
+          203,
+          323,
+          342
+        ],
+        "covered_pixels": 4243,
+        "transparent_pixels": 232378
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0133_intrinsic.png",
+        "sha256": "e6ae576c93c31a4a5bf87391e7b2ceda1a38494dc7eeb7ea09f83736a530a4d6",
+        "rgba_sha256": "2a967f86b71041c5445e61c8f805f5f649010d92b1a02b886a7d54711e6c2888",
+        "bounds": [
+          228,
+          180,
+          304,
+          243
+        ],
+        "covered_pixels": 1399,
+        "transparent_pixels": 235222,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 134,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0134_main.png",
+        "sha256": "a081d5a5acf9baa7086320daf452ccee3377c8979536a70486c01d6fbac03449",
+        "rgba_sha256": "59dee0488dea98b2a96d41554fef0c5ab98951406e79c96c16fcbc3077b5ee27",
+        "bounds": [
+          198,
+          242,
+          331,
+          348
+        ],
+        "covered_pixels": 4206,
+        "transparent_pixels": 232415
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0134_intrinsic.png",
+        "sha256": "881039b5fdf3a5788cf93d438091a47943203ddc34270179c08f9213e32aa40f",
+        "rgba_sha256": "4b05db0c756e8af0833742ed1ee3ea19c4cbebd112660cb29d01dcff281be1b9",
+        "bounds": [
+          183,
+          187,
+          284,
+          338
+        ],
+        "covered_pixels": 6039,
+        "transparent_pixels": 230582,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 135,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0135_main.png",
+        "sha256": "f9db8a6a5fb122b505bfbb129f8a542fec36298ba1d7948d8d2ca4d720cd9f41",
+        "rgba_sha256": "d72a22b0027f4b5a245289b58590dc4adc4352792a23ef9b500f5f4cab3c1a84",
+        "bounds": [
+          265,
+          228,
+          428,
+          353
+        ],
+        "covered_pixels": 4299,
+        "transparent_pixels": 232322
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0135_intrinsic.png",
+        "sha256": "76c2236869cc7bc5119f8149e19e3c4f14d895a793e7bcd49ef374400ede7cca",
+        "rgba_sha256": "260fc558dd78ea6aa1c7c96662551354d2a9634912c1d7bf1e7519a25e37c8c3",
+        "bounds": [
+          185,
+          210,
+          438,
+          354
+        ],
+        "covered_pixels": 14376,
+        "transparent_pixels": 222245,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 136,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0136_main.png",
+        "sha256": "71dca5c44e3f66ba6734778e12560ac61423518ef356aeb95ddc107915763140",
+        "rgba_sha256": "01358358edb18286f5dd893fb8984c49f4d4d0fb41d2541a5315d6a3f2fd3826",
+        "bounds": [
+          273,
+          132,
+          388,
+          333
+        ],
+        "covered_pixels": 5001,
+        "transparent_pixels": 231620
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0136_intrinsic.png",
+        "sha256": "5a51cf5722bd37ceaa9731866242fdc66df975e36f131b5c88c51d1a9c148e70",
+        "rgba_sha256": "2c206659090c6a7f5a77dd9f40ee4b7f87dab21805b02a41d30bc3c90fafdaa1",
+        "bounds": [
+          272,
+          131,
+          437,
+          327
+        ],
+        "covered_pixels": 13615,
+        "transparent_pixels": 223006,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 137,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0137_main.png",
+        "sha256": "14654019fb1778c719d43f631ecdd0afaaeee4d8068d989f50b52ab84a4836b9",
+        "rgba_sha256": "74bcd81b73619826ed064cc5c7a7855cf0cf767e58897c55cb01e83555134ec5",
+        "bounds": [
+          153,
+          149,
+          337,
+          316
+        ],
+        "covered_pixels": 4863,
+        "transparent_pixels": 231758
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0137_intrinsic.png",
+        "sha256": "6e87c7119c889a69d8cccbb73599cfc5bdb7034898a5a182dbe3fa92fe256938",
+        "rgba_sha256": "ed3366ecc59662c37cffe9eb2c43fed6d638ec539ce604003bf956f0ed67e5f4",
+        "bounds": [
+          152,
+          118,
+          414,
+          237
+        ],
+        "covered_pixels": 13190,
+        "transparent_pixels": 223431,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 138,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0138_main.png",
+        "sha256": "946179dfec5180cf969cca861f7a0d9aa674514b9d882c10e2bd1bd84bc4652f",
+        "rgba_sha256": "708adb1fce81f142a8ef2039c5c273deb43824b64a5d2e513d50860dead21bbe",
+        "bounds": [
+          142,
+          136,
+          317,
+          290
+        ],
+        "covered_pixels": 4432,
+        "transparent_pixels": 232189
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0138_intrinsic.png",
+        "sha256": "add21efc78e626c1d3411c11159ed38cdddb3d0d99d1017143da4463c7e39f81",
+        "rgba_sha256": "5f9a4140c0a799bea062b71f4579670c1aeae287d340e29d144dd2b3077cd7bf",
+        "bounds": [
+          128,
+          129,
+          386,
+          265
+        ],
+        "covered_pixels": 9952,
+        "transparent_pixels": 226669,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 139,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0139_main.png",
+        "sha256": "b1be1f8c300d4e1e5c2cb131476ef1abb4bc3a1ea4fc8c41a7ecf82f560e02be",
+        "rgba_sha256": "425249533ba65f30b030bd88fe27a6124a536ecc7a82562bed8db89e2256c64f",
+        "bounds": [
+          186,
+          162,
+          275,
+          314
+        ],
+        "covered_pixels": 3359,
+        "transparent_pixels": 233262
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0139_intrinsic.png",
+        "sha256": "5f2ce575457953746d6ef4a4a020001755f226c0becff264aeffd20029ca3733",
+        "rgba_sha256": "4e509bb0be279f41912778edd85adbc856b7766a7305bfba9de7a276963b54a4",
+        "bounds": [
+          134,
+          133,
+          274,
+          315
+        ],
+        "covered_pixels": 8461,
+        "transparent_pixels": 228160,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 140,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0140_main.png",
+        "sha256": "d655ed38229bbdfa301759fd45fe0d340be48a8ca9602138a22b5d7839d2fe0b",
+        "rgba_sha256": "8e35d6b3f1519f6be16181794ba99afe7cfd7f7cda47f7140e8c4153a4796853",
+        "bounds": [
+          103,
+          186,
+          271,
+          325
+        ],
+        "covered_pixels": 3767,
+        "transparent_pixels": 232854
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0140_intrinsic.png",
+        "sha256": "580a77cde4bc5e23425e941d74cc662afe32a745a2c9d530ebea83822a0ca7a3",
+        "rgba_sha256": "cb83fe15f7f8ea0b1bdfa05e891f2b0763fe94ff96f419d4206a27953ec7610b",
+        "bounds": [
+          161,
+          151,
+          273,
+          323
+        ],
+        "covered_pixels": 6090,
+        "transparent_pixels": 230531,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 141,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0141_main.png",
+        "sha256": "d2ff7e598db0d76b26c04a718fdccf85fffa0c61a2c83f00bdbca6f5dfef1493",
+        "rgba_sha256": "b8d76a84bdcea0dc53313a3359cba35f40b4ef6336a56ee78a460f37d14886f8",
+        "bounds": [
+          48,
+          223,
+          250,
+          340
+        ],
+        "covered_pixels": 4164,
+        "transparent_pixels": 232457
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0141_intrinsic.png",
+        "sha256": "d5b6a1f8aad2284b215a112bd7815bca9d125a142c3999413db3e82e463a553f",
+        "rgba_sha256": "ada2fa22235a6796a6b946277d3af68f04e144a01f191e342cc6ddf1d4b78566",
+        "bounds": [
+          49,
+          175,
+          269,
+          319
+        ],
+        "covered_pixels": 5778,
+        "transparent_pixels": 230843,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 142,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0142_main.png",
+        "sha256": "7a8b37ddd92a8a7552a19c861f2aef9ac210bcc33d3146c9e54ac4e3dcab55de",
+        "rgba_sha256": "c694bf2ec698989aed9803fe6c6b4ebb944909ae951736222fff9f89731de86c",
+        "bounds": [
+          43,
+          237,
+          199,
+          342
+        ],
+        "covered_pixels": 4294,
+        "transparent_pixels": 232327
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0142_intrinsic.png",
+        "sha256": "f411925a9606ef39ac21295a4919abe7672889a8b2f51086a685dcd5776a39c6",
+        "rgba_sha256": "4b8cec00cea4fa599e345b7a07af21581927b897356da9f335998181a4f6d27c",
+        "bounds": [
+          33,
+          187,
+          257,
+          315
+        ],
+        "covered_pixels": 3541,
+        "transparent_pixels": 233080,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 143,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0143_main.png",
+        "sha256": "b59f8947011a73c2caa6cf045ca6b1e91b1fc5f2afaf55028510f9154d7737a8",
+        "rgba_sha256": "33c3368061225e1e0e5c5cbbb29a0115fbfa27e7f2142afa81cd9e0ce107e5cd",
+        "bounds": [
+          19,
+          209,
+          123,
+          342
+        ],
+        "covered_pixels": 4422,
+        "transparent_pixels": 232199
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0143_intrinsic.png",
+        "sha256": "58eba04283b0fcec24c84b44973db13fce34c3e30b01741e0c09e18307b6a70d",
+        "rgba_sha256": "32cc9fffae0b3dc1323577e4eeccbcaff46794e0903b5170fadd88f5a0ff2b4e",
+        "bounds": [
+          26,
+          216,
+          242,
+          322
+        ],
+        "covered_pixels": 3166,
+        "transparent_pixels": 233455,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 144,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0144_main.png",
+        "sha256": "0d608674cff70196d2dfece274854fcf58565e0e2f23ca15d1c96261b10b64a0",
+        "rgba_sha256": "e224f2394199677bb8a81a2e7318adfc1c87076c4f8fc30666cadc83772219ce",
+        "bounds": [
+          13,
+          217,
+          122,
+          342
+        ],
+        "covered_pixels": 4474,
+        "transparent_pixels": 232147
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0144_intrinsic.png",
+        "sha256": "b747812a0c4f855b78cad5802b37aa9cd2dfff40abc05103a3198581db1dd7a1",
+        "rgba_sha256": "7a5b190a0228ff11215927ff4d1c6509faf343e1dfbd07d1cf89f9be625bb8e4",
+        "bounds": [
+          0,
+          216,
+          122,
+          322
+        ],
+        "covered_pixels": 2801,
+        "transparent_pixels": 233820,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 145,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0145_main.png",
+        "sha256": "fb6ef1446eeba7f8bd32fac573cfcf21c32153c55130be20210162a988aa25cb",
+        "rgba_sha256": "8439bee74278b73539d40d78f943832ccbe1d71e32bd7c3082d1c9e08d268a78",
+        "bounds": [
+          53,
+          221,
+          186,
+          342
+        ],
+        "covered_pixels": 4599,
+        "transparent_pixels": 232022
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0145_intrinsic.png",
+        "sha256": "fa989d2f0a283675066be611173c5ebedc926108866bb6b307d97f86eae9bf79",
+        "rgba_sha256": "b055c549a576b0e81ea317464371ac56b5e7b9bda970239dea9bf3d387c29aff",
+        "bounds": [
+          0,
+          221,
+          160,
+          322
+        ],
+        "covered_pixels": 5600,
+        "transparent_pixels": 231021,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 146,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0146_main.png",
+        "sha256": "539663dfb072cd9f3686c4f81d283f2714c60aba169d4eeb11e5e0dee09c557f",
+        "rgba_sha256": "7bfb89190d5baa81ccdd93c176934e8419afa4348b78c1f6501c86d2340ece4f",
+        "bounds": [
+          119,
+          224,
+          365,
+          345
+        ],
+        "covered_pixels": 4539,
+        "transparent_pixels": 232082
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0146_intrinsic.png",
+        "sha256": "a442e0984e7ed9548cbd768ee43961d7c06a99cff3c4645497dcdf7fe3ea5da8",
+        "rgba_sha256": "42e16913cbdedde48a6d854753024941b090602703489f1302cbfcec49ff7ff6",
+        "bounds": [
+          11,
+          198,
+          368,
+          331
+        ],
+        "covered_pixels": 17429,
+        "transparent_pixels": 219192,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 147,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0147_main.png",
+        "sha256": "3110d725e8f6decdb85803a192b715661a98a04ce98ab662a2e0461beafb1868",
+        "rgba_sha256": "180baa2849a98287805aa986563499dd731514d74b35c5ba70b30cf1b160fe04",
+        "bounds": [
+          181,
+          244,
+          398,
+          351
+        ],
+        "covered_pixels": 4477,
+        "transparent_pixels": 232144
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0147_intrinsic.png",
+        "sha256": "b8c83373eabc33d0a745419b7c329edc7b975cd77efea72fa7797d6ed9fd6e87",
+        "rgba_sha256": "116039d26870d252a11c452fe3b83ab356c83ed16354be83e565f1e748e3df60",
+        "bounds": [
+          55,
+          220,
+          400,
+          350
+        ],
+        "covered_pixels": 9371,
+        "transparent_pixels": 227250,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 148,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0148_main.png",
+        "sha256": "2e97b9383ecbefed9e98aaedca995115eb73ce530680dc437c8b62c5aea819f7",
+        "rgba_sha256": "efacd7e481b4222d59246f2ad82d42554b3b098c154142977236f024f1a1389d",
+        "bounds": [
+          255,
+          231,
+          361,
+          366
+        ],
+        "covered_pixels": 3571,
+        "transparent_pixels": 233050
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0148_intrinsic.png",
+        "sha256": "1c3492db44eb7d9302e9398835c5c8aca54d44670ab1ad36b24a3e26de32438c",
+        "rgba_sha256": "8e9b8c71aa0cab11e2d06e040a9976f89202e9334ced290c58f2308757066d90",
+        "bounds": [
+          193,
+          232,
+          398,
+          369
+        ],
+        "covered_pixels": 4208,
+        "transparent_pixels": 232413,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 149,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0149_main.png",
+        "sha256": "70907a50326661e27d2209c8c13d4628fea6839368e6d0aa216260ccc61f9261",
+        "rgba_sha256": "d6660cf227ba95f0da913119ced50dc86bd0343336110b9e94e07f9b0cc08bfe",
+        "bounds": [
+          250,
+          255,
+          399,
+          352
+        ],
+        "covered_pixels": 3813,
+        "transparent_pixels": 232808
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0149_intrinsic.png",
+        "sha256": "d77fa569b5efeb744d780a5d31cf0e52b0894db77c486ec690649526a0fe57c0",
+        "rgba_sha256": "3fd5d712a8a45dc7288e72464ab4d8fb2a33865d6316ca2890278f96b14502f4",
+        "bounds": [
+          245,
+          282,
+          367,
+          365
+        ],
+        "covered_pixels": 3205,
+        "transparent_pixels": 233416,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 150,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0150_main.png",
+        "sha256": "bc648b3f11a8e41683a6d313cd694f9ab11a9e2b88e2085f8469e00362583d05",
+        "rgba_sha256": "4c45d62073ce7b54229edde0e0017629cecd50ea1106d10cf5b65dfd3dcea679",
+        "bounds": [
+          331,
+          243,
+          455,
+          349
+        ],
+        "covered_pixels": 3865,
+        "transparent_pixels": 232756
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0150_intrinsic.png",
+        "sha256": "57b37e1829fa773b4ab76f6b0faf66f1a48af7e3cde074ab858a4624523dc393",
+        "rgba_sha256": "4f0992c302ef9458af001abce7dcaa882a60e93b36a53cd7b3cb70b79c425044",
+        "bounds": [
+          247,
+          245,
+          389,
+          347
+        ],
+        "covered_pixels": 3842,
+        "transparent_pixels": 232779,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 151,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0151_main.png",
+        "sha256": "bd16d57d585a7a3adc34ac6b8d9527c269d6603676f659653dc280481a6aed4d",
+        "rgba_sha256": "0e38ed84b2f4ce6ca07f92513878431bf47dd0649172d2f86e3ebe945fb6f389",
+        "bounds": [
+          377,
+          211,
+          496,
+          361
+        ],
+        "covered_pixels": 4050,
+        "transparent_pixels": 232571
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0151_intrinsic.png",
+        "sha256": "28224c3f4f5f41b9f64e1658d8c78e5f27d2ddf4cf8f9ab1f5d0a9b34725a417",
+        "rgba_sha256": "ddee9fdae6c9622fb88993924817e4b01020a83f89f88f1465c344d3540eda1a",
+        "bounds": [
+          298,
+          209,
+          461,
+          345
+        ],
+        "covered_pixels": 7278,
+        "transparent_pixels": 229343,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 152,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0152_main.png",
+        "sha256": "536208d754abf3abee7126d38eabda8d2365c9368a9084c42149d933f1bbefd8",
+        "rgba_sha256": "288ea24168fec502132b5637c53d54f4b02ebcf514af5643f38eb8b29ecefef0",
+        "bounds": [
+          405,
+          231,
+          510,
+          363
+        ],
+        "covered_pixels": 4157,
+        "transparent_pixels": 232464
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0152_intrinsic.png",
+        "sha256": "ecc3dbe204dd254c025149ef812c1502faf24cfc2bd21538874f59b89b47ce45",
+        "rgba_sha256": "215339a886ea0238ee943141712439ac51d3e659efeeb2a6c1e6ef72e3785515",
+        "bounds": [
+          399,
+          209,
+          512,
+          344
+        ],
+        "covered_pixels": 5905,
+        "transparent_pixels": 230716,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 153,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0153_main.png",
+        "sha256": "74df6e105241459a7b7312c4833e65836ebc9025ecf442f2ccc2bf2aa292b655",
+        "rgba_sha256": "da873c05bd4eecb86edc98819f98cff97cd438690905cf321c2f2eaa1847071c",
+        "bounds": [
+          420,
+          240,
+          500,
+          363
+        ],
+        "covered_pixels": 3446,
+        "transparent_pixels": 233175
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0153_intrinsic.png",
+        "sha256": "efaecd3281d839f9c19a4f3fca08db3ffbbb2d90e2ffe1112139ad9204b205ad",
+        "rgba_sha256": "527bb6069c332e8284db95890107cca595a795134815e0f6c17de9136f4ef0f9",
+        "bounds": [
+          434,
+          224,
+          515,
+          356
+        ],
+        "covered_pixels": 3156,
+        "transparent_pixels": 233465,
+        "active": true
+      }
+    },
+    {
+      "source_frame": 154,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0154_main.png",
+        "sha256": "ca164828ee91c33f235709662798c1b4187c1e70243f6099e592565f5a3f0f6c",
+        "rgba_sha256": "1e9d03762a8253dd24528ccb621a0d3adf494aec9377e772be66eb293675e387",
+        "bounds": [
+          407,
+          210,
+          500,
+          363
+        ],
+        "covered_pixels": 3866,
+        "transparent_pixels": 232755
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0154_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 155,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0155_main.png",
+        "sha256": "61448a46075890b308fed224770eda6a42a337407967920363c3ee90618b3a01",
+        "rgba_sha256": "6550368619b055ee6d3588c0e112aa879367006ce9acc97cfcb0f9c153ee805c",
+        "bounds": [
+          382,
+          148,
+          487,
+          338
+        ],
+        "covered_pixels": 4175,
+        "transparent_pixels": 232446
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0155_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 156,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0156_main.png",
+        "sha256": "41822b816608808fd1ef497b5ff5cde4729eb7211b158b8cb962fc0c953dd00e",
+        "rgba_sha256": "de71064a1b1bed5a4cb6893e8188e1bbae7eb59a86f70056ab7ee4ed52f02884",
+        "bounds": [
+          337,
+          116,
+          471,
+          245
+        ],
+        "covered_pixels": 4587,
+        "transparent_pixels": 232034
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0156_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 157,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0157_main.png",
+        "sha256": "916137bbbf135deb097eb6f0308cac7c650f42e3832f88c4809a5d441b6bbd69",
+        "rgba_sha256": "67b65bc2baa0d3c1599ab07fdeac6dd12e1056fb5a93c0ce69f47bcff57bba4b",
+        "bounds": [
+          296,
+          102,
+          451,
+          250
+        ],
+        "covered_pixels": 4704,
+        "transparent_pixels": 231917
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0157_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 158,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0158_main.png",
+        "sha256": "e06fa07a4a643d0f8bbb02c21fc461e0ebe7c6ffbede02b922c6f15a7300d856",
+        "rgba_sha256": "4f73c322875c7958a7af4dc646e335205fc5a95e06c664cdf7bca5354d4991bc",
+        "bounds": [
+          268,
+          114,
+          409,
+          275
+        ],
+        "covered_pixels": 4692,
+        "transparent_pixels": 231929
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0158_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 159,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0159_main.png",
+        "sha256": "765ac8cef29ed9d5c6816e89c8c5805feac6791fe35cc9e831de0553fdfb2f36",
+        "rgba_sha256": "18098482e6528e7ecfa36e6a5544951b59af0a736cfd4720c9903ae8fdbba6d6",
+        "bounds": [
+          218,
+          166,
+          368,
+          304
+        ],
+        "covered_pixels": 4283,
+        "transparent_pixels": 232338
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0159_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 160,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0160_main.png",
+        "sha256": "1862db2a36ac87decc9f3a7ce5a634b4e3a5886e7ee11e8e2e36755e3ea1d424",
+        "rgba_sha256": "65e0d36febda91e9f1ce10f7313e13b0245348e98bfeed34df871383aec2bd91",
+        "bounds": [
+          208,
+          196,
+          339,
+          337
+        ],
+        "covered_pixels": 4443,
+        "transparent_pixels": 232178
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0160_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 161,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0161_main.png",
+        "sha256": "98ac2c15428a19f1bc75d3dd0a2979a94556d2e2d722d45bf3ee19d47994b44f",
+        "rgba_sha256": "c3b82cfb161588da6886fe334859552409858f055b2ea06577cf22c476eadbf1",
+        "bounds": [
+          188,
+          228,
+          323,
+          342
+        ],
+        "covered_pixels": 4493,
+        "transparent_pixels": 232128
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0161_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 162,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0162_main.png",
+        "sha256": "69069298783b9855e500d99dbb32394c12aa39bc4e2782131c94fafdaefce7b6",
+        "rgba_sha256": "1ce30821f032b02cf8341b378984717087582582dfd362a609c58fc5ecdb127d",
+        "bounds": [
+          188,
+          228,
+          317,
+          343
+        ],
+        "covered_pixels": 4494,
+        "transparent_pixels": 232127
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0162_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    },
+    {
+      "source_frame": 163,
+      "main": {
+        "path": "assets/enemy_layers/041/frame_0163_main.png",
+        "sha256": "dc0c1d25598b76501ea05f89e526bb76cbe48139aa71d252be644a5195888f45",
+        "rgba_sha256": "2dec3070064df25088e0e317595423047c7997de0816db21773ccc32e240cb2b",
+        "bounds": [
+          214,
+          210,
+          320,
+          342
+        ],
+        "covered_pixels": 4619,
+        "transparent_pixels": 232002
+      },
+      "intrinsic": {
+        "path": "assets/enemy_layers/041/frame_0163_intrinsic.png",
+        "sha256": "fe2e27a6bd0ea7ed5f1d590b27764acdb3afd0e81083fa50f9b8ed54ad120f10",
+        "rgba_sha256": "862f67aca00bca0c6df81b77c27ee447efeb85bdf35acb9d4a96655c7364f2ab",
+        "bounds": null,
+        "covered_pixels": 0,
+        "transparent_pixels": 236621,
+        "active": false
+      }
+    }
+  ],
+  "source_hashes": {
+    "GAME.exe": "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18",
+    "Fight_Role/041.CHR": "d0427095198fb28533c2a48d8f2ce22475faf13154386c7098e44053d12e5c32",
+    "Fight_Role/041.dgp": "c3dad87c15be05aded6f95356d73c8734f84e33299a5099626de704bb038ca52"
+  },
+  "evidence": [
+    "ev_e684765a5b552708f4e35b7fa0516950d8ef5d9e5acc0b9e4ddb0f7e3ff1a5cf",
+    "ev_0c237df7043928c88bbdebd562f666aa4b7f4201a779c0a793b1483939fd71d2",
+    "ev_a6647ea0bc3a48a670332ca03d6a4e02d7b145a407b5a5ad2dcfa4ed39b122d1"
+  ],
+  "limits": [
+    "Source main and intrinsic layers share one physical frame and origin.",
+    "Canvas additive blending and wall-clock timing are preview policies."
+  ]
+}

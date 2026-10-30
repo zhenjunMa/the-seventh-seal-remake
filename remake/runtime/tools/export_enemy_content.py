@@ -149,14 +149,23 @@ def prepare_role(ident, status):
             raise ValueError(f'Enemy {ident} skill {index}: unsupported native action command')
         handler = 'effect-carrier' if carrier else 'direct'
         retained = ai['skills'][index]
-        retained['battle_handler'] = handler
         if carrier:
-            if fixed[0x25] != 0 or fixed[0x32] & 15 not in (2, 3):
+            if fixed[0x32] & 15 not in (2, 3):
                 raise ValueError(f'Enemy {ident} skill {index}: unsupported carrier recovery targeting')
-            retained['effect_context'] = dict(effect_token=1, effect_source_skill_index=index,
-                effect_lookup='same-index-source-table',
-                evidence=['ev_dc019d336cb98549ccba8bab90528f5d4cb8a1d34fea55c99639941e188b6763',
-                          'ev_c9bbdef1c8377c5cb768f67c055aa4189564ec176aa68cd9b38b398e47bb0b9b'])
+            if fixed[0x25]:
+                # The same 50FA00 allied contact as player support: dormant
+                # +231 ID0/mode0, followed by positive 41E950 recovery.
+                hp_low, hp_high = struct.unpack_from('<ii', fixed, 0xab)
+                mp_low, mp_high = struct.unpack_from('<ii', fixed, 0xbb)
+                if fixed[0x25] != 1 or fixed[0x24] not in (0, 1) or effect[1] or fixed[0x232] or fixed[0x23c] or not (0 <= hp_low <= hp_high and 0 <= mp_low <= mp_high):
+                    raise ValueError(f'Enemy {ident} skill {index}: unsupported allied recovery payload')
+                handler = 'native-support'
+            else:
+                retained['effect_context'] = dict(effect_token=1, effect_source_skill_index=index,
+                    effect_lookup='same-index-source-table',
+                    evidence=['ev_dc019d336cb98549ccba8bab90528f5d4cb8a1d34fea55c99639941e188b6763',
+                              'ev_c9bbdef1c8377c5cb768f67c055aa4189564ec176aa68cd9b38b398e47bb0b9b'])
+        retained['battle_handler'] = handler
         view = enrich_sequence(c, d, index, handler=handler)
         for segment in view['segments']:
             segment['raw_hex'] = skill['actions'][segment['chr_record_index']]['raw_hex']
@@ -199,6 +208,19 @@ def export():
     player_blocks = player_status_blocks()
     extend_status_descriptors(status, {**player_blocks, **{key: block for value in prepared.values() for key, block in value[4].items()}}, sources)
     support_blocks = player_support_blocks()
+    for ident, (character, _, source_ai, *_) in prepared.items():
+        for index in source_ai['learned_indices']:
+            if source_ai['skills'][index]['battle_handler'] != 'native-support':
+                continue
+            skill = character.skills[index]
+            fixed = bytes.fromhex(skill['fixed_raw_hex'])
+            effect = fixed[0x231:0x2f7]
+            support_blocks[f'{ident}:{index}'] = dict(actor_id=ident, original_skill_index=index,
+                name=skill['name_cp936'], fixed_raw_hex=fixed.hex(), effect_raw_hex=effect.hex(),
+                effect_id_raw=effect[1], mode_raw=effect[0xb],
+                source=dict(path=f'Fight_Role/{ident}.CHR', sha256=character.sha256,
+                    fixed_offset=skill['offset'], block_offset=skill['offset']+0x231,
+                    fixed_bytes=0x41d, effect_bytes=0xc6))
     extend_status_descriptors(status, {key: block for key, block in support_blocks.items()
         if block['effect_id_raw'] and block['mode_raw'] in (0, 2)}, sources)
     # +231 is a separate contact payload and must not replace +16B records.

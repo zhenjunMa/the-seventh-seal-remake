@@ -16,7 +16,7 @@
     "chr_skills": 1948,
     "system_magic": 41,
     "items": 416,
-    "runtime_skills": 173
+    "runtime_skills": 182
   },
   "entries": {
     "roles": {
@@ -1354,8 +1354,8 @@
         "source": "Fight_Role/024.CHR",
         "definition": "data/library/roles.json#/roles/024",
         "native_slot": null,
-        "registered": false,
-        "runtime_side": null,
+        "registered": true,
+        "runtime_side": "enemy",
         "skills": [
           "024_0",
           "024_1",
@@ -1935,8 +1935,8 @@
         "source": "Fight_Role/041.CHR",
         "definition": "data/library/roles.json#/roles/041",
         "native_slot": null,
-        "registered": false,
-        "runtime_side": null,
+        "registered": true,
+        "runtime_side": "enemy",
         "skills": [
           "041_0",
           "041_1",
@@ -10656,7 +10656,7 @@
         "definition": "data/library/skills.json#/skills/024_14",
         "configuration_id": "024_14",
         "configuration": "data/config/skills.json#/entries/024_14",
-        "runtime_registered": false,
+        "runtime_registered": true,
         "authored_binding": false,
         "handler": null
       },
@@ -10670,7 +10670,7 @@
         "definition": "data/library/skills.json#/skills/024_15",
         "configuration_id": "024_15",
         "configuration": "data/config/skills.json#/entries/024_15",
-        "runtime_registered": false,
+        "runtime_registered": true,
         "authored_binding": false,
         "handler": null
       },
@@ -10698,7 +10698,7 @@
         "definition": "data/library/skills.json#/skills/024_17",
         "configuration_id": "024_17",
         "configuration": "data/config/skills.json#/entries/024_17",
-        "runtime_registered": false,
+        "runtime_registered": true,
         "authored_binding": false,
         "handler": null
       },
@@ -10712,7 +10712,7 @@
         "definition": "data/library/skills.json#/skills/024_18",
         "configuration_id": "024_18",
         "configuration": "data/config/skills.json#/entries/024_18",
-        "runtime_registered": false,
+        "runtime_registered": true,
         "authored_binding": false,
         "handler": null
       },
@@ -15934,7 +15934,7 @@
         "definition": "data/library/skills.json#/skills/041_14",
         "configuration_id": "041_14",
         "configuration": "data/config/skills.json#/entries/041_14",
-        "runtime_registered": false,
+        "runtime_registered": true,
         "authored_binding": false,
         "handler": null
       },
@@ -15948,7 +15948,7 @@
         "definition": "data/library/skills.json#/skills/041_15",
         "configuration_id": "041_15",
         "configuration": "data/config/skills.json#/entries/041_15",
-        "runtime_registered": false,
+        "runtime_registered": true,
         "authored_binding": false,
         "handler": null
       },
@@ -15962,7 +15962,7 @@
         "definition": "data/library/skills.json#/skills/041_16",
         "configuration_id": "041_16",
         "configuration": "data/config/skills.json#/entries/041_16",
-        "runtime_registered": false,
+        "runtime_registered": true,
         "authored_binding": false,
         "handler": null
       },
@@ -15976,7 +15976,7 @@
         "definition": "data/library/skills.json#/skills/041_17",
         "configuration_id": "041_17",
         "configuration": "data/config/skills.json#/entries/041_17",
-        "runtime_registered": false,
+        "runtime_registered": true,
         "authored_binding": false,
         "handler": null
       },
@@ -16032,7 +16032,7 @@
         "definition": "data/library/skills.json#/skills/041_21",
         "configuration_id": "041_21",
         "configuration": "data/config/skills.json#/entries/041_21",
-        "runtime_registered": false,
+        "runtime_registered": true,
         "authored_binding": false,
         "handler": null
       },
@@ -33466,7 +33466,7 @@
         "definition": "data/items.json#/definitions/245",
         "configuration": "data/config/items.json#/entries/245",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "crafting-material"
       },
       "246": {
         "id": 246,
@@ -35006,7 +35006,7 @@
         "definition": "data/items.json#/definitions/399",
         "configuration": "data/config/items.json#/entries/399",
         "source": "SYSTEM/Object.ITM",
-        "behavior": "source-only"
+        "behavior": "status-cure"
       },
       "400": {
         "id": 400,
@@ -46167,11 +46167,11 @@
     "data/library/roles.json": "c88f1459169e56a333ca0376a56bb66e7c6c9a18c5d2e8bf1b77b3c9d394d8a6",
     "data/library/skills.json": "91517d541e4d0fc36ffe3334c975634d718a2dcdd6af9f71a08019d4fcaa47e4",
     "data/library/magic.json": "2a0784270dcd6661e267c84caae37f959a1813045da44da46c3c8fde666d5812",
-    "data/items.json": "6ca42637d0de8b442b12b120897c418fc1145a5ddb1673bd27e94a04f4dda8d8",
-    "data/runtime_content.json": "d358feaa7d539630e43bcce1cf3cd1bcf8a1c8b74b8a010915f0de17437299f4",
-    "data/party_skills.json": "3d7b183df3a54c7e5757a3b7e125510924a8926b4e202a42a805fee1708fbaab",
-    "data/forest_ai.json": "40310ef434e32acd06c12c94cdb22a1019e22fddb9d83f07f23981d3759018c9",
-    "data/config/skills.json": "476e7c6b4dd6821a3ac24fbd38ac9dbde60a76a61f7450022a00e8b9b973af6b",
+    "data/items.json": "ceb5339a904f86d331ce18754a603f0f453264d1cdfeec04dd4e13c286a738e9",
+    "data/runtime_content.json": "1ef29fc9a223b695a8919638d0ae4615cfe80015be7ecaf9f1e3c0a442a6b572",
+    "data/party_skills.json": "764f205f693492e89d22f5e6b27013e7aee5aca064e53b2d2b4daac1ff291110",
+    "data/forest_ai.json": "24d582559e30b39ba960ca35d23658d7a0f0a74ef44ce7e60adfc4724f19ec4d",
+    "data/config/skills.json": "de2696e662f9cafecf01ae9cef6a2490958c3d07afe97776346a54b481895461",
     "data/config/items.json": "7103f7356567dfd41ecdb1ec9286d93f3ae45a6673eb565873018711055bfb23"
   }
 }

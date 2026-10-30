@@ -10,6 +10,11 @@
       "sha256": "9edcaed256e84ffe7f4f6502a58509a408bdaad23a3b5773e842edef10b0d104"
     },
     {
+      "id": "M01019",
+      "path": "data/maps/m01019.json",
+      "sha256": "7f04f8bc9c3e7bdbc164a6a2447ab8cb81432c4f8bf0ae31baddd3973a1f060f"
+    },
+    {
       "id": "M01020A",
       "path": "data/maps/m01020a.json",
       "sha256": "19ef58f3182a1c3b75bf11d10bf918f084cfb11ec804779f990003a617d9e222"
@@ -268,6 +273,51 @@
       "id": "M70076",
       "path": "data/maps/m70076.json",
       "sha256": "30ed60f64921b8c67eae539e05f515430d1eb422817956f8f90d2f80646294bf"
+    },
+    {
+      "id": "M70077-1",
+      "path": "data/maps/m70077-1.json",
+      "sha256": "0539ed9f9c8ebc083a7b4a432d24b8610b8d470d7043137f97e34143917aba62"
+    },
+    {
+      "id": "M70077-2",
+      "path": "data/maps/m70077-2.json",
+      "sha256": "548a3924834893b9d29fd56a83d5799ce3ab853458d530894614cc733f70b0fc"
+    },
+    {
+      "id": "M70077-3",
+      "path": "data/maps/m70077-3.json",
+      "sha256": "e7d17737433129404f5091386096f6110090ebf62b2b85f38dc5a0454b6b24ff"
+    },
+    {
+      "id": "M70077-4",
+      "path": "data/maps/m70077-4.json",
+      "sha256": "ee52e52800f25b81ebc481e90936a89c11702552642327aebeb8520143298968"
+    },
+    {
+      "id": "M70077",
+      "path": "data/maps/m70077.json",
+      "sha256": "905cb835971b4f33f3223d05c7ebf12e93844bc10b4256ff536cc8027c53622a"
+    },
+    {
+      "id": "M70078-1_1",
+      "path": "data/maps/m70078-1_1.json",
+      "sha256": "d11a8a579a9508da7d7f8dd064f912d83c1574887d466dc9edb597a9f8ef3660"
+    },
+    {
+      "id": "M70078-2_1",
+      "path": "data/maps/m70078-2_1.json",
+      "sha256": "57e571ed7a1f60bd7d8761eb313d6a78767ec8195dff90fa661c4113bdaebcc3"
+    },
+    {
+      "id": "M70078-3_1",
+      "path": "data/maps/m70078-3_1.json",
+      "sha256": "e90395620603ced54e34e6954050e7012fe912a07d736bdacb0e3d2ae2965db0"
+    },
+    {
+      "id": "M70078_2",
+      "path": "data/maps/m70078_2.json",
+      "sha256": "7c9241f91192edcaa7b6b9b8ffa5bb6ee71548f03fa8e70f07477a8c7be02cd8"
     },
     {
       "id": "M71010",
@@ -2598,7 +2648,7 @@
   "forest_battle_view": "data/enemy_battle_view.json",
   "scope": {
     "official_runtime_started": true,
-    "ready_exits": 119,
+    "ready_exits": 129,
     "source_backed_events": 0,
     "one_on_one_turn_sample": true,
     "full_combat": false,

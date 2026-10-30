@@ -126,8 +126,10 @@ def native_frame_sequence(raw_action: bytes, start: int, end: int, reverse: int,
             raise DGPError('Frame sequence leaves its DGP global frame pool')
         sequence = list(range(start, end))
     else:
-        count = u32(raw_action, 0x12)
-        if count > 0x5C or end > count:
+        # 50E980 indexes +16 with the CHR range, independently of +12's
+        # declared sequence count. Shipped024 ID4 reads five zero entries
+        # although its action4 declares two; all five repeat source frame37.
+        if end > 0x5C:
             raise DGPError('DGP explicit sequence exceeds retained +0x16 table')
         sequence = list(raw_action[0x16 + start:0x16 + end])
     # 50E980 writes action+72 plus the CHR/local frame directly (50F2D7-E6).

@@ -1663,6 +1663,87 @@
       },
       "parameters": {}
     },
+    "024_14": {
+      "name": "死破斩",
+      "owner": {
+        "role_id": "024",
+        "skill_index": 14,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "024_15": {
+      "name": "怨杀斩",
+      "owner": {
+        "role_id": "024",
+        "skill_index": 15,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "024_17": {
+      "name": "死破斩翔",
+      "owner": {
+        "role_id": "024",
+        "skill_index": 17,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "024_18": {
+      "name": "怨杀斩落",
+      "owner": {
+        "role_id": "024",
+        "skill_index": 18,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "041_14": {
+      "name": "",
+      "owner": {
+        "role_id": "041",
+        "skill_index": 14,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "041_15": {
+      "name": "",
+      "owner": {
+        "role_id": "041",
+        "skill_index": 15,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "041_16": {
+      "name": "",
+      "owner": {
+        "role_id": "041",
+        "skill_index": 16,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "041_17": {
+      "name": "",
+      "owner": {
+        "role_id": "041",
+        "skill_index": 17,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "041_21": {
+      "name": "回复药",
+      "owner": {
+        "role_id": "041",
+        "skill_index": 21,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
     "001_0": {
       "name": "",
       "owner": {
@@ -4993,47 +5074,11 @@
       },
       "parameters": {}
     },
-    "024_14": {
-      "name": "死破斩",
-      "owner": {
-        "role_id": "024",
-        "skill_index": 14,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "024_15": {
-      "name": "怨杀斩",
-      "owner": {
-        "role_id": "024",
-        "skill_index": 15,
-        "side": "source"
-      },
-      "parameters": {}
-    },
     "024_16": {
       "name": "灵杀斩",
       "owner": {
         "role_id": "024",
         "skill_index": 16,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "024_17": {
-      "name": "死破斩翔",
-      "owner": {
-        "role_id": "024",
-        "skill_index": 17,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "024_18": {
-      "name": "怨杀斩落",
-      "owner": {
-        "role_id": "024",
-        "skill_index": 18,
         "side": "source"
       },
       "parameters": {}
@@ -8341,42 +8386,6 @@
       },
       "parameters": {}
     },
-    "041_14": {
-      "name": "",
-      "owner": {
-        "role_id": "041",
-        "skill_index": 14,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "041_15": {
-      "name": "",
-      "owner": {
-        "role_id": "041",
-        "skill_index": 15,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "041_16": {
-      "name": "",
-      "owner": {
-        "role_id": "041",
-        "skill_index": 16,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "041_17": {
-      "name": "",
-      "owner": {
-        "role_id": "041",
-        "skill_index": 17,
-        "side": "source"
-      },
-      "parameters": {}
-    },
     "041_18": {
       "name": "",
       "owner": {
@@ -8400,15 +8409,6 @@
       "owner": {
         "role_id": "041",
         "skill_index": 20,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "041_21": {
-      "name": "回复药",
-      "owner": {
-        "role_id": "041",
-        "skill_index": 21,
         "side": "source"
       },
       "parameters": {}

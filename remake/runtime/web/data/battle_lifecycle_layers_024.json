@@ -1,0 +1,822 @@
+{
+  "schema": "seventh-seal-native-layer-bank",
+  "version": 1,
+  "role_id": "024",
+  "frame_width": 539,
+  "frame_height": 439,
+  "anchor": {
+    "x": 266,
+    "y": 324
+  },
+  "source_frame_pool_count": 202,
+  "frames": [
+    {
+      "source_frame": 20,
+      "main": {
+        "path": "assets/battle_lifecycle/024/frame_0020_main.png",
+        "sha256": "0bd3ef32821331a0258b8b0dbdec5a3b3cab78690e93a4e004aeca5f474384b5",
+        "width": 539,
+        "height": 439
+      },
+      "intrinsic": {
+        "path": "assets/battle_lifecycle/024/frame_0020_intrinsic.png",
+        "sha256": "5cf003f44e88c8a38c7aa3c4f6d5347a0f5da08f105b01c4074b67efd2150e4f",
+        "width": 539,
+        "height": 439,
+        "active": true,
+        "blend": "lighter"
+      }
+    },
+    {
+      "source_frame": 21,
+      "main": {
+        "path": "assets/battle_lifecycle/024/frame_0021_main.png",
+        "sha256": "630b43d68f019c7ca7f17337e371c7c24e6f035dd4e9085783ad6fe35582e697",
+        "width": 539,
+        "height": 439
+      },
+      "intrinsic": {
+        "path": "assets/battle_lifecycle/024/frame_0021_intrinsic.png",
+        "sha256": "8dee944a232cc78da7c8ff833511eb05325afb83244f02aa74c1e9670fe3a03f",
+        "width": 539,
+        "height": 439,
+        "active": true,
+        "blend": "lighter"
+      }
+    },
+    {
+      "source_frame": 22,
+      "main": {
+        "path": "assets/battle_lifecycle/024/frame_0022_main.png",
+        "sha256": "a3e619b83ed969741d87d13dfb3e1d6adf8a528f87705a1a834e5dff1d099812",
+        "width": 539,
+        "height": 439
+      },
+      "intrinsic": {
+        "path": "assets/battle_lifecycle/024/frame_0022_intrinsic.png",
+        "sha256": "3eb89b1ab046a32e159d74cf4aaaec25a4b653e1ec105552cc203b3d53eed887",
+        "width": 539,
+        "height": 439,
+        "active": true,
+        "blend": "lighter"
+      }
+    },
+    {
+      "source_frame": 23,
+      "main": {
+        "path": "assets/battle_lifecycle/024/frame_0023_main.png",
+        "sha256": "e06a8da71e90cd288d43a5385eb1010e8dadbfbe0da1fde877fbef2dd811e80e",
+        "width": 539,
+        "height": 439
+      },
+      "intrinsic": {
+        "path": "assets/battle_lifecycle/024/frame_0023_intrinsic.png",
+        "sha256": "d3f31c0bd399ff6144dd22614065ab5030ee75ab289a60579f2a59ad5908fc51",
+        "width": 539,
+        "height": 439,
+        "active": true,
+        "blend": "lighter"
+      }
+    },
+    {
+      "source_frame": 24,
+      "main": {
+        "path": "assets/battle_lifecycle/024/frame_0024_main.png",
+        "sha256": "2fdfa43d4f0d6c6623caf9da63016fb62695a2772ea974e4bb08f867960bdf88",
+        "width": 539,
+        "height": 439
+      },
+      "intrinsic": {
+        "path": "assets/battle_lifecycle/024/frame_0024_intrinsic.png",
+        "sha256": "e5497569a93cafe3485d24531598a8decf0241ffb0e58c4d915014dd2e8a2b97",
+        "width": 539,
+        "height": 439,
+        "active": true,
+        "blend": "lighter"
+      }
+    },
+    {
+      "source_frame": 25,
+      "main": {
+        "path": "assets/battle_lifecycle/024/frame_0025_main.png",
+        "sha256": "6eb16d35d0d6dfd8a4134bf6919425b593547a85f0152608899ee6e385d063aa",
+        "width": 539,
+        "height": 439
+      },
+      "intrinsic": {
+        "path": "assets/battle_lifecycle/024/frame_0025_intrinsic.png",
+        "sha256": "0331dcc9e123f27db8f3bc8ed1b4776e356790cbd6b9682e1b9c77f25cce84bc",
+        "width": 539,
+        "height": 439,
+        "active": true,
+        "blend": "lighter"
+      }
+    },
+    {
+      "source_frame": 26,
+      "main": {
+        "path": "assets/battle_lifecycle/024/frame_0026_main.png",
+        "sha256": "ef86951e3e7e7751f560c85934f848110c2327130eb1e3ae9cc79e56f6d26ccc",
+        "width": 539,
+        "height": 439
+      },
+      "intrinsic": {
+        "path": "assets/battle_lifecycle/024/frame_0026_intrinsic.png",
+        "sha256": "a8013e11897c85d3b1d880769755e162b8a9ba37a71280929b26d256fafc9abf",
+        "width": 539,
+        "height": 439,
+        "active": true,
+        "blend": "lighter"
+      }
+    },
+    {
+      "source_frame": 27,
+      "main": {
+        "path": "assets/battle_lifecycle/024/frame_0027_main.png",
+        "sha256": "7ea413628efb23ddcb4a9597c4f9f4c28fa561466b28dd2dc35caa430c3973ed",
+        "width": 539,
+        "height": 439
+      },
+      "intrinsic": {
+        "path": "assets/battle_lifecycle/024/frame_0027_intrinsic.png",
+        "sha256": "a22deae5fe1776d36d7a3f436d14016f54514fcf2242d0892813adb11233991e",
+        "width": 539,
+        "height": 439,
+        "active": true,
+        "blend": "lighter"
+      }
+    },
+    {
+      "source_frame": 28,
+      "main": {
+        "path": "assets/battle_lifecycle/024/frame_0028_main.png",
+        "sha256": "69b3473d7e338dd1e65d781e0a47c119b6aa14626495cfea8869c5ad90a1ec5b",
+        "width": 539,
+        "height": 439
+      },
+      "intrinsic": {
+        "path": "assets/battle_lifecycle/024/frame_0028_intrinsic.png",
+        "sha256": "262c006cfe7f21f34c29668ee359eec61ed9829b5e1edd04418f54134cf7fbcd",
+        "width": 539,
+        "height": 439,
+        "active": true,
+        "blend": "lighter"
+      }
+    },
+    {
+      "source_frame": 29,
+      "main": {
+        "path": "assets/battle_lifecycle/024/frame_0029_main.png",
+        "sha256": "aa1daebb70c48176fe0b4ce39d75df791ec3bac7c27529e44da4be854a7cb818",
+        "width": 539,
+        "height": 439
+      },
+      "intrinsic": {
+        "path": "assets/battle_lifecycle/024/frame_0029_intrinsic.png",
+        "sha256": "988d482bf7e24df7965ae2d5d3a8a92c66a491aa1c5d258ba4243bd941602dcf",
+        "width": 539,
+        "height": 439,
+        "active": true,
+        "blend": "lighter"
+      }
+    },
+    {
+      "source_frame": 30,
+      "main": {
+        "path": "assets/battle_lifecycle/024/frame_0030_main.png",
+        "sha256": "d5818204bc0779f36f03f32316f887a85bc2f8442b04de4030b785fbd8e9fc0f",
+        "width": 539,
+        "height": 439
+      },
+      "intrinsic": {
+        "path": "assets/battle_lifecycle/024/frame_0030_intrinsic.png",
+        "sha256": "cdadac9aa19e707ce3eb550c2d4a7935dba3675521f48a4cb43fff6dbad706aa",
+        "width": 539,
+        "height": 439,
+        "active": true,
+        "blend": "lighter"
+      }
+    },
+    {
+      "source_frame": 31,
+      "main": {
+        "path": "assets/battle_lifecycle/024/frame_0031_main.png",
+        "sha256": "763012c1c6409668e65a291263228c7ea9b75630396c266fb64444a2793b8499",
+        "width": 539,
+        "height": 439
+      },
+      "intrinsic": {
+        "path": "assets/battle_lifecycle/024/frame_0031_intrinsic.png",
+        "sha256": "94d64bd17ba477b13823dc6afa3de0f6994d5b91f93838651b6fb580a3dbf462",
+        "width": 539,
+        "height": 439,
+        "active": true,
+        "blend": "lighter"
+      }
+    },
+    {
+      "source_frame": 32,
+      "main": {
+        "path": "assets/battle_lifecycle/024/frame_0032_main.png",
+        "sha256": "9c99f27f19f6faab409f7e849e0b8be99ce351a86cb3d5fc4df525363a9b8413",
+        "width": 539,
+        "height": 439
+      },
+      "intrinsic": {
+        "path": "assets/battle_lifecycle/024/frame_0032_intrinsic.png",
+        "sha256": "68724adefab81083db3bb8a3395179ca7d501b72bb9c4dd955400791203f589a",
+        "width": 539,
+        "height": 439,
+        "active": true,
+        "blend": "lighter"
+      }
+    },
+    {
+      "source_frame": 33,
+      "main": {
+        "path": "assets/battle_lifecycle/024/frame_0033_main.png",
+        "sha256": "e26848a361a287a3d84793def7c8e616e60bb3e1a59732296c1facb8ab51f9f2",
+        "width": 539,
+        "height": 439
+      },
+      "intrinsic": {
+        "path": "assets/battle_lifecycle/024/frame_0033_intrinsic.png",
+        "sha256": "a826be7a987a9110d97328dc6e5f6da04f57419979dfe25756ee1e0e0c56e5e4",
+        "width": 539,
+        "height": 439,
+        "active": true,
+        "blend": "lighter"
+      }
+    },
+    {
+      "source_frame": 34,
+      "main": {
+        "path": "assets/battle_lifecycle/024/frame_0034_main.png",
+        "sha256": "4d96bf8f01132ec418185a90f0b2a2b2aca6a7c1d7903f487b781f82ce7d40ff",
+        "width": 539,
+        "height": 439
+      },
+      "intrinsic": {
+        "path": "assets/battle_lifecycle/024/frame_0034_intrinsic.png",
+        "sha256": "013d85f91bd1e55a7942441e72a1bfbad0fda52013a65145b94956b3cf2c7146",
+        "width": 539,
+        "height": 439,
+        "active": true,
+        "blend": "lighter"
+      }
+    },
+    {
+      "source_frame": 35,
+      "main": {
+        "path": "assets/battle_lifecycle/024/frame_0035_main.png",
+        "sha256": "18c41c8918befcf7d74dbcaab20ab75d325391e0dd59152d0ae8aaf65260307d",
+        "width": 539,
+        "height": 439
+      },
+      "intrinsic": {
+        "path": "assets/battle_lifecycle/024/frame_0035_intrinsic.png",
+        "sha256": "2d160df98650b42376472a92d967dcd3dcab9d356320e381aad8339e0b05a8d0",
+        "width": 539,
+        "height": 439,
+        "active": true,
+        "blend": "lighter"
+      }
+    },
+    {
+      "source_frame": 36,
+      "main": {
+        "path": "assets/battle_lifecycle/024/frame_0036_main.png",
+        "sha256": "406905dd9c2518fa2e54dfc7fdbe613eb5d58035e6a7575eaeafc0df5c5ff938",
+        "width": 539,
+        "height": 439
+      },
+      "intrinsic": {
+        "path": "assets/battle_lifecycle/024/frame_0036_intrinsic.png",
+        "sha256": "f4fa7dd7b6beca4f24e5090970c34a716eea0139bf1469a18105e4c09ef7fc33",
+        "width": 539,
+        "height": 439,
+        "active": true,
+        "blend": "lighter"
+      }
+    },
+    {
+      "source_frame": 37,
+      "main": {
+        "path": "assets/battle_lifecycle/024/frame_0037_main.png",
+        "sha256": "1f7a04dab4facca59b510973442d333a1a751c9fab0affb030e6142d499adde6",
+        "width": 539,
+        "height": 439
+      },
+      "intrinsic": {
+        "path": "assets/battle_lifecycle/024/frame_0037_intrinsic.png",
+        "sha256": "ee1bd13599159634c5a3ff508dd307c759f0d30294f5ab96d4dc1fe4678cf278",
+        "width": 539,
+        "height": 439,
+        "active": true,
+        "blend": "lighter"
+      }
+    },
+    {
+      "source_frame": 42,
+      "main": {
+        "path": "assets/battle_lifecycle/024/frame_0042_main.png",
+        "sha256": "27cf6e45dbfe20645d22c53e10dc4803ff7fe0da83c2f6569413f7f084bb7718",
+        "width": 539,
+        "height": 439
+      },
+      "intrinsic": {
+        "path": "assets/battle_lifecycle/024/frame_0042_intrinsic.png",
+        "sha256": "b0b53813d7a93668edb0cab3a517ff9f4cb4663abc810995a132b52ef0dd0c9c",
+        "width": 539,
+        "height": 439,
+        "active": true,
+        "blend": "lighter"
+      }
+    },
+    {
+      "source_frame": 43,
+      "main": {
+        "path": "assets/battle_lifecycle/024/frame_0043_main.png",
+        "sha256": "6005ddabe78f0ae009fd448ac2534cbbe03c19a1401c67fa40cfb32935d67f56",
+        "width": 539,
+        "height": 439
+      },
+      "intrinsic": {
+        "path": "assets/battle_lifecycle/024/frame_0043_intrinsic.png",
+        "sha256": "e92c4ae158b1e4bd0e0dfa534452a937acc06f7fbd84218dc16de73566a7f55e",
+        "width": 539,
+        "height": 439,
+        "active": true,
+        "blend": "lighter"
+      }
+    },
+    {
+      "source_frame": 44,
+      "main": {
+        "path": "assets/battle_lifecycle/024/frame_0044_main.png",
+        "sha256": "d31c36dc749fa8297a00450e6c3bc7350be9265ec6be85b518a115f3cf3ecf26",
+        "width": 539,
+        "height": 439
+      },
+      "intrinsic": {
+        "path": "assets/battle_lifecycle/024/frame_0044_intrinsic.png",
+        "sha256": "7d7035b27ab6e26af18e30d95a75c3dbc6f4e5ae0308ff2a0e6d5977bfe07797",
+        "width": 539,
+        "height": 439,
+        "active": true,
+        "blend": "lighter"
+      }
+    },
+    {
+      "source_frame": 45,
+      "main": {
+        "path": "assets/battle_lifecycle/024/frame_0045_main.png",
+        "sha256": "33f293cef531e1fec491a0db2349b9b93972503bb12124cba8f105a93f9387e4",
+        "width": 539,
+        "height": 439
+      },
+      "intrinsic": {
+        "path": "assets/battle_lifecycle/024/frame_0045_intrinsic.png",
+        "sha256": "6d66d2ee883d75de24bd097da5928900eab14d7c110d5e996a3803b0e4db282b",
+        "width": 539,
+        "height": 439,
+        "active": true,
+        "blend": "lighter"
+      }
+    },
+    {
+      "source_frame": 46,
+      "main": {
+        "path": "assets/battle_lifecycle/024/frame_0046_main.png",
+        "sha256": "eb786e7ed51981114e960fe4b743c70f133bb8007ebdda79f2ad336cc312c7bb",
+        "width": 539,
+        "height": 439
+      },
+      "intrinsic": {
+        "path": "assets/battle_lifecycle/024/frame_0046_intrinsic.png",
+        "sha256": "e48fb60a963ebba69f372cc6f416e76e42113a5082d02781667661ccd6a08348",
+        "width": 539,
+        "height": 439,
+        "active": true,
+        "blend": "lighter"
+      }
+    },
+    {
+      "source_frame": 47,
+      "main": {
+        "path": "assets/battle_lifecycle/024/frame_0047_main.png",
+        "sha256": "d39ee0c826961c7c51e3c059293360a7f06c1809522d3cc3cd111e3a23da0b25",
+        "width": 539,
+        "height": 439
+      },
+      "intrinsic": {
+        "path": "assets/battle_lifecycle/024/frame_0047_intrinsic.png",
+        "sha256": "28b85dd392d0d9e31f993b5465f1449ad21ea4d09427a7ce87899ea350542780",
+        "width": 539,
+        "height": 439,
+        "active": true,
+        "blend": "lighter"
+      }
+    },
+    {
+      "source_frame": 48,
+      "main": {
+        "path": "assets/battle_lifecycle/024/frame_0048_main.png",
+        "sha256": "38463cef47f830c47d937f5fe638204b09313d5ff0da9cff1bb26e7258a18acb",
+        "width": 539,
+        "height": 439
+      },
+      "intrinsic": {
+        "path": "assets/battle_lifecycle/024/frame_0048_intrinsic.png",
+        "sha256": "b151fa9ebeec2125cdc64f51ee973db61c54457c6f7b0c3a3113cea56134a00e",
+        "width": 539,
+        "height": 439,
+        "active": true,
+        "blend": "lighter"
+      }
+    },
+    {
+      "source_frame": 49,
+      "main": {
+        "path": "assets/battle_lifecycle/024/frame_0049_main.png",
+        "sha256": "c1a23f129dc5de596628cfddbc9cf82e8126772ee6f3154621a69d61d1a63bfb",
+        "width": 539,
+        "height": 439
+      },
+      "intrinsic": {
+        "path": "assets/battle_lifecycle/024/frame_0049_intrinsic.png",
+        "sha256": "6f55ac75070356c068c7c53d80c125a363218aaf7ab8a3117729b82efe01fa5b",
+        "width": 539,
+        "height": 439,
+        "active": true,
+        "blend": "lighter"
+      }
+    },
+    {
+      "source_frame": 50,
+      "main": {
+        "path": "assets/battle_lifecycle/024/frame_0050_main.png",
+        "sha256": "7aba487b643691565072d391ff0c671aceef55d729a56ebda9fb4eee86014147",
+        "width": 539,
+        "height": 439
+      },
+      "intrinsic": {
+        "path": "assets/battle_lifecycle/024/frame_0050_intrinsic.png",
+        "sha256": "a816f6a9168401c6ff863a4c740f4ffd7ea791bca59fe99767f2b928c1201668",
+        "width": 539,
+        "height": 439,
+        "active": true,
+        "blend": "lighter"
+      }
+    },
+    {
+      "source_frame": 55,
+      "main": {
+        "path": "assets/battle_lifecycle/024/frame_0055_main.png",
+        "sha256": "fdbcc516fa5b71ec6823a69b892ed7e37add085f1cf78ebb4fbb97e0d2fefb88",
+        "width": 539,
+        "height": 439
+      },
+      "intrinsic": {
+        "path": "assets/battle_lifecycle/024/frame_0055_intrinsic.png",
+        "sha256": "db43fb3238bcd11a038d048f089d39cea9239531e44ff898196cb818fca1eea6",
+        "width": 539,
+        "height": 439,
+        "active": true,
+        "blend": "lighter"
+      }
+    },
+    {
+      "source_frame": 56,
+      "main": {
+        "path": "assets/battle_lifecycle/024/frame_0056_main.png",
+        "sha256": "0960cca41c996152cfe21ef352c87c8449bdfcd134a1f5d87160f043e090ac78",
+        "width": 539,
+        "height": 439
+      },
+      "intrinsic": {
+        "path": "assets/battle_lifecycle/024/frame_0056_intrinsic.png",
+        "sha256": "847bab35e5c49f3479bc10dfbe910ccf82fcde13b0610e7dc3d235e1d93dd49e",
+        "width": 539,
+        "height": 439,
+        "active": true,
+        "blend": "lighter"
+      }
+    },
+    {
+      "source_frame": 57,
+      "main": {
+        "path": "assets/battle_lifecycle/024/frame_0057_main.png",
+        "sha256": "9d1c96c92c666bd0e19654523f513f7596808558d4bc8894f136fc89dcef423a",
+        "width": 539,
+        "height": 439
+      },
+      "intrinsic": {
+        "path": "assets/battle_lifecycle/024/frame_0057_intrinsic.png",
+        "sha256": "96aeda9f280fcf155b502f263f4f1a60ca6297602b8e8274063e6bc018febf02",
+        "width": 539,
+        "height": 439,
+        "active": true,
+        "blend": "lighter"
+      }
+    },
+    {
+      "source_frame": 58,
+      "main": {
+        "path": "assets/battle_lifecycle/024/frame_0058_main.png",
+        "sha256": "6292a43158b23c857576608c92db6c917a97b973ca59e7d024a497b2713df901",
+        "width": 539,
+        "height": 439
+      },
+      "intrinsic": {
+        "path": "assets/battle_lifecycle/024/frame_0058_intrinsic.png",
+        "sha256": "21e8b42d15c0984010edf34e47e40fabd073eef6b99b689a48a01109fc3f7abb",
+        "width": 539,
+        "height": 439,
+        "active": true,
+        "blend": "lighter"
+      }
+    },
+    {
+      "source_frame": 59,
+      "main": {
+        "path": "assets/battle_lifecycle/024/frame_0059_main.png",
+        "sha256": "ce4abb376e760df3a3209a1dbb5948e7d1d68daa243d217e709093d22c1176db",
+        "width": 539,
+        "height": 439
+      },
+      "intrinsic": {
+        "path": "assets/battle_lifecycle/024/frame_0059_intrinsic.png",
+        "sha256": "0e3e3427326c6d87c928830a4d809dfeaf7ee71c03da3bb8276c7cf3ebaa3014",
+        "width": 539,
+        "height": 439,
+        "active": true,
+        "blend": "lighter"
+      }
+    },
+    {
+      "source_frame": 60,
+      "main": {
+        "path": "assets/battle_lifecycle/024/frame_0060_main.png",
+        "sha256": "48f8309ff90314de2a3d0a693bbcd870d87be686ca824ddc1a035d66f678bfcb",
+        "width": 539,
+        "height": 439
+      },
+      "intrinsic": {
+        "path": "assets/battle_lifecycle/024/frame_0060_intrinsic.png",
+        "sha256": "a7465ceee8fa120e9b7fd855964dd806271b807fc9cc084966484144952f203f",
+        "width": 539,
+        "height": 439,
+        "active": true,
+        "blend": "lighter"
+      }
+    },
+    {
+      "source_frame": 61,
+      "main": {
+        "path": "assets/battle_lifecycle/024/frame_0061_main.png",
+        "sha256": "b5db80dfd322a34ec54f8106e277605c270d98dca8eca5810b16ecd0cc757c63",
+        "width": 539,
+        "height": 439
+      },
+      "intrinsic": {
+        "path": "assets/battle_lifecycle/024/frame_0061_intrinsic.png",
+        "sha256": "a69f46748a7e5ac4ecdb643609a6dcd69df45051a266ca28fe03fbfdd03376b7",
+        "width": 539,
+        "height": 439,
+        "active": true,
+        "blend": "lighter"
+      }
+    },
+    {
+      "source_frame": 62,
+      "main": {
+        "path": "assets/battle_lifecycle/024/frame_0062_main.png",
+        "sha256": "6c9d91e3e78a6c132706db435c2d0db178fa577b21b94db717aa912f52a03b32",
+        "width": 539,
+        "height": 439
+      },
+      "intrinsic": {
+        "path": "assets/battle_lifecycle/024/frame_0062_intrinsic.png",
+        "sha256": "d857513a2310b469dca406d856b6b88f4f62522b87c61880631756b5f2360b24",
+        "width": 539,
+        "height": 439,
+        "active": true,
+        "blend": "lighter"
+      }
+    },
+    {
+      "source_frame": 63,
+      "main": {
+        "path": "assets/battle_lifecycle/024/frame_0063_main.png",
+        "sha256": "3a187c71c0121a6044f86dce8c22face457fb2205152ad91ec247c815c29576f",
+        "width": 539,
+        "height": 439
+      },
+      "intrinsic": {
+        "path": "assets/battle_lifecycle/024/frame_0063_intrinsic.png",
+        "sha256": "16b612d86b8776f445bd3d0625cac415158b21c7c901ec84805478c10f342013",
+        "width": 539,
+        "height": 439,
+        "active": true,
+        "blend": "lighter"
+      }
+    },
+    {
+      "source_frame": 64,
+      "main": {
+        "path": "assets/battle_lifecycle/024/frame_0064_main.png",
+        "sha256": "ec8f981d9b55d43586e987c8c7a19fc06c0b4c35c6f7f63a2f1b2787e9432c2a",
+        "width": 539,
+        "height": 439
+      },
+      "intrinsic": {
+        "path": "assets/battle_lifecycle/024/frame_0064_intrinsic.png",
+        "sha256": "18b6f5723bd047ed65007f700b9e031e7c65c90351c90c817854483f5bba525d",
+        "width": 539,
+        "height": 439,
+        "active": true,
+        "blend": "lighter"
+      }
+    },
+    {
+      "source_frame": 65,
+      "main": {
+        "path": "assets/battle_lifecycle/024/frame_0065_main.png",
+        "sha256": "dcdacfa12dd8269e2f2e4bf2a8bc5d8ebd91a414ee2b27c53804dd73fb0005eb",
+        "width": 539,
+        "height": 439
+      },
+      "intrinsic": {
+        "path": "assets/battle_lifecycle/024/frame_0065_intrinsic.png",
+        "sha256": "6dd7b7dffe855f44024bf8ba103edf14d8ec286c087a4216c357f2a188dc6337",
+        "width": 539,
+        "height": 439,
+        "active": true,
+        "blend": "lighter"
+      }
+    },
+    {
+      "source_frame": 66,
+      "main": {
+        "path": "assets/battle_lifecycle/024/frame_0066_main.png",
+        "sha256": "abdb4b073f526c2515431994f7ec5befafa1e710b94b83bc27216c776413a0fc",
+        "width": 539,
+        "height": 439
+      },
+      "intrinsic": {
+        "path": "assets/battle_lifecycle/024/frame_0066_intrinsic.png",
+        "sha256": "299fb5570a35ea2417992093fa77cfcdf7a776f3de80a2dc51f6220a6a63a60d",
+        "width": 539,
+        "height": 439,
+        "active": true,
+        "blend": "lighter"
+      }
+    },
+    {
+      "source_frame": 67,
+      "main": {
+        "path": "assets/battle_lifecycle/024/frame_0067_main.png",
+        "sha256": "d7362711f550fabcf23fe7b954e7610a917ebca0cf3c2ae83bcc852c1029ce21",
+        "width": 539,
+        "height": 439
+      },
+      "intrinsic": {
+        "path": "assets/battle_lifecycle/024/frame_0067_intrinsic.png",
+        "sha256": "d47b25029c476f57ed64897794f1281aa9ffa0e7dada9c9d247f3a51bcd7bc8e",
+        "width": 539,
+        "height": 439,
+        "active": true,
+        "blend": "lighter"
+      }
+    },
+    {
+      "source_frame": 68,
+      "main": {
+        "path": "assets/battle_lifecycle/024/frame_0068_main.png",
+        "sha256": "6eefdc66fd530a937c04ab8ccc992b4a3617588fcacb17d42272db9272642838",
+        "width": 539,
+        "height": 439
+      },
+      "intrinsic": {
+        "path": "assets/battle_lifecycle/024/frame_0068_intrinsic.png",
+        "sha256": "6cadef2451084eba57556e5b4389744448a4b06add42342b6c21b254926026b4",
+        "width": 539,
+        "height": 439,
+        "active": true,
+        "blend": "lighter"
+      }
+    },
+    {
+      "source_frame": 69,
+      "main": {
+        "path": "assets/battle_lifecycle/024/frame_0069_main.png",
+        "sha256": "0c5ba90bba70e4fc4b80acd46cb10a0b905fae0d258265ab1e442a37bcba2a57",
+        "width": 539,
+        "height": 439
+      },
+      "intrinsic": {
+        "path": "assets/battle_lifecycle/024/frame_0069_intrinsic.png",
+        "sha256": "a8c57d79b4a8a0f88b1f0e74a838be99d86451dfe8bb3f2e3659745aee4501cd",
+        "width": 539,
+        "height": 439,
+        "active": true,
+        "blend": "lighter"
+      }
+    },
+    {
+      "source_frame": 70,
+      "main": {
+        "path": "assets/battle_lifecycle/024/frame_0070_main.png",
+        "sha256": "819a9be139273d36300a1d151cfb3054522d080ffe34cd053fca1dcafaaef38a",
+        "width": 539,
+        "height": 439
+      },
+      "intrinsic": {
+        "path": "assets/battle_lifecycle/024/frame_0070_intrinsic.png",
+        "sha256": "404d70f5a81dfc97ce0b90d1f21f793617b9b29dc2959583a4df89a03fb2de2d",
+        "width": 539,
+        "height": 439,
+        "active": true,
+        "blend": "lighter"
+      }
+    },
+    {
+      "source_frame": 98,
+      "main": {
+        "path": "assets/battle_lifecycle/024/frame_0098_main.png",
+        "sha256": "4e7617641803646669a18353bdce8978496eb1945255ecfd20feaba3c505a893",
+        "width": 539,
+        "height": 439
+      },
+      "intrinsic": {
+        "path": "assets/battle_lifecycle/024/frame_0098_intrinsic.png",
+        "sha256": "2077d29ce1bcc2eec5d6496a5ee0380ca2c92165064428533f49710a344b587a",
+        "width": 539,
+        "height": 439,
+        "active": true,
+        "blend": "lighter"
+      }
+    },
+    {
+      "source_frame": 99,
+      "main": {
+        "path": "assets/battle_lifecycle/024/frame_0099_main.png",
+        "sha256": "7c460dbd19918c6ac33a7d109ca22c56e8e672872990d2c6e4e91998fb665dd2",
+        "width": 539,
+        "height": 439
+      },
+      "intrinsic": {
+        "path": "assets/battle_lifecycle/024/frame_0099_intrinsic.png",
+        "sha256": "3c6b11d6cbc64c59d3d7d3e11bd401da61d48c7cd880343cd28ea7f431a50342",
+        "width": 539,
+        "height": 439,
+        "active": true,
+        "blend": "lighter"
+      }
+    },
+    {
+      "source_frame": 100,
+      "main": {
+        "path": "assets/battle_lifecycle/024/frame_0100_main.png",
+        "sha256": "3cce0e4c328e9d4accabb64449d2f692f35117cef4570726a0efd8abad02eaa5",
+        "width": 539,
+        "height": 439
+      },
+      "intrinsic": {
+        "path": "assets/battle_lifecycle/024/frame_0100_intrinsic.png",
+        "sha256": "f8121c80d43b9df7df6bff45ea256cc334b9bcf415c92b3ba4f5127c016338b3",
+        "width": 539,
+        "height": 439,
+        "active": true,
+        "blend": "lighter"
+      }
+    },
+    {
+      "source_frame": 101,
+      "main": {
+        "path": "assets/battle_lifecycle/024/frame_0101_main.png",
+        "sha256": "5ce86c20781c6c8e46f47b7b14d9e49243f29ce155a5cda8aea7e04dc644f8c9",
+        "width": 539,
+        "height": 439
+      },
+      "intrinsic": {
+        "path": "assets/battle_lifecycle/024/frame_0101_intrinsic.png",
+        "sha256": "881ac70a83327901fc861260292c9ea396161da4e212a942c05a3b734cf15211",
+        "width": 539,
+        "height": 439,
+        "active": true,
+        "blend": "lighter"
+      }
+    }
+  ],
+  "source_hashes": {
+    "Fight_Role/024.CHR": "561e1defb159f9815a8538ff21a45d53916eb332837d2102f51ceae5bcde5db4",
+    "Fight_Role/024.dgp": "d0c8daad124465b789c067d203835c31bb87327dc3c96996b9ecfa0b6553d547",
+    "GAME.exe": "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18"
+  },
+  "limits": [
+    "Layer coverage and pixels are audited independently from original bytes; native game execution is not observed.",
+    "Indexed contributions use additive coverage and must composite against the underlying scene."
+  ]
+}

@@ -19,11 +19,12 @@ async function renderer() {
   });
 }
 
-test('all connected skill and item descriptions have exported glyphs in menu and battle text profiles',async()=>{
+test('all connected skill and item descriptions and enemy target names have exported menu and battle glyphs',async()=>{
   const text=await renderer(),load=name=>JSON.parse(fs.readFileSync(new URL(`../web/data/${name}.json`,import.meta.url),'utf8'));
   const menu=load('operation_menu').menus.find(m=>m.id==='game001'),battle=load('battle_ui').menus.find(m=>m.id==='fight_info');
   const profiles=[operationMnuTextOptions(menu.widgets.find(w=>w.name==='INFO')).font,operationMnuTextOptions(battle.widgets.find(w=>w.name==='TEXT')).font,'simsun12_text'];
   const descriptions=Object.values(load('items').definitions).flatMap(item=>[item.name,item.description??'']);
+  descriptions.push(...Object.values(load('forest_combat').actors).map(actor=>actor.name));
   for(const role of Object.values(load('party_skills').roles))for(const index of new Set([...role.learned_indices,...role.exposed_indices??[]])){
     const skill=role.skills[index],raw=Buffer.from(skill.fixed_raw_hex,'hex').subarray(0x3b,0x3b+200);
     descriptions.push(skill.name,new TextDecoder('gbk').decode(raw.subarray(0,raw.indexOf(0))));

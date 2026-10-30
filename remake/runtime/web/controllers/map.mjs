@@ -155,7 +155,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
       if(binding.handler==='keyed-chest'&&object.behavior_raw_cf!==4)continue;
       if(binding.handler==='tlk-object'&&(object.behavior_raw_cf!==1||!object.interaction_record_raw_f6))continue;
       const distance=Math.hypot(object.x_native*2-at.x,object.y_native*2-at.y);
-      if(distance<64&&(!state.nearest||distance<state.nearest.distance))state.nearest={...object,kind:'object',name:binding.handler==='tlk-object'?'物件':binding.handler==='keyed-chest'?'宝箱':'装备箱',distance};
+      if(distance<64&&(!state.nearest||distance<state.nearest.distance))state.nearest={...object,kind:'object',name:binding.handler==='keyed-chest'?'宝箱':'物件',distance};
     }
     for(const binding of storyBindings(at.map_id).rests){
       const bed=state.chapterStory.maps[at.map_id]?.descriptors?.find(row=>row.id===binding.descriptor_id);

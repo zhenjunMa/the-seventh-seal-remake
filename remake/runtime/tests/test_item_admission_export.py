@@ -91,7 +91,12 @@ class ItemAdmissionExport(unittest.TestCase):
         materials = {int(ident) for ident in admission['sources']
             if exported['definitions'][ident]['type_raw_24'] == 3 and exported['definitions'][ident]['subtype_raw_25'] == 2}
         medicine = {13, 21, *range(23, 29), *range(272, 277), *range(278, 281),
-            *range(283, 286), *range(307, 312), 315, 320, 321, 323, 324, 331}
+            *range(283, 286), *range(307, 312), 315, 320, 321, 323, 324, 331, 399}
+        stone = admission['sources']['399'][0]
+        self.assertEqual((stone['kind'], stone['map_id'], stone['record_id'], stone['enemy_id'], stone['reward_slot']),
+                         ('registered-enemy-reward', 'M70078_2', 6, '024', 1))
+        self.assertEqual(stone['source']['raw_hex'], '8f010000')
+        self.assertEqual(exported['definitions']['399']['battle']['same_side_raw_157'], 0)
         self.assertEqual(set(exported['catalog']['item_capability_admission']['promoted_item_ids']), medicine | materials | {127, 170})
         old_enabled = {1, 4, 8, 10, 11, 12, 39, 40, 41, 42, 50, 51, 61, 127, 170, 272}
         self.assertEqual(set(exported['catalog']['default_enabled_item_ids']), old_enabled | city | recipes | medicine | materials)
@@ -145,7 +150,8 @@ class ItemAdmissionExport(unittest.TestCase):
             self.assertFalse(definitions[str(ident)]['availability']['enabled'])
         self.assertTrue(definitions['257']['availability']['enabled'])
         self.assertEqual(admission['sources']['257'][0]['kind'], 'registered-recipe-product')
-        reward = admission['sources']['331'][0]
+        reward = next(row for row in admission['sources']['331']
+            if row['map_id'] == 'M71013' and row['enemy_id'] == '042')
         self.assertEqual((reward['kind'], reward['map_id'], reward['record_id'], reward['enemy_id'], reward['reward_slot']),
             ('registered-enemy-reward', 'M71013', 5, '042', 0))
         self.assertEqual(reward['source'], dict(path='Fight_Role/042.CHR', sha256=producer.sha((ROOT/'Fight_Role/042.CHR').read_bytes()),
@@ -172,7 +178,10 @@ class ItemAdmissionExport(unittest.TestCase):
         producer.admit_registered_equipment(admitted, self.seed, self.story, unregistered)
         self.assertFalse(admitted['39']['availability']['enabled'])
         unregistered = copy.deepcopy(self.registration)
-        unregistered['roles'].pop('042')
+        # The seal battle adds two more registered sources of the same item.
+        # Admission must close only after all source enemies are unregistered.
+        for role_id in ('024', '041', '042'):
+            unregistered['roles'].pop(role_id)
         admitted = self.source_definitions()
         acquisition = producer.admit_registered_equipment(admitted, self.seed, self.story, unregistered)
         producer.admit_registered_status_cures(admitted, acquisition)

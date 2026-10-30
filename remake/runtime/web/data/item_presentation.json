@@ -1823,6 +1823,34 @@
           "bundle": "remake/runtime/evidence/chapter_items_native.json"
         }
       }
+    },
+    "399": {
+      "id": 399,
+      "name": "魔力之石",
+      "animation_skill_id_raw_142": 17,
+      "effect_id": null,
+      "effect_token_raw_126": "",
+      "source": {
+        "path": "SYSTEM/Object.ITM",
+        "sha256": "9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8",
+        "record_offset": 383246,
+        "record_sha256": "153119006ce1ecad3c741d0654f8ce99c794c6da43d8297bd92c2d6c9e4196f4",
+        "effect_field_offset": 294,
+        "effect_field_bytes": 20
+      },
+      "settlement": {
+        "source_field": "0x49",
+        "frame_source": "acting role CHR sequence",
+        "effect_slot": "target",
+        "only_after_accepted_target": true,
+        "effect_even_without_native_success": true,
+        "consume_only_on_native_success": true,
+        "evidence": {
+          "procedure": "0x41b3e9",
+          "evidence_id": "ev_4ad9019da5e0945f74684bdf2d2c6ee7429b3a2a2e7bb84eee812d448c861eac",
+          "bundle": "remake/runtime/evidence/chapter_items_native.json"
+        }
+      }
     }
   },
   "effects": [

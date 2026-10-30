@@ -14,17 +14,18 @@ const integer=(value,min=0)=>Number.isInteger(value)&&value>=min;
 // initialization repeats while source elapsed==0. Completion has no fixed
 // elapsed threshold. Pixel geometry is supplied by the owning source renderer.
 export const APPEARANCE_ALPHA_ADAPTER=Object.freeze({
-  source_clock_ms:60,complete_elapsed_raw:Object.freeze({1:7,5:null,6:null,7:39}),
+  source_clock_ms:60,complete_elapsed_raw:Object.freeze({1:7,3:null,5:null,6:null,7:39}),
   particle_step_raw:8,particle_target_raw:255,
   pixels:'8-bit alpha adapter; original scanline mask not reproduced',
 });
 // F66A is a disappearance MODE selected by rand()%7+1, despite the legacy
 // event field name fade_increment_raw. It is never an opacity speed.
 export class BattleLifecyclePlayback {
-  constructor(manifest,{appearanceBounds=null,disappearanceEffect=null,nativeBridge=null,onFrame=null}={}){
+  constructor(manifest,{appearanceBounds=null,appearanceEffect=null,disappearanceEffect=null,nativeBridge=null,onFrame=null}={}){
     this.onFrame=onFrame;
     this.nativeBridge=nativeBridge;
     this.disappearanceEffect=disappearanceEffect;
+    this.appearanceEffect=appearanceEffect;
     need(appearanceBounds===null||typeof appearanceBounds==='function','Lifecycle appearance bounds provider invalid');this.appearanceBounds=appearanceBounds;
     need(Array.isArray(manifest?.roles),'Lifecycle manifest roles missing');this.roles=new Map();
     for(const role of manifest.roles){
@@ -103,7 +104,12 @@ export class BattleLifecyclePlayback {
       if(channel.appearance){
         const appearance=channel.appearance,limit=APPEARANCE_ALPHA_ADAPTER.complete_elapsed_raw[appearance.mode];
         appearance.elapsed_raw=Math.floor(Math.max(0,now-appearance.started)/APPEARANCE_ALPHA_ADAPTER.source_clock_ms);
-        if(appearance.mode===5||appearance.mode===6){
+        if(appearance.mode===3){
+          const active=appearance.particles.advance(now);appearance.elapsed_raw=appearance.particles.elapsed;appearance.render_calls=appearance.particles.calls;
+          this.alphas.set(channel.actor_id,appearance.particles.effect?.draw?1:Math.min(1,appearance.elapsed_raw/30));
+          if(active)return;
+          channel.deadline=now;
+        }else if(appearance.mode===5||appearance.mode===6){
           if(appearance.render_limit===null){
             let geometry=this.appearanceBounds?.(channel.resource_id,channel.pose?copy(channel.pose):null);
             if(geometry===null||geometry===undefined){
@@ -172,6 +178,15 @@ export class BattleLifecyclePlayback {
         const mode=channel.nativeBridge?.appearance&&step.raw_hex?channel.nativeBridge.appearance(step.raw_hex).mode:sourceMode;
         if(!integer(mode,1)){channel.blocked='appearance-mode-requires-controller-rng';channel.mode='blocked';return;}
         channel.appearance={mode,clock_raw:60,elapsed_raw:0,started:channel.deadline,render_calls:0,render_limit:null,geometry_source:null};this.alphas.set(channel.actor_id,0);
+        if(mode===3){
+          const effect=this.appearanceEffect?.(channel.actor_id,channel.resource_id,mode,channel.event)??null;
+          if(effect?.pose)channel.pose=copy(effect.pose);
+          // Real surfaces return the original per-pixel active flag. Headless
+          // drawing keeps only the source30-step hard ceiling, explicitly.
+          channel.appearance.particles=new DeathParticlePlayback({mode,clock_ms:60,started:channel.deadline,
+            effect:effect??{reset(){},step:()=>true}});
+          channel.appearance.geometry_source=effect?'source-column-particles':'headless-source-hard-ceiling';
+        }
       }else{channel.blocked=`unsupported-lifecycle-command-${step.command_raw}`;channel.mode='blocked';return;}
     }
   }
@@ -200,8 +215,8 @@ export class BattleLifecyclePlayback {
   pose(actorId){const channel=this.channels.get(actorId),pose=channel?.pose??this.held.get(actorId)?.pose,path=channel?.escape;
     return pose?{...pose,alpha:this.alpha(actorId),...(path?{offset_x:path.from+(path.to-path.from)*Math.min(1,Math.max(0,this.lastNow-path.at)/path.interval)}:{})}:null;}
   hidden(actorId){return this.hiddenActors.has(actorId);}
-  drawDisappearance(actorId,context,x,y){
-    const effect=this.channels.get(actorId)?.particles?.effect;
+  drawParticles(actorId,context,x,y){
+    const channel=this.channels.get(actorId),effect=channel?.particles?.effect??channel?.appearance?.particles?.effect;
     if(!effect?.draw)return false;effect.draw(context,x,y);return true;
   }
   drainCompleted(){const rows=this.completed;this.completed=[];return rows.map(copy);}

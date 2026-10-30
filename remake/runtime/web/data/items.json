@@ -8114,7 +8114,8 @@
         "effect_raw_hex": "040101000000f40100000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
         "definition_offset": 680,
         "effect_bytes": 198,
-        "evidence": "ev_4ee7cc8d9c675c3b1405324f30fb85a23397d5d5af06c75462626bf4fab5b54e"
+        "evidence": "ev_4ee7cc8d9c675c3b1405324f30fb85a23397d5d5af06c75462626bf4fab5b54e",
+        "dispatch_evidence": "ev_c35b08feeff12824174f46746b24be397f916aa51943e1f899649ad2568cb415"
       },
       "effect": {
         "restore_hp_flat": 0,
@@ -8489,7 +8490,8 @@
         "effect_raw_hex": "060201000000f40100000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
         "definition_offset": 680,
         "effect_bytes": 198,
-        "evidence": "ev_4ee7cc8d9c675c3b1405324f30fb85a23397d5d5af06c75462626bf4fab5b54e"
+        "evidence": "ev_4ee7cc8d9c675c3b1405324f30fb85a23397d5d5af06c75462626bf4fab5b54e",
+        "dispatch_evidence": "ev_c35b08feeff12824174f46746b24be397f916aa51943e1f899649ad2568cb415"
       },
       "effect": {
         "restore_hp_flat": 0,
@@ -8864,7 +8866,8 @@
         "effect_raw_hex": "180b01000000f40100000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
         "definition_offset": 680,
         "effect_bytes": 198,
-        "evidence": "ev_4ee7cc8d9c675c3b1405324f30fb85a23397d5d5af06c75462626bf4fab5b54e"
+        "evidence": "ev_4ee7cc8d9c675c3b1405324f30fb85a23397d5d5af06c75462626bf4fab5b54e",
+        "dispatch_evidence": "ev_c35b08feeff12824174f46746b24be397f916aa51943e1f899649ad2568cb415"
       },
       "effect": {
         "restore_hp_flat": 0,
@@ -9239,7 +9242,8 @@
         "effect_raw_hex": "080301000000f40100000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
         "definition_offset": 680,
         "effect_bytes": 198,
-        "evidence": "ev_4ee7cc8d9c675c3b1405324f30fb85a23397d5d5af06c75462626bf4fab5b54e"
+        "evidence": "ev_4ee7cc8d9c675c3b1405324f30fb85a23397d5d5af06c75462626bf4fab5b54e",
+        "dispatch_evidence": "ev_c35b08feeff12824174f46746b24be397f916aa51943e1f899649ad2568cb415"
       },
       "effect": {
         "restore_hp_flat": 0,
@@ -9614,7 +9618,8 @@
         "effect_raw_hex": "0a0401000000f40100000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
         "definition_offset": 680,
         "effect_bytes": 198,
-        "evidence": "ev_4ee7cc8d9c675c3b1405324f30fb85a23397d5d5af06c75462626bf4fab5b54e"
+        "evidence": "ev_4ee7cc8d9c675c3b1405324f30fb85a23397d5d5af06c75462626bf4fab5b54e",
+        "dispatch_evidence": "ev_c35b08feeff12824174f46746b24be397f916aa51943e1f899649ad2568cb415"
       },
       "effect": {
         "restore_hp_flat": 0,
@@ -9989,7 +9994,8 @@
         "effect_raw_hex": "1e0e01000000f40100000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
         "definition_offset": 680,
         "effect_bytes": 198,
-        "evidence": "ev_4ee7cc8d9c675c3b1405324f30fb85a23397d5d5af06c75462626bf4fab5b54e"
+        "evidence": "ev_4ee7cc8d9c675c3b1405324f30fb85a23397d5d5af06c75462626bf4fab5b54e",
+        "dispatch_evidence": "ev_c35b08feeff12824174f46746b24be397f916aa51943e1f899649ad2568cb415"
       },
       "effect": {
         "restore_hp_flat": 0,
@@ -85047,24 +85053,21 @@
         "drop_rate_in_native_range": true
       },
       "behavior": {
-        "kind": "source-only",
-        "status": "unverified",
-        "implemented_scope": [],
-        "unverified_scope": [
-          "special-passive",
-          "crystal-socketing",
-          "crafting",
-          "attack-or-state-effect"
-        ]
+        "kind": "crafting-material",
+        "status": "recovered",
+        "implemented_scope": [
+          "inventory-stack",
+          "native-service-material-input-output"
+        ],
+        "unverified_scope": []
       },
       "availability": {
-        "enabled": false,
-        "chapter_enabled": false,
+        "enabled": true,
+        "chapter_enabled": true,
         "catalog_visible": true,
-        "default_enabled": false,
+        "default_enabled": true,
         "reasons": [
-          "outside-default-chapter-item-set",
-          "usage-handler-not-recovered"
+          "registered-source-acquisition; native-material-exchange-recovered"
         ]
       },
       "raw_fields": {
@@ -94509,7 +94512,8 @@
         "effect_raw_hex": "0c0501000000f40100000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
         "definition_offset": 680,
         "effect_bytes": 198,
-        "evidence": "ev_4ee7cc8d9c675c3b1405324f30fb85a23397d5d5af06c75462626bf4fab5b54e"
+        "evidence": "ev_4ee7cc8d9c675c3b1405324f30fb85a23397d5d5af06c75462626bf4fab5b54e",
+        "dispatch_evidence": "ev_c35b08feeff12824174f46746b24be397f916aa51943e1f899649ad2568cb415"
       },
       "effect": {
         "restore_hp_flat": 0,
@@ -97480,7 +97484,8 @@
         "effect_raw_hex": "120801000000f40100000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
         "definition_offset": 680,
         "effect_bytes": 198,
-        "evidence": "ev_4ee7cc8d9c675c3b1405324f30fb85a23397d5d5af06c75462626bf4fab5b54e"
+        "evidence": "ev_4ee7cc8d9c675c3b1405324f30fb85a23397d5d5af06c75462626bf4fab5b54e",
+        "dispatch_evidence": "ev_c35b08feeff12824174f46746b24be397f916aa51943e1f899649ad2568cb415"
       },
       "effect": {
         "restore_hp_flat": 0,
@@ -109984,7 +109989,8 @@
         "effect_raw_hex": "1c0d01000000f40100000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
         "definition_offset": 680,
         "effect_bytes": 198,
-        "evidence": "ev_4ee7cc8d9c675c3b1405324f30fb85a23397d5d5af06c75462626bf4fab5b54e"
+        "evidence": "ev_4ee7cc8d9c675c3b1405324f30fb85a23397d5d5af06c75462626bf4fab5b54e",
+        "dispatch_evidence": "ev_c35b08feeff12824174f46746b24be397f916aa51943e1f899649ad2568cb415"
       },
       "effect": {
         "restore_hp_flat": 0,
@@ -111767,7 +111773,8 @@
         "effect_raw_hex": "100701000000f40100000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
         "definition_offset": 680,
         "effect_bytes": 198,
-        "evidence": "ev_4ee7cc8d9c675c3b1405324f30fb85a23397d5d5af06c75462626bf4fab5b54e"
+        "evidence": "ev_4ee7cc8d9c675c3b1405324f30fb85a23397d5d5af06c75462626bf4fab5b54e",
+        "dispatch_evidence": "ev_c35b08feeff12824174f46746b24be397f916aa51943e1f899649ad2568cb415"
       },
       "effect": {
         "restore_hp_flat": 0,
@@ -112142,7 +112149,8 @@
         "effect_raw_hex": "1a0c01000000f40100000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
         "definition_offset": 680,
         "effect_bytes": 198,
-        "evidence": "ev_4ee7cc8d9c675c3b1405324f30fb85a23397d5d5af06c75462626bf4fab5b54e"
+        "evidence": "ev_4ee7cc8d9c675c3b1405324f30fb85a23397d5d5af06c75462626bf4fab5b54e",
+        "dispatch_evidence": "ev_c35b08feeff12824174f46746b24be397f916aa51943e1f899649ad2568cb415"
       },
       "effect": {
         "restore_hp_flat": 0,
@@ -112869,7 +112877,8 @@
         "effect_raw_hex": "0e0601000000f40100000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
         "definition_offset": 680,
         "effect_bytes": 198,
-        "evidence": "ev_4ee7cc8d9c675c3b1405324f30fb85a23397d5d5af06c75462626bf4fab5b54e"
+        "evidence": "ev_4ee7cc8d9c675c3b1405324f30fb85a23397d5d5af06c75462626bf4fab5b54e",
+        "dispatch_evidence": "ev_c35b08feeff12824174f46746b24be397f916aa51943e1f899649ad2568cb415"
       },
       "effect": {
         "restore_hp_flat": 0,
@@ -113244,7 +113253,8 @@
         "effect_raw_hex": "261201000000f40100000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
         "definition_offset": 680,
         "effect_bytes": 198,
-        "evidence": "ev_4ee7cc8d9c675c3b1405324f30fb85a23397d5d5af06c75462626bf4fab5b54e"
+        "evidence": "ev_4ee7cc8d9c675c3b1405324f30fb85a23397d5d5af06c75462626bf4fab5b54e",
+        "dispatch_evidence": "ev_c35b08feeff12824174f46746b24be397f916aa51943e1f899649ad2568cb415"
       },
       "effect": {
         "restore_hp_flat": 0,
@@ -139437,24 +139447,20 @@
         "drop_rate_in_native_range": true
       },
       "behavior": {
-        "kind": "source-only",
-        "status": "unverified",
-        "implemented_scope": [],
-        "unverified_scope": [
-          "special-passive",
-          "crystal-socketing",
-          "crafting",
-          "attack-or-state-effect"
-        ]
+        "kind": "status-cure",
+        "status": "recovered",
+        "implemented_scope": [
+          "battle-single-enemy-first-matching-status-removal"
+        ],
+        "unverified_scope": []
       },
       "availability": {
-        "enabled": false,
-        "chapter_enabled": false,
+        "enabled": true,
+        "chapter_enabled": true,
         "catalog_visible": true,
-        "default_enabled": false,
+        "default_enabled": true,
         "reasons": [
-          "outside-default-chapter-item-set",
-          "usage-handler-not-recovered"
+          "registered-source-grant; native-mode1-status-removal-recovered"
         ]
       },
       "raw_fields": {
@@ -139551,6 +139557,34 @@
           "maximum": 0
         },
         "interpretation": "These raw fields alone do not imply a usable simple restore item."
+      },
+      "status_cure": {
+        "effect_id_raw": 20,
+        "mode_raw": 1,
+        "effect_raw_hex": "2a1401000000f40100000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "definition_offset": 680,
+        "effect_bytes": 198,
+        "evidence": "ev_4ee7cc8d9c675c3b1405324f30fb85a23397d5d5af06c75462626bf4fab5b54e",
+        "dispatch_evidence": "ev_c35b08feeff12824174f46746b24be397f916aa51943e1f899649ad2568cb415"
+      },
+      "effect": {
+        "restore_hp_flat": 0,
+        "restore_mp_flat": 0,
+        "restore_hp_percent": 0,
+        "restore_mp_percent": 0,
+        "revive": false
+      },
+      "use_in_field": false,
+      "use_in_battle": true,
+      "battle": {
+        "animation_skill_id_raw_142": 17,
+        "all_targets_raw_156": 0,
+        "same_side_raw_157": 0,
+        "effect_kind_raw_2b3": 1,
+        "preparation_delay_added": 0,
+        "target_state_max_exclusive": 4,
+        "target_immune_must_be_zero": true,
+        "consume_only_on_native_success": true
       }
     },
     "400": {
@@ -148994,6 +149028,8 @@
     "Fight_Role/022.CHR": "1d993fbcd562db44c2f515f3b9e3e1bfa4d2ad99924ad543b62ca8226b3f4455",
     "Fight_Role/032.CHR": "e081f7db9f51ac59c0bbd5b43f82a5894b3e707dd7512eb43aef574e1ec35f9f",
     "Fight_Role/042.CHR": "e6165e6a8c0099485543a521e978e8943aef7f9c5b17711c64a7d4c7fc8c169b",
+    "Fight_Role/024.CHR": "561e1defb159f9815a8538ff21a45d53916eb332837d2102f51ceae5bcde5db4",
+    "Fight_Role/041.CHR": "d0427095198fb28533c2a48d8f2ce22475faf13154386c7098e44053d12e5c32",
     "Map/m01060.dat": "5ff8f2a3c43649fff1efc4eccd878f4a662d905f6ba3404948e47ec9240a3826",
     "Map/m01065.dat": "2ca9d09e6c3b42814d0e6112ea17384e3796bbbe3660aa25c61503b407cb9aa5",
     "Map/m01020a.dat": "6020fed7cc22db1587cedcc5eb6b48183976ee16ae68ad2da028ba6c7129b8ab",
@@ -149060,6 +149096,16 @@
     "Map/m70074_2.dat": "d8ebf4d5179f28c5299c794ca2615f3c7eb7846e289141b82438fb69262005ab",
     "Map/m70075.dat": "ce9b2c1df4565f3ba20a1e15b5736b2c94fa5323bac78055381cc967854bf8f5",
     "Map/m70076.dat": "4a76f605d199e59f3fa6e4e4cbafde307f0b424df36fee46a9e93f0b62220702",
+    "Map/m01019.dat": "6ecd45d09851e46250693f82d02cd5ee76aaa1bfbd21f7ab81d6f9f938940352",
+    "Map/m70077.dat": "1aa5847263530dc3b1cacd0920b92ee7c8ca0d5c0aaba360f5fa1845ff2da3c4",
+    "Map/m70077-1.dat": "920b020de7c13814911adf25e23d30f8a24fd30a81eec9117d77825feb90506a",
+    "Map/m70077-2.dat": "3c4aa96befd20277ebed8f6d8fb81d60becc547341773c7e65e5f6a2cb2ac5e7",
+    "Map/m70077-3.dat": "75009f4075bbfad0ca2a978b16713b25d824c1b48d6497e2a82749a1795bd6dd",
+    "Map/m70077-4.dat": "3e0d349a386bd8ae1132c4e83256674687b7f86a7a370d679bfaf3fe15e28214",
+    "Map/m70078-1_1.dat": "6997b90c8980e5ffc912dca8be8ae8044738ff8de0ed5b2a6d033e153033506e",
+    "Map/m70078-2_1.dat": "761560ea135fc837b06354f3f22cc1abb348a7e8c7636a5e3f02a0a3e32c86ad",
+    "Map/m70078-3_1.dat": "0bbe4fb0fcaf58ada56a85d1cf17536340767be4212592c54e0b3c81957d45eb",
+    "Map/m70078_2.dat": "5dd7156cc55765078812f7aee1196e21dd7f967ff75f36c25adab40afdaa2c1d",
     "Map/m01060.TLK": "8e71ad04dacc1155c6e7adcf5dbf50e1cffbd049a53aa2610a1769f10bbd0bee",
     "Map/m01065.TLK": "59737a03d554b6d1850c301ef5d395c70fd8e5df525df22a8447d118b09ec48b",
     "Map/m01020a.TLK": "407923eb9ea3ff2258e77c6242d2941aba4e470e17f63efc472445ef05ef7bd1",
@@ -149107,6 +149153,11 @@
     "Map/m70072.TLK": "b3ba5d7005317727f429fe23f0b87f5a79110f6335473a95f7023de1c04f1d9b",
     "Map/m70073.TLK": "67fc014d261c1d9e695c386a1932beac02dcdbec8e9336900fa044ebc20db4db",
     "Map/m70076.TLK": "4bcd326f3127a0da37cd28145eeb1966cd02db8d5f65b8e698c7109194cdb0ac",
+    "Map/m01019.TLK": "ba4175738cbf8bcfbebdb292928cfccaa4b59e8f6c8e46ec5d9e1591d422017a",
+    "Map/m70078-1_1.TLK": "f2706c90317d9999ce713eca22e1ae0ff3f8734a5bd2e2b58f071c01065faa06",
+    "Map/m70078-2_1.TLK": "2309825a1929ebc97e010b756cd9fb9617831f9fc4c6337f0b809f1b423d813c",
+    "Map/m70078-3_1.TLK": "67507c3a98a6fcd52713e957ba70d1c6aa4f642c7282d848a67c6cf91beec246",
+    "Map/m70078_2.TLK": "c4def880426cde711e854d4b72b867b73206c0880e888bf064afbd19b6d1f560",
     "Animate/m01010-2.anm": "c55c3523db4a73b52be4c41207759c85875887ecaf59466e2116ecfbedd54eef",
     "Animate/m01010-3.anm": "746051dea82ced51cd73ef4c30e952d82b8e4b009583e88d47e000b950ba7238",
     "Animate/m01020a-1.anm": "2b9cc2ad10eae8674d95e12bd252b8c71b4a1d63f18aa96839ad71f48575caba",
@@ -149137,7 +149188,10 @@
     "Animate/m70030-1.anm": "a5a6e002bea13b92735b33a5bf7d866cda47020776bbab2f4f6cfc539ca11a3f",
     "Animate/m71014-1.anm": "b4788169b65d163448b33c449818bc38cac40efe2d10c8bc0c1c613fa5ca3c56",
     "Animate/m71050-1.anm": "dbbef9d0067bd2ced4d7750b392af11de3e05e206c172e009157ad5fb4090a38",
-    "Animate/m70073-1.anm": "40fbf5f044efb1804712d1cc6faf2b899a3e24624a8b53c74f0bd6e869da37c8"
+    "Animate/m70073-1.anm": "40fbf5f044efb1804712d1cc6faf2b899a3e24624a8b53c74f0bd6e869da37c8",
+    "Animate/m01010-1.anm": "16afe8e9460e192ecc3b16be41d7c457633d6c62e531721318a3e5ac21fbe114",
+    "Animate/m01042-1.anm": "8631c45d33f456b5072349c1b1239dc90f219ced8f5e5dfeab74f183ab6b8d5d",
+    "Animate/m70078-1.anm": "4842a7ac5b7f30d2231a6030ab2364d961dd69243684ae6735c16f4882dc52be"
   },
   "evidence": {
     "initialize": {
@@ -149399,6 +149453,7 @@
       236,
       237,
       238,
+      245,
       251,
       252,
       253,
@@ -149451,7 +149506,8 @@
       356,
       357,
       358,
-      359
+      359,
+      399
     ],
     "original_chapter_item_ids": [
       1,
@@ -149618,6 +149674,30 @@
             "role_source": {
               "path": "Fight_Role/006.CHR",
               "sha256": "27b29fb5cc1073014faea7553d0175559714c18dbbc5132ca1c549e4a9d8e15b"
+            }
+          }
+        ],
+        "298": [
+          {
+            "kind": "registered-story-item-grant",
+            "map_id": "M01042",
+            "record_id": 21,
+            "source": {
+              "path": "Map/m01042.TLK",
+              "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+              "record_id": 21,
+              "record_bytes": 1647,
+              "offset": 34966
+            },
+            "mutation_type": 5,
+            "mutation_index": 0,
+            "mutation_bit": 298,
+            "entrance": {
+              "map_id": "M01042",
+              "record_id": 16,
+              "kind": "anm-talk",
+              "program_id": "m01042-1",
+              "command_index": 51
             }
           }
         ],
@@ -150398,6 +150478,19 @@
               "bytes": 4,
               "raw_hex": "96000000"
             }
+          },
+          {
+            "kind": "registered-map-chest-grant",
+            "map_id": "M70078-1_1",
+            "object_index": 23,
+            "reward_slot": 0,
+            "source": {
+              "path": "Map/m70078-1_1.dat",
+              "sha256": "6997b90c8980e5ffc912dca8be8ae8044738ff8de0ed5b2a6d033e153033506e",
+              "offset": 950084,
+              "bytes": 4,
+              "raw_hex": "96000000"
+            }
           }
         ],
         "50": [
@@ -150597,6 +150690,232 @@
               "offset": 240,
               "bytes": 4,
               "raw_hex": "5b010000"
+            }
+          }
+        ],
+        "331": [
+          {
+            "kind": "registered-enemy-reward",
+            "map_id": "M70078_2",
+            "record_id": 6,
+            "enemy_id": "041",
+            "enemy_slot": 0,
+            "reward_slot": 0,
+            "entrance": {
+              "map_id": "M70078_2",
+              "record_id": 6,
+              "kind": "anm-talk",
+              "program_id": "m70078-1",
+              "command_index": 42
+            },
+            "battle_source": {
+              "path": "Map/m70078_2.TLK",
+              "sha256": "c4def880426cde711e854d4b72b867b73206c0880e888bf064afbd19b6d1f560",
+              "record_id": 6,
+              "record_bytes": 1647,
+              "offset": 10261
+            },
+            "source": {
+              "path": "Fight_Role/041.CHR",
+              "sha256": "d0427095198fb28533c2a48d8f2ce22475faf13154386c7098e44053d12e5c32",
+              "offset": 240,
+              "bytes": 4,
+              "raw_hex": "4b010000"
+            }
+          },
+          {
+            "kind": "registered-enemy-reward",
+            "map_id": "M70078_2",
+            "record_id": 6,
+            "enemy_id": "041",
+            "enemy_slot": 2,
+            "reward_slot": 0,
+            "entrance": {
+              "map_id": "M70078_2",
+              "record_id": 6,
+              "kind": "anm-talk",
+              "program_id": "m70078-1",
+              "command_index": 42
+            },
+            "battle_source": {
+              "path": "Map/m70078_2.TLK",
+              "sha256": "c4def880426cde711e854d4b72b867b73206c0880e888bf064afbd19b6d1f560",
+              "record_id": 6,
+              "record_bytes": 1647,
+              "offset": 10261
+            },
+            "source": {
+              "path": "Fight_Role/041.CHR",
+              "sha256": "d0427095198fb28533c2a48d8f2ce22475faf13154386c7098e44053d12e5c32",
+              "offset": 240,
+              "bytes": 4,
+              "raw_hex": "4b010000"
+            }
+          },
+          {
+            "kind": "registered-enemy-reward",
+            "map_id": "M70078_2",
+            "record_id": 6,
+            "enemy_id": "024",
+            "enemy_slot": 4,
+            "reward_slot": 0,
+            "entrance": {
+              "map_id": "M70078_2",
+              "record_id": 6,
+              "kind": "anm-talk",
+              "program_id": "m70078-1",
+              "command_index": 42
+            },
+            "battle_source": {
+              "path": "Map/m70078_2.TLK",
+              "sha256": "c4def880426cde711e854d4b72b867b73206c0880e888bf064afbd19b6d1f560",
+              "record_id": 6,
+              "record_bytes": 1647,
+              "offset": 10261
+            },
+            "source": {
+              "path": "Fight_Role/024.CHR",
+              "sha256": "561e1defb159f9815a8538ff21a45d53916eb332837d2102f51ceae5bcde5db4",
+              "offset": 240,
+              "bytes": 4,
+              "raw_hex": "4b010000"
+            }
+          },
+          {
+            "kind": "registered-enemy-reward",
+            "map_id": "M70073",
+            "record_id": 7,
+            "enemy_id": "042",
+            "enemy_slot": 0,
+            "reward_slot": 0,
+            "entrance": {
+              "map_id": "M70073",
+              "record_id": 6,
+              "kind": "npc",
+              "npc_slot": 10
+            },
+            "battle_source": {
+              "path": "Map/m70073.TLK",
+              "sha256": "67fc014d261c1d9e695c386a1932beac02dcdbec8e9336900fa044ebc20db4db",
+              "record_id": 7,
+              "record_bytes": 1647,
+              "offset": 11908
+            },
+            "source": {
+              "path": "Fight_Role/042.CHR",
+              "sha256": "e6165e6a8c0099485543a521e978e8943aef7f9c5b17711c64a7d4c7fc8c169b",
+              "offset": 240,
+              "bytes": 4,
+              "raw_hex": "4b010000"
+            }
+          },
+          {
+            "kind": "registered-enemy-reward",
+            "map_id": "M71013",
+            "record_id": 5,
+            "enemy_id": "042",
+            "enemy_slot": 0,
+            "reward_slot": 0,
+            "entrance": {
+              "map_id": "M71013",
+              "record_id": 4,
+              "kind": "anm-talk",
+              "program_id": "m01060-2",
+              "command_index": 30
+            },
+            "battle_source": {
+              "path": "Map/m71013.TLK",
+              "sha256": "da89b10163c8a8374dd4b59e292a68a145f34034a52f8c96fc4bad1e8ed9b944",
+              "record_id": 5,
+              "record_bytes": 1647,
+              "offset": 8614
+            },
+            "source": {
+              "path": "Fight_Role/042.CHR",
+              "sha256": "e6165e6a8c0099485543a521e978e8943aef7f9c5b17711c64a7d4c7fc8c169b",
+              "offset": 240,
+              "bytes": 4,
+              "raw_hex": "4b010000"
+            }
+          }
+        ],
+        "399": [
+          {
+            "kind": "registered-enemy-reward",
+            "map_id": "M70078_2",
+            "record_id": 6,
+            "enemy_id": "024",
+            "enemy_slot": 4,
+            "reward_slot": 1,
+            "entrance": {
+              "map_id": "M70078_2",
+              "record_id": 6,
+              "kind": "anm-talk",
+              "program_id": "m70078-1",
+              "command_index": 42
+            },
+            "battle_source": {
+              "path": "Map/m70078_2.TLK",
+              "sha256": "c4def880426cde711e854d4b72b867b73206c0880e888bf064afbd19b6d1f560",
+              "record_id": 6,
+              "record_bytes": 1647,
+              "offset": 10261
+            },
+            "source": {
+              "path": "Fight_Role/024.CHR",
+              "sha256": "561e1defb159f9815a8538ff21a45d53916eb332837d2102f51ceae5bcde5db4",
+              "offset": 244,
+              "bytes": 4,
+              "raw_hex": "8f010000"
+            }
+          }
+        ],
+        "268": [
+          {
+            "kind": "registered-enemy-reward",
+            "map_id": "M70078_2",
+            "record_id": 6,
+            "enemy_id": "024",
+            "enemy_slot": 4,
+            "reward_slot": 2,
+            "entrance": {
+              "map_id": "M70078_2",
+              "record_id": 6,
+              "kind": "anm-talk",
+              "program_id": "m70078-1",
+              "command_index": 42
+            },
+            "battle_source": {
+              "path": "Map/m70078_2.TLK",
+              "sha256": "c4def880426cde711e854d4b72b867b73206c0880e888bf064afbd19b6d1f560",
+              "record_id": 6,
+              "record_bytes": 1647,
+              "offset": 10261
+            },
+            "source": {
+              "path": "Fight_Role/024.CHR",
+              "sha256": "561e1defb159f9815a8538ff21a45d53916eb332837d2102f51ceae5bcde5db4",
+              "offset": 248,
+              "bytes": 4,
+              "raw_hex": "0c010000"
+            }
+          },
+          {
+            "kind": "registered-recipe-product",
+            "map_id": "M01042",
+            "record_id": 63,
+            "source": {
+              "path": "Map/m01042.TLK",
+              "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+              "record_id": 63,
+              "record_bytes": 1647,
+              "offset": 104140
+            },
+            "entrance": {
+              "map_id": "M01042",
+              "record_id": 31,
+              "kind": "npc",
+              "npc_slot": 12
             }
           }
         ],
@@ -152064,65 +152383,6 @@
             }
           }
         ],
-        "331": [
-          {
-            "kind": "registered-enemy-reward",
-            "map_id": "M70073",
-            "record_id": 7,
-            "enemy_id": "042",
-            "enemy_slot": 0,
-            "reward_slot": 0,
-            "entrance": {
-              "map_id": "M70073",
-              "record_id": 6,
-              "kind": "npc",
-              "npc_slot": 10
-            },
-            "battle_source": {
-              "path": "Map/m70073.TLK",
-              "sha256": "67fc014d261c1d9e695c386a1932beac02dcdbec8e9336900fa044ebc20db4db",
-              "record_id": 7,
-              "record_bytes": 1647,
-              "offset": 11908
-            },
-            "source": {
-              "path": "Fight_Role/042.CHR",
-              "sha256": "e6165e6a8c0099485543a521e978e8943aef7f9c5b17711c64a7d4c7fc8c169b",
-              "offset": 240,
-              "bytes": 4,
-              "raw_hex": "4b010000"
-            }
-          },
-          {
-            "kind": "registered-enemy-reward",
-            "map_id": "M71013",
-            "record_id": 5,
-            "enemy_id": "042",
-            "enemy_slot": 0,
-            "reward_slot": 0,
-            "entrance": {
-              "map_id": "M71013",
-              "record_id": 4,
-              "kind": "anm-talk",
-              "program_id": "m01060-2",
-              "command_index": 30
-            },
-            "battle_source": {
-              "path": "Map/m71013.TLK",
-              "sha256": "da89b10163c8a8374dd4b59e292a68a145f34034a52f8c96fc4bad1e8ed9b944",
-              "record_id": 5,
-              "record_bytes": 1647,
-              "offset": 8614
-            },
-            "source": {
-              "path": "Fight_Role/042.CHR",
-              "sha256": "e6165e6a8c0099485543a521e978e8943aef7f9c5b17711c64a7d4c7fc8c169b",
-              "offset": 240,
-              "bytes": 4,
-              "raw_hex": "4b010000"
-            }
-          }
-        ],
         "343": [
           {
             "kind": "tlk-shop-item",
@@ -153220,26 +153480,6 @@
             }
           }
         ],
-        "268": [
-          {
-            "kind": "registered-recipe-product",
-            "map_id": "M01042",
-            "record_id": 63,
-            "source": {
-              "path": "Map/m01042.TLK",
-              "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
-              "record_id": 63,
-              "record_bytes": 1647,
-              "offset": 104140
-            },
-            "entrance": {
-              "map_id": "M01042",
-              "record_id": 31,
-              "kind": "npc",
-              "npc_slot": 12
-            }
-          }
-        ],
         "254": [
           {
             "kind": "registered-recipe-product",
@@ -153442,6 +153682,139 @@
               "offset": 371748,
               "bytes": 4,
               "raw_hex": "26010000"
+            }
+          }
+        ],
+        "295": [
+          {
+            "kind": "registered-map-chest-grant",
+            "map_id": "M70078-1_1",
+            "object_index": 19,
+            "reward_slot": 0,
+            "source": {
+              "path": "Map/m70078-1_1.dat",
+              "sha256": "6997b90c8980e5ffc912dca8be8ae8044738ff8de0ed5b2a6d033e153033506e",
+              "offset": 948988,
+              "bytes": 4,
+              "raw_hex": "27010000"
+            }
+          }
+        ],
+        "146": [
+          {
+            "kind": "registered-map-chest-grant",
+            "map_id": "M70078-1_1",
+            "object_index": 22,
+            "reward_slot": 0,
+            "source": {
+              "path": "Map/m70078-1_1.dat",
+              "sha256": "6997b90c8980e5ffc912dca8be8ae8044738ff8de0ed5b2a6d033e153033506e",
+              "offset": 949810,
+              "bytes": 4,
+              "raw_hex": "92000000"
+            }
+          }
+        ],
+        "296": [
+          {
+            "kind": "registered-map-chest-grant",
+            "map_id": "M70078-2_1",
+            "object_index": 19,
+            "reward_slot": 0,
+            "source": {
+              "path": "Map/m70078-2_1.dat",
+              "sha256": "761560ea135fc837b06354f3f22cc1abb348a7e8c7636a5e3f02a0a3e32c86ad",
+              "offset": 948988,
+              "bytes": 4,
+              "raw_hex": "28010000"
+            }
+          }
+        ],
+        "149": [
+          {
+            "kind": "registered-map-chest-grant",
+            "map_id": "M70078-2_1",
+            "object_index": 20,
+            "reward_slot": 0,
+            "source": {
+              "path": "Map/m70078-2_1.dat",
+              "sha256": "761560ea135fc837b06354f3f22cc1abb348a7e8c7636a5e3f02a0a3e32c86ad",
+              "offset": 949262,
+              "bytes": 4,
+              "raw_hex": "95000000"
+            }
+          }
+        ],
+        "245": [
+          {
+            "kind": "registered-map-chest-grant",
+            "map_id": "M70078-2_1",
+            "object_index": 21,
+            "reward_slot": 0,
+            "source": {
+              "path": "Map/m70078-2_1.dat",
+              "sha256": "761560ea135fc837b06354f3f22cc1abb348a7e8c7636a5e3f02a0a3e32c86ad",
+              "offset": 949536,
+              "bytes": 4,
+              "raw_hex": "f5000000"
+            }
+          }
+        ],
+        "297": [
+          {
+            "kind": "registered-map-chest-grant",
+            "map_id": "M70078-3_1",
+            "object_index": 19,
+            "reward_slot": 0,
+            "source": {
+              "path": "Map/m70078-3_1.dat",
+              "sha256": "0bbe4fb0fcaf58ada56a85d1cf17536340767be4212592c54e0b3c81957d45eb",
+              "offset": 948988,
+              "bytes": 4,
+              "raw_hex": "29010000"
+            }
+          }
+        ],
+        "148": [
+          {
+            "kind": "registered-map-chest-grant",
+            "map_id": "M70078-3_1",
+            "object_index": 20,
+            "reward_slot": 0,
+            "source": {
+              "path": "Map/m70078-3_1.dat",
+              "sha256": "0bbe4fb0fcaf58ada56a85d1cf17536340767be4212592c54e0b3c81957d45eb",
+              "offset": 949262,
+              "bytes": 4,
+              "raw_hex": "94000000"
+            }
+          },
+          {
+            "kind": "registered-map-chest-grant",
+            "map_id": "M70078_2",
+            "object_index": 27,
+            "reward_slot": 0,
+            "source": {
+              "path": "Map/m70078_2.dat",
+              "sha256": "5dd7156cc55765078812f7aee1196e21dd7f967ff75f36c25adab40afdaa2c1d",
+              "offset": 951180,
+              "bytes": 4,
+              "raw_hex": "94000000"
+            }
+          }
+        ],
+        "160": [
+          {
+            "kind": "registered-map-chest-grant",
+            "map_id": "M70078_2",
+            "object_index": 26,
+            "reward_slot": 0,
+            "source": {
+              "path": "Map/m70078_2.dat",
+              "sha256": "5dd7156cc55765078812f7aee1196e21dd7f967ff75f36c25adab40afdaa2c1d",
+              "offset": 950906,
+              "bytes": 4,
+              "raw_hex": "a0000000"
             }
           }
         ]
@@ -153763,6 +154136,21 @@
           "reason": "not-recovered-plain-numeric-equipment"
         },
         {
+          "item_id": 146,
+          "behavior": "source-only",
+          "reason": "not-recovered-plain-numeric-equipment"
+        },
+        {
+          "item_id": 148,
+          "behavior": "source-only",
+          "reason": "not-recovered-plain-numeric-equipment"
+        },
+        {
+          "item_id": 149,
+          "behavior": "source-only",
+          "reason": "not-recovered-plain-numeric-equipment"
+        },
+        {
           "item_id": 150,
           "behavior": "source-only",
           "reason": "not-recovered-plain-numeric-equipment"
@@ -153779,6 +154167,11 @@
         },
         {
           "item_id": 159,
+          "behavior": "source-only",
+          "reason": "not-recovered-plain-numeric-equipment"
+        },
+        {
+          "item_id": 160,
           "behavior": "source-only",
           "reason": "not-recovered-plain-numeric-equipment"
         },
@@ -153918,6 +154311,11 @@
           "reason": "not-recovered-plain-numeric-equipment"
         },
         {
+          "item_id": 245,
+          "behavior": "source-only",
+          "reason": "not-recovered-plain-numeric-equipment"
+        },
+        {
           "item_id": 251,
           "behavior": "source-only",
           "reason": "not-recovered-plain-numeric-equipment"
@@ -154024,6 +154422,26 @@
         },
         {
           "item_id": 294,
+          "behavior": "source-only",
+          "reason": "not-recovered-plain-numeric-equipment"
+        },
+        {
+          "item_id": 295,
+          "behavior": "source-only",
+          "reason": "not-recovered-plain-numeric-equipment"
+        },
+        {
+          "item_id": 296,
+          "behavior": "source-only",
+          "reason": "not-recovered-plain-numeric-equipment"
+        },
+        {
+          "item_id": 297,
+          "behavior": "source-only",
+          "reason": "not-recovered-plain-numeric-equipment"
+        },
+        {
+          "item_id": 298,
           "behavior": "source-only",
           "reason": "not-recovered-plain-numeric-equipment"
         },
@@ -154189,6 +154607,11 @@
         },
         {
           "item_id": 359,
+          "behavior": "source-only",
+          "reason": "not-recovered-plain-numeric-equipment"
+        },
+        {
+          "item_id": 399,
           "behavior": "source-only",
           "reason": "not-recovered-plain-numeric-equipment"
         }
@@ -154543,6 +154966,12 @@
         },
         {
           "map_id": "M01042",
+          "record_id": 10,
+          "kind": "npc",
+          "npc_slot": 11
+        },
+        {
+          "map_id": "M01042",
           "record_id": 31,
           "kind": "npc",
           "npc_slot": 12
@@ -154803,6 +155232,12 @@
           "record_id": 5,
           "kind": "npc",
           "npc_slot": 15
+        },
+        {
+          "map_id": "M01010",
+          "record_id": 2,
+          "kind": "trigger",
+          "descriptor_id": 3
         },
         {
           "map_id": "M01010",
@@ -155470,6 +155905,54 @@
           "npc_slot": 10
         },
         {
+          "map_id": "M70076",
+          "record_id": 1,
+          "kind": "trigger",
+          "descriptor_id": 1
+        },
+        {
+          "map_id": "M01019",
+          "record_id": 24,
+          "kind": "npc",
+          "npc_slot": 10
+        },
+        {
+          "map_id": "M70078-1_1",
+          "record_id": 1,
+          "kind": "trigger",
+          "descriptor_id": 1
+        },
+        {
+          "map_id": "M70078-2_1",
+          "record_id": 1,
+          "kind": "trigger",
+          "descriptor_id": 1
+        },
+        {
+          "map_id": "M70078-3_1",
+          "record_id": 1,
+          "kind": "trigger",
+          "descriptor_id": 1
+        },
+        {
+          "map_id": "M70078_2",
+          "record_id": 5,
+          "kind": "npc",
+          "npc_slot": 10
+        },
+        {
+          "map_id": "M70078_2",
+          "record_id": 1,
+          "kind": "object",
+          "object_index": 23
+        },
+        {
+          "map_id": "M70078_2",
+          "record_id": 27,
+          "kind": "trigger",
+          "descriptor_id": 1
+        },
+        {
           "map_id": "M01020A",
           "record_id": 9,
           "kind": "anm-talk",
@@ -156000,9 +156483,121 @@
           "kind": "anm-talk",
           "program_id": "m70073-1",
           "command_index": 45
+        },
+        {
+          "map_id": "M01010",
+          "record_id": 12,
+          "kind": "anm-talk",
+          "program_id": "m01010-1",
+          "command_index": 10
+        },
+        {
+          "map_id": "M01010",
+          "record_id": 14,
+          "kind": "anm-talk",
+          "program_id": "m01010-1",
+          "command_index": 14
+        },
+        {
+          "map_id": "M01019",
+          "record_id": 1,
+          "kind": "anm-talk",
+          "program_id": "m01010-1",
+          "command_index": 29
+        },
+        {
+          "map_id": "M01019",
+          "record_id": 3,
+          "kind": "anm-talk",
+          "program_id": "m01010-1",
+          "command_index": 33
+        },
+        {
+          "map_id": "M01019",
+          "record_id": 6,
+          "kind": "anm-talk",
+          "program_id": "m01010-1",
+          "command_index": 37
+        },
+        {
+          "map_id": "M01019",
+          "record_id": 22,
+          "kind": "anm-talk",
+          "program_id": "m01010-1",
+          "command_index": 46
+        },
+        {
+          "map_id": "M01050",
+          "record_id": 90,
+          "kind": "anm-talk",
+          "program_id": "m01010-1",
+          "command_index": 65
+        },
+        {
+          "map_id": "M01042",
+          "record_id": 16,
+          "kind": "anm-talk",
+          "program_id": "m01042-1",
+          "command_index": 51
+        },
+        {
+          "map_id": "M70078_2",
+          "record_id": 23,
+          "kind": "anm-talk",
+          "program_id": "m70078-1",
+          "command_index": 12
+        },
+        {
+          "map_id": "M70078_2",
+          "record_id": 24,
+          "kind": "anm-talk",
+          "program_id": "m70078-1",
+          "command_index": 16
+        },
+        {
+          "map_id": "M70078_2",
+          "record_id": 25,
+          "kind": "anm-talk",
+          "program_id": "m70078-1",
+          "command_index": 20
+        },
+        {
+          "map_id": "M70078_2",
+          "record_id": 26,
+          "kind": "anm-talk",
+          "program_id": "m70078-1",
+          "command_index": 28
+        },
+        {
+          "map_id": "M70078_2",
+          "record_id": 5,
+          "kind": "anm-talk",
+          "program_id": "m70078-1",
+          "command_index": 40
+        },
+        {
+          "map_id": "M70078_2",
+          "record_id": 6,
+          "kind": "anm-talk",
+          "program_id": "m70078-1",
+          "command_index": 42
+        },
+        {
+          "map_id": "M70078_2",
+          "record_id": 7,
+          "kind": "anm-talk",
+          "program_id": "m70078-1",
+          "command_index": 44
+        },
+        {
+          "map_id": "M70078_2",
+          "record_id": 10,
+          "kind": "anm-talk",
+          "program_id": "m70078-1",
+          "command_index": 48
         }
       ],
-      "reachable_tlk_record_count": 903,
+      "reachable_tlk_record_count": 1018,
       "source_hashes": {
         "GAME.exe": "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18",
         "SYSTEM/Object.ITM": "9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8",
@@ -156019,6 +156614,8 @@
         "Fight_Role/022.CHR": "1d993fbcd562db44c2f515f3b9e3e1bfa4d2ad99924ad543b62ca8226b3f4455",
         "Fight_Role/032.CHR": "e081f7db9f51ac59c0bbd5b43f82a5894b3e707dd7512eb43aef574e1ec35f9f",
         "Fight_Role/042.CHR": "e6165e6a8c0099485543a521e978e8943aef7f9c5b17711c64a7d4c7fc8c169b",
+        "Fight_Role/024.CHR": "561e1defb159f9815a8538ff21a45d53916eb332837d2102f51ceae5bcde5db4",
+        "Fight_Role/041.CHR": "d0427095198fb28533c2a48d8f2ce22475faf13154386c7098e44053d12e5c32",
         "Map/m01060.dat": "5ff8f2a3c43649fff1efc4eccd878f4a662d905f6ba3404948e47ec9240a3826",
         "Map/m01065.dat": "2ca9d09e6c3b42814d0e6112ea17384e3796bbbe3660aa25c61503b407cb9aa5",
         "Map/m01020a.dat": "6020fed7cc22db1587cedcc5eb6b48183976ee16ae68ad2da028ba6c7129b8ab",
@@ -156085,6 +156682,16 @@
         "Map/m70074_2.dat": "d8ebf4d5179f28c5299c794ca2615f3c7eb7846e289141b82438fb69262005ab",
         "Map/m70075.dat": "ce9b2c1df4565f3ba20a1e15b5736b2c94fa5323bac78055381cc967854bf8f5",
         "Map/m70076.dat": "4a76f605d199e59f3fa6e4e4cbafde307f0b424df36fee46a9e93f0b62220702",
+        "Map/m01019.dat": "6ecd45d09851e46250693f82d02cd5ee76aaa1bfbd21f7ab81d6f9f938940352",
+        "Map/m70077.dat": "1aa5847263530dc3b1cacd0920b92ee7c8ca0d5c0aaba360f5fa1845ff2da3c4",
+        "Map/m70077-1.dat": "920b020de7c13814911adf25e23d30f8a24fd30a81eec9117d77825feb90506a",
+        "Map/m70077-2.dat": "3c4aa96befd20277ebed8f6d8fb81d60becc547341773c7e65e5f6a2cb2ac5e7",
+        "Map/m70077-3.dat": "75009f4075bbfad0ca2a978b16713b25d824c1b48d6497e2a82749a1795bd6dd",
+        "Map/m70077-4.dat": "3e0d349a386bd8ae1132c4e83256674687b7f86a7a370d679bfaf3fe15e28214",
+        "Map/m70078-1_1.dat": "6997b90c8980e5ffc912dca8be8ae8044738ff8de0ed5b2a6d033e153033506e",
+        "Map/m70078-2_1.dat": "761560ea135fc837b06354f3f22cc1abb348a7e8c7636a5e3f02a0a3e32c86ad",
+        "Map/m70078-3_1.dat": "0bbe4fb0fcaf58ada56a85d1cf17536340767be4212592c54e0b3c81957d45eb",
+        "Map/m70078_2.dat": "5dd7156cc55765078812f7aee1196e21dd7f967ff75f36c25adab40afdaa2c1d",
         "Map/m01060.TLK": "8e71ad04dacc1155c6e7adcf5dbf50e1cffbd049a53aa2610a1769f10bbd0bee",
         "Map/m01065.TLK": "59737a03d554b6d1850c301ef5d395c70fd8e5df525df22a8447d118b09ec48b",
         "Map/m01020a.TLK": "407923eb9ea3ff2258e77c6242d2941aba4e470e17f63efc472445ef05ef7bd1",
@@ -156132,6 +156739,11 @@
         "Map/m70072.TLK": "b3ba5d7005317727f429fe23f0b87f5a79110f6335473a95f7023de1c04f1d9b",
         "Map/m70073.TLK": "67fc014d261c1d9e695c386a1932beac02dcdbec8e9336900fa044ebc20db4db",
         "Map/m70076.TLK": "4bcd326f3127a0da37cd28145eeb1966cd02db8d5f65b8e698c7109194cdb0ac",
+        "Map/m01019.TLK": "ba4175738cbf8bcfbebdb292928cfccaa4b59e8f6c8e46ec5d9e1591d422017a",
+        "Map/m70078-1_1.TLK": "f2706c90317d9999ce713eca22e1ae0ff3f8734a5bd2e2b58f071c01065faa06",
+        "Map/m70078-2_1.TLK": "2309825a1929ebc97e010b756cd9fb9617831f9fc4c6337f0b809f1b423d813c",
+        "Map/m70078-3_1.TLK": "67507c3a98a6fcd52713e957ba70d1c6aa4f642c7282d848a67c6cf91beec246",
+        "Map/m70078_2.TLK": "c4def880426cde711e854d4b72b867b73206c0880e888bf064afbd19b6d1f560",
         "Animate/m01010-2.anm": "c55c3523db4a73b52be4c41207759c85875887ecaf59466e2116ecfbedd54eef",
         "Animate/m01010-3.anm": "746051dea82ced51cd73ef4c30e952d82b8e4b009583e88d47e000b950ba7238",
         "Animate/m01020a-1.anm": "2b9cc2ad10eae8674d95e12bd252b8c71b4a1d63f18aa96839ad71f48575caba",
@@ -156162,7 +156774,10 @@
         "Animate/m70030-1.anm": "a5a6e002bea13b92735b33a5bf7d866cda47020776bbab2f4f6cfc539ca11a3f",
         "Animate/m71014-1.anm": "b4788169b65d163448b33c449818bc38cac40efe2d10c8bc0c1c613fa5ca3c56",
         "Animate/m71050-1.anm": "dbbef9d0067bd2ced4d7750b392af11de3e05e206c172e009157ad5fb4090a38",
-        "Animate/m70073-1.anm": "40fbf5f044efb1804712d1cc6faf2b899a3e24624a8b53c74f0bd6e869da37c8"
+        "Animate/m70073-1.anm": "40fbf5f044efb1804712d1cc6faf2b899a3e24624a8b53c74f0bd6e869da37c8",
+        "Animate/m01010-1.anm": "16afe8e9460e192ecc3b16be41d7c457633d6c62e531721318a3e5ac21fbe114",
+        "Animate/m01042-1.anm": "8631c45d33f456b5072349c1b1239dc90f219ced8f5e5dfeab74f183ab6b8d5d",
+        "Animate/m70078-1.anm": "4842a7ac5b7f30d2231a6030ab2364d961dd69243684ae6735c16f4882dc52be"
       },
       "native_bootstrap": {
         "procedure": "0x47ae20",
@@ -156181,8 +156796,8 @@
       "scope": "Menu equip/link capability only; no inventory grant, party ownership or special passive is inferred.",
       "generated_input_hashes": {
         "data/opening_seed.json": "d22cac66f87121e147518fd1e9833ad7a98667cde923ca141194e5363cc8f3d3",
-        "data/chapter_story.json": "d442ec134bd5854d7ef62fc8ba54e3c35b3d732e3c88ed8c469632a5e36ea94f",
-        "data/runtime_content.json": "d358feaa7d539630e43bcce1cf3cd1bcf8a1c8b74b8a010915f0de17437299f4"
+        "data/chapter_story.json": "06b38d8029e4fc34e720454f1b6137f345503acede11ddcbb1eb7bebee98a6d7",
+        "data/runtime_content.json": "1ef29fc9a223b695a8919638d0ae4615cfe80015be7ecaf9f1e3c0a442a6b572"
       }
     },
     "item_capability_admission": {
@@ -156223,6 +156838,7 @@
         236,
         237,
         238,
+        245,
         251,
         252,
         265,
@@ -156271,7 +156887,8 @@
         356,
         357,
         358,
-        359
+        359,
+        399
       ],
       "sources": {
         "226": [
@@ -156643,6 +157260,232 @@
               "offset": 5395,
               "bytes": 2,
               "raw_hex": "1001"
+            }
+          }
+        ],
+        "331": [
+          {
+            "kind": "registered-enemy-reward",
+            "map_id": "M70078_2",
+            "record_id": 6,
+            "enemy_id": "041",
+            "enemy_slot": 0,
+            "reward_slot": 0,
+            "entrance": {
+              "map_id": "M70078_2",
+              "record_id": 6,
+              "kind": "anm-talk",
+              "program_id": "m70078-1",
+              "command_index": 42
+            },
+            "battle_source": {
+              "path": "Map/m70078_2.TLK",
+              "sha256": "c4def880426cde711e854d4b72b867b73206c0880e888bf064afbd19b6d1f560",
+              "record_id": 6,
+              "record_bytes": 1647,
+              "offset": 10261
+            },
+            "source": {
+              "path": "Fight_Role/041.CHR",
+              "sha256": "d0427095198fb28533c2a48d8f2ce22475faf13154386c7098e44053d12e5c32",
+              "offset": 240,
+              "bytes": 4,
+              "raw_hex": "4b010000"
+            }
+          },
+          {
+            "kind": "registered-enemy-reward",
+            "map_id": "M70078_2",
+            "record_id": 6,
+            "enemy_id": "041",
+            "enemy_slot": 2,
+            "reward_slot": 0,
+            "entrance": {
+              "map_id": "M70078_2",
+              "record_id": 6,
+              "kind": "anm-talk",
+              "program_id": "m70078-1",
+              "command_index": 42
+            },
+            "battle_source": {
+              "path": "Map/m70078_2.TLK",
+              "sha256": "c4def880426cde711e854d4b72b867b73206c0880e888bf064afbd19b6d1f560",
+              "record_id": 6,
+              "record_bytes": 1647,
+              "offset": 10261
+            },
+            "source": {
+              "path": "Fight_Role/041.CHR",
+              "sha256": "d0427095198fb28533c2a48d8f2ce22475faf13154386c7098e44053d12e5c32",
+              "offset": 240,
+              "bytes": 4,
+              "raw_hex": "4b010000"
+            }
+          },
+          {
+            "kind": "registered-enemy-reward",
+            "map_id": "M70078_2",
+            "record_id": 6,
+            "enemy_id": "024",
+            "enemy_slot": 4,
+            "reward_slot": 0,
+            "entrance": {
+              "map_id": "M70078_2",
+              "record_id": 6,
+              "kind": "anm-talk",
+              "program_id": "m70078-1",
+              "command_index": 42
+            },
+            "battle_source": {
+              "path": "Map/m70078_2.TLK",
+              "sha256": "c4def880426cde711e854d4b72b867b73206c0880e888bf064afbd19b6d1f560",
+              "record_id": 6,
+              "record_bytes": 1647,
+              "offset": 10261
+            },
+            "source": {
+              "path": "Fight_Role/024.CHR",
+              "sha256": "561e1defb159f9815a8538ff21a45d53916eb332837d2102f51ceae5bcde5db4",
+              "offset": 240,
+              "bytes": 4,
+              "raw_hex": "4b010000"
+            }
+          },
+          {
+            "kind": "registered-enemy-reward",
+            "map_id": "M70073",
+            "record_id": 7,
+            "enemy_id": "042",
+            "enemy_slot": 0,
+            "reward_slot": 0,
+            "entrance": {
+              "map_id": "M70073",
+              "record_id": 6,
+              "kind": "npc",
+              "npc_slot": 10
+            },
+            "battle_source": {
+              "path": "Map/m70073.TLK",
+              "sha256": "67fc014d261c1d9e695c386a1932beac02dcdbec8e9336900fa044ebc20db4db",
+              "record_id": 7,
+              "record_bytes": 1647,
+              "offset": 11908
+            },
+            "source": {
+              "path": "Fight_Role/042.CHR",
+              "sha256": "e6165e6a8c0099485543a521e978e8943aef7f9c5b17711c64a7d4c7fc8c169b",
+              "offset": 240,
+              "bytes": 4,
+              "raw_hex": "4b010000"
+            }
+          },
+          {
+            "kind": "registered-enemy-reward",
+            "map_id": "M71013",
+            "record_id": 5,
+            "enemy_id": "042",
+            "enemy_slot": 0,
+            "reward_slot": 0,
+            "entrance": {
+              "map_id": "M71013",
+              "record_id": 4,
+              "kind": "anm-talk",
+              "program_id": "m01060-2",
+              "command_index": 30
+            },
+            "battle_source": {
+              "path": "Map/m71013.TLK",
+              "sha256": "da89b10163c8a8374dd4b59e292a68a145f34034a52f8c96fc4bad1e8ed9b944",
+              "record_id": 5,
+              "record_bytes": 1647,
+              "offset": 8614
+            },
+            "source": {
+              "path": "Fight_Role/042.CHR",
+              "sha256": "e6165e6a8c0099485543a521e978e8943aef7f9c5b17711c64a7d4c7fc8c169b",
+              "offset": 240,
+              "bytes": 4,
+              "raw_hex": "4b010000"
+            }
+          }
+        ],
+        "399": [
+          {
+            "kind": "registered-enemy-reward",
+            "map_id": "M70078_2",
+            "record_id": 6,
+            "enemy_id": "024",
+            "enemy_slot": 4,
+            "reward_slot": 1,
+            "entrance": {
+              "map_id": "M70078_2",
+              "record_id": 6,
+              "kind": "anm-talk",
+              "program_id": "m70078-1",
+              "command_index": 42
+            },
+            "battle_source": {
+              "path": "Map/m70078_2.TLK",
+              "sha256": "c4def880426cde711e854d4b72b867b73206c0880e888bf064afbd19b6d1f560",
+              "record_id": 6,
+              "record_bytes": 1647,
+              "offset": 10261
+            },
+            "source": {
+              "path": "Fight_Role/024.CHR",
+              "sha256": "561e1defb159f9815a8538ff21a45d53916eb332837d2102f51ceae5bcde5db4",
+              "offset": 244,
+              "bytes": 4,
+              "raw_hex": "8f010000"
+            }
+          }
+        ],
+        "268": [
+          {
+            "kind": "registered-enemy-reward",
+            "map_id": "M70078_2",
+            "record_id": 6,
+            "enemy_id": "024",
+            "enemy_slot": 4,
+            "reward_slot": 2,
+            "entrance": {
+              "map_id": "M70078_2",
+              "record_id": 6,
+              "kind": "anm-talk",
+              "program_id": "m70078-1",
+              "command_index": 42
+            },
+            "battle_source": {
+              "path": "Map/m70078_2.TLK",
+              "sha256": "c4def880426cde711e854d4b72b867b73206c0880e888bf064afbd19b6d1f560",
+              "record_id": 6,
+              "record_bytes": 1647,
+              "offset": 10261
+            },
+            "source": {
+              "path": "Fight_Role/024.CHR",
+              "sha256": "561e1defb159f9815a8538ff21a45d53916eb332837d2102f51ceae5bcde5db4",
+              "offset": 248,
+              "bytes": 4,
+              "raw_hex": "0c010000"
+            }
+          },
+          {
+            "kind": "registered-recipe-product",
+            "map_id": "M01042",
+            "record_id": 63,
+            "source": {
+              "path": "Map/m01042.TLK",
+              "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
+              "record_id": 63,
+              "record_bytes": 1647,
+              "offset": 104140
+            },
+            "entrance": {
+              "map_id": "M01042",
+              "record_id": 31,
+              "kind": "npc",
+              "npc_slot": 12
             }
           }
         ],
@@ -157711,65 +158554,6 @@
             }
           }
         ],
-        "331": [
-          {
-            "kind": "registered-enemy-reward",
-            "map_id": "M70073",
-            "record_id": 7,
-            "enemy_id": "042",
-            "enemy_slot": 0,
-            "reward_slot": 0,
-            "entrance": {
-              "map_id": "M70073",
-              "record_id": 6,
-              "kind": "npc",
-              "npc_slot": 10
-            },
-            "battle_source": {
-              "path": "Map/m70073.TLK",
-              "sha256": "67fc014d261c1d9e695c386a1932beac02dcdbec8e9336900fa044ebc20db4db",
-              "record_id": 7,
-              "record_bytes": 1647,
-              "offset": 11908
-            },
-            "source": {
-              "path": "Fight_Role/042.CHR",
-              "sha256": "e6165e6a8c0099485543a521e978e8943aef7f9c5b17711c64a7d4c7fc8c169b",
-              "offset": 240,
-              "bytes": 4,
-              "raw_hex": "4b010000"
-            }
-          },
-          {
-            "kind": "registered-enemy-reward",
-            "map_id": "M71013",
-            "record_id": 5,
-            "enemy_id": "042",
-            "enemy_slot": 0,
-            "reward_slot": 0,
-            "entrance": {
-              "map_id": "M71013",
-              "record_id": 4,
-              "kind": "anm-talk",
-              "program_id": "m01060-2",
-              "command_index": 30
-            },
-            "battle_source": {
-              "path": "Map/m71013.TLK",
-              "sha256": "da89b10163c8a8374dd4b59e292a68a145f34034a52f8c96fc4bad1e8ed9b944",
-              "record_id": 5,
-              "record_bytes": 1647,
-              "offset": 8614
-            },
-            "source": {
-              "path": "Fight_Role/042.CHR",
-              "sha256": "e6165e6a8c0099485543a521e978e8943aef7f9c5b17711c64a7d4c7fc8c169b",
-              "offset": 240,
-              "bytes": 4,
-              "raw_hex": "4b010000"
-            }
-          }
-        ],
         "343": [
           {
             "kind": "tlk-shop-item",
@@ -158788,23 +159572,18 @@
             }
           }
         ],
-        "268": [
+        "245": [
           {
-            "kind": "registered-recipe-product",
-            "map_id": "M01042",
-            "record_id": 63,
+            "kind": "registered-map-chest-grant",
+            "map_id": "M70078-2_1",
+            "object_index": 21,
+            "reward_slot": 0,
             "source": {
-              "path": "Map/m01042.TLK",
-              "sha256": "718230daa1693ef019cd1229be63ea91d641a06d25f02b705a04c3021484c15d",
-              "record_id": 63,
-              "record_bytes": 1647,
-              "offset": 104140
-            },
-            "entrance": {
-              "map_id": "M01042",
-              "record_id": 31,
-              "kind": "npc",
-              "npc_slot": 12
+              "path": "Map/m70078-2_1.dat",
+              "sha256": "761560ea135fc837b06354f3f22cc1abb348a7e8c7636a5e3f02a0a3e32c86ad",
+              "offset": 949536,
+              "bytes": 4,
+              "raw_hex": "f5000000"
             }
           }
         ]
@@ -158926,6 +159705,75 @@
           }
         },
         "272": {
+          "availability": {
+            "enabled": false,
+            "chapter_enabled": false,
+            "catalog_visible": true,
+            "default_enabled": false,
+            "reasons": [
+              "outside-default-chapter-item-set",
+              "usage-handler-not-recovered"
+            ]
+          },
+          "behavior": {
+            "kind": "source-only",
+            "status": "unverified",
+            "implemented_scope": [],
+            "unverified_scope": [
+              "special-passive",
+              "crystal-socketing",
+              "crafting",
+              "attack-or-state-effect"
+            ]
+          }
+        },
+        "331": {
+          "availability": {
+            "enabled": false,
+            "chapter_enabled": false,
+            "catalog_visible": true,
+            "default_enabled": false,
+            "reasons": [
+              "outside-default-chapter-item-set",
+              "usage-handler-not-recovered"
+            ]
+          },
+          "behavior": {
+            "kind": "source-only",
+            "status": "unverified",
+            "implemented_scope": [],
+            "unverified_scope": [
+              "special-passive",
+              "crystal-socketing",
+              "crafting",
+              "attack-or-state-effect"
+            ]
+          }
+        },
+        "399": {
+          "availability": {
+            "enabled": false,
+            "chapter_enabled": false,
+            "catalog_visible": true,
+            "default_enabled": false,
+            "reasons": [
+              "outside-default-chapter-item-set",
+              "usage-handler-not-recovered"
+            ]
+          },
+          "behavior": {
+            "kind": "source-only",
+            "status": "unverified",
+            "implemented_scope": [],
+            "unverified_scope": [
+              "special-passive",
+              "crystal-socketing",
+              "crafting",
+              "attack-or-state-effect"
+            ]
+          }
+        },
+        "268": {
           "availability": {
             "enabled": false,
             "chapter_enabled": false,
@@ -159891,29 +160739,6 @@
             ]
           }
         },
-        "331": {
-          "availability": {
-            "enabled": false,
-            "chapter_enabled": false,
-            "catalog_visible": true,
-            "default_enabled": false,
-            "reasons": [
-              "outside-default-chapter-item-set",
-              "usage-handler-not-recovered"
-            ]
-          },
-          "behavior": {
-            "kind": "source-only",
-            "status": "unverified",
-            "implemented_scope": [],
-            "unverified_scope": [
-              "special-passive",
-              "crystal-socketing",
-              "crafting",
-              "attack-or-state-effect"
-            ]
-          }
-        },
         "343": {
           "availability": {
             "enabled": false,
@@ -160673,7 +161498,7 @@
             ]
           }
         },
-        "268": {
+        "245": {
           "availability": {
             "enabled": false,
             "chapter_enabled": false,
@@ -160825,12 +161650,12 @@
     },
     "behavior_counts": {
       "equip": 115,
-      "source-only": 215,
+      "source-only": 213,
       "simple-restore": 4,
       "revival-item": 1,
-      "status-cure": 13,
+      "status-cure": 14,
       "status-immunity-crystal": 1,
-      "crafting-material": 52,
+      "crafting-material": 53,
       "status-attack": 14,
       "status-clear": 1
     },

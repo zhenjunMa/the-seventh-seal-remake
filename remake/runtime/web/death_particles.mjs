@@ -4,6 +4,7 @@
  * browser refresh rate nor particle draws may alter the combat RNG stream.
  * Evidence: runtime/evidence/enemy_death_20261028/native_particles.json.
  */
+import {AppearanceParticles} from './appearance_particles.mjs';
 export const DEATH_PARTICLE_TIMING=Object.freeze({
   render_ms:1000/60,hard_elapsed_raw:30,
   // First render with no live pixels, including the final empty render.
@@ -93,7 +94,7 @@ export class DeathParticles {
  * small changing texture. Intrinsic light is not a second particle source.
  * Source sampling uses the remake's nearest-neighbour scale/anchor contract.
  */
-export function createDeathParticleSurface({rgba,width,height,anchor,mode,seed}){
+export function createDeathParticleSurface({rgba,width,height,anchor,mode,seed,appearance=false}){
   const pixels=[];
   const originX=Math.round(anchor.x),originY=Math.round(anchor.y);
   let left=Infinity,top=Infinity,right=-Infinity,bottom=-Infinity;
@@ -103,14 +104,16 @@ export function createDeathParticleSurface({rgba,width,height,anchor,mode,seed})
     pixels.push({x:px,y:py,rgb:[rgba[i],rgba[i+1],rgba[i+2]]});
     left=Math.min(left,px);top=Math.min(top,py);right=Math.max(right,px);bottom=Math.max(bottom,py);
   }
-  const effect=new DeathParticles({mode,pixels,random:deathVisualRandom(seed)});
+  const effect=appearance?new AppearanceParticles({pixels,anchor:{x:originX,y:originY},random:deathVisualRandom(seed)})
+    :new DeathParticles({mode,pixels,random:deathVisualRandom(seed)});
   if(!pixels.length){effect.draw=()=>{};return effect;}
+  if(appearance){top=Math.min(top,-originY);bottom=Math.max(bottom,-originY);}
   // At most35 calls: translation<=175; spin stays within the source radius.
   const pad=Math.ceil(Math.max(192,Math.hypot(right-left,bottom-top)));
   left=Math.floor(left)-pad;top=Math.floor(top)-pad;
   const canvas=document.createElement('canvas');canvas.width=Math.ceil(right-left)+pad+1;canvas.height=Math.ceil(bottom-top)+pad+1;
   const ctx=canvas.getContext('2d'),frame=ctx.createImageData(canvas.width,canvas.height),data=frame.data;
-  const base=mode===4?document.createElement('canvas'):null;
+  const base=mode===4||appearance?document.createElement('canvas'):null;
   if(base){base.width=canvas.width;base.height=canvas.height;base.battleParticleRevision=0;}
   const baseCtx=base?.getContext('2d'),baseFrame=baseCtx?.createImageData(canvas.width,canvas.height);
   canvas.battleParticleRevision=0;

@@ -203,7 +203,9 @@
         "test_white_forest_landing.mjs",
         "test_white_forest_maps.py",
         "test_white_forest_story.mjs",
-        "test_world_map.mjs"
+        "test_world_map.mjs",
+        "test_inner_white_forest_seal.mjs",
+        "test_inner_white_forest_battle_source.py"
       ],
       "requires": [
         "GAME.exe"
@@ -217,7 +219,8 @@
         "test_battle_result_sequence.mjs",
         "test_ember_city_battle_replay.mjs",
         "test_first_return_opening_view.mjs",
-        "test_forest_stage.mjs"
+        "test_forest_stage.mjs",
+        "test_inner_white_forest_battle_replay.mjs"
       ],
       "layer": "component",
       "cache": false
@@ -292,7 +295,7 @@
     "test_effect_layers.py": ["python:PIL", "remake/runtime/evidence/fire_valley_20261025"],
     "test_ember_city_battle_source.py": ["python:PIL", "remake/runtime/evidence/turn_rules_assembly_20261011.json"],
     "test_ember_city_story_source.mjs": ["Map/M01030.DAT", "Map/M01030.TLK", "Map/M01031.DAT", "Map/M01031.TLK", "Map/M01040.DAT", "Map/M01040.TLK", "Map/M01041.DAT", "Map/M01041.TLK", "Animate/m01040-1.anm", "Animate/m01040-2.anm", "Animate/m01060-2.anm", "remake/runtime/web/data/chapter_map_resources.json"],
-    "test_ember_city_items.py": ["python:PIL", "remake/runtime/evidence/fire_valley_20261024/stage12_status_apply.json", "remake/runtime/evidence/forest_status_instructions_20261011.json", "remake/runtime/evidence/battle_revive_recovery_native_20261015.json", "remake/runtime/evidence/fire_valley_20261025/support_507e20.json"],
+    "test_ember_city_items.py": ["python:PIL", "remake/runtime/evidence/fire_valley_20261024/stage12_status_apply.json", "remake/runtime/evidence/forest_status_instructions_20261011.json", "remake/runtime/evidence/battle_revive_recovery_native_20261015.json", "remake/runtime/evidence/fire_valley_20261025/support_507e20.json", "Fight_Role/021.CHR", "remake/runtime/evidence/inner_white_forest_20261030/item399_native.json"],
     "test_equipment_passives.mjs": ["remake/runtime/evidence/forest_status_instructions_20261011.json", "remake/runtime/evidence/white_forest_20261026/reward_passives/native_bundle.json"],
     "test_finale_defeat_recovery.mjs": ["remake/runtime/evidence/fire_valley_20261025/browser_diagnostic/delivery_finale_defeat_validation_failure_log.json"],
     "test_fire_valley_battle_source.py": ["python:PIL", "remake/runtime/evidence/chapter_native.json", "remake/runtime/evidence/party_magic_native.json", "remake/runtime/evidence/turn_rules_assembly_20261011.json"],
@@ -341,7 +344,10 @@
     "test_white_forest_index.py": ["python:PIL"],
     "test_white_forest_maps.py": ["python:PIL", "remake/runtime/evidence/white_forest_20261026/map_source_validation.json"],
     "test_world_map.mjs": ["remake/runtime/evidence/route_native_20261011.json"],
-    "test_map_collision_source.mjs": ["Map/m01063.dat", "Map/m70060.dat", "Map/m71014.dat", "Map/m71011.dat", "Map/m71012.dat", "Map/m71012-1.dat", "Map/m71012-2.dat", "Map/m71013.dat"]
+    "test_map_collision_source.mjs": ["Map/m01063.dat", "Map/m70060.dat", "Map/m71014.dat", "Map/m71011.dat", "Map/m71012.dat", "Map/m71012-1.dat", "Map/m71012-2.dat", "Map/m71013.dat"],
+    "test_inner_white_forest_seal.mjs": ["Map/m01019.dat", "Map/m01019.TLK", "Map/m70077.dat", "Map/m70077-1.dat", "Map/m70077-2.dat", "Map/m70077-3.dat", "Map/m70077-4.dat", "Map/m70078-1_1.dat", "Map/m70078-2_1.dat", "Map/m70078-3_1.dat", "Map/m70078_2.dat", "Map/m70078-1_1.TLK", "Map/m70078-2_1.TLK", "Map/m70078-3_1.TLK", "Map/m70078_2.TLK", "Animate/m01010-1.anm", "Animate/m01042-1.anm", "Animate/m70078-1.anm", "Map/m17029.dat", "Map/m17029.TLK", "Map/m17020.dat", "Map/m17026.dat", "Map/m17026.TLK", "Animate/m17029-1.anm", "SYSTEM/Object.ITM"],
+    "test_inner_white_forest_battle_source.py": ["python:PIL", "remake/runtime/evidence/turn_rules_assembly_20261011.json", "remake/runtime/evidence/forest_scheduler_native_20261011.json"],
+    "test_inner_white_forest_battle_replay.mjs": ["Fight_Role/024.CHR", "Fight_Role/041.CHR", "remake/runtime/web/assets/enemy_roles/024", "remake/runtime/web/assets/enemy_roles/041", "remake/runtime/web/data/battle_lifecycle_layers_024.json", "remake/runtime/web/data/battle_lifecycle_layers_041.json", "remake/runtime/evidence/inner_white_forest_20261030/appearance_native.json"]
   },
   "profiles": {
     "task": [
