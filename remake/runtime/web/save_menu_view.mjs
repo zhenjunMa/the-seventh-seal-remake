@@ -1,3 +1,4 @@
+import {drawingContext} from './phaser/rendering/recorded_surface.mjs';
 // Original Game_Save_01/02/03 pixels and hit rectangles on a 640x480 plane.
 import {MANUAL_SAVE_SLOTS} from './core/save_slots.mjs';
 import {appendSavePreview} from './save_preview_view.mjs';
@@ -7,7 +8,7 @@ export class SaveMenuView {
     if(manifest?.schema!=='seventh-seal-save-menu'||manifest.slot_count!==20)throw new Error('存档页面来源无效');
     Object.assign(this,{manifest,root,image,onConfirm,onClose,log});
     this.menus=new Map(manifest.menus.map(menu=>[menu.id,menu]));this.images=new Map();
-    this.ctx=root.querySelector('canvas').getContext('2d');this.buttons=root.querySelector('.save-menu-buttons');this.message=root.querySelector('.save-menu-message');
+    this.ctx=drawingContext(root.querySelector('canvas'));this.buttons=root.querySelector('.save-menu-buttons');this.message=root.querySelector('.save-menu-message');
     this.active=false;this.epoch=0;this.pending=false;this.confirming=false;this.top=0;this.selected=0;
     this.observer=new ResizeObserver(()=>this.resize());this.observer.observe(root);
     root.addEventListener('wheel',event=>{if(this.active){event.preventDefault();if(!this.pending&&!this.loading&&!this.confirming)this.move(event.deltaY<0?-1:1);}},{passive:false});

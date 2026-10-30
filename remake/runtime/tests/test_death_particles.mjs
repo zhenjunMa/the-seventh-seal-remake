@@ -45,12 +45,12 @@ test('scaled source anchors produce integer particle columns for both vertical m
   }}finally{globalThis.document=originalDocument;}
 });
 
-test('Phaser uploads a changing actor canvas once per revision and releases it after disappearance',()=>{
+test('cached glyph bitmaps upload once per revision and release after their idle allowance',()=>{
   let uploads=0,removed=0,images=0,canvases=0;
-  const texture={setFilter(){},refresh(){uploads++;}},scene={textures:{addImage(){images++;return texture;},addCanvas(){canvases++;return texture;},remove(){removed++;}}};
-  const cache=new TextureCache(scene),canvas={battleParticleRevision:0};cache.begin();cache.texture(canvas);cache.texture(canvas);
+  const texture={source:[{width:8,height:8}],setFilter(){},refresh(){uploads++;}},scene={textures:{addImage(){images++;return texture;},addCanvas(){canvases++;return texture;},remove(){removed++;}}};
+  const cache=new TextureCache(scene,{idleFrames:0}),canvas={width:8,height:8,gpuRasterRevision:0};cache.begin();cache.texture(canvas);cache.texture(canvas);
   assert.equal(canvases,1);assert.equal(images,0);assert.equal(uploads,0);
-  canvas.battleParticleRevision++;cache.texture(canvas);cache.texture(canvas);assert.equal(uploads,1);
+  canvas.gpuRasterRevision++;cache.texture(canvas);cache.texture(canvas);assert.equal(uploads,1);
   cache.begin();cache.prune();assert.equal(removed,1);assert.equal(cache.entries.size,0);
 });
 

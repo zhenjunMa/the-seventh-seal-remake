@@ -1,3 +1,4 @@
+import {PhaserRuntime} from '../phaser/runtime.mjs';
 import {WorldStore,decodeSave} from '../core/world.mjs';
 import {createBattleController} from '../controllers/battle.mjs';
 import {loadRuntimeConfiguration,compileRuntimeConfiguration} from '../core/runtime_config.mjs';
@@ -8,20 +9,23 @@ const $=id=>document.getElementById(id),json=async p=>{const r=await fetch('/'+p
 const names={battleData:'combat_sample',forestData:'forest_combat',schedulerData:'battle_scheduler',aiData:'forest_ai',partyRewards:'party_rewards',partySkills:'party_skills',partyCombat:'party_combat',partyReactions:'party_reactions',statusData:'forest_status',sourceItemData:'items',sourceSkills:'library/skills',sourceMagic:'library/magic'};
 const state={...Object.fromEntries(await Promise.all(Object.entries(names).map(async([k,v])=>[k,await json('data/'+v+'.json')]))),catalog:{party_battle_view:'data/party_battle_view.json'},
   view:{x:0,y:0},battleViews:new Map(),battleHistory:[],battleCursorMemory:new Map(),selectedRole:'001',sidePriority:0,
-  scenes:{phase:'map',setPhase(phase){this.phase=phase;$('phase').textContent=phase;}}};
+  scenes:{phase:'map',setPhase(phase){this.phase=phase;state.engine?.setPhase(phase);$('phase').textContent=phase;}}};
 const seed=await decodeSave(await json('tests/fixtures/battle_loading_save.json')),logs=[],runs=[],checks=[],entryFrames=[];
 const storageBefore=Object.entries(localStorage),canvas=$('stage');let locked=false;
 const report=()=>{$('report').textContent=JSON.stringify({scope:'Controlled entry; simulation paused after entry for observation. Main-page movement/attack checked separately.',runs,checks,cache:battleResources.snapshot(),storage_unchanged:JSON.stringify(storageBefore)===JSON.stringify(Object.entries(localStorage)),last_events:logs.slice(-8)},null,2);};
 const log=e=>{const {type,kind,elapsed_ms,mode,cache,frames,actor_id,action_id,error}=e;logs.push({type,kind,elapsed_ms,mode,cache,frames,actor_id,action_id,error,at:performance.now()});if(e.type==='battle-transition-complete')report();};
+state.engine=await PhaserRuntime.create({parent:$('phaserHost'),focusTarget:canvas,onError:error=>{checks.push({error:error.message});report();}});
 state.loadingView=await LoadingView.create({root:$('sceneLoading'),manifest:(await json('data/prologue_presentation.json')).loading,image:async p=>{const i=new Image();i.src=p;await i.decode();return i;},log});
-state.battleTransition=new BattleTransitionView({loadingView:state.loadingView,log});
+state.battleTransition=new BattleTransitionView({renderer:state.engine.transitions,clock:state.engine.clock,log});
 const actions={json,log,status:message=>{$('phase').textContent=message;},guarded:fn=>async()=>{try{await fn();}catch(e){checks.push({error:e.message});report();}},resize(){},buildHud(){},updateNearest(){},refreshPartyMenu(){},
   readConfiguredData:async()=>compileRuntimeConfiguration({combat:state.battleData,forest:state.forestData,scheduler:state.schedulerData,ai:state.aiData,rewards:state.partyRewards,party_skills:state.partySkills,items:state.sourceItemData,source_skills:state.sourceSkills,source_magic:state.sourceMagic},await loadRuntimeConfiguration(json)),
   beginTechniqueTestMenu(){state.menuContext=null;return {};},resumeTechniqueTestMenu(){state.menuContext={combat:false,page:'skills'};state.scenes.setPhase('party-menu');}};
 Object.assign(actions,createBattleController({state,actions,$,canvas,ctx:canvas.getContext('2d')}));
 function reset(){state.battleView?.stop('QA reset');state.battleMenu?.dispose();state.battle=null;state.battleMenu=null;state.skillTestSession=null;state.battlePresentationError=null;state.world=new WorldStore(structuredClone(seed));state.scenes.setPhase('map');canvas.hidden=false;
   for(const id of ['battleCanvas','battleHud','battleCommands'])$(id).hidden=true;
-  const c=canvas.getContext('2d');for(let y=0;y<540;y+=30)for(let x=0;x<960;x+=30){c.fillStyle=(x/30+y/30)%2?'#3a5b68':'#172837';c.fillRect(x,y,30,30);}c.fillStyle='#fff';c.font='40px sans-serif';c.fillText('进入战斗前的画面',230,270);}
+  const c=canvas.getContext('2d');for(let y=0;y<540;y+=30)for(let x=0;x<960;x+=30){c.fillStyle=(x/30+y/30)%2?'#3a5b68':'#172837';c.fillRect(x,y,30,30);}c.fillStyle='#fff';c.font='40px sans-serif';c.fillText('进入战斗前的画面',230,270);
+  const scene=state.engine.exploration;scene.background.removeAll(true);scene.backgroundTiles=[];
+  const texture=scene.texturesAdapter.texture(canvas);scene.background.add(scene.add.image(0,0,texture.key).setOrigin(0).setDisplaySize(640,480));}
 async function run(kind){reset();const before=state.world.snapshot(),start=performance.now(),from=logs.length,frameFrom=entryFrames.length;
   if(kind==='training'){state.scenes.setPhase('party-menu');state.menuContext={combat:false,page:'skills'};await actions.startTechniqueTest();}
   else await actions.startBattle({map_id:'M70010',stage:'stage13.scn',members:[{id:'012'},{id:'013'}]},structuredClone(state.world.value.encounters));
@@ -47,8 +51,12 @@ async function pixels(){
       checks.push({pixel_path:path,blend,channels:aa.length,differences,passed:differences===0});
     }original.src='';
   }battleResources.release('qa-pixel-check');report();}
-async function transitions(){reset();const before=state.battleTransition.capture(canvas),after=document.createElement('canvas');after.width=640;after.height=480;const c=after.getContext('2d');c.fillStyle='#54245c';c.fillRect(0,0,640,480);c.fillStyle='#fff';c.font='38px sans-serif';c.fillText('战场已准备好',160,240);
-  for(let kind=0;kind<7;kind++){await state.battleTransition.run(before,()=>after,{kind});checks.push({transition:kind,completed:true,overlay_hidden:$('sceneLoading').hidden});report();}}
+async function transitions(){reset();state.scenes.setPhase('battle-active');
+  for(let kind=0;kind<7;kind++){
+    const before=state.engine.captureTexture('exploration');
+    await state.battleTransition.run(before,()=>{const surface=state.engine.battle.surface;surface.beginFrame();surface.fillStyle='#54245c';surface.fillRect(0,0,640,480);surface.endFrame();return state.engine.captureTexture('battle');},{kind});
+    checks.push({transition:kind,completed:true,overlay_hidden:!state.engine.transitions.active,gpu_snapshots:state.engine.snapshots.size});report();
+  }}
 async function guarded(fn){if(locked)return;locked=true;document.querySelectorAll('header button:not(#download)').forEach(b=>b.disabled=true);try{await fn();}catch(e){checks.push({error:e.stack});report();}finally{locked=false;document.querySelectorAll('header button').forEach(b=>b.disabled=false);}}
 $('normal').onclick=()=>guarded(()=>run('normal'));$('training').onclick=()=>guarded(()=>run('training'));$('reset').onclick=()=>guarded(async()=>{if(state.skillTestSession&&state.battle){state.battle.interrupt('QA return');await actions.returnFromBattle();checks.push({training_returned:state.skillTestSession===null,phase:state.scenes.phase});}else reset();report();});
 $('pixels').onclick=()=>guarded(pixels);$('transitions').onclick=()=>guarded(transitions);
@@ -56,6 +64,6 @@ $('download').onclick=()=>{const value={scope:'Independent controlled browser fi
 document.addEventListener('keydown',e=>{if(state.scenes.phase.startsWith('battle-')&&state.scenes.phase!=='battle-loading'){if(actions.battleKey(e.key,e.repeat))e.preventDefault();}});
 function frame(now){try{if(state.scenes.phase==='battle-loading')entryFrames.push({phase:state.scenes.phase,ticks:state.battle?.presentationSnapshot()?.scheduler?.ticks??0,kind:$('sceneLoading').dataset.kind,
     generic_loading_visible:!$('loading').hidden,scene_loading_visible:!$('sceneLoading').hidden});
-  else if(state.scenes.phase.startsWith('battle-')&&state.battle){state.battleView.draw(state.battle.presentationSnapshot(),now);actions.drawBattleInterface(now);}}
-  catch(e){checks.push({render_error:e.message});state.scenes.setPhase('error');report();}requestAnimationFrame(frame);}
-reset();requestAnimationFrame(frame);document.querySelectorAll('header button').forEach(b=>b.disabled=false);report();
+  else if(state.scenes.phase.startsWith('battle-')&&state.battle){const time=state.engine.battle.clock.time;state.battleView.draw(state.battle.presentationSnapshot(),time);actions.drawBattleInterface(time);}}
+  catch(e){checks.push({render_error:e.message});state.scenes.setPhase('error');report();}}
+reset();state.engine.start({phase:'map',interface:frame});window.addEventListener('pagehide',()=>state.engine.destroy(),{once:true});document.querySelectorAll('header button').forEach(b=>b.disabled=false);report();

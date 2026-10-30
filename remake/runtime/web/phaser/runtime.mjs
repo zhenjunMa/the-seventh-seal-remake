@@ -1,6 +1,9 @@
 import {explorationScene} from './scenes/exploration_scene.mjs';
 import {battleScene} from './scenes/battle_scene.mjs';
 import {ActionClock} from './components/action_clock.mjs';
+import {InterfaceCompositor} from './rendering/interface_compositor.mjs';
+import {transitionScene} from './rendering/battle_transition.mjs';
+import {preparePixelPipeline} from './rendering/pixel_sprite.mjs';
 
 export class PhaserRuntime {
   static async create(options){const runtime=new PhaserRuntime(options);await runtime.ready;return runtime;}
@@ -9,7 +12,7 @@ export class PhaserRuntime {
     if(Phaser?.VERSION!=='3.90.0')throw new Error('Phaser 3.90.0 本地运行库未加载，请检查 vendor/phaser');
     this.clock=new ActionClock();this.started=false;this.onError=onError;this.parent=parent;
     this.adapters={};this.phase='boot';this.mode=null;this.pauseReasons=new Set();this.destroyed=false;
-    this.listeners=new AbortController();
+    this.listeners=new AbortController();this.snapshots=new Set();this.snapshotSerial=0;
     const runtime=this;
     class RuntimeScene extends Phaser.Scene {
       constructor(){super({key:'runtime',active:true});}
@@ -17,17 +20,22 @@ export class PhaserRuntime {
     }
     this.ready=new Promise((resolve,reject)=>{
       this.game=new Phaser.Game({
-        type:Phaser.CANVAS,parent,width:640,height:480,antialias:false,roundPixels:false,version:'0.8-phaser',
+        type:Phaser.WEBGL,parent,width:640,height:480,antialias:false,antialiasGL:false,roundPixels:false,version:'0.9-webgl',
         backgroundColor:'#000000',banner:false,audio:{noAudio:true},
         // The existing input controller owns repeat/focus handling; audio owns
         // native cue selection. Do not install competing keyboard/audio systems.
         input:{keyboard:false,mouse:false,touch:false,gamepad:false},
         scale:{mode:Phaser.Scale.FIT,autoCenter:Phaser.Scale.CENTER_BOTH},
-        scene:[RuntimeScene,explorationScene(Phaser,this),battleScene(Phaser,this)],
+        scene:[RuntimeScene,explorationScene(Phaser,this),battleScene(Phaser,this),transitionScene(Phaser,this)],
         callbacks:{postBoot:game=>game.events.once(Phaser.Core.Events.POST_STEP,()=>{
           try{
             this.exploration=game.scene.getScene('exploration');this.battle=game.scene.getScene('battle');
             this.canvas=game.canvas;this.canvas.setAttribute('aria-label','第七封印游戏画面');
+            preparePixelPipeline(game.renderer);
+            game.renderer.on(Phaser.Renderer.Events.LOSE_WEBGL,()=>this.pause('webgl-main'));
+            game.renderer.on(Phaser.Renderer.Events.RESTORE_WEBGL,()=>{
+              try{for(const snapshot of this.snapshots)snapshot.redraw();this.resume('webgl-main');}catch(error){this.fail(error);}
+            });
             const options={signal:this.listeners.signal};
             this.canvas.addEventListener('pointerdown',()=>focusTarget?.focus({preventScroll:true}),options);
             this.canvas.addEventListener('wheel',event=>{
@@ -37,7 +45,7 @@ export class PhaserRuntime {
               if(document.hidden)this.pause('visibility');else this.resume('visibility');
             },options);
             if(document.hidden)this.pause('visibility');
-            this.syncScenes();resolve(this);
+            this.ui=new InterfaceCompositor(this);this.syncScenes();this.ui.ready.then(()=>resolve(this),reject);
           }catch(error){reject(error);}
         })}
       });
@@ -109,7 +117,16 @@ export class PhaserRuntime {
     this.skipDelta=true;this.syncScenes();this.adapters.resume?.();
   }
   presentMap(options){this.exploration.present(options);}
-  resize(){this.game?.scale?.refresh();}
+  resize(){this.game?.scale?.refresh();this.ui?.invalidate(true);}
+  captureTexture(source='exploration'){
+    if(!this.transitions.active)for(const previous of [...this.snapshots])previous.destroy();
+    const scene=this[source],camera=scene.cameras.main,key=`seal:snapshot:${++this.snapshotSerial}`;
+    const texture=scene.textures.addDynamicTexture(key,640,480);texture.setFilter(1);
+    texture.camera.setScroll(camera.scrollX,camera.scrollY).setZoom(camera.zoom).setRotation(camera.rotation);
+    const redraw=()=>{scene.sys.displayList.depthSort();texture.clear();texture.fill(camera.backgroundColor.color,1);texture.draw(scene.children.list.filter(object=>object.willRender(camera)));};redraw();
+    const snapshot={gpuTexture:true,key,width:640,height:480,redraw,destroy:()=>{if(this.snapshots.delete(snapshot))scene.textures.remove(key);}};
+    this.snapshots.add(snapshot);return snapshot;
+  }
   // Render current display lists without advancing the game clock or world.
   // Used for synchronous transition captures; normal frames render in Phaser.
   flush(){const renderer=this.game.renderer;renderer.preRender();this.game.scene.render(renderer);renderer.postRender();}
@@ -124,13 +141,14 @@ export class PhaserRuntime {
       return target;
     }finally{this.setMode(previous);}
   }
-  snapshot(){return {version:this.game.config.gameVersion,phaser:globalThis.Phaser.VERSION,renderer:'CANVAS',scene:this.mode,
+  snapshot(){return {version:this.game.config.gameVersion,phaser:globalThis.Phaser.VERSION,renderer:'WEBGL',scene:this.mode,interface:this.ui?.snapshot(),
     phase:this.phase,paused:this.paused,
     scenes:Object.fromEntries(['exploration','battle'].map(key=>[key,{active:this[key].sys.isActive(),visible:this[key].sys.isVisible(),sleeping:this[key].sys.isSleeping(),paused:this[key].sys.isPaused(),time:this[key].clock.time}])),
     mapActors:this.exploration.actors.size,battleObjects:Object.fromEntries(Object.entries(this.battle.surface.pools).map(([key,pool])=>[key,pool.length]))};}
   destroy(){
     if(this.destroyed)return;
     this.destroyed=true;this.started=false;this.listeners.abort();
+    this.transitions?.cancel();for(const snapshot of [...this.snapshots])snapshot.destroy();this.ui?.destroy();
     this.clock.destroy();this.exploration?.clock.destroy();this.battle?.clock.destroy();
     this.resizeObserver.disconnect();this.game.destroy(true);this.adapters={};
   }

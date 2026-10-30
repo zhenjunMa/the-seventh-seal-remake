@@ -1,3 +1,4 @@
+import {drawingContext} from './phaser/rendering/recorded_surface.mjs';
 // Native Locate_001/002 pixels and sensor plane. This view owns transient focus;
 // destination preparation, world writes and rollback stay in WorldMapController.
 export function nextWorldMapDestination(destinations, current, step) {
@@ -29,7 +30,7 @@ export class WorldMapView {
     this.images = new Map(); this.sensors = new Map(); this.snapshot = {phase: 'closed'};
     this.selected = null; this.hovered = null; this.armed = false; this.buttons = new Map();
     this.viewport = root.querySelector('.world-map-viewport');
-    this.canvas = root.querySelector('canvas'); this.ctx = this.canvas.getContext('2d');
+    this.canvas = root.querySelector('canvas'); this.ctx = drawingContext(this.canvas);
     this.hits = root.querySelector('#worldMapDestinations');
     this.canvas.addEventListener('pointermove', event => {
       if (this.snapshot.phase !== 'open') return;

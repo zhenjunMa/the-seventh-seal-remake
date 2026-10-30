@@ -1,7 +1,10 @@
 import {TextureCache} from './texture_cache.mjs';
+import {pixelSprite} from './pixel_sprite.mjs';
 
-const properties=['globalAlpha','globalCompositeOperation','fillStyle','strokeStyle','lineWidth','font','textAlign','lineJoin'];
+const properties=['globalAlpha','globalCompositeOperation','fillStyle','strokeStyle','lineWidth','font','textAlign','textBaseline','lineJoin'];
 const rgba=value=>{
+  const css=String(value).match(/^rgba?\(\s*([\d.]+)[, ]+([\d.]+)[, ]+([\d.]+)(?:\s*[,/]\s*([\d.]+))?\s*\)$/);
+  if(css)return {color:(Number(css[1])<<16)|(Number(css[2])<<8)|Number(css[3]),alpha:css[4]===undefined?1:Number(css[4])};
   let hex=String(value).replace('#','');
   if(hex.length===3||hex.length===4)hex=[...hex].map(c=>c+c).join('');
   if(!/^[a-f\d]{6}([a-f\d]{2})?$/i.test(hex))throw new Error(`未支持的绘制颜色：${value}`);
@@ -16,13 +19,13 @@ const intersect=(a,b)=>{const x=Math.max(a.x,b.x),y=Math.max(a.y,b.y);
 export class BattleSurface {
   constructor(scene){
     this.scene=scene;this.textures=new TextureCache(scene);
-    this.pools={sprite:[],graphics:[],text:[]};this.gradients=new Map();
+    this.pools={sprite:[],graphics:[],text:[],particle:[]};this.gradients=new Map();
     this.canvas={width:640,height:480,getContext:()=>this};this.beginFrame();
   }
   beginFrame(){
-    this.cursor={sprite:0,graphics:0,text:0};this.order=0;this.stack=[];this.matrix=[1,0,0,1,0,0];
+    this.cursor={sprite:0,graphics:0,text:0,particle:0};this.order=0;this.stack=[];this.matrix=[1,0,0,1,0,0];
     this.clipRect={x:0,y:0,width:640,height:480};this.path=[];
-    Object.assign(this,{globalAlpha:1,globalCompositeOperation:'source-over',fillStyle:'#000000',strokeStyle:'#000000',lineWidth:1,font:'12px sans-serif',textAlign:'left',lineJoin:'miter'});
+    Object.assign(this,{globalAlpha:1,globalCompositeOperation:'source-over',fillStyle:'#000000',strokeStyle:'#000000',lineWidth:1,font:'12px sans-serif',textAlign:'left',textBaseline:'alphabetic',lineJoin:'miter'});
     for(const pool of Object.values(this.pools))for(const object of pool)object.setVisible(false);
     this.textures.begin();
   }
@@ -33,12 +36,12 @@ export class BattleSurface {
       if(image.packed)for(const region of image.regions){const entry=image.pool.pages.get(region[4]);if(entry)sources.add(entry.bitmap);}
       else sources.add(image);
     }
-    for(const source of sources)this.textures.texture(source);
+    for(const source of sources)if(source.width<=this.textures.maxSize&&source.height<=this.textures.maxSize)this.textures.texture(source);
   }
   take(kind){
     const index=this.cursor[kind]++,pool=this.pools[kind];let object=pool[index];
     if(!object){
-      object=kind==='sprite'?this.scene.add.sprite(0,0,'__WHITE').setOrigin(0)
+      object=kind==='particle'?pixelSprite(this.scene):kind==='sprite'?this.scene.add.sprite(0,0,'__WHITE').setOrigin(0)
         :kind==='graphics'?this.scene.add.graphics():this.scene.add.text(0,0,'');
       pool.push(object);
     }
@@ -65,6 +68,7 @@ export class BattleSurface {
     else if(args.length===4)[dx,dy,dw,dh]=args;
     else if(args.length===8)[sx,sy,sw,sh,dx,dy,dw,dh]=args;
     else throw new Error('Phaser 图片坐标参数无效');
+    if(source.gpuSurface){source.gpuSurface.paint(this,{sx,sy,sw,sh,x:dx,y:dy,width:dw,height:dh});return;}
     const target=this.rectangle(dx,dy,dw,dh),visible=intersect(target,this.clipRect);
     if(sw<=0||sh<=0||visible.width<=0||visible.height<=0)return;
     // Clip both against the source dimensions and the active logical viewport.
@@ -72,10 +76,15 @@ export class BattleSurface {
     const area=intersect(visible,{x:target.x+(bounds.x-sx)*target.width/sw,y:target.y+(bounds.y-sy)*target.height/sh,
       width:bounds.width*target.width/sw,height:bounds.height*target.height/sh});
     if(area.width<=0||area.height<=0)return;
+    if(source.pixels){const sprite=this.take('particle');sprite.pixelImage=source;
+      sprite.pixelRegion={sx:sx+(area.x-target.x)*sw/target.width,sy:sy+(area.y-target.y)*sh/target.height,sw:area.width*sw/target.width,sh:area.height*sh/target.height};
+      sprite.setPosition(area.x,area.y).setSize(sprite.pixelRegion.sw,sprite.pixelRegion.sh).setScale(target.width/sw,target.height/sh);return;}
     const frame=this.textures.region(source,sx+(area.x-target.x)*sw/target.width,sy+(area.y-target.y)*sh/target.height,
       area.width*sw/target.width,area.height*sh/target.height);
     this.take('sprite').setTexture(frame.key,frame.frame).setPosition(area.x,area.y).setDisplaySize(area.width,area.height);
   }
+  strokeRect(x,y,width,height){const r=this.rectangle(x,y,width,height),style=rgba(this.strokeStyle);
+    this.take('graphics').lineStyle(this.lineWidth*this.matrix[0],style.color,style.alpha).strokeRect(r.x,r.y,r.width,r.height);}
   createLinearGradient(...points){return {points,stops:[],addColorStop(at,color){this.stops.push([at,color]);}};}
   fillRect(x,y,width,height){
     if(typeof this.fillStyle==='object'){
@@ -113,7 +122,7 @@ export class BattleSurface {
     text.setText(String(value)).setOrigin(this.textAlign==='center' ? 0.5 : this.textAlign==='right' ? 1 : 0,0)
       .setScale(this.matrix[0],this.matrix[3]);
     const baseline=text.getTextMetrics().ascent+4;
-    text.setPosition(p.x,p.y-baseline*this.matrix[3]);
+    text.setPosition(p.x,p.y-(this.textBaseline==='top'?0:baseline*this.matrix[3]));
   }
   strokeText(value,x,y){this.text(value,x,y,true);}
   fillText(value,x,y){this.text(value,x,y,false);}

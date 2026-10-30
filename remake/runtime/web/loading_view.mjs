@@ -1,3 +1,4 @@
+import {drawingContext} from './phaser/rendering/recorded_surface.mjs';
 // Original Progress01 + Progress.mnu in a fixed 640x480 viewport.
 import {playbackFrame,playbackDelay,playbackTask} from './core/story_playback.mjs';
 export class LoadingView {
@@ -8,14 +9,14 @@ export class LoadingView {
   }
   constructor({root,manifest,backgrounds,frame,fill,log,clock=null}) {
     Object.assign(this,{root,manifest,backgrounds,frame,fill,log,clock});
-    this.canvas=root.querySelector('canvas');this.context=this.canvas.getContext('2d');this.nextBackground=0;
+    this.canvas=root.querySelector('canvas');this.context=drawingContext(this.canvas);this.nextBackground=0;
     this.resizeObserver=new ResizeObserver(()=>this.resize());this.resizeObserver.observe(root.parentElement);
   }
   resize(){const box=this.root.parentElement.getBoundingClientRect();
     this.root.style.setProperty('--loading-scale',String(Math.min(box.width/640,box.height/480)));}
   draw(progress){
     const c=this.context,{origin:o,fill_rect:r}=this.manifest;
-    c.imageSmoothingEnabled=false;c.drawImage(this.backgrounds[this.backgroundIndex],0,0);
+    c.clearRect(0,0,640,480);c.imageSmoothingEnabled=false;c.drawImage(this.backgrounds[this.backgroundIndex],0,0);
     c.drawImage(this.frame,o.x,o.y);c.fillStyle='#000';c.fillRect(o.x+r.left,o.y+r.top,this.fill.width,this.fill.height);
     const width=Math.floor(this.fill.width*progress);
     if(width)c.drawImage(this.fill,0,0,width,this.fill.height,o.x+r.left,o.y+r.top,width,this.fill.height);
