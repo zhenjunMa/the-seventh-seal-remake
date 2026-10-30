@@ -6,8 +6,7 @@ import {initialEncounterState, previewMovement} from "../core/encounters.mjs";
 import {createPartyActors} from "../core/party_attributes.mjs";
 import {drawGameScene,drawOpeningScene} from "../map_scene_view.mjs";
 import {openingCamera} from "../core/opening_presentation.mjs";
-import {decodeSave} from "../core/world.mjs";
-import {savedPreviewPng,SAVE_PREVIEW_WIDTH,SAVE_PREVIEW_HEIGHT} from "../core/save_preview.mjs";
+import {SAVE_PREVIEW_WIDTH,SAVE_PREVIEW_HEIGHT} from "../core/save_preview.mjs";
 import {MapNpcRuntime} from "../core/map_npcs.mjs";
 import {projectMapStage} from "../core/map_stage.mjs";
 import {MapObjectRuntime} from "../core/map_objects.mjs";
@@ -234,14 +233,6 @@ export function createMapController({state, actions, $, canvas, ctx}) {
     const scene=state.scenes.current;if(scene?.data.id!==world.location.map_id)throw new Error('当前场景与存档地图不一致');
     return renderSavePreview(scene,world,{view:{...state.view},action:sheetAction()}).toDataURL('image/png');
   }
-  async function loadSavePreview(envelope){
-    const world=await decodeSave(envelope,state.catalog.maps.map(map=>map.id)),stored=savedPreviewPng(envelope);
-    if(stored){
-      try{const image=new Image();image.src=stored;await image.decode();return {image,source:'stored',map_id:world.location.map_id};}catch{}
-    }
-    const scene=await prepareMap(world.location.map_id,{world});
-    return {image:renderSavePreview(scene,world),source:'reconstructed',map_id:world.location.map_id};
-  }
   let retainedScene = null, retainedRevision = -1;
   function reconcileResources() {
     const scene = state.scenes.current;
@@ -304,5 +295,5 @@ export function createMapController({state, actions, $, canvas, ctx}) {
     }else {motionState.reset();state.view.collisionFeedback=null;}
     paint();
   }
-  return {role, sheetAction, buildHud, prepareMap, validateEntry, commitView, changeMap, follow, fit, resize, npcAvailable, updateNearest, objectBitmap, transitionFor, renderWorldMap,selectWorldMapDestination,closeWorldMap, routeExit, drawCollision, paint, updateExploration,captureScene,captureSavePreview,loadSavePreview};
+  return {role, sheetAction, buildHud, prepareMap, validateEntry, commitView, changeMap, follow, fit, resize, npcAvailable, updateNearest, objectBitmap, transitionFor, renderWorldMap,selectWorldMapDestination,closeWorldMap, routeExit, drawCollision, paint, updateExploration,captureScene,captureSavePreview};
 }

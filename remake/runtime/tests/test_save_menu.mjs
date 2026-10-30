@@ -3,13 +3,16 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {SaveMenuView} from '../web/save_menu_view.mjs';
 import {MANUAL_SAVE_SLOTS} from '../web/core/save_slots.mjs';
+import {attachSavePreview} from '../web/core/save_preview.mjs';
+
+const png='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGgAAABMCAIAAAAOQ2XWAAAAuUlEQVR4nO3SMREAIAADMUASclCCfDTwc7J3+evc5w7+rbBBuM7jIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhRvMAV4QBnCTMUicAAAAASUVORK5CYII=';
 
 const manifest=JSON.parse(readFileSync(new URL('../web/data/save_menu.json',import.meta.url)));
 const emptyEntries=()=>[...MANUAL_SAVE_SLOTS,'quick'].map(slot=>({slot,envelope:null,error:null}));
 const envelope=(slot='00')=>({sha256:`saved-${slot}`,saved_at:'2026-10-23T00:00:00Z',payload:JSON.stringify({party:[{name:'英格妮'}],location:{map_id:'M70010'}})});
 const deferred=()=>{let resolve;return {promise:new Promise(done=>resolve=done),resolve:()=>resolve()};};
 
-async function setup({onConfirm=async()=>{},getPreview}={}){
+async function setup({onConfirm=async()=>{}}={}){
   const draws=[],logs=[],styles=new Map(),listeners=new Map();
   const buttons={children:[],replaceChildren(){this.children=[];},append(button){this.children.push(button);}};
   const message={textContent:''};
@@ -17,9 +20,9 @@ async function setup({onConfirm=async()=>{},getPreview}={}){
   const root={hidden:true,dataset:{},style:{setProperty:(name,value)=>styles.set(name,value)},querySelector:selector=>selector==='canvas'?{getContext:()=>ctx}:selector==='.save-menu-buttons'?buttons:message,
     getBoundingClientRect:()=>({width:960,height:720}),focus(){this.focused=true;},addEventListener:(name,handler)=>listeners.set(name,handler)};
   globalThis.ResizeObserver=class{observe(){}};
-  globalThis.document={createElement:()=>({style:{},dataset:{},attributes:{},setAttribute(name,value){this.attributes[name]=value;}})};
+  globalThis.document={createElement:tag=>({tagName:tag.toUpperCase(),style:{},dataset:{},attributes:{},children:[],append(child){this.children.push(child);},setAttribute(name,value){this.attributes[name]=value;}})};
   let closes=0;
-  const view=await SaveMenuView.create({manifest,root,image:async path=>({path}),getPreview,onConfirm,onClose(){closes++;view.hide();},log:event=>logs.push(event)});
+  const view=await SaveMenuView.create({manifest,root,image:async path=>({path,style:{},attributes:{}}),onConfirm,onClose(){closes++;view.hide();},log:event=>logs.push(event)});
   return {view,root,buttons,message,draws,logs,styles,listeners,get closes(){return closes;}};
 }
 const slotButtons=buttons=>buttons.children.filter(button=>button.className==='save-slot');
@@ -27,10 +30,15 @@ const button=(buttons,label)=>buttons.children.find(button=>button.attributes['a
 
 test('opening the source save page writes nothing and saving empty slot 01 submits exactly that row',async()=>{
   const writes=[],entries=emptyEntries(),{view,root,buttons,styles}=await setup({onConfirm:row=>writes.push(row)});
+  entries[0].envelope=attachSavePreview(envelope(),png);entries[2].envelope=envelope('02');
   view.show({mode:'save',summary:{name:'英格妮',money:120}});
   assert.equal(root.hidden,false);assert.equal(root.focused,true);assert.equal(styles.get('--save-menu-scale'),'1.5');assert.deepEqual(writes,[]);
   assert.equal(view.loading,true);await view.confirm();assert.deepEqual(writes,[]);
   view.setEntries(entries);assert.equal(slotButtons(buttons).length,3);
+  const previews=buttons.children.filter(node=>node.tagName==='IMG'),preview=previews[0];
+  assert.equal(preview.tagName,'IMG');assert.equal(preview.src,png);assert.equal(preview.decoding,'sync');
+  assert.deepEqual([preview.style.left,preview.style.top,preview.width,preview.height],['26px','82px',104,76]);
+  assert.equal(previews.length,1);
   view.select(1);await view.confirm();
   assert.deepEqual(writes,[entries[1]]);assert.equal(root.dataset.slot,'01');assert.equal(view.active,true);assert.equal(view.pending,false);
 });

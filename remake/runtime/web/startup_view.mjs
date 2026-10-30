@@ -1,5 +1,5 @@
 import {StartupSequence} from './core/startup.mjs';
-import {SAVE_PREVIEW_WIDTH,SAVE_PREVIEW_HEIGHT} from './core/save_preview.mjs';
+import {appendSavePreview} from './save_preview_view.mjs';
 
 const labels=['游戏读取','开始游戏','特典','离开'];
 const buttonIds=['menuLoad','menuNew','menuExtras','menuExit'];
@@ -16,11 +16,11 @@ export class StartupView {
     await Promise.all(frames.map(async frame=>view.images.set(frame.path,await options.image(frame.path))));
     return view;
   }
-  constructor({manifest,media,$,image,audio,onNew,onLoad,onResume,onStage,getSave,getSaves,refreshSaves,isBusy=()=>false,getPreview,status,log}) {
-    Object.assign(this,{manifest,media,$,image,audio,onNew,onLoad,onResume,onStage,refreshSaves,isBusy,getPreview,status,log});
+  constructor({manifest,media,$,image,audio,onNew,onLoad,onResume,onStage,getSave,getSaves,refreshSaves,isBusy=()=>false,status,log}) {
+    Object.assign(this,{manifest,media,$,image,audio,onNew,onLoad,onResume,onStage,refreshSaves,isBusy,status,log});
     this.readSaves=getSaves??(()=>{const envelope=getSave?.();return envelope?[{slot:'manual',label:'普通存档',envelope}]:[];});
     this.root=$('startMenu');this.canvas=$('startupCanvas');this.ctx=this.canvas.getContext('2d');
-    this.video=$('startupVideo');this.images=new Map();this.allowResume=false;this.pending=false;this.previewRequest=0;this.previewCache=new Map();
+    this.video=$('startupVideo');this.images=new Map();this.allowResume=false;this.pending=false;
     this.sequence=new StartupSequence(snapshot=>this.changeStage(snapshot));
     this.root.addEventListener('pointerdown',event=>{
       if(this.sequence.stage==='menu')return;
@@ -51,7 +51,6 @@ export class StartupView {
   hide(){this.sequence.close();}
   stopMedia(){this.video.onended=null;this.video.onerror=null;this.video.pause();this.video.removeAttribute('src');this.video.load();}
   changeStage({stage,epoch}) {
-    this.previewRequest++;this.previewCache.clear();this.root.dataset.preview='';
     this.stopMedia();this.pending=false;this.rotation=null;this.root.hidden=stage==='closed';
     this.root.dataset.stage=stage;
     if(stage==='closed')return;
@@ -105,7 +104,7 @@ export class StartupView {
     this.syncVideoAudio(true);
     if(this.sequence.stage!=='menu')return this.sequence.key(key,repeat);
     if(repeat||this.pending||this.isBusy()||this.rotation)return true;
-    if(key==='Escape'){if(this.submenu){this.previewRequest++;this.previewCache.clear();this.root.dataset.preview='';this.cue('cancel');this.submenu=null;this.draw();this.renderOptions();this.updateButtons();}return true;}
+    if(key==='Escape'){if(this.submenu){this.cue('cancel');this.submenu=null;this.draw();this.renderOptions();this.updateButtons();}return true;}
     if(this.submenu){
       if(this.submenu==='read'&&['ArrowUp','ArrowDown','PageUp','PageDown','Home','End'].includes(key)){
         const next={ArrowUp:this.subIndex-1,ArrowDown:this.subIndex+1,PageUp:this.subIndex-visibleSaveRows,PageDown:this.subIndex+visibleSaveRows,Home:0,End:this.optionCount()-1}[key];
@@ -162,10 +161,8 @@ export class StartupView {
     this.asset('menuhlp'+this.selected+this.plaqueIndex,0,this.helpX??0,400);
     if(this.panelType==='read'&&this.panelX>-432){
       this.asset('menulbk',0,this.panelX-8,60);
-      this.visibleSaves().forEach((entry,row)=>{
+      this.visibleSaves().forEach((_entry,row)=>{
         this.asset('menulbx',0,this.panelX,81+108*row);
-        const preview=this.previewCache.get(this.previewKey(entry.envelope));
-        if(preview?.image)c.drawImage(preview.image,this.panelX+17,97+108*row,SAVE_PREVIEW_WIDTH,SAVE_PREVIEW_HEIGHT);
       });
     }
     if(this.panelType==='extras'&&this.panelX>-432){
@@ -191,23 +188,6 @@ export class StartupView {
   }
   getSave(){return this.saveEntries()[this.subIndex]?.envelope??null;}
   optionCount(){return this.submenu==='read'?this.saveEntries().length:this.submenu==='extras'?(this.manifest.audio.gallery?.length??0):0;}
-  previewKey(save){return `${save?.sha256??''}:${save?.payload??''}:${save?.saved_at??''}:${save?.preview?.png??''}`;}
-  updatePreviewState(){this.root.dataset.preview=this.previewCache.get(this.previewKey(this.getSave()))?.source??'';}
-  requestPreview(save){
-    if(!this.getPreview)return;
-    const key=this.previewKey(save),request=this.previewRequest,epoch=this.sequence.epoch;
-    if(this.previewCache.has(key))return;
-    this.previewCache.set(key,{source:'loading'});
-    Promise.resolve().then(()=>this.getPreview(save)).then(result=>{
-      if(request!==this.previewRequest||epoch!==this.sequence.epoch||this.sequence.stage!=='menu'||this.submenu!=='read')return;
-      if(!result?.image)throw new Error('存档截图未生成');
-      this.previewCache.set(key,result);this.updatePreviewState();
-      this.log({type:'save-preview-ready',source:result.source,map_id:result.map_id,payload_sha256:save.sha256});this.draw();
-    }).catch(error=>{
-      if(request!==this.previewRequest||epoch!==this.sequence.epoch||this.submenu!=='read')return;
-      this.previewCache.set(key,{source:'failed'});this.updatePreviewState();this.log({type:'save-preview-failed',error:error.message});
-    });
-  }
   renderOptions(){
     const holder=this.$('startupOptions');holder.replaceChildren();holder.hidden=false;
     const add=(text,x,y,w,h,index,handler)=>{const button=document.createElement('button');button.textContent=text;button.type='button';button.tabIndex=-1;
@@ -221,12 +201,11 @@ export class StartupView {
     if(this.submenu==='read'){
       const entries=this.saveEntries();
       for(const [row,entry] of this.visibleSaves().entries()){const index=this.listTop+row,save=entry.envelope;let world={};try{world=JSON.parse(save.payload);}catch{}
-        this.requestPreview(save);
         const date=save.saved_at?new Date(save.saved_at).toLocaleString('zh-CN',{timeZone:'Asia/Shanghai'}):'';
         const party=(world.party??[]).map(actor=>actor.name).join('　');
-        add(`${entry.label}　${party}\n${date}\n${world.location?.map_id??''}`,147,99+108*row,265,78,index,()=>{this.draw();this.renderOptions();this.confirm();}).className='startup-save panel-row';
+        const button=add(`${entry.label}　${party}\n${date}\n${world.location?.map_id??''}`,147,99+108*row,265,78,index,()=>{this.draw();this.renderOptions();this.confirm();});button.className='startup-save panel-row';
+        appendSavePreview(holder,save,17,97+108*row);
       }
-      this.updatePreviewState();
       if(!entries.length)this.announce('尚无重制存档，Esc返回');
     }else if(this.submenu==='extras'){
       for(let i=0;i<7;i++){const index=this.listTop+i;if(index>=this.optionCount())break;
@@ -240,7 +219,7 @@ export class StartupView {
     for(const node of this.$('startupOptions').children??[]){
       const plaque=node.classList.contains('startup-plaque');
       node.style.transform=`translateX(${plaque?(this.plaqueX[Number(node.dataset.row)]??450)-450:this.panelX}px)`;
-      node.disabled=this.pending||this.isBusy()||Boolean(this.rotation)||(plaque?Boolean(this.submenu):this.panelX!==0);
+      if(node.tagName==='BUTTON')node.disabled=this.pending||this.isBusy()||Boolean(this.rotation)||(plaque?Boolean(this.submenu):this.panelX!==0);
     }
   }
   async confirm(){
