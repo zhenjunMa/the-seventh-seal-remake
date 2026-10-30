@@ -22,7 +22,7 @@ function item(id){
   new DataView(raw.buffer).setUint32(4,1,true);
   return {instance_id:`chest-test-${id}`,id,name:definition.name,quantity:1,source_raw_hex:hex(raw),source_definition:definition.source};
 }
-function setup({key=false,state=0,animation=async()=>{}}={}){
+function setup({key=false,state=0,animation=async()=>{},interaction=async()=>{}}={}){
   const {map_id:id,map_flag_index,map_source,object}=fixture;
   const data={schema:'seventh-seal-chapter-story',version:1,maps:{[id]:{
     id,map_flag_index,map_source,source:null,dialogue_status:'source-file-absent',record_count:0,index_count:0,
@@ -35,7 +35,7 @@ function setup({key=false,state=0,animation=async()=>{}}={}){
   if(state){while(initial.event_records[map_flag_index].length<=object.index)initial.event_records[map_flag_index].push('00'.repeat(14));
     initial.event_records[map_flag_index][object.index]=state.toString(16).padStart(2,'0')+'a5'.repeat(13);}
   const world=new WorldStore(initial);
-  const runner=new ChapterRunner({world,data,content,say:async()=>{throw new Error('Direct chest cannot enter TLK');},objectAnimation:animation});
+  const runner=new ChapterRunner({world,data,content,say:async()=>{throw new Error('Direct chest cannot enter TLK');},objectInteraction:interaction,objectAnimation:animation});
   const run=()=>runner.runObject({mapId:id,objectIndex:object.index});
   return {world,runner,data,content,run};
 }
@@ -118,6 +118,23 @@ testSource('Missing elemental key leaves every world byte unchanged and equipped
   assert.equal(result.locked,true);assert.equal(result.key_id,336);assert.deepEqual(world.snapshot(),before);
   const snapshot=world.snapshot();snapshot.source.initial_equipment.push({role_id:'001',item_id:336});
   assert.equal(canOpenNativeChest(snapshot,nativeKeyedChest(fixture.object)),true);
+});
+
+testSource('Ordinary actor interaction runs without a key and alongside successful collection, but not for completed or pending chests',async()=>{
+  const trace=[];let finish;
+  const interaction=({actionGroup})=>{assert.equal(actionGroup,4);trace.push('actor');return new Promise(resolve=>{finish=resolve;});};
+  const missing=setup({interaction}),before=missing.world.snapshot();let done=false;
+  const locked=missing.run().then(result=>{done=true;return result;});
+  await Promise.resolve();assert.deepEqual(trace,['actor']);assert.equal(done,false);
+  finish();assert.equal((await locked).locked,true);assert.deepEqual(missing.world.snapshot(),before);
+  trace.length=0;
+  const success=setup({key:true,interaction,animation:async()=>{trace.push('chest');}});
+  const opened=success.run();await Promise.resolve();
+  assert.deepEqual(trace,['actor','chest']);assert.equal(success.world.value.inventory.some(row=>row.id===127),false);
+  finish();assert.equal((await opened).state,3);assert.equal(success.world.value.inventory.find(row=>row.id===127).quantity,1);
+  await success.run();assert.deepEqual(trace,['actor','chest']);
+  const pending=setup({state:2,interaction:()=>{throw new Error('Pending chests must not restart actor interaction');}});
+  assert.equal((await pending.run()).state,3);
 });
 
 testSource('Direct rewards commit after animation, retain the key and remain empty after save/load',async()=>{

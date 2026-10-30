@@ -42,6 +42,8 @@ export function createRuntimeState($) {
     chapterRunner: null,
     sceneEntryDraft: null,
     objectPreview: null,
+    objectActorPreview: null,
+    rewardNoticeView: null,
     lastStoryTrigger: '',
     partyCombat: null,
     partySkills: null,

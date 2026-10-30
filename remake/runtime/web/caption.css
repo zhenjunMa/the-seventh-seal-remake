@@ -5,3 +5,5 @@
 .caption-viewport button,.caption-viewport button:hover,.caption-viewport button:focus-visible{position:absolute;inset:0;width:640px;height:480px;background:transparent;border:0;border-radius:0;outline:0;box-shadow:none;padding:0;pointer-events:auto;color:transparent}
 .scene-loading{position:absolute;inset:0;background:#000;z-index:20;overflow:hidden}
 .scene-loading canvas{position:absolute;left:50%;top:50%;width:640px;height:480px;transform:translate(-50%,-50%) scale(var(--loading-scale,1));transform-origin:center;image-rendering:pixelated}
+.reward-notice{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.reward-notice canvas{position:absolute;left:50%;top:50%;width:640px;height:480px;transform-origin:center;image-rendering:pixelated}

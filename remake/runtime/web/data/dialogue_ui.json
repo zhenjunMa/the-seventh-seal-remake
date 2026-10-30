@@ -734,6 +734,29 @@
         0,
         0
       ]
+    },
+    "reward": {
+      "source": "SYSTEM/Map_Object_Name.dgp",
+      "source_sha256": "7113ad786143e92df2a2be4e72aa7d20d32dfe045dd81658775d344a0d100c4d",
+      "width": 201,
+      "height": 50,
+      "frames": [
+        {
+          "index": 0,
+          "image": "/assets/dialogue_ui/reward_000.png",
+          "sha256": "2a986bedde220dd553ac15e5a559a92a7d3e9b2ac72c2c63cb2c3eb1f59f64d5"
+        }
+      ],
+      "interval_ms": null,
+      "frame_count": 1,
+      "source_actions": [],
+      "header_hex": "09000000000000000000000000000000000000000000000000000000000000c90000000000000000000000010000000000000000000000000000000000000000000000",
+      "geometry_hex": "c90032000100000000000000010100000000000000000000ff000100000001012b010000343b00000001",
+      "anchor_raw": [
+        32,
+        0,
+        0
+      ]
     }
   },
   "font_manifest": "data/dialogue_fonts.json",
