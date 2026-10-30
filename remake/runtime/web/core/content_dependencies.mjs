@@ -10,7 +10,7 @@ import {nativeSupportSkillSupported} from './battle_support.mjs';
 import {validateChapterStory,chapterRestChoices} from './chapter.mjs';
 import {validateChapterAnimation} from './chapter_animation.mjs';
 import {validateBattleViewMetadata} from '../battle_view.mjs';
-import {nativeKeyedChest,nativeChestAnimation} from './native_map_chests.mjs';
+import {nativeKeyedChest,nativeScriptedChest,nativeChestAnimation} from './native_map_chests.mjs';
 import {supplementalPartyCommands} from './party_skill_corrections.mjs';
 const need=(ok,message)=>{if(!ok)throw new Error(`内容依赖：${message}`);};
 
@@ -51,8 +51,11 @@ export function validateStoryBindings(content,story,resources,{registeredMaps=co
       need(typeof raw==='string'&&raw.length===0x112*2,`${id} 物件 ${row.index} 缺少来源`);
       const b=Uint8Array.from(raw.match(/../g),part=>parseInt(part,16)),recordId=new DataView(b.buffer).getUint32(0xf6,true);
       if(row.handler==='keyed-chest')nativeKeyedChest(object);
-      else need((row.handler==='stationary-chest'&&b[0xcf]===3||row.handler==='tlk-object'&&b[0xcf]===1)
-        &&b[0x109]===0&&table.records.some(record=>record.id===recordId),`${id} 物件处理器与原记录不符`);
+      else{
+        if(row.handler==='stationary-chest')nativeScriptedChest(object);
+        else need(row.handler==='tlk-object'&&b[0xcf]===1&&b[0x109]===0,`${id} 物件处理器与原记录不符`);
+        need(table.records.some(record=>record.id===recordId),`${id} 物件剧情入口缺失`);
+      }
       const animation=resources.object_animations[id]?.find(item=>item.object_index_zero_based===row.index);
       const source=resources.interactive_objects[id]?.find(item=>item.object_index_zero_based===row.index)?.source;
       need(animation?.frames.length&&source?.raw_hex===raw&&source.sha256===object.source.sha256,`${id} 物件 ${row.index} 缺少动作或来源不一致`);

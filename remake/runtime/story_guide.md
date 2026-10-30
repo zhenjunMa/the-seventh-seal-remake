@@ -49,6 +49,7 @@
 | 翠碧湖 | `data/library/jade_lake.json`；`jade-lake-index`，不含同前缀研究所遗迹 |
 | 炎城 | `data/library/ember_city.json`；`ember-city-index`，保留M01020A等原ID |
 | 里白木森林／幻影之森／封印之森 | `data/library/inner_white_forest.json`；`inner-white-forest-index`，完整保留17图，运行准入另看`runtime_content.json` |
+| 飘城 | `data/library/floating_city.json`；`floating-city-index`，含ANM实际加载的独立地图，未找到入口的候选另列 |
 
 各`tools/export_<区域>_index.py`共用`--query`、`--map`、`--flag`和`--check`查询方式，示例见[工具说明](tools/README.md#来源查询)。`external_callers`记录原调用者，`potential_call_roots`表示静态可达，二者都不保证某个存档当前能进入。
 

@@ -129,7 +129,11 @@ test('朱特两条援攻在菜单、战斗命令和原动作接触中生效，�
     attributes=await read('party_combat'),sample=createPartySample(world,attributes,commands),effective=effectiveSkillSource(commands,world),
     meta=await read('party_battle_view'),lifecycle=await read('battle_lifecycle');
   for(const row of lifecycle.roles){const role=meta.roles.find(role=>role.id===row.id);if(role)mergeNativeActionAtlases(role,row,meta.source_hashes);}
-  assert.equal(addCorrectedPartyPresentations(meta,sample.skills),2);validateBattleViewMetadata(meta);
+  assert.equal(addCorrectedPartyPresentations(meta,sample.skills),0,'当前正式导出已包含两条援攻动作');
+  const jute=meta.roles.find(role=>role.id==='005');
+  for(const id of ['005_29','005_30'])assert.ok(jute.alternate_skills.some(row=>row.runtime_skill_id===id));
+  jute.alternate_skills=jute.alternate_skills.filter(row=>!['005_29','005_30'].includes(row.runtime_skill_id));
+  assert.equal(addCorrectedPartyPresentations(meta,sample.skills),2,'旧媒体缺这两条时仍可按原动作补齐');validateBattleViewMetadata(meta);
   const candidates=techniqueCandidates(world,effective,'005',3,{capacity:7});
   for(const index of [29,30]){
     const skill=sample.skills[`005_${index}`],source=commands.roles['005'].skills[index];

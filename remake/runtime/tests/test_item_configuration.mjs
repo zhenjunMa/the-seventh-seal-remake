@@ -92,10 +92,10 @@ test('All 416 source items share one configuration, including unimplemented crys
     assert.equal(config.entries[id].catalog.value_ranges.length,32);
   }
   assert.equal(config.entries['36'].catalog.validation.all_value_ranges_ordered,false);
-  assert.equal(config.entries['240'].catalog.behavior.kind,'source-only');
-  const cfg=copy(config);cfg.entries['240'].parameters.enabled=true;
+  assert.equal(config.entries['9'].catalog.behavior.kind,'source-only');
+  const cfg=copy(config);cfg.entries['9'].parameters.enabled=true;
   assert.throws(()=>compileItemConfiguration(data,cfg,'debug'),/作用未还原/);
-  cfg.entries['240'].parameters.enabled=false;cfg.entries['240'].parameters.effect={restore_mp_flat:500};
+  cfg.entries['9'].parameters.enabled=false;cfg.entries['9'].parameters.effect={restore_mp_flat:500};
   assert.throws(()=>compileItemConfiguration(data,cfg,'debug'),/字段缺失或未知/);
 });
 

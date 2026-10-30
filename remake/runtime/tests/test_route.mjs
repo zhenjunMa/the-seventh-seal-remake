@@ -5,7 +5,7 @@ import {createHash} from 'node:crypto';
 import {WorldStore,encodeSave,decodeSave} from '../web/core/world.mjs';
 import {WorldMapController} from '../web/core/world_map.mjs';
 import {planRouteExit} from '../web/core/route.mjs';
-import {initialEncounterState,previewMovement,generateGroup} from '../web/core/encounters.mjs';
+import {initialEncounterState,previewMovement,generateGroup,loadEncounterMap} from '../web/core/encounters.mjs';
 import {BattleController} from '../web/core/combat.mjs';
 import {createNativeRng,resolveAction,applyNativeDamage} from '../web/core/combat_rules.mjs';
 import {createForestSample} from '../web/forest_sample.mjs';
@@ -71,6 +71,38 @@ test('persistent encounter RNG continues identically after save and restore',asy
  const loaded=await decodeSave(await encodeSave(world.snapshot()),mapIds),before=clone(loaded);
  assert.deepEqual(previewMovement(loaded.encounters,input(),data),previewMovement(world.value.encounters,input(),data));assert.deepEqual(loaded,before);
  const bad=clone(loaded);bad.encounters.remainders['001']=16;assert.throws(()=>new WorldStore(bad,mapIds));bad.encounters.remainders['001']=0;bad.encounters.active=true;assert.throws(()=>new WorldStore(bad,mapIds));
+});
+
+test('DAT13F zero retains the real global STG while dream DAT140 supplies each movement frequency',async()=>{
+ const encounters=clone(data),draft=clone(seed);
+ loadEncounterMap(draft,'M70071',encounters);
+ assert.equal(draft.encounters.global_pool_map_id,'M70071');
+ for(const id of ['M71071','M71072','M71073','M71074','M71075']){
+  const raw=await readFile(new URL(`../../../Map/${id.toLowerCase()}.dat`,import.meta.url));
+  assert.equal(raw[0x13f],0);
+  encounters.maps[id]={frequency:raw[0x140],global_pool_load_raw:raw[0x13f],members:[],
+    source:[{path:`Map/${id.toLowerCase()}.dat`,sha256:createHash('sha256').update(raw).digest('hex')}],evidence:clone(encounters.maps.M70071.evidence)};
+  loadEncounterMap(draft,id,encounters);assert.equal(draft.encounters.global_pool_map_id,'M70071');
+ }
+ const loaded=await decodeSave(await encodeSave(draft));
+ assert.equal(loaded.encounters.global_pool_map_id,'M70071');
+ for(const [id,threshold]of [['M71072',998],['M71073',996],['M71074',994]]){
+  loaded.encounters.counters['001']=40;
+  const result=previewMovement(loaded.encounters,input(16,{map_id:id}),encounters,queue([threshold,0,0,0,0]));
+  assert.equal(result.encounter.map_id,id);assert.equal(result.encounter.pool_source_map_id,'M70071');
+  assert.equal(result.encounter.stage,encounters.maps.M70071.stage);
+  assert.ok(encounters.maps.M70071.members.some(row=>row.id===result.encounter.members[0].id));
+  assert.equal(result.encounter.trigger_roll.threshold,threshold);
+ }
+ const disabled=await readFile(new URL('../../../Map/m01060.STG',import.meta.url)),header=await readFile(new URL('../../../Map/m01060.dat',import.meta.url));
+ assert.equal(disabled[8],0);assert.equal(disabled[209],0);assert.equal(header[0x13f],1);assert.equal(header[0x140],0);
+ encounters.maps.M01060={frequency:header[0x140],global_pool_load_raw:header[0x13f],global_pool_enabled_raw:disabled[8],members:[],
+  source:[{path:'Map/m01060.STG',sha256:createHash('sha256').update(disabled).digest('hex')}],evidence:clone(encounters.maps.M70071.evidence)};
+ loadEncounterMap(loaded,'M01060',encounters);loadEncounterMap(loaded,'M71072',encounters);
+ assert.equal(loaded.encounters.global_pool_map_id,null);loaded.encounters.counters['001']=40;
+ const empty=previewMovement(loaded.encounters,input(16,{map_id:'M71072'}),encounters,queue([998]));
+ assert.equal(empty.encounter,null);assert.equal(empty.state.counters['001'],0);
+ const corrupt=clone(draft);corrupt.encounters.global_pool_map_id='invented';assert.throws(()=>new WorldStore(corrupt),/全局池来源/);
 });
 test('historical four-role route metadata binds first contact, retaining later hawk contacts as deferred',async()=>{
  const content=clone(runtimeContent);content.battle_rosters['forest-source-group']=meta.roles.map(role=>role.id);

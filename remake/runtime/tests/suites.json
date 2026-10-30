@@ -82,6 +82,7 @@
         "test_content_extension.mjs",
         "test_content_library.mjs",
         "test_fire_valley_npc_interactions.mjs",
+        "test_floating_city_phase.mjs",
         "test_npc_visibility_export.py",
         "test_party_skill_configuration.mjs",
         "test_party_skill_sample.mjs",
@@ -138,6 +139,7 @@
         "test_fire_valley_map_contract.mjs",
         "test_fire_valley_phase_fixtures.mjs",
         "test_first_return_source.mjs",
+        "test_floating_city_rewards.mjs",
         "test_forest_ai.mjs",
         "test_forest_pipeline.mjs",
         "test_forest_presentation.mjs",
@@ -345,7 +347,7 @@
     "test_white_forest_index.py": ["python:PIL"],
     "test_white_forest_maps.py": ["python:PIL", "remake/runtime/evidence/white_forest_20261026/map_source_validation.json"],
     "test_world_map.mjs": ["remake/runtime/evidence/route_native_20261011.json"],
-    "test_map_collision_source.mjs": ["Map/m01063.dat", "Map/m70060.dat", "Map/m71014.dat", "Map/m71011.dat", "Map/m71012.dat", "Map/m71012-1.dat", "Map/m71012-2.dat", "Map/m71013.dat"],
+    "test_map_collision_source.mjs": ["Map/m01063.dat", "Map/m70060.dat", "Map/m71014.dat", "Map/m71011.dat", "Map/m71012.dat", "Map/m71012-1.dat", "Map/m71012-2.dat", "Map/m71013.dat", "Map/m03039.dat", "Animate/m03039-1.anm"],
     "test_inner_white_forest_seal.mjs": ["Map/m01019.dat", "Map/m01019.TLK", "Map/m70077.dat", "Map/m70077-1.dat", "Map/m70077-2.dat", "Map/m70077-3.dat", "Map/m70077-4.dat", "Map/m70078-1_1.dat", "Map/m70078-2_1.dat", "Map/m70078-3_1.dat", "Map/m70078_2.dat", "Map/m70078-1_1.TLK", "Map/m70078-2_1.TLK", "Map/m70078-3_1.TLK", "Map/m70078_2.TLK", "Animate/m01010-1.anm", "Animate/m01042-1.anm", "Animate/m70078-1.anm", "Map/m17029.dat", "Map/m17029.TLK", "Map/m17020.dat", "Map/m17026.dat", "Map/m17026.TLK", "Animate/m17029-1.anm", "SYSTEM/Object.ITM"],
     "test_inner_white_forest_battle_source.py": ["python:PIL", "remake/runtime/evidence/turn_rules_assembly_20261011.json", "remake/runtime/evidence/forest_scheduler_native_20261011.json"],
     "test_inner_white_forest_battle_replay.mjs": ["Fight_Role/024.CHR", "Fight_Role/041.CHR", "remake/runtime/web/assets/enemy_roles/024", "remake/runtime/web/assets/enemy_roles/041", "remake/runtime/web/data/battle_lifecycle_layers_024.json", "remake/runtime/web/data/battle_lifecycle_layers_041.json", "remake/runtime/evidence/inner_white_forest_20261030/appearance_native.json"]
@@ -478,6 +480,10 @@
     }
   },
   "regions": {
+    "floating-city": {
+      "maps": ["m030*", "m00000", "m7107[1-5]"],
+      "tests": ["test_floating_city*"]
+    },
     "inner-white-forest": {
       "maps": ["m7007*"],
       "tests": ["test_inner_white_forest*"]

@@ -40,7 +40,7 @@ export function inspectContentReadiness(content,story,resources){
     }
     for(const row of binding.objects)roots.push(row.handler==='keyed-chest'
       ?{kind:'direct-object',id:row.index,label:row.index}
-      :{kind:'object',id:table?.objects.find(obj=>obj.index===row.index)?.interaction_record_raw_f6,label:row.index,explicit:row.handler==='tlk-object'});
+      :{kind:'object',id:table?.objects.find(obj=>obj.index===row.index)?.interaction_record_raw_f6,label:row.index,explicit:true});
     for(const row of binding.rests)roots.push({kind:'rest',id:row.record_id,label:row.descriptor_id,explicit:true});
     for(const row of binding.routes)roots.push({kind:'route',id:row.record_id,label:row.descriptor_id});
     const npcSlots=binding.npcs??(resources.npcs_by_map[mapId]??[]).map(npc=>npc.slot_zero_based);
@@ -105,8 +105,13 @@ export function inspectContentReadiness(content,story,resources){
               const mutation=record.mutation_bit|0;
               need(mutation===0||mutation>=-32&&mutation<=32&&flagIndex(record.mutation_index||current.map_flag_index),'旗标变更未支持');break;
             }
-            case 1:
-              need(record.region_byte_raw===0&&record.mutation_index===0&&binding.objects.some(row=>row.index===record.mutation_bit-1&&row.handler==='stationary-chest'),'物件状态变更处理器尚未接入');break;
+            case 1:{
+              need(record.region_byte_raw===0&&flagIndex(record.mutation_index)&&Number.isInteger(record.mutation_bit)
+                &&record.mutation_bit>=0&&record.mutation_bit<=1000,'物件状态变更参数尚未接入');
+              if(record.mutation_bit&&(record.mutation_index===0||record.mutation_index===current.map_flag_index))
+                need(content.maps[item.mapId].objects.some(row=>row.index===record.mutation_bit-1&&row.handler==='stationary-chest'),'物件状态变更处理器尚未接入');
+              break;
+            }
             case 2:
               need(item.explicit&&record.mutation_index===0&&record.mutation_bit===0,'恢复分支需要已登记的主动休息入口');break;
             case 4:
@@ -136,7 +141,7 @@ export function inspectContentReadiness(content,story,resources){
             const choiceBytes=record.raw_hex?.slice(0x537*2);
             if(record.style===1&&choiceBytes&&/[^0]/.test(choiceBytes)){
               const rest=binding.rests.find(row=>row.record_id===record.id);
-              need(item.explicit,'选择分支需要已登记的主动入口');
+              need(item.explicit||root.kind==='trigger'&&item.mapId===mapId,'选择分支需要已登记的主动入口');
               for(const choice of rest?chapterRestChoices(record,rest):chapterChoices(record))add(choice.recordId);
             }else add(record.next);
           }else if(record.kind===1){

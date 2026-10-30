@@ -60,7 +60,7 @@ test('all six formal compact map packages load, including direct-object tables w
 test('compact source tables retain the native blocked marker and ordinary movement can only leave that landing',options,async()=>{
   const {repository:repo,maps}=await repository();await repo.ensureMap('M70010');await repo.ensureMap('M70020');
   const exit=repo.resources.exits_by_map.M70020.find(row=>row.id===1),at=exit.entry;
-  const movement=new MovementMap(nativeMapMovement(maps.M70010.movement,repo.story.maps.M70010));
+  const movement=new MovementMap(nativeMapMovement(maps.M70010.movement,repo.story.maps.M70010,repo.story.programs));
   assert.deepEqual([at.x,at.y],[288,288]);assert.equal(movement.at(at.x,at.y).blocked,true);
   assert.equal(movement.validEntry(at.x,at.y),true);
   const leave=movement.move(at.x,at.y,0,16);assert.deepEqual([leave.x,leave.y,leave.blocked],[288,304,false]);

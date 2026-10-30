@@ -230,7 +230,8 @@ def source_files(root=ROOT):
                         if path.is_file() and path.suffix.lower() in suffixes))
 
 
-def build_index(region_label=REGION_LABEL, region_id="fire-valley", exact_label=False):
+def build_index(region_label=REGION_LABEL, region_id="fire-valley", exact_label=False,
+                script_map_sources=()):
     catalog, hashes, failures = {}, {}, []
     paths = sorted(path for path in (ROOT / "Map").iterdir() if path.suffix.lower() == ".dat")
     for path in paths:
@@ -261,6 +262,29 @@ def build_index(region_label=REGION_LABEL, region_id="fire-valley", exact_label=
             except (ValueError, struct.error) as error:
                 failures.append({"path": row["path"], "error": str(error)})
     members, evidence = discover_maps(catalog, details, region_label, exact_label)
+    all_programs = {}
+    for path in sorted(path for path in (ROOT / "Animate").iterdir() if path.suffix.lower() == ".anm"):
+        key = path.relative_to(ROOT).as_posix()
+        hashes[key] = sha(path.read_bytes())
+        try:
+            all_programs[path.stem.lower()] = anm_record(path)
+        except (ValueError, struct.error) as error:
+            failures.append({"path": key, "error": str(error)})
+    # A source script can establish an isolated map identity without a DAT
+    # edge. These explicit source bindings never imply runtime admission.
+    for map_id, program_id, command_index in script_map_sources:
+        parsed = all_programs[program_id]
+        command = next(row for row in parsed["records"] if row["index"] == command_index)
+        raw = bytes.fromhex(command["raw_hex"])
+        filename = raw[54:74].split(b"\0")[0].decode("ascii", "strict")
+        if command["opcode_raw"] != 10 or filename.lower() != map_id.lower() + ".dat" or map_id not in details:
+            raise ValueError(f"Script map source binding changed: {program_id}:{command_index} -> {map_id}")
+        evidence.setdefault(map_id, []).append({"kind": "source-ANM-map-load",
+            "source_id": f"{program_id}:ANM:{command_index}", "filename_raw": filename,
+            "source": provenance(parsed, command["offset"], parsed["record_bytes"])})
+        if map_id not in members:
+            members.append(map_id)
+    members.sort()
     animation_code = RUNTIME / "web/core/chapter_animation.mjs"
     compiler_code = RUNTIME / "web/core/story_flow_compiler.mjs"
     match = re.search(r"const OPCODES\s*=\s*new Set\(\[([\d,\s]+)\]\)", animation_code.read_text("utf-8"))
@@ -359,14 +383,6 @@ def build_index(region_label=REGION_LABEL, region_id="fire-valley", exact_label=
                                           for descriptor in links if descriptor["state_raw"] == 2
                                           and descriptor["cells"] and descriptor["field_26_raw"] > 0)
 
-    all_programs = {}
-    for path in sorted(path for path in (ROOT / "Animate").iterdir() if path.suffix.lower() == ".anm"):
-        key = path.relative_to(ROOT).as_posix()
-        hashes[key] = sha(path.read_bytes())
-        try:
-            all_programs[path.stem.lower()] = anm_record(path)
-        except (ValueError, struct.error) as error:
-            failures.append({"path": key, "error": str(error)})
     selected_programs = {}
     for ident, parsed in all_programs.items():
         refs = strings((ROOT / parsed["path"]).read_bytes())
@@ -506,7 +522,8 @@ def build_index(region_label=REGION_LABEL, region_id="fire-valley", exact_label=
             "discovery": {"region_label": region_label, "label_seed_maps": sorted(seeds),
                           "label_match": "exact" if exact_label else "contains",
                           "candidate_filename_families": sorted(families),
-                          "rule": "Source-label seeds plus undirected DAT descriptor links within candidate families. Prefix nominates candidates only.",
+                          "rule": "Source-label seeds plus undirected DAT descriptor links within candidate families. Prefix nominates candidates only."
+                                  + (" Explicit opcode10 source bindings include isolated scripted maps." if script_map_sources else ""),
                           "map_catalog": {ident: row for ident, row in sorted(catalog.items())}},
             "maps": maps, "variant_groups": variant_groups, "programs": programs, "capability_summary": capabilities,
             "physical_map_graph": graph,
@@ -582,7 +599,7 @@ def coverage_report(data, index_bytes, output=OUTPUT):
 
 
 def main(region_label=REGION_LABEL, region_id="fire-valley", exact_label=False,
-         output=OUTPUT, report_output=REPORT_OUTPUT):
+         output=OUTPUT, report_output=REPORT_OUTPUT, script_map_sources=()):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true", help="Verify deterministic output without writing")
     parser.add_argument("--query", help="Search existing index for map, NPC or dialogue text")
@@ -595,7 +612,7 @@ def main(region_label=REGION_LABEL, region_id="fire-valley", exact_label=False,
     if args.query is not None or args.map_id or args.flag:
         print(json.dumps(query_index(json.loads(output.read_text("utf-8")), args.query, args.map_id, args.flag, args.limit), ensure_ascii=False))
         return
-    data = build_index(region_label, region_id, exact_label)
+    data = build_index(region_label, region_id, exact_label, script_map_sources)
     raw = encoded(data)
     outputs = {output: raw, report_output: encoded(coverage_report(data, raw, output))}
     for path, value in outputs.items():

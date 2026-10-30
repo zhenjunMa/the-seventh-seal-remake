@@ -24,6 +24,7 @@ sys.path.insert(0, str(RUNTIME / 'tools'))
 from source.native_item_init import initialize_existing_instance, VALUE_PAIRS
 from content_registration import definition as content_definition, map_ids
 from export_source_catalog import exe_bytes_at_va
+from export_encounters import map_pool
 
 GAME_SHA = 'fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18'
 ITM_SHA = '9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8'
@@ -177,7 +178,9 @@ def source_files(registration=None):
     registration = content_definition() if registration is None else registration
     return ('GAME.exe', 'SYSTEM/Object.ITM',
             *tuple(f'Fight_Role/{ident}.CHR' for ident in registration['roles']),
-            *tuple(f'Map/{ident.lower()}.dat' for ident in map_ids('story-data', registration)),
+            *tuple(f'Map/{ident.lower()}.dat' for ident in map_ids(value=registration)),
+            *tuple(f'Map/{ident.lower()}.STG' for ident in map_ids(value=registration)
+                   if (ROOT/f'Map/{ident.lower()}.STG').is_file()),
             *tuple(f'Map/{ident.lower()}.TLK' for ident in map_ids('story-data', registration)
                    if (ROOT/f'Map/{ident.lower()}.TLK').is_file()),
             *tuple(f'Animate/{ident}.anm' for ident in registration['programs']))
@@ -214,7 +217,7 @@ def registered_tlk_reachability(story, registration, original, hashes, require):
             obj = next((row for row in table['objects'] if row['index'] == index['index']), None)
             require(obj is not None, f'{map_id} object {index}')
             at = obj['source']['offset']; raw = data[at:at + 0x112]
-            require(raw.hex() == obj['raw_hex'] and raw[0xcf] == (1 if index['handler'] == 'tlk-object' else 3), f'{map_id} object source')
+            require(raw.hex() == obj['raw_hex'] and raw[0xcf] in ([1] if index['handler'] == 'tlk-object' else [3, 4]), f'{map_id} object source')
             add(map_id, u32(raw, 0xf6), 'object', object_index=index['index'])
         descriptors = {row['id']: row for row in table['descriptors']}
         selected = [(ident, 'trigger') for ident in binding.get('triggers', [])]
@@ -479,6 +482,31 @@ def admit_registered_equipment(definitions, seed, story, registration):
                     map_id=map_id, object_index=selected['index'], reward_slot=slot,
                     source=dict(path=path, sha256=hashes[path], offset=at + 0x54 + slot * 4,
                                 bytes=4, raw_hex=raw[0x54 + slot * 4:0x58 + slot * 4].hex())))
+    # Random encounters use the same source pool resolver as encounter export.
+    # A registered CHR alone does not make its drops obtainable: a selected map
+    # must actually name the enemy in its native pool, and rate -1 never drops.
+    enemy_ids = {ident for ident, role in registration['roles'].items() if role['side'] == 'enemy'}
+    for map_id in map_ids(value=registration):
+        pool = map_pool(map_id, enemy_ids, registration['stages'])
+        if pool is None:
+            continue
+        for member in pool.get('members', []):
+            enemy_id = member['id']; path = f'Fight_Role/{enemy_id}.CHR'; role = original[path]
+            for slot in range(6):
+                at = 8 + 0xe8 + slot * 4; ident = i32(role, at)
+                if ident <= 0:
+                    continue
+                row, raw, item_at = item(ident)
+                if row['drop_rate'] == -1:
+                    continue
+                sources.setdefault(str(ident), []).append(dict(kind='registered-encounter-enemy-reward',
+                    map_id=map_id, enemy_id=enemy_id, reward_slot=slot, pool=member['pool'],
+                    encounter_source=deepcopy(pool['source']), pool_member_source=deepcopy(member['source']),
+                    drop_rate=row['drop_rate'],
+                    drop_rate_source=dict(path='SYSTEM/Object.ITM', sha256=ITM_SHA,
+                        offset=item_at + 0x158, bytes=4, raw_hex=raw[0x158:0x15c].hex()),
+                    source=dict(path=path, sha256=hashes[path], offset=at, bytes=4,
+                        raw_hex=role[at:at + 4].hex())))
     promoted, previous, rejected = [], {}, []
     for ident in sorted(sources, key=int):
         row = definitions[ident]

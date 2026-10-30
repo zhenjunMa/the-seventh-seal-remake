@@ -2,10 +2,15 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {createHash} from 'node:crypto';
+import {createHash,webcrypto} from 'node:crypto';
 import {MovementMap} from '../web/core/movement.mjs';
 import {nativeMapMovement} from '../web/core/map_locomotion.mjs';
 import {worldMapEntry} from '../web/core/map_connections.mjs';
+import {WorldStore,encodeSave,decodeSave} from '../web/core/world.mjs';
+import {chapterRoleFromDefinition} from '../web/core/chapter.mjs';
+import {validateChapterAnimation} from '../web/core/chapter_animation.mjs';
+
+globalThis.crypto??=webcrypto;
 const near=(actual,expected)=>assert.ok(Math.abs(actual-expected)<1e-4,`${actual} != ${expected}`);
 
 test('source armor-shop diagonal approach keeps its ray while retaining the original contact endpoint and tangent slide',()=>{
@@ -96,4 +101,29 @@ test('continuous small steps traverse the forest/lake routes and armor-shop entr
     assert.deepEqual(data.movement.terrain_rows,sourceRows);
     for(let y=0;y<map.height;y++)for(let x=0;x<map.width;x++)assert.equal(Number(sourceRows[y][x]),raw[0x172+(y*map.width+x)*64+0x20],link.id);
   }
+});
+
+test('actual source ANM bed placement saves and restores unchanged, permits escape and never opens ordinary terrain entry',async()=>{
+ const read=name=>JSON.parse(readFileSync(new URL('../web/data/'+name+'.json',import.meta.url),'utf8'));
+ const map=read('maps/m03039'),packed=read('story/maps/m03039'),program=packed.programs['m03039-1'];
+ validateChapterAnimation(program);
+ const original=readFileSync(new URL('../../../Animate/m03039-1.anm',import.meta.url)),command=program.commands[26];
+ assert.equal(createHash('sha256').update(original).digest('hex'),program.source.sha256);
+ assert.equal(original.subarray(command.source.offset,command.source.offset+74).toString('hex'),command.raw_hex);
+ assert.deepEqual([command.opcode,command.u32_plus1,command.u32_plus5,command.u32_plus13,command.u32_plus17],[35,0,3,197,89]);
+ const dat=readFileSync(new URL('../../../Map/m03039.dat',import.meta.url)),cell=0x172+(11*map.movement.width+24)*64;
+ assert.equal(dat[cell+0x20],1);assert.equal(new MovementMap(map.movement).validEntry(394,178),false);
+ const prepare=()=>new MovementMap(nativeMapMovement(map.movement,packed.chapter,packed.programs));
+ const movement=prepare();assert.equal(movement.at(394,178).reason,'terrain');assert.equal(movement.validEntry(394,178),true);
+ const initial=read('opening_seed');initial.opening.status='complete';initial.leader_id='004';
+ initial.party=[chapterRoleFromDefinition(initial.source.role_definitions['004'])];initial.location={map_id:'M03039',x:394,y:178,direction:0};
+ const world=new WorldStore(initial),loaded=await decodeSave(await encodeSave(world.snapshot()));
+ assert.deepEqual(loaded.location,initial.location);assert.equal(prepare().validEntry(loaded.location.x,loaded.location.y),true);
+ for(const [dx,dy]of [[16,0],[0,24]]){
+  const left=movement.moveAndSlide(394,178,dx,dy);assert.equal(left.moved,true);assert.equal(movement.at(left.x,left.y).blocked,false);
+ }
+ const returnToBed=movement.moveAndSlide(410,178,-16,0);assert.equal(returnToBed.blocked,true);assert.ok(returnToBed.x>=400);
+ assert.equal(movement.validEntry(344,136),false,'no source player placement makes this other terrain1 cell an entrance');
+ assert.equal(new MovementMap(nativeMapMovement(map.movement,packed.chapter)).validEntry(394,178),false,'without the verified ANM the bed cell remains inadmissible');
+ assert.equal(map.movement.terrain_rows[11][24],'1','derivation never rewrites source terrain');
 });

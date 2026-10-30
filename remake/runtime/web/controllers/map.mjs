@@ -47,7 +47,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
         if(action){resource.shadow_sheet=action.shadow_sheet;resource.shadow_geometry=action.shadow_geometry;}}}
     const data=await actions.json(entry.path);
     if(data.schema!=='seventh-seal-runtime-map'||data.version!==1||data.id!==id) throw new Error('地图数据版本或标识不匹配');
-    data.movement=nativeMapMovement(data.movement,state.chapterStory.maps[id]);
+    data.movement=nativeMapMovement(data.movement,state.chapterStory.maps[id],state.chapterStory.programs);
     const extraExits=[...(state.chapterResources.exits_by_map[id]??[]),...chapterRouteExits(id,state.chapterStory,state.chapterResources)];
     data.exits=[...(data.exits??[]).filter(exit=>!extraExits.some(extra=>extra.id===exit.id)),...extraExits];
     const nativeNpcs=state.chapterResources.npcs_by_map[id];
@@ -150,7 +150,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
     for(const object of state.chapterStory.maps[at.map_id]?.objects??[]){
       const binding=storyBindings(at.map_id).objects.find(row=>row.index===object.index);
       if(!binding)continue;
-      if(binding.handler==='stationary-chest'&&(object.behavior_raw_cf!==3||!object.interaction_record_raw_f6))continue;
+      if(binding.handler==='stationary-chest'&&(![3,4].includes(object.behavior_raw_cf)||!object.interaction_record_raw_f6))continue;
       if(binding.handler==='keyed-chest'&&object.behavior_raw_cf!==4)continue;
       if(binding.handler==='tlk-object'&&(object.behavior_raw_cf!==1||!object.interaction_record_raw_f6))continue;
       const distance=Math.hypot(object.x_native*2-at.x,object.y_native*2-at.y);

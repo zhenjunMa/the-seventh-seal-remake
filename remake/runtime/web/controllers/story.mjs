@@ -9,6 +9,7 @@ import {hasNativeStoryCompletion} from '../core/story_completion.mjs';
 import {nativeChestAnimation} from '../core/native_map_chests.mjs';
 import {captureMapNpcState} from '../core/map_npc_state.mjs';
 import {locomotion} from '../core/movement.mjs';
+import {loadEncounterMap} from '../core/encounters.mjs';
 
 export function createStoryController({state, actions, $, canvas, ctx}) {
   let session=null,sequence=0;
@@ -202,7 +203,9 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
         return runTlk(args);
       };
       const hooks=view.hooks();
-      for(const name of ['map','actor','move']){const invoke=hooks[name];hooks[name]=async payload=>{await invoke(payload);captureActors();};}
+      for(const name of ['map','actor','move']){const invoke=hooks[name];hooks[name]=async payload=>{
+        await invoke(payload);if(name==='map')loadEncounterMap(draft,payload.mapId,state.encounterData);captureActors();
+      };}
       const animation=new ChapterAnimationRunner({program,hooks:{...hooks,...media?.hooks()},runTlk:nestedTlk,joinActor,leaveActor,flagCommand,initialActor,initialLocation:draft.location,playback,
         visualState:state.anmVisualState,
         content});
@@ -268,6 +271,7 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
       const scene=await playbackTask(actions.prepareMap(destination.map_id,{world:targetWorld}),signal);
       if(playback?.paused)await playback.ready();check();
       const location=worldMapEntry(scene,destination,state.chapterStory);actions.validateEntry(scene,location);check();
+      loadEncounterMap(draft,destination.map_id,state.encounterData);
       state.sceneEntryDraft=draft;installed=true;state.scenes.current=scene;
       delete draft.map_npc_state;
       const committed=actions.commitView(scene,location,'exit');
@@ -277,6 +281,7 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
     }catch(error){release({failed:true});throw error;}
   }
   async function enterMap(scene,draft,reason){
+    loadEncounterMap(draft,scene.data.id,state.encounterData);
     const recordId=storyBindings(scene.data.id).entry_record;
     if(!recordId||!['exit','world-map'].includes(reason))return false;
     state.sceneEntryDraft=draft;

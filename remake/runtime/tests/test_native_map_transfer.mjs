@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {ChapterRunner,validateChapterStory} from '../web/core/chapter.mjs';
+import {ChapterRunner,validateChapterStory,chapterChoices} from '../web/core/chapter.mjs';
 import {ChapterAnimationRunner} from '../web/core/chapter_animation.mjs';
 import {WorldStore,encodeSave,decodeSave} from '../web/core/world.mjs';
 import {createStoryController} from '../web/controllers/story.mjs';
@@ -15,6 +15,17 @@ import {applyExperience} from '../web/core/battle_rewards.mjs';
 const copy=structuredClone;
 const read=async name=>JSON.parse(await readFile(new URL(`../web/data/${name}.json`,import.meta.url),'utf8'));
 const [source,seed,resources,targetMap,rewards]=await Promise.all(['chapter_story','opening_seed','chapter_map_resources','maps/m17023','party_rewards'].map(read));
+
+test('real dream stair trigger permits its full leave choice without granting save or recovery permissions',async()=>{
+ const initial=copy(seed);initial.opening.status='complete';initial.location={map_id:'M71071',x:0,y:0,direction:0};initial.flags[428]|=4;
+ const world=new WorldStore(initial),seen=[],runner=new ChapterRunner({world,data:source,say:async()=>{},
+  choose:async({record,choices})=>{seen.push(record.id);assert.deepEqual(choices.map(({index,text,recordId})=>({index,text,recordId})),chapterChoices(record));return 1;}});
+ await runner.runTlk({mapId:'M71071',recordId:10,triggerId:2});assert.deepEqual(seen,[11]);
+ await assert.rejects(runner.runTlk({mapId:'M71071',recordId:10}),/主动交互入口/);
+ const context={transition:{mapId:'M71071',triggerId:2,triggerRecordId:10}};
+ for(const mutation_type of [2,4])assert.throws(()=>runner.applyMutation(world.snapshot(),source.maps.M71071,
+  {mutation_type,mutation_index:0,mutation_bit:0},context),/主动交互入口|尚未接入/);
+});
 
 test('kind2 destination marker255 is independent of source TLK targets in both source and compact validators',()=>{
   for(const version of [1,2]){

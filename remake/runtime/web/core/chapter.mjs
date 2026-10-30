@@ -17,7 +17,7 @@ import {compileTlkFlow,nativeFlowId} from './story_flow_compiler.mjs';
 import {playbackDelay} from './story_playback.mjs';
 import {nativeMapTransfer} from './map_connections.mjs';
 import {nativeScriptedBattle} from './scripted_battle.mjs';
-import {nativeKeyedChest,canOpenNativeChest} from './native_map_chests.mjs';
+import {nativeKeyedChest,nativeScriptedChest,canOpenNativeChest} from './native_map_chests.mjs';
 import {evaluateNativeStoryCombination} from './native_story_combinations.mjs';
 import {isNativeMapId} from './native_map_identity.mjs';
 
@@ -233,7 +233,11 @@ export class ChapterRunner {
     need(object.source?.sha256 === this.data.source_hashes[object.source.path], '剧情箱子来源无效');
     const chest=binding.handler==='keyed-chest'?nativeKeyedChest(object):null;
     const repeatable=binding.handler==='tlk-object';
-    if(!chest)need(b[0xcf] === (repeatable?1:3) && b[0x109] === 0 && table.records.some(row=>row.id===v.getUint32(0xf6,true)), '剧情物件来源或状态类型无效');
+    if(!chest){
+      if(repeatable)need(b[0xcf]===1&&b[0x109]===0,'剧情物件来源或状态类型无效');
+      else nativeScriptedChest(object);
+      need(table.records.some(row=>row.id===v.getUint32(0xf6,true)),'剧情物件入口缺失');
+    }
     if (this.objectData) {
       const manifest = this.objectData[mapId]?.find(row => row.object_index_zero_based === objectIndex);
       need(manifest?.source?.path === object.source.path && manifest.source.offset === object.source.offset
@@ -266,12 +270,15 @@ export class ChapterRunner {
       if(chest)setObjectEventState(draft,table.map_flag_index,objectIndex,2);
       else{
         if (initialState === 1) setObjectEventState(draft, table.map_flag_index, objectIndex, 0);
-        if (initialState !== 2) result = await this.walkTlk({mapId, recordId, draft,context:{steps:0,playback}});
+        if (initialState !== 2) result = await this.walkTlk({mapId, recordId, draft,
+          context:{steps:0,playback,explicitInteraction:true,objectMapId:mapId,objectIndex}});
       }
       let state = chapterObjectState(draft, mapId, objectIndex, this.data);
       if (state === 2) {
         playback?.check();
-        await Promise.all([interaction,this.objectAnimation({mapId, objectIndex, draft, source:object.source, fromState:2, toState:3,playback,signal:playback?.signal})]);
+        // An ANM may already have unloaded this object map. Native 40C5C0
+        // persists completed state for an off-map target without replaying it.
+        await Promise.all([interaction,...(draft.location.map_id===mapId?[this.objectAnimation({mapId, objectIndex, draft, source:object.source, fromState:2, toState:3,playback,signal:playback?.signal})]:[])]);
         playback?.check();
         if(chest){
           for(const reward of chest.rewards){
@@ -287,6 +294,7 @@ export class ChapterRunner {
         setObjectEventState(draft, table.map_flag_index, objectIndex, 3);
         state = 3;
       }
+      await interaction;playback?.check();
       return {...result, mapId, objectIndex, state, already_done:false};
     });
   }
@@ -358,7 +366,7 @@ export class ChapterRunner {
       return this.say({mapId,record:{...record,text_raw:command.text},source:command.source,draft,playback,signal:playback?.signal});
     }
     if(op==='choice'){
-      need(context.explicitInteraction===true,'剧情选择需要已恢复的主动交互入口');
+      need(context.explicitInteraction===true||context.transition?.mapId===mapId,'剧情选择需要已恢复的主动交互入口');
       const rest=storyBindings(mapId,this.content).rests.find(row=>row.record_id===record.id);
       if(rest)chapterRestChoices(record,rest);
       need(typeof this.choose==='function','剧情选择显示接口缺失');
@@ -405,12 +413,17 @@ export class ChapterRunner {
       return;
     }
     if (record.mutation_type === 1) {
-      need(record.region_byte_raw === 0 && record.mutation_index === 0
-        && Number.isInteger(record.mutation_bit)&&record.mutation_bit>0, '剧情物件状态变更尚未接入');
-      const objectIndex=record.mutation_bit-1;
-      this.objectFor(table.id, objectIndex);
-      if (chapterObjectState(draft, table.id, objectIndex, this.data) !== 3)
-        setObjectEventState(draft, table.map_flag_index, objectIndex, 2);
+      need(record.region_byte_raw===0&&flagIndex(record.mutation_index)
+        &&Number.isInteger(record.mutation_bit)&&record.mutation_bit>=0&&record.mutation_bit<=1000,'剧情物件状态变更尚未接入');
+      if(record.mutation_bit===0)return;
+      const active=this.data.maps[draft.location.map_id],objectIndex=record.mutation_bit-1;
+      const mapFlag=record.mutation_index||active.map_flag_index;
+      // 464D80 case1 passes TLK +27/+2B and byte+7 to 40C5C0.
+      // Current map: start state2 unless complete; another map: persist3.
+      if(mapFlag===active.map_flag_index){
+        this.objectFor(active.id,objectIndex);
+        if(chapterObjectState(draft,active.id,objectIndex,this.data)!==3)setObjectEventState(draft,mapFlag,objectIndex,2);
+      }else setObjectEventState(draft,mapFlag,objectIndex,3);
       return;
     }
     if (record.mutation_type === 5) {

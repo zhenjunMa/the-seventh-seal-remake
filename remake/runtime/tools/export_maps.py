@@ -62,8 +62,12 @@ def background_names(bg: MapBackground) -> list[str]:
     names = [bg.data[0x9A + i * 20:0x9A + (i + 1) * 20].split(b"\0")[0].decode("ascii", "strict")
              for i in range(count)]
     if any(not value.lower().endswith(".dgp") or "/" in value or "\\" in value for value in names):
-        raise DGPError("Background name is not an ordinary game-root DGP filename")
-    return names
+        raise DGPError("Background name is not an ordinary DGP filename")
+    # 0x522F6E initializes MAP_PATH to .\\Map\\; 0x4A0FA0 prefixes each
+    # literal DAT name with it. This installation also retains root-only
+    # resources used by the existing exports. Prefer the native location and
+    # retain the exact root name when that is the available source layout.
+    return [f"Map/{name}" if (ROOT / "Map" / name).is_file() else name for name in names]
 
 
 def compose_background(bg: MapBackground, resources: list[DGP]):

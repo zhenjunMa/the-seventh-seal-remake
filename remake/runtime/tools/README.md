@@ -62,6 +62,7 @@ node remake/runtime/tools/check_content.mjs --json
 | 翠碧湖 | jade-lake-index | export_jade_lake_index.py |
 | 炎城 | ember-city-index | export_ember_city_index.py |
 | 里白木森林／幻影之森／封印之森 | inner-white-forest-index | export_inner_white_forest_index.py |
+| 飘城全时期 | floating-city-index | export_floating_city_index.py |
 
 ```console
 python3 -B remake/runtime/tools/build_runtime.py --target ember-city-index --run
@@ -212,6 +213,7 @@ python3 -B remake/runtime/tools/source/inspect_equipment.py /path/to/SaveGame0.D
 | `jade-lake-index` | [export_jade_lake_index.py](export_jade_lake_index.py) | 无声明依赖 |
 | `ember-city-index` | [export_ember_city_index.py](export_ember_city_index.py) | 无声明依赖 |
 | `inner-white-forest-index` | [export_inner_white_forest_index.py](export_inner_white_forest_index.py) | 无声明依赖 |
+| `floating-city-index` | [export_floating_city_index.py](export_floating_city_index.py) | 无声明依赖 |
 | `native-services` | [export_native_services.py](export_native_services.py) | 无声明依赖 |
 
 <!-- 自动生成：构建目标结束 -->
@@ -245,7 +247,7 @@ python3 -B remake/runtime/tools/verify_tests.py --profile audit --list
 python3 -B remake/runtime/tools/verify_tests.py --check
 ```
 
-当前区域为fire-valley、white-forest、jade-lake、ember-city。区域参数选择已登记动态遍历，不自动生成阶段事件链或执行浏览器。
+当前区域为fire-valley、white-forest、inner-white-forest、jade-lake、ember-city、floating-city。区域参数选择已登记动态遍历，不自动生成阶段事件链或执行浏览器。
 
 | 显式组 | 范围 |
 | --- | --- |
