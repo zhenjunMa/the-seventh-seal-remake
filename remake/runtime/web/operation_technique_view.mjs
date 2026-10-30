@@ -80,7 +80,15 @@ export class OperationTechniqueView{
       else {this.paintActions();if(this.action==='set'&&['categories','candidates','slot-confirm'].includes(this.stage))this.paintShortcuts(this.stage==='slot-confirm');if(['actions','categories'].includes(this.stage))this.paintCategories();if(['candidates','slot-confirm'].includes(this.stage))this.paintList(this.candidateEntries(),'game002_1'+['a','b','c','d','e'][this.category]);}
     }
     this.paintShortcutReplacement();
-    if(focusKey){const button=[...this.element.querySelectorAll('button')].find(row=>row.dataset.techniqueKey===focusKey);if(button&&!button.disabled){this.restoring=true;button.focus({preventScroll:true});this.restoring=false;if(button._widget)this.sourceHighlight(button,button._widget,true);}}
+    if(focusKey){
+      const button=[...this.element.querySelectorAll('button')].find(row=>row.dataset.techniqueKey===focusKey);
+      if(button&&!button.disabled){
+        this.restoring=true;button.focus({preventScroll:true});this.restoring=false;
+        if(button._widget)this.sourceHighlight(button,button._widget,true);
+        // Restoring skips focus handlers, so repaint the retained healing target.
+        if(button.dataset.techniqueTarget)button.querySelector('img').src=this.manifest.item_target_panels.selected;
+      }
+    }
   }
   paintRoster(){
     for(const [index,status]of this.rows.entries()){

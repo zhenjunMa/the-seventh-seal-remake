@@ -1,7 +1,7 @@
 // input adapters. Persistent state belongs to the shared runtime context.
 import {useWorldItem, changeEquipment} from "../core/items.mjs";
 import {changeSkillShortcuts} from "../core/skill_shortcuts.mjs";
-import {availableFieldSkills, useWorldSkill} from "../core/field_skills.mjs";
+import {availableFieldSkills} from "../core/field_skills.mjs";
 import {effectiveSkillSource} from "../core/battle_skill_access.mjs";
 import {createContentSample} from "../core/content_sample.mjs";
 import {createPartySkillSample,PARTY_SKILL_SAMPLE_ROSTERS} from "../core/party_skill_sample.mjs";
@@ -22,7 +22,7 @@ export function createInputController({state, actions, $, canvas, ctx}) {
     $('menuEditShortcut').textContent='快捷设置（前三槽）';$('menuEditShortcut').onclick=actions.editSkillShortcuts;
     $('menuShortcutCancel').onclick=()=>{$('menuShortcutEditor').hidden=true;};
     $('menuShortcutSave').onclick=actions.menuOperation(()=>{const roleId=$('menuActor').value,indices=[1,2,3].map(n=>Number($('menuShortcut'+n).value));changeSkillShortcuts(state.world,effectiveSkillSource(state.partySkills,state.world.value),{roleId,indices});$('menuShortcutEditor').hidden=true;actions.log({type:'skill-shortcuts-changed',role_id:roleId,indices});return '快捷技能已设置，下一场战斗按此顺序显示。';});
-    $('menuFieldSkill').onclick=actions.menuOperation(()=>{const casterId=$('menuActor').value,targetId=$('menuSkillTarget').value,index=Number($('menuSkill').value),skill=availableFieldSkills(state.world.value,state.menuContext.configured.party_skills,casterId).find(s=>s.original_skill_index===index);if(!skill)throw new Error('此技能不能在战斗外使用');const result=useWorldSkill(state.world,state.partyCombat,state.menuContext.configured.party_skills,state.itemData,{casterId,targetId,skillId:skill.id});actions.buildHud();actions.log({type:'world-skill-used',...result});return `${result.name}已使用，HP ${result.target_hp.before}→${result.target_hp.after}，消耗MP ${result.mp_cost}。`;});
+    $('menuFieldSkill').onclick=actions.menuOperation(()=>{const casterId=$('menuActor').value,targetId=$('menuSkillTarget').value,index=Number($('menuSkill').value),skill=availableFieldSkills(state.world.value,state.menuContext.configured.party_skills,casterId).find(s=>s.original_skill_index===index);if(!skill)throw new Error('此技能不能在战斗外使用');return actions.useFieldTechnique({casterId,targetId,skillId:skill.id}).message;});
     $('menuUseItem').onclick=actions.menuOperation(async()=>{
       const instanceId=$('menuItem').value,targetId=$('menuActor').value;
       if(state.menuContext.combat){actions.closePartyMenu();await state.battle.chooseItem(instanceId,targetId);return;}

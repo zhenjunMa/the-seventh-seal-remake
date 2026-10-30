@@ -33,6 +33,8 @@ test('Source #41 restores300 HP including fallen targets, costs6 MP once and per
   const world=await fixture(),before=world.snapshot(),source=copy(skills);
   const result=useWorldSkill(world,attributes,skills,items,options),after=world.snapshot();
   assert.deepEqual(result.target_hp,{before:0,after:300});assert.equal(result.caster_mp.before-result.caster_mp.after,6);
+  assert.equal(result.skill_practice,10);
+  assert.deepEqual(after.party[0].skill_progress.records.find(row=>row.index===41),{index:41,level:1,experience:10});
   assert.equal(after.party[0].mp.current,before.party[0].mp.current-6);
   assert.deepEqual(after.inventory,before.inventory);assert.deepEqual(after.encounters,before.encounters);assert.deepEqual(skills,source);
   assert.deepEqual(await decodeSave(await encodeSave(after),world.mapIds),after);
@@ -45,6 +47,7 @@ test('Self recovery occurs before caster cost and source raw max clamps; rejecti
   const result=useWorldSkill(world,attributes,skills,items,{...options,targetId:'001'});
   assert.equal(result.target_hp.after,Math.min(initial.raw_hp+300,initial.raw_hp_maximum)+initial.resource_bonuses.hp_current);
   assert.equal(result.caster_mp.after,initial.mp.current-6);
+  assert.equal(world.value.party[0].skill_progress.records.find(row=>row.index===41).experience,10);
   world.transact(draft=>{draft.party[0].hp.current=draft.party[0].hp.maximum;});
   const full=world.snapshot();assert.throws(()=>useWorldSkill(world,attributes,skills,items,{...options,targetId:'001'}),/HP已满/);assert.deepEqual(world.snapshot(),full);
 });
@@ -58,4 +61,20 @@ test('Unified owner001/index41 debug HP and MP parameters are used by the field 
   assert.equal(applied.result.target_hp.after,50);assert.equal(applied.result.caster_mp.before-applied.result.caster_mp.after,2);
   assert.equal(applied.result.configuration.mode,'debug');assert.deepEqual(world.snapshot(),before);
   assert.deepEqual(skills.field_skills.yannuan.fixed_raw_hex,skills.roles['001'].skills[41].fixed_raw_hex);
+});
+
+test('Field healing levels up immediately, uses the new rank on repeated casts, and rejects full targets without practice or MP loss',async()=>{
+  const world=await fixture(),source=copy(skills);
+  world.transact(draft=>{draft.party[0].skill_progress={version:2,learned_indices:[],records:[{index:22,level:1,experience:39},{index:41,level:1,experience:795}]};});
+  const first=useWorldSkill(world,attributes,skills,items,options);
+  assert.deepEqual(first.target_hp,{before:0,after:300});assert.equal(first.mp_cost,6);assert.equal(first.skill_practice,10);
+  assert.deepEqual(first.notifications.filter(n=>n.type==='skill-level-up').map(n=>({index:n.skill_index,before:n.before,after:n.after})),[{index:41,before:{level:1,experience:795},after:{level:2,experience:5}}]);
+  assert.deepEqual(fieldSkillAvailability(world.value,attributes,skills,items,options),{available:true,hp_delta:400,mp_delta:0,mp_cost:5});
+  const second=useWorldSkill(world,attributes,skills,items,options);
+  assert.deepEqual(second.target_hp,{before:300,after:700});assert.equal(second.mp_cost,5);assert.equal(second.skill_practice,8);
+  assert.deepEqual(world.value.party[0].skill_progress.records.find(row=>row.index===41),{index:41,level:2,experience:13});
+  assert.deepEqual(world.value.party[0].skill_progress.records.find(row=>row.index===22),{index:22,level:1,experience:39});
+  const third=useWorldSkill(world,attributes,skills,items,options);assert.deepEqual(third.target_hp,{before:700,after:900});assert.equal(third.skill_practice,8);
+  const full=world.snapshot();assert.throws(()=>useWorldSkill(world,attributes,skills,items,options),/HP已满/);assert.deepEqual(world.snapshot(),full);
+  assert.deepEqual(await decodeSave(await encodeSave(full),world.mapIds),full);assert.deepEqual(skills,source);
 });
