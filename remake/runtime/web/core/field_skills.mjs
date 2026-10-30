@@ -3,6 +3,7 @@
 import {createPartyActors} from './party_attributes.mjs';
 import {validateWorld} from './world.mjs';
 import {applySavedSkillProgress,isBattleSkillLearned} from './battle_skill_access.mjs';
+import {recordNativeSkillPractice,settleNativeSkillProgress} from './battle_skill_growth.mjs';
 const copy=structuredClone;
 const need=(ok,message)=>{if(!ok)throw new Error(message);};
 const view=s=>new DataView(Uint8Array.from(s.fixed_raw_hex.match(/../g),h=>parseInt(h,16)).buffer);
@@ -52,11 +53,16 @@ export function applyFieldSkill(world,attributes,skills,items,options){
   // to raw maxima and their hard caps (9999 HP / 999 MP).
   casterRole.hp.current=Math.min(Math.max(casterRole.hp.current|0,0),caster.raw_hp_maximum,9999)>>>0;
   casterRole.mp.current=Math.min(Math.max((casterRole.mp.current|0)-cost,0),caster.raw_mp_maximum,999)>>>0;
+  // A successful field cast settles one use immediately, without a battle bonus.
+  const practice={};recordNativeSkillPractice(practice,caster,skill);
+  const growth=settleNativeSkillProgress({role:casterRole,source_role:skills.roles[caster.id],practice:practice[caster.id],remake:true});
+  Object.assign(casterRole,growth.role);
   validateWorld(next);
   const after=createPartyActors(next,attributes,{},items),targetAfter=after.find(a=>a.id===target.id),casterAfter=after.find(a=>a.id===caster.id);
   return {world:next,result:{skillId:skill.id,name:skill.name,casterId:caster.id,targetId:target.id,mp_cost:cost,
     target_hp:{before:target.hp.current,after:targetAfter.hp.current},target_mp:{before:target.mp.current,after:targetAfter.mp.current},
-    caster_mp:{before:caster.mp.current,after:casterAfter.mp.current},configuration:copy(skill.configuration??null)}};
+    caster_mp:{before:caster.mp.current,after:casterAfter.mp.current},skill_practice:growth.practice_total,
+    notifications:growth.notifications,configuration:copy(skill.configuration??null)}};
 }
 
 export function useWorldSkill(world,attributes,skills,items,{expectedRevision=world.value.revision,...options}){
