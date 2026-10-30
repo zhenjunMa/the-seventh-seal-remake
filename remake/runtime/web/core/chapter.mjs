@@ -151,9 +151,9 @@ export function chapterRestChoices(record,binding=null) {
 }
 
 export class ChapterRunner {
-  constructor({world, data, say, choose = null, animate, transfer, battle, service, objectData = null, objectAnimation = async () => {}, wait=playbackDelay, setPhase = () => {}, log = () => {},content=runtimeContent,worldMapState}) {
+  constructor({world, data, say, choose = null, animate, transfer, battle, service, objectData = null, objectInteraction = async () => {}, objectAnimation = async () => {}, wait=playbackDelay, setPhase = () => {}, log = () => {},content=runtimeContent,worldMapState}) {
     validateChapterStory(data);
-    Object.assign(this, {world, data:data.version===2?data:copy(data), objectData:data.version===2?objectData:copy(objectData), objectAnimation, say, choose, animate, transfer, battle, service, wait, setPhase, log,content,worldMapState});
+    Object.assign(this, {world, data:data.version===2?data:copy(data), objectData:data.version===2?objectData:copy(objectData), objectInteraction, objectAnimation, say, choose, animate, transfer, battle, service, wait, setPhase, log,content,worldMapState});
     if(data.version===1)this.data.flows=Object.fromEntries(Object.values(this.data.maps).filter(table=>table.dialogue_status!=='source-file-absent').map(table=>{
       const flow=compileTlkFlow(table,{choices:chapterChoices});return [flow.id,flow];
     }));
@@ -240,19 +240,25 @@ export class ChapterRunner {
         && manifest.source.sha256 === object.source.sha256 && manifest.source.raw_hex === object.raw_hex,
         '剧情物件清单与原始地图不一致');
     }
-    return {table, object, recordId:v.getUint32(0xf6, true),chest,repeatable};
+    return {table, object, recordId:v.getUint32(0xf6, true),chest,repeatable,interactionActionGroup:b[0xb5]};
   }
   async runObject({mapId, objectIndex, playback} = {}) {
     need(!this.running, '火之谷剧情正在执行');
-    const {table, object, recordId,chest,repeatable} = this.objectFor(mapId, objectIndex);
+    const {table, object, recordId,chest,repeatable,interactionActionGroup} = this.objectFor(mapId, objectIndex);
     need(this.world.location.map_id === mapId, '剧情物件不在当前地图');
     if(repeatable)return this.runTlk({mapId,recordId,playback,
       context:{steps:0,explicitInteraction:true,objectMapId:mapId,objectIndex}});
     const initialState = chapterObjectState(this.world.snapshot(), mapId, objectIndex, this.data);
     if (initialState === 3) return {mapId, objectIndex, already_done:true, state:3, world:this.world.snapshot()};
     need([0,1,2].includes(initialState), '剧情物件保存状态尚未接入');
-    if(chest&&initialState!==2&&!canOpenNativeChest(this.world.snapshot(),chest))
+    // 4137C0 -> 412640 -> 4121D0 starts the ordinary actor action before
+    // 411F50 checks possession. It is independent of the action+7F strike.
+    const interaction=initialState===2?null:this.objectInteraction({mapId,objectIndex,object,
+      actionGroup:interactionActionGroup,playback,signal:playback?.signal});
+    if(chest&&initialState!==2&&!canOpenNativeChest(this.world.snapshot(),chest)){
+      await interaction;playback?.check();
       return {mapId,objectIndex,locked:true,key_id:chest.keyId,state:initialState,world:this.world.snapshot()};
+    }
     return this.atomic({mapId, recordId, objectIndex, playback}, async draft => {
       let result = {traversed:[], dialogueIds:[]};
       // Source 0x4137C0 clears pending state1 before dispatching +F6.
@@ -265,7 +271,7 @@ export class ChapterRunner {
       let state = chapterObjectState(draft, mapId, objectIndex, this.data);
       if (state === 2) {
         playback?.check();
-        await this.objectAnimation({mapId, objectIndex, draft, source:object.source, fromState:2, toState:3,playback,signal:playback?.signal});
+        await Promise.all([interaction,this.objectAnimation({mapId, objectIndex, draft, source:object.source, fromState:2, toState:3,playback,signal:playback?.signal})]);
         playback?.check();
         if(chest){
           for(const reward of chest.rewards){

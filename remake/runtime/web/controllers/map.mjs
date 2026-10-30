@@ -204,9 +204,10 @@ export function createMapController({state, actions, $, canvas, ctx}) {
   function drawCollision(scene){const size=16;for(let y=0;y<scene.movement.height;y++)for(let x=0;x<scene.movement.width;x++){const cell=scene.movement.cell(x,y);ctx.fillStyle=cell.trigger?'#e6bd6855':cell.blocked?'#d14d4738':'#78c79623';ctx.fillRect(x*size,y*size,size,size);}}
   function paint(){
     const scene=state.scenes?.current;
-    const world=state.sceneEntryDraft??state.world.value;
+    const sourceWorld=state.sceneEntryDraft??state.world.value,actor=state.objectActorPreview;
+    const world=actor?{...sourceWorld,location:{...sourceWorld.location,direction:actor.direction}}:sourceWorld;
     const draw=state.openingView?.active&&state.openingView.nativeViewport?drawOpeningScene:drawGameScene;
-    const options={scene,world,role:role(),action:sheetAction(),view:state.view,width:state.cssWidth,height:state.cssHeight,objectBitmap:(scene,obj)=>objectBitmap(scene,obj,world),
+    const options={scene,world,role:actor?.role??role(),action:actor?.action??sheetAction(),view:actor?{...state.view,frame:actor.frame,collisionFeedback:null}:state.view,width:state.cssWidth,height:state.cssHeight,objectBitmap:(scene,obj)=>objectBitmap(scene,obj,world),
       openingQueue:state.openingView?.active?state.openingView.drawQueue(scene.data.role_layer_preview??2):null,
       nativeViewport:Boolean(state.openingView?.active&&state.openingView.nativeViewport),
       collision:scene&&state.view.collision?()=>drawCollision(scene):null,nearest:state.nearest};

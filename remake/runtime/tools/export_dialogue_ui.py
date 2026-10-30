@@ -35,7 +35,7 @@ def main():
     resources = {}
     names = {'board':'SYSTEM/MessageBoard.dgp','think':'SYSTEM/Think_Msg.dgp',
         'wait1':'SYSTEM/MessageWait1.dgp','wait2':'SYSTEM/MessageWait2.dgp',
-        'faces':'ROLE/face.dgp'}
+        'faces':'ROLE/face.dgp','reward':'SYSTEM/Map_Object_Name.dgp'}
     sources = {name:sha(ROOT/name) for name in ['GAME.exe',*names.values()]}
     for key,name in names.items():
         d = DGP(ROOT/name)

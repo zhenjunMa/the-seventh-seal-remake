@@ -21,6 +21,8 @@ import {CaptionView} from "../caption_view.mjs";
 import {LoadingView} from "../loading_view.mjs";
 import {BattleTransitionView} from "../battle_transition_view.mjs";
 import {DialogueView} from "../dialogue_view.mjs";
+import {RewardNoticeView} from '../reward_notice_view.mjs';
+import {nativeNpcActionBindings} from '../core/map_npcs.mjs';
 import {WorldMapView} from "../world_map_view.mjs";
 import {runtimeContent,runtimeContentDefinition,validateContentRegistration} from "../core/content_registry.mjs";
 import {StoryRepository} from "../core/story_repository.mjs";
@@ -43,6 +45,9 @@ export function createBootController({state, actions, $, canvas, ctx}) {
     state.openingResources=openingResources;state.chapterResources=state.storyRepository.resources;state.chapterStory=state.storyRepository.story;
     state.events=state.storyRepository.events;state.routeEvents=state.storyRepository.routes;
     state.openingResources.roles={...state.openingResources.roles,...state.chapterResources.roles};
+    for(const [id,binding]of Object.entries(runtimeContent.roles))if(binding.side==='player'){
+      const role=state.openingResources.roles[id];role.native_action_bindings=nativeNpcActionBindings(role);
+    }
     state.mapEffects=await actions.json(state.catalog.map_effects);
     if(state.mapEffects.schema!=='seventh-seal-map-effects'||state.mapEffects.version!==1)throw new Error('地图光效清单版本不兼容');
     for(const [id,resource] of Object.entries(state.mapEffects.roles)){
@@ -90,6 +95,8 @@ export function createBootController({state, actions, $, canvas, ctx}) {
     const dialogueManifest=await actions.json('data/dialogue_ui.json');state.dialogueManifest=dialogueManifest;
     state.dialogueView=await DialogueView.create({manifest:dialogueManifest,fonts:await actions.json(dialogueManifest.font_manifest),
       image:actions.image,root:$('dialogue'),clock:state.engine?.exploration.clock,onAdvance:actions.advanceDialogue,onChoose:actions.chooseDialogue,log:actions.log});
+    state.rewardNoticeView=new RewardNoticeView({root:$('rewardNotice'),resource:state.dialogueView.resources.reward,
+      textRenderer,clock:state.engine.exploration.clock,log:actions.log});
     state.menuSettings=createMenuSettings({storage:localStorage});
     const menuTransaction=fn=>state.menuFeedback?state.menuFeedback.transaction(fn):fn();
     state.operationMenu=new OperationMenuView({manifest:operationManifest,textRenderer,techniquesSupplement:await actions.json('data/operation_techniques.json'),root:$('partyMenu'),onPage:actions.showOperationPage,
@@ -140,7 +147,7 @@ export function createBootController({state, actions, $, canvas, ctx}) {
       worldMapState:()=>state.worldMap.initialState(),
       choose:actions.chooseChapter,service:actions.openNativeService,
       say:({mapId,record,signal})=>actions.say(actions.chapterSpeaker(mapId,record),record.text_raw,record.style,{mapId,record,signal}),
-      animate:actions.animateChapter,transfer:actions.transferChapter,battle:actions.startScriptedBattle,objectAnimation:actions.animateChapterObject,log: actions.log,setPhase:phase=>state.scenes.setPhase(phase)});
+      animate:actions.animateChapter,transfer:actions.transferChapter,battle:actions.startScriptedBattle,objectInteraction:actions.animateObjectInteraction,objectAnimation:actions.animateChapterObject,log: actions.log,setPhase:phase=>state.scenes.setPhase(phase)});
     state.worldMap=new WorldMapController({world: state.world,data:worldMapData,
       prepare:async destination=>{const draft=state.world.snapshot();delete draft.map_npc_state;const scene=await actions.prepareMap(destination.map_id,{world:draft}),location=worldMapEntry(scene,destination,state.chapterStory);
         actions.validateEntry(scene,location);return {scene,location};},

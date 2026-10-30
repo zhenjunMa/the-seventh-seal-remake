@@ -8,6 +8,7 @@ import {worldMapEntry} from '../core/map_connections.mjs';
 import {hasNativeStoryCompletion} from '../core/story_completion.mjs';
 import {nativeChestAnimation} from '../core/native_map_chests.mjs';
 import {captureMapNpcState} from '../core/map_npc_state.mjs';
+import {locomotion} from '../core/movement.mjs';
 
 export function createStoryController({state, actions, $, canvas, ctx}) {
   let session=null,sequence=0;
@@ -232,6 +233,7 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
     if(state.scenes.phase!=='map')return;
     const previous={scene:state.scenes.current,view:state.scenes.captureView()};
     try{
+      if(args.objectIndex!==undefined)state.scenes.setPhase('event');
       const result=await playStory(async playback=>{
         try{
           const result=args.event?await state.chapterRunner.runEvent(args.event,{playback}):args.rest?await state.chapterRunner.runRest({explicitInteraction:true,descriptorId:args.descriptorId??null,playback}):args.objectIndex===undefined?await state.chapterRunner.runTlk({...args,playback}):await state.chapterRunner.runObject({...args,playback});
@@ -240,11 +242,12 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
         }catch(error){state.scenes.current=previous.scene;state.scenes.rollbackView(previous.view);throw error;}
       });
       if(result.story_completed)return result;
+      if(result.rewards?.length)state.rewardNoticeView.show(result.rewards.map(reward=>state.itemData.definitions[reward.id].name));
       actions.status(result.locked?'需要对应元素钥匙。':result.already_done?'宝箱已打开。':'可以继续探索。');
       if(result.save_requested)await actions.openSaveCrystal();
       if(result.world_map_requested)state.worldMap.open(result.world_map_requested.area);
     }catch(error){if(error.gameOverPolicy)await actions.presentGameOver(error.gameOverPolicy);else actions.status(error.message,true);}
-    finally{canvas.focus({preventScroll:true});}
+    finally{if(args.objectIndex!==undefined&&state.scenes.phase==='event')state.scenes.setPhase('map');canvas.focus({preventScroll:true});}
   }
   async function transferChapter({mapId,destination,draft,playback,signal=playback?.signal}){
     const previous={scene:state.scenes.current,view:state.scenes.captureView?.(),entryDraft:state.sceneEntryDraft};
@@ -286,6 +289,24 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
       return playback.nativeCompletion?{resume_exploration:false}:true;
     });}finally{state.sceneEntryDraft=null;}
   }
+  async function animateObjectInteraction({mapId,objectIndex,object,actionGroup,signal,playback}){
+    const role=state.openingResources.roles[state.world.value.leader_id];
+    const actionIndex=role.native_action_bindings[actionGroup];
+    const at=state.world.location,direction=locomotion({dx:object.x_native*2-at.x,dy:object.y_native*2-at.y},false).direction??at.direction;
+    if(!actionGroup||actionIndex===-1)return;
+    const action=role.actions.find(row=>row.index===actionIndex),count=action.logical_count??action.frame_count;
+    const actor={role,action,direction,frame:action.uses_sequence?action.sequence_raw[0]:0};
+    state.objectActorPreview=actor;
+    actions.log?.({type:'object-interaction-start',mapId,objectIndex,role_id:role.id,action_group:actionGroup,action_index:actionIndex,direction});
+    try{
+      await state.engine.exploration.clock.tween(action.interval_raw*count,t=>{
+        const frame=Math.min(count-1,Math.floor(t*count));
+        actor.frame=action.uses_sequence?action.sequence_raw[frame]:frame;
+      },[signal]);
+      playback?.check();
+      actions.log?.({type:'object-interaction-complete',mapId,objectIndex});
+    }finally{state.objectActorPreview=null;}
+  }
   async function animateChapterObject({mapId,objectIndex,signal,playback}){
     const resource=state.chapterResources.object_animations[mapId]?.find(row=>row.object_index_zero_based===objectIndex);
     if(!resource)throw new Error('物件动作资源尚未准备');
@@ -309,5 +330,5 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
       }while(now-start<interval*frames.length);
     }finally{state.objectPreview=null;}
   }
-  return {playStory,cancelStoryPlayback,say, clearDialogue, chooseChapter, chooseDialogue, advanceDialogue, dialogueKey, dialogueKeyUp, releaseDialogueKeys, interact, chapterSpeaker, animateChapter, transferChapter, runChapter, enterMap, animateChapterObject};
+  return {playStory,cancelStoryPlayback,say, clearDialogue, chooseChapter, chooseDialogue, advanceDialogue, dialogueKey, dialogueKeyUp, releaseDialogueKeys, interact, chapterSpeaker, animateChapter, transferChapter, runChapter, enterMap, animateObjectInteraction, animateChapterObject};
 }

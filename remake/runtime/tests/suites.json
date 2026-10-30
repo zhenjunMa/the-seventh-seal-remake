@@ -28,6 +28,7 @@
         "test_battle_transition.mjs",
         "test_caption.mjs",
         "test_chapter.mjs",
+        "test_chest_presentation.mjs",
         "test_combat.mjs",
         "test_combat_sample.mjs",
         "test_death_particles.mjs",

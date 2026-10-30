@@ -38,6 +38,7 @@ export function createServicesController({state, actions, $, canvas, ctx}) {
   }
   function image(path, scope = 'shared') { return state.resources.load(path, scope); }
   function busy(phase) {
+    if(!['map','event'].includes(phase))state.rewardNoticeView?.close();
     state.engine?.setPhase(phase);
     state.keys.clear(); state.clock=0;state.view.action=0;state.view.frame=0;state.lastTime=performance.now();
     $('scenePhase').textContent=state.phaseNames[phase]??phase;
