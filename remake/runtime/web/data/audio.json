@@ -402,6 +402,31 @@
         "decoded_audio_unchanged": true
       }
     },
+    "sound/recover.wav": {
+      "path": "/assets/audio/recover.mp3",
+      "mime": "audio/mpeg",
+      "sha256": "16035a09998f2f5c988a2361f45020f70c36dfb8ddc1f9a33b60b5bc19fa18ff",
+      "source": {
+        "path": "sound/recover.wav",
+        "sha256": "16035a09998f2f5c988a2361f45020f70c36dfb8ddc1f9a33b60b5bc19fa18ff",
+        "bytes": 62694,
+        "header_hex": "fffba0400000035e5bccfd3ca0006bcb",
+        "declared_extension": ".wav",
+        "observed_encoding": "MPEG Layer III"
+      },
+      "audio": {
+        "codec": "mp3",
+        "sample_rate": 44100,
+        "channels": 2,
+        "bits_per_sample": 0,
+        "duration_seconds": 3.1347
+      },
+      "export": {
+        "method": "byte-preserving MPEG suffix correction",
+        "decoded_pcm_md5": "MD5=23fcdb82058d400b2d9722cd1c17ffdf",
+        "decoded_audio_unchanged": true
+      }
+    },
     "sound/mworld.wav": {
       "path": "/assets/audio/mworld.mp3",
       "mime": "audio/mpeg",
@@ -10027,6 +10052,17 @@
       ],
       "source": "sound/menu/close.wav",
       "policy": "Native operation menu cue table; cancel is also the invalid-operation sound."
+    },
+    "fieldSkillRecover": {
+      "clip": "sound/recover.wav",
+      "native_index": 1,
+      "evidence": [
+        "ev_a00da8de0cc74d707894af87817f400b7c9cb3afb3df6f78f5c909a4190c0e75",
+        "ev_d172b2b19e17f3f7c01a51947e9f75a96a005a6074f155004c83f4703b6086aa",
+        "ev_b07315a5bdbd1eb3c6118279357e21d294e6fa6bef7f0042c4278398c62c267e",
+        "ev_581e0ec1913cfbf88d5095a0d4c988b3accab6b6984c7a36e7650e627197bf06"
+      ],
+      "policy": "Native 45C100 plays recovery bank 1 after successful field skill settlement; failed casts remain silent."
     }
   },
   "world_map": {
@@ -21315,6 +21351,7 @@
     "sound/menu/decide.wav": "6b9acda323c0d120aff25f0030757293311f5929859db339d2e57d44a470fba7",
     "sound/menu/select.wav": "d38599e7eb403d20825f8fc77df4aa4229ab410b69465b974fbfcbd55b4c708d",
     "sound/menu/open.wav": "fefd2bf292d83bcb3017da01b3d5f49de017144b1c6bc261735fbf102ebab29a",
+    "sound/recover.wav": "16035a09998f2f5c988a2361f45020f70c36dfb8ddc1f9a33b60b5bc19fa18ff",
     "sound/mworld.wav": "14566fac59737aa483f3085c11040895968b319f3f05d6b0e942a0ab29575466",
     "SYSTEM/Object.ITM": "9d38c8cda16a06549cb3d09547b7b69b6d9fec4ee03926aef862b8da25d078b8",
     "Fight_Role/001.CHR": "37ce92ab57622d2cce022b4a9b8add9b29789f89d82bc369ea7352f38ca75c0a",
@@ -21802,6 +21839,10 @@
     "0x573ff0": "ev_2711aa06d47cb11b2979049f7cf84da9984db59b601b997c1531b7ad750829fb",
     "0x574010": "ev_5591e5ffdd933b2205522d00ef08919b45fa110e28ce5b095369d74252a2961d",
     "0x5074c0": "ev_b74e46f7d90472b3e88a9c9ee2536ba3ddf233dfe759e0b0b90fd11912447de7",
+    "0x45c100": "ev_a00da8de0cc74d707894af87817f400b7c9cb3afb3df6f78f5c909a4190c0e75",
+    "0x4bae20": "ev_d172b2b19e17f3f7c01a51947e9f75a96a005a6074f155004c83f4703b6086aa",
+    "0x4bada3": "ev_b07315a5bdbd1eb3c6118279357e21d294e6fa6bef7f0042c4278398c62c267e",
+    "0x4bad00": "ev_581e0ec1913cfbf88d5095a0d4c988b3accab6b6984c7a36e7650e627197bf06",
     "0x4307a0": "ev_16335dbd262e548898487f424aa403cd4caa237c3d687090aab5f87225e8c8ff",
     "0x513daa": "ev_214711a2bc68fae6e160e992920357b34ee22dc2f8dd6930608baaeec4e4930d",
     "0x50ac40": "ev_3026039071dfded0f91a4a67af18100f72fd7464e7cde52741607091a495a5a2",
@@ -21827,6 +21868,7 @@
     "remake/runtime/evidence/ember_city_20261028/native_cf1_sound_distance.json": "eb8790ea0f9ac13a28221d5608c7d96cbf3744b01fda6ba1a95821d8be4440e0",
     "remake/runtime/evidence/ember_city_20261028/native_cf1_sound_distance_impl.json": "2d5167e301f9ced3a0e0bdae7aba97c1fe0fc6b06dbb446aca178831e23cc161",
     "remake/runtime/evidence/party_magic_native.json": "e9de429b1e1eb4436e6cfd4befef83be22b3e0def8245f329d4bab009647b1c3",
+    "remake/runtime/evidence/menu_field_audio_20261030/native.json": "6e4aa33dee977a37ad62b4aa171e040b009015d58da2da8abf2b04d12017bb01",
     "remake/runtime/evidence/audio_native.json": "9967a58dbb8d9a95e0c7d3f1663c1eb598b1b3e74c24eb2fac535728af64c045",
     "remake/runtime/evidence/menu_audio_native_20261014.json": "0af611955509e1f20b5a3675edf977ab744fa50db0e51104a57d1b6a3a68519b",
     "remake/runtime/web/data/menu_audio_rules.json": "19480bb20fcfa368fe4b9ed81fe257266fdb029cf8a83d0a5a8783b204cadf9a"

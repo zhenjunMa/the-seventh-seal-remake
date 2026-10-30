@@ -141,6 +141,7 @@ export function createMenuController({state, actions, $, canvas, ctx}) {
   function useFieldTechnique(request){
     if(!state.menuContext||state.menuContext.combat)throw new Error('当前无法使用技巧');
     const result=useWorldSkill(state.world,state.partyCombat,state.menuContext.configured.party_skills,state.itemData,request);
+    state.audio?.playCue('fieldSkillRecover');
     const message=result.notifications.map(notice=>notice.type==='skill-level-up'?`${notice.actor_name}的${notice.skill_name}升到${notice.after.level}级。`:notice.type==='skill-learned'?`${notice.actor_name}学会了${notice.skill_name}。`:'').filter(Boolean).join('\n')||`${result.name}已使用，HP ${result.target_hp.before}→${result.target_hp.after}，消耗MP ${result.mp_cost}。`;
     actions.buildHud();actions.log({type:'world-skill-used',...result});refreshPartyMenu();
     $('menuMessage').classList.remove('error');$('menuMessage').textContent=message;return {...result,message};

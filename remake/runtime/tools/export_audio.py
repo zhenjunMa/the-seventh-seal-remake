@@ -97,6 +97,10 @@ def main():
     carrier_bundle = 'remake/runtime/evidence/party_magic_native.json'
     native.append(evidence_record(carrier_bundle, '0x5074c0'))
     native_ref[carrier_bundle] = sha((ROOT/carrier_bundle).read_bytes())
+    field_bundle = 'remake/runtime/evidence/menu_field_audio_20261030/native.json'
+    for procedure in ['0x45c100', '0x4bae20', '0x4bada3', '0x4bad00']:
+        native.append(evidence_record(field_bundle, procedure))
+    native_ref[field_bundle] = sha((ROOT/field_bundle).read_bytes())
     extra_path = RUNTIME / 'evidence/audio_native.json'
     if extra_path.exists():
         extra = json.loads(extra_path.read_text('utf-8'))
@@ -212,6 +216,9 @@ def main():
     for name,index in menu_rules['cue_indices'].items():
         cues[name]=dict(clip=menu_clips[index],native_index=index,evidence=list(menu_rules['evidence'].values()),
             source=menu_rules['banks'][index]['source'],policy='Native operation menu cue table; cancel is also the invalid-operation sound.')
+    cues['fieldSkillRecover']=dict(clip=clip('sound/recover.wav'),native_index=1,
+        evidence=[evidence[address] for address in ['0x45c100','0x4bae20','0x4bada3','0x4bad00']],
+        policy='Native 45C100 plays recovery bank 1 after successful field skill settlement; failed casts remain silent.')
     assert b'%smworld.wav' in (ROOT/'GAME.exe').read_bytes()
     world_map = dict(clip=clip('sound/mworld.wav'),evidence=[evidence['0x49ffa0']],source_string='%smworld.wav',
                      confidence='native world-map open/close pauses/resumes map music')

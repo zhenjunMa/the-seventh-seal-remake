@@ -144,6 +144,7 @@ for target, dependencies in {
     STEPS[target]=replace(STEPS[target],depends=dependencies)
 STEPS['chapter-maps']=replace(STEPS['chapter-maps'],inputs=('data/runtime_content.json','data/opening_map_resources.json'))
 STEPS['audio']=replace(STEPS['audio'],inputs=(*STEPS['audio'].inputs,'data/runtime_content.json','../evidence/party_magic_native.json',
+    '../evidence/menu_field_audio_20261030/native.json',
     '../evidence/fire_valley_20261025/object_tick_4137c0_assembly.json',
     *tuple(f'../evidence/ember_city_20261028/native_cf1_sound_{name}.json'
            for name in ['dispatch','position','play','pan','volume','distance','distance_impl'])),sources=audio_source_files())
