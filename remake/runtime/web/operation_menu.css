@@ -2,6 +2,8 @@
 .sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
 .party-menu{inset:0;padding:0;border:0;border-radius:0;overflow:hidden;background:#000;display:grid;place-items:center;box-shadow:none}
 .operation-frame{position:absolute;left:50%;top:50%;width:640px;height:480px;flex:none;transform:translate(-50%,-50%) scale(var(--operation-scale,1));transform-origin:center;color:#eee5bf;font:20px SimSun,serif;text-shadow:1px 1px 1px #000;outline:none}
+/* Shared glyph output must sit above technique and target panels (z-index 3/5). */
+.operation-frame>.gpu-interface-output{z-index:6}
 .party-menu .menu-source{position:absolute;pointer-events:none;max-width:none;image-rendering:pixelated;object-fit:none;object-position:top left}
 .main-source{left:0;top:0;width:640px;height:480px}.page-source{left:10px;top:-20px}.body-source{left:20px;top:145px}
 .party-menu button{cursor:pointer;border-radius:0;font:20px SimSun,serif;color:#e7e6dc}
