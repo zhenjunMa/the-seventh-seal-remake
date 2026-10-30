@@ -888,12 +888,12 @@ export class BattleView {
     const bounds={min_x:Math.floor(minX*scale),max_x:Math.floor(maxX*scale),max_y:Math.floor(maxY*scale),empty:maxY<0,pose:sourcePose};this.lifecycleBounds.set(key,bounds);return bounds;
   }
 
-  draw(snapshot, now = performance.now()) {
+  draw(snapshot, now = performance.now(), {entryPreview=false} = {}) {
     if (this.destroyed) return;
     if (!Number.isFinite(now)) throw new Error('战斗表现时钟无效');
     this.drawing=true;
     try{
-    this.lastDrawAt=now;
+    if(!entryPreview)this.lastDrawAt=now;
     const ctx = this.context, width = this.canvas.width, height = this.canvas.height;
     ctx.beginFrame?.();
     ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,width,height);ctx.fillStyle='#000';ctx.fillRect(0,0,width,height);
@@ -903,7 +903,7 @@ export class BattleView {
     else ctx.setTransform(viewport.width/960,0,0,viewport.height/540,viewport.x,viewport.y);
     ctx.imageSmoothingEnabled = false;
     ctx.clearRect(0, 0, 960, 540);
-    if(this.stageMeta){this.stageStarted??=now;ctx.fillStyle='#101719';ctx.fillRect(0,0,960,540);drawForestStageBackground(ctx,this.stageMeta,this.images,now-this.stageStarted);}
+    if(this.stageMeta){if(!entryPreview)this.stageStarted??=now;ctx.fillStyle='#101719';ctx.fillRect(0,0,960,540);drawForestStageBackground(ctx,this.stageMeta,this.images,entryPreview?0:now-this.stageStarted);}
     else{
       const backdrop = ctx.createLinearGradient(0, 0, 0, 540);
       backdrop.addColorStop(0, '#111f27'); backdrop.addColorStop(.68, '#273b42'); backdrop.addColorStop(1, '#142429');
@@ -914,7 +914,7 @@ export class BattleView {
     // Periodic source responses and deaths can replace a playing CHR record
     // between render frames. Retire its future contacts before replaying RAF
     // catch-up; the independent lifecycle channel owns the new source pose.
-    if(this.run?.sequence&&snapshot?.lifecycle_events){
+    if(!entryPreview&&this.run?.sequence&&snapshot?.lifecycle_events){
       const active=this.run;active.external_interrupts??=new Set();
       for(const event of snapshot.lifecycle_events){
         if(!['response','death','revive'].includes(event.kind)||active.external_interrupts.has(event.token))continue;
@@ -923,8 +923,8 @@ export class BattleView {
         for(const child of active.children)if(!child.done&&child.result.actor_id===event.actor_id){child.done=true;active.onReactionEnd?.(clone(child.descriptor),false);}
       }
     }
-    const run = this._advance(now), roots=[...this.detachedRuns,...(this.run?[this.run]:[])],slots = this._slots(run),groundSlots=this._slots(run,true);
-    if(snapshot?.actors)this.lifecycle?.advance(snapshot,this.roster,now);
+    const run = entryPreview?null:this._advance(now), roots=entryPreview?[]:[...this.detachedRuns,...(this.run?[this.run]:[])],slots = this._slots(run),groundSlots=this._slots(run,true);
+    if(!entryPreview&&snapshot?.actors)this.lifecycle?.advance(snapshot,this.roster,now);
     if(run?.sequence)for(const c of roots.flatMap(root=>[...root.children,...(!root.main_done?[root]:[])]).filter(c=>!c.done)){slots[c.result.actor_id]=this._slots(c)[c.result.actor_id];groundSlots[c.result.actor_id]=this._slots(c,true)[c.result.actor_id];}
     if (run) {
       const o=run.observations,slot=slots[run.result.actor_id];o.draws++;
@@ -939,6 +939,7 @@ export class BattleView {
     const queue=[...this.roster.filter(a=>a.side==='enemy'),...this.roster.filter(a=>a.side==='player')].map(a=>({...a,depth_y:groundSlots[a.id][1]}));
     if(this.stageMeta)queue.sort((a,b)=>a.depth_y-b.depth_y);
     for (const {id} of queue) {
+      if(entryPreview&&snapshot?.lifecycle_events?.some(event=>event.actor_id===id&&event.kind==='entry'))continue;
       const role = this._role(id), actor = actors.get(id), slot = slots[id];
       const nativeZ=this.nativeControl&&(!this.nativeControlIsCurrent||this.nativeControlIsCurrent())?this.nativeControl.actor(id)?.native_z_raw:actor?.native_z_raw;
       if(Number.isFinite(nativeZ))slot[1]+=nativeZ*(this.stageMeta?1.125:this.meta.policy.sprite_scale);
@@ -997,7 +998,7 @@ export class BattleView {
       }
       ctx.restore();
       if(!this.lifecycle?.drawParticles(id,ctx,slot[0],slot[1]))this._sprite(role, segment.action_index, frame, slot[0], slot[1], alpha, pair);
-      this.lastActorPoses.set(id,{action_index:segment.action_index,action_frame:frame});
+      if(!entryPreview)this.lastActorPoses.set(id,{action_index:segment.action_index,action_frame:frame});
       if(acting&&pair?.intrinsic.active&&!run.observations.intrinsic_source_frames.includes(pair.source_frame))run.observations.intrinsic_source_frames.push(pair.source_frame);
     }
     if (run) {
@@ -1023,7 +1024,7 @@ export class BattleView {
         if(!run.observations.effect_ids.includes(asset.id))run.observations.effect_ids.push(asset.id);
       }
     }
-    this._drawDamageTexts(now);
+    if(!entryPreview)this._drawDamageTexts(now);
     ctx.restore();
     }finally{this.drawing=false;for(const lease of this.retiredLeases.splice(0))lease.release();}
   }

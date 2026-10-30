@@ -24,6 +24,19 @@ const snapshot=(events=[],epoch=0)=>({actors:[{id:'001',hp:{current:900},life_ep
 test('prepared view can paint during HUD loading before the battle snapshot exists',async()=>{
  const {view}=await fixture();assert.doesNotThrow(()=>view.draw(null,0));assert.deepEqual(view.lifecycleSnapshot().active,[]);
 });
+
+test('transition preview leaves entry hidden and does not execute its records or restart its clock',async()=>{
+ const {view,control}=await fixture(),drawn=[],sounds=[],before=structuredClone(control.state);
+ view._sprite=(role,action,frame,x,y,alpha)=>drawn.push({id:role.id,alpha});view.onLifecycleFrame=step=>sounds.push(step);
+ const event={token:'entry-1',actor_id:'001',life_epoch:0,kind:'entry',source_skill_index:11,source_id_raw:11},state=snapshot([event]);
+ view.draw(state,5000,{entryPreview:true});
+ assert.equal(drawn.some(row=>row.id==='001'),false);assert.deepEqual(view.lifecycleSnapshot().active,[]);
+ assert.deepEqual(control.state,before);assert.deepEqual(sounds,[]);assert.equal(view.lastActorPoses.size,0);
+ drawn.length=0;view.draw(state,5000);assert.equal(drawn.find(row=>row.id==='001').alpha,0);assert.equal(sounds.length,1);
+ drawn.length=0;view.draw(state,5119);assert.equal(drawn.find(row=>row.id==='001').alpha,0);assert.equal(sounds.length,1);
+ drawn.length=0;view.draw(state,5120);const alpha=drawn.find(row=>row.id==='001').alpha;
+ assert.ok(alpha>0&&alpha<1);assert.equal(sounds.length,1);assert.equal(view.lifecycleSnapshot().active[0].appearance.mode,5);
+});
 test('real lifecycle layers load separately and a completed player death stays drawn after its event is acknowledged',async()=>{
  const {view,target}=await fixture();const event={token:'death-1',actor_id:'002',life_epoch:0,kind:'death',source_skill_index:12,hold_final_frame:true};
  view.draw(snapshot([event]),0);view.draw(snapshot([event]),5000);assert.equal(view.drainLifecycleCompleted().length,1);

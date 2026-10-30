@@ -221,6 +221,7 @@ export class BattleController {
     const event=this.state.lifecycle_events[index];this.state.lifecycle_events.splice(index,1);
     if(event.kind==='entry'){
       actor.state_raw=0;actor.immune_raw=0;actor.native_active=false;setIdleSkill(actor,this.schedulerData,this.now());
+      if(!this.hasLifecycle('entry'))this.chargeClock=this.now();
     }else if(event.kind==='death'){
       actor.native_active=false;
       // 519DD0 turns an ended native id12 into category7. Keep its source
@@ -240,6 +241,7 @@ export class BattleController {
     return actor.native_z_raw===0&&(!killer||!killer.native_active);
   }
   readyPlayerIds() {
+    if(this.hasLifecycle('entry'))return [];
     if(!this.state?.scheduler)return this.state?.phase==='command'?this.players().filter(a=>a.hp.current>0).map(a=>a.id):[];
     return this.players().filter(a=>a.id!==this.state.scheduler.active_actor_id&&!this.state.lifecycle_events?.some(e=>e.actor_id===a.id)&&isActorReady(a,this.state.scheduler)).map(a=>a.id);
   }
@@ -287,6 +289,7 @@ export class BattleController {
     return this.state.actors.filter(actor=>actor.side!==caster.side&&actor.hp.current>0&&actor.state_raw<4&&!actor.escaped&&this.reactionTargetAvailability(skill,actor).available).map(actor=>actor.id);
   }
   canCommand(id=this.state?.player_id) {
+    if(this.hasLifecycle('entry'))return false;
     const actor=this.state&&this.actor(id),scheduler=this.state?.scheduler;
     if(!scheduler)return Boolean(this.state?.phase==='command'&&!this.running&&actor?.side==='player'&&actor.hp.current>0);
     return Boolean(['command','charging','action'].includes(this.state.phase)&&!this.state.pending_outcome&&!commandForActor(scheduler,id)&&actor?.side==='player'&&actor.id!==scheduler.active_actor_id&&!this.state.lifecycle_events?.some(e=>e.actor_id===id)&&isActorReady(actor,scheduler));
@@ -407,6 +410,13 @@ export class BattleController {
     if(!s||!['command','charging','action'].includes(this.state.phase))return false;
     try {
       requireValue(Number.isFinite(now),'战斗时钟无效');let advanced=false;
+      // Entry is a shared presentation phase. Early finishers can idle, but
+      // nobody charges, ticks statuses or acts until every entry has ended.
+      if(this.hasLifecycle('entry')){
+        this.checkWorld();this.chargeClock=now;
+        for(const actor of this.state.actors)advanceIdleSkill(actor,this.schedulerData,now);
+        return false;
+      }
       // Keep the sub-tick remainder and replay every elapsed source step.
       // Charging, status effects and arbitration must not depend on render FPS.
       while(now-this.chargeClock>=20&&this.state.scheduler===s&&['command','charging','action'].includes(this.state.phase)){

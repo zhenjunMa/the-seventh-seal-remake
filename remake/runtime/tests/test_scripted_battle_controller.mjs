@@ -61,6 +61,12 @@ async function until(predicate){
   while(Date.now()<deadline){if(predicate())return;await new Promise(resolve=>setTimeout(resolve,10));}
   throw Error('controller fixture did not reach its checkpoint');
 }
+async function entered(f){
+  await until(()=>f.state.scenes.phase==='battle-entry');
+  // This controller fixture supplies presentation completion explicitly.
+  for(const event of [...f.state.battle.presentationSnapshot().lifecycle_events])if(event.kind==='entry')assert.equal(f.state.battle.ackLifecycle(event),true);
+  assert.equal(f.state.scenes.phase,'battle-charging');
+}
 async function cancel(f,running){f.playback.cancel();await assert.rejects(running,{name:'AbortError'});assert.equal(f.state.scenes.phase,'event');assert.equal(f.state.scriptedBattleSession,null);}
 test('cancellation settles while JSON/configuration resources remain unresolved and late completion cannot install state',async()=>{
   for(const kind of ['json','config']){
@@ -84,7 +90,7 @@ test('pending detached HUD cannot steal an old return button or install after ca
   assert.deepEqual(f.$('battleHud').childNodes,[replacement]);assert.equal(f.state.battle,f.previous.battle);assert.equal(f.previous.battleMenu.disposed,false);
 });
 for(const outcome of ['victory','escaped'])test(`${outcome} return retains final side priority, merges private resources/RNG once and restores the active ANM scene and shade`,async()=>{
-  const f=fixture(),before=f.world.snapshot(),running=f.run();await until(()=>f.state.scenes.phase==='battle-charging');
+  const f=fixture(),before=f.world.snapshot(),running=f.run();await entered(f);
   const battle=f.state.battle,session=f.state.scriptedBattleSession;
   battle.state.scheduler.side_priority=1;battle.finish=()=>{battle.state.phase='closed';session.simulation.world.transact(next=>{next.party[0].hp.current=7;next.money+=10;});return {outcome};};
   f.state.scenes.setPhase('battle-result');await f.controller.returnFromBattle();await running;
@@ -95,7 +101,7 @@ for(const outcome of ['victory','escaped'])test(`${outcome} return retains final
   assert.equal(f.state.battleHistory.length,1);await f.controller.returnFromBattle();assert.equal(f.state.battleHistory.length,1);
 });
 test('cancelled active combat and a delayed retired combat publish cannot reclaim the ANM phase or a subsequent HUD',async()=>{
-  const f=fixture(),before=copy(f.draft),running=f.run();await until(()=>f.state.scenes.phase==='battle-charging');const retired=f.state.battle;
+  const f=fixture(),before=copy(f.draft),running=f.run();await entered(f);const retired=f.state.battle;
   await cancel(f,running);const next={fresh:true};f.state.battle=next;const node=f.$('battleCommands');node.dataset.phase='fresh';
   retired.interrupt(new Error('late playSequence rejection'));
   assert.equal(f.state.scenes.phase,'event');assert.equal(node.dataset.phase,'fresh');assert.equal(f.state.battle,next);assert.deepEqual(f.draft,before);assert.equal(f.state.sidePriority,0);
@@ -109,14 +115,14 @@ test('late cancelled entry-transition callbacks cannot reveal battle or overwrit
   assert.equal(f.state.scenes.phase,'event');assert.equal(f.state.battleEntryPending,false);assert.deepEqual(f.$('battleHud').childNodes,[next]);assert.equal(f.canvas.hidden,false);
 });
 test('failed return rolls back side priority and private battle mutations',async()=>{
-  const f=fixture(),before=copy(f.draft),running=f.run();await until(()=>f.state.scenes.phase==='battle-charging');
+  const f=fixture(),before=copy(f.draft),running=f.run();await entered(f);
   const battle=f.state.battle,session=f.state.scriptedBattleSession;battle.state.scheduler.side_priority=1;
   battle.finish=()=>{battle.state.phase='closed';session.simulation.world.transact(next=>{next.money+=10;});return {outcome:'interrupted'};};
   f.state.scenes.setPhase('battle-interrupted');await f.controller.returnFromBattle();await assert.rejects(running,/中止/);
   assert.equal(f.state.sidePriority,0);assert.deepEqual(f.draft,before);assert.equal(f.state.scenes.phase,'event');
 });
 test('whole-party defeat propagates game-over policy, restores the story owner and leaves the caller draft uncommitted',async()=>{
-  const f=fixture(),before=copy(f.draft),running=f.run();await until(()=>f.state.scenes.phase==='battle-charging');
+  const f=fixture(),before=copy(f.draft),running=f.run();await entered(f);
   const battle=f.state.battle;battle.state.outcome='defeat';
   for(const actor of battle.state.actors)if(actor.side==='player'){actor.hp.current=0;actor.state_raw=7;actor.native_active=false;}
   battle.state.lifecycle_events=[];battle.state.pending_outcome=null;
@@ -133,7 +139,7 @@ test('outer story failure rolls back a successful nested battle priority and com
     await new ChapterAnimationRunner({program:story.programs['m17030-1'],hooks,visualState:visual,playback,
       initialLocation:{map_id:'M17032',x:640,y:480,direction:0},runTlk:async()=>{},joinActor:async()=>{},leaveActor:async()=>{},flagCommand:()=>({nextIndex:null})}).run();
     assert.deepEqual(visual,{shakeCycles:40,shakeAmplitudeNative:10});
-    const battleRun=f.run({playback});await until(()=>f.state.scenes.phase==='battle-charging');const battle=f.state.battle;
+    const battleRun=f.run({playback});await entered(f);const battle=f.state.battle;
     battle.state.scheduler.side_priority=1;battle.finish=()=>{battle.state.phase='closed';return {outcome:'victory'};};
     f.state.scenes.setPhase('battle-result');await f.controller.returnFromBattle();await battleRun;assert.equal(f.state.sidePriority,1);
     throw new Error('later movie failed');

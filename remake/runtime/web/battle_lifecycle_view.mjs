@@ -76,7 +76,10 @@ export class BattleLifecyclePlayback {
       }
       else{channel.mode='blocked';channel.blocked='missing-source-lifecycle-presentation';}
     }
-    this.channels.set(actor.id,channel);this.alphas.set(actor.id,1);return channel;
+    // Entry sprites before command7 prepare its pose; they must stay hidden
+    // until the appearance renderer starts revealing that pose.
+    const awaitingAppearance=event.kind==='entry'&&skill?.timeline.some(step=>step.kind==='command'&&step.command_raw===7);
+    this.channels.set(actor.id,channel);this.alphas.set(actor.id,awaitingAppearance?0:1);return channel;
   }
   _finish(channel){
     const {event,actor_id}=channel,key=this._key(event);if(this.finished.has(key))return;
