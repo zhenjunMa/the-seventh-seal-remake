@@ -6,7 +6,7 @@
 #startupButtons button:hover,#startupOptions button:hover{background:transparent}
 #startupButtons button:focus-visible,#startupOptions button:focus-visible{outline:none}
 #startupOptions button{color:#fff0b0;font:18px SimSun,serif;text-shadow:1px 1px #000;white-space:pre-line}
-#startupOptions .startup-save{font-size:13px;text-align:left;line-height:1.6}
+#startupOptions .startup-save{font-size:10px;text-align:left;line-height:1.6}
 #startupOptions button[aria-current=true]{color:#ffff60}
 #startupOptions button.startup-save{color:#fff;display:flex;align-items:flex-start;justify-content:flex-start}
 #startupOptions button.startup-save[aria-current=true]{color:#ffff60}

@@ -3,6 +3,6 @@
 .save-menu canvas{position:absolute;inset:0;width:640px;height:480px;image-rendering:pixelated}
 .save-menu-buttons button{position:absolute;border:0;border-radius:0;padding:0;min-width:0;background:transparent;box-shadow:none;color:transparent}
 .save-menu-buttons button:hover,.save-menu-buttons button:focus-visible{background:transparent;outline:none}
-.save-menu-buttons .save-slot{padding:7px 8px 3px 145px;text-align:left;white-space:pre-line;color:#fff;font:14px/1.55 SimSun,serif;text-shadow:1px 1px #000}
+.save-menu-buttons .save-slot{padding:7px 8px 3px 145px;text-align:left;white-space:pre-line;color:#fff;font:10px/1.55 SimSun,serif;text-shadow:1px 1px #000}
 .save-menu-buttons .save-slot[aria-current=true]{color:#ffff60}
 .save-menu-message{position:absolute;left:9px;top:427px;width:515px;min-height:40px;margin:0;color:#fff;font:15px/1.4 SimSun,serif;text-shadow:1px 1px #000;pointer-events:none}
