@@ -201,6 +201,30 @@ test('actual00440 revival reuses the original mode3 branch and recovery instruct
     compare(actual.actor,expected.oracle);assert.deepEqual(actual.trace.filter(row=>row.kind==='rng').map(row=>row.raw),expected.oracle.rng_calls);assert.equal(rng.state,expected.rng.state);assert.deepEqual(target,before);
   }
 });
+
+test('actual041 recovery21 heals its living enemy allies through the same native50FA00 contact',async()=>{
+  const original=await readFile(new URL('../../../Fight_Role/041.CHR',import.meta.url));let at=8+0x30b,skill;
+  for(let index=0;index<original.readUInt32LE(8);index++){
+    const fixed=original.subarray(at,at+0x41d);
+    if(index===21)skill={id:'041_skill_21',actor_id:'041',original_skill_index:index,index,
+      fixed_raw_hex:fixed.toString('hex'),mp_cost:0,battle_handler:'native-support'};
+    at+=0x41d+fixed.readUInt32LE(0x15)*0xb0;
+  }
+  assert.equal(at,original.length);assert.equal(nativeSupportSkillSupported(skill),true);
+  const raw=Buffer.from(skill.fixed_raw_hex,'hex');assert.equal(raw[0x23],1);assert.equal(raw[0x25],1);
+  assert.deepEqual([raw.readInt32LE(0xab),raw.readInt32LE(0xaf)],[1000,1000]);
+  for(const beforeHp of [20,4300,5000]){
+    const {caster,target}=fixture(skill);caster.side_raw=0;caster.side='enemy';target.side_raw=0;target.side='enemy';
+    target.raw_hp_maximum=5000;target.raw_by_address[addr(0x524a705)]=5000;
+    target.raw_hp=beforeHp;target.raw_by_address[addr(0x524a701)]=beforeHp;
+    target.resource_bonuses={hp_current:0,hp_maximum:0,mp_current:0,mp_maximum:0};
+    target.hp={current:beforeHp,maximum:5000};
+    const rng=createNativeRng(12345),actual=applyNativeSupport({target,skill,rng,statusData}),expected=native(caster,target,12345);
+    compare(actual.actor,expected.oracle);assert.equal(actual.actor.raw_hp,Math.min(5000,beforeHp+1000));
+    assert.equal(actual.hp_delta,Math.min(1000,5000-beforeHp));assert.equal(actual.applied,true);
+    assert.deepEqual(expected.oracle.rng_calls,[]);assert.equal(rng.state,expected.rng.state);
+  }
+});
 test('every companion allied support source matches original50FA00 for application, recovery, duplicates and RNG order',()=>{
   assert.equal(Object.keys(alliedSource).length,27);
   for(const[key,skill]of Object.entries(alliedSource)){

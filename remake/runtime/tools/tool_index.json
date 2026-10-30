@@ -1,7 +1,7 @@
 {
   "schema": "seventh-seal-tool-index",
   "version": 1,
-  "updated": "2026-10-29",
+  "updated": "2026-10-30",
   "registered_steps": 46,
   "content_plan": [
     "chapter-maps",
@@ -1298,6 +1298,12 @@
       "imported_by": [
         "export_battle_packs.py"
       ]
+    },
+    {
+      "path": "create_inner_white_forest_seal_fixtures.mjs",
+      "role": "fixture-or-observation-preparation",
+      "build_targets": [],
+      "imported_by": []
     }
   ],
   "notes": [

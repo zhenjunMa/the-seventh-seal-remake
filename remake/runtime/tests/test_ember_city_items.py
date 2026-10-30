@@ -15,7 +15,7 @@ import export_party_skills as skills
 import export_item_presentation as presentation
 
 IDS = [13, 21, *range(23, 29), *range(272, 277), *range(278, 281),
-       *range(283, 286), *range(307, 312), 315, 320, 321, 323, 324, 331]
+       *range(283, 286), *range(307, 312), 315, 320, 321, 323, 324, 331, 399]
 
 CONTRACT = r"""
 import assert from 'node:assert/strict';
@@ -26,7 +26,8 @@ import {withItemQuantity} from './web/core/equipment.mjs';
 import {initializeNativeStatuses,applyNativeItemStatus,removeNativeStatus,tickNativeStatuses} from './web/core/battle_status.mjs';
 import {selectNativeRevivalAnimation} from './web/core/battle_reactions.mjs';
 import {NativeAssemblyOracle} from './tests/native_assembly_oracle.mjs';
-import {WorldStore} from './web/core/world.mjs';
+import {WorldStore,encodeSave,decodeSave} from './web/core/world.mjs';
+import {createRewardLedger,collectEnemyDefeat,planVictoryRewards} from './web/core/battle_rewards.mjs';
 import {admitPartyMember} from './web/core/party_members.mjs';
 import {BattleController} from './web/core/combat.mjs';
 import {createPartySample} from './web/party_sample.mjs';
@@ -102,7 +103,8 @@ for(const id of input.ids){
    assert.equal(result.native_return,oracle.reg.EAX);assert.equal(result.applied,true);clears++;
   }
  }else if(def.behavior.kind==='status-cure'){
-  const actor=player(),source=copy(def.status_cure),raw=Buffer.from(source.effect_raw_hex,'hex');raw[0xb]=0;
+  const actor=def.battle.same_side_raw_157?player():enemy(),source=copy(def.status_cure),raw=Buffer.from(id===399?input.status20:source.effect_raw_hex,'hex');raw[0xb]=0;
+  assert.equal(itemTargetEligible(actor,def,player()),true);
   actor.native_status_slots[3]={raw_hex:raw.toString('hex')};
   const oracle=new Oracle(actor,()=>assert.fail('cure RNG')),result=removeNativeStatus({actor,effect_raw_hex:source.effect_raw_hex,data:input.status});
   oracle.run(0x508bb0,args(source.effect_raw_hex));oracle.compare(result.actor);assert.equal(result.native_return,1);cures++;
@@ -155,7 +157,48 @@ for(const [id,mode]of [[273,'normal'],[273,'immune'],[279,'normal'],[311,'normal
  if(oldDeath&&mode!=='normal')battle.state.lifecycle_events=battle.state.lifecycle_events.filter(event=>event.token!==oldDeath.token);
  battle.finish();assert.equal(world.value.inventory.find(row=>row.instance_id===`itm:${id}`).quantity,used?2:3);scheduled++;
 }
-process.stdout.write(JSON.stringify({comparisons,cures,periodic,clears,revival:true,scheduled}));
+// 399 is acquired from the actual024 reward slot, then dispatched by the
+// existing ordinary item command. The original021 ID20 is a bounded removal
+// fixture only; it does not register021, apply a new status, or enter the game.
+assert.equal(input.dispatchProof.subject.digest.sha256,input.catalog.source_hashes['GAME.exe']);
+assert.ok(input.dispatchProof.normalized_result.includes('FUN_00508bb0(local_10)'));
+assert.equal(data.definitions[399].status_cure.effect_id_raw,20);
+assert.equal(data.definitions[399].battle.same_side_raw_157,0);
+assert.equal(data.definitions[399].raw_fields.effect_token_raw_126,'');
+for(const mode of ['matching','absent','immune']){
+ const value=copy(input.seed),defeated={id:'seal-024',resource_id:'024',side:'enemy',side_raw:0,hp:{current:0},state_raw:5,immune_raw:0},
+  winner={id:'001',side:'player',side_raw:1,hp:{current:1},state_raw:0,immune_raw:0},actors=[winner,defeated],
+  ledger=createRewardLedger(`item399-drop-${mode}`,actors);
+ collectEnemyDefeat(ledger,defeated,{data:input.rewards});
+ assert.deepEqual(input.rewards.enemies['024'].reward_slots,[331,399,268,0,0,0]);
+ const plan=planVictoryRewards({world:value,ledger,data:input.rewards,actors,rng:()=>0});
+ Object.assign(value,plan.world_patch);value.reward_records=[...(value.reward_records??[]),plan.reward_record];
+ assert.equal(plan.summary.drops.find(row=>row.id===399).quantity,1);
+ const world=new WorldStore(await decodeSave(await encodeSave(value))),item=world.value.inventory.find(row=>row.id===399),key=item.instance_id;
+ assert.equal(item.quantity,1);assert.equal(item.source_raw_hex,input.rewards.items[399].instance_raw_hex);
+ assert.equal(itemTargetEligible(player(),data.definitions[399],player()),false);
+ assert.throws(()=>restoreActorWithItem(player(),item,data,{scope:'field'}),/配置禁用/);
+ const source=assembleForestSample(createPartySample(world.snapshot(),input.attributes,input.commands,null,data),input.forest,
+  {map_id:'M70010',members:[{id:'012'}]},input.scheduler,input.ai,input.rewards,input.reactions,input.status);
+ let contacts=0,draws=0;const battle=new BattleController({world,itemData:data,resolveAction,applyDamage:applyNativeDamage,
+  resourcesForWorld:partyResourcesForWorld,consumeResources:consumePartyMp,now:()=>0,
+  playSequence:async()=>assert.fail('399 dispatched ordinary attack'),playItem:async(event,{onUse})=>{
+   if(mode==='immune')target.immune_raw=1;const result=onUse();contacts++;assert.deepEqual(onUse(),result);
+  }});
+ battle.start({...source,lifecycle_enabled:true,rng:()=>{draws++;return 0;}});
+ for(const event of copy(battle.state.lifecycle_events))battle.ackLifecycle(event);
+ const target=battle.actor('enemy-0');if(mode!=='absent')target.native_status_slots[3]={raw_hex:input.status20};
+ for(const actor of battle.state.actors)actor.charge.gauge=actor.id==='001'?battle.state.scheduler.threshold:0;
+ battle.state.phase='command';battle.selectPlayer('001');const before=world.snapshot(),hp=copy(target.hp),mp=copy(target.mp),entryDraws=draws;
+ assert.deepEqual(battle.itemTargetIds(key),['enemy-0']);await battle.chooseItem(key,target.id);
+ assert.equal(contacts,1);assert.equal(draws,entryDraws);assert.equal(battle.state.inventory.some(row=>row.id===399),mode!=='matching');
+ assert.equal(target.native_status_slots[3].raw_hex==='00'.repeat(0xc6),mode!=='immune');
+ assert.deepEqual(target.hp,hp);assert.deepEqual(target.mp,mp);assert.deepEqual(world.snapshot(),before);
+ battle.finish();const saved=await decodeSave(await encodeSave(world.snapshot()));
+ assert.deepEqual(saved.inventory,world.value.inventory);assert.deepEqual(saved.reward_records,world.value.reward_records);
+ assert.equal(saved.inventory.some(row=>row.id===399),mode!=='matching');
+}
+process.stdout.write(JSON.stringify({comparisons,cures,periodic,clears,revival:true,scheduled,item399:3}));
 """
 
 
@@ -176,6 +219,7 @@ class EmberCityItems(unittest.TestCase):
         selected = presentation.item_presentations(catalog, raw)
         self.assertIsNone(selected['279']['effect_id'])
         self.assertIsNone(selected['331']['effect_id'])
+        self.assertIsNone(selected['399']['effect_id'])
         tokens = {selected[str(ident)]['effect_token_raw_126'] for ident in IDS} - {''}
         self.assertEqual(len(tokens), 23)
         checks, generated, previews = [], [], []
@@ -210,10 +254,12 @@ class EmberCityItems(unittest.TestCase):
                 instructions=json.loads((RUNTIME / 'evidence/forest_status_instructions_20261011.json').read_text('utf-8')),
                 recovery=json.loads((RUNTIME / 'evidence/battle_revive_recovery_native_20261015.json').read_text('utf-8')),
                 clearProof=json.loads((RUNTIME / 'evidence/fire_valley_20261025/support_507e20.json').read_text('utf-8')),
-                proof=json.loads((RUNTIME / 'evidence/fire_valley_20261024/stage12_status_apply.json').read_text('utf-8')))),
+                proof=json.loads((RUNTIME / 'evidence/fire_valley_20261024/stage12_status_apply.json').read_text('utf-8')),
+                status20=bytes.fromhex(enemies.CHR(enemies.ROOT / 'Fight_Role/021.CHR').skills[16]['fixed_raw_hex'])[0x16b:0x231].hex(),
+                dispatchProof=json.loads((RUNTIME / 'evidence/inner_white_forest_20261030/item399_native.json').read_text('utf-8'))['records'][0])),
             encoding='utf-8', capture_output=True)
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertEqual(json.loads(result.stdout), dict(comparisons=56, cures=13, periodic=14, clears=2, revival=True, scheduled=9))
+        self.assertEqual(json.loads(result.stdout), dict(comparisons=56, cures=14, periodic=14, clears=2, revival=True, scheduled=9, item399=3))
 
 
 if __name__ == '__main__':

@@ -715,6 +715,12 @@ export const definition = {
     },
     "042": {
       "side": "enemy"
+    },
+    "024": {
+      "side": "enemy"
+    },
+    "041": {
+      "side": "enemy"
     }
   },
   "battle_rosters": {
@@ -783,7 +789,10 @@ export const definition = {
     "m70030-1",
     "m71014-1",
     "m71050-1",
-    "m70073-1"
+    "m70073-1",
+    "m01010-1",
+    "m01042-1",
+    "m70078-1"
   ],
   "maps": {
     "M01060": {
@@ -883,6 +892,7 @@ export const definition = {
     "M01042": {
       "npcs": [
         10,
+        11,
         12
       ]
     },
@@ -1045,6 +1055,7 @@ export const definition = {
         15
       ],
       "triggers": [
+        3,
         31
       ]
     },
@@ -1516,6 +1527,122 @@ export const definition = {
         },
         {
           "index": 9,
+          "handler": "keyed-chest"
+        }
+      ],
+      "triggers": [
+        1
+      ]
+    },
+    "M01019": {
+      "npcs": [
+        10
+      ]
+    },
+    "M70077": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "M70077-1": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "M70077-2": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "M70077-3": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "M70077-4": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "M70078-1_1": {
+      "npcs": [],
+      "triggers": [
+        1
+      ],
+      "objects": [
+        {
+          "index": 19,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 22,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 23,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "M70078-2_1": {
+      "npcs": [],
+      "triggers": [
+        1
+      ],
+      "objects": [
+        {
+          "index": 19,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 20,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 21,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "M70078-3_1": {
+      "npcs": [],
+      "triggers": [
+        1
+      ],
+      "objects": [
+        {
+          "index": 19,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 20,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "M70078_2": {
+      "npcs": [
+        10
+      ],
+      "triggers": [
+        1
+      ],
+      "objects": [
+        {
+          "index": 23,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 26,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 27,
           "handler": "keyed-chest"
         }
       ]
@@ -2448,6 +2575,20 @@ export default {
         "path": "Fight_Role/042.CHR",
         "sha256": "e6165e6a8c0099485543a521e978e8943aef7f9c5b17711c64a7d4c7fc8c169b"
       }
+    },
+    "024": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/024.CHR",
+        "sha256": "561e1defb159f9815a8538ff21a45d53916eb332837d2102f51ceae5bcde5db4"
+      }
+    },
+    "041": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/041.CHR",
+        "sha256": "d0427095198fb28533c2a48d8f2ce22475faf13154386c7098e44053d12e5c32"
+      }
     }
   },
   "battle_rosters": {
@@ -2463,7 +2604,9 @@ export default {
       "014",
       "022",
       "032",
-      "042"
+      "042",
+      "024",
+      "041"
     ],
     "party-source-group": [
       "001",
@@ -2478,7 +2621,9 @@ export default {
       "014",
       "022",
       "032",
-      "042"
+      "042",
+      "024",
+      "041"
     ]
   },
   "stages": {
@@ -2663,6 +2808,21 @@ export default {
       "path": "Animate/m70073-1.anm",
       "sha256": "40fbf5f044efb1804712d1cc6faf2b899a3e24624a8b53c74f0bd6e869da37c8",
       "bytes": 4211
+    },
+    "m01010-1": {
+      "path": "Animate/m01010-1.anm",
+      "sha256": "16afe8e9460e192ecc3b16be41d7c457633d6c62e531721318a3e5ac21fbe114",
+      "bytes": 5617
+    },
+    "m01042-1": {
+      "path": "Animate/m01042-1.anm",
+      "sha256": "8631c45d33f456b5072349c1b1239dc90f219ced8f5e5dfeab74f183ab6b8d5d",
+      "bytes": 4137
+    },
+    "m70078-1": {
+      "path": "Animate/m70078-1.anm",
+      "sha256": "4842a7ac5b7f30d2231a6030ab2364d961dd69243684ae6735c16f4882dc52be",
+      "bytes": 3915
     }
   },
   "maps": {
@@ -2813,6 +2973,7 @@ export default {
       "routes": [],
       "npcs": [
         10,
+        11,
         12
       ],
       "flag_index": 386
@@ -3060,6 +3221,7 @@ export default {
     "M01010": {
       "path": "data/maps/m01010.json",
       "triggers": [
+        3,
         31
       ],
       "objects": [],
@@ -3697,7 +3859,9 @@ export default {
     },
     "M70076": {
       "path": "data/maps/m70076.json",
-      "triggers": [],
+      "triggers": [
+        1
+      ],
       "objects": [
         {
           "index": 7,
@@ -3714,6 +3878,156 @@ export default {
         10
       ],
       "flag_index": 103
+    },
+    "M01019": {
+      "path": "data/maps/m01019.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10
+      ],
+      "flag_index": 26
+    },
+    "M70077": {
+      "path": "data/maps/m70077.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 104
+    },
+    "M70077-1": {
+      "path": "data/maps/m70077-1.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 138
+    },
+    "M70077-2": {
+      "path": "data/maps/m70077-2.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 147
+    },
+    "M70077-3": {
+      "path": "data/maps/m70077-3.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 148
+    },
+    "M70077-4": {
+      "path": "data/maps/m70077-4.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 150
+    },
+    "M70078-1_1": {
+      "path": "data/maps/m70078-1_1.json",
+      "triggers": [
+        1
+      ],
+      "objects": [
+        {
+          "index": 19,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 22,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 23,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 140
+    },
+    "M70078-2_1": {
+      "path": "data/maps/m70078-2_1.json",
+      "triggers": [
+        1
+      ],
+      "objects": [
+        {
+          "index": 19,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 20,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 21,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 142
+    },
+    "M70078-3_1": {
+      "path": "data/maps/m70078-3_1.json",
+      "triggers": [
+        1
+      ],
+      "objects": [
+        {
+          "index": 19,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 20,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 144
+    },
+    "M70078_2": {
+      "path": "data/maps/m70078_2.json",
+      "triggers": [
+        1
+      ],
+      "objects": [
+        {
+          "index": 23,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 26,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 27,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10
+      ],
+      "flag_index": 107
     }
   },
   "story": {

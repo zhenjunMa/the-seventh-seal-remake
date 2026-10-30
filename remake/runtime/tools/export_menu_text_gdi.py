@@ -1,8 +1,7 @@
 """Rebuild the complete numeric, Chinese and MNU menu-font manifest.
 
-The checked-in recipe pins the connected-menu character subset and preserves
-all atlas coordinates. --refresh-charset appends characters needed by newly
-connected content. Requested legacy MNU faces are sent to GDI literally;
+The checked-in recipe preserves existing atlas coordinates. Each export appends
+characters needed by newly connected content. Requested legacy MNU faces are sent to GDI literally;
 GetTextFaceW records the actual local resolution.
 """
 import hashlib
@@ -34,6 +33,7 @@ def collect_text_charset():
             row=role['skills'][index];add(row.get('name'))
             description=bytes.fromhex(row['fixed_raw_hex'])[0x3b:0x3b+200].split(b'\0',1)[0]
             add(description.decode('gbk'))
+    for actor in load(data/'forest_combat.json')['actors'].values():add(actor['name'])
     for path in sorted((data/'maps').glob('*.json')):add(load(path).get('name'))
     for row in load(data/'world_map.json').get('destinations',[]):add(row.get('name'))
     menus=load(data/'operation_menu.json')['menus']
@@ -67,7 +67,7 @@ def collect_text_charset():
 def main():
     import argparse
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--refresh-charset',action='store_true',help='Append newly connected menu characters to the pinned recipe, preserving existing glyph coordinates.')
+    parser.add_argument('--refresh-charset',action='store_true',help='Compatibility flag; every export now appends connected characters while preserving existing glyph coordinates.')
     parser.add_argument('--evidence',default=None,
         help='New report filename inside runtime/evidence; an existing report is never replaced.')
     args=parser.parse_args()
@@ -79,11 +79,10 @@ def main():
     if evidence.parent.resolve()!=(RUNTIME/'evidence').resolve():parser.error('--evidence must be a filename inside runtime/evidence')
     if evidence.exists():parser.error('Evidence report already exists; choose a new --evidence filename')
     recipe=json.loads(RECIPE.read_text(encoding='utf-8'))
-    if args.refresh_charset:
-        current,sources=collect_text_charset()
-        recipe['text_characters']+=''.join(c for c in current if c not in recipe['text_characters'])
-        recipe['text_sources']=sources
-        incremental_json(RECIPE, recipe)
+    current,sources=collect_text_charset()
+    recipe['text_characters']+=''.join(c for c in current if c not in recipe['text_characters'])
+    recipe['text_sources']=sources
+    incremental_json(RECIPE, recipe)
     characters,sources=recipe['text_characters'],recipe['text_sources']
     numeric=[(r['key'],r['face'],r['height']) for r in recipe['fonts'] if r['kind']=='numeric']
     text_fonts=[(r['key'],r['face'],r['height']) for r in recipe['fonts'] if r['kind']=='text']
@@ -92,7 +91,7 @@ def main():
     manifest=json.loads(MANIFEST.read_text(encoding='utf-8'))
     manifest['text_charset']={'character_count':len(characters),'characters':characters,
         'sha256':hashlib.sha256(characters.encode('utf-8')).hexdigest(),'sources':sources,
-        'scope':'Current item catalog names/descriptions, exposed/learned skill names and raw-record descriptions of all integrated roles, integrated map names, all original combination naming characters, and connected operation/battle menu views and rule messages.',
+        'scope':'Current item catalog names/descriptions, exposed/learned player skill names and raw-record descriptions, integrated enemy target names, integrated map names, all original combination naming characters, and connected operation/battle menu views and rule messages.',
         'original_font_boundary':'全真特黑體 is a literal MNU requested face. face_resolved records current Windows mapping; no original font file is supplied.'}
     manifest['MNU_parameters']={'procedure':'0x56DD00','draw_procedure':'0x5344F0',
         'measure_procedures':['0x5341A1','0x53434C'],

@@ -145,7 +145,7 @@ export class BattleController {
   beginNativeAppearance(actorId,raw){
     requireValue(typeof raw==='string'&&/^[0-9a-f]{352}$/i.test(raw),'原入场动作记录缺失');
     const b=Uint8Array.from(raw.match(/../g),x=>parseInt(x,16)),actor=this.actor(actorId),view=new DataView(b.buffer);
-    requireValue(actor&&b[0]===1&&view.getUint32(1,true)===7&&[0,1,5,6,7].includes(b[0x47]),'原入场动作模式尚未接入');
+    requireValue(actor&&b[0]===1&&view.getUint32(1,true)===7&&[0,1,3,5,6,7].includes(b[0x47]),'原入场动作模式尚未接入');
     let mode=b[0x47],draw=null;
     // 5130D0 command7 draws only when its source mode is zero, at this
     // source cursor after entry selection; presentation never owns RNG.

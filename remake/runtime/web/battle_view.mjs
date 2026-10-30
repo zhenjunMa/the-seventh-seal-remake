@@ -366,7 +366,8 @@ export class BattleView {
     this.groundFootprints=new Map();
     this.lifecycleBounds=new Map();
     this.lifecycle=lifecycleMeta?new BattleLifecyclePlayback(lifecycleMeta,{appearanceBounds:(roleId,pose)=>this._appearanceBounds(roleId,pose),
-      disappearanceEffect:(actorId,roleId,mode,event)=>this._disappearanceEffect(actorId,roleId,mode,event),
+      disappearanceEffect:(actorId,roleId,mode,event)=>this._particleEffect(actorId,roleId,mode,event),
+      appearanceEffect:(actorId,roleId,mode,event)=>this._particleEffect(actorId,roleId,mode,event,true),
       nativeBridge:actorId=>this._nativeBridge(actorId),onFrame:step=>this.onLifecycleFrame?.(step)}):null;
     this.assetDescriptors=assets;this.lifecycleMeta=lifecycleMeta;
     await this._prepareEntry({actors,skills,inventory,staged,onProgress,isCurrent:()=>!this.destroyed&&generation===this.generation});
@@ -614,7 +615,7 @@ export class BattleView {
       for(const candidate of roots())for(const channel of this._sequenceChannels(candidate)){
         if(channel.done||channel===candidate&&candidate.main_done)continue;
         const end=channel.visited+1>=channel.steps.length,tail=end&&channel===candidate&&!candidate.independent_carriers?this.meta.policy.tail_ms:0;
-        const due=candidate.started+channel.next_at+tail;
+        const due=candidate.started+(channel.next_at+tail);
         if(due<at||due===at&&channel.carrier&&!carrierFirst){root=candidate;at=due;carrierFirst=Boolean(channel.carrier);}
       }
       const control=this.nativeControl,valid=control&&(!this.nativeControlIsCurrent||this.nativeControlIsCurrent());
@@ -639,7 +640,9 @@ export class BattleView {
         if(iterations++>=limit)break;
         const channels=this._sequenceChannels(run);let selected=null,at=Infinity,ending=false;
         for(const channel of channels){if(channel.done||(channel===run&&run.main_done))continue;const end=channel.visited+1>=channel.steps.length,due=channel.next_at+(end&&channel===run&&!run.independent_carriers?this.meta.policy.tail_ms:0);if(due<at){selected=channel;at=due;ending=end;}}
-        if(!selected||at>run.elapsed)break;const channel=selected,child=Boolean(channel.descriptor),carrier=Boolean(channel.carrier);
+        // Use the same absolute deadline as the merged scheduler. Subtracting
+        // fractional RAF timestamps can round elapsed just below a due frame.
+        if(!selected||run.started+at>now)break;const channel=selected,child=Boolean(channel.descriptor),carrier=Boolean(channel.carrier);
         if(channel.vertical_wait){
           const bridge=this._nativeBridge(channel.result.actor_id,run.native_control,run.native_guard);
           if(bridge.state().waiting){channel.next_at=at+20;continue;}channel.vertical_wait=false;
@@ -851,17 +854,19 @@ export class BattleView {
   drainLifecycleCompleted(){return this.lifecycle?.drainCompleted()??[];}
   lifecycleSnapshot(){return this.lifecycle?.snapshot()??null;}
 
-  _disappearanceEffect(actorId,roleId,mode,event){
+  _particleEffect(actorId,roleId,mode,event,appearance=false){
     if(!globalThis.document?.createElement)return null; // headless timing adapter
     const role=this.meta.roles.find(r=>r.id===roleId),pose=this.lastActorPoses.get(actorId);
-    const action=role.actions.find(a=>a.index===(pose?.action_index??role.reaction.action_index));
-    const frame=pose?.action_frame??role.reaction.frames.at(-1),pair=this.lifecyclePairs.get(`${roleId}:${action.first_frame+frame}`);
+    const fallback=appearance?role.idle:role.reaction,action=role.actions.find(a=>a.index===(pose?.action_index??fallback.action_index));
+    const frame=pose?.action_frame??(appearance?fallback.frames[0]:fallback.frames.at(-1)),pair=this.lifecyclePairs.get(`${roleId}:${action.first_frame+frame}`);
     const image=this.images.get(pair?'/'+pair.main.path:action.sheet),scale=this.meta.policy.sprite_scale;
     const source=document.createElement('canvas');source.width=Math.ceil(role.frame_width*scale);source.height=Math.ceil(role.frame_height*scale);
     const c=source.getContext('2d',{willReadFrequently:true});c.imageSmoothingEnabled=false;
     drawBattleImage(c,image,pair?0:frame*role.frame_width,pair?0:role.direction*role.frame_height,role.frame_width,role.frame_height,0,0,source.width,source.height);
-    return createDeathParticleSurface({rgba:c.getImageData(0,0,source.width,source.height).data,width:source.width,height:source.height,
-      anchor:{x:role.anchor.x*scale,y:role.anchor.y*scale},mode,seed:`${this.lifecycle?.battleId}:${event.life_epoch}:${event.token}`});
+    const effect=createDeathParticleSurface({rgba:c.getImageData(0,0,source.width,source.height).data,width:source.width,height:source.height,
+      anchor:{x:role.anchor.x*scale,y:role.anchor.y*scale},mode,appearance,seed:`${this.lifecycle?.battleId}:${event.life_epoch}:${event.token}`});
+    if(appearance)effect.pose={action_index:action.index,action_frame:frame,source_frame:action.first_frame+frame};
+    return effect;
   }
 
   _appearanceBounds(roleId,pose){
@@ -991,7 +996,7 @@ export class BattleView {
         ctx.ellipse(shadow[0],shadow[1],footprint?.radius_x??82,footprint?.radius_y??15,0,0,Math.PI*2);ctx.fill();
       }
       ctx.restore();
-      if(!this.lifecycle?.drawDisappearance(id,ctx,slot[0],slot[1]))this._sprite(role, segment.action_index, frame, slot[0], slot[1], alpha, pair);
+      if(!this.lifecycle?.drawParticles(id,ctx,slot[0],slot[1]))this._sprite(role, segment.action_index, frame, slot[0], slot[1], alpha, pair);
       this.lastActorPoses.set(id,{action_index:segment.action_index,action_frame:frame});
       if(acting&&pair?.intrinsic.active&&!run.observations.intrinsic_source_frames.includes(pair.source_frame))run.observations.intrinsic_source_frames.push(pair.source_frame);
     }

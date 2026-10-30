@@ -500,15 +500,14 @@ def admit_registered_equipment(definitions, seed, story, registration):
 
 
 def status_cure_supported(row):
-    """Single allied mode1 removal with no field, stat-growth or other payload."""
+    """Single-target mode1 removal with no field, growth or other payload."""
     raw = bytes.fromhex(row['raw_hex'])
     block = raw[0x2a8:0x2a8 + 0xc6]
-    return bool(row['record_status'] == 'defined' and raw[0x24:0x26] == b'\x05\x01'
+    return bool(row['record_status'] == 'defined' and raw[0x24] == 5 and raw[0x25] in (1, 4)
         and row['initialization']['deterministic'] and row['validation']['all_value_ranges_ordered']
         and all(pair['minimum'] == pair['maximum'] == 0 for pair in row['value_ranges'])
-        and raw[0x156] == 0 and raw[0x157] == 1 and i32(raw, 0x142) == 17
-        and block[1] != 0 and block[0xb] == 1 and not any(raw[0x2a8 + 0xc6:])
-        and row['raw_fields']['effect_token_raw_126'] != '')
+        and raw[0x156] == 0 and raw[0x157] in (0, 1) and i32(raw, 0x142) == 17
+        and block[1] != 0 and block[0xb] == 1 and not any(raw[0x2a8 + 0xc6:]))
 
 
 def simple_restore_supported(row):
@@ -628,19 +627,21 @@ def admit_registered_status_cures(definitions, equipment_admission):
         sources[ident] = deepcopy(provenance)
         previous[ident] = {key: deepcopy(row[key]) for key in ('availability', 'behavior')}
         row['behavior'] = dict(kind='status-cure', status='recovered',
-            implemented_scope=['battle-single-allied-first-matching-status-removal'],
+            implemented_scope=['battle-single-allied-first-matching-status-removal' if raw[0x157]
+                else 'battle-single-enemy-first-matching-status-removal'],
             unverified_scope=[])
         row['availability'] = dict(enabled=True, chapter_enabled=True, catalog_visible=True,
             default_enabled=True, reasons=['registered-source-grant; native-mode1-status-removal-recovered'])
         row['status_cure'] = dict(effect_id_raw=bytes.fromhex(row['raw_hex'])[0x2a9], mode_raw=1,
             effect_raw_hex=bytes.fromhex(row['raw_hex'])[0x2a8:0x36e].hex(),
             definition_offset=0x2a8, effect_bytes=0xc6,
-            evidence='ev_4ee7cc8d9c675c3b1405324f30fb85a23397d5d5af06c75462626bf4fab5b54e')
+            evidence='ev_4ee7cc8d9c675c3b1405324f30fb85a23397d5d5af06c75462626bf4fab5b54e',
+            dispatch_evidence='ev_c35b08feeff12824174f46746b24be397f916aa51943e1f899649ad2568cb415')
         row['effect'] = dict(restore_hp_flat=0, restore_mp_flat=0, restore_hp_percent=0,
                              restore_mp_percent=0, revive=False)
         row['use_in_field'], row['use_in_battle'] = False, True
         row['battle'] = dict(animation_skill_id_raw_142=i32(bytes.fromhex(row['raw_hex']), 0x142),
-            all_targets_raw_156=0, same_side_raw_157=1, effect_kind_raw_2b3=1,
+            all_targets_raw_156=0, same_side_raw_157=raw[0x157], effect_kind_raw_2b3=1,
             preparation_delay_added=0, target_state_max_exclusive=4,
             target_immune_must_be_zero=True, consume_only_on_native_success=True)
     return dict(policy='registered-source-item-capabilities-v1', promoted_item_ids=sorted(map(int, sources)),

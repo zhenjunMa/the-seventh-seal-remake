@@ -50,7 +50,7 @@ test('command7 zero mode draws once at execution and renderer completion clears 
     f.battle.completeNativeAppearance('001');assert.equal(actor.immune_raw,0);assert.equal(actor.native_after_raw['0x0521f666'],0);assert.equal(actor.native_after_raw['0x0521a7b1'],0);
   }
   f.battle.rng=()=>assert.fail('fixed appearance must not consume native RNG');
-  for(const mode of [1,5,6,7]){raw[0x47]=mode;assert.equal(f.battle.beginNativeAppearance('001',raw.toString('hex')).mode,mode);}
+  for(const mode of [1,3,5,6,7]){raw[0x47]=mode;assert.equal(f.battle.beginNativeAppearance('001',raw.toString('hex')).mode,mode);}
   raw[0x47]=4;const actorBefore=copy(actor);assert.throws(()=>f.battle.beginNativeAppearance('001',raw.toString('hex')),/模式尚未接入/);assert.deepEqual(actor,actorBefore);assert.equal(f.draws.length,before);
 });
 

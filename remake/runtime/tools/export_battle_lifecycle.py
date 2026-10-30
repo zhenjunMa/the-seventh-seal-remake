@@ -45,6 +45,8 @@ NATIVE = {
  'appearance6':('remake/runtime/evidence/jade_lake_battle_20261028/appearance_native.json','ev_8d1e6359dcc6439fb3d4d925aa51d3c868ecbd9c53d837cd6140d28d90f316b8'),
  'appearance6_init':('remake/runtime/evidence/jade_lake_battle_20261028/appearance_native.json','ev_8402cb5bbc62277bfb9e80aca1ce2177f2f1c89dd20a52b7d39dcb550d6489a2'),
  'appearance7':('remake/runtime/evidence/jade_lake_battle_20261028/appearance_native.json','ev_c4e9cb6e69308d406fe7e93580d29694082c835e56d2030a38f2959ea1d9eff6'),
+ 'appearance3':('remake/runtime/evidence/inner_white_forest_20261030/appearance_native.json','ev_a618050f2c654f231636d0177a671f4804a16249ba66cea25a3a77578097176a'),
+ 'appearance3_init':('remake/runtime/evidence/inner_white_forest_20261030/appearance_native.json','ev_e04841b4143379cbe7006266c7ef31c28ff09b79b09367e0cf49af9642151f2b'),
 }
 RENDERER_BUNDLE=RUNTIME/'evidence/battle_lifecycle_renderer_native_20261015.json'
 RENDERER_FINDINGS=EVIDENCE/'renderer_static_findings.json'
@@ -71,6 +73,14 @@ def renderer_rules():
             sprite_progression_gate='51A4F0 pauses subsequent sprite advancement while appearance or death effect mode is nonzero.',
             sprite_gate_evidence=NATIVE['sprite_effect_gate'][1],
             mode1=findings['appearance_mode1'],mode5=findings['appearance_mode5'],
+            mode3=dict(callee='0x550f12',initializer='0x550975',clock_interval_ms=60,
+                life_rule='per pixel rand modulo30 plus5; age increments once per render',
+                column_rule='even columns speed=(rand&7)+4, offset=-40-(rand&0x6f); odd columns negate speed and offset',
+                target_y_rule='fresh LocalAlloc zeroed +0C; initializer writes +00/+04/+14/+19/+1D only',
+                completion='source per-pixel active flag with elapsed>=30 hard ceiling; elapsed0 reinitializes',
+                visual_rng='local deterministic visual stream; never draws combat RNG',
+                evidence=[NATIVE['appearance3'][1],NATIVE['appearance3_init'][1]],
+                limit='Shared source-particle rasterizer uses additive Canvas color composition and fixed60Hz sampling; native RGB16 background subtraction, offscreen early returns and global render cadence are not exact. Headless tests use the source hard ceiling.'),
             mode6=dict(callee='0x552039',initializer='0x551f03',step_per_render=8,
                 initial_coefficient='minOpaquePixelX - scaledPixelX',target_coefficient=255,
                 completion='max(1, ceil((255 + maxOpaquePixelX - minOpaquePixelX) / 8)) actual render calls after last elapsed0 initialization; empty frame completes in1 call',
@@ -441,7 +451,7 @@ def main():
             limit='Literal source file does not exist; its similarly named sound file is separate. Static source loader failure creates no carrier/new wait and normal record advancement continues.')],
         source_hashes=before,retained_native=retained,
         policy=dict(selection='Core performs sourceLookup in native roster order and consumes native RNG; view receives the selected chr_skill_index.',
-            appearance='Preserve each id11 command7 source mode and cursor. Mode0 draws once from [1,5,7] in the controller; fixed modes consume no RNG. Modes5/6 use source pixel progression, modes1/7 source elapsed thresholds. Command-only entries keep the current pose.',
+            appearance='Preserve each id11 command7 source mode and cursor. Mode0 draws once from [1,5,7] in the controller; fixed modes consume no combat RNG. Mode3 uses source column particles with local visual RNG and a30-step hard ceiling; modes5/6 use source pixel progression, modes1/7 source elapsed thresholds. Command-only entries keep the current pose.',
             timing='Use each DGP action interval_raw for sprite progression; global source clock/effect progression remains distinct.',
             corpse='Source id12 final pose is available. Player corpse hold until revive is the requested presentation behavior, separate from enemy fade.',
             revival='id14 source animation is included for 001/002. HP/state/revival qualification and block150 application belong to the core dispatcher.',
@@ -449,8 +459,9 @@ def main():
         limits=['No original executable, resource, save, old party manifest or historical evidence is edited.',
             'This manifest exports entry/death/revival plus source001 skill43 sequences; no gameplay qualification or input transaction is implemented here.',
             '001 skill43 learned_raw remains zero. Its missing literal m77Rwz01.dgp is retained as a missing-source command and is never substituted.',
-            'Command7 source modes0/1/5/6/7 are retained with native fields and executed at their source cursor.',
-            'Appearance modes1/5/6/7 completion and death modes1..7 hard ceiling/early-return rules are retained as static renderer evidence.',
+            'Command7 source modes0/1/3/5/6/7 are retained with native fields and executed at their source cursor.',
+            'Appearance mode3 uses source particle motion/age with a local visual RNG; RGB16 composition and native global render cadence remain adapted.',
+            'Appearance modes1/3/5/6/7 completion and death modes1..7 hard ceiling/early-return rules are retained as static renderer evidence.',
             'Native global render cadence, exact appearance/disappearance pixel transforms and RGB565/RGB555 rendering remain outside this pixel export.'])
     dest=WEB/'data/battle_lifecycle.json'
     save_json(dest,manifest)

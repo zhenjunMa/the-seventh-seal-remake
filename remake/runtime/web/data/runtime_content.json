@@ -714,6 +714,12 @@
     },
     "042": {
       "side": "enemy"
+    },
+    "024": {
+      "side": "enemy"
+    },
+    "041": {
+      "side": "enemy"
     }
   },
   "battle_rosters": {
@@ -782,7 +788,10 @@
     "m70030-1",
     "m71014-1",
     "m71050-1",
-    "m70073-1"
+    "m70073-1",
+    "m01010-1",
+    "m01042-1",
+    "m70078-1"
   ],
   "maps": {
     "M01060": {
@@ -814,7 +823,7 @@
       "npcs": [11,12,13,14,15]
     },
     "M01042": {
-      "npcs": [10,12]
+      "npcs": [10,11,12]
     },
     "M01051": {
       "npcs": [10,11,12,13]
@@ -899,7 +908,7 @@
     },
     "M01010": {
       "npcs": [10,11,12,13,14,15],
-      "triggers": [31]
+      "triggers": [3,31]
     },
     "M01030": {
       "npcs": [10,11,12,13,14,15,16,17,18,21,22,23,24,26,27,28,34,35,36,37],
@@ -1274,6 +1283,120 @@
       "objects": [
         {"index": 7, "handler": "keyed-chest"},
         {"index": 9, "handler": "keyed-chest"}
+      ],
+      "triggers": [
+        1
+      ]
+    },
+    "M01019": {
+      "npcs": [
+        10
+      ]
+    },
+    "M70077": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "M70077-1": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "M70077-2": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "M70077-3": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "M70077-4": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "M70078-1_1": {
+      "npcs": [],
+      "triggers": [
+        1
+      ],
+      "objects": [
+        {
+          "index": 19,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 22,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 23,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "M70078-2_1": {
+      "npcs": [],
+      "triggers": [
+        1
+      ],
+      "objects": [
+        {
+          "index": 19,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 20,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 21,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "M70078-3_1": {
+      "npcs": [],
+      "triggers": [
+        1
+      ],
+      "objects": [
+        {
+          "index": 19,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 20,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "M70078_2": {
+      "npcs": [10],
+      "triggers": [
+        1
+      ],
+      "objects": [
+        {
+          "index": 23,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 26,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 27,
+          "handler": "keyed-chest"
+        }
       ]
     }
   },

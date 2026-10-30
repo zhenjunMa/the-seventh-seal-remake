@@ -2,6 +2,7 @@
 from pathlib import Path
 import copy
 import json
+import struct
 import sys
 import tempfile
 import unittest
@@ -271,12 +272,16 @@ class ContentExporterTests(unittest.TestCase):
         self.assertEqual(set(blocks), {'014:12', '014:13'})
         self.assertEqual(view['idle']['interval_raw'], d.actions[view['idle']['action_index']]['interval_raw'])
 
-    def test_new_enemy_unsupported_recovery_targeting_is_not_silently_enabled(self):
-        # Generic mode0 status38 now shares the recovered source aggregator.
-        # Its later allied recovery carrier still has no enemy dispatch path;
-        # reject that actual unsupported operation before exporting any art.
-        with self.assertRaisesRegex(ValueError, r'017 skill 18: unsupported carrier recovery targeting'):
-            enemies.prepare_role('017', enemies.read('forest_status'))
+    def test_enemy_allied_recovery_uses_the_shared_support_handler(self):
+        # Registration remains separate: this source probe does not add017.
+        for ident, index, recovery in [('017', 18, 600), ('041', 21, 1000)]:
+            _, _, ai, _, _, _, _ = enemies.prepare_role(ident, enemies.read('forest_status'))
+            skill = ai['skills'][index]
+            self.assertEqual(skill['battle_handler'], 'native-support')
+            self.assertNotIn('effect_context', skill)
+            fixed = bytes.fromhex(skill['fixed_raw_hex'])
+            self.assertEqual(fixed[0x25], 1)
+            self.assertEqual(struct.unpack_from('<ii', fixed, 0xab), (recovery, recovery))
 
     def test_existing_enemy_frame_order_timing_and_contacts_are_preserved(self):
         baseline = enemies.read('forest_full_battle_view')

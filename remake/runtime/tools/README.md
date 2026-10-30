@@ -188,7 +188,7 @@ python3 -B remake/runtime/tools/source/inspect_equipment.py /path/to/SaveGame0.D
 | `battle-result` | [export_battle_result.py](export_battle_result.py) | 无声明依赖 |
 | `battle-packs` | [export_battle_packs.py](export_battle_packs.py) | `party-skills`、`item-presentation`、`forest-stage`、`battle-ui`、`battle-lifecycle`、`skill-test`、`battle-result`、`battle-stages` |
 | `menu-techniques` | [export_menu_techniques.py](export_menu_techniques.py) | `menu`、`party-skills` |
-| `menu-fonts` | [export_menu_text_gdi.py](export_menu_text_gdi.py) | `menu-techniques` |
+| `menu-fonts` | [export_menu_text_gdi.py](export_menu_text_gdi.py) | `menu-techniques`、`enemies` |
 | `startup-media` | [export_startup_media.py](export_startup_media.py) | 无声明依赖 |
 | `startup-menu` | [export_startup_menu.py](export_startup_menu.py) | 无声明依赖 |
 | `prologue-presentation` | [export_prologue_presentation.py](export_prologue_presentation.py) | `chapter-story` |

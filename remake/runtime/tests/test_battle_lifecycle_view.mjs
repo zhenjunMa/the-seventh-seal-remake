@@ -4,6 +4,7 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {BattleLifecyclePlayback,APPEARANCE_ALPHA_ADAPTER} from '../web/battle_lifecycle_view.mjs';
 import {BattleController} from '../web/core/combat.mjs';
+import {AppearanceParticles} from '../web/appearance_particles.mjs';
 const manifest=JSON.parse(await readFile(new URL('../web/data/battle_lifecycle.json',import.meta.url)));
 const copy=structuredClone,role=id=>manifest.roles.find(row=>row.id===id),skill=(id,index)=>role(id).skills.find(row=>row.chr_skill_index===index);
 const duration=s=>s.timeline.filter(step=>step.kind==='sprite').reduce((total,step)=>total+step.interval_raw,0);
@@ -115,6 +116,22 @@ test('all connected original entry variants finish with source mode RNG owned by
       const source=skill(sourceRole.id,index);assert.equal(draws,source.timeline.filter(step=>step.kind==='command'&&step.command_raw===7&&step.mode_raw_0x47===0).length);
     }
   }finally{Math.random=random;}
+});
+
+test('actual024 command-only mode3 entry releases immunity after its source column particles finish, without combat RNG',()=>{
+  const selected=skill('024',11);assert.equal(selected.timeline.length,1);
+  assert.equal(selected.timeline[0].mode_raw_0x47,3);assert.equal(Buffer.from(selected.timeline[0].raw_hex,'hex')[0x47],3);
+  const control=new BattleController({});control.state={actors:[{id:'armor',immune_raw:1}]};control.rng=()=>assert.fail('fixed appearance must not draw combat RNG');
+  const effect=new AppearanceParticles({pixels:[{x:0,y:20,rgb:[255,255,255]}],random:()=>0});let draws=0;effect.draw=()=>draws++;
+  const playback=new BattleLifecyclePlayback(manifest,{appearanceEffect:()=>effect,nativeBridge:()=>({
+    record:raw=>control.nativeSourceRecord('armor',raw),appearance:raw=>control.beginNativeAppearance('armor',raw),appearanceComplete:()=>control.completeNativeAppearance('armor')})}),
+    roster=[{id:'armor',resource_id:'024',side:'enemy'}],entry=event('armor','entry',11,11,{life_epoch:0}),
+    snapshot={id:'024-source-entry',actors:[{id:'armor',life_epoch:0}],lifecycle_events:[entry]};
+  playback.advance(snapshot,roster,0);assert.equal(control.actor('armor').immune_raw,1);
+  assert.equal(playback.drawParticles('armor',{},0,0),true);assert.equal(draws,1);
+  let now=0;while(playback.snapshot().active.length&&now<1800){now+=20;playback.advance(snapshot,roster,now);}
+  assert.ok(now<1800);assert.equal(control.actor('armor').immune_raw,0);assert.equal(control.actor('armor').native_after_raw['0x0521f666'],0);
+  assert.deepEqual(playback.drainCompleted(),[{token:entry.token,actor_id:'armor',life_epoch:0}]);
 });
 
 test('lifecycle sound visits use source logical cursors, survive slow RAF and retire on reset without replay',()=>{

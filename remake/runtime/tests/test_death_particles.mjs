@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {DeathParticles,DeathParticlePlayback,deathVisualRandom,deathParticleColor,createDeathParticleSurface} from '../web/death_particles.mjs';
 import {TextureCache} from '../web/phaser/rendering/texture_cache.mjs';
+import {AppearanceParticles} from '../web/appearance_particles.mjs';
 
 const pixels=[{x:-8,y:-8,rgb:[255,255,255]},{x:8,y:8,rgb:[160,100,64]}];
 const make=mode=>new DeathParticles({mode,pixels,random:deathVisualRandom(`test-${mode}`)});
@@ -51,4 +52,17 @@ test('Phaser uploads a changing actor canvas once per revision and releases it a
   assert.equal(canvases,1);assert.equal(images,0);assert.equal(uploads,0);
   canvas.battleParticleRevision++;cache.texture(canvas);cache.texture(canvas);assert.equal(uploads,1);
   cache.begin();cache.prune();assert.equal(removed,1);assert.equal(cache.entries.size,0);
+});
+
+test('appearance3 particle progression completes early at stable30/60/144Hz, while headless fallback keeps the source hard ceiling',()=>{
+  for(const hz of [30,60,144]){
+    const effect=new AppearanceParticles({pixels:[{x:0,y:20,rgb:[255,255,255]}],random:()=>0}),
+      playback=new DeathParticlePlayback({mode:3,clock_ms:60,started:0,effect});let now=0;
+    while(playback.advance(now)&&now<1800)now+=1000/hz;
+    assert.ok(now<1800);assert.ok(effect.calls<35);assert.equal(playback.advance(2000),false);
+  }
+  const empty=new DeathParticlePlayback({mode:3,clock_ms:60,started:0,effect:new AppearanceParticles({pixels:[],random:()=>0})});
+  assert.equal(empty.advance(0),false);
+  const bounded=new DeathParticlePlayback({mode:3,clock_ms:60,started:0,effect:{reset(){},step:()=>true}});
+  assert.equal(bounded.advance(1799),true);assert.equal(bounded.advance(1800),false);
 });

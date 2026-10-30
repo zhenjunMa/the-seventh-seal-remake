@@ -109,7 +109,8 @@ export function compileNativeSequence(meta,roleId,plan,layers=[]){
   const start=v.getUint32(useCombo?0x2f:0x26,true),end=v.getUint32(useCombo?0x33:0x2a,true);
   fail(end>=start&&end-start<=300,'原组合帧边界无效');
   let frames=Array.from({length:end-start},(_,i)=>(d[0x0d]&15)?start+i:d[0x16+start+i]);
-  if(!(d[0x0d]&15))fail(end<=dv.getUint32(0x12,true)&&end<=0x5c,'原DGP逻辑帧表越界');
+  // 50E980 reads the CHR cursor from +16 even past the declared +12 count.
+  if(!(d[0x0d]&15))fail(end<=0x5c,'原DGP逻辑帧表越界');
   fail(frames.every(f=>Number.isInteger(f)&&f<action.frame_count),'原组合物理帧越界');if(b[0x1d])frames.reverse();
   const effectList=[];for(const [field,trigger,slot]of [[9,5,'actor'],[0x4e,0x49,'target']]){
    const token=new TextDecoder().decode(b.slice(field,field+20)).split('\0')[0];if(token)effectList.push({asset_id:token.replace(/\.dgp$/i,''),frame:v.getUint32(trigger,true),slot});
