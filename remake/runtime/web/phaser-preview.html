@@ -17,7 +17,7 @@
   <div id="screen"><div id="phaserHost"></div><canvas id="movementOverlay" width="640" height="480"></canvas><canvas id="focus" tabindex="0"></canvas></div>
   <div><button id="map">探索场景</button><button id="battle" disabled>战斗场景</button><button id="attack" disabled>执行燕突</button><button id="pause">暂停运行</button><button id="actorSmoothing" aria-pressed="true">人物平滑：开</button><button id="compare">核对地图绘制</button><button id="capture">导出截图</button><a href="/">正式游戏</a></div>
   <div><button id="wallSample">定位墙角</button><button id="npcSample">定位 NPC 接触</button><label><input id="feet" type="checkbox" checked>显示脚底与方向</label></div>
-  <p>探索场景使用方向键／WASD 移动，Shift 加速，滚轮缩放。红褐色区域不可通行；黄色为玩家脚底与输入方向，青色为 NPC 脚底，绿色为实际移动方向。持续顶墙会慢速踏步，NPC 接触时停步，让开后继续。此页复用正式移动与接触模块，示意图只代表几何结构。</p>
+  <p>探索场景使用方向键／WASD 移动，Shift 加速，滚轮缩放。红褐色区域不可通行；黄色为玩家脚底与输入方向，青色为 NPC 脚底，绿色为实际移动方向。持续顶墙保留走路／跑步节奏，并有小幅往返与跟随镜头反馈；NPC 接触时停步，让开后继续。此页复用正式移动与接触模块，示意图只代表几何结构。</p>
   <p id="motionStatus"></p>
   <p>可暂停／继续运行；切换到探索会暂停正在播放的战斗，返回后继续。战斗使用原有控制器与动作时间线。</p>
   <pre id="status">正在准备 Phaser…</pre>

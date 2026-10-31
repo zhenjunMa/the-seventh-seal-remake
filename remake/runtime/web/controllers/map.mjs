@@ -132,7 +132,8 @@ export function createMapController({state, actions, $, canvas, ctx}) {
     try { await state.scenes.loadLocation(at,{reason,restoredWorld,nativeSortCode});if(state.scenes.phase!=='map')return; buildHud(); updateNearest(); actions.log({type:'scene-enter',from,map_id:at.map_id,x:at.x,y:at.y,reason}); actions.status(reason==='restore'?'进度已载入，可以继续探索。':'已进入场景。'); canvas.focus({preventScroll:true}); }
     catch(error){actions.log({type:'scene-failed',error:error.message,from,to:at.map_id});if(error.gameOverPolicy)await actions.presentGameOver(error.gameOverPolicy);else actions.status(`${error.message}，当前场景已保留。`,true);}
   }
-  function follow() {const im=state.scenes.current.bitmap;Object.assign(state.view,openingCamera(state.world.location,im.width,im.height));}
+  function follow() {const im=state.scenes.current.bitmap,at=state.world.location,step=state.view.collisionFeedback?.step;
+    Object.assign(state.view,openingCamera({...at,x:at.x+(step?.x??0),y:at.y+(step?.y??0)},im.width,im.height));}
   function fit(){if(!state.scenes?.current)return;const im=state.scenes.current.bitmap;state.view.zoom=Math.min(640/im.width,480/im.height)*.97;state.view.x=im.width/2;state.view.y=im.height/2;state.view.follow=false;}
   function resize(){const rect=$('screen').getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,2);state.cssWidth=rect.width;state.cssHeight=rect.height;for(const target of [canvas,$('battleCanvas')]){target.width=Math.round(rect.width*dpr);target.height=Math.round(rect.height*dpr);}ctx.setTransform(dpr,0,0,dpr,0,0);ctx.imageSmoothingEnabled=false;state.engine?.resize();}
   function npcAvailable(npc) {
@@ -293,7 +294,8 @@ export function createMapController({state, actions, $, canvas, ctx}) {
       state.view.action=pose.action;state.view.frame=pose.frame;
       state.view.collisionFeedback=pose.feedback;state.clock=pose.elapsed;
       if(state.view.follow)follow();updateNearest();
-    }else {motionState.reset();state.view.collisionFeedback=null;}
+    }else {const step=state.view.collisionFeedback?.step;motionState.reset();state.view.collisionFeedback=null;
+      if(state.view.follow&&step&&(step.x||step.y))follow();}
     paint();
   }
   return {role, sheetAction, buildHud, prepareMap, validateEntry, commitView, changeMap, follow, fit, resize, npcAvailable, updateNearest, objectBitmap, transitionFor, renderWorldMap,selectWorldMapDestination,closeWorldMap, routeExit, drawCollision, paint, updateExploration,captureScene,captureSavePreview};
