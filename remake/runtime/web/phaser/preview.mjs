@@ -152,7 +152,7 @@ runtime.start({phase:'map',suspend:()=>keys.clear(),exploration:(now,delta)=>{
     if(moved)Object.assign(world.location,{x:moved.x,y:moved.y,direction:pose.direction??from.direction});
     Object.assign(viewState,{action:pose.action,frame:pose.frame,collisionFeedback:pose.feedback});
     input={dx,dy};lastTravel={dx:world.location.x-from.x,dy:world.location.y-from.y};blocked=pose.blocked;
-    viewState.x=world.location.x;viewState.y=world.location.y;runtime.presentMap(mapOptions());
+    viewState.x=world.location.x+pose.feedback.step.x;viewState.y=world.location.y+pose.feedback.step.y;runtime.presentMap(mapOptions());
     drawMovementOverlay();
   },battle:now=>{drawMovementOverlay();if(view&&battle)drawBattle(now);}});
 showMap();status('Phaser 探索场景已准备；正在读取现有战斗定义…');

@@ -66,7 +66,7 @@ test('diagonal travel has no speed boost and animation measures accepted per-axi
   assert.equal(at.direction,0);assert.equal(diagonal.state.view.frame,1);
 });
 
-test('wall contact stops travel but preserves slow stepping until release, with phase retained on departure',()=>{
+test('wall contact stops travel but preserves walking until release, with phase retained on departure',()=>{
   const f=fixture({wall:true});f.state.keys.add('ArrowRight');f.step(80);
   assert.ok(f.state.world.location.x<400);assert.equal(f.state.view.action,1);assert.equal(f.state.view.frame,0);
   f.step(80);assert.equal(f.state.view.action,1);
@@ -110,13 +110,40 @@ test('wall impact moves only the body, finishes after release and clears on a ph
   const f=fixture({wall:true});f.state.keys=new Set(['ArrowRight']);f.state.running=true;
   f.step(40);const at={...f.state.world.location};f.step(40);
   assert.deepEqual(f.state.world.location,at);assert.ok(f.state.view.collisionFeedback.x<0);
-  assert.equal(f.state.view.action,1,'running becomes walking only while fully blocked');
+  assert.equal(f.state.view.action,2,'running retains its action while fully blocked');
   f.state.keys.clear();f.step(16);assert.deepEqual(f.state.world.location,at);
   assert.equal(f.state.view.action,0);assert.ok(f.state.view.collisionFeedback.x<0,'release does not snap the body back');
   for(let i=0;i<30;i++)f.step(16);
   assert.deepEqual(f.state.world.location,at);assert.ok(Math.abs(f.state.view.collisionFeedback.x)<1e-8);
   f.state.keys.clear();f.step(16);assert.ok(Math.abs(f.state.view.collisionFeedback.x)<1e-8);
   f.state.scenes.phase='event';f.step(16);assert.equal(f.state.view.collisionFeedback,null);
+});
+
+test('held wall contact retains walk/run cadence and moves the follow camera with presentation only',()=>{
+  for(const running of [false,true])for(const hz of [30,60,120]){
+    const f=fixture({wall:true});f.state.running=running;f.state.keys.add('ArrowRight');
+    for(let n=0;n<hz;n++)f.step(1000/hz);
+    const at={...f.state.world.location},camera=[],frames=new Set();
+    let previous=f.state.view.frame,advances=0;
+    for(let n=0;n<hz;n++){
+      f.step(1000/hz);assert.deepEqual(f.state.world.location,at);
+      assert.equal(f.state.view.action,running?2:1);frames.add(f.state.view.frame);
+      if(f.state.view.frame!==previous)advances++;previous=f.state.view.frame;
+      const step=f.state.view.collisionFeedback.step;
+      assert.ok(step.x<=0&&step.x>=-4);assert.equal(step.y,0);
+      assert.ok(Math.abs(f.state.view.x-(at.x-16+step.x))<1e-8);
+      camera.push(f.state.view.x);
+    }
+    assert.ok(Math.max(...camera)-Math.min(...camera)>.5,'holding the wall keeps the camera recoil alive');
+    assert.ok(frames.size>3,'blocked motion keeps animating at the selected cadence');
+    assert.ok(advances>=(running?20:16),'wall contact does not slow the source animation cadence');
+    f.state.keys.clear();for(let n=0;n<hz;n++)f.step(1000/hz);
+    assert.equal(f.state.view.action,0);assert.deepEqual(f.state.world.location,at);
+    assert.ok(Math.abs(f.state.view.x-(at.x-16))<1e-8,'release settles the camera');
+    f.state.keys.add('ArrowRight');for(let n=0;n<10;n++)f.step(1000/hz);
+    f.state.scenes.phase='event';f.step(1000/hz);
+    assert.equal(f.state.view.collisionFeedback,null);assert.equal(f.state.view.x,at.x-16);
+  }
 });
 
 test('NPC collision and interaction distance follow its displayed feet rather than a leading source coordinate',()=>{
