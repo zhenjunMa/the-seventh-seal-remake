@@ -2400,6 +2400,177 @@
       },
       "parameters": {}
     },
+    "019_15": {
+      "name": "",
+      "owner": {
+        "role_id": "019",
+        "skill_index": 15,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "019_16": {
+      "name": "",
+      "owner": {
+        "role_id": "019",
+        "skill_index": 16,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "019_17": {
+      "name": "",
+      "owner": {
+        "role_id": "019",
+        "skill_index": 17,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "020_13": {
+      "name": "槌槌",
+      "owner": {
+        "role_id": "020",
+        "skill_index": 13,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "020_14": {
+      "name": "槌槌地",
+      "owner": {
+        "role_id": "020",
+        "skill_index": 14,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "020_15": {
+      "name": "黏黏",
+      "owner": {
+        "role_id": "020",
+        "skill_index": 15,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "020_16": {
+      "name": "嚼嚼",
+      "owner": {
+        "role_id": "020",
+        "skill_index": 16,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "029_13": {
+      "name": "急速猎杀",
+      "owner": {
+        "role_id": "029",
+        "skill_index": 13,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "029_14": {
+      "name": "多段爪击",
+      "owner": {
+        "role_id": "029",
+        "skill_index": 14,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "029_15": {
+      "name": "猛鵰扑杀",
+      "owner": {
+        "role_id": "029",
+        "skill_index": 15,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "034_9": {
+      "name": "断狱爪",
+      "owner": {
+        "role_id": "034",
+        "skill_index": 9,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "034_10": {
+      "name": "落狱爪",
+      "owner": {
+        "role_id": "034",
+        "skill_index": 10,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "034_11": {
+      "name": "百骨碎",
+      "owner": {
+        "role_id": "034",
+        "skill_index": 11,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "034_12": {
+      "name": "狮子破吼弹",
+      "owner": {
+        "role_id": "034",
+        "skill_index": 12,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "034_13": {
+      "name": "狂虎猛袭震",
+      "owner": {
+        "role_id": "034",
+        "skill_index": 13,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "034_14": {
+      "name": "龙卷",
+      "owner": {
+        "role_id": "034",
+        "skill_index": 14,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "034_15": {
+      "name": "极．闇云龙卷",
+      "owner": {
+        "role_id": "034",
+        "skill_index": 15,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "034_16": {
+      "name": "天堂巨门．开端",
+      "owner": {
+        "role_id": "034",
+        "skill_index": 16,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "034_17": {
+      "name": "残破大地．终焉",
+      "owner": {
+        "role_id": "034",
+        "skill_index": 17,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
     "001_0": {
       "name": "",
       "owner": {
@@ -4758,33 +4929,6 @@
       },
       "parameters": {}
     },
-    "019_15": {
-      "name": "",
-      "owner": {
-        "role_id": "019",
-        "skill_index": 15,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "019_16": {
-      "name": "",
-      "owner": {
-        "role_id": "019",
-        "skill_index": 16,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "019_17": {
-      "name": "",
-      "owner": {
-        "role_id": "019",
-        "skill_index": 17,
-        "side": "source"
-      },
-      "parameters": {}
-    },
     "019_18": {
       "name": "自反下",
       "owner": {
@@ -4916,42 +5060,6 @@
       "owner": {
         "role_id": "020",
         "skill_index": 12,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "020_13": {
-      "name": "槌槌",
-      "owner": {
-        "role_id": "020",
-        "skill_index": 13,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "020_14": {
-      "name": "槌槌地",
-      "owner": {
-        "role_id": "020",
-        "skill_index": 14,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "020_15": {
-      "name": "黏黏",
-      "owner": {
-        "role_id": "020",
-        "skill_index": 15,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "020_16": {
-      "name": "嚼嚼",
-      "owner": {
-        "role_id": "020",
-        "skill_index": 16,
         "side": "source"
       },
       "parameters": {}
@@ -6464,33 +6572,6 @@
       "owner": {
         "role_id": "029",
         "skill_index": 12,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "029_13": {
-      "name": "急速猎杀",
-      "owner": {
-        "role_id": "029",
-        "skill_index": 13,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "029_14": {
-      "name": "多段爪击",
-      "owner": {
-        "role_id": "029",
-        "skill_index": 14,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "029_15": {
-      "name": "猛鵰扑杀",
-      "owner": {
-        "role_id": "029",
-        "skill_index": 15,
         "side": "source"
       },
       "parameters": {}
@@ -8021,87 +8102,6 @@
       "owner": {
         "role_id": "034",
         "skill_index": 8,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "034_9": {
-      "name": "断狱爪",
-      "owner": {
-        "role_id": "034",
-        "skill_index": 9,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "034_10": {
-      "name": "落狱爪",
-      "owner": {
-        "role_id": "034",
-        "skill_index": 10,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "034_11": {
-      "name": "百骨碎",
-      "owner": {
-        "role_id": "034",
-        "skill_index": 11,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "034_12": {
-      "name": "狮子破吼弹",
-      "owner": {
-        "role_id": "034",
-        "skill_index": 12,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "034_13": {
-      "name": "狂虎猛袭震",
-      "owner": {
-        "role_id": "034",
-        "skill_index": 13,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "034_14": {
-      "name": "龙卷",
-      "owner": {
-        "role_id": "034",
-        "skill_index": 14,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "034_15": {
-      "name": "极．闇云龙卷",
-      "owner": {
-        "role_id": "034",
-        "skill_index": 15,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "034_16": {
-      "name": "天堂巨门．开端",
-      "owner": {
-        "role_id": "034",
-        "skill_index": 16,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "034_17": {
-      "name": "残破大地．终焉",
-      "owner": {
-        "role_id": "034",
-        "skill_index": 17,
         "side": "source"
       },
       "parameters": {}

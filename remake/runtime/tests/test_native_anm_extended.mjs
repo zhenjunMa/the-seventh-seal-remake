@@ -27,13 +27,26 @@ async function sourceProgram(id){
     ||table.descriptors.some(row=>row.state_raw===1&&row.filename_raw.toLowerCase()===`${id}.anm`)).map(([mapId])=>mapId);
   assert.ok(callers.length>0,'source TLK/DAT caller retained');
   const program={schema:'seventh-seal-chapter-anm',version:1,id,source,commands,maps:[...new Set([...callers,...controlMaps])],
-    expected:{caller_maps:callers,control_maps:controlMaps,control_map:controlMaps.at(-1)??callers[0]}};
+    expected:{caller_maps:callers,control_maps:controlMaps,control_map:controlMaps.at(-1)??(callers.length===1?callers[0]:null)}};
   const content=structuredClone(runtimeContent);content.programs[id]=source;
   for(const roleId of ['004','006'])content.roles[roleId]={side:'player',native_slot:Number(roleId)-1,
     source:{path:`Fight_Role/${roleId}.CHR`,sha256:hash(await read(`Fight_Role/${roleId}.CHR`))}};
   validateChapterAnimation(program,content);return {program,content,bytes};
 }
 function hooks(trace){return Object.fromEntries(['map','actor','move','camera','wait','fade','media','sound'].map(name=>[name,async payload=>trace.push({hook:name,...payload})]));}
+
+test('shared rest animation inherits each actual inn caller without moving to the other inn',async()=>{
+  const {program,content}=await sourceProgram('rest');
+  assert.deepEqual(program.expected.caller_maps,['M03012_1F','M29014']);
+  assert.equal(program.expected.control_map,null);
+  for(const mapId of program.expected.caller_maps){
+    const trace=[],location={map_id:mapId,x:400,y:360,direction:0};
+    const runner=new ChapterAnimationRunner({program,content,hooks:hooks(trace),initialLocation:location});
+    const result=await runner.run();
+    assert.deepEqual(result.location,location);
+    assert.ok(trace.some(row=>row.hook==='map'&&row.bootstrap&&row.mapId===mapId));
+  }
+});
 
 test('real m17010-3 executes both camera modes and continues after source annotation255',async()=>{
   const {program,content,bytes}=await sourceProgram('m17010-3'),trace=[];

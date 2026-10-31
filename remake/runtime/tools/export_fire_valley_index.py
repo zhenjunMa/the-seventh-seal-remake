@@ -76,10 +76,11 @@ def descriptors(parsed):
     return result
 
 
-def discover_maps(catalog, details, region_label=REGION_LABEL, exact_label=False):
+def discover_maps(catalog, details, region_label=REGION_LABEL, exact_label=False, additional_labels=()):
     """Return content/link-supported members and the exact admission reason."""
     seeds = {ident for ident, row in catalog.items()
-             if (row.get("name") == region_label if exact_label else region_label in row.get("name", ""))}
+             if any(row.get("name") == label if exact_label else label in row.get("name", "")
+                    for label in (region_label, *additional_labels))}
     selected = set(seeds)
     edges = [(ident, d["target_map_id"], d["source_id"])
              for ident, row in details.items() for d in descriptors(row) if d["target_map_id"]]
@@ -231,7 +232,7 @@ def source_files(root=ROOT):
 
 
 def build_index(region_label=REGION_LABEL, region_id="fire-valley", exact_label=False,
-                script_map_sources=()):
+                script_map_sources=(), additional_labels=()):
     catalog, hashes, failures = {}, {}, []
     paths = sorted(path for path in (ROOT / "Map").iterdir() if path.suffix.lower() == ".dat")
     for path in paths:
@@ -245,7 +246,8 @@ def build_index(region_label=REGION_LABEL, region_id="fire-valley", exact_label=
             hashes[key] = sha(raw)
             failures.append({"path": key, "error": str(error)})
     seeds = [ident for ident, row in catalog.items()
-             if (row.get("name") == region_label if exact_label else region_label in row.get("name", ""))]
+             if any(row.get("name") == label if exact_label else label in row.get("name", "")
+                    for label in (region_label, *additional_labels))]
     if not seeds:
         raise ValueError(f"No source map label nominates {region_label}")
     # Prefix is only a bounded candidate search. Every admitted member requires
@@ -261,7 +263,7 @@ def build_index(region_label=REGION_LABEL, region_id="fire-valley", exact_label=
                 details[ident] = parsed
             except (ValueError, struct.error) as error:
                 failures.append({"path": row["path"], "error": str(error)})
-    members, evidence = discover_maps(catalog, details, region_label, exact_label)
+    members, evidence = discover_maps(catalog, details, region_label, exact_label, additional_labels)
     all_programs = {}
     for path in sorted(path for path in (ROOT / "Animate").iterdir() if path.suffix.lower() == ".anm"):
         key = path.relative_to(ROOT).as_posix()
@@ -520,6 +522,7 @@ def build_index(region_label=REGION_LABEL, region_id="fire-valley", exact_label=
                          "shared_flags": len(flag_index), "source_bytes_unchanged": True,
                          "unlinked_candidates": sorted(set(details) - set(members)), "parse_failures": failures},
             "discovery": {"region_label": region_label, "label_seed_maps": sorted(seeds),
+                          **({"additional_labels": list(additional_labels)} if additional_labels else {}),
                           "label_match": "exact" if exact_label else "contains",
                           "candidate_filename_families": sorted(families),
                           "rule": "Source-label seeds plus undirected DAT descriptor links within candidate families. Prefix nominates candidates only."
@@ -599,7 +602,7 @@ def coverage_report(data, index_bytes, output=OUTPUT):
 
 
 def main(region_label=REGION_LABEL, region_id="fire-valley", exact_label=False,
-         output=OUTPUT, report_output=REPORT_OUTPUT, script_map_sources=()):
+         output=OUTPUT, report_output=REPORT_OUTPUT, script_map_sources=(), additional_labels=()):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true", help="Verify deterministic output without writing")
     parser.add_argument("--query", help="Search existing index for map, NPC or dialogue text")
@@ -612,7 +615,7 @@ def main(region_label=REGION_LABEL, region_id="fire-valley", exact_label=False,
     if args.query is not None or args.map_id or args.flag:
         print(json.dumps(query_index(json.loads(output.read_text("utf-8")), args.query, args.map_id, args.flag, args.limit), ensure_ascii=False))
         return
-    data = build_index(region_label, region_id, exact_label, script_map_sources)
+    data = build_index(region_label, region_id, exact_label, script_map_sources, additional_labels)
     raw = encoded(data)
     outputs = {output: raw, report_output: encoded(coverage_report(data, raw, output))}
     for path, value in outputs.items():

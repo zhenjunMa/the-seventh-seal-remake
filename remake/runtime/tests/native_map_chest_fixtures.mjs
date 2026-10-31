@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import {createHash} from 'node:crypto';
 import assert from 'node:assert/strict';
 export const WHITE_FOREST_MAPS=['M70010','M70020','M70030','M70040','M70050','M70060'];
+export const WIND_ISLAND_CHEST_MAPS=['M19021','M19022','M19023','M19024','M19041'];
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 const originalPath=path=>new URL(`../../../${path}`,import.meta.url);
 const read=path=>JSON.parse(fs.readFileSync(new URL(path,import.meta.url),'utf8'));
@@ -20,10 +21,10 @@ function normalizeAction(raw,version){
     [0x74,0x88,4],[0x78,0x8c,8],[0x80,0x94,4]])raw.copy(out,to,from,from+size);
   return out;
 }
-export function readNativeChestFixtures(){
+export function readNativeChestFixtures({maps=WHITE_FOREST_MAPS,behavior=4,expectedCount=13}={}){
   const story=read('../web/data/chapter_story.json'),resources=read('../web/data/chapter_map_resources.json');
   const chests=[],missing=[],source_hashes={};
-  for(const id of WHITE_FOREST_MAPS){
+  for(const id of maps){
     const table=story.maps[id];
     if(!table){missing.push(`exported source table ${id}`);continue;}
     const path=originalPath(table.map_source.path);
@@ -34,7 +35,7 @@ export function readNativeChestFixtures(){
     for(const object of table.objects){
       const raw=dat.subarray(object.source.offset,object.source.offset+0x112);
       assert.equal(raw.toString('hex'),object.raw_hex,`${id}/${object.index} DAT record`);
-      if(raw[0xcf]!==4)continue;
+      if(raw[0xcf]!==behavior)continue;
       const animation=resources.object_animations[id]?.find(row=>row.object_index_zero_based===object.index);
       if(!animation){missing.push(`exported source animation ${id}/${object.index}`);continue;}
       const dgpPath=originalPath(animation.source.path);
@@ -56,5 +57,5 @@ export function readNativeChestFixtures(){
     }
   }
   return {story,resources,chests,source_hashes,missing,
-    skip:missing.length?`Original/exported chest materials unavailable: ${missing.join(', ')}`:chests.length!==13?'Outer White Forest thirteen-chest source set has not been built':false};
+    skip:missing.length?`Original/exported chest materials unavailable: ${missing.join(', ')}`:chests.length!==expectedCount?`Expected ${expectedCount} CF${behavior} source chests have not been built`:false};
 }

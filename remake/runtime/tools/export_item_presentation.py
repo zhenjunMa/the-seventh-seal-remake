@@ -50,7 +50,7 @@ def source_files():
     tokens = set()
     for index in range(count):
         raw = itm[0x61c + index * 0x3bf:0x61c + (index + 1) * 0x3bf]
-        if raw[0x24] != 5 or raw[0x25] not in (1, 3, 4) or struct.unpack_from('<I', raw, 0x142)[0] != 17 or raw[0x156] != 0 or raw[0x157] not in (0, 1):
+        if raw[0x24] != 5 or raw[0x25] not in (1, 3, 4) or struct.unpack_from('<I', raw, 0x142)[0] != 17 or raw[0x156] not in (0, 1) or raw[0x157] not in (0, 1):
             continue
         filename = token(raw, 0x126)
         if filename:
@@ -80,7 +80,7 @@ def item_presentations(data, itm):
         filename = token(raw, 0x126)
         assert not filename or Path(filename).name == filename and filename.lower().endswith('.dgp')
         assert struct.unpack_from('<I', raw, 0x142)[0] == 17, 'item animation is not supported ID17'
-        assert raw[0x156] == 0 and raw[0x157] in (0, 1), 'item target scope is not supported single target'
+        assert raw[0x156] in (0, 1) and raw[0x157] in (0, 1), 'item target scope is not supported'
         items[key] = dict(id=ident, name=definition['name'], animation_skill_id_raw_142=17,
             effect_id=Path(filename).stem if filename else None, effect_token_raw_126=filename,
             source=dict(path='SYSTEM/Object.ITM', sha256=digest, record_offset=at,

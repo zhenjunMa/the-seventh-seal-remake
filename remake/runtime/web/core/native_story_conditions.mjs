@@ -38,7 +38,8 @@ export function validateNativeStoryCondition(record,table){
   }else if(type===8){
     // Case8 is a DWORD equality test, not an index into the party array.
     // Preserve all four source bytes, including operands which never match.
-    need(typeof record.raw_hex==='string','控制角色条件 DWORD 来源缺失');nativeConditionByte(record);
+    if(record.raw_hex!==undefined)nativeConditionByte(record);
+    else need(uint(record.condition_dword_raw_0b),'控制角色条件 DWORD 来源缺失');
   }else need(nativeConditionByte(record)<10,'队伍角色槽无效');
   return record;
 }
@@ -73,7 +74,8 @@ export function evaluateNativeStoryCondition(record,world,table){
       return (world.party??[]).some(role=>role.id===id);
     }
     case 8:{
-      const operand=parseInt(record.raw_hex.slice(0x0b*2,0x0f*2).match(/../g).reverse().join(''),16);
+      const operand=record.raw_hex===undefined?record.condition_dword_raw_0b:
+        parseInt(record.raw_hex.slice(0x0b*2,0x0f*2).match(/../g).reverse().join(''),16);
       return Number(world.leader_id)-1===operand;
     }
   }

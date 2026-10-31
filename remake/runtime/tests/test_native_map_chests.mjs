@@ -8,13 +8,15 @@ import {ChapterRunner,chapterObjectState,initializeChapterItem,validateChapterSt
 import {WorldStore,encodeSave,decodeSave} from '../web/core/world.mjs';
 import {validateStoryBindings} from '../web/core/content_dependencies.mjs';
 import {inspectContentReadiness} from '../web/core/content_readiness.mjs';
-import {readNativeChestFixtures} from './native_map_chest_fixtures.mjs';
+import {readNativeChestFixtures,WIND_ISLAND_CHEST_MAPS} from './native_map_chest_fixtures.mjs';
 import {MapObjectRuntime} from '../web/core/map_objects.mjs';
 import {mapPresentation} from '../web/core/map_presentation.mjs';
 globalThis.crypto??=webcrypto;
 const read=path=>JSON.parse(fs.readFileSync(new URL(path,import.meta.url),'utf8'));
 const source=readNativeChestFixtures();
 const testSource=(name,fn)=>test(name,{skip:source.skip},fn);
+const island=readNativeChestFixtures({maps:WIND_ISLAND_CHEST_MAPS,behavior:3,expectedCount:7});
+const testIsland=(name,fn)=>test(name,{skip:island.skip},fn);
 const items=read('../web/data/items.json'),seed=read('../web/data/opening_seed.json');
 const fixture=source.chests.find(row=>row.map_id==='M70020'&&row.object.index===3);
 const copy=value=>structuredClone(value),hex=raw=>Buffer.from(raw).toString('hex');
@@ -23,8 +25,8 @@ function item(id){
   new DataView(raw.buffer).setUint32(4,1,true);
   return {instance_id:`chest-test-${id}`,id,name:definition.name,quantity:1,source_raw_hex:hex(raw),source_definition:definition.source};
 }
-function setup({key=false,state=0,animation=async()=>{},interaction=async()=>{}}={}){
-  const {map_id:id,map_flag_index,map_source,object}=fixture;
+function setup({fixture:chestFixture=fixture,key=false,state=0,animation=async()=>{},interaction=async()=>{}}={}){
+  const {map_id:id,map_flag_index,map_source,object}=chestFixture;
   const data={schema:'seventh-seal-chapter-story',version:1,maps:{[id]:{
     id,map_flag_index,map_source,source:null,dialogue_status:'source-file-absent',record_count:0,index_count:0,
     header_setup_tlk_raw:0,header_entry_tlk_raw:0,
@@ -175,6 +177,55 @@ testSource('Source-absent TLK maps admit direct objects without inventing an emp
   const report=inspectContentReadiness(content,data,resources);assert.deepEqual(report.errors,[]);assert.equal(report.entrances[0].kind,'direct-object');
   const altered=copy(data);altered.maps[fixture.map_id].source={path:'invented.tlk'};
   assert.throws(()=>validateChapterStory(altered),/无对白地图来源无效/);
+});
+
+testIsland('Seven island CF3 chests retain their source identities, reward slots and single collection action',()=>{
+  const expected=[['M19021',21,[52]],['M19022',19,[84]],['M19023',17,[228]],['M19023',18,[100]],
+    ['M19024',19,[227]],['M19041',9,[350]],['M19041',10,[33,34,35,36,37,38]]];
+  assert.deepEqual(island.chests.map(row=>[row.map_id,row.object.index,nativeKeyedChest(row.object).rewards.map(reward=>reward.id)]),expected);
+  for(const row of island.chests){
+    for(const provenance of [row.map_source,row.animation.source])assert.equal(island.source_hashes[provenance.path],provenance.sha256);
+    assert.equal(nativeKeyedChest(row.object).keyId,0);
+    const {action,frameIndices}=nativeChestAnimation(row.animation,3);
+    assert.equal(action.index,0);assert.equal(action.interval_raw,150);
+    assert.deepEqual(frameIndices,Array.from({length:16},(_,i)=>i));
+    const {data,content}=setup({fixture:row});
+    const resources={object_animations:{[row.map_id]:[row.animation]},interactive_objects:{[row.map_id]:[
+      {object_index_zero_based:row.object.index,source:{...row.object.source,raw_hex:row.object.raw_hex}}]},trigger_regions:{},npcs_by_map:{}};
+    assert.equal(validateStoryBindings(content,data,resources),true);
+    assert.deepEqual(inspectContentReadiness(content,data,resources).errors,[]);
+  }
+});
+
+testIsland('Real CF3 single and six-slot rewards wait for collection and cannot repeat after save/load',async()=>{
+  for(const row of [island.chests[0],island.chests.at(-1)]){
+    const rewards=nativeKeyedChest(row.object).rewards;let animations=0;
+    const context=setup({fixture:row,animation:async({draft})=>{
+      animations++;assert.equal(chapterObjectState(draft,row.map_id,row.object.index,context.data),2);
+      assert.deepEqual(draft.inventory,before.inventory);assert.deepEqual(context.world.value.inventory,before.inventory);
+    }}),before=context.world.snapshot();
+    const result=await context.run();assert.deepEqual(result.rewards,rewards);assert.equal(result.state,3);
+    for(const {id}of rewards){
+      const quantity=inventory=>inventory.filter(item=>item.id===id).reduce((sum,item)=>sum+item.quantity,0);
+      assert.equal(quantity(context.world.value.inventory),quantity(before.inventory)+1);
+    }
+    context.world.replace(await decodeSave(await encodeSave(context.world.snapshot())));
+    const loaded=context.world.snapshot();assert.equal((await context.run()).already_done,true);
+    assert.deepEqual(context.world.snapshot(),loaded);assert.equal(animations,1);
+  }
+});
+
+testIsland('CF3 cancelled collection rolls back all six rewards and saved state2 finishes exactly once',async()=>{
+  const row=island.chests.at(-1),controller=new AbortController();
+  const context=setup({fixture:row,animation:async()=>controller.abort()});
+  const before=context.world.snapshot(),playback={signal:controller.signal,check(){controller.signal.throwIfAborted();}};
+  await assert.rejects(context.runner.runObject({mapId:row.map_id,objectIndex:row.object.index,playback}),{name:'AbortError'});
+  assert.deepEqual(context.world.snapshot(),before);
+  const pending=setup({fixture:row,state:2,interaction:()=>assert.fail('Saved state2 must not restart actor interaction')});
+  pending.world.replace(await decodeSave(await encodeSave(pending.world.snapshot())));
+  assert.deepEqual((await pending.run()).rewards,[33,34,35,36,37,38].map((id,slot)=>({slot,id})));
+  assert.equal(pending.world.value.event_records[row.map_flag_index][row.object.index],'03'+'a5'.repeat(13));
+  const done=pending.world.snapshot();assert.equal((await pending.run()).already_done,true);assert.deepEqual(pending.world.snapshot(),done);
 });
 
 test('real CF4 F6 script keeps its leave choice reusable and commits the seal across its return ANM',async()=>{

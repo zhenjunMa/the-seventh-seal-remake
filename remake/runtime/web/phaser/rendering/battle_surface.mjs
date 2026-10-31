@@ -1,7 +1,7 @@
 import {TextureCache} from './texture_cache.mjs';
 import {pixelSprite} from './pixel_sprite.mjs';
 
-const properties=['globalAlpha','globalCompositeOperation','fillStyle','strokeStyle','lineWidth','font','textAlign','textBaseline','lineJoin'];
+const properties=['globalAlpha','globalCompositeOperation','fillStyle','strokeStyle','lineWidth','font','textAlign','textBaseline','lineJoin','nativeColorSubtract'];
 const rgba=value=>{
   const css=String(value).match(/^rgba?\(\s*([\d.]+)[, ]+([\d.]+)[, ]+([\d.]+)(?:\s*[,/]\s*([\d.]+))?\s*\)$/);
   if(css)return {color:(Number(css[1])<<16)|(Number(css[2])<<8)|Number(css[3]),alpha:css[4]===undefined?1:Number(css[4])};
@@ -25,7 +25,7 @@ export class BattleSurface {
   beginFrame(){
     this.cursor={sprite:0,graphics:0,text:0,particle:0};this.order=0;this.stack=[];this.matrix=[1,0,0,1,0,0];
     this.clipRect={x:0,y:0,width:640,height:480};this.path=[];
-    Object.assign(this,{globalAlpha:1,globalCompositeOperation:'source-over',fillStyle:'#000000',strokeStyle:'#000000',lineWidth:1,font:'12px sans-serif',textAlign:'left',textBaseline:'alphabetic',lineJoin:'miter'});
+    Object.assign(this,{globalAlpha:1,globalCompositeOperation:'source-over',nativeColorSubtract:0,fillStyle:'#000000',strokeStyle:'#000000',lineWidth:1,font:'12px sans-serif',textAlign:'left',textBaseline:'alphabetic',lineJoin:'miter'});
     for(const pool of Object.values(this.pools))for(const object of pool)object.setVisible(false);
     this.textures.begin();
   }
@@ -92,7 +92,8 @@ export class BattleSurface {
       sprite.setPosition(area.x,area.y).setSize(sprite.pixelRegion.sw,sprite.pixelRegion.sh).setScale(target.width/sw,target.height/sh);return;}
     const frame=this.textures.region(source,sx+(area.x-target.x)*sw/target.width,sy+(area.y-target.y)*sh/target.height,
       area.width*sw/target.width,area.height*sh/target.height);
-    this.take('sprite').setTexture(frame.key,frame.frame).setPosition(area.x,area.y).setDisplaySize(area.width,area.height);
+    const sprite=this.take('sprite').setTexture(frame.key,frame.frame).setPosition(area.x,area.y).setDisplaySize(area.width,area.height);
+    sprite.nativeColorSubtract=this.nativeColorSubtract;
   }
   strokeRect(x,y,width,height){const r=this.rectangle(x,y,width,height),style=rgba(this.strokeStyle);
     this.take('graphics').lineStyle(this.lineWidth*this.matrix[0],style.color,style.alpha).strokeRect(r.x,r.y,r.width,r.height);}

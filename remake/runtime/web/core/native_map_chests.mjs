@@ -1,4 +1,4 @@
-// Direct CF4 chests: 410850 rebuilds +48 as a selection-queue ordinal;
+// Direct CF3/CF4 chests: 410850 rebuilds +48 as a selection-queue ordinal;
 // 411F50 checks +F2 through 47B0C0, and 447DE0 reads ten reward IDs at +54.
 // The reward is dispatched by 468B30 only when 4137C0 reaches state3.
 import {evaluateNativeStoryCondition} from './native_story_conditions.mjs';
@@ -21,7 +21,7 @@ export function nativeScriptedChest(object){
 }
 export function nativeKeyedChest(object){
   const {raw,view}=sourceBytes(object?.raw_hex,0x112,'物件');
-  need(raw[0xcf]===4&&view.getUint32(0xf6,true)===0&&raw[0x109]===0,'仅接入原地 CF4 直接奖励箱');
+  need([3,4].includes(raw[0xcf])&&view.getUint32(0xf6,true)===0&&raw[0x109]===0,'仅接入原地 CF3／CF4 直接奖励箱');
   // BA is an optional denial TLK and +53 chooses another possession mode.
   // Linked objects/spawns need their own recovered adapter before admission.
   need(raw[0x53]===0&&view.getUint32(0xba,true)===0

@@ -11,7 +11,7 @@ const required=[
   'evidence/forest_status_instructions_20261011.json',
   'evidence/white_forest_20261026/reward_passives/native_bundle.json',
 ].map(name=>({name,path:local(name)}));
-for(const name of ['GAME.exe','SYSTEM/Object.ITM','Map/m70030.TLK','Map/m72063-3.TLK','Map/m72064.TLK','Fight_Role/031A.CHR','Fight_Role/031B.CHR','Fight_Role/033.CHR'])required.push({name,path:new URL(`../../../${name}`,import.meta.url)});
+for(const name of ['GAME.exe','SYSTEM/Object.ITM','Map/m70030.TLK','Map/m72063-3.TLK','Map/m72064.TLK','Map/m19040.TLK','Map/m73013.TLK','Fight_Role/031A.CHR','Fight_Role/031B.CHR','Fight_Role/033.CHR','Fight_Role/034.CHR'])required.push({name,path:new URL(`../../../${name}`,import.meta.url)});
 if(process.env.SEVENTH_SEAL_ITEM_TEST_CATALOG)required.push({name:process.env.SEVENTH_SEAL_ITEM_TEST_CATALOG,path:process.env.SEVENTH_SEAL_ITEM_TEST_CATALOG});
 const missing=[];
 async function checkMaterials(rows){
@@ -109,10 +109,10 @@ class Oracle extends NativeAssemblyOracle{
 
 test('only registered real CF4/TLK/CHR rewards admit the exact original mode6 blocks',async()=>{
   const admitted=source.catalog.item_capability_admission.passive_item_ids;
-  assert.deepEqual(admitted.filter(id=>![195,202].includes(id)),[127,170]);assert.deepEqual(admitted.filter(id=>[195,202].includes(id)),[195,202]);
+  assert.deepEqual(admitted.filter(id=>![195,202].includes(id)),[127,169,170,208]);assert.deepEqual(admitted.filter(id=>[195,202].includes(id)),[195,202]);
   const original=await readFile(new URL('../../../SYSTEM/Object.ITM',import.meta.url));
   assert.equal(createHash('sha256').update(original).digest('hex'),source.source_hashes['SYSTEM/Object.ITM']);
-  for(const id of [127,170,195,202]){const def=items.definitions[id];assert.equal(isSupportedItemPassiveDefinition(def),true);
+  for(const id of [127,169,170,195,202,208]){const def=items.definitions[id];assert.equal(isSupportedItemPassiveDefinition(def),true);
     assert.equal(original.subarray(def.source.record_offset,def.source.record_offset+959).toString('hex'),def.raw_hex);
     assert.equal(def.equipment_passive.effect_raw_hex,original.subarray(def.source.record_offset+0x2a8,def.source.record_offset+0x36e).toString('hex'));}
   assert.equal(items.definitions[127].behavior.kind,'equip');assert.equal(items.definitions[170].behavior.kind,'status-immunity-crystal');
@@ -131,6 +131,29 @@ test('only registered real CF4/TLK/CHR rewards admit the exact original mode6 bl
     [['registered-enemy-reward','M72064',8,'033',0,3]]);
   for(const [rows,id]of [[origins,195],[energyOrigins,202]])for(const row of rows){const chr=await readFile(new URL(`../../../${row.source.path}`,import.meta.url));
     assert.equal(createHash('sha256').update(chr).digest('hex'),row.source.sha256);assert.equal(chr.readInt32LE(row.source.offset),id);}
+  //169 is an admitted NPC's exact gift;208 is034's fifth zero-based reward
+  //slot in the admitted literal battle. Neither is enabled merely by mode6.
+  for(const [id,effectId,chance]of [[169,12,60],[208,8,0]]){const def=items.definitions[id];
+    assert.equal(def.behavior.kind,'status-immunity-crystal');assert.deepEqual([def.equipment_passive.effect_id_raw,def.equipment_passive.mode_raw,def.equipment_passive.application_chance_raw],[effectId,6,chance]);
+    assert.equal(Buffer.from(def.equipment_passive.effect_raw_hex,'hex').readInt32LE(2),-1);}
+  const giftOrigins=source.catalog.item_capability_admission.passive_sources[169];
+  assert.deepEqual(giftOrigins.map(row=>[row.kind,row.map_id,row.record_id,row.entrance.kind,row.entrance.npc_slot,row.entrance.record_id]),
+    [['registered-story-item-grant','M19040',2,'npc',12,1]]);
+  const gift=giftOrigins[0],giftBytes=await readFile(new URL('../../../Map/m19040.TLK',import.meta.url));
+  assert.ok(content.maps.M19040.npcs.includes(12));assert.equal(giftBytes.readUInt32LE(0x1a+12*4),1);
+  const giftBase=0x1a+giftBytes.readUInt32LE(2)*4,giftRecord=giftBytes.subarray(giftBase+0x66f,giftBase+2*0x66f);
+  assert.equal(giftBytes.readUInt32LE(giftBase+0x33),2);assert.equal(gift.source.offset,giftBase+0x66f);
+  assert.equal(createHash('sha256').update(giftBytes).digest('hex'),gift.source.sha256);
+  assert.deepEqual([giftRecord[0],giftRecord.readUInt32LE(0x23),giftRecord.readUInt32LE(0x27),giftRecord.readUInt32LE(0x2b)],[0,5,0,169]);
+  const bossOrigins=source.catalog.item_capability_admission.passive_sources[208];
+  assert.deepEqual(bossOrigins.map(row=>[row.kind,row.map_id,row.record_id,row.enemy_id,row.enemy_slot,row.reward_slot]),
+    [['registered-enemy-reward','M73013',20,'034',0,5]]);
+  const boss=bossOrigins[0],bossBytes=await readFile(new URL('../../../Fight_Role/034.CHR',import.meta.url)),battleBytes=await readFile(new URL('../../../Map/m73013.TLK',import.meta.url));
+  assert.equal(createHash('sha256').update(bossBytes).digest('hex'),boss.source.sha256);assert.equal(boss.source.offset,8+0xe8+5*4);assert.equal(bossBytes.readInt32LE(boss.source.offset),208);
+  assert.ok(content.maps.M73013.npcs.includes(10));assert.equal(battleBytes.readUInt32LE(0x1a+10*4),20);
+  const battleOffset=0x1a+battleBytes.readUInt32LE(2)*4+19*0x66f,battleRecord=battleBytes.subarray(battleOffset,battleOffset+0x66f);
+  assert.equal(createHash('sha256').update(battleBytes).digest('hex'),boss.battle_source.sha256);assert.equal(boss.battle_source.offset,battleOffset);
+  assert.equal(battleRecord[0],5);assert.equal(battleRecord.subarray(0x4b,0x4b+20).toString('ascii').split('\0')[0],'034.dgp');assert.equal(items.definitions[208].drop_rate,100);
   const forged=copy(items.definitions[170]);forged.equipment_passive.effect_id_raw=35;assert.equal(isSupportedItemPassiveDefinition(forged),false);
 });
 

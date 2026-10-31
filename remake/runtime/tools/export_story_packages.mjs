@@ -38,6 +38,7 @@ function compileTable(mapId,source,texts){
   table.records=table.records.map(record=>{
     const raw=Uint8Array.from(record.raw_hex.match(/../g),part=>parseInt(part,16));
     const {raw_hex,evidence,header_bytes_2_to14_raw,text_raw,...row}=record;
+    if(record.condition_type===8)row.condition_dword_raw_0b=new DataView(raw.buffer).getUint32(0x0b,true);
     if(record.kind===5)row.scripted_battle=scriptedBattleSource(record);
     if(record.kind===4)row.native_combination_hex=nativeCombinationHex(record);
     if(record.kind===8)row.native_service=readNativeService(record,table);

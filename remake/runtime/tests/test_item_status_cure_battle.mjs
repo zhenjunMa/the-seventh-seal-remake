@@ -69,6 +69,7 @@ test('naturally awarded272 uses one native action, cures once without MP/RNG, an
     assert.equal(f.contacts.length,1);assert.equal(f.contacts[0].item_used,used,mode);assert.equal(f.contacts[0].item_effect,effect,mode);assert.equal(f.contacts[0].native_return,Number(used));
     assert.equal(f.battle.state.inventory.find(row=>row.id===272).quantity,used?2:3);assert.equal(f.battle.state.action_count,1);assert.equal(f.battle.state.round,2);
     assert.equal(f.battle.actor('001').charge.gauge,-f.battle.state.scheduler.threshold);assert.equal(f.draws(),n);
+    if(mode==='display-zero'){resources.raw_hp=0;resources.hp.current=f.target.resource_bonuses.hp_current;}
     assert.deepEqual({hp:f.target.hp,mp:f.target.mp,raw_hp:f.target.raw_hp,raw_mp:f.target.raw_mp},resources);
     assert.equal(f.target.native_status_slots[2].raw_hex,used||mode==='absent'?ZERO:freeze.toString('hex'));
     assert.equal(f.events.filter(event=>event.type==='battle-item-used').length,1);assert.ok(!f.events.some(event=>event.type==='battle-interrupted'));

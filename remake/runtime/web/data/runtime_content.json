@@ -770,6 +770,18 @@
     },
     "033": {
       "side": "enemy"
+    },
+    "019": {
+      "side": "enemy"
+    },
+    "020": {
+      "side": "enemy"
+    },
+    "029": {
+      "side": "enemy"
+    },
+    "034": {
+      "side": "enemy"
     }
   },
   "battle_rosters": {
@@ -809,7 +821,9 @@
     "stage01": {},
     "stage02": {},
     "stage04": {},
-    "stage05": {}
+    "stage05": {},
+    "stage08": {},
+    "stage09": {}
   },
   "programs": [
     "m01010-2",
@@ -880,7 +894,9 @@
     "m72063-2",
     "m72062-3",
     "m72063-3",
-    "m72064-1"
+    "m72064-1",
+    "m19010-1",
+    "m73013-1"
   ],
   "maps": {
     "M01060": {
@@ -1777,7 +1793,30 @@
       "npcs": [10,14]
     },
     "M03060": {
-      "npcs": [10,11,12,13,15,16,19,21,22,23,24,25,26,27,28,29,36,37,41]
+      "npcs": [
+        10,
+        11,
+        12,
+        13,
+        15,
+        16,
+        19,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        36,
+        37,
+        41
+      ],
+      "triggers": [
+        9
+      ]
     },
     "M03062": {
       "npcs": [11,12]
@@ -1796,12 +1835,23 @@
     },
     "M29012": {
       "npcs": [
-        11
+        11,
+        12
       ]
     },
     "M29011": {
       "npcs": [
-        11
+        11,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        23
       ]
     },
     "M72010-0-C": {
@@ -2059,12 +2109,262 @@
     "M72064": {
       "npcs": [11],
       "triggers": [31]
+    },
+    "M19010": {
+      "npcs": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        21,
+        22,
+        23
+      ]
+    },
+    "M19020": {
+      "npcs": [
+        10,
+        11,
+        12,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ]
+    },
+    "M19021": {
+      "npcs": [
+        10,
+        11
+      ],
+      "objects": [
+        {
+          "index": 21,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "M19022": {
+      "npcs": [
+        11
+      ],
+      "objects": [
+        {
+          "index": 19,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "M19023": {
+      "npcs": [
+        10
+      ],
+      "objects": [
+        {
+          "index": 17,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 18,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "M19024": {
+      "npcs": [
+        10,
+        11
+      ],
+      "objects": [
+        {
+          "index": 19,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "M19030": {
+      "npcs": [
+        16,
+        17,
+        18
+      ]
+    },
+    "M19030-1": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "M19040": {
+      "npcs": [
+        12,
+        13,
+        14
+      ]
+    },
+    "M19041": {
+      "npcs": [
+        12,
+        13
+      ],
+      "objects": [
+        {
+          "index": 9,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 10,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "M19042": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "M29010": {
+      "npcs": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        23,
+        24
+      ],
+      "triggers": [
+        1
+      ]
+    },
+    "M29013": {
+      "npcs": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ]
+    },
+    "M29014": {
+      "npcs": [
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ]
+    },
+    "M29015": {
+      "npcs": [
+        10,
+        13,
+        14
+      ]
+    },
+    "M73011-02": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "M73011-04": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "M73011-06": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "M73011-08": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "M73011-10": {
+      "npcs": [],
+      "export": {
+        "story": false
+      },
+      "triggers": [
+        2
+      ]
+    },
+    "M73012-01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "M73012-03": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "M73012-05": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "M73012-07": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "M73012-09": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "M73013": {
+      "npcs": [
+        10,
+        23
+      ]
+    },
+    "M73014": {
+      "npcs": [],
+      "triggers": [3]
+    },
+    "M55010": {
+      "npcs": [
+        10,
+        11,
+        12
+      ],
+      "triggers": [
+        1
+      ]
     }
   },
   "story": {
     "events": [],
     "quests": [
-      "content/quests/fire-valley.json"
+      "content/quests/fire-valley.json",
+      "content/quests/wind-region.json"
     ]
   }
 }

@@ -11,7 +11,8 @@ test('All forest source frames retain hashes and dimensions; the background pass
     assert.equal(createHash('sha256').update(raw).digest('hex'),a.sha256);
     assert.equal(raw.readUInt32BE(16),a.width);assert.equal(raw.readUInt32BE(20),a.height);images.set(a.path,a.path);
   }
-  const calls=[],ctx={drawImage:(...args)=>calls.push(args)};
+  const calls=[],stack=[],ctx={nativeColorSubtract:0,drawImage:(...args)=>calls.push(args),
+    save(){stack.push(this.nativeColorSubtract);},restore(){this.nativeColorSubtract=stack.pop();}};
   drawForestStageBackground(ctx,stage,images,0);
   assert.ok(calls[0][0].endsWith('frame_028.png'));assert.deepEqual(calls[1].slice(1),[380,95,640,305,120,196.875,720,343.125]);
   assert.equal(calls.length,3);assert.ok(calls[2][0].includes('/FB13A/'));

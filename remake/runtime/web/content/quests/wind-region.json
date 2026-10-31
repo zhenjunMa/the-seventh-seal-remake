@@ -1,0 +1,37 @@
+{
+  "schema": "seventh-seal-quests",
+  "version": 1,
+  "quests": [
+    {
+      "id": "wind-region-main",
+      "name": "追赴劲风岛",
+      "maps": ["M72061", "M29010", "M29011", "M29012", "M03060", "M55010", "M19010", "M19020", "M19040", "M19030-1", "M19030", "M73014", "M73013", "M17010"],
+      "stages": [
+        {
+          "id": "returned",
+          "status": "completed",
+          "text": "已返回火之谷与凯会合，准备应对魔王的袭击。",
+          "when": {"flag": {"index": 10, "bit": 5, "value": true}}
+        },
+        {
+          "id": "return-to-valley",
+          "status": "active",
+          "text": "圣山发生巨变，立即返回火之谷。东大陆海岸的水智者仍在等候。",
+          "when": {"flag": {"index": 12, "bit": 1, "value": true}}
+        },
+        {
+          "id": "pursuit",
+          "status": "active",
+          "text": "经力城空塔返回飘城，从广场离城前往东大陆海岸，搭船到劲风岛追查魔王的去向。",
+          "when": {"flag": {"index": 465, "bit": 1, "value": true}}
+        },
+        {
+          "id": "unavailable",
+          "status": "hidden",
+          "text": "",
+          "when": {"all": []}
+        }
+      ]
+    }
+  ]
+}

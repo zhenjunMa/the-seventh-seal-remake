@@ -64,6 +64,7 @@ node remake/runtime/tools/check_content.mjs --json
 | 炎城 | ember-city-index | export_ember_city_index.py |
 | 里白木森林／幻影之森／封印之森 | inner-white-forest-index | export_inner_white_forest_index.py |
 | 飘城全时期 | floating-city-index | export_floating_city_index.py |
+| 力城／劲风岛／圣山／海岸 | wind-region-index | export_wind_region_index.py |
 
 ```console
 python3 -B remake/runtime/tools/build_runtime.py --target ember-city-index --run
@@ -137,6 +138,8 @@ plan只用已提交元数据及既有图集区域，不读PNG或写正式产物�
 基础导出器extract、export_movement、export_combat_lab、export_combat_presentation已在本目录；正式生产不引用prototype。各自仍需原输入及保留证据，使用前核范围。共享原版资源与存档解析、道具初始化模块在`source/`，通过`source.<模块名>`导入；媒体统一`web/assets/`。
 
 每份共享生成表只有一个生产者；例如状态表由enemies生成，party-skills只校验引用。content贯通地图、剧情、怪物、玩家、配置、表现、声音、字体和最终登记。独立原城镇菜单素材使用native-services目标，已经包含在content中。
+
+力城／劲风岛交接使用`node remake/runtime/tools/create_wind_region_fixtures.mjs --from <FF-02结束档> --out <新输出目录>`；`--near-events`仅调整交互附近的玩家坐标和八向朝向。加`--services-only`只准备力城宿屋、普通道具商和合成师的现场样本，保留原资金、背包及角色资源；成功买卖、住宿和合成由正式页面实际操作。
 
 ### 原版存档分析
 
@@ -215,6 +218,7 @@ python3 -B remake/runtime/tools/source/inspect_equipment.py /path/to/SaveGame0.D
 | `ember-city-index` | [export_ember_city_index.py](export_ember_city_index.py) | 无声明依赖 |
 | `inner-white-forest-index` | [export_inner_white_forest_index.py](export_inner_white_forest_index.py) | 无声明依赖 |
 | `floating-city-index` | [export_floating_city_index.py](export_floating_city_index.py) | 无声明依赖 |
+| `wind-region-index` | [export_wind_region_index.py](export_wind_region_index.py) | 无声明依赖 |
 | `native-services` | [export_native_services.py](export_native_services.py) | 无声明依赖 |
 
 <!-- 自动生成：构建目标结束 -->

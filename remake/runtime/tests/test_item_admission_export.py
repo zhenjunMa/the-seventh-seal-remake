@@ -7,6 +7,7 @@ import hashlib
 import json
 import os
 import shutil
+import struct
 import subprocess
 import sys
 import tempfile
@@ -159,6 +160,65 @@ class ItemAdmissionExport(unittest.TestCase):
         city = {int(ident) for ident, sources in admission['sources'].items()
             if any(row['kind'] == 'tlk-shop-item' and row['map_id'] == 'M01063' and row['record_id'] == 2 for row in sources)}
         self.assertEqual(city, set(goods))
+        # New shops are checked against original WORD goods and their actual
+        # NPC choice roots, including items also obtainable from earlier gifts.
+        wind_goods = set()
+        for map_id, record_id, npc_slot, root_id, expected in [
+            ('M29013', 2, 12, 1, [8, 11, 12, 13, 14, 15, 21, 23, 24, 25, 26, 27, 28, 272, 280, 315, 320, 321, 323, 324, 325, 398]),
+            ('M29013', 4, 16, 3, [50, 51, 52, 53, 54, 55]),
+            ('M29013', 6, 10, 5, [273, 274, 275, 276, 278, 279, 283, 284, 285, 307, 308, 309, 310, 311, 312, 313, 314, 316, 317, 318, 319, 322]),
+            ('M29015', 2, 10, 1, [60, 61, 62, 63, 65, 66, 3, 77, 78, 79, 80, 81, 82, 4, 92, 93, 94, 95, 96, 97, 67, 83, 98]),
+        ]:
+            path = f'Map/{map_id.lower()}.TLK'
+            tlk = (ROOT / path).read_bytes()
+            digest = producer.sha(tlk)
+            base = 0x1a + producer.u32(tlk, 2) * 4
+            self.assertIn(npc_slot, self.registration['maps'][map_id]['npcs'])
+            self.assertEqual(producer.u32(tlk, 0x1a + npc_slot * 4), root_id)
+            root_offset = base + (root_id - 1) * 0x66f
+            self.assertEqual((tlk[root_offset], tlk[root_offset + 1]), (0, 1))
+            self.assertEqual(producer.u32(tlk, root_offset + 0x537 + 100), record_id)
+            offset = base + (record_id - 1) * 0x66f
+            self.assertEqual(tlk[offset], 8)
+            actual = [ident for ident in struct.unpack_from('<32H', tlk, offset + 0x37) if ident]
+            self.assertEqual(actual, expected)
+            wind_goods.update(actual)
+            for slot, ident in enumerate(actual):
+                proof = next(row for row in admission['sources'][str(ident)]
+                    if row['kind'] == 'tlk-shop-item' and row['map_id'] == map_id and row['record_id'] == record_id and row['slot'] == slot)
+                self.assertEqual(proof['entrance'], dict(map_id=map_id, record_id=root_id, kind='npc', npc_slot=npc_slot))
+                at = offset + 0x37 + slot * 2
+                self.assertEqual(proof['source'], dict(path=path, sha256=digest, offset=at, bytes=2, raw_hex=tlk[at:at + 2].hex()))
+        wind_chest_gear = {52, 84, 100}
+        for ident, map_id, object_index, reward_slot in [
+            (52, 'M19021', 21, 0), (84, 'M19022', 19, 0), (100, 'M19023', 18, 0),
+            *[(ident, 'M19041', 10, ident - 33) for ident in range(33, 39)],
+        ]:
+            self.assertIn(dict(index=object_index, handler='keyed-chest'), self.registration['maps'][map_id]['objects'])
+            path = f'Map/{map_id.lower()}.dat'
+            dat = (ROOT / path).read_bytes()
+            width, height = struct.unpack_from('<II', dat, 0x146)
+            table = 0x172 + width * height * 64 + 32 * (0x2a + (0x42 if producer.u32(dat, 0x18) == 1 else 0x2b) + 0x1b + 0x110)
+            object_offset = table + object_index * 0x112
+            self.assertEqual(dat[object_offset + 0xcf], 3)
+            self.assertEqual(producer.u32(dat, object_offset + 0xf6), 0)
+            offset = object_offset + 0x54 + reward_slot * 4
+            self.assertEqual(producer.u32(dat, offset), ident)
+            proof = next(row for row in admission['sources'][str(ident)] if row['kind'] == 'registered-map-chest-grant'
+                and row['map_id'] == map_id and row['object_index'] == object_index and row['reward_slot'] == reward_slot)
+            self.assertEqual(proof['source'], dict(path=path, sha256=producer.sha(dat), offset=offset, bytes=4, raw_hex=dat[offset:offset + 4].hex()))
+        gift_path = 'Map/m19040.TLK'
+        gift_tlk = (ROOT / gift_path).read_bytes()
+        gift_base = 0x1a + producer.u32(gift_tlk, 2) * 4
+        self.assertIn(12, self.registration['maps']['M19040']['npcs'])
+        self.assertEqual(producer.u32(gift_tlk, 0x1a + 12 * 4), 1)
+        self.assertEqual(producer.u32(gift_tlk, gift_base + 0x33), 2)
+        for ident, record_id, next_id in [(169, 2, 3), (16, 3, 4), (18, 4, 7)]:
+            offset = gift_base + (record_id - 1) * 0x66f
+            self.assertEqual(tuple(producer.u32(gift_tlk, offset + field) for field in (0x23, 0x27, 0x2b, 0x33)), (5, 0, ident, next_id))
+            proof = next(row for row in admission['sources'][str(ident)] if row['kind'] == 'registered-story-item-grant'
+                and row['map_id'] == 'M19040' and row['record_id'] == record_id)
+            self.assertEqual(proof['source'], dict(path=gift_path, sha256=producer.sha(gift_tlk), offset=offset, record_id=record_id, record_bytes=0x66f))
         recipes = {int(ident) for ident, sources in admission['sources'].items()
             if exported['definitions'][ident]['type_raw_24'] == 1
             and any(row['kind'] == 'registered-recipe-product' for row in sources)}
@@ -168,19 +228,23 @@ class ItemAdmissionExport(unittest.TestCase):
         enemy_gear = {int(ident) for ident, sources in admission['sources'].items()
             if exported['definitions'][ident]['behavior']['kind'] == 'equip'
             and any(row['kind'] in ('registered-enemy-reward', 'registered-encounter-enemy-reward') for row in sources)}
-        self.assertEqual(set(admission['promoted_item_ids']), set(legacy) | city - set(producer.IDS) | recipes | enemy_gear)
+        wind_shop_gear = {ident for ident in wind_goods if exported['definitions'][str(ident)]['type_raw_24'] in (1, 2)}
+        self.assertEqual(set(admission['promoted_item_ids']), (set(legacy) | city | wind_shop_gear | wind_chest_gear) - set(producer.IDS) | recipes | enemy_gear)
         materials = {int(ident) for ident in admission['sources']
             if exported['definitions'][ident]['type_raw_24'] == 3 and exported['definitions'][ident]['subtype_raw_25'] == 2}
         medicine = {13, 21, *range(23, 29), *range(272, 277), *range(278, 281),
             *range(283, 286), *range(307, 312), 315, 320, 321, 323, 324, 331, 399}
+        medicine |= ({ident for ident in wind_goods if exported['definitions'][str(ident)]['type_raw_24'] == 5}
+                     - set(producer.SIMPLE_RESTORE_IDS)) | {16, 18, *range(33, 39)}
         stone = admission['sources']['399'][0]
         self.assertEqual((stone['kind'], stone['map_id'], stone['record_id'], stone['enemy_id'], stone['reward_slot']),
                          ('registered-enemy-reward', 'M70078_2', 6, '024', 1))
         self.assertEqual(stone['source']['raw_hex'], '8f010000')
         self.assertEqual(exported['definitions']['399']['battle']['same_side_raw_157'], 0)
-        self.assertEqual(set(exported['catalog']['item_capability_admission']['promoted_item_ids']), medicine | materials | {127, 170, 195, 202})
+        passives = {127, 169, 170, 195, 202, 208}
+        self.assertEqual(set(exported['catalog']['item_capability_admission']['promoted_item_ids']), medicine | materials | passives)
         old_enabled = {1, 4, 8, 10, 11, 12, 39, 40, 41, 42, 50, 51, 61, 127, 170, 272}
-        self.assertEqual(set(exported['catalog']['default_enabled_item_ids']), old_enabled | city | recipes | medicine | materials | enemy_gear | {195, 202})
+        self.assertEqual(set(exported['catalog']['default_enabled_item_ids']), old_enabled | city | wind_shop_gear | wind_chest_gear | recipes | medicine | materials | enemy_gear | passives)
         for ident in materials:
             self.assertEqual(exported['definitions'][str(ident)]['behavior']['kind'], 'crafting-material')
             self.assertNotIn('effect', exported['definitions'][str(ident)])
@@ -197,7 +261,7 @@ class ItemAdmissionExport(unittest.TestCase):
             elif kind == 'crafting-material':
                 self.assertIn('native-service-material-input-output', definition['behavior']['implemented_scope'])
             else:
-                self.assertIn(kind, ('simple-restore', 'status-cure', 'status-attack', 'revival-item', 'status-clear'))
+                self.assertIn(kind, ('simple-restore', 'status-cure', 'status-attack', 'revival-item', 'status-clear', 'status-support'))
                 self.assertIn('effect', definition)
                 if kind == 'simple-restore':
                     # The original baseline restorers omit the optional flag;
@@ -293,13 +357,13 @@ class ItemAdmissionExport(unittest.TestCase):
         capabilities = producer.admit_registered_status_cures(definitions, no_sources)
         producer.admit_registered_equipment_passives(definitions, no_sources, capabilities)
         self.assertEqual(capabilities['passive_item_ids'], [])
-        for ident in (127, 170, 195, 202):
+        for ident in (127, 169, 170, 195, 202, 208):
             self.assertTrue(producer.equipment_immunity_supported(definitions[str(ident)]))
             self.assertFalse(definitions[str(ident)]['availability']['enabled'])
         admission = producer.admit_registered_equipment(definitions, self.seed, self.story, self.registration)
         capabilities = producer.admit_registered_status_cures(definitions, admission)
         producer.admit_registered_equipment_passives(definitions, admission, capabilities)
-        self.assertEqual([ident for ident in capabilities['passive_item_ids'] if ident not in (195, 202)], [127, 170])
+        self.assertEqual([ident for ident in capabilities['passive_item_ids'] if ident not in (195, 202)], [127, 169, 170, 208])
         self.assertEqual([ident for ident in capabilities['passive_item_ids'] if ident in (195, 202)], [195, 202])
         self.assertEqual(capabilities['passive_sources']['127'][0]['kind'], 'registered-map-chest-grant')
         self.assertEqual(capabilities['passive_sources']['170'][0]['map_id'], 'M70030')
@@ -316,13 +380,35 @@ class ItemAdmissionExport(unittest.TestCase):
         energy = definitions['202']['equipment_passive']
         self.assertEqual((energy['effect_id_raw'], energy['mode_raw'], energy['application_chance_raw']), (38, 6, 0))
         self.assertEqual(producer.i32(bytes.fromhex(energy['effect_raw_hex']), 2), -1)
-        for ident in (127, 170, 195, 202):
+        gift_source = capabilities['passive_sources']['169']
+        self.assertEqual([(row['kind'], row['map_id'], row['record_id'], row['entrance']['npc_slot'], row['entrance']['record_id']) for row in gift_source],
+                         [('registered-story-item-grant', 'M19040', 2, 12, 1)])
+        boss_source = capabilities['passive_sources']['208']
+        self.assertEqual([(row['kind'], row['map_id'], row['record_id'], row['enemy_id'], row['enemy_slot'], row['reward_slot']) for row in boss_source],
+                         [('registered-enemy-reward', 'M73013', 20, '034', 0, 5)])
+        original_boss = (ROOT / 'Fight_Role/034.CHR').read_bytes()
+        self.assertEqual(boss_source[0]['source'], dict(path='Fight_Role/034.CHR', sha256=producer.sha(original_boss),
+                         offset=8 + 0xe8 + 5 * 4, bytes=4, raw_hex=original_boss[8 + 0xe8 + 5 * 4:8 + 0xe8 + 6 * 4].hex()))
+        self.assertEqual(producer.i32(original_boss, 8 + 0xe8 + 5 * 4), 208)
+        for ident, effect_id, chance in [(169, 12, 60), (208, 8, 0)]:
+            passive = definitions[str(ident)]['equipment_passive']
+            self.assertEqual((passive['effect_id_raw'], passive['mode_raw'], passive['application_chance_raw']), (effect_id, 6, chance))
+            self.assertEqual(producer.i32(bytes.fromhex(passive['effect_raw_hex']), 2), -1)
+        for ident in (127, 169, 170, 195, 202, 208):
             row = definitions[str(ident)]
             self.assertEqual(row['equipment_passive']['effect_raw_hex'], bytes.fromhex(row['raw_hex'])[0x2a8:0x36e].hex())
 
     def test_only_registered_reachable_gifts_admit_gear_not_other_npcs_in_the_same_tlk(self):
         registration = copy.deepcopy(self.registration)
         registration['maps']['M17025']['npcs'] = []
+        definitions = self.source_definitions()
+        admission = producer.admit_registered_equipment(definitions, self.seed, self.story, registration)
+        # Removing the gift cannot remove the independent, newly admitted
+        # M29013 NPC16 ->r3 choice ->r4 WORD slot0 shop acquisition.
+        self.assertTrue(definitions['50']['availability']['enabled'])
+        self.assertEqual([(row['kind'], row['map_id'], row['record_id'], row['slot'], row['entrance']['npc_slot']) for row in admission['sources']['50']],
+                         [('tlk-shop-item', 'M29013', 4, 0, 16)])
+        registration['maps']['M29013']['npcs'] = [slot for slot in registration['maps']['M29013']['npcs'] if slot != 16]
         definitions = self.source_definitions()
         admission = producer.admit_registered_equipment(definitions, self.seed, self.story, registration)
         self.assertFalse(definitions['50']['availability']['enabled'])
@@ -375,7 +461,7 @@ class ItemAdmissionExport(unittest.TestCase):
             output = target / 'web/data/items.json'
             exported = json.loads(output.read_text('utf-8'))
             self.assert_current_admission(exported)
-            self.assertEqual(exported['catalog']['item_capability_admission']['passive_item_ids'], [127, 170, 195, 202])
+            self.assertEqual(exported['catalog']['item_capability_admission']['passive_item_ids'], [127, 169, 170, 195, 202, 208])
             self.assertEqual(exported['definitions']['272']['behavior']['kind'], 'status-cure')
             environment = dict(os.environ, SEVENTH_SEAL_ITEM_TEST_CATALOG=str(output))
             result = subprocess.run(['node', '--import', './remake/runtime/tests/preserve_history.mjs', '--test',

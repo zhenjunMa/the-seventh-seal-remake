@@ -36,8 +36,8 @@ class ItemPresentationExport(unittest.TestCase):
         cls.catalog['definitions'] = definitions
         admission = producer.admit_registered_equipment(definitions, seed, story, registration)
         cls.capability = producer.admit_registered_status_cures(definitions, admission)
-        cls.expected_items = {8, 11, 12, 13, 21, *range(23, 29), *range(272, 277), *range(278, 281),
-            *range(283, 286), *range(307, 312), 315, 320, 321, 323, 324, 331}
+        cls.expected_items = {8, 11, 12, 13, 14, 15, 16, 18, 21, *range(23, 29), *range(33, 39),
+            *range(272, 277), *range(278, 281), *range(283, 286), *range(307, 326), 331, 398, 399}
         cls.effect_tokens = {presentation.token(cls.itm[0x61c + (ident - 1) * 959:0x61c + ident * 959], 0x126)
             for ident in cls.expected_items} - {''}
 
@@ -55,7 +55,7 @@ class ItemPresentationExport(unittest.TestCase):
         with self.assertRaises(AssertionError):
             presentation.item_presentations(changed, self.itm)
         unsupported = copy.deepcopy(self.catalog)
-        unsupported['definitions']['14']['effect'] = {}
+        unsupported['definitions']['31']['effect'] = {}
         with self.assertRaises(AssertionError):
             presentation.item_presentations(unsupported, self.itm)
 

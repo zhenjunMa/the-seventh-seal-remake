@@ -12,6 +12,7 @@ import {WorldStore,encodeSave,decodeSave} from '../web/core/world.mjs';
 import {nativeMapMovement} from '../web/core/map_locomotion.mjs';
 import {MovementMap} from '../web/core/movement.mjs';
 import {nativeKeyedChest} from '../web/core/native_map_chests.mjs';
+import {admitPartyMember} from '../web/core/party_members.mjs';
 const ids=['M70010','M70020','M70030','M70040','M70050','M70060'];
 const read=async path=>JSON.parse(await readFile(new URL(`../web/${path}`,import.meta.url),'utf8'));
 const definition=await read('data/runtime_content.json');
@@ -81,4 +82,25 @@ test('a source-absent compact map opens its real direct chest without a dialogue
   world.replace(await decodeSave(await encodeSave(world.snapshot()),Object.keys(content.maps)));
   const after=world.snapshot();assert.equal((await runner.runObject({mapId:'M70020',objectIndex:3})).already_done,true);
   assert.deepEqual(world.snapshot(),after);assert.equal(animations,1);
+});
+
+test('formal compact plaza exit checks the controlled actor DWORD and opens the coast only for Wadi after the temple',options,async()=>{
+  const {repository:repo,seed,content}=await repository();await repo.ensureMap('M03060');
+  const record=repo.story.maps.M03060.records.find(row=>row.id===17);
+  assert.equal(record.raw_hex,undefined);assert.equal(record.condition_dword_raw_0b,2);
+  const worldMap=await read('data/world_map.json');
+  for(const leader of ['003','004']){
+    const initial=structuredClone(seed);initial.opening.status='complete';initial.location={map_id:'M03060',x:128,y:1597,direction:2};
+    for(const id of ['003','004'])admitPartyMember(initial,id,{definitions:repo.story.role_definitions,content});
+    initial.leader_id=leader;initial.flags[465]|=1;
+    const world=new WorldStore(initial,Object.keys(content.maps)),before=world.snapshot(),dialogues=[];
+    const runner=new ChapterRunner({world,data:repo.story,content,say:async({record})=>dialogues.push(record.id),
+      worldMapState:()=>({areas:worldMap.areas.map(({id,selected_index,statuses})=>({id,selected_index,statuses:[...statuses]}))})});
+    const result=await runner.runTrigger({mapId:'M03060',triggerId:9});
+    if(leader==='003'){
+      assert.deepEqual(result.world_map_requested,{area:1});assert.equal(world.value.world_map.areas[1].statuses[6],0);
+    }else{
+      assert.equal(result.world_map_requested,null);assert.deepEqual(dialogues,[17]);assert.deepEqual(world.value.world_map,before.world_map);
+    }
+  }
 });

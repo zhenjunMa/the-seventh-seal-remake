@@ -72,9 +72,9 @@ def program_map_context(commands, maps, ident):
                 descriptors.append(dict(map_id=map_id, descriptor_id=descriptor['id'], source=descriptor.get('source')))
     control_maps = list(dict.fromkeys(row['map_id'] for row in loads))
     caller_maps = list(dict.fromkeys(row['map_id'] for row in [*callers, *descriptors]))
-    if not control_maps and len(caller_maps) != 1:
-        raise ValueError(f'ANM {ident} without opcode10 requires one actual registered caller map; got {caller_maps}')
-    return dict(control_map=loads[-1]['map_id'] if loads else caller_maps[0],
+    if not control_maps and not caller_maps:
+        raise ValueError(f'ANM {ident} without opcode10 requires an actual registered caller map')
+    return dict(control_map=loads[-1]['map_id'] if loads else caller_maps[0] if len(caller_maps) == 1 else None,
                 control_maps=control_maps, caller_maps=caller_maps,
                 maps=list(dict.fromkeys([*caller_maps, *control_maps])),
                 context_sources=dict(map_commands=loads, caller_records=callers, caller_descriptors=descriptors))
@@ -239,8 +239,8 @@ def export():
                 continue
             obj = next(row for row in maps[ident]['objects'] if row['index'] == selected['index'])
             raw = bytes.fromhex(obj['raw_hex'])
-            if raw[0xCF] != 4 or u32(raw, 0xF6):
-                raise ValueError(f'Not a native direct-reward CF4 chest: {ident}:{selected["index"]}')
+            if raw[0xCF] not in (3, 4) or u32(raw, 0xF6):
+                raise ValueError(f'Not a native direct-reward CF3/CF4 chest: {ident}:{selected["index"]}')
             item_ids.update(u32(raw, at) for at in [0xF2, *range(0x54, 0x7C, 4)] if u32(raw, at))
     ITEM_IDS = sorted(item_ids)
     definitions = {}
@@ -255,7 +255,7 @@ def export():
         definitions[str(ident)] = dict(id=ident, name=raw[4:28].split(b"\0")[0].decode("gbk", "strict"),
             raw_hex=raw.hex(), record_sha256=sha(raw), instance_byte9_raw=raw[0x176],
             type_raw_24=raw[0x24],allowed_role_mask_raw_13e=u32(raw,0x13E),
-            initializer_value_pairs=pairs, deterministic_initializer_ranges=all(p["minimum"]==p["maximum"] for p in pairs),
+            initializer_value_pairs=pairs, deterministic_initializer_ranges=all(p["maximum"]<=p["minimum"] for p in pairs),
             source=source("SYSTEM/Object.ITM", hashes["SYSTEM/Object.ITM"], offset,record_bytes=0x3BF,record_id=ident),
             native_evidence=["ev_059378b70e0c3d2d6a7d89406c901bd8453f733aa06817ae33106d860a16fa22"],
             limitations=["This is a definition record, not an initialized or awarded inventory instance."])

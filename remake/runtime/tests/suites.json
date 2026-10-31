@@ -92,6 +92,7 @@
         "test_registered_item_admission.mjs",
         "test_source_skill_configuration.mjs",
         "test_white_forest_packages.mjs",
+        "test_wind_region.mjs",
         "test_yc05_jl03_phase.mjs"
       ],
       "layer": "content",
@@ -210,6 +211,7 @@
         "test_startup.mjs",
         "test_story_completion.mjs",
         "test_story_media.py",
+        "test_wind_entry_items.mjs",
         "test_white_forest_index.py",
         "test_white_forest_landing.mjs",
         "test_white_forest_maps.py",
@@ -278,6 +280,7 @@
     }
   },
   "requirements": {
+    "test_wind_entry_items.mjs": ["SYSTEM/Object.ITM", "Fight_Role/029.CHR", "Fight_Role/034.CHR", "Fight_Role/Status", "remake/runtime/evidence/wind_region_20261031/browser_outputs/boss_first_blocked_log.json"],
     "test_battle_appearance_source.mjs": ["GAME.exe", "Fight_Role/018.CHR", "remake/runtime/tests/fixtures/battle_appearance2_native.json"],
     "test_actor_effects_source.mjs": ["GAME.exe", "remake/runtime/tests/fixtures/anm_actor_blend_native.json", "Animate/m01060-2.anm", "Animate/m17029-1.anm", "Animate/m17030-1.anm", "Animate/m70073-1.anm", "Animate/m70078-1.anm", "Animate/m01040-5.anm", "Animate/m01050-3.anm", "Animate/m01022-1.anm", "Animate/m01022-2.anm"],
     "test_native_story_conditions.mjs": ["Map/m03023.TLK"],
@@ -328,7 +331,7 @@
     "test_ember_city_battle_source.py": ["python:PIL", "remake/runtime/evidence/turn_rules_assembly_20261011.json"],
     "test_ember_city_story_source.mjs": ["Map/M01030.DAT", "Map/M01030.TLK", "Map/M01031.DAT", "Map/M01031.TLK", "Map/M01040.DAT", "Map/M01040.TLK", "Map/M01041.DAT", "Map/M01041.TLK", "Animate/m01040-1.anm", "Animate/m01040-2.anm", "Animate/m01060-2.anm", "remake/runtime/web/data/chapter_map_resources.json"],
     "test_ember_city_items.py": ["python:PIL", "remake/runtime/evidence/fire_valley_20261024/stage12_status_apply.json", "remake/runtime/evidence/forest_status_instructions_20261011.json", "remake/runtime/evidence/battle_revive_recovery_native_20261015.json", "remake/runtime/evidence/fire_valley_20261025/support_507e20.json", "Fight_Role/021.CHR", "remake/runtime/evidence/inner_white_forest_20261030/item399_native.json"],
-    "test_equipment_passives.mjs": ["remake/runtime/evidence/forest_status_instructions_20261011.json", "remake/runtime/evidence/white_forest_20261026/reward_passives/native_bundle.json", "Map/m72063-3.TLK", "Map/m72064.TLK", "Fight_Role/031A.CHR", "Fight_Role/031B.CHR", "Fight_Role/033.CHR", "remake/runtime/web/data/party_rewards.json"],
+    "test_equipment_passives.mjs": ["remake/runtime/evidence/forest_status_instructions_20261011.json", "remake/runtime/evidence/white_forest_20261026/reward_passives/native_bundle.json", "Map/m72063-3.TLK", "Map/m72064.TLK", "Map/m19040.TLK", "Map/m73013.TLK", "Fight_Role/031A.CHR", "Fight_Role/031B.CHR", "Fight_Role/033.CHR", "Fight_Role/034.CHR", "remake/runtime/web/data/party_rewards.json"],
     "test_finale_defeat_recovery.mjs": ["remake/runtime/evidence/fire_valley_20261025/browser_diagnostic/delivery_finale_defeat_validation_failure_log.json"],
     "test_fire_valley_battle_source.py": ["python:PIL", "remake/runtime/evidence/chapter_native.json", "remake/runtime/evidence/party_magic_native.json", "remake/runtime/evidence/turn_rules_assembly_20261011.json"],
     "test_fire_valley_index.py": ["python:PIL", "remake/runtime/evidence/fire_valley_20261024/source_index.json"],
@@ -568,6 +571,10 @@
         "test_fairy_temple.mjs",
         "test_forest_map_mechanisms.mjs"
       ]
+    },
+    "wind-region": {
+      "maps": ["m290*", "m190*", "m730*", "m55010"],
+      "tests": ["test_wind_region*"]
     }
   },
   "browser": {

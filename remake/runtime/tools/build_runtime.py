@@ -122,7 +122,7 @@ for target in ['party-combat','party-skills','party-rewards','item-presentation'
     STEPS[target]=replace(STEPS[target],inputs=(*STEPS[target].inputs,'data/runtime_content.json'))
 
 STEPS['story-check'] = Step('check_content.mjs', (), ('chapter-story','opening-seed','enemies'),
-    inputs=('data/runtime_content.json','data/opening_seed.json','data/forest_combat.json',
+    inputs=('data/runtime_content.json','data/opening_seed.json','data/forest_combat.json','data/forest_ai.json','data/enemy_battle_view.json',
             'data/chapter_story.json','data/chapter_map_resources.json','data/maps'))
 source_stages = {ident: row for ident, row in stage_exports().items() if row['export'] == 'source'}
 STEPS['battle-stages'] = Step('export_battle_stages.py',
@@ -231,6 +231,12 @@ STEPS['inner-white-forest-index']=Step('export_inner_white_forest_index.py',
 STEPS['floating-city-index']=Step('export_floating_city_index.py',
     ('data/library/floating_city.json','../evidence/floating_city_20261030/source_index.json'),
     reports=('floating_city_20261030/source_index.json',),
+    inputs=('../tools/export_fire_valley_index.py','../tools/route_extract_resources.py',
+            '../tools/map_npc_fields.py','core/chapter_animation.mjs','core/story_flow_compiler.mjs'),
+    sources=fire_valley_source_files())
+STEPS['wind-region-index']=Step('export_wind_region_index.py',
+    ('data/library/wind_region.json','../evidence/wind_region_20261031/source_index.json'),
+    reports=('wind_region_20261031/source_index.json',),
     inputs=('../tools/export_fire_valley_index.py','../tools/route_extract_resources.py',
             '../tools/map_npc_fields.py','core/chapter_animation.mjs','core/story_flow_compiler.mjs'),
     sources=fire_valley_source_files())

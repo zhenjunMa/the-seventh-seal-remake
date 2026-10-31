@@ -1,7 +1,8 @@
 """The deterministic subset of GAME.exe item initializer 0x47B3C0.
 
 Only recreates the fields the native initializer writes. Other bytes remain
-intact. All min/max pairs must match: random initialization is unsupported.
+intact. Maximum <= minimum returns minimum without RNG; positive spans remain
+unsupported here.
 Source: save_analysis_20261010/rea_format_evidence.json inventory_init
 (GAME.exe SHA-256 fc6c0194...).
 """
@@ -28,7 +29,7 @@ def initialize_existing_instance(instance, definition):
     result[10:13] = b'\0\0\0'
     for destination, source in VALUE_PAIRS:
         minimum, maximum = struct.unpack_from('<2i', definition, source)
-        if minimum != maximum:
+        if minimum < maximum:
             raise ValueError(f'Random value range at definition +0x{source:X} is unsupported.')
         struct.pack_into('<i', result, destination, minimum)
     return bytes(result)

@@ -19,7 +19,8 @@ const dataView = b => new DataView(b.buffer, b.byteOffset, b.byteLength);
 const hex = b => Array.from(b, n => n.toString(16).padStart(2, '0')).join('');
 const add = (a, b) => (a + b) | 0;
 const pct = (base, amount, percent) => add(amount, idiv(Math.imul(add(base, amount), percent), 100));
-const GROWTH_OFFSETS = [0x24,0x28,0x2c,0x30,0x34,0x38,0x3c,0x40,0x44,0x48,0x4c,0x58,0x5c,0x64];
+const GROWTH_OFFSETS = [0x24,0x28,0x2c,0x30,0x34,0x38,0x3c,0x40,0x44,0x48,0x4c,0x58,0x5c,0x64,
+  ...Array.from({length:6},(_,index)=>0x7a+index*4)];
 
 function savedHeader(role, template) {
   const initial = bytes(template.header_raw_hex, 0x30b, '初始角色头');
@@ -33,7 +34,7 @@ function savedHeader(role, template) {
   for (const [name, offset] of [['attack',0x40], ['defense',0x48]])
     need(role.attributes_stored?.[name]?.current === at(offset) && role.attributes_stored?.[name]?.base === at(offset + 4),
       '保存成长属性不一致');
-  // Native level growth modifies these recovered DWORDs only. Source identity,
+  // Native growth and47D960 element potions modify these recovered DWORDs. Source identity,
   // side, growth-row selector, resistances and the rest of this bounded header
   // are retained rather than accepting a foreign CHR under the same role ID.
   const mutable = new Set(GROWTH_OFFSETS.flatMap(n => [n,n+1,n+2,n+3]));
@@ -138,7 +139,8 @@ export function partyResourcesForWorld(actor,options={}) {
   need(actor.mp.current===Math.max(0,mp+bonus.mp_current) && actor.raw_by_address?.[addr(0x524a709)] === mp, 'MP显示与原始提交字段不一致');
   need(actor.hp.maximum === actor.raw_hp_maximum + bonus.hp_maximum && actor.mp.maximum === actor.raw_mp_maximum + bonus.mp_maximum,
     '当前资源上限发生未支持的变化');
-  return {hp:hp >>> 0, mp:mp >>> 0};
+  return {hp:hp >>> 0, mp:mp >>> 0,...(actor.permanent_item_header_raw_hex?{header_raw_hex:actor.permanent_item_header_raw_hex,
+    hp_maximum:actor.raw_hp_maximum>>>0,mp_maximum:actor.raw_mp_maximum>>>0}:{})};
 }
 
 export function consumePartyMp(actor, cost,content=runtimeContent) {

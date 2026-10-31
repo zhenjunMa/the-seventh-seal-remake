@@ -480,6 +480,8 @@ export class BattleController {
   queuedTarget(pending,attacker,skill) {
     const target=this.actor(pending.target_id);
     if(pending.item_instance_id){
+      const item=this.state.inventory.find(row=>row.instance_id===pending.item_instance_id),definition=this.itemData.definitions[String(item?.id)];
+      if(definition?.battle?.all_targets_raw_156){const member=this.state.actors.find(actor=>this.itemTargetAvailable(actor,pending.item_instance_id,attacker));if(member)return member;}
       if(this.itemTargetAvailable(target,pending.item_instance_id,attacker))return target;
       this.cancelQueuedCommand(pending,'item-target-unavailable');return null;
     }
@@ -541,7 +543,9 @@ export class BattleController {
     if(this.activePlayers().length&&!victory)this.state.pending_outcome=null;
     for(const command of pendingCommands(s)){
       if(this.actor(command.actor_id)?.hp.current===0){this.cancelQueuedCommand(command,'actor-fallen');continue;}
-      if(command.item_instance_id){const target=this.actor(command.target_id);if(!this.itemTargetAvailable(target,command.item_instance_id,this.actor(command.actor_id)))this.cancelQueuedCommand(command,'item-target-unavailable');}
+      if(command.item_instance_id){const target=this.actor(command.target_id),caster=this.actor(command.actor_id),item=this.state.inventory.find(row=>row.instance_id===command.item_instance_id),definition=this.itemData.definitions[String(item?.id)];
+        const available=definition?.battle?.all_targets_raw_156?this.state.actors.some(actor=>this.itemTargetAvailable(actor,command.item_instance_id,caster)):this.itemTargetAvailable(target,command.item_instance_id,caster);
+        if(!available)this.cancelQueuedCommand(command,'item-target-unavailable');}
     }
     const ready=this.readyPlayerIds().filter(id=>this.canCommand(id));
     if(!ready.includes(this.state.player_id)&&ready.length)this.state.player_id=ready[0];
@@ -608,20 +612,28 @@ export class BattleController {
           this.state.phase='action';this.publish();
           const onUse=()=>{
             if(!committed){
-              this.checkWorld();const before=copy(target);
+              this.checkWorld();const before=copy(target),definition=this.itemData.definitions[String(consumed.item.id)],group=Boolean(definition.battle?.all_targets_raw_156);
               // A carrier/status may have invalidated the target since dispatch.
               // Native41B3C0 then skips both5058D0 and the consumption branch.
-              result=this.itemTargetAvailable(target,itemCommand.instance_id,attacker)?restoreActorWithItem(target,consumed.item,this.itemData,{statusData:this.statusData,caster:attacker,rng:this.rng,
-                selectAnimation:(actor,{rng})=>selectNativeRevivalAnimation({actor,data:this.reactionData,rng})})
-                :{actor:copy(target),name:result.name,changes:{},applied:false,native_return:0,effect_requested:false,cancel_command:false,trace:[]};
-              if(result.applied){if(result.revived)this.commitRevival(target,result);else Object.assign(target,result.actor);this.state.inventory=consumed.inventory;}
-              if(result.cancel_command){const command=commandForActor(s,target.id);if(command)this.cancelQueuedCommand(command,'actor-status');}
+              const targets=group?this.state.actors.filter(actor=>this.itemTargetAvailable(actor,itemCommand.instance_id,attacker)):[target],group_results=[];
+              for(const member of targets){
+                const used=this.itemTargetAvailable(member,itemCommand.instance_id,attacker)?restoreActorWithItem(member,consumed.item,this.itemData,{statusData:this.statusData,caster:attacker,rng:this.rng,
+                  selectAnimation:(actor,{rng})=>selectNativeRevivalAnimation({actor,data:this.reactionData,rng})})
+                  :{actor:copy(member),name:result.name,changes:{},applied:false,native_return:0,effect_requested:false,cancel_command:false,trace:[]};
+                if(used.effect_requested){if(used.revived)this.commitRevival(member,used);else Object.assign(member,used.actor);}
+                if(used.cancel_command){const command=commandForActor(s,member.id);if(command)this.cancelQueuedCommand(command,'actor-status');}
+                group_results.push({target_id:member.id,hit:true,damage:0,item_used:used.applied,item_effect:used.effect_requested,native_return:used.native_return,
+                  remainingHp:member.hp.current,changes:used.changes,trace:used.trace,revived:Boolean(used.revived)});
+              }
+              const used=group_results.some(row=>row.item_used),effect=group_results.some(row=>row.item_effect);
+              result={name:definition.name,applied:used,effect_requested:effect,native_return:Number(used),revived:group_results.some(row=>row.revived),changes:group_results[0]?.changes??{},trace:group_results.flatMap(row=>row.trace),group_results};
+              if(result.applied)this.state.inventory=consumed.inventory;
               committed=true;this.activeItemInstanceId=null;this.state.action_count++;
               const entry={action_id:actionId,actor_id:attacker.id,target_id:target.id,skill_id:skillId,item_id:consumed.item.id,round:this.state.round,impact:false,
-                result:{hit:true,damage:0,changes:result.changes,native_return:result.native_return,item_used:result.applied,item_effect:result.effect_requested,trace:result.trace},before,after:copy(target)};
+                result:{hit:true,damage:0,changes:result.changes,native_return:result.native_return,item_used:result.applied,item_effect:result.effect_requested,trace:result.trace,...(group?{group_results}:{} )},before,after:copy(target)};
               const historyIndex=this.state.history.push(entry)-1;this.recordImpact(entry,historyIndex);
               this.log({type:'battle-item-used',battle_id:this.state.id,...copy(entry),name:result.name,charge});this.publish();}
-            return {hit:true,damage:0,item_used:result.applied,item_effect:result.effect_requested,native_return:result.native_return,
+            return {hit:true,damage:0,item_used:result.applied,item_effect:result.effect_requested,native_return:result.native_return,group_results:result.group_results,
               ...(!result.effect_requested?{skipped:'item-target-unavailable'}:{}),revived:Boolean(result.revived),remainingHp:target.hp.current};
           };
           await this.playItem({action_id:actionId,actor_id:attacker.id,target_id:target.id,item_id:consumed.item.id,name:result.name,skill_id:skillId},{onUse});
@@ -842,7 +854,8 @@ export class BattleController {
     if(this.rewardPlan)return this.rewardPlan;this.checkWorld();requireValue(this.state.phase==='victory'||this.lockedOutcome==='victory','尚未胜利，不能规划奖励');
     const candidate=this.world.snapshot();
     if(this.state.inventory)candidate.inventory=copy(this.state.inventory);
-    for(const player of this.players()){const resources=this.resourcesForWorld(copy(player)),role=candidate.party.find(a=>a.id===player.id);role.hp.current=resources.hp;role.mp.current=resources.mp;}
+    for(const player of this.players()){const resources=this.resourcesForWorld(copy(player)),role=candidate.party.find(a=>a.id===player.id);role.hp.current=resources.hp;role.mp.current=resources.mp;
+      if(resources.header_raw_hex){role.combat_progress={header_raw_hex:resources.header_raw_hex};role.hp.maximum=resources.hp_maximum;role.mp.maximum=resources.mp_maximum;}}
     this.rewardPlan=planVictoryRewards({world:candidate,ledger:this.state.reward_ledger,data:this.rewardData,rng:this.rng,actors:this.state.actors,skill_data:this.skillGrowthData,skill_practice:this.skillPractice});
     this.state.rewards=copy(this.rewardPlan.summary);this.log({type:'battle-rewards-planned',battle_id:this.state.id,summary:copy(this.rewardPlan.summary),trace:copy(this.rewardPlan.trace)});return this.rewardPlan;
   }
@@ -859,8 +872,9 @@ export class BattleController {
     // Skill-test owns a private world in the browser controller. Return actual
     // resource / inventory changes for its caller's transaction; this is an
     // ownership boundary, not a native consumable or resource rollback rule.
-    if(!this.testMode&&(rewards?.applied||this.state.inventory&&JSON.stringify(this.state.inventory)!==JSON.stringify(before.inventory)||this.players().some(player=>{const persistent=before.party.find(actor=>actor.id===player.id),row=resourcesByActor[player.id];return persistent.hp.current!==row.hp||persistent.mp.current!==row.mp;}))) {
-      this.world.transact(next=>{for(const [id,row]of Object.entries(resourcesByActor)){const actor=next.party.find(actor=>actor.id===id);actor.hp.current=row.hp;actor.mp.current=row.mp;}
+    if(!this.testMode&&(rewards?.applied||this.state.inventory&&JSON.stringify(this.state.inventory)!==JSON.stringify(before.inventory)||this.players().some(player=>{const persistent=before.party.find(actor=>actor.id===player.id),row=resourcesByActor[player.id];return persistent.hp.current!==row.hp||persistent.mp.current!==row.mp||row.header_raw_hex!==undefined&&persistent.combat_progress?.header_raw_hex!==row.header_raw_hex;}))) {
+      this.world.transact(next=>{for(const [id,row]of Object.entries(resourcesByActor)){const actor=next.party.find(actor=>actor.id===id);actor.hp.current=row.hp;actor.mp.current=row.mp;
+        if(row.header_raw_hex){actor.combat_progress={header_raw_hex:row.header_raw_hex};actor.hp.maximum=row.hp_maximum;actor.mp.maximum=row.mp_maximum;}}
         if(this.state.inventory)next.inventory=copy(this.state.inventory);
         if(rewards?.applied){Object.assign(next,copy(rewards.world_patch));next.reward_records??=[];requireValue(!next.reward_records.some(r=>r.battle_id===this.state.id),'奖励已经提交');next.reward_records.push(copy(rewards.reward_record));}});
     }

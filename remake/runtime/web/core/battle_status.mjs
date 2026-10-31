@@ -23,7 +23,7 @@ function templateEquals(raw,template){
 }
 function effectMetadata(data,id){return data.effects?.[String(id)]??(id===43?data.status43:undefined);}
 export function validateNativeSkillStatus(skill,data){
-  return validateSkillBlock(skill,data,0x16b,[0,2]);
+  return validateSkillBlock(skill,data,0x16b,[0,2,5]);
 }
 function validateSkillBlock(skill,data,offset,modes){
   const fixed=bytes(skill?.fixed_raw_hex,0x41d,'skill'),block=rawView(hex(fixed.slice(offset,offset+0xc6))),id=block.raw[1],mode=block.raw[0xb];
@@ -145,7 +145,7 @@ export function initializeNativeStatuses(actor,data,content=runtimeContent,rng){
   const trace=[];
   for(const passive of out.equipment_passives??[]){
     const block=passiveBlock(passive),result=applyNativeBlock({actor:out,data,rng,
-      records:slots(out,data),block,id:block.raw[1],mode:6,trace:[],remove_on_contact:false});
+      records:slots(out,data),block,id:block.raw[1],mode:6,trace:[],remove_on_contact:false,content});
     out=result.actor;trace.push({kind:'equipment-passive',item_id:passive.item_id,
       group_index:passive.group_index,entry_index:passive.entry_index,reason:result.reason,
       native_return:result.native_return,trace:result.trace});
@@ -177,8 +177,8 @@ export function removeNativeStatus({actor,effect_raw_hex,data,content=runtimeCon
 export function applyNativeSkillStatus({actor,skill,data,rng,now,content=runtimeContent}){
   validateForestStatusData(data,content);integer(now,'native elapsed time');
   const {block,id,mode}=validateNativeSkillStatus(skill,data);
-  need([0,2].includes(mode),'Native hostile-contact status mode is not implemented');
-  return applyNativeBlock({actor,data,rng,records:slots(actor,data),block,id,mode,trace:[],remove_on_contact:true});
+  need([0,2,5].includes(mode)&&!(mode===5&&id),'Native hostile-contact status mode is not implemented');
+  return applyNativeBlock({actor,data,rng,records:slots(actor,data),block,id,mode,trace:[],remove_on_contact:true,content});
 }
 /**41B3C0 calls508BB0 directly for thrown items, without508A90's
  * remove-on-contact pass. The exact ITM template shares normal status clocks.
@@ -187,7 +187,7 @@ export function applyNativeItemStatus({actor,item_id,data,rng,content=runtimeCon
   validateForestStatusData(data,content);
   const source=data.item_effects?.[String(item_id)];need(source,'Native item status source missing');
   const block=rawView(source.effect_raw_hex);
-  return applyNativeBlock({actor,data,rng,records:slots(actor,data),block,id:block.raw[1],mode:block.raw[0xb],trace:[],remove_on_contact:false});
+  return applyNativeBlock({actor,data,rng,records:slots(actor,data),block,id:block.raw[1],mode:block.raw[0xb],trace:[],remove_on_contact:false,content});
 }
 /** 50FA00's allied +231 block calls 508BB0 without the hostile-contact
  * 508A90 removal pass. Cure and clear operate before the separate 41E950
@@ -205,9 +205,9 @@ export function applyNativeSupportStatus({actor,skill,data,rng,content=runtimeCo
   // ID0 bypasses every slot, probability, immunity and payload operation.
   if(id===0)return {actor:clone(actor),native_return:1,applied:false,cancel_command:false,
     reason:'effect-id-zero',trace:[],evidence:data.evidence['0x508bb0']};
-  return applyNativeBlock({actor,data,rng,records:slots(actor,data),block,id,mode,trace:[],remove_on_contact:false});
+  return applyNativeBlock({actor,data,rng,records:slots(actor,data),block,id,mode,trace:[],remove_on_contact:false,content});
 }
-function applyNativeBlock({actor,data,rng,records,block,id,mode,trace,remove_on_contact}){
+function applyNativeBlock({actor,data,rng,records,block,id,mode,trace,remove_on_contact,content=runtimeContent}){
   const out=clone(actor);let cancel_command=false;
   const result=(native_return,reason,applied=false)=>({actor:out,native_return,reason,applied,cancel_command,trace,evidence:data.evidence['0x508bb0']});
   const next=typeof rng==='function'?rng:rng?.next?.bind(rng);
@@ -218,6 +218,11 @@ function applyNativeBlock({actor,data,rng,records,block,id,mode,trace,remove_on_
     const existing=records[index];if(!existing.raw[1]||existing.raw[0xb]!==2)continue;
     const roll=rollFor('status-removal-chance'),chance=existing.raw[0x12];
     if(chance===0||roll<=chance){remove(index);trace.push({kind:'status-removed-on-contact',slot:index});}
+  }
+  if(mode===5){
+    if(out.immune_raw||out.state_raw>=4)return result(0,'target-ineligible');
+    return {actor:clearNativeStatuses(out,data,content),native_return:1,reason:'statuses-cleared',applied:true,
+      cancel_command:false,trace:[...trace,{kind:'status-clear',mode_raw:5}],evidence:data.evidence['0x507e20']};
   }
   // 508E97 -> 50924D. Dormant hunter payload is not an active modifier.
   if(id===0)return result(1,'effect-id-zero');

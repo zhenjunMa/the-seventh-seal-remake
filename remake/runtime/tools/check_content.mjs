@@ -4,15 +4,16 @@ import {fileURLToPath} from 'node:url';
 import path from 'node:path';
 import {resolveContentDefinition} from '../web/core/content_definition.mjs';
 import {validateContentRegistration} from '../web/core/content_registry.mjs';
-import {validateStoryBindings} from '../web/core/content_dependencies.mjs';
+import {validateStoryBindings,validateEnemySequenceClosure} from '../web/core/content_dependencies.mjs';
 import {inspectContentReadiness} from '../web/core/content_readiness.mjs';
 
 export async function checkContent(){
   const read=async name=>JSON.parse(await readFile(new URL(`../web/data/${name}.json`,import.meta.url),'utf8'));
-  const [definition,seed,forest,story,resources]=await Promise.all(['runtime_content','opening_seed','forest_combat','chapter_story','chapter_map_resources'].map(read));
+  const [definition,seed,forest,story,resources,ai,view]=await Promise.all(['runtime_content','opening_seed','forest_combat','chapter_story','chapter_map_resources','forest_ai','enemy_battle_view'].map(read));
   const maps=Object.fromEntries(await Promise.all(Object.keys(definition.maps).map(async id=>[id,await read(`maps/${id.toLowerCase()}`)])));
   const content=resolveContentDefinition(definition,{seed,forest,story,maps});
   validateContentRegistration(content);validateStoryBindings(content,story,resources);
+  validateEnemySequenceClosure(ai,view,content);
   return inspectContentReadiness(content,story,resources);
 }
 if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){

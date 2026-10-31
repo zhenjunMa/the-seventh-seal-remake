@@ -87,6 +87,18 @@ class SourceProjectionTests(unittest.TestCase):
         self.assertEqual(members, ["M17010", "M17011"])
         self.assertEqual(evidence["M17011"][0]["kind"], "source-DAT-link")
 
+    def test_multiple_source_labels_keep_disconnected_city_and_mountain_without_admitting_prefix_siblings(self):
+        def detail(ident):
+            return {"id": ident, "path": f"Map/{ident}.dat", "sha256": "0" * 64,
+                    "bytes": 200, "trigger_cells": {},
+                    "fixed_sections": [{}, {"record_bytes": 0x42, "nonzero_records": []}]}
+        catalog = {"M29010": {"name": "风领地力城"}, "M73013": {"name": "圣山山顶"},
+                   "M73099": {"name": "无来源关系的候选"}}
+        members, evidence = index.discover_maps(catalog, {ident: detail(ident) for ident in catalog},
+                                                "风领地", additional_labels=("圣山",))
+        self.assertEqual(members, ["M29010", "M73013"])
+        self.assertTrue(all(evidence[ident][0]["kind"] == "source-map-label" for ident in members))
+
 
 @unittest.skipUnless((ROOT / "Map/m17010.dat").exists(), "Original Fire Valley source unavailable")
 class ShippedFireValleyIndex(unittest.TestCase):

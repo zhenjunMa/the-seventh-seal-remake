@@ -18,32 +18,37 @@ export function validateForestStage(stage,content=runtimeContent){
   return stage;
 }
 export function forestStageAssets(stage){return stage.layers.flatMap(l=>l.frames.flatMap(f=>[f,...f.intrinsic?[f.intrinsic]:[]].map(asset=>({...asset,path:'/'+asset.path,width:l.source.width,height:l.source.height}))));}
-export function drawForestStageLayer(ctx,stage,images,row,frame=row.frame??0){
+export function drawForestStageLayer(ctx,stage,images,row,frame=row.frame??0,colorFade=null){
   const layer=stage.layers.find(l=>l.id===row.layer_id),asset=layer.frames[frame],scale=540/480,offset=(960-640*scale)/2;
   const [x,y,w,h]=row.destination_rect,[sx,sy,sw,sh]=row.source_rect;
   const left=Math.max(0,x),top=Math.max(0,y),width=Math.min(640,x+w)-left,height=Math.min(480,y+h)-top;
   if(width<=0||height<=0)return;
+  ctx.save();
+  // Native5158E0 uses one unit on perspective ground;52B2FD receives twice
+  // that amount for sky and ordinary scenery. Additive auxiliary pixels follow.
+  ctx.nativeColorSubtract=colorFade?colorFade.mask*512+colorFade.value*(row===stage.default_composition.ground?1:2):0;
   drawBattleImage(ctx,images.get('/'+asset.path),sx+(left-x)*sw/w,sy+(top-y)*sh/h,width*sw/w,height*sh/h,
     offset+left*scale,top*scale,width*scale,height*scale);
   if(asset.intrinsic){
-    ctx.save();ctx.globalCompositeOperation='lighter';
+    ctx.save();ctx.nativeColorSubtract=0;ctx.globalCompositeOperation='lighter';
     drawBattleImage(ctx,images.get('/'+asset.intrinsic.path),sx+(left-x)*sw/w,sy+(top-y)*sh/h,width*sw/w,height*sh/h,
       offset+left*scale,top*scale,width*scale,height*scale);
     ctx.restore();
   }
+  ctx.restore();
 }
-export function drawForestStageBackground(ctx,stage,images,now){
+export function drawForestStageBackground(ctx,stage,images,now,colorFade=null){
   const sky=stage.layers.find(l=>l.id===stage.default_composition.sky.layer_id),frames=sky.animation?.frames;
   const initial=stage.default_composition.sky.initial_frame??0;
   const frame=frames?frames[(initial+Math.floor(now/sky.animation.interval_raw))%frames.length]:initial;
-  drawForestStageLayer(ctx,stage,images,stage.default_composition.sky,frame);
-  drawForestStageLayer(ctx,stage,images,stage.default_composition.ground);
+  drawForestStageLayer(ctx,stage,images,stage.default_composition.sky,frame,colorFade);
+  drawForestStageLayer(ctx,stage,images,stage.default_composition.ground,undefined,colorFade);
   // SCN objects here are scenery textures, not combat actors. Finish the
   // background pass before any monster or party sprite, regardless of its Y.
   const scenery=[...stage.default_composition.scene_objects].sort((a,b)=>(a.sort_category??0)-(b.sort_category??0)||(a.sort_y??0)-(b.sort_y??0));
   for(const row of scenery){
     const layer=stage.layers.find(l=>l.id===row.layer_id),animation=layer.animation;
     const frame=animation?animation.frames[((row.frame??0)+Math.floor(now/animation.interval_raw))%animation.frames.length]:row.frame;
-    drawForestStageLayer(ctx,stage,images,row,frame);
+    drawForestStageLayer(ctx,stage,images,row,frame,colorFade);
   }
 }

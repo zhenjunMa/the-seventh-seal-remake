@@ -90,7 +90,7 @@ def item_status_blocks():
         at = 0x61c + index * 0x3bf
         record = raw[at:at + 0x3bf]
         effect = record[0x2a8:0x36e]
-        if record[0x24:0x26] != b'\x05\x03' or effect[0xb] not in (0, 2) or not effect[1] or effect[1] > 100 or effect[0x10] > 1:
+        if record[0x24] != 5 or record[0x25] not in (1, 3, 4) or effect[0xb] not in (0, 2) or not effect[1] or effect[1] > 100 or effect[0x10] > 1:
             continue
         blocks[str(index + 1)] = dict(item_id=index + 1, effect_raw_hex=effect.hex(),
             effect_id_raw=effect[1], mode_raw=effect[0xb],
@@ -141,7 +141,7 @@ def prepare_role(ident, status):
         skill = c.skills[index]
         fixed = bytes.fromhex(skill['fixed_raw_hex'])
         effect = fixed[0x16b:0x231]
-        if effect[0xb] not in (0, 2) or effect[1] > 100 or effect[0x10] not in (0, 1):
+        if effect[0xb] not in (0, 2, 5) or effect[0xb] == 5 and effect[1] or effect[1] > 100 or effect[0x10] not in (0, 1):
             raise ValueError(f'Enemy {ident} skill {index}: unsupported status handler {effect[1]} / mode {effect[0xb]}')
         commands = [(a['type_raw'], a['u32_at_0x01_raw']) for a in skill['actions'] if a['type_raw']]
         carrier = any(a['type_raw'] == 1 and a['u32_at_0x01_raw'] == 4

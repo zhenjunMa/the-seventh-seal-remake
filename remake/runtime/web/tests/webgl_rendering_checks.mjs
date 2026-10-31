@@ -13,6 +13,19 @@ export async function checkWebglRendering(runtime,record){
   runtime.setPhase('battle-active');const surface=runtime.battle.surface;
   const paint=(top=[50,90,140],bottom=top)=>{surface.beginFrame();surface.fillStyle=`rgb(${top})`;surface.fillRect(0,0,640,240);surface.fillStyle=`rgb(${bottom})`;surface.fillRect(0,240,640,240);surface.endFrame();};
   paint();runtime.flush();assert(near(pixel(runtime.game.renderer,20,20),[50,90,140,255]),'WebGL 基础颜色错误');
+  //034 CHR12/action3:5130D0 case0, mask7, default step2.52B2FD
+  // subtracts each RGB565 channel separately, without darkening the foreground.
+  const dim=document.createElement('canvas');dim.width=4;dim.height=4;
+  dim.getContext('2d').fillStyle='rgb(165,130,66)';dim.getContext('2d').fillRect(0,0,4,4);
+  for(const [mask,amount,expected]of [[7,4,[132,113,33,255]],[2,6,[165,105,66,255]],[7,40,[0,0,0,255]],[0,0,[165,130,66,255]]]){
+    surface.beginFrame();surface.nativeColorSubtract=mask*512+amount;surface.drawImage(dim,20,20,8,8);
+    surface.nativeColorSubtract=0;surface.drawImage(dim,40,20,8,8);surface.endFrame();runtime.flush();
+    assert(near(pixel(runtime.game.renderer,22,22),expected),`034 原背景逐通道减色错误：${pixel(runtime.game.renderer,22,22)}`);
+    assert(near(pixel(runtime.game.renderer,42,22),[165,130,66,255]),'背景减色泄露到前景');
+  }
+  surface.beginFrame();assert(surface.nativeColorSubtract===0,'背景减色没有随帧状态释放');surface.endFrame();
+  for(const entry of [...surface.textures.entries])surface.textures.remove(entry);
+  record('034 来源背景减色：实际 WebGL 的RGB565逐通道相减、绿通道选择、下限与前景隔离通过');
   const rgba=new Uint8ClampedArray(8*8*4);for(let i=0;i<rgba.length;i+=4){rgba[i]=248;rgba[i+1]=128;rgba[i+2]=64;rgba[i+3]=255;}
   for(let mode=1;mode<=7;mode++){
     const effect=createDeathParticleSurface({rgba,width:8,height:8,anchor:{x:0,y:0},mode,seed:23});effect.step();

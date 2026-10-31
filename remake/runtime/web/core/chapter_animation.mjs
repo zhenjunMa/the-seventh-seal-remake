@@ -11,7 +11,7 @@ export function chapterAnimationContext(program){
   const controlMaps=[...new Set(loadedMaps)];
   const callerMaps=program.expected?.caller_maps??[program.expected?.control_map];
   const maps=program.maps??[program.expected?.control_map];
-  return {controlMaps,callerMaps,maps,finalMap:loadedMaps.at(-1)??callerMaps[0]};
+  return {controlMaps,callerMaps,maps,finalMap:loadedMaps.at(-1)??(callerMaps.length===1?callerMaps[0]:null)};
 }
 export function validateChapterAnimation(program,content=runtimeContent) {
   need(program?.schema === 'seventh-seal-chapter-anm' && program.version === 1
@@ -24,7 +24,7 @@ export function validateChapterAnimation(program,content=runtimeContent) {
   const {controlMaps,callerMaps,maps,finalMap}=chapterAnimationContext(program);
   need(Array.isArray(maps)&&maps.length>0&&maps.length<=256&&new Set(maps).size===maps.length&&maps.every(id=>validMapId(id)&&content.maps[id]),'剧情动画地图依赖未登记');
   need(Array.isArray(callerMaps)&&new Set(callerMaps).size===callerMaps.length&&callerMaps.every(id=>maps.includes(id))
-    &&(controlMaps.length>0||callerMaps.length===1),'剧情动画调用地图不明确');
+    &&(controlMaps.length>0||callerMaps.length>0),'剧情动画调用地图不明确');
   need(controlMaps.every(id=>maps.includes(id))&&program.expected?.control_map===finalMap,'剧情动画结束地图与命令不同');
   if(program.expected.control_maps!==undefined)need(JSON.stringify(program.expected.control_maps)===JSON.stringify(controlMaps),'剧情动画控制地图与命令不同');
   need(maps.length===new Set([...callerMaps,...controlMaps]).size,'剧情动画包含无来源地图依赖');

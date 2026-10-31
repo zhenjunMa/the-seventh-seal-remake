@@ -151,7 +151,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
       const binding=storyBindings(at.map_id).objects.find(row=>row.index===object.index);
       if(!binding)continue;
       if(binding.handler==='stationary-chest'&&(![3,4].includes(object.behavior_raw_cf)||!object.interaction_record_raw_f6))continue;
-      if(binding.handler==='keyed-chest'&&object.behavior_raw_cf!==4)continue;
+      if(binding.handler==='keyed-chest'&&![3,4].includes(object.behavior_raw_cf))continue;
       if(binding.handler==='tlk-object'&&(object.behavior_raw_cf!==1||!object.interaction_record_raw_f6))continue;
       if(binding.handler==='scripted-switch'&&(object.behavior_raw_cf!==9||!object.interaction_record_raw_f6))continue;
       const distance=Math.hypot(object.x_native*2-at.x,object.y_native*2-at.y);

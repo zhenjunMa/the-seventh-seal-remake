@@ -54,7 +54,7 @@ export function initializeChapterItem(definition,{allowWeapon=false}={}) {
   instance.fill(0, 10, 13);
   for (const [to, from] of VALUE_PAIRS) {
     const minimum = v.getInt32(from, true), maximum = v.getInt32(from + 4, true);
-    need(minimum === maximum, '剧情道具随机初始化范围尚未接入');
+    need(maximum <= minimum, '剧情道具随机初始化范围尚未接入');
     out.setInt32(to, minimum, true);
   }
   return instance;

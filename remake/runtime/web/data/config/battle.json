@@ -11,10 +11,13 @@
     "Fight_Role/016.CHR": "8bc676f1f94e9406f4ad085077ac260db8242036c437fad71d59462b43b7fb13",
     "Fight_Role/017.CHR": "c5c6c8765cb4953549225ee24f5226b7549a3bb163c17f059e797dde2e7e1bf1",
     "Fight_Role/018.CHR": "2a07bc46c6931b56fd2bd1b91933ab31f18ed3a12f423dca336522568092b705",
+    "Fight_Role/019.CHR": "ef4f81c92d148f4fe09936d23017ac77f6bf413c3a1c43fd6edc3d701ab0c79f",
+    "Fight_Role/020.CHR": "94a1d36015f3b952a02b069759ac8652910c5bfbfeb9ff262dc4221951ec026b",
     "Fight_Role/022.CHR": "1d993fbcd562db44c2f515f3b9e3e1bfa4d2ad99924ad543b62ca8226b3f4455",
     "Fight_Role/024.CHR": "561e1defb159f9815a8538ff21a45d53916eb332837d2102f51ceae5bcde5db4",
     "Fight_Role/026.CHR": "69af2d01787ae85308f4a2c98d9c456356b3243602b0bb4d0d92829fb3f9e455",
     "Fight_Role/028.CHR": "f5735d64b6abee1d18356eb43cfab9cab42e016e361511dd90df9b1cecdd7a13",
+    "Fight_Role/029.CHR": "e20982164480ce785cf45042179f817848ffba849b1e5a1af4b513d687e01888",
     "Fight_Role/031A.CHR": "7cf86ef36b7ecd7042155969654c1f684d8498bec25fca57f3f60896c76f7d9c",
     "Fight_Role/031A1.CHR": "4a1c6281709b8bbdaf7e9645fa35fc5eede558145d737f6cf187e39f226f39b5",
     "Fight_Role/031A2.CHR": "8a459dc1f31dd8130546bcb718f5fb93eea5ff94765128575429f87228cfbd01",
@@ -24,6 +27,7 @@
     "Fight_Role/031C.CHR": "a606894f73656742923ba6519374730bda876bfc171d2ef3f1e77615c48610a5",
     "Fight_Role/032.CHR": "e081f7db9f51ac59c0bbd5b43f82a5894b3e707dd7512eb43aef574e1ec35f9f",
     "Fight_Role/033.CHR": "8ddeca0b57c4149b1d53742275e1b67415a311acc2b72d92a5e1eb4b41d2e669",
+    "Fight_Role/034.CHR": "d91c3a8fd680626b6ba2d048028dccec66c81424b23ba35297bfa5c9ba458062",
     "Fight_Role/041.CHR": "d0427095198fb28533c2a48d8f2ce22475faf13154386c7098e44053d12e5c32",
     "Fight_Role/042.CHR": "e6165e6a8c0099485543a521e978e8943aef7f9c5b17711c64a7d4c7fc8c169b",
     "GAME.exe": "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18"
@@ -215,6 +219,38 @@
     },
     "ai_033": {
       "name": "魔神．凯格拉尔选招",
+      "parameters": {}
+    },
+    "enemy_019": {
+      "name": "鎌虫",
+      "parameters": {}
+    },
+    "ai_019": {
+      "name": "鎌虫选招",
+      "parameters": {}
+    },
+    "enemy_020": {
+      "name": "奥克斯蜥蜴",
+      "parameters": {}
+    },
+    "ai_020": {
+      "name": "奥克斯蜥蜴选招",
+      "parameters": {}
+    },
+    "enemy_029": {
+      "name": "莫理斯猎鵰",
+      "parameters": {}
+    },
+    "ai_029": {
+      "name": "莫理斯猎鵰选招",
+      "parameters": {}
+    },
+    "enemy_034": {
+      "name": "圣山神兽．贝鲁吉斯",
+      "parameters": {}
+    },
+    "ai_034": {
+      "name": "圣山神兽．贝鲁吉斯选招",
       "parameters": {}
     }
   }

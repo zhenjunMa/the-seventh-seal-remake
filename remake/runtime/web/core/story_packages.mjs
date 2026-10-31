@@ -30,6 +30,7 @@ export function validateCompactRecords(table){
     need(Number.isInteger(row.id)&&row.id>0&&!ids.has(row.id)&&row.text_id===storyTextId(table.id,row.id),'对白编号重复或文本编号无效');ids.add(row.id);
     need(typeof row.text_raw==='string'&&['kind','style','region_byte_raw','speaker','condition_type','condition_index','condition_bit','mutation_type','mutation_index','mutation_bit','if_true','next'].every(key=>Number.isInteger(row[key])&&row[key]>=0&&row[key]<=0xffffffff),'对白字段无效');
     need(row.raw_hex===undefined,'运行对白不能携带原始 TLK 字节');
+    if(row.condition_type===8)need(Number.isInteger(row.condition_dword_raw_0b)&&row.condition_dword_raw_0b>=0&&row.condition_dword_raw_0b<=0xffffffff,'控制角色条件 DWORD 缺失或无效');
     if(row.kind===5)need(isNativeScriptedBattleNames(row.scripted_battle),'原剧情战斗文件名缺失');
     if(row.kind===4)nativeCombinationHex(row);
     if(row.kind===8){

@@ -4,7 +4,7 @@
  */
 
 import {compileNativeSequence} from './core/skill_sequence.mjs';
-import {beginNativeCameraShake,advanceNativeCameraShake} from './core/battle_camera.mjs';
+import {beginNativeCameraShake,advanceNativeCameraShake,beginNativeColorFade,advanceNativeColorFade} from './core/battle_camera.mjs';
 import {nativeEntryPath,advanceNativeEntryPath,nativeEntryOffset} from './core/battle_entry.mjs';
 import {addCorrectedPartyPresentations} from './core/party_skill_corrections.mjs';
 import {BattleAssetPlan,effectReferences} from './core/battle_asset_plan.mjs';
@@ -468,7 +468,7 @@ export class BattleView {
   _releaseRun(run){const lease=run?.resourceLease;if(lease){if(this.drawing)this.retiredLeases.push(lease);else lease.release();run.resourceLease=null;}}
 
   setRoster(actors,skills){
-    this.lastActorPoses.clear();this.cameraShake=null;
+    this.lastActorPoses.clear();this.cameraShake=null;this.colorFade=null;
     this.stageStarted=null;
     this.drawnSlots=null;
     this.lifecycle?.reset();
@@ -551,7 +551,7 @@ export class BattleView {
 
   stop(reason = '战斗表现已取消') {
     this.cancelPreparation(reason);
-    this.lastActorPoses.clear();this.cameraShake=null;
+    this.lastActorPoses.clear();this.cameraShake=null;this.colorFade=null;
     this.drawnSlots=null;
     this.damageTexts=[];
     this.lifecycle?.reset();
@@ -672,6 +672,9 @@ export class BattleView {
           channel.carrier_targets=step.command_raw===4?run.onCarrierTargets?.(clone(step),channel.descriptor?clone(channel.descriptor):null):null;
           channel.record_visited=step.plan_record_index;
           if(step.command_raw===1)this.cameraShake=beginNativeCameraShake(step.control,run.started+at,this.cameraShake);
+          if(step.command_raw===0)this.colorFade=beginNativeColorFade(step.control,run.started+at,this.colorFade);
+          // 511C30 starts the shared return-to-normal fade at source command11.
+          if(step.command_raw===11&&this.colorFade){this.colorFade=advanceNativeColorFade(this.colorFade,run.started+at);if(this.colorFade.value){this.colorFade.active=true;if(this.colorFade.step>=0)this.colorFade.step=-8;}}
         }
         if(!carrier&&step.command_raw===4&&channel.carrier_targets?.target_ids.length===0){channel.visited=i;channel.next_at=at;continue;}
         let entryVisited=i;
@@ -714,7 +717,7 @@ export class BattleView {
           channel.result={...channel.result,skipped:null,...clone(response)};channel.impact_called=true;channel.impact_done=true;channel.impact_elapsed=at-(channel.at??0);
           for(const hit of response.group_results??[response])this._queueDamageText({...channel,result:{...channel.result,target_id:hit.target_id??channel.result.target_id}},hit,now);
           if((response.item_effect??response.item_used)&&run.item_effect_id){const asset=this.meta.effects.find(e=>e.id===run.item_effect_id);if(!asset)throw new Error('药品恢复特效缺失');
-            channel.effects.push({asset_id:asset.id,slot:'target',unconditional:true,at:at-(channel.at??0),frame_ms:asset.interval_raw,visited_frame:-1});}
+            for(const hit of response.group_results??[response])if(hit.item_effect??hit.item_used)channel.effects.push({asset_id:asset.id,slot:'target',...(hit.target_id?{target_id:hit.target_id}:{}),unconditional:true,at:at-(channel.at??0),frame_ms:asset.interval_raw,visited_frame:-1});}
           // Native killer F5F9 doubles the current record interval; entering
           // the next source record clears it. Base65ms remains a preview policy.
           if(response.killer_frame_factor===2&&!step.effect_contact)channel.slow_record=step.plan_record_index;
@@ -946,6 +949,7 @@ export class BattleView {
     }
     const run=!entryPreview&&this.ready?this._advance(now):null;
     if(!entryPreview&&this.cameraShake)this.cameraShake=advanceNativeCameraShake(this.cameraShake,now);
+    if(!entryPreview&&this.colorFade)this.colorFade=advanceNativeColorFade(this.colorFade,now);
     const ctx = this.context, width = this.canvas.width, height = this.canvas.height;
     ctx.beginFrame?.();
     ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,width,height);ctx.fillStyle='#000';ctx.fillRect(0,0,width,height);
@@ -956,7 +960,7 @@ export class BattleView {
     if(!entryPreview&&this.cameraShake){const scale=this.stageMeta?1.125:(this.meta?.policy.sprite_scale??1.5);ctx.translate(-this.cameraShake.x*scale,-this.cameraShake.y*scale);}
     ctx.imageSmoothingEnabled = false;
     ctx.clearRect(0, 0, 960, 540);
-    if(this.stageMeta){if(!entryPreview)this.stageStarted??=now;ctx.fillStyle='#101719';ctx.fillRect(0,0,960,540);drawForestStageBackground(ctx,this.stageMeta,this.images,entryPreview?0:now-this.stageStarted);}
+    if(this.stageMeta){if(!entryPreview)this.stageStarted??=now;ctx.fillStyle='#101719';ctx.fillRect(0,0,960,540);drawForestStageBackground(ctx,this.stageMeta,this.images,entryPreview?0:now-this.stageStarted,entryPreview?null:this.colorFade);}
     else{
       const backdrop = ctx.createLinearGradient(0, 0, 0, 540);
       backdrop.addColorStop(0, '#111f27'); backdrop.addColorStop(.68, '#273b42'); backdrop.addColorStop(1, '#142429');

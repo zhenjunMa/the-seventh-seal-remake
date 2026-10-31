@@ -89,6 +89,8 @@ node remake/runtime/tools/export_runtime_config.mjs --reference items 4
 | 装备 | allowed_role_mask按原角色位，0不限；slot_id沿来源。26个已参与getter的attributes按原范围链接实例，不重抽、不改source_raw_hex；换装保留raw HP／MP，充槽读原raw速度。 |
 | 普通恢复药 | use_in_field／use_in_battle限定场合，effect控制已恢复固定／百分比恢复；普通恢复不复活。 |
 | 状态／复活药 | status-cure、status-clear、status-attack及revival-item按原mode／目标判定；菜单、排队、派发和接触共用资格，实际接触才按原规则抽签与消费。 |
+| 持续回复与全体药 | status-support复用原状态槽与周期时钟；all_targets按原阵营遍历合格目标，一次行动最多消耗一件。重复／失败的状态不消费，47D960的目标数值副作用仍提交。 |
+| 属性源与药品上限 | 33～38按原六属性位置永久增加并夹0～999，保存在既有角色头中；36的尾部(768,0)按原初始化取768，该尾字段不参与六属性提升。47D960末尾对每次合格投药统一夹原HP上限9999、MP上限999及当前值，包括原HP100000的034，调参不因此改写。 |
 | 火蜥之血272 | mode1只解除首个ID5状态，不清其他状态、不抽随机；无匹配状态仍可演出但不扣库存。原场外数值为零而拒绝使用，不靠enabled扩大场合。 |
 | 清状态331 | 原mode5／id0与敌方单体，来源为042实际掉落；免疫或无有效目标不消费，不按名称补效果。 |
 | 数值晶石 | 同一items配置；人物保留六槽，武器决定当前可操作孔数。替换先返还，换武器保留隐藏槽；禁用后已有项仍可卸除。 |
@@ -105,7 +107,7 @@ runtime_content编辑格式v2只保存选择；默认路径、原旗标、角色
 | --- | --- |
 | maps | 原地图ID及npcs、triggers、objects、rests、routes；空图可为{}。objects绑定原index与共同handler，rests选择descriptor_id。 |
 | maps.npcs | 显式原零基槽数组，[]保留显示但不开放交谈；省略兼容旧隐式行为，未知分支仅提示。新地图使用显式登记作为能力门槛。 |
-| maps.objects | index绑定原零基物件。handler为stationary-chest（CF3剧情箱）、keyed-chest（CF4直接奖励，钥匙0表示不需要钥匙）、tlk-object（CF1可重复主动交互）或scripted-switch（CF9单次机关）；后两者沿原+F6执行TLK。 |
+| maps.objects | index绑定原零基物件。handler为stationary-chest（CF3／CF4剧情箱）、keyed-chest（CF3／CF4直接奖励，钥匙0表示不需要钥匙）、tlk-object（CF1可重复主动交互）或scripted-switch（CF9单次机关）；后两者沿原+F6执行TLK。 |
 | maps.triggers | 原DAT描述符ID；state2沿原TLK入口，state1将原ANM引用编译为共同StoryFlow的animation／end，不补造TLK记录。 |
 | maps.entry／setup | true分别选择DAT真实到达／加载布置，事务及恢复行为见剧情指南；不手填替代记录。 |
 | maps.routes | 可只登记descriptor_id，由DAT推record_id；已有前置演出保留原requires_flag、animation及denial_record_id等来源条件。 |

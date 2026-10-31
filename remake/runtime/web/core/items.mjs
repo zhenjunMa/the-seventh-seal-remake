@@ -49,7 +49,7 @@ export function restoreActorWithItem(actor,item,data,{scope='battle',statusData,
     need(scope==='battle'&&def.status_cure?.mode_raw===1,'此解除状态物品仅在战斗中有效');
     status=removeNativeStatus({actor:next,effect_raw_hex:def.status_cure.effect_raw_hex,data:statusData,content});
     next=status.actor;trace.push(...status.trace);
-  }else if(scope==='battle'&&def.behavior?.kind==='status-attack'){
+  }else if(scope==='battle'&&['status-attack','status-support'].includes(def.behavior?.kind)){
     status=applyNativeItemStatus({actor:next,item_id:def.id,data:statusData,rng,content});
     next=status.actor;trace.push(...status.trace);
   }else if(scope==='battle'&&def.behavior?.kind==='status-clear'){
@@ -59,18 +59,44 @@ export function restoreActorWithItem(actor,item,data,{scope='battle',statusData,
     status=applyNativeRevivalEffect({target:next,effect_raw_hex:def.revival.effect_raw_hex,rng,selectAnimation});
     next=status.actor;trace.push(...(status.animation?.trace??[]),...status.trace);
   }
+  const elementApplied=def.behavior?.kind==='element-source'&&Array.from({length:6},(_,index)=>def.effect[`element_${index}_flat`]).some(Boolean);
+  if(elementApplied){
+    const raw=Uint8Array.from(next.header_raw_hex.match(/../g),part=>parseInt(part,16)),view=new DataView(raw.buffer);
+    for(let index=0;index<6;index++){
+      const offset=0x7a+index*4,before=view.getInt32(offset,true),amount=def.effect[`element_${index}_flat`];
+      view.setInt32(offset,Math.max(0,Math.min(999,(before+amount)|0)),true);
+      const address=`0x${(0x524a6d1+offset).toString(16).padStart(8,'0')}`;
+      next.raw_by_address[address]=view.getInt32(offset,true);
+      changes[`element_${index}`]={before,after:view.getInt32(offset,true)};
+    }
+    next.header_raw_hex=Array.from(raw,value=>value.toString(16).padStart(2,'0')).join('');
+    next.permanent_item_header_raw_hex=next.header_raw_hex;
+  }
+  if(def.effect.mp_maximum_percent){
+    next.raw_mp_maximum=(next.raw_mp_maximum+Math.trunc(Math.imul(next.raw_mp_maximum,def.effect.mp_maximum_percent)/100))|0;
+  }
   for(const resource of ['hp','mp']){
     const effect=def.effect,amount=(effect[`restore_${resource}_flat`]??0)+Math.trunc(next[`raw_${resource}_maximum`]*(effect[`restore_${resource}_percent`]??0)/100);
-    const raw=amount>0?Math.min(next[`raw_${resource}_maximum`],next[`raw_${resource}`]+amount):next[`raw_${resource}`];
+    //47D960's common epilogue runs even when508BB0 rejected the status and
+    // every numeric field is zero. Its raw caps also apply to enemy medicines.
+    const maximum=Math.min(resource==='hp'?9999:999,next[`raw_${resource}_maximum`]),raw=Math.min(maximum,Math.max(0,(next[`raw_${resource}`]+amount)|0));
+    next[`raw_${resource}_maximum`]=maximum;next[resource].maximum=maximum+next.resource_bonuses[`${resource}_maximum`];
+    next.raw_by_address[resource==='hp'?'0x0524a705':'0x0524a70d']=maximum;
     const value=Math.max(0,raw+next.resource_bonuses[`${resource}_current`]);
     changes[resource]={before:next[resource].current,after:value};next[resource].current=value;
     need(Number.isInteger(raw)&&raw>=-0x80000000&&raw<=0x7fffffff,'恢复资源超出原字段范围');
     next[`raw_${resource}`]=raw;next[`effective_${resource}_raw`]=raw+next.resource_bonuses[`${resource}_current`];next.raw_by_address[resource==='hp'?'0x0524a701':'0x0524a709']=raw;
   }
+  if(next.side==='player'&&(next.permanent_item_header_raw_hex||next.raw_hp_maximum!==actor.raw_hp_maximum||next.raw_mp_maximum!==actor.raw_mp_maximum)){
+    const raw=Uint8Array.from(next.header_raw_hex.match(/../g),part=>parseInt(part,16)),view=new DataView(raw.buffer);
+    view.setInt32(0x34,next.raw_hp_maximum,true);view.setInt32(0x3c,next.raw_mp_maximum,true);
+    next.header_raw_hex=Array.from(raw,value=>value.toString(16).padStart(2,'0')).join('');next.permanent_item_header_raw_hex=next.header_raw_hex;
+  }
   if(scope==='field')next.state_raw=next.hp.current>0?0:4;
-  const resourceApplied=['hp','mp'].some(resource=>(def.effect[`restore_${resource}_flat`]??0)!==0||(def.effect[`restore_${resource}_percent`]??0)!==0);
+  const resourceApplied=elementApplied||Boolean(def.effect.mp_maximum_percent)||['hp','mp'].some(resource=>(def.effect[`restore_${resource}_flat`]??0)!==0||(def.effect[`restore_${resource}_percent`]??0)!==0);
   const applied=Boolean(resourceApplied||status?.native_return===1);
-  return {actor:next,changes,name:def.name,applied,native_return:applied?1:0,effect_requested:true,
+  const state_changed=['raw_hp','raw_mp','raw_hp_maximum','raw_mp_maximum'].some(field=>next[field]!==actor[field]);
+  return {actor:next,changes,name:def.name,applied,state_changed,native_return:applied?1:0,effect_requested:true,
     revived:status?.reason==='revived',animation:status?.animation??null,cancel_command:status?.cancel_command??false,trace};
 }
 
@@ -78,9 +104,10 @@ export function useWorldItem(world,attributes,data,{instanceId,targetId,expected
   need(world.value.revision===expectedRevision,'操作期间进度已变化');
   const target=createPartyActors(world.snapshot(),attributes,{},data).find(a=>a.id===targetId);
   const consumed=consumeInventoryItem(world.value.inventory,instanceId,data),result=restoreActorWithItem(target,consumed.item,data,{scope:'field'});
-  if(!result.applied)return {...result,targetId,world_revision:world.value.revision};
+  if(!result.applied&&!result.state_changed)return {...result,targetId,world_revision:world.value.revision};
   const resources=partyResourcesForWorld(result.actor);
-  world.transact(draft=>{draft.inventory=consumed.inventory;const role=draft.party.find(r=>r.id===targetId);role.hp.current=resources.hp;role.mp.current=resources.mp;});
+  world.transact(draft=>{if(result.applied)draft.inventory=consumed.inventory;const role=draft.party.find(r=>r.id===targetId);role.hp.current=resources.hp;role.mp.current=resources.mp;
+    if(resources.header_raw_hex){role.combat_progress={header_raw_hex:resources.header_raw_hex};role.hp.maximum=resources.hp_maximum;role.mp.maximum=resources.mp_maximum;}});
   return {...result,targetId,world_revision:world.value.revision};
 }
 

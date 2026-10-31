@@ -53,7 +53,7 @@ def catalog_fields(raw, ident, offset):
               for destination, source in VALUE_PAIRS]
     issues = [dict(kind='reversed-source-range', **r) for r in ranges if r['minimum'] > r['maximum']]
     variable = [r for r in ranges if r['minimum'] < r['maximum']]
-    deterministic = all(r['minimum'] == r['maximum'] for r in ranges)
+    deterministic = all(r['minimum'] >= r['maximum'] for r in ranges)
     instance = initialize_existing_instance(bytes(0xe5), raw) if deterministic else None
     type_, subtype = raw[0x24], raw[0x25]
     group = 0 if type_ == 1 else subtype if type_ == 2 else None
@@ -481,7 +481,7 @@ def admit_registered_equipment(definitions, seed, story, registration):
             at = obj['source']['offset']; raw = original[path][at:at + 0x112]
             require(raw.hex() == obj['raw_hex'] and obj['source']['sha256'] == hashes[path]
                     and table['map_source']['sha256'] == hashes[path]
-                    and raw[0xCF] == 4 and u32(raw, 0xF6) == 0, f'{map_id} keyed chest source')
+                    and raw[0xCF] in (3, 4) and u32(raw, 0xF6) == 0, f'{map_id} keyed chest source')
             for slot in range(10):
                 ident = u32(raw, 0x54 + slot * 4)
                 if not ident:
@@ -564,8 +564,9 @@ def status_attack_supported(row):
     block = raw[0x2a8:0x36e]
     return bool(row['record_status'] == 'defined' and raw[0x24:0x26] == b'\x05\x03'
         and row['initialization']['deterministic']
-        and all(pair['minimum'] == pair['maximum'] == 0 for pair in row['value_ranges'])
-        and raw[0x156:0x158] == b'\x00\x00' and i32(raw, 0x142) == 17
+        and all(pair['minimum'] == pair['maximum'] and
+                (pair['instance_offset'] == 0x3d or pair['minimum'] == 0) for pair in row['value_ranges'])
+        and raw[0x156] in (0, 1) and raw[0x157] == 0 and i32(raw, 0x142) == 17
         and 0 < block[1] <= 100 and block[0xb] in (0, 2) and block[0x10] <= 1
         and not any(raw[0x36e:]))
 
@@ -586,11 +587,34 @@ def revival_item_supported(row):
 def status_clear_supported(row):
     raw = bytes.fromhex(row['raw_hex'])
     block = raw[0x2a8:0x36e]
-    return bool(row['record_status'] == 'defined' and raw[0x24:0x26] == b'\x05\x04'
+    return bool(row['record_status'] == 'defined' and raw[0x24] == 5 and raw[0x25] in (1, 4)
         and row['initialization']['deterministic']
         and all(pair['minimum'] == pair['maximum'] == 0 for pair in row['value_ranges'])
-        and raw[0x156:0x158] == b'\x00\x00' and i32(raw, 0x142) == 17
+        and raw[0x156] in (0, 1) and raw[0x157] in (0, 1) and i32(raw, 0x142) == 17
         and block[1] == 0 and block[0xb] == 5 and not any(raw[0x36e:]))
+
+
+def periodic_restore_supported(row):
+    raw = bytes.fromhex(row['raw_hex'])
+    block = raw[0x2a8:0x36e]
+    return bool(row['record_status'] == 'defined' and raw[0x24:0x26] == b'\x05\x01'
+        and row['initialization']['deterministic']
+        and all(pair['minimum'] == pair['maximum'] == 0 for pair in row['value_ranges'])
+        and raw[0x156] in (0, 1) and raw[0x157] == 1 and i32(raw, 0x142) == 17
+        and 0 < block[1] <= 100 and block[0xb] in (0, 2) and block[0x10] == 1
+        and i32(block, 0x23) >= 0 and i32(block, 0x2b) >= 0
+        and not any(raw[0x36e:]))
+
+
+def element_source_supported(row):
+    raw = bytes.fromhex(row['raw_hex'])
+    return bool(row['record_status'] == 'defined' and raw[0x24:0x26] == b'\x05\x04'
+        and row['initialization']['deterministic']
+        and all(pair['minimum'] >= 0 and (pair['instance_offset'] >= 0x65 or pair['minimum'] == 0)
+                for pair in row['value_ranges'])
+        and any(pair['minimum'] > 0 for pair in row['value_ranges'] if 0x65 <= pair['instance_offset'] < 0x7d)
+        and raw[0x156:0x158] == b'\x00\x01' and i32(raw, 0x142) == 17
+        and not any(raw[0x2a8:]))
 
 
 def admit_registered_status_cures(definitions, equipment_admission):
@@ -632,29 +656,33 @@ def admit_registered_status_cures(definitions, equipment_admission):
                 target_immune_must_be_zero=True, consume_only_on_native_success=True)
             continue
         attack, revival, clear = status_attack_supported(row), revival_item_supported(row), status_clear_supported(row)
-        if attack or revival or clear:
+        periodic, element = periodic_restore_supported(row), element_source_supported(row)
+        if attack or revival or clear or periodic or element:
             raw = bytes.fromhex(row['raw_hex'])
             sources[ident] = deepcopy(provenance)
             previous[ident] = {key: deepcopy(row[key]) for key in ('availability', 'behavior')}
-            row['behavior'] = dict(kind='status-attack' if attack else 'status-clear' if clear else 'revival-item', status='recovered',
-                implemented_scope=['battle-single-enemy-source-status'] if attack else ['battle-mode5-all-status-removal'] if clear else ['battle-mode3-revival', 'field-resource-restoration'],
+            row['behavior'] = dict(kind='status-attack' if attack else 'status-clear' if clear else 'status-support' if periodic else 'element-source' if element else 'revival-item', status='recovered',
+                implemented_scope=['battle-source-status-and-raw-resource-change'] if attack else ['battle-mode5-all-status-removal'] if clear else ['battle-periodic-resource-restoration'] if periodic else ['native-permanent-element-increase'] if element else ['battle-mode3-revival', 'field-resource-restoration'],
                 unverified_scope=[])
             row['availability'] = dict(enabled=True, chapter_enabled=True, catalog_visible=True, default_enabled=True,
                 reasons=['registered-source-acquisition; native-item-status-or-revival-recovered'])
             values = {pair['instance_offset']: pair['minimum'] for pair in row['value_ranges']}
             row['effect'] = dict(restore_hp_flat=values[0xd], restore_mp_flat=values[0x15],
                 restore_hp_percent=values[0x31], restore_mp_percent=values[0x39], revive=revival)
+            if values[0x3d]: row['effect']['mp_maximum_percent'] = values[0x3d]
+            if element:
+                row['effect'].update({f'element_{index}_flat': values[0x65 + index * 4] for index in range(6)})
             if revival:
                 row['revival'] = dict(effect_raw_hex=raw[0x2a8:0x36e].hex(), effect_id_raw=raw[0x2a9], mode_raw=3,
                     definition_offset=0x2a8, effect_bytes=0xc6)
             elif clear:
                 row['status_clear'] = dict(effect_raw_hex=raw[0x2a8:0x36e].hex(), effect_id_raw=0, mode_raw=5,
                     definition_offset=0x2a8, effect_bytes=0xc6)
-            else:
+            elif attack or periodic:
                 row['status_attack'] = dict(effect_raw_hex=raw[0x2a8:0x36e].hex(), effect_id_raw=raw[0x2a9], mode_raw=raw[0x2b3],
                     definition_offset=0x2a8, effect_bytes=0xc6)
-            row['use_in_field'], row['use_in_battle'] = revival, True
-            row['battle'] = dict(animation_skill_id_raw_142=17, all_targets_raw_156=0, same_side_raw_157=raw[0x157],
+            row['use_in_field'], row['use_in_battle'] = revival or element, True
+            row['battle'] = dict(animation_skill_id_raw_142=17, all_targets_raw_156=raw[0x156], same_side_raw_157=raw[0x157],
                 effect_kind_raw_2b3=raw[0x2b3], preparation_delay_added=0,
                 target_state_max_exclusive=8 if revival else 4, target_immune_must_be_zero=True,
                 consume_only_on_native_success=True)

@@ -79,7 +79,7 @@ export function inspectContentReadiness(content,story,resources){
             initializeChapterItem(definition);
           }
           const animation=resources.object_animations[mapId]?.find(row=>row.object_index_zero_based===root.id);
-          need(animation,'宝箱动作资源缺失');nativeChestAnimation(animation,4);
+          need(animation,'宝箱动作资源缺失');nativeChestAnimation(animation,object.behavior_raw_cf);
           entrances.push({map_id:mapId,kind:root.kind,id:root.id,records:0,advisory:false});
         }catch(error){target.push(diagnostic(null,error.message));}
         continue;

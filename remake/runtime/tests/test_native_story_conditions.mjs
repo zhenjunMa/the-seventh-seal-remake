@@ -61,6 +61,10 @@ test('original ticket counter condition8 tests the controlled actor, independent
   assert.equal(record.condition_type,8);const slot=nativeConditionByte(record),id=String(slot+1).padStart(3,'0');
   value.party=[{id:'001'},{id}];value.leader_id=id;
   assert.equal(evaluateNativeStoryCondition(record,value,{}),true);
+  const compact={...record,raw_hex:undefined,condition_dword_raw_0b:Buffer.from(record.raw_hex,'hex').readUInt32LE(0x0b)};
+  assert.equal(evaluateNativeStoryCondition(compact,value,{}),true);
+  assert.equal(evaluateNativeStoryCondition({...compact,condition_dword_raw_0b:compact.condition_dword_raw_0b+256},value,{}),false,
+    'the compact operand retains all four source bytes');
   const wide=Buffer.from(record.raw_hex,'hex');wide[0x0c]=1;
   assert.equal(evaluateNativeStoryCondition({...record,raw_hex:wide.toString('hex')},value,{}),false,'the native DWORD comparison never truncates to byte0B');
   value.leader_id=id==='001'?'003':'001';

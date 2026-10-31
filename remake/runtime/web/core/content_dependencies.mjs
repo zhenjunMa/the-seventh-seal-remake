@@ -14,7 +14,17 @@ import {nativeKeyedChest,nativeScriptedChest,nativeChestAnimation} from './nativ
 import {supplementalPartyCommands} from './party_skill_corrections.mjs';
 import {compileNativeTriggerFlow} from './story_flow_compiler.mjs';
 import {nativeAnmObjectTarget} from './native_anm_commands.mjs';
+import {compileNativeSequence,directSequence} from './skill_sequence.mjs';
 const need=(ok,message)=>{if(!ok)throw new Error(`内容依赖：${message}`);};
+
+export function validateEnemySequenceClosure(ai,view,content){
+  for(const id of registeredRoles('enemy',content))for(const index of ai.roles[id].learned_indices){
+    const skill=ai.roles[id].skills[index];
+    // Run the exact presentation compiler, including control payloads and DGP
+    // boundaries. An opcode list alone cannot establish executable admission.
+    compileNativeSequence(view,id,directSequence(skill));
+  }
+}
 
 export function validateEnemyReactionClosure(ai,reactions,content){
   for(const [enemyId,role]of Object.entries(ai.roles))for(const index of role.learned_indices){
@@ -159,6 +169,7 @@ export function validateContentDependencies(content,data){
   validateForestRewards(rewards,content);validateForestReactionsData(reactions,content);
   validateEnemyReactionClosure(ai,reactions,content);
   validateForestStatusData(status,content);validateBattleViewMetadata(view,content);
+  validateEnemySequenceClosure(ai,view,content);
   validateStoryBindings(content,story,resources);
   for(const id of Object.keys(content.roles))need(sourceHash(content.roles[id].source.sha256),`${id} 来源指纹缺失`);
   return {roles:Object.keys(content.roles).length,maps:maps.size,programs:Object.keys(content.programs).length};

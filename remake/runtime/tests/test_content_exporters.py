@@ -334,11 +334,12 @@ class ContentExporterTests(unittest.TestCase):
         self.assertEqual(context['control_maps'], [])
         self.assertEqual(context['caller_maps'], ['M17010'])
         self.assertEqual(context['context_sources']['caller_records'][0]['record_id'], 91)
-        with self.assertRaisesRegex(ValueError, 'one actual registered caller map'):
+        with self.assertRaisesRegex(ValueError, 'an actual registered caller map'):
             story.program_map_context([], {'M17010': {}}, 'm17010-6')
         tables['M17020'] = tables['M17010']
-        with self.assertRaisesRegex(ValueError, 'one actual registered caller map'):
-            story.program_map_context([], tables, 'm17010-6')
+        context = story.program_map_context([], tables, 'm17010-6')
+        self.assertEqual(context['caller_maps'], ['M17010', 'M17020'])
+        self.assertIsNone(context['control_map'])
 
     def test_real_no_map_anm_context_comes_from_tlk91(self):
         root = RUNTIME.parents[1]

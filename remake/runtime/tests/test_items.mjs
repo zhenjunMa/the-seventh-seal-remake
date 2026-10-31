@@ -94,11 +94,14 @@ test('Field medicine accepts depleted and full actors; battle rejects KO and imm
   world.transact(draft=>{draft.party[0].hp.current=(-88)>>>0;draft.party[0].mp.current=(-6)>>>0;});
   const actor=createPartyActors(world.snapshot(),attributes,{},data)[0];assert.equal(actor.hp.current,0);
   assert.throws(()=>restoreActorWithItem(actor,tea,data),/倒下或免疫/);
-  const restored=useWorldItem(world,attributes,data,{instanceId:tea.instance_id,targetId:'001'});assert.equal(restored.actor.hp.current,0);assert.equal(restored.actor.mp.current,50);
-  assert.throws(()=>restoreActorWithItem({...restored.actor,hp:{...restored.actor.hp,current:1},state_raw:0,immune_raw:1},tea,data),/免疫/);
   changeEquipment(world,attributes,data,{roleId:'001',slotId:'weapon'});assert.equal(world.value.party[0].hp.current,(-88)>>>0);
+  changeEquipment(world,attributes,data,{roleId:'001',slotId:'weapon',instanceId:world.value.inventory.find(row=>row.id===1).instance_id});assert.equal(world.value.party[0].hp.current,(-88)>>>0);
+  //47D960's common epilogue also clamps rawHP while using an MP medicine.
+  const restored=useWorldItem(world,attributes,data,{instanceId:tea.instance_id,targetId:'001'});assert.equal(restored.actor.raw_hp,0);assert.equal(restored.actor.hp.current,restored.actor.resource_bonuses.hp_current);assert.equal(restored.actor.mp.current,50);
+  assert.throws(()=>restoreActorWithItem({...restored.actor,hp:{...restored.actor.hp,current:1},state_raw:0,immune_raw:1},tea,data),/免疫/);
+  changeEquipment(world,attributes,data,{roleId:'001',slotId:'weapon'});assert.equal(world.value.party[0].hp.current,0);
   const loaded=await decodeSave(await encodeSave(world.snapshot()),world.mapIds);
-  assert.equal(createPartyActors(loaded,attributes,{},data)[0].hp.current,0);assert.equal(createPartyActors(loaded,attributes,{},data)[0].effective_hp_raw,-88);
+  assert.equal(createPartyActors(loaded,attributes,{},data)[0].hp.current,0);assert.equal(createPartyActors(loaded,attributes,{},data)[0].effective_hp_raw,0);
   const weapon=world.value.inventory.find(r=>r.id===1);changeEquipment(world,attributes,data,{roleId:'001',slotId:'weapon',instanceId:weapon.instance_id});
-  assert.equal(createPartyActors(world.snapshot(),attributes,{},data)[0].hp.current,0);assert.equal(world.value.party[0].hp.current,(-88)>>>0);
+  assert.equal(createPartyActors(world.snapshot(),attributes,{},data)[0].hp.current,restored.actor.resource_bonuses.hp_current);assert.equal(world.value.party[0].hp.current,0);
 });
