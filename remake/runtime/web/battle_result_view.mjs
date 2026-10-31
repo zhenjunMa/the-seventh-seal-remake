@@ -23,8 +23,8 @@ export class BattleResultView{
   }
   publish(kind){
     const s=this.model.snapshot();this.root.dataset.resultStage=s.phase;this.root.dataset.resultPage=String(s.page);this.root.dataset.resultComplete=String(s.done);
-    this.root.dataset.resultNotices=JSON.stringify(s.notifications.filter(n=>n.active).map(({id,type,actor_name,skill_name,after,x})=>({id,type,actor_name,skill_name,after,x})));
-    const notices=s.notifications.filter(n=>n.active).map(n=>n.type==='practice-bonus'?`技巧经验加值 ${n.value}`:`${n.actor_name} ${n.type==='role-level-up'?'人物升级':n.type==='skill-level-up'?'招式升级':'学会招式'}${n.skill_name?' '+n.skill_name:''}`);
+    this.root.dataset.resultNotices=JSON.stringify(s.notifications.filter(n=>n.active).map(({id,type,actor_name,skill_name,item_id,item_name,after,x})=>({id,type,actor_name,skill_name,item_id,item_name,after,x})));
+    const notices=s.notifications.filter(n=>n.active).map(n=>n.type==='special-item'?`取得 ${n.item_name}`:n.type==='practice-bonus'?`技巧经验加值 ${n.value}`:`${n.actor_name} ${n.type==='role-level-up'?'人物升级':n.type==='skill-level-up'?'招式升级':'学会招式'}${n.skill_name?' '+n.skill_name:''}`);
     const message=['战斗胜利',...s.experience.map(r=>`${r.name} 获得经验 ${r.experience}`),`获得金钱 ${this.model.summary.money}`,
       ...this.model.summary.drops.map(d=>`${d.name} ×${d.quantity}`),...notices,'按空格继续，全部展示后再按空格返回地图'].join('。');
     if(this.status.textContent!==message)this.status.textContent=message;
@@ -75,8 +75,8 @@ export class BattleResultView{
     // Native 50BB50 groups by actor. Older active records remain behind the
     // new card at the same row; never replace the queue with a single toast.
     for(const notice of s.notifications)if(notice.active){
-      this.asset(ctx,glow,'fight_report_02',notice.type==='practice-bonus'?2:notice.type==='skill-learned'?0:1,notice.x,notice.y);
-      this.text(ctx,notice.type==='practice-bonus'?`x${notice.value}`:notice.skill_name??notice.actor_name,notice.x+20,notice.y+3,{width:106,align:'center',shadow:false});
+      this.asset(ctx,glow,'fight_report_02',notice.type==='special-item'?3:notice.type==='practice-bonus'?2:notice.type==='skill-learned'?0:1,notice.x,notice.y);
+      this.text(ctx,notice.type==='special-item'?notice.item_name:notice.type==='practice-bonus'?`x${notice.value}`:notice.skill_name??notice.actor_name,notice.x+20,notice.y+3,{width:106,align:'center',shadow:false});
     }
     this.publish();
   }

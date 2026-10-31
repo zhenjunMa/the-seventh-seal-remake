@@ -158,16 +158,17 @@ export class OpeningView {
             const ticks=payload.nativeStateRaw===7?(this.effects.reveal_ticks??effect.ticks):effect.ticks;
             const update=t=>{
               const tick=Math.min(effect.ticks-1,Math.floor(t*effect.ticks));
-              const raw=240-effect.coefficientStep*tick;
-              const coefficient=raw<=(effect.coefficientCutoff??effect.coefficientFloor)?effect.coefficientFloor:raw;
+              const raw=effect.fadeOut?tick*effect.coefficientStep+10:240-effect.coefficientStep*tick;
+              const coefficient=effect.fadeOut?Math.min(240,raw):raw<=(effect.coefficientCutoff??effect.coefficientFloor)?effect.coefficientFloor:raw;
               actor.alpha=(255-coefficient)/255;
-              actor.blendEffect={blend:effect.blend,offsetY:(effect.startY??0)+(effect.stepY??0)*tick};
+              actor.blendEffect={blend:effect.blend,offsetY:effect.fadeOut?-((raw>>2)*2):(effect.startY??0)+(effect.stepY??0)*tick};
             };
             update(0);
             // GPU ADD/alpha keep the native coefficient and movement sequence.
             // RGB565 destination saturation/rounding remain a browser adapter.
             try{await this.tween(ticks*tickMs,update,signal);}
             finally{actor.alpha=1;actor.blendEffect=null;}
+            if(kind==='behavior')actor.visible=false;
           }
           this.snapshot('opening-effect-complete',{actor:payload.actor,kind,command:payload.command?.index});
           return;

@@ -1,4 +1,4 @@
-// Four active players and up to four admitted enemies; source TLK retains six slots.
+// Four active players and up to six enemies, matching source TLK battle slots.
 import {initializeScheduler,chargeActor,isActorReady,selectReady,dispatchCharge,dispatchItemCharge,setIdleSkill,advanceIdleSkill,pendingCommands,commandForActor} from './battle_scheduler.mjs';
 import {planForestEnemyAction,selectNativeTarget} from './forest_ai.mjs';
 import {composeNativeSequence,directSequence} from './skill_sequence.mjs';
@@ -76,10 +76,10 @@ export class BattleController {
     requireValue(!this.running && (!this.state || this.state.phase === 'closed'), '当前战斗尚未结束');
     requireValue(!lifecycle_enabled||scheduler_data&&reaction_data,'战斗生命周期需要原调度与动作来源');
     requireValue(typeof test_mode==='boolean'&&(!test_mode||scheduler_data),'技巧测试需要原行动调度');
-    requireValue(Array.isArray(actors) && actors.length >= 2 && actors.length <= 8, '参战人数超出当前支持范围');
+    requireValue(Array.isArray(actors) && actors.length >= 2 && actors.length <= 10, '参战人数超出当前支持范围');
     const next = copy(actors); next.forEach(actorShape);
     const players=next.filter(actor=>actor.side==='player');
-    requireValue(players.length>=1&&players.length<=4&&next.length-players.length>=1&&next.length-players.length<=4, '战斗阵营不匹配');
+    requireValue(players.length>=1&&players.length<=4&&next.length-players.length>=1&&next.length-players.length<=6, '战斗阵营不匹配');
     requireValue(players.length===1||scheduler_data, '多人战斗需要行动槽调度');
     requireValue(new Set(next.map(actor=>actor.id)).size===next.length, '战斗角色标识重复');
     const player=players.find(actor=>actor.hp.current>0), enemy=next.find(actor=>actor.side==='enemy');
@@ -855,7 +855,7 @@ export class BattleController {
     const candidate=this.world.snapshot();
     if(this.state.inventory)candidate.inventory=copy(this.state.inventory);
     for(const player of this.players()){const resources=this.resourcesForWorld(copy(player)),role=candidate.party.find(a=>a.id===player.id);role.hp.current=resources.hp;role.mp.current=resources.mp;
-      if(resources.header_raw_hex){role.combat_progress={header_raw_hex:resources.header_raw_hex};role.hp.maximum=resources.hp_maximum;role.mp.maximum=resources.mp_maximum;}}
+      if(resources.header_raw_hex){role.combat_progress={header_raw_hex:resources.header_raw_hex};role.hp.maximum=resources.hp_maximum;role.mp.maximum=resources.mp_maximum;role.attributes_stored=resources.attributes_stored;}}
     this.rewardPlan=planVictoryRewards({world:candidate,ledger:this.state.reward_ledger,data:this.rewardData,rng:this.rng,actors:this.state.actors,skill_data:this.skillGrowthData,skill_practice:this.skillPractice});
     this.state.rewards=copy(this.rewardPlan.summary);this.log({type:'battle-rewards-planned',battle_id:this.state.id,summary:copy(this.rewardPlan.summary),trace:copy(this.rewardPlan.trace)});return this.rewardPlan;
   }
@@ -874,7 +874,7 @@ export class BattleController {
     // ownership boundary, not a native consumable or resource rollback rule.
     if(!this.testMode&&(rewards?.applied||this.state.inventory&&JSON.stringify(this.state.inventory)!==JSON.stringify(before.inventory)||this.players().some(player=>{const persistent=before.party.find(actor=>actor.id===player.id),row=resourcesByActor[player.id];return persistent.hp.current!==row.hp||persistent.mp.current!==row.mp||row.header_raw_hex!==undefined&&persistent.combat_progress?.header_raw_hex!==row.header_raw_hex;}))) {
       this.world.transact(next=>{for(const [id,row]of Object.entries(resourcesByActor)){const actor=next.party.find(actor=>actor.id===id);actor.hp.current=row.hp;actor.mp.current=row.mp;
-        if(row.header_raw_hex){actor.combat_progress={header_raw_hex:row.header_raw_hex};actor.hp.maximum=row.hp_maximum;actor.mp.maximum=row.mp_maximum;}}
+        if(row.header_raw_hex){actor.combat_progress={header_raw_hex:row.header_raw_hex};actor.hp.maximum=row.hp_maximum;actor.mp.maximum=row.mp_maximum;actor.attributes_stored=row.attributes_stored;}}
         if(this.state.inventory)next.inventory=copy(this.state.inventory);
         if(rewards?.applied){Object.assign(next,copy(rewards.world_patch));next.reward_records??=[];requireValue(!next.reward_records.some(r=>r.battle_id===this.state.id),'奖励已经提交');next.reward_records.push(copy(rewards.reward_record));}});
     }

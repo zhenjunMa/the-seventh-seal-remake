@@ -3,7 +3,7 @@
 Reads original Object.ITM and immutable GAME.exe; never edits saves/resources.
 Source-owned, registered plain equipment is enabled with source provenance.
 Source-only records,
-random or malformed ranges, and unverified crystal/special behaviors remain
+malformed ranges and unverified crystal/special behaviors remain
 explicit. All 416 original records are retained without normalizing bytes.
 """
 from pathlib import Path
@@ -74,7 +74,6 @@ def catalog_fields(raw, ident, offset):
     if empty: reasons.append('empty-source-record')
     if placeholder: reasons.append('source-name-marks-placeholder; actual original usage is not asserted')
     if internal: reasons.append('internal-type6 record; no player item handler recovered')
-    if variable: reasons.append('random-initialization-not-ported')
     if issues: reasons.append('reversed-source-range-retained')
     if kind == 'source-only': reasons.append('usage-handler-not-recovered')
     row = dict(id=ident, name=name, raw_hex=raw.hex(),
@@ -90,7 +89,7 @@ def catalog_fields(raw, ident, offset):
         initialization=dict(deterministic=deterministic, variable_fields=variable,
             range_issues=issues, instance_bytes=0xe5, initialized_byte_raw_176=raw[0x176],
             native_random_rule='if minimum < maximum: minimum + rand() % (maximum - minimum); otherwise assign minimum',
-            native_maximum_is_exclusive=True, runtime_random_initialization_supported=False),
+            native_maximum_is_exclusive=True, runtime_random_initialization_supported=type_ in (1, 2, 3, 5)),
         validation=dict(record_id_matches_index=True, name_empty=not name, all_bytes_zero=not any(raw),
             all_value_ranges_ordered=not issues, range_issues=issues,
             deterministic_fields=sum(r['minimum'] == r['maximum'] for r in ranges),
@@ -217,7 +216,7 @@ def registered_tlk_reachability(story, registration, original, hashes, require):
             obj = next((row for row in table['objects'] if row['index'] == index['index']), None)
             require(obj is not None, f'{map_id} object {index}')
             at = obj['source']['offset']; raw = data[at:at + 0x112]
-            behaviors = {'tlk-object': (1,), 'scripted-switch': (9,), 'stationary-chest': (3, 4)}
+            behaviors = {'tlk-object': (1,), 'scripted-object': (2,), 'scripted-switch': (9,), 'stationary-chest': (3, 4)}
             require(raw.hex() == obj['raw_hex'] and raw[0xcf] in behaviors.get(index['handler'], ()), f'{map_id} object source')
             add(map_id, u32(raw, 0xf6), 'object', object_index=index['index'])
         descriptors = {row['id']: row for row in table['descriptors']}
@@ -284,6 +283,13 @@ def registered_tlk_reachability(story, registration, original, hashes, require):
         table = story['maps'][map_id]
         require(0 < record_id <= len(table['records']), f'{key} reachable record')
         row = table['records'][record_id - 1]; raw = bytes.fromhex(row['raw_hex']); reachable[key] = origin
+        if raw[0] == 3:
+            # 462600 dispatches weighted WORD pairs before the ordinary TLK
+            # condition/mutation path; its header and next are not executed.
+            for index in range(15):
+                target, weight = struct.unpack_from('<HH', raw, 0x37 + index * 4)
+                if weight: queue.append((map_id, target, origin))
+            continue
         if raw[0] != 2 and (raw[0] == 4 or u32(raw, 0x17) or u32(raw, 0x1f)):
             queue.append((map_id, u32(raw, 0x2f), origin))
         if raw[0] != 1:
@@ -594,14 +600,14 @@ def status_clear_supported(row):
         and block[1] == 0 and block[0xb] == 5 and not any(raw[0x36e:]))
 
 
-def periodic_restore_supported(row):
+def support_status_item_supported(row):
     raw = bytes.fromhex(row['raw_hex'])
     block = raw[0x2a8:0x36e]
     return bool(row['record_status'] == 'defined' and raw[0x24:0x26] == b'\x05\x01'
         and row['initialization']['deterministic']
         and all(pair['minimum'] == pair['maximum'] == 0 for pair in row['value_ranges'])
         and raw[0x156] in (0, 1) and raw[0x157] == 1 and i32(raw, 0x142) == 17
-        and 0 < block[1] <= 100 and block[0xb] in (0, 2) and block[0x10] == 1
+        and 0 < block[1] <= 100 and block[0xb] in (0, 2) and block[0x10] <= 1
         and i32(block, 0x23) >= 0 and i32(block, 0x2b) >= 0
         and not any(raw[0x36e:]))
 
@@ -613,6 +619,18 @@ def element_source_supported(row):
         and all(pair['minimum'] >= 0 and (pair['instance_offset'] >= 0x65 or pair['minimum'] == 0)
                 for pair in row['value_ranges'])
         and any(pair['minimum'] > 0 for pair in row['value_ranges'] if 0x65 <= pair['instance_offset'] < 0x7d)
+        and raw[0x156:0x158] == b'\x00\x01' and i32(raw, 0x142) == 17
+        and not any(raw[0x2a8:]))
+
+
+def permanent_attack_source_supported(row):
+    """47D960 applies saved+1D, then saved+41 percent, leaving base+44 intact."""
+    raw = bytes.fromhex(row['raw_hex'])
+    return bool(row['record_status'] == 'defined' and raw[0x24:0x26] == b'\x05\x04'
+        and row['validation']['all_value_ranges_ordered']
+        and all(pair['minimum'] >= 0 and (pair['instance_offset'] in (0x1d, 0x41) or pair['maximum'] == 0)
+                for pair in row['value_ranges'])
+        and any(pair['maximum'] > 0 for pair in row['value_ranges'] if pair['instance_offset'] in (0x1d, 0x41))
         and raw[0x156:0x158] == b'\x00\x01' and i32(raw, 0x142) == 17
         and not any(raw[0x2a8:]))
 
@@ -638,6 +656,22 @@ def admit_registered_status_cures(definitions, equipment_admission):
             row['availability'] = dict(enabled=True, chapter_enabled=True, catalog_visible=True, default_enabled=True,
                 reasons=['registered-source-acquisition; native-material-exchange-recovered'])
             continue
+        if permanent_attack_source_supported(row):
+            sources[ident] = deepcopy(provenance)
+            previous[ident] = {key: deepcopy(row[key]) for key in ('availability', 'behavior')}
+            row['behavior'] = dict(kind='permanent-stat-source', status='recovered',
+                implemented_scope=['native-instance-permanent-current-attack-increase'], unverified_scope=[])
+            row['availability'] = dict(enabled=True, chapter_enabled=True, catalog_visible=True, default_enabled=True,
+                reasons=['registered-source-acquisition; native-random-initialization-and-permanent-stat-use-recovered'])
+            row['permanent_stat'] = dict(instance_offset=0x1d, percent_instance_offset=0x41, header_offset=0x40,
+                attribute='attack_flat', percent_attribute='attack_percent',
+                procedure='0x47d960', evidence='ev_1c0a51b83c36440a3e4ca24350ee4e46045db3f7d34c08151aab60fb099daca5')
+            row['effect'] = dict(restore_hp_flat=0, restore_mp_flat=0, restore_hp_percent=0, restore_mp_percent=0, revive=False)
+            row['use_in_field'], row['use_in_battle'] = True, True
+            row['battle'] = dict(animation_skill_id_raw_142=17, all_targets_raw_156=0, same_side_raw_157=1,
+                effect_kind_raw_2b3=0, preparation_delay_added=0, target_state_max_exclusive=4,
+                target_immune_must_be_zero=True, consume_only_on_native_success=True)
+            continue
         if simple_restore_supported(row):
             if row['availability']['enabled'] and row['behavior']['kind'] == 'simple-restore':
                 continue
@@ -656,13 +690,13 @@ def admit_registered_status_cures(definitions, equipment_admission):
                 target_immune_must_be_zero=True, consume_only_on_native_success=True)
             continue
         attack, revival, clear = status_attack_supported(row), revival_item_supported(row), status_clear_supported(row)
-        periodic, element = periodic_restore_supported(row), element_source_supported(row)
-        if attack or revival or clear or periodic or element:
+        support, element = support_status_item_supported(row), element_source_supported(row)
+        if attack or revival or clear or support or element:
             raw = bytes.fromhex(row['raw_hex'])
             sources[ident] = deepcopy(provenance)
             previous[ident] = {key: deepcopy(row[key]) for key in ('availability', 'behavior')}
-            row['behavior'] = dict(kind='status-attack' if attack else 'status-clear' if clear else 'status-support' if periodic else 'element-source' if element else 'revival-item', status='recovered',
-                implemented_scope=['battle-source-status-and-raw-resource-change'] if attack else ['battle-mode5-all-status-removal'] if clear else ['battle-periodic-resource-restoration'] if periodic else ['native-permanent-element-increase'] if element else ['battle-mode3-revival', 'field-resource-restoration'],
+            row['behavior'] = dict(kind='status-attack' if attack else 'status-clear' if clear else 'status-support' if support else 'element-source' if element else 'revival-item', status='recovered',
+                implemented_scope=['battle-source-status-and-raw-resource-change'] if attack else ['battle-mode5-all-status-removal'] if clear else ['battle-periodic-resource-restoration' if raw[0x2b8] else 'battle-static-status-aggregation'] if support else ['native-permanent-element-increase'] if element else ['battle-mode3-revival', 'field-resource-restoration'],
                 unverified_scope=[])
             row['availability'] = dict(enabled=True, chapter_enabled=True, catalog_visible=True, default_enabled=True,
                 reasons=['registered-source-acquisition; native-item-status-or-revival-recovered'])
@@ -678,7 +712,7 @@ def admit_registered_status_cures(definitions, equipment_admission):
             elif clear:
                 row['status_clear'] = dict(effect_raw_hex=raw[0x2a8:0x36e].hex(), effect_id_raw=0, mode_raw=5,
                     definition_offset=0x2a8, effect_bytes=0xc6)
-            elif attack or periodic:
+            elif attack or support:
                 row['status_attack'] = dict(effect_raw_hex=raw[0x2a8:0x36e].hex(), effect_id_raw=raw[0x2a9], mode_raw=raw[0x2b3],
                     definition_offset=0x2a8, effect_bytes=0xc6)
             row['use_in_field'], row['use_in_battle'] = revival or element, True

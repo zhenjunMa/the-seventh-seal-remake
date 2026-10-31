@@ -22,12 +22,12 @@ export class BattleResultSequence{
     this.money=summary.money_before;this.moneyGain=0;this.combo=0;this.practice=0;this.notices=[];this.pendingRoles=[];
     const ids=new Set();this.groups=new Map();
     for(const event of summary.notifications??[]){
-      need(['role-level-up','skill-learned','skill-level-up','practice-bonus'].includes(event.type)&&typeof event.id==='string'&&!ids.has(event.id),'通知类型或身份无效');ids.add(event.id);
+      need(['role-level-up','skill-learned','skill-level-up','practice-bonus','special-item'].includes(event.type)&&typeof event.id==='string'&&!ids.has(event.id),'通知类型或身份无效');ids.add(event.id);
       if(event.type==='role-level-up'&&event.experience_gained_at>0)this.pendingRoles.push(copy(event));else this.enqueue(event);
     }
   }
   enqueue(event){
-    const actorIndex=event.type==='practice-bonus'?6:this.actors.findIndex(a=>a.id===event.actor_id);need(actorIndex>=0,'通知人物未参战');
+    const actorIndex=event.type==='special-item'?7:event.type==='practice-bonus'?6:this.actors.findIndex(a=>a.id===event.actor_id);need(actorIndex>=0,'通知人物未参战');
     const ordinal=this.groups.get(actorIndex)??0;this.groups.set(actorIndex,ordinal+1);
     this.notices.push({...copy(event),actor_index:actorIndex,ordinal,x:500,y:actorIndex*35+103,active:ordinal===0,landed:false,last:0});
   }

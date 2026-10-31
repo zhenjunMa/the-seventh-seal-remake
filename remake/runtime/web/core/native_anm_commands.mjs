@@ -2,7 +2,8 @@
 // ANM jump operands are one-based command numbers, never TLK record IDs.
 const need=(ok,message)=>{if(!ok)throw new Error(`剧情动画旗标：${message}`);};
 // Source 473E30 case12 -> 40C5C0. This phase admits source CF7 objects
-// without rewards, spawns, proximity dispatch or closing TLK side effects.
+// without rewards, spawns or closing TLK side effects. CF2/CF9 +F6 runs
+// on explicit selection; 40C5C0 itself starts only the requested animation.
 export function nativeAnmObjectTarget(command,mapId,story){
   const active=story.maps[mapId],mapFlag=command.u32_plus5||active.map_flag_index;
   if(!command.u32_plus25)return null;
@@ -13,7 +14,7 @@ export function nativeAnmObjectTarget(command,mapId,story){
   if(table.id===mapId){
     const raw=Uint8Array.from(object.raw_hex.match(/../g),value=>parseInt(value,16)),view=new DataView(raw.buffer);
     need([2,7,9].includes(raw[0xcf])&&raw[0x109]===0&&raw[0x51]===0&&view.getUint32(0x4c,true)===0
-      &&view.getUint32(0xba,true)===0&&(raw[0xcf]===9||view.getUint32(0xf6,true)===0)
+      &&view.getUint32(0xba,true)===0&&([2,9].includes(raw[0xcf])||view.getUint32(0xf6,true)===0)
       &&view.getUint32(0xe3,true)===0&&view.getUint32(0xe7,true)===0
       &&Array.from({length:10},(_,slot)=>view.getUint32(0x54+slot*4,true)).every(id=>id===0),'物件联动或主动类型尚未恢复');
   }

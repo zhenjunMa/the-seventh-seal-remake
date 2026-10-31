@@ -60,7 +60,9 @@ export class AnmActions {
 
   async execute(command) {
     this.check();
-    const actor = command.u32_plus5;
+    // Native473E30 resolves slots6..9 at the instant each actor command runs.
+    const slot=command.u32_plus5;
+    const actor = slot>5&&slot<10&&[32,33,35,41,48,49].includes(command.opcode)?this.context().controlledActor??0:slot;
     const position = {x:(command.u32_plus13 | 0) * 2, y:(command.u32_plus17 | 0) * 2};
     if (this.nativeMetadata) Object.assign(position, {
       nativeX:command.u32_plus13 | 0, nativeY:command.u32_plus17 | 0});

@@ -2,6 +2,7 @@ import {createPartyActors,partyResourcesForWorld} from './party_attributes.mjs';
 import {migrateEquipment,withItemQuantity,validateItemInstance} from './equipment.mjs';
 import {removeNativeStatus,applyNativeItemStatus,clearNativeStatuses} from './battle_status.mjs';
 import {applyNativeRevivalEffect} from './battle_revival.mjs';
+import {configuredEquipmentHex} from './item_registry.mjs';
 const copy=structuredClone;
 const need=(ok,message)=>{if(!ok)throw new Error(message);};
 
@@ -59,6 +60,20 @@ export function restoreActorWithItem(actor,item,data,{scope='battle',statusData,
     status=applyNativeRevivalEffect({target:next,effect_raw_hex:def.revival.effect_raw_hex,rng,selectAnimation});
     next=status.actor;trace.push(...(status.animation?.trace??[]),...status.trace);
   }
+  let permanentStatApplied=false;
+  if(def.behavior?.kind==='permanent-stat-source'){
+    const instance=Uint8Array.from(configuredEquipmentHex(item.source_raw_hex,def).match(/../g),part=>parseInt(part,16));
+    const values=new DataView(instance.buffer),amount=values.getInt32(def.permanent_stat.instance_offset,true),percent=values.getInt32(def.permanent_stat.percent_instance_offset,true);
+    if(amount||percent){
+      const raw=Uint8Array.from(next.header_raw_hex.match(/../g),part=>parseInt(part,16)),view=new DataView(raw.buffer),offset=def.permanent_stat.header_offset;
+      const before=view.getInt32(offset,true),flat=(before+amount)|0;
+      const after=percent?Math.max(0,Math.min(999,(flat+Math.trunc(Math.imul(flat,percent)/100))|0)):flat;
+      view.setInt32(offset,after,true);
+      next.raw_by_address[`0x${(0x524a6d1+offset).toString(16).padStart(8,'0')}`]=after;
+      next.header_raw_hex=Array.from(raw,value=>value.toString(16).padStart(2,'0')).join('');next.permanent_item_header_raw_hex=next.header_raw_hex;
+      changes.attack={before,after};permanentStatApplied=true;
+    }
+  }
   const elementApplied=def.behavior?.kind==='element-source'&&Array.from({length:6},(_,index)=>def.effect[`element_${index}_flat`]).some(Boolean);
   if(elementApplied){
     const raw=Uint8Array.from(next.header_raw_hex.match(/../g),part=>parseInt(part,16)),view=new DataView(raw.buffer);
@@ -93,7 +108,7 @@ export function restoreActorWithItem(actor,item,data,{scope='battle',statusData,
     next.header_raw_hex=Array.from(raw,value=>value.toString(16).padStart(2,'0')).join('');next.permanent_item_header_raw_hex=next.header_raw_hex;
   }
   if(scope==='field')next.state_raw=next.hp.current>0?0:4;
-  const resourceApplied=elementApplied||Boolean(def.effect.mp_maximum_percent)||['hp','mp'].some(resource=>(def.effect[`restore_${resource}_flat`]??0)!==0||(def.effect[`restore_${resource}_percent`]??0)!==0);
+  const resourceApplied=permanentStatApplied||elementApplied||Boolean(def.effect.mp_maximum_percent)||['hp','mp'].some(resource=>(def.effect[`restore_${resource}_flat`]??0)!==0||(def.effect[`restore_${resource}_percent`]??0)!==0);
   const applied=Boolean(resourceApplied||status?.native_return===1);
   const state_changed=['raw_hp','raw_mp','raw_hp_maximum','raw_mp_maximum'].some(field=>next[field]!==actor[field]);
   return {actor:next,changes,name:def.name,applied,state_changed,native_return:applied?1:0,effect_requested:true,
@@ -107,7 +122,7 @@ export function useWorldItem(world,attributes,data,{instanceId,targetId,expected
   if(!result.applied&&!result.state_changed)return {...result,targetId,world_revision:world.value.revision};
   const resources=partyResourcesForWorld(result.actor);
   world.transact(draft=>{if(result.applied)draft.inventory=consumed.inventory;const role=draft.party.find(r=>r.id===targetId);role.hp.current=resources.hp;role.mp.current=resources.mp;
-    if(resources.header_raw_hex){role.combat_progress={header_raw_hex:resources.header_raw_hex};role.hp.maximum=resources.hp_maximum;role.mp.maximum=resources.mp_maximum;}});
+    if(resources.header_raw_hex){role.combat_progress={header_raw_hex:resources.header_raw_hex};role.hp.maximum=resources.hp_maximum;role.mp.maximum=resources.mp_maximum;role.attributes_stored=resources.attributes_stored;}});
   return {...result,targetId,world_revision:world.value.revision};
 }
 

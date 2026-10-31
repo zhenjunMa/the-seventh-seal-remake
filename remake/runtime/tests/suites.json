@@ -93,7 +93,8 @@
         "test_source_skill_configuration.mjs",
         "test_white_forest_packages.mjs",
         "test_wind_region.mjs",
-        "test_yc05_jl03_phase.mjs"
+        "test_yc05_jl03_phase.mjs",
+        "test_guild_quests.mjs"
       ],
       "layer": "content",
       "cache": true
@@ -220,7 +221,10 @@
         "test_inner_white_forest_seal.mjs",
         "test_inner_white_forest_battle_source.py",
         "test_yc05_jl03_battle.mjs",
-        "test_yc05_jl03_rewards.mjs"
+        "test_yc05_jl03_rewards.mjs",
+        "test_guild_battles.mjs",
+        "test_guild_crafting.mjs",
+        "test_guild_shared.mjs"
       ],
       "requires": [
         "GAME.exe"
@@ -282,9 +286,9 @@
   "requirements": {
     "test_wind_entry_items.mjs": ["SYSTEM/Object.ITM", "Fight_Role/029.CHR", "Fight_Role/034.CHR", "Fight_Role/Status", "remake/runtime/evidence/wind_region_20261031/browser_outputs/boss_first_blocked_log.json"],
     "test_battle_appearance_source.mjs": ["GAME.exe", "Fight_Role/018.CHR", "remake/runtime/tests/fixtures/battle_appearance2_native.json"],
-    "test_actor_effects_source.mjs": ["GAME.exe", "remake/runtime/tests/fixtures/anm_actor_blend_native.json", "Animate/m01060-2.anm", "Animate/m17029-1.anm", "Animate/m17030-1.anm", "Animate/m70073-1.anm", "Animate/m70078-1.anm", "Animate/m01040-5.anm", "Animate/m01050-3.anm", "Animate/m01022-1.anm", "Animate/m01022-2.anm"],
+    "test_actor_effects_source.mjs": ["GAME.exe", "remake/runtime/tests/fixtures/anm_actor_blend_native.json", "Animate/m01060-2.anm", "Animate/m17029-1.anm", "Animate/m17030-1.anm", "Animate/m70073-1.anm", "Animate/m70078-1.anm", "Animate/m01040-5.anm", "Animate/m01050-3.anm", "Animate/m01022-1.anm", "Animate/m01022-2.anm", "remake/runtime/tests/fixtures/guild_actor_fade_native.json", "Animate/m55001.anm", "Animate/m72062-1.anm", "Animate/m72063.anm", "Animate/m72062-2.anm", "Animate/m72063-2.anm", "Animate/m72062-3.anm", "Animate/m72063-3.anm", "Animate/m72064-1.anm", "Animate/m73013-1.anm", "Animate/m01066-3.anm", "Animate/m01053-2.anm", "Animate/m71080.anm", "Animate/elf-e.anm", "Animate/elf-i.anm", "Animate/elf-v.anm"],
     "test_native_story_conditions.mjs": ["Map/m03023.TLK"],
-    "test_native_anm_extended.mjs": ["Animate/m17010-3.anm", "Animate/m03021.anm", "Animate/m17030-1.anm", "Fight_Role/004.CHR", "Fight_Role/006.CHR", "remake/runtime/web/data/opening_map_resources.json"],
+    "test_native_anm_extended.mjs": ["Animate/m17010-3.anm", "Animate/m03021.anm", "Animate/m17030-1.anm", "Fight_Role/004.CHR", "Fight_Role/006.CHR", "remake/runtime/web/data/opening_map_resources.json", "Animate/m71080.anm"],
     "test_yc05_jl03_battle.mjs": ["Fight_Role/031A1.CHR", "Fight_Role/031B2.CHR", "Fight_Role/031A1.dgp", "Fight_Role/031B2.dgp", "remake/runtime/evidence/yc05_jl03_20261030/battle_camera_native.json", "remake/runtime/evidence/yc05_jl03_20261030/battle_command9_native.json", "remake/runtime/evidence/yc05_jl03_20261030/battle_entry_native_bundle.json"],
     "test_yc05_jl03_rewards.mjs": ["SYSTEM/Object.ITM", "Map/m71010.dat", "Map/m71020.dat", "Map/m71030.dat", "Map/m71040.dat", "Map/m71050.dat", "Map/m71060.dat"],
     "test_inner_white_forest_phase.mjs": ["Map/m70071.dat", "Map/m70072.dat", "Map/m70073.dat", "Map/m70075.dat", "Map/m70076.dat", "Map/m70074_1.dat", "Map/m70074_2.dat", "Map/m70071.TLK", "Map/m70072.TLK", "Map/m70073.TLK", "Map/m70076.TLK", "Animate/m01051-1.anm", "Animate/m01050-1.anm", "Animate/m70073-1.anm", "Animate/m01050-2.anm", "Animate/m17010-2.anm", "SYSTEM/Object.ITM", "mapm/m70071/014.dgp"],
@@ -382,7 +386,11 @@
     "test_map_collision_source.mjs": ["Map/m01063.dat", "Map/m70060.dat", "Map/m71014.dat", "Map/m71011.dat", "Map/m71012.dat", "Map/m71012-1.dat", "Map/m71012-2.dat", "Map/m71013.dat", "Map/m03039.dat", "Animate/m03039-1.anm"],
     "test_inner_white_forest_seal.mjs": ["Map/m01019.dat", "Map/m01019.TLK", "Map/m70077.dat", "Map/m70077-1.dat", "Map/m70077-2.dat", "Map/m70077-3.dat", "Map/m70077-4.dat", "Map/m70078-1_1.dat", "Map/m70078-2_1.dat", "Map/m70078-3_1.dat", "Map/m70078_2.dat", "Map/m70078-1_1.TLK", "Map/m70078-2_1.TLK", "Map/m70078-3_1.TLK", "Map/m70078_2.TLK", "Animate/m01010-1.anm", "Animate/m01042-1.anm", "Animate/m70078-1.anm", "Map/m17029.dat", "Map/m17029.TLK", "Map/m17020.dat", "Map/m17026.dat", "Map/m17026.TLK", "Animate/m17029-1.anm", "SYSTEM/Object.ITM"],
     "test_inner_white_forest_battle_source.py": ["python:PIL", "remake/runtime/evidence/turn_rules_assembly_20261011.json", "remake/runtime/evidence/forest_scheduler_native_20261011.json"],
-    "test_inner_white_forest_battle_replay.mjs": ["Fight_Role/024.CHR", "Fight_Role/041.CHR", "remake/runtime/web/assets/enemy_roles/024", "remake/runtime/web/assets/enemy_roles/041", "remake/runtime/web/data/battle_lifecycle_layers_024.json", "remake/runtime/web/data/battle_lifecycle_layers_041.json", "remake/runtime/evidence/inner_white_forest_20261030/appearance_native.json"]
+    "test_inner_white_forest_battle_replay.mjs": ["Fight_Role/024.CHR", "Fight_Role/041.CHR", "remake/runtime/web/assets/enemy_roles/024", "remake/runtime/web/assets/enemy_roles/041", "remake/runtime/web/data/battle_lifecycle_layers_024.json", "remake/runtime/web/data/battle_lifecycle_layers_041.json", "remake/runtime/evidence/inner_white_forest_20261030/appearance_native.json"],
+    "test_guild_crafting.mjs": ["GAME.exe", "SYSTEM/Object.ITM", "Map/m01042.TLK", "Map/m03032.TLK", "remake/runtime/web/data/items.json", "remake/runtime/web/data/config/items.json"],
+    "test_guild_battles.mjs": ["Fight_Role/043.CHR", "Fight_Role/061.CHR", "Fight_Role/063.CHR", "Fight_Role/084.CHR", "Map/m71078-3-24.TLK", "remake/runtime/web/data/forest_ai.json", "Fight_Role"],
+    "test_guild_shared.mjs": ["Map/m01053.TLK", "Map/Elf-forest-E.TLK", "Map/m03066.TLK", "Map/m71078-3-24.dat", "remake/runtime/web/data/chapter_story.json"],
+    "test_audio.mjs": ["Map", "sound/E017.wav", "sound/E018.wav", "sound/E019.wav", "sound/E020.wav"]
   },
   "profiles": {
     "task": [
@@ -575,7 +583,8 @@
     "wind-region": {
       "maps": ["m290*", "m190*", "m730*", "m55010"],
       "tests": ["test_wind_region*"]
-    }
+    },
+    "guild": {"maps": ["m010*", "m030*", "m290*", "m7107*", "m71080", "elf-forest-*"], "tests": ["test_guild*"]}
   },
   "browser": {
     "path": "/tests/phaser_lifecycle.html",

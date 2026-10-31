@@ -20,6 +20,8 @@ import {nativeScriptedBattle} from './scripted_battle.mjs';
 import {nativeKeyedChest,nativeScriptedChest,canOpenNativeChest} from './native_map_chests.mjs';
 import {evaluateNativeStoryCombination} from './native_story_combinations.mjs';
 import {isNativeMapId} from './native_map_identity.mjs';
+import {createNativeRng} from './combat_rules.mjs';
+import {initialEncounterState} from './encounters.mjs';
 
 const copy = value => structuredClone(value);
 const need = (ok, message) => { if (!ok) throw new Error(message); };
@@ -40,9 +42,13 @@ const VALUE_PAIRS = [[0x0d,0x17e],[0x11,0x186],[0x15,0x18e],[0x19,0x196],
   ...Array.from({length:10}, (_, i) => [0x65 + i * 4, 0x24a + i * 8])];
 const ZERO_EVENT = '00'.repeat(14);
 
-export function initializeChapterItem(definition,{allowWeapon=false}={}) {
+export function validateChapterItemDefinition(definition,{allowWeapon=false}={}) {
   const b = bytes(definition?.raw_hex, 0x3bf, '剧情道具定义'), v = view(b);
   need(v.getUint32(0, true) === definition.id && (allowWeapon?[1,2,3,5]:[2,3,5]).includes(b[0x24]), '剧情道具类别尚未接入');
+  return b;
+}
+export function initializeChapterItem(definition,{allowWeapon=false,rng}={}) {
+  const b=validateChapterItemDefinition(definition,{allowWeapon}),v=view(b);
   // TLK case5 uses the 0xCC-filled 0x461780 local buffer, not a fabricated
   // zeroed native instance. 0x47B3C0 only overwrites the fields below;
   // 0x47BDC0 writes quantity when the buffer enters inventory.
@@ -54,8 +60,9 @@ export function initializeChapterItem(definition,{allowWeapon=false}={}) {
   instance.fill(0, 10, 13);
   for (const [to, from] of VALUE_PAIRS) {
     const minimum = v.getInt32(from, true), maximum = v.getInt32(from + 4, true);
-    need(maximum <= minimum, '剧情道具随机初始化范围尚未接入');
-    out.setInt32(to, minimum, true);
+    const span=maximum-minimum;
+    if(span>0)need(typeof rng==='function','随机道具初始化需要原CRT随机源');
+    out.setInt32(to, minimum+(span>0?rng()%span:0), true);
   }
   return instance;
 }
@@ -151,9 +158,9 @@ export function chapterRestChoices(record,binding=null) {
 }
 
 export class ChapterRunner {
-  constructor({world, data, say, choose = null, animate, transfer, battle, service, objectData = null, objectInteraction = async () => {}, objectAnimation = async () => {}, wait=playbackDelay, setPhase = () => {}, log = () => {},content=runtimeContent,worldMapState}) {
+  constructor({world, data, say, choose = null, animate, transfer, battle, service, sound = () => {}, objectData = null, objectInteraction = async () => {}, objectAnimation = async () => {}, wait=playbackDelay, setPhase = () => {}, log = () => {},content=runtimeContent,worldMapState}) {
     validateChapterStory(data);
-    Object.assign(this, {world, data:data.version===2?data:copy(data), objectData:data.version===2?objectData:copy(objectData), objectInteraction, objectAnimation, say, choose, animate, transfer, battle, service, wait, setPhase, log,content,worldMapState});
+    Object.assign(this, {world, data:data.version===2?data:copy(data), objectData:data.version===2?objectData:copy(objectData), objectInteraction, objectAnimation, say, choose, animate, transfer, battle, service, sound, wait, setPhase, log,content,worldMapState});
     if(data.version===1)this.data.flows=Object.fromEntries(Object.values(this.data.maps).filter(table=>table.dialogue_status!=='source-file-absent').map(table=>{
       const flow=compileTlkFlow(table,{choices:chapterChoices});return [flow.id,flow];
     }));
@@ -163,7 +170,7 @@ export class ChapterRunner {
       }
     }
     this.flowRunner=new StoryFlowRunner(Object.fromEntries(['record','say','choice','animation','give_item','restore_party','request_save','set_native_object','wait',
-      'test_native_condition','test_native_combination','change_native_money','native_service','learn_native_skill','native_noop','unlock_recipe','world_map_command','transfer_native_map','native_battle','restore_native_resources']
+      'test_native_condition','test_native_combination','random_jump','change_native_money','native_service','native_sound','learn_native_skill','native_noop','unlock_recipe','world_map_command','transfer_native_map','native_battle','restore_native_resources']
       .map(op=>[op,(command,execution)=>this.applyFlowCommand(op,command,execution)])));
     this.running = false;
   }
@@ -240,7 +247,7 @@ export class ChapterRunner {
   }
   objectFor(mapId, objectIndex) {
     const binding=storyBindings(mapId,this.content).objects.find(row=>row.index===objectIndex);
-    need(binding&&['stationary-chest','keyed-chest','tlk-object','scripted-switch'].includes(binding.handler), '剧情物件行为尚未接入');
+    need(binding&&['stationary-chest','keyed-chest','tlk-object','scripted-switch','scripted-object'].includes(binding.handler), '剧情物件行为尚未接入');
     const table = this.data.maps[mapId], object = table?.objects.find(row => row.index === objectIndex);
     need(object, '剧情物件来源缺失');
     const b = bytes(object.raw_hex, 0x112, '剧情物件'), v = view(b);
@@ -252,7 +259,10 @@ export class ChapterRunner {
       else if(binding.handler==='scripted-switch'){
         need(b[0xcf]===9&&v.getUint32(0xf6,true)>0,'机关剧情入口无效');
         nativeAnmObjectTarget({u32_plus5:table.map_flag_index,u32_plus25:objectIndex+1,byte_plus29:0},mapId,this.data);
-      }else nativeScriptedChest(object);
+      }else{
+        nativeScriptedChest(object);
+        need(binding.handler!=='scripted-object'||b[0xcf]===2,'脚本物件原行为类型不符');
+      }
       need(table.records.some(row=>row.id===v.getUint32(0xf6,true)),'剧情物件入口缺失');
     }
     if (this.objectData) {
@@ -333,6 +343,16 @@ export class ChapterRunner {
     const record=native?table?.records.find(row=>row.id===command.record_id):{
       ...command.presentation,id:command.record_id,text_raw:command.text,source:command.source,
       ...(typeof command.speaker==='string'?{speaker_name:command.speaker}:{})};
+    if(op==='random_jump'){
+      draft.encounters??=initialEncounterState(draft.party);
+      const rng=createNativeRng(draft.encounters.rng_state),roll=rng()%100;
+      draft.encounters.rng_state=rng.state;
+      this.log({type:'chapter-random',mapId,recordId:record.id,roll});return roll;
+    }
+    if(op==='native_sound'){
+      // 462600 calls 4BAFA0 with TLK+37, then immediately follows next.
+      this.sound({token:command.token,playback,signal:playback?.signal});return;
+    }
     if(op==='record'){
       need(record,'剧情记录缺失');
       if(storyBindings(mapId,this.content).rests.some(row=>row.restore_records.includes(record.id)))need(context.explicitInteraction===true,'休息需要主动操作床铺');
@@ -470,7 +490,12 @@ export class ChapterRunner {
       }
       const definition = this.data.item_definitions?.[record.mutation_bit];
       need(definition && definition.source?.sha256 === this.data.source_hashes[definition.source.path], '剧情道具来源缺失');
-      const template = initializeChapterItem(definition);
+      let rng;
+      const template = initializeChapterItem(definition,{rng:()=>{
+        if(!rng){draft.encounters??=initialEncounterState(draft.party);rng=createNativeRng(draft.encounters.rng_state);}
+        return rng();
+      }});
+      if(rng)draft.encounters.rng_state=rng.state;
       const inventory = draft.inventory;
       // 0x47BDC0 checks each stored slot in order, choosing the first matching
       // stack (+0x0C=0) or empty ID0 slot. Gear type2 joins inventory too.

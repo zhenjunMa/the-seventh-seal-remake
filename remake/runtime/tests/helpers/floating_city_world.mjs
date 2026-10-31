@@ -54,9 +54,9 @@ export async function floatingCityComplete(source,{world,checkpoint=async()=>{}}
   assert.equal(world.value.encounters.global_pool_map_id,originalPool);
   assert.deepEqual(trace.animations.filter(row=>row.id==='m03044-1'),[{id:'m03044-1',commands:48}]);
   await restore();await checkpoint('dream_entry',world,trace);
-  // The deep-floor teleport entrance remains wholly unadmitted.
-  assert.ok(!source.content.maps.M71071.triggers.includes(3));
-  assert.ok(!source.maps.M71075.exits.some(row=>row.target_map==='M71077'&&row.state==='ready'));
+  // The later guild admission must not change this first dream's route.
+  assert.equal(world.value.flags[126],beforeBook.flags[126]);
+  assert.equal(world.value.flags[614],beforeBook.flags[614]);
   innerWhiteForestRoute(source,world,'M71072','M71073','M71074','M71075');
   await checkpoint('dream_seal_before',world,trace);
   choice=1;await runner.runObject({mapId:'M71075',objectIndex:9});choice=0;
@@ -66,6 +66,9 @@ export async function floatingCityComplete(source,{world,checkpoint=async()=>{}}
   assert.deepEqual(world.snapshot(),beforeReturn);cancelMap=null;
   await runner.runObject({mapId:'M71075',objectIndex:9});
   assert.equal(world.location.map_id,'M03044');assert.equal(bit(428,3),true);
+  assert.equal(world.value.flags[126],beforeBook.flags[126]);
+  assert.equal(world.value.flags[614],beforeBook.flags[614]);
+  assert.ok(!trace.animations.some(row=>row.id==='m71080'));
   assert.deepEqual(trace.animations.filter(row=>row.id==='m03044-2'),[{id:'m03044-2',commands:22}]);
   await restore();await checkpoint('dream_return',world,trace);
   innerWhiteForestRoute(source,world,'M03043-5','M03043-4','M03043-3','M03043-2',

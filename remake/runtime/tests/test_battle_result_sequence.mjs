@@ -76,6 +76,20 @@ test('Role upgrades enter only when their report EXP crosses the planned thresho
   model.tick(20);const notification=model.snapshot().notifications.find(n=>n.id==='r1');assert.equal(notification.ordinal,1);assert.equal(notification.active,false);
 });
 
+test('Source type7 special drops occupy their own row and use the original obtained card and supplied item label',()=>{
+  const notice={id:'unique20',type:'special-item',actor_id:null,actor_name:null,item_id:20,item_name:'火凤之卵',
+    actual_item_name:'金乌鸟羽',source_type_raw:7,source_payload_raw:20,display_item_id:21};
+  const model=create([notice]),row=model.snapshot().notifications[0];
+  assert.deepEqual([row.actor_index,row.ordinal,row.y],[7,0,348]);
+  model.victorFinished=true;model.phase='notices';model.reportX=0;
+  const assets=[],texts=[],view={active:true,model,asset:(_ctx,_glow,...args)=>assets.push(args),text:(_ctx,...args)=>texts.push(args),
+    nextExperience:()=>0,publish(){}};
+  BattleResultView.prototype.draw.call(view,{}, {},0);
+  assert.deepEqual(assets.find(args=>args[0]==='fight_report_02'),['fight_report_02',3,500,348]);
+  assert.ok(texts.some(args=>args[0]==='火凤之卵'&&args[1]===520&&args[2]===351));
+  assert.equal(model.summary.drops.some(item=>item.id===20),false,'special drops do not enter the ordinary drop list');
+});
+
 test('Repeated open/update cannot restart the same report or issue its completion callback twice',()=>{
   const node=()=>({hidden:true,dataset:{},setAttribute(){},focus(){},remove(){}}),root={dataset:{},ownerDocument:{createElement:node},append(){}};
   const manifest={schema:'seventh-seal-battle-result',version:1,native_canvas:{width:640,height:480},assets:Object.fromEntries(['fight_report_01','fight_report_02','victor'].map(id=>[id,{frames:Array.from({length:id==='fight_report_02'?4:24},(_,i)=>({image:`assets/battle_result/${id}/${i}.png`}))}]))};

@@ -53,6 +53,7 @@ test('catalog support is the proven 21 stat-only crystals, with immutable ITM so
 
 test('new game exposes four original holes and admits crystals in physical inventory order', () => {
   const o = setup([instance(157), instance(2), instance(156), instance(162)]);
+  o.itemData.definitions['162'].runtime_enabled = false;
   assert.equal(crystalSocketCount(o.worldStore.value, attributes, o.itemData, '001'), 4);
   assert.deepEqual(crystalSocketRows(o.worldStore.value, attributes, o.itemData, '001').map(row => row.visible), [true,true,true,true,false,false]);
   assert.deepEqual(crystalSocketCandidates(o.worldStore.value.inventory, o.itemData).map(row => row.id), [157,156]);
@@ -146,8 +147,9 @@ test('configuration adjusts a linked calculation copy without rewriting original
   assert.equal(o.worldStore.value.crystal_sockets.roles['001'][0].source_raw_hex, raw);
 });
 
-test('invalid holes, stale revisions, unsupported passives and tampered instances are atomic', () => {
+test('invalid holes, stale revisions, disabled crystals and tampered instances are atomic', () => {
   const o = setup([instance(156), instance(162)]), before = o.worldStore.snapshot();
+  o.itemData.definitions['162'].runtime_enabled = false;
   for (const attempt of [
     {...o,socketIndex:0,instanceId:'fixture:156'}, {...o,socketIndex:5,instanceId:'fixture:156'},
     {...o,expectedRevision:999,instanceId:'fixture:156'}, {...o,instanceId:'fixture:162'},

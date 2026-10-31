@@ -53,15 +53,18 @@ function activeObjectSource(row){
   const actions=resource.actions.map((action,index)=>{
     const {raw:a,view:v}=sourceBytes(action.source_action_raw_hex,0xac,'机关动作');
     const explicit=(a[13]&15)===0,count=v.getUint32(explicit?0x12:0x0e,true);
+    const token=String.fromCharCode(...a.slice(0x56,0x6a)).split('\0')[0];
     if(action.index!==index||a[0]!==0||![0,1].includes(a[13]&15)||(a[13]>>>4)>2||action.directions!==1
       ||count<1||action.logical_frames?.length!==count||action.first_frame!==v.getUint32(0x72,true)
       ||action.interval_raw!==v.getUint32(1,true)||action.interval_raw<1
       ||action.logical_frames.some((frame,i)=>frame!==(explicit?a[0x16+i]:i)||frame>=action.frame_count)
-      ||a.slice(0x56,0x6a).some(Boolean)||a[0x84]||view.getUint32(0x9e+index*4,true)!==0)
+      ||(token&&!/^[A-Za-z0-9_-]+\.wav$/i.test(token))||a[0x84]
+      ||(behavior===9&&(token||view.getUint32(0x9e+index*4,true)!==0)))
       throw new Error('机关物件动作或声音模式未恢复');
-    return {count,interval:action.interval_raw,restoredLayer:[2,3,1][a[13]>>>4]};
+    return {count,interval:action.interval_raw,restoredLayer:[2,3,1][a[13]>>>4],
+      sound:{token,enabled:view.getUint32(0x9e+index*4,true)!==0,frame:v.getUint32(0x6a,true),x:view.getInt32(0x26,true),y:view.getInt32(0x2a,true)}};
   });
-  return {...actions[0],layer:raw[0xce],restoredLayer:actions.at(-1).restoredLayer,fixed:raw[0xb4]!==0};
+  return {...actions[0],sounds:actions.map(action=>action.sound),layer:raw[0xce],restoredLayer:actions.at(-1).restoredLayer,fixed:raw[0xb4]!==0};
 }
 
 export class MapObjectRuntime {
@@ -100,7 +103,7 @@ export class MapObjectRuntime {
         actor.sourceLayer=source.layer;actor.restoredLayer=source.restoredLayer;actor.nativeDisplayZero=true;
         if(behavior_raw_cf===1){actor.interactionRecord=source.interactionRecord;actor.sound=source.sound;}
         if(behavior_raw_cf===7){actor.actionIndex=0;actor.displayActionIndex=0;actor.displayFrame=0;actor.fixed=source.fixed;}
-        if([2,9].includes(behavior_raw_cf)){actor.actionIndex=0;actor.displayActionIndex=0;actor.displayFrame=0;}
+        if([2,9].includes(behavior_raw_cf)){actor.actionIndex=0;actor.displayActionIndex=0;actor.displayFrame=0;actor.sounds=source.sounds;}
       }
       this.project(actor,0);return actor;
     });
@@ -183,7 +186,13 @@ export class MapObjectRuntime {
           if(state===2||state===5){
             const action=actor.resource.actions[actor.actionIndex],done=state===2?actor.frame===action.logical_frames.length-1:actor.frame===0;
             if(done){actor.commandState=state===2?3:0;actor.object.layer=state===2?actor.restoredLayer:actor.sourceLayer;actor.pending();}
-            else actor.frame+=state===2?1:-1;
+            else{
+              actor.frame+=state===2?1:-1;
+              const sound=actor.sounds[actor.actionIndex],frame=state===2?sound.frame:action.logical_frames.length-sound.frame-1;
+              // 4142BE / 4146BC gate the source action handle, then compare
+              // its logical cursor; loading a completed pose never plays it.
+              if(sound.enabled&&actor.frame===frame)this.onSound?.({mapId:this.mapId,objectIndex:actor.object.index,...sound});
+            }
             actor.displayActionIndex=actor.actionIndex;actor.displayFrame=action.logical_frames[actor.frame];
           }else if(actor.behavior===9){
             const index=state===3?2:0,action=actor.resource.actions[index];

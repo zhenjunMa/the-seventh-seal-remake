@@ -273,15 +273,29 @@ class ContentExporterTests(unittest.TestCase):
             if path.suffix.lower() == '.dat' and path.stem[:1].lower() == 'm' and path.stem[1:6].isdigit():
                 self.assertTrue(is_native_map_id(path.stem.upper()), path.name)
                 self.assertEqual(native_map_id_from_filename(path.name), path.stem.upper())
+        # The guild monster's forest is its own23-map family; never alias it
+        # to an identically named M720xx map or admit unrelated named families.
+        forest = sorted(path for path in (root / 'Map').glob('*')
+                        if path.suffix.lower() == '.dat' and path.stem.upper().startswith('ELF-FOREST-'))
+        self.assertEqual([path.stem.upper() for path in forest],
+                         [f'ELF-FOREST-{chr(65 + index)}' for index in range(23)])
+        for path in forest:
+            self.assertTrue(is_native_map_id(path.stem.upper()), path.name)
+            self.assertEqual(native_map_id_from_filename(path.name), path.stem.upper())
+        for ident in ('ELF-FOREST-X', 'ELF-FOREST-AA', 'ELF-FOREST-A-1',
+                      'ELF_FOREST_A', 'elf-forest-a', 'REBIRTH-A01', 'WING-A01'):
+            self.assertFalse(is_native_map_id(ident), ident)
         for value in ('Map/M01020A.DAT', 'M01020A.DAT\n', 'M01020A..DAT', 'M01020A.DAT.exe',
-                      'M01020A\\x.DAT', 'M01020A\x00.DAT', None, 15):
+                      'M01020A\\x.DAT', 'M01020A\x00.DAT', '../Elf-forest-E.dat',
+                      'Elf-forest-X.dat', 'Elf-forest-A-1.dat', 'Elf-forest-A.dat\n', 'Rebirth-A01.dat', None, 15):
             self.assertIsNone(native_map_id_from_filename(value), value)
 
     def test_anm_letter_and_underscore_maps_require_exact_registration(self):
         commands = [dict(opcode=10, u32_plus5=0, filename='m01020a.dat'),
-                    dict(opcode=10, u32_plus5=0, filename='M70074_2.DAT')]
-        context = story.program_map_context(commands, {'M01020A': {}, 'M70074_2': {}}, 'source-map-variants')
-        self.assertEqual(context['control_maps'], ['M01020A', 'M70074_2'])
+                    dict(opcode=10, u32_plus5=0, filename='M70074_2.DAT'),
+                    dict(opcode=10, u32_plus5=0, filename='Elf-forest-E.dat')]
+        context = story.program_map_context(commands, {'M01020A': {}, 'M70074_2': {}, 'ELF-FOREST-E': {}}, 'source-map-variants')
+        self.assertEqual(context['control_maps'], ['M01020A', 'M70074_2', 'ELF-FOREST-E'])
         with self.assertRaisesRegex(ValueError, 'unregistered control map'):
             story.program_map_context(commands, {'M01020A': {}}, 'source-map-variants')
         for filename in ('../M01020A.DAT', 'M01020A.DAT\n'):

@@ -475,7 +475,7 @@ export class BattleView {
     this.defendClocks=new Map();
     this.damageTexts=[];
     if(!this.ready||this.run)throw new Error('战斗资源尚未就绪或正在行动');
-    if(!Array.isArray(actors)||actors.length<2||actors.length>8||new Set(actors.map(a=>a.id)).size!==actors.length||actors.filter(a=>a.side==='player').length<1||actors.filter(a=>a.side==='player').length>4||actors.filter(a=>a.side==='enemy').length<1||actors.filter(a=>a.side==='enemy').length>4)throw new Error('战斗表现角色表无效');
+    if(!Array.isArray(actors)||actors.length<2||actors.length>10||new Set(actors.map(a=>a.id)).size!==actors.length||actors.filter(a=>a.side==='player').length<1||actors.filter(a=>a.side==='player').length>4||actors.filter(a=>a.side==='enemy').length<1||actors.filter(a=>a.side==='enemy').length>6)throw new Error('战斗表现角色表无效');
     this.roster=actors.map(actor=>{
       // Compositions reuse their member sequences and have no separate atlas.
       const resource_id=actor.resource_id??actor.id,role=this.meta.roles.find(r=>r.id===resource_id),selected=Object.values(skills).filter(s=>s.actor_id===actor.id&&s.battle_handler!=='combination');

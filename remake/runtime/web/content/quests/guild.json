@@ -1,0 +1,35 @@
+{
+  "schema": "seventh-seal-quests",
+  "version": 1,
+  "quests": [
+    {
+      "id": "guild-progression",
+      "name": "锻造与水晶工会",
+      "maps": ["M01042", "M01062", "M01063", "M01031", "M70030", "M01066", "M01053", "M03032", "M03043-3", "M03051", "M03066", "M29014", "M01050", "ELF-FOREST-E", "ELF-FOREST-I", "ELF-FOREST-V", "M71071", "M71080"],
+      "stages": [
+        {"id": "god-hammer", "status": "completed", "text": "已揭开研究所最深处的秘密，成为神锤级会员。工会现可合成最高阶材料与水晶，并锻造新的武器。", "when": {"flag": {"index": 419, "bit": 9, "value": true}}},
+        {"id": "research-report", "status": "active", "text": "已击败研究所深处的魔法兵器，回法王城藏书阁向阿雷斯报告。", "when": {"all": [{"flag": {"index": 419, "bit": 8, "value": true}}, {"flag": {"index": 614, "bit": 2, "value": true}}]}},
+        {"id": "research", "status": "active", "text": "前往翠碧湖附近的研究所遗迹，逐层探索地下设施，查明最深处的研究机密。", "when": {"flag": {"index": 419, "bit": 8, "value": true}}},
+        {"id": "god-flame", "status": "active", "text": "已成为神炎级会员。若想挑战最高的神锤阶级，再找阿雷斯询问。", "when": {"flag": {"index": 419, "bit": 7, "value": true}}},
+        {"id": "wolf-report", "status": "active", "text": "克利顿已确认力城事件解决，回法王城藏书阁向阿雷斯覆命。", "when": {"all": [{"flag": {"index": 419, "bit": 6, "value": true}}, {"flag": {"index": 521, "bit": 2, "value": true}}]}},
+        {"id": "wolf-complete", "status": "active", "text": "妖精森林的怪物事件已解决，回力城宿屋向克利顿报告。", "when": {"all": [{"flag": {"index": 419, "bit": 6, "value": true}}, {"flag": {"index": 521, "bit": 4, "value": true}}]}},
+        {"id": "wolf", "status": "active", "text": "力城工会受到妖精森林怪物袭击的困扰。向宿屋的克利顿打听，调查怪物与炎城蒂娜所寻找的洛克。", "when": {"flag": {"index": 419, "bit": 6, "value": true}}},
+        {"id": "god-drill", "status": "active", "text": "已成为神钻级会员。再向阿雷斯申请晋级，承接工会的新委托。", "when": {"flag": {"index": 419, "bit": 5, "value": true}}},
+        {"id": "tea-crystal", "status": "active", "text": "合成茶晶水晶交给阿雷斯。可向图书馆莉兰及广场天桥下的路德寻找配方线索，材料齐备后找席格。", "when": {"flag": {"index": 419, "bit": 4, "value": true}}},
+        {"id": "giant-hammer", "status": "active", "text": "已成为巨锤级会员。再向阿雷斯申请晋级，挑战更高阶水晶的合成。", "when": {"flag": {"index": 419, "bit": 3, "value": true}}},
+        {"id": "moss-crystal", "status": "active", "text": "查找苔藓水晶的合成方法，收齐原料后请飘城武器店的席格合成，再交给阿雷斯。", "when": {"flag": {"index": 419, "bit": 2, "value": true}}},
+        {"id": "ember-flame", "status": "active", "text": "已成为烈焰级会员。若想继续晋级，前往飘城法王城藏书阁寻找阿雷斯长老。", "when": {"flag": {"index": 386, "bit": 9, "value": true}}},
+        {"id": "sewer-report", "status": "active", "text": "查明炎城锻材失窃案的真相，回工会向克姆罗斯报告。", "when": {"all": [{"flag": {"index": 386, "bit": 8, "value": true}}, {"flag": {"index": 396, "bit": 2, "value": true}}]}},
+        {"id": "sewer", "status": "active", "text": "调查炎城频繁失窃的锻材，向城中居民打听下水道的线索，查清幕后真相。", "when": {"all": [{"flag": {"index": 386, "bit": 8, "value": true}}, {"flag": {"index": 3, "bit": 4, "value": true}}]}},
+        {"id": "sewer-clue-window", "status": "active", "text": "下水道调查需要炎城早期的侦探线索：先听蒂娜讲完洛克的事，再请侦探戴丽尔帮忙，并向运河居民打听入口。若侦探已转去调查研究所，原线索窗口已错过。", "when": {"flag": {"index": 386, "bit": 8, "value": true}}},
+        {"id": "sealed-house", "status": "active", "text": "用地之键解除运河右岸爱尔希家的封印，赶走入侵的禁咒师，再回报克姆罗斯。", "when": {"flag": {"index": 386, "bit": 7, "value": true}}},
+        {"id": "iron-drill", "status": "active", "text": "已成为铁钻级会员。再向炎城会长克姆罗斯申请晋级。尽早听蒂娜讲完洛克的事，再找侦探戴丽尔及运河居民打听下水道线索。", "when": {"flag": {"index": 386, "bit": 6, "value": true}}},
+        {"id": "purple-crystal", "status": "active", "text": "到宿屋打听伊斯坦的去向，找到他并将紫龙晶带回给克姆罗斯。", "when": {"flag": {"index": 386, "bit": 5, "value": true}}},
+        {"id": "delivery", "status": "active", "text": "把克姆罗斯交付的铂丝乌金送给防具店里的哈吉贝，再回工会覆命。", "when": {"flag": {"index": 386, "bit": 4, "value": true}}},
+        {"id": "tongs", "status": "active", "text": "已加入工会成为火钳级会员，可找研发工房的多姆合成材料，也可向克姆罗斯申请晋级。尽早听蒂娜讲完洛克的事，再请侦探戴丽尔帮忙，并向运河居民打听下水道入口。", "when": {"flag": {"index": 386, "bit": 2, "value": true}}},
+        {"id": "invited", "status": "active", "text": "锻材店老板已推荐你加入工会，备好1000库伦后找会长克姆罗斯。别错过早期线索：蒂娜讲述洛克的事、侦探戴丽尔的委托，以及运河居民知道的下水道入口。", "when": {"flag": {"index": 31, "bit": 2, "value": true}}},
+        {"id": "unavailable", "status": "hidden", "text": "", "when": {"all": []}}
+      ]
+    }
+  ]
+}

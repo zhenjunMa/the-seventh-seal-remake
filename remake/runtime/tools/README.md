@@ -65,6 +65,7 @@ node remake/runtime/tools/check_content.mjs --json
 | 里白木森林／幻影之森／封印之森 | inner-white-forest-index | export_inner_white_forest_index.py |
 | 飘城全时期 | floating-city-index | export_floating_city_index.py |
 | 力城／劲风岛／圣山／海岸 | wind-region-index | export_wind_region_index.py |
+| 研究所遗迹与地下深层来源 | research-index | export_research_index.py |
 
 ```console
 python3 -B remake/runtime/tools/build_runtime.py --target ember-city-index --run
@@ -219,6 +220,7 @@ python3 -B remake/runtime/tools/source/inspect_equipment.py /path/to/SaveGame0.D
 | `inner-white-forest-index` | [export_inner_white_forest_index.py](export_inner_white_forest_index.py) | 无声明依赖 |
 | `floating-city-index` | [export_floating_city_index.py](export_floating_city_index.py) | 无声明依赖 |
 | `wind-region-index` | [export_wind_region_index.py](export_wind_region_index.py) | 无声明依赖 |
+| `research-index` | [export_research_index.py](export_research_index.py) | 无声明依赖 |
 | `native-services` | [export_native_services.py](export_native_services.py) | 无声明依赖 |
 
 <!-- 自动生成：构建目标结束 -->

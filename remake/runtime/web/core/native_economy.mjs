@@ -3,6 +3,8 @@ import {initializeChapterItem} from './chapter.mjs';
 import {withItemQuantity} from './equipment.mjs';
 import {removeNativeStoryItem} from './native_story_inventory.mjs';
 import {allPartyRoles} from './party_roster.mjs';
+import {createNativeRng} from './combat_rules.mjs';
+import {initialEncounterState} from './encounters.mjs';
 
 export function readNativeService(record,table){
   if(record.native_service)return record.native_service;
@@ -77,7 +79,12 @@ export function applyNativeServiceAction(draft,service,catalog,{mode,id,quantity
   }
   const stack=draft.inventory.find(row=>row.id===item.id&&parseInt(row.source_raw_hex.slice(24,26),16)===0);
   if(item.type!==1&&!stack&&draft.inventory.length>=1000)return {changed:false,message:'背包已满。'};
-  const sourceRaw=initializeChapterItem(item,{allowWeapon:true});
+  let rng;
+  const sourceRaw=initializeChapterItem(item,{allowWeapon:true,rng:()=>{
+    draft.encounters??=initialEncounterState(draft.party);
+    rng??=createNativeRng(draft.encounters.rng_state);
+    const value=rng();draft.encounters.rng_state=rng.state;return value;
+  }});
   new DataView(sourceRaw.buffer).setUint32(4,quantity,true);
   const created={instance_id:`service:${mapId}:${recordId}:${crypto.randomUUID()}`,id:item.id,name:item.name,quantity,
     source_raw_hex:Array.from(sourceRaw,v=>v.toString(16).padStart(2,'0')).join(''),

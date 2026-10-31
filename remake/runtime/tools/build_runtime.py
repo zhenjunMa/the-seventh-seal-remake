@@ -144,6 +144,7 @@ for target, dependencies in {
     STEPS[target]=replace(STEPS[target],depends=dependencies)
 STEPS['chapter-maps']=replace(STEPS['chapter-maps'],inputs=('data/runtime_content.json','data/opening_map_resources.json'))
 STEPS['audio']=replace(STEPS['audio'],inputs=(*STEPS['audio'].inputs,'data/runtime_content.json','../evidence/party_magic_native.json',
+    '../evidence/guild_20261031/native_4bafa0.json',
     '../evidence/menu_field_audio_20261030/native.json',
     '../evidence/fire_valley_20261025/object_tick_4137c0_assembly.json',
     *tuple(f'../evidence/ember_city_20261028/native_cf1_sound_{name}.json'
@@ -237,6 +238,12 @@ STEPS['floating-city-index']=Step('export_floating_city_index.py',
 STEPS['wind-region-index']=Step('export_wind_region_index.py',
     ('data/library/wind_region.json','../evidence/wind_region_20261031/source_index.json'),
     reports=('wind_region_20261031/source_index.json',),
+    inputs=('../tools/export_fire_valley_index.py','../tools/route_extract_resources.py',
+            '../tools/map_npc_fields.py','core/chapter_animation.mjs','core/story_flow_compiler.mjs'),
+    sources=fire_valley_source_files())
+STEPS['research-index']=Step('export_research_index.py',
+    ('data/library/research.json','../evidence/guild_20261031/research_source_index.json'),
+    reports=('guild_20261031/research_source_index.json',),
     inputs=('../tools/export_fire_valley_index.py','../tools/route_extract_resources.py',
             '../tools/map_npc_fields.py','core/chapter_animation.mjs','core/story_flow_compiler.mjs'),
     sources=fire_valley_source_files())

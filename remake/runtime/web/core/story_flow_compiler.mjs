@@ -2,6 +2,7 @@
 import {validateStoryFlow} from './story_flow.mjs';
 import {NATIVE_STORY_CONDITION_TYPES,nativeConditionByte} from './native_story_conditions.mjs';
 import {nativeCombinationConditions} from './native_story_combinations.mjs';
+import {nativeRandomBranches} from './native_story_random.mjs';
 const copy=structuredClone;
 const nativeFlowId=mapId=>`${mapId}:tlk`;
 export {nativeFlowId};
@@ -28,6 +29,10 @@ export function compileTlkFlow(table,{choices}){
       commands.push({id:commandId,op,record_id:record.id,source:copy(source),...fields});
     };
     add('record');
+    if(record.kind===3){
+      add('random_jump',{branches:nativeRandomBranches(record).map(({recordId,weight})=>({target:at(recordId),weight})),otherwise:entry});
+      continue;
+    }
     const type=record.mutation_type,bit=record.mutation_bit|0,index=record.mutation_index||table.map_flag_index;
     if(type===0&&bit){
       if(!flagIndex(index)||bit<-32||bit>32)add('unsupported',{reason:'剧情旗标变更无效'});
@@ -68,6 +73,7 @@ export function compileTlkFlow(table,{choices}){
     }
     else if(record.kind===2)add('transfer_native_map');
     else if(record.kind===5)add('native_battle');
+    else if(record.kind===6)add('native_sound',{token:record.text_raw});
     else if(record.kind===8)add('native_service');
     else add('unsupported',{reason:`对白类型 ${record.kind} 尚未接入`});
     add('jump',{target:at(record.next)});

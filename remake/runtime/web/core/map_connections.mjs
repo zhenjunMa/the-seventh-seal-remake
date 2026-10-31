@@ -4,13 +4,14 @@ import {nativeMapIdFromFilename} from './native_map_identity.mjs';
 const need=(ok,message)=>{if(!ok)throw new Error(`地图接入：${message}`);};
 
 // 4A81D0 keeps descriptor+2A as the placement sort code. A kind2 TLK
-// replaces only the entry marker with record+2F before 4A5110 scans it.
+// replaces the entry marker with record+2F before 4A5110 scans it.
+// 4A5110 normalizes a zero marker to marker1 and placement sort2.
 export function nativeMapTransfer(table,record,{triggerId,triggerRecordId,npcSlot,objectIndex,sortCode=1}={},content=runtimeContent){
   need(record?.kind===2&&record.condition_type===0&&record.condition_bit===0,'地图跳转记录类型或条件未恢复');
   const mapId=nativeMapIdFromFilename(record.text_raw);need(mapId,'地图跳转文件名无效');
   const descriptor=table?.descriptors?.find(row=>row.id===triggerId);
   need(content.maps[mapId],'地图跳转目标尚未登记');
-  need(Number.isInteger(record.if_true)&&record.if_true>=1&&record.if_true<=255,'地图跳转原入口标记无效');
+  need(Number.isInteger(record.if_true)&&record.if_true>=0&&record.if_true<=255,'地图跳转原入口标记无效');
   if(npcSlot!==undefined){
     need(storyBindings(table.id,content).npcs?.includes(npcSlot)&&table.index_nonzero?.some(row=>row.slot===npcSlot),'地图跳转缺少原NPC交互上下文');
   }else if(objectIndex!==undefined){
@@ -23,7 +24,7 @@ export function nativeMapTransfer(table,record,{triggerId,triggerRecordId,npcSlo
     sortCode=descriptor.field_2a_raw;
   }
   need(Number.isInteger(sortCode)&&sortCode>=0&&sortCode<=8,'地图跳转原排序无效');
-  return {map_id:mapId,entry_marker:record.if_true,sort_code:sortCode,
+  return {map_id:mapId,entry_marker:record.if_true||1,sort_code:record.if_true===0?2:sortCode,
     source:{record:record.source??table.source,...(npcSlot!==undefined?{npc_slot:npcSlot}:objectIndex!==undefined?{object_index:objectIndex}:{descriptor:descriptor.source??descriptor})}};
 }
 

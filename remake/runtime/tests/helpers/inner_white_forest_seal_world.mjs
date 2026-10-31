@@ -13,7 +13,7 @@ import {nativeKeyedChest} from '../../web/core/native_map_chests.mjs';
 import {innerWhiteForestComplete,innerWhiteForestRunner,innerWhiteForestRoute,
   innerWhiteForestSelect} from './inner_white_forest_world.mjs';
 
-export async function innerWhiteForestSealComplete(source,{checkpoint=async()=>{}}={}){
+export async function innerWhiteForestSealComplete(source,{checkpoint=async()=>{},beforeCity=async()=>{}}={}){
   const quantity=(world,id)=>world.value.inventory.filter(row=>row.id===id).reduce((n,row)=>n+row.quantity,0);
   const bit=(world,index,number)=>Boolean(world.value.flags[index]&(1<<(number-1)));
   const npc=(runner,mapId,slot,playback)=>runner.runTlk({mapId,playback,recordId:source.story.maps[mapId].index_nonzero.find(row=>row.slot===slot).record,
@@ -33,6 +33,7 @@ export async function innerWhiteForestSealComplete(source,{checkpoint=async()=>{
   await entry.runner.runObject({mapId:'M17026',objectIndex:9});assert.equal(bit(entryWorld,48,1),true);
   await restore(entryWorld);await checkpoint('route_prerequisites_earned',entryWorld);
   entryWorld.transact(draft=>{draft.location={map_id:'M01051',x:424,y:334,direction:3};});
+  await beforeCity(entryWorld);
   const world=await innerWhiteForestComplete(source,{world:entryWorld}),initial=world.snapshot();
   let failBattle=false,cancelAnimationMap=null,cancelPlayback;
   await checkpoint('jute_end',world);

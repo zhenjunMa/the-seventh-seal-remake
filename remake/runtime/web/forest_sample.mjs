@@ -5,7 +5,7 @@ export function createForestSample(world,base,data,group,config,schedulerData=nu
   return assembleForestSample(createBattleSample(world,base,config),data,group,schedulerData,aiData,rewardData,reactionData,statusData);
 }
 export function assembleForestSample(sample,data,group,schedulerData=null,aiData=null,rewardData=null,reactionData=null,statusData=null,content=runtimeContent){
-  if(data?.schema!=='seventh-seal-forest-combat'||data.version!==1||!(content.maps[group?.map_id]||group?.kind==='skill-test'&&group.map_id===null)||!Array.isArray(group.members)||group.members.length<1||group.members.length>4)throw new Error('敌组来源未支持');
+  if(data?.schema!=='seventh-seal-forest-combat'||data.version!==1||!(content.maps[group?.map_id]||group?.kind==='skill-test'&&group.map_id===null)||!Array.isArray(group.members)||group.members.length<1||group.members.length>6)throw new Error('敌组来源未支持');
   requireRegisteredRoles([...new Set(group.members.map(member=>member.id))],{side:'enemy'},content);
   if(group.stage)battleStage(group.stage,content);
   const actors=sample.actors.filter(a=>a.side==='player').map(clone),playerIds=new Set(actors.map(a=>a.id));
@@ -27,7 +27,7 @@ export function assembleForestSample(sample,data,group,schedulerData=null,aiData
     result.scheduler_data=clone(schedulerData);
     result.source.scope='Native fresh forest gauge/dispatch with live ready-player command input; fixed enemy command and first contact.';
     result.source.order={policy:'native mode0 gauge scheduler',evidence:clone(schedulerData.evidence),preview_policy:clone(schedulerData.policy)};
-    result.source.limitations=['One saved player; full 1-4 source-generated enemies. Native scalar charging/dispatch; frame clock and ready-player input. Full enemy selection/combinations, contacts, native visual clocks and rewards deferred.'];
+    result.source.limitations=['One saved player; full 1-6 source-generated enemies. Native scalar charging/dispatch; frame clock and ready-player input. Full enemy selection/combinations, contacts, native visual clocks and rewards deferred.'];
   }
   if(aiData){
     if(!schedulerData)throw new Error('完整森林行动需要原调度');

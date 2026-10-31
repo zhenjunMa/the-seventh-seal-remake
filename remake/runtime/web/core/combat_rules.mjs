@@ -147,7 +147,7 @@ export function resolveAction({attacker,target,skill,rng,context={}}) {
   const sameIndex=context.effect_lookup==='same-index-source-table',targetId=target.resource_id??target.id;
   if(effect&&(token!==1||skill.battle_handler!=='effect-carrier'||!Number.isInteger(effectIndex)||effectIndex<0||effectIndex>=200||effectIndex!==skill.original_skill_index||
       (sameIndex?skill.source?.path!==`Fight_Role/${attacker.resource_id??attacker.id}.CHR`:(attacker.resource_id??attacker.id)!==skill.actor_id)||
-      (sameIndex?![2,3].includes(s.u32(0x32)&15):s.u32(0x32)!==0x1102)||context.effect_target_skill?.initialized_slots!==200||
+      (sameIndex?![1,2,3].includes(s.u32(0x32)&15):s.u32(0x32)!==0x1102)||context.effect_target_skill?.initialized_slots!==200||
       !Number.isInteger(targetSkillCount)||targetSkillCount<0||targetSkillCount>200||
       (sameIndex?(context.effect_target_skill.source?.path!==`Fight_Role/${targetId}.CHR`||context.effect_target_skill.source.sha256!==target.source?.sha256||context.effect_target_skill.source_skill_index!==effectIndex):
         targetSkillCount>effectIndex||context.effect_target_skill?.fixed_raw_hex!=='00'.repeat(0x41d))))throw new RangeError('Effect-token source is outside the fresh registered carrier scope');

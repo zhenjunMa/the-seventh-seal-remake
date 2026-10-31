@@ -115,6 +115,8 @@ def source_files():
             fixed = bytes.fromhex(character.skills[index]['fixed_raw_hex'])
             if fixed[0x16c]:
                 paths.add(f'Fight_Role/Status/{fixed[0x16c]:03d}.dgp')
+            if fixed[0x25] and fixed[0x232] and fixed[0x23c] in (0, 2):
+                paths.add(f'Fight_Role/Status/{fixed[0x232]:03d}.dgp')
     for block in player_status_blocks().values():
         paths.add(block['source']['path'])
         if block['effect_id_raw']:
@@ -151,14 +153,19 @@ def prepare_role(ident, status):
         handler = 'effect-carrier' if carrier else 'direct'
         retained = ai['skills'][index]
         if carrier or fixed[0x25] and not retained.get('contactless'):
-            if fixed[0x32] & 15 not in (2, 3):
+            if fixed[0x32] & 15 not in (1, 2, 3):
                 raise ValueError(f'Enemy {ident} skill {index}: unsupported carrier recovery targeting')
             if fixed[0x25]:
                 # The same 50FA00 allied contact as player support: dormant
-                # +231 ID0/mode0, followed by positive 41E950 recovery.
+                # ID0 or an admitted +231 status, then 41E950 recovery.
                 hp_low, hp_high = struct.unpack_from('<ii', fixed, 0xab)
                 mp_low, mp_high = struct.unpack_from('<ii', fixed, 0xbb)
-                if fixed[0x25] != 1 or fixed[0x24] not in (0, 1) or effect[1] or fixed[0x232] or fixed[0x23c] or not (0 <= hp_low <= hp_high and 0 <= mp_low <= mp_high):
+                support = fixed[0x231:0x2f7]
+                if (fixed[0x25] != 1 or fixed[0x24] not in (0, 1) or effect[1]
+                        or support[0xb] not in (0, 1, 5) or support[1] > 100
+                        or support[0xb] == 5 and support[1]
+                        or support[0xb] == 0 and support[1] and support[0x10] > 1
+                        or not (0 <= hp_low <= hp_high and 0 <= mp_low <= mp_high)):
                     raise ValueError(f'Enemy {ident} skill {index}: unsupported allied recovery payload')
                 handler = 'native-support'
             else:

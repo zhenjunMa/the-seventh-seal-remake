@@ -36,7 +36,7 @@ export function nativeScriptedBattle(table,record,content=runtimeContent){
     need(role?.side==='enemy','原敌人尚未登记');
     return [{id,source_slot,source:copy(role.source)}];
   });
-  need(members.length>0&&members.length<=4,'原敌人数超出当前已恢复战斗上限');
+  need(members.length>0&&members.length<=6,'原敌人数超出当前已恢复战斗上限');
   return {kind:'scripted',map_id:table.id,stage,members,source:copy(record.source),
     evidence:['0x461ED0','0x4451C0'],selection_policy:'literal-TLK-six-filenames-no-STG-draw'};
 }

@@ -59,6 +59,27 @@ test('ANM49 renderer matches every native coefficient, body offset and completio
   }
 });
 
+test('elf ANM41 state10 matches555CAD alpha, unclamped rise offset, final draw and hide completion',async()=>{
+  const proof=JSON.parse(await read('remake/runtime/tests/fixtures/guild_actor_fade_native.json'));
+  assert.equal(hash(await read('GAME.exe')),proof.game_sha256);
+  const oracle=new BlendOracle(proof.entry,proof.assembly),native=[];
+  for(let tick=0;;tick++){
+    const {eax}=oracle.run(Number(proof.entry),[0x30000000,40,60,10,12,0,tick]);native.push(oracle.draws.at(-1));
+    if(!eax)break;
+  }
+  assert.equal(native.length,9);assert.equal(native.at(-1).coefficient,240);assert.equal(native.at(-1).y,60-66);
+  const {view,actor}=fixture(11),frames=[];
+  view.tween=async(duration,update)=>{
+    assert.equal(duration,180);
+    for(let tick=0;tick<native.length;tick++){
+      update(tick/native.length);const draw=view.drawQueue()[0];frames.push({alpha:draw.alpha,offsetY:draw.pose.body_offset.y,blend:draw.blend});
+    }
+  };
+  await view.hooks().actor({kind:'behavior',nativeStateRaw:10,actor:11});
+  assert.deepEqual(frames,native.map(draw=>({alpha:(255-draw.coefficient)/255,offsetY:(draw.y-60)*2,blend:'source-over'})));
+  assert.equal(actor.visible,false);assert.equal(actor.alpha,1);assert.equal(actor.blendEffect,null);assert.equal(actor.y,120);view.dispose();
+});
+
 test('every registered source ANM41/49 command reaches its real renderer and retains show/hide semantics',async()=>{
   // Pixel extraction is a one-pixel fixture; particle displacement is covered
   // by its existing source tests. This regression exercises the actual hook,
@@ -84,9 +105,9 @@ test('every registered source ANM41/49 command reaches its real renderer and ret
       }
     }
   }finally{globalThis.document=previous;}
-  assert.equal(visited.length,14);
+  assert.equal(visited.length,60);
   assert.deepEqual([...new Set(visited.filter(row=>row[2]===49).map(row=>row[3]))].sort((a,b)=>a-b),[1,2,7,8]);
-  assert.deepEqual([...new Set(visited.filter(row=>row[2]===41).map(row=>row[3]))].sort(),[1,2]);
+  assert.deepEqual([...new Set(visited.filter(row=>row[2]===41).map(row=>row[3]))].sort((a,b)=>a-b),[1,2,10]);
 });
 
 test('unknown raw pixel modes fail chapter validation and entrance readiness before rendering',()=>{
@@ -101,10 +122,10 @@ test('unknown raw pixel modes fail chapter validation and entrance readiness bef
   }
 });
 
-test('new additive and descending effects pause with the action clock and cancellation restores transient rendering',async()=>{
-  for(const nativeStateRaw of [1,8]){
+test('additive, descending and fade-out effects pause with the action clock and cancellation restores transient rendering',async()=>{
+  for(const [kind,nativeStateRaw] of [['facing',1],['facing',8],['behavior',10]]){
     const clock=new ActionClock(),{view,actor}=fixture(10,{clock}),controller=new AbortController();
-    const running=view.hooks().actor({kind:'facing',nativeStateRaw,actor:10,signal:controller.signal});
+    const running=view.hooks().actor({kind,nativeStateRaw,actor:10,signal:controller.signal});
     const first={...actor.blendEffect};clock.paused=true;clock.advance(2000);assert.deepEqual(actor.blendEffect,first);
     clock.paused=false;clock.advance(40);assert.ok(actor.alpha>15/255);
     controller.abort(new Error('cancel native blend'));await assert.rejects(running,/cancel native blend/);

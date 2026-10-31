@@ -23,6 +23,10 @@ export function validateAudioManifest(data) {
       && digest(entry.source?.sha256) && digest(entry.source?.raw_sha256), '原动作音效字段无效');
   }
   for (const entry of Object.values(data.item_effects ?? {})) requireValue((entry.effect_id===null||data.effect_sounds?.[entry.effect_id]) && digest(entry.source?.sha256), '道具特效声音映射无效');
+  for(const [token,clip]of Object.entries(data.native_sound_tokens??{}))requireValue((token===''||/^[A-Za-z0-9_-]+\.wav$/i.test(token))
+    &&(clip===null||data.clips[clip]),'原对白音效映射无效');
+  for(const entry of data.native_sound_sources??[])requireValue(data.native_sound_tokens?.[entry.token]===entry.clip
+    &&digest(entry.source?.sha256)&&digest(entry.source?.raw_sha256)&&entry.source.token_offset===0x37,'原对白音效来源无效');
   return data;
 }
 

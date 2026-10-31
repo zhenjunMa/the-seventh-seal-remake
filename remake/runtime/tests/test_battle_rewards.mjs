@@ -24,10 +24,10 @@ function bit(b,at){return new DataView(b.buffer,b.byteOffset,b.byteLength).getIn
 function put(b,at,value){new DataView(b.buffer,b.byteOffset,b.byteLength).setInt32(at,value,true);}
 
 class RewardsOracle extends NativeAssemblyOracle {
-  constructor(functions,rng){super(functions,[],rng);this.items=[];}
+  constructor(functions,rng){super(functions,[],rng);this.items=[];this.notices=[];}
   external(target){const arg=i=>this.read(this.reg.ESP+i*4);
     if(target===0x4023d3){this.items.push(arg(1)+1);return;} // Native item init is deterministic for the six exported forest definitions.
-    if(target===0x50bb50)return; // Display record only.
+    if(target===0x50bb50){this.notices.push({type:arg(0),payload:arg(1)});return;}
     return super.external(target);
   }
 }
@@ -41,7 +41,7 @@ function dropOracle(ledger,rolls,rewards=data){
   o.write(0x503b7e8,pointer);o.write(0x55ede78,ledger.chain.maximum);o.write(0x55ede84,ledger.candidates.length);
   ledger.candidates.forEach((row,i)=>{o.write(0x55ede88+i*8,row.id);o.write(0x55ede8c+i*8,row.count);});
   for(const item of Object.values(rewards.items)){const b=Buffer.from(item.source.definition_raw_hex,'hex');for(let j=0;j<b.length;j++)o.write(pointer+(item.id-1)*0x3bf+j,b[j],1);}
-  o.run(0x50cc20,[]);return {items:o.items,calls:rng.count(),practice:o.read(0x55edf28)};
+  o.run(0x50cc20,[]);return {items:o.items,calls:rng.count(),practice:o.read(0x55edf28),notices:o.notices};
 }
 
 test('reward export anchors exact untouched CHR, ITM and verified save inputs',()=>{
@@ -107,7 +107,27 @@ test('native minus-one slots347/29/30 skip unique handling, RNG and initializati
   assert.deepEqual(plan.summary.drops,[]);assert.deepEqual(plan.world_patch.inventory,seed.inventory);
   assert.deepEqual(plan.trace.filter(row=>row.type==='drop-skipped').map(row=>row.id),[347,29,30]);
   fixture.items[29].drop_rate=100;
-  assert.throws(()=>validateForestRewards(fixture),/掉落类型未支持/,'A droppable unique item remains outside the supported contract');
+  fixture.items[29].initialization_rng_calls=0;
+  assert.throws(()=>validateForestRewards(fixture),/特殊掉落通知来源缺失/,'A changed source rate cannot bypass required type7 notification metadata');
+});
+
+test('actual043/084 unique20 queues once, matches native type7/RNG/halved bonus, and may stack in later battles',()=>{
+  const {actors,ledger}=pool(['043','084','043'],'unique-first');
+  assert.equal(ledger.candidates.find(row=>row.id===20).count,1);
+  ledger.candidates=[ledger.candidates.find(row=>row.id===20)];ledger.experience=0;ledger.chain.maximum=5;
+  const oracle=dropOracle(ledger,[99]),rng=rngSequence([99]),plan=planVictoryRewards({world:seed,ledger,data,rng,actors});
+  assert.deepEqual(oracle.items,[20]);assert.equal(rng.count(),oracle.calls);assert.equal(oracle.calls,1);
+  assert.deepEqual(oracle.notices,[{type:7,payload:20}]);assert.equal(plan.summary.practice_bonus,oracle.practice);assert.equal(oracle.practice,5);
+  assert.deepEqual(plan.summary.drops,[]);
+  const notice=plan.summary.notifications[0];assert.equal(notice.type,'special-item');assert.equal(notice.item_id,20);assert.equal(notice.source_payload_raw,20);
+  assert.equal(notice.actual_item_name,'金乌鸟羽');assert.equal(notice.item_name,'火凤之卵');assert.equal(notice.display_item_id,21);
+  const quantity=inventory=>inventory.filter(row=>row.id===20).reduce((sum,row)=>sum+row.quantity,0);
+  assert.equal(quantity(plan.world_patch.inventory),quantity(seed.inventory)+1);
+  const next={...copy(seed),...plan.world_patch,reward_records:[plan.reward_record]};
+  const repeated=planVictoryRewards({world:next,ledger,data,rng:()=>{throw Error('same victory must not roll again');},actors});assert.equal(repeated.applied,false);
+  const second=copy(ledger);second.battle_id='unique-second';
+  const later=planVictoryRewards({world:next,ledger:second,data,rng:rngSequence([99]),actors});
+  assert.equal(quantity(later.world_patch.inventory),quantity(seed.inventory)+2,'unique controls the battle candidate, not inventory ownership');
 });
 
 test('original chain only counts repeat settled contacts and resets at dispatch or idle',()=>{

@@ -13,6 +13,17 @@ import export_fire_valley_index as index
 
 
 class SourceProjectionTests(unittest.TestCase):
+    def test_real_library_and_luther_weighted_targets_are_source_reachable(self):
+        for map_id, record_id, targets in [('M03043-3', 5, [6, 7, 8, 9]),
+                                           ('M03066', 2, list(range(3, 12))),
+                                           ('M03066', 12, list(range(3, 12)) + [13])]:
+            parsed = index.tlk_record(ROOT / f'Map/{map_id.lower()}.TLK')
+            rows = index.dialogue_records(parsed, map_id, 434 if map_id == 'M03043-3' else 433)
+            record = rows[record_id - 1]
+            self.assertEqual(record['kind'], 3)
+            self.assertEqual(record['branch_targets'], targets)
+            self.assertTrue({record_id, *targets}.issubset(index.reachable_records(rows, record_id)))
+
     def test_source_inventory_is_deterministic_case_insensitive_and_registration_free(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)

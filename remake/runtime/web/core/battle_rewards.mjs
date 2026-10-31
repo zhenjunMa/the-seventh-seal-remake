@@ -33,7 +33,11 @@ export function validateForestRewards(data,content=runtimeContent) {
     integer(item.id, '道具编号'); bytes(item.source.definition_raw_hex, 0x3bf);
     requireValue(Number.isInteger(item.drop_rate) && item.drop_rate >= -1 && item.drop_rate <= 100, '道具掉落率无效');
     if (item.drop_rate === -1) continue;
-    requireValue(item.type_raw >= 2 && item.unique_raw === 0 && item.initialization_rng_calls === 0, '森林掉落类型未支持');
+    integer(item.unique_raw,'原特殊掉落标记',255);
+    requireValue(item.type_raw >= 2 && item.initialization_rng_calls === 0, '森林掉落类型未支持');
+    if(item.unique_raw)requireValue(item.special_notice?.source_type_raw===7&&item.special_notice.payload_raw===item.id
+      &&item.special_notice.display_item_id===item.id+1&&typeof item.special_notice.display_name==='string'
+      &&item.special_notice.source?.path==='SYSTEM/Object.ITM','特殊掉落通知来源缺失');
     bytes(item.instance_raw_hex, 0xe5);
   }
   bytes(data.initial_roles?.['001']?.header_raw_hex, 0x30b); integer(data.initial_money, '原始金钱', 0xffffffff);
@@ -62,7 +66,7 @@ export function validatePartyRewards(data,content=runtimeContent) {
 export function createRewardLedger(battleId, actors) {
   requireValue(typeof battleId === 'string' && battleId.length > 0 && battleId.length <= 100, '奖励战斗编号无效');
   const enemies = actors.filter(a => a.side === 'enemy');
-  requireValue(enemies.length >= 1 && enemies.length <= 4 && new Set(enemies.map(a => a.id)).size === enemies.length, '奖励敌组无效');
+  requireValue(enemies.length >= 1 && enemies.length <= 6 && new Set(enemies.map(a => a.id)).size === enemies.length, '奖励敌组无效');
   return {battle_id:battleId, expected_enemy_ids:enemies.map(a => a.id), defeated_ids:[], experience:0, money:0, candidates:[],
     chain:{target_id:null, attacker_side:null, count:0, maximum:0}, trace:[]};
 }
@@ -223,25 +227,34 @@ export function planVictoryRewards({world, ledger, data, rng, actors,skill_data=
     const role=world.party.find(role=>role.id===actor.id);requireValue(role,'奖励角色不在队伍');progressHeaderForRole(role,data);
   }
   const k=Math.trunc(integer(ledger.chain.maximum,'连击数')/5); requireValue(k<data.chain_bonuses.length,'连击奖励超出原局部表范围');
-  const trace=copy(ledger.trace), inventory=copy(world.inventory), drops=[];
-  let sequence=0;
+  const trace=copy(ledger.trace), inventory=copy(world.inventory), drops=[],specialNotices=[];
+  let sequence=0,specialDrop=false;
   for (const candidate of ledger.candidates) {
     const item=data.items[candidate.id]; requireValue(item,'掉落类型未支持'); integer(candidate.count,'掉落候选数量');
     if (item.drop_rate===-1) {trace.push({type:'drop-skipped',id:item.id});continue;}
-    requireValue(item.unique_raw===0,'掉落类型未支持');
     const threshold=i32(item.drop_rate+data.chain_bonuses[k]);
-    for(let i=0;i<candidate.count;i++) {
+    for(let i=0;i<(item.unique_raw?1:candidate.count);i++) {
       const raw=integer(rng(),'掉落随机',32767),roll=raw%100,success=roll<threshold||item.drop_rate===0;
       const record={type:'drop-roll',id:item.id,occurrence:i,raw,roll,threshold,success};
-      if(success) {record.inventory=addItem(inventory,item,ledger.battle_id,sequence++);const dropped=drops.find(d=>d.id===item.id);if(dropped)dropped.quantity++;else drops.push({id:item.id,name:item.name,quantity:1});}
+      if(success) {
+        record.inventory=addItem(inventory,item,ledger.battle_id,sequence++);
+        if(item.unique_raw){
+          specialDrop=true;
+          specialNotices.push({type:'special-item',actor_id:null,actor_name:null,skill_index:null,skill_name:null,
+            item_id:item.id,item_name:item.special_notice.display_name,actual_item_name:item.name,
+            source_type_raw:7,source_payload_raw:item.special_notice.payload_raw,
+            display_item_id:item.special_notice.display_item_id,before:{quantity:0},after:{quantity:1}});
+        }else{const dropped=drops.find(d=>d.id===item.id);if(dropped)dropped.quantity++;else drops.push({id:item.id,name:item.name,quantity:1});}
+      }
       trace.push(record);
     }
   }
-  const party=copy(world.party), experience=[],notifications=[],roleNotifications=[];let practiceTotal=0;
+  const practiceBonus=specialDrop?data.skill_practice_bonuses[k]>>1:data.skill_practice_bonuses[k];
+  const party=copy(world.party), experience=[],notifications=[...specialNotices],roleNotifications=[];let practiceTotal=0;
   for(const actor of participants) {
     const i=party.findIndex(role=>role.id===actor.id); requireValue(i>=0,'奖励角色不在队伍');
     if(skill_data){
-      const growth=settleNativeSkillProgress({role:party[i],source_role:skill_data.roles[actor.id],practice:skill_practice[actor.id]??{},chain_bonus:data.skill_practice_bonuses[k],remake:true});
+      const growth=settleNativeSkillProgress({role:party[i],source_role:skill_data.roles[actor.id],practice:skill_practice[actor.id]??{},chain_bonus:practiceBonus,remake:true});
       party[i]=growth.role;notifications.push(...growth.notifications);practiceTotal=i32(practiceTotal+growth.practice_total);trace.push(...growth.trace);
     }
     // Original 0x50D1C0 sends the whole enemy experience pool to each eligible participant.
@@ -260,7 +273,6 @@ export function planVictoryRewards({world, ledger, data, rng, actors,skill_data=
   // actor level follows that level notice at the same report XP boundary.
   const positions=new Map(participants.map((actor,index)=>[actor.id,index]));
   roleNotifications.sort((a,b)=>a.experience_gained_at-b.experience_gained_at||positions.get(a.actor_id)-positions.get(b.actor_id));
-  const practiceBonus=data.skill_practice_bonuses[k];
   if(practiceBonus!==0)notifications.push({type:'practice-bonus',actor_id:null,actor_name:null,skill_index:null,skill_name:null,before:{value:0},after:{value:practiceBonus},value:practiceBonus,source_type_raw:6});
   notifications.push(...roleNotifications);notifications.forEach((notice,index)=>notice.id=`${ledger.battle_id}:notice:${index}`);
   const moneyBefore=world.money??data.initial_money;integer(moneyBefore,'当前金钱',0xffffffff);

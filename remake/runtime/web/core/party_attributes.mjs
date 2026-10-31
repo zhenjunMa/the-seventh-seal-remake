@@ -139,8 +139,10 @@ export function partyResourcesForWorld(actor,options={}) {
   need(actor.mp.current===Math.max(0,mp+bonus.mp_current) && actor.raw_by_address?.[addr(0x524a709)] === mp, 'MP显示与原始提交字段不一致');
   need(actor.hp.maximum === actor.raw_hp_maximum + bonus.hp_maximum && actor.mp.maximum === actor.raw_mp_maximum + bonus.mp_maximum,
     '当前资源上限发生未支持的变化');
-  return {hp:hp >>> 0, mp:mp >>> 0,...(actor.permanent_item_header_raw_hex?{header_raw_hex:actor.permanent_item_header_raw_hex,
-    hp_maximum:actor.raw_hp_maximum>>>0,mp_maximum:actor.raw_mp_maximum>>>0}:{})};
+  const header=actor.permanent_item_header_raw_hex?dataView(bytes(actor.permanent_item_header_raw_hex,0x30b,'永久道具角色头')):null;
+  return {hp:hp >>> 0, mp:mp >>> 0,...(header?{header_raw_hex:actor.permanent_item_header_raw_hex,
+    hp_maximum:actor.raw_hp_maximum>>>0,mp_maximum:actor.raw_mp_maximum>>>0,
+    attributes_stored:Object.fromEntries([['attack',0x40],['defense',0x48]].map(([name,offset])=>[name,{current:header.getInt32(offset,true),base:header.getInt32(offset+4,true)}]))}:{})};
 }
 
 export function consumePartyMp(actor, cost,content=runtimeContent) {

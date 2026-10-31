@@ -24,6 +24,7 @@ export function battleBallState(charge,threshold){
 export function battleActorPositions(roster){
   const players=roster.filter(a=>a.side==='player'),enemies=roster.filter(a=>a.side==='enemy');
   const playerSlots=[[140,200],[220,170],[190,250],[270,210]].map(([x,y])=>[320+x,80+y]);
-  const enemySlots=enemies.length===1?[[174,289]]:enemies.length===2?[[170,232],[103,324]]:[[179,225],[101,324],[277,301],[265,194]];
+  const enemySlots=enemies.length===1?[[174,289]]:enemies.length===2?[[170,232],[103,324]]:enemies.length<=4?[[179,225],[101,324],[277,301],[265,194]]:
+    [[98,187],[189,225],[280,263],[62,282],[153,320],[244,358]];
   return Object.fromEntries([...players.map((a,i)=>[a.id,playerSlots[a.party_slot_zero_based??i]]),...enemies.map((a,i)=>[a.id,enemySlots[i]])]);
 }

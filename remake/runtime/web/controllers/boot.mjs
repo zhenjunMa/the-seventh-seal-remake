@@ -146,6 +146,7 @@ export function createBootController({state, actions, $, canvas, ctx}) {
     state.chapterRunner=new ChapterRunner({world: state.world,data:state.chapterStory,objectData:state.chapterResources.interactive_objects,
       worldMapState:()=>state.worldMap.initialState(),
       choose:actions.chooseChapter,service:actions.openNativeService,
+      sound:({token,signal})=>{signal?.throwIfAborted();return state.audio.playClip(audioManifest.native_sound_tokens[token]);},
       say:({mapId,record,signal})=>actions.say(actions.chapterSpeaker(mapId,record),record.text_raw,record.style,{mapId,record,signal}),
       animate:actions.animateChapter,transfer:actions.transferChapter,battle:actions.startScriptedBattle,objectInteraction:actions.animateObjectInteraction,objectAnimation:actions.animateChapterObject,log: actions.log,setPhase:phase=>state.scenes.setPhase(phase)});
     state.worldMap=new WorldMapController({world: state.world,data:worldMapData,

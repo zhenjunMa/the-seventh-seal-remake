@@ -139,6 +139,9 @@ def dialogue_records(parsed, map_id, map_flag):
                                             *[choice["target_record"] for choice in choices]] if target})}
         if record["kind"] == 1:
             row["animation_reference"] = record["text_raw"].removesuffix(".anm").removesuffix(".ANM").lower()
+        if record["kind"] == 3:
+            row["branch_targets"] = sorted({target for index in range(15)
+                for target, weight in [struct.unpack_from('<HH', raw, 0x37 + index * 4)] if target and weight})
         result.append(row)
     return result
 

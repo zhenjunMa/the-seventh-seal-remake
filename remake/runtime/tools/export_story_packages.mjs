@@ -16,6 +16,7 @@ import {STORY_RESOURCE_TABLES,storyTextId,validateStorySelection,hydrateStoryTab
 import {compileTlkFlow,compileEventFlow,compileNativeTriggerFlow} from '../web/core/story_flow_compiler.mjs';
 import {scriptedBattleSource} from '../web/core/scripted_battle.mjs';
 import {nativeCombinationHex} from '../web/core/native_story_combinations.mjs';
+import {nativeRandomBranches} from '../web/core/native_story_random.mjs';
 import {readNativeService} from '../web/core/native_economy.mjs';
 
 const web=fileURLToPath(new URL('../web/',import.meta.url));
@@ -41,6 +42,7 @@ function compileTable(mapId,source,texts){
     if(record.condition_type===8)row.condition_dword_raw_0b=new DataView(raw.buffer).getUint32(0x0b,true);
     if(record.kind===5)row.scripted_battle=scriptedBattleSource(record);
     if(record.kind===4)row.native_combination_hex=nativeCombinationHex(record);
+    if(record.kind===3)row.native_random_branches=nativeRandomBranches(record);
     if(record.kind===8)row.native_service=readNativeService(record,table);
     row.text_id=storyTextId(mapId,record.id);row.portrait_id=raw[2];putText(texts,row.text_id,text_raw);
     row.choices=record.kind===0&&record.style===1?chapterChoices(record).map(({text,...choice})=>{

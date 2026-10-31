@@ -1,6 +1,6 @@
 // Audit only admitted entrances as build gates. Legacy implicit NPC dialogue is
 // inventoried separately so existing bounded content does not gain new promises.
-import {chapterChoices,chapterRestChoices,initializeChapterItem} from './chapter.mjs';
+import {chapterChoices,chapterRestChoices,validateChapterItemDefinition} from './chapter.mjs';
 import {validateChapterAnimation,validateChapterSetupAnimation} from './chapter_animation.mjs';
 import {validateRouteRecord} from './route.mjs';
 import {chapterRouteExits,nativeMapTransfer} from './map_connections.mjs';
@@ -9,6 +9,7 @@ import {validateNativeStoryMutation} from './native_story_mutations.mjs';
 import {nativeScriptedBattle} from './scripted_battle.mjs';
 import {nativeKeyedChest,nativeChestAnimation} from './native_map_chests.mjs';
 import {nativeCombinationConditions} from './native_story_combinations.mjs';
+import {nativeRandomBranches} from './native_story_random.mjs';
 import {readNativeService} from './native_economy.mjs';
 import {compileNativeTriggerFlow} from './story_flow_compiler.mjs';
 const need=(ok,message)=>{if(!ok)throw new Error(message);};
@@ -76,7 +77,7 @@ export function inspectContentReadiness(content,story,resources){
           for(const reward of chest.rewards){
             const definition=story.item_definitions?.[reward.id];
             need(definition?.source?.sha256===story.source_hashes[definition.source.path],'宝箱奖励道具来源缺失');
-            initializeChapterItem(definition);
+            validateChapterItemDefinition(definition);
           }
           const animation=resources.object_animations[mapId]?.find(row=>row.object_index_zero_based===root.id);
           need(animation,'宝箱动作资源缺失');nativeChestAnimation(animation,object.behavior_raw_cf);
@@ -110,6 +111,10 @@ export function inspectContentReadiness(content,story,resources){
             }else add(record.next,{route:true});
             continue;
           }
+          if(record.kind===3){
+            for(const branch of nativeRandomBranches(record))add(branch.recordId);
+            continue;
+          }
           if(record.kind!==4&&record.condition_type!==0)validateNativeStoryCondition(record,current);
           if(record.kind===4)nativeCombinationConditions(record,current);
           if(root.kind==='setup')need(record.condition_type===0&&record.mutation_type===0&&record.mutation_bit===0,'加载入口只能包含布局与旗标判断');
@@ -138,7 +143,7 @@ export function inspectContentReadiness(content,story,resources){
               const definition=story.item_definitions?.[record.mutation_bit];
               if(record.mutation_index===0){
                 need(definition?.source?.sha256===story.source_hashes[definition.source.path],'道具变更来源或处理器缺失');
-                initializeChapterItem(definition);
+                validateChapterItemDefinition(definition);
               }else need(record.mutation_bit>=0&&record.mutation_bit<=416,'移除道具来源编号无效');
               break;
             }
@@ -147,7 +152,7 @@ export function inspectContentReadiness(content,story,resources){
               if(record.mutation_type===17&&record.mutation_bit){
                 const definition=story.item_definitions?.[record.mutation_bit];
                 need(definition?.source?.sha256===story.source_hashes[definition.source.path],'配方产物来源缺失');
-                initializeChapterItem(definition,{allowWeapon:true});
+                validateChapterItemDefinition(definition,{allowWeapon:true});
               }
               requireLearningRewardReadiness(record,content,story.role_definitions);break;
             case 9:need(record.region_byte_raw>=0&&record.region_byte_raw<2&&record.mutation_index>=0&&record.mutation_index<=2
@@ -176,12 +181,13 @@ export function inspectContentReadiness(content,story,resources){
             add(record.next);
           }else if(record.kind===4)add(record.next);
           else if(record.kind===5){nativeScriptedBattle(current,record,content);add(record.next);}
+          else if(record.kind===6){need(/^[A-Za-z0-9_.-]+\.wav$/i.test(record.text_raw),'剧情音效文件名无效');add(record.next);}
           else if(record.kind===8){
             need(item.explicit,'商店服务需要已登记的主动入口');
             for(const id of readNativeService(record,current).goods){
               const definition=story.item_definitions?.[id];
               need(definition?.source?.sha256===story.source_hashes[definition.source.path],'商店商品来源缺失');
-              initializeChapterItem(definition,{allowWeapon:true});
+              validateChapterItemDefinition(definition,{allowWeapon:true});
             }
             add(record.next);
           }

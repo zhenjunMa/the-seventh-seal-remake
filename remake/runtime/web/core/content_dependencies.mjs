@@ -70,7 +70,13 @@ export function validateStoryBindings(content,story,resources,{registeredMaps=co
       const b=Uint8Array.from(raw.match(/../g),part=>parseInt(part,16)),recordId=new DataView(b.buffer).getUint32(0xf6,true);
       if(row.handler==='keyed-chest')nativeKeyedChest(object);
       else{
-        if(row.handler==='stationary-chest')nativeScriptedChest(object);
+        if(['stationary-chest','scripted-object'].includes(row.handler)){
+          nativeScriptedChest(object);
+          if(row.handler==='scripted-object'){
+            need(b[0xcf]===2,`${id} 脚本物件原行为不符`);
+            nativeAnmObjectTarget({u32_plus5:0,u32_plus25:row.index+1,byte_plus29:0},id,story);
+          }
+        }
         else if(row.handler==='scripted-switch'){
           need(b[0xcf]===9&&recordId>0,`${id} 机关入口与原记录不符`);
           nativeAnmObjectTarget({u32_plus5:0,u32_plus25:row.index+1,byte_plus29:0},id,story);

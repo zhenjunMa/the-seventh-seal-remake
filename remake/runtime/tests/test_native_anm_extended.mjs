@@ -48,6 +48,21 @@ test('shared rest animation inherits each actual inn caller without moving to th
   }
 });
 
+test('real research finale moves source slot9 as the current controlled actor before both battles',async()=>{
+  const {program,content}=await sourceProgram('m71080');
+  assert.deepEqual([program.commands[2].opcode,program.commands[2].u32_plus5],[33,9]);
+  for(const controlledActor of [0,2]){
+    const trace=[];
+    const result=await new ChapterAnimationRunner({program,content,hooks:hooks(trace),initialActor:controlledActor,
+      initialLocation:{map_id:'M71080',x:640,y:480,direction:0},
+      runTlk:async row=>trace.push({hook:'tlk',...row})}).run();
+    assert.deepEqual(trace.filter(row=>row.hook==='move').map(row=>[row.command.index,row.actor,row.x,row.y]),[[2,controlledActor,656,378]]);
+    assert.equal(result.controlled_actor,controlledActor);
+    assert.deepEqual(result.location,{map_id:'M71080',x:656,y:378});
+    assert.deepEqual(trace.filter(row=>row.hook==='tlk').map(row=>row.recordId),[3,13,15,16]);
+  }
+});
+
 test('real m17010-3 executes both camera modes and continues after source annotation255',async()=>{
   const {program,content,bytes}=await sourceProgram('m17010-3'),trace=[];
   const runner=new ChapterAnimationRunner({program,content,hooks:hooks(trace),initialLocation:{map_id:'M17020',x:1240,y:1456,direction:0},

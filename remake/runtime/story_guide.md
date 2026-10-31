@@ -44,9 +44,15 @@ TLK条件8比较当前控制角色的原槽号与记录+0x0B完整DWORD；条件
 
 TLK kind1结束当前对白流并移交ANM；动画完成不自动继续该记录的next，后续TLK由ANM opcode14显式进入。运行与能力检查共用这一可达语义，来源中的next及全部记录仍完整保留。
 
+TLK kind3读取+0x37起的15组WORD目标／权重，以原CRT的rand()%100按累计区间选择，绕过普通头部条件和变更；未覆盖的区间重入本记录。kind6以同一位置的原文件名播放音效后立即继续next，不等待播放结束。随机状态与遇敌、奖励共用世界中的CRT状态，随剧情事务保存或回滚。
+
+CF2的非零+F6以`scripted-object`登记，按原选择队列主动交互后进入完整TLK，再播放物件动画；仅经过物件不会自动触发。此入口与剧情战、宝箱共用同一事务。
+
+CF2动作音效沿共用地图声音接口播放：DAT对应动作的+9E句柄非零才启用，DGP文件名按NUL截断；正放逻辑帧等于DGP+6A、倒放等于逻辑帧数−+6A−1时发声。静止、完成状态恢复和重复交互不重播；音效输入及导出与CF1一同由`audio`构建目标追踪。
+
 无opcode10的共用ANM可以有多个实际TLK／DAT调用地图，执行时继承本次调用地点；来源表保留全部调用者，不指定一个虚构的固定结束地图。
 
-物理state0出口由原DAT推导；TLK kind2使用目标marker和原排序，不能误用对白跳转号。原CF1物件可按tlk-object登记+F6入口，主动交互沿同一StoryFlow事务执行，保持可重复交互；其kind2传送继承当前原排序，目标准备失败回滚物品和旗标。原障碍入口允许移出但不改terrain；无cells描述符不补自选触发格。物件CF1／CF4／CF7和动作绑定的共同规则见[来源规则速查](../assessment/region_remake_workflow.md#来源规则速查)。
+物理state0出口由原DAT推导；TLK kind2使用目标marker和原排序，marker0依原4A5110归一化为marker1／sort2，不能误用对白跳转号。原CF1物件可按tlk-object登记+F6入口，主动交互沿同一StoryFlow事务执行，保持可重复交互；其kind2传送继承当前原排序，目标准备失败回滚物品和旗标。原障碍入口允许移出但不改terrain；无cells描述符不补自选触发格。物件CF1／CF4／CF7和动作绑定的共同规则见[来源规则速查](../assessment/region_remake_workflow.md#来源规则速查)。
 
 ## 来源查询
 
@@ -61,6 +67,7 @@ TLK kind1结束当前对白流并移交ANM；动画完成不自动继续该记�
 | 里白木森林／幻影之森／封印之森 | `data/library/inner_white_forest.json`；`inner-white-forest-index`，完整保留17图，运行准入另看`runtime_content.json` |
 | 飘城 | `data/library/floating_city.json`；`floating-city-index`，含ANM实际加载的独立地图，未找到入口的候选另列 |
 | 风领地力城／劲风岛／圣山／东大陆海岸 | `data/library/wind_region.json`；`wind-region-index`，多组原地图名提名后按真实DAT关系盘点，保留无TLK图及跨区调用 |
+| 研究所遗迹 | `data/library/research.json`；`research-index`，以真实出口遍历57图，另保留无入口模板；狼人任务的`ELF-FOREST-A～W`是独立原地图族，不并入M720xx |
 
 各`tools/export_<区域>_index.py`共用`--query`、`--map`、`--flag`和`--check`查询方式，示例见[工具说明](tools/README.md#来源查询)。`external_callers`记录原调用者，`potential_call_roots`表示静态可达，二者都不保证某个存档当前能进入。
 

@@ -25,6 +25,7 @@ from source.combat_resources import CHR
 from source.dgp import DGP
 from source.map_objects import MapObjects
 from content_registration import map_ids
+from route_extract_resources import tlk_record
 
 
 def sha(raw): return hashlib.sha256(raw).hexdigest()
@@ -49,7 +50,7 @@ def evidence_record(filename, procedure):
 
 
 def source_files():
-    """Track active CF1 sound inputs before the first export ledger exists."""
+    """Track active CF1/CF2 sound inputs before the first export ledger exists."""
     paths = set()
     for ident in map_ids():
         relative = f'Map/{ident.lower()}.dat'
@@ -57,12 +58,21 @@ def source_files():
         table = MapObjects(ROOT / relative)
         for obj in table.objects:
             raw = bytes.fromhex(obj['raw_hex'])
-            if raw[0xcf] != 1 or not struct.unpack_from('<I', raw, 0x9e)[0]:
+            if raw[0xcf] not in (1, 2) or not struct.unpack_from('<I', raw, 0x9e)[0]:
                 continue
             path = table.resource_source(struct.unpack_from('<I', raw, 0x1e)[0])
             paths.add(path)
             dgp = DGP(ROOT / path)
             token = original_text(dgp.raw_actions[0], 0x56, 20)
+            if token and (ROOT / ('sound/' + token)).is_file():
+                paths.add('sound/' + token)
+    for ident in map_ids('story'):
+        relative=f'Map/{ident.lower()}.TLK'
+        paths.add(relative)
+        for record in tlk_record(ROOT / relative)['records']:
+            if record['kind'] != 6:
+                continue
+            token=original_text(bytes.fromhex(record['raw_hex']),0x37,0x100)
             if token and (ROOT / ('sound/' + token)).is_file():
                 paths.add('sound/' + token)
     return tuple(sorted(paths))
@@ -101,6 +111,10 @@ def main():
     for procedure in ['0x45c100', '0x4bae20', '0x4bada3', '0x4bad00']:
         native.append(evidence_record(field_bundle, procedure))
     native_ref[field_bundle] = sha((ROOT/field_bundle).read_bytes())
+    tlk_sound_native='remake/runtime/evidence/guild_20261031/native_4bafa0.json'
+    tlk_sound_record=json.loads((ROOT/tlk_sound_native).read_text('utf-8'))
+    assert tlk_sound_record['subject']['digest']['sha256']==GAME_SHA
+    native.append(tlk_sound_record);native_ref[tlk_sound_native]=sha((ROOT/tlk_sound_native).read_bytes())
     extra_path = RUNTIME / 'evidence/audio_native.json'
     if extra_path.exists():
         extra = json.loads(extra_path.read_text('utf-8'))
@@ -174,17 +188,29 @@ def main():
         table = MapObjects(ROOT / path)
         for obj in table.objects:
             object_raw = bytes.fromhex(obj['raw_hex'])
-            if object_raw[0xcf] != 1 or not struct.unpack_from('<I', object_raw, 0x9e)[0]:
+            if object_raw[0xcf] not in (1, 2) or not struct.unpack_from('<I', object_raw, 0x9e)[0]:
                 continue
             dgp_path = table.resource_source(struct.unpack_from('<I', object_raw, 0x1e)[0])
             dgp = DGP(ROOT / dgp_path);read(dgp_path)
             action = dgp.raw_actions[0]
             sound_token = original_text(action, 0x56, 20)
-            object_sounds.append(dict(map_id=ident, object_index=obj['index'], clip=clip('sound/'+sound_token) if sound_token else None,
+            object_sounds.append(dict(map_id=ident, object_index=obj['index'], behavior_raw_cf=object_raw[0xcf], clip=clip('sound/'+sound_token) if sound_token else None,
                 token=sound_token, logical_frame=struct.unpack_from('<I', action, 0x6a)[0],
                 object_source=dict(path=path, sha256=sha(raw), offset=obj['offset'], raw_sha256=sha(object_raw), sound_enabled_raw=struct.unpack_from('<I', object_raw, 0x9e)[0]),
                 action_source=dict(path=dgp_path, sha256=dgp.sha256, offset=67, raw_sha256=sha(action)),
                 evidence=[object_tick['evidence_id']] ))
+    native_sound_tokens,native_sound_sources={},[]
+    for ident in map_ids('story'):
+        path=f'Map/{ident.lower()}.TLK';raw=read(path)
+        for record in tlk_record(ROOT/path)['records']:
+            if record['kind'] != 6:
+                continue
+            record_raw=bytes.fromhex(record['raw_hex']);token=original_text(record_raw,0x37,0x100)
+            assert not token or token.lower().endswith('.wav')
+            native_sound_tokens[token]=clip('sound/'+token) if token else None
+            native_sound_sources.append(dict(map_id=ident,record_id=record['id'],token=token,clip=native_sound_tokens[token],
+                source=dict(path=path,sha256=sha(raw),offset=record['offset'],bytes=0x66f,raw_sha256=sha(record_raw),token_offset=0x37),
+                evidence=[evidence['0x4bafa0']],policy='Native TLK kind6 starts an independent effect voice and immediately continues next; no completion wait.'))
     encounters = json.loads((WEB/'data/encounters.json').read_text('utf-8'))
     battles = {}
     stage_sources={entry['stage']:entry['evidence'] for entry in encounters['maps'].values() if entry['members']}
@@ -304,7 +330,7 @@ def main():
         'Operation menu open/select/confirm/cancel use the confirmed native five-entry table. Missing close.wav is retained as unavailable, without substituting _close.wav or close.mp3.',
         'Browser feedback coalesces keyboard/click handling to one cue per gesture; exact original nested-panel mixer timing is not reproduced.']
     manifest=dict(schema='seventh-seal-audio',version=1,clips=clips,maps=maps,battles=battles,cues=cues,world_map=world_map,action_tokens=tokens,frame_sounds=frame_sounds,
-        effect_sounds=effect_sounds,item_effects=item_effects,object_sounds=object_sounds,reference_hashes=reference_hashes,
+        effect_sounds=effect_sounds,item_effects=item_effects,object_sounds=object_sounds,native_sound_tokens=native_sound_tokens,native_sound_sources=native_sound_sources,reference_hashes=reference_hashes,
         action_sources=action_sources,source_hashes=sources,native_evidence=evidence,native_bundle_hashes=native_ref,
         missing_original_files=missing,limitations=limitations)
     save(WEB/'data/audio.json',manifest)

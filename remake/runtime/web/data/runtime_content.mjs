@@ -783,6 +783,54 @@ export const definition = {
     },
     "034": {
       "side": "enemy"
+    },
+    "021": {
+      "side": "enemy"
+    },
+    "023": {
+      "side": "enemy"
+    },
+    "025": {
+      "side": "enemy"
+    },
+    "027": {
+      "side": "enemy"
+    },
+    "040": {
+      "side": "enemy"
+    },
+    "043": {
+      "side": "enemy"
+    },
+    "060": {
+      "side": "enemy"
+    },
+    "061": {
+      "side": "enemy"
+    },
+    "062": {
+      "side": "enemy"
+    },
+    "063": {
+      "side": "enemy"
+    },
+    "064": {
+      "side": "enemy"
+    },
+    "065": {
+      "side": "enemy"
+    },
+    "082": {
+      "side": "enemy"
+    },
+    "084": {
+      "side": "enemy"
+    },
+    "085": {
+      "side": "enemy"
+    },
+    "088": {
+      "side": "enemy"
     }
   },
   "battle_rosters": {
@@ -824,7 +872,8 @@ export const definition = {
     "stage04": {},
     "stage05": {},
     "stage08": {},
-    "stage09": {}
+    "stage09": {},
+    "stage10": {}
   },
   "programs": [
     "m01010-2",
@@ -897,7 +946,16 @@ export const definition = {
     "m72063-3",
     "m72064-1",
     "m19010-1",
-    "m73013-1"
+    "m73013-1",
+    "m01066-1",
+    "m01066-2",
+    "m01066-3",
+    "m01053-1",
+    "m01053-2",
+    "m71080",
+    "elf-e",
+    "elf-i",
+    "elf-v"
   ],
   "maps": {
     "M01060": {
@@ -915,6 +973,8 @@ export const definition = {
       ],
       "triggers": [
         6,
+        28,
+        29,
         30
       ]
     },
@@ -1063,6 +1123,10 @@ export const definition = {
         {
           "index": 19,
           "handler": "keyed-chest"
+        },
+        {
+          "index": 20,
+          "handler": "keyed-chest"
         }
       ]
     },
@@ -1121,6 +1185,10 @@ export const definition = {
       "objects": [
         {
           "index": 3,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 4,
           "handler": "keyed-chest"
         }
       ]
@@ -1204,11 +1272,13 @@ export const definition = {
     "M01050": {
       "triggers": [
         29,
+        30,
         31
       ],
       "npcs": [
         10,
         11,
+        12,
         13,
         14,
         15,
@@ -1883,7 +1953,8 @@ export const definition = {
       "npcs": [
         10,
         11,
-        12
+        12,
+        13
       ]
     },
     "M03043-4": {
@@ -1917,20 +1988,49 @@ export const definition = {
       ],
       "setup": true,
       "triggers": [
-        2
+        2,
+        3
+      ],
+      "objects": [
+        {
+          "index": 16,
+          "handler": "keyed-chest"
+        }
       ]
     },
     "M71072": {
       "npcs": [],
-      "setup": true
+      "setup": true,
+      "objects": [
+        {
+          "index": 11,
+          "handler": "keyed-chest"
+        }
+      ]
     },
     "M71073": {
       "npcs": [],
-      "setup": true
+      "setup": true,
+      "objects": [
+        {
+          "index": 7,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 8,
+          "handler": "keyed-chest"
+        }
+      ]
     },
     "M71074": {
       "npcs": [],
-      "setup": true
+      "setup": true,
+      "objects": [
+        {
+          "index": 7,
+          "handler": "keyed-chest"
+        }
+      ]
     },
     "M71075": {
       "npcs": [
@@ -2073,7 +2173,8 @@ export const definition = {
     "M03051": {
       "npcs": [
         10,
-        14
+        14,
+        15
       ]
     },
     "M03060": {
@@ -2573,7 +2674,8 @@ export const definition = {
         15,
         16,
         17,
-        18
+        18,
+        20
       ]
     },
     "M29015": {
@@ -2667,13 +2769,1424 @@ export const definition = {
       "triggers": [
         1
       ]
+    },
+    "M71076-1-03": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 10,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 11,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 13,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "M71076-1-06": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 10,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 11,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "M71076-2-12": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 10,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 11,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 13,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "M71076-2-18": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 10,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 11,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "M71076-3-23": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 10,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 11,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 12,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 14,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "M71076-3-26": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 10,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 11,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "M71076-4-34": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 10,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 11,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 13,
+          "handler": "stationary-chest"
+        }
+      ]
+    },
+    "M71076-4-37": {
+      "npcs": [
+        22
+      ],
+      "objects": [
+        {
+          "index": 10,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 11,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 12,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 13,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 14,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "M71076-5-42": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 10,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 11,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 12,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 13,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 14,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "M71076-5-48": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 10,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 11,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 13,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 14,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 15,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 16,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "M71077": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "M71077-1": {
+      "npcs": [],
+      "triggers": [
+        3
+      ]
+    },
+    "M71077-2": {
+      "npcs": [],
+      "triggers": [
+        3
+      ]
+    },
+    "M71077-3": {
+      "npcs": [],
+      "triggers": [
+        3
+      ]
+    },
+    "M71077-4": {
+      "npcs": [],
+      "triggers": [
+        3
+      ]
+    },
+    "M71077-5": {
+      "npcs": [],
+      "triggers": [
+        3
+      ]
+    },
+    "M71077-6": {
+      "npcs": [],
+      "triggers": [
+        3
+      ]
+    },
+    "M71077-7": {
+      "npcs": [],
+      "triggers": [
+        3
+      ]
+    },
+    "M71077-8": {
+      "npcs": [],
+      "triggers": [
+        3
+      ]
+    },
+    "M71077-9": {
+      "npcs": [],
+      "triggers": [
+        3
+      ]
+    },
+    "M71078-1-01": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 85,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 86,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 90,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "M71078-1-02": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 86,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 87,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 88,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 89,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 91,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "M71078-1-04": {
+      "npcs": [
+        13
+      ],
+      "objects": [
+        {
+          "index": 83,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 87,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 88,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 89,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 90,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "M71078-1-07": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 83,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 85,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 89,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 90,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 91,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "M71078-1-08": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 83,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 85,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 89,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 90,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 91,
+          "handler": "stationary-chest"
+        }
+      ]
+    },
+    "M71078-1-09": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 82,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 83,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 84,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 88,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 89,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 90,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "M71078-2-11": {
+      "npcs": [
+        14
+      ],
+      "objects": [
+        {
+          "index": 90,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 91,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 95,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 96,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 97,
+          "handler": "stationary-chest"
+        }
+      ]
+    },
+    "M71078-2-13": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 90,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 91,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 95,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 96,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 97,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 99,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "M71078-2-14": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 88,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 90,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 91,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 95,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 96,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 97,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 98,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "M71078-2-16": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 87,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 88,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 90,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 95,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 97,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "M71078-2-17": {
+      "npcs": [
+        14
+      ],
+      "objects": [
+        {
+          "index": 90,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 91,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 97,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 98,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 99,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "M71078-2-19": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 88,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 90,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 94,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 95,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "M71078-3-21": {
+      "npcs": [
+        16
+      ],
+      "objects": [
+        {
+          "index": 93,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 94,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 99,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 100,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "M71078-3-22": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 91,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 93,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 95,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 99,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 100,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 101,
+          "handler": "stationary-chest"
+        }
+      ]
+    },
+    "M71078-3-24": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 93,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 94,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 95,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 101,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 102,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 103,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "M71078-3-27": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 91,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 92,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 94,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 101,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 102,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "M71078-3-28": {
+      "npcs": [
+        16
+      ],
+      "objects": [
+        {
+          "index": 94,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 96,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 98,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 99,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 105,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 106,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "M71078-3-29": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 89,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 90,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 91,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 92,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 93,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 94,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 95,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 96,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 98,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "M71078-4-31": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 97,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 98,
+          "handler": "keyed-chest"
+        }
+      ],
+      "export": {
+        "story": false
+      }
+    },
+    "M71078-4-32": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 89,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 90,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 92,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 93,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 95,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 98,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 99,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 100,
+          "handler": "stationary-chest"
+        }
+      ]
+    },
+    "M71078-4-33": {
+      "npcs": [
+        15
+      ],
+      "objects": [
+        {
+          "index": 91,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 92,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 95,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 99,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 100,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 101,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 102,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 103,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "M71078-4-36": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 87,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 89,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 91,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 93,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 95,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 99,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 100,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 101,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "M71078-4-38": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 91,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 93,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 95,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 101,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 102,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 103,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 104,
+          "handler": "stationary-chest"
+        }
+      ]
+    },
+    "M71078-4-39": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 90,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 91,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 93,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 94,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 95,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 99,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 101,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "M71078-5-41": {
+      "npcs": [
+        18
+      ],
+      "objects": [
+        {
+          "index": 91,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 92,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 93,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 95,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 101,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 102,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 103,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 104,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "M71078-5-43": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 89,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 90,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 92,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 94,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 95,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 99,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 100,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 101,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 102,
+          "handler": "stationary-chest"
+        }
+      ]
+    },
+    "M71078-5-44": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 90,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 92,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 93,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 94,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 96,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 101,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 102,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 103,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 104,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 105,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 106,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "M71078-5-46": {
+      "npcs": [
+        19
+      ],
+      "objects": [
+        {
+          "index": 91,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 92,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 94,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 96,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 102,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 103,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 104,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 105,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "M71078-5-47": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 92,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 93,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 94,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 95,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 96,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 104,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 105,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 106,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 107,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 108,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 109,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 110,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 111,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 112,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "M71078-5-49": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 92,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 93,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 94,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 95,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 96,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 97,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 98,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 99,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 100,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 101,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 102,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "M71079": {
+      "npcs": [],
+      "triggers": [
+        3
+      ]
+    },
+    "M71080": {
+      "npcs": [
+        10
+      ],
+      "triggers": [
+        2
+      ],
+      "objects": [
+        {
+          "index": 4,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "M01053": {
+      "npcs": [
+        10
+      ],
+      "triggers": [
+        2
+      ],
+      "objects": [
+        {
+          "index": 0,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "M01066": {
+      "npcs": [
+        10,
+        11
+      ],
+      "triggers": [
+        2,
+        30
+      ],
+      "setup": true
+    },
+    "M03032": {
+      "npcs": [
+        19
+      ]
+    },
+    "M03066": {
+      "npcs": [
+        10
+      ]
+    },
+    "ELF-FOREST-A": {
+      "npcs": [],
+      "triggers": [
+        2
+      ]
+    },
+    "ELF-FOREST-D": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "ELF-FOREST-E": {
+      "npcs": [
+        11
+      ],
+      "triggers": [
+        32
+      ]
+    },
+    "ELF-FOREST-F": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "ELF-FOREST-G": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "ELF-FOREST-H": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "ELF-FOREST-I": {
+      "npcs": [
+        11
+      ],
+      "triggers": [
+        31
+      ],
+      "objects": [
+        {
+          "index": 18,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "ELF-FOREST-J": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "ELF-FOREST-K": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "ELF-FOREST-L": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "ELF-FOREST-M": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "ELF-FOREST-N": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "ELF-FOREST-R": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "ELF-FOREST-S": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "ELF-FOREST-T": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "ELF-FOREST-U": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "ELF-FOREST-V": {
+      "npcs": [
+        11
+      ],
+      "triggers": [
+        32
+      ]
     }
   },
   "story": {
     "events": [],
     "quests": [
       "content/quests/fire-valley.json",
-      "content/quests/wind-region.json"
+      "content/quests/wind-region.json",
+      "content/quests/guild.json"
     ]
   }
 };
@@ -3747,6 +5260,118 @@ export default {
         "path": "Fight_Role/034.CHR",
         "sha256": "d91c3a8fd680626b6ba2d048028dccec66c81424b23ba35297bfa5c9ba458062"
       }
+    },
+    "021": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/021.CHR",
+        "sha256": "815b12b37f3a4feace3747def43c0c78b7ab53c8e6d9c307129ed322241203ce"
+      }
+    },
+    "023": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/023.CHR",
+        "sha256": "f33046d37d40d7e5aff125cb28200cb627583b5c2375d7450163960f437e5294"
+      }
+    },
+    "025": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/025.CHR",
+        "sha256": "070eae5442788b687a75de0f59952195d206a80a72d96d5830e42c4f048c7bd1"
+      }
+    },
+    "027": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/027.CHR",
+        "sha256": "c4c294d36c0bbaa6705d40ed7ac0e81c2e50a203c24651161f36b4f7315b2bc1"
+      }
+    },
+    "040": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/040.CHR",
+        "sha256": "0306833e9066ec1e385abc675153d9d36e2a197d3f720869be157dfdc6d51194"
+      }
+    },
+    "043": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/043.CHR",
+        "sha256": "cf6d926ddb5990ef15138b67856371628494d1ddb2c5ba025ac7ce41c1ad719d"
+      }
+    },
+    "060": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/060.CHR",
+        "sha256": "c60c96ca785c541875a9a9757c89c7535fd98d47ac0e2180907fe52a81952d85"
+      }
+    },
+    "061": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/061.CHR",
+        "sha256": "5d4f49e524682c7c43939e6b16bb848e4b403ac63aaa00580e97a3a5cf1c048c"
+      }
+    },
+    "062": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/062.CHR",
+        "sha256": "9e19bf6eada46232a1160fa6516cdd8fbf1a0118b5a4254c3d544a263ff47d25"
+      }
+    },
+    "063": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/063.CHR",
+        "sha256": "e5db8e5c5526f868b10124d703e49ae63b8036f1e7a221314f781ae8581b6063"
+      }
+    },
+    "064": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/064.CHR",
+        "sha256": "402b84cd0fc8a8c0335ee9f7d10ce9f0a9a3907e09b8e8d0983af272e2e7ed8b"
+      }
+    },
+    "065": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/065.CHR",
+        "sha256": "30adca02a5047aacbe9fe6aa44c41649d724864345363938be8cb47ac7335fdd"
+      }
+    },
+    "082": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/082.CHR",
+        "sha256": "5d5d5585d40151d2d0f2db00f6e590edb2a9d96313bc1f6bdcf1167457bcc881"
+      }
+    },
+    "084": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/084.CHR",
+        "sha256": "8ae011d9fcd90e8b21c134b1bbb730d139d666afa67e1e07bbccf96333aa78b6"
+      }
+    },
+    "085": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/085.CHR",
+        "sha256": "82650e373c3c706c84049331a4907c0793016f87974325fa7bf8946539eae0b3"
+      }
+    },
+    "088": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/088.CHR",
+        "sha256": "e72ded76a5f7e4a561edb0f6e4f1d878589ce04ff5052fa18f25a54dd070ae13"
+      }
     }
   },
   "battle_rosters": {
@@ -3782,7 +5407,23 @@ export default {
       "019",
       "020",
       "029",
-      "034"
+      "034",
+      "021",
+      "023",
+      "025",
+      "027",
+      "040",
+      "043",
+      "060",
+      "061",
+      "062",
+      "063",
+      "064",
+      "065",
+      "082",
+      "084",
+      "085",
+      "088"
     ],
     "party-source-group": [
       "001",
@@ -3817,7 +5458,23 @@ export default {
       "019",
       "020",
       "029",
-      "034"
+      "034",
+      "021",
+      "023",
+      "025",
+      "027",
+      "040",
+      "043",
+      "060",
+      "061",
+      "062",
+      "063",
+      "064",
+      "065",
+      "082",
+      "084",
+      "085",
+      "088"
     ]
   },
   "stages": {
@@ -3875,6 +5532,11 @@ export default {
       "path": "data/stages/stage09.json",
       "schema": "seventh-seal-battle-stage",
       "asset_prefix": "assets/stages/stage09/"
+    },
+    "stage10": {
+      "path": "data/stages/stage10.json",
+      "schema": "seventh-seal-battle-stage",
+      "asset_prefix": "assets/stages/stage10/"
     }
   },
   "programs": {
@@ -4232,6 +5894,51 @@ export default {
       "path": "Animate/m73013-1.anm",
       "sha256": "8ca0c95e33705caf7dce15dbc1187d22c206ddf18d73ffdeabaecc7ecb87bbdc",
       "bytes": 8429
+    },
+    "m01066-1": {
+      "path": "Animate/m01066-1.anm",
+      "sha256": "f93755c3377933b38856553a8cda62d0c9a02bb6db012ad213b12f705474e9ca",
+      "bytes": 437
+    },
+    "m01066-2": {
+      "path": "Animate/m01066-2.anm",
+      "sha256": "418a6323c20be80f02ada26fbe91c84bc6dff6c53523ae2c9615bd1e818d490c",
+      "bytes": 437
+    },
+    "m01066-3": {
+      "path": "Animate/m01066-3.anm",
+      "sha256": "6808267f90619e9435797b875a9d1b74e53824928069b02d7e816a8d09fed3a6",
+      "bytes": 955
+    },
+    "m01053-1": {
+      "path": "Animate/m01053-1.anm",
+      "sha256": "b4db22a555ccbe0d9706c13b02c872daf2d494e0349934c43be893fc2e9709c7",
+      "bytes": 1399
+    },
+    "m01053-2": {
+      "path": "Animate/m01053-2.anm",
+      "sha256": "49d03e05fc4a62b0ce07a600c020e475b4c197caf698021118aa4a2292db196d",
+      "bytes": 1103
+    },
+    "m71080": {
+      "path": "Animate/m71080.anm",
+      "sha256": "1ad346c4045e91813e10e8dd13e4e256e81c71485935793bdad21a1a632b2cc7",
+      "bytes": 1399
+    },
+    "elf-e": {
+      "path": "Animate/elf-e.anm",
+      "sha256": "81a57829f037b7263ec7d8d23503c3ba11a2252bb691bfaa8fb418f333894752",
+      "bytes": 1547
+    },
+    "elf-i": {
+      "path": "Animate/elf-i.anm",
+      "sha256": "7cabfaaf9954461532d481d57ec29600597355382638b9059f615683e2fc9095",
+      "bytes": 1547
+    },
+    "elf-v": {
+      "path": "Animate/elf-v.anm",
+      "sha256": "1a4b84fa7fd739723b1e9de299351448f1a048293ca9f6a8fd88e196fc8b5727",
+      "bytes": 1547
     }
   },
   "maps": {
@@ -4239,6 +5946,8 @@ export default {
       "path": "data/maps/m01060.json",
       "triggers": [
         6,
+        28,
+        29,
         30
       ],
       "objects": [],
@@ -4481,6 +6190,10 @@ export default {
         {
           "index": 19,
           "handler": "keyed-chest"
+        },
+        {
+          "index": 20,
+          "handler": "keyed-chest"
         }
       ],
       "rests": [],
@@ -4566,6 +6279,10 @@ export default {
       "objects": [
         {
           "index": 3,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 4,
           "handler": "keyed-chest"
         }
       ],
@@ -4664,6 +6381,7 @@ export default {
       "path": "data/maps/m01050.json",
       "triggers": [
         29,
+        30,
         31
       ],
       "objects": [],
@@ -4672,6 +6390,7 @@ export default {
       "npcs": [
         10,
         11,
+        12,
         13,
         14,
         15,
@@ -5617,7 +7336,8 @@ export default {
       "npcs": [
         10,
         11,
-        12
+        12,
+        13
       ],
       "flag_index": 434
     },
@@ -5665,9 +7385,15 @@ export default {
     "M71071": {
       "path": "data/maps/m71071.json",
       "triggers": [
-        2
+        2,
+        3
       ],
-      "objects": [],
+      "objects": [
+        {
+          "index": 16,
+          "handler": "keyed-chest"
+        }
+      ],
       "rests": [],
       "routes": [],
       "setup_record": 16,
@@ -5679,7 +7405,12 @@ export default {
     "M71072": {
       "path": "data/maps/m71072.json",
       "triggers": [],
-      "objects": [],
+      "objects": [
+        {
+          "index": 11,
+          "handler": "keyed-chest"
+        }
+      ],
       "rests": [],
       "routes": [],
       "setup_record": 1,
@@ -5689,7 +7420,16 @@ export default {
     "M71073": {
       "path": "data/maps/m71073.json",
       "triggers": [],
-      "objects": [],
+      "objects": [
+        {
+          "index": 7,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 8,
+          "handler": "keyed-chest"
+        }
+      ],
       "rests": [],
       "routes": [],
       "setup_record": 1,
@@ -5699,7 +7439,12 @@ export default {
     "M71074": {
       "path": "data/maps/m71074.json",
       "triggers": [],
-      "objects": [],
+      "objects": [
+        {
+          "index": 7,
+          "handler": "keyed-chest"
+        }
+      ],
       "rests": [],
       "routes": [],
       "setup_record": 1,
@@ -5976,7 +7721,8 @@ export default {
       "routes": [],
       "npcs": [
         10,
-        14
+        14,
+        15
       ],
       "flag_index": 429
     },
@@ -6750,7 +8496,8 @@ export default {
         15,
         16,
         17,
-        18
+        18,
+        20
       ],
       "flag_index": 521
     },
@@ -6896,13 +8643,1757 @@ export default {
         12
       ],
       "flag_index": 477
+    },
+    "M71076-1-03": {
+      "path": "data/maps/m71076-1-03.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 10,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 11,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 13,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 518
+    },
+    "M71076-1-06": {
+      "path": "data/maps/m71076-1-06.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 10,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 11,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 494
+    },
+    "M71076-2-12": {
+      "path": "data/maps/m71076-2-12.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 10,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 11,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 13,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 495
+    },
+    "M71076-2-18": {
+      "path": "data/maps/m71076-2-18.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 10,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 11,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 496
+    },
+    "M71076-3-23": {
+      "path": "data/maps/m71076-3-23.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 10,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 11,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 12,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 14,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 497
+    },
+    "M71076-3-26": {
+      "path": "data/maps/m71076-3-26.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 10,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 11,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 498
+    },
+    "M71076-4-34": {
+      "path": "data/maps/m71076-4-34.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 10,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 11,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 13,
+          "handler": "stationary-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 499
+    },
+    "M71076-4-37": {
+      "path": "data/maps/m71076-4-37.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 10,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 11,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 12,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 13,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 14,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        22
+      ],
+      "flag_index": 500
+    },
+    "M71076-5-42": {
+      "path": "data/maps/m71076-5-42.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 10,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 11,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 12,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 13,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 14,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 501
+    },
+    "M71076-5-48": {
+      "path": "data/maps/m71076-5-48.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 10,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 11,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 13,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 14,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 15,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 16,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 502
+    },
+    "M71077": {
+      "path": "data/maps/m71077.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 439
+    },
+    "M71077-1": {
+      "path": "data/maps/m71077-1.json",
+      "triggers": [
+        3
+      ],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 448
+    },
+    "M71077-2": {
+      "path": "data/maps/m71077-2.json",
+      "triggers": [
+        3
+      ],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 440
+    },
+    "M71077-3": {
+      "path": "data/maps/m71077-3.json",
+      "triggers": [
+        3
+      ],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 449
+    },
+    "M71077-4": {
+      "path": "data/maps/m71077-4.json",
+      "triggers": [
+        3
+      ],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 450
+    },
+    "M71077-5": {
+      "path": "data/maps/m71077-5.json",
+      "triggers": [
+        3
+      ],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 451
+    },
+    "M71077-6": {
+      "path": "data/maps/m71077-6.json",
+      "triggers": [
+        3
+      ],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 452
+    },
+    "M71077-7": {
+      "path": "data/maps/m71077-7.json",
+      "triggers": [
+        3
+      ],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 453
+    },
+    "M71077-8": {
+      "path": "data/maps/m71077-8.json",
+      "triggers": [
+        3
+      ],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 454
+    },
+    "M71077-9": {
+      "path": "data/maps/m71077-9.json",
+      "triggers": [
+        3
+      ],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 455
+    },
+    "M71078-1-01": {
+      "path": "data/maps/m71078-1-01.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 85,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 86,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 90,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 504
+    },
+    "M71078-1-02": {
+      "path": "data/maps/m71078-1-02.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 86,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 87,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 88,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 89,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 91,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 505
+    },
+    "M71078-1-04": {
+      "path": "data/maps/m71078-1-04.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 83,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 87,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 88,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 89,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 90,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        13
+      ],
+      "flag_index": 472
+    },
+    "M71078-1-07": {
+      "path": "data/maps/m71078-1-07.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 83,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 85,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 89,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 90,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 91,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 473
+    },
+    "M71078-1-08": {
+      "path": "data/maps/m71078-1-08.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 83,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 85,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 89,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 90,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 91,
+          "handler": "stationary-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 475
+    },
+    "M71078-1-09": {
+      "path": "data/maps/m71078-1-09.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 82,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 83,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 84,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 88,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 89,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 90,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 478
+    },
+    "M71078-2-11": {
+      "path": "data/maps/m71078-2-11.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 90,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 91,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 95,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 96,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 97,
+          "handler": "stationary-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        14
+      ],
+      "flag_index": 479
+    },
+    "M71078-2-13": {
+      "path": "data/maps/m71078-2-13.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 90,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 91,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 95,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 96,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 97,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 99,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 480
+    },
+    "M71078-2-14": {
+      "path": "data/maps/m71078-2-14.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 88,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 90,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 91,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 95,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 96,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 97,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 98,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 481
+    },
+    "M71078-2-16": {
+      "path": "data/maps/m71078-2-16.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 87,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 88,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 90,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 95,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 97,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 483
+    },
+    "M71078-2-17": {
+      "path": "data/maps/m71078-2-17.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 90,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 91,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 97,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 98,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 99,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        14
+      ],
+      "flag_index": 484
+    },
+    "M71078-2-19": {
+      "path": "data/maps/m71078-2-19.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 88,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 90,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 94,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 95,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 485
+    },
+    "M71078-3-21": {
+      "path": "data/maps/m71078-3-21.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 93,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 94,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 99,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 100,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        16
+      ],
+      "flag_index": 486
+    },
+    "M71078-3-22": {
+      "path": "data/maps/m71078-3-22.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 91,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 93,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 95,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 99,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 100,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 101,
+          "handler": "stationary-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 487
+    },
+    "M71078-3-24": {
+      "path": "data/maps/m71078-3-24.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 93,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 94,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 95,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 101,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 102,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 103,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 488
+    },
+    "M71078-3-27": {
+      "path": "data/maps/m71078-3-27.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 91,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 92,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 94,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 101,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 102,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 489
+    },
+    "M71078-3-28": {
+      "path": "data/maps/m71078-3-28.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 94,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 96,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 98,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 99,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 105,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 106,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        16
+      ],
+      "flag_index": 490
+    },
+    "M71078-3-29": {
+      "path": "data/maps/m71078-3-29.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 89,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 90,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 91,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 92,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 93,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 94,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 95,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 96,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 98,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 491
+    },
+    "M71078-4-31": {
+      "path": "data/maps/m71078-4-31.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 97,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 98,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 492
+    },
+    "M71078-4-32": {
+      "path": "data/maps/m71078-4-32.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 89,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 90,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 92,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 93,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 95,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 98,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 99,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 100,
+          "handler": "stationary-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 508
+    },
+    "M71078-4-33": {
+      "path": "data/maps/m71078-4-33.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 91,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 92,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 95,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 99,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 100,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 101,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 102,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 103,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        15
+      ],
+      "flag_index": 509
+    },
+    "M71078-4-36": {
+      "path": "data/maps/m71078-4-36.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 87,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 89,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 91,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 93,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 95,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 99,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 100,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 101,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 503
+    },
+    "M71078-4-38": {
+      "path": "data/maps/m71078-4-38.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 91,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 93,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 95,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 101,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 102,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 103,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 104,
+          "handler": "stationary-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 510
+    },
+    "M71078-4-39": {
+      "path": "data/maps/m71078-4-39.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 90,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 91,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 93,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 94,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 95,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 99,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 101,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 511
+    },
+    "M71078-5-41": {
+      "path": "data/maps/m71078-5-41.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 91,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 92,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 93,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 95,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 101,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 102,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 103,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 104,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        18
+      ],
+      "flag_index": 513
+    },
+    "M71078-5-43": {
+      "path": "data/maps/m71078-5-43.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 89,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 90,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 92,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 94,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 95,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 99,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 100,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 101,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 102,
+          "handler": "stationary-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 514
+    },
+    "M71078-5-44": {
+      "path": "data/maps/m71078-5-44.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 90,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 92,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 93,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 94,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 96,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 101,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 102,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 103,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 104,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 105,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 106,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 515
+    },
+    "M71078-5-46": {
+      "path": "data/maps/m71078-5-46.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 91,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 92,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 94,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 96,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 102,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 103,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 104,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 105,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        19
+      ],
+      "flag_index": 516
+    },
+    "M71078-5-47": {
+      "path": "data/maps/m71078-5-47.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 92,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 93,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 94,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 95,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 96,
+          "handler": "scripted-object"
+        },
+        {
+          "index": 104,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 105,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 106,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 107,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 108,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 109,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 110,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 111,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 112,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 517
+    },
+    "M71078-5-49": {
+      "path": "data/maps/m71078-5-49.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 92,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 93,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 94,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 95,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 96,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 97,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 98,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 99,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 100,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 101,
+          "handler": "stationary-chest"
+        },
+        {
+          "index": 102,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 493
+    },
+    "M71079": {
+      "path": "data/maps/m71079.json",
+      "triggers": [
+        3
+      ],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 613
+    },
+    "M71080": {
+      "path": "data/maps/m71080.json",
+      "triggers": [
+        2
+      ],
+      "objects": [
+        {
+          "index": 4,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10
+      ],
+      "flag_index": 614
+    },
+    "M01053": {
+      "path": "data/maps/m01053.json",
+      "triggers": [
+        2
+      ],
+      "objects": [
+        {
+          "index": 0,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10
+      ],
+      "flag_index": 396
+    },
+    "M01066": {
+      "path": "data/maps/m01066.json",
+      "triggers": [
+        2,
+        30
+      ],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "setup_record": 5,
+      "npcs": [
+        10,
+        11
+      ],
+      "flag_index": 616
+    },
+    "M03032": {
+      "path": "data/maps/m03032.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        19
+      ],
+      "flag_index": 419
+    },
+    "M03066": {
+      "path": "data/maps/m03066.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10
+      ],
+      "flag_index": 433
+    },
+    "ELF-FOREST-A": {
+      "path": "data/maps/elf-forest-a.json",
+      "triggers": [
+        2
+      ],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 580
+    },
+    "ELF-FOREST-D": {
+      "path": "data/maps/elf-forest-d.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 583
+    },
+    "ELF-FOREST-E": {
+      "path": "data/maps/elf-forest-e.json",
+      "triggers": [
+        32
+      ],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        11
+      ],
+      "flag_index": 584
+    },
+    "ELF-FOREST-F": {
+      "path": "data/maps/elf-forest-f.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 585
+    },
+    "ELF-FOREST-G": {
+      "path": "data/maps/elf-forest-g.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 586
+    },
+    "ELF-FOREST-H": {
+      "path": "data/maps/elf-forest-h.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 587
+    },
+    "ELF-FOREST-I": {
+      "path": "data/maps/elf-forest-i.json",
+      "triggers": [
+        31
+      ],
+      "objects": [
+        {
+          "index": 18,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        11
+      ],
+      "flag_index": 588
+    },
+    "ELF-FOREST-J": {
+      "path": "data/maps/elf-forest-j.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 589
+    },
+    "ELF-FOREST-K": {
+      "path": "data/maps/elf-forest-k.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 590
+    },
+    "ELF-FOREST-L": {
+      "path": "data/maps/elf-forest-l.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 591
+    },
+    "ELF-FOREST-M": {
+      "path": "data/maps/elf-forest-m.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 592
+    },
+    "ELF-FOREST-N": {
+      "path": "data/maps/elf-forest-n.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 593
+    },
+    "ELF-FOREST-R": {
+      "path": "data/maps/elf-forest-r.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 597
+    },
+    "ELF-FOREST-S": {
+      "path": "data/maps/elf-forest-s.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 598
+    },
+    "ELF-FOREST-T": {
+      "path": "data/maps/elf-forest-t.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 599
+    },
+    "ELF-FOREST-U": {
+      "path": "data/maps/elf-forest-u.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 600
+    },
+    "ELF-FOREST-V": {
+      "path": "data/maps/elf-forest-v.json",
+      "triggers": [
+        32
+      ],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        11
+      ],
+      "flag_index": 601
     }
   },
   "story": {
     "events": [],
     "quests": [
       "content/quests/fire-valley.json",
-      "content/quests/wind-region.json"
+      "content/quests/wind-region.json",
+      "content/quests/guild.json"
     ]
   }
 };

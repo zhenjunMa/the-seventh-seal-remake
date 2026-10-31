@@ -154,6 +154,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
       if(binding.handler==='keyed-chest'&&![3,4].includes(object.behavior_raw_cf))continue;
       if(binding.handler==='tlk-object'&&(object.behavior_raw_cf!==1||!object.interaction_record_raw_f6))continue;
       if(binding.handler==='scripted-switch'&&(object.behavior_raw_cf!==9||!object.interaction_record_raw_f6))continue;
+      if(binding.handler==='scripted-object'&&(object.behavior_raw_cf!==2||!object.interaction_record_raw_f6))continue;
       const distance=Math.hypot(object.x_native*2-at.x,object.y_native*2-at.y);
       if(distance<64&&(!state.nearest||distance<state.nearest.distance))state.nearest={...object,kind:'object',name:binding.handler==='keyed-chest'?'宝箱':binding.handler==='scripted-switch'?'机关':'物件',distance};
     }

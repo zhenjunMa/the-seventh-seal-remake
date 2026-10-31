@@ -33,6 +33,9 @@ export function validateCompactRecords(table){
     if(row.condition_type===8)need(Number.isInteger(row.condition_dword_raw_0b)&&row.condition_dword_raw_0b>=0&&row.condition_dword_raw_0b<=0xffffffff,'控制角色条件 DWORD 缺失或无效');
     if(row.kind===5)need(isNativeScriptedBattleNames(row.scripted_battle),'原剧情战斗文件名缺失');
     if(row.kind===4)nativeCombinationHex(row);
+    if(row.kind===3)need(Array.isArray(row.native_random_branches)&&row.native_random_branches.length>0&&row.native_random_branches.length<=15
+      &&row.native_random_branches.every(branch=>Number.isInteger(branch.recordId)&&branch.recordId>0&&branch.recordId<=0xffff
+        &&Number.isInteger(branch.weight)&&branch.weight>0&&branch.weight<=0xffff),'随机对白分支无效');
     if(row.kind===8){
       const service=row.native_service;
       need(service&&Number.isInteger(service.kind)&&service.kind>=0&&service.kind<=4&&typeof service.title==='string'
@@ -45,7 +48,7 @@ export function validateCompactRecords(table){
       &&choice.text_id===`${row.text_id}:choice:${choice.index}`&&Number.isInteger(choice.recordId)&&choice.recordId>=0,'选择字段无效');
   }
   // kind2 +2F is a destination map marker and may exceed this TLK's row count.
-  for(const row of table.records)for(const target of [...(row.kind===2?[]:[row.if_true]),row.next,...row.choices.map(choice=>choice.recordId)])need(target===0||ids.has(target),`${table.id}:${row.id} 跳转 ${target} 缺失`);
+  for(const row of table.records)for(const target of [...(row.kind===2?[]:[row.if_true]),row.next,...row.choices.map(choice=>choice.recordId),...(row.native_random_branches??[]).map(branch=>branch.recordId)])need(target===0||ids.has(target),`${table.id}:${row.id} 跳转 ${target} 缺失`);
   return table;
 }
 export function hydrateStoryTable(table,texts){

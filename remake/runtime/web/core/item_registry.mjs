@@ -23,12 +23,14 @@ export function deriveItemConfiguration(data,{socketSupport=true}={}){
   const entries=Object.fromEntries(Object.entries(data.definitions).map(([id,def])=>{
     const crystal=socketSupport&&isSupportedCrystalDefinition(def);
     const parameters={drop_rate:def.drop_rate,enabled:def.availability.enabled||crystal};
-    if(def.behavior.kind==='equip'||crystal){
+    const permanent=def.behavior.kind==='permanent-stat-source';
+    if(def.behavior.kind==='equip'||crystal||permanent){
       if(def.behavior.kind==='equip')parameters.allowed_role_mask=def.allowed_role_mask_raw_13e;
-      parameters.attributes=Object.fromEntries(EQUIPMENT_ATTRIBUTES.map(([name,offset])=>{
+      parameters.attributes=Object.fromEntries(EQUIPMENT_ATTRIBUTES.filter(([name])=>!permanent||[def.permanent_stat.attribute,def.permanent_stat.percent_attribute].includes(name)).map(([name,offset])=>{
         const r=def.value_ranges.find(r=>r.instance_offset===offset);
         return [name,{minimum:r.minimum,maximum_exclusive:r.maximum}];
       }));
+      if(permanent){parameters.use_in_field=def.use_in_field;parameters.use_in_battle=def.use_in_battle;parameters.effect=copy(def.effect);}
     }else if(['simple-restore','status-cure','status-attack','status-clear','status-support','element-source','revival-item'].includes(def.behavior.kind)){
       parameters.use_in_field=def.use_in_field??true;parameters.use_in_battle=def.use_in_battle??true;
       parameters.effect=copy(def.effect);
@@ -60,7 +62,8 @@ export function compileItemConfiguration(data,cfg,mode){
     need(!p.enabled||def.behavior.kind!=='source-only'||crystal,`${id}作用未还原，不能启用`);
     need(!p.enabled||def.behavior.kind!=='equip'||!hasEquipmentPassiveSource(def)
       ||isSupportedItemPassiveDefinition(def)||def.availability.enabled===true,`${id}装备被动作用未还原，不能启用`);
-    if(def.behavior.kind==='equip'||crystal){
+    const permanent=def.behavior.kind==='permanent-stat-source';
+    if(def.behavior.kind==='equip'||crystal||permanent){
       if(def.behavior.kind==='equip')integer(p.allowed_role_mask,`${id}.allowed_role_mask`,0,255);
       fields(p.attributes,Object.keys(b.original.attributes),`${id}.attributes`);
       for(const [name,r]of Object.entries(p.attributes)){
@@ -72,7 +75,8 @@ export function compileItemConfiguration(data,cfg,mode){
       if(def.behavior.kind==='equip')def.allowed_role_mask_raw_13e=p.allowed_role_mask;
       def.runtime_attributes=copy(p.attributes);
       if(crystal)def.runtime_socket_supported=true;
-    }else if(['simple-restore','status-cure','status-attack','status-clear','status-support','element-source','revival-item'].includes(def.behavior.kind)){
+    }
+    if(permanent||['simple-restore','status-cure','status-attack','status-clear','status-support','element-source','revival-item'].includes(def.behavior.kind)){
       need(typeof p.use_in_field==='boolean'&&typeof p.use_in_battle==='boolean',`${id}使用场景须为布尔值`);
       if(['status-cure','status-attack','status-clear','status-support'].includes(def.behavior.kind))need(p.use_in_field===false,`${id}原状态道具仅支持战斗场景`);
       fields(p.effect,Object.keys(b.original.effect),`${id}.effect`);
@@ -107,7 +111,7 @@ export function upgradeItemConfiguration(data,existing){
     if(capabilities){
       need(capabilities.policy==='registered-source-item-capabilities-v1','道具能力准入来源版本不兼容');
       for(const [id,previous]of Object.entries(capabilities.previous_definitions??{})){
-        need(capabilities.promoted_item_ids.includes(Number(id))&&['simple-restore','status-cure','status-attack','status-clear','status-support','element-source','revival-item','crafting-material','equip','status-immunity-crystal'].includes(former.definitions[id]?.behavior.kind)&&
+        need(capabilities.promoted_item_ids.includes(Number(id))&&['simple-restore','status-cure','status-attack','status-clear','status-support','element-source','revival-item','permanent-stat-source','crafting-material','equip','status-immunity-crystal'].includes(former.definitions[id]?.behavior.kind)&&
           ['source-only','equip'].includes(previous.behavior.kind)&&previous.availability.enabled===false,`${id}道具能力旧基线无效`);
         Object.assign(former.definitions[id],copy(previous));
         delete former.definitions[id].equipment_passive;
@@ -170,7 +174,8 @@ export function configuredEquipmentHex(raw,definition){
   if(!definition?.runtime_attributes)return raw;
   const bytes=Uint8Array.from(raw.match(/../g),h=>parseInt(h,16)),view=new DataView(bytes.buffer);
   for(const [name,offset]of EQUIPMENT_ATTRIBUTES){
-    const from=definition.value_ranges.find(r=>r.instance_offset===offset),to=definition.runtime_attributes[name],value=view.getInt32(offset,true);
+    const to=definition.runtime_attributes[name];if(!to)continue;
+    const from=definition.value_ranges.find(r=>r.instance_offset===offset),value=view.getInt32(offset,true);
     // Retain the saved roll's position; tuning never draws RNG or changes raw provenance.
     const span=to.maximum_exclusive-to.minimum;
     const delta=from.maximum>from.minimum?Math.floor((value-from.minimum)*span/(from.maximum-from.minimum)):0;

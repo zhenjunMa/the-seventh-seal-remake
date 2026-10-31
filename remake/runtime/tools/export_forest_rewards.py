@@ -71,11 +71,20 @@ def export():
         # Keep these original slots without manufacturing an inventory instance.
         if items[str(item_id)]['drop_rate'] == -1:
             continue
-        assert definition[0x24] >= 2 and definition[0x14b] == 0
+        assert definition[0x24] >= 2
         assert all(struct.unpack_from('<2i', definition, p)[0] == struct.unpack_from('<2i', definition, p)[1] for _, p in VALUE_PAIRS)
         instance = bytearray(initialize_existing_instance(bytes([0xcc]) * 0xe5, definition))
         struct.pack_into('<I', instance, 4, 1)
         items[str(item_id)].update(instance_raw_hex=instance.hex(), initialization_rng_calls=0)
+        if definition[0x14b]:
+            # 50CC20 passes the one-based ID to 50BB50(type7), but 50D450
+            # reads that payload directly as a zero-based Object.ITM index.
+            notice_offset = 0x61c + item_id * 0x3bf
+            notice_name = item_bytes[notice_offset + 4:notice_offset + 28].split(b'\0')[0]
+            items[str(item_id)]['special_notice'] = dict(source_type_raw=7, payload_raw=item_id,
+                display_item_id=item_id + 1, display_name=notice_name.decode('cp936'),
+                source=dict(path='SYSTEM/Object.ITM', name_file_offset=notice_offset + 4,
+                    name_raw_hex=notice_name.hex()))
     save = sources[2].read_bytes()
     roles = {}
     for role in complete_layout(save)['characters']:
@@ -93,7 +102,7 @@ def export():
         chain_bonuses=[0,5,10,15,20,25,30,30,35,35,40,40,45,45,50,50,55,55,60,60]+[60]*21,
         skill_practice_bonuses=[0,10,20,30,40,50,60,70,80,90,100,120,140,200,260,320,400,480,580,700]+[700]*21,
         limits=['Only participating player 001 receives rewards; saved party member 002 is not a battle participant.',
-                'Rate -1 source slots are retained and skipped before initialization. Actual drops require inventory type >=2 and deterministic initialization; droppable unique and randomized rewards remain unsupported.',
+                'Rate -1 source slots are skipped before initialization. Unique source IDs roll once per battle, enqueue type7 notices and halve the practice bonus; their inventory instances may stack. Randomized item initialization remains unsupported.',
                 'The original local chain bonus table admits k=0..40; higher values are rejected rather than invented.',
                 'Native proficiency rewards 0x50C560 are separate from character experience; this contract exports their bonus table but does not assert a full proficiency port.',
                 'Original game execution was not observed. Remake persistence and reward idempotency are explicit adapters.'])

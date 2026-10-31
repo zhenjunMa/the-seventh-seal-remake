@@ -11,7 +11,7 @@ function sourceBytes(hex,count,label){
 export function nativeScriptedChest(object){
   const {raw,view}=sourceBytes(object?.raw_hex,0x112,'物件');
   const behavior=raw[0xcf],recordId=view.getUint32(0xf6,true);
-  need([3,4].includes(behavior)&&recordId>0&&raw[0x109]===0,'脚本箱来源或状态类型无效');
+  need([2,3,4].includes(behavior)&&recordId>0&&raw[0x109]===0,'脚本物件来源或状态类型无效');
   if(behavior===4)need(raw[0x51]===0&&view.getUint32(0x4c,true)===0
     &&view.getUint32(0xe3,true)===0&&view.getUint32(0xe7,true)===0
     &&Array.from({length:10},(_,slot)=>view.getInt32(0x54+slot*4,true)).every(id=>id===0),

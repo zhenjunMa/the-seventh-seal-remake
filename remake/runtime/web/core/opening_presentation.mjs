@@ -62,5 +62,7 @@ export const nativeActorPixelEffects={
     7:{ticks:40,coefficientStep:6,coefficientFloor:10,blend:'source-over'},
     8:{ticks:8,coefficientStep:32,coefficientFloor:10,coefficientCutoff:20,blend:'source-over',startY:-240,stepY:32},
   },
-  behavior:{1:{ticks:30,particles:'scatter'},2:{ticks:30,particles:'rise'}},
+  behavior:{1:{ticks:30,particles:'scatter'},2:{ticks:30,particles:'rise'},
+    // 555CAD clamps alpha240, but y still uses the unclamped (elapsed*32+10)>>2.
+    10:{ticks:9,coefficientStep:32,fadeOut:true,blend:'source-over'}},
 };

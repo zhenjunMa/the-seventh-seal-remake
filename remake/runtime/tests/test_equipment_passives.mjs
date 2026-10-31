@@ -109,10 +109,12 @@ class Oracle extends NativeAssemblyOracle{
 
 test('only registered real CF4/TLK/CHR rewards admit the exact original mode6 blocks',async()=>{
   const admitted=source.catalog.item_capability_admission.passive_item_ids;
-  assert.deepEqual(admitted.filter(id=>![195,202].includes(id)),[127,169,170,208]);assert.deepEqual(admitted.filter(id=>[195,202].includes(id)),[195,202]);
+  for(const id of [127,169,170,195,202,208])assert.ok(admitted.includes(id));
+  assert.deepEqual(admitted,Object.values(source.definitions).filter(row=>row.equipment_passive).map(row=>row.id));
   const original=await readFile(new URL('../../../SYSTEM/Object.ITM',import.meta.url));
   assert.equal(createHash('sha256').update(original).digest('hex'),source.source_hashes['SYSTEM/Object.ITM']);
-  for(const id of [127,169,170,195,202,208]){const def=items.definitions[id];assert.equal(isSupportedItemPassiveDefinition(def),true);
+  for(const id of admitted){const def=items.definitions[id];assert.equal(isSupportedItemPassiveDefinition(def),true);
+    assert.ok(source.catalog.item_capability_admission.passive_sources[id].length);
     assert.equal(original.subarray(def.source.record_offset,def.source.record_offset+959).toString('hex'),def.raw_hex);
     assert.equal(def.equipment_passive.effect_raw_hex,original.subarray(def.source.record_offset+0x2a8,def.source.record_offset+0x36e).toString('hex'));}
   assert.equal(items.definitions[127].behavior.kind,'equip');assert.equal(items.definitions[170].behavior.kind,'status-immunity-crystal');
@@ -120,13 +122,15 @@ test('only registered real CF4/TLK/CHR rewards admit the exact original mode6 bl
   const wind=items.definitions[195];assert.equal(wind.behavior.kind,'status-immunity-crystal');
   assert.deepEqual([wind.equipment_passive.effect_id_raw,wind.equipment_passive.mode_raw,wind.equipment_passive.application_chance_raw],[6,6,0]);
   assert.equal(Buffer.from(wind.equipment_passive.effect_raw_hex,'hex').readInt32LE(2),-1);
-  const origins=source.catalog.item_capability_admission.passive_sources[195];
+  const origins=source.catalog.item_capability_admission.passive_sources[195]
+    .filter(row=>row.kind==='registered-enemy-reward'&&row.map_id==='M72063-3');
   assert.deepEqual(origins.map(row=>[row.kind,row.map_id,row.record_id,row.enemy_id,row.enemy_slot,row.reward_slot]),
     [['registered-enemy-reward','M72063-3',3,'031A',2,2],['registered-enemy-reward','M72063-3',3,'031B',4,2]]);
   const energy=items.definitions[202];assert.equal(energy.behavior.kind,'status-immunity-crystal');
   assert.deepEqual([energy.equipment_passive.effect_id_raw,energy.equipment_passive.mode_raw,energy.equipment_passive.application_chance_raw],[38,6,0]);
   assert.equal(Buffer.from(energy.equipment_passive.effect_raw_hex,'hex').readInt32LE(2),-1);
-  const energyOrigins=source.catalog.item_capability_admission.passive_sources[202];
+  const energyOrigins=source.catalog.item_capability_admission.passive_sources[202]
+    .filter(row=>row.kind==='registered-enemy-reward'&&row.map_id==='M72064');
   assert.deepEqual(energyOrigins.map(row=>[row.kind,row.map_id,row.record_id,row.enemy_id,row.enemy_slot,row.reward_slot]),
     [['registered-enemy-reward','M72064',8,'033',0,3]]);
   for(const [rows,id]of [[origins,195],[energyOrigins,202]])for(const row of rows){const chr=await readFile(new URL(`../../../${row.source.path}`,import.meta.url));
@@ -136,7 +140,8 @@ test('only registered real CF4/TLK/CHR rewards admit the exact original mode6 bl
   for(const [id,effectId,chance]of [[169,12,60],[208,8,0]]){const def=items.definitions[id];
     assert.equal(def.behavior.kind,'status-immunity-crystal');assert.deepEqual([def.equipment_passive.effect_id_raw,def.equipment_passive.mode_raw,def.equipment_passive.application_chance_raw],[effectId,6,chance]);
     assert.equal(Buffer.from(def.equipment_passive.effect_raw_hex,'hex').readInt32LE(2),-1);}
-  const giftOrigins=source.catalog.item_capability_admission.passive_sources[169];
+  const giftOrigins=source.catalog.item_capability_admission.passive_sources[169]
+    .filter(row=>row.kind==='registered-story-item-grant');
   assert.deepEqual(giftOrigins.map(row=>[row.kind,row.map_id,row.record_id,row.entrance.kind,row.entrance.npc_slot,row.entrance.record_id]),
     [['registered-story-item-grant','M19040',2,'npc',12,1]]);
   const gift=giftOrigins[0],giftBytes=await readFile(new URL('../../../Map/m19040.TLK',import.meta.url));
@@ -145,7 +150,8 @@ test('only registered real CF4/TLK/CHR rewards admit the exact original mode6 bl
   assert.equal(giftBytes.readUInt32LE(giftBase+0x33),2);assert.equal(gift.source.offset,giftBase+0x66f);
   assert.equal(createHash('sha256').update(giftBytes).digest('hex'),gift.source.sha256);
   assert.deepEqual([giftRecord[0],giftRecord.readUInt32LE(0x23),giftRecord.readUInt32LE(0x27),giftRecord.readUInt32LE(0x2b)],[0,5,0,169]);
-  const bossOrigins=source.catalog.item_capability_admission.passive_sources[208];
+  const bossOrigins=source.catalog.item_capability_admission.passive_sources[208]
+    .filter(row=>row.kind==='registered-enemy-reward'&&row.map_id==='M73013');
   assert.deepEqual(bossOrigins.map(row=>[row.kind,row.map_id,row.record_id,row.enemy_id,row.enemy_slot,row.reward_slot]),
     [['registered-enemy-reward','M73013',20,'034',0,5]]);
   const boss=bossOrigins[0],bossBytes=await readFile(new URL('../../../Fight_Role/034.CHR',import.meta.url)),battleBytes=await readFile(new URL('../../../Map/m73013.TLK',import.meta.url));
@@ -271,7 +277,7 @@ test('historical chapter equipment keeps numeric projection without executing an
   assert.deepEqual(initializeNativeStatuses(after,statusData,undefined,draws([])).native_status_slots,Array.from({length:100},()=>({raw_hex:ZERO})));
   // New unsupported equipment remains blocked; an existing numeric contract
   // cannot authorize arbitrary source-only special effects or a bad descriptor.
-  for(const id of [118,136,141]){
+  for(const id of [118,141]){
     assert.throws(()=>equipmentPassiveRows([{item_id:id}],items),/被动作用尚未还原/);
     const cfg=deriveItemConfiguration(source);cfg.entries[id].parameters.enabled=true;
     assert.throws(()=>compileItemConfiguration(source,cfg,'debug'),/装备被动作用未还原/);

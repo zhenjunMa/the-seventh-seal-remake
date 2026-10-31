@@ -84,18 +84,35 @@ test('audio export binds real content, source digests and action fields, retaini
     assert.equal(digest(record),source.record_sha256);
     assert.equal(record.subarray(source.effect_field_offset,source.effect_field_offset+source.effect_field_bytes).toString().split('\0')[0],entry.effect_id===null?'':entry.effect_id+'.dgp');
   }
-  assert.deepEqual(data.object_sounds.map(entry=>[entry.map_id,entry.object_index,entry.clip]),
-    [['M01042',8,'sound/E015.wav'],['M71071',15,'sound/E034.wav']]);
+  assert.deepEqual(data.object_sounds.filter(entry=>entry.behavior_raw_cf===1).map(entry=>[entry.map_id,entry.object_index,entry.clip]),
+    [['M01042',8,'sound/E015.wav'],['M71071',15,'sound/E034.wav'],
+      ['M71077-1',26,'sound/E034.wav'],['M71077-2',24,'sound/E034.wav'],['M71077-3',25,'sound/E034.wav'],
+      ['M71077-4',25,'sound/E034.wav'],['M71077-5',25,'sound/E034.wav']]);
   for(const entry of data.object_sounds){
     const object=readFileSync(new URL('../../../'+entry.object_source.path,import.meta.url)).subarray(entry.object_source.offset,entry.object_source.offset+0x112);
     const action=readFileSync(new URL('../../../'+entry.action_source.path,import.meta.url)).subarray(entry.action_source.offset,entry.action_source.offset+0xac);
     assert.equal(digest(object),entry.object_source.raw_sha256);assert.equal(object.readUInt32LE(0x9e),entry.object_source.sound_enabled_raw);
+    assert.equal(object[0xcf],entry.behavior_raw_cf);assert.ok([1,2].includes(object[0xcf]));assert.notEqual(object.readUInt32LE(0x9e),0);
     assert.equal(digest(action),entry.action_source.raw_sha256);assert.equal(action.subarray(0x56,0x6a).toString().split('\0')[0],entry.token);
     assert.equal(action.readUInt32LE(0x6a),entry.logical_frame);assert.equal(entry.logical_frame,1);
   }
+  assert.deepEqual([...new Set(data.object_sounds.filter(entry=>entry.behavior_raw_cf===2).map(entry=>entry.token))].sort(),
+    ['E035.wav','NEW.wav','NEWCantOp.wav','NEWlever1.wav']);
+  for(const entry of data.object_sounds.filter(entry=>entry.behavior_raw_cf===2))assert.ok(data.clips[entry.clip],entry.token);
+  assert.deepEqual(Object.keys(data.native_sound_tokens).sort(),['E017.wav','E018.wav','E019.wav','E020.wav']);
+  for(const entry of data.native_sound_sources){
+    const file=readFileSync(new URL('../../../'+entry.source.path,import.meta.url));
+    const record=file.subarray(entry.source.offset,entry.source.offset+entry.source.bytes);
+    assert.equal(digest(file),entry.source.sha256);assert.equal(digest(record),entry.source.raw_sha256);
+    assert.equal(record[0],6);assert.equal(record.subarray(0x37,0x137).toString().split('\0')[0],entry.token);
+    assert.equal(entry.clip,data.native_sound_tokens[entry.token]);assert.equal(entry.clip,'sound/'+entry.token);
+    assert.ok(entry.evidence.includes(data.native_evidence['0x4bafa0']));
+  }
   const expectedMissing=new Set(['sound/menu/close.wav',...data.action_sources.map(entry=>'sound/'+entry.token),
+    ...Object.values(data.maps).filter(entry=>entry.source.token).map(entry=>'sound/'+entry.source.token),
     ...Object.values(data.frame_sounds).flatMap(cues=>Object.values(cues)).filter(entry=>entry.token).map(entry=>'sound/'+entry.token),
-    ...Object.values(data.effect_sounds).filter(entry=>entry.token).map(entry=>'sound/'+entry.token)]
+    ...Object.values(data.effect_sounds).filter(entry=>entry.token).map(entry=>'sound/'+entry.token),
+    ...data.native_sound_sources.filter(entry=>entry.token).map(entry=>'sound/'+entry.token)]
     .filter(source=>!existsSync(new URL('../../../'+source,import.meta.url))));
   assert.deepEqual([...data.missing_original_files].sort(),[...expectedMissing].sort());
   for(const source of data.missing_original_files){
@@ -104,6 +121,15 @@ test('audio export binds real content, source digests and action fields, retaini
   }
   assert.equal(data.battles['stage13.scn'].clip,null);
   assert.deepEqual(data.battles['stage13.scn'].pool,['sound/Fight/FightBGM01.wav','sound/Fight/FightBGM02.wav']);
+});
+
+test('TLK sound starts overlapping voices immediately without waiting for playback completion',()=>{
+  const {audio,voices}=setup(data,()=>new Promise(()=>{}));audio.unlock();
+  const clip=data.native_sound_tokens['E017.wav'];
+  assert.equal(audio.playClip(clip),true);assert.equal(audio.playClip(clip),true);
+  assert.equal(voices.length,2);assert.deepEqual(voices.map(voice=>voice.playCalls),[1,1]);
+  assert.equal(audio.snapshot().effects.length,2);assert.equal(audio.snapshot().stats.effects_started,0);
+  audio.dispose();
 });
 
 test('positioned source sounds preserve native distance/pan, existing channel gain, active single-voice playback and node cleanup',async()=>{

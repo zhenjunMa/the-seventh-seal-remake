@@ -42,7 +42,9 @@ export function validateChapterAnimation(program,content=runtimeContent) {
       && c.source.sha256 === program.source.sha256 && c.source.path === program.source.path, '剧情动画记录来源不符');
     for (const offset of [1,5,9,13,17,21,25]) need(c[`u32_plus${offset}`] === v.getUint32(offset,true), '剧情动画字段不符');
     for (const offset of [29,30,31,32,33]) need(c[`byte_plus${offset}`] === b[offset], '剧情动画字节不符');
-    if ([32,33,35,36,37,41,48,49].includes(c.opcode)) need(c.u32_plus5>=10||Object.values(content.roles).some(role=>role.side==='player'&&role.native_slot===c.u32_plus5), '剧情动画人物未接入');
+    // 473E30 aliases source slots6..9 to the currently controlled player;
+    // these are not additional party identities (m71080 moves source slot9).
+    if ([32,33,35,36,37,41,48,49].includes(c.opcode)) need(c.u32_plus5>=6||Object.values(content.roles).some(role=>role.side==='player'&&role.native_slot===c.u32_plus5), '剧情动画人物未接入');
     if (c.opcode === 10) need(nativeMapIdFromFilename(c.filename)!==null
       &&c.filename===new TextDecoder().decode(b.slice(54,74)).split('\0')[0]
       &&maps.includes(c.filename.slice(0,-4).toUpperCase())&&c.u32_plus5 === 0, '剧情动画地图入口未支持');

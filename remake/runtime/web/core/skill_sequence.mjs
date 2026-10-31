@@ -49,7 +49,7 @@ export function compileNativeSequence(meta,roleId,plan,layers=[]){
    const entry=group===9&&b[0x47]===4&&plan.handler==='native-response';
    const handler=plan.kind==='single'?plan.handler:plan.skill_handlers?.[record.source_skill_index];
    const magic=vertical||entry||plan.handler==='native-response'||['effect-carrier','native-revival','native-support'].includes(handler)||
-     group===4&&v.getUint32(0x49,true)===0||group===0||group===1||group===7||group===8||group===10||group===11||plan.allow_no_contacts;
+     group===4&&v.getUint32(0x49,true)===0||group===0||group===1||group===6||group===7||group===8||group===10||group===11||plan.allow_no_contacts;
    fail(b[0]===1&&(group===11||vertical||entry||magic&&[0,1,4,6,7,8,10].includes(group)),'原组合类型命令未支持');
    if(group===0)fail([0,1].includes(b[0x47])&&b[0x25]<=7,'原背景减色模式未支持');
    if(group===1)fail([0,1].includes(b[0x47])&&!b[0x1d],'原镜头抖动轴或等待模式未支持');
