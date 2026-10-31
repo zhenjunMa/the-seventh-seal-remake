@@ -109,7 +109,10 @@ export class MapLocomotion {
     const travelX=result?result.x-from.x:0,travelY=result?result.y-from.y:0;
     if(!(dx||dy))this.movement.reset();
     const moving=(result?.travel??Math.hypot(travelX,travelY))>1e-4,blocked=Boolean((dx||dy)&&result?.blocked&&!moving);
-    const heading=result?.heading??{dx:travelX,dy:travelY};
+    // A backward wall microstep contributes travel, but does not make the
+    // sprite alternate 180 degrees on every render frame.
+    const actual=result?.heading??{dx:travelX,dy:travelY};
+    const heading=actual.dx*dx+actual.dy*dy<0?{dx,dy}:actual;
     const choice=locomotion({dx:moving?(Math.abs(heading.dx)>1e-4?heading.dx:0):dx,
       dy:moving?(Math.abs(heading.dy)>1e-4?heading.dy:0):dy,running},moving||blocked&&!result?.stopped);
     const action=role.actions.find(action=>action.index===choice.action);
