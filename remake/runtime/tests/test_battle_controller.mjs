@@ -25,7 +25,8 @@ test('battle preparation retains the map without either loading overlay, blocks 
     if(!nodes.has(id))nodes.set(id,{hidden:true,dataset:{},textContent:'',classList:{toggle(){}}});
     return nodes.get(id);
   };
-  const canvas={hidden:false},state={world:{value:{revision:7,source:{kind:'legacy'}}},
+  const canvas={hidden:false},audioEvents=[],state={world:{location:{map_id:'M70010'},value:{revision:7,source:{kind:'legacy'}}},
+    audio:{setScene:scene=>audioEvents.push(scene)},
     keys:new Set(),view:{x:12,y:34,action:0,frame:0},phaseNames:{},battleData:{}};
   let rejectPreparation,preparations=0,loadingCalls=0;
   const gate=new Promise((_,reject)=>{rejectPreparation=reject;});
@@ -37,14 +38,16 @@ test('battle preparation retains the map without either loading overlay, blocks 
   // Other scene loads still use the generic loading overlay.
   for(const phase of ['boot','loading']){services.busy(phase);assert.equal($('loading').hidden,false);}
   state.scenes.setPhase('map');
-  const pending=controller.startBattle();
+  const pending=controller.startBattle({stage:'stage13.scn'});
   assert.equal(state.scenes.phase,'battle-loading');assert.equal(canvas.hidden,false);
   assert.equal($('loading').hidden,true);assert.equal($('sceneLoading').hidden,true);
+  assert.deepEqual(audioEvents,[],'Battle music starts after actor preparation');
   await controller.startBattle();assert.equal(preparations,1);assert.equal(loadingCalls,0);
   rejectPreparation(Error('resource decode failed'));await assert.rejects(pending,/resource decode failed/);
   assert.equal(state.scenes.phase,'map');assert.equal(canvas.hidden,false);
   assert.equal($('loading').hidden,true);assert.equal($('sceneLoading').hidden,true);
   assert.deepEqual([state.view.x,state.view.y],[12,34]);assert.equal(state.world.value.revision,7);
+  assert.deepEqual(audioEvents,[{mapId:'M70010',battle:false}]);
 });
 
 test('natural battle return stores its RNG, restores exploration and cannot submit twice', async () => {

@@ -5,6 +5,7 @@ export function createRuntimeState($) {
   return {
     engine: null,
     keys: new Set(),
+    running: false,
     resources: new ImageResources(),
     actorResourcesByMap: new Map(),
     logs: [],
