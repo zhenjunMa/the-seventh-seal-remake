@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {DistanceGait,mapMotionProfile,mapStepGeometry,nativeMapMovement} from '../web/core/map_locomotion.mjs';
-import {MovementMap} from '../web/core/movement.mjs';
+import {MovementMap,KeyboardMovement} from '../web/core/movement.mjs';
 import {initialEncounterState} from '../web/core/encounters.mjs';
 
 const {createMapController}=await import('../web/controllers/map.mjs');
@@ -81,62 +81,117 @@ test('held wall microsteps preserve walk/run cadence, encounter distance and fol
       const positions=[],frames=new Set();
       for(let n=0;n<hz;n++){
         f.step(1000/hz);const at=f.state.world.location;positions.push(at.x);frames.add(f.state.view.frame);
-        assert.ok(at.x>=380-1e-8&&at.x<=384+1e-8);assert.equal(at.y,300);
+        assert.ok(at.x>=392-1e-4&&at.x<=396+1e-4);assert.equal(at.y,300);
+        assert.equal(at.direction,1,'backward wall microsteps must not flip the displayed pose');
         assert.equal(f.state.view.action,running?2:1);
         assert.ok(Math.abs(f.state.view.x-(at.x-16))<1e-8,'camera follows the actual microstep');
       }
       assert.ok(Math.max(...positions)-Math.min(...positions)>1);assert.ok(frames.size>3);
       const encounters=f.state.world.value.encounters,distance=(running?250:1000*4/31)*2;
-      assert.equal(encounters.counters['001'],Math.floor(distance/4));
-      assert.ok(Math.abs(encounters.remainders['001']-(distance/4%1)*16)<1e-7);
+      const accepted=encounters.counters['001']*4+encounters.remainders['001']/4;
+      assert.ok(Math.abs(accepted-distance)<1e-4,'only contact skin may trim the accepted distance');
       results.push({...f.state.world.location,frame:f.state.view.frame});
       const at={...f.state.world.location};f.state.keys.clear();for(let n=0;n<hz;n++)f.step(1000/hz);
       assert.equal(f.state.view.action,0);assert.deepEqual(f.state.world.location,at);
       assert.equal(f.state.view.collisionFeedback.x,0);
       f.state.scenes.phase='event';f.step(16);assert.equal(f.state.view.collisionFeedback,null);
     }
-    for(const at of results){assert.ok(Math.abs(at.x-results[0].x)<1e-8);assert.equal(at.direction,results[0].direction);assert.equal(at.frame,results[0].frame);}
+    for(const at of results){assert.ok(Math.abs(at.x-results[0].x)<1e-4);assert.equal(at.direction,results[0].direction);assert.equal(at.frame,results[0].frame);}
   }
 });
 
-test('native neighbour scoring redirects diagonal input along the wall without stopping or changing running action',()=>{
+test('diagonal wall contact preserves accepted tangent travel without stopping or changing running action',()=>{
   const results=[];
   for(const hz of [30,60,120]){
     const f=fixture({wall:true});f.state.keys=new Set(['ArrowRight','ArrowDown']);f.state.running=true;
     for(let n=0;n<hz;n++)f.step(1000/hz);
     const at=f.state.world.location;
-    assert.equal(at.x,392);assert.ok(Math.abs(at.y-550)<1e-8);
+    assert.ok(Math.abs(at.x-396)<1e-4);assert.ok(Math.abs(at.y-(300+250/Math.SQRT2))<1e-4);
     assert.equal(at.direction,7);assert.equal(f.state.view.action,2);
     results.push({x:at.x,y:at.y,frame:f.state.view.frame});
   }
-  for(const r of results){assert.ok(Math.abs(r.y-results[0].y)<1e-8);assert.equal(r.frame,results[0].frame);}
+  for(const r of results){assert.ok(Math.abs(r.y-results[0].y)<1e-4);assert.equal(r.frame,results[0].frame);}
 });
 
 test('visible NPCs remain solid during direction reselection, hidden actors do not block',()=>{
   for(const hidden of [false,true]){
     const f=fixture();f.state.scenes.current.npcs.push({id:'guard',x:320,y:300,hidden,event:{conditions:[]}});
     f.state.keys.add('ArrowRight');for(let i=0;i<20;i++){
-      f.step(16);if(!hidden)assert.ok(f.state.world.location.x<312);
+      f.step(16);const at=f.state.world.location;
+      if(!hidden)assert.ok(Math.abs(at.x-320)>=8-1e-4||Math.abs(at.y-300)>=6-1e-4,'NPC feet cannot overlap');
     }
-    assert.equal(f.state.world.location.x<312,!hidden);
+    assert.ok(f.state.world.location.x>320,'reselection can continue past the NPC');
+    assert.equal(f.state.world.location.y===300,hidden);
     if(!hidden){assert.equal(f.state.view.action,1);assert.equal(f.state.nearest.id,'guard');}
   }
 });
 
-test('an old save beside a wall can immediately take a reselected step away with a valid heading',()=>{
+test('the real forest entry stairs remain open uphill and downhill in walk/run at 30/60/120Hz',()=>{
+  const data=read('maps/m70010');
+  // The diagonal (26,36)->(27,35) is the narrow mouth of the entry stairs.
+  assert.equal(data.movement.terrain_rows[36][26],'0');assert.equal(data.movement.terrain_rows[35][27],'0');
+  for(const running of [false,true])for(const hz of [30,60,120]){
+    const f=fixture(),scene=f.state.scenes.current;f.state.running=running;
+    scene.data={...scene.data,movement:data.movement};scene.movement=new MovementMap(data.movement);
+    f.state.world.value.location={...f.state.world.location,x:424,y:584};
+    const speed=mapMotionProfile(f.state.catalog.roles[0].actions[running?2:1],data.movement).speed;
+    for(const [keys,distance]of [[['ArrowRight','ArrowUp'],40],[['ArrowUp'],48],[['ArrowDown'],48],[['ArrowLeft','ArrowDown'],40]]){
+      f.state.keys=new Set(keys);let remaining=distance/speed*1000;
+      while(remaining>1e-8){const dt=Math.min(1000/hz,remaining);f.step(dt);remaining-=dt;
+        assert.equal(scene.movement.at(f.state.world.location.x,f.state.world.location.y).blocked,false);}
+      if(keys.length===1&&keys[0]==='ArrowUp')assert.ok(f.state.world.location.y<520,'reached the top of the stairs');
+    }
+    assert.ok(f.state.world.location.x<432&&f.state.world.location.y>579,'returned through the lower stair mouth');
+  }
+});
+
+test('keyboard movement can follow source-open entry routes to all three forest exits',()=>{
+  const data=read('maps/m70010'),resources=read('chapter_map_resources'),definition=read('runtime_content');
+  const ready=new Set([...(resources.exits_by_map.M70010??[]).map(row=>row.id),...(definition.maps.M70010.triggers??[])]);
+  const movement={...data.movement,triggers:data.movement.triggers.map(row=>({...row,path_gate:!ready.has(row.id)}))};
+  const map=new MovementMap(movement),profile=mapMotionProfile(actions[1],movement);
+  for(const trigger of [1,2,3]){
+    const end=movement.triggers.find(row=>row.id===trigger),start=map.at(272,736),queue=[start];
+    const previous=new Map([[`${start.x},${start.y}`,null]]);
+    for(let i=0;i<queue.length;i++){
+      const cell=queue[i];if(cell.x===end.x&&cell.y===end.y)break;
+      for(const [dx,dy]of [[0,-1],[-1,0],[1,0],[0,1],[-1,-1],[1,-1],[-1,1],[1,1]]){
+        const next=map.cell(cell.x+dx,cell.y+dy),key=`${next.x},${next.y}`;
+        if(next.blocked||previous.has(key))continue;previous.set(key,cell);queue.push(next);
+      }
+    }
+    const path=[];for(let cell=end;cell;cell=previous.get(`${cell.x},${cell.y}`))path.push(cell);path.reverse();
+    for(const hz of [30,60,120]){
+      let at={x:272,y:736};const keyboard=new KeyboardMovement();
+      for(const cell of path){
+        const goal={x:cell.x*16+8,y:cell.y*16+8};
+        for(let frame=0;frame<hz&&Math.hypot(goal.x-at.x,goal.y-at.y)>=4;frame++){
+          const vx=goal.x-at.x,vy=goal.y-at.y;
+          at=keyboard.advance(map,at,{dx:Math.abs(vx)<2?0:Math.sign(vx),dy:Math.abs(vy)<2?0:Math.sign(vy),profile,elapsedMs:1000/hz});
+          assert.equal(map.at(at.x,at.y).blocked,false);
+        }
+        assert.ok(Math.hypot(goal.x-at.x,goal.y-at.y)<4,`exit${trigger} ${hz}Hz cell${cell.x},${cell.y}: ${at.x},${at.y}`);
+      }
+    }
+  }
+});
+
+test('an old save beside a wall is not blocked early and keeps its displayed heading during recoil',()=>{
   const f=fixture({wall:true});f.state.world.value.location={...f.state.world.location,x:395.99997,direction:3};
   f.state.keys.add('ArrowRight');f.step(16);
-  assert.ok(f.state.world.location.x<395.99997);assert.equal(f.state.world.location.direction,5);
-  f.step(16);assert.equal(f.state.world.location.direction,5);assert.equal(f.state.view.action,1);
+  assert.ok(f.state.world.location.x>395.99997&&f.state.world.location.x<400);assert.equal(f.state.world.location.direction,1);
+  f.step(16);assert.equal(f.state.world.location.direction,1);assert.equal(f.state.view.action,1);
 });
 
 test('wall microsteps can trigger a real encounter and stop at the successful step, independent of render Hz',()=>{
   for(const hz of [30,60,120]){
     const f=fixture({wall:true,encounters:true});f.state.world.value.encounters.counters['001']=40;
+    f.state.world.value.location.x=396;
     f.state.keys.add('ArrowRight');f.state.running=true;
     for(let n=0;n<hz&&!f.state.battle;n++)f.step(1000/hz);
     assert.ok(f.state.battle);assert.equal(f.state.scenes.phase,'battle-loading');
-    assert.equal(f.state.world.location.x,388);assert.equal(f.state.world.location.y,300);
+    assert.equal(f.state.world.location.x,392);assert.equal(f.state.world.location.y,300);
+    assert.equal(f.state.world.location.direction,1);
     assert.equal(f.state.battle.group.trigger_roll.value,998);assert.equal(f.state.battle.encounters.counters['001'],0);
     const at={...f.state.world.location};f.step(80);assert.deepEqual(f.state.world.location,at);
     assert.equal(f.state.view.collisionFeedback,null);
@@ -163,8 +218,8 @@ test('NPC collision and interaction distance use its displayed feet during resel
   const f=fixture(),npc={id:'guard',x:340,y:300,motion:{x:320,y:300,direction:5},event:{conditions:[]}};
   f.state.scenes.current.npcs.push(npc);f.state.keys.add('ArrowRight');
   for(let i=0;i<20;i++)f.step(16);
-  assert.ok(f.state.world.location.x<312);
-  assert.equal(f.state.nearest.x,320);assert.ok(Math.abs(f.state.nearest.distance-(320-f.state.world.location.x))<1e-8);
+  assert.ok(f.state.world.location.x>320&&f.state.world.location.y<294);
+  assert.equal(f.state.nearest.x,320);assert.ok(Math.abs(f.state.nearest.distance-Math.hypot(320-f.state.world.location.x,300-f.state.world.location.y))<1e-8);
   assert.equal(npc.x,340);
 });
 

@@ -243,24 +243,24 @@ export class KeyboardMovement {
         const cell=map.at(x,y),target=map.cell(cell.x+dx*lookahead,cell.y+dy*lookahead);
         let vx=dx,vy=dy;
         const direct=map.moveAndSlide(x,y,dx*step,dy*step,options);
-        if(target.reason==='bounds'||target.reason==='transition'){
-          contacts.push({nx:-dx,ny:-dy,hit:target});stopped=true;break;
-        }
-        if(target.blocked||direct.blocked){
+        // The native grid target remains the scoring goal, not a second
+        // collider 32px ahead of the continuous player's actual feet. Keep
+        // accepted approach/slide travel before selecting a different vector.
+        if(direct.blocked&&!direct.moved){
           contacts.push(...direct.contacts);
-          if(target.blocked)contacts.push({nx:-dx,ny:-dy,hit:target});
+          if(direct.hit?.reason==='bounds'||direct.hit?.reason==='transition'){stopped=true;break;}
           let best=null,score=Infinity;
           // 48EB70 enumeration and strict-less scoring preserve native ties.
           for(const [nx,ny]of [[-1,0],[-1,-1],[-1,1],[0,-1],[0,1],[1,0],[1,-1],[1,1]]){
             const cx=cell.x+nx,cy=cell.y+ny;
             if(map.cell(cx,cy).blocked||obstacles.some(box=>
               Math.floor((box.left+box.right)/2/map.cellSize)===cx&&Math.floor((box.top+box.bottom)/2/map.cellSize)===cy))continue;
-            const distance=Math.abs(cx-(cell.x+dx*lookahead))+Math.abs(cy-(cell.y+dy*lookahead));
+            const distance=Math.abs(cx-target.x)+Math.abs(cy-target.y);
             if(distance>=score)continue;
             // Keep the remake's swept feet/actor collision and source-entry
             // escape handling; a source-open neighbour must be reachable.
             const trial=map.moveAndSlide(x,y,nx*step,ny*step,options);
-            if(!trial.moved||trial.blocked)continue;
+            if(!trial.moved)continue;
             best={dx:nx,dy:ny};score=distance;
           }
           if(!best){stopped=true;break;}
