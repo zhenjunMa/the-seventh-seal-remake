@@ -11,13 +11,13 @@ export function validateForestStage(stage,content=runtimeContent){
   need(Array.isArray(stage.layers)&&stage.layers.length>=2&&new Set(stage.layers.map(l=>l.id)).size===stage.layers.length,'图层无效');
   for(const layer of stage.layers){
     need(Array.isArray(layer.frames)&&layer.frames.length===layer.source.frame_count,'帧表无效');
-    for(const f of layer.frames)need(f.path.startsWith(prefix)&&/^[A-Za-z0-9_./-]+\.png$/.test(f.path)&&!f.path.split('/').includes('..')&&/^[a-f0-9]{64}$/.test(f.sha256),'图片来源无效');
+    for(const frame of layer.frames)for(const f of [frame,...frame.intrinsic?[frame.intrinsic]:[]])need(f.path.startsWith(prefix)&&/^[A-Za-z0-9_./-]+\.png$/.test(f.path)&&!f.path.split('/').includes('..')&&/^[a-f0-9]{64}$/.test(f.sha256),'图片来源无效');
     if(layer.animation)need(layer.animation.frames.length>0&&layer.animation.frames.every(i=>Number.isInteger(i)&&i>=0&&i<layer.frames.length)&&layer.animation.interval_raw>0,'动画帧无效');
   }
   for(const r of [c.sky,c.ground,...c.scene_objects])need(stage.layers.some(l=>l.id===r.layer_id)&&[r.source_rect,r.destination_rect].every(rect=>Array.isArray(rect)&&rect.length===4&&rect.every(Number.isFinite)),'构图范围无效');
   return stage;
 }
-export function forestStageAssets(stage){return stage.layers.flatMap(l=>l.frames.map(f=>({...f,path:'/'+f.path,width:l.source.width,height:l.source.height})));}
+export function forestStageAssets(stage){return stage.layers.flatMap(l=>l.frames.flatMap(f=>[f,...f.intrinsic?[f.intrinsic]:[]].map(asset=>({...asset,path:'/'+asset.path,width:l.source.width,height:l.source.height}))));}
 export function drawForestStageLayer(ctx,stage,images,row,frame=row.frame??0){
   const layer=stage.layers.find(l=>l.id===row.layer_id),asset=layer.frames[frame],scale=540/480,offset=(960-640*scale)/2;
   const [x,y,w,h]=row.destination_rect,[sx,sy,sw,sh]=row.source_rect;
@@ -25,6 +25,12 @@ export function drawForestStageLayer(ctx,stage,images,row,frame=row.frame??0){
   if(width<=0||height<=0)return;
   drawBattleImage(ctx,images.get('/'+asset.path),sx+(left-x)*sw/w,sy+(top-y)*sh/h,width*sw/w,height*sh/h,
     offset+left*scale,top*scale,width*scale,height*scale);
+  if(asset.intrinsic){
+    ctx.save();ctx.globalCompositeOperation='lighter';
+    drawBattleImage(ctx,images.get('/'+asset.intrinsic.path),sx+(left-x)*sw/w,sy+(top-y)*sh/h,width*sw/w,height*sh/h,
+      offset+left*scale,top*scale,width*scale,height*scale);
+    ctx.restore();
+  }
 }
 export function drawForestStageBackground(ctx,stage,images,now){
   const sky=stage.layers.find(l=>l.id===stage.default_composition.sky.layer_id),frames=sky.animation?.frames;
@@ -35,5 +41,9 @@ export function drawForestStageBackground(ctx,stage,images,now){
   // SCN objects here are scenery textures, not combat actors. Finish the
   // background pass before any monster or party sprite, regardless of its Y.
   const scenery=[...stage.default_composition.scene_objects].sort((a,b)=>(a.sort_category??0)-(b.sort_category??0)||(a.sort_y??0)-(b.sort_y??0));
-  for(const row of scenery)drawForestStageLayer(ctx,stage,images,row);
+  for(const row of scenery){
+    const layer=stage.layers.find(l=>l.id===row.layer_id),animation=layer.animation;
+    const frame=animation?animation.frames[((row.frame??0)+Math.floor(now/animation.interval_raw))%animation.frames.length]:row.frame;
+    drawForestStageLayer(ctx,stage,images,row,frame);
+  }
 }

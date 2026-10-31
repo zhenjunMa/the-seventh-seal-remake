@@ -43,8 +43,6 @@ def stage_records(raw, ident):
         if record[0] != min(index, 2) or not re.fullmatch(r'[A-Za-z0-9_-]+\.[dD][gG][pP]', name):
             raise ValueError(f'Stage {ident} record {index}: unsupported layer or filename')
         rows.append((name, record, at))
-    if len({Path(name).stem.lower() for name, _, _ in rows}) != count:
-        raise ValueError(f'Stage {ident}: duplicate layer identities')
     return rows
 
 
@@ -70,21 +68,25 @@ def prepare_stage(ident, entry):
     for index, (filename, record, at) in enumerate(stage_records(raw, ident)):
         graphics = DGP(ROOT / f'Fight_Bk/{filename}')
         audit = SourceAudit(graphics.data)
-        if graphics.indexed_auxiliary or (audit.width, audit.height, audit.count, audit.anchor) != (graphics.width, graphics.height, graphics.frame_count, graphics.anchor_raw):
-            raise ValueError(f'Stage {ident}: unsupported image channels or inconsistent decoder')
+        if (audit.width, audit.height, audit.count, audit.anchor) != (graphics.width, graphics.height, graphics.frame_count, graphics.anchor_raw):
+            raise ValueError(f'Stage {ident}: inconsistent decoder')
         if u32(record, 0x1d) >= graphics.frame_count:
             raise ValueError(f'Stage {ident}: invalid initial frame')
         animation = None
         if graphics.actions:
-            if index != 0 or len(graphics.actions) != 1:
-                raise ValueError(f'Stage {ident}: non-sky/multiple animation actions need a handler')
+            if index == 1 or len(graphics.actions) != 1:
+                raise ValueError(f'Stage {ident}: ground/multiple animation actions need a handler')
             action = graphics.actions[0]
-            if action['directions'] != 1 or action['loop_raw'] != 1 or action['interval_raw'] <= 0 or action['frames_per_direction'] != graphics.frame_count:
-                raise ValueError(f'Stage {ident}: unsupported sky animation')
-            animation = dict(action_index=0, interval_raw=action['interval_raw'], loop_raw=1,
+            if action['directions'] != 1 or not action['loop_raw'] & 15 or action['interval_raw'] <= 0 or action['frames_per_direction'] != graphics.frame_count or action['first_frame'] != 0 or graphics.raw_actions[0][0x56]:
+                raise ValueError(f'Stage {ident}: unsupported stage animation')
+            animation = dict(action_index=0, interval_raw=action['interval_raw'], loop_raw=action['loop_raw'],
                 frames=list(range(graphics.frame_count)), first_frame_raw=action['first_frame'],
                 action_raw_hex=graphics.raw_actions[0].hex(), runtime_clock_observed=False)
-        rows.append(dict(id=Path(filename).stem, graphics=graphics, audit=audit, raw=record, offset=at, animation=animation))
+        # 51C3E0 loads every SCN record; repeated DGPs are separate placements.
+        layer_id = Path(filename).stem
+        if any(row['graphics'].path.name.lower() == filename.lower() for row in rows):
+            layer_id += f'_{index}'
+        rows.append(dict(id=layer_id, graphics=graphics, audit=audit, raw=record, offset=at, animation=animation))
     sky, ground = (row['graphics'] for row in rows[:2])
     horizon = 480 - (ground.height - 95)
     if ground.width < 640 or not 0 < horizon < 480 or sky.width < 640 or sky.height < horizon:
@@ -119,9 +121,9 @@ def export():
     if not selected:
         print(json.dumps(dict(passed=True, stages=[], message='No new source stages registered')))
         return
-    from PIL import Image
+    from PIL import Image, ImageChops
     from source.combat_resources import GAME_SHA256
-    from export_skill_layers import save_layer
+    from export_skill_layers import save_layer, indexed_contribution
     from export_forest_stage import image_asset
     before = {name: sha((ROOT / name).read_bytes()) for name in source_files()}
     if before['GAME.exe'] != GAME_SHA256:
@@ -135,7 +137,7 @@ def export():
     generated, checks = [], []
     for stage in prepared:
         ident, entry, rows, horizon = stage['id'], stage['entry'], stage['rows'], stage['horizon']
-        layers, initial = [], {}
+        layers, initial, initial_light = [], {}, {}
         for index, row in enumerate(rows):
             graphics, raw = row['graphics'], row['raw']
             frames = []
@@ -153,7 +155,17 @@ def export():
                     recipe_hash([Path(__file__),tools/'source/dgp.py',tools/'export_skill_layers.py']),produce_frame)
                 asset, check = cached['asset'], cached['check']
                 generated.append(output)
-                frames.append(dict(index=frame, **asset))
+                frame_asset = dict(index=frame, **asset)
+                if graphics.indexed_auxiliary:
+                    light_path = output.with_name(f'intrinsic_{frame:03}.png')
+                    light, _ = indexed_contribution(graphics, frame)
+                    rgba, light_check = row['audit'].sparse(frame, True)
+                    frame_asset['intrinsic'] = save_layer(light, light_path, rgba, light_check, web=WEB)
+                    generated.append(light_path)
+                    checks.append(dict(stage=ident, layer=row['id'], frame=frame, channel='intrinsic', **light_check))
+                    if frame == u32(raw, 0x1d):
+                        initial_light[row['id']] = light
+                frames.append(frame_asset)
                 checks.append(dict(stage=ident, layer=row['id'], frame=frame, **check))
                 if frame == u32(raw, 0x1d):
                     with Image.open(output) as opened:
@@ -174,6 +186,10 @@ def export():
         preview.alpha_composite(initial[layers[1]['id']].crop((gx, gy, gx + 640, gh)), (0, horizon))
         for row in sorted(composition['scene_objects'], key=lambda row: (row['sort_category'], row['sort_y'])):
             preview.alpha_composite(initial[row['layer_id']], tuple(row['destination_rect'][:2]))
+            if row['layer_id'] in initial_light:
+                light = Image.new('RGBA', preview.size, (0, 0, 0, 0))
+                light.alpha_composite(initial_light[row['layer_id']], tuple(row['destination_rect'][:2]))
+                preview = ImageChops.add(preview, light)
         preview_path = WEB / entry['asset_prefix'] / 'default_composite.png'
         preview_asset = image_asset(preview, preview_path)
         generated.append(preview_path)
@@ -187,7 +203,7 @@ def export():
             native_evidence=reference['native_evidence'],
             derivation_source=dict(path='data/forest_stage.json', sha256=sha(reference_bytes)),
             original_game_execution_observed=False,
-            limitations=['Recovered SCN v2/mode4 zero-camera layout only; dynamic camera, non-sky animation and exact native blending require additional handlers.'])
+            limitations=['Recovered SCN v2/mode4 zero-camera layout and single-action sequential scenery animation; dynamic camera and exact native RGB565 blending remain adaptation boundaries.'])
         output = WEB / entry['path']
         output.parent.mkdir(parents=True, exist_ok=True)
         incremental_json(output, value)

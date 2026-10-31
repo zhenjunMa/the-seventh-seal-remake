@@ -327,7 +327,7 @@ class CF1MapPixels(unittest.TestCase):
                                              (frame + 1) * raster.width, raster.height)).tobytes()
                         self.assertEqual(actual, raster.pixels(frame, intrinsic=channel == 'intrinsic'))
                 added_frames += raster.count
-            legacy_sources = {bank['source']['path'] for bank in manifest['roles'].values()}
+            legacy_sources = {manifest['roles'][key]['source']['path'] for key in ['013', '183']}
             legacy_sources.update(manifest['object_banks'][obj['bank']]['source']['path']
                                   for obj in manifest['maps']['M70010']['objects'])
             self.assertEqual(sum(row['source'] in legacy_sources for row in report['frame_checks']), 147)
@@ -404,7 +404,12 @@ class CF1MapPixels(unittest.TestCase):
             self.assertEqual(len(handoff_checks), 34)
             covered = {row['source'] for row in baseline_checks + city_checks + forest_checks + handoff_checks}
             extra = [row for row in report['cf1_frame_checks'] if row['source'] not in covered]
-            self.assertEqual(len(extra), 176)
+            legacy_city_maps = ['M01020A', 'M01031', 'M01032', 'M01041', 'M01042',
+                                'M01052', 'M01061', 'M01062', 'M01063', 'M01064']
+            legacy_city_sources = {manifest['object_banks'][obj['bank']]['source']['path']
+                                   for map_id in legacy_city_maps for obj in manifest['maps'][map_id]['objects']
+                                   if obj['behavior_raw_cf'] == 1}
+            self.assertEqual(sum(row['source'] in legacy_city_sources for row in extra), 176)
             added_banks = {obj['bank'] for current in manifest['maps'].values() for obj in current['objects']
                            if obj['behavior_raw_cf'] == 1 and manifest['object_banks'][obj['bank']]['source']['path'] not in covered}
             for key in added_banks:
@@ -414,7 +419,9 @@ class CF1MapPixels(unittest.TestCase):
                 raster = FileRaster(source)
                 action = bank['actions'][0]
                 self.assertEqual(action['source_action_raw_hex'], source[67:239].hex())
-                self.assertEqual(len([row for row in extra if row['source'] == bank['source']['path']]), raster.count)
+                source_banks = sum(manifest['object_banks'][other]['source']['path'] == bank['source']['path']
+                                   for other in added_banks)
+                self.assertEqual(len([row for row in extra if row['source'] == bank['source']['path']]), raster.count * source_banks)
                 has_shadow = bool(raster.shadows) and any(any(raster.shadow_mask(frame)) for frame in range(raster.count))
                 self.assertEqual(bool(action.get('shadow_sheet')), has_shadow, bank['source']['path'])
                 for channel in ['main', 'intrinsic'] + (['shadow'] if action.get('shadow_sheet') else []):
@@ -477,7 +484,7 @@ class CF1MapPixels(unittest.TestCase):
 
     def test_legacy_147_pixel_baseline_stays_identical_in_isolated_export(self):
         manifest = json.loads((RUNTIME / 'web/data/map_effects.json').read_text('utf-8'))
-        legacy = [(f'role_{key}', bank, False) for key, bank in manifest['roles'].items()]
+        legacy = [(f'role_{key}', manifest['roles'][key], False) for key in ['013', '183']]
         legacy += [(row['bank'], manifest['object_banks'][row['bank']], True)
                    for row in manifest['maps']['M70010']['objects']]
         checks = []

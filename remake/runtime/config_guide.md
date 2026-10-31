@@ -112,7 +112,7 @@ runtime_content编辑格式v2只保存选择；默认路径、原旗标、角色
 | programs | 原ANM ID；地图依赖来自实际TLK／DAT调用者与opcode10。无加载指令时继承已核实调用地图，不由名字猜测。 |
 | stages | 同格式新舞台可登记ID与{}，默认Fight_Bk/<ID>.scn；可指定path／schema／asset_prefix。旧path默认existing，通用导出显式export:"source"。 |
 
-通用舞台支持已恢复的SCN v2／mode4、默认640×480零镜头、天空单循环及静态景物。新格式、非天空动画或动态镜头先补规则。大地图入口从原marker和sort_code推导，缺少支持拒绝，不填兜底坐标。
+通用舞台支持已恢复的SCN v2／mode4、默认640×480零镜头、天空及景物的单动作顺序循环、主层与indexed加色。重复贴图保留各SCN摆放实例；动态镜头、其他动画序列或新格式先补规则。大地图入口从原marker和sort_code推导，缺少支持拒绝，不填兜底坐标。
 
 新图流程为chapter-story→preflight→content；显式入口远期可达分支也须通过。不能独立准入的入口登记依赖阻断，不能按存档旗标隐藏。独立事件与任务格式见[剧情指南](story_guide.md)。
 

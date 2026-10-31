@@ -83,6 +83,7 @@
         "test_content_library.mjs",
         "test_fire_valley_npc_interactions.mjs",
         "test_floating_city_phase.mjs",
+        "test_floating_city_pc02.mjs",
         "test_yc05_jl03_phase.mjs",
         "test_npc_visibility_export.py",
         "test_party_skill_configuration.mjs",
@@ -498,7 +499,7 @@
       "tests": ["test_yc05_jl03*"]
     },
     "floating-city": {
-      "maps": ["m030*", "m00000", "m7107[1-5]"],
+      "maps": ["m030*", "m00000", "m7107[1-5]", "m55001", "m72020", "m72010-0-a", "m72010-1-b"],
       "tests": ["test_floating_city*"]
     },
     "inner-white-forest": {

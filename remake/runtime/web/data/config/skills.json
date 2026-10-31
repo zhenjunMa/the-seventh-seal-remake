@@ -1887,6 +1887,51 @@
       },
       "parameters": {}
     },
+    "015_12": {
+      "name": "花籽喷射",
+      "owner": {
+        "role_id": "015",
+        "skill_index": 12,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "026_14": {
+      "name": "撞击",
+      "owner": {
+        "role_id": "026",
+        "skill_index": 14,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "026_15": {
+      "name": "尾击",
+      "owner": {
+        "role_id": "026",
+        "skill_index": 15,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "028_13": {
+      "name": "落镰切击",
+      "owner": {
+        "role_id": "028",
+        "skill_index": 13,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "028_14": {
+      "name": "飞镰切击",
+      "owner": {
+        "role_id": "028",
+        "skill_index": 14,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
     "001_0": {
       "name": "",
       "owner": {
@@ -3732,15 +3777,6 @@
       },
       "parameters": {}
     },
-    "015_12": {
-      "name": "花籽喷射",
-      "owner": {
-        "role_id": "015",
-        "skill_index": 12,
-        "side": "source"
-      },
-      "parameters": {}
-    },
     "015_13": {
       "name": "藤荆刺",
       "owner": {
@@ -5523,24 +5559,6 @@
       },
       "parameters": {}
     },
-    "026_14": {
-      "name": "撞击",
-      "owner": {
-        "role_id": "026",
-        "skill_index": 14,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "026_15": {
-      "name": "尾击",
-      "owner": {
-        "role_id": "026",
-        "skill_index": 15,
-        "side": "source"
-      },
-      "parameters": {}
-    },
     "026_16": {
       "name": "尾击落",
       "owner": {
@@ -5951,24 +5969,6 @@
       "owner": {
         "role_id": "028",
         "skill_index": 12,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "028_13": {
-      "name": "落镰切击",
-      "owner": {
-        "role_id": "028",
-        "skill_index": 13,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "028_14": {
-      "name": "飞镰切击",
-      "owner": {
-        "role_id": "028",
-        "skill_index": 14,
         "side": "source"
       },
       "parameters": {}
