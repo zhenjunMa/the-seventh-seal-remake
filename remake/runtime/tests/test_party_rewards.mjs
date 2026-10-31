@@ -13,7 +13,7 @@ const read=relative=>JSON.parse(fs.readFileSync(path.join(runtime,relative),'utf
 const data=validatePartyRewards(read('web/data/party_rewards.json'));
 const proof=read('evidence/party_rewards_instructions.json');
 const growthProof=read('evidence/forest_rewards_instructions_20261011.json');
-const seed=read('web/data/opening_seed.json'), historical=read('web/data/world_seed.json');
+const seed=read('web/data/opening_seed.json');
 const copy=value=>structuredClone(value),hex=b=>Buffer.from(b).toString('hex');
 function roleFor(id) {
   const b=Buffer.from(data.initial_roles[id].header_raw_hex,'hex'),get=at=>b.readInt32LE(at);
@@ -137,13 +137,12 @@ test('new-party victory save/reload duplicate applies no XP, items, money or RNG
   assert.deepEqual(repeat.summary,plan.summary);assert.deepEqual(repeat.trace,[]);
 });
 
-test('absent party members receive no experience and source/state mismatches fail before RNG',()=>{
+test('reward eligibility follows participants and current state independently of save origin',()=>{
   const world=worldFor(),{actors,ledger}=pool([player('001')]);
   const plan=planVictoryRewards({world,ledger,data,rng:noGrowthRandom,actors});
   assert.deepEqual(plan.world_patch.party[1],world.party[1]);
-  const noRng=()=>{throw Error('invalid plan RNG');},wrong=copy(world);wrong.source.sha256='0'.repeat(64);
-  assert.throws(()=>planVictoryRewards({world:wrong,ledger,data,rng:noRng,actors}),/来源不匹配/);
-  assert.throws(()=>planVictoryRewards({world:historical,ledger,data,rng:noRng,actors}),/来源不匹配/);
+  const noRng=()=>{throw Error('invalid plan RNG');},native=copy(world);native.source={kind:'native-save',path:'Game.SAV',sha256:'0'.repeat(64)};
+  assert.deepEqual(planVictoryRewards({world:native,ledger,data,rng:noGrowthRandom,actors}),plan);
   const missing=copy(world);missing.party[1].level++;
   const pair=pool();assert.throws(()=>planVictoryRewards({world:missing,...pair,data,rng:noRng}),/成长与世界/);
   const dead=pool([player('001',0),player('002',0)]);

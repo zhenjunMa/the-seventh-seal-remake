@@ -29,7 +29,9 @@ Phaser关闭内建输入和音频，由既有控制器统一处理。规则不�
 | 启动配置会话 | boot读取并编译一次配置，菜单、战斗与技巧测试取得独立副本；刷新页面才重新读取。人物当前资源及成长仍来自最新世界。 |
 | 浏览器偏好与临时视图 | 音量、光标、完成标记独立于世界；焦点、动画、租约和加载锁不进入游戏进度。 |
 
-普通与快速存档使用封装校验、临时文件和同目录原子替换；固定00～19与quick接口采用If-Match／If-None-Match防止并发覆盖。服务仅接受本地同源请求，不暴露原程序、原存档、evidence或任意文件路径。普通档写SaveGame00～19.json，快速档写QuickSave.json；旧SaveGame0.json仅在00缺失时后备读取，浏览器旧档只迁入空00并保留副本。重制JSON与原版二进制存档不直接兼容；具体格式与存取连接见[save_storage](web/core/save_storage.mjs)及[本地服务](serve.py)。
+普通与快速存档统一使用原版v2二进制格式，目录仍为`remake/saves/`；普通档为`SaveGame0.Dat`～`SaveGame19.Dat`，快速档为`Game.SAV`，不读取旧JSON文件或浏览器旧档。`native_save.py`在文件边界完成编解码与校验，恢复人物、装备、技巧、旗标、事件和地图状态，保留尚未映射的原始区块；新游戏由正式资源定义生成原版格式。写入使用临时文件和同目录原子替换，固定00～19与quick接口沿用If-Match／If-None-Match。服务仅接受本地同源请求，不暴露原程序、evidence或任意文件路径。具体连接见[save_storage](web/core/save_storage.mjs)、[原版编解码](native_save.py)及[本地服务](serve.py)。
+
+新游戏与读档共同产生WorldStore，剧情、菜单、战斗和奖励依据当前状态及正式资源规则运行。`source`记录来源与核对证据，不以存档来源或初始化入口决定流程资格。
 
 ## 时钟、暂停与取消
 

@@ -14,7 +14,7 @@ def u32(b, p):
         raise ValueError(f'uint32 outside file at 0x{p:X}')
     return struct.unpack_from('<I', b, p)[0]
 
-def inventory(b):
+def inventory(b, names=None):
     if u32(b, 0) != 2:
         raise ValueError('Unsupported outer save format (expected version 2).')
     preview = u32(b, 0x3C1)
@@ -26,7 +26,7 @@ def inventory(b):
     n = u32(b, p)
     if n > 1000 or p+4+n*0xE5 > len(b):
         raise ValueError('Invalid inventory count or record bounds.')
-    names = definitions()
+    names = definitions() if names is None else names
     items = []
     for j in range(n):
         q = p+4+j*0xE5
@@ -96,14 +96,14 @@ def character_at_header(b, h):
             'defense': {'current':u32(b,h+0x48),'base':u32(b,h+0x4C)},
             'attribute_0x58_0x5c': {'current':u32(b,h+0x58),'base':u32(b,h+0x5C)}}
 
-def complete_layout(b):
+def complete_layout(b, names=None):
     """Follow the located writer's sections to EOF.
 
     The world n2 writer/reader discrepancy is rejected explicitly until a
     nonzero sample establishes which layout the game actually preserves.
     All ten role headers are serialized, even when their state byte is zero.
     """
-    inv = inventory(b)
+    inv = inventory(b, names)
     sections = []
     p = 0
     def skip(section_name, size, **details):

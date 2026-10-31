@@ -6,7 +6,7 @@
 
 | 操作 | 前置 |
 | --- | --- |
-| 静态服务 | Python 3标准库，正式媒体另备 |
+| 本地游戏服务 | Python 3、Pillow，正式媒体另备 |
 | 代码／剧情包预检查 | Node.js；`verify_phaser.mjs`默认允许媒体缺失，分别报告code与assets |
 | 素材导出 | 对应原版输入和来源台账；Pillow，部分步骤需NumPy、FFmpeg／FFprobe |
 | 原字体GDI导出、部分原版观察 | Windows及对应组件 |
@@ -28,6 +28,14 @@
 | 查看目标计划／缓存原因 | build_runtime加`--target content --explain`，不导出 |
 | 同步／核对派生工具文档 | `python3 -B remake/runtime/tools/sync_tool_docs.py`；只读核对加`--check` |
 | 预览日常检查范围 | `python3 -B remake/runtime/tools/verify_tests.py --list --explain` |
+
+### 游戏存档
+
+正式服务的存档目录仍为`remake/saves/`。普通槽00～19对应原版文件`SaveGame0.Dat`～`SaveGame19.Dat`，F4／F5使用快速档`Game.SAV`；读取、保存、导入与导出都使用原版v2二进制格式。可将原版普通档或快速档复制到对应目录后读取，JSON文件和浏览器旧档不再自动读取。
+
+[native_save.py](../native_save.py)负责原版格式与游戏状态的转换；剧情、菜单、战斗及奖励使用恢复后的当前状态，来源标记不决定流程资格。HTTP与磁盘验收使用`--save-dir`指定独立目录，保留玩家目录供正常游戏使用。
+
+已有重制版JSON档使用一次性工具`migrate_native_saves.py --backup-dir <saves之外的新目录>`预览；加`--apply`后安装原版格式、移除已转换JSON。输入文件和被覆盖的测试档均备份至指定目录，正式游戏不依赖迁移工具。
 
 ### 新地图接入顺序
 
@@ -143,6 +151,8 @@ plan只用已提交元数据及既有图集区域，不读PNG或写正式产物�
 力城／劲风岛交接使用`node remake/runtime/tools/create_wind_region_fixtures.mjs --from <FF-02结束档> --out <新输出目录>`；`--near-events`仅调整交互附近的玩家坐标和八向朝向。加`--services-only`只准备力城宿屋、普通道具商和合成师的现场样本，保留原资金、背包及角色资源；成功买卖、住宿和合成由正式页面实际操作。
 
 ### 原版存档分析
+
+游戏读写使用[原版编解码](../native_save.py)；下列工具用于只读分析与来源核对。
 
 | 目的 | 工具 |
 | --- | --- |

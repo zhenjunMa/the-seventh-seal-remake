@@ -131,31 +131,50 @@ test('MP submission handles either player and rejects insufficient or inconsiste
   assert.throws(() => partyResourcesForWorld(ingni),/状态资源/);
 });
 
-test('inventory rewards do not become equipped; altered initial equipment is rejected', () => {
+test('inventory and saved source metadata do not replace equipped instances or resource defaults', () => {
   const world = twoParty(), before = createPartyActors(world,data);
   world.inventory.push({id:4,quantity:2,name:'兽骨戒指',source_raw_hex:'cc'.repeat(0xe5)});
   assert.deepEqual(createPartyActors(world,data).map(actor => actor.linked_by_address),before.map(actor => actor.linked_by_address));
   world.source.initial_equipment[0].source_raw_hex = '00'.repeat(0xe5);
-  assert.throws(() => createPartyActors(world,data),/换装尚未接入/);
+  assert.deepEqual(createPartyActors(world,data).map(actor => actor.linked_by_address),before.map(actor => actor.linked_by_address));
 });
 
-test('old v1 progress fallback requires matching native initial values and never imports historical state', () => {
+test('native equipped records retain raw zero or prior stack counts while contributing one item', () => {
+  const world=copy(seed),items=load('items'),initial=data.initial_equipment.find(row=>row.role_id==='001');
+  const definition=items.definitions[String(initial.item_id)],expected=createPartyActors(world,data,{},items)[0];
+  for(const count of [0,14]){
+    const raw=Buffer.from(initial.source_raw_hex,'hex');raw.writeUInt32LE(count,4);
+    world.equipment={version:1,roles:{'001':[{instance_id:'native:001:weapon',id:definition.id,name:definition.name,
+      quantity:1,slot_id:definition.slot_id,source_raw_hex:raw.toString('hex')}]}};
+    const before=JSON.stringify(world),actor=createPartyActors(world,data,{},items)[0];
+    assert.deepEqual(actor.hp,expected.hp);assert.deepEqual(actor.linked_by_address,expected.linked_by_address);
+    assert.equal(JSON.stringify(world),before);
+  }
+});
+
+test('initialization without a saved header uses resource defaults, independently of origin metadata', () => {
   const world = twoParty(); world.party.forEach(role => delete role.combat_progress);
   assert.deepEqual(createPartyActors(world,data).map(actor => actor.level),[11,10]);
   world.party[1].level++;
   assert.throws(() => createPartyActors(world,data),/缺少保存成长来源/);
-  const historical = load('world_seed'); assert.throws(() => createPartyActors(historical,data),/新游戏来源/);
+  world.party[1].level--;delete world.source;
+  assert.deepEqual(createPartyActors(world,data).map(actor => actor.level),[11,10]);
 });
 
-test('source or malformed growth changes fail before any persistent world mutation', () => {
+test('saved character fields and original-save origins use current state rather than initial template identity', () => {
+  const world=twoParty();world.source={kind:'native-save',path:'SaveGame0.Dat',sha256:'0'.repeat(64)};
+  modifyHeader(world,'002',{[0x60]:2,[0x7a]:75,[0x50]:13});
+  const before=JSON.stringify(world),actor=createPartyActors(world,data)[1];
+  assert.equal(actor.raw_by_address['0x0524a74b'],75);
+  assert.equal(Buffer.from(actor.header_raw_hex,'hex').readInt32LE(0x60),2);
+  assert.equal(JSON.stringify(world),before);
+});
+
+test('malformed growth changes fail before any persistent world mutation', () => {
   for (const change of [
-    w => w.source.sha256 = '0'.repeat(64),
-    w => w.source.source_hashes['Fight_Role/002.CHR'] = '0'.repeat(64),
-    w => w.source.role_definitions['002'].header_raw_hex = '00'.repeat(0x30b),
     w => w.party[1].hp.maximum++,
     w => w.party[1].attributes_stored.attack.current++,
-    w => modifyHeader(w,'002',{[0x60]:2}),
-    w => w.party[1].id = '003',
+    w => w.party[1].id = '999',
   ]) {
     const world = twoParty(); change(world); const before = JSON.stringify(world);
     assert.throws(() => createPartyActors(world,data)); assert.equal(JSON.stringify(world),before);

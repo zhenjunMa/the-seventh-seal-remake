@@ -43,14 +43,14 @@ test('startup session preserves both reward profiles and isolates every returned
   cfg.items.entries['242'].parameters.drop_rate=100;
   const session=createRuntimeConfigurationSession(data,cfg,partyRewards);
   const legacy=compileRuntimeConfiguration(data,cfg),native=compileRuntimeConfiguration({...data,rewards:partyRewards},cfg);
-  assert.deepEqual(session.snapshot('legacy'),legacy);
-  assert.deepEqual(session.snapshot('native-new-game'),native);
-  const first=session.snapshot('native-new-game');
+  assert.deepEqual(session.snapshot({sample:true}),legacy);
+  assert.deepEqual(session.snapshot(),native);
+  const first=session.snapshot();
   first.skill_registry.yantu.mp_cost=999;first.forest.actors['012'].hp.current=0;
   first.items.definitions['242'].drop_rate=-1;first.rewards.enemies['013'].reward_slots.fill(0);
   first.rewards.initial_roles['001'].header_raw_hex='00';first.rewards.tables.growth_rows[0][0]=999;
-  assert.deepEqual(session.snapshot('native-new-game'),native);
-  assert.deepEqual(session.snapshot('legacy'),legacy);
+  assert.deepEqual(session.snapshot(),native);
+  assert.deepEqual(session.snapshot({sample:true}),legacy);
   const drift=copy(partyRewards);drift.enemies['013'].experience++;
   assert.throws(()=>createRuntimeConfigurationSession(data,cfg,drift),/奖励来源不同/);
   drift.enemies=partyRewards.enemies;drift.source_hashes['GAME.exe']='0'.repeat(64);
@@ -86,7 +86,8 @@ test('services read configuration once at startup; rewards and restored progress
   assert.equal(state.world.value.inventory.find(item=>item.id===242).quantity,2);
   assert.equal(createPartyActors(state.world.snapshot(),attributes,{},next.items)[0].hp.current,beforeHp-3);
   const nativeWorld=state.world;state.world={value:{source:{kind:'legacy'}}};
-  assert.equal((await services.readConfiguredData()).rewards.schema,'seventh-seal-forest-rewards');
+  assert.equal((await services.readConfiguredData()).rewards.schema,'seventh-seal-party-rewards');
+  assert.equal((await services.readConfiguredData({sample:true})).rewards.schema,'seventh-seal-forest-rewards');
   state.world=nativeWorld;assert.equal((await services.readConfiguredData()).rewards.schema,'seventh-seal-party-rewards');
   assert.equal(requests.length,5);
   // A fresh controller represents a refreshed page. Title/new-game/load reuse

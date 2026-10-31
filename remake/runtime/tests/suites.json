@@ -62,6 +62,7 @@
         "test_save_menu.mjs",
         "test_save_preview.mjs",
         "test_save_storage.mjs",
+        "test_native_save.py",
         "test_scripted_battle_controller.mjs",
         "test_scripted_locomotion.mjs",
         "test_skill_config.mjs",
@@ -224,7 +225,8 @@
         "test_yc05_jl03_rewards.mjs",
         "test_guild_battles.mjs",
         "test_guild_crafting.mjs",
-        "test_guild_shared.mjs"
+        "test_guild_shared.mjs",
+        "test_native_save_sources.py"
       ],
       "requires": [
         "GAME.exe"
@@ -284,6 +286,7 @@
     }
   },
   "requirements": {
+    "test_native_save_sources.py": ["SaveGame0.Dat", "SaveGame1.Dat", "SaveGame2.Dat"],
     "test_wind_entry_items.mjs": ["SYSTEM/Object.ITM", "Fight_Role/029.CHR", "Fight_Role/034.CHR", "Fight_Role/Status", "remake/runtime/evidence/wind_region_20261031/browser_outputs/boss_first_blocked_log.json"],
     "test_battle_appearance_source.mjs": ["GAME.exe", "Fight_Role/018.CHR", "remake/runtime/tests/fixtures/battle_appearance2_native.json"],
     "test_actor_effects_source.mjs": ["GAME.exe", "remake/runtime/tests/fixtures/anm_actor_blend_native.json", "Animate/m01060-2.anm", "Animate/m17029-1.anm", "Animate/m17030-1.anm", "Animate/m70073-1.anm", "Animate/m70078-1.anm", "Animate/m01040-5.anm", "Animate/m01050-3.anm", "Animate/m01022-1.anm", "Animate/m01022-2.anm", "remake/runtime/tests/fixtures/guild_actor_fade_native.json", "Animate/m55001.anm", "Animate/m72062-1.anm", "Animate/m72063.anm", "Animate/m72062-2.anm", "Animate/m72063-2.anm", "Animate/m72062-3.anm", "Animate/m72063-3.anm", "Animate/m72064-1.anm", "Animate/m73013-1.anm", "Animate/m01066-3.anm", "Animate/m01053-2.anm", "Animate/m71080.anm", "Animate/elf-e.anm", "Animate/elf-i.anm", "Animate/elf-v.anm"],

@@ -1,6 +1,7 @@
 // session adapters. Persistent state belongs to the shared runtime context.
 import {decodeSave} from "../core/world.mjs";
 import {createPartyActors} from "../core/party_attributes.mjs";
+import {effectiveSkillSource} from "../core/battle_skill_access.mjs";
 import {OpeningRunner} from "../core/opening.mjs";
 import {completedOpeningWorld} from "../core/opening_state.mjs";
 import {OpeningView} from "../opening_view.mjs";
@@ -87,7 +88,10 @@ export function createSessionController({state, actions, $, canvas, ctx,completi
     const previousPhase=operation.phase;
     const restored=await decodeSave(envelope,state.catalog.maps.map(m=>m.id));
     if(restored.party.some(actor=>!state.catalog.roles.some(role=>role.id===actor.id)))throw new Error('存档包含尚未接入的队伍角色');
-    if(restored.source.kind==='native-new-game'){createPartyActors(restored,state.partyCombat,{},state.itemData);validateSourceSkillShortcuts(restored,state.partySkills);for(const role of restored.party){techniqueCombinations(restored,state.partySkills,role.id);if(restored.technique_bindings)techniqueSlots(restored,state.partySkills,role.id);}}
+    createPartyActors(restored,state.partyCombat,{},state.itemData);
+    const skills=effectiveSkillSource(state.partySkills,restored);
+    validateSourceSkillShortcuts(restored,skills);
+    for(const role of restored.party){techniqueCombinations(restored,skills,role.id);if(restored.technique_bindings)techniqueSlots(restored,skills,role.id);}
     if(restored.opening?.status==='pending'){
       // A legacy pending prologue must release the picker before it takes input.
       const picker=state.saveMenuContext;

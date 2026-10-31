@@ -176,8 +176,8 @@ export async function loadRuntimeConfiguration(readJson,manifestPath='data/confi
   return {manifest,...Object.fromEntries(sections)};
 }
 
-// One private compiled baseline per game page. Reward parameters are shared,
-// while native-new-game and historical samples retain their own growth tables.
+// One private compiled baseline per game page. Formal play uses party growth
+// tables; a diagnostic sample can request its retained fixture explicitly.
 // Callers only receive copies, never the reusable baseline or source records.
 export function createRuntimeConfigurationSession(data,bundle,partyRewards){
   fail(partyRewards?.schema==='seventh-seal-party-rewards'&&partyRewards.version===1,'新游戏奖励来源缺失');
@@ -187,7 +187,7 @@ export function createRuntimeConfigurationSession(data,bundle,partyRewards){
     fail(partyRewards.source_hashes?.[path]===hash,`新游戏与历史样本的奖励来源指纹不同：${path}`);
   const compiled=compileRuntimeConfiguration(data,bundle);
   const nativeRewards={...copy(partyRewards),enemies:compiled.rewards.enemies,items:compiled.rewards.items};
-  return {snapshot(sourceKind){
-    return copy({...compiled,rewards:sourceKind==='native-new-game'?nativeRewards:compiled.rewards});
+  return {snapshot({sample=false}={}){
+    return copy({...compiled,rewards:sample?compiled.rewards:nativeRewards});
   }};
 }

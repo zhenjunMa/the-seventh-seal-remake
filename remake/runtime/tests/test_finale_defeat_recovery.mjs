@@ -92,12 +92,16 @@ function fixture(){
   state.chapterRunner=new ChapterRunner({world,data:story,setPhase:phase=>state.scenes.setPhase(phase),log:actions.log,say:async()=>{},battle:request=>battleController.startScriptedBattle(request)});
   return {world,state,events,$,canvas,actions,battleController,storyController,scene};
 }
-async function until(predicate){for(let turn=0;turn<250;turn++){if(predicate())return;await new Promise(resolve=>setImmediate(resolve));}throw Error('defeat controller fixture did not reach its checkpoint');}
+async function until(predicate){const deadline=Date.now()+10000;while(Date.now()<deadline){if(predicate())return;await new Promise(resolve=>setTimeout(resolve,10));}throw Error('defeat controller fixture did not reach its checkpoint');}
 
 test('captured completed defeat returns through real battle, story transaction and game-over controllers without committing the ANM draft or rewards',async()=>{
   const f=fixture(),before=f.world.snapshot(),beforeSide=f.state.sidePriority;
   const running=f.storyController.runChapter({mapId:'M17030-2',recordId:31});
-  await until(()=>f.state.scenes.phase==='battle-charging');
+  await until(()=>f.state.scenes.phase==='battle-entry');
+  // The cached view has no frame playback; complete its entry presentation
+  // explicitly before restoring the captured immediately-before-finish state.
+  for(const event of [...f.state.battle.presentationSnapshot().lifecycle_events])if(event.kind==='entry')assert.equal(f.state.battle.ackLifecycle(event),true);
+  assert.equal(f.state.scenes.phase,'battle-charging');
   const core=f.state.battle,session=f.state.scriptedBattleSession;
   // Restore the completed capture to the immediately-before-finish boundary;
   // every actor, resource, raw record, contact and RNG source stays unchanged.

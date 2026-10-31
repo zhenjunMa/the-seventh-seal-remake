@@ -104,7 +104,6 @@ export function socketEquipmentRows(world, attributes, itemData, roleId) {
 }
 
 export function migrateCrystalSockets(draft) {
-  need(draft.source.kind === 'native-new-game', '当前样本未提供晶石孔位来源');
   draft.crystal_sockets ??= {version:1, roles:{}};
   for (const role of draft.party) draft.crystal_sockets.roles[role.id] ??= Array(6).fill(null);
   validateCrystalSocketState(draft.crystal_sockets, allPartyRoles(draft));

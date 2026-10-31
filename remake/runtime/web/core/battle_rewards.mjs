@@ -211,10 +211,6 @@ function addItem(inventory, item, battleId, sequence) {
  * RNG runs in native order: queue IDs, each occurrence, then experience growth.
  */
 export function planVictoryRewards({world, ledger, data, rng, actors,skill_data=null,skill_practice={}}) {
-  const required=data.world_source;
-  requireValue(required ? world?.source?.path===required.path && world.source.sha256===required.sha256
-    && world.source.kind===required.kind && world.source.seed_id===required.seed_id
-    : world?.source?.sha256===data.source_hashes['save_analysis_20261010/verified_level12_SaveGame0.Dat'], '奖励存档来源不匹配');
   const old = world.reward_records?.find(record => (typeof record==='string'?record:record.battle_id)===ledger.battle_id);
   if (old) return {applied:false,world_patch:null,reward_record:null,summary:copy(typeof old==='object'?old.summary:null),trace:[]};
   requireValue(typeof rng==='function' && ledger?.battle_id && ledger.defeated_ids.length===ledger.expected_enemy_ids.length && ledger.expected_enemy_ids.every(id=>ledger.defeated_ids.includes(id)), '尚未胜利，不能发放奖励');

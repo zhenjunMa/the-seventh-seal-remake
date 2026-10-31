@@ -39,7 +39,7 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
       if(snapshot.phase==='defeat'&&!state.scriptedBattleSession.returnPending)queueMicrotask(actions.guarded(returnFromBattle));
     }else if(state.skillTestSession){
       if(snapshot.phase==='escaped'&&!state.skillTestSession.returnPending){state.skillTestSession.returnPending=true;queueMicrotask(actions.guarded(returnFromBattle));}
-    }else if(snapshot.phase==='defeat'&&state.world.value.source.kind==='native-new-game')queueMicrotask(actions.guarded(returnFromBattle));
+    }else if(snapshot.phase==='defeat'&&!state.battleSampleMode)queueMicrotask(actions.guarded(returnFromBattle));
   }
   function battleKey(key,repeat=false){if(state.battleEntryPending||state.scenes.phase==='battle-entry')return true;return state.battleMenu?.key(key,repeat)??false;}
   function battleKeyUp(key){state.battleMenu?.keyup(key);}
@@ -161,7 +161,7 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
     }finally{if(isCurrent())state.battleEntryPending=false;}
     if(isCurrent())updateBattle(state.battle.presentationSnapshot());
   }
-  async function startBattle(group=null,encounterState=null){
+  async function startBattle(group=null,encounterState=null,{sample:sampleMode=false}={}){
     if(state.scenes.phase!=='map')return;
     const revision=state.world.value.revision,before=(state.battleTransition?captureTransition():null);state.battlePresentationError=null;
     state.battleCheckpoint={...state.view};state.scenes.setPhase('battle-loading');
@@ -169,9 +169,10 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
       let sample,newParty;
       await prepareBattleResources('battle',async progress=>{
       state.battleData??=await actions.json(state.catalog.combat_sample??'data/combat_sample.json');
-      newParty=state.world.value.source.kind==='native-new-game';
-      if(newParty&&!group)throw new Error('新游戏请在白木森林中行走遇敌。');
-      const configured=await actions.readConfiguredData();state.itemData=configured.items;
+      newParty=!sampleMode;
+      if(newParty&&!group)throw new Error('请在野外行走遇敌。');
+      state.battleSampleMode=sampleMode;
+      const configured=await actions.readConfiguredData({sample:sampleMode});state.itemData=configured.items;
       progress({completed:10,total:100});
       const newScheduler={...configured.scheduler,policy:{...configured.scheduler.policy,commands:'Frame-driven charging and queued ready-player commands; menu selection and other actors animations continue charging.'},...(newParty?{idle_skills:{...configured.scheduler.idle_skills,...state.partySkills.idle_skills}}:{})};
       sample=newParty?assembleForestSample(createPartySample(state.world.snapshot(),state.partyCombat,state.partySkills,configured,state.itemData,state.operationMenu?.techniques?.supplement?.name_charset),configured.forest,group,newScheduler,configured.ai,configured.rewards,state.partyReactions,state.statusData):group?createForestSample(state.world.snapshot(),configured.combat,configured.forest,group,null,newScheduler,configured.ai,configured.rewards,state.reactionData,state.statusData):createBattleSample(state.world.snapshot(),configured.combat);
@@ -334,7 +335,7 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
       }catch(error){restoreTechniqueTest(session,'测试已结束');throw error;}
     }
     const result=state.battle.finish();
-    const defeatPolicy=result.outcome==='defeat'&&state.world.value.source.kind==='native-new-game'?planPartyDefeat({battle:state.battle.snapshot()}):null;
+    const defeatPolicy=result.outcome==='defeat'&&!state.battleSampleMode?planPartyDefeat({battle:state.battle.snapshot()}):null;
     if(state.battle.snapshot().scheduler)state.sidePriority=state.battle.snapshot().scheduler.side_priority;
     if(state.battleNatural){
       const encounterState=structuredClone(state.world.value.encounters);

@@ -6,30 +6,33 @@ import {SceneController} from '../web/core/scenes.mjs';
 import {createServicesController} from '../web/controllers/services.mjs';
 import {createStoryController} from '../web/controllers/story.mjs';
 import {createInputController} from '../web/controllers/input.mjs';
+import {createMenuController} from '../web/controllers/menu.mjs';
 import {PhaserRuntime} from '../web/phaser/runtime.mjs';
 import {MANUAL_SAVE_SLOTS} from '../web/core/save_slots.mjs';
 
 const {createSessionController}=await import('../web/controllers/session.mjs');
 globalThis.document={createElement:()=>({textContent:''})};
 
-const seed=JSON.parse(readFileSync(new URL('../web/data/world_seed.json',import.meta.url)));
+const load=name=>JSON.parse(readFileSync(new URL(`../web/data/${name}.json`,import.meta.url)));
+const seed=load('opening_seed');seed.opening.status='complete';
+const partyCombat=load('party_combat'),itemData=load('items'),partySkills=load('party_skills');
 const png='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGgAAABMCAIAAAAOQ2XWAAAAuUlEQVR4nO3SMREAIAADMUASclCCfDTwc7J3+evc5w7+rbBBuM7jIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhRvMAV4QBnCTMUicAAAAASUVORK5CYII=';
 const deferred=()=>{let resolve,reject;const promise=new Promise((yes,no)=>{resolve=yes;reject=no;});return {promise,resolve,reject};};
 const ALL_SLOTS=[...MANUAL_SAVE_SLOTS,'quick'];
 const settled=()=>new Promise(done=>setImmediate(done));
-function fixture(){
-  const nodes=new Map(),$=id=>{if(!nodes.has(id))nodes.set(id,{textContent:'',hidden:false,dataset:{},classList:{toggle(){}},append(){},children:[]});return nodes.get(id);};
-  const world=new WorldStore(seed),state={world,logs:[],keys:new Set(),clock:0,view:{},phaseNames:{},saveSlots:Object.fromEntries(ALL_SLOTS.map(slot=>[slot,null])),saveOperation:null,
-    catalog:{maps:[{id:seed.location.map_id}],roles:seed.party.map(role=>({id:role.id}))},startupView:{hide(){},showMenu(){}}};
+function fixture(initial=seed){
+  const nodes=new Map(),$=id=>{if(!nodes.has(id))nodes.set(id,{textContent:'',hidden:false,dataset:{},style:{},classList:{toggle(){},add(){},remove(){}},append(){},children:[],replaceChildren(...children){this.children=children;if(!children.some(row=>row.value===this.value))this.value=children[0]?.value??'';}});return nodes.get(id);};
+  const world=new WorldStore(initial),state={world,partyCombat,itemData,partySkills,logs:[],keys:new Set(),clock:0,view:{},phaseNames:{},saveSlots:Object.fromEntries(ALL_SLOTS.map(slot=>[slot,null])),saveOperation:null,
+    catalog:{maps:[{id:initial.location.map_id}],roles:initial.party.map(role=>({id:role.id}))},startupView:{hide(){},showMenu(){}}};
   const actions={captureSavePreview:()=>png,buildHud(){},updateNearest(){}},canvas={focus(){}};
   Object.assign(actions,createServicesController({state,actions,$,canvas}));
-  state.scenes=new SceneController({world,prepare:async()=>({data:{id:seed.location.map_id}}),validateEntry(){},commitView(){}});
-  state.scenes.current={data:{id:seed.location.map_id}};state.scenes.setPhase('map');
+  state.scenes=new SceneController({world,prepare:async()=>({data:{id:initial.location.map_id}}),validateEntry(){},commitView(){}});
+  state.scenes.current={data:{id:initial.location.map_id}};state.scenes.setPhase('map');
   Object.assign(actions,createStoryController({state,actions,$,canvas}));
   Object.assign(actions,createSessionController({state,actions,$,canvas}));
   state.saveMenu={active:false,show(options){this.active=true;this.options=options;},hide(){this.active=false;},setEntries(entries){this.entries=entries;},setMessage(message){this.message=message;},key(key){if(!this.active)return false;if(key==='Escape')actions.closeSaveMenu();return true;}};
   const files=new Map(),storageCalls=[];
-  state.saveStorage={read:async slot=>files.get(slot)??null,write:async(envelope,slot,createOnly,options)=>{storageCalls.push({slot,envelope,createOnly,options});files.set(slot,envelope);return {path:`remake/saves/SaveGame${slot}.json`};},list:async()=>ALL_SLOTS.map(slot=>({slot,envelope:files.get(slot)??null,error:null}))};
+  state.saveStorage={read:async slot=>files.get(slot)??null,write:async(envelope,slot,createOnly,options)=>{storageCalls.push({slot,envelope,createOnly,options});files.set(slot,envelope);return {path:`remake/saves/${slot==='quick'?'Game.SAV':`SaveGame${Number(slot)}.Dat`}`};},list:async()=>ALL_SLOTS.map(slot=>({slot,envelope:files.get(slot)??null,error:null}))};
   return {state,actions,$,canvas,files,storageCalls};
 }
 
@@ -45,7 +48,7 @@ test('file save holds exploration and blocks load, new game and scene transition
   await entered.promise;
   assert.equal(written.slot,'quick');assert.deepEqual(await decodeSave(written.envelope),await decodeSave(await encodeSave(seed)));
   assert.equal(state.saveSlots.quick,null);assert.equal($('saveStatus').textContent,'');
-  gate.resolve({path:'remake/saves/quick.json'});await pending;
+  gate.resolve({path:'remake/saves/Game.SAV'});await pending;
   assert.equal(state.scenes.phase,'map');assert.equal(state.saveOperation,null);
   assert.equal(state.saveSlots.quick,written.envelope);assert.equal(state.saveSlots['00'],null);
   assert.match($('saveStatus').textContent,/快速存档已保存/);
@@ -129,7 +132,7 @@ test('slot page passes the displayed save fingerprint to overwrite and blocks cl
   const {state,actions,files}=fixture(),existing=await encodeSave(seed),gate=deferred(),entered=deferred();files.set('00',existing);
   const opened=actions.openSaveCrystal();await settled();
   let write;
-  state.saveStorage.write=async(envelope,slot,createOnly,options)=>{write={envelope,slot,createOnly,options};entered.resolve();await gate.promise;files.set(slot,envelope);return {path:'remake/saves/SaveGame00.json'};};
+  state.saveStorage.write=async(envelope,slot,createOnly,options)=>{write={envelope,slot,createOnly,options};entered.resolve();await gate.promise;files.set(slot,envelope);return {path:'remake/saves/SaveGame0.Dat'};};
   const saving=actions.selectSaveSlot(state.saveMenu.entries[0]);await entered.promise;
   assert.equal(write.slot,'00');assert.equal(write.createOnly,false);assert.equal(write.options.expectedSha,existing.sha256);
   assert.equal(state.scenes.phase,'save-io');assert.equal(actions.closeSaveMenu(),false);
@@ -156,6 +159,33 @@ test('loading a numbered slot through the page restores the world and closes bac
   state.scenes.setPhase('menu');const opened=actions.openSaveMenu({mode:'load'});await settled();
   await actions.selectSaveSlot(state.saveMenu.entries.find(row=>row.slot==='19'));await opened;
   assert.deepEqual(state.world.snapshot(),await decodeSave(saved));assert.equal(state.scenes.phase,'map');assert.equal(state.saveMenu.active,false);assert.equal(state.saveMenuContext,null);
+});
+
+test('an original-save world opens the party menu, saves either slot kind and restores learned shortcuts without origin metadata',async()=>{
+  const native=structuredClone(seed);native.source={kind:'native-save',path:'Game.SAV',sha256:'1'.repeat(64)};
+  native.equipment={version:1,roles:{'001':[]}};native.formation_slots=[null,null,null,'001'];
+  const learned=partySkills.roles['001'].skills.find(skill=>!skill.learned_raw&&(skill.type_flags_u32_0x32&15)!==0).original_skill_index;
+  native.party[0].skill_progress={version:1,learned_indices:[learned]};
+  native.skill_shortcuts={version:1,roles:{'001':[learned,learned,learned]}};
+  const header=Buffer.from(native.party[0].combat_progress.header_raw_hex,'hex');header.writeInt32LE(75,0x7a);
+  native.party[0].combat_progress.header_raw_hex=header.toString('hex');
+  const {state,actions,$,canvas,files,storageCalls}=fixture(native),rendered=[];
+  state.audio={playCue(){},snapshot:()=>({channels:{}})};state.menuSettings={snapshot:()=>({battleCursor:'initial'})};
+  state.operationMenu={focusInitial(){},page(){},suspend(){},stats(row){rendered.push(row);},roster(){},mnuText(){},items(){},itemButtons:new Map(),
+    manifest:{},equipment(){},equipmentView:{render(){}},weapon(){},system:{render(){}}};
+  actions.readConfiguredData=async()=>({items:{...itemData,runtime_configuration:{differences:[]}},party_skills:partySkills,audit:{mode:'original'}});
+  Object.assign(actions,createMenuController({state,actions,$,canvas}));
+  await actions.openPartyMenu();
+  assert.equal(state.scenes.phase,'party-menu');assert.equal($('partyMenu').hidden,false);
+  assert.equal(rendered[0].hp.current,native.party[0].hp.current);assert.ok(rendered[0].elements.includes(75));
+  actions.closePartyMenu();assert.equal(state.scenes.phase,'map');
+  const picker=actions.openSaveCrystal();await settled();await actions.selectSaveSlot(state.saveMenu.entries.find(row=>row.slot==='19'));
+  actions.closeSaveMenu();await picker;await actions.saveProgress('quick');
+  assert.deepEqual(storageCalls.map(row=>row.slot),['19','quick']);
+  const saved=await decodeSave(files.get('19'));assert.deepEqual(saved,native);
+  state.world.transact(draft=>{draft.party[0].hp.current-=9;draft.money+=17;draft.formation_slots=['001',null,null,null];});
+  await actions.loadProgress('quick');
+  assert.deepEqual(state.world.snapshot(),native);assert.equal(state.scenes.phase,'map');
 });
 
 test('a legacy pending prologue releases the numbered picker and still attempts playback, with usable title on failure',async()=>{
@@ -197,7 +227,8 @@ test('runtime log download preserves every event and history entry without cloni
   }finally{JSON.stringify=stringify;globalThis.document=previousDocument;URL.createObjectURL=create;URL.revokeObjectURL=revoke;globalThis.setTimeout=timeout;}
   assert.equal(anchor.clicked,true);assert.equal(anchor.download,'seventh-seal-runtime-log.json');assert.ok(blob instanceof Blob);assert.equal(blob.type,'application/json');
   const exported=await blob.text();assert.deepEqual(JSON.parse(exported),before);assert.deepEqual(expected,before);
-  assert.ok(maxChunk<exported.length/8,'Only one event, action or small metadata block is serialized at once');
+  const worldMetadataLength=stringify({world:expected.world,audio:expected.audio,scope:expected.scope}).length;
+  assert.ok(maxChunk<=Math.max(worldMetadataLength,exported.length/8),'Only one event, action or the world metadata block is serialized at once');
   // The delayed revocation belongs to the normal download adapter.
   URL.revokeObjectURL=url=>revoked.push(url);try{timers.forEach(callback=>callback());}finally{URL.revokeObjectURL=revoke;}
   assert.deepEqual(revoked,['blob:runtime-log']);

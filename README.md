@@ -8,13 +8,13 @@
 
 **首次构建尚未打通。** 干净克隆只有代码和结构化定义；现有构建入口仍依赖部分本地来源台账和历史样本。运行正式游戏需要与当前定义匹配的已生成媒体，准备与缺失处理见[本地资料](remake/local_materials.md)。
 
-从仓库根目录启动（Python 3）：
+从仓库根目录启动（Python 3，需安装Pillow）：
 
 ```console
 python3 -B remake/runtime/serve.py
 ```
 
-Windows 可用 `python -B remake/runtime/serve.py`，或双击 `remake/start.cmd`。访问 <http://127.0.0.1:8767/>；服务将重制存档写入 `remake/saves/`，与原版二进制存档不直接兼容。具体操作以游戏内提示为准。
+Windows 可用 `python -B remake/runtime/serve.py`，或双击 `remake/start.cmd`。访问 <http://127.0.0.1:8767/>；存档目录仍为 `remake/saves/`，普通档使用原版 `SaveGame0.Dat`～`SaveGame19.Dat`，快速档使用 `Game.SAV`。可读取原版普通档与快速档，保存也使用原版二进制格式；JSON存档不再读取。具体操作以游戏内提示为准。
 
 没有媒体时，可访问 <http://127.0.0.1:8767/phaser-preview.html>，用示意图检查探索、缩放和战斗。预览不读写正式存档，其结果不代表原作画面或主线验收。
 

@@ -1,5 +1,5 @@
-// Native-new-game player attributes. No historical-save fallback and no gear
-// inferred from inventory rewards. Battle statuses and stance are fresh copies.
+// Current player attributes use saved character headers and equipped instances.
+// Resource templates supply combat structure; battle statuses are fresh copies.
 import {idiv} from './combat_rules.mjs';
 import {equipmentRows} from './equipment.mjs';
 import {partyFormationSlots} from './party_formation.mjs';
@@ -19,27 +19,16 @@ const dataView = b => new DataView(b.buffer, b.byteOffset, b.byteLength);
 const hex = b => Array.from(b, n => n.toString(16).padStart(2, '0')).join('');
 const add = (a, b) => (a + b) | 0;
 const pct = (base, amount, percent) => add(amount, idiv(Math.imul(add(base, amount), percent), 100));
-const GROWTH_OFFSETS = [0x24,0x28,0x2c,0x30,0x34,0x38,0x3c,0x40,0x44,0x48,0x4c,0x58,0x5c,0x64,
-  ...Array.from({length:6},(_,index)=>0x7a+index*4)];
-
 function savedHeader(role, template) {
-  const initial = bytes(template.header_raw_hex, 0x30b, '初始角色头');
-  const b = role.combat_progress ? bytes(role.combat_progress.header_raw_hex, 0x30b, '保存成长头') : initial.slice();
+  const b = bytes(role.combat_progress?.header_raw_hex ?? template.header_raw_hex, 0x30b, '角色头');
   const v = dataView(b), at = n => v.getInt32(n, true);
   if (!role.combat_progress) need(role.level === template.level, '此等级缺少保存成长来源');
-  need(role.name === template.name && at(0x24) === role.level && role.level >= 1 && role.level <= 99,
-    '保存角色身份或等级与来源不一致');
+  need(at(0x24) === role.level && role.level >= 1 && role.level <= 99, '保存角色等级与角色头不一致');
   need(at(0x34) === role.hp.maximum && at(0x3c) === role.mp.maximum && at(0x34) >= 0 && at(0x3c) >= 0,
     '保存成长头与资源上限不一致');
   for (const [name, offset] of [['attack',0x40], ['defense',0x48]])
     need(role.attributes_stored?.[name]?.current === at(offset) && role.attributes_stored?.[name]?.base === at(offset + 4),
       '保存成长属性不一致');
-  // Native growth and47D960 element potions modify these recovered DWORDs. Source identity,
-  // side, growth-row selector, resistances and the rest of this bounded header
-  // are retained rather than accepting a foreign CHR under the same role ID.
-  const mutable = new Set(GROWTH_OFFSETS.flatMap(n => [n,n+1,n+2,n+3]));
-  for (let n = 0; n < b.length; n++) if (!mutable.has(n))
-    need(b[n] === initial[n], '保存成长头包含尚未接入的角色字段变化');
   v.setUint32(0x30, u32(role.hp.current, 'HP'), true);
   v.setUint32(0x38, u32(role.mp.current, 'MP'), true);
   return {b, v, at};
@@ -77,22 +66,13 @@ function recalculateLinked(actor, header, entries) {
  */
 export function createPartyActors(world, data, selectedSkills = {}, itemData = null, content=runtimeContent) {
   need(data?.schema === 'seventh-seal-party-combat' && data.version === 1, '新游戏战斗属性版本不兼容');
-  const required = data.source?.required_world_source;
-  need(world?.source?.kind === 'native-new-game' && world.source.kind === required?.kind
-    && world.source.path === required.path && world.source.sha256 === required.sha256
-    && world.source.seed_id === data.source.required_seed_id, '当前世界不是已验证的新游戏来源');
   need(Array.isArray(world.party) && world.party.length >= 1 && world.party.length <= content.party_limit
     && new Set(world.party.map(role => role.id)).size === world.party.length, '当前新游戏队伍未支持');
   requireRegisteredRoles(world.party.map(role=>role.id),{side:'player'},content);
-  for (const [path, sha] of Object.entries(data.source_hashes))
-    need(world.source.source_hashes?.[path] === sha, '新游戏资源指纹不同');
   const formation=partyFormationSlots(world);
   if(world.crystal_sockets)validateCrystalSocketDefinitions(world.crystal_sockets,itemData);
   return world.party.map((role) => {
     const template = data.actors?.[role.id]; need(template, '当前新游戏角色尚未接入');
-    const definition = world.source.role_definitions?.[role.id];
-    need(definition?.path === template.source.path && definition.sha256 === template.source.sha256
-      && definition.header_raw_hex === template.header_raw_hex, '新游戏角色定义来源不同');
     const {b,v,at} = savedHeader(role, template), actor = copy(template);
     const entries = equipmentRows(world, data, itemData, role.id).concat(socketEquipmentRows(world,data,itemData,role.id));
     recalculateLinked(actor,v,entries);
@@ -102,7 +82,7 @@ export function createPartyActors(world, data, selectedSkills = {}, itemData = n
       ? crystalSocketRows(world,data,itemData,role.id).filter(row=>row.item).map(row=>({
         item_id:row.item.id,group_index:0,entry_index:row.socket_index})) : []);
     actor.equipment_passives = equipmentPassiveRows(passiveEntries,itemData);
-    actor.level = role.level; actor.party_slot_zero_based = formation.indexOf(role.id); actor.header_raw_hex = hex(b);
+    actor.name = role.name; actor.level = role.level; actor.party_slot_zero_based = formation.indexOf(role.id); actor.header_raw_hex = hex(b);
     for (const key of Object.keys(actor.raw_by_address)) actor.raw_by_address[key] = at(Number(key) - 0x0524a6d1);
     actor.raw_hp = u32(role.hp.current, 'HP') | 0; actor.raw_mp = u32(role.mp.current, 'MP') | 0;
     actor.raw_hp_maximum = at(0x34); actor.raw_mp_maximum = at(0x3c);

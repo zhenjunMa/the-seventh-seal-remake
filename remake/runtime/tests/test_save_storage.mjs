@@ -6,35 +6,18 @@ import {encodeSave} from '../web/core/world.mjs';
 import {MANUAL_SAVE_SLOTS,SAVE_SLOT_COUNT,normalizeSaveSlot,saveSlotLabel} from '../web/core/save_slots.mjs';
 const seed=JSON.parse(readFileSync(new URL('../web/data/opening_seed.json',import.meta.url)));
 const saved=()=>encodeSave(seed);
-const reply=(status,value)=>({status,ok:status>=200&&status<300,json:async()=>value});
+const reply=(status,value)=>({status,ok:status>=200&&status<300,json:async()=>value,blob:async()=>value});
 const emptySlots=()=>[...MANUAL_SAVE_SLOTS,'quick'].map(slot=>({slot,envelope:null,error:null}));
 
-test('manual browser save migrates only to an empty file slot and retains the legacy copy',async()=>{
-  const envelope=await saved(),calls=[],legacy=JSON.stringify(envelope);
-  const storage=createSaveStorage({legacyStorage:{getItem:()=>legacy},legacyKey:'old',fetchImpl:async(url,options)=>{
-    calls.push({url,options});return reply(options.method?200:404,options.method?{slot:'manual'}:{});
+test('empty disk slots remain empty and browser JSON progress is never migrated',async()=>{
+  let legacyReads=0;const calls=[];
+  const storage=createSaveStorage({legacyStorage:{getItem(){legacyReads++;return 'old JSON';}},fetchImpl:async(url,options)=>{
+    calls.push({url,options});return reply(404,{});
   }});
-  assert.deepEqual(await storage.read(),envelope);
-  assert.deepEqual(calls.map(row=>[row.url,row.options.method??'GET']),[['/api/saves/00','GET'],['/api/saves/00','PUT']]);
-  assert.equal(calls[1].options.body,legacy);
-  calls.length=0;
+  assert.equal(await storage.read(),null);
   assert.equal(await storage.read('quick'),null);
-  assert.equal(calls.length,1);
-});
-
-test('existing disk save takes precedence over browser progress',async()=>{
-  const envelope=await saved();let legacyReads=0;
-  const storage=createSaveStorage({legacyStorage:{getItem(){legacyReads++;return 'bad';}},fetchImpl:async()=>reply(200,envelope)});
-  assert.deepEqual(await storage.read(),envelope);assert.equal(legacyReads,0);
-});
-
-test('a migration racing another tab preserves the newly created disk save',async()=>{
-  const legacy=await saved(),current=await saved();current.saved_at='2026-10-23T01:00:00Z';let reads=0;
-  const storage=createSaveStorage({legacyStorage:{getItem:()=>JSON.stringify(legacy)},fetchImpl:async(_url,options)=>{
-    if(options.method){assert.equal(options.headers['If-None-Match'],'*');return reply(412,{error:'already exists'});}
-    return ++reads===1?reply(404,{}):reply(200,current);
-  }});
-  assert.deepEqual(await storage.read(),current);
+  assert.equal(legacyReads,0);
+  assert.deepEqual(calls.map(row=>[row.url,row.options.method??'GET']),[['/api/saves/00','GET'],['/api/saves/quick','GET']]);
 });
 
 test('unavailable service and invalid saves never report successful persistence or fall back silently',async()=>{
@@ -46,7 +29,7 @@ test('unavailable service and invalid saves never report successful persistence 
   const bad={...envelope,sha256:'0'.repeat(64)};let calls=0;
   const untouched=createSaveStorage({fetchImpl:async()=>{calls++;return reply(200,{});}});
   await assert.rejects(untouched.write(bad),/校验失败/);assert.equal(calls,0);
-  const corrupt=createSaveStorage({legacyStorage:{getItem:()=>JSON.stringify(envelope)},fetchImpl:async()=>reply(422,{error:'corrupt file'})});
+  const corrupt=createSaveStorage({fetchImpl:async()=>reply(422,{error:'corrupt file'})});
   await assert.rejects(corrupt.read(),/corrupt file/);
 });
 
@@ -96,34 +79,9 @@ test('list validates all occupied slots with one request and isolates each damag
   assert.deepEqual(listed.at(-1),{slot:'quick',envelope,error:null});
 });
 
-test('list migrates the browser copy only to an empty 00 without reading twenty separate files',async()=>{
-  const envelope=await saved(),calls=[];
-  const storage=createSaveStorage({legacyStorage:{getItem:()=>JSON.stringify(envelope)},fetchImpl:async(url,options)=>{
-    calls.push({url,options});return reply(200,options.method?{slot:'00'}:{slots:emptySlots()});
-  }});
-  const slots=await storage.list();
-  assert.deepEqual(calls.map(row=>[row.url,row.options.method??'GET']),[['/api/saves','GET'],['/api/saves/00','PUT']]);
-  assert.equal(calls[1].options.headers['If-None-Match'],'*');
-  assert.deepEqual(slots[0].envelope,envelope);
-  assert.ok(slots.slice(1).every(row=>row.envelope===null&&row.error===null));
-});
-
-test('list preserves a new file created during browser migration and keeps migration failures in 00',async()=>{
-  const legacy=await saved(),current=await saved();current.saved_at='2026-10-23T01:00:00Z';
-  const storage=createSaveStorage({legacyStorage:{getItem:()=>JSON.stringify(legacy)},fetchImpl:async(url,options)=>{
-    if(url==='/api/saves')return reply(200,{slots:emptySlots()});
-    return options.method?reply(412,{error:'already exists'}):reply(200,current);
-  }});
-  assert.deepEqual((await storage.list())[0].envelope,current);
-  const corruptBrowser=createSaveStorage({legacyStorage:{getItem:()=>'{bad'},fetchImpl:async()=>reply(200,{slots:emptySlots()})});
-  const listing=await corruptBrowser.list();
-  assert.match(listing[0].error,/旧浏览器存档格式无效/);
-  assert.ok(listing.slice(1).every(row=>!row.error));
-});
-
-test('list does not migrate over an occupied or corrupt slot 00 and rejects malformed responses',async()=>{
+test('list never consults browser JSON and rejects malformed responses',async()=>{
   const envelope=await saved();
-  for(const row of [{slot:'00',envelope,error:null},{slot:'00',envelope:null,error:'corrupt file'}]){
+  for(const row of [{slot:'00',envelope:null,error:null},{slot:'00',envelope,error:null},{slot:'00',envelope:null,error:'corrupt file'}]){
     const slots=emptySlots();slots[0]=row;let legacyReads=0;
     const storage=createSaveStorage({legacyStorage:{getItem(){legacyReads++;return 'bad';}},fetchImpl:async()=>reply(200,{slots})});
     await storage.list();assert.equal(legacyReads,0);
@@ -132,4 +90,23 @@ test('list does not migrate over an occupied or corrupt slot 00 and rejects malf
     const storage=createSaveStorage({fetchImpl:async()=>reply(200,value)});
     await assert.rejects(storage.list(),/本地存档列表格式无效/);
   }
+});
+
+test('native file import and export use binary conversion endpoints',async()=>{
+  const envelope=await saved(),file=new Blob([new Uint8Array([2,0,0,0])]),calls=[];
+  const storage=createSaveStorage({fetchImpl:async(url,options)=>{
+    calls.push({url,options});return reply(200,url.endsWith('/decode')?envelope:file);
+  }});
+  assert.deepEqual(await storage.decodeFile(file),envelope);
+  assert.equal(calls[0].url,'/api/saves/decode');
+  assert.equal(calls[0].options.method,'POST');
+  assert.equal(calls[0].options.body,file);
+  assert.equal(calls[0].options.headers['Content-Type'],'application/octet-stream');
+  assert.equal(await storage.encodeFile(envelope),file);
+  assert.equal(calls[1].url,'/api/saves/encode');
+  assert.equal(calls[1].options.method,'POST');
+  assert.deepEqual(JSON.parse(calls[1].options.body),envelope);
+  const invalid=createSaveStorage({fetchImpl:async()=>reply(422,{error:'原版存档格式无效'})});
+  await assert.rejects(invalid.decodeFile(file),/原版存档格式无效/);
+  await assert.rejects(invalid.encodeFile(envelope),/原版存档格式无效/);
 });

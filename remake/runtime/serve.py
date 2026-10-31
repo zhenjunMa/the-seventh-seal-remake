@@ -1,48 +1,26 @@
 """Local runtime with fixed save slots; static mounts exclude original files."""
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+from datetime import datetime, timezone
 from urllib.parse import urlsplit, unquote
 import argparse
-import hashlib
 import json
 import os
+import sys
 import tempfile
 import threading
-
 ROOT = Path(__file__).resolve().parent
+sys.path.insert(0, str(ROOT))
+from native_save import decode_native_save, encode_native_save
+
 MOUNTS = {'/': ROOT / 'web'}
-SAVE_FILES = {**{f'{index:02}': f'SaveGame{index:02}.json' for index in range(20)}, 'quick': 'QuickSave.json'}
-LEGACY_SAVE_FILE = 'SaveGame0.json'
+SAVE_FILES = {**{f'{index:02}': f'SaveGame{index}.Dat' for index in range(20)}, 'quick': 'Game.SAV'}
 MAX_SAVE_BYTES = 8_000_000
-
-
-def validate_save(raw):
-    """Check the envelope before replacing a file; game rules stay in world.mjs."""
-    value = json.loads(raw)
-    if not isinstance(value, dict) or value.get('schema') != 'seventh-seal-save' or value.get('version') != 1:
-        raise ValueError('存档封装版本不兼容')
-    payload = value.get('payload')
-    if not isinstance(payload, str) or hashlib.sha256(payload.encode('utf-8')).hexdigest() != value.get('sha256'):
-        raise ValueError('存档校验失败，原存档已保留')
-    world = json.loads(payload)
-    if not isinstance(world, dict) or world.get('schema') != 'seventh-seal-world' or world.get('version') != 1:
-        raise ValueError('存档世界格式不兼容')
-    return value
 
 
 def normalize_save_slot(slot):
     slot = '00' if slot == 'manual' else slot
     return slot if slot in SAVE_FILES else None
-
-
-def existing_save_path(directory, slot):
-    """00 falls back to the old single-slot filename without modifying it."""
-    path = directory / SAVE_FILES[slot]
-    if slot == '00' and not path.exists() and not path.is_symlink():
-        legacy = directory / LEGACY_SAVE_FILE
-        if legacy.exists() or legacy.is_symlink():
-            return legacy
-    return path
 
 
 def read_save_file(path):
@@ -51,7 +29,9 @@ def read_save_file(path):
     raw = path.read_bytes()
     if len(raw) > MAX_SAVE_BYTES:
         raise ValueError('存档文件超过当前版本上限')
-    return validate_save(raw)
+    value = decode_native_save(raw)
+    value['saved_at'] = datetime.fromtimestamp(path.stat().st_mtime, timezone.utc).isoformat()
+    return value
 
 class RuntimeHandler(SimpleHTTPRequestHandler):
     protocol_version = 'HTTP/1.1'
@@ -60,6 +40,13 @@ class RuntimeHandler(SimpleHTTPRequestHandler):
         raw = json.dumps(value, ensure_ascii=False).encode('utf-8')
         self.send_response(status)
         self.send_header('Content-Type', 'application/json; charset=utf-8')
+        self.send_header('Content-Length', str(len(raw)))
+        self.end_headers()
+        self.wfile.write(raw)
+
+    def binary_response(self, raw):
+        self.send_response(200)
+        self.send_header('Content-Type', 'application/octet-stream')
         self.send_header('Content-Length', str(len(raw)))
         self.end_headers()
         self.wfile.write(raw)
@@ -90,7 +77,7 @@ class RuntimeHandler(SimpleHTTPRequestHandler):
                 for key in SAVE_FILES:
                     row = {'slot': key, 'envelope': None, 'error': None}
                     try:
-                        row['envelope'] = read_save_file(existing_save_path(self.server.save_dir, key))
+                        row['envelope'] = read_save_file(self.server.save_dir / SAVE_FILES[key])
                     except FileNotFoundError:
                         pass
                     except (ValueError, UnicodeError):
@@ -104,7 +91,7 @@ class RuntimeHandler(SimpleHTTPRequestHandler):
             return self.json_response(404, {'error': '存档槽不存在'})
         try:
             with self.server.save_lock:
-                value = read_save_file(existing_save_path(self.server.save_dir, slot))
+                value = read_save_file(self.server.save_dir / SAVE_FILES[slot])
         except FileNotFoundError:
             return self.json_response(404, {'error': '此存档槽尚未保存进度'})
         except (ValueError, UnicodeError):
@@ -131,7 +118,7 @@ class RuntimeHandler(SimpleHTTPRequestHandler):
         try:
             if len(raw) != length:
                 raise ValueError('存档数据不完整')
-            validate_save(raw)
+            raw = encode_native_save(json.loads(raw))
         except (ValueError, UnicodeError) as error:
             return self.json_response(422, {'error': str(error)})
         temporary = None
@@ -139,7 +126,7 @@ class RuntimeHandler(SimpleHTTPRequestHandler):
             with self.server.save_lock:
                 self.server.save_dir.mkdir(parents=True, exist_ok=True)
                 path = self.server.save_dir / SAVE_FILES[slot]
-                existing = existing_save_path(self.server.save_dir, slot)
+                existing = path
                 if self.headers.get('If-None-Match') == '*' and (existing.exists() or existing.is_symlink()):
                     return self.json_response(412, {'error': '此存档槽已有文件，保留现有进度'})
                 expected = self.headers.get('If-Match')
@@ -164,6 +151,33 @@ class RuntimeHandler(SimpleHTTPRequestHandler):
             if temporary is not None:
                 temporary.unlink(missing_ok=True)
         self.json_response(200, {'slot': slot, 'path': f'remake/saves/{SAVE_FILES[slot]}'})
+
+    def do_POST(self):
+        self.close_connection = True
+        if not self.local_request():
+            return self.json_response(403, {'error': '存档接口仅供本地游戏访问'})
+        action = urlsplit(self.path).path
+        if action not in ('/api/saves/decode', '/api/saves/encode'):
+            return self.json_response(404, {'error': '存档操作不存在'})
+        try:
+            length = int(self.headers.get('Content-Length', '0'))
+        except ValueError:
+            length = 0
+        if self.headers.get('Transfer-Encoding') or not 0 < length <= MAX_SAVE_BYTES:
+            return self.json_response(413, {'error': '存档文件大小无效或超过当前版本上限'})
+        raw = self.rfile.read(length)
+        try:
+            if len(raw) != length:
+                raise ValueError('存档数据不完整')
+            if action == '/api/saves/decode':
+                value = decode_native_save(raw)
+            else:
+                value = encode_native_save(json.loads(raw))
+        except (ValueError, UnicodeError) as error:
+            return self.json_response(422, {'error': str(error)})
+        if action == '/api/saves/decode':
+            return self.json_response(200, value)
+        self.binary_response(value)
 
     def translate_path(self, path):
         decoded = unquote(urlsplit(path).path)

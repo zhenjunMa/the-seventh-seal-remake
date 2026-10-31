@@ -33,8 +33,7 @@ import {SaveMenuView} from "../save_menu_view.mjs";
 export function createBootController({state, actions, $, canvas, ctx}) {
   async function boot(){
     actions.busy('boot');
-    let legacyStorage;try{legacyStorage=localStorage;}catch{}
-    state.saveStorage=createSaveStorage({legacyStorage,legacyKey:state.saveKey});
+    state.saveStorage=createSaveStorage();
     state.catalog=await actions.json('data/catalog.json');if(state.catalog.schema!=='seventh-seal-runtime-catalog'||state.catalog.version!==1)throw new Error('运行清单版本不兼容');
     const registration=await actions.json(state.catalog.runtime_content??'data/runtime_content.json');
     validateContentRegistration(runtimeContent);

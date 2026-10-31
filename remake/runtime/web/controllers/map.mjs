@@ -1,6 +1,5 @@
 // map adapters. Persistent state belongs to the shared runtime context.
 import {MovementMap,mapActorPosition} from "../core/movement.mjs";
-import {createBattleSample} from "../combat_sample.mjs";
 import {planRouteExit} from "../core/route.mjs";
 import {initialEncounterState, previewMovement} from "../core/encounters.mjs";
 import {createPartyActors} from "../core/party_attributes.mjs";
@@ -22,9 +21,8 @@ export function createMapController({state, actions, $, canvas, ctx}) {
     const snapshot=state.world.snapshot();
     state.questProgress=state.storyRepository?.journal(snapshot)??[];
     let effective=[];state.battleUnavailable='';
-    const newParty=snapshot.source.kind==='native-new-game';
-    if(state.battleData)try{effective=newParty?createPartyActors(snapshot,state.partyCombat,{},state.itemData):createBattleSample(snapshot,state.battleData).actors;if(!effective.some(a=>a.side==='player'&&a.hp.current>0))state.battleUnavailable='队伍已经倒下，请载入进度。';}catch(error){state.battleUnavailable=error.message;}
-    $('battleOpen').disabled=state.scenes.phase!=='map'||Boolean(state.battleUnavailable)||newParty;$('battleOpen').title=newParty?'新游戏请在野外行走遇敌。':state.battleUnavailable;
+    if(state.partyCombat)try{effective=createPartyActors(snapshot,state.partyCombat,{},state.itemData);if(!effective.some(a=>a.side==='player'&&a.hp.current>0))state.battleUnavailable='队伍已经倒下，请载入进度。';}catch(error){state.battleUnavailable=error.message;}
+    $('battleOpen').disabled=true;$('battleOpen').title='请在野外行走遇敌。';
     state.mapVitals.clear();for(const actor of effective)state.mapVitals.set(actor.id,{hp:{...actor.hp},mp:{...actor.mp}});
     state.selectedRole=snapshot.leader_id;
     $('role').replaceChildren(...snapshot.party.map(actor=>{const option=document.createElement('option');option.value=actor.id;option.textContent=actor.name;return option;}));

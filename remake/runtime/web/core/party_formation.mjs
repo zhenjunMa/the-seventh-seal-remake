@@ -20,15 +20,10 @@ export function admitFormationMember(slots,party,roleId){
 }
 
 export function partyFormationSlots(world){
-  need(world?.source?.kind==='native-new-game'&&Array.isArray(world.party),'当前队列缺少新游戏来源');
   if('formation_slots' in world)return validateFormationSlots(world.formation_slots,world.party);
-  // CHR templates store both original actors at +2B3=0. They are not live
-  // admission records. Verify the initial role's source position, then replay
-  // the native initializer and first-empty admission for the current chapter.
-  const initial=world.source.role_definitions?.['001']?.header_raw_hex;
-  need(world.party.some(row=>row.id==='001')&&typeof initial==='string'&&/^(?:[0-9a-f]{2}){779}$/.test(initial),'初始队列角色来源缺失');
-  const bytes=Uint8Array.from(initial.match(/../g),n=>parseInt(n,16));need(new DataView(bytes.buffer).getInt32(0x2b3,true)===0,'初始角色队列位置与原来源不同');
-  let slots=['001',null,null,null];for(const role of world.party)if(role.id!=='001')slots=admitFormationMember(slots,world.party,role.id);
+  // Initialization defaults are stable under roster enumeration changes.
+  // Loaded games carry their actual native positions in formation_slots.
+  let slots=[null,null,null,null];for(const role of [...world.party].sort((a,b)=>a.id.localeCompare(b.id)))slots=admitFormationMember(slots,world.party,role.id);
   return validateFormationSlots(slots,world.party);
 }
 

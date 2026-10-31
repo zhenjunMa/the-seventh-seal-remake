@@ -1,5 +1,5 @@
-// Equipped instances are mutable world state. The original initial equipment
-// remains immutable provenance and supplies a fallback for legacy v1 saves.
+// Equipped instances are mutable world state. Resource defaults initialize
+// equipment only when a world has no explicit equipment state yet.
 import {configuredEquipmentHex} from './item_registry.mjs';
 import {allPartyRoles} from './party_roster.mjs';
 const copy = structuredClone;
@@ -21,11 +21,11 @@ export function withItemQuantity(item, quantity) {
   return {...copy(item), quantity, source_raw_hex:hex(b)};
 }
 
-export function validateItemInstance(item, definition) {
+export function validateItemInstance(item, definition, {equipped=false}={}) {
   need(definition && item.id === definition.id && item.name === definition.name, '道具定义或名称不一致');
   const b = bytes(item.source_raw_hex), v = new DataView(b.buffer);
   need(v.getUint32(0, true) === item.id, '道具编号与实例不一致');
-  need(Number.isInteger(item.quantity)&&item.quantity>=1&&item.quantity<=99&&v.getUint32(4,true)===item.quantity,'道具数量与原实例不一致');
+  need(Number.isInteger(item.quantity)&&item.quantity>=1&&item.quantity<=99&&(equipped||v.getUint32(4,true)===item.quantity),'道具数量与原实例不一致');
   need(/^(?:[0-9a-f]{2}){959}$/.test(definition.raw_hex), '道具定义记录无效');
   const d = Uint8Array.from(definition.raw_hex.match(/../g), h=>parseInt(h,16)), dv = new DataView(d.buffer);
   need(dv.getUint32(0,true) === item.id && b[9] === d[0x176], '道具实例与来源不同');
@@ -50,7 +50,7 @@ export function validateEquipmentState(state, party) {
         && !slots.has(row.slot_id) && row.quantity === 1 && Number.isInteger(row.id) && row.id > 0
         && typeof row.name === 'string' && row.name.length <= 150, '装备实例或部位重复');
       const v = new DataView(bytes(row.source_raw_hex).buffer);
-      need(v.getUint32(0,true) === row.id && v.getUint32(4,true) === 1, '装备原始编号或数量不一致');
+      need(v.getUint32(0,true) === row.id, '装备原始编号不一致');
       seen.add(row.instance_id); slots.add(row.slot_id);
     }
   }
@@ -58,21 +58,11 @@ export function validateEquipmentState(state, party) {
 }
 
 export function equipmentRows(world, attributes, itemData, roleId) {
-  const expected = attributes.initial_equipment.filter(row=>row.role_id===roleId);
-  const retained = world.source.initial_equipment?.filter(row=>row.role_id===roleId);
-  need(expected.length === 1 && Array.isArray(retained) && retained.length === expected.length, '新游戏初始装备来源缺失');
-  for (let n=0;n<expected.length;n++) {
-    const a=retained[n], b=expected[n];
-    for (const k of ['role_id','group_index','entry_index','item_id','source_raw_hex','instance_sha256','native_storage_address'])
-      need(a[k]===b[k], '当前装备实例与初始来源不同，换装尚未接入');
-    need(a.definition_source?.path===b.definition_source.path && a.definition_source.sha256===b.definition_source.sha256
-      && a.definition_source.record_offset===b.definition_source.record_offset, '初始装备定义来源不同');
-  }
   if (world.equipment?.roles?.[roleId]) {
     need(itemData?.schema === 'seventh-seal-chapter-items', '当前装备定义缺失');
     return world.equipment.roles[roleId].map(row=> {
       const definition = itemData.definitions[String(row.id)];
-      validateItemInstance(row, definition);
+      validateItemInstance(row, definition, {equipped:true});
       need(definition.slot_id === row.slot_id, '装备部位与原定义不同');
       const mask = definition.allowed_role_mask_raw_13e;
       need(mask === 0 || (mask & (1 << (Number(roleId)-1))) !== 0, '角色不能装备此物品');
@@ -81,11 +71,11 @@ export function equipmentRows(world, attributes, itemData, roleId) {
         group_index:definition.group_index,entry_index:0};
     });
   }
-  return retained.map(row=>({...copy(row),effective_raw_hex:configuredEquipmentHex(row.source_raw_hex,itemData?.definitions[String(row.item_id)])}));
+  return attributes.initial_equipment.filter(row=>row.role_id===roleId)
+    .map(row=>({...copy(row),effective_raw_hex:configuredEquipmentHex(row.source_raw_hex,itemData?.definitions[String(row.item_id)])}));
 }
 
 export function migrateEquipment(draft, attributes, itemData) {
-  need(draft.source.kind === 'native-new-game', '当前样本不支持换装');
   draft.equipment ??= {version:1,roles:{}};
   for (const role of draft.party) {
     if (draft.equipment.roles[role.id]) continue;

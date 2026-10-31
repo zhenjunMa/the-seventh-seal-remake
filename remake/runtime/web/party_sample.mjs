@@ -1,4 +1,4 @@
-// New-game party commands use their CHR records, independent of the retained
+// Current party commands use their CHR records, independent of the retained
 // historical battle fixture. Every implemented role command uses the same
 // owner/source-bound numeric configuration registry.
 import {createPartyActors} from './core/party_attributes.mjs';
@@ -24,7 +24,6 @@ export function createPartySample(world,attributes,commands,configured=null,item
     if(!battleSkillEligibility(world,configured?.skill_registry?.[id]??original).available)continue;
     need(original.id===id&&(raw[0x32]&15)!==0&&(raw[0x25]===0||['native-revival','native-support'].includes(original.battle_handler)),
       '队伍命令未学会或目标规则尚未接入');
-    need(world.source.source_hashes?.[original.source.path]===commands.source_hashes[original.source.path], '队伍技能源指纹不同');
     let skill=copy(original);
     if(configured){
       const overlay=configured.skill_registry?.[id],cfg=overlay?.configuration;

@@ -73,8 +73,8 @@ export function createInputController({state, actions, $, canvas, ctx}) {
     });
     $('save').onclick=actions.guarded(()=>actions.openSaveMenu({mode:'save'}));
     $('load').onclick=actions.guarded(()=>actions.openSaveMenu({mode:'load'}));
-    $('exportSave').onclick=actions.guarded(async()=>actions.download(await actions.saveEnvelope(),'seventh-seal-runtime-save.json'));
-    $('importSave').onclick=()=>$('saveFile').click();$('saveFile').onchange=actions.guarded(async()=>{const file=$('saveFile').files[0];$('saveFile').value='';if(!file)return;if(file.size>8_000_000)throw new Error('存档文件超过当前版本上限');await actions.restore(JSON.parse(await file.text()));});
+    $('exportSave').onclick=actions.guarded(async()=>actions.download(await state.saveStorage.encodeFile(await actions.saveEnvelope()),'SaveGame0.Dat'));
+    $('importSave').onclick=()=>$('saveFile').click();$('saveFile').onchange=actions.guarded(async()=>{const file=$('saveFile').files[0];$('saveFile').value='';if(!file)return;if(file.size>8_000_000)throw new Error('存档文件超过当前版本上限');await actions.restore(await state.saveStorage.decodeFile(file));});
     $('exportLog').onclick=actions.exportRuntimeLog;
     $('layerOpen').onclick=actions.guarded(actions.showLayers);$('layerClose').onclick=()=>{$('layerPanel').hidden=true;state.scenes.setPhase('map');canvas.focus();};
     $('layerPrevious').onclick=actions.guarded(async()=>{state.layerIndex=Math.max(0,state.layerIndex-1);await actions.drawLayer();});$('layerNext').onclick=actions.guarded(async()=>{state.layerIndex=Math.min(state.layerData.frames.length-1,state.layerIndex+1);await actions.drawLayer();});$('mainLayer').onchange=actions.guarded(actions.drawLayer);$('intrinsicLayer').onchange=actions.guarded(actions.drawLayer);
@@ -90,7 +90,7 @@ export function createInputController({state, actions, $, canvas, ctx}) {
       if(state.worldMapView?.key(key,event.repeat)){event.preventDefault();return;}
       if(state.menuContext){const kind=key==='Escape'?'cancel':[' ','Enter'].includes(key)?'confirm':key==='Tab'?'ignore':'select';const handle=()=>{if(key==='Escape'){if(!event.repeat&&state.operationMenu.escape())actions.closePartyMenu();return true;}return state.operationMenu.key(key,event.repeat);};const handled=state.menuFeedback?state.menuFeedback.run(kind,handle,{repeat:event.repeat}):handle();if(handled)event.preventDefault();return;}
       if(state.scenes?.phase.startsWith('battle-')){if(actions.battleKey(key,event.repeat))event.preventDefault();return;}
-      if(state.scenes?.phase==='map'&&state.world.value.source.kind==='native-new-game'&&key==='Tab'&&!event.shiftKey){event.preventDefault();if(!event.repeat)actions.openPartyMenu();return;}
+      if(state.scenes?.phase==='map'&&key==='Tab'&&!event.shiftKey){event.preventDefault();if(!event.repeat)actions.openPartyMenu();return;}
       if(['INPUT','SELECT','TEXTAREA','BUTTON'].includes(document.activeElement?.tagName))return;
       if(state.scenes?.phase!=='map')return;
       if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','w','a','s','d','Shift',' '].includes(key)){event.preventDefault();if(key===' '){if(!event.repeat)actions.interact();}else if(key==='Shift'){if(!event.repeat)state.running=!state.running;}else state.keys.add(key);}

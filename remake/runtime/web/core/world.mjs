@@ -38,7 +38,7 @@ export function validateWorldMapState(value) {
 
 export function validateWorld(value, mapIds = null) {
   requireValue(object(value) && value.schema === WORLD_SCHEMA && value.version === WORLD_VERSION, '存档格式或版本不兼容');
-  const allowed = new Set(['schema','version','revision','location','leader_id','party','reserve_party','inventory','flags','event_records','object_states','source','world_map','encounters','money','reward_records','opening','equipment','skill_shortcuts','technique_bindings','technique_combinations','formation_slots','crystal_sockets','native_pending_skill_unlocks','recipe_unlock_indices','native_map_sort_code','map_npc_state']);
+  const allowed = new Set(['schema','version','revision','location','leader_id','party','reserve_party','inventory','flags','event_records','object_states','source','world_map','encounters','money','reward_records','opening','equipment','skill_shortcuts','technique_bindings','technique_combinations','formation_slots','crystal_sockets','native_pending_skill_unlocks','recipe_unlock_indices','native_map_sort_code','map_npc_state','native_save']);
   requireValue(Object.keys(value).every(key => allowed.has(key)), '存档包含未支持的世界字段');
   validateNativeStoryMutationState(value);
   if('native_map_sort_code' in value)requireValue(Number.isInteger(value.native_map_sort_code)&&value.native_map_sort_code>=0&&value.native_map_sort_code<=8,'原地图入口排序无效');

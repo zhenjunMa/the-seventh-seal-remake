@@ -1341,6 +1341,12 @@
       "role": "fixture-or-observation-preparation",
       "build_targets": [],
       "imported_by": []
+    },
+    {
+      "path": "migrate_native_saves.py",
+      "role": "one-time-save-migration",
+      "build_targets": [],
+      "imported_by": []
     }
   ],
   "notes": [
