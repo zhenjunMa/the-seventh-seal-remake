@@ -12,6 +12,8 @@ import {validateChapterAnimation} from './chapter_animation.mjs';
 import {validateBattleViewMetadata} from '../battle_view.mjs';
 import {nativeKeyedChest,nativeScriptedChest,nativeChestAnimation} from './native_map_chests.mjs';
 import {supplementalPartyCommands} from './party_skill_corrections.mjs';
+import {compileNativeTriggerFlow} from './story_flow_compiler.mjs';
+import {nativeAnmObjectTarget} from './native_anm_commands.mjs';
 const need=(ok,message)=>{if(!ok)throw new Error(`内容依赖：${message}`);};
 
 export function validateEnemyReactionClosure(ai,reactions,content){
@@ -44,7 +46,13 @@ export function validateStoryBindings(content,story,resources,{registeredMaps=co
     for(const slot of binding.npcs??[])need(resources.npcs_by_map[id]?.some(row=>row.slot_zero_based===slot)&&table.index_nonzero.some(row=>row.slot===slot),`${id} NPC 槽 ${slot} 缺少原对白入口`);
     for(const triggerId of binding.triggers){
       const trigger=resources.trigger_regions[id]?.find(row=>row.id===triggerId);
-      need(trigger&&table.records.some(record=>record.id===trigger.field_26_raw),`${id} 触发器 ${triggerId} 缺少对白入口`);
+      const descriptor=table.descriptors.find(row=>row.id===triggerId);
+      need(trigger&&descriptor&&trigger.state_raw===descriptor.state_raw,`${id} 触发器 ${triggerId} 缺少原描述符`);
+      if(descriptor.state_raw===1){
+        const flow=compileNativeTriggerFlow(table,descriptor),name=flow.commands[0].program_id;
+        need(trigger.filename_raw===descriptor.filename_raw&&content.programs[name]&&story.programs[name],`${id} 触发器 ${triggerId} 缺少演出入口`);
+      }else need(descriptor.state_raw===2&&trigger.field_26_raw===descriptor.field_26_raw
+        &&table.records.some(record=>record.id===trigger.field_26_raw),`${id} 触发器 ${triggerId} 缺少对白入口`);
     }
     for(const row of binding.objects){
       const object=table.objects.find(object=>object.index===row.index),raw=object?.raw_hex;
@@ -53,13 +61,16 @@ export function validateStoryBindings(content,story,resources,{registeredMaps=co
       if(row.handler==='keyed-chest')nativeKeyedChest(object);
       else{
         if(row.handler==='stationary-chest')nativeScriptedChest(object);
-        else need(row.handler==='tlk-object'&&b[0xcf]===1&&b[0x109]===0,`${id} 物件处理器与原记录不符`);
+        else if(row.handler==='scripted-switch'){
+          need(b[0xcf]===9&&recordId>0,`${id} 机关入口与原记录不符`);
+          nativeAnmObjectTarget({u32_plus5:0,u32_plus25:row.index+1,byte_plus29:0},id,story);
+        }else need(row.handler==='tlk-object'&&b[0xcf]===1&&b[0x109]===0,`${id} 物件处理器与原记录不符`);
         need(table.records.some(record=>record.id===recordId),`${id} 物件剧情入口缺失`);
       }
       const animation=resources.object_animations[id]?.find(item=>item.object_index_zero_based===row.index);
       const source=resources.interactive_objects[id]?.find(item=>item.object_index_zero_based===row.index)?.source;
       need(animation?.frames.length&&source?.raw_hex===raw&&source.sha256===object.source.sha256,`${id} 物件 ${row.index} 缺少动作或来源不一致`);
-      if(row.handler!=='tlk-object')nativeChestAnimation(animation,b[0xcf]);
+      if(['stationary-chest','keyed-chest'].includes(row.handler))nativeChestAnimation(animation,b[0xcf]);
     }
     for(const rest of binding.rests){
       const descriptor=table.descriptors.find(row=>row.id===rest.descriptor_id),record=table.records.find(row=>row.id===rest.record_id);

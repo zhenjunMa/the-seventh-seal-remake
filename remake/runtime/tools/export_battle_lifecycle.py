@@ -48,6 +48,7 @@ NATIVE = {
  'appearance7':('remake/runtime/evidence/jade_lake_battle_20261028/appearance_native.json','ev_c4e9cb6e69308d406fe7e93580d29694082c835e56d2030a38f2959ea1d9eff6'),
  'appearance3':('remake/runtime/evidence/inner_white_forest_20261030/appearance_native.json','ev_a618050f2c654f231636d0177a671f4804a16249ba66cea25a3a77578097176a'),
  'appearance3_init':('remake/runtime/evidence/inner_white_forest_20261030/appearance_native.json','ev_e04841b4143379cbe7006266c7ef31c28ff09b79b09367e0cf49af9642151f2b'),
+ 'appearance2':('remake/runtime/evidence/fairy_forest_temple_assessment_20261031/appearance2_native.json','ev_307536a38945e5375b8ab1c0ea0dc56959b696bb033065aa1622ec9f6f7c0b3a'),
 }
 RENDERER_BUNDLE=RUNTIME/'evidence/battle_lifecycle_renderer_native_20261015.json'
 RENDERER_FINDINGS=EVIDENCE/'renderer_static_findings.json'
@@ -74,6 +75,14 @@ def renderer_rules():
             sprite_progression_gate='51A4F0 pauses subsequent sprite advancement while appearance or death effect mode is nonzero.',
             sprite_gate_evidence=NATIVE['sprite_effect_gate'][1],
             mode1=findings['appearance_mode1'],mode5=findings['appearance_mode5'],
+            mode2=dict(callee='0x550a28',initializer='0x550975',clock_interval_ms=60,
+                life_rule='per pixel rand modulo30 plus5; age increments once per render',
+                column_rule='speed=(rand&6)+4, initial vertical offset=-40-(rand&0x6f)',
+                target_y_rule='fresh LocalAlloc zeroed +0C; falling pixels clamp after crossing it',
+                completion='source per-pixel active flag with elapsed>=30 hard ceiling; elapsed0 reinitializes',
+                visual_rng='local deterministic visual stream; never draws combat RNG',
+                evidence=[NATIVE['appearance2'][1],NATIVE['appearance3_init'][1]],
+                limit='Shared source-particle rasterizer uses additive Canvas color composition and fixed60Hz sampling; native RGB16 background subtraction, offscreen early returns and global render cadence are not exact. Headless tests use the source hard ceiling.'),
             mode3=dict(callee='0x550f12',initializer='0x550975',clock_interval_ms=60,
                 life_rule='per pixel rand modulo30 plus5; age increments once per render',
                 column_rule='even columns speed=(rand&7)+4, offset=-40-(rand&0x6f); odd columns negate speed and offset',
@@ -116,9 +125,22 @@ def save_json(path,value):
 def save_image(path,image):
     path.parent.mkdir(parents=True,exist_ok=True)
     save_png(image,path)
-    with Image.open(path) as stored:
-        if stored.convert('RGBA').tobytes()!=image.convert('RGBA').tobytes():
-            raise ValueError('Lifecycle PNG roundtrip differs')
+    previous_limit=Image.MAX_IMAGE_PIXELS
+    try:
+        # This file was just written from this exact in-memory image. Keep
+        # its known dimensions as the bound while verifying the PNG decode.
+        Image.MAX_IMAGE_PIXELS=max(previous_limit or 0,image.width*image.height)
+        with Image.open(path) as stored:
+            if stored.size!=image.size:
+                raise ValueError('Lifecycle PNG roundtrip dimensions differ')
+            # Large source shadow grids need not allocate two additional
+            # full-atlas RGBA byte strings merely to compare their pixels.
+            for top in range(0,image.height,64):
+                box=(0,top,image.width,min(top+64,image.height))
+                if stored.crop(box).convert('RGBA').tobytes()!=image.crop(box).convert('RGBA').tobytes():
+                    raise ValueError('Lifecycle PNG roundtrip differs')
+    finally:
+        Image.MAX_IMAGE_PIXELS=previous_limit
     return dict(path=path.relative_to(WEB).as_posix(),sha256=sha(path.read_bytes()),width=image.width,height=image.height)
 
 

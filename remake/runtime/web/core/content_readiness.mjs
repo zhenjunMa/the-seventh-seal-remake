@@ -10,6 +10,7 @@ import {nativeScriptedBattle} from './scripted_battle.mjs';
 import {nativeKeyedChest,nativeChestAnimation} from './native_map_chests.mjs';
 import {nativeCombinationConditions} from './native_story_combinations.mjs';
 import {readNativeService} from './native_economy.mjs';
+import {compileNativeTriggerFlow} from './story_flow_compiler.mjs';
 const need=(ok,message)=>{if(!ok)throw new Error(message);};
 const flagIndex=n=>Number.isInteger(n)&&n>=0&&n<2000;
 
@@ -36,7 +37,8 @@ export function inspectContentReadiness(content,story,resources){
     if(binding.setup_record)roots.push({kind:'setup',id:binding.setup_record});
     for(const id of binding.triggers){
       const row=resources.trigger_regions[mapId]?.find(row=>row.id===id);
-      roots.push({kind:'trigger',id:row?.field_26_raw,label:id});
+      roots.push(row?.state_raw===1?{kind:'dat-trigger',id,label:id,descriptor:table?.descriptors.find(row=>row.id===id)}:
+        {kind:'trigger',id:row?.field_26_raw,label:id});
     }
     for(const row of binding.objects)roots.push(row.handler==='keyed-chest'
       ?{kind:'direct-object',id:row.index,label:row.index}
@@ -50,11 +52,23 @@ export function inspectContentReadiness(content,story,resources){
     }
     for(const root of roots){
       const diagnostic=(recordId,message)=>({map_id:mapId,entrance:root.kind,entrance_id:root.label??root.id,record_id:recordId,message});
-      const seen=new Set(),programs=new Set(),queue=[{mapId,id:root.id,route:root.kind==='route',explicit:root.explicit}];
+      const seen=new Set(),programs=new Set(),queue=root.kind==='dat-trigger'?[]:[{mapId,id:root.id,route:root.kind==='route',explicit:root.explicit}];
       const target=root.advisory?warnings:errors;
       let opensWorldMap=false;
       let activeMap=mapId;
       const add=(id,options={})=>{if(id)queue.push({mapId:activeMap,id,explicit:root.explicit,...options});};
+      const addProgram=(name,callerMap)=>{
+        const program=story.programs[name];need(program&&content.programs[name],`演出 ${name} 尚未登记`);
+        validateChapterAnimation(program,content);
+        if(root.kind==='setup')validateChapterSetupAnimation(program,callerMap,content);
+        if(programs.has(name))return;
+        programs.add(name);let controlMap=callerMap;
+        for(const command of program.commands){
+          if(command.opcode===10&&command.u32_plus5===0)controlMap=command.filename.replace(/\.dat$/i,'').toUpperCase();
+          if(command.opcode===12)nativeAnmObjectTarget(command,controlMap,story);
+          if(command.opcode===14)add(command.u32_plus5,{mapId:controlMap});
+        }
+      };
       if(root.kind==='direct-object'){
         try{
           const object=table?.objects.find(row=>row.index===root.id),chest=nativeKeyedChest(object);
@@ -75,6 +89,7 @@ export function inspectContentReadiness(content,story,resources){
         if(root.kind==='entry')need(table.header_entry_tlk_raw===root.id,'进入剧情与 DAT +0x13A 不同');
         if(root.kind==='setup')need(table.header_setup_tlk_raw===root.id,'加载布置与 DAT +0x8A 不同');
         if(root.kind==='route')chapterRouteExits(mapId,story,resources,content);
+        if(root.kind==='dat-trigger')addProgram(compileNativeTriggerFlow(table,root.descriptor).commands[0].program_id,mapId);
       }catch(error){target.push(diagnostic(root.id,error.message));continue;}
       while(queue.length){
         const item=queue.shift(),key=`${item.mapId}:${item.id}:${Boolean(item.route)}:${Boolean(item.falseOnly)}`;
@@ -108,8 +123,11 @@ export function inspectContentReadiness(content,story,resources){
             case 1:{
               need(record.region_byte_raw===0&&flagIndex(record.mutation_index)&&Number.isInteger(record.mutation_bit)
                 &&record.mutation_bit>=0&&record.mutation_bit<=1000,'物件状态变更参数尚未接入');
-              if(record.mutation_bit&&(record.mutation_index===0||record.mutation_index===current.map_flag_index))
-                need(content.maps[item.mapId].objects.some(row=>row.index===record.mutation_bit-1&&row.handler==='stationary-chest'),'物件状态变更处理器尚未接入');
+              if(record.mutation_bit&&(record.mutation_index===0||record.mutation_index===current.map_flag_index)){
+                const object=current.objects.find(row=>row.index===record.mutation_bit-1);
+                if([2,9].includes(object?.behavior_raw_cf))nativeAnmObjectTarget({u32_plus5:0,u32_plus25:record.mutation_bit,byte_plus29:0},current.id,story);
+                else need(content.maps[item.mapId].objects.some(row=>row.index===record.mutation_bit-1&&row.handler==='stationary-chest'),'物件状态变更处理器尚未接入');
+              }
               break;
             }
             case 2:
@@ -145,20 +163,7 @@ export function inspectContentReadiness(content,story,resources){
               for(const choice of rest?chapterRestChoices(record,rest):chapterChoices(record))add(choice.recordId);
             }else add(record.next);
           }else if(record.kind===1){
-            const name=record.text_raw.replace(/\.anm$/i,'').toLowerCase(),program=story.programs[name];
-            need(program&&content.programs[name],`演出 ${name} 尚未登记`);
-            validateChapterAnimation(program,content);
-            if(root.kind==='setup')validateChapterSetupAnimation(program,item.mapId,content);
-            if(!programs.has(name)){
-              programs.add(name);
-              let controlMap=item.mapId;
-              for(const command of program.commands){
-                if(command.opcode===10&&command.u32_plus5===0)controlMap=command.filename.replace(/\.dat$/i,'').toUpperCase();
-                if(command.opcode===12)nativeAnmObjectTarget(command,controlMap,story);
-                if(command.opcode===14)add(command.u32_plus5,{mapId:controlMap});
-              }
-            }
-            add(record.next);
+            addProgram(record.text_raw.replace(/\.anm$/i,'').toLowerCase(),item.mapId);
           }else if(record.kind===2){
             need(['trigger','npc','object'].includes(root.kind)&&item.mapId===mapId,'地图跳转需要原地形或主动交互上下文');
             const destination=nativeMapTransfer(current,record,root.kind==='npc'?{npcSlot:root.label}:

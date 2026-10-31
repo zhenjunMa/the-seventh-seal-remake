@@ -22,6 +22,9 @@ import {resolveAction,applyNativeDamage} from '../web/core/combat_rules.mjs';
 import {partyResourcesForWorld,consumePartyMp} from '../web/core/party_attributes.mjs';
 import {deriveRuntimeConfiguration,compileRuntimeConfiguration} from '../web/core/runtime_config.mjs';
 import {nativeScriptedBattle,beginScriptedBattle,commitScriptedBattle} from '../web/core/scripted_battle.mjs';
+import {directSequence,compileNativeSequence} from '../web/core/skill_sequence.mjs';
+import {nativeLoadedSkillCodes} from '../web/core/native_skill_loading.mjs';
+import {selectNativeSkills} from '../web/core/forest_ai.mjs';
 const copy=structuredClone,web=new URL('../web/',import.meta.url),read=async name=>JSON.parse(await readFile(new URL(`data/${name}.json`,web),'utf8'));
 const [seed,story,attributes,commands,forest,scheduler,ai,rewards,reactions,status,items,combat]=await Promise.all([
  'opening_seed','chapter_story','party_combat','party_skills','forest_combat','battle_scheduler','forest_ai','party_rewards','party_reactions','forest_status','items','combat_sample'].map(read));
@@ -36,6 +39,43 @@ async function loadAsset(asset){
  assert.equal(width,asset.width);assert.equal(height,asset.height);
  const value={image:{width,height,path:asset.path},sha256:asset.sha256};assets.set(asset.path,value);return value;
 }
+test('all65 learned forest and temple skills compile from the configured production battle sample, including direct visibility and camera controls',async()=>{
+ const meta=await read('party_battle_view'),party=createPartySample(seed,attributes,commands,configured,configured.items);
+ let checked=0;
+ for(const id of ['016','017','018','031A','031A1','031A2','031B','031B1','031B2','031C','033']){
+  // A capability fixture uses the production skill-test group contract; it
+  // does not assert a newly invented natural encounter containing this role.
+  const source=assembleForestSample(party,configured.forest,{kind:'skill-test',map_id:null,members:[{id}]},
+   {...configured.scheduler,idle_skills:{...configured.scheduler.idle_skills,...commands.idle_skills}},configured.ai,configured.rewards,reactions,status);
+  const battle=new BattleController({world:new WorldStore(copy(seed)),id:()=>`admission-${id}`,now:()=>0,resolveAction,applyDamage:applyNativeDamage,
+   playSequence:async()=>{throw Error('capability initialization must not execute combat');}});
+  battle.start({...source,rng:()=>0});
+  const role=battle.nativeAiData.roles[id],actor=battle.actor('enemy-0'),codes=nativeLoadedSkillCodes(role.skills);
+  assert.deepEqual(role.learned_indices.filter(index=>codes[index]!==0),[],`${id} has no source mode0 combination candidates`);
+  const selected=selectNativeSkills({actor,role,rng:()=>0});assert.equal(selected.kind,'single','even a successful combination gate falls back to a source single');
+  for(const index of role.learned_indices){
+   const skill=battle.skills[battle.enemySkillTables[actor.id][index]],plan=directSequence(skill);
+   assert.equal(skill.battle_handler,configured.ai.roles[id].skills[index].battle_handler);
+   assert.deepEqual(plan.records.map(row=>row.raw_hex),ai.roles[id].skills[index].actions.map(row=>row.raw_hex));
+   const compiled=compileNativeSequence(meta,id,plan);assert.ok(compiled.steps.length,`${id}:${index}`);checked++;
+   if(id==='031B'&&[12,14,16].includes(index)||id==='031B2'&&[18,20,22].includes(index)){
+    assert.deepEqual(compiled.steps.filter(row=>row.visibility&&!row.visibility_end).map(row=>[row.command_raw,row.control.mode_raw,row.visibility.complete_ticks]),
+     [[8,9,39],[7,1,7],[8,9,39],[7,1,7]],`${id}:${index} source disappear/appear controls`);
+    if((id==='031B'&&index===16)||(id==='031B2'&&index===22))assert.equal(compiled.steps.filter(row=>row.command_raw===1&&row.control.mode_raw===1).length,1);
+   }
+   if(id==='031B2'&&index===20){
+    const view=new BattleView({canvas:{getContext:()=>({})}}),contacts=[];
+    Object.assign(view,{ready:true,meta,layers:{role_id:id,frames:[]}});view.setRoster(battle.state.actors,battle.skills);
+    const playing=view.playSequence({actor_id:actor.id,target_id:battle.players()[0].id,skill_id:skill.id,plan,action_id:'temple-direct-visibility'},
+     {onRecord(){},onContact:step=>{contacts.push(step.contact_key);return {hit:true,damage:0,remainingHp:100};}});
+    view._advance(0);view._advance(100000);const result=await playing;
+    assert.equal(result.completed,true);assert.equal(view.run,null);assert.equal(contacts.length,compiled.steps.filter(row=>row.event).length);
+    assert.equal(new Set(contacts).size,contacts.length);
+   }
+  }
+ }
+ assert.equal(checked,65);
+});
 test('appearance3 source callback and column motion match original550975/550F12 instruction execution',async()=>{
   const proof=JSON.parse(await readFile(new URL('../evidence/inner_white_forest_20261030/appearance_native.json',import.meta.url)));
   const functions=Object.fromEntries(proof.records.map(record=>[record.parameters.procedure,record.normalized_result.assembly]));

@@ -58,7 +58,9 @@ function compareTick(a,threshold,now){
   report.case_counts.tick++;return result;
 }
 test('all eight original blocks and every retained instruction match immutable sources',async()=>{
-  validateForestStatusData(data);assert.equal(Object.values(data.skills).filter(s=>s.effect_id_raw===43).length,1);
+  validateForestStatusData(data);
+  const baseline=['001:21','001:22','011:14','011:15','012:14','012:15','013:15','013:16'];
+  assert.equal(baseline.map(key=>data.skills[key]).filter(skill=>skill.effect_id_raw===43).length,1);
   assert.ok(Object.isFrozen(data)&&Object.isFrozen(data.skills)&&Object.isFrozen(data.skills['012:14'])&&Object.isFrozen(data.aggregation));
   const changed=clone(data);changed.skills['012:14'].effect_id_raw=0;assert.throws(()=>validateForestStatusData(changed),/mismatch/);
   for(const s of Object.values(data.skills)){const original=await readFile(new URL('../../../'+s.source.path,import.meta.url));assert.equal(sha(original),s.source.sha256);
@@ -85,6 +87,32 @@ test('duplicate id/mode returns0 before RNG and preserves duration and timestamp
   let a=compareApply(actor(),'012:14',[0]).result.actor;a=compareTick(a,500,80).actor;
   const {result}=compareApply(a,'012:14',[],12345);assert.equal(result.reason,'duplicate-id-and-mode');assert.deepEqual(result.actor,a);
   report.checks.push('Repeated contact cannot refresh or stack status43 and does not draw application RNG');
+});
+test('actual016 whip and012 snow retain different C6 payloads under the same043 resource and native ID deduplication',async()=>{
+  const skill=data.skills['016:14'],original=await readFile(new URL('../../../Fight_Role/016.CHR',import.meta.url)),raw=Buffer.from(skill.effect_raw_hex,'hex');
+  assert.equal(sha(original),skill.source.sha256);
+  assert.equal(original.subarray(skill.source.block_offset,skill.source.block_offset+0xc6).toString('hex'),skill.effect_raw_hex);
+  assert.notEqual(skill.effect_raw_hex,data.skills['012:14'].effect_raw_hex);
+  assert.equal(raw[1],43);assert.equal(raw.readInt32LE(2),15);assert.equal(raw[0x11],20);assert.equal(raw.readInt32LE(0x8f),300);
+  for(const roll of [0,19,20,21,99]){
+    const {result}=compareApply(actor(),'016:14',[roll]);assert.equal(result.applied,roll<=20);
+    if(result.applied)for(const offset of [0x8b,0x8f,0x93,0x97,0x9b,0x9f]){
+      const field=data.aggregation.find(row=>row.block_offset===offset);assert.equal(result.actor.status_by_address[field.address],raw.readInt32LE(offset));
+    }
+  }
+  for(const [first,second,duration,addition]of [['016:14','012:14',15,300],['012:14','016:14',10,200]]){
+    let a=compareApply(actor(),first,[0]).result.actor;
+    const duplicate=compareApply(a,second,[]).result;assert.equal(duplicate.reason,'duplicate-id-and-mode');assert.deepEqual(duplicate.actor,a);
+    for(let tick=1;tick<=duration;tick++){
+      a=compareTick(a,500,tick*80).actor;
+      assert.equal(a.status_by_address['0x0521f5bd'],tick===duration?0:addition);
+    }
+    assert.ok(a.native_status_slots.every(slot=>slot.raw_hex===ZERO));
+  }
+  const changed=clone(data);changed.skills['016:14'].effect_raw_hex=data.skills['012:14'].effect_raw_hex;
+  assert.throws(()=>validateForestStatusData(changed),/Original effect block mismatch/);
+  const clock=clone(data);clock.effects['43'].interval_ms++;
+  assert.throws(()=>validateForestStatusData(clock),/Status43 resource descriptor differs/);
 });
 test('80ms exact boundary, one tick after long stall and discarded threshold spill match native instructions',()=>{
   let a=compareApply(actor(),'012:14',[0]).result.actor;

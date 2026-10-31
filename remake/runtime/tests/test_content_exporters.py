@@ -23,6 +23,31 @@ from source.map_identity import is_native_map_id, native_map_id_from_filename
 
 
 class ContentExporterTests(unittest.TestCase):
+    def test_lifecycle_png_roundtrip_bounds_only_the_generated_size_and_restores_pillow_limit(self):
+        from PIL import Image
+        import hashlib
+        original=Image.new('RGBA',(8,7),(19,23,31,255))
+        with tempfile.TemporaryDirectory() as temporary:
+            root=Path(temporary)
+            with patch.object(lifecycle,'WEB',root),patch.object(Image,'MAX_IMAGE_PIXELS',4):
+                path=root/'shadow.png'
+                record=lifecycle.save_image(path,original)
+                self.assertEqual((record['width'],record['height']),(8,7))
+                self.assertEqual(record['sha256'],hashlib.sha256(path.read_bytes()).hexdigest())
+                self.assertEqual(Image.MAX_IMAGE_PIXELS,4)
+                with self.assertRaises(Image.DecompressionBombError):
+                    Image.open(path)
+                different=Image.new('RGBA',(8,7),(19,23,32,255))
+                with patch.object(lifecycle,'save_png',side_effect=lambda _,target:different.save(target)):
+                    with self.assertRaisesRegex(ValueError,'roundtrip differs'):
+                        lifecycle.save_image(path,original)
+                self.assertEqual(Image.MAX_IMAGE_PIXELS,4)
+                resized=Image.new('RGBA',(7,8),(19,23,31,255))
+                with patch.object(lifecycle,'save_png',side_effect=lambda _,target:resized.save(target)):
+                    with self.assertRaisesRegex(ValueError,'dimensions differ'):
+                        lifecycle.save_image(path,original)
+                self.assertEqual(Image.MAX_IMAGE_PIXELS,4)
+
     def test_stage02_keeps_both_original_poders_placements(self):
         stage = stages.prepare_stage('stage02', content.stage_exports()['stage02'])
         rows = stage['rows']
@@ -345,6 +370,34 @@ class ContentExporterTests(unittest.TestCase):
             fixed = bytes.fromhex(skill['fixed_raw_hex'])
             self.assertEqual(fixed[0x25], 1)
             self.assertEqual(struct.unpack_from('<ii', fixed, 0xab), (recovery, recovery))
+
+    def test_temple_enemies_retain_every_learned_action_without_fabricating_contacts(self):
+        expected = {'018': [8, 9, 10, 11, 12, 13, 14], '031C': [8, 9, 10, 11, 12],
+                    '033': [8, 9, 10, 11, 12, 13, 14, 15]}
+        for ident, indices in expected.items():
+            character, _, ai, view, _, _, _ = enemies.prepare_role(ident, enemies.read('forest_status'))
+            self.assertEqual(ai['learned_indices'], indices)
+            views = {v['chr_skill_index']: v for v in [view['skill'], *view['alternate_skills']]}
+            for index in indices:
+                source = character.skills[index]
+                self.assertEqual([a['raw_hex'] for a in ai['skills'][index]['actions']],
+                                 [a['raw_hex'] for a in source['actions']])
+                self.assertEqual(len(views[index]['segments']) + len(views[index].get('command_effects', []))
+                                 + len(views[index]['terminal_commands']), len(source['actions']))
+            if ident == '018':
+                command = next(c for c in views[14]['command_effects'] if c['command_raw'] == 10)
+                self.assertEqual(bytes.fromhex(command['raw_hex'])[0x47], 1)
+            elif ident == '031C':
+                self.assertEqual(ai['skills'][9]['battle_handler'], 'direct')
+                self.assertNotIn('effect_context', ai['skills'][9])
+                self.assertIsNone(views[9]['command_effects'][0]['event'])
+                self.assertTrue(any(segment['event'] for segment in views[9]['segments']))
+            else:
+                self.assertTrue(ai['skills'][15]['contactless'])
+                self.assertTrue(views[15]['contactless'])
+                self.assertIsNone(ai['skills'][15]['impact_action_index'])
+                self.assertTrue(all(not segment['event'] for segment in views[15]['segments']))
+                self.assertTrue(all(not command.get('event') for command in views[15]['command_effects']))
 
     def test_existing_enemy_frame_order_timing_and_contacts_are_preserved(self):
         baseline = enemies.read('forest_full_battle_view')

@@ -217,7 +217,8 @@ def registered_tlk_reachability(story, registration, original, hashes, require):
             obj = next((row for row in table['objects'] if row['index'] == index['index']), None)
             require(obj is not None, f'{map_id} object {index}')
             at = obj['source']['offset']; raw = data[at:at + 0x112]
-            require(raw.hex() == obj['raw_hex'] and raw[0xcf] in ([1] if index['handler'] == 'tlk-object' else [3, 4]), f'{map_id} object source')
+            behaviors = {'tlk-object': (1,), 'scripted-switch': (9,), 'stationary-chest': (3, 4)}
+            require(raw.hex() == obj['raw_hex'] and raw[0xcf] in behaviors.get(index['handler'], ()), f'{map_id} object source')
             add(map_id, u32(raw, 0xf6), 'object', object_index=index['index'])
         descriptors = {row['id']: row for row in table['descriptors']}
         selected = [(ident, 'trigger') for ident in binding.get('triggers', [])]
@@ -233,7 +234,12 @@ def registered_tlk_reachability(story, registration, original, hashes, require):
             descriptor = descriptors.get(ident)
             require(descriptor is not None, f'{map_id} descriptor {ident}')
             at = descriptor['source']['offset']; size = descriptor['record_bytes']; raw = data[at:at + size]
-            require(raw.hex() == descriptor['raw_hex'] and raw[0] == 2 and size in (0x2b, 0x42), f'{map_id} descriptor source')
+            require(raw.hex() == descriptor['raw_hex'] and raw[0] in (1, 2) and size in (0x2b, 0x42), f'{map_id} descriptor source')
+            if raw[0] == 1:
+                filename = raw[0x11:0x26].split(b'\0')[0].decode('ascii').lower()
+                require(filename == descriptor['filename_raw'].lower() and filename.endswith('.anm')
+                        and filename[:-4] in registration['programs'], f'{map_id} descriptor ANM')
+                continue  # The complete source program walk below keeps this caller map.
             record_id = raw[0x26] if size == 0x2b else u32(raw, 0x26)
             require(record_id == descriptor['field_26_raw'], f'{map_id} descriptor TLK')
             add(map_id, record_id, kind, descriptor_id=ident)
@@ -280,7 +286,8 @@ def registered_tlk_reachability(story, registration, original, hashes, require):
         row = table['records'][record_id - 1]; raw = bytes.fromhex(row['raw_hex']); reachable[key] = origin
         if raw[0] != 2 and (raw[0] == 4 or u32(raw, 0x17) or u32(raw, 0x1f)):
             queue.append((map_id, u32(raw, 0x2f), origin))
-        queue.append((map_id, u32(raw, 0x33), origin))
+        if raw[0] != 1:
+            queue.append((map_id, u32(raw, 0x33), origin))
         if raw[0] == 0 and raw[1] == 1:
             for index in range(3):
                 at = 0x537 + index * 104

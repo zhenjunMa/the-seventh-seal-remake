@@ -1,4 +1,4 @@
-// Native actor-Z motion: 5130D0 case3 initialization and the isolated
+// Native actor/target-Z motion: 5130D0 case3/case10 initialization and the isolated
 // 51A4F0:51A622..51A969 update block. Z is signed native height (up < 0).
 // Rendering/projection (513FC0), camera (5119F0), record advancement (51A240)
 // and death/normal-response dispatch (51CC00) remain with their owners.
@@ -54,15 +54,19 @@ export function createNativeVertical({actor,record}){
   const raw=typeof record==='string'?record:record?.raw_hex;
   need(typeof raw==='string'&&/^[0-9a-f]{352}$/i.test(raw),'Native vertical action bytes missing');
   const bytes=Uint8Array.from(raw.match(/../g),part=>parseInt(part,16)),view=new DataView(bytes.buffer);
-  need(bytes[0]===1&&view.getUint32(1,true)===3,'Native vertical command3 source missing');
+  const command=view.getUint32(1,true);
+  need(bytes[0]===1&&[3,10].includes(command),'Native vertical command3/10 source missing');
   const mode=bytes[0x47],speed=view.getInt32(5,true),multiplier=view.getInt32(0x1e,true),wait=bytes[0x1d],acceleration=bytes[0x23];
-  need(mode<=3,'Camera-only command3 mode belongs to the camera executor');
+  need(command===10?mode<=1:mode<=3,'Camera-only command3 mode belongs to the camera executor');
   const state=nativeVerticalState(actor),height=Math.imul(speed,multiplier),up=(mode&1)===0;
   state.mode_raw=mode;state.counter=0;state.wait_raw=wait;state.acceleration_raw=acceleration;
   state.target_z=up?(state.z-height)|0:0;
   state.velocity=up?(-(acceleration?(height-(height>>1))|0:speed))|0:acceleration?1:speed;
-  state.delay_ms=0;state.wrote_delay=true;
-  if(mode<2)state.camera_request={procedure:'0x5119f0',x:-1,y:up?height:0,wait_raw:0,acceleration_raw:acceleration};
+  // 5130D0 case10 writes the selected target's same motion fields, but
+  // neither changes its frame delay nor requests the actor's camera move.
+  state.wrote_delay=command===3;
+  if(command===3)state.delay_ms=0;
+  if(command===3&&mode<2)state.camera_request={procedure:'0x5119f0',x:-1,y:up?height:0,wait_raw:0,acceleration_raw:acceleration};
   return derived(state);
 }
 /** Pure 20ms frame updates. Keep this state between frames; when a source

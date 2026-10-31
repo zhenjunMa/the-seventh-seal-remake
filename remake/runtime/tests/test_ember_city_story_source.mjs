@@ -126,20 +126,34 @@ test('all four original city departure rings retain their exact source bit4 pola
   }
 });
 
-test('second source round needs31:2 and bits6/7/8, rewards once, and remote clauses keep their native index',async()=>{
-  const animations=[],{table,world,runner}=await fixture('M01040',{animate:async({program})=>animations.push(program.id)});
+test('second source round needs31:2 and bits6/7/8, hands off without a reward callback, and remote clauses keep their native index',async()=>{
+  const animations=[],completed=[],{table,content,world,runner}=await fixture('M01040');
+  for(const id of ['m01040-2','m01040-3']){
+    const program=await sourceProgram(id,'M01040');runner.data.programs[id]=program;content.programs[id]=program.source;
+    assert.equal(program.commands.some(command=>command.opcode===14),false,'the source has no reward TLK callback');
+  }
+  runner.animate=async({program,draft,runTlk})=>{
+    animations.push(program.id);
+    const hooks=Object.fromEntries(['map','actor','move','camera','wait'].map(name=>[name,async()=>{}]));
+    await new ChapterAnimationRunner({program,hooks,runTlk,initialLocation:draft.location,content}).run();
+    completed.push(program.commands.length);
+  };
   let result=await runner.runTlk({mapId:table.id,recordId:41});assert.deepEqual(result.traversed,[41]);
   world.transact(draft=>{draft.flags[31]|=2;});
   result=await runner.runTlk({mapId:table.id,recordId:41});assert.ok(result.traversed.includes(43));assert.ok(animations.includes('m01040-3'));
-  animations.length=0;
+  animations.length=0;completed.length=0;
   for(let mask=0;mask<8;mask++){
     world.transact(draft=>{draft.flags[4]=(mask<<5);});
     result=await runner.runTlk({mapId:table.id,recordId:46});
     assert.equal(result.traversed[1]??null,mask===7?50:null);
-    assert.equal(Boolean(world.value.flags[4]&256),mask===7);
+    assert.equal(Boolean(world.value.flags[4]&256),false,'kind1 TLK51 does not continue into reward writer52');
   }
-  assert.deepEqual(animations,['m01040-2']);
-  await runner.runTlk({mapId:table.id,recordId:46});assert.deepEqual(animations,['m01040-2']);
+  assert.deepEqual(animations,['m01040-2']);assert.deepEqual(completed,[8]);
+  await runner.runTlk({mapId:table.id,recordId:46});assert.deepEqual(animations,['m01040-2','m01040-2']);assert.deepEqual(completed,[8,8]);
+  assert.equal(table.records[51].mutation_bit,9,'retain the separate source reward writer');
+  world.transact(draft=>{draft.flags[4]|=256;});
+  result=await runner.runTlk({mapId:table.id,recordId:46});assert.deepEqual(result.traversed,[46,50,53]);
+  assert.deepEqual(animations,['m01040-2','m01040-2'],'the original bit9 branch still skips the animation');
   const other=await sourceTable('M01030'),gate=other.records[26];
   world.transact(draft=>{draft.flags[3]=4;draft.flags[5]=0;});
   assert.equal(evaluateNativeStoryCombination(gate,world.value,other),false);
@@ -149,14 +163,22 @@ test('second source round needs31:2 and bits6/7/8, rewards once, and remote clau
 
 test('actual100-currency inn uses its NPC root, restores then deducts once, and rolls back failed animation',async()=>{
   const {table,world,runner}=await fixture('M01031');
+  const program=await sourceProgram('m01031-1','M01031'),lines=[];
+  runner.data.programs[program.id]=program;runner.say=async({record})=>lines.push(record.id);
+  runner.animate=async({draft,runTlk})=>{
+    const hooks=Object.fromEntries(['map','actor','move','camera','wait','fade'].map(name=>[name,async()=>{}]));
+    await new ChapterAnimationRunner({program,hooks,runTlk,initialLocation:draft.location}).run();
+  };
   assert.equal(table.records.length,15,'TLK trailing bytes are not extra records');
   assert.deepEqual([table.records[5].condition_type,table.records[5].condition_index,table.records[2].mutation_type,table.records[2].mutation_index],[2,100,3,0xffffff9c]);
   world.transact(draft=>{draft.money=99;draft.party[0].hp.current=1;});
   let result=await runner.runTlk({mapId:table.id,recordId:1,context:{steps:0,explicitInteraction:true}});
   assert.deepEqual(result.traversed,[1,6,7]);assert.equal(world.value.money,99);assert.equal(world.value.party[0].hp.current,1);
   world.transact(draft=>{draft.money=100;});
+  lines.length=0;
   result=await runner.runTlk({mapId:table.id,recordId:1,context:{steps:0,explicitInteraction:true}});
-  assert.deepEqual(result.traversed,[1,6,2,3,8,9]);assert.equal(world.value.money,0);assert.equal(world.value.party[0].hp.current,world.value.party[0].hp.maximum);
+  assert.deepEqual(result.traversed,[1,6,2,3,8]);assert.equal(lines.filter(id=>id===9).length,1,'the complete source ANM14 supplies the only post-rest line');
+  assert.equal(world.value.money,0);assert.equal(world.value.party[0].hp.current,world.value.party[0].hp.maximum);
   const loaded=await decodeSave(await encodeSave(world.value),[table.id]);assert.deepEqual(loaded,world.value);
   world.transact(draft=>{draft.money=200;draft.party[0].hp.current=1;});
   runner.animate=async()=>{throw new Error('inn renderer failed');};

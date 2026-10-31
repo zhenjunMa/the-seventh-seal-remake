@@ -195,8 +195,9 @@ class RuntimeServer(ThreadingHTTPServer):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--port', type=int, default=8767)
+    parser.add_argument('--save-dir', type=Path, help='独立验收存档目录；默认使用 remake/saves')
     args = parser.parse_args()
-    server = RuntimeServer(('127.0.0.1', args.port), RuntimeHandler)
+    server = RuntimeServer(('127.0.0.1', args.port), RuntimeHandler, save_dir=args.save_dir)
     print(f'Seventh Seal runtime: http://127.0.0.1:{args.port}/', flush=True)
     try:
         server.serve_forever()

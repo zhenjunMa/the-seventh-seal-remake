@@ -744,6 +744,33 @@ export const definition = {
     },
     "028": {
       "side": "enemy"
+    },
+    "016": {
+      "side": "enemy"
+    },
+    "017": {
+      "side": "enemy"
+    },
+    "018": {
+      "side": "enemy"
+    },
+    "031A2": {
+      "side": "enemy"
+    },
+    "031B1": {
+      "side": "enemy"
+    },
+    "031A": {
+      "side": "enemy"
+    },
+    "031B": {
+      "side": "enemy"
+    },
+    "031C": {
+      "side": "enemy"
+    },
+    "033": {
+      "side": "enemy"
     }
   },
   "battle_rosters": {
@@ -781,7 +808,9 @@ export const definition = {
       "asset_prefix": "assets/skill_test_stage/"
     },
     "stage01": {},
-    "stage02": {}
+    "stage02": {},
+    "stage04": {},
+    "stage05": {}
   },
   "programs": [
     "m01010-2",
@@ -836,7 +865,23 @@ export const definition = {
     "m03021",
     "m03021-41",
     "m55001",
-    "rest"
+    "rest",
+    "m72040-7",
+    "m72040-8",
+    "m72040-h",
+    "m72040-p",
+    "m72040-v",
+    "m72040-z",
+    "m72050-1",
+    "m72050-2",
+    "m72061-1",
+    "m72062-1",
+    "m72063",
+    "m72062-2",
+    "m72063-2",
+    "m72062-3",
+    "m72063-3",
+    "m72064-1"
   ],
   "maps": {
     "M01060": {
@@ -1397,10 +1442,10 @@ export const definition = {
       ]
     },
     "M72061": {
-      "export": {
-        "assets": "existing",
-        "story": false
-      }
+      "npcs": [],
+      "triggers": [
+        1
+      ]
     },
     "M17011": {
       "npcs": [
@@ -2066,6 +2111,280 @@ export const definition = {
     "M29011": {
       "npcs": [
         11
+      ]
+    },
+    "M72010-0-C": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "M72010-0-N": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "M72010-1-3": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "M72010-1-D": {
+      "npcs": [],
+      "triggers": [
+        4
+      ]
+    },
+    "M72020-0-2": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "M72020-0-G": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "M72020-0-J": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "M72020-0-L": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "M72020-0-S": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "M72020-1-1": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "M72020-1-E": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "M72020-1-M": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "M72020-1-U": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "M72020-1-X": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "M72030-0-6": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "M72030-0-F": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "M72030-0-Y": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "M72030-1-K": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "M72030-1-O": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "M72030-1-T": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "M72040-0-4": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "M72040-0-7": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 20,
+          "handler": "scripted-switch"
+        }
+      ]
+    },
+    "M72040-0-8": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 20,
+          "handler": "scripted-switch"
+        }
+      ]
+    },
+    "M72040-0-H": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 20,
+          "handler": "scripted-switch"
+        }
+      ]
+    },
+    "M72040-0-I": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "M72040-0-R": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "M72040-1-5": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "M72040-1-P": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 18,
+          "handler": "scripted-switch"
+        }
+      ]
+    },
+    "M72040-1-Q": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "M72040-1-V": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 18,
+          "handler": "scripted-switch"
+        }
+      ]
+    },
+    "M72040-1-W": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "M72040-1-Z": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 18,
+          "handler": "scripted-switch"
+        }
+      ]
+    },
+    "M72050": {
+      "npcs": [
+        10
+      ],
+      "triggers": [
+        3
+      ]
+    },
+    "M72050-1": {
+      "npcs": [
+        10
+      ],
+      "triggers": [
+        1,
+        2,
+        30
+      ]
+    },
+    "M72062": {
+      "npcs": [
+        10
+      ],
+      "triggers": [
+        32
+      ]
+    },
+    "M72063": {
+      "npcs": [],
+      "triggers": [
+        32
+      ]
+    },
+    "M72062-2": {
+      "npcs": [],
+      "triggers": [
+        31
+      ]
+    },
+    "M72063-2": {
+      "npcs": [],
+      "triggers": [
+        31
+      ]
+    },
+    "M72062-3": {
+      "npcs": [],
+      "triggers": [
+        31
+      ]
+    },
+    "M72063-3": {
+      "npcs": [],
+      "triggers": [
+        31
+      ]
+    },
+    "M72064": {
+      "npcs": [
+        11
+      ],
+      "triggers": [
+        31
       ]
     }
   },
@@ -3055,6 +3374,69 @@ export default {
         "path": "Fight_Role/028.CHR",
         "sha256": "f5735d64b6abee1d18356eb43cfab9cab42e016e361511dd90df9b1cecdd7a13"
       }
+    },
+    "016": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/016.CHR",
+        "sha256": "8bc676f1f94e9406f4ad085077ac260db8242036c437fad71d59462b43b7fb13"
+      }
+    },
+    "017": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/017.CHR",
+        "sha256": "c5c6c8765cb4953549225ee24f5226b7549a3bb163c17f059e797dde2e7e1bf1"
+      }
+    },
+    "018": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/018.CHR",
+        "sha256": "2a07bc46c6931b56fd2bd1b91933ab31f18ed3a12f423dca336522568092b705"
+      }
+    },
+    "031A2": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/031A2.CHR",
+        "sha256": "8a459dc1f31dd8130546bcb718f5fb93eea5ff94765128575429f87228cfbd01"
+      }
+    },
+    "031B1": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/031B1.CHR",
+        "sha256": "2cc87ac1d927bcb4b353d7f2eaf255e39c23825d2b92f04bb07fa06cc59f80b6"
+      }
+    },
+    "031A": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/031A.CHR",
+        "sha256": "7cf86ef36b7ecd7042155969654c1f684d8498bec25fca57f3f60896c76f7d9c"
+      }
+    },
+    "031B": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/031B.CHR",
+        "sha256": "2229adab9130d1b1b527b715bbf1df628e29e5516f7ac0d0c4f7959854192115"
+      }
+    },
+    "031C": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/031C.CHR",
+        "sha256": "a606894f73656742923ba6519374730bda876bfc171d2ef3f1e77615c48610a5"
+      }
+    },
+    "033": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/033.CHR",
+        "sha256": "8ddeca0b57c4149b1d53742275e1b67415a311acc2b72d92a5e1eb4b41d2e669"
+      }
     }
   },
   "battle_rosters": {
@@ -3077,7 +3459,16 @@ export default {
       "031B2",
       "015",
       "026",
-      "028"
+      "028",
+      "016",
+      "017",
+      "018",
+      "031A2",
+      "031B1",
+      "031A",
+      "031B",
+      "031C",
+      "033"
     ],
     "party-source-group": [
       "001",
@@ -3099,7 +3490,16 @@ export default {
       "031B2",
       "015",
       "026",
-      "028"
+      "028",
+      "016",
+      "017",
+      "018",
+      "031A2",
+      "031B1",
+      "031A",
+      "031B",
+      "031C",
+      "033"
     ]
   },
   "stages": {
@@ -3137,6 +3537,16 @@ export default {
       "path": "data/stages/stage02.json",
       "schema": "seventh-seal-battle-stage",
       "asset_prefix": "assets/stages/stage02/"
+    },
+    "stage04": {
+      "path": "data/stages/stage04.json",
+      "schema": "seventh-seal-battle-stage",
+      "asset_prefix": "assets/stages/stage04/"
+    },
+    "stage05": {
+      "path": "data/stages/stage05.json",
+      "schema": "seventh-seal-battle-stage",
+      "asset_prefix": "assets/stages/stage05/"
     }
   },
   "programs": {
@@ -3404,6 +3814,86 @@ export default {
       "path": "Animate/rest.anm",
       "sha256": "c2b80a140cfd57e01b220d489d3f7040a59c5ee49971074e165e24ea511a1288",
       "bytes": 2139
+    },
+    "m72040-7": {
+      "path": "Animate/m72040-7.anm",
+      "sha256": "c0eb7de8c49ebcf31f37fd0a4da9c7faafacfb8564e22efd596ef57115f641b1",
+      "bytes": 1621
+    },
+    "m72040-8": {
+      "path": "Animate/m72040-8.anm",
+      "sha256": "103b2943d61015d7077e5aaa92bafa6e8029fb5fe1a3fd6240cca4af3a5d0786",
+      "bytes": 1621
+    },
+    "m72040-h": {
+      "path": "Animate/m72040-h.anm",
+      "sha256": "1514432215098b04e3e9c995e6bcc38cdc980ad88126e61c3ad8aca3a4a849ff",
+      "bytes": 1621
+    },
+    "m72040-p": {
+      "path": "Animate/m72040-p.anm",
+      "sha256": "33f5ceed2850e62047279ac640c388281bf2ee94c0490fa0310b21ba6ea54215",
+      "bytes": 1695
+    },
+    "m72040-v": {
+      "path": "Animate/m72040-v.anm",
+      "sha256": "a8e7f5b58288b6799b39794838122748c8f2cc68794f230e6e25c9a523b8f3ed",
+      "bytes": 1621
+    },
+    "m72040-z": {
+      "path": "Animate/m72040-z.anm",
+      "sha256": "229d50e775cf9921a45e7652f48d8e97d5835b37524ee89f86759d9c17332666",
+      "bytes": 1621
+    },
+    "m72050-1": {
+      "path": "Animate/m72050-1.anm",
+      "sha256": "07e6b6161f54ed2f7063f366721c074607e55b6f0168e60850666399302723dc",
+      "bytes": 659
+    },
+    "m72050-2": {
+      "path": "Animate/m72050-2.anm",
+      "sha256": "d56551904149c17cf512975cb1c998124d27973ff86e3ec9b12f1460eae224a1",
+      "bytes": 2287
+    },
+    "m72061-1": {
+      "path": "Animate/m72061-1.anm",
+      "sha256": "a63fe256515d9219d9a66bbf6c17d025d722fbc05d0a5119c5fda1955be4472b",
+      "bytes": 3767
+    },
+    "m72062-1": {
+      "path": "Animate/m72062-1.anm",
+      "sha256": "9c155996cea399c02dfbc331d551970e27f35f89bf7b5812b73d8b2efcb85a52",
+      "bytes": 1399
+    },
+    "m72063": {
+      "path": "Animate/m72063.anm",
+      "sha256": "79d688c8cbc8d24ad4ce2444e0a7cb32c0335329ce7c076f5b6da3b8b58578ef",
+      "bytes": 955
+    },
+    "m72062-2": {
+      "path": "Animate/m72062-2.anm",
+      "sha256": "f3e56b000983b51303efc7c56c1c0793782d8089e1936d8d95c6d8791ae3dbd0",
+      "bytes": 1103
+    },
+    "m72063-2": {
+      "path": "Animate/m72063-2.anm",
+      "sha256": "278aa3463f04e2ba12a15ee7c73d00c149371970f54213f5922e3121d523163a",
+      "bytes": 1251
+    },
+    "m72062-3": {
+      "path": "Animate/m72062-3.anm",
+      "sha256": "d3f34bfe1ac246eea5bc2a2f68d2aa4024296b6a7db25822542e8a5a9dd0f281",
+      "bytes": 1251
+    },
+    "m72063-3": {
+      "path": "Animate/m72063-3.anm",
+      "sha256": "9ed03d1a7d42578ed5dab4d3a754e91d967bcad6a6cfed1c033e25bbc6e6f0f1",
+      "bytes": 1251
+    },
+    "m72064-1": {
+      "path": "Animate/m72064-1.anm",
+      "sha256": "8d11b04677a1528f6bc25e9b6297d000f5c86fa2065295c148ff514af81f6ef4",
+      "bytes": 6949
     }
   },
   "maps": {
@@ -4156,10 +4646,13 @@ export default {
     },
     "M72061": {
       "path": "data/maps/m72061.json",
-      "triggers": [],
+      "triggers": [
+        1
+      ],
       "objects": [],
       "rests": [],
       "routes": [],
+      "npcs": [],
       "flag_index": 388
     },
     "M17011": {
@@ -5249,6 +5742,435 @@ export default {
         11
       ],
       "flag_index": 519
+    },
+    "M72010-0-C": {
+      "path": "data/maps/m72010-0-c.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 79
+    },
+    "M72010-0-N": {
+      "path": "data/maps/m72010-0-n.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 80
+    },
+    "M72010-1-3": {
+      "path": "data/maps/m72010-1-3.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 82
+    },
+    "M72010-1-D": {
+      "path": "data/maps/m72010-1-d.json",
+      "triggers": [
+        4
+      ],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 84
+    },
+    "M72020-0-2": {
+      "path": "data/maps/m72020-0-2.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 86
+    },
+    "M72020-0-G": {
+      "path": "data/maps/m72020-0-g.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 87
+    },
+    "M72020-0-J": {
+      "path": "data/maps/m72020-0-j.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 88
+    },
+    "M72020-0-L": {
+      "path": "data/maps/m72020-0-l.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 89
+    },
+    "M72020-0-S": {
+      "path": "data/maps/m72020-0-s.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 90
+    },
+    "M72020-1-1": {
+      "path": "data/maps/m72020-1-1.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 92
+    },
+    "M72020-1-E": {
+      "path": "data/maps/m72020-1-e.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 93
+    },
+    "M72020-1-M": {
+      "path": "data/maps/m72020-1-m.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 94
+    },
+    "M72020-1-U": {
+      "path": "data/maps/m72020-1-u.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 52
+    },
+    "M72020-1-X": {
+      "path": "data/maps/m72020-1-x.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 53
+    },
+    "M72030-0-6": {
+      "path": "data/maps/m72030-0-6.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 57
+    },
+    "M72030-0-F": {
+      "path": "data/maps/m72030-0-f.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 58
+    },
+    "M72030-0-Y": {
+      "path": "data/maps/m72030-0-y.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 59
+    },
+    "M72030-1-K": {
+      "path": "data/maps/m72030-1-k.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 60
+    },
+    "M72030-1-O": {
+      "path": "data/maps/m72030-1-o.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 61
+    },
+    "M72030-1-T": {
+      "path": "data/maps/m72030-1-t.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 62
+    },
+    "M72040-0-4": {
+      "path": "data/maps/m72040-0-4.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 64
+    },
+    "M72040-0-7": {
+      "path": "data/maps/m72040-0-7.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 20,
+          "handler": "scripted-switch"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 65
+    },
+    "M72040-0-8": {
+      "path": "data/maps/m72040-0-8.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 20,
+          "handler": "scripted-switch"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 66
+    },
+    "M72040-0-H": {
+      "path": "data/maps/m72040-0-h.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 20,
+          "handler": "scripted-switch"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 67
+    },
+    "M72040-0-I": {
+      "path": "data/maps/m72040-0-i.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 68
+    },
+    "M72040-0-R": {
+      "path": "data/maps/m72040-0-r.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 69
+    },
+    "M72040-1-5": {
+      "path": "data/maps/m72040-1-5.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 71
+    },
+    "M72040-1-P": {
+      "path": "data/maps/m72040-1-p.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 18,
+          "handler": "scripted-switch"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 72
+    },
+    "M72040-1-Q": {
+      "path": "data/maps/m72040-1-q.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 74
+    },
+    "M72040-1-V": {
+      "path": "data/maps/m72040-1-v.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 18,
+          "handler": "scripted-switch"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 75
+    },
+    "M72040-1-W": {
+      "path": "data/maps/m72040-1-w.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 76
+    },
+    "M72040-1-Z": {
+      "path": "data/maps/m72040-1-z.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 18,
+          "handler": "scripted-switch"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 95
+    },
+    "M72050": {
+      "path": "data/maps/m72050.json",
+      "triggers": [
+        3
+      ],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10
+      ],
+      "flag_index": 96
+    },
+    "M72050-1": {
+      "path": "data/maps/m72050-1.json",
+      "triggers": [
+        1,
+        2,
+        30
+      ],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10
+      ],
+      "flag_index": 615
+    },
+    "M72062": {
+      "path": "data/maps/m72062.json",
+      "triggers": [
+        32
+      ],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10
+      ],
+      "flag_index": 464
+    },
+    "M72063": {
+      "path": "data/maps/m72063.json",
+      "triggers": [
+        32
+      ],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 524
+    },
+    "M72062-2": {
+      "path": "data/maps/m72062-2.json",
+      "triggers": [
+        31
+      ],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 611
+    },
+    "M72063-2": {
+      "path": "data/maps/m72063-2.json",
+      "triggers": [
+        31
+      ],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 525
+    },
+    "M72062-3": {
+      "path": "data/maps/m72062-3.json",
+      "triggers": [
+        31
+      ],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 612
+    },
+    "M72063-3": {
+      "path": "data/maps/m72063-3.json",
+      "triggers": [
+        31
+      ],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 526
+    },
+    "M72064": {
+      "path": "data/maps/m72064.json",
+      "triggers": [
+        31
+      ],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        11
+      ],
+      "flag_index": 465
     }
   },
   "story": {

@@ -72,7 +72,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
       [...actorIds].reduce((n,roleId)=>n+(state.openingResources.roles[roleId]?.actions??[])
         .reduce((count,action)=>count+1+Number(Boolean(action.intrinsic_sheet))+Number(Boolean(action.shadow_sheet)),0),0)+completedAnimations.length+
       effectObjects.reduce((count,obj)=>count+state.mapEffects.object_banks[obj.bank].actions
-        .reduce((n,action)=>n+2+Number(Boolean(action.shadow_sheet)),0),0);
+        .reduce((n,action)=>n+['main','intrinsic','shadow'].filter(channel=>action[channel+'_sheet']).length,0),0);
     let completed=0;onProgress?.({completed,total});
     const step=async promise=>{const value=await promise;onProgress?.({completed:++completed,total});return value;};
     const bitmap=await step(actions.image(typeof data.background==='string'?data.background:data.background.image, `map:${id}`));
@@ -100,12 +100,12 @@ export function createMapController({state, actions, $, canvas, ctx}) {
     if(effectObjects.length){
       const resources=await Promise.all(effectObjects.map(async obj=>{
         const source=state.mapEffects.object_banks[obj.bank],resource={...source,actions:source.actions.map(action=>({...action}))};
-        await Promise.all(resource.actions.flatMap(action=>['main','intrinsic',...(action.shadow_sheet?['shadow']:[])].map(async channel=>{
+        await Promise.all(resource.actions.flatMap(action=>['main','intrinsic','shadow'].filter(channel=>action[channel+'_sheet']).map(async channel=>{
           action[channel+'_bitmap']=await step(actions.image(action[channel+'_sheet'],`map:${id}`));
         })));
         return {...obj,resource};
       }));
-      scene.objectRuntime=new MapObjectRuntime({objects,resources,mapFlagIndex:effectMap.map_flag_index,mapId:id,
+      scene.objectRuntime=new MapObjectRuntime({objects,resources,mapFlagIndex:effectMap.map_flag_index,mapId:id,movement,
         onSound:({token,x,y})=>{
           const listener=state.openingView?.active?state.openingView.cameraAt:state.world.location;
           const shift=data.movement.native_coordinate_shift;
@@ -153,8 +153,9 @@ export function createMapController({state, actions, $, canvas, ctx}) {
       if(binding.handler==='stationary-chest'&&(![3,4].includes(object.behavior_raw_cf)||!object.interaction_record_raw_f6))continue;
       if(binding.handler==='keyed-chest'&&object.behavior_raw_cf!==4)continue;
       if(binding.handler==='tlk-object'&&(object.behavior_raw_cf!==1||!object.interaction_record_raw_f6))continue;
+      if(binding.handler==='scripted-switch'&&(object.behavior_raw_cf!==9||!object.interaction_record_raw_f6))continue;
       const distance=Math.hypot(object.x_native*2-at.x,object.y_native*2-at.y);
-      if(distance<64&&(!state.nearest||distance<state.nearest.distance))state.nearest={...object,kind:'object',name:binding.handler==='keyed-chest'?'宝箱':'物件',distance};
+      if(distance<64&&(!state.nearest||distance<state.nearest.distance))state.nearest={...object,kind:'object',name:binding.handler==='keyed-chest'?'宝箱':binding.handler==='scripted-switch'?'机关':'物件',distance};
     }
     for(const binding of storyBindings(at.map_id).rests){
       const bed=state.chapterStory.maps[at.map_id]?.descriptors?.find(row=>row.id===binding.descriptor_id);
@@ -165,6 +166,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
   }
   function objectBitmap(scene,obj,world=state.world.value,live=true){
     if(live&&state.objectPreview?.mapId===scene.data.id&&state.objectPreview.objectIndex===obj.index)return state.objectPreview.bitmap;
+    if(scene.objectRuntime?.actors.some(actor=>actor.object.index===obj.index&&[2,9].includes(actor.behavior)))return obj.bitmap;
     const table=state.chapterStory.maps[scene.data.id],record=table&&world.event_records[table.map_flag_index]?.[obj.index];
     if(record?.slice(0,2)==='03'){
       const animation=state.chapterResources.object_animations[scene.data.id]?.find(row=>row.object_index_zero_based===obj.index);
@@ -286,7 +288,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
         const storyTrigger=state.scenes.current.data.story_triggers.find(trigger=>trigger.cells.some(cell=>cell.x===reached.x&&cell.y===reached.y));
         if(storyTrigger){
           const tag=`${at.map_id}:${storyTrigger.id}`;
-          if(tag!==state.lastStoryTrigger){state.lastStoryTrigger=tag;actions.runChapter({mapId:at.map_id,recordId:storyTrigger.field_26_raw,triggerId:storyTrigger.id});}
+          if(tag!==state.lastStoryTrigger){state.lastStoryTrigger=tag;actions.runChapter({mapId:at.map_id,triggerId:storyTrigger.id});}
         }else state.lastStoryTrigger='';
         if(exit){
           const tag=`${at.map_id}:${exit.id}`;

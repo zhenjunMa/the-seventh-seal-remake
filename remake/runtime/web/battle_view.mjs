@@ -89,11 +89,11 @@ export function validateBattleViewMetadata(meta,content=runtimeContent) {
       if (segment.movement_step_raw !== undefined && (!Number.isInteger(segment.movement_step_raw) || segment.movement_source_field !== '0x1e')) throw new Error('原动作位移字段无效');
     }
     if (role.skill.role_id !== role.id || !role.skill.segments.length ||
-        (meta.policy.complete_contacts?contactCount(role.skill)<1:contactCount(role.skill)!==1)) throw new Error('技能源结算事件无效');
-    for(const skill of role.alternate_skills??[])if(skill.role_id!==role.id||(meta.policy.complete_contacts?!/^[A-Za-z0-9_]+$/.test(skill.runtime_skill_id):skill.runtime_skill_id!=='yanci')||!skill.segments.length||(meta.policy.complete_contacts?contactCount(skill)<1:contactCount(skill)!==1)||
+        (meta.policy.complete_contacts?contactCount(role.skill)<1&&!role.skill.contactless:contactCount(role.skill)!==1)) throw new Error('技能源结算事件无效');
+    for(const skill of role.alternate_skills??[])if(skill.role_id!==role.id||(meta.policy.complete_contacts?!/^[A-Za-z0-9_]+$/.test(skill.runtime_skill_id):skill.runtime_skill_id!=='yanci')||!skill.segments.length||(meta.policy.complete_contacts?contactCount(skill)<1&&!skill.contactless:contactCount(skill)!==1)||
       (skill.layers&&(!urlAllowed(skill.layers.path)||!/^[a-f0-9]{64}$/.test(skill.layers.sha256))))throw new Error('追加技能表现未支持');
     for(const skill of skillsOf(role))for(const c of skill.command_effects??[]){
-      if(![0,1,4,6,7,8,11].includes(c.command_raw)||c.type_raw!==1)throw new Error('原类型命令范围未支持');
+      if(![0,1,4,6,7,8,10,11].includes(c.command_raw)||c.type_raw!==1)throw new Error('原类型命令范围未支持');
       if(c.command_raw===4&&!c.missing_source_file&&(!meta.effects.some(e=>e.id===c.effect_asset_id)||![0,1].includes(c.wait_raw)||!['actor','target'].includes(c.slot)||!Array.isArray(c.frames)||!c.frames.length||c.end_exclusive-c.start!==c.frames.length||c.event&&(c.event.frame<c.start||c.event.frame>=c.end_exclusive)))throw new Error('原类型4效果范围无效');
     }
   }
@@ -487,6 +487,7 @@ export class BattleView {
   _nativeBridge(actorId,control=this.nativeControl,guard=this.nativeControlIsCurrent){
     const check=()=>{if(!control||this.nativeControl!==control||guard&&!guard())throw abortError('原动作控制器已失效');};
     return {begin:(raw,at)=>{check();return control.beginNativeVertical(actorId,raw,at);},
+      target:(targetId,raw,at)=>{check();return control.beginNativeTargetVertical(actorId,targetId,raw,at);},
       appearance:raw=>{check();return control.beginNativeAppearance(actorId,raw);},
       appearanceComplete:()=>{check();control.completeNativeAppearance(actorId);},
       entry:(raw,width)=>{check();return control.beginNativeEntry(actorId,raw,width);},
@@ -687,6 +688,14 @@ export class BattleView {
         if(step.vertical_raw_hex){
           const bridge=this._nativeBridge(channel.result.actor_id,run.native_control,run.native_guard),state=bridge.begin(step.vertical_raw_hex,run.started+at);
           channel.vertical_wait=state.waiting;
+        }
+        if(step.target_vertical_raw_hex){
+          // case10's wait byte belongs to the target, so the acting source
+          // advances while the target's existing response waits on its Z.
+          const bridge=this._nativeBridge(channel.result.actor_id,run.native_control,run.native_guard);
+          const state=bridge.target(channel.result.target_id,step.target_vertical_raw_hex,run.started+at);
+          if(state)for(const target of this._sequenceChannels(run))if(!target.carrier&&target.result.actor_id===channel.result.target_id)
+            target.vertical_wait=state.waiting;
         }
         if(step.carrier_spawn){
           const source=step.carrier_spawn,id=`carrier-${run.carriers.length}`,firstAt=Math.max(at,source.interval_ms-run.started);

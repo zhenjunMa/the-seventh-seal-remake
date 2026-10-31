@@ -62,15 +62,20 @@ def export():
         offset = 0x61c + (item_id - 1) * 0x3bf
         definition = item_bytes[offset:offset + 0x3bf]
         assert struct.unpack_from('<I', definition)[0] == item_id
+        items[str(item_id)] = dict(id=item_id, name=definition[4:28].split(b'\0')[0].decode('cp936'),
+                                  drop_rate=struct.unpack_from('<i', definition, 0x158)[0], unique_raw=definition[0x14b],
+                                  type_raw=definition[0x24],
+                                  source=dict(path='SYSTEM/Object.ITM', definition_file_offset=offset, definition_raw_hex=definition.hex(),
+                                              drop_rate_definition_offset=0x158, unique_definition_offset=0x14b))
+        # 50CFCF/50CFD7 skips rate -1 before unique handling, RNG or item init.
+        # Keep these original slots without manufacturing an inventory instance.
+        if items[str(item_id)]['drop_rate'] == -1:
+            continue
         assert definition[0x24] >= 2 and definition[0x14b] == 0
         assert all(struct.unpack_from('<2i', definition, p)[0] == struct.unpack_from('<2i', definition, p)[1] for _, p in VALUE_PAIRS)
         instance = bytearray(initialize_existing_instance(bytes([0xcc]) * 0xe5, definition))
         struct.pack_into('<I', instance, 4, 1)
-        items[str(item_id)] = dict(id=item_id, name=definition[4:28].split(b'\0')[0].decode('cp936'),
-                                  drop_rate=struct.unpack_from('<i', definition, 0x158)[0], unique_raw=definition[0x14b],
-                                  type_raw=definition[0x24], instance_raw_hex=instance.hex(), initialization_rng_calls=0,
-                                  source=dict(path='SYSTEM/Object.ITM', definition_file_offset=offset, definition_raw_hex=definition.hex(),
-                                              drop_rate_definition_offset=0x158, unique_definition_offset=0x14b))
+        items[str(item_id)].update(instance_raw_hex=instance.hex(), initialization_rng_calls=0)
     save = sources[2].read_bytes()
     roles = {}
     for role in complete_layout(save)['characters']:
@@ -88,7 +93,7 @@ def export():
         chain_bonuses=[0,5,10,15,20,25,30,30,35,35,40,40,45,45,50,50,55,55,60,60]+[60]*21,
         skill_practice_bonuses=[0,10,20,30,40,50,60,70,80,90,100,120,140,200,260,320,400,480,580,700]+[700]*21,
         limits=['Only participating player 001 receives rewards; saved party member 002 is not a battle participant.',
-                'Registered drops use inventory type >=2 and deterministic initialization; unique and randomized rewards remain unsupported.',
+                'Rate -1 source slots are retained and skipped before initialization. Actual drops require inventory type >=2 and deterministic initialization; droppable unique and randomized rewards remain unsupported.',
                 'The original local chain bonus table admits k=0..40; higher values are rejected rather than invented.',
                 'Native proficiency rewards 0x50C560 are separate from character experience; this contract exports their bonus table but does not assert a full proficiency port.',
                 'Original game execution was not observed. Remake persistence and reward idempotency are explicit adapters.'])

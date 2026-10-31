@@ -104,7 +104,7 @@ export function createDeathParticleSurface({rgba,width,height,anchor,mode,seed,a
     pixels.push({x:px,y:py,rgb:[rgba[i],rgba[i+1],rgba[i+2]]});
     left=Math.min(left,px);top=Math.min(top,py);right=Math.max(right,px);bottom=Math.max(bottom,py);
   }
-  const effect=appearance?new AppearanceParticles({pixels,anchor:{x:originX,y:originY},random:deathVisualRandom(seed)})
+  const effect=appearance?new AppearanceParticles({pixels,anchor:{x:originX,y:originY},random:deathVisualRandom(seed),mode})
     :new DeathParticles({mode,pixels,random:deathVisualRandom(seed)});
   if(!pixels.length){effect.draw=()=>{};return effect;}
   if(appearance){top=Math.min(top,-originY);bottom=Math.max(bottom,-originY);}

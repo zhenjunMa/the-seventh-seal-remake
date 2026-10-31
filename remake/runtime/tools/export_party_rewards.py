@@ -79,7 +79,7 @@ def export():
                                                 'state_raw != 11', '0x50A710 == 0',
                                                 '0x500350 effective HP > 0']),
                  limits=['Registered player roles use their source CHR growth-row selector and retained executable tables.',
-                         'Only forest death/drop rewards are covered; other enemy pools and unique/equipment drops remain outside this contract.',
+                         'Registered enemy pools retain all source slots; rate -1 skips before initialization. Actual drops require deterministic nonunique inventory records.',
                          'Native skill proficiency rewards 0x50C560 are still separate from character experience.',
                          'Original executable was not run. World/reward persistence is an atomic remake adapter.'])
     proof_names = {'0x50d1c0': 'victory_assembly', '0x50a710': 'eligibility_status', '0x500350': 'eligibility_hp'}

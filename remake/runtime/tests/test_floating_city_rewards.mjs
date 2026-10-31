@@ -56,7 +56,8 @@ test('247 admission comes from an actual registered STG member and exact CHR dro
     assert.equal(stg.subarray(row.pool_member_source.filename_offset,row.pool_member_source.filename_offset+20)
       .toString('ascii').split('\0')[0].toLowerCase(),'022.dgp');
   }
-  assert.ok(!provenance.some(row=>row.enemy_id==='016'),'An unregistered CHR must not admit its drops');
+  assert.ok(provenance.filter(row=>row.kind==='registered-encounter-enemy-reward')
+    .every(row=>runtimeContent.roles[row.enemy_id]?.side==='enemy'),'Only registered encounter enemies admit their drops');
 });
 
 test('source shop purchase pays for354, detective consumes it once for333, and wind chest keeps its key',async()=>{

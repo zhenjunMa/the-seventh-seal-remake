@@ -13,7 +13,7 @@ import {validateOpeningProgram} from '../web/core/opening.mjs';
 import {validateProgram} from '../web/core/events.mjs';
 import {validateQuests} from '../web/core/story_quests.mjs';
 import {STORY_RESOURCE_TABLES,storyTextId,validateStorySelection,hydrateStoryTable} from '../web/core/story_packages.mjs';
-import {compileTlkFlow,compileEventFlow} from '../web/core/story_flow_compiler.mjs';
+import {compileTlkFlow,compileEventFlow,compileNativeTriggerFlow} from '../web/core/story_flow_compiler.mjs';
 import {scriptedBattleSource} from '../web/core/scripted_battle.mjs';
 import {nativeCombinationHex} from '../web/core/native_story_combinations.mjs';
 import {readNativeService} from '../web/core/native_economy.mjs';
@@ -160,6 +160,10 @@ export async function compileStoryPackages({content=runtimeContent,definition:co
     if(chapter?.records.length){
       const flow=compileTlkFlow(hydrateStoryTable(chapter,texts),{choices:chapterChoices});
       chapter.flow_id=flow.id;flows[flow.id]=packFlow(flow);
+    }
+    for(const triggerId of content.maps[id].triggers){
+      const descriptor=chapter.descriptors.find(row=>row.id===triggerId);
+      if(descriptor.state_raw===1){const flow=compileNativeTriggerFlow(chapter,descriptor);flows[flow.id]=packFlow(flow);}
     }
     for(const {event:source,file}of eventsByMap[id]??[]){
       const {event,flow}=compileEvent(source,file,texts,content,map,resources);

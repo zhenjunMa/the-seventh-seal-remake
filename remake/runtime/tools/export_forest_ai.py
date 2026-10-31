@@ -53,10 +53,12 @@ def role_record(chr_data):
         learned = fixed[0x23]
         if learned:
             impact = next((a['index'] for a in actions if struct.unpack_from('<I', bytes.fromhex(a['raw_hex']), 0x49)[0]), None)
-            if impact is None:
-                raise ValueError(f'Enemy {ident} skill {index}: no supported contact action')
             item = combat.skill_record(f"{ident}_skill_{index}", ident, fixed,
                                        skill['offset'], index, path, actions, impact)
+            if impact is None:
+                # No +49 means neither 50E980 nor 5074C0 calls settlement.
+                # Retain the learned animation without inventing a hit.
+                item['contactless'] = True
         else:
             item = dict(id=f"{ident}_skill_{index}", actor_id=ident,
                         name=skill['name_cp936'], original_skill_index=index,

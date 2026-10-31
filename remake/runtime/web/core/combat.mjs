@@ -141,6 +141,10 @@ export class BattleController {
     const state=createNativeVertical({actor,record});requireValue(!state.camera_request,'原高度动作的镜头分支尚未接入');
     Object.assign(actor,verticalActorPatch(state,actor));this.verticalClocks.set(actorId,{at,state});return copy(state);
   }
+  beginNativeTargetVertical(actorId,targetId,record,at){
+    if(targetId===null||targetId===actorId||!this.actor(targetId))return null;
+    return this.beginNativeVertical(targetId,record,at);
+  }
   nativeVerticalFor(actorId){return nativeVerticalState(this.actor(actorId));}
   beginNativeEntry(actorId,raw,width){
     const actor=this.actor(actorId),b=Uint8Array.from(raw.match(/../g),x=>parseInt(x,16)),v=new DataView(b.buffer);
@@ -160,7 +164,7 @@ export class BattleController {
   beginNativeAppearance(actorId,raw){
     requireValue(typeof raw==='string'&&/^[0-9a-f]{352}$/i.test(raw),'原入场动作记录缺失');
     const b=Uint8Array.from(raw.match(/../g),x=>parseInt(x,16)),actor=this.actor(actorId),view=new DataView(b.buffer);
-    requireValue(actor&&b[0]===1&&view.getUint32(1,true)===7&&[0,1,3,5,6,7].includes(b[0x47]),'原入场动作模式尚未接入');
+    requireValue(actor&&b[0]===1&&view.getUint32(1,true)===7&&[0,1,2,3,5,6,7].includes(b[0x47]),'原入场动作模式尚未接入');
     let mode=b[0x47],draw=null;
     // 5130D0 command7 draws only when its source mode is zero, at this
     // source cursor after entry selection; presentation never owns RNG.
@@ -769,7 +773,7 @@ export class BattleController {
       onCarrierEnd:({carrier_id})=>{this.pendingCarriers.delete(`${actionId}:${carrier_id}`);this.refreshCommandState();this.publish();},
       onDetachedError:error=>this.interrupt(error),
       onReactionContact:onContact,onReactionRecord:onRecord,onReactionEnd:(descriptor,completed,now)=>{if(completed)end(this.actor(descriptor.actor_id),descriptor.token,now);},onPrimaryEnd:now=>end(attacker,primaryToken,now)});this.checkWorld();
-    requireValue(entry.contacts.length>0||entry.empty_carrier_allocation||playback?.interrupted||playback?.carriers_pending,'完整技能结束却没有接触结算');
+    requireValue(entry.contacts.length>0||plan.allow_no_contacts||entry.empty_carrier_allocation||playback?.interrupted||playback?.carriers_pending,'完整技能结束却没有接触结算');
     for(const actor of this.state.actors)if(actor.state_raw===4&&this.canFinalizeDeath(actor))this.finalizeDeath(actor);
     if(this.state.reward_ledger)resetNativeChain(this.state.reward_ledger,attacker.id);
   }

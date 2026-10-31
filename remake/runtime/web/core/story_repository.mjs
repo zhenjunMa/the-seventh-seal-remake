@@ -5,6 +5,7 @@ import {validateQuests,questJournal} from './story_quests.mjs';
 import {playbackTask} from './story_playback.mjs';
 import {chapterAnimationContext} from './chapter_animation.mjs';
 import {isNativeMapId} from './native_map_identity.mjs';
+import {nativeTriggerFlowId} from './story_flow_compiler.mjs';
 
 const need=(ok,message)=>{if(!ok)throw new Error(`剧情加载：${message}`);};
 // One repository admits both TLK maps and standalone NPC events. A failed load
@@ -91,6 +92,10 @@ export class StoryRepository {
     }));
     if(table?.records.length)need(flows[table.flow_id]&&table.records.every(row=>flows[table.flow_id].entries?.[row.id]),'原剧情流程入口缺失');
     else if(table)need(table.dialogue_status==='source-file-absent'&&table.flow_id===undefined,'无对白地图不能包含虚构流程');
+    for(const triggerId of this.content.maps[id].triggers){
+      const descriptor=table?.descriptors.find(row=>row.id===triggerId);
+      if(descriptor?.state_raw===1)need(flows[nativeTriggerFlowId(id,triggerId)]?.commands[0]?.program_id===descriptor.filename_raw.slice(0,-4).toLowerCase(),'原DAT演出流程入口缺失');
+    }
     for(const event of events)need(event.schema==='seventh-seal-story-event-binding'&&event.flow_id===event.id&&flows[event.flow_id]
       &&event.program===undefined&&event.commit_policy===undefined,'NPC 流程入口无效');
     const resources={roles:this.resources.roles};

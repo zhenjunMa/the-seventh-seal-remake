@@ -6,12 +6,12 @@ import {createHash} from 'node:crypto';
 const local=name=>new URL(`../${name}`,import.meta.url);
 const required=[
   'web/data/items.json','web/data/config/items.json','web/data/party_combat.json','web/data/opening_seed.json',
-  'web/data/chapter_story.json','web/data/forest_status.json','web/data/forest_combat.json',
+  'web/data/chapter_story.json','web/data/forest_status.json','web/data/forest_combat.json','web/data/party_rewards.json',
   'web/data/runtime_content.json','web/data/runtime_content.mjs','web/data/combat_sample.json',
   'evidence/forest_status_instructions_20261011.json',
   'evidence/white_forest_20261026/reward_passives/native_bundle.json',
 ].map(name=>({name,path:local(name)}));
-for(const name of ['GAME.exe','SYSTEM/Object.ITM','Map/m70030.TLK'])required.push({name,path:new URL(`../../../${name}`,import.meta.url)});
+for(const name of ['GAME.exe','SYSTEM/Object.ITM','Map/m70030.TLK','Map/m72063-3.TLK','Map/m72064.TLK','Fight_Role/031A.CHR','Fight_Role/031B.CHR','Fight_Role/033.CHR'])required.push({name,path:new URL(`../../../${name}`,import.meta.url)});
 if(process.env.SEVENTH_SEAL_ITEM_TEST_CATALOG)required.push({name:process.env.SEVENTH_SEAL_ITEM_TEST_CATALOG,path:process.env.SEVENTH_SEAL_ITEM_TEST_CATALOG});
 const missing=[];
 async function checkMaterials(rows){
@@ -45,6 +45,7 @@ const {initializeNativeStatuses,applyNativeSkillStatus,tickNativeStatuses,clearN
 const {isSupportedItemPassiveDefinition,equipmentPassiveRows}=await import('../web/core/item_passives.mjs');
 const {readContentDefinition}=await import('../tools/resolve_content_definition.mjs');
 const {BattleController}=await import('../web/core/combat.mjs');
+const {createRewardLedger,collectEnemyDefeat,planVictoryRewards}=await import('../web/core/battle_rewards.mjs');
 const read=async name=>JSON.parse(await readFile(new URL(`../${name}`,import.meta.url),'utf8'));
 const [published,overrides,attributes,seed,story,statusData,assembly,bundle]=await Promise.all([
   'web/data/items.json','web/data/config/items.json','web/data/party_combat.json','web/data/opening_seed.json',
@@ -106,16 +107,63 @@ class Oracle extends NativeAssemblyOracle{
     for(const field of statusData.aggregation)assert.equal(this.read(Number(field.address),field.bits===8?1:4),actor.status_by_address[field.address]);}
 }
 
-test('only registered real CF4/TLK rewards admit the exact original mode6 blocks',async()=>{
-  assert.deepEqual(source.catalog.item_capability_admission.passive_item_ids,[127,170]);
+test('only registered real CF4/TLK/CHR rewards admit the exact original mode6 blocks',async()=>{
+  const admitted=source.catalog.item_capability_admission.passive_item_ids;
+  assert.deepEqual(admitted.filter(id=>![195,202].includes(id)),[127,170]);assert.deepEqual(admitted.filter(id=>[195,202].includes(id)),[195,202]);
   const original=await readFile(new URL('../../../SYSTEM/Object.ITM',import.meta.url));
   assert.equal(createHash('sha256').update(original).digest('hex'),source.source_hashes['SYSTEM/Object.ITM']);
-  for(const id of [127,170]){const def=items.definitions[id];assert.equal(isSupportedItemPassiveDefinition(def),true);
+  for(const id of [127,170,195,202]){const def=items.definitions[id];assert.equal(isSupportedItemPassiveDefinition(def),true);
     assert.equal(original.subarray(def.source.record_offset,def.source.record_offset+959).toString('hex'),def.raw_hex);
     assert.equal(def.equipment_passive.effect_raw_hex,original.subarray(def.source.record_offset+0x2a8,def.source.record_offset+0x36e).toString('hex'));}
   assert.equal(items.definitions[127].behavior.kind,'equip');assert.equal(items.definitions[170].behavior.kind,'status-immunity-crystal');
   assert.equal(items.definitions[170].equipment_passive.application_chance_raw,60);
+  const wind=items.definitions[195];assert.equal(wind.behavior.kind,'status-immunity-crystal');
+  assert.deepEqual([wind.equipment_passive.effect_id_raw,wind.equipment_passive.mode_raw,wind.equipment_passive.application_chance_raw],[6,6,0]);
+  assert.equal(Buffer.from(wind.equipment_passive.effect_raw_hex,'hex').readInt32LE(2),-1);
+  const origins=source.catalog.item_capability_admission.passive_sources[195];
+  assert.deepEqual(origins.map(row=>[row.kind,row.map_id,row.record_id,row.enemy_id,row.enemy_slot,row.reward_slot]),
+    [['registered-enemy-reward','M72063-3',3,'031A',2,2],['registered-enemy-reward','M72063-3',3,'031B',4,2]]);
+  const energy=items.definitions[202];assert.equal(energy.behavior.kind,'status-immunity-crystal');
+  assert.deepEqual([energy.equipment_passive.effect_id_raw,energy.equipment_passive.mode_raw,energy.equipment_passive.application_chance_raw],[38,6,0]);
+  assert.equal(Buffer.from(energy.equipment_passive.effect_raw_hex,'hex').readInt32LE(2),-1);
+  const energyOrigins=source.catalog.item_capability_admission.passive_sources[202];
+  assert.deepEqual(energyOrigins.map(row=>[row.kind,row.map_id,row.record_id,row.enemy_id,row.enemy_slot,row.reward_slot]),
+    [['registered-enemy-reward','M72064',8,'033',0,3]]);
+  for(const [rows,id]of [[origins,195],[energyOrigins,202]])for(const row of rows){const chr=await readFile(new URL(`../../../${row.source.path}`,import.meta.url));
+    assert.equal(createHash('sha256').update(chr).digest('hex'),row.source.sha256);assert.equal(chr.readInt32LE(row.source.offset),id);}
   const forged=copy(items.definitions[170]);forged.equipment_passive.effect_id_raw=35;assert.equal(isSupportedItemPassiveDefinition(forged),false);
+});
+
+test('real FF02 crystal rewards preserve native chance0 guaranteed immunity with one RNG draw',async()=>{
+  const rewards=await read('web/data/party_rewards.json'),initial=copy(seed);
+  initial.opening.status='complete';initial.location={map_id:'M72063-3',x:400,y:320,direction:0};
+  const world=new WorldStore(initial);
+  // Source groups below are reward-planning fixtures, not rendered victories.
+  for(const [mapId,ids,itemId,quantity]of [['M72063-3',['031C','031A','031B'],195,2],['M72064',['033'],202,1]]){
+    world.transact(draft=>{draft.location.map_id=mapId;});
+    const actors=[{id:'001',side:'player',hp:{current:1},immune_raw:0,state_raw:0},
+      ...ids.map(id=>({id,side:'enemy',hp:{current:0}}))],ledger=createRewardLedger(`ff02-source-loot-${mapId}`,actors);
+    for(const actor of actors.slice(1))collectEnemyDefeat(ledger,actor,{data:rewards});
+    const plan=planVictoryRewards({world:world.snapshot(),ledger,data:rewards,actors,rng:()=>0});
+    assert.equal(plan.summary.drops.find(row=>row.id===itemId).quantity,quantity);
+    world.transact(draft=>{Object.assign(draft,plan.world_patch);(draft.reward_records??=[]).push(plan.reward_record);});
+    insertCrystal({worldStore:world,attributes,itemData:items,roleId:'001',socketIndex:1,
+      instanceId:world.value.inventory.find(row=>row.id===itemId).instance_id});
+    const saved=world.snapshot();world.replace(await decodeSave(await encodeSave(saved)));assert.deepEqual(world.snapshot(),saved);
+    assert.equal(planVictoryRewards({world:world.snapshot(),ledger,data:rewards,actors,rng:()=>assert.fail('Repeated reward RNG')}).applied,false);
+    const actor=createPartyActors(world.snapshot(),attributes,{},items)[0],effectId=itemId===195?6:38;
+    assert.deepEqual(actor.equipment_passives.map(row=>row.item_id),[itemId]);
+    for(const roll of [0,1,99,32767]){
+      const rng=draws([roll]),nativeRng=draws([roll]),oracle=new Oracle(clearNativeStatuses(actor,statusData),nativeRng);
+      const actual=initializeNativeStatuses(actor,statusData,undefined,rng);oracle.run(0x47a6a0,[0]);oracle.compare(actual);
+      assert.equal(rng.calls,1);assert.deepEqual(oracle.rng_calls,[roll]);
+      assert.deepEqual(actual.native_status_slots.filter(row=>row.raw_hex!==ZERO).map(row=>parseInt(row.raw_hex.slice(2,4),16)),[effectId]);
+      assert.equal(tickNativeStatuses({actor:actual,threshold:1,now:100000,data:statusData,rng:draws([])}).ticks,0);
+    }
+    removeCrystal({worldStore:world,attributes,itemData:items,roleId:'001',socketIndex:1});
+    const removed=world.snapshot();assert.deepEqual(await decodeSave(await encodeSave(removed)),removed);
+    assert.equal(world.value.inventory.find(row=>row.id===itemId).quantity,quantity);
+  }
 });
 
 test('real rewards equip/socket and retain bytes through save, disable and removal',async()=>{

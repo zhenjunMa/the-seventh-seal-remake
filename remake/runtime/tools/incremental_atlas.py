@@ -8,6 +8,20 @@ from PIL import Image, ImageChops
 from incremental import digest, file_hash, write_bytes, write_json
 
 
+def source_image(path,descriptor):
+    """Decode a SHA-verified source within its retained descriptor dimensions."""
+    expected=(descriptor['width'],descriptor['height'])
+    previous_limit=Image.MAX_IMAGE_PIXELS
+    try:
+        Image.MAX_IMAGE_PIXELS=max(previous_limit or 0,expected[0]*expected[1])
+        with Image.open(path) as opened:
+            if opened.size!=expected:
+                raise ValueError('Source image geometry mismatch: '+str(path))
+            return opened.convert('RGBA')
+    finally:
+        Image.MAX_IMAGE_PIXELS=previous_limit
+
+
 def build_atlas(data, *, runtime, web, out, layout_pages, packing_family, dependency_groups, repack=False):
     runtime, web, out = Path(runtime), Path(web), Path(out)
     manifest_path = web/'data/battle_packs.json'
@@ -60,8 +74,7 @@ def build_atlas(data, *, runtime, web, out, layout_pages, packing_family, depend
             source = local(name)
             if not source.is_file() or file_hash(source) != descriptor['sha256']:
                 raise ValueError('Cannot repair retained atlas page from changed/missing source: '+name)
-            with Image.open(source) as opened:
-                image = opened.convert('RGBA')
+            image = source_image(source,descriptor)
             for ox, oy, w, h, _, px, py in regions:
                 restored.paste(image.crop((ox, oy, ox+w, oy+h)), (px, py))
         raw = encode(restored)
@@ -108,10 +121,7 @@ def build_atlas(data, *, runtime, web, out, layout_pages, packing_family, depend
             counters['reused_images'] += 1
             continue
         counters['decoded_images'] += 1
-        with Image.open(source) as opened:
-            image = opened.convert('RGBA')
-        if image.size != (asset['width'], asset['height']):
-            raise ValueError('Source image geometry mismatch: '+name)
+        image = source_image(source,asset)
         row = dict(sha256=asset['sha256'], width=image.width, height=image.height, regions=[])
         images[name] = row
         bank = tile_index.setdefault(family, {})
@@ -166,8 +176,7 @@ def build_atlas(data, *, runtime, web, out, layout_pages, packing_family, depend
         restored = Image.new('RGBA', (row['width'],row['height']))
         for ox,oy,w,h,number,px,py in row['regions']:
             restored.paste(page_image(number).crop((px,py,px+w,py+h)),(ox,oy))
-        with Image.open(local(asset['path'])) as opened:
-            original = opened.convert('RGBA')
+        original = source_image(local(asset['path']),asset)
         if original.getchannel('A').tobytes() != restored.getchannel('A').tobytes():
             raise ValueError('Atlas alpha reconstruction differs: '+asset['path'])
         difference = ImageChops.difference(original.convert('RGB'),restored.convert('RGB'))

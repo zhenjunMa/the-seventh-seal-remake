@@ -5,6 +5,7 @@ import {readFile} from 'node:fs/promises';
 import {BattleLifecyclePlayback,APPEARANCE_ALPHA_ADAPTER} from '../web/battle_lifecycle_view.mjs';
 import {BattleController} from '../web/core/combat.mjs';
 import {AppearanceParticles} from '../web/appearance_particles.mjs';
+import {createDeathParticleSurface} from '../web/death_particles.mjs';
 const manifest=JSON.parse(await readFile(new URL('../web/data/battle_lifecycle.json',import.meta.url)));
 const copy=structuredClone,role=id=>manifest.roles.find(row=>row.id===id),skill=(id,index)=>role(id).skills.find(row=>row.chr_skill_index===index);
 const duration=s=>s.timeline.filter(step=>step.kind==='sprite').reduce((total,step)=>total+step.interval_raw,0);
@@ -134,6 +135,26 @@ test('actual024 command-only mode3 entry releases immunity after its source colu
   let now=0;while(playback.snapshot().active.length&&now<1800){now+=20;playback.advance(snapshot,roster,now);}
   assert.ok(now<1800);assert.equal(control.actor('armor').immune_raw,0);assert.equal(control.actor('armor').native_after_raw['0x0521f666'],0);
   assert.deepEqual(playback.drainCompleted(),[{token:entry.token,actor_id:'armor',life_epoch:0}]);
+});
+
+test('exported018 command-only mode2 falls through the shared source-pixel renderer and clears immunity only at completion',()=>{
+  const selected=skill('018',5),step=selected.timeline[0];assert.equal(selected.timeline.length,1);
+  assert.equal(Buffer.from(step.raw_hex,'hex')[0x47],2);
+  for(const hz of [30,60,144]){
+    const control=new BattleController({});control.state={actors:[{id:'demon',immune_raw:1}]};control.rng=()=>assert.fail('fixed mode2 must not draw combat RNG');
+    const effect=createDeathParticleSurface({rgba:new Uint8Array([255,255,255,255]),width:1,height:1,anchor:{x:0,y:0},mode:2,appearance:true,seed:'018-entry'});
+    const playback=new BattleLifecyclePlayback(manifest,{appearanceEffect:(_actor,_role,mode)=>{assert.equal(mode,2);return effect;},nativeBridge:()=>({
+      record:raw=>control.nativeSourceRecord('demon',raw),appearance:raw=>control.beginNativeAppearance('demon',raw),appearanceComplete:()=>control.completeNativeAppearance('demon')})});
+    const roster=[{id:'demon',resource_id:'018',side:'enemy'}],entry=event('demon','entry',5,11,{life_epoch:0}),
+      snapshot={id:'018-source-entry',actors:[{id:'demon',life_epoch:0}],lifecycle_events:[entry]};
+    playback.advance(snapshot,roster,0);assert.equal(control.actor('demon').immune_raw,1);assert.ok(effect.particles[0].y<0);
+    let draws=0;assert.equal(playback.drawParticles('demon',{save(){},restore(){},drawImage(){draws++;}},0,0),true);assert.equal(draws,2);
+    let now=0;while(playback.snapshot().active.length&&now<1800){
+      assert.equal(control.actor('demon').immune_raw,1);now+=1000/hz;playback.advance(snapshot,roster,now);
+    }
+    assert.ok(now<1800);assert.equal(effect.particles[0].y,0);assert.equal(control.actor('demon').immune_raw,0);
+    assert.equal(control.actor('demon').native_after_raw['0x0521f666'],0);assert.deepEqual(playback.drainCompleted(),[{token:entry.token,actor_id:'demon',life_epoch:0}]);
+  }
 });
 
 test('lifecycle sound visits use source logical cursors, survive slow RAF and retire on reset without replay',()=>{

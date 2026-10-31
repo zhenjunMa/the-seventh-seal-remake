@@ -144,12 +144,13 @@ def prepare_role(ident, status):
         if effect[0xb] not in (0, 2) or effect[1] > 100 or effect[0x10] not in (0, 1):
             raise ValueError(f'Enemy {ident} skill {index}: unsupported status handler {effect[1]} / mode {effect[0xb]}')
         commands = [(a['type_raw'], a['u32_at_0x01_raw']) for a in skill['actions'] if a['type_raw']]
-        carrier = any(group != 11 for _, group in commands)
-        if any(kind != 1 or group not in ((0, 1, 4, 6, 7, 8, 11) if carrier else (11,)) for kind, group in commands):
+        carrier = any(a['type_raw'] == 1 and a['u32_at_0x01_raw'] == 4
+            and struct.unpack_from('<I', bytes.fromhex(a['raw_hex']), 0x49)[0] for a in skill['actions'])
+        if any(kind != 1 or group not in (0, 1, 4, 6, 7, 8, 10, 11) for kind, group in commands):
             raise ValueError(f'Enemy {ident} skill {index}: unsupported native action command')
         handler = 'effect-carrier' if carrier else 'direct'
         retained = ai['skills'][index]
-        if carrier:
+        if carrier or fixed[0x25] and not retained.get('contactless'):
             if fixed[0x32] & 15 not in (2, 3):
                 raise ValueError(f'Enemy {ident} skill {index}: unsupported carrier recovery targeting')
             if fixed[0x25]:
@@ -167,6 +168,8 @@ def prepare_role(ident, status):
                               'ev_c9bbdef1c8377c5cb768f67c055aa4189564ec176aa68cd9b38b398e47bb0b9b'])
         retained['battle_handler'] = handler
         view = enrich_sequence(c, d, index, handler=handler)
+        if retained.get('contactless'):
+            view['contactless'] = True
         for segment in view['segments']:
             segment['raw_hex'] = skill['actions'][segment['chr_record_index']]['raw_hex']
             segment['source_skill_index'] = index

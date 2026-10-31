@@ -1,15 +1,17 @@
-// 552642 mode3 -> 550F12, with the fresh zeroed particle records from550975.
+// 552642 modes2/3 -> 550A28/550F12, with fresh zeroed records from550975.
+// mode2: ev_307536a38945e5375b8ab1c0ea0dc56959b696bb033065aa1622ec9f6f7c0b3a.
 // Pixels retain the source scanner's local columns; rendering uses the shared
 // source-particle surface and a local visual RNG, separate from combat draws.
 export class AppearanceParticles {
-  constructor({pixels,anchor={x:0,y:0},random,screenWidth=640}){
-    Object.assign(this,{source:pixels,anchor,random,screenWidth});this.reset();
+  constructor({pixels,anchor={x:0,y:0},random,screenWidth=640,mode=3}){
+    Object.assign(this,{source:pixels,anchor,random,screenWidth,mode});this.reset();
   }
   reset(){
-    const {source,anchor,random,screenWidth}=this;
+    const {source,anchor,random,screenWidth,mode}=this;
     this.particles=source.map(pixel=>({...pixel,life:random()%30+5,age:0,target_y:(-anchor.y)|0}));
     const columns=Array.from({length:screenWidth},(_,x)=>{
-      const speed=(random()&7)+4,offset=(random()&0x6f)+40;
+      const speed=(random()&(mode===2?6:7))+4,offset=(random()&0x6f)+40;
+      if(mode===2)return {speed,offset:-offset};
       return x&1?{speed:-speed,offset}:{speed,offset:-offset};
     });
     for(const p of this.particles){const column=columns[(p.x+anchor.x)%screenWidth];p.speed=column.speed;p.y+=column.offset;}

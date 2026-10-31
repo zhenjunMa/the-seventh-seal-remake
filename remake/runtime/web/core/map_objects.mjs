@@ -1,4 +1,4 @@
-// Presentation clocks for source CF1, CF4 and CF7 idle objects. Triggering/collecting an
+// Presentation clocks for source ordinary objects. Triggering/collecting an
 // object remains an event transaction, never an animation side effect.
 import {createNativeRng} from './combat_rules.mjs';
 
@@ -46,11 +46,28 @@ function cf7Source(row){
   if(resource.actions[0].first_frame!==0)throw new Error('CF7地图物件初始物理帧尚未恢复');
   return {count:parsed[0].count,interval:parsed[0].interval,fixed:raw[0xb4]!==0,layer:raw[0xce],restoredLayer:parsed[1].restoredLayer};
 }
+function activeObjectSource(row){
+  const {resource}=row,{raw,view}=sourceBytes(row.source_record_raw_hex,0x112,'机关物件');
+  const behavior=raw[0xcf];
+  if(![2,9].includes(behavior)||resource.actions?.length!==(behavior===9?3:1))throw new Error('机关物件源动作数量未恢复');
+  const actions=resource.actions.map((action,index)=>{
+    const {raw:a,view:v}=sourceBytes(action.source_action_raw_hex,0xac,'机关动作');
+    const explicit=(a[13]&15)===0,count=v.getUint32(explicit?0x12:0x0e,true);
+    if(action.index!==index||a[0]!==0||![0,1].includes(a[13]&15)||(a[13]>>>4)>2||action.directions!==1
+      ||count<1||action.logical_frames?.length!==count||action.first_frame!==v.getUint32(0x72,true)
+      ||action.interval_raw!==v.getUint32(1,true)||action.interval_raw<1
+      ||action.logical_frames.some((frame,i)=>frame!==(explicit?a[0x16+i]:i)||frame>=action.frame_count)
+      ||a.slice(0x56,0x6a).some(Boolean)||a[0x84]||view.getUint32(0x9e+index*4,true)!==0)
+      throw new Error('机关物件动作或声音模式未恢复');
+    return {count,interval:action.interval_raw,restoredLayer:[2,3,1][a[13]>>>4]};
+  });
+  return {...actions[0],layer:raw[0xce],restoredLayer:actions.at(-1).restoredLayer,fixed:raw[0xb4]!==0};
+}
 
 export class MapObjectRuntime {
-  constructor({objects,resources,mapFlagIndex,mapId=null,random=null,onSound=null}) {
+  constructor({objects,resources,mapFlagIndex,mapId=null,movement=null,random=null,onSound=null}) {
     this.mapFlagIndex=mapFlagIndex;this.mapId=mapId;this.lastTime=null;
-    this.onSound=onSound;
+    this.onSound=onSound;this.movement=movement;
     // Scene-local visual CRT, like MapNpcRuntime. The original complete global
     // CRT stream has not been observed; never consume WorldStore/encounter RNG.
     this.rng=createNativeRng((Date.now()^Math.floor(Math.random()*0xffffffff))>>>0);
@@ -60,8 +77,8 @@ export class MapObjectRuntime {
     if(new Set(rows.map(row=>row.index)).size!==rows.length)throw new Error('地图物件索引重复');
     this.actors=rows.map(row=>{
       const {index,resource,behavior_raw_cf}=row;
-      if(![1,4,7].includes(behavior_raw_cf))throw new Error('地图物件待机类型尚未恢复');
-      const source=behavior_raw_cf===1?cf1Source(row):behavior_raw_cf===7?cf7Source(row):null;
+      if(![1,2,4,7,9].includes(behavior_raw_cf))throw new Error('地图物件待机类型尚未恢复');
+      const source=behavior_raw_cf===1?cf1Source(row):behavior_raw_cf===7?cf7Source(row):[2,9].includes(behavior_raw_cf)?activeObjectSource(row):null;
       if(mapId&&row.map_id&&mapId!==row.map_id)throw new Error('地图物件源地图不匹配');
       const object=objects.find(object=>object.index===index);
       if(!object)throw new Error('地图光效没有对应物件');
@@ -83,6 +100,7 @@ export class MapObjectRuntime {
         actor.sourceLayer=source.layer;actor.restoredLayer=source.restoredLayer;actor.nativeDisplayZero=true;
         if(behavior_raw_cf===1){actor.interactionRecord=source.interactionRecord;actor.sound=source.sound;}
         if(behavior_raw_cf===7){actor.actionIndex=0;actor.displayActionIndex=0;actor.displayFrame=0;actor.fixed=source.fixed;}
+        if([2,9].includes(behavior_raw_cf)){actor.actionIndex=0;actor.displayActionIndex=0;actor.displayFrame=0;}
       }
       this.project(actor,0);return actor;
     });
@@ -90,30 +108,42 @@ export class MapObjectRuntime {
   }
   animate({objectIndex,state,signal}){
     const actor=this.actors.find(actor=>actor.object.index===objectIndex);
-    if(actor?.behavior!==7||![2,5].includes(state))throw new Error('剧情物件主动类型尚未恢复');
+    if(![2,7,9].includes(actor?.behavior)||![2,5].includes(state)||actor.behavior===9&&state===5)throw new Error('剧情物件主动类型尚未恢复');
     if(actor.pending)throw new Error('剧情物件上一个动作尚未结束');
     if(signal?.aborted)return Promise.reject(signal.reason);
     // 40C5C0 starts action0 at logical0; closing CF7 restores action0's
     // last logical cursor, leaving its displayed image until the next tick.
     const before={commandState:actor.commandState,actionIndex:actor.actionIndex,displayActionIndex:actor.displayActionIndex,
       displayFrame:actor.displayFrame,frame:actor.frame,state:actor.state,elapsed:actor.elapsed,interval:actor.interval};
-    actor.commandState=state;actor.actionIndex=0;
+    const terrainBefore=actor.resource.terrain_frames&&this.movement?[...this.movement.rows]:null;
+    actor.commandState=state;actor.actionIndex=actor.behavior===9?1:0;
     actor.frame=state===2?0:actor.resource.actions[0].logical_frames.length-1;
-    if(state===2){actor.displayActionIndex=0;actor.displayFrame=0;}
+    if(state===2){actor.displayActionIndex=actor.actionIndex;actor.displayFrame=actor.resource.actions[actor.actionIndex].logical_frames[0];}
     this.project(actor,state);
     return new Promise((resolve,reject)=>{
       const abort=()=>{
-        signal.removeEventListener('abort',abort);actor.pending=null;Object.assign(actor,before);this.project(actor,before.state);reject(signal.reason);
+        signal.removeEventListener('abort',abort);actor.pending=null;Object.assign(actor,before);
+        if(terrainBefore)this.movement.rows=terrainBefore;
+        this.project(actor,before.state);reject(signal.reason);
       };
       signal?.addEventListener('abort',abort,{once:true});
       actor.pending=()=>{signal?.removeEventListener('abort',abort);actor.pending=null;resolve();};
     });
   }
   project(actor,state) {
-    if(actor.behavior===7){
+    if([2,7,9].includes(actor.behavior)){
       const action=actor.resource.actions[actor.displayActionIndex];actor.state=state;
-      actor.object.motion={main:action.main_bitmap,intrinsic:action.intrinsic_bitmap,
+      actor.object.motion={main:action.main_bitmap,intrinsic:action.intrinsic_bitmap,shadow:action.shadow_bitmap,
         width:actor.resource.frame_width,height:actor.resource.frame_height,frame:actor.displayFrame};
+      // 411420 writes nonzero DGP volume cells into DAT terrain. Raw2 clears
+      // a cell; raw0 leaves it untouched. Positions are the exported DAT grid.
+      if(this.movement&&actor.resource.terrain_frames){
+        const physical=action.first_frame+actor.displayFrame;
+        for(const [dx,dy,raw]of actor.resource.terrain_frames[physical]){
+          const x=actor.object.cell_x+dx,y=actor.object.cell_y+dy,row=this.movement.rows[y];
+          this.movement.rows[y]=row.slice(0,x)+(raw===2?'0':'1')+row.slice(x+1);
+        }
+      }
       return action;
     }
     // 4137C0: CF4 states 0/1 loop action0; 40CFE0 restores state3 at
@@ -138,6 +168,35 @@ export class MapObjectRuntime {
     for(const actor of this.actors){
       const record=world.event_records?.[this.mapFlagIndex]?.[actor.object.index];
       const state=actor.commandState??(record?parseInt(record.slice(0,2),16):0);
+      if([2,9].includes(actor.behavior)){
+        if(![0,2,3,5].includes(state)||[2,5].includes(state)&&!actor.pending)throw new Error('机关物件主动状态缺少剧情时钟');
+        if(!actor.loaded){
+          actor.loaded=true;actor.object.layer=state===3?actor.restoredLayer:actor.sourceLayer;
+          actor.actionIndex=state===3&&actor.behavior===9?2:0;
+          actor.frame=state===3&&actor.behavior===2?actor.resource.actions[0].logical_frames.length-1:0;
+          actor.displayActionIndex=actor.actionIndex;actor.displayFrame=actor.resource.actions[actor.actionIndex].logical_frames[actor.frame];
+        }
+        if(paused||delta>250){actor.elapsed=0;this.project(actor,state);continue;}
+        actor.elapsed+=delta;
+        if(actor.elapsed>=actor.interval){
+          actor.elapsed=0;
+          if(state===2||state===5){
+            const action=actor.resource.actions[actor.actionIndex],done=state===2?actor.frame===action.logical_frames.length-1:actor.frame===0;
+            if(done){actor.commandState=state===2?3:0;actor.object.layer=state===2?actor.restoredLayer:actor.sourceLayer;actor.pending();}
+            else actor.frame+=state===2?1:-1;
+            actor.displayActionIndex=actor.actionIndex;actor.displayFrame=action.logical_frames[actor.frame];
+          }else if(actor.behavior===9){
+            const index=state===3?2:0,action=actor.resource.actions[index];
+            // 4137C0 selects action2 and advances logical1, but computes that
+            // first displayed frame with the previous action's bank pointer.
+            const display=actor.actionIndex;
+            if(display!==index){actor.actionIndex=index;actor.frame=0;}
+            actor.frame=(actor.frame+1)%action.logical_frames.length;
+            actor.displayActionIndex=display;actor.displayFrame=actor.resource.actions[display].logical_frames[actor.frame];
+          }
+        }
+        this.project(actor,state);continue;
+      }
       if(actor.behavior===7){
         if(![0,3,4].includes(state)&&!actor.pending)throw new Error('CF7地图物件主动交互状态尚未恢复');
         if(!actor.loaded){
