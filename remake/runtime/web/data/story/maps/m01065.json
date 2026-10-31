@@ -16996,7 +16996,7 @@
         },
         {
           "id": "M01065:tlk:67:3",
-          "op": "jump",
+          "op": "end",
           "record_id": 67,
           "source": {
             "path": "Map/m01065.TLK",
@@ -17004,8 +17004,7 @@
             "record_id": 67,
             "record_bytes": 1647,
             "offset": 110728
-          },
-          "target": "M01065:tlk:end"
+          }
         },
         {
           "id": "M01065:tlk:end",

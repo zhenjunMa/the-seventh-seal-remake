@@ -5036,7 +5036,7 @@
         },
         {
           "id": "M17020:tlk:11:2",
-          "op": "jump",
+          "op": "end",
           "record_id": 11,
           "source": {
             "path": "Map/m17020.TLK",
@@ -5044,8 +5044,7 @@
             "record_id": 11,
             "record_bytes": 1647,
             "offset": 18496
-          },
-          "target": "M17020:tlk:end"
+          }
         },
         {
           "id": "M17020:tlk:end",

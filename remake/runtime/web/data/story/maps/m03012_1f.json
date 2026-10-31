@@ -4589,7 +4589,7 @@
         },
         {
           "id": "M03012_1F:tlk:26:2",
-          "op": "jump",
+          "op": "end",
           "record_id": 26,
           "source": {
             "path": "Map/m03012_1f.TLK",
@@ -4597,8 +4597,7 @@
             "record_id": 26,
             "record_bytes": 1647,
             "offset": 43201
-          },
-          "target": "M03012_1F:tlk:end"
+          }
         },
         {
           "id": "M03012_1F:tlk:27",

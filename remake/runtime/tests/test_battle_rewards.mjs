@@ -36,11 +36,11 @@ class ChainOracle extends NativeAssemblyOracle {
   regWrite(s,v){const register={AX:'EAX',CX:'ECX',DX:'EDX'}[s];if(register)this.reg[register]=(this.reg[register]&~65535)|(v&65535);else super.regWrite(s,v);}
   value(s){const word=s.match(/^word ptr \[(.*)\]$/);return word?this.read(this.address(word[1]),2):super.value(s);}
 }
-function dropOracle(ledger,rolls){
+function dropOracle(ledger,rolls,rewards=data){
   const rng=rngSequence(rolls),o=new RewardsOracle(instructions.functions,rng),pointer=0x20000000;
   o.write(0x503b7e8,pointer);o.write(0x55ede78,ledger.chain.maximum);o.write(0x55ede84,ledger.candidates.length);
   ledger.candidates.forEach((row,i)=>{o.write(0x55ede88+i*8,row.id);o.write(0x55ede8c+i*8,row.count);});
-  for(const item of Object.values(data.items)){const b=Buffer.from(item.source.definition_raw_hex,'hex');for(let j=0;j<b.length;j++)o.write(pointer+(item.id-1)*0x3bf+j,b[j],1);}
+  for(const item of Object.values(rewards.items)){const b=Buffer.from(item.source.definition_raw_hex,'hex');for(let j=0;j<b.length;j++)o.write(pointer+(item.id-1)*0x3bf+j,b[j],1);}
   o.run(0x50cc20,[]);return {items:o.items,calls:rng.count(),practice:o.read(0x55edf28)};
 }
 
@@ -83,6 +83,31 @@ test('drop rate zero consumes RNG and succeeds; minus one skips RNG; stack caps 
   const rng=rngSequence([99]);const plan=planVictoryRewards({world,ledger,data:fixture,rng,actors});
   assert.equal(rng.count(),1);assert.deepEqual(plan.summary.drops,[{id:331,name:item.name,quantity:1}]);
   const old=plan.world_patch.inventory.find(v=>v.instance_id==='existing-stone');assert.equal(old.quantity,99);assert.equal(Buffer.from(old.source_raw_hex,'hex').readUInt32LE(4),99);
+});
+
+test('native minus-one slots347/29/30 skip unique handling, RNG and initialization',()=>{
+  const fixture=copy(data),itm=fs.readFileSync(path.join(root,'SYSTEM/Object.ITM'));
+  const boss=fs.readFileSync(path.join(root,'Fight_Role/033.CHR'));
+  const slots=Array.from({length:6},(_,i)=>boss.readInt32LE(8+0xe8+i*4));
+  assert.deepEqual(slots.filter(id=>[347,29,30].includes(id)),[347,29,30]);
+  for(const id of [347,29,30]){
+    const at=0x61c+(id-1)*0x3bf,b=itm.subarray(at,at+0x3bf);
+    fixture.items[id]={id,name:new TextDecoder('gbk').decode(b.subarray(4,28)).split('\0')[0],
+      type_raw:b[0x24],unique_raw:b[0x14b],drop_rate:b.readInt32LE(0x158),
+      source:{definition_raw_hex:b.toString('hex')}};
+    assert.equal(fixture.items[id].drop_rate,-1);
+  }
+  assert.deepEqual([fixture.items[347].type_raw,fixture.items[29].unique_raw,fixture.items[30].unique_raw],[6,1,1]);
+  validateForestRewards(fixture);
+  const {actors,ledger}=pool(['032']);ledger.experience=0;
+  ledger.candidates=[347,29,30].map(id=>({id,count:1}));
+  const oracle=dropOracle(ledger,[],fixture),rng=rngSequence([]);
+  const plan=planVictoryRewards({world:seed,ledger,data:fixture,rng,actors});
+  assert.deepEqual(oracle.items,[]);assert.equal(oracle.calls,0);assert.equal(rng.count(),0);
+  assert.deepEqual(plan.summary.drops,[]);assert.deepEqual(plan.world_patch.inventory,seed.inventory);
+  assert.deepEqual(plan.trace.filter(row=>row.type==='drop-skipped').map(row=>row.id),[347,29,30]);
+  fixture.items[29].drop_rate=100;
+  assert.throws(()=>validateForestRewards(fixture),/掉落类型未支持/,'A droppable unique item remains outside the supported contract');
 });
 
 test('original chain only counts repeat settled contacts and resets at dispatch or idle',()=>{

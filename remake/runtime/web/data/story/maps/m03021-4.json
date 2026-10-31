@@ -18179,7 +18179,7 @@
         },
         {
           "id": "M03021-4:tlk:33:2",
-          "op": "jump",
+          "op": "end",
           "record_id": 33,
           "source": {
             "path": "Map/m03021-4.TLK",
@@ -18187,8 +18187,7 @@
             "record_id": 33,
             "record_bytes": 1647,
             "offset": 54730
-          },
-          "target": "M03021-4:tlk:end"
+          }
         },
         {
           "id": "M03021-4:tlk:34",
@@ -18407,7 +18406,7 @@
         },
         {
           "id": "M03021-4:tlk:38:2",
-          "op": "jump",
+          "op": "end",
           "record_id": 38,
           "source": {
             "path": "Map/m03021-4.TLK",
@@ -18415,8 +18414,7 @@
             "record_id": 38,
             "record_bytes": 1647,
             "offset": 62965
-          },
-          "target": "M03021-4:tlk:end"
+          }
         },
         {
           "id": "M03021-4:tlk:39",

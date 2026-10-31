@@ -5142,7 +5142,7 @@
         },
         {
           "id": "M29011:tlk:45:2",
-          "op": "jump",
+          "op": "end",
           "record_id": 45,
           "source": {
             "path": "Map/m29011.TLK",
@@ -5150,8 +5150,7 @@
             "record_id": 45,
             "record_bytes": 1647,
             "offset": 74494
-          },
-          "target": "M29011:tlk:end"
+          }
         },
         {
           "id": "M29011:tlk:46",

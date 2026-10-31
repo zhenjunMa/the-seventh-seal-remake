@@ -1,0 +1,304 @@
+{
+  "schema": "seventh-seal-battle-stage",
+  "version": 1,
+  "stage_id": "stage04",
+  "source_scn": {
+    "path": "Fight_Bk/stage04.scn",
+    "sha256": "6c32fdf7838e8726fe5d9152cbac658f5268674f0d282349f4ffd141877f2852",
+    "version_raw": 2,
+    "record_start": 25284,
+    "record_bytes": 71,
+    "record_count": 3,
+    "header_raw_hex": "0200000000000000c1bca4a7afabb7b5000000000000000000000000466967687442474d30312e77617600000000000004000000010000000400000000000000000000000000000000000000",
+    "opaque_block": {
+      "offset": 76,
+      "bytes": 25208,
+      "sha256": "f16cbdeae67db8b18e8f57ead316b4e280e47d796d08f7f91d7bfce20ac43764"
+    }
+  },
+  "layers": [
+    {
+      "id": "FSBLACK",
+      "role": "sky",
+      "source": {
+        "path": "Fight_Bk/FSBLACK.DGP",
+        "sha256": "cd62f149a29c6805a2baed8f40966b156abf367af0c2412e37f181802f816679",
+        "width": 640,
+        "height": 480,
+        "frame_count": 1,
+        "anchor_raw": [
+          32,
+          0,
+          0
+        ],
+        "header_raw_hex": "09000000000000000000000000000000000000000001000000000000000000800200000000000000000000010000000000000000000000000000000000000000000000"
+      },
+      "scn": {
+        "record_index": 0,
+        "offset": 25284,
+        "bytes": 71,
+        "raw_hex": "004653424c41434b2e4447500000000000000000000400000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000",
+        "type_raw_00": 0,
+        "current_frame_raw_1d": 0,
+        "position_raw": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "sort_category_raw_36": 1
+      },
+      "frames": [
+        {
+          "index": 0,
+          "path": "assets/stages/stage04/FSBLACK/frame_000.png",
+          "sha256": "406bac86fa777227aeafc5ba74787a7e2a93ccc66dbbc5dce4f42e470960eb96",
+          "rgba_sha256": "13d8097034a59f0d0b9305090716569a8f8bbb4de83d1b8394815efaaca69b75",
+          "bounds": [
+            0,
+            0,
+            639,
+            479
+          ],
+          "covered_pixels": 306081,
+          "transparent_pixels": 1119
+        }
+      ],
+      "animation": null
+    },
+    {
+      "id": "FG04A",
+      "role": "ground",
+      "source": {
+        "path": "Fight_Bk/FG04A.DGP",
+        "sha256": "c069d8bd7ff43a60e1520fcec0df767f76918f068f56e3b18ba479f891a16d54",
+        "width": 1400,
+        "height": 400,
+        "frame_count": 1,
+        "anchor_raw": [
+          32,
+          0,
+          0
+        ],
+        "header_raw_hex": "09000000000000000000000000000000000000000000000000000000000000000000009001000001000000000000000000000000000000000000000000000000000000"
+      },
+      "scn": {
+        "record_index": 1,
+        "offset": 25355,
+        "bytes": 71,
+        "raw_hex": "0146473034412e44475000000000000000000000000200000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000",
+        "type_raw_00": 1,
+        "current_frame_raw_1d": 0,
+        "position_raw": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "sort_category_raw_36": 1
+      },
+      "frames": [
+        {
+          "index": 0,
+          "path": "assets/stages/stage04/FG04A/frame_000.png",
+          "sha256": "1ce29c9c138dd3c4ad55415a6246b791c6253847548caa2f82851a4a5995e827",
+          "rgba_sha256": "72e81a906178be1fc043adfc5af45a1d4e7f77e5721d2fedb6b64deeddfb1355",
+          "bounds": [
+            0,
+            0,
+            1399,
+            399
+          ],
+          "covered_pixels": 447838,
+          "transparent_pixels": 112162
+        }
+      ],
+      "animation": null
+    },
+    {
+      "id": "FB04A",
+      "role": "scene_object",
+      "source": {
+        "path": "Fight_Bk/FB04A.DGP",
+        "sha256": "d4867b18e078c3ae00189485911b5635b4ae433abd6df976453eacbbb1f81487",
+        "width": 899,
+        "height": 399,
+        "frame_count": 1,
+        "anchor_raw": [
+          446,
+          359,
+          0
+        ],
+        "header_raw_hex": "09000000000000000000000000000000000000000000000000000000000000000000008f01000001000000000000000000000000000000000000000000000000000000"
+      },
+      "scn": {
+        "record_index": 2,
+        "offset": 25426,
+        "bytes": 71,
+        "raw_hex": "0246423034412e44475000000000000000000000000300000000000000000000003b01000067000000000000000000000000000000000100000000000000000000000000000000",
+        "type_raw_00": 2,
+        "current_frame_raw_1d": 0,
+        "position_raw": {
+          "x": 315,
+          "y": 103,
+          "z": 0
+        },
+        "sort_category_raw_36": 1
+      },
+      "frames": [
+        {
+          "index": 0,
+          "path": "assets/stages/stage04/FB04A/frame_000.png",
+          "sha256": "3e3d460c871de59a03f993ec00ed7662ea8adbe5c3e1566082adc8df1a452ca5",
+          "rgba_sha256": "5cd237fa061d7d50668b0de6f2353ed66781ee3a16f7c076007604aa151adb7a",
+          "bounds": [
+            0,
+            0,
+            899,
+            395
+          ],
+          "covered_pixels": 348418,
+          "transparent_pixels": 10283
+        }
+      ],
+      "animation": null
+    }
+  ],
+  "default_composition": {
+    "viewport": {
+      "width": 640,
+      "height": 480
+    },
+    "camera": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "sky": {
+      "layer_id": "FSBLACK",
+      "initial_frame": 0,
+      "source_rect": [
+        0,
+        0,
+        640,
+        175
+      ],
+      "destination_rect": [
+        0,
+        0,
+        640,
+        175
+      ]
+    },
+    "ground": {
+      "layer_id": "FG04A",
+      "frame": 0,
+      "source_rect": [
+        380,
+        95,
+        640,
+        305
+      ],
+      "destination_rect": [
+        0,
+        175,
+        640,
+        305
+      ]
+    },
+    "scene_objects": [
+      {
+        "layer_id": "FB04A",
+        "frame": 0,
+        "source_rect": [
+          0,
+          0,
+          899,
+          399
+        ],
+        "destination_rect": [
+          -131,
+          -208,
+          899,
+          399
+        ],
+        "sort_category": 1,
+        "sort_y": 103
+      }
+    ],
+    "camera_limit_x": 410,
+    "animated_camera_projection_implemented": false,
+    "draw_order": "sky, ground, scenery textures, combat actors sorted by ground Y, then effects and HUD"
+  },
+  "default_composite": {
+    "path": "/assets/stages/stage04/default_composite.png",
+    "sha256": "5eadbc419c8528ea3995fc8463c670eec1a6813376870d06e930d777cee70b07",
+    "width": 640,
+    "height": 480
+  },
+  "source_hashes": {
+    "GAME.exe": "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18",
+    "Fight_Bk/stage04.scn": "6c32fdf7838e8726fe5d9152cbac658f5268674f0d282349f4ffd141877f2852",
+    "Fight_Bk/FSBLACK.DGP": "cd62f149a29c6805a2baed8f40966b156abf367af0c2412e37f181802f816679",
+    "Fight_Bk/FG04A.DGP": "c069d8bd7ff43a60e1520fcec0df767f76918f068f56e3b18ba479f891a16d54",
+    "Fight_Bk/FB04A.DGP": "d4867b18e078c3ae00189485911b5635b4ae433abd6df976453eacbbb1f81487"
+  },
+  "native_evidence": {
+    "loader": {
+      "selector": "0x51c48f",
+      "evidence_id": "ev_943b0b73f1e96b42f7c10b51e88dc4d7863d2f2860e0306b9f3676596bf34686",
+      "bundle": "remake/runtime/evidence/forest_stage_native.json"
+    },
+    "register": {
+      "selector": "0x51c070",
+      "evidence_id": "ev_c46492f694a8d07c53256c078f5f9fd532c960de0e5c440351e14b9db37b2217",
+      "bundle": "remake/runtime/evidence/forest_stage_native.json"
+    },
+    "viewport": {
+      "selector": "0x67c3a0",
+      "evidence_id": "ev_8ca2bfee0c0cc1cf3aef8c7925374a59763d8c00ddae639444d2cca1b6d09581",
+      "bundle": "remake/runtime/evidence/forest_stage_native.json"
+    },
+    "background_draw": {
+      "selector": "0x515d03",
+      "evidence_id": "ev_905b24d5b64b962806945c172e0ff62ec47d36f049592bec3943ef246c544306",
+      "bundle": "remake/runtime/evidence/forest_stage_native.json"
+    },
+    "sky_draw": {
+      "selector": "0x5154d8",
+      "evidence_id": "ev_862e12f6c9e9063110e4f7b011aad3061a9c93e4ebed25ef2af3c9872c654623",
+      "bundle": "remake/runtime/evidence/forest_stage_native.json"
+    },
+    "ground_scanlines": {
+      "selector": "0x5145d0",
+      "evidence_id": "ev_fb4eae0c9be69541893c3047b15076c461006bd02d921a124867ba8dc1294465",
+      "bundle": "remake/runtime/evidence/forest_stage_native.json"
+    },
+    "object_projection": {
+      "selector": "0x513fc0",
+      "evidence_id": "ev_18cdcb45ca765d672e35f752afdc5e706f22e1459b45625a11f7c281f3ba326b",
+      "bundle": "remake/runtime/evidence/forest_stage_native.json"
+    },
+    "object_queue": {
+      "selector": "0x514990",
+      "evidence_id": "ev_b369f1149d0cea79384a0ae8296c12400febd1ba48c1feffbfb9bea7cbc05bf9",
+      "bundle": "remake/runtime/evidence/forest_stage_native.json"
+    },
+    "depth_sort": {
+      "selector": "0x515320",
+      "evidence_id": "ev_885213dafbc931d020af2efd8feb71415f8a38dde2ccdcff8bc6e3cd161d64cb",
+      "bundle": "remake/runtime/evidence/forest_stage_native.json"
+    },
+    "animation": {
+      "selector": "0x51d28f",
+      "evidence_id": "ev_5980fa61b3229e1e821a27ef87d60e6ba0603fea9415239c7f52ac25807dc58a",
+      "bundle": "remake/runtime/evidence/forest_stage_native.json"
+    }
+  },
+  "derivation_source": {
+    "path": "data/forest_stage.json",
+    "sha256": "bca1808c76f2db6bef833bdde899ac48e0cd7bc4bf064124f185c6471ff917f8"
+  },
+  "original_game_execution_observed": false,
+  "limitations": [
+    "Recovered SCN v2/mode4 zero-camera layout and single-action sequential scenery animation; dynamic camera and exact native RGB565 blending remain adaptation boundaries."
+  ]
+}

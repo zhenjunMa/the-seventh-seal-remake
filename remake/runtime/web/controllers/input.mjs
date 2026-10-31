@@ -75,7 +75,7 @@ export function createInputController({state, actions, $, canvas, ctx}) {
     $('load').onclick=actions.guarded(()=>actions.openSaveMenu({mode:'load'}));
     $('exportSave').onclick=actions.guarded(async()=>actions.download(await actions.saveEnvelope(),'seventh-seal-runtime-save.json'));
     $('importSave').onclick=()=>$('saveFile').click();$('saveFile').onchange=actions.guarded(async()=>{const file=$('saveFile').files[0];$('saveFile').value='';if(!file)return;if(file.size>8_000_000)throw new Error('存档文件超过当前版本上限');await actions.restore(JSON.parse(await file.text()));});
-    $('exportLog').onclick=()=>actions.download({schema:'seventh-seal-runtime-log',version:2,events:state.logs,battle_history:state.battleHistory,current_battle:state.battle?.snapshot()??null,world:state.world.snapshot(),audio:state.audio?.snapshot()??null,scope:state.catalog.scope},'seventh-seal-runtime-log.json');
+    $('exportLog').onclick=actions.exportRuntimeLog;
     $('layerOpen').onclick=actions.guarded(actions.showLayers);$('layerClose').onclick=()=>{$('layerPanel').hidden=true;state.scenes.setPhase('map');canvas.focus();};
     $('layerPrevious').onclick=actions.guarded(async()=>{state.layerIndex=Math.max(0,state.layerIndex-1);await actions.drawLayer();});$('layerNext').onclick=actions.guarded(async()=>{state.layerIndex=Math.min(state.layerData.frames.length-1,state.layerIndex+1);await actions.drawLayer();});$('mainLayer').onchange=actions.guarded(actions.drawLayer);$('intrinsicLayer').onchange=actions.guarded(actions.drawLayer);
     $('layerSelect').onchange=actions.guarded(async()=>{state.layerIndex=Number($('layerSelect').value);await actions.drawLayer();});

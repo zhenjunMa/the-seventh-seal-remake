@@ -5,7 +5,18 @@ import {nativeCombinationConditions} from './native_story_combinations.mjs';
 const copy=structuredClone;
 const nativeFlowId=mapId=>`${mapId}:tlk`;
 export {nativeFlowId};
+export const nativeTriggerFlowId=(mapId,triggerId)=>`${mapId}:dat:${triggerId}`;
 const flagIndex=n=>Number.isInteger(n)&&n>=0&&n<2000;
+export function compileNativeTriggerFlow(table,descriptor){
+  if(descriptor?.state_raw!==1||!Number.isInteger(descriptor.id)||descriptor.id<1||descriptor.id>32
+    ||!/^[-a-z0-9_]+\.anm$/i.test(descriptor.filename_raw)
+    ||descriptor.source?.path?.toLowerCase()!==`map/${table.id.toLowerCase()}.dat`
+    ||descriptor.source.sha256!==table.map_source?.sha256)throw new Error('原DAT演出触发器来源无效');
+  const id=nativeTriggerFlowId(table.id,descriptor.id);
+  return validateStoryFlow({schema:'seventh-seal-story-flow',version:1,id,map_id:table.id,entry:`${id}:animation`,
+    commands:[{id:`${id}:animation`,op:'animation',program_id:descriptor.filename_raw.slice(0,-4).toLowerCase(),source:copy(descriptor.source)},
+      {id:`${id}:end`,op:'end'}]});
+}
 export function compileTlkFlow(table,{choices}){
   const id=nativeFlowId(table.id),end=`${id}:end`,commands=[],entries={};
   const at=recordId=>recordId?`${id}:${recordId}`:end;
@@ -49,7 +60,12 @@ export function compileTlkFlow(table,{choices}){
       const dialogue={text:record.text_raw,text_id:record.text_id??`${table.id}:TLK:${record.id}`,presentation};
       if(options.length)add('choice',{...dialogue,choices:options.map(row=>({...copy(row),target:at(row.recordId)}))});
       else if(record.text_raw)add('say',dialogue);
-    }else if(record.kind===1)add('animation',{program_id:record.text_raw.replace(/\.anm$/i,'').toLowerCase()});
+    }else if(record.kind===1){
+      add('animation',{program_id:record.text_raw.replace(/\.anm$/i,'').toLowerCase()});
+      // Native467600 ends the TLK before starting ANM. Only ANM14 can
+      // enter another TLK; finishing the animation never resumes this next.
+      add('end');continue;
+    }
     else if(record.kind===2)add('transfer_native_map');
     else if(record.kind===5)add('native_battle');
     else if(record.kind===8)add('native_service');

@@ -1129,7 +1129,7 @@
         },
         {
           "id": "M70030:tlk:2:2",
-          "op": "jump",
+          "op": "end",
           "record_id": 2,
           "source": {
             "path": "Map/m70030.TLK",
@@ -1137,8 +1137,7 @@
             "record_id": 2,
             "record_bytes": 1647,
             "offset": 3673
-          },
-          "target": "M70030:tlk:end"
+          }
         },
         {
           "id": "M70030:tlk:3",

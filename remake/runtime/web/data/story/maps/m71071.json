@@ -4553,7 +4553,7 @@
         },
         {
           "id": "M71071:tlk:17:2",
-          "op": "jump",
+          "op": "end",
           "record_id": 17,
           "source": {
             "path": "Map/m71071.TLK",
@@ -4561,8 +4561,7 @@
             "record_id": 17,
             "record_bytes": 1647,
             "offset": 28378
-          },
-          "target": "M71071:tlk:end"
+          }
         },
         {
           "id": "M71071:tlk:18",

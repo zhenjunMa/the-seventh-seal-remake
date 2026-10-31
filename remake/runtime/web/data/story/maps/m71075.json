@@ -1963,7 +1963,7 @@
         },
         {
           "id": "M71075:tlk:4:2",
-          "op": "jump",
+          "op": "end",
           "record_id": 4,
           "source": {
             "path": "Map/m71075.TLK",
@@ -1971,8 +1971,7 @@
             "record_id": 4,
             "record_bytes": 1647,
             "offset": 6967
-          },
-          "target": "M71075:tlk:end"
+          }
         },
         {
           "id": "M71075:tlk:5",
@@ -2220,7 +2219,7 @@
         },
         {
           "id": "M71075:tlk:10:2",
-          "op": "jump",
+          "op": "end",
           "record_id": 10,
           "source": {
             "path": "Map/m71075.TLK",
@@ -2228,8 +2227,7 @@
             "record_id": 10,
             "record_bytes": 1647,
             "offset": 16849
-          },
-          "target": "M71075:tlk:end"
+          }
         },
         {
           "id": "M71075:tlk:end",

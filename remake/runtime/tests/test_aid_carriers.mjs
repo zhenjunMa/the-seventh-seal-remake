@@ -192,3 +192,44 @@ test('actual carrier draws keep native shadow main and intrinsic layers in that 
  assert.equal(events.filter(event=>event.kind==='contact').length,0,'body layers are already drawn before each original contact');
  view.stop();
 });
+
+test('temple visual carriers preserve token0 hits and the source contactless steel-stone animation',async()=>{
+ for(const [id,index]of [['031C',9],['033',15]]){
+  const chr=await readFile(new URL(`../../../Fight_Role/${id}.CHR`,import.meta.url)),dgp=await readFile(new URL(`../../../Fight_Role/${id}.dgp`,import.meta.url));
+  let offset=8+0x30b;
+  for(let i=0;i<index;i++)offset+=0x41d+chr.readUInt32LE(offset+0x15)*0xb0;
+  const fixed=chr.subarray(offset,offset+0x41d),actions=Array.from({length:fixed.readUInt32LE(0x15)},(_,i)=>{
+   const at=offset+0x41d+i*0xb0;return {index:i,offset:at,raw_hex:chr.subarray(at,at+0xb0).toString('hex')};});
+  const selected={id:`${id}_skill_${index}`,actor_id:id,index,original_skill_index:index,battle_handler:'direct',
+   fixed_raw_hex:fixed.toString('hex'),mp_cost:0,actions,source:{path:`Fight_Role/${id}.CHR`,sha256:sha(chr),fixed_record_offset:offset}};
+  const contactless=actions.every(a=>!Buffer.from(a.raw_hex,'hex').readUInt32LE(0x49));if(contactless)selected.contactless=true;
+  assert.equal(dgp[0],9);
+  const meta={roles:[{id,actions:Array.from({length:dgp[2]},(_,i)=>{
+   const raw=dgp.subarray(0x43+i*0xac,0x43+(i+1)*0xac);return {index:i,first_frame:raw.readUInt32LE(0x72),frame_count:raw[14],native_raw_hex:raw.toString('hex')};})}],effects:[],policy:{complete_contacts:true,frame_ms:65,tail_ms:0}};
+  for(const action of actions){const raw=Buffer.from(action.raw_hex,'hex');if(raw[0]!==1||raw.readUInt32LE(1)!==4)continue;
+   const token=raw.subarray(9,29).toString('ascii').split('\0')[0].replace(/\.dgp$/i,''),effect=await readFile(new URL(`../../../Fight_Role/Effect/${token}.dgp`,import.meta.url)),native=effect.subarray(0x43,0xef),geometry=0x43+effect[2]*0xac;
+   assert.equal(effect[0],9);assert.equal(effect[2],1);
+   meta.effects.push({id:token,native_raw_hex:native.toString('hex'),frame_count:effect.readUInt32LE(geometry+4),frames:Array.from({length:native[14]},(_,i)=>native[0xd]&15?i:native[0x16+i])});
+  }
+  const plan=directSequence(selected),compiled=compileNativeSequence(meta,id,plan),contacts=compiled.steps.filter(step=>step.event);
+  if(id==='031C'){
+   assert.equal(fixed[0x32]&15,1);assert.equal(plan.allow_no_contacts,undefined);assert.equal(contacts.length,1);
+   assert.equal(contacts[0].effect_contact,undefined);assert.equal(contacts[0].source_skill_index,9);
+   assert.equal(compiled.steps.find(step=>step.carrier_spawn).carrier_spawn.steps.filter(step=>step.event).length,0);
+  }else{
+   assert.equal(fixed[0x232],31,'Steel-stone source retains its dormant allied status payload');assert.equal(plan.allow_no_contacts,true);
+   assert.equal(contacts.length,0);assert.ok(compiled.steps.some(step=>step.command_raw===4));
+   const view=new BattleView({canvas:{getContext:()=>({})}});Object.assign(view,{ready:true,meta,layers:{role_id:id,frames:[]},roster:[{id,resource_id:id,side:'enemy'}]});
+   const promise=view.playSequence({actor_id:id,target_id:id,skill_id:selected.id,plan,action_id:'source-no-contact'},
+    {onContact(){throw Error('Original steel-stone never calls a contact');},onRecord(){}});
+   view._advance(0);view._advance(100000);const result=await promise;
+   assert.equal(result.completed,true);assert.equal(result.contact_count,0);assert.equal(view.run,null);
+   const actor={id,side:'enemy',current_skill:selected,hp:{current:100,maximum:100},mp:{current:200,maximum:200},state_raw:0},core=Object.create(BattleController.prototype);
+   Object.assign(core,{state:{id:'source-no-contact',action_count:0,round:1,history:[],actors:[actor]},testMode:true,
+    now:()=>0,checkWorld(){},publish(){},log(){},playSequence:async()=>result,
+    resolveAction(){throw Error('A contactless source must not change HP or statuses');}});
+   await core.performSequence(actor,actor,selected,plan);assert.equal(core.state.history[0].contacts.length,0);
+   assert.deepEqual(actor.hp,{current:100,maximum:100});assert.deepEqual(actor.mp,{current:200,maximum:200});
+  }
+ }
+});

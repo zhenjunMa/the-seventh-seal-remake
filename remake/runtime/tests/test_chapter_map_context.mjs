@@ -29,13 +29,14 @@ function contentFor(program){
   for(const id of program.maps)content.maps[id]??=binding(id);
   return content;
 }
-function syntheticCrossMap(){
+function syntheticCrossMap({dialogue=false}={}){
   // An isolated fixture of already implemented opcode10/35 encodings. This
   // never admits or bypasses the unknown instructions in real late ANMs.
   const records=[];
   for(const [id,x,y]of [['M17010',10,20],['M17014',30,40]]){
     const load=Buffer.alloc(74);load[0]=10;load.write(`${id}.DAT`,54,'ascii');records.push(load);
     const place=Buffer.alloc(74);place[0]=35;place.writeUInt32LE(x,13);place.writeUInt32LE(y,17);place.writeUInt32LE(1,25);records.push(place);
+    if(dialogue){const say=Buffer.alloc(74);say[0]=14;say.writeUInt32LE(1,5);records.push(say);}
   }
   const header=Buffer.alloc(67);header.writeUInt16LE(3);header.writeUInt32LE(records.length,2);
   return programFromBytes(Buffer.concat([header,...records]),'test-cross-map',['M17010','M17014'],{
@@ -84,19 +85,22 @@ test('m17010-6 action2 moves bind actual ROLE014/015 source action records',asyn
 function controllerFixture(program,prepareTarget){
   const role={frame_width:16,frame_height:24,anchor:{x:0,y:0},actions:[{index:0,first_frame:0,frame_count:1,directions:8}]};
   const makeScene=id=>({data:{id,opening_npcs:[]},bitmap:{width:1024,height:768},npcs:[],npcRuntime:{inherit(){},adoptActors(){}}});
-  const original=makeScene('M17010'),prepared=[],adopted=[];
-  const state={view:{x:10,y:20,follow:true},openingResources:{roles:{'001':role}},scenes:{current:original,
+  const original=makeScene('M17010'),prepared=[],adopted=[],previousEntryDraft={from:'previous scene preparation'};
+  const state={sceneEntryDraft:previousEntryDraft,engine:{exploration:{clock:{async tween(_duration,update){update(1);}}}},
+    view:{x:10,y:20,follow:true},openingResources:{roles:{'001':role}},scenes:{current:original,
     captureView(){return copy(state.view);},rollbackView(value){state.view=copy(value);}},
     storyRepository:{content:contentFor(program),async ensureProgram(){return {program,release(){adopted.push('release');}};}}};
   const draft={leader_id:'001',location:{map_id:'M17010',x:160,y:160,direction:1},flags:[4]},before=copy(draft),view=copy(state.view);
-  const actions={async prepareMap(id){prepared.push(id);if(id==='M17014'&&prepareTarget)return prepareTarget(makeScene(id));return makeScene(id);},
+  const actions={async prepareMap(id){assert.equal(state.sceneEntryDraft,draft);prepared.push(id);if(id==='M17014'&&prepareTarget)return prepareTarget(makeScene(id));return makeScene(id);},
     commitView(){},validateEntry(scene,location){assert.equal(scene.data.id,location.map_id);},log(){}};
   const shade={hidden:true,style:{opacity:'0'}};
   const controller=createStoryController({state,actions,$:id=>id==='openingShade'?shade:{},canvas:{}});
-  return {state,draft,before,view,original,prepared,adopted,actions,run:options=>controller.animateChapter({program,mapId:'M17010',draft,runTlk:async()=>{},joinActor:async()=>{},...options})};
+  return {state,draft,before,view,original,prepared,adopted,actions,previousEntryDraft,run:options=>controller.animateChapter({program,mapId:'M17010',draft,runTlk:async()=>{},joinActor:async()=>{},...options})};
 }
 test('cross-map presentation prepares its target on demand and commits the final map pose',async()=>{
-  const fixture=controllerFixture(syntheticCrossMap());await fixture.run();
+  const fixture=controllerFixture(syntheticCrossMap({dialogue:true})),dialogues=[];
+  await fixture.run({runTlk:async({mapId})=>{assert.equal(fixture.state.sceneEntryDraft,fixture.draft);dialogues.push(mapId);}});
+  assert.deepEqual(dialogues,['M17010','M17014']);assert.equal(fixture.state.sceneEntryDraft,fixture.previousEntryDraft);
   assert.deepEqual(fixture.prepared,['M17010','M17014']);
   assert.deepEqual(fixture.draft.location,{map_id:'M17014',x:60,y:80,direction:0});
   assert.equal(fixture.state.scenes.current.data.id,'M17014');assert.equal(fixture.state.openingView.active,false);
@@ -106,6 +110,7 @@ test('failed target preparation restores the prior scene and view without draft 
   const fixture=controllerFixture(syntheticCrossMap(),async()=>{throw new Error('target unavailable');});
   await assert.rejects(fixture.run(),/target unavailable/);
   assert.equal(fixture.state.scenes.current,fixture.original);assert.deepEqual(fixture.state.view,fixture.view);
+  assert.equal(fixture.state.sceneEntryDraft,fixture.previousEntryDraft);
   assert.deepEqual(fixture.draft,fixture.before);assert.deepEqual(fixture.adopted,['release']);
 });
 test('cancelled cross-map preparation cannot install a late scene or commit the draft',async()=>{
@@ -115,6 +120,7 @@ test('cancelled cross-map preparation cannot install a late scene or commit the 
   const running=fixture.run({playback});await started;playback.cancel();
   await assert.rejects(running,{name:'AbortError'});finishTarget();await Promise.resolve();await Promise.resolve();
   assert.equal(fixture.state.scenes.current,fixture.original);assert.deepEqual(fixture.state.view,fixture.view);
+  assert.equal(fixture.state.sceneEntryDraft,fixture.previousEntryDraft);
   assert.deepEqual(fixture.draft,fixture.before);assert.deepEqual(fixture.adopted,['release']);
 });
 
@@ -145,5 +151,6 @@ test('an ordinary cross-map ANM still rejects a blocked final exploration pose b
   fixture.actions.validateEntry=()=>{throw Error('blocked final exploration pose');};
   await assert.rejects(fixture.run(),/blocked final exploration pose/);
   assert.equal(fixture.state.scenes.current,fixture.original);assert.deepEqual(fixture.state.view,fixture.view);
+  assert.equal(fixture.state.sceneEntryDraft,fixture.previousEntryDraft);
   assert.deepEqual(fixture.draft,fixture.before);assert.deepEqual(fixture.adopted,['release']);
 });

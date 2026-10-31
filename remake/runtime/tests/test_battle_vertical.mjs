@@ -4,6 +4,8 @@ import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {NativeAssemblyOracle} from './native_assembly_oracle.mjs';
 import {nativeVerticalState,createNativeVertical,advanceNativeVertical,verticalActorPatch} from '../web/core/battle_vertical.mjs';
+import {BattleView} from '../web/battle_view.mjs';
+import {BattleController} from '../web/core/combat.mjs';
 
 const read=async path=>JSON.parse(await readFile(new URL(path,import.meta.url),'utf8'));
 const [instructions,reactions,game]=await Promise.all([
@@ -68,6 +70,43 @@ test('all four actor modes, signed product/velocity and camera requests match th
     assert.deepEqual(rawState(state),oracle.snapshot(),JSON.stringify({mode,acceleration,wait,speed,multiplier,z}));
     assert.deepEqual(oracle.camera,state.camera_request?[Object.fromEntries(Object.entries(state.camera_request).filter(([key])=>key!=='procedure'))]:[]);
   }
+});
+
+test('command10 changes only the selected target height using the same native motion block',async()=>{
+  const original=await readFile(new URL('../../../Fight_Role/018.CHR',import.meta.url));
+  for(const mode of [0,1])for(const acceleration of [0,1])for(const z of [-80,0]){
+    const raw=Buffer.from(sourceCommand(mode,{speed:50,multiplier:50,wait:1,acceleration}),'hex');raw.writeUInt32LE(10,1);
+    if(mode===1&&acceleration===0)assert.ok(original.includes(raw),'Blood blade command10 is literal source bytes');
+    const input={...actor(z),native_vertical_delay_raw:777},state=createNativeVertical({actor:input,record:raw.toString('hex')});
+    const oracle=new VerticalOracle(initLines);oracle.record=raw;oracle.write(0x521f68e,1);
+    for(const[key,[address,size]]of Object.entries(fields))oracle.write(address+0x30274,nativeVerticalState(input)[key],size);
+    for(let i=0;i<jumpTable.length;i++)oracle.write(0x513dd9+i,jumpTable[i],1);
+    oracle.run(0x5130d0,[0]);
+    assert.deepEqual(rawState(state),Object.fromEntries(Object.entries(fields).map(([key,[address,size]])=>[key,oracle.read(address+0x30274,size)])));
+    assert.deepEqual(oracle.camera,[]);assert.equal(state.wrote_delay,false);assert.equal(state.delay_ms,777);assert.equal(oracle.advances,1);
+  }
+});
+
+test('target-height wait blocks the target response while the acting source continues',async()=>{
+  const dgp=await readFile(new URL('../../../Fight_Role/018.dgp',import.meta.url)),native=dgp.subarray(0x43,0xef),raw=Buffer.from(sourceCommand(1,{speed:50,multiplier:50,wait:1,acceleration:0}),'hex');raw.writeUInt32LE(10,1);
+  const frame=Buffer.alloc(176);frame.writeUInt32LE(1,0x2a);
+  // A two-record controlled schedule isolates the unchanged source command10.
+  // The source DGP idle interval120ms remains exact; this is not a whole battle.
+  const plan={kind:'single',handler:'direct',allow_no_contacts:true,skill_indices:[14],records:[raw,frame].map((b,index)=>({raw_hex:b.toString('hex'),source_skill_index:14,source_action_index:index}))};
+  const meta={roles:[{id:'018',actions:[{index:0,first_frame:native.readUInt32LE(0x72),frame_count:native[14],native_raw_hex:native.toString('hex')}]}],effects:[],policy:{complete_contacts:true,frame_ms:65,tail_ms:0}};
+  const attacker={...actor(),id:'018'},target={...actor(-600),id:'001'},core=Object.create(BattleController.prototype);
+  Object.assign(core,{state:{actors:[attacker,target]},verticalClocks:new Map()});
+  const view=new BattleView({canvas:{getContext:()=>({})}});Object.assign(view,{ready:true,meta,layers:{role_id:'018',frames:[]},nativeControl:core,nativeControlIsCurrent:()=>true,
+    roster:[{id:'018',resource_id:'018',side:'enemy'},{id:'001',resource_id:'001',side:'player'}]});
+  const records=[],promise=view.playSequence({actor_id:'018',target_id:'001',skill_id:'source-target-z',plan,action_id:'target-z'},
+    {onContact(){throw Error('Controlled schedule has no contacts');},onRecord(step){records.push(step.plan_record_index);}});
+  const child={descriptor:{actor_id:'001'},result:{actor_id:'001',target_id:'018'},steps:[{plan_record_index:0,segment_index:0,effects:[],duration_ms:120}],segments:[],
+    channel_id:'target-response',at:0,next_at:0,elapsed:0,cursor:0,visited:-1,record_visited:-1,effects:[],done:false};view.run.children.push(child);
+  view._advance(0);assert.deepEqual(records,[0,1]);assert.equal(child.visited,-1);assert.equal(child.vertical_wait,true);
+  view._advance(120);assert.equal(view.run.main_done,true);assert.equal(target.native_z_raw,-300);assert.equal(child.visited,-1);
+  view._advance(240);assert.equal(target.native_z_raw,0);assert.equal(child.visited,0);assert.equal(child.vertical_wait,false);
+  view._advance(360);assert.equal((await promise).completed,true);assert.equal(child.done,true);
+  const before=structuredClone(target);assert.equal(core.beginNativeTargetVertical('001','001',raw.toString('hex'),400),null);assert.deepEqual(target,before);
 });
 
 test('51A4F0 native instruction oracle agrees tick by tick on positive/negative motion, acceleration, clamps and early guards',()=>{

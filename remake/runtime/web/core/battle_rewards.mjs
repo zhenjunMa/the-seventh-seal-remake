@@ -30,9 +30,11 @@ export function validateForestRewards(data,content=runtimeContent) {
   for (const row of data.tables.growth_rows) requireValue(row.length === 10 && row.every(v => Number.isInteger(v) && v >= 0), '成长行无效');
   requireValue(data.chain_bonuses?.length === 41 && data.skill_practice_bonuses?.length === 41, '连击奖励表缺失');
   for (const item of Object.values(data.items ?? {})) {
-    integer(item.id, '道具编号'); requireValue(item.type_raw >= 2 && item.unique_raw === 0 && item.initialization_rng_calls === 0, '森林掉落类型未支持');
+    integer(item.id, '道具编号'); bytes(item.source.definition_raw_hex, 0x3bf);
     requireValue(Number.isInteger(item.drop_rate) && item.drop_rate >= -1 && item.drop_rate <= 100, '道具掉落率无效');
-    bytes(item.instance_raw_hex, 0xe5); bytes(item.source.definition_raw_hex, 0x3bf);
+    if (item.drop_rate === -1) continue;
+    requireValue(item.type_raw >= 2 && item.unique_raw === 0 && item.initialization_rng_calls === 0, '森林掉落类型未支持');
+    bytes(item.instance_raw_hex, 0xe5);
   }
   bytes(data.initial_roles?.['001']?.header_raw_hex, 0x30b); integer(data.initial_money, '原始金钱', 0xffffffff);
   if (data.schema === 'seventh-seal-party-rewards') {
@@ -224,8 +226,9 @@ export function planVictoryRewards({world, ledger, data, rng, actors,skill_data=
   const trace=copy(ledger.trace), inventory=copy(world.inventory), drops=[];
   let sequence=0;
   for (const candidate of ledger.candidates) {
-    const item=data.items[candidate.id]; requireValue(item && item.unique_raw===0,'掉落类型未支持'); integer(candidate.count,'掉落候选数量');
+    const item=data.items[candidate.id]; requireValue(item,'掉落类型未支持'); integer(candidate.count,'掉落候选数量');
     if (item.drop_rate===-1) {trace.push({type:'drop-skipped',id:item.id});continue;}
+    requireValue(item.unique_raw===0,'掉落类型未支持');
     const threshold=i32(item.drop_rate+data.chain_bonuses[k]);
     for(let i=0;i<candidate.count;i++) {
       const raw=integer(rng(),'掉落随机',32767),roll=raw%100,success=roll<threshold||item.drop_rate===0;

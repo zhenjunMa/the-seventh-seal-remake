@@ -15809,7 +15809,7 @@
         },
         {
           "id": "M01050:tlk:81:3",
-          "op": "jump",
+          "op": "end",
           "record_id": 81,
           "source": {
             "path": "Map/m01050.TLK",
@@ -15817,8 +15817,7 @@
             "record_id": 81,
             "record_bytes": 1647,
             "offset": 133786
-          },
-          "target": "M01050:tlk:end"
+          }
         },
         {
           "id": "M01050:tlk:82",
@@ -15847,7 +15846,7 @@
         },
         {
           "id": "M01050:tlk:82:2",
-          "op": "jump",
+          "op": "end",
           "record_id": 82,
           "source": {
             "path": "Map/m01050.TLK",
@@ -15855,8 +15854,7 @@
             "record_id": 82,
             "record_bytes": 1647,
             "offset": 135433
-          },
-          "target": "M01050:tlk:end"
+          }
         },
         {
           "id": "M01050:tlk:83",
@@ -16741,7 +16739,7 @@
         },
         {
           "id": "M01050:tlk:102:2",
-          "op": "jump",
+          "op": "end",
           "record_id": 102,
           "source": {
             "path": "Map/m01050.TLK",
@@ -16749,8 +16747,7 @@
             "record_id": 102,
             "record_bytes": 1647,
             "offset": 168373
-          },
-          "target": "M01050:tlk:end"
+          }
         },
         {
           "id": "M01050:tlk:103",
@@ -17538,7 +17535,7 @@
         },
         {
           "id": "M01050:tlk:120:2",
-          "op": "jump",
+          "op": "end",
           "record_id": 120,
           "source": {
             "path": "Map/m01050.TLK",
@@ -17546,8 +17543,7 @@
             "record_id": 120,
             "record_bytes": 1647,
             "offset": 198019
-          },
-          "target": "M01050:tlk:end"
+          }
         },
         {
           "id": "M01050:tlk:121",

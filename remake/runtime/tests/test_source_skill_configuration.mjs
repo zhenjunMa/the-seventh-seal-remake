@@ -13,6 +13,7 @@ const copy=structuredClone,read=async name=>JSON.parse(await readFile(new URL(`.
 const names={combat:'combat_sample',forest:'forest_combat',scheduler:'battle_scheduler',ai:'forest_ai',rewards:'forest_rewards',party_skills:'party_skills',items:'items'};
 const original=Object.fromEntries(await Promise.all(Object.entries(names).map(async([key,file])=>[key,await read(file)])));
 function catalogFixture(){
+  assert.equal(original.ai.roles.eagle,undefined,'source-only fixture must remain unregistered');
   const template=original.party_skills.skills.yantu;
   const source=(actor,index)=>{
     const s=copy(template);s.actor_id=actor;s.id=`${actor}_${index}`;s.index=s.original_skill_index=index;
@@ -22,7 +23,7 @@ function catalogFixture(){
     delete s.mp_cost;return s;
   };
   const alias={...copy(template),id:`${template.actor_id}_${template.original_skill_index}`};
-  const records=[alias,source('004',7),source('031A',5),source('E01',0)];
+  const records=[alias,source('004',7),source('eagle',5),source('E01',0)];
   return {schema:'seventh-seal-source-skills',version:1,source_hashes:Object.fromEntries(records.map(s=>[s.source.path,s.source.sha256])),skills:Object.fromEntries(records.map(s=>[s.id,s]))};
 }
 function fixture(){return {...copy(original),source_skills:catalogFixture()};}
@@ -71,7 +72,7 @@ test('full source catalog shares stable bindings with implemented commands and r
   assert.equal(Object.keys(config.skills.entries).length,Object.keys(plain.skills.entries).length+3);
   assert.equal(config.skills.entries['001_22'],undefined);assert.deepEqual(config.skills.entries.yantu,plain.skills.entries.yantu);
   const row=config.skills.entries['004_7'];assert.deepEqual(row.owner,{role_id:'004',skill_index:7,side:'player'});
-  assert.deepEqual(config.skills.entries['031A_5'].owner,{role_id:'031A',skill_index:5,side:'source'});
+  assert.deepEqual(config.skills.entries['eagle_5'].owner,{role_id:'eagle',skill_index:5,side:'source'});
   assert.equal(row.original.enabled,false);assert.equal(row.original.mp_delta_raw,40);assert.equal(Object.hasOwn(row.original,'mp_cost'),false);
   assert.deepEqual(row.original.physical_multiplier_percent,{minimum:20,maximum_exclusive:10});assert.equal(row.original.preparation_delay_raw,-1);
   const compiled=compileRuntimeConfiguration(data,config);

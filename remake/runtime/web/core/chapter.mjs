@@ -13,7 +13,7 @@ import {evaluateNativeStoryCondition} from './native_story_conditions.mjs';
 import {applyNativeStoryMutation} from './native_story_mutations.mjs';
 import {removeNativeStoryItem} from './native_story_inventory.mjs';
 import {applyWorldMapCommandToDraft} from './world_map.mjs';
-import {compileTlkFlow,nativeFlowId} from './story_flow_compiler.mjs';
+import {compileTlkFlow,nativeFlowId,compileNativeTriggerFlow,nativeTriggerFlowId} from './story_flow_compiler.mjs';
 import {playbackDelay} from './story_playback.mjs';
 import {nativeMapTransfer} from './map_connections.mjs';
 import {nativeScriptedBattle} from './scripted_battle.mjs';
@@ -157,10 +157,24 @@ export class ChapterRunner {
     if(data.version===1)this.data.flows=Object.fromEntries(Object.values(this.data.maps).filter(table=>table.dialogue_status!=='source-file-absent').map(table=>{
       const flow=compileTlkFlow(table,{choices:chapterChoices});return [flow.id,flow];
     }));
+    if(data.version===1)for(const table of Object.values(this.data.maps))for(const descriptor of table.descriptors??[]){
+      if(descriptor.state_raw===1&&storyBindings(table.id,content).triggers.includes(descriptor.id)){
+        const flow=compileNativeTriggerFlow(table,descriptor);this.data.flows[flow.id]=flow;
+      }
+    }
     this.flowRunner=new StoryFlowRunner(Object.fromEntries(['record','say','choice','animation','give_item','restore_party','request_save','set_native_object','wait',
       'test_native_condition','test_native_combination','change_native_money','native_service','learn_native_skill','native_noop','unlock_recipe','world_map_command','transfer_native_map','native_battle','restore_native_resources']
       .map(op=>[op,(command,execution)=>this.applyFlowCommand(op,command,execution)])));
     this.running = false;
+  }
+  async runTrigger({mapId,triggerId,playback}={}){
+    const table=this.data.maps[mapId],descriptor=table?.descriptors.find(row=>row.id===triggerId);
+    need(this.world.location.map_id===mapId&&storyBindings(mapId,this.content).triggers.includes(triggerId)
+      &&descriptor&&[1,2].includes(descriptor.state_raw),'原地形触发器尚未接入');
+    if(descriptor.state_raw===2)return this.runTlk({mapId,triggerId,recordId:descriptor.field_26_raw,playback});
+    const flow=this.data.flows?.[nativeTriggerFlowId(mapId,triggerId)];
+    need(flow,'原DAT演出触发流程缺失');
+    return this.atomic({mapId,eventId:flow.id,playback},draft=>this.flowRunner.execute(flow,{draft,context:{steps:0,playback}}));
   }
   async runTlk({mapId, recordId, triggerId, draft, context = {steps:0}, playback = context.playback} = {}) {
     if(playback)context.playback=playback;
@@ -226,7 +240,7 @@ export class ChapterRunner {
   }
   objectFor(mapId, objectIndex) {
     const binding=storyBindings(mapId,this.content).objects.find(row=>row.index===objectIndex);
-    need(binding&&['stationary-chest','keyed-chest','tlk-object'].includes(binding.handler), '剧情物件行为尚未接入');
+    need(binding&&['stationary-chest','keyed-chest','tlk-object','scripted-switch'].includes(binding.handler), '剧情物件行为尚未接入');
     const table = this.data.maps[mapId], object = table?.objects.find(row => row.index === objectIndex);
     need(object, '剧情物件来源缺失');
     const b = bytes(object.raw_hex, 0x112, '剧情物件'), v = view(b);
@@ -235,7 +249,10 @@ export class ChapterRunner {
     const repeatable=binding.handler==='tlk-object';
     if(!chest){
       if(repeatable)need(b[0xcf]===1&&b[0x109]===0,'剧情物件来源或状态类型无效');
-      else nativeScriptedChest(object);
+      else if(binding.handler==='scripted-switch'){
+        need(b[0xcf]===9&&v.getUint32(0xf6,true)>0,'机关剧情入口无效');
+        nativeAnmObjectTarget({u32_plus5:table.map_flag_index,u32_plus25:objectIndex+1,byte_plus29:0},mapId,this.data);
+      }else nativeScriptedChest(object);
       need(table.records.some(row=>row.id===v.getUint32(0xf6,true)),'剧情物件入口缺失');
     }
     if (this.objectData) {
@@ -244,11 +261,11 @@ export class ChapterRunner {
         && manifest.source.sha256 === object.source.sha256 && manifest.source.raw_hex === object.raw_hex,
         '剧情物件清单与原始地图不一致');
     }
-    return {table, object, recordId:v.getUint32(0xf6, true),chest,repeatable,interactionActionGroup:b[0xb5]};
+    return {table, object, recordId:v.getUint32(0xf6, true),chest,repeatable,scriptedSwitch:binding.handler==='scripted-switch',interactionActionGroup:b[0xb5]};
   }
   async runObject({mapId, objectIndex, playback} = {}) {
     need(!this.running, '火之谷剧情正在执行');
-    const {table, object, recordId,chest,repeatable,interactionActionGroup} = this.objectFor(mapId, objectIndex);
+    const {table, object, recordId,chest,repeatable,scriptedSwitch,interactionActionGroup} = this.objectFor(mapId, objectIndex);
     need(this.world.location.map_id === mapId, '剧情物件不在当前地图');
     if(repeatable)return this.runTlk({mapId,recordId,playback,
       context:{steps:0,explicitInteraction:true,objectMapId:mapId,objectIndex}});
@@ -257,7 +274,7 @@ export class ChapterRunner {
     need([0,1,2].includes(initialState), '剧情物件保存状态尚未接入');
     // 4137C0 -> 412640 -> 4121D0 starts the ordinary actor action before
     // 411F50 checks possession. It is independent of the action+7F strike.
-    const interaction=initialState===2?null:this.objectInteraction({mapId,objectIndex,object,
+    const interaction=initialState===2||scriptedSwitch?null:this.objectInteraction({mapId,objectIndex,object,
       actionGroup:interactionActionGroup,playback,signal:playback?.signal});
     if(chest&&initialState!==2&&!canOpenNativeChest(this.world.snapshot(),chest)){
       await interaction;playback?.check();
@@ -383,8 +400,9 @@ export class ChapterRunner {
           return applyNativeAnmFlagCommand(draft,command,active.map_flag_index);
         },objectCommand:({command,mapId:activeMap})=>{
           const target=nativeAnmObjectTarget(command,activeMap,this.data);if(!target)return null;
-          const {mapId,mapFlag,objectIndex,enabled}=target;
+          const {mapId,mapFlag,objectIndex,enabled,behavior}=target;
           if(mapId!==activeMap){setObjectEventState(draft,mapFlag,objectIndex,enabled?3:0);return null;}
+          if(!enabled&&behavior===9)return null;
           const before=chapterObjectState(draft,mapId,objectIndex,this.data);
           if(enabled&&before===3||!enabled&&before===0)return null;
           const state=enabled?2:5;setObjectEventState(draft,mapFlag,objectIndex,state);
@@ -394,6 +412,13 @@ export class ChapterRunner {
     if(op==='wait')return playback?playback.wait(command.ms):this.wait(command.ms);
     need(native&&record,'原剧情行为记录缺失');
     this.applyMutation(draft,table,record,context);
+    if(record.mutation_type===1&&record.mutation_bit&&(record.mutation_index===0||record.mutation_index===table.map_flag_index)){
+      const objectIndex=record.mutation_bit-1,object=table.objects.find(row=>row.index===objectIndex);
+      if([2,9].includes(object?.behavior_raw_cf)&&chapterObjectState(draft,table.id,objectIndex,this.data)===2)return (async()=>{
+        await this.objectAnimation({mapId:table.id,objectIndex,draft,playback,signal:playback?.signal});playback?.check();
+        setObjectEventState(draft,table.map_flag_index,objectIndex,3);
+      })();
+    }
   }
   applyMutation(draft, table, record, context={}) {
     if([3,10,11,14,16,17].includes(record.mutation_type))return applyNativeStoryMutation(draft,record,{roleDefinitions:this.data.role_definitions});
@@ -424,12 +449,14 @@ export class ChapterRunner {
       need(record.region_byte_raw===0&&flagIndex(record.mutation_index)
         &&Number.isInteger(record.mutation_bit)&&record.mutation_bit>=0&&record.mutation_bit<=1000,'剧情物件状态变更尚未接入');
       if(record.mutation_bit===0)return;
-      const active=this.data.maps[draft.location.map_id],objectIndex=record.mutation_bit-1;
+      const active=table,objectIndex=record.mutation_bit-1;
       const mapFlag=record.mutation_index||active.map_flag_index;
       // 464D80 case1 passes TLK +27/+2B and byte+7 to 40C5C0.
       // Current map: start state2 unless complete; another map: persist3.
       if(mapFlag===active.map_flag_index){
-        this.objectFor(active.id,objectIndex);
+        const object=active.objects.find(row=>row.index===objectIndex);
+        if([2,9].includes(object?.behavior_raw_cf))nativeAnmObjectTarget({u32_plus5:mapFlag,u32_plus25:objectIndex+1,byte_plus29:0},active.id,this.data);
+        else this.objectFor(active.id,objectIndex);
         if(chapterObjectState(draft,active.id,objectIndex,this.data)!==3)setObjectEventState(draft,mapFlag,objectIndex,2);
       }else setObjectEventState(draft,mapFlag,objectIndex,3);
       return;

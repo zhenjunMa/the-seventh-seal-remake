@@ -20,6 +20,7 @@
 | 目的 | 命令或目标 |
 | --- | --- |
 | 启动 | `python3 -B remake/runtime/serve.py` |
+| 独立存档验收 | `serve.py --port 8786 --save-dir remake/runtime/evidence/<本次验收>/saves`；使用空目录，与玩家存档分开 |
 | 无媒体代码预检查 | `node remake/runtime/tools/verify_phaser.mjs` |
 | 实际媒体核对 | 同上加`--assets`，再做正式浏览器流程 |
 | 新内容完整生产 | `python3 -B remake/runtime/tools/build_runtime.py --target content --run` |

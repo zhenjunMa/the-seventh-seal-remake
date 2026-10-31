@@ -51,7 +51,28 @@ export function createServicesController({state, actions, $, canvas, ctx}) {
     $('menuNew').disabled=phase!=='menu';$('menuLoad').disabled=phase!=='menu';
     $('load').disabled=!['map','menu'].includes(phase);$('importSave').disabled=!['map','menu'].includes(phase);
   }
-  function download(value,filename){const url=URL.createObjectURL(new Blob([JSON.stringify(value,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+  function download(value,filename){const url=URL.createObjectURL(value instanceof Blob?value:new Blob([JSON.stringify(value,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+  function exportRuntimeLog(){
+    // This synchronous export observes one event-loop turn. It never clones
+    // the full battle history or builds a full-log string beside the atlases.
+    const parts=['{"schema":"seventh-seal-runtime-log","version":2,"events":['];
+    const append=value=>parts.push(new Blob([JSON.stringify(value)],{type:'application/json'}));
+    const appendBattle=battle=>{
+      if(!battle){parts.push('null');return;}
+      const {history,...metadata}=battle;
+      parts.push(JSON.stringify(metadata).slice(0,-1),',"history":[');
+      history.forEach((entry,index)=>{if(index)parts.push(',');append(entry);});parts.push(']}');
+    };
+    state.logs.forEach((entry,index)=>{if(index)parts.push(',');append(entry);});
+    parts.push('],"battle_history":[');
+    state.battleHistory.forEach((entry,index)=>{
+      if(index)parts.push(',');const {battle,...metadata}=entry;
+      parts.push(JSON.stringify(metadata).slice(0,-1),',"battle":');appendBattle(battle);parts.push('}');
+    });
+    parts.push('],"current_battle":');appendBattle(state.battle?.state??null);
+    parts.push(',',JSON.stringify({world:state.world.snapshot(),audio:state.audio?.snapshot()??null,scope:state.catalog.scope}).slice(1));
+    download(new Blob(parts,{type:'application/json'}),'seventh-seal-runtime-log.json');
+  }
   function guarded(fn){return async()=>{try{await fn();}catch(error){status(error.message,true);log({type:'operation-failed',error:error.message});}};}
   async function saveEnvelope(){if(!state.scenes.canSave()&&!(state.saveOperation?.kind==='save'&&state.scenes.current&&(state.saveOperation.phase==='map'||state.saveMenuContext?.originPhase==='map'&&state.saveMenuContext.mode==='save')))throw new Error('请在地图探索状态保存');const world=state.world.snapshot();if(state.scenes.current?.npcs)captureMapNpcState(world,state.scenes.current.data.id,state.scenes.current.npcs);if(world.source.kind==='native-new-game')createPartyActors(world,state.partyCombat,{},state.itemData);const preview=actions.captureSavePreview(world);return attachSavePreview(await encodeSave(world),preview);}
   async function withSaveOperation(kind,work,{fromMenu=false}={}){
@@ -101,5 +122,5 @@ export function createServicesController({state, actions, $, canvas, ctx}) {
   function releaseInput(){
     state.keys.clear();actions.releaseDialogueKeys?.();actions.battleKeyUp?.(' ');
   }
-  return {status, log, json, initializeRuntimeConfiguration, readConfiguredData, image, busy, download, guarded, saveEnvelope, withSaveOperation,saveProgress,loadProgress,refreshSaveSlots,saveEntries,option,updateInterface,releaseInput};
+  return {status, log, json, initializeRuntimeConfiguration, readConfiguredData, image, busy, download, exportRuntimeLog, guarded, saveEnvelope, withSaveOperation,saveProgress,loadProgress,refreshSaveSlots,saveEntries,option,updateInterface,releaseInput};
 }

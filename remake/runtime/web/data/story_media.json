@@ -288,6 +288,47 @@
           "raw_hex": "3c000000000000000000000000000000000000000000000000000000000000000000800100000000000000000000000000000000000030352e62696b00a6e0a65eafe82e62696b000000"
         }
       ]
+    },
+    "14.bik": {
+      "path": "/assets/video/story/14.mp4",
+      "sha256": "e4c254c92801cc441cbb74c2ea9f315c7778190c600c8b4f80b091bfb6eaa978",
+      "bytes": 8495203,
+      "mime": "video/mp4",
+      "width": 640,
+      "height": 480,
+      "fps": "30",
+      "frames": 401,
+      "duration_seconds": 13.366667,
+      "lossy_conversion": true,
+      "audio": {
+        "playback_gain": 2,
+        "encode_gain": 0.5,
+        "codec": "aac",
+        "sample_rate": 44100,
+        "channels": 2
+      },
+      "source": {
+        "path": "Animate/14.bik",
+        "sha256": "ea0edf335c4c6f06618d89dd142e025a6cc7c7bc98f86289522cb2b0f516d5d5",
+        "bytes": 31954124
+      },
+      "referenced_by": [
+        {
+          "program_id": "m72064-1",
+          "selection_authority": "runtime-registered",
+          "command_index": 51,
+          "opcode": 60,
+          "mode_raw": 0,
+          "source": {
+            "path": "Animate/m72064-1.anm",
+            "sha256": "8d11b04677a1528f6bc25e9b6297d000f5c86fa2065295c148ff514af81f6ef4",
+            "bytes": 6949,
+            "offset": 3841
+          },
+          "filename_raw": "14.bik",
+          "raw_hex": "3c000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000031342e62696b0000000000000000000000000000"
+        }
+      ]
     }
   },
   "sounds": {

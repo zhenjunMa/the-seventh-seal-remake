@@ -81,7 +81,7 @@ export class MovementMap {
       throw new Error('地图通行数据无效');
     }
     this.width = data.width; this.height = data.height; this.cellSize = data.cell_size;
-    this.rows = data.terrain_rows; this.triggers = new Map();
+    this.rows = [...data.terrain_rows]; this.triggers = new Map();
     this.entryCells=new Set();
     for(const cell of data.native_entry_cells??[]){
       if(!Number.isInteger(cell.x)||!Number.isInteger(cell.y)||cell.x<0||cell.y<0

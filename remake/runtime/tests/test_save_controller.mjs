@@ -95,8 +95,9 @@ test('F4 and F5 precede active views, cancel browser defaults, ignore repeats an
   globalThis.window={addEventListener:(kind,handler)=>listeners.set(kind,handler)};
   try{
     const state={keys:new Set(),engine:{paused:false},startupView:{key(){throw new Error('view received function key');}}};
-    const actions={guarded:fn=>fn,saveProgress:slot=>calls.push(['save',slot]),loadProgress:slot=>calls.push(['load',slot]),menuOperation:fn=>fn};
+    const actions={guarded:fn=>fn,saveProgress:slot=>calls.push(['save',slot]),loadProgress:slot=>calls.push(['load',slot]),menuOperation:fn=>fn,exportRuntimeLog:()=>calls.push(['export-log'])};
     const controller=createInputController({state,actions,$,canvas:{addEventListener(){}}});controller.wire();
+    assert.equal($('exportLog').onclick,actions.exportRuntimeLog);
     let prevented=0;
     for(const [key,repeat] of [['F4',false],['F4',true],['F5',false],['F5',true]])listeners.get('keydown')({key,repeat,preventDefault(){prevented++;}});
     assert.equal(prevented,4);assert.deepEqual(calls,[['save','quick'],['load','quick']]);controller.disposeInput();
@@ -173,4 +174,37 @@ test('an overwrite conflict refreshes the displayed slot before a new confirmati
   state.saveStorage.write=async()=>{const error=new Error('slot changed');error.status=412;throw error;};
   await assert.rejects(actions.selectSaveSlot(displayed),/slot changed/);
   assert.equal(state.saveMenu.entries[0].envelope,newer);assert.equal(state.scenes.phase,'save-menu');actions.closeSaveMenu();await opened;
+});
+
+test('runtime log download preserves every event and history entry without cloning or serializing a whole battle',async()=>{
+  const {state,actions}=fixture(),raw='00'.repeat(2000),history=Array.from({length:64},(_,index)=>({action_id:`action-${index}`,before:{native_status_slots:[{raw_hex:raw}]},contacts:[{damage:index}]}));
+  state.logs=history.map((entry,index)=>({sequence:index+1,type:'battle-action',entry}));
+  state.battleHistory=[{result:{outcome:'victory'},battle:{id:'past',phase:'closed',history:history.slice(0,2)}}];
+  state.battle={state:{id:'current',phase:'charging',history},snapshot:()=>assert.fail('Export must not clone the current battle history')};
+  state.audio={snapshot:()=>({muted:false})};state.catalog.scope='保留完整诊断记录';
+  const expected={schema:'seventh-seal-runtime-log',version:2,events:state.logs,battle_history:state.battleHistory,current_battle:state.battle.state,world:state.world.snapshot(),audio:state.audio.snapshot(),scope:state.catalog.scope};
+  const before=structuredClone(expected),stringify=JSON.stringify,previousDocument=globalThis.document,create=URL.createObjectURL,revoke=URL.revokeObjectURL,timeout=globalThis.setTimeout;
+  const anchor={click(){this.clicked=true;}},timers=[],revoked=[];let blob,maxChunk=0;
+  try{
+    globalThis.document={createElement:kind=>{assert.equal(kind,'a');return anchor;}};
+    URL.createObjectURL=value=>{blob=value;return 'blob:runtime-log';};URL.revokeObjectURL=url=>revoked.push(url);
+    globalThis.setTimeout=callback=>{timers.push(callback);return 1;};
+    JSON.stringify=(value,...options)=>{
+      assert.notEqual(value,expected);assert.notEqual(value,state.logs);assert.notEqual(value,state.battleHistory);assert.notEqual(value,state.battle.state);assert.notEqual(value,history);
+      const text=stringify(value,...options);maxChunk=Math.max(maxChunk,text.length);return text;
+    };
+    actions.exportRuntimeLog();
+  }finally{JSON.stringify=stringify;globalThis.document=previousDocument;URL.createObjectURL=create;URL.revokeObjectURL=revoke;globalThis.setTimeout=timeout;}
+  assert.equal(anchor.clicked,true);assert.equal(anchor.download,'seventh-seal-runtime-log.json');assert.ok(blob instanceof Blob);assert.equal(blob.type,'application/json');
+  const exported=await blob.text();assert.deepEqual(JSON.parse(exported),before);assert.deepEqual(expected,before);
+  assert.ok(maxChunk<exported.length/8,'Only one event, action or small metadata block is serialized at once');
+  // The delayed revocation belongs to the normal download adapter.
+  URL.revokeObjectURL=url=>revoked.push(url);try{timers.forEach(callback=>callback());}finally{URL.revokeObjectURL=revoke;}
+  assert.deepEqual(revoked,['blob:runtime-log']);
+  state.battle=null;state.battleHistory=[];state.logs=[];
+  try{
+    globalThis.document={createElement:()=>anchor};URL.createObjectURL=value=>{blob=value;return 'blob:empty-log';};globalThis.setTimeout=()=>1;
+    actions.exportRuntimeLog();
+  }finally{globalThis.document=previousDocument;URL.createObjectURL=create;globalThis.setTimeout=timeout;}
+  const empty=JSON.parse(await blob.text());assert.equal(empty.current_battle,null);assert.deepEqual(empty.battle_history,[]);assert.deepEqual(empty.events,[]);
 });

@@ -21,7 +21,7 @@ function templateEquals(raw,template){
   const mutable=new Set([2,3,4,5,0x13,0x14,0x15,0x16,0x17,0x18,0x19,0x1a,0x1b,0x1c,0x1d,0x1e]);
   return raw.every((b,i)=>mutable.has(i)||b===template[i]);
 }
-function effectMetadata(data,id){return id===43?data.status43:data.effects?.[String(id)];}
+function effectMetadata(data,id){return data.effects?.[String(id)]??(id===43?data.status43:undefined);}
 export function validateNativeSkillStatus(skill,data){
   return validateSkillBlock(skill,data,0x16b,[0,2]);
 }
@@ -45,10 +45,9 @@ export function validateForestStatusData(data,content=runtimeContent){
   if(data&&typeof data==='object'&&validatedData.get(data)===content)return data;
   need(data?.schema==='seventh-seal-forest-status'&&data.version===1&&data.slots===100&&data.effect_bytes===0xc6&&data.skill_block_offset===0x16b,'Forest status metadata incompatible');
   need(data.skills&&Object.keys(data.skills).length>0,'Original skill blocks required');
-  const active=[];
   for(const[key,skill]of Object.entries(data.skills)){
     const [role,index]=key.split(':');need(content.roles[role]&&/^\d+$/.test(index)&&Number(index)<200,'Status skill owner is not registered');
-    const {id}=validateNativeSkillStatus(skill,data);if(id===43)active.push(key);
+    validateNativeSkillStatus(skill,data);
   }
   for(const[key,skill]of Object.entries(data.support_skills??{})){
     const [role,index]=key.split(':');need(content.roles[role]&&/^\d+$/.test(index)&&Number(index)<200,'Status skill owner is not registered');
@@ -60,9 +59,12 @@ export function validateForestStatusData(data,content=runtimeContent){
       &&[0,2].includes(block.raw[0xb])&&block.raw[0x10]<=1,'Item status template is not implemented');
     const metadata=effectMetadata(data,block.raw[1]);need(metadata?.id_raw===block.raw[1],'Item status source metadata missing');
   }
-  const s=data.status43,b=rawView(s?.effect_raw_hex),v=b.view;
-  need(s.id_raw===43&&s.mode_raw===0&&s.interval_ms===80&&s.frame_count===10&&b.raw[1]===43&&b.raw[0xb]===0&&b.raw[0x10]===0&&b.raw[0x11]===80&&v.getInt32(2,true)===10&&v.getInt32(6,true)===500&&v.getInt32(0x17,true)===0&&v.getInt32(0x1b,true)===0&&v.getInt32(0x8f,true)===200&&v.getInt32(0xb8,true)===0,'Status43 source fields incompatible');
-  need(active.every(key=>data.skills[key].effect_raw_hex===s.effect_raw_hex),'Status43 source identity differs');
+  // Effect IDs share DGP timing, not the owner's C6 duration/chance/stats.
+  // 012:14 and016:14 both use043.dgp with distinct immutable skill blocks.
+  const s=effectMetadata(data,43),action=bytes(s?.source?.action_raw_hex,0xac,'status43 resource'),v=new DataView(action.buffer);
+  need(s.id_raw===43&&s.interval_ms===v.getUint32(1,true)&&s.frame_count===action[14]
+    &&s.source.path==='Fight_Role/Status/043.dgp'&&s.source.sha256===data.source_hashes[s.source.path],
+    'Status43 resource descriptor differs');
   need(Array.isArray(data.aggregation)&&data.aggregation.length===38&&data.aggregation.some(x=>x.block_offset===0x8f&&x.address==='0x0521f5bd'&&x.bits===32),'Native aggregate field table missing');
   for(const address of ['0x508bb0','0x508300','0x509e10','0x507e20','0x508a90'])need(/^ev_[a-f0-9]{64}$/.test(data.evidence?.[address]),'Status source evidence missing');
   // The cache only contains source metadata that passed validation and was

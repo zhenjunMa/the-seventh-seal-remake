@@ -1,0 +1,1164 @@
+{
+  "schema": "seventh-seal-runtime-map",
+  "version": 1,
+  "id": "M72010-0-C",
+  "name": "妖精森林",
+  "name_bytes_hex": "d1fdbeabc9adc1d6",
+  "width": 896,
+  "height": 816,
+  "background": {
+    "image": "/assets/maps/m72010-0-c/background.png",
+    "width": 896,
+    "height": 816,
+    "sources": [
+      {
+        "path": "M72010.DGP",
+        "sha256": "8fea8021b70e851a4d73fec1dc923700cd0e8c37a9ffbdf52841c47974fbd678"
+      }
+    ],
+    "image_sha256": "f976fb221a0908a3a65a3ecb9d6f7de88a1cf177bad954d355bdbb97c8c273f8",
+    "assembly": {
+      "referenced_frames": 675,
+      "empty_blocks": 0,
+      "columns": 28,
+      "rows": 26,
+      "resource_count": 1,
+      "animation_frame": 0,
+      "assembly": "DAT even-cell frame/resource -> indexed header DGP; 0x4A3770 rectangular branch",
+      "odd_size_policy": "Native tile-origin loops; clip beyond exact DAT dimensions"
+    }
+  },
+  "movement": {
+    "schema": "seventh-seal-map-movement",
+    "version": 1,
+    "map": "M72010-0-C",
+    "source": "Map/m72010-0-c.dat",
+    "source_sha256": "6132f6cc176376a20cc005f1dbca068c4ba7a1fd6fead08b29cd8d99b5cc86bb",
+    "width": 56,
+    "height": 51,
+    "cell_size": 16,
+    "native_coordinate_shift": 3,
+    "native_to_pixel_scale": 2,
+    "native_step_shift": 1,
+    "native_camera_step_shift": 1,
+    "terrain_rows": [
+      "11111111111111111111111111111111111111111111111111111111",
+      "11111111111111111111111111111111111111111111111111111111",
+      "11111111111111111111111111111111111111111111111111111111",
+      "11111111111111111111111111111111111111111111111111111111",
+      "11111111111111111111111111111111111111111111111111111111",
+      "11111111111111111111111111111111111111111111111111111111",
+      "11111111111111111111111111111111111111111111111111111111",
+      "11111111111111111111111111111111111111111111111111111111",
+      "11111111111111111111111111111111111111111111110001111111",
+      "11111111111111111111111111111111111111111111100001111111",
+      "11111111111111111111111111111111111111111111000001111111",
+      "11111111111111111111111111111111111111111110000001111111",
+      "11111111111111111111111111111111111111110000000000111111",
+      "11111111111111111111111111111111111111100000000000111111",
+      "11111111111111111111111111111111111111100000000001111111",
+      "11111111111111111111111111111111111111100000000011111111",
+      "11111111111111111111111111111111111111100000000011111111",
+      "11111111111111111111111111111111111111100000000011111111",
+      "11111111111111111111111111111111111111100000000111111111",
+      "11111111111111111111111111111111111111100000000111111111",
+      "10011111111111111111111111111111111111100000000111111111",
+      "00000111111111111111111111111111111111000000000111111111",
+      "00000000111111111111111111111111111100000000000111111111",
+      "00000000001111111111100000000000000000000000000111111111",
+      "00000000000000011110000000000000000000000000000111111111",
+      "10000000000000000000000000000000000000000000000111111111",
+      "10000000000000000000000000000000000000000000011111111111",
+      "10000000000000000000000000000000000000000000111111111111",
+      "11000000000000000000000000000000000000000000001111111111",
+      "11110000000000000000000000000000111100000000000111111111",
+      "11111111111100000000000001111000111110000000000001111111",
+      "11111111111110000000000001111100111110000000000001111111",
+      "11111111111111000000000001111111111110000000000000111111",
+      "11111111111111000000000001111111111110000000000000111111",
+      "11111111111111100000000001111111111111100000000000111111",
+      "11111111111111110000000001111111111111100000000011111111",
+      "11111111111111110000000011111111111111100000000001111111",
+      "11111111111111000000000111111111111111110000000000011111",
+      "11111111111111000000000111111111111111110000000000001111",
+      "11111111111110000000000111111111111111111000000000001111",
+      "11111111111110000000000011111111111111111000000000000111",
+      "11111111111100000000000001111111111111111000000000000111",
+      "11111111111100000000000001111111111111111000000000000111",
+      "11111111111000000000000111111111111111111000000000000111",
+      "11111111111000000000001111111111111111111000000000000111",
+      "11111111111000000000001111111111111111111000000000000111",
+      "11111111111000000000111111111111111111111000000000000111",
+      "11111111110000000000111111111111111111111100000000000111",
+      "11111111100000000001111111111111111111111110000000000111",
+      "11111111111111111111111111111111111111111111111111111111",
+      "11111111111111111111111111111111111111111111111111111111"
+    ],
+    "triggers": [
+      {
+        "x": 43,
+        "y": 48,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37323032302d312d582e646174000000000000000104000000"
+      },
+      {
+        "x": 44,
+        "y": 48,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37323032302d312d582e646174000000000000000104000000"
+      },
+      {
+        "x": 45,
+        "y": 48,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37323032302d312d582e646174000000000000000104000000"
+      },
+      {
+        "x": 46,
+        "y": 48,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37323032302d312d582e646174000000000000000104000000"
+      },
+      {
+        "x": 47,
+        "y": 48,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37323032302d312d582e646174000000000000000104000000"
+      },
+      {
+        "x": 48,
+        "y": 48,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37323032302d312d582e646174000000000000000104000000"
+      },
+      {
+        "x": 49,
+        "y": 48,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37323032302d312d582e646174000000000000000104000000"
+      },
+      {
+        "x": 50,
+        "y": 48,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37323032302d312d582e646174000000000000000104000000"
+      },
+      {
+        "x": 51,
+        "y": 48,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37323032302d312d582e646174000000000000000104000000"
+      },
+      {
+        "x": 52,
+        "y": 48,
+        "id": 1,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37323032302d312d582e646174000000000000000104000000"
+      },
+      {
+        "x": 9,
+        "y": 48,
+        "id": 2,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37323031302d312d422e646174000000000000000106000000"
+      },
+      {
+        "x": 10,
+        "y": 48,
+        "id": 2,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37323031302d312d422e646174000000000000000106000000"
+      },
+      {
+        "x": 11,
+        "y": 48,
+        "id": 2,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37323031302d312d422e646174000000000000000106000000"
+      },
+      {
+        "x": 12,
+        "y": 48,
+        "id": 2,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37323031302d312d422e646174000000000000000106000000"
+      },
+      {
+        "x": 13,
+        "y": 48,
+        "id": 2,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37323031302d312d422e646174000000000000000106000000"
+      },
+      {
+        "x": 14,
+        "y": 48,
+        "id": 2,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37323031302d312d422e646174000000000000000106000000"
+      },
+      {
+        "x": 15,
+        "y": 48,
+        "id": 2,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37323031302d312d422e646174000000000000000106000000"
+      },
+      {
+        "x": 16,
+        "y": 48,
+        "id": 2,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37323031302d312d422e646174000000000000000106000000"
+      },
+      {
+        "x": 17,
+        "y": 48,
+        "id": 2,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37323031302d312d422e646174000000000000000106000000"
+      },
+      {
+        "x": 18,
+        "y": 48,
+        "id": 2,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37323031302d312d422e646174000000000000000106000000"
+      },
+      {
+        "x": 1,
+        "y": 20,
+        "id": 3,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37323032302d302d4a2e646174000000000000000202000000"
+      },
+      {
+        "x": 1,
+        "y": 21,
+        "id": 3,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37323032302d302d4a2e646174000000000000000202000000"
+      },
+      {
+        "x": 1,
+        "y": 22,
+        "id": 3,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37323032302d302d4a2e646174000000000000000202000000"
+      },
+      {
+        "x": 1,
+        "y": 23,
+        "id": 3,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37323032302d302d4a2e646174000000000000000202000000"
+      },
+      {
+        "x": 1,
+        "y": 24,
+        "id": 3,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37323032302d302d4a2e646174000000000000000202000000"
+      },
+      {
+        "x": 1,
+        "y": 25,
+        "id": 3,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37323032302d302d4a2e646174000000000000000202000000"
+      },
+      {
+        "x": 1,
+        "y": 26,
+        "id": 3,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37323032302d302d4a2e646174000000000000000202000000"
+      },
+      {
+        "x": 1,
+        "y": 27,
+        "id": 3,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37323032302d302d4a2e646174000000000000000202000000"
+      },
+      {
+        "x": 46,
+        "y": 8,
+        "id": 4,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37323031302d312d442e646174000000000000000303000000"
+      },
+      {
+        "x": 47,
+        "y": 8,
+        "id": 4,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37323031302d312d442e646174000000000000000303000000"
+      },
+      {
+        "x": 48,
+        "y": 8,
+        "id": 4,
+        "state_raw": 0,
+        "path_gate": true,
+        "descriptor_hex": "00000000000000000000000000000000006d37323031302d312d442e646174000000000000000303000000"
+      }
+    ],
+    "terrain_rule": "cell byte +0x20 == 0 permits terrain entry",
+    "transition_rule": "0x4A80E0: +0x38 reference, descriptor[0]==0 and descriptor[0x11]!=0 is path-gated",
+    "policy": "Unimplemented native transition gates block. Runtime enables only separately verified exits.",
+    "role_occupancy_rule": "+0x14 is runtime role index + 1, not static terrain",
+    "object_lookup_rule": "+0x2B is runtime object index + 1, not a second collision mask"
+  },
+  "objects": [
+    {
+      "index": 0,
+      "resource_filename": "006.DGP",
+      "source": "mapm/m72010/006.dgp",
+      "resource_sha256": "450c8eddad813ece0b0254b92fcf4f48cfd93655b73885eac1b84a11a88cd772",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 208,
+      "y_native": 360,
+      "x_world": 416,
+      "y_world": 720,
+      "anchor_x": 167,
+      "anchor_y": 235,
+      "draw_x": 249,
+      "draw_y": 485,
+      "frame_width": 518,
+      "frame_height": 318,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 26,
+      "cell_y": 45,
+      "kind_raw": 3,
+      "layer": 3,
+      "sort_x": 416,
+      "sort_y": 752,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m72010-0-c/objects/006_frame_000.png",
+      "image_sha256": "d943f6933db7e40de9c6d34a07af1001be6b47efe86ae63cd986aa965dc3d413"
+    },
+    {
+      "index": 1,
+      "resource_filename": "005.DGP",
+      "source": "mapm/m72010/005.dgp",
+      "resource_sha256": "2c5a4b49e9c4282fc1b711998835ca72520e22c13197e505fc4a057bbb1a40c3",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 416,
+      "y_native": 224,
+      "x_world": 832,
+      "y_world": 448,
+      "anchor_x": 137,
+      "anchor_y": 217,
+      "draw_x": 695,
+      "draw_y": 231,
+      "frame_width": 169,
+      "frame_height": 249,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 52,
+      "cell_y": 28,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 832,
+      "sort_y": 480,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m72010-0-c/objects/005_frame_000.png",
+      "image_sha256": "4ed679c4f00be4949e50f8f2920db7dcc68e7011d645c95e2f1587ac802e3d3d"
+    },
+    {
+      "index": 2,
+      "resource_filename": "004.DGP",
+      "source": "mapm/m72010/004.dgp",
+      "resource_sha256": "521ce01e23427833c45a7ea7e9fa705fb299a5aff39fdfa28b95f9528b73574a",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 64,
+      "y_native": 288,
+      "x_world": 128,
+      "y_world": 576,
+      "anchor_x": 127,
+      "anchor_y": 575,
+      "draw_x": 1,
+      "draw_y": 1,
+      "frame_width": 293,
+      "frame_height": 626,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 8,
+      "cell_y": 36,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 128,
+      "sort_y": 608,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m72010-0-c/objects/004_frame_000.png",
+      "image_sha256": "6e10f500866c006c6428e095b36aecd91af26484b78fff5baae4a2ab9f9378f2"
+    },
+    {
+      "index": 3,
+      "resource_filename": "002.DGP",
+      "source": "mapm/m72010/002.dgp",
+      "resource_sha256": "4ef55a58a1f11cea2d027bedad26011b2fedff564c5186519e3a58d3a998fddd",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 320,
+      "y_native": 400,
+      "x_world": 640,
+      "y_world": 800,
+      "anchor_x": 65,
+      "anchor_y": 98,
+      "draw_x": 575,
+      "draw_y": 702,
+      "frame_width": 119,
+      "frame_height": 130,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 40,
+      "cell_y": 50,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 640,
+      "sort_y": 832,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m72010-0-c/objects/002_frame_000.png",
+      "image_sha256": "69f4a77b481e3829829d709b4e649e45c3f26c02c51324f0934217602d1c4350"
+    },
+    {
+      "index": 4,
+      "resource_filename": "003.DGP",
+      "source": "mapm/m72010/003.dgp",
+      "resource_sha256": "b22264c6f2870dc6d9cb63518e6bfb5db4c807444a0b58617d4073e833e9dac0",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 384,
+      "y_native": 272,
+      "x_world": 768,
+      "y_world": 544,
+      "anchor_x": 32,
+      "anchor_y": 72,
+      "draw_x": 736,
+      "draw_y": 472,
+      "frame_width": 122,
+      "frame_height": 118,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 48,
+      "cell_y": 34,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 768,
+      "sort_y": 576,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m72010-0-c/objects/003_frame_000.png",
+      "image_sha256": "771ba44ac89a9f990b2b702681277ec72bddf4588294f065e37589ff4b504e11"
+    },
+    {
+      "index": 5,
+      "resource_filename": "001.DGP",
+      "source": "mapm/m72010/001.dgp",
+      "resource_sha256": "f9343c532ebe266c5b17866bff9ea40058c49343cab7150151e6043d05b2c003",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 272,
+      "y_native": 344,
+      "x_world": 544,
+      "y_world": 688,
+      "anchor_x": 128,
+      "anchor_y": 280,
+      "draw_x": 416,
+      "draw_y": 408,
+      "frame_width": 234,
+      "frame_height": 312,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 34,
+      "cell_y": 43,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 544,
+      "sort_y": 720,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m72010-0-c/objects/001_frame_000.png",
+      "image_sha256": "0bd9777b5f2d5e69673f394669d7ce0b1624c2626c53eed131dad3e412052453"
+    },
+    {
+      "index": 6,
+      "resource_filename": "007.DGP",
+      "source": "mapm/m72010/007.dgp",
+      "resource_sha256": "ebc908821cb34adb7ad0c4c604d8dad0a51de9c92af8f49bbe9fe4a759d968ed",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 320,
+      "y_native": 395,
+      "x_world": 640,
+      "y_world": 790,
+      "anchor_x": 130,
+      "anchor_y": 213,
+      "draw_x": 510,
+      "draw_y": 577,
+      "frame_width": 319,
+      "frame_height": 245,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 40,
+      "cell_y": 49,
+      "kind_raw": 3,
+      "layer": 3,
+      "sort_x": 640,
+      "sort_y": 822,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m72010-0-c/objects/007_frame_000.png",
+      "image_sha256": "a4b5cc292e14bdb4f0ea7ac8b3bd010a60834c87271ac40ce378d0b7a0b16ce4"
+    },
+    {
+      "index": 7,
+      "resource_filename": "009.DGP",
+      "source": "mapm/m72010/009.dgp",
+      "resource_sha256": "b7d9d9d0c2de66cdfd923b39c6391ff96184dd477e6b6319812169ab1cb496aa",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 252,
+      "y_native": 316,
+      "x_world": 504,
+      "y_world": 632,
+      "anchor_x": 111,
+      "anchor_y": 135,
+      "draw_x": 393,
+      "draw_y": 497,
+      "frame_width": 199,
+      "frame_height": 199,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 31,
+      "cell_y": 39,
+      "kind_raw": 3,
+      "layer": 3,
+      "sort_x": 504,
+      "sort_y": 664,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m72010-0-c/objects/009_frame_000.png",
+      "image_sha256": "451786306169cab1b804986259ff7cc810e34c86abf0eec0c08e8d2355b60eb1"
+    },
+    {
+      "index": 8,
+      "resource_filename": "010.DGP",
+      "source": "mapm/m72010/010.dgp",
+      "resource_sha256": "920231d6de0d97926f27a4320b4275d64ed636f873455abe110aff0586b65ed2",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 234,
+      "y_native": 119,
+      "x_world": 468,
+      "y_world": 238,
+      "anchor_x": 71,
+      "anchor_y": 126,
+      "draw_x": 397,
+      "draw_y": 112,
+      "frame_width": 154,
+      "frame_height": 158,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 29,
+      "cell_y": 14,
+      "kind_raw": 3,
+      "layer": 3,
+      "sort_x": 468,
+      "sort_y": 270,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m72010-0-c/objects/010_frame_000.png",
+      "image_sha256": "8c610635c32b9640c3ed4d59a4c4fa122c98cd3105936c0298b698caed5497db"
+    },
+    {
+      "index": 9,
+      "resource_filename": "010.DGP",
+      "source": "mapm/m72010/010.dgp",
+      "resource_sha256": "920231d6de0d97926f27a4320b4275d64ed636f873455abe110aff0586b65ed2",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 200,
+      "y_native": 368,
+      "x_world": 400,
+      "y_world": 736,
+      "anchor_x": 71,
+      "anchor_y": 126,
+      "draw_x": 329,
+      "draw_y": 610,
+      "frame_width": 154,
+      "frame_height": 158,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 25,
+      "cell_y": 46,
+      "kind_raw": 3,
+      "layer": 3,
+      "sort_x": 400,
+      "sort_y": 768,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m72010-0-c/objects/010_frame_000.png",
+      "image_sha256": "8c610635c32b9640c3ed4d59a4c4fa122c98cd3105936c0298b698caed5497db"
+    },
+    {
+      "index": 10,
+      "resource_filename": "011.DGP",
+      "source": "mapm/m72010/011.dgp",
+      "resource_sha256": "ce1094679ae5ded229428b477aa5b3417f42fa372325069d9dd8f5e421cf8f69",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 103,
+      "y_native": 271,
+      "x_world": 206,
+      "y_world": 542,
+      "anchor_x": 40,
+      "anchor_y": 201,
+      "draw_x": 166,
+      "draw_y": 341,
+      "frame_width": 75,
+      "frame_height": 233,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 12,
+      "cell_y": 33,
+      "kind_raw": 3,
+      "layer": 3,
+      "sort_x": 206,
+      "sort_y": 574,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m72010-0-c/objects/011_frame_000.png",
+      "image_sha256": "1f7cfd10260217bc9a42c92107f82ce15f70453fd39c83b22d754abd1bfea1cb"
+    },
+    {
+      "index": 11,
+      "resource_filename": "012.DGP",
+      "source": "mapm/m72010/012.dgp",
+      "resource_sha256": "c5840a1e9cc6905b0d3a04704dd9e03970c7a246703bb51d3ca7430ccc656bfe",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 162,
+      "y_native": 178,
+      "x_world": 324,
+      "y_world": 356,
+      "anchor_x": 74,
+      "anchor_y": 62,
+      "draw_x": 250,
+      "draw_y": 294,
+      "frame_width": 125,
+      "frame_height": 94,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 20,
+      "cell_y": 22,
+      "kind_raw": 2,
+      "layer": 2,
+      "sort_x": 324,
+      "sort_y": 388,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m72010-0-c/objects/012_frame_000.png",
+      "image_sha256": "678c7dac4e0abf5035ee15eee2526995879020d495924e826bdb25c67116bab8"
+    },
+    {
+      "index": 12,
+      "resource_filename": "013.DGP",
+      "source": "mapm/m72010/013.dgp",
+      "resource_sha256": "8348407602256fad1e375a434fe788a0f6ef04bcd450294afbece8314a7b827e",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 238,
+      "y_native": 115,
+      "x_world": 476,
+      "y_world": 230,
+      "anchor_x": 60,
+      "anchor_y": 70,
+      "draw_x": 416,
+      "draw_y": 160,
+      "frame_width": 131,
+      "frame_height": 102,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 29,
+      "cell_y": 14,
+      "kind_raw": 3,
+      "layer": 3,
+      "sort_x": 476,
+      "sort_y": 262,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m72010-0-c/objects/013_frame_000.png",
+      "image_sha256": "91671b7a135c984879716e209345fa5ef853b2f8b5f6e9a183fddd98355c65a2"
+    },
+    {
+      "index": 13,
+      "resource_filename": "015.DGP",
+      "source": "mapm/m72010/015.dgp",
+      "resource_sha256": "fbbec3a1c46280b355fe4515712a096e9192f4e3f3c6c4e19cfe49fbf9532f5b",
+      "initial_frame": 0,
+      "frame": 0,
+      "x_native": 270,
+      "y_native": 307,
+      "x_world": 540,
+      "y_world": 614,
+      "anchor_x": 111,
+      "anchor_y": 192,
+      "draw_x": 429,
+      "draw_y": 422,
+      "frame_width": 182,
+      "frame_height": 226,
+      "width_cells": 1,
+      "height_cells": 1,
+      "cell_x": 33,
+      "cell_y": 38,
+      "kind_raw": 3,
+      "layer": 3,
+      "sort_x": 540,
+      "sort_y": 646,
+      "depth_rule": "0x4AA110 rectangular branch; stable (layer, sort_y) ascending",
+      "image": "/assets/maps/m72010-0-c/objects/015_frame_000.png",
+      "image_sha256": "33faac888cce63f7553b37f054c95721d96be9707ab611ecbe9ef52e3b043462"
+    }
+  ],
+  "exits": [
+    {
+      "id": 1,
+      "state": "ready",
+      "cells": [
+        {
+          "x": 43,
+          "y": 48
+        },
+        {
+          "x": 44,
+          "y": 48
+        },
+        {
+          "x": 45,
+          "y": 48
+        },
+        {
+          "x": 46,
+          "y": 48
+        },
+        {
+          "x": 47,
+          "y": 48
+        },
+        {
+          "x": 48,
+          "y": 48
+        },
+        {
+          "x": 49,
+          "y": 48
+        },
+        {
+          "x": 50,
+          "y": 48
+        },
+        {
+          "x": 51,
+          "y": 48
+        },
+        {
+          "x": 52,
+          "y": 48
+        }
+      ],
+      "target_map": "M72020-1-X",
+      "entry": {
+        "x": 80,
+        "y": 176,
+        "direction": 0,
+        "cell_x": 5,
+        "cell_y": 11,
+        "native_x": 40,
+        "native_y": 88
+      },
+      "conditions": [],
+      "source": {
+        "path": "Map/m72010-0-c.dat",
+        "sha256": "6132f6cc176376a20cc005f1dbca068c4ba7a1fd6fead08b29cd8d99b5cc86bb",
+        "descriptor_offset": 184498,
+        "descriptor_bytes": 43,
+        "descriptor_hex": "00000000000000000000000000000000006d37323032302d312d582e646174000000000000000104000000",
+        "compact_field_expansion_evidence": "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "target_path": "Map/m72020-1-x.dat",
+        "target_sha256": "c7a1fc6ceeb0de982fe238c5fb8b7939331062f0353f6b1f8d0eb5c2b80aa61a",
+        "target_entry_marker": 1,
+        "entry_sort_code": 4,
+        "entry_terrain_raw": 0,
+        "entry_trigger_raw": 0,
+        "entry_scan_cells": [
+          {
+            "x": 5,
+            "y": 11,
+            "offset": 42226
+          }
+        ],
+        "entry_sorted_cells": [
+          {
+            "x": 5,
+            "y": 11
+          }
+        ],
+        "entry_sort": "x descending; stable ties",
+        "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
+        "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
+        "native_evidence": {
+          "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+          "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+          "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+          "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+        }
+      },
+      "execution": "Native transition descriptor only; map-entry TLK/ANM and their once-only checks must complete separately.",
+      "limitations": [
+        "Static source/code evidence; original timing not observed",
+        "Continuous keyboard movement is runtime policy"
+      ]
+    },
+    {
+      "id": 2,
+      "state": "ready",
+      "cells": [
+        {
+          "x": 9,
+          "y": 48
+        },
+        {
+          "x": 10,
+          "y": 48
+        },
+        {
+          "x": 11,
+          "y": 48
+        },
+        {
+          "x": 12,
+          "y": 48
+        },
+        {
+          "x": 13,
+          "y": 48
+        },
+        {
+          "x": 14,
+          "y": 48
+        },
+        {
+          "x": 15,
+          "y": 48
+        },
+        {
+          "x": 16,
+          "y": 48
+        },
+        {
+          "x": 17,
+          "y": 48
+        },
+        {
+          "x": 18,
+          "y": 48
+        }
+      ],
+      "target_map": "M72010-1-B",
+      "entry": {
+        "x": 128,
+        "y": 192,
+        "direction": 7,
+        "cell_x": 8,
+        "cell_y": 12,
+        "native_x": 64,
+        "native_y": 96
+      },
+      "conditions": [],
+      "source": {
+        "path": "Map/m72010-0-c.dat",
+        "sha256": "6132f6cc176376a20cc005f1dbca068c4ba7a1fd6fead08b29cd8d99b5cc86bb",
+        "descriptor_offset": 184541,
+        "descriptor_bytes": 43,
+        "descriptor_hex": "00000000000000000000000000000000006d37323031302d312d422e646174000000000000000106000000",
+        "compact_field_expansion_evidence": "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "target_path": "Map/m72010-1-b.dat",
+        "target_sha256": "9bf7b931c4fa73e7531c23feda0fdc8c5f2f5231cd96f07d2742764ec6aa9404",
+        "target_entry_marker": 1,
+        "entry_sort_code": 6,
+        "entry_terrain_raw": 0,
+        "entry_trigger_raw": 0,
+        "entry_scan_cells": [
+          {
+            "x": 8,
+            "y": 12,
+            "offset": 43122
+          }
+        ],
+        "entry_sorted_cells": [
+          {
+            "x": 8,
+            "y": 12
+          }
+        ],
+        "entry_sort": "y descending; stable ties",
+        "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
+        "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
+        "native_evidence": {
+          "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+          "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+          "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+          "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+        }
+      },
+      "execution": "Native transition descriptor only; map-entry TLK/ANM and their once-only checks must complete separately.",
+      "limitations": [
+        "Static source/code evidence; original timing not observed",
+        "Continuous keyboard movement is runtime policy"
+      ]
+    },
+    {
+      "id": 3,
+      "state": "ready",
+      "cells": [
+        {
+          "x": 1,
+          "y": 20
+        },
+        {
+          "x": 1,
+          "y": 21
+        },
+        {
+          "x": 1,
+          "y": 22
+        },
+        {
+          "x": 1,
+          "y": 23
+        },
+        {
+          "x": 1,
+          "y": 24
+        },
+        {
+          "x": 1,
+          "y": 25
+        },
+        {
+          "x": 1,
+          "y": 26
+        },
+        {
+          "x": 1,
+          "y": 27
+        }
+      ],
+      "target_map": "M72020-0-J",
+      "entry": {
+        "x": 848,
+        "y": 176,
+        "direction": 6,
+        "cell_x": 53,
+        "cell_y": 11,
+        "native_x": 424,
+        "native_y": 88
+      },
+      "conditions": [],
+      "source": {
+        "path": "Map/m72010-0-c.dat",
+        "sha256": "6132f6cc176376a20cc005f1dbca068c4ba7a1fd6fead08b29cd8d99b5cc86bb",
+        "descriptor_offset": 184584,
+        "descriptor_bytes": 43,
+        "descriptor_hex": "00000000000000000000000000000000006d37323032302d302d4a2e646174000000000000000202000000",
+        "compact_field_expansion_evidence": "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "target_path": "Map/m72020-0-j.dat",
+        "target_sha256": "766457cd2e797863769c1ab005e7af63c1e0f1c4e141c1cf210b29d49b56770d",
+        "target_entry_marker": 2,
+        "entry_sort_code": 2,
+        "entry_terrain_raw": 0,
+        "entry_trigger_raw": 0,
+        "entry_scan_cells": [
+          {
+            "x": 53,
+            "y": 11,
+            "offset": 45298
+          }
+        ],
+        "entry_sorted_cells": [
+          {
+            "x": 53,
+            "y": 11
+          }
+        ],
+        "entry_sort": "y descending; stable ties",
+        "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
+        "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
+        "native_evidence": {
+          "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+          "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+          "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+          "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+        }
+      },
+      "execution": "Native transition descriptor only; map-entry TLK/ANM and their once-only checks must complete separately.",
+      "limitations": [
+        "Static source/code evidence; original timing not observed",
+        "Continuous keyboard movement is runtime policy"
+      ]
+    },
+    {
+      "id": 4,
+      "state": "ready",
+      "cells": [
+        {
+          "x": 46,
+          "y": 8
+        },
+        {
+          "x": 47,
+          "y": 8
+        },
+        {
+          "x": 48,
+          "y": 8
+        }
+      ],
+      "target_map": "M72010-1-D",
+      "entry": {
+        "x": 624,
+        "y": 736,
+        "direction": 4,
+        "cell_x": 39,
+        "cell_y": 46,
+        "native_x": 312,
+        "native_y": 368
+      },
+      "conditions": [],
+      "source": {
+        "path": "Map/m72010-0-c.dat",
+        "sha256": "6132f6cc176376a20cc005f1dbca068c4ba7a1fd6fead08b29cd8d99b5cc86bb",
+        "descriptor_offset": 184627,
+        "descriptor_bytes": 43,
+        "descriptor_hex": "00000000000000000000000000000000006d37323031302d312d442e646174000000000000000303000000",
+        "compact_field_expansion_evidence": "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "target_path": "Map/m72010-1-d.dat",
+        "target_sha256": "0da4ec5b404f2acc53b0a001fce3a57319389adda8bd7c632a99b4e66bb717c8",
+        "target_entry_marker": 3,
+        "entry_sort_code": 3,
+        "entry_terrain_raw": 0,
+        "entry_trigger_raw": 0,
+        "entry_scan_cells": [
+          {
+            "x": 39,
+            "y": 46,
+            "offset": 164786
+          }
+        ],
+        "entry_sorted_cells": [
+          {
+            "x": 39,
+            "y": 46
+          }
+        ],
+        "entry_sort": "x ascending; stable ties",
+        "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
+        "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
+        "native_evidence": {
+          "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+          "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+          "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+          "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+        }
+      },
+      "execution": "Native transition descriptor only; map-entry TLK/ANM and their once-only checks must complete separately.",
+      "limitations": [
+        "Static source/code evidence; original timing not observed",
+        "Continuous keyboard movement is runtime policy"
+      ]
+    }
+  ],
+  "unresolved_triggers": [],
+  "role_layer_preview": 2,
+  "role_layer_note": "Runtime render policy; native role +0xF3 initial value remains unverified",
+  "source": {
+    "path": "Map/m72010-0-c.dat",
+    "sha256": "6132f6cc176376a20cc005f1dbca068c4ba7a1fd6fead08b29cd8d99b5cc86bb",
+    "bytes": 225774,
+    "object_resource_base_raw": ".\\MAPM\\M72010\\",
+    "object_resource_base": "mapm/m72010",
+    "object_table_start": 195442,
+    "object_table_end": 199278,
+    "unknown_tail_bytes": 26496,
+    "native_evidence": {
+      "map_loader": "ev_86fb8504826b15ccbea2b3911eaa302ef3f5cbeba7d1b233df62109a9ff38681",
+      "background_draw": "ev_2f7d67b0c8598838be7ac99150b959c5012222fdac93464caaf6732031f0b6e7",
+      "background_resource_loader": "ev_7c353572e07610a7b7e99f989466929dd711a469b13e61acb2597b40ff70e8d4",
+      "transition_path_gate": "ev_1ccb72823e262e4317968f322fcebaf8bd8724a31c215f127d8a68ac77c7b2b2",
+      "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+      "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+      "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+      "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+    },
+    "object_native_evidence": [
+      "ev_86fb8504826b15ccbea2b3911eaa302ef3f5cbeba7d1b233df62109a9ff38681",
+      "ev_6093394ea87d8eb856eef46d19eabdaf9e4735e58a8a18243c3aa798fda1feb5",
+      "ev_c0c0aa49cfd0507760600c7f4f475d3912f8210c498f1896a6fb058f80960b5b",
+      "ev_05dce0e80a25427e4e72280265291973d42f600238f7f832c0320114fed82fb7",
+      "ev_70e72b030eca65a4073731754bc443a383f4b215be5da103ed824b0c1a97727a",
+      "ev_02ca024fc6f9093e9bd38f06052ee2a4f2b2671240c4df2293cf1a50c4e2ae02",
+      "ev_813d397c0060f8bec0ba044eadc20f12cfb9fd8a36a56b19620629114d4ec9a7",
+      "ev_f32a0609558d1fb49c46e1a996c57b11aa62f681842c5ee0f86256aa7b74ffbe",
+      "ev_0781814eee25b61ac8bbd2b2ede6999858f4f7041d5b908f25c58d7a7691a89d",
+      "ev_9abd5ba6645433c0752e35b69015a7f998c9c9b054862a5afdfadc7499e40962"
+    ]
+  },
+  "limitations": [
+    "Static resource/code evidence; original-game entry/transition timing is not observed.",
+    "Background uses its initial animation frame; background animation is not advanced.",
+    "Initial static objects; script changes and object animation are not reconstructed.",
+    "Role depth and continuous keyboard movement are runtime policies.",
+    "NPC source defaults require chapter TLK/ANM changes; asset export executes no story"
+  ],
+  "chapter_npcs": [],
+  "opening_npcs": [],
+  "map_flag_index": 79
+}

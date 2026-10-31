@@ -2822,6 +2822,2892 @@
         "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
         "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
       ]
+    },
+    "M72010-0-C": {
+      "frequency": 1,
+      "global_pool_load_raw": 1,
+      "members": [
+        {
+          "id": "015",
+          "name": "食魂藤",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72010-0-c.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/015.CHR",
+            "sha256": "d4fa2cfc370119a8154d43dc3d508c1bf0e14013512ddf3ef1aa7a645efa296b",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "026",
+          "name": "翼蝠魔兽",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72010-0-c.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/026.CHR",
+            "sha256": "69af2d01787ae85308f4a2c98d9c456356b3243602b0bb4d0d92829fb3f9e455",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "028",
+          "name": "爆毒巨蜂",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72010-0-c.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 250
+          },
+          "chr_source": {
+            "path": "Fight_Role/028.CHR",
+            "sha256": "f5735d64b6abee1d18356eb43cfab9cab42e016e361511dd90df9b1cecdd7a13",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m72010-0-c.dat",
+          "sha256": "6132f6cc176376a20cc005f1dbca068c4ba7a1fd6fead08b29cd8d99b5cc86bb",
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
+        },
+        {
+          "path": "Map/m72010-0-c.STG",
+          "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef"
+        }
+      ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage02.scn",
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
+      ]
+    },
+    "M72010-0-N": {
+      "frequency": 1,
+      "global_pool_load_raw": 1,
+      "members": [
+        {
+          "id": "015",
+          "name": "食魂藤",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72010-0-n.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/015.CHR",
+            "sha256": "d4fa2cfc370119a8154d43dc3d508c1bf0e14013512ddf3ef1aa7a645efa296b",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "026",
+          "name": "翼蝠魔兽",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72010-0-n.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/026.CHR",
+            "sha256": "69af2d01787ae85308f4a2c98d9c456356b3243602b0bb4d0d92829fb3f9e455",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "028",
+          "name": "爆毒巨蜂",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72010-0-n.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 250
+          },
+          "chr_source": {
+            "path": "Fight_Role/028.CHR",
+            "sha256": "f5735d64b6abee1d18356eb43cfab9cab42e016e361511dd90df9b1cecdd7a13",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m72010-0-n.dat",
+          "sha256": "690dee6d0ea40e6a4ff16796fcfe1a22717bdca43627bc6c9f2cc34a0a0554f2",
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
+        },
+        {
+          "path": "Map/m72010-0-n.STG",
+          "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef"
+        }
+      ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage02.scn",
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
+      ]
+    },
+    "M72010-1-3": {
+      "frequency": 1,
+      "global_pool_load_raw": 1,
+      "members": [
+        {
+          "id": "015",
+          "name": "食魂藤",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72010-1-3.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/015.CHR",
+            "sha256": "d4fa2cfc370119a8154d43dc3d508c1bf0e14013512ddf3ef1aa7a645efa296b",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "026",
+          "name": "翼蝠魔兽",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72010-1-3.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/026.CHR",
+            "sha256": "69af2d01787ae85308f4a2c98d9c456356b3243602b0bb4d0d92829fb3f9e455",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "028",
+          "name": "爆毒巨蜂",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72010-1-3.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 250
+          },
+          "chr_source": {
+            "path": "Fight_Role/028.CHR",
+            "sha256": "f5735d64b6abee1d18356eb43cfab9cab42e016e361511dd90df9b1cecdd7a13",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m72010-1-3.dat",
+          "sha256": "e34e5d2f116a7005c20704464b982ba52b827a5504544ef717598b70e9b94dbb",
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
+        },
+        {
+          "path": "Map/m72010-1-3.STG",
+          "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef"
+        }
+      ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage02.scn",
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
+      ]
+    },
+    "M72010-1-D": {
+      "frequency": 1,
+      "global_pool_load_raw": 1,
+      "members": [
+        {
+          "id": "015",
+          "name": "食魂藤",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72010-1-d.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/015.CHR",
+            "sha256": "d4fa2cfc370119a8154d43dc3d508c1bf0e14013512ddf3ef1aa7a645efa296b",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "026",
+          "name": "翼蝠魔兽",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72010-1-d.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/026.CHR",
+            "sha256": "69af2d01787ae85308f4a2c98d9c456356b3243602b0bb4d0d92829fb3f9e455",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "028",
+          "name": "爆毒巨蜂",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72010-1-d.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 250
+          },
+          "chr_source": {
+            "path": "Fight_Role/028.CHR",
+            "sha256": "f5735d64b6abee1d18356eb43cfab9cab42e016e361511dd90df9b1cecdd7a13",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m72010-1-d.dat",
+          "sha256": "0da4ec5b404f2acc53b0a001fce3a57319389adda8bd7c632a99b4e66bb717c8",
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
+        },
+        {
+          "path": "Map/m72010-1-d.STG",
+          "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef"
+        }
+      ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage02.scn",
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
+      ]
+    },
+    "M72020-0-2": {
+      "frequency": 1,
+      "global_pool_load_raw": 1,
+      "members": [
+        {
+          "id": "015",
+          "name": "食魂藤",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72020-0-2.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/015.CHR",
+            "sha256": "d4fa2cfc370119a8154d43dc3d508c1bf0e14013512ddf3ef1aa7a645efa296b",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "026",
+          "name": "翼蝠魔兽",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72020-0-2.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/026.CHR",
+            "sha256": "69af2d01787ae85308f4a2c98d9c456356b3243602b0bb4d0d92829fb3f9e455",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "028",
+          "name": "爆毒巨蜂",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72020-0-2.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 250
+          },
+          "chr_source": {
+            "path": "Fight_Role/028.CHR",
+            "sha256": "f5735d64b6abee1d18356eb43cfab9cab42e016e361511dd90df9b1cecdd7a13",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m72020-0-2.dat",
+          "sha256": "e7c5b0c0e4c3dfa1a50a0c8186546832c5ae5bbc1f567ff9940ee1bcea32d57e",
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
+        },
+        {
+          "path": "Map/m72020-0-2.STG",
+          "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef"
+        }
+      ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage02.scn",
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
+      ]
+    },
+    "M72020-0-G": {
+      "frequency": 1,
+      "global_pool_load_raw": 1,
+      "members": [
+        {
+          "id": "015",
+          "name": "食魂藤",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72020-0-g.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/015.CHR",
+            "sha256": "d4fa2cfc370119a8154d43dc3d508c1bf0e14013512ddf3ef1aa7a645efa296b",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "026",
+          "name": "翼蝠魔兽",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72020-0-g.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/026.CHR",
+            "sha256": "69af2d01787ae85308f4a2c98d9c456356b3243602b0bb4d0d92829fb3f9e455",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "028",
+          "name": "爆毒巨蜂",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72020-0-g.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 250
+          },
+          "chr_source": {
+            "path": "Fight_Role/028.CHR",
+            "sha256": "f5735d64b6abee1d18356eb43cfab9cab42e016e361511dd90df9b1cecdd7a13",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m72020-0-g.dat",
+          "sha256": "7fb6f2f602577f3102043cb68489aefec10f92eacdfa8ad953d298c7c6d15538",
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
+        },
+        {
+          "path": "Map/m72020-0-g.STG",
+          "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef"
+        }
+      ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage02.scn",
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
+      ]
+    },
+    "M72020-0-J": {
+      "frequency": 1,
+      "global_pool_load_raw": 1,
+      "members": [
+        {
+          "id": "015",
+          "name": "食魂藤",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72020-0-j.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/015.CHR",
+            "sha256": "d4fa2cfc370119a8154d43dc3d508c1bf0e14013512ddf3ef1aa7a645efa296b",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "026",
+          "name": "翼蝠魔兽",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72020-0-j.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/026.CHR",
+            "sha256": "69af2d01787ae85308f4a2c98d9c456356b3243602b0bb4d0d92829fb3f9e455",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "028",
+          "name": "爆毒巨蜂",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72020-0-j.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 250
+          },
+          "chr_source": {
+            "path": "Fight_Role/028.CHR",
+            "sha256": "f5735d64b6abee1d18356eb43cfab9cab42e016e361511dd90df9b1cecdd7a13",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m72020-0-j.dat",
+          "sha256": "766457cd2e797863769c1ab005e7af63c1e0f1c4e141c1cf210b29d49b56770d",
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
+        },
+        {
+          "path": "Map/m72020-0-j.STG",
+          "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef"
+        }
+      ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage02.scn",
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
+      ]
+    },
+    "M72020-0-L": {
+      "frequency": 1,
+      "global_pool_load_raw": 1,
+      "members": [
+        {
+          "id": "015",
+          "name": "食魂藤",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72020-0-l.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/015.CHR",
+            "sha256": "d4fa2cfc370119a8154d43dc3d508c1bf0e14013512ddf3ef1aa7a645efa296b",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "026",
+          "name": "翼蝠魔兽",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72020-0-l.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/026.CHR",
+            "sha256": "69af2d01787ae85308f4a2c98d9c456356b3243602b0bb4d0d92829fb3f9e455",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "028",
+          "name": "爆毒巨蜂",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72020-0-l.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 250
+          },
+          "chr_source": {
+            "path": "Fight_Role/028.CHR",
+            "sha256": "f5735d64b6abee1d18356eb43cfab9cab42e016e361511dd90df9b1cecdd7a13",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m72020-0-l.dat",
+          "sha256": "6926a1b6126b41a210b90720f4a21b2c138ed29a65755a23ab8d5c082af7e9b8",
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
+        },
+        {
+          "path": "Map/m72020-0-l.STG",
+          "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef"
+        }
+      ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage02.scn",
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
+      ]
+    },
+    "M72020-0-S": {
+      "frequency": 1,
+      "global_pool_load_raw": 1,
+      "members": [
+        {
+          "id": "015",
+          "name": "食魂藤",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72020-0-s.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/015.CHR",
+            "sha256": "d4fa2cfc370119a8154d43dc3d508c1bf0e14013512ddf3ef1aa7a645efa296b",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "026",
+          "name": "翼蝠魔兽",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72020-0-s.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/026.CHR",
+            "sha256": "69af2d01787ae85308f4a2c98d9c456356b3243602b0bb4d0d92829fb3f9e455",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "028",
+          "name": "爆毒巨蜂",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72020-0-s.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 250
+          },
+          "chr_source": {
+            "path": "Fight_Role/028.CHR",
+            "sha256": "f5735d64b6abee1d18356eb43cfab9cab42e016e361511dd90df9b1cecdd7a13",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m72020-0-s.dat",
+          "sha256": "cb471710205721ed470e72f9a7ae5163e6a2874d7c9e9acf9216e813c59e5065",
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
+        },
+        {
+          "path": "Map/m72020-0-s.STG",
+          "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef"
+        }
+      ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage02.scn",
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
+      ]
+    },
+    "M72020-1-1": {
+      "frequency": 1,
+      "global_pool_load_raw": 1,
+      "members": [
+        {
+          "id": "015",
+          "name": "食魂藤",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72020-1-1.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/015.CHR",
+            "sha256": "d4fa2cfc370119a8154d43dc3d508c1bf0e14013512ddf3ef1aa7a645efa296b",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "026",
+          "name": "翼蝠魔兽",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72020-1-1.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/026.CHR",
+            "sha256": "69af2d01787ae85308f4a2c98d9c456356b3243602b0bb4d0d92829fb3f9e455",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "028",
+          "name": "爆毒巨蜂",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72020-1-1.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 250
+          },
+          "chr_source": {
+            "path": "Fight_Role/028.CHR",
+            "sha256": "f5735d64b6abee1d18356eb43cfab9cab42e016e361511dd90df9b1cecdd7a13",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m72020-1-1.dat",
+          "sha256": "27ed57e221999d08ddc47f1ef8f6dd2f512146a53252122e6d14fc9b2f908e82",
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
+        },
+        {
+          "path": "Map/m72020-1-1.STG",
+          "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef"
+        }
+      ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage02.scn",
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
+      ]
+    },
+    "M72020-1-E": {
+      "frequency": 1,
+      "global_pool_load_raw": 1,
+      "members": [
+        {
+          "id": "015",
+          "name": "食魂藤",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72020-1-e.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/015.CHR",
+            "sha256": "d4fa2cfc370119a8154d43dc3d508c1bf0e14013512ddf3ef1aa7a645efa296b",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "026",
+          "name": "翼蝠魔兽",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72020-1-e.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/026.CHR",
+            "sha256": "69af2d01787ae85308f4a2c98d9c456356b3243602b0bb4d0d92829fb3f9e455",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "028",
+          "name": "爆毒巨蜂",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72020-1-e.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 250
+          },
+          "chr_source": {
+            "path": "Fight_Role/028.CHR",
+            "sha256": "f5735d64b6abee1d18356eb43cfab9cab42e016e361511dd90df9b1cecdd7a13",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m72020-1-e.dat",
+          "sha256": "85e00af5e4a68ce3d96d5b051a9e985ad5790eea75452ec378b753fb4db0da7d",
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
+        },
+        {
+          "path": "Map/m72020-1-e.STG",
+          "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef"
+        }
+      ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage02.scn",
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
+      ]
+    },
+    "M72020-1-M": {
+      "frequency": 1,
+      "global_pool_load_raw": 1,
+      "members": [
+        {
+          "id": "015",
+          "name": "食魂藤",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72020-1-m.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/015.CHR",
+            "sha256": "d4fa2cfc370119a8154d43dc3d508c1bf0e14013512ddf3ef1aa7a645efa296b",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "026",
+          "name": "翼蝠魔兽",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72020-1-m.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/026.CHR",
+            "sha256": "69af2d01787ae85308f4a2c98d9c456356b3243602b0bb4d0d92829fb3f9e455",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "028",
+          "name": "爆毒巨蜂",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72020-1-m.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 250
+          },
+          "chr_source": {
+            "path": "Fight_Role/028.CHR",
+            "sha256": "f5735d64b6abee1d18356eb43cfab9cab42e016e361511dd90df9b1cecdd7a13",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m72020-1-m.dat",
+          "sha256": "206b70b8d950bcf854e063c291d75a6de39803bb49ec061aa648132c413b372e",
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
+        },
+        {
+          "path": "Map/m72020-1-m.STG",
+          "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef"
+        }
+      ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage02.scn",
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
+      ]
+    },
+    "M72020-1-U": {
+      "frequency": 1,
+      "global_pool_load_raw": 1,
+      "members": [
+        {
+          "id": "015",
+          "name": "食魂藤",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72020-1-u.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/015.CHR",
+            "sha256": "d4fa2cfc370119a8154d43dc3d508c1bf0e14013512ddf3ef1aa7a645efa296b",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "026",
+          "name": "翼蝠魔兽",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72020-1-u.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/026.CHR",
+            "sha256": "69af2d01787ae85308f4a2c98d9c456356b3243602b0bb4d0d92829fb3f9e455",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "028",
+          "name": "爆毒巨蜂",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72020-1-u.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 250
+          },
+          "chr_source": {
+            "path": "Fight_Role/028.CHR",
+            "sha256": "f5735d64b6abee1d18356eb43cfab9cab42e016e361511dd90df9b1cecdd7a13",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m72020-1-u.dat",
+          "sha256": "b1e1284b08866e86bef4a8f05e4f1d3ddc62e7ed7dbe78e285774b3899d1373d",
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
+        },
+        {
+          "path": "Map/m72020-1-u.STG",
+          "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef"
+        }
+      ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage02.scn",
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
+      ]
+    },
+    "M72020-1-X": {
+      "frequency": 1,
+      "global_pool_load_raw": 1,
+      "members": [
+        {
+          "id": "015",
+          "name": "食魂藤",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72020-1-x.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/015.CHR",
+            "sha256": "d4fa2cfc370119a8154d43dc3d508c1bf0e14013512ddf3ef1aa7a645efa296b",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "026",
+          "name": "翼蝠魔兽",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72020-1-x.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/026.CHR",
+            "sha256": "69af2d01787ae85308f4a2c98d9c456356b3243602b0bb4d0d92829fb3f9e455",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "028",
+          "name": "爆毒巨蜂",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72020-1-x.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 250
+          },
+          "chr_source": {
+            "path": "Fight_Role/028.CHR",
+            "sha256": "f5735d64b6abee1d18356eb43cfab9cab42e016e361511dd90df9b1cecdd7a13",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m72020-1-x.dat",
+          "sha256": "c7a1fc6ceeb0de982fe238c5fb8b7939331062f0353f6b1f8d0eb5c2b80aa61a",
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
+        },
+        {
+          "path": "Map/m72020-1-x.STG",
+          "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef"
+        }
+      ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage02.scn",
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
+      ]
+    },
+    "M72030-0-6": {
+      "frequency": 1,
+      "global_pool_load_raw": 1,
+      "members": [
+        {
+          "id": "015",
+          "name": "食魂藤",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72030-0-6.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/015.CHR",
+            "sha256": "d4fa2cfc370119a8154d43dc3d508c1bf0e14013512ddf3ef1aa7a645efa296b",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "026",
+          "name": "翼蝠魔兽",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72030-0-6.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/026.CHR",
+            "sha256": "69af2d01787ae85308f4a2c98d9c456356b3243602b0bb4d0d92829fb3f9e455",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "028",
+          "name": "爆毒巨蜂",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72030-0-6.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 250
+          },
+          "chr_source": {
+            "path": "Fight_Role/028.CHR",
+            "sha256": "f5735d64b6abee1d18356eb43cfab9cab42e016e361511dd90df9b1cecdd7a13",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m72030-0-6.dat",
+          "sha256": "9ce7f9a9cfa16db7f0bbe85a4c96f84dfdb64e03959f38da72e8ebbeb92482c3",
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
+        },
+        {
+          "path": "Map/m72030-0-6.STG",
+          "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef"
+        }
+      ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage02.scn",
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
+      ]
+    },
+    "M72030-0-F": {
+      "frequency": 1,
+      "global_pool_load_raw": 1,
+      "members": [
+        {
+          "id": "015",
+          "name": "食魂藤",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72030-0-f.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/015.CHR",
+            "sha256": "d4fa2cfc370119a8154d43dc3d508c1bf0e14013512ddf3ef1aa7a645efa296b",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "026",
+          "name": "翼蝠魔兽",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72030-0-f.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/026.CHR",
+            "sha256": "69af2d01787ae85308f4a2c98d9c456356b3243602b0bb4d0d92829fb3f9e455",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "028",
+          "name": "爆毒巨蜂",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72030-0-f.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 250
+          },
+          "chr_source": {
+            "path": "Fight_Role/028.CHR",
+            "sha256": "f5735d64b6abee1d18356eb43cfab9cab42e016e361511dd90df9b1cecdd7a13",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m72030-0-f.dat",
+          "sha256": "143eea7ab92c45404892c3db5f202d9338b7bf252f1c4d29e6159ebe8cf0bad9",
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
+        },
+        {
+          "path": "Map/m72030-0-f.STG",
+          "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef"
+        }
+      ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage02.scn",
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
+      ]
+    },
+    "M72030-0-Y": {
+      "frequency": 1,
+      "global_pool_load_raw": 1,
+      "members": [
+        {
+          "id": "015",
+          "name": "食魂藤",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72030-0-y.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/015.CHR",
+            "sha256": "d4fa2cfc370119a8154d43dc3d508c1bf0e14013512ddf3ef1aa7a645efa296b",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "026",
+          "name": "翼蝠魔兽",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72030-0-y.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/026.CHR",
+            "sha256": "69af2d01787ae85308f4a2c98d9c456356b3243602b0bb4d0d92829fb3f9e455",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "028",
+          "name": "爆毒巨蜂",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72030-0-y.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 250
+          },
+          "chr_source": {
+            "path": "Fight_Role/028.CHR",
+            "sha256": "f5735d64b6abee1d18356eb43cfab9cab42e016e361511dd90df9b1cecdd7a13",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m72030-0-y.dat",
+          "sha256": "2744d25c0c0790ea4689c4c9349d9b5d7accaf4c5d14563971964945c924180f",
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
+        },
+        {
+          "path": "Map/m72030-0-y.STG",
+          "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef"
+        }
+      ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage02.scn",
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
+      ]
+    },
+    "M72030-1-K": {
+      "frequency": 1,
+      "global_pool_load_raw": 1,
+      "members": [
+        {
+          "id": "015",
+          "name": "食魂藤",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72030-1-k.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/015.CHR",
+            "sha256": "d4fa2cfc370119a8154d43dc3d508c1bf0e14013512ddf3ef1aa7a645efa296b",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "026",
+          "name": "翼蝠魔兽",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72030-1-k.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/026.CHR",
+            "sha256": "69af2d01787ae85308f4a2c98d9c456356b3243602b0bb4d0d92829fb3f9e455",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "028",
+          "name": "爆毒巨蜂",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72030-1-k.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 250
+          },
+          "chr_source": {
+            "path": "Fight_Role/028.CHR",
+            "sha256": "f5735d64b6abee1d18356eb43cfab9cab42e016e361511dd90df9b1cecdd7a13",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m72030-1-k.dat",
+          "sha256": "7e63f97924cd10366a33702276f5acdd64d21937956d40ce1fb5986d5cf1f462",
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
+        },
+        {
+          "path": "Map/m72030-1-k.STG",
+          "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef"
+        }
+      ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage02.scn",
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
+      ]
+    },
+    "M72030-1-O": {
+      "frequency": 1,
+      "global_pool_load_raw": 1,
+      "members": [
+        {
+          "id": "015",
+          "name": "食魂藤",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72030-1-o.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/015.CHR",
+            "sha256": "d4fa2cfc370119a8154d43dc3d508c1bf0e14013512ddf3ef1aa7a645efa296b",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "026",
+          "name": "翼蝠魔兽",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72030-1-o.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/026.CHR",
+            "sha256": "69af2d01787ae85308f4a2c98d9c456356b3243602b0bb4d0d92829fb3f9e455",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "028",
+          "name": "爆毒巨蜂",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72030-1-o.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 250
+          },
+          "chr_source": {
+            "path": "Fight_Role/028.CHR",
+            "sha256": "f5735d64b6abee1d18356eb43cfab9cab42e016e361511dd90df9b1cecdd7a13",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m72030-1-o.dat",
+          "sha256": "978eb86d914655f288851a7e17888b940a55c4a0af271a1b15244340fd32520d",
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
+        },
+        {
+          "path": "Map/m72030-1-o.STG",
+          "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef"
+        }
+      ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage02.scn",
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
+      ]
+    },
+    "M72030-1-T": {
+      "frequency": 1,
+      "global_pool_load_raw": 1,
+      "members": [
+        {
+          "id": "015",
+          "name": "食魂藤",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72030-1-t.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/015.CHR",
+            "sha256": "d4fa2cfc370119a8154d43dc3d508c1bf0e14013512ddf3ef1aa7a645efa296b",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "026",
+          "name": "翼蝠魔兽",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72030-1-t.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/026.CHR",
+            "sha256": "69af2d01787ae85308f4a2c98d9c456356b3243602b0bb4d0d92829fb3f9e455",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "028",
+          "name": "爆毒巨蜂",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72030-1-t.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 250
+          },
+          "chr_source": {
+            "path": "Fight_Role/028.CHR",
+            "sha256": "f5735d64b6abee1d18356eb43cfab9cab42e016e361511dd90df9b1cecdd7a13",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m72030-1-t.dat",
+          "sha256": "f9f8996b4d768d563857e94ed3aaf43850c2b0ca50c3e53e6ebfbeacc97059cf",
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
+        },
+        {
+          "path": "Map/m72030-1-t.STG",
+          "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef"
+        }
+      ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage02.scn",
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
+      ]
+    },
+    "M72040-0-4": {
+      "frequency": 1,
+      "global_pool_load_raw": 1,
+      "members": [
+        {
+          "id": "015",
+          "name": "食魂藤",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72040-0-4.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/015.CHR",
+            "sha256": "d4fa2cfc370119a8154d43dc3d508c1bf0e14013512ddf3ef1aa7a645efa296b",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "026",
+          "name": "翼蝠魔兽",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72040-0-4.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/026.CHR",
+            "sha256": "69af2d01787ae85308f4a2c98d9c456356b3243602b0bb4d0d92829fb3f9e455",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "028",
+          "name": "爆毒巨蜂",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72040-0-4.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 250
+          },
+          "chr_source": {
+            "path": "Fight_Role/028.CHR",
+            "sha256": "f5735d64b6abee1d18356eb43cfab9cab42e016e361511dd90df9b1cecdd7a13",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m72040-0-4.dat",
+          "sha256": "c520571439202c004ca2ee73df38779792708907e7815b3ece6c4b39e5c9dd41",
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
+        },
+        {
+          "path": "Map/m72040-0-4.STG",
+          "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef"
+        }
+      ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage02.scn",
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
+      ]
+    },
+    "M72040-0-7": {
+      "frequency": 1,
+      "global_pool_load_raw": 1,
+      "members": [
+        {
+          "id": "015",
+          "name": "食魂藤",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72040-0-7.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/015.CHR",
+            "sha256": "d4fa2cfc370119a8154d43dc3d508c1bf0e14013512ddf3ef1aa7a645efa296b",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "026",
+          "name": "翼蝠魔兽",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72040-0-7.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/026.CHR",
+            "sha256": "69af2d01787ae85308f4a2c98d9c456356b3243602b0bb4d0d92829fb3f9e455",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "028",
+          "name": "爆毒巨蜂",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72040-0-7.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 250
+          },
+          "chr_source": {
+            "path": "Fight_Role/028.CHR",
+            "sha256": "f5735d64b6abee1d18356eb43cfab9cab42e016e361511dd90df9b1cecdd7a13",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m72040-0-7.dat",
+          "sha256": "825af5e356aa3def18da42b19672941a362d2f83878a9686f9785bb502a7b19b",
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
+        },
+        {
+          "path": "Map/m72040-0-7.STG",
+          "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef"
+        }
+      ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage02.scn",
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
+      ]
+    },
+    "M72040-0-8": {
+      "frequency": 1,
+      "global_pool_load_raw": 1,
+      "members": [
+        {
+          "id": "015",
+          "name": "食魂藤",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72040-0-8.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/015.CHR",
+            "sha256": "d4fa2cfc370119a8154d43dc3d508c1bf0e14013512ddf3ef1aa7a645efa296b",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "026",
+          "name": "翼蝠魔兽",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72040-0-8.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/026.CHR",
+            "sha256": "69af2d01787ae85308f4a2c98d9c456356b3243602b0bb4d0d92829fb3f9e455",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "028",
+          "name": "爆毒巨蜂",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72040-0-8.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 250
+          },
+          "chr_source": {
+            "path": "Fight_Role/028.CHR",
+            "sha256": "f5735d64b6abee1d18356eb43cfab9cab42e016e361511dd90df9b1cecdd7a13",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m72040-0-8.dat",
+          "sha256": "310ece004cce7be5c5d9aa5229914cc33118ebc6d0885add09153909bbeb5564",
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
+        },
+        {
+          "path": "Map/m72040-0-8.STG",
+          "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef"
+        }
+      ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage02.scn",
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
+      ]
+    },
+    "M72040-0-H": {
+      "frequency": 1,
+      "global_pool_load_raw": 1,
+      "members": [
+        {
+          "id": "015",
+          "name": "食魂藤",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72040-0-h.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/015.CHR",
+            "sha256": "d4fa2cfc370119a8154d43dc3d508c1bf0e14013512ddf3ef1aa7a645efa296b",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "026",
+          "name": "翼蝠魔兽",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72040-0-h.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/026.CHR",
+            "sha256": "69af2d01787ae85308f4a2c98d9c456356b3243602b0bb4d0d92829fb3f9e455",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "028",
+          "name": "爆毒巨蜂",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72040-0-h.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 250
+          },
+          "chr_source": {
+            "path": "Fight_Role/028.CHR",
+            "sha256": "f5735d64b6abee1d18356eb43cfab9cab42e016e361511dd90df9b1cecdd7a13",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m72040-0-h.dat",
+          "sha256": "5863c256f8936f56072900dff0cf0df21954161a7025dd8546a5e024c0198f4d",
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
+        },
+        {
+          "path": "Map/m72040-0-h.STG",
+          "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef"
+        }
+      ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage02.scn",
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
+      ]
+    },
+    "M72040-0-I": {
+      "frequency": 1,
+      "global_pool_load_raw": 1,
+      "members": [
+        {
+          "id": "015",
+          "name": "食魂藤",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72040-0-i.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/015.CHR",
+            "sha256": "d4fa2cfc370119a8154d43dc3d508c1bf0e14013512ddf3ef1aa7a645efa296b",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "026",
+          "name": "翼蝠魔兽",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72040-0-i.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/026.CHR",
+            "sha256": "69af2d01787ae85308f4a2c98d9c456356b3243602b0bb4d0d92829fb3f9e455",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "028",
+          "name": "爆毒巨蜂",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72040-0-i.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 250
+          },
+          "chr_source": {
+            "path": "Fight_Role/028.CHR",
+            "sha256": "f5735d64b6abee1d18356eb43cfab9cab42e016e361511dd90df9b1cecdd7a13",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m72040-0-i.dat",
+          "sha256": "a1cb453a34a2406ab4d5a88455bdf4b81678d99675b8a63412b80a07bdad1374",
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
+        },
+        {
+          "path": "Map/m72040-0-i.STG",
+          "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef"
+        }
+      ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage02.scn",
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
+      ]
+    },
+    "M72040-0-R": {
+      "frequency": 1,
+      "global_pool_load_raw": 1,
+      "members": [
+        {
+          "id": "015",
+          "name": "食魂藤",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72040-0-r.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/015.CHR",
+            "sha256": "d4fa2cfc370119a8154d43dc3d508c1bf0e14013512ddf3ef1aa7a645efa296b",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "026",
+          "name": "翼蝠魔兽",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72040-0-r.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/026.CHR",
+            "sha256": "69af2d01787ae85308f4a2c98d9c456356b3243602b0bb4d0d92829fb3f9e455",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "028",
+          "name": "爆毒巨蜂",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72040-0-r.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 250
+          },
+          "chr_source": {
+            "path": "Fight_Role/028.CHR",
+            "sha256": "f5735d64b6abee1d18356eb43cfab9cab42e016e361511dd90df9b1cecdd7a13",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m72040-0-r.dat",
+          "sha256": "c8316129a4a9ff6bfad6fff77a80238119135c0a75b1afa568d0165f0c627e96",
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
+        },
+        {
+          "path": "Map/m72040-0-r.STG",
+          "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef"
+        }
+      ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage02.scn",
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
+      ]
+    },
+    "M72040-1-5": {
+      "frequency": 1,
+      "global_pool_load_raw": 1,
+      "members": [
+        {
+          "id": "015",
+          "name": "食魂藤",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72040-1-5.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/015.CHR",
+            "sha256": "d4fa2cfc370119a8154d43dc3d508c1bf0e14013512ddf3ef1aa7a645efa296b",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "026",
+          "name": "翼蝠魔兽",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72040-1-5.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/026.CHR",
+            "sha256": "69af2d01787ae85308f4a2c98d9c456356b3243602b0bb4d0d92829fb3f9e455",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "028",
+          "name": "爆毒巨蜂",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72040-1-5.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 250
+          },
+          "chr_source": {
+            "path": "Fight_Role/028.CHR",
+            "sha256": "f5735d64b6abee1d18356eb43cfab9cab42e016e361511dd90df9b1cecdd7a13",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m72040-1-5.dat",
+          "sha256": "4437a32d4598918eadefaa027c649c55c390a0f6c07827e72468f42786f0a617",
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
+        },
+        {
+          "path": "Map/m72040-1-5.STG",
+          "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef"
+        }
+      ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage02.scn",
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
+      ]
+    },
+    "M72040-1-P": {
+      "frequency": 1,
+      "global_pool_load_raw": 1,
+      "members": [
+        {
+          "id": "015",
+          "name": "食魂藤",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72040-1-p.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/015.CHR",
+            "sha256": "d4fa2cfc370119a8154d43dc3d508c1bf0e14013512ddf3ef1aa7a645efa296b",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "026",
+          "name": "翼蝠魔兽",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72040-1-p.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/026.CHR",
+            "sha256": "69af2d01787ae85308f4a2c98d9c456356b3243602b0bb4d0d92829fb3f9e455",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "028",
+          "name": "爆毒巨蜂",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72040-1-p.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 250
+          },
+          "chr_source": {
+            "path": "Fight_Role/028.CHR",
+            "sha256": "f5735d64b6abee1d18356eb43cfab9cab42e016e361511dd90df9b1cecdd7a13",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m72040-1-p.dat",
+          "sha256": "b67e37873156ad0c45821d422210d9b840aa3ab98217a405760a1bb2b145cdc3",
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
+        },
+        {
+          "path": "Map/m72040-1-p.STG",
+          "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef"
+        }
+      ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage02.scn",
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
+      ]
+    },
+    "M72040-1-Q": {
+      "frequency": 1,
+      "global_pool_load_raw": 1,
+      "members": [
+        {
+          "id": "015",
+          "name": "食魂藤",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72040-1-q.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/015.CHR",
+            "sha256": "d4fa2cfc370119a8154d43dc3d508c1bf0e14013512ddf3ef1aa7a645efa296b",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "026",
+          "name": "翼蝠魔兽",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72040-1-q.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/026.CHR",
+            "sha256": "69af2d01787ae85308f4a2c98d9c456356b3243602b0bb4d0d92829fb3f9e455",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "028",
+          "name": "爆毒巨蜂",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72040-1-q.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 250
+          },
+          "chr_source": {
+            "path": "Fight_Role/028.CHR",
+            "sha256": "f5735d64b6abee1d18356eb43cfab9cab42e016e361511dd90df9b1cecdd7a13",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m72040-1-q.dat",
+          "sha256": "01e8a4fcf4658d523591057718a102f6104f4304214f649e7a454e0bb06c0045",
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
+        },
+        {
+          "path": "Map/m72040-1-q.STG",
+          "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef"
+        }
+      ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage02.scn",
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
+      ]
+    },
+    "M72040-1-V": {
+      "frequency": 1,
+      "global_pool_load_raw": 1,
+      "members": [
+        {
+          "id": "015",
+          "name": "食魂藤",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72040-1-v.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/015.CHR",
+            "sha256": "d4fa2cfc370119a8154d43dc3d508c1bf0e14013512ddf3ef1aa7a645efa296b",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "026",
+          "name": "翼蝠魔兽",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72040-1-v.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/026.CHR",
+            "sha256": "69af2d01787ae85308f4a2c98d9c456356b3243602b0bb4d0d92829fb3f9e455",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "028",
+          "name": "爆毒巨蜂",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72040-1-v.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 250
+          },
+          "chr_source": {
+            "path": "Fight_Role/028.CHR",
+            "sha256": "f5735d64b6abee1d18356eb43cfab9cab42e016e361511dd90df9b1cecdd7a13",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m72040-1-v.dat",
+          "sha256": "cb1d91003f2f0fdeacd6d98f3fe71764218c8d7d896e42cb3c925faafe1ade4d",
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
+        },
+        {
+          "path": "Map/m72040-1-v.STG",
+          "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef"
+        }
+      ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage02.scn",
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
+      ]
+    },
+    "M72040-1-W": {
+      "frequency": 1,
+      "global_pool_load_raw": 1,
+      "members": [
+        {
+          "id": "015",
+          "name": "食魂藤",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72040-1-w.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/015.CHR",
+            "sha256": "d4fa2cfc370119a8154d43dc3d508c1bf0e14013512ddf3ef1aa7a645efa296b",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "026",
+          "name": "翼蝠魔兽",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72040-1-w.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/026.CHR",
+            "sha256": "69af2d01787ae85308f4a2c98d9c456356b3243602b0bb4d0d92829fb3f9e455",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "028",
+          "name": "爆毒巨蜂",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72040-1-w.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 250
+          },
+          "chr_source": {
+            "path": "Fight_Role/028.CHR",
+            "sha256": "f5735d64b6abee1d18356eb43cfab9cab42e016e361511dd90df9b1cecdd7a13",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m72040-1-w.dat",
+          "sha256": "848ba8677d230482fbcf4dfbbe50d9a4c41674f350717f2842b688af3798c63b",
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
+        },
+        {
+          "path": "Map/m72040-1-w.STG",
+          "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef"
+        }
+      ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage02.scn",
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
+      ]
+    },
+    "M72040-1-Z": {
+      "frequency": 1,
+      "global_pool_load_raw": 1,
+      "members": [
+        {
+          "id": "015",
+          "name": "食魂藤",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72040-1-z.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/015.CHR",
+            "sha256": "d4fa2cfc370119a8154d43dc3d508c1bf0e14013512ddf3ef1aa7a645efa296b",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "026",
+          "name": "翼蝠魔兽",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72040-1-z.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/026.CHR",
+            "sha256": "69af2d01787ae85308f4a2c98d9c456356b3243602b0bb4d0d92829fb3f9e455",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "028",
+          "name": "爆毒巨蜂",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72040-1-z.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 250
+          },
+          "chr_source": {
+            "path": "Fight_Role/028.CHR",
+            "sha256": "f5735d64b6abee1d18356eb43cfab9cab42e016e361511dd90df9b1cecdd7a13",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m72040-1-z.dat",
+          "sha256": "351e39d9365974883bd8800de25a0991a7b1387f8e951af951d8b7c8f975a322",
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
+        },
+        {
+          "path": "Map/m72040-1-z.STG",
+          "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef"
+        }
+      ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage02.scn",
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
+      ]
+    },
+    "M72050": {
+      "frequency": 1,
+      "global_pool_load_raw": 1,
+      "members": [
+        {
+          "id": "015",
+          "name": "食魂藤",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72050.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/015.CHR",
+            "sha256": "d4fa2cfc370119a8154d43dc3d508c1bf0e14013512ddf3ef1aa7a645efa296b",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "026",
+          "name": "翼蝠魔兽",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72050.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/026.CHR",
+            "sha256": "69af2d01787ae85308f4a2c98d9c456356b3243602b0bb4d0d92829fb3f9e455",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "028",
+          "name": "爆毒巨蜂",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72050.STG",
+            "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef",
+            "filename_offset": 250
+          },
+          "chr_source": {
+            "path": "Fight_Role/028.CHR",
+            "sha256": "f5735d64b6abee1d18356eb43cfab9cab42e016e361511dd90df9b1cecdd7a13",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m72050.dat",
+          "sha256": "28584a687743689816a9ba7f91583ceb0cc54214622db2dae01f1d066bba4b7f",
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
+        },
+        {
+          "path": "Map/m72050.STG",
+          "sha256": "263c2891f8026214fb1bbfbc523450035c4bae66c4b4fb866f0b213830be8fef"
+        }
+      ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage02.scn",
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
+      ]
+    },
+    "M72062": {
+      "frequency": 1,
+      "global_pool_load_raw": 1,
+      "members": [
+        {
+          "id": "016",
+          "name": "禁咒师",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72062.STG",
+            "sha256": "ef2fb5f0da7a12bf3bc3fcebddc8fc1207fd1c749979b5dfec5aee3f55b230f7",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/016.CHR",
+            "sha256": "8bc676f1f94e9406f4ad085077ac260db8242036c437fad71d59462b43b7fb13",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "017",
+          "name": "自我傀儡",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72062.STG",
+            "sha256": "ef2fb5f0da7a12bf3bc3fcebddc8fc1207fd1c749979b5dfec5aee3f55b230f7",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/017.CHR",
+            "sha256": "c5c6c8765cb4953549225ee24f5226b7549a3bb163c17f059e797dde2e7e1bf1",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "018",
+          "name": "血腥之刃",
+          "pool": "B",
+          "class_raw": 0,
+          "source": {
+            "path": "Map/m72062.STG",
+            "sha256": "ef2fb5f0da7a12bf3bc3fcebddc8fc1207fd1c749979b5dfec5aee3f55b230f7",
+            "filename_offset": 250
+          },
+          "chr_source": {
+            "path": "Fight_Role/018.CHR",
+            "sha256": "2a07bc46c6931b56fd2bd1b91933ab31f18ed3a12f423dca336522568092b705",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m72062.dat",
+          "sha256": "77243a5f03df76185d348e3b3cf587c82eb2de5eb5a3c1a9b76feb53f36c484f",
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
+        },
+        {
+          "path": "Map/m72062.STG",
+          "sha256": "ef2fb5f0da7a12bf3bc3fcebddc8fc1207fd1c749979b5dfec5aee3f55b230f7"
+        }
+      ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage05.scn",
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
+      ]
+    },
+    "M72063": {
+      "frequency": 1,
+      "global_pool_load_raw": 1,
+      "members": [
+        {
+          "id": "016",
+          "name": "禁咒师",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72063.STG",
+            "sha256": "ef2fb5f0da7a12bf3bc3fcebddc8fc1207fd1c749979b5dfec5aee3f55b230f7",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/016.CHR",
+            "sha256": "8bc676f1f94e9406f4ad085077ac260db8242036c437fad71d59462b43b7fb13",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "017",
+          "name": "自我傀儡",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72063.STG",
+            "sha256": "ef2fb5f0da7a12bf3bc3fcebddc8fc1207fd1c749979b5dfec5aee3f55b230f7",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/017.CHR",
+            "sha256": "c5c6c8765cb4953549225ee24f5226b7549a3bb163c17f059e797dde2e7e1bf1",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "018",
+          "name": "血腥之刃",
+          "pool": "B",
+          "class_raw": 0,
+          "source": {
+            "path": "Map/m72063.STG",
+            "sha256": "ef2fb5f0da7a12bf3bc3fcebddc8fc1207fd1c749979b5dfec5aee3f55b230f7",
+            "filename_offset": 250
+          },
+          "chr_source": {
+            "path": "Fight_Role/018.CHR",
+            "sha256": "2a07bc46c6931b56fd2bd1b91933ab31f18ed3a12f423dca336522568092b705",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m72063.dat",
+          "sha256": "0ba8e8f0c4c0c1a0ba25b343f80b4aac3ad0d713bb2d126986f2af3191888bb8",
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
+        },
+        {
+          "path": "Map/m72063.STG",
+          "sha256": "ef2fb5f0da7a12bf3bc3fcebddc8fc1207fd1c749979b5dfec5aee3f55b230f7"
+        }
+      ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage05.scn",
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
+      ]
+    },
+    "M72062-2": {
+      "frequency": 1,
+      "global_pool_load_raw": 1,
+      "members": [
+        {
+          "id": "016",
+          "name": "禁咒师",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72062-2.STG",
+            "sha256": "ef2fb5f0da7a12bf3bc3fcebddc8fc1207fd1c749979b5dfec5aee3f55b230f7",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/016.CHR",
+            "sha256": "8bc676f1f94e9406f4ad085077ac260db8242036c437fad71d59462b43b7fb13",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "017",
+          "name": "自我傀儡",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72062-2.STG",
+            "sha256": "ef2fb5f0da7a12bf3bc3fcebddc8fc1207fd1c749979b5dfec5aee3f55b230f7",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/017.CHR",
+            "sha256": "c5c6c8765cb4953549225ee24f5226b7549a3bb163c17f059e797dde2e7e1bf1",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "018",
+          "name": "血腥之刃",
+          "pool": "B",
+          "class_raw": 0,
+          "source": {
+            "path": "Map/m72062-2.STG",
+            "sha256": "ef2fb5f0da7a12bf3bc3fcebddc8fc1207fd1c749979b5dfec5aee3f55b230f7",
+            "filename_offset": 250
+          },
+          "chr_source": {
+            "path": "Fight_Role/018.CHR",
+            "sha256": "2a07bc46c6931b56fd2bd1b91933ab31f18ed3a12f423dca336522568092b705",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m72062-2.dat",
+          "sha256": "55ae6e39cadbae3164f17ea2fe53767e4e70ddffc96138651e8b7ab7d7c8dff4",
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
+        },
+        {
+          "path": "Map/m72062-2.STG",
+          "sha256": "ef2fb5f0da7a12bf3bc3fcebddc8fc1207fd1c749979b5dfec5aee3f55b230f7"
+        }
+      ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage05.scn",
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
+      ]
+    },
+    "M72063-2": {
+      "frequency": 1,
+      "global_pool_load_raw": 1,
+      "members": [
+        {
+          "id": "016",
+          "name": "禁咒师",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72063-2.STG",
+            "sha256": "ef2fb5f0da7a12bf3bc3fcebddc8fc1207fd1c749979b5dfec5aee3f55b230f7",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/016.CHR",
+            "sha256": "8bc676f1f94e9406f4ad085077ac260db8242036c437fad71d59462b43b7fb13",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "017",
+          "name": "自我傀儡",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72063-2.STG",
+            "sha256": "ef2fb5f0da7a12bf3bc3fcebddc8fc1207fd1c749979b5dfec5aee3f55b230f7",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/017.CHR",
+            "sha256": "c5c6c8765cb4953549225ee24f5226b7549a3bb163c17f059e797dde2e7e1bf1",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "018",
+          "name": "血腥之刃",
+          "pool": "B",
+          "class_raw": 0,
+          "source": {
+            "path": "Map/m72063-2.STG",
+            "sha256": "ef2fb5f0da7a12bf3bc3fcebddc8fc1207fd1c749979b5dfec5aee3f55b230f7",
+            "filename_offset": 250
+          },
+          "chr_source": {
+            "path": "Fight_Role/018.CHR",
+            "sha256": "2a07bc46c6931b56fd2bd1b91933ab31f18ed3a12f423dca336522568092b705",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m72063-2.dat",
+          "sha256": "9e7ef547e0b800b3589373f8e742f889414342f228a050300a686b8959619127",
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
+        },
+        {
+          "path": "Map/m72063-2.STG",
+          "sha256": "ef2fb5f0da7a12bf3bc3fcebddc8fc1207fd1c749979b5dfec5aee3f55b230f7"
+        }
+      ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage05.scn",
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
+      ]
+    },
+    "M72062-3": {
+      "frequency": 1,
+      "global_pool_load_raw": 1,
+      "members": [
+        {
+          "id": "016",
+          "name": "禁咒师",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72062-3.STG",
+            "sha256": "ef2fb5f0da7a12bf3bc3fcebddc8fc1207fd1c749979b5dfec5aee3f55b230f7",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/016.CHR",
+            "sha256": "8bc676f1f94e9406f4ad085077ac260db8242036c437fad71d59462b43b7fb13",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "017",
+          "name": "自我傀儡",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72062-3.STG",
+            "sha256": "ef2fb5f0da7a12bf3bc3fcebddc8fc1207fd1c749979b5dfec5aee3f55b230f7",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/017.CHR",
+            "sha256": "c5c6c8765cb4953549225ee24f5226b7549a3bb163c17f059e797dde2e7e1bf1",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "018",
+          "name": "血腥之刃",
+          "pool": "B",
+          "class_raw": 0,
+          "source": {
+            "path": "Map/m72062-3.STG",
+            "sha256": "ef2fb5f0da7a12bf3bc3fcebddc8fc1207fd1c749979b5dfec5aee3f55b230f7",
+            "filename_offset": 250
+          },
+          "chr_source": {
+            "path": "Fight_Role/018.CHR",
+            "sha256": "2a07bc46c6931b56fd2bd1b91933ab31f18ed3a12f423dca336522568092b705",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m72062-3.dat",
+          "sha256": "299ac9eb3209f7d42c19dd7cfef45759fbc3e8824f88ae9fed69503b8cb87a16",
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
+        },
+        {
+          "path": "Map/m72062-3.STG",
+          "sha256": "ef2fb5f0da7a12bf3bc3fcebddc8fc1207fd1c749979b5dfec5aee3f55b230f7"
+        }
+      ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage05.scn",
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
+      ]
+    },
+    "M72063-3": {
+      "frequency": 1,
+      "global_pool_load_raw": 1,
+      "members": [
+        {
+          "id": "016",
+          "name": "禁咒师",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72063-3.STG",
+            "sha256": "ef2fb5f0da7a12bf3bc3fcebddc8fc1207fd1c749979b5dfec5aee3f55b230f7",
+            "filename_offset": 210
+          },
+          "chr_source": {
+            "path": "Fight_Role/016.CHR",
+            "sha256": "8bc676f1f94e9406f4ad085077ac260db8242036c437fad71d59462b43b7fb13",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "017",
+          "name": "自我傀儡",
+          "pool": "B",
+          "class_raw": 1,
+          "source": {
+            "path": "Map/m72063-3.STG",
+            "sha256": "ef2fb5f0da7a12bf3bc3fcebddc8fc1207fd1c749979b5dfec5aee3f55b230f7",
+            "filename_offset": 230
+          },
+          "chr_source": {
+            "path": "Fight_Role/017.CHR",
+            "sha256": "c5c6c8765cb4953549225ee24f5226b7549a3bb163c17f059e797dde2e7e1bf1",
+            "header_class_offset": 32
+          }
+        },
+        {
+          "id": "018",
+          "name": "血腥之刃",
+          "pool": "B",
+          "class_raw": 0,
+          "source": {
+            "path": "Map/m72063-3.STG",
+            "sha256": "ef2fb5f0da7a12bf3bc3fcebddc8fc1207fd1c749979b5dfec5aee3f55b230f7",
+            "filename_offset": 250
+          },
+          "chr_source": {
+            "path": "Fight_Role/018.CHR",
+            "sha256": "2a07bc46c6931b56fd2bd1b91933ab31f18ed3a12f423dca336522568092b705",
+            "header_class_offset": 32
+          }
+        }
+      ],
+      "source": [
+        {
+          "path": "Map/m72063-3.dat",
+          "sha256": "570d8dbe0bb642869169d843439e8e01283260c3175a5c24ff289e53044d78ec",
+          "frequency_offset": 320,
+          "global_pool_load_offset": 319
+        },
+        {
+          "path": "Map/m72063-3.STG",
+          "sha256": "ef2fb5f0da7a12bf3bc3fcebddc8fc1207fd1c749979b5dfec5aee3f55b230f7"
+        }
+      ],
+      "global_pool_enabled_raw": 1,
+      "stage": "stage05.scn",
+      "evidence": [
+        "ev_0e5e70ae5feab6af13b7941b88e4bf44906b6f3fca1f26fc9c400858810035c8",
+        "ev_3608d8a214bcd7e7c41df5aed0dcf4272ff723ef6de07ec836cef0bb76e72d5a",
+        "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+        "ev_a9a200bd29900c56f97d559b79156b468bf62591a77515a7e0f57a459a3b9aa9"
+      ]
     }
   },
   "compositions": [

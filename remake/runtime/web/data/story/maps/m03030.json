@@ -2434,7 +2434,7 @@
         },
         {
           "id": "M03030:tlk:15:2",
-          "op": "jump",
+          "op": "end",
           "record_id": 15,
           "source": {
             "path": "Map/m03030.TLK",
@@ -2442,8 +2442,7 @@
             "record_id": 15,
             "record_bytes": 1647,
             "offset": 25084
-          },
-          "target": "M03030:tlk:end"
+          }
         },
         {
           "id": "M03030:tlk:16",

@@ -66,3 +66,10 @@ test('appearance3 particle progression completes early at stable30/60/144Hz, whi
   const bounded=new DeathParticlePlayback({mode:3,clock_ms:60,started:0,effect:{reset(){},step:()=>true}});
   assert.equal(bounded.advance(1799),true);assert.equal(bounded.advance(1800),false);
 });
+
+test('appearance2 empty pixels finish immediately and its source clock retains the hard ceiling',()=>{
+  const empty=new DeathParticlePlayback({mode:2,clock_ms:60,started:0,effect:new AppearanceParticles({mode:2,pixels:[],random:()=>0})});
+  assert.equal(empty.advance(0),false);
+  const ceiling=new DeathParticlePlayback({mode:2,clock_ms:60,started:0,effect:{reset(){},step:()=>true}});
+  assert.equal(ceiling.advance(1799),true);assert.equal(ceiling.advance(1800),false);
+});

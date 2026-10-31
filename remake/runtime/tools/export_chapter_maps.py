@@ -337,7 +337,7 @@ def export():
     interactive_objects = {}
     object_animations = {}
     for ident in IDS:
-        trigger_regions[ident] = [d for d in transition_descriptors(bg[ident])[0] if d["state_raw"] == 2]
+        trigger_regions[ident] = [d for d in transition_descriptors(bg[ident])[0] if d["state_raw"] in (1, 2)]
         table = MapObjects(ROOT / detail[ident]["path"])
         object_paths = table.resource_paths(ROOT)
         interactive_objects[ident] = []

@@ -1932,6 +1932,474 @@
       },
       "parameters": {}
     },
+    "016_14": {
+      "name": "鞭刑",
+      "owner": {
+        "role_id": "016",
+        "skill_index": 14,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "016_16": {
+      "name": "烙刑",
+      "owner": {
+        "role_id": "016",
+        "skill_index": 16,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "017_14": {
+      "name": "月下之舞 ",
+      "owner": {
+        "role_id": "017",
+        "skill_index": 14,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "017_15": {
+      "name": "幻影之舞",
+      "owner": {
+        "role_id": "017",
+        "skill_index": 15,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "017_18": {
+      "name": "恶魔镇魂曲",
+      "owner": {
+        "role_id": "017",
+        "skill_index": 18,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "018_8": {
+      "name": "碎",
+      "owner": {
+        "role_id": "018",
+        "skill_index": 8,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "018_9": {
+      "name": "斩",
+      "owner": {
+        "role_id": "018",
+        "skill_index": 9,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "018_10": {
+      "name": "旋",
+      "owner": {
+        "role_id": "018",
+        "skill_index": 10,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "018_11": {
+      "name": "",
+      "owner": {
+        "role_id": "018",
+        "skill_index": 11,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "018_12": {
+      "name": "",
+      "owner": {
+        "role_id": "018",
+        "skill_index": 12,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "018_13": {
+      "name": "",
+      "owner": {
+        "role_id": "018",
+        "skill_index": 13,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "018_14": {
+      "name": "",
+      "owner": {
+        "role_id": "018",
+        "skill_index": 14,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "031A2_17": {
+      "name": "闇云．魔天奈落Atyp",
+      "owner": {
+        "role_id": "031A2",
+        "skill_index": 17,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "031A2_19": {
+      "name": "闇云．狂天龙咒Atyp",
+      "owner": {
+        "role_id": "031A2",
+        "skill_index": 19,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "031A2_21": {
+      "name": "闇云．逆天闪空Atyp",
+      "owner": {
+        "role_id": "031A2",
+        "skill_index": 21,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "031A2_23": {
+      "name": "风炮",
+      "owner": {
+        "role_id": "031A2",
+        "skill_index": 23,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "031A2_24": {
+      "name": "龙卷风",
+      "owner": {
+        "role_id": "031A2",
+        "skill_index": 24,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "031A2_25": {
+      "name": "援护攻击",
+      "owner": {
+        "role_id": "031A2",
+        "skill_index": 25,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "031A2_29": {
+      "name": "翔牙连",
+      "owner": {
+        "role_id": "031A2",
+        "skill_index": 29,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "031B1_14": {
+      "name": "翔牙返",
+      "owner": {
+        "role_id": "031B1",
+        "skill_index": 14,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "031B1_15": {
+      "name": "穿风爪",
+      "owner": {
+        "role_id": "031B1",
+        "skill_index": 15,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "031B1_16": {
+      "name": "断灭蹴",
+      "owner": {
+        "role_id": "031B1",
+        "skill_index": 16,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "031B1_23": {
+      "name": "风炮",
+      "owner": {
+        "role_id": "031B1",
+        "skill_index": 23,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "031B1_24": {
+      "name": "龙卷风",
+      "owner": {
+        "role_id": "031B1",
+        "skill_index": 24,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "031B1_26": {
+      "name": "援护攻击",
+      "owner": {
+        "role_id": "031B1",
+        "skill_index": 26,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "031A_11": {
+      "name": "闇云．魔天奈落Atyp",
+      "owner": {
+        "role_id": "031A",
+        "skill_index": 11,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "031A_13": {
+      "name": "闇云．狂天龙咒Atyp",
+      "owner": {
+        "role_id": "031A",
+        "skill_index": 13,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "031A_15": {
+      "name": "闇云．逆天闪空Atyp",
+      "owner": {
+        "role_id": "031A",
+        "skill_index": 15,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "031A_17": {
+      "name": "风炮",
+      "owner": {
+        "role_id": "031A",
+        "skill_index": 17,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "031A_18": {
+      "name": "龙卷风",
+      "owner": {
+        "role_id": "031A",
+        "skill_index": 18,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "031A_21": {
+      "name": "击．",
+      "owner": {
+        "role_id": "031A",
+        "skill_index": 21,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "031A_23": {
+      "name": "翔牙连",
+      "owner": {
+        "role_id": "031A",
+        "skill_index": 23,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "031B_12": {
+      "name": "闇云．魔天奈落Btyp",
+      "owner": {
+        "role_id": "031B",
+        "skill_index": 12,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "031B_14": {
+      "name": "闇云．狂天龙咒Btyp",
+      "owner": {
+        "role_id": "031B",
+        "skill_index": 14,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "031B_16": {
+      "name": "闇云．逆天闪空Btyp",
+      "owner": {
+        "role_id": "031B",
+        "skill_index": 16,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "031B_17": {
+      "name": "风炮",
+      "owner": {
+        "role_id": "031B",
+        "skill_index": 17,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "031B_18": {
+      "name": "龙卷风",
+      "owner": {
+        "role_id": "031B",
+        "skill_index": 18,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "031B_22": {
+      "name": "匿．",
+      "owner": {
+        "role_id": "031B",
+        "skill_index": 22,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "031B_24": {
+      "name": "断灭连",
+      "owner": {
+        "role_id": "031B",
+        "skill_index": 24,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "031C_8": {
+      "name": "破颜蹴",
+      "owner": {
+        "role_id": "031C",
+        "skill_index": 8,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "031C_9": {
+      "name": "烈风炮",
+      "owner": {
+        "role_id": "031C",
+        "skill_index": 9,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "031C_10": {
+      "name": "旋风蹴",
+      "owner": {
+        "role_id": "031C",
+        "skill_index": 10,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "031C_11": {
+      "name": "闇云．回天破鼎",
+      "owner": {
+        "role_id": "031C",
+        "skill_index": 11,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "031C_12": {
+      "name": "极．闇云龙卷",
+      "owner": {
+        "role_id": "031C",
+        "skill_index": 12,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "033_8": {
+      "name": "残魔炎",
+      "owner": {
+        "role_id": "033",
+        "skill_index": 8,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "033_9": {
+      "name": "烈魔炎",
+      "owner": {
+        "role_id": "033",
+        "skill_index": 9,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "033_10": {
+      "name": "风魔炮",
+      "owner": {
+        "role_id": "033",
+        "skill_index": 10,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "033_11": {
+      "name": "风魔刃",
+      "owner": {
+        "role_id": "033",
+        "skill_index": 11,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "033_12": {
+      "name": "水魔咒",
+      "owner": {
+        "role_id": "033",
+        "skill_index": 12,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "033_13": {
+      "name": "冰魔柱",
+      "owner": {
+        "role_id": "033",
+        "skill_index": 13,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "033_14": {
+      "name": "碎魔石",
+      "owner": {
+        "role_id": "033",
+        "skill_index": 14,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "033_15": {
+      "name": "钢魔石",
+      "owner": {
+        "role_id": "033",
+        "skill_index": 15,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
     "001_0": {
       "name": "",
       "owner": {
@@ -3921,29 +4389,11 @@
       },
       "parameters": {}
     },
-    "016_14": {
-      "name": "鞭刑",
-      "owner": {
-        "role_id": "016",
-        "skill_index": 14,
-        "side": "source"
-      },
-      "parameters": {}
-    },
     "016_15": {
       "name": "鞭刑落",
       "owner": {
         "role_id": "016",
         "skill_index": 15,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "016_16": {
-      "name": "烙刑",
-      "owner": {
-        "role_id": "016",
-        "skill_index": 16,
         "side": "source"
       },
       "parameters": {}
@@ -4083,24 +4533,6 @@
       },
       "parameters": {}
     },
-    "017_14": {
-      "name": "月下之舞 ",
-      "owner": {
-        "role_id": "017",
-        "skill_index": 14,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "017_15": {
-      "name": "幻影之舞",
-      "owner": {
-        "role_id": "017",
-        "skill_index": 15,
-        "side": "source"
-      },
-      "parameters": {}
-    },
     "017_16": {
       "name": "魔性华尔兹 ",
       "owner": {
@@ -4115,15 +4547,6 @@
       "owner": {
         "role_id": "017",
         "skill_index": 17,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "017_18": {
-      "name": "恶魔镇魂曲",
-      "owner": {
-        "role_id": "017",
-        "skill_index": 18,
         "side": "source"
       },
       "parameters": {}
@@ -4196,69 +4619,6 @@
       "owner": {
         "role_id": "018",
         "skill_index": 7,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "018_8": {
-      "name": "碎",
-      "owner": {
-        "role_id": "018",
-        "skill_index": 8,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "018_9": {
-      "name": "斩",
-      "owner": {
-        "role_id": "018",
-        "skill_index": 9,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "018_10": {
-      "name": "旋",
-      "owner": {
-        "role_id": "018",
-        "skill_index": 10,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "018_11": {
-      "name": "",
-      "owner": {
-        "role_id": "018",
-        "skill_index": 11,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "018_12": {
-      "name": "",
-      "owner": {
-        "role_id": "018",
-        "skill_index": 12,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "018_13": {
-      "name": "",
-      "owner": {
-        "role_id": "018",
-        "skill_index": 13,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "018_14": {
-      "name": "",
-      "owner": {
-        "role_id": "018",
-        "skill_index": 14,
         "side": "source"
       },
       "parameters": {}
@@ -6261,29 +6621,11 @@
       },
       "parameters": {}
     },
-    "031A_11": {
-      "name": "闇云．魔天奈落Atyp",
-      "owner": {
-        "role_id": "031A",
-        "skill_index": 11,
-        "side": "source"
-      },
-      "parameters": {}
-    },
     "031A_12": {
       "name": "闇云．魔天奈落Btyp",
       "owner": {
         "role_id": "031A",
         "skill_index": 12,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "031A_13": {
-      "name": "闇云．狂天龙咒Atyp",
-      "owner": {
-        "role_id": "031A",
-        "skill_index": 13,
         "side": "source"
       },
       "parameters": {}
@@ -6297,38 +6639,11 @@
       },
       "parameters": {}
     },
-    "031A_15": {
-      "name": "闇云．逆天闪空Atyp",
-      "owner": {
-        "role_id": "031A",
-        "skill_index": 15,
-        "side": "source"
-      },
-      "parameters": {}
-    },
     "031A_16": {
       "name": "闇云．逆天闪空Btyp",
       "owner": {
         "role_id": "031A",
         "skill_index": 16,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "031A_17": {
-      "name": "风炮",
-      "owner": {
-        "role_id": "031A",
-        "skill_index": 17,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "031A_18": {
-      "name": "龙卷风",
-      "owner": {
-        "role_id": "031A",
-        "skill_index": 18,
         "side": "source"
       },
       "parameters": {}
@@ -6351,29 +6666,11 @@
       },
       "parameters": {}
     },
-    "031A_21": {
-      "name": "击．",
-      "owner": {
-        "role_id": "031A",
-        "skill_index": 21,
-        "side": "source"
-      },
-      "parameters": {}
-    },
     "031A_22": {
       "name": "匿．",
       "owner": {
         "role_id": "031A",
         "skill_index": 22,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "031A_23": {
-      "name": "翔牙连",
-      "owner": {
-        "role_id": "031A",
-        "skill_index": 23,
         "side": "source"
       },
       "parameters": {}
@@ -6765,29 +7062,11 @@
       },
       "parameters": {}
     },
-    "031A2_17": {
-      "name": "闇云．魔天奈落Atyp",
-      "owner": {
-        "role_id": "031A2",
-        "skill_index": 17,
-        "side": "source"
-      },
-      "parameters": {}
-    },
     "031A2_18": {
       "name": "闇云．魔天奈落Btyp",
       "owner": {
         "role_id": "031A2",
         "skill_index": 18,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "031A2_19": {
-      "name": "闇云．狂天龙咒Atyp",
-      "owner": {
-        "role_id": "031A2",
-        "skill_index": 19,
         "side": "source"
       },
       "parameters": {}
@@ -6801,47 +7080,11 @@
       },
       "parameters": {}
     },
-    "031A2_21": {
-      "name": "闇云．逆天闪空Atyp",
-      "owner": {
-        "role_id": "031A2",
-        "skill_index": 21,
-        "side": "source"
-      },
-      "parameters": {}
-    },
     "031A2_22": {
       "name": "闇云．逆天闪空Btyp",
       "owner": {
         "role_id": "031A2",
         "skill_index": 22,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "031A2_23": {
-      "name": "风炮",
-      "owner": {
-        "role_id": "031A2",
-        "skill_index": 23,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "031A2_24": {
-      "name": "龙卷风",
-      "owner": {
-        "role_id": "031A2",
-        "skill_index": 24,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "031A2_25": {
-      "name": "援护攻击",
-      "owner": {
-        "role_id": "031A2",
-        "skill_index": 25,
         "side": "source"
       },
       "parameters": {}
@@ -6869,15 +7112,6 @@
       "owner": {
         "role_id": "031A2",
         "skill_index": 28,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "031A2_29": {
-      "name": "翔牙连",
-      "owner": {
-        "role_id": "031A2",
-        "skill_index": 29,
         "side": "source"
       },
       "parameters": {}
@@ -6999,15 +7233,6 @@
       },
       "parameters": {}
     },
-    "031B_12": {
-      "name": "闇云．魔天奈落Btyp",
-      "owner": {
-        "role_id": "031B",
-        "skill_index": 12,
-        "side": "source"
-      },
-      "parameters": {}
-    },
     "031B_13": {
       "name": "闇云．狂天龙咒Atyp",
       "owner": {
@@ -7017,47 +7242,11 @@
       },
       "parameters": {}
     },
-    "031B_14": {
-      "name": "闇云．狂天龙咒Btyp",
-      "owner": {
-        "role_id": "031B",
-        "skill_index": 14,
-        "side": "source"
-      },
-      "parameters": {}
-    },
     "031B_15": {
       "name": "闇云．逆天闪空Atyp",
       "owner": {
         "role_id": "031B",
         "skill_index": 15,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "031B_16": {
-      "name": "闇云．逆天闪空Btyp",
-      "owner": {
-        "role_id": "031B",
-        "skill_index": 16,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "031B_17": {
-      "name": "风炮",
-      "owner": {
-        "role_id": "031B",
-        "skill_index": 17,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "031B_18": {
-      "name": "龙卷风",
-      "owner": {
-        "role_id": "031B",
-        "skill_index": 18,
         "side": "source"
       },
       "parameters": {}
@@ -7089,29 +7278,11 @@
       },
       "parameters": {}
     },
-    "031B_22": {
-      "name": "匿．",
-      "owner": {
-        "role_id": "031B",
-        "skill_index": 22,
-        "side": "source"
-      },
-      "parameters": {}
-    },
     "031B_23": {
       "name": "翔牙连",
       "owner": {
         "role_id": "031B",
         "skill_index": 23,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "031B_24": {
-      "name": "断灭连",
-      "owner": {
-        "role_id": "031B",
-        "skill_index": 24,
         "side": "source"
       },
       "parameters": {}
@@ -7242,33 +7413,6 @@
       },
       "parameters": {}
     },
-    "031B1_14": {
-      "name": "翔牙返",
-      "owner": {
-        "role_id": "031B1",
-        "skill_index": 14,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "031B1_15": {
-      "name": "穿风爪",
-      "owner": {
-        "role_id": "031B1",
-        "skill_index": 15,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "031B1_16": {
-      "name": "断灭蹴",
-      "owner": {
-        "role_id": "031B1",
-        "skill_index": 16,
-        "side": "source"
-      },
-      "parameters": {}
-    },
     "031B1_17": {
       "name": "闇云．魔天奈落Atyp",
       "owner": {
@@ -7323,38 +7467,11 @@
       },
       "parameters": {}
     },
-    "031B1_23": {
-      "name": "风炮",
-      "owner": {
-        "role_id": "031B1",
-        "skill_index": 23,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "031B1_24": {
-      "name": "龙卷风",
-      "owner": {
-        "role_id": "031B1",
-        "skill_index": 24,
-        "side": "source"
-      },
-      "parameters": {}
-    },
     "031B1_25": {
       "name": "援护攻击",
       "owner": {
         "role_id": "031B1",
         "skill_index": 25,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "031B1_26": {
-      "name": "援护攻击",
-      "owner": {
-        "role_id": "031B1",
-        "skill_index": 26,
         "side": "source"
       },
       "parameters": {}
@@ -7683,51 +7800,6 @@
       },
       "parameters": {}
     },
-    "031C_8": {
-      "name": "破颜蹴",
-      "owner": {
-        "role_id": "031C",
-        "skill_index": 8,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "031C_9": {
-      "name": "烈风炮",
-      "owner": {
-        "role_id": "031C",
-        "skill_index": 9,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "031C_10": {
-      "name": "旋风蹴",
-      "owner": {
-        "role_id": "031C",
-        "skill_index": 10,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "031C_11": {
-      "name": "闇云．回天破鼎",
-      "owner": {
-        "role_id": "031C",
-        "skill_index": 11,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "031C_12": {
-      "name": "极．闇云龙卷",
-      "owner": {
-        "role_id": "031C",
-        "skill_index": 12,
-        "side": "source"
-      },
-      "parameters": {}
-    },
     "032_0": {
       "name": "",
       "owner": {
@@ -7859,78 +7931,6 @@
       "owner": {
         "role_id": "033",
         "skill_index": 7,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "033_8": {
-      "name": "残魔炎",
-      "owner": {
-        "role_id": "033",
-        "skill_index": 8,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "033_9": {
-      "name": "烈魔炎",
-      "owner": {
-        "role_id": "033",
-        "skill_index": 9,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "033_10": {
-      "name": "风魔炮",
-      "owner": {
-        "role_id": "033",
-        "skill_index": 10,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "033_11": {
-      "name": "风魔刃",
-      "owner": {
-        "role_id": "033",
-        "skill_index": 11,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "033_12": {
-      "name": "水魔咒",
-      "owner": {
-        "role_id": "033",
-        "skill_index": 12,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "033_13": {
-      "name": "冰魔柱",
-      "owner": {
-        "role_id": "033",
-        "skill_index": 13,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "033_14": {
-      "name": "碎魔石",
-      "owner": {
-        "role_id": "033",
-        "skill_index": 14,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "033_15": {
-      "name": "钢魔石",
-      "owner": {
-        "role_id": "033",
-        "skill_index": 15,
         "side": "source"
       },
       "parameters": {}

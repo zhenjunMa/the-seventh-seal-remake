@@ -1390,7 +1390,7 @@
         },
         {
           "id": "M01063:tlk:6:2",
-          "op": "jump",
+          "op": "end",
           "record_id": 6,
           "source": {
             "path": "Map/m01063.TLK",
@@ -1398,8 +1398,7 @@
             "record_id": 6,
             "record_bytes": 1647,
             "offset": 10261
-          },
-          "target": "M01063:tlk:end"
+          }
         },
         {
           "id": "M01063:tlk:7",

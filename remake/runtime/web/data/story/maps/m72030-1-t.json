@@ -1,0 +1,1004 @@
+{
+  "schema": "seventh-seal-story-map",
+  "version": 2,
+  "map_id": "M72030-1-T",
+  "chapter": {
+    "id": "M72030-1-T",
+    "name": "妖精森林",
+    "flag_index": 62,
+    "map_flag_index": 62,
+    "source": null,
+    "dialogue_status": "source-file-absent",
+    "map_source": {
+      "path": "Map/m72030-1-t.dat",
+      "sha256": "f9f8996b4d768d563857e94ed3aaf43850c2b0ca50c3e53e6ebfbeacc97059cf",
+      "bytes": 167054
+    },
+    "index_nonzero": [],
+    "index_count": 0,
+    "record_base": null,
+    "record_bytes": 1647,
+    "record_count": 0,
+    "records": [],
+    "trailing_bytes": 0,
+    "trailing_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "header_raw_hex": "3344a661b9cfb8eaaec6286329596f6b690000000600000001000000d1fdbeabc9adc1d600000000000000000000000000000000000000000000000000000000000000006d6e3732302d312e7761760000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002020e0000000000010000000000000000003e000000010000004d37323033302d312e44475000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001010203000101290000002f0000002e5c4d41504d5c4d37323033302d315c003033302d315c00900100009001000000020100",
+    "compatibility_variant": 1,
+    "descriptors": [
+      {
+        "id": 1,
+        "state_raw": 0,
+        "filename_raw": "m72020-0-S.dat",
+        "field_26_raw": 2,
+        "field_2a_raw": 2,
+        "field_2e_raw": 0,
+        "record_bytes": 66,
+        "raw_hex": "00000000000000000000000000000000006d37323032302d302d532e6461740000000000000002000000020000000000000000000000000000000000000000000000",
+        "cells": [
+          {
+            "x": 6,
+            "y": 44,
+            "offset": 116210
+          },
+          {
+            "x": 7,
+            "y": 44,
+            "offset": 116274
+          },
+          {
+            "x": 8,
+            "y": 44,
+            "offset": 116338
+          },
+          {
+            "x": 9,
+            "y": 44,
+            "offset": 116402
+          },
+          {
+            "x": 10,
+            "y": 44,
+            "offset": 116466
+          },
+          {
+            "x": 11,
+            "y": 44,
+            "offset": 116530
+          },
+          {
+            "x": 12,
+            "y": 44,
+            "offset": 116594
+          },
+          {
+            "x": 13,
+            "y": 44,
+            "offset": 116658
+          },
+          {
+            "x": 14,
+            "y": 44,
+            "offset": 116722
+          },
+          {
+            "x": 15,
+            "y": 44,
+            "offset": 116786
+          },
+          {
+            "x": 16,
+            "y": 44,
+            "offset": 116850
+          },
+          {
+            "x": 17,
+            "y": 44,
+            "offset": 116914
+          },
+          {
+            "x": 18,
+            "y": 44,
+            "offset": 116978
+          },
+          {
+            "x": 19,
+            "y": 44,
+            "offset": 117042
+          },
+          {
+            "x": 5,
+            "y": 45,
+            "offset": 118770
+          },
+          {
+            "x": 6,
+            "y": 45,
+            "offset": 118834
+          },
+          {
+            "x": 7,
+            "y": 45,
+            "offset": 118898
+          },
+          {
+            "x": 8,
+            "y": 45,
+            "offset": 118962
+          },
+          {
+            "x": 9,
+            "y": 45,
+            "offset": 119026
+          },
+          {
+            "x": 10,
+            "y": 45,
+            "offset": 119090
+          },
+          {
+            "x": 11,
+            "y": 45,
+            "offset": 119154
+          },
+          {
+            "x": 12,
+            "y": 45,
+            "offset": 119218
+          },
+          {
+            "x": 13,
+            "y": 45,
+            "offset": 119282
+          },
+          {
+            "x": 14,
+            "y": 45,
+            "offset": 119346
+          },
+          {
+            "x": 15,
+            "y": 45,
+            "offset": 119410
+          },
+          {
+            "x": 16,
+            "y": 45,
+            "offset": 119474
+          },
+          {
+            "x": 17,
+            "y": 45,
+            "offset": 119538
+          },
+          {
+            "x": 18,
+            "y": 45,
+            "offset": 119602
+          }
+        ],
+        "source": {
+          "path": "Map/m72030-1-t.dat",
+          "sha256": "f9f8996b4d768d563857e94ed3aaf43850c2b0ca50c3e53e6ebfbeacc97059cf",
+          "descriptor_id": 1,
+          "bytes": 66,
+          "offset": 125042
+        },
+        "evidence": [
+          "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a"
+        ],
+        "field_expansion": "Native 0x42-byte descriptor fields"
+      },
+      {
+        "id": 2,
+        "state_raw": 0,
+        "filename_raw": "m72020-1-U.dat",
+        "field_26_raw": 1,
+        "field_2a_raw": 4,
+        "field_2e_raw": 0,
+        "record_bytes": 66,
+        "raw_hex": "00000000000000000000000000000000006d37323032302d312d552e6461740000000000000001000000040000000000000000000000000000000000000000000000",
+        "cells": [
+          {
+            "x": 38,
+            "y": 28,
+            "offset": 76274
+          },
+          {
+            "x": 38,
+            "y": 29,
+            "offset": 78898
+          },
+          {
+            "x": 38,
+            "y": 30,
+            "offset": 81522
+          },
+          {
+            "x": 38,
+            "y": 31,
+            "offset": 84146
+          },
+          {
+            "x": 38,
+            "y": 32,
+            "offset": 86770
+          }
+        ],
+        "source": {
+          "path": "Map/m72030-1-t.dat",
+          "sha256": "f9f8996b4d768d563857e94ed3aaf43850c2b0ca50c3e53e6ebfbeacc97059cf",
+          "descriptor_id": 2,
+          "bytes": 66,
+          "offset": 125108
+        },
+        "evidence": [
+          "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a"
+        ],
+        "field_expansion": "Native 0x42-byte descriptor fields"
+      }
+    ],
+    "objects": [
+      {
+        "index": 0,
+        "slot_one_based": 1,
+        "raw_hex": "433a5cb2c4a443abcaa64ca5bfa6a1a475a8e35c2e5c4e45574d41505c4d0100000000000000b000000038010000010000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 176,
+        "y_native": 312,
+        "resource_id_raw": 1,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m72030-1-t.dat",
+          "sha256": "f9f8996b4d768d563857e94ed3aaf43850c2b0ca50c3e53e6ebfbeacc97059cf",
+          "bytes": 274,
+          "offset": 136722
+        }
+      },
+      {
+        "index": 1,
+        "slot_one_based": 2,
+        "raw_hex": "433a5cb2c4a443abcaa64ca5bfa6a1a475a8e35c2e5c4e45574d41505c4d0200000000000000b0000000e8000000010000000100000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 176,
+        "y_native": 232,
+        "resource_id_raw": 2,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m72030-1-t.dat",
+          "sha256": "f9f8996b4d768d563857e94ed3aaf43850c2b0ca50c3e53e6ebfbeacc97059cf",
+          "bytes": 274,
+          "offset": 136996
+        }
+      },
+      {
+        "index": 2,
+        "slot_one_based": 3,
+        "raw_hex": "433a5cb2c4a443abcaa64ca5bfa6a1a475a8e35c2e5c4e45574d41505c4d03000000000000006000000020010000010000000100000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 96,
+        "y_native": 288,
+        "resource_id_raw": 3,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m72030-1-t.dat",
+          "sha256": "f9f8996b4d768d563857e94ed3aaf43850c2b0ca50c3e53e6ebfbeacc97059cf",
+          "bytes": 274,
+          "offset": 137270
+        }
+      },
+      {
+        "index": 3,
+        "slot_one_based": 4,
+        "raw_hex": "433a5cb2c4a443abcaa64ca5bfa6a1a475a8e35c2e5c4e45574d41505c4d040000000000000050000000f8000000010000000100000000000000000000000000000000000300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 80,
+        "y_native": 248,
+        "resource_id_raw": 4,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m72030-1-t.dat",
+          "sha256": "f9f8996b4d768d563857e94ed3aaf43850c2b0ca50c3e53e6ebfbeacc97059cf",
+          "bytes": 274,
+          "offset": 137544
+        }
+      },
+      {
+        "index": 4,
+        "slot_one_based": 5,
+        "raw_hex": "433a5cb2c4a443abcaa64ca5bfa6a1a475a8e35c2e5c4e45574d41505c4d05000000000000002001000040010000010000000100000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000000000000000000820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "x_native": 288,
+        "y_native": 320,
+        "resource_id_raw": 5,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m72030-1-t.dat",
+          "sha256": "f9f8996b4d768d563857e94ed3aaf43850c2b0ca50c3e53e6ebfbeacc97059cf",
+          "bytes": 274,
+          "offset": 137818
+        }
+      },
+      {
+        "index": 5,
+        "slot_one_based": 6,
+        "raw_hex": "433a5cb2c4a443abcaa64ca5bfa6a1a475a8e35c2e5c4e45574d41505c4d06000000000000001001000056010000010000000100000000000000000000000000000000000500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000100000000000000b40000000000000000000000000000000000000000000000000000000000000000000000000005000000000000000000000000000000000000",
+        "x_native": 272,
+        "y_native": 342,
+        "resource_id_raw": 6,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m72030-1-t.dat",
+          "sha256": "f9f8996b4d768d563857e94ed3aaf43850c2b0ca50c3e53e6ebfbeacc97059cf",
+          "bytes": 274,
+          "offset": 138092
+        }
+      },
+      {
+        "index": 6,
+        "slot_one_based": 7,
+        "raw_hex": "433a5cb2c4a443abcaa64ca5bfa6a1a475a8e35c2e5c4e45574d41505c4d07000000000000009900000038010000010000000100000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000100000000000000b40000000000000000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000",
+        "x_native": 153,
+        "y_native": 312,
+        "resource_id_raw": 7,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m72030-1-t.dat",
+          "sha256": "f9f8996b4d768d563857e94ed3aaf43850c2b0ca50c3e53e6ebfbeacc97059cf",
+          "bytes": 274,
+          "offset": 138366
+        }
+      },
+      {
+        "index": 7,
+        "slot_one_based": 8,
+        "raw_hex": "433a5cb2c4a443abcaa64ca5bfa6a1a475a8e35c2e5c4e45574d41505c4d0800000000000000ef0000007c000000010000000100000000000000000000000000000000000700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000100000000000000780000000000000000000000000000000000000000000000000000000000000000000000000012000000000000000000000000000000000000",
+        "x_native": 239,
+        "y_native": 124,
+        "resource_id_raw": 8,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m72030-1-t.dat",
+          "sha256": "f9f8996b4d768d563857e94ed3aaf43850c2b0ca50c3e53e6ebfbeacc97059cf",
+          "bytes": 274,
+          "offset": 138640
+        }
+      },
+      {
+        "index": 8,
+        "slot_one_based": 9,
+        "raw_hex": "433a5cb2c4a443abcaa64ca5bfa6a1a475a8e35c2e5c4e45574d41505c4d09000000000000006a0000005e000000010000000100000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000100000000000000820000000000000000000000000000000000000000000000000000000000000000000000000003000000000000000000000000000000000000",
+        "x_native": 106,
+        "y_native": 94,
+        "resource_id_raw": 9,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m72030-1-t.dat",
+          "sha256": "f9f8996b4d768d563857e94ed3aaf43850c2b0ca50c3e53e6ebfbeacc97059cf",
+          "bytes": 274,
+          "offset": 138914
+        }
+      },
+      {
+        "index": 9,
+        "slot_one_based": 10,
+        "raw_hex": "433a5cb2c4a443abcaa64ca5bfa6a1a475a8e35c2e5c4e45574d41505c4d080000000000000038000000c600000001000000010000000000000000000000000000000000090000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000020100010000000000000078000000000000000000000000000000000000000000000000000000000000000000000000000e000000000000000000000000000000000000",
+        "x_native": 56,
+        "y_native": 198,
+        "resource_id_raw": 8,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m72030-1-t.dat",
+          "sha256": "f9f8996b4d768d563857e94ed3aaf43850c2b0ca50c3e53e6ebfbeacc97059cf",
+          "bytes": 274,
+          "offset": 139188
+        }
+      },
+      {
+        "index": 10,
+        "slot_one_based": 11,
+        "raw_hex": "433a5cb2c4a443abcaa64ca5bfa6a1a475a8e35c2e5c4e45574d41505c4d080000000000000035000000c9000000010000000100000000000000000000000000000000000a00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000100000000000000780000000000000000000000000000000000000000000000000000000000000000000000000003000000000000000000000000000000000000",
+        "x_native": 53,
+        "y_native": 201,
+        "resource_id_raw": 8,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m72030-1-t.dat",
+          "sha256": "f9f8996b4d768d563857e94ed3aaf43850c2b0ca50c3e53e6ebfbeacc97059cf",
+          "bytes": 274,
+          "offset": 139462
+        }
+      },
+      {
+        "index": 11,
+        "slot_one_based": 12,
+        "raw_hex": "433a5cb2c4a443abcaa64ca5bfa6a1a475a8e35c2e5c4e45574d41505c4d080000000000000028000000c7000000010000000100000000000000000000000000000000000b00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000100000000000000780000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000",
+        "x_native": 40,
+        "y_native": 199,
+        "resource_id_raw": 8,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m72030-1-t.dat",
+          "sha256": "f9f8996b4d768d563857e94ed3aaf43850c2b0ca50c3e53e6ebfbeacc97059cf",
+          "bytes": 274,
+          "offset": 139736
+        }
+      },
+      {
+        "index": 12,
+        "slot_one_based": 13,
+        "raw_hex": "433a5cb2c4a443abcaa64ca5bfa6a1a475a8e35c2e5c4e45574d41505c4d0a000000000000000a0000004f010000010000000100000000000000000000000000000000000c00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000201000100000000000000780000000000000000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000",
+        "x_native": 10,
+        "y_native": 335,
+        "resource_id_raw": 10,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 1,
+        "source": {
+          "path": "Map/m72030-1-t.dat",
+          "sha256": "f9f8996b4d768d563857e94ed3aaf43850c2b0ca50c3e53e6ebfbeacc97059cf",
+          "bytes": 274,
+          "offset": 140010
+        }
+      },
+      {
+        "index": 13,
+        "slot_one_based": 14,
+        "raw_hex": "433a5c736576656e5c2e5c4d41504d5c4d37323033302d315c3031312e440b0000000000000070000000e0000000010000000100000000000000000000000000000000000d0000000000000000000000000000009d000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000204000200000000000000960000000000000000000000000000000000000000000000004d01000000000000470000000000000000000000000000000000000000000000",
+        "x_native": 112,
+        "y_native": 224,
+        "resource_id_raw": 11,
+        "event_record_index_raw_4c": 0,
+        "event_region_raw_b6": 0,
+        "interaction_record_raw_f6": 0,
+        "object_type_raw_ce": 2,
+        "behavior_raw_cf": 4,
+        "source": {
+          "path": "Map/m72030-1-t.dat",
+          "sha256": "f9f8996b4d768d563857e94ed3aaf43850c2b0ca50c3e53e6ebfbeacc97059cf",
+          "bytes": 274,
+          "offset": 140284
+        }
+      }
+    ],
+    "npc_records": [],
+    "entry_markers": {
+      "1": [
+        {
+          "x": 12,
+          "y": 43,
+          "offset": 113970
+        }
+      ],
+      "2": [
+        {
+          "x": 35,
+          "y": 29,
+          "offset": 78706
+        }
+      ]
+    },
+    "default_object_index_slot": 499,
+    "default_object_record": 0,
+    "header_entry_tlk_raw": 0,
+    "header_entry_tlk_source": {
+      "path": "Map/m72030-1-t.dat",
+      "sha256": "f9f8996b4d768d563857e94ed3aaf43850c2b0ca50c3e53e6ebfbeacc97059cf",
+      "bytes": 4,
+      "offset": 314
+    },
+    "header_setup_tlk_raw": 0,
+    "header_setup_tlk_source": {
+      "path": "Map/m72030-1-t.dat",
+      "sha256": "f9f8996b4d768d563857e94ed3aaf43850c2b0ca50c3e53e6ebfbeacc97059cf",
+      "bytes": 4,
+      "offset": 138
+    },
+    "evidence": [
+      "ev_e14d28c11ec31e5eebdf4c08a994a900102658650d8e5364d58b848cbd114ea7",
+      "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a"
+    ],
+    "limitations": [
+      "Index slot499 is retained as the object default TLK entry; it must not be used as an automatic map-load event. Header +0x8A controls map setup; +0x13A controls map-entry TLK.",
+      "TLK record kind/mutation numbers are raw native values; dialogue text alone does not define their behavior."
+    ]
+  },
+  "programs": {},
+  "flows": {},
+  "events": [],
+  "resources": {
+    "npcs_by_map": [],
+    "exits_by_map": [
+      {
+        "id": 1,
+        "state": "ready",
+        "cells": [
+          {
+            "x": 6,
+            "y": 44
+          },
+          {
+            "x": 7,
+            "y": 44
+          },
+          {
+            "x": 8,
+            "y": 44
+          },
+          {
+            "x": 9,
+            "y": 44
+          },
+          {
+            "x": 10,
+            "y": 44
+          },
+          {
+            "x": 11,
+            "y": 44
+          },
+          {
+            "x": 12,
+            "y": 44
+          },
+          {
+            "x": 13,
+            "y": 44
+          },
+          {
+            "x": 14,
+            "y": 44
+          },
+          {
+            "x": 15,
+            "y": 44
+          },
+          {
+            "x": 16,
+            "y": 44
+          },
+          {
+            "x": 17,
+            "y": 44
+          },
+          {
+            "x": 18,
+            "y": 44
+          },
+          {
+            "x": 19,
+            "y": 44
+          },
+          {
+            "x": 5,
+            "y": 45
+          },
+          {
+            "x": 6,
+            "y": 45
+          },
+          {
+            "x": 7,
+            "y": 45
+          },
+          {
+            "x": 8,
+            "y": 45
+          },
+          {
+            "x": 9,
+            "y": 45
+          },
+          {
+            "x": 10,
+            "y": 45
+          },
+          {
+            "x": 11,
+            "y": 45
+          },
+          {
+            "x": 12,
+            "y": 45
+          },
+          {
+            "x": 13,
+            "y": 45
+          },
+          {
+            "x": 14,
+            "y": 45
+          },
+          {
+            "x": 15,
+            "y": 45
+          },
+          {
+            "x": 16,
+            "y": 45
+          },
+          {
+            "x": 17,
+            "y": 45
+          },
+          {
+            "x": 18,
+            "y": 45
+          }
+        ],
+        "target_map": "M72020-0-S",
+        "entry": {
+          "x": 848,
+          "y": 176,
+          "direction": 6,
+          "cell_x": 53,
+          "cell_y": 11,
+          "native_x": 424,
+          "native_y": 88
+        },
+        "conditions": [],
+        "source": {
+          "path": "Map/m72030-1-t.dat",
+          "sha256": "f9f8996b4d768d563857e94ed3aaf43850c2b0ca50c3e53e6ebfbeacc97059cf",
+          "descriptor_offset": 125042,
+          "descriptor_bytes": 66,
+          "descriptor_hex": "00000000000000000000000000000000006d37323032302d302d532e6461740000000000000002000000020000000000000000000000000000000000000000000000",
+          "compact_field_expansion_evidence": null,
+          "target_path": "Map/m72020-0-s.dat",
+          "target_sha256": "cb471710205721ed470e72f9a7ae5163e6a2874d7c9e9acf9216e813c59e5065",
+          "target_entry_marker": 2,
+          "entry_sort_code": 2,
+          "entry_terrain_raw": 0,
+          "entry_trigger_raw": 0,
+          "entry_scan_cells": [
+            {
+              "x": 53,
+              "y": 11,
+              "offset": 45298
+            }
+          ],
+          "entry_sorted_cells": [
+            {
+              "x": 53,
+              "y": 11
+            }
+          ],
+          "entry_sort": "y descending; stable ties",
+          "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
+          "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
+          "native_evidence": {
+            "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+            "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+            "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+            "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+          }
+        },
+        "execution": "Native transition descriptor only; map-entry TLK/ANM and their once-only checks must complete separately.",
+        "limitations": [
+          "Static source/code evidence; original timing not observed",
+          "Continuous keyboard movement is runtime policy"
+        ]
+      },
+      {
+        "id": 2,
+        "state": "ready",
+        "cells": [
+          {
+            "x": 38,
+            "y": 28
+          },
+          {
+            "x": 38,
+            "y": 29
+          },
+          {
+            "x": 38,
+            "y": 30
+          },
+          {
+            "x": 38,
+            "y": 31
+          },
+          {
+            "x": 38,
+            "y": 32
+          }
+        ],
+        "target_map": "M72020-1-U",
+        "entry": {
+          "x": 80,
+          "y": 176,
+          "direction": 0,
+          "cell_x": 5,
+          "cell_y": 11,
+          "native_x": 40,
+          "native_y": 88
+        },
+        "conditions": [],
+        "source": {
+          "path": "Map/m72030-1-t.dat",
+          "sha256": "f9f8996b4d768d563857e94ed3aaf43850c2b0ca50c3e53e6ebfbeacc97059cf",
+          "descriptor_offset": 125108,
+          "descriptor_bytes": 66,
+          "descriptor_hex": "00000000000000000000000000000000006d37323032302d312d552e6461740000000000000001000000040000000000000000000000000000000000000000000000",
+          "compact_field_expansion_evidence": null,
+          "target_path": "Map/m72020-1-u.dat",
+          "target_sha256": "b1e1284b08866e86bef4a8f05e4f1d3ddc62e7ed7dbe78e285774b3899d1373d",
+          "target_entry_marker": 1,
+          "entry_sort_code": 4,
+          "entry_terrain_raw": 0,
+          "entry_trigger_raw": 0,
+          "entry_scan_cells": [
+            {
+              "x": 5,
+              "y": 11,
+              "offset": 42226
+            }
+          ],
+          "entry_sorted_cells": [
+            {
+              "x": 5,
+              "y": 11
+            }
+          ],
+          "entry_sort": "x descending; stable ties",
+          "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
+          "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
+          "native_evidence": {
+            "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+            "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+            "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+            "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+          }
+        },
+        "execution": "Native transition descriptor only; map-entry TLK/ANM and their once-only checks must complete separately.",
+        "limitations": [
+          "Static source/code evidence; original timing not observed",
+          "Continuous keyboard movement is runtime policy"
+        ]
+      }
+    ],
+    "trigger_regions": [],
+    "interactive_objects": [
+      {
+        "object_index_zero_based": 13,
+        "object_number_one_based": 14,
+        "resource_id": "011",
+        "x": 224,
+        "y": 448,
+        "behavior_raw_cf": 4,
+        "state_raw_d0": 0,
+        "field_f6_raw": 0,
+        "field_fa_raw": 71,
+        "source": {
+          "path": "Map/m72030-1-t.dat",
+          "sha256": "f9f8996b4d768d563857e94ed3aaf43850c2b0ca50c3e53e6ebfbeacc97059cf",
+          "offset": 140284,
+          "bytes": 274,
+          "raw_hex": "433a5c736576656e5c2e5c4d41504d5c4d37323033302d315c3031312e440b0000000000000070000000e0000000010000000100000000000000000000000000000000000d0000000000000000000000000000009d000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000204000200000000000000960000000000000000000000000000000000000000000000004d01000000000000470000000000000000000000000000000000000000000000"
+        },
+        "status": "Raw interactive-object candidates; native selection/TLK/state timing must be corroborated"
+      }
+    ],
+    "object_animations": [
+      {
+        "object_index_zero_based": 13,
+        "object_number_one_based": 14,
+        "resource_id": "011",
+        "source": {
+          "path": "mapm/m72030-1/011.dgp",
+          "sha256": "dda14608299ae70edb25e8c3c6739bdf8e294ed5732a85df84673549a8fc8337"
+        },
+        "frames": [
+          {
+            "index": 0,
+            "image": "/assets/chapter_objects/m72030-1-t/011/frame_000.png",
+            "sha256": "6c576411f7949ccea4251daed50df20ebdc4eab709dbfcd94f4a4110d0d279c6"
+          },
+          {
+            "index": 1,
+            "image": "/assets/chapter_objects/m72030-1-t/011/frame_001.png",
+            "sha256": "250c11ce74a85a5dde51e5ebbab9b69252ce628d48474c1159fa5a448b8c0b33"
+          },
+          {
+            "index": 2,
+            "image": "/assets/chapter_objects/m72030-1-t/011/frame_002.png",
+            "sha256": "f40a4fec1c324ad77092c5fe55d77089a65299794d182598caa9ec10926eeb9e"
+          },
+          {
+            "index": 3,
+            "image": "/assets/chapter_objects/m72030-1-t/011/frame_003.png",
+            "sha256": "fe9dfc048f8c1a4dc2d2ed3a0c2c5e59d518784729c1ae4b93a78cfe1e7c3d89"
+          },
+          {
+            "index": 4,
+            "image": "/assets/chapter_objects/m72030-1-t/011/frame_004.png",
+            "sha256": "4cd2c40fca4e821ab3f9a747ad79b91fef56b219b752aa4fd82723efaf197696"
+          },
+          {
+            "index": 5,
+            "image": "/assets/chapter_objects/m72030-1-t/011/frame_005.png",
+            "sha256": "9dd674de569871e04aac720f65157dfef3d4e0de92cb3ba096f13963f2ebdf64"
+          },
+          {
+            "index": 6,
+            "image": "/assets/chapter_objects/m72030-1-t/011/frame_006.png",
+            "sha256": "67187d3562a590d0f97d149735a1a51be52a7fdd5b00c7e15076960820523fb7"
+          },
+          {
+            "index": 7,
+            "image": "/assets/chapter_objects/m72030-1-t/011/frame_007.png",
+            "sha256": "c380d69b7f8df7862fdda97ae7fc0424f04efc3945ce8d938b06957211fa46a1"
+          },
+          {
+            "index": 8,
+            "image": "/assets/chapter_objects/m72030-1-t/011/frame_008.png",
+            "sha256": "9a46b30d23ec8828c5313dd49b272e63b00924d662288a7f2ce8a16aa77681c8"
+          },
+          {
+            "index": 9,
+            "image": "/assets/chapter_objects/m72030-1-t/011/frame_009.png",
+            "sha256": "048c8a452c09e65872655110ae6841c752f59f168f26b188d2b29c4d903849e6"
+          },
+          {
+            "index": 10,
+            "image": "/assets/chapter_objects/m72030-1-t/011/frame_010.png",
+            "sha256": "0b9b8d4ac28fc735b25309060c452bff5030d4077def7df4330342ea7746df45"
+          },
+          {
+            "index": 11,
+            "image": "/assets/chapter_objects/m72030-1-t/011/frame_011.png",
+            "sha256": "7f780b3fe40085ed2c8ba5227bba671f190df1abc6c0f2714073de0c7b66b759"
+          },
+          {
+            "index": 12,
+            "image": "/assets/chapter_objects/m72030-1-t/011/frame_012.png",
+            "sha256": "435525a14fe112a14d7a9712e6f41fd2cfb2156882b86657a59344e90d5afc2a"
+          },
+          {
+            "index": 13,
+            "image": "/assets/chapter_objects/m72030-1-t/011/frame_013.png",
+            "sha256": "7774f36cde12bc2315dc8b399e097f4016faa05bb5b086f8b76f55468aac686e"
+          },
+          {
+            "index": 14,
+            "image": "/assets/chapter_objects/m72030-1-t/011/frame_014.png",
+            "sha256": "ba78fdbadc0e13ecd61c7c427ca3842270fbf56d53cda98dcdf85e7841e9b08d"
+          },
+          {
+            "index": 15,
+            "image": "/assets/chapter_objects/m72030-1-t/011/frame_015.png",
+            "sha256": "65eaf2d10b90fce5703859fee0409a14bf70e119a58d6b4acc736c4b478ee637"
+          },
+          {
+            "index": 16,
+            "image": "/assets/chapter_objects/m72030-1-t/011/frame_016.png",
+            "sha256": "93134e7c76713f1128f4053edfff26025535a06a827e1012e15493a69d8a69c1"
+          },
+          {
+            "index": 17,
+            "image": "/assets/chapter_objects/m72030-1-t/011/frame_017.png",
+            "sha256": "0bbf023e7c6e13e3317255c1e8747436d19dd6b7d399e9c83e46aa77aa303a7f"
+          },
+          {
+            "index": 18,
+            "image": "/assets/chapter_objects/m72030-1-t/011/frame_018.png",
+            "sha256": "2a4da48aeae821e728280f7c506aca005640b6ade0871ad3c103ebe59591c0b4"
+          },
+          {
+            "index": 19,
+            "image": "/assets/chapter_objects/m72030-1-t/011/frame_019.png",
+            "sha256": "6a3925477479eb8817159f36eb3f721567a5b5a4d56e7061aa60d3abd42e772e"
+          },
+          {
+            "index": 20,
+            "image": "/assets/chapter_objects/m72030-1-t/011/frame_020.png",
+            "sha256": "b5ff02759c2d52fca82d16f3778351286adf06bcd94f88342e4d4849bad132f6"
+          },
+          {
+            "index": 21,
+            "image": "/assets/chapter_objects/m72030-1-t/011/frame_021.png",
+            "sha256": "99619dddc1c144c39eb7086921495c6f82d4ffb964427f53b85e374dcd031831"
+          },
+          {
+            "index": 22,
+            "image": "/assets/chapter_objects/m72030-1-t/011/frame_022.png",
+            "sha256": "0221b63ba532689c614d7b138ca96519bd79c0f165b02646ee9fd5d5433f588a"
+          },
+          {
+            "index": 23,
+            "image": "/assets/chapter_objects/m72030-1-t/011/frame_023.png",
+            "sha256": "248f77897f787392c8e8e3d525f86bcecfcf8b07cddb2871f9a79fde87149bbf"
+          },
+          {
+            "index": 24,
+            "image": "/assets/chapter_objects/m72030-1-t/011/frame_024.png",
+            "sha256": "5aa122efde2f6de0d7c5f461862dad15ad68b1a19a5868d0cbc556d8bba51ebd"
+          },
+          {
+            "index": 25,
+            "image": "/assets/chapter_objects/m72030-1-t/011/frame_025.png",
+            "sha256": "5aa122efde2f6de0d7c5f461862dad15ad68b1a19a5868d0cbc556d8bba51ebd"
+          }
+        ],
+        "frame_width": 170,
+        "frame_height": 191,
+        "actions": [
+          {
+            "index": 0,
+            "directions": 1,
+            "directions_raw": 0,
+            "interval_raw": 150,
+            "loop_raw": 1,
+            "frames_per_direction": 10,
+            "first_frame": 0,
+            "identifier_raw": 0,
+            "raw_hex": "00960000000000000000000000010a00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+          },
+          {
+            "index": 1,
+            "directions": 1,
+            "directions_raw": 0,
+            "interval_raw": 110,
+            "loop_raw": 1,
+            "frames_per_direction": 16,
+            "first_frame": 10,
+            "identifier_raw": 0,
+            "raw_hex": "006e000000000000000000000001100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+          }
+        ],
+        "completed_last_frame": 25,
+        "evidence": [
+          "ev_7ff7092a0522a10920b1c81430af56c62cb116c3d66a5af86a35ecb5e9498a5c"
+        ],
+        "authority": "Original DGP physical frames; retained 0x4137C0 proves CF3 state2 progresses to state3 at its final animation frame; exact clock phase remains unobserved"
+      }
+    ]
+  },
+  "route": null,
+  "texts": {}
+}

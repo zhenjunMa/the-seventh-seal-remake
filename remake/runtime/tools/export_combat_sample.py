@@ -94,7 +94,7 @@ def equipment_table(header, equipment):
 
 def skill_record(alias, actor_id, raw, offset, index, path, actions, impact_index):
     assert len(raw) == 0x41d
-    impact = bytes.fromhex(actions[impact_index]['raw_hex'])
+    impact = bytes.fromhex(actions[impact_index if impact_index is not None else 0]['raw_hex'])
     mp_delta = i32(raw, 0x14f)
     return dict(id=alias,actor_id=actor_id,name=raw[1:0x15].split(b'\0')[0].decode('cp936'),
                 original_id_raw=raw[0],original_skill_index=index,fixed_raw_hex=raw.hex(),fixed_bytes=0x41d,

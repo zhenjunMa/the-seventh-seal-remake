@@ -9678,7 +9678,7 @@
         },
         {
           "id": "M01022:tlk:13:2",
-          "op": "jump",
+          "op": "end",
           "record_id": 13,
           "source": {
             "path": "Map/m01022.TLK",
@@ -9686,8 +9686,7 @@
             "record_id": 13,
             "record_bytes": 1647,
             "offset": 21790
-          },
-          "target": "M01022:tlk:end"
+          }
         },
         {
           "id": "M01022:tlk:end",

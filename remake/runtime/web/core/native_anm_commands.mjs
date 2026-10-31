@@ -12,12 +12,12 @@ export function nativeAnmObjectTarget(command,mapId,story){
   need(object,'物件来源缺失');
   if(table.id===mapId){
     const raw=Uint8Array.from(object.raw_hex.match(/../g),value=>parseInt(value,16)),view=new DataView(raw.buffer);
-    need(raw[0xcf]===7&&raw[0x109]===0&&raw[0x51]===0&&view.getUint32(0x4c,true)===0
-      &&view.getUint32(0xba,true)===0&&view.getUint32(0xf6,true)===0
+    need([2,7,9].includes(raw[0xcf])&&raw[0x109]===0&&raw[0x51]===0&&view.getUint32(0x4c,true)===0
+      &&view.getUint32(0xba,true)===0&&(raw[0xcf]===9||view.getUint32(0xf6,true)===0)
       &&view.getUint32(0xe3,true)===0&&view.getUint32(0xe7,true)===0
       &&Array.from({length:10},(_,slot)=>view.getUint32(0x54+slot*4,true)).every(id=>id===0),'物件联动或主动类型尚未恢复');
   }
-  return {mapId:table.id,mapFlag,objectIndex,enabled:command.byte_plus29===0};
+  return {mapId:table.id,mapFlag,objectIndex,enabled:command.byte_plus29===0,behavior:parseInt(object.raw_hex.slice(0xcf*2,0xd0*2),16)};
 }
 export function applyNativeAnmFlagCommand(draft,command,mapFlagIndex){
   need(command?.opcode===20&&Array.isArray(draft?.flags),'命令或世界状态无效');

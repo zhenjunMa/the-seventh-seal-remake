@@ -4285,7 +4285,7 @@
         },
         {
           "id": "M01010:tlk:3:3",
-          "op": "jump",
+          "op": "end",
           "record_id": 3,
           "source": {
             "path": "Map/m01010.TLK",
@@ -4293,8 +4293,7 @@
             "record_id": 3,
             "record_bytes": 1647,
             "offset": 5320
-          },
-          "target": "M01010:tlk:end"
+          }
         },
         {
           "id": "M01010:tlk:4",
@@ -4865,7 +4864,7 @@
         },
         {
           "id": "M01010:tlk:16:2",
-          "op": "jump",
+          "op": "end",
           "record_id": 16,
           "source": {
             "path": "Map/m01010.TLK",
@@ -4873,8 +4872,7 @@
             "record_id": 16,
             "record_bytes": 1647,
             "offset": 26731
-          },
-          "target": "M01010:tlk:end"
+          }
         },
         {
           "id": "M01010:tlk:17",
@@ -4903,7 +4901,7 @@
         },
         {
           "id": "M01010:tlk:17:2",
-          "op": "jump",
+          "op": "end",
           "record_id": 17,
           "source": {
             "path": "Map/m01010.TLK",
@@ -4911,8 +4909,7 @@
             "record_id": 17,
             "record_bytes": 1647,
             "offset": 28378
-          },
-          "target": "M01010:tlk:end"
+          }
         },
         {
           "id": "M01010:tlk:18",
@@ -5530,6 +5527,74 @@
         ],
         "path_gate": false,
         "descriptor_hex": "02000000000000000000000000000000000030313031392e646174000000000000000000000002000000050000000100000000000000000000000000000000000000"
+      },
+      {
+        "id": 4,
+        "offset": 554872,
+        "bytes": 66,
+        "state_raw": 1,
+        "filename_raw": "m01010-2.anm",
+        "field_26_raw": 0,
+        "field_2a_raw": 0,
+        "field_2e_raw": 1,
+        "compact_source_offsets": null,
+        "field_expansion_evidence": null,
+        "cells": [
+          {
+            "x": 30,
+            "y": 71
+          },
+          {
+            "x": 31,
+            "y": 71
+          },
+          {
+            "x": 32,
+            "y": 71
+          },
+          {
+            "x": 33,
+            "y": 71
+          },
+          {
+            "x": 33,
+            "y": 72
+          },
+          {
+            "x": 34,
+            "y": 72
+          }
+        ],
+        "path_gate": false,
+        "descriptor_hex": "01000000000000000000000000000000006d30313031302d322e616e6d00000000000000000000000000000000000100000000000000000000000000000000000000"
+      },
+      {
+        "id": 5,
+        "offset": 554938,
+        "bytes": 66,
+        "state_raw": 1,
+        "filename_raw": "m01010-3.anm",
+        "field_26_raw": 0,
+        "field_2a_raw": 0,
+        "field_2e_raw": 1,
+        "compact_source_offsets": null,
+        "field_expansion_evidence": null,
+        "cells": [
+          {
+            "x": 52,
+            "y": 73
+          },
+          {
+            "x": 53,
+            "y": 73
+          },
+          {
+            "x": 52,
+            "y": 74
+          }
+        ],
+        "path_gate": false,
+        "descriptor_hex": "01000000000000000000000000000000006d30313031302d332e616e6d00000000000000000000000000000000000100000000000000000000000000000000000000"
       },
       {
         "id": 31,

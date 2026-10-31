@@ -23,8 +23,8 @@ test('all source roles, skills and items have stable references and unified conf
 test('runtime aliases resolve to their source owner without registering source-only skills',()=>{
   const yantu=resolveContentReference(library,{kind:'skills',id:'yantu'});
   assert.equal(yantu.role_id,'001');assert.equal(yantu.configuration_id,'yantu');assert.ok(yantu.runtime_registered);
-  assert.equal(data.registration.roles['017'],undefined,'source-only fixture must remain unregistered');
-  const rows=searchContentLibrary(library,{kind:'skills',roleId:'017'});assert.ok(rows.length);
+  assert.equal(data.registration.roles.eagle,undefined,'source-only fixture must remain unregistered');
+  const rows=searchContentLibrary(library,{kind:'skills',roleId:'eagle'});assert.ok(rows.length);
   assert.ok(rows.every(row=>row.runtime_registered===false));
   assert.ok(library.counts.skills>library.counts.runtime_skills);
 });

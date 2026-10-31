@@ -81,16 +81,18 @@
       "files": [
         "test_content_extension.mjs",
         "test_content_library.mjs",
+        "test_fairy_forest.mjs",
+        "test_fairy_temple.mjs",
         "test_fire_valley_npc_interactions.mjs",
-        "test_floating_city_phase.mjs",
         "test_floating_city_pc02.mjs",
-        "test_yc05_jl03_phase.mjs",
+        "test_floating_city_phase.mjs",
         "test_npc_visibility_export.py",
         "test_party_skill_configuration.mjs",
         "test_party_skill_sample.mjs",
         "test_registered_item_admission.mjs",
         "test_source_skill_configuration.mjs",
-        "test_white_forest_packages.mjs"
+        "test_white_forest_packages.mjs",
+        "test_yc05_jl03_phase.mjs"
       ],
       "layer": "content",
       "cache": true
@@ -98,6 +100,7 @@
     "source": {
       "description": "原版字节、独立解码和原指令差分核对",
       "files": [
+        "test_battle_appearance_source.mjs",
         "test_actor_effects_source.mjs",
         "test_aid_carriers.mjs",
         "test_audio.mjs",
@@ -119,6 +122,7 @@
         "test_battle_view.mjs",
         "test_cf1_map_effect_pixels.py",
         "test_cf1_map_objects.mjs",
+        "test_cf2_map_terrain.py",
         "test_cf7_map_objects.mjs",
         "test_cf7_map_pixels.py",
         "test_chapter_animation.mjs",
@@ -143,6 +147,7 @@
         "test_fire_valley_phase_fixtures.mjs",
         "test_first_return_source.mjs",
         "test_floating_city_rewards.mjs",
+        "test_forest_map_mechanisms.mjs",
         "test_forest_ai.mjs",
         "test_forest_pipeline.mjs",
         "test_forest_presentation.mjs",
@@ -273,6 +278,7 @@
     }
   },
   "requirements": {
+    "test_battle_appearance_source.mjs": ["GAME.exe", "Fight_Role/018.CHR", "remake/runtime/tests/fixtures/battle_appearance2_native.json"],
     "test_actor_effects_source.mjs": ["GAME.exe", "remake/runtime/tests/fixtures/anm_actor_blend_native.json", "Animate/m01060-2.anm", "Animate/m17029-1.anm", "Animate/m17030-1.anm", "Animate/m70073-1.anm", "Animate/m70078-1.anm", "Animate/m01040-5.anm", "Animate/m01050-3.anm", "Animate/m01022-1.anm", "Animate/m01022-2.anm"],
     "test_native_story_conditions.mjs": ["Map/m03023.TLK"],
     "test_native_anm_extended.mjs": ["Animate/m17010-3.anm", "Animate/m03021.anm", "Animate/m17030-1.anm", "Fight_Role/004.CHR", "Fight_Role/006.CHR", "remake/runtime/web/data/opening_map_resources.json"],
@@ -295,6 +301,19 @@
     "test_build_runtime.py": ["GAME.exe", "python:PIL", "python:numpy"],
     "test_cf1_map_effect_pixels.py": ["python:PIL", "remake/runtime/evidence/fire_valley_20261025", "remake/runtime/evidence/fire_valley_20261025/object_closure_audit.json", "remake/runtime/evidence/map_effects_20261021/export.json", "remake/runtime/evidence/movement_audit_20261023/native_evidence.json", "Map/M01031.DAT", "Map/M01032.DAT", "Map/M01061.DAT"],
     "test_cf1_map_objects.mjs": ["remake/runtime/evidence/fire_valley_20261025/object_closure_audit.json", "Map/M01031.DAT", "Map/M01031.TLK", "Map/M01032.DAT", "Map/M01032.TLK", "Map/M01061.DAT", "Map/M01061.TLK", "Map/M01042.DAT", "Map/M01062.DAT", "Map/M01063.DAT"],
+    "test_cf2_map_terrain.py": [
+      "python:PIL",
+      "GAME.exe",
+      "Map/m72050.dat",
+      "Map/m72061.dat",
+      "mapm/m72050/007.dgp",
+      "mapm/m72061/001.dgp",
+      "mapm/m72040/020.dgp",
+      "mapm/m72040-1/017.dgp",
+      "mapm/m72050/006.dgp",
+      "remake/runtime/evidence/inner_white_forest_20261029/native_objects_bundle.json"
+    ],
+    "test_forest_map_mechanisms.mjs": ["Map/m72050.dat", "Map/m72061.dat", "mapm/M72040", "mapm/M72040-1", "remake/runtime/evidence/fire_valley_20261025/object_tick_4137c0_assembly.json"],
     "test_cf7_map_objects.mjs": ["GAME.exe", "Map/m01065.dat", "mapm/m01065/002.dgp", "remake/runtime/evidence/fire_valley_20261025/object_queue_assembly.json", "remake/runtime/evidence/fire_valley_20261025/object_tick_4137c0_assembly.json"],
     "test_cf7_map_pixels.py": ["python:PIL", "mapm/m01065/002.dgp", "remake/runtime/web/data/map_effects.json"],
     "test_combat_rules.mjs": ["remake/runtime/evidence/turn_rules_assembly_20261011.json"],
@@ -309,7 +328,7 @@
     "test_ember_city_battle_source.py": ["python:PIL", "remake/runtime/evidence/turn_rules_assembly_20261011.json"],
     "test_ember_city_story_source.mjs": ["Map/M01030.DAT", "Map/M01030.TLK", "Map/M01031.DAT", "Map/M01031.TLK", "Map/M01040.DAT", "Map/M01040.TLK", "Map/M01041.DAT", "Map/M01041.TLK", "Animate/m01040-1.anm", "Animate/m01040-2.anm", "Animate/m01060-2.anm", "remake/runtime/web/data/chapter_map_resources.json"],
     "test_ember_city_items.py": ["python:PIL", "remake/runtime/evidence/fire_valley_20261024/stage12_status_apply.json", "remake/runtime/evidence/forest_status_instructions_20261011.json", "remake/runtime/evidence/battle_revive_recovery_native_20261015.json", "remake/runtime/evidence/fire_valley_20261025/support_507e20.json", "Fight_Role/021.CHR", "remake/runtime/evidence/inner_white_forest_20261030/item399_native.json"],
-    "test_equipment_passives.mjs": ["remake/runtime/evidence/forest_status_instructions_20261011.json", "remake/runtime/evidence/white_forest_20261026/reward_passives/native_bundle.json"],
+    "test_equipment_passives.mjs": ["remake/runtime/evidence/forest_status_instructions_20261011.json", "remake/runtime/evidence/white_forest_20261026/reward_passives/native_bundle.json", "Map/m72063-3.TLK", "Map/m72064.TLK", "Fight_Role/031A.CHR", "Fight_Role/031B.CHR", "Fight_Role/033.CHR", "remake/runtime/web/data/party_rewards.json"],
     "test_finale_defeat_recovery.mjs": ["remake/runtime/evidence/fire_valley_20261025/browser_diagnostic/delivery_finale_defeat_validation_failure_log.json"],
     "test_fire_valley_battle_source.py": ["python:PIL", "remake/runtime/evidence/chapter_native.json", "remake/runtime/evidence/party_magic_native.json", "remake/runtime/evidence/turn_rules_assembly_20261011.json"],
     "test_fire_valley_index.py": ["python:PIL", "remake/runtime/evidence/fire_valley_20261024/source_index.json"],
@@ -538,6 +557,16 @@
       ],
       "tests": [
         "test_ember_city*"
+      ]
+    },
+    "fairy-forest": {
+      "maps": [
+        "m720*"
+      ],
+      "tests": [
+        "test_fairy_forest.mjs",
+        "test_fairy_temple.mjs",
+        "test_forest_map_mechanisms.mjs"
       ]
     }
   },

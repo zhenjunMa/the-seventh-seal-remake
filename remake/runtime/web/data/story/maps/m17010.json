@@ -12890,7 +12890,7 @@
         },
         {
           "id": "M17010:tlk:48:3",
-          "op": "jump",
+          "op": "end",
           "record_id": 48,
           "source": {
             "path": "Map/m17010.TLK",
@@ -12898,8 +12898,7 @@
             "record_id": 48,
             "record_bytes": 1647,
             "offset": 79435
-          },
-          "target": "M17010:tlk:end"
+          }
         },
         {
           "id": "M17010:tlk:49",
@@ -12969,7 +12968,7 @@
         },
         {
           "id": "M17010:tlk:50:2",
-          "op": "jump",
+          "op": "end",
           "record_id": 50,
           "source": {
             "path": "Map/m17010.TLK",
@@ -12977,8 +12976,7 @@
             "record_id": 50,
             "record_bytes": 1647,
             "offset": 82729
-          },
-          "target": "M17010:tlk:end"
+          }
         },
         {
           "id": "M17010:tlk:51",
@@ -13048,7 +13046,7 @@
         },
         {
           "id": "M17010:tlk:52:2",
-          "op": "jump",
+          "op": "end",
           "record_id": 52,
           "source": {
             "path": "Map/m17010.TLK",
@@ -13056,8 +13054,7 @@
             "record_id": 52,
             "record_bytes": 1647,
             "offset": 86023
-          },
-          "target": "M17010:tlk:end"
+          }
         },
         {
           "id": "M17010:tlk:53",
@@ -13874,7 +13871,7 @@
         },
         {
           "id": "M17010:tlk:70:3",
-          "op": "jump",
+          "op": "end",
           "record_id": 70,
           "source": {
             "path": "Map/m17010.TLK",
@@ -13882,8 +13879,7 @@
             "record_id": 70,
             "record_bytes": 1647,
             "offset": 115669
-          },
-          "target": "M17010:tlk:end"
+          }
         },
         {
           "id": "M17010:tlk:71",
@@ -14542,7 +14538,7 @@
         },
         {
           "id": "M17010:tlk:85:2",
-          "op": "jump",
+          "op": "end",
           "record_id": 85,
           "source": {
             "path": "Map/m17010.TLK",
@@ -14550,8 +14546,7 @@
             "record_id": 85,
             "record_bytes": 1647,
             "offset": 140374
-          },
-          "target": "M17010:tlk:end"
+          }
         },
         {
           "id": "M17010:tlk:86",
@@ -14797,7 +14792,7 @@
         },
         {
           "id": "M17010:tlk:91:2",
-          "op": "jump",
+          "op": "end",
           "record_id": 91,
           "source": {
             "path": "Map/m17010.TLK",
@@ -14805,8 +14800,7 @@
             "record_id": 91,
             "record_bytes": 1647,
             "offset": 150256
-          },
-          "target": "M17010:tlk:end"
+          }
         },
         {
           "id": "M17010:tlk:92",

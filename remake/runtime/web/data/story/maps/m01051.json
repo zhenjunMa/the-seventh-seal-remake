@@ -3556,7 +3556,7 @@
         },
         {
           "id": "M01051:tlk:32:2",
-          "op": "jump",
+          "op": "end",
           "record_id": 32,
           "source": {
             "path": "Map/m01051.TLK",
@@ -3564,8 +3564,7 @@
             "record_id": 32,
             "record_bytes": 1647,
             "offset": 53083
-          },
-          "target": "M01051:tlk:end"
+          }
         },
         {
           "id": "M01051:tlk:33",

@@ -2047,7 +2047,7 @@
         },
         {
           "id": "M01062:tlk:13:2",
-          "op": "jump",
+          "op": "end",
           "record_id": 13,
           "source": {
             "path": "Map/m01062.TLK",
@@ -2055,8 +2055,7 @@
             "record_id": 13,
             "record_bytes": 1647,
             "offset": 21790
-          },
-          "target": "M01062:tlk:14"
+          }
         },
         {
           "id": "M01062:tlk:14",

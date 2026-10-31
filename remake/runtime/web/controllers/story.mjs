@@ -166,7 +166,7 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
   async function animateChapter({program,mapId,draft,runTlk,joinActor,leaveActor,flagCommand,objectCommand,playback,signal}){
     signal??=playback?.signal;
     const previous={scene:state.scenes.current,view:state.scenes.captureView?.(),shadeHidden:$('openingShade').hidden,shadeOpacity:$('openingShade').style.opacity,
-      hasNpcState:Object.hasOwn(draft,'map_npc_state'),npcState:draft.map_npc_state},prepared=new Map();
+      hasNpcState:Object.hasOwn(draft,'map_npc_state'),npcState:draft.map_npc_state,entryDraft:state.sceneEntryDraft},prepared=new Map();
     let lease,view,media;
     const prepare=async(id,requestSignal)=>{
       const scene=await playbackTask(actions.prepareMap(id,{world:draft}),requestSignal);
@@ -175,6 +175,7 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
       return scene;
     };
     try{
+      state.sceneEntryDraft=draft;
       lease=await state.storyRepository?.ensureProgram(program.id,{callerMap:mapId,signal});
       if(lease)program=lease.program;
       prepared.set(mapId,await prepare(mapId,signal));
@@ -234,7 +235,7 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
       if(previous.view!==undefined)state.scenes.rollbackView?.(previous.view);
       if(previous.hasNpcState)draft.map_npc_state=previous.npcState;else delete draft.map_npc_state;
       throw error;
-    }finally{media?.dispose();view?.dispose();lease?.release();$('openingShade').hidden=previous.shadeHidden;$('openingShade').style.opacity=previous.shadeOpacity;}
+    }finally{state.sceneEntryDraft=previous.entryDraft;media?.dispose();view?.dispose();lease?.release();$('openingShade').hidden=previous.shadeHidden;$('openingShade').style.opacity=previous.shadeOpacity;}
   }
   async function runChapter(args){
     if(state.scenes.phase!=='map')return;
@@ -243,14 +244,15 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
       if(args.objectIndex!==undefined)state.scenes.setPhase('event');
       const result=await playStory(async playback=>{
         try{
-          const result=args.event?await state.chapterRunner.runEvent(args.event,{playback}):args.rest?await state.chapterRunner.runRest({explicitInteraction:true,descriptorId:args.descriptorId??null,playback}):args.objectIndex===undefined?await state.chapterRunner.runTlk({...args,playback}):await state.chapterRunner.runObject({...args,playback});
+          const result=args.event?await state.chapterRunner.runEvent(args.event,{playback}):args.rest?await state.chapterRunner.runRest({explicitInteraction:true,descriptorId:args.descriptorId??null,playback}):args.triggerId!==undefined&&args.recordId===undefined?await state.chapterRunner.runTrigger({...args,playback}):args.objectIndex===undefined?await state.chapterRunner.runTlk({...args,playback}):await state.chapterRunner.runObject({...args,playback});
           if(!playback.nativeCompletion){actions.commitView(state.scenes.current,state.world.location);actions.buildHud();actions.updateNearest();}
           return result;
         }catch(error){state.scenes.current=previous.scene;state.scenes.rollbackView(previous.view);throw error;}
       });
       if(result.story_completed)return result;
       if(result.rewards?.length)state.rewardNoticeView.show(result.rewards.map(reward=>state.itemData.definitions[reward.id].name));
-      actions.status(result.locked?'需要对应元素钥匙。':result.already_done?'宝箱已打开。':'可以继续探索。');
+      actions.status(result.locked?'需要对应元素钥匙。':result.already_done?
+        (state.chapterStory.maps[args.mapId]?.objects.find(row=>row.index===args.objectIndex)?.behavior_raw_cf===9?'机关已启动。':'宝箱已打开。'):'可以继续探索。');
       if(result.save_requested)await actions.openSaveCrystal();
       if(result.world_map_requested)state.worldMap.open(result.world_map_requested.area);
     }catch(error){if(error.gameOverPolicy)await actions.presentGameOver(error.gameOverPolicy);else actions.status(error.message,true);}
@@ -317,9 +319,13 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
     }finally{state.objectActorPreview=null;}
   }
   async function animateChapterObject({mapId,objectIndex,signal,playback}){
+    const object=state.chapterStory.maps[mapId]?.objects.find(row=>row.index===objectIndex);
+    if([2,9].includes(object?.behavior_raw_cf)){
+      if(state.scenes.current.data.id!==mapId)throw new Error('机关动作目标不是当前地图');
+      return state.scenes.current.objectRuntime.animate({objectIndex,state:2,signal});
+    }
     const resource=state.chapterResources.object_animations[mapId]?.find(row=>row.object_index_zero_based===objectIndex);
     if(!resource)throw new Error('物件动作资源尚未准备');
-    const object=state.chapterStory.maps[mapId]?.objects.find(row=>row.index===objectIndex);
     const {action,frameIndices}=nativeChestAnimation(resource,object?.behavior_raw_cf);
     const frames=await playbackTask(Promise.all(frameIndices.map(index=>index>=resource.frames.length?null:
       actions.image(resource.frames.find(frame=>frame.index===index).image, `map:${mapId}`))),signal);

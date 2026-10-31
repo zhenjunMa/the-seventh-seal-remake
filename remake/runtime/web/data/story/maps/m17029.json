@@ -4229,7 +4229,7 @@
         },
         {
           "id": "M17029:tlk:25:3",
-          "op": "jump",
+          "op": "end",
           "record_id": 25,
           "source": {
             "path": "Map/m17029.TLK",
@@ -4237,8 +4237,7 @@
             "record_id": 25,
             "record_bytes": 1647,
             "offset": 41554
-          },
-          "target": "M17029:tlk:end"
+          }
         },
         {
           "id": "M17029:tlk:26",

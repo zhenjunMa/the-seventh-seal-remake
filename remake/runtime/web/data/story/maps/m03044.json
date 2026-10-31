@@ -7610,7 +7610,7 @@
         },
         {
           "id": "M03044:tlk:56:2",
-          "op": "jump",
+          "op": "end",
           "record_id": 56,
           "source": {
             "path": "Map/m03044.TLK",
@@ -7618,8 +7618,7 @@
             "record_id": 56,
             "record_bytes": 1647,
             "offset": 92611
-          },
-          "target": "M03044:tlk:end"
+          }
         },
         {
           "id": "M03044:tlk:57",

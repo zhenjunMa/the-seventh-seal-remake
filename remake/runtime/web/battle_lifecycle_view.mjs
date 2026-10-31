@@ -15,7 +15,7 @@ const integer=(value,min=0)=>Number.isInteger(value)&&value>=min;
 // initialization repeats while source elapsed==0. Completion has no fixed
 // elapsed threshold. Pixel geometry is supplied by the owning source renderer.
 export const APPEARANCE_ALPHA_ADAPTER=Object.freeze({
-  source_clock_ms:60,complete_elapsed_raw:Object.freeze({1:7,3:null,5:null,6:null,7:39}),
+  source_clock_ms:60,complete_elapsed_raw:Object.freeze({1:7,2:null,3:null,5:null,6:null,7:39}),
   particle_step_raw:8,particle_target_raw:255,
   pixels:'8-bit alpha adapter; original scanline mask not reproduced',
 });
@@ -108,7 +108,7 @@ export class BattleLifecyclePlayback {
       if(channel.appearance){
         const appearance=channel.appearance,limit=APPEARANCE_ALPHA_ADAPTER.complete_elapsed_raw[appearance.mode];
         appearance.elapsed_raw=Math.floor(Math.max(0,now-appearance.started)/APPEARANCE_ALPHA_ADAPTER.source_clock_ms);
-        if(appearance.mode===3){
+        if(appearance.mode===2||appearance.mode===3){
           const active=appearance.particles.advance(now);appearance.elapsed_raw=appearance.particles.elapsed;appearance.render_calls=appearance.particles.calls;
           this.alphas.set(channel.actor_id,appearance.particles.effect?.draw?1:Math.min(1,appearance.elapsed_raw/30));
           if(active)return;
@@ -205,7 +205,7 @@ export class BattleLifecyclePlayback {
         const mode=channel.nativeBridge?.appearance&&step.raw_hex?channel.nativeBridge.appearance(step.raw_hex).mode:sourceMode;
         if(!integer(mode,1)){channel.blocked='appearance-mode-requires-controller-rng';channel.mode='blocked';return;}
         channel.appearance={mode,clock_raw:60,elapsed_raw:0,started:channel.deadline,render_calls:0,render_limit:null,geometry_source:null};this.alphas.set(channel.actor_id,0);
-        if(mode===3){
+        if(mode===2||mode===3){
           const effect=this.appearanceEffect?.(channel.actor_id,channel.resource_id,mode,channel.event)??null;
           if(effect?.pose)channel.pose=copy(effect.pose);
           // Real surfaces return the original per-pixel active flag. Headless

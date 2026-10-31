@@ -1,4 +1,4 @@
-"""Export source map animation and its same-frame indexed light channel.
+"""Export source map animation, frame terrain and same-frame indexed light.
 
 Original DAT/DGP/EXE inputs are read-only. Main and indexed pixels are checked
 against the independent sparse decoder before atlas assembly.
@@ -22,6 +22,8 @@ from export_combat_presentation import indexed_contribution, native_frame_sequen
 from export_skill_layers import SourceAudit
 from export_map_shadows import audit_mask, EVIDENCE as SHADOW_EVIDENCE
 from PIL import Image
+
+TERRAIN_EVIDENCE = 'ev_73b2b2323e55bfa5712a624a1e9a44958e3fa4a23d5a2fe2a0384f30a87f1b69'
 
 
 def sha(path):
@@ -60,29 +62,29 @@ def validate_cf1_action(dgp):
         raise DGPError('CF1 source drawing effect is not recovered')
 
 
-def export_bank(dgp, source, key, include_main, *, force_main=False, web=None, checks=None, outputs=None):
+def export_bank(dgp, source, key, include_main, *, force_main=False, behavior_raw_cf=None, web=None, checks=None, outputs=None):
     web = WEB if web is None else Path(web)
     tools = Path(__file__).parent
     def produce():
         local_checks, local_outputs = [], {}
-        bank = _export_bank(dgp, source, key, include_main, force_main=force_main,
+        bank = _export_bank(dgp, source, key, include_main, force_main=force_main, behavior_raw_cf=behavior_raw_cf,
                             web=web, checks=local_checks, outputs=local_outputs)
         return {'bank':bank,'checks':local_checks,'outputs':local_outputs}, [web/name.lstrip('/') for name in local_outputs]
     cache_root = RUNTIME if web.resolve() == (RUNTIME/'web').resolve() else web
     cached = resource(cache_root,'map-effect/'+key,
-        {'source':dgp.sha256,'path':source,'include_main':include_main,'force_main':force_main},
+        {'source':dgp.sha256,'path':source,'include_main':include_main,'force_main':force_main,'behavior_raw_cf':behavior_raw_cf},
         recipe_hash([Path(__file__),tools/'source/dgp.py',tools/'export_skill_layers.py',tools/'export_combat_presentation.py',tools/'export_map_shadows.py']),produce)
     if checks is not None: checks.extend(cached['checks'])
     if outputs is not None: outputs.update(cached['outputs'])
     return cached['bank']
 
 
-def _export_bank(dgp, source, key, include_main, *, force_main=False, web=None, checks=None, outputs=None):
+def _export_bank(dgp, source, key, include_main, *, force_main=False, behavior_raw_cf=None, web=None, checks=None, outputs=None):
     """Write one source-bound atlas bank; callers may use an isolated temp web."""
     web = WEB if web is None else Path(web)
     checks = [] if checks is None else checks
     outputs = {} if outputs is None else outputs
-    if force_main:
+    if force_main and behavior_raw_cf in (None, 1):
         validate_cf1_action(dgp)
     if not force_main and not any(row['active_raw'] for row in dgp.indexed_auxiliary):
         return None
@@ -141,20 +143,36 @@ def _export_bank(dgp, source, key, include_main, *, force_main=False, web=None, 
             item[channel + '_sheet'] = '/' + out.relative_to(web).as_posix()
             outputs[item[channel + '_sheet']] = sha(out)
         actions.append(item)
-    return dict(source=dict(path=source, sha256=dgp.sha256), frame_width=dgp.width,
+    bank = dict(source=dict(path=source, sha256=dgp.sha256), frame_width=dgp.width,
                 frame_height=dgp.height, actions=actions)
+    volume = next((row for row in dgp.optional_blocks if row['kind'] == 'volume'), None)
+    if volume is not None:
+        count, width, height = struct.unpack_from('<3I', dgp.extra_header)
+        if count != dgp.frame_count:
+            raise DGPError('Map terrain volume must cover the complete physical frame pool')
+        raw = dgp.data[volume['offset']:volume['offset'] + volume['bytes']]
+        plane = width * height
+        bank.update(terrain_width_cells=width, terrain_height_cells=height,
+            terrain_frames=[[[cell % width, cell // width, value]
+                for cell, value in enumerate(raw[frame * plane:(frame + 1) * plane]) if value]
+                for frame in range(count)],
+            terrain_source=dict(offset=volume['offset'], bytes=volume['bytes'],
+                sha256=hashlib.sha256(raw).hexdigest(), extra_header_raw_hex=dgp.extra_header.hex(),
+                evidence=TERRAIN_EVIDENCE))
+    return bank
 
 
 def export():
     sources = {'GAME.exe': sha(ROOT / 'GAME.exe')}
-    outputs, checks, cf1_checks, banks = {}, [], [], {}
+    outputs, checks, cf1_checks, cf2_checks, banks = {}, [], [], [], {}
     native_records = []
     wanted = {NATIVE_IDS['indexed_draw'], NATIVE_IDS['pixel_format'],
               'ev_02ca024fc6f9093e9bd38f06052ee2a4f2b2671240c4df2293cf1a50c4e2ae02',
-              'ev_7ff7092a0522a10920b1c81430af56c62cb116c3d66a5af86a35ecb5e9498a5c'}
+              'ev_7ff7092a0522a10920b1c81430af56c62cb116c3d66a5af86a35ecb5e9498a5c', TERRAIN_EVIDENCE}
     for file in ['remake/runtime/evidence/source/combat_presentation_indexed_native_20261011.json',
                  'remake/runtime/evidence/source/map_layers_native_new.json',
-                 'remake/runtime/evidence/chapter_native.json']:
+                 'remake/runtime/evidence/chapter_native.json',
+                 'remake/runtime/evidence/inner_white_forest_20261029/native_objects_bundle.json']:
         for row in json.loads((ROOT / file).read_text(encoding='utf-8'))['records']:
             if row['evidence_id'] in wanted:
                 native_records.append(row)
@@ -169,13 +187,13 @@ def export():
     assert {row['evidence_id'] for row in native_records} == wanted
     assert all(row['subject']['digest']['sha256'] == sources['GAME.exe'] for row in native_records)
 
-    def bank(source, key, include_main, *, force_main=False):
+    def bank(source, key, include_main, *, force_main=False, behavior_raw_cf=None):
         if key in banks:
             return banks[key]
         dgp = DGP(ROOT / source)
         sources[source] = dgp.sha256
-        result = export_bank(dgp, source, key, include_main, force_main=force_main,
-                             checks=cf1_checks if force_main else checks, outputs=outputs)
+        result = export_bank(dgp, source, key, include_main, force_main=force_main, behavior_raw_cf=behavior_raw_cf,
+                             checks=cf2_checks if behavior_raw_cf == 2 else cf1_checks if force_main else checks, outputs=outputs)
         if result is None:
             return None
         banks[key] = result
@@ -200,7 +218,9 @@ def export():
                 raise DGPError('Map animation source disagrees with its DAT resource identifier')
             dgp_header = (ROOT / obj['source']).read_bytes()[:3]
             cf1 = raw[0xcf] == 1 and bool(dgp_header[2])
-            value = bank(obj['source'], current['id'].lower() + '_' + Path(obj['source']).stem, True, force_main=cf1)
+            cf2 = raw[0xcf] == 2 and bool(dgp_header[2])
+            value = bank(obj['source'], current['id'].lower() + '_' + Path(obj['source']).stem, True,
+                         force_main=cf1 or cf2, behavior_raw_cf=raw[0xcf])
             if not value:
                 continue
             source = current['source']['path']
@@ -228,7 +248,7 @@ def export():
     folder = RUNTIME / 'evidence/map_effects_20261021'
     write(folder / 'native_retained.json', dict(authority='Retained native static evidence', records=native_records))
     write(folder / 'export.json', dict(passed=True, source_bytes_unchanged=True, source_hashes=sources,
-        output_hashes=outputs, roles=list(roles), maps=maps, frame_checks=checks, cf1_frame_checks=cf1_checks,
+        output_hashes=outputs, roles=list(roles), maps=maps, frame_checks=checks, cf1_frame_checks=cf1_checks, cf2_frame_checks=cf2_checks,
         original_game_execution_observed=False))
     # Keep the same source-frame shadow channel when the registered map
     # presentation assets are rebuilt. This helper never rewrites main/light.

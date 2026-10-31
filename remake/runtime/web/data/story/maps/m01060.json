@@ -21664,7 +21664,7 @@
         },
         {
           "id": "M01060:tlk:72:3",
-          "op": "jump",
+          "op": "end",
           "record_id": 72,
           "source": {
             "path": "Map/m01060.TLK",
@@ -21672,8 +21672,7 @@
             "record_id": 72,
             "record_bytes": 1647,
             "offset": 118963
-          },
-          "target": "M01060:tlk:end"
+          }
         },
         {
           "id": "M01060:tlk:73",
@@ -22300,7 +22299,7 @@
         },
         {
           "id": "M01060:tlk:86:3",
-          "op": "jump",
+          "op": "end",
           "record_id": 86,
           "source": {
             "path": "Map/m01060.TLK",
@@ -22308,8 +22307,7 @@
             "record_id": 86,
             "record_bytes": 1647,
             "offset": 142021
-          },
-          "target": "M01060:tlk:end"
+          }
         },
         {
           "id": "M01060:tlk:87",
@@ -22481,7 +22479,7 @@
         },
         {
           "id": "M01060:tlk:90:2",
-          "op": "jump",
+          "op": "end",
           "record_id": 90,
           "source": {
             "path": "Map/m01060.TLK",
@@ -22489,8 +22487,7 @@
             "record_id": 90,
             "record_bytes": 1647,
             "offset": 148609
-          },
-          "target": "M01060:tlk:end"
+          }
         },
         {
           "id": "M01060:tlk:91",
@@ -22519,7 +22516,7 @@
         },
         {
           "id": "M01060:tlk:91:2",
-          "op": "jump",
+          "op": "end",
           "record_id": 91,
           "source": {
             "path": "Map/m01060.TLK",
@@ -22527,8 +22524,7 @@
             "record_id": 91,
             "record_bytes": 1647,
             "offset": 150256
-          },
-          "target": "M01060:tlk:end"
+          }
         },
         {
           "id": "M01060:tlk:92",
@@ -22672,7 +22668,7 @@
         },
         {
           "id": "M01060:tlk:95:2",
-          "op": "jump",
+          "op": "end",
           "record_id": 95,
           "source": {
             "path": "Map/m01060.TLK",
@@ -22680,8 +22676,7 @@
             "record_id": 95,
             "record_bytes": 1647,
             "offset": 156844
-          },
-          "target": "M01060:tlk:end"
+          }
         },
         {
           "id": "M01060:tlk:96",

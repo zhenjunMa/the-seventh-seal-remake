@@ -17,11 +17,46 @@ build = importlib.util.module_from_spec(spec)
 sys.modules[spec.name] = build
 spec.loader.exec_module(build)
 from incremental import resource, write_bytes, write_json, save_png, file_hash, local_modules, build_lock
-from incremental_atlas import build_atlas
+from incremental_atlas import build_atlas, source_image
 import export_battle_packs as packs
 
 
 class BuildTests(unittest.TestCase):
+    def test_source_atlas_decode_uses_real_033_shadow_dimensions_and_restores_pillow_guard(self):
+        from PIL import Image
+        from source.dgp import DGP
+        from unittest.mock import MagicMock
+        graphics=DGP(TOOL.parents[3]/'Fight_Role/033.dgp')
+        self.assertEqual((graphics.width,graphics.height,graphics.frame_count),(1119,719,268))
+        self.assertEqual(max(action['first_frame']+action['frames_per_direction']*action['directions']
+                             for action in graphics.actions),graphics.frame_count)
+        bounds=[box for frame in range(graphics.frame_count) if (box:=graphics.decode_shadow(frame).getbbox())]
+        width=max(box[2] for box in bounds)-min(box[0] for box in bounds)
+        height=max(box[3] for box in bounds)-min(box[1] for box in bounds)
+        descriptor={'width':16*width,'height':((graphics.frame_count+15)//16)*height}
+        self.assertEqual((descriptor['width'],descriptor['height']),(17888,12223))
+        expected_pixels=descriptor['width']*descriptor['height']
+        self.assertEqual(expected_pixels,218645024)
+        opened=MagicMock();opened.__enter__.return_value=opened;opened.size=(descriptor['width'],descriptor['height'])
+        decoded=object()
+        def convert(mode):
+            self.assertEqual(mode,'RGBA');self.assertEqual(Image.MAX_IMAGE_PIXELS,expected_pixels)
+            return decoded
+        opened.convert.side_effect=convert
+        with patch.object(Image,'open',return_value=opened),patch.object(Image,'MAX_IMAGE_PIXELS',123):
+            self.assertIs(source_image(Path('verified-source.png'),descriptor),decoded)
+            self.assertEqual(Image.MAX_IMAGE_PIXELS,123)
+            opened.size=(descriptor['width']-1,descriptor['height']);opened.convert.reset_mock()
+            with self.assertRaisesRegex(ValueError,'geometry mismatch'):
+                source_image(Path('verified-source.png'),descriptor)
+            opened.convert.assert_not_called();self.assertEqual(Image.MAX_IMAGE_PIXELS,123)
+        with tempfile.TemporaryDirectory() as temporary:
+            image=Image.new('RGBA',(8,7),(17,31,47,255));path=Path(temporary)/'source.png';image.save(path)
+            with patch.object(Image,'MAX_IMAGE_PIXELS',4):
+                self.assertEqual(source_image(path,{'width':8,'height':7}).tobytes(),image.tobytes())
+                self.assertEqual(Image.MAX_IMAGE_PIXELS,4)
+                with self.assertRaises(Image.DecompressionBombError):Image.open(path)
+
     def test_exporter_function_bodies_have_no_unbound_global_names(self):
         allowed=set(dir(builtins))|{'__file__','__name__','__package__','__doc__','__spec__','__loader__','__builtins__'}
         names={step.tool for step in build.STEPS.values() if step.tool.endswith('.py')}|{'incremental.py','incremental_atlas.py'}

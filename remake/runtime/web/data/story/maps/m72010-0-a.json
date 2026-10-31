@@ -9290,6 +9290,194 @@
     ],
     "exits_by_map": [
       {
+        "id": 1,
+        "state": "ready",
+        "cells": [
+          {
+            "x": 43,
+            "y": 48
+          },
+          {
+            "x": 44,
+            "y": 48
+          },
+          {
+            "x": 45,
+            "y": 48
+          },
+          {
+            "x": 46,
+            "y": 48
+          },
+          {
+            "x": 47,
+            "y": 48
+          },
+          {
+            "x": 48,
+            "y": 48
+          },
+          {
+            "x": 49,
+            "y": 48
+          },
+          {
+            "x": 50,
+            "y": 48
+          },
+          {
+            "x": 51,
+            "y": 48
+          },
+          {
+            "x": 52,
+            "y": 48
+          }
+        ],
+        "target_map": "M72020-0-S",
+        "entry": {
+          "x": 48,
+          "y": 272,
+          "direction": 0,
+          "cell_x": 3,
+          "cell_y": 17,
+          "native_x": 24,
+          "native_y": 136
+        },
+        "conditions": [],
+        "source": {
+          "path": "Map/m72010-0-a.dat",
+          "sha256": "322da8a758dc24e25a7bdff70189f2f7be25f1775b5de6b6b55eb377aa193943",
+          "descriptor_offset": 184498,
+          "descriptor_bytes": 66,
+          "descriptor_hex": "00000000000000000000000000000000006d37323032302d302d532e6461740000000000000001000000040000000000000000000000000000000000000000000000",
+          "compact_field_expansion_evidence": null,
+          "target_path": "Map/m72020-0-s.dat",
+          "target_sha256": "cb471710205721ed470e72f9a7ae5163e6a2874d7c9e9acf9216e813c59e5065",
+          "target_entry_marker": 1,
+          "entry_sort_code": 4,
+          "entry_terrain_raw": 0,
+          "entry_trigger_raw": 0,
+          "entry_scan_cells": [
+            {
+              "x": 3,
+              "y": 17,
+              "offset": 64754
+            }
+          ],
+          "entry_sorted_cells": [
+            {
+              "x": 3,
+              "y": 17
+            }
+          ],
+          "entry_sort": "x descending; stable ties",
+          "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
+          "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
+          "native_evidence": {
+            "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+            "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+            "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+            "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+          }
+        },
+        "execution": "Native transition descriptor only; map-entry TLK/ANM and their once-only checks must complete separately.",
+        "limitations": [
+          "Static source/code evidence; original timing not observed",
+          "Continuous keyboard movement is runtime policy"
+        ]
+      },
+      {
+        "id": 2,
+        "state": "ready",
+        "cells": [
+          {
+            "x": 1,
+            "y": 20
+          },
+          {
+            "x": 1,
+            "y": 21
+          },
+          {
+            "x": 1,
+            "y": 22
+          },
+          {
+            "x": 1,
+            "y": 23
+          },
+          {
+            "x": 1,
+            "y": 24
+          },
+          {
+            "x": 1,
+            "y": 25
+          },
+          {
+            "x": 1,
+            "y": 26
+          },
+          {
+            "x": 1,
+            "y": 27
+          }
+        ],
+        "target_map": "M72020-1-E",
+        "entry": {
+          "x": 848,
+          "y": 272,
+          "direction": 6,
+          "cell_x": 53,
+          "cell_y": 17,
+          "native_x": 424,
+          "native_y": 136
+        },
+        "conditions": [],
+        "source": {
+          "path": "Map/m72010-0-a.dat",
+          "sha256": "322da8a758dc24e25a7bdff70189f2f7be25f1775b5de6b6b55eb377aa193943",
+          "descriptor_offset": 184564,
+          "descriptor_bytes": 66,
+          "descriptor_hex": "00000000000000000000000000000000006d37323032302d312d452e6461740000000000000002000000020000000000000000000000000000000000000000000000",
+          "compact_field_expansion_evidence": null,
+          "target_path": "Map/m72020-1-e.dat",
+          "target_sha256": "85e00af5e4a68ce3d96d5b051a9e985ad5790eea75452ec378b753fb4db0da7d",
+          "target_entry_marker": 2,
+          "entry_sort_code": 2,
+          "entry_terrain_raw": 0,
+          "entry_trigger_raw": 0,
+          "entry_scan_cells": [
+            {
+              "x": 53,
+              "y": 17,
+              "offset": 67954
+            }
+          ],
+          "entry_sorted_cells": [
+            {
+              "x": 53,
+              "y": 17
+            }
+          ],
+          "entry_sort": "y descending; stable ties",
+          "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
+          "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
+          "native_evidence": {
+            "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+            "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+            "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+            "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+          }
+        },
+        "execution": "Native transition descriptor only; map-entry TLK/ANM and their once-only checks must complete separately.",
+        "limitations": [
+          "Static source/code evidence; original timing not observed",
+          "Continuous keyboard movement is runtime policy"
+        ]
+      },
+      {
         "id": 3,
         "state": "ready",
         "cells": [

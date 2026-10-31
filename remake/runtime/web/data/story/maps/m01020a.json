@@ -5760,7 +5760,7 @@
         },
         {
           "id": "M01020A:tlk:8:3",
-          "op": "jump",
+          "op": "end",
           "record_id": 8,
           "source": {
             "path": "Map/m01020a.TLK",
@@ -5768,8 +5768,7 @@
             "record_id": 8,
             "record_bytes": 1647,
             "offset": 13555
-          },
-          "target": "M01020A:tlk:end"
+          }
         },
         {
           "id": "M01020A:tlk:9",
@@ -6195,7 +6194,7 @@
         },
         {
           "id": "M01020A:tlk:18:2",
-          "op": "jump",
+          "op": "end",
           "record_id": 18,
           "source": {
             "path": "Map/m01020a.TLK",
@@ -6203,8 +6202,7 @@
             "record_id": 18,
             "record_bytes": 1647,
             "offset": 30025
-          },
-          "target": "M01020A:tlk:end"
+          }
         },
         {
           "id": "M01020A:tlk:19",
@@ -6403,7 +6401,7 @@
         },
         {
           "id": "M01020A:tlk:23:2",
-          "op": "jump",
+          "op": "end",
           "record_id": 23,
           "source": {
             "path": "Map/m01020a.TLK",
@@ -6411,8 +6409,7 @@
             "record_id": 23,
             "record_bytes": 1647,
             "offset": 38260
-          },
-          "target": "M01020A:tlk:end"
+          }
         },
         {
           "id": "M01020A:tlk:24",

@@ -7276,6 +7276,31 @@
         }
       ]
     },
+    "201": {
+      "source": {
+        "path": "ROLE/201.dgp",
+        "sha256": "abc750761657826b2072ffdcac32604fcc3c02bf1ccbe4c4c4d72b2abf5a020f"
+      },
+      "frame_width": 736,
+      "frame_height": 432,
+      "event_only": false,
+      "actions": [
+        {
+          "index": 0,
+          "first_frame": 0,
+          "frame_count": 16,
+          "directions": 1,
+          "shadow_sheet": "/assets/map_shadows/201/action_00_shadow.png",
+          "shadow_geometry": {
+            "x": 60,
+            "y": 334,
+            "width": 579,
+            "height": 86
+          },
+          "sha256": "42aaed9f5ad71a77f07df06ebe1e671cc377f70b97e656fe9b19e0983394dd31"
+        }
+      ]
+    },
     "205": {
       "source": {
         "path": "ROLE/205.dgp",

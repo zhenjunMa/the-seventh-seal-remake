@@ -9840,7 +9840,7 @@
         },
         {
           "id": "M01030:tlk:82:2",
-          "op": "jump",
+          "op": "end",
           "record_id": 82,
           "source": {
             "path": "Map/m01030.TLK",
@@ -9848,8 +9848,7 @@
             "record_id": 82,
             "record_bytes": 1647,
             "offset": 135433
-          },
-          "target": "M01030:tlk:end"
+          }
         },
         {
           "id": "M01030:tlk:83",
