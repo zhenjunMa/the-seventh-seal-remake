@@ -132,8 +132,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
     try { await state.scenes.loadLocation(at,{reason,restoredWorld,nativeSortCode});if(state.scenes.phase!=='map')return; buildHud(); updateNearest(); actions.log({type:'scene-enter',from,map_id:at.map_id,x:at.x,y:at.y,reason}); actions.status(reason==='restore'?'进度已载入，可以继续探索。':'已进入场景。'); canvas.focus({preventScroll:true}); }
     catch(error){actions.log({type:'scene-failed',error:error.message,from,to:at.map_id});if(error.gameOverPolicy)await actions.presentGameOver(error.gameOverPolicy);else actions.status(`${error.message}，当前场景已保留。`,true);}
   }
-  function follow() {const im=state.scenes.current.bitmap,at=state.world.location,step=state.view.collisionFeedback?.step;
-    Object.assign(state.view,openingCamera({...at,x:at.x+(step?.x??0),y:at.y+(step?.y??0)},im.width,im.height));}
+  function follow() {const im=state.scenes.current.bitmap;Object.assign(state.view,openingCamera(state.world.location,im.width,im.height));}
   function fit(){if(!state.scenes?.current)return;const im=state.scenes.current.bitmap;state.view.zoom=Math.min(640/im.width,480/im.height)*.97;state.view.x=im.width/2;state.view.y=im.height/2;state.view.follow=false;}
   function resize(){const rect=$('screen').getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,2);state.cssWidth=rect.width;state.cssHeight=rect.height;for(const target of [canvas,$('battleCanvas')]){target.width=Math.round(rect.width*dpr);target.height=Math.round(rect.height*dpr);}ctx.setTransform(dpr,0,0,dpr,0,0);ctx.imageSmoothingEnabled=false;state.engine?.resize();}
   function npcAvailable(npc) {
@@ -262,15 +261,27 @@ export function createMapController({state, actions, $, canvas, ctx}) {
         motionState.reset();gaitScene=state.scenes.current;gaitRole=state.selectedRole;
       }
       const active=state.world.value.party.find(actor=>actor.id===state.selectedRole),effectivePlayer=state.mapVitals.get(state.selectedRole)??active;
-      if((dx||dy)&&effectivePlayer.hp.current>0){const length=Math.hypot(dx,dy),running=state.running;
+      if((dx||dy)&&effectivePlayer.hp.current>0){const running=state.running;
         const headerRawHex=state.chapterStory.maps[at.map_id]?.header_raw_hex;
         const motion=mapMotionProfile(sheetAction(running?2:1),state.scenes.current.data.movement,headerRawHex);
         const movement=state.scenes.current.movement;
-        const moved=movement.moveAndSlide(at.x,at.y,dx/length*motion.speed*delta,dy/length*motion.speed*delta,
-          {obstacles:movement.actorObstacles(state.scenes.current.npcs.filter(npcAvailable))});
+        let encounter=null,encounterState=state.world.value.encounters??initialEncounterState(state.world.value.party),encounterAdvanced=false;
+        const moved=motionState.movement.advance(movement,at,{dx,dy,profile:motion,elapsedMs:delta*1000,
+          obstacles:movement.actorObstacles(state.scenes.current.npcs.filter(npcAvailable)),onTravel:segment=>{
+            const cell=movement.at(segment.x,segment.y),exit=cell.trigger?transitionFor(cell):null;
+            const story=state.scenes.current.data.story_triggers.find(trigger=>trigger.cells.some(c=>c.x===cell.x&&c.y===cell.y));
+            const stop=Boolean(exit||story&&state.lastStoryTrigger!==`${at.map_id}:${story.id}`);
+            if(state.encounterData&&!state.battleUnavailable){
+              const preview=previewMovement(encounterState,{party:state.world.value.party,leader_id:state.selectedRole,map_id:at.map_id,
+                dx:segment.dx,dy:segment.dy,distance:segment.distance,step_pixels:motion.keyboardStepSize,transition:stop,phase:'map'},state.encounterData);
+              encounterState=preview.state;encounter=preview.encounter;encounterAdvanced=true;
+            }
+            return !encounter&&!stop;
+          }});
         pose=motionState.advance(moved,{from:at,dx,dy,running,elapsedMs:delta*1000,
           role:role(),movement:state.scenes.current.data.movement,headerRawHex});
         state.world.setPosition(moved.x,moved.y,pose.direction??at.direction);state.view.follow=true;
+        if(encounterAdvanced&&!encounter)state.world.setEncounterState(encounterState);
         const reached=state.scenes.current.movement.at(moved.x,moved.y),exit=reached.trigger?transitionFor(reached):null;
         const storyTrigger=state.scenes.current.data.story_triggers.find(trigger=>trigger.cells.some(cell=>cell.x===reached.x&&cell.y===reached.y));
         if(storyTrigger){
@@ -283,19 +294,13 @@ export function createMapController({state, actions, $, canvas, ctx}) {
         }
         else if(moved.blocked&&moved.hit?.trigger){if(state.lastBoundary!==`${at.map_id}:${moved.hit.trigger.id}`){state.lastBoundary=`${at.map_id}:${moved.hit.trigger.id}`;actions.status('这条出口的执行规则尚未纳入当前片段。');}}
         else {state.lastBoundary='';state.lastExit='';}
-        if(moved.moved&&state.encounterData&&state.scenes.phase==='map'&&!state.battleUnavailable){
-          const preview=previewMovement(state.world.value.encounters??initialEncounterState(state.world.value.party),{
-            party:state.world.value.party,leader_id:state.selectedRole,map_id:at.map_id,dx:moved.x-at.x,dy:moved.y-at.y,transition:Boolean(exit),phase:'map'},state.encounterData);
-          if(preview.encounter){actions.guarded(()=>actions.startBattle(preview.encounter,preview.state))();}
-          else if(preview.steps||moved.x!==at.x||moved.y!==at.y)state.world.setEncounterState(preview.state);
-        }
+        if(encounter&&state.scenes.phase==='map')actions.guarded(()=>actions.startBattle(encounter,encounterState))();
       }
       pose??=motionState.advance(null,{from:at,role:role(),elapsedMs:delta*1000});
       state.view.action=pose.action;state.view.frame=pose.frame;
       state.view.collisionFeedback=pose.feedback;state.clock=pose.elapsed;
       if(state.view.follow)follow();updateNearest();
-    }else {const step=state.view.collisionFeedback?.step;motionState.reset();state.view.collisionFeedback=null;
-      if(state.view.follow&&step&&(step.x||step.y))follow();}
+    }else {motionState.reset();state.view.collisionFeedback=null;}
     paint();
   }
   return {role, sheetAction, buildHud, prepareMap, validateEntry, commitView, changeMap, follow, fit, resize, npcAvailable, updateNearest, objectBitmap, transitionFor, renderWorldMap,selectWorldMapDestination,closeWorldMap, routeExit, drawCollision, paint, updateExploration,captureScene,captureSavePreview};

@@ -1,4 +1,4 @@
-import {locomotion} from './movement.mjs';
+import {locomotion,KeyboardMovement} from './movement.mjs';
 
 // Native 46CED0 scales the movement visit interval, not the final atlas frame
 // period. Keyboard motion stays continuous; gait phase follows accepted travel.
@@ -7,8 +7,10 @@ export function mapStepGeometry(movement={},headerRawHex='') {
     ?parseInt(headerRawHex.slice(0x144*2,0x144*2+2),16):1;
   const coordinateShift=movement.native_coordinate_shift??3;
   const stepShift=movement.native_step_shift??sourceStep;
-  const stepSize=2**stepShift*(movement.native_to_pixel_scale??2);
-  return {coordinateShift,stepSize,cellSize:movement.cell_size??16};
+  const keyboardShift=movement.native_camera_step_shift??(/^[0-9a-f]+$/i.test(headerRawHex)&&headerRawHex.length>0x145*2+1
+    ?parseInt(headerRawHex.slice(0x145*2,0x145*2+2),16):stepShift);
+  const scale=movement.native_to_pixel_scale??2,stepSize=2**stepShift*scale;
+  return {coordinateShift,stepSize,keyboardStepSize:2**keyboardShift*scale,keyboardLookahead:2**keyboardShift,cellSize:movement.cell_size??16};
 }
 
 export function mapMotionProfile(action,movement,headerRawHex='',speedBias=0) {
@@ -42,7 +44,7 @@ function logicalCount(action) {
 export class DistanceGait {
   constructor(){this.reset();}
   reset(){this.action=0;this.phase=0;this.elapsed=0;}
-  advance(action,{dx=0,dy=0,elapsedMs=0,stride=1,inPlaceSpeed=0}={}) {
+  advance(action,{dx=0,dy=0,distance=null,elapsedMs=0,stride=1,inPlaceSpeed=0}={}) {
     const count=logicalCount(action),moving=action.index!==0;
     if(this.action!==action.index){
       if(!moving||this.action===0)this.phase=0;
@@ -51,7 +53,7 @@ export class DistanceGait {
     if(moving){
       // Native diagonal steps change both axes by stepSize. The controller
       // normalizes speed; using per-axis travel also scales diagonal gait.
-      const travel=Math.max(Math.abs(dx),Math.abs(dy))||Math.max(0,inPlaceSpeed)*Math.max(0,elapsedMs)/1000;
+      const travel=distance??(Math.max(Math.abs(dx),Math.abs(dy))||Math.max(0,inPlaceSpeed)*Math.max(0,elapsedMs)/1000);
       this.phase+=travel/(stride*count);
     }else {
       const interval=Math.max(20,action.interval_raw??action.interval_ms_preview??180);
@@ -65,13 +67,12 @@ export class DistanceGait {
   }
 }
 
-// The initial body impact and gait-driven ground recoil are presentation only.
-// Track normals rather than tiles so wall seams cannot restart the impact.
-// The ground recoil carries the shadow and follow camera, then settles on release.
+// The initial body impact is presentation only. Sustained wall motion now
+// comes from real keyboard microsteps, including the followed camera/shadow.
 export class CollisionFeedback {
   constructor(){this.reset();}
-  reset(){this.contacts=new Set();this.time=0;this.lastImpact=new Map();this.pulses=[];this.step={x:0,y:0};}
-  advance(result,{dx=0,dy=0,running=false,elapsedMs=0,blocked=false,stepSize=0,stridePhase=0}={}){
+  reset(){this.contacts=new Set();this.time=0;this.lastImpact=new Map();this.pulses=[];}
+  advance(result,{dx=0,dy=0,running=false,elapsedMs=0}={}){
     const dt=Math.max(0,elapsedMs);this.time+=dt;
     const contacts=new Map();
     for(const hit of dx||dy?result?.contacts??[]:[]){
@@ -92,37 +93,31 @@ export class CollisionFeedback {
       x+=pulse.x*amount;y+=pulse.y*amount;}
     this.pulses=this.pulses.filter(pulse=>pulse.age<160);
     for(const [key,time]of this.lastImpact)if(this.time-time>=220)this.lastImpact.delete(key);
-    let normalX=0,normalY=0;
-    if(blocked)for(const normal of contacts.values()){normalX+=normal.x;normalY+=normal.y;}
-    const length=Math.hypot(normalX,normalY)||1;
-    const recoil=stepSize*(1-Math.cos(stridePhase*Math.PI))/2;
-    const blend=1-Math.exp(-dt/24);
-    this.step.x+=(normalX/length*recoil-this.step.x)*blend;
-    this.step.y+=(normalY/length*recoil-this.step.y)*blend;
     const scale=Math.min(1,2.5/(Math.hypot(x,y)||1));
-    return {x:x*scale,y:y*scale,step:{...this.step}};
+    return {x:x*scale,y:y*scale};
   }
 }
 
 // Shared exploration presentation for the formal controller and asset-free
-// preview. Blocked stepping retains the chosen walk/run cadence. Only accepted
-// world travel contributes encounter distance; recoil stays in presentation.
+// preview. KeyboardMovement supplies actual travelled distance even when wall
+// microsteps cancel within a render frame; gait never uses only net movement.
 export class MapLocomotion {
-  constructor(){this.gait=new DistanceGait();this.feedback=new CollisionFeedback();}
+  constructor(){this.movement=new KeyboardMovement();this.gait=new DistanceGait();this.feedback=new CollisionFeedback();}
   get action(){return this.gait.action;}
-  reset(){this.gait.reset();this.feedback.reset();}
+  reset(){this.movement.reset();this.gait.reset();this.feedback.reset();}
   advance(result,{from,dx=0,dy=0,running=false,elapsedMs=0,role,movement,headerRawHex=''}={}){
     const travelX=result?result.x-from.x:0,travelY=result?result.y-from.y:0;
-    const moving=Math.hypot(travelX,travelY)>1e-4,blocked=Boolean((dx||dy)&&result?.blocked&&!moving);
-    const choice=locomotion({dx:moving?(Math.abs(travelX)>1e-4?travelX:0):dx,
-      dy:moving?(Math.abs(travelY)>1e-4?travelY:0):dy,running},moving||blocked);
+    if(!(dx||dy))this.movement.reset();
+    const moving=(result?.travel??Math.hypot(travelX,travelY))>1e-4,blocked=Boolean((dx||dy)&&result?.blocked&&!moving);
+    const heading=result?.heading??{dx:travelX,dy:travelY};
+    const choice=locomotion({dx:moving?(Math.abs(heading.dx)>1e-4?heading.dx:0):dx,
+      dy:moving?(Math.abs(heading.dy)>1e-4?heading.dy:0):dy,running},moving||blocked&&!result?.stopped);
     const action=role.actions.find(action=>action.index===choice.action);
     const profile=choice.action?mapMotionProfile(action,movement,headerRawHex):null;
-    const frame=this.gait.advance(action,{dx:travelX,dy:travelY,elapsedMs,stride:profile?.stride,
-      inPlaceSpeed:blocked?profile.speed:0});
+    const frame=this.gait.advance(action,{dx:travelX,dy:travelY,distance:result?.travel,elapsedMs,stride:profile?.stride,
+      inPlaceSpeed:blocked&&!result?.stopped?profile.speed:0});
     return {...choice,frame,blocked,elapsed:this.gait.elapsed,
-      feedback:this.feedback.advance(result,{dx,dy,running,elapsedMs,blocked,
-        stepSize:profile?.stepSize,stridePhase:this.gait.phase*logicalCount(action)})};
+      feedback:this.feedback.advance(result,{dx,dy,running,elapsedMs})};
   }
 }
 // Older route assets retain their original exporter. The verified story table
