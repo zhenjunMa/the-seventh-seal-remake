@@ -116,6 +116,7 @@ export function createAudioController(manifest, options = {}) {
       requireValue(Number.isFinite(draw) && draw >= 0 && draw < 1, '音乐随机数无效');
       desired = mapping.pool[Math.floor(draw * mapping.pool.length)];
     } else if (!mapping?.pool && !mapping?.inherit) desired = mapping?.clip ?? null;
+    if(changed&&scene.battle)positions.delete(desired);
     syncMusic(); return snapshot();
   }
   function setMusic(clipId) {

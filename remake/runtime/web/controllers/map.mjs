@@ -261,7 +261,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
         motionState.reset();gaitScene=state.scenes.current;gaitRole=state.selectedRole;
       }
       const active=state.world.value.party.find(actor=>actor.id===state.selectedRole),effectivePlayer=state.mapVitals.get(state.selectedRole)??active;
-      if((dx||dy)&&effectivePlayer.hp.current>0){const length=Math.hypot(dx,dy),running=state.keys.has('Shift');
+      if((dx||dy)&&effectivePlayer.hp.current>0){const length=Math.hypot(dx,dy),running=state.running;
         const headerRawHex=state.chapterStory.maps[at.map_id]?.header_raw_hex;
         const motion=mapMotionProfile(sheetAction(running?2:1),state.scenes.current.data.movement,headerRawHex);
         const movement=state.scenes.current.movement;

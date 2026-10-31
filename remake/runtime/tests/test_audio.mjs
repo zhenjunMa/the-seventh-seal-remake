@@ -222,9 +222,13 @@ test('confirmed native battle music pool selects once per encounter and world-ma
   audio.setScene({mapId:'M70010'});audio.unlock();await tick();voices[0].currentTime=21;
   audio.setScene({mapId:'M70010',battle:true,stageId:'stage13.scn'});await tick();
   assert.equal(audio.snapshot().desired_clip,'sound/Fight/FightBGM02.wav');
+  voices.at(-1).currentTime=8;
   audio.setScene({mapId:'M70010',battle:true,stageId:'stage13.scn'});await tick();assert.equal(draws,1);
+  assert.equal(audio.snapshot().music.current_time,8,'The same encounter does not restart its music');
   audio.setScene({mapId:'M70010',worldMap:true});await tick();assert.equal(audio.snapshot().desired_clip,'sound/mworld.wav');
   audio.setScene({mapId:'M70010'});await tick();assert.equal(audio.snapshot().music.current_time,21);
+  audio.setScene({mapId:'M70010',battle:true,stageId:'stage13.scn'});await tick();
+  assert.equal(draws,2);assert.equal(audio.snapshot().music.current_time,0,'A fresh encounter plays the intro from the beginning');
 });
 
 test('actor DGP sounds use the same logical frame and can play alongside a CHR cue without repeating', async () => {

@@ -23,7 +23,7 @@ function fixture({wall=false,roleId='001'}={}) {
     movement:new MovementMap(movement),npcs:[],objects:[]};
   const nodes=new Map(),$=id=>{if(!nodes.has(id))nodes.set(id,{dataset:{}});return nodes.get(id);};
   const state={world,scenes:{phase:'map',current:scene},resources:{revision:0,retainScopes(){}},
-    actorResourcesByMap:new Map(),openingResources:{roles:{}},keys:new Set(),selectedRole:roleId,
+    actorResourcesByMap:new Map(),openingResources:{roles:{}},keys:new Set(),running:false,selectedRole:roleId,
     catalog:{roles:[role]},mapVitals:new Map(),view:{action:0,frame:0,follow:false,zoom:1},
     clock:0,chapterStory:{maps:{}},engine:{presentMap(){}},battleUnavailable:''};
   const controller=createMapController({state,actions:{},$,canvas:{},ctx:{}});let now=0;
@@ -47,7 +47,7 @@ test('actual controller travel and gait agree across 30/60/120Hz and all three p
   for(const roleId of ['001','002','003'])for(const running of [false,true]){
     const results=[];
     for(const hz of [30,60,120]){
-      const f=fixture({roleId});f.state.keys.add('ArrowRight');if(running)f.state.keys.add('Shift');
+      const f=fixture({roleId});f.state.keys.add('ArrowRight');f.state.running=running;
       for(let n=0;n<hz;n++)f.step(1000/hz);
       results.push({distance:f.state.world.location.x-300,frame:f.state.view.frame});
       assert.equal(f.state.view.action,running?2:1);assert.ok(Number.isInteger(f.state.view.frame));
@@ -80,7 +80,7 @@ test('wall contact stops travel but preserves slow stepping until release, with 
 test('controller slides with actual heading and stable gait at 30/60/120Hz without wall oscillation',()=>{
   const results=[];
   for(const hz of [30,60,120]){
-    const f=fixture({wall:true});f.state.keys=new Set(['ArrowRight','ArrowDown','Shift']);
+    const f=fixture({wall:true});f.state.keys=new Set(['ArrowRight','ArrowDown']);f.state.running=true;
     for(let n=0;n<hz;n++)f.step(1000/hz);
     const at=f.state.world.location;
     assert.ok(at.x>395.99&&at.x<396);assert.equal(at.direction,7);assert.equal(f.state.view.action,2);
@@ -107,7 +107,7 @@ test('subpixel travel into a wall keeps a valid heading when the direction filte
 });
 
 test('wall impact moves only the body, finishes after release and clears on a phase change',()=>{
-  const f=fixture({wall:true});f.state.keys=new Set(['ArrowRight','Shift']);
+  const f=fixture({wall:true});f.state.keys=new Set(['ArrowRight']);f.state.running=true;
   f.step(40);const at={...f.state.world.location};f.step(40);
   assert.deepEqual(f.state.world.location,at);assert.ok(f.state.view.collisionFeedback.x<0);
   assert.equal(f.state.view.action,1,'running becomes walking only while fully blocked');

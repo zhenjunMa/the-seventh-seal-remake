@@ -85,6 +85,8 @@ test('cancelling cached view preparation leaves the cache reusable and ignores i
 test('pending detached HUD cannot steal an old return button or install after cancellation, including unstarted battle cleanup',async()=>{
   hudPreparation=deferred();const gate=hudPreparation,f=fixture(),running=f.run();await until(()=>f.state.scriptedBattleSession?.menu?.testPrepareStarted);
   assert.deepEqual(f.$('battleHud').childNodes,[f.oldButton]);assert.equal(f.state.battle.state,null);
+  assert.equal(f.state.scenes.phase,'battle-loading');
+  assert.deepEqual(f.events.filter(event=>event.battle),[{mapId:f.draft.location.map_id,battle:true,stageId:group.stage}]);
   await cancel(f,running);const replacement=f.$('battleHud').ownerDocument.createElement();f.$('battleHud').replaceChildren(replacement);
   gate.resolve();hudPreparation=null;await new Promise(resolve=>setImmediate(resolve));
   assert.deepEqual(f.$('battleHud').childNodes,[replacement]);assert.equal(f.state.battle,f.previous.battle);assert.equal(f.previous.battleMenu.disposed,false);

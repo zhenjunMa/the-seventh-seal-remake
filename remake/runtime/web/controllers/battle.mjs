@@ -153,7 +153,7 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
         state.battleView.draw(snapshot,now,{entryPreview:true});
         state.battleMenu.draw(now,state.battleView.actorPositions());state.battleMenu.paintTo(state.engine?.battle.surface.canvas??$('battleCanvas'));
         state.engine?.battle.surface.endFrame();
-        // Capture only the prepared battlefield. Entry records, audio and RNG
+        // Capture only the prepared battlefield. Actor entry records, audio and RNG
         // begin once, on the first live battle frame after the transition.
         return captureTransition('battle');
       },transitionOptions);
@@ -178,6 +178,7 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
       if(sample.actors.filter(actor=>actor.side==='player').every(actor=>actor.hp.current===0))throw new Error('队伍已经倒下，请载入进度后继续。');
       const mode=newParty?'party':group?'forest':'sample';state.battleView=await prepareView({mode,newParty,stagePath:group?'/'+battleStage(group.stage).path:null,lifecycle:Boolean(group),actors:sample.actors,skills:sample.skills,inventory:state.world.value.inventory,onProgress:p=>progress({completed:10+75*p.completed/p.total,total:100})});state.battleView.setRoster(sample.actors,sample.skills);
       state.battle=createCombat(state.world,newParty,state.battleView);
+      state.audio?.setScene({mapId:state.world.location.map_id,battle:true,stageId:group?.stage??null});
       await prepareHud(newParty,{onProgress:p=>progress({completed:(p.stage==='result'?95:85)+5*p.completed/p.total,total:100})});
       progress({completed:100,total:100});
       });
@@ -188,10 +189,9 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
       const rngSeed=group?encounterState.rng_state:0x20261011;
       state.battleRng=createNativeRng(rngSeed);state.battleNatural=Boolean(group);
       await revealBattle(before,()=>state.battle.start({...sample,lifecycle_enabled:Boolean(state.battleView.lifecycle),side_priority:state.sidePriority,rng:state.battleRng,source:{...sample.source,rng_seed:rngSeed,rng_seed_policy:group?'persistent-development-global-stream':'controlled-development-seed'}}));
-      state.audio?.setScene({mapId:state.world.location.map_id,battle:true,stageId:group?.stage??null});
       if(group)actions.log({type:'field-encounter',group,location:state.world.location,counter_after:state.world.value.encounters.counters[state.selectedRole]});
       actions.status('满槽后选择招式和目标。Esc 收起轮盘，方向键切换人物，空格打开轮盘；也可用 Tab / X / Z 切换满槽人物。');
-    }catch(error){before?.destroy?.();state.battleView?.stop('战斗启动失败');state.battleMenu?.dispose();state.battleMenu=null;canvas.hidden=false;for(const id of ['battleCanvas','battleHud','battleCommands'])$(id).hidden=true;Object.assign(state.view,state.battleCheckpoint);state.scenes.setPhase('map');throw error;}
+    }catch(error){before?.destroy?.();state.battleView?.stop('战斗启动失败');state.battleMenu?.dispose();state.battleMenu=null;canvas.hidden=false;for(const id of ['battleCanvas','battleHud','battleCommands'])$(id).hidden=true;Object.assign(state.view,state.battleCheckpoint);state.scenes.setPhase('map');state.audio?.setScene({mapId:state.world.location.map_id,battle:false});throw error;}
   }
   async function startScriptedBattle({group,draft,playback,signal=playback?.signal}){
     if(state.scriptedBattleSession||state.skillTestSession||state.scenes.phase!=='event')throw new Error('剧情战斗入口状态无效');
@@ -221,13 +221,13 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
       session.view=state.battleView=preparedView;
       session.view.setRoster(sample.actors,sample.skills);
       session.battle=state.battle=createCombat(simulation.world,true,session.view);state.battleRng=simulation.rng;
+      state.audio?.setScene({mapId:draft.location.map_id,battle:true,stageId:group.stage});
       await prepareHud(true,{world:simulation.world,battle:session.battle,owner:session,signal});check();
       await playbackTask(revealBattle(before,()=>state.battle.start({...sample,lifecycle_enabled:true,rng:simulation.rng,side_priority:state.sidePriority,
         source:{...sample.source,scripted_battle:true,record:group.source,rng_seed:simulation.encounters.rng_state,
           rng_seed_policy:'persistent-development-global-stream',transition_draw:simulation.transitionRaw,
           transition_visual_rng_policy:'Source kind uses CRT; existing pixel-transition adapter uses its separate presentation random source.'}}),
         {kind:simulation.transitionKind,signal},isCurrent),signal);check();
-      state.audio?.setScene({mapId:draft.location.map_id,battle:true,stageId:group.stage});
       actions.log({type:'scripted-battle-enter',group,revision,party:draft.party.map(role=>role.id)});
       actions.status('剧情战斗：选择招式和目标，战斗结束后继续剧情。');
       const result=await finished;check();
@@ -282,13 +282,13 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
       if(state.world!==session.mapWorld||state.world.value.revision!==session.revision)throw new Error('资源加载期间世界状态已变化');
       session.battle=state.battle=createCombat(world,true,session.view);
       const rngSeed=world.value.encounters?.rng_state??0x20261020;state.battleRng=createNativeRng(rngSeed);
+      state.audio?.setScene({mapId:state.world.location.map_id,battle:true,stageId:rules.stage.music_stage_id??'stage13.scn'});
       await prepareHud(true,{returnLabel:'返回技巧测试',onProgress:p=>progress({completed:85+15*p.completed/p.total,total:100})});
       progress({completed:100,total:100});
       });
       await revealBattle(before,()=>state.battle.start({...sample,lifecycle_enabled:true,rng:state.battleRng,side_priority:state.sidePriority,
         source:{...sample.source,rng_seed:state.battleRng.state,rng_seed_policy:'separate-technique-test-stream'}}));
       $('mapName').textContent='技巧测试';
-      state.audio?.setScene({mapId:state.world.location.map_id,battle:true,stageId:rules.stage.music_stage_id??'stage13.scn'});
       actions.status('技巧测试：目标不主动攻击，技能不消耗HP／MP；道具照常消耗。选择逃跑返回技巧页面。');
       actions.log({type:'technique-test-opened',battle_id:state.battle.state.id,stage_id:rules.stage.stage_id,enemy_resources:rules.enemy_resources,world_revision:session.revision});
     }catch(error){before?.destroy?.();restoreTechniqueTest(session,'测试启动失败');throw error;}

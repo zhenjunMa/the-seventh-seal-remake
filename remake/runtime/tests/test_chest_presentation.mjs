@@ -30,6 +30,7 @@ test('Reward notices keep each item name, follow paused exploration time and rel
   const view=Object.assign(Object.create(RewardNoticeView.prototype),{root,canvas:{style:{}},context:{clearRect(){},drawImage(image,x,y){draws.push({image,x,y});}},
     label:{set textContent(text){labels.push(text);}},ink:{},resource:{width:201,height:50,bitmaps:[{plate:true}]},clock,queue:[],
     textRenderer:{paint:()=>({offsetX:0,offsetY:0})}});
+  clock.update(0); // Keep visit thresholds independent of performance.now() fractions.
   view.show(['红宝石','高纯度红晶矿']);assert.equal(root.hidden,false);assert.equal(labels.at(-1),'获得 红宝石');
   clock.advance(840);assert.equal(draws.at(-2).x,439);assert.equal(draws.at(-2).y,430);
   clock.paused=true;const before=draws.length;clock.advance(10000);assert.equal(draws.length,before);assert.equal(labels.at(-1),'获得 红宝石');
