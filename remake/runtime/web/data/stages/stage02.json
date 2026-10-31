@@ -1,0 +1,3056 @@
+{
+  "schema": "seventh-seal-battle-stage",
+  "version": 1,
+  "stage_id": "stage02",
+  "source_scn": {
+    "path": "Fight_Bk/stage02.scn",
+    "sha256": "6117a00ff63db72905d399324398e02bd7c3a205f61d048481b4f64c7a4bc868",
+    "version_raw": 2,
+    "record_start": 25284,
+    "record_bytes": 71,
+    "record_count": 8,
+    "header_raw_hex": "0200000000000000a7afbaebb4cbaa4c000000000000000000000000466967687442474d30312e77617600000000000007000000060000000400000000000000000000000000000000000000",
+    "opaque_block": {
+      "offset": 76,
+      "bytes": 25208,
+      "sha256": "9159d5061508bd56c531d74a9ab604dbc78a97b40436e34682771175c31dcadc"
+    }
+  },
+  "layers": [
+    {
+      "id": "FS02A",
+      "role": "sky",
+      "source": {
+        "path": "Fight_Bk/FS02A.DGP",
+        "sha256": "4babf53a3c3503e1344283967faf6f6148f32a9d2b6f2266e6c68b7834c06b7e",
+        "width": 640,
+        "height": 180,
+        "frame_count": 1,
+        "anchor_raw": [
+          32,
+          0,
+          0
+        ],
+        "header_raw_hex": "09000000000000000000000000000000000000000000000000000000000000800200000000000000000000010000000000000000000000000000000000000000000000"
+      },
+      "scn": {
+        "record_index": 0,
+        "offset": 25284,
+        "bytes": 71,
+        "raw_hex": "0046533032412e44475000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000",
+        "type_raw_00": 0,
+        "current_frame_raw_1d": 0,
+        "position_raw": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "sort_category_raw_36": 1
+      },
+      "frames": [
+        {
+          "index": 0,
+          "path": "assets/stages/stage02/FS02A/frame_000.png",
+          "sha256": "680b56a6dd5036ea3ad6e58171212e73b129854970a6c3c4d9f7c86a5f54490d",
+          "rgba_sha256": "d3ad29cdde6ca37169f32f7a34d38ad704194f7c652fbce51c8db900c3d314d9",
+          "bounds": [
+            0,
+            0,
+            639,
+            179
+          ],
+          "covered_pixels": 114381,
+          "transparent_pixels": 819
+        }
+      ],
+      "animation": null
+    },
+    {
+      "id": "FG02A",
+      "role": "ground",
+      "source": {
+        "path": "Fight_Bk/FG02A.DGP",
+        "sha256": "650dc171c293617978806502846dc7fe3dd889ae4d9bbe21d510fcfa6822a1ac",
+        "width": 1400,
+        "height": 400,
+        "frame_count": 1,
+        "anchor_raw": [
+          32,
+          0,
+          0
+        ],
+        "header_raw_hex": "09000000000000000000000000000000000000000000000000000000000000000000009001000001000000000000000000000000000000000000000000000000000000"
+      },
+      "scn": {
+        "record_index": 1,
+        "offset": 25355,
+        "bytes": 71,
+        "raw_hex": "0146473032412e44475000000000000000000000000200000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000",
+        "type_raw_00": 1,
+        "current_frame_raw_1d": 0,
+        "position_raw": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "sort_category_raw_36": 1
+      },
+      "frames": [
+        {
+          "index": 0,
+          "path": "assets/stages/stage02/FG02A/frame_000.png",
+          "sha256": "66741f960353f1f7628ccaa4901cc14064cacdf0919433aa859c49f93008547a",
+          "rgba_sha256": "eccaa3b799cf83e62391f1bc7a9565b09bcace3faeb146e8fcd2e2d7e22cbc0c",
+          "bounds": [
+            0,
+            0,
+            1399,
+            399
+          ],
+          "covered_pixels": 448697,
+          "transparent_pixels": 111303
+        }
+      ],
+      "animation": null
+    },
+    {
+      "id": "FB02A2",
+      "role": "scene_object",
+      "source": {
+        "path": "Fight_Bk/FB02A2.DGP",
+        "sha256": "468221ec8e8a2a7710c38a3d2c91674668edf3034f79a24619382d0783e377bf",
+        "width": 899,
+        "height": 399,
+        "frame_count": 1,
+        "anchor_raw": [
+          431,
+          299,
+          0
+        ],
+        "header_raw_hex": "09000000000000000000000000000000000000000000000000000000000000000000008f01000001000000000000000000000000000000000000000000000000000000"
+      },
+      "scn": {
+        "record_index": 2,
+        "offset": 25426,
+        "bytes": 71,
+        "raw_hex": "024642303241322e444750000000000000000000000300000000000000000000003501000028000000000000000000000000000000000100000000000000000000000000000000",
+        "type_raw_00": 2,
+        "current_frame_raw_1d": 0,
+        "position_raw": {
+          "x": 309,
+          "y": 40,
+          "z": 0
+        },
+        "sort_category_raw_36": 1
+      },
+      "frames": [
+        {
+          "index": 0,
+          "path": "assets/stages/stage02/FB02A2/frame_000.png",
+          "sha256": "ede30de0076ef95659324a3c0d80cf7aa4157e7b32623c6aa12b6ca3e9645c8c",
+          "rgba_sha256": "7eab6292688078c6683b485b406b684af89c125c89da61f7adf87dbeeccce512",
+          "bounds": [
+            315,
+            0,
+            560,
+            378
+          ],
+          "covered_pixels": 22847,
+          "transparent_pixels": 335854
+        }
+      ],
+      "animation": null
+    },
+    {
+      "id": "FB02A",
+      "role": "scene_object",
+      "source": {
+        "path": "Fight_Bk/FB02A.DGP",
+        "sha256": "c195ad84f0cc5ba7809082e6774494957625b0c274abf489fd6000b4c4ac18de",
+        "width": 899,
+        "height": 399,
+        "frame_count": 1,
+        "anchor_raw": [
+          431,
+          359,
+          0
+        ],
+        "header_raw_hex": "09000000000000000000000000000000000000000000000000000000000000000000008f01000001000000000000000000000000000000000000000000000000000000"
+      },
+      "scn": {
+        "record_index": 3,
+        "offset": 25497,
+        "bytes": 71,
+        "raw_hex": "0246423032412e44475000000000000000000000000400000001000000000000003a0100005f000000000000000000000000000000000100000000000000000000000000000000",
+        "type_raw_00": 2,
+        "current_frame_raw_1d": 0,
+        "position_raw": {
+          "x": 314,
+          "y": 95,
+          "z": 0
+        },
+        "sort_category_raw_36": 1
+      },
+      "frames": [
+        {
+          "index": 0,
+          "path": "assets/stages/stage02/FB02A/frame_000.png",
+          "sha256": "8dd541373a584d10f7ee3d2df22473466782ed9be32b8110a74cfb9d4495c53a",
+          "rgba_sha256": "18d070d356c3e82c4b761667fc385cfd3cbdfad9835d701b05565f1827ab02d2",
+          "bounds": [
+            0,
+            0,
+            899,
+            399
+          ],
+          "covered_pixels": 206866,
+          "transparent_pixels": 151835
+        }
+      ],
+      "animation": null
+    },
+    {
+      "id": "PODER",
+      "role": "scene_object",
+      "source": {
+        "path": "Fight_Bk/PODER.DGP",
+        "sha256": "b7d9d9d0c2de66cdfd923b39c6391ff96184dd477e6b6319812169ab1cb496aa",
+        "width": 199,
+        "height": 199,
+        "frame_count": 21,
+        "anchor_raw": [
+          111,
+          135,
+          0
+        ],
+        "header_raw_hex": "09000100000000000000000000000000000000010000000000000000000000550200000000000003000000030000000000000000000001000000000000000000000000"
+      },
+      "scn": {
+        "record_index": 4,
+        "offset": 25568,
+        "bytes": 71,
+        "raw_hex": "02504f4445522e444750000000000000000000000005000000020000000f0000008d0100003e000000000000002c5c6c000000000f000000000000000000000000000000000000",
+        "type_raw_00": 2,
+        "current_frame_raw_1d": 15,
+        "position_raw": {
+          "x": 397,
+          "y": 62,
+          "z": 0
+        },
+        "sort_category_raw_36": 0
+      },
+      "frames": [
+        {
+          "index": 0,
+          "path": "assets/stages/stage02/PODER/frame_000.png",
+          "sha256": "451786306169cab1b804986259ff7cc810e34c86abf0eec0c08e8d2355b60eb1",
+          "rgba_sha256": "2fc476c61bd2ca2979bd757537eb728574e750ea03fa2726d0b5a562ff7572b7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 39601,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODER/intrinsic_000.png",
+            "sha256": "a4102b8be52f2866d277118a534366a07b72af346b41e582d73733ede6a2adfe",
+            "rgba_sha256": "ebc3edf340b42d5477d2aede74321079019b35096d85872300ba7aa638d2fa08",
+            "bounds": [
+              14,
+              10,
+              198,
+              183
+            ],
+            "covered_pixels": 8236,
+            "transparent_pixels": 31365
+          }
+        },
+        {
+          "index": 1,
+          "path": "assets/stages/stage02/PODER/frame_001.png",
+          "sha256": "451786306169cab1b804986259ff7cc810e34c86abf0eec0c08e8d2355b60eb1",
+          "rgba_sha256": "2fc476c61bd2ca2979bd757537eb728574e750ea03fa2726d0b5a562ff7572b7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 39601,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODER/intrinsic_001.png",
+            "sha256": "ae31d0170e4d20caf2fdfb7831c910e4a270693f621274cd6fd2685d22c88b2b",
+            "rgba_sha256": "75b3656d04c994d96097b4cf1a0839fe67026757b025b9b2a77b713ef55f8e03",
+            "bounds": [
+              0,
+              13,
+              199,
+              184
+            ],
+            "covered_pixels": 11048,
+            "transparent_pixels": 28553
+          }
+        },
+        {
+          "index": 2,
+          "path": "assets/stages/stage02/PODER/frame_002.png",
+          "sha256": "451786306169cab1b804986259ff7cc810e34c86abf0eec0c08e8d2355b60eb1",
+          "rgba_sha256": "2fc476c61bd2ca2979bd757537eb728574e750ea03fa2726d0b5a562ff7572b7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 39601,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODER/intrinsic_002.png",
+            "sha256": "ae15bfa4a9c15686a95cb9fef7fe891ea47efe53b8b9b841f16942f98ac00941",
+            "rgba_sha256": "578c38d5ebe24ff9ce31ac3e6f2ccdc21562a3eb80aafcfbb8af17c4bb256989",
+            "bounds": [
+              10,
+              5,
+              199,
+              185
+            ],
+            "covered_pixels": 12353,
+            "transparent_pixels": 27248
+          }
+        },
+        {
+          "index": 3,
+          "path": "assets/stages/stage02/PODER/frame_003.png",
+          "sha256": "451786306169cab1b804986259ff7cc810e34c86abf0eec0c08e8d2355b60eb1",
+          "rgba_sha256": "2fc476c61bd2ca2979bd757537eb728574e750ea03fa2726d0b5a562ff7572b7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 39601,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODER/intrinsic_003.png",
+            "sha256": "3a1d739043439f67b605166f1cf106075bad85249f20085e1d71c6356828dde4",
+            "rgba_sha256": "dc94c5557e9ab596c368aa42cb145eb45eeb62624f13041d3b35e077734c92a1",
+            "bounds": [
+              8,
+              0,
+              194,
+              188
+            ],
+            "covered_pixels": 13270,
+            "transparent_pixels": 26331
+          }
+        },
+        {
+          "index": 4,
+          "path": "assets/stages/stage02/PODER/frame_004.png",
+          "sha256": "451786306169cab1b804986259ff7cc810e34c86abf0eec0c08e8d2355b60eb1",
+          "rgba_sha256": "2fc476c61bd2ca2979bd757537eb728574e750ea03fa2726d0b5a562ff7572b7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 39601,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODER/intrinsic_004.png",
+            "sha256": "5f303b21e17fd80de369546bd49f61bbac231aa83e802e57dab7aff9e275357f",
+            "rgba_sha256": "8477f922b172bc481b13c6ad873f5883e67814a64eae150f542975d622d47d07",
+            "bounds": [
+              5,
+              0,
+              197,
+              186
+            ],
+            "covered_pixels": 13960,
+            "transparent_pixels": 25641
+          }
+        },
+        {
+          "index": 5,
+          "path": "assets/stages/stage02/PODER/frame_005.png",
+          "sha256": "451786306169cab1b804986259ff7cc810e34c86abf0eec0c08e8d2355b60eb1",
+          "rgba_sha256": "2fc476c61bd2ca2979bd757537eb728574e750ea03fa2726d0b5a562ff7572b7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 39601,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODER/intrinsic_005.png",
+            "sha256": "7fd0c0afa66cf034166ff15286827dfc3355601a64fd586ac38d429a168ebc15",
+            "rgba_sha256": "1d5f8667b8805fc28b6cbadc118a6008a2bae9b50db0ed35d4d4117ecbf7cdec",
+            "bounds": [
+              3,
+              0,
+              199,
+              188
+            ],
+            "covered_pixels": 14271,
+            "transparent_pixels": 25330
+          }
+        },
+        {
+          "index": 6,
+          "path": "assets/stages/stage02/PODER/frame_006.png",
+          "sha256": "451786306169cab1b804986259ff7cc810e34c86abf0eec0c08e8d2355b60eb1",
+          "rgba_sha256": "2fc476c61bd2ca2979bd757537eb728574e750ea03fa2726d0b5a562ff7572b7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 39601,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODER/intrinsic_006.png",
+            "sha256": "9a1f0144492a18bd11b8c79e188ec9c9584734b218f83de36d9ac19090a4daac",
+            "rgba_sha256": "13b08f4dfdb234afbdcd3ad3d5e875d0376a12e88cabef45d613038c8d69b5e6",
+            "bounds": [
+              3,
+              0,
+              199,
+              189
+            ],
+            "covered_pixels": 13389,
+            "transparent_pixels": 26212
+          }
+        },
+        {
+          "index": 7,
+          "path": "assets/stages/stage02/PODER/frame_007.png",
+          "sha256": "451786306169cab1b804986259ff7cc810e34c86abf0eec0c08e8d2355b60eb1",
+          "rgba_sha256": "2fc476c61bd2ca2979bd757537eb728574e750ea03fa2726d0b5a562ff7572b7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 39601,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODER/intrinsic_007.png",
+            "sha256": "a1fa9c16168c67188e7cb87dc8f2957e55fb5f60f495cba9acf26f67ff718336",
+            "rgba_sha256": "a9ca1d84eaa1af700884a1dd57fca5dcf5997ca433634ac11f265451c9190fb8",
+            "bounds": [
+              6,
+              7,
+              198,
+              187
+            ],
+            "covered_pixels": 12552,
+            "transparent_pixels": 27049
+          }
+        },
+        {
+          "index": 8,
+          "path": "assets/stages/stage02/PODER/frame_008.png",
+          "sha256": "451786306169cab1b804986259ff7cc810e34c86abf0eec0c08e8d2355b60eb1",
+          "rgba_sha256": "2fc476c61bd2ca2979bd757537eb728574e750ea03fa2726d0b5a562ff7572b7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 39601,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODER/intrinsic_008.png",
+            "sha256": "46b8611fc26498678f815e371835e8c0742bb5b0a9ccbe298678aba2527966aa",
+            "rgba_sha256": "2db26f41b564d0811ae8db53fc6986c93a71df02e87883c1c82ecbed7a3da2db",
+            "bounds": [
+              6,
+              3,
+              199,
+              187
+            ],
+            "covered_pixels": 11171,
+            "transparent_pixels": 28430
+          }
+        },
+        {
+          "index": 9,
+          "path": "assets/stages/stage02/PODER/frame_009.png",
+          "sha256": "451786306169cab1b804986259ff7cc810e34c86abf0eec0c08e8d2355b60eb1",
+          "rgba_sha256": "2fc476c61bd2ca2979bd757537eb728574e750ea03fa2726d0b5a562ff7572b7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 39601,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODER/intrinsic_009.png",
+            "sha256": "5cfa3c43522d187724f11ca7f8302c75de878bb1b67ba68011ae4afe454ae1a4",
+            "rgba_sha256": "7ca0a4f585b59f3fa039aee226154aca77d086e87173234c0703bcf8e5aa2b37",
+            "bounds": [
+              5,
+              0,
+              199,
+              187
+            ],
+            "covered_pixels": 9133,
+            "transparent_pixels": 30468
+          }
+        },
+        {
+          "index": 10,
+          "path": "assets/stages/stage02/PODER/frame_010.png",
+          "sha256": "451786306169cab1b804986259ff7cc810e34c86abf0eec0c08e8d2355b60eb1",
+          "rgba_sha256": "2fc476c61bd2ca2979bd757537eb728574e750ea03fa2726d0b5a562ff7572b7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 39601,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODER/intrinsic_010.png",
+            "sha256": "c65d37ad281bcec5bb4927673ed894f5c97680e35e24394623696c24f9bf5990",
+            "rgba_sha256": "fbc31292030570e62647deba3214846dd43e1a54b89ca873397b8adc6beb59ec",
+            "bounds": [
+              4,
+              5,
+              199,
+              187
+            ],
+            "covered_pixels": 7846,
+            "transparent_pixels": 31755
+          }
+        },
+        {
+          "index": 11,
+          "path": "assets/stages/stage02/PODER/frame_011.png",
+          "sha256": "451786306169cab1b804986259ff7cc810e34c86abf0eec0c08e8d2355b60eb1",
+          "rgba_sha256": "2fc476c61bd2ca2979bd757537eb728574e750ea03fa2726d0b5a562ff7572b7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 39601,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODER/intrinsic_011.png",
+            "sha256": "d93a8ff684a5540c1402c9c5f91669889ceaa7364fe873c3d2dd3614e2d4fc52",
+            "rgba_sha256": "8cb7ab08e34c5510ee47b693fd12be8a86b11e213b33704b0599808089129521",
+            "bounds": [
+              4,
+              0,
+              199,
+              184
+            ],
+            "covered_pixels": 7671,
+            "transparent_pixels": 31930
+          }
+        },
+        {
+          "index": 12,
+          "path": "assets/stages/stage02/PODER/frame_012.png",
+          "sha256": "451786306169cab1b804986259ff7cc810e34c86abf0eec0c08e8d2355b60eb1",
+          "rgba_sha256": "2fc476c61bd2ca2979bd757537eb728574e750ea03fa2726d0b5a562ff7572b7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 39601,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODER/intrinsic_012.png",
+            "sha256": "36229dcf50b4593b34b9ed09bccc955e5d823605b84384a76bf106d51f8a3163",
+            "rgba_sha256": "ea6313dbee848f2893be5ed2bba703e11fdda5e204ecd964f0a3416e186cfefa",
+            "bounds": [
+              3,
+              5,
+              199,
+              181
+            ],
+            "covered_pixels": 8875,
+            "transparent_pixels": 30726
+          }
+        },
+        {
+          "index": 13,
+          "path": "assets/stages/stage02/PODER/frame_013.png",
+          "sha256": "451786306169cab1b804986259ff7cc810e34c86abf0eec0c08e8d2355b60eb1",
+          "rgba_sha256": "2fc476c61bd2ca2979bd757537eb728574e750ea03fa2726d0b5a562ff7572b7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 39601,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODER/intrinsic_013.png",
+            "sha256": "d22de4f2e0d66df818ffcbf0b221dd9da45d2ca0e94e95bb41db733a47966859",
+            "rgba_sha256": "a207e8af6df1ef2b2eeffbc739bbc6bb72ec69cf0cd3f06c7f96d793a89ab89b",
+            "bounds": [
+              1,
+              13,
+              199,
+              191
+            ],
+            "covered_pixels": 10900,
+            "transparent_pixels": 28701
+          }
+        },
+        {
+          "index": 14,
+          "path": "assets/stages/stage02/PODER/frame_014.png",
+          "sha256": "451786306169cab1b804986259ff7cc810e34c86abf0eec0c08e8d2355b60eb1",
+          "rgba_sha256": "2fc476c61bd2ca2979bd757537eb728574e750ea03fa2726d0b5a562ff7572b7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 39601,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODER/intrinsic_014.png",
+            "sha256": "e5282691566c2c1c7f101270c3423a6784f7b899b4c4958989c1cea310bd786a",
+            "rgba_sha256": "4be03ebfa20ad6ffe0a9ffebc33c56286867bcc81c695807589b2dc43db59589",
+            "bounds": [
+              0,
+              7,
+              199,
+              188
+            ],
+            "covered_pixels": 12341,
+            "transparent_pixels": 27260
+          }
+        },
+        {
+          "index": 15,
+          "path": "assets/stages/stage02/PODER/frame_015.png",
+          "sha256": "451786306169cab1b804986259ff7cc810e34c86abf0eec0c08e8d2355b60eb1",
+          "rgba_sha256": "2fc476c61bd2ca2979bd757537eb728574e750ea03fa2726d0b5a562ff7572b7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 39601,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODER/intrinsic_015.png",
+            "sha256": "4c7da9522e498b44334b643c5da38508bb106dfae6486c01cf6c4efb6b28d05b",
+            "rgba_sha256": "26ca05bf49df4ce5c2eb91520d39848aaea333c785be4f8f30667d49e9679997",
+            "bounds": [
+              0,
+              2,
+              196,
+              188
+            ],
+            "covered_pixels": 13344,
+            "transparent_pixels": 26257
+          }
+        },
+        {
+          "index": 16,
+          "path": "assets/stages/stage02/PODER/frame_016.png",
+          "sha256": "451786306169cab1b804986259ff7cc810e34c86abf0eec0c08e8d2355b60eb1",
+          "rgba_sha256": "2fc476c61bd2ca2979bd757537eb728574e750ea03fa2726d0b5a562ff7572b7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 39601,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODER/intrinsic_016.png",
+            "sha256": "4af9fed864da1db24c753c9f762ea6e8e5a3a67ba6d167223974106b59b58156",
+            "rgba_sha256": "7ab49ff18827124ddbc64f72cd33341657a2a71763279b173cf9b4e40ea88866",
+            "bounds": [
+              0,
+              1,
+              198,
+              185
+            ],
+            "covered_pixels": 13820,
+            "transparent_pixels": 25781
+          }
+        },
+        {
+          "index": 17,
+          "path": "assets/stages/stage02/PODER/frame_017.png",
+          "sha256": "451786306169cab1b804986259ff7cc810e34c86abf0eec0c08e8d2355b60eb1",
+          "rgba_sha256": "2fc476c61bd2ca2979bd757537eb728574e750ea03fa2726d0b5a562ff7572b7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 39601,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODER/intrinsic_017.png",
+            "sha256": "dbef6a8b0054ffc6f8dde4ec6fd0cad8ad8f4adb54c401c57a8cc3adfe65e488",
+            "rgba_sha256": "dcf7c92ffcf0ebba8486495885357c1490f2bae601cf060a779f0adaa34cd78e",
+            "bounds": [
+              1,
+              3,
+              199,
+              188
+            ],
+            "covered_pixels": 13517,
+            "transparent_pixels": 26084
+          }
+        },
+        {
+          "index": 18,
+          "path": "assets/stages/stage02/PODER/frame_018.png",
+          "sha256": "451786306169cab1b804986259ff7cc810e34c86abf0eec0c08e8d2355b60eb1",
+          "rgba_sha256": "2fc476c61bd2ca2979bd757537eb728574e750ea03fa2726d0b5a562ff7572b7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 39601,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODER/intrinsic_018.png",
+            "sha256": "cef54e842e01755a6f8a29f03b8671149336fb9999cf993a09cf8af7c86ad463",
+            "rgba_sha256": "c9e24496c17171c25c0658be114d950e2fcd6f738c5bc715291df958e8b48ead",
+            "bounds": [
+              0,
+              0,
+              199,
+              188
+            ],
+            "covered_pixels": 12777,
+            "transparent_pixels": 26824
+          }
+        },
+        {
+          "index": 19,
+          "path": "assets/stages/stage02/PODER/frame_019.png",
+          "sha256": "451786306169cab1b804986259ff7cc810e34c86abf0eec0c08e8d2355b60eb1",
+          "rgba_sha256": "2fc476c61bd2ca2979bd757537eb728574e750ea03fa2726d0b5a562ff7572b7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 39601,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODER/intrinsic_019.png",
+            "sha256": "9ac749ce66c78c8bc5a6539787bc96b97bd729f172f2cdfb58a315497b1c0980",
+            "rgba_sha256": "d8b7bfc13efac85649389317eb40d5f7e94a4a7933527ace756c9029cc13d933",
+            "bounds": [
+              2,
+              9,
+              196,
+              186
+            ],
+            "covered_pixels": 11166,
+            "transparent_pixels": 28435
+          }
+        },
+        {
+          "index": 20,
+          "path": "assets/stages/stage02/PODER/frame_020.png",
+          "sha256": "451786306169cab1b804986259ff7cc810e34c86abf0eec0c08e8d2355b60eb1",
+          "rgba_sha256": "2fc476c61bd2ca2979bd757537eb728574e750ea03fa2726d0b5a562ff7572b7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 39601,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODER/intrinsic_020.png",
+            "sha256": "7fff3a65744bd9e2b4a9b4a4c60bb9794150c52b5db3890c8614e8699d49ba3a",
+            "rgba_sha256": "282668fe71dfdca3066053441ab101f3063b1ec5c86166c21b712efaec51a492",
+            "bounds": [
+              15,
+              8,
+              197,
+              184
+            ],
+            "covered_pixels": 8358,
+            "transparent_pixels": 31243
+          }
+        }
+      ],
+      "animation": {
+        "action_index": 0,
+        "interval_raw": 120,
+        "loop_raw": 33,
+        "frames": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20
+        ],
+        "first_frame_raw": 0,
+        "action_raw_hex": "00780000000000000000000000211500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "runtime_clock_observed": false
+      }
+    },
+    {
+      "id": "PODERS",
+      "role": "scene_object",
+      "source": {
+        "path": "Fight_Bk/PODERS.DGP",
+        "sha256": "920231d6de0d97926f27a4320b4275d64ed636f873455abe110aff0586b65ed2",
+        "width": 154,
+        "height": 158,
+        "frame_count": 20,
+        "anchor_raw": [
+          71,
+          126,
+          0
+        ],
+        "header_raw_hex": "09000100000000000000000000000000000000010000000000000000000000680200009e00000001000000040000000100000000000000000000000000000000000000"
+      },
+      "scn": {
+        "record_index": 5,
+        "offset": 25639,
+        "bytes": 71,
+        "raw_hex": "02504f444552532e444750000000000000000000000600000003000000010000003d02000045000000000000002c5c6c0000000001000100000000000000000000000000000000",
+        "type_raw_00": 2,
+        "current_frame_raw_1d": 1,
+        "position_raw": {
+          "x": 573,
+          "y": 69,
+          "z": 0
+        },
+        "sort_category_raw_36": 1
+      },
+      "frames": [
+        {
+          "index": 0,
+          "path": "assets/stages/stage02/PODERS/frame_000.png",
+          "sha256": "8c610635c32b9640c3ed4d59a4c4fa122c98cd3105936c0298b698caed5497db",
+          "rgba_sha256": "1eddd94a3916ef9084f134d0735d32fe4c1dfbb35380651322a9a7571096c902",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 24332,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODERS/intrinsic_000.png",
+            "sha256": "dc73ccd20d0e2d83a83c964d8fae89e6c0fdc1d23d98594959f6603e93daab36",
+            "rgba_sha256": "484de9e63440fc018148db7e50fbaf6ec7ab45a34d9e32ad9d557aa3fcadb73e",
+            "bounds": [
+              12,
+              9,
+              146,
+              135
+            ],
+            "covered_pixels": 3262,
+            "transparent_pixels": 21070
+          }
+        },
+        {
+          "index": 1,
+          "path": "assets/stages/stage02/PODERS/frame_001.png",
+          "sha256": "8c610635c32b9640c3ed4d59a4c4fa122c98cd3105936c0298b698caed5497db",
+          "rgba_sha256": "1eddd94a3916ef9084f134d0735d32fe4c1dfbb35380651322a9a7571096c902",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 24332,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODERS/intrinsic_001.png",
+            "sha256": "8b5983f778f36bfcc43fc7877a2a3f192a23015687c8bb28b7ffee4ae31e9fab",
+            "rgba_sha256": "27237df4af762f1a9827e9a97f16c44ac278f2fc5dc9db91dc0812e69293ab47",
+            "bounds": [
+              5,
+              13,
+              146,
+              154
+            ],
+            "covered_pixels": 4435,
+            "transparent_pixels": 19897
+          }
+        },
+        {
+          "index": 2,
+          "path": "assets/stages/stage02/PODERS/frame_002.png",
+          "sha256": "8c610635c32b9640c3ed4d59a4c4fa122c98cd3105936c0298b698caed5497db",
+          "rgba_sha256": "1eddd94a3916ef9084f134d0735d32fe4c1dfbb35380651322a9a7571096c902",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 24332,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODERS/intrinsic_002.png",
+            "sha256": "2641970e68660986352768a7cc2fd2e2ee300d2447509be0ea78d0e094fbbdc5",
+            "rgba_sha256": "fc7519ed9e9d1fb71bfc6d51fb4b94e48d235cc4e5b189c1b2c90e3c608b0550",
+            "bounds": [
+              3,
+              13,
+              147,
+              155
+            ],
+            "covered_pixels": 4947,
+            "transparent_pixels": 19385
+          }
+        },
+        {
+          "index": 3,
+          "path": "assets/stages/stage02/PODERS/frame_003.png",
+          "sha256": "8c610635c32b9640c3ed4d59a4c4fa122c98cd3105936c0298b698caed5497db",
+          "rgba_sha256": "1eddd94a3916ef9084f134d0735d32fe4c1dfbb35380651322a9a7571096c902",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 24332,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODERS/intrinsic_003.png",
+            "sha256": "b1fe8ee547a032539fb8ce313eb6e7c6b5aa3d24f3eb62d7a74f8ff1493a7ad7",
+            "rgba_sha256": "c820b9cd98bb632c14dfaa1f881ec111695f0274dcf6f19c1bc2ba438bacaea2",
+            "bounds": [
+              2,
+              8,
+              149,
+              157
+            ],
+            "covered_pixels": 5198,
+            "transparent_pixels": 19134
+          }
+        },
+        {
+          "index": 4,
+          "path": "assets/stages/stage02/PODERS/frame_004.png",
+          "sha256": "8c610635c32b9640c3ed4d59a4c4fa122c98cd3105936c0298b698caed5497db",
+          "rgba_sha256": "1eddd94a3916ef9084f134d0735d32fe4c1dfbb35380651322a9a7571096c902",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 24332,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODERS/intrinsic_004.png",
+            "sha256": "3bdf1aa211ac7fe66f37c6db144094e9bec4a31883c5dc3aa79d4a603c8da063",
+            "rgba_sha256": "30516737b3720ce91e6042c1dc82dc43231c58e4ae54cb44c5e8a0a865c76a24",
+            "bounds": [
+              1,
+              3,
+              151,
+              155
+            ],
+            "covered_pixels": 5500,
+            "transparent_pixels": 18832
+          }
+        },
+        {
+          "index": 5,
+          "path": "assets/stages/stage02/PODERS/frame_005.png",
+          "sha256": "8c610635c32b9640c3ed4d59a4c4fa122c98cd3105936c0298b698caed5497db",
+          "rgba_sha256": "1eddd94a3916ef9084f134d0735d32fe4c1dfbb35380651322a9a7571096c902",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 24332,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODERS/intrinsic_005.png",
+            "sha256": "de98387f04ecff8d1081f8e400bbc59c1035f0a3c528b98dfbd4619a8bc9e9a1",
+            "rgba_sha256": "8eacdd22b464b2400361aa5984e1e52c571938b2bfb4fdcbf20c41b6f37a8766",
+            "bounds": [
+              1,
+              2,
+              153,
+              157
+            ],
+            "covered_pixels": 5614,
+            "transparent_pixels": 18718
+          }
+        },
+        {
+          "index": 6,
+          "path": "assets/stages/stage02/PODERS/frame_006.png",
+          "sha256": "8c610635c32b9640c3ed4d59a4c4fa122c98cd3105936c0298b698caed5497db",
+          "rgba_sha256": "1eddd94a3916ef9084f134d0735d32fe4c1dfbb35380651322a9a7571096c902",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 24332,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODERS/intrinsic_006.png",
+            "sha256": "91761cc1d132fc550ec19977072c65b15f96affd97957514b9fd48b0e0ff28ba",
+            "rgba_sha256": "727079a22315aa9fce9a16e21f756e2e2c5267e63061d3b970e11d8c5e7fda57",
+            "bounds": [
+              1,
+              0,
+              154,
+              158
+            ],
+            "covered_pixels": 5112,
+            "transparent_pixels": 19220
+          }
+        },
+        {
+          "index": 7,
+          "path": "assets/stages/stage02/PODERS/frame_007.png",
+          "sha256": "8c610635c32b9640c3ed4d59a4c4fa122c98cd3105936c0298b698caed5497db",
+          "rgba_sha256": "1eddd94a3916ef9084f134d0735d32fe4c1dfbb35380651322a9a7571096c902",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 24332,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODERS/intrinsic_007.png",
+            "sha256": "f187ab7799e2d0eecaa2e678538b00e994f88195145f14d71d3535db78dfbb42",
+            "rgba_sha256": "b056dda02eed32d76aea17af177ede0c6170a1360823bc8097000ed8ad56195c",
+            "bounds": [
+              1,
+              0,
+              151,
+              156
+            ],
+            "covered_pixels": 4654,
+            "transparent_pixels": 19678
+          }
+        },
+        {
+          "index": 8,
+          "path": "assets/stages/stage02/PODERS/frame_008.png",
+          "sha256": "8c610635c32b9640c3ed4d59a4c4fa122c98cd3105936c0298b698caed5497db",
+          "rgba_sha256": "1eddd94a3916ef9084f134d0735d32fe4c1dfbb35380651322a9a7571096c902",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 24332,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODERS/intrinsic_008.png",
+            "sha256": "d26e0d092f05ebf66c17b9f19aadad82c19ee7b28ca18d074f75f4cae706d287",
+            "rgba_sha256": "8d51b8b3b880428d6131ca6bda0e34194d975e59df77e779ba637ce50b0644b5",
+            "bounds": [
+              0,
+              12,
+              152,
+              156
+            ],
+            "covered_pixels": 3993,
+            "transparent_pixels": 20339
+          }
+        },
+        {
+          "index": 9,
+          "path": "assets/stages/stage02/PODERS/frame_009.png",
+          "sha256": "8c610635c32b9640c3ed4d59a4c4fa122c98cd3105936c0298b698caed5497db",
+          "rgba_sha256": "1eddd94a3916ef9084f134d0735d32fe4c1dfbb35380651322a9a7571096c902",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 24332,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODERS/intrinsic_009.png",
+            "sha256": "d378ce14fb524cb11e68add2bcb38d8ff619e39fd719ee666d8d79c399eb4942",
+            "rgba_sha256": "8591bdeaa9e6d64063b2e331fc217b31d07545c711d6da29918d0370e49dcb3d",
+            "bounds": [
+              0,
+              8,
+              153,
+              157
+            ],
+            "covered_pixels": 3220,
+            "transparent_pixels": 21112
+          }
+        },
+        {
+          "index": 10,
+          "path": "assets/stages/stage02/PODERS/frame_010.png",
+          "sha256": "8c610635c32b9640c3ed4d59a4c4fa122c98cd3105936c0298b698caed5497db",
+          "rgba_sha256": "1eddd94a3916ef9084f134d0735d32fe4c1dfbb35380651322a9a7571096c902",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 24332,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODERS/intrinsic_010.png",
+            "sha256": "ae6affdf0540b9a9bfd44bea781d91ea82490dc258a275c2fc4567e03c9d0519",
+            "rgba_sha256": "b423a0adf198b82b61539c6cbf1cbc45ee0ba9e51929885f564c69e3986ea4a1",
+            "bounds": [
+              0,
+              6,
+              154,
+              157
+            ],
+            "covered_pixels": 2656,
+            "transparent_pixels": 21676
+          }
+        },
+        {
+          "index": 11,
+          "path": "assets/stages/stage02/PODERS/frame_011.png",
+          "sha256": "8c610635c32b9640c3ed4d59a4c4fa122c98cd3105936c0298b698caed5497db",
+          "rgba_sha256": "1eddd94a3916ef9084f134d0735d32fe4c1dfbb35380651322a9a7571096c902",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 24332,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODERS/intrinsic_011.png",
+            "sha256": "9037699db050d5d9f07977edb05d05c26596c0d8cfd43074acc38bdd90c77f1a",
+            "rgba_sha256": "9d5f8a2ce17ca3ad2e80ac90c3c54b487b3a0ccb57bf22f865fea38e40f6fa22",
+            "bounds": [
+              0,
+              9,
+              154,
+              154
+            ],
+            "covered_pixels": 2624,
+            "transparent_pixels": 21708
+          }
+        },
+        {
+          "index": 12,
+          "path": "assets/stages/stage02/PODERS/frame_012.png",
+          "sha256": "8c610635c32b9640c3ed4d59a4c4fa122c98cd3105936c0298b698caed5497db",
+          "rgba_sha256": "1eddd94a3916ef9084f134d0735d32fe4c1dfbb35380651322a9a7571096c902",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 24332,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODERS/intrinsic_012.png",
+            "sha256": "4774f74c0079ac6d6b99194ec02dc6bf8051ac188543f9e14f388cafd0454b98",
+            "rgba_sha256": "cdfaefd29753e4e295ca2c198e87b79dbc6bada999a369b6a771d33a4c43dbbe",
+            "bounds": [
+              0,
+              5,
+              154,
+              151
+            ],
+            "covered_pixels": 3201,
+            "transparent_pixels": 21131
+          }
+        },
+        {
+          "index": 13,
+          "path": "assets/stages/stage02/PODERS/frame_013.png",
+          "sha256": "8c610635c32b9640c3ed4d59a4c4fa122c98cd3105936c0298b698caed5497db",
+          "rgba_sha256": "1eddd94a3916ef9084f134d0735d32fe4c1dfbb35380651322a9a7571096c902",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 24332,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODERS/intrinsic_013.png",
+            "sha256": "b2dcf18d0647e06b2dda717dcf2dbff23a05cd7295e08b5c516d07ba42de7a2c",
+            "rgba_sha256": "745256da0004daea3699d0b8104459e4e93000f2a9fbe3b202f18ffe797b8366",
+            "bounds": [
+              0,
+              8,
+              154,
+              158
+            ],
+            "covered_pixels": 4067,
+            "transparent_pixels": 20265
+          }
+        },
+        {
+          "index": 14,
+          "path": "assets/stages/stage02/PODERS/frame_014.png",
+          "sha256": "8c610635c32b9640c3ed4d59a4c4fa122c98cd3105936c0298b698caed5497db",
+          "rgba_sha256": "1eddd94a3916ef9084f134d0735d32fe4c1dfbb35380651322a9a7571096c902",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 24332,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODERS/intrinsic_014.png",
+            "sha256": "fa89cd10a3c414ca9f70926873a1b57b28f1cc8640e145ba968d78e6dafc1071",
+            "rgba_sha256": "630d5a25c099f6fa647094bc54218ebd0551068d798845abc46e48de111e63fa",
+            "bounds": [
+              0,
+              7,
+              154,
+              157
+            ],
+            "covered_pixels": 4669,
+            "transparent_pixels": 19663
+          }
+        },
+        {
+          "index": 15,
+          "path": "assets/stages/stage02/PODERS/frame_015.png",
+          "sha256": "8c610635c32b9640c3ed4d59a4c4fa122c98cd3105936c0298b698caed5497db",
+          "rgba_sha256": "1eddd94a3916ef9084f134d0735d32fe4c1dfbb35380651322a9a7571096c902",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 24332,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODERS/intrinsic_015.png",
+            "sha256": "e34b8ed5f363b33fedb4c49515f639402406f007b8e03853287c82b1b46e9e38",
+            "rgba_sha256": "d028ac2f1e0efa7b8269f7e196a2b9a57135411ce28bf96a27fa8b3e50b4eae0",
+            "bounds": [
+              0,
+              4,
+              152,
+              157
+            ],
+            "covered_pixels": 5149,
+            "transparent_pixels": 19183
+          }
+        },
+        {
+          "index": 16,
+          "path": "assets/stages/stage02/PODERS/frame_016.png",
+          "sha256": "8c610635c32b9640c3ed4d59a4c4fa122c98cd3105936c0298b698caed5497db",
+          "rgba_sha256": "1eddd94a3916ef9084f134d0735d32fe4c1dfbb35380651322a9a7571096c902",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 24332,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODERS/intrinsic_016.png",
+            "sha256": "bfb132daaf298d96de3cf5fa210e09f816bdadd021b8b08d7631329184076c51",
+            "rgba_sha256": "048254c65e1f87dac2181683d7e9da6ccdcdba79fb4b6510f1cbcc9dd8beec2e",
+            "bounds": [
+              0,
+              3,
+              152,
+              155
+            ],
+            "covered_pixels": 5435,
+            "transparent_pixels": 18897
+          }
+        },
+        {
+          "index": 17,
+          "path": "assets/stages/stage02/PODERS/frame_017.png",
+          "sha256": "8c610635c32b9640c3ed4d59a4c4fa122c98cd3105936c0298b698caed5497db",
+          "rgba_sha256": "1eddd94a3916ef9084f134d0735d32fe4c1dfbb35380651322a9a7571096c902",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 24332,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODERS/intrinsic_017.png",
+            "sha256": "25b1be5591c606c56757b30607bf57f2c734b3f87a85a4ccf78aea6da3f50e1c",
+            "rgba_sha256": "710a06fb920022440d1a6d50fa97c4ad24172317f82d115e9242b29cd59608c7",
+            "bounds": [
+              0,
+              11,
+              154,
+              157
+            ],
+            "covered_pixels": 5190,
+            "transparent_pixels": 19142
+          }
+        },
+        {
+          "index": 18,
+          "path": "assets/stages/stage02/PODERS/frame_018.png",
+          "sha256": "8c610635c32b9640c3ed4d59a4c4fa122c98cd3105936c0298b698caed5497db",
+          "rgba_sha256": "1eddd94a3916ef9084f134d0735d32fe4c1dfbb35380651322a9a7571096c902",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 24332,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODERS/intrinsic_018.png",
+            "sha256": "d4de42f4f073a7b8826ada1026b3653d8a0a3fb02bf35076fa2cc6b51d5972ef",
+            "rgba_sha256": "31bc804ea77578a7365aae569b06bc9331b70e1b1005f06ba183bfa0156d818c",
+            "bounds": [
+              0,
+              7,
+              154,
+              157
+            ],
+            "covered_pixels": 4889,
+            "transparent_pixels": 19443
+          }
+        },
+        {
+          "index": 19,
+          "path": "assets/stages/stage02/PODERS/frame_019.png",
+          "sha256": "8c610635c32b9640c3ed4d59a4c4fa122c98cd3105936c0298b698caed5497db",
+          "rgba_sha256": "1eddd94a3916ef9084f134d0735d32fe4c1dfbb35380651322a9a7571096c902",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 24332,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODERS/intrinsic_019.png",
+            "sha256": "4def7d16fa451d937fd83aa9469a77a376acf57b9ead51c69761f7f59b7eeeb0",
+            "rgba_sha256": "5068097999984e1c0f8ab39228474e42a78567aaf4d25abc00fe8676bb2981f6",
+            "bounds": [
+              0,
+              8,
+              147,
+              156
+            ],
+            "covered_pixels": 4415,
+            "transparent_pixels": 19917
+          }
+        }
+      ],
+      "animation": {
+        "action_index": 0,
+        "interval_raw": 120,
+        "loop_raw": 1,
+        "frames": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19
+        ],
+        "first_frame_raw": 0,
+        "action_raw_hex": "00780000000000000000000000011400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "runtime_clock_observed": false
+      }
+    },
+    {
+      "id": "BUGZ",
+      "role": "scene_object",
+      "source": {
+        "path": "Fight_Bk/BUGZ.DGP",
+        "sha256": "bb25554828cef8d4fb8b70dae1fe0a203d0d70d77407fe26b1048b2e272e0fcc",
+        "width": 280,
+        "height": 216,
+        "frame_count": 45,
+        "anchor_raw": [
+          131,
+          184,
+          0
+        ],
+        "header_raw_hex": "0900010000000000000000000000000000000001000000000000000000000018010000000000000b000000010000000000000000000000000000000000000000000000"
+      },
+      "scn": {
+        "record_index": 6,
+        "offset": 25710,
+        "bytes": 71,
+        "raw_hex": "024255475a2e444750000000000000000000000000070000000400000010000000a500000092000000000000002c5c6c0000000010000100000000000000000000000000000000",
+        "type_raw_00": 2,
+        "current_frame_raw_1d": 16,
+        "position_raw": {
+          "x": 165,
+          "y": 146,
+          "z": 0
+        },
+        "sort_category_raw_36": 1
+      },
+      "frames": [
+        {
+          "index": 0,
+          "path": "assets/stages/stage02/BUGZ/frame_000.png",
+          "sha256": "a9c98fd935fd9fe4c8b10fc12e480310e3e0f7bc642eeaba50d0e02b508e9673",
+          "rgba_sha256": "20209fcf1d7582a5a720c56fbbb325d24017ecff86233454f28d1e65576c59d7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 60480,
+          "intrinsic": {
+            "path": "assets/stages/stage02/BUGZ/intrinsic_000.png",
+            "sha256": "698d2b0e217eb3cf6bd2b4de2dfb4cda4751d9bdcee6332eee0bbc30b69ef4cb",
+            "rgba_sha256": "12006933295d43747b15051f609aeb33665414c3a44d8fd46c6dbf5dd375e978",
+            "bounds": [
+              7,
+              31,
+              242,
+              156
+            ],
+            "covered_pixels": 831,
+            "transparent_pixels": 59649
+          }
+        },
+        {
+          "index": 1,
+          "path": "assets/stages/stage02/BUGZ/frame_001.png",
+          "sha256": "a9c98fd935fd9fe4c8b10fc12e480310e3e0f7bc642eeaba50d0e02b508e9673",
+          "rgba_sha256": "20209fcf1d7582a5a720c56fbbb325d24017ecff86233454f28d1e65576c59d7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 60480,
+          "intrinsic": {
+            "path": "assets/stages/stage02/BUGZ/intrinsic_001.png",
+            "sha256": "ee9e0808f21a0f09b7553e6aaa1692046c08227d62b4b17e412ccaac6027323f",
+            "rgba_sha256": "d2edd6e18acf3b6b7d47f4966763f3739ea34b996fc4e8d4c0844a51e5f7fb66",
+            "bounds": [
+              2,
+              8,
+              262,
+              154
+            ],
+            "covered_pixels": 996,
+            "transparent_pixels": 59484
+          }
+        },
+        {
+          "index": 2,
+          "path": "assets/stages/stage02/BUGZ/frame_002.png",
+          "sha256": "a9c98fd935fd9fe4c8b10fc12e480310e3e0f7bc642eeaba50d0e02b508e9673",
+          "rgba_sha256": "20209fcf1d7582a5a720c56fbbb325d24017ecff86233454f28d1e65576c59d7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 60480,
+          "intrinsic": {
+            "path": "assets/stages/stage02/BUGZ/intrinsic_002.png",
+            "sha256": "85dec6934d948afdfa5142ab94c246389bbce81084131b4817e1de28bff6cf47",
+            "rgba_sha256": "626cdfddeac1ddb087812cf9cf87ef87dcb940c0d82cc8e3561540ce307e993a",
+            "bounds": [
+              21,
+              31,
+              272,
+              155
+            ],
+            "covered_pixels": 1064,
+            "transparent_pixels": 59416
+          }
+        },
+        {
+          "index": 3,
+          "path": "assets/stages/stage02/BUGZ/frame_003.png",
+          "sha256": "a9c98fd935fd9fe4c8b10fc12e480310e3e0f7bc642eeaba50d0e02b508e9673",
+          "rgba_sha256": "20209fcf1d7582a5a720c56fbbb325d24017ecff86233454f28d1e65576c59d7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 60480,
+          "intrinsic": {
+            "path": "assets/stages/stage02/BUGZ/intrinsic_003.png",
+            "sha256": "77e66997eb389879677fc3c1057a9ef2f2df68c87f716a2429e354a3615f15cd",
+            "rgba_sha256": "b24292ea685832fb6184d5d6b22f6686d1302b0e0ba9529b54b628023fd0aa11",
+            "bounds": [
+              35,
+              65,
+              272,
+              159
+            ],
+            "covered_pixels": 1026,
+            "transparent_pixels": 59454
+          }
+        },
+        {
+          "index": 4,
+          "path": "assets/stages/stage02/BUGZ/frame_004.png",
+          "sha256": "a9c98fd935fd9fe4c8b10fc12e480310e3e0f7bc642eeaba50d0e02b508e9673",
+          "rgba_sha256": "20209fcf1d7582a5a720c56fbbb325d24017ecff86233454f28d1e65576c59d7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 60480,
+          "intrinsic": {
+            "path": "assets/stages/stage02/BUGZ/intrinsic_004.png",
+            "sha256": "14fc804ddbb9ebc95d2ae36b3fde42a49621e50fb6ddf97a85a83438fd08d151",
+            "rgba_sha256": "9d49c5da3bc6447530d9e2aef63e57f247b1e94a072c0ea3ab8661c3d19976ea",
+            "bounds": [
+              56,
+              44,
+              259,
+              159
+            ],
+            "covered_pixels": 372,
+            "transparent_pixels": 60108
+          }
+        },
+        {
+          "index": 5,
+          "path": "assets/stages/stage02/BUGZ/frame_005.png",
+          "sha256": "a9c98fd935fd9fe4c8b10fc12e480310e3e0f7bc642eeaba50d0e02b508e9673",
+          "rgba_sha256": "20209fcf1d7582a5a720c56fbbb325d24017ecff86233454f28d1e65576c59d7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 60480,
+          "intrinsic": {
+            "path": "assets/stages/stage02/BUGZ/intrinsic_005.png",
+            "sha256": "d0d194e6575c5f17aadb425188b3b63d210f6f423243473453e04c516448ac73",
+            "rgba_sha256": "47abaac6cfdeef63054b2e35c313cf5fef94789f595b3350374e7a37e4a19b30",
+            "bounds": [
+              68,
+              0,
+              226,
+              150
+            ],
+            "covered_pixels": 1020,
+            "transparent_pixels": 59460
+          }
+        },
+        {
+          "index": 6,
+          "path": "assets/stages/stage02/BUGZ/frame_006.png",
+          "sha256": "a9c98fd935fd9fe4c8b10fc12e480310e3e0f7bc642eeaba50d0e02b508e9673",
+          "rgba_sha256": "20209fcf1d7582a5a720c56fbbb325d24017ecff86233454f28d1e65576c59d7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 60480,
+          "intrinsic": {
+            "path": "assets/stages/stage02/BUGZ/intrinsic_006.png",
+            "sha256": "f78f462b6fb65356940ca06116cb0ccc1de34e8b85b9032f780be9a339727f62",
+            "rgba_sha256": "83c76336fcc800b521a47981c0a7ade4769dc23ae88b9d4c5a431d68e255e874",
+            "bounds": [
+              22,
+              19,
+              223,
+              146
+            ],
+            "covered_pixels": 716,
+            "transparent_pixels": 59764
+          }
+        },
+        {
+          "index": 7,
+          "path": "assets/stages/stage02/BUGZ/frame_007.png",
+          "sha256": "a9c98fd935fd9fe4c8b10fc12e480310e3e0f7bc642eeaba50d0e02b508e9673",
+          "rgba_sha256": "20209fcf1d7582a5a720c56fbbb325d24017ecff86233454f28d1e65576c59d7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 60480,
+          "intrinsic": {
+            "path": "assets/stages/stage02/BUGZ/intrinsic_007.png",
+            "sha256": "8f6f30403622b62bf55bc21acaf40397b68e96ece8ea22e4c9e056fdffeabb2c",
+            "rgba_sha256": "a2426987e46e72cbbfb2bd446e0492ca3ad44b884bd02a679ae69034a80a9024",
+            "bounds": [
+              28,
+              54,
+              243,
+              141
+            ],
+            "covered_pixels": 682,
+            "transparent_pixels": 59798
+          }
+        },
+        {
+          "index": 8,
+          "path": "assets/stages/stage02/BUGZ/frame_008.png",
+          "sha256": "a9c98fd935fd9fe4c8b10fc12e480310e3e0f7bc642eeaba50d0e02b508e9673",
+          "rgba_sha256": "20209fcf1d7582a5a720c56fbbb325d24017ecff86233454f28d1e65576c59d7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 60480,
+          "intrinsic": {
+            "path": "assets/stages/stage02/BUGZ/intrinsic_008.png",
+            "sha256": "9b0a6b2e4868d69b162be7ead0ac6b41b845db6ad72b7af86acffd4d4d5ace42",
+            "rgba_sha256": "6aa04d0c2923b5ff0826d8d670493d5e29d175031e056f6b9219fcd64ea099c1",
+            "bounds": [
+              29,
+              45,
+              268,
+              134
+            ],
+            "covered_pixels": 884,
+            "transparent_pixels": 59596
+          }
+        },
+        {
+          "index": 9,
+          "path": "assets/stages/stage02/BUGZ/frame_009.png",
+          "sha256": "a9c98fd935fd9fe4c8b10fc12e480310e3e0f7bc642eeaba50d0e02b508e9673",
+          "rgba_sha256": "20209fcf1d7582a5a720c56fbbb325d24017ecff86233454f28d1e65576c59d7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 60480,
+          "intrinsic": {
+            "path": "assets/stages/stage02/BUGZ/intrinsic_009.png",
+            "sha256": "48309727457a1a6c72ae55cdbfe3059624452a128338e3ab3842bc6e8bf965d8",
+            "rgba_sha256": "8b5dd70fcc73b11b10def835a48940a6ff084527814b93db9fd26cbfeb23190c",
+            "bounds": [
+              56,
+              32,
+              273,
+              148
+            ],
+            "covered_pixels": 1092,
+            "transparent_pixels": 59388
+          }
+        },
+        {
+          "index": 10,
+          "path": "assets/stages/stage02/BUGZ/frame_010.png",
+          "sha256": "a9c98fd935fd9fe4c8b10fc12e480310e3e0f7bc642eeaba50d0e02b508e9673",
+          "rgba_sha256": "20209fcf1d7582a5a720c56fbbb325d24017ecff86233454f28d1e65576c59d7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 60480,
+          "intrinsic": {
+            "path": "assets/stages/stage02/BUGZ/intrinsic_010.png",
+            "sha256": "7b84f02b32baa15cb553cb2215bc35c4f995f50bb8ba9582c99ebf70cb2e7b52",
+            "rgba_sha256": "0bb0b0de4bc4452d2708c2e549f5e4a9cf9601e1ed65daea978f9d7b3b6b5732",
+            "bounds": [
+              62,
+              8,
+              270,
+              143
+            ],
+            "covered_pixels": 797,
+            "transparent_pixels": 59683
+          }
+        },
+        {
+          "index": 11,
+          "path": "assets/stages/stage02/BUGZ/frame_011.png",
+          "sha256": "a9c98fd935fd9fe4c8b10fc12e480310e3e0f7bc642eeaba50d0e02b508e9673",
+          "rgba_sha256": "20209fcf1d7582a5a720c56fbbb325d24017ecff86233454f28d1e65576c59d7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 60480,
+          "intrinsic": {
+            "path": "assets/stages/stage02/BUGZ/intrinsic_011.png",
+            "sha256": "2ec1951932dc334a99bdbdffaf072d4f5b4bae9d6dcf5ae73e0931b2447fbe49",
+            "rgba_sha256": "6eb5239239f32780b711a369dc9bdee59bf412e1b794c1ab4740bfd30f2ab30a",
+            "bounds": [
+              81,
+              3,
+              253,
+              155
+            ],
+            "covered_pixels": 985,
+            "transparent_pixels": 59495
+          }
+        },
+        {
+          "index": 12,
+          "path": "assets/stages/stage02/BUGZ/frame_012.png",
+          "sha256": "a9c98fd935fd9fe4c8b10fc12e480310e3e0f7bc642eeaba50d0e02b508e9673",
+          "rgba_sha256": "20209fcf1d7582a5a720c56fbbb325d24017ecff86233454f28d1e65576c59d7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 60480,
+          "intrinsic": {
+            "path": "assets/stages/stage02/BUGZ/intrinsic_012.png",
+            "sha256": "1e3d646facad2f877298cbe9d02cc7ca2ea0e420d8abe6761341a13ec7fa8285",
+            "rgba_sha256": "dbbc1036188db4ab5705443cde1b64ac8f98ca218fc0f22e2a3d2efacedf30f7",
+            "bounds": [
+              103,
+              31,
+              220,
+              154
+            ],
+            "covered_pixels": 844,
+            "transparent_pixels": 59636
+          }
+        },
+        {
+          "index": 13,
+          "path": "assets/stages/stage02/BUGZ/frame_013.png",
+          "sha256": "a9c98fd935fd9fe4c8b10fc12e480310e3e0f7bc642eeaba50d0e02b508e9673",
+          "rgba_sha256": "20209fcf1d7582a5a720c56fbbb325d24017ecff86233454f28d1e65576c59d7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 60480,
+          "intrinsic": {
+            "path": "assets/stages/stage02/BUGZ/intrinsic_013.png",
+            "sha256": "6bd6034df77142ca55935cae8c6c76e33ada75d3edd3311c0189db63a372567a",
+            "rgba_sha256": "445bf51090c7e82eeb4c08468da15d94157340d3962ef19bd4a12bf7c78ca9b1",
+            "bounds": [
+              126,
+              10,
+              215,
+              140
+            ],
+            "covered_pixels": 578,
+            "transparent_pixels": 59902
+          }
+        },
+        {
+          "index": 14,
+          "path": "assets/stages/stage02/BUGZ/frame_014.png",
+          "sha256": "a9c98fd935fd9fe4c8b10fc12e480310e3e0f7bc642eeaba50d0e02b508e9673",
+          "rgba_sha256": "20209fcf1d7582a5a720c56fbbb325d24017ecff86233454f28d1e65576c59d7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 60480,
+          "intrinsic": {
+            "path": "assets/stages/stage02/BUGZ/intrinsic_014.png",
+            "sha256": "3063edc7d5b7a61f225e7bc5c024abdd13a838ed1822b44ceab3fb0c61bc2ded",
+            "rgba_sha256": "9f0cf0fda2b43c738eb8e936a49bf53378c98d9510b442bd6617b0dcd0503286",
+            "bounds": [
+              143,
+              26,
+              211,
+              158
+            ],
+            "covered_pixels": 697,
+            "transparent_pixels": 59783
+          }
+        },
+        {
+          "index": 15,
+          "path": "assets/stages/stage02/BUGZ/frame_015.png",
+          "sha256": "a9c98fd935fd9fe4c8b10fc12e480310e3e0f7bc642eeaba50d0e02b508e9673",
+          "rgba_sha256": "20209fcf1d7582a5a720c56fbbb325d24017ecff86233454f28d1e65576c59d7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 60480,
+          "intrinsic": {
+            "path": "assets/stages/stage02/BUGZ/intrinsic_015.png",
+            "sha256": "6c612d584340bb7791f597ce1094247b0458289db07c72072de2260ec7242654",
+            "rgba_sha256": "c65b7220d433a12a396c5833cf04e12cd59f5de54b6dee7e01dab78f86dfa90d",
+            "bounds": [
+              129,
+              45,
+              192,
+              159
+            ],
+            "covered_pixels": 477,
+            "transparent_pixels": 60003
+          }
+        },
+        {
+          "index": 16,
+          "path": "assets/stages/stage02/BUGZ/frame_016.png",
+          "sha256": "a9c98fd935fd9fe4c8b10fc12e480310e3e0f7bc642eeaba50d0e02b508e9673",
+          "rgba_sha256": "20209fcf1d7582a5a720c56fbbb325d24017ecff86233454f28d1e65576c59d7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 60480,
+          "intrinsic": {
+            "path": "assets/stages/stage02/BUGZ/intrinsic_016.png",
+            "sha256": "92bdd8dafa8a33c758414e69003cfda1e82073835d6e42daca9c0a7a48bf6c05",
+            "rgba_sha256": "3aeb811671eb0a5ffb7e2d5c38cc0e9b6cdffb3a04736d7b66d89d2fe9dfaf07",
+            "bounds": [
+              120,
+              27,
+              202,
+              159
+            ],
+            "covered_pixels": 1014,
+            "transparent_pixels": 59466
+          }
+        },
+        {
+          "index": 17,
+          "path": "assets/stages/stage02/BUGZ/frame_017.png",
+          "sha256": "a9c98fd935fd9fe4c8b10fc12e480310e3e0f7bc642eeaba50d0e02b508e9673",
+          "rgba_sha256": "20209fcf1d7582a5a720c56fbbb325d24017ecff86233454f28d1e65576c59d7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 60480,
+          "intrinsic": {
+            "path": "assets/stages/stage02/BUGZ/intrinsic_017.png",
+            "sha256": "fb5360d94e82394e857f19d9864f32ca7ab62fb56a054b7e1892216f8df5e435",
+            "rgba_sha256": "c56774eb89b2a2d8083b39da71c47faa5f2c7295be3b81975929cde411f13d98",
+            "bounds": [
+              126,
+              4,
+              216,
+              151
+            ],
+            "covered_pixels": 621,
+            "transparent_pixels": 59859
+          }
+        },
+        {
+          "index": 18,
+          "path": "assets/stages/stage02/BUGZ/frame_018.png",
+          "sha256": "a9c98fd935fd9fe4c8b10fc12e480310e3e0f7bc642eeaba50d0e02b508e9673",
+          "rgba_sha256": "20209fcf1d7582a5a720c56fbbb325d24017ecff86233454f28d1e65576c59d7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 60480,
+          "intrinsic": {
+            "path": "assets/stages/stage02/BUGZ/intrinsic_018.png",
+            "sha256": "d75e179ceddec1994765be1f84a06f0043d0de2878bf5e96222763cea7328ae7",
+            "rgba_sha256": "947cb8a0ca2532aefb178b4fbc0bf79822d9b690424c67bbbbf8e9cadb282df4",
+            "bounds": [
+              125,
+              0,
+              257,
+              145
+            ],
+            "covered_pixels": 845,
+            "transparent_pixels": 59635
+          }
+        },
+        {
+          "index": 19,
+          "path": "assets/stages/stage02/BUGZ/frame_019.png",
+          "sha256": "a9c98fd935fd9fe4c8b10fc12e480310e3e0f7bc642eeaba50d0e02b508e9673",
+          "rgba_sha256": "20209fcf1d7582a5a720c56fbbb325d24017ecff86233454f28d1e65576c59d7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 60480,
+          "intrinsic": {
+            "path": "assets/stages/stage02/BUGZ/intrinsic_019.png",
+            "sha256": "531d1c6e5bcc8a590e5594327dc6166799d177d97a147990b924a7186e82c24e",
+            "rgba_sha256": "e3ef040862a1d5ac287f85e1f3f7caf4ca04fc939b0f72dcee09569fc7c2c317",
+            "bounds": [
+              101,
+              0,
+              277,
+              134
+            ],
+            "covered_pixels": 1132,
+            "transparent_pixels": 59348
+          }
+        },
+        {
+          "index": 20,
+          "path": "assets/stages/stage02/BUGZ/frame_020.png",
+          "sha256": "a9c98fd935fd9fe4c8b10fc12e480310e3e0f7bc642eeaba50d0e02b508e9673",
+          "rgba_sha256": "20209fcf1d7582a5a720c56fbbb325d24017ecff86233454f28d1e65576c59d7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 60480,
+          "intrinsic": {
+            "path": "assets/stages/stage02/BUGZ/intrinsic_020.png",
+            "sha256": "59fc9ad8506cdd4fdef285e3272c9bedad901bc9a92e0767f9a62360239e07f8",
+            "rgba_sha256": "7f350bc72d952abacc36c7de4a59684219159721650b3b5e043b9d451425312e",
+            "bounds": [
+              85,
+              11,
+              270,
+              113
+            ],
+            "covered_pixels": 630,
+            "transparent_pixels": 59850
+          }
+        },
+        {
+          "index": 21,
+          "path": "assets/stages/stage02/BUGZ/frame_021.png",
+          "sha256": "a9c98fd935fd9fe4c8b10fc12e480310e3e0f7bc642eeaba50d0e02b508e9673",
+          "rgba_sha256": "20209fcf1d7582a5a720c56fbbb325d24017ecff86233454f28d1e65576c59d7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 60480,
+          "intrinsic": {
+            "path": "assets/stages/stage02/BUGZ/intrinsic_021.png",
+            "sha256": "6f0bb3c3c636e9e3d26a19124aa3c551b501dd69eaf2d02ccb03f7e71a9ba9f7",
+            "rgba_sha256": "f1274bdbef981af9a9b024afaf6ab3c6392c658afa13168fcc5e1ef079a93467",
+            "bounds": [
+              81,
+              24,
+              268,
+              120
+            ],
+            "covered_pixels": 736,
+            "transparent_pixels": 59744
+          }
+        },
+        {
+          "index": 22,
+          "path": "assets/stages/stage02/BUGZ/frame_022.png",
+          "sha256": "a9c98fd935fd9fe4c8b10fc12e480310e3e0f7bc642eeaba50d0e02b508e9673",
+          "rgba_sha256": "20209fcf1d7582a5a720c56fbbb325d24017ecff86233454f28d1e65576c59d7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 60480,
+          "intrinsic": {
+            "path": "assets/stages/stage02/BUGZ/intrinsic_022.png",
+            "sha256": "b2214e0a90f2e39c963de0478dd504ec11bf061e6d3cd056b75af4e0ce8d7fac",
+            "rgba_sha256": "bf906dbe9d9abf3da01a85d9a7466c30c5fbb33ef4748e9ea2c7bc20f537cde3",
+            "bounds": [
+              59,
+              14,
+              255,
+              66
+            ],
+            "covered_pixels": 678,
+            "transparent_pixels": 59802
+          }
+        },
+        {
+          "index": 23,
+          "path": "assets/stages/stage02/BUGZ/frame_023.png",
+          "sha256": "a9c98fd935fd9fe4c8b10fc12e480310e3e0f7bc642eeaba50d0e02b508e9673",
+          "rgba_sha256": "20209fcf1d7582a5a720c56fbbb325d24017ecff86233454f28d1e65576c59d7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 60480,
+          "intrinsic": {
+            "path": "assets/stages/stage02/BUGZ/intrinsic_023.png",
+            "sha256": "1ab94e884dd13530e2a51401e7e519a425e7ff395b79fb613be78053219672d4",
+            "rgba_sha256": "66ecc913d3538e53de988fc85b364d10e6f11c901f754b119fa86da58fe287e5",
+            "bounds": [
+              41,
+              13,
+              273,
+              117
+            ],
+            "covered_pixels": 865,
+            "transparent_pixels": 59615
+          }
+        },
+        {
+          "index": 24,
+          "path": "assets/stages/stage02/BUGZ/frame_024.png",
+          "sha256": "a9c98fd935fd9fe4c8b10fc12e480310e3e0f7bc642eeaba50d0e02b508e9673",
+          "rgba_sha256": "20209fcf1d7582a5a720c56fbbb325d24017ecff86233454f28d1e65576c59d7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 60480,
+          "intrinsic": {
+            "path": "assets/stages/stage02/BUGZ/intrinsic_024.png",
+            "sha256": "b7f740b6b88e32dea3480ab46942bd1bf7ccbc56cffc0a97c1a0076eb08f9cd7",
+            "rgba_sha256": "d1494588f455d5445d6d20f6e5bed160fa1638fc2e5eed2224346380f82738ae",
+            "bounds": [
+              21,
+              14,
+              279,
+              93
+            ],
+            "covered_pixels": 1021,
+            "transparent_pixels": 59459
+          }
+        },
+        {
+          "index": 25,
+          "path": "assets/stages/stage02/BUGZ/frame_025.png",
+          "sha256": "a9c98fd935fd9fe4c8b10fc12e480310e3e0f7bc642eeaba50d0e02b508e9673",
+          "rgba_sha256": "20209fcf1d7582a5a720c56fbbb325d24017ecff86233454f28d1e65576c59d7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 60480,
+          "intrinsic": {
+            "path": "assets/stages/stage02/BUGZ/intrinsic_025.png",
+            "sha256": "c6a9b360592fd8fbe9dad16f1dc72674b5d2117ab8d2600a71b53b77158de1e8",
+            "rgba_sha256": "184b4c091965417d6bde8ced2b156ec6fa829ee321de79ce9b1327545bad8c2b",
+            "bounds": [
+              10,
+              47,
+              278,
+              89
+            ],
+            "covered_pixels": 994,
+            "transparent_pixels": 59486
+          }
+        },
+        {
+          "index": 26,
+          "path": "assets/stages/stage02/BUGZ/frame_026.png",
+          "sha256": "a9c98fd935fd9fe4c8b10fc12e480310e3e0f7bc642eeaba50d0e02b508e9673",
+          "rgba_sha256": "20209fcf1d7582a5a720c56fbbb325d24017ecff86233454f28d1e65576c59d7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 60480,
+          "intrinsic": {
+            "path": "assets/stages/stage02/BUGZ/intrinsic_026.png",
+            "sha256": "a1d456a0bd745c07e697b77269c89085638fe8ffabee7fe4e4954d69aba264e6",
+            "rgba_sha256": "e89df94cb1a5fdb47672e4640079aeb968e13b94734b6ef5afd1dcbb6d4a31da",
+            "bounds": [
+              17,
+              25,
+              269,
+              82
+            ],
+            "covered_pixels": 482,
+            "transparent_pixels": 59998
+          }
+        },
+        {
+          "index": 27,
+          "path": "assets/stages/stage02/BUGZ/frame_027.png",
+          "sha256": "a9c98fd935fd9fe4c8b10fc12e480310e3e0f7bc642eeaba50d0e02b508e9673",
+          "rgba_sha256": "20209fcf1d7582a5a720c56fbbb325d24017ecff86233454f28d1e65576c59d7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 60480,
+          "intrinsic": {
+            "path": "assets/stages/stage02/BUGZ/intrinsic_027.png",
+            "sha256": "b3554a79554356d9df5de1acf0685692d1a5c7708da7aae338389c734e8cb9b6",
+            "rgba_sha256": "1ef48d15bb06afc188a182e30a7a68a3bc7e2777621af93141aecf34397200ed",
+            "bounds": [
+              2,
+              7,
+              246,
+              111
+            ],
+            "covered_pixels": 834,
+            "transparent_pixels": 59646
+          }
+        },
+        {
+          "index": 28,
+          "path": "assets/stages/stage02/BUGZ/frame_028.png",
+          "sha256": "a9c98fd935fd9fe4c8b10fc12e480310e3e0f7bc642eeaba50d0e02b508e9673",
+          "rgba_sha256": "20209fcf1d7582a5a720c56fbbb325d24017ecff86233454f28d1e65576c59d7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 60480,
+          "intrinsic": {
+            "path": "assets/stages/stage02/BUGZ/intrinsic_028.png",
+            "sha256": "b2b2627a7309c48594a26aaa232733c90bbb2d8a61fca5be0c8fbe36b855f303",
+            "rgba_sha256": "47c7af0ffa1cc70be7f6c99e9d4bd9239de54de12845a43c4267247d78b00464",
+            "bounds": [
+              5,
+              2,
+              221,
+              133
+            ],
+            "covered_pixels": 699,
+            "transparent_pixels": 59781
+          }
+        },
+        {
+          "index": 29,
+          "path": "assets/stages/stage02/BUGZ/frame_029.png",
+          "sha256": "a9c98fd935fd9fe4c8b10fc12e480310e3e0f7bc642eeaba50d0e02b508e9673",
+          "rgba_sha256": "20209fcf1d7582a5a720c56fbbb325d24017ecff86233454f28d1e65576c59d7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 60480,
+          "intrinsic": {
+            "path": "assets/stages/stage02/BUGZ/intrinsic_029.png",
+            "sha256": "3400b23e1b6d8f43cd59746f5f09da9f098687c41b8256c11d949aae29f75a5f",
+            "rgba_sha256": "b00a24ad9515b400baac0065cff64d25265133e723e523cee9fcd29f86ec9d83",
+            "bounds": [
+              13,
+              2,
+              205,
+              155
+            ],
+            "covered_pixels": 703,
+            "transparent_pixels": 59777
+          }
+        },
+        {
+          "index": 30,
+          "path": "assets/stages/stage02/BUGZ/frame_030.png",
+          "sha256": "a9c98fd935fd9fe4c8b10fc12e480310e3e0f7bc642eeaba50d0e02b508e9673",
+          "rgba_sha256": "20209fcf1d7582a5a720c56fbbb325d24017ecff86233454f28d1e65576c59d7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 60480,
+          "intrinsic": {
+            "path": "assets/stages/stage02/BUGZ/intrinsic_030.png",
+            "sha256": "438914c81cef8aa51106b9ea4e53ed9e499f8cc64691bb9411236df0cdaed409",
+            "rgba_sha256": "9e05632849fcff715cd34ee124e378453354579f261894a6e7da9f6a159f1e8c",
+            "bounds": [
+              26,
+              2,
+              185,
+              105
+            ],
+            "covered_pixels": 840,
+            "transparent_pixels": 59640
+          }
+        },
+        {
+          "index": 31,
+          "path": "assets/stages/stage02/BUGZ/frame_031.png",
+          "sha256": "a9c98fd935fd9fe4c8b10fc12e480310e3e0f7bc642eeaba50d0e02b508e9673",
+          "rgba_sha256": "20209fcf1d7582a5a720c56fbbb325d24017ecff86233454f28d1e65576c59d7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 60480,
+          "intrinsic": {
+            "path": "assets/stages/stage02/BUGZ/intrinsic_031.png",
+            "sha256": "9f4cfa87a42c8390eadb6a5a5759872ec570d579620ae2e029908ed382962257",
+            "rgba_sha256": "39f1286fd3cfa09abb7cfd5e77267e846aba7093fbe2b35e31f2453ec4644917",
+            "bounds": [
+              17,
+              11,
+              189,
+              159
+            ],
+            "covered_pixels": 915,
+            "transparent_pixels": 59565
+          }
+        },
+        {
+          "index": 32,
+          "path": "assets/stages/stage02/BUGZ/frame_032.png",
+          "sha256": "a9c98fd935fd9fe4c8b10fc12e480310e3e0f7bc642eeaba50d0e02b508e9673",
+          "rgba_sha256": "20209fcf1d7582a5a720c56fbbb325d24017ecff86233454f28d1e65576c59d7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 60480,
+          "intrinsic": {
+            "path": "assets/stages/stage02/BUGZ/intrinsic_032.png",
+            "sha256": "8f00d17034cd39d2549af76c66e96923df09970ef22d36e939d314beee9f3582",
+            "rgba_sha256": "e9e893c9f4ed7a4965045a7e5eaafe152fc6f63d53cb2155099eddec468864c1",
+            "bounds": [
+              26,
+              19,
+              196,
+              143
+            ],
+            "covered_pixels": 329,
+            "transparent_pixels": 60151
+          }
+        },
+        {
+          "index": 33,
+          "path": "assets/stages/stage02/BUGZ/frame_033.png",
+          "sha256": "a9c98fd935fd9fe4c8b10fc12e480310e3e0f7bc642eeaba50d0e02b508e9673",
+          "rgba_sha256": "20209fcf1d7582a5a720c56fbbb325d24017ecff86233454f28d1e65576c59d7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 60480,
+          "intrinsic": {
+            "path": "assets/stages/stage02/BUGZ/intrinsic_033.png",
+            "sha256": "0714a129b27ebfcfe70aad02a8a852329ca298e1e1ab7c6d69ec9e9130c88df9",
+            "rgba_sha256": "b178715c355a324a910b1c48c9ffc83e0251eed13b4a7d2e35a3002c6f5a9640",
+            "bounds": [
+              14,
+              7,
+              194,
+              122
+            ],
+            "covered_pixels": 646,
+            "transparent_pixels": 59834
+          }
+        },
+        {
+          "index": 34,
+          "path": "assets/stages/stage02/BUGZ/frame_034.png",
+          "sha256": "a9c98fd935fd9fe4c8b10fc12e480310e3e0f7bc642eeaba50d0e02b508e9673",
+          "rgba_sha256": "20209fcf1d7582a5a720c56fbbb325d24017ecff86233454f28d1e65576c59d7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 60480,
+          "intrinsic": {
+            "path": "assets/stages/stage02/BUGZ/intrinsic_034.png",
+            "sha256": "78db7fd4269d3fdbe94e0d6b10ddc54f9816e05593984d48f01913c2f5b41ff8",
+            "rgba_sha256": "fca330d44972f9d13f5fb822bb9057b6414c9e6166513f810389973659a3da57",
+            "bounds": [
+              0,
+              6,
+              182,
+              121
+            ],
+            "covered_pixels": 1137,
+            "transparent_pixels": 59343
+          }
+        },
+        {
+          "index": 35,
+          "path": "assets/stages/stage02/BUGZ/frame_035.png",
+          "sha256": "a9c98fd935fd9fe4c8b10fc12e480310e3e0f7bc642eeaba50d0e02b508e9673",
+          "rgba_sha256": "20209fcf1d7582a5a720c56fbbb325d24017ecff86233454f28d1e65576c59d7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 60480,
+          "intrinsic": {
+            "path": "assets/stages/stage02/BUGZ/intrinsic_035.png",
+            "sha256": "c2444342aa706986ac5adf91333e1e954b7aa35cfaf18d9cb1e2d75bfa76314d",
+            "rgba_sha256": "e19fb396ce8a80755ae8ca551220664b56b70cccaaf44e9194fd04f9126c573e",
+            "bounds": [
+              6,
+              17,
+              162,
+              140
+            ],
+            "covered_pixels": 677,
+            "transparent_pixels": 59803
+          }
+        },
+        {
+          "index": 36,
+          "path": "assets/stages/stage02/BUGZ/frame_036.png",
+          "sha256": "a9c98fd935fd9fe4c8b10fc12e480310e3e0f7bc642eeaba50d0e02b508e9673",
+          "rgba_sha256": "20209fcf1d7582a5a720c56fbbb325d24017ecff86233454f28d1e65576c59d7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 60480,
+          "intrinsic": {
+            "path": "assets/stages/stage02/BUGZ/intrinsic_036.png",
+            "sha256": "71ec59f67e2e1c47a15e205e07f36d49bdf870fe8f39517d8cd0fa34cc5f7120",
+            "rgba_sha256": "1fa85095a05b539fc42487df8d86c023dba2ec47efe9dabf3015533c348679d9",
+            "bounds": [
+              27,
+              43,
+              212,
+              159
+            ],
+            "covered_pixels": 825,
+            "transparent_pixels": 59655
+          }
+        },
+        {
+          "index": 37,
+          "path": "assets/stages/stage02/BUGZ/frame_037.png",
+          "sha256": "a9c98fd935fd9fe4c8b10fc12e480310e3e0f7bc642eeaba50d0e02b508e9673",
+          "rgba_sha256": "20209fcf1d7582a5a720c56fbbb325d24017ecff86233454f28d1e65576c59d7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 60480,
+          "intrinsic": {
+            "path": "assets/stages/stage02/BUGZ/intrinsic_037.png",
+            "sha256": "8ef3b1a3f9c715b421b648693aa54b85d852c74ec92263424dfe872d9c4bcc1f",
+            "rgba_sha256": "4a56543783ce9abd7b5f746be5295eba0a9c02ebb24bc68ea2f7f4d75786bea8",
+            "bounds": [
+              52,
+              65,
+              183,
+              159
+            ],
+            "covered_pixels": 633,
+            "transparent_pixels": 59847
+          }
+        },
+        {
+          "index": 38,
+          "path": "assets/stages/stage02/BUGZ/frame_038.png",
+          "sha256": "a9c98fd935fd9fe4c8b10fc12e480310e3e0f7bc642eeaba50d0e02b508e9673",
+          "rgba_sha256": "20209fcf1d7582a5a720c56fbbb325d24017ecff86233454f28d1e65576c59d7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 60480,
+          "intrinsic": {
+            "path": "assets/stages/stage02/BUGZ/intrinsic_038.png",
+            "sha256": "84e1a08682eeb02cddd8a0f6fe16955c41968678d958a67f1a20e3abcadc129f",
+            "rgba_sha256": "83f75841a6efd1fa89e541766b7dc1d201506f3ea217ce2a05879c6c9b41f506",
+            "bounds": [
+              81,
+              47,
+              155,
+              159
+            ],
+            "covered_pixels": 709,
+            "transparent_pixels": 59771
+          }
+        },
+        {
+          "index": 39,
+          "path": "assets/stages/stage02/BUGZ/frame_039.png",
+          "sha256": "a9c98fd935fd9fe4c8b10fc12e480310e3e0f7bc642eeaba50d0e02b508e9673",
+          "rgba_sha256": "20209fcf1d7582a5a720c56fbbb325d24017ecff86233454f28d1e65576c59d7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 60480,
+          "intrinsic": {
+            "path": "assets/stages/stage02/BUGZ/intrinsic_039.png",
+            "sha256": "c9beec2c7efa69b7621febaeb09ccb881133458a2fcf7d5bba6ba6b68fc43ee7",
+            "rgba_sha256": "6b4b9b062d64c5d4d247f9785eab1464cb61c126bb8947add26929b0489538cd",
+            "bounds": [
+              95,
+              43,
+              171,
+              150
+            ],
+            "covered_pixels": 636,
+            "transparent_pixels": 59844
+          }
+        },
+        {
+          "index": 40,
+          "path": "assets/stages/stage02/BUGZ/frame_040.png",
+          "sha256": "a9c98fd935fd9fe4c8b10fc12e480310e3e0f7bc642eeaba50d0e02b508e9673",
+          "rgba_sha256": "20209fcf1d7582a5a720c56fbbb325d24017ecff86233454f28d1e65576c59d7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 60480,
+          "intrinsic": {
+            "path": "assets/stages/stage02/BUGZ/intrinsic_040.png",
+            "sha256": "e287ba15ee60eb75bf9790bf48d5637a37b95a42fc953918642333414c2d8297",
+            "rgba_sha256": "9a05b3bed7f35f78b04a199cc759dd2af645c005a79a1d6ab630a7a7b8b0a1f8",
+            "bounds": [
+              62,
+              16,
+              226,
+              143
+            ],
+            "covered_pixels": 576,
+            "transparent_pixels": 59904
+          }
+        },
+        {
+          "index": 41,
+          "path": "assets/stages/stage02/BUGZ/frame_041.png",
+          "sha256": "a9c98fd935fd9fe4c8b10fc12e480310e3e0f7bc642eeaba50d0e02b508e9673",
+          "rgba_sha256": "20209fcf1d7582a5a720c56fbbb325d24017ecff86233454f28d1e65576c59d7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 60480,
+          "intrinsic": {
+            "path": "assets/stages/stage02/BUGZ/intrinsic_041.png",
+            "sha256": "4d101f7450d2c310d2713a249d09a5287dc148cd747a1f60b7c2751a0eea7680",
+            "rgba_sha256": "023b29444bfd844563e5aef6d110060b2a5da6daab02344008356141f33a40d3",
+            "bounds": [
+              43,
+              0,
+              277,
+              124
+            ],
+            "covered_pixels": 879,
+            "transparent_pixels": 59601
+          }
+        },
+        {
+          "index": 42,
+          "path": "assets/stages/stage02/BUGZ/frame_042.png",
+          "sha256": "a9c98fd935fd9fe4c8b10fc12e480310e3e0f7bc642eeaba50d0e02b508e9673",
+          "rgba_sha256": "20209fcf1d7582a5a720c56fbbb325d24017ecff86233454f28d1e65576c59d7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 60480,
+          "intrinsic": {
+            "path": "assets/stages/stage02/BUGZ/intrinsic_042.png",
+            "sha256": "458a3502dda24418d97a478dd9ae6619ce9fb26e7c34e1faa1385328c1b51878",
+            "rgba_sha256": "d2bfaac944c4e0d4bfdd82cfe0dd2b2786fc11d2becb3f7e11c649e4fa3de60d",
+            "bounds": [
+              26,
+              0,
+              271,
+              122
+            ],
+            "covered_pixels": 834,
+            "transparent_pixels": 59646
+          }
+        },
+        {
+          "index": 43,
+          "path": "assets/stages/stage02/BUGZ/frame_043.png",
+          "sha256": "a9c98fd935fd9fe4c8b10fc12e480310e3e0f7bc642eeaba50d0e02b508e9673",
+          "rgba_sha256": "20209fcf1d7582a5a720c56fbbb325d24017ecff86233454f28d1e65576c59d7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 60480,
+          "intrinsic": {
+            "path": "assets/stages/stage02/BUGZ/intrinsic_043.png",
+            "sha256": "02ba9abb89c679fbc4373bfcad902a69dcab534935faf36316db947ad8be22d3",
+            "rgba_sha256": "f8c5f719ada7ebfd7936ebe11ebbb1ae01442769ae3708b1e61f1649e0e6757d",
+            "bounds": [
+              13,
+              5,
+              231,
+              130
+            ],
+            "covered_pixels": 877,
+            "transparent_pixels": 59603
+          }
+        },
+        {
+          "index": 44,
+          "path": "assets/stages/stage02/BUGZ/frame_044.png",
+          "sha256": "a9c98fd935fd9fe4c8b10fc12e480310e3e0f7bc642eeaba50d0e02b508e9673",
+          "rgba_sha256": "20209fcf1d7582a5a720c56fbbb325d24017ecff86233454f28d1e65576c59d7",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 60480,
+          "intrinsic": {
+            "path": "assets/stages/stage02/BUGZ/intrinsic_044.png",
+            "sha256": "4d97ca5535beacf0b34df96459ef3c8c151afc420a5179270d437c3ccb6975df",
+            "rgba_sha256": "669c4ecd8a3cd2614fb7ef5cf68b593c58265f0880da234080e40ba73eb1ec34",
+            "bounds": [
+              11,
+              26,
+              220,
+              149
+            ],
+            "covered_pixels": 842,
+            "transparent_pixels": 59638
+          }
+        }
+      ],
+      "animation": {
+        "action_index": 0,
+        "interval_raw": 120,
+        "loop_raw": 1,
+        "frames": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44
+        ],
+        "first_frame_raw": 0,
+        "action_raw_hex": "00780000000000000000000000012d00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "runtime_clock_observed": false
+      }
+    },
+    {
+      "id": "PODERS_7",
+      "role": "scene_object",
+      "source": {
+        "path": "Fight_Bk/PODERS.DGP",
+        "sha256": "920231d6de0d97926f27a4320b4275d64ed636f873455abe110aff0586b65ed2",
+        "width": 154,
+        "height": 158,
+        "frame_count": 20,
+        "anchor_raw": [
+          71,
+          126,
+          0
+        ],
+        "header_raw_hex": "09000100000000000000000000000000000000010000000000000000000000680200009e00000001000000040000000100000000000000000000000000000000000000"
+      },
+      "scn": {
+        "record_index": 7,
+        "offset": 25781,
+        "bytes": 71,
+        "raw_hex": "02504f444552532e44475000000000000000000000060000000500000007000000f5ffffff3f000000000000002c5c6c0000000007000100000000000000000000000000000000",
+        "type_raw_00": 2,
+        "current_frame_raw_1d": 7,
+        "position_raw": {
+          "x": -11,
+          "y": 63,
+          "z": 0
+        },
+        "sort_category_raw_36": 1
+      },
+      "frames": [
+        {
+          "index": 0,
+          "path": "assets/stages/stage02/PODERS_7/frame_000.png",
+          "sha256": "8c610635c32b9640c3ed4d59a4c4fa122c98cd3105936c0298b698caed5497db",
+          "rgba_sha256": "1eddd94a3916ef9084f134d0735d32fe4c1dfbb35380651322a9a7571096c902",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 24332,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODERS_7/intrinsic_000.png",
+            "sha256": "dc73ccd20d0e2d83a83c964d8fae89e6c0fdc1d23d98594959f6603e93daab36",
+            "rgba_sha256": "484de9e63440fc018148db7e50fbaf6ec7ab45a34d9e32ad9d557aa3fcadb73e",
+            "bounds": [
+              12,
+              9,
+              146,
+              135
+            ],
+            "covered_pixels": 3262,
+            "transparent_pixels": 21070
+          }
+        },
+        {
+          "index": 1,
+          "path": "assets/stages/stage02/PODERS_7/frame_001.png",
+          "sha256": "8c610635c32b9640c3ed4d59a4c4fa122c98cd3105936c0298b698caed5497db",
+          "rgba_sha256": "1eddd94a3916ef9084f134d0735d32fe4c1dfbb35380651322a9a7571096c902",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 24332,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODERS_7/intrinsic_001.png",
+            "sha256": "8b5983f778f36bfcc43fc7877a2a3f192a23015687c8bb28b7ffee4ae31e9fab",
+            "rgba_sha256": "27237df4af762f1a9827e9a97f16c44ac278f2fc5dc9db91dc0812e69293ab47",
+            "bounds": [
+              5,
+              13,
+              146,
+              154
+            ],
+            "covered_pixels": 4435,
+            "transparent_pixels": 19897
+          }
+        },
+        {
+          "index": 2,
+          "path": "assets/stages/stage02/PODERS_7/frame_002.png",
+          "sha256": "8c610635c32b9640c3ed4d59a4c4fa122c98cd3105936c0298b698caed5497db",
+          "rgba_sha256": "1eddd94a3916ef9084f134d0735d32fe4c1dfbb35380651322a9a7571096c902",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 24332,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODERS_7/intrinsic_002.png",
+            "sha256": "2641970e68660986352768a7cc2fd2e2ee300d2447509be0ea78d0e094fbbdc5",
+            "rgba_sha256": "fc7519ed9e9d1fb71bfc6d51fb4b94e48d235cc4e5b189c1b2c90e3c608b0550",
+            "bounds": [
+              3,
+              13,
+              147,
+              155
+            ],
+            "covered_pixels": 4947,
+            "transparent_pixels": 19385
+          }
+        },
+        {
+          "index": 3,
+          "path": "assets/stages/stage02/PODERS_7/frame_003.png",
+          "sha256": "8c610635c32b9640c3ed4d59a4c4fa122c98cd3105936c0298b698caed5497db",
+          "rgba_sha256": "1eddd94a3916ef9084f134d0735d32fe4c1dfbb35380651322a9a7571096c902",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 24332,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODERS_7/intrinsic_003.png",
+            "sha256": "b1fe8ee547a032539fb8ce313eb6e7c6b5aa3d24f3eb62d7a74f8ff1493a7ad7",
+            "rgba_sha256": "c820b9cd98bb632c14dfaa1f881ec111695f0274dcf6f19c1bc2ba438bacaea2",
+            "bounds": [
+              2,
+              8,
+              149,
+              157
+            ],
+            "covered_pixels": 5198,
+            "transparent_pixels": 19134
+          }
+        },
+        {
+          "index": 4,
+          "path": "assets/stages/stage02/PODERS_7/frame_004.png",
+          "sha256": "8c610635c32b9640c3ed4d59a4c4fa122c98cd3105936c0298b698caed5497db",
+          "rgba_sha256": "1eddd94a3916ef9084f134d0735d32fe4c1dfbb35380651322a9a7571096c902",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 24332,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODERS_7/intrinsic_004.png",
+            "sha256": "3bdf1aa211ac7fe66f37c6db144094e9bec4a31883c5dc3aa79d4a603c8da063",
+            "rgba_sha256": "30516737b3720ce91e6042c1dc82dc43231c58e4ae54cb44c5e8a0a865c76a24",
+            "bounds": [
+              1,
+              3,
+              151,
+              155
+            ],
+            "covered_pixels": 5500,
+            "transparent_pixels": 18832
+          }
+        },
+        {
+          "index": 5,
+          "path": "assets/stages/stage02/PODERS_7/frame_005.png",
+          "sha256": "8c610635c32b9640c3ed4d59a4c4fa122c98cd3105936c0298b698caed5497db",
+          "rgba_sha256": "1eddd94a3916ef9084f134d0735d32fe4c1dfbb35380651322a9a7571096c902",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 24332,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODERS_7/intrinsic_005.png",
+            "sha256": "de98387f04ecff8d1081f8e400bbc59c1035f0a3c528b98dfbd4619a8bc9e9a1",
+            "rgba_sha256": "8eacdd22b464b2400361aa5984e1e52c571938b2bfb4fdcbf20c41b6f37a8766",
+            "bounds": [
+              1,
+              2,
+              153,
+              157
+            ],
+            "covered_pixels": 5614,
+            "transparent_pixels": 18718
+          }
+        },
+        {
+          "index": 6,
+          "path": "assets/stages/stage02/PODERS_7/frame_006.png",
+          "sha256": "8c610635c32b9640c3ed4d59a4c4fa122c98cd3105936c0298b698caed5497db",
+          "rgba_sha256": "1eddd94a3916ef9084f134d0735d32fe4c1dfbb35380651322a9a7571096c902",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 24332,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODERS_7/intrinsic_006.png",
+            "sha256": "91761cc1d132fc550ec19977072c65b15f96affd97957514b9fd48b0e0ff28ba",
+            "rgba_sha256": "727079a22315aa9fce9a16e21f756e2e2c5267e63061d3b970e11d8c5e7fda57",
+            "bounds": [
+              1,
+              0,
+              154,
+              158
+            ],
+            "covered_pixels": 5112,
+            "transparent_pixels": 19220
+          }
+        },
+        {
+          "index": 7,
+          "path": "assets/stages/stage02/PODERS_7/frame_007.png",
+          "sha256": "8c610635c32b9640c3ed4d59a4c4fa122c98cd3105936c0298b698caed5497db",
+          "rgba_sha256": "1eddd94a3916ef9084f134d0735d32fe4c1dfbb35380651322a9a7571096c902",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 24332,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODERS_7/intrinsic_007.png",
+            "sha256": "f187ab7799e2d0eecaa2e678538b00e994f88195145f14d71d3535db78dfbb42",
+            "rgba_sha256": "b056dda02eed32d76aea17af177ede0c6170a1360823bc8097000ed8ad56195c",
+            "bounds": [
+              1,
+              0,
+              151,
+              156
+            ],
+            "covered_pixels": 4654,
+            "transparent_pixels": 19678
+          }
+        },
+        {
+          "index": 8,
+          "path": "assets/stages/stage02/PODERS_7/frame_008.png",
+          "sha256": "8c610635c32b9640c3ed4d59a4c4fa122c98cd3105936c0298b698caed5497db",
+          "rgba_sha256": "1eddd94a3916ef9084f134d0735d32fe4c1dfbb35380651322a9a7571096c902",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 24332,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODERS_7/intrinsic_008.png",
+            "sha256": "d26e0d092f05ebf66c17b9f19aadad82c19ee7b28ca18d074f75f4cae706d287",
+            "rgba_sha256": "8d51b8b3b880428d6131ca6bda0e34194d975e59df77e779ba637ce50b0644b5",
+            "bounds": [
+              0,
+              12,
+              152,
+              156
+            ],
+            "covered_pixels": 3993,
+            "transparent_pixels": 20339
+          }
+        },
+        {
+          "index": 9,
+          "path": "assets/stages/stage02/PODERS_7/frame_009.png",
+          "sha256": "8c610635c32b9640c3ed4d59a4c4fa122c98cd3105936c0298b698caed5497db",
+          "rgba_sha256": "1eddd94a3916ef9084f134d0735d32fe4c1dfbb35380651322a9a7571096c902",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 24332,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODERS_7/intrinsic_009.png",
+            "sha256": "d378ce14fb524cb11e68add2bcb38d8ff619e39fd719ee666d8d79c399eb4942",
+            "rgba_sha256": "8591bdeaa9e6d64063b2e331fc217b31d07545c711d6da29918d0370e49dcb3d",
+            "bounds": [
+              0,
+              8,
+              153,
+              157
+            ],
+            "covered_pixels": 3220,
+            "transparent_pixels": 21112
+          }
+        },
+        {
+          "index": 10,
+          "path": "assets/stages/stage02/PODERS_7/frame_010.png",
+          "sha256": "8c610635c32b9640c3ed4d59a4c4fa122c98cd3105936c0298b698caed5497db",
+          "rgba_sha256": "1eddd94a3916ef9084f134d0735d32fe4c1dfbb35380651322a9a7571096c902",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 24332,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODERS_7/intrinsic_010.png",
+            "sha256": "ae6affdf0540b9a9bfd44bea781d91ea82490dc258a275c2fc4567e03c9d0519",
+            "rgba_sha256": "b423a0adf198b82b61539c6cbf1cbc45ee0ba9e51929885f564c69e3986ea4a1",
+            "bounds": [
+              0,
+              6,
+              154,
+              157
+            ],
+            "covered_pixels": 2656,
+            "transparent_pixels": 21676
+          }
+        },
+        {
+          "index": 11,
+          "path": "assets/stages/stage02/PODERS_7/frame_011.png",
+          "sha256": "8c610635c32b9640c3ed4d59a4c4fa122c98cd3105936c0298b698caed5497db",
+          "rgba_sha256": "1eddd94a3916ef9084f134d0735d32fe4c1dfbb35380651322a9a7571096c902",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 24332,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODERS_7/intrinsic_011.png",
+            "sha256": "9037699db050d5d9f07977edb05d05c26596c0d8cfd43074acc38bdd90c77f1a",
+            "rgba_sha256": "9d5f8a2ce17ca3ad2e80ac90c3c54b487b3a0ccb57bf22f865fea38e40f6fa22",
+            "bounds": [
+              0,
+              9,
+              154,
+              154
+            ],
+            "covered_pixels": 2624,
+            "transparent_pixels": 21708
+          }
+        },
+        {
+          "index": 12,
+          "path": "assets/stages/stage02/PODERS_7/frame_012.png",
+          "sha256": "8c610635c32b9640c3ed4d59a4c4fa122c98cd3105936c0298b698caed5497db",
+          "rgba_sha256": "1eddd94a3916ef9084f134d0735d32fe4c1dfbb35380651322a9a7571096c902",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 24332,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODERS_7/intrinsic_012.png",
+            "sha256": "4774f74c0079ac6d6b99194ec02dc6bf8051ac188543f9e14f388cafd0454b98",
+            "rgba_sha256": "cdfaefd29753e4e295ca2c198e87b79dbc6bada999a369b6a771d33a4c43dbbe",
+            "bounds": [
+              0,
+              5,
+              154,
+              151
+            ],
+            "covered_pixels": 3201,
+            "transparent_pixels": 21131
+          }
+        },
+        {
+          "index": 13,
+          "path": "assets/stages/stage02/PODERS_7/frame_013.png",
+          "sha256": "8c610635c32b9640c3ed4d59a4c4fa122c98cd3105936c0298b698caed5497db",
+          "rgba_sha256": "1eddd94a3916ef9084f134d0735d32fe4c1dfbb35380651322a9a7571096c902",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 24332,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODERS_7/intrinsic_013.png",
+            "sha256": "b2dcf18d0647e06b2dda717dcf2dbff23a05cd7295e08b5c516d07ba42de7a2c",
+            "rgba_sha256": "745256da0004daea3699d0b8104459e4e93000f2a9fbe3b202f18ffe797b8366",
+            "bounds": [
+              0,
+              8,
+              154,
+              158
+            ],
+            "covered_pixels": 4067,
+            "transparent_pixels": 20265
+          }
+        },
+        {
+          "index": 14,
+          "path": "assets/stages/stage02/PODERS_7/frame_014.png",
+          "sha256": "8c610635c32b9640c3ed4d59a4c4fa122c98cd3105936c0298b698caed5497db",
+          "rgba_sha256": "1eddd94a3916ef9084f134d0735d32fe4c1dfbb35380651322a9a7571096c902",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 24332,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODERS_7/intrinsic_014.png",
+            "sha256": "fa89cd10a3c414ca9f70926873a1b57b28f1cc8640e145ba968d78e6dafc1071",
+            "rgba_sha256": "630d5a25c099f6fa647094bc54218ebd0551068d798845abc46e48de111e63fa",
+            "bounds": [
+              0,
+              7,
+              154,
+              157
+            ],
+            "covered_pixels": 4669,
+            "transparent_pixels": 19663
+          }
+        },
+        {
+          "index": 15,
+          "path": "assets/stages/stage02/PODERS_7/frame_015.png",
+          "sha256": "8c610635c32b9640c3ed4d59a4c4fa122c98cd3105936c0298b698caed5497db",
+          "rgba_sha256": "1eddd94a3916ef9084f134d0735d32fe4c1dfbb35380651322a9a7571096c902",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 24332,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODERS_7/intrinsic_015.png",
+            "sha256": "e34b8ed5f363b33fedb4c49515f639402406f007b8e03853287c82b1b46e9e38",
+            "rgba_sha256": "d028ac2f1e0efa7b8269f7e196a2b9a57135411ce28bf96a27fa8b3e50b4eae0",
+            "bounds": [
+              0,
+              4,
+              152,
+              157
+            ],
+            "covered_pixels": 5149,
+            "transparent_pixels": 19183
+          }
+        },
+        {
+          "index": 16,
+          "path": "assets/stages/stage02/PODERS_7/frame_016.png",
+          "sha256": "8c610635c32b9640c3ed4d59a4c4fa122c98cd3105936c0298b698caed5497db",
+          "rgba_sha256": "1eddd94a3916ef9084f134d0735d32fe4c1dfbb35380651322a9a7571096c902",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 24332,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODERS_7/intrinsic_016.png",
+            "sha256": "bfb132daaf298d96de3cf5fa210e09f816bdadd021b8b08d7631329184076c51",
+            "rgba_sha256": "048254c65e1f87dac2181683d7e9da6ccdcdba79fb4b6510f1cbcc9dd8beec2e",
+            "bounds": [
+              0,
+              3,
+              152,
+              155
+            ],
+            "covered_pixels": 5435,
+            "transparent_pixels": 18897
+          }
+        },
+        {
+          "index": 17,
+          "path": "assets/stages/stage02/PODERS_7/frame_017.png",
+          "sha256": "8c610635c32b9640c3ed4d59a4c4fa122c98cd3105936c0298b698caed5497db",
+          "rgba_sha256": "1eddd94a3916ef9084f134d0735d32fe4c1dfbb35380651322a9a7571096c902",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 24332,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODERS_7/intrinsic_017.png",
+            "sha256": "25b1be5591c606c56757b30607bf57f2c734b3f87a85a4ccf78aea6da3f50e1c",
+            "rgba_sha256": "710a06fb920022440d1a6d50fa97c4ad24172317f82d115e9242b29cd59608c7",
+            "bounds": [
+              0,
+              11,
+              154,
+              157
+            ],
+            "covered_pixels": 5190,
+            "transparent_pixels": 19142
+          }
+        },
+        {
+          "index": 18,
+          "path": "assets/stages/stage02/PODERS_7/frame_018.png",
+          "sha256": "8c610635c32b9640c3ed4d59a4c4fa122c98cd3105936c0298b698caed5497db",
+          "rgba_sha256": "1eddd94a3916ef9084f134d0735d32fe4c1dfbb35380651322a9a7571096c902",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 24332,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODERS_7/intrinsic_018.png",
+            "sha256": "d4de42f4f073a7b8826ada1026b3653d8a0a3fb02bf35076fa2cc6b51d5972ef",
+            "rgba_sha256": "31bc804ea77578a7365aae569b06bc9331b70e1b1005f06ba183bfa0156d818c",
+            "bounds": [
+              0,
+              7,
+              154,
+              157
+            ],
+            "covered_pixels": 4889,
+            "transparent_pixels": 19443
+          }
+        },
+        {
+          "index": 19,
+          "path": "assets/stages/stage02/PODERS_7/frame_019.png",
+          "sha256": "8c610635c32b9640c3ed4d59a4c4fa122c98cd3105936c0298b698caed5497db",
+          "rgba_sha256": "1eddd94a3916ef9084f134d0735d32fe4c1dfbb35380651322a9a7571096c902",
+          "bounds": null,
+          "covered_pixels": 0,
+          "transparent_pixels": 24332,
+          "intrinsic": {
+            "path": "assets/stages/stage02/PODERS_7/intrinsic_019.png",
+            "sha256": "4def7d16fa451d937fd83aa9469a77a376acf57b9ead51c69761f7f59b7eeeb0",
+            "rgba_sha256": "5068097999984e1c0f8ab39228474e42a78567aaf4d25abc00fe8676bb2981f6",
+            "bounds": [
+              0,
+              8,
+              147,
+              156
+            ],
+            "covered_pixels": 4415,
+            "transparent_pixels": 19917
+          }
+        }
+      ],
+      "animation": {
+        "action_index": 0,
+        "interval_raw": 120,
+        "loop_raw": 1,
+        "frames": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19
+        ],
+        "first_frame_raw": 0,
+        "action_raw_hex": "00780000000000000000000000011400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "runtime_clock_observed": false
+      }
+    }
+  ],
+  "default_composition": {
+    "viewport": {
+      "width": 640,
+      "height": 480
+    },
+    "camera": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "sky": {
+      "layer_id": "FS02A",
+      "initial_frame": 0,
+      "source_rect": [
+        0,
+        0,
+        640,
+        175
+      ],
+      "destination_rect": [
+        0,
+        0,
+        640,
+        175
+      ]
+    },
+    "ground": {
+      "layer_id": "FG02A",
+      "frame": 0,
+      "source_rect": [
+        380,
+        95,
+        640,
+        305
+      ],
+      "destination_rect": [
+        0,
+        175,
+        640,
+        305
+      ]
+    },
+    "scene_objects": [
+      {
+        "layer_id": "FB02A2",
+        "frame": 0,
+        "source_rect": [
+          0,
+          0,
+          899,
+          399
+        ],
+        "destination_rect": [
+          -122,
+          -211,
+          899,
+          399
+        ],
+        "sort_category": 1,
+        "sort_y": 40
+      },
+      {
+        "layer_id": "FB02A",
+        "frame": 0,
+        "source_rect": [
+          0,
+          0,
+          899,
+          399
+        ],
+        "destination_rect": [
+          -117,
+          -216,
+          899,
+          399
+        ],
+        "sort_category": 1,
+        "sort_y": 95
+      },
+      {
+        "layer_id": "PODER",
+        "frame": 15,
+        "source_rect": [
+          0,
+          0,
+          199,
+          199
+        ],
+        "destination_rect": [
+          286,
+          -25,
+          199,
+          199
+        ],
+        "sort_category": 0,
+        "sort_y": 62
+      },
+      {
+        "layer_id": "PODERS",
+        "frame": 1,
+        "source_rect": [
+          0,
+          0,
+          154,
+          158
+        ],
+        "destination_rect": [
+          502,
+          -9,
+          154,
+          158
+        ],
+        "sort_category": 1,
+        "sort_y": 69
+      },
+      {
+        "layer_id": "BUGZ",
+        "frame": 16,
+        "source_rect": [
+          0,
+          0,
+          280,
+          216
+        ],
+        "destination_rect": [
+          34,
+          10,
+          280,
+          216
+        ],
+        "sort_category": 1,
+        "sort_y": 146
+      },
+      {
+        "layer_id": "PODERS_7",
+        "frame": 7,
+        "source_rect": [
+          0,
+          0,
+          154,
+          158
+        ],
+        "destination_rect": [
+          -82,
+          -15,
+          154,
+          158
+        ],
+        "sort_category": 1,
+        "sort_y": 63
+      }
+    ],
+    "camera_limit_x": 410,
+    "animated_camera_projection_implemented": false,
+    "draw_order": "sky, ground, scenery textures, combat actors sorted by ground Y, then effects and HUD"
+  },
+  "default_composite": {
+    "path": "/assets/stages/stage02/default_composite.png",
+    "sha256": "9cddf38f3315490ce13abbf24d14ab7c96d47bc150750e5f6108624f008dcac0",
+    "width": 640,
+    "height": 480
+  },
+  "source_hashes": {
+    "GAME.exe": "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18",
+    "Fight_Bk/stage02.scn": "6117a00ff63db72905d399324398e02bd7c3a205f61d048481b4f64c7a4bc868",
+    "Fight_Bk/FS02A.DGP": "4babf53a3c3503e1344283967faf6f6148f32a9d2b6f2266e6c68b7834c06b7e",
+    "Fight_Bk/FG02A.DGP": "650dc171c293617978806502846dc7fe3dd889ae4d9bbe21d510fcfa6822a1ac",
+    "Fight_Bk/FB02A2.DGP": "468221ec8e8a2a7710c38a3d2c91674668edf3034f79a24619382d0783e377bf",
+    "Fight_Bk/FB02A.DGP": "c195ad84f0cc5ba7809082e6774494957625b0c274abf489fd6000b4c4ac18de",
+    "Fight_Bk/PODER.DGP": "b7d9d9d0c2de66cdfd923b39c6391ff96184dd477e6b6319812169ab1cb496aa",
+    "Fight_Bk/PODERS.DGP": "920231d6de0d97926f27a4320b4275d64ed636f873455abe110aff0586b65ed2",
+    "Fight_Bk/BUGZ.DGP": "bb25554828cef8d4fb8b70dae1fe0a203d0d70d77407fe26b1048b2e272e0fcc"
+  },
+  "native_evidence": {
+    "loader": {
+      "selector": "0x51c48f",
+      "evidence_id": "ev_943b0b73f1e96b42f7c10b51e88dc4d7863d2f2860e0306b9f3676596bf34686",
+      "bundle": "remake/runtime/evidence/forest_stage_native.json"
+    },
+    "register": {
+      "selector": "0x51c070",
+      "evidence_id": "ev_c46492f694a8d07c53256c078f5f9fd532c960de0e5c440351e14b9db37b2217",
+      "bundle": "remake/runtime/evidence/forest_stage_native.json"
+    },
+    "viewport": {
+      "selector": "0x67c3a0",
+      "evidence_id": "ev_8ca2bfee0c0cc1cf3aef8c7925374a59763d8c00ddae639444d2cca1b6d09581",
+      "bundle": "remake/runtime/evidence/forest_stage_native.json"
+    },
+    "background_draw": {
+      "selector": "0x515d03",
+      "evidence_id": "ev_905b24d5b64b962806945c172e0ff62ec47d36f049592bec3943ef246c544306",
+      "bundle": "remake/runtime/evidence/forest_stage_native.json"
+    },
+    "sky_draw": {
+      "selector": "0x5154d8",
+      "evidence_id": "ev_862e12f6c9e9063110e4f7b011aad3061a9c93e4ebed25ef2af3c9872c654623",
+      "bundle": "remake/runtime/evidence/forest_stage_native.json"
+    },
+    "ground_scanlines": {
+      "selector": "0x5145d0",
+      "evidence_id": "ev_fb4eae0c9be69541893c3047b15076c461006bd02d921a124867ba8dc1294465",
+      "bundle": "remake/runtime/evidence/forest_stage_native.json"
+    },
+    "object_projection": {
+      "selector": "0x513fc0",
+      "evidence_id": "ev_18cdcb45ca765d672e35f752afdc5e706f22e1459b45625a11f7c281f3ba326b",
+      "bundle": "remake/runtime/evidence/forest_stage_native.json"
+    },
+    "object_queue": {
+      "selector": "0x514990",
+      "evidence_id": "ev_b369f1149d0cea79384a0ae8296c12400febd1ba48c1feffbfb9bea7cbc05bf9",
+      "bundle": "remake/runtime/evidence/forest_stage_native.json"
+    },
+    "depth_sort": {
+      "selector": "0x515320",
+      "evidence_id": "ev_885213dafbc931d020af2efd8feb71415f8a38dde2ccdcff8bc6e3cd161d64cb",
+      "bundle": "remake/runtime/evidence/forest_stage_native.json"
+    },
+    "animation": {
+      "selector": "0x51d28f",
+      "evidence_id": "ev_5980fa61b3229e1e821a27ef87d60e6ba0603fea9415239c7f52ac25807dc58a",
+      "bundle": "remake/runtime/evidence/forest_stage_native.json"
+    }
+  },
+  "derivation_source": {
+    "path": "data/forest_stage.json",
+    "sha256": "bca1808c76f2db6bef833bdde899ac48e0cd7bc4bf064124f185c6471ff917f8"
+  },
+  "original_game_execution_observed": false,
+  "limitations": [
+    "Recovered SCN v2/mode4 zero-camera layout and single-action sequential scenery animation; dynamic camera and exact native RGB565 blending remain adaptation boundaries."
+  ]
+}

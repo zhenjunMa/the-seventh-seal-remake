@@ -41,9 +41,9 @@ def validate_cf1_action(dgp):
     count = struct.unpack_from('<I', raw, 0x0e)[0]
     first = struct.unpack_from('<I', raw, 0x72)[0]
     interval = struct.unpack_from('<I', raw, 1)[0]
-    if raw[0] != 0 or raw[0x0d] not in (0, 1) or not 0 < count <= 255 or first != 0 or count > dgp.frame_count:
+    if raw[0] != 0 or raw[0x0d] & 15 not in (0, 1) or raw[0x0d] >> 4 > 2 or not 0 < count <= 255 or first != 0 or count > dgp.frame_count:
         raise DGPError('CF1 map action direction/sequence mode is not recovered')
-    logical_count = struct.unpack_from('<I', raw, 0x12)[0] if raw[0x0d] == 0 else count
+    logical_count = struct.unpack_from('<I', raw, 0x12)[0] if raw[0x0d] & 15 == 0 else count
     if not logical_count:
         raise DGPError('CF1 map action requires a nonempty native logical sequence')
     # 410850 uses this logical count for FF's initial modulo. 4137C0 wraps

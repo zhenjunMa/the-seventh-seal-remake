@@ -57,7 +57,7 @@ for(const [metadataPath,itemMetadataPath,stageMetadataPath,lifecycleMetadataPath
   for(const bank of [view.layers,...view.alternateLayers.values()])for(const pair of bank.frames)for(const layer of [pair.main,pair.intrinsic]){
     const p='/'+layer.path;add({...assets.get(p),group:'role-'+bank.role_id,tile_width:bank.frame_width,tile_height:bank.frame_height});
   }
-  if(view.stageMeta)for(const asset of view.stageMeta.layers.flatMap(layer=>layer.frames.map(frame=>canonical(frame.path))))
+  if(view.stageMeta)for(const asset of view.stageMeta.layers.flatMap(layer=>layer.frames.flatMap(frame=>[frame.path,...frame.intrinsic?[frame.intrinsic.path]:[]].map(canonical))))
     add({...assets.get(asset),group:'stage-'+view.stageMeta.stage_id});
   if(roleIds&&metadataPath==='/data/party_battle_view.json'&&view.stageMeta?.stage_id===stageId){
     const paths=selectBattleAssets(view.assetDescriptors,roleIds.map(id=>({id}))).map(asset=>asset.path);

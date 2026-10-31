@@ -299,6 +299,6 @@
   },
   "original_game_execution_observed": false,
   "limitations": [
-    "Recovered SCN v2/mode4 zero-camera layout only; dynamic camera, non-sky animation and exact native blending require additional handlers."
+    "Recovered SCN v2/mode4 zero-camera layout and single-action sequential scenery animation; dynamic camera and exact native RGB565 blending remain adaptation boundaries."
   ]
 }

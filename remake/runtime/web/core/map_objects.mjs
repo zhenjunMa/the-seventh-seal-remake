@@ -14,8 +14,8 @@ function cf1Source(row){
   const action=resource.actions[0],{raw:a,view:v}=sourceBytes(action.source_action_raw_hex,0xac,'地图物件动作');
   const count=v.getUint32(0x0e,true),interval=v.getUint32(1,true),first=v.getUint32(0x72,true);
   const sound=String.fromCharCode(...a.slice(0x56,0x6a)).split('\0')[0];
-  const explicit=a[13]===0,logicalCount=explicit?v.getUint32(0x12,true):count;
-  if(a[0]!==0||![0,1].includes(a[13])||count<1||count>255||first!==0||action.index!==0||action.directions!==1
+  const explicit=(a[13]&15)===0,logicalCount=explicit?v.getUint32(0x12,true):count;
+  if(a[0]!==0||![0,1].includes(a[13]&15)||(a[13]>>>4)>2||count<1||count>255||first!==0||action.index!==0||action.directions!==1
     ||action.frame_count!==count||action.interval_raw!==interval||action.first_frame!==first
     ||logicalCount<1||(explicit&&logicalCount>0x5c)
     ||action.logical_frames?.length!==logicalCount

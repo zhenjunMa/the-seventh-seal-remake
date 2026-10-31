@@ -15,6 +15,7 @@ import export_chapter_maps as maps
 import export_chapter_story as story
 import export_enemy_content as enemies
 import export_battle_lifecycle as lifecycle
+import export_battle_stages as stages
 from source.combat_resources import CHR
 from source.dgp import DGP
 from export_skill_layers import SourceAudit
@@ -22,6 +23,17 @@ from source.map_identity import is_native_map_id, native_map_id_from_filename
 
 
 class ContentExporterTests(unittest.TestCase):
+    def test_stage02_keeps_both_original_poders_placements(self):
+        stage = stages.prepare_stage('stage02', content.stage_exports()['stage02'])
+        rows = stage['rows']
+        self.assertEqual(len(rows), 8)
+        first, second = rows[5], rows[7]
+        self.assertEqual(first['graphics'].sha256, second['graphics'].sha256)
+        self.assertEqual(first['graphics'].path.name.lower(), 'poders.dgp')
+        self.assertNotEqual(first['id'], second['id'])
+        self.assertEqual(struct.unpack_from('<iii', first['raw'], 0x21), (573, 69, 0))
+        self.assertEqual(struct.unpack_from('<iii', second['raw'], 0x21), (-11, 63, 0))
+
     def test_lifecycle_native_retention_accepts_exact_bundle_and_single_record_sources(self):
         with tempfile.TemporaryDirectory() as temporary:
             root=Path(temporary)

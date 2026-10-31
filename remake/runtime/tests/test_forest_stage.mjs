@@ -18,3 +18,23 @@ test('All forest source frames retain hashes and dimensions; the background pass
   assert.deepEqual(calls[2].slice(1),[142,185,640,214,120,0,720,240.75]);
   calls.length=0;drawForestStageBackground(ctx,stage,images,160);assert.ok(calls[0][0].endsWith('frame_000.png'));
 });
+
+test('stage02 preserves repeated scenery and advances each indexed light on the source120ms clock',async()=>{
+  const stage=JSON.parse(await readFile(new URL('../web/data/stages/stage02.json',import.meta.url),'utf8'));
+  validateForestStage(stage);
+  const repeated=stage.layers.filter(layer=>layer.source.path.toLowerCase()==='fight_bk/poders.dgp');
+  assert.equal(repeated.length,2);assert.notEqual(repeated[0].id,repeated[1].id);
+  assert.deepEqual(repeated.map(layer=>layer.scn.position_raw.x),[573,-11]);
+  const images=new Map(forestStageAssets(stage).map(asset=>[asset.path,asset.path]));
+  const calls=[],stack=[],ctx={globalCompositeOperation:'source-over',
+    save(){stack.push(this.globalCompositeOperation);},restore(){this.globalCompositeOperation=stack.pop();},
+    drawImage(path,...args){calls.push({path,blend:this.globalCompositeOperation,args});}};
+  for(const [time,frame]of [[0,15],[119,15],[120,16],[720,0]]){
+    calls.length=0;drawForestStageBackground(ctx,stage,images,time);
+    const poder=calls.filter(row=>row.path.includes('/PODER/'));
+    assert.equal(poder.length,2);assert.ok(poder[0].path.endsWith(`frame_${String(frame).padStart(3,'0')}.png`));
+    assert.equal(poder[0].blend,'source-over');assert.equal(poder[1].blend,'lighter');
+    assert.equal(ctx.globalCompositeOperation,'source-over');
+    for(const layer of repeated)assert.equal(calls.filter(row=>row.path.includes(`/${layer.id}/`)).length,2);
+  }
+});

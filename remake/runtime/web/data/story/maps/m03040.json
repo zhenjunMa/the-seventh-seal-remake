@@ -2494,6 +2494,151 @@
     ],
     "exits_by_map": [
       {
+        "id": 1,
+        "state": "ready",
+        "cells": [
+          {
+            "x": 36,
+            "y": 77
+          },
+          {
+            "x": 37,
+            "y": 77
+          },
+          {
+            "x": 38,
+            "y": 77
+          },
+          {
+            "x": 39,
+            "y": 77
+          },
+          {
+            "x": 40,
+            "y": 77
+          },
+          {
+            "x": 41,
+            "y": 77
+          },
+          {
+            "x": 42,
+            "y": 77
+          },
+          {
+            "x": 43,
+            "y": 77
+          },
+          {
+            "x": 44,
+            "y": 77
+          },
+          {
+            "x": 45,
+            "y": 77
+          },
+          {
+            "x": 46,
+            "y": 77
+          },
+          {
+            "x": 47,
+            "y": 77
+          },
+          {
+            "x": 48,
+            "y": 77
+          },
+          {
+            "x": 49,
+            "y": 77
+          },
+          {
+            "x": 50,
+            "y": 77
+          }
+        ],
+        "target_map": "M03050",
+        "entry": {
+          "x": 1712,
+          "y": 128,
+          "direction": 6,
+          "cell_x": 107,
+          "cell_y": 8,
+          "native_x": 856,
+          "native_y": 64
+        },
+        "conditions": [],
+        "source": {
+          "path": "Map/m03040.dat",
+          "sha256": "9a69cbfe47b4832e5a23c91f95c2db354439efba421eab292e8b2c44690cef7b",
+          "descriptor_offset": 452274,
+          "descriptor_bytes": 43,
+          "descriptor_hex": "00000000000000000000000000000000006d30333035302e64617400000000000000000000000202000000",
+          "compact_field_expansion_evidence": "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a",
+          "target_path": "Map/m03050.dat",
+          "target_sha256": "e1ea93450aa8bcb6002c02f8f30d3fdf78ed35aedc89b8da9fb17efae7f173a1",
+          "target_entry_marker": 2,
+          "entry_sort_code": 2,
+          "entry_terrain_raw": 0,
+          "entry_trigger_raw": 0,
+          "entry_scan_cells": [
+            {
+              "x": 107,
+              "y": 7,
+              "offset": 58738
+            },
+            {
+              "x": 108,
+              "y": 7,
+              "offset": 58802
+            },
+            {
+              "x": 107,
+              "y": 8,
+              "offset": 66098
+            },
+            {
+              "x": 108,
+              "y": 8,
+              "offset": 66162
+            }
+          ],
+          "entry_sorted_cells": [
+            {
+              "x": 107,
+              "y": 8
+            },
+            {
+              "x": 108,
+              "y": 8
+            },
+            {
+              "x": 107,
+              "y": 7
+            },
+            {
+              "x": 108,
+              "y": 7
+            }
+          ],
+          "entry_sort": "y descending; stable ties",
+          "default_direction_assembly": "0x4A5144: MOV byte ptr [EBP-0x28],0x2",
+          "coordinate_rule": "first native sorted marker cell <<3, then native coordinate x2; no center offset",
+          "native_evidence": {
+            "transition_execute": "ev_49e75a99b3e63a3ad909ec9b83d16fcc3fe4046568391ae2a399a2b2cdd69d54",
+            "transition_load": "ev_8564dce0fc083a81e920321518d1d32841a39c673640260fae4417f4fdb5f00b",
+            "entry_scan": "ev_32d96560f0087a383b5eaf8ff9646886dba64a9de41cf598f1089ad8ca65d16e",
+            "entry_assembly": "ev_64381418fb6ce9006b56967c5a24b40e3f64ea74ee5e6d4aa7a4f245416548d0"
+          }
+        },
+        "execution": "Native transition descriptor only; map-entry TLK/ANM and their once-only checks must complete separately.",
+        "limitations": [
+          "Static source/code evidence; original timing not observed",
+          "Continuous keyboard movement is runtime policy"
+        ]
+      },
+      {
         "id": 2,
         "state": "ready",
         "cells": [

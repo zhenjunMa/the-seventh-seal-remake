@@ -12,6 +12,19 @@ const {OpeningView}=await import('../web/opening_view.mjs');
 
 const root=new URL('../',import.meta.url),read=async path=>JSON.parse(await readFile(new URL(path,root),'utf8'));
 const manifest=await read('web/data/map_effects.json');
+test('three PC-02 forest lights keep sequential mode1 separate from restored draw-layer2',()=>{
+  for(const id of ['M72020','M72010-0-A','M72010-1-B']){
+    const map=manifest.maps[id],row=map.objects.find(row=>manifest.object_banks[row.bank].actions[0].source_action_raw_hex.slice(26,28)==='21');
+    const resource=manifest.object_banks[row.bank];assert.equal(resource.actions[0].interval_raw,120);
+    const world={event_records:[]},object={index:row.index};
+    const model=new MapObjectRuntime({objects:[object],resources:[{...row,resource}],mapId:id,mapFlagIndex:map.map_flag_index,random:()=>0});
+    model.update(0,{world});assert.equal(object.motion.frame,0);
+    for(let n=1;n<=23;n++){model.update(n*120,{world});assert.equal(object.motion.frame,n%21);}
+    world.event_records[map.map_flag_index]=[];world.event_records[map.map_flag_index][row.index]='0300000000000000000000000000';
+    const restored=new MapObjectRuntime({objects:[object],resources:[{...row,resource}],mapId:id,mapFlagIndex:map.map_flag_index,random:()=>0});
+    restored.update(0,{world});assert.equal(object.motion.frame,20);assert.equal(object.layer,1);
+  }
+});
 function clock(){
   const map=manifest.maps.M70010,objects=map.objects.map(row=>({index:row.index}));
   const resources=map.objects.map(row=>({...row,resource:{...manifest.object_banks[row.bank],
