@@ -12,7 +12,7 @@ RUNTIME = Path(__file__).resolve().parents[1]
 ROOT = RUNTIME.parents[1]
 WEB = RUNTIME/'web'
 OUT = WEB/'assets/dialogue_ui'
-REPORT = RUNTIME/'evidence/dialogue_alignment_20261021'
+REPORT = RUNTIME/'evidence/dialogue_map_name_20261031'
 sys.path.insert(0,str(ROOT/'remake/runtime/tools'))
 from incremental import write_json as incremental_json, recipe_hash, cached_png
 sys.path.insert(0,str(Path(__file__).resolve().parent))
@@ -35,7 +35,7 @@ def main():
     resources = {}
     names = {'board':'SYSTEM/MessageBoard.dgp','think':'SYSTEM/Think_Msg.dgp',
         'wait1':'SYSTEM/MessageWait1.dgp','wait2':'SYSTEM/MessageWait2.dgp',
-        'faces':'ROLE/face.dgp','reward':'SYSTEM/Map_Object_Name.dgp'}
+        'faces':'ROLE/face.dgp','reward':'SYSTEM/Map_Object_Name.dgp','map_name':'SYSTEM/Map_Area_Name.dgp'}
     sources = {name:sha(ROOT/name) for name in ['GAME.exe',*names.values()]}
     for key,name in names.items():
         d = DGP(ROOT/name)
@@ -94,6 +94,13 @@ def main():
         gdi.export([('dialogue17','宋体',17),('dialogue13','宋体',13),('caption19','宋体',19),
             ('latin17','Benguiat Bk BT',17),('latin13','Benguiat Bk BT',13)],
             charset=chars,cell_width=32,cell_height=32,columns=32,character_extra=0)
+        map_names=[]
+        for path in sorted((WEB/'data/maps').glob('*.json')):
+            text_sources.append({'path':path.relative_to(RUNTIME).as_posix(),'sha256':sha(path)})
+            map_names.append(json.loads(path.read_text(encoding='utf-8'))['name'])
+        map_chars=''.join(sorted({c for name in map_names for c in name if c.isprintable()}))
+        gdi.export([('map_name18','宋体',18)],charset=map_chars,preserve=True,
+            cell_width=32,cell_height=32,columns=32,character_extra=1)
         fonts=json.loads(gdi.MANIFEST.read_text(encoding='utf-8'))
         fonts.update(schema='seventh-seal-dialogue-gdi-fonts',native_procedure='0x466450',
             native_evidence_id='ev_5a71b46ca5199b02cf3a94ce5e5813a9a8647ec44453f5de9fe51b21c877610e',

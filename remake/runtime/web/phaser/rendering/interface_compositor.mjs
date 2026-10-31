@@ -72,7 +72,7 @@ export class InterfaceCompositor {
     const plane=entries.filter(entry=>!entry.glyph).at(-1)??top;
     this.surface.beginFrame();
     if(!plane){this.canvas.style.display='none';this.surface.endFrame();return;}
-    const anchor=plane.canvas.closest('.operation-frame,.dialogue-viewport,.caption-viewport,.world-map-viewport,.save-menu-viewport,.startup-viewport');
+    const anchor=plane.canvas.closest('.operation-frame,.dialogue-viewport,.caption-viewport,.map-name-viewport,.world-map-viewport,.save-menu-viewport,.startup-viewport');
     const base=anchor?.getBoundingClientRect()??plane.box,parent=anchor??plane.canvas.parentElement;
     if(this.canvas.parentElement!==parent){
       if(anchor)parent.append(this.canvas);else plane.canvas.after(this.canvas);

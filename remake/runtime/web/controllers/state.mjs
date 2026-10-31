@@ -45,6 +45,7 @@ export function createRuntimeState($) {
     objectPreview: null,
     objectActorPreview: null,
     rewardNoticeView: null,
+    mapNameNoticeView: null,
     lastStoryTrigger: '',
     partyCombat: null,
     partySkills: null,

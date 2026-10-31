@@ -115,7 +115,8 @@ export function createMapController({state, actions, $, canvas, ctx}) {
     return scene;
   }
   function validateEntry(scene,at) { if(!scene.movement.validEntry(at.x,at.y)) throw new Error(`目标位置不在可通行格：${at.map_id} ${at.x},${at.y}`); }
-  function commitView(scene,at) {
+  function commitView(scene,at,reason) {
+    if(scene!==gaitScene&&reason!=='boot')state.mapNameNoticeView?.show(scene.data.name||scene.data.id);
     motionState.reset();state.view.collisionFeedback=null;gaitScene=scene;gaitRole=state.selectedRole;
     state.view.action=0;state.view.frame=0;state.view.follow=true;state.view.zoom=1;
     Object.assign(state.view,openingCamera(at,scene.bitmap.width,scene.bitmap.height));

@@ -22,6 +22,7 @@ import {LoadingView} from "../loading_view.mjs";
 import {BattleTransitionView} from "../battle_transition_view.mjs";
 import {DialogueView} from "../dialogue_view.mjs";
 import {RewardNoticeView} from '../reward_notice_view.mjs';
+import {MapNameNoticeView} from '../map_name_notice_view.mjs';
 import {nativeNpcActionBindings} from '../core/map_npcs.mjs';
 import {WorldMapView} from "../world_map_view.mjs";
 import {runtimeContent,runtimeContentDefinition,validateContentRegistration} from "../core/content_registry.mjs";
@@ -96,6 +97,8 @@ export function createBootController({state, actions, $, canvas, ctx}) {
       image:actions.image,root:$('dialogue'),clock:state.engine?.exploration.clock,onAdvance:actions.advanceDialogue,onChoose:actions.chooseDialogue,log:actions.log});
     state.rewardNoticeView=new RewardNoticeView({root:$('rewardNotice'),resource:state.dialogueView.resources.reward,
       textRenderer,clock:state.engine.exploration.clock,log:actions.log});
+    state.mapNameNoticeView=new MapNameNoticeView({root:$('mapNameNotice'),resource:state.dialogueView.resources.map_name,
+      textRenderer:state.dialogueView.textRenderer,clock:state.engine.exploration.clock});
     state.menuSettings=createMenuSettings({storage:localStorage});
     const menuTransaction=fn=>state.menuFeedback?state.menuFeedback.transaction(fn):fn();
     state.operationMenu=new OperationMenuView({manifest:operationManifest,textRenderer,techniquesSupplement:await actions.json('data/operation_techniques.json'),root:$('partyMenu'),onPage:actions.showOperationPage,
@@ -141,7 +144,7 @@ export function createBootController({state, actions, $, canvas, ctx}) {
     state.scenes=new SceneController({world: state.world,prepare:actions.prepareMap,validateEntry: actions.validateEntry,commitView: actions.commitView,enter:actions.enterMap,onPhase:actions.busy,
       afterCommit:()=>actions.finishStoryCompletion?.(),
       captureView:()=>({view:{...state.view},name:$('mapName').textContent,probes:Array.from($('probe').children,child=>child.cloneNode(true)),nearest: state.nearest,resetHidden:$('resetEventSample').hidden}),
-      rollbackView:checkpoint=>{Object.assign(state.view,checkpoint.view);$('mapName').textContent=checkpoint.name;$('probe').replaceChildren(...checkpoint.probes);$('resetEventSample').hidden=checkpoint.resetHidden;state.nearest=checkpoint.nearest;state.audio?.setScene({mapId:state.world.location.map_id,battle:false});}});
+      rollbackView:checkpoint=>{state.mapNameNoticeView.close();Object.assign(state.view,checkpoint.view);$('mapName').textContent=checkpoint.name;$('probe').replaceChildren(...checkpoint.probes);$('resetEventSample').hidden=checkpoint.resetHidden;state.nearest=checkpoint.nearest;state.audio?.setScene({mapId:state.world.location.map_id,battle:false});}});
     state.chapterRunner=new ChapterRunner({world: state.world,data:state.chapterStory,objectData:state.chapterResources.interactive_objects,
       worldMapState:()=>state.worldMap.initialState(),
       choose:actions.chooseChapter,service:actions.openNativeService,

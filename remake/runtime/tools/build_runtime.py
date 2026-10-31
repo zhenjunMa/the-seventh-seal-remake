@@ -86,7 +86,7 @@ STEPS = {
     'startup-media': Step('export_startup_media.py', ('data/startup_media.json', 'assets/video/startup'), reports=('startup_media_export.json',)),
     'startup-menu': Step('export_startup_menu.py', ('data/startup_menu.json', 'assets/startup'), reports=('startup_menu_export_20261020.json',), inputs=('../evidence/startup_menu_native_20261020.json',)),
     'prologue-presentation': Step('export_prologue_presentation.py', ('data/prologue_presentation.json','data/prologue_fonts.json','assets/prologue','assets/prologue_loading'), reports=('prologue_routes_20261020/export.json',), inputs=('../evidence/prologue_sequence_20261020/native_evidence.json','data/opening_program.json','data/chapter_story.json')),
-    'dialogue-ui': Step('export_dialogue_ui.py', ('data/dialogue_ui.json','data/dialogue_fonts.json','assets/dialogue_ui'), reports=('dialogue_alignment_20261021/source_audit.json',), inputs=('../evidence/dialogue_alignment_20261021/native_evidence.json','data/opening_program.json','data/chapter_story.json','data/events.json')),
+    'dialogue-ui': Step('export_dialogue_ui.py', ('data/dialogue_ui.json','data/dialogue_fonts.json','assets/dialogue_ui'), reports=('dialogue_map_name_20261031/source_audit.json',), inputs=('../evidence/dialogue_alignment_20261021/native_evidence.json','data/opening_program.json','data/chapter_story.json','data/events.json')),
     'world-map-ui': Step('export_world_map_ui.py', ('data/world_map_ui.json','assets/world_map'), reports=('world_map_alignment_20261021/export.json',), inputs=('data/world_map.json','../evidence/route_native_20261011.json','../evidence/operation_menu_native.json')),
     'configuration': Step('export_runtime_config.mjs', ('data/config',), inputs=('data/combat_sample.json', 'data/forest_combat.json', 'data/battle_scheduler.json', 'data/forest_ai.json', 'data/forest_rewards.json', 'data/party_skills.json', 'data/items.json', 'data/config')),
     'catalog': Step('build_catalog.py', ('data/catalog.json', 'data/events.json'), ('configuration',), inputs=('data/maps', 'data/events', 'data/source/manifest.json')),
@@ -165,7 +165,9 @@ STEPS['story-pack']=Step('export_story_packages.mjs', ('data/story','data/runtim
             'data/events','content','data/maps'))
 STEPS['battle-packs']=replace(STEPS['battle-packs'],depends=(*STEPS['battle-packs'].depends,'battle-stages'))
 STEPS['dialogue-ui']=replace(STEPS['dialogue-ui'],depends=('catalog','chapter-story'))
-STEPS['dialogue-ui']=replace(STEPS['dialogue-ui'],inputs=(*STEPS['dialogue-ui'].inputs,'data/runtime_content.json','content'))
+STEPS['dialogue-ui']=replace(STEPS['dialogue-ui'],inputs=(*STEPS['dialogue-ui'].inputs,'data/runtime_content.json','content','data/maps'),
+    sources=('SYSTEM/MessageBoard.dgp','SYSTEM/Think_Msg.dgp','SYSTEM/MessageWait1.dgp','SYSTEM/MessageWait2.dgp',
+        'ROLE/face.dgp','SYSTEM/Map_Object_Name.dgp','SYSTEM/Map_Area_Name.dgp'))
 STEPS['prologue-presentation']=replace(STEPS['prologue-presentation'],depends=('chapter-story',))
 
 # Full source inventory is independent of the subset opened by runtime_content.
