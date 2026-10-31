@@ -36,8 +36,7 @@ export function mapPresentation({scene,world,role,action,view,
     queue.push({key:'leader',character:true,layer:scene.data.role_layer_preview??2,sort_y:at.y+32,
       pose:{image:action.bitmap,light:action.intrinsic_bitmap,shadow:action.shadow_bitmap,shadow_geometry:action.shadow_geometry,
         sx:(view.frame??0)*role.frame_width,sy:at.direction*role.frame_height,
-        width:role.frame_width,height:role.frame_height,
-        x:at.x+offset.x+(view.collisionFeedback?.step?.x??0),y:at.y+offset.y+(view.collisionFeedback?.step?.y??0),
+        width:role.frame_width,height:role.frame_height,x:at.x+offset.x,y:at.y+offset.y,
         body_offset:view.collisionFeedback??null}});
   }
   return queue.sort((a,b)=>(a.layer??0)-(b.layer??0)||(a.sort_y??0)-(b.sort_y??0));

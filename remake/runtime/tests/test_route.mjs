@@ -15,7 +15,7 @@ import {runtimeContent} from '../web/core/content_registry.mjs';
 const read=async p=>JSON.parse(await readFile(new URL('../web/data/'+p,import.meta.url),'utf8'));
 const [seed,data,wm,events,base,forest,meta,config]=await Promise.all(['route_seed.json','encounters.json','world_map.json','route_events.json','combat_sample.json','forest_combat.json','forest_battle_view.json','skills.json'].map(read));
 const clone=structuredClone,mapIds=['M01010','M01030','M17010','M70010'];
-const input=(dx=16,extra={})=>({party:seed.party,leader_id:'001',map_id:'M70010',dx,dy:0,...extra});
+const input=(dx=4,extra={})=>({party:seed.party,leader_id:'001',map_id:'M70010',dx,dy:0,...extra});
 const queue=values=>{let i=0;const rng=()=>{assert.ok(i<values.length,'Unexpected RNG call');return values[i++];};rng.used=()=>i;return rng;};
 test('route fixture retains verified story flags rather than inventing an unlock',async()=>{
  const original=await read('world_seed.json');assert.equal(seed.flags[48],original.flags[48]);assert.equal(seed.flags[51],original.flags[51]);assert.ok(seed.flags[48]&1);assert.deepEqual(seed.party,original.party);
@@ -35,18 +35,28 @@ test('counter <=40 never draws; standing and non-map phases do not count',()=>{
  const state=initialEncounterState(seed.party),rng=queue([]);
  let s=state;for(let i=0;i<40;i++)s=previewMovement(s,input(),data,rng).state;
  assert.equal(s.counters['001'],40);assert.equal(rng.used(),0);
- assert.deepEqual(previewMovement(s,input(0),data,rng).state,s);assert.deepEqual(previewMovement(s,input(16,{phase:'event'}),data,rng).state,s);
+ assert.deepEqual(previewMovement(s,input(0),data,rng).state,s);assert.deepEqual(previewMovement(s,input(4,{phase:'event'}),data,rng).state,s);
 });
 test('native byte counter wraps; cities and transition completion suppress draws',()=>{
  const s=initialEncounterState(seed.party);s.counters['001']=255;
  assert.equal(previewMovement(s,input(),data,queue([])).state.counters['001'],0);
- s.counters['001']=40;assert.equal(previewMovement(s,input(16,{map_id:'M17010'}),data,queue([])).state.counters['001'],41);
- assert.equal(previewMovement(s,input(16,{transition:true}),data,queue([])).state.counters['001'],41);
+ s.counters['001']=40;assert.equal(previewMovement(s,input(4,{map_id:'M17010'}),data,queue([])).state.counters['001'],41);
+ assert.equal(previewMovement(s,input(4,{transition:true}),data,queue([])).state.counters['001'],41);
 });
-test('fractional accepted travel accumulates; diagonal 16x16 is one grid completion',()=>{
- let s=initialEncounterState(seed.party);s=previewMovement(s,input(8),data,queue([])).state;assert.equal(s.counters['001'],0);assert.equal(s.remainders['001'],8);
- s=previewMovement(s,input(8),data,queue([])).state;assert.equal(s.counters['001'],1);assert.equal(s.remainders['001'],0);
- assert.equal(previewMovement(s,input(16,{dy:16}),data,queue([])).steps,1);
+test('fractional accepted travel accumulates; diagonal 16x16 counts four native microsteps',()=>{
+ let s=initialEncounterState(seed.party);s=previewMovement(s,input(2),data,queue([])).state;assert.equal(s.counters['001'],0);assert.equal(s.remainders['001'],8);
+ s=previewMovement(s,input(2),data,queue([])).state;assert.equal(s.counters['001'],1);assert.equal(s.remainders['001'],0);
+ assert.equal(previewMovement(s,input(16,{dy:16}),data,queue([])).steps,4);
+});
+test('accepted backtracking counts its path even when net displacement is zero',()=>{
+ const s=initialEncounterState(seed.party),p=previewMovement(s,input(0,{distance:8}),data,queue([]));
+ assert.equal(p.steps,2);assert.equal(p.state.counters['001'],2);assert.equal(p.state.remainders['001'],0);
+ assert.equal(previewMovement(s,input(16,{step_pixels:8}),data,queue([])).steps,2);
+});
+test('160 accepted pixels are protected and pixel164 makes the first chance draw',()=>{
+ const rng=queue([997]),s=initialEncounterState(seed.party),p=previewMovement(s,input(160),data,rng);
+ assert.equal(p.steps,40);assert.equal(p.state.counters['001'],40);assert.equal(rng.used(),0);
+ const first=previewMovement(p.state,input(),data,rng);assert.equal(first.steps,1);assert.equal(first.state.counters['001'],41);assert.equal(rng.used(),1);
 });
 test('frequency1 zero-modifier chance is roll%1000 >=998; preview does not mutate',()=>{
  const s=initialEncounterState(seed.party);s.counters['001']=40;const before=clone(s);
@@ -72,6 +82,12 @@ test('persistent encounter RNG continues identically after save and restore',asy
  assert.deepEqual(previewMovement(loaded.encounters,input(),data),previewMovement(world.value.encounters,input(),data));assert.deepEqual(loaded,before);
  const bad=clone(loaded);bad.encounters.remainders['001']=16;assert.throws(()=>new WorldStore(bad,mapIds));bad.encounters.remainders['001']=0;bad.encounters.active=true;assert.throws(()=>new WorldStore(bad,mapIds));
 });
+test('legacy save remainder keeps its fraction of a native step after restore',async()=>{
+ const world=new WorldStore(clone(seed),mapIds),state=initialEncounterState(seed.party);state.remainders['001']=7.5;world.setEncounterState(state);
+ const loaded=await decodeSave(await encodeSave(world.snapshot()),mapIds);assert.equal(loaded.encounters.remainders['001'],7.5);
+ const partial=previewMovement(loaded.encounters,input(2),data,queue([]));assert.equal(partial.steps,0);assert.equal(partial.state.remainders['001'],15.5);
+ const completed=previewMovement(partial.state,input(.125),data,queue([]));assert.equal(completed.steps,1);assert.equal(completed.state.remainders['001'],0);
+});
 
 test('DAT13F zero retains the real global STG while dream DAT140 supplies each movement frequency',async()=>{
  const encounters=clone(data),draft=clone(seed);
@@ -88,7 +104,7 @@ test('DAT13F zero retains the real global STG while dream DAT140 supplies each m
  assert.equal(loaded.encounters.global_pool_map_id,'M70071');
  for(const [id,threshold]of [['M71072',998],['M71073',996],['M71074',994]]){
   loaded.encounters.counters['001']=40;
-  const result=previewMovement(loaded.encounters,input(16,{map_id:id}),encounters,queue([threshold,0,0,0,0]));
+  const result=previewMovement(loaded.encounters,input(4,{map_id:id}),encounters,queue([threshold,0,0,0,0]));
   assert.equal(result.encounter.map_id,id);assert.equal(result.encounter.pool_source_map_id,'M70071');
   assert.equal(result.encounter.stage,encounters.maps.M70071.stage);
   assert.ok(encounters.maps.M70071.members.some(row=>row.id===result.encounter.members[0].id));
@@ -100,7 +116,7 @@ test('DAT13F zero retains the real global STG while dream DAT140 supplies each m
   source:[{path:'Map/m01060.STG',sha256:createHash('sha256').update(disabled).digest('hex')}],evidence:clone(encounters.maps.M70071.evidence)};
  loadEncounterMap(loaded,'M01060',encounters);loadEncounterMap(loaded,'M71072',encounters);
  assert.equal(loaded.encounters.global_pool_map_id,null);loaded.encounters.counters['001']=40;
- const empty=previewMovement(loaded.encounters,input(16,{map_id:'M71072'}),encounters,queue([998]));
+ const empty=previewMovement(loaded.encounters,input(4,{map_id:'M71072'}),encounters,queue([998]));
  assert.equal(empty.encounter,null);assert.equal(empty.state.counters['001'],0);
  const corrupt=clone(draft);corrupt.encounters.global_pool_map_id='invented';assert.throws(()=>new WorldStore(corrupt),/全局池来源/);
 });

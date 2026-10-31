@@ -2899,8 +2899,12 @@
     "ev_ce5d3eb1f59a4444348777f057452833badfd6bcae00d0f373e6c104e538131f"
   ],
   "policy": {
-    "step_pixels": 16,
-    "step_measure": "Chebyshev accepted travel distance accumulated from continuous keyboard motion; native grid completion mapped to 16px, original keyboard timing pending",
+    "step_pixels": 4,
+    "step_measure": "One counter increment per successful native keyboard microstep (496AC0/496F90), normally 4px rather than a 16px grid cell; accepted Chebyshev path length includes wall redirects and backtracking",
+    "step_evidence": [
+      "ev_d3fed89a80f823ee98a33bd75fb24fd8d6f7506f21382637fe6c57c451cfb0f5",
+      "ev_86d58cd06b8676a7c9b77435f2967fdcfa86570e206a5bdb3957ba3443af9f40"
+    ],
     "initial_counter": 0,
     "initial_rng_state": 539365393,
     "equipment_bonus": 0,

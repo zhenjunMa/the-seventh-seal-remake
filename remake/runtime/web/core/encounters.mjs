@@ -27,7 +27,7 @@ export function loadEncounterMap(draft,map_id,data){
 }
 export function validateEncounterData(data,content=runtimeContent){
   requireValue(data?.schema==='seventh-seal-encounters'&&data.version===1&&data.source&&data.evidence?.length,'遇敌配置来源缺失');
-  requireValue(data.policy?.step_pixels===16&&data.policy.equipment_bonus===0&&data.policy.buff_bonus===0,'遇敌修正尚未接入');
+  requireValue(data.policy?.step_pixels===4&&data.policy.equipment_bonus===0&&data.policy.buff_bonus===0,'遇敌修正尚未接入');
   requireValue(Array.isArray(data.compositions)&&data.compositions.length===13&&data.compositions.every(r=>r.length===3&&r[1]===0&&r.every(n=>Number.isInteger(n)&&n>=0)),'敌组组成表无效');
   for(const [id,map] of Object.entries(data.maps)){
     requireValue(mapId(id)&&content.maps[id]&&Number.isInteger(map.frequency)&&map.frequency>=0&&map.frequency<=500
@@ -55,14 +55,15 @@ export function generateGroup(map,data,rng,map_id=Object.keys(data.maps).find(id
 }
 // A non-mutating preview lets resource preparation fail without consuming the
 // draw/counter reset. The caller locks exploration before preparing a battle.
-export function previewMovement(state,{party,leader_id,map_id,dx,dy,transition=false,phase='map'},data,rngOverride=null,content=runtimeContent){
-  validateEncounterData(data,content);const next=validateEncounterState(state,party);
-  requireValue(Number.isFinite(dx)&&Number.isFinite(dy),'遇敌移动量无效');
-  if(phase!=='map'||(!dx&&!dy))return {state:next,encounter:null,steps:0};
+export function previewMovement(state,{party,leader_id,map_id,dx,dy,distance=Math.max(Math.abs(dx),Math.abs(dy)),step_pixels,transition=false,phase='map'},data,rngOverride=null,content=runtimeContent){
+  const next=clone(state);step_pixels??=data.policy.step_pixels;
+  requireValue(Number.isFinite(dx)&&Number.isFinite(dy)&&Number.isFinite(distance)&&distance>=0&&Number.isFinite(step_pixels)&&step_pixels>0,'遇敌移动量无效');
+  if(phase!=='map'||distance===0)return {state:next,encounter:null,steps:0};
   requireValue(Object.hasOwn(next.counters,leader_id),'遇敌领队缺失');
-  const travel=Math.max(Math.abs(dx),Math.abs(dy))+next.remainders[leader_id],steps=Math.floor((travel+1e-9)/16);
+  // Saves retain the original 0..16 representation as a fraction of one
+  // native microstep, including saves written when that step was 16 pixels.
+  const travel=distance/step_pixels*16+next.remainders[leader_id],steps=Math.floor((travel+1e-9)/16);
   next.remainders[leader_id]=Math.max(0,travel-steps*16);
-  requireValue(steps<=8,'遇敌移动步长超出当前运行时');
   const rng=rngOverride??createNativeRng(next.rng_state),map=data.maps[map_id];let encounter=null,accepted=0;
   const poolMapId=next.global_pool_map_id===undefined?(map?.members.length?map_id:null):next.global_pool_map_id;
   const pool=poolMapId===null?null:data.maps[poolMapId];

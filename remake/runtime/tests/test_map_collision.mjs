@@ -163,9 +163,4 @@ test('Canvas and Phaser apply recoil to body/light only, keeping shadow and worl
   const entry=mapPresentation({scene:{data:{id:'map'},objects:[],npcs:[]},world,
     role:{frame_width:16,frame_height:16,map_draw_offset:{x:0,y:0}},action:{bitmap:{}},view:{collisionFeedback:{x:-2,y:1}}})[0];
   assert.deepEqual(entry.pose.body_offset,{x:-2,y:1});assert.equal(entry.sort_y,52);assert.deepEqual(world,before);
-  const stepping=mapPresentation({scene:{data:{id:'map'},objects:[],npcs:[]},world,
-    role:{frame_width:16,frame_height:16,map_draw_offset:{x:0,y:0}},action:{bitmap:{}},
-    view:{collisionFeedback:{x:-2,y:1,step:{x:-3,y:0}}}})[0];
-  assert.deepEqual([stepping.pose.x,stepping.pose.y],[7,20],'held recoil moves the shared body/shadow anchor');
-  assert.deepEqual(world,before,'display recoil never changes the logical position');
 });

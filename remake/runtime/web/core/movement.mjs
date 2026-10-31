@@ -227,6 +227,68 @@ export class MovementMap {
   }
 }
 
+// 496AC0/496F90: choose again after each keyboard microstep. Keep a partially
+// displayed step until its distance is consumed, so render Hz cannot change
+// the neighbour tie-break or lose back-and-forth encounter travel.
+export class KeyboardMovement {
+  constructor(){this.reset();}
+  reset(){this.remaining=0;this.dx=0;this.dy=0;this.heading=null;}
+  advance(map,at,{dx,dy,profile,elapsedMs,obstacles=[],onTravel=null}){
+    if(dx!==this.dx||dy!==this.dy){this.remaining=0;this.dx=dx;this.dy=dy;}
+    const step=profile.keyboardStepSize,lookahead=profile.keyboardLookahead;
+    const options={obstacles},segments=[],contacts=[];
+    let x=at.x,y=at.y,budget=profile.speed*elapsedMs/1000,travel=0,heading=null,redirected=false,stopped=false;
+    while(budget>EPS){
+      if(this.remaining<=EPS){
+        const cell=map.at(x,y),target=map.cell(cell.x+dx*lookahead,cell.y+dy*lookahead);
+        let vx=dx,vy=dy;
+        const direct=map.moveAndSlide(x,y,dx*step,dy*step,options);
+        if(target.reason==='bounds'||target.reason==='transition'){
+          contacts.push({nx:-dx,ny:-dy,hit:target});stopped=true;break;
+        }
+        if(target.blocked||direct.blocked){
+          contacts.push(...direct.contacts);
+          if(target.blocked)contacts.push({nx:-dx,ny:-dy,hit:target});
+          let best=null,score=Infinity;
+          // 48EB70 enumeration and strict-less scoring preserve native ties.
+          for(const [nx,ny]of [[-1,0],[-1,-1],[-1,1],[0,-1],[0,1],[1,0],[1,-1],[1,1]]){
+            const cx=cell.x+nx,cy=cell.y+ny;
+            if(map.cell(cx,cy).blocked||obstacles.some(box=>
+              Math.floor((box.left+box.right)/2/map.cellSize)===cx&&Math.floor((box.top+box.bottom)/2/map.cellSize)===cy))continue;
+            const distance=Math.abs(cx-(cell.x+dx*lookahead))+Math.abs(cy-(cell.y+dy*lookahead));
+            if(distance>=score)continue;
+            // Keep the remake's swept feet/actor collision and source-entry
+            // escape handling; a source-open neighbour must be reachable.
+            const trial=map.moveAndSlide(x,y,nx*step,ny*step,options);
+            if(!trial.moved||trial.blocked)continue;
+            best={dx:nx,dy:ny};score=distance;
+          }
+          if(!best){stopped=true;break;}
+          vx=best.dx;vy=best.dy;redirected||=vx!==dx||vy!==dy;
+        }
+        this.heading={dx:vx,dy:vy};this.endX=x+vx*step;this.endY=y+vy*step;
+        this.remaining=step*Math.hypot(vx,vy);
+      }
+      const length=Math.hypot(this.heading.dx,this.heading.dy),amount=Math.min(budget,this.remaining);
+      // Finish at the exact step endpoint: accumulated render fractions must
+      // not put the next source cell on the wrong side of a grid boundary.
+      const complete=this.remaining-amount<=EPS;
+      const moved=map.moveAndSlide(x,y,complete?this.endX-x:this.heading.dx/length*amount,
+        complete?this.endY-y:this.heading.dy/length*amount,options);
+      contacts.push(...moved.contacts);this.remaining-=amount;budget-=amount;
+      if(moved.blocked)this.remaining=0;
+      const distance=moved.segments.reduce((sum,s)=>sum+Math.max(Math.abs(s.dx),Math.abs(s.dy)),0);
+      if(distance<=EPS){this.remaining=0;stopped=true;break;}
+      segments.push(...moved.segments);travel+=distance;
+      const last=moved.segments.at(-1);heading={dx:last.dx,dy:last.dy};
+      const from={x,y};x=moved.x;y=moved.y;
+      if(onTravel?.({x,y,dx:x-from.x,dy:y-from.y,distance})===false){this.remaining=0;break;}
+    }
+    return {x,y,moved:travel>EPS,travel,segments,contacts,heading,redirected,stopped,
+      blocked:contacts.length>0,hit:contacts[0]?.hit};
+  }
+}
+
 export function locomotion(input, moved) {
   const {dx, dy} = input;
   const direction = dy < 0 ? (dx > 0 ? 2 : dx < 0 ? 4 : 3)
