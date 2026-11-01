@@ -22,6 +22,7 @@ class NativeSourceTests(unittest.TestCase):
                 sections = {row['section']: row for row in layout['sections'] if row['section'] != 'role'}
                 envelope = decode_native_save(raw)
                 world = json.loads(envelope['payload'])
+                self.assertEqual(world['play_time_ms'], struct.unpack_from('<I', raw, 0x7D)[0] * 100)
                 self.assertEqual(world['location']['map_id'], raw[0x39:0x4D].split(b'\0')[0].decode('ascii').upper().removesuffix('.DAT'))
                 self.assertEqual(len(world['inventory']), sections['inventory']['count'])
                 self.assertEqual(sum(map(len, world['event_records'])), sections['events']['event_total'])

@@ -80,18 +80,21 @@ class NativeSaveTests(unittest.TestCase):
         self.assertEqual(struct.unpack_from('<I', raw, crystal + 0xD6)[0], 80)
         self.assertEqual(struct.unpack_from('<I', raw, crystal + 0x30B)[0], 10)
         self.assertEqual(raw[0x3A9:0x3B1], bytes((64, 64, 64, 1, 1, 1, 1, 0)))
-        self.assertEqual(struct.unpack_from('<3H', raw, 0x75), (3, 4, 5))
+        # Native menu 479D70 reads DWORD +7D, then 469CA0 divides by ten.
+        self.assertEqual(struct.unpack_from('<I', raw, 0x7D)[0], 110450)
+        self.assertEqual(raw[0x6D:0x7D], bytes(16))
         self.assertEqual(json.loads(decode_native_save(raw)['payload'])['play_time_ms'], world['play_time_ms'])
 
     def test_native_original_time_words_and_legitimate_muted_settings_are_preserved(self):
         raw = bytearray(encode_native_save(envelope(resources()[0])))
-        # Original saves have large cumulative hours and retain unrelated words.
+        # Internal SYSTEMTIME words are separate from the displayed 100ms clock.
         struct.pack_into('<8H', raw, 0x6D, 0, 0, 0, 17, 10611, 37, 30, 888)
+        struct.pack_into('<I', raw, 0x7D, 4127)
         raw[0x3A9:0x3B1] = bytes((32, 48, 64, 1, 1, 0, 1, 0))
         raw = bytes(raw)
         loaded = decode_native_save(raw)
         world = json.loads(loaded['payload'])
-        self.assertEqual(world['play_time_ms'], ((10611 * 60 + 37) * 60 + 30) * 1000)
+        self.assertEqual(world['play_time_ms'], 412700)
         self.assertTrue(world['game_settings']['audio']['music']['muted'])
         self.assertEqual(encode_native_save(loaded), raw)
         candidate, report = repair_native_saves.repair_save(raw)
@@ -102,6 +105,29 @@ class NativeSaveTests(unittest.TestCase):
         candidate, report = repair_native_saves.repair_save(bytes(all_muted))
         self.assertEqual(candidate, all_muted)
         self.assertFalse(report['changed'])
+
+    def test_native_menu_clock_save_reload_and_known_wrong_field_recovery(self):
+        world = deepcopy(resources()[0])
+        world['play_time_ms'] = 789099
+        raw = encode_native_save(envelope(world))
+        # Native 479D70/469CA0: row+0x7D / 10 = 789 seconds = 00:13:09.
+        self.assertEqual(struct.unpack_from('<I', raw, 0x7D)[0], 7890)
+        self.assertEqual(json.loads(decode_native_save(raw)['payload'])['play_time_ms'], 789000)
+        resumed = json.loads(decode_native_save(raw)['payload'])
+        resumed['play_time_ms'] += 15300
+        self.assertEqual(struct.unpack_from('<I', encode_native_save(envelope(resumed)), 0x7D)[0], 8043)
+        bad = bytearray(raw)
+        struct.pack_into('<I', bad, 0x7D, 0)
+        struct.pack_into('<3H', bad, 0x75, 0, 13, 9)
+        self.assertEqual(repair_native_saves.repair_save(bytes(bad))[0], bad)
+        repaired, report = repair_native_saves.repair_save(bytes(bad), restore_missing_play_time=True)
+        self.assertEqual(struct.unpack_from('<I', repaired, 0x7D)[0], 7890)
+        self.assertEqual(repaired[:0x7D] + repaired[0x81:], bad[:0x7D] + bad[0x81:])
+        self.assertTrue(all(row['unrelated_progress_equal'] for row in report['domains']))
+        self.assertEqual(repair_native_saves.repair_save(repaired, restore_missing_play_time=True)[0], repaired)
+        # A real nonzero native clock wins even when SYSTEMTIME has other values.
+        struct.pack_into('<I', bad, 0x7D, 4127)
+        self.assertEqual(repair_native_saves.repair_save(bytes(bad), restore_missing_play_time=True)[0], bad)
 
     def test_native_camera_header_bytes_match_original_viewport_coordinates(self):
         for map_id, x_native, y_native, expected in (
@@ -203,8 +229,8 @@ class NativeSaveTests(unittest.TestCase):
             path.write_bytes(raw)
             newer = bytearray(raw)
             struct.pack_into('<I', newer, 0x81, 999)
-            def player_saves_again(snapshot):
-                result = original_repair(snapshot)
+            def player_saves_again(snapshot, **options):
+                result = original_repair(snapshot, **options)
                 path.write_bytes(newer)
                 return result
             argv = ['repair_native_saves.py', '--save-dir', str(saves), '--backup-dir', str(backup)]

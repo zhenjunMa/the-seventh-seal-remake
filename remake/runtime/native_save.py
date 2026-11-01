@@ -192,8 +192,8 @@ def decode_native_save(raw):
                  leader_id=f'{leader + 1:03}', party=[], reserve_party=[], inventory=[],
                  flags=list(struct.unpack('<2000I', sections['flags'])),
                  event_records=[], object_states={}, money=u32(header, 0x81), reward_records=[],
-                 play_time_ms=sum(value * unit for value, unit in zip(
-                     struct.unpack_from('<3H', header, 0x75), (3600000, 60000, 1000))),
+                 # 479D70 displays +7D through 469D60/469CA0, in 100ms ticks.
+                 play_time_ms=u32(header, 0x7D) * 100,
                  game_settings=dict(audio={key: dict(volume=header[0x3A9 + i] / 64,
                      muted=not bool(header[0x3AD + i]))
                      for i, key in enumerate(('master', 'music', 'effects'))},
@@ -370,8 +370,7 @@ def encode_native_save(envelope):
     put(header, 0x69, leader)
     put(header, 0x81, world.get('money', seed['money']))
     if 'play_time_ms' in world:
-        seconds = world['play_time_ms'] // 1000
-        struct.pack_into('<3H', header, 0x75, seconds // 3600, seconds // 60 % 60, seconds % 60)
+        put(header, 0x7D, world['play_time_ms'] // 100)
     settings = world.get('game_settings')
     if settings:
         for index, key in enumerate(('master', 'music', 'effects')):

@@ -19,7 +19,7 @@ from native_save import decode_native_save, encode_native_save, resources, initi
 from tools.source.save_format import complete_layout
 
 
-def repair_save(raw):
+def repair_save(raw, *, restore_missing_play_time=False):
     """Return a candidate only after checking every byte outside named fixes."""
     _, skills, items, maps, _ = resources()
     layout = complete_layout(raw, {int(k): v['name'] for k, v in items.items()})
@@ -28,6 +28,25 @@ def repair_save(raw):
     report = dict(source_sha256=hashlib.sha256(raw).hexdigest(), bytes=len(raw),
                   bug_signature=dict(missing_role_identity_slots=[role['role_index'] for role in missing]),
                   changed=False, allowed_byte_ranges=[], domains=[])
+    # Opt-in recovery for the 0f307ca writer: it filled SYSTEMTIME H/M/S,
+    # leaving the actual native menu clock at zero. Original clocks stay intact.
+    hours, minutes, seconds = struct.unpack_from('<3H', raw, 0x75)
+    ticks = (hours * 3600 + minutes * 60 + seconds) * 10
+    if (restore_missing_play_time and not missing and ticks and
+            raw[0x7D:0x81] == bytes(4) and raw[0x6D:0x75] == bytes(8) and raw[0x7B:0x7D] == bytes(2)):
+        candidate = bytearray(raw)
+        struct.pack_into('<I', candidate, 0x7D, ticks)
+        candidate = bytes(candidate)
+        report.update(status='known-remake-play-time-field-repaired', changed=True,
+            sha256=hashlib.sha256(candidate).hexdigest(),
+            changed_bytes=sum(a != b for a, b in zip(raw, candidate)),
+            allowed_byte_ranges=[dict(offset=0x7D, offset_hex='0x7D', bytes=4,
+                reason='recover native 100ms play clock from the known remake writer',
+                before_hex=raw[0x7D:0x81].hex(), after_hex=candidate[0x7D:0x81].hex())],
+            domains=[dict(domain='all-bytes-outside-play-clock',
+                preserved_sha256=hashlib.sha256(raw[:0x7D] + raw[0x81:]).hexdigest(),
+                unrelated_progress_equal=raw[:0x7D] + raw[0x81:] == candidate[:0x7D] + candidate[0x81:])])
+        return candidate, report
     if not missing:
         report.update(sha256=report['source_sha256'], status='healthy-source-preserved')
         return raw, report
@@ -168,6 +187,8 @@ def main():
     parser.add_argument('--save-dir', type=Path, default=RUNTIME.parent / 'saves')
     parser.add_argument('--backup-dir', type=Path, required=True)
     parser.add_argument('--apply', action='store_true')
+    parser.add_argument('--restore-missing-play-time', action='store_true',
+                        help='修复已确认旧重制版写入错误字段的时长；原生非零计数保持不变')
     args = parser.parse_args()
     saves, backup = args.save_dir.resolve(), args.backup_dir.resolve()
     if backup.is_relative_to(saves):
@@ -180,7 +201,7 @@ def main():
     for path in paths:
         metadata = path.stat()
         raw = path.read_bytes()
-        candidate, entry = repair_save(raw)
+        candidate, entry = repair_save(raw, restore_missing_play_time=args.restore_missing_play_time)
         entry.update(name=path.name, mtime_ns=metadata.st_mtime_ns)
         outputs.append((path, metadata, raw, candidate, entry))
     (backup / 'inputs').mkdir(parents=True, exist_ok=False)
