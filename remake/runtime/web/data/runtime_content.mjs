@@ -1664,6 +1664,10 @@ export const definition = {
         {
           "index": 13,
           "handler": "keyed-chest"
+        },
+        {
+          "index": 14,
+          "handler": "keyed-chest"
         }
       ]
     },
@@ -6935,6 +6939,10 @@ export default {
         },
         {
           "index": 13,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 14,
           "handler": "keyed-chest"
         }
       ],

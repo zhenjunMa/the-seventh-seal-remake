@@ -134,7 +134,7 @@
   "text_sources": [
     {
       "path": "web/data/items.json",
-      "sha256": "fa7e7a9717e4685d808a22140436087c83dfc01e83ce6d64f267b16fa10c98fd"
+      "sha256": "164fbd6ad5406f2ebc0a16d4e81570d1273fbcc80bf0e5727b56e86468137949"
     },
     {
       "path": "web/data/party_skills.json",
@@ -1126,7 +1126,7 @@
     },
     {
       "path": "web/data/maps/m72061.json",
-      "sha256": "e3be69801082c308fd3e0b5165eb085ab973669339b9eacf1c4324ae12cc32aa"
+      "sha256": "4a874fbfa3bab8d81922430d59baa3c8fd63c147ec5ae09135ff665505743b5a"
     },
     {
       "path": "web/data/maps/m72062-2.json",
@@ -1318,7 +1318,7 @@
     },
     {
       "path": "web/core/menu_settings.mjs",
-      "sha256": "daf73aeba1e6a0bbef4b352be99603bf34527398077cc31a867fcaf92e572dde"
+      "sha256": "0ad2233d94d3d223b7cace2ec702fe9f06883126dd5aec52271d8782ee984bad"
     },
     {
       "path": "web/core/menu_techniques.mjs",

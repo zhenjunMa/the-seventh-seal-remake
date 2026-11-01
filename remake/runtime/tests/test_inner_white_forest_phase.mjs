@@ -5,7 +5,10 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {encodeSave,decodeSave} from '../web/core/world.mjs';
-import {nativeChestAnimation} from '../web/core/native_map_chests.mjs';
+import {nativeChestAnimation,nativeKeyedChest} from '../web/core/native_map_chests.mjs';
+import {initializeChapterItem,chapterObjectState} from '../web/core/chapter.mjs';
+import {insertCrystal,removeCrystal,socketEquipmentRows} from '../web/core/crystal_sockets.mjs';
+import {compileItemConfiguration} from '../web/core/item_registry.mjs';
 import {mapPresentation} from '../web/core/map_presentation.mjs';
 import {createMapController} from '../web/controllers/map.mjs';
 import {createStoryController} from '../web/controllers/story.mjs';
@@ -70,4 +73,41 @@ test('source014 chest retains its seventeenth logical wait and hides its missing
 
 test('two forest trips naturally earn349,332,293/294 and299 before all three first-return rewards and005 admission',async()=>{
   await innerWhiteForestComplete(source);
+});
+
+
+test('M70071 wind chest accepts held333, grants usable145 once, and keeps key and saved state',async()=>{
+  const mapId='M70071',objectIndex=14,object=source.story.maps[mapId].objects.find(row=>row.index===objectIndex);
+  assert.equal(source.content.maps[mapId].objects.find(row=>row.index===objectIndex)?.handler,'keyed-chest');
+  assert.deepEqual(nativeKeyedChest(object),{keyId:333,rewards:[{slot:0,id:145}]});
+  const resource=source.resources.object_animations[mapId].find(row=>row.object_index_zero_based===objectIndex);
+  const original=await innerWhiteForestOriginal(resource.source.path),animation=nativeChestAnimation(resource,4);
+  assert.equal(createHash('sha256').update(original).digest('hex'),resource.source.sha256);
+  assert.equal(animation.action.interval_raw,130);assert.deepEqual(animation.frameIndices,Array.from({length:16},(_,i)=>i+10));
+  const world=innerWhiteForestWorld(source);world.transact(draft=>{draft.location={map_id:mapId,x:336,y:920,direction:0};});
+  let interrupted=false,animations=0;
+  const {runner}=innerWhiteForestRunner(source,world,{objectAnimation:async()=>{
+    animations++;if(interrupted)throw Error('wind chest animation interrupted');
+  }});
+  const closed=world.snapshot();assert.equal((await runner.runObject({mapId,objectIndex})).locked,true);
+  assert.deepEqual(world.snapshot(),closed);assert.equal(animations,0);
+  // The caller hands in only the key, matching the player's reported inventory.
+  const key=initializeChapterItem(source.items.definitions['333']);new DataView(key.buffer).setUint32(4,1,true);
+  world.transact(draft=>draft.inventory.push({id:333,name:source.items.definitions['333'].name,quantity:1,
+    instance_id:'wind-chest-key',source_raw_hex:Buffer.from(key).toString('hex')}));
+  interrupted=true;const before=world.snapshot();
+  await assert.rejects(runner.runObject({mapId,objectIndex}),/wind chest animation interrupted/);
+  assert.deepEqual(world.snapshot(),before);interrupted=false;
+  await runner.runObject({mapId,objectIndex});assert.equal(quantity(world,145),1);assert.equal(quantity(world,333),1);
+  assert.equal(chapterObjectState(world.value,mapId,objectIndex,source.story),3);await restore(world);
+  const opened=world.snapshot();assert.equal((await runner.runObject({mapId,objectIndex})).already_done,true);
+  assert.deepEqual(world.snapshot(),opened);
+  const itemData=compileItemConfiguration(source.items,source.itemConfiguration,'original').data;
+  const crystal=world.value.inventory.find(row=>row.id===145),options={worldStore:world,attributes:source.attributes,
+    itemData,roleId:'001',socketIndex:1};
+  assert.equal(itemData.definitions['145'].runtime_enabled,true);
+  insertCrystal({...options,instanceId:crystal.instance_id});
+  const linked=socketEquipmentRows(world.value,source.attributes,itemData,'001').find(row=>row.item_id===145);
+  assert.equal(Buffer.from(linked.source_raw_hex,'hex').readInt32LE(0x6d),10);
+  await restore(world);removeCrystal(options);assert.equal(quantity(world,145),1);assert.equal(quantity(world,333),1);
 });
