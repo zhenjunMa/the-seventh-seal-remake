@@ -1271,6 +1271,7 @@ export const definition = {
     },
     "M01050": {
       "triggers": [
+        28,
         29,
         30,
         31
@@ -6380,6 +6381,7 @@ export default {
     "M01050": {
       "path": "data/maps/m01050.json",
       "triggers": [
+        28,
         29,
         30,
         31

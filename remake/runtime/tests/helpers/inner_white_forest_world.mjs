@@ -100,6 +100,8 @@ export async function innerWhiteForestComplete(source,{world=innerWhiteForestWor
   assert.equal(world.value.world_map.areas[0].statuses[3],0);
   innerWhiteForestRoute(source,world,'M01050');await npc(runner,'M01050',15);
   assert.equal(quantity(world,332),0);assert.equal(bit(world,5,1),false);
+  const beforeStairs=world.snapshot();await runner.runTrigger({mapId:'M01050',triggerId:28});
+  assert.deepEqual({...world.snapshot(),revision:beforeStairs.revision},beforeStairs,'the inactive stair trigger must leave progress unchanged');
   innerWhiteForestRoute(source,world,'M01040','M01060');
   await runner.runTlk({mapId:'M01060',triggerId:6,recordId:56});await innerWhiteForestSelect(source,world,3);
   assert.equal(world.location.map_id,'M70071');
@@ -114,7 +116,7 @@ export async function innerWhiteForestComplete(source,{world=innerWhiteForestWor
   innerWhiteForestRoute(source,world,'M01040','M01050','M01051');await npc(runner,'M01051',10);
   assert.equal(quantity(world,349),0);assert.equal(bit(world,31,2),true);
   assert.ok([252,253].every(index=>world.value.recipe_unlock_indices.includes(index)));await restore(world);
-  innerWhiteForestRoute(source,world,'M01050');await npc(runner,'M01050',15);
+  innerWhiteForestRoute(source,world,'M01050');await runner.runTrigger({mapId:'M01050',triggerId:28});
   assert.equal(bit(world,5,1),true);assert.equal(quantity(world,332),1);
   await npc(runner,'M01050',15);assert.equal(quantity(world,332),1);
   assert.equal(trace.animations.filter(row=>row.id==='m01050-1').length,1);
