@@ -52,7 +52,7 @@ node remake/runtime/tools/verify_phaser.mjs
 | `remake/assessment/` | 当前计划、区域方法、测试规范 |
 | `remake/prototype/` | 复用正式实现的实验页面，正式游戏不依赖它 |
 
-原版 `GAME.exe`、`Map/`、`Fight_Role/`、`SYSTEM/` 等输入放在仓库根目录，由工具只读访问，不提交。`.gitignore` 同时排除提取媒体、原存档、观察副本、证据、归档和缓存。
+原版 `GAME.exe`、`Map/`、`Fight_Role/`、`SYSTEM/` 等输入放在仓库根目录，由工具只读访问，不提交。`.gitignore` 同时排除提取媒体、原存档、观察副本、证据、归档和缓存；`remake/saves/` 及其中的玩家存档纳入 Git。
 
 文档描述当前职责和操作；详细开发过程留在证据记录中。变更状态只在开发计划维护，其他指南通过链接引用。
 
