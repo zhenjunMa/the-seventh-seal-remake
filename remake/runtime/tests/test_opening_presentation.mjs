@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import {openingCamera,approachPoint,directArrivalMoves} from '../web/core/opening_presentation.mjs';
 import {OpeningRunner} from '../web/core/opening.mjs';
+import {ActionClock} from '../web/phaser/components/action_clock.mjs';
 const {OpeningView}=await import('../web/opening_view.mjs');
 const read=async name=>JSON.parse(await fs.readFile(new URL(`../web/data/${name}.json`,import.meta.url),'utf8'));
 
@@ -87,6 +88,28 @@ test('direct arrival coalescing stops at dialogue and never changes unconfigured
   assert.equal(plan.has(8),false);assert.equal(plan.has(44),false);
   const interrupted=structuredClone(program);interrupted.commands[24].opcode=14;
   assert.equal(directArrivalMoves(interrupted,presentation.staging).size,0);
+});
+
+test('the first prologue actor reveals over40 native80ms ticks before moving',async()=>{
+  const [program,resources,presentation,data]=await Promise.all([
+    read('opening_program'),read('opening_map_resources'),read('prologue_presentation'),read('maps/m72061')]);
+  const clock=new ActionClock(),view=new OpeningView({resources,program,clock,
+    prepared:new Map([['M72061',{data,bitmap:{width:992,height:832}}]]),
+    staging:presentation.staging,effects:presentation.effects,install(){},camera(){}});
+  const hooks=view.hooks();await hooks.map({mapId:'M72061'});
+  const command=program.commands.find(row=>row.opcode===49),actor=view.getActor(command.u32_plus5);
+  assert.equal(actor.visible,false);
+  let complete=false;
+  const reveal=hooks.actor({kind:'facing',actor:command.u32_plus5,nativeStateRaw:command.byte_plus29+1,command})
+    .then(()=>{complete=true;});
+  assert.equal(actor.alpha,15/255);assert.equal(actor.visible,true);
+  for(const alpha of [75/255,135/255,195/255]){
+    clock.advance(800);await Promise.resolve();
+    assert.equal(actor.alpha,alpha);assert.equal(complete,false);
+  }
+  clock.advance(800);await reveal;
+  assert.equal(complete,true);assert.equal(actor.alpha,1);assert.equal(clock.tasks.size,0);
+  view.dispose();clock.destroy();
 });
 
 test('disposing the presentation prevents late async map installation',async()=>{

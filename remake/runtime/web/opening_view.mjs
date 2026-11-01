@@ -156,6 +156,9 @@ export class OpeningView {
             if(kind==='behavior')actor.visible=false;
           }else{
             const ticks=payload.nativeStateRaw===7?(this.effects.reveal_ticks??effect.ticks):effect.ticks;
+            // The first reveal retains the map-load actor timer (+D6=80ms),
+            // advanced by4984E0/49A8B0, rather than the shared20ms logic step.
+            const interval=payload.nativeStateRaw===7?(this.effects.reveal_tick_ms??tickMs):tickMs;
             const update=t=>{
               const tick=Math.min(effect.ticks-1,Math.floor(t*effect.ticks));
               const raw=effect.fadeOut?tick*effect.coefficientStep+10:240-effect.coefficientStep*tick;
@@ -166,7 +169,7 @@ export class OpeningView {
             update(0);
             // GPU ADD/alpha keep the native coefficient and movement sequence.
             // RGB565 destination saturation/rounding remain a browser adapter.
-            try{await this.tween(ticks*tickMs,update,signal);}
+            try{await this.tween(ticks*interval,update,signal);}
             finally{actor.alpha=1;actor.blendEffect=null;}
             if(kind==='behavior')actor.visible=false;
           }

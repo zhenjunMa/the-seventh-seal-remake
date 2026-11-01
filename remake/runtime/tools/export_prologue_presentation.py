@@ -91,7 +91,7 @@ def main():
             'direct_arrivals':{'slots':[10,11,12,13],'direction':3,
                 'authority':'User correction: four later arrivals should move directly to their final positions without an intermediate turn.'},
             'authority':'User original screenshots: empty first caption; actor14 first, four followers later; final approach faces up. Raw DAT direction retained.'}},
-        'effects':{'tick_ms':20,'reveal_ticks':40,'particle_ticks':30},
+        'effects':{'tick_ms':20,'reveal_ticks':40,'reveal_tick_ms':80,'particle_ticks':30},
         'authority':'User original screenshots and order; native ANM, camera, effect dispatch and original loading resources; local GDI caption masks.',
         'limitations':['Original screenshots supplied by user; no new original GAME.exe runtime capture.',
             'Browser clock, deterministic particle seed and 8-bit compositing approximate native render ticks, RNG and RGB565 blending.',
