@@ -62,6 +62,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
       ({...trigger,path_gate:!readyCells.has(`${trigger.x},${trigger.y}`)}))});
     const actorIds = new Set([...registeredRoles('player'), ...(data.opening_npcs ?? []).map(npc => npc.resource_id)]);
     const table = state.chapterStory.maps[id];
+    data.native_layer=table?.map_flag_index;
     const effectMap=state.mapEffects?.maps[id],effectObjects=effectMap?.objects??[];
     const completedAnimations=(state.chapterResources.object_animations[id]??[]).filter(animation=>
       table&&world.event_records[table.map_flag_index]?.[animation.object_index_zero_based]?.slice(0,2)==='03');
@@ -92,6 +93,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
       npcs.push({...npc,event:mapEvents.find(event=>event.npc_slot===npc.slot_zero_based),bitmap:a.bitmap,shadow_bitmap:a.shadow_bitmap,resource:{frame_width:r.frame_width,frame_height:r.frame_height,
         frames_per_direction:a.frame_count,interval_ms:a.interval_raw,anchor_x:r.anchor.x,anchor_y:r.anchor.y,shadow_geometry:a.shadow_geometry}});
     }
+    for(const npc of npcs)npc.native_layer??=data.native_layer;
     const probes=[...(data.probes??[]),...state.events.filter(event=>event.map_id===id&&event.sample?.probe).map(event=>event.sample.probe)];
     const scene={data,movement,bitmap,objects,npcs,probes};
     scene.npcRuntime=new MapNpcRuntime({scene,table,roles:state.openingResources.roles});
@@ -135,7 +137,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
   function fit(){if(!state.scenes?.current)return;const im=state.scenes.current.bitmap;state.view.zoom=Math.min(640/im.width,480/im.height)*.97;state.view.x=im.width/2;state.view.y=im.height/2;state.view.follow=false;}
   function resize(){const rect=$('screen').getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,2);state.cssWidth=rect.width;state.cssHeight=rect.height;for(const target of [canvas,$('battleCanvas')]){target.width=Math.round(rect.width*dpr);target.height=Math.round(rect.height*dpr);}ctx.setTransform(dpr,0,0,dpr,0,0);ctx.imageSmoothingEnabled=false;state.engine?.resize();}
   function npcAvailable(npc) {
-    if(npc.hidden)return false;
+    if(npc.hidden||npc.native_layer!==undefined&&state.scenes.current.data.native_layer!==undefined&&npc.native_layer!==state.scenes.current.data.native_layer)return false;
     const conditions=npc.event?.conditions??[];
     return conditions.every(condition=>state.world.value.flags[condition.index]===condition.value);
   }

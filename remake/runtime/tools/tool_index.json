@@ -1,7 +1,7 @@
 {
   "schema": "seventh-seal-tool-index",
   "version": 1,
-  "updated": "2026-10-31",
+  "updated": "2026-11-01",
   "registered_steps": 49,
   "content_plan": [
     "chapter-maps",
@@ -1345,6 +1345,12 @@
     {
       "path": "migrate_native_saves.py",
       "role": "one-time-save-migration",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "repair_native_saves.py",
+      "role": "one-time-save-repair",
       "build_targets": [],
       "imported_by": []
     }

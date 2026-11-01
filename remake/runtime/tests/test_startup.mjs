@@ -111,10 +111,12 @@ test('read preview is an inline image created with the row and removed on Esc',a
 });
 
 test('title lists ordinary and quick files, refreshes on entry and loads the selected slot',async()=>{
-  let entries=[],refreshes=0;const loads=[],quick={sha256:'quick',payload:'{}'},manual={sha256:'manual',payload:'{}'};
-  const {view}=setup({getSaves:()=>entries,refreshSaves:async()=>{refreshes++;entries=[{slot:'manual',label:'普通存档',envelope:manual},{slot:'quick',label:'快速存档',envelope:quick}];},onLoad:(save,slot)=>loads.push({save,slot})});
+  let entries=[],refreshes=0;const loads=[],quick={sha256:'quick',saved_at:'2026-10-23T00:00:00Z',payload:JSON.stringify({play_time_ms:(12243*3600+40*60+32)*1000})},manual={sha256:'manual',saved_at:'2026-10-23T00:00:00Z',payload:JSON.stringify({play_time_ms:3723000})};
+  const {view,$}=setup({getSaves:()=>entries,refreshSaves:async()=>{refreshes++;entries=[{slot:'manual',label:'普通存档',envelope:manual},{slot:'quick',label:'快速存档',envelope:quick}];},onLoad:(save,slot)=>loads.push({save,slot})});
   view.showMenu();settle(view);await view.confirm();settle(view);
   assert.equal(refreshes,1);assert.equal(view.optionCount(),2);assert.equal(view.getSave(),manual);
+  assert.match(saveButtons($)[0].textContent,/01:02:03/);assert.match(saveButtons($)[1].textContent,/12243:40:32/);
+  assert.ok(saveButtons($).every(row=>!row.textContent.includes('2026')));
   view.key('ArrowDown');assert.equal(view.getSave(),quick);await view.confirm();
   assert.deepEqual(loads,[{save:quick,slot:'quick'}]);
 });

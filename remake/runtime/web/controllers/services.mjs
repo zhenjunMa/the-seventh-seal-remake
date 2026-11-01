@@ -1,12 +1,17 @@
 // services adapters. Persistent state belongs to the shared runtime context.
-import {encodeSave} from "../core/world.mjs";
+import {encodeSave,DEFAULT_GAME_SETTINGS} from "../core/world.mjs";
 import {loadRuntimeConfiguration, createRuntimeConfigurationSession} from "../core/runtime_config.mjs";
 import {attachSavePreview} from "../core/save_preview.mjs";
 import {MANUAL_SAVE_SLOTS,normalizeSaveSlot,saveSlotLabel} from "../core/save_slots.mjs";
 import {captureMapNpcState} from '../core/map_npc_state.mjs';
 
-export function createServicesController({state, actions, $, canvas, ctx}) {
+export function createServicesController({state, actions, $, canvas, ctx,now=()=>performance.now()}) {
   let configurationReady;
+  let playTime={base:state.world?.value?.play_time_ms??0,elapsed:0,startedAt:null};
+  function currentPlayTime(){return Math.floor(playTime.base+playTime.elapsed+(playTime.startedAt===null?0:now()-playTime.startedAt));}
+  function resetPlayTime(milliseconds=state.world.value.play_time_ms??0){
+    playTime={base:milliseconds,elapsed:0,startedAt:['boot','startup','menu','game-over','story-complete'].includes(state.scenes.phase)?null:now()};
+  }
   function status(message, error=false) { $('status').textContent=message; $('status').classList.toggle('error',error); }
   function log(event) {
     const entry={sequence:state.logs.length+1,at:new Date().toISOString(),...event}; state.logs.push(entry);
@@ -37,6 +42,9 @@ export function createServicesController({state, actions, $, canvas, ctx}) {
   }
   function image(path, scope = 'shared') { return state.resources.load(path, scope); }
   function busy(phase) {
+    const at=now();if(playTime.startedAt!==null)playTime.elapsed+=at-playTime.startedAt;
+    const paused=['boot','startup','menu','game-over','story-complete'].includes(phase)||['save-menu','save-io'].includes(phase)&&playTime.startedAt===null;
+    playTime.startedAt=paused?null:at;
     if(!['map','event'].includes(phase))state.rewardNoticeView?.close();
     if(!['map','event','opening'].includes(phase))state.mapNameNoticeView?.close();
     state.engine?.setPhase(phase);
@@ -74,7 +82,14 @@ export function createServicesController({state, actions, $, canvas, ctx}) {
     download(new Blob(parts,{type:'application/json'}),'seventh-seal-runtime-log.json');
   }
   function guarded(fn){return async()=>{try{await fn();}catch(error){status(error.message,true);log({type:'operation-failed',error:error.message});}};}
-  async function saveEnvelope(){if(!state.scenes.canSave()&&!(state.saveOperation?.kind==='save'&&state.scenes.current&&(state.saveOperation.phase==='map'||state.saveMenuContext?.originPhase==='map'&&state.saveMenuContext.mode==='save')))throw new Error('请在地图探索状态保存');const world=state.world.snapshot();if(state.scenes.current?.npcs)captureMapNpcState(world,state.scenes.current.data.id,state.scenes.current.npcs);const preview=actions.captureSavePreview(world);return attachSavePreview(await encodeSave(world),preview);}
+  async function saveEnvelope(){
+    if(!state.scenes.canSave()&&!(state.saveOperation?.kind==='save'&&state.scenes.current&&(state.saveOperation.phase==='map'||state.saveMenuContext?.originPhase==='map'&&state.saveMenuContext.mode==='save')))throw new Error('请在地图探索状态保存');
+    const world=state.world.snapshot();
+    world.play_time_ms=currentPlayTime();
+    world.game_settings={audio:structuredClone(state.audio?.snapshot().channels??DEFAULT_GAME_SETTINGS.audio),battle_cursor:state.menuSettings?.snapshot().battleCursor??DEFAULT_GAME_SETTINGS.battle_cursor};
+    if(state.scenes.current?.npcs)captureMapNpcState(world,state.scenes.current.data.id,state.scenes.current.npcs);
+    const preview=actions.captureSavePreview(world);return attachSavePreview(await encodeSave(world),preview);
+  }
   async function withSaveOperation(kind,work,{fromMenu=false}={}){
     if(state.saveOperation)throw new Error('正在存取进度，请稍候');
     const phase=state.scenes.phase;
@@ -122,5 +137,5 @@ export function createServicesController({state, actions, $, canvas, ctx}) {
   function releaseInput(){
     state.keys.clear();actions.releaseDialogueKeys?.();actions.battleKeyUp?.(' ');
   }
-  return {status, log, json, initializeRuntimeConfiguration, readConfiguredData, image, busy, download, exportRuntimeLog, guarded, saveEnvelope, withSaveOperation,saveProgress,loadProgress,refreshSaveSlots,saveEntries,option,updateInterface,releaseInput};
+  return {status, log, json, initializeRuntimeConfiguration, readConfiguredData, image, busy, download, exportRuntimeLog, guarded, saveEnvelope, withSaveOperation,saveProgress,loadProgress,refreshSaveSlots,saveEntries,option,updateInterface,releaseInput,currentPlayTime,resetPlayTime};
 }

@@ -19,7 +19,8 @@ export function mapPresentation({scene,world,role,action,view,
     const motion=npc.motion,actorRole=motion?.role,actorAction=actorRole?.actions.find(a=>a.index===motion.action);
     const position=mapActorPosition(npc);
     const bitmap=actorAction?.bitmap??npc.bitmap;
-    if(!bitmap||npc.hidden||!(npc.event?.conditions??[]).every(c=>world.flags[c.index]===c.value))continue;
+    if(!bitmap||npc.hidden||npc.native_layer!==undefined&&scene.data.native_layer!==undefined&&npc.native_layer!==scene.data.native_layer
+      ||!(npc.event?.conditions??[]).every(c=>world.flags[c.index]===c.value))continue;
     const resource=actorAction?.bitmap?{frame_width:actorRole.frame_width,frame_height:actorRole.frame_height,
       anchor_x:actorRole.anchor.x,anchor_y:actorRole.anchor.y}:npc.resource;
     const frame=actorAction?.bitmap?motion.frame:Math.floor(time/(resource.interval_ms??180))%resource.frames_per_direction;

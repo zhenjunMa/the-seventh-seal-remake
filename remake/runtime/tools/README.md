@@ -37,6 +37,8 @@
 
 已有重制版JSON档使用一次性工具`migrate_native_saves.py --backup-dir <saves之外的新目录>`预览；加`--apply`后安装原版格式、移除已转换JSON。输入文件和被覆盖的测试档均备份至指定目录，正式游戏不依赖迁移工具。
 
+早期重制版写出的原版格式坏档使用`python3 -B remake/runtime/tools/repair_native_saves.py --save-dir remake/saves --backup-dir <saves之外的新目录>`预览；先备份全部输入并生成候选和逐段字节校验报告，加`--apply`才原地安装。保留原文件名（包括自行编号的`SaveGame31.Dat`）及修改时间，修复角色身份／队列、地图人物初始化字段及原版加载进度总量，保留人物当前姿态、路线与AI进度；仅已识别旧缺失身份签名且设置八字节全零的档恢复默认声音设置，健康原版静音设置保持原值。HP、成长、装备、背包、旗标、事件、技巧及累计时间按允许修复字段外的字节不变校验，正式游戏不依赖该工具。
+
 ### 新地图接入顺序
 
 ```console
@@ -143,6 +145,7 @@ plan只用已提交元数据及既有图集区域，不读PNG或写正式产物�
 | specialized-evidence-check | 旧观察及专题复核，按其原范围解释 |
 | fixture-or-observation-preparation／source-observation | 隔离样本准备、原版观察及只读记录 |
 | independent-source-export | 基础来源或旧样本生产，分类不代表可以删除 |
+| one-time-save-migration／one-time-save-repair | 旧存档转换或已知错误修复；先预览和备份，显式安装 |
 
 基础导出器extract、export_movement、export_combat_lab、export_combat_presentation已在本目录；正式生产不引用prototype。各自仍需原输入及保留证据，使用前核范围。共享原版资源与存档解析、道具初始化模块在`source/`，通过`source.<模块名>`导入；媒体统一`web/assets/`。
 

@@ -1,6 +1,6 @@
 // The original Game005_2 offers initial/memory battle cursor modes.
-// Keep preferences outside world saves so changing UI/audio settings does not
-// mark game progress as saved. Selection behavior is integrated separately.
+// Browser preferences initialize a page; loading a game restores its saved
+// settings, and the next save captures the current preference snapshot.
 export function createMenuSettings(options = {}) {
   const storage = options.storage ?? null;
   const storageKey = options.storageKey ?? 'seventh-seal-menu-settings-v1';

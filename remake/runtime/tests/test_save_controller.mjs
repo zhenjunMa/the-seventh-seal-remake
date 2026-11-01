@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {WorldStore,encodeSave,decodeSave} from '../web/core/world.mjs';
+import {WorldStore,encodeSave,decodeSave,validateWorld,DEFAULT_GAME_SETTINGS} from '../web/core/world.mjs';
 import {SceneController} from '../web/core/scenes.mjs';
 import {createServicesController} from '../web/controllers/services.mjs';
 import {createStoryController} from '../web/controllers/story.mjs';
@@ -20,13 +20,13 @@ const png='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGgAAABMCAIAAAAOQ2XWAAA
 const deferred=()=>{let resolve,reject;const promise=new Promise((yes,no)=>{resolve=yes;reject=no;});return {promise,resolve,reject};};
 const ALL_SLOTS=[...MANUAL_SAVE_SLOTS,'quick'];
 const settled=()=>new Promise(done=>setImmediate(done));
-function fixture(initial=seed){
+function fixture(initial=seed,{now=()=>0}={}){
   const nodes=new Map(),$=id=>{if(!nodes.has(id))nodes.set(id,{textContent:'',hidden:false,dataset:{},style:{},classList:{toggle(){},add(){},remove(){}},append(){},children:[],replaceChildren(...children){this.children=children;if(!children.some(row=>row.value===this.value))this.value=children[0]?.value??'';}});return nodes.get(id);};
   const world=new WorldStore(initial),state={world,partyCombat,itemData,partySkills,logs:[],keys:new Set(),clock:0,view:{},phaseNames:{},saveSlots:Object.fromEntries(ALL_SLOTS.map(slot=>[slot,null])),saveOperation:null,
     catalog:{maps:[{id:initial.location.map_id}],roles:initial.party.map(role=>({id:role.id}))},startupView:{hide(){},showMenu(){}}};
   const actions={captureSavePreview:()=>png,buildHud(){},updateNearest(){}},canvas={focus(){}};
-  Object.assign(actions,createServicesController({state,actions,$,canvas}));
-  state.scenes=new SceneController({world,prepare:async()=>({data:{id:initial.location.map_id}}),validateEntry(){},commitView(){}});
+  Object.assign(actions,createServicesController({state,actions,$,canvas,now}));
+  state.scenes=new SceneController({world,prepare:async()=>({data:{id:initial.location.map_id}}),validateEntry(){},commitView(){},onPhase:actions.busy});
   state.scenes.current={data:{id:initial.location.map_id}};state.scenes.setPhase('map');
   Object.assign(actions,createStoryController({state,actions,$,canvas}));
   Object.assign(actions,createSessionController({state,actions,$,canvas}));
@@ -46,7 +46,7 @@ test('file save holds exploration and blocks load, new game and scene transition
   assert.throws(()=>actions.showTitle(),/正在存取/);
   await assert.rejects(state.scenes.loadLocation(seed.location),/尚未完成/);
   await entered.promise;
-  assert.equal(written.slot,'quick');assert.deepEqual(await decodeSave(written.envelope),await decodeSave(await encodeSave(seed)));
+  assert.equal(written.slot,'quick');assert.deepEqual(await decodeSave(written.envelope),{...seed,play_time_ms:0,game_settings:DEFAULT_GAME_SETTINGS});
   assert.equal(state.saveSlots.quick,null);assert.equal($('saveStatus').textContent,'');
   gate.resolve({path:'remake/saves/Game.SAV'});await pending;
   assert.equal(state.scenes.phase,'map');assert.equal(state.saveOperation,null);
@@ -63,6 +63,48 @@ test('failed writes never mark progress saved and failed reads or checksums pres
   const damaged={...await encodeSave(seed),sha256:'0'.repeat(64)};
   await assert.rejects(actions.restore(damaged),/校验失败/);
   assert.deepEqual(state.world.snapshot(),before);assert.equal(state.scenes.phase,'map');assert.equal(state.saveOperation,null);
+});
+
+test('play time counts once across failed or repeated saves, pauses on the title and resets on load or new game',async()=>{
+  let clock=0;const initial={...structuredClone(seed),play_time_ms:100*3600_000};
+  const {state,actions,files}=fixture(initial,{now:()=>clock}),before=state.world.snapshot();
+  clock=1500;const write=state.saveStorage.write;state.saveStorage.write=async()=>{throw Error('disk full');};
+  await assert.rejects(actions.saveProgress('quick'),/disk full/);assert.equal(actions.currentPlayTime(),initial.play_time_ms+1500);
+  state.saveStorage.write=write;clock=2500;await actions.saveProgress('quick');await actions.saveProgress('quick');
+  assert.equal((await decodeSave(files.get('quick'))).play_time_ms,initial.play_time_ms+2500);assert.deepEqual(state.world.snapshot(),before);
+  state.scenes.setPhase('menu');clock=12500;
+  const picker=actions.openSaveMenu({mode:'load'});await settled();clock=13500;actions.closeSaveMenu();await picker;
+  assert.equal(actions.currentPlayTime(),initial.play_time_ms+2500);
+  state.scenes.setPhase('map');clock=14500;await actions.saveProgress('quick');
+  assert.equal((await decodeSave(files.get('quick'))).play_time_ms,initial.play_time_ms+3500);
+  clock=100000;await actions.loadProgress('quick');assert.equal(actions.currentPlayTime(),initial.play_time_ms+3500);
+  actions.resetPlayTime(0);clock+=250;assert.equal(actions.currentPlayTime(),250);
+});
+
+test('loading applies saved audio and cursor settings only after success; saving captures later preference edits',async()=>{
+  const saved=structuredClone(seed);saved.play_time_ms=321000;
+  saved.game_settings={audio:{master:{volume:.5,muted:false},music:{volume:.25,muted:true},effects:{volume:0,muted:false}},battle_cursor:'initial'};
+  const {state,actions,$}=fixture(),channels=structuredClone(DEFAULT_GAME_SETTINGS.audio);let cursor='memory';
+  state.audio={setChannelVolume(name,value){channels[name].volume=value;},setChannelMuted(name,value){channels[name].muted=value;},
+    snapshot:()=>({channels:structuredClone(channels),volume:channels.master.volume,muted:channels.master.muted})};
+  state.menuSettings={setBattleCursor(value){cursor=value;},snapshot:()=>({battleCursor:cursor})};
+  const envelope=await encodeSave(saved);
+  await assert.rejects(actions.restore({...envelope,sha256:'0'.repeat(64)}),/校验失败/);
+  assert.deepEqual(channels,DEFAULT_GAME_SETTINGS.audio);assert.equal(cursor,'memory');
+  await actions.restore(envelope);assert.deepEqual(channels,saved.game_settings.audio);assert.equal(cursor,'initial');
+  assert.equal($('audioVolume').value,'50');assert.equal(actions.currentPlayTime(),321000);
+  channels.effects={volume:.75,muted:true};cursor='memory';
+  const next=await decodeSave(await actions.saveEnvelope());assert.deepEqual(next.game_settings,{audio:channels,battle_cursor:'memory'});
+  assert.deepEqual(state.world.value.game_settings,saved.game_settings,'saving preferences does not mutate live progress');
+});
+
+test('the world boundary validates optional play time and settings while accepting older in-memory fixtures',()=>{
+  assert.doesNotThrow(()=>validateWorld(seed));
+  for(const play_time_ms of [-1,.5,Number.MAX_SAFE_INTEGER+1])assert.throws(()=>validateWorld({...seed,play_time_ms}),/累计游戏时间/);
+  for(const change of [s=>s.audio.master.volume=1.01,s=>s.audio.music.muted=1,s=>s.battle_cursor='fast',s=>s.audio.extra={volume:1,muted:false}]){
+    const game_settings=structuredClone(DEFAULT_GAME_SETTINGS);change(game_settings);assert.throws(()=>validateWorld({...seed,game_settings}),/游戏.*设置/);
+  }
+  assert.equal(validateWorld({...seed,play_time_ms:1000*3600_000,game_settings:DEFAULT_GAME_SETTINGS}).play_time_ms,1000*3600_000);
 });
 
 test('quick load reads the quick slot and restores through the validated scene transaction',async()=>{
@@ -163,6 +205,7 @@ test('loading a numbered slot through the page restores the world and closes bac
 
 test('an original-save world opens the party menu, saves either slot kind and restores learned shortcuts without origin metadata',async()=>{
   const native=structuredClone(seed);native.source={kind:'native-save',path:'Game.SAV',sha256:'1'.repeat(64)};
+  native.play_time_ms=90123;native.game_settings=structuredClone(DEFAULT_GAME_SETTINGS);
   native.equipment={version:1,roles:{'001':[]}};native.formation_slots=[null,null,null,'001'];
   const learned=partySkills.roles['001'].skills.find(skill=>!skill.learned_raw&&(skill.type_flags_u32_0x32&15)!==0).original_skill_index;
   native.party[0].skill_progress={version:1,learned_indices:[learned]};
@@ -170,7 +213,7 @@ test('an original-save world opens the party menu, saves either slot kind and re
   const header=Buffer.from(native.party[0].combat_progress.header_raw_hex,'hex');header.writeInt32LE(75,0x7a);
   native.party[0].combat_progress.header_raw_hex=header.toString('hex');
   const {state,actions,$,canvas,files,storageCalls}=fixture(native),rendered=[];
-  state.audio={playCue(){},snapshot:()=>({channels:{}})};state.menuSettings={snapshot:()=>({battleCursor:'initial'})};
+  state.audio={playCue(){},snapshot:()=>({channels:structuredClone(DEFAULT_GAME_SETTINGS.audio),volume:1,muted:false})};state.menuSettings={snapshot:()=>({battleCursor:'memory'})};
   state.operationMenu={focusInitial(){},page(){},suspend(){},stats(row){rendered.push(row);},roster(){},mnuText(){},items(){},itemButtons:new Map(),
     manifest:{},equipment(){},equipmentView:{render(){}},weapon(){},system:{render(){}}};
   actions.readConfiguredData=async()=>({items:{...itemData,runtime_configuration:{differences:[]}},party_skills:partySkills,audit:{mode:'original'}});

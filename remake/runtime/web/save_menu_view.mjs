@@ -57,8 +57,9 @@ export class SaveMenuView {
       const index=this.top+visible,row=this.row(index),widget=menu.widgets.find(item=>item.name===String(visible+1).padStart(2,'0'));
       if(index===this.selected)this.drawImage(widget.active_images[0],widget.draw_point_raw.x,widget.draw_point_raw.y);
       let world={};try{world=JSON.parse(row.envelope?.payload??'{}');}catch{}
-      const label=row.error?'无法读取':row.envelope?(world.party??[]).map(role=>role.name).join('　'):'空白存档',date=row.envelope?.saved_at?new Date(row.envelope.saved_at).toLocaleString('zh-CN',{timeZone:'Asia/Shanghai',hour12:false}):'';
-      const button=this.button(`存档栏位 ${row.slot} · ${label}`,widget.rect,()=>this.select(index),{className:'save-slot',text:`${row.slot}　${label}\n${date}\n${world.location?.map_id??''}`,disabled:this.confirming});button.dataset.slot=row.slot;button.setAttribute('aria-current',String(index===this.selected));
+      const label=row.error?'无法读取':row.envelope?(world.party??[]).map(role=>role.name).join('　'):'空白存档',seconds=Math.floor((world.play_time_ms??0)/1000);
+      const duration=row.envelope?[Math.floor(seconds/3600),Math.floor(seconds/60)%60,seconds%60].map(value=>String(value).padStart(2,'0')).join(':'):'';
+      const button=this.button(`存档栏位 ${row.slot} · ${label}`,widget.rect,()=>this.select(index),{className:'save-slot',text:`${row.slot}　${label}\n${duration}\n${world.location?.map_id??''}`,disabled:this.confirming});button.dataset.slot=row.slot;button.setAttribute('aria-current',String(index===this.selected));
       appendSavePreview(this.buttons,row.envelope,26,82+visible*105);
     }
     this.widgetButton('game_save_02','UP','向上翻动存档栏位',()=>this.move(-3),{disabled:this.confirming||this.selected===0});this.widgetButton('game_save_02','DN','向下翻动存档栏位',()=>this.move(3),{disabled:this.confirming||this.selected===19});

@@ -30,7 +30,7 @@ def resources():
     items = json.loads((DATA / 'items.json').read_bytes())['definitions']
     story = json.loads((DATA / 'chapter_story.json').read_bytes())['maps']
     # Retain only the native map records used by save serialization.
-    maps = {key: {k: value.get(k) for k in ('name', 'header_raw_hex', 'npc_records', 'objects')}
+    maps = {key: {k: value.get(k) for k in ('name', 'header_raw_hex', 'npc_records', 'objects', 'native_camera_extent_cells')}
             for key, value in story.items()}
     areas = json.loads((DATA / 'world_map.json').read_bytes())['areas']
     return seed, skills, items, maps, areas
@@ -51,8 +51,7 @@ def text(raw, offset, length, encoding='cp936'):
 @cache
 def map_actions():
     roles = json.loads((DATA / 'chapter_map_resources.json').read_bytes())['roles']
-    return {key: {a['index']: (a['sequence_raw'][:a['logical_count']] if a['uses_sequence'] else None)
-                  for a in role['actions']} for key, role in roles.items()}
+    return {key: {a['index']: a for a in role['actions']} for key, role in roles.items()}
 
 
 @cache
@@ -83,6 +82,69 @@ def initial_map_actor(index, map_header, position):
     for offset in (0x30, 0x34, 0x6F, 0x73):
         put(actor, offset, position)
     return actor
+
+
+def initialize_map_npc(raw_actor, map_header):
+    """DAT -> live actor: 4B4A80/4B3AA0/4B4F10/469F50/483550."""
+    actor = bytearray(raw_actor)
+    shift = map_header[0x142]
+    coordinate_offsets = [0x6F, 0x73]
+    for index in range(u32(actor, 0x14B)):
+        coordinate_offsets.extend((0x14F + index * 0x15, 0x153 + index * 0x15))
+    for offset in coordinate_offsets:
+        value = (u32(actor, offset) << (shift + 2)) & 0xFFFFFFFF
+        put(actor, offset, (value - 0x100000000 if value & 0x80000000 else value) >> 5)
+    actor[0xC5] = actor[0xF5]
+    actor[0x2D:0x2F] = bytes(2)
+    actor[0xD5] = actor[0x4BD] = actor[0x4BE] = 0
+    actor[0xE0] = 1
+    if actor[0x2AC]:
+        actor[0x97] = 1
+    for offset, value in ((0x93, u32(map_header, 0x92)), (0x5B, u32(actor, 0x6F)),
+                          (0x5F, u32(actor, 0x73)), (0x30, u32(actor, 0x6F)),
+                          (0x34, u32(actor, 0x73)), (0x83, 0), (0xD6, 80), (0xEA, 0),
+                          (0x4BF, 0), (0x495, int(7 < actor[0x2C] < 128))):
+        put(actor, offset, value)
+    # Shipped NPCs have equal min/max values in all six ranges (4B3AA0).
+    for offset in (0x2C7, 0x2D3, 0x2DF, 0x2EF, 0x2FF, 0x30F, 0x485, 0x489):
+        put(actor, offset, 0)
+    put(actor, 0x2CB, u32(actor, 0x2C3))
+    put(actor, 0x2D7, u32(actor, 0x2CF))
+    if not u32(actor, 0x30B):
+        put(actor, 0x30B, 10)
+    actions = map_actions().get(f'{u32(actor, 0x28):03}', {})
+    actor[0x46:0x5A] = bytes([255] * 20)
+    for action in actions.values():
+        channel = bytes.fromhex(action['raw_hex'])[0x7E]
+        if channel < 20 and actor[0x46 + channel] == 255:
+            actor[0x46 + channel] = action['index']
+    if actor[0x47] == 255:
+        actor[0x47] = actor[0x46]
+    actor[0x2F] = actor[0x47]
+    actor[0xFA:0xFA + len(actions) * 4] = bytes(len(actions) * 4)
+    action = actions.get(0)
+    if action:
+        frame = action['sequence_raw'][0] if action['uses_sequence'] else 0
+        put(actor, 0x7B, 0)
+        put(actor, 0x7F, actor[0x45])
+        put(actor, 0x8B, action['first_frame'] + frame +
+            (actor[0x45] * action['frame_count'] if action['directions'] == 8 else 0))
+    return actor
+
+
+def native_camera_position(map_header, extent_cells, x, y):
+    """640x480 viewport: 4A0500 dimensions, 4A18F0 bounds, 4A4E50 follow."""
+    if not u32(map_header, 0x88):
+        return x, y
+    shift, step = map_header[0x142], 1 << map_header[0x145]
+    tile_height = 32 >> map_header[0x145]
+    result = []
+    for position, extent, screen_size in zip((x, y), extent_cells, (640, 480)):
+        cells = screen_size // tile_height + step + (step if screen_size % tile_height else 0)
+        half = (cells // 2) << shift
+        maximum = max(0, (extent - cells) << shift)
+        result.append(min(maximum, max(0, position - half)) // step * step)
+    return tuple(result)
 
 
 def image_png(raw):
@@ -130,6 +192,12 @@ def decode_native_save(raw):
                  leader_id=f'{leader + 1:03}', party=[], reserve_party=[], inventory=[],
                  flags=list(struct.unpack('<2000I', sections['flags'])),
                  event_records=[], object_states={}, money=u32(header, 0x81), reward_records=[],
+                 play_time_ms=sum(value * unit for value, unit in zip(
+                     struct.unpack_from('<3H', header, 0x75), (3600000, 60000, 1000))),
+                 game_settings=dict(audio={key: dict(volume=header[0x3A9 + i] / 64,
+                     muted=not bool(header[0x3AD + i]))
+                     for i, key in enumerate(('master', 'music', 'effects'))},
+                     battle_cursor='memory' if header[0x3AC] else 'initial'),
                  source={**deepcopy(seed['source']), 'kind': 'native-save',
                          'path': 'native-save', 'sha256': hashlib.sha256(raw).hexdigest()},
                  native_save={'raw': b64encode(raw).decode('ascii')},
@@ -222,11 +290,12 @@ def decode_native_save(raw):
     for slot in range(10, 10 + u32(map_actors, 4 + 10 * ACTOR_BYTES)):
         actor = map_actors[dynamic + slot * ACTOR_BYTES:dynamic + (slot + 1) * ACTOR_BYTES]
         action, logical = u32(actor, 0x83), u32(actor, 0x7B)
-        sequence = map_actions().get(f'{u32(actor, 0x28):03}', {}).get(action)
+        definition = map_actions().get(f'{u32(actor, 0x28):03}', {}).get(action)
+        sequence = definition['sequence_raw'][:definition['logical_count']] if definition and definition['uses_sequence'] else None
         frame = sequence[logical % len(sequence)] if sequence else logical
         world['map_npc_state']['actors'].append(dict(slot=slot, x=u32(actor, 0x6F) * 2,
             y=u32(actor, 0x73) * 2, direction=actor[0x45], hidden=bool(actor[0x97]),
-            action=action, frame=frame))
+            action=action, frame=frame, layer=u32(actor, 0x93)))
     world['recipe_unlock_indices'] = list(struct.unpack_from(f'<{u32(sections["last_table"])}I', sections['last_table'], 4))
     payload = json.dumps(world, ensure_ascii=False, separators=(',', ':'))
     digest = hashlib.sha256(payload.encode('utf-8')).hexdigest()
@@ -282,12 +351,36 @@ def encode_native_save(envelope):
     header[0x38] = 1
     map_id = world['location']['map_id']
     current_map = maps[map_id]
+    # 4785C0 sums ten section progress getters: 2048 plus current NPC count.
+    put(header, 0x34, 2048 + len(current_map['npc_records']))
     same_map = bool(base and text(header, 0x39, 20, 'ascii').upper() == map_id + '.DAT')
+    leader = int(world['leader_id']) - 1
+    map_header = bytes.fromhex(current_map['header_raw_hex'])
+    native_x, native_y = round(world['location']['x'] / 2), round(world['location']['y'] / 2)
+    previous_actors = sections.get('map_objects')
+    previous_leader = 8 + (10 + leader) * ACTOR_BYTES
+    if not same_map or u32(previous_actors) != leader or any(
+            u32(previous_actors, previous_leader + offset) != value
+            for offset, value in ((0x6F, native_x), (0x73, native_y))):
+        camera = native_camera_position(map_header, current_map['native_camera_extent_cells'], native_x, native_y)
+        put(header, 0x61, camera[0])
+        put(header, 0x65, camera[1])
     header[0x39:0x4D] = (map_id + '.DAT').encode('ascii').ljust(20, b'\0')
     header[0x4D:0x61] = current_map['name'].encode('cp936').ljust(20, b'\0')
-    leader = int(world['leader_id']) - 1
     put(header, 0x69, leader)
     put(header, 0x81, world.get('money', seed['money']))
+    if 'play_time_ms' in world:
+        seconds = world['play_time_ms'] // 1000
+        struct.pack_into('<3H', header, 0x75, seconds // 3600, seconds // 60 % 60, seconds % 60)
+    settings = world.get('game_settings')
+    if settings:
+        for index, key in enumerate(('master', 'music', 'effects')):
+            channel = settings['audio'][key]
+            header[0x3A9 + index] = round(channel['volume'] * 64)
+            header[0x3AD + index] = int(not channel['muted'])
+        header[0x3AC] = int(settings['battle_cursor'] == 'memory')
+    elif not base:
+        header[0x3A9:0x3B1] = bytes((64, 64, 64, 1, 1, 1, 1, 0))
     preview = native_preview(envelope, bytes(sections.get('preview', bytes(104 * 76 * 2))))
     flags = struct.pack('<2000I', *world['flags'])
     records = world['event_records']
@@ -330,7 +423,6 @@ def encode_native_save(envelope):
             map_objects[4:4 + 10 * ACTOR_BYTES] = old[4:4 + 10 * ACTOR_BYTES]
             map_objects[dynamic:dynamic + 10 * ACTOR_BYTES] = old[4:4 + 10 * ACTOR_BYTES]
         else:
-            map_header = bytes.fromhex(current_map['header_raw_hex'])
             shift = map_header[0x142] or 3
             for index in range(6):
                 at = 4 + index * ACTOR_BYTES
@@ -339,13 +431,15 @@ def encode_native_save(envelope):
                 map_objects[at:at + ACTOR_BYTES] = initial_map_actor(index + 1, map_header, 0)
         for npc in current_map['npc_records']:
             at = dynamic + npc['slot_zero_based'] * ACTOR_BYTES
-            map_objects[at:at + ACTOR_BYTES] = bytes.fromhex(npc['raw_hex'])
+            map_objects[at:at + ACTOR_BYTES] = initialize_map_npc(bytes.fromhex(npc['raw_hex']), map_header)
     for role in world['party']:
         index = int(role['id']) - 1
         at = dynamic + index * ACTOR_BYTES
         if not u32(map_objects, at + 0x28):
             put(map_objects, at + 0x28, index + 1)
         map_objects[at + 0xC2] = world.get('encounters', {}).get('counters', {}).get(role['id'], 0)
+        if not same_map:
+            put(map_objects, at + 0x93, u32(map_header, 0x92))
         if index == leader:
             put(map_objects, at + 0x6F, round(world['location']['x'] / 2))
             put(map_objects, at + 0x73, round(world['location']['y'] / 2))
@@ -353,15 +447,23 @@ def encode_native_save(envelope):
             map_objects[at + 0x97] = 0
             if not same_map:
                 map_objects[at + 0xEF] = 1
+                put(map_objects, at + 0x30, u32(map_objects, at + 0x6F))
+                put(map_objects, at + 0x34, u32(map_objects, at + 0x73))
     if world.get('map_npc_state', {}).get('map_id') == map_id:
         for npc in world['map_npc_state']['actors']:
             at = dynamic + npc['slot'] * ACTOR_BYTES
             for offset, key in ((0x6F, 'x'), (0x73, 'y')):
                 put(map_objects, at + offset, round(npc[key] / 2))
+            old_direction = map_objects[at + 0x45]
             map_objects[at + 0x45] = npc['direction']
             map_objects[at + 0x97] = int(npc['hidden'])
+            if 'layer' in npc:
+                put(map_objects, at + 0x93, npc['layer'])
             old_action, logical = u32(map_objects, at + 0x83), u32(map_objects, at + 0x7B)
-            sequence = map_actions().get(f'{u32(map_objects, at + 0x28):03}', {}).get(npc['action'])
+            definition = map_actions().get(f'{u32(map_objects, at + 0x28):03}', {}).get(npc['action'])
+            sequence = definition['sequence_raw'][:definition['logical_count']] if definition and definition['uses_sequence'] else None
+            old_frame = sequence[logical % len(sequence)] if sequence else logical
+            changed = old_action != npc['action'] or old_direction != npc['direction'] or old_frame != npc['frame']
             if sequence:
                 if old_action != npc['action'] or sequence[logical % len(sequence)] != npc['frame']:
                     logical = sequence.index(npc['frame'])
@@ -369,6 +471,13 @@ def encode_native_save(envelope):
                 logical = npc['frame']
             put(map_objects, at + 0x83, npc['action'])
             put(map_objects, at + 0x7B, logical)
+            if definition and (changed or not same_map):
+                put(map_objects, at + 0x7F, npc['direction'])
+                put(map_objects, at + 0x8B, definition['first_frame'] + npc['frame'] +
+                    (npc['direction'] * definition['frame_count'] if definition['directions'] == 8 else 0))
+            if not same_map:
+                put(map_objects, at + 0x30, u32(map_objects, at + 0x6F))
+                put(map_objects, at + 0x34, u32(map_objects, at + 0x73))
     global_block = sections.get('global_block', bytearray(472))
     if not base:
         for area in areas:
@@ -407,10 +516,8 @@ def encode_native_save(envelope):
             for key, offset in (('attack', 0x40), ('defense', 0x48)):
                 put(head, offset, role['attributes_stored'][key]['current'])
                 put(head, offset + 4, role['attributes_stored'][key]['base'])
-            old_formation = [f'{u32(sections["last_fixed"], n * 20):03}'
-                             if u32(sections['last_fixed'], n * 20) else None for n in range(4)] if base else None
-            if role_id in formation and formation != old_formation:
-                put(head, 0x2B3, formation.index(role_id))
+            if role_id in formation:
+                put(head, 0x303, formation.index(role_id))
             progress = role.get('skill_progress', {})
             for entry in progress.get('records', []):
                 record = skill_records[entry['index']]
@@ -425,6 +532,9 @@ def encode_native_save(envelope):
                 match = next((s for s in skill_records if s[0] == pending['source_skill_id']), None)
                 if match is not None:
                     match[0x23] = 1
+        # 4FDD00 populates the CHR cache identity; 4FF480 rejects an empty cache.
+        if source and not u32(head, 0x2FF):
+            put(head, 0x2FF, index + 1)
         put(head, 0, len(skill_records))
         roles.append(bytes([int(any(r['id'] == role_id for r in world['party']))]) + struct.pack('<II', 8, 0) + head + b''.join(skill_records))
         at = index * ACTOR_BYTES

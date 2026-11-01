@@ -1,5 +1,5 @@
 // session adapters. Persistent state belongs to the shared runtime context.
-import {decodeSave} from "../core/world.mjs";
+import {decodeSave,DEFAULT_GAME_SETTINGS} from "../core/world.mjs";
 import {createPartyActors} from "../core/party_attributes.mjs";
 import {effectiveSkillSource} from "../core/battle_skill_access.mjs";
 import {OpeningRunner} from "../core/opening.mjs";
@@ -14,6 +14,13 @@ import {loadEncounterMap} from '../core/encounters.mjs';
 export function createSessionController({state, actions, $, canvas, ctx,completionStorage}) {
   let storage=completionStorage;try{if(storage===undefined)storage=globalThis.localStorage;}catch{}
   const completion=loadStoryCompletion(storage);if(completion){state.completionMetadata=completion;state.nativeMenuCodeUnlocked=true;}
+  function applyGameSettings(settings=DEFAULT_GAME_SETTINGS){
+    if(state.audio?.setChannelVolume)for(const [name,channel]of Object.entries(settings.audio)){
+      state.audio.setChannelVolume(name,channel.volume);state.audio.setChannelMuted(name,channel.muted);
+    }
+    state.menuSettings?.setBattleCursor?.(settings.battle_cursor);
+    if(state.audio?.snapshot){const audio=state.audio.snapshot();$('audioMuted').checked=audio.muted;$('audioVolume').value=String(Math.round(audio.volume*100));}
+  }
   function showTitle({allowResume=false}={}){
     if(state.saveOperation&&state.scenes.phase==='save-io')throw new Error('正在存取进度，请稍候');
     state.audio?.suspend();
@@ -45,11 +52,14 @@ export function createSessionController({state, actions, $, canvas, ctx,completi
   async function beginOpening(seed=null){
     if(state.saveOperation&&state.saveOperation.kind!=='restore-opening')throw new Error('正在存取进度，请稍候');
     if(!['map','menu'].includes(state.scenes.phase))return;
-    const previous={scene:state.scenes.current,world:state.world.snapshot(),view:state.scenes.captureView(),phase:state.scenes.phase};
+    const previous={scene:state.scenes.current,world:state.world.snapshot(),view:state.scenes.captureView(),phase:state.scenes.phase,playTime:actions.currentPlayTime?.(),
+      settings:{audio:structuredClone(state.audio?.snapshot?.().channels??DEFAULT_GAME_SETTINGS.audio),battle_cursor:state.menuSettings?.snapshot().battleCursor??DEFAULT_GAME_SETTINGS.battle_cursor}};
     state.startupView.hide();state.audio?.suspend();state.scenes.setPhase('opening');
     return actions.playStory(async playback=>{
       try{
         const initial=seed??await playbackTask(actions.json('data/opening_seed.json'),playback.signal);
+        initial.play_time_ms??=0;initial.game_settings??=structuredClone(DEFAULT_GAME_SETTINGS);
+        actions.resetPlayTime?.(initial.play_time_ms);applyGameSettings(initial.game_settings);
         const program=await playbackTask(state.storyRepository.opening(),playback.signal);playback.check();
         if(playback.paused)await playback.ready();state.openingProgram=program;
         // Prepare each map at its source opcode, after the outgoing performance.
@@ -77,6 +87,7 @@ export function createSessionController({state, actions, $, canvas, ctx,completi
       }catch(error){
         $('openingShade').hidden=true;
         state.world.replace(previous.world);state.scenes.current=previous.scene;state.scenes.rollbackView(previous.view);
+        actions.resetPlayTime?.(previous.playTime??previous.world.play_time_ms??0);applyGameSettings(previous.settings);
         if(previous.phase==='menu')showTitle();else{state.scenes.setPhase('map');actions.buildHud();}
         actions.log({type:'opening-failed',error:error.message});throw error;
       }finally{$('openingShade').hidden=true;}
@@ -101,6 +112,7 @@ export function createSessionController({state, actions, $, canvas, ctx,completi
     try{
       state.scenes.setPhase('map');
       await state.scenes.loadLocation(restored.location,{reason:'restore',restoredWorld:restored});
+      actions.resetPlayTime?.(restored.play_time_ms??0);applyGameSettings(restored.game_settings);
       state.startupView.hide();actions.buildHud();actions.updateNearest();canvas.focus();actions.status('进度已载入，可以继续探索。');
       actions.log({type:'restore',map_id:restored.location.map_id,opening:restored.opening?.status??'legacy-v1'});
     }catch(error){if(previousPhase==='menu')showTitle();throw error;}

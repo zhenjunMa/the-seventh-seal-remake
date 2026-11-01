@@ -43,6 +43,12 @@ test('opening the source save page writes nothing and saving empty slot 01 submi
   assert.deepEqual(writes,[entries[1]]);assert.equal(root.dataset.slot,'01');assert.equal(view.active,true);assert.equal(view.pending,false);
 });
 
+test('slot labels show saved play duration beyond24hours instead of the file modification date',async()=>{
+  const {view,buttons}=await setup(),entries=emptyEntries();entries[0].envelope={...envelope(),payload:JSON.stringify({play_time_ms:(12243*3600+40*60+32)*1000,party:[{name:'英格妮'}],location:{map_id:'M01060'}})};
+  view.show();view.setEntries(entries);
+  assert.match(slotButtons(buttons)[0].textContent,/12243:40:32/);assert.doesNotMatch(slotButtons(buttons)[0].textContent,/2026/);
+});
+
 test('occupied slot 00 requires overwrite confirmation, cancellation writes nothing and acceptance submits once',async()=>{
   const writes=[],entries=emptyEntries();entries[0].envelope=envelope();
   const {view,root,buttons}=await setup({onConfirm:row=>writes.push(row)});view.show();view.setEntries(entries);

@@ -6,6 +6,8 @@ import {WorldStore} from '../web/core/world.mjs';
 import {ChapterRunner} from '../web/core/chapter.mjs';
 import {StoryRepository} from '../web/core/story_repository.mjs';
 import {runtimeContent,runtimeContentDefinition} from '../web/core/content_registry.mjs';
+import {captureMapNpcState,restoreMapNpcState,validateMapNpcState} from '../web/core/map_npc_state.mjs';
+import {mapPresentation} from '../web/core/map_presentation.mjs';
 
 const {createMapController}=await import('../web/controllers/map.mjs');
 const {createStoryController}=await import('../web/controllers/story.mjs');
@@ -44,6 +46,7 @@ async function fixture(mapId='M17020'){
 
 test('map preparation creates independent live NPCs and ordinary view commits preserve their positions',async()=>{
   const {state,controller,scene}=await fixture(),source=structuredClone(state.chapterResources.npcs_by_map.M17020);
+  assert.ok(scene.npcs.every(npc=>npc.native_layer===scene.data.native_layer));
   assert.ok(scene.npcRuntime.snapshot().length>0);
   const npc=scene.npcs[0],x=npc.x;npc.x+=32;
   const preview=await controller.prepareMap('M17020',{world:structuredClone(state.world.value)});
@@ -53,6 +56,23 @@ test('map preparation creates independent live NPCs and ordinary view commits pr
   controller.commitView(scene,state.world.location);
   assert.deepEqual(scene.npcRuntime.snapshot(),before);
   assert.deepEqual(state.chapterResources.npcs_by_map.M17020,source);
+});
+
+test('native NPC layers survive capture and restoration while drawing and interaction leave hidden state intact',()=>{
+  const resource={frame_width:16,frame_height:24,frames_per_direction:1,anchor_x:8,anchor_y:12};
+  const npcs=[{id:'current',slot_zero_based:10,x:20,y:30,direction:0,hidden:false,native_layer:6,bitmap:{},resource},
+    {id:'other',slot_zero_based:11,x:40,y:50,direction:0,hidden:false,native_layer:0xffffffff,bitmap:{},resource}];
+  const world={location:{map_id:'M01060',x:20,y:30,direction:0},flags:[],object_states:{}};
+  captureMapNpcState(world,'M01060',npcs);validateMapNpcState(world.map_npc_state);
+  const restored=restoreMapNpcState(npcs.map(npc=>({...npc,native_layer:6})),world,'M01060');
+  assert.equal(restored[1].native_layer,0xffffffff);assert.equal(restored[1].hidden,false);
+  const scene={data:{id:'M01060',native_layer:6},objects:[],npcs:restored};
+  const rows=mapPresentation({scene,world,role:{frame_width:16,frame_height:24,map_draw_offset:{x:0,y:0}},action:{bitmap:{}},view:{}});
+  assert.deepEqual(rows.map(row=>row.key),['npc:current','leader']);
+  const controller=createMapController({state:{world:{value:world},scenes:{current:scene}},actions:{},$:elements(),canvas:{},ctx:{}});
+  assert.equal(controller.npcAvailable(restored[0]),true);assert.equal(controller.npcAvailable(restored[1]),false);
+  captureMapNpcState(world,'M01060',restored);assert.equal(world.map_npc_state.actors[1].hidden,false);assert.equal(world.map_npc_state.actors[1].layer,0xffffffff);
+  assert.throws(()=>validateMapNpcState({map_id:'M01060',actors:[{...world.map_npc_state.actors[0],layer:-1}]}),/场景层码/);
 });
 
 test('map drawing uses live action atlases and physical frames without advancing NPC or world state',()=>{

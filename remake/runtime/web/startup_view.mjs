@@ -202,9 +202,10 @@ export class StartupView {
     if(this.submenu==='read'){
       const entries=this.saveEntries();
       for(const [row,entry] of this.visibleSaves().entries()){const index=this.listTop+row,save=entry.envelope;let world={};try{world=JSON.parse(save.payload);}catch{}
-        const date=save.saved_at?new Date(save.saved_at).toLocaleString('zh-CN',{timeZone:'Asia/Shanghai'}):'';
+        const seconds=Math.floor((world.play_time_ms??0)/1000);
+        const duration=[Math.floor(seconds/3600),Math.floor(seconds/60)%60,seconds%60].map(value=>String(value).padStart(2,'0')).join(':');
         const party=(world.party??[]).map(actor=>actor.name).join('　');
-        const button=add(`${entry.label}　${party}\n${date}\n${world.location?.map_id??''}`,147,99+108*row,265,78,index,()=>{this.draw();this.renderOptions();this.confirm();});button.className='startup-save panel-row';
+        const button=add(`${entry.label}　${party}\n${duration}\n${world.location?.map_id??''}`,147,99+108*row,265,78,index,()=>{this.draw();this.renderOptions();this.confirm();});button.className='startup-save panel-row';
         appendSavePreview(holder,save,17,97+108*row);
       }
       if(!entries.length)this.announce('尚无重制存档，Esc返回');

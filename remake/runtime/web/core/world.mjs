@@ -1,6 +1,7 @@
 // Persistent game data. Camera, image caches and animation cursors live elsewhere.
 export const WORLD_SCHEMA = 'seventh-seal-world';
 export const WORLD_VERSION = 1;
+export const DEFAULT_GAME_SETTINGS = {audio:{master:{volume:1,muted:false},music:{volume:1,muted:false},effects:{volume:1,muted:false}},battle_cursor:'memory'};
 import {validateEncounterState} from './encounters.mjs';
 import {validateEquipmentState} from './equipment.mjs';
 import {validateSkillShortcutState} from './skill_shortcuts.mjs';
@@ -38,8 +39,16 @@ export function validateWorldMapState(value) {
 
 export function validateWorld(value, mapIds = null) {
   requireValue(object(value) && value.schema === WORLD_SCHEMA && value.version === WORLD_VERSION, '存档格式或版本不兼容');
-  const allowed = new Set(['schema','version','revision','location','leader_id','party','reserve_party','inventory','flags','event_records','object_states','source','world_map','encounters','money','reward_records','opening','equipment','skill_shortcuts','technique_bindings','technique_combinations','formation_slots','crystal_sockets','native_pending_skill_unlocks','recipe_unlock_indices','native_map_sort_code','map_npc_state','native_save']);
+  const allowed = new Set(['schema','version','revision','location','leader_id','party','reserve_party','inventory','flags','event_records','object_states','source','world_map','encounters','money','reward_records','opening','equipment','skill_shortcuts','technique_bindings','technique_combinations','formation_slots','crystal_sockets','native_pending_skill_unlocks','recipe_unlock_indices','native_map_sort_code','map_npc_state','native_save','play_time_ms','game_settings']);
   requireValue(Object.keys(value).every(key => allowed.has(key)), '存档包含未支持的世界字段');
+  if('play_time_ms' in value)requireValue(Number.isSafeInteger(value.play_time_ms)&&value.play_time_ms>=0,'累计游戏时间无效');
+  if('game_settings' in value){
+    const settings=value.game_settings;
+    requireValue(object(settings)&&Object.keys(settings).sort().join(',')==='audio,battle_cursor'&&['initial','memory'].includes(settings.battle_cursor)
+      &&object(settings.audio)&&Object.keys(settings.audio).sort().join(',')==='effects,master,music','游戏设置字段无效');
+    for(const channel of Object.values(settings.audio))requireValue(object(channel)&&Object.keys(channel).sort().join(',')==='muted,volume'
+      &&Number.isFinite(channel.volume)&&channel.volume>=0&&channel.volume<=1&&typeof channel.muted==='boolean','游戏音频设置无效');
+  }
   validateNativeStoryMutationState(value);
   if('native_map_sort_code' in value)requireValue(Number.isInteger(value.native_map_sort_code)&&value.native_map_sort_code>=0&&value.native_map_sort_code<=8,'原地图入口排序无效');
   if('map_npc_state' in value)validateMapNpcState(value.map_npc_state);

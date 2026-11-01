@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {attachSavePreview,savedPreviewPng,validPreviewPng,SAVE_PREVIEW_WIDTH,SAVE_PREVIEW_HEIGHT} from '../web/core/save_preview.mjs';
-import {encodeSave,decodeSave} from '../web/core/world.mjs';
+import {encodeSave,decodeSave,DEFAULT_GAME_SETTINGS} from '../web/core/world.mjs';
 import {drawMapScene} from '../web/map_scene_view.mjs';
 import {createServicesController} from '../web/controllers/services.mjs';
 
@@ -30,9 +30,10 @@ test('preview rejects foreign URLs, mismatched payloads, overlarge images and wr
 test('save adapter captures the same snapshot it checksums and does not write browser storage',async()=>{
   let captures=0,snapshots=0;
   const state={scenes:{canSave:()=>true},world:{snapshot:()=>{snapshots++;return structuredClone(seed);}}};
-  const services=createServicesController({state,actions:{captureSavePreview:world=>{captures++;assert.deepEqual(world,seed);return png;}}});
+  const expected={...seed,play_time_ms:0,game_settings:DEFAULT_GAME_SETTINGS};
+  const services=createServicesController({state,actions:{captureSavePreview:world=>{captures++;assert.deepEqual(world,expected);return png;}}});
   const saved=await services.saveEnvelope();assert.equal(captures,1);assert.equal(snapshots,1);
-  assert.equal(savedPreviewPng(saved),png);assert.deepEqual(await decodeSave(saved),await decodeSave(await encodeSave(seed)));
+  assert.equal(savedPreviewPng(saved),png);assert.deepEqual(await decodeSave(saved),expected);
   state.scenes.canSave=()=>false;await assert.rejects(services.saveEnvelope(),/地图探索/);assert.equal(captures,1);
 });
 

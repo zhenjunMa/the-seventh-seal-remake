@@ -107,6 +107,12 @@ def export():
             records=[], index_nonzero=[], index_count=0, record_base=None,
             record_bytes=0x66F, record_count=0, trailing_bytes=0, trailing_sha256=sha(b""))
         data = original[dat["path"]]
+        # 4A18F0 scans every cell's frame, including cells between tile origins.
+        native_camera_extent_cells = [1, 1]
+        for index in range(dat["width_cells"] * dat["height_cells"]):
+            if u32(data, 0x172 + index * 0x40) != 999999:
+                native_camera_extent_cells[0] = max(native_camera_extent_cells[0], index % dat["width_cells"] + 1)
+                native_camera_extent_cells[1] = max(native_camera_extent_cells[1], index // dat["width_cells"] + 1)
         for record in tlk["records"]:
             record["source"] = source(tlk["path"], tlk["sha256"], record["offset"],
                                        record_id=record["id"], record_bytes=0x66F)
@@ -161,6 +167,7 @@ def export():
             record_count=tlk["record_count"], records=tlk["records"],
             trailing_bytes=tlk["trailing_bytes"], trailing_sha256=tlk["trailing_sha256"],
             header_raw_hex=dat["header_hex"], compatibility_variant=u32(data, 0x18),
+            native_camera_extent_cells=native_camera_extent_cells,
             descriptors=descriptors, objects=objects,
             npc_records=dat["npc_table"]["records"],
             entry_markers={str(marker): [dict(x=cell["x"],y=cell["y"],offset=cell["offset"])
