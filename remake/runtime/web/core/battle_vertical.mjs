@@ -74,8 +74,10 @@ export function createNativeVertical({actor,record}){
  * fractional frame remainder. No RNG, HP changes, callbacks or hidden landing. */
 export function advanceNativeVertical(previous,deltaMs){
   validate(previous);need(Number.isFinite(deltaMs)&&deltaMs>=0&&Number.isSafeInteger(Math.floor(deltaMs)),'Native vertical elapsed time invalid');
-  const state={...previous,wrote_delay:false,wrote_render:false},total=state.tick_remainder_ms+deltaMs,ticks=Math.floor(total/20);
-  state.tick_remainder_ms=total-ticks*20;state.ticks=(state.ticks??0)+ticks;
+  const state={...previous,wrote_delay:false,wrote_render:false},total=state.tick_remainder_ms+deltaMs,ticks=Math.floor((total+1e-9)/20);
+  // Fractional scene timestamps can leave a scheduled 20ms endpoint a few
+  // ulps short. Consume that endpoint so the merged clock cannot visit it forever.
+  state.tick_remainder_ms=Math.max(0,total-ticks*20);state.ticks=(state.ticks??0)+ticks;
   for(let i=0;i<ticks;i++){
     // Native top guard skips the complete block, including ground cleanup,
     // acceleration, render-Z copy, clock write and the wait-byte check.

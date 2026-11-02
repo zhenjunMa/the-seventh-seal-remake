@@ -55,7 +55,7 @@ export class BattleController {
     const mode=(state.source.runtime_configuration??state.source.skill_configuration)?.mode;
     return copy({id,phase,round,player_id,enemy_id,error,outcome,scheduler,rewards,test_mode,
       lifecycle_events:state.lifecycle_events??[],pending_outcome:state.pending_outcome??null,
-      ready_player_ids:this.readyPlayerIds(),command_available:this.canCommand(),input_busy:Boolean(commandForActor(scheduler,player_id))||this.running&&scheduler?.active_actor_id===player_id,action_busy:this.running,
+      ready_player_ids:this.readyPlayerIds(),command_available:this.canCommand(),input_busy:Boolean(commandForActor(scheduler,player_id))||this.activeActions?.has(player_id)||this.running&&scheduler?.active_actor_id===player_id,action_busy:this.running,
       source:{runtime_configuration:{mode},player_command_order:state.source.player_command_order},
       actors:state.actors.map(({id,name,side,hp,mp,alive,charge,state_raw,defense_half_raw,party_slot_zero_based,life_epoch,idle_pose,native_active,native_x_raw,native_z_raw,native_vertical_render_z_raw})=>({id,name,side,hp,mp,alive,charge,state_raw,party_slot_zero_based,life_epoch,idle_pose,native_active,native_x_raw,native_z_raw,native_vertical_render_z_raw,defending:Boolean(defense_half_raw),escaped:state_raw===11})),
       impact_count:this.impactSummary?.count??0,
@@ -102,7 +102,7 @@ export class BattleController {
     if(this.itemData)this.state.inventory=copy(this.world.value.inventory);
     this.schedulerData=scheduler_data?copy(scheduler_data):null;
     if(this.schedulerData){this.chargeClock=this.now();this.state.scheduler=initializeScheduler(next,this.schedulerData,side_priority,this.chargeClock);this.state.scheduler.command_stage='closed';this.state.phase='charging';}
-    this.actionTask=null;this.activeItemInstanceId=null;this.pendingCarriers=new Set();this.verticalClocks=new Map();this.pendingSourceEnds=new Set();this.lockedOutcome=null;
+    this.actionTask=null;this.activeItemInstanceId=null;this.pendingCarriers=new Set();this.activeActions=new Map();this.pendingPresentations=new Set();this.verticalClocks=new Map();this.pendingSourceEnds=new Set();this.lockedOutcome=null;
     const positions=battleActorPositions(next);
     for(const actor of next){
       actor.native_z_raw??=0;
@@ -207,11 +207,13 @@ export class BattleController {
     const descriptor=selectNativeAfterSourceReaction({actor:copy(actor),data:this.reactionData,rng:this.rng,threshold:this.state.scheduler?.threshold,...this.nativeSourceHooks()});
     const raw={...actor.native_after_raw,...descriptor.after.native_after_raw};Object.assign(actor,copy(descriptor.after));actor.native_after_raw=raw;
     for(const effect of descriptor.effects??[]){
-      if(effect.kind==='clear-native-chain'&&this.state.reward_ledger&&resetNativeChain(this.state.reward_ledger,actor.id)){
+      if(effect.kind==='clear-native-chain'){
+        if(this.state.reward_ledger)resetNativeChain(this.state.reward_ledger,actor.id);
         actor.settled_raw=0;actor.native_after_raw['0x0521f69d']=0;
       }
       if(effect.kind==='release-active-owner'&&this.state.scheduler?.active_actor_id===actor.id)this.state.scheduler.active_actor_id=null;
     }
+    if(descriptor.after.settled_raw===0&&this.state.reward_ledger)resetNativeChain(this.state.reward_ledger,actor.id);
     this.pendingSourceEnds??=new Set();
     if(!descriptor.skill&&actor.native_active&&['source-end-status-gate','source-end-death'].includes(descriptor.reason))this.pendingSourceEnds.add(actor.id);else this.pendingSourceEnds.delete(actor.id);
     if(descriptor.skill&&descriptor.kind==='response'){
@@ -313,7 +315,7 @@ export class BattleController {
     if(!scheduler)return Boolean(this.state?.phase==='command'&&!this.running&&actor?.side==='player'&&actor.hp.current>0);
     // Input belongs to the player, independently of charging and hit reactions.
     // Confirmation locks this actor until its queued action has completed.
-    return Boolean(['command','charging','action'].includes(this.state.phase)&&!this.state.pending_outcome&&!commandForActor(scheduler,id)&&actor?.side==='player'&&actor.hp.current>0&&actor.state_raw<4&&!actor.escaped&&actor.id!==scheduler.active_actor_id&&!this.state.lifecycle_events?.some(e=>e.actor_id===id&&e.kind!=='response'));
+    return Boolean(['command','charging','action'].includes(this.state.phase)&&!this.state.pending_outcome&&!commandForActor(scheduler,id)&&!this.activeActions?.has(id)&&actor?.side==='player'&&actor.hp.current>0&&actor.state_raw<4&&!actor.escaped&&actor.id!==scheduler.active_actor_id&&!this.state.lifecycle_events?.some(e=>e.actor_id===id&&e.kind!=='response'));
   }
   setCommandStage(stage='closed') {
     requireValue(typeof stage==='string'&&stage.length>0&&stage.length<=64,'战斗命令层无效');
@@ -472,6 +474,7 @@ export class BattleController {
   }
   interrupt(error) {
     this.running=false;this.activeItemInstanceId=null;this.state.phase='interrupted';this.state.error=error.message;
+    this.activeActions?.clear();this.pendingPresentations?.clear();
     if(this.state.scheduler){this.clearCommands();this.state.scheduler.active_actor_id=null;this.state.scheduler.command_stage='closed';}
     this.log({type:'battle-interrupted',battle_id:this.state.id,error:error.message});this.publish();
   }
@@ -523,7 +526,7 @@ export class BattleController {
     const s=this.state.scheduler,victory=this.lockedOutcome?this.lockedOutcome==='victory':this.state.actors.filter(a=>a.side==='enemy').every(fallenActor);
     if(this.testMode&&this.state.test_exit_requested&&!this.running){
       this.clearCommands();s.command_stage='closed';
-      if(this.hasLifecycle()||this.pendingCarriers.size){this.state.pending_outcome='escaped';this.state.phase='charging';return;}
+      if(this.hasLifecycle()||this.pendingCarriers.size||this.pendingPresentations?.size){this.state.pending_outcome='escaped';this.state.phase='charging';return;}
       this.state.pending_outcome=null;this.state.phase='escaped';this.state.outcome='escaped';return;
     }
     if(!this.running&&(this.lockedOutcome||!this.activePlayers().length||victory)){
@@ -538,7 +541,7 @@ export class BattleController {
         this.lockedOutcome=outcome;
         if(victory){for(const actor of this.players())if(actor.hp.current>0&&actor.state_raw<4)actor.state_raw=9;if(this.rewardData)this.prepareRewards();}
       }
-      if(this.pendingCarriers.size){this.state.pending_outcome=outcome;this.state.phase='charging';this.clearCommands();s.command_stage='closed';return;}
+      if(this.pendingCarriers.size||this.pendingPresentations?.size){this.state.pending_outcome=outcome;this.state.phase='charging';this.clearCommands();s.command_stage='closed';return;}
       this.state.pending_outcome=null;this.state.phase=outcome;this.state.outcome=outcome;this.clearCommands();s.command_stage='closed';
       if(victory&&this.rewardData)this.prepareRewards();return;
     }
@@ -662,7 +665,7 @@ export class BattleController {
           ticks:s.ticks,threshold:s.threshold,selection,native_plan:nativePlan?copy(nativePlan):null,charge,gauges:this.state.actors.map(a=>({id:a.id,...copy(a.charge)}))});
         if(this.state.reward_ledger)resetNativeChain(this.state.reward_ledger,attacker.id);
         this.publish();if(plan)await this.performSequence(attacker,victim,selected,plan,{command:attacker.side==='player'?skill:selected,members:selectedList});else await this.performAction(attacker,victim,selected);this.checkWorld();
-        s.active_actor_id=null;if(attacker.hp.current>0&&!this.state.lifecycle_events?.some(event=>event.actor_id===attacker.id)&&!attacker.native_active){
+        if(s.active_actor_id===attacker.id)s.active_actor_id=null;if(attacker.hp.current>0&&!this.state.lifecycle_events?.some(event=>event.actor_id===attacker.id)&&!attacker.native_active){
           if(attacker.current_skill?.id!==this.schedulerData.idle_skills[attacker.resource_id??attacker.id].id&&attacker.current_skill?.id!==this.schedulerData.low_hp_skills?.[attacker.resource_id??attacker.id]?.id)setIdleSkill(attacker,this.schedulerData,this.now());}
         if(this.lifecycleEnabled)for(const actor of this.state.actors)if(actor.state_raw===4&&this.canFinalizeDeath(actor))this.finalizeDeath(actor);
         if(attacker.side==='player'){this.state.round++;break;}
@@ -684,6 +687,10 @@ export class BattleController {
     const actionId=`${this.state.id}:${++this.state.action_count}`,entry={action_id:actionId,actor_id:attacker.id,target_id:target.id,skill_id:command.id,round:this.state.round,plan:copy(plan),contacts:[],impact:false,result:{hit:true,damage:0},before:copy({attacker,target}),after:null};
     const historyIndex=this.state.history.push(entry)-1;this.log({type:'battle-action',battle_id:this.state.id,...copy(entry)});this.publish();
     const seen=new Map(),controlsSeen=new Set(),primaryToken=actionId;let reactionCount=0;
+    const sequenceState=this.state;
+    (this.activeActions??=new Map()).set(attacker.id,actionId);(this.pendingPresentations??=new Set()).add(actionId);
+    const releaseActor=()=>{if(this.state===sequenceState&&this.activeActions.get(attacker.id)===actionId)this.activeActions.delete(attacker.id);};
+    const finishPlayback=()=>{if(this.state!==sequenceState)return;releaseActor();this.pendingPresentations.delete(actionId);this.refreshCommandState();this.publish();};
     attacker.native_active=true;attacker.current_target_id=target.id;attacker.native_sequence_token=primaryToken;
     const onRecord=(step,descriptor=null)=>{const actor=descriptor?this.actor(descriptor.actor_id):attacker;if(actor.state_raw>=5)return;
       const source=descriptor?descriptor.skill:plan.kind==='single'?selected:this.sequenceSkill(actor,step.source_skill_index);
@@ -698,8 +705,7 @@ export class BattleController {
       }
     };
     const end=(actor,token,now=this.now())=>{if(actor.native_sequence_token!==token)return;
-      if(this.reactionData&&this.schedulerData)this.completeNativeSource(actor,now);else{actor.native_active=false;if(actor.hp.current>0)setIdleSkill(actor,this.schedulerData,now);}
-      if(this.state.reward_ledger)resetNativeChain(this.state.reward_ledger,actor.id);};
+      if(this.reactionData&&this.schedulerData)this.completeNativeSource(actor,now);else{actor.native_active=false;if(actor.hp.current>0)setIdleSkill(actor,this.schedulerData,now);}};
     const onContact=(step,descriptor=null)=>{
       if(seen.has(step.contact_key))return copy(seen.get(step.contact_key));this.checkWorld();if(!step.independent_carrier)onRecord(step,descriptor);
       // A slow RAF can replay several contacts. Each sees the idle record at
@@ -746,7 +752,9 @@ export class BattleController {
         if(lethal&&this.lifecycleEnabled)victim.killer_actor_id=striker.id;
         if(lethal&&victim.charge){victim.charge.gauge=0;victim.charge.delay=0;victim.charge.recovery=0;victim.native_active=false;}
         if(this.reactionData){reaction=applyContactReaction({attacker:striker,target:victim,result,record:step.source,data:this.reactionData,rng:this.rng,threshold:this.state.scheduler?.threshold,...this.nativeSourceHooks()});
-          if(reaction){Object.assign(victim,copy(reaction.after));if(reaction.skill){reaction.token=`${actionId}:reaction:${++reactionCount}`;victim.native_sequence_token=reaction.token;reaction.plan=directSequence(reaction.skill);reaction.plan.allow_no_contacts=true;}}
+          if(reaction){Object.assign(victim,copy(reaction.after));if(reaction.skill){
+            if(this.lifecycleEnabled)this.state.lifecycle_events=this.state.lifecycle_events.filter(event=>event.actor_id!==victim.id||event.kind!=='response');
+            reaction.token=`${actionId}:reaction:${++reactionCount}`;victim.native_sequence_token=reaction.token;reaction.plan=directSequence(reaction.skill);reaction.plan.allow_no_contacts=true;}}
         }
       }
       const presented={...copy(result),remainingHp:victim?.hp.current??0,death:lethal,killer_frame_factor:lethal?2:1,status:status?{applied:status.applied,reason:status.reason,trace:status.trace}:null,
@@ -769,7 +777,8 @@ export class BattleController {
       const primary=results.find(row=>row.target_id===target.id)??results[0];
       return {...(primary??{hit:false,damage:0,skipped:'no-native-carrier-target',remainingHp:0}),group_results:results};
     };
-    const playback=await this.playSequence({actor_id:attacker.id,target_id:target.id,skill_id:command.id,action_id:actionId,plan:copy(plan)},{onContact:onSourceContact,onRecord,
+    let playback;
+    try{playback=await this.playSequence({actor_id:attacker.id,target_id:target.id,skill_id:command.id,action_id:actionId,plan:copy(plan)},{onContact:onSourceContact,onRecord,
       onCarrierTargets:(step,descriptor=null)=>{
         const caster=descriptor?this.actor(descriptor.actor_id):attacker,primary=descriptor?this.actor(descriptor.target_id):target;
         const source=descriptor?descriptor.skill:plan.kind==='single'?selected:this.sequenceSkill(caster,step.source_skill_index);
@@ -786,10 +795,14 @@ export class BattleController {
       onCarrierStart:({carrier_id})=>{this.pendingCarriers.add(`${actionId}:${carrier_id}`);},
       onCarrierEnd:({carrier_id})=>{this.pendingCarriers.delete(`${actionId}:${carrier_id}`);this.refreshCommandState();this.publish();},
       onDetachedError:error=>this.interrupt(error),
-      onReactionContact:onContact,onReactionRecord:onRecord,onReactionEnd:(descriptor,completed,now)=>{if(completed)end(this.actor(descriptor.actor_id),descriptor.token,now);},onPrimaryEnd:now=>end(attacker,primaryToken,now)});this.checkWorld();
+      onAttackEnd:now=>{this.log({type:'battle-attack-completed',battle_id:this.state.id,action_id:actionId,actor_id:attacker.id,presentation_time_ms:now});},
+      onPlaybackEnd:finishPlayback,
+      onReactionContact:onContact,onReactionRecord:onRecord,onReactionEnd:(descriptor,completed,now)=>{if(completed)end(this.actor(descriptor.actor_id),descriptor.token,now);},
+      onPrimaryEnd:(now,completed=true)=>{releaseActor();if(completed)end(attacker,primaryToken,now);this.publish();}});this.checkWorld();
+    }catch(error){finishPlayback();throw error;}
+    if(!playback?.playback_pending)finishPlayback();
     requireValue(entry.contacts.length>0||plan.allow_no_contacts||entry.empty_carrier_allocation||playback?.interrupted||playback?.carriers_pending,'完整技能结束却没有接触结算');
     for(const actor of this.state.actors)if(actor.state_raw===4&&this.canFinalizeDeath(actor))this.finalizeDeath(actor);
-    if(this.state.reward_ledger)resetNativeChain(this.state.reward_ledger,attacker.id);
   }
   finalizeDeath(actor){
     if(actor.state_raw!==4||!this.canFinalizeDeath(actor))return;const death=this.reactionData?finalizeNativeDeath({actor,data:this.reactionData,rng:this.rng}):null;
@@ -863,7 +876,7 @@ export class BattleController {
   }
   finish() {
     if(this.completed)return copy(this.completed);
-    requireValue(this.state && !this.running && !this.pendingCarriers.size && !this.state.scheduler?.pending && !this.hasLifecycle() && !this.state.pending_outcome && ['charging','command','victory','defeat','escaped','interrupted'].includes(this.state.phase), '战斗行动仍在执行');
+    requireValue(this.state && !this.running && !this.pendingCarriers.size && !this.pendingPresentations?.size && !this.state.scheduler?.pending && !this.hasLifecycle() && !this.state.pending_outcome && ['charging','command','victory','defeat','escaped','interrupted'].includes(this.state.phase), '战斗行动仍在执行');
     this.checkWorld();
     const resourcesByActor=Object.fromEntries(this.players().map(player=>[player.id,this.resourcesForWorld(copy(player))])),resources=resourcesByActor[this.state.player_id];
     // Native raw HP may be negative after linked-equipment HP is exhausted.

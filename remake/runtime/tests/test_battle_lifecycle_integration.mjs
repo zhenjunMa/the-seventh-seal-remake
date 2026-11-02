@@ -7,6 +7,9 @@ import {BattleController} from '../web/core/combat.mjs';
 import {compileNativeSequence,directSequence} from '../web/core/skill_sequence.mjs';
 import {WorldStore} from '../web/core/world.mjs';
 import {createForestSample} from '../web/forest_sample.mjs';
+import {createHandoffFixture} from '../web/tests/battle_handoff_fixture.mjs';
+import {isActorReady} from '../web/core/battle_scheduler.mjs';
+import {selectNativeNormalReaction} from '../web/core/battle_reactions.mjs';
 const base=new URL('../web/',import.meta.url),read=async p=>JSON.parse(await readFile(new URL(p.replace(/^\//,''),base),'utf8'));
 const meta=await read('/data/party_battle_view.json'),life=await read('/data/battle_lifecycle.json');
 function canvas(){const calls=[],c={globalAlpha:1,save(){},restore(){},setTransform(){},clearRect(){},fillRect(){},beginPath(){},rect(){},clip(){},ellipse(){},fill(){},moveTo(){},lineTo(){},stroke(){},createLinearGradient(){return {addColorStop(){}};},drawImage(img,...args){calls.push({path:img.path,args});},fillText(){},strokeText(){}};return {width:960,height:540,getContext:()=>c,calls};}
@@ -93,7 +96,7 @@ test('enemy and party hit recovery uses source durations and never inserts idle 
    for(let tick=0;tick<fps*12;tick++){
      const active=victim.native_active;await f.draw(tick*1000/fps);
      if(active)assert.notEqual(drawn.get(resource).action,0,`${side}:${skillId} must retain the response pose at ${tick}/${fps}`);
-     if(ended&&!battle.state.lifecycle_events.length)break;
+     if(ended&&!battle.state.lifecycle_events.length&&!battle.pendingPresentations.size)break;
    }
    await task;
    if(knockdown)assert.ok(logs.some(e=>e.type==='battle-source-completed'&&e.actor_id===victim.id&&e.descriptor.reason==='source-end-get-up'));
@@ -120,6 +123,69 @@ test('party and enemy attackers return to idle when their final source frame end
    assert.equal(attacker.native_active,false);await f.draw(duration+1);
    assert.equal(drawn.get(attacker.resource_id??attacker.id).action,0);assert.equal(view.run,null);await task;
  }
+});
+
+test('four compiled attacks hand off before return, retain their leases and chain across 50/60/144 FPS',async()=>{
+ for(const fps of [50,60,144]){
+   const f=await createHandoffFixture({load:read,canvas:canvas(),assetLoader:async a=>({width:a.width,height:a.height,path:a.path})});
+   f.view._sprite=()=>{};let released=0,checkedReturn=false;
+   f.view.run.resourceLease={release(){released++;}};
+   try{
+     for(let frame=0;frame<fps*20;frame++){
+       await f.advance(frame*1000/fps);
+       if(!checkedReturn&&f.events.some(e=>e.type==='battle-attack-completed'&&e.actor_id==='004')){
+         checkedReturn=true;assert.equal(f.battle.canCommand('004'),false,'returning actor remains locked');
+         assert.equal(f.battle.activeActions.has('004'),true);assert.equal(released,0,'handoff must retain the action lease');
+         assert.ok(f.view.detachedRuns.some(run=>run.result.actor_id==='004'&&!run.main_done));
+       }
+       const enemy=f.battle.actor('enemy-0');
+       if(enemy.native_active&&enemy.charge.gauge>=f.battle.state.scheduler.threshold)assert.equal(isActorReady(enemy,f.battle.state.scheduler),false);
+       if(f.finished)break;
+     }
+     const hits=f.events.filter(e=>e.type==='battle-impact'&&e.hit&&e.actor_id!=='enemy-0');
+     assert.equal(checkedReturn,true);assert.equal(hits.length,16);assert.equal(f.battle.state.reward_ledger.chain.maximum,16);
+     assert.deepEqual(hits.slice(1).map(e=>e.chain),Array.from({length:15},(_,i)=>i+2));
+     const starts=f.events.filter(e=>e.type==='battle-scheduled'),second=starts.find(e=>e.actor_id==='001');
+     const firstEnd=f.events.find(e=>e.type==='battle-source-completed'&&e.actor_id==='004');
+     assert.ok(second.at<firstEnd.at,'next actor starts while its predecessor returns');
+     assert.ok(starts.find(e=>e.actor_id==='enemy-0').at>hits.at(-1).at,'a full enemy waits for hit recovery');
+     assert.equal(f.finished,true);assert.equal(released,1);assert.equal(f.battle.activeActions.size,0);assert.equal(f.battle.pendingPresentations.size,0);
+   }finally{f.dispose();}
+ }
+});
+
+test('handoff preserves ordinary-hit gaps, enemy recovery and native action ordering',async()=>{
+ for(const [scenario,maximum]of [['ordinary',0],['gap',0],['natural',8]]){
+   const f=await createHandoffFixture({load:read,canvas:canvas(),assetLoader:async a=>({width:a.width,height:a.height,path:a.path}),scenario});f.view._sprite=()=>{};
+   try{
+     for(let frame=0;frame<60*20;frame++){await f.advance(frame*1000/60);if(f.finished)break;}
+     assert.equal(f.finished,true);assert.equal(f.battle.state.reward_ledger.chain.maximum,maximum,scenario);
+     if(scenario==='ordinary')assert.ok(f.events.filter(e=>e.type==='battle-impact'&&e.actor_id!=='enemy-0').every(e=>e.settled_before===0));
+     if(scenario==='gap'){
+       const recovered=f.events.find(e=>e.type==='battle-source-completed'&&e.actor_id==='enemy-0'&&e.descriptor.reason==='source-end-idle');
+       const attack=f.events.find(e=>e.type==='battle-scheduled'&&e.actor_id==='enemy-0');
+       assert.ok(attack.at>=recovered.at&&attack.at-recovered.at<=40);assert.equal(f.battle.state.history.some(e=>e.actor_id==='002'),false);
+     }
+     if(scenario==='natural')assert.deepEqual(f.events.filter(e=>e.type==='battle-scheduled'&&e.actor_id!=='enemy-0').map(e=>e.actor_id),['004','003','002','001']);
+   }finally{f.dispose();}
+ }
+});
+
+test('a new hit interrupts a detached return without retiring the next actor or the old target reaction',async()=>{
+ const f=await createHandoffFixture({load:read,canvas:canvas(),assetLoader:async a=>({width:a.width,height:a.height,path:a.path})});f.view._sprite=()=>{};
+ try{
+   for(let frame=0;frame<=95;frame++)await f.advance(frame*20);
+   const returning=f.view.detachedRuns.find(run=>run.result.actor_id==='004'),next=f.view.run;
+   assert.ok(returning&&!returning.main_done);assert.equal(next.result.actor_id,'001');
+   const actor=f.battle.actor('004'),response=selectNativeNormalReaction({actor,ident:1,data:f.sample.reaction_data,rng:()=>50});
+   Object.assign(actor,structuredClone(response.after));actor.native_sequence_token='controlled-return-hit';f.battle.queueLifecycle(actor,response);
+   await f.advance(1920);
+   assert.equal(returning.main_done,true);assert.equal(returning.interrupted,true);assert.equal(f.battle.activeActions.has('004'),false);
+   assert.equal(f.view.run,next);assert.equal(next.main_done,false);assert.equal(f.battle.activeActions.has('001'),true);
+   assert.ok(returning.children.some(child=>child.result.actor_id==='enemy-0'&&!child.done));
+   for(let frame=97;frame<1000;frame++){await f.advance(frame*20);if(f.finished)break;}
+   assert.equal(f.finished,true);assert.equal(f.battle.pendingPresentations.size,0);
+ }finally{f.dispose();}
 });
 
 test('warm healing retains the source effect waits and restores idle immediately after their last frame',async()=>{

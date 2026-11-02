@@ -128,5 +128,15 @@ export function compileNativeSequence(meta,roleId,plan,layers=[]){
     effects:effectList.filter(e=>e.frame===logical&&!meta.missing_effects?.some(row=>row.id===e.asset_id&&row.source_exists===false)),pair:clone(pairs.get(source_frame)??null),...(independent||verticalClock||plan.kind==='single'&&['native-revival','native-support','native-response'].includes(plan.handler)?{duration_ms:dv.getUint32(1,true)}:{})});
   });
  }
- fail(steps.length>0&&(plan.allow_no_contacts||steps.some(s=>s.event||s.carrier_spawn?.steps.some(c=>c.event))),'原完整技能缺少接触事件');return {steps,segments,independent_carriers:independent};
+ fail(steps.length>0&&(plan.allow_no_contacts||steps.some(s=>s.event||s.carrier_spawn?.steps.some(c=>c.event))),'原完整技能缺少接触事件');
+ // Release the turn after the whole compiled attack, before its return records.
+ // Some source contacts are outside +2e bodies; keep those and all carrier
+ // allocations before handoff rather than releasing after an intermediate hit.
+ let attackEnd=null;
+ if(plan.kind==='combination'||['direct','effect-carrier'].includes(plan.handler)){
+  let last=-1;
+  for(const step of steps)if(recordBytes(step.source.raw_hex)[0x2e]||step.event||step.carrier_spawn)last=Math.max(last,step.plan_record_index);
+  if(last>=0){const next=steps.findIndex(step=>step.plan_record_index>last);attackEnd=next<0?steps.length:next;}
+ }
+ return {steps,segments,independent_carriers:independent,attack_end_step_index:attackEnd};
 }

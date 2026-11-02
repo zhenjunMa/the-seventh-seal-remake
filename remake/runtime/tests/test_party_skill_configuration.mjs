@@ -100,7 +100,7 @@ async function fixture(cfg){
   await view.prepare();view.setRoster(sample.actors,sample.skills);let time=0,battle;const logs=[],rng=createNativeRng(0x20261011);
   battle=new BattleController({world,id:()=> 'party-config',now:()=>time,waitTick:async()=>{time+=20;},resolveAction,applyDamage:applyNativeDamage,resourcesForWorld:partyResourcesForWorld,consumeResources:consumePartyMp,log:e=>logs.push(e),
     playSequence:async(result,hooks)=>{const promise=view.playSequence(result,hooks);view.draw({actors:battle.state.actors},time);let ticks=0;
-      while(view.run){assert.ok(++ticks<20000);time+=20;battle.advanceClock();view.draw({actors:battle.state.actors},time);}return promise;}});
+      while(view.run||view.detachedRuns.length){assert.ok(++ticks<20000);time+=20;battle.advanceClock();view.draw({actors:battle.state.actors},time);}return promise;}});
   battle.start({...sample,rng});return {world,battle,logs,rng};
 }
 

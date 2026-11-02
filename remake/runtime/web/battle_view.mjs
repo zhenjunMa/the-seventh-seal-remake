@@ -465,7 +465,10 @@ export class BattleView {
     }catch(error){if(error.name!=='AbortError'&&this.prefetchTicket===ticket&&generation===this.generation)this.onResourceError?.(error);}
   }
   resourceSnapshot(){return {staged:Boolean(this.assetPlan),entry_images:this.entryImageCount??this.images.size,scopes:this.resourceScopes.size};}
-  _releaseRun(run){const lease=run?.resourceLease;if(lease){if(this.drawing)this.retiredLeases.push(lease);else lease.release();run.resourceLease=null;}}
+  _releaseRun(run){
+    if(run&&!run.playback_ended){run.playback_ended=true;run.onPlaybackEnd?.();}
+    const lease=run?.resourceLease;if(lease){if(this.drawing)this.retiredLeases.push(lease);else lease.release();run.resourceLease=null;}
+  }
 
   setRoster(actors,skills){
     this.lastActorPoses.clear();this.cameraShake=null;this.colorFade=null;
@@ -497,12 +500,12 @@ export class BattleView {
       advance:at=>{check();control.advanceNativeVerticals(at);}};
   }
 
-  playSequence(result,{onContact,onRecord,onReactionContact,onReactionRecord,onReactionEnd,onPrimaryEnd,onFrame,onEffectFrame,onCarrierStart,onCarrierEnd,onCarrierTargets,onDetachedError}={}){
+  playSequence(result,{onContact,onRecord,onReactionContact,onReactionRecord,onReactionEnd,onPrimaryEnd,onAttackEnd,onPlaybackEnd,onFrame,onEffectFrame,onCarrierStart,onCarrierEnd,onCarrierTargets,onDetachedError}={}){
     if(!this.ready||this.destroyed||this.run)return Promise.reject(new Error('完整技能表现尚未就绪或上一行动未结束'));
     const actor=this.roster.find(a=>a.id===result.actor_id),target=this.roster.find(a=>a.id===result.target_id);
     if(!this.meta.policy.complete_contacts||!actor||!target||typeof onContact!=='function'||typeof onRecord!=='function')return Promise.reject(new Error('完整技能序列或接触回调缺失'));
     let compiled;try{compiled=this.compiledSequences.get(result)??compileNativeSequence(this.meta,actor.resource_id,result.plan,[this.layers,...this.alternateLayers.values()]);}catch(e){return Promise.reject(e);}
-    return new Promise((resolve,reject)=>{this.run={sequence:true,native_control:this.nativeControl,native_guard:this.nativeControlIsCurrent,result:clone(result),steps:compiled.steps,segments:compiled.segments,resolve,reject,onContact,onRecord,onReactionContact,onReactionEnd,onPrimaryEnd,onFrame,onEffectFrame,onCarrierStart,onCarrierEnd,onCarrierTargets,onDetachedError,children:[],carriers:[],independent_carriers:compiled.independent_carriers,main_done:false,death_until:0,
+    return new Promise((resolve,reject)=>{this.run={sequence:true,native_control:this.nativeControl,native_guard:this.nativeControlIsCurrent,result:clone(result),steps:compiled.steps,segments:compiled.segments,attack_end_step_index:compiled.attack_end_step_index,resolve,reject,onContact,onRecord,onReactionContact,onReactionRecord,onReactionEnd,onPrimaryEnd,onAttackEnd,onPlaybackEnd,onFrame,onEffectFrame,onCarrierStart,onCarrierEnd,onCarrierTargets,onDetachedError,children:[],carriers:[],independent_carriers:compiled.independent_carriers,main_done:false,death_until:0,
       started:null,elapsed:0,cursor:0,visited:-1,next_at:0,record_visited:-1,impact_called:false,impact_done:false,impact_elapsed:null,effects:[],generation:this.generation,
       observations:{draws:0,origin_slot:null,last_slot:null,contact_slot:null,bounds:null,intrinsic_source_frames:[],effect_ids:[],contacts:[],authority:'Actual remake Canvas draws with all source contacts; preview animation clock'}};});
   }
@@ -556,7 +559,7 @@ export class BattleView {
     this.damageTexts=[];
     this.lifecycle?.reset();
     this.prefetchTicket=null;this.prefetchLease=null;
-    for(const run of [this.run,...this.detachedRuns].filter(Boolean))if(!run.primary_resolved)run.reject(abortError(reason));
+    for(const run of [this.run,...this.detachedRuns].filter(Boolean)){if(!run.primary_resolved)run.reject(abortError(reason));this._releaseRun(run);}
     this.run=null;this.detachedRuns=[];
     if(this.resourcePool&&this.resourcePool.scopes.get('battle-actors')===this.resourceLease)this.resourcePool.release('battle-actors');
   }
@@ -571,10 +574,10 @@ export class BattleView {
   }
 
   _fail(run, error) {
-    this._releaseRun(run);
     if(this.run===run)this.run=null;
     this.detachedRuns=this.detachedRuns.filter(old=>old!==run);
     if(run.primary_resolved)run.onDetachedError?.(error);else run.reject(error);
+    this._releaseRun(run);
   }
 
   _advance(now) {
@@ -620,13 +623,35 @@ export class BattleView {
 
   _sequenceChannels(run){return [...run.carriers,run,...run.children];}
 
+  _sequenceRuns(){return [...this.detachedRuns,this.run].filter(run=>run?.sequence);}
+
+  _releaseAction(run,at){
+    if(run.primary_resolved)return;
+    run.primary_resolved=true;if(this.run===run)this.run=null;
+    if(!this.detachedRuns.includes(run))this.detachedRuns.push(run);
+    run.onAttackEnd?.(run.started+at);
+    run.resolve({completed:true,interrupted:Boolean(run.interrupted),playback_pending:true,carriers_pending:run.carriers.some(c=>!c.done),
+      impact_committed:run.observations.contacts.length>0,contact_count:run.observations.contacts.length,observations:clone(run.observations)});
+  }
+
+  _interruptActor(actorId,now){
+    for(const owner of this._sequenceRuns()){
+      if(!owner.main_done&&owner.result.actor_id===actorId){
+        owner.main_done=true;owner.interrupted=true;owner.onPrimaryEnd?.(now,false);
+        this._releaseAction(owner,Math.max(0,now-owner.started));
+      }
+      for(const child of owner.children)if(!child.done&&child.result.actor_id===actorId){child.done=true;owner.onReactionEnd?.(clone(child.descriptor),false,now);}
+    }
+  }
+
   _advanceSequenceRuns(now){
-    const roots=()=>[...this.detachedRuns,this.run].filter(run=>run?.sequence);
+    const roots=()=>this._sequenceRuns();
     for(const root of roots()){root.started??=now;root.elapsed=Math.max(root.elapsed,now-root.started);}
     // Merge every detached carrier with the current action before callbacks.
     // A later command cannot consume RNG ahead of an earlier carrier contact
     // merely because RAF delivered both in one render frame.
     for(let visits=0;visits<30000;visits++){
+      if(visits===29999)throw new Error('战斗动作时钟访问超出范围');
       let root=null,at=Infinity,carrierFirst=false;
       for(const candidate of roots())for(const channel of this._sequenceChannels(candidate)){
         if(channel.done||channel===candidate&&candidate.main_done)continue;
@@ -638,7 +663,6 @@ export class BattleView {
       if(verticalAt<=now&&(verticalAt<at||verticalAt===at&&!carrierFirst)){control.advanceNativeVerticals(verticalAt);continue;}
       if(!root||at>now)break;
       this._advanceSequence(now,root,1);
-      if(visits===29999)throw new Error('独立特效访问超出范围');
     }
     for(const root of roots())this._advanceSequence(now,root,0);
     return this.run??this.detachedRuns[0]??null;
@@ -664,8 +688,9 @@ export class BattleView {
           const bridge=this._nativeBridge(channel.result.actor_id,run.native_control,run.native_guard);
           if(bridge.state().waiting){channel.next_at=at+20;continue;}channel.vertical_wait=false;
         }
-        if(ending){if(carrier)channel.done=true;else if(child){channel.done=true;run.onReactionEnd?.(clone(channel.descriptor),true,run.started+at);}else{run.main_done=true;run.onPrimaryEnd?.(run.started+at);}continue;}
+        if(ending){if(carrier)channel.done=true;else if(child){channel.done=true;run.onReactionEnd?.(clone(channel.descriptor),true,run.started+at);}else{run.main_done=true;run.onPrimaryEnd?.(run.started+at);if(Number.isInteger(run.attack_end_step_index))this._releaseAction(run,at);}continue;}
         const i=channel.visited+1,step=channel.steps[i];
+        if(channel===run&&Number.isInteger(run.attack_end_step_index)&&i>=run.attack_end_step_index)this._releaseAction(run,at);
         if(!carrier)run.onFrame?.({...clone(step),actor_id:channel.result.actor_id,target_id:channel.result.target_id,channel_id:child?channel.channel_id:'main'});
         channel.cursor=i;
         if(!carrier&&(step.plan_record_index!==channel.record_visited||step.visibility_end)){
@@ -724,8 +749,7 @@ export class BattleView {
           if(response.killer_frame_factor===2&&!step.effect_contact)channel.slow_record=step.plan_record_index;
           if(response.death)run.death_until=Math.max(run.death_until,at+520);
           for(const hit of response.group_results??[response])run.observations.contacts.push({...detail,target_id:hit.target_id??detail.target_id,hit:hit.hit,damage:hit.damage,remainingHp:hit.remainingHp,skipped:hit.skipped??null});
-          if(response.interrupt_actor_id===run.result.actor_id)run.main_done=true;
-          for(const old of run.children)if(!old.done&&old.result.actor_id===response.interrupt_actor_id){old.done=true;run.onReactionEnd?.(clone(old.descriptor),false);}
+          if(response.interrupt_actor_id)this._interruptActor(response.interrupt_actor_id,run.started+at);
           for(const hit of response.group_results??[response])if(hit.reaction_descriptor){
             const descriptor=clone(hit.reaction_descriptor),role=this._role(descriptor.actor_id),plan=clone(descriptor.plan);plan.allow_no_contacts=true;plan.handler='native-response';
             const compiled=compileNativeSequence(this.meta,role.id,plan,[this.layers,...this.alternateLayers.values()]);
@@ -752,11 +776,7 @@ export class BattleView {
           actor_id:channel.result.actor_id,target_id:effect.target_id??channel.result.target_id,channel_id:channel.channel_id??'main',effect_index:index});effect.visited_frame=Math.max(effect.visited_frame??-1,cursor);}
       const visualEnd=Math.max(0,...this._sequenceChannels(run).flatMap(c=>c.effects.filter(e=>e.unconditional).map(e=>(c.at??0)+e.at+(e.frame_count??this.meta.effects.find(a=>a.id===e.asset_id).frames.length)*(e.frame_ms??ms))));
       const foregroundDone=run.main_done&&run.children.every(c=>c.done);
-      if(foregroundDone&&run.independent_carriers&&!run.primary_resolved){
-        run.primary_resolved=true;if(this.run===run)this.run=null;
-        if(!this.detachedRuns.includes(run))this.detachedRuns.push(run);
-        run.resolve({completed:true,interrupted:Boolean(run.interrupted),carriers_pending:run.carriers.some(c=>!c.done),impact_committed:run.observations.contacts.length>0,contact_count:run.observations.contacts.length,observations:clone(run.observations)});
-      }
+      if(foregroundDone&&run.independent_carriers&&!run.primary_resolved)this._releaseAction(run,run.elapsed);
       if(foregroundDone&&run.carriers.every(c=>c.done)&&run.elapsed>=Math.max(run.death_until,visualEnd)){
         if(this.run===run)this.run=null;this.detachedRuns=this.detachedRuns.filter(old=>old!==run);this._releaseRun(run);
         if(!run.primary_resolved)run.resolve({completed:true,interrupted:Boolean(run.interrupted),impact_committed:run.observations.contacts.length>0,contact_count:run.observations.contacts.length,observations:clone(run.observations)});return null;
@@ -939,13 +959,12 @@ export class BattleView {
     // Periodic source responses and deaths can replace a playing CHR record
     // between render frames. Retire its future contacts before replaying RAF
     // catch-up; the independent lifecycle channel owns the new source pose.
-    if(!entryPreview&&this.run?.sequence&&snapshot?.lifecycle_events){
-      const active=this.run;active.external_interrupts??=new Set();
+    if(!entryPreview&&snapshot?.lifecycle_events)for(const active of this._sequenceRuns()){
+      active.external_interrupts??=new Set();
       for(const event of snapshot.lifecycle_events){
         if(!['response','death','revive'].includes(event.kind)||active.external_interrupts.has(event.token))continue;
         active.external_interrupts.add(event.token);
-        if(active.result.actor_id===event.actor_id){active.main_done=true;active.interrupted=true;}
-        for(const child of active.children)if(!child.done&&child.result.actor_id===event.actor_id){child.done=true;active.onReactionEnd?.(clone(child.descriptor),false);}
+        this._interruptActor(event.actor_id,now);
       }
     }
     const run=!entryPreview&&this.ready?this._advance(now):null;
@@ -970,7 +989,10 @@ export class BattleView {
     }
     if (!this.ready){ctx.restore();return;}
     const roots=entryPreview?[]:[...this.detachedRuns,...(this.run?[this.run]:[])],slots = this._slots(run),groundSlots=this._slots(run,true);
-    if(!entryPreview&&snapshot?.actors)this.lifecycle?.advance(snapshot,this.roster,now);
+    if(!entryPreview&&snapshot?.actors){
+      const current=this.nativeControl&&(!this.nativeControlIsCurrent||this.nativeControlIsCurrent())?this.nativeControl.state:null;
+      this.lifecycle?.advance(current?.lifecycle_events?{...snapshot,actors:current.actors,lifecycle_events:current.lifecycle_events}:snapshot,this.roster,now);
+    }
     if(run?.sequence)for(const c of roots.flatMap(root=>[...root.children,...(!root.main_done?[root]:[])]).filter(c=>!c.done)){slots[c.result.actor_id]=this._slots(c)[c.result.actor_id];groundSlots[c.result.actor_id]=this._slots(c,true)[c.result.actor_id];}
     if (run) {
       const o=run.observations,slot=slots[run.result.actor_id];o.draws++;
@@ -998,7 +1020,7 @@ export class BattleView {
       const idlePose=actor?.idle_pose??(role.idle_sequence?idlePoseAt(role.idle_sequence.segments,now):null);
       if(idlePose){segment={action_index:idlePose.action_index};frame=idlePose.action_frame;}
       const acting=run?.sequence?roots.flatMap(root=>[...root.children,...(!root.main_done?[root]:[])]).reverse().find(c=>!c.done&&c.result.actor_id===id):run?.result.actor_id===id?run:null;
-      const impacting=run?.sequence?roots.flatMap(root=>this._sequenceChannels(root)).filter(c=>c.result.target_id===id&&c.impact_called&&this._damaging(c.result)).sort((a,b)=>(b.at??0)+(b.impact_elapsed??0)-(a.at??0)-(a.impact_elapsed??0))[0]:run?.result.target_id===id&&run.impact_called&&this._damaging(run.result)?run:null;
+      const impacting=run?.sequence?roots.flatMap(root=>this._sequenceChannels(root).map(channel=>({channel,at:root.started+(channel.at??0)+(channel.impact_elapsed??0)}))).filter(({channel:c})=>c.result.target_id===id&&c.impact_called&&this._damaging(c.result)).sort((a,b)=>b.at-a.at)[0]?.channel:run?.result.target_id===id&&run.impact_called&&this._damaging(run.result)?run:null;
       if(lifePose){segment={action_index:lifePose.action_index};frame=lifePose.action_frame;alpha=lifePose.alpha??1;
         pair=this.lifecyclePairs.get(`${role.id}:${lifePose.source_frame}`)??null;
       } else if (acting) {
@@ -1027,7 +1049,7 @@ export class BattleView {
         segment=role.reaction;frame=segment.frames.at(-1);
       }
       const visibility=acting?.visibility;
-      if(visibility){const progress=visibility.complete?1:Math.min(1,Math.max(0,run.elapsed-visibility.started)/(visibility.complete_ticks*visibility.clock_ms));alpha*=visibility.kind==='appear'?progress:1-progress;}
+      if(visibility){const progress=visibility.complete?1:Math.min(1,Math.max(0,acting.elapsed-visibility.started)/(visibility.complete_ticks*visibility.clock_ms));alpha*=visibility.kind==='appear'?progress:1-progress;}
       else if(actor?.native_visibility?.complete&&actor.native_visibility.kind==='disappear')alpha=0;
       if(!lifePose)alpha*=this.lifecycle?.alpha(id)??1;
       if(!actor?.defending)this.defendClocks?.delete(id);

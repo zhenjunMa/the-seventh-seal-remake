@@ -227,7 +227,7 @@ async function fullFixture(cfg){
   const v=new BattleView({canvas:{width:960,height:540,getContext:()=>ctx},metadataPath:'/data/enemy_battle_view.json',jsonLoader:p=>read(p.slice(6)),assetLoader:async a=>({image:{width:a.width,height:a.height},sha256:a.sha256})});
   await v.prepare();v.setRoster(s.actors,s.skills);let time=0,battle;const logs=[],rng=createNativeRng(0x20261011);
   battle=new BattleController({world,id:()=> 'configured-full',now:()=>time,waitTick:async()=>{time+=20;},resolveAction,applyDamage:applyNativeDamage,resourcesForWorld,consumeResources:consumeBattleMp,log:e=>logs.push(e),
-    playSequence:async(r,callbacks)=>{const promise=v.playSequence(r,callbacks);v.draw({actors:battle.state.actors},time);let n=0;while(v.run){assert.ok(++n<20000);time+=20;battle.advanceClock();v.draw({actors:battle.state.actors},time);}return promise;}});
+    playSequence:async(r,callbacks)=>{const promise=v.playSequence(r,callbacks);v.draw({actors:battle.state.actors},time);let n=0;while(v.run||v.detachedRuns.length){assert.ok(++n<20000);time+=20;battle.advanceClock();v.draw({actors:battle.state.actors},time);}return promise;}});
   battle.start({...s,rng});return {battle,world,logs,rng};
 }
 async function win(f){let commands=0;while(battleActive(f.battle)){assert.ok(++commands<=50);await chooseReady(f.battle,'yanci','enemy-0');}assert.equal(f.battle.state.phase,'victory');f.battle.finish();return commands;}

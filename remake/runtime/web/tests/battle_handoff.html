@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>战斗接力验证</title>
+<style>
+body{margin:24px;background:#151b24;color:#e4eaf2;font:15px/1.7 system-ui}main{max-width:1000px}h1{font-size:24px}button{margin:4px;padding:8px 12px}#stage{width:640px;height:480px;max-width:100%;background:#000}#status{white-space:pre-wrap}table{border-collapse:collapse;width:100%}td,th{padding:5px 12px;border-bottom:1px solid #364253;text-align:left}.note{color:#adbacc}
+</style>
+<main>
+<h1>战斗接力验证</h1>
+<p class="note">使用正式战斗控制器、动作数据与 Phaser WebGL，人物和特效为程序生成的示意图。队员为99级并预先确认指令；固定随机值、保持敌人不被击杀以观察整条连击。敌人首次受击后设为满槽。本页不读写玩家存档，不代表原素材或正常数值平衡验收。</p>
+<div><button data-case="relay">固定顺序：四人接力</button><button data-case="natural">自然行动顺序</button><button data-case="ordinary">普通单招</button><button data-case="gap">下一人未就绪</button><button id="pause">暂停</button></div>
+<p id="status" role="status">正在准备 Phaser…</p>
+<div id="stage" tabindex="0"></div>
+<table><thead><tr><th>队员</th><th>当前动作</th><th>攻击主体结束</th><th>整套动作结束</th></tr></thead><tbody id="actors"></tbody></table>
+<pre id="result"></pre>
+<script src="../vendor/phaser/phaser-3.90.0.min.js"></script>
+<script type="module" src="battle_handoff.mjs"></script>
+</main>
+</html>
