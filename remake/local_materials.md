@@ -48,6 +48,16 @@
 
 `runtime/tools/layout_migration.json`记录目录迁移与清单SHA；[工具索引](runtime/tools/tool_index.json)的`retired_documents`记录已删除文档的原路径、SHA、替代入口及恢复提交。先确认对应提交在本地，再用`git show <提交>:<原路径>`查看；放入独立目录核SHA，不覆盖当前指南。
 
+2026-11-02将开发计划中的历次修复经过、阶段实施细节和旧排期收口为当前范围与剩余任务；未删除来源证据或构建输入。需要回查精简前的完整339行计划时，使用以下固定版本，不能把其中的旧待办当作当前状态：
+
+| 原路径 | 恢复提交 | 原文件SHA-256 | 当前替代入口 |
+| --- | --- | --- | --- |
+| `remake/assessment/validation_design.md` | `6044664a5fe38a7b6943b90fefa3340423ad3f98` | `427ee8f6f0f1aae397e091db3e93ae7afe3b17ceba853dedbd30bff555fee6d9` | [当前开发计划](assessment/validation_design.md)；详细记录按原计划中的evidence路径交接 |
+
+```console
+git show 6044664a5fe38a7b6943b90fefa3340423ad3f98:remake/assessment/validation_design.md
+```
+
 2026-10-29本轮精简前的完整技术笔记保留在Git提交`858f5ddacac9de3f27681817eafbdd46b83e06c7`，其中区域方法、剧情指南和计划包含详细来源推导。精简后的规则以当前代码、来源库及测试为准，需要回查旧解释时读取该版本原路径：
 
 ```console

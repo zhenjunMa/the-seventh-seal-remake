@@ -2,7 +2,7 @@
 
 《第七封印》重制项目。仓库保存浏览器游戏代码、配置、内容定义、资源导出工具和测试；图片、音乐、影片等媒体由使用者从自己的原版安装中提取。
 
-当前代码使用随仓库提供的 Phaser 3.90.0 和 WebGL 渲染，包含探索、剧情、战斗、操作菜单和存读档。区域接入范围、自然路线与开发交接验收的区别，以及下一阶段任务，统一见[当前开发计划](remake/assessment/validation_design.md)。
+当前代码使用随仓库提供的 Phaser 3.90.0 和 WebGL 渲染，包含探索、剧情、战斗、操作菜单和存读档。已接入范围、剩余支线、工程待办与验收边界，统一见[当前开发计划](remake/assessment/validation_design.md)。
 
 ## 本地运行
 
@@ -30,7 +30,7 @@ node remake/runtime/tools/verify_phaser.mjs
 
 | 要做的事 | 唯一说明入口 |
 | --- | --- |
-| 查当前范围、待办和验收状态 | [当前开发计划](remake/assessment/validation_design.md) |
+| 查已接入范围、剩余支线与验收边界 | [当前开发计划](remake/assessment/validation_design.md) |
 | 理解模块、状态、事务和时钟 | [实现架构](remake/runtime/architecture.md) |
 | 调整数值，接入角色、技能、怪物 | [配置与内容登记](remake/runtime/config_guide.md) |
 | 接入地图、NPC、对白与任务 | [剧情指南](remake/runtime/story_guide.md) |
@@ -54,7 +54,7 @@ node remake/runtime/tools/verify_phaser.mjs
 
 原版 `GAME.exe`、`Map/`、`Fight_Role/`、`SYSTEM/` 等输入放在仓库根目录，由工具只读访问，不提交。`.gitignore` 同时排除提取媒体、原存档、观察副本、证据、归档和缓存；`remake/saves/` 及其中的玩家存档纳入 Git。
 
-文档描述当前职责和操作；详细开发过程留在证据记录中。变更状态只在开发计划维护，其他指南通过链接引用。
+只查进度时先读开发计划；修改功能时再按上表查对应指南。工具说明含自动生成的目标与依赖表，无需作为进度文档通读。变更状态只在开发计划维护，详细开发过程留在证据与Git历史中。
 
 ## 许可证与原作权利
 
