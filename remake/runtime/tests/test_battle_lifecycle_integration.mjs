@@ -64,10 +64,10 @@ test('source revival carrier load failure advances without wait or invented cont
 
 // Controlled surviving contacts exercise the production completion callbacks;
 // exported CHR/DGP records and renderer timestamps remain unchanged.
-async function liveFixture(enemyRole='013'){
+async function liveFixture(enemyRole='013',statusData=null){
  const [seed,base,forest,scheduler,reactions,ai,commands]=await Promise.all(['route_seed.json','combat_sample.json','forest_combat.json','battle_scheduler.json','party_reactions.json','forest_ai.json','party_skills.json'].map(n=>read('/data/'+n)));
  let now=0;const drawn=new Map(),logs=[],target=canvas(),world=new WorldStore(structuredClone(seed),['M17010','M70010']);
- const sample=createForestSample(world.snapshot(),base,forest,{map_id:'M70010',members:[{id:enemyRole}]},null,scheduler,ai,null,reactions);
+ const sample=createForestSample(world.snapshot(),base,forest,{map_id:'M70010',members:[{id:enemyRole}]},null,scheduler,ai,null,reactions,statusData);
  const view=new BattleView({canvas:target,metadataPath:'/data/party_battle_view.json',lifecycleMetadataPath:'/data/battle_lifecycle.json',jsonLoader:read,assetLoader:async a=>({width:a.width,height:a.height,path:a.path})});
  await view.prepare();view.setRoster(sample.actors,sample.skills);
  view._sprite=(role,action,frame,x,y)=>drawn.set(role.id,{action,frame,x,y});
@@ -105,6 +105,33 @@ test('enemy and party hit recovery uses source durations and never inserts idle 
    }
    assert.equal(view.run,null);
  }
+});
+
+test('party and enemy attackers return to idle when their final source frame ends without a preview tail',async()=>{
+ // Source records:燕突32 frames / 烈爪突击34 frames, at the attack adapter's65ms.
+ for(const [side,duration] of [['player',2080],['enemy',2210]]){
+   const f=await liveFixture(),{battle,view,drawn,logs}=f;
+   const attacker=battle.actor(side==='player'?'001':'enemy-0'),victim=battle.actor(side==='player'?'enemy-0':'001');
+   const skill=structuredClone(side==='player'?f.sample.skills.yantu:f.ai.roles['013'].skills[15]);skill.actor_id=attacker.id;
+   const task=battle.performSequence(attacker,victim,skill,directSequence(skill));
+   await f.draw(0);await f.draw(duration-1);assert.equal(attacker.native_active,true);
+   await f.draw(duration);
+   assert.ok(logs.some(e=>e.type==='battle-source-completed'&&e.actor_id===attacker.id&&e.at===duration));
+   assert.equal(attacker.native_active,false);await f.draw(duration+1);
+   assert.equal(drawn.get(attacker.resource_id??attacker.id).action,0);assert.equal(view.run,null);await task;
+ }
+});
+
+test('warm healing retains the source effect waits and restores idle immediately after their last frame',async()=>{
+ const f=await liveFixture('013',await read('/data/forest_status.json')),{battle,view,drawn,logs}=f,attacker=battle.actor('001'),target=attacker;
+ const skill=f.commands.skills.yannuan,task=battle.performSequence(attacker,target,skill,directSequence(skill));
+ // Source body2200ms, then m01Rwz01 19*70ms and _iReSTfr 19*80ms.
+ await f.draw(0);await f.draw(2200);const held=structuredClone(drawn.get('001'));
+ await f.draw(5049);assert.equal(attacker.native_active,true);assert.deepEqual(drawn.get('001'),held);
+ assert.equal(battle.state.history.at(-1).contacts.length,1);
+ await f.draw(5050);assert.equal(attacker.native_active,false);
+ assert.ok(logs.some(e=>e.type==='battle-source-completed'&&e.actor_id==='001'&&e.at===5050));
+ await f.draw(5051);assert.equal(drawn.get('001').action,0);assert.equal(view.run,null);await task;
 });
 
 test('successful escape remains visible while its source action moves out, then acknowledges before battle exit',async()=>{

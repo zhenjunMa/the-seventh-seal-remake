@@ -630,8 +630,7 @@ export class BattleView {
       let root=null,at=Infinity,carrierFirst=false;
       for(const candidate of roots())for(const channel of this._sequenceChannels(candidate)){
         if(channel.done||channel===candidate&&candidate.main_done)continue;
-        const end=channel.visited+1>=channel.steps.length,tail=end&&channel===candidate&&!candidate.independent_carriers?this.meta.policy.tail_ms:0;
-        const due=candidate.started+(channel.next_at+tail);
+        const due=candidate.started+channel.next_at;
         if(due<at||due===at&&channel.carrier&&!carrierFirst){root=candidate;at=due;carrierFirst=Boolean(channel.carrier);}
       }
       const control=this.nativeControl,valid=control&&(!this.nativeControlIsCurrent||this.nativeControlIsCurrent());
@@ -655,7 +654,9 @@ export class BattleView {
       while(true){
         if(iterations++>=limit)break;
         const channels=this._sequenceChannels(run);let selected=null,at=Infinity,ending=false;
-        for(const channel of channels){if(channel.done||(channel===run&&run.main_done))continue;const end=channel.visited+1>=channel.steps.length,due=channel.next_at+(end&&channel===run&&!run.independent_carriers?this.meta.policy.tail_ms:0);if(due<at){selected=channel;at=due;ending=end;}}
+        // Native 51A240 hands the final source record straight to 51CC00.
+        // The old preview tail must not hold a completed actor's last pose.
+        for(const channel of channels){if(channel.done||(channel===run&&run.main_done))continue;const end=channel.visited+1>=channel.steps.length,due=channel.next_at;if(due<at){selected=channel;at=due;ending=end;}}
         // Use the same absolute deadline as the merged scheduler. Subtracting
         // fractional RAF timestamps can round elapsed just below a due frame.
         if(!selected||run.started+at>now)break;const channel=selected,child=Boolean(channel.descriptor),carrier=Boolean(channel.carrier);

@@ -148,12 +148,9 @@ async function replay(victory){
   assert.notEqual(battle.state.phase,'interrupted',battle.state.error);
   if(['victory','defeat'].includes(battle.state.phase)&&!battle.running&&!pending.size)break;
   // Include frames exactly on real primary/reaction/carrier deadlines, with
-  // their original tail. RAF may land on those same fractional timestamps.
+  // source completion. RAF may land on those same fractional timestamps.
   const deadlines=[...view.detachedRuns,view.run].filter(run=>run?.sequence&&run.started!==null).flatMap(run=>
-   view._sequenceChannels(run).filter(channel=>!channel.done&&!(channel===run&&run.main_done)).map(channel=>{
-    const ending=channel.visited+1>=channel.steps.length;
-    return run.started+(channel.next_at+(ending&&channel===run&&!run.independent_carriers?view.meta.policy.tail_ms:0));
-   }));
+   view._sequenceChannels(run).filter(channel=>!channel.done&&!(channel===run&&run.main_done)).map(channel=>run.started+channel.next_at));
   now=Math.min(now+1000/60,...deadlines.filter(at=>at>now));await new Promise(resolve=>setImmediate(resolve));
  }
  if(error)throw error;await Promise.all(pending);
