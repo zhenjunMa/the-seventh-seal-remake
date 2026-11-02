@@ -54,6 +54,7 @@ export class BattleController {
     const {id,phase,round,player_id,enemy_id,error,outcome,scheduler,rewards,test_mode}=state;
     const mode=(state.source.runtime_configuration??state.source.skill_configuration)?.mode;
     return copy({id,phase,round,player_id,enemy_id,error,outcome,scheduler,rewards,test_mode,
+      chain:state.reward_ledger?.chain??null,
       lifecycle_events:state.lifecycle_events??[],pending_outcome:state.pending_outcome??null,
       ready_player_ids:this.readyPlayerIds(),command_available:this.canCommand(),input_busy:Boolean(commandForActor(scheduler,player_id))||this.activeActions?.has(player_id)||this.running&&scheduler?.active_actor_id===player_id,action_busy:this.running,
       source:{runtime_configuration:{mode},player_command_order:state.source.player_command_order},
@@ -114,7 +115,8 @@ export class BattleController {
     this.nativeAiData=enemy_ai_data?copy(enemy_ai_data):null;this.enemySkillTables=enemy_skill_tables?copy(enemy_skill_tables):null;this.completeContacts=complete_contacts;this.rewardData=!test_mode&&reward_data?copy(reward_data):null;this.rewardPlan=null;
     this.skillGrowthData=skill_data?skillGrowthSource(skill_data):null;this.skillPractice={};
     if(complete_contacts)requireValue(this.nativeAiData&&this.enemySkillTables&&typeof this.playSequence==='function','完整技能序列执行器缺失');
-    if(this.rewardData)this.state.reward_ledger=createRewardLedger(this.state.id,next);
+    // Training still needs the native contact counter with rewards disabled.
+    if(this.rewardData||complete_contacts)this.state.reward_ledger=createRewardLedger(this.state.id,next);
     this.reactionData=reaction_data;this.statusData=status_data;
     if(this.statusData)for(const actor of next)Object.assign(actor,initializeNativeStatuses(actor,this.statusData,undefined,this.rng));
     this.lifecycleEnabled=Boolean(lifecycle_enabled);this.lifecycleSequence=0;
@@ -810,7 +812,7 @@ export class BattleController {
     if(this.statusData)Object.assign(actor,clearNativeStatuses(actor,this.statusData));
     if(this.lifecycleEnabled&&actor.charge)Object.assign(actor.charge,{gauge:0,delay:0,recovery:0,recovery_ticks:0});
     const command=commandForActor(this.state.scheduler,actor.id);if(command)this.cancelQueuedCommand(command,'actor-fallen');
-    if(this.state.reward_ledger&&actor.side==='enemy')collectEnemyDefeat(this.state.reward_ledger,actor,{data:this.rewardData});
+    if(this.state.reward_ledger&&this.rewardData&&actor.side==='enemy')collectEnemyDefeat(this.state.reward_ledger,actor,{data:this.rewardData});
     if(this.lifecycleEnabled&&death){
       this.state.lifecycle_events=this.state.lifecycle_events.filter(e=>e.actor_id!==actor.id);this.queueLifecycle(actor,death);
     }

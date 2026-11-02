@@ -33,7 +33,10 @@ test('Frame and HUD snapshots never read history and keep isolated incremental i
   Object.defineProperty(f.battle.actor('001'),'native_status_slots',{get(){throw new Error('raw status must not be traversed');}});
   const history=f.battle.state.history;
   Object.defineProperty(f.battle.state,'history',{get(){throw new Error('frame/HUD must not read history');}});
+  f.battle.state.reward_ledger={chain:{target_id:'012',attacker_side:1,count:12,maximum:12},trace:()=>{throw Error('HUD must not copy the reward ledger');}};
   const snapshot=f.battle.presentationSnapshot();assert.ok(JSON.stringify(snapshot).length<2000);
+  assert.deepEqual(snapshot.chain,{target_id:'012',attacker_side:1,count:12,maximum:12});
+  snapshot.chain.count=99;assert.equal(f.battle.state.reward_ledger.chain.count,12);
   assert.equal(Object.hasOwn(snapshot,'history'),false);assert.equal(snapshot.source.runtime_configuration.mode,'debug');
   assert.equal(snapshot.impact_count,2);assert.deepEqual(snapshot.last_impact,{actor_id:'012',source_frame:17});
   snapshot.actors[0].hp.current=0;snapshot.last_impact.actor_id='mutated';

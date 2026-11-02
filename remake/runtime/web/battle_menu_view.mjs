@@ -227,6 +227,25 @@ export class BattleMenuView{
         this.asset(id,Math.floor(now/(a.actions[0]?.interval_raw??120)),x-a.anchor_raw[0],y-height-64-a.anchor_raw[1]);
       }
     }
+    const chain=this.snapshot.chain;
+    if(!(chain?.count>1)){this.chainDisplay=null;return;}
+    const binding=this.manifest.semantic_bindings.chain,previous=this.chainDisplay;
+    if(!previous||previous.count!==chain.count||previous.target_id!==chain.target_id||previous.attacker_side!==chain.attacker_side){
+      // Native 504B80 finishes the opening shrink on another contact and
+      // restarts the hold. This uses the existing paused battle clock.
+      const active=previous&&now-previous.started<previous.duration;
+      const frame=active?this.manifest.assets.hit.frame_count-1:0;
+      this.chainDisplay={...chain,started:now,frame,duration:(this.manifest.assets.hit.frame_count-1-frame+binding.hold_ticks)*binding.tick_ms};
+    }
+    const display=this.chainDisplay,ticks=Math.floor((now-display.started)/binding.tick_ms),last=this.manifest.assets.hit.frame_count-1;
+    const frame=Math.min(last,display.frame+ticks),hold=Math.max(0,ticks-(last-display.frame));
+    if(hold>=binding.hold_ticks)return;
+    c.save();this.glowCtx.save();
+    c.globalAlpha=this.glowCtx.globalAlpha=1-Math.max(0,hold-binding.fade_after_ticks)*binding.fade_step/255;
+    const {x,y}=binding.digit_origin;
+    this.asset('hit',frame,x+binding.label_offset_x,y);
+    for(const [i,digit]of [...String(chain.count)].reverse().entries())this.asset('h'+digit,frame,x-i*binding.digit_spacing,y);
+    c.restore();this.glowCtx.restore();
   }
   drawWheel(now){
     this.image(this.menus.get('game002d').images[0].image,490,340);

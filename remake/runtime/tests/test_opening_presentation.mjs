@@ -93,7 +93,8 @@ test('direct arrival coalescing stops at dialogue and never changes unconfigured
 test('the first prologue actor reveals over40 native80ms ticks before moving',async()=>{
   const [program,resources,presentation,data]=await Promise.all([
     read('opening_program'),read('opening_map_resources'),read('prologue_presentation'),read('maps/m72061')]);
-  const clock=new ActionClock(),view=new OpeningView({resources,program,clock,
+  const clock=new ActionClock();clock.update(0); // Exact simulated tick boundaries, independent of performance.now() fractions.
+  const view=new OpeningView({resources,program,clock,
     prepared:new Map([['M72061',{data,bitmap:{width:992,height:832}}]]),
     staging:presentation.staging,effects:presentation.effects,install(){},camera(){}});
   const hooks=view.hooks();await hooks.map({mapId:'M72061'});

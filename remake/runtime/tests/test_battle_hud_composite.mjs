@@ -35,6 +35,27 @@ test('HUD normal and additive pixels composite over the battle at the same 4:3 f
   assert.equal(root.dataset.compositeMode,'webgl-source-over-lighter');
 });
 
+test('live chain uses native HIT pixels, refreshes through two digits, fades on the battle clock and clears on recovery',()=>{
+  const manifest=JSON.parse(readFileSync(new URL('../web/data/battle_ui.json',import.meta.url),'utf8'));
+  const calls=[],view=Object.create(BattleMenuView.prototype),context=()=>({clearRect(){},save(){},restore(){}});
+  Object.assign(view,{manifest,ctx:context(),glowCtx:context(),snapshot:{actors:[],chain:null},
+    menus:new Map(manifest.menus.map(m=>[m.id,m])),stage:'waiting',message:'',
+    image(){},text(){},syncTargets(){},drawWheel(){},ready:()=>[],
+    asset(...args){calls.push({args,alpha:this.ctx.globalAlpha});}});
+  view.draw(0);assert.deepEqual(calls,[]);
+  view.snapshot.chain={target_id:'enemy-0',attacker_side:1,count:2};view.draw(100);
+  assert.deepEqual(calls.map(c=>c.args),[['hit',0,145,-87],['h2',0,75,-87]]);
+  calls.length=0;view.draw(280);assert.deepEqual(calls.map(c=>c.args[1]),[6,6]);
+  view.snapshot.chain.count=12;calls.length=0;view.draw(300);
+  assert.deepEqual(calls.map(c=>c.args),[['hit',6,145,-87],['h2',6,75,-87],['h1',6,35,-87]]);
+  calls.length=0;view.draw(300);assert.equal(calls[0].alpha,1,'paused battle time retains the same pose');
+  calls.length=0;view.draw(900);assert.equal(calls[0].alpha,1-40/255);
+  calls.length=0;view.draw(1200);assert.deepEqual(calls,[],'finished hold hides even before recovery');
+  view.snapshot.chain={target_id:'001',attacker_side:0,count:2};view.draw(1300);
+  assert.deepEqual(calls.map(c=>c.args),[['hit',0,145,-87],['h2',0,75,-87]],'enemy chains also display');
+  view.snapshot.chain.count=0;calls.length=0;view.draw(1310);assert.deepEqual(calls,[]);assert.equal(view.chainDisplay,null);
+});
+
 test('Waiting for a command shows the original seven-cover wheel without skill icons or disable crosses',()=>{
   const calls=[],view={
     menus:new Map([['game002d',{images:[{image:'source-wheel'}]}]]),

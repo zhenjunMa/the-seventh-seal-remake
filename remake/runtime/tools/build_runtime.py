@@ -74,7 +74,7 @@ STEPS = {
     'audio': Step('export_audio.py', ('data/audio.json', 'assets/audio'), reports=('audio_export.json',)),
     'forest-stage': Step('export_forest_stage.py', ('data/forest_stage.json', 'assets/forest_stage'), reports=('forest_stage_export.json',)),
     'menu': Step('export_operation_menu.py', ('data/operation_menu.json', 'assets/menu'), ('items','party-skills'), ('operation_menu_resources.json',), ('data/party_battle_view.json',)),
-    'battle-ui': Step('export_battle_ui.py', ('data/battle_ui.json', 'assets/battle_ui', '../evidence/battle_ui_native_retained.json'), reports=('battle_ui_resources.json',), inputs=('../evidence/party_native.json','../evidence/operation_menu_native.json')),
+    'battle-ui': Step('export_battle_ui.py', ('data/battle_ui.json', 'assets/battle_ui', '../evidence/battle_ui_native_retained.json'), reports=('battle_ui_resources.json',), inputs=('../evidence/party_native.json','../evidence/operation_menu_native.json','../evidence/battle_combo_20261102/native.json'), sources=tuple(f'Fight_Role/combo/{name}.dgp' for name in ['hit',*[f'h{i}' for i in range(10)]])),
     'battle-lifecycle': Step('export_battle_lifecycle.py', ('data/battle_lifecycle.json', *tuple('data/battle_lifecycle_layers_'+i+'.json' for i in REGISTERED_ROLE_IDS), 'assets/battle_lifecycle'), reports=('battle_lifecycle_20261015/export.json',),
         inputs=tuple(dict.fromkeys('../evidence/'+Path(name).relative_to('remake/runtime/evidence').as_posix() for name,_ in LIFECYCLE_NATIVE.values()))
             +tuple('../'+path.relative_to(RUNTIME).as_posix() for path in (RENDERER_BUNDLE,RENDERER_FINDINGS,FAILURE_FINDINGS,FAILURE_RECORDS))),

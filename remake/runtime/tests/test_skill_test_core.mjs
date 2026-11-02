@@ -21,6 +21,7 @@ function fixture({testMode=true,complete=true,enemyHp=null,party2=false,playReac
   const config=deriveRuntimeConfiguration(data);config.manifest.mode='debug';config.skills.entries.yanci.parameters.mp_cost=7;
   const configured=compileRuntimeConfiguration(data,config),world=new WorldStore(copy(seed),['M17010','M70010']),sample=createForestSample(world.snapshot(),configured.combat,configured.forest,{map_id:'M70010',members:[{id:'012'},{id:'011'},{id:'013'}]},null,configured.scheduler,
     complete?configured.ai:null,complete?configured.rewards:null,complete?reactions:null,complete?statuses:null);
+  if(testMode)delete sample.reward_data;
   if(party2){sample.actors.splice(1,0,{...copy(sample.actors[0]),id:'002',resource_id:'001',name:'second actor command fixture'});sample.order=sample.actors.map(a=>a.id);}
   if(enemyHp!==null)for(const actor of sample.actors.filter(a=>a.side==='enemy')){actor.raw_hp=enemyHp;actor.raw_by_address['0x0524a701']=enemyHp;actor.hp.current=enemyHp;}
   const logs=[],contacts=[],presented=[],consumed=[];let now=0,draws=0,battle;
@@ -75,11 +76,13 @@ test('Native test-global contact rejects player targets before RNG while enemy h
 
 test('Full source contacts still display calculated lethal damage, consume normal gauge/debt, and preserve both raw resources in skill-test',async()=>{
   const f=fixture({enemyHp:1}),player=f.battle.actor('001'),initialPlayer=copy({hp:player.raw_hp,mp:player.raw_mp}),initialEnemies=f.battle.state.actors.filter(a=>a.side==='enemy').map(a=>[a.id,a.raw_hp]);
-  assert.equal(f.battle.presentationSnapshot().test_mode,true);assert.equal(f.battle.state.reward_ledger,undefined);
+  assert.equal(f.battle.presentationSnapshot().test_mode,true);assert.equal(f.battle.rewardData,null);
+  assert.equal(f.battle.presentationSnapshot().chain.count,0);
   for(let i=0;i<3;i++){f.ready();await f.battle.choose('yanci','enemy-2');assert.ok(f.contacts.at(-1).result.damage>1);assert.equal(f.contacts.at(-1).result.death,false);assert.equal(f.battle.actor('enemy-2').hp.current,1);assert.equal(player.charge.gauge,-f.battle.state.scheduler.threshold);assert.ok(player.charge.delay>0);}
   assert.deepEqual([player.raw_hp,player.raw_mp],[initialPlayer.hp,initialPlayer.mp]);assert.deepEqual(f.consumed,[]);assert.equal(f.battle.state.outcome,null);assert.equal(f.battle.state.actors.some(a=>a.state_raw>=4),false);
   assert.deepEqual(f.battle.state.actors.filter(a=>a.side==='enemy').map(a=>[a.id,a.raw_hp]),initialEnemies);
-  f.battle.state.round=101;f.ready();await f.battle.choose('yanci','enemy-2');assert.equal(f.battle.state.round,102);
+  f.battle.state.round=101;f.battle.actor('enemy-2').settled_raw=1;f.ready();await f.battle.choose('yanci','enemy-2');assert.equal(f.battle.state.round,102);
+  assert.equal(f.battle.presentationSnapshot().chain.maximum,2,'contact on an already settled training target counts without reward data');
 });
 
 test('Skill-test targets keep charging without proactive commands or AI draws; ordinary encounters still dispatch their ready enemies',async()=>{

@@ -33,7 +33,11 @@ NATIVE_RECORDS = {
         'ev_e8c682f007b176eb7b5375df3c241435778308acf063beab53071675397a406c'],
     'operation_menu_native.json': [
         'ev_99f6ed2c5f47d193aa31bcf957f18c4fa2c98b8f423c338fe4ba5f6225792da4',
-        'ev_5d20e858d57da5884c138203f623e7a5a9a398d54964d62b64db80e6414d7b4f']}
+        'ev_5d20e858d57da5884c138203f623e7a5a9a398d54964d62b64db80e6414d7b4f'],
+    'battle_combo_20261102/native.json': [
+        'ev_deebaae22867b7fff254db06ce66d2b981f8403c3d4db3688a8429feaa4b4ccd',
+        'ev_04f5d7d526478ecfc908bda715a83de1b00c0188d99e99e9997785123a941832',
+        'ev_295bdc30bafb41bad0acf0ff0fdc575a174f26811cb02956c6659f9d4df32693']}
 
 
 def pe_data(va, count):
@@ -101,6 +105,13 @@ def bindings(result):
             limit='Source machine instruction bytes inspected directly. This is static evidence, not a new REA decompilation or original-game execution.')
     result['semantic_bindings'] = dict(
         evidence_boundary='Resource aliases combine source-pixel visual inspection and retained native static drawing evidence. No original execution was observed.',
+        chain=dict(label_asset='hit',digit_assets=[f'h{i}' for i in range(10)],
+            digit_origin=dict(x=((640-result['assets']['h0']['width'])>>1)-20,y=-(result['assets']['h0']['height']>>2)),
+            origin_formula='((surface_width-digit_width)>>1)-20, -(digit_height>>2)',
+            label_offset_x=70,digit_spacing=40,tick_ms=30,hold_ticks=30,fade_after_ticks=18,fade_step=20,
+            native_functions=['0x504b80','0x504d80','0x5052d0'],evidence=NATIVE_RECORDS['battle_combo_20261102/native.json'],
+            display_rule='Existing native chain starts at2. Draw label, then digits; shrink one source frame per30ms, hold30 ticks and fade in the last12. A further contact jumps to the last source frame and restarts the hold.',
+            limit='Static native evidence and source pixels; original execution was not observed. Counts with three or more digits extend the recovered40px spacing.'),
         wheel=dict(menu='game002d',origin=dict(x=490,y=340),native_canvas=dict(width=640,height=480),
             origin_formula='(surface_width-150,surface_height-140)',native_function='0x42a910',evidence=wheel_evidence,
             background='assets/battle_ui/game002d/image_000.png',
@@ -310,7 +321,7 @@ def main():
     dgp_names = ['menu','time_bar','time_glass','fight_role_name','fight_cursor1',
         'fight_cursor2','fight_cursor3','fight_mark','fight_board_mask','fight_board_disable',
         'board_bright','board_brightB','magic_ball1','magic_ball1_attr','magic_ball1_num',
-        'other_ball','use_ball','use_ball_num','char_ball','name_ball']
+        'other_ball','use_ball','use_ball_num','char_ball','name_ball','hit',*[f'h{i}' for i in range(10)]]
     sources = [ROOT/'SYSTEM'/(name+'.mnu') for name in mnu_names]
     sources += [ROOT/'Fight_Role/combo'/(name+'.dgp') for name in dgp_names]
     sources.append(ROOT/'GAME.exe')
