@@ -37,8 +37,8 @@ function validate(state){
   need(Number.isFinite(state.tick_remainder_ms)&&state.tick_remainder_ms>=0&&state.tick_remainder_ms<20,'Native vertical clock remainder invalid');
   return state;
 }
-/** Rehydrate from current actor fields after any source dispatcher changes
- * its Z/velocity. The caller owns the remainder across adjacent draw frames. */
+/** Rehydrate after source dispatch changes Z/velocity. The actor's source
+ * clock owns when this motion block runs, together with its sprite update. */
 export function nativeVerticalState(actor){
   const state={z:int(actor?.native_z_raw,'actor Z'),tick_remainder_ms:0,ticks:0,updates:0,wrote_delay:false,wrote_render:false,camera_request:null};
   for(const [key,[field,address]]of Object.entries(fields)){
@@ -69,15 +69,12 @@ export function createNativeVertical({actor,record}){
   if(command===3&&mode<2)state.camera_request={procedure:'0x5119f0',x:-1,y:up?height:0,wait_raw:0,acceleration_raw:acceleration};
   return derived(state);
 }
-/** Pure 20ms frame updates. Keep this state between frames; when a source
- * dispatcher replaces vertical actor fields, rehydrate and retain the owner's
- * fractional frame remainder. No RNG, HP changes, callbacks or hidden landing. */
+/** 51BB90 calls the 51A4F0 motion block at most once per elapsed interval.
+ * Keep short-frame elapsed time until due, then discard any excess. */
 export function advanceNativeVertical(previous,deltaMs){
   validate(previous);need(Number.isFinite(deltaMs)&&deltaMs>=0&&Number.isSafeInteger(Math.floor(deltaMs)),'Native vertical elapsed time invalid');
-  const state={...previous,wrote_delay:false,wrote_render:false},total=state.tick_remainder_ms+deltaMs,ticks=Math.floor((total+1e-9)/20);
-  // Fractional scene timestamps can leave a scheduled 20ms endpoint a few
-  // ulps short. Consume that endpoint so the merged clock cannot visit it forever.
-  state.tick_remainder_ms=Math.max(0,total-ticks*20);state.ticks=(state.ticks??0)+ticks;
+  const state={...previous,wrote_delay:false,wrote_render:false},total=state.tick_remainder_ms+deltaMs,ticks=Number(total>=20);
+  state.tick_remainder_ms=ticks?0:total;state.ticks=(state.ticks??0)+ticks;
   for(let i=0;i<ticks;i++){
     // Native top guard skips the complete block, including ground cleanup,
     // acceleration, render-Z copy, clock write and the wait-byte check.

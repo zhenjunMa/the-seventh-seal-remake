@@ -501,7 +501,10 @@ export class BattleView {
       entryPoint:x=>{check();control.advanceNativeEntry(actorId,x);},
       state:()=>{check();return control.nativeVerticalFor(actorId);},
       record:raw=>{check();control.nativeSourceRecord(actorId,raw);},
-      advance:at=>{check();control.advanceNativeVerticals(at);}};
+      advance:at=>{check();if(!this.preparingEntry){
+        if(this.sourceVisitTime!==at){this.sourceVisitTime=at;this.sourceVisits=new Set();}
+        if(this.sourceVisits.has(actorId))return false;this.sourceVisits.add(actorId);}
+        control.advanceNativeVerticals(at,actorId);return true;}};
   }
 
   playSequence(result,{onContact,onRecord,onReactionContact,onReactionRecord,onReactionEnd,onPrimaryEnd,onAttackEnd,onPlaybackEnd,onFrame,onEffectFrame,onCarrierStart,onCarrierEnd,onCarrierTargets,onDetachedError}={}){
@@ -585,6 +588,7 @@ export class BattleView {
   }
 
   _advance(now) {
+    this.sourceVisitTime=now;this.sourceVisits=new Set();
     if(this.detachedRuns.length||this.run?.sequence||this.nativeControl&&(!this.nativeControlIsCurrent||this.nativeControlIsCurrent())&&Number.isFinite(this.nativeControl.nextNativeVerticalAt()))return this._advanceSequenceRuns(now);
     const run = this.run;
     if (!run) return null;
@@ -651,6 +655,9 @@ export class BattleView {
   _advanceSequenceRuns(now){
     const roots=()=>this._sequenceRuns();
     for(const root of roots()){root.started??=now;root.elapsed=Math.max(root.elapsed,now-root.started);}
+    const control=this.nativeControl,valid=control&&(!this.nativeControlIsCurrent||this.nativeControlIsCurrent());
+    const visited=this.sourceVisits??=new Set(),owned=new Set([...roots().flatMap(root=>this._sequenceChannels(root).filter(c=>!c.carrier&&!c.done&&!(c===root&&root.main_done)).map(c=>c.result.actor_id)),...this.lifecycle?.channels.keys()??[]]);
+    if(valid)for(const [id,clock]of control.verticalClocks)if(!owned.has(id)&&now-clock.at>=20){control.advanceNativeVerticals(now,id);visited.add(id);}
     // Merge every detached carrier with the current action before callbacks.
     // A later command cannot consume RNG ahead of an earlier carrier contact
     // merely because RAF delivered both in one render frame.
@@ -658,21 +665,18 @@ export class BattleView {
       if(visits===29999)throw new Error('战斗动作时钟访问超出范围');
       let root=null,at=Infinity,carrierFirst=false;
       for(const candidate of roots())for(const channel of this._sequenceChannels(candidate)){
-        if(channel.done||channel===candidate&&candidate.main_done)continue;
+        if(channel.done||channel===candidate&&candidate.main_done||visited.has(channel.carrier?channel:channel.result.actor_id))continue;
         const due=candidate.started+channel.next_at;
         if(due<at||due===at&&channel.carrier&&!carrierFirst){root=candidate;at=due;carrierFirst=Boolean(channel.carrier);}
       }
-      const control=this.nativeControl,valid=control&&(!this.nativeControlIsCurrent||this.nativeControlIsCurrent());
-      const verticalAt=valid?control.nextNativeVerticalAt():Infinity;
-      if(verticalAt<=now&&(verticalAt<at||verticalAt===at&&!carrierFirst)){control.advanceNativeVerticals(verticalAt);continue;}
       if(!root||at>now)break;
-      this._advanceSequence(now,root,1);
+      this._advanceSequence(now,root,1,visited);
     }
-    for(const root of roots())this._advanceSequence(now,root,0);
+    for(const root of roots())this._advanceSequence(now,root,0,visited);
     return this.run??this.detachedRuns[0]??null;
   }
 
-  _advanceSequence(now,run=this.run,limit=20000){if(run.started===null)run.started=now;run.elapsed=Math.max(run.elapsed,now-run.started);
+  _advanceSequence(now,run=this.run,limit=20000,visited=new Set()){if(run.started===null)run.started=now;run.elapsed=Math.max(run.elapsed,now-run.started);
     const ms=run.frame_ms??this.meta.policy.frame_ms;
     try{
       if(run.native_control&&(this.nativeControl!==run.native_control||run.native_guard&&!run.native_guard()))throw abortError('原行动控制器已失效');
@@ -684,11 +688,16 @@ export class BattleView {
         const channels=this._sequenceChannels(run);let selected=null,at=Infinity,ending=false;
         // Native 51A240 hands the final source record straight to 51CC00.
         // The old preview tail must not hold a completed actor's last pose.
-        for(const channel of channels){if(channel.done||(channel===run&&run.main_done))continue;const end=channel.visited+1>=channel.steps.length,due=channel.next_at;if(due<at){selected=channel;at=due;ending=end;}}
+        for(const channel of channels){if(channel.done||(channel===run&&run.main_done)||visited.has(channel.carrier?channel:channel.result.actor_id))continue;const end=channel.visited+1>=channel.steps.length,due=channel.next_at;if(due<at){selected=channel;at=due;ending=end;}}
         // Use the same absolute deadline as the merged scheduler. Subtracting
         // fractional RAF timestamps can round elapsed just below a due frame.
-        if(!selected||run.started+at>now)break;const channel=selected,child=Boolean(channel.descriptor),carrier=Boolean(channel.carrier);
-        if(channel.vertical_wait){
+        if(!selected||run.started+at>now)break;
+        // Native 51BB90 stores now when a source frame is due. Resetting at
+        // its old deadline would catch up skipped frames and shorten recovery.
+        at=now-run.started;const channel=selected,child=Boolean(channel.descriptor),carrier=Boolean(channel.carrier);
+        visited.add(carrier?channel:channel.result.actor_id);
+        if(!carrier&&run.native_control){
+          run.native_control.advanceNativeVerticals(now,channel.result.actor_id);
           const bridge=this._nativeBridge(channel.result.actor_id,run.native_control,run.native_guard);
           if(bridge.state().waiting){channel.next_at=at+20;continue;}channel.vertical_wait=false;
         }
@@ -773,6 +782,12 @@ export class BattleView {
         const interval=(step.duration_ms??ms)*(channel.slow_record===step.plan_record_index?2:1);
         channel.frame_started_at=at-(channel.at??0);channel.frame_duration_ms=interval;
         channel.visited=entryVisited;channel.next_at=at+interval;
+        // 5130D0 itself calls 51A240: a terminal control hands off to
+        // 51CC00 now, even when its new height wait continues in the next ID.
+        if(step.command_raw!==undefined&&interval===0&&entryVisited+1>=channel.steps.length){
+          if(child){channel.done=true;run.onReactionEnd?.(clone(channel.descriptor),true,now);}
+          else if(!carrier){run.main_done=true;run.onPrimaryEnd?.(now);if(Number.isInteger(run.attack_end_step_index))this._releaseAction(run,at);}
+        }
       }
       for(const c of [...run.children,...run.carriers])c.elapsed=Math.max(0,run.elapsed-c.at);
       for(const channel of this._sequenceChannels(run))for(const [index,effect]of channel.effects.entries()){const asset=this.meta.effects.find(e=>e.id===effect.asset_id),cursor=Math.min((effect.frame_count??asset.frames.length)-1,Math.floor((channel.elapsed-effect.at)/(effect.frame_ms??ms)));

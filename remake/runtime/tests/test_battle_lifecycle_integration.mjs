@@ -37,7 +37,7 @@ test('transition preview leaves entry hidden and does not execute its records or
  assert.deepEqual(control.state,before);assert.deepEqual(sounds,[]);assert.equal(view.lastActorPoses.size,0);
  drawn.length=0;view.draw(state,5000);assert.equal(drawn.find(row=>row.id==='001').alpha,0);assert.equal(sounds.length,1);
  drawn.length=0;view.draw(state,5119);assert.equal(drawn.find(row=>row.id==='001').alpha,0);assert.equal(sounds.length,1);
- drawn.length=0;view.draw(state,5120);const alpha=drawn.find(row=>row.id==='001').alpha;
+ drawn.length=0;view.draw(state,5120);view.draw(state,5121);const alpha=drawn.findLast(row=>row.id==='001').alpha;
  assert.ok(alpha>0&&alpha<1);assert.equal(sounds.length,1);assert.equal(view.lifecycleSnapshot().active[0].appearance.mode,5);
 });
 test('transition prepares visible entry poses once, defers cues and resumes their remaining animation without an empty lead',async()=>{
@@ -61,7 +61,7 @@ test('transition prepares visible entry poses once, defers cues and resumes thei
 
 test('real lifecycle layers load separately and a completed player death stays drawn after its event is acknowledged',async()=>{
  const {view,target}=await fixture();const event={token:'death-1',actor_id:'002',life_epoch:0,kind:'death',source_skill_index:12,hold_final_frame:true};
- view.draw(snapshot([event]),0);view.draw(snapshot([event]),5000);assert.equal(view.drainLifecycleCompleted().length,1);
+ for(let at=0;at<=5000;at+=20)view.draw(snapshot([event]),at);assert.equal(view.drainLifecycleCompleted().length,1);
  target.calls.length=0;view.draw(snapshot(),6000);
  const last=life.roles.find(r=>r.id==='002').skills.find(s=>s.chr_skill_index===12).last_source_pose;
  assert.ok(target.calls.some(c=>c.path?.endsWith(`frame_${String(last.source_frame).padStart(4,'0')}_main.png`)));
@@ -69,10 +69,10 @@ test('real lifecycle layers load separately and a completed player death stays d
 });
 test('revive epoch replaces held corpse without cancelling an unrelated actor lifecycle',async()=>{
  const {view}=await fixture();const dead={token:'d',actor_id:'002',life_epoch:0,kind:'death',source_skill_index:12,hold_final_frame:true};
- view.draw(snapshot([dead]),0);view.draw(snapshot([dead]),4000);view.drainLifecycleCompleted();
+ for(let at=0;at<=4000;at+=20)view.draw(snapshot([dead]),at);view.drainLifecycleCompleted();
  const revive={token:'r',actor_id:'002',life_epoch:1,kind:'revive',source_skill_index:14};
  view.draw(snapshot([revive],1),4100);assert.notEqual(view.lifecycle.pose('002').source_frame,life.roles.find(role=>role.id==='002').skills.find(s=>s.chr_skill_index===12).last_source_pose.source_frame);
- view.draw(snapshot([revive],1),9000);assert.deepEqual(view.drainLifecycleCompleted().map(e=>e.token),['r']);assert.equal(view.lifecycle.hidden('002'),false);
+ for(let at=4120;at<=9000;at+=20)view.draw(snapshot([revive],1),at);assert.deepEqual(view.drainLifecycleCompleted().map(e=>e.token),['r']);assert.equal(view.lifecycle.hidden('002'),false);
 });
 test('source revival carrier load failure advances without wait or invented contact, then real effect contacts at frame1',async()=>{
  const {view}=await fixture(),skill=life.roles.find(role=>role.id==='001').skills.find(s=>s.chr_skill_index===43).source_skill;
@@ -81,7 +81,7 @@ test('source revival carrier load failure advances without wait or invented cont
  assert.deepEqual(compiled.steps.filter(s=>s.event).map(s=>[s.carrier_asset_id,s.logical_frame]),[['_iRelife',1]]);
  const effects=compiled.steps.filter(s=>s.carrier_asset_id==='_iRelife');assert.equal(effects.length,19);assert.ok(effects.every(s=>s.duration_ms===80));
  let contacts=0;const done=view.playSequence({actor_id:'001',target_id:'002',skill_id:'001_43',plan},{onRecord(){},onContact(){contacts++;return {hit:true,damage:0,revived:true,hp_delta:151};}});
- view.draw(snapshot(),0);view.draw(snapshot(),20000);view.draw(snapshot(),21000);await done;assert.equal(contacts,1);assert.equal(view.damageTexts.length,0);
+ for(let at=0;at<=21000;at+=20)view.draw(snapshot(),at);await done;assert.equal(contacts,1);assert.equal(view.damageTexts.length,0);
 });
 
 // Controlled surviving contacts exercise the production completion callbacks;
@@ -123,7 +123,9 @@ test('enemy and party hit recovery uses source durations and never inserts idle 
      const contact=logs.find(e=>e.type==='battle-impact'),end=logs.find(e=>e.type==='battle-source-completed'&&e.actor_id===victim.id);
      const source=life.roles.find(r=>r.id===resource).skills.find(s=>s.chr_skill_index===contact.reaction.source_skill_index);
      const duration=source.timeline.reduce((n,s)=>n+(s.interval_raw??0),0);
-     assert.ok(Math.abs(end.at-contact.presentation.presentation_time_ms-duration)<=1000/fps+0.001,'ordinary response ends without the old 260ms tail');
+     const frameMs=1000/fps,sourceFrames=source.timeline.filter(s=>s.kind==='sprite');
+     const expected=sourceFrames.reduce((n,s)=>n+Math.ceil((s.interval_raw-1e-7)/frameMs)*frameMs,0);
+     assert.ok(Math.abs(end.at-contact.at-expected)<=frameMs+0.001,'each response interval resets at the actual native loop visit');
    }
    assert.equal(view.run,null);
  }
@@ -136,15 +138,15 @@ test('party and enemy attackers return to idle when their final source frame end
    const attacker=battle.actor(side==='player'?'001':'enemy-0'),victim=battle.actor(side==='player'?'enemy-0':'001');
    const skill=structuredClone(side==='player'?f.sample.skills.yantu:f.ai.roles['013'].skills[15]);skill.actor_id=attacker.id;
    const task=battle.performSequence(attacker,victim,skill,directSequence(skill));
-   await f.draw(0);await f.draw(duration-1);assert.equal(attacker.native_active,true);
-   await f.draw(duration);
-   assert.ok(logs.some(e=>e.type==='battle-source-completed'&&e.actor_id===attacker.id&&e.at===duration));
-   assert.equal(attacker.native_active,false);await f.draw(duration+1);
+   for(let at=0;at<duration;at+=65)await f.draw(at);assert.equal(attacker.native_active,true);
+   for(let at=duration;attacker.native_active&&at<duration+1000;at+=65)await f.draw(at);
+   const end=logs.find(e=>e.type==='battle-source-completed'&&e.actor_id===attacker.id);
+   assert.ok(end&&end.at>=duration);assert.equal(attacker.native_active,false);await f.draw(end.at+1);
    assert.equal(drawn.get(attacker.resource_id??attacker.id).action,0);assert.equal(view.run,null);await task;
  }
 });
 
-test('four compiled attacks hand off before return, retain their leases and chain across 50/60/144 FPS',async()=>{
+test('four compiled attacks hand off before return, retain leases and preserve source hit gates across 50/60/144 FPS',async()=>{
  for(const fps of [50,60,144]){
    const f=await createHandoffFixture({load:read,canvas:canvas(),assetLoader:async a=>({width:a.width,height:a.height,path:a.path})});
    f.view._sprite=()=>{};let released=0,checkedReturn=false;
@@ -161,11 +163,14 @@ test('four compiled attacks hand off before return, retain their leases and chai
        if(enemy.native_active&&enemy.charge.gauge>=f.battle.state.scheduler.threshold)assert.equal(isActorReady(enemy,f.battle.state.scheduler),false);
        if(f.finished)break;
      }
-     const hits=f.events.filter(e=>e.type==='battle-impact'&&e.hit&&e.actor_id!=='enemy-0');
-     assert.equal(checkedReturn,true);assert.equal(hits.length,16);assert.equal(f.battle.state.reward_ledger.chain.maximum,16);
-     assert.deepEqual(hits.slice(1).map(e=>e.chain),Array.from({length:15},(_,i)=>i+2));
+     const contacts=f.events.filter(e=>e.type==='battle-impact'&&e.actor_id!=='enemy-0'),hits=contacts.filter(e=>e.hit);
+     assert.equal(checkedReturn,true);assert.equal(contacts.length,16);assert.ok(hits.length>=2);
+     assert.ok(f.battle.state.reward_ledger.chain.maximum>=2);
+     for(const hit of hits)if(hit.settled_before)assert.ok(hit.chain>=2,'only a still-settled victim extends the chain');
      const starts=f.events.filter(e=>e.type==='battle-scheduled'),second=starts.find(e=>e.actor_id==='001');
      const firstEnd=f.events.find(e=>e.type==='battle-source-completed'&&e.actor_id==='004');
+     const handoff=f.events.find(e=>e.type==='battle-attack-completed'&&e.actor_id==='004');
+     assert.ok(second.at-handoff.at>=0&&second.at-handoff.at<=1000/fps+0.001,'a ready teammate dispatches on the next loop without a return/recovery wait');
      assert.ok(second.at<firstEnd.at,'next actor starts while its predecessor returns');
      assert.ok(starts.find(e=>e.actor_id==='enemy-0').at>hits.at(-1).at,'a full enemy waits for hit recovery');
      assert.equal(f.finished,true);assert.equal(released,1);assert.equal(f.battle.activeActions.size,0);assert.equal(f.battle.pendingPresentations.size,0);
@@ -193,16 +198,17 @@ test('handoff preserves ordinary-hit gaps, enemy recovery and native action orde
 test('a new hit interrupts a detached return without retiring the next actor or the old target reaction',async()=>{
  const f=await createHandoffFixture({load:read,canvas:canvas(),assetLoader:async a=>({width:a.width,height:a.height,path:a.path})});f.view._sprite=()=>{};
  try{
-   for(let frame=0;frame<=95;frame++)await f.advance(frame*20);
+   let frame=0;
+   for(;frame<500&&(!f.view.run||!f.view.detachedRuns.some(run=>run.result.actor_id==='004'&&!run.main_done));frame++)await f.advance(frame*20);
    const returning=f.view.detachedRuns.find(run=>run.result.actor_id==='004'),next=f.view.run;
    assert.ok(returning&&!returning.main_done);assert.equal(next.result.actor_id,'001');
    const actor=f.battle.actor('004'),response=selectNativeNormalReaction({actor,ident:1,data:f.sample.reaction_data,rng:()=>50});
    Object.assign(actor,structuredClone(response.after));actor.native_sequence_token='controlled-return-hit';f.battle.queueLifecycle(actor,response);
-   await f.advance(1920);
+   await f.advance(frame++*20);
    assert.equal(returning.main_done,true);assert.equal(returning.interrupted,true);assert.equal(f.battle.activeActions.has('004'),false);
    assert.equal(f.view.run,next);assert.equal(next.main_done,false);assert.equal(f.battle.activeActions.has('001'),true);
    assert.ok(returning.children.some(child=>child.result.actor_id==='enemy-0'&&!child.done));
-   for(let frame=97;frame<1000;frame++){await f.advance(frame*20);if(f.finished)break;}
+   for(;frame<1500;frame++){await f.advance(frame*20);if(f.finished)break;}
    assert.equal(f.finished,true);assert.equal(f.battle.pendingPresentations.size,0);
  }finally{f.dispose();}
 });
@@ -210,13 +216,16 @@ test('a new hit interrupts a detached return without retiring the next actor or 
 test('warm healing retains the source effect waits and restores idle immediately after their last frame',async()=>{
  const f=await liveFixture('013',await read('/data/forest_status.json')),{battle,view,drawn,logs}=f,attacker=battle.actor('001'),target=attacker;
  const skill=f.commands.skills.yannuan,task=battle.performSequence(attacker,target,skill,directSequence(skill));
- // Source body2200ms, then m01Rwz01 19*70ms and _iReSTfr 19*80ms.
- await f.draw(0);await f.draw(2200);const held=structuredClone(drawn.get('001'));
- await f.draw(5049);assert.equal(attacker.native_active,true);assert.deepEqual(drawn.get('001'),held);
+ // Walk every source body/effect frame; a late draw must not skip their waits.
+ let now=0;for(;now<=2200;now+=10)await f.draw(now);
+ const held=structuredClone(drawn.get('001'));
+ for(;now<=5040;now+=10)await f.draw(now);
+ assert.equal(attacker.native_active,true);assert.deepEqual(drawn.get('001'),held);
  assert.equal(battle.state.history.at(-1).contacts.length,1);
- await f.draw(5050);assert.equal(attacker.native_active,false);
- assert.ok(logs.some(e=>e.type==='battle-source-completed'&&e.actor_id==='001'&&e.at===5050));
- await f.draw(5051);assert.equal(drawn.get('001').action,0);assert.equal(view.run,null);await task;
+ for(;attacker.native_active&&now<6000;now+=10)await f.draw(now);
+ assert.equal(attacker.native_active,false);
+ assert.ok(logs.some(e=>e.type==='battle-source-completed'&&e.actor_id==='001'&&e.at>=5050));
+ await f.draw(now);assert.equal(drawn.get('001').action,0);assert.equal(view.run,null);await task;
 });
 
 test('successful escape remains visible while its source action moves out, then acknowledges before battle exit',async()=>{
@@ -244,4 +253,49 @@ test('battle draws each displayed physical frame shadow and keeps it on the grou
  const next=target.calls.find(c=>c.path===shadow.sheet);
  assert.equal(next.args[0],shadow.frame_width,'shadow advances with source idle frame1');
  assert.equal(next.args[5],firstY,'source shadow remains grounded');assert.ok(drawn.get('001').y<bodyY);
+});
+
+test('contact recovery accumulates source12D, preserves native gates and converts only after the response ends',async()=>{
+ // Original 50FA00 reads the attacker's current fixed+12D; 506870 instead
+ // reads the victim's current fixed+12D. Controlled contact delivery keeps
+ // their unmodified 45/35 source bytes distinct and does not run rendering.
+ for(const scenario of ['ordinary','effect','subthreshold','guard','dodge','zero','lethal','recovering','rejected']){
+   const f=await liveFixture(),{battle}=f,attacker=battle.actor('001'),victim=battle.actor('enemy-0');
+   const selected=structuredClone(f.commands.skills.kai_luoyan),targetSkill=structuredClone(f.commands.skills.kai_mieyan);
+   selected.actor_id=attacker.id;
+   assert.equal(Buffer.from(selected.fixed_raw_hex,'hex')[0x12d],45);
+   assert.equal(Buffer.from(targetSkill.fixed_raw_hex,'hex')[0x12d],35);
+   const contact=selected.actions.find(action=>Buffer.from(action.raw_hex,'hex').readUInt32LE(0x49));
+   const effect=scenario==='effect',damage=['zero','dodge'].includes(scenario)?0:1,reaction=scenario==='guard'?1:scenario==='dodge'?2:0;
+   if(effect){selected.effect_context={effect_token:1};victim.current_skill=targetSkill;}
+   victim.charge.recovery_ticks=scenario==='subthreshold'?0:70;
+   victim.native_after_raw={...victim.native_after_raw,'0x0521f6a2':victim.charge.recovery_ticks};
+   if(scenario==='recovering'){victim.reaction_inhibit_raw=25;victim.charge.recovery=25;}
+   if(scenario==='rejected')victim.reaction_busy_raw=1;
+   battle.resolveAction=({skill})=>({hit:scenario!=='dodge',damage,mp_cost:skill.mp_cost,native_return:damage,reaction,after_settled_raw:reaction?0:1});
+   if(scenario==='lethal')battle.applyDamage=actor=>({...actor,hp:{...actor.hp,current:0},state_raw:4});
+   const expected=scenario==='ordinary'?[115,160]:effect?[105]:scenario==='subthreshold'?[45]:[70],contacts=[];
+   battle.playSequence=async(event,hooks)=>{
+     for(const [index,ticks]of expected.entries()){
+       const step={source:contact,source_skill_index:selected.original_skill_index,class_raw:contact.class_raw,
+         action_mask_raw:effect?0:contact.action_mask_raw,effect_contact:effect,effect_token:effect?1:0,contact_key:`${event.action_id}:${index}`};
+       const result=hooks.onContact(step);contacts.push(result);
+       assert.equal(victim.charge.recovery_ticks,ticks,scenario);
+       assert.equal(victim.native_after_raw['0x0521f6a2'],ticks,scenario);
+       assert.equal(victim.charge.recovery,scenario==='recovering'?25:0,scenario);
+       assert.deepEqual(hooks.onContact(step),result,'the same delivered contact must not add recovery twice');
+       assert.equal(victim.charge.recovery_ticks,ticks,scenario);
+     }
+     return {completed:true};
+   };
+   await battle.performSequence(attacker,victim,selected,directSequence(selected));
+   assert.equal(contacts.length,expected.length);
+   if(['ordinary','effect','subthreshold'].includes(scenario)){
+     assert.equal(victim.native_active,true,'recovery remains cumulative while the hit response plays');
+     battle.completeNativeSource(victim,0);
+     const converted=expected.at(-1)>99,recovery=converted?Math.floor(battle.state.scheduler.threshold*expected.at(-1)/100):0;
+     assert.equal(victim.charge.recovery,recovery);assert.equal(victim.reaction_inhibit_raw,recovery);
+     assert.equal(victim.charge.recovery_ticks,converted?0:45);assert.equal(victim.native_after_raw['0x0521f6a2'],converted?0:45);
+   }
+ }
 });

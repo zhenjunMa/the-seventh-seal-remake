@@ -101,12 +101,18 @@ test('target-height wait blocks the target response while the acting source cont
   const records=[],promise=view.playSequence({actor_id:'018',target_id:'001',skill_id:'source-target-z',plan,action_id:'target-z'},
     {onContact(){throw Error('Controlled schedule has no contacts');},onRecord(step){records.push(step.plan_record_index);}});
   const child={descriptor:{actor_id:'001'},result:{actor_id:'001',target_id:'018'},steps:[{plan_record_index:0,segment_index:0,effects:[],duration_ms:120}],segments:[],
-    channel_id:'target-response',at:0,next_at:0,elapsed:0,cursor:0,visited:-1,record_visited:-1,effects:[],done:false};view.run.children.push(child);
-  view._advance(0);assert.deepEqual(records,[0,1]);assert.equal(child.visited,-1);assert.equal(child.vertical_wait,true);
-  view._advance(120);assert.equal(view.run.main_done,true);assert.equal(target.native_z_raw,-300);assert.equal(child.visited,-1);
-  view._advance(240);assert.equal(target.native_z_raw,0);assert.equal(child.visited,0);assert.equal(child.vertical_wait,false);
-  view._advance(360);assert.equal((await promise).completed,true);assert.equal(child.done,true);
-  const before=structuredClone(target);assert.equal(core.beginNativeTargetVertical('001','001',raw.toString('hex'),400),null);assert.deepEqual(target,before);
+    channel_id:'target-response',at:0,next_at:120,elapsed:0,cursor:0,visited:-1,record_visited:-1,effects:[],done:false};view.run.children.push(child);
+  view._advance(0);assert.deepEqual(records,[0]);assert.equal(target.native_z_raw,-600);assert.equal(child.visited,-1);assert.equal(child.vertical_wait,true);
+  // A control record returns to the main loop; its following sprite waits
+  // until the next call. Command10 preserves the target's existing120ms gate.
+  view._advance(1);assert.deepEqual(records,[0,1]);
+  view._advance(119);assert.equal(target.native_z_raw,-600);assert.equal(child.visited,-1);
+  view._advance(120);assert.equal(target.native_z_raw,-550);assert.equal(child.visited,-1);
+  view._advance(1120);assert.equal(view.run.main_done,true);assert.equal(target.native_z_raw,-500);assert.equal(child.visited,-1);
+  for(let at=1140;at<=1320;at+=20)view._advance(at);
+  assert.equal(target.native_z_raw,0);assert.equal(child.visited,0);assert.equal(child.vertical_wait,false);
+  view._advance(1440);assert.equal((await promise).completed,true);assert.equal(child.done,true);
+  const before=structuredClone(target);assert.equal(core.beginNativeTargetVertical('001','001',raw.toString('hex'),1480),null);assert.deepEqual(target,before);
 });
 
 test('51A4F0 native instruction oracle agrees tick by tick on positive/negative motion, acceleration, clamps and early guards',()=>{
@@ -136,11 +142,20 @@ test('real nonwait ascent and landing wait preserve KO resources and expose grou
 
 test('fractional frame ownership, zero-speed stale wait, validation and restore from source dispatcher fields remain pure',()=>{
   const initial=createNativeVertical({actor:actor(-80),record:sourceCommand(3)}),a=advanceNativeVertical(advanceNativeVertical(initial,19),1),b=advanceNativeVertical(initial,20);assert.deepEqual(a,b);
-  const four=advanceNativeVertical(initial,80);let once=initial;for(let i=0;i<4;i++)once=advanceNativeVertical(once,20);assert.deepEqual(four,once);
+  const late=advanceNativeVertical(initial,80);assert.deepEqual(late,b);
+  assert.equal(advanceNativeVertical(late,19).ticks,1);assert.equal(advanceNativeVertical(advanceNativeVertical(late,19),1).ticks,2);
   const stopped=createNativeVertical({actor:actor(-10),record:sourceCommand(3,{speed:0,acceleration:0})});assert.equal(stopped.wait_raw,1);assert.equal(stopped.waiting,false);assert.equal(advanceNativeVertical(stopped,20).z,-10);
   const resumed=nativeVerticalState({native_z_raw:-30,native_after_raw:{'0x0524a63a':0,'0x0524a636':4,'0x0524a63e':8,'0x0524a642':1,'0x0524a635':0}});
   assert.equal(advanceNativeVertical(resumed,20).z,-22);
   assert.throws(()=>createNativeVertical({actor:actor(),record:sourceCommand(4)}),/camera executor/);
   assert.throws(()=>createNativeVertical({actor:{},record:sourceCommand(2)}),/actor Z/);
   assert.throws(()=>advanceNativeVertical(initial,-1),/elapsed/);assert.throws(()=>createNativeVertical({actor:actor(),record:'00'}),/bytes/);
+});
+
+test('60Hz vertical frame checks take one step every other frame and discard long-frame excess',()=>{
+  let state=createNativeVertical({actor:actor(-600),record:sourceCommand(3,{speed:1,acceleration:0})});
+  for(let frame=1;frame<=60;frame++)state=advanceNativeVertical(state,1000/60);
+  assert.equal(state.ticks,30);assert.equal(state.z,-570);assert.equal(state.tick_remainder_ms,0);
+  state=advanceNativeVertical(state,1000);assert.equal(state.ticks,31);assert.equal(state.z,-569);assert.equal(state.tick_remainder_ms,0);
+  state=advanceNativeVertical(state,1);assert.equal(state.ticks,31);assert.equal(state.z,-569);
 });

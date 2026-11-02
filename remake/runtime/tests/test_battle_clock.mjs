@@ -22,13 +22,13 @@ function fixture({origin=0,statusData=null,testMode=true,playAction=async(_,{onI
 }
 const charges=battle=>battle.state.actors.map(a=>structuredClone(a.charge));
 
-test('20ms charging retains fractional time across short, late and repeated frames',()=>{
+test('20ms charging waits across short frames and discards late-frame excess',()=>{
   const {battle}=fixture();
-  for(const [now,ticks]of [[19,0],[21,1],[39,1],[40,2],[99,4],[99,4],[100,5],[1020,51]]){
+  for(const [now,ticks]of [[19,0],[21,1],[39,1],[40,1],[99,2],[99,2],[100,2],[1020,3],[1039,3],[1040,4]]){
     const advanced=ticks>battle.state.scheduler.ticks;
     assert.equal(battle.advanceClock(now),advanced,`${now}ms advanced`);
     assert.equal(battle.state.scheduler.ticks,ticks,`${now}ms ticks`);
-    assert.equal(battle.state.scheduler.elapsed_ms,ticks*20);
+    assert.equal(battle.state.scheduler.elapsed_ms,now);
   }
 });
 
@@ -58,21 +58,21 @@ test('low-HP idle waits for active actions and does not replace a dead actor pos
   assert.equal(enemy.idle_pose,undefined);assert.equal(battle.state.phase,'victory');
 });
 
-test('30/50/60/75/120/144/240 FPS all produce 50 charging ticks per scene second',()=>{
+test('native millisecond frame timestamps preserve the original FPS-dependent charging cadence',()=>{
   for(const origin of [0,1234.5]){
-    const {battle:reference}=fixture({origin});
-    for(let tick=1;tick<=50;tick++)reference.advanceClock(origin+tick*20);
-    for(const fps of [30,50,60,75,120,144,240]){
+    for(const [fps,ticks] of [[30,30],[50,50],[60,30],[75,37],[120,40],[144,48],[240,48]]){
+      const {battle:reference}=fixture({origin});
+      for(let tick=1;tick<=ticks;tick++)reference.advanceClock(origin+tick*20);
       const {battle}=fixture({origin});
-      for(let frame=1;frame<=fps;frame++)battle.advanceClock(origin+frame*1000/fps);
-      assert.equal(battle.state.scheduler.ticks,50,`${fps} FPS at origin ${origin}`);
+      for(let frame=1;frame<=fps;frame++)battle.advanceClock(origin+Math.floor(frame*1000/fps));
+      assert.equal(battle.state.scheduler.ticks,ticks,`${fps} FPS at origin ${origin}`);
       assert.equal(battle.state.scheduler.elapsed_ms,1000);
       assert.deepEqual(charges(battle),charges(reference));
     }
   }
 });
 
-test('irregular frames preserve charge debt, recovery and RNG draws across a long frame',()=>{
+test('irregular frames spend one charge/recovery step per due call and never replay a long frame',()=>{
   const make=()=>{
     const f=fixture();
     for(const actor of f.battle.state.actors){
@@ -82,26 +82,28 @@ test('irregular frames preserve charge debt, recovery and RNG draws across a lon
     return f.battle;
   };
   const reference=make(),irregular=make();
-  for(let now=20;now<=1000;now+=20)reference.advanceClock(now);
+  for(let now=20;now<=100;now+=20)reference.advanceClock(now);
   for(const now of [7,15,70,71,97,100,164,180,721,999,1000])irregular.advanceClock(now);
-  assert.equal(irregular.state.scheduler.ticks,50);
+  assert.equal(irregular.state.scheduler.ticks,5);
   assert.deepEqual(charges(irregular),charges(reference));
   assert.equal(irregular.rng(),reference.rng());
 });
 
-test('status effects receive every fixed step when a frame crosses several 80ms intervals',()=>{
+test('a delayed frame processes an overdue status once using the actual frame time',()=>{
   const make=()=>{
     const {battle}=fixture({statusData:status});
     const actor=battle.actor('001'),applied=applyNativeSkillStatus({actor,skill:status.skills['012:14'],data:status,rng:()=>0,now:0});
     assert.equal(applied.applied,true);Object.assign(actor,applied.actor);return battle;
   };
-  const reference=make(),delayed=make();
-  for(let now=20;now<=1000;now+=20)reference.advanceClock(now);
+  const delayed=make();
   delayed.advanceClock(1000);
-  for(let i=0;i<100;i++)assert.equal(delayed.actor('001').native_status_slots[i].raw_hex,reference.actor('001').native_status_slots[i].raw_hex,`status slot ${i}`);
   const block=Buffer.from(delayed.actor('001').native_status_slots[0].raw_hex,'hex');
-  assert.equal(block.readInt32LE(0x17),960);
-  assert.equal(block.readInt32LE(0x1b),6000);
+  assert.equal(block.readInt32LE(0x17),1000);
+  assert.equal(block.readInt32LE(0x1b),500);
+  delayed.advanceClock(1079);
+  assert.equal(Buffer.from(delayed.actor('001').native_status_slots[0].raw_hex,'hex').readInt32LE(0x1b),500);
+  delayed.advanceClock(1080);
+  assert.equal(Buffer.from(delayed.actor('001').native_status_slots[0].raw_hex,'hex').readInt32LE(0x1b),1000);
 });
 
 test('scene pause and resume exclude suspended time while retaining the partial battle tick',()=>{
@@ -115,19 +117,21 @@ test('scene pause and resume exclude suspended time while retaining the partial 
   runtime.paused=false;clock.paused=false;scene.skipDelta=true;frame(30000);
   assert.equal(battle.state.scheduler.ticks,1);
   frame(18);assert.equal(battle.state.scheduler.ticks,1);
+  frame(1);assert.equal(battle.state.scheduler.ticks,1);
   frame(1);assert.equal(battle.state.scheduler.ticks,2);
 });
 
-test('catchup stops immediately when the battle is interrupted',()=>{
+test('an interruption prevents subsequent frame steps',()=>{
   const {battle}=fixture();
   battle.notify=snapshot=>{if(snapshot.phase!=='interrupted'&&snapshot.scheduler.ticks===2)battle.interrupt(new Error('clock test interruption'));};
-  battle.advanceClock(1000);
+  battle.advanceClock(1000);assert.equal(battle.state.scheduler.ticks,1);
+  battle.advanceClock(2000);
   assert.equal(battle.state.phase,'interrupted');
   assert.equal(battle.state.scheduler.ticks,2);
-  assert.equal(battle.advanceClock(2000),false);
+  assert.equal(battle.advanceClock(3000),false);
 });
 
-test('catchup stops at victory and rejects a changed world before spending any ticks',()=>{
+test('a due frame stops at victory and rejects a changed world before spending any ticks',()=>{
   const {battle}=fixture();battle.actor('012').hp.current=0;battle.actor('012').state_raw=4;
   battle.advanceClock(1000);
   assert.equal(battle.state.phase,'victory');assert.equal(battle.state.scheduler.ticks,1);
@@ -137,13 +141,14 @@ test('catchup stops at victory and rejects a changed world before spending any t
   assert.equal(changed.battle.state.phase,'interrupted');assert.equal(changed.battle.state.scheduler.ticks,0);
 });
 
-test('catchup continues charging during an action without dispatching it twice',async()=>{
+test('late action frames charge once without dispatching the action twice',async()=>{
   let release,calls=0;
   const {battle}=fixture({testMode:false,playAction:async(_,{onImpact})=>{calls++;await new Promise(resolve=>release=resolve);onImpact();}});
   battle.actor('012').charge.gauge=battle.state.scheduler.threshold-1;
   battle.advanceClock(1000);
   assert.equal(calls,1);assert.equal(battle.running,true);
-  assert.equal(battle.state.scheduler.ticks,50);
+  assert.equal(battle.state.scheduler.ticks,1);
+  battle.advanceClock(2000);assert.equal(battle.state.scheduler.ticks,2);assert.equal(calls,1);
   const task=battle.actionTask;release();await task;
   assert.equal(calls,1);assert.equal(battle.running,false);
 });

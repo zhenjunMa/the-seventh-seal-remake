@@ -26,15 +26,23 @@ test('actual source ID5 nonwait ascent and wait landing share one gameplay Z clo
   const plan=directSequence(actor.current_skill);plan.allow_no_contacts=true;
   let primaryEnd=null;const pending=view.playSequence({actor_id:id,target_id:'enemy-0',skill_id:actor.current_skill.id,plan},{onRecord(){},onContact(){throw Error('ID5 has no damage contact');},
    onPrimaryEnd:at=>{primaryEnd=at;core.completeNativeSource(actor,at);}});
-  const z=[];for(clock=0;clock<=2000&&view.run;clock+=20){view._advance(clock);if(clock<=60)z.push(actor.native_z_raw);}
-  await pending;assert.deepEqual(z.slice(0,4),id==='006'?[0,-50,-93,-100]:[0,-40,-75,-80],id);assert.equal(actor.native_z_raw,0,id);assert.ok(primaryEnd>=220);
+  const sourceSprite=actor.current_skill.actions.find(action=>Buffer.from(action.raw_hex,'hex')[0]===0),ascentAction=Buffer.from(sourceSprite.raw_hex,'hex').readUInt32LE(1);
+  const sourceInterval=Buffer.from(sourceRole.actions.find(action=>action.index===ascentAction).native_raw_hex,'hex').readUInt32LE(1),frameGap=Math.ceil(sourceInterval/20)*20;
+  const z=[];for(clock=0;clock<=2000&&view.run;clock+=20){view._advance(clock);if(!z.length||z.at(-1).z!==actor.native_z_raw)z.push({at:clock,z:actor.native_z_raw});}
+  await pending;assert.deepEqual(z.slice(0,4),[0,...(id==='006'?[-50,-93,-100]:[-40,-75,-80])].map((height,index)=>({at:index?20+(index-1)*frameGap:0,z:height})),id);
+  const sourceBytes=Buffer.from(sourceSprite.raw_hex,'hex'),spriteCount=sourceBytes.readUInt32LE(0x2a)-sourceBytes.readUInt32LE(0x26);
+  assert.equal(primaryEnd,20+spriteCount*frameGap,id);assert.ok(actor.native_z_raw<0,id);assert.equal(core.nativeVerticalFor(id).waiting,true);
   assert.equal(actor.current_skill.original_id_raw,8);assert.equal(actor.native_active,true);
-  const life=new BattleLifecyclePlayback(sources,{nativeBridge:actorId=>view._nativeBridge(actorId)}),seen=[8];
+  const life=new BattleLifecyclePlayback(sources,{nativeBridge:actorId=>view._nativeBridge(actorId)}),seen=[8];view.lifecycle=life;let landedAt=null;
   for(let n=0;n<2000&&core.state.lifecycle_events.length;n++,clock+=20){
+   // The formal view starts each main-loop visit before lifecycle playback.
+   view._advance(clock);
    life.advance({id:'vertical-test',actors:[actor],lifecycle_events:core.state.lifecycle_events},view.roster,clock);
+   if(actor.native_z_raw<0){assert.equal(actor.current_skill.original_id_raw,8);assert.equal(life.pose(id),null);}
+   else landedAt??=clock;
    for(const completed of life.drainCompleted()){core.ackLifecycle(completed);seen.push(actor.current_skill.original_id_raw??0);}
   }
-  assert.deepEqual(seen,[8,4,6,0],id);assert.equal(actor.native_active,false,id);assert.equal(actor.native_z_raw,0,id);
+  assert.ok(landedAt>primaryEnd,id);assert.deepEqual(seen,[8,4,6,0],id);assert.equal(actor.native_active,false,id);assert.equal(actor.native_z_raw,0,id);
   assert.equal(core.state.lifecycle_events.length,0,id);assert.equal(draws,4,'8,4,6,0 each retain the native singleton lookup draw');
  }
 });

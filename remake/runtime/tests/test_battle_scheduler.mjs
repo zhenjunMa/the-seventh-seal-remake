@@ -56,7 +56,7 @@ test('charge arithmetic matches native x86 for exact debt/recovery boundaries an
 });
 test('ranged speed consumes one draw, exclusive upper bound; zero bound uses80 and equipment is excluded',()=>{
  for(const type of [0,4,7])for(const min of [0,51])for(const n of [0,6,32767]){
-  const {actors,scheduler}=prepared(['012']),a=actors[0];a.raw_by_address['0x0524a729']=min;a.raw_by_address['0x0524a72d']=58;
+  const {actors,scheduler}=prepared(['012']),a=actors[0];a.charge.gauge=0;a.raw_by_address['0x0524a729']=min;a.raw_by_address['0x0524a72d']=58;
   a.current_skill=skillFields(a.current_skill,{0xe3:min,0xe7:58});const b=Buffer.from(a.current_skill.fixed_raw_hex,'hex');b[0]=type;a.current_skill.fixed_raw_hex=b.toString('hex');a.status_by_address['0x0521f56d']=3;
   const o=oracle(clone(actors),scheduler,()=>n),used=[];chargeActor(a,()=>{used.push(n);return n;});o.run(0x502f30,[0]);
   assert.equal(a.charge.gauge,o.read(0x521a7b9));assert.deepEqual(used,o.rng_calls);assert.equal(a.charge.gauge,min?min+n%7+3:83);
@@ -120,11 +120,11 @@ test('a source response remains ineligible while other actors can act beside a d
  player.native_active=false;
  assert.equal(isActorReady(player,scheduler),true);
 });
-test('20ms clock runs before input and in every command layer with elapsed-time catchup',async()=>{
+test('20ms clock runs before input and in every command layer without late-frame catchup',async()=>{
  const g=fixture(['012']);
  assert.equal(g.battle.state.phase,'charging');assert.equal(g.battle.canChoose('yantu'),true);
  await g.battle.choose('yantu');assert.equal(g.battle.state.scheduler.pending.actor_id,'001');assert.equal(g.battle.canCommand('001'),false);assert.equal(g.battle.state.history.length,0);
- assert.equal(g.battle.advanceClock(19),false);assert.equal(g.battle.advanceClock(20),true);assert.equal(g.battle.advanceClock(20),false);assert.equal(g.battle.advanceClock(1020),true);assert.equal(g.battle.snapshot().scheduler.ticks,51);
+ assert.equal(g.battle.advanceClock(19),false);assert.equal(g.battle.advanceClock(20),true);assert.equal(g.battle.advanceClock(20),false);assert.equal(g.battle.advanceClock(1020),true);assert.equal(g.battle.snapshot().scheduler.ticks,2);
  let now=1020;
  for(const stage of ['wheel','skills','items','target']){g.battle.setCommandStage(stage);const ticks=g.battle.state.scheduler.ticks;assert.equal(g.battle.advanceClock(now+=20),true);assert.equal(g.battle.state.scheduler.ticks,ticks+1);}
  assert.equal(g.battle.state.history.length,0);assert.ok(g.battle.actor('001').charge.gauge>-g.battle.state.scheduler.threshold);

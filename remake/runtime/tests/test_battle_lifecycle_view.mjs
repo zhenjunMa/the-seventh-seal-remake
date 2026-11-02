@@ -11,23 +11,28 @@ const copy=structuredClone,role=id=>manifest.roles.find(row=>row.id===id),skill=
 const duration=s=>s.timeline.filter(step=>step.kind==='sprite').reduce((total,step)=>total+step.interval_raw,0);
 const sprites=s=>s.timeline.filter(step=>step.kind==='sprite');
 function fixture(){const playback=new BattleLifecyclePlayback(manifest),roster=[{id:'party-1',resource_id:'001',side:'player'},{id:'enemy-A',resource_id:'012',side:'enemy'}];const snapshot={id:'lifecycle-view-fixture',actors:roster.map(row=>({...row,life_epoch:1})),lifecycle_events:[]};return {playback,roster,snapshot};}
+// Deliver each source interval explicitly; a late draw no longer replays it.
+function advanceFrames(playback,snapshot,roster,until){
+  for(let at=Math.floor(playback.lastNow??0)+1;at<until&&playback.channels.size;at++)playback.advance(snapshot,roster,at);
+  return playback.advance(snapshot,roster,until);
+}
 function event(actorId,kind,index,id,extra={}){return {token:`${actorId}:${kind}:1`,actor_id:actorId,kind,life_epoch:1,source_skill_index:index,source_id_raw:id,hold_final_frame:kind==='death'&&actorId.startsWith('party'),fade_increment_raw:null,...extra};}
 test('player death follows every original frame interval, holds the final corpse pose and acknowledges once',()=>{
   const {playback,roster,snapshot}=fixture(),selected=skill('001',13),frames=sprites(selected),total=duration(selected),death=event('party-1','death',13,12);snapshot.lifecycle_events=[death];const before=copy(snapshot);
   playback.advance(snapshot,roster,0);assert.equal(playback.pose('party-1').source_frame,frames[0].source_frame);assert.deepEqual(playback.drainCompleted(),[]);
   playback.advance(snapshot,roster,frames[0].interval_raw-1);assert.equal(playback.pose('party-1').source_frame,frames[0].source_frame);
   playback.advance(snapshot,roster,frames[0].interval_raw);assert.equal(playback.pose('party-1').source_frame,frames[1].source_frame);
-  playback.advance(snapshot,roster,total-1);assert.equal(playback.pose('party-1').source_frame,frames.at(-1).source_frame);assert.deepEqual(playback.drainCompleted(),[]);
-  playback.advance(snapshot,roster,total);assert.deepEqual(playback.drainCompleted(),[{token:death.token,actor_id:death.actor_id,life_epoch:1}]);assert.equal(playback.hidden('party-1'),false);assert.equal(playback.snapshot().held.length,1);
-  playback.advance(snapshot,roster,total+999);assert.deepEqual(playback.drainCompleted(),[]);assert.deepEqual(snapshot,before);
-  snapshot.lifecycle_events=[];playback.advance(snapshot,roster,total+1000);assert.equal(playback.pose('party-1').source_frame,frames.at(-1).source_frame);
+  advanceFrames(playback,snapshot,roster,total-1);assert.equal(playback.pose('party-1').source_frame,frames.at(-1).source_frame);assert.deepEqual(playback.drainCompleted(),[]);
+  advanceFrames(playback,snapshot,roster,total);assert.deepEqual(playback.drainCompleted(),[{token:death.token,actor_id:death.actor_id,life_epoch:1}]);assert.equal(playback.hidden('party-1'),false);assert.equal(playback.snapshot().held.length,1);
+  advanceFrames(playback,snapshot,roster,total+999);assert.deepEqual(playback.drainCompleted(),[]);assert.deepEqual(snapshot,before);
+  snapshot.lifecycle_events=[];advanceFrames(playback,snapshot,roster,total+1000);assert.equal(playback.pose('party-1').source_frame,frames.at(-1).source_frame);
 });
 test('independent actor channels finish at their own source durations; enemy hides only after its last frame',()=>{
   const {playback,roster,snapshot}=fixture(),revive=event('party-1','revive',16,14),death=event('enemy-A','death',2,2);snapshot.lifecycle_events=[revive,death];const enemyDuration=duration(skill('012',2)),reviveDuration=duration(skill('001',16));assert.ok(enemyDuration<reviveDuration);
   playback.advance(snapshot,roster,0);assert.equal(playback.snapshot().active.length,2);assert.equal(playback.hidden('enemy-A'),false);
-  playback.advance(snapshot,roster,enemyDuration-1);assert.equal(playback.hidden('enemy-A'),false);assert.deepEqual(playback.drainCompleted(),[]);
-  playback.advance(snapshot,roster,enemyDuration);assert.equal(playback.hidden('enemy-A'),true);assert.equal(playback.snapshot().active.length,1);assert.deepEqual(playback.drainCompleted().map(row=>row.token),[death.token]);
-  playback.advance(snapshot,roster,reviveDuration);assert.equal(playback.pose('party-1'),null);assert.deepEqual(playback.drainCompleted().map(row=>row.token),[revive.token]);
+  advanceFrames(playback,snapshot,roster,enemyDuration-1);assert.equal(playback.hidden('enemy-A'),false);assert.deepEqual(playback.drainCompleted(),[]);
+  advanceFrames(playback,snapshot,roster,enemyDuration);assert.equal(playback.hidden('enemy-A'),true);assert.equal(playback.snapshot().active.length,1);assert.deepEqual(playback.drainCompleted().map(row=>row.token),[death.token]);
+  advanceFrames(playback,snapshot,roster,reviveDuration);assert.equal(playback.pose('party-1'),null);assert.deepEqual(playback.drainCompleted().map(row=>row.token),[revive.token]);
 });
 
 test('all six party resources finish their own type10 escape path before acknowledging disappearance',()=>{
@@ -46,10 +51,10 @@ test('all six party resources finish their own type10 escape path before acknowl
  }
 });
 test('life epoch cancels held death and queued old acknowledgements before a revive channel starts',()=>{
-  const {playback,roster,snapshot}=fixture(),death=event('party-1','death',13,12),total=duration(skill('001',13));snapshot.lifecycle_events=[death];playback.advance(snapshot,roster,0);playback.advance(snapshot,roster,total);assert.equal(playback.snapshot().completed_count,1);
-  snapshot.actors[0].life_epoch=2;const revive=event('party-1','revive',16,14,{token:'party-1:revive:2',life_epoch:2});snapshot.lifecycle_events=[death,revive];playback.advance(snapshot,roster,total);
+  const {playback,roster,snapshot}=fixture(),death=event('party-1','death',13,12),total=duration(skill('001',13));snapshot.lifecycle_events=[death];playback.advance(snapshot,roster,0);advanceFrames(playback,snapshot,roster,total);assert.equal(playback.snapshot().completed_count,1);
+  snapshot.actors[0].life_epoch=2;const revive=event('party-1','revive',16,14,{token:'party-1:revive:2',life_epoch:2});snapshot.lifecycle_events=[death,revive];advanceFrames(playback,snapshot,roster,total);
   assert.equal(playback.snapshot().held.length,0);assert.deepEqual(playback.drainCompleted(),[]);assert.equal(playback.pose('party-1').source_frame,sprites(skill('001',16))[0].source_frame);
-  playback.advance(snapshot,roster,total+duration(skill('001',16)));assert.deepEqual(playback.drainCompleted(),[{token:revive.token,actor_id:'party-1',life_epoch:2}]);assert.equal(playback.hidden('party-1'),false);
+  advanceFrames(playback,snapshot,roster,total+duration(skill('001',16)));assert.deepEqual(playback.drainCompleted(),[{token:revive.token,actor_id:'party-1',life_epoch:2}]);assert.equal(playback.hidden('party-1'),false);
 });
 test('a newer event token cancels prior playback without acknowledging or restarting stale tokens',()=>{
   const {playback,roster,snapshot}=fixture(),first=event('party-1','death',13,12),second={...first,token:'replacement-death'};snapshot.lifecycle_events=[first];playback.advance(snapshot,roster,0);playback.advance(snapshot,roster,140);
@@ -63,12 +68,12 @@ test('the legacy fade increment selects particles; render completion does not wa
   playback.advance(snapshot,roster,850);assert.equal(playback.alpha('enemy-A'),0);assert.equal(playback.hidden('enemy-A'),true);assert.deepEqual(playback.drainCompleted().map(row=>row.token),[death.token]);
 });
 test('absent death source and absent fade do not create guessed fade or early acknowledgement',()=>{
-  const {playback,roster,snapshot}=fixture();snapshot.lifecycle_events=[event('enemy-A','death',null,null)];playback.advance(snapshot,roster,0);playback.advance(snapshot,roster,100000);
+  const {playback,roster,snapshot}=fixture();snapshot.lifecycle_events=[event('enemy-A','death',null,null)];playback.advance(snapshot,roster,0);advanceFrames(playback,snapshot,roster,100000);
   assert.equal(playback.hidden('enemy-A'),false);assert.equal(playback.alpha('enemy-A'),1);assert.equal(playback.pose('enemy-A'),null);assert.deepEqual(playback.drainCompleted(),[]);assert.equal(playback.snapshot().active[0].blocked,'missing-source-lifecycle-presentation');
 });
 test('a fade increment without its source clock cannot create an invented duration',()=>{
   const bounded=copy(manifest);delete bounded.roles.find(row=>row.id==='012').death_policy.enemy_fade_fields.clock_raw;
-  const playback=new BattleLifecyclePlayback(bounded),{roster,snapshot}=fixture();snapshot.lifecycle_events=[event('enemy-A','death',null,null,{fade_increment_raw:3})];playback.advance(snapshot,roster,0);playback.advance(snapshot,roster,100000);
+  const playback=new BattleLifecyclePlayback(bounded),{roster,snapshot}=fixture();snapshot.lifecycle_events=[event('enemy-A','death',null,null,{fade_increment_raw:3})];playback.advance(snapshot,roster,0);advanceFrames(playback,snapshot,roster,100000);
   assert.equal(playback.snapshot().active[0].blocked,'missing-source-fade-clock');assert.deepEqual(playback.drainCompleted(),[]);assert.equal(playback.hidden('enemy-A'),false);
 });
 test('source skill index is exact and a nonexistent choice never falls back to another same-ID candidate',()=>{
@@ -77,9 +82,9 @@ test('source skill index is exact and a nonexistent choice never falls back to a
   snapshot.lifecycle_events=[event('party-1','entry',999,11,{token:'invalid-source'})];assert.throws(()=>playback.advance(snapshot,roster,10),/Exact selected/);assert.deepEqual(playback.drainCompleted(),[]);
 });
 test('reset and a changed battle identity clear all visual channels, hidden actors and pending acknowledgements',()=>{
-  const {playback,roster,snapshot}=fixture();snapshot.lifecycle_events=[event('enemy-A','death',2,2)];playback.advance(snapshot,roster,0);playback.advance(snapshot,roster,100000);assert.equal(playback.hidden('enemy-A'),true);
+  const {playback,roster,snapshot}=fixture();snapshot.lifecycle_events=[event('enemy-A','death',2,2)];playback.advance(snapshot,roster,0);advanceFrames(playback,snapshot,roster,100000);assert.equal(playback.hidden('enemy-A'),true);
   playback.reset();assert.deepEqual(playback.snapshot(),{active:[],held:[],hidden:[],completed_count:0});assert.equal(playback.alpha('enemy-A'),1);
-  playback.advance(snapshot,roster,0);playback.advance(snapshot,roster,100000);snapshot.id='second-battle';snapshot.lifecycle_events=[];playback.advance(snapshot,roster,0);assert.deepEqual(playback.snapshot(),{active:[],held:[],hidden:[],completed_count:0});
+  playback.advance(snapshot,roster,0);advanceFrames(playback,snapshot,roster,100000);snapshot.id='second-battle';snapshot.lifecycle_events=[];playback.advance(snapshot,roster,0);assert.deepEqual(playback.snapshot(),{active:[],held:[],hidden:[],completed_count:0});
 });
 test('source mode1 appearance blocks subsequent sprites for seven original60ms clock steps',()=>{
   const {playback,roster,snapshot}=fixture(),entry=event('enemy-A','entry',11,11),selected=skill('012',11),frames=sprites(selected),prefix=frames[0].interval_raw,total=duration(selected)+7*60;
@@ -87,11 +92,15 @@ test('source mode1 appearance blocks subsequent sprites for seven original60ms c
   playback.advance(snapshot,roster,prefix);assert.equal(playback.pose('enemy-A').source_frame,frames[0].source_frame);assert.equal(playback.alpha('enemy-A'),0);
   playback.advance(snapshot,roster,prefix+60);assert.equal(playback.alpha('enemy-A'),1/7);assert.equal(playback.pose('enemy-A').source_frame,frames[0].source_frame);
   playback.advance(snapshot,roster,prefix+7*60);assert.equal(playback.alpha('enemy-A'),1);assert.equal(playback.pose('enemy-A').source_frame,frames[1].source_frame);assert.deepEqual(playback.drainCompleted(),[]);
-  playback.advance(snapshot,roster,total-1);assert.deepEqual(playback.drainCompleted(),[]);playback.advance(snapshot,roster,total);assert.equal(playback.pose('enemy-A'),null);assert.deepEqual(playback.drainCompleted().map(row=>row.token),[entry.token]);
+  advanceFrames(playback,snapshot,roster,total-1);assert.deepEqual(playback.drainCompleted(),[]);advanceFrames(playback,snapshot,roster,total);assert.equal(playback.pose('enemy-A'),null);assert.deepEqual(playback.drainCompleted().map(row=>row.token),[entry.token]);
 });
 test('mode5 uses source pixel geometry and actual renderer calls; elapsed0 resets initialization',()=>{
   const {roster,snapshot}=fixture(),playback=new BattleLifecyclePlayback(manifest,{appearanceBounds:(id,pose)=>{assert.equal(id,'001');assert.equal(pose.source_frame,170);return {min_x:261,max_y:350,empty:false};}});
   snapshot.lifecycle_events=[event('party-1','entry',11,11)];playback.advance(snapshot,roster,0);playback.advance(snapshot,roster,120);
+  assert.equal(playback.snapshot().active[0].appearance.render_limit,null);assert.equal(playback.snapshot().active[0].appearance.render_calls,0);
+  // Command7 returns before its renderer runs; the next main-loop call may
+  // have the same millisecond timestamp, but owns the first render visit.
+  playback.advance(snapshot,roster,120);
   assert.equal(playback.snapshot().active[0].appearance.render_limit,43);assert.equal(playback.snapshot().active[0].appearance.render_calls,1);
   playback.advance(snapshot,roster,120);assert.equal(playback.snapshot().active[0].appearance.render_calls,1);assert.equal(playback.pose('party-1').source_frame,170);
   for(let calls=2;calls<43;calls++){playback.advance(snapshot,roster,180);assert.equal(playback.snapshot().active[0].appearance.render_calls,calls);assert.equal(playback.pose('party-1').source_frame,170);}
@@ -100,10 +109,11 @@ test('mode5 uses source pixel geometry and actual renderer calls; elapsed0 reset
 test('mode5 strict plus8 boundary and empty source main finish without an invented wait',()=>{
   for(const geometry of [{min_x:248,max_y:1,empty:false},{empty:true}]){
     const {snapshot}=fixture(),roster=[{id:'party-1',resource_id:'002',side:'player'}],playback=new BattleLifecyclePlayback(manifest,{appearanceBounds:()=>geometry});snapshot.actors=snapshot.actors.slice(0,1);snapshot.lifecycle_events=[event('party-1','entry',11,11)];playback.advance(snapshot,roster,0);
+    assert.equal(playback.snapshot().active[0].appearance.render_calls,0);playback.advance(snapshot,roster,0);
     assert.equal(playback.snapshot().active[0].appearance,null);assert.equal(playback.pose('party-1').source_frame,sprites(skill('002',11))[0].source_frame);assert.deepEqual(playback.drainCompleted(),[]);
   }
   const {snapshot}=fixture(),roster=[{id:'party-1',resource_id:'002',side:'player'}],idle={action_index:0,action_frame:0,source_frame:0};
-  const playback=new BattleLifecyclePlayback(manifest,{appearanceBounds:()=>({min_x:247,max_y:1,empty:false,pose:idle})});snapshot.actors=snapshot.actors.slice(0,1);snapshot.lifecycle_events=[event('party-1','entry',11,11)];playback.advance(snapshot,roster,0);assert.equal(playback.snapshot().active[0].appearance.render_limit,2);assert.equal(playback.pose('party-1').source_frame,0);
+  const playback=new BattleLifecyclePlayback(manifest,{appearanceBounds:()=>({min_x:247,max_y:1,empty:false,pose:idle})});snapshot.actors=snapshot.actors.slice(0,1);snapshot.lifecycle_events=[event('party-1','entry',11,11)];playback.advance(snapshot,roster,0);playback.advance(snapshot,roster,0);assert.equal(playback.snapshot().active[0].appearance.render_limit,2);assert.equal(playback.pose('party-1').source_frame,0);
   playback.advance(snapshot,roster,60);assert.equal(playback.snapshot().active[0].appearance,null);assert.equal(playback.pose('party-1').source_frame,sprites(skill('002',11))[0].source_frame);
 });
 test('all connected original entry variants finish with source mode RNG owned by the controller',()=>{
@@ -163,7 +173,7 @@ test('exported018 command-only mode2 falls through the shared source-pixel rende
 
 test('lifecycle sound visits use source logical cursors, survive slow RAF and retire on reset without replay',()=>{
  const frames=[],{roster,snapshot}=fixture(),playback=new BattleLifecyclePlayback(manifest,{onFrame:step=>frames.push(step)});
- snapshot.lifecycle_events=[event('party-1','death',13,12)];playback.advance(snapshot,roster,0);playback.advance(snapshot,roster,100000);
+ snapshot.lifecycle_events=[event('party-1','death',13,12)];playback.advance(snapshot,roster,0);advanceFrames(playback,snapshot,roster,100000);
  const selected=skill('001',13),expected=[];
  for(const record of selected.source_skill.actions){
   const raw=Buffer.from(record.raw_hex,'hex');if(raw[0]!==0)continue;
@@ -185,4 +195,13 @@ test('entry audio observes live immunity clearing at appearance completion befor
  assert.equal(frames[0].inhibited,true);assert.ok(frames.some(f=>!f.inhibited));
  assert.equal(frames.find(f=>f.plan_record_index===2&&f.logical_frame===1).inhibited,false);
  assert.equal(playback.snapshot().active.length,0);
+});
+
+test('a late recovery draw advances one source frame and resets its interval to the actual draw time',()=>{
+ const {playback,roster,snapshot}=fixture(),frames=sprites(skill('001',13));
+ snapshot.lifecycle_events=[event('party-1','response',13,12)];
+ playback.advance(snapshot,roster,0);playback.advance(snapshot,roster,1000);
+ assert.equal(playback.pose('party-1').source_frame,frames[1].source_frame);assert.deepEqual(playback.drainCompleted(),[]);
+ playback.advance(snapshot,roster,1000+frames[1].interval_raw-1);assert.equal(playback.pose('party-1').source_frame,frames[1].source_frame);
+ playback.advance(snapshot,roster,1000+frames[1].interval_raw);assert.equal(playback.pose('party-1').source_frame,frames[2].source_frame);
 });

@@ -100,10 +100,12 @@ export class BattleLifecyclePlayback {
       channel.fade_elapsed_raw=channel.particles.elapsed;
       if(!active)this._finish(channel);return;
     }
-    while(now>=channel.deadline){
-      if(channel.vertical_wait){
-        need(channel.nativeBridge,'Lifecycle native vertical controller missing');channel.nativeBridge.advance(channel.deadline);
-        if(channel.nativeBridge.state().waiting){channel.deadline+=20;continue;}channel.vertical_wait=false;
+    if(now>=channel.deadline){
+      // 51BB90 resets the actor clock to now, discarding late-frame excess.
+      channel.deadline=now;
+      if(channel.nativeBridge?.advance){
+        if(channel.nativeBridge.advance(now)===false)return;
+        if(channel.nativeBridge.state().waiting){channel.deadline+=20;return;}channel.vertical_wait=false;
       }
       if(channel.appearance){
         const appearance=channel.appearance,limit=APPEARANCE_ALPHA_ADAPTER.complete_elapsed_raw[appearance.mode];
@@ -215,6 +217,7 @@ export class BattleLifecyclePlayback {
           channel.appearance.geometry_source=effect?'source-column-particles':'headless-source-hard-ceiling';
         }
       }else{channel.blocked=`unsupported-lifecycle-command-${step.command_raw}`;channel.mode='blocked';return;}
+      if(step.kind==='command'&&channel.cursor>=channel.skill.timeline.length&&!channel.appearance)this._finish(channel);
     }
   }
   advance(snapshot,roster,now){
@@ -262,7 +265,7 @@ export class BattleLifecyclePlayback {
           const appearance=channel.appearance;
           const at=appearance?.particles?appearance.particles.started+(appearance.particles.tick+1)*DEATH_PARTICLE_TIMING.render_ms
             :appearance?appearance.started+APPEARANCE_ALPHA_ADAPTER.source_clock_ms:channel.deadline;
-          need(at>time,'Entry preparation has no next hidden frame');next=Math.min(next,at);
+          need(at>=time,'Entry preparation has no next hidden frame');next=Math.min(next,at);
         }
         if(ready.size<entries.length){need(Number.isFinite(next),'Entry preparation cannot reach a visible frame');time=next;}
       }

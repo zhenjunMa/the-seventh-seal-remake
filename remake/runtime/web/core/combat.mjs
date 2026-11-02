@@ -182,14 +182,14 @@ export class BattleController {
   }
   nextNativeVerticalAt(){
     let due=Infinity;
-    for(const [id,clock]of this.verticalClocks){const state=nativeVerticalState(this.actor(id));if(state.active)due=Math.min(due,clock.at+20-(clock.state.tick_remainder_ms??0));}
+    for(const [id,clock]of this.verticalClocks){const state=nativeVerticalState(this.actor(id));if(state.active)due=Math.min(due,clock.at+20);}
     return due;
   }
-  advanceNativeVerticals(at){
+  advanceNativeVerticals(at,actorId=null){
     for(const [id,clock]of this.verticalClocks){
-      if(at<clock.at)continue;
-      const actor=this.actor(id),state=nativeVerticalState(actor);state.tick_remainder_ms=clock.state.tick_remainder_ms??0;
-      const next=advanceNativeVertical(state,at-clock.at);Object.assign(actor,verticalActorPatch(next,actor));clock.state=next;clock.at=at;
+      if(actorId!==null&&id!==actorId||at<clock.at||actorId===null&&at-clock.at<20)continue;
+      const actor=this.actor(id),state=nativeVerticalState(actor);
+      const next=advanceNativeVertical(state,20);Object.assign(actor,verticalActorPatch(next,actor));clock.state=next;clock.at=at;
     }
   }
   nativeSourceRecord(actorId,raw){
@@ -244,7 +244,7 @@ export class BattleController {
     const event=this.state.lifecycle_events[index];this.state.lifecycle_events.splice(index,1);
     if(event.kind==='entry'){
       actor.state_raw=0;actor.immune_raw=0;actor.native_active=false;setIdleSkill(actor,this.schedulerData,this.now());
-      if(!this.hasLifecycle('entry'))this.chargeClock=this.now();
+      if(!this.hasLifecycle('entry')){this.chargeClock=this.now();this.state.scheduler.clock_origin=this.chargeClock;}
     }else if(event.kind==='death'){
       actor.native_active=false;
       // 519DD0 turns an ended native id12 into category7. Keep its source
@@ -438,17 +438,22 @@ export class BattleController {
       // Entry is a shared presentation phase. Early finishers can idle, but
       // nobody charges, ticks statuses or acts until every entry has ended.
       if(this.hasLifecycle('entry')){
-        this.checkWorld();this.chargeClock=now;
+        this.checkWorld();this.chargeClock=now;s.clock_origin=now;
         for(const actor of this.state.actors)advanceIdleSkill(actor,this.schedulerData,now);
         return false;
       }
-      // Keep the sub-tick remainder and replay every elapsed source step.
-      // Charging, status effects and arbitration must not depend on render FPS.
-      while(now-this.chargeClock>=20&&this.state.scheduler===s&&['command','charging','action'].includes(this.state.phase)){
-        this.checkWorld();this.chargeClock+=20;s.ticks++;s.elapsed_ms+=20;advanced=true;
+      s.elapsed_ms=Math.floor(now-s.clock_origin);
+      // 51BB90 updates once and stores the current time. Late frames discard
+      // their excess elapsed time instead of replaying missed charge steps.
+      if(now-this.chargeClock>=20){
+        this.checkWorld();this.chargeClock=now;s.ticks++;advanced=true;
         for(const actor of this.state.actors)advanceIdleSkill(actor,this.schedulerData,this.chargeClock);
         for(const actor of this.state.actors){chargeActor(actor,this.rng);if(actor.state_raw===4&&this.reactionData&&this.canFinalizeDeath(actor))this.finalizeDeath(actor);}
-        if(this.statusData)for(const actor of this.state.actors){
+        for(const actorId of [...this.pendingSourceEnds])this.completeNativeSource(this.actor(actorId),this.chargeClock);
+      }
+      // 51BB90 calls 509E10 with real scene time on every main-loop visit,
+      // independently of the global 20ms charging gate.
+      if(this.statusData)for(const actor of this.state.actors){
           if(!actor.native_status_slots.some(slot=>slot.raw_hex.slice(2,4)!=='00'))continue;
           const update=tickNativeStatuses({actor,threshold:s.threshold,now:s.elapsed_ms,data:this.statusData,rng:this.rng,...this.nativeContext(),
             onPeriodicEffect:({actor:pulsed,effect,damageResult,reaction_requested})=>{
@@ -464,10 +469,8 @@ export class BattleController {
           }
           if(update.cancel_command){const command=commandForActor(s,actor.id);if(command)this.cancelQueuedCommand(command,'actor-status');}
           if(update.expired.length)this.log({type:'battle-status-expired',battle_id:this.state.id,actor_id:actor.id,slots:update.expired});
-        }
-        for(const actorId of [...this.pendingSourceEnds])this.completeNativeSource(this.actor(actorId),this.chargeClock);
-        this.refreshCommandState();this.publish();this.scheduleReady();
       }
+      this.refreshCommandState();this.publish();this.scheduleReady();
       // Poses still follow the exact scene time, including frames without a
       // charge tick. A synchronous action hook may already have advanced time.
       for(const actor of this.state.actors)advanceIdleSkill(actor,this.schedulerData,Math.max(now,this.chargeClock));
@@ -753,8 +756,17 @@ export class BattleController {
         lethal=before.target.hp.current>0&&victim.hp.current===0;
         if(lethal&&this.lifecycleEnabled)victim.killer_actor_id=striker.id;
         if(lethal&&victim.charge){victim.charge.gauge=0;victim.charge.delay=0;victim.charge.recovery=0;victim.native_active=false;}
+        // 50FA00 / 506870 accumulate F6A2 only outside guard/dodge and new
+        // death. Effect contacts read the victim's current skill, direct hits
+        // read the striker's; an existing F69E recovery blocks accumulation.
+        if(result.damage>0&&!lethal&&!(result.reaction!==0&&victim.state_raw<4)&&victim.reaction_inhibit_raw===0){
+          const increment=(step.effect_contact?targetFixed:fixed)[0x12d];
+          if(increment){const value=((victim.charge?.recovery_ticks??victim.native_after_raw?.['0x0521f6a2']??0)+increment)>>>0;
+            if(victim.charge)victim.charge.recovery_ticks=value;
+            victim.native_after_raw={...victim.native_after_raw,'0x0521f6a2':value};}
+        }
         if(this.reactionData){reaction=applyContactReaction({attacker:striker,target:victim,result,record:step.source,data:this.reactionData,rng:this.rng,threshold:this.state.scheduler?.threshold,...this.nativeSourceHooks()});
-          if(reaction){Object.assign(victim,copy(reaction.after));if(reaction.skill){
+          if(reaction){const raw={...victim.native_after_raw,...reaction.after.native_after_raw};Object.assign(victim,copy(reaction.after));victim.native_after_raw=raw;if(reaction.skill){
             if(this.lifecycleEnabled)this.state.lifecycle_events=this.state.lifecycle_events.filter(event=>event.actor_id!==victim.id||event.kind!=='response');
             reaction.token=`${actionId}:reaction:${++reactionCount}`;victim.native_sequence_token=reaction.token;reaction.plan=directSequence(reaction.skill);reaction.plan.allow_no_contacts=true;}}
         }

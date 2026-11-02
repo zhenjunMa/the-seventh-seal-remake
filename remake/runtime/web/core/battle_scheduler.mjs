@@ -31,7 +31,7 @@ export function initializeScheduler(actors,data,sidePriority=0,now=0){
     actor.native_active=false;actor.current_target_id=actors[0].id;actor.reaction_special_gate_raw=0;actor.native_z_raw=0;
     setIdleSkill(actor,data,now);
   }
-  return {mode:'native-forest',threshold,tick_interval_ms:20,ticks:0,elapsed_ms:0,side_priority:sidePriority,pending:null,queued_commands:[],active_actor_id:null,...(data.default_preparation_delay&&data.default_preparation_delay!==800?{default_preparation_delay:data.default_preparation_delay}:{})};
+  return {mode:'native-forest',threshold,tick_interval_ms:20,ticks:0,elapsed_ms:0,clock_origin:now,side_priority:sidePriority,pending:null,queued_commands:[],active_actor_id:null,...(data.default_preparation_delay&&data.default_preparation_delay!==800?{default_preparation_delay:data.default_preparation_delay}:{})};
 }
 // The source idle skill can contain multiple records with different hit
 // classes (50E980 copies the current record +24 to actor 524A633).
