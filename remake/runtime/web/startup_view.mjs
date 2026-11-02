@@ -1,6 +1,7 @@
 import {drawingContext} from './phaser/rendering/recorded_surface.mjs';
 import {StartupSequence} from './core/startup.mjs';
 import {appendSavePreview} from './save_preview_view.mjs';
+import {renderSaveSlotText} from './save_slot_view.mjs';
 
 const labels=['游戏读取','开始游戏','特典','离开'];
 const buttonIds=['menuLoad','menuNew','menuExtras','menuExit'];
@@ -19,7 +20,7 @@ export class StartupView {
   }
   constructor({manifest,media,$,image,audio,onNew,onLoad,onResume,onStage,getSave,getSaves,refreshSaves,isBusy=()=>false,status,log}) {
     Object.assign(this,{manifest,media,$,image,audio,onNew,onLoad,onResume,onStage,refreshSaves,isBusy,status,log});
-    this.readSaves=getSaves??(()=>{const envelope=getSave?.();return envelope?[{slot:'manual',label:'普通存档',envelope}]:[];});
+    this.readSaves=getSaves??(()=>{const summary=getSave?.();return summary?[{slot:'manual',label:'普通存档',summary}]:[];});
     this.root=$('startMenu');this.canvas=$('startupCanvas');this.ctx=drawingContext(this.canvas);
     this.video=$('startupVideo');this.images=new Map();this.allowResume=false;this.pending=false;
     this.sequence=new StartupSequence(snapshot=>this.changeStage(snapshot));
@@ -176,7 +177,11 @@ export class StartupView {
   }
   plaqueCount(){return this.selected===3&&this.allowResume?2:1;}
   galleryTop(index){return index<18?Math.max(0,Math.min(11,index-3)):Math.max(18,Math.min(23,index-3));}
-  saveEntries(){return this.readSaves();}
+  saveEntries(){
+    const entries=this.readSaves().filter(row=>row.slot!=='quick'||row.summary);
+    const quick=entries.findIndex(row=>row.slot==='quick');
+    return quick>0?[entries[quick],...entries.slice(0,quick),...entries.slice(quick+1)]:entries;
+  }
   visibleSaves(){return this.saveEntries().slice(this.listTop,this.listTop+visibleSaveRows);}
   selectRead(index){
     const count=this.optionCount(),next=Math.max(0,Math.min(count-1,index));
@@ -187,7 +192,7 @@ export class StartupView {
     this.listTop=Math.max(0,Math.min(Math.max(0,count-visibleSaveRows),this.listTop));
     this.cue('move');this.draw();this.renderOptions();
   }
-  getSave(){return this.saveEntries()[this.subIndex]?.envelope??null;}
+  getSave(){return this.saveEntries()[this.subIndex]?.summary??null;}
   optionCount(){return this.submenu==='read'?this.saveEntries().length:this.submenu==='extras'?(this.manifest.audio.gallery?.length??0):0;}
   renderOptions(){
     const holder=this.$('startupOptions');holder.replaceChildren();holder.hidden=false;
@@ -201,12 +206,10 @@ export class StartupView {
     }
     if(this.submenu==='read'){
       const entries=this.saveEntries();
-      for(const [row,entry] of this.visibleSaves().entries()){const index=this.listTop+row,save=entry.envelope;let world={};try{world=JSON.parse(save.payload);}catch{}
-        const seconds=Math.floor((world.play_time_ms??0)/1000);
-        const duration=[Math.floor(seconds/3600),Math.floor(seconds/60)%60,seconds%60].map(value=>String(value).padStart(2,'0')).join(':');
-        const party=(world.party??[]).map(actor=>actor.name).join('　');
-        const button=add(`${entry.label}　${party}\n${duration}\n${world.location?.map_id??''}`,147,99+108*row,265,78,index,()=>{this.draw();this.renderOptions();this.confirm();});button.className='startup-save panel-row';
-        appendSavePreview(holder,save,17,97+108*row);
+      for(const [row,entry] of this.visibleSaves().entries()){const index=this.listTop+row,summary=entry.summary;
+        const button=add('',147,99+108*row,265,78,index,()=>{this.draw();this.renderOptions();this.confirm();});button.className='startup-save panel-row';
+        renderSaveSlotText(button,{label:entry.label,summary});
+        appendSavePreview(holder,summary,17,97+108*row);
       }
       if(!entries.length)this.announce('尚无重制存档，Esc返回');
     }else if(this.submenu==='extras'){

@@ -6,6 +6,7 @@ Fresh games are built from the shipped runtime resource definitions, not a save.
 """
 from base64 import b64decode, b64encode
 from copy import deepcopy
+from datetime import datetime, timedelta, timezone
 from functools import cache
 from io import BytesIO
 from pathlib import Path
@@ -21,6 +22,23 @@ U32 = struct.Struct('<I')
 ROLE_BYTES = 0x30B
 ACTOR_BYTES = 0x4C5
 ITEM_BYTES = 0xE5
+SAVE_TIME_ZONE = timezone(timedelta(hours=8))
+
+
+def native_saved_at(raw):
+    """The remake stores its save date in the header's SYSTEMTIME words.
+
+    This is a remake convention, not a verified claim about the original game.
+    Legacy zero/elapsed-time words have no valid calendar date.
+    """
+    year, month, weekday, day, hour, minute, second, millisecond = struct.unpack_from('<8H', raw, 0x6D)
+    if not 1601 <= year <= 9999 or weekday > 6 or millisecond > 999:
+        return None
+    try:
+        value = datetime(year, month, day, hour, minute, second, millisecond * 1000, SAVE_TIME_ZONE)
+    except ValueError:
+        return None
+    return value.isoformat(timespec='milliseconds')
 
 
 @cache
@@ -157,6 +175,35 @@ def image_png(raw):
     output = BytesIO()
     Image.frombytes('RGB', (104, 76), bytes(pixels)).save(output, format='PNG')
     return 'data:image/png;base64,' + b64encode(output.getvalue()).decode('ascii')
+
+
+def native_save_summary(raw):
+    """Read only the native list header and its stored RGB565 thumbnail."""
+    if len(raw) < 0x3C5 or u32(raw) != 2:
+        raise ValueError('原版存档头无效')
+    count = u32(raw, 0x85)
+    if not 1 <= count <= 10:
+        raise ValueError('原版存档队伍摘要无效')
+    map_id = text(raw, 0x39, 20, 'ascii').upper().removesuffix('.DAT')
+    if not map_id:
+        raise ValueError('原版存档地图摘要无效')
+    thumbnail = None
+    size = u32(raw, 0x3C1)
+    if size == 104 * 76 * 2 and len(raw) >= 0x3C5 + size:
+        # A top-down BI_BITFIELDS bitmap wraps the saved pixels unchanged.
+        # No scene rendering, RGB conversion or PNG compression is needed.
+        bitmap = (struct.pack('<2sIHHI', b'BM', 66 + size, 0, 0, 66)
+                  + struct.pack('<IiiHHIIiiII', 40, 104, -76, 1, 16, 3, size, 0, 0, 0, 0)
+                  + struct.pack('<III', 0xF800, 0x07E0, 0x001F)
+                  + raw[0x3C5:0x3C5 + size])
+        thumbnail = 'data:image/bmp;base64,' + b64encode(bitmap).decode('ascii')
+    return dict(schema='seventh-seal-save-summary', version=1,
+                sha256=hashlib.sha256(raw).hexdigest(),
+                party=[dict(name=text(raw, 0x89 + index * 80, 20)) for index in range(count)],
+                location=dict(map_id=map_id, map_name=text(raw, 0x4D, 20).strip()),
+                play_time_ms=u32(raw, 0x7D) * 100,
+                saved_at=native_saved_at(raw),
+                thumbnail=thumbnail)
 
 
 def native_preview(envelope, fallback):
@@ -299,9 +346,11 @@ def decode_native_save(raw):
     world['recipe_unlock_indices'] = list(struct.unpack_from(f'<{u32(sections["last_table"])}I', sections['last_table'], 4))
     payload = json.dumps(world, ensure_ascii=False, separators=(',', ':'))
     digest = hashlib.sha256(payload.encode('utf-8')).hexdigest()
-    return dict(schema='seventh-seal-save', version=1, payload=payload, sha256=digest, saved_at=None,
-                preview=dict(version=1, width=104, height=76, payload_sha256=digest,
-                             png=image_png(sections['preview'])))
+    envelope = dict(schema='seventh-seal-save', version=1, payload=payload, sha256=digest, saved_at=native_saved_at(raw))
+    if len(sections['preview']) == 104 * 76 * 2:
+        envelope['preview'] = dict(version=1, width=104, height=76, payload_sha256=digest,
+                                   png=image_png(sections['preview']))
+    return envelope
 
 
 def upgrade_skill(fixed):
@@ -329,7 +378,7 @@ def upgrade_skill(fixed):
     fixed[0x12D] = (fixed[0x12D] + fixed[0x35F]) & 255
 
 
-def encode_native_save(envelope):
+def encode_native_save(envelope, *, saved_at=None):
     """Turn one validated browser world into the original sequential v2 format."""
     if not isinstance(envelope, dict) or envelope.get('schema') != 'seventh-seal-save' or envelope.get('version') != 1:
         raise ValueError('存档封装版本不兼容')
@@ -369,6 +418,12 @@ def encode_native_save(envelope):
     header[0x4D:0x61] = current_map['name'].encode('cp936').ljust(20, b'\0')
     put(header, 0x69, leader)
     put(header, 0x81, world.get('money', seed['money']))
+    if saved_at is not None:
+        if not isinstance(saved_at, datetime) or saved_at.utcoffset() is None or saved_at.year < 1601:
+            raise ValueError('保存日期必须是带时区的有效日期')
+        saved_at = saved_at.astimezone(SAVE_TIME_ZONE)
+        struct.pack_into('<8H', header, 0x6D, saved_at.year, saved_at.month, (saved_at.weekday() + 1) % 7,
+                         saved_at.day, saved_at.hour, saved_at.minute, saved_at.second, saved_at.microsecond // 1000)
     if 'play_time_ms' in world:
         put(header, 0x7D, world['play_time_ms'] // 100)
     settings = world.get('game_settings')

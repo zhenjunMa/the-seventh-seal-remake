@@ -4,6 +4,7 @@ from pathlib import Path
 from datetime import datetime, timezone
 from urllib.parse import urlsplit, unquote
 import argparse
+import hashlib
 import json
 import os
 import sys
@@ -11,7 +12,7 @@ import tempfile
 import threading
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
-from native_save import decode_native_save, encode_native_save
+from native_save import decode_native_save, encode_native_save, native_save_summary
 
 MOUNTS = {'/': ROOT / 'web'}
 SAVE_FILES = {**{f'{index:02}': f'SaveGame{index}.Dat' for index in range(20)}, 'quick': 'Game.SAV'}
@@ -23,15 +24,37 @@ def normalize_save_slot(slot):
     return slot if slot in SAVE_FILES else None
 
 
-def read_save_file(path):
+def read_save_bytes(path):
     if path.is_symlink():
         raise ValueError('存档路径无效')
     raw = path.read_bytes()
     if len(raw) > MAX_SAVE_BYTES:
         raise ValueError('存档文件超过当前版本上限')
-    value = decode_native_save(raw)
-    value['saved_at'] = datetime.fromtimestamp(path.stat().st_mtime, timezone.utc).isoformat()
+    return raw
+
+
+def read_save_file(path):
+    value = decode_native_save(read_save_bytes(path))
+    value['saved_at_source'] = 'save' if value['saved_at'] else 'file'
+    value['saved_at'] = value['saved_at'] or datetime.fromtimestamp(path.stat().st_mtime, timezone.utc).isoformat()
     return value
+
+
+def read_save_summary(path, cache=None):
+    if path.is_symlink():
+        raise ValueError('存档路径无效')
+    stat = path.stat()
+    fingerprint = (stat.st_dev, stat.st_ino, stat.st_size, stat.st_mtime_ns, stat.st_ctime_ns)
+    previous = cache.get(path) if cache is not None else None
+    if previous is not None and previous[0] == fingerprint:
+        return previous[1]
+    value = native_save_summary(read_save_bytes(path))
+    value['saved_at_source'] = 'save' if value['saved_at'] else 'file'
+    value['saved_at'] = value['saved_at'] or datetime.fromtimestamp(stat.st_mtime, timezone.utc).isoformat()
+    if cache is not None:
+        cache[path] = (fingerprint, value)
+    return value
+
 
 class RuntimeHandler(SimpleHTTPRequestHandler):
     protocol_version = 'HTTP/1.1'
@@ -75,9 +98,9 @@ class RuntimeHandler(SimpleHTTPRequestHandler):
             slots = []
             with self.server.save_lock:
                 for key in SAVE_FILES:
-                    row = {'slot': key, 'envelope': None, 'error': None}
+                    row = {'slot': key, 'summary': None, 'error': None}
                     try:
-                        row['envelope'] = read_save_file(self.server.save_dir / SAVE_FILES[key])
+                        row['summary'] = read_save_summary(self.server.save_dir / SAVE_FILES[key], self.server.save_summary_cache)
                     except FileNotFoundError:
                         pass
                     except (ValueError, UnicodeError):
@@ -118,7 +141,7 @@ class RuntimeHandler(SimpleHTTPRequestHandler):
         try:
             if len(raw) != length:
                 raise ValueError('存档数据不完整')
-            raw = encode_native_save(json.loads(raw))
+            raw = encode_native_save(json.loads(raw), saved_at=datetime.now(timezone.utc))
         except (ValueError, UnicodeError) as error:
             return self.json_response(422, {'error': str(error)})
         temporary = None
@@ -132,10 +155,10 @@ class RuntimeHandler(SimpleHTTPRequestHandler):
                 expected = self.headers.get('If-Match')
                 if expected is not None:
                     try:
-                        current = read_save_file(existing)
+                        current_sha = hashlib.sha256(read_save_bytes(existing)).hexdigest()
                     except (ValueError, UnicodeError, OSError):
                         return self.json_response(412, {'error': '此存档槽已发生变化，请重新选择后确认覆盖'})
-                    if expected != f'"{current["sha256"]}"':
+                    if expected != f'"{current_sha}"':
                         return self.json_response(412, {'error': '此存档槽已发生变化，请重新选择后确认覆盖'})
                 if path.is_symlink():
                     raise OSError('Invalid save path')
@@ -145,12 +168,13 @@ class RuntimeHandler(SimpleHTTPRequestHandler):
                     stream.flush()
                     os.fsync(stream.fileno())
                 os.replace(temporary, path)
+                summary = read_save_summary(path, self.server.save_summary_cache)
         except OSError:
             return self.json_response(500, {'error': '无法写入 remake/saves，原存档已保留'})
         finally:
             if temporary is not None:
                 temporary.unlink(missing_ok=True)
-        self.json_response(200, {'slot': slot, 'path': f'remake/saves/{SAVE_FILES[slot]}'})
+        self.json_response(200, {'slot': slot, 'path': f'remake/saves/{SAVE_FILES[slot]}', 'summary': summary})
 
     def do_POST(self):
         self.close_connection = True
@@ -172,7 +196,7 @@ class RuntimeHandler(SimpleHTTPRequestHandler):
             if action == '/api/saves/decode':
                 value = decode_native_save(raw)
             else:
-                value = encode_native_save(json.loads(raw))
+                value = encode_native_save(json.loads(raw), saved_at=datetime.now(timezone.utc))
         except (ValueError, UnicodeError) as error:
             return self.json_response(422, {'error': str(error)})
         if action == '/api/saves/decode':
@@ -204,6 +228,7 @@ class RuntimeServer(ThreadingHTTPServer):
     def __init__(self, *args, save_dir=None, **kwargs):
         self.save_dir = Path(save_dir) if save_dir is not None else ROOT.parent / 'saves'
         self.save_lock = threading.Lock()
+        self.save_summary_cache = {}
         super().__init__(*args, **kwargs)
 
 if __name__ == '__main__':

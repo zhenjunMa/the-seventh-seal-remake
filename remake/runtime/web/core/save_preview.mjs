@@ -24,3 +24,17 @@ export function savedPreviewPng(envelope){
   return preview?.version===1&&preview.width===SAVE_PREVIEW_WIDTH&&preview.height===SAVE_PREVIEW_HEIGHT
     &&preview.payload_sha256===envelope.sha256&&validPreviewPng(preview.png)?preview.png:null;
 }
+
+export function savedSummaryImage(summary){
+  const image=summary?.thumbnail;
+  if(validPreviewPng(image))return image;
+  const prefix='data:image/bmp;base64,',size=66+SAVE_PREVIEW_WIDTH*SAVE_PREVIEW_HEIGHT*2;
+  if(typeof image!=='string'||image.length!==prefix.length+Math.ceil(size/3)*4||!image.startsWith(prefix))return null;
+  try{
+    const header=Uint8Array.from(atob(image.slice(prefix.length,prefix.length+88)),char=>char.charCodeAt(0)),view=new DataView(header.buffer);
+    return view.getUint16(0,true)===0x4d42&&view.getUint32(2,true)===size&&view.getUint32(10,true)===66
+      &&view.getUint32(14,true)===40&&view.getInt32(18,true)===SAVE_PREVIEW_WIDTH&&view.getInt32(22,true)===-SAVE_PREVIEW_HEIGHT
+      &&view.getUint16(26,true)===1&&view.getUint16(28,true)===16&&view.getUint32(30,true)===3
+      &&view.getUint32(54,true)===0xf800&&view.getUint32(58,true)===0x07e0&&view.getUint32(62,true)===0x001f?image:null;
+  }catch{return null;}
+}

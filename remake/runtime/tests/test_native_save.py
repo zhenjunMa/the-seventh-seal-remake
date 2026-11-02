@@ -1,6 +1,7 @@
 """Original-format records and meaningful remake progress through the file codec."""
 from copy import deepcopy
 from contextlib import redirect_stdout
+from datetime import datetime, timezone
 from io import StringIO
 from pathlib import Path
 from tempfile import TemporaryDirectory
@@ -14,7 +15,7 @@ import unittest
 
 RUNTIME = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(RUNTIME))
-from native_save import decode_native_save, encode_native_save, complete_layout, resources, native_camera_position
+from native_save import decode_native_save, encode_native_save, complete_layout, resources, native_camera_position, native_save_summary
 from tools import repair_native_saves
 
 
@@ -105,6 +106,24 @@ class NativeSaveTests(unittest.TestCase):
         candidate, report = repair_native_saves.repair_save(bytes(all_muted))
         self.assertEqual(candidate, all_muted)
         self.assertFalse(report['changed'])
+
+    def test_explicit_save_date_is_embedded_separately_from_play_time_and_survives_reencoding(self):
+        world = deepcopy(resources()[0])
+        world['play_time_ms'] = 789000
+        original = encode_native_save(envelope(world))
+        saved_at = datetime(2026, 11, 2, 12, 34, 56, 789123, timezone.utc)
+        dated = encode_native_save(envelope(world), saved_at=saved_at)
+        self.assertEqual(struct.unpack_from('<8H', dated, 0x6D), (2026, 11, 1, 2, 20, 34, 56, 789))
+        self.assertEqual(dated[:0x6D] + dated[0x7D:], original[:0x6D] + original[0x7D:])
+        loaded = decode_native_save(dated)
+        self.assertEqual(loaded['saved_at'], '2026-11-02T20:34:56.789+08:00')
+        self.assertEqual(native_save_summary(dated)['saved_at'], loaded['saved_at'])
+        self.assertEqual(json.loads(loaded['payload'])['play_time_ms'], 789000)
+        self.assertEqual(encode_native_save(loaded), dated)
+        invalid = bytearray(dated)
+        struct.pack_into('<H', invalid, 0x6F, 0)
+        self.assertIsNone(native_save_summary(invalid)['saved_at'])
+        self.assertIsNone(native_save_summary(original)['saved_at'])
 
     def test_native_menu_clock_save_reload_and_known_wrong_field_recovery(self):
         world = deepcopy(resources()[0])

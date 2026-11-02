@@ -4,7 +4,6 @@ import {StartupSequence} from '../web/core/startup.mjs';
 import {StartupView} from '../web/startup_view.mjs';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
-import {attachSavePreview} from '../web/core/save_preview.mjs';
 
 const png='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGgAAABMCAIAAAAOQ2XWAAAAuUlEQVR4nO3SMREAIAADMUASclCCfDTwc7J3+evc5w7+rbBBuM7jIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhRvMAV4QBnCTMUicAAAAASUVORK5CYII=';
 
@@ -53,10 +52,11 @@ test('skip, held key, obsolete completion and close do not cross state boundarie
 function setup({save=null,onNew=async()=>{},onLoad=async()=>{},getSaves,refreshSaves,isBusy}={}){
   const nodes=new Map();
   const draws=[];
-  const make=()=>{const node={hidden:false,children:[],listeners:{},attributes:{},style:{setProperty(){}},dataset:{},
-    setAttribute(name,value){this.attributes[name]=value;},addEventListener(name,listener){this.listeners[name]=listener;},focus(){},replaceChildren(){this.children=[];},append(child){this.children.push(child);},
+  const make=()=>{let text='';const node={hidden:false,children:[],listeners:{},attributes:{},style:{setProperty(){}},dataset:{},
+    setAttribute(name,value){this.attributes[name]=value;},addEventListener(name,listener){this.listeners[name]=listener;},focus(){},replaceChildren(...children){text='';this.children=children;},append(...children){this.children.push(...children);},
     getBoundingClientRect:()=>({width:800,height:600}),getContext:()=>({clearRect(){},fillRect(){},drawImage:(...args)=>draws.push(args)}),
     pause(){this.paused=true;},play(){this.paused=false;return Promise.resolve();},removeAttribute(){},load(){}};
+    Object.defineProperty(node,'textContent',{get(){return text+this.children.map(child=>child.textContent??'').join('');},set(value){text=value;this.children=[];}});
     node.classList={contains:name=>(node.className??'').split(' ').includes(name)};return node;};
   const $=id=>{if(!nodes.has(id))nodes.set(id,make());return nodes.get(id);};
   globalThis.ResizeObserver=class {observe(){}};
@@ -99,7 +99,7 @@ test('menu rotation includes source frame zero and music groups do not mix at th
 });
 
 test('read preview is an inline image created with the row and removed on Esc',async()=>{
-  const save=attachSavePreview({sha256:'save',payload:'{}'},png);
+  const save={sha256:'save',thumbnail:png};
   const {view,$}=setup({save});
   view.showMenu();settle(view);const opening=view.confirm();
   const preview=$('startupOptions').children.find(node=>node.tagName==='IMG');
@@ -111,19 +111,25 @@ test('read preview is an inline image created with the row and removed on Esc',a
 });
 
 test('title lists ordinary and quick files, refreshes on entry and loads the selected slot',async()=>{
-  let entries=[],refreshes=0;const loads=[],quick={sha256:'quick',saved_at:'2026-10-23T00:00:00Z',payload:JSON.stringify({play_time_ms:(12243*3600+40*60+32)*1000})},manual={sha256:'manual',saved_at:'2026-10-23T00:00:00Z',payload:JSON.stringify({play_time_ms:3723000})};
-  const {view,$}=setup({getSaves:()=>entries,refreshSaves:async()=>{refreshes++;entries=[{slot:'manual',label:'普通存档',envelope:manual},{slot:'quick',label:'快速存档',envelope:quick}];},onLoad:(save,slot)=>loads.push({save,slot})});
+  let entries=[],refreshes=0;const loads=[],quick={sha256:'quick',saved_at:'2026-10-23T00:00:00Z',play_time_ms:(12243*3600+40*60+32)*1000},manual={sha256:'manual',saved_at:'2026-10-23T00:00:00Z',play_time_ms:3723000};
+  manual.location={map_id:'M17010',map_name:'火之谷'};quick.location={map_id:'M01060'};
+  const {view,$}=setup({getSaves:()=>entries,refreshSaves:async()=>{refreshes++;entries=[{slot:'manual',label:'普通存档',summary:manual},{slot:'quick',label:'快速存档',summary:quick}];},onLoad:(save,slot)=>loads.push({save,slot})});
   view.showMenu();settle(view);await view.confirm();settle(view);
-  assert.equal(refreshes,1);assert.equal(view.optionCount(),2);assert.equal(view.getSave(),manual);
-  assert.match(saveButtons($)[0].textContent,/01:02:03/);assert.match(saveButtons($)[1].textContent,/12243:40:32/);
-  assert.ok(saveButtons($).every(row=>!row.textContent.includes('2026')));
-  view.key('ArrowDown');assert.equal(view.getSave(),quick);await view.confirm();
+  assert.equal(refreshes,1);assert.equal(view.optionCount(),2);assert.equal(view.getSave(),quick);
+  assert.match(saveButtons($)[0].textContent,/12243:40:32/);assert.match(saveButtons($)[1].textContent,/01:02:03/);
+  assert.match(saveButtons($)[1].textContent,/火之谷/);assert.doesNotMatch(saveButtons($)[1].textContent,/M17010/);
+  assert.match(saveButtons($)[0].textContent,/M01060/);
+  assert.ok(saveButtons($).every(row=>row.textContent.includes('保存 2026-10-23 08:00')&&row.textContent.includes('时长 ')));
+  await view.confirm();
   assert.deepEqual(loads,[{save:quick,slot:'quick'}]);
+  view.key('ArrowDown');assert.equal(view.getSave(),manual);
+  view.key('Escape');view.refreshSaves=null;entries[1].summary=null;
+  await view.confirm();settle(view);assert.equal(view.optionCount(),1);assert.equal(view.getSave(),manual);
 });
 
 const numberedSaves=()=>[...Array.from({length:20},(_,index)=>{
-  const slot=String(index).padStart(2,'0');return {slot,label:'存档 '+slot,envelope:{sha256:slot,payload:'{}'}};
-}),{slot:'quick',label:'快速存档',envelope:{sha256:'quick',payload:'{}'}}];
+  const slot=String(index).padStart(2,'0');return {slot,label:'存档 '+slot,summary:{sha256:slot,thumbnail:null}};
+}),{slot:'quick',label:'快速存档',summary:{sha256:'quick',thumbnail:null}}];
 const saveButtons=$=>$('startupOptions').children.filter(node=>node.classList.contains('startup-save'));
 
 test('title keeps three native save rows while navigation reaches every numbered slot and quick file',async()=>{
@@ -132,12 +138,13 @@ test('title keeps three native save rows while navigation reaches every numbered
   assert.equal(saveButtons($).length,3);assert.equal(view.listTop,0);
   view.key('PageDown');assert.equal(view.subIndex,3);assert.equal(view.listTop,1);
   view.key('PageUp');assert.equal(view.subIndex,0);assert.equal(view.listTop,0);
-  view.key('End');assert.equal(view.getSave(),entries[20].envelope);assert.equal(view.listTop,18);
+  assert.equal(view.getSave(),entries[20].summary);
+  view.key('End');assert.equal(view.getSave(),entries[19].summary);assert.equal(view.listTop,18);
   assert.deepEqual(saveButtons($).map(node=>node.style.top),['99px','207px','315px']);
-  assert.ok(saveButtons($)[0].textContent.startsWith('存档 18'));
-  assert.ok(saveButtons($)[2].textContent.startsWith('快速存档'));
-  await view.confirm();assert.deepEqual(loads,[{save:entries[20].envelope,slot:'quick'}]);
-  view.key('ArrowUp');assert.equal(view.subIndex,19);await view.confirm();assert.equal(loads[1].slot,'19');
+  assert.ok(saveButtons($)[0].textContent.startsWith('存档 17'));
+  assert.ok(saveButtons($)[2].textContent.startsWith('存档 19'));
+  await view.confirm();assert.deepEqual(loads,[{save:entries[19].summary,slot:'19'}]);
+  view.key('ArrowUp');assert.equal(view.subIndex,19);await view.confirm();assert.equal(loads[1].slot,'18');
   view.key('Home');assert.equal(view.subIndex,0);assert.equal(view.listTop,0);
   view.key('ArrowUp');assert.equal(view.subIndex,0);
   for(let index=1;index<entries.length;index++){
@@ -159,7 +166,7 @@ test('read wheel only scrolls the read panel and a visible row click loads its f
   for(let index=0;index<30;index++)wheel(event);
   assert.equal(view.subIndex,20);assert.equal(view.listTop,18);assert.equal(prevented,stopped);
   const row=saveButtons($)[1];row.onclick();await new Promise(done=>setImmediate(done));
-  assert.equal(view.subIndex,19);assert.deepEqual(loads,[{save:entries[19].envelope,slot:'19'}]);
+  assert.equal(view.subIndex,19);assert.deepEqual(loads,[{save:entries[18].summary,slot:'18'}]);
   wheel({...event,deltaY:-1});assert.equal(view.subIndex,18);
   view.key('Escape');const before=prevented;wheel(event);assert.equal(prevented,before);
   view.submenu='extras';wheel(event);assert.equal(prevented,before);
@@ -167,16 +174,16 @@ test('read wheel only scrolls the read panel and a visible row click loads its f
 
 test('read rows directly show stored previews and leave legacy rows empty through scrolling',async()=>{
   const entries=numberedSaves();
-  for(const index of [0,2,19,20])entries[index].envelope=attachSavePreview(entries[index].envelope,png);
+  for(const index of [0,2,19,20])entries[index].summary={...entries[index].summary,thumbnail:png};
   const {view,$}=setup({getSaves:()=>entries});
   const thumbnails=()=>saveButtons($).map((_button,row)=>$('startupOptions').children.find(node=>node.tagName==='IMG'&&node.style.top===97+108*row+'px')?.src??null);
   view.showMenu();settle(view);await view.confirm();settle(view);
-  assert.deepEqual(thumbnails(),[png,null,png]);
-  view.key('ArrowDown');assert.deepEqual(thumbnails(),[png,null,png]);
-  view.key('End');assert.equal(view.listTop,18);assert.deepEqual(thumbnails(),[null,png,png]);
-  view.key('Home');assert.deepEqual(thumbnails(),[png,null,png]);
-  entries[0].envelope={...entries[0].envelope,sha256:'changed'};
-  view.renderOptions();assert.deepEqual(thumbnails(),[null,null,png]);
+  assert.deepEqual(thumbnails(),[png,png,null]);
+  view.key('ArrowDown');assert.deepEqual(thumbnails(),[png,png,null]);
+  view.key('End');assert.equal(view.listTop,18);assert.deepEqual(thumbnails(),[null,null,png]);
+  view.key('Home');assert.deepEqual(thumbnails(),[png,png,null]);
+  entries[0].summary={...entries[0].summary,thumbnail:'invalid'};
+  view.renderOptions();assert.deepEqual(thumbnails(),[png,null,null]);
 });
 
 test('an external quick load locks title keyboard, mouse confirmation and new game until it finishes',async()=>{

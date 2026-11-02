@@ -137,7 +137,7 @@ export function createSessionController({state, actions, $, canvas, ctx,completi
   async function selectSaveSlot(row){
     const context=state.saveMenuContext;if(!context||state.saveOperation)throw new Error('存档页面已关闭或正在存取进度');
     if(context.mode==='save'){
-      try{await actions.saveProgress(row.slot,{fromMenu:true,createOnly:!row.envelope,expectedSha:row.envelope?.sha256});}
+      try{await actions.saveProgress(row.slot,{fromMenu:true,createOnly:!row.summary,expectedSha:row.summary?.sha256});}
       catch(error){if(error.status===412){await actions.refreshSaveSlots({quiet:true});if(state.saveMenuContext===context)state.saveMenu.setEntries(actions.saveEntries());}throw error;}
       await actions.refreshSaveSlots({quiet:true});state.saveMenu.setEntries(actions.saveEntries());state.saveMenu.setMessage(`栏位 ${row.slot} 已保存。`);
     }else{await actions.loadProgress(row.slot,{fromMenu:true});closeSaveMenu({loaded:true});}

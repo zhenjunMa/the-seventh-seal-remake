@@ -2,6 +2,7 @@ import {drawingContext} from './phaser/rendering/recorded_surface.mjs';
 // Original Game_Save_01/02/03 pixels and hit rectangles on a 640x480 plane.
 import {MANUAL_SAVE_SLOTS} from './core/save_slots.mjs';
 import {appendSavePreview} from './save_preview_view.mjs';
+import {renderSaveSlotText} from './save_slot_view.mjs';
 export class SaveMenuView {
   static async create(options){const view=new SaveMenuView(options);await Promise.all(options.manifest.menus.flatMap(menu=>menu.images).map(async record=>view.images.set(record.image,await options.image(record.image))));return view;}
   constructor({manifest,root,image,onConfirm,onClose,log=()=>{}}){
@@ -16,9 +17,15 @@ export class SaveMenuView {
   resize(){const rect=this.root.getBoundingClientRect();this.root.style.setProperty('--save-menu-scale',String(Math.min(rect.width/640,rect.height/480)));}
   show({mode='save',entries=[],summary={}}={}){this.active=true;this.epoch++;Object.assign(this,{mode,summary,entries,selected:0,top:0,pending:false,confirming:false,loading:true});this.root.hidden=false;this.resize();this.render();this.root.focus({preventScroll:true});}
   hide(){this.active=false;this.epoch++;this.root.hidden=true;this.buttons.replaceChildren();}
-  setEntries(entries){this.entries=entries;this.loading=false;this.render();}
-  row(index=this.selected){const slot=MANUAL_SAVE_SLOTS[index];return this.entries.find(row=>row.slot===slot)??{slot,envelope:null,error:null};}
-  select(index){if(this.pending||this.loading||this.confirming)return;this.selected=Math.max(0,Math.min(19,index));if(this.selected<this.top)this.top=this.selected;if(this.selected>=this.top+3)this.top=this.selected-2;this.render();}
+  setEntries(entries){
+    const slot=this.loading?null:this.row().slot;this.entries=entries;const slots=this.slotIds();
+    this.selected=slot===null?0:Math.max(0,slots.indexOf(slot));this.top=Math.min(this.top,Math.max(0,slots.length-3),this.selected);
+    if(this.selected>=this.top+3)this.top=this.selected-2;
+    this.loading=false;this.render();
+  }
+  slotIds(){return this.mode==='load'&&this.entries.some(row=>row.slot==='quick'&&row.summary)?['quick',...MANUAL_SAVE_SLOTS]:MANUAL_SAVE_SLOTS;}
+  row(index=this.selected){const slot=this.slotIds()[index];return this.entries.find(row=>row.slot===slot)??{slot,summary:null,error:null};}
+  select(index){if(this.pending||this.loading||this.confirming)return;this.selected=Math.max(0,Math.min(this.slotIds().length-1,index));if(this.selected<this.top)this.top=this.selected;if(this.selected>=this.top+3)this.top=this.selected-2;this.render();}
   move(delta){this.select(this.selected+delta);}
   key(key,repeat=false){
     if(!this.active)return false;if(this.pending||this.loading)return true;
@@ -28,13 +35,13 @@ export class SaveMenuView {
       else if(!repeat&&[' ','Enter'].includes(key)){if(this.confirmIndex===1){this.confirming=false;this.render();}else this.submit();}return true;
     }
     const steps={ArrowUp:-1,ArrowDown:1,PageUp:-3,PageDown:3};
-    if(key in steps)this.move(steps[key]);else if(key==='Home')this.select(0);else if(key==='End')this.select(19);else if(!repeat&&[' ','Enter'].includes(key))this.confirm();return true;
+    if(key in steps)this.move(steps[key]);else if(key==='Home')this.select(0);else if(key==='End')this.select(this.slotIds().length-1);else if(!repeat&&[' ','Enter'].includes(key))this.confirm();return true;
   }
   async confirm(){
     if(this.pending||this.loading||this.confirming)return;const row=this.row();
     if(row.error){this.setMessage(`栏位 ${row.slot} 无法读取，请选择其他栏位。`);return;}
-    if(this.mode==='load'&&!row.envelope){this.setMessage(`栏位 ${row.slot} 为空。`);return;}
-    if(this.mode==='save'&&row.envelope){this.confirming=true;this.confirmIndex=0;this.render();return;}return this.submit();
+    if(this.mode==='load'&&!row.summary){this.setMessage(`栏位 ${row.slot} 为空。`);return;}
+    if(this.mode==='save'&&row.summary){this.confirming=true;this.confirmIndex=0;this.render();return;}return this.submit();
   }
   async submit(){
     if(this.pending||this.loading)return;const row=this.row(),epoch=this.epoch;this.confirming=false;this.pending=true;this.render();
@@ -52,22 +59,21 @@ export class SaveMenuView {
   widgetButton(id,name,label,handler,options){return this.button(label,this.menus.get(id).widgets.find(row=>row.name===name).rect,handler,options);}
   render(resetMessage=true){
     if(!this.active)return;this.buttons.replaceChildren();this.ctx.clearRect(0,0,640,480);this.ctx.imageSmoothingEnabled=false;this.page('game_save_02');this.page('game_save_01');
-    const menu=this.menus.get('game_save_02');
-    for(let visible=0;visible<3&&this.top+visible<20;visible++){
+    const menu=this.menus.get('game_save_02'),count=this.slotIds().length;
+    for(let visible=0;visible<3&&this.top+visible<count;visible++){
       const index=this.top+visible,row=this.row(index),widget=menu.widgets.find(item=>item.name===String(visible+1).padStart(2,'0'));
       if(index===this.selected)this.drawImage(widget.active_images[0],widget.draw_point_raw.x,widget.draw_point_raw.y);
-      let world={};try{world=JSON.parse(row.envelope?.payload??'{}');}catch{}
-      const label=row.error?'无法读取':row.envelope?(world.party??[]).map(role=>role.name).join('　'):'空白存档',seconds=Math.floor((world.play_time_ms??0)/1000);
-      const duration=row.envelope?[Math.floor(seconds/3600),Math.floor(seconds/60)%60,seconds%60].map(value=>String(value).padStart(2,'0')).join(':'):'';
-      const button=this.button(`存档栏位 ${row.slot} · ${label}`,widget.rect,()=>this.select(index),{className:'save-slot',text:`${row.slot}　${label}\n${duration}\n${world.location?.map_id??''}`,disabled:this.confirming});button.dataset.slot=row.slot;button.setAttribute('aria-current',String(index===this.selected));
-      appendSavePreview(this.buttons,row.envelope,26,82+visible*105);
+      const summary=row.summary;
+      const button=this.button(`存档栏位 ${row.slot}`,widget.rect,()=>this.select(index),{className:'save-slot',disabled:this.confirming});button.dataset.slot=row.slot;button.setAttribute('aria-current',String(index===this.selected));
+      renderSaveSlotText(button,{label:row.slot==='quick'?'快速存档':row.slot,summary,error:row.error});
+      appendSavePreview(this.buttons,summary,26,82+visible*105);
     }
-    this.widgetButton('game_save_02','UP','向上翻动存档栏位',()=>this.move(-3),{disabled:this.confirming||this.selected===0});this.widgetButton('game_save_02','DN','向下翻动存档栏位',()=>this.move(3),{disabled:this.confirming||this.selected===19});
+    this.widgetButton('game_save_02','UP','向上翻动存档栏位',()=>this.move(-3),{disabled:this.confirming||this.selected===0});this.widgetButton('game_save_02','DN','向下翻动存档栏位',()=>this.move(3),{disabled:this.confirming||this.selected===count-1});
     this.widgetButton('game_save_01','OK',this.mode==='save'?'保存所选栏位':'读取所选栏位',()=>this.confirm(),{disabled:this.confirming});this.widgetButton('game_save_01','EXIT','离开存档页面',()=>this.onClose(),{disabled:this.confirming});
     this.ctx.fillStyle='#fff';this.ctx.font='16px SimSun,serif';this.ctx.fillText(this.summary.name??'',522,355);this.ctx.fillText(String(this.summary.money??0),523,406);
     if(this.mode==='load'){const background=this.images.get(menu.images[0].image);if(background)this.ctx.drawImage(background,151,3,43,30,43,3,43,30);}
     if(this.confirming){this.overlayImage(this.menus.get('game_save_03').images[0].image);const selected=this.menus.get('game_save_03').widgets.find(row=>row.name===(this.confirmIndex===1?'CANCEL':'OK'));this.overlayImage(selected.active_images[0],selected.draw_point_raw.x,selected.draw_point_raw.y);this.widgetButton('game_save_03','OK',`覆盖存档 ${this.row().slot}`,()=>this.submit());this.widgetButton('game_save_03','CANCEL','取消覆盖存档',()=>{this.confirming=false;this.render();});}
-    if(resetMessage)this.setMessage(this.loading?'正在读取存档栏位…':this.pending?'正在存取进度…':this.confirming?`覆盖栏位 ${this.row().slot} 的现有存档？`:`${this.mode==='save'?'保存':'读取'}栏位 ${this.row().slot}　方向键选择，Enter确认，Esc返回（${this.selected+1}/20）`);
+    if(resetMessage)this.setMessage(this.loading?'正在读取存档栏位…':this.pending?'正在存取进度…':this.confirming?`覆盖栏位 ${this.row().slot} 的现有存档？`:`${this.mode==='save'?'保存':'读取'}${this.row().slot==='quick'?'快速存档':`栏位 ${this.row().slot}`}　方向键选择，Enter确认，Esc返回（${this.selected+1}/${count}）`);
     this.root.dataset.mode=this.mode;this.root.dataset.slot=this.row().slot;this.root.dataset.state=this.pending?'pending':this.confirming?'overwrite':'list';
   }
 }

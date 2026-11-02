@@ -7,7 +7,8 @@ import {MANUAL_SAVE_SLOTS,SAVE_SLOT_COUNT,normalizeSaveSlot,saveSlotLabel} from 
 const seed=JSON.parse(readFileSync(new URL('../web/data/opening_seed.json',import.meta.url)));
 const saved=()=>encodeSave(seed);
 const reply=(status,value)=>({status,ok:status>=200&&status<300,json:async()=>value,blob:async()=>value});
-const emptySlots=()=>[...MANUAL_SAVE_SLOTS,'quick'].map(slot=>({slot,envelope:null,error:null}));
+const emptySlots=()=>[...MANUAL_SAVE_SLOTS,'quick'].map(slot=>({slot,summary:null,error:null}));
+const savedSummary=()=>({schema:'seventh-seal-save-summary',version:1,sha256:'1'.repeat(64),party:[{name:'英格妮'}],location:{map_id:'M72061'},play_time_ms:12300,thumbnail:null});
 
 test('empty disk slots remain empty and browser JSON progress is never migrated',async()=>{
   let legacyReads=0;const calls=[];
@@ -60,28 +61,28 @@ test('numbered writes include conditional overwrite fingerprints and reject ille
   assert.equal(calls.length,2);
 });
 
-test('list validates all occupied slots with one request and isolates each damaged slot',async()=>{
-  const envelope=await saved(),slots=emptySlots(),calls=[];
-  slots[1].envelope=envelope;
-  slots[2].envelope={...envelope,sha256:'0'.repeat(64)};
+test('list reads only summaries with one request and isolates invalid summaries without decoding worlds',async()=>{
+  const summary=savedSummary(),slots=emptySlots(),calls=[];
+  slots[1].summary=summary;
+  slots[2].summary={...summary,sha256:'invalid'};
   slots[3].error='unreadable file';
-  slots[4].envelope=false;
-  slots.at(-1).envelope=envelope;
+  slots[4].summary=false;
+  slots.at(-1).summary=summary;
   const storage=createSaveStorage({fetchImpl:async(url)=>{calls.push(url);return reply(200,{slots});}});
   const listed=await storage.list();
   assert.deepEqual(calls,['/api/saves']);
   assert.equal(listed.length,21);
-  assert.deepEqual(listed[0],{slot:'00',envelope:null,error:null});
-  assert.deepEqual(listed[1],{slot:'01',envelope,error:null});
-  assert.equal(listed[2].envelope,null);assert.match(listed[2].error,/校验失败/);
-  assert.deepEqual(listed[3],{slot:'03',envelope:null,error:'unreadable file'});
-  assert.equal(listed[4].envelope,null);assert.match(listed[4].error,/存档封装版本不兼容/);
-  assert.deepEqual(listed.at(-1),{slot:'quick',envelope,error:null});
+  assert.deepEqual(listed[0],{slot:'00',summary:null,error:null});
+  assert.deepEqual(listed[1],{slot:'01',summary,error:null});
+  assert.equal(listed[2].summary,null);assert.match(listed[2].error,/存档摘要格式无效/);
+  assert.deepEqual(listed[3],{slot:'03',summary:null,error:'unreadable file'});
+  assert.equal(listed[4].summary,null);assert.match(listed[4].error,/存档摘要格式无效/);
+  assert.deepEqual(listed.at(-1),{slot:'quick',summary,error:null});
 });
 
 test('list never consults browser JSON and rejects malformed responses',async()=>{
-  const envelope=await saved();
-  for(const row of [{slot:'00',envelope:null,error:null},{slot:'00',envelope,error:null},{slot:'00',envelope:null,error:'corrupt file'}]){
+  const summary=savedSummary();
+  for(const row of [{slot:'00',summary:null,error:null},{slot:'00',summary,error:null},{slot:'00',summary:null,error:'corrupt file'}]){
     const slots=emptySlots();slots[0]=row;let legacyReads=0;
     const storage=createSaveStorage({legacyStorage:{getItem(){legacyReads++;return 'bad';}},fetchImpl:async()=>reply(200,{slots})});
     await storage.list();assert.equal(legacyReads,0);

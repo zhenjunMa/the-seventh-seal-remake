@@ -18,6 +18,7 @@ const seed=load('opening_seed');seed.opening.status='complete';
 const partyCombat=load('party_combat'),itemData=load('items'),partySkills=load('party_skills');
 const png='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGgAAABMCAIAAAAOQ2XWAAAAuUlEQVR4nO3SMREAIAADMUASclCCfDTwc7J3+evc5w7+rbBBuM7jIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhRvMAV4QBnCTMUicAAAAASUVORK5CYII=';
 const deferred=()=>{let resolve,reject;const promise=new Promise((yes,no)=>{resolve=yes;reject=no;});return {promise,resolve,reject};};
+const summaryOf=envelope=>{if(!envelope)return null;const world=JSON.parse(envelope.payload);return {sha256:envelope.sha256,party:world.party.map(({name})=>({name})),location:{map_id:world.location.map_id},play_time_ms:world.play_time_ms??0};};
 const ALL_SLOTS=[...MANUAL_SAVE_SLOTS,'quick'];
 const settled=()=>new Promise(done=>setImmediate(done));
 function fixture(initial=seed,{now=()=>0}={}){
@@ -32,7 +33,7 @@ function fixture(initial=seed,{now=()=>0}={}){
   Object.assign(actions,createSessionController({state,actions,$,canvas}));
   state.saveMenu={active:false,show(options){this.active=true;this.options=options;},hide(){this.active=false;},setEntries(entries){this.entries=entries;},setMessage(message){this.message=message;},key(key){if(!this.active)return false;if(key==='Escape')actions.closeSaveMenu();return true;}};
   const files=new Map(),storageCalls=[];
-  state.saveStorage={read:async slot=>files.get(slot)??null,write:async(envelope,slot,createOnly,options)=>{storageCalls.push({slot,envelope,createOnly,options});files.set(slot,envelope);return {path:`remake/saves/${slot==='quick'?'Game.SAV':`SaveGame${Number(slot)}.Dat`}`};},list:async()=>ALL_SLOTS.map(slot=>({slot,envelope:files.get(slot)??null,error:null}))};
+  state.saveStorage={read:async slot=>files.get(slot)??null,write:async(envelope,slot,createOnly,options)=>{storageCalls.push({slot,envelope,createOnly,options});files.set(slot,envelope);return {summary:summaryOf(envelope),path:`remake/saves/${slot==='quick'?'Game.SAV':`SaveGame${Number(slot)}.Dat`}`};},list:async()=>ALL_SLOTS.map(slot=>({slot,summary:summaryOf(files.get(slot)),error:null}))};
   return {state,actions,$,canvas,files,storageCalls};
 }
 
@@ -48,9 +49,9 @@ test('file save holds exploration and blocks load, new game and scene transition
   await entered.promise;
   assert.equal(written.slot,'quick');assert.deepEqual(await decodeSave(written.envelope),{...seed,play_time_ms:0,game_settings:DEFAULT_GAME_SETTINGS});
   assert.equal(state.saveSlots.quick,null);assert.equal($('saveStatus').textContent,'');
-  gate.resolve({path:'remake/saves/Game.SAV'});await pending;
+  gate.resolve({path:'remake/saves/Game.SAV',summary:summaryOf(written.envelope)});await pending;
   assert.equal(state.scenes.phase,'map');assert.equal(state.saveOperation,null);
-  assert.equal(state.saveSlots.quick,written.envelope);assert.equal(state.saveSlots['00'],null);
+  assert.deepEqual(state.saveSlots.quick,summaryOf(written.envelope));assert.equal(state.saveSlots['00'],null);
   assert.match($('saveStatus').textContent,/快速存档已保存/);
 });
 
@@ -127,9 +128,9 @@ test('a rejected title load restores the menu phase and permits a subsequent val
 
 test('unavailable boot saves do not throw and a readable second slot remains available',async()=>{
   const {state,actions,$}=fixture(),quick=await encodeSave(seed);
-  state.saveStorage={list:async()=>ALL_SLOTS.map(slot=>({slot,envelope:slot==='quick'?quick:null,error:slot==='00'?'文件损坏':null}))};
+  state.saveStorage={list:async()=>ALL_SLOTS.map(slot=>({slot,summary:slot==='quick'?summaryOf(quick):null,error:slot==='00'?'文件损坏':null}))};
   const errors=await actions.refreshSaveSlots({quiet:true});
-  assert.equal(errors.length,1);assert.equal(state.saveSlots['00'],null);assert.equal(state.saveSlots.quick,quick);assert.match($('saveStatus').textContent,/文件损坏/);
+  assert.equal(errors.length,1);assert.equal(state.saveSlots['00'],null);assert.deepEqual(state.saveSlots.quick,summaryOf(quick));assert.match($('saveStatus').textContent,/文件损坏/);
 });
 
 test('F4 and F5 precede active views, cancel browser defaults, ignore repeats and always use the quick slot',async()=>{
@@ -161,10 +162,10 @@ test('communications crystal opens the slot page without writing and saves only 
   const opened=actions.openSaveCrystal();await settled();
   assert.equal(state.scenes.phase,'save-menu');assert.equal(state.saveMenu.active,true);assert.equal(state.saveMenu.options.mode,'save');
   assert.deepEqual(storageCalls,[]);assert.equal(state.saveMenu.entries.length,21);
-  assert.equal(state.saveMenu.entries[0].envelope,existing);
+  assert.deepEqual(state.saveMenu.entries[0].summary,summaryOf(existing));
   await actions.selectSaveSlot(state.saveMenu.entries.find(row=>row.slot==='01'));
   assert.equal(storageCalls.length,1);assert.equal(storageCalls[0].slot,'01');assert.equal(storageCalls[0].createOnly,true);assert.equal(storageCalls[0].options.expectedSha,undefined);
-  assert.equal(files.get('00'),existing);assert.equal(state.saveSlots['00'],existing);assert.equal(state.saveSlots['01'],files.get('01'));
+  assert.equal(files.get('00'),existing);assert.deepEqual(state.saveSlots['00'],summaryOf(existing));assert.deepEqual(state.saveSlots['01'],summaryOf(files.get('01')));
   assert.equal(state.scenes.phase,'save-menu');assert.match(state.saveMenu.message,/栏位 01 已保存/);
   state.saveMenu.key('Escape');await opened;
   assert.equal(state.scenes.phase,'map');assert.equal(state.saveMenu.active,false);assert.equal(state.saveMenuContext,null);
@@ -174,7 +175,7 @@ test('slot page passes the displayed save fingerprint to overwrite and blocks cl
   const {state,actions,files}=fixture(),existing=await encodeSave(seed),gate=deferred(),entered=deferred();files.set('00',existing);
   const opened=actions.openSaveCrystal();await settled();
   let write;
-  state.saveStorage.write=async(envelope,slot,createOnly,options)=>{write={envelope,slot,createOnly,options};entered.resolve();await gate.promise;files.set(slot,envelope);return {path:'remake/saves/SaveGame0.Dat'};};
+  state.saveStorage.write=async(envelope,slot,createOnly,options)=>{write={envelope,slot,createOnly,options};entered.resolve();await gate.promise;files.set(slot,envelope);return {path:'remake/saves/SaveGame0.Dat',summary:summaryOf(envelope)};};
   const saving=actions.selectSaveSlot(state.saveMenu.entries[0]);await entered.promise;
   assert.equal(write.slot,'00');assert.equal(write.createOnly,false);assert.equal(write.options.expectedSha,existing.sha256);
   assert.equal(state.scenes.phase,'save-io');assert.equal(actions.closeSaveMenu(),false);
@@ -188,7 +189,7 @@ test('slot page keeps a failed save available for retry and returns load pages t
   const {state,actions,storageCalls}=fixture();
   const opened=actions.openSaveCrystal();await settled();
   state.saveStorage.write=async()=>{throw new Error('disk full');};
-  await assert.rejects(actions.selectSaveSlot({slot:'02',envelope:null}),/disk full/);
+  await assert.rejects(actions.selectSaveSlot({slot:'02',summary:null}),/disk full/);
   assert.equal(state.scenes.phase,'save-menu');assert.equal(state.saveMenu.active,true);assert.equal(state.saveSlots['02'],null);assert.equal(storageCalls.length,0);
   actions.closeSaveMenu();await opened;state.scenes.setPhase('menu');
   const loading=actions.openSaveMenu({mode:'load'});await settled();
@@ -246,7 +247,7 @@ test('an overwrite conflict refreshes the displayed slot before a new confirmati
   const changed=structuredClone(seed);changed.revision++;const newer=await encodeSave(changed);files.set('00',newer);
   state.saveStorage.write=async()=>{const error=new Error('slot changed');error.status=412;throw error;};
   await assert.rejects(actions.selectSaveSlot(displayed),/slot changed/);
-  assert.equal(state.saveMenu.entries[0].envelope,newer);assert.equal(state.scenes.phase,'save-menu');actions.closeSaveMenu();await opened;
+  assert.deepEqual(state.saveMenu.entries[0].summary,summaryOf(newer));assert.equal(state.scenes.phase,'save-menu');actions.closeSaveMenu();await opened;
 });
 
 test('runtime log download preserves every event and history entry without cloning or serializing a whole battle',async()=>{

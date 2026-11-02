@@ -164,8 +164,8 @@ export function createBootController({state, actions, $, canvas, ctx}) {
     $('boundaries').textContent=state.catalog.boundaries;$('scopeText').textContent=state.catalog.introduction;
     state.startupView=await StartupView.create({manifest:startupManifest,media:startupMedia,$,image:actions.image,audio:state.audio,
       onStage:stage=>{state.scenes.setPhase(stage==='menu'?'menu':'startup');},
-      onNew:()=>actions.beginOpening(),onLoad:(_save,slot)=>actions.loadProgress(slot),onResume:()=>actions.resumeExploration(),
-      getSaves:()=>actions.saveEntries().filter(row=>row.envelope),
+      onNew:()=>actions.beginOpening(),onLoad:(_summary,slot)=>actions.loadProgress(slot),onResume:()=>actions.resumeExploration(),
+      getSaves:()=>actions.saveEntries().filter(row=>row.summary),
       refreshSaves:()=>actions.refreshSaveSlots(),isBusy:()=>Boolean(state.saveOperation),status:actions.status,log:actions.log});
     actions.wire();actions.resize();await state.scenes.loadLocation(state.world.location,{reason:'boot'});actions.buildHud();
     await actions.refreshSaveSlots({quiet:true});

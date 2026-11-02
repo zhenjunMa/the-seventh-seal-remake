@@ -4,6 +4,10 @@
 .save-menu-buttons button{position:absolute;border:0;border-radius:0;padding:0;min-width:0;background:transparent;box-shadow:none;color:transparent}
 .save-menu-buttons button:hover,.save-menu-buttons button:focus-visible{background:transparent;outline:none}
 .save-menu-buttons>img{position:absolute;pointer-events:none;image-rendering:pixelated}
-.save-menu-buttons .save-slot{padding:7px 8px 3px 145px;text-align:left;white-space:pre-line;color:#fff;font:10px/1.55 SimSun,serif;text-shadow:1px 1px #000}
+.save-menu-buttons .save-slot{display:flex;flex-direction:column;align-items:stretch;padding:7px 8px 3px 145px;text-align:left;white-space:pre-line;color:#fff;font:12px/1.55 SimSun,serif;text-shadow:1px 1px #000}
+.save-slot-heading,.save-slot-party{display:block;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.save-slot-times{display:flex;justify-content:space-between;gap:8px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.save-slot-date{min-width:0;overflow:hidden;text-overflow:ellipsis}
+.save-slot-duration{flex:none;text-align:right}
 .save-menu-buttons .save-slot[aria-current=true]{color:#ffff60}
 .save-menu-message{position:absolute;left:9px;top:427px;width:515px;min-height:40px;margin:0;color:#fff;font:15px/1.4 SimSun,serif;text-shadow:1px 1px #000;pointer-events:none}

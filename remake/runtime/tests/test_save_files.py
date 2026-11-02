@@ -1,6 +1,8 @@
 """Exercise native save persistence through the real HTTP/file boundary."""
 from contextlib import contextmanager
 from copy import deepcopy
+from base64 import b64decode
+from datetime import datetime, timezone
 from importlib.util import module_from_spec, spec_from_file_location
 from pathlib import Path
 from tempfile import TemporaryDirectory
@@ -9,6 +11,8 @@ from unittest.mock import patch
 import hashlib
 import http.client
 import json
+import os
+import struct
 import sys
 import unittest
 
@@ -125,8 +129,8 @@ class SaveFileTests(unittest.TestCase):
             status, listing = request(server, path='/api/saves')
             self.assertEqual(status, 200)
             keys = [f'{index:02}' for index in range(20)] + ['quick']
-            self.assertEqual(listing, {'slots': [{'slot': key, 'envelope': None, 'error': None} for key in keys]})
-            saves = {}
+            self.assertEqual(listing, {'slots': [{'slot': key, 'summary': None, 'error': None} for key in keys]})
+            saves, summaries = {}, {}
             for key in keys:
                 value = envelope(key)
                 status, saved = request(server, 'PUT', key, value)
@@ -134,29 +138,30 @@ class SaveFileTests(unittest.TestCase):
                 self.assertEqual(saved['slot'], key)
                 filename = 'Game.SAV' if key == 'quick' else f'SaveGame{int(key)}.Dat'
                 self.assertEqual(saved['path'], f'remake/saves/{filename}')
+                summaries[key] = saved['summary']
                 saves[key] = runtime.read_save_file(Path(directory) / filename)
                 self.assertEqual(money(saves[key]), money(value))
             self.assertEqual(len(list(Path(directory).iterdir())), 21)
             self.assertEqual(list(Path(directory).glob('*.json')), [])
             self.assertEqual(request(server, path='/api/saves'), (200, {'slots': [
-                {'slot': key, 'envelope': saves[key], 'error': None} for key in keys]}))
+                {'slot': key, 'summary': summaries[key], 'error': None} for key in keys]}))
             for key, value in saves.items():
                 self.assertEqual(request(server, slot=key), (200, value))
 
     def test_listing_separates_corrupt_and_unreadable_files_from_empty_slots(self):
         with TemporaryDirectory() as directory, serving(directory) as server:
             request(server, 'PUT', '01', envelope('valid'))
-            current = request(server, slot='01')[1]
+            current = runtime.read_save_summary(Path(directory) / 'SaveGame1.Dat')
             (Path(directory) / 'SaveGame2.Dat').write_bytes(b'{bad')
             (Path(directory) / 'SaveGame3.Dat').mkdir()
             status, listing = request(server, path='/api/saves')
             self.assertEqual(status, 200)
             by_slot = {row['slot']: row for row in listing['slots']}
-            self.assertEqual(by_slot['00'], {'slot': '00', 'envelope': None, 'error': None})
-            self.assertEqual(by_slot['01'], {'slot': '01', 'envelope': current, 'error': None})
-            self.assertIsNone(by_slot['02']['envelope'])
+            self.assertEqual(by_slot['00'], {'slot': '00', 'summary': None, 'error': None})
+            self.assertEqual(by_slot['01'], {'slot': '01', 'summary': current, 'error': None})
+            self.assertIsNone(by_slot['02']['summary'])
             self.assertIn('损坏', by_slot['02']['error'])
-            self.assertIsNone(by_slot['03']['envelope'])
+            self.assertIsNone(by_slot['03']['summary'])
             self.assertIn('无法读取', by_slot['03']['error'])
 
     def test_json_files_are_ignored_without_fallback(self):
@@ -165,7 +170,7 @@ class SaveFileTests(unittest.TestCase):
                 (Path(directory) / name).write_text(json.dumps(envelope()), encoding='utf-8')
             self.assertEqual(request(server)[0], 404)
             self.assertEqual(request(server, slot='quick')[0], 404)
-            self.assertTrue(all(row['envelope'] is None for row in request(server, path='/api/saves')[1]['slots']))
+            self.assertTrue(all(row['summary'] is None for row in request(server, path='/api/saves')[1]['slots']))
             self.assertEqual(request(server, 'PUT', value=envelope('new'), headers={'If-None-Match': '*'})[0], 200)
             self.assertTrue((Path(directory) / 'SaveGame0.Dat').exists())
 
@@ -176,13 +181,75 @@ class SaveFileTests(unittest.TestCase):
             path = Path(directory) / 'SaveGame4.Dat'
             self.assertFalse(path.exists())
             self.assertEqual(request(server, 'PUT', '04', first)[0], 200)
-            headers = {'If-Match': f'"{request(server, slot="04")[1]["sha256"]}"'}
+            headers = {'If-Match': f'"{request(server, path="/api/saves")[1]["slots"][4]["summary"]["sha256"]}"'}
             self.assertEqual(request(server, 'PUT', '04', second, headers)[0], 200)
             self.assertEqual(request(server, 'PUT', '04', third, headers)[0], 412)
             self.assertEqual(money(request(server, slot='04')[1]), money(second))
             path.write_bytes(b'{bad')
             self.assertEqual(request(server, 'PUT', '04', third, headers)[0], 412)
             self.assertEqual(path.read_bytes(), b'{bad')
+
+    def test_file_save_date_uses_server_clock_and_survives_changed_filesystem_time(self):
+        saved_at = datetime(2026, 11, 2, 12, 34, 56, 789000, timezone.utc)
+        expected = '2026-11-02T20:34:56.789+08:00'
+        with TemporaryDirectory() as directory, serving(directory) as server:
+            with patch.object(runtime, 'datetime') as clock:
+                clock.now.return_value = saved_at
+                clock.fromtimestamp.side_effect = datetime.fromtimestamp
+                status, saved = request(server, 'PUT', '00', envelope())
+                self.assertEqual(status, 200)
+                self.assertEqual(saved['summary']['saved_at'], expected)
+                self.assertEqual(saved['summary']['saved_at_source'], 'save')
+                status, exported = request(server, 'POST', value=envelope(), path='/api/saves/encode')
+                self.assertEqual(status, 200)
+            path = Path(directory) / 'SaveGame0.Dat'
+            self.assertEqual(struct.unpack_from('<8H', path.read_bytes(), 0x6D), (2026, 11, 1, 2, 20, 34, 56, 789))
+            os.utime(path, (0, 0))
+            for value in (request(server)[1], request(server, path='/api/saves')[1]['slots'][0]['summary']):
+                self.assertEqual(value['saved_at'], expected)
+                self.assertEqual(value['saved_at_source'], 'save')
+            self.assertEqual(request(server, 'POST', value=exported, path='/api/saves/decode')[1]['saved_at'], expected)
+
+    def test_summary_reuses_saved_pixels_and_cache_without_decoding_game_state(self):
+        with TemporaryDirectory() as directory, serving(directory) as server:
+            path = Path(directory) / 'SaveGame0.Dat'
+            raw = bytearray(runtime.encode_native_save(envelope()))
+            raw[0x4D:0x61] = '预览地图'.encode('cp936').ljust(20, b'\0')
+            path.write_bytes(raw)
+            with patch.object(runtime, 'decode_native_save', side_effect=AssertionError('列表不应完整解码')):
+                with patch.object(runtime, 'native_save_summary', wraps=runtime.native_save_summary) as summarize:
+                    first = request(server, path='/api/saves')[1]['slots'][0]['summary']
+                    self.assertEqual(request(server, path='/api/saves')[1]['slots'][0]['summary'], first)
+                    self.assertEqual(summarize.call_count, 1)
+                    self.assertNotIn('payload', first)
+                    self.assertEqual(first['saved_at_source'], 'file')
+                    self.assertEqual(first['location'], dict(map_id=SEED['location']['map_id'], map_name='预览地图'))
+                    self.assertEqual(first['party'], [{'name': role['name']} for role in SEED['party']])
+                    bitmap = b64decode(first['thumbnail'].split(',', 1)[1])
+                    self.assertEqual(bitmap[66:], raw[0x3C5:0x3C5 + 104 * 76 * 2])
+                    self.assertEqual(struct.unpack_from('<ii', bitmap, 18), (104, -76))
+                    # Replacing a file with preserved mtime still invalidates the cache.
+                    stamp = path.stat().st_mtime_ns
+                    changed = bytearray(raw)
+                    struct.pack_into('<I', changed, 0x7D, 1234)
+                    other = Path(directory) / 'replacement'
+                    other.write_bytes(changed)
+                    os.utime(other, ns=(stamp, stamp))
+                    os.replace(other, path)
+                    second = request(server, path='/api/saves')[1]['slots'][0]['summary']
+                    self.assertEqual(second['play_time_ms'], 123400)
+                    self.assertNotEqual(first['sha256'], second['sha256'])
+                    self.assertEqual(summarize.call_count, 2)
+                    # Missing thumbnails stay empty; no fallback image is produced.
+                    struct.pack_into('<I', changed, 0x3C1, 0)
+                    del changed[0x3C5:0x3C5 + 104 * 76 * 2]
+                    path.write_bytes(changed)
+                    self.assertIsNone(request(server, path='/api/saves')[1]['slots'][0]['summary']['thumbnail'])
+            status, loaded = request(server)
+            self.assertEqual(status, 200)
+            self.assertNotIn('preview', loaded)
+            path.unlink()
+            self.assertIsNone(request(server, path='/api/saves')[1]['slots'][0]['summary'])
 
     def test_binary_import_export_converts_native_files_without_writing_slots(self):
         with TemporaryDirectory() as directory, serving(directory) as server:

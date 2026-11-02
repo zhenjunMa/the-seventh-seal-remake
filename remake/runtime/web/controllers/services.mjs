@@ -104,9 +104,9 @@ export function createServicesController({state, actions, $, canvas, ctx,now=()=
     slot=normalizeSaveSlot(slot);
     return withSaveOperation('save',async()=>{
       const envelope=await saveEnvelope(),result=await state.saveStorage.write(envelope,slot,createOnly,{expectedSha});
-      state.saveSlots[slot]=envelope;
+      state.saveSlots[slot]=result.summary;
       const label=slot==='quick'?'快速存档':`存档 ${saveSlotLabel(slot)}`;
-      $('saveStatus').textContent=`${label}已保存 · ${new Date(envelope.saved_at).toLocaleTimeString('zh-CN',{timeZone:'Asia/Shanghai'})}`;
+      $('saveStatus').textContent=`${label}已保存 · ${new Date(result.summary?.saved_at??envelope.saved_at).toLocaleTimeString('zh-CN',{timeZone:'Asia/Shanghai'})}`;
       log({type:'save',slot,path:result.path,map_id:state.world.location.map_id,revision:state.world.value.revision});
       status(`${label}已保存到 ${result.path}。`);return envelope;
     },{fromMenu});
@@ -114,21 +114,21 @@ export function createServicesController({state, actions, $, canvas, ctx,now=()=
   async function loadProgress(slot='00',{fromMenu=false}={}){
     slot=normalizeSaveSlot(slot);
     return withSaveOperation('load',async operation=>{
-      const envelope=await state.saveStorage.read(slot);state.saveSlots[slot]=envelope;
+      const envelope=await state.saveStorage.read(slot);
       if(!envelope)throw new Error(slot==='quick'?'尚无快速存档，请先按 F4 保存':'尚无普通存档，请先在通讯水晶或侧栏保存');
       await actions.restore(envelope,{operation});
     },{fromMenu});
   }
   async function refreshSaveSlots({quiet=false}={}){
     const slots=[...MANUAL_SAVE_SLOTS,'quick'],errors=[];let rows;
-    try{rows=await state.saveStorage.list();}catch(error){rows=slots.map(slot=>({slot,envelope:null,error:error.message}));}
+    try{rows=await state.saveStorage.list();}catch(error){rows=slots.map(slot=>({slot,summary:null,error:error.message}));}
     state.saveErrors??={};
-    for(const row of rows){state.saveSlots[row.slot]=row.envelope;state.saveErrors[row.slot]=row.error??null;if(row.error)errors.push(`${saveSlotLabel(row.slot)}：${row.error}`);}
+    for(const row of rows){state.saveSlots[row.slot]=row.summary;state.saveErrors[row.slot]=row.error??null;if(row.error)errors.push(`${saveSlotLabel(row.slot)}：${row.error}`);}
     if(errors.length){$('saveStatus').textContent=errors.join('；');if(!quiet)status(errors.join('；'),true);log({type:'save-list-failed',error:errors.join('；')});}
     else $('saveStatus').textContent=slots.some(slot=>state.saveSlots[slot])?'已有重制存档，可从游戏读取继续。':'尚无重制存档；F4 快速保存，F5 快速读取。';
     return errors;
   }
-  function saveEntries(){return [...MANUAL_SAVE_SLOTS,'quick'].map(slot=>({slot,label:slot==='quick'?'快速存档':`存档 ${slot}`,envelope:state.saveSlots[slot]??null,error:state.saveErrors?.[slot]??null}));}
+  function saveEntries(){return [...MANUAL_SAVE_SLOTS,'quick'].map(slot=>({slot,label:slot==='quick'?'快速存档':`存档 ${slot}`,summary:state.saveSlots[slot]??null,error:state.saveErrors?.[slot]??null}));}
   function option(value,text,disabled=false){const node=document.createElement('option');node.value=value;node.textContent=text;node.disabled=disabled;return node;}
   function updateInterface(now){
     if(state.menuContext)state.operationMenu?.tick(now);

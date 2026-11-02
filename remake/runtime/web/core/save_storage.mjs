@@ -34,15 +34,21 @@ export function createSaveStorage({fetchImpl=globalThis.fetch}={}) {
     if(!Array.isArray(value?.slots)||value.slots.length!==ALL_SAVE_SLOTS.length)throw new Error('本地存档列表格式无效');
     const bySlot=new Map(value.slots.map(row=>[row?.slot,row]));
     if(bySlot.size!==ALL_SAVE_SLOTS.length||ALL_SAVE_SLOTS.some(slot=>!bySlot.has(slot)))throw new Error('本地存档列表格式无效');
-    const slots=await Promise.all(ALL_SAVE_SLOTS.map(async slot=>{
+    if(value.slots.some(row=>!Object.hasOwn(row,'summary')))throw new Error('本地存档列表格式无效，请重启游戏服务');
+    return ALL_SAVE_SLOTS.map(slot=>{
       const row=bySlot.get(slot);
-      if(row.error)return {slot,envelope:null,error:String(row.error)};
+      if(row.error)return {slot,summary:null,error:String(row.error)};
       try {
-        if(row.envelope!==null&&row.envelope!==undefined)await decodeSave(row.envelope);
-        return {slot,envelope:row.envelope??null,error:null};
-      } catch(error){return {slot,envelope:null,error:error.message};}
-    }));
-    return slots;
+        const summary=row.summary??null;
+        if(summary!==null&&(summary.schema!=='seventh-seal-save-summary'||summary.version!==1
+          ||!/^[0-9a-f]{64}$/.test(summary.sha256)||!Array.isArray(summary.party)||summary.party.length<1||summary.party.length>10
+          ||summary.party.some(role=>typeof role?.name!=='string'||role.name.length>20)
+          ||typeof summary.location?.map_id!=='string'||!summary.location.map_id||summary.location.map_id.length>20
+          ||summary.location.map_name!==undefined&&(typeof summary.location.map_name!=='string'||summary.location.map_name.length>20)
+          ||!Number.isSafeInteger(summary.play_time_ms)||summary.play_time_ms<0))throw new Error('存档摘要格式无效');
+        return {slot,summary,error:null};
+      } catch(error){return {slot,summary:null,error:error.message};}
+    });
   }
   async function decodeFile(file) {
     const envelope=await request('/api/saves/decode',{method:'POST',headers:{'Content-Type':'application/octet-stream'},body:file});

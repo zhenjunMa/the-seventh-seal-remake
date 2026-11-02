@@ -3,13 +3,12 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {SaveMenuView} from '../web/save_menu_view.mjs';
 import {MANUAL_SAVE_SLOTS} from '../web/core/save_slots.mjs';
-import {attachSavePreview} from '../web/core/save_preview.mjs';
 
 const png='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGgAAABMCAIAAAAOQ2XWAAAAuUlEQVR4nO3SMREAIAADMUASclCCfDTwc7J3+evc5w7+rbBBuM7jIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhIuEi4SLhRvMAV4QBnCTMUicAAAAASUVORK5CYII=';
 
 const manifest=JSON.parse(readFileSync(new URL('../web/data/save_menu.json',import.meta.url)));
-const emptyEntries=()=>[...MANUAL_SAVE_SLOTS,'quick'].map(slot=>({slot,envelope:null,error:null}));
-const envelope=(slot='00')=>({sha256:`saved-${slot}`,saved_at:'2026-10-23T00:00:00Z',payload:JSON.stringify({party:[{name:'英格妮'}],location:{map_id:'M70010'}})});
+const emptyEntries=()=>[...MANUAL_SAVE_SLOTS,'quick'].map(slot=>({slot,summary:null,error:null}));
+const summary=(slot='00')=>({sha256:`saved-${slot}`,saved_at:'2026-10-23T00:00:00Z',party:[{name:'英格妮'}],location:{map_id:'M70010',map_name:'白木森林'}});
 const deferred=()=>{let resolve;return {promise:new Promise(done=>resolve=done),resolve:()=>resolve()};};
 
 async function setup({onConfirm=async()=>{}}={}){
@@ -20,7 +19,10 @@ async function setup({onConfirm=async()=>{}}={}){
   const root={hidden:true,dataset:{},style:{setProperty:(name,value)=>styles.set(name,value)},querySelector:selector=>selector==='canvas'?{getContext:()=>ctx}:selector==='.save-menu-buttons'?buttons:message,
     getBoundingClientRect:()=>({width:960,height:720}),focus(){this.focused=true;},addEventListener:(name,handler)=>listeners.set(name,handler)};
   globalThis.ResizeObserver=class{observe(){}};
-  globalThis.document={createElement:tag=>({tagName:tag.toUpperCase(),style:{},dataset:{},attributes:{},children:[],append(child){this.children.push(child);},setAttribute(name,value){this.attributes[name]=value;}})};
+  globalThis.document={createElement:tag=>{
+    let text='';const node={tagName:tag.toUpperCase(),style:{},dataset:{},attributes:{},children:[],append(...children){this.children.push(...children);},replaceChildren(...children){text='';this.children=children;},setAttribute(name,value){this.attributes[name]=value;}};
+    Object.defineProperty(node,'textContent',{get(){return text+this.children.map(child=>child.textContent??'').join('');},set(value){text=value;this.children=[];}});return node;
+  }};
   let closes=0;
   const view=await SaveMenuView.create({manifest,root,image:async path=>({path,style:{},attributes:{}}),onConfirm,onClose(){closes++;view.hide();},log:event=>logs.push(event)});
   return {view,root,buttons,message,draws,logs,styles,listeners,get closes(){return closes;}};
@@ -30,11 +32,14 @@ const button=(buttons,label)=>buttons.children.find(button=>button.attributes['a
 
 test('opening the source save page writes nothing and saving empty slot 01 submits exactly that row',async()=>{
   const writes=[],entries=emptyEntries(),{view,root,buttons,styles}=await setup({onConfirm:row=>writes.push(row)});
-  entries[0].envelope=attachSavePreview(envelope(),png);entries[2].envelope=envelope('02');
+  entries[0].summary={...summary(),thumbnail:png};entries[2].summary=summary('02');
+  entries[2].summary.location.map_name='';
   view.show({mode:'save',summary:{name:'英格妮',money:120}});
   assert.equal(root.hidden,false);assert.equal(root.focused,true);assert.equal(styles.get('--save-menu-scale'),'1.5');assert.deepEqual(writes,[]);
   assert.equal(view.loading,true);await view.confirm();assert.deepEqual(writes,[]);
   view.setEntries(entries);assert.equal(slotButtons(buttons).length,3);
+  assert.match(slotButtons(buttons)[0].textContent,/白木森林/);assert.doesNotMatch(slotButtons(buttons)[0].textContent,/M70010/);
+  assert.match(slotButtons(buttons)[2].textContent,/M70010/);
   const previews=buttons.children.filter(node=>node.tagName==='IMG'),preview=previews[0];
   assert.equal(preview.tagName,'IMG');assert.equal(preview.src,png);assert.equal(preview.decoding,'sync');
   assert.deepEqual([preview.style.left,preview.style.top,preview.width,preview.height],['26px','82px',104,76]);
@@ -43,23 +48,23 @@ test('opening the source save page writes nothing and saving empty slot 01 submi
   assert.deepEqual(writes,[entries[1]]);assert.equal(root.dataset.slot,'01');assert.equal(view.active,true);assert.equal(view.pending,false);
 });
 
-test('slot labels show saved play duration beyond24hours instead of the file modification date',async()=>{
-  const {view,buttons}=await setup(),entries=emptyEntries();entries[0].envelope={...envelope(),payload:JSON.stringify({play_time_ms:(12243*3600+40*60+32)*1000,party:[{name:'英格妮'}],location:{map_id:'M01060'}})};
+test('slot labels distinguish the save date from play duration beyond24hours',async()=>{
+  const {view,buttons}=await setup(),entries=emptyEntries();entries[0].summary={...summary(),play_time_ms:(12243*3600+40*60+32)*1000};
   view.show();view.setEntries(entries);
-  assert.match(slotButtons(buttons)[0].textContent,/12243:40:32/);assert.doesNotMatch(slotButtons(buttons)[0].textContent,/2026/);
+  assert.match(slotButtons(buttons)[0].textContent,/时长 12243:40:32/);assert.match(slotButtons(buttons)[0].textContent,/保存 2026-10-23 08:00/);
 });
 
 test('occupied slot 00 requires overwrite confirmation, cancellation writes nothing and acceptance submits once',async()=>{
-  const writes=[],entries=emptyEntries();entries[0].envelope=envelope();
+  const writes=[],entries=emptyEntries();entries[0].summary=summary();
   const {view,root,buttons}=await setup({onConfirm:row=>writes.push(row)});view.show();view.setEntries(entries);
   await view.confirm();assert.equal(view.confirming,true);assert.equal(root.dataset.state,'overwrite');assert.deepEqual(writes,[]);
   button(buttons,'取消覆盖存档').onclick();assert.equal(view.confirming,false);assert.equal(root.dataset.state,'list');assert.deepEqual(writes,[]);
   await view.confirm();assert.equal(view.confirming,true);await view.submit();
-  assert.deepEqual(writes,[entries[0]]);assert.equal(writes[0].envelope,entries[0].envelope);assert.equal(view.pending,false);
+  assert.deepEqual(writes,[entries[0]]);assert.equal(writes[0].summary,entries[0].summary);assert.equal(view.pending,false);
 });
 
 test('overwrite keyboard selection can choose cancel with Down and Enter without writing',async()=>{
-  const writes=[],entries=emptyEntries();entries[0].envelope=envelope();const {view}=await setup({onConfirm:row=>writes.push(row)});
+  const writes=[],entries=emptyEntries();entries[0].summary=summary();const {view}=await setup({onConfirm:row=>writes.push(row)});
   view.show();view.setEntries(entries);await view.confirm();view.key('ArrowDown');view.key('Enter');
   assert.equal(view.confirming,false);assert.equal(view.active,true);assert.deepEqual(writes,[]);
 });
@@ -82,7 +87,7 @@ test('a failed write leaves the same page and selection available for retry with
 });
 
 test('End reaches slot 19 in the three native row rectangles and navigation never exposes a quick-save row',async()=>{
-  const {view,buttons}=await setup();view.show();view.setEntries(emptyEntries());view.key('End');
+  const {view,buttons}=await setup(),entries=emptyEntries();entries.at(-1).summary=summary('quick');view.show();view.setEntries(entries);view.key('End');
   assert.equal(view.selected,19);assert.equal(view.top,17);assert.deepEqual(slotButtons(buttons).map(row=>row.dataset.slot),['17','18','19']);
   assert.deepEqual(slotButtons(buttons).map(row=>[row.style.left,row.style.top,row.style.width,row.style.height]),[['12px','68px','456px','100px'],['12px','173px','456px','100px'],['12px','278px','456px','100px']]);
   assert.equal(slotButtons(buttons)[2].attributes['aria-current'],'true');view.key('ArrowDown');assert.equal(view.selected,19);
@@ -90,16 +95,23 @@ test('End reaches slot 19 in the three native row rectangles and navigation neve
 });
 
 test('load ignores empty or damaged slots, loads an occupied slot directly and Esc closes without reading',async()=>{
-  const loads=[],entries=emptyEntries();entries[1].envelope=envelope('01');entries[2].error='存档文件损坏';
+  const loads=[],entries=emptyEntries();entries[1].summary=summary('01');entries[2].error='存档文件损坏';
   const context=await setup({onConfirm:row=>loads.push(row)}),{view,message}=context;
   view.show({mode:'load'});view.setEntries(entries);await view.confirm();assert.deepEqual(loads,[]);assert.match(message.textContent,/栏位 00 为空/);
   view.select(2);await view.confirm();assert.deepEqual(loads,[]);assert.match(message.textContent,/栏位 02 无法读取/);
   view.select(1);await view.confirm();assert.deepEqual(loads,[entries[1]]);assert.equal(view.confirming,false);
   view.key('Escape');assert.equal(context.closes,1);assert.equal(view.active,false);assert.equal(context.root.hidden,true);assert.equal(loads.length,1);
+  entries.at(-1).summary=summary('quick');
+  view.show({mode:'load'});view.setEntries(entries);
+  assert.equal(view.row().slot,'quick');assert.deepEqual(slotButtons(context.buttons).map(row=>row.dataset.slot),['quick','00','01']);
+  assert.match(slotButtons(context.buttons)[0].textContent,/快速存档/);assert.match(message.textContent,/1\/21/);
+  await view.confirm();assert.equal(loads.at(-1).slot,'quick');
+  view.key('End');assert.equal(view.row().slot,'19');assert.equal(view.selected,20);view.key('Home');assert.equal(view.row().slot,'quick');
+  entries.at(-1).summary=null;view.setEntries(entries);assert.equal(view.row().slot,'00');assert.match(message.textContent,/1\/20/);
 });
 
 test('Escape cancels overwrite first and then closes, while loading and held confirmation cannot submit',async()=>{
-  const writes=[],entries=emptyEntries();entries[0].envelope=envelope();const context=await setup({onConfirm:row=>writes.push(row)}),{view}=context;
+  const writes=[],entries=emptyEntries();entries[0].summary=summary();const context=await setup({onConfirm:row=>writes.push(row)}),{view}=context;
   view.show();view.key('Enter');view.key('Escape');assert.equal(view.active,true);assert.deepEqual(writes,[]);
   view.setEntries(entries);view.key('Enter',true);assert.equal(view.confirming,false);await view.confirm();view.key('Escape');assert.equal(view.confirming,false);assert.equal(context.closes,0);
   view.key('Escape',true);assert.equal(context.closes,0);view.key('Escape');assert.equal(context.closes,1);assert.deepEqual(writes,[]);
