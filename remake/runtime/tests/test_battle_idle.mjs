@@ -68,6 +68,22 @@ test('each record boundary and loop use the source class, including independent 
   advanceIdleSkill(a,scheduler,90000+starts[2]);assert.equal(a.class_raw,0);
 });
 
+test('registered enemy low-HP idles retain the complete CHR id7 source and preload every rendered action',async()=>{
+  assert.equal(Object.keys(scheduler.low_hp_skills).length,Object.keys(forest.actors).length);
+  for(const [id,low]of Object.entries(scheduler.low_hp_skills)){
+    const source=await readFile(new URL('../../../'+low.source.path,import.meta.url)),view=meta.roles.find(r=>r.id===id);
+    assert.equal(source.subarray(low.source.offset,low.source.offset+1053).toString('hex'),low.fixed_raw_hex,id);
+    assert.equal(source[low.source.offset],7,id);
+    assert.deepEqual(view.response_skills.find(s=>s.skill_id_raw===7).segments,low.segments,id);
+    for(const segment of low.segments){
+      assert.equal(source.subarray(segment.source.offset,segment.source.offset+176).toString('hex'),segment.raw_hex,id);
+      const action=view.actions.find(a=>a.index===segment.action_index);assert.ok(action,`${id}:${segment.action_index}`);
+      const atlas=await readFile(new URL('../web'+action.sheet,import.meta.url));
+      assert.equal(createHash('sha256').update(atlas).digest('hex'),action.sha256,id);
+    }
+  }
+});
+
 test('all registered class3-blocked physical attacks can damage open snow poses and still reject closed poses using the native instruction oracle',async()=>{
   const assembly=JSON.parse(await readFile(new URL('../evidence/turn_rules_assembly_20261011.json',import.meta.url),'utf8'));
   const {sample:party}=sample();

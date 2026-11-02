@@ -192,6 +192,9 @@ def prepare_role(ident, status):
         return sequence(c, d, index)['segments'][0]
     responses = [sequence(c, d, index) for index, skill in enumerate(c.skills)
                  if skill['id_raw'] in (1, 2, 3, 9, 12, 18, 19)]
+    low_hp_index = next((index for index, skill in enumerate(c.skills) if skill['id_raw'] == 7), None)
+    if low_hp_index is not None:
+        responses.append(enrich_sequence(c, d, low_hp_index))
     idle = enrich_sequence(c, d, 0)
     role = dict(id=ident, name=c.name, frame_width=d.width, frame_height=d.height,
         cursor_height_raw=d.cursor_height_raw,
@@ -247,6 +250,7 @@ def export():
     reactions['roles'] = {ident: row for ident, row in reactions['roles'].items() if ident in role_ids('player')}
     status['skills'] = {key: row for key, row in status['skills'].items() if row['actor_id'] in role_ids('player')}
     checks, banks = [], []
+    scheduler['low_hp_skills'] = {}
     for ident, (c, d, source_ai, view, blocks, skill, actor) in prepared.items():
         sources[f'Fight_Role/{ident}.CHR'], sources[f'Fight_Role/{ident}.dgp'] = c.sha256, d.sha256
         ai['roles'][ident], data['actors'][ident], data['skills'][skill['id']] = source_ai, actor, skill
@@ -259,6 +263,15 @@ def export():
             segments=copy.deepcopy(view['idle_sequence']['segments']),
             source=dict(path=f'Fight_Role/{ident}.CHR', sha256=c.sha256,
                         offset=c.skills[0]['offset'], bytes=0x41d))
+        low_hp = next((skill for skill in view['response_skills'] if skill['skill_id_raw'] == 7), None)
+        if low_hp is not None:
+            skill = c.skills[low_hp['chr_skill_index']]
+            action = bytes.fromhex(skill['actions'][0]['raw_hex'])
+            scheduler['low_hp_skills'][ident] = dict(id=f'{ident}_low_hp_idle', actor_id=ident,
+                original_skill_index=skill['index'], name=skill['name_cp936'], fixed_raw_hex=skill['fixed_raw_hex'],
+                class_raw=action[0x24], action_mask_raw=action[0x78], segments=copy.deepcopy(low_hp['segments']),
+                source=dict(path=f'Fight_Role/{ident}.CHR', sha256=c.sha256, offset=skill['offset'], bytes=0x41d),
+                evidence=['ev_15074ba1e716dbee5de449c6c18c8af0dfb570150803f5138f7f9fe4991fe96f'])
         # Use the same independently audited image/layer implementation as players.
         banks.append(export_role_assets(view, c, d, sources, checks, group='enemy'))
         meta['roles'].append(view)

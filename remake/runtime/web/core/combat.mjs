@@ -661,7 +661,7 @@ export class BattleController {
         if(this.state.reward_ledger)resetNativeChain(this.state.reward_ledger,attacker.id);
         this.publish();if(plan)await this.performSequence(attacker,victim,selected,plan,{command:attacker.side==='player'?skill:selected,members:selectedList});else await this.performAction(attacker,victim,selected);this.checkWorld();
         s.active_actor_id=null;if(attacker.hp.current>0&&!this.state.lifecycle_events?.some(event=>event.actor_id===attacker.id)&&!attacker.native_active){
-          if(attacker.current_skill?.id!==this.schedulerData.idle_skills[attacker.resource_id??attacker.id].id)setIdleSkill(attacker,this.schedulerData,this.now());}
+          if(attacker.current_skill?.id!==this.schedulerData.idle_skills[attacker.resource_id??attacker.id].id&&attacker.current_skill?.id!==this.schedulerData.low_hp_skills?.[attacker.resource_id??attacker.id]?.id)setIdleSkill(attacker,this.schedulerData,this.now());}
         if(this.lifecycleEnabled)for(const actor of this.state.actors)if(actor.state_raw===4&&this.canFinalizeDeath(actor))this.finalizeDeath(actor);
         if(attacker.side==='player'){this.state.round++;break;}
         // Return control after each completed action. The next frame performs

@@ -13,6 +13,7 @@ export function validateScheduler(data){
   fail(data.default_preparation_delay===undefined||(Number.isInteger(data.default_preparation_delay)&&data.default_preparation_delay>=1&&data.default_preparation_delay<=1000000&&(debug||data.default_preparation_delay===800)),'默认技能准备量无效');
   fail(data.initial_side_priority===0&&data.policy&&Object.values(data.evidence??{}).length===7&&Object.values(data.evidence).every(s=>/^ev_[a-f0-9]{64}$/.test(s)),'行动调度证据缺失');
   for(const id of ['001','011','012','013'])fail(/^([a-f0-9]{2}){1053}$/.test(data.idle_skills?.[id]?.fixed_raw_hex),'原待机属性缺失');
+  for(const [id,skill]of Object.entries(data.low_hp_skills??{}))fail(data.idle_skills[id]&&/^07([a-f0-9]{2}){1052}$/.test(skill.fixed_raw_hex)&&skill.segments?.length,'原低血量待机属性缺失');
   return data;
 }
 export function initializeScheduler(actors,data,sidePriority=0,now=0){
@@ -51,10 +52,14 @@ export function idlePoseAt(segments,elapsed){
   }
 }
 export function advanceIdleSkill(actor,data,now){
-  const idle=data.idle_skills[actor.resource_id??actor.id];
+  const id=actor.resource_id??actor.id,idle=data.idle_skills[id],low=data.low_hp_skills?.[id];
   if(!idle?.segments)return;
-  if(actor.current_skill?.id!==idle.id||actor.hp.current===0||actor.state_raw>=4||actor.native_active||actor.immune_raw||actor.reaction_busy_raw||actor.defense_half_raw){delete actor.idle_pose;return;}
-  actor.idle_pose=idlePoseAt(idle.segments,now-actor.idle_started_at);
+  if((actor.current_skill?.id!==idle.id&&actor.current_skill?.id!==low?.id)||actor.hp.current===0||actor.state_raw>=4||actor.native_active||actor.immune_raw||actor.reaction_busy_raw||actor.defense_half_raw){delete actor.idle_pose;return;}
+  // 51AA80-51ACCA: id7 at HP <= raw maximum/4, status bit8 or recovery;
+  // id0 resumes when those gates clear. Reset the source cursor only on change.
+  const selected=low&&(actor.hp.current<=(actor.raw_by_address['0x0524a705']>>2)||(actor.status_flags_raw&0x100)||actor.charge?.recovery)?low:idle;
+  if(actor.current_skill.id!==selected.id){actor.current_skill=clone(selected);actor.idle_started_at=now;}
+  actor.idle_pose=idlePoseAt(selected.segments,now-actor.idle_started_at);
   actor.class_raw=actor.idle_pose.class_raw;actor.action_mask_raw=actor.idle_pose.action_mask_raw;
 }
 export function setIdleSkill(actor,data,now=0){

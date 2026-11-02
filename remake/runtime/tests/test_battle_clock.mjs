@@ -6,6 +6,7 @@ import {BattleController} from '../web/core/combat.mjs';
 import {WorldStore} from '../web/core/world.mjs';
 import {createNativeRng,resolveAction,applyNativeDamage} from '../web/core/combat_rules.mjs';
 import {applyNativeSkillStatus} from '../web/core/battle_status.mjs';
+import {setIdleSkill} from '../web/core/battle_scheduler.mjs';
 import {ActionClock} from '../web/phaser/components/action_clock.mjs';
 import {PhaserRuntime} from '../web/phaser/runtime.mjs';
 
@@ -29,6 +30,32 @@ test('20ms charging retains fractional time across short, late and repeated fram
     assert.equal(battle.state.scheduler.ticks,ticks,`${now}ms ticks`);
     assert.equal(battle.state.scheduler.elapsed_ms,ticks*20);
   }
+});
+
+test('enemy idle changes at one-quarter HP, loops without restarting and recovers after healing',()=>{
+  const {battle}=fixture(),enemy=battle.actor('012'),low=scheduler.low_hp_skills['012'];
+  enemy.raw_by_address['0x0524a705']=100;enemy.hp.maximum=100;enemy.charge.delay=1000000;
+  enemy.hp.current=26;battle.advanceClock(20);assert.equal(enemy.current_skill.id,'012_idle');
+  enemy.hp.current=25;battle.advanceClock(40);assert.equal(enemy.current_skill.id,low.id);
+  assert.equal(enemy.idle_started_at,40);assert.equal(enemy.idle_pose.action_index,10);
+  const duration=low.segments.reduce((n,s)=>n+s.frames.length*s.interval_raw,0);
+  battle.advanceClock(40+duration);assert.equal(enemy.idle_started_at,40);assert.equal(enemy.idle_pose.action_index,10);
+  enemy.hp.current=1;battle.advanceClock(60+duration);assert.equal(enemy.current_skill.id,low.id);
+  enemy.hp.current=26;battle.advanceClock(80+duration);assert.equal(enemy.current_skill.id,'012_idle');
+  assert.equal(enemy.idle_started_at,80+duration);
+});
+
+test('low-HP idle waits for active actions and does not replace a dead actor pose',()=>{
+  const {battle}=fixture(),enemy=battle.actor('012');
+  enemy.hp.current=1;enemy.native_active=true;enemy.current_skill=structuredClone(sample.skills.snow_attack);
+  const actingId=enemy.current_skill.id;
+  battle.advanceClock(20);assert.equal(enemy.current_skill.id,actingId);assert.equal(enemy.idle_pose,undefined);
+  enemy.native_active=false;
+  // This is the same idle handoff used when an attack or surviving reaction ends.
+  setIdleSkill(enemy,battle.schedulerData,40);
+  battle.advanceClock(40);assert.equal(enemy.current_skill.id,scheduler.low_hp_skills['012'].id);
+  enemy.hp.current=0;enemy.state_raw=4;battle.advanceClock(60);
+  assert.equal(enemy.idle_pose,undefined);assert.equal(battle.state.phase,'victory');
 });
 
 test('30/50/60/75/120/144/240 FPS all produce 50 charging ticks per scene second',()=>{
