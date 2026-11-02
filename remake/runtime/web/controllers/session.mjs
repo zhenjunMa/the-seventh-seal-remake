@@ -12,6 +12,7 @@ import {hasNativeStoryCompletion,loadStoryCompletion,saveStoryCompletion,STORY_C
 import {loadEncounterMap} from '../core/encounters.mjs';
 
 export function createSessionController({state, actions, $, canvas, ctx,completionStorage}) {
+  let finishGameOver=null;
   let storage=completionStorage;try{if(storage===undefined)storage=globalThis.localStorage;}catch{}
   const completion=loadStoryCompletion(storage);if(completion){state.completionMetadata=completion;state.nativeMenuCodeUnlocked=true;}
   function applyGameSettings(settings=DEFAULT_GAME_SETTINGS){
@@ -141,17 +142,23 @@ export function createSessionController({state, actions, $, canvas, ctx,completi
       await actions.refreshSaveSlots({quiet:true});state.saveMenu.setEntries(actions.saveEntries());state.saveMenu.setMessage(`栏位 ${row.slot} 已保存。`);
     }else{await actions.loadProgress(row.slot,{fromMenu:true});closeSaveMenu({loaded:true});}
   }
+  function gameOverKey(key,repeat=false){
+    if(state.scenes.phase!=='game-over')return false;
+    if(key==='Escape'&&!repeat)finishGameOver?.();
+    return true;
+  }
   async function presentGameOver(policy){
     state.audio?.suspend();state.scenes.setPhase('game-over');$('gameOver').hidden=false;
-    const video=$('gameOverVideo');video.currentTime=0;$('gameOverSkip').focus();
+    const video=$('gameOverVideo');video.currentTime=0;$('gameOver').focus({preventScroll:true});
     let playbackError=null;
     await new Promise(resolve=>{
-      const finish=()=>{video.pause();video.onended=null;video.onerror=null;$('gameOverSkip').onclick=null;resolve();};
-      video.onended=finish;video.onerror=()=>{playbackError='败北电影加载失败';finish();};$('gameOverSkip').onclick=finish;
-      video.play().catch(error=>{playbackError=error.message;finish();});
+      const finish=()=>{if(finishGameOver!==finish)return;finishGameOver=null;video.pause();video.onended=null;video.onerror=null;resolve();};
+      const failed=message=>{if(finishGameOver!==finish)return;playbackError=message;finish();};
+      finishGameOver=finish;video.onended=finish;video.onerror=()=>failed('败北电影加载失败');
+      video.play().catch(error=>failed(error.message));
     });
     $('gameOver').hidden=true;showTitle();actions.status('全队倒下。请载入已保存的进度，或开始新游戏。');
     actions.log({type:'game-over',policy,movie:'/assets/video/go02.mp4',playback_error:playbackError});
   }
-  return {showTitle, finishStoryCompletion,resumeExploration, beginOpening, restore, openSaveCrystal,openSaveMenu,closeSaveMenu,selectSaveSlot, presentGameOver};
+  return {showTitle, finishStoryCompletion,resumeExploration, beginOpening, restore, openSaveCrystal,openSaveMenu,closeSaveMenu,selectSaveSlot, presentGameOver,gameOverKey};
 }

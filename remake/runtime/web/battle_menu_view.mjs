@@ -15,10 +15,10 @@ const skillCategory=skill=>{
 };
 // Stable transparent controls over the original source pixels. No world writes.
 export class BattleMenuView{
-  constructor({root,manifest,battle,getSettings,getBindings=null,getCursorHeight,playCue,onReturn,onStage=()=>{},textRenderer=null,memory=null,returnLabel=null,resultManifest=null,onResultEvent=()=>{},now=()=>performance.now(),reuseReturnButton=true,deferResult=false,prepareResources=work=>work(),onResourcesPrepared=()=>{},prefetchCommand=()=>{},onResourceError=()=>{}}){
+  constructor({root,manifest,battle,getSettings,getBindings=null,getCursorHeight,playCue,onReturn,onStage=()=>{},textRenderer=null,memory=null,returnLabel=null,autoReturnOnDefeat=false,resultManifest=null,onResultEvent=()=>{},now=()=>performance.now(),reuseReturnButton=true,deferResult=false,prepareResources=work=>work(),onResourcesPrepared=()=>{},prefetchCommand=()=>{},onResourceError=()=>{}}){
     Object.assign(this,{deferResult,prepareResources,onResourcesPrepared,prefetchCommand,onResourceError});
     this.resourceScope=battleResources.createScope('battle-hud');
-    Object.assign(this,{root,manifest,battle,getSettings,getBindings,getCursorHeight,playCue,onReturn,onStage,textRenderer,returnLabel});
+    Object.assign(this,{root,manifest,battle,getSettings,getBindings,getCursorHeight,playCue,onReturn,onStage,textRenderer,returnLabel,autoReturnOnDefeat});
     this.doc=root.ownerDocument;this.images=new Map();this.players=new Map();this.targets=new Map();this.memory=memory??new Map();this.textCache=new Map();this.ballCache=new Map();this.fontOptions=new WeakMap();this.stage='waiting';this.focusIndex=0;this.listIndex=0;this.listOffset=0;this.draft=null;this.message='';this.epoch=0;this.cueSequence=0;
     this.menus=new Map(manifest.menus.map(m=>[m.id,m]));
     this.frame=this.doc.createElement('div');this.frame.className='battle-interface-frame';this.frame.tabIndex=-1;this.root.replaceChildren(this.frame);
@@ -41,7 +41,7 @@ export class BattleMenuView{
     this.listButtons=Array.from({length:6},(_,i)=>{const b=this.button('battle-list-hit',()=>this.selectEntry(this.listOffset+i));b.onfocus=()=>{this.listIndex=this.listOffset+i;this.remember();this.setInfo(this.entries?.[this.listIndex]?.description??'');};this.frame.append(b);return b;});
     this.previous=this.button('battle-scroll-hit',()=>this.moveList(-6));this.previous.setAttribute('aria-label','上一页');this.place(this.previous,467+152,274+40,12,16);this.frame.append(this.previous);
     this.next=this.button('battle-scroll-hit',()=>this.moveList(6));this.next.setAttribute('aria-label','下一页');this.place(this.next,467+152,274+186,12,16);this.frame.append(this.next);
-    this.returnButton=(reuseReturnButton?this.doc.getElementById('battleReturn'):null)??this.doc.createElement('button');this.returnButton.id='battleReturn';this.returnButton.className='battle-result-return';this.returnButton.onclick=()=>this.onReturn();this.frame.append(this.returnButton);
+    this.returnButton=(reuseReturnButton?this.doc.getElementById('battleReturn'):null)??this.doc.createElement('button');this.returnButton.id='battleReturn';this.returnButton.className='battle-result-return';this.returnButton.hidden=true;this.returnButton.onclick=()=>this.onReturn();this.frame.append(this.returnButton);
     this.info=this.doc.createElement('span');this.info.className='sr-only';this.info.setAttribute('role','status');this.frame.append(this.info);
     this.resultView=resultManifest?new BattleResultView({root:this.frame,manifest:resultManifest,onComplete:onReturn,onEvent:onResultEvent,textRenderer,now}):null;
     this.resizeObserver=new ResizeObserver(()=>this.fit());this.resizeObserver.observe(root);this.fit();
@@ -81,7 +81,7 @@ export class BattleMenuView{
     }
     this.syncPlayers();this.syncWheel();this.syncList();this.syncTargets();
     this.actorLayer.hidden=this.targetLayer.hidden=Boolean(this.resultView?.active);
-    this.returnButton.hidden=this.stage!=='result'||Boolean(this.resultView?.active)||Boolean(this.resultPreparing);this.returnButton.disabled=false;this.returnButton.textContent=this.returnLabel??(snapshot.phase==='defeat'?'返回主菜单':'返回地图');
+    this.returnButton.hidden=this.stage!=='result'||Boolean(this.resultView?.active)||Boolean(this.resultPreparing)||snapshot.phase==='defeat'&&this.autoReturnOnDefeat;this.returnButton.disabled=false;this.returnButton.textContent=this.returnLabel??(snapshot.phase==='defeat'&&this.autoReturnOnDefeat?'返回主菜单':'返回地图');
     if((changed||this.needsFocus)&&this.available()){this.needsFocus=false;(this.stage==='actors'?this.players.get(snapshot.player_id):this.wheelButtons[this.focusIndex])?.focus({preventScroll:true});}
   }
   openResult(snapshot){
@@ -159,6 +159,7 @@ export class BattleMenuView{
     if(this.resultPreparing)return true;
     if(this.resultView?.active)return this.resultView.key(key,repeat);
     if(this.disposed)return false;if(['Enter',' ','Escape'].includes(key)&&repeat)return true;
+    if(this.autoReturnOnDefeat&&this.snapshot?.phase==='defeat')return true;
     if(key==='Escape'){this.escape();return true;}if(key==='Tab'||key==='x'||key==='z'){this.cycleActor(key==='z'?-1:1);return true;}
     if(!['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Enter',' '].includes(key))return false;
     if(this.stage==='skills'&&this.skillListKey(key))return true;

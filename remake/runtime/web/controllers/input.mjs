@@ -81,6 +81,7 @@ export function createInputController({state, actions, $, canvas, ctx}) {
     $('layerSelect').onchange=actions.guarded(async()=>{state.layerIndex=Number($('layerSelect').value);await actions.drawLayer();});
     window.addEventListener('keydown',event=>{
       const key=event.key.length===1?event.key.toLowerCase():event.key;
+      if(actions.gameOverKey?.(key,event.repeat)){event.preventDefault();return;}
       if(saveKey(key,event.repeat)){event.preventDefault();return;}
       if(state.engine?.paused)return;
       if(actions.nativeServiceKey(key,event.repeat)){event.preventDefault();return;}

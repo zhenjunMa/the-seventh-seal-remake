@@ -5,7 +5,7 @@
 .party-menu[hidden]{display:none}.party-menu-head{display:flex;align-items:center;justify-content:space-between;gap:15px}.party-menu h2{font:22px SimSun,serif;color:#efd9ae;margin:0 0 15px}.party-menu h3{font-size:14px;color:#e5c990}.party-menu section{border-top:1px solid #607d7755;margin-top:18px;padding-top:6px}.party-menu select{max-width:430px}.party-menu p{font-size:12px;line-height:1.8}.party-menu ul{font-size:12px;line-height:1.9;padding-left:18px}.party-menu :focus-visible{outline:2px solid #e5c990;outline-offset:3px}
 #dialogueChoices{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}.party-menu .error{color:#efb4a5}
 @media(max-width:750px){.party-menu{inset:8px 3%;padding:15px}}
-.game-over{position:absolute;inset:0;background:#000;z-index:45;display:flex;align-items:center;justify-content:center}.game-over[hidden]{display:none}.game-over video{max-width:100%;max-height:100%;object-fit:contain}.game-over button{position:absolute;right:18px;bottom:18px}
+.game-over{position:absolute;inset:0;background:#000;z-index:45;display:flex;align-items:center;justify-content:center;outline:none}.game-over[hidden]{display:none}.game-over video{width:100%;height:100%;object-fit:contain}
 
 
 /* Phaser owns the visible 640x480 scene. Legacy canvases remain read-only
