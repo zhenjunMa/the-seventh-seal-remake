@@ -28,9 +28,9 @@ export class OperationTechniqueView{
       .technique-ui .technique-target-value{position:absolute;font-size:18px;line-height:20px}
     `;root.append(style);this.style=style;this.section='use';this.stage='roster';this.mode='sub';this.roleId=null;this.action='compose';this.category=1;this.slotIndex=0;this.listOffset=0;this.composition=[];
   }
-  destroy(){this.stopShortcutAnimations();this.element.remove();this.style.remove();}
+  destroy(){this.hide();this.element.remove();this.style.remove();}
   page({section='use',roleId=null,layer='sub'}={}){this.stopShortcutAnimations();this.section=section;this.roleId=roleId;this.mode=layer;this.stage=roleId?(section==='edit'?'actions':'list'):'roster';this.preview=null;this.pending=null;this.listOffset=0;this.element.hidden=false;this.paint();return this;}
-  hide(){this.stopShortcutAnimations();this.pending=null;this.element.hidden=true;}
+  hide(){this.stopShortcutAnimations();this.pending=null;this.element.hidden=true;this.root.classList.toggle('technique-fullscreen',false);this.paintedStage=null;}
   render(world,source,configured,{rows=null,capacity=0}={}){Object.assign(this,{world,source,configured,rows:rows??world.party,capacity});this.paint();return this;}
   asset(menuId){const menu=this.menus.get(menuId);return menu.composed??menu.images[0].image;}
   image(path,x,y,parent=this.element){const image=document.createElement('img');image.alt='';image.src=path;position(image,x,y);parent.append(image);return image;}
@@ -63,6 +63,9 @@ export class OperationTechniqueView{
   chooseActor(roleId){this.stopShortcutAnimations();this.roleId=roleId;this.onActor?.(roleId,true);this.stage=this.section==='edit'?'actions':'list';this.mode='content';this.paint();this.focus('content');}
   paint(){
     if(!this.world||!this.source||this.element.hidden)return;
+    const fullscreen=['name-editor','icon-editor','compose-confirm'].includes(this.stage);
+    if(fullscreen&&this.paintedStage!==this.stage)this.onInfo?.('');
+    this.root.classList.toggle('technique-fullscreen',fullscreen);this.paintedStage=this.stage;
     if(this.stage!=='slot-confirm')this.stopShortcutCursor();
     if(!this.shortcutWheelVisible())this.stopShortcutReplacement();
     const focusKey=document.activeElement?.dataset?.techniqueKey;

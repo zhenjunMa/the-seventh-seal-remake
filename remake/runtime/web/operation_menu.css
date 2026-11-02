@@ -6,6 +6,8 @@
 .party-menu .operation-frame:focus-visible{outline:none}
 /* Shared glyph output must sit above technique and target panels (z-index 3/5). */
 .operation-frame>.gpu-interface-output{z-index:6}
+/* Full-page technique dialogs suppress the shared menu chrome and its GPU glyphs. */
+.operation-frame.technique-fullscreen>.operation-main-nav,.operation-frame.technique-fullscreen>.operation-gold,.operation-frame.technique-fullscreen>.operation-area,.operation-frame.technique-fullscreen>.operation-message:not(.error){display:none}
 .party-menu .menu-source{position:absolute;pointer-events:none;max-width:none;image-rendering:pixelated;object-fit:none;object-position:top left}
 .main-source{left:0;top:0;width:640px;height:480px}.page-source{left:10px;top:-20px}.body-source{left:20px;top:145px}
 .party-menu button{cursor:pointer;border-radius:0;font:20px SimSun,serif;color:#e7e6dc}
