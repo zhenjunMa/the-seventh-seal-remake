@@ -1,0 +1,19 @@
+remake/runtime/web/operation_menu_view.mjs
+  s_b691a2880e42d9::t_4659f18ada3f73 36,74-78
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "614ae6a1adab1d09a5e0ea713f3b3f80a3740e88",
+  "prompts": {},
+  "sessions": {
+    "s_b691a2880e42d9": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a19bf3-aa20-7000-ad6a-acad12d8d6ca",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
