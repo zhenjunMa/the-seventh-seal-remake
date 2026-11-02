@@ -4,9 +4,11 @@ import {battleViewport,battleBallState,battleActorPositions} from '../web/core/b
 test('battle source plane stays 4:3 with identical HUD and pointer transforms in wide and narrow screens',()=>{
   for(const [w,h]of [[1280,960],[1200,600],[600,900]]){const v=battleViewport(w,h);assert.equal(v.width/v.height,4/3);assert.equal(v.x+640*v.scale,w-v.x);assert.equal(v.y+480*v.scale,h-v.y);assert.ok(v.x>=0&&v.y>=0);}
 });
-test('zero and just-spent charge leave the original glass empty; full charge fills green',()=>{
-  assert.equal(battleBallState({gauge:0,delay:0},20000),null);
+test('entry and spent charge grow continuously from empty through the midpoint to full green',()=>{
+  assert.equal(battleBallState({gauge:0,delay:0},20000).top,23);
   assert.equal(battleBallState({gauge:-20000,delay:0},20000).top,46);
+  const tops=[-20000,-10000,-1,0,1,10000,20000].map(gauge=>battleBallState({gauge,delay:0},20000).top);
+  assert.ok(tops.every((top,index)=>index===0||top<=tops[index-1]),'charge must not clear when crossing zero');
   assert.deepEqual(battleBallState({gauge:20000,delay:0},20000),{top:0,color:[0,128,0],phase:'charge',level:23});
   assert.equal(battleBallState({gauge:24000,delay:0},20000).top,0);
 });

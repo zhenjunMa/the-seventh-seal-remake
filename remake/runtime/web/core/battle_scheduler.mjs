@@ -23,7 +23,9 @@ export function initializeScheduler(actors,data,sidePriority=0,now=0){
   fail(threshold>0,'原充能阈值不可用');
   for(const actor of actors){
     fail(raw(actor,'0x0524a729')>0&&raw(actor,'0x0524a72d')>=raw(actor,'0x0524a729'),'当前充能属性范围未支持');
-    actor.charge={gauge:0,delay:0,recovery:0,recovery_ticks:0};actor.status_flags_raw=0;actor.reaction_busy_raw=0;
+    // Runtime entry starts at the same empty gauge as a spent attack. The
+    // exported initial_gauge=0 remains the unmodified native source value.
+    actor.charge={gauge:actor.hp.current>0?-threshold:0,delay:0,recovery:0,recovery_ticks:0};actor.status_flags_raw=0;actor.reaction_busy_raw=0;
     // 0x519A80 zeroes the allocated actor block: F68E starts at queue index0.
     // Idle preserves it; 0x51C640 explicitly clears it after a normal hit.
     actor.native_active=false;actor.current_target_id=actors[0].id;actor.reaction_special_gate_raw=0;actor.native_z_raw=0;

@@ -57,15 +57,15 @@ test('command7 zero mode draws once at execution and renderer completion clears 
 test('Lifecycle remains opt-in; all entries finish before charging or commands begin',async()=>{
   const legacy=fixture({enabled:false});assert.equal(legacy.draws.length,0);assert.deepEqual(legacy.battle.presentationSnapshot().lifecycle_events,[]);
   const f=fixture({enemies:2}),initial=entries(f.battle);assert.deepEqual(initial.map(e=>e.actor_id),f.battle.state.actors.map(a=>a.id));assert.equal(f.draws.length,3);
-  await f.tick();assert.ok(f.battle.state.actors.every(a=>a.charge.gauge===0));
+  await f.tick();assert.ok(f.battle.state.actors.every(a=>a.charge.gauge===-f.battle.state.scheduler.threshold));
   assert.equal(f.battle.ackLifecycle({...initial[0],life_epoch:99}),false);assert.equal(f.battle.ackLifecycle(initial[0]),true);
   const player=f.battle.actor('001');assert.equal(player.state_raw,0);assert.equal(player.immune_raw,0);
-  await f.tick();assert.ok(f.battle.state.actors.every(a=>a.charge.gauge===0));assert.equal(f.battle.state.scheduler.ticks,0);
-  player.charge.gauge=f.battle.state.scheduler.threshold;assert.equal(f.battle.canCommand(player.id),false);assert.deepEqual(f.battle.readyPlayerIds(),[]);player.charge.gauge=0;
+  await f.tick();assert.ok(f.battle.state.actors.every(a=>a.charge.gauge===-f.battle.state.scheduler.threshold));assert.equal(f.battle.state.scheduler.ticks,0);
+  player.charge.gauge=f.battle.state.scheduler.threshold;assert.equal(f.battle.canCommand(player.id),false);assert.deepEqual(f.battle.readyPlayerIds(),[]);player.charge.gauge=-f.battle.state.scheduler.threshold;
   f.advanceTo(5000);assert.equal(f.battle.state.scheduler.ticks,0);assert.equal(f.battle.state.history.length,0);
   assert.equal(f.battle.ackLifecycle(initial[0]),false);assert.equal(f.draws.length,3);assert.throws(()=>f.battle.finish());
   assert.ok(JSON.stringify(f.battle.presentationSnapshot().lifecycle_events).length<2000);assert.ok(!JSON.stringify(initial).includes('raw_hex'));
-  ackEntries(f.battle);await f.tick();assert.equal(f.battle.state.scheduler.ticks,1);assert.ok(f.battle.state.actors.every(a=>a.charge.gauge>0));
+  ackEntries(f.battle);await f.tick();assert.equal(f.battle.state.scheduler.ticks,1);assert.ok(f.battle.state.actors.every(a=>a.charge.gauge>-f.battle.state.scheduler.threshold&&a.charge.gauge<0));
 });
 
 test('Death waits for its killer action, draws one descriptor and defers victory/finish until presentation acknowledgement',async()=>{

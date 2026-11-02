@@ -207,7 +207,7 @@ export class BattleMenuView{
       const nameIndex=actor.id==='002'?1:actor.id==='001'?0:null;if(nameIndex!==null)this.asset('fight_role_name',nameIndex,x+70,y+3);else this.text(actor.name,x+70,y+3);
       // Native 42EAD0 shades time_bar, then draws time_glass. Canvas uses
       // the original alpha silhouette and an 8bit colour adapter.
-      const state=this.snapshot.scheduler?battleBallState(g,threshold):{top:0,color:[0,128,0],phase:'charge',level:23};
+      const state=this.snapshot.scheduler?(actor.hp.current>0&&!(actor.state_raw>=4&&actor.state_raw<=7)?battleBallState(g,threshold):null):{top:0,color:[0,128,0],phase:'charge',level:23};
       const bar=this.images.get(this.manifest.assets.time_bar.frames[0].image),key=state?`${state.phase}:${state.level}`:null;let ball=this.ballCache.get(key);
       if(state&&state.top<46&&!ball&&bar){ball=this.doc.createElement('canvas');ball.width=47;ball.height=46;const bc=ball.getContext('2d');drawBattleImage(bc,bar,0,0);bc.globalCompositeOperation='multiply';bc.fillStyle=`rgb(${state.color.join(',')})`;bc.fillRect(0,0,47,46);bc.globalCompositeOperation='destination-in';drawBattleImage(bc,bar,0,0);this.ballCache.set(key,ball);}
       if(state&&state.top<46&&ball){c.save();c.beginPath();c.rect(x+16,y+1+state.top,47,46-state.top);c.clip();c.drawImage(ball,x+16,y+1);c.restore();}

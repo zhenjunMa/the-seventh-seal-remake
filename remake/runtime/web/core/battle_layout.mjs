@@ -3,12 +3,11 @@ export function battleViewport(width,height){
   const scale=Math.min(width/640,height/480);
   return {scale,x:(width-640*scale)/2,y:(height-480*scale)/2,width:640*scale,height:480*scale};
 }
-// 42EAD0's two clipped phases. Zero charge leaves only the glass visible.
+// 42EAD0's two clipped phases. -threshold is empty; zero is the midpoint.
 export function battleBallState(charge,threshold){
   if(!charge||!(threshold>0))return null;
   const byte=n=>((n&255)^128)-128;
   if(charge.delay===0){
-    if(charge.gauge===0)return null;
     const level=Math.trunc(Math.min(charge.gauge,threshold)*23/threshold),top=23-level;
     const b=byte(Math.trunc(top*255/23)),r=Math.max(0,byte(255-2*b));
     return {top,color:[r,128,b&255],phase:'charge',level};

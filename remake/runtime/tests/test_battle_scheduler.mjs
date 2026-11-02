@@ -127,7 +127,7 @@ test('20ms clock runs before input and in every command layer with elapsed-time 
  assert.equal(g.battle.advanceClock(19),false);assert.equal(g.battle.advanceClock(20),true);assert.equal(g.battle.advanceClock(20),false);assert.equal(g.battle.advanceClock(1020),true);assert.equal(g.battle.snapshot().scheduler.ticks,51);
  let now=1020;
  for(const stage of ['wheel','skills','items','target']){g.battle.setCommandStage(stage);const ticks=g.battle.state.scheduler.ticks;assert.equal(g.battle.advanceClock(now+=20),true);assert.equal(g.battle.state.scheduler.ticks,ticks+1);}
- assert.equal(g.battle.state.history.length,0);assert.ok(g.battle.actor('001').charge.gauge>0);
+ assert.equal(g.battle.state.history.length,0);assert.ok(g.battle.actor('001').charge.gauge>-g.battle.state.scheduler.threshold);
 });
 test('hunters can precede player; charging and post-impact clocks retain gauge across commands',async()=>{
  const {battle,logs,world}=fixture();const before=world.snapshot();await chooseReady(battle,'yanci','enemy-1');
