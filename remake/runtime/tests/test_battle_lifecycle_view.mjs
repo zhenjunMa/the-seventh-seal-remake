@@ -109,11 +109,15 @@ test('mode5 strict plus8 boundary and empty source main finish without an invent
 test('all connected original entry variants finish with source mode RNG owned by the controller',()=>{
   const random=Math.random;Math.random=()=>assert.fail('Lifecycle playback must not select native randomness');
   try{
-    for(const sourceRole of manifest.roles)for(const index of sourceRole.entry_skill_indices){
+    for(const prepared of [false,true])for(const sourceRole of manifest.roles)for(const index of sourceRole.entry_skill_indices){
       const control=new BattleController({});control.state={actors:[{id:'member',immune_raw:1,native_x_raw:-146,native_y_raw:152,native_z_raw:0,native_home_y_raw:152}]};let draws=0;control.rng=()=>{draws++;return 2;};
       const playback=new BattleLifecyclePlayback(manifest,{nativeBridge:()=>({record:raw=>control.nativeSourceRecord('member',raw),appearance:raw=>control.beginNativeAppearance('member',raw),appearanceComplete:()=>control.completeNativeAppearance('member'),
         entry:(raw,width)=>control.beginNativeEntry('member',raw,width),entryPoint:x=>control.advanceNativeEntry('member',x)})}),roster=[{id:'member',resource_id:sourceRole.id,side:sourceRole.side}],entry=event('member','entry',index,11,{life_epoch:0});
-      const snapshot={id:`entry-${sourceRole.id}-${index}`,actors:[{id:'member',side:sourceRole.side,life_epoch:0}],lifecycle_events:[entry]};playback.advance(snapshot,roster,0);
+      const snapshot={id:`entry-${sourceRole.id}-${index}`,actors:[{id:'member',side:sourceRole.side,life_epoch:0}],lifecycle_events:[entry]};
+      if(prepared){
+        playback.prepareEntry(snapshot,roster,0);assert.ok(playback.alpha('member')>0,sourceRole.id);
+        assert.deepEqual(playback.drainCompleted(),[]);const first=playback.snapshot();playback.prepareEntry(snapshot,roster,0);assert.deepEqual(playback.snapshot(),first);
+      }else playback.advance(snapshot,roster,0);
       let now=0;for(;playback.snapshot().active.length&&now<20000;){now+=20;playback.advance(snapshot,roster,now);}
       assert.ok(now<20000,`${sourceRole.id}:${index} entry completed`);assert.equal(playback.pose('member'),null);assert.deepEqual(playback.drainCompleted(),[{token:entry.token,actor_id:'member',life_epoch:0}]);
       const source=skill(sourceRole.id,index);assert.equal(draws,source.timeline.filter(step=>step.kind==='command'&&step.command_raw===7&&step.mode_raw_0x47===0).length);

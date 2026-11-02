@@ -242,6 +242,7 @@ export class BattleView {
     this.itemMetadataPath=itemMetadataPath;this.itemMeta=null;
     this.stageMetadataPath=stageMetadataPath;this.stageMeta=null;this.stageStarted=null;
     this.lifecycleMetadataPath=lifecycleMetadataPath;this.lifecycle=null;
+    this.preparingEntry=false;this.entryFrameSounds=[];
     this.lastActorPoses=new Map();
     this.roster=[{id:'001',resource_id:'001',side:'player',skill_id:'yantu'},{id:'012',resource_id:'012',side:'enemy',skill_id:'snow_attack'}];
     this.images = new Map();
@@ -373,7 +374,10 @@ export class BattleView {
     this.lifecycle=lifecycleMeta?new BattleLifecyclePlayback(lifecycleMeta,{appearanceBounds:(roleId,pose)=>this._appearanceBounds(roleId,pose),
       disappearanceEffect:(actorId,roleId,mode,event)=>this._particleEffect(actorId,roleId,mode,event),
       appearanceEffect:(actorId,roleId,mode,event)=>this._particleEffect(actorId,roleId,mode,event,true),
-      nativeBridge:actorId=>this._nativeBridge(actorId),onFrame:step=>this.onLifecycleFrame?.(step)}):null;
+      nativeBridge:actorId=>this._nativeBridge(actorId),onFrame:step=>{
+        if(this.preparingEntry)this.entryFrameSounds.push({...step,sound_inhibited:Boolean(this.nativeControl?.actor(step.actor_id)?.immune_raw)});
+        else this.onLifecycleFrame?.(step);
+      }}):null;
     this.assetDescriptors=assets;this.lifecycleMeta=lifecycleMeta;
     await this._prepareEntry({actors,skills,inventory,staged,onProgress,isCurrent:()=>!this.destroyed&&generation===this.generation});
     check();
@@ -474,7 +478,7 @@ export class BattleView {
     this.lastActorPoses.clear();this.cameraShake=null;this.colorFade=null;
     this.stageStarted=null;
     this.drawnSlots=null;
-    this.lifecycle?.reset();
+    this.lifecycle?.reset();this.entryFrameSounds=[];
     this.defendClocks=new Map();
     this.damageTexts=[];
     if(!this.ready||this.run)throw new Error('战斗资源尚未就绪或正在行动');
@@ -557,7 +561,7 @@ export class BattleView {
     this.lastActorPoses.clear();this.cameraShake=null;this.colorFade=null;
     this.drawnSlots=null;
     this.damageTexts=[];
-    this.lifecycle?.reset();
+    this.lifecycle?.reset();this.entryFrameSounds=[];
     this.prefetchTicket=null;this.prefetchLease=null;
     for(const run of [this.run,...this.detachedRuns].filter(Boolean)){if(!run.primary_resolved)run.reject(abortError(reason));this._releaseRun(run);}
     this.run=null;this.detachedRuns=[];
@@ -915,6 +919,13 @@ export class BattleView {
 
   drainLifecycleCompleted(){return this.lifecycle?.drainCompleted()??[];}
   lifecycleSnapshot(){return this.lifecycle?.snapshot()??null;}
+  prepareEntry(snapshot,now){
+    if(!this.lifecycle||this.lifecycle.entryPrepared)return;
+    const current=this.nativeControl&&(!this.nativeControlIsCurrent||this.nativeControlIsCurrent())?this.nativeControl.state:null;
+    this.preparingEntry=true;
+    try{return this.lifecycle.prepareEntry(current?.lifecycle_events?{...snapshot,actors:current.actors,lifecycle_events:current.lifecycle_events}:snapshot,this.roster,now);}
+    finally{this.preparingEntry=false;}
+  }
 
   _particleEffect(actorId,roleId,mode,event,appearance=false){
     if(!globalThis.document?.createElement)return null; // headless timing adapter
@@ -955,7 +966,10 @@ export class BattleView {
     if (!Number.isFinite(now)) throw new Error('战斗表现时钟无效');
     this.drawing=true;
     try{
-    if(!entryPreview)this.lastDrawAt=now;
+    if(!entryPreview){
+      this.lastDrawAt=now;
+      for(const step of this.entryFrameSounds.splice(0))this.onLifecycleFrame?.(step);
+    }
     // Periodic source responses and deaths can replace a playing CHR record
     // between render frames. Retire its future contacts before replaying RAF
     // catch-up; the independent lifecycle channel owns the new source pose.
@@ -1007,7 +1021,7 @@ export class BattleView {
     const queue=[...this.roster.filter(a=>a.side==='enemy'),...this.roster.filter(a=>a.side==='player')].map(a=>({...a,depth_y:groundSlots[a.id][1]}));
     if(this.stageMeta)queue.sort((a,b)=>a.depth_y-b.depth_y);
     for (const {id} of queue) {
-      if(entryPreview&&snapshot?.lifecycle_events?.some(event=>event.actor_id===id&&event.kind==='entry'))continue;
+      if(entryPreview&&!this.lifecycle?.entryPrepared&&snapshot?.lifecycle_events?.some(event=>event.actor_id===id&&event.kind==='entry'))continue;
       const role = this._role(id), actor = actors.get(id), slot = slots[id];
       const nativeZ=this.nativeControl&&(!this.nativeControlIsCurrent||this.nativeControlIsCurrent())?this.nativeControl.actor(id)?.native_z_raw:actor?.native_z_raw;
       if(Number.isFinite(nativeZ))slot[1]+=nativeZ*(this.stageMeta?1.125:this.meta.policy.sprite_scale);

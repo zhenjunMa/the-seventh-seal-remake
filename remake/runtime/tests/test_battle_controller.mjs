@@ -20,7 +20,7 @@ test('battle start notifications cannot unfreeze the loading phase before entry 
   controller.updateBattle({...snapshot,phase:'interrupted',error:'entry failed',lifecycle_events:[{kind:'entry'}]});assert.equal(controller.battleKey('Escape'),true);assert.equal(inputs,1);
 });
 
-test('battle preparation retains the map without either loading overlay, blocks reentry and rolls back on failure',async()=>{
+test('encounters start their transition before resource preparation, block reentry and roll back on failure',async()=>{
   const nodes=new Map(),$=id=>{
     if(!nodes.has(id))nodes.set(id,{hidden:true,dataset:{},textContent:'',classList:{toggle(){}}});
     return nodes.get(id);
@@ -28,23 +28,30 @@ test('battle preparation retains the map without either loading overlay, blocks 
   const canvas={hidden:false},audioEvents=[],state={world:{location:{map_id:'M70010'},value:{revision:7,source:{kind:'legacy'}}},
     audio:{setScene:scene=>audioEvents.push(scene)},
     keys:new Set(),view:{x:12,y:34,action:0,frame:0},phaseNames:{},battleData:{}};
-  let rejectPreparation,preparations=0,loadingCalls=0;
+  let rejectPreparation,preparations=0,loadingCalls=0,transitions=0;
   const gate=new Promise((_,reject)=>{rejectPreparation=reject;});
   const actions={readConfiguredData:()=>{preparations++;return gate;}};
   const services=createServicesController({state,actions,$,canvas});
   state.scenes={phase:'map',setPhase(phase){this.phase=phase;services.busy(phase);}};
   state.loadingView={run(){loadingCalls++;throw Error('Battle must not show a loading page');}};
+  const before={destroy(){}};
+  state.battleTransition={capture:()=>before,async run(snapshot,paint){
+    transitions++;assert.equal(snapshot,before);assert.equal(preparations,0);
+    return paint(new AbortController().signal);
+  }};
   const controller=createBattleController({state,actions,$,canvas});
   // Other scene loads still use the generic loading overlay.
   for(const phase of ['boot','loading']){services.busy(phase);assert.equal($('loading').hidden,false);}
   state.scenes.setPhase('map');
   const pending=controller.startBattle({stage:'stage13.scn'});
   assert.equal(state.scenes.phase,'battle-loading');assert.equal(canvas.hidden,false);
+  assert.equal(transitions,1);assert.equal(state.battleEntryPending,true);
   assert.equal($('loading').hidden,true);assert.equal($('sceneLoading').hidden,true);
   assert.deepEqual(audioEvents,[],'Battle music starts after actor preparation');
   await controller.startBattle();assert.equal(preparations,1);assert.equal(loadingCalls,0);
   rejectPreparation(Error('resource decode failed'));await assert.rejects(pending,/resource decode failed/);
   assert.equal(state.scenes.phase,'map');assert.equal(canvas.hidden,false);
+  assert.equal(state.battleEntryPending,false);
   assert.equal($('loading').hidden,true);assert.equal($('sceneLoading').hidden,true);
   assert.deepEqual([state.view.x,state.view.y],[12,34]);assert.equal(state.world.value.revision,7);
   assert.deepEqual(audioEvents,[{mapId:'M70010',battle:false}]);

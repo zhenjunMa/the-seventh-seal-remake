@@ -40,6 +40,25 @@ test('transition preview leaves entry hidden and does not execute its records or
  drawn.length=0;view.draw(state,5120);const alpha=drawn.find(row=>row.id==='001').alpha;
  assert.ok(alpha>0&&alpha<1);assert.equal(sounds.length,1);assert.equal(view.lifecycleSnapshot().active[0].appearance.mode,5);
 });
+test('transition prepares visible entry poses once, defers cues and resumes their remaining animation without an empty lead',async()=>{
+ for(const now of [5000,123.456]){
+ const {view}=await fixture(),drawn=[],sounds=[];
+ view._sprite=(role,action,frame,x,y,alpha)=>drawn.push({id:role.id,alpha});view.onLifecycleFrame=step=>sounds.push(step);
+ const events=['001','enemy'].map(actor_id=>({token:'entry-'+actor_id,actor_id,life_epoch:0,kind:'entry',source_skill_index:11,source_id_raw:11})),state=snapshot(events);
+ view.prepareEntry(state,now);const prepared=view.lifecycleSnapshot();
+ assert.equal(prepared.active.length,2);assert.ok(prepared.active.every(row=>row.alpha>0&&row.alpha<1));
+ assert.equal(view.lifecycle.pose('001').source_frame,170);assert.equal(view.lifecycle.alpha('enemy'),1/7);
+ assert.deepEqual(view.drainLifecycleCompleted(),[]);assert.equal(sounds.length,0);assert.equal(view.lastActorPoses.size,0);
+ view.prepareEntry(state,now);assert.deepEqual(view.lifecycleSnapshot(),prepared);
+ view.draw(state,now,{entryPreview:true});assert.deepEqual(view.lifecycleSnapshot(),prepared);assert.equal(sounds.length,0);
+ assert.ok(drawn.find(row=>row.id==='001').alpha>0);assert.ok(drawn.find(row=>row.id==='012').alpha>0);
+ drawn.length=0;view.draw(state,now);assert.equal(sounds.length,2);assert.equal(view.lifecycle.alpha('enemy'),1/7);
+ assert.ok(drawn.find(row=>row.id==='001').alpha>0);assert.deepEqual(view.drainLifecycleCompleted(),[]);
+ view.draw(state,now+60);assert.equal(view.lifecycle.alpha('enemy'),2/7);assert.equal(sounds.length,2);
+ view.stop();assert.deepEqual(view.entryFrameSounds,[]);assert.equal(view.lifecycle.entryPrepared,false);
+ }
+});
+
 test('real lifecycle layers load separately and a completed player death stays drawn after its event is acknowledged',async()=>{
  const {view,target}=await fixture();const event={token:'death-1',actor_id:'002',life_epoch:0,kind:'death',source_skill_index:12,hold_final_frame:true};
  view.draw(snapshot([event]),0);view.draw(snapshot([event]),5000);assert.equal(view.drainLifecycleCompleted().length,1);

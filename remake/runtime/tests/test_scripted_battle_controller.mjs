@@ -113,7 +113,7 @@ test('late cancelled entry-transition callbacks cannot reveal battle or overwrit
   f.state.battleTransition={capture(){return {};},async run(_before,callback){paint=callback;started=true;await gate.promise;return callback();},cancel(){}};
   const running=f.run();await until(()=>started);await cancel(f,running);
   const next=f.$('battleHud').ownerDocument.createElement();f.$('battleHud').replaceChildren(next);
-  assert.throws(()=>paint(),/会话已失效/);gate.resolve();await new Promise(resolve=>setImmediate(resolve));
+  await assert.rejects(paint(),/会话已失效/);gate.resolve();await new Promise(resolve=>setImmediate(resolve));
   assert.equal(f.state.scenes.phase,'event');assert.equal(f.state.battleEntryPending,false);assert.deepEqual(f.$('battleHud').childNodes,[next]);assert.equal(f.canvas.hidden,false);
 });
 test('failed return rolls back side priority and private battle mutations',async()=>{

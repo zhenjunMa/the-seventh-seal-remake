@@ -91,7 +91,7 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
         return await playback;
       }catch(error){lease?.release();throw error;}
     };
-    const actionSound=(result,step)=>state.audio?.playAction({...step,sound_inhibited:Boolean(battle.actor(step.actor_id).immune_raw)},`${result.action_id}:${step.channel_id}:${step.plan_record_index}:${step.logical_frame}`);
+    const actionSound=(result,step)=>state.audio?.playAction({...step,sound_inhibited:step.sound_inhibited??Boolean(battle.actor(step.actor_id).immune_raw)},`${result.action_id}:${step.channel_id}:${step.plan_record_index}:${step.logical_frame}`);
     const effectSound=(result,step)=>state.audio?.playEffect(step.asset_id,`${result.action_id}:${step.channel_id}:${step.effect_index}`,step.logical_frame);
     const present=method=>async(result,options)=>{const played=await play(method,result,{...options,onFrame:step=>actionSound(result,step),onEffectFrame:step=>effectSound(result,step)});actions.log({type:'battle-presentation',action_id:result.action_id,actor_id:result.actor_id,skill_id:result.skill_id,observations:played.observations});return played;};
     battle=new BattleController({world,resolveAction,applyDamage:applyNativeDamage,playAction:present('playAction'),playSequence:present('playSequence'),
@@ -136,9 +136,7 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
   }
   async function prepareBattleResources(mode,work){
     const started=performance.now();
-    // Keep the exploration/menu image visible until the battle can be drawn.
-    // LoadingView is shared with map changes; its progress artwork is not an
-    // entry animation and must never be exposed by battle preparation.
+    // Battle preparation never exposes the generic map loading artwork.
     const result=await work(()=>{});
     actions.log({type:'battle-resources-ready',mode,elapsed_ms:performance.now()-started,cache:battleResources.snapshot()});
     return result;
@@ -146,18 +144,21 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
   async function revealBattle(before,start,transitionOptions={},isCurrent=()=>true){
     state.battleEntryPending=true;
     try{
-      start();
-      if(state.battleTransition&&before)await state.battleTransition.run(before,()=>{
+      const paintBattle=async signal=>{
+        signal?.throwIfAborted();if(!isCurrent())throw new Error('剧情战斗入场会话已失效');
+        await start(signal);signal?.throwIfAborted();
         if(!isCurrent())throw new Error('剧情战斗入场会话已失效');
         showBattle();const snapshot=state.battle.presentationSnapshot(),now=state.battleView.resourceTime?.()??0;
+        state.battleView.prepareEntry?.(snapshot,now);
         state.battleView.draw(snapshot,now,{entryPreview:true});
         state.battleMenu.draw(now,state.battleView.actorPositions());state.battleMenu.paintTo(state.engine?.battle.surface.canvas??$('battleCanvas'));
         state.engine?.battle.surface.endFrame();
-        // Capture only the prepared battlefield. Actor entry records, audio and RNG
-        // begin once, on the first live battle frame after the transition.
+        // Capture the first visible entry poses. Hidden preparation overlaps
+        // the transition; visible motion and queued audio resume afterwards.
         return captureTransition('battle');
-      },transitionOptions);
-      else showBattle();
+      };
+      if(state.battleTransition&&before)await state.battleTransition.run(before,paintBattle,transitionOptions);
+      else{await start(transitionOptions.signal);if(isCurrent()){showBattle();state.battleView.prepareEntry?.(state.battle.presentationSnapshot(),state.battleView.resourceTime?.()??0);}}
     }finally{if(isCurrent())state.battleEntryPending=false;}
     if(isCurrent())updateBattle(state.battle.presentationSnapshot());
   }
@@ -166,21 +167,22 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
     const revision=state.world.value.revision,before=(state.battleTransition?captureTransition():null);state.battlePresentationError=null;
     state.battleCheckpoint={...state.view};state.scenes.setPhase('battle-loading');
     try{
+      await revealBattle(before,async signal=>{
       let sample,newParty;
       await prepareBattleResources('battle',async progress=>{
-      state.battleData??=await actions.json(state.catalog.combat_sample??'data/combat_sample.json');
+      if(!state.battleData){const data=await playbackTask(actions.json(state.catalog.combat_sample??'data/combat_sample.json'),signal);signal?.throwIfAborted();state.battleData=data;}
       newParty=!sampleMode;
       if(newParty&&!group)throw new Error('请在野外行走遇敌。');
       state.battleSampleMode=sampleMode;
-      const configured=await actions.readConfiguredData({sample:sampleMode});state.itemData=configured.items;
+      const configured=await playbackTask(actions.readConfiguredData({sample:sampleMode}),signal);signal?.throwIfAborted();state.itemData=configured.items;
       progress({completed:10,total:100});
       const newScheduler={...configured.scheduler,policy:{...configured.scheduler.policy,commands:'Frame-driven charging with per-player buffered commands; input continues during charging and hit reactions, confirmation locks until action completion, and dispatch waits for execution readiness.'},...(newParty?{idle_skills:{...configured.scheduler.idle_skills,...state.partySkills.idle_skills}}:{})};
       sample=newParty?assembleForestSample(createPartySample(state.world.snapshot(),state.partyCombat,state.partySkills,configured,state.itemData,state.operationMenu?.techniques?.supplement?.name_charset),configured.forest,group,newScheduler,configured.ai,configured.rewards,state.partyReactions,state.statusData):group?createForestSample(state.world.snapshot(),configured.combat,configured.forest,group,null,newScheduler,configured.ai,configured.rewards,state.reactionData,state.statusData):createBattleSample(state.world.snapshot(),configured.combat);
       if(sample.actors.filter(actor=>actor.side==='player').every(actor=>actor.hp.current===0))throw new Error('队伍已经倒下，请载入进度后继续。');
-      const mode=newParty?'party':group?'forest':'sample';state.battleView=await prepareView({mode,newParty,stagePath:group?'/'+battleStage(group.stage).path:null,lifecycle:Boolean(group),actors:sample.actors,skills:sample.skills,inventory:state.world.value.inventory,onProgress:p=>progress({completed:10+75*p.completed/p.total,total:100})});state.battleView.setRoster(sample.actors,sample.skills);
+      const mode=newParty?'party':group?'forest':'sample';const view=await playbackTask(prepareView({mode,newParty,stagePath:group?'/'+battleStage(group.stage).path:null,lifecycle:Boolean(group),actors:sample.actors,skills:sample.skills,inventory:state.world.value.inventory,signal,onProgress:p=>progress({completed:10+75*p.completed/p.total,total:100})}),signal);signal?.throwIfAborted();state.battleView=view;view.setRoster(sample.actors,sample.skills);
       state.battle=createCombat(state.world,newParty,state.battleView);
       state.audio?.setScene({mapId:state.world.location.map_id,battle:true,stageId:group?.stage??null});
-      await prepareHud(newParty,{onProgress:p=>progress({completed:(p.stage==='result'?95:85)+5*p.completed/p.total,total:100})});
+      await prepareHud(newParty,{signal,onProgress:p=>progress({completed:(p.stage==='result'?95:85)+5*p.completed/p.total,total:100})});signal?.throwIfAborted();
       progress({completed:100,total:100});
       });
       if(state.world.value.revision!==revision)throw new Error('资源加载期间世界状态已变化');
@@ -189,7 +191,8 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
       // the unknown original game's starting seed or global RNG scheduling.
       const rngSeed=group?encounterState.rng_state:0x20261011;
       state.battleRng=createNativeRng(rngSeed);state.battleNatural=Boolean(group);
-      await revealBattle(before,()=>state.battle.start({...sample,lifecycle_enabled:Boolean(state.battleView.lifecycle),side_priority:state.sidePriority,rng:state.battleRng,source:{...sample.source,rng_seed:rngSeed,rng_seed_policy:group?'persistent-development-global-stream':'controlled-development-seed'}}));
+      state.battle.start({...sample,lifecycle_enabled:Boolean(state.battleView.lifecycle),side_priority:state.sidePriority,rng:state.battleRng,source:{...sample.source,rng_seed:rngSeed,rng_seed_policy:group?'persistent-development-global-stream':'controlled-development-seed'}});
+      });
       if(group)actions.log({type:'field-encounter',group,location:state.world.location,counter_after:state.world.value.encounters.counters[state.selectedRole]});
       actions.status('蓄力时即可选择招式和目标，确认后等待满槽行动；行动结束即可输入下一轮，受击不打断选择。Esc 收起轮盘，方向键切换人物，空格打开；Tab / X / Z 切换人物。');
     }catch(error){before?.destroy?.();state.battleView?.stop('战斗启动失败');state.battleMenu?.dispose();state.battleMenu=null;canvas.hidden=false;for(const id of ['battleCanvas','battleHud','battleCommands'])$(id).hidden=true;Object.assign(state.view,state.battleCheckpoint);state.scenes.setPhase('map');state.audio?.setScene({mapId:state.world.location.map_id,battle:false});throw error;}

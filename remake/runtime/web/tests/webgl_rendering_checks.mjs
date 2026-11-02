@@ -1,5 +1,6 @@
 import {drawingContext,registerGlyph} from '../phaser/rendering/recorded_surface.mjs';
 import {createDeathParticleSurface} from '../death_particles.mjs';
+import {BattleLifecyclePlayback} from '../battle_lifecycle_view.mjs';
 const frame=()=>new Promise(resolve=>requestAnimationFrame(resolve));
 const assert=(condition,message)=>{if(!condition)throw new Error(message);};
 const pixel=(renderer,x,y)=>{const data=new Uint8Array(4),scale=renderer.width/640;
@@ -46,22 +47,62 @@ export async function checkWebglRendering(runtime,record){
   surface.beginFrame();for(const entry of [...surface.textures.entries])surface.textures.remove(entry);surface.endFrame();
   record('粒子小数缩放、GL 状态隔离及 8360 像素图集的按帧裁切通过');
   for(let kind=0;kind<7;kind++){
-    paint([50,90,140],[140,90,50]);const before=runtime.captureTexture('battle');let draws=0,shaderFailure=null;
+    runtime.setPhase('battle-loading');const held=runtime.battle.clock.time;
+    paint([50,90,140],[140,90,50]);const before=runtime.captureTexture('battle');let draws=0,shaderFailure=null,preparing=false,releasePreparation;
+    const preparation=new Promise(resolve=>{releasePreparation=resolve;}),count=[16,64,16,16,20,30,20][kind];
     const clock={time:0,requestFrame(callback){let stopped=false;requestAnimationFrame(()=>{if(stopped)return;runtime.flush();
+      if(draws===0&&preparing)shaderFailure=new Error('资源准备阻塞了转场首帧');
       if(draws===0&&kind===1&&!near(pixel(runtime.game.renderer,20,20),[66,98,156,255]))shaderFailure=new Error(`白闪着色器方向／颜色错误：${pixel(runtime.game.renderer,20,20)}`);
+      if(draws===count+3){
+        if(!preparing||!runtime.transitions.active||runtime.transitions.frame!==(kind===1?31:count-1))shaderFailure=new Error(`转场 ${kind} 没有在慢加载期间推进并等待战场`);
+        if(runtime.battle.clock.time!==held)shaderFailure=new Error('资源准备期间战斗时钟提前运行');
+        releasePreparation();
+      }
       draws++;clock.time+=250;callback(clock.time);});return {cancel(){stopped=true;}};}};
-    await runtime.transitions.run(before,()=>{paint([20,40,60],[60,40,20]);return runtime.captureTexture('battle');},{kind,random:()=>.5,clock});
+    await runtime.transitions.run(before,async signal=>{preparing=true;await preparation;signal.throwIfAborted();paint([20,40,60],[60,40,20]);return runtime.captureTexture('battle');},{kind,random:()=>.5,clock});
     if(shaderFailure)throw shaderFailure;
     assert(!runtime.transitions.active&&!runtime.snapshots.size,'转场未清理 GPU 快照');
     runtime.flush();assert(near(pixel(runtime.game.renderer,20,20),[20,40,60,255]),`转场 ${kind} 未完整显露战场`);
     assert(draws>0,'转场没有播放逻辑帧');
   }
-  record('七种 GPU 入战转场：白闪颜色／纹理方向、结束画面及快照释放通过');
+  runtime.setPhase('battle-active');
+  record('七种 GPU 入战转场：首帧先显示、慢加载并行／等待、战斗时钟冻结、结束画面及快照释放通过');
+  const lifecycleManifest=await (await fetch('/data/battle_lifecycle.json')).json();
+  const roster=[{id:'entry-player',resource_id:'001',side:'player'},{id:'entry-enemy',resource_id:'012',side:'enemy'}];
+  const entryState={id:'webgl-entry-preparation',actors:roster.map(actor=>({...actor,life_epoch:0})),
+    lifecycle_events:roster.map(actor=>({actor_id:actor.id,token:actor.id,life_epoch:0,kind:'entry',source_skill_index:11,source_id_raw:11}))};
+  const lifecycle=new BattleLifecyclePlayback(lifecycleManifest,{appearanceBounds:()=>({min_x:200,max_y:200,empty:false})});
+  runtime.setPhase('battle-loading');const entryTime=runtime.battle.clock.time;
+  lifecycle.prepareEntry(entryState,roster,entryTime);
+  const paintEntry=()=>{
+    paint([20,40,60]);surface.globalAlpha=lifecycle.alpha('entry-player');surface.fillStyle='#ff0000';surface.fillRect(100,280,80,80);
+    surface.globalAlpha=lifecycle.alpha('entry-enemy');surface.fillStyle='#00ff00';surface.fillRect(380,280,80,80);surface.globalAlpha=1;surface.endFrame();
+  };
+  await runtime.transitions.run(runtime.captureTexture('battle'),()=>{paintEntry();return runtime.captureTexture('battle');},{kind:4});
+  runtime.flush();
+  assert(pixel(runtime.game.renderer,140,300)[0]>20&&pixel(runtime.game.renderer,420,300)[1]>40,'转场结束首帧仍为空战场');
+  assert(runtime.battle.clock.time===entryTime&&!lifecycle.drainCompleted().length,'转场准备提前推进了战斗时钟或完成了入场');
+  const entryAlpha=lifecycle.alpha('entry-enemy');lifecycle.advance(entryState,roster,entryTime+60);paintEntry();runtime.flush();
+  assert(lifecycle.alpha('entry-enemy')>entryAlpha,'可见入场动作没有从准备帧继续播放');runtime.setPhase('battle-active');
+  record('入场衔接：原动作隐藏前段在转场内准备，结束首帧已有可见单位、后续显现继续且战斗时钟未推进（示意人物）');
   const cancellation=new AbortController();paint();const before=runtime.captureTexture('battle');
   const interrupted=runtime.transitions.run(before,()=>runtime.captureTexture('battle'),{kind:6,signal:cancellation.signal});cancellation.abort(new Error('验收取消'));
   let cancelled=false;try{await interrupted;}catch(error){cancelled=error.message==='验收取消';}
   assert(cancelled&&!runtime.snapshots.size&&!runtime.transitions.active,'取消转场没有释放 GPU 资源');
   record('转场取消：等待拒绝、覆盖层关闭与 GPU 快照释放通过');
+  const loadingCancellation=new AbortController();let preparationStarted=false,releaseLate;
+  const loading=runtime.transitions.run(runtime.captureTexture('battle'),()=>{
+    preparationStarted=true;return new Promise(resolve=>{releaseLate=resolve;});
+  },{kind:1,signal:loadingCancellation.signal});
+  await until(()=>preparationStarted,'转场没有开始异步资源准备');
+  const late=runtime.captureTexture('battle');loadingCancellation.abort(new Error('准备中取消'));
+  let loadingCancelled=false;try{await loading;}catch(error){loadingCancelled=error.message==='准备中取消';}
+  releaseLate(late);await frame();
+  assert(loadingCancelled&&!runtime.transitions.active&&!runtime.snapshots.size,'取消后的迟到战场重新安装或泄露了快照');
+  const preparationFailure=new Error('受控资源准备失败');let failure=null;
+  try{await runtime.transitions.run(runtime.captureTexture('battle'),async()=>{throw preparationFailure;},{kind:4});}catch(error){failure=error;}
+  assert(failure===preparationFailure&&!runtime.transitions.active&&!runtime.snapshots.size,'资源准备失败后没有恢复并释放转场');
+  record('异步资源准备：取消后的迟到快照释放、失败退出与覆盖层清理通过');
   const panel=document.createElement('div');panel.className='dialogue-viewport';panel.style.cssText='position:absolute;inset:0;width:640px;height:480px';
   const plane=document.createElement('canvas');plane.width=640;plane.height=480;plane.style.cssText='position:absolute;inset:0;width:640px;height:480px';panel.append(plane);stage.append(panel);
   let rasterRequests=0;const nativeGetContext=plane.getContext.bind(plane);plane.getContext=(kind,...args)=>{if(kind==='2d')rasterRequests++;return nativeGetContext(kind,...args);};

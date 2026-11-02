@@ -4,7 +4,7 @@
  * Source: ev_6a97d55ce2cda38f5a9cacf245900414d96566b052c7e04fb96bac9a431a6764,
  * ev_e7ebc40b1eb0efaa9d96ff7f3e6fc290955d8807dff0dc831ad32c06ceb45a70.
  */
-import {DeathParticlePlayback} from './death_particles.mjs';
+import {DeathParticlePlayback,DEATH_PARTICLE_TIMING} from './death_particles.mjs';
 import {nativeEntryPath,advanceNativeEntryPath,nativeEntryOffset} from './core/battle_entry.mjs';
 const need=(ok,message)=>{if(!ok)throw new TypeError(message);};
 const copy=value=>structuredClone(value);
@@ -43,7 +43,7 @@ export class BattleLifecyclePlayback {
     }
     this.reset();
   }
-  reset(){this.channels=new Map();this.held=new Map();this.hiddenActors=new Set();this.alphas=new Map();this.epochs=new Map();this.finished=new Set();this.retired=new Set();this.completed=[];this.battleId=null;this.lastNow=null;}
+  reset(){this.channels=new Map();this.held=new Map();this.hiddenActors=new Set();this.alphas=new Map();this.epochs=new Map();this.finished=new Set();this.retired=new Set();this.completed=[];this.battleId=null;this.lastNow=null;this.entryPrepared=false;this.preparingEntries=null;}
   _key(event){return `${event.actor_id}\0${event.life_epoch}\0${event.token}`;}
   _cancel(actorId){
     const channel=this.channels.get(actorId);if(channel)this.retired.add(this._key(channel.event));
@@ -107,7 +107,7 @@ export class BattleLifecyclePlayback {
       }
       if(channel.appearance){
         const appearance=channel.appearance,limit=APPEARANCE_ALPHA_ADAPTER.complete_elapsed_raw[appearance.mode];
-        appearance.elapsed_raw=Math.floor(Math.max(0,now-appearance.started)/APPEARANCE_ALPHA_ADAPTER.source_clock_ms);
+        appearance.elapsed_raw=Math.floor((Math.max(0,now-appearance.started)+1e-7)/APPEARANCE_ALPHA_ADAPTER.source_clock_ms);
         if(appearance.mode===2||appearance.mode===3){
           const active=appearance.particles.advance(now);appearance.elapsed_raw=appearance.particles.elapsed;appearance.render_calls=appearance.particles.calls;
           this.alphas.set(channel.actor_id,appearance.particles.effect?.draw?1:Math.min(1,appearance.elapsed_raw/30));
@@ -234,9 +234,48 @@ export class BattleLifecyclePlayback {
       if(this.finished.has(this._key(event))||this.retired.has(this._key(event)))continue;
       let channel=this.channels.get(id);
       if(!channel){this._cancel(id);channel=this._start(event,actors.get(id),members.get(id),time);}
-      this._advanceChannel(channel,time);
+      if(!this.preparingEntries?.has(id))this._advanceChannel(channel,time);
     }
     return this.snapshot();
+  }
+  prepareEntry(snapshot,roster,now){
+    if(this.entryPrepared&&this.battleId===snapshot.id)return this.snapshot();
+    if(this.battleId!==null&&snapshot.id!==undefined&&snapshot.id!==this.battleId)this.reset();
+    const entries=(snapshot.lifecycle_events??[]).filter(event=>event.kind==='entry');
+    if(!entries.length)return this.snapshot();
+    need(!this.channels.size,'Entry preparation must precede live lifecycle playback');
+    const input={...snapshot,lifecycle_events:entries},ready=new Map();let time=now;
+    try{
+      // Visit hidden records in their shared source-time order, including
+      // controller-owned appearance RNG. Stop each actor at its first visible
+      // frame; running entries keep their initial movement frame intact.
+      this.preparingEntries=new Set();
+      while(ready.size<entries.length){
+        this.advance(input,roster,time);let next=Infinity;
+        for(const event of entries){
+          if(ready.has(event.actor_id))continue;
+          const channel=this.channels.get(event.actor_id);
+          need(!channel?.blocked,`Entry preparation blocked: ${channel?.blocked}`);
+          if(!channel||this.alpha(event.actor_id)>0){
+            ready.set(event.actor_id,time);this.preparingEntries.add(event.actor_id);continue;
+          }
+          const appearance=channel.appearance;
+          const at=appearance?.particles?appearance.particles.started+(appearance.particles.tick+1)*DEATH_PARTICLE_TIMING.render_ms
+            :appearance?appearance.started+APPEARANCE_ALPHA_ADAPTER.source_clock_ms:channel.deadline;
+          need(at>time,'Entry preparation has no next hidden frame');next=Math.min(next,at);
+        }
+        if(ready.size<entries.length){need(Number.isFinite(next),'Entry preparation cannot reach a visible frame');time=next;}
+      }
+      // Only presentation timestamps move. The owning battle clock, charging,
+      // status ticks and lifecycle acknowledgements have not advanced.
+      for(const [id,at]of ready){
+        const channel=this.channels.get(id);if(!channel)continue;const shift=now-at;
+        channel.started+=shift;channel.deadline+=shift;
+        for(const value of [channel.appearance,channel.appearance?.particles])if(value)value.started+=shift;
+        for(const value of [channel.entry,channel.escape,channel.last_control])if(value)value.at+=shift;
+      }
+      this.lastNow=now;this.entryPrepared=true;return this.snapshot();
+    }finally{this.preparingEntries=null;}
   }
   alpha(actorId){return this.alphas.get(actorId)??1;}
   pose(actorId){const channel=this.channels.get(actorId),pose=channel?.pose??this.held.get(actorId)?.pose,path=channel?.escape??channel?.entry;
