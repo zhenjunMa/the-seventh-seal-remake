@@ -79,7 +79,7 @@ test('Battle medicine consumes one scheduled action and commits once on exit',as
   // conversion, while other suites cover complete enemy contact playback.
   battle.start({...sample,rng:createNativeRng(12345)});for(const enemy of battle.state.actors.filter(a=>a.side==='enemy'))enemy.charge.delay=1000000;
   const tea=battle.items().find(r=>r.id===12),before=world.snapshot();
-  await commandReady(battle,'001');battle.selectPlayer('001');const queued=battle.chooseItem(tea.instance_id,'001');await assert.rejects(battle.chooseItem(tea.instance_id,'001'),/行动/);await queued;
+  await commandReady(battle,'001');battle.selectPlayer('001');const queued=battle.chooseItem(tea.instance_id,'001');assert.equal(battle.canCommand('001'),false);assert.throws(()=>battle.selectPlayer('001'),/行动/);await queued;
   assert.equal(battle.state.phase,'charging');assert.equal(battle.state.round,2);assert.equal(battle.state.action_count,1);
   assert.equal(battle.actor('001').charge.gauge,-battle.state.scheduler.threshold);assert.equal(battle.items().find(r=>r.id===12).quantity,4);
   assert.equal(battle.actor('001').charge.delay,0);assert.equal(events.find(e=>e.type==='battle-item-used').charge.effective_delay,0);

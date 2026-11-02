@@ -11,8 +11,9 @@ export async function pumpUntil(battle,predicate,{limit=120000}={}){
   throw new Error('Test frame driver exceeded bounded battle clock');
 }
 export async function commandReady(battle,id=battle.state.player_id){
-  await pumpUntil(battle,()=>battle.canCommand(id));
-  return battle.canCommand(id);
+  const ready=()=>battle.canCommand(id)&&(!battle.state.scheduler||battle.readyPlayerIds().includes(id));
+  await pumpUntil(battle,ready);
+  return ready();
 }
 export async function chooseReady(battle,skillId,targetId=null){
   if(!battle.state.scheduler)return battle.choose(skillId,targetId);

@@ -87,14 +87,14 @@ export function chargeActor(actor,rng){
   // recovery arithmetic and exact strict debt comparison from 0x502F30.
   if(actor.state_raw>=4)return speed;
   c.recovery_ticks=(c.recovery_ticks>>>0)>0?(c.recovery_ticks-1)|0:0;
-  if(c.recovery){if((c.recovery>>>0)>(speed>>1>>>0))c.recovery=(c.recovery-(speed>>1))|0;else{c.recovery=0;c.recovery_ticks=0;}}
+  if(c.recovery){if((c.recovery>>>0)>(speed>>1>>>0))c.recovery=(c.recovery-(speed>>1))|0;else{c.recovery=0;c.recovery_ticks=0;}actor.reaction_inhibit_raw=c.recovery;}
   if(c.delay===0)c.gauge=(c.gauge+speed)|0;
   else if(c.delay<speed){c.gauge=(c.gauge+speed-c.delay)|0;c.delay=0;}
   else c.delay=(c.delay-speed)|0;
   return speed;
 }
-// Input readiness and automatic dispatch use the same native eligibility gate.
-// A ready player can choose a command before it has a pending skill.
+// Execution readiness is independent of command input. Buffered commands wait
+// for the native charge, recovery and reaction gates before dispatch.
 export function isActorReady(actor,scheduler){
   const c=actor?.charge,flags=actor?.status_flags_raw??0;
   return Boolean(c&&actor.hp.current>0&&actor.state_raw<4&&!actor.native_active&&!actor.immune_raw&&!actor.reaction_inhibit_raw&&!c.recovery&&!c.delay&&!(flags&0x1e1)&&c.gauge>=scheduler.threshold);
@@ -111,8 +111,8 @@ export function selectReady(actors,scheduler,{enemy_passive=false}={}){
     // Skill-test targets retain their clock but have no proactive command.
     // Keep the original actor positions for native candidate-side arbitration.
     if(enemy_passive&&a.side==='enemy')continue;
-    // A full player gauge enables command entry. Automatic dispatch still
-    // requires that player's own confirmed command, never another member's.
+    // Automatic dispatch requires a full gauge and this player's own confirmed
+    // command, never another member's. Confirmed commands stay locked until done.
     if(!isActorReady(a,scheduler))continue;
     if(a.side==='player'){
       clearCommandDefense(a);

@@ -62,7 +62,7 @@ export class BattleMenuView{
   reject(message){this.setInfo(message);this.cue('menuError');}
   setStage(stage){if(this.stage===stage)return;this.stage=stage;this.root.dataset.focusLayer=stage;this.onStage(stage);}
   ready(){return this.battle.readyPlayerIds?.()??(this.snapshot?.phase==='command'?[this.snapshot.player_id]:[]);}
-  available(id=this.snapshot?.player_id){return this.battle.canCommand?.(id)??this.snapshot?.phase==='command';}
+  available(id=this.snapshot?.player_id){return this.battle?.canCommand?.(id)??this.snapshot?.phase==='command';}
   skills(){const id=this.snapshot.player_id,order=this.snapshot.source.player_command_order?.[id]??[];return Object.values(this.battle.skills).filter(s=>s.actor_id===id).sort((a,b)=>(order.indexOf(a.id)<0?999:order.indexOf(a.id))-(order.indexOf(b.id)<0?999:order.indexOf(b.id)));}
   slots(){const skills=this.skills(),bindings=this.getBindings?.(this.snapshot.player_id);return (bindings??[...Array.from({length:3},(_,i)=>({type:0,index_one_based:(skills[i]?.original_skill_index??i)+1})),...[1,2,3,4].map(n=>({type:2,index_one_based:n,icon:n-1,color:0}))]).map((slot,i)=>{const skill=slot.type===0?(bindings?skills.find(s=>s.original_skill_index===slot.index_one_based-1):skills[i]):slot.type===1?skills.find(s=>s.technique_index_one_based===slot.index_one_based):null;return {...slot,skill,name:slot.type===2?['使用招式','使用物品','防御','逃跑'][slot.index_one_based-1]:skill?.name??slot.name??(slot.type===1?'编成技巧':'当前不可用')};});}
   remember(){if(this.snapshot){const previous=this.memory.get(this.snapshot.player_id)??{};this.memory.set(this.snapshot.player_id,{...previous,wheel:this.focusIndex,list:['skills','items'].includes(this.stage)?this.listIndex:previous.list??this.listIndex,target:this.targetId,...(this.stage==='skills'?{skillCategory:this.skillCategory}:{})});}}
@@ -95,18 +95,18 @@ export class BattleMenuView{
   }
   syncPlayers(){
     const party=this.snapshot.actors.filter(a=>a.side==='player');const ready=this.ready();
-    party.forEach((a,index)=>{let b=this.players.get(a.id);if(!b){b=this.button('battle-actor-hit',()=>this.selectActor(a.id));b.dataset.actorId=a.id;this.players.set(a.id,b);this.actorLayer.append(b);}b.hidden=a.escaped||a.state_raw===11;const [x,y]=originalSlots[a.party_slot_zero_based??index]??originalSlots[0];this.place(b,x,y,203,53);const queued=[this.snapshot.scheduler?.pending,...(this.snapshot.scheduler?.queued_commands??[])].some(command=>command?.actor_id===a.id);b.setAttribute('aria-label',`${a.name}，HP ${a.hp.current}/${a.hp.maximum}，MP ${a.mp.current}/${a.mp.maximum}，${queued?'指令已确认':ready.includes(a.id)?'行动槽已满':'充能中'}`);b.setAttribute('aria-pressed',String(a.id===this.snapshot.player_id&&ready.includes(a.id)));b.setAttribute('aria-disabled',String(!this.available(a.id)));});
+    party.forEach((a,index)=>{let b=this.players.get(a.id);if(!b){b=this.button('battle-actor-hit',()=>this.selectActor(a.id));b.dataset.actorId=a.id;this.players.set(a.id,b);this.actorLayer.append(b);}b.hidden=a.escaped||a.state_raw===11;const [x,y]=originalSlots[a.party_slot_zero_based??index]??originalSlots[0];this.place(b,x,y,203,53);const queued=[this.snapshot.scheduler?.pending,...(this.snapshot.scheduler?.queued_commands??[])].some(command=>command?.actor_id===a.id);b.setAttribute('aria-label',`${a.name}，HP ${a.hp.current}/${a.hp.maximum}，MP ${a.mp.current}/${a.mp.maximum}，${queued?'指令已确认':ready.includes(a.id)?'行动槽已满':'充能中'}`);b.setAttribute('aria-pressed',String(a.id===this.snapshot.player_id&&this.available(a.id)));b.setAttribute('aria-disabled',String(!this.available(a.id)));});
   }
   syncWheel(){
     const slots=this.slots();this.commandSlots=slots;
     this.wheelButtons.forEach((b,i)=>{const slot=slots[i],skill=slot?.skill;b.hidden=this.stage!=='wheel';b.setAttribute('aria-label',slot?.name??'空快捷栏');b.dataset.skill=skill?.id??'';const supported=[0,1].includes(slot?.type)?Boolean(skill)&&this.battle.canChoose(skill.id):slot?.type===2?[Boolean(this.skills().length),Boolean(this.battle.itemData&&this.battle.items().length),typeof this.battle.chooseDefend==='function',typeof this.battle.chooseEscape==='function'][slot.index_one_based-1]:false;b.setAttribute('aria-disabled',String(!this.available()||!supported));});
   }
   selectActor(id){if(!this.available(id)){this.reject('此角色尚不能输入新指令。');return;}if(id===this.snapshot.player_id)return;this.remember();this.battle.selectPlayer(id);this.cue('menuSelect');}
-  cycleActor(direction=1){const ids=this.ready().filter(id=>this.available(id));if(!ids.length)return;const current=ids.indexOf(this.snapshot.player_id);this.selectActor(ids[current<0?(direction<0?ids.length-1:0):(current+direction+ids.length)%ids.length]);}
+  cycleActor(direction=1){const ids=this.snapshot.actors.filter(actor=>actor.side==='player'&&this.available(actor.id)).map(actor=>actor.id);if(!ids.length)return;const current=ids.indexOf(this.snapshot.player_id);this.selectActor(ids[current<0?(direction<0?ids.length-1:0):(current+direction+ids.length)%ids.length]);}
   moveActor(key){const slot={ArrowLeft:0,ArrowUp:1,ArrowDown:2,ArrowRight:3}[key],party=this.snapshot.actors.filter(a=>a.side==='player'),actor=party.find((a,index)=>(a.party_slot_zero_based??index)===slot);if(actor&&this.available(actor.id))this.selectActor(actor.id);}
   activateWheel(index){
     if(this.stage!=='wheel')return;
-    if(!this.available()){this.reject('请等待行动槽充满。');return;}this.focusIndex=index;this.remember();
+    if(!this.available()){this.reject('角色正在行动或当前不能输入指令。');return;}this.focusIndex=index;this.remember();
     const slot=this.commandSlots[index];
     if([0,1].includes(slot?.type)){const skill=slot.skill;if(!skill||!this.battle.canChoose(skill.id)){this.reject(this.battle.skillUnavailableReason?.(skill?.id)||'资源不足或招式当前不可用。');return;}this.chooseSkill(skill,'wheel');}
     else if(slot?.type===2&&slot.index_one_based===2)this.openItems();
@@ -212,12 +212,12 @@ export class BattleMenuView{
       if(state&&state.top<46&&!ball&&bar){ball=this.doc.createElement('canvas');ball.width=47;ball.height=46;const bc=ball.getContext('2d');drawBattleImage(bc,bar,0,0);bc.globalCompositeOperation='multiply';bc.fillStyle=`rgb(${state.color.join(',')})`;bc.fillRect(0,0,47,46);bc.globalCompositeOperation='destination-in';drawBattleImage(bc,bar,0,0);this.ballCache.set(key,ball);}
       if(state&&state.top<46&&ball){c.save();c.beginPath();c.rect(x+16,y+1+state.top,47,46-state.top);c.clip();c.drawImage(ball,x+16,y+1);c.restore();}
       this.asset('time_glass',0,x+16,y+1,{mask:true});
-      if(actor.id===this.snapshot.player_id&&this.ready().includes(actor.id))this.asset('fight_mark',Math.floor(now/120),x-30,y-16,{blend:'lighter'});
+      if(actor.id===this.snapshot.player_id&&(this.ready().includes(actor.id)||this.available(actor.id)))this.asset('fight_mark',Math.floor(now/120),x-30,y-16,{blend:'lighter'});
     });
     const info=this.menus.get('fight_info'),infoText=info.widgets.find(w=>w.name==='TEXT');this.image(info.images[0].image,0,443);this.text(this.message,infoText.rect.left,443+infoText.rect.top,{font:'14px SimSun',widget:infoText});
     if(this.stage!=='result')this.drawWheel(now);
     if(['skills','items'].includes(this.stage))this.drawList();
-    const selected=this.snapshot.actors.find(a=>a.id===this.snapshot.player_id),pointer=this.stage==='target'?this.snapshot.actors.find(a=>a.id===this.targetId):this.ready().includes(selected?.id)?selected:null;
+    const selected=this.snapshot.actors.find(a=>a.id===this.snapshot.player_id),pointer=this.stage==='target'?this.snapshot.actors.find(a=>a.id===this.targetId):this.ready().includes(selected?.id)||this.available(selected?.id)?selected:null;
     if(pointer){
       const height=this.getCursorHeight?.(pointer.id);
       if(Number.isFinite(height)){

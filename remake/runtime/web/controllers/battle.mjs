@@ -174,7 +174,7 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
       state.battleSampleMode=sampleMode;
       const configured=await actions.readConfiguredData({sample:sampleMode});state.itemData=configured.items;
       progress({completed:10,total:100});
-      const newScheduler={...configured.scheduler,policy:{...configured.scheduler.policy,commands:'Frame-driven charging and queued ready-player commands; menu selection and other actors animations continue charging.'},...(newParty?{idle_skills:{...configured.scheduler.idle_skills,...state.partySkills.idle_skills}}:{})};
+      const newScheduler={...configured.scheduler,policy:{...configured.scheduler.policy,commands:'Frame-driven charging with per-player buffered commands; input continues during charging and hit reactions, confirmation locks until action completion, and dispatch waits for execution readiness.'},...(newParty?{idle_skills:{...configured.scheduler.idle_skills,...state.partySkills.idle_skills}}:{})};
       sample=newParty?assembleForestSample(createPartySample(state.world.snapshot(),state.partyCombat,state.partySkills,configured,state.itemData,state.operationMenu?.techniques?.supplement?.name_charset),configured.forest,group,newScheduler,configured.ai,configured.rewards,state.partyReactions,state.statusData):group?createForestSample(state.world.snapshot(),configured.combat,configured.forest,group,null,newScheduler,configured.ai,configured.rewards,state.reactionData,state.statusData):createBattleSample(state.world.snapshot(),configured.combat);
       if(sample.actors.filter(actor=>actor.side==='player').every(actor=>actor.hp.current===0))throw new Error('队伍已经倒下，请载入进度后继续。');
       const mode=newParty?'party':group?'forest':'sample';state.battleView=await prepareView({mode,newParty,stagePath:group?'/'+battleStage(group.stage).path:null,lifecycle:Boolean(group),actors:sample.actors,skills:sample.skills,inventory:state.world.value.inventory,onProgress:p=>progress({completed:10+75*p.completed/p.total,total:100})});state.battleView.setRoster(sample.actors,sample.skills);
@@ -191,7 +191,7 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
       state.battleRng=createNativeRng(rngSeed);state.battleNatural=Boolean(group);
       await revealBattle(before,()=>state.battle.start({...sample,lifecycle_enabled:Boolean(state.battleView.lifecycle),side_priority:state.sidePriority,rng:state.battleRng,source:{...sample.source,rng_seed:rngSeed,rng_seed_policy:group?'persistent-development-global-stream':'controlled-development-seed'}}));
       if(group)actions.log({type:'field-encounter',group,location:state.world.location,counter_after:state.world.value.encounters.counters[state.selectedRole]});
-      actions.status('满槽后选择招式和目标。Esc 收起轮盘，方向键切换人物，空格打开轮盘；也可用 Tab / X / Z 切换满槽人物。');
+      actions.status('蓄力时即可选择招式和目标，确认后等待满槽行动；行动结束即可输入下一轮，受击不打断选择。Esc 收起轮盘，方向键切换人物，空格打开；Tab / X / Z 切换人物。');
     }catch(error){before?.destroy?.();state.battleView?.stop('战斗启动失败');state.battleMenu?.dispose();state.battleMenu=null;canvas.hidden=false;for(const id of ['battleCanvas','battleHud','battleCommands'])$(id).hidden=true;Object.assign(state.view,state.battleCheckpoint);state.scenes.setPhase('map');state.audio?.setScene({mapId:state.world.location.map_id,battle:false});throw error;}
   }
   async function startScriptedBattle({group,draft,playback,signal=playback?.signal}){

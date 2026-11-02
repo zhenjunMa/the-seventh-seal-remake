@@ -54,7 +54,7 @@ export async function replayFixture(save,{commandLimit=35}={}){
   while(['charging','command','action'].includes(battle.state.phase)&&commands.length<commandLimit){
     const living=battle.players().filter(actor=>actor.hp.current>0),enemies=battle.state.actors.filter(actor=>actor.side==='enemy'&&actor.hp.current>0);
     const selected=living.find(actor=>actor.id==='001')??living[0];
-    await pump(()=>battle.canCommand(selected.id));if(!battle.canCommand(selected.id))break;
+    await pump(()=>battle.readyPlayerIds().includes(selected.id)&&battle.canCommand(selected.id));if(!battle.readyPlayerIds().includes(selected.id)||!battle.canCommand(selected.id))break;
     battle.selectPlayer(selected.id);
     const practiceYantu=selected.id==='001'&&entry.party.find(role=>role.id==='001').skill_progress?.records?.some(row=>row.index===22)&&!commands.some(row=>row.skill_id==='yantu');
     const spell=selected.id==='001'&&selected.mp.current>=battle.skills.yancui.mp_cost;

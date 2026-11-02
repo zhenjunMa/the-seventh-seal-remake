@@ -85,17 +85,17 @@ function partyFixture(){
   return {view,cues,selected};
 }
 
-test('Esc closes the wheel; native direction slots select ready actors and Space reopens their commands',()=>{
+test('Esc closes the wheel; direction slots select commandable actors and Space reopens their commands',()=>{
   const {view,selected}=partyFixture();
   view.key('Escape');assert.equal(view.stage,'actors');assert.equal(view.focusedActor,'001');
   view.key('ArrowUp');assert.equal(view.stage,'actors');assert.equal(view.snapshot.player_id,'002');
   view.key('ArrowDown');assert.equal(view.snapshot.player_id,'003');view.key('ArrowLeft');assert.equal(view.snapshot.player_id,'001');
-  view.key('ArrowRight');assert.equal(view.snapshot.player_id,'001','A partial gauge must not take command focus');
+  view.key('ArrowRight');assert.equal(view.snapshot.player_id,'001','An actor with a locked command must not take focus');
   assert.deepEqual(selected,['002','003','001']);view.key(' ');assert.equal(view.stage,'wheel');
 });
 
-test('A ready teammate remains selectable when the current actor is busy, including the only available teammate',()=>{
-  const {view,selected}=partyFixture();view.battle.canCommand=id=>id==='002';
+test('An uncharged teammate remains selectable when the current actor is busy, including the only available teammate',()=>{
+  const {view,selected}=partyFixture();view.battle.canCommand=id=>id==='002';view.ready=()=>[];
   view.cycleActor();assert.deepEqual(selected,['002']);
   view.snapshot.player_id='001';view.selectActor('002');assert.deepEqual(selected,['002','002']);
 });

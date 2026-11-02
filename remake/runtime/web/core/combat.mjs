@@ -198,7 +198,7 @@ export class BattleController {
     onFinalizeDeath:({actor:candidate})=>{const actor=this.actor(candidate.id);Object.assign(actor,copy(candidate));if(this.canFinalizeDeath(actor))this.finalizeDeath(actor);return {actor:copy(actor)};},
     onDispatch:({actor:candidate})=>{
       const actor=this.actor(candidate.id);Object.assign(actor,copy(candidate));
-      const pending=commandForActor(this.state.scheduler,actor.id);if(pending)this.cancelQueuedCommand(pending,'native-recovery-command6');
+      // Recovery delays execution without discarding the player's confirmed command.
       actor.native_after_raw={...actor.native_after_raw,'0x0521a7c7':0,'0x0521a779':0,'0x0521a77a':0,'0x0521a7c6':0,'0x0521a7c8':0};
       return {actor:copy(actor)};
     }};
@@ -311,7 +311,9 @@ export class BattleController {
     if(this.hasLifecycle('entry'))return false;
     const actor=this.state&&this.actor(id),scheduler=this.state?.scheduler;
     if(!scheduler)return Boolean(this.state?.phase==='command'&&!this.running&&actor?.side==='player'&&actor.hp.current>0);
-    return Boolean(['command','charging','action'].includes(this.state.phase)&&!this.state.pending_outcome&&!commandForActor(scheduler,id)&&actor?.side==='player'&&actor.id!==scheduler.active_actor_id&&!this.state.lifecycle_events?.some(e=>e.actor_id===id)&&isActorReady(actor,scheduler));
+    // Input belongs to the player, independently of charging and hit reactions.
+    // Confirmation locks this actor until its queued action has completed.
+    return Boolean(['command','charging','action'].includes(this.state.phase)&&!this.state.pending_outcome&&!commandForActor(scheduler,id)&&actor?.side==='player'&&actor.hp.current>0&&actor.state_raw<4&&!actor.escaped&&actor.id!==scheduler.active_actor_id&&!this.state.lifecycle_events?.some(e=>e.actor_id===id&&e.kind!=='response'));
   }
   setCommandStage(stage='closed') {
     requireValue(typeof stage==='string'&&stage.length>0&&stage.length<=64,'战斗命令层无效');
@@ -320,7 +322,7 @@ export class BattleController {
   selectPlayer(id) {
     requireValue(this.state&&['command','charging','action'].includes(this.state.phase),'当前战斗不能切换角色');this.checkWorld();
     const actor=this.actor(id);requireValue(actor?.side==='player'&&actor.hp.current>0,'角色已经倒下或不属于队伍');
-    requireValue(this.canCommand(id),'角色行动槽尚未充满');
+    requireValue(this.canCommand(id),'角色正在行动或当前不能输入指令');
     this.state.player_id=id;this.publish();return this.snapshot();
   }
   canChoose(skillId) {
@@ -352,7 +354,7 @@ export class BattleController {
   async chooseEscape() { return this.chooseFixedCommand('escape'); }
   async chooseFixedCommand(kind) {
     requireValue(['defend','escape'].includes(kind),'固定战斗命令无效');
-    requireValue(this.state?.scheduler&&this.canCommand(),'行动槽尚未充满或已有行动指令');this.checkWorld();
+    requireValue(this.state?.scheduler&&this.canCommand(),'角色正在行动或当前不能输入指令');this.checkWorld();
     const player=this.actor(this.state.player_id);
     this.queueCommand({actor_id:player.id,skill_id:kind,target_id:player.id,command_kind:kind});
     if(!this.running){const task=this.scheduleReady();if(task)await task;}
@@ -547,8 +549,8 @@ export class BattleController {
         const available=definition?.battle?.all_targets_raw_156?this.state.actors.some(actor=>this.itemTargetAvailable(actor,command.item_instance_id,caster)):this.itemTargetAvailable(target,command.item_instance_id,caster);
         if(!available)this.cancelQueuedCommand(command,'item-target-unavailable');}
     }
-    const ready=this.readyPlayerIds().filter(id=>this.canCommand(id));
-    if(!ready.includes(this.state.player_id)&&ready.length)this.state.player_id=ready[0];
+    const ready=this.readyPlayerIds(),available=this.players().filter(actor=>this.canCommand(actor.id)).map(actor=>actor.id);
+    if(!available.includes(this.state.player_id)&&available.length)this.state.player_id=available[0];
     else if(!this.activePlayers().some(a=>a.id===this.state.player_id))this.state.player_id=this.activePlayers()[0]?.id??this.state.player_id;
     if(!this.running)this.state.phase=ready.length?'command':'charging';
   }
@@ -566,7 +568,7 @@ export class BattleController {
   async chooseScheduled(skillId,targetId=null,itemCommand=null) {
     requireValue(this.state&&['command','charging','action'].includes(this.state.phase),'当前战斗不能选择命令');this.checkWorld();
     const player=this.actor(this.state.player_id);
-    requireValue(this.canCommand(player.id),'角色行动槽尚未充满');
+    requireValue(this.canCommand(player.id),'角色正在行动或当前不能输入指令');
     let skill=this.skills[skillId];
     if(itemCommand){
       const consumed=consumeInventoryItem(this.state.inventory,itemCommand.instance_id,this.itemData);

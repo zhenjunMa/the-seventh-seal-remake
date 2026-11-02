@@ -44,6 +44,28 @@ test('Only the selected party member dispatches the queued command; both resourc
   const saved=world.snapshot();assert.deepEqual(battle.finish(),done);assert.deepEqual(world.snapshot(),saved);
   assert.deepEqual(await decodeSave(await encodeSave(saved),['M17010','M70010']),saved);
 });
+test('Early confirmation locks through charging, hit recovery and action, then unlocks before the next full gauge',async()=>{
+  const {battle,calls}=fixture(),actor=battle.actor('001'),s=battle.state.scheduler;
+  battle.actor('012').charge.delay=1000000;
+  const before=clone({charge:actor.charge,mp:actor.mp});
+  assert.equal(battle.canChoose('one'),true);assert.deepEqual(battle.readyPlayerIds(),[]);
+  await battle.choose('one');assert.deepEqual(actor.charge,before.charge);assert.deepEqual(actor.mp,before.mp);
+  assert.equal(battle.canCommand('001'),false);assert.equal(battle.canCommand('002'),true);assert.equal(calls.length,0);
+  assert.throws(()=>battle.selectPlayer('001'));
+  actor.charge.gauge=s.threshold;actor.native_active=true;
+  Object.assign(actor.charge,{recovery:25,recovery_ticks:0});actor.reaction_inhibit_raw=25;
+  battle.nativeSourceHooks().onDispatch({actor:clone(actor)});
+  await battle.waitTick();battle.advanceClock();
+  assert.equal(s.pending.actor_id,'001');assert.equal(calls.length,0);assert.equal(actor.reaction_inhibit_raw,0);
+  let release;battle.playAction=async(_,{onImpact})=>{await new Promise(resolve=>release=resolve);onImpact();};
+  actor.native_active=false;await battle.waitTick();battle.advanceClock();const task=battle.actionTask;
+  assert.equal(s.active_actor_id,'001');assert.equal(battle.canCommand('001'),false);assert.equal(calls.length,1);
+  release();await task;
+  assert.equal(battle.canCommand('001'),true);assert.equal(battle.readyPlayerIds().includes('001'),false);
+  battle.selectPlayer('001');await battle.choose('one');
+  assert.equal(s.pending.actor_id,'001');assert.equal(battle.canCommand('001'),false);assert.equal(calls.length,1);
+});
+
 test('A fallen selected member cancels its command and leaves the surviving member playable',async()=>{
   const {battle}=fixture({playerHp:[1,120],enemyFirst:true,damage:5});
   await commandReady(battle,'002');
@@ -79,17 +101,17 @@ test('Native silence bit1 blocks type2 commands before charge, cost or world mut
   player.status_flags_raw=0;assert.equal(battle.canChoose('spell'),true);
 });
 
-test('Two full party gauges can switch command ownership without spending charge; a partial gauge cannot',async()=>{
+test('Party members can switch command ownership before full charge without spending it',async()=>{
   const {battle,calls}=fixture();await commandReady(battle,'001');
   const s=battle.state.scheduler,a=battle.actor('001'),b=battle.actor('002');
   b.charge.gauge=s.threshold-1;
-  assert.throws(()=>battle.selectPlayer('002'),/尚未充满/);
+  battle.selectPlayer('002');assert.equal(battle.canChoose('two'),true);assert.deepEqual(battle.readyPlayerIds(),['001']);
   b.charge.gauge=s.threshold;const gauges=[a.charge.gauge,b.charge.gauge];
   assert.deepEqual(battle.readyPlayerIds(),['001','002']);
   battle.selectPlayer('002');assert.equal(battle.canChoose('two'),true);assert.equal(battle.canChoose('one'),false);
   battle.selectPlayer('001');assert.deepEqual([a.charge.gauge,b.charge.gauge],gauges);assert.equal(calls.length,0);
   battle.selectPlayer('002');await battle.choose('two');assert.equal(battle.actor('001').charge.gauge,gauges[0]);
-  assert.deepEqual(calls.map(c=>c.attacker.id),['002']);assert.equal(battle.canChoose('two'),false);
+  assert.deepEqual(calls.map(c=>c.attacker.id),['002']);battle.selectPlayer('002');assert.equal(battle.canChoose('two'),true);assert.equal(battle.readyPlayerIds().includes('002'),false);
 });
 
 test('Ready enemies act without input, while an active action keeps charging and prevents another dispatch',async()=>{
@@ -266,7 +288,7 @@ test('Frame-driven enemy presentation errors publish one interrupted state witho
 });
 
 test('Defend commits one full-gauge command and expires on the next ready scan without spending MP or inventing contact',async()=>{
-  const {battle,world,calls}=fixture(),saved=world.snapshot();await assert.rejects(battle.chooseDefend());
+  const {battle,world,calls}=fixture(),saved=world.snapshot();
   await commandReady(battle,'001');const a=battle.actor('001'),s=battle.state.scheduler;
   a.charge.gauge=s.threshold+17;const mp=a.mp.current;
   await battle.chooseDefend();assert.equal(a.charge.gauge,17);assert.equal(a.charge.delay,0);assert.equal(a.defense_half_raw,1);

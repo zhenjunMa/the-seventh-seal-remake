@@ -122,8 +122,8 @@ test('a source response remains ineligible while other actors can act beside a d
 });
 test('20ms clock runs before input and in every command layer with elapsed-time catchup',async()=>{
  const g=fixture(['012']);
- assert.equal(g.battle.state.phase,'charging');assert.equal(g.battle.canChoose('yantu'),false);
- const before=g.battle.snapshot();await assert.rejects(g.battle.choose('yantu'));assert.deepEqual(g.battle.snapshot(),before);
+ assert.equal(g.battle.state.phase,'charging');assert.equal(g.battle.canChoose('yantu'),true);
+ await g.battle.choose('yantu');assert.equal(g.battle.state.scheduler.pending.actor_id,'001');assert.equal(g.battle.canCommand('001'),false);assert.equal(g.battle.state.history.length,0);
  assert.equal(g.battle.advanceClock(19),false);assert.equal(g.battle.advanceClock(20),true);assert.equal(g.battle.advanceClock(20),false);assert.equal(g.battle.advanceClock(1020),true);assert.equal(g.battle.snapshot().scheduler.ticks,51);
  let now=1020;
  for(const stage of ['wheel','skills','items','target']){g.battle.setCommandStage(stage);const ticks=g.battle.state.scheduler.ticks;assert.equal(g.battle.advanceClock(now+=20),true);assert.equal(g.battle.state.scheduler.ticks,ticks+1);}
