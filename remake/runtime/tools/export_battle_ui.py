@@ -321,7 +321,8 @@ def main():
     dgp_names = ['menu','time_bar','time_glass','fight_role_name','fight_cursor1',
         'fight_cursor2','fight_cursor3','fight_mark','fight_board_mask','fight_board_disable',
         'board_bright','board_brightB','magic_ball1','magic_ball1_attr','magic_ball1_num',
-        'other_ball','use_ball','use_ball_num','char_ball','name_ball','hit',*[f'h{i}' for i in range(10)]]
+        'other_ball','use_ball','use_ball_num','char_ball','name_ball','fight_var_text',
+        'fight_var_textB','fight_miss_text','hit',*[f'h{i}' for i in range(10)]]
     sources = [ROOT/'SYSTEM'/(name+'.mnu') for name in mnu_names]
     sources += [ROOT/'Fight_Role/combo'/(name+'.dgp') for name in dgp_names]
     sources.append(ROOT/'GAME.exe')

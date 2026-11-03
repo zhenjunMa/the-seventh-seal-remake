@@ -9,6 +9,7 @@ import {BattleView, compileActionTimeline} from '../web/battle_view.mjs';
 const base = new URL('../', import.meta.url), root = new URL('../../../', import.meta.url);
 const meta = JSON.parse(await readFile(new URL('web/data/battle_view.json', base)));
 const layers = JSON.parse(await readFile(new URL('web/data/yantu_layers.json', base)));
+const ui = JSON.parse(await readFile(new URL('web/data/battle_ui.json', base)));
 const clone = value => structuredClone(value);
 const assetChecks = new Map();
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -44,7 +45,7 @@ async function realAssets(asset) {
   return {image: {width, height, path: asset.path}, sha256: asset.sha256};
 }
 
-const jsonLoader = async path => clone(path === '/data/battle_view.json' ? meta : layers);
+const jsonLoader = async path => clone(path === '/data/battle_ui.json' ? ui : path === '/data/battle_view.json' ? meta : layers);
 async function viewFixture(options = {}) {
   const target = canvas();
   const view = new BattleView({canvas: target, jsonLoader, assetLoader: realAssets, ...options});
@@ -168,7 +169,7 @@ contract('MISS keeps target pose and suppresses damage-only target effects', asy
   const done = view.playAction(input, {onImpact: () => count++});
   view.draw(world, 0); target.calls.length = 0; view.draw(world, 975);
   assert.equal(count, 1);
-  assert.ok(target.calls.some(call => call.text === 'MISS'));
+  assert.ok(target.calls.some(call => call.path?.includes('/fight_miss_text/')));
   assert.equal(target.calls.some(call => call.path?.includes('BFr01_Dn')), false);
   assert.equal(target.calls.some(call => call.path?.includes('/012/action_01')), false);
   assert.deepEqual(input, before); assert.deepEqual(world, worldBefore);

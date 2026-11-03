@@ -342,6 +342,15 @@ export class BattleView {
       const previous=descriptors.get(path),owners=[...new Set([...(previous?.owners??[]),...(Array.isArray(owner)?owner:[owner])])];
       descriptors.set(path, {path, sha256, width, height,owners});
     };
+    const ui=await this.jsonLoader('/data/battle_ui.json');
+    const damageTextAssets={damage:ui.assets.fight_var_text,healed:ui.assets.fight_var_textb,miss:ui.assets.fight_miss_text};
+    for(const [kind,asset]of Object.entries(damageTextAssets)){
+      if(!asset||asset.width!==(kind==='miss'?61:18)||asset.height!==(kind==='miss'?23:18)||asset.frames.length!==(kind==='miss'?1:10))throw new Error('战斗飘字素材无效');
+      for(const frame of asset.frames){
+        if(!urlAllowed('/'+frame.image)||!/^[a-f0-9]{64}$/.test(frame.png_sha256))throw new Error('战斗飘字来源无效');
+        add('/'+frame.image,frame.png_sha256,asset.width,asset.height);
+      }
+    }
     const stageMeta=this.stageMetadataPath?validateForestStage(await this.jsonLoader(this.stageMetadataPath),this.content):null;
     if(stageMeta)for(const asset of forestStageAssets(stageMeta))add(asset.path,asset.sha256,asset.width,asset.height);
     for (const role of meta.roles) for (const action of role.actions) {
@@ -366,6 +375,7 @@ export class BattleView {
     this.meta = clone(meta);
     this.itemMeta=clone(itemMeta);
     this.stageMeta=clone(stageMeta);
+    this.damageTextAssets=damageTextAssets;
     this.layers = clone(layers);
     this.alternateLayers = alternateLayers;
     this.lifecyclePairs=new Map([layers,...alternateLayers.values()].flatMap(bank=>bank.frames.map(pair=>[`${bank.role_id}:${pair.source_frame}`,pair])));
@@ -822,18 +832,21 @@ export class BattleView {
     const targetId=channel.result.target_id,slot=this._slots(channel)[targetId];if(!slot)return;
     this.damageTexts=this.damageTexts.filter(e=>now-e.created_at<900);
     const lane=this.damageTexts.filter(e=>e.target_id===targetId).length;
-    this.damageTexts.push({id:++this.damageTextSerial,target_id:targetId,text:miss?'MISS':result.supported?`+${result.hp_delta}`:String(result.damage),miss,healed:Boolean(result.supported),created_at:now,
+    this.damageTexts.push({id:++this.damageTextSerial,target_id:targetId,text:miss?'MISS':String(result.supported?result.hp_delta:result.damage),miss,healed:Boolean(result.supported),created_at:now,
       x:Math.max(this.stageMeta?140:20,Math.min(this.stageMeta?820:940,slot[0]+34+Math.floor(lane/4)*28)),
       y:Math.max(28,slot[1]-70-(lane%4)*24)});
   }
 
   _drawDamageTexts(now){
     this.damageTexts=this.damageTexts.filter(e=>now-e.created_at<900);
-    const c=this.context;
+    const c=this.context,scaleX=this.stageMeta?1.125:1.5,scaleY=1.125;
     for(const e of this.damageTexts){const age=Math.max(0,now-e.created_at);
-      c.save();c.globalAlpha=1-age/900;c.textAlign='center';c.font='bold 28px "Microsoft YaHei", sans-serif';c.fillStyle=e.miss?'#e2e8e7':e.healed?'#9df7ac':'#ffda91';
-      c.lineWidth=3;c.lineJoin='round';c.strokeStyle='#24190e';c.strokeText?.(e.text,e.x,e.y-age/60);
-      c.fillText(e.text,e.x,e.y-age/60);c.restore();
+      const asset=this.damageTextAssets[e.miss?'miss':e.healed?'healed':'damage'];
+      const frames=e.miss?[asset.frames[0]]:[...e.text].map(digit=>asset.frames[Number(digit)]);
+      const width=asset.width*scaleX,height=asset.height*scaleY,x=e.x-width*frames.length/2,y=e.y-age/60-height;
+      c.save();c.globalAlpha=1-age/900;
+      for(const [index,frame]of frames.entries())drawBattleImage(c,this.images.get('/'+frame.image),x+index*width,y,width,height);
+      c.restore();
     }
   }
 

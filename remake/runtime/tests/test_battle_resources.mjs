@@ -67,7 +67,9 @@ test('prepared BattleView switches actor sets without re-reading metadata or loa
   for(const id of ['BFr01_Up','_iRelife','_iReHP','_iReMP','_iReSTfz']){
     assert.ok(effectPaths(id).every(path=>selectedPaths().has(path)),`${id} must survive contact/revival/item closure`);
   }
-  assert.ok(selections[0].every(asset=>!asset.owners.includes('shared')),'effects are owned references, not battle-global');
+  const shared=selections[0].filter(asset=>asset.owners.includes('shared'));
+  assert.equal(shared.length,21);
+  assert.ok(shared.every(asset=>/\/battle_ui\/fight_(?:var_textb?|miss_text)\//.test(asset.path)),'only damage feedback is battle-global; skill effects retain their owners');
   const sharedEffect=selections[0].find(asset=>asset.path===effectPaths('_DutyN')[0]);
   assert.ok(sharedEffect.owners.includes('001')&&sharedEffect.owners.includes('002'));
   await view.prepare({actors:[{id:'002'},{id:'enemy',resource_id:'013'}]});assert.equal(jsonReads,count);
