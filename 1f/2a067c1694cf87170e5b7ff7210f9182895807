@@ -1,0 +1,50 @@
+remake/runtime/tests/test_field_skills.mjs
+  s_49a1e4fb1a0f8b::t_f748af376529ee 10-11,71,73-75,79-81,88-92
+remake/runtime/web/core/battle_skill_access.mjs
+  s_49a1e4fb1a0f8b::t_239c32d7b21af5 29-56
+remake/runtime/web/controllers/menu.mjs
+  s_49a1e4fb1a0f8b::t_f5a2df722031f2 6,18,20-21,23,25-27,57,93-98,100-112,114-120,133-134,145-146,150,152
+  s_49a1e4fb1a0f8b::t_2465a0753b0a33 19,22,24
+  s_49a1e4fb1a0f8b::t_239c32d7b21af5 2,172,176-185
+remake/assessment/validation_design.md
+  s_49a1e4fb1a0f8b::t_f85e58dbf68aca 66
+remake/runtime/web/core/battle_skill_growth.mjs
+  s_49a1e4fb1a0f8b::t_549299cb41e4d5 9-19,25,47-48
+remake/runtime/tests/test_skill_test_menu.mjs
+  s_49a1e4fb1a0f8b::t_c23fad16b24b26 75
+  s_49a1e4fb1a0f8b::t_f748af376529ee 6-7,61-62
+  s_49a1e4fb1a0f8b::t_a2d380f2a44317 72
+  s_49a1e4fb1a0f8b::t_3c71c9f4b67a3e 66-71,73-74,76-88
+remake/runtime/web/operation_technique_view.mjs
+  s_49a1e4fb1a0f8b::t_d28f1908512014 32
+  s_49a1e4fb1a0f8b::t_714f00b61eece2 35,39-40,202
+  s_49a1e4fb1a0f8b::t_15249c382b86ce 36-38,41-65,68-69,85,260-272
+remake/runtime/tests/test_save_controller.mjs
+  s_49a1e4fb1a0f8b::t_5b648f7d0de778 218
+remake/runtime/web/controllers/map.mjs
+  s_49a1e4fb1a0f8b::t_239c32d7b21af5 20-22,24,27-28
+remake/runtime/web/core/operation_menu.mjs
+  s_49a1e4fb1a0f8b::t_0fc05d0e726aa7 11-14,37
+remake/runtime/architecture.md
+  s_49a1e4fb1a0f8b::t_1429fd88561a78 132-133,136
+  s_49a1e4fb1a0f8b::t_79029214f3fd86 134-135
+remake/runtime/web/operation_menu_view.mjs
+  s_49a1e4fb1a0f8b::t_d28f1908512014 161,167
+  s_49a1e4fb1a0f8b::t_2465a0753b0a33 180
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "1f2a067c1694cf87170e5b7ff7210f9182895807",
+  "prompts": {},
+  "sessions": {
+    "s_49a1e4fb1a0f8b": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a19fdf-9b4e-7072-97ee-704727a6c964",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
