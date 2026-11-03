@@ -1,0 +1,45 @@
+remake/assessment/validation_design.md
+  s_81c9eb81b6fac6::t_14361144a116a0 29
+  s_81c9eb81b6fac6::t_73eaf912048cf1 30
+remake/runtime/tests/test_scripted_battle_controller.mjs
+  s_81c9eb81b6fac6::t_76273cadaaa1a4 104-109
+  s_81c9eb81b6fac6::t_c98d857a6718fc 49,103
+remake/runtime/architecture.md
+  s_81c9eb81b6fac6::t_73eaf912048cf1 45
+  s_81c9eb81b6fac6::t_fa25d7c6ca72a8 44
+remake/runtime/web/controllers/services.mjs
+  s_81c9eb81b6fac6::t_c98d857a6718fc 64-66,75-76
+remake/runtime/web/controllers/state.mjs
+  s_81c9eb81b6fac6::t_e21e22c601804c 95
+remake/runtime/web/controllers/battle.mjs
+  s_81c9eb81b6fac6::t_76273cadaaa1a4 86
+  s_81c9eb81b6fac6::t_2b98b94c61aefc 343,359,367-369
+  s_81c9eb81b6fac6::t_c98d857a6718fc 102,117,121-122,335-336,344,360,375
+  s_81c9eb81b6fac6::t_e21e22c601804c 85,87-96
+remake/runtime/tests/test_battle_controller.mjs
+  s_81c9eb81b6fac6::t_2b98b94c61aefc 95
+  s_81c9eb81b6fac6::t_c98d857a6718fc 96,110
+remake/runtime/tests/test_skill_test_session.mjs
+  s_81c9eb81b6fac6::t_c98d857a6718fc 63,82
+  s_81c9eb81b6fac6::t_2b98b94c61aefc 77
+remake/runtime/web/core/combat.mjs
+  s_81c9eb81b6fac6::t_2b98b94c61aefc 50-52,55,57,139,340,375,437,609,693
+remake/runtime/tests/test_save_controller.mjs
+  s_81c9eb81b6fac6::t_c98d857a6718fc 253,256-257,259,267,279-280,285
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "e797153e2b010df246833c3457d00b29db976e89",
+  "prompts": {},
+  "sessions": {
+    "s_81c9eb81b6fac6": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a013-12c2-7420-91f8-33e2e1ae9428",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
