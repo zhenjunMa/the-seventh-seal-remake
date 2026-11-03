@@ -1,0 +1,64 @@
+remake/runtime/web/controllers/menu.mjs
+  s_571c8b1e939895::t_83a246fbda6394 55,59,62,65-68,74,173
+remake/runtime/web/controllers/boot.mjs
+  s_571c8b1e939895::t_ca4f3f97cfb99c 23,177-181
+remake/runtime/web/battle_menu_view.mjs
+  s_7b415707402683::t_dda2ca5b35d293 58
+remake/assessment/validation_design.md
+  s_571c8b1e939895::t_b0512f33546388 29-30
+remake/runtime/web/battle_transition_view.mjs
+  s_571c8b1e939895::t_b52bfa91ddd581 10,13
+remake/runtime/web/tests/webgl_rendering_checks.mjs
+  s_571c8b1e939895::t_bff99e737fdc0a 81,94,97-98,100
+  s_571c8b1e939895::t_98f30b0530daa9 70-80,82-93,95-96,99
+remake/runtime/architecture.md
+  s_571c8b1e939895::t_a3ed3422d835b1 110-112,132
+remake/runtime/web/core/battle_resources.mjs
+  s_571c8b1e939895::t_ca4f3f97cfb99c 21,27-28
+  s_571c8b1e939895::t_17e1e5b27da6a0 29
+remake/runtime/web/phaser/runtime.mjs
+  s_571c8b1e939895::t_b52bfa91ddd581 152-153,155,158,160
+  s_571c8b1e939895::t_ca4f3f97cfb99c 159
+remake/runtime/web/phaser/rendering/battle_transition.mjs
+  s_571c8b1e939895::t_5ffbb547557b32 61,95,107,126
+  s_571c8b1e939895::t_b52bfa91ddd581 55,96,98,102-105
+remake/runtime/web/phaser/rendering/battle_surface.mjs
+  s_571c8b1e939895::t_b52bfa91ddd581 15-22,42-52
+remake/runtime/web/phaser/rendering/interface_compositor.mjs
+  s_571c8b1e939895::t_e43ef182c84e39 45,93-131
+  s_571c8b1e939895::t_f31668f441868c 132
+remake/runtime/tests/test_battle_transition.mjs
+  s_571c8b1e939895::t_976fea037153c1 14
+remake/runtime/web/controllers/battle.mjs
+  s_571c8b1e939895::t_83a246fbda6394 170,174-195,197-217,220-221,223,297-300,304,306,309
+  s_7b415707402683::t_dda2ca5b35d293 71-81,127,132
+  s_571c8b1e939895::t_48fc26591c7679 196
+remake/runtime/tests/test_skill_test_menu.mjs
+  s_571c8b1e939895::t_976fea037153c1 94-104
+remake/runtime/tests/test_battle_controller.mjs
+  s_571c8b1e939895::t_f013db0078039f 60-86
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "ad07e81c7a9c6fb5c36f972b09df24e85bdd91c7",
+  "prompts": {},
+  "sessions": {
+    "s_571c8b1e939895": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a19f7c-1e36-7b71-9ba5-ec20882761ac",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    },
+    "s_7b415707402683": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a19f93-9c77-71c2-9eae-bb9e006053a6",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
