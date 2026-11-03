@@ -1,0 +1,33 @@
+remake/runtime/web/tests/battle_handoff.mjs
+  s_eaf48bec343efd::t_50b6cd8c5d093e 30
+remake/runtime/tests/test_battle_lifecycle_integration.mjs
+  s_eaf48bec343efd::t_f852989dde5b80 200,211-212,225-230,247-248,255,259-262,268-269
+  s_eaf48bec343efd::t_aee713c5b43b9f 144,146-148
+remake/assessment/validation_design.md
+  s_eaf48bec343efd::t_44e5bdc9f1af07 29
+  s_eaf48bec343efd::t_d635ed0f38552c 25
+remake/runtime/web/core/skill_sequence.mjs
+  s_eaf48bec343efd::t_9bc77eaebdcf14 132-133
+remake/runtime/web/battle_view.mjs
+  s_eaf48bec343efd::t_4df3e7bf0ff4d4 638-642,647,713
+remake/runtime/web/tests/battle_handoff.html
+  s_eaf48bec343efd::t_50b6cd8c5d093e 10
+remake/runtime/architecture.md
+  s_eaf48bec343efd::t_d635ed0f38552c 106
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "5e9b14621b60e951867b3e3e066a1c6fc484ab9c",
+  "prompts": {},
+  "sessions": {
+    "s_eaf48bec343efd": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a19ad6-0491-7503-9a78-df8637bf9ea9",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
