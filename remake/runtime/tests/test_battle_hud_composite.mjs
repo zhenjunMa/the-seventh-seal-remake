@@ -56,21 +56,27 @@ test('live chain uses native HIT pixels, refreshes through two digits, fades on 
   view.snapshot.chain.count=0;calls.length=0;view.draw(1310);assert.deepEqual(calls,[]);assert.equal(view.chainDisplay,null);
 });
 
-test('Waiting for a command shows the original seven-cover wheel without skill icons or disable crosses',()=>{
+test('Only the selected actor waiting for its confirmed command shows the seven-cover wheel',()=>{
   const calls=[],view={
+    snapshot:{player_id:'001',scheduler:{pending:{actor_id:'001'},queued_commands:[]}},
     menus:new Map([['game002d',{images:[{image:'source-wheel'}]}]]),
     image:(...args)=>calls.push(['background',...args]),asset:(...args)=>calls.push(['asset',...args]),
     available:()=>false,slots(){throw Error('Closed wheel must not render command slots');},
     wheelButtons:Array.from({length:7},()=>({style:{left:'540px',top:'345px'},getAttribute:()=> 'true'}))
   };
-  for(const stage of ['waiting','wheel','skills','target']){
-    calls.length=0;view.stage=stage;BattleMenuView.prototype.drawWheel.call(view,0);
+  for(const scheduler of [
+    {pending:{actor_id:'001'},queued_commands:[]},
+    {pending:{actor_id:'002'},queued_commands:[{actor_id:'001'}]}
+  ])for(const stage of ['actors','waiting','wheel','skills','target']){
+    view.snapshot.scheduler=scheduler;calls.length=0;view.stage=stage;
+    BattleMenuView.prototype.drawWheel.call(view,0);
     assert.deepEqual(calls,[['background','source-wheel',490,340],['asset','fight_board_mask',0,490,340]]);
   }
 });
 
-test('A ready actor opens the wheel; an individually unavailable slot still retains its disable cross',()=>{
+test('Actor focus and active actions keep the wheel open; only wheel focus highlights its current slot',()=>{
   const calls=[],view={menus:new Map([['game002d',{images:[{image:'source-wheel'}]}]]),
+    snapshot:{player_id:'001',scheduler:{pending:{actor_id:'002'},queued_commands:[]}},
     image(){},asset:(...args)=>calls.push(args),available:()=>true,stage:'wheel',focusIndex:0,
     commandSlots:Array.from({length:7},(_,i)=>({type:2,icon:i%4})),
     wheelButtons:Array.from({length:7},(_,i)=>({style:{left:(490+i)+'px',top:'345px'},getAttribute:()=>String(i===2)}))
@@ -80,4 +86,15 @@ test('A ready actor opens the wheel; an individually unavailable slot still reta
   assert.equal(calls.filter(([id])=>id==='board_bright').length,1);
   assert.deepEqual(calls.filter(([id])=>id==='fight_board_disable'),[['fight_board_disable',0,492,345]]);
   assert.equal(calls.some(([id])=>id==='fight_board_mask'),false);
+  calls.length=0;view.stage='actors';BattleMenuView.prototype.drawWheel.call(view,0);
+  assert.equal(calls.filter(([id])=>id==='other_ball').length,7);
+  assert.equal(calls.some(([id])=>id==='board_bright'||id==='fight_board_mask'),false);
+  assert.deepEqual(calls.filter(([id])=>id==='fight_board_disable'),[['fight_board_disable',0,492,345]]);
+  for(const active of [null,'001']){
+    calls.length=0;view.stage='waiting';view.available=()=>false;
+    view.snapshot.scheduler={pending:null,queued_commands:[],active_actor_id:active};
+    BattleMenuView.prototype.drawWheel.call(view,0);
+    assert.equal(calls.filter(([id])=>id==='other_ball').length,7);
+    assert.equal(calls.some(([id])=>['board_bright','fight_board_mask','fight_board_disable'].includes(id)),false);
+  }
 });

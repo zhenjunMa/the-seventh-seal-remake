@@ -1,5 +1,6 @@
 import {drawingContext} from './phaser/rendering/recorded_surface.mjs';
 import {battleViewport,battleActorPositions,battleBallState} from './core/battle_layout.mjs';
+import {commandForActor} from './core/battle_scheduler.mjs';
 import {operationMnuTextOptions} from './core/menu_presentation.mjs';
 import {TECHNIQUE_CATEGORIES,TECHNIQUE_WHEEL_NAVIGATION} from './core/menu_techniques.mjs';
 import {BattleResultView} from './battle_result_view.mjs';
@@ -69,10 +70,10 @@ export class BattleMenuView{
   update(snapshot){
     if(this.disposed)return;const previous=this.snapshot;this.snapshot=snapshot;this.root.dataset.phase=snapshot.phase;this.root.dataset.actorId=snapshot.player_id;this.root.dataset.ticks=String(snapshot.scheduler?.ticks??0);this.root.dataset.readyIds=this.ready().join(',');
     const changed=previous?.player_id!==snapshot.player_id;
-    if(changed){this.draft=null;this.entries=null;this.listIndex=0;this.listOffset=0;this.setStage(this.available()?(this.stage==='actors'?'actors':'wheel'):'waiting');const memory=this.getSettings?.().battleCursor==='memory'?this.memory.get(snapshot.player_id):null;this.focusIndex=memory?.wheel??0;this.targetId=memory?.target??null;}
+    if(changed){this.draft=null;this.entries=null;this.listIndex=0;this.listOffset=0;this.setStage(this.available()?'actors':'waiting');const memory=this.getSettings?.().battleCursor==='memory'?this.memory.get(snapshot.player_id):null;this.focusIndex=memory?.wheel??0;this.targetId=memory?.target??null;this.setInfo(snapshot.actors.find(a=>a.id===snapshot.player_id)?.name??'');}
     if(terminal(snapshot.phase)){this.draft=null;this.setStage('result');this.setInfo(snapshot.phase==='victory'?'战斗胜利':snapshot.phase==='defeat'?'队伍已经倒下':snapshot.phase==='escaped'?'已经逃离战斗':snapshot.error??'战斗结束');this.openResult(snapshot);}
     else if(!this.available()){this.draft=null;if(this.stage!=='waiting')this.setStage('waiting');this.setInfo('');}
-    else if(this.stage==='waiting'){this.focusIndex=this.getSettings?.().battleCursor==='memory'?(this.memory.get(snapshot.player_id)?.wheel??0):0;this.setStage('wheel');this.needsFocus=true;this.setInfo(snapshot.actors.find(a=>a.id===snapshot.player_id)?.name??'');}
+    else if(this.stage==='waiting'){this.focusIndex=this.getSettings?.().battleCursor==='memory'?(this.memory.get(snapshot.player_id)?.wheel??0):0;this.setStage('actors');this.needsFocus=true;this.setInfo(snapshot.actors.find(a=>a.id===snapshot.player_id)?.name??'');}
     if(this.stage==='items')this.refreshItems();
     if(this.stage==='skills')for(const entry of this.entries??[])entry.available=this.battle.canChoose(entry.id);
     if(this.stage==='target'){
@@ -95,7 +96,7 @@ export class BattleMenuView{
   }
   syncPlayers(){
     const party=this.snapshot.actors.filter(a=>a.side==='player');const ready=this.ready();
-    party.forEach((a,index)=>{let b=this.players.get(a.id);if(!b){b=this.button('battle-actor-hit',()=>this.selectActor(a.id));b.dataset.actorId=a.id;this.players.set(a.id,b);this.actorLayer.append(b);}b.hidden=a.escaped||a.state_raw===11;const [x,y]=originalSlots[a.party_slot_zero_based??index]??originalSlots[0];this.place(b,x,y,203,53);const queued=[this.snapshot.scheduler?.pending,...(this.snapshot.scheduler?.queued_commands??[])].some(command=>command?.actor_id===a.id);b.setAttribute('aria-label',`${a.name}，HP ${a.hp.current}/${a.hp.maximum}，MP ${a.mp.current}/${a.mp.maximum}，${queued?'指令已确认':ready.includes(a.id)?'行动槽已满':'充能中'}`);b.setAttribute('aria-pressed',String(a.id===this.snapshot.player_id&&this.available(a.id)));b.setAttribute('aria-disabled',String(!this.available(a.id)));});
+    party.forEach((a,index)=>{let b=this.players.get(a.id);if(!b){b=this.button('battle-actor-hit',()=>this.selectActor(a.id));b.dataset.actorId=a.id;this.players.set(a.id,b);this.actorLayer.append(b);}b.hidden=a.escaped||a.state_raw===11;const [x,y]=originalSlots[a.party_slot_zero_based??index]??originalSlots[0];this.place(b,x,y,203,53);const queued=Boolean(commandForActor(this.snapshot.scheduler,a.id));b.setAttribute('aria-label',`${a.name}，HP ${a.hp.current}/${a.hp.maximum}，MP ${a.mp.current}/${a.mp.maximum}，${queued?'指令已确认':ready.includes(a.id)?'行动槽已满':'充能中'}`);b.setAttribute('aria-pressed',String(a.id===this.snapshot.player_id&&this.available(a.id)));b.setAttribute('aria-disabled',String(!this.available(a.id)));});
   }
   syncWheel(){
     const slots=this.slots();this.commandSlots=slots;
@@ -139,7 +140,7 @@ export class BattleMenuView{
     try{if(draft.actorId!==this.snapshot.player_id)throw new Error('行动人物已变化，请重新选择。');if(draft.kind==='item')await this.battle.chooseItem(draft.instanceId,targetId);else await this.battle.choose(draft.skillId,targetId);}
     catch(error){if(!this.disposed&&epoch===this.epoch){this.reject(error.message);this.update(this.battle.presentationSnapshot());}}
   }
-  escape(){if(this.stage==='target'){this.draft=null;this.setStage(this.returnStage??'wheel');this.syncWheel();if(['skills','items'].includes(this.stage)){this.syncList();this.listButtons[this.listIndex-this.listOffset]?.focus({preventScroll:true});}else this.wheelButtons[this.focusIndex]?.focus({preventScroll:true});}else if(['skills','items'].includes(this.stage)){this.entries=null;this.setStage('wheel');this.syncWheel();this.wheelButtons[this.focusIndex]?.focus({preventScroll:true});}else if(this.stage==='wheel'&&this.snapshot.actors.filter(a=>a.side==='player'&&!a.escaped&&a.state_raw!==11).length>1){this.setStage('actors');this.syncWheel();this.players.get(this.snapshot.player_id)?.focus({preventScroll:true});}else return;this.syncTargets();this.syncList();this.cue('menuCancel');this.setInfo('');}
+  escape(){if(this.stage==='target'){this.draft=null;this.setStage(this.returnStage??'wheel');this.syncWheel();if(['skills','items'].includes(this.stage)){this.syncList();this.listButtons[this.listIndex-this.listOffset]?.focus({preventScroll:true});}else this.wheelButtons[this.focusIndex]?.focus({preventScroll:true});}else if(['skills','items'].includes(this.stage)){this.entries=null;this.setStage('wheel');this.syncWheel();this.wheelButtons[this.focusIndex]?.focus({preventScroll:true});}else if(this.stage==='wheel'){this.setStage('actors');this.syncWheel();this.players.get(this.snapshot.player_id)?.focus({preventScroll:true});}else return;this.syncTargets();this.syncList();this.cue('menuCancel');this.setInfo('');}
   moveWheel(key){
     const next=TECHNIQUE_WHEEL_NAVIGATION[key]?.[this.focusIndex];
     if(next===undefined||next===this.focusIndex)return;
@@ -249,11 +250,11 @@ export class BattleMenuView{
   }
   drawWheel(now){
     this.image(this.menus.get('game002d').images[0].image,490,340);
-    if(this.stage==='actors'||!this.available()){this.asset('fight_board_mask',0,490,340);return;}
+    if(commandForActor(this.snapshot?.scheduler,this.snapshot?.player_id)){this.asset('fight_board_mask',0,490,340);return;}
     const slots=this.commandSlots??this.slots();
     this.wheelButtons.forEach((b,i)=>{const x=parseFloat(b.style.left),y=parseFloat(b.style.top),slot=slots[i],active=i===this.focusIndex&&this.stage==='wheel'&&this.available();if(slot){let icon=slot.icon,units=slot.color;if(slot.type===0&&slot.skill&&icon===undefined){const raw=Uint8Array.from(slot.skill.fixed_raw_hex.match(/../g),x=>parseInt(x,16));icon=(raw[0x32]>>4)&15;units=raw[0x36];}this.asset(slot.type===2?'other_ball':slot.type===1?'name_ball':'magic_ball1',(icon??0)+(active?(slot.type===2?4:slot.type===1?88:6):0),x,y);if(units>0)this.asset('magic_ball1_num',Math.min(41,(slot.type===1?Math.floor(icon/11):icon)*7+units-1),x+14,y+12);}
       if(i===this.focusIndex&&this.stage==='wheel'&&this.available())this.asset('board_bright',Math.floor(now/120),x-13,y-13,{blend:'lighter'});
-      if(b.getAttribute('aria-disabled')==='true')this.asset('fight_board_disable',0,x,y);
+      if(this.available()&&b.getAttribute('aria-disabled')==='true')this.asset('fight_board_disable',0,x,y);
     });
   }
   drawList(){const menu=this.menus.get(this.stage==='items'?'fight002':'fight001'),x=467,y=274;this.image(menu.images[0].image,x,y);if(this.stage==='skills'){const w=menu.widgets.find(w=>w.name===String(this.skillCategory+1).padStart(3,'0'));this.image(w.selected_images.at(-1)??w.active_images.at(-1),x+w.draw_point_raw.x,y+w.draw_point_raw.y);}this.listButtons.forEach((b,i)=>{const entry=this.entries?.[this.listOffset+i];if(!entry)return;const w=menu.widgets.find(w=>w.name.toLowerCase()==='list'+(i+1));if(this.listIndex===this.listOffset+i)this.image(w.active_images[0],x+w.draw_point_raw.x,y+w.draw_point_raw.y);this.text(entry.name,x+w.rect.left+6,y+w.rect.top,{font:'12px SimSun',color:entry.available?this.listIndex===this.listOffset+i?'#ffff44':'#fff':'#777',width:entry.quantity===undefined?124:104});if(entry.quantity!==undefined)this.text(entry.quantity,x+140,y+w.rect.top,{font:'11px Arial',bitmapFont:'arial11_text',align:'right'});});}

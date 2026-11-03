@@ -78,20 +78,39 @@ test('moving onto the central escape command only focuses it; confirmation execu
 
 function partyFixture(){
   const {view,cues}=fixture(),selected=[];
-  view.snapshot={player_id:'001',actors:[0,1,2,3].map(slot=>({id:String(slot+1).padStart(3,'0'),side:'player',party_slot_zero_based:slot}))};
-  view.battle={canCommand:id=>id!=='004',selectPlayer(id){selected.push(id);view.snapshot.player_id=id;}};
+  view.snapshot={phase:'charging',player_id:'001',actors:[0,1,2,3].map(slot=>({id:String(slot+1).padStart(3,'0'),side:'player',party_slot_zero_based:slot}))};
+  view.battle={canCommand:id=>id!=='004',targetIdsForSkill:()=>['002'],selectPlayer(id){selected.push(id);view.update({...view.snapshot,player_id:id});}};
   view.ready=()=>['001','002','003'];view.players=new Map(view.snapshot.actors.map(a=>[a.id,{focus(){view.focusedActor=a.id;}}]));
-  view.syncWheel=view.syncList=view.syncTargets=view.setInfo=()=>{};
+  Object.assign(view,{actorLayer:{},targetLayer:{},returnButton:{},listIndex:0,listOffset:0});
+  view.syncPlayers=view.syncWheel=view.syncList=view.syncTargets=view.setInfo=()=>{};
   return {view,cues,selected};
 }
 
-test('Esc closes the wheel; direction slots select commandable actors and Space reopens their commands',()=>{
+test('Command input selects actors before confirmation, including rotation and the same actor next round',()=>{
   const {view,selected}=partyFixture();
-  view.key('Escape');assert.equal(view.stage,'actors');assert.equal(view.focusedActor,'001');
+  const initial=view.snapshot;view.snapshot=null;view.stage='waiting';
+  view.update(initial);assert.equal(view.stage,'actors');assert.equal(view.focusedActor,'001');
+  view.key(' ');assert.equal(view.stage,'wheel');assert.equal(view.activeSlot,0);
+  view.key(' ',true);assert.equal(view.stage,'wheel','Holding confirmation must not activate the wheel command');
+  view.update({...view.snapshot});assert.equal(view.stage,'wheel','Ordinary snapshots retain confirmed wheel focus');
+  view.stage='skills';view.update({...view.snapshot});assert.equal(view.stage,'skills');
+  view.stage='target';const draft={kind:'skill',skillId:'example'};view.draft=draft;view.targetId='002';
+  view.update({...view.snapshot});assert.equal(view.stage,'target');assert.equal(view.draft,draft);
+  view.stage='wheel';view.key('Escape');assert.equal(view.stage,'actors');assert.equal(view.focusedActor,'001');
   view.key('ArrowUp');assert.equal(view.stage,'actors');assert.equal(view.snapshot.player_id,'002');
   view.key('ArrowDown');assert.equal(view.snapshot.player_id,'003');view.key('ArrowLeft');assert.equal(view.snapshot.player_id,'001');
   view.key('ArrowRight');assert.equal(view.snapshot.player_id,'001','An actor with a locked command must not take focus');
   assert.deepEqual(selected,['002','003','001']);view.key(' ');assert.equal(view.stage,'wheel');
+  view.key('Tab');assert.equal(view.stage,'actors');assert.equal(view.focusedActor,'002');
+  view.key(' ');assert.equal(view.stage,'wheel');
+  view.update({...view.snapshot,player_id:'003'});assert.equal(view.stage,'actors');assert.equal(view.focusedActor,'003');
+  view.key(' ');assert.equal(view.stage,'wheel');
+  view.battle.canCommand=()=>false;view.update({...view.snapshot});assert.equal(view.stage,'waiting');
+  view.battle.canCommand=id=>id==='003';view.update({...view.snapshot});assert.equal(view.stage,'actors');assert.equal(view.focusedActor,'003');
+  view.key(' ');assert.equal(view.stage,'wheel');
+  view.snapshot.actors=view.snapshot.actors.filter(a=>a.id==='003');
+  view.key('Escape');assert.equal(view.stage,'actors');assert.equal(view.focusedActor,'003');
+  view.key('Enter');assert.equal(view.stage,'wheel');
 });
 
 test('An uncharged teammate remains selectable when the current actor is busy, including the only available teammate',()=>{

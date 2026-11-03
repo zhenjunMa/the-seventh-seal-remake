@@ -194,7 +194,7 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
       state.battle.start({...sample,lifecycle_enabled:Boolean(state.battleView.lifecycle),side_priority:state.sidePriority,rng:state.battleRng,source:{...sample.source,rng_seed:rngSeed,rng_seed_policy:group?'persistent-development-global-stream':'controlled-development-seed'}});
       });
       if(group)actions.log({type:'field-encounter',group,location:state.world.location,counter_after:state.world.value.encounters.counters[state.selectedRole]});
-      actions.status('蓄力时即可选择招式和目标，确认后等待满槽行动；行动结束即可输入下一轮，受击不打断选择。Esc 收起轮盘，方向键切换人物，空格打开；Tab / X / Z 切换人物。');
+      actions.status('先选中人物，按空格进入该人物的战斗轮盘；蓄力时即可选择招式和目标，确认后等待满槽行动。行动结束可输入下一轮，受击不打断选择；Esc 从轮盘退回选人并保留开放样式，方向键或 Tab / X / Z 切换人物。');
     }catch(error){before?.destroy?.();state.battleView?.stop('战斗启动失败');state.battleMenu?.dispose();state.battleMenu=null;canvas.hidden=false;for(const id of ['battleCanvas','battleHud','battleCommands'])$(id).hidden=true;Object.assign(state.view,state.battleCheckpoint);state.scenes.setPhase('map');state.audio?.setScene({mapId:state.world.location.map_id,battle:false});throw error;}
   }
   async function startScriptedBattle({group,draft,playback,signal=playback?.signal}){
