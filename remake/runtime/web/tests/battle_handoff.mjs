@@ -27,7 +27,7 @@ function report(){
   $('status').textContent=`${running?'正在运行':'已结束'} · 最大连击 ${chain.maximum} · 敌人主动行动 ${enemyTurns.length} 次${manualPause?' · 已暂停':''}`;
   const rows=battle.players().map(actor=>{
     const body=events.find(e=>e.type==='battle-attack-completed'&&e.actor_id===actor.id),end=events.find(e=>e.type==='battle-source-completed'&&e.actor_id===actor.id);
-    const state=battle.activeActions.has(actor.id)?battle.state.scheduler.active_actor_id===actor.id?'攻击阶段':'归位／收尾':actor.native_active?'受击／起身':'待机';
+    const state=battle.activeActions.has(actor.id)?body?'归位／收尾':'攻击阶段':actor.native_active?'受击／倒地／起身':'待机';
     return [actor.name,state,body?`${(body.presentation_time_ms/1000).toFixed(3)} 秒`:'—',end?`${(end.at/1000).toFixed(3)} 秒`:'—'];
   });
   $('actors').replaceChildren(...rows.map(values=>{const row=document.createElement('tr');for(const value of values){const cell=document.createElement('td');cell.textContent=value;row.append(cell);}return row;}));

@@ -129,7 +129,8 @@ export function compileNativeSequence(meta,roleId,plan,layers=[]){
   });
  }
  fail(steps.length>0&&(plan.allow_no_contacts||steps.some(s=>s.event||s.carrier_spawn?.steps.some(c=>c.event))),'原完整技能缺少接触事件');
- // Release the turn after the whole compiled attack, before its return records.
+ // Mark the compiled attack boundary for observation; return records still
+ // own the turn until the primary source sequence has completed.
  // Some source contacts are outside +2e bodies; keep those and all carrier
  // allocations before handoff rather than releasing after an intermediate hit.
  let attackEnd=null;

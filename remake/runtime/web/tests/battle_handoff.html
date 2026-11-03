@@ -7,7 +7,7 @@ body{margin:24px;background:#151b24;color:#e4eaf2;font:15px/1.7 system-ui}main{m
 </style>
 <main>
 <h1>战斗接力验证</h1>
-<p class="note">使用正式战斗控制器、动作数据与 Phaser WebGL，人物和特效为程序生成的示意图。队员为99级并预先确认指令；固定随机值、保持敌人不被击杀以观察整条连击。敌人首次受击后设为满槽。本页不读写玩家存档，不代表原素材或正常数值平衡验收。</p>
+<p class="note">使用正式战斗控制器、动作数据与 Phaser WebGL，人物和特效为程序生成的示意图。进攻者完成攻击与归位后才交棒，目标受击与独立效果继续推进。队员为99级并预先确认指令；固定随机值、保持敌人不被击杀以观察整条连击。敌人首次受击后设为满槽。本页不读写玩家存档，不代表原素材或正常数值平衡验收。</p>
 <div><button data-case="relay">固定顺序：四人接力</button><button data-case="natural">自然行动顺序</button><button data-case="ordinary">普通单招</button><button data-case="gap">下一人未就绪</button><button id="pause">暂停</button></div>
 <p id="status" role="status">正在准备 Phaser…</p>
 <div id="stage" tabindex="0"></div>

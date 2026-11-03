@@ -141,9 +141,11 @@ test('a real knockdown holds its final ground frame for the native5000 budget be
 test('a hit during the ground hold replaces its timer without prematurely ending the new response',async()=>{
  const f=await liveFixture('013'),{battle,view,logs}=f,attacker=battle.actor('001'),victim=battle.actor('enemy-0');
  const skill=structuredClone(f.commands.skills['001_26']);skill.actor_id=attacker.id;
- const first=battle.performSequence(attacker,victim,skill,directSequence(skill));let frame=0;
+ let firstDone=false;const first=battle.performSequence(attacker,victim,skill,directSequence(skill)).then(()=>{firstDone=true;});let frame=0;
  for(;frame<600;frame++){await f.draw(frame*1000/60);if(victim.reaction_special_gate_raw===5000){frame++;break;}}
- assert.equal(victim.reaction_special_gate_raw,5000);assert.ok(battle.pendingSourceEnds.has(victim.id));await first;
+ assert.equal(victim.reaction_special_gate_raw,5000);assert.ok(battle.pendingSourceEnds.has(victim.id));
+ for(;!firstDone&&frame<900;frame++)await f.draw(frame*1000/60);
+ await first;assert.ok(victim.reaction_special_gate_raw>0,'the next attack is queued while the victim still holds the ground pose');
  const next=f.sample.skills.yantu,task=battle.performSequence(attacker,victim,next,directSequence(next));let contact=null;
  for(;frame<1200;frame++){
   await f.draw(frame*1000/60);contact=logs.find(e=>e.type==='battle-impact'&&e.skill_id==='yantu');if(contact){frame++;break;}
@@ -195,7 +197,7 @@ test('party and enemy attackers return to idle when their final source frame end
  }
 });
 
-test('four compiled attacks hand off before return, retain leases and preserve source hit gates across 50/60/144 FPS',async()=>{
+test('four compiled attacks hand off after return, retain leases and preserve source hit gates across 50/60/144 FPS',async()=>{
  for(const fps of [50,60,144]){
    const f=await createHandoffFixture({load:read,canvas:canvas(),assetLoader:async a=>({width:a.width,height:a.height,path:a.path})});
    f.view._sprite=()=>{};let released=0,checkedReturn=false;
@@ -206,7 +208,8 @@ test('four compiled attacks hand off before return, retain leases and preserve s
        if(!checkedReturn&&f.events.some(e=>e.type==='battle-attack-completed'&&e.actor_id==='004')){
          checkedReturn=true;assert.equal(f.battle.canCommand('004'),false,'returning actor remains locked');
          assert.equal(f.battle.activeActions.has('004'),true);assert.equal(released,0,'handoff must retain the action lease');
-         assert.ok(f.view.detachedRuns.some(run=>run.result.actor_id==='004'&&!run.main_done));
+         assert.equal(f.view.run.result.actor_id,'004');assert.equal(f.view.run.main_done,false);
+         assert.equal(f.battle.state.scheduler.active_actor_id,'004','return retains the global action owner');
        }
        const enemy=f.battle.actor('enemy-0');
        if(enemy.native_active&&enemy.charge.gauge>=f.battle.state.scheduler.threshold)assert.equal(isActorReady(enemy,f.battle.state.scheduler),false);
@@ -219,8 +222,12 @@ test('four compiled attacks hand off before return, retain leases and preserve s
      const starts=f.events.filter(e=>e.type==='battle-scheduled'),second=starts.find(e=>e.actor_id==='001');
      const firstEnd=f.events.find(e=>e.type==='battle-source-completed'&&e.actor_id==='004');
      const handoff=f.events.find(e=>e.type==='battle-attack-completed'&&e.actor_id==='004');
-     assert.ok(second.at-handoff.at>=0&&second.at-handoff.at<=1000/fps+0.001,'a ready teammate dispatches on the next loop without a return/recovery wait');
-     assert.ok(second.at<firstEnd.at,'next actor starts while its predecessor returns');
+     assert.ok(firstEnd.at>handoff.at,'attack boundary remains observable before the return ends');
+     assert.ok(second.at>=firstEnd.at&&second.at-firstEnd.at<=1000/fps+0.001,'a ready teammate dispatches on the next loop after the full primary action');
+     for(const next of starts.filter(e=>e.actor_id!=='004'&&e.actor_id!=='enemy-0')){
+       const previous=starts[starts.indexOf(next)-1],end=f.events.find(e=>e.type==='battle-source-completed'&&e.actor_id===previous.actor_id);
+       assert.ok(end&&next.at>=end.at,'primary actions never overlap');
+     }
      assert.ok(starts.find(e=>e.actor_id==='enemy-0').at>hits.at(-1).at,'a full enemy waits for hit recovery');
      assert.equal(f.finished,true);assert.equal(released,1);assert.equal(f.battle.activeActions.size,0);assert.equal(f.battle.pendingPresentations.size,0);
    }finally{f.dispose();}
@@ -237,26 +244,29 @@ test('handoff preserves ordinary-hit gaps, enemy recovery and native action orde
      if(scenario==='gap'){
        const recovered=f.events.find(e=>e.type==='battle-source-completed'&&e.actor_id==='enemy-0'&&e.descriptor.reason==='source-end-idle');
        const attack=f.events.find(e=>e.type==='battle-scheduled'&&e.actor_id==='enemy-0');
-       assert.ok(attack.at>=recovered.at&&attack.at-recovered.at<=40);assert.equal(f.battle.state.history.some(e=>e.actor_id==='002'),false);
+       const returned=f.events.find(e=>e.type==='battle-source-completed'&&e.actor_id==='001'),readyAt=Math.max(recovered.at,returned.at);
+       assert.ok(attack.at>=readyAt&&attack.at-readyAt<=40);assert.equal(f.battle.state.history.some(e=>e.actor_id==='002'),false);
      }
      if(scenario==='natural')assert.deepEqual(f.events.filter(e=>e.type==='battle-scheduled'&&e.actor_id!=='enemy-0').map(e=>e.actor_id),['004','003','002','001']);
    }finally{f.dispose();}
  }
 });
 
-test('a new hit interrupts a detached return without retiring the next actor or the old target reaction',async()=>{
+test('a new hit interrupts the current return and releases its queued teammate while the old target reaction continues',async()=>{
  const f=await createHandoffFixture({load:read,canvas:canvas(),assetLoader:async a=>({width:a.width,height:a.height,path:a.path})});f.view._sprite=()=>{};
  try{
    let frame=0;
-   for(;frame<500&&(!f.view.run||!f.view.detachedRuns.some(run=>run.result.actor_id==='004'&&!run.main_done));frame++)await f.advance(frame*20);
-   const returning=f.view.detachedRuns.find(run=>run.result.actor_id==='004'),next=f.view.run;
-   assert.ok(returning&&!returning.main_done);assert.equal(next.result.actor_id,'001');
+   for(;frame<500&&!f.events.some(e=>e.type==='battle-attack-completed'&&e.actor_id==='004');frame++)await f.advance(frame*20);
+   const returning=f.view.run;
+   assert.ok(returning&&!returning.main_done);assert.equal(returning.result.actor_id,'004');
+   assert.equal(f.events.some(e=>e.type==='battle-scheduled'&&e.actor_id==='001'),false);
    const actor=f.battle.actor('004'),response=selectNativeNormalReaction({actor,ident:1,data:f.sample.reaction_data,rng:()=>50});
    Object.assign(actor,structuredClone(response.after));actor.native_sequence_token='controlled-return-hit';f.battle.queueLifecycle(actor,response);
    await f.advance(frame++*20);
    assert.equal(returning.main_done,true);assert.equal(returning.interrupted,true);assert.equal(f.battle.activeActions.has('004'),false);
-   assert.equal(f.view.run,next);assert.equal(next.main_done,false);assert.equal(f.battle.activeActions.has('001'),true);
    assert.ok(returning.children.some(child=>child.result.actor_id==='enemy-0'&&!child.done));
+   await f.advance(frame++*20);
+   assert.equal(f.view.run.result.actor_id,'001');assert.equal(f.view.run.main_done,false);assert.equal(f.battle.activeActions.has('001'),true);
    for(;frame<1500;frame++){await f.advance(frame*20);if(f.finished)break;}
    assert.equal(f.finished,true);assert.equal(f.battle.pendingPresentations.size,0);
  }finally{f.dispose();}

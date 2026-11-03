@@ -635,11 +635,16 @@ export class BattleView {
 
   _sequenceRuns(){return [...this.detachedRuns,this.run].filter(run=>run?.sequence);}
 
+  _markAttackEnd(run,at){
+    if(run.attack_ended)return;
+    run.attack_ended=true;run.onAttackEnd?.(run.started+at);
+  }
+
   _releaseAction(run,at){
     if(run.primary_resolved)return;
     run.primary_resolved=true;if(this.run===run)this.run=null;
     if(!this.detachedRuns.includes(run))this.detachedRuns.push(run);
-    run.onAttackEnd?.(run.started+at);
+    this._markAttackEnd(run,at);
     run.resolve({completed:true,interrupted:Boolean(run.interrupted),playback_pending:true,carriers_pending:run.carriers.some(c=>!c.done),
       impact_committed:run.observations.contacts.length>0,contact_count:run.observations.contacts.length,observations:clone(run.observations)});
   }
@@ -705,7 +710,7 @@ export class BattleView {
         }
         if(ending){if(carrier)channel.done=true;else if(child){channel.done=true;run.onReactionEnd?.(clone(channel.descriptor),true,run.started+at);}else{run.main_done=true;run.onPrimaryEnd?.(run.started+at);if(Number.isInteger(run.attack_end_step_index))this._releaseAction(run,at);}continue;}
         const i=channel.visited+1,step=channel.steps[i];
-        if(channel===run&&Number.isInteger(run.attack_end_step_index)&&i>=run.attack_end_step_index)this._releaseAction(run,at);
+        if(channel===run&&Number.isInteger(run.attack_end_step_index)&&i>=run.attack_end_step_index)this._markAttackEnd(run,at);
         if(!carrier)run.onFrame?.({...clone(step),actor_id:channel.result.actor_id,target_id:channel.result.target_id,channel_id:child?channel.channel_id:'main'});
         channel.cursor=i;
         if(!carrier&&(step.plan_record_index!==channel.record_visited||step.visibility_end)){
