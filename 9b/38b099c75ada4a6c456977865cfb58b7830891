@@ -1,0 +1,33 @@
+remake/runtime/web/controllers/battle.mjs
+  s_28ff24ad124c95::t_b95a12a1957943 197
+remake/assessment/validation_design.md
+  s_28ff24ad124c95::t_b95a12a1957943 25
+remake/runtime/tests/test_battle_menu_navigation.mjs
+  s_28ff24ad124c95::t_a0f5423801dc64 81,84,89,91-99,104-113
+  s_28ff24ad124c95::t_6209263b4c9b55 85
+  s_28ff24ad124c95::t_29cf0f605fe033 82
+remake/runtime/architecture.md
+  s_28ff24ad124c95::t_b95a12a1957943 104
+remake/runtime/web/battle_menu_view.mjs
+  s_28ff24ad124c95::t_5490419d504f24 73
+  s_28ff24ad124c95::t_da656ffd50cb7c 76,143
+  s_28ff24ad124c95::t_b95a12a1957943 3,99,253,257
+remake/runtime/tests/test_battle_hud_composite.mjs
+  s_28ff24ad124c95::t_60310bf926790d 59,61,67-72,77,79,89-99
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "db899c441275ca110a0c6479d92d85c69cd345b1",
+  "prompts": {},
+  "sessions": {
+    "s_28ff24ad124c95": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a19f5f-e4f6-73a1-b660-84e8a218835f",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
