@@ -6,7 +6,7 @@
 .save-menu-buttons>img{position:absolute;pointer-events:none;image-rendering:pixelated}
 .save-menu-buttons .save-slot{display:flex;flex-direction:column;align-items:stretch;padding:7px 8px 3px 145px;text-align:left;white-space:pre-line;color:#fff;font:12px/1.55 SimSun,serif;text-shadow:1px 1px #000}
 .save-slot-heading,.save-slot-party{display:block;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.save-slot-times{display:flex;justify-content:space-between;gap:8px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.save-slot-times{display:flex;justify-content:flex-start;gap:4px;white-space:nowrap;font-variant-numeric:tabular-nums}
 .save-slot-date{min-width:0;overflow:hidden;text-overflow:ellipsis}
 .save-slot-duration{flex:none;text-align:right}
 .save-menu-buttons .save-slot[aria-current=true]{color:#ffff60}
