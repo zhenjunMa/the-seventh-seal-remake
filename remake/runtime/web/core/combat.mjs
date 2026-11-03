@@ -47,13 +47,14 @@ export class BattleController {
     this.state = null; this.running = false; this.completed = null; this.actionTask = null;
   }
   snapshot() { return this.state ? copy(this.state) : null; }
-  // Frame/HUD snapshots never traverse action history. Contact summaries are
-  // maintained when actions settle; snapshot() retains the full diagnostic log.
+  // Commands and frame/HUD snapshots never traverse action history.
+  // Full diagnostic copies are explicit through snapshot(), never implicit
+  // return values from gameplay operations.
   presentationSnapshot() {
     const state=this.state;if(!state)return null;
-    const {id,phase,round,player_id,enemy_id,error,outcome,scheduler,rewards,test_mode}=state;
+    const {id,phase,round,action_count,player_id,enemy_id,error,outcome,scheduler,rewards,test_mode}=state;
     const mode=(state.source.runtime_configuration??state.source.skill_configuration)?.mode;
-    return copy({id,phase,round,player_id,enemy_id,error,outcome,scheduler,rewards,test_mode,
+    return copy({id,phase,round,action_count,player_id,enemy_id,error,outcome,scheduler,rewards,test_mode,
       chain:state.reward_ledger?.chain??null,
       lifecycle_events:state.lifecycle_events??[],pending_outcome:state.pending_outcome??null,
       ready_player_ids:this.readyPlayerIds(),command_available:this.canCommand(),input_busy:Boolean(commandForActor(scheduler,player_id))||this.activeActions?.has(player_id)||this.running&&scheduler?.active_actor_id===player_id,action_busy:this.running,
@@ -135,7 +136,7 @@ export class BattleController {
       }
     }
     this.log({type:'battle-start',battle_id:this.state.id,world_revision:this.expectedRevision,source:this.state.source});
-    this.publish(); return this.snapshot();
+    this.publish(); return this.presentationSnapshot();
   }
   actor(id) { return this.state.actors.find(actor=>actor.id===id); }
   beginNativeVertical(actorId,record,at){
@@ -336,7 +337,7 @@ export class BattleController {
     requireValue(this.state&&['command','charging','action'].includes(this.state.phase),'当前战斗不能切换角色');this.checkWorld();
     const actor=this.actor(id);requireValue(actor?.side==='player'&&actor.hp.current>0,'角色已经倒下或不属于队伍');
     requireValue(this.canCommand(id),'角色正在行动或当前不能输入指令');
-    this.state.player_id=id;this.publish();return this.snapshot();
+    this.state.player_id=id;this.publish();return this.presentationSnapshot();
   }
   canChoose(skillId) {
     const skill=this.skills?.[skillId], player=this.state && this.actor(this.state.player_id);
@@ -371,7 +372,7 @@ export class BattleController {
     const player=this.actor(this.state.player_id);
     this.queueCommand({actor_id:player.id,skill_id:kind,target_id:player.id,command_kind:kind});
     if(!this.running){const task=this.scheduleReady();if(task)await task;}
-    return this.snapshot();
+    return this.presentationSnapshot();
   }
   performDefend(player) {
     const before=copy(player),descriptor=dispatchDefend(player,this.state.scheduler);
@@ -433,7 +434,7 @@ export class BattleController {
       const victory=this.state.actors.filter(a=>a.side==='enemy').every(a=>a.hp.current===0);
       if(player.hp.current===0||victory){this.state.phase=victory?'victory':'defeat';this.state.outcome=this.state.phase;}
       else{this.state.round++;this.state.phase='command';}
-      this.running=false; this.publish(); return this.snapshot();
+      this.running=false; this.publish(); return this.presentationSnapshot();
     } catch(error) {
       this.running=false; this.state.phase='interrupted'; this.state.error=error.message;
       this.log({type:'battle-interrupted',battle_id:this.state.id,error:error.message}); this.publish();throw error;
@@ -605,7 +606,7 @@ export class BattleController {
     requireValue(itemCommand?this.itemTargetAvailable(target,itemCommand.instance_id,player):revival||support?target&&this.targetIdsForSkill(skill.id).includes(target.id):target?.side==='enemy'&&target.hp.current>0&&target.state_raw!==11&&!target.escaped,'目标已经倒下、离场或阵营不匹配');
     if(!itemCommand){const support=this.reactionTargetAvailability(skill,target);requireValue(support.available,support.reason);}
     this.queueCommand({actor_id:player.id,skill_id:skill.id,target_id:target.id,...(itemCommand?{item_instance_id:itemCommand.instance_id}:{})});
-    if(!this.running){const task=this.scheduleReady();if(task)await task;}return this.snapshot();
+    if(!this.running){const task=this.scheduleReady();if(task)await task;}return this.presentationSnapshot();
   }
   async runScheduledReady(firstSelection) {
     const s=this.state.scheduler;let selection=firstSelection;
@@ -689,7 +690,7 @@ export class BattleController {
         // player's command instead of draining an unbounded enemy action chain.
         break;
       }
-      this.running=false;this.refreshCommandState();this.publish();return this.snapshot();
+      this.running=false;this.refreshCommandState();this.publish();return this.presentationSnapshot();
     }catch(error){
       this.interrupt(error);throw error;
     }

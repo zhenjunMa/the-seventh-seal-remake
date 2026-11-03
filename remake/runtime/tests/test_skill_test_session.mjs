@@ -60,7 +60,7 @@ function controllerFixture(){
   const world=worldFixture(),ticket=Object.freeze({}),events=[],nodes=new Map(),canvas={hidden:false},context={combat:false,page:'skills'};
   const $=id=>{if(!nodes.has(id))nodes.set(id,{hidden:false,textContent:id==='mapName'?'原地图':'',dataset:{},querySelector(){return this;}});return nodes.get(id);};
   const previous={battle:null,battleView:{old:true},battleMenu:null,battleRng:{old:true},battleNatural:true,battleCursorMemory:new Map([['001',3]]),sidePriority:1,battlePresentationError:'old',itemData:{old:true}};
-  const state={...previous,world,view:{x:12,y:34},catalog:{},battleViews:new Map(),battleHistory:[],menuContext:context,scenes:{phase:'party-menu',setPhase(p){this.phase=p;}},audio:{setScene:s=>events.push(s)}};
+  const state={...previous,world,view:{x:12,y:34},catalog:{},battleViews:new Map(),lastBattle:null,menuContext:context,scenes:{phase:'party-menu',setPhase(p){this.phase=p;}},audio:{setScene:s=>events.push(s)}};
   const actions={beginTechniqueTestMenu(){state.menuContext=null;$('partyMenu').hidden=true;return ticket;},resumeTechniqueTestMenu(value){assert.equal(value,ticket);state.menuContext=context;state.scenes.setPhase('party-menu');$('partyMenu').hidden=false;events.push('resume');},resize(){},buildHud(){events.push('hud');},refreshPartyMenu(){events.push('refresh');},log:e=>events.push(e),status:s=>events.push(s),json:async()=>({}),readConfiguredData:async()=>({items:{}})};
   const controller=createBattleController({state,actions,$,canvas});
   return {world,state,actions,controller,previous,ticket,events,$,canvas};
@@ -74,10 +74,10 @@ test('Failed test startup releases battle UI and returns to the same retained me
 });
 test('Training return commits item effects once, restores map/cursor ownership and refreshes the retained techniques page',async()=>{
   const f=controllerFixture(),before=f.world.snapshot(),result=resultFor(f.world),snapshot=snapshotFor(f.world);result.resources_by_actor['002'].mp=12;snapshot.inventory.pop();let finishes=0;
-  f.state.menuContext=null;f.state.scenes.setPhase('battle-result');f.state.battle={state:{phase:'escaped'},finish(){finishes++;return result;},snapshot(){return snapshot;}};
+  f.state.menuContext=null;f.state.scenes.setPhase('battle-result');f.state.battle={state:{...snapshot,phase:'escaped'},finish(){finishes++;this.state.phase='closed';return result;}};
   f.state.skillTestSession={ticket:f.ticket,mapWorld:f.world,revision:before.revision,previous:f.previous,viewState:{x:12,y:34},mapName:'原地图',visibility:{canvas:false,dialogue:true},view:{stop:r=>f.events.push(r)}};
   await f.controller.returnFromBattle();await f.controller.returnFromBattle();
   assert.equal(finishes,1);assert.equal(f.state.scenes.phase,'party-menu');assert.equal(f.state.skillTestSession,null);assert.equal(f.state.battleCursorMemory,f.previous.battleCursorMemory);
   assert.equal(f.world.value.party[1].mp.current,12);assert.deepEqual(f.world.value.encounters,before.encounters);assert.deepEqual(f.world.location,before.location);assert.equal(f.world.value.money,before.money);
-  assert.ok(f.events.includes('hud')&&f.events.includes('refresh'));assert.equal(f.state.battleHistory.length,1);
+  assert.ok(f.events.includes('hud')&&f.events.includes('refresh'));assert.equal(f.state.lastBattle.result,result);
 });

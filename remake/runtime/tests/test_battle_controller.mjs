@@ -92,8 +92,8 @@ test('natural battle return stores its RNG, restores exploration and cannot subm
     scenes:{phase:'battle-result',setPhase(phase){this.phase=phase;}},
     world:{value:{source:{kind:'native-new-game'},encounters:{rng_state:1,counters:{'001':0},remainders:{'001':0}}},
       location:{map_id:'M70010'},setEncounterState(next){this.value.encounters=next;}},
-    battle:{finish(){finished++;return {outcome:'victory',rewards_applied:true};},snapshot(){return {scheduler:{side_priority:1}};}},
-    battleNatural:true,battleRng:{state:123456},battleHistory:[],
+    battle:{state:{phase:'victory',scheduler:{side_priority:1}},finish(){finished++;this.state.phase='closed';return {outcome:'victory',rewards_applied:true};}},
+    battleNatural:true,battleRng:{state:123456},lastBattle:null,
     view:{x:0,y:0},battleCheckpoint:{x:769,y:412},
     battleView:{stop:reason=>events.push(reason)},audio:{setScene:scene=>events.push(scene)},
   };
@@ -107,7 +107,7 @@ test('natural battle return stores its RNG, restores exploration and cannot subm
   assert.deepEqual(state.view,state.battleCheckpoint);
   assert.equal(canvas.hidden,false);
   assert.equal(elements.get('battleCanvas').hidden,true);
-  assert.equal(state.battleHistory.length,1);
+  assert.equal(state.lastBattle.battle,state.battle.state);assert.equal(state.lastBattle.result.outcome,'victory');
   assert.ok(events.some(e=>typeof e==='string'&&e.includes('战斗胜利')));
   await controller.returnFromBattle();
   assert.equal(finished,1);

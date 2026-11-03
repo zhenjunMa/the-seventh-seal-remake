@@ -61,9 +61,9 @@ export function createServicesController({state, actions, $, canvas, ctx,now=()=
   }
   function download(value,filename){const url=URL.createObjectURL(value instanceof Blob?value:new Blob([JSON.stringify(value,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
   function exportRuntimeLog(){
-    // This synchronous export observes one event-loop turn. It never clones
-    // the full battle history or builds a full-log string beside the atlases.
-    const parts=['{"schema":"seventh-seal-runtime-log","version":2,"events":['];
+    // Export the latest fight, even after a technique/scripted session has
+    // restored its previous controller. Serialize history one entry at a time.
+    const parts=['{"schema":"seventh-seal-runtime-log","version":3,"events":['];
     const append=value=>parts.push(new Blob([JSON.stringify(value)],{type:'application/json'}));
     const appendBattle=battle=>{
       if(!battle){parts.push('null');return;}
@@ -72,12 +72,8 @@ export function createServicesController({state, actions, $, canvas, ctx,now=()=
       history.forEach((entry,index)=>{if(index)parts.push(',');append(entry);});parts.push(']}');
     };
     state.logs.forEach((entry,index)=>{if(index)parts.push(',');append(entry);});
-    parts.push('],"battle_history":[');
-    state.battleHistory.forEach((entry,index)=>{
-      if(index)parts.push(',');const {battle,...metadata}=entry;
-      parts.push(JSON.stringify(metadata).slice(0,-1),',"battle":');appendBattle(battle);parts.push('}');
-    });
-    parts.push('],"current_battle":');appendBattle(state.battle?.state??null);
+    parts.push('],"current_battle":');appendBattle(state.lastBattle?.battle??null);
+    parts.push(',"battle_result":');append(state.lastBattle?.result??null);
     parts.push(',',JSON.stringify({world:state.world.snapshot(),audio:state.audio?.snapshot()??null,scope:state.catalog.scope}).slice(1));
     download(new Blob(parts,{type:'application/json'}),'seventh-seal-runtime-log.json');
   }

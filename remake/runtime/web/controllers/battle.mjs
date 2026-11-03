@@ -82,12 +82,24 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
   }
   function createCombat(world,newParty,view){
     let battle,waits=0,waitStarted=0,waitTotal=0;
+    const log=event=>{
+      if(state.battle!==battle||!battle.state)return;
+      if(state.lastBattle?.battle!==battle.state){
+        if(battle.state?.phase==='closed')return;
+        // Cached views can still reference an older controller. Drop its
+        // detailed history as well as the old event log when a new fight starts.
+        if(state.lastBattle?.battle?.history)state.lastBattle.battle.history.length=0;
+        state.lastBattle={result:null,battle:battle.state};state.logs=[];
+        $('eventLog').textContent='';
+      }
+      actions.log(event);
+    };
     const now=()=>state.engine?.battle.clock.time??performance.now()-waitTotal-(waits?performance.now()-waitStarted:0);
     const withResources=async(work,wait=true)=>{
       const reason=Symbol('battle-resources'),generation=view.generation,started=performance.now();
       if(wait){if(!waits++)waitStarted=performance.now();(state.battleResourceWaits??=new Set()).add(reason);state.engine?.pause(reason);}
       const signal=view.resourceController?.signal;
-      try{const result=await playbackTask(work(),signal);if(state.battle!==battle||view.destroyed||view.generation!==generation){result?.release?.();throw new Error('战斗资源会话已失效');}if(wait)actions.log({type:'battle-resource-wait-complete',elapsed_ms:performance.now()-started,cache:battleResources.snapshot()});return result;}
+      try{const result=await playbackTask(work(),signal);if(state.battle!==battle||view.destroyed||view.generation!==generation){result?.release?.();throw new Error('战斗资源会话已失效');}if(wait)log({type:'battle-resource-wait-complete',elapsed_ms:performance.now()-started,cache:battleResources.snapshot()});return result;}
       finally{if(wait){if(!--waits)waitTotal+=performance.now()-waitStarted;state.battleResourceWaits.delete(reason);state.engine?.resume(reason);}}
     };
     view.withResources=withResources;view.resourceTime=now;
@@ -102,12 +114,12 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
     };
     const actionSound=(result,step)=>state.audio?.playAction({...step,sound_inhibited:step.sound_inhibited??Boolean(battle.actor(step.actor_id).immune_raw)},`${result.action_id}:${step.channel_id}:${step.plan_record_index}:${step.logical_frame}`);
     const effectSound=(result,step)=>state.audio?.playEffect(step.asset_id,`${result.action_id}:${step.channel_id}:${step.effect_index}`,step.logical_frame);
-    const present=method=>async(result,options)=>{const played=await play(method,result,{...options,onFrame:step=>actionSound(result,step),onEffectFrame:step=>effectSound(result,step)});actions.log({type:'battle-presentation',action_id:result.action_id,actor_id:result.actor_id,skill_id:result.skill_id,observations:played.observations});return played;};
+    const present=method=>async(result,options)=>{const played=await play(method,result,{...options,onFrame:step=>actionSound(result,step),onEffectFrame:step=>effectSound(result,step)});log({type:'battle-presentation',action_id:result.action_id,actor_id:result.actor_id,skill_id:result.skill_id,observations:played.observations});return played;};
     battle=new BattleController({world,resolveAction,applyDamage:applyNativeDamage,playAction:present('playAction'),playSequence:present('playSequence'),
       now,
       resourcesForWorld:newParty?partyResourcesForWorld:resourcesForWorld,consumeResources:newParty?consumePartyMp:consumeBattleMp,
-      notify:snapshot=>{if(state.battle===battle)updateBattle(snapshot);},log:actions.log,itemData:newParty?state.itemData:null,
-      playItem:async(event,hooks)=>{actions.status(`${event.name} → ${battle.actor(event.target_id).name}`);const played=await play('playItem',event,{...hooks,onFrame:step=>actionSound(event,step),onEffectFrame:step=>effectSound(event,step)});actions.log({type:'battle-item-presentation',action_id:event.action_id,item_id:event.item_id,observations:played.observations});}});
+      notify:snapshot=>{if(state.battle===battle)updateBattle(snapshot);},log,itemData:newParty?state.itemData:null,
+      playItem:async(event,hooks)=>{actions.status(`${event.name} → ${battle.actor(event.target_id).name}`);const played=await play('playItem',event,{...hooks,onFrame:step=>actionSound(event,step),onEffectFrame:step=>effectSound(event,step)});log({type:'battle-item-presentation',action_id:event.action_id,item_id:event.item_id,observations:played.observations});}});
     view.nativeControl=battle;
     view.nativeControlIsCurrent=()=>state.battle===battle;
     view.onLifecycleFrame=step=>{if(state.battle===battle)actionSound({action_id:`${step.battle_id}:${step.lifecycle_token}`},{...step,channel_id:'lifecycle'});};
@@ -320,14 +332,16 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
     state.audio?.setScene({mapId:state.world.location.map_id,battle:false});
     actions.resize();actions.resumeTechniqueTestMenu(session.ticket);
   }
+  // Retain one completed fight; a new fight replaces it without cloning
+  // or appending to a multi-battle archive.
   async function returnFromBattle(){
     if(!state.scenes.phase.startsWith('battle-')||!state.battle)return;
     if(state.battleMenu?.resultPreparing||state.battleMenu?.resultView?.active&&!state.battleMenu.resultView.complete)return;
     if(state.scriptedBattleSession){
       const session=state.scriptedBattleSession;if(session.returnPending)return;session.returnPending=true;
       try{
-        const result=state.battle.finish(),snapshot=state.battle.snapshot();
-        state.battleHistory.push({result,battle:snapshot});
+        const result=state.battle.finish(),snapshot=state.battle.state;
+        state.lastBattle={result,battle:snapshot};
         if(result.outcome==='defeat'){
           const error=new Error('剧情战斗全队败北');error.gameOverPolicy=planPartyDefeat({battle:snapshot});throw error;
         }
@@ -342,23 +356,23 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
       if(state.battle.state?.phase==='interrupted'){restoreTechniqueTest(session,'测试已中止');actions.status('测试已中止，未提交测试中的变化。');return;}
       try{
         if(state.world!==session.mapWorld||state.world.value.revision!==session.revision)throw new Error('测试期间地图进度已变化，测试结果未覆盖新进度');
-        const result=state.battle.finish(),snapshot=state.battle.snapshot(),commit=commitSkillTestResources(state.world,snapshot,result,session.revision);
-        state.battleHistory.push({result,battle:snapshot});
+        const result=state.battle.finish(),snapshot=state.battle.state,commit=commitSkillTestResources(state.world,snapshot,result,session.revision);
+        state.lastBattle={result,battle:snapshot};
         actions.log({type:'technique-test-returned',battle_id:result.battle_id,outcome:result.outcome,...commit});
         restoreTechniqueTest(session,'已返回技巧测试');
         if(commit.changed){actions.buildHud();actions.refreshPartyMenu();}
         actions.status(commit.changed?'已返回技巧测试，道具消耗和恢复效果已保存。':'已返回技巧测试，地图进度保持原样。');return;
       }catch(error){restoreTechniqueTest(session,'测试已结束');throw error;}
     }
-    const result=state.battle.finish();
-    const defeatPolicy=result.outcome==='defeat'&&!state.battleSampleMode?planPartyDefeat({battle:state.battle.snapshot()}):null;
-    if(state.battle.snapshot().scheduler)state.sidePriority=state.battle.snapshot().scheduler.side_priority;
+    const result=state.battle.finish(),snapshot=state.battle.state;
+    const defeatPolicy=result.outcome==='defeat'&&!state.battleSampleMode?planPartyDefeat({battle:snapshot}):null;
+    if(snapshot.scheduler)state.sidePriority=snapshot.scheduler.side_priority;
     if(state.battleNatural){
       const encounterState=structuredClone(state.world.value.encounters);
       encounterState.rng_state=state.battleRng.state;
       state.world.setEncounterState(encounterState);
     }
-    state.battleHistory.push({result,battle:state.battle.snapshot()});state.battleView.stop('已返回地图');state.battleMenu?.dispose();state.battleMenu=null;
+    state.lastBattle={result,battle:snapshot};state.battleView.stop('已返回地图');state.battleMenu?.dispose();state.battleMenu=null;
     for(const id of ['battleCanvas','battleHud','battleCommands'])$(id).hidden=true;canvas.hidden=false;
     state.scenes.setPhase('map');Object.assign(state.view,state.battleCheckpoint);actions.buildHud();actions.updateNearest();actions.resize();canvas.focus({preventScroll:true});
     state.audio?.setScene({mapId:state.world.location.map_id,battle:false});

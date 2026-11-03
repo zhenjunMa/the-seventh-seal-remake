@@ -250,13 +250,13 @@ test('an overwrite conflict refreshes the displayed slot before a new confirmati
   assert.deepEqual(state.saveMenu.entries[0].summary,summaryOf(newer));assert.equal(state.scenes.phase,'save-menu');actions.closeSaveMenu();await opened;
 });
 
-test('runtime log download preserves every event and history entry without cloning or serializing a whole battle',async()=>{
+test('runtime log download exports only the latest fight without cloning or serializing a whole battle',async()=>{
   const {state,actions}=fixture(),raw='00'.repeat(2000),history=Array.from({length:64},(_,index)=>({action_id:`action-${index}`,before:{native_status_slots:[{raw_hex:raw}]},contacts:[{damage:index}]}));
   state.logs=history.map((entry,index)=>({sequence:index+1,type:'battle-action',entry}));
-  state.battleHistory=[{result:{outcome:'victory'},battle:{id:'past',phase:'closed',history:history.slice(0,2)}}];
-  state.battle={state:{id:'current',phase:'charging',history},snapshot:()=>assert.fail('Export must not clone the current battle history')};
+  state.battle={state:{id:'older-controller',phase:'closed',history:[{action_id:'old-action'}]},snapshot:()=>assert.fail('Export must not clone the current battle history')};
+  state.lastBattle={result:{outcome:'escaped'},battle:{id:'latest-technique-test',phase:'closed',history}};
   state.audio={snapshot:()=>({muted:false})};state.catalog.scope='保留完整诊断记录';
-  const expected={schema:'seventh-seal-runtime-log',version:2,events:state.logs,battle_history:state.battleHistory,current_battle:state.battle.state,world:state.world.snapshot(),audio:state.audio.snapshot(),scope:state.catalog.scope};
+  const expected={schema:'seventh-seal-runtime-log',version:3,events:state.logs,current_battle:state.lastBattle.battle,battle_result:state.lastBattle.result,world:state.world.snapshot(),audio:state.audio.snapshot(),scope:state.catalog.scope};
   const before=structuredClone(expected),stringify=JSON.stringify,previousDocument=globalThis.document,create=URL.createObjectURL,revoke=URL.revokeObjectURL,timeout=globalThis.setTimeout;
   const anchor={click(){this.clicked=true;}},timers=[],revoked=[];let blob,maxChunk=0;
   try{
@@ -264,7 +264,7 @@ test('runtime log download preserves every event and history entry without cloni
     URL.createObjectURL=value=>{blob=value;return 'blob:runtime-log';};URL.revokeObjectURL=url=>revoked.push(url);
     globalThis.setTimeout=callback=>{timers.push(callback);return 1;};
     JSON.stringify=(value,...options)=>{
-      assert.notEqual(value,expected);assert.notEqual(value,state.logs);assert.notEqual(value,state.battleHistory);assert.notEqual(value,state.battle.state);assert.notEqual(value,history);
+      assert.notEqual(value,expected);assert.notEqual(value,state.logs);assert.notEqual(value,state.lastBattle.battle);assert.notEqual(value,state.battle.state);assert.notEqual(value,history);
       const text=stringify(value,...options);maxChunk=Math.max(maxChunk,text.length);return text;
     };
     actions.exportRuntimeLog();
@@ -276,10 +276,11 @@ test('runtime log download preserves every event and history entry without cloni
   // The delayed revocation belongs to the normal download adapter.
   URL.revokeObjectURL=url=>revoked.push(url);try{timers.forEach(callback=>callback());}finally{URL.revokeObjectURL=revoke;}
   assert.deepEqual(revoked,['blob:runtime-log']);
-  state.battle=null;state.battleHistory=[];state.logs=[];
+  assert.equal(Object.hasOwn(JSON.parse(exported),'battle_history'),false);assert.ok(!exported.includes('old-action'));
+  state.battle=null;state.lastBattle=null;state.logs=[];
   try{
     globalThis.document={createElement:()=>anchor};URL.createObjectURL=value=>{blob=value;return 'blob:empty-log';};globalThis.setTimeout=()=>1;
     actions.exportRuntimeLog();
   }finally{globalThis.document=previousDocument;URL.createObjectURL=create;globalThis.setTimeout=timeout;}
-  const empty=JSON.parse(await blob.text());assert.equal(empty.current_battle,null);assert.deepEqual(empty.battle_history,[]);assert.deepEqual(empty.events,[]);
+  const empty=JSON.parse(await blob.text());assert.equal(empty.current_battle,null);assert.equal(empty.battle_result,null);assert.equal(Object.hasOwn(empty,'battle_history'),false);assert.deepEqual(empty.events,[]);
 });

@@ -92,7 +92,7 @@ export function createRuntimeState($) {
     statusData: null,
     sidePriority: 0,
     battleViews: new Map(),
-    battleHistory: [],
+    lastBattle: null,
     mapVitals: new Map(),
     view: {x:0,y:0,zoom:1,follow:true,collision:false,action:0,frame:0},
     phaseNames: {startup:'启动演出',menu:'等待开始',opening:'序章演出',boot:'准备资源',loading:'正在进入场景','save-io':'正在存取进度','save-menu':'选择存档栏位',map:'探索中',event:'交谈中',inspect:'图层检查','party-menu':'操作界面','game-over':'全队败北',

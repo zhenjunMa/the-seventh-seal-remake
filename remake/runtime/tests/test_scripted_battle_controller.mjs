@@ -46,7 +46,7 @@ function fixture({jsonGate=null,configGate=null,viewGate=null}={}){
   const previous={battle:null,battleView:{previous:true},battleMenu:{disposed:false,dispose(){this.disposed=true;}},battleRng:null,battleNatural:false,
     battleCursorMemory:new Map([['001',1]]),sidePriority:0,battlePresentationError:null,battleEntryPending:false,itemData:null};
   const cached={stops:0,rosters:0,async prepare(){events.push('prepare-view');if(viewGate)await viewGate.promise;},setRoster(){this.rosters++;},stop(){this.stops++;},draw(){},actorPositions(){return [];}};
-  const state={...previous,world,partyCombat,partySkills,partyReactions,statusData,catalog:{},view:{x:100,y:200},battleHistory:[],
+  const state={...previous,world,partyCombat,partySkills,partyReactions,statusData,catalog:{},view:{x:100,y:200},lastBattle:null,
     openingView:{active:true,actors:new Map([['sentinel',{}]]),dispose(){this.active=false;}},battleViews:new Map([['scripted:/data/stages/stage12.json',cached]]),
     scenes:{phase:'event',setPhase(value){this.phase=value;}},audio:{setScene(value){events.push(value);}}};
   const actions={json:()=>jsonGate?jsonGate.promise:Promise.resolve({}),readConfiguredData:()=>configGate?configGate.promise:Promise.resolve(copy(configured)),
@@ -100,7 +100,13 @@ for(const outcome of ['victory','escaped'])test(`${outcome} return retains final
   assert.equal(f.draft.encounters.rng_state,session.simulation.rng.state);assert.equal(f.draft.revision,before.revision);assert.deepEqual(f.world.snapshot(),before);
   assert.equal(f.state.openingView.active,true);assert.equal(f.state.scenes.phase,'event');assert.deepEqual(f.state.view,{x:100,y:200});
   assert.equal(f.$('openingShade').hidden,false);assert.equal(f.$('openingShade').style.opacity,'0.7');assert.deepEqual(f.$('battleHud').childNodes,[f.oldButton]);
-  assert.equal(f.state.battleHistory.length,1);await f.controller.returnFromBattle();assert.equal(f.state.battleHistory.length,1);
+  assert.equal(f.state.lastBattle.battle,battle.state);assert.equal(f.state.lastBattle.result.outcome,outcome);await f.controller.returnFromBattle();assert.equal(f.state.lastBattle.battle,battle.state);assert.equal(f.state.lastBattle.result.outcome,outcome);
+  const previousRecord=f.state.lastBattle;previousRecord.battle.history.push({action_id:'previous-battle-action'});
+  f.state.logs.push({type:'previous-battle-event'});
+  const next=f.run();await entered(f);
+  assert.notEqual(f.state.lastBattle,previousRecord);assert.equal(f.state.lastBattle.battle,f.state.battle.state);
+  assert.equal(f.state.lastBattle.result,null);assert.deepEqual(previousRecord.battle.history,[]);assert.deepEqual(f.state.logs,[]);
+  await cancel(f,next);
 });
 test('cancelled active combat and a delayed retired combat publish cannot reclaim the ANM phase or a subsequent HUD',async()=>{
   const f=fixture(),before=copy(f.draft),running=f.run();await entered(f);const retired=f.state.battle;
