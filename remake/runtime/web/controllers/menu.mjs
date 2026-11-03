@@ -52,22 +52,26 @@ export function createMenuController({state, actions, $, canvas, ctx}) {
     if(!previous.combat)state.scenes.setPhase(previous.phase);
     if(state.menuFeedback)state.menuFeedback.closing();else state.audio?.playCue('menuCancel');if(previous.combat)state.battleMenu?.frame.focus();else canvas.focus();
   }
-  function beginTechniqueTestMenu(){
+  function beginTechniqueTestMenu({retainVisible=false}={}){
     if(techniqueTestMenu)throw new Error('技巧测试正在进行。');
     if(!state.menuContext||state.menuContext.combat||state.menuContext.page!=='skills'||state.scenes.phase!=='party-menu')throw new Error('请从操作界面的技巧测试进入。');
     const root=$('partyMenu'),focus=root.ownerDocument.activeElement,ticket=Object.freeze({});
-    techniqueTestMenu={ticket,context:state.menuContext,phase:state.scenes.phase,hidden:root.hidden,focus,focusKey:focus?.dataset?.techniqueKey};
+    techniqueTestMenu={ticket,context:state.menuContext,phase:state.scenes.phase,hidden:root.hidden,inert:Boolean(root.inert),focus,focusKey:focus?.dataset?.techniqueKey};
     // Input dispatch uses menuContext before the battle controller. Retain the
     // view and DOM, but release that input owner until the test returns.
-    state.menuContext=null;state.keys.clear();root.hidden=true;
+    state.menuContext=null;state.keys.clear();root.inert=true;if(!retainVisible)root.hidden=true;
     return ticket;
+  }
+  function hideTechniqueTestMenu(ticket){
+    if(techniqueTestMenu?.ticket!==ticket)return false;
+    $('partyMenu').hidden=true;return true;
   }
   function resumeTechniqueTestMenu(ticket){
     const retained=techniqueTestMenu;
     if(!retained||retained.ticket!==ticket)return false;
     if(state.menuContext&&state.menuContext!==retained.context)return false;
     techniqueTestMenu=null;state.menuContext=retained.context;state.keys.clear();state.scenes.setPhase(retained.phase);
-    const root=$('partyMenu');root.hidden=retained.hidden;
+    const root=$('partyMenu');root.hidden=retained.hidden;root.inert=retained.inert;
     const focus=root.contains(retained.focus)?retained.focus:[...root.querySelectorAll('[data-technique-key]')].find(node=>node.dataset.techniqueKey===retained.focusKey);
     const techniques=state.operationMenu.techniques,wasRestoring=techniques?.restoring;
     // Refocusing a retained header must not run its preview/selection handler.
@@ -166,5 +170,5 @@ export function createMenuController({state, actions, $, canvas, ctx}) {
     const request={worldStore:state.world,attributes:state.partyCombat,itemData:state.itemData,roleId:$('menuActor').value,socketIndex:index+1,expectedRevision:state.world.value.revision};
     const result=instanceId?insertCrystal({...request,instanceId}):removeCrystal(request);actions.buildHud();actions.log({type:instanceId?'crystal-inserted':'crystal-removed',...result});return instanceId?'晶石已镶嵌。':'晶石已卸下。';
   })();}
-  return {menuOperation, openPartyMenu, showOperationPage, closePartyMenu, beginTechniqueTestMenu, resumeTechniqueTestMenu, refreshPartyMenu, refreshMenuSkill, editSkillShortcuts,setTechniqueSlot,useFieldTechnique,editTechniqueCombination,changePartyFormation,changeWeaponSocket};
+  return {menuOperation, openPartyMenu, showOperationPage, closePartyMenu, beginTechniqueTestMenu, hideTechniqueTestMenu, resumeTechniqueTestMenu, refreshPartyMenu, refreshMenuSkill, editSkillShortcuts,setTechniqueSlot,useFieldTechnique,editTechniqueCombination,changePartyFormation,changeWeaponSocket};
 }

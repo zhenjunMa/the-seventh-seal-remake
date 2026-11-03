@@ -12,6 +12,14 @@ const rgba=value=>{
 };
 const intersect=(a,b)=>{const x=Math.max(a.x,b.x),y=Math.max(a.y,b.y);
   return {x,y,width:Math.max(0,Math.min(a.x+a.width,b.x+b.width)-x),height:Math.max(0,Math.min(a.y+a.height,b.y+b.height)-y)};};
+function imageSources(images){
+  const sources=new Set();
+  for(const image of images.values()){
+    if(image.packed)for(const region of image.regions){const entry=image.pool.pages.get(region[4]);if(entry)sources.add(entry.bitmap);}
+    else sources.add(image);
+  }
+  return sources;
+}
 
 // A narrow compatibility boundary for the source-backed battle presentation.
 // Commands become pooled Phaser Sprites, Graphics and Text, rather than a
@@ -31,12 +39,18 @@ export class BattleSurface {
   }
   endFrame(){this.textures.prune();}
   prepareImages(images){
-    const sources=new Set();
-    for(const image of images.values()){
-      if(image.packed)for(const region of image.regions){const entry=image.pool.pages.get(region[4]);if(entry)sources.add(entry.bitmap);}
-      else sources.add(image);
+    for(const source of imageSources(images))if(source.width<=this.textures.maxSize&&source.height<=this.textures.maxSize)this.textures.texture(source);
+  }
+  async prepareEntryImages(images,{signal,clock}={}){
+    let started=performance.now();
+    for(const source of imageSources(images)){
+      signal?.throwIfAborted();
+      if(source.width<=this.textures.maxSize&&source.height<=this.textures.maxSize)this.textures.texture(source);
+      if(clock&&performance.now()-started>=4){
+        await new Promise((resolve,reject)=>clock.requestFrame(resolve,{signal,onCancel:reject}));
+        signal?.throwIfAborted();started=performance.now();
+      }
     }
-    for(const source of sources)if(source.width<=this.textures.maxSize&&source.height<=this.textures.maxSize)this.textures.texture(source);
   }
   take(kind){
     const index=this.cursor[kind]++,pool=this.pools[kind];let object=pool[index];

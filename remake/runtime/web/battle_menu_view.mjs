@@ -55,7 +55,7 @@ export class BattleMenuView{
     for(const menu of this.manifest.menus)for(const image of menu.images)paths.add(image.image);
     for(const asset of Object.values(this.manifest.assets))for(const f of asset.frames){paths.add(f.image);if(f.indexed_image)paths.add(f.indexed_image);if(f.inverse_mask_image)paths.add(f.inverse_mask_image);}
     this.images=await this.resourceScope.preparePaths([...paths],{onProgress:p=>onProgress({...p,stage:'hud'})});
-    this.onResourcesPrepared(this.images);
+    await this.onResourcesPrepared(this.images);
     if(!this.deferResult)await this.resultView?.prepare({onProgress:p=>onProgress({...p,stage:'result'})});
   }
   cue(name){this.playCue?.(name,`battle-menu:${this.epoch}:${++this.cueSequence}`);}

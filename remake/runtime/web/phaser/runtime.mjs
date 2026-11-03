@@ -149,13 +149,15 @@ export class PhaserRuntime {
     }
     this.game?.scale?.refresh();this.ui?.invalidate(true);
   }
-  captureTexture(source='exploration'){
+  captureInterface(root){return this.ui.capture(root);}
+  captureTexture(source='exploration',{objects=null,onDestroy=null}={}){
     if(!this.transitions.active)for(const previous of [...this.snapshots])previous.destroy();
-    const scene=this[source],camera=scene.cameras.main,key=`seal:snapshot:${++this.snapshotSerial}`;
+    const scene=typeof source==='string'?this[source]:source,camera=scene.cameras.main,key=`seal:snapshot:${++this.snapshotSerial}`;
     const texture=scene.textures.addDynamicTexture(key,640*this.renderScale,480*this.renderScale);texture.setFilter(1);
     texture.camera.setScroll(camera.scrollX,camera.scrollY).setZoom(camera.zoom).setRotation(camera.rotation);
-    const redraw=()=>{scene.sys.displayList.depthSort();texture.clear();texture.fill(camera.backgroundColor.color,1);texture.draw(scene.children.list.filter(object=>object.willRender(camera)));};redraw();
-    const snapshot={gpuTexture:true,key,width:640,height:480,redraw,destroy:()=>{if(this.snapshots.delete(snapshot))scene.textures.remove(key);}};
+    const redraw=()=>{scene.sys.displayList.depthSort();texture.clear();texture.fill(camera.backgroundColor.color,1);texture.draw((objects??scene.children.list).filter(object=>object.willRender(camera)));};
+    try{redraw();}catch(error){scene.textures.remove(key);throw error;}
+    const snapshot={gpuTexture:true,key,width:640,height:480,redraw,destroy:()=>{if(this.snapshots.delete(snapshot)){scene.textures.remove(key);onDestroy?.();}}};
     this.snapshots.add(snapshot);return snapshot;
   }
   // Render current display lists without advancing the game clock or world.

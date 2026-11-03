@@ -52,12 +52,13 @@ export class GpuBattleTransition {
   }
   clearShader(){this.shader.setVisible(false).setChannel0('__WHITE').setChannel1('__WHITE').setChannel2('__WHITE');}
   capture(source){if(!source?.gpuTexture)throw new Error('入战转场需要 GPU 场景纹理');return source;}
-  async run(before,paintBattle,{kind,random=Math.random,clock=this.runtime.clock,log,signal}={}){
+  async run(before,paintBattle,{kind,random=Math.random,clock=this.runtime.clock,log,signal,onCovered,startedAt=performance.now()}={}){
     if(!Number.isInteger(kind)||kind<0||kind>6)throw new Error('入战转场类型无效');
     this.cancel();const epoch=++this.epoch,scene=this.scene,objects=[],textures=[],controller=new AbortController();let after,prepared=false;
     this.controller=controller;
     const abort=()=>controller.abort(signal.reason);signal?.addEventListener('abort',abort,{once:true});if(signal?.aborted)abort();
     const check=()=>{controller.signal.throwIfAborted();if(epoch!==this.epoch)throw new Error('入战转场已取消');};
+    const presented=()=>{if(epoch===this.epoch&&!controller.signal.aborted)log?.({type:'battle-transition-first-frame',kind,elapsed_ms:performance.now()-startedAt,renderer:'WEBGL'});};
     this.active=true;
     try{
       check();this.capture(before);
@@ -91,15 +92,19 @@ export class GpuBattleTransition {
         this.frame=frame;
       };
       paint(0);scene.sys.setVisible(true);
+      this.runtime.game?.events.once('postrender',presented);
+      onCovered?.();
       log?.({type:'battle-transition-start',kind,authority:'GAME.exe 0x430850; WebGL',renderer:'WEBGL'});
-      let frame=1,nextAt=clock.time+battleTransitionFrame(kind,0).delay,preparationStarted=false;
+      let frame=1,nextAt=clock.time+battleTransitionFrame(kind,0).delay,preparationStarted=false,presentationFrames=0;
       await new Promise((resolve,reject)=>{
         const schedule=()=>{this.pending=clock.requestFrame(now=>{try{
           check();
-          if(!preparationStarted){
+          // A menu click can start between Phaser frames. Cross two update
+          // boundaries so the browser can present the covering frame before
+          // configuration cloning or metadata work begins in a microtask.
+          if(++presentationFrames>=2&&!preparationStarted){
             preparationStarted=true;
-            // Yield one rendered transition frame before configuration, image
-            // preparation and GPU uploads can occupy the main thread.
+            log?.({type:'battle-transition-preparation-start',kind,elapsed_ms:performance.now()-startedAt,renderer:'WEBGL'});
             Promise.resolve().then(()=>{check();return paintBattle(controller.signal);}).then(snapshot=>{
               try{check();}catch(error){snapshot?.destroy?.();throw error;}
               after=snapshot;this.capture(after);
@@ -118,6 +123,7 @@ export class GpuBattleTransition {
       });
       check();log?.({type:'battle-transition-complete',kind,frames:frame,renderer:'WEBGL'});
     }finally{
+      this.runtime.game?.events.off('postrender',presented);
       controller.abort(new Error('入战转场已结束'));signal?.removeEventListener('abort',abort);
       if(epoch===this.epoch)this.clearShader();
       for(const object of objects)object.destroy();for(const key of textures)scene.textures.remove(key);

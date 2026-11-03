@@ -18,10 +18,14 @@ export class BattleResources {
       need(response.ok,'图集清单读取失败');const data=await response.json();
       need(data.schema==='seventh-seal-battle-packs'&&data.version===1&&Array.isArray(data.pages)&&data.images&&data.manifests,'图集清单无效');
       for(const page of data.pages)need(safe(page.path)&&/^[a-f0-9]{64}$/.test(page.sha256)&&Number.isInteger(page.width)&&page.width>0&&page.width<=2048&&Number.isInteger(page.height)&&page.height>0&&page.height<=2048,'图集描述无效');
+      let checked=0,started=performance.now();
       for(const image of Object.values(data.images)){
         need(image.width>0&&image.height>0&&/^[a-f0-9]{64}$/.test(image.sha256)&&Array.isArray(image.regions),'图片描述无效');
         for(const region of image.regions){const [x,y,w,h,index,px,py]=region,page=data.pages[index];
           need(region.length===7&&region.every(Number.isInteger)&&page&&x>=0&&y>=0&&w>0&&h>0&&x+w<=image.width&&y+h<=image.height&&px>=0&&py>=0&&px+w<=page.width&&py+h<=page.height,'图集坐标无效');
+        }
+        if(++checked%256===0&&performance.now()-started>=4){
+          await new Promise(resolve=>setTimeout(resolve,0));started=performance.now();
         }
       }
       this.data=data;return data;

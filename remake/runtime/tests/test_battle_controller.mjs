@@ -57,6 +57,33 @@ test('encounters start their transition before resource preparation, block reent
   assert.deepEqual(audioEvents,[{mapId:'M70010',battle:false}]);
 });
 
+test('technique entry captures the menu and covers it before shared resource preparation; failure restores its original owner',async()=>{
+  const nodes=new Map(),$=id=>{if(!nodes.has(id))nodes.set(id,{hidden:false,dataset:{},textContent:id,style:{}});return nodes.get(id);};
+  const context={combat:false,page:'skills'},ticket={},before={destroy(){}},canvas={hidden:false};
+  const world={value:{revision:7},location:{map_id:'M70010'}},previousView={retained:true},events=[];
+  const state={world,menuContext:context,view:{x:12,y:34},battleData:{},battleViews:new Map(),battleCursorMemory:new Map(),battleView:previousView,
+    scenes:{phase:'party-menu',setPhase(phase){this.phase=phase;}},engine:{captureInterface(root){assert.equal(root,$('operationFrame'));events.push('capture-menu');return before;}}};
+  let rejectPreparation,preparations=0;
+  const gate=new Promise((_,reject)=>{rejectPreparation=reject;});
+  const actions={
+    beginTechniqueTestMenu(options){assert.equal(options.retainVisible,true);state.menuContext=null;return ticket;},
+    hideTechniqueTestMenu(value){assert.equal(value,ticket);$('partyMenu').hidden=true;events.push('covered');},
+    resumeTechniqueTestMenu(value){assert.equal(value,ticket);state.menuContext=context;$('partyMenu').hidden=false;state.scenes.setPhase('party-menu');},
+    readConfiguredData(){preparations++;events.push('prepare');return gate;},json:async()=>({}),resize(){}
+  };
+  state.battleTransition={async run(snapshot,paint,options){
+    assert.equal(snapshot,before);assert.equal(preparations,0);assert.equal($('partyMenu').hidden,false);
+    events.push('transition');options.onCovered();return paint(new AbortController().signal);
+  }};
+  const controller=createBattleController({state,actions,$,canvas}),pending=controller.startTechniqueTest();
+  assert.deepEqual(events,['capture-menu','transition','covered','prepare']);assert.equal(state.scenes.phase,'battle-loading');
+  await controller.startTechniqueTest();assert.equal(preparations,1);
+  rejectPreparation(new Error('测试资源不可用'));await assert.rejects(pending,/测试资源不可用/);
+  assert.equal(state.scenes.phase,'party-menu');assert.equal(state.menuContext,context);assert.equal($('partyMenu').hidden,false);
+  assert.equal(state.battleView,previousView);assert.equal(state.skillTestSession,null);assert.equal(state.battleEntryPending,false);
+  assert.equal(state.world,world);assert.equal(world.value.revision,7);
+});
+
 test('natural battle return stores its RNG, restores exploration and cannot submit twice', async () => {
   const elements=new Map(), events=[];
   const $=id=>{if(!elements.has(id))elements.set(id,{hidden:false});return elements.get(id);};

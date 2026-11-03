@@ -67,6 +67,37 @@ export async function checkWebglRendering(runtime,record){
   }
   runtime.setPhase('battle-active');
   record('七种 GPU 入战转场：首帧先显示、慢加载并行／等待、战斗时钟冻结、结束画面及快照释放通过');
+  const menu=document.createElement('div');menu.className='operation-frame';
+  menu.style.cssText='position:absolute;left:0;top:0;width:640px;height:480px;transform:none';stage.append(menu);
+  const background=document.createElement('canvas');background.width=640;background.height=480;
+  background.getContext('2d').fillStyle='rgb(80,32,16)';background.getContext('2d').fillRect(0,0,640,480);
+  const menuImage=new Image();menuImage.src=background.toDataURL();await menuImage.decode();menu.append(menuImage);
+  const panelGlyph=document.createElement('canvas');panelGlyph.width=8;panelGlyph.height=8;
+  panelGlyph.style.cssText='position:absolute;left:100px;top:80px;width:8px;height:8px';
+  panelGlyph.getContext('2d').fillStyle='#00ff00';panelGlyph.getContext('2d').fillRect(0,0,8,8);registerGlyph(panelGlyph);menu.append(panelGlyph);
+  const menuPlane=document.createElement('canvas');menuPlane.width=40;menuPlane.height=40;
+  menuPlane.style.cssText='position:absolute;left:200px;top:100px;width:40px;height:40px';menu.append(menuPlane);
+  const menuCommands=drawingContext(menuPlane);menuCommands.fillStyle='#0000ff';menuCommands.fillRect(0,0,40,40);
+  const menuStarted=performance.now(),menuBefore=runtime.captureInterface(menu),menuObjects=runtime.transitions.scene.children.length,menuTiming=[];
+  menuBefore.redraw();let menuFrames=0,menuPreparing=false,coverCalls=0,menuFailure=null;
+  const menuClock={time:0,requestFrame(callback){let stopped=false;requestAnimationFrame(()=>{
+    if(stopped)return;runtime.flush();
+    if(menuFrames===0){
+      if(menuPreparing||!menu.hidden||!near(pixel(runtime.game.renderer,20,20),[96,40,32,255])||
+        !near(pixel(runtime.game.renderer,102,82),[16,255,16,255])||!near(pixel(runtime.game.renderer,210,110),[16,8,255,255]))menuFailure=new Error('技巧测试转场没有保留菜单图片、字形与绘制列表');
+    }
+    menuFrames++;menuClock.time+=250;callback(menuClock.time);
+  });return {cancel(){stopped=true;}};}};
+  await runtime.transitions.run(menuBefore,()=>{
+    menuPreparing=true;if(menuFrames<2)throw new Error('菜单启动的资源准备抢占了首个可见转场帧');
+    paint([20,40,60]);return runtime.captureTexture('battle');
+  },{kind:1,clock:menuClock,startedAt:menuStarted,log:event=>menuTiming.push(event),onCovered:()=>{coverCalls++;menu.hidden=true;}});
+  if(menuFailure)throw menuFailure;
+  assert(coverCalls===1&&runtime.transitions.scene.children.length===menuObjects&&!runtime.snapshots.size,'菜单转场没有清理捕获对象或快照');
+  const firstFrame=menuTiming.findIndex(event=>event.type==='battle-transition-first-frame'),preparationFrame=menuTiming.findIndex(event=>event.type==='battle-transition-preparation-start');
+  assert(firstFrame>=0&&preparationFrame>firstFrame,'资源准备没有等到实际 Phaser 首帧绘制完成');
+  menu.remove();runtime.setPhase('battle-active');
+  record(`菜单入战：图片、GPU字形与保留绘制列表完整捕获，覆盖后隐藏菜单、首帧后准备及快照释放通过（示意菜单，首帧 ${menuTiming[firstFrame].elapsed_ms.toFixed(1)}ms）`);
   const lifecycleManifest=await (await fetch('/data/battle_lifecycle.json')).json();
   const roster=[{id:'entry-player',resource_id:'001',side:'player'},{id:'entry-enemy',resource_id:'012',side:'enemy'}];
   const entryState={id:'webgl-entry-preparation',actors:roster.map(actor=>({...actor,life_epoch:0})),

@@ -91,6 +91,17 @@ test('opaque tickets reject forged, duplicate and stale resumes while preserving
   assert.equal(controller.resumeTechniqueTestMenu(ticket),false);assert.equal(state.menuContext,null);assert.equal(controller.resumeTechniqueTestMenu(later),true);assert.equal(controller.resumeTechniqueTestMenu(later),false);
 });
 
+test('entry retains the visible menu with input suspended until the transition covers it, then restores its focus',()=>{
+  const {state,controller,root,doc}=fixture(),focus=doc.activeElement;
+  const ticket=controller.beginTechniqueTestMenu({retainVisible:true});
+  assert.equal(root.hidden,false);assert.equal(root.inert,true);assert.equal(state.menuContext,null);
+  assert.equal(controller.hideTechniqueTestMenu({}),false);assert.equal(root.hidden,false);
+  assert.equal(controller.hideTechniqueTestMenu(ticket),true);assert.equal(root.hidden,true);
+  assert.equal(controller.resumeTechniqueTestMenu(ticket),true);
+  assert.equal(root.hidden,false);assert.equal(root.inert,false);assert.equal(doc.activeElement,focus);
+  assert.equal(state.menuContext.page,'skills');assert.equal(controller.hideTechniqueTestMenu(ticket),false);
+});
+
 test('resume finds the same header after DOM replacement and does not rerun its selection callback',()=>{
   const {state,controller,view,doc,battle}=fixture(),old=doc.activeElement,ticket=controller.beginTechniqueTestMenu();battle.focus();old.remove();view.techniques.paint();
   const replacement=view.techniques.element.querySelector('[data-technique-key="header-test"]');let selections=0;view.techniques.onSection=()=>selections++;

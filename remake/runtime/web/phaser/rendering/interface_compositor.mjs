@@ -42,7 +42,7 @@ export class InterfaceCompositor {
   geometry(record){
     const node=record.canvas,root=this.root(node),box=node.getBoundingClientRect();
     if(!box.width||!box.height||node.closest('[hidden]')||getComputedStyle(node).visibility==='hidden')return null;
-    const clip={left:box.left,top:box.top,right:box.right,bottom:box.bottom};let alpha=node.gpuOriginalOpacity;
+    const clip={left:box.left,top:box.top,right:box.right,bottom:box.bottom};let alpha=node.gpuOriginalOpacity??Number(getComputedStyle(node).opacity);
     for(let parent=node.parentElement;parent&&parent!==this.runtime.parent.parentElement;parent=parent.parentElement){
       const style=getComputedStyle(parent);
       alpha*=Number(style.opacity);
@@ -89,6 +89,46 @@ export class InterfaceCompositor {
       this.surface.globalAlpha=entry.alpha;this.surface.drawImage(entry.canvas,(b.left-base.left)*kx,(b.top-base.top)*ky,b.width*kx,b.height*ky);this.surface.restore();
     }
     this.surface.endFrame();
+  }
+  capture(root){
+    const base=root?.getBoundingClientRect();
+    if(!base?.width||!base.height||root.closest('[hidden]'))throw new Error('待转场的菜单画面不可见');
+    const scene=this.runtime.transitions.scene,surface=new BattleSurface(scene),entries=[];
+    try{
+      for(const node of root.querySelectorAll('img,canvas')){
+        if(node===this.canvas||this.records.get(node)?.embedded||node.tagName==='IMG'&&(!node.complete||!node.naturalWidth))continue;
+        const entry=this.geometry({canvas:node});if(!entry||entry.alpha<=0)continue;
+        // Glyphs are normally drawn by the shared output at z-index 6.
+        // Replay their original sources, never copy the other WebGL canvas.
+        entry.stack=[];
+        for(let parent=node;parent&&parent!==root;parent=parent.parentElement){
+          const z=getComputedStyle(parent).zIndex;if(z!=='auto')entry.stack.unshift(Number.parseInt(z)||0);
+        }
+        if(this.records.has(node)||node.gpuSurface||node.hasAttribute('data-gpu-glyph'))entry.stack=[6];
+        entries.push(entry);
+      }
+      entries.sort((a,b)=>{
+        for(let i=0;i<Math.max(a.stack.length,b.stack.length);i++){const delta=(a.stack[i]??0)-(b.stack[i]??0);if(delta)return delta;}
+        return a.canvas.compareDocumentPosition(b.canvas)&Node.DOCUMENT_POSITION_FOLLOWING?-1:1;
+      });
+      const kx=640/base.width,ky=480/base.height;
+      surface.fillStyle='#000000';surface.fillRect(0,0,640,480);
+      for(const entry of entries){
+        const node=entry.canvas,b=entry.box,c=entry.clip;if(c.right<=c.left||c.bottom<=c.top)continue;
+        surface.save();surface.beginPath();surface.rect((c.left-base.left)*kx,(c.top-base.top)*ky,(c.right-c.left)*kx,(c.bottom-c.top)*ky);surface.clip();
+        surface.globalAlpha=entry.alpha;
+        const natural=node.tagName==='IMG'&&getComputedStyle(node).objectFit==='none';
+        surface.drawImage(node,0,0,node.naturalWidth??node.width,node.naturalHeight??node.height,
+          (b.left-base.left)*kx,(b.top-base.top)*ky,natural?node.naturalWidth:b.width*kx,natural?node.naturalHeight:b.height*ky);
+        surface.restore();
+      }
+      surface.endFrame();
+      const objects=Object.values(surface.pools).flat().sort((a,b)=>a.depth-b.depth);
+      // Keep the immutable drawing objects for context restoration, detached
+      // from the live scene. The snapshot owns their textures and disposal.
+      for(const object of objects)scene.children.remove(object);
+      return this.runtime.captureTexture(scene,{objects,onDestroy:()=>surface.destroy()});
+    }catch(error){surface.destroy();throw error;}
   }
   destroy(){installInterfaceCompositor(null);this.listeners.abort();this.observer.disconnect();this.records.clear();this.surface?.destroy();this.game.destroy(true);this.mount.remove();}
   snapshot(){return {renderer:'WEBGL',surfaces:this.records.size,visible:this.visible?.length??0,textures:this.surface?.textures.snapshot()};}

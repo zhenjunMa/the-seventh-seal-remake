@@ -11,7 +11,7 @@ test('the view passes GPU snapshots, source kind, owning clock and cancellation 
  const view=new BattleTransitionView({renderer,clock,random});assert.equal(view.capture(before),before);
  for(let kind=0;kind<7;kind++)await view.run(before,()=>after,{kind,signal});view.cancel();
  assert.equal(calls.length,8);assert.equal(calls.at(-1),'cancel');
- calls.slice(0,7).forEach((call,kind)=>{assert.equal(call.image,before);assert.equal(call.after,after);assert.deepEqual(call.options,{kind,signal,random,clock,log:undefined});});
+ calls.slice(0,7).forEach((call,kind)=>{assert.equal(call.image,before);assert.equal(call.after,after);assert.deepEqual(call.options,{kind,signal,onCovered:undefined,startedAt:undefined,random,clock,log:undefined});});
 });
 test('missing WebGL and rendering failures remain visible; invalid source kinds cannot start a transition',async()=>{
  await assert.rejects(new BattleTransitionView({}).run({},()=>({})),/WebGL/);

@@ -7,10 +7,10 @@ export function battleTransitionFrame(kind,frame){
 export class BattleTransitionView {
   constructor({renderer,log,random=Math.random,clock=null}){Object.assign(this,{renderer,log,random,clock});}
   capture(source){if(!this.renderer)throw new Error('WebGL 转场后端尚未准备');return this.renderer.capture(source);}
-  async run(before,paintBattle,{kind=Math.floor(this.random()*7),signal}={}){
+  async run(before,paintBattle,{kind=Math.floor(this.random()*7),signal,onCovered,startedAt}={}){
     if(!Number.isInteger(kind)||kind<0||kind>6)throw new Error('入战转场类型无效');
     if(!this.renderer)throw new Error('WebGL 转场后端尚未准备');
-    return this.renderer.run(before,paintBattle,{kind,signal,random:this.random,clock:this.clock,log:this.log});
+    return this.renderer.run(before,paintBattle,{kind,signal,onCovered,startedAt,random:this.random,clock:this.clock,log:this.log});
   }
   cancel(){this.renderer?.cancel();}
 }

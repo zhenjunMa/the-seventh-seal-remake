@@ -20,6 +20,7 @@ import {StartupView} from "../startup_view.mjs";
 import {CaptionView} from "../caption_view.mjs";
 import {LoadingView} from "../loading_view.mjs";
 import {BattleTransitionView} from "../battle_transition_view.mjs";
+import {battleResources} from '../core/battle_resources.mjs';
 import {DialogueView} from "../dialogue_view.mjs";
 import {RewardNoticeView} from '../reward_notice_view.mjs';
 import {MapNameNoticeView} from '../map_name_notice_view.mjs';
@@ -173,6 +174,11 @@ export function createBootController({state, actions, $, canvas, ctx}) {
     state.engine.start({phase:state.scenes.phase,interface:actions.updateInterface,
       exploration:actions.updateExploration,battle:actions.updateBattleFrame,suspend:actions.releaseInput});
     actions.status('片头按Esc跳过；提示画面按任意键进入主菜单。首次交互启用声音。');state.startupView.start();
+    // Warm shared metadata after the startup screen can appear. This does not
+    // draw an encounter/RNG or retain any decoded atlas lease.
+    state.engine.clock.requestFrame(()=>state.engine.clock.requestFrame(()=>{
+      void battleResources.catalog().catch(error=>actions.log({type:'battle-resource-prefetch-failed',error:error.message}));
+    }));
   }
   return {boot};
 }
