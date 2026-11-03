@@ -196,6 +196,15 @@ export class BattleController {
     const b=Uint8Array.from(raw.match(/../g),x=>parseInt(x,16)),actor=this.actor(actorId);
     requireValue(b.length===176&&actor,'原动作记录缺失');actor.class_raw=b[0x24];actor.action_mask_raw=b[0x78];
   }
+  finishNativeSpriteRecord(actorId){
+    const actor=this.actor(actorId);
+    // 510900 starts the living id4 hold on its final sprite, before 51A240.
+    // A selected id4 also proves that its native A65C candidate cache exists.
+    if(parseInt(actor.current_skill.fixed_raw_hex.slice(0,2),16)!==4||[4,5,6].includes(actor.state_raw))return false;
+    actor.reaction_special_gate_raw=5000;
+    actor.native_after_raw={...actor.native_after_raw,'0x0521f692':5000};
+    return true;
+  }
   nativeSourceHooks(){return {
     onFinalizeDeath:({actor:candidate})=>{const actor=this.actor(candidate.id);Object.assign(actor,copy(candidate));if(this.canFinalizeDeath(actor))this.finalizeDeath(actor);return {actor:copy(actor)};},
     onDispatch:({actor:candidate})=>{
@@ -448,8 +457,8 @@ export class BattleController {
       if(now-this.chargeClock>=20){
         this.checkWorld();this.chargeClock=now;s.ticks++;advanced=true;
         for(const actor of this.state.actors)advanceIdleSkill(actor,this.schedulerData,this.chargeClock);
-        for(const actor of this.state.actors){chargeActor(actor,this.rng);if(actor.state_raw===4&&this.reactionData&&this.canFinalizeDeath(actor))this.finalizeDeath(actor);}
-        for(const actorId of [...this.pendingSourceEnds])this.completeNativeSource(this.actor(actorId),this.chargeClock);
+        for(const actor of this.state.actors){chargeActor(actor,this.rng,current=>this.completeNativeSource(current,this.chargeClock));if(actor.state_raw===4&&this.reactionData&&this.canFinalizeDeath(actor))this.finalizeDeath(actor);}
+        for(const actorId of [...this.pendingSourceEnds]){const actor=this.actor(actorId);if(!actor.reaction_special_gate_raw)this.completeNativeSource(actor,this.chargeClock);}
       }
       // 51BB90 calls 509E10 with real scene time on every main-loop visit,
       // independently of the global 20ms charging gate.
@@ -464,6 +473,7 @@ export class BattleController {
             }});
           Object.assign(actor,update.actor);
           for(const response of update.periodic_reactions??[])if(this.lifecycleEnabled&&response.skill){
+            this.pendingSourceEnds.delete(actor.id);
             this.state.lifecycle_events=this.state.lifecycle_events.filter(event=>event.actor_id!==actor.id);
             this.queueLifecycle(actor,{...response,kind:'response'});
           }
@@ -767,6 +777,7 @@ export class BattleController {
         }
         if(this.reactionData){reaction=applyContactReaction({attacker:striker,target:victim,result,record:step.source,data:this.reactionData,rng:this.rng,threshold:this.state.scheduler?.threshold,...this.nativeSourceHooks()});
           if(reaction){const raw={...victim.native_after_raw,...reaction.after.native_after_raw};Object.assign(victim,copy(reaction.after));victim.native_after_raw=raw;if(reaction.skill){
+            this.pendingSourceEnds.delete(victim.id);
             if(this.lifecycleEnabled)this.state.lifecycle_events=this.state.lifecycle_events.filter(event=>event.actor_id!==victim.id||event.kind!=='response');
             reaction.token=`${actionId}:reaction:${++reactionCount}`;victim.native_sequence_token=reaction.token;reaction.plan=directSequence(reaction.skill);reaction.plan.allow_no_contacts=true;}}
         }

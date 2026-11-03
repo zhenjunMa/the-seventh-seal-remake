@@ -501,6 +501,8 @@ export class BattleView {
       entryPoint:x=>{check();control.advanceNativeEntry(actorId,x);},
       state:()=>{check();return control.nativeVerticalFor(actorId);},
       record:raw=>{check();control.nativeSourceRecord(actorId,raw);},
+      spriteEnd:pose=>{check();if(!control.finishNativeSpriteRecord(actorId))return false;
+        this.lastActorPoses.set(actorId,{action_index:pose.action_index,action_frame:pose.action_frame});return true;},
       advance:at=>{check();if(!this.preparingEntry){
         if(this.sourceVisitTime!==at){this.sourceVisitTime=at;this.sourceVisits=new Set();}
         if(this.sourceVisits.has(actorId))return false;this.sourceVisits.add(actorId);}
@@ -782,9 +784,11 @@ export class BattleView {
         const interval=(step.duration_ms??ms)*(channel.slow_record===step.plan_record_index?2:1);
         channel.frame_started_at=at-(channel.at??0);channel.frame_duration_ms=interval;
         channel.visited=entryVisited;channel.next_at=at+interval;
-        // 5130D0 itself calls 51A240: a terminal control hands off to
-        // 51CC00 now, even when its new height wait continues in the next ID.
-        if(step.command_raw!==undefined&&interval===0&&entryVisited+1>=channel.steps.length){
+        // 510900 starts id4's hold on the last sprite. 5130D0 also calls
+        // 51A240 immediately for terminal controls, including height waits.
+        const heldSprite=!carrier&&step.command_raw===undefined&&entryVisited+1>=channel.steps.length&&run.native_control&&
+          this._nativeBridge(channel.result.actor_id,run.native_control,run.native_guard).spriteEnd(step);
+        if(heldSprite||step.command_raw!==undefined&&interval===0&&entryVisited+1>=channel.steps.length){
           if(child){channel.done=true;run.onReactionEnd?.(clone(channel.descriptor),true,now);}
           else if(!carrier){run.main_done=true;run.onPrimaryEnd?.(now);if(Number.isInteger(run.attack_end_step_index))this._releaseAction(run,at);}
         }

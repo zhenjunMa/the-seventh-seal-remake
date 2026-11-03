@@ -25,12 +25,13 @@ class SchedulerOracle extends NativeAssemblyOracle {
  external(target){
   if(target===0x5002b0){assert.ok(this.actors[this.read(this.reg.ESP)].hp.current>0);return;} // No state change in fresh, positive-HP slice.
   if(target===0x504b80){this.selected=this.read(this.reg.ESP+4)&255;throw signal;} // Its actor argument is a byte; EAX upper bytes remain stale.
+  if(target===0x51a240){this.sourceEnds=(this.sourceEnds??0)+1;return;}
   return super.external(target);
  }
 }
 function oracle(actors,scheduler,rng){const o=new SchedulerOracle(asm.functions,actors,rng);
  o.write(0x55df74c,actors.length);o.write(0x679c6c,0);o.write(0x679c74,scheduler.threshold);o.write(0x55df75c,scheduler.side_priority);
- actors.forEach((a,i)=>{const n=i*0x30274;o.write(0x521a770+n,1);o.write(0x521a778+n,Number(Boolean(a.native_active)),1);o.write(0x521a7b9+n,a.charge.gauge);o.write(0x521a7bd+n,a.charge.delay);o.write(0x521f69e+n,a.charge.recovery||a.reaction_inhibit_raw);o.write(0x521f6a2+n,a.charge.recovery_ticks);o.write(0x521f52a+n,a.status_flags_raw);o.write(0x521a7c5+n,a.side==='player'&&scheduler.pending?1:0,1);});return o;}
+ actors.forEach((a,i)=>{const n=i*0x30274;o.write(0x521a770+n,1);o.write(0x521a778+n,Number(Boolean(a.native_active)),1);o.write(0x521a7b9+n,a.charge.gauge);o.write(0x521a7bd+n,a.charge.delay);o.write(0x521f692+n,a.reaction_special_gate_raw);o.write(0x521f69e+n,a.charge.recovery||a.reaction_inhibit_raw);o.write(0x521f6a2+n,a.charge.recovery_ticks);o.write(0x521f52a+n,a.status_flags_raw);o.write(0x521a7c5+n,a.side==='player'&&scheduler.pending?1:0,1);});return o;}
 function fixture(ids=['012','013','013'],extra={}){
  const world=new WorldStore(clone(seed),mapIds),s=sample(ids,world.snapshot()),logs=[];let time=0,battle;
  battle=new BattleController({world,id:()=> 'scheduler',now:()=>time,waitTick:async()=>{time+=20;},log:e=>logs.push(e),
@@ -54,6 +55,19 @@ test('charge arithmetic matches native x86 for exact debt/recovery boundaries an
   assert.deepEqual(a.charge,{gauge:o.read(0x521a7b9),delay:o.read(0x521a7bd),recovery:o.read(0x521f69e),recovery_ticks:o.read(0x521f6a2)},`case${i}`);assert.deepEqual(o.rng_calls,[]);
  }
 });
+test('native F692 hold pauses charging/debt/recovery and resumes the source only on expiration',()=>{
+ for(const remaining of [1,50,51,52,5000])for(const speed of [0,51,-1]){
+  const {actors,scheduler}=prepared(['012']),a=actors[0];
+  a.reaction_special_gate_raw=remaining;a.status_by_address['0x0521f56d']=speed-51;
+  a.charge={gauge:100,delay:800,recovery:25,recovery_ticks:115};
+  const o=oracle(clone(actors),scheduler,()=>0);let sourceEnds=0;
+  chargeActor(a,()=>0,()=>sourceEnds++);o.run(0x502f30,[0]);
+  assert.equal(a.reaction_special_gate_raw,o.read(0x521f692));
+  assert.deepEqual(a.charge,{gauge:o.read(0x521a7b9),delay:o.read(0x521a7bd),recovery:o.read(0x521f69e),recovery_ticks:o.read(0x521f6a2)});
+  assert.equal(sourceEnds,o.sourceEnds??0);assert.equal(sourceEnds,Number(a.reaction_special_gate_raw===0));
+ }
+});
+
 test('ranged speed consumes one draw, exclusive upper bound; zero bound uses80 and equipment is excluded',()=>{
  for(const type of [0,4,7])for(const min of [0,51])for(const n of [0,6,32767]){
   const {actors,scheduler}=prepared(['012']),a=actors[0];a.charge.gauge=0;a.raw_by_address['0x0524a729']=min;a.raw_by_address['0x0524a72d']=58;

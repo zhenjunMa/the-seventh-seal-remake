@@ -188,6 +188,7 @@ export class BattleLifecyclePlayback {
           }
         }
         channel.pose={action_index:step.action_index,action_frame:step.action_frame,source_frame:step.source_frame};channel.deadline+=step.interval_raw;
+        if(channel.cursor>=channel.skill.timeline.length&&channel.nativeBridge?.spriteEnd?.(channel.pose))this._finish(channel);
       }else if(step.command_raw===9){
         need((step.mode_raw_0x47??step.mode_raw47)===4,'Lifecycle entry-placement mode is not recovered');
         const placement=channel.nativeBridge?.entry?.(step.raw_hex,channel.role.frame_width)

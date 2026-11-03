@@ -70,7 +70,7 @@ export function setIdleSkill(actor,data,now=0){
   actor.idle_started_at=now;delete actor.idle_pose;
   advanceIdleSkill(actor,data,now);
 }
-export function chargeActor(actor,rng){
+export function chargeActor(actor,rng,onSourceEnd=null){
   const c=actor.charge;fail(c,'行动槽未初始化');
   if(actor.hp.current===0||actor.immune_raw||actor.state_raw>7||actor.state_raw===7)return 0;
   const bytes=Uint8Array.from(actor.current_skill.fixed_raw_hex.match(/../g),x=>parseInt(x,16)),view=new DataView(bytes.buffer);
@@ -83,8 +83,16 @@ export function chargeActor(actor,rng){
   // 502F30 adds status speed with signed32 wrap and does not clamp zero or
   // negative results. Gauge/debt use signed arithmetic; recovery compares
   // its unsigned counter against the unsigned bit pattern of SAR(speed,1).
-  // Fresh forest slice has no cast-reaction override @521F692. Retain the
-  // recovery arithmetic and exact strict debt comparison from 0x502F30.
+  // 502F30 spends F692 before ordinary charging/recovery. Only overflow
+  // reaches the gauge; expiration resumes the source in this same tick.
+  if(actor.reaction_special_gate_raw){
+    const remaining=actor.reaction_special_gate_raw;
+    if((remaining>>>0)>=(speed>>>0))actor.reaction_special_gate_raw=(remaining-speed)|0;
+    else{actor.reaction_special_gate_raw=0;c.gauge=(c.gauge+speed-remaining)|0;}
+    actor.native_after_raw={...actor.native_after_raw,'0x0521f692':actor.reaction_special_gate_raw};
+    if(actor.reaction_special_gate_raw===0)onSourceEnd?.(actor);
+    return speed;
+  }
   if(actor.state_raw>=4)return speed;
   c.recovery_ticks=(c.recovery_ticks>>>0)>0?(c.recovery_ticks-1)|0:0;
   if(c.recovery){if((c.recovery>>>0)>(speed>>1>>>0))c.recovery=(c.recovery-(speed>>1))|0;else{c.recovery=0;c.recovery_ticks=0;}actor.reaction_inhibit_raw=c.recovery;}

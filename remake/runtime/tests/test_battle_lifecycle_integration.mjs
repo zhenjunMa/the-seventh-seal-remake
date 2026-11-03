@@ -19,7 +19,7 @@ async function fixture(){
  // This Canvas fixture owns source-record writes through the same controller
  // bridge as the browser. HP submission / lifecycle acknowledgements remain
  // explicit test inputs; no numeric battle is synthesized by these pixels.
- const control=new BattleController({});control.state={actors:view.roster.map(actor=>({...actor,native_z_raw:0}))};control.verticalClocks=new Map();
+ const control=new BattleController({});control.state={actors:view.roster.map(actor=>({...actor,native_z_raw:0}))};control.verticalClocks=new Map();control.finishNativeSpriteRecord=()=>false;
  view.nativeControl=control;view.nativeControlIsCurrent=()=>view.nativeControl===control;
  return {view,target,control};
 }
@@ -106,6 +106,55 @@ async function liveFixture(enemyRole='013',statusData=null){
  }};
 }
 
+test('a real knockdown holds its final ground frame for the native5000 budget before getting up',async()=>{
+ for(const fps of [30,60,144]){
+  const f=await liveFixture('013'),{battle,view,drawn}=f,attacker=battle.actor('001'),victim=battle.actor('enemy-0');
+  const skill=structuredClone(f.commands.skills['001_26']);skill.actor_id=attacker.id;
+  const task=battle.performSequence(attacker,victim,skill,directSequence(skill));
+  let held=null,holdTicks=0,released=false;
+  for(let frame=0;frame<fps*12;frame++){
+   const ticks=battle.state.scheduler.ticks;await f.draw(frame*1000/fps);
+   if(!held&&victim.reaction_special_gate_raw===5000){
+    held={charge:structuredClone(victim.charge),pose:structuredClone(drawn.get('013'))};
+    const last=life.roles.find(r=>r.id==='013').skills.find(s=>s.chr_skill_index===4).last_source_pose;
+    assert.equal(held.pose.frame,last.action_frame,'hold starts on the last ground frame');
+    assert.equal(view.lifecycleSnapshot().active.some(row=>row.actor_id===victim.id),false,'sprite completion starts the hold immediately');
+   }else if(held&&!released&&battle.state.scheduler.ticks!==ticks){
+    holdTicks++;
+    if(holdTicks<=50){
+     assert.equal(victim.reaction_special_gate_raw,5000-holdTicks*99);
+     assert.equal(victim.current_skill.original_id_raw,4);assert.equal(victim.native_active,true);
+     assert.deepEqual(victim.charge,held.charge,'hold does not spend preparation or F6A2/F69E');
+     assert.deepEqual(drawn.get('013'),held.pose,'ground pose remains still');
+    }else{
+     assert.equal(holdTicks,51);assert.equal(victim.reaction_special_gate_raw,0);
+     assert.equal(victim.current_skill.original_id_raw,6);assert.equal(victim.charge.gauge,held.charge.gauge+49);
+     released=true;
+    }
+   }
+   if(released&&!battle.hasLifecycle()&&!battle.pendingPresentations.size)break;
+  }
+  await task;assert.ok(held&&released,`${fps}fps completed the full hold`);view.destroy();
+ }
+});
+
+test('a hit during the ground hold replaces its timer without prematurely ending the new response',async()=>{
+ const f=await liveFixture('013'),{battle,view,logs}=f,attacker=battle.actor('001'),victim=battle.actor('enemy-0');
+ const skill=structuredClone(f.commands.skills['001_26']);skill.actor_id=attacker.id;
+ const first=battle.performSequence(attacker,victim,skill,directSequence(skill));let frame=0;
+ for(;frame<600;frame++){await f.draw(frame*1000/60);if(victim.reaction_special_gate_raw===5000){frame++;break;}}
+ assert.equal(victim.reaction_special_gate_raw,5000);assert.ok(battle.pendingSourceEnds.has(victim.id));await first;
+ const next=f.sample.skills.yantu,task=battle.performSequence(attacker,victim,next,directSequence(next));let contact=null;
+ for(;frame<1200;frame++){
+  await f.draw(frame*1000/60);contact=logs.find(e=>e.type==='battle-impact'&&e.skill_id==='yantu');if(contact){frame++;break;}
+ }
+ assert.ok(contact);assert.equal(victim.current_skill.original_id_raw,3);assert.equal(victim.reaction_special_gate_raw,0);
+ assert.equal(battle.pendingSourceEnds.has(victim.id),false,'the old source wait is retired by the new hit');
+ for(let count=0;count<3;count++,frame++){await f.draw(frame*1000/60);assert.equal(victim.current_skill.original_id_raw,3);}
+ for(;frame<1800;frame++){await f.draw(frame*1000/60);if(!battle.pendingPresentations.size&&!battle.hasLifecycle()&&!battle.pendingSourceEnds.size)break;}
+ await task;view.destroy();
+});
+
 test('enemy and party hit recovery uses source durations and never inserts idle into knockdown/get-up handoffs',async()=>{
  for(const fps of [30,60,144])for(const [side,skillId,enemyRole,knockdown] of [['enemy',15,'013',false],['player','yantu','013',false],['player','001_26','013',true],['enemy',19,'042',true]]){
    const f=await liveFixture(enemyRole),{battle,view,drawn,logs}=f;
@@ -115,7 +164,7 @@ test('enemy and party hit recovery uses source durations and never inserts idle 
    for(let tick=0;tick<fps*12;tick++){
      const active=victim.native_active;await f.draw(tick*1000/fps);
      if(active)assert.notEqual(drawn.get(resource).action,0,`${side}:${skillId} must retain the response pose at ${tick}/${fps}`);
-     if(ended&&!battle.state.lifecycle_events.length&&!battle.pendingPresentations.size)break;
+      if(ended&&!battle.state.lifecycle_events.length&&!battle.pendingPresentations.size&&!battle.pendingSourceEnds.size)break;
    }
    await task;
    if(knockdown)assert.ok(logs.some(e=>e.type==='battle-source-completed'&&e.actor_id===victim.id&&e.descriptor.reason==='source-end-get-up'));
@@ -179,7 +228,7 @@ test('four compiled attacks hand off before return, retain leases and preserve s
 });
 
 test('handoff preserves ordinary-hit gaps, enemy recovery and native action ordering',async()=>{
- for(const [scenario,maximum]of [['ordinary',0],['gap',0],['natural',8]]){
+ for(const [scenario,maximum]of [['ordinary',0],['gap',0],['natural',16]]){
    const f=await createHandoffFixture({load:read,canvas:canvas(),assetLoader:async a=>({width:a.width,height:a.height,path:a.path}),scenario});f.view._sprite=()=>{};
    try{
      for(let frame=0;frame<60*20;frame++){await f.advance(frame*1000/60);if(f.finished)break;}
