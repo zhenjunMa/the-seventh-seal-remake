@@ -8,6 +8,10 @@ const need=(ok,message)=>{if(!ok)throw new Error(message);};
 export function operationStatus(world,attributes,items,roleId){
   const actor=createPartyActors(world,attributes,{},items).find(row=>row.id===roleId);
   need(actor,'操作角色不在队伍中');
+  return operationActorStatus(actor);
+}
+
+export function operationActorStatus(actor){
   const value=(raw,linked)=>Math.max(0,Math.min(999,(actor.raw_by_address[raw]+actor.linked_by_address[linked])|0));
   const address=n=>'0x'+n.toString(16).padStart(8,'0');
   const header=new DataView(Uint8Array.from(actor.header_raw_hex.match(/../g),v=>parseInt(v,16)).buffer);
@@ -30,8 +34,7 @@ export function operationItemCard(definition,manifest){
 
 // Native 0x47ae20 initializes empty actor-owned sockets. Optional remake socket
 // records retain later changes; legacy remake saves predate any socket editing.
-export function operationWeaponDetails(world,attributes,items,roleId){
-  const status=operationStatus(world,attributes,items,roleId);
+export function operationWeaponDetails(world,attributes,items,roleId,status=operationStatus(world,attributes,items,roleId)){
   const weapon=equipmentRows(world,attributes,items,roleId).find(row=>items.definitions[String(row.item_id)]?.type_raw_24===1);
   if(!weapon)return {status,weapon:null,socketCount:0,sockets:null};
   const definition=items.definitions[String(weapon.item_id)],raw=Uint8Array.from(definition.raw_hex.match(/../g),v=>parseInt(v,16));

@@ -3,6 +3,8 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {OperationMenuView} from '../web/operation_menu_view.mjs';
 import {createMenuController} from '../web/controllers/menu.mjs';
+import {WorldStore} from '../web/core/world.mjs';
+import {chapterRoleFromDefinition} from '../web/core/chapter.mjs';
 
 const load=name=>JSON.parse(readFileSync(new URL(`../web/data/${name}.json`,import.meta.url),'utf8'));
 const manifest=load('operation_menu'),supplement=load('operation_techniques'),source=load('party_skills');
@@ -56,10 +58,33 @@ function fixture(startup=()=>{}){
   view.page('skills');view.techniques.render(world,source,source,{rows:[],capacity:3});view.techniques.focus('sub',2);
   const context={combat:false,phase:'map',page:'skills',configured:{marker:'retained-config'},selectedRole:'001'};
   const state={operationMenu:view,menuContext:context,world:{value:world},keys:new Set(['ArrowLeft']),scenes:{phase:'party-menu',setPhase(value){this.phase=value;}},audio:{playCue(name){calls.push(['cue',name]);}},menuFeedback:{closing(){calls.push(['closing']);}}};
-  controller=createMenuController({state,actions:{},$,canvas,ctx:{}});
-  return {doc,root,battle,view,state,controller,context,calls,messages,world};
+  const actions={};controller=createMenuController({state,actions,$,canvas,ctx:{}});
+  return {doc,root,battle,view,state,controller,context,calls,messages,world,actions,$};
 }
 const settle=()=>new Promise(resolve=>setImmediate(resolve));
+
+test('field healing preserves target controls, focus and value canvases while updating HP, MP and skill rank',async()=>{
+  const {state,view,controller,doc,actions,$,messages}=fixture(),seed=load('opening_seed'),hud=[];
+  seed.party.push(chapterRoleFromDefinition(seed.source.role_definitions['002']));seed.party[1].hp.current=0;
+  seed.party[0].skill_progress={version:2,learned_indices:[],records:[{index:41,level:1,experience:795}]};
+  Object.assign(state,{world:new WorldStore(seed),partyCombat:load('party_combat'),itemData:load('items'),partySkills:source});
+  state.menuContext.configured={party_skills:source};$('menuActor').value='001';
+  actions.buildHud=options=>hud.push(options);actions.log=()=>{};actions.option=(value,label)=>Object.assign(doc.createElement('option'),{value,textContent:label});
+  view.techniques.textRenderer={supports:()=>true,paint(canvas,value){canvas.value=String(value);return {offsetX:0,offsetY:0};}};
+  view.techniques.onFieldSkill=request=>controller.useFieldTechnique(request);
+  view.techniques.page({section:'use'});controller.refreshPartyMenu();view.techniques.chooseActor('001');view.techniques.confirmEntry(view.techniques.fieldEntries().find(entry=>entry.skillId==='yannuan'));
+  const target=view.techniques.element.querySelector('[data-technique-key="target-002"]'),caster=view.techniques.element.querySelector('[data-technique-key="target-001"]');target.focus();
+  const hp=target._targetFields.hp.current.querySelector('canvas'),mp=caster._targetFields.mp.current.querySelector('canvas'),mpBefore=Number(mp.value),background=view.techniques.element.firstChild;
+  let paints=0;const paint=view.techniques.paint.bind(view.techniques);view.techniques.paint=()=>{paints++;return paint();};
+  await target.click();
+  assert.equal(paints,0);assert.equal(doc.activeElement,target);assert.equal(view.techniques.element.firstChild,background);
+  assert.equal(target._targetFields.hp.current.querySelector('canvas'),hp);assert.equal(caster._targetFields.mp.current.querySelector('canvas'),mp);
+  assert.equal(hp.value,'300');assert.equal(Number(mp.value),mpBefore-6);assert.equal(view.techniques.selectedSkill.source.skill_level_raw,2);
+  assert.equal(view.techniques.selectedSkill.source.mp_cost,5);assert.equal(hud[0].resourcesOnly,true);
+  await target.click();assert.equal(hp.value,'700');assert.equal(Number(mp.value),mpBefore-11);assert.equal(paints,0);
+  await target.click();assert.equal(hp.value,'900');const full=state.world.snapshot();await target.click();
+  assert.deepEqual(state.world.snapshot(),full);assert.match(messages.at(-1).message,/HP已满/);assert.equal(paints,0);assert.equal(doc.activeElement,target);
+});
 
 test('test header dispatches one whole-party request and leaves battle focus after startup resolves',async()=>{
   let resolveStart,ticket;const gate=new Promise(resolve=>{resolveStart=resolve;});

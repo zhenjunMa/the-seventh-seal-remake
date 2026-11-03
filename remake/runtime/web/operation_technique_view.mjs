@@ -29,12 +29,44 @@ export class OperationTechniqueView{
     `;root.append(style);this.style=style;this.section='use';this.stage='roster';this.mode='sub';this.roleId=null;this.action='compose';this.category=1;this.slotIndex=0;this.listOffset=0;this.composition=[];
   }
   destroy(){this.hide();this.element.remove();this.style.remove();}
-  page({section='use',roleId=null,layer='sub'}={}){this.stopShortcutAnimations();this.section=section;this.roleId=roleId;this.mode=layer;this.stage=roleId?(section==='edit'?'actions':'list'):'roster';this.preview=null;this.pending=null;this.listOffset=0;this.element.hidden=false;this.paint();return this;}
+  page({section='use',roleId=null,layer='sub',deferPaint=false}={}){this.stopShortcutAnimations();this.section=section;this.roleId=roleId;this.mode=layer;this.stage=roleId?(section==='edit'?'actions':'list'):'roster';this.preview=null;this.pending=null;this.listOffset=0;this.element.hidden=false;if(!deferPaint)this.paint();return this;}
   hide(){this.stopShortcutAnimations();this.pending=null;this.element.hidden=true;this.root.classList.toggle('technique-fullscreen',false);this.paintedStage=null;}
   render(world,source,configured,{rows=null,capacity=0}={}){Object.assign(this,{world,source,configured,rows:rows??world.party,capacity});this.paint();return this;}
+  updateFieldUse(world,source,configured,{rows=this.rows}={}){
+    const previousEntries=this.fieldEntries();
+    Object.assign(this,{world,source,configured,rows});
+    const entries=this.fieldEntries();
+    const find=entry=>entries.find(row=>row.type===entry?.type&&row.index===entry?.index);
+    const preview=this.preview;this.preview=find(this.preview)??this.preview;this.selectedSkill=find(this.selectedSkill)??this.selectedSkill;
+    if(this.section!=='use'||this.stage!=='targets'||previousEntries.length!==entries.length||entries.some((entry,index)=>entry.skillId!==previousEntries[index].skillId)){
+      this.paint();return this;
+    }
+    for(const button of this.element.querySelectorAll('.technique-row')){
+      const entry=find(button._entry),before=button._entry;if(!entry)continue;button._entry=entry;
+      if(entry.source.fixed_raw_hex!==before.source.fixed_raw_hex){
+        for(const selector of ['[data-row-level]','[data-row-attribute]','[data-row-experience]','[data-row-experience-digit]'])for(const node of button.querySelectorAll(selector))node.remove();
+        this.paintRowDetails(button);
+        if(entry.name!==before.name||entry.source.mp_cost!==before.source.mp_cost)this.paintRowText(button);
+      }
+    }
+    if(preview?.slot.color!==this.preview?.slot.color)this.paintPreview();
+    for(const status of rows){
+      const button=this.element.querySelector('[data-technique-key="target-'+status.id+'"]');if(!button?._targetFields)continue;
+      const before=button._targetStatus;
+      for(const key of ['hp','mp']){
+        const fields=button._targetFields[key],value=status[key];
+        if(value.current!==before[key].current)this.paintText(fields.current,value.current,'simsun18');
+        if(value.maximum!==before[key].maximum)this.paintText(fields.maximum,value.maximum,'simsun18');
+        if(value.current!==before[key].current||value.maximum!==before[key].maximum)fields.bar.style.width=(value.maximum?Math.floor(147*value.current/value.maximum):0)+'px';
+      }
+      button._targetStatus=status;
+    }
+    return this;
+  }
   asset(menuId){const menu=this.menus.get(menuId);return menu.composed??menu.images[0].image;}
   image(path,x,y,parent=this.element){const image=document.createElement('img');image.alt='';image.src=path;position(image,x,y);parent.append(image);return image;}
-  text(value,x,y,parent=this.element,className='technique-name',options={}){const node=document.createElement('span');node.className=className;position(node,x,y);const font=className==='technique-target-value'?'simsun18':className==='technique-target-name'?'simsun20_text':className===''?'simsun19_text':'simsun22_text';node.style.pointerEvents='none';node.style.color=options.foreground??'#ffffff';if(this.textRenderer?.supports?.(String(value),font)){const canvas=document.createElement('canvas'),result=this.textRenderer.paint(canvas,value,{font,foreground:'#ffffff',shadow:'#000000',...options});position(canvas,result.offsetX,result.offsetY);node.append(canvas);}else node.textContent=value;parent.append(node);return node;}
+  text(value,x,y,parent=this.element,className='technique-name',options={}){const node=document.createElement('span');node.className=className;position(node,x,y);const font=className==='technique-target-value'?'simsun18':className==='technique-target-name'?'simsun20_text':className===''?'simsun19_text':'simsun22_text';node.style.pointerEvents='none';node.style.color=options.foreground??'#ffffff';this.paintText(node,value,font,options);parent.append(node);return node;}
+  paintText(node,value,font,options={}){if(this.textRenderer?.supports?.(String(value),font)){let canvas=node.querySelector('canvas');if(!canvas){canvas=document.createElement('canvas');node.replaceChildren(canvas);}const result=this.textRenderer.paint(canvas,value,{font,foreground:'#ffffff',shadow:'#000000',...options});position(canvas,result.offsetX,result.offsetY);}else node.textContent=value;}
   button(key,label,x,y,w,h,{click,focus,group='content',disabled=false}={}){const button=document.createElement('button');button.type='button';button.dataset.techniqueKey=key;button.dataset.techniqueGroup=group;button.setAttribute('aria-label',label);button.disabled=disabled;position(button,x,y,w,h);button.onclick=click;button.onfocus=()=>{this.mode=group==='background'?'content':group;this.onFocus?.(this.mode);if(!this.restoring)focus?.();};this.element.append(button);return button;}
   sourceButton(menuId,name,origin,key,label,{click,focus,group='content',selected=false,disabled=false}={}){
     const widget=this.menus.get(menuId).widgets.find(row=>row.name.toLowerCase()===name.toLowerCase()),r=widget.rect;
@@ -50,7 +82,7 @@ export class OperationTechniqueView{
   }
   focus(mode='content',index=0){this.mode=mode;this.onFocus?.(mode);const group=this.controls(mode);(group[(index+group.length)%group.length]??this.root).focus({preventScroll:true});}
   controls(mode=this.mode){return [...this.element.querySelectorAll('button')].filter(button=>button.dataset.techniqueGroup===mode&&!button.hidden&&!button.disabled);}
-  invoke(callback,args){if(!callback)return;Promise.resolve().then(()=>callback(args)).then(()=>{this.paint();if(!this.element.contains(document.activeElement))this.focus(this.mode);}).catch(error=>this.onMessage?.(error.message,true));}
+  invoke(callback,args,{repaint=true}={}){if(!callback)return;return Promise.resolve().then(()=>callback(args)).then(()=>{if(repaint)this.paint();if(!this.element.contains(document.activeElement))this.focus(this.mode);}).catch(error=>this.onMessage?.(error.message,true));}
   invokeTest(){
     if(this.testPending)return this.testPending;
     if(!this.onTest){this.onMessage?.('技巧测试战斗尚未接入。',true);return;}
@@ -167,7 +199,7 @@ export class OperationTechniqueView{
     const maxOffset=Math.max(0,entries.length-6);this.listOffset=Math.max(0,Math.min(this.listOffset,maxOffset));
     if(entries.length>6){for(const [name,amount]of [['UP',-6],['DN',6]])this.sourceButton('game002_1',name,o,'scroll-'+name,amount<0?'上一页':'下一页',{click:()=>{this.listOffset=Math.max(0,Math.min(maxOffset,this.listOffset+amount));this.paint();this.focus('content',this.section==='edit'?4:0);}});}
     for(const [visible,entry]of entries.slice(this.listOffset,this.listOffset+6).entries()){
-      const widget=this.menus.get(menuId).widgets[visible+3],r=widget.rect,button=this.button('entry-'+entry.type+'-'+entry.index,entry.name,r.left+o.x,r.top+o.y,r.right-r.left+1,r.bottom-r.top+1,{group:['targets','slot-confirm'].includes(this.stage)?'background':'content',disabled:['targets','slot-confirm'].includes(this.stage),click:()=>this.confirmEntry(entry),focus:()=>this.previewEntry(entry,button)});button.className='technique-row';button._entry=entry;button._rowWidget=widget;
+      const widget=this.menus.get(menuId).widgets[visible+3],r=widget.rect,button=this.button('entry-'+entry.type+'-'+entry.index,entry.name,r.left+o.x,r.top+o.y,r.right-r.left+1,r.bottom-r.top+1,{group:['targets','slot-confirm'].includes(this.stage)?'background':'content',disabled:['targets','slot-confirm'].includes(this.stage),click:()=>this.confirmEntry(button._entry),focus:()=>this.previewEntry(button._entry,button)});button.className='technique-row';button._entry=entry;button._rowWidget=widget;
       const selected=this.preview?.index===entry.index&&this.preview?.type===entry.type;button.dataset.selected=String(selected);if(selected)this.paintRowHighlight(button);
       const bank=this.supplement.icons[entry.type===2?'other_ball':entry.type===1?'name_ball':'magic_ball1'],frame=entry.slot.icon+(selected?(entry.type===2?4:entry.type===1?88:6):0);if(bank.frames[frame]){const icon=this.image(bank.frames[frame],8,5,button);icon.dataset.rowIcon='true';}
       this.paintRowDetails(button);
@@ -225,7 +257,19 @@ export class OperationTechniqueView{
       this.element.querySelector('[data-technique-key="entry-'+pending.type+'-'+pending.index+'"]')?.focus({preventScroll:true});this.startShortcutReplacement(slotIndex);
     }).catch(error=>{if(this.slotCommit!==operation)return;this.slotCommit=null;this.onMessage?.(error.message,true);});
   }
-  paintTargets(){const o=this.manifest.page_bindings.items.target_origin;this.image(this.asset('game003_4'),o.x,o.y);this.rows.forEach((status,index)=>{const button=this.button('target-'+status.id,`目标 ${status.name}`,o.x+5,o.y+5+index*84,211,84,{click:()=>this.invoke(this.onFieldSkill,{casterId:this.roleId,targetId:status.id,skillId:this.selectedSkill.skillId,index:this.selectedSkill.index}),focus:()=>{for(const node of this.element.querySelectorAll('[data-technique-target]'))node.querySelector('img').src=this.manifest.item_target_panels[node===button?'selected':'normal'];}});button.dataset.techniqueTarget=status.id;this.image(this.manifest.item_target_panels.normal,0,0,button);this.text(status.name,20,13,button,'technique-target-name');for(const [key,y,frame,barY]of [['hp',30,1,47],['mp',53,0,70]]){this.text(status[key].current,110,y,button,'technique-target-value');this.text(status[key].maximum,155,y,button,'technique-target-value');const clip=document.createElement('span');position(clip,49,barY,status[key].maximum?Math.floor(147*status[key].current/status[key].maximum):0,3);clip.style.overflow='hidden';button.append(clip);this.image(this.manifest.item_target_bars.frames[frame],0,0,clip);}});}
+  paintTargets(){
+    const o=this.manifest.page_bindings.items.target_origin;this.image(this.asset('game003_4'),o.x,o.y);
+    this.rows.forEach((status,index)=>{
+      const button=this.button('target-'+status.id,`目标 ${status.name}`,o.x+5,o.y+5+index*84,211,84,{click:()=>this.invoke(this.onFieldSkill,{casterId:this.roleId,targetId:status.id,skillId:this.selectedSkill.skillId,index:this.selectedSkill.index},{repaint:false}),focus:()=>{for(const node of this.element.querySelectorAll('[data-technique-target]'))node.querySelector('img').src=this.manifest.item_target_panels[node===button?'selected':'normal'];}});
+      button.dataset.techniqueTarget=status.id;button._targetFields={};button._targetStatus=status;
+      this.image(this.manifest.item_target_panels.normal,0,0,button);this.text(status.name,20,13,button,'technique-target-name');
+      for(const [key,y,frame,barY]of [['hp',30,1,47],['mp',53,0,70]]){
+        const current=this.text(status[key].current,110,y,button,'technique-target-value'),maximum=this.text(status[key].maximum,155,y,button,'technique-target-value');
+        const clip=document.createElement('span');position(clip,49,barY,status[key].maximum?Math.floor(147*status[key].current/status[key].maximum):0,3);clip.style.overflow='hidden';button.append(clip);this.image(this.manifest.item_target_bars.frames[frame],0,0,clip);
+        button._targetFields[key]={current,maximum,bar:clip};
+      }
+    });
+  }
   compositionUnits(){return this.composition.reduce((n,index)=>n+sourceTechniqueSlot(this.source,this.roleId,0,index+1).color,0);}
   beginName(record=null){if(!this.composition.length){this.onMessage?.('请先选择要编成的技巧。',true);return;}this.nameCodes=record?[...record.name_codes]:[];this.nameCursor=0;this.nameCharacterIndex=0;this.nameFocusZone='characters';this.nameIcon=record?.icon??null;this.iconFocus=record?.icon??0;this.editorRevision=this.world.revision;this.stage='name-editor';this.paint();this.focus('content',5);}
   paintNameEditor(){

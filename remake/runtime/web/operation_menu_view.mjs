@@ -158,13 +158,13 @@ export class OperationMenuView{
   fit(){const r=this.root.getBoundingClientRect();this.frame.style.setProperty('--operation-scale',String(Math.min(r.width/640,r.height/480)));}
   bitmap(menuId){const menu=this.menus.get(menuId);if(!menu)throw new Error('操作界面素材缺失：'+menuId);return menu.composed??menu.images.find(image=>image.group===0).image;}
   source(id,menuId,x,y){const node=this.node(id);node.hidden=!menuId;if(!menuId)return;node.src=this.bitmap(menuId);node.style.left=x+'px';node.style.top=y+'px';}
-  page(page,{combat=false,itemCategory='items',selectionPage=null}={}){
+  page(page,{combat=false,itemCategory='items',selectionPage=null,deferTechniquePaint=false}={}){
     if(page==='items'&&(this.current!=='items'||this.itemCategory!==itemCategory)){this.itemFilterIndex=0;this.itemOffset=0;this.node('menuItemList').scrollTop=0;}
     this.current=page;this.root.dataset.menuPage=page;this.root.classList.toggle('combat-items',combat);this.fit();
     this.equipmentView.reset();
     this.weaponView.reset();
     this.formation.section.hidden=page!=='formation';this.formation.reset();
-    if(page==='skills')this.techniques.page({section:'use',layer:this.mode});else this.techniques.hide();
+    if(page==='skills')this.techniques.page({section:'use',layer:this.mode,deferPaint:deferTechniquePaint});else this.techniques.hide();
     this.itemCategory=itemCategory;
     for(const [category,buttons]of this.itemScrollButtons)for(const button of buttons)button.hidden=page!=='items'||itemCategory!==category;
     for(const filter of this.filters)filter.hidden=page!=='items'||itemCategory!=='items';
@@ -177,6 +177,7 @@ export class OperationMenuView{
     for(const [id,key]of [['menuItemsPage','items'],['menuInventoryEquipmentPage','equipment'],['menuCrystalsPage','crystals']])this.node(id).setAttribute('aria-pressed',String(itemCategory===key));
     for(const [id,key]of [['menuStatusSection','status'],['menuEquipmentSection','equipment'],['menuWeaponSection','weapon'],['menuItemSection','items'],['menuSkillsSection','skills'],['menuSystemSection','system']])this.node(id).hidden=key!==page;
     this.node('menuRoster').hidden=page!=='roster';this.node('menuActorBar').hidden=['roster','weapon','formation'].includes(page);this.node('menuActorSummary').hidden=['roster','weapon','formation'].includes(page);
+    if(!['status','equipment'].includes(page))this.node('menuStandingActor').hidden=true;
     this.node('menuEquipmentPicker').hidden=true;this.node('menuItemTargets').hidden=true;
     const bindings=this.manifest.page_bindings,group=status?bindings.characters:page==='items'?bindings.items:page==='skills'?bindings.techniques:null;
     const head=group?.header_origin??{x:9,y:4};

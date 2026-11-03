@@ -6,13 +6,23 @@ import {correctPartySkillType,isStoryGrantedPartySkill} from './party_skill_corr
 const copy=structuredClone,need=(ok,message)=>{if(!ok)throw new Error(message);};
 const int=(n,label,min=-2147483648,max=2147483647)=>{need(Number.isInteger(n)&&n>=min&&n<=max,`${label}无效`);return n;};
 const add=(a,b)=>(a+b)|0;
-const bytes=skill=>{need(/^(?:[0-9a-f]{2}){1053}$/i.test(skill?.fixed_raw_hex),'技巧成长原记录无效');return Uint8Array.from(skill.fixed_raw_hex.match(/../g),n=>parseInt(n,16));};
+const decodedSkills=new WeakMap();
+const rememberBytes=(skill,b)=>{decodedSkills.set(skill,{raw:skill.fixed_raw_hex,bytes:b.slice()});return skill;};
+const bytes=skill=>{
+  let cached=decodedSkills.get(skill);
+  if(!cached||cached.raw!==skill?.fixed_raw_hex){
+    need(/^(?:[0-9a-f]{2}){1053}$/i.test(skill?.fixed_raw_hex),'技巧成长原记录无效');
+    cached={raw:skill.fixed_raw_hex,bytes:Uint8Array.from(skill.fixed_raw_hex.match(/../g),n=>parseInt(n,16))};decodedSkills.set(skill,cached);
+  }
+  // Growth callers edit their working bytes. Never expose the cached source.
+  return cached.bytes.slice();
+};
 const hex=b=>Array.from(b,n=>n.toString(16).padStart(2,'0')).join('');
 const view=b=>new DataView(b.buffer,b.byteOffset,b.byteLength);
 const signed=n=>n&128?n-256:n;
 export const SKILL_GROWTH_EVIDENCE=Object.freeze({practice:'ev_671ce5d0595f5d8a6af3720a3dbdadeb33e2cfa1a168b28595b81f6d8861a1f2',upgrade:'ev_a6e1c1739d3f04a4b1f5c8a312d5bfe35ffa6fdc7e23c1ac84c688e9ba84a92b',prerequisite:'ev_7859d6c93ab161979a62219e691309ea9ceb9da1b3e76de18c7c50b30bc54f7a',settle:'ev_b513b24728bf72e5a50ea92ea4ad9463fd8ff6aee9939be0f3521468441c55e0'});
 
-function refresh(skill,b){const v=view(b),out={...copy(skill),fixed_raw_hex:hex(b),learned_raw:b[0x23],skill_level_raw:b[0x2d],skill_experience_raw:v.getInt32(0x2fb,true),mp_delta_raw:v.getInt32(0x14f,true)};out.mp_cost=Math.max(0,-out.mp_delta_raw);return out;}
+function refresh(skill,b){const v=view(b),out={...copy(skill),fixed_raw_hex:hex(b),learned_raw:b[0x23],skill_level_raw:b[0x2d],skill_experience_raw:v.getInt32(0x2fb,true),mp_delta_raw:v.getInt32(0x14f,true)};out.mp_cost=Math.max(0,-out.mp_delta_raw);return rememberBytes(out,b);}
 /** Native 50C000: flat first, then percent of the updated signed DWORD. */
 export function upgradeNativeSkill(skill){
   const b=bytes(skill),v=view(b),get=n=>v.getInt32(n,true),put=(n,value)=>v.setInt32(n,value,true);b[0x23]=1;
@@ -34,8 +44,8 @@ export function upgradeNativeSkill(skill){
 export function applySavedSkillProgress(skill,role){
   const index=skill.original_skill_index??skill.index,b=bytes(skill),record=role?.skill_progress?.version===2?role.skill_progress.records.find(row=>row.index===index):null;
   const marker=record||role?.skill_progress?.learned_indices.includes(index)?{index,level:record?.level??b[0x2d],experience:record?.experience??view(b).getInt32(0x2fb,true),learned:Boolean(b[0x23]||role?.skill_progress?.learned_indices.includes(index))}:null;
-  if(marker&&JSON.stringify(skill.skill_progress_applied)===JSON.stringify(marker))return copy(skill);
-  let out=copy(skill);
+  if(marker&&JSON.stringify(skill.skill_progress_applied)===JSON.stringify(marker))return rememberBytes(copy(skill),b);
+  let out=rememberBytes(copy(skill),b);
   if(record){
     const initial=b[0x2d],base=Math.max(1,initial);need(record.level>=initial&&record.level<=7,'保存技巧等级低于原记录');
     for(let level=base;level<record.level;level++)out=upgradeNativeSkill(out);

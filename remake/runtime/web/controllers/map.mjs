@@ -17,20 +17,21 @@ export function createMapController({state, actions, $, canvas, ctx}) {
   const motionState=new MapLocomotion();let gaitScene=null,gaitRole=null;
   function role() { return state.catalog.roles.find(role=>role.id===state.selectedRole); }
   function sheetAction(index=state.view.action) { return role().actions.find(action=>action.index===index); }
-  function buildHud() {
-    const snapshot=state.world.snapshot();
-    state.questProgress=state.storyRepository?.journal(snapshot)??[];
+  function buildHud({resourcesOnly=false,actors=null}={}) {
+    const snapshot=resourcesOnly?state.world.value:state.world.snapshot();
+    if(!resourcesOnly)state.questProgress=state.storyRepository?.journal(snapshot)??[];
     let effective=[];state.battleUnavailable='';
-    if(state.partyCombat)try{effective=createPartyActors(snapshot,state.partyCombat,{},state.itemData);if(!effective.some(a=>a.side==='player'&&a.hp.current>0))state.battleUnavailable='队伍已经倒下，请载入进度。';}catch(error){state.battleUnavailable=error.message;}
+    if(state.partyCombat)try{effective=actors??createPartyActors(snapshot,state.partyCombat,{},state.itemData);if(!effective.some(a=>a.side==='player'&&a.hp.current>0))state.battleUnavailable='队伍已经倒下，请载入进度。';}catch(error){state.battleUnavailable=error.message;}
     $('battleOpen').disabled=true;$('battleOpen').title='请在野外行走遇敌。';
     state.mapVitals.clear();for(const actor of effective)state.mapVitals.set(actor.id,{hp:{...actor.hp},mp:{...actor.mp}});
+    $('stateInfo').textContent=`世界版本 ${snapshot.revision} · 2000 项事件旗标 · ${snapshot.event_records.reduce((n,row)=>n+row.length,0)} 条原始事件状态`;
+    if(resourcesOnly)return;
     state.selectedRole=snapshot.leader_id;
     $('role').replaceChildren(...snapshot.party.map(actor=>{const option=document.createElement('option');option.value=actor.id;option.textContent=actor.name;return option;}));
     $('role').value=state.selectedRole;
     $('inventory').replaceChildren(...snapshot.inventory.map(item=>{const li=document.createElement('li'),count=document.createElement('span');li.append(document.createTextNode(item.name));count.textContent=`× ${item.quantity}`;li.append(count);return li;}));
     $('itemCount').textContent=`${snapshot.inventory.length} 项`;
     $('money').textContent=`金钱 ${snapshot.money??state.rewardData?.initial_money??'—'}`;
-    $('stateInfo').textContent=`世界版本 ${snapshot.revision} · 2000 项事件旗标 · ${snapshot.event_records.reduce((n,row)=>n+row.length,0)} 条原始事件状态`;
   }
   async function prepareMap(id,options={}) {
     const release=state.storyRepository.retainMap(id);

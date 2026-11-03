@@ -7,6 +7,8 @@ import {chapterRoleFromDefinition} from '../web/core/chapter.mjs';
 import {WorldStore,encodeSave,decodeSave} from '../web/core/world.mjs';
 import {createPartyActors} from '../web/core/party_attributes.mjs';
 import {deriveRuntimeConfiguration,compileRuntimeConfiguration} from '../web/core/runtime_config.mjs';
+import {effectiveSkillSource,updateEffectiveSkillSource} from '../web/core/battle_skill_access.mjs';
+import {upgradeNativeSkill} from '../web/core/battle_skill_growth.mjs';
 globalThis.crypto??=webcrypto;
 const copy=structuredClone,read=async name=>JSON.parse(await readFile(new URL('../web/data/'+name+'.json',import.meta.url),'utf8'));
 const data=Object.fromEntries(await Promise.all(Object.entries({combat:'combat_sample',forest:'forest_combat',scheduler:'battle_scheduler',ai:'forest_ai',rewards:'party_rewards',party_skills:'party_skills',items:'items'}).map(async([id,file])=>[id,await read(file)])));
@@ -66,15 +68,26 @@ test('Unified owner001/index41 debug HP and MP parameters are used by the field 
 test('Field healing levels up immediately, uses the new rank on repeated casts, and rejects full targets without practice or MP loss',async()=>{
   const world=await fixture(),source=copy(skills);
   world.transact(draft=>{draft.party[0].skill_progress={version:2,learned_indices:[],records:[{index:22,level:1,experience:39},{index:41,level:1,experience:795}]};});
+  const beforeRole=world.value.party[0],previous=effectiveSkillSource(skills,world.value),previousHex=previous.field_skills.yannuan.fixed_raw_hex;
   const first=useWorldSkill(world,attributes,skills,items,options);
+  let facade=updateEffectiveSkillSource(skills,world.value,previous,beforeRole);
+  assert.equal(facade.field_skills.yannuan.skill_level_raw,2);assert.equal(facade.field_skills.yannuan.skill_experience_raw,5);assert.equal(facade.field_skills.yannuan.mp_cost,5);
+  assert.equal(facade.roles['001'].skills[22],previous.roles['001'].skills[22]);assert.equal(facade.roles['002'],previous.roles['002']);assert.equal(previous.field_skills.yannuan.fixed_raw_hex,previousHex);
   assert.deepEqual(first.target_hp,{before:0,after:300});assert.equal(first.mp_cost,6);assert.equal(first.skill_practice,10);
   assert.deepEqual(first.notifications.filter(n=>n.type==='skill-level-up').map(n=>({index:n.skill_index,before:n.before,after:n.after})),[{index:41,before:{level:1,experience:795},after:{level:2,experience:5}}]);
   assert.deepEqual(fieldSkillAvailability(world.value,attributes,skills,items,options),{available:true,hp_delta:400,mp_delta:0,mp_cost:5});
-  const second=useWorldSkill(world,attributes,skills,items,options);
+  const secondBefore=world.value.party[0],second=useWorldSkill(world,attributes,skills,items,options);
+  facade=updateEffectiveSkillSource(skills,world.value,facade,secondBefore);
+  assert.equal(facade.field_skills.yannuan.skill_level_raw,2);assert.equal(facade.field_skills.yannuan.skill_experience_raw,13);assert.equal(facade.field_skills.yannuan.mp_cost,5);
   assert.deepEqual(second.target_hp,{before:300,after:700});assert.equal(second.mp_cost,5);assert.equal(second.skill_practice,8);
   assert.deepEqual(world.value.party[0].skill_progress.records.find(row=>row.index===41),{index:41,level:2,experience:13});
   assert.deepEqual(world.value.party[0].skill_progress.records.find(row=>row.index===22),{index:22,level:1,experience:39});
   const third=useWorldSkill(world,attributes,skills,items,options);assert.deepEqual(third.target_hp,{before:700,after:900});assert.equal(third.skill_practice,8);
   const full=world.snapshot();assert.throws(()=>useWorldSkill(world,attributes,skills,items,options),/HP已满/);assert.deepEqual(world.snapshot(),full);
   assert.deepEqual(await decodeSave(await encodeSave(full),world.mapIds),full);assert.deepEqual(skills,source);
+  // A decoded-source cache must neither retain caller edits nor mutate a source
+  // record when the same object is upgraded more than once.
+  const record=copy(skills.field_skills.yannuan),upgraded=upgradeNativeSkill(record);
+  assert.equal(upgradeNativeSkill(record).fixed_raw_hex,upgraded.fixed_raw_hex);assert.equal(record.fixed_raw_hex,skills.field_skills.yannuan.fixed_raw_hex);
+  record.fixed_raw_hex='invalid';assert.throws(()=>upgradeNativeSkill(record),/原记录无效/);
 });

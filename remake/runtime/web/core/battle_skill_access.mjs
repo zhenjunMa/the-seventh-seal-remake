@@ -26,6 +26,34 @@ export function effectiveSkillSource(commands,world){
   for(const table of [out.skills,out.field_skills])for(const [id,skill]of Object.entries(table??{}))if(roles.has(skill.actor_id))table[id]=correctPartySkillType(applySavedSkillProgress(skill,roles.get(skill.actor_id)));
   return out;
 }
+/** A field cast changes one role's saved skill progress. Keep the remaining
+ * read-only facade intact, and always replay changed records from the baseline. */
+export function updateEffectiveSkillSource(commands,world,previous,beforeRole){
+  const role=world.party.find(row=>row.id===beforeRole.id);
+  need(role&&previous.roles?.[role.id]&&commands.roles?.[role.id],'技巧成长角色来源缺失');
+  if(role.skill_progress)validateBattleSkillProgress(role.skill_progress);
+  const before=beforeRole.skill_progress,after=role.skill_progress;
+  const oldRecords=new Map((before?.records??[]).map(row=>[row.index,row])),newRecords=new Map((after?.records??[]).map(row=>[row.index,row]));
+  const oldLearned=new Set(before?.learned_indices??[]),newLearned=new Set(after?.learned_indices??[]);
+  const changed=new Set([...oldRecords.keys(),...newRecords.keys(),...oldLearned,...newLearned].filter(index=>{
+    const a=oldRecords.get(index),b=newRecords.get(index);
+    return a?.level!==b?.level||a?.experience!==b?.experience||oldLearned.has(index)!==newLearned.has(index);
+  }));
+  if(!changed.size)return previous;
+  const apply=skill=>correctPartySkillType(applySavedSkillProgress(skill,role));
+  const skills=[...previous.roles[role.id].skills];
+  for(const index of changed)skills[index]=apply(commands.roles[role.id].skills[index]);
+  const out={...previous,roles:{...previous.roles,[role.id]:{...previous.roles[role.id],skills,learned_indices:skills.filter(skill=>skill.learned_raw).map(skill=>skill.original_skill_index)}}};
+  let supplemental;
+  for(const table of ['skills','field_skills'])if(previous[table]){
+    out[table]={...previous[table]};
+    for(const [id,skill]of Object.entries(previous[table]))if(skill.actor_id===role.id&&changed.has(skill.original_skill_index)){
+      const baseline=commands[table]?.[id]??(supplemental??=supplementalPartyCommands(commands,runtimeContent))[id];
+      need(baseline,'技巧成长原记录缺失');out[table][id]=apply(baseline);
+    }
+  }
+  return out;
+}
 export function partyBattleSkills(commands){
   return {...commands.skills,...supportedBattleRecoverySkills(commands),...supplementalPartyCommands(commands,runtimeContent)};
 }

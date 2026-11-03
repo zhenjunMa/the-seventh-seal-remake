@@ -1,9 +1,9 @@
 // menu adapters. Persistent state belongs to the shared runtime context.
-import {effectiveSkillSource} from "../core/battle_skill_access.mjs";
+import {effectiveSkillSource,updateEffectiveSkillSource} from "../core/battle_skill_access.mjs";
 import {createPartyActors} from "../core/party_attributes.mjs";
 import {usableItems, canEquipItem} from "../core/items.mjs";
 import {equipmentRows} from "../core/equipment.mjs";
-import {operationStatus, learnedOperationSkills, operationItemCard, operationWeaponDetails} from "../core/operation_menu.mjs";
+import {operationActorStatus, learnedOperationSkills, operationItemCard, operationWeaponDetails} from "../core/operation_menu.mjs";
 import {skillShortcuts} from "../core/skill_shortcuts.mjs";
 import {availableFieldSkills, fieldSkillAvailability} from "../core/field_skills.mjs";
 import {useWorldSkill} from "../core/field_skills.mjs";
@@ -15,7 +15,16 @@ export function createMenuController({state, actions, $, canvas, ctx}) {
   const battleItemSelections=new Map();
   let techniqueTestMenu=null;
   let skillFacade=null;
-  function currentSkills(){const source=state.menuContext?.configured?.party_skills??state.partySkills;if(!skillFacade||skillFacade.world!==state.world||skillFacade.revision!==state.world.value.revision||skillFacade.source!==source)skillFacade={world:state.world,revision:state.world.value.revision,source,value:effectiveSkillSource(source,state.world.value)};return skillFacade.value;}
+  let partyView=null;
+  function currentSkills(){const source=state.menuContext?.configured?.party_skills??state.partySkills;if(!skillFacade||skillFacade.world!==state.world||skillFacade.worldValue!==state.world.value||skillFacade.revision!==state.world.value.revision||skillFacade.source!==source)skillFacade={world:state.world,worldValue:state.world.value,revision:state.world.value.revision,source,value:effectiveSkillSource(source,state.world.value)};return skillFacade.value;}
+  function currentPartyView(){
+    const world=state.world.value;
+    if(!partyView||partyView.world!==state.world||partyView.worldValue!==world||partyView.revision!==world.revision||partyView.attributes!==state.partyCombat||partyView.items!==state.itemData){
+      const actors=createPartyActors(world,state.partyCombat,{},state.itemData);
+      partyView={world:state.world,worldValue:world,revision:world.revision,attributes:state.partyCombat,items:state.itemData,actors,rows:actors.map(operationActorStatus)};
+    }
+    return partyView;
+  }
   function menuOperation(fn){return async()=>{try{const message=await (state.menuFeedback?state.menuFeedback.transaction(fn):fn());$('menuMessage').classList.remove('error');$('menuMessage').textContent=message??'';if(!state.menuFeedback)state.audio?.playCue('menuConfirm');refreshPartyMenu();}catch(error){$('menuMessage').classList.add('error');$('menuMessage').textContent=error.message;if(!state.menuFeedback)state.audio?.playCue('menuError');actions.status(error.message,true);actions.log({type:'operation-failed',error:error.message});}};}
   async function openPartyMenu(combat=false){
     if(combat?!state.battle?.canCommand():state.scenes.phase!=='map')return;
@@ -45,7 +54,7 @@ export function createMenuController({state, actions, $, canvas, ctx}) {
     if(page!==state.menuContext.page||itemCategory&&itemCategory!==state.menuContext.itemCategory)state.operationMenu.itemFocused=false;
     if(enteringItems&&!state.menuContext.combat){state.menuContext.itemFilter=nextItemCategory==='equipment'?[2,1]:nextItemCategory==='crystals'?[3,1]:[5,1];$('menuItem').value='';}
     state.menuContext.page=page;if(itemCategory)state.menuContext.itemCategory=itemCategory;state.menuContext.itemCategory??='items';$('menuShortcutEditor').hidden=true;
-    state.operationMenu.page(page,{combat:state.menuContext.combat,itemCategory:state.menuContext.itemCategory,selectionPage:state.menuContext.selectionPage});refreshPartyMenu();
+    state.operationMenu.page(page,{combat:state.menuContext.combat,itemCategory:state.menuContext.itemCategory,selectionPage:state.menuContext.selectionPage,deferTechniquePaint:true});refreshPartyMenu();
   }
   function closePartyMenu(){
     if(!state.menuContext)return;const previous=state.menuContext;if(previous.combat)battleItemSelections.set(previous.commandActor,$('menuItem').value);state.menuContext=null;$('partyMenu').hidden=true;state.operationMenu.suspend();
@@ -81,18 +90,34 @@ export function createMenuController({state, actions, $, canvas, ctx}) {
   }
   function refreshPartyMenu(){
     if(!state.menuContext)return;
-    const combat=state.menuContext.combat,roleId=$('menuActor').value;
-    const actors=combat?state.battle.players():createPartyActors(state.world.snapshot(),state.partyCombat,{},state.itemData),actor=actors.find(r=>r.id===roleId);
-    $('menuVitals').textContent=`${actor.name} · 等级 ${actor.level} · HP ${actor.hp.current}/${actor.hp.maximum} · MP ${actor.mp.current}/${actor.mp.maximum}`;
-    state.operationMenu.stats({...operationStatus(state.world.snapshot(),state.partyCombat,state.itemData,roleId),hp:actor.hp,mp:actor.mp});
-    state.operationMenu.roster(state.world.value.party.map(role=>operationStatus(state.world.snapshot(),state.partyCombat,state.itemData,role.id)),roleId);
-    if(state.menuContext.page==='formation')state.operationMenu.formation.render({slots:partyFormationSlots(state.world.value),actors});
-    if(state.menuContext.page==='skills'&&state.operationMenu.techniques){
-      const weapon=operationWeaponDetails(state.world.snapshot(),state.partyCombat,state.itemData,roleId).weapon;
-      const raw=weapon?.definition?.raw_hex,capacity=raw?new DataView(Uint8Array.from(raw.match(/../g),v=>parseInt(v,16)).buffer).getUint32(0x146,true):0;
-      state.operationMenu.techniques.render(state.world.snapshot(),currentSkills(),{...state.menuContext.configured,party_skills:effectiveSkillSource(state.menuContext.configured.party_skills,state.world.value)},{rows:state.world.value.party.map(role=>operationStatus(state.world.snapshot(),state.partyCombat,state.itemData,role.id)),capacity});
-    }
+    const {combat,page}=state.menuContext,roleId=$('menuActor').value,world=state.world.value;
     state.operationMenu.mnuText($('menuGold'),String(state.world.value.money??0).padStart(8,'0'),'game001','GOLD');state.operationMenu.mnuText($('menuArea'),$('mapName').textContent,'game001','AREA');
+    // Hidden panels keep their DOM until their own page is entered. Rebuild
+    // actor data only after a world/configuration change, never once per role.
+    if(page==='system'){state.operationMenu.system.render(state.audio.snapshot().channels,state.menuSettings.snapshot().battleCursor);return;}
+    const party=combat?null:currentPartyView(),actors=combat?state.battle.players():party.actors,actor=actors.find(r=>r.id===roleId);
+    $('menuVitals').textContent=`${actor.name} · 等级 ${actor.level} · HP ${actor.hp.current}/${actor.hp.maximum} · MP ${actor.mp.current}/${actor.mp.maximum}`;
+    state.operationMenu.actorId=roleId;state.operationMenu.rosterOrder=world.party.map(role=>role.id);
+    if(page==='roster'){state.operationMenu.roster(party.rows,roleId);return;}
+    if(page==='formation'){state.operationMenu.formation.render({slots:partyFormationSlots(world),actors});return;}
+    if(page==='status'||page==='equipment')state.operationMenu.stats(party.rows.find(row=>row.id===roleId));
+    if(page==='status')return;
+    if(page==='skills'){
+      if(state.operationMenu.techniques){
+        const weapon=equipmentRows(world,state.partyCombat,state.itemData,roleId).find(row=>state.itemData.definitions[String(row.item_id)]?.type_raw_24===1);
+        const raw=state.itemData.definitions[String(weapon?.item_id)]?.raw_hex,capacity=raw?new DataView(Uint8Array.from(raw.match(/../g),v=>parseInt(v,16)).buffer).getUint32(0x146,true):0;
+        const skills=currentSkills();
+        state.operationMenu.techniques.render(state.world.snapshot(),skills,{...state.menuContext.configured,party_skills:skills},{rows:party.rows,capacity});
+      }
+      refreshFieldSkillList(roleId);return;
+    }
+    if(page==='weapon'){
+      state.operationMenu.weapon({...operationWeaponDetails(world,state.partyCombat,state.itemData,roleId,party.rows.find(row=>row.id===roleId)),definitions:state.itemData.definitions,actor,
+        candidates:crystalSocketCandidates(world.inventory,state.itemData,{includeDisabled:true}).map(row=>({...row,available:row.socket_enabled})),
+        slotIndex:state.menuContext.socketIndex??0,selectedId:state.menuContext.crystalInstanceId});return;
+    }
+    if(page==='equipment'){refreshEquipment(roleId,actor);return;}
+    if(page!=='items')return;
     state.menuContext.itemFilter??=state.menuContext.itemCategory==='equipment'?[2,1]:state.menuContext.itemCategory==='crystals'?[3,1]:[5,1];
     state.operationMenu.setItemFilter?.(...state.menuContext.itemFilter);
     const previous=$('menuItem').value,previousIndex=state.operationMenu.itemFocused?Math.max(0,state.operationMenu.itemOrder?.indexOf(previous)??0):0,inventory=combat?state.battle.state.inventory:state.world.value.inventory,usable=usableItems(inventory,state.itemData,combat?'battle':'field'),listed=(combat?usable:inventory.filter(row=>{const def=state.itemData.definitions[String(row.id)],type=def?.type_raw_24,subtype=def?.subtype_raw_25;return row.quantity>0&&(state.menuContext.itemCategory==='equipment'?type===2&&subtype===state.menuContext.itemFilter[1]:state.menuContext.itemCategory==='crystals'?type===3&&subtype===1:type===state.menuContext.itemFilter[0]&&subtype===state.menuContext.itemFilter[1]);})).sort((a,b)=>a.id-b.id);
@@ -105,7 +130,8 @@ export function createMenuController({state, actions, $, canvas, ctx}) {
     $('menuItemCard').hidden=!(card||back);if(card||back){$('menuItemCard').src=card?.image??back.image??back;$('menuItemCard').style.width=(card?.width??175)+'px';$('menuItemCard').style.height=(card?.height??265)+'px';$('menuItemCard').style.left=(state.operationMenu.cardRect?.left??292)+'px';$('menuItemCard').style.top=((state.operationMenu.cardRect?.top??28)+(card?1:0))+'px';}
     $('menuUseItem').disabled=!usable.some(row=>row.instance_id===selected?.instance_id)||combat&&actor.hp.current===0;
     $('menuItemHint').textContent=def?.description??(combat?'消耗当前行动人物的一次行动。':state.menuContext.itemCategory==='items'?'选择物品与使用目标。':'');
-    if(combat)return;
+  }
+  function refreshEquipment(roleId,actor){
     const slotId=$('menuSlot').value,rows=equipmentRows(state.world.value,state.partyCombat,state.itemData,roleId);
     const worn=rows.find(row=>(row.slot_id??state.itemData.definitions[String(row.item_id)].slot_id)===slotId);
     $('menuWorn').textContent=`当前：${worn?state.itemData.definitions[String(worn.item_id)].name:'未装备'}`;
@@ -116,15 +142,14 @@ export function createMenuController({state, actions, $, canvas, ctx}) {
     $('menuEquipmentHint').textContent=state.itemData.definitions[String(worn?.item_id)]?.description??'';
     state.operationMenu.equipment(state.itemData.slots,rows,state.itemData.definitions,slotId);
     state.operationMenu.equipmentView.render({slots:state.itemData.slots,rows,definitions:state.itemData.definitions,candidates,slotId,selectedId:$('menuEquipment').value,actor,roleId});
-    state.operationMenu.weapon({...operationWeaponDetails(state.world.snapshot(),state.partyCombat,state.itemData,roleId),definitions:state.itemData.definitions,actor,
-      candidates:crystalSocketCandidates(state.world.value.inventory,state.itemData,{includeDisabled:true}).map(row=>({...row,available:row.socket_enabled})),
-      slotIndex:state.menuContext.socketIndex??0,selectedId:state.menuContext.crystalInstanceId});
+  }
+  function refreshFieldSkillList(roleId){
     const previousSkill=$('menuSkill').value,fieldSkills=availableFieldSkills(state.world.value,state.menuContext.configured.party_skills,roleId),skills=learnedOperationSkills(state.world.value,currentSkills(),state.menuContext.configured,roleId).filter(skill=>fieldSkills.some(field=>field.original_skill_index===skill.index));
     $('menuSkill').replaceChildren(...(skills.length?skills.map(skill=>actions.option(String(skill.index),`${skill.name} · MP ${skill.mpCost}`)):[actions.option('','没有可在战斗外使用的技巧')]));
     if(skills.some(skill=>String(skill.index)===previousSkill))$('menuSkill').value=previousSkill;
-    else{const firstField=availableFieldSkills(state.world.value,state.menuContext.configured.party_skills,roleId)[0];if(firstField)$('menuSkill').value=String(firstField.original_skill_index);}
+    else{const firstField=fieldSkills[0];if(firstField)$('menuSkill').value=String(firstField.original_skill_index);}
     const target=$('menuSkillTarget').value;$('menuSkillTarget').replaceChildren(...state.world.value.party.map(role=>actions.option(role.id,role.name)));if(state.world.value.party.some(role=>role.id===target))$('menuSkillTarget').value=target;else $('menuSkillTarget').value=roleId;
-    refreshMenuSkill();state.operationMenu.system.render(state.audio.snapshot().channels,state.menuSettings.snapshot().battleCursor);
+    refreshMenuSkill();
   }
   function refreshMenuSkill(){
     if(!state.menuContext||state.menuContext.combat)return;
@@ -144,10 +169,20 @@ export function createMenuController({state, actions, $, canvas, ctx}) {
   }
   function useFieldTechnique(request){
     if(!state.menuContext||state.menuContext.combat)throw new Error('当前无法使用技巧');
+    const beforeRole=state.world.value.party.find(role=>role.id===request.casterId),previousSkills=currentSkills();
     const result=useWorldSkill(state.world,state.partyCombat,state.menuContext.configured.party_skills,state.itemData,request);
     state.audio?.playCue('fieldSkillRecover');
     const message=result.notifications.map(notice=>notice.type==='skill-level-up'?`${notice.actor_name}的${notice.skill_name}升到${notice.after.level}级。`:notice.type==='skill-learned'?`${notice.actor_name}学会了${notice.skill_name}。`:'').filter(Boolean).join('\n')||`${result.name}已使用，HP ${result.target_hp.before}→${result.target_hp.after}，消耗MP ${result.mp_cost}。`;
-    actions.buildHud();actions.log({type:'world-skill-used',...result});refreshPartyMenu();
+    const source=state.menuContext.configured.party_skills,world=state.world.value;
+    const skills=updateEffectiveSkillSource(source,world,previousSkills,beforeRole);
+    skillFacade={world:state.world,worldValue:world,revision:world.revision,source,value:skills};
+    const party=currentPartyView(),actor=party.actors.find(role=>role.id===$('menuActor').value);
+    actions.buildHud({resourcesOnly:true,actors:party.actors});actions.log({type:'world-skill-used',...result});
+    if(state.menuContext.page==='skills'&&state.operationMenu.techniques){
+      $('menuVitals').textContent=`${actor.name} · 等级 ${actor.level} · HP ${actor.hp.current}/${actor.hp.maximum} · MP ${actor.mp.current}/${actor.mp.maximum}`;
+      state.operationMenu.techniques.updateFieldUse(state.world.snapshot(),skills,{...state.menuContext.configured,party_skills:skills},{rows:party.rows});
+      refreshFieldSkillList(actor.id);
+    }else refreshPartyMenu();
     $('menuMessage').classList.remove('error');$('menuMessage').textContent=message;return {...result,message};
   }
   function editTechniqueCombination(kind,request){

@@ -215,7 +215,7 @@ test('an original-save world opens the party menu, saves either slot kind and re
   native.party[0].combat_progress.header_raw_hex=header.toString('hex');
   const {state,actions,$,canvas,files,storageCalls}=fixture(native),rendered=[];
   state.audio={playCue(){},snapshot:()=>({channels:structuredClone(DEFAULT_GAME_SETTINGS.audio),volume:1,muted:false})};state.menuSettings={snapshot:()=>({battleCursor:'memory'})};
-  state.operationMenu={focusInitial(){},page(){},suspend(){},stats(row){rendered.push(row);},roster(){},mnuText(){},items(){},itemButtons:new Map(),
+  state.operationMenu={focusInitial(){},page(){},suspend(){},stats(){},roster(rows){rendered.push(...rows);},mnuText(){},items(){},itemButtons:new Map(),
     manifest:{},equipment(){},equipmentView:{render(){}},weapon(){},system:{render(){}}};
   actions.readConfiguredData=async()=>({items:{...itemData,runtime_configuration:{differences:[]}},party_skills:partySkills,audit:{mode:'original'}});
   Object.assign(actions,createMenuController({state,actions,$,canvas}));
