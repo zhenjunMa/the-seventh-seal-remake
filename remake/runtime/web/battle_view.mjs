@@ -1056,7 +1056,9 @@ export class BattleView {
     this.drawnSlots=slots;
     const actors = new Map((snapshot?.actors || []).map(actor => [actor.id, actor]));
     const queue=[...this.roster.filter(a=>a.side==='enemy'),...this.roster.filter(a=>a.side==='player')].map(a=>({...a,depth_y:groundSlots[a.id][1]}));
-    if(this.stageMeta)queue.sort((a,b)=>a.depth_y-b.depth_y);
+    // Ground depth follows approach/return on both stage and preview paths.
+    // Native altitude moves the body only; it must not change occlusion order.
+    queue.sort((a,b)=>a.depth_y-b.depth_y);
     for (const {id} of queue) {
       if(entryPreview&&!this.lifecycle?.entryPrepared&&snapshot?.lifecycle_events?.some(event=>event.actor_id===id&&event.kind==='entry'))continue;
       const role = this._role(id), actor = actors.get(id), slot = slots[id];
