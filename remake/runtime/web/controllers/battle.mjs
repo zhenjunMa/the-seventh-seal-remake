@@ -202,9 +202,10 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
         else{state.battleSampleMode=sampleMode;if(newParty&&!group)throw new Error('请在野外行走遇敌。');}
         progress({completed:10,total:100});
         const scheduler={...configured.scheduler,policy:{...configured.scheduler.policy,commands:'Frame-driven charging with per-player buffered commands; input continues during charging and hit reactions, confirmation locks until action completion, and dispatch waits for execution readiness.'},...(newParty?{idle_skills:{...configured.scheduler.idle_skills,...state.partySkills.idle_skills}}:{})};
-        sample=testing?createSkillTestSample(world.snapshot(),state.partyCombat,state.partySkills,configured,state.itemData,rules,state.partyReactions,state.statusData,state.operationMenu?.techniques?.supplement?.name_charset)
-          :newParty?assembleForestSample(createPartySample(world.snapshot(),state.partyCombat,state.partySkills,configured,state.itemData,state.operationMenu?.techniques?.supplement?.name_charset),configured.forest,group,scheduler,configured.ai,configured.rewards,state.partyReactions,state.statusData)
-          :group?createForestSample(world.snapshot(),configured.combat,configured.forest,group,null,scheduler,configured.ai,configured.rewards,state.reactionData,state.statusData):createBattleSample(world.snapshot(),configured.combat);
+        // Factories read the world synchronously and build isolated combat data.
+        sample=testing?createSkillTestSample(world.value,state.partyCombat,state.partySkills,configured,state.itemData,rules,state.partyReactions,state.statusData,state.operationMenu?.techniques?.supplement?.name_charset)
+          :newParty?assembleForestSample(createPartySample(world.value,state.partyCombat,state.partySkills,configured,state.itemData,state.operationMenu?.techniques?.supplement?.name_charset),configured.forest,group,scheduler,configured.ai,configured.rewards,state.partyReactions,state.statusData)
+          :group?createForestSample(world.value,configured.combat,configured.forest,group,null,scheduler,configured.ai,configured.rewards,state.reactionData,state.statusData):createBattleSample(world.value,configured.combat);
         if(!testing&&sample.actors.filter(actor=>actor.side==='player').every(actor=>actor.hp.current===0))throw new Error('队伍已经倒下，请载入进度后继续。');
         const mode=testing?'skill-test':newParty?'party':group?'forest':'sample',stagePath=testing?rules.stage.path:group?'/'+battleStage(group.stage).path:null;
         const view=await playbackTask(prepareView({mode,newParty,stagePath,lifecycle:testing||Boolean(group),actors:sample.actors,skills:sample.skills,inventory:world.value.inventory,signal,
@@ -258,7 +259,7 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
       check();if(!state.battleData){const data=await playbackTask(actions.json(state.catalog.combat_sample??'data/combat_sample.json'),signal);check();state.battleData=data;}
       const configured=await playbackTask(actions.readConfiguredData(),signal);check();state.itemData=configured.items;
       const scheduler={...configured.scheduler,idle_skills:{...configured.scheduler.idle_skills,...state.partySkills.idle_skills}};
-      const sample=assembleForestSample(createPartySample(simulation.world.snapshot(),state.partyCombat,state.partySkills,configured,state.itemData,state.operationMenu?.techniques?.supplement?.name_charset),
+      const sample=assembleForestSample(createPartySample(simulation.world.value,state.partyCombat,state.partySkills,configured,state.itemData,state.operationMenu?.techniques?.supplement?.name_charset),
         configured.forest,group,scheduler,configured.ai,configured.rewards,state.partyReactions,state.statusData);
       if(sample.actors.filter(actor=>actor.side==='player').every(actor=>actor.hp.current===0))throw new Error('队伍已经倒下，无法进入剧情战斗');
       const preparedView=await playbackTask(prepareView({mode:'scripted',newParty:true,stagePath:'/'+battleStage(group.stage).path,lifecycle:true,actors:sample.actors,skills:sample.skills,inventory:simulation.world.value.inventory,signal}),signal);check();
