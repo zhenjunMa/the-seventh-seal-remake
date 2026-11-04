@@ -1,0 +1,80 @@
+remake/runtime/web/menu_dom.mjs
+  s_9bd8cd0b16e0ef::t_502a78e471a78a 1-17,19-20
+  s_9bd8cd0b16e0ef::t_6bf25157e2d96e 18
+remake/runtime/web/controllers/boot.mjs
+  s_9bd8cd0b16e0ef::t_2c157cdafad2cb 122-123
+  s_9bd8cd0b16e0ef::t_11b6569f7c6f4e 110,133
+remake/assessment/validation_design.md
+  s_9bd8cd0b16e0ef::t_96ee0b79fcc8af 70
+remake/runtime/web/tests/menu_rendering_checks.mjs
+  s_9bd8cd0b16e0ef::t_ccd5814793cb43 71-73,79
+  s_9bd8cd0b16e0ef::t_07637eeb7a0355 42-43
+  s_9bd8cd0b16e0ef::t_4abe58580e3213 4,76,88-92,102-111
+  s_9bd8cd0b16e0ef::t_51493e8dfc5f67 3,16,18
+  s_9bd8cd0b16e0ef::t_e3a18c132569bb 1-2,5-15,17,19-41,44-52,54-70,74-75,77-78,80-87,93-101,112-118
+  s_9bd8cd0b16e0ef::t_ac436456346b80 53
+remake/runtime/tests/test_menu_navigation.mjs
+  s_9bd8cd0b16e0ef::t_a988f72698cd58 252,281
+remake/runtime/web/phaser/rendering/interface_compositor.mjs
+  s_9bd8cd0b16e0ef::t_ccd5814793cb43 34
+  s_9bd8cd0b16e0ef::t_d76189a3b202ac 10,23-32,39-42,50,55-58,67,74-75,80-81,84,86,150
+remake/runtime/web/operation_formation_view.mjs
+  s_9bd8cd0b16e0ef::t_eb36fc35a58453 1,21,26
+remake/runtime/tests/test_runtime_config.mjs
+  s_9bd8cd0b16e0ef::t_6bf25157e2d96e 48-51
+remake/runtime/tests/test_skill_test_menu.mjs
+  s_9bd8cd0b16e0ef::t_b269250d7d128d 143-183
+remake/runtime/web/controllers/menu.mjs
+  s_9bd8cd0b16e0ef::t_11b6569f7c6f4e 28-29,110,143,146-150,202,205,227
+  s_9bd8cd0b16e0ef::t_4e3176d3c4ffe7 153
+  s_9bd8cd0b16e0ef::t_2c157cdafad2cb 36-37,127-142,144-145
+remake/runtime/web/controllers/services.mjs
+  s_9bd8cd0b16e0ef::t_2c157cdafad2cb 43-46,140
+remake/runtime/web/operation_menu_view.mjs
+  s_9bd8cd0b16e0ef::t_03c96eaec75e20 276,282-302
+  s_9bd8cd0b16e0ef::t_4a1587cc16c41b 17,20-22,201
+  s_9bd8cd0b16e0ef::t_dad00d7411de91 3,15,55-56,63-64,68,70,73,79,83,162,164,167-170,174,195,198-199,203-209,214,226-227,229-233,235-243,245,248-275,320-333,335
+remake/runtime/web/operation_equipment_view.mjs
+  s_9bd8cd0b16e0ef::t_4a1587cc16c41b 1,72,82-83,101,112,124
+  s_9bd8cd0b16e0ef::t_6bf25157e2d96e 106,108-109,116,119
+  s_9bd8cd0b16e0ef::t_b269250d7d128d 107
+remake/runtime/web/operation_weapon_view.mjs
+  s_9bd8cd0b16e0ef::t_4a1587cc16c41b 1,26,37-38,46,54,82
+  s_9bd8cd0b16e0ef::t_6bf25157e2d96e 57-62,71,73,75,78
+  s_9bd8cd0b16e0ef::t_b269250d7d128d 72
+remake/runtime/tests/test_save_controller.mjs
+  s_9bd8cd0b16e0ef::t_6bf25157e2d96e 220
+remake/runtime/web/tests/phaser_lifecycle.html
+  s_9bd8cd0b16e0ef::t_ac436456346b80 8
+  s_9bd8cd0b16e0ef::t_e3a18c132569bb 5,21,55
+remake/runtime/web/core/runtime_config.mjs
+  s_9bd8cd0b16e0ef::t_2c157cdafad2cb 6-11,187,196-197
+remake/runtime/web/operation_system_view.mjs
+  s_9bd8cd0b16e0ef::t_eb36fc35a58453 1,49-50,55,59,63
+remake/runtime/tests/test_operation_technique_view.mjs
+  s_9bd8cd0b16e0ef::t_a988f72698cd58 56,78
+remake/runtime/web/controllers/input.mjs
+  s_9bd8cd0b16e0ef::t_6bf25157e2d96e 20
+remake/runtime/web/operation_technique_view.mjs
+  s_9bd8cd0b16e0ef::t_31b50a1ac6f817 1,73,75-77,85-90,104-109,112,125,129-130,135,212-216,218-259,291-310,384
+  s_9bd8cd0b16e0ef::t_4e3176d3c4ffe7 6-11
+  s_9bd8cd0b16e0ef::t_51493e8dfc5f67 163,343-356,359,361-362,365
+remake/runtime/architecture.md
+  s_9bd8cd0b16e0ef::t_a988f72698cd58 29,138-139,148
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "a95fb098dcb79095d015ae8b4f7ec979f938be40",
+  "prompts": {},
+  "sessions": {
+    "s_9bd8cd0b16e0ef": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a4f8-2091-77e1-a2e1-a6b33b5546f5",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
