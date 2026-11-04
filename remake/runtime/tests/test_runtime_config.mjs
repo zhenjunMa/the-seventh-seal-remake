@@ -45,6 +45,10 @@ test('startup session preserves both reward profiles and isolates every returned
   const legacy=compileRuntimeConfiguration(data,cfg),native=compileRuntimeConfiguration({...data,rewards:partyRewards},cfg);
   assert.deepEqual(session.snapshot({sample:true}),legacy);
   assert.deepEqual(session.snapshot(),native);
+  const menu=session.menu();assert.equal(session.menu(),menu);
+  assert.deepEqual(Object.keys(menu).sort(),['audit','items','party_skills','skill_registry']);
+  assert.ok(Object.isFrozen(menu.items.definitions['242']));
+  assert.throws(()=>{menu.items.definitions['242'].drop_rate=-1;},TypeError);
   const first=session.snapshot();
   first.skill_registry.yantu.mp_cost=999;first.forest.actors['012'].hp.current=0;
   first.items.definitions['242'].drop_rate=-1;first.rewards.enemies['013'].reward_slots.fill(0);

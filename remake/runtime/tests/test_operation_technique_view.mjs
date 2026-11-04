@@ -53,7 +53,7 @@ test('use and compose rows preserve the native text inset and each row bitmap or
     for(const [index,row]of rows.entries()){
       row.focus();const widget=manifest.menus.find(menu=>menu.id===menuId).widgets[index+3],highlight=row.querySelector('img[data-highlight]');
       assert.equal(row._labelNode.style.top,'5px');assert.equal(highlight.style.top,`${widget.draw_point_raw.y-widget.rect.top}px`);assert.equal(row.querySelector('[data-row-icon]').style.top,'5px');
-      assert.equal(rows.filter(button=>button.querySelector('img[data-highlight]')).length,1);
+      assert.equal(rows.filter(button=>button.querySelector('img[data-highlight]')?.hidden===false).length,1);
     }
   }
 });
@@ -75,7 +75,7 @@ test('direct technique rows use the source19px layout and focus colors while com
 test('list repaint preserves both row icons and a single selected strip after moving to another skill',()=>{
   const {view}=fixture();view.action='set';view.category=1;view.stage='candidates';view.paint();view.focus('content');view.key('ArrowDown');view.paint();
   const rows=view.element.querySelectorAll('.technique-row');assert.equal(rows.length,2);
-  assert.equal(rows.filter(row=>row.querySelector('img[data-highlight]')).length,1);
+  assert.equal(rows.filter(row=>row.querySelector('img[data-highlight]')?.hidden===false).length,1);
   for(const row of rows){assert.ok(row.querySelector('[data-row-icon]'));assert.equal(row.querySelectorAll('[data-row-level]').length,row._entry.slot.color>0?1:0);assert.equal(row.querySelectorAll('[data-row-attribute]').length,Array.from({length:5},(_,n)=>Boolean(row._entry.source.type_flags_u32_0x32&(1<<(8+n)))).filter(Boolean).length);assert.equal(row.querySelectorAll('[data-row-experience]').length,1);}
 });
 test('skill rows read source level, feature bits and experience digits at native positions without writing progress',()=>{

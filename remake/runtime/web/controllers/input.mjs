@@ -17,7 +17,7 @@ export function createInputController({state, actions, $, canvas, ctx}) {
   }
   function wire(){
     $('partyMenuOpen').onclick=()=>actions.openPartyMenu();
-    $('menuActor').onchange=()=>{$('menuShortcutEditor').hidden=true;actions.refreshPartyMenu();};$('menuSlot').onchange=actions.refreshPartyMenu;$('menuItem').onchange=actions.refreshPartyMenu;
+    $('menuActor').onchange=()=>{$('menuShortcutEditor').hidden=true;actions.refreshPartyMenu();};$('menuSlot').onchange=actions.refreshPartyMenu;$('menuItem').onchange=()=>actions.selectMenuItem($('menuItem').value,{showInfo:true});
     $('menuSkill').onchange=actions.refreshMenuSkill;$('menuSkillTarget').onchange=actions.refreshMenuSkill;
     $('menuEditShortcut').textContent='快捷设置（前三槽）';$('menuEditShortcut').onclick=actions.editSkillShortcuts;
     $('menuShortcutCancel').onclick=()=>{$('menuShortcutEditor').hidden=true;};

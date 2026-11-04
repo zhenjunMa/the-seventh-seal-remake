@@ -7,6 +7,7 @@ import {installInterfaceCompositor} from './recorded_surface.mjs';
 export class InterfaceCompositor {
   constructor(runtime){
     this.runtime=runtime;this.records=new Map();this.dirty=true;this.layoutDirty=true;this.frames=0;
+    this.layoutRoots=new Set();this.fullLayout=true;this.layoutReads=0;this.rebuilds=0;
     this.mount=document.createElement('div');this.mount.hidden=true;runtime.parent.append(this.mount);
     const owner=this,Phaser=globalThis.Phaser;
     class InterfaceScene extends Phaser.Scene{
@@ -19,15 +20,26 @@ export class InterfaceCompositor {
     this.game=new Phaser.Game({type:Phaser.WEBGL,parent:this.mount,width:640,height:480,transparent:true,antialias:false,antialiasGL:false,
       banner:false,audio:{noAudio:true},input:{keyboard:false,mouse:false,touch:false,gamepad:false},scene:[InterfaceScene]});
     this.observer=new MutationObserver(changes=>{
-      if(changes.every(change=>change.target===this.canvas||change.target===this.mount))return;
-      this.invalidate(true);
+      for(const change of changes){
+        if(change.target===this.canvas||change.target===this.mount)continue;
+        // A DOM image, navigation highlight or hidden page without glyphs does
+        // not affect the shared GPU surfaces' geometry.
+        const node=change.target;
+        if(!this.records.has(node)&&!node.querySelector?.('canvas')&&
+          ![...(change.removedNodes??[])].some(child=>this.records.has(child)||child.querySelector?.('canvas')))continue;
+        if(node.parentElement?.closest('[hidden]'))continue;
+        this.invalidate(true,node);
+      }
     });
-    this.observer.observe(runtime.parent.parentElement,{subtree:true,childList:true,attributes:true,attributeFilter:['hidden','style','class','width','height']});
+    this.observer.observe(runtime.parent.parentElement,{subtree:true,childList:true,attributes:true,attributeFilter:['hidden','style','class','width','height','data-menu-page']});
     this.listeners=new AbortController();
     document.addEventListener('scroll',()=>this.invalidate(true),{capture:true,signal:this.listeners.signal});
     installInterfaceCompositor(this);
   }
-  invalidate(layout=false){this.dirty=true;this.layoutDirty||=layout;}
+  invalidate(layout=false,node=null){
+    this.dirty=true;if(!layout)return;this.layoutDirty=true;
+    if(node)this.layoutRoots.add(node);else this.fullLayout=true;
+  }
   register(canvas,{embedded=false,glyph=false}={}){
     if(!this.records.has(canvas)){
       const opacity=Number.parseFloat(getComputedStyle(canvas).opacity);
@@ -35,13 +47,15 @@ export class InterfaceCompositor {
       this.records.set(canvas,{canvas,embedded,glyph,lastSeen:this.frames});
       canvas.style.opacity='0';
       if(glyph)canvas.dataset.gpuGlyph='';
-      this.invalidate(true);
+      this.invalidate(true,canvas);
     }
   }
   root(node){let root=node;const screen=this.runtime.parent.parentElement;while(root.parentElement&&root.parentElement!==screen)root=root.parentElement;return root;}
   geometry(record){
-    const node=record.canvas,root=this.root(node),box=node.getBoundingClientRect();
-    if(!box.width||!box.height||node.closest('[hidden]')||getComputedStyle(node).visibility==='hidden')return null;
+    const node=record.canvas;if(node.closest('[hidden]'))return null;
+    this.layoutReads++;
+    const root=this.root(node),box=node.getBoundingClientRect();
+    if(!box.width||!box.height||getComputedStyle(node).visibility==='hidden')return null;
     const clip={left:box.left,top:box.top,right:box.right,bottom:box.bottom};let alpha=node.gpuOriginalOpacity??Number(getComputedStyle(node).opacity);
     for(let parent=node.parentElement;parent&&parent!==this.runtime.parent.parentElement;parent=parent.parentElement){
       const style=getComputedStyle(parent);
@@ -50,24 +64,26 @@ export class InterfaceCompositor {
         if(/hidden|clip|auto|scroll/.test(style.overflowX)){clip.left=Math.max(clip.left,r.left);clip.right=Math.min(clip.right,r.right);}
         if(/hidden|clip|auto|scroll/.test(style.overflowY)){clip.top=Math.max(clip.top,r.top);clip.bottom=Math.min(clip.bottom,r.bottom);}}
     }
-    return {...record,root,box,clip,alpha,z:Number.parseInt(getComputedStyle(root).zIndex)||0};
+    return {canvas:node,embedded:record.embedded,glyph:record.glyph,root,box,clip,alpha,z:Number.parseInt(getComputedStyle(root).zIndex)||0};
   }
   update(){
     if(!this.surface||this.runtime.destroyed||this.game.renderer.contextLost)return;this.frames++;
     if(this.frames%120===0&&this.records.size)this.invalidate(true);
     if(this.layoutDirty){
       // Cached glyph nodes can be detached and inserted again without painting.
-      for(const node of this.runtime.parent.parentElement.querySelectorAll('canvas[data-gpu-glyph]'))if(!this.records.has(node))this.register(node,{glyph:true});
+      const roots=this.fullLayout?[this.runtime.parent.parentElement]:[...this.layoutRoots];
+      for(const root of roots)for(const node of root.querySelectorAll?.('canvas[data-gpu-glyph]')??[])if(!this.records.has(node))this.register(node,{glyph:true});
       this.visible=[];
       for(const [node,record]of this.records){
         if(!node.isConnected){if(this.frames-record.lastSeen>120)this.records.delete(node);continue;}
         record.lastSeen=this.frames;if(record.embedded)continue;
-        const entry=this.geometry(record);if(entry)this.visible.push(entry);
+        if(this.fullLayout||!record.measured||roots.some(root=>root===node||root.contains(node))){record.entry=this.geometry(record);record.measured=true;}
+        if(record.entry)this.visible.push(record.entry);
       }
       this.visible.sort((a,b)=>a.z-b.z||((a.canvas.compareDocumentPosition(b.canvas)&Node.DOCUMENT_POSITION_FOLLOWING)?-1:1));
-      this.layoutDirty=false;
+      this.layoutDirty=false;this.fullLayout=false;this.layoutRoots.clear();
     }
-    if(!this.dirty)return;this.dirty=false;
+    if(!this.dirty)return;this.dirty=false;this.rebuilds++;
     const visible=this.visible??[],top=visible.at(-1),entries=visible.filter(entry=>entry.z===(top?.z??0));
     const plane=entries.filter(entry=>!entry.glyph).at(-1)??top;
     this.surface.beginFrame();
@@ -131,5 +147,5 @@ export class InterfaceCompositor {
     }catch(error){surface.destroy();throw error;}
   }
   destroy(){installInterfaceCompositor(null);this.listeners.abort();this.observer.disconnect();this.records.clear();this.surface?.destroy();this.game.destroy(true);this.mount.remove();}
-  snapshot(){return {renderer:'WEBGL',surfaces:this.records.size,visible:this.visible?.length??0,textures:this.surface?.textures.snapshot()};}
+  snapshot(){return {renderer:'WEBGL',surfaces:this.records.size,visible:this.visible?.length??0,layoutReads:this.layoutReads,rebuilds:this.rebuilds,textures:this.surface?.textures.snapshot()};}
 }

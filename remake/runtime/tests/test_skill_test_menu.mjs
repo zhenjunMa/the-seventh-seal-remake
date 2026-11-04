@@ -140,3 +140,44 @@ test('only the field technique page can release menu input ownership',()=>{
   state.scenes.phase='party-menu';const ticket=controller.beginTechniqueTestMenu(),other={combat:false,page:'system'};state.menuContext=other;
   assert.equal(controller.resumeTechniqueTestMenu(ticket),false);assert.equal(state.menuContext,other);state.menuContext=null;assert.equal(controller.resumeTechniqueTestMenu(ticket),true);
 });
+
+
+test('opening the default roster reuses menu configuration and does not rebuild the map HUD or hidden pages',async()=>{
+  const {state,view,controller,actions,doc}=fixture(),items=load('items');
+  const configured={items:{...items,runtime_configuration:{differences:[]}},party_skills:source,audit:{mode:'original'}};
+  Object.assign(state,{world:new WorldStore(load('opening_seed')),partyCombat:load('party_combat'),partySkills:source,itemData:configured.items,menuContext:null,menuFeedback:null});
+  state.scenes.phase='map';view.current='roster';
+  let reads=0;actions.readMenuConfiguration=async()=>{reads++;return configured;};
+  actions.readConfiguredData=actions.buildHud=()=>assert.fail('menu opening must not copy battle configuration or rebuild the map HUD');
+  actions.log=actions.status=()=>{};actions.option=(value,label)=>Object.assign(doc.createElement('option'),{value,textContent:label});
+  for(const child of [view.equipmentView,view.weaponView,view.formation])child.reset=()=>assert.fail('unvisited pages must not reset');
+  await controller.openPartyMenu();assert.equal(state.menuContext.configured,configured);assert.equal(view.current,'roster');
+  const summary=view.rosterButtons.get('001').querySelector('dl').children[0];
+  controller.closePartyMenu();await controller.openPartyMenu();
+  assert.equal(reads,2);assert.equal(view.rosterButtons.get('001').querySelector('dl').children[0],summary);
+});
+
+test('skill selection retains panel, six visible row controls and label canvases, including scrolling and mouse selection',()=>{
+  const {view}=fixture(),tech=view.techniques;
+  tech.textRenderer={supports:()=>true,paint(canvas,value){canvas.value=String(value);return {offsetX:0,offsetY:0};}};
+  tech.page({section:'edit',roleId:'001',layer:'content'});tech.action='set';tech.category=1;tech.stage='candidates';tech.paint();tech.focus('content');
+  const rows=[...tech.listButtons],labels=rows.map(row=>row._labelNode.querySelector('canvas')),background=tech.listBackground,revision=tech.paintRevision;
+  tech.key('ArrowDown');assert.equal(tech.paintRevision,revision);assert.equal(tech.listBackground,background);
+  rows.forEach((row,index)=>{assert.equal(tech.listButtons[index],row);assert.equal(row._labelNode.querySelector('canvas'),labels[index]);});
+  tech.key('PageDown');assert.equal(tech.paintRevision,revision);assert.equal(tech.listBackground,background);
+  tech.listButtons.filter(row=>!row.hidden).at(-1).focus();
+  assert.equal(tech.element.querySelectorAll('.technique-row').filter(row=>row.dataset.selected==='true'&&!row.hidden).length,1);
+});
+
+test('item selection and paging retain a bounded visible raster pool and preserve semantic focus',()=>{
+  const {view,doc}=fixture(),items=load('items');view.page('items',{itemCategory:'crystals'});
+  view.textRenderer={supports:()=>true,paint(canvas,value){canvas.value=String(value);return {offsetX:0,offsetY:0};}};
+  view.onItemSelect=id=>view.selectItem(id);
+  const rows=Array.from({length:40},(_,index)=>({id:156,instance_id:'item-'+index,name:items.definitions['156'].name,quantity:2}));
+  view.items(rows,rows[0].instance_id,items.definitions);view.focusItem();
+  const canvases=view.itemVisuals.flatMap(row=>[row.name.querySelector('canvas'),row.quantity.querySelector('canvas')]);
+  view.itemKey('ArrowDown');assert.equal(doc.activeElement.dataset.instanceId,'item-1');
+  view.itemKey('PageDown');view.itemKey('PageDown');
+  assert.equal(view.itemVisuals.length,view.itemPageSize);assert.ok(view.itemOffset>0);
+  assert.deepEqual(view.itemVisuals.flatMap(row=>[row.name.querySelector('canvas'),row.quantity.querySelector('canvas')]),canvases);
+});

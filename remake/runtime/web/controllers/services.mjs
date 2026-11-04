@@ -40,6 +40,10 @@ export function createServicesController({state, actions, $, canvas, ctx,now=()=
     const configuration=await configurationReady;
     return configuration.snapshot(options);
   }
+  async function readMenuConfiguration(){
+    if(!configurationReady)throw new Error('运行配置尚未初始化，请刷新游戏页面');
+    return (await configurationReady).menu();
+  }
   function image(path, scope = 'shared') { return state.resources.load(path, scope); }
   function busy(phase) {
     const at=now();if(playTime.startedAt!==null)playTime.elapsed+=at-playTime.startedAt;
@@ -133,5 +137,5 @@ export function createServicesController({state, actions, $, canvas, ctx,now=()=
   function releaseInput(){
     state.keys.clear();actions.releaseDialogueKeys?.();actions.battleKeyUp?.(' ');
   }
-  return {status, log, json, initializeRuntimeConfiguration, readConfiguredData, image, busy, download, exportRuntimeLog, guarded, saveEnvelope, withSaveOperation,saveProgress,loadProgress,refreshSaveSlots,saveEntries,option,updateInterface,releaseInput,currentPlayTime,resetPlayTime};
+  return {status, log, json, initializeRuntimeConfiguration, readConfiguredData, readMenuConfiguration, image, busy, download, exportRuntimeLog, guarded, saveEnvelope, withSaveOperation,saveProgress,loadProgress,refreshSaveSlots,saveEntries,option,updateInterface,releaseInput,currentPlayTime,resetPlayTime};
 }

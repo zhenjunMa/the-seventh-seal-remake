@@ -1,5 +1,6 @@
 // Keep original menu images and hit rectangles in the original coordinate plane.
 import {operationSummaryFields, operationStandingFrame, operationMnuTextOptions} from './core/menu_presentation.mjs';
+import {menuText,menuStyle,menuImage} from './menu_dom.mjs';
 import {OperationSystemView} from './operation_system_view.mjs';
 import {OperationTechniqueView} from './operation_technique_view.mjs';
 import {OperationEquipmentView} from './operation_equipment_view.mjs';
@@ -11,14 +12,14 @@ export class OperationMenuView{
   constructor({manifest,root,textRenderer,techniquesSupplement,onPage,onActor,onItemSelect,onItemConfirm,onItemTarget,onSlot,onItemFilter,onSystemSetting,onSystemExit,onTechniqueActor,onTechniqueSlot,onTechniqueCast,onTechniqueTest,onTechniqueMessage,onTechniqueCreate,onTechniqueRename,onTechniqueDelete,onEquipmentSelect,onEquipmentConfirm,onEquipmentUnequip,onFormationExchange,onWeaponSocket,onWeaponSelect,onWeaponConfirm,onWeaponUnequip,onWeaponActorChange}){
     if(manifest?.version!==1||!Array.isArray(manifest.menus))throw new Error('操作界面素材版本无效');
     this.manifest=manifest;this.menus=new Map(manifest.menus.map(menu=>[menu.id,menu]));this.root=root;this.frame=root.querySelector('#operationFrame');this.onPage=onPage;this.onActor=onActor;this.onItemSelect=onItemSelect;this.onItemConfirm=onItemConfirm;this.onItemTarget=onItemTarget;this.onSlot=onSlot;this.rosterButtons=new Map();this.itemButtons=new Map();this.slotButtons=new Map();this.mode='main';this.mainIndex=0;
-    this.node=id=>root.querySelector('#'+id);this.node('menuBackground').src=this.menus.get('game001').images[0].image;this.frame.tabIndex=-1;
+    const nodes=new Map();this.node=id=>{if(!nodes.has(id))nodes.set(id,root.querySelector('#'+id));return nodes.get(id);};this.node('menuBackground').src=this.menus.get('game001').images[0].image;this.frame.tabIndex=-1;
     this.textRenderer=textRenderer;
-    this.formation=new OperationFormationView({manifest,root,onExchange:onFormationExchange,onFocus:()=>{this.mode='content';},onInfo:message=>{this.node('menuMessage').textContent=message;}});
+    this.formation=new OperationFormationView({manifest,root,onExchange:onFormationExchange,onFocus:()=>{this.mode='content';},onInfo:message=>{this.info(message);}});
     this.messageObserver=new MutationObserver(()=>{const node=this.node('menuMessage');if(node.firstChild?.nodeType===3)this.mnuText(node,node.textContent,'game001','INFO',{maxLines:2});});
     this.messageObserver.observe(this.node('menuMessage'),{childList:true});
-    this.equipmentView=new OperationEquipmentView({manifest,root,textRenderer,onSlot,onSelect:onEquipmentSelect,onConfirm:onEquipmentConfirm,onUnequip:onEquipmentUnequip,onInfo:message=>{this.node('menuMessage').textContent=message;},onFocus:()=>{this.mode='content';}});
-    this.weaponView=new OperationWeaponView({manifest,root,textRenderer,onSocket:onWeaponSocket,onSelect:onWeaponSelect,onConfirm:onWeaponConfirm,onUnequip:onWeaponUnequip,onActorChange:onWeaponActorChange,onInfo:message=>{this.node('menuMessage').textContent=message;},onFocus:()=>{this.mode='content';}});
-    this.techniques=new OperationTechniqueView({root:this.frame,manifest,supplement:techniquesSupplement,textRenderer,onActor:onTechniqueActor,onFieldSkill:onTechniqueCast,onSetSlot:onTechniqueSlot,onCreateCombination:onTechniqueCreate,onRenameCombination:onTechniqueRename,onDeleteCombination:onTechniqueDelete,onTest:onTechniqueTest,onMessage:onTechniqueMessage,onInfo:message=>{const node=this.node('menuMessage');node.classList.remove('error');node.textContent=message;},onFocus:mode=>{this.mode=mode;this.mainCommitted=true;this.subCommitted=mode==='content';this.highlight();}});
+    this.equipmentView=new OperationEquipmentView({manifest,root,textRenderer,onSlot,onSelect:onEquipmentSelect,onConfirm:onEquipmentConfirm,onUnequip:onEquipmentUnequip,onInfo:message=>{this.info(message);},onFocus:()=>{this.mode='content';}});
+    this.weaponView=new OperationWeaponView({manifest,root,textRenderer,onSocket:onWeaponSocket,onSelect:onWeaponSelect,onConfirm:onWeaponConfirm,onUnequip:onWeaponUnequip,onActorChange:onWeaponActorChange,onInfo:message=>{this.info(message);},onFocus:()=>{this.mode='content';}});
+    this.techniques=new OperationTechniqueView({root:this.frame,manifest,supplement:techniquesSupplement,textRenderer,onActor:onTechniqueActor,onFieldSkill:onTechniqueCast,onSetSlot:onTechniqueSlot,onCreateCombination:onTechniqueCreate,onRenameCombination:onTechniqueRename,onDeleteCombination:onTechniqueDelete,onTest:onTechniqueTest,onMessage:onTechniqueMessage,onInfo:message=>{const node=this.node('menuMessage');node.classList.remove('error');this.info(message);},onFocus:mode=>{this.mode=mode;this.mainCommitted=true;this.subCommitted=mode==='content';this.highlight();}});
     this.system=new OperationSystemView({manifest,root:this.node('menuSystemSection'),navigation:this.node('menuSystemNavigation'),onSetting:onSystemSetting,onExit:onSystemExit});
     for(const {button}of this.system.tabs){const focus=button.onfocus,click=button.onclick;button.onfocus=()=>{this.mode='sub';focus();this.highlight(button);};button.onclick=()=>{this.subCommitted=true;click();};}
     for(const button of [...this.system.rows,...this.system.bars,...this.system.mutes.map(row=>row.button),...this.system.cursorButtons.map(row=>row.button)]){const focus=button.onfocus;button.onfocus=()=>{this.mode='content';focus();this.highlight(button);};}
@@ -51,32 +52,35 @@ export class OperationMenuView{
   }
   widgetImage(button,widget,origin,active,selected=false){
     const path=selected?widget.selected_images.at(-1):active?widget.active_images.at(-1):widget.normal_images[0];let image=button.querySelector('img');
-    if(!path){if(image)image.hidden=true;return;}if(!image){image=document.createElement('img');image.alt='';image.className='menu-source menu-highlight';button.append(image);}image.hidden=false;image.src=path;
-    Object.assign(image.style,{left:widget.draw_point_raw.x+origin.x-parseFloat(button.style.left)+'px',top:widget.draw_point_raw.y+origin.y-parseFloat(button.style.top)+'px'});
+    if(!path){if(image)image.hidden=true;return;}if(!image){image=document.createElement('img');image.alt='';image.className='menu-source menu-highlight';button.append(image);}image.hidden=false;menuImage(image,path);
+    menuStyle(image,{left:widget.draw_point_raw.x+origin.x-parseFloat(button.style.left)+'px',top:widget.draw_point_raw.y+origin.y-parseFloat(button.style.top)+'px'});
   }
   highlight(button=null){
     if(this.mode!=='content')this.actorFocused=false;
     this.paintRosterFocus();
     this.focused=button;for(const [id,key]of this.main){const node=this.node(id),widget=this.menus.get('game001').widgets.find(row=>row.name===key);this.widgetImage(node,widget,{x:0,y:0},button===node||this.mainCommitted&&node.getAttribute('aria-pressed')==='true');}
     for(const [menuId,tabs,origin]of [['game001d',this.characterTabs,this.manifest.page_bindings.characters.header_origin],['game003a',this.itemTabs,this.manifest.page_bindings.items.header_origin]]){
+      if((menuId==='game003a')!==(this.current==='items'))continue;
+      if(menuId==='game001d'&&this.mainPage()!=='roster')continue;
       const focusedHeader=this.mode==='sub'&&tabs.some(([id])=>this.node(id)===button)?button:null;
       for(const [id,key]of tabs){const node=this.node(id),widget=this.menus.get(menuId).widgets.find(row=>row.name===key);this.widgetImage(node,widget,origin,focusedHeader?node===focusedHeader:this.subCommitted&&node.getAttribute('aria-pressed')==='true');}
     }
-    this.system.navFocus=this.mode==='sub';this.system.committed=this.subCommitted;this.system.paint();
+    if(this.current==='system'){this.system.navFocus=this.mode==='sub';this.system.committed=this.subCommitted;this.system.paint();}
   }
-  focusInitial(){this.mode='main';this.mainIndex=0;this.mainCommitted=true;this.subCommitted=false;this.actorFocused=false;this.itemFocused=false;this.itemFilterIndex=0;this.itemOffset=0;this.subIndex=0;this.frame.focus({preventScroll:true});this.highlight();}
+  focusInitial(){this.mode='main';this.mainIndex=0;this.mainCommitted=true;this.subCommitted=false;this.actorFocused=false;this.itemFocused=false;this.itemFilterIndex=0;this.itemOffset=0;this.subIndex=0;this.frame.focus({preventScroll:true});}
   mainPage(){return ['roster','status','equipment','weapon','formation'].includes(this.current)?'roster':this.current;}
   headerIndex(){if(this.current==='skills')return Math.max(0,['use','edit','test'].indexOf(this.techniques.section));if(this.current==='system')return this.system.navIndex??0;const controls=this.controls('sub'),pressed=controls.findIndex(node=>node.getAttribute('aria-pressed')==='true');return Math.max(0,pressed);}
-  focusGroup(mode,index=0){this.mode=mode;if(this.current==='skills'){this.techniques.mode=mode;this.techniques.paint();}let controls=this.controls(mode);if(mode==='sub'&&!controls.length){this.mode='content';controls=this.controls('content');}if(!controls.length){this.frame.focus({preventScroll:true});return;}controls[((index%controls.length)+controls.length)%controls.length]?.focus({preventScroll:true});}
+  focusGroup(mode,index=0){this.mode=mode;if(this.current==='skills'){this.techniques.mode=mode;this.techniques.paintHeaders();}let controls=this.controls(mode);if(mode==='sub'&&!controls.length){this.mode='content';controls=this.controls('content');}if(!controls.length){this.frame.focus({preventScroll:true});return;}controls[((index%controls.length)+controls.length)%controls.length]?.focus({preventScroll:true});}
   itemRows(){return (this.itemOrder??[]).map(id=>this.itemButtons.get(id)).filter(Boolean);}
   currentItemFilters(){return this.itemCategory==='equipment'?this.equipmentFilters:this.itemCategory==='items'?this.filters:[];}
   setItemFilter(type,subtype){const index=this.itemCategory==='equipment'&&type===2?subtype-1:this.itemCategory==='items'?[[5,1],[5,4],[5,3],[3,2],[5,2]].findIndex(row=>row[0]===type&&row[1]===subtype):0;this.itemFilterIndex=Math.max(0,Math.min(4,index));this.paintItemFilters();}
   paintItemFilters(){
     for(const [category,menuId,buttons]of [['items','game003_1',this.filters],['equipment','game003_2',this.equipmentFilters]]){
+      if(category!==this.itemCategory)continue;
       for(const [index,button]of buttons.entries()){const selected=this.itemCategory===category&&index===(this.itemFilterIndex??0),widget=this.menus.get(menuId).widgets.find(row=>row.name===String(index+1).padStart(2,'0'));button.setAttribute('aria-pressed',String(selected));this.widgetImage(button,widget,{x:0,y:0},false,selected);}
     }
   }
-  ensureItemVisible(index){const count=this.itemRows().length,size=this.itemPageSize??9,max=Math.max(0,count-size);let offset=Math.max(0,Math.min(max,this.itemOffset??0));if(index<offset)offset=index;else if(index>=offset+size)offset=index-size+1;this.itemOffset=Math.max(0,Math.min(max,offset));this.node('menuItemList').scrollTop=this.itemOffset*(this.itemRowStep??30);}
+  ensureItemVisible(index){const count=this.itemRows().length,size=this.itemPageSize??9,max=Math.max(0,count-size);let offset=Math.max(0,Math.min(max,this.itemOffset??0));if(index<offset)offset=index;else if(index>=offset+size)offset=index-size+1;this.itemOffset=Math.max(0,Math.min(max,offset));const list=this.node('menuItemList'),top=this.itemOffset*(this.itemRowStep??30);if(list.scrollTop!==top)list.scrollTop=top;this.paintItemWindow();}
   focusItem(id=this.itemSelectedId){const rows=this.itemRows(),index=Math.max(0,rows.findIndex(button=>button.dataset.instanceId===id));this.mode='content';if(!rows.length){const filters=this.currentItemFilters();(filters[this.itemFilterIndex??0]??filters[0]??this.frame).focus({preventScroll:true});return;}this.ensureItemVisible(index);rows[index].focus({preventScroll:true});}
   cycleActor(direction){const ids=this.rosterOrder??[],index=ids.indexOf(this.actorId);if(ids.length>1){const slot=this.current==='equipment'?this.equipmentView.slotId:null;this.onActor?.(ids[(Math.max(0,index)+direction+ids.length)%ids.length],false);if(slot){this.equipmentView.slotFocused=true;this.equipmentView.paintSlots();this.equipmentView.infoWorn();this.equipmentView.slotButtons.get(slot)?.focus({preventScroll:true});}}return true;}
   pageItems(direction,{edgeFirst=true}={}){const rows=this.itemRows();if(!rows.length)return true;const size=this.itemPageSize??9,offset=this.itemOffset??0,last=Math.min(rows.length-1,offset+size-1);let index=rows.indexOf(document.activeElement);if(index<0)index=Math.max(0,rows.findIndex(button=>button.dataset.instanceId===this.itemSelectedId));if(edgeFirst&&(direction>0?index<last:index>offset))index=direction>0?last:offset;else{this.itemOffset=Math.max(0,Math.min(Math.max(0,rows.length-size),offset+direction*size));index=Math.min(rows.length-1,this.itemOffset+Math.max(0,Math.min(size-1,index-offset)));}this.focusItem(rows[index].dataset.instanceId);return true;}
@@ -155,20 +159,19 @@ export class OperationMenuView{
     if(['status','equipment','weapon'].includes(this.current)){const roleId=this.actorId;this.onPage('back-roster');this.focusGroup('content',Math.max(0,this.controls('content').findIndex(button=>button.dataset.roleId===roleId)));return false;}
     this.focusGroup('sub',this.headerIndex());return false;
   }
-  fit(){const r=this.root.getBoundingClientRect();this.frame.style.setProperty('--operation-scale',String(Math.min(r.width/640,r.height/480)));}
+  fit(){const r=this.root.getBoundingClientRect();const scale=String(Math.min(r.width/640,r.height/480));if(this.scale!==scale){this.scale=scale;this.frame.style.setProperty('--operation-scale',scale);}}
   bitmap(menuId){const menu=this.menus.get(menuId);if(!menu)throw new Error('操作界面素材缺失：'+menuId);return menu.composed??menu.images.find(image=>image.group===0).image;}
-  source(id,menuId,x,y){const node=this.node(id);node.hidden=!menuId;if(!menuId)return;node.src=this.bitmap(menuId);node.style.left=x+'px';node.style.top=y+'px';}
+  source(id,menuId,x,y){const node=this.node(id);node.hidden=!menuId;if(!menuId)return;menuImage(node,this.bitmap(menuId));menuStyle(node,{left:x+'px',top:y+'px'});}
   page(page,{combat=false,itemCategory='items',selectionPage=null,deferTechniquePaint=false}={}){
     if(page==='items'&&(this.current!=='items'||this.itemCategory!==itemCategory)){this.itemFilterIndex=0;this.itemOffset=0;this.node('menuItemList').scrollTop=0;}
-    this.current=page;this.root.dataset.menuPage=page;this.root.classList.toggle('combat-items',combat);this.fit();
-    this.equipmentView.reset();
-    this.weaponView.reset();
-    this.formation.section.hidden=page!=='formation';this.formation.reset();
-    if(page==='skills')this.techniques.page({section:'use',layer:this.mode,deferPaint:deferTechniquePaint});else this.techniques.hide();
+    const previous=this.current;this.current=page;this.root.dataset.menuPage=page;this.root.classList.toggle('combat-items',combat);this.fit();
+    if(previous!==page){if(previous==='equipment'||page==='equipment')this.equipmentView.reset();if(previous==='weapon'||page==='weapon')this.weaponView.reset();if(page==='formation')this.formation.reset();}
+    this.formation.section.hidden=page!=='formation';
+    if(page==='skills')this.techniques.page({section:'use',layer:this.mode,deferPaint:deferTechniquePaint});else if(previous==='skills')this.techniques.hide();
     this.itemCategory=itemCategory;
     for(const [category,buttons]of this.itemScrollButtons)for(const button of buttons)button.hidden=page!=='items'||itemCategory!==category;
     for(const filter of this.filters)filter.hidden=page!=='items'||itemCategory!=='items';
-    for(const filter of this.equipmentFilters)filter.hidden=page!=='items'||itemCategory!=='equipment';this.paintItemFilters();
+    for(const filter of this.equipmentFilters)filter.hidden=page!=='items'||itemCategory!=='equipment';if(page==='items')this.paintItemFilters();
     const status=['roster','status','equipment','weapon','formation'].includes(page);
     for(const [id,value]of [['menuStatusTab',status],['menuObjectsTab',page==='items'],['menuTechTab',page==='skills'],['menuSystemTab',page==='system'],['menuStatusPage',page==='status'||selectionPage==='status'],['menuEquipmentPage',page==='equipment'||selectionPage==='equipment'],['menuWeaponPage',page==='weapon'||selectionPage==='weapon'],['menuFormationPage',page==='formation'||selectionPage==='formation']])this.node(id).setAttribute('aria-pressed',String(value));
     this.node('menuStatusNavigation').hidden=!status||combat;
@@ -189,21 +192,26 @@ export class OperationMenuView{
     this.highlight(this.focused);
   }
   number(node,value,font='simsun18',foreground='#ffffff',shadow='#222222',options={}){
-    if(!this.textRenderer){node.textContent=value;return;}
-    const canvas=document.createElement('canvas');canvas.className='native-menu-number';const result=this.textRenderer.paint(canvas,String(value),{font,foreground,shadow,...(font.endsWith('_mnu')?{layout:'mnu'}:{}),...options});canvas.style.left=result.offsetX+'px';canvas.style.top=result.offsetY+'px';node.replaceChildren(canvas);
+    menuText(node,value,this.textRenderer,{font,foreground,shadow,...(font.endsWith('_mnu')?{layout:'mnu'}:{}),...options},'native-menu-number');
   }
   text(node,value,options={}){
-    value=String(value??'');const font=options.font??'simsun24_text';
-    if(!value||!this.textRenderer?.supports(value,font)){if(node.textContent!==value)node.textContent=value;return;}
-    const canvas=document.createElement('canvas');canvas.className='native-menu-number';const result=this.textRenderer.paint(canvas,value,{font,foreground:'#ffffff',shadow:'#000000',...(font.endsWith('_mnu')?{layout:'mnu'}:{}),...options});canvas.style.left=result.offsetX+'px';canvas.style.top=result.offsetY+'px';node.replaceChildren(canvas);
+    const font=options.font??'simsun24_text';
+    menuText(node,value,this.textRenderer,{font,foreground:'#ffffff',shadow:'#000000',...(font.endsWith('_mnu')?{layout:'mnu'}:{}),...options},'native-menu-number');
   }
+  info(message){this.mnuText(this.node('menuMessage'),message,'game001','INFO',{maxLines:2});}
   mnuText(node,value,menuId,widgetName,options={}){const widget=this.menus.get(menuId).widgets.find(row=>row.name===widgetName);this.text(node,value,{...operationMnuTextOptions(widget),...options});}
-  summary(node,status){node.replaceChildren(...operationSummaryFields(status).map(([label,value,key])=>{const row=document.createElement('div'),term=document.createElement('dt'),number=document.createElement('dd');row.className='summary-'+key;term.className='sr-only';term.textContent=label;this.number(number,value,key==='level'?'simsun26':'simsun18');row.append(term,number);return row;}));}
+  summary(node,status){
+    for(const [label,value,key]of operationSummaryFields(status)){
+      const fields=node._summaryFields??=new Map();let number=fields.get(key);
+      if(!number){const row=document.createElement('div'),term=document.createElement('dt');number=document.createElement('dd');row.className='summary-'+key;term.className='sr-only';term.textContent=label;row.append(term,number);node.append(row);fields.set(key,number);}
+      this.number(number,value,key==='level'?'simsun26':'simsun18');
+    }
+  }
   paintRosterFocus(selectedId=this.rosterSelectedId){
     this.rosterSelectedId=selectedId;
     const focused=this.current==='roster'&&this.mode==='content'&&this.actorFocused;
     // The retained "unfocused" alias is the original purple focus panel.
-    for(const [id,button]of this.rosterButtons){const selected=Boolean(focused&&id===selectedId),panel=this.manifest.actor_panels?.[id];button.classList.toggle('selected',selected);button.querySelector('img').src=panel?.[selected?'unfocused':'normal']??this.manifest.actor_bar.dynamic_name_image;}
+    for(const [id,button]of this.rosterButtons){const selected=Boolean(focused&&id===selectedId),panel=this.manifest.actor_panels?.[id];button.classList.toggle('selected',selected);menuImage(button.querySelector('img'),panel?.[selected?'unfocused':'normal']??this.manifest.actor_bar.dynamic_name_image);}
   }
   roster(rows,selectedId){
     this.rosterOrder=rows.map(row=>row.id);
@@ -215,30 +223,83 @@ export class OperationMenuView{
     this.paintRosterFocus(selectedId);
   }
   items(rows,selectedId,definitions,{showSelection=this.itemFocused,usableIds=null}={}){
-    const list=this.node('menuItemList');
-    const oldActive=document.activeElement,hadFocus=[...this.itemButtons.values()].includes(oldActive);
-    this.itemOrder=rows.map(row=>row.instance_id);this.itemSelectedId=selectedId;
+    const list=this.node('menuItemList'),oldActive=document.activeElement,hadFocus=this.itemButtons.has(oldActive?.dataset?.instanceId);
+    this.itemOrder=rows.map(row=>row.instance_id);this.itemSelectedId=selectedId;this.itemShowSelection=showSelection;
     const menuId={items:'game003_1',equipment:'game003_2',crystals:'game003_3'}[this.itemCategory]??'game003_1';
-    const cells=this.menus.get(menuId).widgets.filter(widget=>/^list\d+$/i.test(widget.name));this.itemPageSize=cells.length;this.itemRowStep=cells.length>1?cells[1].rect.top-cells[0].rect.top:30;
-    Object.assign(list.style,{left:cells[0].rect.left+'px',top:cells[0].rect.top+'px',width:cells[0].rect.right-cells[0].rect.left+1+'px',height:cells.at(-1).rect.bottom-cells[0].rect.top+1+'px'});
+    this.itemCells=this.menus.get(menuId).widgets.filter(widget=>/^list\d+$/i.test(widget.name));const cells=this.itemCells;
+    this.itemPageSize=cells.length;this.itemRowStep=cells.length>1?cells[1].rect.top-cells[0].rect.top:30;
+    menuStyle(list,{left:cells[0].rect.left+'px',top:cells[0].rect.top+'px',width:cells[0].rect.right-cells[0].rect.left+1+'px',height:cells.at(-1).rect.bottom-cells[0].rect.top+1+'px'});
+    const ids=new Set(this.itemOrder);
+    for(const [id,button]of this.itemButtons)if(!ids.has(id)){button.remove();this.itemButtons.delete(id);}
     for(const [index,row]of rows.entries()){
-      let button=this.itemButtons.get(row.instance_id);if(!button){button=document.createElement('button');button.className='source-item-row';button.dataset.instanceId=row.instance_id;const highlight=document.createElement('img'),icon=document.createElement('img'),name=document.createElement('span'),quantity=document.createElement('span');highlight.className='menu-source item-row-highlight';highlight.alt='';highlight.src=this.menus.get('game003_1').widgets.find(w=>w.name==='list1').active_images[0];icon.className='menu-source item-row-icon';icon.alt='';name.className='item-row-name';quantity.className='item-row-quantity';button.append(highlight,icon,name,quantity);button.onfocus=()=>{this.mode='content';this.itemFocused=true;this.ensureItemVisible(this.itemOrder.indexOf(row.instance_id));this.onItemSelect?.(row.instance_id);};button.onclick=()=>{this.itemFocused=true;this.onItemSelect?.(row.instance_id);if(this.itemCategory==='items')this.onItemConfirm?.();};this.itemButtons.set(row.instance_id,button);}
-      const def=definitions[String(row.id)],selected=showSelection&&row.instance_id===selectedId,unusable=usableIds&&!usableIds.has(row.instance_id);button.style.top=index*this.itemRowStep+'px';button.setAttribute('aria-label',`${row.name} ×${row.quantity}`);button.classList.toggle('selected',selected);this.text(button.querySelector('.item-row-name'),row.name,{foreground:unusable?'#505050':selected?'#ffff44':'#ffffff',shadow:unusable?'#000000':selected?'#4f4f4f':'#4f4f00'});this.text(button.querySelector('.item-row-quantity'),row.quantity>1?'x'+row.quantity:'',{font:'simsun20_text',foreground:unusable?'#505050':selected?'#ffff44':'#ffffff',shadow:unusable?'#000000':selected?'#4f4f4f':'#4f4f00'});button.classList.toggle('unusable',Boolean(unusable));const highlight=button.querySelector('.item-row-highlight');highlight.src=cells[index%cells.length].active_images[0];highlight.hidden=!selected;const icon=button.querySelector('.item-row-icon'),raw=Uint8Array.from(def.raw_hex.match(/../g),v=>parseInt(v,16)),indexRaw=new DataView(raw.buffer).getUint32(0x1c,true),frame=selected&&!unusable&&indexRaw>=1&&indexRaw<=21?indexRaw+95:indexRaw,iconAsset=this.manifest.item_row_icons?.frames?.[frame]??(def.type_raw_24===5&&def.subtype_raw_25===1?this.manifest.item_row_icons?.[selected?'active':'ordinary']:null);icon.hidden=!iconAsset;if(!icon.hidden)icon.src=iconAsset.image??iconAsset;if(button.parentNode!==list)list.append(button);
+      let button=this.itemButtons.get(row.instance_id);
+      if(!button){
+        button=document.createElement('button');button.className='source-item-row';button.dataset.instanceId=row.instance_id;
+        button.onfocus=()=>{this.mode='content';this.itemFocused=true;this.ensureItemVisible(this.itemOrder.indexOf(button.dataset.instanceId));this.onItemSelect?.(button.dataset.instanceId);};
+        button.onclick=()=>{this.itemFocused=true;this.onItemSelect?.(button.dataset.instanceId);if(this.itemCategory==='items')this.onItemConfirm?.();};
+        this.itemButtons.set(row.instance_id,button);list.append(button);
+      }
+      button._item=row;button._definition=definitions[String(row.id)];button._unusable=Boolean(usableIds&&!usableIds.has(row.instance_id));button._itemIndex=index;
+      menuStyle(button,{top:index*this.itemRowStep+'px'});button.setAttribute('aria-label',`${row.name} ×${row.quantity}`);
     }
-    for(const [id,button]of this.itemButtons)if(!rows.some(row=>row.instance_id===id)){button.remove();this.itemButtons.delete(id);}
-    this.ensureItemVisible(Math.max(0,this.itemOrder.indexOf(selectedId)));
+    this.itemWindowKey=null;this.ensureItemVisible(Math.max(0,this.itemOrder.indexOf(selectedId)));
     if(hadFocus&&!this.itemButtons.has(oldActive.dataset.instanceId))this.focusItem(selectedId);
+  }
+  paintItemWindow(){
+    if(!this.itemCells)return;
+    const key=[this.itemOffset,this.itemCategory,this.itemOrder.length].join(':');if(this.itemWindowKey===key)return;this.itemWindowKey=key;
+    this.itemVisuals??=[];
+    // Keep semantic buttons for focus, but only the visible rows own pixels.
+    for(const visual of this.itemVisuals)if(visual.button){visual.button._visual=null;visual.button=null;}
+    for(let index=0;index<this.itemPageSize;index++){
+      const button=this.itemButtons.get(this.itemOrder[(this.itemOffset??0)+index]);let visual=this.itemVisuals[index];
+      if(!visual){const highlight=document.createElement('img'),icon=document.createElement('img'),name=document.createElement('span'),quantity=document.createElement('span');highlight.className='menu-source item-row-highlight';icon.className='menu-source item-row-icon';highlight.alt=icon.alt='';name.className='item-row-name';quantity.className='item-row-quantity';visual={highlight,icon,name,quantity};this.itemVisuals.push(visual);}
+      if(!button){for(const node of [visual.highlight,visual.icon,visual.name,visual.quantity])node.remove();continue;}
+      visual.button=button;button._visual=visual;button.append(visual.highlight,visual.icon,visual.name,visual.quantity);this.paintItemRow(button);
+    }
+  }
+  paintItemRow(button){
+    const visual=button?._visual;if(!visual)return;
+    const row=button._item,def=button._definition,unusable=button._unusable,selected=(this.itemShowSelection||this.itemFocused)&&row.instance_id===this.itemSelectedId;
+    button.classList.toggle('selected',selected);button.classList.toggle('unusable',unusable);
+    const options={foreground:unusable?'#505050':selected?'#ffff44':'#ffffff',shadow:unusable?'#000000':selected?'#4f4f4f':'#4f4f00'};
+    this.text(visual.name,row.name,options);this.text(visual.quantity,row.quantity>1?'x'+row.quantity:'',{font:'simsun20_text',...options});
+    menuImage(visual.highlight,this.itemCells[button._itemIndex%this.itemCells.length].active_images[0]);visual.highlight.hidden=!selected;
+    this.itemIconIndices??=new WeakMap();let rawIndex=this.itemIconIndices.get(def);
+    if(rawIndex===undefined){rawIndex=new DataView(Uint8Array.from(def.raw_hex.match(/../g),v=>parseInt(v,16)).buffer).getUint32(0x1c,true);this.itemIconIndices.set(def,rawIndex);}
+    const frame=selected&&!unusable&&rawIndex>=1&&rawIndex<=21?rawIndex+95:rawIndex,asset=this.manifest.item_row_icons?.frames?.[frame]??(def.type_raw_24===5&&def.subtype_raw_25===1?this.manifest.item_row_icons?.[selected?'active':'ordinary']:null);
+    visual.icon.hidden=!asset;if(asset)menuImage(visual.icon,asset.image??asset);
+  }
+  selectItem(id){
+    const previous=this.itemSelectedId;this.itemSelectedId=id;
+    this.paintItemRow(this.itemButtons.get(previous));if(id!==previous)this.paintItemRow(this.itemButtons.get(id));
   }
   equipment(slots,rows,definitions,selectedId){
     // The controller passes full instance and qualification data to render().
     this.slotButtons=this.equipmentView.slotButtons;
   }
   itemTargets(rows,selectedId){
-    this.node('menuItemTargetSource').src=this.bitmap('game003_4');this.node('menuItemTargets').hidden=false;this.node('menuItemTargetList').replaceChildren(...rows.map((row,index)=>{
-      const button=document.createElement('button'),panel=document.createElement('img'),name=document.createElement('span');button.style.top=(5+index*84)+'px';button.setAttribute('aria-label',`使用目标 ${row.name}，HP ${row.hp.current}/${row.hp.maximum}，MP ${row.mp.current}/${row.mp.maximum}`);button.disabled=this.root.classList.contains('combat-items')&&row.hp.current===0;panel.className='menu-source target-panel';panel.src=this.manifest.item_target_panels.normal;panel.alt='';name.className='target-name';button.dataset.roleName=row.name;this.text(name,row.name,{font:'simsun20_text',foreground:'#808080',shadow:'#000000'});button.append(panel,name);
-      for(const [key,y,frame,barY]of [['hp',30,1,47],['mp',53,0,70]]){const stat=row[key],current=document.createElement('span'),maximum=document.createElement('span'),bar=document.createElement('span'),image=document.createElement('img');current.className='target-current';maximum.className='target-maximum';current.style.top=maximum.style.top=y+'px';this.number(current,stat.current);this.number(maximum,stat.maximum);bar.className='target-bar';bar.style.top=barY+'px';bar.style.width=(stat.maximum>0?Math.floor(147*stat.current/stat.maximum):0)+'px';image.src=this.manifest.item_target_bars.frames[frame];image.alt='';bar.append(image);button.append(current,maximum,bar);}
-      button.onfocus=()=>{for(const other of this.node('menuItemTargetList').querySelectorAll('button')){other.querySelector('img').src=other===button?this.manifest.item_target_panels.selected:this.manifest.item_target_panels.normal;this.text(other.querySelector('.target-name'),other.dataset.roleName,{font:'simsun20_text',foreground:other===button?'#ffffff':'#808080',shadow:'#000000'});}};button.onclick=()=>this.onItemTarget?.(row.id);return button;
-    }));this.focusGroup('content',Math.max(0,rows.findIndex(row=>row.id===selectedId)));
+    menuImage(this.node('menuItemTargetSource'),this.bitmap('game003_4'));this.node('menuItemTargets').hidden=false;
+    const list=this.node('menuItemTargetList');this.targetButtons??=new Map();const ids=new Set(rows.map(row=>row.id));
+    for(const [id,button]of this.targetButtons)if(!ids.has(id)){button.remove();this.targetButtons.delete(id);}
+    for(const [index,row]of rows.entries()){
+      let button=this.targetButtons.get(row.id);
+      if(!button){
+        button=document.createElement('button');button.dataset.roleId=row.id;button._panel=document.createElement('img');button._panel.className='menu-source target-panel';button._panel.alt='';button._name=document.createElement('span');button._name.className='target-name';button._fields={};button.append(button._panel,button._name);
+        for(const [key,y,frame,barY]of [['hp',30,1,47],['mp',53,0,70]]){
+          const current=document.createElement('span'),maximum=document.createElement('span'),bar=document.createElement('span'),image=document.createElement('img');current.className='target-current';maximum.className='target-maximum';current.style.top=maximum.style.top=y+'px';bar.className='target-bar';bar.style.top=barY+'px';image.src=this.manifest.item_target_bars.frames[frame];image.alt='';bar.append(image);button.append(current,maximum,bar);button._fields[key]={current,maximum,bar};
+        }
+        button.onfocus=()=>{const previous=this.targetButtons.get(this.targetFocusedId);this.targetFocusedId=row.id;if(previous&&previous!==button)this.paintItemTarget(previous,false);this.paintItemTarget(button,true);};button.onclick=()=>this.onItemTarget?.(row.id);
+        this.targetButtons.set(row.id,button);list.append(button);
+      }
+      menuStyle(button,{top:(5+index*84)+'px'});button.dataset.roleName=row.name;button.setAttribute('aria-label',`使用目标 ${row.name}，HP ${row.hp.current}/${row.hp.maximum}，MP ${row.mp.current}/${row.mp.maximum}`);button.disabled=this.root.classList.contains('combat-items')&&row.hp.current===0;
+      for(const key of ['hp','mp']){const stat=row[key],fields=button._fields[key];this.number(fields.current,stat.current);this.number(fields.maximum,stat.maximum);menuStyle(fields.bar,{width:(stat.maximum>0?Math.floor(147*stat.current/stat.maximum):0)+'px'});}
+      this.paintItemTarget(button,this.targetFocusedId===row.id);
+    }
+    this.focusGroup('content',Math.max(0,rows.findIndex(row=>row.id===selectedId)));
+  }
+  paintItemTarget(button,selected){
+    menuImage(button._panel,this.manifest.item_target_panels[selected?'selected':'normal']);this.text(button._name,button.dataset.roleName,{font:'simsun20_text',foreground:selected?'#ffffff':'#808080',shadow:'#000000'});
   }
   equipmentPicker(){this.mode='content';this.equipmentView.openPicker();}
   weapon(details){this.weaponView.render(details);}
@@ -256,13 +317,22 @@ export class OperationMenuView{
     }
     const values=[['力量',status.attack],['防御',status.defense],['速度',status.speed],...status.elements.map((n,i)=>[['火','风','水','地','日','月'][i]+'属性',n])];
     const body=this.menus.get('game001a_2'),list=this.node('menuStats');
-    this.node('menuEquipmentStats').replaceChildren(...[['力量',status.attack],['防御',status.defense],['速度',status.speed]].map(([label,value],i)=>{const row=document.createElement('div'),term=document.createElement('dt'),number=document.createElement('dd');row.style.top=i*30+'px';term.textContent=label;term.className='sr-only';this.mnuText(number,value,'game001a','text'+String(i+7).padStart(2,'0'));row.append(term,number);return row;}));
-    list.replaceChildren(...values.map(([label,value],index)=>{
-      const row=document.createElement('div'),name=document.createElement('dt'),number=document.createElement('dd');row.className='stat-row';
-      const slot=body.widgets.find(w=>w.name===`text${String(index+1).padStart(2,'0')}`),bar=body.widgets.find(w=>w.name===`bar${String(index+1).padStart(2,'0')}`);row.style.top=slot.rect.top+'px';name.textContent=label;this.text(number,value,operationMnuTextOptions(slot));number.style.top='0px';
-      const fill=document.createElement('span'),image=document.createElement('img');fill.className='operation-bars';fill.style.left=bar.rect.left+'px';fill.style.top=bar.rect.top-slot.rect.top+'px';fill.style.width=Math.floor(value*(bar.rect.right-bar.rect.left)/1000)+'px';image.src=bar.normal_images[0];image.alt='';fill.append(image);row.append(name,number,fill);return row;
-    }));
+    if(this.current==='equipment'){
+      const panel=this.node('menuEquipmentStats');
+      for(const [i,[label,value]]of [['力量',status.attack],['防御',status.defense],['速度',status.speed]].entries()){
+        let row=panel.children[i];if(!row){row=document.createElement('div');const term=document.createElement('dt'),number=document.createElement('dd');row.style.top=i*30+'px';term.textContent=label;term.className='sr-only';row.append(term,number);panel.append(row);}
+        this.mnuText(row.children[1],value,'game001a','text'+String(i+7).padStart(2,'0'));
+      }
+    }
+    if(this.current!=='status')return;
+    for(const [index,[label,value]]of values.entries()){
+      const slot=body.widgets.find(w=>w.name===`text${String(index+1).padStart(2,'0')}`),bar=body.widgets.find(w=>w.name===`bar${String(index+1).padStart(2,'0')}`);
+      let row=list.children[index];
+      if(!row){row=document.createElement('div');const name=document.createElement('dt'),number=document.createElement('dd'),fill=document.createElement('span'),image=document.createElement('img');row.className='stat-row';row.style.top=slot.rect.top+'px';name.textContent=label;number.style.top='0px';fill.className='operation-bars';fill.style.left=bar.rect.left+'px';fill.style.top=bar.rect.top-slot.rect.top+'px';image.src=bar.normal_images[0];image.alt='';fill.append(image);row.append(name,number,fill);list.append(row);}
+      this.text(row.children[1],value,operationMnuTextOptions(slot));menuStyle(row.children[2],{width:Math.floor(value*(bar.rect.right-bar.rect.left)/1000)+'px'});
+    }
   }
+
   tick(now){
     this.formation.tick(now);this.techniques.tick(now);
     const sprite=this.node('menuStandingActor');

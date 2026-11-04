@@ -1,3 +1,4 @@
+import {menuImage} from './menu_dom.mjs';
 import {operationStandingFrame} from './core/menu_presentation.mjs';
 
 const place=(node,x,y,width,height)=>Object.assign(node.style,{position:'absolute',left:x+'px',top:y+'px',...(width==null?{}:{width:width+'px'}),...(height==null?{}:{height:height+'px'})});
@@ -17,12 +18,12 @@ export class OperationFormationView{
     for(const [id,sprite]of this.sprites)if(!slots.includes(id)){sprite.remove();this.sprites.delete(id);}this.paint();this.tick(performance.now());
   }
   paint(){
-    for(const [index,button]of this.buttons.entries()){const id=this.slots[index],actor=this.actors.find(row=>row.id===id),focused=index===this.focusIndex,chosen=index===this.firstIndex;button.setAttribute('aria-label',`${['攻击型','防御型','一般型','一般型'][index]}：${actor?.name??'空位'}`);button.setAttribute('aria-pressed',String(chosen));button._cursor.hidden=!focused&&!chosen;button._cursor.src=chosen?button._widget.selected_images[0]:button._widget.active_images[0];}
+    for(const [index,button]of this.buttons.entries()){const id=this.slots[index],actor=this.actors.find(row=>row.id===id),focused=index===this.focusIndex,chosen=index===this.firstIndex,key=JSON.stringify([id,actor?.name,focused,chosen]);if(button._formationSignature===key)continue;button._formationSignature=key;button.setAttribute('aria-label',`${['攻击型','防御型','一般型','一般型'][index]}：${actor?.name??'空位'}`);button.setAttribute('aria-pressed',String(chosen));button._cursor.hidden=!focused&&!chosen;menuImage(button._cursor,chosen?button._widget.selected_images[0]:button._widget.active_images[0]);}
     this.onInfo?.('');
   }
   controls(){return this.buttons;}
   confirm(){if(this.firstIndex===null){this.firstIndex=this.focusIndex;this.paint();return;}const first=this.firstIndex,second=this.focusIndex;this.firstIndex=null;this.onExchange?.(first,second);this.paint();}
-  key(key,repeat=false){if(key==='Tab')return true;if(key===' '||key==='Enter'){if(!repeat)this.confirm();return true;}const index={ArrowLeft:0,ArrowUp:1,ArrowDown:2,ArrowRight:3}[key];if(index===undefined)return false;this.focusIndex=index;this.buttons[index].focus({preventScroll:true});this.paint();return true;}
+  key(key,repeat=false){if(key==='Tab')return true;if(key===' '||key==='Enter'){if(!repeat)this.confirm();return true;}const index={ArrowLeft:0,ArrowUp:1,ArrowDown:2,ArrowRight:3}[key];if(index===undefined)return false;this.focusIndex=index;const button=this.buttons[index];if(this.root.ownerDocument.activeElement===button)this.paint();else button.focus({preventScroll:true});return true;}
   escape(){this.firstIndex=null;this.paint();return false;}
   reset(){this.firstIndex=null;this.focusIndex=0;this.startedAt=performance.now();this.paint();}
   tick(now){if(this.section.hidden||this.root.hidden)return;for(const [id,sprite]of this.sprites){const standing=this.manifest.standing_actors[id],frame=operationStandingFrame(standing,now-this.startedAt);if(sprite.getAttribute('src')!==frame)sprite.src=frame;}}

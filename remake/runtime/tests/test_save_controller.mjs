@@ -217,7 +217,7 @@ test('an original-save world opens the party menu, saves either slot kind and re
   state.audio={playCue(){},snapshot:()=>({channels:structuredClone(DEFAULT_GAME_SETTINGS.audio),volume:1,muted:false})};state.menuSettings={snapshot:()=>({battleCursor:'memory'})};
   state.operationMenu={focusInitial(){},page(){},suspend(){},stats(){},roster(rows){rendered.push(...rows);},mnuText(){},items(){},itemButtons:new Map(),
     manifest:{},equipment(){},equipmentView:{render(){}},weapon(){},system:{render(){}}};
-  actions.readConfiguredData=async()=>({items:{...itemData,runtime_configuration:{differences:[]}},party_skills:partySkills,audit:{mode:'original'}});
+  actions.readMenuConfiguration=async()=>({items:{...itemData,runtime_configuration:{differences:[]}},party_skills:partySkills,audit:{mode:'original'}});
   Object.assign(actions,createMenuController({state,actions,$,canvas}));
   await actions.openPartyMenu();
   assert.equal(state.scenes.phase,'party-menu');assert.equal($('partyMenu').hidden,false);

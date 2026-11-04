@@ -1,3 +1,4 @@
+import {menuText,menuStyle,menuImage} from './menu_dom.mjs';
 // Game001a / Game001b equipment presentation. This view never changes world
 // equipment, saved item rolls, or actor resources; the controller owns commits.
 import {EQUIPMENT_ATTRIBUTES} from './core/item_registry.mjs';
@@ -68,7 +69,7 @@ export class OperationEquipmentView{
     this.rowButtons=Array.from({length:8},(_,i)=>{
       const widget=this.menus.get('game001b').widgets.find(row=>row.name==='list'+(i+1)),r=widget.rect,button=document.createElement('button');button.type='button';button.className='equipment-source-candidate';buttonStyle(button);absolute(button,r.left,r.top,r.right-r.left+1,r.bottom-r.top+1);button.style.fontSize='20px';
       button._highlight=this.picture(button,widget.active_images[0],widget.draw_point_raw.x-r.left,widget.draw_point_raw.y-r.top);button._icon=this.picture(button,null,10,0);button._name=document.createElement('span');absolute(button._name,40,3);button.append(button._name);button._name.style.lineHeight='22px';
-      button.onfocus=()=>{if(button.hidden)return;this.selectCandidate(this.offset+i);this.onFocus?.();};button.onclick=()=>{this.selectCandidate(this.offset+i);this.confirm();};this.picker.append(button);return button;
+      button.onfocus=()=>{if(button.hidden)return;if(!this.selecting)this.selectCandidate(this.offset+i);this.onFocus?.();};button.onclick=()=>{this.selectCandidate(this.offset+i);this.confirm();};this.picker.append(button);return button;
     });
     this.scrollButtons=[['scroll_up',-1],['scroll_dn',1]].map(([name,direction])=>{
       const widget=this.menus.get('game001b').widgets.find(row=>row.name===name),r=widget.rect,button=document.createElement('button');button.type='button';button.className='equipment-source-scroll';button.tabIndex=-1;button.setAttribute('aria-label',direction<0?'装备候选向上翻页':'装备候选向下翻页');buttonStyle(button);absolute(button,r.left,r.top,r.right-r.left+1,r.bottom-r.top+1);const image=this.picture(button,widget.active_images[0],widget.draw_point_raw.x-r.left,widget.draw_point_raw.y-r.top);image.hidden=true;button.onpointerenter=()=>image.hidden=false;button.onpointerleave=()=>image.hidden=true;button.onclick=()=>this.pageCandidates(direction,false);this.picker.append(button);return button;
@@ -78,9 +79,8 @@ export class OperationEquipmentView{
   }
   picture(parent,src,x,y){const image=document.createElement('img');image.alt='';image.className='menu-source';if(src)image.src=src;absolute(image,x,y);image.hidden=!src;parent.append(image);return image;}
   text(node,value,font,foreground,shadow='#222222'){
-    node.style.color=foreground;
-    if(!value||!this.textRenderer?.supports(value,font)){node.textContent=value;return;}
-    const canvas=node._canvas??=document.createElement('canvas');node.replaceChildren(canvas);canvas.style.pointerEvents='none';const box=this.textRenderer.paint(canvas,value,{font,foreground,shadow,maxLines:1});absolute(canvas,box.offsetX??-1,box.offsetY??-1);
+    if(node.style.color!==foreground)node.style.color=foreground;
+    menuText(node,value,this.textRenderer,{font,foreground,shadow,maxLines:1});
   }
   get pickerOpen(){return !this.picker.hidden;}
   get selectedId(){return this.candidates[this.selectedIndex]?.instance_id??'';}
@@ -98,28 +98,30 @@ export class OperationEquipmentView{
       const r=widget.rect;absolute(button,r.left,r.top,r.right-r.left+1,r.bottom-r.top+1);button.style.fontSize='22px';button.disabled=slot.group_index===0||slot.id==='weapon';const worn=this.worn(slot.id),def=this.definition(worn),label=this.manifest.slot_icons.labels_observed[index]??slot.label;button._text=def?.name??'';button.setAttribute('aria-label',`${label}：${def?.name??'空槽'}`);button.dataset.slotId=slot.id;
     }
     for(const [id,button]of this.slotButtons)if(!slots.some(slot=>slot.id===id)){button.remove();this.slotButtons.delete(id);}
-    this.paintSlots();this.ensureVisible();this.paintCandidates();if(this.pickerOpen)this.paintDetails();
+    this.paintSlots();this.ensureVisible();if(this.pickerOpen){this.paintCandidates();this.paintDetails();}
   }
   paintSlots(){for(const [id,button] of this.slotButtons){const selected=this.slotFocused&&id===this.slotId&&!this.pickerOpen;button.classList.toggle('selected',selected);button._icon.hidden=!selected;this.text(button._name,button._text??'','simsun22_text',button.disabled?'#ff8000':selected?'#ffff00':'#ffffff',selected?'#222200':'#222222');button.setAttribute('aria-pressed',String(selected));}}
   controls(){return this.pickerOpen?this.rowButtons.filter(button=>!button.hidden):[...this.slotButtons.values()].filter(button=>!button.disabled);}
   ensureVisible(){this.offset=Math.min(this.offset,Math.max(0,this.candidates.length-8));if(this.selectedIndex<this.offset)this.offset=this.selectedIndex;if(this.selectedIndex>=this.offset+8)this.offset=this.selectedIndex-7;}
-  paintCandidates(){
-    this.candidateButtons.clear();for(const [visibleIndex,button]of this.rowButtons.entries()){
+  paintCandidates(indices=null){
+    if(this.paintedCandidateOffset!==this.offset)indices=null;this.paintedCandidateOffset=this.offset;
+    if(!indices)this.candidateButtons.clear();for(const [visibleIndex,button]of this.rowButtons.entries()){
+      if(indices&&!indices.includes(visibleIndex))continue;
       const row=this.candidates[this.offset+visibleIndex];button.hidden=!row;if(!row)continue;const selected=this.offset+visibleIndex===this.selectedIndex,def=this.definition(row);button._highlight.hidden=!selected;button.setAttribute('aria-pressed',String(selected));button.dataset.instanceId=row.instance_id;button.dataset.empty=String(Boolean(row.empty));button.dataset.available=String(row.empty||this.available(row));
       this.text(button._name,row.empty?'':`${def?.name??row.name}${row.quantity>=2?'x'+row.quantity:''}`,'simsun20_text',row.empty||this.available(row)?selected?'#ffffff':'#ffff00':'#505050',this.available(row)?selected?'#222222':'#222200':'#000000');button.setAttribute('aria-label',row.empty?`卸下${this.slots.find(slot=>slot.id===this.slotId)?.label??'装备'}`:`${def?.name??row.name} ×${row.quantity}${this.available(row)?'':'，此角色无法装备'}`);
-      const raw=def?.raw_hex,bytes=raw?Uint8Array.from(raw.match(/../g),n=>parseInt(n,16)):null,iconIndex=bytes?new DataView(bytes.buffer).getUint32(0x1c,true):null,frame=selected&&iconIndex>=1&&iconIndex<=21?iconIndex+95:iconIndex,asset=frame==null?null:this.manifest.item_row_icons?.frames?.[frame];button._icon.hidden=!asset;if(asset)button._icon.src=asset.image??asset;this.candidateButtons.set(row.instance_id,button);
+      this.iconIndices??=new WeakMap();let iconIndex=def?this.iconIndices.get(def):null;if(def&&iconIndex===undefined){iconIndex=new DataView(Uint8Array.from(def.raw_hex.match(/../g),n=>parseInt(n,16)).buffer).getUint32(0x1c,true);this.iconIndices.set(def,iconIndex);}const frame=selected&&iconIndex>=1&&iconIndex<=21?iconIndex+95:iconIndex,asset=frame==null?null:this.manifest.item_row_icons?.frames?.[frame];button._icon.hidden=!asset;if(asset)button._icon.src=asset.image??asset;this.candidateButtons.set(row.instance_id,button);
     }
   }
   infoWorn(){this.onInfo?.(this.definition(this.worn())?.description??'');}
-  selectCandidate(index,{focus=false}={}){this.selectedIndex=Math.max(0,Math.min(this.candidates.length-1,index));this.ensureVisible();this.paintCandidates();const row=this.candidates[this.selectedIndex];this.onInfo?.(this.definition(row)?.description??'');this.paintDetails();this.onSelect?.(row?.instance_id??'',row);if(focus)this.rowButtons[this.selectedIndex-this.offset]?.focus({preventScroll:true});}
+  selectCandidate(index,{focus=false}={}){const previous=this.selectedIndex,offset=this.offset;this.selectedIndex=Math.max(0,Math.min(this.candidates.length-1,index));this.ensureVisible();this.paintCandidates(offset===this.offset?[previous-this.offset,this.selectedIndex-this.offset]:null);const row=this.candidates[this.selectedIndex];this.onInfo?.(this.definition(row)?.description??'');this.paintDetails();this.onSelect?.(row?.instance_id??'',row);if(focus){this.selecting=true;try{this.rowButtons[this.selectedIndex-this.offset]?.focus({preventScroll:true});}finally{this.selecting=false;}}}
   move(delta){this.selectCandidate(this.selectedIndex+delta,{focus:true});}
   pageCandidates(direction,edgeFirst=true){const next=operationPickerPage({index:this.selectedIndex,offset:this.offset,count:this.candidates.length,size:this.rowButtons.length},direction,{edgeFirst});this.offset=next.offset;this.selectCandidate(next.index,{focus:true});}
-  openPicker(){if(this.slotButtons.get(this.slotId)?.disabled)return false;this.picker.hidden=false;this.slotFocused=true;this.paintSlots();this.selectCandidate(this.selectedIndex,{focus:true});return true;}
+  openPicker(){if(this.slotButtons.get(this.slotId)?.disabled)return false;this.picker.hidden=false;this.slotFocused=true;this.paintSlots();this.paintCandidates();this.selectCandidate(this.selectedIndex,{focus:true});return true;}
   closePicker({focus=true}={}){this.picker.hidden=true;this.details.hidden=true;this.paintSlots();this.infoWorn();if(focus)this.slotButtons.get(this.slotId)?.focus({preventScroll:true});}
   confirm(){const row=this.candidates[this.selectedIndex];if(!row)return;if(row.empty){if(this.worn())this.onUnequip?.(this.slotId);}else if(this.available(row))this.onConfirm?.(row.instance_id,this.slotId,row);}
   paintDetails(){
     const row=this.candidates[this.selectedIndex],def=this.definition(row),values=operationEquipmentPreview(this.actor,this.definition(this.worn()),def);this.onDetails?.(this.detailsIndex,def,row,values?.[this.detailsIndex]??null);this.details.hidden=!this.pickerOpen||!def||!values;if(this.details.hidden)return;
-    const menu=this.menus.get(['game001f','game001g','game001h'][this.detailsIndex]);this.detailsBackground.src=menu.composed;this.detailsBackground.hidden=false;for(const number of this.detailNumbers)number.remove();this.detailNumbers=values[this.detailsIndex].map((value,index)=>{const widget=menu.widgets.find(row=>row.name===String(index+1).padStart(2,'0')),number=document.createElement('span');absolute(number,widget.rect.left,widget.rect.top);Object.assign(number.style,{fontFamily:'inherit',fontSize:'18px',lineHeight:'18px',whiteSpace:'pre',textShadow:'none'});this.text(number,value.before===value.after?String(value.before).padStart(3,' '):`${String(value.before).padStart(3,' ')}>${value.after}`,'simsun18',value.after<value.before?'#ff4040':value.after>value.before?'#00ff00':'#ffffff','#000000');this.details.append(number);return number;});
+    const menu=this.menus.get(['game001f','game001g','game001h'][this.detailsIndex]);this.detailsBackground.src=menu.composed;this.detailsBackground.hidden=false;this.detailNumbers.forEach((node,index)=>node.hidden=index>=values[this.detailsIndex].length);values[this.detailsIndex].forEach((value,index)=>{const widget=menu.widgets.find(row=>row.name===String(index+1).padStart(2,'0')),number=this.detailNumbers[index]??=document.createElement('span');number.hidden=false;absolute(number,widget.rect.left,widget.rect.top);Object.assign(number.style,{fontFamily:'inherit',fontSize:'18px',lineHeight:'18px',whiteSpace:'pre',textShadow:'none'});this.text(number,value.before===value.after?String(value.before).padStart(3,' '):`${String(value.before).padStart(3,' ')}>${value.after}`,'simsun18',value.after<value.before?'#ff4040':value.after>value.before?'#00ff00':'#ffffff','#000000');if(number.parentNode!==this.details)this.details.append(number);});
   }
   key(key,repeat=false){
     if(key==='Tab')return true;if(!this.pickerOpen){if([' ','Enter'].includes(key)){if(!repeat)this.slotButtons.get(this.slotId)?.click();return true;}if(!['ArrowUp','ArrowDown'].includes(key))return false;const slots=this.controls(),index=Math.max(0,slots.indexOf(this.root.ownerDocument.activeElement));slots[(index+(key==='ArrowUp'?-1:1)+slots.length)%slots.length]?.focus({preventScroll:true});return true;}

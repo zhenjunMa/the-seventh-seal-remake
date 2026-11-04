@@ -249,7 +249,7 @@ function controllerFixture(preference='memory'){
     menuContext:{combat:false,page:'items',itemCategory:'crystals',configured},menuSettings:createMenuSettings({battleCursor:preference}),
     audio:{playCue(){},snapshot(){return{channels:{}};}},keys:new Set(),selectedRole:statuses[0].id,
     scenes:{phase:'map',setPhase(phase){this.phase=phase;}}};
-  const actions={option:(id,label,disabled=false)=>{const option=new Node(ui.doc,'option');option.value=id;option.textContent=label;option.disabled=disabled;return option;},readConfiguredData:async()=>configured,buildHud(){},log(){},status(){}};
+  const actions={option:(id,label,disabled=false)=>{const option=new Node(ui.doc,'option');option.value=id;option.textContent=label;option.disabled=disabled;return option;},readMenuConfiguration:async()=>configured,buildHud(){},log(){},status(){}};
   ui.node('menuActor').value=statuses[0].id;ui.node('menuSlot').value='head';ui.node('menuSkill').value='';ui.node('menuSkillTarget').value=statuses[0].id;
   const controller=createMenuController({state,actions,$:node,canvas:new Node(ui.doc,'canvas'),ctx:{}});
   return{...ui,node,state,actions,configured,listed,controller};
@@ -278,5 +278,5 @@ test('field menu opening ignores battle cursor preference, falls back from a mis
 });
 
 test('a pending configuration load cannot reopen a menu after the user cancels it',async()=>{
-  const{state,controller,actions,configured,node}=controllerFixture();state.menuContext=null;let resolve;actions.readConfiguredData=()=>new Promise(done=>resolve=done);const open=controller.openPartyMenu(false);controller.closePartyMenu();resolve(configured);await open;assert.equal(state.menuContext,null);assert.equal(node('partyMenu').hidden,true);assert.equal(state.scenes.phase,'map');
+  const{state,controller,actions,configured,node}=controllerFixture();state.menuContext=null;let resolve;actions.readMenuConfiguration=()=>new Promise(done=>resolve=done);const open=controller.openPartyMenu(false);controller.closePartyMenu();resolve(configured);await open;assert.equal(state.menuContext,null);assert.equal(node('partyMenu').hidden,true);assert.equal(state.scenes.phase,'map');
 });

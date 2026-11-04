@@ -1,3 +1,4 @@
+import {menuStyle,menuImage} from './menu_dom.mjs';
 // Game005_1 / Game005_2: original pixels and four-row keyboard navigation.
 // Values are exposed through the audio adapter's normalized 0..1 API; the
 // original mixer and menu use integer ticks 0..64, with steps of four.
@@ -45,20 +46,21 @@ export class OperationSystemView {
   overlay({button,widget},active,origin={x:0,y:0}) {
     let image=button.querySelector('.system-control-image');
     if(!image){image=document.createElement('img');image.alt='';image.className='menu-source system-control-image';button.append(image);}
-    image.hidden=!active;if(!active)return;image.src=widget.active_images.at(-1);
-    image.style.left=widget.draw_point_raw.x+origin.x-parseFloat(button.style.left)+'px';image.style.top=widget.draw_point_raw.y+origin.y-parseFloat(button.style.top)+'px';
+    image.hidden=!active;if(!active)return;menuImage(image,widget.active_images.at(-1));
+    menuStyle(image,{left:widget.draw_point_raw.x+origin.x-parseFloat(button.style.left)+'px',top:widget.draw_point_raw.y+origin.y-parseFloat(button.style.top)+'px'});
   }
   show(visible){this.root.hidden=!visible;this.navigation.hidden=!visible;}
   render(channels,battleCursor){this.state={channels,battleCursor};this.paint();}
   paint(){
+    const signature=JSON.stringify([this.state,this.navIndex,this.navFocus,this.committed,this.index]);if(signature===this.paintSignature)return;this.paintSignature=signature;
     this.tabs.forEach((tab,index)=>this.overlay(tab,this.navFocus&&this.navIndex===index||this.committed&&index===0,{x:9,y:4}));
     if(!this.state)return;
     const menu=this.menus.get('game005_2'),w=menu.widgets.find(row=>row.name===String(this.index+1).padStart(2,'0'));
-    this.focusImage.src=w.active_images[0];this.focusImage.style.left=w.draw_point_raw.x+'px';this.focusImage.style.top=w.draw_point_raw.y+'px';this.focusImage.hidden=this.navFocus;
+    menuImage(this.focusImage,w.active_images[0]);menuStyle(this.focusImage,{left:w.draw_point_raw.x+'px',top:w.draw_point_raw.y+'px'});this.focusImage.hidden=this.navFocus;
     this.channels.forEach((channel,index)=>{
       const value=this.state.channels[channel],raw=Math.round(value.volume*64),slider=this.bars[index];
       slider.setAttribute('aria-valuenow',String(raw));slider.setAttribute('aria-valuetext',`${raw}/64`);
-      slider.querySelector('.system-volume-fill').style.width=Math.floor(raw*216/64)+'px';
+      menuStyle(slider.querySelector('.system-volume-fill'),{width:Math.floor(raw*216/64)+'px'});
       this.mutes[index].button.setAttribute('aria-checked',String(value.muted));this.overlay(this.mutes[index],value.muted);
     });
     this.cursorButtons.forEach((control,index)=>{const active=this.state.battleCursor===(index?'memory':'initial');control.button.setAttribute('aria-pressed',String(active));this.overlay(control,active);});

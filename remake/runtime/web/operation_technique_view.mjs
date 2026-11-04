@@ -1,8 +1,14 @@
+import {menuText,menuStyle,menuImage} from './menu_dom.mjs';
 import {techniqueSlots,sourceTechniqueSlot,techniqueSlotName,techniqueCandidates,TECHNIQUE_CATEGORIES,TECHNIQUE_WHEEL_NAVIGATION,techniqueCombinations,techniqueCombinationName} from './core/menu_techniques.mjs';
 import {operationSummaryFields} from './core/menu_presentation.mjs';
 
 const position=(node,x,y,w=null,h=null)=>Object.assign(node.style,{position:'absolute',left:x+'px',top:y+'px',...(w===null?{}:{width:w+'px'}),...(h===null?{}:{height:h+'px'})});
-const raw=skill=>new DataView(Uint8Array.from(skill.fixed_raw_hex.match(/../g),v=>parseInt(v,16)).buffer);
+const skillRecords=new WeakMap();
+const raw=skill=>{
+  let record=skillRecords.get(skill);
+  if(!record||record.hex!==skill.fixed_raw_hex){record={hex:skill.fixed_raw_hex,view:new DataView(Uint8Array.from(skill.fixed_raw_hex.match(/../g),v=>parseInt(v,16)).buffer)};skillRecords.set(skill,record);}
+  return record.view;
+};
 const description=skill=>{if(!skill)return '';const bytes=new Uint8Array(raw(skill).buffer).slice(0x3b,0x3b+200);return new TextDecoder('gbk').decode(bytes.slice(0,Math.max(0,bytes.indexOf(0))));};
 
 // Owns only its overlay. World transactions, field casting and test battles are
@@ -64,10 +70,11 @@ export class OperationTechniqueView{
     return this;
   }
   asset(menuId){const menu=this.menus.get(menuId);return menu.composed??menu.images[0].image;}
-  image(path,x,y,parent=this.element){const image=document.createElement('img');image.alt='';image.src=path;position(image,x,y);parent.append(image);return image;}
+  image(path,x,y,parent=this.paintParent??this.element){const image=document.createElement('img');image.alt='';image.src=path;position(image,x,y);parent.append(image);return image;}
   text(value,x,y,parent=this.element,className='technique-name',options={}){const node=document.createElement('span');node.className=className;position(node,x,y);const font=className==='technique-target-value'?'simsun18':className==='technique-target-name'?'simsun20_text':className===''?'simsun19_text':'simsun22_text';node.style.pointerEvents='none';node.style.color=options.foreground??'#ffffff';this.paintText(node,value,font,options);parent.append(node);return node;}
-  paintText(node,value,font,options={}){if(this.textRenderer?.supports?.(String(value),font)){let canvas=node.querySelector('canvas');if(!canvas){canvas=document.createElement('canvas');node.replaceChildren(canvas);}const result=this.textRenderer.paint(canvas,value,{font,foreground:'#ffffff',shadow:'#000000',...options});position(canvas,result.offsetX,result.offsetY);}else node.textContent=value;}
-  button(key,label,x,y,w,h,{click,focus,group='content',disabled=false}={}){const button=document.createElement('button');button.type='button';button.dataset.techniqueKey=key;button.dataset.techniqueGroup=group;button.setAttribute('aria-label',label);button.disabled=disabled;position(button,x,y,w,h);button.onclick=click;button.onfocus=()=>{this.mode=group==='background'?'content':group;this.onFocus?.(this.mode);if(!this.restoring)focus?.();};this.element.append(button);return button;}
+  paintText(node,value,font,options={}){menuText(node,value,this.textRenderer,{font,foreground:'#ffffff',shadow:'#000000',...options});}
+
+  button(key,label,x,y,w,h,{click,focus,group='content',disabled=false}={}){const button=document.createElement('button');button.type='button';button.dataset.techniqueKey=key;button.dataset.techniqueGroup=group;button.setAttribute('aria-label',label);button.disabled=disabled;position(button,x,y,w,h);button.onclick=click;button.onfocus=()=>{this.mode=group==='background'?'content':group;this.onFocus?.(this.mode);if(!this.restoring)focus?.();};(this.paintParent??this.element).append(button);return button;}
   sourceButton(menuId,name,origin,key,label,{click,focus,group='content',selected=false,disabled=false}={}){
     const widget=this.menus.get(menuId).widgets.find(row=>row.name.toLowerCase()===name.toLowerCase()),r=widget.rect;
     const retained=key.startsWith('header-')?this.element.querySelector('[data-technique-key="'+key+'"]'):null;
@@ -75,10 +82,12 @@ export class OperationTechniqueView{
     button.onclick=click;button.onfocus=()=>{this.mode=group==='background'?'content':group;this.onFocus?.(this.mode);this.sourceHighlight(button,widget,true);if(!this.restoring)focus?.();};button.disabled=disabled;
     button._widget=widget;button.classList.add('technique-native-control');button.onblur=()=>this.sourceHighlight(button,widget,selected);this.sourceHighlight(button,widget,selected);return button;
   }
-  sourceHighlight(button,widget,active){button.querySelector('img')?.remove();const frames=button._selectedImage?widget.selected_images:widget.active_images;
-    // Naming operations share five gold-frame images; their final image is
-    // the faint phase. Keep the original bright frame visible while focused.
-    const path=active?(button.dataset.techniqueKey?.startsWith('name-')?frames[0]:frames.at(-1)):widget.normal_images[0];if(path)this.image(path,widget.draw_point_raw.x-widget.rect.left,widget.draw_point_raw.y-widget.rect.top,button);
+  sourceHighlight(button,widget,active){
+    const frames=button._selectedImage?widget.selected_images:widget.active_images;
+    const path=active?(button.dataset.techniqueKey?.startsWith('name-')?frames[0]:frames.at(-1)):widget.normal_images[0];
+    let image=button._sourceHighlight;if(!path){if(image)image.hidden=true;return;}
+    if(!image)image=button._sourceHighlight=this.image(path,widget.draw_point_raw.x-widget.rect.left,widget.draw_point_raw.y-widget.rect.top,button);
+    image.hidden=false;menuImage(image,path);
   }
   focus(mode='content',index=0){this.mode=mode;this.onFocus?.(mode);const group=this.controls(mode);(group[(index+group.length)%group.length]??this.root).focus({preventScroll:true});}
   controls(mode=this.mode){return [...this.element.querySelectorAll('button')].filter(button=>button.dataset.techniqueGroup===mode&&!button.hidden&&!button.disabled);}
@@ -92,9 +101,15 @@ export class OperationTechniqueView{
     this.testPending=pending;return pending;
   }
   chooseSection(section,confirmed=false){if(confirmed&&section==='test'&&this.testPending)return this.testPending;this.stopShortcutAnimations();this.section=section;this.roleId=null;this.stage='roster';this.preview=null;this.pending=null;this.listOffset=0;this.onSection?.(section,confirmed);this.paint();if(confirmed&&section==='test')return this.invokeTest();else if(confirmed)this.focus('content');}
-  chooseActor(roleId){this.stopShortcutAnimations();this.roleId=roleId;this.onActor?.(roleId,true);this.stage=this.section==='edit'?'actions':'list';this.mode='content';this.paint();this.focus('content');}
+  chooseActor(roleId){this.stopShortcutAnimations();this.roleId=roleId;this.stage=this.section==='edit'?'actions':'list';this.mode='content';const revision=this.paintRevision;this.onActor?.(roleId,true);if(this.paintRevision===revision)this.paint();this.focus('content');}
+  paintHeaders(){
+    if(!this.world||this.element.hidden||['name-editor','icon-editor','compose-confirm'].includes(this.stage))return;
+    const origins=this.supplement.origins;
+    ['use','edit','test'].forEach((section,index)=>this.sourceButton('game002a',['USE','EDIT','TEST'][index],origins.header,'header-'+section,['技巧使用','技巧编成','技巧测试'][index],{group:'sub',selected:this.mode!=='main'&&this.section===section,click:()=>this.chooseSection(section,true),focus:()=>{if(this.section!==section)this.chooseSection(section);}}));
+  }
   paint(){
     if(!this.world||!this.source||this.element.hidden)return;
+    this.paintRevision=(this.paintRevision??0)+1;
     const fullscreen=['name-editor','icon-editor','compose-confirm'].includes(this.stage);
     if(fullscreen&&this.paintedStage!==this.stage)this.onInfo?.('');
     this.root.classList.toggle('technique-fullscreen',fullscreen);this.paintedStage=this.stage;
@@ -107,17 +122,17 @@ export class OperationTechniqueView{
     if(this.stage==='name-editor'||this.stage==='icon-editor'){this.paintNameEditor();if(focusKey){const b=[...this.element.querySelectorAll('button')].find(row=>row.dataset.techniqueKey===focusKey);if(b&&!b.disabled){this.restoring=true;b.focus({preventScroll:true});this.restoring=false;if(b._widget)this.sourceHighlight(b,b._widget,true);}}return;}
     if(this.stage==='compose-confirm'){this.image(this.asset('game004'),0,0);this.sourceButton('game004','END',{x:0,y:0},'compose-end','结束编成',{click:()=>this.beginName()});this.sourceButton('game004','CONTINUE',{x:0,y:0},'compose-continue','继续编成',{click:()=>{this.stage='candidates';this.paint();this.focus('content');}});return;}
     const origins=this.supplement.origins;this.element.prepend(this.image(this.asset('game002a'),origins.header.x,origins.header.y));
-    ['use','edit','test'].forEach((section,index)=>this.sourceButton('game002a',['USE','EDIT','TEST'][index],origins.header,'header-'+section,['技巧使用','技巧编成','技巧测试'][index],{group:'sub',selected:this.mode!=='main'&&this.section===section,click:()=>this.chooseSection(section,true),focus:()=>{if(this.section!==section)this.chooseSection(section);}}));
+    this.paintHeaders();
     if(this.stage==='roster'){this.paintRoster();}
     else{
       this.paintCompositionBoard();
-      if(this.section==='use'){this.paintShortcuts(false);this.paintList(this.fieldEntries(),'game002_1');if(this.stage==='targets')this.paintTargets();}
-      else {this.paintActions();if(this.action==='set'&&['categories','candidates','slot-confirm'].includes(this.stage))this.paintShortcuts(this.stage==='slot-confirm');if(['actions','categories'].includes(this.stage))this.paintCategories();if(['candidates','slot-confirm'].includes(this.stage))this.paintList(this.candidateEntries(),'game002_1'+['a','b','c','d','e'][this.category]);}
+      if(this.section==='use'){this.paintShortcuts(false);this.paintList(this.currentEntries(),'game002_1');if(this.stage==='targets')this.paintTargets();}
+      else {this.paintActions();if(this.action==='set'&&['categories','candidates','slot-confirm'].includes(this.stage))this.paintShortcuts(this.stage==='slot-confirm');if(['actions','categories'].includes(this.stage))this.paintCategories();if(['candidates','slot-confirm'].includes(this.stage))this.paintList(this.currentEntries(),'game002_1'+['a','b','c','d','e'][this.category]);}
     }
     this.paintShortcutReplacement();
     if(focusKey){
       const button=[...this.element.querySelectorAll('button')].find(row=>row.dataset.techniqueKey===focusKey);
-      if(button&&!button.disabled){
+      if(button&&!button.disabled&&!button.hidden){
         this.restoring=true;button.focus({preventScroll:true});this.restoring=false;
         if(button._widget)this.sourceHighlight(button,button._widget,true);
         // Restoring skips focus handlers, so repaint the retained healing target.
@@ -145,7 +160,7 @@ export class OperationTechniqueView{
   paintIcon(slot,x,y,active=false,parent=this.element){const bank=this.supplement.icons[slot.type===2?'other_ball':slot.type===1?'name_ball':'magic_ball1'],frame=slot.icon+(active?(slot.type===2?4:slot.type===1?88:6):0);if(bank?.frames[frame])this.image(bank.frames[frame],x,y,parent);if(slot.color){const numbers=this.supplement.icons.magic_ball1_num,index=(slot.type===1?Math.floor(slot.icon/11):slot.icon)*7-1+slot.color;if(numbers?.frames[index])this.image(numbers.frames[index],x+14,y+12,parent);}}
   paintShortcuts(confirm){
     const o=this.supplement.origins.shortcuts;this.image(this.asset('game002d'),o.x,o.y).dataset.shortcutBoard='true';const slots=techniqueSlots(this.world,this.source,this.roleId),icons=[];
-    const refresh=()=>slots.forEach((slot,index)=>{const preview=confirm&&index===this.slotIndex&&this.pending?this.pending.slot:slot;icons[index].replaceChildren();this.paintIcon(preview,0,0,confirm&&index===this.slotIndex,icons[index]);this.element.querySelector('[data-technique-key="slot-'+index+'"]')?.setAttribute('aria-label',`槽${index+1}：${this.slotName(preview)}`);});
+    const refresh=()=>slots.forEach((slot,index)=>{const preview=confirm&&index===this.slotIndex&&this.pending?this.pending.slot:slot,key=JSON.stringify([preview,confirm&&index===this.slotIndex]);if(icons[index]._slotSignature===key)return;icons[index]._slotSignature=key;icons[index].replaceChildren();this.paintIcon(preview,0,0,confirm&&index===this.slotIndex,icons[index]);this.element.querySelector('[data-technique-key="slot-'+index+'"]')?.setAttribute('aria-label',`槽${index+1}：${this.slotName(preview)}`);});
     slots.forEach((slot,index)=>{const widget=this.menus.get('game002d').widgets.find(w=>w.name===String(index+1).padStart(3,'0')),r=widget.rect,icon=document.createElement('span');position(icon,o.x+r.left,o.y+r.top);this.element.append(icon);icons.push(icon);
       if(confirm)this.button('slot-'+index,`槽${index+1}：${this.slotName(slot)}`,o.x+r.left-5,o.y+r.top-5,r.right-r.left+11,r.bottom-r.top+11,{click:()=>this.commitSlot(index),focus:()=>{this.slotIndex=index;refresh();this.showShortcutCursor(index);this.onInfo?.(this.slotName(this.pending?.slot??slot));}});
     });refresh();if(confirm)this.showShortcutCursor(this.slotIndex);
@@ -194,19 +209,55 @@ export class OperationTechniqueView{
   focusCategory(){this.mode='content';this.onFocus?.('content');const button=this.element.querySelector('[data-technique-key="category-'+this.category+'"]');if(button&&!button.disabled)button.focus({preventScroll:true});else this.focus('content');}
   fieldEntries(){const bundle=this.configured?.party_skills??this.configured??this.source;return Object.values(bundle.field_skills??{}).filter(skill=>skill.actor_id===this.roleId&&skill.learned_raw&&((skill.type_flags_u32_0x32>>>13)&1)).map(skill=>({name:skill.name,index:skill.original_skill_index,type:0,source:skill,skillId:skill.id,slot:sourceTechniqueSlot(this.source,this.roleId,0,skill.original_skill_index+1)}));}
   candidateEntries(){if(this.category===0)return techniqueCombinations(this.world,this.source,this.roleId).map((record,index)=>({name:techniqueCombinationName(record,this.supplement.name_charset),index,type:1,record,source:null,slot:sourceTechniqueSlot(this.source,this.roleId,1,index+1,techniqueCombinations(this.world,this.source,this.roleId))}));return techniqueCandidates(this.world,this.source,this.roleId,this.category,{action:this.action==='compose'?'compose':'set',capacity:this.capacity});}
-  paintList(entries,menuId){
-    if(!this.menus.has(menuId))menuId='game002_1a';const o=this.supplement.origins.use;this.image(this.asset(menuId),o.x,o.y);
-    const maxOffset=Math.max(0,entries.length-6);this.listOffset=Math.max(0,Math.min(this.listOffset,maxOffset));
-    if(entries.length>6){for(const [name,amount]of [['UP',-6],['DN',6]])this.sourceButton('game002_1',name,o,'scroll-'+name,amount<0?'上一页':'下一页',{click:()=>{this.listOffset=Math.max(0,Math.min(maxOffset,this.listOffset+amount));this.paint();this.focus('content',this.section==='edit'?4:0);}});}
-    for(const [visible,entry]of entries.slice(this.listOffset,this.listOffset+6).entries()){
-      const widget=this.menus.get(menuId).widgets[visible+3],r=widget.rect,button=this.button('entry-'+entry.type+'-'+entry.index,entry.name,r.left+o.x,r.top+o.y,r.right-r.left+1,r.bottom-r.top+1,{group:['targets','slot-confirm'].includes(this.stage)?'background':'content',disabled:['targets','slot-confirm'].includes(this.stage),click:()=>this.confirmEntry(button._entry),focus:()=>this.previewEntry(button._entry,button)});button.className='technique-row';button._entry=entry;button._rowWidget=widget;
-      const selected=this.preview?.index===entry.index&&this.preview?.type===entry.type;button.dataset.selected=String(selected);if(selected)this.paintRowHighlight(button);
-      const bank=this.supplement.icons[entry.type===2?'other_ball':entry.type===1?'name_ball':'magic_ball1'],frame=entry.slot.icon+(selected?(entry.type===2?4:entry.type===1?88:6):0);if(bank.frames[frame]){const icon=this.image(bank.frames[frame],8,5,button);icon.dataset.rowIcon='true';}
-      this.paintRowDetails(button);
-      this.paintRowText(button);
-    }
+  currentEntries(){
+    const key=[this.world,this.source,this.configured,this.roleId,this.category,this.action,this.capacity,this.section];
+    if(!this.entriesKey||key.some((value,index)=>value!==this.entriesKey[index])){this.entriesKey=key;this.entriesCache=this.section==='use'?this.fieldEntries():this.candidateEntries();}
+    return this.entriesCache;
   }
-  paintRowHighlight(button){const widget=button._rowWidget,path=widget?.active_images[0];if(path){const image=this.image(path,widget.draw_point_raw.x-widget.rect.left,widget.draw_point_raw.y-widget.rect.top,button);image.dataset.highlight='true';}}
+  paintList(entries,menuId){
+    if(!this.menus.has(menuId))menuId='game002_1a';this.listMenuId=menuId;
+    const o=this.supplement.origins.use,maxOffset=Math.max(0,entries.length-6);this.listOffset=Math.max(0,Math.min(this.listOffset,maxOffset));
+    const layer=this.listLayer??=document.createElement('div');layer.className='technique-list';
+    if(layer.parentNode!==this.element)this.element.append(layer);
+    const previous=this.paintParent;this.paintParent=layer;
+    try{
+      if(!this.listBackground)this.listBackground=this.image(this.asset(menuId),o.x,o.y);
+      if(this.listBackground.parentNode!==layer)layer.append(this.listBackground);menuImage(this.listBackground,this.asset(menuId));
+      this.listScrollButtons??=new Map();
+      for(const [name,amount]of [['UP',-6],['DN',6]]){
+        let button=this.listScrollButtons.get(name);
+        if(!button){button=this.sourceButton('game002_1',name,o,'scroll-'+name,amount<0?'上一页':'下一页',{click:()=>{this.listOffset=Math.max(0,Math.min(Math.max(0,this.currentEntries().length-6),this.listOffset+amount));this.paintList(this.currentEntries(),this.listMenuId);this.focus('content',this.section==='edit'?4:0);}});this.listScrollButtons.set(name,button);}
+        button.hidden=entries.length<=6;
+      }
+      this.listButtons??=[];
+      for(let visible=0;visible<6;visible++){
+        const entry=entries[this.listOffset+visible];let button=this.listButtons[visible];
+        if(!entry){if(button)button.hidden=true;continue;}
+        const widget=this.menus.get(menuId).widgets[visible+3],r=widget.rect;
+        if(!button){button=this.button('',entry.name,r.left+o.x,r.top+o.y,r.right-r.left+1,r.bottom-r.top+1,{click:()=>this.confirmEntry(button._entry),focus:()=>this.previewEntry(button._entry,button)});button.className='technique-row';this.listButtons[visible]=button;}
+        button.hidden=false;position(button,r.left+o.x,r.top+o.y,r.right-r.left+1,r.bottom-r.top+1);
+        button.dataset.techniqueKey='entry-'+entry.type+'-'+entry.index;button.dataset.techniqueGroup=['targets','slot-confirm'].includes(this.stage)?'background':'content';button.disabled=['targets','slot-confirm'].includes(this.stage);button.setAttribute('aria-label',entry.name);
+        const before=button._entry;button._entry=entry;button._rowWidget=widget;
+        if(!before||before.type!==entry.type||before.index!==entry.index||before.source?.fixed_raw_hex!==entry.source?.fixed_raw_hex){
+          for(const selector of ['[data-row-level]','[data-row-attribute]','[data-row-experience]','[data-row-experience-digit]'])for(const node of button.querySelectorAll(selector))node.remove();
+          this.paintRowDetails(button);
+        }
+        this.paintEntrySelection(button,this.preview?.index===entry.index&&this.preview?.type===entry.type);
+      }
+    }finally{this.paintParent=previous;}
+  }
+  paintRowHighlight(button){
+    const widget=button._rowWidget,path=widget?.active_images[0];if(!path)return;
+    let image=button._highlight;if(!image){image=button._highlight=this.image(path,0,0,button);image.dataset.highlight='true';}
+    image.hidden=false;menuImage(image,path);position(image,widget.draw_point_raw.x-widget.rect.left,widget.draw_point_raw.y-widget.rect.top);
+  }
+  paintEntrySelection(button,selected){
+    const entry=button._entry;button.dataset.selected=String(Boolean(selected));
+    if(selected)this.paintRowHighlight(button);else if(button._highlight)button._highlight.hidden=true;
+    const bank=this.supplement.icons[entry.type===2?'other_ball':entry.type===1?'name_ball':'magic_ball1'],frame=entry.slot.icon+(selected?(entry.type===2?4:entry.type===1?88:6):0);
+    let icon=button._rowIcon;if(!icon){icon=button._rowIcon=this.image(bank.frames[frame],8,5,button);icon.dataset.rowIcon='true';}
+    icon.hidden=!bank.frames[frame];if(!icon.hidden)menuImage(icon,bank.frames[frame]);this.paintRowText(button);
+  }
   paintRowDetails(button){
     const entry=button._entry;if(entry.type===2)return;
     const data=entry.source?raw(entry.source):null,units=data?data.getUint32(0x36,true):entry.record?.total_units??entry.slot.color;
@@ -237,10 +288,27 @@ export class OperationTechniqueView{
     const options={foreground:yellow?'#ffff00':'#ffffff',shadow:yellow?'#4f4f00':'#000000',
       ...(direct?{layout:'mnu',advanceOverride:19,lineHeight:19,maxWidth:250,maxLines:1}:{})};
     const cost=entry.source?Math.max(0,-raw(entry.source).getInt32(0x14f,true)):0;
-    button._labelNode?.remove();button._labelNode=this.text(entry.name+(cost?' Mp/'+cost:''),34,direct?5:7,button,'',options);
+    if(!button._labelNode)button._labelNode=this.text('',34,direct?5:7,button,'',options);
+    menuStyle(button._labelNode,{top:(direct?5:7)+'px'});this.paintText(button._labelNode,entry.name+(cost?' Mp/'+cost:''),'simsun19_text',options);
   }
-  previewEntry(entry,button){this.preview=entry;for(const row of this.element.querySelectorAll('.technique-row')){row.dataset.selected=String(row===button);row.querySelector('img[data-highlight]')?.remove();const e=row._entry,bank=this.supplement.icons[e.type===2?'other_ball':e.type===1?'name_ball':'magic_ball1'],frame=e.slot.icon+(row===button?(e.type===2?4:e.type===1?88:6):0);const icon=row.querySelector('[data-row-icon]');if(icon&&bank.frames[frame])icon.src=bank.frames[frame];this.paintRowText(row);}this.paintRowHighlight(button);this.onInfo?.(entry.record?entry.record.indices.map(index=>this.source.roles[this.roleId].skills[index].name).join(' → '):description(entry.source));this.paintPreview();}
-  paintPreview(){this.element.querySelectorAll('[data-preview-icon]').forEach(node=>node.remove());const o=this.supplement.origins.composition_board,count=this.element.childNodes.length,compiled=this.section==='edit'&&this.action==='compose'?this.compositionUnits():0,ghost=this.preview?.slot.color??0,units=compiled+ghost<=this.capacity?compiled+ghost:compiled;for(let n=0;n<Math.min(7,units);n++){const w=this.menus.get('game002e').widgets.find(row=>row.name===String(8-n).padStart(3,'0')),image=this.image(this.supplement.icons.char_ball.frames[n],o.x+w.rect.left-1,o.y+w.rect.top-2);if(n>=compiled)image.style.opacity='0.5';}for(const node of [...this.element.childNodes].slice(count))node.dataset.previewIcon='true';}
+  previewEntry(entry,button){
+    this.preview=entry;
+    for(const row of this.element.querySelectorAll('.technique-row')){
+      if(row.hidden)continue;const selected=row===button;if(row.dataset.selected!==String(selected))this.paintEntrySelection(row,selected);
+    }
+    this.onInfo?.(entry.record?entry.record.indices.map(index=>this.source.roles[this.roleId].skills[index].name).join(' → '):description(entry.source));this.paintPreview();
+  }
+  paintPreview(){
+    const o=this.supplement.origins.composition_board,compiled=this.section==='edit'&&this.action==='compose'?this.compositionUnits():0,ghost=this.preview?.slot.color??0,units=compiled+ghost<=this.capacity?compiled+ghost:compiled;
+    this.previewIcons??=[];
+    for(let n=0;n<7;n++){
+      let image=this.previewIcons[n];
+      if(n>=Math.min(7,units)){if(image)image.hidden=true;continue;}
+      const w=this.menus.get('game002e').widgets.find(row=>row.name===String(8-n).padStart(3,'0'));
+      if(!image){image=this.previewIcons[n]=this.image(this.supplement.icons.char_ball.frames[n],o.x+w.rect.left-1,o.y+w.rect.top-2);image.dataset.previewIcon='true';}
+      if(image.parentNode!==this.element)this.element.append(image);image.hidden=false;menuStyle(image,{opacity:n>=compiled?'0.5':'1'});
+    }
+  }
   confirmEntry(entry){
     if(this.section==='use'){this.selectedSkill=entry;this.stage='targets';this.paint();this.focus('content',Math.max(0,this.controls('content').findIndex(button=>button.dataset.techniqueKey==='target-'+this.roleId)));return;}
     if(this.action==='compose'){if(this.composition.includes(entry.index)){this.onMessage?.('此技巧已经加入编成。',true);return;}const total=this.compositionUnits()+entry.slot.color;if(total>this.capacity){this.onMessage?.('编成球数超出法器容量。',true);return;}this.composition.push(entry.index);if(total===this.capacity)this.beginName();else this.paintPreview();return;}
@@ -272,17 +340,29 @@ export class OperationTechniqueView{
   }
   compositionUnits(){return this.composition.reduce((n,index)=>n+sourceTechniqueSlot(this.source,this.roleId,0,index+1).color,0);}
   beginName(record=null){if(!this.composition.length){this.onMessage?.('请先选择要编成的技巧。',true);return;}this.nameCodes=record?[...record.name_codes]:[];this.nameCursor=0;this.nameCharacterIndex=0;this.nameFocusZone='characters';this.nameIcon=record?.icon??null;this.iconFocus=record?.icon??0;this.editorRevision=this.world.revision;this.stage='name-editor';this.paint();this.focus('content',5);}
+  paintNamePreview(){
+    const naming=this.stage==='name-editor',layer=this.namePreviewLayer??=document.createElement('div');
+    if(layer.parentNode!==this.element)this.element.append(layer);this.nameGlyphs??=[];
+    for(let index=0;index<8;index++){
+      let glyph=this.nameGlyphs[index];const code=this.nameCodes[index];
+      if(!code){if(glyph)glyph.hidden=true;continue;}
+      if(!glyph)glyph=this.nameGlyphs[index]=this.image(this.supplement.icons.name_text.frames[code-1],0,0,layer);
+      glyph.hidden=false;menuImage(glyph,this.supplement.icons.name_text.frames[code-1]);position(glyph,(naming?30:110)+index*22,20);
+    }
+    if(naming){if(!this.nameCursorImage)this.nameCursorImage=this.image(this.supplement.icons.name_cursor.frames[0],0,0,layer);this.nameCursorImage.hidden=false;position(this.nameCursorImage,30+this.nameCursor*22,20);}
+    else if(this.nameCursorImage)this.nameCursorImage.hidden=true;
+    if(!naming&&this.nameIcon!==null){if(!this.nameIconImage)this.nameIconImage=this.image(this.supplement.icons.name_ball.frames[this.nameIcon+88],66,22,layer);this.nameIconImage.hidden=false;menuImage(this.nameIconImage,this.supplement.icons.name_ball.frames[this.nameIcon+88]);}
+    else if(this.nameIconImage)this.nameIconImage.hidden=true;
+  }
   paintNameEditor(){
     const naming=this.stage==='name-editor',menuId=naming?'game002_2a':'game002_2b';this.image(this.asset(menuId),0,0);
-    for(const [index,code]of this.nameCodes.entries())this.image(this.supplement.icons.name_text.frames[code-1],(naming?30:110)+index*22,20);
+    this.paintNamePreview();
     if(naming){
-      this.image(this.supplement.icons.name_cursor.frames[0],30+this.nameCursor*22,20);
-      for(const [name,label,click]of [['PROV','前移',()=>{this.nameCursor=Math.max(0,this.nameCursor-1);}],['NEXT','后移',()=>{this.nameCursor=Math.min(this.nameCodes.length,this.nameCursor+1);}],['DEL','删除',()=>this.nameCodes.splice(this.nameCursor,1)],['CANCEL','取消',()=>this.cancelNaming()],['OK','决定',()=>{if(!this.nameCodes.length){this.onMessage?.('请为技巧命名。',true);return;}this.stage='icon-editor';this.paint();this.focus('content',3+this.iconFocus);}]] )this.sourceButton(menuId,name,{x:0,y:0},'name-'+name,label,{focus:()=>{this.nameFocusZone='actions';},click:()=>{click();this.paint();}});
-      this.supplement.name_charset.characters.forEach((char,index)=>this.sourceButton(menuId,String(index+1).padStart(3,'0'),{x:0,y:0},'char-'+index,char,{focus:()=>{this.nameFocusZone='characters';this.nameCharacterIndex=index;},click:()=>{if(this.nameCursor>=8){this.onMessage?.('技巧名称最多八个字符。',true);return;}if(this.action==='name')this.nameCodes[this.nameCursor]=index+1;else if(this.nameCodes.length<8)this.nameCodes.splice(this.nameCursor,0,index+1);else this.nameCodes[this.nameCursor]=index+1;this.nameCursor=Math.min(8,this.nameCursor+1);this.paint();}}));
+      for(const [name,label,click]of [['PROV','前移',()=>{this.nameCursor=Math.max(0,this.nameCursor-1);}],['NEXT','后移',()=>{this.nameCursor=Math.min(this.nameCodes.length,this.nameCursor+1);}],['DEL','删除',()=>this.nameCodes.splice(this.nameCursor,1)],['CANCEL','取消',()=>this.cancelNaming()],['OK','决定',()=>{if(!this.nameCodes.length){this.onMessage?.('请为技巧命名。',true);return;}this.stage='icon-editor';this.paint();this.focus('content',3+this.iconFocus);}]] )this.sourceButton(menuId,name,{x:0,y:0},'name-'+name,label,{focus:()=>{this.nameFocusZone='actions';},click:()=>{const stage=this.stage;click();if(this.stage===stage)this.paintNamePreview();}});
+      this.supplement.name_charset.characters.forEach((char,index)=>this.sourceButton(menuId,String(index+1).padStart(3,'0'),{x:0,y:0},'char-'+index,char,{focus:()=>{this.nameFocusZone='characters';this.nameCharacterIndex=index;},click:()=>{if(this.nameCursor>=8){this.onMessage?.('技巧名称最多八个字符。',true);return;}if(this.action==='name')this.nameCodes[this.nameCursor]=index+1;else if(this.nameCodes.length<8)this.nameCodes.splice(this.nameCursor,0,index+1);else this.nameCodes[this.nameCursor]=index+1;this.nameCursor=Math.min(8,this.nameCursor+1);this.paintNamePreview();}}));
     }else{
-      if(this.nameIcon!==null)this.image(this.supplement.icons.name_ball.frames[this.nameIcon+88],66,22);
       [['OK','完成',false],['SET','设定',true],['CANCEL','取消',null]].forEach(([name,label,setAfter])=>this.sourceButton(menuId,name,{x:0,y:0},'icon-'+name,label,{click:()=>{if(setAfter===null){this.stage='name-editor';this.paint();this.focus('content',5);return;}this.saveNamedCombination(setAfter);}}));
-      for(let index=0;index<66;index++){const button=this.sourceButton(menuId,String(index+1).padStart(3,'0'),{x:0,y:0},'icon-choice-'+index,'技巧图标'+(index+1),{selected:this.iconFocus===index,click:()=>{this.nameIcon=index;this.iconFocus=index;this.paint();this.focus('content');},focus:()=>{this.iconFocus=index;const widget=this.menus.get(menuId).widgets.find(w=>w.name===String(index+1).padStart(3,'0')),old=this.element.querySelector('[data-icon-highlight]');old?.remove();const icon=this.image(this.supplement.icons.name_ball.frames[index+88],widget.rect.left+1,widget.rect.top+1);icon.dataset.iconHighlight='true';}});button.dataset.iconIndex=String(index);}
+      for(let index=0;index<66;index++){const button=this.sourceButton(menuId,String(index+1).padStart(3,'0'),{x:0,y:0},'icon-choice-'+index,'技巧图标'+(index+1),{selected:this.iconFocus===index,click:()=>{this.nameIcon=index;this.iconFocus=index;this.paintNamePreview();this.focus('content');},focus:()=>{this.iconFocus=index;const widget=this.menus.get(menuId).widgets.find(w=>w.name===String(index+1).padStart(3,'0')),old=this.element.querySelector('[data-icon-highlight]');old?.remove();const icon=this.image(this.supplement.icons.name_ball.frames[index+88],widget.rect.left+1,widget.rect.top+1);icon.dataset.iconHighlight='true';}});button.dataset.iconIndex=String(index);}
       const widget=this.menus.get(menuId).widgets.find(w=>w.name===String(this.iconFocus+1).padStart(3,'0')),highlight=this.image(this.supplement.icons.name_ball.frames[this.iconFocus+88],widget.rect.left+1,widget.rect.top+1);highlight.dataset.iconHighlight='true';
     }
   }
@@ -301,7 +381,7 @@ export class OperationTechniqueView{
     if(['name-editor','icon-editor'].includes(this.stage)){if(key.startsWith('Arrow'))this.directionalFocus(key);return true;}
     if(this.stage==='candidates'&&this.action==='compose'&&this.composition.length&&['ArrowLeft','ArrowRight'].includes(key)){this.stage='compose-confirm';this.paint();this.focus('content');return true;}
     if(['list','candidates'].includes(this.stage)&&['ArrowUp','ArrowDown','PageUp','PageDown'].includes(key)){
-      const entries=this.section==='use'?this.fieldEntries():this.candidateEntries();if(!entries.length)return true;const current=Math.max(0,entries.findIndex(entry=>entry.type===this.preview?.type&&entry.index===this.preview?.index)),next=Math.max(0,Math.min(entries.length-1,current+(key==='ArrowUp'?-1:key==='ArrowDown'?1:key==='PageUp'?-6:6)));this.preview=entries[next];if(next<this.listOffset)this.listOffset=next;else if(next>this.listOffset+5)this.listOffset=next-5;this.paint();const button=this.element.querySelector('[data-technique-key="entry-'+this.preview.type+'-'+this.preview.index+'"]');button?.focus({preventScroll:true});return true;
+      const entries=this.currentEntries();if(!entries.length)return true;const current=Math.max(0,entries.findIndex(entry=>entry.type===this.preview?.type&&entry.index===this.preview?.index)),next=Math.max(0,Math.min(entries.length-1,current+(key==='ArrowUp'?-1:key==='ArrowDown'?1:key==='PageUp'?-6:6)));const offset=this.listOffset;this.preview=entries[next];if(next<this.listOffset)this.listOffset=next;else if(next>this.listOffset+5)this.listOffset=next-5;if(offset!==this.listOffset)this.paintList(entries,this.listMenuId);const button=this.element.querySelector('[data-technique-key="entry-'+this.preview.type+'-'+this.preview.index+'"]');button?.focus({preventScroll:true});return true;
     }
     if(this.stage==='candidates'&&['x','X','z','Z'].includes(key)&&['compose','set'].includes(this.action)){const choices=this.action==='compose'?[1,2,3]:[0,1,2,3,4],at=choices.indexOf(this.category);this.category=choices[(at+(['x','X'].includes(key)?1:choices.length-1))%choices.length];this.preview=null;this.listOffset=0;this.paint();this.focus('content');return true;}
     if(this.mode==='sub'){const index=['use','edit','test'].indexOf(this.section);this.focus('sub',index+(['ArrowLeft','ArrowUp'].includes(key)?-1:1));return true;}

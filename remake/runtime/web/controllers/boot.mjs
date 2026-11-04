@@ -107,7 +107,7 @@ export function createBootController({state, actions, $, canvas, ctx}) {
       onTechniqueSlot:request=>menuTransaction(()=>actions.setTechniqueSlot(request)),onTechniqueCast:request=>menuTransaction(()=>actions.useFieldTechnique(request)),
       onTechniqueTest:request=>menuTransaction(()=>actions.startTechniqueTest(request)),
       onTechniqueCreate:request=>menuTransaction(()=>actions.editTechniqueCombination('create',request)),onTechniqueRename:request=>menuTransaction(()=>actions.editTechniqueCombination('rename',request)),onTechniqueDelete:request=>menuTransaction(()=>actions.editTechniqueCombination('delete',request)),
-      onTechniqueMessage:(message,error=false)=>{$('menuMessage').textContent=message;$('menuMessage').classList.toggle('error',error);if(error)state.menuFeedback?.reject();},
+      onTechniqueMessage:(message,error=false)=>{state.operationMenu.info(message);$('menuMessage').classList.toggle('error',error);if(error)state.menuFeedback?.reject();},
       onEquipmentSelect:instanceId=>{$('menuEquipment').value=instanceId;},
       onEquipmentConfirm:async(instanceId)=>{$('menuEquipment').value=instanceId;await $('menuEquip').onclick();},
       onEquipmentUnequip:async()=>{await $('menuUnequip').onclick();},
@@ -119,8 +119,8 @@ export function createBootController({state, actions, $, canvas, ctx}) {
       onFormationExchange:(first,second)=>menuTransaction(()=>actions.changePartyFormation(first,second)),
       onSystemSetting:(kind,channel,value)=>{if(kind==='cursor')state.menuSettings.setBattleCursor(value);else if(kind==='volume')state.audio.setChannelVolume(channel,value);else state.audio.setChannelMuted(channel,value);$('audioMuted').checked=state.audio.snapshot().muted;$('audioVolume').value=String(Math.round(state.audio.snapshot().volume*100));state.operationMenu.system.render(state.audio.snapshot().channels,state.menuSettings.snapshot().battleCursor);},
       onSystemExit:()=>{actions.closePartyMenu();actions.showTitle({allowResume:true});actions.log({type:'operation-exit-to-title'});},
-      onActor:(roleId,confirm)=>{if(!state.menuContext)return;$('menuActor').value=roleId;state.operationMenu.mainCommitted=true;state.operationMenu.subCommitted=true;if(!confirm&&state.menuContext.page==='roster'&&!state.menuContext.selectionPage)actions.showOperationPage('choose-status');else actions.refreshPartyMenu();if(confirm){const page=state.menuContext.selectionPage??'status';actions.showOperationPage(page);state.operationMenu.frame.focus();state.operationMenu.mode='content';if(['equipment','weapon'].includes(page))state.operationMenu.focusGroup('content');}},
-      onItemSelect:instanceId=>{if(!state.menuContext)return;$('menuItem').value=instanceId;actions.refreshPartyMenu();$('menuMessage').textContent=$('menuItemHint').textContent;},
+      onActor:(roleId,confirm)=>{if(!state.menuContext)return;$('menuActor').value=roleId;state.operationMenu.mainCommitted=true;state.operationMenu.subCommitted=true;if(!confirm&&state.menuContext.page==='roster'&&!state.menuContext.selectionPage)actions.showOperationPage('choose-status');else if(!confirm&&state.menuContext.page!=='roster')actions.refreshPartyMenu();if(confirm){const page=state.menuContext.selectionPage??'status';actions.showOperationPage(page);state.operationMenu.frame.focus();state.operationMenu.mode='content';if(['equipment','weapon'].includes(page))state.operationMenu.focusGroup('content');}},
+      onItemSelect:instanceId=>actions.selectMenuItem(instanceId,{showInfo:true}),
       onItemConfirm:()=>{if(!state.menuContext)return;if($('menuUseItem').disabled){$('menuMessage').textContent='此物品当前无法使用。';state.menuFeedback?.reject();return;}const actors=state.menuContext.combat?state.battle.players():createPartyActors(state.world.snapshot(),state.partyCombat,{},state.itemData);state.operationMenu.itemTargets(actors,$('menuActor').value);},
       onItemTarget:async roleId=>{
         if(!state.menuContext)return;const context=state.menuContext;
@@ -130,7 +130,7 @@ export function createBootController({state, actions, $, canvas, ctx}) {
           state.operationMenu.itemTargets(createPartyActors(state.world.snapshot(),state.partyCombat,{},state.itemData),roleId);
         }else{$('menuItemTargets').hidden=true;state.operationMenu.focusGroup('content');}
       },
-      onSlot:(slotId,confirm)=>{$('menuSlot').value=slotId;actions.refreshPartyMenu();$('menuMessage').textContent=$('menuEquipmentHint').textContent;if(confirm)state.operationMenu.equipmentPicker();},
+      onSlot:actions.selectEquipmentSlot,
       onItemFilter:(type,subtype)=>{state.menuContext.itemFilter=[type,subtype];$('menuMessage').textContent='';actions.refreshPartyMenu();}});
     state.menuFeedback=createMenuFeedback({playCue:(name,key)=>state.audio.playCue(name,key),getState:()=>operationFeedbackState(state.operationMenu)});
     state.menuFeedback.attach($('partyMenu'));
