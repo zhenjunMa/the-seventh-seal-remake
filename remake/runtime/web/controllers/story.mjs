@@ -331,19 +331,21 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
       actions.image(resource.frames.find(frame=>frame.index===index).image, `map:${mapId}`))),signal);
     if(playback?.paused)await playback.ready();signal?.throwIfAborted();playback?.check();
     state.objectPreview={mapId,objectIndex,bitmap:frames[0]};
-    const start=performance.now(),interval=action.interval_raw;
-    if(state.engine){
-      try{await state.engine.exploration.clock.tween(interval*frames.length,t=>{
-        state.objectPreview.bitmap=frames[Math.min(frames.length-1,Math.floor(t*frames.length))];
-      },[signal]);}finally{state.objectPreview=null;}
-      return;
-    }
+    const start=performance.now(),interval=action.interval_raw;let completed=false;
     try{
-      let now=start;
-      do{now=await playbackFrame(null,signal);
-        const frame=Math.min(frames.length-1,Math.floor(Math.max(0,now-start)/interval));state.objectPreview.bitmap=frames[frame];
-      }while(now-start<interval*frames.length);
-    }finally{state.objectPreview=null;}
+      if(state.engine)await state.engine.exploration.clock.tween(interval*frames.length,t=>{
+        state.objectPreview.bitmap=frames[Math.min(frames.length-1,Math.floor(t*frames.length))];
+      },[signal]);
+      else{
+        let now=start;
+        do{now=await playbackFrame(null,signal);
+          const frame=Math.min(frames.length-1,Math.floor(Math.max(0,now-start)/interval));state.objectPreview.bitmap=frames[frame];
+        }while(now-start<interval*frames.length);
+      }
+      completed=true;
+      // Keep the final pose while the parallel actor action finishes. The
+      // complete event releases it in playStory, after the world/view commit.
+    }finally{if(!completed)state.objectPreview=null;}
   }
   return {playStory,cancelStoryPlayback,say, clearDialogue, chooseChapter, chooseDialogue, advanceDialogue, dialogueKey, dialogueKeyUp, releaseDialogueKeys, interact, chapterSpeaker, animateChapter, transferChapter, runChapter, enterMap, animateObjectInteraction, animateChapterObject};
 }

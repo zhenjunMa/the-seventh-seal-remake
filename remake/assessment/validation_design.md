@@ -1,6 +1,6 @@
 # 第七封印 · 当前开发计划
 
-更新：2026-11-03。本文件只维护当前范围、剩余任务和验收边界；机制、命令与资料恢复按[根导航](../../README.md)查阅。历次实施细节从[历史文档与恢复](../local_materials.md#历史文档与恢复)回查，不在这里逐次追加修复日志。
+更新：2026-11-04。本文件只维护当前范围、剩余任务和验收边界；机制、命令与资料恢复按[根导航](../../README.md)查阅。历次实施细节从[历史文档与恢复](../local_materials.md#历史文档与恢复)回查，不在这里逐次追加修复日志。
 
 ## 当前范围与验收边界
 
@@ -11,7 +11,7 @@
 | 范围／既有编号 | 已接入内容与交接 |
 | --- | --- |
 | 序章、火之谷与终章 | 序章、离谷、各次返谷、队伍交接、stage12剧情战及结局提交后返回标题。 |
-| 外层白木森林 WF-01／02、翠碧湖 JL-01 | 初次跨区通行、原遇敌、已登记元素箱、赠礼和追击；湖区后期主线由JL-03接续。 |
+| 外层白木森林 WF-01／02、翠碧湖 JL-01 | 初次跨区通行、原遇敌、已登记元素箱、赠礼和追击；元素箱末帧保持至整次交互结束，风箱动画结束后的闪回已修复并核正式画面。湖区后期主线由JL-03接续。 |
 | 炎城、里白木森林 YC-00～04A | 首访与城内事件、两次取货、霞光手环委托、朱特入队、塔巴斯、三法器、法雷斯剑及封印战。这里的封印之森不是待开发的封印遗迹。 |
 | 侦探／飘城 PC-01、YC-04B | 侦探完整根、佛兰珂独立视角、法王委托、禁书梦境及火祭坛，至471:1。 |
 | 融湖、追击与登舟 YC-05／JL-03 | 融湖、两类追击、炎城伏击、空塔分支及完整登舟抵达。 |
@@ -90,7 +90,7 @@
 | 主题 | 既有记录入口 |
 | --- | --- |
 | 火之谷与终章 | `fire_valley_20261025/implementation_closure.json`、`browser_validation.json`、`stage12_delivery/victory_report.json` |
-| 外层森林／翠碧湖／炎城 | `white_forest_20261026/`、`jade_lake_20261028/`、`ember_city_20261028/`各自来源索引、验收和交接清单 |
+| 外层森林／翠碧湖／炎城 | `white_forest_20261026/`、`jade_lake_20261028/`、`ember_city_20261028/`各自来源索引、验收和交接清单；风箱末帧衔接见`wind_chest_handoff_20261104/verification.json` |
 | 里白木森林与塔巴斯封印 | `inner_white_forest_20261029/implementation_closure.json`；`inner_white_forest_20261030_yc04/implementation_closure.json`及`browser_saves/yc04_manifest.json` |
 | 飘城、融湖与再出航 | `floating_city_20261030/implementation_closure.json`；`yc05_jl03_20261030/implementation_closure.json`；`floating_city_pc02_20261031/implementation_closure.json` |
 | 妖精森林与神殿 | `fairy_forest_ff01_20261031/`；`fairy_forest_ff02_20261031/implementation_closure.json`、`automatic_validation.json`和`plaza_resource_lifecycle_findings.json` |

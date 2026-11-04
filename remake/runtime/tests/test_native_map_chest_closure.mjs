@@ -7,7 +7,10 @@ import {readNativeChestFixtures,WHITE_FOREST_MAPS} from './native_map_chest_fixt
 import {ChapterRunner,initializeChapterItem,chapterObjectState,validateChapterStory} from '../web/core/chapter.mjs';
 import {nativeKeyedChest,nativeChestAnimation} from '../web/core/native_map_chests.mjs';
 import {createStoryController} from '../web/controllers/story.mjs';
+import {createMapController} from '../web/controllers/map.mjs';
 import {StoryPlayback} from '../web/core/story_playback.mjs';
+import {ActionClock} from '../web/phaser/components/action_clock.mjs';
+import {nativeNpcActionBindings} from '../web/core/map_npcs.mjs';
 import {WorldStore,encodeSave,decodeSave} from '../web/core/world.mjs';
 import {validateStoryBindings} from '../web/core/content_dependencies.mjs';
 import {inspectContentReadiness} from '../web/core/content_readiness.mjs';
@@ -50,6 +53,43 @@ function deterministicAnimation(row,world){
     native:{action_index:native.action.index,interval_ms:native.action.interval_raw,
       frame_indices:native.frameIndices,duration_ms:native.action.interval_raw*native.frameIndices.length}};
 }
+
+test('Wind chest holds its final image while the longer actor action finishes, then releases it with the event',
+  {skip:fixture.skip},async()=>{
+  const row=fixture.chests.find(row=>row.map_id==='M70010'&&row.object.index===10),chest=nativeKeyedChest(row.object);
+  const initial=JSON.parse(fs.readFileSync(new URL('../web/data/opening_seed.json',import.meta.url),'utf8'));
+  initial.opening.status='complete';initial.location={map_id:row.map_id,x:row.object.x_native*2,y:row.object.y_native*2,direction:0};
+  initial.inventory.push(keyItem(fixture.story.item_definitions[chest.keyId],'wind-handoff'));
+  const roles=JSON.parse(fs.readFileSync(new URL('../web/data/story/shared.json',import.meta.url),'utf8')).roles;
+  for(const role of Object.values(roles))role.native_action_bindings=nativeNpcActionBindings(role);
+  const clock=new ActionClock(),world=new WorldStore(initial),state={world,openingResources:{roles},
+    chapterStory:fixture.story,chapterResources:fixture.resources,engine:{exploration:{clock}},objectPreview:null};
+  const actions={image:async image=>({image})},context={state,actions,$:()=>({}),canvas:{}};
+  const controller=createStoryController(context),map=createMapController(context);
+  const runner=new ChapterRunner({world,data:fixture.story,objectData:fixture.resources.interactive_objects,say:async()=>{},
+    objectInteraction:controller.animateObjectInteraction,objectAnimation:controller.animateChapterObject});
+  const object={index:row.object.index,bitmap:{image:'idle-chest'}},scene={data:{id:row.map_id}};
+  const native=nativeChestAnimation(row.animation,4),duration=native.action.interval_raw*native.frameIndices.length;
+  const lastImage=row.animation.frames[native.frameIndices.at(-1)].image;
+  for(const cancel of [false,true]){
+    world.replace(initial);const before=world.snapshot();
+    const task=controller.playStory(playback=>runner.runObject({mapId:row.map_id,objectIndex:row.object.index,playback}));
+    for(let i=0;i<20&&clock.tasks.size<2;i++)await Promise.resolve();
+    assert.equal(clock.tasks.size,2);
+    clock.advance(duration);
+    for(let i=0;i<10;i++)await Promise.resolve();
+    assert.equal(clock.tasks.size,1,'the actor action still has 760ms remaining');
+    assert.equal(map.objectBitmap(scene,object)?.image,lastImage,'never return to the idle chest after its animation');
+    assert.deepEqual(world.snapshot(),before,'rewards wait for the complete interaction');
+    if(cancel){state.storyPlayback.cancel();await assert.rejects(task,{name:'AbortError'});assert.deepEqual(world.snapshot(),before);}
+    else{
+      clock.paused=true;clock.advance(10000);assert.equal(map.objectBitmap(scene,object)?.image,lastImage);
+      clock.paused=false;clock.advance(760);await task;
+      assert.equal(quantity(world.value,chest.rewards[0].id),quantity(before,chest.rewards[0].id)+1);
+    }
+    assert.equal(state.objectPreview,null);assert.equal(state.objectActorPreview,null);assert.equal(clock.tasks.size,0);
+  }
+});
 
 test('All thirteen registered direct chests close their key, reward, real action, failure and saved-state branches',
   {skip:fixture.skip},async()=>{
@@ -121,7 +161,8 @@ test('All thirteen registered direct chests close their key, reward, real action
       world.replace(makeSeed(true));animation.reset();before=world.snapshot();const opened=await invoke();
       assert.equal(opened.state,3);assert.deepEqual(opened.rewards,chest.rewards);
       assert.deepEqual(animation.trace.frames,animation.expected);assert.deepEqual(animation.trace.images,animation.expected);
-      assert.equal(animation.trace.elapsed,animation.native.duration_ms);assert.equal(animation.state.objectPreview,null);
+      assert.equal(animation.trace.elapsed,animation.native.duration_ms);
+      assert.equal(animation.state.objectPreview.bitmap.image,animation.expected.at(-1));
       for(const reward of chest.rewards)assert.equal(quantity(world.value,reward.id),quantity(before,reward.id)+1);
       assert.deepEqual(world.value.inventory.find(item=>item.id===chest.keyId),before.inventory.find(item=>item.id===chest.keyId));
       assert.equal(world.value.event_records[flag][object.index],'03'+'a5'.repeat(13));
