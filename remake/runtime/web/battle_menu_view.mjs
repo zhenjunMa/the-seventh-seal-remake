@@ -67,7 +67,10 @@ export class BattleMenuView{
     if(this.stage==='actors')message=this.snapshot?.actors.find(a=>a.id===this.snapshot.player_id)?.name??'';
     else if(this.stage==='wheel')message=this.commandSlots?.[this.focusIndex]?.name??'';
     else if(['skills','items'].includes(this.stage))message=this.entries?.[this.listIndex]?.name??(this.stage==='skills'?'此分类没有招式。':'没有可用的药品。');
-    else if(this.stage==='target')message=this.snapshot?.actors.find(a=>a.id===this.targetId)?.name??'';
+    else if(this.stage==='target'){
+      const preview=this.targetPreview();
+      message=preview.group&&preview.actors.length?(preview.actors[0].side==='player'?'我方全体':'敌方全体'):preview.actors[0]?.name??'';
+    }
     this.setInfo(message);
   }
   setStage(stage){if(this.stage===stage)return;this.stage=stage;this.root.dataset.focusLayer=stage;this.syncInfo();this.onStage(stage);}
@@ -141,8 +144,13 @@ export class BattleMenuView{
   selectEntry(index){const entry=this.entries?.[index];if(!entry?.available||!this.available()){this.reject(this.stage==='skills'&&this.battle.skillUnavailableReason?.(entry?.id)||'此项当前无法使用。');return;}this.listIndex=index;this.remember();if(this.stage==='skills')this.chooseSkill(entry.skill,'skills');else{this.prefetchCommand({actor_id:this.snapshot.player_id,item_id:entry.item.id});this.draft={kind:'item',instanceId:entry.id,actorId:this.snapshot.player_id,name:entry.name};this.openTarget('items');}}
   chooseSkill(skill,from){this.prefetchCommand({actor_id:this.snapshot.player_id,skill_id:skill.id});this.draft={kind:'skill',skillId:skill.id,actorId:this.snapshot.player_id,name:skill.name};this.openTarget(from);}
   targetActors(){if(this.draft?.kind==='item'&&this.battle.itemTargetIds){const ids=this.battle.itemTargetIds(this.draft.instanceId);return this.snapshot.actors.filter(a=>ids.includes(a.id));}if(this.draft?.kind==='skill'&&this.battle.targetIdsForSkill){const ids=this.battle.targetIdsForSkill(this.draft.skillId);return this.snapshot.actors.filter(a=>ids.includes(a.id));}const side=this.draft?.kind==='item'?'player':'enemy';return this.snapshot.actors.filter(a=>a.side===side&&a.hp.current>0&&!a.escaped&&a.state_raw!==11);}
+  targetPreview(){
+    const preview=this.battle?.commandTargetPreview?.({skillId:this.draft?.skillId,instanceId:this.draft?.instanceId,targetId:this.targetId});
+    const ids=preview?.target_ids??[this.targetId];
+    return {group:preview?.group??false,actors:this.snapshot.actors.filter(actor=>ids.includes(actor.id))};
+  }
   openTarget(from){this.returnStage=from;this.setStage('target');const actors=this.targetActors();const remembered=this.getSettings?.().battleCursor==='memory'?this.memory.get(this.snapshot.player_id)?.target:null;this.targetId=actors.some(a=>a.id===remembered)?remembered:actors[0]?.id;this.cue('menuConfirm');this.syncInfo();this.syncWheel();this.syncList();this.syncTargets();this.targets.get(this.targetId)?.focus({preventScroll:true});}
-  syncTargets(){const active=this.stage==='target',candidates=active?this.targetActors():[],positions=this.positions??battleActorPositions(this.snapshot.actors);for(const a of this.snapshot.actors){let b=this.targets.get(a.id);if(!b){b=this.button('battle-target-hit',()=>{this.targetId=a.id;this.commit();});b.dataset.targetId=a.id;b.onfocus=()=>{if(this.stage==='target'){this.targetId=a.id;this.remember();this.syncInfo();}};this.targets.set(a.id,b);this.targetLayer.append(b);}b.hidden=!active||!candidates.some(c=>c.id===a.id);const [x,y]=positions[a.id]??[0,0];this.place(b,x-35,y-95,70,105);b.setAttribute('aria-label',`选择目标：${a.name}`);b.setAttribute('aria-disabled',String(!this.available()));}}
+  syncTargets(){const active=this.stage==='target',candidates=active?this.targetActors():[],preview=active?this.targetPreview():{group:false,actors:[]},positions=this.positions??battleActorPositions(this.snapshot.actors);for(const a of this.snapshot.actors){let b=this.targets.get(a.id);if(!b){b=this.button('battle-target-hit',()=>{this.targetId=a.id;this.commit();});b.dataset.targetId=a.id;b.onfocus=()=>{if(this.stage==='target'){this.targetId=a.id;this.remember();this.syncInfo();}};this.targets.set(a.id,b);this.targetLayer.append(b);}b.hidden=!active||!candidates.some(c=>c.id===a.id);const [x,y]=positions[a.id]??[0,0];this.place(b,x-35,y-95,70,105);b.setAttribute('aria-label',preview.group?`选择${a.side==='player'?'我方全体':'敌方全体'}`:`选择目标：${a.name}`);b.setAttribute('aria-pressed',String(active&&preview.actors.some(target=>target.id===a.id)));b.setAttribute('aria-disabled',String(!this.available()));}}
   async commitFixed(kind){const epoch=++this.epoch;this.draft=null;this.setStage('waiting');try{await (kind==='defend'?this.battle.chooseDefend():this.battle.chooseEscape());if(!this.disposed&&epoch===this.epoch)this.cue('menuConfirm');}catch(error){if(!this.disposed&&epoch===this.epoch){this.reject(error.message);this.update(this.battle.presentationSnapshot());}}}
   async commit(){
     if(!this.draft||!this.available()){this.reject('当前不能提交行动。');return;}const draft=this.draft,targetId=this.targetId,epoch=++this.epoch;this.remember();this.draft=null;this.setStage('waiting');this.syncTargets();this.cue('menuConfirm');
@@ -227,8 +235,8 @@ export class BattleMenuView{
     const info=this.menus.get('fight_info'),infoText=info.widgets.find(w=>w.name==='TEXT');this.image(info.images[0].image,0,443);this.text(this.message,infoText.rect.left,443+infoText.rect.top,{font:'14px SimSun',widget:infoText});
     if(this.stage!=='result')this.drawWheel(now);
     if(['skills','items'].includes(this.stage))this.drawList();
-    const selected=this.snapshot.actors.find(a=>a.id===this.snapshot.player_id),pointer=this.stage==='target'?this.snapshot.actors.find(a=>a.id===this.targetId):this.ready().includes(selected?.id)||this.available(selected?.id)?selected:null;
-    if(pointer){
+    const selected=this.snapshot.actors.find(a=>a.id===this.snapshot.player_id),pointers=this.stage==='target'?this.targetPreview().actors:this.ready().includes(selected?.id)||this.available(selected?.id)?[selected]:[];
+    for(const pointer of pointers){
       const height=this.getCursorHeight?.(pointer.id);
       if(Number.isFinite(height)){
         const [x,y]=(positions??battleActorPositions(this.snapshot.actors))[pointer.id]??[0,0],id=pointer.side==='enemy'?'fight_cursor2':'fight_cursor1',a=this.manifest.assets[id];

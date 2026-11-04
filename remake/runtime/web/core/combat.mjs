@@ -321,6 +321,25 @@ export class BattleController {
     if(skill.battle_handler==='native-revival')return this.state.actors.filter(actor=>actor.side===caster.side&&revivalTargetEligibility(actor,skill).available).map(actor=>actor.id);
     return this.state.actors.filter(actor=>actor.side!==caster.side&&actor.hp.current>0&&actor.state_raw<4&&!actor.escaped&&this.reactionTargetAvailability(skill,actor).available).map(actor=>actor.id);
   }
+  commandTargetPreview({skillId=null,instanceId=null,targetId=null}={}) {
+    let group=false,ids=[];
+    if(instanceId!==null){
+      const item=this.state?.inventory?.find(item=>item.instance_id===instanceId),definition=this.itemData?.definitions[String(item?.id)];
+      group=Boolean(definition?.battle?.all_targets_raw_156);ids=this.itemTargetIds(instanceId);
+    }else if(skillId!==null){
+      const skill=this.skills?.[skillId];
+      if(skill?.battle_handler==='combination'){
+        const members=this.commandSkills(skill);if(!members.length||members.some(member=>!member))return {group:false,target_ids:[]};
+        const previews=members.map(member=>this.commandTargetPreview({skillId:member.id,targetId}));
+        const selected=new Set(previews.flatMap(preview=>preview.target_ids));
+        return {group:previews.some(preview=>preview.group),target_ids:this.state.actors.filter(actor=>selected.has(actor.id)).map(actor=>actor.id)};
+      }
+      // CHR +24 is the effective single/all flag, including configured skills.
+      group=Boolean(parseInt(skill?.fixed_raw_hex?.slice(0x48,0x4a),16));ids=this.targetIdsForSkill(skillId);
+      if(group)ids=ids.filter(id=>!this.actor(id).immune_raw);
+    }
+    return {group,target_ids:group?ids:ids.filter(id=>id===targetId)};
+  }
   canCommand(id=this.state?.player_id) {
     if(this.hasLifecycle('entry'))return false;
     const actor=this.state&&this.actor(id),scheduler=this.state?.scheduler;
