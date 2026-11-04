@@ -1265,6 +1265,10 @@
         {
           "index": 8,
           "handler": "keyed-chest"
+        },
+        {
+          "index": 9,
+          "handler": "keyed-chest"
         }
       ]
     },
@@ -1688,6 +1692,10 @@
         {
           "index": 13,
           "handler": "tlk-object"
+        },
+        {
+          "index": 14,
+          "handler": "keyed-chest"
         }
       ]
     },
@@ -1720,6 +1728,10 @@
       "npcs": [],
       "objects": [
         {
+          "index": 7,
+          "handler": "keyed-chest"
+        },
+        {
           "index": 8,
           "handler": "keyed-chest"
         },
@@ -1734,6 +1746,14 @@
         {
           "index": 11,
           "handler": "keyed-chest"
+        },
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 13,
+          "handler": "keyed-chest"
         }
       ]
     },
@@ -1745,6 +1765,18 @@
       "objects": [
         {
           "index": 12,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 13,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 14,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 15,
           "handler": "keyed-chest"
         },
         {
@@ -1766,6 +1798,22 @@
         {
           "index": 8,
           "handler": "keyed-chest"
+        },
+        {
+          "index": 9,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 10,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 11,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 12,
+          "handler": "keyed-chest"
         }
       ]
     },
@@ -1779,7 +1827,19 @@
           "handler": "keyed-chest"
         },
         {
+          "index": 8,
+          "handler": "keyed-chest"
+        },
+        {
           "index": 9,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 10,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 11,
           "handler": "keyed-chest"
         }
       ],
@@ -1833,11 +1893,23 @@
           "handler": "keyed-chest"
         },
         {
+          "index": 20,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 21,
+          "handler": "keyed-chest"
+        },
+        {
           "index": 22,
           "handler": "keyed-chest"
         },
         {
           "index": 23,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 24,
           "handler": "keyed-chest"
         }
       ]
@@ -1859,6 +1931,14 @@
         {
           "index": 21,
           "handler": "keyed-chest"
+        },
+        {
+          "index": 22,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 23,
+          "handler": "keyed-chest"
         }
       ]
     },
@@ -1875,6 +1955,14 @@
         {
           "index": 20,
           "handler": "keyed-chest"
+        },
+        {
+          "index": 21,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 22,
+          "handler": "keyed-chest"
         }
       ]
     },
@@ -1889,6 +1977,14 @@
         {
           "index": 23,
           "handler": "stationary-chest"
+        },
+        {
+          "index": 24,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 25,
+          "handler": "keyed-chest"
         },
         {
           "index": 26,
@@ -2276,61 +2372,121 @@
       "npcs": [],
       "export": {
         "story": false
-      }
+      },
+      "objects": [
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ]
     },
     "M72020-0-G": {
       "npcs": [],
       "export": {
         "story": false
-      }
+      },
+      "objects": [
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ]
     },
     "M72020-0-J": {
       "npcs": [],
       "export": {
         "story": false
-      }
+      },
+      "objects": [
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ]
     },
     "M72020-0-L": {
       "npcs": [],
       "export": {
         "story": false
-      }
+      },
+      "objects": [
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ]
     },
     "M72020-0-S": {
       "npcs": [],
       "export": {
         "story": false
-      }
+      },
+      "objects": [
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ]
     },
     "M72020-1-1": {
       "npcs": [],
       "export": {
         "story": false
-      }
+      },
+      "objects": [
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ]
     },
     "M72020-1-E": {
       "npcs": [],
       "export": {
         "story": false
-      }
+      },
+      "objects": [
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ]
     },
     "M72020-1-M": {
       "npcs": [],
       "export": {
         "story": false
-      }
+      },
+      "objects": [
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ]
     },
     "M72020-1-U": {
       "npcs": [],
       "export": {
         "story": false
-      }
+      },
+      "objects": [
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ]
     },
     "M72020-1-X": {
       "npcs": [],
       "export": {
         "story": false
-      }
+      },
+      "objects": [
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ]
     },
     "M72030-0-6": {
       "npcs": [],
@@ -2366,13 +2522,25 @@
       "npcs": [],
       "export": {
         "story": false
-      }
+      },
+      "objects": [
+        {
+          "index": 13,
+          "handler": "keyed-chest"
+        }
+      ]
     },
     "M72040-0-4": {
       "npcs": [],
       "export": {
         "story": false
-      }
+      },
+      "objects": [
+        {
+          "index": 20,
+          "handler": "keyed-chest"
+        }
+      ]
     },
     "M72040-0-7": {
       "npcs": [],
@@ -2405,19 +2573,37 @@
       "npcs": [],
       "export": {
         "story": false
-      }
+      },
+      "objects": [
+        {
+          "index": 20,
+          "handler": "keyed-chest"
+        }
+      ]
     },
     "M72040-0-R": {
       "npcs": [],
       "export": {
         "story": false
-      }
+      },
+      "objects": [
+        {
+          "index": 20,
+          "handler": "keyed-chest"
+        }
+      ]
     },
     "M72040-1-5": {
       "npcs": [],
       "export": {
         "story": false
-      }
+      },
+      "objects": [
+        {
+          "index": 18,
+          "handler": "keyed-chest"
+        }
+      ]
     },
     "M72040-1-P": {
       "npcs": [],
@@ -2432,7 +2618,13 @@
       "npcs": [],
       "export": {
         "story": false
-      }
+      },
+      "objects": [
+        {
+          "index": 18,
+          "handler": "keyed-chest"
+        }
+      ]
     },
     "M72040-1-V": {
       "npcs": [],
@@ -2447,7 +2639,13 @@
       "npcs": [],
       "export": {
         "story": false
-      }
+      },
+      "objects": [
+        {
+          "index": 18,
+          "handler": "keyed-chest"
+        }
+      ]
     },
     "M72040-1-Z": {
       "npcs": [],
@@ -2474,6 +2672,32 @@
         1,
         2,
         30
+      ],
+      "objects": [
+        {
+          "index": 0,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 1,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 2,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 3,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 4,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 5,
+          "handler": "keyed-chest"
+        }
       ]
     },
     "M72062": {
@@ -2762,6 +2986,12 @@
       "npcs": [],
       "triggers": [
         3
+      ],
+      "objects": [
+        {
+          "index": 9,
+          "handler": "keyed-chest"
+        }
       ]
     },
     "M55010": {
@@ -4088,6 +4318,12 @@
       ],
       "triggers": [
         32
+      ],
+      "objects": [
+        {
+          "index": 18,
+          "handler": "keyed-chest"
+        }
       ]
     },
     "ELF-FOREST-F": {
@@ -4100,7 +4336,13 @@
       "npcs": [],
       "export": {
         "story": false
-      }
+      },
+      "objects": [
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ]
     },
     "ELF-FOREST-H": {
       "npcs": [],
@@ -4138,7 +4380,13 @@
       "npcs": [],
       "export": {
         "story": false
-      }
+      },
+      "objects": [
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ]
     },
     "ELF-FOREST-M": {
       "npcs": [],
@@ -4162,7 +4410,13 @@
       "npcs": [],
       "export": {
         "story": false
-      }
+      },
+      "objects": [
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ]
     },
     "ELF-FOREST-T": {
       "npcs": [],
@@ -4174,7 +4428,13 @@
       "npcs": [],
       "export": {
         "story": false
-      }
+      },
+      "objects": [
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ]
     },
     "ELF-FOREST-V": {
       "npcs": [
@@ -4182,6 +4442,12 @@
       ],
       "triggers": [
         32
+      ],
+      "objects": [
+        {
+          "index": 18,
+          "handler": "keyed-chest"
+        }
       ]
     }
   },

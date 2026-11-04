@@ -72,6 +72,7 @@ test('Wind chest holds its final image while the longer actor action finishes, t
   const native=nativeChestAnimation(row.animation,4),duration=native.action.interval_raw*native.frameIndices.length;
   const lastImage=row.animation.frames[native.frameIndices.at(-1)].image;
   for(const cancel of [false,true]){
+    clock.update(0);
     world.replace(initial);const before=world.snapshot();
     const task=controller.playStory(playback=>runner.runObject({mapId:row.map_id,objectIndex:row.object.index,playback}));
     for(let i=0;i<20&&clock.tasks.size<2;i++)await Promise.resolve();

@@ -43,6 +43,22 @@ function setup({fixture:chestFixture=fixture,key=false,state=0,animation=async()
   return {world,runner,data,content,run};
 }
 
+test('Every reward or scripted chest in an admitted map has its source handler registered',()=>{
+  const story=read('../web/data/chapter_story.json'),missing=[];
+  for(const [mapId,binding]of Object.entries(runtimeContent.maps)){
+    for(const object of story.maps[mapId].objects){
+      const raw=Buffer.from(object.raw_hex,'hex');
+      if(![3,4].includes(raw[0xcf]))continue;
+      const scripted=raw.readUInt32LE(0xf6)!==0;
+      const rewards=Array.from({length:10},(_,slot)=>raw.readInt32LE(0x54+slot*4));
+      if(!scripted&&!rewards.some(Boolean))continue;
+      const handler=scripted?'stationary-chest':'keyed-chest';
+      if(!binding.objects.some(row=>row.index===object.index&&row.handler===handler))missing.push(`${mapId}:${object.index}:${handler}`);
+    }
+  }
+  assert.deepEqual(missing,[],'source chests must not depend on players reporting missing interactions');
+});
+
 testSource('All thirteen outer White Forest chests retain source hashes, F2 keys and ten-slot reward IDs',()=>{
   assert.equal(source.chests.length,13);
   const expected=[[335,159],[333,353],[336,127],[332,156],[335,354],[334,158],[334,271],[335,159],[333,354],[334,271],[332,156],[337,161],[335,338]];
@@ -53,6 +69,38 @@ testSource('All thirteen outer White Forest chests retain source hashes, F2 keys
     const raw=Buffer.from(row.object.raw_hex,'hex');raw.writeUInt32LE(999,0x48);
     assert.deepEqual(nativeKeyedChest({...row.object,raw_hex:raw.toString('hex')}),chest,'+48 is a rebuilt queue ordinal');
     initializeChapterItem(items.definitions[chest.rewards[0].id]);
+  }
+});
+
+testSource('Registered direct chests across all admitted maps retain their native key and award every source reward once',async()=>{
+  const story=read('../web/data/chapter_story.json'),resources=read('../web/data/chapter_map_resources.json');
+  for(const [mapId,binding]of Object.entries(runtimeContent.maps)){
+    const selected=binding.objects.filter(row=>row.handler==='keyed-chest');
+    if(!selected.length)continue;
+    const table=story.maps[mapId],dat=fs.readFileSync(new URL(`../../../${table.map_source.path}`,import.meta.url));
+    for(const {index}of selected){
+      const object=table.objects.find(row=>row.index===index),label=`${mapId}:${index}`;
+      assert.equal(dat.subarray(object.source.offset,object.source.offset+0x112).toString('hex'),object.raw_hex,label);
+      const chest=nativeKeyedChest(object),animation=resources.object_animations[mapId].find(row=>row.object_index_zero_based===index);
+      nativeChestAnimation(animation,object.behavior_raw_cf);
+      let plays=0;
+      const context=setup({fixture:{map_id:mapId,map_flag_index:table.map_flag_index,map_source:table.map_source,object},
+        animation:async({draft})=>{plays++;assert.equal(chapterObjectState(draft,mapId,index,context.data),2,label);}});
+      if(chest.keyId){
+        const locked=context.world.snapshot();assert.equal((await context.run()).locked,true,label);
+        assert.deepEqual(context.world.snapshot(),locked,label);assert.equal(plays,0,label);
+        context.world.transact(draft=>draft.inventory.push(item(chest.keyId)));
+      }
+      const before=context.world.snapshot(),result=await context.run();
+      assert.deepEqual(result.rewards,chest.rewards,label);assert.equal(result.state,3,label);assert.equal(plays,1,label);
+      for(const id of new Set(chest.rewards.map(row=>row.id))){
+        const quantity=world=>world.inventory.filter(row=>row.id===id).reduce((sum,row)=>sum+row.quantity,0);
+        assert.equal(quantity(context.world.value),quantity(before)+chest.rewards.filter(row=>row.id===id).length,label);
+      }
+      if(chest.keyId)assert.deepEqual(context.world.value.inventory.find(row=>row.id===chest.keyId),before.inventory.find(row=>row.id===chest.keyId),label);
+      const completed=context.world.snapshot();assert.equal((await context.run()).already_done,true,label);
+      assert.deepEqual(context.world.snapshot(),completed,label);assert.equal(plays,1,label);
+    }
   }
 });
 

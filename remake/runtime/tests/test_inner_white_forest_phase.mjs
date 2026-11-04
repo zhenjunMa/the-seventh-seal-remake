@@ -64,7 +64,8 @@ test('source014 chest retains its seventeenth logical wait and hides its missing
   }}}};
   const story=createStoryController({state,actions:{image:async path=>{requested.push(path);return {path};}},$:()=>({}),canvas:{}});
   const {runner}=innerWhiteForestRunner(source,world,{objectAnimation:story.animateChapterObject});
-  assert.equal(map.objectBitmap(scene,object),object.bitmap);await runner.runObject({mapId:'M70071',objectIndex:12});
+  assert.equal(map.objectBitmap(scene,object),object.bitmap);
+  await story.playStory(playback=>runner.runObject({mapId:'M70071',objectIndex:12,playback}));
   assert.equal(requested.length,16);assert.equal(frames[0].path,resource.frames[1].image);
   assert.equal(frames[15].path,resource.frames[16].image);assert.equal(state.objectPreview,null);
   assert.equal(map.objectBitmap(scene,object),null);assert.deepEqual(queue().map(row=>row.key),['leader']);

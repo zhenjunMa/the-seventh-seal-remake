@@ -47,8 +47,12 @@ export async function innerWhiteForestSealComplete(source,{checkpoint=async()=>{
   const materialIds=[];
   const collectChest=async(mapId,objectIndex)=>{
     const object=source.story.maps[mapId].objects.find(row=>row.index===objectIndex),chest=nativeKeyedChest(object);
-    const owned=chest.rewards.map(row=>quantity(world,row.id));
-    await runner.runObject({mapId,objectIndex});await restore(world);
+    const owned=chest.rewards.map(row=>quantity(world,row.id)),before=world.snapshot();
+    const result=await runner.runObject({mapId,objectIndex});
+    // This route has earned the fire key; newly admitted elemental chests
+    // remain locked until their own keys are obtained.
+    if(result.locked){assert.deepEqual(world.snapshot(),before);return;}
+    await restore(world);
     for(const [j,reward]of chest.rewards.entries()){
       assert.equal(quantity(world,reward.id),owned[j]+1);
       if(![295,296,297].includes(reward.id))materialIds.push(reward.id);

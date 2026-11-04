@@ -144,7 +144,9 @@ export async function windRegionComplete(source,{world,checkpoint=async()=>{},ba
   route('M19040','M19030-1','M19030','M73014');
   const sealedChest=nativeKeyedChest(source.story.maps.M73014.objects.find(row=>row.index===9));
   assert.equal(sealedChest.keyId,333);assert.equal(canOpenNativeChest(world.value,sealedChest),false);
-  assert.equal(storyBindings('M73014',source.content).objects.some(row=>row.index===9),false,'Wind-key chest stays outside this acquisition phase');
+  assert.equal(storyBindings('M73014',source.content).objects.some(row=>row.index===9),true);
+  const lockedChest=world.snapshot();assert.equal((await runner.runObject({mapId:'M73014',objectIndex:9})).locked,true);
+  assert.deepEqual(world.snapshot(),lockedChest,'The admitted wind chest still requires its unearned key');
   const beforeUnderground=world.snapshot();assert.deepEqual((await runner.runTrigger({mapId:'M73014',triggerId:3})).traversed,[34]);
   assert.deepEqual(world.snapshot(),{...beforeUnderground,revision:beforeUnderground.revision+1});
   route('M73012-01','M73011-02','M73012-03','M73011-04','M73012-05','M73011-06','M73012-07','M73011-08','M73012-09','M73011-10');

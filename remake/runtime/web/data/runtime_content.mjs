@@ -1266,6 +1266,10 @@ export const definition = {
         {
           "index": 8,
           "handler": "keyed-chest"
+        },
+        {
+          "index": 9,
+          "handler": "keyed-chest"
         }
       ]
     },
@@ -1689,6 +1693,10 @@ export const definition = {
         {
           "index": 13,
           "handler": "tlk-object"
+        },
+        {
+          "index": 14,
+          "handler": "keyed-chest"
         }
       ]
     },
@@ -1721,6 +1729,10 @@ export const definition = {
       "npcs": [],
       "objects": [
         {
+          "index": 7,
+          "handler": "keyed-chest"
+        },
+        {
           "index": 8,
           "handler": "keyed-chest"
         },
@@ -1735,6 +1747,14 @@ export const definition = {
         {
           "index": 11,
           "handler": "keyed-chest"
+        },
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 13,
+          "handler": "keyed-chest"
         }
       ]
     },
@@ -1746,6 +1766,18 @@ export const definition = {
       "objects": [
         {
           "index": 12,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 13,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 14,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 15,
           "handler": "keyed-chest"
         },
         {
@@ -1767,6 +1799,22 @@ export const definition = {
         {
           "index": 8,
           "handler": "keyed-chest"
+        },
+        {
+          "index": 9,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 10,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 11,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 12,
+          "handler": "keyed-chest"
         }
       ]
     },
@@ -1780,7 +1828,19 @@ export const definition = {
           "handler": "keyed-chest"
         },
         {
+          "index": 8,
+          "handler": "keyed-chest"
+        },
+        {
           "index": 9,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 10,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 11,
           "handler": "keyed-chest"
         }
       ],
@@ -1834,11 +1894,23 @@ export const definition = {
           "handler": "keyed-chest"
         },
         {
+          "index": 20,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 21,
+          "handler": "keyed-chest"
+        },
+        {
           "index": 22,
           "handler": "keyed-chest"
         },
         {
           "index": 23,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 24,
           "handler": "keyed-chest"
         }
       ]
@@ -1860,6 +1932,14 @@ export const definition = {
         {
           "index": 21,
           "handler": "keyed-chest"
+        },
+        {
+          "index": 22,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 23,
+          "handler": "keyed-chest"
         }
       ]
     },
@@ -1876,6 +1956,14 @@ export const definition = {
         {
           "index": 20,
           "handler": "keyed-chest"
+        },
+        {
+          "index": 21,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 22,
+          "handler": "keyed-chest"
         }
       ]
     },
@@ -1890,6 +1978,14 @@ export const definition = {
         {
           "index": 23,
           "handler": "stationary-chest"
+        },
+        {
+          "index": 24,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 25,
+          "handler": "keyed-chest"
         },
         {
           "index": 26,
@@ -2277,61 +2373,121 @@ export const definition = {
       "npcs": [],
       "export": {
         "story": false
-      }
+      },
+      "objects": [
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ]
     },
     "M72020-0-G": {
       "npcs": [],
       "export": {
         "story": false
-      }
+      },
+      "objects": [
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ]
     },
     "M72020-0-J": {
       "npcs": [],
       "export": {
         "story": false
-      }
+      },
+      "objects": [
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ]
     },
     "M72020-0-L": {
       "npcs": [],
       "export": {
         "story": false
-      }
+      },
+      "objects": [
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ]
     },
     "M72020-0-S": {
       "npcs": [],
       "export": {
         "story": false
-      }
+      },
+      "objects": [
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ]
     },
     "M72020-1-1": {
       "npcs": [],
       "export": {
         "story": false
-      }
+      },
+      "objects": [
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ]
     },
     "M72020-1-E": {
       "npcs": [],
       "export": {
         "story": false
-      }
+      },
+      "objects": [
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ]
     },
     "M72020-1-M": {
       "npcs": [],
       "export": {
         "story": false
-      }
+      },
+      "objects": [
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ]
     },
     "M72020-1-U": {
       "npcs": [],
       "export": {
         "story": false
-      }
+      },
+      "objects": [
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ]
     },
     "M72020-1-X": {
       "npcs": [],
       "export": {
         "story": false
-      }
+      },
+      "objects": [
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ]
     },
     "M72030-0-6": {
       "npcs": [],
@@ -2367,13 +2523,25 @@ export const definition = {
       "npcs": [],
       "export": {
         "story": false
-      }
+      },
+      "objects": [
+        {
+          "index": 13,
+          "handler": "keyed-chest"
+        }
+      ]
     },
     "M72040-0-4": {
       "npcs": [],
       "export": {
         "story": false
-      }
+      },
+      "objects": [
+        {
+          "index": 20,
+          "handler": "keyed-chest"
+        }
+      ]
     },
     "M72040-0-7": {
       "npcs": [],
@@ -2406,19 +2574,37 @@ export const definition = {
       "npcs": [],
       "export": {
         "story": false
-      }
+      },
+      "objects": [
+        {
+          "index": 20,
+          "handler": "keyed-chest"
+        }
+      ]
     },
     "M72040-0-R": {
       "npcs": [],
       "export": {
         "story": false
-      }
+      },
+      "objects": [
+        {
+          "index": 20,
+          "handler": "keyed-chest"
+        }
+      ]
     },
     "M72040-1-5": {
       "npcs": [],
       "export": {
         "story": false
-      }
+      },
+      "objects": [
+        {
+          "index": 18,
+          "handler": "keyed-chest"
+        }
+      ]
     },
     "M72040-1-P": {
       "npcs": [],
@@ -2433,7 +2619,13 @@ export const definition = {
       "npcs": [],
       "export": {
         "story": false
-      }
+      },
+      "objects": [
+        {
+          "index": 18,
+          "handler": "keyed-chest"
+        }
+      ]
     },
     "M72040-1-V": {
       "npcs": [],
@@ -2448,7 +2640,13 @@ export const definition = {
       "npcs": [],
       "export": {
         "story": false
-      }
+      },
+      "objects": [
+        {
+          "index": 18,
+          "handler": "keyed-chest"
+        }
+      ]
     },
     "M72040-1-Z": {
       "npcs": [],
@@ -2475,6 +2673,32 @@ export const definition = {
         1,
         2,
         30
+      ],
+      "objects": [
+        {
+          "index": 0,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 1,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 2,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 3,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 4,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 5,
+          "handler": "keyed-chest"
+        }
       ]
     },
     "M72062": {
@@ -2763,6 +2987,12 @@ export const definition = {
       "npcs": [],
       "triggers": [
         3
+      ],
+      "objects": [
+        {
+          "index": 9,
+          "handler": "keyed-chest"
+        }
       ]
     },
     "M55010": {
@@ -4089,6 +4319,12 @@ export const definition = {
       ],
       "triggers": [
         32
+      ],
+      "objects": [
+        {
+          "index": 18,
+          "handler": "keyed-chest"
+        }
       ]
     },
     "ELF-FOREST-F": {
@@ -4101,7 +4337,13 @@ export const definition = {
       "npcs": [],
       "export": {
         "story": false
-      }
+      },
+      "objects": [
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ]
     },
     "ELF-FOREST-H": {
       "npcs": [],
@@ -4139,7 +4381,13 @@ export const definition = {
       "npcs": [],
       "export": {
         "story": false
-      }
+      },
+      "objects": [
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ]
     },
     "ELF-FOREST-M": {
       "npcs": [],
@@ -4163,7 +4411,13 @@ export const definition = {
       "npcs": [],
       "export": {
         "story": false
-      }
+      },
+      "objects": [
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ]
     },
     "ELF-FOREST-T": {
       "npcs": [],
@@ -4175,7 +4429,13 @@ export const definition = {
       "npcs": [],
       "export": {
         "story": false
-      }
+      },
+      "objects": [
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ]
     },
     "ELF-FOREST-V": {
       "npcs": [
@@ -4183,6 +4443,12 @@ export const definition = {
       ],
       "triggers": [
         32
+      ],
+      "objects": [
+        {
+          "index": 18,
+          "handler": "keyed-chest"
+        }
       ]
     }
   },
@@ -6375,6 +6641,10 @@ export default {
         {
           "index": 8,
           "handler": "keyed-chest"
+        },
+        {
+          "index": 9,
+          "handler": "keyed-chest"
         }
       ],
       "rests": [],
@@ -6970,6 +7240,10 @@ export default {
         {
           "index": 13,
           "handler": "tlk-object"
+        },
+        {
+          "index": 14,
+          "handler": "keyed-chest"
         }
       ],
       "rests": [],
@@ -7008,6 +7282,10 @@ export default {
       "triggers": [],
       "objects": [
         {
+          "index": 7,
+          "handler": "keyed-chest"
+        },
+        {
           "index": 8,
           "handler": "keyed-chest"
         },
@@ -7022,6 +7300,14 @@ export default {
         {
           "index": 11,
           "handler": "keyed-chest"
+        },
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 13,
+          "handler": "keyed-chest"
         }
       ],
       "rests": [],
@@ -7035,6 +7321,18 @@ export default {
       "objects": [
         {
           "index": 12,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 13,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 14,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 15,
           "handler": "keyed-chest"
         },
         {
@@ -7058,6 +7356,22 @@ export default {
         {
           "index": 8,
           "handler": "keyed-chest"
+        },
+        {
+          "index": 9,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 10,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 11,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 12,
+          "handler": "keyed-chest"
         }
       ],
       "rests": [],
@@ -7076,7 +7390,19 @@ export default {
           "handler": "keyed-chest"
         },
         {
+          "index": 8,
+          "handler": "keyed-chest"
+        },
+        {
           "index": 9,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 10,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 11,
           "handler": "keyed-chest"
         }
       ],
@@ -7154,11 +7480,23 @@ export default {
           "handler": "keyed-chest"
         },
         {
+          "index": 20,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 21,
+          "handler": "keyed-chest"
+        },
+        {
           "index": 22,
           "handler": "keyed-chest"
         },
         {
           "index": 23,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 24,
           "handler": "keyed-chest"
         }
       ],
@@ -7184,6 +7522,14 @@ export default {
         {
           "index": 21,
           "handler": "keyed-chest"
+        },
+        {
+          "index": 22,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 23,
+          "handler": "keyed-chest"
         }
       ],
       "rests": [],
@@ -7204,6 +7550,14 @@ export default {
         {
           "index": 20,
           "handler": "keyed-chest"
+        },
+        {
+          "index": 21,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 22,
+          "handler": "keyed-chest"
         }
       ],
       "rests": [],
@@ -7220,6 +7574,14 @@ export default {
         {
           "index": 23,
           "handler": "stationary-chest"
+        },
+        {
+          "index": 24,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 25,
+          "handler": "keyed-chest"
         },
         {
           "index": 26,
@@ -7891,7 +8253,12 @@ export default {
     "M72020-0-2": {
       "path": "data/maps/m72020-0-2.json",
       "triggers": [],
-      "objects": [],
+      "objects": [
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ],
       "rests": [],
       "routes": [],
       "npcs": [],
@@ -7900,7 +8267,12 @@ export default {
     "M72020-0-G": {
       "path": "data/maps/m72020-0-g.json",
       "triggers": [],
-      "objects": [],
+      "objects": [
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ],
       "rests": [],
       "routes": [],
       "npcs": [],
@@ -7909,7 +8281,12 @@ export default {
     "M72020-0-J": {
       "path": "data/maps/m72020-0-j.json",
       "triggers": [],
-      "objects": [],
+      "objects": [
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ],
       "rests": [],
       "routes": [],
       "npcs": [],
@@ -7918,7 +8295,12 @@ export default {
     "M72020-0-L": {
       "path": "data/maps/m72020-0-l.json",
       "triggers": [],
-      "objects": [],
+      "objects": [
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ],
       "rests": [],
       "routes": [],
       "npcs": [],
@@ -7927,7 +8309,12 @@ export default {
     "M72020-0-S": {
       "path": "data/maps/m72020-0-s.json",
       "triggers": [],
-      "objects": [],
+      "objects": [
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ],
       "rests": [],
       "routes": [],
       "npcs": [],
@@ -7936,7 +8323,12 @@ export default {
     "M72020-1-1": {
       "path": "data/maps/m72020-1-1.json",
       "triggers": [],
-      "objects": [],
+      "objects": [
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ],
       "rests": [],
       "routes": [],
       "npcs": [],
@@ -7945,7 +8337,12 @@ export default {
     "M72020-1-E": {
       "path": "data/maps/m72020-1-e.json",
       "triggers": [],
-      "objects": [],
+      "objects": [
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ],
       "rests": [],
       "routes": [],
       "npcs": [],
@@ -7954,7 +8351,12 @@ export default {
     "M72020-1-M": {
       "path": "data/maps/m72020-1-m.json",
       "triggers": [],
-      "objects": [],
+      "objects": [
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ],
       "rests": [],
       "routes": [],
       "npcs": [],
@@ -7963,7 +8365,12 @@ export default {
     "M72020-1-U": {
       "path": "data/maps/m72020-1-u.json",
       "triggers": [],
-      "objects": [],
+      "objects": [
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ],
       "rests": [],
       "routes": [],
       "npcs": [],
@@ -7972,7 +8379,12 @@ export default {
     "M72020-1-X": {
       "path": "data/maps/m72020-1-x.json",
       "triggers": [],
-      "objects": [],
+      "objects": [
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ],
       "rests": [],
       "routes": [],
       "npcs": [],
@@ -8026,7 +8438,12 @@ export default {
     "M72030-1-T": {
       "path": "data/maps/m72030-1-t.json",
       "triggers": [],
-      "objects": [],
+      "objects": [
+        {
+          "index": 13,
+          "handler": "keyed-chest"
+        }
+      ],
       "rests": [],
       "routes": [],
       "npcs": [],
@@ -8035,7 +8452,12 @@ export default {
     "M72040-0-4": {
       "path": "data/maps/m72040-0-4.json",
       "triggers": [],
-      "objects": [],
+      "objects": [
+        {
+          "index": 20,
+          "handler": "keyed-chest"
+        }
+      ],
       "rests": [],
       "routes": [],
       "npcs": [],
@@ -8086,7 +8508,12 @@ export default {
     "M72040-0-I": {
       "path": "data/maps/m72040-0-i.json",
       "triggers": [],
-      "objects": [],
+      "objects": [
+        {
+          "index": 20,
+          "handler": "keyed-chest"
+        }
+      ],
       "rests": [],
       "routes": [],
       "npcs": [],
@@ -8095,7 +8522,12 @@ export default {
     "M72040-0-R": {
       "path": "data/maps/m72040-0-r.json",
       "triggers": [],
-      "objects": [],
+      "objects": [
+        {
+          "index": 20,
+          "handler": "keyed-chest"
+        }
+      ],
       "rests": [],
       "routes": [],
       "npcs": [],
@@ -8104,7 +8536,12 @@ export default {
     "M72040-1-5": {
       "path": "data/maps/m72040-1-5.json",
       "triggers": [],
-      "objects": [],
+      "objects": [
+        {
+          "index": 18,
+          "handler": "keyed-chest"
+        }
+      ],
       "rests": [],
       "routes": [],
       "npcs": [],
@@ -8127,7 +8564,12 @@ export default {
     "M72040-1-Q": {
       "path": "data/maps/m72040-1-q.json",
       "triggers": [],
-      "objects": [],
+      "objects": [
+        {
+          "index": 18,
+          "handler": "keyed-chest"
+        }
+      ],
       "rests": [],
       "routes": [],
       "npcs": [],
@@ -8150,7 +8592,12 @@ export default {
     "M72040-1-W": {
       "path": "data/maps/m72040-1-w.json",
       "triggers": [],
-      "objects": [],
+      "objects": [
+        {
+          "index": 18,
+          "handler": "keyed-chest"
+        }
+      ],
       "rests": [],
       "routes": [],
       "npcs": [],
@@ -8190,7 +8637,32 @@ export default {
         2,
         30
       ],
-      "objects": [],
+      "objects": [
+        {
+          "index": 0,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 1,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 2,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 3,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 4,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 5,
+          "handler": "keyed-chest"
+        }
+      ],
       "rests": [],
       "routes": [],
       "npcs": [
@@ -8633,7 +9105,12 @@ export default {
       "triggers": [
         3
       ],
-      "objects": [],
+      "objects": [
+        {
+          "index": 9,
+          "handler": "keyed-chest"
+        }
+      ],
       "rests": [],
       "routes": [],
       "npcs": [],
@@ -10250,7 +10727,12 @@ export default {
       "triggers": [
         32
       ],
-      "objects": [],
+      "objects": [
+        {
+          "index": 18,
+          "handler": "keyed-chest"
+        }
+      ],
       "rests": [],
       "routes": [],
       "npcs": [
@@ -10270,7 +10752,12 @@ export default {
     "ELF-FOREST-G": {
       "path": "data/maps/elf-forest-g.json",
       "triggers": [],
-      "objects": [],
+      "objects": [
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ],
       "rests": [],
       "routes": [],
       "npcs": [],
@@ -10324,7 +10811,12 @@ export default {
     "ELF-FOREST-L": {
       "path": "data/maps/elf-forest-l.json",
       "triggers": [],
-      "objects": [],
+      "objects": [
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ],
       "rests": [],
       "routes": [],
       "npcs": [],
@@ -10360,7 +10852,12 @@ export default {
     "ELF-FOREST-S": {
       "path": "data/maps/elf-forest-s.json",
       "triggers": [],
-      "objects": [],
+      "objects": [
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ],
       "rests": [],
       "routes": [],
       "npcs": [],
@@ -10378,7 +10875,12 @@ export default {
     "ELF-FOREST-U": {
       "path": "data/maps/elf-forest-u.json",
       "triggers": [],
-      "objects": [],
+      "objects": [
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ],
       "rests": [],
       "routes": [],
       "npcs": [],
@@ -10389,7 +10891,12 @@ export default {
       "triggers": [
         32
       ],
-      "objects": [],
+      "objects": [
+        {
+          "index": 18,
+          "handler": "keyed-chest"
+        }
+      ],
       "rests": [],
       "routes": [],
       "npcs": [

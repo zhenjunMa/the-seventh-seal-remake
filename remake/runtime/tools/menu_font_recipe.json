@@ -134,7 +134,7 @@
   "text_sources": [
     {
       "path": "web/data/items.json",
-      "sha256": "164fbd6ad5406f2ebc0a16d4e81570d1273fbcc80bf0e5727b56e86468137949"
+      "sha256": "8d2b5f359e7e31e87147de9bbc3ebb2261ef436ff9c03c276fafc6eb3639f189"
     },
     {
       "path": "web/data/party_skills.json",
@@ -1210,7 +1210,7 @@
     },
     {
       "path": "web/data/operation_menu.json",
-      "sha256": "fba71d6f1d3c900ba09714302048503d89c748ca0f585911062bd635ab55ee3e"
+      "sha256": "a3c8d8d95a2cc319409c872197beb28a83442cac29602e8611b34cd4a4418462"
     },
     {
       "path": "web/data/operation_techniques.json",
@@ -1218,11 +1218,11 @@
     },
     {
       "path": "web/battle_menu_view.mjs",
-      "sha256": "edc82a43ff0d659d5e476d9b30cd586d0e32d8e24c3b2b1dc1d4cde18961caf6"
+      "sha256": "19da3780e6178310039ae538fc3017be14b267f7d040a6f21b89410530d65228"
     },
     {
       "path": "web/controllers/menu.mjs",
-      "sha256": "16e8da7d64c87c49634a2034076044b66bbe44136d0cfb73088601588eb5e988"
+      "sha256": "ad27193aa1f2770f66b846cae71ffc0c9231fccb9f2fa1faae8f4bda5f1ed73b"
     },
     {
       "path": "web/core/battle_asset_plan.mjs",
@@ -1242,7 +1242,7 @@
     },
     {
       "path": "web/core/battle_layout.mjs",
-      "sha256": "ea237968e325de2632222e0a9db5aa320d1998f4c74c7218999b3ff5782f8dec"
+      "sha256": "ec79f2e023b0d844d734987101d8e9b359854c99c1a2f8e36c2fcdc7a799c0f6"
     },
     {
       "path": "web/core/battle_reactions.mjs",
@@ -1250,7 +1250,7 @@
     },
     {
       "path": "web/core/battle_resources.mjs",
-      "sha256": "894b6f393c2fddeb16a38f856aa577d8c4324d4549261be1a5b52cd3c6a47c0d"
+      "sha256": "3bf40e8dffb2c4dab3188c7492dccad1e4c690de4190a581e46aadd4842204c6"
     },
     {
       "path": "web/core/battle_result.mjs",
@@ -1266,15 +1266,15 @@
     },
     {
       "path": "web/core/battle_scheduler.mjs",
-      "sha256": "3e686cd724e52d01db27b6f135a63d75fdb2a841ce88a4998d31c991047db44a"
+      "sha256": "32f3759db935505dc0aa3d4b552befb957823d2d647f3efb8e0a7cdeaf01a027"
     },
     {
       "path": "web/core/battle_skill_access.mjs",
-      "sha256": "2ce12179d93f574d1858b16c5520efcac737f07fcf7d741148d44f57c8ad20b3"
+      "sha256": "5bd820b021b3390e62d978411799e970b3f91381bb3f4cec418e7c9278ed40d2"
     },
     {
       "path": "web/core/battle_skill_growth.mjs",
-      "sha256": "c7f2bf5ab5c9cb5153304f99475d73148ef65015ba23258d909e8ea5846906b0"
+      "sha256": "08aeb49987bd018c9c1a9e21b02967817aae92fa1a94d2a17b3195ec3e4c4d77"
     },
     {
       "path": "web/core/battle_status.mjs",
@@ -1290,11 +1290,11 @@
     },
     {
       "path": "web/core/battle_vertical.mjs",
-      "sha256": "94f4c2fdd3bcdb156099f111c1cddad5c716877439a89f6a7ace26e3e8b0277b"
+      "sha256": "13e9df88db3c1daf74ddffe027b10f23af97192d0a6aa3901a5f299d446ab50e"
     },
     {
       "path": "web/core/combat.mjs",
-      "sha256": "49042522092a21b31f7547199d0ea8e8fa4b596ef7ebde0cd251eaf75b5d954a"
+      "sha256": "8f27bc8947a324d69ff7230905e98ae7ededc7fb2acab3662b7ccc5c39a4806b"
     },
     {
       "path": "web/core/combat_rules.mjs",
@@ -1330,7 +1330,7 @@
     },
     {
       "path": "web/core/operation_menu.mjs",
-      "sha256": "94d8bcac30041339012633937f7928df72b68d0d9d8b40e20053e39f80b11b30"
+      "sha256": "6b8a5cff9224216aadad9cb4516ee21fad03aaf1b4d776ea9777f93acdce733b"
     },
     {
       "path": "web/operation_equipment_view.mjs",
@@ -1342,7 +1342,7 @@
     },
     {
       "path": "web/operation_menu_view.mjs",
-      "sha256": "f6e92227bdc817cafe66dfb66b1fa73d918e04591a3b7dc8c9b1d1a4072177ba"
+      "sha256": "0ac18679b7c3ad66c3412b5cf23a555ebda0b4cc2338f14d3d2d7da9284c99ed"
     },
     {
       "path": "web/operation_system_view.mjs",
@@ -1350,7 +1350,7 @@
     },
     {
       "path": "web/operation_technique_view.mjs",
-      "sha256": "f0a1b733da6b7abc810506ba0c1a2af63ef2bc6758298feaacaf4b277ba9915a"
+      "sha256": "c76b5fadeb38c9494af2bf57c06f118d3f1cd00eb2337d0dbd56a6837c66c153"
     },
     {
       "path": "web/operation_weapon_view.mjs",
