@@ -1,0 +1,26 @@
+remake/runtime/web/battle_menu_view.mjs
+  s_d5ade6f47f205d::t_a2c41ca7236c4c 33,42,64-73,82,85,90,133,135-136,144-145,152
+  s_d5ade6f47f205d::t_5f3b58532dafb8 140
+remake/runtime/tests/test_battle_menu_navigation.mjs
+  s_d5ade6f47f205d::t_a2c41ca7236c4c 15
+remake/assessment/validation_design.md
+  s_d5ade6f47f205d::t_a3e0362de37f44 25
+remake/runtime/architecture.md
+  s_d5ade6f47f205d::t_e24744644de971 108-109
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "a9648541a95ad1739db4a9b15064132ea5d142df",
+  "prompts": {},
+  "sessions": {
+    "s_d5ade6f47f205d": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a490-502e-73d3-8a03-5a7a30d6d70c",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
