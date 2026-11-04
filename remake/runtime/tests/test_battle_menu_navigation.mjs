@@ -12,7 +12,7 @@ const native=JSON.parse(readFileSync(new URL('./fixtures/battle_wheel_native.jso
 
 function fixture(){
   const cues=[],view=Object.create(BattleMenuView.prototype);
-  Object.assign(view,{stage:'wheel',focusIndex:0,epoch:0,root:{dataset:{}},onStage(){},memory:new Map(),snapshot:{player_id:'001'},cue:name=>cues.push(name)});
+  Object.assign(view,{stage:'wheel',focusIndex:0,epoch:0,root:{dataset:{}},info:{textContent:''},onStage(){},memory:new Map(),snapshot:{player_id:'001'},cue:name=>cues.push(name)});
   view.wheelButtons=names.map((_,index)=>{
     const {rect}=wheel.widgets.find(widget=>widget.name===String(index+1).padStart(3,'0'));
     return {hidden:false,style:{left:(490+rect.left)+'px',top:(340+rect.top)+'px',width:(rect.right-rect.left+1)+'px',height:(rect.bottom-rect.top+1)+'px'},
