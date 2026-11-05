@@ -12,7 +12,7 @@ import {createPartyActors} from '../web/core/party/party_attributes.mjs';
 import {useWorldItem,changeEquipment,usableItems} from '../web/core/items/items.mjs';
 import {initializeNativeStatuses,applyNativeSkillStatus,tickNativeStatuses} from '../web/core/battle/battle_status.mjs';
 import {compileNativeSequence,directSequence} from '../web/core/battle/skill_sequence.mjs';
-import {BattleLifecyclePlayback} from '../web/battle_lifecycle_view.mjs';
+import {BattleLifecyclePlayback} from '../web/core/battle/battle_lifecycle.mjs';
 import {beginNativeCameraPan,advanceNativeCameraPan} from '../web/core/battle/battle_camera.mjs';
 import {previewMovement} from '../web/core/exploration/encounters.mjs';
 import {BattleController} from '../web/core/battle/battle_controller.mjs';

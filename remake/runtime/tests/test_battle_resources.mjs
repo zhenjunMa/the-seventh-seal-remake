@@ -81,3 +81,27 @@ test('prepared BattleView switches actor sets without re-reading metadata or loa
     assert.ok(effectPaths(id).every(path=>selectedPaths().has(path)),`${id} is restored for its actual caster`);
   }
 });
+
+
+test('different stages share immutable definitions and compiled lifecycle tables while sessions stay independent',async()=>{
+ const reads=[];
+ const jsonLoader=async path=>{reads.push(path);return JSON.parse(await readFile(new URL('../web'+path,import.meta.url),'utf8'));};
+ const make=stage=>new BattleView({canvas:{getContext:()=>({})},jsonLoader,assetLoader:async asset=>({width:asset.width,height:asset.height}),
+  metadataPath:'/data/party_battle_view.json',itemMetadataPath:'/data/item_presentation.json',
+  lifecycleMetadataPath:'/data/battle_lifecycle.json',stageMetadataPath:`/data/stages/${stage}.json`});
+ const first=make('stage01'),second=make('stage02');
+ try{
+  const options={actors:[{id:'001'},{id:'enemy-0',resource_id:'012'}],skills:{},inventory:[],staged:true};
+  await Promise.all([first.prepare(options),second.prepare(options)]);
+  assert.equal(reads.filter(path=>path==='/data/party_battle_view.json').length,1);
+  assert.equal(first.definition,second.definition);assert.equal(first.meta,second.meta);
+  assert.equal(first.lifecycle.roles,second.lifecycle.roles);
+  assert.notEqual(first.stageMeta,second.stageMeta);assert.notEqual(first.lifecycle.channels,second.lifecycle.channels);
+  assert.notEqual(first.playbackRuntime,second.playbackRuntime);assert.notEqual(first.resourceScopes,second.resourceScopes);
+  assert.ok(Object.isFrozen(first.meta.roles[0].actions[0]));
+  assert.throws(()=>first.alternateLayers.set('invalid',{}),TypeError);
+  assert.throws(()=>first.lifecycle.roles.clear(),TypeError);
+  assert.throws(()=>{first.meta.roles[0].actions[0].frame_count++;},TypeError);
+  first.stop();assert.equal(second.ready,true);assert.equal(second.resourceScopes.size,1);
+ }finally{first.destroy();second.destroy();}
+});

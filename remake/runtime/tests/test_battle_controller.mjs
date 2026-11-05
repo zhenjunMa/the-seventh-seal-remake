@@ -143,3 +143,18 @@ test('natural battle return stores its RNG, restores exploration and cannot subm
   await controller.returnFromBattle();
   assert.equal(finished,1);
 });
+
+
+test('presentation advancement acknowledges lifecycle completion without requiring HUD painting',async()=>{
+ const state={scenes:{phase:'battle-charging'}},nodes=new Map();
+ const $=id=>{if(!nodes.has(id))nodes.set(id,{dataset:{}});return nodes.get(id);};
+ const controller=createBattleController({state,actions:{},$,canvas:{}}),events=[];
+ const battle={presentationSnapshot:()=>({phase:'charging'}),ackLifecycle:event=>events.push(event.token)};
+ const completed=[{token:'entry',actor_id:'001',life_epoch:0}];
+ controller.runtime.battle=battle;
+ controller.runtime.battleView={advance:()=>events.push('advance'),drainLifecycleCompleted:()=>completed.splice(0),lifecycleSnapshot:()=>({}),actorPositions:()=>({})};
+ controller.runtime.battleMenu={draw(){events.push('paint');},paintTo(){}};
+ controller.drawBattleInterface(0);await Promise.resolve();assert.deepEqual(events,['paint']);
+ controller.advanceBattlePresentation(0);await Promise.resolve();assert.deepEqual(events,['paint','advance','entry']);
+ controller.drawBattleInterface(0);await Promise.resolve();assert.deepEqual(events,['paint','advance','entry','paint']);
+});

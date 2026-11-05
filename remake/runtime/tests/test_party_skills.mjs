@@ -261,7 +261,7 @@ test('actual BattleView loads every party atlas/layer and presents all admitted 
   const pending=v.playSequence({actor_id:skill.actor_id,target_id:'enemy-0',skill_id:skill.id,plan:directSequence(skill)},
    {onRecord(step){records.push(step.chr_record_index);},onContact:s=>{contacts.push(s);return {hit:true,damage:1,remainingHp:700};}});
   const compiled=compileNativeSequence(meta,skill.actor_id,directSequence(skill),banks),independent=compiled.independent_carriers;
-  v.draw({actors},0);let frame=0;while(v.run||v.detachedRuns.length){assert.ok(++frame<(independent?1000:20));v.draw({actors},frame*(independent?80:10000));}
+  v.present({actors},0);let frame=0;while(v.run||v.detachedRuns.length){assert.ok(++frame<(independent?1000:20));v.present({actors},frame*(independent?80:10000));}
   const absentRecords=new Set(compiled.steps.filter(step=>step.missing_effect).map(step=>step.chr_record_index));
   const expectedContacts=skill.actions.filter(action=>action.contact_u32_raw_0x49!==0&&!absentRecords.has(action.index)).length;
   const result=await pending;assert.equal(result.contact_count,result.observations.contacts.length);assert.ok(result.contact_count<=contacts.length);assert.equal(contacts.length,expectedContacts);
@@ -281,11 +281,11 @@ test('fire casting preserves source record order, draws target fire before conta
  const pending=v.playSequence({actor_id:'001',target_id:'enemy-0',skill_id:'yancui',plan:directSequence(skill)},
   {onRecord:s=>records.push(s.chr_record_index),onPrimaryEnd:()=>{ended=true;},onContact:s=>{
    contacts.push(s);return {hit:true,damage:300,remainingHp:400,killer_frame_factor:2};}});
- v.draw({actors},0);v.draw({actors},850);
+ v.present({actors},0);v.present({actors},850);
  assert.equal(contacts.length,0);assert.ok(draws.some(d=>d.path.includes('/m01Awz02/')),'source visual command appears before settlement');
- v.draw({actors},1235);assert.equal(contacts.length,1);assert.equal(contacts[0].carrier_source_frame,6);
- v.draw({actors},1900);assert.equal(ended,true);assert.ok(v.run,'independent source visual still plays after carrier completion');
- v.draw({actors},10000);const completed=await pending;
+ v.present({actors},1235);assert.equal(contacts.length,1);assert.equal(contacts[0].carrier_source_frame,6);
+ v.present({actors},1900);assert.equal(ended,true);assert.ok(v.run,'independent source visual still plays after carrier completion');
+ v.present({actors},10000);const completed=await pending;
  assert.deepEqual(records,[0,1,2,3,4,5,6,7,8]);assert.equal(completed.contact_count,1);
  assert.ok(completed.observations.effect_ids.includes('m01Awz02'));assert.ok(completed.observations.effect_ids.includes('BFr01_Nm'));
  assert.throws(()=>compileNativeSequence(meta,'001',{...directSequence(skill),records:[{...directSequence(skill).records[0],raw_hex:'0102000000'+directSequence(skill).records[0].raw_hex.slice(10)}]},banks),/类型命令未支持/);
@@ -302,8 +302,8 @@ test('a periodic response retires future source contacts before a slow RAF catch
  let contacts=0,ended=false;
  const pending=v.playSequence({actor_id:'001',target_id:'enemy-0',skill_id:'yancui',plan:directSequence(party.skills.yancui)},
   {onRecord(){},onContact(){contacts++;return {hit:true,damage:1};},onPrimaryEnd(){ended=true;}});
- v.draw({actors,lifecycle_events:[]},0);
- v.draw({actors,lifecycle_events:[{token:'periodic-1',actor_id:'001',life_epoch:0,kind:'response',source_skill_index:1}]},10000);
+ v.present({actors,lifecycle_events:[]},0);
+ v.present({actors,lifecycle_events:[{token:'periodic-1',actor_id:'001',life_epoch:0,kind:'response',source_skill_index:1}]},10000);
  const result=await pending;assert.equal(result.interrupted,true);assert.equal(contacts,0);assert.equal(result.contact_count,0);assert.equal(ended,false);
  v.destroy();
 });

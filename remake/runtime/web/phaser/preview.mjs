@@ -92,7 +92,7 @@ function report(){return {engine:runtime.snapshot(),mode,error:lastError,
   resources:view?{...view.resourceSnapshot(),textures:runtime.battle.surface.textures.snapshot()}:null,
   battle:battle?{phase:battle.state.phase,contacts:battle.state.history.filter(h=>h.impact).length,
     hp:battle.state.actors.map(a=>({id:a.id,hp:a.hp.current,mp:a.mp.current}))}:null};}
-function drawBattle(now){view.draw(battle.presentationSnapshot(),now);runtime.battle.surface.endFrame();}
+function drawBattle(now){view.present(battle.presentationSnapshot(),now);runtime.battle.surface.endFrame();}
 function drawMovementOverlay(){
   const overlay=$('movementOverlay'),c=overlay.getContext('2d');c.clearRect(0,0,640,480);
   if(mode!=='exploration')return;

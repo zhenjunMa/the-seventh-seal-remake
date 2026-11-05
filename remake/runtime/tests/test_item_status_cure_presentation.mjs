@@ -32,8 +32,8 @@ test('actual cure effect plays all19 native80ms frames after ID17 even when508BB
     const running=view.playItem({action_id:`cure-${used}-${requested}`,actor_id:'001',target_id:'002',item_id:272,skill_id:'item:272'},
       {onUse:()=>{contacts++;return {hit:true,damage:0,item_used:used,item_effect:requested,native_return:Number(used),...(!requested?{skipped:'item-target-unavailable'}:{})};},
         onFrame:step=>actorFrames.push(step.logical_frame),onEffectFrame:step=>effectFrames.push(step.logical_frame)});
-    view.draw({phase:'action',actors},0);view.draw({phase:'action',actors},1699);assert.equal(contacts,0);
-    view.draw({phase:'action',actors},1700);assert.equal(contacts,1);view.draw({phase:'action',actors},1900);view.draw({phase:'action',actors},4000);
+    view.present({phase:'action',actors},0);view.present({phase:'action',actors},1699);assert.equal(contacts,0);
+    view.present({phase:'action',actors},1700);assert.equal(contacts,1);view.present({phase:'action',actors},1900);view.present({phase:'action',actors},4000);
     const result=await running;assert.equal(contacts,1);assert.equal(result.contact_count,1);assert.deepEqual(actorFrames,Array.from({length:18},(_,index)=>index));
     assert.deepEqual(effectFrames,requested?Array.from({length:19},(_,index)=>index):[]);
     assert.equal(result.observations.effect_ids.includes('_iReSTfz'),requested);assert.equal(view.damageTexts.length,0,'medicine failure does not invent damage0 text');

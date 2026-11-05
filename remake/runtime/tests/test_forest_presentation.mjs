@@ -44,35 +44,35 @@ test('Xuanyingzhan binds 36 source pairs, nine intrinsic frames and one source32
 });
 test('actual renderer draws Xuanying main/intrinsic together and target fire only at source contact',async()=>{
  const {view,target}=await fixture();let impacts=0;const done=view.playAction(result(),{onImpact:()=>impacts++});
- view.draw(snapshot,0);view.draw(snapshot,1104);assert.equal(impacts,0);
+ view.present(snapshot,0);view.present(snapshot,1104);assert.equal(impacts,0);
  assert.ok(!target.calls.some(c=>c.path.includes('BFr01_Nd')));
- target.calls.length=0;view.draw(snapshot,1105);
+ target.calls.length=0;view.present(snapshot,1105);
  const main=target.calls.find(c=>c.path.endsWith('frame_0326_main.png')),intrinsic=target.calls.find(c=>c.path.endsWith('frame_0326_intrinsic.png'));
  assert.ok(main&&intrinsic);assert.deepEqual(main.coordinates,intrinsic.coordinates);assert.equal(intrinsic.blend,'lighter');
  assert.ok(target.calls.some(c=>c.path.includes('BFr01_Nd')&&c.blend==='lighter'));assert.equal(impacts,1);
- view.draw(snapshot,2600);await done;assert.equal(impacts,1);
+ view.present(snapshot,2600);await done;assert.equal(impacts,1);
 });
 test('miss suppresses target fire while Xuanying actor intrinsic still renders',async()=>{
  const {view,target}=await fixture();const done=view.playAction(result('001','enemy-1','yanci',false),{onImpact(){}});
- view.draw(snapshot,0);view.draw(snapshot,1105);
+ view.present(snapshot,0);view.present(snapshot,1105);
  assert.ok(target.calls.some(c=>c.path.endsWith('frame_0326_intrinsic.png')));
- assert.ok(!target.calls.some(c=>c.path.includes('BFr01_Nd')));view.draw(snapshot,2600);await done;
+ assert.ok(!target.calls.some(c=>c.path.includes('BFr01_Nd')));view.present(snapshot,2600);await done;
 });
 test('hunter approaches player in both axes, attacks in front and returns to own slot',async()=>{
  const {view,target}=await fixture();let impacts=0;const done=view.playAction(result('enemy-1','001','hunter1'),{onImpact:()=>impacts++});
- view.draw(snapshot,0);target.calls.length=0;view.draw(snapshot,1105);
+ view.present(snapshot,0);target.calls.length=0;view.present(snapshot,1105);
  const hunter=meta.roles.find(r=>r.id==='013'),attack=target.calls.find(c=>c.path.includes('/013/action_18'));
  assert.deepEqual(position(attack,hunter),[572.8,351.15]);assert.equal(impacts,1);
  assert.ok(target.calls.some(c=>c.path.includes('_DutyEg'))); // source record2 actor event remains active
- target.calls.length=0;view.draw(snapshot,2015);
+ target.calls.length=0;view.present(snapshot,2015);
  const returned=target.calls.find(c=>c.path.includes('/013/action_10'));
- assert.deepEqual(position(returned,hunter),[385,287.5]);view.draw(snapshot,2470);await done;
+ assert.deepEqual(position(returned,hunter),[385,287.5]);view.present(snapshot,2470);await done;
 });
 test('player approaches the selected living hunter row rather than a fixed x-only offset',async()=>{
  const {view,target}=await fixture();const done=view.playAction(result('001','enemy-2'),{onImpact(){}});
- view.draw(snapshot,0);target.calls.length=0;view.draw(snapshot,1105);
+ view.present(snapshot,0);target.calls.length=0;view.present(snapshot,1105);
  const player=meta.roles.find(r=>r.id==='001'),main=target.calls.find(c=>c.path.endsWith('frame_0326_main.png'));
- assert.deepEqual(position(main,player),[387.2,413.65]);view.draw(snapshot,2600);await done;
+ assert.deepEqual(position(main,player),[387.2,413.65]);view.present(snapshot,2600);await done;
 });
 test('Xuanying layer asset failure leaves no ready command or partial impact',async()=>{
  const target=canvas(),view=new BattleView({canvas:target,content,metadataPath:'/data/forest_battle_view.json',jsonLoader:async p=>clone(p==='/data/battle_ui.json'?ui:p.includes('forest_battle_view')?meta:p.includes('xuanying')?xuanying:yantu),assetLoader:async a=>{if(a.path.includes('xuanying/frame_0326_intrinsic'))throw Error('missing intrinsic');return assets(a);}});
@@ -82,13 +82,13 @@ test('Xuanying layer asset failure leaves no ready command or partial impact',as
 });
 test('slow RAF visits Xuanying source event once and cancelled frames never replay it',async()=>{
  const {view}=await fixture();let impacts=0;const done=view.playAction(result(),{onImpact:()=>impacts++});
- view.draw(snapshot,0);view.draw(snapshot,2400);assert.equal(impacts,1);view.draw(snapshot,2600);await done;assert.equal(impacts,1);
+ view.present(snapshot,0);view.present(snapshot,2400);assert.equal(impacts,1);view.present(snapshot,2600);await done;assert.equal(impacts,1);
  const second=view.playAction(result(),{onImpact:()=>impacts++});const aborted=assert.rejects(second,{name:'AbortError'});
- view.draw(snapshot,3000);view.stop();await aborted;view.draw(snapshot,8000);assert.equal(impacts,1);
+ view.present(snapshot,3000);view.stop();await aborted;view.present(snapshot,8000);assert.equal(impacts,1);
 });
 test('same signed movement records also place eagle at selected target with one retained contact',async()=>{
  const {view,target}=await fixture();view.setRoster([{id:'001',side:'player'},{id:'eagle',side:'enemy',resource_id:'011'}],{yantu:skills.yantu,yanci:skills.yanci,claw:{id:'claw',actor_id:'eagle'}});
- const done=view.playAction(result('eagle','001','claw'),{onImpact(){}});view.draw(snapshot,0);target.calls.length=0;
- view.draw(snapshot,1040);const eagle=meta.roles.find(r=>r.id==='011'),attack=target.calls.find(c=>c.path.includes('/011/action_14'));
- assert.deepEqual(position(attack,eagle),[572.8,351.15]);view.draw(snapshot,4000);await done;
+ const done=view.playAction(result('eagle','001','claw'),{onImpact(){}});view.present(snapshot,0);target.calls.length=0;
+ view.present(snapshot,1040);const eagle=meta.roles.find(r=>r.id==='011'),attack=target.calls.find(c=>c.path.includes('/011/action_14'));
+ assert.deepEqual(position(attack,eagle),[572.8,351.15]);view.present(snapshot,4000);await done;
 });

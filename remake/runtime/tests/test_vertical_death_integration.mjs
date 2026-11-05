@@ -6,7 +6,7 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {BattleController} from '../web/core/battle/battle_controller.mjs';
 import {BattleView,mergeNativeActionAtlases} from '../web/battle_view.mjs';
-import {BattleLifecyclePlayback} from '../web/battle_lifecycle_view.mjs';
+import {BattleLifecyclePlayback} from '../web/core/battle/battle_lifecycle.mjs';
 import {initializeScheduler} from '../web/core/battle/battle_scheduler.mjs';
 import {initializeNativeStatuses,applyNativeSkillStatus} from '../web/core/battle/battle_status.mjs';
 import {applyContactReaction} from '../web/core/battle/battle_reactions.mjs';
@@ -41,7 +41,7 @@ function fixture({player='001',enemy='032',victim=player,seed=173}={}){
   view.lifecycle=new BattleLifecyclePlayback(lifecycle,{nativeBridge:id=>view._nativeBridge(id)});
   const heldDeaths=[];
   const frame=(at,{holdDeath=false}={})=>{
-    clock=at;core.advanceClock(at);view.draw(core.presentationSnapshot(),at);
+    clock=at;core.advanceClock(at);view.present(core.presentationSnapshot(),at);
     for(const completed of view.drainLifecycleCompleted()){
       const event=core.state.lifecycle_events.find(event=>event.token===completed.token);
       if(holdDeath&&event?.kind==='death')heldDeaths.push(completed);else core.ackLifecycle(completed);
@@ -138,7 +138,7 @@ test('repeated real airborne hit responses replace one actor clock, and cancelli
   // Reuse that very view, including its lifecycle object, for a new native ID5.
   fresh.view.lifecycle.nativeBridge=id=>old.view._nativeBridge(id);
   old.view.lifecycle=fresh.view.lifecycle;fresh.launch();
-  old.view.draw(fresh.core.presentationSnapshot(),0);old.view._advance(20);
+  old.view.present(fresh.core.presentationSnapshot(),0);old.view._advance(20);
   assert.equal(fresh.target.native_z_raw,-8,'011 uses its own source ascent, not the player height80 curve');assert.equal(fresh.core.verticalClocks.size,1);
   assert.deepEqual(old.target,snapshot);
 });

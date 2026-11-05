@@ -63,6 +63,8 @@ import {
   applyBattleSettlement,
 } from './settlement.mjs';
 
+import {retainDefinition} from '../content/immutable_definition.mjs';
+
 const copy = (value) => structuredClone(value);
 // 41BFB0 can request category4 death at rawHP0 while linked equipment keeps
 // effective/display HP positive. 4FFE90 and 519DD0 advance death through5/7;
@@ -356,7 +358,7 @@ export class BattleController {
       test_mode,
     };
     if (this.itemData) this.state.inventory = copy(this.world.value.inventory);
-    this.schedulerData = scheduler_data ? copy(scheduler_data) : null;
+    this.schedulerData = scheduler_data ? retainDefinition(scheduler_data) : null;
     if (this.schedulerData) {
       this.chargeClock = this.now();
       this.state.scheduler = initializeScheduler(next, this.schedulerData, side_priority, this.chargeClock);
@@ -379,10 +381,10 @@ export class BattleController {
       actor.native_x_raw = actor.native_home_x_raw = positions[actor.id][0] - 320;
       actor.native_y_raw = actor.native_home_y_raw = positions[actor.id][1] - 80;
     }
-    this.nativeAiData = enemy_ai_data ? copy(enemy_ai_data) : null;
+    this.nativeAiData = enemy_ai_data ? retainDefinition(enemy_ai_data) : null;
     this.enemySkillTables = enemy_skill_tables ? copy(enemy_skill_tables) : null;
     this.completeContacts = complete_contacts;
-    this.rewardData = !test_mode && reward_data ? copy(reward_data) : null;
+    this.rewardData = !test_mode && reward_data ? retainDefinition(reward_data) : null;
     this.rewardPlan = null;
     this.skillGrowthData = skill_data ? skillGrowthSource(skill_data) : null;
     this.skillPractice = {};

@@ -34,7 +34,7 @@ function assertBackgroundFirst(calls,actorCount){
 
 test('Screenshot regression: the first hunter in a three-player, two-enemy battle is above every scenery layer',async()=>{
   const {view,calls,snapshot}=await fixture(['013','012'],['001','002','003']);
-  view.draw(snapshot,0);
+  view.present(snapshot,0);
   assertBackgroundFirst(calls,5);
 });
 
@@ -44,7 +44,7 @@ test('All one-to-four enemy arrangements and one-to-three joined players stay ab
     groups=groups.flatMap(ids=>['011','012','013'].map(id=>[...ids,id]));
     for(const enemies of groups)for(let players=1;players<=3;players++){
       const snapshot=setActors(view,enemies,['001','002','003'].slice(0,players));
-      calls.length=0;view.draw(snapshot,0);assertBackgroundFirst(calls,enemies.length+players);cases++;
+      calls.length=0;view.present(snapshot,0);assertBackgroundFirst(calls,enemies.length+players);cases++;
     }
   }
   assert.equal(cases,360);
@@ -58,7 +58,7 @@ test('Hunter and the third party member remain above scenery throughout their ap
       {onRecord(){},onContact:()=>({hit:true,damage:1,remainingHp:999})});
     let frames=0;
     for(let now=0;view.run;now+=65){
-      assert.ok(++frames<2000);calls.length=0;view.draw(snapshot,now);assertBackgroundFirst(calls,5);
+      assert.ok(++frames<2000);calls.length=0;view.present(snapshot,now);assertBackgroundFirst(calls,5);
     }
     await done;assert.ok(frames>1);
   }
@@ -71,7 +71,7 @@ test('Both players approach the flying target in front of the ridge throughout s
       {onRecord(){},onContact:()=>({hit:true,damage:1,remainingHp:999})});
     let frames=0;
     for(let now=0;view.run;now+=65){
-      assert.ok(++frames<2000);calls.length=0;view.draw(snapshot,now);
+      assert.ok(++frames<2000);calls.length=0;view.present(snapshot,now);
       assertBackgroundFirst(calls,4);
       assert.ok(view._slots(view.run,true)[actor][1]>view._slots(view.run)[actor][1],'Ground shadows remain separate from visual altitude');
     }
@@ -89,7 +89,7 @@ test('Counter movement uses its own ground path while the parent flying action c
   const spritePositions=new Map(),originalSprite=view._sprite.bind(view);
   view._sprite=(role,action,frame,x,y,...rest)=>{spritePositions.set(role.id,[x,y]);return originalSprite(role,action,frame,x,y,...rest);};
   let frames=0;
-  for(let now=0;view.run;now+=65){assert.ok(++frames<2000);calls.length=0;view.draw(snapshot,now);
+  for(let now=0;view.run;now+=65){assert.ok(++frames<2000);calls.length=0;view.present(snapshot,now);
     assertBackgroundFirst(calls,4);
     const [x,y]=spritePositions.get('001'),position=view.actorPositions()['001'];
     assert.deepEqual(position,[(x-120)/1.125,y/1.125],'HUD follows the actual reaction-channel sprite');
@@ -103,7 +103,7 @@ test('HUD actor positions follow native altitude and the displayed resource afte
   view.roster.find(a=>a.id==='002').party_slot_zero_based=3;
   for(const z of [0,-45,-120,20]){
     snapshot.actors.find(a=>a.id==='002').native_z_raw=z;
-    view.draw(snapshot,0);
+    view.present(snapshot,0);
     assert.deepEqual(view.actorPositions()['002'],[590,290+z]);
     assert.equal(view.actorCursorHeight('002'),110);
     const positions=view.actorPositions();positions['002'][0]=0;

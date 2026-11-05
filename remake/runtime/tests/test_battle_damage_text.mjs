@@ -38,7 +38,7 @@ async function fixture(){
   const actors=[{id:'001',resource_id:'001',side:'player',hp:{current:1000,maximum:1000},alive:true},{id:'enemy-0',resource_id:'011',side:'enemy',hp:{current:1000,maximum:1000},alive:true}];
   view.setRoster(actors,{yantu:base.skills.yantu,eagle:{...copy(eagle),id:'eagle',actor_id:'enemy-0'}});
   let now=0;
-  const draw=at=>{now=at;calls.length=0;view.draw({actors},now);return copy(calls);};
+  const draw=at=>{now=at;calls.length=0;view.present({actors},now);return copy(calls);};
   const until=predicate=>{for(let frame=0;frame<500;frame++){if(predicate())return copy(calls);draw(now+65);}assert.fail('Source frame driver exceeded its action bound');};
   return {view,draw,until,get now(){return now;},finish:()=>until(()=>!view.run&&!view.detachedRuns.length)};
 }

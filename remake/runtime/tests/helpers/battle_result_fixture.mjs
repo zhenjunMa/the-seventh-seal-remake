@@ -42,10 +42,10 @@ export async function replayFixture(save,{commandLimit=35}={}){
   }});
   await view.prepare();view.setRoster(sample.actors,sample.skills);
   let clock=0,battle;const events=[],commands=[];
-  const frame=()=>{clock+=20;battle.advanceClock();view.draw(battle.presentationSnapshot(),clock);for(const row of view.drainLifecycleCompleted())battle.ackLifecycle(row);};
+  const frame=()=>{clock+=20;battle.advanceClock();view.present(battle.presentationSnapshot(),clock);for(const row of view.drainLifecycleCompleted())battle.ackLifecycle(row);};
   battle=new BattleController({world,resolveAction,applyDamage:applyNativeDamage,consumeResources:consumePartyMp,resourcesForWorld:partyResourcesForWorld,itemData:configured.items,
     now:()=>clock,waitTick:async()=>frame(),id:()=> 'independent-battle-result-20261020',log:event=>events.push(event),playAction:async()=>{throw new Error('Expected complete original source sequence');},
-    playSequence:async(event,hooks)=>{const pending=view.playSequence(event,hooks);view.draw(battle.presentationSnapshot(),clock);let ticks=0;
+    playSequence:async(event,hooks)=>{const pending=view.playSequence(event,hooks);view.present(battle.presentationSnapshot(),clock);let ticks=0;
       while(view.run){assert.ok(++ticks<20000,'Bounded source animation');frame();}return pending;}});
   const rng=createNativeRng(movement.state.rng_state);
   battle.start({...sample,lifecycle_enabled:true,rng,source:{...sample.source,rng_seed:movement.state.rng_state}});

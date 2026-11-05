@@ -58,23 +58,40 @@ export function createBattleController({host, sessions = createBattleSessions()}
     try{
       now=current().battleView?.resourceTime?.()??now;
       current().battle?.advanceClock(now);
-      current().battleView?.draw(current().battle?.presentationSnapshot(),now);drawBattleInterface(now);
+      const snapshot=current().battle?.presentationSnapshot();
+      advanceBattlePresentation(now,snapshot);
+      current().battleView?.draw(snapshot,now);drawBattleInterface(now);
     }catch(error){
       current().battlePresentationError=error.message;current().battleView?.stop(error.message);
       current().battle?.interrupt(error);actions.status(error.message,true);
     }
   }
+  function advanceBattlePresentation(now,snapshot=current().battle?.presentationSnapshot()){
+    const battle=current().battle;
+    current().battleView?.advance(snapshot,now);
+    const completed=current().battleView?.drainLifecycleCompleted()??[];
+    if(completed.length)queueMicrotask(()=>{
+      if(current().battle===battle)for(const event of completed)battle.ackLifecycle(event);
+    });
+  }
   function drawBattleInterface(now){if(current().battleMenu){current().battleMenu.draw(now,current().battleView?.actorPositions());current().battleMenu.paintTo(host.engine?.battle.surface.canvas??$('battleCanvas'));
     $('battleCommands').dataset.lifecycle=JSON.stringify(current().battleView?.lifecycleSnapshot());
-    const battle=current().battle,completed=current().battleView?.drainLifecycleCompleted()??[];
-    if(completed.length)queueMicrotask(()=>{if(current().battle===battle)for(const event of completed)battle.ackLifecycle(event);});
   }host.engine?.battle.surface.endFrame();}
+  function pruneViews(activeView){
+    const frame=current(),held=new Set([activeView,frame.battleView,
+      frame.scriptedBattleSession?.previous?.battleView,frame.skillTestSession?.previous?.battleView]);
+    for(const [key,view]of sessions.views){
+      if(sessions.views.size<=4)break;
+      if(held.has(view))continue;
+      view.destroy();sessions.views.delete(key);
+    }
+  }
   async function prepareView({mode,newParty,stagePath=null,lifecycle=false,actors,skills,inventory,onProgress,signal}){
     mode=`${mode}:${stagePath??''}`;
     if(!sessions.views.has(mode))sessions.views.set(mode,new BattleView({canvas:host.engine?.battle.surface.canvas??$('battleCanvas'),
       metadataPath:newParty?'/'+host.catalog.party_battle_view:stagePath?'/'+host.catalog.forest_battle_view:'/data/battle_view.json',
       itemMetadataPath:newParty?'/data/item_presentation.json':null,stageMetadataPath:stagePath,lifecycleMetadataPath:lifecycle?'/data/battle_lifecycle.json':null}));
-    const view=sessions.views.get(mode);
+    const view=sessions.views.get(mode);sessions.views.delete(mode);sessions.views.set(mode,view);
     view.onResourcesPrepared=images=>host.engine?.battle.surface.prepareImages?.(images);
     view.onResourceError=error=>actions.log({type:'battle-resource-prefetch-failed',error:error.message});
     const cancel=()=>view.cancelPreparation?.('战斗准备已取消');signal?.throwIfAborted();signal?.addEventListener('abort',cancel,{once:true});
@@ -82,7 +99,7 @@ export function createBattleController({host, sessions = createBattleSessions()}
       await view.prepare({actors,skills,inventory,staged:true,onProgress});
       if(view.images)await prepareEntryImages(view.entryLease?.images??view.images,signal);
       signal?.throwIfAborted();return view;
-    }finally{signal?.removeEventListener('abort',cancel);}
+    }finally{signal?.removeEventListener('abort',cancel);pruneViews(view);}
   }
   async function prepareEntryImages(images,signal){
     const surface=host.engine?.battle.surface;
@@ -166,8 +183,14 @@ export function createBattleController({host, sessions = createBattleSessions()}
   async function prepareBattleResources(mode,work){
     const started=performance.now();
     // Battle preparation never exposes the generic map loading artwork.
-    const result=await work(()=>{});
-    actions.log({type:'battle-resources-ready',mode,elapsed_ms:performance.now()-started,cache:battleResources.snapshot()});
+    const stages={};
+    const measure=async(name,prepare)=>{
+      const begin=performance.now();
+      try{return await prepare();}
+      finally{stages[name]=(stages[name]??0)+performance.now()-begin;}
+    };
+    const result=await work(()=>{},measure);
+    actions.log({type:'battle-resources-ready',mode,elapsed_ms:performance.now()-started,stages_ms:stages,cache:battleResources.snapshot()});
     return result;
   }
   async function revealBattle(before,start,transitionOptions={},isCurrent=()=>true){
@@ -200,10 +223,10 @@ export function createBattleController({host, sessions = createBattleSessions()}
     await revealBattle(before,async signal=>{
       let sample,rules,world=mapWorld;
       const newParty=!sampleMode;
-      await prepareBattleResources(testing?'skill-test':'battle',async progress=>{
-        const combatData=host.loadCombatData(signal);if(combatData)await combatData;
-        const [configured,loadedRules]=await playbackTask(Promise.all([
-          actions.readConfiguredData({sample:sampleMode}),testing?actions.json('data/skill_test.json'):null]),signal);
+      await prepareBattleResources(testing?'skill-test':'battle',async(progress,measure)=>{
+        const combatData=host.loadCombatData(signal);if(combatData)await measure('combat_input',()=>combatData);
+        const [configured,loadedRules]=await measure('configuration',()=>playbackTask(Promise.all([
+          actions.readConfiguredData({sample:sampleMode,shared:true}),testing?actions.json('data/skill_test.json'):null]),signal));
         signal?.throwIfAborted();rules=loadedRules;current().itemData=configured.items;
         if(!isCurrent()||mapWorld.value.revision!==revision)throw new Error('资源加载期间世界状态已变化');
         if(testing)world=new WorldStore(mapWorld.snapshot(),mapWorld.mapIds);
@@ -211,21 +234,21 @@ export function createBattleController({host, sessions = createBattleSessions()}
         progress({completed:10,total:100});
         const scheduler={...configured.scheduler,policy:{...configured.scheduler.policy,commands:'Frame-driven charging with per-player buffered commands; input continues during charging and hit reactions, confirmation locks until action completion, and dispatch waits for execution readiness.'},...(newParty?{idle_skills:{...configured.scheduler.idle_skills,...host.partySkills.idle_skills}}:{})};
         // Factories read the world synchronously and build isolated combat data.
-        sample=testing?createSkillTestSample(world.value,host.partyCombat,host.partySkills,configured,current().itemData,rules,host.partyReactions,host.statusData,host.menu.nameCharset)
+        sample=await measure('assembly',()=>testing?createSkillTestSample(world.value,host.partyCombat,host.partySkills,configured,current().itemData,rules,host.partyReactions,host.statusData,host.menu.nameCharset)
           :newParty?assembleForestSample(createPartySample(world.value,host.partyCombat,host.partySkills,configured,current().itemData,host.menu.nameCharset),configured.forest,group,scheduler,configured.ai,configured.rewards,host.partyReactions,host.statusData)
-          :group?createForestSample(world.value,configured.combat,configured.forest,group,null,scheduler,configured.ai,configured.rewards,host.reactionData,host.statusData):createBattleSample(world.value,configured.combat);
+          :group?createForestSample(world.value,configured.combat,configured.forest,group,null,scheduler,configured.ai,configured.rewards,host.reactionData,host.statusData):createBattleSample(world.value,configured.combat));
         if(!testing&&sample.actors.filter(actor=>actor.side==='player').every(actor=>actor.hp.current===0))throw new Error('队伍已经倒下，请载入进度后继续。');
         const mode=testing?'skill-test':newParty?'party':group?'forest':'sample',stagePath=testing?rules.stage.path:group?'/'+battleStage(group.stage).path:null;
-        const view=await playbackTask(prepareView({mode,newParty,stagePath,lifecycle:testing||Boolean(group),actors:sample.actors,skills:sample.skills,inventory:world.value.inventory,signal,
-          onProgress:p=>progress({completed:10+75*p.completed/p.total,total:100})}),signal);
+        const view=await measure('view_and_upload',()=>playbackTask(prepareView({mode,newParty,stagePath,lifecycle:testing||Boolean(group),actors:sample.actors,skills:sample.skills,inventory:world.value.inventory,signal,
+          onProgress:p=>progress({completed:10+75*p.completed/p.total,total:100})}),signal));
         signal?.throwIfAborted();
         if(!isCurrent())throw new Error('战斗准备会话已失效');
         current().battleView=view;if(testing)testSession.view=view;
         view.setRoster(sample.actors,sample.skills);current().battle=createCombat(world,newParty,view);
         if(testing)testSession.battle=current().battle;
         host.audio?.setScene({mapId:mapWorld.location.map_id,battle:true,stageId:testing?rules.stage.music_stage_id??'stage13.scn':group?.stage??null});
-        await prepareHud(newParty,{world,signal,returnLabel:testing?'返回技巧测试':null,
-          onProgress:p=>progress({completed:(p.stage==='result'?95:85)+5*p.completed/p.total,total:100})});
+        await measure('hud_and_upload',()=>prepareHud(newParty,{world,signal,returnLabel:testing?'返回技巧测试':null,
+          onProgress:p=>progress({completed:(p.stage==='result'?95:85)+5*p.completed/p.total,total:100})}));
         signal?.throwIfAborted();progress({completed:100,total:100});
       });
       signal?.throwIfAborted();
@@ -273,7 +296,7 @@ export function createBattleController({host, sessions = createBattleSessions()}
       before=host.battleTransition?captureTransition():null;
       host.setPhase('battle-loading');
       check();await host.loadCombatData(signal);check();
-      const configured=await playbackTask(actions.readConfiguredData(),signal);check();current().itemData=configured.items;
+      const configured=await playbackTask(actions.readConfiguredData({shared:true}),signal);check();current().itemData=configured.items;
       const scheduler={...configured.scheduler,idle_skills:{...configured.scheduler.idle_skills,...host.partySkills.idle_skills}};
       const sample=assembleForestSample(createPartySample(simulation.world.value,host.partyCombat,host.partySkills,configured,current().itemData,host.menu.nameCharset),
         configured.forest,group,scheduler,configured.ai,configured.rewards,host.partyReactions,host.statusData);
@@ -407,5 +430,5 @@ export function createBattleController({host, sessions = createBattleSessions()}
     for(const view of sessions.views.values())view.destroy();
     sessions.views.clear();
   }
-  return {updateBattle, startBattle, startScriptedBattle, startTechniqueTest, returnFromBattle, battleKey, battleKeyUp, drawBattleInterface,updateBattleFrame,disposeBattles,battleMenuState,chooseBattleItem,focusBattleMenu};
+  return {updateBattle, startBattle, startScriptedBattle, startTechniqueTest, returnFromBattle, battleKey, battleKeyUp, drawBattleInterface,advanceBattlePresentation,updateBattleFrame,disposeBattles,battleMenuState,chooseBattleItem,focusBattleMenu};
 }

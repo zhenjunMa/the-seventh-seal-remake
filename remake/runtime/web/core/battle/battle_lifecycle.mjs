@@ -4,8 +4,9 @@
  * Source: ev_6a97d55ce2cda38f5a9cacf245900414d96566b052c7e04fb96bac9a431a6764,
  * ev_e7ebc40b1eb0efaa9d96ff7f3e6fc290955d8807dff0dc831ad32c06ceb45a70.
  */
-import {DeathParticlePlayback,DEATH_PARTICLE_TIMING} from './death_particles.mjs';
-import {nativeEntryPath,advanceNativeEntryPath,nativeEntryOffset} from './core/battle/battle_entry.mjs';
+import {freezeDefinitionMap} from '../content/immutable_definition.mjs';
+import {DeathParticlePlayback,DEATH_PARTICLE_TIMING} from '../../death_particles.mjs';
+import {nativeEntryPath,advanceNativeEntryPath,nativeEntryOffset} from './battle_entry.mjs';
 const need=(ok,message)=>{if(!ok)throw new TypeError(message);};
 const copy=value=>structuredClone(value);
 const integer=(value,min=0)=>Number.isInteger(value)&&value>=min;
@@ -21,6 +22,7 @@ export const APPEARANCE_ALPHA_ADAPTER=Object.freeze({
 });
 // F66A is a disappearance MODE selected by rand()%7+1, despite the legacy
 // event field name fade_increment_raw. It is never an opacity speed.
+const compiledManifests=new WeakMap();
 export class BattleLifecyclePlayback {
   constructor(manifest,{appearanceBounds=null,appearanceEffect=null,disappearanceEffect=null,nativeBridge=null,onFrame=null,onControl=null}={}){
     this.onFrame=onFrame;
@@ -29,7 +31,8 @@ export class BattleLifecyclePlayback {
     this.disappearanceEffect=disappearanceEffect;
     this.appearanceEffect=appearanceEffect;
     need(appearanceBounds===null||typeof appearanceBounds==='function','Lifecycle appearance bounds provider invalid');this.appearanceBounds=appearanceBounds;
-    need(Array.isArray(manifest?.roles),'Lifecycle manifest roles missing');this.roles=new Map();
+    need(Array.isArray(manifest?.roles),'Lifecycle manifest roles missing');this.roles=Object.isFrozen(manifest)?compiledManifests.get(manifest):null;
+    if(!this.roles){this.roles=new Map();
     for(const role of manifest.roles){
       need(typeof role.id==='string'&&!this.roles.has(role.id)&&Array.isArray(role.skills),'Lifecycle role invalid');
       const skills=new Map();for(const skill of role.skills){
@@ -50,7 +53,9 @@ export class BattleLifecyclePlayback {
         });
         skills.set(skill.chr_skill_index,{index:skill.chr_skill_index,id:skill.skill_id_raw??skill.original_id_raw,timeline});
       }
-      this.roles.set(role.id,{side:role.side,skills,fadeClock:role.death_policy?.enemy_fade_fields?.clock_raw,frame_width:role.frame_width,frame_height:role.frame_height});
+      this.roles.set(role.id,{side:role.side,skills:Object.isFrozen(manifest)?freezeDefinitionMap(skills):skills,fadeClock:role.death_policy?.enemy_fade_fields?.clock_raw,frame_width:role.frame_width,frame_height:role.frame_height});
+    }
+    if(Object.isFrozen(manifest)){this.roles=freezeDefinitionMap(this.roles);compiledManifests.set(manifest,this.roles);}
     }
     this.reset();
   }

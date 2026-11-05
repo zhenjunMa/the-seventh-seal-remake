@@ -51,7 +51,7 @@ test('all 154 six-member commands execute through the production controller, nat
         const logs=[],playbacks=[];let clock=0,battle;
         const visualSkill=skill.actor_id==='001'&&[40,42].includes(skill.original_skill_index);
         probe=visualSkill?{path:metadata.effects.find(asset=>asset.id===(skill.original_skill_index===42?'_iReHP':'_m64spit')).main_sheet,frame:[],frames:[],beforeContact:[]}:null;
-        const draw=()=>{view.draw({actors:battle.state.actors},clock);if(probe&&probe.frame.length){probe.frames.push(clone(probe.frame));
+        const draw=()=>{view.present({actors:battle.state.actors},clock);if(probe&&probe.frame.length){probe.frames.push(clone(probe.frame));
           if(!battle.state.history.some(action=>action.skill_id===skill.id&&action.contacts.length))probe.beforeContact.push(clone(probe.frame));}};
         battle=new BattleController({world,id:()=>`all-party-${skill.id}`,now:()=>clock,waitTick:async()=>{clock+=80;},
           resolveAction,applyDamage:applyNativeDamage,resourcesForWorld:partyResourcesForWorld,consumeResources:consumePartyMp,log:event=>logs.push(event),
@@ -152,8 +152,8 @@ test('Source party, complete contact reactions, two-person rewards and re-entry 
   const battle=new BattleController({world,resolveAction,applyDamage:applyNativeDamage,resourcesForWorld:partyResourcesForWorld,consumeResources:consumePartyMp,
     id:()=> 'source-party-integration',now:()=>clock,waitTick:async()=>{clock+=20;},log:event=>events.push(event),playAction:async()=>{throw new Error('Complete source contact path expected');},
     playSequence:async(result,hooks)=>{
-      const pending=view.playSequence(result,hooks);view.draw({actors:battle.state.actors},clock);let frames=0;
-      while(view.run){assert.ok(++frames<20000,'Bounded source playback');clock+=20;battle.advanceClock();view.draw({actors:battle.state.actors},clock);}
+      const pending=view.playSequence(result,hooks);view.present({actors:battle.state.actors},clock);let frames=0;
+      while(view.run){assert.ok(++frames<20000,'Bounded source playback');clock+=20;battle.advanceClock();view.present({actors:battle.state.actors},clock);}
       return pending;
     }});
   battle.start({...sample,rng:createNativeRng(0x20261011)});

@@ -143,7 +143,7 @@ async function replay(victory){
    const action=battle.choose(skill,target);submitted++;pending.add(action);
    action.then(()=>pending.delete(action),cause=>{error=cause;pending.delete(action);});
   }
-  battle.advanceClock(now);view.draw(battle.presentationSnapshot(),now);
+  battle.advanceClock(now);view.present(battle.presentationSnapshot(),now);
   for(const event of view.drainLifecycleCompleted())battle.ackLifecycle(event);
   assert.notEqual(battle.state.phase,'interrupted',battle.state.error);
   if(['victory','defeat'].includes(battle.state.phase)&&!battle.running&&!pending.size)break;

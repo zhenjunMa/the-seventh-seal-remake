@@ -2,13 +2,8 @@
 import {createSkillRegistry,deriveSkillConfiguration,applyRegisteredSkillParameters,skillOwnerKey,validateSourceOnlySkillParameters} from './skill_registry.mjs';
 import {deriveItemConfiguration,compileItemConfiguration} from '../items/item_registry.mjs';
 import {expandParameterOverrides,compactParameterConfiguration} from './config_overrides.mjs';
+import {freezeDefinition} from '../content/immutable_definition.mjs';
 const copy=structuredClone;
-const freeze=value=>{
-  if(value&&typeof value==='object'&&!Object.isFrozen(value)){
-    Object.freeze(value);for(const child of Object.values(value))freeze(child);
-  }
-  return value;
-};
 const fail=(ok,message)=>{if(!ok)throw new Error(`运行配置：${message}`);};
 const object=v=>v!==null&&typeof v==='object'&&!Array.isArray(v);
 const canonical=v=>JSON.stringify(Array.isArray(v)?v.map(x=>JSON.parse(canonical(x))):object(v)?Object.fromEntries(Object.keys(v).sort().map(k=>[k,JSON.parse(canonical(v[k]))])):v);
@@ -184,7 +179,8 @@ export async function loadRuntimeConfiguration(readJson,manifestPath='data/confi
 
 // One private compiled baseline per game page. Formal play uses party growth
 // tables; a diagnostic sample can request its retained fixture explicitly.
-// Battles receive isolated copies; menus share a frozen, narrowly scoped view.
+// Runtime callers share read-only definitions. Explicit snapshots remain
+// isolated for editors/diagnostics; actors, inventory and RNG stay per battle.
 export function createRuntimeConfigurationSession(data,bundle,partyRewards){
   fail(partyRewards?.schema==='seventh-seal-party-rewards'&&partyRewards.version===1,'新游戏奖励来源缺失');
   for(const field of ['enemies','items'])
@@ -193,8 +189,12 @@ export function createRuntimeConfigurationSession(data,bundle,partyRewards){
     fail(partyRewards.source_hashes?.[path]===hash,`新游戏与历史样本的奖励来源指纹不同：${path}`);
   const compiled=compileRuntimeConfiguration(data,bundle);
   const nativeRewards={...copy(partyRewards),enemies:compiled.rewards.enemies,items:compiled.rewards.items};
-  const menu=freeze({items:compiled.items,party_skills:compiled.party_skills,skill_registry:compiled.skill_registry,audit:{mode:compiled.audit.mode}});
-  return {menu:()=>menu,snapshot({sample=false}={}){
+  const {equipment_admission,item_capability_admission,...catalog}=compiled.items.catalog??{};
+  const items=freezeDefinition({...compiled.items,catalog});
+  const menu=freezeDefinition({items,party_skills:compiled.party_skills,skill_registry:compiled.skill_registry,audit:{mode:compiled.audit.mode}});
+  const battle=freezeDefinition({...compiled,items,rewards:nativeRewards});
+  const sampleBattle=freezeDefinition({...compiled,items});
+  return {menu:()=>menu,battle:({sample=false}={})=>sample?sampleBattle:battle,snapshot({sample=false}={}){
     return copy({...compiled,rewards:sample?compiled.rewards:nativeRewards});
   }};
 }

@@ -42,7 +42,7 @@ async function fixture(airborne){
     const reaction=reactions.roles['001'].skills.find(skill=>skill.original_id_raw===5);
     Object.assign(target,{current_skill:copy(reaction),native_active:true});
     oldEvent=core.queueLifecycle(target,{kind:'response',skill:reaction,source_skill_index:reaction.original_skill_index});
-    view.draw(core.presentationSnapshot(),0);clock=20;view.draw(core.presentationSnapshot(),clock);assert.equal(target.native_z_raw,-40);
+    view.present(core.presentationSnapshot(),0);clock=20;view.present(core.presentationSnapshot(),clock);assert.equal(target.native_z_raw,-40);
     const down=reaction.actions.find(action=>{const raw=Buffer.from(action.raw_hex,'hex');return raw[0]===1&&raw.readUInt32LE(1)===3&&raw[0x47]===3;});
     core.beginNativeVertical('001',down.raw_hex,clock);
   }
@@ -59,7 +59,7 @@ async function fixture(airborne){
     responses.push(hooks.onContact(contact));assert.equal(rng.state,state);hooks.onPrimaryEnd(clock);return {completed:true};
   };
   return {core,view,target,caster,selected,draws,logs,responses,oldEvent,get clock(){return clock;},get rngState(){return rng.state;},
-    frame(){clock+=20;view.draw(core.presentationSnapshot(),clock);for(const completed of view.drainLifecycleCompleted())core.ackLifecycle(completed);}};
+    frame(){clock+=20;view.present(core.presentationSnapshot(),clock);for(const completed of view.drainLifecycleCompleted())core.ackLifecycle(completed);}};
 }
 
 test('normal choose00440 revives source001 rawHP0/display88 in category7 and airborne category4, preserving type14 RNG and native Z ownership',async()=>{

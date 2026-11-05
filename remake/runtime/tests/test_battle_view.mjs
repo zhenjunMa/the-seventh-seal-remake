@@ -88,15 +88,15 @@ contract('all actual PNG fingerprints and geometry complete before commands beco
 contract('exact +0x49 frame commits once and main/intrinsic share identical projection', async () => {
   const {view, target} = await viewFixture(), impacts = [];
   const done = view.playAction(playerAction(), {onImpact: detail => impacts.push(detail)});
-  view.draw(snapshot(), 0); view.draw(snapshot(), 974);
+  view.present(snapshot(), 0); view.present(snapshot(), 974);
   assert.equal(impacts.length, 0);
-  target.calls.length = 0; view.draw(snapshot(), 975);
+  target.calls.length = 0; view.present(snapshot(), 975);
   assert.equal(impacts.length, 1); assert.equal(impacts[0].source_frame, 338);
   const main = target.calls.find(call => call.path?.endsWith('frame_0338_main.png'));
   const intrinsic = target.calls.find(call => call.path?.endsWith('frame_0338_intrinsic.png'));
   assert.ok(main); assert.ok(intrinsic); assert.deepEqual(main.coordinates, intrinsic.coordinates);
   assert.equal(main.blend, 'source-over'); assert.equal(intrinsic.blend, 'lighter');
-  view.draw(snapshot(), 975); view.draw(snapshot(), 1500); view.draw(snapshot(), 2340);
+  view.present(snapshot(), 975); view.present(snapshot(), 1500); view.present(snapshot(), 2340);
   const end = await done;
   assert.equal(impacts.length, 1); assert.equal(end.impact_committed, true); assert.equal(view.playback, null);
   return {impact_source_frame: 338, identical_coordinates: main.coordinates, callback_count: impacts.length};
@@ -105,10 +105,10 @@ contract('exact +0x49 frame commits once and main/intrinsic share identical proj
 contract('slow RAF cannot skip impact and resolve occurs after return frames', async () => {
   const {view} = await viewFixture(), impacts = [];
   const done = view.playAction(enemyAction(), {onImpact: detail => impacts.push(detail)});
-  view.draw(snapshot(), 200); view.draw(snapshot(), 900);
+  view.present(snapshot(), 200); view.present(snapshot(), 900);
   assert.equal(impacts.length, 1); assert.equal(impacts[0].source_frame, 91);
   assert.notEqual(view.playback, null);
-  view.draw(snapshot(), 6000); view.draw(snapshot(), 7000);
+  view.present(snapshot(), 6000); view.present(snapshot(), 7000);
   const end = await done;
   assert.equal(end.source_frame, 91); assert.equal(impacts.length, 1);
   return {skipped_draw_frames_retained_event: true, callback_count: impacts.length};
@@ -118,10 +118,10 @@ contract('next command waits for asynchronous external impact commit', async () 
   const {view} = await viewFixture(); let release, count = 0;
   const gate = new Promise(resolve => {release = resolve;});
   const done = view.playAction(playerAction(), {onImpact: () => {count++; return gate;}});
-  view.draw(snapshot(), 0); view.draw(snapshot(), 5000); view.draw(snapshot(), 6000);
+  view.present(snapshot(), 0); view.present(snapshot(), 5000); view.present(snapshot(), 6000);
   assert.equal(count, 1); assert.equal(view.playback.impact_done, false);
   await assert.rejects(view.playAction(enemyAction(), {onImpact() {}}), /尚未播放结束/);
-  release(); await gate; await Promise.resolve(); view.draw(snapshot(), 6001);
+  release(); await gate; await Promise.resolve(); view.present(snapshot(), 6001);
   assert.equal((await done).completed, true); assert.equal(count, 1);
   return {next_command_blocked_until_commit: true};
 });
@@ -130,12 +130,12 @@ contract('cancel before or after impact never replays a stale callback', async (
   const {view} = await viewFixture(); let count = 0;
   let done = view.playAction(playerAction(), {onImpact: () => count++});
   const rejected = assert.rejects(done, {name: 'AbortError'});
-  view.draw(snapshot(), 0); view.draw(snapshot(), 500); view.stop('开发中断'); await rejected;
-  view.draw(snapshot(), 5000); assert.equal(count, 0);
+  view.present(snapshot(), 0); view.present(snapshot(), 500); view.stop('开发中断'); await rejected;
+  view.present(snapshot(), 5000); assert.equal(count, 0);
   done = view.playAction(enemyAction(), {onImpact: () => count++});
   const secondRejected = assert.rejects(done, {name: 'AbortError'});
-  view.draw(snapshot(), 6000); view.draw(snapshot(), 6600); assert.equal(count, 1);
-  view.stop(); await secondRejected; view.draw(snapshot(), 16000);
+  view.present(snapshot(), 6000); view.present(snapshot(), 6600); assert.equal(count, 1);
+  view.stop(); await secondRejected; view.present(snapshot(), 16000);
   assert.equal(count, 1); assert.equal(view.ready, true);
   return {before_impact_callbacks: 0, after_impact_callbacks: 1};
 });
@@ -167,13 +167,13 @@ contract('MISS keeps target pose and suppresses damage-only target effects', asy
   const input = {...playerAction(), hit: 'miss', damage: 0};
   const before = clone(input), world = snapshot(), worldBefore = clone(world);
   const done = view.playAction(input, {onImpact: () => count++});
-  view.draw(world, 0); target.calls.length = 0; view.draw(world, 975);
+  view.present(world, 0); target.calls.length = 0; view.present(world, 975);
   assert.equal(count, 1);
   assert.ok(target.calls.some(call => call.path?.includes('/fight_miss_text/')));
   assert.equal(target.calls.some(call => call.path?.includes('BFr01_Dn')), false);
   assert.equal(target.calls.some(call => call.path?.includes('/012/action_01')), false);
   assert.deepEqual(input, before); assert.deepEqual(world, worldBefore);
-  view.draw(world, 2340); await done;
+  view.present(world, 2340); await done;
   return {external_input_and_snapshot_unchanged: true, miss_target_effects: 0};
 });
 
@@ -181,13 +181,13 @@ contract('external commit error rejects playback and destroy cancels an unfinish
   const {view} = await viewFixture();
   const done = view.playAction(playerAction(), {onImpact: () => {throw new Error('world revision conflict');}});
   const rejected = assert.rejects(done, /world revision conflict/);
-  view.draw(snapshot(), 0); view.draw(snapshot(), 975); await rejected;
+  view.present(snapshot(), 0); view.present(snapshot(), 975); await rejected;
   assert.equal(view.playback, null);
   let release;
   const gate = new Promise(resolve => {release = resolve;});
   const second = view.playAction(enemyAction(), {onImpact: () => gate});
   const aborted = assert.rejects(second, {name: 'AbortError'});
-  view.draw(snapshot(), 2000); view.draw(snapshot(), 2700); view.destroy(); await aborted;
+  view.present(snapshot(), 2000); view.present(snapshot(), 2700); view.destroy(); await aborted;
   release(); await gate; await Promise.resolve();
   assert.equal(view.ready, false); assert.equal(view.images.size, 0); assert.equal(view.playback, null);
   return {commit_error_propagated: true, stale_async_completion_discarded: true};

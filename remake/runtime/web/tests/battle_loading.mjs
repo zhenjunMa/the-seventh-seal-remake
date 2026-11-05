@@ -89,6 +89,6 @@ function frame(now){try{if(state.scenes.phase==='battle-loading')entryFrames.pus
   else if(state.scenes.phase.startsWith('battle-')&&sessions.current.battle){const time=feedbackTime??state.engine.battle.clock.time;
     if(idleCheck){for(const actor of sessions.current.battle.state.actors)advanceIdleSkill(actor,sessions.current.battle.schedulerData,time);
       $('poseReport').textContent=JSON.stringify(sessions.current.battle.state.actors.filter(a=>a.side==='enemy').map(a=>({id:a.resource_id,hp:a.hp.current,skill:a.current_skill.id,...a.idle_pose})),null,2);}
-    sessions.current.battleView.draw(sessions.current.battle.presentationSnapshot(),time);actions.drawBattleInterface(time);}}
+    actions.advanceBattlePresentation(time);sessions.current.battleView.draw(sessions.current.battle.presentationSnapshot(),time);actions.drawBattleInterface(time);}}
   catch(e){checks.push({render_error:e.message});state.scenes.setPhase('error');report();}}
 reset();state.engine.start({phase:'map',interface:frame});window.addEventListener('pagehide',()=>{state.audio.dispose();state.engine.destroy();},{once:true});document.querySelectorAll('header button').forEach(b=>b.disabled=false);report();

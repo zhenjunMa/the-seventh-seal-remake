@@ -24,7 +24,7 @@ export function createServicesController({state, actions, $, canvas, ctx,now=()=
     $('eventLog').append(item); while($('eventLog').children.length>50) $('eventLog').firstChild.remove();
   }
   async function json(path,{cache='no-cache'}={}) { const response=await fetch(path,{cache}); if(!response.ok) throw new Error(`资源加载失败：${path}（${response.status}）`); return response.json(); }
-  async function initializeRuntimeConfiguration(){
+  async function initializeRuntimeConfiguration(options){
     // Coalesce startup calls, including a failed startup. Refreshing the page
     // creates a new owner; menu/battle/save operations never reload this input.
     configurationReady??=(async()=>{
@@ -33,12 +33,12 @@ export function createServicesController({state, actions, $, canvas, ctx,now=()=
         rewards:state.rewardData,party_skills:state.partySkills,items:state.sourceItemData,
         ...(state.sourceSkills?{source_skills:state.sourceSkills}:{}),...(state.sourceMagic?{source_magic:state.sourceMagic}:{})},config,state.partyRewards);
     })();
-    return readConfiguredData();
+    return readConfiguredData(options);
   }
   async function readConfiguredData(options){
     if(!configurationReady)throw new Error('运行配置尚未初始化，请刷新游戏页面');
     const configuration=await configurationReady;
-    return configuration.snapshot(options);
+    return options?.shared?configuration.battle(options):configuration.snapshot(options);
   }
   async function readMenuConfiguration(){
     if(!configurationReady)throw new Error('运行配置尚未初始化，请刷新游戏页面');

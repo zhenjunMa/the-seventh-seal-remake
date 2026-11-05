@@ -1,6 +1,6 @@
 import {drawingContext,registerGlyph} from '../phaser/rendering/recorded_surface.mjs';
 import {createDeathParticleSurface} from '../death_particles.mjs';
-import {BattleLifecyclePlayback} from '../battle_lifecycle_view.mjs';
+import {BattleLifecyclePlayback} from '../core/battle/battle_lifecycle.mjs';
 const frame=()=>new Promise(resolve=>requestAnimationFrame(resolve));
 const assert=(condition,message)=>{if(!condition)throw new Error(message);};
 const pixel=(renderer,x,y)=>{const data=new Uint8Array(4),scale=renderer.width/640;

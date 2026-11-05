@@ -142,7 +142,7 @@ test('renderer displays the same complete idle pose used by combat, including th
   view._sprite=(r,action,frame)=>{if(r.id==='012')drawn.push({action,frame});};
   const enemy=party.actors.find(a=>a.id==='enemy-0');setIdleSkill(enemy,scheduler,500);
   for(const at of [0,starts[2],starts[4],duration-1,duration]){
-    advanceIdleSkill(enemy,scheduler,500+at);view.draw({actors:party.actors},500+at);
+    advanceIdleSkill(enemy,scheduler,500+at);view.present({actors:party.actors},500+at);
     assert.deepEqual(drawn.at(-1),{action:enemy.idle_pose.action_index,frame:enemy.idle_pose.action_frame});
   }
   assert.ok(drawn.some(p=>p.action===18));

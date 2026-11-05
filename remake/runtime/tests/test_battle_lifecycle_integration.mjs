@@ -25,19 +25,19 @@ async function fixture(enemyRole='012'){
 }
 const snapshot=(events=[],epoch=0)=>({actors:[{id:'001',hp:{current:900},life_epoch:0},{id:'002',hp:{current:epoch?151:0},life_epoch:epoch},{id:'enemy',hp:{current:100},life_epoch:0}],lifecycle_events:events});
 test('prepared view can paint during HUD loading before the battle snapshot exists',async()=>{
- const {view}=await fixture();assert.doesNotThrow(()=>view.draw(null,0));assert.deepEqual(view.lifecycleSnapshot().active,[]);
+ const {view}=await fixture();assert.doesNotThrow(()=>view.present(null,0));assert.deepEqual(view.lifecycleSnapshot().active,[]);
 });
 
 test('transition preview leaves entry hidden and does not execute its records or restart its clock',async()=>{
  const {view,control}=await fixture(),drawn=[],sounds=[],before=structuredClone(control.state);
  view._sprite=(role,action,frame,x,y,alpha)=>drawn.push({id:role.id,alpha});view.onLifecycleFrame=step=>sounds.push(step);
  const event={token:'entry-1',actor_id:'001',life_epoch:0,kind:'entry',source_skill_index:11,source_id_raw:11},state=snapshot([event]);
- view.draw(state,5000,{entryPreview:true});
+ view.present(state,5000,{entryPreview:true});
  assert.equal(drawn.some(row=>row.id==='001'),false);assert.deepEqual(view.lifecycleSnapshot().active,[]);
  assert.deepEqual(control.state,before);assert.deepEqual(sounds,[]);assert.equal(view.lastActorPoses.size,0);
- drawn.length=0;view.draw(state,5000);assert.equal(drawn.find(row=>row.id==='001').alpha,0);assert.equal(sounds.length,1);
- drawn.length=0;view.draw(state,5119);assert.equal(drawn.find(row=>row.id==='001').alpha,0);assert.equal(sounds.length,1);
- drawn.length=0;view.draw(state,5120);view.draw(state,5121);const alpha=drawn.findLast(row=>row.id==='001').alpha;
+ drawn.length=0;view.present(state,5000);assert.equal(drawn.find(row=>row.id==='001').alpha,0);assert.equal(sounds.length,1);
+ drawn.length=0;view.present(state,5119);assert.equal(drawn.find(row=>row.id==='001').alpha,0);assert.equal(sounds.length,1);
+ drawn.length=0;view.present(state,5120);view.present(state,5121);const alpha=drawn.findLast(row=>row.id==='001').alpha;
  assert.ok(alpha>0&&alpha<1);assert.equal(sounds.length,1);assert.equal(view.lifecycleSnapshot().active[0].appearance.mode,5);
 });
 test('transition prepares visible entry poses once, defers cues and resumes their remaining animation without an empty lead',async()=>{
@@ -50,11 +50,11 @@ test('transition prepares visible entry poses once, defers cues and resumes thei
  assert.equal(view.lifecycle.pose('001').source_frame,170);assert.equal(view.lifecycle.alpha('enemy'),1/7);
  assert.deepEqual(view.drainLifecycleCompleted(),[]);assert.equal(sounds.length,0);assert.equal(view.lastActorPoses.size,0);
  view.prepareEntry(state,now);assert.deepEqual(view.lifecycleSnapshot(),prepared);
- view.draw(state,now,{entryPreview:true});assert.deepEqual(view.lifecycleSnapshot(),prepared);assert.equal(sounds.length,0);
+ view.present(state,now,{entryPreview:true});assert.deepEqual(view.lifecycleSnapshot(),prepared);assert.equal(sounds.length,0);
  assert.ok(drawn.find(row=>row.id==='001').alpha>0);assert.ok(drawn.find(row=>row.id==='012').alpha>0);
- drawn.length=0;view.draw(state,now);assert.equal(sounds.length,2);assert.equal(view.lifecycle.alpha('enemy'),1/7);
+ drawn.length=0;view.present(state,now);assert.equal(sounds.length,2);assert.equal(view.lifecycle.alpha('enemy'),1/7);
  assert.ok(drawn.find(row=>row.id==='001').alpha>0);assert.deepEqual(view.drainLifecycleCompleted(),[]);
- view.draw(state,now+60);assert.equal(view.lifecycle.alpha('enemy'),2/7);assert.equal(sounds.length,2);
+ view.present(state,now+60);assert.equal(view.lifecycle.alpha('enemy'),2/7);assert.equal(sounds.length,2);
  view.stop();assert.deepEqual(view.entryFrameSounds,[]);assert.equal(view.lifecycle.entryPrepared,false);
  }
 });
@@ -73,36 +73,36 @@ test('077 original entry executes both background fades, camera snap and return 
  if(prepared){
    view.prepareEntry(state,started);assert.deepEqual(view.entryFrameControls.map(step=>step.command_raw),[0,6]);
    assert.equal(view.colorFade,null);assert.equal(view.cameraPan,null);assert.deepEqual(visited,[]);
-   const before=view.lifecycleSnapshot();view.draw(state,500000,{entryPreview:true});
+   const before=view.lifecycleSnapshot();view.present(state,500000,{entryPreview:true});
    assert.deepEqual(view.lifecycleSnapshot(),before);assert.equal(view.colorFade,null);assert.equal(view.cameraPan,null);
  }
- view.draw(state,started);assert.equal(visited[0].at,started);assert.equal(view.colorFade.value,50,'no hidden preparation time is charged to the first color update');
- let now=started;for(;view.lifecycleSnapshot().active.length&&now<started+15000;){now+=20;view.draw(state,now);}
+ view.present(state,started);assert.equal(visited[0].at,started);assert.equal(view.colorFade.value,50,'no hidden preparation time is charged to the first color update');
+ let now=started;for(;view.lifecycleSnapshot().active.length&&now<started+15000;){now+=20;view.present(state,now);}
  assert.ok(now<started+15000);assert.deepEqual(visited.map(row=>row.command),[0,6,0,11]);
  assert.deepEqual(visited[0].control,{mode_raw:0,step_i32_raw:100,amount_i32_raw:50,color_mask_raw:7});
  assert.equal(visited[1].camera.x,-274);assert.equal(visited[1].camera.active,false);
  assert.equal(visited[2].fade.value,0);assert.equal(visited[2].fade.step,1);assert.equal(visited[2].fade.target,15);assert.equal(visited[2].fade.mask,1);
  assert.equal(visited[3].fade.step,-8);assert.equal(visited[3].camera.target,0);
  assert.deepEqual(view.drainLifecycleCompleted(),[{token:event.token,actor_id:'enemy',life_epoch:0}]);
- view.draw(state,now+1000);assert.equal(view.colorFade.value,0);assert.equal(view.colorFade.active,false);
+ view.present(state,now+1000);assert.equal(view.colorFade.value,0);assert.equal(view.colorFade.active,false);
  assert.equal(view.cameraPan.x,0);assert.equal(view.cameraPan.active,false);view.destroy();
  }
 });
 
 test('real lifecycle layers load separately and a completed player death stays drawn after its event is acknowledged',async()=>{
  const {view,target}=await fixture();const event={token:'death-1',actor_id:'002',life_epoch:0,kind:'death',source_skill_index:12,hold_final_frame:true};
- for(let at=0;at<=5000;at+=20)view.draw(snapshot([event]),at);assert.equal(view.drainLifecycleCompleted().length,1);
- target.calls.length=0;view.draw(snapshot(),6000);
+ for(let at=0;at<=5000;at+=20)view.present(snapshot([event]),at);assert.equal(view.drainLifecycleCompleted().length,1);
+ target.calls.length=0;view.present(snapshot(),6000);
  const last=life.roles.find(r=>r.id==='002').skills.find(s=>s.chr_skill_index===12).last_source_pose;
  assert.ok(target.calls.some(c=>c.path?.endsWith(`frame_${String(last.source_frame).padStart(4,'0')}_main.png`)));
  assert.equal(view.lifecycle.pose('002').source_frame,last.source_frame);assert.equal(view.lifecycle.hidden('002'),false);
 });
 test('revive epoch replaces held corpse without cancelling an unrelated actor lifecycle',async()=>{
  const {view}=await fixture();const dead={token:'d',actor_id:'002',life_epoch:0,kind:'death',source_skill_index:12,hold_final_frame:true};
- for(let at=0;at<=4000;at+=20)view.draw(snapshot([dead]),at);view.drainLifecycleCompleted();
+ for(let at=0;at<=4000;at+=20)view.present(snapshot([dead]),at);view.drainLifecycleCompleted();
  const revive={token:'r',actor_id:'002',life_epoch:1,kind:'revive',source_skill_index:14};
- view.draw(snapshot([revive],1),4100);assert.notEqual(view.lifecycle.pose('002').source_frame,life.roles.find(role=>role.id==='002').skills.find(s=>s.chr_skill_index===12).last_source_pose.source_frame);
- for(let at=4120;at<=9000;at+=20)view.draw(snapshot([revive],1),at);assert.deepEqual(view.drainLifecycleCompleted().map(e=>e.token),['r']);assert.equal(view.lifecycle.hidden('002'),false);
+ view.present(snapshot([revive],1),4100);assert.notEqual(view.lifecycle.pose('002').source_frame,life.roles.find(role=>role.id==='002').skills.find(s=>s.chr_skill_index===12).last_source_pose.source_frame);
+ for(let at=4120;at<=9000;at+=20)view.present(snapshot([revive],1),at);assert.deepEqual(view.drainLifecycleCompleted().map(e=>e.token),['r']);assert.equal(view.lifecycle.hidden('002'),false);
 });
 test('source revival carrier load failure advances without wait or invented contact, then real effect contacts at frame1',async()=>{
  const {view}=await fixture(),skill=life.roles.find(role=>role.id==='001').skills.find(s=>s.chr_skill_index===43).source_skill;
@@ -111,7 +111,7 @@ test('source revival carrier load failure advances without wait or invented cont
  assert.deepEqual(compiled.steps.filter(s=>s.event).map(s=>[s.carrier_asset_id,s.logical_frame]),[['_iRelife',1]]);
  const effects=compiled.steps.filter(s=>s.carrier_asset_id==='_iRelife');assert.equal(effects.length,19);assert.ok(effects.every(s=>s.duration_ms===80));
  let contacts=0;const done=view.playSequence({actor_id:'001',target_id:'002',skill_id:'001_43',plan},{onRecord(){},onContact(){contacts++;return {hit:true,damage:0,revived:true,hp_delta:151};}});
- for(let at=0;at<=21000;at+=20)view.draw(snapshot(),at);await done;assert.equal(contacts,1);assert.equal(view.damageTexts.length,0);
+ for(let at=0;at<=21000;at+=20)view.present(snapshot(),at);await done;assert.equal(contacts,1);assert.equal(view.damageTexts.length,0);
 });
 
 // Controlled surviving contacts exercise the production completion callbacks;
@@ -130,7 +130,7 @@ async function liveFixture(enemyRole='013',statusData=null){
  for(const actor of battle.state.actors)actor.charge.delay=1000000;
  view.nativeControl=battle;view.nativeControlIsCurrent=()=>true;
  return {view,battle,drawn,logs,target,sample,ai,commands,async draw(at){
-   now=at;battle.advanceClock(now);drawn.clear();target.calls.length=0;view.draw(battle.presentationSnapshot(),now);
+   now=at;battle.advanceClock(now);drawn.clear();target.calls.length=0;view.present(battle.presentationSnapshot(),now);
    for(const event of view.drainLifecycleCompleted())battle.ackLifecycle(event);
    await Promise.resolve();
  }};
@@ -387,4 +387,25 @@ test('contact recovery accumulates source12D, preserves native gates and convert
      assert.equal(victim.charge.recovery_ticks,converted?0:45);assert.equal(victim.native_after_raw['0x0521f6a2'],converted?0:45);
    }
  }
+});
+
+
+test('painting zero or several times per update preserves contacts, RNG, recovery and handoff',async()=>{
+ const results=[];
+ for(const options of [{render:true},{render:false},{render:true,repaints:3}]){
+  const target=canvas(),f=await createHandoffFixture({load:read,canvas:target,
+    assetLoader:async asset=>({width:asset.width,height:asset.height}),scenario:'relay'});
+  let draws=0;const rng=f.battle.rng;f.battle.rng=()=>{draws++;return rng();};
+  try{
+   let frames=0;
+   for(;frames<3000&&!f.finished;frames++)await f.advance(Math.floor(frames*1000/60),options);
+   assert.equal(f.finished,true);
+   results.push({frames,draws,events:structuredClone(f.events),state:structuredClone(f.battle.state),world:f.world.snapshot()});
+   const before=f.battle.snapshot(),lifecycle=f.view.lifecycleSnapshot();
+   for(let paint=0;paint<3;paint++)f.view.draw(before,100000);
+   assert.deepEqual(f.battle.snapshot(),before,'painting cannot acknowledge or advance a battle');
+   assert.deepEqual(f.view.lifecycleSnapshot(),lifecycle);
+  }finally{f.dispose();}
+ }
+ assert.deepEqual(results[1],results[0]);assert.deepEqual(results[2],results[0]);
 });

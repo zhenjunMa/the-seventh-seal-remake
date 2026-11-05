@@ -99,8 +99,8 @@ async function fixture(cfg){
   const view=new BattleView({canvas:{width:960,height:540,getContext:()=>ctx},metadataPath:'/data/party_battle_view.json',jsonLoader:p=>read(p.slice(6)),assetLoader:async a=>({image:{width:a.width,height:a.height},sha256:a.sha256})});
   await view.prepare();view.setRoster(sample.actors,sample.skills);let time=0,battle;const logs=[],rng=createNativeRng(0x20261011);
   battle=new BattleController({world,id:()=> 'party-config',now:()=>time,waitTick:async()=>{time+=20;},resolveAction,applyDamage:applyNativeDamage,resourcesForWorld:partyResourcesForWorld,consumeResources:consumePartyMp,log:e=>logs.push(e),
-    playSequence:async(result,hooks)=>{const promise=view.playSequence(result,hooks);view.draw({actors:battle.state.actors},time);let ticks=0;
-      while(view.run||view.detachedRuns.length){assert.ok(++ticks<20000);time+=20;battle.advanceClock();view.draw({actors:battle.state.actors},time);}return promise;}});
+    playSequence:async(result,hooks)=>{const promise=view.playSequence(result,hooks);view.present({actors:battle.state.actors},time);let ticks=0;
+      while(view.run||view.detachedRuns.length){assert.ok(++ticks<20000);time+=20;battle.advanceClock();view.present({actors:battle.state.actors},time);}return promise;}});
   battle.start({...sample,rng});return {world,battle,logs,rng};
 }
 

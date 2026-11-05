@@ -32,7 +32,7 @@ import {selectNativeSkills} from './web/core/battle/enemy_ai.mjs';
 import {compileNativeSequence,directSequence} from './web/core/battle/skill_sequence.mjs';
 import {nativeReactionTargetAvailability,selectNativeNormalReaction} from './web/core/battle/battle_reactions.mjs';
 import {BattleController} from './web/core/battle/battle_controller.mjs';
-import {BattleLifecyclePlayback} from './web/battle_lifecycle_view.mjs';
+import {BattleLifecyclePlayback} from './web/core/battle/battle_lifecycle.mjs';
 import {NativeAssemblyOracle} from './tests/native_assembly_oracle.mjs';
 const input=JSON.parse(fs.readFileSync(0,'utf8')),copy=structuredClone;
 let comparisons=0,aiPlans=0,admissions=0,currentPoses=0,landings=0;

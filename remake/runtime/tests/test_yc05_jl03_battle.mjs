@@ -13,7 +13,7 @@ import {resolveAction,createNativeRng,nativeEffectContextForTarget} from '../web
 import {BattleView} from '../web/battle_view.mjs';
 import {ActionClock} from '../web/phaser/components/action_clock.mjs';
 import {BattleController} from '../web/core/battle/battle_controller.mjs';
-import {BattleLifecyclePlayback} from '../web/battle_lifecycle_view.mjs';
+import {BattleLifecyclePlayback} from '../web/core/battle/battle_lifecycle.mjs';
 import {nativeEntryPath} from '../web/core/battle/battle_entry.mjs';
 import {skillOwner,deriveSkillConfiguration} from '../web/core/config/skill_registry.mjs';
 const json=async name=>JSON.parse(await readFile(new URL(`../${name}`,import.meta.url),'utf8'));
@@ -128,11 +128,11 @@ test('real command1 enters BattleView scene projection, freezes on the shared pa
   // source bytes/offset. Full13 source sequences are compiled above.
   plan.records=plan.records.filter(row=>{const raw=Buffer.from(row.raw_hex,'hex');return raw[0]===1&&raw.readUInt32LE(1)===1;});plan.allow_no_contacts=true;
   const done=view.playSequence({actor_id:'enemy-0',target_id:'001',skill_id:'source-shake',plan},{onRecord(){},onContact:()=>assert.fail('Camera command changes no HP')});
-  const clock=new ActionClock();clock.time=0;view.draw(snapshot,clock.time);const before=view.actorPositions()['001'];
-  clock.advance(20);view.draw(snapshot,clock.time);assert.equal(view.cameraShake.y,5);
+  const clock=new ActionClock();clock.time=0;view.present(snapshot,clock.time);const before=view.actorPositions()['001'];
+  clock.advance(20);view.present(snapshot,clock.time);assert.equal(view.cameraShake.y,5);
   assert.deepEqual(translations.at(-1),[-0,-5*1.125]);assert.equal(view.actorPositions()['001'][1],before[1]-5);
-  const paused=structuredClone(view.cameraShake);clock.paused=true;clock.advance(1000);view.draw(snapshot,clock.time);
-  assert.deepEqual(view.cameraShake,paused);clock.paused=false;clock.advance(20);view.draw(snapshot,clock.time);assert.equal(view.cameraShake.y,0);
-  clock.advance(5000);view.draw(snapshot,clock.time);await done;assert.equal(view.cameraShake.active,false);assert.equal(view.cameraShake.y,0);
+  const paused=structuredClone(view.cameraShake);clock.paused=true;clock.advance(1000);view.present(snapshot,clock.time);
+  assert.deepEqual(view.cameraShake,paused);clock.paused=false;clock.advance(20);view.present(snapshot,clock.time);assert.equal(view.cameraShake.y,0);
+  clock.advance(5000);view.present(snapshot,clock.time);await done;assert.equal(view.cameraShake.active,false);assert.equal(view.cameraShake.y,0);
   view.stop();assert.equal(view.cameraShake,null);view.destroy();clock.destroy();
 });

@@ -1,3 +1,4 @@
+import {retainDefinition} from './core/content/immutable_definition.mjs';
 import {createBattleSample} from './combat_sample.mjs';
 import {runtimeContent,requireRegisteredRoles,battleStage} from './core/content/content_registry.mjs';
 const clone=value=>structuredClone(value);
@@ -24,14 +25,14 @@ export function assembleForestSample(sample,data,group,schedulerData=null,aiData
     enemy_selection:{policy:'fixed learned commands; full AI and multihit not integrated'},limitations:clone(data.limits)}};
   if(sample.skill_data)result.skill_data=sample.skill_data;
   if(schedulerData){
-    result.scheduler_data=clone(schedulerData);
+    result.scheduler_data=retainDefinition(schedulerData);
     result.source.scope='Native fresh forest gauge/dispatch with live ready-player command input; fixed enemy command and first contact.';
     result.source.order={policy:'native mode0 gauge scheduler',evidence:clone(schedulerData.evidence),preview_policy:clone(schedulerData.policy)};
     result.source.limitations=['One saved player; full 1-6 source-generated enemies. Native scalar charging/dispatch; frame clock and ready-player input. Full enemy selection/combinations, contacts, native visual clocks and rewards deferred.'];
   }
   if(aiData){
     if(!schedulerData)throw new Error('完整森林行动需要原调度');
-    result.enemy_ai_data=clone(aiData);result.complete_contacts=true;result.enemy_skill_tables={};
+    result.enemy_ai_data=retainDefinition(aiData);result.complete_contacts=true;result.enemy_skill_tables={};
     for(const actor of actors.filter(a=>a.side==='enemy')){
       const role=aiData.roles[actor.resource_id];if(!role)throw new Error('原敌方技能表缺失');const table={};
       for(const index of role.learned_indices){const skill=clone(role.skills[index]),id=`${actor.id}_skill_${index}`;Object.assign(skill,{id,actor_id:actor.id});skills[id]=skill;table[index]=id;}
@@ -41,8 +42,8 @@ export function assembleForestSample(sample,data,group,schedulerData=null,aiData
     result.source.scope='Native fresh forest scheduler, enemy skill/target selection and complete source contact sequences; live ready-player input.';
     result.source.limitations=sample.source.party_new_game?['New-game party with source equipment and learned direct attacks; command selection and queued player input continue during other actor animations. Native rendering/OS timing, equipment swapping and other player commands remain pending.']:['One historical player; six learned source forest skills and two exposed player skills. Original renderer/OS timing and opening story remain outside this slice.'];
   }
-  if(rewardData){if(!aiData)throw new Error('奖励需要完整森林结算');result.reward_data=clone(rewardData);}
-  if(reactionData)result.reaction_data=clone(reactionData);
-  if(statusData)result.status_data=clone(statusData);
+  if(rewardData){if(!aiData)throw new Error('奖励需要完整森林结算');result.reward_data=retainDefinition(rewardData);}
+  if(reactionData)result.reaction_data=retainDefinition(reactionData);
+  if(statusData)result.status_data=retainDefinition(statusData);
   return result;
 }

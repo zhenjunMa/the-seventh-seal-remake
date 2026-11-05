@@ -49,6 +49,14 @@ test('startup session preserves both reward profiles and isolates every returned
   assert.deepEqual(Object.keys(menu).sort(),['audit','items','party_skills','skill_registry']);
   assert.ok(Object.isFrozen(menu.items.definitions['242']));
   assert.throws(()=>{menu.items.definitions['242'].drop_rate=-1;},TypeError);
+  const shared=session.battle();
+  assert.equal(session.battle(),shared);assert.equal(shared.items,menu.items);
+  assert.equal(shared.rewards.schema,'seventh-seal-party-rewards');
+  assert.equal(session.battle({sample:true}).rewards.schema,'seventh-seal-forest-rewards');
+  assert.equal(shared.items.catalog.equipment_admission,undefined);
+  assert.equal(shared.items.catalog.item_capability_admission,undefined);
+  assert.throws(()=>{shared.ai.roles['012'].skills[0].fixed_raw_hex='00';},TypeError);
+  assert.throws(()=>{shared.forest.actors['012'].hp.current=0;},TypeError);
   const first=session.snapshot();
   first.skill_registry.yantu.mp_cost=999;first.forest.actors['012'].hp.current=0;
   first.items.definitions['242'].drop_rate=-1;first.rewards.enemies['013'].reward_slots.fill(0);
@@ -85,6 +93,10 @@ test('services read configuration once at startup; rewards and restored progress
   state.world=new WorldStore(await decodeSave(await encodeSave(state.world.snapshot()),['M72061']),['M72061']);
   files.skills.entries.yantu.parameters.mp_cost=9;
   initial.skill_registry.yantu.mp_cost=777;
+  const shared=await services.readConfiguredData({shared:true});
+  assert.equal(await services.readConfiguredData({shared:true}),shared);
+  assert.equal(shared.items.definitions['242'].drop_rate,100);
+  assert.throws(()=>{shared.skill_registry.yantu.mp_cost=999;},TypeError);
   const next=await services.readConfiguredData();
   assert.equal(requests.length,5);assert.equal(next.skill_registry.yantu.mp_cost,5);
   assert.equal(state.world.value.inventory.find(item=>item.id===242).quantity,2);
@@ -231,7 +243,7 @@ async function fullFixture(cfg){
   const v=new BattleView({canvas:{width:960,height:540,getContext:()=>ctx},metadataPath:'/data/enemy_battle_view.json',jsonLoader:p=>read(p.slice(6)),assetLoader:async a=>({image:{width:a.width,height:a.height},sha256:a.sha256})});
   await v.prepare();v.setRoster(s.actors,s.skills);let time=0,battle;const logs=[],rng=createNativeRng(0x20261011);
   battle=new BattleController({world,id:()=> 'configured-full',now:()=>time,waitTick:async()=>{time+=20;},resolveAction,applyDamage:applyNativeDamage,resourcesForWorld,consumeResources:consumeBattleMp,log:e=>logs.push(e),
-    playSequence:async(r,callbacks)=>{const promise=v.playSequence(r,callbacks);v.draw({actors:battle.state.actors},time);let n=0;while(v.run||v.detachedRuns.length){assert.ok(++n<20000);time+=20;battle.advanceClock();v.draw({actors:battle.state.actors},time);}return promise;}});
+    playSequence:async(r,callbacks)=>{const promise=v.playSequence(r,callbacks);v.present({actors:battle.state.actors},time);let n=0;while(v.run||v.detachedRuns.length){assert.ok(++n<20000);time+=20;battle.advanceClock();v.present({actors:battle.state.actors},time);}return promise;}});
   battle.start({...s,rng});return {battle,world,logs,rng};
 }
 async function win(f){let commands=0;while(battleActive(f.battle)){assert.ok(++commands<=50);await chooseReady(f.battle,'yanci','enemy-0');}assert.equal(f.battle.state.phase,'victory');f.battle.finish();return commands;}

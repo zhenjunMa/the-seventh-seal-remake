@@ -186,7 +186,7 @@ test('actual carrier draws keep native shadow main and intrinsic layers in that 
  const asset=view.meta.effects.find(e=>e.id==='cvt_p002');
  Object.assign(asset,{layer_order:['shadow','main','intrinsic'],shadow_sheet:'/assets/test/aid_shadow.png',main_sheet:'/assets/test/aid_main.png',intrinsic_sheet:'/assets/test/aid_intrinsic.png',shadow_blend:'source-over',main_blend:'source-over',intrinsic_blend:'lighter'});
  for(const path of [asset.shadow_sheet,asset.main_sheet,asset.intrinsic_sheet])view.images.set(path,{path});
- const events=[],started=launch(view,skill('001',36),events,'layers');view.draw({actors:[]},0);calls.length=0;view.draw({actors:[]},1280);await started.promise;
+ const events=[],started=launch(view,skill('001',36),events,'layers');view.present({actors:[]},0);calls.length=0;view.present({actors:[]},1280);await started.promise;
  const drawn=calls.filter(([path])=>path.startsWith('/assets/test/aid_'));
  assert.deepEqual(drawn,Array.from({length:3},()=>[[asset.shadow_sheet,'source-over'],[asset.main_sheet,'source-over'],[asset.intrinsic_sheet,'lighter']]).flat());
  assert.equal(events.filter(event=>event.kind==='contact').length,0,'body layers are already drawn before each original contact');

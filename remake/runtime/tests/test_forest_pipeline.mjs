@@ -25,7 +25,7 @@ function sample(ids,world=seed){return createForestSample(world,base,forest,{map
 async function fixture(ids=['012'],extra={}){const world=new WorldStore(copy(seed),maps),v=await viewFixture(),logs=[];let time=0,battle;
  const input=sample(ids,world.snapshot());v.setRoster(input.actors,input.skills);
  battle=new BattleController({world,id:()=> 'pipeline',now:()=>time,waitTick:async()=>{time+=20;},resolveAction,applyDamage:applyNativeDamage,resourcesForWorld,consumeResources:consumeBattleMp,log:e=>logs.push(e),
-  playSequence:async(r,callbacks)=>{const pending=v.playSequence(r,callbacks);v.draw({actors:battle.state.actors},time);let n=0;while(v.run){assert.ok(++n<20000,'bounded sequence');time+=20;battle.advanceClock();v.draw({actors:battle.state.actors},time);}return pending;},...extra});
+  playSequence:async(r,callbacks)=>{const pending=v.playSequence(r,callbacks);v.present({actors:battle.state.actors},time);let n=0;while(v.run){assert.ok(++n<20000,'bounded sequence');time+=20;battle.advanceClock();v.present({actors:battle.state.actors},time);}return pending;},...extra});
  const rng=createNativeRng(0x20261011);battle.start({...input,rng});return {world,battle,v,logs,rng,input};}
 test('all eight skills retain every original CHR record and logical contact',async()=>{
  const v=await viewFixture();assert.ok(assets.size>50);let contacts=0;
@@ -52,7 +52,7 @@ test('slow RAF merges response completion before later parent contact and visits
  const d={actor_id:'001',target_id:'enemy-0',skill:counter,plan:{...directSequence(counter),allow_no_contacts:true}};
  const promise=v.playSequence({actor_id:'enemy-0',target_id:'001',skill_id:skill.id,plan:directSequence(skill)},{onRecord(){},onReactionRecord(){},onReactionEnd:()=>{idle=true;events.push('end');},onReactionContact:s=>({hit:true,damage:1,remainingHp:100}),
   onContact:s=>{events.push(s.contact_key);return {hit:true,damage:1,remainingHp:100,reaction_descriptor:events.length===1?d:null,idle};}});
- v.draw({actors:s.actors},0);v.draw({actors:s.actors},100000);const result=await promise;assert.equal(new Set(result.observations.contacts.map(c=>c.contact_key)).size,result.contact_count);assert.ok(events.includes('end'));assert.equal(result.contact_count,4);
+ v.present({actors:s.actors},0);v.present({actors:s.actors},100000);const result=await promise;assert.equal(new Set(result.observations.contacts.map(c=>c.contact_key)).size,result.contact_count);assert.ok(events.includes('end'));assert.equal(result.contact_count,4);
 });
 test('real numeric forest fight submits every contact, reaction RNG, one reward and a reloadable save',async()=>{
  const {world,battle,logs,rng}=await fixture(['013']);let commands=0;while(battleActive(battle)){assert.ok(++commands<=30);await chooseReady(battle,commands%2?'yanci':'yantu','enemy-0');}

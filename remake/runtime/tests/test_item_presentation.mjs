@@ -19,9 +19,9 @@ test('Both original item actions commit once at logical17, draw audited recovery
   for(const id of ['001','002']){
     let commits=0;const actorFrames=[],effectFrames=[];
     const pending=view.playItem({action_id:'item-'+id,actor_id:id,target_id:'001',item_id:12,skill_id:'item:12'},{onUse:()=>{commits++;return{item_used:true,hit:true,damage:0};},onFrame:s=>actorFrames.push(s.logical_frame),onEffectFrame:s=>effectFrames.push(s.logical_frame)});
-    view.draw({phase:'action',actors},0);view.draw({phase:'action',actors},1699);assert.equal(commits,0);
-    view.draw({phase:'action',actors},1700);assert.equal(commits,1);view.draw({phase:'action',actors},1900);
-    view.draw({phase:'action',actors},4000);const result=await pending;
+    view.present({phase:'action',actors},0);view.present({phase:'action',actors},1699);assert.equal(commits,0);
+    view.present({phase:'action',actors},1700);assert.equal(commits,1);view.present({phase:'action',actors},1900);
+    view.present({phase:'action',actors},4000);const result=await pending;
     assert.equal(commits,1);assert.equal(result.contact_count,1);assert.deepEqual(actorFrames,Array.from({length:18},(_,i)=>i));assert.deepEqual(effectFrames,Array.from({length:19},(_,i)=>i));
     assert.ok(result.observations.effect_ids.includes('_iReMP'));
   }

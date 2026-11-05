@@ -24,7 +24,7 @@ import {resolveAction,createNativeRng} from './web/core/battle/combat_rules.mjs'
 import {selectNativeSkills} from './web/core/battle/enemy_ai.mjs';
 import {compileNativeSequence,directSequence} from './web/core/battle/skill_sequence.mjs';
 import {nativeReactionTargetAvailability} from './web/core/battle/battle_reactions.mjs';
-import {BattleLifecyclePlayback} from './web/battle_lifecycle_view.mjs';
+import {BattleLifecyclePlayback} from './web/core/battle/battle_lifecycle.mjs';
 import {BattleController} from './web/core/battle/battle_controller.mjs';
 import {NativeAssemblyOracle} from './tests/native_assembly_oracle.mjs';
 const input=JSON.parse(fs.readFileSync(0,'utf8')),copy=structuredClone;let comparisons=0,aiPlans=0,reactions=0,entries=0;
@@ -80,7 +80,7 @@ process.stdout.write(JSON.stringify({comparisons,aiPlans,reactions,entries}));
 APPEARANCE_CONTRACT = r"""
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {APPEARANCE_ALPHA_ADAPTER} from './web/battle_lifecycle_view.mjs';
+import {APPEARANCE_ALPHA_ADAPTER} from './web/core/battle/battle_lifecycle.mjs';
 import {NativeAssemblyOracle} from './tests/native_assembly_oracle.mjs';
 const input=JSON.parse(fs.readFileSync(0,'utf8')),functions=Object.fromEntries(input.records.map(row=>[row.parameters.procedure,row.normalized_result.assembly]));
 class RendererOracle extends NativeAssemblyOracle{external(target){if(target===0x54421c)return;super.external(target);}}

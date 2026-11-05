@@ -1,4 +1,5 @@
 // boot adapters. Persistent state belongs to the shared runtime context.
+import {freezeDefinition} from '../core/content/immutable_definition.mjs';
 import {WorldStore} from "../core/world/world.mjs";
 import {SceneController} from "../core/exploration/scene_controller.mjs";
 import {WorldMapController} from "../core/exploration/world_map.mjs";
@@ -78,10 +79,11 @@ export function createBootController({state, actions, $, canvas, ctx}) {
     state.schedulerData=validateScheduler(await actions.json('data/battle_scheduler.json'));
     [state.aiData,state.rewardData,state.reactionData,state.statusData]=await Promise.all([actions.json('data/forest_ai.json').then(validateEnemyAIData),actions.json('data/forest_rewards.json').then(validateForestRewards),actions.json('data/enemy_reactions.json').then(validateForestReactionsData),actions.json('data/forest_status.json').then(validateForestStatusData)]);
     [state.partyCombat,state.partySkills,state.partyRewards,state.partyReactions]=await Promise.all([actions.json(state.catalog.party_combat),actions.json(state.catalog.party_skills),actions.json(state.catalog.party_rewards).then(validateForestRewards),actions.json(state.catalog.party_reactions).then(validateForestReactionsData)]);
+    for(const key of ['aiData','rewardData','reactionData','statusData','partyRewards','partyReactions'])freezeDefinition(state[key]);
     state.sourceItemData=validateItemData(await actions.json('data/items.json'));
     if(state.catalog.source_skills)state.sourceSkills=await actions.json(state.catalog.source_skills);
     if(state.catalog.source_magic)state.sourceMagic=await actions.json(state.catalog.source_magic);
-    state.itemData=(await actions.initializeRuntimeConfiguration()).items;
+    state.itemData=(await actions.initializeRuntimeConfiguration({shared:true})).items;
     const operationManifest=await actions.json('data/operation_menu.json');
     state.saveMenu=await SaveMenuView.create({manifest:await actions.json('data/save_menu.json'),root:$('saveMenu'),image:actions.image,onConfirm:actions.selectSaveSlot,onClose:actions.closeSaveMenu,log:actions.log});
     await Promise.all(['assets/menu/main.png','assets/menu/actor_bar.png',...['game001d','game001a','game001a_2','game002a','game002_1','game003a','game003_1','game005'].map(id=>operationManifest.menus.find(menu=>menu.id===id).composed)].map(actions.image));

@@ -5,11 +5,11 @@ let view,mode=1,at=0,playing=false,start=0,serial=0,completed=[];
 const snapshot={id:'death-particles-browser',actors:actors.map(a=>({...a,life_epoch:0,hp:{current:100}})),lifecycle_events:[]};
 function begin(){
   view.lifecycle.reset();view.lastActorPoses.clear();completed=[];at=0;
-  snapshot.lifecycle_events=[];view.draw(snapshot,0);
+  snapshot.lifecycle_events=[];view.present(snapshot,0);
   snapshot.lifecycle_events=[{token:`death-${++serial}`,actor_id:'enemy',life_epoch:0,kind:'death',source_skill_index:null,fade_mode_raw:mode,fade_clock_raw:220}];
-  view.draw(snapshot,0);
+  view.present(snapshot,0);
 }
-function paint(){view.draw(snapshot,at);completed.push(...view.drainLifecycleCompleted());result.textContent=JSON.stringify({mode,at_ms:Math.round(at),completed,playback:view.lifecycleSnapshot()},null,2);}
+function paint(){view.present(snapshot,at);completed.push(...view.drainLifecycleCompleted());result.textContent=JSON.stringify({mode,at_ms:Math.round(at),completed,playback:view.lifecycleSnapshot()},null,2);}
 for(let i=1;i<=7;i++){
   const b=document.createElement('button');b.textContent=`模式${i}`;b.onclick=()=>{mode=i;playing=false;begin();paint();};document.querySelector('#modes').append(b);
 }

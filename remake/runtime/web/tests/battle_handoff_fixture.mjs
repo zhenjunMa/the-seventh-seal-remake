@@ -70,8 +70,9 @@ export async function createHandoffFixture({load,canvas,assetLoader,scenario='re
   const chooseOrder=()=>{if(config.ordered&&battle.state.scheduler.pending)battle.actor(battle.state.scheduler.pending.actor_id).charge.gauge=10000000;};
   chooseOrder();battle.scheduleReady();
   return {battle,view,world,events,config,sample,
-    async advance(at){
-      now=at;chooseOrder();battle.advanceClock(now);view.draw(battle.presentationSnapshot(),now);
+    async advance(at,{render=true,repaints=1}={}){
+      now=at;chooseOrder();battle.advanceClock(now);const snapshot=battle.presentationSnapshot();view.advance(snapshot,now);
+      if(render)for(let paint=0;paint<repaints;paint++)view.draw(snapshot,now);
       for(const event of view.drainLifecycleCompleted())battle.ackLifecycle(event);
       for(let index=0;index<6;index++)await Promise.resolve();
       if(battle.state.phase==='interrupted')throw new Error(battle.state.error);

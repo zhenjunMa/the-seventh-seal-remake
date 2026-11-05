@@ -4,12 +4,13 @@
  */
 
 import {compileNativeSequence} from './core/battle/skill_sequence.mjs';
-import {beginNativeCameraShake,advanceNativeCameraShake,beginNativeColorFade,advanceNativeColorFade,beginNativeCameraPan,advanceNativeCameraPan} from './core/battle/battle_camera.mjs';
-import {nativeEntryPath,advanceNativeEntryPath,nativeEntryOffset} from './core/battle/battle_entry.mjs';
-import {addCorrectedPartyPresentations} from './core/party/party_skill_corrections.mjs';
+import {nativeEntryOffset} from './core/battle/battle_entry.mjs';
+import {battleDefinitions} from './core/battle/battle_definition_cache.mjs';
+import {freezeDefinition,freezeDefinitionMap} from './core/content/immutable_definition.mjs';
+import {hasPartySkillTypeCorrection,addCorrectedPartyPresentations} from './core/party/party_skill_corrections.mjs';
 import {BattleAssetPlan,effectReferences} from './core/battle/battle_asset_plan.mjs';
 import {idlePoseAt} from './core/battle/battle_scheduler.mjs';
-import {BattleLifecyclePlayback} from './battle_lifecycle_view.mjs';
+import {BattlePlayback} from './core/battle/battle_playback.mjs';
 import {createDeathParticleSurface} from './death_particles.mjs';
 import {battleViewport,battleActorPositions} from './core/battle/battle_layout.mjs';
 import {battleResources,drawBattleImage} from './core/battle/battle_resources.mjs';
@@ -227,16 +228,23 @@ async function loadJson(path, expectedHash) {
   return battleResources.json(path,expectedHash);
 }
 
-/** The Phaser frame loop calls draw while playAction is pending. No own timer. */
+/** Explicit advance owns playback; draw only paints the prepared state. */
 export class BattleView {
-  constructor({canvas, assetLoader = null, jsonLoader = loadJson,metadataPath='/data/battle_view.json',itemMetadataPath=null,stageMetadataPath=null,lifecycleMetadataPath=null,content=runtimeContent} = {}) {
+  constructor({canvas, assetLoader = null, jsonLoader = loadJson,metadataPath='/data/battle_view.json',itemMetadataPath=null,stageMetadataPath=null,lifecycleMetadataPath=null,content=runtimeContent,definitionCache=battleDefinitions} = {}) {
     if (!canvas?.getContext) throw new Error('战斗画布缺失');
+    this.playbackRuntime=new BattlePlayback({
+      isReady:()=>this.ready&&!this.destroyed,
+      releaseResources:run=>this._releaseRunResources(run),
+      feedback:(...args)=>this._queueDamageText(...args),
+      sourceControl:(...args)=>this._nativeSourceControl(...args),
+      lifecycleFrame:step=>this.onLifecycleFrame?.(step),
+    });
     this.canvas = canvas;
     this.context = canvas.getContext('2d');
     if (!this.context) throw new Error('战斗画布无法初始化');
     this.resourcePool=assetLoader?null:battleResources;
     this.assetLoader = assetLoader;
-    this.jsonLoader = jsonLoader;
+    this.jsonLoader = jsonLoader;this.definitionCache=definitionCache;
     this.content=content;
     this.metadataPath=metadataPath;
     this.itemMetadataPath=itemMetadataPath;this.itemMeta=null;
@@ -260,17 +268,110 @@ export class BattleView {
     this.resourceScopes=new Set();this.compiledSequences=new WeakMap();this.preparedAssets=new WeakMap();this.retiredLeases=[];
   }
 
+  get run(){return this.playbackRuntime.run;}
+  set run(value){this.playbackRuntime.run=value;}
+  get detachedRuns(){return this.playbackRuntime.detachedRuns;}
+  set detachedRuns(value){this.playbackRuntime.detachedRuns=value;}
+  get lifecycle(){return this.playbackRuntime.lifecycle;}
+  set lifecycle(value){this.playbackRuntime.lifecycle=value;}
+  get nativeControl(){return this.playbackRuntime.nativeControl;}
+  set nativeControl(value){this.playbackRuntime.nativeControl=value;}
+  get nativeControlIsCurrent(){return this.playbackRuntime.nativeControlIsCurrent;}
+  set nativeControlIsCurrent(value){this.playbackRuntime.nativeControlIsCurrent=value;}
+  get lastActorPoses(){return this.playbackRuntime.lastActorPoses;}
+  set lastActorPoses(value){this.playbackRuntime.lastActorPoses=value;}
+  get preparingEntry(){return this.playbackRuntime.preparingEntry;}
+  set preparingEntry(value){this.playbackRuntime.preparingEntry=value;}
+  get entryFrameSounds(){return this.playbackRuntime.entryFrameSounds;}
+  set entryFrameSounds(value){this.playbackRuntime.entryFrameSounds=value;}
+  get entryFrameControls(){return this.playbackRuntime.entryFrameControls;}
+  set entryFrameControls(value){this.playbackRuntime.entryFrameControls=value;}
+  get cameraShake(){return this.playbackRuntime.cameraShake;}
+  set cameraShake(value){this.playbackRuntime.cameraShake=value;}
+  get cameraPan(){return this.playbackRuntime.cameraPan;}
+  set cameraPan(value){this.playbackRuntime.cameraPan=value;}
+  get colorFade(){return this.playbackRuntime.colorFade;}
+  set colorFade(value){this.playbackRuntime.colorFade=value;}
+
+  _configurePlayback(){
+    this.playbackRuntime.configure({meta:this.meta,stageMeta:this.stageMeta,roster:this.roster,
+      layers:this.layers,alternateLayers:this.alternateLayers,compiledSequences:this.compiledSequences,
+      generation:this.generation});
+  }
+  _nativeBridge(...args){this._configurePlayback();return this.playbackRuntime._nativeBridge(...args);}
+  _nativeSourceControl(...args){this._configurePlayback();return this.playbackRuntime._nativeSourceControl(...args);}
+  _sequenceChannels(run){return this.playbackRuntime._sequenceChannels(run);}
+  _advance(now){this._configurePlayback();return this.playbackRuntime.currentRun=this.playbackRuntime._advance(now);}
+  playSequence(...args){this._configurePlayback();return this.playbackRuntime.playSequence(...args);}
+  advance(snapshot,now=performance.now()){
+    if(this.destroyed)return;
+    // A retiring action may still supply this update's final pose. Hold its
+    // pixels through drawing, or only until the next update when rendering skips.
+    for(const lease of this.retiredLeases.splice(0))lease.release();
+    this._configurePlayback();this.advancing=true;
+    try{
+      const run=this.playbackRuntime.advance(snapshot,now);
+      this.lastDrawAt=now;
+      if(this.stageMeta)this.stageStarted??=now;
+      for(const actor of snapshot?.actors??[]){
+        if(actor.defending){if(!this.defendClocks.has(actor.id))this.defendClocks.set(actor.id,now);}
+        else this.defendClocks?.delete(actor.id);
+      }
+      if(this.ready){
+        const frame=this._actorPresentation(snapshot,now,{run});
+        this.presentationFrame={snapshot,now,frame};this.drawnSlots=frame.slots;
+        for(const {id,segment,frame:pose} of frame.entries)
+          this.lastActorPoses.set(id,{action_index:segment.action_index,action_frame:pose});
+      }
+      return run;
+    }finally{this.advancing=false;}
+  }
+  present(snapshot,now=performance.now(),options={}){
+    if(!options.entryPreview)this.advance(snapshot,now);
+    return this.draw(snapshot,now,options);
+  }
+
   async prepare({actors=null,skills=null,inventory=null,staged=false,onProgress=()=>{}}={}) {
-    if (this.destroyed) throw new Error('战斗表现已销毁');
-    if (this.run||this.detachedRuns.length) throw new Error('行动播放期间不能重新准备战斗');
+    if(this.destroyed)throw new Error('战斗表现已销毁');
+    if(this.run||this.detachedRuns.length)throw new Error('行动播放期间不能重新准备战斗');
     this.resourceController?.abort(abortError('重新准备战斗'));this.resourceController=new AbortController();
-    if (this.ready) {
-      const generation=++this.generation;
-      await this._prepareEntry({actors,skills,inventory,staged,onProgress,isCurrent:()=>!this.destroyed&&generation===this.generation});
-      return staged?this.resourceSnapshot():clone(this.meta);
+    const generation=++this.generation,isCurrent=()=>!this.destroyed&&generation===this.generation;
+    const check=()=>{if(!isCurrent())throw abortError();};
+    if(!this.definition){
+      const identity=JSON.stringify([this.metadataPath,this.itemMetadataPath,this.lifecycleMetadataPath]);
+      const definition=await this.definitionCache.load(this.jsonLoader,this.content,identity,()=>this._readDefinition());
+      check();
+      const stageMeta=this.stageMetadataPath?validateForestStage(await this.jsonLoader(this.stageMetadataPath),this.content):null;
+      check();
+      this.definition=definition;
+      Object.assign(this,{meta:definition.meta,itemMeta:definition.itemMeta,lifecycleMeta:definition.lifecycleMeta,
+        layers:definition.layers,alternateLayers:definition.alternateLayers,lifecyclePairs:definition.lifecyclePairs,
+        damageTextAssets:definition.damageTextAssets,stageMeta:freezeDefinition(stageMeta)});
+      const descriptors=new Map(definition.assetDescriptors.map(asset=>[asset.path,asset]));
+      for(const asset of stageMeta?forestStageAssets(stageMeta):[]){
+        const previous=descriptors.get(asset.path);
+        descriptors.set(asset.path,{...asset,owners:[...new Set([...(previous?.owners??[]),'shared'])]});
+      }
+      this.assetDescriptors=[...descriptors.values()];
+      this.groundFootprints=new Map();this.lifecycleBounds=new Map();
+      this._configurePlayback();
+      this.playbackRuntime.configureLifecycle(this.lifecycleMeta,{
+        appearanceBounds:(roleId,pose)=>this._appearanceBounds(roleId,pose),
+        disappearanceEffect:(actorId,roleId,mode,event)=>this._particleEffect(actorId,roleId,mode,event),
+        appearanceEffect:(actorId,roleId,mode,event)=>this._particleEffect(actorId,roleId,mode,event,true),
+      });
     }
-    const generation = ++this.generation;
-    const check = () => {if (generation !== this.generation || this.destroyed) throw abortError();};
+    await this._prepareEntry({actors,skills,inventory,staged,onProgress,isCurrent});
+    check();
+    if(!staged&&!this.ready){
+      for(const role of this.meta.roles)this.timelines.set(role.id,compileActionTimeline(this.meta,this.layers,role.id,null,null,this.content));
+      for(const role of this.meta.roles)for(const skill of role.alternate_skills??[])this.timelines.set(`${role.id}:${skill.runtime_skill_id}`,compileActionTimeline(this.meta,this.layers,role.id,skill.runtime_skill_id,this.alternateLayers.get(`${role.id}:${skill.runtime_skill_id}`),this.content));
+    }
+    this.ready=true;
+    return staged?this.resourceSnapshot():clone(this.meta);
+  }
+
+  async _readDefinition(){
     const meta = validateBattleViewMetadata(await this.jsonLoader(this.metadataPath),this.content);
     let itemMeta=null;
     if(this.itemMetadataPath){
@@ -308,11 +409,8 @@ export class BattleView {
       meta.missing_effects=[...new Map([...(meta.missing_effects??[]),...(lifecycleMeta.missing_effects??[])].map(row=>[row.id,clone(row)])).values()];
       validateBattleViewMetadata(meta,this.content);
     }
-    addCorrectedPartyPresentations(meta,skills);
     validateBattleViewMetadata(meta,this.content);
-    check();
     const layers = validateLayers(await this.jsonLoader(meta.layers.path, meta.layers.sha256), meta);
-    check();
     const alternateLayers = new Map(),physicalLayers=new Map();
     for(const descriptor of [meta.extra_layers,...(meta.extra_layer_banks??[])].filter(Boolean)){
       const bank=await this.jsonLoader(descriptor.path,descriptor.sha256),role=meta.roles.find(r=>r.id===bank.role_id),lifecycle=lifecycleFrames.get(descriptor.path);
@@ -331,12 +429,11 @@ export class BattleView {
         physicalLayers.set(key,p);
       }
       if(lifecycle&&[...lifecycle.required].some(frame=>!frames.has(frame)))throw new Error('战斗入场死亡图层缺少原始帧');
-      alternateLayers.set(`${bank.role_id}:bank:${descriptor.path}`,bank);check();
+      alternateLayers.set(`${bank.role_id}:bank:${descriptor.path}`,bank);
     }
     for (const role of meta.roles) for (const skill of role.alternate_skills ?? []) if (skill.layers) {
       alternateLayers.set(`${role.id}:${skill.runtime_skill_id}`,validateLayers(await this.jsonLoader(skill.layers.path,skill.layers.sha256),meta,skill.runtime_skill_id));
-      check();
-    }
+      }
     const descriptors = new Map();
     const add = (path, sha256, width, height,owner='shared') => {
       const previous=descriptors.get(path),owners=[...new Set([...(previous?.owners??[]),...(Array.isArray(owner)?owner:[owner])])];
@@ -351,8 +448,6 @@ export class BattleView {
         add('/'+frame.image,frame.png_sha256,asset.width,asset.height);
       }
     }
-    const stageMeta=this.stageMetadataPath?validateForestStage(await this.jsonLoader(this.stageMetadataPath),this.content):null;
-    if(stageMeta)for(const asset of forestStageAssets(stageMeta))add(asset.path,asset.sha256,asset.width,asset.height);
     for (const role of meta.roles) for (const action of role.actions) {
       add(action.sheet, action.sha256, role.frame_width * action.frame_count, role.frame_height * action.directions,role.id);
     }
@@ -368,38 +463,11 @@ export class BattleView {
     for (const source of [layers,...alternateLayers.values()]) for (const pair of source.frames) for (const layer of [pair.main, pair.intrinsic]) {
       add('/' + layer.path, layer.sha256, source.frame_width, source.frame_height,source.role_id);
     }
-    // Commit readiness only after every actor, reaction, effect and intrinsic PNG
-    // has decoded successfully. A failed batch leaves no partly ready command.
-    const assets=[...descriptors.values()];
-    check();
-    this.meta = clone(meta);
-    this.itemMeta=clone(itemMeta);
-    this.stageMeta=clone(stageMeta);
-    this.damageTextAssets=damageTextAssets;
-    this.layers = clone(layers);
-    this.alternateLayers = alternateLayers;
-    this.lifecyclePairs=new Map([layers,...alternateLayers.values()].flatMap(bank=>bank.frames.map(pair=>[`${bank.role_id}:${pair.source_frame}`,pair])));
-    this.groundFootprints=new Map();
-    this.lifecycleBounds=new Map();
-    this.lifecycle=lifecycleMeta?new BattleLifecyclePlayback(lifecycleMeta,{appearanceBounds:(roleId,pose)=>this._appearanceBounds(roleId,pose),
-      disappearanceEffect:(actorId,roleId,mode,event)=>this._particleEffect(actorId,roleId,mode,event),
-      appearanceEffect:(actorId,roleId,mode,event)=>this._particleEffect(actorId,roleId,mode,event,true),
-      onControl:step=>{if(this.preparingEntry)this.entryFrameControls.push(step);
-        else this._nativeSourceControl(step,step.actor_id,undefined,step.at);},
-      nativeBridge:actorId=>this._nativeBridge(actorId),onFrame:step=>{
-        if(this.preparingEntry)this.entryFrameSounds.push({...step,sound_inhibited:Boolean(this.nativeControl?.actor(step.actor_id)?.immune_raw)});
-        else this.onLifecycleFrame?.(step);
-      }}):null;
-    this.assetDescriptors=assets;this.lifecycleMeta=lifecycleMeta;
-    await this._prepareEntry({actors,skills,inventory,staged,onProgress,isCurrent:()=>!this.destroyed&&generation===this.generation});
-    check();
-    this.timelines = new Map();
-    if(!staged){
-      for(const role of meta.roles)this.timelines.set(role.id,compileActionTimeline(meta,layers,role.id,null,null,this.content));
-      for(const role of meta.roles)for(const skill of role.alternate_skills??[])this.timelines.set(`${role.id}:${skill.runtime_skill_id}`,compileActionTimeline(meta,layers,role.id,skill.runtime_skill_id,alternateLayers.get(`${role.id}:${skill.runtime_skill_id}`),this.content));
-    }
-    this.ready = true;
-    return staged?this.resourceSnapshot():clone(meta);
+    const definition={meta,itemMeta,lifecycleMeta,layers,damageTextAssets,
+      assetDescriptors:[...descriptors.values()],alternateLayers:freezeDefinitionMap(alternateLayers),
+      lifecyclePairs:freezeDefinitionMap([layers,...alternateLayers.values()].flatMap(bank=>bank.frames.map(pair=>[`${bank.role_id}:${pair.source_frame}`,pair])))};
+    for(const bank of alternateLayers.values())freezeDefinition(bank);
+    return freezeDefinition(definition);
   }
 
   async _prepareImages(descriptors,actors,onProgress,isCurrent){
@@ -426,13 +494,23 @@ export class BattleView {
   }
 
   async _prepareEntry({actors,skills,inventory,staged,onProgress,isCurrent}){
-    if(addCorrectedPartyPresentations(this.meta,skills)){
+    const correctedRoles=new Set(Object.values(skills??{}).filter(skill=>{
+      if(!hasPartySkillTypeCorrection(skill))return false;
+      const role=this.meta.roles.find(row=>row.id===skill.actor_id);
+      return role&&role.skill.runtime_skill_id!==skill.id&&!role.alternate_skills?.some(row=>row.runtime_skill_id===skill.id);
+    }).map(skill=>skill.actor_id));
+    if(correctedRoles.size){
+      this.meta={...this.meta,roles:this.meta.roles.map(role=>correctedRoles.has(role.id)
+        ?{...role,alternate_skills:[...(role.alternate_skills??[])]}:role)};
+      addCorrectedPartyPresentations(this.meta,skills);
       validateBattleViewMetadata(this.meta,this.content);
       const owners=effectOwners(this.meta,this.itemMeta,this.lifecycleMeta);
-      for(const effect of this.meta.effects)for(const asset of this.assetDescriptors){
-        if([effect.sheet,effect.main_sheet,effect.intrinsic_sheet,effect.shadow_sheet].includes(asset.path))
-          asset.owners=[...new Set([...asset.owners,...owners.get(effect.id)])];
-      }
+      const additional=new Map();
+      for(const effect of this.meta.effects)for(const path of [effect.sheet,effect.main_sheet,effect.intrinsic_sheet,effect.shadow_sheet])
+        if(path)additional.set(path,[...(additional.get(path)??[]),...owners.get(effect.id)]);
+      this.assetDescriptors=this.assetDescriptors.map(asset=>additional.has(asset.path)
+        ?freezeDefinition({...asset,owners:[...new Set([...asset.owners,...additional.get(asset.path)])]}):asset);
+      freezeDefinition(this.meta);
     }
     this.preparedAssets=new WeakMap();
     this.assetPlan=staged?new BattleAssetPlan({meta:this.meta,itemMeta:this.itemMeta,lifecycleMeta:this.lifecycleMeta,
@@ -481,16 +559,16 @@ export class BattleView {
     }catch(error){if(error.name!=='AbortError'&&this.prefetchTicket===ticket&&generation===this.generation)this.onResourceError?.(error);}
   }
   resourceSnapshot(){return {staged:Boolean(this.assetPlan),entry_images:this.entryImageCount??this.images.size,scopes:this.resourceScopes.size};}
-  _releaseRun(run){
-    if(run&&!run.playback_ended){run.playback_ended=true;run.onPlaybackEnd?.();}
-    const lease=run?.resourceLease;if(lease){if(this.drawing)this.retiredLeases.push(lease);else lease.release();run.resourceLease=null;}
+  _releaseRun(run){this.playbackRuntime._releaseRun(run);}
+  _releaseRunResources(run){
+    const lease=run?.resourceLease;if(lease){if(this.advancing||this.drawing)this.retiredLeases.push(lease);else lease.release();run.resourceLease=null;}
   }
 
   setRoster(actors,skills){
     this.lastActorPoses.clear();this.cameraShake=null;this.colorFade=null;this.cameraPan=null;
     this.stageStarted=null;
-    this.drawnSlots=null;
-    this.lifecycle?.reset();this.entryFrameSounds=[];this.entryFrameControls=[];
+    this.drawnSlots=null;this.presentationFrame=null;
+    this.lifecycle?.reset();this.entryFrameSounds=[];this.entryFrameControls=[];this.playbackRuntime.currentRun=null;
     this.defendClocks=new Map();
     this.damageTexts=[];
     if(!this.ready||this.run)throw new Error('战斗资源尚未就绪或正在行动');
@@ -501,51 +579,6 @@ export class BattleView {
       if(!role||!selected.length||actor.side!==this.content.roles[resource_id]?.side||selected.some(s=>actor.side==='player'&&s.id!==(role.skill.runtime_skill_id??'yantu')&&!(role.alternate_skills??[]).some(a=>a.runtime_skill_id===s.id)))throw new Error('战斗人物或技能表现尚未接入');
       return {id:actor.id,resource_id,side:actor.side,party_slot_zero_based:actor.party_slot_zero_based,skill_id:selected[0].id,skill_ids:selected.map(s=>s.id)};
     });
-  }
-
-  _nativeBridge(actorId,control=this.nativeControl,guard=this.nativeControlIsCurrent){
-    const check=()=>{if(!control||this.nativeControl!==control||guard&&!guard())throw abortError('原动作控制器已失效');};
-    return {begin:(raw,at)=>{check();return control.beginNativeVertical(actorId,raw,at);},
-      target:(targetId,raw,at)=>{check();return control.beginNativeTargetVertical(actorId,targetId,raw,at);},
-      appearance:raw=>{check();return control.beginNativeAppearance(actorId,raw);},
-      appearanceComplete:()=>{check();control.completeNativeAppearance(actorId);},
-      entry:(raw,width)=>{check();return control.beginNativeEntry(actorId,raw,width);},
-      entryPoint:x=>{check();control.advanceNativeEntry(actorId,x);},
-      state:()=>{check();return control.nativeVerticalFor(actorId);},
-      record:raw=>{check();control.nativeSourceRecord(actorId,raw);},
-      spriteEnd:pose=>{check();if(!control.finishNativeSpriteRecord(actorId))return false;
-        this.lastActorPoses.set(actorId,{action_index:pose.action_index,action_frame:pose.action_frame});return true;},
-      advance:at=>{check();if(!this.preparingEntry){
-        if(this.sourceVisitTime!==at){this.sourceVisitTime=at;this.sourceVisits=new Set();}
-        if(this.sourceVisits.has(actorId))return false;this.sourceVisits.add(actorId);}
-        control.advanceNativeVerticals(at,actorId);return true;}};
-  }
-
-  _nativeSourceControl(step,actorId,targetId,at,control=this.nativeControl){
-    if(step.command_raw===1)this.cameraShake=beginNativeCameraShake(step.control,at,this.cameraShake);
-    if(step.command_raw===2||step.command_raw===6){
-      const id=step.control.mode_raw?(targetId===undefined?control?.actor(actorId)?.current_target_id:targetId):actorId,
-        actor=control?.actor(id)??this.roster.find(actor=>actor.id===id);
-      if(actor){const point=battleActorPositions(this.roster)[id],x=actor.native_x_raw??point[0]-320;
-        this.cameraPan=beginNativeCameraPan(x+(actor.side==='player'?128:-128),at,this.cameraPan,
-          {immediate:step.command_raw===6,limit:this.stageMeta?.default_composition.camera_limit_x??410});}
-    }
-    if(step.command_raw===11)this.cameraPan=beginNativeCameraPan(0,at,this.cameraPan,
-      {limit:this.stageMeta?.default_composition.camera_limit_x??410});
-    if(step.command_raw===0)this.colorFade=beginNativeColorFade(step.control,at,this.colorFade);
-    //511C30 starts the shared return-to-normal fade at source command11.
-    if(step.command_raw===11&&this.colorFade){this.colorFade=advanceNativeColorFade(this.colorFade,at);
-      if(this.colorFade.value){this.colorFade.active=true;if(this.colorFade.step>=0)this.colorFade.step=-8;}}
-  }
-
-  playSequence(result,{onContact,onRecord,onReactionContact,onReactionRecord,onReactionEnd,onPrimaryEnd,onAttackEnd,onPlaybackEnd,onFrame,onEffectFrame,onCarrierStart,onCarrierEnd,onCarrierTargets,onDetachedError}={}){
-    if(!this.ready||this.destroyed||this.run)return Promise.reject(new Error('完整技能表现尚未就绪或上一行动未结束'));
-    const actor=this.roster.find(a=>a.id===result.actor_id),target=this.roster.find(a=>a.id===result.target_id);
-    if(!this.meta.policy.complete_contacts||!actor||!target||typeof onContact!=='function'||typeof onRecord!=='function')return Promise.reject(new Error('完整技能序列或接触回调缺失'));
-    let compiled;try{compiled=this.compiledSequences.get(result)??compileNativeSequence(this.meta,actor.resource_id,result.plan,[this.layers,...this.alternateLayers.values()]);}catch(e){return Promise.reject(e);}
-    return new Promise((resolve,reject)=>{this.run={sequence:true,native_control:this.nativeControl,native_guard:this.nativeControlIsCurrent,result:clone(result),steps:compiled.steps,segments:compiled.segments,attack_end_step_index:compiled.attack_end_step_index,resolve,reject,onContact,onRecord,onReactionContact,onReactionRecord,onReactionEnd,onPrimaryEnd,onAttackEnd,onPlaybackEnd,onFrame,onEffectFrame,onCarrierStart,onCarrierEnd,onCarrierTargets,onDetachedError,children:[],carriers:[],independent_carriers:compiled.independent_carriers,main_done:false,death_until:0,
-      started:null,elapsed:0,cursor:0,visited:-1,next_at:0,record_visited:-1,impact_called:false,impact_done:false,impact_elapsed:null,effects:[],generation:this.generation,
-      observations:{draws:0,origin_slot:null,last_slot:null,contact_slot:null,bounds:null,intrinsic_source_frames:[],effect_ids:[],contacts:[],authority:'Actual remake Canvas draws with all source contacts; preview animation clock'}};});
   }
 
   playItem(result,{onUse,onFrame,onEffectFrame}={}){
@@ -593,12 +626,13 @@ export class BattleView {
   stop(reason = '战斗表现已取消') {
     this.cancelPreparation(reason);
     this.lastActorPoses.clear();this.cameraShake=null;this.colorFade=null;this.cameraPan=null;
-    this.drawnSlots=null;
+    this.drawnSlots=null;this.presentationFrame=null;
     this.damageTexts=[];
     this.lifecycle?.reset();this.entryFrameSounds=[];this.entryFrameControls=[];
     this.prefetchTicket=null;this.prefetchLease=null;
     for(const run of [this.run,...this.detachedRuns].filter(Boolean)){if(!run.primary_resolved)run.reject(abortError(reason));this._releaseRun(run);}
-    this.run=null;this.detachedRuns=[];
+    this.run=null;this.detachedRuns=[];this.playbackRuntime.currentRun=null;
+    for(const lease of this.retiredLeases.splice(0))lease.release();
     if(this.resourcePool&&this.resourcePool.scopes.get('battle-actors')===this.resourceLease)this.resourcePool.release('battle-actors');
   }
 
@@ -609,235 +643,6 @@ export class BattleView {
     for (const image of this.images.values()) image?.close?.();
     this.images.clear();
     if(this.resourcePool&&this.resourcePool.scopes.get('battle-actors')===this.resourceLease)this.resourcePool.release('battle-actors');
-  }
-
-  _fail(run, error) {
-    if(this.run===run)this.run=null;
-    this.detachedRuns=this.detachedRuns.filter(old=>old!==run);
-    if(run.primary_resolved)run.onDetachedError?.(error);else run.reject(error);
-    this._releaseRun(run);
-  }
-
-  _advance(now) {
-    this.sourceVisitTime=now;this.sourceVisits=new Set();
-    if(this.detachedRuns.length||this.run?.sequence||this.nativeControl&&(!this.nativeControlIsCurrent||this.nativeControlIsCurrent())&&Number.isFinite(this.nativeControl.nextNativeVerticalAt()))return this._advanceSequenceRuns(now);
-    const run = this.run;
-    if (!run) return null;
-    if (run.started === null) run.started = now;
-    run.elapsed = Math.max(run.elapsed, now - run.started);
-    const ms = this.meta.policy.frame_ms;
-    run.cursor = Math.min(run.steps.length - 1, Math.floor(run.elapsed / ms));
-    for (let index = run.visited + 1; index <= run.cursor; index++) {
-      const step = run.steps[index];
-      for (const effect of step.effects) {
-        if (effect.slot === 'target' && !this._damaging(run.result)) continue;
-        run.effects.push({...clone(effect), at: index * ms});
-      }
-      if (step.event && !run.impact_called) {
-        run.impact_called = true;
-        run.impact_elapsed = index * ms;
-        const detail = {actor_id: run.result.actor_id, target_id: run.result.target_id,
-          skill_id: run.result.skill_id, source_frame: step.source_frame,
-          action_index: step.action_index, logical_frame: step.logical_frame,
-          chr_record_index: step.chr_record_index, event: clone(step.event), source: clone(step.source),
-          basis: 'original CHR +0x49 logical event position; presentation preview clock'};
-        try {
-          const pending = run.onImpact(detail);
-          if (pending && typeof pending.then === 'function') {
-            Promise.resolve(pending).then(() => {if (this.run === run){run.impact_done = true;this._queueDamageText(run,run.result,this.lastDrawAt??now);}}, error => this._fail(run, error));
-          } else {run.impact_done = true;this._queueDamageText(run,run.result,now);}
-        } catch (error) {this._fail(run, error); return null;}
-      }
-    }
-    run.visited = run.cursor;
-    if (this.run !== run) return null;
-    if (run.elapsed >= run.steps.length * ms + this.meta.policy.tail_ms && run.impact_done) {
-      this.run = null;this._releaseRun(run);
-      run.resolve({completed: true, impact_committed: true, actor_id: run.result.actor_id,
-        source_frame: run.steps.find(step => step.event).source_frame,observations:clone(run.observations)});
-      return null;
-    }
-    return run;
-  }
-
-  _sequenceChannels(run){return [...run.carriers,run,...run.children];}
-
-  _sequenceRuns(){return [...this.detachedRuns,this.run].filter(run=>run?.sequence);}
-
-  _markAttackEnd(run,at){
-    if(run.attack_ended)return;
-    run.attack_ended=true;run.onAttackEnd?.(run.started+at);
-  }
-
-  _releaseAction(run,at){
-    if(run.primary_resolved)return;
-    run.primary_resolved=true;if(this.run===run)this.run=null;
-    if(!this.detachedRuns.includes(run))this.detachedRuns.push(run);
-    this._markAttackEnd(run,at);
-    run.resolve({completed:true,interrupted:Boolean(run.interrupted),playback_pending:true,carriers_pending:run.carriers.some(c=>!c.done),
-      impact_committed:run.observations.contacts.length>0,contact_count:run.observations.contacts.length,observations:clone(run.observations)});
-  }
-
-  _interruptActor(actorId,now){
-    for(const owner of this._sequenceRuns()){
-      if(!owner.main_done&&owner.result.actor_id===actorId){
-        owner.main_done=true;owner.interrupted=true;owner.onPrimaryEnd?.(now,false);
-        this._releaseAction(owner,Math.max(0,now-owner.started));
-      }
-      for(const child of owner.children)if(!child.done&&child.result.actor_id===actorId){child.done=true;owner.onReactionEnd?.(clone(child.descriptor),false,now);}
-    }
-  }
-
-  _advanceSequenceRuns(now){
-    const roots=()=>this._sequenceRuns();
-    for(const root of roots()){root.started??=now;root.elapsed=Math.max(root.elapsed,now-root.started);}
-    const control=this.nativeControl,valid=control&&(!this.nativeControlIsCurrent||this.nativeControlIsCurrent());
-    const visited=this.sourceVisits??=new Set(),owned=new Set([...roots().flatMap(root=>this._sequenceChannels(root).filter(c=>!c.carrier&&!c.done&&!(c===root&&root.main_done)).map(c=>c.result.actor_id)),...this.lifecycle?.channels.keys()??[]]);
-    if(valid)for(const [id,clock]of control.verticalClocks)if(!owned.has(id)&&now-clock.at>=20){control.advanceNativeVerticals(now,id);visited.add(id);}
-    // Merge every detached carrier with the current action before callbacks.
-    // A later command cannot consume RNG ahead of an earlier carrier contact
-    // merely because RAF delivered both in one render frame.
-    for(let visits=0;visits<30000;visits++){
-      if(visits===29999)throw new Error('战斗动作时钟访问超出范围');
-      let root=null,at=Infinity,carrierFirst=false;
-      for(const candidate of roots())for(const channel of this._sequenceChannels(candidate)){
-        if(channel.done||channel===candidate&&candidate.main_done||visited.has(channel.carrier?channel:channel.result.actor_id))continue;
-        const due=candidate.started+channel.next_at;
-        if(due<at||due===at&&channel.carrier&&!carrierFirst){root=candidate;at=due;carrierFirst=Boolean(channel.carrier);}
-      }
-      if(!root||at>now)break;
-      this._advanceSequence(now,root,1,visited);
-    }
-    for(const root of roots())this._advanceSequence(now,root,0,visited);
-    return this.run??this.detachedRuns[0]??null;
-  }
-
-  _advanceSequence(now,run=this.run,limit=20000,visited=new Set()){if(run.started===null)run.started=now;run.elapsed=Math.max(run.elapsed,now-run.started);
-    const ms=run.frame_ms??this.meta.policy.frame_ms;
-    try{
-      if(run.native_control&&(this.nativeControl!==run.native_control||run.native_guard&&!run.native_guard()))throw abortError('原行动控制器已失效');
-      // Merge parent/reaction frame visits by preview time; a slow RAF preserves
-      // contact ordering and cannot collapse an entire counter into one callback.
-      let iterations=0;
-      while(true){
-        if(iterations++>=limit)break;
-        const channels=this._sequenceChannels(run);let selected=null,at=Infinity,ending=false;
-        // Native 51A240 hands the final source record straight to 51CC00.
-        // The old preview tail must not hold a completed actor's last pose.
-        for(const channel of channels){if(channel.done||(channel===run&&run.main_done)||visited.has(channel.carrier?channel:channel.result.actor_id))continue;const end=channel.visited+1>=channel.steps.length,due=channel.next_at;if(due<at){selected=channel;at=due;ending=end;}}
-        // Use the same absolute deadline as the merged scheduler. Subtracting
-        // fractional RAF timestamps can round elapsed just below a due frame.
-        if(!selected||run.started+at>now)break;
-        // Native 51BB90 stores now when a source frame is due. Resetting at
-        // its old deadline would catch up skipped frames and shorten recovery.
-        at=now-run.started;const channel=selected,child=Boolean(channel.descriptor),carrier=Boolean(channel.carrier);
-        visited.add(carrier?channel:channel.result.actor_id);
-        if(!carrier&&run.native_control){
-          run.native_control.advanceNativeVerticals(now,channel.result.actor_id);
-          const bridge=this._nativeBridge(channel.result.actor_id,run.native_control,run.native_guard);
-          if(bridge.state().waiting){channel.next_at=at+20;continue;}channel.vertical_wait=false;
-        }
-        if(ending){if(carrier)channel.done=true;else if(child){channel.done=true;run.onReactionEnd?.(clone(channel.descriptor),true,run.started+at);}else{run.main_done=true;run.onPrimaryEnd?.(run.started+at);if(Number.isInteger(run.attack_end_step_index))this._releaseAction(run,at);}continue;}
-        const i=channel.visited+1,step=channel.steps[i];
-        if(channel===run&&Number.isInteger(run.attack_end_step_index)&&i>=run.attack_end_step_index)this._markAttackEnd(run,at);
-        if(!carrier)run.onFrame?.({...clone(step),actor_id:channel.result.actor_id,target_id:channel.result.target_id,channel_id:child?channel.channel_id:'main'});
-        channel.cursor=i;
-        if(!carrier&&(step.plan_record_index!==channel.record_visited||step.visibility_end)){
-          if(child)run.onReactionRecord?.({...clone(step),presentation_time_ms:run.started+at},clone(channel.descriptor));else run.onRecord({...clone(step),presentation_time_ms:run.started+at});
-          channel.carrier_targets=step.command_raw===4?run.onCarrierTargets?.(clone(step),channel.descriptor?clone(channel.descriptor):null):null;
-          channel.record_visited=step.plan_record_index;
-          this._nativeSourceControl(step,channel.result.actor_id,channel.result.target_id,run.started+at,run.native_control);
-        }
-        if(!carrier&&step.command_raw===4&&channel.carrier_targets?.target_ids.length===0){channel.visited=i;channel.next_at=at;continue;}
-        let entryVisited=i;
-        if(step.entry_raw_hex){
-          const bridge=this._nativeBridge(channel.result.actor_id,run.native_control,run.native_guard);
-          channel.entry=nativeEntryPath(bridge.entry(step.entry_raw_hex,step.entry_width),at-(channel.at??0));
-        }
-        if(channel.entry&&step.command_raw===undefined&&channel.segments[step.segment_index].movement_step_raw>0){
-          const complete=advanceNativeEntryPath(channel.entry,channel.segments[step.segment_index].movement_step_raw,at-(channel.at??0),step.duration_ms??ms);
-          this._nativeBridge(channel.result.actor_id,run.native_control,run.native_guard).entryPoint(channel.entry.origin+channel.entry.to);
-          if(complete)entryVisited=channel.steps.findLastIndex(row=>row.plan_record_index===step.plan_record_index);
-          else if(channel.steps[i+1]?.plan_record_index!==step.plan_record_index)entryVisited=channel.steps.findIndex(row=>row.plan_record_index===step.plan_record_index)-1;
-        }
-        if(step.vertical_raw_hex){
-          const bridge=this._nativeBridge(channel.result.actor_id,run.native_control,run.native_guard),state=bridge.begin(step.vertical_raw_hex,run.started+at);
-          channel.vertical_wait=state.waiting;
-        }
-        if(step.target_vertical_raw_hex){
-          // case10's wait byte belongs to the target, so the acting source
-          // advances while the target's existing response waits on its Z.
-          const bridge=this._nativeBridge(channel.result.actor_id,run.native_control,run.native_guard);
-          const state=bridge.target(channel.result.target_id,step.target_vertical_raw_hex,run.started+at);
-          if(state)for(const target of this._sequenceChannels(run))if(!target.carrier&&target.result.actor_id===channel.result.target_id)
-            target.vertical_wait=state.waiting;
-        }
-        if(step.carrier_spawn){
-          const source=step.carrier_spawn,id=`carrier-${run.carriers.length}`,firstAt=Math.max(at,source.interval_ms-run.started);
-          const carrier={carrier:true,channel_id:id,descriptor:channel.descriptor??null,result:clone(channel.result),steps:clone(source.steps),segments:[],carrier_targets:clone(channel.carrier_targets??null),
-            at,next_at:firstAt,elapsed:0,cursor:0,visited:-1,record_visited:-1,effects:[],done:false};
-          for(const target_id of carrier.carrier_targets?.group?carrier.carrier_targets.target_ids:[null])carrier.effects.push({asset_id:source.asset_id,slot:target_id?'target':source.slot,...(target_id?{target_id}:{}),unconditional:true,full_screen_effect:step.full_screen_effect,frame_count:source.frames.length,
-            source_frames:clone(source.frames),logical_start:source.start,frame_ms:source.interval_ms,at:firstAt-at-source.interval_ms,visited_frame:0});
-          run.carriers.push(carrier);run.onCarrierStart?.({carrier_id:id,source:clone(step),actor_id:channel.result.actor_id});
-        }
-        if(step.carrier_end){channel.done=true;run.onCarrierEnd?.({carrier_id:channel.channel_id,source:clone(step),actor_id:channel.result.actor_id},run.started+at);}
-        if(step.visibility)channel.visibility={...clone(step.visibility),started:step.visibility_end?channel.visibility?.started??at:at,complete:Boolean(step.visibility_end)};
-        if(step.event){
-          const detail={...clone(step),...(channel.carrier_targets?.group?{carrier_target_ids:clone(channel.carrier_targets.target_ids)}:{}),presentation_time_ms:run.started+at,contact_key:`${carrier||child?channel.channel_id:'main'}:${step.plan_record_index}:${step.logical_frame}`,actor_id:channel.result.actor_id,target_id:channel.result.target_id,skill_id:channel.result.skill_id,
-            basis:'Original logical CHR contact position; original composition and DGP frame table, preview animation clock'};
-          const response=child?run.onReactionContact?.(detail,clone(channel.descriptor)):run.onContact(detail);if(!response||typeof response.then==='function')throw new Error('完整接触结算必须同步返回原结算结果');
-          channel.result={...channel.result,skipped:null,...clone(response)};channel.impact_called=true;channel.impact_done=true;channel.impact_elapsed=at-(channel.at??0);
-          for(const hit of response.group_results??[response])this._queueDamageText({...channel,result:{...channel.result,target_id:hit.target_id??channel.result.target_id}},hit,now);
-          if((response.item_effect??response.item_used)&&run.item_effect_id){const asset=this.meta.effects.find(e=>e.id===run.item_effect_id);if(!asset)throw new Error('药品恢复特效缺失');
-            for(const hit of response.group_results??[response])if(hit.item_effect??hit.item_used)channel.effects.push({asset_id:asset.id,slot:'target',...(hit.target_id?{target_id:hit.target_id}:{}),unconditional:true,at:at-(channel.at??0),frame_ms:asset.interval_raw,visited_frame:-1});}
-          // Native killer F5F9 doubles the current record interval; entering
-          // the next source record clears it. Base65ms remains a preview policy.
-          if(response.killer_frame_factor===2&&!step.effect_contact)channel.slow_record=step.plan_record_index;
-          if(response.death)run.death_until=Math.max(run.death_until,at+520);
-          for(const hit of response.group_results??[response])run.observations.contacts.push({...detail,target_id:hit.target_id??detail.target_id,hit:hit.hit,damage:hit.damage,remainingHp:hit.remainingHp,skipped:hit.skipped??null});
-          if(response.interrupt_actor_id)this._interruptActor(response.interrupt_actor_id,run.started+at);
-          for(const hit of response.group_results??[response])if(hit.reaction_descriptor){
-            const descriptor=clone(hit.reaction_descriptor),role=this._role(descriptor.actor_id),plan=clone(descriptor.plan);plan.allow_no_contacts=true;plan.handler='native-response';
-            plan.initial_pose=clone(this.lastActorPoses.get(descriptor.actor_id)??null);
-            const compiled=compileNativeSequence(this.meta,role.id,plan,[this.layers,...this.alternateLayers.values()]);
-            for(const old of run.children)if(!old.done&&old.result.actor_id===descriptor.actor_id){old.done=true;run.onReactionEnd?.(clone(old.descriptor),false);}
-            run.children.push({sequence:true,result:{actor_id:descriptor.actor_id,target_id:descriptor.target_id,skill_id:descriptor.skill.id,plan},descriptor,steps:compiled.steps,segments:compiled.segments,
-              channel_id:`reaction-${run.children.length}`,at,next_at:at,elapsed:0,cursor:0,visited:-1,record_visited:-1,impact_called:false,impact_done:false,impact_elapsed:null,effects:[],done:false});
-          }
-        }
-        for(const effect of step.effects){
-          const allocation=effect.unconditional&&step.command_raw===4&&channel.carrier_targets?.group;
-          const hits=effect.unconditional&&step.command_raw===4?
-            allocation?channel.carrier_targets.target_ids.map(target_id=>({target_id})):[channel.result]:
-            effect.slot==='target'&&channel.result.group_results?channel.result.group_results:[channel.result];
-          for(const hit of hits){if(effect.slot==='target'&&!effect.unconditional&&(!(hit.target_id??channel.result.target_id)||!this._damaging(hit)))continue;
-            channel.effects.push({...clone(effect),...(effect.unconditional&&step.command_raw===4?{logical_start:step.logical_frame,visited_frame:0}:{}),...(allocation?{slot:'target'}:{}),...(allocation||effect.slot==='target'?{target_id:hit.target_id??channel.result.target_id}:{}),...(step.duration_ms>0?{frame_ms:step.duration_ms}:{}),at:at-(channel.at??0)});}
-        }
-        const interval=(step.duration_ms??ms)*(channel.slow_record===step.plan_record_index?2:1);
-        channel.frame_started_at=at-(channel.at??0);channel.frame_duration_ms=interval;
-        channel.visited=entryVisited;channel.next_at=at+interval;
-        // 510900 starts id4's hold on the last sprite. 5130D0 also calls
-        // 51A240 immediately for terminal controls, including height waits.
-        const heldSprite=!carrier&&step.command_raw===undefined&&entryVisited+1>=channel.steps.length&&run.native_control&&
-          this._nativeBridge(channel.result.actor_id,run.native_control,run.native_guard).spriteEnd(step);
-        if(heldSprite||step.command_raw!==undefined&&interval===0&&entryVisited+1>=channel.steps.length){
-          if(child){channel.done=true;run.onReactionEnd?.(clone(channel.descriptor),true,now);}
-          else if(!carrier){run.main_done=true;run.onPrimaryEnd?.(now);if(Number.isInteger(run.attack_end_step_index))this._releaseAction(run,at);}
-        }
-      }
-      for(const c of [...run.children,...run.carriers])c.elapsed=Math.max(0,run.elapsed-c.at);
-      for(const channel of this._sequenceChannels(run))for(const [index,effect]of channel.effects.entries()){const asset=this.meta.effects.find(e=>e.id===effect.asset_id),cursor=Math.min((effect.frame_count??asset.frames.length)-1,Math.floor((channel.elapsed-effect.at)/(effect.frame_ms??ms)));
-        for(let frame=(effect.visited_frame??-1)+1;frame<=cursor;frame++)run.onEffectFrame?.({asset_id:asset.id,logical_frame:(effect.logical_start??0)+frame,
-          actor_id:channel.result.actor_id,target_id:effect.target_id??channel.result.target_id,channel_id:channel.channel_id??'main',effect_index:index});effect.visited_frame=Math.max(effect.visited_frame??-1,cursor);}
-      const visualEnd=Math.max(0,...this._sequenceChannels(run).flatMap(c=>c.effects.filter(e=>e.unconditional).map(e=>(c.at??0)+e.at+(e.frame_count??this.meta.effects.find(a=>a.id===e.asset_id).frames.length)*(e.frame_ms??ms))));
-      const foregroundDone=run.main_done&&run.children.every(c=>c.done);
-      if(foregroundDone&&run.independent_carriers&&!run.primary_resolved)this._releaseAction(run,run.elapsed);
-      if(foregroundDone&&run.carriers.every(c=>c.done)&&run.elapsed>=Math.max(run.death_until,visualEnd)){
-        if(this.run===run)this.run=null;this.detachedRuns=this.detachedRuns.filter(old=>old!==run);this._releaseRun(run);
-        if(!run.primary_resolved)run.resolve({completed:true,interrupted:Boolean(run.interrupted),impact_committed:run.observations.contacts.length>0,contact_count:run.observations.contacts.length,observations:clone(run.observations)});return null;
-      }
-      return run;
-    }catch(error){this._fail(run,error);return null;}
   }
 
   _damaging(result) {return result.hit !== false && result.hit !== 'miss' && result.hit !== 'MISS' && Number(result.damage) > 0;}
@@ -1015,72 +820,15 @@ export class BattleView {
     const bounds={min_x:Math.floor(minX*scale),max_x:Math.floor(maxX*scale),max_y:Math.floor(maxY*scale),empty:maxY<0,pose:sourcePose};this.lifecycleBounds.set(key,bounds);return bounds;
   }
 
-  draw(snapshot, now = performance.now(), {entryPreview=false} = {}) {
-    if (this.destroyed) return;
-    if (!Number.isFinite(now)) throw new Error('战斗表现时钟无效');
-    this.drawing=true;
-    try{
-    if(!entryPreview){
-      this.lastDrawAt=now;
-      // Hidden entry preparation stages controls until the battle is active.
-      // Its unshown source time never creates camera or color clock debt.
-      for(const step of this.entryFrameControls.splice(0))this._nativeSourceControl(step,step.actor_id,undefined,now);
-      for(const step of this.entryFrameSounds.splice(0))this.onLifecycleFrame?.(step);
-    }
-    // Periodic source responses and deaths can replace a playing CHR record
-    // between render frames. Retire its future contacts before replaying RAF
-    // catch-up; the independent lifecycle channel owns the new source pose.
-    if(!entryPreview&&snapshot?.lifecycle_events)for(const active of this._sequenceRuns()){
-      active.external_interrupts??=new Set();
-      for(const event of snapshot.lifecycle_events){
-        if(!['response','death','revive'].includes(event.kind)||active.external_interrupts.has(event.token))continue;
-        active.external_interrupts.add(event.token);
-        this._interruptActor(event.actor_id,now);
-      }
-    }
-    const run=!entryPreview&&this.ready?this._advance(now):null;
-    if(!entryPreview&&this.ready&&snapshot?.actors){
-      const current=this.nativeControl&&(!this.nativeControlIsCurrent||this.nativeControlIsCurrent())?this.nativeControl.state:null;
-      this.lifecycle?.advance(current?.lifecycle_events?{...snapshot,actors:current.actors,lifecycle_events:current.lifecycle_events}:snapshot,this.roster,now);
-    }
-    if(!entryPreview&&this.cameraShake)this.cameraShake=advanceNativeCameraShake(this.cameraShake,now);
-    if(!entryPreview&&this.cameraPan)this.cameraPan=advanceNativeCameraPan(this.cameraPan,now);
-    if(!entryPreview&&this.colorFade)this.colorFade=advanceNativeColorFade(this.colorFade,now);
-    const ctx = this.context, width = this.canvas.width, height = this.canvas.height;
-    ctx.beginFrame?.();
-    ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,width,height);ctx.fillStyle='#000';ctx.fillRect(0,0,width,height);
-    const viewport=battleViewport(width,height);
-    ctx.save();ctx.beginPath();ctx.rect(viewport.x,viewport.y,viewport.width,viewport.height);ctx.clip();
-    if(this.stageMeta)ctx.setTransform(viewport.scale/1.125,0,0,viewport.scale/1.125,viewport.x-120*viewport.scale/1.125,viewport.y);
-    else ctx.setTransform(viewport.width/960,0,0,viewport.height/540,viewport.x,viewport.y);
-    if(!entryPreview&&this.cameraShake){const scale=this.stageMeta?1.125:(this.meta?.policy.sprite_scale??1.5);ctx.translate(-this.cameraShake.x*scale,-this.cameraShake.y*scale);}
-    ctx.imageSmoothingEnabled = false;
-    ctx.clearRect(0, 0, 960, 540);
-    if(this.stageMeta){if(!entryPreview)this.stageStarted??=now;ctx.fillStyle='#101719';ctx.fillRect(0,0,960,540);drawForestStageBackground(ctx,this.stageMeta,this.images,entryPreview?0:now-this.stageStarted,entryPreview?null:this.colorFade,entryPreview?0:this.cameraPan?.x??0);}
-    else{
-      const backdrop = ctx.createLinearGradient(0, 0, 0, 540);
-      backdrop.addColorStop(0, '#111f27'); backdrop.addColorStop(.68, '#273b42'); backdrop.addColorStop(1, '#142429');
-      ctx.fillStyle = backdrop; ctx.fillRect(0, 0, 960, 540);
-      ctx.strokeStyle = '#759a9a35'; ctx.beginPath(); ctx.moveTo(0, 384); ctx.lineTo(960, 384); ctx.stroke();
-    }
-    if (!this.ready){ctx.restore();return;}
-    if(!entryPreview&&this.cameraPan)ctx.translate(-this.cameraPan.x*(this.stageMeta?1.125:this.meta.policy.sprite_scale),0);
+  _actorPresentation(snapshot,now,{entryPreview=false,run=entryPreview?null:this.playbackRuntime.currentRun}={}){
     const roots=entryPreview?[]:[...this.detachedRuns,...(this.run?[this.run]:[])],slots = this._slots(run),groundSlots=this._slots(run,true);
     if(run?.sequence)for(const c of roots.flatMap(root=>[...root.children,...(!root.main_done?[root]:[])]).filter(c=>!c.done)){slots[c.result.actor_id]=this._slots(c)[c.result.actor_id];groundSlots[c.result.actor_id]=this._slots(c,true)[c.result.actor_id];}
-    if (run) {
-      const o=run.observations,slot=slots[run.result.actor_id];o.draws++;
-      o.origin_slot??=clone(this._slots(null)[run.result.actor_id]);o.last_slot=clone(slot);
-      if(run.impact_called&&!o.contact_slot)o.contact_slot=clone(slot);
-      o.bounds??=[...slot,...slot];o.bounds=[Math.min(o.bounds[0],slot[0]),Math.min(o.bounds[1],slot[1]),Math.max(o.bounds[2],slot[0]),Math.max(o.bounds[3],slot[1])];
-    }
-    // The HUD consumes this frame's positions, including reaction-channel
-    // movement and native altitude, rather than reconstructing formation slots.
-    this.drawnSlots=slots;
     const actors = new Map((snapshot?.actors || []).map(actor => [actor.id, actor]));
     const queue=[...this.roster.filter(a=>a.side==='enemy'),...this.roster.filter(a=>a.side==='player')].map(a=>({...a,depth_y:groundSlots[a.id][1]}));
     // Ground depth follows approach/return on both stage and preview paths.
     // Native altitude moves the body only; it must not change occlusion order.
     queue.sort((a,b)=>a.depth_y-b.depth_y);
+    const entries=[];
     for (const {id} of queue) {
       if(entryPreview&&!this.lifecycle?.entryPrepared&&snapshot?.lifecycle_events?.some(event=>event.actor_id===id&&event.kind==='entry'))continue;
       const role = this._role(id), actor = actors.get(id), slot = slots[id];
@@ -1108,9 +856,8 @@ export class BattleView {
         const last=this.lastActorPoses.get(id);segment={action_index:last.action_index};frame=last.action_frame;
         const action=role.actions.find(a=>a.index===segment.action_index);pair=this.lifecyclePairs.get(`${role.id}:${action.first_frame+frame}`)??null;
       } else if(actor?.defending&&role.response_skills?.some(s=>s.chr_skill_index===9)){
-        if(!this.defendClocks.has(id))this.defendClocks.set(id,now);
         segment=role.response_skills.find(s=>s.chr_skill_index===9).segments[0];
-        frame=poseFrame(segment,now-this.defendClocks.get(id));
+        frame=poseFrame(segment,now-(this.defendClocks.get(id)??now));
       } else if (impacting) {
         const age = Math.max(0, impacting.elapsed - impacting.impact_elapsed);
         segment = role.reaction;
@@ -1127,7 +874,50 @@ export class BattleView {
       if(visibility){const progress=visibility.complete?1:Math.min(1,Math.max(0,acting.elapsed-visibility.started)/(visibility.complete_ticks*visibility.clock_ms));alpha*=visibility.kind==='appear'?progress:1-progress;}
       else if(actor?.native_visibility?.complete&&actor.native_visibility.kind==='disappear')alpha=0;
       if(!lifePose)alpha*=this.lifecycle?.alpha(id)??1;
-      if(!actor?.defending)this.defendClocks?.delete(id);
+      entries.push({id,role,actor,slot,nativeZ,segment,frame,pair,alpha,acting});
+    }
+    return {roots,slots,groundSlots,entries};
+  }
+
+  draw(snapshot, now = performance.now(), {entryPreview=false} = {}) {
+    if (this.destroyed) return;
+    if (!Number.isFinite(now)) throw new Error('战斗表现时钟无效');
+    this.drawing=true;
+    try{
+    const run=entryPreview?null:this.playbackRuntime.currentRun;
+    const ctx = this.context, width = this.canvas.width, height = this.canvas.height;
+    ctx.beginFrame?.();
+    ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,width,height);ctx.fillStyle='#000';ctx.fillRect(0,0,width,height);
+    const viewport=battleViewport(width,height);
+    ctx.save();ctx.beginPath();ctx.rect(viewport.x,viewport.y,viewport.width,viewport.height);ctx.clip();
+    if(this.stageMeta)ctx.setTransform(viewport.scale/1.125,0,0,viewport.scale/1.125,viewport.x-120*viewport.scale/1.125,viewport.y);
+    else ctx.setTransform(viewport.width/960,0,0,viewport.height/540,viewport.x,viewport.y);
+    if(!entryPreview&&this.cameraShake){const scale=this.stageMeta?1.125:(this.meta?.policy.sprite_scale??1.5);ctx.translate(-this.cameraShake.x*scale,-this.cameraShake.y*scale);}
+    ctx.imageSmoothingEnabled = false;
+    ctx.clearRect(0, 0, 960, 540);
+    if(this.stageMeta){ctx.fillStyle='#101719';ctx.fillRect(0,0,960,540);drawForestStageBackground(ctx,this.stageMeta,this.images,entryPreview?0:now-(this.stageStarted??now),entryPreview?null:this.colorFade,entryPreview?0:this.cameraPan?.x??0);}
+    else{
+      const backdrop = ctx.createLinearGradient(0, 0, 0, 540);
+      backdrop.addColorStop(0, '#111f27'); backdrop.addColorStop(.68, '#273b42'); backdrop.addColorStop(1, '#142429');
+      ctx.fillStyle = backdrop; ctx.fillRect(0, 0, 960, 540);
+      ctx.strokeStyle = '#759a9a35'; ctx.beginPath(); ctx.moveTo(0, 384); ctx.lineTo(960, 384); ctx.stroke();
+    }
+    if (!this.ready){ctx.restore();return;}
+    if(!entryPreview&&this.cameraPan)ctx.translate(-this.cameraPan.x*(this.stageMeta?1.125:this.meta.policy.sprite_scale),0);
+    const cached=this.presentationFrame;
+    const {roots,slots,groundSlots,entries}=!entryPreview&&cached?.snapshot===snapshot&&cached.now===now
+      ?cached.frame:this._actorPresentation(snapshot,now,{entryPreview,run});
+    this.drawnSlots=slots;
+    if (run) {
+      const o=run.observations,slot=slots[run.result.actor_id];o.draws++;
+      o.origin_slot??=clone(this._slots(null)[run.result.actor_id]);o.last_slot=clone(slot);
+      if(run.impact_called&&!o.contact_slot)o.contact_slot=clone(slot);
+      o.bounds??=[...slot,...slot];o.bounds=[Math.min(o.bounds[0],slot[0]),Math.min(o.bounds[1],slot[1]),Math.max(o.bounds[2],slot[0]),Math.max(o.bounds[3],slot[1])];
+    }
+    // The HUD consumes this frame's positions, including reaction-channel
+    // movement and native altitude, rather than reconstructing formation slots.
+    this.drawnSlots=slots;
+    for (const {id,role,actor,slot,nativeZ,segment,frame,pair,alpha,acting} of entries) {
       ctx.save();
       if(role.shadow){
         const s=role.shadow,sourceFrame=role.actions.find(a=>a.index===segment.action_index).first_frame+frame,scale=this.meta.policy.sprite_scale;
@@ -1141,7 +931,6 @@ export class BattleView {
       }
       ctx.restore();
       if(!this.lifecycle?.drawParticles(id,ctx,slot[0],slot[1]))this._sprite(role, segment.action_index, frame, slot[0], slot[1], alpha, pair);
-      if(!entryPreview)this.lastActorPoses.set(id,{action_index:segment.action_index,action_frame:frame});
       if(acting&&pair?.intrinsic.active&&!run.observations.intrinsic_source_frames.includes(pair.source_frame))run.observations.intrinsic_source_frames.push(pair.source_frame);
     }
     if (run) {
