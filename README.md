@@ -1,20 +1,28 @@
 # The Seventh Seal Remake
 
-《第七封印》重制项目。仓库保存浏览器游戏代码、配置、内容定义、资源导出工具和测试；图片、音乐、影片等媒体由使用者从自己的原版安装中提取。
+《第七封印》重制项目。仓库保存浏览器游戏代码、固定规则与内容定义、内置位图字库、资源导出工具和测试；原作图片、音乐、影片由使用者从自己的原版安装中提取。
 
 当前代码使用随仓库提供的 Phaser 3.90.0 和 WebGL 渲染，包含探索、剧情、战斗、操作菜单和存读档。已接入范围、剩余支线、工程待办与验收边界，统一见[当前开发计划](remake/assessment/validation_design.md)。
 
 ## 本地运行
 
-**首次构建尚未打通。** 干净克隆只有代码和结构化定义；现有构建入口仍依赖部分本地来源台账和历史样本。运行正式游戏需要与当前定义匹配的已生成媒体，准备与缺失处理见[本地资料](remake/local_materials.md)。
-
-从仓库根目录启动（Python 3，需安装Pillow）：
+首次准备需要 Python 3.12 或更新版本、Node.js、FFmpeg 和 FFprobe。从仓库根目录安装固定 Python 依赖，然后指定完整原版安装目录：
 
 ```console
-python3 -B remake/runtime/serve.py
+python3 -m venv .venv
+.venv/bin/python -m pip install -r remake/runtime/requirements.txt
+.venv/bin/python -B remake/runtime/tools/build_runtime.py --target media --original-dir "/path/to/DiQiFengYin" --run --serve
 ```
 
-Windows 可用 `python -B remake/runtime/serve.py`，或双击 `remake/start.cmd`。访问 <http://127.0.0.1:8767/>；存档目录仍为 `remake/saves/`，普通档使用原版 `SaveGame0.Dat`～`SaveGame19.Dat`，快速档使用 `Game.SAV`。可读取原版普通档与快速档，保存也使用原版二进制格式；JSON存档不再读取。具体操作以游戏内提示为准。
+构建只生成媒体及素材清单，直接使用仓库中的规则、数值、剧情和字库；不依赖历史台账、观察存档或 Windows GDI。缺原文件或图片不匹配会明确报错，已完成的素材可以复用。构建完成后在 <http://127.0.0.1:8767/> 开玩。
+
+后续启动无需再次提供原版目录：
+
+```console
+.venv/bin/python -B remake/runtime/serve.py
+```
+
+Windows 将 `.venv/bin/python` 换成 `.venv\Scripts\python.exe`；已有媒体时也可双击 `remake/start.cmd`。存档目录仍为 `remake/saves/`，普通档使用原版 `SaveGame0.Dat`～`SaveGame19.Dat`，快速档使用 `Game.SAV`。可读取原版普通档与快速档，保存也使用原版二进制格式；JSON存档不再读取。具体操作以游戏内提示为准。
 
 没有媒体时，可访问 <http://127.0.0.1:8767/phaser-preview.html>，用示意图检查探索、缩放和战斗。预览不读写正式存档，其结果不代表原作画面或主线验收。
 
@@ -52,7 +60,7 @@ node remake/runtime/tools/verify_phaser.mjs
 | `remake/assessment/` | 当前计划、区域方法、测试规范 |
 | `remake/prototype/` | 复用正式实现的实验页面，正式游戏不依赖它 |
 
-原版 `GAME.exe`、`Map/`、`Fight_Role/`、`SYSTEM/` 等输入放在仓库根目录，由工具只读访问，不提交。`.gitignore` 同时排除提取媒体、原存档、观察副本、证据、归档和缓存；`remake/saves/` 及其中的玩家存档纳入 Git。
+原版 `GAME.exe`、`Map/`、`Fight_Role/`、`SYSTEM/` 等保持原安装目录结构，通过 `--original-dir` 只读访问，不提交。旧开发导出器仍沿用其根目录输入约定。`.gitignore` 排除提取媒体、原存档、观察副本、证据、归档和缓存；内置字库及 `remake/saves/` 中的玩家存档纳入 Git。
 
 只查进度时先读开发计划；修改功能时再按上表查对应指南。工具说明含自动生成的目标与依赖表，无需作为进度文档通读。变更状态只在开发计划维护，详细开发过程留在证据与Git历史中。
 
@@ -62,6 +70,6 @@ node remake/runtime/tools/verify_phaser.mjs
 
 原版《第七封印》的程序、图片、音乐、视频、剧情对白及其他原作内容，以及相关商标和标识，其权利归各自权利人所有，不在本项目的 MIT 授权范围内。本项目不分发原版游戏程序和媒体素材；运行所需原版资源须由使用者从合法取得的游戏副本中自行准备。
 
-第三方组件遵循各自许可证，使用和分发时须保留相应的版权及许可声明。随仓库提供的 Phaser 使用其[独立的 MIT 许可证](remake/runtime/web/vendor/phaser/LICENSE.md)。
+第三方组件遵循各自许可证，使用和分发时须保留相应的版权及许可声明。Phaser 使用其[独立的 MIT 许可证](remake/runtime/web/vendor/phaser/LICENSE.md)，Noto 替代位图字库的来源及许可见[字库说明](remake/runtime/builtin/fonts/README.md)。
 
 本项目为非官方重制项目，不代表原作权利人，也不表示获得其背书。

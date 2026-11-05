@@ -12,8 +12,8 @@ function canvas() {
     set globalCompositeOperation(value){},set fillStyle(value){},set imageSmoothingEnabled(value){},
   };}};
 }
-async function renderer() {
-  return createMenuTextRenderer(manifest,{
+async function renderer(definition=manifest) {
+  return createMenuTextRenderer(definition,{
     document:{createElement(){return canvas();}},
     makeImage:()=>({width:1280,height:1200,async decode(){}}),
   });
@@ -55,8 +55,10 @@ test('roster %5d/ uses the exported one-pixel GDI character extra',async()=>{
 });
 
 test('GDI negative side bearing and both diagonal shadows survive canvas bounds',async()=>{
-  const text=await renderer(),target=canvas();
-  assert.equal(manifest.fonts.simsun19_text.glyphs.N.offset_x,-1);
+  // Exercise the retained negative-bearing contract independently of the
+  // built-in font's actual N glyph, which can have a positive bearing.
+  const definition=structuredClone(manifest);definition.fonts.simsun19_text.glyphs.N.offset_x=-1;
+  const text=await renderer(definition),target=canvas();
   const result=text.paint(target,'N',{font:'simsun19_text'});
   assert.equal(result.offsetX,-2);
   for(const draw of target.calls){

@@ -94,3 +94,6 @@
 
 # Track remake player saves, including their binary files.
 !/remake/saves/**
+
+# Versioned, generated glyph atlases are built-in remake resources.
+!/remake/runtime/builtin/fonts/**/*.png

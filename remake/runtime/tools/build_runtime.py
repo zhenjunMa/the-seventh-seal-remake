@@ -4,6 +4,25 @@ Listing is read-only. --run explicitly runs selected steps; ordinary config
 export preserves parameters. Dated evidence is retained verbatim, with newly
 generated versions recorded under evidence/builds instead.
 """
+import sys
+
+# The player-facing media build is independent of the research exporters below.
+# Route before importing their optional decoders or discovering original files.
+if __name__ == '__main__':
+    arguments = sys.argv[1:]
+    first_build = any(value == '--original-dir' or value.startswith('--original-dir=') for value in arguments)
+    if '--target' in arguments:
+        start = arguments.index('--target') + 1
+        targets = []
+        for value in arguments[start:]:
+            if value.startswith('--'):
+                break
+            targets.append(value)
+        first_build = first_build or bool({'media', 'game'} & set(targets))
+    if first_build or '--help' in arguments or '-h' in arguments:
+        from export_media import main as build_media
+        raise SystemExit(build_media(arguments))
+
 from pathlib import Path
 from dataclasses import dataclass, replace
 from datetime import datetime, timezone
@@ -34,6 +53,12 @@ WEB = RUNTIME / 'web'
 EVIDENCE = RUNTIME / 'evidence'
 REGISTERED_ROLE_IDS = role_ids()
 REGISTERED_PLAYER_IDS = role_ids('player')
+SOURCE_DISCOVERERS = {
+    'items': item_source_files, 'enemies': enemy_source_files,
+    'stages': stage_source_files, 'audio': audio_source_files,
+    'item-presentation': item_presentation_source_files,
+    'region-index': fire_valley_source_files, 'story-media': story_media_source_files,
+}
 
 
 @dataclass(frozen=True)
@@ -68,7 +93,7 @@ STEPS = {
             '../evidence/forest_rewards_native_20261011.json',
             '../evidence/fire_valley_20261024/stage12_status_apply.json',
             '../evidence/white_forest_20261026/reward_passives/native_bundle.json',
-            '../tools/source/native_item_init.py'), sources=item_source_files()),
+            '../tools/source/native_item_init.py'), sources=('@discover:items',)),
     'item-presentation': Step('export_item_presentation.py', ('data/item_presentation.json', 'assets/item_presentation'), ('items',), ('item_presentation_export.json',)),
     'recovery': Step('export_chapter_recovery.py', ('../evidence/chapter_recovery_export_20261011.json',), reports=('chapter_recovery_export_20261011.json',)),
     'audio': Step('export_audio.py', ('data/audio.json', 'assets/audio'), reports=('audio_export.json',)),
@@ -94,7 +119,7 @@ STEPS = {
 }
 
 # Selection comes from authoring JSON, before generated maps/enemies exist.
-enemy_sources = enemy_source_files()
+enemy_sources = ('@discover:enemies',)
 STEPS['enemies'] = Step('export_enemy_content.py',
     ('data/forest_combat.json','data/forest_ai.json','data/forest_status.json','data/battle_scheduler.json',
      'data/enemy_reactions.json','data/enemy_battle_view.json','assets/enemy_roles','assets/enemy_layers','assets/enemy_effects',
@@ -128,7 +153,7 @@ source_stages = {ident: row for ident, row in stage_exports().items() if row['ex
 STEPS['battle-stages'] = Step('export_battle_stages.py',
     tuple(item for row in source_stages.values() for item in (row['path'],row['asset_prefix'])),
     ('forest-stage',), ('battle_stages_export.json',) if source_stages else (),
-    ('data/runtime_content.json','data/forest_stage.json'), stage_source_files() if source_stages else ())
+    ('data/runtime_content.json','data/forest_stage.json'), ('@discover:stages',) if source_stages else ())
 
 # A single content build prepares its source-derived data before compiling the
 # final registry. Ordinary parameter-only exports reuse the unchanged assets.
@@ -149,14 +174,14 @@ STEPS['audio']=replace(STEPS['audio'],inputs=(*STEPS['audio'].inputs,'data/runti
     '../evidence/menu_field_audio_20261030/native.json',
     '../evidence/fire_valley_20261025/object_tick_4137c0_assembly.json',
     *tuple(f'../evidence/ember_city_20261028/native_cf1_sound_{name}.json'
-           for name in ['dispatch','position','play','pan','volume','distance','distance_impl'])),sources=audio_source_files())
+           for name in ['dispatch','position','play','pan','volume','distance','distance_impl'])),sources=('@discover:audio',))
 STEPS['map-effects']=replace(STEPS['map-effects'],inputs=(*STEPS['map-effects'].inputs,'data/catalog.json'))
 STEPS['party-combat']=replace(STEPS['party-combat'],inputs=(*STEPS['party-combat'].inputs,'data/opening_seed.json'))
 STEPS['catalog']=replace(STEPS['catalog'],inputs=(*STEPS['catalog'].inputs,'data/chapter_map_resources.json'))
 STEPS['party-rewards']=replace(STEPS['party-rewards'],inputs=(*STEPS['party-rewards'].inputs,'../evidence/content_workflow_20261021/growth_native.json'))
 STEPS['party-skills']=replace(STEPS['party-skills'],outputs=(*STEPS['party-skills'].outputs,*tuple(f'data/party_role_layers_{ident}.json' for ident in REGISTERED_PLAYER_IDS)))
 STEPS['item-presentation']=replace(STEPS['item-presentation'],outputs=(*STEPS['item-presentation'].outputs,*tuple(f'data/item_role_layers_{ident}.json' for ident in REGISTERED_PLAYER_IDS)),
-    inputs=(*STEPS['item-presentation'].inputs,'data/items.json'), sources=item_presentation_source_files())
+    inputs=(*STEPS['item-presentation'].inputs,'data/items.json'), sources=('@discover:item-presentation',))
 STEPS['content']=replace(STEPS['content'],outputs=(*STEPS['content'].outputs,'data/story'),
     inputs=(*STEPS['content'].inputs,'data/operation_menu.json','content','data/events',
             'data/opening_program.json','data/route_events.json'))
@@ -201,61 +226,61 @@ STEPS['fire-valley-index']=Step('export_fire_valley_index.py',
     reports=('fire_valley_20261024/source_index.json',),
     inputs=('../tools/route_extract_resources.py','../tools/map_npc_fields.py',
             'core/story/chapter_animation.mjs','core/story/story_flow_compiler.mjs'),
-    sources=fire_valley_source_files())
+    sources=('@discover:region-index',))
 STEPS['story-media']=Step('export_story_media.py',
     ('data/story_media.json','assets/video/story','assets/audio/story'),
     reports=('story_media_export.json',),
     inputs=('data/runtime_content.json','../tools/export_startup_media.py'),
-    sources=story_media_source_files())
+    sources=('@discover:story-media',))
 STEPS['content']=replace(STEPS['content'],depends=(*STEPS['content'].depends,'story-media'))
 STEPS['white-forest-index']=Step('export_white_forest_index.py',
     ('data/library/white_forest.json','../evidence/white_forest_20261026/source_index.json'),
     reports=('white_forest_20261026/source_index.json',),
     inputs=('../tools/export_fire_valley_index.py','../tools/route_extract_resources.py',
             '../tools/map_npc_fields.py','core/story/chapter_animation.mjs','core/story/story_flow_compiler.mjs'),
-    sources=fire_valley_source_files())
+    sources=('@discover:region-index',))
 STEPS['jade-lake-index']=Step('export_jade_lake_index.py',
     ('data/library/jade_lake.json','../evidence/jade_lake_20261028/source_index.json'),
     reports=('jade_lake_20261028/source_index.json',),
     inputs=('../tools/export_fire_valley_index.py','../tools/route_extract_resources.py',
             '../tools/map_npc_fields.py','core/story/chapter_animation.mjs','core/story/story_flow_compiler.mjs'),
-    sources=fire_valley_source_files())
+    sources=('@discover:region-index',))
 STEPS['ember-city-index']=Step('export_ember_city_index.py',
     ('data/library/ember_city.json','../evidence/ember_city_20261028/source_index.json'),
     reports=('ember_city_20261028/source_index.json',),
     inputs=('../tools/export_fire_valley_index.py','../tools/route_extract_resources.py',
             '../tools/map_npc_fields.py','core/story/chapter_animation.mjs','core/story/story_flow_compiler.mjs'),
-    sources=fire_valley_source_files())
+    sources=('@discover:region-index',))
 STEPS['inner-white-forest-index']=Step('export_inner_white_forest_index.py',
     ('data/library/inner_white_forest.json','../evidence/inner_white_forest_20261029/source_index.json'),
     reports=('inner_white_forest_20261029/source_index.json',),
     inputs=('../tools/export_fire_valley_index.py','../tools/route_extract_resources.py',
             '../tools/map_npc_fields.py','core/story/chapter_animation.mjs','core/story/story_flow_compiler.mjs'),
-    sources=fire_valley_source_files())
+    sources=('@discover:region-index',))
 STEPS['floating-city-index']=Step('export_floating_city_index.py',
     ('data/library/floating_city.json','../evidence/floating_city_20261030/source_index.json'),
     reports=('floating_city_20261030/source_index.json',),
     inputs=('../tools/export_fire_valley_index.py','../tools/route_extract_resources.py',
             '../tools/map_npc_fields.py','core/story/chapter_animation.mjs','core/story/story_flow_compiler.mjs'),
-    sources=fire_valley_source_files())
+    sources=('@discover:region-index',))
 STEPS['wind-region-index']=Step('export_wind_region_index.py',
     ('data/library/wind_region.json','../evidence/wind_region_20261031/source_index.json'),
     reports=('wind_region_20261031/source_index.json',),
     inputs=('../tools/export_fire_valley_index.py','../tools/route_extract_resources.py',
             '../tools/map_npc_fields.py','core/story/chapter_animation.mjs','core/story/story_flow_compiler.mjs'),
-    sources=fire_valley_source_files())
+    sources=('@discover:region-index',))
 STEPS['research-index']=Step('export_research_index.py',
     ('data/library/research.json','../evidence/guild_20261031/research_source_index.json'),
     reports=('guild_20261031/research_source_index.json',),
     inputs=('../tools/export_fire_valley_index.py','../tools/route_extract_resources.py',
             '../tools/map_npc_fields.py','core/story/chapter_animation.mjs','core/story/story_flow_compiler.mjs'),
-    sources=fire_valley_source_files())
+    sources=('@discover:region-index',))
 STEPS['seal-region-index']=Step('export_seal_region_index.py',
     ('data/library/seal_region.json','../evidence/seal_region_20261104/source_index.json'),
     reports=('seal_region_20261104/source_index.json',),
     inputs=('../tools/export_fire_valley_index.py','../tools/route_extract_resources.py',
             '../tools/map_npc_fields.py','core/story/chapter_animation.mjs','core/story/story_flow_compiler.mjs'),
-    sources=fire_valley_source_files())
+    sources=('@discover:region-index',))
 STEPS['native-services']=Step('export_native_services.py',
     ('data/native_services.json','assets/native_services'),
     reports=('ember_city_20261028/service_export.json',),
@@ -368,7 +393,13 @@ def plan(names, steps=None):
 
 
 def source_paths(step):
-    paths = {relocated_path(name, root=ROOT) for name in step.sources}
+    names = set()
+    for name in step.sources:
+        if name.startswith('@discover:'):
+            names.update(SOURCE_DISCOVERERS[name.removeprefix('@discover:')]())
+        else:
+            names.add(name)
+    paths = {relocated_path(name, root=ROOT) for name in names}
     for report in step.reports:
         path = EVIDENCE / report
         if not path.is_file():

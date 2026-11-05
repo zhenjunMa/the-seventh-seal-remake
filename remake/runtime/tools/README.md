@@ -6,20 +6,39 @@
 
 | 操作 | 前置 |
 | --- | --- |
-| 本地游戏服务 | Python 3、Pillow，正式媒体另备 |
+| 本地游戏服务 | Python 3.12+、Pillow，首次素材构建完成 |
 | 代码／剧情包预检查 | Node.js；`verify_phaser.mjs`默认允许媒体缺失，分别报告code与assets |
-| 素材导出 | 对应原版输入和来源台账；Pillow，部分步骤需NumPy、FFmpeg／FFprobe |
+| 首次素材构建 `media` | `--original-dir` 指定完整原版目录；`runtime/requirements.txt` 固定 Python 依赖，Node.js、FFmpeg／FFprobe；内置字库随仓库提供 |
+| 开发用规则／来源重导出 | 对应原版输入和来源台账；沿用原有开发目标及其环境要求 |
 | 原字体GDI导出、部分原版观察 | Windows及对应组件 |
-| 构建与文档同步入口 | 当前导入build_runtime声明时会读取登记敌人CHR等原输入，亦依赖Pillow；无原版环境不能保证仅列计划或sync_tool_docs可执行 |
+| 开发目标声明及文档同步 | 导出依赖需安装；来源发现延迟至实际输入核验，列计划和文档同步不读取原版文件；首次 `media` 帮助只用标准库 |
 | 来源、真实媒体、历史专项 | 检查声明的原文件、媒体、证据与环境；HTTP／保存集成需本地服务 |
 
-**build_runtime是已有基础内容上的增量入口，首次构建尚未打通。** `--target all --run`不会补齐未声明的旧台账或历史观察；统一依赖锁定及干净首次构建任务见[开发计划](../../assessment/validation_design.md)。素材交接与恢复见[本地资料](../../local_materials.md)。
+首次构建使用 `media` 目标，只从原版提取素材，读取仓库中固定的规则、数值、剧情和字库，不读取历史台账、观察存档或 GDI。`content`、`all` 等仍是开发用内容重导出目标，保留各自的来源审计依赖。
+
+## 首次素材构建
+
+安装固定依赖的命令见[根 README](../../../README.md#本地运行)。指定原版目录，不加 `--run` 时只读检查完整资源配方、原版缺项、指纹、内置字库和环境：
+
+```console
+python3 -B remake/runtime/tools/build_runtime.py --target media --original-dir "/path/to/DiQiFengYin"
+python3 -B remake/runtime/tools/build_runtime.py --target media --original-dir "/path/to/DiQiFengYin" --run --serve
+```
+
+`--serve` 在素材构建及 `verify_phaser.mjs --assets` 通过后启动正式服务；可加 `--port`、`--save-dir`。后续直接运行 `serve.py`。原版文件保持原位，只读访问；路径按 Windows 文件名解析，兼容目录和文件大小写以及已声明背景 DGP 的根目录位置。
+
+固定定义中的媒体描述决定物件初始帧、动作分区、图层、裁切和图集坐标。构建不重写 `web/data`、`web/content` 或数值调参。PNG 按固定清单核 SHA；音频保留 MPEG 字节或核转码前后 PCM，影片核帧数、时长及画面质量。音视频编码后的实际指纹写入 `assets/media_manifest.json`，与固定规则的原来源记录分开；允许的来源变体在该清单及构建报告中明确记录。
+
+`runtime/.cache/media` 保存可核验缓存，失败可续跑；缺失或损坏输出重建，`--force` 重新提取但不重置调参。现有战斗图集按已提交页面布局恢复，其余图片保持现有路径。本目标不包含全图片图集改造。
+
+`--images-only` 只用于定向排查图片；该结果不记完整首次构建通过。完整构建缺少已声明音视频时返回非零，不生成占位素材。工具与报告入口为 `media_definitions.py`、`export_media.py` 和 `evidence/builds/<本次 media 构建>/run.json`。
 
 ## 常用操作
 
 | 目的 | 命令或目标 |
 | --- | --- |
 | 启动 | `python3 -B remake/runtime/serve.py` |
+| 首次素材构建并开玩 | `build_runtime.py --target media --original-dir <原版目录> --run --serve` |
 | 独立存档验收 | `serve.py --port 8786 --save-dir remake/runtime/evidence/<本次验收>/saves`；使用空目录，与玩家存档分开 |
 | 无媒体代码预检查 | `node remake/runtime/tools/verify_phaser.mjs` |
 | 实际媒体核对 | 同上加`--assets`，再做正式浏览器流程 |

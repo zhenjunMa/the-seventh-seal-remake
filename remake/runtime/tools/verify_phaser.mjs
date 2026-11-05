@@ -55,7 +55,7 @@ try{
         // Legacy descriptors also carry hashes of original DGP bytes or the
         // decoded MNU sensor plane. Neither identifies the exported PNG bytes.
         const hashKind=value.sheet&&value.source?'original-source'
-          :value.source_offset!==undefined&&value.value_counts?'decoded-sensor-plane':null;
+          :value.source_offset!==undefined&&value.bytes!==undefined&&!value.png_sha256?'decoded-sensor-plane':null;
         if(value.sha256&&hashKind&&!report.assets.non_file_hashes.some(row=>row.path===canonical(name)))
           report.assets.non_file_hashes.push({path:canonical(name),kind:hashKind,sha256:value.sha256});
         const old=assets.get(canonical(name))??{};assets.set(canonical(name),{...old,...(value.sha256&&!hashKind?{sha256:value.sha256}:{}),...dimensions});
@@ -77,13 +77,33 @@ try{
     if(url.startsWith('/data/source/')||url==='/data/battle_packs.json'||packedManifests.has(url))continue;
     collect(await readJson(file));
   }
+  let media=null;
+  const mediaFile=path.join(web,'assets/media_manifest.json');
+  if(await exists(mediaFile)){
+    media=await readJson(mediaFile);
+    if(media.schema!=='seventh-seal-media-manifest'||media.version!==1||!media.files||!media.definitions)
+      throw new Error('素材构建清单格式无效');
+    for(const [name,expected]of Object.entries(media.definitions)){
+      const file=path.resolve(web,name);
+      if(!name.startsWith('data/')||!inside(file,path.join(web,'data'))||!await exists(file)||hash(await fs.readFile(file))!==expected)
+        throw new Error(`素材构建后的游戏定义已变化，请重新构建：${name}`);
+    }
+    report.assets.build_complete=media.complete===true;
+    report.assets.source_variants=Object.keys(media.source_variants??{}).length;
+    if(!media.complete)report.assets.invalid.push({path:'/assets/media_manifest.json',reason:'未完成完整素材构建'});
+    collect(Object.keys(media.files));
+  }
   report.assets.required=assets.size;
   for(const [url,descriptor]of assets){
     const file=resolveUrl(url);
     if(!await exists(file)){report.assets.missing.push(url);continue;}
     report.assets.present++;
     const bytes=await fs.readFile(file);
-    if(descriptor.sha256&&hash(bytes)!==descriptor.sha256)report.assets.invalid.push({path:url,reason:'SHA-256 不符'});
+    // Encoded media hashes belong to the local media build. The game rules
+    // retain their original provenance; FFmpeg container bytes can vary.
+    const expected=media?.files[url]??descriptor.sha256;
+    if(expected&&hash(bytes)!==expected)report.assets.invalid.push({path:url,reason:'SHA-256 不符'});
+    if(media&&!media.files[url])report.assets.invalid.push({path:url,reason:'未登记到素材构建清单'});
     if(url.toLowerCase().endsWith('.png')&&descriptor.width&&descriptor.height&&
       (bytes.length<24||bytes.readUInt32BE(16)!==descriptor.width||bytes.readUInt32BE(20)!==descriptor.height))
       report.assets.invalid.push({path:url,reason:'PNG 尺寸与定义不符'});

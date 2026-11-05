@@ -8,9 +8,10 @@ test('style3 centers text in its shade and leaves room for the continuation mark
   const fonts=JSON.parse(await fs.readFile(new URL('../web/data/prologue_fonts.json',import.meta.url),'utf8'));
   const layout=captionLayout('一万八千年后………………',19,{font:fonts.fonts.caption19});
   assert.deepEqual(layout.text,{x:195,y:230});
-  assert.deepEqual(layout.shade,{x:159,y:222,width:322,height:35});
+  // The fixed Noto atlas has 20 pixels of visible ink including its shadow.
+  assert.deepEqual(layout.shade,{x:159,y:222,width:322,height:36});
   assert.equal(layout.text.x+1+248/2,layout.shade.x+layout.shade.width/2);
-  assert.equal(layout.text.y+19/2,layout.shade.y+layout.shade.height/2);
+  assert.equal(layout.text.y+20/2,layout.shade.y+layout.shade.height/2);
   assert.equal(layout.wait.x,446);
   assert.ok(layout.wait.x+31<layout.shade.x+layout.shade.width);
 });

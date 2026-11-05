@@ -1,7 +1,7 @@
 {
   "schema": "seventh-seal-tool-index",
   "version": 1,
-  "updated": "2026-11-04",
+  "updated": "2026-11-05",
   "registered_steps": 50,
   "content_plan": [
     "chapter-maps",
@@ -1368,6 +1368,22 @@
       "role": "one-time-save-repair",
       "build_targets": [],
       "imported_by": []
+    },
+    {
+      "path": "export_media.py",
+      "role": "daily-entry",
+      "build_targets": [],
+      "imported_by": [
+        "build_runtime.py"
+      ]
+    },
+    {
+      "path": "media_definitions.py",
+      "role": "shared-current",
+      "build_targets": [],
+      "imported_by": [
+        "export_media.py"
+      ]
     }
   ],
   "notes": [
