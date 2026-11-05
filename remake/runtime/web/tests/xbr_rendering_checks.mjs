@@ -102,3 +102,56 @@ export async function checkCharacterSmoothing(runtime,record){
   runtime.fixedRenderScale=3;runtime.resize();
   record('绘制分辨率切换：640×480 逻辑坐标、高分辨率快照与纹理清理通过');
 }
+import {createMenuTextRenderer} from '../core/ui/menu_text.mjs';
+import {drawingContext} from '../phaser/rendering/recorded_surface.mjs';
+
+
+export async function checkTextSmoothing(runtime,record){
+  const atlas=bitmap(24,24,c=>{
+    c.fillStyle='#fff';c.fillRect(4,4,16,1);c.fillRect(11,2,1,18);
+    for(let y=7;y<21;y++){c.fillRect(4+Math.floor((y-7)/2),y,2,1);c.fillRect(18-Math.floor((y-7)/2),y,2,1);}
+  });
+  const definition={image:atlas.toDataURL(),height:24,glyphs:{文:{x:0,y:0,width:24,height:24,offset_x:0,offset_y:0,advance:24}}};
+  const text=await createMenuTextRenderer({fonts:{fixture:definition,futureFont:definition}});
+  const ink=document.createElement('canvas'),options={font:'fixture',foreground:'#ffffff',shadow:'#151515'};
+  text.paint(ink,'文文',options);const revision=ink.gpuRasterRevision;
+  const raw=bitmap(ink.width,ink.height,c=>c.drawImage(ink,0,0));
+  const read=renderer=>{const pixels=new Uint8Array(renderer.width*renderer.height*4);renderer.gl.readPixels(0,0,renderer.width,renderer.height,renderer.gl.RGBA,renderer.gl.UNSIGNED_BYTE,pixels);return pixels;};
+  const flush=game=>{const renderer=game.renderer;renderer.preRender();game.scene.render(renderer);renderer.postRender();return read(renderer);};
+  const surface=runtime.battle.surface;
+  runtime.setPhase('battle-active');runtime.fixedRenderScale=3;runtime.resize();
+  const draw=enabled=>{
+    runtime.setActorSmoothing(enabled);surface.beginFrame();surface.drawImage(ink,40,30);surface.drawImage(raw,140,30);surface.endFrame();runtime.flush();return read(runtime.game.renderer);
+  };
+  const plain=draw(false),smooth=draw(true),uploads=surface.textures.snapshot().uploads;
+  assert(!same(plain,smooth),'主画面位图文字没有随平滑开关改变');
+  assert(surface.pools.sprite[0].smoothText&&!surface.pools.sprite[0].smoothActor&&!surface.pools.sprite[1].smoothText,'文字分类泄露给了普通图片或人物');
+  assert(same(plain,draw(false)),'关闭平滑没有恢复原始位图文字');
+  draw(true);text.paint(ink,'文文',options);
+  assert(ink.gpuRasterRevision===revision&&surface.textures.snapshot().uploads===uploads,'平滑切换重新生成或上传了缓存文字');
+  surface.beginFrame();surface.drawImage(raw,40,30);surface.endFrame();assert(!surface.pools.sprite[0].smoothText,'对象池把字体平滑传给了普通图片');
+  record('位图文字：正式统一绘字入口、主画面开关、缓存复用与对象池分类通过');
+
+  const panel=document.createElement('div');panel.className='operation-frame';panel.style.cssText='position:relative;width:640px;height:480px;z-index:80';
+  const plane=bitmap(640,480),future=document.createElement('canvas');
+  panel.append(plane,future);runtime.parent.parentElement.append(panel);
+  try{
+    const context=drawingContext(plane);context.fillStyle='#243539';context.fillRect(0,0,640,480);
+    text.paint(future,'文文',{...options,font:'futureFont'});Object.assign(future.style,{position:'absolute',left:'40px',top:'30px'});
+    runtime.ui.invalidate(true);runtime.ui.update();
+    assert(runtime.ui.canvas.width===1920&&runtime.ui.canvas.height===1440,'界面文字仍画在低分辨率画布上');
+    const drawUi=enabled=>{runtime.setActorSmoothing(enabled);runtime.ui.update();return flush(runtime.ui.game);};
+    const uiPlain=drawUi(false),uiSmooth=drawUi(true),uiUploads=runtime.ui.surface.textures.snapshot().uploads;
+    assert(!same(uiPlain,uiSmooth),'共享界面文字没有随同一个平滑开关改变');
+    assert(same(uiPlain,drawUi(false)),'缓存界面文字关闭平滑后没有恢复');
+    assert(runtime.ui.surface.textures.snapshot().uploads===uiUploads,'界面开关重新上传了字形');
+    for(const scale of [2,1,3]){
+      runtime.fixedRenderScale=scale;runtime.resize();runtime.ui.update();flush(runtime.ui.game);
+      assert(runtime.ui.canvas.width===640*scale&&runtime.ui.canvas.height===480*scale,'界面分辨率没有跟随主画面');
+      const point=runtime.ui.scene.cameras.main.getWorldPoint(320*scale,240*scale);
+      assert(Math.abs(point.x-320)<.01&&Math.abs(point.y-240)<.01,'字体分辨率切换改变了逻辑坐标');
+    }
+    assert(runtime.ui.game.renderer.gl.getError()===0,'字体平滑污染了界面 WebGL 状态');
+    record('共享界面：新增字库自动平滑、同一开关即时切换、缓存零上传与 1～3 倍分辨率通过');
+  }finally{panel.remove();runtime.ui.invalidate(true);runtime.ui.update();runtime.setActorSmoothing(false);}
+}

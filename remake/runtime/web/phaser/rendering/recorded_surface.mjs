@@ -57,6 +57,7 @@ export function drawingContext(canvas,{embedded=false}={}){
   return canvas.gpuSurface;
 }
 export function registerGlyph(canvas){
+  canvas.gpuGlyph=true;
   canvas.gpuRasterRevision=(canvas.gpuRasterRevision??0)+1;
   compositor?.register(canvas,{glyph:true});compositor?.invalidate();
 }

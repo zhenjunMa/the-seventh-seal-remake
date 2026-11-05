@@ -120,8 +120,8 @@ function compareMap(){
 }
 $('map').onclick=showMap;
 $('actorSmoothing').onclick=()=>{const enabled=runtime.setActorSmoothing(!runtime.actorSmoothing);
-  $('actorSmoothing').textContent=`人物平滑：${enabled?'开':'关'}`;$('actorSmoothing').setAttribute('aria-pressed',String(enabled));status(report());};
-$('actorSmoothing').textContent=`人物平滑：${runtime.actorSmoothing?'开':'关'}`;$('actorSmoothing').setAttribute('aria-pressed',String(runtime.actorSmoothing));
+  $('actorSmoothing').textContent=`平滑显示：${enabled?'开':'关'}`;$('actorSmoothing').setAttribute('aria-pressed',String(enabled));status(report());};
+$('actorSmoothing').textContent=`平滑显示：${runtime.actorSmoothing?'开':'关'}`;$('actorSmoothing').setAttribute('aria-pressed',String(runtime.actorSmoothing));
 $('battle').onclick=showBattle;
 $('wallSample').onclick=()=>{movementSample('wall');showMap();};
 $('npcSample').onclick=()=>{movementSample();showMap();};

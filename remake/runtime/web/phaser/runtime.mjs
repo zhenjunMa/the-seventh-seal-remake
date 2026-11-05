@@ -136,8 +136,12 @@ export class PhaserRuntime {
     camera.setZoom(zoom*this.renderScale).setScroll(x-camera.width/2,y-camera.height/2);
   }
   setActorSmoothing(enabled,{persist=false}={}){
-    this.actorSmoothing=Boolean(enabled);const pipeline=this.game?.renderer?.pipelines?.get(XBR_PIPELINE);
-    if(pipeline){pipeline.flush();pipeline.enabled=this.actorSmoothing;}
+    this.actorSmoothing=Boolean(enabled);
+    for(const game of [this.game,this.ui?.game]){
+      const pipeline=game?.renderer?.pipelines?.get(XBR_PIPELINE);
+      if(pipeline){pipeline.flush();pipeline.enabled=this.actorSmoothing;}
+    }
+    this.ui?.invalidate();
     if(persist)try{localStorage.setItem('seal:actor-smoothing',enabled?'on':'off');}catch{/* Session toggle still works. */}
     return this.actorSmoothing;
   }
@@ -147,7 +151,7 @@ export class PhaserRuntime {
       this.renderScale=scale;this.game.scale.setGameSize(640*scale,480*scale);
       for(const [camera,view]of this.cameraViews)this.configureCamera(camera,view);
     }
-    this.game?.scale?.refresh();this.ui?.invalidate(true);
+    this.game?.scale?.refresh();this.ui?.resize();this.ui?.invalidate(true);
   }
   captureInterface(root){return this.ui.capture(root);}
   captureTexture(source='exploration',{objects=null,onDestroy=null}={}){

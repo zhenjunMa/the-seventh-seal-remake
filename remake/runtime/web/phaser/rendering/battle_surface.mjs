@@ -62,7 +62,7 @@ export class BattleSurface {
     object.setVisible(true).setDepth(this.order++).setAlpha(this.globalAlpha)
       .setBlendMode(this.globalCompositeOperation==='lighter'?'ADD':'NORMAL');
     if(kind==='graphics')object.clear();
-    if(kind==='sprite'){object.smoothActor=false;object.xbrBounds=null;}
+    if(kind==='sprite'){object.smoothActor=false;object.smoothText=false;object.xbrBounds=null;}
     return object;
   }
   save(){this.stack.push({matrix:[...this.matrix],clipRect:{...this.clipRect},...Object.fromEntries(properties.map(k=>[k,this[k]]))});}
@@ -107,6 +107,7 @@ export class BattleSurface {
     const frame=this.textures.region(source,sx+(area.x-target.x)*sw/target.width,sy+(area.y-target.y)*sh/target.height,
       area.width*sw/target.width,area.height*sh/target.height);
     const sprite=this.take('sprite').setTexture(frame.key,frame.frame).setPosition(area.x,area.y).setDisplaySize(area.width,area.height);
+    sprite.smoothText=Boolean(source.gpuGlyph);
     sprite.nativeColorSubtract=this.nativeColorSubtract;
   }
   strokeRect(x,y,width,height){const r=this.rectangle(x,y,width,height),style=rgba(this.strokeStyle);

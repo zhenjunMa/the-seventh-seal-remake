@@ -1,5 +1,5 @@
 /**
- * Character-only, alpha-aware xBR-lv2. Algorithm adapted from Hyllian's
+ * Character and bitmap-text, alpha-aware xBR-lv2. Algorithm adapted from Hyllian's
  * libretro/glsl-shaders/xbr/shaders/xbr-lv2.glsl and DynastyReforge's RGBA variant.
  * Copyright (C) 2011-2016 Hyllian - sergiogdb@gmail.com
  *
@@ -210,8 +210,8 @@ void main(){
 
 export const XBR_PIPELINE='SealCharacters';
 
-// One multi-texture pipeline for the whole main renderer. Character metadata
-// travels with vertices, so interleaved scenery/actors never force a flush.
+// One multi-texture pipeline shared by the main and interface renderers.
+// Smoothing metadata travels with vertices without switching pipelines.
 export function characterPipeline(Phaser){
   return class CharacterPipeline extends Phaser.Renderer.WebGL.Pipelines.MultiPipeline {
     constructor(game){
@@ -238,12 +238,13 @@ export function characterPipeline(Phaser){
       const flushed=this.shouldFlush(6);if(flushed)this.flush();
       if(!this.currentBatch)unit=this.setTexture2D(texture);
       let meta=null;
-      if(this.enabled&&object?.smoothActor&&effect!==2){
+      if(this.enabled&&(object?.smoothActor||object?.smoothText)&&effect!==2){
         const tex=texture??object.frame.glTexture,w=tex.width,h=tex.height;
         const scale=Math.min(Math.hypot(x3-x0,y3-y0)/Math.max(0.001,Math.abs(u1-u0)*w),
           Math.hypot(x1-x0,y1-y0)/Math.max(0.001,Math.abs(v1-v0)*h));
         if(scale>1.01){
-          const f=object.frame,r=object.xbrBounds??{x:f.cutX,y:f.cutY,width:f.cutWidth,height:f.cutHeight};
+          const f=object.frame,r=object.xbrBounds??(object.smoothText?{x:0,y:0,width:w,height:h}
+            :{x:f.cutX,y:f.cutY,width:f.cutWidth,height:f.cutHeight});
           meta=this.sampleMeta;meta[0]=r.x/w;meta[1]=r.y/h;meta[2]=(r.x+r.width)/w;meta[3]=(r.y+r.height)/h;
           meta[4]=1/w;meta[5]=1/h;meta[6]=scale;effect+=4;
         }

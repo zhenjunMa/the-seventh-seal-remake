@@ -17,7 +17,7 @@ body{background:#15191e;color:#e2e7ec;font:16px/1.7 system-ui;margin:24px}button
 <script type="module">
 import {PhaserRuntime} from '../phaser/runtime.mjs';
 import {checkWebglRendering} from './webgl_rendering_checks.mjs';
-import {checkCharacterSmoothing} from './xbr_rendering_checks.mjs';
+import {checkCharacterSmoothing,checkTextSmoothing} from './xbr_rendering_checks.mjs';
 import {checkMenuRendering} from './menu_rendering_checks.mjs';
 const stage=document.querySelector('#stage'),output=document.querySelector('#result'),button=document.querySelector('#run');
 const frame=()=>new Promise(resolve=>requestAnimationFrame(resolve));
@@ -52,7 +52,7 @@ async function check(){
         runtime.setPhase('map');assert(runtime.exploration.sys.isActive()&&runtime.battle.sys.isSleeping(),'战斗返回探索失败');
       }
       assert(runtime.exploration.events.listenerCount('wake')===wakeListeners,'重复切换叠加了唤醒监听器');
-      if(round===0){await checkCharacterSmoothing(runtime,record);await checkWebglRendering(runtime,record);await checkMenuRendering(runtime,record);}
+      if(round===0){await checkCharacterSmoothing(runtime,record);await checkTextSmoothing(runtime,record);await checkWebglRendering(runtime,record);await checkMenuRendering(runtime,record);}
       const image=document.createElement('canvas');image.width=8;image.height=8;
       const cache=runtime.battle.surface.textures,texture=cache.texture(image);
       assert(runtime.game.textures.exists(texture.key)&&cache.snapshot().resident===1,'正式纹理缓存未建立真实纹理');

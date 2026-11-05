@@ -1,5 +1,6 @@
 import {BattleSurface} from './battle_surface.mjs';
 import {installInterfaceCompositor} from './recorded_surface.mjs';
+import {characterPipeline,XBR_PIPELINE} from './xbr_pipeline.mjs';
 
 // One shared WebGL context for every DOM-anchored UI surface. Move its output
 // beside the active screen's pixel plane, retaining semantic DOM controls and
@@ -12,12 +13,16 @@ export class InterfaceCompositor {
     const owner=this,Phaser=globalThis.Phaser;
     class InterfaceScene extends Phaser.Scene{
       create(){owner.scene=this;owner.surface=new BattleSurface(this);owner.canvas=this.game.canvas;owner.canvas.className='gpu-interface-output';owner.canvas.setAttribute('aria-hidden','true');
+        const pipeline=this.game.renderer.pipelines.get(XBR_PIPELINE);
+        this.game.renderer.pipelines.MULTI_PIPELINE=pipeline;pipeline.enabled=runtime.actorSmoothing;
+        owner.resize();
         this.game.renderer.on(Phaser.Renderer.Events.LOSE_WEBGL,()=>runtime.pause('webgl-interface'));
         this.game.renderer.on(Phaser.Renderer.Events.RESTORE_WEBGL,()=>{owner.invalidate(true);runtime.resume('webgl-interface');});owner.resolve();}
       update(){try{owner.update();}catch(error){runtime.fail(error);}}
     }
     this.ready=new Promise(resolve=>{this.resolve=resolve;});
-    this.game=new Phaser.Game({type:Phaser.WEBGL,parent:this.mount,width:640,height:480,transparent:true,antialias:false,antialiasGL:false,
+    this.game=new Phaser.Game({type:Phaser.WEBGL,parent:this.mount,width:640*runtime.renderScale,height:480*runtime.renderScale,transparent:true,antialias:false,antialiasGL:false,
+      pipeline:{[XBR_PIPELINE]:characterPipeline(Phaser)},defaultPipeline:XBR_PIPELINE,autoMobilePipeline:false,
       banner:false,audio:{noAudio:true},input:{keyboard:false,mouse:false,touch:false,gamepad:false},scene:[InterfaceScene]});
     this.observer=new MutationObserver(changes=>{
       for(const change of changes){
@@ -39,6 +44,16 @@ export class InterfaceCompositor {
   invalidate(layout=false,node=null){
     this.dirty=true;if(!layout)return;this.layoutDirty=true;
     if(node)this.layoutRoots.add(node);else this.fullLayout=true;
+  }
+  resize(){
+    if(!this.scene)return;
+    const scale=this.runtime.renderScale;
+    if(this.renderScale===scale)return;
+    this.renderScale=scale;this.game.scale.setGameSize(640*scale,480*scale);
+    const camera=this.scene.cameras.main;
+    camera.setZoom(scale).setScroll(320-camera.width/2,240-camera.height/2);
+    Object.assign(this.canvas.style,{width:'640px',height:'480px'});
+    this.invalidate(true);
   }
   register(canvas,{embedded=false,glyph=false}={}){
     if(!this.records.has(canvas)){
