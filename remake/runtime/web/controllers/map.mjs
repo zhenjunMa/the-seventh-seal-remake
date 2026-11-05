@@ -13,7 +13,10 @@ import {storyBindings,registeredRoles} from "../core/content_registry.mjs";
 import {chapterRouteExits} from "../core/map_connections.mjs";
 import {MapLocomotion,mapMotionProfile,nativeMapMovement} from "../core/map_locomotion.mjs";
 
+import {createExplorationPresentation} from './presentation_handoff.mjs';
+
 export function createMapController({state, actions, $, canvas, ctx}) {
+  const presentation=createExplorationPresentation({state,actions,$,canvas});
   const motionState=new MapLocomotion();let gaitScene=null,gaitRole=null;
   function role() { return state.catalog.roles.find(role=>role.id===state.selectedRole); }
   function sheetAction(index=state.view.action) { return role().actions.find(action=>action.index===index); }
@@ -309,5 +312,5 @@ export function createMapController({state, actions, $, canvas, ctx}) {
     }else {motionState.reset();state.view.collisionFeedback=null;}
     paint();
   }
-  return {role, sheetAction, buildHud, prepareMap, validateEntry, commitView, changeMap, follow, fit, resize, npcAvailable, updateNearest, objectBitmap, transitionFor, renderWorldMap,selectWorldMapDestination,closeWorldMap, routeExit, drawCollision, paint, updateExploration,captureScene,captureSavePreview};
+  return {explorationPresentation:presentation,role, sheetAction, buildHud, prepareMap, validateEntry, commitView, changeMap, follow, fit, resize, npcAvailable, updateNearest, objectBitmap, transitionFor, renderWorldMap,selectWorldMapDestination,closeWorldMap, routeExit, drawCollision, paint, updateExploration,captureScene,captureSavePreview};
 }

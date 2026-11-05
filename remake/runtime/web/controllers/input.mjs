@@ -25,7 +25,7 @@ export function createInputController({state, actions, $, canvas, ctx}) {
     $('menuFieldSkill').onclick=actions.menuOperation(()=>{const casterId=$('menuActor').value,targetId=$('menuSkillTarget').value,index=Number($('menuSkill').value),skill=availableFieldSkills(state.world.value,state.menuContext.configured.party_skills,casterId).find(s=>s.original_skill_index===index);if(!skill)throw new Error('此技能不能在战斗外使用');return actions.useFieldTechnique({casterId,targetId,skillId:skill.id}).message;});
     $('menuUseItem').onclick=actions.menuOperation(async()=>{
       const instanceId=$('menuItem').value,targetId=$('menuActor').value;
-      if(state.menuContext.combat){actions.closePartyMenu();await state.battle.chooseItem(instanceId,targetId);return;}
+      if(state.menuContext.combat){actions.closePartyMenu();await actions.chooseBattleItem(instanceId,targetId);return;}
       const result=useWorldItem(state.world,state.partyCombat,state.itemData,{instanceId,targetId,playTimeMs:actions.currentPlayTime()});actions.buildHud();actions.log({type:'world-item-used',target_id:targetId,name:result.name,changes:result.changes});return `${result.name}已使用。`;
     });
     $('menuEquip').onclick=actions.menuOperation(()=>{changeEquipment(state.world,state.partyCombat,state.itemData,{roleId:$('menuActor').value,slotId:$('menuSlot').value,instanceId:$('menuEquipment').value});actions.buildHud();actions.log({type:'equipment-changed',role_id:$('menuActor').value,slot_id:$('menuSlot').value});return '装备已更换。';});

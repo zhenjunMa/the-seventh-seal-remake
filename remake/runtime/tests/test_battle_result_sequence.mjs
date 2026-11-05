@@ -4,7 +4,7 @@ import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {BattleResultSequence,validateBattleResultManifest} from '../web/core/battle_result.mjs';
 import {BattleResultView} from '../web/battle_result_view.mjs';
-import {createBattleController} from '../web/controllers/battle.mjs';
+import {createBattleFixtureController as createBattleController} from './helpers/battle_controller.mjs';
 import {createMenuTextRenderer} from '../web/core/menu_text.mjs';
 const copy=structuredClone;
 const actors=[{id:'001',name:'英格妮',side:'player'},{id:'002',name:'凯',side:'player'}];
@@ -126,8 +126,8 @@ test('Source report frames retain their audited hashes and the transparent/addit
 
 test('Controller refuses to submit unfinished victory presentation and submits once after its last acknowledgement',async()=>{
   let finishes=0;const resultView={active:true,complete:false},elements=new Map(),$=id=>{if(!elements.has(id))elements.set(id,{});return elements.get(id);};
-  const state={scenes:{phase:'battle-result',setPhase(p){this.phase=p;}},battle:{finish(){finishes++;return {outcome:'victory'};},snapshot(){return {};}},battleMenu:{resultView,dispose(){}},battleView:{stop(){}},battleHistory:[],world:{value:{source:{kind:'native-new-game'}},location:{map_id:'M70010'}},view:{},battleCheckpoint:{},audio:{setScene(){}}};
+  const state={scenes:{phase:'battle-result',setPhase(p){this.phase=p;}},battle:{state:{phase:'victory'},finish(){finishes++;this.state.phase='closed';return {outcome:'victory'};},snapshot(){return {};}},battleMenu:{resultView,dispose(){}},battleView:{stop(){}},battleHistory:[],world:{value:{source:{kind:'native-new-game'}},location:{map_id:'M70010'}},view:{},battleCheckpoint:{},audio:{setScene(){}}};
   const actions={buildHud(){},updateNearest(){},resize(){},status(){}};const controller=createBattleController({state,actions,$,canvas:{focus(){}}});
   await controller.returnFromBattle();assert.equal(finishes,0);assert.equal(state.scenes.phase,'battle-result');resultView.complete=true;
-  await controller.returnFromBattle();await controller.returnFromBattle();assert.equal(finishes,1);assert.equal(state.battleHistory.length,1);assert.equal(state.scenes.phase,'map');
+  await controller.returnFromBattle();await controller.returnFromBattle();assert.equal(finishes,1);assert.equal(state.lastBattle.result.outcome,'victory');assert.equal(state.scenes.phase,'map');
 });

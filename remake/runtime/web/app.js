@@ -5,6 +5,7 @@ import {createStoryController} from './controllers/story.mjs';
 import {createMenuController} from './controllers/menu.mjs';
 import {createSessionController} from './controllers/session.mjs';
 import {createBattleController} from './controllers/battle.mjs';
+import {createBattleHost} from './controllers/battle_host.mjs';
 import {createInspectionController} from './controllers/inspection.mjs';
 import {createInputController} from './controllers/input.mjs';
 import {createBootController} from './controllers/boot.mjs';
@@ -13,14 +14,17 @@ import {PhaserRuntime} from './phaser/runtime.mjs';
 
 const $ = id => document.getElementById(id), canvas = $('stage'), ctx = canvas.getContext('2d');
 const state = createRuntimeState($);
-// Each controller closes over the same explicit state and action registry.
-// Assemble every adapter before starting asynchronous work.
+// Assemble adapters before boot. Combat only receives the declared host ports;
+// its transient sessions are private to the battle controller.
 const actions = {};
 const context = {state, actions, $, canvas, ctx};
 for (const create of [createServicesController, createMapController,
   createStoryController, createNativeServicesController, createMenuController, createSessionController,
-  createBattleController, createInspectionController, createInputController,
+  createInspectionController, createInputController,
   createBootController]) Object.assign(actions, create(context));
+Object.assign(actions, createBattleController({host: createBattleHost({
+  ...context, exploration: actions.explorationPresentation, story: actions.storyPresentation,
+})}));
 
 const failed=error=>{void actions.cancelStoryPlayback(error);actions.status(error.message,true);$('loading').hidden=false;$('loading').querySelector('p').textContent=error.message;};
 async function start(){

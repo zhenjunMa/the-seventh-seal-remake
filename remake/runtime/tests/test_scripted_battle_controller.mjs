@@ -3,7 +3,7 @@
 import test,{after} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {createBattleController} from '../web/controllers/battle.mjs';
+import {createBattleFixtureController as createBattleController} from './helpers/battle_controller.mjs';
 import {createStoryController} from '../web/controllers/story.mjs';
 import {ChapterAnimationRunner} from '../web/core/chapter_animation.mjs';
 import {BattleMenuView} from '../web/battle_menu_view.mjs';
@@ -64,36 +64,36 @@ async function until(predicate){
 async function entered(f){
   await until(()=>f.state.scenes.phase==='battle-entry');
   // This controller fixture supplies presentation completion explicitly.
-  for(const event of [...f.state.battle.presentationSnapshot().lifecycle_events])if(event.kind==='entry')assert.equal(f.state.battle.ackLifecycle(event),true);
+  for(const event of [...f.controller.runtime.battle.presentationSnapshot().lifecycle_events])if(event.kind==='entry')assert.equal(f.controller.runtime.battle.ackLifecycle(event),true);
   assert.equal(f.state.scenes.phase,'battle-charging');
 }
-async function cancel(f,running){f.playback.cancel();await assert.rejects(running,{name:'AbortError'});assert.equal(f.state.scenes.phase,'event');assert.equal(f.state.scriptedBattleSession,null);}
+async function cancel(f,running){f.playback.cancel();await assert.rejects(running,{name:'AbortError'});assert.equal(f.state.scenes.phase,'event');assert.equal(f.controller.runtime.scriptedBattleSession,null);}
 test('cancellation settles while JSON/configuration resources remain unresolved and late completion cannot install state',async()=>{
   for(const kind of ['json','config']){
     const gate=deferred(),f=fixture(kind==='json'?{jsonGate:gate}:{configGate:gate}),before=f.world.snapshot(),running=f.run();
-    await cancel(f,running);const sentinel={next:true};f.state.battleView=sentinel;f.$('battleHud').replaceChildren(f.oldButton);
+    await cancel(f,running);const sentinel={next:true};f.controller.runtime.battleView=sentinel;f.$('battleHud').replaceChildren(f.oldButton);
     gate.resolve(kind==='json'?{}:copy(configured));await new Promise(resolve=>setImmediate(resolve));
-    assert.equal(f.state.battleView,sentinel);assert.deepEqual(f.$('battleHud').childNodes,[f.oldButton]);assert.deepEqual(f.world.snapshot(),before);
+    assert.equal(f.controller.runtime.battleView,sentinel);assert.deepEqual(f.$('battleHud').childNodes,[f.oldButton]);assert.deepEqual(f.world.snapshot(),before);
     assert.equal(f.previous.battleMenu.disposed,false);assert.equal(f.state.sidePriority,0);
   }
 });
 test('cancelling cached view preparation leaves the cache reusable and ignores its late result',async()=>{
   const gate=deferred(),f=fixture({viewGate:gate}),running=f.run();await until(()=>f.events.includes('prepare-view'));await cancel(f,running);
-  const sentinel={next:true};f.state.battleView=sentinel;gate.resolve();await new Promise(resolve=>setImmediate(resolve));
-  assert.equal(f.state.battleView,sentinel);assert.equal(f.cached.rosters,0);assert.equal(f.cached.stops,0);assert.equal(f.previous.battleMenu.disposed,false);
+  const sentinel={next:true};f.controller.runtime.battleView=sentinel;gate.resolve();await new Promise(resolve=>setImmediate(resolve));
+  assert.equal(f.controller.runtime.battleView,sentinel);assert.equal(f.cached.rosters,0);assert.equal(f.cached.stops,0);assert.equal(f.previous.battleMenu.disposed,false);
 });
 test('pending detached HUD cannot steal an old return button or install after cancellation, including unstarted battle cleanup',async()=>{
-  hudPreparation=deferred();const gate=hudPreparation,f=fixture(),running=f.run();await until(()=>f.state.scriptedBattleSession?.menu?.testPrepareStarted);
-  assert.deepEqual(f.$('battleHud').childNodes,[f.oldButton]);assert.equal(f.state.battle.state,null);
+  hudPreparation=deferred();const gate=hudPreparation,f=fixture(),running=f.run();await until(()=>f.controller.runtime.scriptedBattleSession?.menu?.testPrepareStarted);
+  assert.deepEqual(f.$('battleHud').childNodes,[f.oldButton]);assert.equal(f.controller.runtime.battle.state,null);
   assert.equal(f.state.scenes.phase,'battle-loading');
   assert.deepEqual(f.events.filter(event=>event.battle),[{mapId:f.draft.location.map_id,battle:true,stageId:group.stage}]);
   await cancel(f,running);const replacement=f.$('battleHud').ownerDocument.createElement();f.$('battleHud').replaceChildren(replacement);
   gate.resolve();hudPreparation=null;await new Promise(resolve=>setImmediate(resolve));
-  assert.deepEqual(f.$('battleHud').childNodes,[replacement]);assert.equal(f.state.battle,f.previous.battle);assert.equal(f.previous.battleMenu.disposed,false);
+  assert.deepEqual(f.$('battleHud').childNodes,[replacement]);assert.equal(f.controller.runtime.battle,f.previous.battle);assert.equal(f.previous.battleMenu.disposed,false);
 });
 for(const outcome of ['victory','escaped'])test(`${outcome} return retains final side priority, merges private resources/RNG once and restores the active ANM scene and shade`,async()=>{
   const f=fixture(),before=f.world.snapshot(),running=f.run();await entered(f);
-  const battle=f.state.battle,session=f.state.scriptedBattleSession;
+  const battle=f.controller.runtime.battle,session=f.controller.runtime.scriptedBattleSession;
   battle.state.scheduler.side_priority=1;battle.finish=()=>{battle.state.phase='closed';session.simulation.world.transact(next=>{next.party[0].hp.current=7;next.money+=10;});return {outcome};};
   f.state.scenes.setPhase('battle-result');await f.controller.returnFromBattle();await running;
   assert.equal(f.state.sidePriority,1);assert.equal(f.draft.party[0].hp.current,7);assert.equal(f.draft.money,before.money+10);
@@ -104,15 +104,15 @@ for(const outcome of ['victory','escaped'])test(`${outcome} return retains final
   const previousRecord=f.state.lastBattle;previousRecord.battle.history.push({action_id:'previous-battle-action'});
   f.state.logs.push({type:'previous-battle-event'});
   const next=f.run();await entered(f);
-  assert.notEqual(f.state.lastBattle,previousRecord);assert.equal(f.state.lastBattle.battle,f.state.battle.state);
+  assert.notEqual(f.state.lastBattle,previousRecord);assert.equal(f.state.lastBattle.battle,f.controller.runtime.battle.state);
   assert.equal(f.state.lastBattle.result,null);assert.deepEqual(previousRecord.battle.history,[]);assert.deepEqual(f.state.logs,[]);
   await cancel(f,next);
 });
 test('cancelled active combat and a delayed retired combat publish cannot reclaim the ANM phase or a subsequent HUD',async()=>{
-  const f=fixture(),before=copy(f.draft),running=f.run();await entered(f);const retired=f.state.battle;
-  await cancel(f,running);const next={fresh:true};f.state.battle=next;const node=f.$('battleCommands');node.dataset.phase='fresh';
+  const f=fixture(),before=copy(f.draft),running=f.run();await entered(f);const retired=f.controller.runtime.battle;
+  await cancel(f,running);const next={fresh:true};f.controller.runtime.battle=next;const node=f.$('battleCommands');node.dataset.phase='fresh';
   retired.interrupt(new Error('late playSequence rejection'));
-  assert.equal(f.state.scenes.phase,'event');assert.equal(node.dataset.phase,'fresh');assert.equal(f.state.battle,next);assert.deepEqual(f.draft,before);assert.equal(f.state.sidePriority,0);
+  assert.equal(f.state.scenes.phase,'event');assert.equal(node.dataset.phase,'fresh');assert.equal(f.controller.runtime.battle,next);assert.deepEqual(f.draft,before);assert.equal(f.state.sidePriority,0);
 });
 test('late cancelled entry-transition callbacks cannot reveal battle or overwrite the restored story HUD',async()=>{
   const f=fixture(),gate=deferred();let paint,started=false;
@@ -120,24 +120,24 @@ test('late cancelled entry-transition callbacks cannot reveal battle or overwrit
   const running=f.run();await until(()=>started);await cancel(f,running);
   const next=f.$('battleHud').ownerDocument.createElement();f.$('battleHud').replaceChildren(next);
   await assert.rejects(paint(),/会话已失效/);gate.resolve();await new Promise(resolve=>setImmediate(resolve));
-  assert.equal(f.state.scenes.phase,'event');assert.equal(f.state.battleEntryPending,false);assert.deepEqual(f.$('battleHud').childNodes,[next]);assert.equal(f.canvas.hidden,false);
+  assert.equal(f.state.scenes.phase,'event');assert.equal(f.controller.runtime.battleEntryPending,false);assert.deepEqual(f.$('battleHud').childNodes,[next]);assert.equal(f.canvas.hidden,false);
 });
 test('failed return rolls back side priority and private battle mutations',async()=>{
   const f=fixture(),before=copy(f.draft),running=f.run();await entered(f);
-  const battle=f.state.battle,session=f.state.scriptedBattleSession;battle.state.scheduler.side_priority=1;
+  const battle=f.controller.runtime.battle,session=f.controller.runtime.scriptedBattleSession;battle.state.scheduler.side_priority=1;
   battle.finish=()=>{battle.state.phase='closed';session.simulation.world.transact(next=>{next.money+=10;});return {outcome:'interrupted'};};
   f.state.scenes.setPhase('battle-interrupted');await f.controller.returnFromBattle();await assert.rejects(running,/中止/);
   assert.equal(f.state.sidePriority,0);assert.deepEqual(f.draft,before);assert.equal(f.state.scenes.phase,'event');
 });
 test('whole-party defeat propagates game-over policy, restores the story owner and leaves the caller draft uncommitted',async()=>{
   const f=fixture(),before=copy(f.draft),running=f.run();await entered(f);
-  const battle=f.state.battle;battle.state.outcome='defeat';
+  const battle=f.controller.runtime.battle;battle.state.outcome='defeat';
   for(const actor of battle.state.actors)if(actor.side==='player'){actor.hp.current=0;actor.state_raw=7;actor.native_active=false;}
   battle.state.lifecycle_events=[];battle.state.pending_outcome=null;
   battle.finish=()=>{battle.state.phase='closed';return {outcome:'defeat'};};
   f.state.scenes.setPhase('battle-result');await f.controller.returnFromBattle();
   await assert.rejects(running,error=>error.gameOverPolicy?.mode==='game-over'&&error.gameOverPolicy.can_save===false);
-  assert.deepEqual(f.draft,before);assert.equal(f.state.scenes.phase,'event');assert.equal(f.state.scriptedBattleSession,null);assert.equal(f.state.sidePriority,0);
+  assert.deepEqual(f.draft,before);assert.equal(f.state.scenes.phase,'event');assert.equal(f.controller.runtime.scriptedBattleSession,null);assert.equal(f.state.sidePriority,0);
 });
 test('outer story failure rolls back a successful nested battle priority and completed native ANM camera parameters',async()=>{
   const f=fixture();f.state.anmVisualState={shakeCycles:10,shakeAmplitudeNative:4};const visual=f.state.anmVisualState;
@@ -147,7 +147,7 @@ test('outer story failure rolls back a successful nested battle priority and com
     await new ChapterAnimationRunner({program:story.programs['m17030-1'],hooks,visualState:visual,playback,
       initialLocation:{map_id:'M17032',x:640,y:480,direction:0},runTlk:async()=>{},joinActor:async()=>{},leaveActor:async()=>{},flagCommand:()=>({nextIndex:null})}).run();
     assert.deepEqual(visual,{shakeCycles:40,shakeAmplitudeNative:10});
-    const battleRun=f.run({playback});await entered(f);const battle=f.state.battle;
+    const battleRun=f.run({playback});await entered(f);const battle=f.controller.runtime.battle;
     battle.state.scheduler.side_priority=1;battle.finish=()=>{battle.state.phase='closed';return {outcome:'victory'};};
     f.state.scenes.setPhase('battle-result');await f.controller.returnFromBattle();await battleRun;assert.equal(f.state.sidePriority,1);
     throw new Error('later movie failed');

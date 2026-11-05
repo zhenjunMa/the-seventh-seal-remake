@@ -9,7 +9,7 @@ import {BattleController} from '../web/core/combat.mjs';
 import {partyResourcesForWorld} from '../web/core/party_attributes.mjs';
 import {WorldStore} from '../web/core/world.mjs';
 import {ChapterRunner} from '../web/core/chapter.mjs';
-import {createBattleController} from '../web/controllers/battle.mjs';
+import {createBattleFixtureController as createBattleController} from './helpers/battle_controller.mjs';
 import {createStoryController} from '../web/controllers/story.mjs';
 import {createSessionController} from '../web/controllers/session.mjs';
 import {BattleMenuView} from '../web/battle_menu_view.mjs';
@@ -100,9 +100,9 @@ test('captured completed defeat returns through real battle, story transaction a
   await until(()=>f.state.scenes.phase==='battle-entry');
   // The cached view has no frame playback; complete its entry presentation
   // explicitly before restoring the captured immediately-before-finish state.
-  for(const event of [...f.state.battle.presentationSnapshot().lifecycle_events])if(event.kind==='entry')assert.equal(f.state.battle.ackLifecycle(event),true);
+  for(const event of [...f.battleController.runtime.battle.presentationSnapshot().lifecycle_events])if(event.kind==='entry')assert.equal(f.battleController.runtime.battle.ackLifecycle(event),true);
   assert.equal(f.state.scenes.phase,'battle-charging');
-  const core=f.state.battle,session=f.state.scriptedBattleSession;
+  const core=f.battleController.runtime.battle,session=f.battleController.runtime.scriptedBattleSession;
   // Restore the completed capture to the immediately-before-finish boundary;
   // every actor, resource, raw record, contact and RNG source stays unchanged.
   core.state=copy(terminal.battle);core.state.phase='defeat';core.completed=null;
@@ -112,24 +112,24 @@ test('captured completed defeat returns through real battle, story transaction a
   assert.deepEqual(core.completed.resources_by_actor,terminal.result.resources_by_actor,'native DWORD resources survive finish without replacing the HP formula');
   assert.deepEqual(core.state.actors.map(a=>({id:a.id,raw_hp:a.raw_hp,hp:a.hp,state_raw:a.state_raw})),sourceActors.map(a=>({id:a.id,raw_hp:a.raw_hp,hp:a.hp,state_raw:a.state_raw})));
   assert.deepEqual(f.world.snapshot(),before);assert.deepEqual(session.simulation.before,draftBefore);
-  assert.equal(f.state.sidePriority,beforeSide);assert.equal(f.state.scriptedBattleSession,null);assert.equal(f.state.storyPlayback,null);
+  assert.equal(f.state.sidePriority,beforeSide);assert.equal(f.battleController.runtime.scriptedBattleSession,null);assert.equal(f.state.storyPlayback,null);
   assert.equal(f.state.openingView,null);assert.equal(f.state.chapterRunner.running,false);assert.equal(f.state.scenes.current,f.scene);
   assert.equal(f.state.scenes.phase,'menu');assert.equal(f.$('menuResume').hidden,true);
   assert.ok(f.events.some(event=>event.type==='phase'&&event.phase==='game-over'));
   assert.deepEqual(f.events.find(event=>event.type==='title').options,{allowResume:false});
   const gameOver=f.events.find(event=>event.type==='game-over');assert.equal(gameOver.policy.mode,'game-over');assert.equal(gameOver.playback_error,null);
   assert.equal(f.events.some(event=>event.type==='chapter-commit'),false);assert.equal(f.events.some(event=>event.type==='story-complete'),false);
-  assert.equal(f.state.battleHistory.length,1);assert.equal(f.state.battleHistory[0].result.outcome,'defeat');
+  assert.equal(f.state.lastBattle.result.outcome,'defeat');
 });
 
 test('the adjacent ordinary battle return uses the same completed native defeat without replacing raw world resources or awarding rewards',async()=>{
   const f=fixture(),before=f.world.snapshot(),battle=new BattleController({world:f.world,resourcesForWorld:partyResourcesForWorld,log:f.actions.log});
   battle.state=copy(terminal.battle);battle.state.phase='defeat';battle.expectedRevision=f.world.value.revision;battle.pendingCarriers=new Set();
-  Object.assign(f.state,{battle,battleView:{stop(){}},battleNatural:true,battleRng:{state:123456},battleCheckpoint:{x:100,y:200}});
+  Object.assign(f.battleController.runtime,{battle,battleView:{stop(){}},battleNatural:true,battleRng:{state:123456},returnView:f.battleController.host.presentation.captureReturn()});
   f.state.scenes.setPhase('battle-result');await f.battleController.returnFromBattle();
   assert.equal(f.state.scenes.phase,'menu');assert.equal(f.$('menuResume').hidden,true);
   assert.ok(f.events.some(event=>event.type==='game-over'));assert.equal(battle.completed.rewards_applied,false);
   for(const actor of f.world.value.party)assert.equal(actor.hp.current,terminal.result.resources_by_actor[actor.id].hp);
   assert.deepEqual(f.world.value.inventory,before.inventory);assert.equal(f.world.value.money,before.money);assert.deepEqual(f.world.value.reward_records,before.reward_records);
-  assert.equal(f.world.value.encounters.rng_state,123456);assert.equal(f.state.battleHistory.length,1);
+  assert.equal(f.world.value.encounters.rng_state,123456);assert.equal(f.state.lastBattle.result.outcome,'defeat');
 });

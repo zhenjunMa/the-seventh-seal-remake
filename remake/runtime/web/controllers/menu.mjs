@@ -28,8 +28,9 @@ export function createMenuController({state, actions, $, canvas, ctx}) {
   function showMessage(value){if(state.operationMenu.info)state.operationMenu.info(value);else $('menuMessage').textContent=value;}
   function menuOperation(fn){return async()=>{try{const message=await (state.menuFeedback?state.menuFeedback.transaction(fn):fn());$('menuMessage').classList.remove('error');showMessage(message??'');if(!state.menuFeedback)state.audio?.playCue('menuConfirm');refreshPartyMenu();}catch(error){$('menuMessage').classList.add('error');showMessage(error.message);if(!state.menuFeedback)state.audio?.playCue('menuError');actions.status(error.message,true);actions.log({type:'operation-failed',error:error.message});}};}
   async function openPartyMenu(combat=false){
-    if(combat?!state.battle?.canCommand():state.scenes.phase!=='map')return;
-    const context={combat,phase:state.scenes.phase,page:combat?'items':'roster',commandActor:combat?state.battle.state.player_id:null};state.menuContext=context;state.keys.clear();
+    const battle=combat?actions.battleMenuState():null;
+    if(combat?!battle?.canCommand:state.scenes.phase!=='map')return;
+    const context={combat,phase:state.scenes.phase,page:combat?'items':'roster',commandActor:battle?.actorId??null,items:battle?.items};state.menuContext=context;state.keys.clear();
     if(combat)$('menuItem').value=state.menuSettings.snapshot().battleCursor==='memory'?battleItemSelections.get(context.commandActor)??'':'';
     if(!combat)state.scenes.setPhase('party-menu');
     if(!combat)try{
@@ -38,9 +39,9 @@ export function createMenuController({state, actions, $, canvas, ctx}) {
       actions.log({type:'item-configuration',scope:'field',mode:configured.audit.mode,differences:configured.items.runtime_configuration.differences});
     }catch(error){if(state.menuContext!==context)return;state.menuContext=null;state.scenes.setPhase(context.phase);actions.status(error.message,true);actions.log({type:'operation-failed',error:error.message});return;}
     $('partyMenu').hidden=false;$('partyMenuTitle').textContent=combat?'战斗药品':'操作界面';$('menuMessage').textContent=state.menuContext.mode==='debug'?'调试参数':'';
-    const roles=combat?state.battle.players():state.world.value.party;
+    const roles=combat?battle.actors:state.world.value.party;
     $('menuActor').replaceChildren(...roles.map(r=>actions.option(r.id,r.name,combat&&r.hp.current===0)));
-    $('menuActor').value=combat?state.battle.state.player_id:roles.some(role=>role.id===state.selectedRole)?state.selectedRole:roles[0]?.id??'';
+    $('menuActor').value=combat?battle.actorId:roles.some(role=>role.id===state.selectedRole)?state.selectedRole:roles[0]?.id??'';
     $('menuShortcutEditor').hidden=true;
     $('menuUseItem').textContent=combat?'使用（一次行动）':'使用';state.audio?.playCue('menuOpen');state.menuFeedback?.activate();state.operationMenu.focusInitial();showOperationPage(context.page);
   }
@@ -59,7 +60,7 @@ export function createMenuController({state, actions, $, canvas, ctx}) {
   function closePartyMenu(){
     if(!state.menuContext)return;const previous=state.menuContext;if(previous.combat)battleItemSelections.set(previous.commandActor,$('menuItem').value);state.menuContext=null;$('partyMenu').hidden=true;state.operationMenu.suspend();
     if(!previous.combat)state.scenes.setPhase(previous.phase);
-    if(state.menuFeedback)state.menuFeedback.closing();else state.audio?.playCue('menuCancel');if(previous.combat)state.battleMenu?.frame.focus();else canvas.focus();
+    if(state.menuFeedback)state.menuFeedback.closing();else state.audio?.playCue('menuCancel');if(previous.combat)actions.focusBattleMenu();else canvas.focus();
   }
   function beginTechniqueTestMenu({retainVisible=false}={}){
     if(techniqueTestMenu)throw new Error('技巧测试正在进行。');
@@ -91,11 +92,12 @@ export function createMenuController({state, actions, $, canvas, ctx}) {
   function refreshPartyMenu(){
     if(!state.menuContext)return;
     const {combat,page}=state.menuContext,roleId=$('menuActor').value,world=state.world.value;
+    const itemData=combat?state.menuContext.items:state.itemData;
     state.operationMenu.mnuText($('menuGold'),String(state.world.value.money??0).padStart(8,'0'),'game001','GOLD');state.operationMenu.mnuText($('menuArea'),$('mapName').textContent,'game001','AREA');
     // Hidden panels keep their DOM until their own page is entered. Rebuild
     // actor data only after a world/configuration change, never once per role.
     if(page==='system'){state.operationMenu.system.render(state.audio.snapshot().channels,state.menuSettings.snapshot().battleCursor);return;}
-    const party=combat?null:currentPartyView(),actors=combat?state.battle.players():party.actors,actor=actors.find(r=>r.id===roleId);
+    const party=combat?null:currentPartyView(),actors=combat?actions.battleMenuState().actors:party.actors,actor=actors.find(r=>r.id===roleId);
     $('menuVitals').textContent=`${actor.name} · 等级 ${actor.level} · HP ${actor.hp.current}/${actor.hp.maximum} · MP ${actor.mp.current}/${actor.mp.maximum}`;
     state.operationMenu.actorId=roleId;state.operationMenu.rosterOrder=world.party.map(role=>role.id);
     if(page==='roster'){state.operationMenu.roster(party.rows,roleId);return;}
@@ -104,39 +106,40 @@ export function createMenuController({state, actions, $, canvas, ctx}) {
     if(page==='status')return;
     if(page==='skills'){
       if(state.operationMenu.techniques){
-        const weapon=equipmentRows(world,state.partyCombat,state.itemData,roleId).find(row=>state.itemData.definitions[String(row.item_id)]?.type_raw_24===1);
-        const raw=state.itemData.definitions[String(weapon?.item_id)]?.raw_hex,capacity=raw?new DataView(Uint8Array.from(raw.match(/../g),v=>parseInt(v,16)).buffer).getUint32(0x146,true):0;
+        const weapon=equipmentRows(world,state.partyCombat,itemData,roleId).find(row=>itemData.definitions[String(row.item_id)]?.type_raw_24===1);
+        const raw=itemData.definitions[String(weapon?.item_id)]?.raw_hex,capacity=raw?new DataView(Uint8Array.from(raw.match(/../g),v=>parseInt(v,16)).buffer).getUint32(0x146,true):0;
         const skills=currentSkills();
         state.operationMenu.techniques.render(state.world.value,skills,{...state.menuContext.configured,party_skills:skills},{rows:party.rows,capacity});
       }
       refreshFieldSkillList(roleId);return;
     }
     if(page==='weapon'){
-      state.operationMenu.weapon({...operationWeaponDetails(world,state.partyCombat,state.itemData,roleId,party.rows.find(row=>row.id===roleId)),definitions:state.itemData.definitions,actor,
-        candidates:crystalSocketCandidates(world.inventory,state.itemData,{includeDisabled:true}).map(row=>({...row,available:row.socket_enabled})),
+      state.operationMenu.weapon({...operationWeaponDetails(world,state.partyCombat,itemData,roleId,party.rows.find(row=>row.id===roleId)),definitions:itemData.definitions,actor,
+        candidates:crystalSocketCandidates(world.inventory,itemData,{includeDisabled:true}).map(row=>({...row,available:row.socket_enabled})),
         slotIndex:state.menuContext.socketIndex??0,selectedId:state.menuContext.crystalInstanceId});return;
     }
     if(page==='equipment'){refreshEquipment(roleId,actor);return;}
     if(page!=='items')return;
     state.menuContext.itemFilter??=state.menuContext.itemCategory==='equipment'?[2,1]:state.menuContext.itemCategory==='crystals'?[3,1]:[5,1];
     state.operationMenu.setItemFilter?.(...state.menuContext.itemFilter);
-    const previous=$('menuItem').value,previousIndex=state.operationMenu.itemFocused?Math.max(0,state.operationMenu.itemOrder?.indexOf(previous)??0):0,inventory=combat?state.battle.state.inventory:state.world.value.inventory,usable=usableItems(inventory,state.itemData,combat?'battle':'field'),listed=(combat?usable:inventory.filter(row=>{const def=state.itemData.definitions[String(row.id)],type=def?.type_raw_24,subtype=def?.subtype_raw_25;return row.quantity>0&&(state.menuContext.itemCategory==='equipment'?type===2&&subtype===state.menuContext.itemFilter[1]:state.menuContext.itemCategory==='crystals'?type===3&&subtype===1:type===state.menuContext.itemFilter[0]&&subtype===state.menuContext.itemFilter[1]);})).sort((a,b)=>a.id-b.id);
+    const previous=$('menuItem').value,previousIndex=state.operationMenu.itemFocused?Math.max(0,state.operationMenu.itemOrder?.indexOf(previous)??0):0,inventory=combat?actions.battleMenuState({inventory:true}).inventory:state.world.value.inventory,usable=usableItems(inventory,itemData,combat?'battle':'field'),listed=(combat?usable:inventory.filter(row=>{const def=itemData.definitions[String(row.id)],type=def?.type_raw_24,subtype=def?.subtype_raw_25;return row.quantity>0&&(state.menuContext.itemCategory==='equipment'?type===2&&subtype===state.menuContext.itemFilter[1]:state.menuContext.itemCategory==='crystals'?type===3&&subtype===1:type===state.menuContext.itemFilter[0]&&subtype===state.menuContext.itemFilter[1]);})).sort((a,b)=>a.id-b.id);
     $('menuItem').replaceChildren(...(listed.length?listed.map(r=>actions.option(r.instance_id,`${r.name} ×${r.quantity}`)):[actions.option('','没有物品')]));
     $('menuItem').value=listed.some(r=>r.instance_id===previous)?previous:listed[Math.min(previousIndex,listed.length-1)]?.instance_id??'';
-    state.operationMenu.items(listed,$('menuItem').value,state.itemData.definitions,{usableIds:new Set(usable.map(row=>row.instance_id))});
+    state.operationMenu.items(listed,$('menuItem').value,itemData.definitions,{usableIds:new Set(usable.map(row=>row.instance_id))});
     state.menuContext.itemRows=new Map(listed.map(row=>[row.instance_id,row]));
     state.menuContext.usableItemIds=new Set(usable.map(row=>row.instance_id));
     selectMenuItem($('menuItem').value);
   }
   function selectMenuItem(instanceId,{showInfo=false}={}){
     const context=state.menuContext;if(!context||context.page!=='items')return;
+    const itemData=context.combat?context.items:state.itemData;
     $('menuItem').value=instanceId;
     state.operationMenu.selectItem?.(instanceId);
-    const selected=context.itemRows?.get(instanceId),def=selected&&state.itemData.definitions[String(selected.id)];
+    const selected=context.itemRows?.get(instanceId),def=selected&&itemData.definitions[String(selected.id)];
     const card=state.operationMenu.itemFocused?operationItemCard(def,state.operationMenu.manifest):null,back=context.itemCategory==='items'?state.operationMenu.manifest.item_card_back:null;
     const image=$('menuItemCard');image.hidden=!(card||back);
     if(card||back){const path=card?.image??back.image??back;if(image.getAttribute?.('src')!==path)image.src=path;image.style.width=(card?.width??175)+'px';image.style.height=(card?.height??265)+'px';image.style.left=(state.operationMenu.cardRect?.left??292)+'px';image.style.top=((state.operationMenu.cardRect?.top??28)+(card?1:0))+'px';}
-    const actor=context.combat?state.battle.players().find(row=>row.id===$('menuActor').value):null;
+    const actor=context.combat?actions.battleMenuState().actors.find(row=>row.id===$('menuActor').value):null;
     $('menuUseItem').disabled=!context.usableItemIds?.has(instanceId)||context.combat&&actor?.hp.current===0;
     const hint=def?.description??(context.combat?'消耗当前行动人物的一次行动。':context.itemCategory==='items'?'选择物品与使用目标。':'');
     if($('menuItemHint').textContent!==hint)$('menuItemHint').textContent=hint;

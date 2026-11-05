@@ -4,7 +4,7 @@ import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {WorldStore} from '../web/core/world.mjs';
 import {chapterRoleFromDefinition} from '../web/core/chapter.mjs';
-import {createBattleController} from '../web/controllers/battle.mjs';
+import {createBattleFixtureController as createBattleController} from './helpers/battle_controller.mjs';
 import {createSkillTestSample} from '../web/skill_test_sample.mjs';
 import {commitSkillTestResources} from '../web/core/skill_test_commit.mjs';
 import {loadRuntimeConfiguration,compileRuntimeConfiguration} from '../web/core/runtime_config.mjs';
@@ -69,15 +69,19 @@ test('Failed test startup releases battle UI and returns to the same retained me
   const f=controllerFixture(),before=f.world.snapshot();
   f.state.loadingView={run(){throw Error('Technique test must not show a loading page');}};
   await assert.rejects(f.controller.startTechniqueTest(),/技巧测试来源/);
-  assert.equal(f.state.skillTestSession,null);assert.equal(f.state.scenes.phase,'party-menu');assert.equal(f.state.menuContext.page,'skills');assert.equal(f.$('partyMenu').hidden,false);
-  for(const [key,value]of Object.entries(f.previous))assert.equal(f.state[key],value,key);assert.deepEqual(f.world.snapshot(),before);assert.equal(f.canvas.hidden,false);
+  assert.equal(f.controller.runtime.skillTestSession,null);assert.equal(f.state.scenes.phase,'party-menu');assert.equal(f.state.menuContext.page,'skills');assert.equal(f.$('partyMenu').hidden,false);
+  for(const [key,value]of Object.entries(f.previous))assert.equal(Object.hasOwn(f.controller.runtime,key)?f.controller.runtime[key]:f.state[key],value,key);assert.deepEqual(f.world.snapshot(),before);assert.equal(f.canvas.hidden,false);
 });
 test('Training return commits item effects once, restores map/cursor ownership and refreshes the retained techniques page',async()=>{
   const f=controllerFixture(),before=f.world.snapshot(),result=resultFor(f.world),snapshot=snapshotFor(f.world);result.resources_by_actor['002'].mp=12;snapshot.inventory.pop();let finishes=0;
-  f.state.menuContext=null;f.state.scenes.setPhase('battle-result');f.state.battle={state:{...snapshot,phase:'escaped'},finish(){finishes++;this.state.phase='closed';return result;}};
-  f.state.skillTestSession={ticket:f.ticket,mapWorld:f.world,revision:before.revision,previous:f.previous,viewState:{x:12,y:34},mapName:'原地图',visibility:{canvas:false,dialogue:true},view:{stop:r=>f.events.push(r)}};
+  const session=f.controller.sessions.enter('skill-test',{
+    ticket:f.ticket,mapWorld:f.world,revision:before.revision,
+    returnView:f.controller.host.presentation.captureReturn(),view:{stop:r=>f.events.push(r)},
+  });
+  f.state.menuContext=null;f.state.scenes.setPhase('battle-result');
+  f.controller.runtime.battle={state:{...snapshot,phase:'escaped'},finish(){finishes++;this.state.phase='closed';return result;}};
   await f.controller.returnFromBattle();await f.controller.returnFromBattle();
-  assert.equal(finishes,1);assert.equal(f.state.scenes.phase,'party-menu');assert.equal(f.state.skillTestSession,null);assert.equal(f.state.battleCursorMemory,f.previous.battleCursorMemory);
+  assert.equal(finishes,1);assert.equal(f.state.scenes.phase,'party-menu');assert.equal(f.controller.runtime.skillTestSession,null);assert.equal(f.controller.runtime.battleCursorMemory,f.previous.battleCursorMemory);
   assert.equal(f.world.value.party[1].mp.current,12);assert.deepEqual(f.world.value.encounters,before.encounters);assert.deepEqual(f.world.location,before.location);assert.equal(f.world.value.money,before.money);
   assert.ok(f.events.includes('hud')&&f.events.includes('refresh'));assert.equal(f.state.lastBattle.result,result);
 });

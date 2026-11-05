@@ -1,4 +1,4 @@
-// battle adapters. Persistent state belongs to the shared runtime context.
+// Combat owns its transient sessions. Cross-system effects use the host ports.
 import {effectiveSkillSource} from "../core/battle_skill_access.mjs";
 import {BattleController} from "../core/combat.mjs";
 import {resolveAction, applyNativeDamage, createNativeRng} from "../core/combat_rules.mjs";
@@ -18,54 +18,64 @@ import {commitSkillTestResources} from "../core/skill_test_commit.mjs";
 import {battleResources} from "../core/battle_resources.mjs";
 import {beginScriptedBattle,commitScriptedBattle} from '../core/scripted_battle.mjs';
 import {playbackTask} from '../core/story_playback.mjs';
+import {createBattleSessions} from './battle_sessions.mjs';
 
-export function createBattleController({state, actions, $, canvas, ctx}) {
-  const captureScene=kind=>actions.captureScene?.(kind)??(kind==='battle'?$('battleCanvas'):canvas);
-  const captureTransition=(kind='exploration')=>state.engine?.captureTexture?state.engine.captureTexture(kind):state.battleTransition.capture(captureScene(kind));
+export function createBattleController({host, sessions = createBattleSessions()}) {
+  const actions = host.services, $ = host.element;
+  const current = () => sessions.current;
+  const captureTransition = kind => host.presentation.capture(kind);
+  function disposeMenu(menu){
+    if(menu?.root===$('battleHud')&&current().battleMenu!==menu){
+      const detached=menu.root.ownerDocument.createElement('div');
+      if(menu.frame.parentNode===menu.root)detached.append(menu.frame);
+      menu.root=detached;
+    }
+    menu?.dispose();
+  }
   function updateBattle(snapshot){
     if(!snapshot||snapshot.phase==='closed')return;
     const entering=['command','charging'].includes(snapshot.phase)&&snapshot.lifecycle_events?.some(event=>event.kind==='entry');
     const phase=entering?'battle-entry':snapshot.phase==='command'?'battle-command':snapshot.phase==='charging'?'battle-charging':snapshot.phase==='action'?'battle-action':snapshot.phase==='interrupted'?'battle-interrupted':'battle-result';
-    if(!state.battleEntryPending&&state.scenes.phase!==phase)state.scenes.setPhase(phase);
+    if(!current().battleEntryPending&&host.phase!==phase)host.setPhase(phase);
     const node=$('battleCommands');node.dataset.phase=snapshot.phase;node.dataset.round=snapshot.round;
-    node.dataset.mode=state.skillTestSession?'skill-test':'battle';
+    node.dataset.mode=current().skillTestSession?'skill-test':'battle';
     const impacted=snapshot.last_impact;
     node.dataset.impactFrame=impacted?.source_frame??'';
     node.dataset.impactActor=impacted?.actor_id??'';
     node.dataset.impactCount=snapshot.impact_count;
     $('battleMessage').textContent=entering?'正在入场':snapshot.phase==='victory'?'战斗胜利':snapshot.phase==='defeat'?'队伍已经倒下':snapshot.phase==='escaped'?'已经逃离战斗':snapshot.phase==='interrupted'?snapshot.error:snapshot.phase==='action'?'正在行动':snapshot.phase==='command'?'选择行动':'行动槽充能中';
-    state.battleMenu?.update(snapshot);
-    if(state.scriptedBattleSession){
-      if(snapshot.phase==='defeat'&&!state.scriptedBattleSession.returnPending)queueMicrotask(actions.guarded(returnFromBattle));
-    }else if(state.skillTestSession){
-      if(snapshot.phase==='escaped'&&!state.skillTestSession.returnPending){state.skillTestSession.returnPending=true;queueMicrotask(actions.guarded(returnFromBattle));}
-    }else if(snapshot.phase==='defeat'&&!state.battleSampleMode)queueMicrotask(actions.guarded(returnFromBattle));
+    current().battleMenu?.update(snapshot);
+    if(current().scriptedBattleSession){
+      if(snapshot.phase==='defeat'&&!current().scriptedBattleSession.returnPending)queueMicrotask(actions.guarded(returnFromBattle));
+    }else if(current().skillTestSession){
+      if(snapshot.phase==='escaped'&&!current().skillTestSession.returnPending){current().skillTestSession.returnPending=true;queueMicrotask(actions.guarded(returnFromBattle));}
+    }else if(snapshot.phase==='defeat'&&!current().battleSampleMode)queueMicrotask(actions.guarded(returnFromBattle));
   }
-  function battleKey(key,repeat=false){if(state.battleEntryPending||state.scenes.phase==='battle-entry')return true;return state.battleMenu?.key(key,repeat)??false;}
-  function battleKeyUp(key){state.battleMenu?.keyup(key);}
+  function battleKey(key,repeat=false){if(current().battleEntryPending||host.phase==='battle-entry')return true;return current().battleMenu?.key(key,repeat)??false;}
+  function battleKeyUp(key){current().battleMenu?.keyup(key);}
   function updateBattleFrame(now){
-    if(state.battleEntryPending||state.battlePresentationError||state.battleResourceWaits?.size)return;
+    if(current().battleEntryPending||current().battlePresentationError||current().battleResourceWaits?.size)return;
     try{
-      now=state.battleView?.resourceTime?.()??now;
-      state.battle?.advanceClock(now);
-      state.battleView?.draw(state.battle?.presentationSnapshot(),now);drawBattleInterface(now);
+      now=current().battleView?.resourceTime?.()??now;
+      current().battle?.advanceClock(now);
+      current().battleView?.draw(current().battle?.presentationSnapshot(),now);drawBattleInterface(now);
     }catch(error){
-      state.battlePresentationError=error.message;state.battleView?.stop(error.message);
-      state.battle?.interrupt(error);actions.status(error.message,true);
+      current().battlePresentationError=error.message;current().battleView?.stop(error.message);
+      current().battle?.interrupt(error);actions.status(error.message,true);
     }
   }
-  function drawBattleInterface(now){if(state.battleMenu){state.battleMenu.draw(now,state.battleView?.actorPositions());state.battleMenu.paintTo(state.engine?.battle.surface.canvas??$('battleCanvas'));
-    $('battleCommands').dataset.lifecycle=JSON.stringify(state.battleView?.lifecycleSnapshot());
-    const battle=state.battle,completed=state.battleView?.drainLifecycleCompleted()??[];
-    if(completed.length)queueMicrotask(()=>{if(state.battle===battle)for(const event of completed)battle.ackLifecycle(event);});
-  }state.engine?.battle.surface.endFrame();}
+  function drawBattleInterface(now){if(current().battleMenu){current().battleMenu.draw(now,current().battleView?.actorPositions());current().battleMenu.paintTo(host.engine?.battle.surface.canvas??$('battleCanvas'));
+    $('battleCommands').dataset.lifecycle=JSON.stringify(current().battleView?.lifecycleSnapshot());
+    const battle=current().battle,completed=current().battleView?.drainLifecycleCompleted()??[];
+    if(completed.length)queueMicrotask(()=>{if(current().battle===battle)for(const event of completed)battle.ackLifecycle(event);});
+  }host.engine?.battle.surface.endFrame();}
   async function prepareView({mode,newParty,stagePath=null,lifecycle=false,actors,skills,inventory,onProgress,signal}){
     mode=`${mode}:${stagePath??''}`;
-    if(!state.battleViews.has(mode))state.battleViews.set(mode,new BattleView({canvas:state.engine?.battle.surface.canvas??$('battleCanvas'),
-      metadataPath:newParty?'/'+state.catalog.party_battle_view:stagePath?'/'+state.catalog.forest_battle_view:'/data/battle_view.json',
+    if(!sessions.views.has(mode))sessions.views.set(mode,new BattleView({canvas:host.engine?.battle.surface.canvas??$('battleCanvas'),
+      metadataPath:newParty?'/'+host.catalog.party_battle_view:stagePath?'/'+host.catalog.forest_battle_view:'/data/battle_view.json',
       itemMetadataPath:newParty?'/data/item_presentation.json':null,stageMetadataPath:stagePath,lifecycleMetadataPath:lifecycle?'/data/battle_lifecycle.json':null}));
-    const view=state.battleViews.get(mode);
-    view.onResourcesPrepared=images=>state.engine?.battle.surface.prepareImages?.(images);
+    const view=sessions.views.get(mode);
+    view.onResourcesPrepared=images=>host.engine?.battle.surface.prepareImages?.(images);
     view.onResourceError=error=>actions.log({type:'battle-resource-prefetch-failed',error:error.message});
     const cancel=()=>view.cancelPreparation?.('战斗准备已取消');signal?.throwIfAborted();signal?.addEventListener('abort',cancel,{once:true});
     try{
@@ -75,32 +85,31 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
     }finally{signal?.removeEventListener('abort',cancel);}
   }
   async function prepareEntryImages(images,signal){
-    const surface=state.engine?.battle.surface;
-    if(surface?.prepareEntryImages)await surface.prepareEntryImages(images,{signal,clock:state.engine.clock});
+    const surface=host.engine?.battle.surface;
+    if(surface?.prepareEntryImages)await surface.prepareEntryImages(images,{signal,clock:host.engine.clock});
     else surface?.prepareImages?.(images);
     signal?.throwIfAborted();
   }
   function createCombat(world,newParty,view){
     let battle,waits=0,waitStarted=0,waitTotal=0;
     const log=event=>{
-      if(state.battle!==battle||!battle.state)return;
-      if(state.lastBattle?.battle!==battle.state){
+      if(current().battle!==battle||!battle.state)return;
+      if(host.lastBattle?.battle!==battle.state){
         if(battle.state?.phase==='closed')return;
         // Cached views can still reference an older controller. Drop its
         // detailed history as well as the old event log when a new fight starts.
-        if(state.lastBattle?.battle?.history)state.lastBattle.battle.history.length=0;
-        state.lastBattle={result:null,battle:battle.state};state.logs=[];
-        $('eventLog').textContent='';
+        if(host.lastBattle?.battle?.history)host.lastBattle.battle.history.length=0;
+        host.lastBattle={result:null,battle:battle.state};host.clearBattleLog();
       }
       actions.log(event);
     };
-    const now=()=>state.engine?.battle.clock.time??performance.now()-waitTotal-(waits?performance.now()-waitStarted:0);
+    const now=()=>host.engine?.battle.clock.time??performance.now()-waitTotal-(waits?performance.now()-waitStarted:0);
     const withResources=async(work,wait=true)=>{
-      const reason=Symbol('battle-resources'),generation=view.generation,started=performance.now();
-      if(wait){if(!waits++)waitStarted=performance.now();(state.battleResourceWaits??=new Set()).add(reason);state.engine?.pause(reason);}
+      const reason=Symbol('battle-resources'),generation=view.generation,started=performance.now(),resourceWaits=current().battleResourceWaits;
+      if(wait){if(!waits++)waitStarted=performance.now();resourceWaits.add(reason);host.engine?.pause(reason);}
       const signal=view.resourceController?.signal;
-      try{const result=await playbackTask(work(),signal);if(state.battle!==battle||view.destroyed||view.generation!==generation){result?.release?.();throw new Error('战斗资源会话已失效');}if(wait)log({type:'battle-resource-wait-complete',elapsed_ms:performance.now()-started,cache:battleResources.snapshot()});return result;}
-      finally{if(wait){if(!--waits)waitTotal+=performance.now()-waitStarted;state.battleResourceWaits.delete(reason);state.engine?.resume(reason);}}
+      try{const result=await playbackTask(work(),signal);if(current().battle!==battle||view.destroyed||view.generation!==generation){result?.release?.();throw new Error('战斗资源会话已失效');}if(wait)log({type:'battle-resource-wait-complete',elapsed_ms:performance.now()-started,cache:battleResources.snapshot()});return result;}
+      finally{if(wait){if(!--waits)waitTotal+=performance.now()-waitStarted;resourceWaits.delete(reason);host.engine?.resume(reason);}}
     };
     view.withResources=withResources;view.resourceTime=now;
     const play=async(method,result,options)=>{
@@ -112,48 +121,47 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
         return await playback;
       }catch(error){lease?.release();throw error;}
     };
-    const actionSound=(result,step)=>state.audio?.playAction({...step,sound_inhibited:step.sound_inhibited??Boolean(battle.actor(step.actor_id).immune_raw)},`${result.action_id}:${step.channel_id}:${step.plan_record_index}:${step.logical_frame}`);
-    const effectSound=(result,step)=>state.audio?.playEffect(step.asset_id,`${result.action_id}:${step.channel_id}:${step.effect_index}`,step.logical_frame);
+    const actionSound=(result,step)=>host.audio?.playAction({...step,sound_inhibited:step.sound_inhibited??Boolean(battle.actor(step.actor_id).immune_raw)},`${result.action_id}:${step.channel_id}:${step.plan_record_index}:${step.logical_frame}`);
+    const effectSound=(result,step)=>host.audio?.playEffect(step.asset_id,`${result.action_id}:${step.channel_id}:${step.effect_index}`,step.logical_frame);
     const present=method=>async(result,options)=>{const played=await play(method,result,{...options,onFrame:step=>actionSound(result,step),onEffectFrame:step=>effectSound(result,step)});log({type:'battle-presentation',action_id:result.action_id,actor_id:result.actor_id,skill_id:result.skill_id,observations:played.observations});return played;};
     battle=new BattleController({world,resolveAction,applyDamage:applyNativeDamage,playAction:present('playAction'),playSequence:present('playSequence'),
       now,playTime:()=>actions.currentPlayTime(),
       resourcesForWorld:newParty?partyResourcesForWorld:resourcesForWorld,consumeResources:newParty?consumePartyMp:consumeBattleMp,
-      notify:snapshot=>{if(state.battle===battle)updateBattle(snapshot);},log,itemData:newParty?state.itemData:null,
+      notify:snapshot=>{if(current().battle===battle)updateBattle(snapshot);},log,itemData:newParty?current().itemData:null,
       playItem:async(event,hooks)=>{actions.status(`${event.name} → ${battle.actor(event.target_id).name}`);const played=await play('playItem',event,{...hooks,onFrame:step=>actionSound(event,step),onEffectFrame:step=>effectSound(event,step)});log({type:'battle-item-presentation',action_id:event.action_id,item_id:event.item_id,observations:played.observations});}});
     view.nativeControl=battle;
-    view.nativeControlIsCurrent=()=>state.battle===battle;
-    view.onLifecycleFrame=step=>{if(state.battle===battle)actionSound({action_id:`${step.battle_id}:${step.lifecycle_token}`},{...step,channel_id:'lifecycle'});};
+    view.nativeControlIsCurrent=()=>current().battle===battle;
+    view.onLifecycleFrame=step=>{if(current().battle===battle)actionSound({action_id:`${step.battle_id}:${step.lifecycle_token}`},{...step,channel_id:'lifecycle'});};
     return battle;
   }
-  async function prepareHud(newParty,{returnLabel=null,onProgress,world=state.world,battle=state.battle,owner=null,signal}={}){
-    const check=()=>{signal?.throwIfAborted();if(owner&&state.scriptedBattleSession!==owner)throw new Error('剧情战斗界面会话已失效');};
-    if(!owner)state.battleMenu?.dispose();
+  async function prepareHud(newParty,{returnLabel=null,onProgress,world=host.world,battle=current().battle,owner=null,signal}={}){
+    const frame=current();
+    const check=()=>{signal?.throwIfAborted();if(current()!==frame||owner&&!sessions.owns(owner))throw new Error('战斗界面会话已失效');};
+    if(!owner)current().battleMenu?.dispose();
     const [uiManifest,resultManifest]=await playbackTask(Promise.all([battleResources.json('data/battle_ui.json'),returnLabel?null:battleResources.json('data/battle_result.json')]),signal);check();
-    const bindingSource=newParty?effectiveSkillSource(state.partySkills,world.value):null;
-    const host=$('battleHud'),root=owner?host.ownerDocument.createElement('div'):host,view=state.battleView;
-    const menu=new BattleMenuView({root,manifest:uiManifest,battle,returnLabel,autoReturnOnDefeat:Boolean(owner)||!state.skillTestSession&&!state.battleSampleMode,reuseReturnButton:!owner,
+    const bindingSource=newParty?effectiveSkillSource(host.partySkills,world.value):null;
+    const hud=$('battleHud'),root=owner?hud.ownerDocument.createElement('div'):hud,view=current().battleView;
+    const menu=new BattleMenuView({root,manifest:uiManifest,battle,returnLabel,autoReturnOnDefeat:Boolean(owner)||!current().skillTestSession&&!current().battleSampleMode,reuseReturnButton:!owner,
       getCursorHeight:id=>view.actorCursorHeight(id),
-      getSettings:()=>state.menuSettings?.snapshot()??{},getBindings:newParty?id=>techniqueSlots(world.value,bindingSource,id).map(slot=>({...slot,name:slot.type===1?battle.skills[battleTechniqueId(id,slot.index_one_based)]?.name:techniqueSlotName(bindingSource,id,slot)})):null,
-      playCue:(...args)=>state.audio?.playCue(...args),onReturn:actions.guarded(returnFromBattle),onStage:stage=>{if(state.battle===battle)battle.setCommandStage?.(stage);},textRenderer:state.operationMenu?.textRenderer,memory:state.battleCursorMemory,resultManifest,onResultEvent:actions.log,
-      now:view.resourceTime??(()=>state.engine?.battle.clock.time??performance.now()),deferResult:true,
+      getSettings:()=>host.menu.settings(),getBindings:newParty?id=>techniqueSlots(world.value,bindingSource,id).map(slot=>({...slot,name:slot.type===1?battle.skills[battleTechniqueId(id,slot.index_one_based)]?.name:techniqueSlotName(bindingSource,id,slot)})):null,
+      playCue:(...args)=>host.audio?.playCue(...args),onReturn:actions.guarded(returnFromBattle),onStage:stage=>{if(current().battle===battle)battle.setCommandStage?.(stage);},textRenderer:host.menu.textRenderer,memory:current().battleCursorMemory,resultManifest,onResultEvent:actions.log,
+      now:view.resourceTime??(()=>host.engine?.battle.clock.time??performance.now()),deferResult:true,
       prepareResources:work=>view.withResources(work),onResourcesPrepared:images=>prepareEntryImages(images,signal),
       prefetchCommand:command=>{void view.prefetchCommand?.(command);},
-      onResourceError:error=>{if(state.battle===battle){battle.interrupt(error);actions.status(error.message,true);}}});
-    if(owner)owner.menu=menu;else state.battleMenu=menu;
+      onResourceError:error=>{if(current().battle===battle){battle.interrupt(error);actions.status(error.message,true);}}});
+    if(owner)owner.menu=menu;else current().battleMenu=menu;
     try{
       await playbackTask(menu.prepare({onProgress}),signal);check();menu.onResourcesPrepared=view.onResourcesPrepared;
       if(owner){
-        owner.hudChildren=[...host.childNodes];owner.hudDataset={...host.dataset};host.replaceChildren(...root.childNodes);menu.root=host;
-        menu.resizeObserver.unobserve?.(root);menu.resizeObserver.observe(host);menu.fit();state.battleMenu=menu;
+        owner.hudChildren=[...hud.childNodes];owner.hudDataset={...hud.dataset};hud.replaceChildren(...root.childNodes);menu.root=hud;
+        menu.resizeObserver.unobserve?.(root);menu.resizeObserver.observe(hud);menu.fit();current().battleMenu=menu;
       }
       return menu;
-    }catch(error){menu.dispose();throw error;}
+    }catch(error){disposeMenu(menu);throw error;}
   }
   function showBattle(){
-    state.engine?.setMode('battle');
-    for(const id of ['battleCanvas','battleHud','battleCommands'])$(id).hidden=false;
-    canvas.hidden=true;$('dialogue').hidden=true;actions.resize();state.battleMenu.fit();
-    if(state.scriptedBattleSession)$('openingShade').hidden=true;
+    host.presentation.show({scripted: Boolean(current().scriptedBattleSession)});
+    current().battleMenu.fit();
   }
   async function prepareBattleResources(mode,work){
     const started=performance.now();
@@ -163,57 +171,59 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
     return result;
   }
   async function revealBattle(before,start,transitionOptions={},isCurrent=()=>true){
-    state.battleEntryPending=true;
+    current().battleEntryPending=true;
     try{
       const paintBattle=async signal=>{
         signal?.throwIfAborted();if(!isCurrent())throw new Error('剧情战斗入场会话已失效');
         await start(signal);signal?.throwIfAborted();
         if(!isCurrent())throw new Error('剧情战斗入场会话已失效');
-        showBattle();const snapshot=state.battle.presentationSnapshot(),now=state.battleView.resourceTime?.()??0;
-        state.battleView.prepareEntry?.(snapshot,now);
-        state.battleView.draw(snapshot,now,{entryPreview:true});
-        state.battleMenu.draw(now,state.battleView.actorPositions());state.battleMenu.paintTo(state.engine?.battle.surface.canvas??$('battleCanvas'));
-        state.engine?.battle.surface.endFrame();
+        showBattle();const snapshot=current().battle.presentationSnapshot(),now=current().battleView.resourceTime?.()??0;
+        current().battleView.prepareEntry?.(snapshot,now);
+        current().battleView.draw(snapshot,now,{entryPreview:true});
+        current().battleMenu.draw(now,current().battleView.actorPositions());current().battleMenu.paintTo(host.engine?.battle.surface.canvas??$('battleCanvas'));
+        host.engine?.battle.surface.endFrame();
         // Capture the first visible entry poses. Hidden preparation overlaps
         // the transition; visible motion and queued audio resume afterwards.
         return captureTransition('battle');
       };
-      if(state.battleTransition&&before)await state.battleTransition.run(before,paintBattle,transitionOptions);
-      else{transitionOptions.onCovered?.();await start(transitionOptions.signal);if(isCurrent()){showBattle();state.battleView.prepareEntry?.(state.battle.presentationSnapshot(),state.battleView.resourceTime?.()??0);}}
-    }finally{if(isCurrent())state.battleEntryPending=false;}
-    if(isCurrent())updateBattle(state.battle.presentationSnapshot());
+      if(host.battleTransition&&before)await host.battleTransition.run(before,paintBattle,transitionOptions);
+      else{transitionOptions.signal?.throwIfAborted();if(!isCurrent())throw new Error('战斗入场会话已失效');transitionOptions.onCovered?.();await start(transitionOptions.signal);if(isCurrent()){showBattle();current().battleView.prepareEntry?.(current().battle.presentationSnapshot(),current().battleView.resourceTime?.()??0);}}
+    }finally{if(isCurrent())current().battleEntryPending=false;}
+    if(isCurrent())updateBattle(current().battle.presentationSnapshot());
   }
   // Field encounters and technique tests share resource preparation, transition,
   // HUD creation and entry. Only sample rules and the owning world differ.
   async function enterBattle({before,startedAt,group=null,encounterState=null,sampleMode=false,testSession=null}){
-    const testing=Boolean(testSession),mapWorld=state.world,revision=mapWorld.value.revision;
-    const isCurrent=()=>state.world===mapWorld&&(!testing||state.skillTestSession===testSession);
-    state.battlePresentationError=null;state.scenes.setPhase('battle-loading');
+    const frame=current(),testing=Boolean(testSession),mapWorld=host.world,revision=mapWorld.value.revision;
+    const isCurrent=()=>current()===frame&&host.world===mapWorld&&(!testing||current().skillTestSession===testSession);
+    current().battlePresentationError=null;host.setPhase('battle-loading');
     await revealBattle(before,async signal=>{
       let sample,rules,world=mapWorld;
       const newParty=!sampleMode;
       await prepareBattleResources(testing?'skill-test':'battle',async progress=>{
-        if(!state.battleData)state.battleData=await playbackTask(actions.json(state.catalog.combat_sample??'data/combat_sample.json'),signal);
+        const combatData=host.loadCombatData(signal);if(combatData)await combatData;
         const [configured,loadedRules]=await playbackTask(Promise.all([
           actions.readConfiguredData({sample:sampleMode}),testing?actions.json('data/skill_test.json'):null]),signal);
-        signal?.throwIfAborted();rules=loadedRules;state.itemData=configured.items;
+        signal?.throwIfAborted();rules=loadedRules;current().itemData=configured.items;
         if(!isCurrent()||mapWorld.value.revision!==revision)throw new Error('资源加载期间世界状态已变化');
         if(testing)world=new WorldStore(mapWorld.snapshot(),mapWorld.mapIds);
-        else{state.battleSampleMode=sampleMode;if(newParty&&!group)throw new Error('请在野外行走遇敌。');}
+        else{current().battleSampleMode=sampleMode;if(newParty&&!group)throw new Error('请在野外行走遇敌。');}
         progress({completed:10,total:100});
-        const scheduler={...configured.scheduler,policy:{...configured.scheduler.policy,commands:'Frame-driven charging with per-player buffered commands; input continues during charging and hit reactions, confirmation locks until action completion, and dispatch waits for execution readiness.'},...(newParty?{idle_skills:{...configured.scheduler.idle_skills,...state.partySkills.idle_skills}}:{})};
+        const scheduler={...configured.scheduler,policy:{...configured.scheduler.policy,commands:'Frame-driven charging with per-player buffered commands; input continues during charging and hit reactions, confirmation locks until action completion, and dispatch waits for execution readiness.'},...(newParty?{idle_skills:{...configured.scheduler.idle_skills,...host.partySkills.idle_skills}}:{})};
         // Factories read the world synchronously and build isolated combat data.
-        sample=testing?createSkillTestSample(world.value,state.partyCombat,state.partySkills,configured,state.itemData,rules,state.partyReactions,state.statusData,state.operationMenu?.techniques?.supplement?.name_charset)
-          :newParty?assembleForestSample(createPartySample(world.value,state.partyCombat,state.partySkills,configured,state.itemData,state.operationMenu?.techniques?.supplement?.name_charset),configured.forest,group,scheduler,configured.ai,configured.rewards,state.partyReactions,state.statusData)
-          :group?createForestSample(world.value,configured.combat,configured.forest,group,null,scheduler,configured.ai,configured.rewards,state.reactionData,state.statusData):createBattleSample(world.value,configured.combat);
+        sample=testing?createSkillTestSample(world.value,host.partyCombat,host.partySkills,configured,current().itemData,rules,host.partyReactions,host.statusData,host.menu.nameCharset)
+          :newParty?assembleForestSample(createPartySample(world.value,host.partyCombat,host.partySkills,configured,current().itemData,host.menu.nameCharset),configured.forest,group,scheduler,configured.ai,configured.rewards,host.partyReactions,host.statusData)
+          :group?createForestSample(world.value,configured.combat,configured.forest,group,null,scheduler,configured.ai,configured.rewards,host.reactionData,host.statusData):createBattleSample(world.value,configured.combat);
         if(!testing&&sample.actors.filter(actor=>actor.side==='player').every(actor=>actor.hp.current===0))throw new Error('队伍已经倒下，请载入进度后继续。');
         const mode=testing?'skill-test':newParty?'party':group?'forest':'sample',stagePath=testing?rules.stage.path:group?'/'+battleStage(group.stage).path:null;
         const view=await playbackTask(prepareView({mode,newParty,stagePath,lifecycle:testing||Boolean(group),actors:sample.actors,skills:sample.skills,inventory:world.value.inventory,signal,
           onProgress:p=>progress({completed:10+75*p.completed/p.total,total:100})}),signal);
-        signal?.throwIfAborted();state.battleView=view;if(testing)testSession.view=view;
-        view.setRoster(sample.actors,sample.skills);state.battle=createCombat(world,newParty,view);
-        if(testing)testSession.battle=state.battle;
-        state.audio?.setScene({mapId:mapWorld.location.map_id,battle:true,stageId:testing?rules.stage.music_stage_id??'stage13.scn':group?.stage??null});
+        signal?.throwIfAborted();
+        if(!isCurrent())throw new Error('战斗准备会话已失效');
+        current().battleView=view;if(testing)testSession.view=view;
+        view.setRoster(sample.actors,sample.skills);current().battle=createCombat(world,newParty,view);
+        if(testing)testSession.battle=current().battle;
+        host.audio?.setScene({mapId:mapWorld.location.map_id,battle:true,stageId:testing?rules.stage.music_stage_id??'stage13.scn':group?.stage??null});
         await prepareHud(newParty,{world,signal,returnLabel:testing?'返回技巧测试':null,
           onProgress:p=>progress({completed:(p.stage==='result'?95:85)+5*p.completed/p.total,total:100})});
         signal?.throwIfAborted();progress({completed:100,total:100});
@@ -222,53 +232,59 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
       if(!isCurrent()||mapWorld.value.revision!==revision)throw new Error('资源加载期间世界状态已变化');
       if(!testing&&group)mapWorld.setEncounterState(encounterState);
       const rngSeed=testing?world.value.encounters?.rng_state??0x20261020:group?encounterState.rng_state:0x20261011;
-      state.battleRng=createNativeRng(rngSeed);state.battleNatural=!testing&&Boolean(group);
-      state.battle.start({...sample,lifecycle_enabled:Boolean(state.battleView.lifecycle),side_priority:state.sidePriority,rng:state.battleRng,
+      current().battleRng=createNativeRng(rngSeed);current().battleNatural=!testing&&Boolean(group);
+      current().battle.start({...sample,lifecycle_enabled:Boolean(current().battleView.lifecycle),side_priority:host.sidePriority,rng:current().battleRng,
         source:{...sample.source,rng_seed:rngSeed,rng_seed_policy:testing?'separate-technique-test-stream':group?'persistent-development-global-stream':'controlled-development-seed'}});
       if(testing)testSession.rules=rules;
-    },{startedAt,onCovered:testing?()=>actions.hideTechniqueTestMenu?.(testSession.ticket):undefined},isCurrent);
+    },{startedAt,onCovered:testing?()=>host.menu.cover(testSession.ticket):undefined},isCurrent);
   }
   async function startBattle(group=null,encounterState=null,{sample:sampleMode=false}={}){
-    if(state.scenes.phase!=='map')return;
-    const startedAt=performance.now(),before=(state.battleTransition?captureTransition():null);
-    state.battleCheckpoint={...state.view};
+    if(host.phase!=='map')return;
+    const startedAt=performance.now(),before=(host.battleTransition?captureTransition():null);
+    const session=sessions.enter('field',{returnView:host.presentation.captureReturn()});
+    current().returnView=session.returnView;
     try{
       await enterBattle({before,startedAt,group,encounterState,sampleMode});
-      if(group)actions.log({type:'field-encounter',group,location:state.world.location,counter_after:state.world.value.encounters.counters[state.selectedRole]});
+      if(group)actions.log({type:'field-encounter',group,location:host.world.location,counter_after:host.world.value.encounters.counters[host.selectedRole]});
       actions.status('先选中人物，按空格进入该人物的战斗轮盘；蓄力时即可选择招式和目标，确认后等待满槽行动。行动结束可输入下一轮，受击不打断选择；Esc 从轮盘退回选人并保留开放样式，方向键或 Tab / X / Z 切换人物。');
-    }catch(error){before?.destroy?.();state.battleView?.stop('战斗启动失败');state.battleMenu?.dispose();state.battleMenu=null;canvas.hidden=false;for(const id of ['battleCanvas','battleHud','battleCommands'])$(id).hidden=true;Object.assign(state.view,state.battleCheckpoint);state.scenes.setPhase('map');state.audio?.setScene({mapId:state.world.location.map_id,battle:false});throw error;}
+    }catch(error){
+      before?.destroy?.();
+      if(sessions.owns(session)){
+        current().battleView?.stop('战斗启动失败');current().battleMenu?.dispose();
+        host.presentation.hide();sessions.leave(session);session.returnView.restore();
+      }
+      throw error;
+    }
   }
   async function startScriptedBattle({group,draft,playback,signal=playback?.signal}){
-    if(state.scriptedBattleSession||state.skillTestSession||state.scenes.phase!=='event')throw new Error('剧情战斗入口状态无效');
-    const simulation=beginScriptedBattle(draft,state.world.mapIds),revision=state.world.value.revision;
-    const session={simulation,returnPending:false,previousPhase:state.scenes.phase,
-      viewState:{...state.view},mapName:$('mapName').textContent,
-      visibility:{canvas:canvas.hidden,dialogue:$('dialogue').hidden,shadeHidden:$('openingShade').hidden,shadeOpacity:$('openingShade').style.opacity},
-      previous:{battle:state.battle,battleView:state.battleView,battleMenu:state.battleMenu,battleRng:state.battleRng,
-        battleNatural:state.battleNatural,battleCursorMemory:state.battleCursorMemory,sidePriority:state.sidePriority,
-        battlePresentationError:state.battlePresentationError,battleEntryPending:state.battleEntryPending,itemData:state.itemData}};
+    if(current().scriptedBattleSession||current().skillTestSession||host.phase!=='event')throw new Error('剧情战斗入口状态无效');
+    const simulation=beginScriptedBattle(draft,host.world.mapIds),revision=host.world.value.revision;
+    const session=sessions.enter('scripted',{
+      simulation,returnPending:false,returnView:host.presentation.captureReturn(),
+      previousPriority:host.sidePriority,
+    });
     const finished=new Promise((resolve,reject)=>Object.assign(session,{resolve,reject}));finished.catch(()=>{});
     const abort=()=>session.reject(signal.reason??new Error('剧情战斗已取消'));
     signal?.addEventListener('abort',abort,{once:true});
-    const isCurrent=()=>state.scriptedBattleSession===session&&!signal?.aborted;
-    const check=()=>{signal?.throwIfAborted();playback?.check();if(state.scriptedBattleSession!==session)throw new Error('剧情战斗会话已失效');if(state.world.value.revision!==revision)throw new Error('战斗期间世界状态已变化');};
-    const before=(state.battleTransition?captureTransition():null);
-    state.scriptedBattleSession=session;state.battlePresentationError=null;state.battleNatural=false;
-    state.battleCursorMemory=new Map(state.battleCursorMemory);state.scenes.setPhase('battle-loading');
+    const isCurrent=()=>current().scriptedBattleSession===session&&!signal?.aborted;
+    const check=()=>{signal?.throwIfAborted();playback?.check();if(current().scriptedBattleSession!==session)throw new Error('剧情战斗会话已失效');if(host.world.value.revision!==revision)throw new Error('战斗期间世界状态已变化');};
+    let before;
     try{
-      check();if(!state.battleData){const data=await playbackTask(actions.json(state.catalog.combat_sample??'data/combat_sample.json'),signal);check();state.battleData=data;}
-      const configured=await playbackTask(actions.readConfiguredData(),signal);check();state.itemData=configured.items;
-      const scheduler={...configured.scheduler,idle_skills:{...configured.scheduler.idle_skills,...state.partySkills.idle_skills}};
-      const sample=assembleForestSample(createPartySample(simulation.world.value,state.partyCombat,state.partySkills,configured,state.itemData,state.operationMenu?.techniques?.supplement?.name_charset),
-        configured.forest,group,scheduler,configured.ai,configured.rewards,state.partyReactions,state.statusData);
+      before=host.battleTransition?captureTransition():null;
+      host.setPhase('battle-loading');
+      check();await host.loadCombatData(signal);check();
+      const configured=await playbackTask(actions.readConfiguredData(),signal);check();current().itemData=configured.items;
+      const scheduler={...configured.scheduler,idle_skills:{...configured.scheduler.idle_skills,...host.partySkills.idle_skills}};
+      const sample=assembleForestSample(createPartySample(simulation.world.value,host.partyCombat,host.partySkills,configured,current().itemData,host.menu.nameCharset),
+        configured.forest,group,scheduler,configured.ai,configured.rewards,host.partyReactions,host.statusData);
       if(sample.actors.filter(actor=>actor.side==='player').every(actor=>actor.hp.current===0))throw new Error('队伍已经倒下，无法进入剧情战斗');
       const preparedView=await playbackTask(prepareView({mode:'scripted',newParty:true,stagePath:'/'+battleStage(group.stage).path,lifecycle:true,actors:sample.actors,skills:sample.skills,inventory:simulation.world.value.inventory,signal}),signal);check();
-      session.view=state.battleView=preparedView;
+      session.view=current().battleView=preparedView;
       session.view.setRoster(sample.actors,sample.skills);
-      session.battle=state.battle=createCombat(simulation.world,true,session.view);state.battleRng=simulation.rng;
-      state.audio?.setScene({mapId:draft.location.map_id,battle:true,stageId:group.stage});
+      session.battle=current().battle=createCombat(simulation.world,true,session.view);current().battleRng=simulation.rng;
+      host.audio?.setScene({mapId:draft.location.map_id,battle:true,stageId:group.stage});
       await prepareHud(true,{world:simulation.world,battle:session.battle,owner:session,signal});check();
-      await playbackTask(revealBattle(before,()=>state.battle.start({...sample,lifecycle_enabled:true,rng:simulation.rng,side_priority:state.sidePriority,
+      await playbackTask(revealBattle(before,()=>current().battle.start({...sample,lifecycle_enabled:true,rng:simulation.rng,side_priority:host.sidePriority,
         source:{...sample.source,scripted_battle:true,record:group.source,rng_seed:simulation.encounters.rng_state,
           rng_seed_policy:'persistent-development-global-stream',transition_draw:simulation.transitionRaw,
           transition_visual_rng_policy:'Source kind uses CRT; existing pixel-transition adapter uses its separate presentation random source.'}}),
@@ -282,67 +298,57 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
       return result;
     }finally{
       before?.destroy?.();signal?.removeEventListener('abort',abort);
-      const ownsState=state.scriptedBattleSession===session;if(ownsState)state.battleTransition?.cancel();
+      const ownsState=current().scriptedBattleSession===session;if(ownsState)host.battleTransition?.cancel();
       if(session.battle?.state&&session.battle.state.phase!=='closed')session.battle.interrupt(new Error('剧情战斗会话结束'));
-      if(ownsState||state.battleView!==session.view)session.view?.stop('已返回剧情');
-      if(!ownsState&&session.menu?.root===$('battleHud')){
-        const detached=session.menu.root.ownerDocument.createElement('div');
-        if(session.menu.frame.parentNode===session.menu.root)detached.append(session.menu.frame);
-        session.menu.root=detached;
-      }
-      session.menu?.dispose();
+      if(ownsState||current().battleView!==session.view)session.view?.stop('已返回剧情');
+      disposeMenu(session.menu);
       if(ownsState){
-        for(const id of ['battleCanvas','battleHud','battleCommands'])$(id).hidden=true;
-        Object.assign(state,session.previous);Object.assign(state.view,session.viewState);state.scriptedBattleSession=null;
-        if(session.committed&&session.sidePriority!==undefined)state.sidePriority=session.sidePriority;
+        host.presentation.hide();
+        sessions.leave(session);
+        host.sidePriority=session.committed&&session.sidePriority!==undefined?session.sidePriority:session.previousPriority;
         if(session.hudChildren){
-          const host=$('battleHud');host.replaceChildren(...session.hudChildren);
-          for(const key of Object.keys(host.dataset))delete host.dataset[key];Object.assign(host.dataset,session.hudDataset);
+          const hud=$('battleHud');hud.replaceChildren(...session.hudChildren);
+          for(const key of Object.keys(hud.dataset))delete hud.dataset[key];Object.assign(hud.dataset,session.hudDataset);
         }
-        canvas.hidden=session.visibility.canvas;$('dialogue').hidden=session.visibility.dialogue;$('mapName').textContent=session.mapName;
-        $('openingShade').hidden=session.visibility.shadeHidden;$('openingShade').style.opacity=session.visibility.shadeOpacity;
-        state.scenes.setPhase(session.previousPhase);state.audio?.setScene({mapId:draft.location.map_id,battle:false});actions.resize();
+        session.returnView.restore();
       }
     }
   }
   async function startTechniqueTest(){
-    if(state.skillTestSession||state.scenes.phase!=='party-menu'||!state.menuContext||state.menuContext.combat)return;
+    if(current().skillTestSession||!host.menu.canTest())return;
     const startedAt=performance.now();
-    const before=state.battleTransition?(state.engine?.captureInterface?.($('operationFrame'))??captureTransition()):null;
+    const before=host.battleTransition?(host.presentation.captureMenu()??captureTransition()):null;
     let ticket;
-    try{ticket=actions.beginTechniqueTestMenu({retainVisible:true});}catch(error){before?.destroy?.();throw error;}
-    const session={ticket,mapWorld:state.world,revision:state.world.value.revision,viewState:{...state.view},mapName:$('mapName').textContent,
-      previous:{battle:state.battle,battleView:state.battleView,battleMenu:state.battleMenu,battleRng:state.battleRng,battleNatural:state.battleNatural,battleCursorMemory:state.battleCursorMemory,sidePriority:state.sidePriority,battlePresentationError:state.battlePresentationError,itemData:state.itemData},
-      visibility:{canvas:canvas.hidden,dialogue:$('dialogue').hidden},view:null,battle:null,returnPending:false};
-    state.skillTestSession=session;state.battleCursorMemory=new Map(state.battleCursorMemory);
+    try{ticket=host.menu.begin();}catch(error){before?.destroy?.();throw error;}
+    const session=sessions.enter('skill-test',{
+      ticket,mapWorld:host.world,revision:host.world.value.revision,
+      returnView:host.presentation.captureReturn(),view:null,battle:null,returnPending:false,
+    });
     try{
       await enterBattle({before,startedAt,testSession:session});
-      $('mapName').textContent='技巧测试';
+      host.presentation.label('技巧测试');
       actions.status('技巧测试：目标不主动攻击，技能不消耗HP／MP；道具照常消耗。选择逃跑返回技巧页面。');
       const rules=session.rules;
-      actions.log({type:'technique-test-opened',battle_id:state.battle.state.id,stage_id:rules.stage.stage_id,enemy_resources:rules.enemy_resources,world_revision:session.revision});
+      actions.log({type:'technique-test-opened',battle_id:current().battle.state.id,stage_id:rules.stage.stage_id,enemy_resources:rules.enemy_resources,world_revision:session.revision});
     }catch(error){before?.destroy?.();restoreTechniqueTest(session,'测试启动失败');throw error;}
   }
   function restoreTechniqueTest(session,reason){
-    if(state.skillTestSession!==session)return;
+    if(current().skillTestSession!==session)return;
     if(session.view)session.view.stop(reason);
-    if(state.battleMenu!==session.previous.battleMenu)state.battleMenu?.dispose();
-    for(const id of ['battleCanvas','battleHud','battleCommands'])$(id).hidden=true;
-    Object.assign(state,session.previous);Object.assign(state.view,session.viewState);state.skillTestSession=null;
-    canvas.hidden=session.visibility.canvas;$('dialogue').hidden=session.visibility.dialogue;$('mapName').textContent=session.mapName;
-    state.audio?.setScene({mapId:state.world.location.map_id,battle:false});
-    actions.resize();actions.resumeTechniqueTestMenu(session.ticket);
+    if(current().battleMenu!==session.previous.battleMenu)current().battleMenu?.dispose();
+    host.presentation.hide();sessions.leave(session);session.returnView.restore();
+    host.menu.resume(session.ticket);
   }
   // Retain one completed fight; a new fight replaces it without cloning
   // or appending to a multi-battle archive.
   async function returnFromBattle(){
-    if(!state.scenes.phase.startsWith('battle-')||!state.battle)return;
-    if(state.battleMenu?.resultPreparing||state.battleMenu?.resultView?.active&&!state.battleMenu.resultView.complete)return;
-    if(state.scriptedBattleSession){
-      const session=state.scriptedBattleSession;if(session.returnPending)return;session.returnPending=true;
+    if(!host.phase.startsWith('battle-')||!current().battle)return;
+    if(current().battleMenu?.resultPreparing||current().battleMenu?.resultView?.active&&!current().battleMenu.resultView.complete)return;
+    if(current().scriptedBattleSession){
+      const session=current().scriptedBattleSession;if(session.returnPending)return;session.returnPending=true;
       try{
-        const result=state.battle.finish(),snapshot=state.battle.state;
-        state.lastBattle={result,battle:snapshot};
+        const result=current().battle.finish(),snapshot=current().battle.state;
+        host.lastBattle={result,battle:snapshot};
         if(result.outcome==='defeat'){
           const error=new Error('剧情战斗全队败北');error.gameOverPolicy=planPartyDefeat({battle:snapshot});throw error;
         }
@@ -352,38 +358,54 @@ export function createBattleController({state, actions, $, canvas, ctx}) {
       }catch(error){session.reject(error);}
       return;
     }
-    if(state.skillTestSession){
-      const session=state.skillTestSession;
-      if(state.battle.state?.phase==='interrupted'){restoreTechniqueTest(session,'测试已中止');actions.status('测试已中止，未提交测试中的变化。');return;}
+    if(current().skillTestSession){
+      const session=current().skillTestSession;
+      if(current().battle.state?.phase==='interrupted'){restoreTechniqueTest(session,'测试已中止');actions.status('测试已中止，未提交测试中的变化。');return;}
       try{
-        if(state.world!==session.mapWorld||state.world.value.revision!==session.revision)throw new Error('测试期间地图进度已变化，测试结果未覆盖新进度');
-        const result=state.battle.finish(),snapshot=state.battle.state,commit=commitSkillTestResources(state.world,snapshot,result,session.revision);
-        state.lastBattle={result,battle:snapshot};
+        if(host.world!==session.mapWorld||host.world.value.revision!==session.revision)throw new Error('测试期间地图进度已变化，测试结果未覆盖新进度');
+        const result=current().battle.finish(),snapshot=current().battle.state,commit=commitSkillTestResources(host.world,snapshot,result,session.revision);
+        host.lastBattle={result,battle:snapshot};
         actions.log({type:'technique-test-returned',battle_id:result.battle_id,outcome:result.outcome,...commit});
         restoreTechniqueTest(session,'已返回技巧测试');
-        if(commit.changed){actions.buildHud();actions.refreshPartyMenu();}
+        if(commit.changed){host.presentation.refreshExploration();actions.refreshPartyMenu();}
         actions.status(commit.changed?'已返回技巧测试，道具消耗和恢复效果已保存。':'已返回技巧测试，地图进度保持原样。');return;
       }catch(error){restoreTechniqueTest(session,'测试已结束');throw error;}
     }
-    const result=state.battle.finish(),snapshot=state.battle.state;
-    const defeatPolicy=result.outcome==='defeat'&&!state.battleSampleMode?planPartyDefeat({battle:snapshot}):null;
-    if(snapshot.scheduler)state.sidePriority=snapshot.scheduler.side_priority;
-    if(state.battleNatural){
-      const encounterState=structuredClone(state.world.value.encounters);
-      encounterState.rng_state=state.battleRng.state;
-      state.world.setEncounterState(encounterState);
+    const result=current().battle.finish(),snapshot=current().battle.state;
+    const defeatPolicy=result.outcome==='defeat'&&!current().battleSampleMode?planPartyDefeat({battle:snapshot}):null;
+    if(snapshot.scheduler)host.sidePriority=snapshot.scheduler.side_priority;
+    if(current().battleNatural){
+      const encounterState=structuredClone(host.world.value.encounters);
+      encounterState.rng_state=current().battleRng.state;
+      host.world.setEncounterState(encounterState);
     }
-    state.lastBattle={result,battle:snapshot};state.battleView.stop('已返回地图');state.battleMenu?.dispose();state.battleMenu=null;
-    for(const id of ['battleCanvas','battleHud','battleCommands'])$(id).hidden=true;canvas.hidden=false;
-    state.scenes.setPhase('map');Object.assign(state.view,state.battleCheckpoint);actions.buildHud();actions.updateNearest();actions.resize();canvas.focus({preventScroll:true});
-    state.audio?.setScene({mapId:state.world.location.map_id,battle:false});
+    host.lastBattle={result,battle:snapshot};current().battleView.stop('已返回地图');current().battleMenu?.dispose();current().battleMenu=null;
+    host.presentation.hide();
+    current().returnView.restore({refresh:true});
     if(defeatPolicy){await actions.presentGameOver(defeatPolicy);return;}
     actions.status(result.outcome==='victory'?`战斗胜利，队伍HP / MP${result.rewards_applied?'和奖励':''}已保存到当前进度；可以保存存档。`:result.outcome==='defeat'?'队伍倒下，结果已保留；可载入存档。':'已经返回地图，队伍HP / MP变化已保留。');
   }
-  function disposeBattles(){
-    state.battleMenu?.dispose();state.battleMenu=null;
-    for(const view of state.battleViews.values())view.destroy();
-    state.battleViews.clear();
+  function battleMenuState({inventory=false}={}){
+    const {battle,itemData}=current();
+    return battle?{
+      canCommand:battle.canCommand(),actorId:battle.state?.player_id,
+      actors:battle.players().map(({id,name,level,hp,mp})=>({id,name,level,hp:{...hp},mp:{...mp}})),
+      ...(inventory?{inventory:structuredClone(battle.state?.inventory??[])}:{}),items:itemData,
+    }:null;
   }
-  return {updateBattle, startBattle, startScriptedBattle, startTechniqueTest, returnFromBattle, battleKey, battleKeyUp, drawBattleInterface,updateBattleFrame,disposeBattles};
+  function chooseBattleItem(instanceId,targetId){
+    const battle=current().battle;
+    if(!battle)throw new Error('当前没有可操作的战斗');
+    return battle.chooseItem(instanceId,targetId);
+  }
+  function focusBattleMenu(){current().battleMenu?.frame.focus();}
+  function disposeBattles(){
+    const frame=current(),reason=new Error('战斗会话已结束');
+    frame.scriptedBattleSession?.reject(reason);
+    frame.battle?.interrupt(reason);frame.battleMenu?.dispose();
+    sessions.reset();host.battleTransition?.cancel();
+    for(const view of sessions.views.values())view.destroy();
+    sessions.views.clear();
+  }
+  return {updateBattle, startBattle, startScriptedBattle, startTechniqueTest, returnFromBattle, battleKey, battleKeyUp, drawBattleInterface,updateBattleFrame,disposeBattles,battleMenuState,chooseBattleItem,focusBattleMenu};
 }

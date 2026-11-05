@@ -1,21 +1,52 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {createBattleController} from '../web/controllers/battle.mjs';
+import {createBattleFixtureController as createBattleController} from './helpers/battle_controller.mjs';
 import {createServicesController} from '../web/controllers/services.mjs';
+import {createBattleSessions} from '../web/controllers/battle_sessions.mjs';
+import {createRuntimeState} from '../web/controllers/state.mjs';
+
+test('session handoff restores the complete owner and a retired session cannot overwrite its successor',()=>{
+  const sessions=createBattleSessions(),original=sessions.current;
+  original.futureTargetCache={marker:'retained'};
+  const story=sessions.enter('scripted');
+  assert.equal(sessions.current.futureTargetCache,undefined);
+  const training=sessions.enter('skill-test');
+  assert.equal(sessions.leave(story),false);
+  assert.equal(sessions.current,training.runtime);
+  assert.equal(sessions.leave(training),true);
+  assert.equal(sessions.current,story.runtime);
+  assert.equal(sessions.leave(story),true);
+  assert.equal(sessions.current,original);
+  assert.equal(sessions.current.futureTargetCache.marker,'retained');
+});
+
+test('menu and input use isolated projections and commands without exposing combat on application state',async()=>{
+  const state=createRuntimeState(),actors=[{id:'001',name:'英格妮',level:11,hp:{current:7,maximum:10},mp:{current:3,maximum:5},raw_hex:'source-only'}];
+  const calls=[],controller=createBattleController({state,actions:{buildHud:()=>calls.push('hud')},$:()=>({}),canvas:{focus:()=>calls.push('map-focus')}});
+  controller.runtime.battle={state:{player_id:'001',inventory:[{instance_id:'tea',quantity:1}]},canCommand:()=>true,players:()=>actors,chooseItem:(...args)=>calls.push(args)};
+  const menu=controller.battleMenuState({inventory:true});
+  menu.actors[0].hp.current=0;menu.inventory[0].quantity=0;
+  assert.equal(actors[0].hp.current,7);assert.equal(controller.runtime.battle.state.inventory[0].quantity,1);
+  assert.equal(menu.actors[0].raw_hex,undefined);assert.equal(controller.battleMenuState().inventory,undefined);
+  assert.equal(Object.hasOwn(state,'battle'),false);assert.equal(Object.hasOwn(state,'battleView'),false);
+  await controller.chooseBattleItem('tea','001');assert.deepEqual(calls,[['tea','001']]);
+  controller.host.presentation.refreshExploration();
+  assert.deepEqual(calls,[['tea','001'],'hud'],'刷新技巧测试后的地图摘要不能抢走已恢复的菜单焦点');
+});
 
 test('battle start notifications cannot unfreeze the loading phase before entry animation completes',()=>{
   const elements=new Map(),$=id=>{if(!elements.has(id))elements.set(id,{dataset:{}});return elements.get(id);};
   const state={battleEntryPending:true,scenes:{phase:'battle-loading',setPhase(p){this.phase=p;}},world:{value:{source:{kind:'native-new-game'}}}};
   const controller=createBattleController({state,actions:{},$,canvas:{}}),snapshot={phase:'charging',round:1,impact_count:0,last_impact:null};
   controller.updateBattle(snapshot);assert.equal(state.scenes.phase,'battle-loading');
-  state.battleEntryPending=false;controller.updateBattle(snapshot);assert.equal(state.scenes.phase,'battle-charging');
+  controller.runtime.battleEntryPending=false;controller.updateBattle(snapshot);assert.equal(state.scenes.phase,'battle-charging');
   controller.updateBattle({...snapshot,lifecycle_events:[{kind:'entry'}]});assert.equal(state.scenes.phase,'battle-entry');assert.equal($('battleMessage').textContent,'正在入场');
   controller.updateBattle(snapshot);assert.equal(state.scenes.phase,'battle-charging');
   assert.equal($('battleCommands').dataset.impactCount,0);assert.equal($('battleCommands').dataset.impactFrame,'');
   controller.updateBattle({...snapshot,impact_count:3,last_impact:{actor_id:'001',source_frame:17}});
   assert.equal($('battleCommands').dataset.impactCount,3);assert.equal($('battleCommands').dataset.impactFrame,17);
   assert.equal($('battleCommands').dataset.impactActor,'001');
-  let inputs=0;state.battleMenu={update(){},key(){inputs++;return true;}};
+  let inputs=0;controller.runtime.battleMenu={update(){},key(){inputs++;return true;}};
   controller.updateBattle({...snapshot,lifecycle_events:[{kind:'entry'}]});assert.equal(controller.battleKey('Escape'),true);assert.equal(inputs,0);
   controller.updateBattle({...snapshot,phase:'interrupted',error:'entry failed',lifecycle_events:[{kind:'entry'}]});assert.equal(controller.battleKey('Escape'),true);assert.equal(inputs,1);
 });
@@ -45,13 +76,13 @@ test('encounters start their transition before resource preparation, block reent
   state.scenes.setPhase('map');
   const pending=controller.startBattle({stage:'stage13.scn'});
   assert.equal(state.scenes.phase,'battle-loading');assert.equal(canvas.hidden,false);
-  assert.equal(transitions,1);assert.equal(state.battleEntryPending,true);
+  assert.equal(transitions,1);assert.equal(controller.runtime.battleEntryPending,true);
   assert.equal($('loading').hidden,true);assert.equal($('sceneLoading').hidden,true);
   assert.deepEqual(audioEvents,[],'Battle music starts after actor preparation');
   await controller.startBattle();assert.equal(preparations,1);assert.equal(loadingCalls,0);
   rejectPreparation(Error('resource decode failed'));await assert.rejects(pending,/resource decode failed/);
   assert.equal(state.scenes.phase,'map');assert.equal(canvas.hidden,false);
-  assert.equal(state.battleEntryPending,false);
+  assert.equal(controller.runtime.battleEntryPending,false);
   assert.equal($('loading').hidden,true);assert.equal($('sceneLoading').hidden,true);
   assert.deepEqual([state.view.x,state.view.y],[12,34]);assert.equal(state.world.value.revision,7);
   assert.deepEqual(audioEvents,[{mapId:'M70010',battle:false}]);
@@ -80,7 +111,7 @@ test('technique entry captures the menu and covers it before shared resource pre
   await controller.startTechniqueTest();assert.equal(preparations,1);
   rejectPreparation(new Error('测试资源不可用'));await assert.rejects(pending,/测试资源不可用/);
   assert.equal(state.scenes.phase,'party-menu');assert.equal(state.menuContext,context);assert.equal($('partyMenu').hidden,false);
-  assert.equal(state.battleView,previousView);assert.equal(state.skillTestSession,null);assert.equal(state.battleEntryPending,false);
+  assert.equal(controller.runtime.battleView,previousView);assert.equal(controller.runtime.skillTestSession,null);assert.equal(controller.runtime.battleEntryPending,false);
   assert.equal(state.world,world);assert.equal(world.value.revision,7);
 });
 
@@ -107,7 +138,7 @@ test('natural battle return stores its RNG, restores exploration and cannot subm
   assert.deepEqual(state.view,state.battleCheckpoint);
   assert.equal(canvas.hidden,false);
   assert.equal(elements.get('battleCanvas').hidden,true);
-  assert.equal(state.lastBattle.battle,state.battle.state);assert.equal(state.lastBattle.result.outcome,'victory');
+  assert.equal(state.lastBattle.battle,controller.runtime.battle.state);assert.equal(state.lastBattle.result.outcome,'victory');
   assert.ok(events.some(e=>typeof e==='string'&&e.includes('战斗胜利')));
   await controller.returnFromBattle();
   assert.equal(finished,1);

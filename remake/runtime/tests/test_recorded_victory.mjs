@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import {WorldStore} from '../web/core/world.mjs';
 import {BattleController} from '../web/core/combat.mjs';
-import {createBattleController} from '../web/controllers/battle.mjs';
+import {createBattleFixtureController as createBattleController} from './helpers/battle_controller.mjs';
 import {partyResourcesForWorld} from '../web/core/party_attributes.mjs';
 import {createNativeRng} from '../web/core/combat_rules.mjs';
 import {deriveRuntimeConfiguration, compileRuntimeConfiguration} from '../web/core/runtime_config.mjs';

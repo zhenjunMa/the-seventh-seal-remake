@@ -12,7 +12,10 @@ import {locomotion} from '../core/movement.mjs';
 import {loadEncounterMap} from '../core/encounters.mjs';
 import {initializeMapSequence} from '../core/map_stage.mjs';
 
+import {createStoryPresentation} from './presentation_handoff.mjs';
+
 export function createStoryController({state, actions, $, canvas, ctx}) {
+  const presentation=createStoryPresentation({state,actions,$,canvas});
   let session=null,sequence=0;
   const heldDialogueKeys=new Set();
   const cancelled=storyCancelled;
@@ -50,7 +53,7 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
     }
     finally{
       const ownsState=state.storyPlayback===playback;
-      try{if(ownsState){clearDialogue();state.openingView?.dispose();state.openingView=null;state.objectPreview=null;releaseDialogueKeys();state.keys?.clear();}}
+      try{if(ownsState){clearDialogue();state.openingView?.dispose();state.openingView=null;state.objectPreview=null;releaseDialogueKeys();presentation.clearInput();}}
       finally{
         if(ownsState)state.storyPlayback=null;playback.dispose();
         actions.log?.({type:'story-playback-end',status:playback.phase});
@@ -76,7 +79,7 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
     const signals=[signal,state.storyPlayback?.signal].filter(Boolean);
     const aborted=signals.find(signal=>signal.aborted);
     if(aborted)return Promise.reject(aborted.reason??cancelled());
-    state.keys?.clear();
+    presentation.clearInput();
     return new Promise((resolve,reject)=>{
       const current={id:++sequence,resolve,reject,choices,detach:()=>{}};session=current;
       const abort=()=>{if(closeSession(current))reject(signals.find(signal=>signal.aborted)?.reason??cancelled());};
@@ -353,5 +356,5 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
       // complete event releases it in playStory, after the world/view commit.
     }finally{if(!completed)state.objectPreview=null;}
   }
-  return {playStory,cancelStoryPlayback,say, clearDialogue, chooseChapter, chooseDialogue, advanceDialogue, dialogueKey, dialogueKeyUp, releaseDialogueKeys, interact, chapterSpeaker, animateChapter, transferChapter, runChapter, enterMap, animateObjectInteraction, animateChapterObject};
+  return {storyPresentation:presentation,playStory,cancelStoryPlayback,say, clearDialogue, chooseChapter, chooseDialogue, advanceDialogue, dialogueKey, dialogueKeyUp, releaseDialogueKeys, interact, chapterSpeaker, animateChapter, transferChapter, runChapter, enterMap, animateObjectInteraction, animateChapterObject};
 }
