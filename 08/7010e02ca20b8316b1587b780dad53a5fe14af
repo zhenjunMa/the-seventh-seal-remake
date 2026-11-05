@@ -1,0 +1,825 @@
+remake/runtime/tests/test_field_skills.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 5-11
+remake/runtime/tools/verify_save_preview.py
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 42
+remake/runtime/web/core/exploration/world_map.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-130
+remake/runtime/tools/battle_pack_inventory.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 7-8
+remake/runtime/tools/verify_phaser.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 7
+remake/runtime/web/core/battle/battle_support.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-58
+remake/runtime/tests/test_seal_region.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 5
+remake/runtime/web/core/party/skill_shortcuts.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-47
+remake/runtime/web/core/story/story_quests.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-54
+remake/runtime/tests/test_battle_techniques.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4-8,11,14-17
+remake/runtime/tests/test_source_skill_configuration.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 7-9
+remake/runtime/web/core/battle/battle_result.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-69
+remake/runtime/web/core/resources/audio.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-255
+remake/runtime/web/core/story/events.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-62
+remake/runtime/tests/test_scripted_battle_controller.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 8,10-15
+remake/runtime/web/core/exploration/map_locomotion.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-167
+remake/runtime/web/core/ui/menu_presentation.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-50
+remake/runtime/web/core/ui/operation_menu.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-57
+remake/runtime/tests/test_items.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 6-11,14
+remake/runtime/web/phaser/rendering/texture_cache.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1
+remake/runtime/web/phaser/scenes/exploration_scene.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1
+remake/runtime/web/core/battle/settlement.mjs
+  s_76efd1cff4f2c4::t_1f1c8ef6697eb4 1,6,20,35-40,52
+  s_76efd1cff4f2c4::t_d6904c81f63409 2-5,7-19,21-34,41-51,53-55
+remake/runtime/web/core/exploration/map_objects.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-285
+remake/runtime/tests/helpers/yc05_jl03_world.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 5-12
+remake/runtime/tests/test_native_story_recovery.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4-8
+remake/runtime/web/controllers/services.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 2-6,66-83
+remake/runtime/web/core/battle/battle_asset_plan.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-128
+remake/runtime/web/core/party/field_skills.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-73
+remake/runtime/web/controllers/map.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 2-5,7-14
+remake/runtime/web/core/battle/battle_techniques.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-27
+remake/runtime/web/controllers/state.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-2
+remake/runtime/web/core/story/native_records.mjs
+  s_76efd1cff4f2c4::t_3b9482ec930de4 1-5,23-24,29,46-47,66-67,77-78,89-90,94,103-104,108-114,119,124,126-129,153-154
+  s_76efd1cff4f2c4::t_1f1c8ef6697eb4 6-22,25-28,30-45,48-65,68-76,79-88,91-93,95-102,105-107,115-118,120-123,125,130-152
+remake/runtime/tests/test_scripted_battle_source_names.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 5-8
+remake/runtime/web/core/ui/menu_text.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-140
+remake/runtime/tests/test_party_combat.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 6-9
+remake/runtime/tests/test_save_menu.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 5
+remake/runtime/tests/test_scripted_locomotion.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 5
+remake/runtime/tests/test_battle_reactions.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 8-9
+remake/runtime/tests/test_runtime.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 8-11
+remake/runtime/tools/verify_dialogue_alignment.py
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 11,13
+remake/runtime/web/core/exploration/movement.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-2,6,12-13,21,30,48-51,55-58,72-78,87,105-109,123-124,142-144,158-169,190-191,194-196,222,291,294-295,300-302,318,323,333-335,348-351,353-354,360-361,364,370-373,376-379,387,390-400,435-437,439,446,470-471,476,484,489,492-493,523,537-541,544-545
+  s_76efd1cff4f2c4::t_1f1c8ef6697eb4 3-5,7-11,14-20,22-29,31-47,52-54,59-71,79-86,88-104,110-122,125-141,145-157,170-189,192-193,197-221,223-290,292-293,296-299,303-317,319-322,324-332,336-347,352,355-359,362-363,365-369,374-375,380-386,388-389,401-434,438,440-445,447-469,472-475,477-483,485-488,490-491,494-522,524-536,542-543
+remake/runtime/web/core/resources/image_resources.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-57
+remake/runtime/web/operation_weapon_view.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4,6
+remake/runtime/tests/test_fire_valley_phase_fixtures.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 5-6
+remake/runtime/tests/test_item_configuration.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 5-12
+remake/runtime/web/controllers/native_services.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 2
+remake/runtime/tools/resolve_content_definition.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 7
+remake/runtime/web/core/battle/battle_entry.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-15
+remake/runtime/tests/test_menu_presentation.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4
+remake/prototype/web/app.js
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1
+remake/runtime/tests/test_scripted_battle.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4-9
+remake/runtime/web/core/battle/scripted_battle.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-60
+remake/runtime/web/core/items/native_economy.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1,3-110
+  s_ecfcf00968ccbd::t_f9ca53a9df6876 2
+remake/runtime/web/core/ui/menu_settings.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-20
+remake/prototype/tools/test_movement.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 3
+remake/runtime/tests/test_cf7_map_objects.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 6-9
+remake/runtime/tests/test_jade_lake_phase.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 3-10
+remake/runtime/tools/verify_runtime_config.py
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 67-68,75
+remake/runtime/web/core/content/content_definition.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-78
+remake/runtime/web/core/content/content_registry.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-78
+remake/runtime/tests/test_chapter.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 5-6
+remake/runtime/web/core/battle/item_action.mjs
+  s_76efd1cff4f2c4::t_1f1c8ef6697eb4 6,34,41-55,74-82,87-88,90-97,105-123,131-136,138-139,143-153
+  s_76efd1cff4f2c4::t_d6904c81f63409 1-5,7-33,35-40,56-73,83-86,89,98-104,124-130,137,140-142,154-159
+remake/runtime/web/core/story/story_flow_compiler.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-96
+remake/runtime/tools/verify_audio.py
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 22
+remake/runtime/web/core/ui/menu_techniques.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-130
+remake/runtime/tests/test_map_stage.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 7-12
+remake/runtime/tools/verify_turn_browser.py
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 34-35
+remake/runtime/tests/test_menu_navigation.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 5,7-8
+remake/runtime/tests/test_battle_resources.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 5
+remake/runtime/tests/test_map_npc_integration.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 5-10
+remake/runtime/tests/test_menu_feedback.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 3
+remake/runtime/tests/test_stage12_status.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 9-10,12,14
+remake/runtime/tests/test_native_story_inventory.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 5-9
+remake/runtime/web/operation_menu_view.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 2
+remake/runtime/web/core/ui/map_presentation.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-44
+remake/runtime/web/actor_effect_view.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1
+remake/runtime/web/core/battle/skill_sequence.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-157
+remake/runtime/tests/test_vertical_playback.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4,7-8
+remake/runtime/web/core/content/content_dependencies.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-3,5-9,11-175,177-184
+  s_ecfcf00968ccbd::t_e679ddf7e581f4 4,10,176
+remake/runtime/tests/test_actor_effects_source.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 9,11-13
+remake/runtime/tests/test_chest_presentation.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 5,8
+remake/runtime/web/core/items/crystal_catalog.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-20
+remake/runtime/tools/export_content_registry.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 6,9
+remake/runtime/tests/test_ember_city_story_source.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 7-14,16-17
+remake/runtime/tests/test_inner_white_forest_phase.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 7-12
+remake/runtime/tests/test_slice.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 6-11
+remake/runtime/tests/helpers/guild_world.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 6-15
+remake/runtime/tests/test_battle_revival_core.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 6-7,9-10
+remake/runtime/tools/verify_battle_loading.py
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 13
+remake/runtime/web/caption_view.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 2-3
+remake/runtime/tests/test_wind_entry_items.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 7-14,17-18,20-23
+remake/runtime/tests/test_combat_rules.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4
+remake/runtime/tests/test_inner_white_forest_battle_replay.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 11-14,17,21-27
+remake/runtime/tests/helpers/inner_white_forest_world.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 6-13
+remake/runtime/tests/test_native_story_conditions.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4
+remake/runtime/web/battle_lifecycle_view.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 8
+remake/runtime/tests/test_guild_quests.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 5
+remake/runtime/web/core/exploration/map_connections.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-65
+remake/runtime/tests/test_battle_lifecycle_integration.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 6-8,11-12
+remake/runtime/tests/test_operation_weapon_view.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 5-6
+remake/runtime/web/core/content/native_bytes.mjs
+  s_76efd1cff4f2c4::t_3b9482ec930de4 1,6,12
+  s_76efd1cff4f2c4::t_c1cf67653f4832 2-4
+  s_76efd1cff4f2c4::t_1f1c8ef6697eb4 5,7-11,13
+remake/runtime/tests/test_first_return_source.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 3-5
+remake/runtime/tests/test_recovery.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4
+remake/runtime/tests/test_party_skill_configuration.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 8-10,14-16,18-20
+remake/runtime/tests/test_white_forest_packages.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 7,9-15
+remake/runtime/web/core/battle/battle_commands.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-106
+remake/runtime/tests/test_map_locomotion.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4-6
+remake/runtime/tools/create_party_skill_fixtures.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 5-8
+remake/runtime/web/core/story/story_completion.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-19
+remake/runtime/tests/test_map_collision_source.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 6-11
+remake/runtime/tests/helpers/wind_region_world.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 6-15
+remake/runtime/tests/helpers/inner_white_forest_seal_world.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4-12
+remake/runtime/tests/test_guild_battles.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 6-8,11,13-18
+remake/runtime/web/core/story/native_story_conditions.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-94
+remake/runtime/tests/helpers/floating_city_world.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4-6
+remake/runtime/tests/test_save_storage.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4-6
+remake/runtime/web/core/story/opening.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-243
+remake/runtime/web/core/exploration/route.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-43
+remake/runtime/web/core/items/item_registry.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-185
+remake/runtime/tests/test_startup.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 3
+remake/runtime/tests/helpers/seal_tablets_world.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 5-10
+remake/runtime/tests/test_recorded_victory.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 6-7,9-11
+remake/runtime/web/core/story/object_state.mjs
+  s_76efd1cff4f2c4::t_1f1c8ef6697eb4 3-5,9-10
+  s_76efd1cff4f2c4::t_3b9482ec930de4 1-2,6-8,11-22
+remake/runtime/web/battle_result_view.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-2
+remake/runtime/web/core/content/native_battle_filenames.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-12
+remake/runtime/tests/test_image_resources.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 3
+remake/runtime/tools/check_content.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 5-8
+remake/runtime/tests/test_chapter_animation.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 5-10
+remake/runtime/tools/create_npc_motion_fixture.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 3-4
+remake/runtime/web/core/config/config_overrides.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-90
+remake/runtime/web/core/config/runtime_config.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-200
+remake/runtime/web/core/exploration/native_map_identity.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-12
+remake/runtime/web/core/content/content_sample.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-28
+remake/runtime/tests/test_finale_opening_view.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 10-16,21,23
+remake/runtime/tools/create_battle_alignment_fixture.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 3-4
+remake/runtime/tools/create_menu_socket_fixture.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 3-4
+remake/runtime/web/core/party/party_members.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-53
+remake/runtime/tools/verify_route.py
+  s_76efd1cff4f2c4::t_353e54004ce427 9
+remake/runtime/tests/test_story_media_view.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4-5
+remake/runtime/tests/test_ember_city_battle_source.py
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 30-34
+remake/runtime/web/operation_technique_view.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 2-3
+remake/runtime/web/core/party/equipment.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-90
+remake/runtime/tests/test_dialogue.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4
+remake/runtime/web/map_scene_view.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 6
+remake/runtime/tests/test_first_return_opening_view.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 6-7,9
+remake/runtime/web/controllers/session.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 2-6,8-12
+remake/runtime/web/core/party/party_skill_corrections.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-75
+remake/runtime/tests/test_ember_city_battle_replay.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 9-12,15,17-20
+remake/runtime/tests/test_menu_techniques.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4
+remake/runtime/tests/test_world_map.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 7-8
+remake/runtime/tests/test_battle_damage_text.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 8
+remake/runtime/tools/verify_startup_alignment.py
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 55
+remake/runtime/tools/export_fire_valley_index.py
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 293-294
+remake/runtime/tests/test_battle_layout.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 3
+remake/runtime/tests/test_vertical_death_integration.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 7,10-14
+remake/runtime/tools/create_menu_finish_fixture.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 3-4
+remake/runtime/tests/test_battle_revival.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 5-6,8
+remake/runtime/web/story_media_view.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 3
+remake/runtime/tests/test_party_rewards.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 9
+remake/runtime/web/forest_sample.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 2
+remake/runtime/web/core/story/native_story_combinations.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-44
+remake/runtime/web/opening_view.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 3-5,8-10
+remake/runtime/tests/test_yc05_jl03_rewards.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 8-17
+remake/runtime/tests/helpers/battle_result_fixture.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 8-9,12-15,17
+remake/runtime/tools/export_runtime_config.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 5-9
+remake/runtime/tests/test_content_workflow.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4-8,10-15,17
+remake/runtime/tests/test_skill_config.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4,6-8
+remake/runtime/tools/create_guild_fixtures.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 9-10,13
+remake/runtime/web/controllers/story.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 3,5-13
+remake/runtime/web/core/content/content_readiness.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-2,5-213
+  s_ecfcf00968ccbd::t_94741cdb4d50dc 3-4
+remake/runtime/tools/test_map_transitions.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 7
+remake/runtime/tests/test_battle_lifecycle_view.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 6
+remake/runtime/tests/test_native_map_chest_closure.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 7-8,11,13-16,103-106
+remake/runtime/web/dialogue_view.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 2-3
+remake/runtime/web/forest_stage.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 2-3
+remake/runtime/tests/test_battle_rewards.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 8
+remake/runtime/tools/verify_forest_combat.py
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 89,96
+remake/runtime/web/core/story/chapter_runner.mjs
+  s_76efd1cff4f2c4::t_3b9482ec930de4 1-2,33,35-40,227,331
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 3-4,7,9-13,20-22,29-32,45-48,54-56,76,146-147,165,178-179,191-193,201,203,225-226,228,231,235,237-241,248,253,262-268,284,287,301,303,308-309,329-330,334,342,346-347,373-374,377,385-390,408,411-412,433,435-438,442-443,465-466,489,513,516,522-524,528,532,541,543-544,549,643,654-655,661-662,671-673,683,692-694,712-713,726-727,729-732,743-745,750,761-763,768-775,790-801,827,835-837
+  s_76efd1cff4f2c4::t_1f1c8ef6697eb4 5-6,8,14-19,23-28,41-44,49-53,57-75,77-145,148-164,166-177,180-190,194-200,202,204-224,229-230,232-234,236,242-247,249-252,254-261,269-283,285-286,288-300,302,304-307,310-328,332-333,335-341,343-345,348-372,375-376,378-384,391-407,409-410,413-432,434,439-441,444-464,467-488,490-512,514-515,517-521,525-527,529-531,533-540,542,545-548,550-642,644-653,656-660,663-670,674-682,684-691,695-711,714-725,728,733-742,746-749,751-760,764-767,776-789,802-826,828-834
+  s_76efd1cff4f2c4::t_353e54004ce427 34
+remake/runtime/tools/create_inner_white_forest_seal_fixtures.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 5-6
+remake/runtime/tests/test_content_extension.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 6-8,11-14
+  s_76efd1cff4f2c4::t_1f1c8ef6697eb4 9,57,64
+remake/runtime/web/core/battle/battle_skill_growth.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-140
+remake/runtime/tests/test_map_collision.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4-6
+remake/runtime/tests/helpers/floating_city_pc02_world.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4-6
+remake/runtime/web/core/battle/battle_camera.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-65
+remake/runtime/tests/test_region_phase_history.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 6
+remake/runtime/tests/test_battle_commands.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4-6
+remake/runtime/tests/test_crystal_sockets.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 5-8,11
+remake/runtime/architecture.md
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 54
+  s_76efd1cff4f2c4::t_8beff93d97aedf 22-42
+remake/runtime/web/core/exploration/scene_controller.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-59
+remake/runtime/web/core/story/story_flow.mjs
+  s_76efd1cff4f2c4::t_1f1c8ef6697eb4 4-114,116-134,138-147,151-165,169-183,185-195,197-207,209-224,226-231,233-290
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-3,115,135-137,148-150,166-168,184,196,208,225,232,291-296
+remake/runtime/web/core/battle/battle_skill_access.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-79
+remake/assessment/region_remake_workflow.md
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 38-52,54
+remake/runtime/tests/helpers/party_skill_fixture.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-2
+remake/runtime/web/core/items/items.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-164
+remake/runtime/tests/test_operation_technique_view.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 5-6
+remake/runtime/web/core/battle/battle_reactions.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-329
+remake/runtime/tests/test_party_skills.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 7,9-12,14,16-18
+remake/runtime/web/core/story/anm_runtime.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-142
+remake/prototype/README.md
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 11
+remake/runtime/tests/helpers/fire_valley_world.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4-9
+remake/runtime/tests/test_battle_vertical.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 6,8
+remake/runtime/web/core/battle/battle_status.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-328
+remake/runtime/web/combat_sample.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4
+remake/runtime/web/controllers/input.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 2-7
+remake/runtime/tests/test_native_economy.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 5-9
+remake/runtime/web/core/battle/battle_revival.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-133
+remake/runtime/web/controllers/menu.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 2-12
+remake/runtime/web/core/story/story_repository.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-129
+remake/runtime/tools/export_menu_text_gdi.py
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 51-52
+  s_76efd1cff4f2c4::t_353e54004ce427 54,56
+remake/runtime/web/battle_view.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 6-11,14-16
+remake/runtime/tests/test_native_map_variants.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 3-10
+remake/runtime/tests/test_skill_test_session.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 5-6,9-10
+remake/runtime/web/core/exploration/map_npcs.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-249
+remake/runtime/tests/helpers/seal_region_world.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4-6
+remake/runtime/web/core/story/story_packages.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-63
+remake/runtime/web/core/ui/dialogue.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-61
+remake/runtime/web/core/world/save_slots.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-13
+remake/runtime/web/core/world/world.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-192
+remake/runtime/tests/test_battle_idle.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 7-8,10-11,14-15
+remake/runtime/tools/verify_http.py
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 11
+remake/runtime/tests/test_source_catalog.py
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 156
+remake/runtime/web/tests/menu_rendering_checks.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 3-5
+remake/runtime/tests/test_finale_defeat_recovery.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 7-11,16-18
+remake/runtime/tests/test_operation_equipment_view.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4
+remake/runtime/web/core/party/party_formation.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-32
+remake/runtime/config_guide.md
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 35
+remake/runtime/web/core/story/story_playback.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-78
+remake/runtime/web/core/battle/battle_rewards.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-278
+remake/runtime/web/core/exploration/map_npc_state.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-36
+remake/runtime/web/phaser/preview.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4-6,8-10
+remake/runtime/tests/test_white_forest_story.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 7-14
+remake/runtime/web/core/ui/menu_feedback.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-58
+remake/runtime/story_guide.md
+  s_76efd1cff4f2c4::t_8beff93d97aedf 16-17
+remake/runtime/tests/test_party_skill_sample.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4-12,14-15,17
+remake/runtime/tests/test_white_forest_landing.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4-5
+remake/runtime/tools/export_combat_rules.py
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 25,39
+remake/runtime/web/core/story/native_story_inventory.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-47
+remake/runtime/tests/test_jade_lake_battle_source.py
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 23-26,28
+remake/runtime/tests/test_battle_pose_timing.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 6
+remake/runtime/tests/test_chapter_map_context.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 5,7-10
+remake/runtime/tools/export_story_packages.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 8-10,12-20
+  s_ecfcf00968ccbd::t_cbba6c7c0250b7 11
+remake/runtime/web/loading_view.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 3
+remake/assessment/validation_design.md
+  s_76efd1cff4f2c4::t_4c34c92cbef7f8 105
+remake/runtime/tests/test_route.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 5-10,14
+remake/runtime/tests/helpers/fairy_forest_temple_world.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 5-8
+remake/runtime/web/core/world/save_preview.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-40
+remake/runtime/web/save_preview_view.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1
+remake/runtime/web/battle_menu_view.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 2-5,7
+remake/runtime/web/core/exploration/native_map_chests.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-83
+remake/runtime/tests/test_opening.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 7
+remake/runtime/tests/helpers/fairy_forest_handoffs.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 12-13
+remake/runtime/tests/test_party_departure.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4-16
+remake/runtime/tests/test_map_shadows.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 5,8
+remake/runtime/tests/test_battle_cursor.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 5
+remake/runtime/tests/test_operation_menu.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4
+remake/runtime/web/controllers/boot.mjs
+  s_76efd1cff4f2c4::t_1f1c8ef6697eb4 8,79
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 2-7,9-15,17-18,23,27,29-32
+remake/runtime/tools/verify_tests.py
+  s_76efd1cff4f2c4::t_353e54004ce427 194,215
+remake/runtime/tests/test_battle_result_sequence.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 5,8
+remake/runtime/web/tests/battle_loading.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 2,7,10-12
+remake/runtime/web/core/battle/enemy_ai.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-4,38,54,70-71,113,115-116,123,133,145-146,150,164,205,214
+  s_76efd1cff4f2c4::t_1f1c8ef6697eb4 5-37,39-53,55-69,72-112,114,117-122,124-132,134-144,147-149,151-163,165-204,206-213
+remake/runtime/tests/test_battle_lifecycle_core.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 6-8,10
+remake/runtime/tests/test_native_toggle_objects.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 7-12
+remake/runtime/web/core/story/native_anm_commands.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-39
+remake/runtime/web/startup_view.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 2
+remake/runtime/web/core/party/party_skill_sample.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-61
+remake/runtime/tests/test_fire_valley_map_contract.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 7-10
+remake/runtime/tests/test_native_configuration_ranges.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 7-9
+remake/runtime/tests/test_fire_valley_battle_source.py
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 36-40,68-69,111-115
+remake/runtime/tests/test_guild_crafting.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 6-16,19-20,23
+remake/runtime/tests/test_yc05_jl03_phase.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 2
+remake/runtime/tests/test_turn_sample.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4-6
+remake/runtime/tools/create_wind_region_fixtures.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 9-10,57
+remake/runtime/tests/test_npc_visibility.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 5,7
+remake/runtime/tests/test_aid_carriers.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 5,7-8
+remake/runtime/tools/create_seal_region_fixtures.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 10-11,126-128
+remake/runtime/tests/test_native_story_mutations.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4-7
+remake/runtime/web/core/story/opening_state.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-15
+remake/runtime/web/operation_equipment_view.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4
+remake/runtime/tests/test_battle_scheduler.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 8-11
+remake/runtime/web/core/config/skill_config.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-62
+remake/runtime/web/core/battle/battle_vertical.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-114
+remake/runtime/web/core/battle/skill_test_commit.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-17
+remake/runtime/tests/test_battle_status.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 8-9
+remake/runtime/tests/helpers/seal_wind_world.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 5
+remake/runtime/web/core/ui/opening_presentation.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-71
+remake/runtime/tests/test_fire_valley_npc_sweep.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4
+remake/runtime/tools/build_content_library.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 6-7
+remake/runtime/web/core/content/content_library.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-112
+remake/runtime/tests/test_native_map_transfer.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4-6,8-14
+remake/runtime/tests/test_forest_presentation.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 7
+remake/runtime/tests/test_party_formation.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4-7
+remake/runtime/tools/verify_current.py
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 257,268,313
+remake/runtime/web/core/party/crystal_sockets.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-196
+remake/runtime/tests/test_fire_valley_npc_interactions.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 3-7
+remake/runtime/tests/test_menu_settings.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4-5
+remake/runtime/tests/test_skill_test_core.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 6-8,11-13
+remake/runtime/web/core/config/skill_registry.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-216
+remake/runtime/tests/helpers/fire_valley_case.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 3-6
+remake/runtime/web/core/ui/caption.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-40
+remake/runtime/tests/test_opening_presentation.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4-5
+remake/runtime/tests/helpers/jade_lake_world.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 5-10
+remake/runtime/tests/test_guild_shared.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4-8,10
+remake/runtime/tools/create_map_effects_fixture.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4-5
+remake/runtime/tests/test_operation_formation_view.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 5
+remake/runtime/tests/test_source_reaction_admission.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4-5,8,10
+remake/runtime/web/core/exploration/map_stage.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-74
+remake/runtime/web/core/party/recovery.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-105
+remake/runtime/web/core/content/native_skill_loading.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-31
+remake/runtime/tests/test_forest_ai.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 6
+  s_76efd1cff4f2c4::t_1f1c8ef6697eb4 9,76,154,174
+remake/runtime/tests/test_ember_city_items.py
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 23-27,29-32,35-36
+remake/runtime/tests/test_registered_item_admission.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 5-8
+remake/runtime/tests/test_native_story_sequence.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 6-13
+remake/runtime/web/core/party/party_attributes.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-140
+remake/runtime/tests/test_runtime_config.mjs
+  s_76efd1cff4f2c4::t_1f1c8ef6697eb4 16,143
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 8,10,14-15,17-19,21-22
+remake/runtime/tests/test_anm_runtime.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 3
+remake/runtime/tests/test_battle_stage_depth.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 7
+remake/runtime/tests/test_fairy_temple.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 6-8
+remake/runtime/tests/test_map_effects.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 5-6,9-10
+remake/runtime/tests/test_opening_state.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4-6
+remake/runtime/tests/test_skill_growth.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 7-9,11-14
+remake/runtime/tests/test_yc05_jl03_battle.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 7-10,12,15,17-18
+remake/runtime/tests/test_learning_reward_readiness.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4-6
+remake/runtime/tests/test_seal_battle_rewards.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 8-14,16-18,21-26
+remake/runtime/tools/source/map_identity.py
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 6
+remake/runtime/tools/create_battle_lifecycle_fixture.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 3
+remake/runtime/web/core/battle/combat_rules.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-203
+remake/runtime/web/core/exploration/encounters.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-100
+remake/runtime/web/core/world/save_storage.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-62
+remake/runtime/web/operation_formation_view.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 2
+remake/runtime/web/tests/dialogue_alignment.html
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 11
+remake/runtime/tests/test_battle_clock.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 5-9
+remake/runtime/tests/test_map_viewport.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4
+remake/runtime/tests/test_story_completion.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 5-8,11
+remake/runtime/web/core/battle/battle_layout.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-29
+remake/runtime/tests/test_map_npcs.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4-7
+remake/runtime/tests/test_native_npc_bindings.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 6-8,10
+remake/runtime/web/core/battle/battle_controller.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1,48-49,56,67-69,71-72,80-81,84,87-90,97-99,144-147,238-239,274,319,377-378,394,412-414,424-426,498,518-519,544,555-556,567-568,575,578-579,587,612,650,660,667,683,715-716,727-728,732-733,776,778,780-781,802-803,852-853,868-869,882,887-888,900-901,974,984-986,1005-1007,1023-1025,1047-1048,1052,1056,1072,1082,1102,1118,1121-1122,1128-1129,1131-1132,1148-1150,1199,1211-1212,1215,1220-1221,1237,1281-1282,1295,1319-1320,1323,1326-1327,1362,1364-1366,1373,1416-1417,1432-1433,1439-1440,1510-1511,1514,1535-1537,1544,1665,1672-1677,1685-1686,1723,1798,1807-1808,1813-1814,1823-1825,1847,1970,1985-1988,2004,2039,2041-2042,2096,2108,2122-2123,2342,2394-2395,2408,2414-2416,2441-2442
+  s_76efd1cff4f2c4::t_603f300629821b 38
+  s_76efd1cff4f2c4::t_1f1c8ef6697eb4 2-12,14-37,39-47,50-55,59-64,66,70,73-79,82-83,85-86,91-96,100-143,148-237,240-273,275-318,320-376,379-393,395-411,415-423,427-497,499-517,520-543,545-554,557-566,569-574,576-577,580-586,588-611,613-649,651-659,661-666,668-682,684-714,717-726,729-731,734-775,777,779,782-801,804-851,854-867,870-881,883-886,889-899,902-973,975-983,987-1004,1008-1022,1026-1046,1049-1051,1053-1055,1057-1071,1073-1081,1083-1101,1103-1117,1119-1120,1123-1127,1130,1133-1147,1151-1198,1200-1210,1213-1214,1216-1219,1222-1236,1238-1280,1283-1294,1296-1318,1321-1322,1324-1325,1328-1361,1363,1367-1372,1374-1415,1418-1431,1434-1438,1441-1509,1512-1513,1515-1534,1538-1543,1545,1548-1570,1572-1664,1666-1671,1678-1684,1689-1712,1714-1715,1718-1722,1724-1797,1799-1806,1809-1812,1815-1822,1826-1846,1848-1969,1971-1984,1989-2003,2005-2038,2040,2043-2095,2097-2107,2109-2121,2124-2341,2343-2375,2377-2393,2396-2407,2410,2412-2413,2418-2440
+  s_76efd1cff4f2c4::t_1a1c00622ec7db 57-58,65,1546-1547,1687-1688,1713,1716-1717,2376,2409,2411,2417
+  s_76efd1cff4f2c4::t_dd67fd3dd5be48 13
+  s_76efd1cff4f2c4::t_492c217d6d743f 1571
+remake/runtime/tests/test_battle_revival_bonus.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 7,9-14
+remake/runtime/web/core/story/native_story_mutations.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-133
+remake/runtime/tests/test_audio.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 5
+remake/runtime/tests/test_native_after_source.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 8-9
+remake/runtime/tests/test_inner_white_forest_battle_source.py
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 24-27,83
+remake/runtime/web/core/story/native_story_random.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-16
+remake/runtime/tests/test_caption.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4
+remake/runtime/tests/test_item_status_cure_battle.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 8-10,14-16
+remake/runtime/tools/README.md
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 254
+remake/runtime/tests/test_menu_text.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4-5
+remake/runtime/web/save_menu_view.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 3
+remake/runtime/tests/test_floating_city_rewards.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 8-15
+remake/runtime/tests/test_native_map_chests.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 5-10,12-13
+remake/runtime/tests/test_combat_sample.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 5
+remake/runtime/web/controllers/battle_host.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1
+remake/runtime/tests/test_forest_pipeline.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 8-10,13,15
+remake/runtime/tests/test_floating_city_pc02.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 3
+remake/runtime/web/core/party/party_roster.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-5
+remake/runtime/tests/helpers/first_return_source.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4-7
+remake/runtime/tests/test_battle_support.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 7-11,13
+remake/runtime/web/core/ui/startup.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-31
+remake/runtime/web/core/items/native_story_items.mjs
+  s_76efd1cff4f2c4::t_1f1c8ef6697eb4 3-30,32-38,41-43,49-50,55-59
+  s_76efd1cff4f2c4::t_3b9482ec930de4 1-2,31,39-40,44-48,51-54,60-62
+remake/runtime/tests/test_content_library.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4-5
+remake/runtime/tests/test_skill_shortcuts.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4-5,7-8
+remake/runtime/tests/test_party_attributes.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 5-7
+remake/runtime/tests/test_native_skill_loading.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 5-6
+remake/runtime/tests/test_combat.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4-5
+remake/runtime/web/controllers/battle.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 2-4,10-15,17-20
+remake/runtime/tests/test_battle_result_fixture.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 6-8
+remake/runtime/web/party_sample.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4-9
+remake/runtime/tools/build_runtime.py
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 188,203,215,221,227,233,239,245,251,257
+remake/runtime/web/core/story/chapter_animation.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-157
+remake/runtime/tests/test_skill_test_menu.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 6-7
+remake/runtime/tests/test_party_integration.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 7-8,11-14,16
+remake/runtime/web/tests/battle_handoff_fixture.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 5-8,10-12
+remake/runtime/tools/create_map_viewport_fixture.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4
+remake/runtime/tests/suites.json
+  s_76efd1cff4f2c4::t_1f1c8ef6697eb4 446-450,464,476-477,487-488,498-499,509-512
+remake/runtime/tests/test_save_controller.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4-5,11
+remake/runtime/tests/test_battle_skill_access.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4,6-7
+remake/runtime/tests/test_native_anm_extended.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 7-9,12
+remake/runtime/tests/test_item_status_cure.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 7-11
+remake/runtime/tests/test_equipment_passives.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 37-45,47-48
+remake/runtime/tests/test_forest_map_mechanisms.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 8-10
+remake/runtime/tests/test_jute_source_readiness.py
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 30-37
+remake/runtime/tests/test_cf1_map_objects.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 6-7
+remake/runtime/web/core/battle/battle_resources.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-143
+remake/runtime/tests/test_save_preview.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 4-5
+remake/runtime/web/core/battle/battle_scheduler.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-166
+remake/runtime/web/core/items/item_passives.mjs
+  s_76efd1cff4f2c4::t_5e80b13b4edbd9 1-59
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "bd60c36e8ef5f20d7b8a39c37bde00d27cf7e5a1",
+  "prompts": {},
+  "sessions": {
+    "s_76efd1cff4f2c4": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a4fc-21ec-79f0-a197-39de62362017",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    },
+    "s_ecfcf00968ccbd": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a9ac-bf5a-71c2-ba37-442c2ff0cde8",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
