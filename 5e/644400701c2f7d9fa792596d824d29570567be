@@ -1,0 +1,44 @@
+remake/assessment/validation_design.md
+  s_6d4b8b8253ff99::t_b602d9eb3df537 108
+remake/runtime/web/phaser/rendering/interface_compositor.mjs
+  s_6d4b8b8253ff99::t_5345a063771444 3,16-18,24-25,48-56
+  s_6d4b8b8253ff99::t_9faa5b67c30faf 57
+remake/runtime/web/tests/phaser_lifecycle.html
+  s_6d4b8b8253ff99::t_0b3d266634a159 20,55
+remake/runtime/web/phaser/rendering/recorded_surface.mjs
+  s_6d4b8b8253ff99::t_5345a063771444 60
+remake/runtime/web/phaser/rendering/battle_surface.mjs
+  s_6d4b8b8253ff99::t_5345a063771444 65,110
+remake/runtime/web/phaser-preview.html
+  s_6d4b8b8253ff99::t_3c628727b178a7 18
+remake/runtime/web/phaser/rendering/xbr_pipeline.mjs
+  s_6d4b8b8253ff99::t_5345a063771444 2,213-214,241,246-247
+remake/runtime/web/phaser/runtime.mjs
+  s_6d4b8b8253ff99::t_5345a063771444 139-144,154
+remake/runtime/web/index.html
+  s_6d4b8b8253ff99::t_3c628727b178a7 74
+remake/runtime/architecture.md
+  s_6d4b8b8253ff99::t_908b635ab12e82 181
+remake/runtime/web/tests/xbr_rendering_checks.mjs
+  s_6d4b8b8253ff99::t_0b3d266634a159 105-157
+remake/runtime/web/controllers/input.mjs
+  s_6d4b8b8253ff99::t_3c628727b178a7 60
+remake/runtime/web/phaser/preview.mjs
+  s_6d4b8b8253ff99::t_3c628727b178a7 123-124
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "5e644400701c2f7d9fa792596d824d29570567be",
+  "prompts": {},
+  "sessions": {
+    "s_6d4b8b8253ff99": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1aa55-3cb0-7853-8ea3-4609941fb21a",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
