@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import test from 'node:test';
 import {createBattleSample,resourcesForWorld} from '../web/combat_sample.mjs';
-import {buildEffectiveAttributes,createNativeRng,resolveAction,applyNativeDamage} from '../web/core/combat_rules.mjs';
+import {buildEffectiveAttributes,createNativeRng,resolveAction,applyNativeDamage} from '../web/core/battle/combat_rules.mjs';
 const data=JSON.parse(readFileSync(new URL('../web/data/combat_sample.json',import.meta.url)));
 const seed=JSON.parse(readFileSync(new URL('../web/data/world_seed.json',import.meta.url)));
 const copy=value=>structuredClone(value);

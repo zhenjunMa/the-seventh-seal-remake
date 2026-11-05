@@ -254,7 +254,7 @@ def verify():
         assert all((ROOT/name).is_file() for name in row['sources']), row['id']
         assert all((RUNTIME/'tests'/name).is_file() for name in row['tests']), row['id']
         if row['kind'].startswith('required'): assert row['status'] == 'implemented' and row['tests'], row['id']
-    refs = {path.relative_to(WEB).as_posix() for glob in ['*.html', '*.css', '*.js', '*.mjs', 'controllers/*.mjs', 'core/*.mjs', 'data/config/*.json']
+    refs = {path.relative_to(WEB).as_posix() for glob in ['*.html', '*.css', '*.js', '*.mjs', 'controllers/*.mjs', 'core/**/*.mjs', 'data/config/*.json']
             for path in WEB.glob(glob)}
     refs.add('data/catalog.json')
     refs.update(path.relative_to(WEB).as_posix() for path in (WEB/'phaser').rglob('*.mjs'))
@@ -265,7 +265,7 @@ def verify():
                 'party_combat', 'party_skills', 'party_rewards', 'party_reactions', 'party_battle_view', 'items', 'item_presentation', 'audio', 'operation_menu', 'content_checklist','map_shadows']:
         if catalog.get(key): refs.add(catalog[key])
     refs.update(row['path'] for row in catalog['maps'])
-    refs.add('core/movement.mjs')
+    refs.add('core/exploration/movement.mjs')
     refs.update(action['sheet'] for role in catalog['roles'] for action in role['actions'])
     opening_resources = read(WEB/catalog['opening_resources'])
     refs.update(a['sheet'].lstrip('/') for r in opening_resources['roles'].values() for a in r['actions'])
@@ -310,7 +310,7 @@ def verify():
     for name, expected in opening_sources.items(): assert sha(ROOT/name) == expected, f'Opening input changed during checks: {name}'
     for name, expected in party_sources.items(): assert sha(ROOT/name) == expected, f'Party input changed during checks: {name}'
     for name, expected in system_sources.items(): assert sha(ROOT/name) == expected, f'System input changed during checks: {name}'
-    current = [*tests, *RUNTIME.glob('tests/test_*.py'), RUNTIME/'tools/build_runtime.py', *WEB.glob('*.html'), *WEB.glob('*.css'), *WEB.glob('*.js'), *WEB.glob('*.mjs'), *WEB.glob('core/*.mjs'), *WEB.glob('controllers/*.mjs'), *WEB.glob('data/config/*.json'),
+    current = [*tests, *RUNTIME.glob('tests/test_*.py'), RUNTIME/'tools/build_runtime.py', *WEB.glob('*.html'), *WEB.glob('*.css'), *WEB.glob('*.js'), *WEB.glob('*.mjs'), *WEB.glob('core/**/*.mjs'), *WEB.glob('controllers/*.mjs'), *WEB.glob('data/config/*.json'),
                *WEB.glob('phaser/**/*.mjs'), *WEB.glob('vendor/phaser/*'), RUNTIME/'tools/verify_phaser.mjs',
                WEB/'data/catalog.json', WEB/'data/runtime_content.json', WEB/'data/runtime_content.mjs',
                RUNTIME/'tools/export_content_registry.mjs', RUNTIME/'tools/content_registration.py', RUNTIME/'tools/layout_migration.json', RUNTIME/'tests/preserve_history.mjs', RUNTIME/'tests/suites.json', RUNTIME/'tools/verify_tests.py',

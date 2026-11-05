@@ -3,17 +3,17 @@
  * Existing attack choreography and the 65 ms attack clock remain adapters.
  */
 
-import {compileNativeSequence} from './core/skill_sequence.mjs';
-import {beginNativeCameraShake,advanceNativeCameraShake,beginNativeColorFade,advanceNativeColorFade,beginNativeCameraPan,advanceNativeCameraPan} from './core/battle_camera.mjs';
-import {nativeEntryPath,advanceNativeEntryPath,nativeEntryOffset} from './core/battle_entry.mjs';
-import {addCorrectedPartyPresentations} from './core/party_skill_corrections.mjs';
-import {BattleAssetPlan,effectReferences} from './core/battle_asset_plan.mjs';
-import {idlePoseAt} from './core/battle_scheduler.mjs';
+import {compileNativeSequence} from './core/battle/skill_sequence.mjs';
+import {beginNativeCameraShake,advanceNativeCameraShake,beginNativeColorFade,advanceNativeColorFade,beginNativeCameraPan,advanceNativeCameraPan} from './core/battle/battle_camera.mjs';
+import {nativeEntryPath,advanceNativeEntryPath,nativeEntryOffset} from './core/battle/battle_entry.mjs';
+import {addCorrectedPartyPresentations} from './core/party/party_skill_corrections.mjs';
+import {BattleAssetPlan,effectReferences} from './core/battle/battle_asset_plan.mjs';
+import {idlePoseAt} from './core/battle/battle_scheduler.mjs';
 import {BattleLifecyclePlayback} from './battle_lifecycle_view.mjs';
 import {createDeathParticleSurface} from './death_particles.mjs';
-import {battleViewport,battleActorPositions} from './core/battle_layout.mjs';
-import {battleResources,drawBattleImage} from './core/battle_resources.mjs';
-import {runtimeContent,requireRegisteredRoles} from './core/content_registry.mjs';
+import {battleViewport,battleActorPositions} from './core/battle/battle_layout.mjs';
+import {battleResources,drawBattleImage} from './core/battle/battle_resources.mjs';
+import {runtimeContent,requireRegisteredRoles} from './core/content/content_registry.mjs';
 import {validateForestStage,forestStageAssets,drawForestStageBackground} from './forest_stage.mjs';
 const clone = value => structuredClone(value);
 const abortError = reason => Object.assign(new Error(reason || '战斗表现已取消'), {name: 'AbortError'});

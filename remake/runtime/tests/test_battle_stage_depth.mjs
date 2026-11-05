@@ -4,7 +4,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {BattleView} from '../web/battle_view.mjs';
-import {directSequence} from '../web/core/skill_sequence.mjs';
+import {directSequence} from '../web/core/battle/skill_sequence.mjs';
 
 const web=new URL('../web/',import.meta.url),read=async name=>JSON.parse(await readFile(new URL('data/'+name,web)));
 const [commands,ai,reactions]=await Promise.all(['party_skills.json','forest_ai.json','party_reactions.json'].map(read));

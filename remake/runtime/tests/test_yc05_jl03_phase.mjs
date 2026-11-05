@@ -1,5 +1,5 @@
 import test from 'node:test';
-import {WorldStore} from '../web/core/world.mjs';
+import {WorldStore} from '../web/core/world/world.mjs';
 import {innerWhiteForestSource} from './helpers/inner_white_forest_world.mjs';
 import {floatingCityComplete} from './helpers/floating_city_world.mjs';
 import {yc05Jl03Complete} from './helpers/yc05_jl03_world.mjs';

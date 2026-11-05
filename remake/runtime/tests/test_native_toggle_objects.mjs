@@ -4,12 +4,12 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
-import {nativeToggleObject} from '../web/core/native_map_chests.mjs';
-import {ChapterRunner,chapterObjectState} from '../web/core/chapter.mjs';
-import {WorldStore,encodeSave,decodeSave} from '../web/core/world.mjs';
-import {MapObjectRuntime} from '../web/core/map_objects.mjs';
-import {inspectContentReadiness} from '../web/core/content_readiness.mjs';
-import {validateStoryBindings} from '../web/core/content_dependencies.mjs';
+import {nativeToggleObject} from '../web/core/exploration/native_map_chests.mjs';
+import {ChapterRunner,chapterObjectState} from '../web/core/story/chapter_runner.mjs';
+import {WorldStore,encodeSave,decodeSave} from '../web/core/world/world.mjs';
+import {MapObjectRuntime} from '../web/core/exploration/map_objects.mjs';
+import {inspectContentReadiness} from '../web/core/content/content_readiness.mjs';
+import {validateStoryBindings} from '../web/core/content/content_dependencies.mjs';
 import {createStoryController} from '../web/controllers/story.mjs';
 
 const copy=structuredClone,hash=bytes=>createHash('sha256').update(bytes).digest('hex');

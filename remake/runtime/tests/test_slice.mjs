@@ -3,12 +3,12 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
-import {WorldStore,encodeSave,decodeSave} from '../web/core/world.mjs';
-import {EventRunner,validateProgram} from '../web/core/events.mjs';
-import {MovementMap} from '../web/core/movement.mjs';
-import {nativeMapMovement} from '../web/core/map_locomotion.mjs';
-import {chapterRouteExits} from '../web/core/map_connections.mjs';
-import {runtimeContent,storyBindings} from '../web/core/content_registry.mjs';
+import {WorldStore,encodeSave,decodeSave} from '../web/core/world/world.mjs';
+import {EventRunner,validateProgram} from '../web/core/story/events.mjs';
+import {MovementMap} from '../web/core/exploration/movement.mjs';
+import {nativeMapMovement} from '../web/core/exploration/map_locomotion.mjs';
+import {chapterRouteExits} from '../web/core/exploration/map_connections.mjs';
+import {runtimeContent,storyBindings} from '../web/core/content/content_registry.mjs';
 
 const runtime=new URL('../',import.meta.url),root=new URL('../../../',import.meta.url);
 const read=async path=>JSON.parse(await readFile(new URL(path,runtime),'utf8'));

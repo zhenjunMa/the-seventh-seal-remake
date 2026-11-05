@@ -2,12 +2,12 @@
 // render actor poses, decode video, or replace the browser acceptance run.
 import {readFile} from 'node:fs/promises';
 import {createHash,webcrypto} from 'node:crypto';
-import {WorldStore} from '../../web/core/world.mjs';
-import {ChapterRunner} from '../../web/core/chapter.mjs';
-import {ChapterAnimationRunner} from '../../web/core/chapter_animation.mjs';
-import {admitPartyMember} from '../../web/core/party_members.mjs';
-import {runtimeContent} from '../../web/core/content_registry.mjs';
-import {worldMapEntry} from '../../web/core/map_connections.mjs';
+import {WorldStore} from '../../web/core/world/world.mjs';
+import {ChapterRunner} from '../../web/core/story/chapter_runner.mjs';
+import {ChapterAnimationRunner} from '../../web/core/story/chapter_animation.mjs';
+import {admitPartyMember} from '../../web/core/party/party_members.mjs';
+import {runtimeContent} from '../../web/core/content/content_registry.mjs';
+import {worldMapEntry} from '../../web/core/exploration/map_connections.mjs';
 
 globalThis.crypto??=webcrypto;
 const copy=structuredClone;

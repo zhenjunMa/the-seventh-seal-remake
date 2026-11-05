@@ -4,14 +4,14 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
-import {BattleController} from '../web/core/combat.mjs';
+import {BattleController} from '../web/core/battle/battle_controller.mjs';
 import {BattleView} from '../web/battle_view.mjs';
-import {initializeScheduler} from '../web/core/battle_scheduler.mjs';
-import {initializeNativeStatuses} from '../web/core/battle_status.mjs';
-import {revivalTargetEligibility} from '../web/core/battle_revival.mjs';
-import {consumePartyMp} from '../web/core/party_attributes.mjs';
-import {createNativeRng} from '../web/core/combat_rules.mjs';
-import {directSequence,compileNativeSequence} from '../web/core/skill_sequence.mjs';
+import {initializeScheduler} from '../web/core/battle/battle_scheduler.mjs';
+import {initializeNativeStatuses} from '../web/core/battle/battle_status.mjs';
+import {revivalTargetEligibility} from '../web/core/battle/battle_revival.mjs';
+import {consumePartyMp} from '../web/core/party/party_attributes.mjs';
+import {createNativeRng} from '../web/core/battle/combat_rules.mjs';
+import {directSequence,compileNativeSequence} from '../web/core/battle/skill_sequence.mjs';
 
 const copy=structuredClone,web=new URL('../web/',import.meta.url),read=async path=>JSON.parse(await readFile(new URL(path.replace(/^\//,''),web)));
 const [party,forest,skills,reactions,schedulerSource,status,lifecycle]=await Promise.all([

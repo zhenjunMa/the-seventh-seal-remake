@@ -1,10 +1,10 @@
 import {drawingContext} from './phaser/rendering/recorded_surface.mjs';
-import {battleViewport,battleActorPositions,battleBallState} from './core/battle_layout.mjs';
-import {commandForActor} from './core/battle_scheduler.mjs';
-import {operationMnuTextOptions} from './core/menu_presentation.mjs';
-import {TECHNIQUE_CATEGORIES,TECHNIQUE_WHEEL_NAVIGATION} from './core/menu_techniques.mjs';
+import {battleViewport,battleActorPositions,battleBallState} from './core/battle/battle_layout.mjs';
+import {commandForActor} from './core/battle/battle_scheduler.mjs';
+import {operationMnuTextOptions} from './core/ui/menu_presentation.mjs';
+import {TECHNIQUE_CATEGORIES,TECHNIQUE_WHEEL_NAVIGATION} from './core/ui/menu_techniques.mjs';
 import {BattleResultView} from './battle_result_view.mjs';
-import {battleResources,drawBattleImage} from './core/battle_resources.mjs';
+import {battleResources,drawBattleImage} from './core/battle/battle_resources.mjs';
 
 const clamp=n=>Math.max(0,Math.min(1,n));
 const terminal=phase=>['victory','defeat','escaped','interrupted','closed'].includes(phase);

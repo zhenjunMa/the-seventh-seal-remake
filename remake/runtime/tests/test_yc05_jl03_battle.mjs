@@ -4,18 +4,18 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
-import {compileNativeSequence,directSequence} from '../web/core/skill_sequence.mjs';
-import {beginNativeCameraShake,advanceNativeCameraShake} from '../web/core/battle_camera.mjs';
-import {nativeScriptedBattle} from '../web/core/scripted_battle.mjs';
-import {runtimeContent,requireRegisteredRoles} from '../web/core/content_registry.mjs';
+import {compileNativeSequence,directSequence} from '../web/core/battle/skill_sequence.mjs';
+import {beginNativeCameraShake,advanceNativeCameraShake} from '../web/core/battle/battle_camera.mjs';
+import {nativeScriptedBattle} from '../web/core/battle/scripted_battle.mjs';
+import {runtimeContent,requireRegisteredRoles} from '../web/core/content/content_registry.mjs';
 import {NativeAssemblyOracle} from './native_assembly_oracle.mjs';
-import {resolveAction,createNativeRng,nativeEffectContextForTarget} from '../web/core/combat_rules.mjs';
+import {resolveAction,createNativeRng,nativeEffectContextForTarget} from '../web/core/battle/combat_rules.mjs';
 import {BattleView} from '../web/battle_view.mjs';
 import {ActionClock} from '../web/phaser/components/action_clock.mjs';
-import {BattleController} from '../web/core/combat.mjs';
+import {BattleController} from '../web/core/battle/battle_controller.mjs';
 import {BattleLifecyclePlayback} from '../web/battle_lifecycle_view.mjs';
-import {nativeEntryPath} from '../web/core/battle_entry.mjs';
-import {skillOwner,deriveSkillConfiguration} from '../web/core/skill_registry.mjs';
+import {nativeEntryPath} from '../web/core/battle/battle_entry.mjs';
+import {skillOwner,deriveSkillConfiguration} from '../web/core/config/skill_registry.mjs';
 const json=async name=>JSON.parse(await readFile(new URL(`../${name}`,import.meta.url),'utf8'));
 const [ai,meta,story,camera,combat,partySkills,lifecycle,placement,pathBundle]=await Promise.all(['web/data/forest_ai.json','web/data/party_battle_view.json',
   'web/data/chapter_story.json','evidence/yc05_jl03_20261030/battle_camera_native.json','web/data/forest_combat.json','web/data/party_skills.json',

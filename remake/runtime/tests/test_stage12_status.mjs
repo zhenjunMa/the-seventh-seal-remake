@@ -6,12 +6,12 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {NativeAssemblyOracle} from './native_assembly_oracle.mjs';
-import {createNativeRng} from '../web/core/combat_rules.mjs';
-import {runtimeContent} from '../web/core/content_registry.mjs';
+import {createNativeRng} from '../web/core/battle/combat_rules.mjs';
+import {runtimeContent} from '../web/core/content/content_registry.mjs';
 import {createForestSample} from '../web/forest_sample.mjs';
-import {initializeScheduler} from '../web/core/battle_scheduler.mjs';
+import {initializeScheduler} from '../web/core/battle/battle_scheduler.mjs';
 import {validateForestStatusData,validateNativeSkillStatus,initializeNativeStatuses,clearNativeStatuses,applyNativeSkillStatus,
-  tickNativeStatuses,applyNativePeriodicResourceBlock} from '../web/core/battle_status.mjs';
+  tickNativeStatuses,applyNativePeriodicResourceBlock} from '../web/core/battle/battle_status.mjs';
 const json=async name=>JSON.parse(await readFile(new URL(`../${name}`,import.meta.url),'utf8'));
 const hash=raw=>createHash('sha256').update(raw).digest('hex'),copy=structuredClone,ZERO='00'.repeat(0xc6),addr=n=>`0x${n.toString(16).padStart(8,'0')}`;
 const [baseData,instructions,seed,base,forest,skills,scheduler]=await Promise.all(['web/data/forest_status.json','evidence/forest_status_instructions_20261011.json',

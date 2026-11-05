@@ -1,13 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {WorldStore} from '../web/core/world.mjs';
-import {admitPartyMember} from '../web/core/party_members.mjs';
+import {WorldStore} from '../web/core/world/world.mjs';
+import {admitPartyMember} from '../web/core/party/party_members.mjs';
 import {createPartySample} from '../web/party_sample.mjs';
 import {assembleForestSample} from '../web/forest_sample.mjs';
-import {BattleController} from '../web/core/combat.mjs';
+import {BattleController} from '../web/core/battle/battle_controller.mjs';
 import {BattleMenuView} from '../web/battle_menu_view.mjs';
-import {nativeReactionTargetAvailability,selectNativeNormalReaction} from '../web/core/battle_reactions.mjs';
+import {nativeReactionTargetAvailability,selectNativeNormalReaction} from '../web/core/battle/battle_reactions.mjs';
 const read=async name=>JSON.parse(await readFile(new URL('../web/data/'+name+'.json',import.meta.url),'utf8')),copy=structuredClone;
 const [seed,attributes,commands,forest,scheduler,ai,reactions,status]=await Promise.all(['opening_seed','party_combat','party_skills','forest_combat','battle_scheduler','forest_ai','party_reactions','forest_status'].map(read));
 function fixture(ids){

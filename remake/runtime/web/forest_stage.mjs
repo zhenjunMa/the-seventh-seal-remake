@@ -1,6 +1,6 @@
 // Source zero-camera composition; browser time and actor placement are preview policies.
-import {drawBattleImage} from './core/battle_resources.mjs';
-import {runtimeContent} from './core/content_registry.mjs';
+import {drawBattleImage} from './core/battle/battle_resources.mjs';
+import {runtimeContent} from './core/content/content_registry.mjs';
 const need=(ok,message)=>{if(!ok)throw new Error(`森林战斗背景：${message}`);};
 export function validateForestStage(stage,content=runtimeContent){
   const entry=content.stages[stage?.stage_id];

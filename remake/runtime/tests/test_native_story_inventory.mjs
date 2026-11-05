@@ -2,11 +2,11 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
-import {removeNativeStoryItem} from '../web/core/native_story_inventory.mjs';
-import {ChapterRunner} from '../web/core/chapter.mjs';
-import {admitPartyMember,deactivatePartyMember} from '../web/core/party_members.mjs';
-import {WorldStore,encodeSave,decodeSave} from '../web/core/world.mjs';
-import {withItemQuantity} from '../web/core/equipment.mjs';
+import {removeNativeStoryItem} from '../web/core/story/native_story_inventory.mjs';
+import {ChapterRunner} from '../web/core/story/chapter_runner.mjs';
+import {admitPartyMember,deactivatePartyMember} from '../web/core/party/party_members.mjs';
+import {WorldStore,encodeSave,decodeSave} from '../web/core/world/world.mjs';
+import {withItemQuantity} from '../web/core/party/equipment.mjs';
 const read=async name=>JSON.parse(await readFile(new URL(`../web/data/${name}.json`,import.meta.url),'utf8'));
 const [seed,items,story]=await Promise.all(['opening_seed','items','chapter_story'].map(read)),copy=structuredClone;
 const instance=(id,quantity=1,instance_id=`source:${id}`)=>withItemQuantity({id,name:items.definitions[id].name,

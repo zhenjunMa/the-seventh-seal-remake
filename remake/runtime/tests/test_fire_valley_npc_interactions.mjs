@@ -1,10 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {WorldStore,encodeSave,decodeSave} from '../web/core/world.mjs';
-import {runtimeContent} from '../web/core/content_registry.mjs';
-import {compileItemConfiguration} from '../web/core/item_registry.mjs';
-import {insertCrystal,crystalSocketCandidates} from '../web/core/crystal_sockets.mjs';
-import {createPartyActors} from '../web/core/party_attributes.mjs';
+import {WorldStore,encodeSave,decodeSave} from '../web/core/world/world.mjs';
+import {runtimeContent} from '../web/core/content/content_registry.mjs';
+import {compileItemConfiguration} from '../web/core/items/item_registry.mjs';
+import {insertCrystal,crystalSocketCandidates} from '../web/core/party/crystal_sockets.mjs';
+import {createPartyActors} from '../web/core/party/party_attributes.mjs';
 import {read,story,maps,world,runner} from './helpers/fire_valley_case.mjs';
 
 for(const [mapId,itemId]of [['M17024',150],['M17028',156]])test(`${mapId} source crystal gift ${itemId} is saved once and a failed dialogue rolls it back`,async()=>{

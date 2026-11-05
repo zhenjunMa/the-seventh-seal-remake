@@ -2,13 +2,13 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
-import {WorldStore} from '../web/core/world.mjs';
-import {createPartyActors} from '../web/core/party_attributes.mjs';
-import {changeEquipment} from '../web/core/items.mjs';
-import {migrateEquipment, withItemQuantity} from '../web/core/equipment.mjs';
+import {WorldStore} from '../web/core/world/world.mjs';
+import {createPartyActors} from '../web/core/party/party_attributes.mjs';
+import {changeEquipment} from '../web/core/items/items.mjs';
+import {migrateEquipment, withItemQuantity} from '../web/core/party/equipment.mjs';
 import {isCrystalDefinition, isSupportedCrystalDefinition, validateCrystalSocketState,
   validateCrystalSocketDefinitions, crystalSocketCandidates, crystalSocketCount, crystalSocketRows,
-  socketEquipmentRows, insertCrystal, removeCrystal} from '../web/core/crystal_sockets.mjs';
+  socketEquipmentRows, insertCrystal, removeCrystal} from '../web/core/party/crystal_sockets.mjs';
 
 const load = name => JSON.parse(readFileSync(new URL(`../web/data/${name}.json`, import.meta.url)));
 const source = load('items'), attributes = load('party_combat'), seed = load('opening_seed');

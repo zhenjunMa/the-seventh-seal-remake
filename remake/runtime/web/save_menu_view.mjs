@@ -1,6 +1,6 @@
 import {drawingContext} from './phaser/rendering/recorded_surface.mjs';
 // Original Game_Save_01/02/03 pixels and hit rectangles on a 640x480 plane.
-import {MANUAL_SAVE_SLOTS} from './core/save_slots.mjs';
+import {MANUAL_SAVE_SLOTS} from './core/world/save_slots.mjs';
 import {appendSavePreview} from './save_preview_view.mjs';
 import {renderSaveSlotText} from './save_slot_view.mjs';
 export class SaveMenuView {

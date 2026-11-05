@@ -1,10 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {MapNpcRuntime,decodeNpcBehavior,npcPath} from '../web/core/map_npcs.mjs';
-import {MovementMap} from '../web/core/movement.mjs';
-import {createNativeRng} from '../web/core/combat_rules.mjs';
-import {captureMapNpcState,restoreMapNpcState} from '../web/core/map_npc_state.mjs';
+import {MapNpcRuntime,decodeNpcBehavior,npcPath} from '../web/core/exploration/map_npcs.mjs';
+import {MovementMap} from '../web/core/exploration/movement.mjs';
+import {createNativeRng} from '../web/core/battle/combat_rules.mjs';
+import {captureMapNpcState,restoreMapNpcState} from '../web/core/exploration/map_npc_state.mjs';
 
 const read=name=>JSON.parse(readFileSync(new URL('../web/data/'+name+'.json',import.meta.url),'utf8'));
 const story=read('chapter_story'),resources=read('chapter_map_resources'),village=read('maps/m17020');

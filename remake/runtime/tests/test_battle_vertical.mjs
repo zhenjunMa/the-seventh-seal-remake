@@ -3,9 +3,9 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {NativeAssemblyOracle} from './native_assembly_oracle.mjs';
-import {nativeVerticalState,createNativeVertical,advanceNativeVertical,verticalActorPatch} from '../web/core/battle_vertical.mjs';
+import {nativeVerticalState,createNativeVertical,advanceNativeVertical,verticalActorPatch} from '../web/core/battle/battle_vertical.mjs';
 import {BattleView} from '../web/battle_view.mjs';
-import {BattleController} from '../web/core/combat.mjs';
+import {BattleController} from '../web/core/battle/battle_controller.mjs';
 
 const read=async path=>JSON.parse(await readFile(new URL(path,import.meta.url),'utf8'));
 const [instructions,reactions,game]=await Promise.all([

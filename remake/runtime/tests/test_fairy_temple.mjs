@@ -3,9 +3,9 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {innerWhiteForestSource} from './helpers/inner_white_forest_world.mjs';
 import {templeComplete} from './helpers/fairy_forest_temple_world.mjs';
-import {compileNativeTriggerFlow,nativeTriggerFlowId} from '../web/core/story_flow_compiler.mjs';
-import {StoryRepository} from '../web/core/story_repository.mjs';
-import {runtimeContent,runtimeContentDefinition} from '../web/core/content_registry.mjs';
+import {compileNativeTriggerFlow,nativeTriggerFlowId} from '../web/core/story/story_flow_compiler.mjs';
+import {StoryRepository} from '../web/core/story/story_repository.mjs';
+import {runtimeContent,runtimeContentDefinition} from '../web/core/content/content_registry.mjs';
 
 test('FF-02 follows the earned seal through five stairs, the plaza and full93-command revival, then restores retreat',async()=>{
   const {world,trace}=await templeComplete(await innerWhiteForestSource());

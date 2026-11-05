@@ -4,9 +4,9 @@ import {readFile,writeFile,mkdtemp,mkdir,rm} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {pathToFileURL} from 'node:url';
-import {deriveRuntimeConfiguration,compileRuntimeConfiguration,compactRuntimeConfiguration} from '../web/core/runtime_config.mjs';
-import {createSkillRegistry,deriveSkillConfiguration,upgradeSkillConfiguration} from '../web/core/skill_registry.mjs';
-import {compactParameterConfiguration} from '../web/core/config_overrides.mjs';
+import {deriveRuntimeConfiguration,compileRuntimeConfiguration,compactRuntimeConfiguration} from '../web/core/config/runtime_config.mjs';
+import {createSkillRegistry,deriveSkillConfiguration,upgradeSkillConfiguration} from '../web/core/config/skill_registry.mjs';
+import {compactParameterConfiguration} from '../web/core/config/config_overrides.mjs';
 import {exportRuntimeConfiguration,inspectRuntimeConfiguration} from '../tools/export_runtime_config.mjs';
 
 const copy=structuredClone,read=async name=>JSON.parse(await readFile(new URL(`../web/data/${name}.json`,import.meta.url),'utf8'));

@@ -2,11 +2,11 @@
 import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import {fileURLToPath} from 'node:url';
 import path from 'node:path';
-import {deriveRuntimeConfiguration,compileRuntimeConfiguration,compactRuntimeConfiguration,expandRuntimeConfiguration,loadRuntimeConfiguration,CONFIG_FILES} from '../web/core/runtime_config.mjs';
-import {expandParameterOverrides} from '../web/core/config_overrides.mjs';
-import {upgradeSkillConfiguration,createSkillRegistry} from '../web/core/skill_registry.mjs';
-import {upgradeItemConfiguration} from '../web/core/item_registry.mjs';
-import {sourceSkillParameters} from '../web/core/skill_config.mjs';
+import {deriveRuntimeConfiguration,compileRuntimeConfiguration,compactRuntimeConfiguration,expandRuntimeConfiguration,loadRuntimeConfiguration,CONFIG_FILES} from '../web/core/config/runtime_config.mjs';
+import {expandParameterOverrides} from '../web/core/config/config_overrides.mjs';
+import {upgradeSkillConfiguration,createSkillRegistry} from '../web/core/config/skill_registry.mjs';
+import {upgradeItemConfiguration} from '../web/core/items/item_registry.mjs';
+import {sourceSkillParameters} from '../web/core/config/skill_config.mjs';
 const sourceNames={combat:'combat_sample',forest:'forest_combat',scheduler:'battle_scheduler',ai:'forest_ai',rewards:'forest_rewards',party_skills:'party_skills',items:'items'};
 const readJson=async url=>JSON.parse(await readFile(url,'utf8'));
 async function readSources(directory){

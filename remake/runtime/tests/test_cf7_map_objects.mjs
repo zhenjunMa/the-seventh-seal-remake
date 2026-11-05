@@ -3,10 +3,10 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
-import {MapObjectRuntime} from '../web/core/map_objects.mjs';
-import {createNativeRng} from '../web/core/combat_rules.mjs';
-import {StoryRepository} from '../web/core/story_repository.mjs';
-import {runtimeContent,runtimeContentDefinition} from '../web/core/content_registry.mjs';
+import {MapObjectRuntime} from '../web/core/exploration/map_objects.mjs';
+import {createNativeRng} from '../web/core/battle/combat_rules.mjs';
+import {StoryRepository} from '../web/core/story/story_repository.mjs';
+import {runtimeContent,runtimeContentDefinition} from '../web/core/content/content_registry.mjs';
 import {createMapController} from '../web/controllers/map.mjs';
 import {NativeAssemblyOracle} from './native_assembly_oracle.mjs';
 

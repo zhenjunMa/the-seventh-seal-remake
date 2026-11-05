@@ -86,14 +86,14 @@ def main():
     assert not any(e['type']=='battle-rewards-planned' for e in reload['events'])
     assert read(EVIDENCE/'forest_combat_four_steps_browser_console_20261011.json')==[]
     http=[]
-    for ref in ['app.js','battle_view.mjs','core/combat.mjs','core/battle_scheduler.mjs','core/forest_ai.mjs','core/skill_sequence.mjs','core/battle_rewards.mjs','core/battle_reactions.mjs','core/battle_status.mjs',
+    for ref in ['app.js','battle_view.mjs','core/battle/battle_controller.mjs','core/battle/battle_scheduler.mjs','core/battle/enemy_ai.mjs','core/battle/skill_sequence.mjs','core/battle/battle_rewards.mjs','core/battle/battle_reactions.mjs','core/battle/battle_status.mjs',
                 'data/catalog.json','data/forest_full_battle_view.json','data/battle_scheduler.json','data/forest_ai.json','data/forest_rewards.json','data/forest_reactions.json','data/forest_status.json','data/forest_response_layers.json']:
         with urllib.request.urlopen('http://127.0.0.1:8767/'+ref,timeout=10) as response:
             content=response.read();assert response.status==200
         assert hashlib.sha256(content).hexdigest()==digest(WEB/ref), ref
         http.append(ref)
     fingerprints={}
-    paths=[*WEB.glob('*.js'),*WEB.glob('*.mjs'),*WEB.glob('*.html'),*WEB.glob('*.css'),*WEB.glob('core/*.mjs'),*WEB.glob('data/*.json'),*RUNTIME.glob('tools/export_battle_scheduler.py'),*RUNTIME.glob('tools/*forest*.py'),RUNTIME/'tools/build_catalog.py',RUNTIME/'tests/native_assembly_oracle.mjs',RUNTIME/'tests/preserve_history.mjs',WEB/'core/movement.mjs',*tests,
+    paths=[*WEB.glob('*.js'),*WEB.glob('*.mjs'),*WEB.glob('*.html'),*WEB.glob('*.css'),*WEB.glob('core/**/*.mjs'),*WEB.glob('data/*.json'),*RUNTIME.glob('tools/export_battle_scheduler.py'),*RUNTIME.glob('tools/*forest*.py'),RUNTIME/'tools/build_catalog.py',RUNTIME/'tests/native_assembly_oracle.mjs',RUNTIME/'tests/preserve_history.mjs',WEB/'core/exploration/movement.mjs',*tests,
            ROOT/'README.md',REMAKE/'assessment/validation_design.md',REMAKE/'assessment/testing_strategy.md']
     paths+=list(EVIDENCE.glob('forest_combat_four_steps_browser*'))
     for path in paths:fingerprints[str(path.relative_to(ROOT)).replace('\\','/')]=digest(path)

@@ -8,7 +8,7 @@ RUNTIME = Path(__file__).resolve().parents[1]
 BASE = 'http://127.0.0.1:8767'
 cases = []
 for path, expected in [('/', 200), ('/data/catalog.json', 200),
-                       ('/core/movement.mjs', 200), ('/prototype/movement.mjs', 404),
+                       ('/core/exploration/movement.mjs', 200), ('/prototype/movement.mjs', 404),
                        ('/GAME.exe', 404), ('/Map/m01030.TLK', 404),
                        ('/data/', 404), ('/assets/', 404), ('/prototype/', 404),
                        ('/../GAME.exe', 404), ('/%2e%2e/GAME.exe', 404),

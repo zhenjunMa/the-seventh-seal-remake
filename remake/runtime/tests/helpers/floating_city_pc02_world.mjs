@@ -1,9 +1,9 @@
 // PC-02 starts at the prior main-chain endpoint, without the optional ticket
 // replays in yc05Jl03Complete. Walking/rendering remain separate browser checks.
 import assert from 'node:assert/strict';
-import {WorldStore,encodeSave,decodeSave} from '../../web/core/world.mjs';
-import {StoryPlayback} from '../../web/core/story_playback.mjs';
-import {allPartyRoles} from '../../web/core/party_roster.mjs';
+import {WorldStore,encodeSave,decodeSave} from '../../web/core/world/world.mjs';
+import {StoryPlayback} from '../../web/core/story/story_playback.mjs';
+import {allPartyRoles} from '../../web/core/party/party_roster.mjs';
 import {innerWhiteForestRunner,innerWhiteForestRoute} from './inner_white_forest_world.mjs';
 import {yc05Jl03Complete} from './yc05_jl03_world.mjs';
 

@@ -34,18 +34,18 @@ if(missing.length){
     {skip:`Local source/oracle materials unavailable: ${missing.sort().join(', ')}`},()=>{});
 }else{
 const {NativeAssemblyOracle}=await import('./native_assembly_oracle.mjs');
-const {compileItemConfiguration,deriveItemConfiguration,upgradeItemConfiguration}=await import('../web/core/item_registry.mjs');
-const {WorldStore,encodeSave,decodeSave}=await import('../web/core/world.mjs');
-const {ChapterRunner,chapterChoices,initializeChapterItem}=await import('../web/core/chapter.mjs');
-const {compileTlkFlow,nativeFlowId}=await import('../web/core/story_flow_compiler.mjs');
-const {changeEquipment}=await import('../web/core/items.mjs');
-const {insertCrystal,removeCrystal}=await import('../web/core/crystal_sockets.mjs');
-const {createPartyActors}=await import('../web/core/party_attributes.mjs');
-const {initializeNativeStatuses,applyNativeSkillStatus,tickNativeStatuses,clearNativeStatuses}=await import('../web/core/battle_status.mjs');
-const {isSupportedItemPassiveDefinition,equipmentPassiveRows}=await import('../web/core/item_passives.mjs');
+const {compileItemConfiguration,deriveItemConfiguration,upgradeItemConfiguration}=await import('../web/core/items/item_registry.mjs');
+const {WorldStore,encodeSave,decodeSave}=await import('../web/core/world/world.mjs');
+const {ChapterRunner,chapterChoices,initializeChapterItem}=await import('../web/core/story/chapter_runner.mjs');
+const {compileTlkFlow,nativeFlowId}=await import('../web/core/story/story_flow_compiler.mjs');
+const {changeEquipment}=await import('../web/core/items/items.mjs');
+const {insertCrystal,removeCrystal}=await import('../web/core/party/crystal_sockets.mjs');
+const {createPartyActors}=await import('../web/core/party/party_attributes.mjs');
+const {initializeNativeStatuses,applyNativeSkillStatus,tickNativeStatuses,clearNativeStatuses}=await import('../web/core/battle/battle_status.mjs');
+const {isSupportedItemPassiveDefinition,equipmentPassiveRows}=await import('../web/core/items/item_passives.mjs');
 const {readContentDefinition}=await import('../tools/resolve_content_definition.mjs');
-const {BattleController}=await import('../web/core/combat.mjs');
-const {createRewardLedger,collectEnemyDefeat,planVictoryRewards}=await import('../web/core/battle_rewards.mjs');
+const {BattleController}=await import('../web/core/battle/battle_controller.mjs');
+const {createRewardLedger,collectEnemyDefeat,planVictoryRewards}=await import('../web/core/battle/battle_rewards.mjs');
 const read=async name=>JSON.parse(await readFile(new URL(`../${name}`,import.meta.url),'utf8'));
 const [published,overrides,attributes,seed,story,statusData,assembly,bundle]=await Promise.all([
   'web/data/items.json','web/data/config/items.json','web/data/party_combat.json','web/data/opening_seed.json',

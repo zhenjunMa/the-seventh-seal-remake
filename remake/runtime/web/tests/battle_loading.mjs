@@ -1,15 +1,15 @@
 import {PhaserRuntime} from '../phaser/runtime.mjs';
-import {WorldStore,decodeSave} from '../core/world.mjs';
+import {WorldStore,decodeSave} from '../core/world/world.mjs';
 import {createBattleController} from '../controllers/battle.mjs';
 import {createBattleHost} from '../controllers/battle_host.mjs';
 import {createBattleSessions} from '../controllers/battle_sessions.mjs';
 import {createExplorationPresentation,createStoryPresentation} from '../controllers/presentation_handoff.mjs';
-import {loadRuntimeConfiguration,compileRuntimeConfiguration} from '../core/runtime_config.mjs';
+import {loadRuntimeConfiguration,compileRuntimeConfiguration} from '../core/config/runtime_config.mjs';
 import {LoadingView} from '../loading_view.mjs';
 import {BattleTransitionView} from '../battle_transition_view.mjs';
-import {createAudioController} from '../core/audio.mjs';
-import {battleResources,drawBattleImage} from '../core/battle_resources.mjs';
-import {advanceIdleSkill} from '../core/battle_scheduler.mjs';
+import {createAudioController} from '../core/resources/audio.mjs';
+import {battleResources,drawBattleImage} from '../core/battle/battle_resources.mjs';
+import {advanceIdleSkill} from '../core/battle/battle_scheduler.mjs';
 const $=id=>document.getElementById(id),json=async p=>{const r=await fetch('/'+p.replace(/^\//,''),{cache:'no-store'});if(!r.ok)throw Error(p);return r.json();};
 const names={battleData:'combat_sample',forestData:'forest_combat',schedulerData:'battle_scheduler',aiData:'forest_ai',partyRewards:'party_rewards',partySkills:'party_skills',partyCombat:'party_combat',partyReactions:'party_reactions',statusData:'forest_status',sourceItemData:'items',sourceSkills:'library/skills',sourceMagic:'library/magic'};
 const state={...Object.fromEntries(await Promise.all(Object.entries(names).map(async([k,v])=>[k,await json('data/'+v+'.json')]))),catalog:{party_battle_view:'data/party_battle_view.json'},

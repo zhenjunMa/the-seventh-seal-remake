@@ -1,9 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {MovementMap,MAP_FOOTPRINT} from '../web/core/movement.mjs';
-import {CollisionFeedback,nativeMapMovement} from '../web/core/map_locomotion.mjs';
-import {mapPresentation} from '../web/core/map_presentation.mjs';
+import {MovementMap,MAP_FOOTPRINT} from '../web/core/exploration/movement.mjs';
+import {CollisionFeedback,nativeMapMovement} from '../web/core/exploration/map_locomotion.mjs';
+import {mapPresentation} from '../web/core/ui/map_presentation.mjs';
 import {SpritePose} from '../web/phaser/components/sprite_pose.mjs';
 import {drawMapSprite} from '../web/map_sprite.mjs';
 

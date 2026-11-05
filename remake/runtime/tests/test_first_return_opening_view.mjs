@@ -3,10 +3,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {OpeningView} from '../web/opening_view.mjs';
-import {ChapterRunner} from '../web/core/chapter.mjs';
-import {WorldStore,encodeSave,decodeSave} from '../web/core/world.mjs';
+import {ChapterRunner} from '../web/core/story/chapter_runner.mjs';
+import {WorldStore,encodeSave,decodeSave} from '../web/core/world/world.mjs';
 import {ActionClock} from '../web/phaser/components/action_clock.mjs';
-import {SceneController} from '../web/core/scenes.mjs';
+import {SceneController} from '../web/core/exploration/scene_controller.mjs';
 import {createMapController} from '../web/controllers/map.mjs';
 import {createStoryController} from '../web/controllers/story.mjs';
 import {firstReturnSource,firstReturnWorld,firstReturnRead as read,firstReturnBytes} from './helpers/first_return_source.mjs';

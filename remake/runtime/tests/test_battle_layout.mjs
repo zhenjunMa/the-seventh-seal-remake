@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {battleViewport,battleBallState,battleActorPositions} from '../web/core/battle_layout.mjs';
+import {battleViewport,battleBallState,battleActorPositions} from '../web/core/battle/battle_layout.mjs';
 test('battle source plane stays 4:3 with identical HUD and pointer transforms in wide and narrow screens',()=>{
   for(const [w,h]of [[1280,960],[1200,600],[600,900]]){const v=battleViewport(w,h);assert.equal(v.width/v.height,4/3);assert.equal(v.x+640*v.scale,w-v.x);assert.equal(v.y+480*v.scale,h-v.y);assert.ok(v.x>=0&&v.y>=0);}
 });

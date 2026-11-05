@@ -7,8 +7,8 @@ import {createHash} from 'node:crypto';
 import {parseArgs} from 'node:util';
 import {resolve,relative,isAbsolute} from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {encodeSave} from '../web/core/world.mjs';
-import {locomotion} from '../web/core/movement.mjs';
+import {encodeSave} from '../web/core/world/world.mjs';
+import {locomotion} from '../web/core/exploration/movement.mjs';
 import {innerWhiteForestSource} from '../tests/helpers/inner_white_forest_world.mjs';
 import {sealRegionComplete} from '../tests/helpers/seal_region_world.mjs';
 
@@ -123,9 +123,9 @@ export async function createSealRegionFixtures({out,nearEvents=false}){
     'web/data/chapter_map_resources.json','web/data/encounters.json','web/data/world_map.json','web/data/story/shared.json',
     'web/data/items.json','web/data/config/items.json','web/data/config/index.json','web/data/party_rewards.json',
     'web/data/party_skills.json','web/data/party_combat.json','web/data/opening_seed.json',
-    'web/core/chapter.mjs','web/core/story_flow.mjs','web/core/story_flow_compiler.mjs','web/core/native_story_conditions.mjs',
-    'web/core/native_story_mutations.mjs','web/core/native_map_chests.mjs','web/core/map_stage.mjs','web/core/movement.mjs',
-    'web/core/world.mjs','web/core/battle_rewards.mjs','web/core/native_economy.mjs',
+    'web/core/story/chapter_runner.mjs','web/core/story/story_flow.mjs','web/core/story/story_flow_compiler.mjs','web/core/story/native_story_conditions.mjs',
+    'web/core/story/native_story_mutations.mjs','web/core/exploration/native_map_chests.mjs','web/core/exploration/map_stage.mjs','web/core/exploration/movement.mjs',
+    'web/core/world/world.mjs','web/core/battle/battle_rewards.mjs','web/core/items/native_economy.mjs',
     'tests/helpers/inner_white_forest_world.mjs','tests/helpers/inner_white_forest_seal_world.mjs',
     'tests/helpers/floating_city_world.mjs','tests/helpers/yc05_jl03_world.mjs','tests/helpers/floating_city_pc02_world.mjs',
     'tests/helpers/fairy_forest_temple_world.mjs','tests/helpers/wind_region_world.mjs','tests/helpers/guild_world.mjs',

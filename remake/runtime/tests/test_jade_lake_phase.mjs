@@ -1,13 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {WorldStore,encodeSave,decodeSave} from '../web/core/world.mjs';
-import {WorldMapController} from '../web/core/world_map.mjs';
-import {worldMapEntry} from '../web/core/map_connections.mjs';
-import {runtimeContent} from '../web/core/content_registry.mjs';
-import {admitPartyMember,deactivatePartyMember} from '../web/core/party_members.mjs';
-import {migrateEquipment} from '../web/core/equipment.mjs';
-import {initialEncounterState} from '../web/core/encounters.mjs';
-import {applyExperience} from '../web/core/battle_rewards.mjs';
+import {WorldStore,encodeSave,decodeSave} from '../web/core/world/world.mjs';
+import {WorldMapController} from '../web/core/exploration/world_map.mjs';
+import {worldMapEntry} from '../web/core/exploration/map_connections.mjs';
+import {runtimeContent} from '../web/core/content/content_registry.mjs';
+import {admitPartyMember,deactivatePartyMember} from '../web/core/party/party_members.mjs';
+import {migrateEquipment} from '../web/core/party/equipment.mjs';
+import {initialEncounterState} from '../web/core/exploration/encounters.mjs';
+import {applyExperience} from '../web/core/battle/battle_rewards.mjs';
 import {jadeLakeSource,jadeLakeWorld,jadeLakeRunner,jadeLakeRead,lakeMapIds} from './helpers/jade_lake_world.mjs';
 
 const source=await jadeLakeSource(),copy=structuredClone;

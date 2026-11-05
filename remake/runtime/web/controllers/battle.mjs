@@ -1,23 +1,23 @@
 // Combat owns its transient sessions. Cross-system effects use the host ports.
-import {effectiveSkillSource} from "../core/battle_skill_access.mjs";
-import {BattleController} from "../core/combat.mjs";
-import {resolveAction, applyNativeDamage, createNativeRng} from "../core/combat_rules.mjs";
+import {effectiveSkillSource} from "../core/battle/battle_skill_access.mjs";
+import {BattleController} from "../core/battle/battle_controller.mjs";
+import {resolveAction, applyNativeDamage, createNativeRng} from "../core/battle/combat_rules.mjs";
 import {createBattleSample, resourcesForWorld, consumeBattleMp} from "../combat_sample.mjs";
 import {BattleView} from "../battle_view.mjs";
 import {BattleMenuView} from "../battle_menu_view.mjs";
 import {createForestSample, assembleForestSample} from "../forest_sample.mjs";
 import {createPartySample} from "../party_sample.mjs";
-import {partyResourcesForWorld, consumePartyMp} from "../core/party_attributes.mjs";
-import {battleStage} from "../core/content_registry.mjs";
-import {planPartyDefeat} from "../core/recovery.mjs";
-import {techniqueSlots,techniqueSlotName} from "../core/menu_techniques.mjs";
-import {battleTechniqueId} from "../core/battle_techniques.mjs";
-import {WorldStore} from "../core/world.mjs";
+import {partyResourcesForWorld, consumePartyMp} from "../core/party/party_attributes.mjs";
+import {battleStage} from "../core/content/content_registry.mjs";
+import {planPartyDefeat} from "../core/party/recovery.mjs";
+import {techniqueSlots,techniqueSlotName} from "../core/ui/menu_techniques.mjs";
+import {battleTechniqueId} from "../core/battle/battle_techniques.mjs";
+import {WorldStore} from "../core/world/world.mjs";
 import {createSkillTestSample} from "../skill_test_sample.mjs";
-import {commitSkillTestResources} from "../core/skill_test_commit.mjs";
-import {battleResources} from "../core/battle_resources.mjs";
-import {beginScriptedBattle,commitScriptedBattle} from '../core/scripted_battle.mjs';
-import {playbackTask} from '../core/story_playback.mjs';
+import {commitSkillTestResources} from "../core/battle/skill_test_commit.mjs";
+import {battleResources} from "../core/battle/battle_resources.mjs";
+import {beginScriptedBattle,commitScriptedBattle} from '../core/battle/scripted_battle.mjs';
+import {playbackTask} from '../core/story/story_playback.mjs';
 import {createBattleSessions} from './battle_sessions.mjs';
 
 export function createBattleController({host, sessions = createBattleSessions()}) {

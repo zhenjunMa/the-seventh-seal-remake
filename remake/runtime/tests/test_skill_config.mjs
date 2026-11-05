@@ -1,11 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {configureSkills,sourceSkillParameters} from '../web/core/skill_config.mjs';
+import {configureSkills,sourceSkillParameters} from '../web/core/config/skill_config.mjs';
 import {createBattleSample,resourcesForWorld,consumeBattleMp} from '../web/combat_sample.mjs';
-import {createNativeRng,resolveAction,applyNativeDamage} from '../web/core/combat_rules.mjs';
-import {BattleController} from '../web/core/combat.mjs';
-import {WorldStore,encodeSave,decodeSave} from '../web/core/world.mjs';
+import {createNativeRng,resolveAction,applyNativeDamage} from '../web/core/battle/combat_rules.mjs';
+import {BattleController} from '../web/core/battle/battle_controller.mjs';
+import {WorldStore,encodeSave,decodeSave} from '../web/core/world/world.mjs';
 const root=new URL('../',import.meta.url),read=async p=>JSON.parse(await readFile(new URL(p,root)));
 const [data,seed,config]=await Promise.all(['web/data/combat_sample.json','web/data/world_seed.json','web/data/skills.json'].map(read)),clone=v=>structuredClone(v);
 function debugConfig(){const next=clone(config);next.mode='debug';return next;}

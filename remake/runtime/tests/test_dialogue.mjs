@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 const {createStoryController}=await import('../web/controllers/story.mjs');
-const {dialoguePages,DialoguePlayback}=await import('../web/core/dialogue.mjs');
+const {dialoguePages,DialoguePlayback}=await import('../web/core/ui/dialogue.mjs');
 
 test('ordinary dialogue scrolls one row; thought pages clear; width uses ink cell before extra spacing',()=>{
   const profile={width:350,height:60,fontHeight:17,lineHeight:21};

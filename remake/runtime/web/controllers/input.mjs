@@ -1,10 +1,10 @@
 // input adapters. Persistent state belongs to the shared runtime context.
-import {useWorldItem, changeEquipment} from "../core/items.mjs";
-import {changeSkillShortcuts} from "../core/skill_shortcuts.mjs";
-import {availableFieldSkills} from "../core/field_skills.mjs";
-import {effectiveSkillSource} from "../core/battle_skill_access.mjs";
-import {createContentSample} from "../core/content_sample.mjs";
-import {createPartySkillSample,PARTY_SKILL_SAMPLE_ROSTERS} from "../core/party_skill_sample.mjs";
+import {useWorldItem, changeEquipment} from "../core/items/items.mjs";
+import {changeSkillShortcuts} from "../core/party/skill_shortcuts.mjs";
+import {availableFieldSkills} from "../core/party/field_skills.mjs";
+import {effectiveSkillSource} from "../core/battle/battle_skill_access.mjs";
+import {createContentSample} from "../core/content/content_sample.mjs";
+import {createPartySkillSample,PARTY_SKILL_SAMPLE_ROSTERS} from "../core/party/party_skill_sample.mjs";
 import {createFullscreenController} from "./fullscreen.mjs";
 
 export function createInputController({state, actions, $, canvas, ctx}) {

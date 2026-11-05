@@ -251,7 +251,7 @@ python3 -B remake/runtime/tools/source/inspect_equipment.py /path/to/SaveGame0.D
 python3 -B remake/runtime/tools/verify_tests.py --list --explain
 python3 -B remake/runtime/tools/verify_tests.py --report
 python3 -B remake/runtime/tools/verify_tests.py --since HEAD~1 --list --explain
-python3 -B remake/runtime/tools/verify_tests.py --changed remake/runtime/web/core/movement.mjs --explain
+python3 -B remake/runtime/tools/verify_tests.py --changed remake/runtime/web/core/exploration/movement.mjs --explain
 ```
 
 `--changed`可重复，须列全相关变化；`--domain battle`追加系统范围，可用于干净工作区。动态数据依赖第一版仍保守选便携整组，原版解析器变化追加source。只改文档不启动游戏回归。

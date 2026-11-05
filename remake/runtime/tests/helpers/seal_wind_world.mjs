@@ -2,7 +2,7 @@
 // pads, guardian roots and return markers. Instant battle callbacks remain
 // rule checks; they do not prove movement, rendered fights or heard audio.
 import assert from 'node:assert/strict';
-import {nativeOwnedQuantity} from '../../web/core/native_economy.mjs';
+import {nativeOwnedQuantity} from '../../web/core/items/native_economy.mjs';
 
 export async function sealWindComplete(source,earnedActions,{checkpoint=async()=>{}}={}){
   const {world,runner,go,object,setChoices,save}=earnedActions;

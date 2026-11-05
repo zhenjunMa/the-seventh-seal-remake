@@ -3,7 +3,7 @@
 // Exploration and ANM use the same logical plane as dialogue and menus.
 // view.zoom is relative to that plane, independent of window/fullscreen size.
 import {drawMapSprite} from './map_sprite.mjs';
-import {mapPresentation} from './core/map_presentation.mjs';
+import {mapPresentation} from './core/ui/map_presentation.mjs';
 export function drawGameScene(ctx,options) {
   const {width,height}=options,scale=Math.min(width/640,height/480);
   ctx.clearRect(0,0,width,height);ctx.fillStyle='#000';ctx.fillRect(0,0,width,height);

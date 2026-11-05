@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {buildContentLibrary,resolveContentReference,searchContentLibrary} from '../web/core/content_library.mjs';
-import {createSkillRegistry} from '../web/core/skill_registry.mjs';
+import {buildContentLibrary,resolveContentReference,searchContentLibrary} from '../web/core/content/content_library.mjs';
+import {createSkillRegistry} from '../web/core/config/skill_registry.mjs';
 const json=async name=>JSON.parse(await readFile(new URL(`../web/data/${name}`,import.meta.url),'utf8'));
 const runtimeSkillIds=Object.keys(createSkillRegistry({party_skills:await json('party_skills.json'),ai:await json('forest_ai.json')}));
 const data={roles:await json('library/roles.json'),skills:await json('library/skills.json'),magic:await json('library/magic.json'),items:await json('items.json'),runtimeSkillIds,

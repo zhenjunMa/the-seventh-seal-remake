@@ -1,7 +1,7 @@
 // Bounded adapter from raw persistent DWORD resource bits to native battle data.
 // The actor/equipment source is one verified historical level-12 save. This is
 // an explicitly controlled encounter and fresh status/stance initialization.
-import {configureSkills} from './core/skill_config.mjs';
+import {configureSkills} from './core/config/skill_config.mjs';
 const clone = value => structuredClone(value);
 const addr = n => `0x${n.toString(16).padStart(8,'0')}`;
 function requireValue(ok,message) { if(!ok)throw new Error(message); }

@@ -2,10 +2,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {WorldStore,encodeSave,decodeSave} from '../web/core/world.mjs';
-import {compileItemConfiguration,upgradeItemConfiguration,deriveItemConfiguration} from '../web/core/item_registry.mjs';
-import {changeEquipment,canEquipItem} from '../web/core/items.mjs';
-import {isSupportedCrystalDefinition} from '../web/core/crystal_catalog.mjs';
+import {WorldStore,encodeSave,decodeSave} from '../web/core/world/world.mjs';
+import {compileItemConfiguration,upgradeItemConfiguration,deriveItemConfiguration} from '../web/core/items/item_registry.mjs';
+import {changeEquipment,canEquipItem} from '../web/core/items/items.mjs';
+import {isSupportedCrystalDefinition} from '../web/core/items/crystal_catalog.mjs';
 import {fireValleyPartyFixture,headlessRunner} from './helpers/fire_valley_world.mjs';
 const read=async name=>JSON.parse(await readFile(new URL(`../web/data/${name}.json`,import.meta.url),'utf8'));
 // Optional isolated official-producer output, used before the unified asset

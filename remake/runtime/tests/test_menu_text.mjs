@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {createMenuTextRenderer} from '../web/core/menu_text.mjs';
-import {operationMnuTextOptions} from '../web/core/menu_presentation.mjs';
+import {createMenuTextRenderer} from '../web/core/ui/menu_text.mjs';
+import {operationMnuTextOptions} from '../web/core/ui/menu_presentation.mjs';
 
 const manifest=JSON.parse(fs.readFileSync(new URL('../web/data/menu_fonts.json',import.meta.url),'utf8'));
 function canvas() {

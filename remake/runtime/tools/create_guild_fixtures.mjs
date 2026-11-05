@@ -6,11 +6,11 @@ import {createHash} from 'node:crypto';
 import {parseArgs} from 'node:util';
 import {resolve,relative,isAbsolute} from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {WorldStore,decodeSave,encodeSave} from '../web/core/world.mjs';
-import {locomotion} from '../web/core/movement.mjs';
+import {WorldStore,decodeSave,encodeSave} from '../web/core/world/world.mjs';
+import {locomotion} from '../web/core/exploration/movement.mjs';
 import {innerWhiteForestSource} from '../tests/helpers/inner_white_forest_world.mjs';
 import {guildComplete} from '../tests/helpers/guild_world.mjs';
-import {createPartySkillSample} from '../web/core/party_skill_sample.mjs';
+import {createPartySkillSample} from '../web/core/party/party_skill_sample.mjs';
 
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 export async function createGuildFixtures({from,out,nearEvents=false,violent=false,level99=false}){

@@ -153,7 +153,7 @@ class ShippedCatalog(unittest.TestCase):
         script = """
 import fs from 'node:fs';
 import assert from 'node:assert/strict';
-import {sourceSkillParameters} from './web/core/skill_config.mjs';
+import {sourceSkillParameters} from './web/core/config/skill_config.mjs';
 const data=JSON.parse(fs.readFileSync('./web/data/library/skills.json','utf8'));
 for(const [id,skill] of Object.entries(data.skills)){
   const {preparation_delay_raw,...parameters}=skill.source_defaults;

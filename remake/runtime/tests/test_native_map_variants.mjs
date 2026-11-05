@@ -1,13 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {mapId,runtimeContent,validateContentRegistration} from '../web/core/content_registry.mjs';
-import {validateCompactRecords,STORY_RESOURCE_TABLES,storyDigest} from '../web/core/story_packages.mjs';
-import {validateChapterStory} from '../web/core/chapter.mjs';
-import {StoryRepository} from '../web/core/story_repository.mjs';
-import {validateQuests} from '../web/core/story_quests.mjs';
-import {createAudioController} from '../web/core/audio.mjs';
-import {planRouteExit} from '../web/core/route.mjs';
-import {nativeMapIdFromFilename} from '../web/core/native_map_identity.mjs';
+import {mapId,runtimeContent,validateContentRegistration} from '../web/core/content/content_registry.mjs';
+import {validateCompactRecords,STORY_RESOURCE_TABLES,storyDigest} from '../web/core/story/story_packages.mjs';
+import {validateChapterStory} from '../web/core/story/chapter_runner.mjs';
+import {StoryRepository} from '../web/core/story/story_repository.mjs';
+import {validateQuests} from '../web/core/story/story_quests.mjs';
+import {createAudioController} from '../web/core/resources/audio.mjs';
+import {planRouteExit} from '../web/core/exploration/route.mjs';
+import {nativeMapIdFromFilename} from '../web/core/exploration/native_map_identity.mjs';
 
 const variants=['M17030','M17030-1','M17030-2','M01020A','M70074_2','M03012_1F','M70078-1_1','M71076-1-03','M72010-0-A','MTEST','MTEST2',
   ...Array.from({length:23},(_,index)=>`ELF-FOREST-${String.fromCharCode(65+index)}`),

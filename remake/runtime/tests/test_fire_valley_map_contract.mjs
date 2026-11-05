@@ -4,10 +4,10 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile,readdir} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
-import {runtimeContent,runtimeContentDefinition} from '../web/core/content_registry.mjs';
-import {STORY_RESOURCE_TABLES} from '../web/core/story_packages.mjs';
-import {StoryRepository} from '../web/core/story_repository.mjs';
-import {MovementMap} from '../web/core/movement.mjs';
+import {runtimeContent,runtimeContentDefinition} from '../web/core/content/content_registry.mjs';
+import {STORY_RESOURCE_TABLES} from '../web/core/story/story_packages.mjs';
+import {StoryRepository} from '../web/core/story/story_repository.mjs';
+import {MovementMap} from '../web/core/exploration/movement.mjs';
 import {createMapController} from '../web/controllers/map.mjs';
 
 const copy=structuredClone;

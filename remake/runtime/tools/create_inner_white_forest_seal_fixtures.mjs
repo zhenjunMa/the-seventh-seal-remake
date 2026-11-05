@@ -2,8 +2,8 @@
 // the separately labelled battle-growth sample are changed for UI observation.
 import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
-import {encodeSave} from '../web/core/world.mjs';
-import {applyExperience,progressHeaderForRole} from '../web/core/battle_rewards.mjs';
+import {encodeSave} from '../web/core/world/world.mjs';
+import {applyExperience,progressHeaderForRole} from '../web/core/battle/battle_rewards.mjs';
 import {innerWhiteForestSource} from '../tests/helpers/inner_white_forest_world.mjs';
 import {innerWhiteForestSealComplete} from '../tests/helpers/inner_white_forest_seal_world.mjs';
 

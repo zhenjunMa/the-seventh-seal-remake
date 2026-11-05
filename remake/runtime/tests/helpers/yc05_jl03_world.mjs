@@ -2,14 +2,14 @@
 // Battle outcome callbacks and source clocks are rule checks, not live play.
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {encodeSave,decodeSave} from '../../web/core/world.mjs';
-import {StoryPlayback} from '../../web/core/story_playback.mjs';
-import {allPartyRoles} from '../../web/core/party_roster.mjs';
-import {MapObjectRuntime} from '../../web/core/map_objects.mjs';
-import {projectMapStage} from '../../web/core/map_stage.mjs';
-import {planRouteExit} from '../../web/core/route.mjs';
-import {applyWorldMapCommandToDraft} from '../../web/core/world_map.mjs';
-import {chapterObjectState} from '../../web/core/chapter.mjs';
+import {encodeSave,decodeSave} from '../../web/core/world/world.mjs';
+import {StoryPlayback} from '../../web/core/story/story_playback.mjs';
+import {allPartyRoles} from '../../web/core/party/party_roster.mjs';
+import {MapObjectRuntime} from '../../web/core/exploration/map_objects.mjs';
+import {projectMapStage} from '../../web/core/exploration/map_stage.mjs';
+import {planRouteExit} from '../../web/core/exploration/route.mjs';
+import {applyWorldMapCommandToDraft} from '../../web/core/exploration/world_map.mjs';
+import {chapterObjectState} from '../../web/core/story/chapter_runner.mjs';
 import {floatingCityComplete} from './floating_city_world.mjs';
 import {innerWhiteForestRunner,innerWhiteForestRoute,innerWhiteForestSelect} from './inner_white_forest_world.mjs';
 

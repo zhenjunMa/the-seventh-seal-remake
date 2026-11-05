@@ -31,8 +31,8 @@ smoke = observed['final_frozen_code_smoke']
 assert smoke['state']=={'playerHp':'HP 996 / 1056','enemyHp':'HP 863 / 1362','impacts':'2','round':'2'}
 assert 'HP 932 / 1056' in smoke['restored_party']
 paths = ['web/app.js', 'web/index.html', 'web/style.css', 'web/battle_shell.css',
-         'web/battle_view.mjs', 'web/combat_sample.mjs', 'web/core/combat.mjs',
-         'web/core/combat_rules.mjs', 'web/core/scenes.mjs', 'web/data/catalog.json',
+         'web/battle_view.mjs', 'web/combat_sample.mjs', 'web/core/battle/battle_controller.mjs',
+         'web/core/battle/combat_rules.mjs', 'web/core/exploration/scene_controller.mjs', 'web/data/catalog.json',
          'web/data/combat_sample.json', 'web/data/battle_view.json']
 report = dict(schema='seventh-seal-turn-browser-verification', version=1, success=True,
               checks=8, observations_sha256=sha(EVIDENCE/'turn_browser_observations_20261011.json'),

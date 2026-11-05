@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {MovementMap, locomotion} from '../../runtime/web/core/movement.mjs';
+import {MovementMap, locomotion} from '../../runtime/web/core/exploration/movement.mjs';
 
 const fixture = rows => new MovementMap({schema:'seventh-seal-map-movement',version:1,
   width:rows[0].length,height:rows.length,cell_size:16,terrain_rows:rows,triggers:[]});

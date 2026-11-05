@@ -1,9 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {WorldStore,encodeSave,decodeSave} from '../web/core/world.mjs';
-import {BattleController} from '../web/core/combat.mjs';
-import {resolveAction,applyNativeDamage,createNativeRng} from '../web/core/combat_rules.mjs';
+import {WorldStore,encodeSave,decodeSave} from '../web/core/world/world.mjs';
+import {BattleController} from '../web/core/battle/battle_controller.mjs';
+import {resolveAction,applyNativeDamage,createNativeRng} from '../web/core/battle/combat_rules.mjs';
 import {createBattleSample,resourcesForWorld} from '../web/combat_sample.mjs';
 const root=new URL('../',import.meta.url),paths=['web/data/world_seed.json','web/data/combat_sample.json'];
 const bytes=await Promise.all(paths.map(p=>readFile(new URL(p,root)))),[seed,data]=bytes.map(b=>JSON.parse(b));

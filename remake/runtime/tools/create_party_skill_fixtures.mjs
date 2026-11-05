@@ -2,10 +2,10 @@
 import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {isDeepStrictEqual} from 'node:util';
-import {createPartySkillSample,PARTY_SKILL_SAMPLE_ROSTERS,partySampleSkillIndices} from '../web/core/party_skill_sample.mjs';
-import {partyBattleSkills} from '../web/core/battle_skill_access.mjs';
-import {allPartyRoles} from '../web/core/party_roster.mjs';
-import {encodeSave,decodeSave} from '../web/core/world.mjs';
+import {createPartySkillSample,PARTY_SKILL_SAMPLE_ROSTERS,partySampleSkillIndices} from '../web/core/party/party_skill_sample.mjs';
+import {partyBattleSkills} from '../web/core/battle/battle_skill_access.mjs';
+import {allPartyRoles} from '../web/core/party/party_roster.mjs';
+import {encodeSave,decodeSave} from '../web/core/world/world.mjs';
 
 const runtime=new URL('../',import.meta.url),folder=new URL('evidence/party_skill_alignment_20261027/',runtime);
 const read=async path=>JSON.parse(await readFile(new URL(path,runtime),'utf8'));

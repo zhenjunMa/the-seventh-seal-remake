@@ -1,6 +1,6 @@
 // Independent controlled saves, never edit an original or browser save.
 import {readFile,writeFile,mkdir} from 'node:fs/promises';
-import {WorldStore,decodeSave,encodeSave} from '../web/core/world.mjs';
+import {WorldStore,decodeSave,encodeSave} from '../web/core/world/world.mjs';
 const base=new URL('../',import.meta.url),dir=new URL('evidence/battle_lifecycle_20261015/',base);
 const seed=JSON.parse(await readFile(new URL('evidence/battle_alignment_20261015/controlled_entry_save.json',base),'utf8'));
 await mkdir(dir,{recursive:true});

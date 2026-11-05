@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {WorldStore,encodeSave,decodeSave} from '../web/core/world.mjs';
+import {WorldStore,encodeSave,decodeSave} from '../web/core/world/world.mjs';
 import {innerWhiteForestSource,innerWhiteForestRunner} from './helpers/inner_white_forest_world.mjs';
 import {floatingCitySecondComplete} from './helpers/floating_city_pc02_world.mjs';
 

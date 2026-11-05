@@ -191,7 +191,7 @@ def make_plan(manifest, profile='task', changed=None, domains=(), regions=(), si
                 add(pool, f'内容数据变化，动态依赖保守检查便携组：{name}')
             elif name.startswith(prefix+'web/'):
                 add(direct or pool, f'代码依赖：{name}' if direct else f'未确定依赖，扩大便携检查：{name}')
-                if name.endswith(('/story_flow.mjs', '/story_flow_compiler.mjs', '/chapter.mjs')):
+                if name.endswith(('/story_flow.mjs', '/story_flow_compiler.mjs', '/chapter_runner.mjs', '/native_records.mjs', '/object_state.mjs')):
                     add(select_tests(manifest, ['content-full']), f'共享剧情执行机制变化：{name}')
             else:
                 add(pool, f'未分类运行改动，保守扩大：{name}')
@@ -212,7 +212,7 @@ def make_plan(manifest, profile='task', changed=None, domains=(), regions=(), si
             raise ValueError('没有匹配的测试；不能把空筛选当成通过')
     content_check = (profile in {'phase', 'release'} or bool(regions) or any(
         name.startswith((prefix+'web/data/', prefix+'web/content/')) or
-        name.endswith(('/content_readiness.mjs', '/story_flow_compiler.mjs', '/chapter.mjs'))
+        name.endswith(('/content_readiness.mjs', '/story_flow_compiler.mjs', '/chapter_runner.mjs', '/native_records.mjs', '/object_state.mjs'))
         for name in relevant))
     return dict(profile=profile, changed=changed, files=sorted(reasons), reasons=reasons,
                 content_check=content_check, filtered=bool(patterns),

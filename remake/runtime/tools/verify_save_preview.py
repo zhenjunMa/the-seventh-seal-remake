@@ -39,7 +39,7 @@ def main():
     assert '0x68' in procedures['0x478410'] and '0x4c' in procedures['0x478410']
     original=read(RUNTIME/'evidence/startup_menu_export_20261020.json')['source_hashes']
     assert sha(ROOT/'GAME.exe')==original['GAME.exe']
-    names=['web/startup_view.mjs','web/startup.css','web/map_scene_view.mjs','web/core/save_preview.mjs',
+    names=['web/startup_view.mjs','web/startup.css','web/map_scene_view.mjs','web/core/world/save_preview.mjs',
         'web/controllers/map.mjs','web/controllers/services.mjs','web/controllers/boot.mjs',
         'tests/test_startup.mjs','tests/test_save_preview.mjs','tools/verify_save_preview.py']
     fingerprints={(RUNTIME/n).relative_to(ROOT).as_posix():sha(RUNTIME/n) for n in names}

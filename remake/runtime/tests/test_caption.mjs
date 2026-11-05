@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
-import {CaptionPlayback,captionLayout} from '../web/core/caption.mjs';
+import {CaptionPlayback,captionLayout} from '../web/core/ui/caption.mjs';
 const {createStoryController}=await import('../web/controllers/story.mjs');
 
 test('style3 centers text in its shade and leaves room for the continuation marker',async()=>{

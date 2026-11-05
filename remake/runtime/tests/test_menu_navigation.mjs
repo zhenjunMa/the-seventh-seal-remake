@@ -2,10 +2,10 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {OperationMenuView} from '../web/operation_menu_view.mjs';
-import {operationStatus} from '../web/core/operation_menu.mjs';
+import {operationStatus} from '../web/core/ui/operation_menu.mjs';
 import {createMenuController} from '../web/controllers/menu.mjs';
-import {WorldStore} from '../web/core/world.mjs';
-import {createMenuSettings} from '../web/core/menu_settings.mjs';
+import {WorldStore} from '../web/core/world/world.mjs';
+import {createMenuSettings} from '../web/core/ui/menu_settings.mjs';
 
 const load = name => JSON.parse(readFileSync(new URL(`../web/data/${name}.json`,import.meta.url)));
 const manifest=load('operation_menu'), supplement=load('operation_techniques'), attributes=load('party_combat'), items=load('items');

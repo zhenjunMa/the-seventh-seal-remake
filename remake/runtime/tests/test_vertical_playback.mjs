@@ -1,11 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {BattleController} from '../web/core/combat.mjs';
+import {BattleController} from '../web/core/battle/battle_controller.mjs';
 import {BattleView} from '../web/battle_view.mjs';
 import {BattleLifecyclePlayback} from '../web/battle_lifecycle_view.mjs';
-import {directSequence} from '../web/core/skill_sequence.mjs';
-import {chargeActor} from '../web/core/battle_scheduler.mjs';
+import {directSequence} from '../web/core/battle/skill_sequence.mjs';
+import {chargeActor} from '../web/core/battle/battle_scheduler.mjs';
 const read=async p=>JSON.parse(await readFile(new URL(p,import.meta.url),'utf8')),copy=structuredClone;
 const [sources,reactions,metadata,forest,scheduler]=await Promise.all([
  './fixtures/native_vertical_sequences.json','../web/data/party_reactions.json','../web/data/party_battle_view.json','../web/data/party_combat.json','../web/data/battle_scheduler.json'].map(read));

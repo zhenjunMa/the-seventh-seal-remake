@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {BattleMenuView} from '../web/battle_menu_view.mjs';
-import {battleActorPositions} from '../web/core/battle_layout.mjs';
+import {battleActorPositions} from '../web/core/battle/battle_layout.mjs';
 import {NativeAssemblyOracle} from './native_assembly_oracle.mjs';
 
 const read=path=>JSON.parse(readFileSync(new URL(path,import.meta.url),'utf8'));

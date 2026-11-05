@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {existsSync,readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
-import {decodeSave} from '../web/core/world.mjs';
+import {decodeSave} from '../web/core/world/world.mjs';
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
 const manifestURL=new URL('../evidence/white_forest_20261026/phase_fixture_manifest.json',import.meta.url);
 const scriptURL=new URL('../evidence/white_forest_20261026/prepare_phase_fixtures.mjs',import.meta.url);

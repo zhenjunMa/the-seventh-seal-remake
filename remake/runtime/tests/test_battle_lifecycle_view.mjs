@@ -3,7 +3,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {BattleLifecyclePlayback,APPEARANCE_ALPHA_ADAPTER} from '../web/battle_lifecycle_view.mjs';
-import {BattleController} from '../web/core/combat.mjs';
+import {BattleController} from '../web/core/battle/battle_controller.mjs';
 import {BattleView} from '../web/battle_view.mjs';
 import {AppearanceParticles} from '../web/appearance_particles.mjs';
 import {createDeathParticleSurface} from '../web/death_particles.mjs';

@@ -1,12 +1,12 @@
 // Current party commands use their CHR records, independent of the retained
 // historical battle fixture. Every implemented role command uses the same
 // owner/source-bound numeric configuration registry.
-import {createPartyActors} from './core/party_attributes.mjs';
-import {runtimeSkillParameters,skillOwner} from './core/skill_registry.mjs';
-import {battleMenuSkillOrder,validateSourceSkillShortcuts} from './core/skill_shortcuts.mjs';
-import {partyBattleSkills,battleSkillEligibility,effectiveSkillSource,applySavedSkillProgress} from './core/battle_skill_access.mjs';
-import {correctPartySkillType} from './core/party_skill_corrections.mjs';
-import {createBattleTechniques} from './core/battle_techniques.mjs';
+import {createPartyActors} from './core/party/party_attributes.mjs';
+import {runtimeSkillParameters,skillOwner} from './core/config/skill_registry.mjs';
+import {battleMenuSkillOrder,validateSourceSkillShortcuts} from './core/party/skill_shortcuts.mjs';
+import {partyBattleSkills,battleSkillEligibility,effectiveSkillSource,applySavedSkillProgress} from './core/battle/battle_skill_access.mjs';
+import {correctPartySkillType} from './core/party/party_skill_corrections.mjs';
+import {createBattleTechniques} from './core/battle/battle_techniques.mjs';
 const copy=structuredClone;
 const need=(ok,message)=>{if(!ok)throw new Error(message);};
 const fixed=skill=>{need(/^(?:[0-9a-f]{2}){1053}$/.test(skill?.fixed_raw_hex),'队伍技能源记录缺失');return Uint8Array.from(skill.fixed_raw_hex.match(/../g),x=>parseInt(x,16));};

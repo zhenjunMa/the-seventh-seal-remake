@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync,existsSync} from 'node:fs';
 import {createHash} from 'node:crypto';
-import {createAudioController, validateAudioManifest} from '../web/core/audio.mjs';
+import {createAudioController, validateAudioManifest} from '../web/core/resources/audio.mjs';
 
 const data = JSON.parse(readFileSync(new URL('../web/data/audio.json', import.meta.url)));
 const digest = raw => createHash('sha256').update(raw).digest('hex');

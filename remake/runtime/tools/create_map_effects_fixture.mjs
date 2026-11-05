@@ -1,8 +1,8 @@
 // UI-only entries. These are explicit relocations from a new-game seed, not
 // evidence of a continuous walk through the chapter or original execution.
 import {readFile,writeFile,mkdir} from 'node:fs/promises';
-import {encodeSave} from '../web/core/world.mjs';
-import {MovementMap} from '../web/core/movement.mjs';
+import {encodeSave} from '../web/core/world/world.mjs';
+import {MovementMap} from '../web/core/exploration/movement.mjs';
 const root=new URL('../',import.meta.url),read=async name=>JSON.parse(await readFile(new URL('web/data/'+name+'.json',root),'utf8'));
 const seed=await read('opening_seed'),folder=new URL('evidence/map_effects_20261021/',root);await mkdir(folder,{recursive:true});
 const positions={entrance:{map_id:'M17010',x:1072,y:1168,direction:3},

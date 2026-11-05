@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
-import {openingCamera,approachPoint,directArrivalMoves} from '../web/core/opening_presentation.mjs';
-import {OpeningRunner} from '../web/core/opening.mjs';
+import {openingCamera,approachPoint,directArrivalMoves} from '../web/core/ui/opening_presentation.mjs';
+import {OpeningRunner} from '../web/core/story/opening.mjs';
 import {ActionClock} from '../web/phaser/components/action_clock.mjs';
 const {OpeningView}=await import('../web/opening_view.mjs');
 const read=async name=>JSON.parse(await fs.readFile(new URL(`../web/data/${name}.json`,import.meta.url),'utf8'));

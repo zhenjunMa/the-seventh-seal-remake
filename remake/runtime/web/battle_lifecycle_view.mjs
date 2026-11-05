@@ -5,7 +5,7 @@
  * ev_e7ebc40b1eb0efaa9d96ff7f3e6fc290955d8807dff0dc831ad32c06ceb45a70.
  */
 import {DeathParticlePlayback,DEATH_PARTICLE_TIMING} from './death_particles.mjs';
-import {nativeEntryPath,advanceNativeEntryPath,nativeEntryOffset} from './core/battle_entry.mjs';
+import {nativeEntryPath,advanceNativeEntryPath,nativeEntryOffset} from './core/battle/battle_entry.mjs';
 const need=(ok,message)=>{if(!ok)throw new TypeError(message);};
 const copy=value=>structuredClone(value);
 const integer=(value,min=0)=>Number.isInteger(value)&&value>=min;

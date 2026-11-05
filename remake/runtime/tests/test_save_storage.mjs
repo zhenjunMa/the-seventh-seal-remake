@@ -1,9 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {createSaveStorage} from '../web/core/save_storage.mjs';
-import {encodeSave} from '../web/core/world.mjs';
-import {MANUAL_SAVE_SLOTS,SAVE_SLOT_COUNT,normalizeSaveSlot,saveSlotLabel} from '../web/core/save_slots.mjs';
+import {createSaveStorage} from '../web/core/world/save_storage.mjs';
+import {encodeSave} from '../web/core/world/world.mjs';
+import {MANUAL_SAVE_SLOTS,SAVE_SLOT_COUNT,normalizeSaveSlot,saveSlotLabel} from '../web/core/world/save_slots.mjs';
 const seed=JSON.parse(readFileSync(new URL('../web/data/opening_seed.json',import.meta.url)));
 const saved=()=>encodeSave(seed);
 const reply=(status,value)=>({status,ok:status>=200&&status<300,json:async()=>value,blob:async()=>value});

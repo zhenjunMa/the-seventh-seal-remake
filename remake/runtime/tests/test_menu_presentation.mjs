@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {operationSummaryFields, operationStandingFrame,operationColorRef,operationMnuTextOptions} from '../web/core/menu_presentation.mjs';
+import {operationSummaryFields, operationStandingFrame,operationColorRef,operationMnuTextOptions} from '../web/core/ui/menu_presentation.mjs';
 
 test('role board preserves native padded current fields and separate maximum fields', () => {
   const status={level:10,hp:{current:900,maximum:900},mp:{current:0,maximum:40},experience:5318,nextLevelExperience:632};

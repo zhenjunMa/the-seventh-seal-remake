@@ -1,6 +1,6 @@
 import {drawingContext} from './phaser/rendering/recorded_surface.mjs';
 // Original Progress01 + Progress.mnu in a fixed 640x480 viewport.
-import {playbackFrame,playbackDelay,playbackTask} from './core/story_playback.mjs';
+import {playbackFrame,playbackDelay,playbackTask} from './core/story/story_playback.mjs';
 export class LoadingView {
   static async create({manifest,image,...options}) {
     const [backgrounds,frame,fill]=await Promise.all([

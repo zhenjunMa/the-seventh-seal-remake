@@ -19,6 +19,27 @@
 
 Phaser关闭内建输入和音频，由既有控制器统一处理。规则不写进Sprite、view或`app.js`；实验复用方向为prototype→runtime，正式运行及构建不读取实验目录。
 
+## 领域模块与阅读入口
+
+`web/core/`按领域分组；目录表达职责，不增加世界状态或新的执行器。跨领域显式导入实际模块，不设置同名转发文件或统一的全量导出入口。
+
+| 目录 | 职责与主要入口 |
+| --- | --- |
+| `core/battle/` | 本场战斗规则及编排；[battle_controller](web/core/battle/battle_controller.mjs)负责调度与生命周期，[item_action](web/core/battle/item_action.mjs)执行药品行动，[settlement](web/core/battle/settlement.mjs)投影结算资源；`enemy_ai`是通用敌人选招。 |
+| `core/story/` | [chapter_runner](web/core/story/chapter_runner.mjs)协调剧情事务与行为，`story_flow`执行共同指令图；`native_records`校验来源与解码选项，`object_state`读取及修改草稿中的物件记录。 |
+| `core/exploration/` | 地形、移动、NPC、物件、遇敌、出口与大地图；`scene_controller`负责地图准备和提交，不是Phaser Scene。 |
+| `core/party/` | 人物属性、队伍、装备、晶石、技巧绑定与野外技巧。 |
+| `core/items/` | 道具效果、资格与经济规则；`native_story_items`只初始化原版剧情奖励实例，不发奖或提交世界。 |
+| `core/world/` | WorldStore、存档访问、栏位和预览模型。 |
+| `core/content/` | 内容定义、登记、能力与依赖检查；`native_bytes`提供原记录的公共字节校验。 |
+| `core/config/` | 配置合并、启动快照、技能配置和注册。 |
+| `core/ui/` | 菜单、对白、字幕和演出的显示模型；实际视图仍由`web/*_view.mjs`及Phaser适配拥有。 |
+| `core/resources/` | 图片加载缓存与音频适配。 |
+
+战斗主循环只分派完整行动，药品的目标复查、复活、库存消耗和结果记录在同一行动模块内完成。药品仍在原动作接触时提交本场效果，重复接触只返回既有结果。结算辅助只修改调用者提供的草稿，WorldStore提交、revision检查和奖励去重仍由原事务边界负责。
+
+原版来源的schema、编号、偏移、字节与指纹保持其来源含义；通用模块不以最早接入的区域命名。关键模块展开复杂条件与异步步骤，说明输入、副作用和提交时机。`chapter_runner`保留已有辅助函数导出供工具兼容，新调用应直接导入辅助函数所属模块。
+
 ## 状态与提交
 
 | 持有者 | 状态与提交边界 |
@@ -30,7 +51,7 @@ Phaser关闭内建输入和音频，由既有控制器统一处理。规则不�
 | 启动配置会话 | boot读取并编译一次配置；菜单复用冻结的道具、技能源和技能注册表，战斗与技巧测试取得独立副本；刷新页面才重新读取。人物当前资源及成长仍来自最新世界。 |
 | 浏览器偏好与临时视图 | 音量、光标、完成标记独立于世界；焦点、动画、租约和加载锁不进入游戏进度。 |
 
-普通与快速存档统一使用原版v2二进制格式，目录仍为`remake/saves/`；普通档为`SaveGame0.Dat`～`SaveGame19.Dat`，快速档为`Game.SAV`，不读取旧JSON文件或浏览器旧档。`native_save.py`在文件边界完成编解码与校验，恢复人物、装备、技巧、旗标、事件和地图状态，保留尚未映射的原始区块；新游戏由正式资源定义生成原版格式。写入使用临时文件和同目录原子替换，固定00～19与quick接口沿用If-Match／If-None-Match。服务仅接受本地同源请求，不暴露原程序、evidence或任意文件路径。具体连接见[save_storage](web/core/save_storage.mjs)、[原版编解码](native_save.py)及[本地服务](serve.py)。
+普通与快速存档统一使用原版v2二进制格式，目录仍为`remake/saves/`；普通档为`SaveGame0.Dat`～`SaveGame19.Dat`，快速档为`Game.SAV`，不读取旧JSON文件或浏览器旧档。`native_save.py`在文件边界完成编解码与校验，恢复人物、装备、技巧、旗标、事件和地图状态，保留尚未映射的原始区块；新游戏由正式资源定义生成原版格式。写入使用临时文件和同目录原子替换，固定00～19与quick接口沿用If-Match／If-None-Match。服务仅接受本地同源请求，不暴露原程序、evidence或任意文件路径。具体连接见[save_storage](web/core/world/save_storage.mjs)、[原版编解码](native_save.py)及[本地服务](serve.py)。
 
 存档列表只返回原存档头中的队伍、地图、累计时间及已有缩略图，不构造世界状态或传输完整存档。RGB565缩略图像素原样包成浏览器可解码的BMP，缺图留空，不重建场景或重新生成PNG。服务按文件身份、大小、纳秒修改／变更时间缓存摘要；文件替换或修改后重新读取。列表指纹使用原文件SHA-256，覆盖时按同一指纹核对；确认读取后才完整解码及校验所选存档。
 

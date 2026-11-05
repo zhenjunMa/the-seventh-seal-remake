@@ -1,11 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {WorldStore,encodeSave,decodeSave,validateWorld} from '../web/core/world.mjs';
-import {skillShortcuts,changeSkillShortcuts,validateSourceSkillShortcuts,battleMenuSkillOrder} from '../web/core/skill_shortcuts.mjs';
+import {WorldStore,encodeSave,decodeSave,validateWorld} from '../web/core/world/world.mjs';
+import {skillShortcuts,changeSkillShortcuts,validateSourceSkillShortcuts,battleMenuSkillOrder} from '../web/core/party/skill_shortcuts.mjs';
 import {createPartySample} from '../web/party_sample.mjs';
-import {effectiveSkillSource} from '../web/core/battle_skill_access.mjs';
-import {admitPartyMember} from '../web/core/party_members.mjs';
+import {effectiveSkillSource} from '../web/core/battle/battle_skill_access.mjs';
+import {admitPartyMember} from '../web/core/party/party_members.mjs';
 const load=n=>JSON.parse(readFileSync(new URL(`../web/data/${n}.json`,import.meta.url),'utf8'));
 const source=load('party_skills'),attributes=load('party_combat'),items=load('items');
 const initial=JSON.parse(JSON.parse(readFileSync(new URL('../evidence/chapter_systems_home_save.json',import.meta.url),'utf8')).payload);

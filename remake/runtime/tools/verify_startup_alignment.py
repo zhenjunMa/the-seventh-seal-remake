@@ -52,7 +52,7 @@ def verify():
         for name, digest in export[field].items():
             assert sha(ROOT / name) == digest, name
     code_names = [
-        'web/startup_view.mjs', 'web/core/startup.mjs', 'web/core/audio.mjs',
+        'web/startup_view.mjs', 'web/core/ui/startup.mjs', 'web/core/resources/audio.mjs',
         'web/controllers/boot.mjs', 'web/controllers/session.mjs', 'web/controllers/input.mjs',
         'web/controllers/map.mjs', 'web/controllers/state.mjs', 'web/index.html', 'web/startup.css',
         'web/data/startup_menu.json', 'web/data/startup_media.json', 'web/tests/startup_storage.html',

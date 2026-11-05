@@ -1,15 +1,15 @@
 // Shared YC-04 production rules replay and named handoffs for browser checks.
 // Checkpoints retain earned state; positioning for a browser check is separate.
 import assert from 'node:assert/strict';
-import {WorldStore,encodeSave,decodeSave} from '../../web/core/world.mjs';
-import {chapterObjectState} from '../../web/core/chapter.mjs';
-import {planRouteExit} from '../../web/core/route.mjs';
-import {applyWorldMapCommandToDraft} from '../../web/core/world_map.mjs';
-import {compileItemConfiguration} from '../../web/core/item_registry.mjs';
-import {insertCrystal,removeCrystal,socketEquipmentRows} from '../../web/core/crystal_sockets.mjs';
-import {StoryPlayback} from '../../web/core/story_playback.mjs';
-import {nativeEconomyCatalog,readNativeService,applyNativeServiceAction} from '../../web/core/native_economy.mjs';
-import {nativeKeyedChest} from '../../web/core/native_map_chests.mjs';
+import {WorldStore,encodeSave,decodeSave} from '../../web/core/world/world.mjs';
+import {chapterObjectState} from '../../web/core/story/chapter_runner.mjs';
+import {planRouteExit} from '../../web/core/exploration/route.mjs';
+import {applyWorldMapCommandToDraft} from '../../web/core/exploration/world_map.mjs';
+import {compileItemConfiguration} from '../../web/core/items/item_registry.mjs';
+import {insertCrystal,removeCrystal,socketEquipmentRows} from '../../web/core/party/crystal_sockets.mjs';
+import {StoryPlayback} from '../../web/core/story/story_playback.mjs';
+import {nativeEconomyCatalog,readNativeService,applyNativeServiceAction} from '../../web/core/items/native_economy.mjs';
+import {nativeKeyedChest} from '../../web/core/exploration/native_map_chests.mjs';
 import {innerWhiteForestComplete,innerWhiteForestRunner,innerWhiteForestRoute,
   innerWhiteForestSelect} from './inner_white_forest_world.mjs';
 

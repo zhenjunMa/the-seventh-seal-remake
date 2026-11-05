@@ -1,7 +1,7 @@
 // Full regional enumeration is explicit phase/release coverage.
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {runtimeContent} from '../web/core/content_registry.mjs';
+import {runtimeContent} from '../web/core/content/content_registry.mjs';
 import {story,regional,world,runner} from './helpers/fire_valley_case.mjs';
 
 test('all 21 admitted Fire Valley maps retain native identities and every NPC entry executes under three source flag states',async()=>{

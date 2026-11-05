@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {drawGameScene,drawOpeningScene} from '../web/map_scene_view.mjs';
-import {openingCamera} from '../web/core/opening_presentation.mjs';
+import {openingCamera} from '../web/core/ui/opening_presentation.mjs';
 const {createMapController}=await import('../web/controllers/map.mjs');
 const {createStoryController}=await import('../web/controllers/story.mjs');
 const {OpeningView}=await import('../web/opening_view.mjs');

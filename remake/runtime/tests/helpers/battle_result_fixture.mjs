@@ -5,16 +5,16 @@
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
-import {WorldStore,decodeSave,encodeSave} from '../../web/core/world.mjs';
-import {BattleController} from '../../web/core/combat.mjs';
+import {WorldStore,decodeSave,encodeSave} from '../../web/core/world/world.mjs';
+import {BattleController} from '../../web/core/battle/battle_controller.mjs';
 import {createPartySample} from '../../web/party_sample.mjs';
 import {assembleForestSample} from '../../web/forest_sample.mjs';
-import {partyResourcesForWorld,consumePartyMp} from '../../web/core/party_attributes.mjs';
-import {resolveAction,applyNativeDamage,createNativeRng} from '../../web/core/combat_rules.mjs';
-import {previewMovement} from '../../web/core/encounters.mjs';
-import {loadRuntimeConfiguration,compileRuntimeConfiguration} from '../../web/core/runtime_config.mjs';
+import {partyResourcesForWorld,consumePartyMp} from '../../web/core/party/party_attributes.mjs';
+import {resolveAction,applyNativeDamage,createNativeRng} from '../../web/core/battle/combat_rules.mjs';
+import {previewMovement} from '../../web/core/exploration/encounters.mjs';
+import {loadRuntimeConfiguration,compileRuntimeConfiguration} from '../../web/core/config/runtime_config.mjs';
 import {BattleView} from '../../web/battle_view.mjs';
-import {MovementMap} from '../../web/core/movement.mjs';
+import {MovementMap} from '../../web/core/exploration/movement.mjs';
 
 const runtime=new URL('../../',import.meta.url);
 const read=async path=>JSON.parse(await readFile(new URL(path,runtime),'utf8'));

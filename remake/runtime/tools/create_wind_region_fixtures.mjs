@@ -6,8 +6,8 @@ import {createHash} from 'node:crypto';
 import {parseArgs} from 'node:util';
 import {resolve,relative,isAbsolute} from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {WorldStore,encodeSave,decodeSave} from '../web/core/world.mjs';
-import {locomotion} from '../web/core/movement.mjs';
+import {WorldStore,encodeSave,decodeSave} from '../web/core/world/world.mjs';
+import {locomotion} from '../web/core/exploration/movement.mjs';
 import {innerWhiteForestSource} from '../tests/helpers/inner_white_forest_world.mjs';
 import {windRegionComplete,windIslandChests} from '../tests/helpers/wind_region_world.mjs';
 
@@ -54,7 +54,7 @@ export async function createWindRegionFixtures({from,out,nearEvents=false,servic
   }
   const runtimeInputs=Object.fromEntries(await Promise.all(['web/data/runtime_content.json','web/data/runtime_content.mjs','web/data/chapter_story.json',
     'web/data/chapter_map_resources.json','web/data/encounters.json','web/data/world_map.json','web/data/story/shared.json',
-    'web/data/items.json','web/data/config/items.json','web/core/movement.mjs','tests/helpers/wind_region_world.mjs',
+    'web/data/items.json','web/data/config/items.json','web/core/exploration/movement.mjs','tests/helpers/wind_region_world.mjs',
     'tools/create_wind_region_fixtures.mjs'].map(async path=>[path,hash(await readFile(new URL(path,new URL('../',import.meta.url))))])));
   await mkdir(directory,{recursive:true});const files=[];
   for(const [index,checkpoint]of checkpoints.entries()){

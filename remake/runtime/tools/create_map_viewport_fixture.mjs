@@ -1,7 +1,7 @@
 // Controlled visual regression entry for the reported first visit to Kai.
 // Keeps the source opening seed and conditions; only location/status are set.
 import {readFile,mkdir,writeFile} from 'node:fs/promises';
-import {encodeSave} from '../web/core/world.mjs';
+import {encodeSave} from '../web/core/world/world.mjs';
 const root=new URL('../',import.meta.url),read=async path=>JSON.parse(await readFile(new URL(path,root),'utf8'));
 const world=await read('web/data/opening_seed.json');
 world.opening.status='complete';world.location={map_id:'M17029',x:648,y:632,direction:1};

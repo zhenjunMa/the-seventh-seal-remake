@@ -1,7 +1,7 @@
 // Independent UI scene; no original input or existing browser save is changed.
 import {readFile,writeFile} from 'node:fs/promises';
-import {WorldStore,decodeSave,encodeSave} from '../web/core/world.mjs';
-import {restorePartyAfterRest} from '../web/core/recovery.mjs';
+import {WorldStore,decodeSave,encodeSave} from '../web/core/world/world.mjs';
+import {restorePartyAfterRest} from '../web/core/party/recovery.mjs';
 const root=new URL('../',import.meta.url),read=async p=>JSON.parse(await readFile(new URL(p,root),'utf8'));
 const world=new WorldStore(await decodeSave(await read('evidence/chapter_systems_win_save.json')));
 const before=world.snapshot();let resources;

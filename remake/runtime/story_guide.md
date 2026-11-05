@@ -13,6 +13,8 @@
 
 原TLK、自编事件与旧核对事件统一编译为StoryFlow。StoryFlowRunner执行流程，ChapterRunner提供世界事务和游戏行为；新增区域沿同一执行器，不复制剧情VM。
 
+规则入口在`web/core/story/`：`chapter_runner.mjs`负责执行与事务，`native_records.mjs`负责TLK来源校验与选项解码，`object_state.mjs`负责原物件事件记录。原剧情奖励实例初始化位于`web/core/items/native_story_items.mjs`，它不自行发奖或提交进度。地图运行规则在`core/exploration/`，战斗规则在`core/battle/`；按职责扩展已有模块。
+
 来源、编辑和生成层各有职责；修改参数用[统一配置](config_guide.md)，修改原剧情必须先核对来源。按原编号查角色／道具／技能，重名不静默选择，来源目录中的未接入技能不可直接执行。
 
 ## 地图与NPC接入

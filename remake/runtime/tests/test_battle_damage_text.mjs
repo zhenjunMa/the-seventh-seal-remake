@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {BattleView} from '../web/battle_view.mjs';
-import {directSequence} from '../web/core/skill_sequence.mjs';
+import {directSequence} from '../web/core/battle/skill_sequence.mjs';
 
 const web=new URL('../web/',import.meta.url);
 const read=async name=>JSON.parse(await readFile(new URL('data/'+name,web)));

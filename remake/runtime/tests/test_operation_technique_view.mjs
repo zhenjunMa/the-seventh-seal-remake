@@ -2,8 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {OperationTechniqueView} from '../web/operation_technique_view.mjs';
-import {changeTechniqueSlot,techniqueSlots,createTechniqueCombination,deleteTechniqueCombination} from '../web/core/menu_techniques.mjs';
-import {WorldStore} from '../web/core/world.mjs';
+import {changeTechniqueSlot,techniqueSlots,createTechniqueCombination,deleteTechniqueCombination} from '../web/core/ui/menu_techniques.mjs';
+import {WorldStore} from '../web/core/world/world.mjs';
 
 const load=name=>JSON.parse(readFileSync(new URL(`../web/data/${name}.json`,import.meta.url),'utf8'));
 const manifest=load('operation_menu'),source=load('party_skills'),supplement=load('operation_techniques');

@@ -1,11 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {WorldStore,encodeSave,decodeSave} from '../web/core/world.mjs';
-import {admitPartyMember,deactivatePartyMember} from '../web/core/party_members.mjs';
-import {allPartyRoles} from '../web/core/party_roster.mjs';
-import {restoreNativeStoryResources,restorePartyAfterRest} from '../web/core/recovery.mjs';
-import {applyNativeStoryMutation,validateNativeStoryMutation} from '../web/core/native_story_mutations.mjs';
+import {WorldStore,encodeSave,decodeSave} from '../web/core/world/world.mjs';
+import {admitPartyMember,deactivatePartyMember} from '../web/core/party/party_members.mjs';
+import {allPartyRoles} from '../web/core/party/party_roster.mjs';
+import {restoreNativeStoryResources,restorePartyAfterRest} from '../web/core/party/recovery.mjs';
+import {applyNativeStoryMutation,validateNativeStoryMutation} from '../web/core/story/native_story_mutations.mjs';
 const copy=structuredClone;
 const [seed,tlk,game]=await Promise.all([
   readFile(new URL('../web/data/opening_seed.json',import.meta.url),'utf8').then(JSON.parse),

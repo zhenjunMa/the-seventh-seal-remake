@@ -1,6 +1,6 @@
 import {menuText,menuStyle,menuImage} from './menu_dom.mjs';
-import {techniqueSlots,sourceTechniqueSlot,techniqueSlotName,techniqueCandidates,TECHNIQUE_CATEGORIES,TECHNIQUE_WHEEL_NAVIGATION,techniqueCombinations,techniqueCombinationName} from './core/menu_techniques.mjs';
-import {operationSummaryFields} from './core/menu_presentation.mjs';
+import {techniqueSlots,sourceTechniqueSlot,techniqueSlotName,techniqueCandidates,TECHNIQUE_CATEGORIES,TECHNIQUE_WHEEL_NAVIGATION,techniqueCombinations,techniqueCombinationName} from './core/ui/menu_techniques.mjs';
+import {operationSummaryFields} from './core/ui/menu_presentation.mjs';
 
 const position=(node,x,y,w=null,h=null)=>Object.assign(node.style,{position:'absolute',left:x+'px',top:y+'px',...(w===null?{}:{width:w+'px'}),...(h===null?{}:{height:h+'px'})});
 const skillRecords=new WeakMap();

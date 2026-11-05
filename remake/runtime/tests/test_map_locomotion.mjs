@@ -1,9 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {DistanceGait,mapMotionProfile,mapStepGeometry,nativeMapMovement} from '../web/core/map_locomotion.mjs';
-import {MovementMap,KeyboardMovement} from '../web/core/movement.mjs';
-import {initialEncounterState} from '../web/core/encounters.mjs';
+import {DistanceGait,mapMotionProfile,mapStepGeometry,nativeMapMovement} from '../web/core/exploration/map_locomotion.mjs';
+import {MovementMap,KeyboardMovement} from '../web/core/exploration/movement.mjs';
+import {initialEncounterState} from '../web/core/exploration/encounters.mjs';
 
 const {createMapController}=await import('../web/controllers/map.mjs');
 const read=name=>JSON.parse(readFileSync(new URL('../web/data/'+name+'.json',import.meta.url),'utf8'));

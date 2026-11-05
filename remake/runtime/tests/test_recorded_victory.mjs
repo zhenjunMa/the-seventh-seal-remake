@@ -3,12 +3,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
-import {WorldStore} from '../web/core/world.mjs';
-import {BattleController} from '../web/core/combat.mjs';
+import {WorldStore} from '../web/core/world/world.mjs';
+import {BattleController} from '../web/core/battle/battle_controller.mjs';
 import {createBattleFixtureController as createBattleController} from './helpers/battle_controller.mjs';
-import {partyResourcesForWorld} from '../web/core/party_attributes.mjs';
-import {createNativeRng} from '../web/core/combat_rules.mjs';
-import {deriveRuntimeConfiguration, compileRuntimeConfiguration} from '../web/core/runtime_config.mjs';
+import {partyResourcesForWorld} from '../web/core/party/party_attributes.mjs';
+import {createNativeRng} from '../web/core/battle/combat_rules.mjs';
+import {deriveRuntimeConfiguration, compileRuntimeConfiguration} from '../web/core/config/runtime_config.mjs';
 
 test('recorded three-enemy victory preserves its rewards, native RNG and one-time world commit', async () => {
   const read=async name=>JSON.parse(await fs.readFile(new URL('../web/data/'+name+'.json',import.meta.url),'utf8'));

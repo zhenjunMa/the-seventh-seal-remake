@@ -3,13 +3,13 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {BattleView} from '../web/battle_view.mjs';
-import {BattleController} from '../web/core/combat.mjs';
-import {compileNativeSequence,directSequence} from '../web/core/skill_sequence.mjs';
-import {WorldStore} from '../web/core/world.mjs';
+import {BattleController} from '../web/core/battle/battle_controller.mjs';
+import {compileNativeSequence,directSequence} from '../web/core/battle/skill_sequence.mjs';
+import {WorldStore} from '../web/core/world/world.mjs';
 import {createForestSample} from '../web/forest_sample.mjs';
 import {createHandoffFixture} from '../web/tests/battle_handoff_fixture.mjs';
-import {isActorReady} from '../web/core/battle_scheduler.mjs';
-import {selectNativeNormalReaction} from '../web/core/battle_reactions.mjs';
+import {isActorReady} from '../web/core/battle/battle_scheduler.mjs';
+import {selectNativeNormalReaction} from '../web/core/battle/battle_reactions.mjs';
 const base=new URL('../web/',import.meta.url),read=async p=>JSON.parse(await readFile(new URL(p.replace(/^\//,''),base),'utf8'));
 const meta=await read('/data/party_battle_view.json'),life=await read('/data/battle_lifecycle.json');
 function canvas(){const calls=[],c={globalAlpha:1,save(){},restore(){},setTransform(){},translate(){},clearRect(){},fillRect(){},beginPath(){},rect(){},clip(){},ellipse(){},fill(){},moveTo(){},lineTo(){},stroke(){},createLinearGradient(){return {addColorStop(){}};},drawImage(img,...args){calls.push({path:img.path,args});},fillText(){},strokeText(){}};return {width:960,height:540,getContext:()=>c,calls};}

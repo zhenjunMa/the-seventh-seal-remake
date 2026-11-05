@@ -1,6 +1,6 @@
 import {drawingContext} from './phaser/rendering/recorded_surface.mjs';
-import {CaptionPlayback,captionLayout} from './core/caption.mjs';
-import {createMenuTextRenderer} from './core/menu_text.mjs';
+import {CaptionPlayback,captionLayout} from './core/ui/caption.mjs';
+import {createMenuTextRenderer} from './core/ui/menu_text.mjs';
 
 export class CaptionView {
   static async create({manifest,fonts,image,...options}) {

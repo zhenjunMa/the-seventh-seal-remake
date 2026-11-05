@@ -2,10 +2,10 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {createStoryController} from '../web/controllers/story.mjs';
-import {StoryPlayback} from '../web/core/story_playback.mjs';
+import {StoryPlayback} from '../web/core/story/story_playback.mjs';
 import {ActionClock} from '../web/phaser/components/action_clock.mjs';
 import {RewardNoticeView} from '../web/reward_notice_view.mjs';
-import {nativeNpcActionBindings} from '../web/core/map_npcs.mjs';
+import {nativeNpcActionBindings} from '../web/core/exploration/map_npcs.mjs';
 
 const roles=JSON.parse(fs.readFileSync(new URL('../web/data/story/shared.json',import.meta.url),'utf8')).roles;
 for(const role of Object.values(roles))role.native_action_bindings=nativeNpcActionBindings(role);

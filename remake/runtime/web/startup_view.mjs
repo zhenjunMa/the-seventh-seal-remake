@@ -1,5 +1,5 @@
 import {drawingContext} from './phaser/rendering/recorded_surface.mjs';
-import {StartupSequence} from './core/startup.mjs';
+import {StartupSequence} from './core/ui/startup.mjs';
 import {appendSavePreview} from './save_preview_view.mjs';
 import {renderSaveSlotText} from './save_slot_view.mjs';
 

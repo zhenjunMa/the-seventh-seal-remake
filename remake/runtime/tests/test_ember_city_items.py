@@ -20,20 +20,20 @@ IDS = [13, 21, *range(23, 29), *range(272, 277), *range(278, 281),
 CONTRACT = r"""
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {deriveItemConfiguration,compileItemConfiguration} from './web/core/item_registry.mjs';
-import {restoreActorWithItem,itemTargetEligible} from './web/core/items.mjs';
-import {withItemQuantity} from './web/core/equipment.mjs';
-import {initializeNativeStatuses,applyNativeItemStatus,removeNativeStatus,tickNativeStatuses} from './web/core/battle_status.mjs';
-import {selectNativeRevivalAnimation} from './web/core/battle_reactions.mjs';
+import {deriveItemConfiguration,compileItemConfiguration} from './web/core/items/item_registry.mjs';
+import {restoreActorWithItem,itemTargetEligible} from './web/core/items/items.mjs';
+import {withItemQuantity} from './web/core/party/equipment.mjs';
+import {initializeNativeStatuses,applyNativeItemStatus,removeNativeStatus,tickNativeStatuses} from './web/core/battle/battle_status.mjs';
+import {selectNativeRevivalAnimation} from './web/core/battle/battle_reactions.mjs';
 import {NativeAssemblyOracle} from './tests/native_assembly_oracle.mjs';
-import {WorldStore,encodeSave,decodeSave} from './web/core/world.mjs';
-import {createRewardLedger,collectEnemyDefeat,planVictoryRewards} from './web/core/battle_rewards.mjs';
-import {admitPartyMember} from './web/core/party_members.mjs';
-import {BattleController} from './web/core/combat.mjs';
+import {WorldStore,encodeSave,decodeSave} from './web/core/world/world.mjs';
+import {createRewardLedger,collectEnemyDefeat,planVictoryRewards} from './web/core/battle/battle_rewards.mjs';
+import {admitPartyMember} from './web/core/party/party_members.mjs';
+import {BattleController} from './web/core/battle/battle_controller.mjs';
 import {createPartySample} from './web/party_sample.mjs';
 import {assembleForestSample} from './web/forest_sample.mjs';
-import {resolveAction,applyNativeDamage} from './web/core/combat_rules.mjs';
-import {partyResourcesForWorld,consumePartyMp} from './web/core/party_attributes.mjs';
+import {resolveAction,applyNativeDamage} from './web/core/battle/combat_rules.mjs';
+import {partyResourcesForWorld,consumePartyMp} from './web/core/party/party_attributes.mjs';
 const input=JSON.parse(fs.readFileSync(0,'utf8')),copy=structuredClone;
 const cfg=deriveItemConfiguration(input.catalog),data=compileItemConfiguration(input.catalog,cfg,'original').data;
 const functions={...input.instructions.instructions,'0x508bb0':input.proof.normalized_result.assembly,

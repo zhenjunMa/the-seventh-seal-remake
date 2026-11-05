@@ -1,13 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {nativeRandomBranches} from '../web/core/native_story_random.mjs';
-import {compileTlkFlow} from '../web/core/story_flow_compiler.mjs';
-import {StoryFlowRunner} from '../web/core/story_flow.mjs';
-import {WorldStore,encodeSave,decodeSave} from '../web/core/world.mjs';
-import {chapterObjectState} from '../web/core/chapter.mjs';
+import {nativeRandomBranches} from '../web/core/story/native_story_random.mjs';
+import {compileTlkFlow} from '../web/core/story/story_flow_compiler.mjs';
+import {StoryFlowRunner} from '../web/core/story/story_flow.mjs';
+import {WorldStore,encodeSave,decodeSave} from '../web/core/world/world.mjs';
+import {chapterObjectState} from '../web/core/story/chapter_runner.mjs';
 import {innerWhiteForestSource,innerWhiteForestRunner} from './helpers/inner_white_forest_world.mjs';
-import {MapObjectRuntime} from '../web/core/map_objects.mjs';
+import {MapObjectRuntime} from '../web/core/exploration/map_objects.mjs';
 
 test('real sewer, forest and Luther WORD weights keep every threshold in source and compact flows',async()=>{
   for(const [file,id,expected]of [['m01053',6,[[31,90],[7,10]]],['Elf-forest-E',3,[[22,20],[4,80]]],

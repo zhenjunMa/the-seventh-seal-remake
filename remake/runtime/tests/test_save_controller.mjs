@@ -1,14 +1,14 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {WorldStore,encodeSave,decodeSave,validateWorld,DEFAULT_GAME_SETTINGS} from '../web/core/world.mjs';
-import {SceneController} from '../web/core/scenes.mjs';
+import {WorldStore,encodeSave,decodeSave,validateWorld,DEFAULT_GAME_SETTINGS} from '../web/core/world/world.mjs';
+import {SceneController} from '../web/core/exploration/scene_controller.mjs';
 import {createServicesController} from '../web/controllers/services.mjs';
 import {createStoryController} from '../web/controllers/story.mjs';
 import {createInputController} from '../web/controllers/input.mjs';
 import {createMenuController} from '../web/controllers/menu.mjs';
 import {PhaserRuntime} from '../web/phaser/runtime.mjs';
-import {MANUAL_SAVE_SLOTS} from '../web/core/save_slots.mjs';
+import {MANUAL_SAVE_SLOTS} from '../web/core/world/save_slots.mjs';
 
 const {createSessionController}=await import('../web/controllers/session.mjs');
 globalThis.document={createElement:()=>({textContent:''})};

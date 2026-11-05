@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {ChapterRunner} from '../web/core/chapter.mjs';
-import {ChapterAnimationRunner} from '../web/core/chapter_animation.mjs';
-import {WorldStore,encodeSave,decodeSave} from '../web/core/world.mjs';
+import {ChapterRunner} from '../web/core/story/chapter_runner.mjs';
+import {ChapterAnimationRunner} from '../web/core/story/chapter_animation.mjs';
+import {WorldStore,encodeSave,decodeSave} from '../web/core/world/world.mjs';
 import {firstReturnSource,firstReturnWorld,originalTlk} from './helpers/first_return_source.mjs';
 const data=await firstReturnSource(),copy=structuredClone;
 function fixture(options={}){

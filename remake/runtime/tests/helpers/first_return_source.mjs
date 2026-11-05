@@ -1,10 +1,10 @@
 import {readFile} from 'node:fs/promises';
 import {pathToFileURL} from 'node:url';
 import {createHash} from 'node:crypto';
-import {resolveContentDefinition} from '../../web/core/content_definition.mjs';
-import {admitPartyMember} from '../../web/core/party_members.mjs';
-import {initializeChapterItem,chapterChoices,validateChapterStory} from '../../web/core/chapter.mjs';
-import {compileTlkFlow} from '../../web/core/story_flow_compiler.mjs';
+import {resolveContentDefinition} from '../../web/core/content/content_definition.mjs';
+import {admitPartyMember} from '../../web/core/party/party_members.mjs';
+import {initializeChapterItem,chapterChoices,validateChapterStory} from '../../web/core/story/chapter_runner.mjs';
+import {compileTlkFlow} from '../../web/core/story/story_flow_compiler.mjs';
 const web=new URL('../../web/',import.meta.url),original=new URL('../../../../',import.meta.url);
 const isolated=process.env.FIRST_RETURN_RUNTIME?new URL('web/',pathToFileURL(process.env.FIRST_RETURN_RUNTIME.replace(/[/\\]?$/,'/'))):null;
 export async function firstReturnRead(path){

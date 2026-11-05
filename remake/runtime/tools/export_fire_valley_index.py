@@ -290,8 +290,8 @@ def build_index(region_label=REGION_LABEL, region_id="fire-valley", exact_label=
         if map_id not in members:
             members.append(map_id)
     members.sort()
-    animation_code = RUNTIME / "web/core/chapter_animation.mjs"
-    compiler_code = RUNTIME / "web/core/story_flow_compiler.mjs"
+    animation_code = RUNTIME / "web/core/story/chapter_animation.mjs"
+    compiler_code = RUNTIME / "web/core/story/story_flow_compiler.mjs"
     match = re.search(r"const OPCODES\s*=\s*new Set\(\[([\d,\s]+)\]\)", animation_code.read_text("utf-8"))
     if not match:
         raise ValueError("Cannot locate chapter animation declared opcode contract")

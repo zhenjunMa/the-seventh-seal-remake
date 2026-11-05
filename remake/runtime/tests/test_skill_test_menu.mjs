@@ -3,8 +3,8 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {OperationMenuView} from '../web/operation_menu_view.mjs';
 import {createMenuController} from '../web/controllers/menu.mjs';
-import {WorldStore} from '../web/core/world.mjs';
-import {chapterRoleFromDefinition} from '../web/core/chapter.mjs';
+import {WorldStore} from '../web/core/world/world.mjs';
+import {chapterRoleFromDefinition} from '../web/core/story/chapter_runner.mjs';
 
 const load=name=>JSON.parse(readFileSync(new URL(`../web/data/${name}.json`,import.meta.url),'utf8'));
 const manifest=load('operation_menu'),supplement=load('operation_techniques'),source=load('party_skills');

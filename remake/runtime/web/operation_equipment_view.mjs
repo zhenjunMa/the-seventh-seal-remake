@@ -1,7 +1,7 @@
 import {menuText,menuStyle,menuImage} from './menu_dom.mjs';
 // Game001a / Game001b equipment presentation. This view never changes world
 // equipment, saved item rolls, or actor resources; the controller owns commits.
-import {EQUIPMENT_ATTRIBUTES} from './core/item_registry.mjs';
+import {EQUIPMENT_ATTRIBUTES} from './core/items/item_registry.mjs';
 
 const sourceNumber=(definition,instanceOffset,definitionOffset)=>{
   const name=EQUIPMENT_ATTRIBUTES.find(row=>row[1]===instanceOffset)?.[0];

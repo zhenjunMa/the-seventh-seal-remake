@@ -1,4 +1,4 @@
-import {battleBitmapResident,onBattleBitmapEvicted} from '../../core/battle_resources.mjs';
+import {battleBitmapResident,onBattleBitmapEvicted} from '../../core/battle/battle_resources.mjs';
 let serial=0;
 
 // ImageResources and BattleResources keep ownership of decoded pixels and hashes.

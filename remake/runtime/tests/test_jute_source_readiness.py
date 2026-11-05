@@ -27,14 +27,14 @@ from source.dgp import DGP, DGPError
 NODE_CONTRACT = r"""
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {admitPartyMember} from './web/core/party_members.mjs';
-import {ChapterAnimationRunner} from './web/core/chapter_animation.mjs';
-import {runtimeContent} from './web/core/content_registry.mjs';
-import {createPartyActors} from './web/core/party_attributes.mjs';
-import {battleMenuSkillOrder,skillShortcuts} from './web/core/skill_shortcuts.mjs';
-import {learnedOperationSkills} from './web/core/operation_menu.mjs';
-import {compileNativeSequence,directSequence} from './web/core/skill_sequence.mjs';
-import {resolveAction,createNativeRng} from './web/core/combat_rules.mjs';
+import {admitPartyMember} from './web/core/party/party_members.mjs';
+import {ChapterAnimationRunner} from './web/core/story/chapter_animation.mjs';
+import {runtimeContent} from './web/core/content/content_registry.mjs';
+import {createPartyActors} from './web/core/party/party_attributes.mjs';
+import {battleMenuSkillOrder,skillShortcuts} from './web/core/party/skill_shortcuts.mjs';
+import {learnedOperationSkills} from './web/core/ui/operation_menu.mjs';
+import {compileNativeSequence,directSequence} from './web/core/battle/skill_sequence.mjs';
+import {resolveAction,createNativeRng} from './web/core/battle/combat_rules.mjs';
 import {NativeAssemblyOracle} from './tests/native_assembly_oracle.mjs';
 const input=JSON.parse(fs.readFileSync(0,'utf8')),copy=structuredClone;
 const world=copy(input.seed),content=copy(runtimeContent),definition=world.source.role_definitions['005'];

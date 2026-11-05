@@ -5,9 +5,9 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
-import {MapObjectRuntime} from '../web/core/map_objects.mjs';
-import {MovementMap} from '../web/core/movement.mjs';
-import {createNativeRng} from '../web/core/combat_rules.mjs';
+import {MapObjectRuntime} from '../web/core/exploration/map_objects.mjs';
+import {MovementMap} from '../web/core/exploration/movement.mjs';
+import {createNativeRng} from '../web/core/battle/combat_rules.mjs';
 import {NativeAssemblyOracle} from './native_assembly_oracle.mjs';
 import {forestSwitches} from './helpers/fairy_forest_temple_world.mjs';
 

@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {createAudioController} from '../web/core/audio.mjs';
-import {createMenuSettings} from '../web/core/menu_settings.mjs';
+import {createAudioController} from '../web/core/resources/audio.mjs';
+import {createMenuSettings} from '../web/core/ui/menu_settings.mjs';
 
 const manifest = JSON.parse(readFileSync(new URL('../web/data/audio.json', import.meta.url)));
 const tick = async () => { await Promise.resolve(); await Promise.resolve(); };

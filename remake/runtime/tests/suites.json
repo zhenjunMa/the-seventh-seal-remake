@@ -441,12 +441,13 @@
   "domains": {
     "battle": {
       "modules": [
-        "web/core/battle*.mjs",
-        "web/core/combat*.mjs",
-        "web/core/*skill*.mjs",
         "web/battle*.mjs",
         "web/phaser/rendering/battle*.mjs",
-        "web/controllers/battle.mjs"
+        "web/controllers/battle.mjs",
+        "web/core/battle/*.mjs",
+        "web/core/party/*.mjs",
+        "web/core/items/*.mjs",
+        "web/core/config/*.mjs"
       ],
       "tests": [
         "test_battle*",
@@ -457,13 +458,10 @@
     },
     "story": {
       "modules": [
-        "web/core/chapter*.mjs",
-        "web/core/story*.mjs",
-        "web/core/anm*.mjs",
         "web/controllers/story.mjs",
         "web/actor_effect_view.mjs",
         "web/opening_view.mjs",
-        "web/core/opening_presentation.mjs"
+        "web/core/story/*.mjs"
       ],
       "tests": [
         "test_actor_effects_source.mjs",
@@ -475,10 +473,8 @@
     },
     "movement": {
       "modules": [
-        "web/core/movement.mjs",
-        "web/core/map*.mjs",
-        "web/core/scenes.mjs",
-        "web/controllers/map.mjs"
+        "web/controllers/map.mjs",
+        "web/core/exploration/*.mjs"
       ],
       "tests": [
         "test_map*",
@@ -487,10 +483,9 @@
     },
     "save": {
       "modules": [
-        "web/core/world.mjs",
-        "web/core/*save*.mjs",
         "web/controllers/save*.mjs",
-        "serve.py"
+        "serve.py",
+        "web/core/world/*.mjs"
       ],
       "tests": [
         "test_save*",
@@ -500,8 +495,8 @@
     "menu": {
       "modules": [
         "web/*menu*.mjs",
-        "web/core/*menu*.mjs",
-        "web/controllers/menu.mjs"
+        "web/controllers/menu.mjs",
+        "web/core/ui/*.mjs"
       ],
       "tests": [
         "test_menu*",
@@ -511,10 +506,10 @@
     "engine": {
       "modules": [
         "web/phaser/*",
-        "web/core/*clock*.mjs",
-        "web/core/*resources*.mjs",
-        "web/core/*playback*.mjs",
-        "web/*resources*.mjs"
+        "web/*resources*.mjs",
+        "web/core/resources/*.mjs",
+        "web/core/battle/*resources*.mjs",
+        "web/core/story/*playback*.mjs"
       ],
       "tests": [
         "test_battle_clock*",

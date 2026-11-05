@@ -4,7 +4,7 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {createHash} from 'node:crypto';
 import {spawnSync} from 'node:child_process';
-import {BattleResources} from '../web/core/battle_resources.mjs';
+import {BattleResources} from '../web/core/battle/battle_resources.mjs';
 import {exportStoryPackages} from './export_story_packages.mjs';
 
 const runtime=fileURLToPath(new URL('../',import.meta.url)),web=path.join(runtime,'web');

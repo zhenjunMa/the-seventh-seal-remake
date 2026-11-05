@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {innerWhiteForestSource} from './helpers/inner_white_forest_world.mjs';
 import {guildComplete} from './helpers/guild_world.mjs';
-import {WorldStore} from '../web/core/world.mjs';
+import {WorldStore} from '../web/core/world/world.mjs';
 
 const source=await innerWhiteForestSource();
 let earnedStart;

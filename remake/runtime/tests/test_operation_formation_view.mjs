@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {OperationFormationView} from '../web/operation_formation_view.mjs';
-import {exchangeFormationSlots} from '../web/core/party_formation.mjs';
+import {exchangeFormationSlots} from '../web/core/party/party_formation.mjs';
 const manifest=JSON.parse(readFileSync(new URL('../web/data/operation_menu.json',import.meta.url),'utf8'));
 class Node{
   constructor(doc,tag='div'){this.ownerDocument=doc;this.tagName=tag.toUpperCase();this.children=[];this.style={};this.attrs={};this.hidden=false;}

@@ -2,12 +2,12 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
-import {ChapterAnimationRunner,validateChapterAnimation} from '../web/core/chapter_animation.mjs';
+import {ChapterAnimationRunner,validateChapterAnimation} from '../web/core/story/chapter_animation.mjs';
 import {createStoryController} from '../web/controllers/story.mjs';
-import {runtimeContent} from '../web/core/content_registry.mjs';
-import {StoryPlayback} from '../web/core/story_playback.mjs';
-import {StoryRepository} from '../web/core/story_repository.mjs';
-import {STORY_RESOURCE_TABLES,storyDigest} from '../web/core/story_packages.mjs';
+import {runtimeContent} from '../web/core/content/content_registry.mjs';
+import {StoryPlayback} from '../web/core/story/story_playback.mjs';
+import {StoryRepository} from '../web/core/story/story_repository.mjs';
+import {STORY_RESOURCE_TABLES,storyDigest} from '../web/core/story/story_packages.mjs';
 
 const copy=structuredClone;
 const binding=id=>({path:`data/maps/${id.toLowerCase()}.json`,triggers:[],objects:[],rests:[],routes:[]});

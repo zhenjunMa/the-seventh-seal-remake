@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {operationStatus,operationItemCard,operationWeaponDetails} from '../web/core/operation_menu.mjs';
+import {operationStatus,operationItemCard,operationWeaponDetails} from '../web/core/ui/operation_menu.mjs';
 const load=name=>JSON.parse(readFileSync(new URL(`../web/data/${name}.json`,import.meta.url),'utf8'));
 const world=JSON.parse(JSON.parse(readFileSync(new URL('../evidence/chapter_systems_home_save.json',import.meta.url),'utf8')).payload);
 const attributes=load('party_combat'),items=load('items'),manifest=load('operation_menu');

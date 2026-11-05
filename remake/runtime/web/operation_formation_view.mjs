@@ -1,5 +1,5 @@
 import {menuImage} from './menu_dom.mjs';
-import {operationStandingFrame} from './core/menu_presentation.mjs';
+import {operationStandingFrame} from './core/ui/menu_presentation.mjs';
 
 const place=(node,x,y,width,height)=>Object.assign(node.style,{position:'absolute',left:x+'px',top:y+'px',...(width==null?{}:{width:width+'px'}),...(height==null?{}:{height:height+'px'})});
 

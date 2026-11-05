@@ -1,15 +1,15 @@
 // session adapters. Persistent state belongs to the shared runtime context.
-import {decodeSave,DEFAULT_GAME_SETTINGS} from "../core/world.mjs";
-import {createPartyActors} from "../core/party_attributes.mjs";
-import {effectiveSkillSource} from "../core/battle_skill_access.mjs";
-import {OpeningRunner} from "../core/opening.mjs";
-import {completedOpeningWorld} from "../core/opening_state.mjs";
+import {decodeSave,DEFAULT_GAME_SETTINGS} from "../core/world/world.mjs";
+import {createPartyActors} from "../core/party/party_attributes.mjs";
+import {effectiveSkillSource} from "../core/battle/battle_skill_access.mjs";
+import {OpeningRunner} from "../core/story/opening.mjs";
+import {completedOpeningWorld} from "../core/story/opening_state.mjs";
 import {OpeningView} from "../opening_view.mjs";
-import {playbackTask} from "../core/story_playback.mjs";
-import {validateSourceSkillShortcuts} from "../core/skill_shortcuts.mjs";
-import {techniqueSlots,techniqueCombinations} from "../core/menu_techniques.mjs";
-import {hasNativeStoryCompletion,loadStoryCompletion,saveStoryCompletion,STORY_COMPLETION_EVIDENCE} from '../core/story_completion.mjs';
-import {loadEncounterMap} from '../core/encounters.mjs';
+import {playbackTask} from "../core/story/story_playback.mjs";
+import {validateSourceSkillShortcuts} from "../core/party/skill_shortcuts.mjs";
+import {techniqueSlots,techniqueCombinations} from "../core/ui/menu_techniques.mjs";
+import {hasNativeStoryCompletion,loadStoryCompletion,saveStoryCompletion,STORY_COMPLETION_EVIDENCE} from '../core/story/story_completion.mjs';
+import {loadEncounterMap} from '../core/exploration/encounters.mjs';
 
 export function createSessionController({state, actions, $, canvas, ctx,completionStorage}) {
   let finishGameOver=null;

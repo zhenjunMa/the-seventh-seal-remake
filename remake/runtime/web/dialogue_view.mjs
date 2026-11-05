@@ -1,6 +1,6 @@
 import {drawingContext} from './phaser/rendering/recorded_surface.mjs';
-import {createMenuTextRenderer} from './core/menu_text.mjs';
-import {dialoguePages,DialoguePlayback} from './core/dialogue.mjs';
+import {createMenuTextRenderer} from './core/ui/menu_text.mjs';
+import {dialoguePages,DialoguePlayback} from './core/ui/dialogue.mjs';
 
 export class DialogueView {
   static async create({manifest,fonts,image,...options}){

@@ -35,23 +35,23 @@
 
 | 范畴 | 必须保持的规则 | 当前定位 |
 | --- | --- | --- |
-| 地图身份与资源 | 原ID可含有源依据的字母、连字符和下划线；素材目录读DAT +0x14E，不从文件名猜。背景复用不合并旗标／NPC身份。 | `tools/source/map_identity.py`、`source/map_data.py`；`web/core/native_map_identity.mjs` |
-| 加载与到达 | DAT +0x8A为加载布置，+0x13A为真实到达；NPC slot499不自动等于二者。恢复／缩略图用目标世界只读投影，不重播到达。 | `web/core/map_stage.mjs`、`scenes.mjs`；剧情指南 |
-| 传送与触发 | 描述符有0x2B紧凑表与0x42表，字段宽度不同。TLK kind2 +0x2F为目标入口marker，非本TLK记录。无cells描述符不增造触发格。 | `tools/source/map_data.py`；`web/core/chapter.mjs`、`map_connections.mjs` |
-| 原落点与移动适配 | 原4A5110可放置到terrain=1入口，允许移出但普通路径不进入。连续脚底不能封死原八邻对角接点；保留原地形、逻辑中心检查和NPC阻挡，不按地图ID补洞。 | `web/core/movement.mjs`；`tests/test_map_collision.mjs`、`test_map_transitions.mjs` |
-| 物件与宝箱 | 盘点交互表、更新队列和全部像素通道；CF4 +48为重建序号，F2为钥匙条件，+54起为十个奖励槽。即时完成与重载layer可不同。无TLK可直接走共同物件事务。 | `web/core/map_objects.mjs`、`native_map_chests.mjs`；`tools/export_chapter_story.py` |
-| CF1／CF7时序 | CF1物理帧与逻辑序列分开，410850初始化与4137C0单步循环保持原随机次序；隐藏物件继续更新。CF7独立处理默认／保存动作，不能套CF1。 | `web/core/map_objects.mjs`；`tests/test_cf1_map_effect_pixels.py`、`test_cf7_map_pixels.py` |
-| 演出调用与索引 | ANM名不决定执行地图；取实际TLK／DAT调用者和opcode10。ANM命令零基、分支目标原一基，TLK记录一基，日志保留偏移。opcode255依原分派，不一概终止。 | `web/core/chapter_animation.mjs`、`anm_runtime.mjs`；来源索引的external_callers |
-| 人物动作 | ROLE raw+7E按469F50取首个匹配，缺walk才继承idle；DAT的FF模板不代表已初始化。ANM33 +25低字节为到达朝向，不是速度。 | `tools/map_npc_fields.py`、`web/core/map_npcs.mjs`、`anm_runtime.mjs` |
-| DGP帧边界 | 动作可引用全局帧池；CHR显式区间读取DGP +0x16表，不以+0x12声明数裁剪，仍核表容量及物理帧池。存储RLE行可能超出显示矩形，严审完整流，只绘声明矩形。图集合并核身份、原动作、方向／间隔与可见像素。 | `tools/source/dgp.py`、`export_combat_presentation.py`、`web/core/skill_sequence.mjs`；`tests/test_dgp_native_clipping.mjs` |
-| 条件与技能 | 条件raw+0B、对象反转、装备／镶嵌持有及活跃slot都有语义；技能source ID须解析到原索引。学会、机制支持、配方解锁与服务可用分别校验。 | `web/core/native_story_conditions.mjs`、`native_story_mutations.mjs`、`skill_registry.mjs` |
-| 剧情战身份 | kind5为stage与最多六个20字节文件名，首NUL截断；合法031A1／031B2等basename不得截成三位ID。战斗执行仍查真实CHR、登记和处理器。 | `web/core/native_battle_filenames.mjs`、`scripted_battle.mjs` |
-| 原数值与加载派生 | 41D990／41C610上限≤下限时取下限且不抽RNG；速度采样另有规则。技能code需沿真实入口模式在不可变CHR上派生，不能用镜像初值或文件值直接替代。 | `web/core/config_overrides.mjs`、`combat_rules.mjs`、`native_skill_loading.mjs` |
-| HP、死亡与复活 | rawHP、显示HP和死亡类别分开；终局等落地及回执，复活候选／排队／接触共用资格。复活只换epoch，不清原Z和浮空时钟。 | `web/core/battle_revival.mjs`、`battle_vertical.mjs`、`recovery.mjs` |
-| 药品与被动 | 零HP／MP字段不代表无作用；mode、目标、首个状态解除、重复guard和实际接触共同决定消耗。普通type0记录保持来源资格；朱特005／29、30援攻按明确Bug修复在运行副本中纠正，原字节保留。 | `web/core/items.mjs`、`equipment.mjs`、`item_passives.mjs`、`party_skill_corrections.mjs` |
-| 独立载体 | wait0效果沿自己的源时钟继续接触，人物可进入下一行动；尾部效果保留施放时技能，不能迟到切回旧动作或改成wait-all。合并调度与通道推进使用同一绝对到期时间。 | `web/core/combat.mjs`、`battle_view.mjs`、`battle_controller.mjs`；`tests/test_battle_support.mjs` |
+| 地图身份与资源 | 原ID可含有源依据的字母、连字符和下划线；素材目录读DAT +0x14E，不从文件名猜。背景复用不合并旗标／NPC身份。 | `tools/source/map_identity.py`、`source/map_data.py`；`web/core/exploration/native_map_identity.mjs` |
+| 加载与到达 | DAT +0x8A为加载布置，+0x13A为真实到达；NPC slot499不自动等于二者。恢复／缩略图用目标世界只读投影，不重播到达。 | `web/core/exploration/map_stage.mjs`、`scenes.mjs`；剧情指南 |
+| 传送与触发 | 描述符有0x2B紧凑表与0x42表，字段宽度不同。TLK kind2 +0x2F为目标入口marker，非本TLK记录。无cells描述符不增造触发格。 | `tools/source/map_data.py`；`web/core/story/chapter_runner.mjs`、`map_connections.mjs` |
+| 原落点与移动适配 | 原4A5110可放置到terrain=1入口，允许移出但普通路径不进入。连续脚底不能封死原八邻对角接点；保留原地形、逻辑中心检查和NPC阻挡，不按地图ID补洞。 | `web/core/exploration/movement.mjs`；`tests/test_map_collision.mjs`、`test_map_transitions.mjs` |
+| 物件与宝箱 | 盘点交互表、更新队列和全部像素通道；CF4 +48为重建序号，F2为钥匙条件，+54起为十个奖励槽。即时完成与重载layer可不同。无TLK可直接走共同物件事务。 | `web/core/exploration/map_objects.mjs`、`native_map_chests.mjs`；`tools/export_chapter_story.py` |
+| CF1／CF7时序 | CF1物理帧与逻辑序列分开，410850初始化与4137C0单步循环保持原随机次序；隐藏物件继续更新。CF7独立处理默认／保存动作，不能套CF1。 | `web/core/exploration/map_objects.mjs`；`tests/test_cf1_map_effect_pixels.py`、`test_cf7_map_pixels.py` |
+| 演出调用与索引 | ANM名不决定执行地图；取实际TLK／DAT调用者和opcode10。ANM命令零基、分支目标原一基，TLK记录一基，日志保留偏移。opcode255依原分派，不一概终止。 | `web/core/story/chapter_animation.mjs`、`anm_runtime.mjs`；来源索引的external_callers |
+| 人物动作 | ROLE raw+7E按469F50取首个匹配，缺walk才继承idle；DAT的FF模板不代表已初始化。ANM33 +25低字节为到达朝向，不是速度。 | `tools/map_npc_fields.py`、`web/core/exploration/map_npcs.mjs`、`anm_runtime.mjs` |
+| DGP帧边界 | 动作可引用全局帧池；CHR显式区间读取DGP +0x16表，不以+0x12声明数裁剪，仍核表容量及物理帧池。存储RLE行可能超出显示矩形，严审完整流，只绘声明矩形。图集合并核身份、原动作、方向／间隔与可见像素。 | `tools/source/dgp.py`、`export_combat_presentation.py`、`web/core/battle/skill_sequence.mjs`；`tests/test_dgp_native_clipping.mjs` |
+| 条件与技能 | 条件raw+0B、对象反转、装备／镶嵌持有及活跃slot都有语义；技能source ID须解析到原索引。学会、机制支持、配方解锁与服务可用分别校验。 | `web/core/story/native_story_conditions.mjs`、`native_story_mutations.mjs`、`skill_registry.mjs` |
+| 剧情战身份 | kind5为stage与最多六个20字节文件名，首NUL截断；合法031A1／031B2等basename不得截成三位ID。战斗执行仍查真实CHR、登记和处理器。 | `web/core/content/native_battle_filenames.mjs`、`scripted_battle.mjs` |
+| 原数值与加载派生 | 41D990／41C610上限≤下限时取下限且不抽RNG；速度采样另有规则。技能code需沿真实入口模式在不可变CHR上派生，不能用镜像初值或文件值直接替代。 | `web/core/config/config_overrides.mjs`、`combat_rules.mjs`、`native_skill_loading.mjs` |
+| HP、死亡与复活 | rawHP、显示HP和死亡类别分开；终局等落地及回执，复活候选／排队／接触共用资格。复活只换epoch，不清原Z和浮空时钟。 | `web/core/battle/battle_revival.mjs`、`battle_vertical.mjs`、`recovery.mjs` |
+| 药品与被动 | 零HP／MP字段不代表无作用；mode、目标、首个状态解除、重复guard和实际接触共同决定消耗。普通type0记录保持来源资格；朱特005／29、30援攻按明确Bug修复在运行副本中纠正，原字节保留。 | `web/core/items/items.mjs`、`equipment.mjs`、`item_passives.mjs`、`party_skill_corrections.mjs` |
+| 独立载体 | wait0效果沿自己的源时钟继续接触，人物可进入下一行动；尾部效果保留施放时技能，不能迟到切回旧动作或改成wait-all。合并调度与通道推进使用同一绝对到期时间。 | `web/core/battle/battle_controller.mjs`、`battle_view.mjs`、`battle_controller.mjs`；`tests/test_battle_support.mjs` |
 | 文件名与媒体 | 原字面路径缺失不猜近名替代；扩展名不等于编码。BIK完整帧／音轨核对，浮点PCM转码要保留明确增益关系。 | `tools/export_audio.py`、`export_story_media.py`；`web/story_media_view.mjs` |
-| 菜单字库 | 按实际界面文本收集，包含已接敌人的目标名称；统一构建追加新字符并保留旧字形坐标。规则／战斗回放不能替代实际目标菜单的位图绘制验收。 | `tools/export_menu_text_gdi.py`、`web/core/menu_text.mjs`；`tests/test_menu_text.mjs` |
+| 菜单字库 | 按实际界面文本收集，包含已接敌人的目标名称；统一构建追加新字符并保留旧字形坐标。规则／战斗回放不能替代实际目标菜单的位图绘制验收。 | `tools/export_menu_text_gdi.py`、`web/core/ui/menu_text.mjs`；`tests/test_menu_text.mjs` |
 
 ## 事务与资源边界
 

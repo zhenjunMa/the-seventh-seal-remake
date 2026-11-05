@@ -21,10 +21,10 @@ from source.combat_resources import CHR
 CONTRACT = r"""
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {resolveAction,createNativeRng} from './web/core/combat_rules.mjs';
-import {compileNativeSequence,directSequence} from './web/core/skill_sequence.mjs';
-import {nativeReactionTargetAvailability} from './web/core/battle_reactions.mjs';
-import {selectNativeSkills,selectNativeTarget} from './web/core/forest_ai.mjs';
+import {resolveAction,createNativeRng} from './web/core/battle/combat_rules.mjs';
+import {compileNativeSequence,directSequence} from './web/core/battle/skill_sequence.mjs';
+import {nativeReactionTargetAvailability} from './web/core/battle/battle_reactions.mjs';
+import {selectNativeSkills,selectNativeTarget} from './web/core/battle/enemy_ai.mjs';
 import {NativeAssemblyOracle} from './tests/native_assembly_oracle.mjs';
 const input=JSON.parse(fs.readFileSync(0,'utf8')),copy=structuredClone;let comparisons=0,admissions=0;
 for(const role of input.enemies){
@@ -80,7 +80,7 @@ class InnerWhiteForestBattleSourceTests(unittest.TestCase):
         self.assertEqual([step['source_frame'] for step in result['timeline']], [37] * 5)
         script = r"""
 import assert from 'node:assert/strict';import fs from 'node:fs';
-import {compileNativeSequence,directSequence} from './web/core/skill_sequence.mjs';
+import {compileNativeSequence,directSequence} from './web/core/battle/skill_sequence.mjs';
 const input=JSON.parse(fs.readFileSync(0,'utf8')),plan=directSequence(input.skill);plan.allow_no_contacts=true;
 const compiled=compileNativeSequence({roles:[input.role],effects:[]},'024',plan);
 assert.deepEqual(compiled.steps.map(step=>step.source_frame),[37,37,37,37,37]);

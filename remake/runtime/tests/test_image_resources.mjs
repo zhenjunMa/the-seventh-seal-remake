@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {ImageResources} from '../web/core/image_resources.mjs';
+import {ImageResources} from '../web/core/resources/image_resources.mjs';
 
 function cache() {
   const images = [];

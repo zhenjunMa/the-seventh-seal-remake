@@ -4,8 +4,8 @@ import path from 'node:path';
 import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 import {BattleView,selectBattleAssets} from '../web/battle_view.mjs';
-import {BattleAssetPlan} from '../web/core/battle_asset_plan.mjs';
-import {runtimeContent,runtimeContentDefinition,validateContentRegistration} from '../web/core/content_registry.mjs';
+import {BattleAssetPlan} from '../web/core/battle/battle_asset_plan.mjs';
+import {runtimeContent,runtimeContentDefinition,validateContentRegistration} from '../web/core/content/content_registry.mjs';
 import {readContentDefinition} from './resolve_content_definition.mjs';
 
 const runtime=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');

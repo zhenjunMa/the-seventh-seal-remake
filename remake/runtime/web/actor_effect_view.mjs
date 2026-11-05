@@ -1,4 +1,4 @@
-import {particleColumns} from './core/opening_presentation.mjs';
+import {particleColumns} from './core/ui/opening_presentation.mjs';
 
 // 552437 alpha reveal, 550A28 falling pixels, 553A45 rising pixels,
 // 553332 dispersal (ANM41 mode0). The latter keeps source per-pixel rays,

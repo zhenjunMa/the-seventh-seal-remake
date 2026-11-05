@@ -8,9 +8,9 @@ from PIL import Image
 RUNTIME=Path(__file__).resolve().parents[1]
 ROOT=RUNTIME.parents[1]
 FOLDER=RUNTIME/'evidence/dialogue_alignment_20261021'
-UI_FILES=['web/dialogue_view.mjs','web/dialogue.css','web/core/dialogue.mjs','web/core/events.mjs',
+UI_FILES=['web/dialogue_view.mjs','web/dialogue.css','web/core/ui/dialogue.mjs','web/core/story/events.mjs',
     'web/controllers/story.mjs','web/controllers/input.mjs','web/controllers/boot.mjs','web/controllers/state.mjs',
-    'web/opening_view.mjs','web/caption_view.mjs','web/core/menu_text.mjs','web/index.html',
+    'web/opening_view.mjs','web/caption_view.mjs','web/core/ui/menu_text.mjs','web/index.html',
     'web/data/dialogue_ui.json','web/data/dialogue_fonts.json','web/tests/dialogue_alignment.html']
 
 def read(path):return json.loads(path.read_text('utf-8-sig'))

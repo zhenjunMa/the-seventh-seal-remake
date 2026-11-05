@@ -1,10 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {applyNativeStoryMutation,applyPendingNativeSkillUnlocks,validateNativeStoryMutation} from '../web/core/native_story_mutations.mjs';
-import {admitPartyMember} from '../web/core/party_members.mjs';
-import {WorldStore,validateWorld,encodeSave,decodeSave} from '../web/core/world.mjs';
-import {runtimeContent} from '../web/core/content_registry.mjs';
+import {applyNativeStoryMutation,applyPendingNativeSkillUnlocks,validateNativeStoryMutation} from '../web/core/story/native_story_mutations.mjs';
+import {admitPartyMember} from '../web/core/party/party_members.mjs';
+import {WorldStore,validateWorld,encodeSave,decodeSave} from '../web/core/world/world.mjs';
+import {runtimeContent} from '../web/core/content/content_registry.mjs';
 const seed=JSON.parse(await readFile(new URL('../web/data/opening_seed.json',import.meta.url),'utf8'));
 const copy=structuredClone;
 async function sourceRecord(mapId,id){

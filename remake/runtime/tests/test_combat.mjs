@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {WorldStore,encodeSave,decodeSave} from '../web/core/world.mjs';
-import {BattleController} from '../web/core/combat.mjs';
+import {WorldStore,encodeSave,decodeSave} from '../web/core/world/world.mjs';
+import {BattleController} from '../web/core/battle/battle_controller.mjs';
 
 const root=new URL('../',import.meta.url);
 const seedBytes=await readFile(new URL('web/data/world_seed.json',root)),seed=JSON.parse(seedBytes);

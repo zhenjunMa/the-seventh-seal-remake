@@ -1,5 +1,5 @@
-import {createPartySkillSample,PARTY_SKILL_SAMPLE_ROSTERS} from '../../web/core/party_skill_sample.mjs';
-import {hasPartySkillTypeCorrection} from '../../web/core/party_skill_corrections.mjs';
+import {createPartySkillSample,PARTY_SKILL_SAMPLE_ROSTERS} from '../../web/core/party/party_skill_sample.mjs';
+import {hasPartySkillTypeCorrection} from '../../web/core/party/party_skill_corrections.mjs';
 
 export const playerRoleIds=['001','002','003','004','005','006'];
 export const fullSkillGroups=Object.values(PARTY_SKILL_SAMPLE_ROSTERS);

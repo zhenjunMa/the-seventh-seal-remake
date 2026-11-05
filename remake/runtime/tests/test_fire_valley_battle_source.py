@@ -33,11 +33,11 @@ from source.dgp import DGP
 NODE_CONTRACT = r"""
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {runtimeContent} from './web/core/content_registry.mjs';
-import {createPartyActors} from './web/core/party_attributes.mjs';
-import {admitPartyMember} from './web/core/party_members.mjs';
-import {compileNativeSequence,directSequence} from './web/core/skill_sequence.mjs';
-import {resolveAction,createNativeRng} from './web/core/combat_rules.mjs';
+import {runtimeContent} from './web/core/content/content_registry.mjs';
+import {createPartyActors} from './web/core/party/party_attributes.mjs';
+import {admitPartyMember} from './web/core/party/party_members.mjs';
+import {compileNativeSequence,directSequence} from './web/core/battle/skill_sequence.mjs';
+import {resolveAction,createNativeRng} from './web/core/battle/combat_rules.mjs';
 import {NativeAssemblyOracle} from './tests/native_assembly_oracle.mjs';
 const input=JSON.parse(fs.readFileSync(0,'utf8')),world=structuredClone(input.seed),content=structuredClone(runtimeContent);
 const definition=world.source.role_definitions['004'];
@@ -65,8 +65,8 @@ process.stdout.write(JSON.stringify({comparisons,contacts:1}));
 NODE_BOSS_CONTRACT = r"""
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {compileNativeSequence,directSequence} from './web/core/skill_sequence.mjs';
-import {resolveAction,createNativeRng,nativeEffectContextForTarget,validateNativeEffectBinding} from './web/core/combat_rules.mjs';
+import {compileNativeSequence,directSequence} from './web/core/battle/skill_sequence.mjs';
+import {resolveAction,createNativeRng,nativeEffectContextForTarget,validateNativeEffectBinding} from './web/core/battle/combat_rules.mjs';
 import {NativeAssemblyOracle} from './tests/native_assembly_oracle.mjs';
 const input=JSON.parse(fs.readFileSync(0,'utf8')),getter=input.magic.records.find(r=>r.operation==='procedure_assembly'&&r.parameters.procedure==='0x501930');
 const functions={...input.assembly.functions,'0x501930':getter.normalized_result.trim().split('\n')};
@@ -108,11 +108,11 @@ assert.deepEqual(contacts,[1,1,1,1,18]);process.stdout.write(JSON.stringify({com
 NODE_BOSS_CONTROLLER = r"""
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {BattleController} from './web/core/combat.mjs';
-import {applyNativeSkillStatus} from './web/core/battle_status.mjs';
-import {selectNativeNormalReaction,finalizeNativeDeath} from './web/core/battle_reactions.mjs';
-import {compileNativeSequence,directSequence} from './web/core/skill_sequence.mjs';
-import {resolveAction,applyNativeDamage,createNativeRng} from './web/core/combat_rules.mjs';
+import {BattleController} from './web/core/battle/battle_controller.mjs';
+import {applyNativeSkillStatus} from './web/core/battle/battle_status.mjs';
+import {selectNativeNormalReaction,finalizeNativeDeath} from './web/core/battle/battle_reactions.mjs';
+import {compileNativeSequence,directSequence} from './web/core/battle/skill_sequence.mjs';
+import {resolveAction,applyNativeDamage,createNativeRng} from './web/core/battle/combat_rules.mjs';
 const input=JSON.parse(fs.readFileSync(0,'utf8')),copy=structuredClone;
 const roles=input.reactions.roles;Object.assign(roles,input.roles);input.reactions.party_native_bundle={path:'source CHR fixture'};
 const active=input.players,enemy=copy(input.enemy);enemy.id='enemy-0';enemy.resource_id='032';

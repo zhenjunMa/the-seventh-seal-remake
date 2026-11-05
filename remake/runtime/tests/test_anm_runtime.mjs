@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {AnmActions} from '../web/core/anm_runtime.mjs';
+import {AnmActions} from '../web/core/story/anm_runtime.mjs';
 
 const command = (opcode, actor=0) => ({opcode, u32_plus5:actor, u32_plus1:0,
   u32_plus13:10, u32_plus17:20, u32_plus25:1, byte_plus29:0, byte_plus30:0});

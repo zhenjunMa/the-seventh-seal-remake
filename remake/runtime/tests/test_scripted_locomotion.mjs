@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 const {OpeningView}=await import('../web/opening_view.mjs');
-const {AnmActions}=await import('../web/core/anm_runtime.mjs');
+const {AnmActions}=await import('../web/core/story/anm_runtime.mjs');
 const read=name=>JSON.parse(readFileSync(new URL('../web/data/'+name+'.json',import.meta.url),'utf8'));
 const resources=read('opening_map_resources'),map=read('maps/m72061');
 

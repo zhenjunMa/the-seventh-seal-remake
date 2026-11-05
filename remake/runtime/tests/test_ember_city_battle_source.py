@@ -27,11 +27,11 @@ from source.dgp import DGP
 CONTRACT = r"""
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {resolveAction,createNativeRng} from './web/core/combat_rules.mjs';
-import {selectNativeSkills} from './web/core/forest_ai.mjs';
-import {compileNativeSequence,directSequence} from './web/core/skill_sequence.mjs';
-import {nativeReactionTargetAvailability,selectNativeNormalReaction} from './web/core/battle_reactions.mjs';
-import {BattleController} from './web/core/combat.mjs';
+import {resolveAction,createNativeRng} from './web/core/battle/combat_rules.mjs';
+import {selectNativeSkills} from './web/core/battle/enemy_ai.mjs';
+import {compileNativeSequence,directSequence} from './web/core/battle/skill_sequence.mjs';
+import {nativeReactionTargetAvailability,selectNativeNormalReaction} from './web/core/battle/battle_reactions.mjs';
+import {BattleController} from './web/core/battle/battle_controller.mjs';
 import {BattleLifecyclePlayback} from './web/battle_lifecycle_view.mjs';
 import {NativeAssemblyOracle} from './tests/native_assembly_oracle.mjs';
 const input=JSON.parse(fs.readFileSync(0,'utf8')),copy=structuredClone;

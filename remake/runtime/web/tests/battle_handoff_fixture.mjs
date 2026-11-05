@@ -2,14 +2,14 @@
 // HP submission is held only to observe a whole chain; masks, reactions,
 // charging, animation intervals and normal action arbitration stay in core.
 import {BattleView} from '../battle_view.mjs';
-import {BattleController} from '../core/combat.mjs';
-import {WorldStore} from '../core/world.mjs';
-import {createPartySkillSample} from '../core/party_skill_sample.mjs';
-import {createPartyActors,consumePartyMp} from '../core/party_attributes.mjs';
+import {BattleController} from '../core/battle/battle_controller.mjs';
+import {WorldStore} from '../core/world/world.mjs';
+import {createPartySkillSample} from '../core/party/party_skill_sample.mjs';
+import {createPartyActors,consumePartyMp} from '../core/party/party_attributes.mjs';
 import {assembleForestSample} from '../forest_sample.mjs';
-import {directSequence,composeNativeSequence} from '../core/skill_sequence.mjs';
-import {resolveAction} from '../core/combat_rules.mjs';
-import {createRewardLedger} from '../core/battle_rewards.mjs';
+import {directSequence,composeNativeSequence} from '../core/battle/skill_sequence.mjs';
+import {resolveAction} from '../core/battle/combat_rules.mjs';
+import {createRewardLedger} from '../core/battle/battle_rewards.mjs';
 
 const relay=[['004_19','004_18'],['001_46','001_33'],['003_21','003_26','003_29'],['kai_luoyan','002_26']];
 export const handoffCases={

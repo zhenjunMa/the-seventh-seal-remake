@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {createMenuFeedback} from '../web/core/menu_feedback.mjs';
+import {createMenuFeedback} from '../web/core/ui/menu_feedback.mjs';
 
 function fixture(){
   let state='main';const cues=[],queue=[];

@@ -1,0 +1,79 @@
+// Native learned bytes stay immutable. Sparse saved progress records additional
+// learned source indices. Learning decisions are committed by reward rules.
+import {nativeRevivalSkillSupported} from './battle_revival.mjs';
+import {applySavedSkillProgress} from './battle_skill_growth.mjs';
+import {allPartyRoles} from '../party/party_roster.mjs';
+import {runtimeContent} from '../content/content_registry.mjs';
+import {correctPartySkillType,supplementalPartyCommands} from '../party/party_skill_corrections.mjs';
+const need=(ok,message)=>{if(!ok)throw new Error(message);};
+export function validateBattleSkillProgress(value){
+  need(value&&[1,2].includes(value.version)&&Object.keys(value).sort().join(',')===(value.version===1?'learned_indices,version':'learned_indices,records,version')&&Array.isArray(value.learned_indices), '角色已学技巧记录无效');
+  need(value.learned_indices.length<=200&&new Set(value.learned_indices).size===value.learned_indices.length&&value.learned_indices.every(i=>Number.isInteger(i)&&i>=0&&i<200),'角色已学技巧索引无效');
+  if(value.version===2){
+    need(Array.isArray(value.records)&&value.records.length<=200&&new Set(value.records.map(r=>r?.index)).size===value.records.length,'角色技巧成长记录无效');
+    for(const row of value.records)need(row&&Object.keys(row).sort().join(',')==='experience,index,level'&&Number.isInteger(row.index)&&row.index>=0&&row.index<200&&Number.isInteger(row.level)&&row.level>=0&&row.level<=7&&Number.isInteger(row.experience)&&row.experience>=-2147483648&&row.experience<=2147483647,'角色技巧成长数值无效');
+  }
+  return structuredClone(value);
+}
+export {applySavedSkillProgress};
+/** Read-only source facade for menus, bindings and displayed proficiency. */
+export function effectiveSkillSource(commands,world){
+  const out=structuredClone(commands),roles=new Map(allPartyRoles(world).map(role=>{if(role.skill_progress)validateBattleSkillProgress(role.skill_progress);return [role.id,role];}));
+  Object.assign(out.skills,supplementalPartyCommands(commands,runtimeContent));
+  for(const [id,role]of Object.entries(out.roles??{}))if(roles.has(id)){
+    role.skills=role.skills.map(skill=>correctPartySkillType(applySavedSkillProgress(skill,roles.get(id))));role.learned_indices=role.skills.filter(s=>s.learned_raw).map(s=>s.original_skill_index);
+  }
+  for(const table of [out.skills,out.field_skills])for(const [id,skill]of Object.entries(table??{}))if(roles.has(skill.actor_id))table[id]=correctPartySkillType(applySavedSkillProgress(skill,roles.get(skill.actor_id)));
+  return out;
+}
+/** A field cast changes one role's saved skill progress. Keep the remaining
+ * read-only facade intact, and always replay changed records from the baseline. */
+export function updateEffectiveSkillSource(commands,world,previous,beforeRole){
+  const role=world.party.find(row=>row.id===beforeRole.id);
+  need(role&&previous.roles?.[role.id]&&commands.roles?.[role.id],'技巧成长角色来源缺失');
+  if(role.skill_progress)validateBattleSkillProgress(role.skill_progress);
+  const before=beforeRole.skill_progress,after=role.skill_progress;
+  const oldRecords=new Map((before?.records??[]).map(row=>[row.index,row])),newRecords=new Map((after?.records??[]).map(row=>[row.index,row]));
+  const oldLearned=new Set(before?.learned_indices??[]),newLearned=new Set(after?.learned_indices??[]);
+  const changed=new Set([...oldRecords.keys(),...newRecords.keys(),...oldLearned,...newLearned].filter(index=>{
+    const a=oldRecords.get(index),b=newRecords.get(index);
+    return a?.level!==b?.level||a?.experience!==b?.experience||oldLearned.has(index)!==newLearned.has(index);
+  }));
+  if(!changed.size)return previous;
+  const apply=skill=>correctPartySkillType(applySavedSkillProgress(skill,role));
+  const skills=[...previous.roles[role.id].skills];
+  for(const index of changed)skills[index]=apply(commands.roles[role.id].skills[index]);
+  const out={...previous,roles:{...previous.roles,[role.id]:{...previous.roles[role.id],skills,learned_indices:skills.filter(skill=>skill.learned_raw).map(skill=>skill.original_skill_index)}}};
+  let supplemental;
+  for(const table of ['skills','field_skills'])if(previous[table]){
+    out[table]={...previous[table]};
+    for(const [id,skill]of Object.entries(previous[table]))if(skill.actor_id===role.id&&changed.has(skill.original_skill_index)){
+      const baseline=commands[table]?.[id]??(supplemental??=supplementalPartyCommands(commands,runtimeContent))[id];
+      need(baseline,'技巧成长原记录缺失');out[table][id]=apply(baseline);
+    }
+  }
+  return out;
+}
+export function partyBattleSkills(commands){
+  return {...commands.skills,...supportedBattleRecoverySkills(commands),...supplementalPartyCommands(commands,runtimeContent)};
+}
+export function isBattleSkillLearned(world,skill){
+  const role=world.party.find(r=>r.id===skill.actor_id);if(!role)return false;
+  const progress=role.skill_progress?validateBattleSkillProgress(role.skill_progress):null;
+  return Boolean(skill.learned_raw||progress?.learned_indices.includes(skill.original_skill_index));
+}
+export function requiredSkillLevel(skill){
+  need(/^(?:[0-9a-f]{2}){1053}$/.test(skill?.fixed_raw_hex),'技能源记录缺失');
+  const bytes=Uint8Array.from(skill.fixed_raw_hex.match(/../g),part=>parseInt(part,16));
+  return new DataView(bytes.buffer).getInt32(0x143,true);
+}
+export function battleSkillEligibility(world,skill){
+  const role=world.party.find(row=>row.id===skill.actor_id),required_level=requiredSkillLevel(skill);
+  const learned=isBattleSkillLearned(world,skill),level=role?.level??0;
+  return {available:learned&&level>=required_level,learned,required_level,level};
+}
+export function supportedBattleRecoverySkills(commands){
+  return Object.fromEntries(Object.values(commands.roles??{}).flatMap(role=>(role.skills??[])
+    .filter(nativeRevivalSkillSupported).map(source=>{const id=`${role.id}_${source.original_skill_index}`;
+      return [id,{...structuredClone(source),id,battle_handler:'native-revival',evidence:source.evidence??Object.values(commands.evidence??{})}];})));
+}

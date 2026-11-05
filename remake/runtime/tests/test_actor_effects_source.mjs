@@ -6,11 +6,11 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {OpeningView} from '../web/opening_view.mjs';
-import {AnmActions} from '../web/core/anm_runtime.mjs';
+import {AnmActions} from '../web/core/story/anm_runtime.mjs';
 import {ActionClock} from '../web/phaser/components/action_clock.mjs';
-import {validateChapterAnimation} from '../web/core/chapter_animation.mjs';
-import {inspectContentReadiness} from '../web/core/content_readiness.mjs';
-import {runtimeContent} from '../web/core/content_registry.mjs';
+import {validateChapterAnimation} from '../web/core/story/chapter_animation.mjs';
+import {inspectContentReadiness} from '../web/core/content/content_readiness.mjs';
+import {runtimeContent} from '../web/core/content/content_registry.mjs';
 import {NativeAssemblyOracle} from './native_assembly_oracle.mjs';
 import {readContentDefinition} from '../tools/resolve_content_definition.mjs';
 

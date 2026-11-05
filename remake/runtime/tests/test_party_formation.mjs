@@ -1,10 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {partyFormationSlots,validateFormationSlots,exchangeFormationSlots,admitFormationMember} from '../web/core/party_formation.mjs';
-import {WorldStore,encodeSave,decodeSave} from '../web/core/world.mjs';
-import {createPartyActors} from '../web/core/party_attributes.mjs';
-import {ChapterRunner} from '../web/core/chapter.mjs';
+import {partyFormationSlots,validateFormationSlots,exchangeFormationSlots,admitFormationMember} from '../web/core/party/party_formation.mjs';
+import {WorldStore,encodeSave,decodeSave} from '../web/core/world/world.mjs';
+import {createPartyActors} from '../web/core/party/party_attributes.mjs';
+import {ChapterRunner} from '../web/core/story/chapter_runner.mjs';
 const world=JSON.parse(JSON.parse(readFileSync(new URL('../evidence/chapter_systems_home_save.json',import.meta.url),'utf8')).payload);
 
 test('legacy new-game formation replays initializer and first-empty admission, independent of leader and roster order',()=>{

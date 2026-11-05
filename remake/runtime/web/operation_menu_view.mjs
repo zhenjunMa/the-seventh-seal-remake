@@ -1,5 +1,5 @@
 // Keep original menu images and hit rectangles in the original coordinate plane.
-import {operationSummaryFields, operationStandingFrame, operationMnuTextOptions} from './core/menu_presentation.mjs';
+import {operationSummaryFields, operationStandingFrame, operationMnuTextOptions} from './core/ui/menu_presentation.mjs';
 import {menuText,menuStyle,menuImage} from './menu_dom.mjs';
 import {OperationSystemView} from './operation_system_view.mjs';
 import {OperationTechniqueView} from './operation_technique_view.mjs';

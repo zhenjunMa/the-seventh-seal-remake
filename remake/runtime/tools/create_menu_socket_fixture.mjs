@@ -1,7 +1,7 @@
 // User-authorized test save only: original game/saves and browser storage stay untouched.
 import {readFile,writeFile} from 'node:fs/promises';
-import {WorldStore,decodeSave,encodeSave} from '../web/core/world.mjs';
-import {withItemQuantity,validateItemInstance} from '../web/core/equipment.mjs';
+import {WorldStore,decodeSave,encodeSave} from '../web/core/world/world.mjs';
+import {withItemQuantity,validateItemInstance} from '../web/core/party/equipment.mjs';
 const runtime=new URL('../',import.meta.url),read=async name=>JSON.parse(await readFile(new URL(name,runtime),'utf8'));
 const seed=await read('evidence/chapter_systems_home_save.json'),items=await read('web/data/items.json');
 const world=new WorldStore(await decodeSave(seed)),before=world.snapshot(),added=[];

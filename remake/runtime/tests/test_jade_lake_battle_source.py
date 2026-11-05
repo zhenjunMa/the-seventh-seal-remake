@@ -20,12 +20,12 @@ from source.combat_resources import CHR
 CONTRACT = r"""
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {resolveAction,createNativeRng} from './web/core/combat_rules.mjs';
-import {selectNativeSkills} from './web/core/forest_ai.mjs';
-import {compileNativeSequence,directSequence} from './web/core/skill_sequence.mjs';
-import {nativeReactionTargetAvailability} from './web/core/battle_reactions.mjs';
+import {resolveAction,createNativeRng} from './web/core/battle/combat_rules.mjs';
+import {selectNativeSkills} from './web/core/battle/enemy_ai.mjs';
+import {compileNativeSequence,directSequence} from './web/core/battle/skill_sequence.mjs';
+import {nativeReactionTargetAvailability} from './web/core/battle/battle_reactions.mjs';
 import {BattleLifecyclePlayback} from './web/battle_lifecycle_view.mjs';
-import {BattleController} from './web/core/combat.mjs';
+import {BattleController} from './web/core/battle/battle_controller.mjs';
 import {NativeAssemblyOracle} from './tests/native_assembly_oracle.mjs';
 const input=JSON.parse(fs.readFileSync(0,'utf8')),copy=structuredClone;let comparisons=0,aiPlans=0,reactions=0,entries=0;
 for(const enemy of input.enemies){

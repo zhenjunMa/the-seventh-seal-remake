@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {attachSavePreview,savedPreviewPng,validPreviewPng,SAVE_PREVIEW_WIDTH,SAVE_PREVIEW_HEIGHT} from '../web/core/save_preview.mjs';
-import {encodeSave,decodeSave,DEFAULT_GAME_SETTINGS} from '../web/core/world.mjs';
+import {attachSavePreview,savedPreviewPng,validPreviewPng,SAVE_PREVIEW_WIDTH,SAVE_PREVIEW_HEIGHT} from '../web/core/world/save_preview.mjs';
+import {encodeSave,decodeSave,DEFAULT_GAME_SETTINGS} from '../web/core/world/world.mjs';
 import {drawMapScene} from '../web/map_scene_view.mjs';
 import {createServicesController} from '../web/controllers/services.mjs';
 

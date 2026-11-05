@@ -1,5 +1,5 @@
 import {NativeServiceView} from '../native_service_view.mjs';
-import {readNativeService,nativeEconomyCatalog,nativeServiceRows,nativeOwnedQuantity,applyNativeServiceAction} from '../core/native_economy.mjs';
+import {readNativeService,nativeEconomyCatalog,nativeServiceRows,nativeOwnedQuantity,applyNativeServiceAction} from '../core/items/native_economy.mjs';
 
 export function createNativeServicesController({state,actions,$,canvas}){
   let view;

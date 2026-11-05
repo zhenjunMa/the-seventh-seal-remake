@@ -4,7 +4,7 @@ import test, {after} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
-import {OpeningRunner, validateOpeningProgram} from '../web/core/opening.mjs';
+import {OpeningRunner, validateOpeningProgram} from '../web/core/story/opening.mjs';
 
 const program = JSON.parse(await readFile(new URL('../web/data/opening_program.json', import.meta.url)));
 const root = new URL('../../../', import.meta.url);

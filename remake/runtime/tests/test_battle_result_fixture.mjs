@@ -3,9 +3,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {decodeSave,encodeSave} from '../web/core/world.mjs';
-import {progressHeaderForRole} from '../web/core/battle_rewards.mjs';
-import {BattleResultSequence} from '../web/core/battle_result.mjs';
+import {decodeSave,encodeSave} from '../web/core/world/world.mjs';
+import {progressHeaderForRole} from '../web/core/battle/battle_rewards.mjs';
+import {BattleResultSequence} from '../web/core/battle/battle_result.mjs';
 import {replayFixture} from './helpers/battle_result_fixture.mjs';
 const read=async path=>JSON.parse(await readFile(new URL('../'+path,import.meta.url),'utf8'));
 

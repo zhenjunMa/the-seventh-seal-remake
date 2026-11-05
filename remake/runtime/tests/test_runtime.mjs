@@ -5,10 +5,10 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
-import {WorldStore, validateWorld, encodeSave, decodeSave} from '../web/core/world.mjs';
-import {SceneController} from '../web/core/scenes.mjs';
-import {EventRunner, validateProgram} from '../web/core/events.mjs';
-import {MovementMap} from '../web/core/movement.mjs';
+import {WorldStore, validateWorld, encodeSave, decodeSave} from '../web/core/world/world.mjs';
+import {SceneController} from '../web/core/exploration/scene_controller.mjs';
+import {EventRunner, validateProgram} from '../web/core/story/events.mjs';
+import {MovementMap} from '../web/core/exploration/movement.mjs';
 
 const runtime = new URL('../', import.meta.url);
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');

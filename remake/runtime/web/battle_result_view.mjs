@@ -1,5 +1,5 @@
-import {BattleResultSequence,validateBattleResultManifest} from './core/battle_result.mjs';
-import {battleResources,drawBattleImage} from './core/battle_resources.mjs';
+import {BattleResultSequence,validateBattleResultManifest} from './core/battle/battle_result.mjs';
+import {battleResources,drawBattleImage} from './core/battle/battle_resources.mjs';
 
 // Original report assets stay in the battle's 640x480 plane. The reward plan
 // belongs to combat; this view only counts and acknowledges its presentation.

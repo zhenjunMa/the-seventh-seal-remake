@@ -1,9 +1,9 @@
 // PC-01 continues the earned YC-04 endpoint using original exits and TLK/ANM.
 // Rule callbacks do not simulate walking, rendering, or an original GAME run.
 import assert from 'node:assert/strict';
-import {encodeSave,decodeSave} from '../../web/core/world.mjs';
-import {StoryPlayback} from '../../web/core/story_playback.mjs';
-import {allPartyRoles} from '../../web/core/party_roster.mjs';
+import {encodeSave,decodeSave} from '../../web/core/world/world.mjs';
+import {StoryPlayback} from '../../web/core/story/story_playback.mjs';
+import {allPartyRoles} from '../../web/core/party/party_roster.mjs';
 import {innerWhiteForestRunner,innerWhiteForestRoute} from './inner_white_forest_world.mjs';
 import {innerWhiteForestSealComplete} from './inner_white_forest_seal_world.mjs';
 

@@ -3,11 +3,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {BattleController} from '../web/core/combat.mjs';
-import {initializeNativeEntry} from '../web/core/battle_reactions.mjs';
-import {WorldStore} from '../web/core/world.mjs';
+import {BattleController} from '../web/core/battle/battle_controller.mjs';
+import {initializeNativeEntry} from '../web/core/battle/battle_reactions.mjs';
+import {WorldStore} from '../web/core/world/world.mjs';
 import {createForestSample} from '../web/forest_sample.mjs';
-import {selectNativeTarget} from '../web/core/forest_ai.mjs';
+import {selectNativeTarget} from '../web/core/battle/enemy_ai.mjs';
 const read=async name=>JSON.parse(await readFile(new URL('../web/data/'+name,import.meta.url)));
 const [seed,base,forest,scheduler,reactions]=await Promise.all(['route_seed.json','combat_sample.json','forest_combat.json','battle_scheduler.json','enemy_reactions.json'].map(read));
 const copy=structuredClone;

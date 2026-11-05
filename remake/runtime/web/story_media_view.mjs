@@ -1,6 +1,6 @@
 // Native ANM 60/62/63 adapted to browser media. The source selects each file
 // and lifecycle operation; browser decoding and wall-clock timing are adapters.
-import {playbackTask} from './core/story_playback.mjs';
+import {playbackTask} from './core/story/story_playback.mjs';
 const need=(ok,message)=>{if(!ok)throw new Error(`剧情媒体：${message}`);};
 const digest=value=>typeof value==='string'&&/^[a-f0-9]{64}$/.test(value);
 export function validateStoryMedia(data){

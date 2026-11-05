@@ -22,7 +22,7 @@ def export():
     assert digest(source) == GAME_HASH, "The admitted GAME.exe identity changed"
     bundle = RUNTIME / "evidence/turn_rules_native_20261011.json"
     native = json.loads(bundle.read_text(encoding="utf-8"))
-    module = RUNTIME / "web/core/combat_rules.mjs"
+    module = RUNTIME / "web/core/battle/combat_rules.mjs"
     module_text = module.read_text(encoding="utf-8")
     evidence_ids = re.findall(r"ev_[0-9a-f]{64}", module_text)
     retained = {record["evidence_id"] for record in native["records"]}
@@ -36,7 +36,7 @@ def export():
         "source": {"path": "GAME.exe", "sha256": GAME_HASH},
         "native_bundle": {"path": str(bundle.relative_to(GAME_ROOT)).replace("\\", "/"),
                           "sha256": digest(bundle), "records": len(native["records"])},
-        "module": {"path": "core/combat_rules.mjs", "sha256": digest(module)},
+        "module": {"path": "core/battle/combat_rules.mjs", "sha256": digest(module)},
         "functions": {"effective": "0x41C610", "elements": "0x41CFE0", "damage": "0x41D990",
                       "rng": "0x571060", "reaction_type_gate": "0x50B3E0", "hp_submit": "0x5005C0",
                       "selected_actor_settled_clear": "0x503BD8"},

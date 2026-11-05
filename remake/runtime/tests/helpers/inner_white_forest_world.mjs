@@ -3,14 +3,14 @@
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {webcrypto} from 'node:crypto';
-import {WorldStore,encodeSave,decodeSave} from '../../web/core/world.mjs';
-import {ChapterRunner,chapterObjectState} from '../../web/core/chapter.mjs';
-import {ChapterAnimationRunner} from '../../web/core/chapter_animation.mjs';
-import {admitPartyMember} from '../../web/core/party_members.mjs';
-import {runtimeContent} from '../../web/core/content_registry.mjs';
-import {worldMapEntry,chapterRouteExits} from '../../web/core/map_connections.mjs';
-import {WorldMapController} from '../../web/core/world_map.mjs';
-import {loadEncounterMap} from '../../web/core/encounters.mjs';
+import {WorldStore,encodeSave,decodeSave} from '../../web/core/world/world.mjs';
+import {ChapterRunner,chapterObjectState} from '../../web/core/story/chapter_runner.mjs';
+import {ChapterAnimationRunner} from '../../web/core/story/chapter_animation.mjs';
+import {admitPartyMember} from '../../web/core/party/party_members.mjs';
+import {runtimeContent} from '../../web/core/content/content_registry.mjs';
+import {worldMapEntry,chapterRouteExits} from '../../web/core/exploration/map_connections.mjs';
+import {WorldMapController} from '../../web/core/exploration/world_map.mjs';
+import {loadEncounterMap} from '../../web/core/exploration/encounters.mjs';
 
 globalThis.crypto??=webcrypto;
 export const innerWhiteForestMapIds=['M70071','M70072','M70073','M70075','M70076','M70074_1','M70074_2'];

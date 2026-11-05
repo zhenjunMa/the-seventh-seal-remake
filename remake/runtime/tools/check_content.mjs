@@ -2,10 +2,10 @@
 import {readFile} from 'node:fs/promises';
 import {fileURLToPath} from 'node:url';
 import path from 'node:path';
-import {resolveContentDefinition} from '../web/core/content_definition.mjs';
-import {validateContentRegistration} from '../web/core/content_registry.mjs';
-import {validateStoryBindings,validateEnemySequenceClosure} from '../web/core/content_dependencies.mjs';
-import {inspectContentReadiness} from '../web/core/content_readiness.mjs';
+import {resolveContentDefinition} from '../web/core/content/content_definition.mjs';
+import {validateContentRegistration} from '../web/core/content/content_registry.mjs';
+import {validateStoryBindings,validateEnemySequenceClosure} from '../web/core/content/content_dependencies.mjs';
+import {inspectContentReadiness} from '../web/core/content/content_readiness.mjs';
 
 export async function checkContent(){
   const read=async name=>JSON.parse(await readFile(new URL(`../web/data/${name}.json`,import.meta.url),'utf8'));

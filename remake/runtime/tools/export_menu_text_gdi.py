@@ -48,12 +48,12 @@ def collect_text_charset():
     # only quoted text containing Chinese is collected, never raw-hex/catalogs.
     import re
     font_faces={row['face'] for row in json.loads(RECIPE.read_text(encoding='utf-8'))['fonts']}
-    filenames={'web/controllers/menu.mjs','web/core/operation_menu.mjs',
-        'web/core/equipment.mjs','web/core/field_items.mjs','web/core/field_skills.mjs'}
+    filenames={'web/controllers/menu.mjs','web/core/ui/operation_menu.mjs',
+        'web/core/party/equipment.mjs','web/core/field_items.mjs','web/core/party/field_skills.mjs'}
     filenames.update(p.relative_to(RUNTIME).as_posix() for p in (RUNTIME/'web').glob('operation_*_view.mjs'))
-    filenames.update(p.relative_to(RUNTIME).as_posix() for p in (RUNTIME/'web/core').glob('menu_*.mjs'))
+    filenames.update(p.relative_to(RUNTIME).as_posix() for p in (RUNTIME/'web/core/ui').glob('menu_*.mjs'))
     filenames.add('web/battle_menu_view.mjs')
-    filenames.update(p.relative_to(RUNTIME).as_posix() for pattern in ['battle_*.mjs','combat*.mjs'] for p in (RUNTIME/'web/core').glob(pattern))
+    filenames.update(p.relative_to(RUNTIME).as_posix() for p in (RUNTIME/'web/core/battle').glob('*.mjs'))
     for filename in sorted(filenames):
         path=RUNTIME/filename
         if not path.exists():continue

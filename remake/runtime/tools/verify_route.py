@@ -6,6 +6,7 @@ RUNTIME=Path(__file__).resolve().parents[1]
 ROOT=RUNTIME.parents[1]
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 code=[p for folder in ['web','web/core','tests','tools'] for p in (RUNTIME/folder).glob('*') if p.suffix in ['.mjs','.js','.py']]
+code.extend((RUNTIME/'web/core').rglob('*.mjs'))
 code.extend((RUNTIME/'web/data').rglob('*.json'))
 before={p.relative_to(RUNTIME).as_posix():sha(p) for p in sorted(code)}
 historical={p:sha(p) for p in (RUNTIME/'evidence').glob('*verification*.json')}

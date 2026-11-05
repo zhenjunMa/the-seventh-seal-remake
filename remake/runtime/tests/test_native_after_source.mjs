@@ -5,8 +5,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {NativeAssemblyOracle} from './native_assembly_oracle.mjs';
-import {createNativeRng} from '../web/core/combat_rules.mjs';
-import {selectNativeAfterSourceReaction,selectNativeNormalReaction,finalizeNativeDeath,applyContactReaction} from '../web/core/battle_reactions.mjs';
+import {createNativeRng} from '../web/core/battle/combat_rules.mjs';
+import {selectNativeAfterSourceReaction,selectNativeNormalReaction,finalizeNativeDeath,applyContactReaction} from '../web/core/battle/battle_reactions.mjs';
 const read=async path=>JSON.parse(await readFile(new URL(path,import.meta.url)));
 const [data,sample,instructions,death,cc,home,idle]=await Promise.all([
   '../web/data/party_reactions.json','../web/data/combat_sample.json',

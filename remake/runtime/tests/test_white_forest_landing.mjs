@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {nativeMapMovement} from '../web/core/map_locomotion.mjs';
-import {MovementMap} from '../web/core/movement.mjs';
+import {nativeMapMovement} from '../web/core/exploration/map_locomotion.mjs';
+import {MovementMap} from '../web/core/exploration/movement.mjs';
 
 const read=name=>JSON.parse(readFileSync(new URL('../web/data/'+name+'.json',import.meta.url),'utf8'));
 

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {StartupSequence} from '../web/core/startup.mjs';
+import {StartupSequence} from '../web/core/ui/startup.mjs';
 import {StartupView} from '../web/startup_view.mjs';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';

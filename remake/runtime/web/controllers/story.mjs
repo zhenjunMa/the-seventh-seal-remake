@@ -1,16 +1,16 @@
 // story adapters. Persistent state belongs to the shared runtime context.
 import {OpeningView} from "../opening_view.mjs";
-import {ChapterAnimationRunner} from "../core/chapter_animation.mjs";
+import {ChapterAnimationRunner} from "../core/story/chapter_animation.mjs";
 import {StoryMediaView} from '../story_media_view.mjs';
-import {StoryPlayback,storyCancelled,playbackTask,playbackFrame} from '../core/story_playback.mjs';
-import {runtimeContent,storyBindings} from "../core/content_registry.mjs";
-import {worldMapEntry} from '../core/map_connections.mjs';
-import {hasNativeStoryCompletion} from '../core/story_completion.mjs';
-import {nativeChestAnimation} from '../core/native_map_chests.mjs';
-import {captureMapNpcState} from '../core/map_npc_state.mjs';
-import {locomotion} from '../core/movement.mjs';
-import {loadEncounterMap} from '../core/encounters.mjs';
-import {initializeMapSequence} from '../core/map_stage.mjs';
+import {StoryPlayback,storyCancelled,playbackTask,playbackFrame} from '../core/story/story_playback.mjs';
+import {runtimeContent,storyBindings} from "../core/content/content_registry.mjs";
+import {worldMapEntry} from '../core/exploration/map_connections.mjs';
+import {hasNativeStoryCompletion} from '../core/story/story_completion.mjs';
+import {nativeChestAnimation} from '../core/exploration/native_map_chests.mjs';
+import {captureMapNpcState} from '../core/exploration/map_npc_state.mjs';
+import {locomotion} from '../core/exploration/movement.mjs';
+import {loadEncounterMap} from '../core/exploration/encounters.mjs';
+import {initializeMapSequence} from '../core/exploration/map_stage.mjs';
 
 import {createStoryPresentation} from './presentation_handoff.mjs';
 

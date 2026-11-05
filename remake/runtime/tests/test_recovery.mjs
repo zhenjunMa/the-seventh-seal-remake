@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {planPartyDefeat,restorePartyAfterRest} from '../web/core/recovery.mjs';
+import {planPartyDefeat,restorePartyAfterRest} from '../web/core/party/recovery.mjs';
 const read = file => JSON.parse(fs.readFileSync(new URL(file, import.meta.url),'utf8'));
 const forest = read('../web/data/forest_combat.json');
 const seed = read('../web/data/opening_seed.json');

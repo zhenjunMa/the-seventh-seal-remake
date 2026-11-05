@@ -10,7 +10,7 @@ ROOT = RUNTIME.parents[1]
 FOLDER = RUNTIME/'evidence/battle_loading_20261021'
 REPORT = RUNTIME/'evidence/battle_loading_browser_validation_20261021.json'
 FILES = [
-    'web/core/battle_resources.mjs', 'web/battle_view.mjs', 'web/forest_stage.mjs',
+    'web/core/battle/battle_resources.mjs', 'web/battle_view.mjs', 'web/forest_stage.mjs',
     'web/battle_menu_view.mjs', 'web/battle_result_view.mjs', 'web/loading_view.mjs',
     'web/battle_transition_view.mjs', 'web/controllers/battle.mjs', 'web/controllers/boot.mjs',
     'web/controllers/state.mjs', 'web/tests/battle_loading.html', 'web/tests/battle_loading.mjs',

@@ -2,12 +2,12 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
-import {MapObjectRuntime} from '../web/core/map_objects.mjs';
-import {ImageResources} from '../web/core/image_resources.mjs';
+import {MapObjectRuntime} from '../web/core/exploration/map_objects.mjs';
+import {ImageResources} from '../web/core/resources/image_resources.mjs';
 import {drawMapScene} from '../web/map_scene_view.mjs';
 import {createMapController} from '../web/controllers/map.mjs';
-import {StoryRepository} from '../web/core/story_repository.mjs';
-import {runtimeContent,runtimeContentDefinition} from '../web/core/content_registry.mjs';
+import {StoryRepository} from '../web/core/story/story_repository.mjs';
+import {runtimeContent,runtimeContentDefinition} from '../web/core/content/content_registry.mjs';
 const {OpeningView}=await import('../web/opening_view.mjs');
 
 const root=new URL('../',import.meta.url),read=async path=>JSON.parse(await readFile(new URL(path,root),'utf8'));

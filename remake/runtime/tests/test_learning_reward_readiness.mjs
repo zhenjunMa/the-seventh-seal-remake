@@ -1,9 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {requireLearningRewardReadiness} from '../web/core/content_readiness.mjs';
-import {runtimeContent} from '../web/core/content_registry.mjs';
-import {validateEnemyReactionClosure} from '../web/core/content_dependencies.mjs';
+import {requireLearningRewardReadiness} from '../web/core/content/content_readiness.mjs';
+import {runtimeContent} from '../web/core/content/content_registry.mjs';
+import {validateEnemyReactionClosure} from '../web/core/content/content_dependencies.mjs';
 const story=JSON.parse(await readFile(new URL('../web/data/chapter_story.json',import.meta.url),'utf8'));
 const rewards=[['M17010',93,'001',36],['M17010',94,'002',31],['M17010',95,'005',30],
   ['M17028',13,'001',35],['M17028',16,'002',30],['M17028',17,'003',33]];

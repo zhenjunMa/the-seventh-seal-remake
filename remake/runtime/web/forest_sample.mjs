@@ -1,5 +1,5 @@
 import {createBattleSample} from './combat_sample.mjs';
-import {runtimeContent,requireRegisteredRoles,battleStage} from './core/content_registry.mjs';
+import {runtimeContent,requireRegisteredRoles,battleStage} from './core/content/content_registry.mjs';
 const clone=value=>structuredClone(value);
 export function createForestSample(world,base,data,group,config,schedulerData=null,aiData=null,rewardData=null,reactionData=null,statusData=null){
   return assembleForestSample(createBattleSample(world,base,config),data,group,schedulerData,aiData,rewardData,reactionData,statusData);

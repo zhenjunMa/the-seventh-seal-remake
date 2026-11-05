@@ -64,15 +64,15 @@ def main():
     assert any('原版模式有参数差异' in str(event) for event in browser['events'])
     assert (EVIDENCE/'runtime_config_browser_debug_20261011.png').is_file()
 
-    refs = ['app.js', 'core/runtime_config.mjs', 'core/skill_config.mjs', 'core/battle_scheduler.mjs', 'core/forest_ai.mjs',
-            'core/combat.mjs', 'core/battle_rewards.mjs', 'combat_sample.mjs', 'forest_sample.mjs', 'data/catalog.json',
+    refs = ['app.js', 'core/config/runtime_config.mjs', 'core/config/skill_config.mjs', 'core/battle/battle_scheduler.mjs', 'core/battle/enemy_ai.mjs',
+            'core/battle/battle_controller.mjs', 'core/battle/battle_rewards.mjs', 'combat_sample.mjs', 'forest_sample.mjs', 'data/catalog.json',
             'data/config/index.json', 'data/config/skills.json', 'data/config/battle.json', 'data/config/rewards.json', 'data/config/items.json']
     for ref in refs:
         with urllib.request.urlopen('http://127.0.0.1:8767/'+ref, timeout=10) as response:
             assert response.status == 200
             assert hashlib.sha256(response.read()).hexdigest() == sha(WEB/ref), ref
 
-    paths = [*WEB.glob('*.js'), *WEB.glob('*.mjs'), *WEB.glob('core/*.mjs'), *WEB.glob('data/config/*.json'), WEB/'data/catalog.json',
+    paths = [*WEB.glob('*.js'), *WEB.glob('*.mjs'), *WEB.glob('core/**/*.mjs'), *WEB.glob('data/config/*.json'), WEB/'data/catalog.json',
              RUNTIME/'tools/export_runtime_config.mjs', RUNTIME/'tools/export_skill_config.py', RUNTIME/'tools/build_catalog.py', Path(__file__),
              *tests, RUNTIME/'tests/preserve_history.mjs', RUNTIME/'config_guide.md',
              ROOT/'README.md', RUNTIME.parent/'assessment/testing_strategy.md',

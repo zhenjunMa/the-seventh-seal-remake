@@ -2,11 +2,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {readNativeService,nativeEconomyCatalog,nativeServiceRows,nativeOwnedQuantity,applyNativeServiceAction} from '../web/core/native_economy.mjs';
-import {initializeChapterItem,ChapterRunner} from '../web/core/chapter.mjs';
-import {WorldStore,encodeSave,decodeSave} from '../web/core/world.mjs';
-import {withItemQuantity} from '../web/core/equipment.mjs';
-import {runtimeContent} from '../web/core/content_registry.mjs';
+import {readNativeService,nativeEconomyCatalog,nativeServiceRows,nativeOwnedQuantity,applyNativeServiceAction} from '../web/core/items/native_economy.mjs';
+import {initializeChapterItem,ChapterRunner} from '../web/core/story/chapter_runner.mjs';
+import {WorldStore,encodeSave,decodeSave} from '../web/core/world/world.mjs';
+import {withItemQuantity} from '../web/core/party/equipment.mjs';
+import {runtimeContent} from '../web/core/content/content_registry.mjs';
 const json=async name=>JSON.parse(await readFile(new URL(`../web/data/${name}.json`,import.meta.url),'utf8'));
 const [items,story,seed]=await Promise.all(['items','chapter_story','opening_seed'].map(json));
 const catalog=nativeEconomyCatalog(items);

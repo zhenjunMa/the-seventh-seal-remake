@@ -3,10 +3,10 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
-import {createNativeRng} from '../web/core/combat_rules.mjs';
+import {createNativeRng} from '../web/core/battle/combat_rules.mjs';
 import {NativeAssemblyOracle} from './native_assembly_oracle.mjs';
 import {loadedSkillCodeOracle} from './helpers/native_skill_code_oracle.mjs';
-import {validateForestAIData,selectNativeSkills,selectNativeTarget,planForestEnemyAction} from '../web/core/forest_ai.mjs';
+import {validateEnemyAIData,selectNativeSkills,selectNativeTarget,planEnemyAction} from '../web/core/battle/enemy_ai.mjs';
 const clone=structuredClone,hash=b=>createHash('sha256').update(b).digest('hex');
 const data=JSON.parse(await readFile(new URL('../web/data/forest_ai.json',import.meta.url)));
 const instructions=JSON.parse(await readFile(new URL('../evidence/forest_ai_instructions_20261011.json',import.meta.url)));
@@ -73,7 +73,7 @@ function compareTarget(actors,actingIndex,targetSide,values){
 function editedRole(role,edits){const result=clone(role);for(const[index,fields]of Object.entries(edits)){const bytes=Buffer.from(result.skills[index].fixed_raw_hex,'hex');for(const[offset,value]of Object.entries(fields))bytes[Number(offset)]=value;result.skills[index].fixed_raw_hex=bytes.toString('hex');}return result;}
 
 test('exported header, all fixed/action bytes and native instructions match immutable sources',async()=>{
-  validateForestAIData(data);for(const role of roles){const bytes=await readFile(new URL('../../../'+role.source.path,import.meta.url));
+  validateEnemyAIData(data);for(const role of roles){const bytes=await readFile(new URL('../../../'+role.source.path,import.meta.url));
     assert.equal(hash(bytes),role.source.sha256);assert.equal(bytes.subarray(8,8+0x30b).toString('hex'),role.header_raw_hex);
     assert.equal(bytes.readUInt32LE(8),role.skill_count);
     for(const skill of role.skills){const fixed=bytes.subarray(skill.source_record_offset,skill.source_record_offset+0x41d);
@@ -151,7 +151,7 @@ test('empty target pool draws nothing, count1 still draws, HP is not substituted
 test('planned enemy action preserves the same original selection then target RNG stream',()=>{
   for(const role of roles)for(let seed=0;seed<50;seed++){
     const actors=[actor('enemy',{resource_id:role.id}),actor('player-a',{resource_id:'001',side_raw:1}),actor('player-b',{resource_id:'001',side_raw:1})],before=clone(actors);
-    const rng=createNativeRng((seed*174637823)>>>0),actual=planForestEnemyAction({actors,actor_id:'enemy',data,rng});
+    const rng=createNativeRng((seed*174637823)>>>0),actual=planEnemyAction({actors,actor_id:'enemy',data,rng});
     const nativeRng=createNativeRng((seed*174637823)>>>0),oracle=new AIOracle(actors,role,nativeRng,0),chosen=oracle.run(0x5029a0,[0]);
     assert.equal(chosen.eax,1);assert.deepEqual(actual.skill_indices,oracle.selected.skill_indices);assert.deepEqual(actual.skill_codes,oracle.selected.skill_codes);assert.equal(actual.kind,oracle.selected.kind);
     const targeted=oracle.run(0x5014c0,[0]);assert.equal(actual.target_index,targeted.eax);assert.equal(actual.target_id,actors[targeted.eax].id);
@@ -171,7 +171,7 @@ test('invalid source snapshots reject before RNG, recovery and busy flags stay d
   assert.throws(()=>selectNativeSkills({actor:actor('bad',{status_flags_raw:undefined}),role,rng}));
   assert.throws(()=>selectNativeSkills({actor:actor('bad',{status_by_address:{'0x0521f52a':16}}),role,rng}));
   assert.throws(()=>selectNativeSkills({actor:actor(),role:{...role,skills:role.skills.slice(1)},rng}));
-  assert.throws(()=>planForestEnemyAction({actors:[actor('enemy',{reaction_busy_raw:undefined,reaction_inhibit_raw:0})],actor_id:'enemy',data,rng}));
+  assert.throws(()=>planEnemyAction({actors:[actor('enemy',{reaction_busy_raw:undefined,reaction_inhibit_raw:0})],actor_id:'enemy',data,rng}));
   assert.equal(calls,0);
   assert.throws(()=>selectNativeTarget({actors:[actor('caster'),actor('opponent',{side_raw:1})],actor_id:'caster',target_side_raw:0,rng:()=>32768}));
   const addressOnly=actor('ok',{status_flags_raw:undefined,status_by_address:{'0x0521f52a':2}});

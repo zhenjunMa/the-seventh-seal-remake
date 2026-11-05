@@ -1,9 +1,9 @@
 // Continue the earned tablet chains through all six trials and the complete
 // cross-map finale. Battles are declared victory callbacks, not rendered wins.
 import assert from 'node:assert/strict';
-import {WorldStore} from '../../web/core/world.mjs';
-import {chapterObjectState} from '../../web/core/chapter.mjs';
-import {changeEquipment} from '../../web/core/items.mjs';
+import {WorldStore} from '../../web/core/world/world.mjs';
+import {chapterObjectState} from '../../web/core/story/chapter_runner.mjs';
+import {changeEquipment} from '../../web/core/items/items.mjs';
 import {innerWhiteForestRunner} from './inner_white_forest_world.mjs';
 import {sealTabletsComplete} from './seal_tablets_world.mjs';
 import {sealWindComplete} from './seal_wind_world.mjs';

@@ -1,13 +1,13 @@
 // Presentation preview for the source-bound ANM player. Interpolation and
 // blend-state transitions are browser approximations, not native equivalence.
-import {locomotion} from './core/movement.mjs';
-import {linkPlaybackAbort,playbackFrame,playbackTask} from './core/story_playback.mjs';
-import {openingCamera,approachPoint,directArrivalMoves,nativeActorPixelEffects} from './core/opening_presentation.mjs';
+import {locomotion} from './core/exploration/movement.mjs';
+import {linkPlaybackAbort,playbackFrame,playbackTask} from './core/story/story_playback.mjs';
+import {openingCamera,approachPoint,directArrivalMoves,nativeActorPixelEffects} from './core/ui/opening_presentation.mjs';
 import {ActorEffectView} from './actor_effect_view.mjs';
 import {drawMapSprite} from './map_sprite.mjs';
-import {runtimeContent} from './core/content_registry.mjs';
-import {DistanceGait,mapMotionProfile,mapTravelDistance} from './core/map_locomotion.mjs';
-import {nativeNpcActionBindings} from './core/map_npcs.mjs';
+import {runtimeContent} from './core/content/content_registry.mjs';
+import {DistanceGait,mapMotionProfile,mapTravelDistance} from './core/exploration/map_locomotion.mjs';
+import {nativeNpcActionBindings} from './core/exploration/map_npcs.mjs';
 
 export function physicalFrame(action, logicalIndex) {
   const frame = action.uses_sequence ? action.sequence_raw[logicalIndex] : logicalIndex;

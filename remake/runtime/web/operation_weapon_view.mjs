@@ -1,9 +1,9 @@
 import {menuText,menuStyle,menuImage} from './menu_dom.mjs';
 // Source-backed Game001c sockets and the shared Game001b crystal chooser.
 // Persistent socket transactions and eligibility remain controller/core owned.
-import {operationItemCard} from './core/operation_menu.mjs';
+import {operationItemCard} from './core/ui/operation_menu.mjs';
 import {operationEquipmentPreview,operationPickerPage} from './operation_equipment_view.mjs';
-import {operationMnuTextOptions} from './core/menu_presentation.mjs';
+import {operationMnuTextOptions} from './core/ui/menu_presentation.mjs';
 
 const place=(node,left,top,width,height)=>Object.assign(node.style,{position:'absolute',left:left+'px',top:top+'px',...(width==null?{}:{width:width+'px'}),...(height==null?{}:{height:height+'px'})});
 const buttonStyle=node=>Object.assign(node.style,{margin:'0',padding:'0',border:'0',borderRadius:'0',background:'none',boxShadow:'none',outline:'none',textAlign:'left',whiteSpace:'nowrap',fontFamily:'inherit',lineHeight:'25px'});

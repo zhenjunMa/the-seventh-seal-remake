@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {readFile} from 'node:fs/promises';
-import {BattleResources,drawBattleImage} from '../web/core/battle_resources.mjs';
+import {BattleResources,drawBattleImage} from '../web/core/battle/battle_resources.mjs';
 import {BattleView} from '../web/battle_view.mjs';
 
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');

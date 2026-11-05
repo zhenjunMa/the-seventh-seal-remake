@@ -1,9 +1,9 @@
 // services adapters. Persistent state belongs to the shared runtime context.
-import {encodeSave,DEFAULT_GAME_SETTINGS} from "../core/world.mjs";
-import {loadRuntimeConfiguration, createRuntimeConfigurationSession} from "../core/runtime_config.mjs";
-import {attachSavePreview} from "../core/save_preview.mjs";
-import {MANUAL_SAVE_SLOTS,normalizeSaveSlot,saveSlotLabel} from "../core/save_slots.mjs";
-import {captureMapNpcState} from '../core/map_npc_state.mjs';
+import {encodeSave,DEFAULT_GAME_SETTINGS} from "../core/world/world.mjs";
+import {loadRuntimeConfiguration, createRuntimeConfigurationSession} from "../core/config/runtime_config.mjs";
+import {attachSavePreview} from "../core/world/save_preview.mjs";
+import {MANUAL_SAVE_SLOTS,normalizeSaveSlot,saveSlotLabel} from "../core/world/save_slots.mjs";
+import {captureMapNpcState} from '../core/exploration/map_npc_state.mjs';
 
 export function createServicesController({state, actions, $, canvas, ctx,now=()=>performance.now()}) {
   let configurationReady;

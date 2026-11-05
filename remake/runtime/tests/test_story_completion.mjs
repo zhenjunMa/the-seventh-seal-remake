@@ -2,13 +2,13 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
-import {WorldStore} from '../web/core/world.mjs';
-import {SceneController} from '../web/core/scenes.mjs';
-import {ChapterRunner} from '../web/core/chapter.mjs';
-import {runtimeContent} from '../web/core/content_registry.mjs';
+import {WorldStore} from '../web/core/world/world.mjs';
+import {SceneController} from '../web/core/exploration/scene_controller.mjs';
+import {ChapterRunner} from '../web/core/story/chapter_runner.mjs';
+import {runtimeContent} from '../web/core/content/content_registry.mjs';
 import {createStoryController} from '../web/controllers/story.mjs';
 import {createSessionController} from '../web/controllers/session.mjs';
-import {STORY_COMPLETION_STORAGE_KEY,hasNativeStoryCompletion,loadStoryCompletion} from '../web/core/story_completion.mjs';
+import {STORY_COMPLETION_STORAGE_KEY,hasNativeStoryCompletion,loadStoryCompletion} from '../web/core/story/story_completion.mjs';
 const copy=structuredClone,read=async name=>JSON.parse(await readFile(new URL(`../web/data/${name}.json`,import.meta.url),'utf8'));
 const [seed,story]=await Promise.all(['opening_seed','chapter_story'].map(read));
 function fixture(){

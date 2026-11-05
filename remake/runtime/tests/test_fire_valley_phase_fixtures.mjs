@@ -2,8 +2,8 @@
 // regeneration remains a separate history check, not a runtime dependency.
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {WorldStore} from '../web/core/world.mjs';
-import {admitPartyMember} from '../web/core/party_members.mjs';
+import {WorldStore} from '../web/core/world/world.mjs';
+import {admitPartyMember} from '../web/core/party/party_members.mjs';
 import {fireValleyPartyFixture,headlessRunner} from './helpers/fire_valley_world.mjs';
 import {originalTlk as sourceRecord} from './helpers/first_return_source.mjs';
 

@@ -2,8 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {webcrypto} from 'node:crypto';
-import {ChapterRunner, validateChapterStory, chapterProgress, chapterRoleFromDefinition, chapterObjectState, initializeChapterItem, chapterRestChoices,chapterChoices} from '../web/core/chapter.mjs';
-import {WorldStore, validateWorld, encodeSave, decodeSave} from '../web/core/world.mjs';
+import {ChapterRunner, validateChapterStory, chapterProgress, chapterRoleFromDefinition, chapterObjectState, initializeChapterItem, chapterRestChoices,chapterChoices} from '../web/core/story/chapter_runner.mjs';
+import {WorldStore, validateWorld, encodeSave, decodeSave} from '../web/core/world/world.mjs';
 
 globalThis.crypto ??= webcrypto;
 const read = file => JSON.parse(fs.readFileSync(new URL(file, import.meta.url), 'utf8'));

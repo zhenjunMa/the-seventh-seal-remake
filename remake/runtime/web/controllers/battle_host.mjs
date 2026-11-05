@@ -1,4 +1,4 @@
-import {playbackTask} from '../core/story_playback.mjs';
+import {playbackTask} from '../core/story/story_playback.mjs';
 
 // Composition adapter: combat receives named capabilities and read-only data
 // access, rather than the application's mutable state/action registries.

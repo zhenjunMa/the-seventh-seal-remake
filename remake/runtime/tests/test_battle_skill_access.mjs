@@ -1,10 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {validateBattleSkillProgress,isBattleSkillLearned,supportedBattleRecoverySkills} from '../web/core/battle_skill_access.mjs';
+import {validateBattleSkillProgress,isBattleSkillLearned,supportedBattleRecoverySkills} from '../web/core/battle/battle_skill_access.mjs';
 import {createPartySample} from '../web/party_sample.mjs';
-import {WorldStore,validateWorld,encodeSave,decodeSave} from '../web/core/world.mjs';
-import {compileRuntimeConfiguration,loadRuntimeConfiguration,expandRuntimeConfiguration} from '../web/core/runtime_config.mjs';
+import {WorldStore,validateWorld,encodeSave,decodeSave} from '../web/core/world/world.mjs';
+import {compileRuntimeConfiguration,loadRuntimeConfiguration,expandRuntimeConfiguration} from '../web/core/config/runtime_config.mjs';
 const read=async name=>JSON.parse(await readFile(new URL('../web/data/'+name+'.json',import.meta.url)));
 const names={combat:'combat_sample',forest:'forest_combat',scheduler:'battle_scheduler',ai:'forest_ai',rewards:'party_rewards',party_skills:'party_skills',items:'items'};
 const data=Object.fromEntries(await Promise.all(Object.entries(names).map(async([key,name])=>[key,await read(name)])));

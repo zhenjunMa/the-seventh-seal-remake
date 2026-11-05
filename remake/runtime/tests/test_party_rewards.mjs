@@ -6,7 +6,7 @@ import crypto from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 import {NativeAssemblyOracle} from './native_assembly_oracle.mjs';
 import {validatePartyRewards,createRewardLedger,collectEnemyDefeat,planVictoryRewards,
-  progressHeaderForRole,nativeExperienceEligibility} from '../web/core/battle_rewards.mjs';
+  progressHeaderForRole,nativeExperienceEligibility} from '../web/core/battle/battle_rewards.mjs';
 
 const runtime=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..'), root=path.resolve(runtime,'../..');
 const read=relative=>JSON.parse(fs.readFileSync(path.join(runtime,relative),'utf8'));

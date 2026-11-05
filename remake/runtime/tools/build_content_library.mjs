@@ -3,8 +3,8 @@ import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 import path from 'node:path';
-import {buildContentLibrary,resolveContentReference,searchContentLibrary} from '../web/core/content_library.mjs';
-import {createSkillRegistry} from '../web/core/skill_registry.mjs';
+import {buildContentLibrary,resolveContentReference,searchContentLibrary} from '../web/core/content/content_library.mjs';
+import {createSkillRegistry} from '../web/core/config/skill_registry.mjs';
 const directory=new URL('../web/data/',import.meta.url),output=new URL('library/index.json',directory);
 const sources={roles:'library/roles.json',skills:'library/skills.json',magic:'library/magic.json',items:'items.json',registration:'runtime_content.json',partySkills:'party_skills.json',ai:'forest_ai.json',
   skillConfiguration:'config/skills.json',itemConfiguration:'config/items.json'};

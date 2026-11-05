@@ -4,16 +4,16 @@ import fs from 'node:fs';
 import {createHash,webcrypto} from 'node:crypto';
 import {readContentDefinition} from '../tools/resolve_content_definition.mjs';
 import {readNativeChestFixtures,WHITE_FOREST_MAPS} from './native_map_chest_fixtures.mjs';
-import {ChapterRunner,initializeChapterItem,chapterObjectState,validateChapterStory} from '../web/core/chapter.mjs';
-import {nativeKeyedChest,nativeChestAnimation} from '../web/core/native_map_chests.mjs';
+import {ChapterRunner,initializeChapterItem,chapterObjectState,validateChapterStory} from '../web/core/story/chapter_runner.mjs';
+import {nativeKeyedChest,nativeChestAnimation} from '../web/core/exploration/native_map_chests.mjs';
 import {createStoryController} from '../web/controllers/story.mjs';
 import {createMapController} from '../web/controllers/map.mjs';
-import {StoryPlayback} from '../web/core/story_playback.mjs';
+import {StoryPlayback} from '../web/core/story/story_playback.mjs';
 import {ActionClock} from '../web/phaser/components/action_clock.mjs';
-import {nativeNpcActionBindings} from '../web/core/map_npcs.mjs';
-import {WorldStore,encodeSave,decodeSave} from '../web/core/world.mjs';
-import {validateStoryBindings} from '../web/core/content_dependencies.mjs';
-import {inspectContentReadiness} from '../web/core/content_readiness.mjs';
+import {nativeNpcActionBindings} from '../web/core/exploration/map_npcs.mjs';
+import {WorldStore,encodeSave,decodeSave} from '../web/core/world/world.mjs';
+import {validateStoryBindings} from '../web/core/content/content_dependencies.mjs';
+import {inspectContentReadiness} from '../web/core/content/content_readiness.mjs';
 globalThis.crypto??=webcrypto;
 const fixture=readNativeChestFixtures(),copy=value=>structuredClone(value);
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
@@ -100,10 +100,10 @@ test('All thirteen registered direct chests close their key, reward, real action
       'web/data/chapter_story.json':fileHash('../web/data/chapter_story.json'),
       'web/data/chapter_map_resources.json':fileHash('../web/data/chapter_map_resources.json'),
       'web/data/runtime_content.json':fileHash('../web/data/runtime_content.json'),
-      'web/core/native_map_chests.mjs':fileHash('../web/core/native_map_chests.mjs'),
-      'web/core/map_objects.mjs':fileHash('../web/core/map_objects.mjs'),
-      'web/core/map_presentation.mjs':fileHash('../web/core/map_presentation.mjs'),
-      'web/core/chapter.mjs':fileHash('../web/core/chapter.mjs'),
+      'web/core/exploration/native_map_chests.mjs':fileHash('../web/core/exploration/native_map_chests.mjs'),
+      'web/core/exploration/map_objects.mjs':fileHash('../web/core/exploration/map_objects.mjs'),
+      'web/core/ui/map_presentation.mjs':fileHash('../web/core/ui/map_presentation.mjs'),
+      'web/core/story/chapter_runner.mjs':fileHash('../web/core/story/chapter_runner.mjs'),
       'web/controllers/story.mjs':fileHash('../web/controllers/story.mjs'),
       'tests/test_native_map_chest_closure.mjs':fileHash('./test_native_map_chest_closure.mjs')},
       content_resolution:'readContentDefinition() resolves current authoring JSON against original DAT identities; compiled runtime_content.mjs is not required.'},

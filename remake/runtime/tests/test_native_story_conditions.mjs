@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {evaluateNativeStoryCondition,nativeConditionByte,validateNativeStoryCondition} from '../web/core/native_story_conditions.mjs';
+import {evaluateNativeStoryCondition,nativeConditionByte,validateNativeStoryCondition} from '../web/core/story/native_story_conditions.mjs';
 
 async function sourceRecord(mapId,id){
   const bytes=await readFile(new URL(`../../../Map/${mapId}.TLK`,import.meta.url));

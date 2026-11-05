@@ -3,7 +3,7 @@
 The shipped DAT inventory includes m01020a, m03012_1f, m70078-1_1,
 m71076-1-03, m72010-0-A, mtest/mtest2, Elf-forest-A through -W, and the seven ruin families.
 Case is normalized only at filename boundaries.
-Keep this contract aligned with web/core/native_map_identity.mjs.
+Keep this contract aligned with web/core/exploration/native_map_identity.mjs.
 """
 import re
 

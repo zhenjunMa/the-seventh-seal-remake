@@ -8,7 +8,7 @@
 <script type="module">
 import {DialogueView} from '../dialogue_view.mjs';
 import {createStoryController} from '../controllers/story.mjs';
-import {chapterRestChoices} from '../core/chapter.mjs';
+import {chapterRestChoices} from '../core/story/chapter_runner.mjs';
 const $=id=>document.getElementById(id),load=async path=>(await fetch(path)).json();
 const [manifest,fonts,chapter]=await Promise.all([load('../data/dialogue_ui.json'),load('../data/dialogue_fonts.json'),load('../data/chapter_story.json')]);
 const logs=[],samples=[],state={keys:new Set(),world:{location:{map_id:'M17026'}},chapterResources:{npcs_by_map:{}},captionView:{close(){}},

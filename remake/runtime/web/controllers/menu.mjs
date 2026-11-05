@@ -1,15 +1,15 @@
 // menu adapters. Persistent state belongs to the shared runtime context.
-import {effectiveSkillSource,updateEffectiveSkillSource} from "../core/battle_skill_access.mjs";
-import {createPartyActors} from "../core/party_attributes.mjs";
-import {usableItems, canEquipItem} from "../core/items.mjs";
-import {equipmentRows} from "../core/equipment.mjs";
-import {operationActorStatus, learnedOperationSkills, operationItemCard, operationWeaponDetails} from "../core/operation_menu.mjs";
-import {skillShortcuts} from "../core/skill_shortcuts.mjs";
-import {availableFieldSkills, fieldSkillAvailability} from "../core/field_skills.mjs";
-import {useWorldSkill} from "../core/field_skills.mjs";
-import {changeTechniqueSlot,createTechniqueCombination,renameTechniqueCombination,deleteTechniqueCombination} from "../core/menu_techniques.mjs";
-import {partyFormationSlots,exchangeFormationSlots} from "../core/party_formation.mjs";
-import {crystalSocketCandidates,insertCrystal,removeCrystal} from "../core/crystal_sockets.mjs";
+import {effectiveSkillSource,updateEffectiveSkillSource} from "../core/battle/battle_skill_access.mjs";
+import {createPartyActors} from "../core/party/party_attributes.mjs";
+import {usableItems, canEquipItem} from "../core/items/items.mjs";
+import {equipmentRows} from "../core/party/equipment.mjs";
+import {operationActorStatus, learnedOperationSkills, operationItemCard, operationWeaponDetails} from "../core/ui/operation_menu.mjs";
+import {skillShortcuts} from "../core/party/skill_shortcuts.mjs";
+import {availableFieldSkills, fieldSkillAvailability} from "../core/party/field_skills.mjs";
+import {useWorldSkill} from "../core/party/field_skills.mjs";
+import {changeTechniqueSlot,createTechniqueCombination,renameTechniqueCombination,deleteTechniqueCombination} from "../core/ui/menu_techniques.mjs";
+import {partyFormationSlots,exchangeFormationSlots} from "../core/party/party_formation.mjs";
+import {crystalSocketCandidates,insertCrystal,removeCrystal} from "../core/party/crystal_sockets.mjs";
 
 export function createMenuController({state, actions, $, canvas, ctx}) {
   const battleItemSelections=new Map();

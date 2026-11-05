@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {createPartyActors} from '../web/core/party_attributes.mjs';
+import {createPartyActors} from '../web/core/party/party_attributes.mjs';
 import {OperationEquipmentView,operationEquipmentPreview} from '../web/operation_equipment_view.mjs';
 const load=name=>JSON.parse(readFileSync(new URL(`../web/data/${name}.json`,import.meta.url),'utf8'));
 const manifest=load('operation_menu'),items=load('items'),attributes=load('party_combat');

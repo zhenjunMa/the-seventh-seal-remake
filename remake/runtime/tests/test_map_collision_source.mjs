@@ -3,12 +3,12 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createHash,webcrypto} from 'node:crypto';
-import {MovementMap} from '../web/core/movement.mjs';
-import {nativeMapMovement} from '../web/core/map_locomotion.mjs';
-import {worldMapEntry} from '../web/core/map_connections.mjs';
-import {WorldStore,encodeSave,decodeSave} from '../web/core/world.mjs';
-import {chapterRoleFromDefinition} from '../web/core/chapter.mjs';
-import {validateChapterAnimation} from '../web/core/chapter_animation.mjs';
+import {MovementMap} from '../web/core/exploration/movement.mjs';
+import {nativeMapMovement} from '../web/core/exploration/map_locomotion.mjs';
+import {worldMapEntry} from '../web/core/exploration/map_connections.mjs';
+import {WorldStore,encodeSave,decodeSave} from '../web/core/world/world.mjs';
+import {chapterRoleFromDefinition} from '../web/core/story/chapter_runner.mjs';
+import {validateChapterAnimation} from '../web/core/story/chapter_animation.mjs';
 
 globalThis.crypto??=webcrypto;
 const near=(actual,expected)=>assert.ok(Math.abs(actual-expected)<1e-4,`${actual} != ${expected}`);

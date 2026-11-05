@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {techniqueSlots,sourceTechniqueSlot,techniqueCandidates,changeTechniqueSlot,validateTechniqueBindingsState,TECHNIQUE_COMMANDS,createTechniqueCombination,renameTechniqueCombination,deleteTechniqueCombination,techniqueCombinations,techniqueCombinationName} from '../web/core/menu_techniques.mjs';
+import {techniqueSlots,sourceTechniqueSlot,techniqueCandidates,changeTechniqueSlot,validateTechniqueBindingsState,TECHNIQUE_COMMANDS,createTechniqueCombination,renameTechniqueCombination,deleteTechniqueCombination,techniqueCombinations,techniqueCombinationName} from '../web/core/ui/menu_techniques.mjs';
 const load=n=>JSON.parse(readFileSync(new URL(`../web/data/${n}.json`,import.meta.url),'utf8'));
 const source=load('party_skills');
 const initial=JSON.parse(JSON.parse(readFileSync(new URL('../evidence/chapter_systems_home_save.json',import.meta.url),'utf8')).payload);

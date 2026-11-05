@@ -2,12 +2,12 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {drawMapScene} from '../web/map_scene_view.mjs';
-import {WorldStore} from '../web/core/world.mjs';
-import {ChapterRunner} from '../web/core/chapter.mjs';
-import {StoryRepository} from '../web/core/story_repository.mjs';
-import {runtimeContent,runtimeContentDefinition} from '../web/core/content_registry.mjs';
-import {captureMapNpcState,restoreMapNpcState,validateMapNpcState} from '../web/core/map_npc_state.mjs';
-import {mapPresentation} from '../web/core/map_presentation.mjs';
+import {WorldStore} from '../web/core/world/world.mjs';
+import {ChapterRunner} from '../web/core/story/chapter_runner.mjs';
+import {StoryRepository} from '../web/core/story/story_repository.mjs';
+import {runtimeContent,runtimeContentDefinition} from '../web/core/content/content_registry.mjs';
+import {captureMapNpcState,restoreMapNpcState,validateMapNpcState} from '../web/core/exploration/map_npc_state.mjs';
+import {mapPresentation} from '../web/core/ui/map_presentation.mjs';
 
 const {createMapController}=await import('../web/controllers/map.mjs');
 const {createStoryController}=await import('../web/controllers/story.mjs');

@@ -2,12 +2,12 @@
 // travel, services, crafting and reward RNG supply every prerequisite. The
 // battle callback certifies story rules only, not combat or rendered play.
 import assert from 'node:assert/strict';
-import {WorldStore} from '../../web/core/world.mjs';
-import {chapterObjectState} from '../../web/core/chapter.mjs';
-import {nativeEconomyCatalog,nativeOwnedQuantity,readNativeService,applyNativeServiceAction} from '../../web/core/native_economy.mjs';
-import {insertCrystal,removeCrystal} from '../../web/core/crystal_sockets.mjs';
-import {useWorldItem,changeEquipment} from '../../web/core/items.mjs';
-import {createPartyActors} from '../../web/core/party_attributes.mjs';
+import {WorldStore} from '../../web/core/world/world.mjs';
+import {chapterObjectState} from '../../web/core/story/chapter_runner.mjs';
+import {nativeEconomyCatalog,nativeOwnedQuantity,readNativeService,applyNativeServiceAction} from '../../web/core/items/native_economy.mjs';
+import {insertCrystal,removeCrystal} from '../../web/core/party/crystal_sockets.mjs';
+import {useWorldItem,changeEquipment} from '../../web/core/items/items.mjs';
+import {createPartyActors} from '../../web/core/party/party_attributes.mjs';
 import {guildComplete} from './guild_world.mjs';
 import {innerWhiteForestRunner,innerWhiteForestRoute} from './inner_white_forest_world.mjs';
 

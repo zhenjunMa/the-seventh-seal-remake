@@ -1,8 +1,8 @@
 import {OperationMenuView} from '../operation_menu_view.mjs';
 import {createMenuController} from '../controllers/menu.mjs';
-import {chapterRoleFromDefinition} from '../core/chapter.mjs';
-import {createPartyActors} from '../core/party_attributes.mjs';
-import {WorldStore} from '../core/world.mjs';
+import {chapterRoleFromDefinition} from '../core/story/chapter_runner.mjs';
+import {createPartyActors} from '../core/party/party_attributes.mjs';
+import {WorldStore} from '../core/world/world.mjs';
 import {registerGlyph} from '../phaser/rendering/recorded_surface.mjs';
 
 const frame=()=>new Promise(resolve=>requestAnimationFrame(resolve));

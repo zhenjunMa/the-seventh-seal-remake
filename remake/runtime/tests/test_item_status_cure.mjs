@@ -4,11 +4,11 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {NativeAssemblyOracle} from './native_assembly_oracle.mjs';
-import {initializeNativeStatuses,removeNativeStatus} from '../web/core/battle_status.mjs';
-import {restoreActorWithItem,usableItems,useWorldItem} from '../web/core/items.mjs';
-import {compileItemConfiguration} from '../web/core/item_registry.mjs';
-import {withItemQuantity} from '../web/core/equipment.mjs';
-import {WorldStore,encodeSave,decodeSave} from '../web/core/world.mjs';
+import {initializeNativeStatuses,removeNativeStatus} from '../web/core/battle/battle_status.mjs';
+import {restoreActorWithItem,usableItems,useWorldItem} from '../web/core/items/items.mjs';
+import {compileItemConfiguration} from '../web/core/items/item_registry.mjs';
+import {withItemQuantity} from '../web/core/party/equipment.mjs';
+import {WorldStore,encodeSave,decodeSave} from '../web/core/world/world.mjs';
 import {fireValleyPartyFixture,headlessRunner} from './helpers/fire_valley_world.mjs';
 const json=async path=>JSON.parse(await readFile(new URL(`../${path}`,import.meta.url),'utf8'));
 const [published,statusData,sample,instructions,proof,overrides,attributes]=await Promise.all([

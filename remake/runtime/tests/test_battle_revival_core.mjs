@@ -3,11 +3,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {BattleController} from '../web/core/combat.mjs';
-import {WorldStore} from '../web/core/world.mjs';
+import {BattleController} from '../web/core/battle/battle_controller.mjs';
+import {WorldStore} from '../web/core/world/world.mjs';
 import {createForestSample} from '../web/forest_sample.mjs';
-import {selectNativeRevivalAnimation} from '../web/core/battle_reactions.mjs';
-import {REVIVAL_EVIDENCE} from '../web/core/battle_revival.mjs';
+import {selectNativeRevivalAnimation} from '../web/core/battle/battle_reactions.mjs';
+import {REVIVAL_EVIDENCE} from '../web/core/battle/battle_revival.mjs';
 const read=async name=>JSON.parse(await readFile(new URL('../web/data/'+name,import.meta.url)));
 const [seed,base,forest,skills,scheduler,reactions,party]=await Promise.all(['route_seed.json','combat_sample.json','forest_combat.json','skills.json','battle_scheduler.json','enemy_reactions.json','party_skills.json'].map(read));
 const copy=structuredClone,zero='00'.repeat(0xc6),address=n=>`0x${n.toString(16).padStart(8,'0')}`;

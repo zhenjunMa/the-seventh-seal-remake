@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {innerWhiteForestSource} from './helpers/inner_white_forest_world.mjs';
 import {sealRegionComplete} from './helpers/seal_region_world.mjs';
-import {nativeOwnedQuantity} from '../web/core/native_economy.mjs';
+import {nativeOwnedQuantity} from '../web/core/items/native_economy.mjs';
 
 test('the earned six tablets open every original trial and the complete three-battle finale, returning with its reward once',async()=>{
   const source=await innerWhiteForestSource(),{world,trace}=await sealRegionComplete(source);

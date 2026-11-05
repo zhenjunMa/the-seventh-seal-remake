@@ -1,13 +1,13 @@
 import {PhaserRuntime} from './runtime.mjs';
 import {drawGameScene} from '../map_scene_view.mjs';
 import {BattleView} from '../battle_view.mjs';
-import {BattleController} from '../core/combat.mjs';
-import {WorldStore} from '../core/world.mjs';
-import {resolveAction,applyNativeDamage,createNativeRng} from '../core/combat_rules.mjs';
+import {BattleController} from '../core/battle/battle_controller.mjs';
+import {WorldStore} from '../core/world/world.mjs';
+import {resolveAction,applyNativeDamage,createNativeRng} from '../core/battle/combat_rules.mjs';
 import {createBattleSample,resourcesForWorld,consumeBattleMp} from '../combat_sample.mjs';
-import {MovementMap,MAP_FOOTPRINT,mapActorPosition} from '../core/movement.mjs';
-import {MapLocomotion,mapMotionProfile} from '../core/map_locomotion.mjs';
-import {MapNpcRuntime} from '../core/map_npcs.mjs';
+import {MovementMap,MAP_FOOTPRINT,mapActorPosition} from '../core/exploration/movement.mjs';
+import {MapLocomotion,mapMotionProfile} from '../core/exploration/map_locomotion.mjs';
+import {MapNpcRuntime} from '../core/exploration/map_npcs.mjs';
 
 const $=id=>document.getElementById(id),keys=new Set(),json=async path=>{
   const response=await fetch(path);if(!response.ok)throw new Error(`定义读取失败：${path}`);return response.json();

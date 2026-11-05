@@ -1,5 +1,5 @@
-import {ImageResources} from "../core/image_resources.mjs";
-import {MANUAL_SAVE_SLOTS} from "../core/save_slots.mjs";
+import {ImageResources} from "../core/resources/image_resources.mjs";
+import {MANUAL_SAVE_SLOTS} from "../core/world/save_slots.mjs";
 // One owner for mutable runtime state; views and rules receive explicit adapters.
 export function createRuntimeState($) {
   return {

@@ -4,7 +4,7 @@ import {readFile} from 'node:fs/promises';
 import {fileURLToPath} from 'node:url';
 import path from 'node:path';
 import {createHash} from 'node:crypto';
-import {resolveContentDefinition} from '../web/core/content_definition.mjs';
+import {resolveContentDefinition} from '../web/core/content/content_definition.mjs';
 const web=new URL('../web/',import.meta.url);
 export async function readContentDefinition(){
   const input_sha256={},hash=bytes=>createHash('sha256').update(bytes).digest('hex');

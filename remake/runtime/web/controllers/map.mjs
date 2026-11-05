@@ -1,17 +1,17 @@
 // map adapters. Persistent state belongs to the shared runtime context.
-import {MovementMap,mapActorPosition} from "../core/movement.mjs";
-import {planRouteExit} from "../core/route.mjs";
-import {initialEncounterState, previewMovement} from "../core/encounters.mjs";
-import {createPartyActors} from "../core/party_attributes.mjs";
+import {MovementMap,mapActorPosition} from "../core/exploration/movement.mjs";
+import {planRouteExit} from "../core/exploration/route.mjs";
+import {initialEncounterState, previewMovement} from "../core/exploration/encounters.mjs";
+import {createPartyActors} from "../core/party/party_attributes.mjs";
 import {drawGameScene,drawOpeningScene} from "../map_scene_view.mjs";
-import {openingCamera} from "../core/opening_presentation.mjs";
-import {SAVE_PREVIEW_WIDTH,SAVE_PREVIEW_HEIGHT} from "../core/save_preview.mjs";
-import {MapNpcRuntime} from "../core/map_npcs.mjs";
-import {projectMapStage} from "../core/map_stage.mjs";
-import {MapObjectRuntime} from "../core/map_objects.mjs";
-import {storyBindings,registeredRoles} from "../core/content_registry.mjs";
-import {chapterRouteExits} from "../core/map_connections.mjs";
-import {MapLocomotion,mapMotionProfile,nativeMapMovement} from "../core/map_locomotion.mjs";
+import {openingCamera} from "../core/ui/opening_presentation.mjs";
+import {SAVE_PREVIEW_WIDTH,SAVE_PREVIEW_HEIGHT} from "../core/world/save_preview.mjs";
+import {MapNpcRuntime} from "../core/exploration/map_npcs.mjs";
+import {projectMapStage} from "../core/exploration/map_stage.mjs";
+import {MapObjectRuntime} from "../core/exploration/map_objects.mjs";
+import {storyBindings,registeredRoles} from "../core/content/content_registry.mjs";
+import {chapterRouteExits} from "../core/exploration/map_connections.mjs";
+import {MapLocomotion,mapMotionProfile,nativeMapMovement} from "../core/exploration/map_locomotion.mjs";
 
 import {createExplorationPresentation} from './presentation_handoff.mjs';
 

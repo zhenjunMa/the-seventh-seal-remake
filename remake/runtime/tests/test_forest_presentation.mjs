@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {BattleView,compileActionTimeline,validateBattleViewMetadata} from '../web/battle_view.mjs';
-import {runtimeContent} from '../web/core/content_registry.mjs';
+import {runtimeContent} from '../web/core/content/content_registry.mjs';
 const root=new URL('../../../',import.meta.url),base=new URL('../',import.meta.url);
 const read=async p=>JSON.parse(await readFile(new URL('web/data/'+p,base)));
 const meta=await read('forest_battle_view.json'),yantu=await read('yantu_layers.json'),xuanying=await read('xuanying_layers.json');

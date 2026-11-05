@@ -1,12 +1,12 @@
 // Rule fixtures use checked-in source tables and production party/story APIs.
 // This is an explicit development handoff, not a natural full-game playthrough.
 import {readFile} from 'node:fs/promises';
-import {WorldStore} from '../../web/core/world.mjs';
-import {ChapterRunner} from '../../web/core/chapter.mjs';
-import {ChapterAnimationRunner} from '../../web/core/chapter_animation.mjs';
-import {admitPartyMember,deactivatePartyMember,controlPartyActor} from '../../web/core/party_members.mjs';
-import {runtimeContent} from '../../web/core/content_registry.mjs';
-import {worldMapEntry} from '../../web/core/map_connections.mjs';
+import {WorldStore} from '../../web/core/world/world.mjs';
+import {ChapterRunner} from '../../web/core/story/chapter_runner.mjs';
+import {ChapterAnimationRunner} from '../../web/core/story/chapter_animation.mjs';
+import {admitPartyMember,deactivatePartyMember,controlPartyActor} from '../../web/core/party/party_members.mjs';
+import {runtimeContent} from '../../web/core/content/content_registry.mjs';
+import {worldMapEntry} from '../../web/core/exploration/map_connections.mjs';
 
 const read=async name=>JSON.parse(await readFile(new URL(`../../web/data/${name}.json`,import.meta.url),'utf8'));
 const [story,seed,worldMap]=await Promise.all(['chapter_story','opening_seed','world_map'].map(read));

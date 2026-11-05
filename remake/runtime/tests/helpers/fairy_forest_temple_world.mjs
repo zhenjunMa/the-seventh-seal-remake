@@ -2,10 +2,10 @@
 // original entry markers; battle callbacks and instant media are rule checks,
 // not walking, rendered battle victories or natural movie playback.
 import assert from 'node:assert/strict';
-import {WorldStore,encodeSave,decodeSave} from '../../web/core/world.mjs';
-import {StoryPlayback} from '../../web/core/story_playback.mjs';
-import {chapterObjectState} from '../../web/core/chapter.mjs';
-import {allPartyRoles} from '../../web/core/party_roster.mjs';
+import {WorldStore,encodeSave,decodeSave} from '../../web/core/world/world.mjs';
+import {StoryPlayback} from '../../web/core/story/story_playback.mjs';
+import {chapterObjectState} from '../../web/core/story/chapter_runner.mjs';
+import {allPartyRoles} from '../../web/core/party/party_roster.mjs';
 import {floatingCitySecondComplete} from './floating_city_pc02_world.mjs';
 import {innerWhiteForestRunner,innerWhiteForestRoute} from './inner_white_forest_world.mjs';
 

@@ -32,7 +32,7 @@ node remake/runtime/tools/build_content_library.mjs --query items 125
 node remake/runtime/tools/build_content_library.mjs --query search 海皇印 items
 ```
 
-工具代码可复用`core/content_library.mjs`的resolveContentReference／searchContentLibrary。目录中的runtime_registered=false不开放执行、入队或学习。
+工具代码可复用`core/content/content_library.mjs`的resolveContentReference／searchContentLibrary。目录中的runtime_registered=false不开放执行、入队或学习。
 
 ## 数值配置
 

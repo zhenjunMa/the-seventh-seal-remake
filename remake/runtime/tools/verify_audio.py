@@ -19,7 +19,7 @@ def main():
     assert before == sources, 'Original audio sources differ from the recorded export'
     for path,expected in {**manifest.get('reference_hashes',{}),**manifest.get('native_bundle_hashes',{})}.items():
         assert sha(ROOT/path)==expected, f'Audio source manifest/evidence reference changed: {path}'
-    files = [manifest_path,RUNTIME/'web/core/audio.mjs',RUNTIME/'tests/test_audio.mjs']
+    files = [manifest_path,RUNTIME/'web/core/resources/audio.mjs',RUNTIME/'tests/test_audio.mjs']
     files += [RUNTIME/'web'/clip['path'].lstrip('/') for clip in manifest['clips'].values()]
     video_path=RUNTIME/'evidence/gameover_video_export.json'
     video=json.loads(video_path.read_text('utf-8'))

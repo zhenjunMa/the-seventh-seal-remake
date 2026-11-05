@@ -1,12 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {runtimeContent} from '../web/core/content_registry.mjs';
-import {scriptedBattleSource,nativeScriptedBattle,beginScriptedBattle,commitScriptedBattle} from '../web/core/scripted_battle.mjs';
-import {ChapterRunner} from '../web/core/chapter.mjs';
-import {WorldStore,encodeSave,decodeSave} from '../web/core/world.mjs';
-import {initialEncounterState} from '../web/core/encounters.mjs';
-import {admitPartyMember} from '../web/core/party_members.mjs';
+import {runtimeContent} from '../web/core/content/content_registry.mjs';
+import {scriptedBattleSource,nativeScriptedBattle,beginScriptedBattle,commitScriptedBattle} from '../web/core/battle/scripted_battle.mjs';
+import {ChapterRunner} from '../web/core/story/chapter_runner.mjs';
+import {WorldStore,encodeSave,decodeSave} from '../web/core/world/world.mjs';
+import {initialEncounterState} from '../web/core/exploration/encounters.mjs';
+import {admitPartyMember} from '../web/core/party/party_members.mjs';
 const copy=structuredClone;
 const read=name=>JSON.parse(readFileSync(new URL(`../web/data/${name}.json`,import.meta.url),'utf8'));
 const seed=read('opening_seed'),story=read('chapter_story');

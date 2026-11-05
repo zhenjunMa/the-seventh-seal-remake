@@ -1,9 +1,9 @@
 // Shared source-backed fixtures; mutable worlds remain private to each case.
 import {readFile} from 'node:fs/promises';
-import {ChapterRunner} from '../../web/core/chapter.mjs';
-import {ChapterAnimationRunner} from '../../web/core/chapter_animation.mjs';
-import {WorldStore} from '../../web/core/world.mjs';
-import {runtimeContent} from '../../web/core/content_registry.mjs';
+import {ChapterRunner} from '../../web/core/story/chapter_runner.mjs';
+import {ChapterAnimationRunner} from '../../web/core/story/chapter_animation.mjs';
+import {WorldStore} from '../../web/core/world/world.mjs';
+import {runtimeContent} from '../../web/core/content/content_registry.mjs';
 const read=async file=>JSON.parse(await readFile(new URL(file,new URL('../',import.meta.url)),'utf8'));
 const [story,seed,mapData]=await Promise.all([read('../web/data/chapter_story.json'),read('../web/data/opening_seed.json'),read('../web/data/world_map.json')]);
 const maps=Object.keys(runtimeContent.maps),regional=maps.filter(id=>id.startsWith('M170'));

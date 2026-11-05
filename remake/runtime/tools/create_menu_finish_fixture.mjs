@@ -1,7 +1,7 @@
 // Standalone UI fixture: no original save or browser progress is written.
 import {readFile,writeFile,access} from 'node:fs/promises';
-import {WorldStore,decodeSave,encodeSave} from '../web/core/world.mjs';
-import {withItemQuantity,validateItemInstance} from '../web/core/equipment.mjs';
+import {WorldStore,decodeSave,encodeSave} from '../web/core/world/world.mjs';
+import {withItemQuantity,validateItemInstance} from '../web/core/party/equipment.mjs';
 const runtime=new URL('../',import.meta.url),read=async path=>JSON.parse(await readFile(new URL(path,runtime),'utf8'));
 const output=new URL('evidence/menu_finish_browser_20261014/menu-test-save.json',runtime);
 try{await access(output);throw new Error('UI fixture already exists');}catch(error){if(error.code!=='ENOENT')throw error;}

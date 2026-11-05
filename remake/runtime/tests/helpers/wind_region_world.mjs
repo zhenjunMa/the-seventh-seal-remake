@@ -3,16 +3,16 @@
 // not prove rendered victories, natural walking or movie completion.
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {WorldStore,encodeSave,decodeSave} from '../../web/core/world.mjs';
-import {WorldMapController} from '../../web/core/world_map.mjs';
-import {worldMapEntry} from '../../web/core/map_connections.mjs';
-import {loadEncounterMap} from '../../web/core/encounters.mjs';
-import {storyBindings} from '../../web/core/content_registry.mjs';
-import {StoryPlayback} from '../../web/core/story_playback.mjs';
-import {chapterObjectState} from '../../web/core/chapter.mjs';
-import {nativeKeyedChest,canOpenNativeChest} from '../../web/core/native_map_chests.mjs';
-import {allPartyRoles} from '../../web/core/party_roster.mjs';
-import {questJournal} from '../../web/core/story_quests.mjs';
+import {WorldStore,encodeSave,decodeSave} from '../../web/core/world/world.mjs';
+import {WorldMapController} from '../../web/core/exploration/world_map.mjs';
+import {worldMapEntry} from '../../web/core/exploration/map_connections.mjs';
+import {loadEncounterMap} from '../../web/core/exploration/encounters.mjs';
+import {storyBindings} from '../../web/core/content/content_registry.mjs';
+import {StoryPlayback} from '../../web/core/story/story_playback.mjs';
+import {chapterObjectState} from '../../web/core/story/chapter_runner.mjs';
+import {nativeKeyedChest,canOpenNativeChest} from '../../web/core/exploration/native_map_chests.mjs';
+import {allPartyRoles} from '../../web/core/party/party_roster.mjs';
+import {questJournal} from '../../web/core/story/story_quests.mjs';
 import {templeComplete} from './fairy_forest_temple_world.mjs';
 import {innerWhiteForestRunner,innerWhiteForestRoute} from './inner_white_forest_world.mjs';
 

@@ -1,9 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {dispatchDefend,clearCommandDefense,dispatchEscapeFailure,resolveNativeEscape,dispatchEscapeSuccess} from '../web/core/battle_commands.mjs';
-import {initializeScheduler} from '../web/core/battle_scheduler.mjs';
-import {buildEffectiveAttributes,createNativeRng} from '../web/core/combat_rules.mjs';
+import {dispatchDefend,clearCommandDefense,dispatchEscapeFailure,resolveNativeEscape,dispatchEscapeSuccess} from '../web/core/battle/battle_commands.mjs';
+import {initializeScheduler} from '../web/core/battle/battle_scheduler.mjs';
+import {buildEffectiveAttributes,createNativeRng} from '../web/core/battle/combat_rules.mjs';
 import {createForestSample} from '../web/forest_sample.mjs';
 import {NativeAssemblyOracle} from './native_assembly_oracle.mjs';
 const read=async name=>JSON.parse(await readFile(new URL('../web/data/'+name,import.meta.url)));

@@ -1,4 +1,4 @@
-import {savedSummaryImage,SAVE_PREVIEW_WIDTH,SAVE_PREVIEW_HEIGHT} from './core/save_preview.mjs';
+import {savedSummaryImage,SAVE_PREVIEW_WIDTH,SAVE_PREVIEW_HEIGHT} from './core/world/save_preview.mjs';
 
 // Show only the stored thumbnail; missing previews leave the space empty.
 export function appendSavePreview(parent,summary,left,top){

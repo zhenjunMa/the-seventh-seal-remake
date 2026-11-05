@@ -9,8 +9,8 @@ import {parseArgs} from 'node:util';
 import {resolve,relative,isAbsolute} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import assert from 'node:assert/strict';
-import {WorldStore,encodeSave,decodeSave} from '../../web/core/world.mjs';
-import {applyExperience,progressHeaderForRole} from '../../web/core/battle_rewards.mjs';
+import {WorldStore,encodeSave,decodeSave} from '../../web/core/world/world.mjs';
+import {applyExperience,progressHeaderForRole} from '../../web/core/battle/battle_rewards.mjs';
 import {innerWhiteForestSource} from './inner_white_forest_world.mjs';
 import {forestSealComplete,templeComplete,forestSwitches} from './fairy_forest_temple_world.mjs';
 

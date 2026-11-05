@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {StoryMediaView,validateStoryMedia} from '../web/story_media_view.mjs';
-import {StoryPlayback} from '../web/core/story_playback.mjs';
-import {createAudioController} from '../web/core/audio.mjs';
+import {StoryPlayback} from '../web/core/story/story_playback.mjs';
+import {createAudioController} from '../web/core/resources/audio.mjs';
 import {readFile} from 'node:fs/promises';
 const audioManifest=JSON.parse(await readFile(new URL('../web/data/audio.json',import.meta.url)));
 const digest='a'.repeat(64),manifest={schema:'seventh-seal-story-media',version:1,

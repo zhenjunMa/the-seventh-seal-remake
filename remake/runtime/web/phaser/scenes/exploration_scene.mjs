@@ -1,4 +1,4 @@
-import {mapPresentation} from '../../core/map_presentation.mjs';
+import {mapPresentation} from '../../core/ui/map_presentation.mjs';
 import {TextureCache} from '../rendering/texture_cache.mjs';
 import {MapActor} from '../actors/map_actor.mjs';
 import {ActionClock} from '../components/action_clock.mjs';
