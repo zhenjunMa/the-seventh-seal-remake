@@ -37,7 +37,7 @@ def save(path: Path, value: dict) -> None:
 
 def sequence(role: CHR, dgp: DGP, index: int) -> dict:
     skill = role.skills[index]
-    segments, terminal = [], []
+    segments, terminal, invalid = [], [], []
     for entry in skill['actions']:
         raw = bytes.fromhex(entry['raw_hex'])
         group = u32(raw, 1)
@@ -48,6 +48,12 @@ def sequence(role: CHR, dgp: DGP, index: int) -> dict:
                 raise ValueError('This slice only covers type 1 command 11 cleanup')
             terminal.append(dict(type_raw=1, command_raw=11, source=origin,
                                  evidence=[NATIVE_IDS['terminal_command'], NATIVE_IDS['terminal_cleanup']]))
+            continue
+        if group >= len(dgp.raw_actions):
+            # 50E980 returns F676=-2 before reading an absent DGP action.
+            # Keep the CHR record, without inventing a replacement sprite.
+            invalid.append(dict(chr_record_index=entry['index'], action_index=group, source=origin,
+                                native_frame_result=-2))
             continue
         start, end = u32(raw, 0x26), u32(raw, 0x2a)
         frames = native_frame_sequence(dgp.raw_actions[group], start, end, raw[0x1d], total_frames=dgp.frame_count)
@@ -67,7 +73,8 @@ def sequence(role: CHR, dgp: DGP, index: int) -> dict:
             reaction_class_raw=raw[0x62], effects=effects,
             evidence=[NATIVE_IDS['range'], NATIVE_IDS['range_pseudo'], NATIVE_IDS['events']]))
     return dict(role_id=role.path.stem, chr_skill_index=index, skill_id_raw=skill['id_raw'],
-                name=skill['name_cp936'], segments=segments, terminal_commands=terminal)
+                name=skill['name_cp936'], segments=segments, terminal_commands=terminal,
+                invalid_source_actions=invalid)
 
 
 def export_snow_effect(filename: str) -> dict:

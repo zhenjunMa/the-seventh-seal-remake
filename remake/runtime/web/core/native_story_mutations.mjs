@@ -6,12 +6,14 @@ import {restoreNativeStoryResources} from './recovery.mjs';
 const need=(ok,message)=>{if(!ok)throw new Error(`原剧情变更：${message}`);};
 const uint=value=>Number.isInteger(value)&&value>=0&&value<=0xffffffff;
 const roleId=slot=>String(slot+1).padStart(3,'0');
-export const NATIVE_STORY_MUTATION_TYPES=new Set([3,10,11,14,16,17]);
+export const NATIVE_STORY_MUTATION_TYPES=new Set([3,7,8,10,11,14,16,17]);
 export const NATIVE_STORY_MUTATION_EVIDENCE={
   restoreResources:'ev_f5b336470c325748b8696f702dd1babb487b4e55109ad82d9a04fb904683770d',
   learn:'ev_b81f3b90a966881565f8fafb6e081714c775bca83167ec9eff4199d7a3facf83',
   noEffect:'ev_ea329184a6c4cfc0204f6f3c93d6d9cbbf3da28fe8e7094c7541f5679f1452a2',
-  synthesis:'ev_2a1703678dc0fc8df4355f2d71101212f2e70be464c0b148868bbe2cff0633c3'
+  synthesis:'ev_2a1703678dc0fc8df4355f2d71101212f2e70be464c0b148868bbe2cff0633c3',
+  sequenceTarget:'ev_7c7a6d3f2dee26686000505337125b9aa708949419537e154996412e2cf67fc6',
+  sequenceInput:'ev_5663b5b3ac5ce51981c7ab86c43d79be7e25e3f8fe2f33c15a98fdd11fbd9e81'
 };
 
 function sourceSkill(definition,id,sourceId){
@@ -28,6 +30,8 @@ function sourceSkill(definition,id,sourceId){
 export function validateNativeStoryMutation(record,{roleDefinitions={}}={}){
   need(NATIVE_STORY_MUTATION_TYPES.has(record?.mutation_type),`类型 ${record?.mutation_type} 尚未接入`);
   need(uint(record.mutation_index)&&uint(record.mutation_bit),'变更参数无效');
+  if(record.mutation_type===7||record.mutation_type===8)
+    need(typeof record.text_raw==='string'&&/^[\x01-\x7f]{0,255}$/.test(record.text_raw),'序列来源字节尚未接入');
   if(record.mutation_type===14){
     need(record.mutation_index<10&&record.mutation_bit<=255,'学会技巧的角色槽或来源编号无效');
     const id=roleId(record.mutation_index);sourceSkill(roleDefinitions[id],id,record.mutation_bit);
@@ -79,6 +83,19 @@ export function applyNativeStoryMutation(draft,record,{roleDefinitions={}}={}){
   const definitions={...draft.source?.role_definitions,...roleDefinitions};
   validateNativeStoryMutation(record,{roleDefinitions:definitions});
   validateNativeStoryMutationState(draft);
+  if(record.mutation_type===7){
+    const sequence=draft.native_sequence??={target:'',input:'',input_count:0};
+    sequence.target=record.text_raw;sequence.input_count=0;
+    return {mutation_type:7,target:sequence.target};
+  }
+  if(record.mutation_type===8){
+    const sequence=draft.native_sequence;
+    if(!sequence?.target.length)return {mutation_type:8,changed:false};
+    const count=sequence.input_count,text=record.text_raw;
+    sequence.input=sequence.input.slice(0,count)+text+sequence.input.slice(count+text.length);
+    sequence.input_count+=text.length;
+    return {mutation_type:8,input_count:sequence.input_count,changed:text.length>0};
+  }
   if(record.mutation_type===3){
     // 4618DA adds signed TLK +27 with 32-bit wrap, then clamps negatives.
     const before=draft.money??0,delta=record.mutation_index|0;

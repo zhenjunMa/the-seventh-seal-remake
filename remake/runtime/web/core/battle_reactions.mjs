@@ -70,7 +70,8 @@ export function validateForestReactionsData(data,content=runtimeContent){
     }
     // 032 has no native id2/id3. 51C640 explicitly falls back through id5/id1
     // when those lookups fail; source absence must reach that same branch.
-    for(const ident of [0,1,9,18,19])requireValue(r.skills.some(s=>s.original_id_raw===ident),'Required reaction id missing');
+    for(const ident of [0,1])requireValue(r.skills.some(s=>s.original_id_raw===ident),'Required reaction id missing');
+    requireValue(r.skills[0].original_id_raw===0,'Native zero source index must be idle');
   }
   for(const address of ['0x50b520','0x41ef00','0x50b770','0x5016b0','0x51c640','0x50b3e0'])requireValue(data.evidence?.[address],'Reaction procedure evidence missing');
   requireValue(Object.values(data.roles).filter(r=>content.roles[r.id].side==='player').every(r=>r.skills.some(s=>s.original_id_raw===12))&&data.evidence?.['0x4ffe90'],'Death source evidence missing');
@@ -247,6 +248,17 @@ export function applyContactReaction({attacker,target,result,record,data,rng,thr
   integer(result?.damage,'resolved damage',0,2147483647);
   if(result.skipped||result.native_return===-1)return null;
   const reaction=integer(result.reaction,'outReaction',0,2),specialBranch=reaction!==0&&t.state<4;
+  //50B520/50B770 write5016B0's zero result before calling519DD0.
+  // No missing-candidate RNG is drawn;519DD0 selects a real id0, clears
+  // the old action/chain and releases its scheduler owner without animation.
+  const missingSpecial=(policy,targetId)=>{
+    const idle=sourceLookup(role,0,draw),after={...resetAfter(target),current_skill:clone(idle),current_target_id:targetId,
+      native_active:false,reaction_special_gate_raw:0,settled_raw:0,class_raw:idle.actions[0].class_raw,action_mask_raw:idle.actions[0].action_mask_raw,
+      native_after_raw:{...resetAfter(target).native_after_raw,'0x0521a778':0,'0x0524a656':idle.original_skill_index,
+        '0x0524a657':0,'0x0521a7a1':0,'0x0521a7a5':0,'0x0521f692':0,'0x0524a647':0,'0x0524a64b':0,'0x0521f6b1':0,'0x0521f6b2':0}};
+    return {...descriptor(target,null,policy,targetId,trace,data,'missing-special-idle',after),kind:'idle',source_skill_index:idle.original_skill_index,
+      effects:[{kind:'clear-native-chain',actor_id:target.id,source:'0x504b80'},{kind:'release-active-owner',actor_id:target.id,source:'0x055df754'}]};
+  };
   const sourceAfter=()=>{
     const before=resetAfter(target),next=selectNativeAfterSourceReaction({actor:{...clone(target),...before,
       native_after_raw:{...target.native_after_raw,...before.native_after_raw}},data,rng,threshold,onFinalizeDeath,onDispatch});
@@ -263,7 +275,7 @@ export function applyContactReaction({attacker,target,result,record,data,rng,thr
     if(ident===0||t.current===19)return descriptor(target,null,'preserve',target.current_target_id,trace,data,'guard-current-skill-preserved',after);
     if(t.special!==0||t.z!==0)return sourceAfter();
     const wanted=draw(10,'guard-response-choice')<7?ident:19,selected=sourceLookup(role,wanted,draw);
-    requireValue(selected,'Guard native idle fallback is not implemented');
+    if(!selected)return missingSpecial('preserve',target.current_target_id);
     return descriptor(target,selected,'preserve',target.current_target_id,trace,data,'guard-contact',after);
   }
   // 41EF00 evaluates the current target skill before 50B770 dispatch. The
@@ -283,7 +295,7 @@ export function applyContactReaction({attacker,target,result,record,data,rng,thr
   if(t.special!==0||t.z!==0)return sourceAfter();
   let wanted=counter?19:18;
   if(counter&&attacker.native_active&&a.current===19)wanted=18;
-  const selected=sourceLookup(role,wanted,draw);requireValue(selected,'Dodge native idle fallback is not implemented');
+  const selected=sourceLookup(role,wanted,draw);if(!selected)return missingSpecial('attacker',attacker.id);
   return descriptor(target,selected,'attacker',attacker.id,trace,data,wanted===19?'dodge-counter':'dodge-response');
 }
 /** 0x4FFE90 finalization, after the source-backed category4 HP submission and

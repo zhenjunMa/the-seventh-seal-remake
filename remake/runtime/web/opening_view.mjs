@@ -149,8 +149,8 @@ export class OpeningView {
           this.snapshot('opening-effect-start',{actor:payload.actor,kind,native_state:payload.nativeStateRaw,command:payload.command?.index});
           actor.awaitingAppearance=false;actor.visible=true;
           if(effect.particles){
-            const particleTicks=this.effects.particle_ticks??effect.ticks;
             actor.effect=new ActorEffectView(actor,effect.particles);
+            const particleTicks=actor.effect.ticks??this.effects.particle_ticks??effect.ticks;
             try{await this.tween(particleTicks*tickMs,t=>actor.effect.update(Math.min(particleTicks-1,Math.floor(t*particleTicks))),signal);}
             finally{actor.effect=null;}
             if(kind==='behavior')actor.visible=false;
@@ -164,7 +164,7 @@ export class OpeningView {
               const raw=effect.fadeOut?tick*effect.coefficientStep+10:240-effect.coefficientStep*tick;
               const coefficient=effect.fadeOut?Math.min(240,raw):raw<=(effect.coefficientCutoff??effect.coefficientFloor)?effect.coefficientFloor:raw;
               actor.alpha=(255-coefficient)/255;
-              actor.blendEffect={blend:effect.blend,offsetY:effect.fadeOut?-((raw>>2)*2):(effect.startY??0)+(effect.stepY??0)*tick};
+              actor.blendEffect={blend:effect.blend,offsetY:effect.rise?-((raw>>2)*2):(effect.startY??0)+(effect.stepY??0)*tick};
             };
             update(0);
             // GPU ADD/alpha keep the native coefficient and movement sequence.
@@ -262,11 +262,11 @@ export class OpeningView {
     };
   }
   drawQueue(layer = 2) {
-    return [...this.actors.entries()].filter(([,a]) => a.visible).map(([slot,actor]) => {
+    return [...this.actors.entries()].filter(([,a]) => a.visible).flatMap(([slot,actor]) => {
       const r=actor.role,a=r.actions.find(a=>a.index===actor.action);
-      return {key:`opening:${slot}`,character:!actor.effect,layer,sort_y:actor.y+32,alpha:actor.alpha,
-      blend:actor.blendEffect?.blend??(actor.effect&&['rise','scatter'].includes(actor.effect.kind)?'lighter':'source-over'),
-      pose:actor.effect?{image:actor.effect.image,x:actor.x+16-r.anchor.x-(actor.effect.offsetX??0),y:actor.y-r.anchor.y-160}
+      const entry={key:`opening:${slot}`,character:!actor.effect,layer,sort_y:actor.y+32,alpha:actor.alpha,
+      blend:actor.blendEffect?.blend??(actor.effect&&['rise','scatter','rise-trail'].includes(actor.effect.kind)?'lighter':'source-over'),
+      pose:actor.effect?{image:actor.effect.image,x:actor.x+16-r.anchor.x-(actor.effect.offsetX??0),y:actor.y-r.anchor.y-actor.effect.offsetY}
         :{image:a.bitmap,light:a.intrinsic_bitmap,shadow:a.shadow_bitmap,shadow_geometry:a.shadow_geometry,sx:actor.frame*r.frame_width,sy:actor.direction*r.frame_height,
           width:r.frame_width,height:r.frame_height,x:actor.x+16-r.anchor.x,y:actor.y-r.anchor.y,
           body_offset:{x:0,y:actor.blendEffect?.offsetY??0}},
@@ -279,6 +279,13 @@ export class OpeningView {
           r.frame_width,r.frame_height,actor.x+16-r.anchor.x,actor.y-r.anchor.y,a.shadow_bitmap,a.shadow_geometry,
           {x:0,y:actor.blendEffect?.offsetY??0});
         ctx.restore();
-      }};});
+      }};
+      // 55430A copies the original pixel before adding its rising light.
+      // Keep the two blend modes as separate entries in the existing GPU queue.
+      if(actor.effect?.sourceImage)return [{...entry,key:`opening:${slot}:source`,blend:'source-over',
+        pose:{...entry.pose,image:actor.effect.sourceImage},draw:ctx=>{
+          ctx.save();ctx.globalAlpha=actor.alpha;ctx.globalCompositeOperation='source-over';
+          ctx.drawImage(actor.effect.sourceImage,entry.pose.x,entry.pose.y);ctx.restore();}},entry];
+      return [entry];});
   }
 }

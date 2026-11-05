@@ -133,10 +133,12 @@ test('rest handler accepts different map/descriptor/record IDs and keeps explici
 });
 
 test('cross-file audit admits current content and rejects a registered enemy with missing dependencies',async()=>{
-  const names={catalog:'catalog',seed:'opening_seed',story:'chapter_story',resources:'chapter_map_resources',party:'party_combat',commands:'party_skills',forest:'forest_combat',ai:'forest_ai',rewards:'party_rewards',reactions:'party_reactions',status:'forest_status',encounters:'encounters',view:'party_battle_view',itemView:'item_presentation',lifecycle:'battle_lifecycle',menu:'operation_menu'};
+  const names={catalog:'catalog',seed:'opening_seed',story:'chapter_story',resources:'chapter_map_resources',party:'party_combat',commands:'party_skills',forest:'forest_combat',ai:'forest_ai',rewards:'party_rewards',reactions:'party_reactions',status:'forest_status',encounters:'encounters',view:'party_battle_view',itemView:'item_presentation',lifecycle:'battle_lifecycle',menu:'operation_menu',scheduler:'battle_scheduler'};
   const data=Object.fromEntries(await Promise.all(Object.entries(names).map(async([key,name])=>[key,await read(name)])));
   assert.deepEqual(validateContentDependencies(runtimeContent,data),{
     roles:Object.keys(runtimeContent.roles).length,maps:Object.keys(runtimeContent.maps).length,programs:Object.keys(runtimeContent.programs).length});
+  const missingScheduler=copy(data);delete missingScheduler.scheduler;
+  assert.throws(()=>validateContentDependencies(runtimeContent,missingScheduler),/行动调度版本/);
   const missingMenu=copy(data);delete missingMenu.menu.actor_panels['003'];
   assert.throws(()=>validateContentDependencies(runtimeContent,missingMenu),/菜单人物条/);
   const staleTiming=copy(data);staleTiming.menu.standing_actors['003'].interval_ms=120;

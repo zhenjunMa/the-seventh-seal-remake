@@ -39,7 +39,7 @@ export function validateWorldMapState(value) {
 
 export function validateWorld(value, mapIds = null) {
   requireValue(object(value) && value.schema === WORLD_SCHEMA && value.version === WORLD_VERSION, '存档格式或版本不兼容');
-  const allowed = new Set(['schema','version','revision','location','leader_id','party','reserve_party','inventory','flags','event_records','object_states','source','world_map','encounters','money','reward_records','opening','equipment','skill_shortcuts','technique_bindings','technique_combinations','formation_slots','crystal_sockets','native_pending_skill_unlocks','recipe_unlock_indices','native_map_sort_code','map_npc_state','native_save','play_time_ms','game_settings']);
+  const allowed = new Set(['schema','version','revision','location','leader_id','party','reserve_party','inventory','flags','event_records','object_states','source','world_map','encounters','money','reward_records','opening','equipment','skill_shortcuts','technique_bindings','technique_combinations','formation_slots','crystal_sockets','native_pending_skill_unlocks','recipe_unlock_indices','native_sequence','native_map_sort_code','map_npc_state','native_save','play_time_ms','game_settings']);
   requireValue(Object.keys(value).every(key => allowed.has(key)), '存档包含未支持的世界字段');
   if('play_time_ms' in value)requireValue(Number.isSafeInteger(value.play_time_ms)&&value.play_time_ms>=0,'累计游戏时间无效');
   if('game_settings' in value){
@@ -50,6 +50,12 @@ export function validateWorld(value, mapIds = null) {
       &&Number.isFinite(channel.volume)&&channel.volume>=0&&channel.volume<=1&&typeof channel.muted==='boolean','游戏音频设置无效');
   }
   validateNativeStoryMutationState(value);
+  if('native_sequence' in value){
+    const sequence=value.native_sequence;
+    requireValue(object(sequence)&&Object.keys(sequence).sort().join(',')==='input,input_count,target'
+      &&['target','input'].every(key=>typeof sequence[key]==='string'&&/^[\x01-\x7f]{0,255}$/.test(sequence[key]))
+      &&Number.isInteger(sequence.input_count)&&sequence.input_count>=0&&sequence.input_count<=sequence.input.length,'原剧情序列状态无效');
+  }
   if('native_map_sort_code' in value)requireValue(Number.isInteger(value.native_map_sort_code)&&value.native_map_sort_code>=0&&value.native_map_sort_code<=8,'原地图入口排序无效');
   if('map_npc_state' in value)validateMapNpcState(value.map_npc_state);
   // Optional v1 extension. Legacy saves keep their existing progress and do

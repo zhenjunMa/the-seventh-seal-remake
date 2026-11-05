@@ -12,9 +12,21 @@ import {StoryPlayback} from '../web/core/story_playback.mjs';
 import {inspectContentReadiness} from '../web/core/content_readiness.mjs';
 import {compileTlkFlow,nativeFlowId} from '../web/core/story_flow_compiler.mjs';
 import {applyExperience} from '../web/core/battle_rewards.mjs';
+import {readContentDefinition} from '../tools/resolve_content_definition.mjs';
 const copy=structuredClone;
 const read=async name=>JSON.parse(await readFile(new URL(`../web/data/${name}.json`,import.meta.url),'utf8'));
 const [source,seed,resources,targetMap,rewards]=await Promise.all(['chapter_story','opening_seed','chapter_map_resources','maps/m17023','party_rewards'].map(read));
+
+test('the original earth-trial CF4 script transfers with its explicit object context and retained placement sort',async()=>{
+  const {content}=await readContentDefinition(),table=source.maps['RUINOUSLY-B02'],record=table.records.find(row=>row.id===7),
+    object=table.objects.find(row=>row.index===8),raw=Buffer.from(object.raw_hex,'hex');
+  assert.equal(raw[0xcf],4);assert.equal(raw.readUInt32LE(0xf6),1);
+  assert.deepEqual(content.maps[table.id].objects.find(row=>row.index===8),{index:8,handler:'stationary-chest'});
+  const destination=nativeMapTransfer(table,record,{objectIndex:8,sortCode:7},content);
+  assert.deepEqual([destination.map_id,destination.entry_marker,destination.sort_code],['RUINOUSLY-D02',2,7]);
+  assert.equal(destination.source.object_index,8);
+  assert.throws(()=>nativeMapTransfer(table,record,{objectIndex:7},content),/物件交互上下文/);
+});
 
 test('real dream stair trigger permits its full leave choice without granting save or recovery permissions',async()=>{
  const initial=copy(seed);initial.opening.status='complete';initial.location={map_id:'M71071',x:0,y:0,direction:0};initial.flags[428]|=4;

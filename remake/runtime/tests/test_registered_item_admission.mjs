@@ -117,7 +117,7 @@ test('new admitted equipment defaults preserve non-default numeric edits through
 test('exact former full equipment baseline migrates recovered defaults, retains numeric edits and rejects readonly drift',()=>{
   const former=structuredClone(items),admission=former.catalog.equipment_admission;
   const legacy=admission.promoted_item_ids.filter(id=>admission.sources[id].some(row=>['registered-player-native-initial-equipment','registered-story-item-grant'].includes(row.kind)));
-  assert.deepEqual(legacy,[39,40,41,42,50,85]);
+  assert.deepEqual(legacy,[39,40,41,42,50,67,85,104]);
   for(const [id,availability]of Object.entries(admission.previous_availability))former.definitions[id].availability=structuredClone(availability);
   delete former.catalog.equipment_admission;
   const old=deriveItemConfiguration(former);assert.equal(old.entries['39'].original.enabled,false);

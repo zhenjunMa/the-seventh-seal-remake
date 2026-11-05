@@ -277,7 +277,7 @@ test('historical chapter equipment keeps numeric projection without executing an
   assert.deepEqual(initializeNativeStatuses(after,statusData,undefined,draws([])).native_status_slots,Array.from({length:100},()=>({raw_hex:ZERO})));
   // New unsupported equipment remains blocked; an existing numeric contract
   // cannot authorize arbitrary source-only special effects or a bad descriptor.
-  for(const id of [118,141]){
+  for(const id of [141]){
     assert.throws(()=>equipmentPassiveRows([{item_id:id}],items),/被动作用尚未还原/);
     const cfg=deriveItemConfiguration(source);cfg.entries[id].parameters.enabled=true;
     assert.throws(()=>compileItemConfiguration(source,cfg,'debug'),/装备被动作用未还原/);

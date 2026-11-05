@@ -90,7 +90,7 @@ STEPS = {
     'world-map-ui': Step('export_world_map_ui.py', ('data/world_map_ui.json','assets/world_map'), reports=('world_map_alignment_20261021/export.json',), inputs=('data/world_map.json','../evidence/route_native_20261011.json','../evidence/operation_menu_native.json')),
     'configuration': Step('export_runtime_config.mjs', ('data/config',), inputs=('data/combat_sample.json', 'data/forest_combat.json', 'data/battle_scheduler.json', 'data/forest_ai.json', 'data/forest_rewards.json', 'data/party_skills.json', 'data/items.json', 'data/config')),
     'catalog': Step('build_catalog.py', ('data/catalog.json', 'data/events.json'), ('configuration',), inputs=('data/maps', 'data/events', 'data/source/manifest.json')),
-    'content': Step('export_content_registry.mjs', ('data/runtime_content.mjs',), ('catalog',), inputs=('data/runtime_content.json','data/catalog.json','data/chapter_story.json','data/chapter_map_resources.json','data/party_combat.json','data/party_skills.json','data/forest_combat.json','data/forest_ai.json','data/party_rewards.json','data/party_reactions.json','data/forest_status.json','data/encounters.json','data/party_battle_view.json','data/items.json','data/item_presentation.json','data/battle_lifecycle.json','data/maps')),
+    'content': Step('export_content_registry.mjs', ('data/runtime_content.mjs',), ('catalog',), inputs=('data/runtime_content.json','data/catalog.json','data/chapter_story.json','data/chapter_map_resources.json','data/party_combat.json','data/party_skills.json','data/battle_scheduler.json','data/forest_combat.json','data/forest_ai.json','data/party_rewards.json','data/party_reactions.json','data/forest_status.json','data/encounters.json','data/party_battle_view.json','data/items.json','data/item_presentation.json','data/battle_lifecycle.json','data/maps')),
 }
 
 # Selection comes from authoring JSON, before generated maps/enemies exist.
@@ -144,6 +144,7 @@ for target, dependencies in {
     STEPS[target]=replace(STEPS[target],depends=dependencies)
 STEPS['chapter-maps']=replace(STEPS['chapter-maps'],inputs=('data/runtime_content.json','data/opening_map_resources.json'))
 STEPS['audio']=replace(STEPS['audio'],inputs=(*STEPS['audio'].inputs,'data/runtime_content.json','../evidence/party_magic_native.json',
+    '../evidence/source/combat_presentation_native_20261011.json',
     '../evidence/guild_20261031/native_4bafa0.json',
     '../evidence/menu_field_audio_20261030/native.json',
     '../evidence/fire_valley_20261025/object_tick_4137c0_assembly.json',
@@ -246,6 +247,12 @@ STEPS['wind-region-index']=Step('export_wind_region_index.py',
 STEPS['research-index']=Step('export_research_index.py',
     ('data/library/research.json','../evidence/guild_20261031/research_source_index.json'),
     reports=('guild_20261031/research_source_index.json',),
+    inputs=('../tools/export_fire_valley_index.py','../tools/route_extract_resources.py',
+            '../tools/map_npc_fields.py','core/chapter_animation.mjs','core/story_flow_compiler.mjs'),
+    sources=fire_valley_source_files())
+STEPS['seal-region-index']=Step('export_seal_region_index.py',
+    ('data/library/seal_region.json','../evidence/seal_region_20261104/source_index.json'),
+    reports=('seal_region_20261104/source_index.json',),
     inputs=('../tools/export_fire_valley_index.py','../tools/route_extract_resources.py',
             '../tools/map_npc_fields.py','core/chapter_animation.mjs','core/story_flow_compiler.mjs'),
     sources=fire_valley_source_files())

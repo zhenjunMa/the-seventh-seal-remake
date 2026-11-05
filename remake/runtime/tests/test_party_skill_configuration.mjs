@@ -95,7 +95,7 @@ async function fixture(cfg){
   const party=createPartySample(world.snapshot(),attributes,data.party_skills,cfg?d:null);
   const sample=assembleForestSample(party,d.forest,{map_id:'M70010',members:[{id:'013'}]},
     {...d.scheduler,idle_skills:{...d.scheduler.idle_skills,...data.party_skills.idle_skills}},d.ai,d.rewards,reactions,statuses);
-  const ctx={setTransform(){},clearRect(){},fillRect(){},beginPath(){},rect(){},clip(){},moveTo(){},lineTo(){},stroke(){},ellipse(){},fill(){},save(){},restore(){},drawImage(){},fillText(){},createLinearGradient:()=>({addColorStop(){}})};
+  const ctx={setTransform(){},translate(){},clearRect(){},fillRect(){},beginPath(){},rect(){},clip(){},moveTo(){},lineTo(){},stroke(){},ellipse(){},fill(){},save(){},restore(){},drawImage(){},fillText(){},createLinearGradient:()=>({addColorStop(){}})};
   const view=new BattleView({canvas:{width:960,height:540,getContext:()=>ctx},metadataPath:'/data/party_battle_view.json',jsonLoader:p=>read(p.slice(6)),assetLoader:async a=>({image:{width:a.width,height:a.height},sha256:a.sha256})});
   await view.prepare();view.setRoster(sample.actors,sample.skills);let time=0,battle;const logs=[],rng=createNativeRng(0x20261011);
   battle=new BattleController({world,id:()=> 'party-config',now:()=>time,waitTick:async()=>{time+=20;},resolveAction,applyDamage:applyNativeDamage,resourcesForWorld:partyResourcesForWorld,consumeResources:consumePartyMp,log:e=>logs.push(e),

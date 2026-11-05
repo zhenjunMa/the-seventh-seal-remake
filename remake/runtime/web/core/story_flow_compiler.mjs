@@ -38,7 +38,7 @@ export function compileTlkFlow(table,{choices}){
       if(!flagIndex(index)||bit<-32||bit>32)add('unsupported',{reason:'剧情旗标变更无效'});
       else add(bit>0?'set_flag_bit':'clear_flag_bit',{index,bit:Math.abs(bit)});
     }else if(type!==0){
-      const op={1:'set_native_object',2:'restore_party',3:'change_native_money',4:'request_save',5:'give_item',9:'world_map_command',10:'restore_native_resources',11:'restore_native_resources',14:'learn_native_skill',16:'native_noop',17:'unlock_recipe'}[type];
+      const op={1:'set_native_object',2:'restore_party',3:'change_native_money',4:'request_save',5:'give_item',7:'set_native_sequence',8:'append_native_sequence',9:'world_map_command',10:'restore_native_resources',11:'restore_native_resources',14:'learn_native_skill',16:'native_noop',17:'unlock_recipe'}[type];
       add(op??'unsupported',op?{}:{reason:`剧情变更 ${type} 尚未接入`});
     }
     // Kind4 bypasses the ordinary header condition/presentation dispatch.
@@ -64,7 +64,8 @@ export function compileTlkFlow(table,{choices}){
       const presentation={speaker:record.speaker,style:record.style,portrait_id:record.portrait_id,region_byte_raw:record.region_byte_raw};
       const dialogue={text:record.text_raw,text_id:record.text_id??`${table.id}:TLK:${record.id}`,presentation};
       if(options.length)add('choice',{...dialogue,choices:options.map(row=>({...copy(row),target:at(row.recordId)}))});
-      else if(record.text_raw)add('say',dialogue);
+      // 467600 bypasses dialogue rendering for the sequence text operands.
+      else if(record.text_raw&&type!==7&&type!==8)add('say',dialogue);
     }else if(record.kind===1){
       add('animation',{program_id:record.text_raw.replace(/\.anm$/i,'').toLowerCase()});
       // Native467600 ends the TLK before starting ANM. Only ANM14 can

@@ -137,6 +137,21 @@ class SourceAudit:
                 "active": False, "covered_pixels": 0, "transparent_pixels": self.width * self.height,
                 "span_count": 0, "rows": self.height, "bounds": None, "pixel_probes": [],
             }
+        if indexed and frame == 97 and sha(self.data) == 'b31f5ecaf2ee01f48561440a4c730f83591d2dcbb6caf867af5a6d1fd1bc6ac0':
+            # Independent exact-source check of the shipped050 defect, not a
+            # general parse-error fallback. Native reads this allocation as-is.
+            assert (begin, size, self.width, self.height) == (210547, 2927, 539, 439)
+            assert struct.unpack_from('<H', self.data, begin)[0] == 48011
+            assert sha(self.data[begin:begin + size]) == '653a6f0ff4d8c768f2562f4ce05ab8e728367f5742226caad5f7ccc78b2aac35'
+            rgba = bytes(self.width * self.height * 4)
+            return rgba, dict(active=True, source_offset=begin, source_bytes=size,
+                source_span_sha256=sha(self.data[begin:begin + size]), rgba_sha256=sha(rgba),
+                covered_pixels=0, transparent_pixels=self.width * self.height,
+                span_count=0, rows=self.height, bounds=None, pixel_probes=[],
+                malformed_source=dict(code='invalid-indexed-span-count', row=0,
+                    span_count=48011, width=self.width,
+                    policy='Exact shipped050 frame97 indexed channel omitted; native out-of-allocation drawing is undefined.',
+                    evidence='evidence/seal_battle_rewards_20261104/native.json'))
         end, position = begin + size, begin
         rgba = bytearray(self.width * self.height * 4)
         bounds = [self.width, self.height, 0, 0]

@@ -211,8 +211,8 @@ def registered_tlk_reachability(story, registration, original, hashes, require):
             require(slot in slots, f'{map_id} NPC {slot} TLK index')
             add(map_id, slots[slot], 'npc', npc_slot=slot)
         for index in binding.get('objects', []):
-            if index['handler'] == 'keyed-chest':
-                continue  # Direct DAT rewards have no fabricated TLK root.
+            if index['handler'] in ('keyed-chest', 'toggle-object'):
+                continue  # Direct DAT interactions have no fabricated TLK root.
             obj = next((row for row in table['objects'] if row['index'] == index['index']), None)
             require(obj is not None, f'{map_id} object {index}')
             at = obj['source']['offset']; raw = data[at:at + 0x112]
@@ -480,11 +480,19 @@ def admit_registered_equipment(definitions, seed, story, registration):
         table = story['maps'][map_id]
         path = f'Map/{map_id.lower()}.dat'
         for selected in registration['maps'][map_id].get('objects', []):
-            if selected['handler'] != 'keyed-chest':
+            if selected['handler'] not in ('keyed-chest', 'toggle-object'):
                 continue
             obj = next((row for row in table['objects'] if row['index'] == selected['index']), None)
-            require(obj is not None, f'{map_id} keyed chest {selected["index"]}')
+            require(obj is not None, f'{map_id} direct object {selected["index"]}')
             at = obj['source']['offset']; raw = original[path][at:at + 0x112]
+            if selected['handler'] == 'toggle-object':
+                require(raw.hex() == obj['raw_hex'] and obj['source']['sha256'] == hashes[path]
+                        and table['map_source']['sha256'] == hashes[path] and raw[0xCF] == 7
+                        and u32(raw, 0xF6) == u32(raw, 0xF2) == 0 and raw[0x98] == 1
+                        and raw[0x109] == raw[0x51] == 0
+                        and all(u32(raw, off) == 0 for off in (0x4C, 0xE3, 0xE7, *range(0x54, 0x7C, 4))),
+                        f'{map_id} direct CF7 object source')
+                continue  # +FA is an object name token, never an item grant.
             require(raw.hex() == obj['raw_hex'] and obj['source']['sha256'] == hashes[path]
                     and table['map_source']['sha256'] == hashes[path]
                     and raw[0xCF] in (3, 4) and u32(raw, 0xF6) == 0, f'{map_id} keyed chest source')
@@ -603,13 +611,14 @@ def status_clear_supported(row):
 def support_status_item_supported(row):
     raw = bytes.fromhex(row['raw_hex'])
     block = raw[0x2a8:0x36e]
-    return bool(row['record_status'] == 'defined' and raw[0x24:0x26] == b'\x05\x01'
+    return bool(row['record_status'] == 'defined' and raw[0x24] == 5 and raw[0x25] in (1, 4)
         and row['initialization']['deterministic']
         and all(pair['minimum'] == pair['maximum'] == 0 for pair in row['value_ranges'])
         and raw[0x156] in (0, 1) and raw[0x157] == 1 and i32(raw, 0x142) == 17
         and 0 < block[1] <= 100 and block[0xb] in (0, 2) and block[0x10] <= 1
         and i32(block, 0x23) >= 0 and i32(block, 0x2b) >= 0
-        and not any(raw[0x36e:]))
+        and not any(raw[0x36e:0x3a7]) and not any(raw[0x3af:])
+        and i32(raw, 0x3ab) >= 0)
 
 
 def element_source_supported(row):
@@ -635,6 +644,18 @@ def permanent_attack_source_supported(row):
         and not any(raw[0x2a8:]))
 
 
+def permanent_resource_source_supported(row):
+    """47D960 increases raw maximum HP/MP before its common cap/save epilogue."""
+    raw = bytes.fromhex(row['raw_hex'])
+    return bool(row['record_status'] == 'defined' and raw[0x24:0x26] == b'\x05\x04'
+        and row['initialization']['deterministic'] and row['validation']['all_value_ranges_ordered']
+        and all(pair['minimum'] >= 0 and (pair['instance_offset'] in (0x11, 0x19, 0x35, 0x3d)
+                or pair['maximum'] == 0) for pair in row['value_ranges'])
+        and any(pair['maximum'] > 0 for pair in row['value_ranges'])
+        and raw[0x156:0x158] == b'\x00\x01' and i32(raw, 0x142) == 17
+        and not any(raw[0x2a8:]))
+
+
 def admit_registered_status_cures(definitions, equipment_admission):
     # Provenance has already passed the original-byte checks above. Do not
     # enable all cure records merely because the interpreter supports mode1.
@@ -642,6 +663,20 @@ def admit_registered_status_cures(definitions, equipment_admission):
     for ident, provenance in equipment_admission['sources'].items():
         row = definitions[ident]
         raw = bytes.fromhex(row['raw_hex'])
+        if (row['record_status'] == 'defined' and raw[0x24:0x26] == b'\x05\x04'
+                and all(pair['minimum'] == pair['maximum'] == 0 for pair in row['value_ranges'])
+                and not any(raw[0x126:0x13a]) and i32(raw, 0x142) == 0
+                and raw[0x2a9] == 0 and raw[0x2b3] == 6 and not any(raw[0x36e:])):
+            # The shipped record has no item animation/contact, and ID0 is
+            # dormant in508BB0. Preserve an obtainable inventory commodity;
+            # its description cannot manufacture a status-immunity effect.
+            sources[ident] = deepcopy(provenance)
+            previous[ident] = {key: deepcopy(row[key]) for key in ('availability', 'behavior')}
+            row['behavior'] = dict(kind='native-inert-item', status='recovered',
+                implemented_scope=['inventory-stack', 'source-animation-zero-without-contact'], unverified_scope=[])
+            row['availability'] = dict(enabled=True, chapter_enabled=True, catalog_visible=True, default_enabled=True,
+                reasons=['registered-source-acquisition; original-no-contact-id0-payload-preserved'])
+            continue
         if (row['record_status'] == 'defined' and raw[0x24:0x26] == b'\x03\x02'
                 and row['initialization']['deterministic']
                 and all(pair['minimum'] == pair['maximum'] == 0 for pair in row['value_ranges'])
@@ -672,7 +707,7 @@ def admit_registered_status_cures(definitions, equipment_admission):
                 effect_kind_raw_2b3=0, preparation_delay_added=0, target_state_max_exclusive=4,
                 target_immune_must_be_zero=True, consume_only_on_native_success=True)
             continue
-        if simple_restore_supported(row):
+        if simple_restore_supported(row) or permanent_resource_source_supported(row):
             if row['availability']['enabled'] and row['behavior']['kind'] == 'simple-restore':
                 continue
             sources[ident] = deepcopy(provenance)
@@ -684,6 +719,9 @@ def admit_registered_status_cures(definitions, equipment_admission):
                 default_enabled=True, reasons=['registered-source-acquisition; native-flat-resource-restoration-recovered'])
             row['effect'] = dict(restore_hp_flat=values[0xd], restore_mp_flat=values[0x15],
                 restore_hp_percent=0, restore_mp_percent=0, revive=False)
+            for name, at in [('hp_maximum_flat', 0x11), ('mp_maximum_flat', 0x19),
+                             ('hp_maximum_percent', 0x35), ('mp_maximum_percent', 0x3d)]:
+                if values[at]: row['effect'][name] = values[at]
             row['use_in_field'], row['use_in_battle'] = True, True
             row['battle'] = dict(animation_skill_id_raw_142=17, all_targets_raw_156=0, same_side_raw_157=1,
                 effect_kind_raw_2b3=0, preparation_delay_added=0, target_state_max_exclusive=4,
@@ -715,7 +753,9 @@ def admit_registered_status_cures(definitions, equipment_admission):
             elif attack or support:
                 row['status_attack'] = dict(effect_raw_hex=raw[0x2a8:0x36e].hex(), effect_id_raw=raw[0x2a9], mode_raw=raw[0x2b3],
                     definition_offset=0x2a8, effect_bytes=0xc6)
-            row['use_in_field'], row['use_in_battle'] = revival or element, True
+            if support and i32(raw, 0x3a7):
+                row['effect'].update(encounter_modifier_delta=i32(raw, 0x3a7), encounter_duration_ticks=i32(raw, 0x3ab))
+            row['use_in_field'], row['use_in_battle'] = revival or element or support and bool(i32(raw, 0x3a7)), True
             row['battle'] = dict(animation_skill_id_raw_142=17, all_targets_raw_156=raw[0x156], same_side_raw_157=raw[0x157],
                 effect_kind_raw_2b3=raw[0x2b3], preparation_delay_added=0,
                 target_state_max_exclusive=8 if revival else 4, target_immune_must_be_zero=True,
@@ -750,15 +790,16 @@ def admit_registered_status_cures(definitions, equipment_admission):
 
 
 def equipment_immunity_supported(row):
-    """47A6A0/508BB0 mode6 only; 509E10 skips its periodic and visual payload."""
+    """47A6A0/508BB0 permanent mode0 statuses and dormant mode6 immunity."""
     raw = bytes.fromhex(row['raw_hex'])
     block = raw[0x2a8:0x36e]
     return bool(row['record_status'] == 'defined'
         and (raw[0x24] in (1, 2) or raw[0x24:0x26] == b'\x03\x01')
         and row['initialization']['deterministic'] and row['validation']['all_value_ranges_ordered']
-        and block[1] != 0 and block[0xb] == 6 and block[0x10] <= 1
-        and i32(block, 2) == -1 and u32(block, 0xb8) == 0
-        and (block[0x10] == 1 or not any(block[0x23:0xb8]))
+        and 0 < block[1] <= 100 and block[0xb] in (0, 6) and block[0x10] <= 1
+        and i32(block, 2) == -1
+        and (block[0xb] == 0 or u32(block, 0xb8) == 0
+             and (block[0x10] == 1 or not any(block[0x23:0xb8])))
         and not any(raw[0x126:0x13a]) and i32(raw, 0x142) == 0 and i32(raw, 0x3a7) == 0)
 
 
@@ -773,13 +814,15 @@ def admit_registered_equipment_passives(definitions, equipment_admission, capabi
             key: deepcopy(row[key]) for key in ('availability', 'behavior')}
         raw = bytes.fromhex(row['raw_hex'])
         crystal = raw[0x24:0x26] == b'\x03\x01'
+        mode = raw[0x2b3]
         row['behavior'] = dict(kind='status-immunity-crystal' if crystal else 'equip', status='recovered',
             implemented_scope=(['crystal-socketing', 'instance-attribute-linking'] if crystal
-                else ['equipment-slot-transfer', 'instance-attribute-linking']) + ['battle-mode6-status-immunity'],
+                else ['equipment-slot-transfer', 'instance-attribute-linking']) +
+                ['battle-mode6-status-immunity' if mode == 6 else 'battle-permanent-native-status'],
             unverified_scope=['crafting'] if crystal else [])
         row['availability'] = dict(enabled=True, chapter_enabled=True, catalog_visible=True,
-            default_enabled=True, reasons=['registered-source-grant; native-equipment-mode6-immunity-recovered'])
-        row['equipment_passive'] = dict(kind='status-immunity', effect_id_raw=raw[0x2a9], mode_raw=6,
+            default_enabled=True, reasons=['registered-source-grant; native-equipment-status-recovered'])
+        row['equipment_passive'] = dict(kind='status-immunity' if mode == 6 else 'native-status', effect_id_raw=raw[0x2a9], mode_raw=mode,
             effect_raw_hex=raw[0x2a8:0x36e].hex(), definition_offset=0x2a8, effect_bytes=0xc6,
             application_chance_raw=raw[0x2b9],
             evidence='ev_3896095f57f082ad42c4995b1b3ba73f5f5609d82426b7ab65f7767e8e10445b')
@@ -787,8 +830,8 @@ def admit_registered_equipment_passives(definitions, equipment_admission, capabi
     capabilities['passive_item_ids'] = sorted(map(int, sources))
     capabilities['promoted_item_ids'] = sorted(set(capabilities['promoted_item_ids']) | set(map(int, sources)))
     capabilities['passive_scope'] = ('4451C0 -> 47A6A0 scans equipment and retained sockets in native group/entry order; '
-        '508BB0 preserves duplicate-before-RNG and inclusive chance. Mode6 blocks only matching incoming status IDs, '
-        'never ticks or renders, and does not revive or apply its dormant numeric payload.')
+        '508BB0 preserves duplicate-before-RNG and inclusive chance. Mode0 uses normal aggregation and periodic clocks; '
+        'mode6 blocks matching incoming status IDs, never ticks or renders, and retains dormant numeric payload.')
     return capabilities
 
 
@@ -900,7 +943,7 @@ def export():
                                       definition_offset=0x27a, minimum=768, maximum=0)]}
     assert variable_ids == [31]
     assert {k for k, r in definitions.items() if 'effect' in r} == {'8', '11', '12'} | {
-        ident for ident in capabilities['sources'] if definitions[ident]['behavior']['kind'] != 'crafting-material'}
+        ident for ident in capabilities['sources'] if definitions[ident]['behavior']['kind'] not in ('crafting-material', 'native-inert-item')}
     assert all(len(row['value_ranges']) == 32 and row['source']['record_sha256'] == sha(bytes.fromhex(row['raw_hex']))
                and row['validation']['drop_rate_in_native_range'] and row['validation']['target_flags_are_boolean']
                for row in definitions.values())

@@ -4,6 +4,7 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {BattleLifecyclePlayback,APPEARANCE_ALPHA_ADAPTER} from '../web/battle_lifecycle_view.mjs';
 import {BattleController} from '../web/core/combat.mjs';
+import {BattleView} from '../web/battle_view.mjs';
 import {AppearanceParticles} from '../web/appearance_particles.mjs';
 import {createDeathParticleSurface} from '../web/death_particles.mjs';
 const manifest=JSON.parse(await readFile(new URL('../web/data/battle_lifecycle.json',import.meta.url)));
@@ -120,9 +121,12 @@ test('all connected original entry variants finish with source mode RNG owned by
   const random=Math.random;Math.random=()=>assert.fail('Lifecycle playback must not select native randomness');
   try{
     for(const prepared of [false,true])for(const sourceRole of manifest.roles)for(const index of sourceRole.entry_skill_indices){
-      const control=new BattleController({});control.state={actors:[{id:'member',immune_raw:1,native_x_raw:-146,native_y_raw:152,native_z_raw:0,native_home_y_raw:152}]};let draws=0;control.rng=()=>{draws++;return 2;};
+      const control=new BattleController({});control.state={actors:[{id:'member',side:sourceRole.side,immune_raw:1,native_x_raw:-146,native_y_raw:152,native_z_raw:0,native_home_y_raw:152}]};let draws=0;control.rng=()=>{draws++;return 2;};
+      const view=new BattleView({canvas:{getContext:()=>({})}}),controls=[];view.nativeControl=control;
       const playback=new BattleLifecyclePlayback(manifest,{nativeBridge:()=>({record:raw=>control.nativeSourceRecord('member',raw),appearance:raw=>control.beginNativeAppearance('member',raw),appearanceComplete:()=>control.completeNativeAppearance('member'),
-        entry:(raw,width)=>control.beginNativeEntry('member',raw,width),entryPoint:x=>control.advanceNativeEntry('member',x)})}),roster=[{id:'member',resource_id:sourceRole.id,side:sourceRole.side}],entry=event('member','entry',index,11,{life_epoch:0});
+        entry:(raw,width)=>control.beginNativeEntry('member',raw,width),entryPoint:x=>control.advanceNativeEntry('member',x)}),
+        onControl:step=>{controls.push(step.command_raw);view._nativeSourceControl(step,'member',undefined,step.at);}}),roster=[{id:'member',resource_id:sourceRole.id,side:sourceRole.side}],entry=event('member','entry',index,11,{life_epoch:0});
+      view.roster=roster;
       const snapshot={id:`entry-${sourceRole.id}-${index}`,actors:[{id:'member',side:sourceRole.side,life_epoch:0}],lifecycle_events:[entry]};
       if(prepared){
         playback.prepareEntry(snapshot,roster,0);assert.ok(playback.alpha('member')>0,sourceRole.id);
@@ -131,6 +135,8 @@ test('all connected original entry variants finish with source mode RNG owned by
       let now=0;for(;playback.snapshot().active.length&&now<20000;){now+=20;playback.advance(snapshot,roster,now);}
       assert.ok(now<20000,`${sourceRole.id}:${index} entry completed`);assert.equal(playback.pose('member'),null);assert.deepEqual(playback.drainCompleted(),[{token:entry.token,actor_id:'member',life_epoch:0}]);
       const source=skill(sourceRole.id,index);assert.equal(draws,source.timeline.filter(step=>step.kind==='command'&&step.command_raw===7&&step.mode_raw_0x47===0).length);
+      assert.deepEqual(controls,source.timeline.filter(step=>step.kind==='command'&&[0,6,11].includes(step.command_raw)).map(step=>step.command_raw));
+      if(controls.includes(11))assert.equal(view.cameraPan.target,0,sourceRole.id);
     }
   }finally{Math.random=random;}
 });

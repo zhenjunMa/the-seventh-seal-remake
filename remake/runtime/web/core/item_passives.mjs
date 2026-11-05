@@ -1,6 +1,6 @@
 // 4451C0 -> 47A6A0 copies each equipped ITM +2A8 C6 block into 508BB0.
-// This bounded capability admits mode6 immunity only. Mode6 never ticks or
-// displays its status sprite; periodic payloads in that mode stay dormant.
+// Permanent mode0 blocks share ordinary aggregation/ticking. Mode6 never
+// ticks or displays its status sprite; its periodic payload stays dormant.
 const bytes = hex => typeof hex === 'string' && /^(?:[0-9a-f]{2}){959}$/.test(hex)
   ? Uint8Array.from(hex.match(/../g), h => parseInt(h, 16)) : null;
 const hex = raw => Array.from(raw, b => b.toString(16).padStart(2, '0')).join('');
@@ -11,9 +11,10 @@ export function supportsEquipmentImmunitySource(definition) {
   const block = raw.slice(0x2a8, 0x36e), view = new DataView(block.buffer);
   return definition.initialization?.deterministic === true
     && definition.validation?.all_value_ranges_ordered === true
-    && block[1] !== 0 && block[0xb] === 6 && block[0x10] <= 1
-    && view.getInt32(2, true) === -1 && view.getUint32(0xb8, true) === 0
-    && (block[0x10] === 1 || !block.slice(0x23, 0xb8).some(Boolean))
+    && block[1] > 0 && block[1] <= 100 && [0,6].includes(block[0xb]) && block[0x10] <= 1
+    && view.getInt32(2, true) === -1
+    && (block[0xb] === 0 || view.getUint32(0xb8, true) === 0
+      && (block[0x10] === 1 || !block.slice(0x23, 0xb8).some(Boolean)))
     && !raw.slice(0x126, 0x13a).some(Boolean)
     && new DataView(raw.buffer).getInt32(0x142, true) === 0
     && new DataView(raw.buffer).getInt32(0x3a7, true) === 0;
@@ -21,9 +22,11 @@ export function supportsEquipmentImmunitySource(definition) {
 
 export function isSupportedItemPassiveDefinition(definition) {
   const passive = definition?.equipment_passive;
-  if (!supportsEquipmentImmunitySource(definition) || passive?.kind !== 'status-immunity' || passive.mode_raw !== 6) return false;
+  if (!supportsEquipmentImmunitySource(definition)
+    || !['status-immunity','native-status'].includes(passive?.kind)) return false;
   const block = bytes(definition.raw_hex).slice(0x2a8, 0x36e);
-  return passive.effect_id_raw === block[1] && passive.effect_raw_hex === hex(block)
+  return passive.mode_raw === block[0xb] && passive.kind === (block[0xb] === 6?'status-immunity':'native-status')
+    && passive.effect_id_raw === block[1] && passive.effect_raw_hex === hex(block)
     && passive.definition_offset === 0x2a8 && passive.effect_bytes === 0xc6;
 }
 

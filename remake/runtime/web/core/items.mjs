@@ -3,6 +3,7 @@ import {migrateEquipment,withItemQuantity,validateItemInstance} from './equipmen
 import {removeNativeStatus,applyNativeItemStatus,clearNativeStatuses} from './battle_status.mjs';
 import {applyNativeRevivalEffect} from './battle_revival.mjs';
 import {configuredEquipmentHex} from './item_registry.mjs';
+import {initialEncounterState,applyEncounterItemEffect} from './encounters.mjs';
 const copy=structuredClone;
 const need=(ok,message)=>{if(!ok)throw new Error(message);};
 
@@ -87,8 +88,10 @@ export function restoreActorWithItem(actor,item,data,{scope='battle',statusData,
     next.header_raw_hex=Array.from(raw,value=>value.toString(16).padStart(2,'0')).join('');
     next.permanent_item_header_raw_hex=next.header_raw_hex;
   }
-  if(def.effect.mp_maximum_percent){
-    next.raw_mp_maximum=(next.raw_mp_maximum+Math.trunc(Math.imul(next.raw_mp_maximum,def.effect.mp_maximum_percent)/100))|0;
+  for(const resource of ['hp','mp']){
+    const flat=def.effect[`${resource}_maximum_flat`]??0,percent=def.effect[`${resource}_maximum_percent`]??0;
+    if(flat||percent){const maximum=(next[`raw_${resource}_maximum`]+flat)|0;
+      next[`raw_${resource}_maximum`]=(maximum+Math.trunc(Math.imul(maximum,percent)/100))|0;}
   }
   for(const resource of ['hp','mp']){
     const effect=def.effect,amount=(effect[`restore_${resource}_flat`]??0)+Math.trunc(next[`raw_${resource}_maximum`]*(effect[`restore_${resource}_percent`]??0)/100);
@@ -108,20 +111,24 @@ export function restoreActorWithItem(actor,item,data,{scope='battle',statusData,
     next.header_raw_hex=Array.from(raw,value=>value.toString(16).padStart(2,'0')).join('');next.permanent_item_header_raw_hex=next.header_raw_hex;
   }
   if(scope==='field')next.state_raw=next.hp.current>0?0:4;
-  const resourceApplied=permanentStatApplied||elementApplied||Boolean(def.effect.mp_maximum_percent)||['hp','mp'].some(resource=>(def.effect[`restore_${resource}_flat`]??0)!==0||(def.effect[`restore_${resource}_percent`]??0)!==0);
+  const resourceApplied=permanentStatApplied||elementApplied||['hp','mp'].some(resource=>
+    ['maximum_flat','maximum_percent'].some(suffix=>Boolean(def.effect[`${resource}_${suffix}`]))
+    ||(def.effect[`restore_${resource}_flat`]??0)!==0||(def.effect[`restore_${resource}_percent`]??0)!==0);
   const applied=Boolean(resourceApplied||status?.native_return===1);
   const state_changed=['raw_hp','raw_mp','raw_hp_maximum','raw_mp_maximum'].some(field=>next[field]!==actor[field]);
   return {actor:next,changes,name:def.name,applied,state_changed,native_return:applied?1:0,effect_requested:true,
+    ...(def.effect.encounter_modifier_delta?{encounter_effect:{modifier_delta:def.effect.encounter_modifier_delta,duration_ticks:def.effect.encounter_duration_ticks}}:{}),
     revived:status?.reason==='revived',animation:status?.animation??null,cancel_command:status?.cancel_command??false,trace};
 }
 
-export function useWorldItem(world,attributes,data,{instanceId,targetId,expectedRevision=world.value.revision}) {
+export function useWorldItem(world,attributes,data,{instanceId,targetId,expectedRevision=world.value.revision,playTimeMs=world.value.play_time_ms??0}) {
   need(world.value.revision===expectedRevision,'操作期间进度已变化');
   const target=createPartyActors(world.snapshot(),attributes,{},data).find(a=>a.id===targetId);
   const consumed=consumeInventoryItem(world.value.inventory,instanceId,data),result=restoreActorWithItem(target,consumed.item,data,{scope:'field'});
-  if(!result.applied&&!result.state_changed)return {...result,targetId,world_revision:world.value.revision};
+  if(!result.applied&&!result.state_changed&&!result.encounter_effect)return {...result,targetId,world_revision:world.value.revision};
   const resources=partyResourcesForWorld(result.actor);
   world.transact(draft=>{if(result.applied)draft.inventory=consumed.inventory;const role=draft.party.find(r=>r.id===targetId);role.hp.current=resources.hp;role.mp.current=resources.mp;
+    if(result.encounter_effect)draft.encounters=applyEncounterItemEffect(draft.encounters??initialEncounterState(draft.party),result.encounter_effect,playTimeMs);
     if(resources.header_raw_hex){role.combat_progress={header_raw_hex:resources.header_raw_hex};role.hp.maximum=resources.hp_maximum;role.mp.maximum=resources.mp_maximum;role.attributes_stored=resources.attributes_stored;}});
   return {...result,targetId,world_revision:world.value.revision};
 }

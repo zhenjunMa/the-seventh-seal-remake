@@ -193,7 +193,7 @@ def export():
         dgp = DGP(ROOT / source)
         sources[source] = dgp.sha256
         result = export_bank(dgp, source, key, include_main, force_main=force_main, behavior_raw_cf=behavior_raw_cf,
-                             checks=cf2_checks if behavior_raw_cf == 2 else cf1_checks if force_main else checks, outputs=outputs)
+                             checks=cf2_checks if behavior_raw_cf == 2 else cf1_checks if force_main and behavior_raw_cf == 1 else checks, outputs=outputs)
         if result is None:
             return None
         banks[key] = result
@@ -219,8 +219,9 @@ def export():
             dgp_header = (ROOT / obj['source']).read_bytes()[:3]
             cf1 = raw[0xcf] == 1 and bool(dgp_header[2])
             cf2 = raw[0xcf] == 2 and bool(dgp_header[2])
+            cf7 = raw[0xcf] == 7 and bool(dgp_header[2])
             value = bank(obj['source'], current['id'].lower() + '_' + Path(obj['source']).stem, True,
-                         force_main=cf1 or cf2, behavior_raw_cf=raw[0xcf])
+                         force_main=cf1 or cf2 or cf7, behavior_raw_cf=raw[0xcf])
             if not value:
                 continue
             source = current['source']['path']

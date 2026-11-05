@@ -90,7 +90,7 @@ export async function guildComplete(source,{world,checkpoint=async()=>{},battle=
     const binding=storyBindings(id,source.content);
     if(binding.setup_record)await runner.runTlk({mapId:id,recordId:binding.setup_record});
     if(binding.entry_record)await runner.runTlk({mapId:id,recordId:binding.entry_record});}};
-  const gateways=[['M01060',0,6],['M03060',1,9],['M29010',1,1],['M70010',0,4],['M71071',0,2],['M71014',0,1],['ELF-FOREST-A',1,2],['M17010',0,null]];
+  const gateways=[['M01060',0,6],['M03060',1,9],['M29010',1,1],['M70010',0,4],['M71071',0,2],['M71014',0,1],['ELF-FOREST-A',1,2],['M17010',0,null],['REBIRTH-B04',1,2]];
   const depart=async()=>{
     const available=gateways.map(row=>({row,path:path(world.location.map_id,row[0])})).filter(row=>row.path).sort((a,b)=>a.path.length-b.path.length);
     if(!available.length){
@@ -278,5 +278,8 @@ export async function guildComplete(source,{world,checkpoint=async()=>{},battle=
   await go('M03032');
   const earned=world.snapshot();await npc('M03032',19);assert.deepEqual(world.value.inventory,earned.inventory);assert.deepEqual(world.value.recipe_unlock_indices,earned.recipe_unlock_indices);
   assert.deepEqual(world.value.flags,earned.flags);await save('guild_complete');
-  return {world,trace};
+  // Subsequent side chains continue this earned world with the same original
+  // travel, economy and reward operations, rather than injecting their inputs.
+  return {world,trace,runner,go,npc,object,service,prepareRecipe,farm,save,route,travel,
+    setChoices:value=>{choices=value;}};
 }

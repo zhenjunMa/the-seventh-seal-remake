@@ -227,7 +227,7 @@ async function fullFixture(cfg){
   const world=new WorldStore(copy(seed),maps),d=cfg?compileRuntimeConfiguration(data,cfg):data;
   const s=createForestSample(world.snapshot(),d.combat,d.forest,{map_id:'M70010',members:[{id:'013'}]},null,d.scheduler,d.ai,d.rewards,
     await read('enemy_reactions.json'),await read('forest_status.json'));
-  const ctx={setTransform(){},clearRect(){},fillRect(){},beginPath(){},rect(){},clip(){},moveTo(){},lineTo(){},stroke(){},ellipse(){},fill(){},save(){},restore(){},drawImage(){},fillText(){},createLinearGradient:()=>({addColorStop(){}})};
+  const ctx={setTransform(){},translate(){},clearRect(){},fillRect(){},beginPath(){},rect(){},clip(){},moveTo(){},lineTo(){},stroke(){},ellipse(){},fill(){},save(){},restore(){},drawImage(){},fillText(){},createLinearGradient:()=>({addColorStop(){}})};
   const v=new BattleView({canvas:{width:960,height:540,getContext:()=>ctx},metadataPath:'/data/enemy_battle_view.json',jsonLoader:p=>read(p.slice(6)),assetLoader:async a=>({image:{width:a.width,height:a.height},sha256:a.sha256})});
   await v.prepare();v.setRoster(s.actors,s.skills);let time=0,battle;const logs=[],rng=createNativeRng(0x20261011);
   battle=new BattleController({world,id:()=> 'configured-full',now:()=>time,waitTick:async()=>{time+=20;},resolveAction,applyDamage:applyNativeDamage,resourcesForWorld,consumeResources:consumeBattleMp,log:e=>logs.push(e),

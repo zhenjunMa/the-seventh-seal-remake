@@ -26,7 +26,7 @@ export function drawForestStageLayer(ctx,stage,images,row,frame=row.frame??0,col
   ctx.save();
   // Native5158E0 uses one unit on perspective ground;52B2FD receives twice
   // that amount for sky and ordinary scenery. Additive auxiliary pixels follow.
-  ctx.nativeColorSubtract=colorFade?colorFade.mask*512+colorFade.value*(row===stage.default_composition.ground?1:2):0;
+  ctx.nativeColorSubtract=colorFade?colorFade.mask*512+colorFade.value*(row.layer_id===stage.default_composition.ground.layer_id?1:2):0;
   drawBattleImage(ctx,images.get('/'+asset.path),sx+(left-x)*sw/w,sy+(top-y)*sh/h,width*sw/w,height*sh/h,
     offset+left*scale,top*scale,width*scale,height*scale);
   if(asset.intrinsic){
@@ -37,18 +37,19 @@ export function drawForestStageLayer(ctx,stage,images,row,frame=row.frame??0,col
   }
   ctx.restore();
 }
-export function drawForestStageBackground(ctx,stage,images,now,colorFade=null){
+export function drawForestStageBackground(ctx,stage,images,now,colorFade=null,cameraX=0){
   const sky=stage.layers.find(l=>l.id===stage.default_composition.sky.layer_id),frames=sky.animation?.frames;
   const initial=stage.default_composition.sky.initial_frame??0;
   const frame=frames?frames[(initial+Math.floor(now/sky.animation.interval_raw))%frames.length]:initial;
   drawForestStageLayer(ctx,stage,images,stage.default_composition.sky,frame,colorFade);
-  drawForestStageLayer(ctx,stage,images,stage.default_composition.ground,undefined,colorFade);
+  const ground=stage.default_composition.ground;
+  drawForestStageLayer(ctx,stage,images,cameraX?{...ground,source_rect:[ground.source_rect[0]+cameraX,...ground.source_rect.slice(1)]}:ground,undefined,colorFade);
   // SCN objects here are scenery textures, not combat actors. Finish the
   // background pass before any monster or party sprite, regardless of its Y.
   const scenery=[...stage.default_composition.scene_objects].sort((a,b)=>(a.sort_category??0)-(b.sort_category??0)||(a.sort_y??0)-(b.sort_y??0));
   for(const row of scenery){
     const layer=stage.layers.find(l=>l.id===row.layer_id),animation=layer.animation;
     const frame=animation?animation.frames[((row.frame??0)+Math.floor(now/animation.interval_raw))%animation.frames.length]:row.frame;
-    drawForestStageLayer(ctx,stage,images,row,frame,colorFade);
+    drawForestStageLayer(ctx,stage,images,cameraX?{...row,destination_rect:[row.destination_rect[0]-cameraX,...row.destination_rect.slice(1)]}:row,frame,colorFade);
   }
 }

@@ -166,11 +166,18 @@ class ItemAdmissionExport(unittest.TestCase):
 
     def assert_current_admission(self, exported):
         admission = exported['catalog']['equipment_admission']
-        legacy = [39, 40, 41, 42, 50, 85]
+        legacy = [39, 40, 41, 42, 50, 67, 85, 104]
         historical = [ident for ident in admission['promoted_item_ids']
             if any(row['kind'] in ('registered-player-native-initial-equipment', 'registered-story-item-grant')
                 for row in admission['sources'][str(ident)])]
         self.assertEqual(historical, legacy)
+        for ident, record_id in [(67, 32), (104, 52)]:
+            proof = next(row for row in admission['sources'][str(ident)]
+                         if row['kind'] == 'registered-story-item-grant' and row['map_id'] == 'M29011')
+            self.assertEqual(proof['record_id'], record_id)
+            raw = (ROOT / proof['source']['path']).read_bytes()
+            at = proof['source']['offset']
+            self.assertEqual((producer.u32(raw, at + 0x23), producer.u32(raw, at + 0x2b)), (5, ident))
         raw = bytes.fromhex(self.story['maps']['M01063']['records'][1]['raw_hex'])
         goods = [int.from_bytes(raw[0x37 + i * 2:0x39 + i * 2], 'little') for i in range(32)]
         goods = [ident for ident in goods if ident]
@@ -247,10 +254,22 @@ class ItemAdmissionExport(unittest.TestCase):
             if producer.plain_equipment_supported(exported['definitions'][ident])
             and any(row['kind'] in ('registered-enemy-reward', 'registered-encounter-enemy-reward') for row in sources)}
         wind_shop_gear = {ident for ident in wind_goods if exported['definitions'][str(ident)]['type_raw_24'] in (1, 2)}
+        seal_tlk = (ROOT / 'Map/rebirth-s01.TLK').read_bytes()
+        seal_base = 0x1a + producer.u32(seal_tlk, 2) * 4
+        seal_at = seal_base + 10 * 0x66f
+        seal_goods = [ident for ident in struct.unpack_from('<32H', seal_tlk, seal_at + 0x37) if ident]
+        self.assertEqual(seal_goods, [5, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117,
+            277, 281, 282, 286, 287, 288, 19, 312, 314, 316, 317, 319, 322, 14, 15, 16, 18, 17, 22])
+        for slot, ident in enumerate(seal_goods):
+            proof = next(row for row in admission['sources'][str(ident)] if row['kind'] == 'tlk-shop-item'
+                         and row['map_id'] == 'REBIRTH-S01' and row['record_id'] == 11 and row['slot'] == slot)
+            self.assertEqual(proof['entrance'], dict(map_id='REBIRTH-S01', record_id=5, kind='npc', npc_slot=10))
+            self.assertEqual(proof['source']['raw_hex'], seal_tlk[seal_at + 0x37 + slot * 2:seal_at + 0x39 + slot * 2].hex())
+        seal_shop_gear = {ident for ident in seal_goods if producer.plain_equipment_supported(exported['definitions'][str(ident)])}
         chest_gear = {int(ident) for ident, sources in admission['sources'].items()
             if any(row['kind'] == 'registered-map-chest-grant' for row in sources)
             and producer.plain_equipment_supported(exported['definitions'][ident])}
-        self.assertEqual(set(admission['promoted_item_ids']), (set(legacy) | city | wind_shop_gear | wind_chest_gear | chest_gear) - set(producer.IDS) | recipes | enemy_gear)
+        self.assertEqual(set(admission['promoted_item_ids']), (set(legacy) | city | wind_shop_gear | seal_shop_gear | wind_chest_gear | chest_gear) - set(producer.IDS) | recipes | enemy_gear)
         materials = {int(ident) for ident in admission['sources']
             if exported['definitions'][ident]['type_raw_24'] == 3 and exported['definitions'][ident]['subtype_raw_25'] == 2}
         medicine = {13, 21, *range(23, 29), *range(272, 277), *range(278, 281),
@@ -266,9 +285,15 @@ class ItemAdmissionExport(unittest.TestCase):
         self.assertEqual(exported['definitions']['399']['battle']['same_side_raw_157'], 0)
         passives = set(exported['catalog']['item_capability_admission']['passive_item_ids'])
         self.assertTrue({127, 169, 170, 195, 202, 208}.issubset(passives))
-        self.assertEqual(set(exported['catalog']['item_capability_admission']['promoted_item_ids']), medicine | materials | passives)
+        inert = {288}
+        row = exported['definitions']['288']
+        self.assertEqual(row['behavior']['kind'], 'native-inert-item')
+        self.assertNotIn('effect', row)
+        raw = bytes.fromhex(row['raw_hex'])
+        self.assertEqual((producer.i32(raw, 0x142), raw[0x2a9], raw[0x2b3]), (0, 0, 6))
+        self.assertEqual(set(exported['catalog']['item_capability_admission']['promoted_item_ids']), medicine | materials | passives | inert)
         old_enabled = {1, 4, 8, 10, 11, 12, 39, 40, 41, 42, 50, 51, 61, 127, 170, 272}
-        self.assertEqual(set(exported['catalog']['default_enabled_item_ids']), old_enabled | set(legacy) | city | wind_shop_gear | wind_chest_gear | chest_gear | recipes | medicine | materials | enemy_gear | passives)
+        self.assertEqual(set(exported['catalog']['default_enabled_item_ids']), old_enabled | set(legacy) | city | wind_shop_gear | seal_shop_gear | wind_chest_gear | chest_gear | recipes | medicine | materials | enemy_gear | passives | inert)
         for ident in materials:
             self.assertEqual(exported['definitions'][str(ident)]['behavior']['kind'], 'crafting-material')
             self.assertNotIn('effect', exported['definitions'][str(ident)])
@@ -287,6 +312,9 @@ class ItemAdmissionExport(unittest.TestCase):
             elif kind == 'status-immunity-crystal':
                 self.assertTrue(producer.equipment_immunity_supported(definition))
                 self.assertEqual(definition['equipment_passive']['effect_raw_hex'], bytes.fromhex(definition['raw_hex'])[0x2a8:0x36e].hex())
+            elif kind == 'native-inert-item':
+                self.assertEqual(int(ident), 288)
+                self.assertNotIn('effect', definition)
             else:
                 self.assertIn(kind, ('simple-restore', 'status-cure', 'status-attack', 'revival-item', 'status-clear', 'status-support', 'permanent-stat-source'))
                 self.assertIn('effect', definition)
@@ -304,7 +332,7 @@ class ItemAdmissionExport(unittest.TestCase):
         historical = [ident for ident in admission['promoted_item_ids']
             if any(row['kind'] in ('registered-player-native-initial-equipment', 'registered-story-item-grant')
                 for row in admission['sources'][str(ident)])]
-        self.assertEqual(historical, [39, 40, 41, 42, 50, 85])
+        self.assertEqual(historical, [39, 40, 41, 42, 50, 67, 85, 104])
         for ident in admission['promoted_item_ids']:
             row = definitions[str(ident)]
             self.assertEqual(row['behavior']['kind'], 'equip')

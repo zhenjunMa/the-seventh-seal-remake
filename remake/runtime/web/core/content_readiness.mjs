@@ -7,7 +7,7 @@ import {chapterRouteExits,nativeMapTransfer} from './map_connections.mjs';
 import {validateNativeStoryCondition} from './native_story_conditions.mjs';
 import {validateNativeStoryMutation} from './native_story_mutations.mjs';
 import {nativeScriptedBattle} from './scripted_battle.mjs';
-import {nativeKeyedChest,nativeChestAnimation} from './native_map_chests.mjs';
+import {nativeKeyedChest,nativeChestAnimation,nativeToggleObject} from './native_map_chests.mjs';
 import {nativeCombinationConditions} from './native_story_combinations.mjs';
 import {nativeRandomBranches} from './native_story_random.mjs';
 import {readNativeService} from './native_economy.mjs';
@@ -41,8 +41,8 @@ export function inspectContentReadiness(content,story,resources){
       roots.push(row?.state_raw===1?{kind:'dat-trigger',id,label:id,descriptor:table?.descriptors.find(row=>row.id===id)}:
         {kind:'trigger',id:row?.field_26_raw,label:id});
     }
-    for(const row of binding.objects)roots.push(row.handler==='keyed-chest'
-      ?{kind:'direct-object',id:row.index,label:row.index}
+    for(const row of binding.objects)roots.push(['keyed-chest','toggle-object'].includes(row.handler)
+      ?{kind:'direct-object',id:row.index,label:row.index,handler:row.handler}
       :{kind:'object',id:table?.objects.find(obj=>obj.index===row.index)?.interaction_record_raw_f6,label:row.index,explicit:true});
     for(const row of binding.rests)roots.push({kind:'rest',id:row.record_id,label:row.descriptor_id,explicit:true});
     for(const row of binding.routes)roots.push({kind:'route',id:row.record_id,label:row.descriptor_id});
@@ -72,15 +72,15 @@ export function inspectContentReadiness(content,story,resources){
       };
       if(root.kind==='direct-object'){
         try{
-          const object=table?.objects.find(row=>row.index===root.id),chest=nativeKeyedChest(object);
+          const object=table?.objects.find(row=>row.index===root.id),chest=root.handler==='toggle-object'?nativeToggleObject(object):nativeKeyedChest(object);
           need(object.source?.sha256===story.source_hashes[object.source.path],'宝箱原地图来源缺失');
-          for(const reward of chest.rewards){
+          for(const reward of chest.rewards??[]){
             const definition=story.item_definitions?.[reward.id];
             need(definition?.source?.sha256===story.source_hashes[definition.source.path],'宝箱奖励道具来源缺失');
             validateChapterItemDefinition(definition);
           }
           const animation=resources.object_animations[mapId]?.find(row=>row.object_index_zero_based===root.id);
-          need(animation,'宝箱动作资源缺失');nativeChestAnimation(animation,object.behavior_raw_cf);
+          need(animation,'物件动作资源缺失');if(root.handler!=='toggle-object')nativeChestAnimation(animation,object.behavior_raw_cf);
           entrances.push({map_id:mapId,kind:root.kind,id:root.id,records:0,advisory:false});
         }catch(error){target.push(diagnostic(null,error.message));}
         continue;
@@ -117,7 +117,7 @@ export function inspectContentReadiness(content,story,resources){
           }
           if(record.kind!==4&&record.condition_type!==0)validateNativeStoryCondition(record,current);
           if(record.kind===4)nativeCombinationConditions(record,current);
-          if(root.kind==='setup')need(record.condition_type===0&&record.mutation_type===0&&record.mutation_bit===0,'加载入口只能包含布局与旗标判断');
+          if(root.kind==='setup')need(record.condition_type===0&&(record.mutation_type===0&&record.mutation_bit===0||record.mutation_type===7),'加载入口只能包含布局、旗标判断与序列初始化');
           const bit=record.condition_bit|0,index=record.condition_index||current.map_flag_index;
           if(record.kind!==4&&record.condition_type===0)need(bit===0||bit>=1&&bit<=32&&flagIndex(index),'剧情旗标条件未支持');
           switch(record.mutation_type){
@@ -126,8 +126,10 @@ export function inspectContentReadiness(content,story,resources){
               need(mutation===0||mutation>=-32&&mutation<=32&&flagIndex(record.mutation_index||current.map_flag_index),'旗标变更未支持');break;
             }
             case 1:{
-              need(record.region_byte_raw===0&&flagIndex(record.mutation_index)&&Number.isInteger(record.mutation_bit)
+              need([0,1].includes(record.region_byte_raw)&&flagIndex(record.mutation_index)&&Number.isInteger(record.mutation_bit)
                 &&record.mutation_bit>=0&&record.mutation_bit<=1000,'物件状态变更参数尚未接入');
+              need(record.region_byte_raw===0||record.mutation_index!==0&&record.mutation_index!==current.map_flag_index,
+                '当前地图物件反播TLK尚未接入');
               if(record.mutation_bit&&(record.mutation_index===0||record.mutation_index===current.map_flag_index)){
                 const object=current.objects.find(row=>row.index===record.mutation_bit-1);
                 if([2,9].includes(object?.behavior_raw_cf))nativeAnmObjectTarget({u32_plus5:0,u32_plus25:record.mutation_bit,byte_plus29:0},current.id,story);
@@ -147,7 +149,7 @@ export function inspectContentReadiness(content,story,resources){
               }else need(record.mutation_bit>=0&&record.mutation_bit<=416,'移除道具来源编号无效');
               break;
             }
-            case 3:case 10:case 11:case 14:case 16:case 17:
+            case 3:case 7:case 8:case 10:case 11:case 14:case 16:case 17:
               validateNativeStoryMutation(record,{roleDefinitions:story.role_definitions});
               if(record.mutation_type===17&&record.mutation_bit){
                 const definition=story.item_definitions?.[record.mutation_bit];

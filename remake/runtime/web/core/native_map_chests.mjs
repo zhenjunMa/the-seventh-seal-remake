@@ -39,6 +39,19 @@ export function nativeKeyedChest(object){
   need(rewards.length>0,'直接奖励来源缺失');
   return {keyId,rewards};
 }
+export function nativeToggleObject(object){
+  const {raw,view}=sourceBytes(object?.raw_hex,0x112,'CF7物件');
+  need(raw[0xcf]===7&&view.getUint32(0xf6,true)===0&&view.getUint32(0xf2,true)===0&&raw[0x109]===0,
+    'CF7剧情、钥匙或状态类型尚未接入');
+  // The admitted native pedestals have +98=1: after placement, repeated
+  // interaction never enters the source's optional reverse state4 -> 5.
+  need(raw[0x98]===1,'可逆CF7交互尚未接入');
+  need(view.getUint32(0x4c,true)===0&&raw[0x51]===0&&view.getUint32(0xe3,true)===0&&view.getUint32(0xe7,true)===0
+    &&Array.from({length:10},(_,slot)=>view.getInt32(0x54+slot*4,true)).every(id=>id===0),
+    'CF7奖励、生成或物件联动尚未接入');
+  // +FA names the source object; it is not an item consumed or awarded.
+  return {behavior:7};
+}
 export function canOpenNativeChest(world,chest){
   // Mode0 compares IDs across inventory and all retained native equipment;
   // it neither consumes the key nor requires it on the controlled actor.

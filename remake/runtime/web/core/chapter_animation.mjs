@@ -55,7 +55,7 @@ export function validateChapterAnimation(program,content=runtimeContent) {
     if (c.opcode === 36) need(Object.values(content.roles).some(role=>role.side==='player'&&role.native_slot===c.u32_plus5)&&[0,1,3].includes(c.byte_plus29), '剧情队伍操作未支持');
     if (c.opcode === 37) need(Object.values(content.roles).some(role=>role.side==='player'&&role.native_slot===c.u32_plus5), '剧情离队人物未接入');
     if([41,49].includes(c.opcode))need(nativeActorPixelEffects[c.opcode===41?'behavior':'facing'][c.byte_plus29+1]
-      &&[0,1,2].includes(c.u32_plus1),'剧情人物像素效果模式未恢复');
+      &&[0,1,2].includes(c.u32_plus1),`剧情人物像素效果模式未恢复：${program.id}:${c.index} opcode=${c.opcode} byte29=${c.byte_plus29} u32+1=${c.u32_plus1}`);
     if(c.opcode===20){
       need(c.u32_plus5<2000&&c.u32_plus25<=32,'剧情旗标索引或位无效');
       if(c.byte_plus29>=2)for(const target of [c.u32_plus13,c.u32_plus17])need(target>=0&&target<=program.commands.length,'剧情旗标跳转越界');

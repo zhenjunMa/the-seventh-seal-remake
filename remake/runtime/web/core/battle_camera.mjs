@@ -45,3 +45,21 @@ export function advanceNativeColorFade(previous,now){
   }
   return state;
 }
+
+// 5130D0 case2 -> 5119F0 and 511640: non-waiting, unaccelerated X pan.
+// Commands6/11 use the same camera coordinates for snap/return respectively.
+export function beginNativeCameraPan(target,at,previous=null,{immediate=false,limit=410}={}){
+  const position=previous?advanceNativeCameraPan(previous,at):{x:0};
+  const destination=Math.max(-limit,Math.min(limit,target));
+  return {x:immediate?destination:position.x,target:destination,step:Math.sign(destination-position.x)*16,
+    last_at:Math.max(0,at-20),active:!immediate&&destination!==position.x,limit};
+}
+export function advanceNativeCameraPan(previous,now){
+  const state={...previous};
+  while(state.active&&now-state.last_at>=20){
+    state.last_at+=20;
+    state.x=state.step>0?Math.min(state.target,state.x+state.step):Math.max(state.target,state.x+state.step);
+    state.active=state.x!==state.target;
+  }
+  return state;
+}

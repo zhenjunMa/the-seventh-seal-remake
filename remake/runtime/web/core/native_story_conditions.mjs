@@ -1,13 +1,15 @@
 // TLK conditions beyond flag bits, recovered from 462600 and its helpers.
-// This only reads a world snapshot; it never awards items or changes progress.
+// Case5 also resets the native sequence input count after a wrong answer.
 const need=(ok,message)=>{if(!ok)throw new Error(`原剧情条件：${message}`);};
 const uint=value=>Number.isInteger(value)&&value>=0&&value<=0xffffffff;
-export const NATIVE_STORY_CONDITION_TYPES=new Set([1,2,4,8,10]);
+export const NATIVE_STORY_CONDITION_TYPES=new Set([1,2,4,5,6,8,10]);
 export const NATIVE_STORY_CONDITION_EVIDENCE={
   dispatch:'ev_e14d28c11ec31e5eebdf4c08a994a900102658650d8e5364d58b848cbd114ea7',
   object:'ev_ae80938b5372bbdb5a8910aed7225ecd370a8f09ab420dfa11092554bcbd6dac',
   inventory:'ev_dafa0c988c45fa7e7114cf4af701d9849866e3a182f1432485d4201c59994dca',
-  party:'ev_8da059ef56c5de88c95fdb157a91830e05541173e328cebfe7839957303d230b'
+  party:'ev_8da059ef56c5de88c95fdb157a91830e05541173e328cebfe7839957303d230b',
+  sequenceLength:'ev_eefd1999d13ff3b79b2ab77c4f9a4b8e32e46d25eb708f78654e79bc4e975362',
+  sequenceMatch:'ev_d01d1965cb8825fa870c63e6e112039c664d1f39e40ce6a30dd516d982769056'
 };
 
 export function nativeConditionByte(record){
@@ -35,6 +37,8 @@ export function validateNativeStoryCondition(record,table){
     // 462600 calls 47B0C0(index,itemId,0): mode0 includes equipment
     // for every native role as well as inventory, regardless of active party.
     need(record.condition_bit>=1&&record.condition_bit<=416,'道具编号无效');
+  }else if(type===5||type===6){
+    // 443650/4436A0 use the shared sequence globals, without TLK operands.
   }else if(type===8){
     // Case8 is a DWORD equality test, not an index into the party array.
     // Preserve all four source bytes, including operands which never match.
@@ -55,6 +59,14 @@ function retainedEquipment(world){
 export function evaluateNativeStoryCondition(record,world,table){
   validateNativeStoryCondition(record,table);
   switch(record.condition_type){
+    case 6:return Boolean(world.native_sequence?.target.length)&&world.native_sequence.input_count===world.native_sequence.target.length;
+    case 5:{
+      const sequence=world.native_sequence;
+      if(!sequence?.target.length)return false;
+      const matched=sequence.input.slice(0,sequence.target.length)===sequence.target;
+      if(!matched)sequence.input_count=0;
+      return matched;
+    }
     case 2:return ((world.money??0)|0)>=(record.condition_index|0);
     case 1:{
       const index=record.condition_index||table.map_flag_index;

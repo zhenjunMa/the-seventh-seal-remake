@@ -55,7 +55,7 @@ def save_json(path: Path, value) -> None:
 def indexed_rows(dgp: DGP, frame: int):
     """0x52A278: FFFF empty row; absolute x, length, length byte indices."""
     record = dgp.indexed_auxiliary[frame]
-    if not record['active_raw']:
+    if not record['active_raw'] or record.get('malformed_source'):
         return
     start = record['indexed_pixels_offset']
     r = Reader(dgp.data[start:start + record['indexed_pixels_bytes']])
@@ -89,6 +89,8 @@ def indexed_contribution(dgp: DGP, frame: int) -> tuple[Image.Image, dict]:
     pixels = bytearray(dgp.width * dgp.height * 4)
     stats = dict(frame=frame, covered_pixels=0, index_zero_pixels=0,
                  index_255_pixels=0, nonblack_pixels=0, bounds=None)
+    if record.get('malformed_source'):
+        stats['malformed_source'] = record['malformed_source']
     if record['active_raw']:
         p = record['palette_offset']
         palette = dgp.data[p:p + 768]

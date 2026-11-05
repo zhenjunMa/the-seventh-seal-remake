@@ -321,6 +321,12 @@ def decode_native_save(raw):
         raise ValueError('原版存档没有有效的当前队伍')
     world['encounters'] = dict(rng_state=0x20261011, counters=counters,
                               remainders={key: 0 for key in counters})
+    #4785C0/478C80 preserve4B4ECA4's remaining100ms ticks and4B4ECAC's
+    # signed chance modifier at the real native header offsets. +3B5 is a
+    # separate global whose bytes remain in the retained native header.
+    if u32(header, 0x3B1):
+        world['encounters']['modifier'] = dict(value=struct.unpack_from('<i', header, 0x3B9)[0],
+            expires_at_ms=world['play_time_ms'] + u32(header, 0x3B1) * 100)
     inventory = sections['inventory']
     for index in range(u32(inventory)):
         record = inventory[4 + index * ITEM_BYTES:4 + (index + 1) * ITEM_BYTES]
@@ -426,6 +432,10 @@ def encode_native_save(envelope, *, saved_at=None):
                          saved_at.day, saved_at.hour, saved_at.minute, saved_at.second, saved_at.microsecond // 1000)
     if 'play_time_ms' in world:
         put(header, 0x7D, world['play_time_ms'] // 100)
+    modifier = world.get('encounters', {}).get('modifier')
+    remaining = max(0, modifier['expires_at_ms'] - world.get('play_time_ms', 0)) if modifier else 0
+    put(header, 0x3B1, (remaining + 99) // 100)
+    put(header, 0x3B9, modifier['value'] if remaining else 0)
     settings = world.get('game_settings')
     if settings:
         for index, key in enumerate(('master', 'music', 'effects')):

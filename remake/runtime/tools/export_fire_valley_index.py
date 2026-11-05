@@ -258,7 +258,7 @@ def build_index(region_label=REGION_LABEL, region_id="fire-valley", exact_label=
     families = {ident[:4] for ident in seeds}
     details = {}
     for ident, row in catalog.items():
-        if ident in seeds or ident[:4] in families:
+        if ident in seeds or ident[:4] in families or ident in {row[0] for row in script_map_sources}:
             try:
                 parsed = map_record(ROOT / row["path"], detailed=True)
                 if "unsupported" in parsed:
@@ -369,6 +369,11 @@ def build_index(region_label=REGION_LABEL, region_id="fire-valley", exact_label=
                                       "record_kinds": sorted({r["kind"] for r in records} - SUPPORTED_TLK_KINDS),
                                       "branch_targets": sorted({t for r in records for t in r["branch_targets"]
                                                                 if t > len(records)}),
+                                      "object_record_targets": [{"object_index": obj["index"],
+                                          "record_id": obj["interaction_record_raw_f6"], "source": obj["source"],
+                                          "reason": "source-TLK-file-absent" if tlk is None else "source-TLK-record-absent"}
+                                          for obj in objects if obj["interaction_record_raw_f6"]
+                                          and not any(r["id"] == obj["interaction_record_raw_f6"] for r in records)],
                                       "map_targets": sorted({d["target_map_id"] for d in links
                                                              if d["target_map_id"] and d["target_map_id"] not in catalog})}}
         maps[ident]["entrypoints"] = [{"id": f"{ident}:TLK-index:{slot}", "kind": "npc" if any(n["slot_zero_based"] == slot for n in npcs) else "tlk-index-source",
@@ -590,6 +595,7 @@ def coverage_report(data, index_bytes, output=OUTPUT):
                       "npc_dialogue_entries": sum(npc["dialogue_index_entry"] is not None for npc in row["npcs"]),
                       "tlk_status": row["dialogue"]["status"], "tlk_records": len(row["dialogue"]["records"]),
                       "load_record_8a": row["map_load_record_raw"], "arrival_record_13a": row["map_entry_record_raw"],
+                      "missing_object_record_targets": row["unresolved"]["object_record_targets"],
                       "unresolved_record_counts": row["unresolved_record_counts"]}
                      for ident, row in data["maps"].items()],
             "projection_gaps": {

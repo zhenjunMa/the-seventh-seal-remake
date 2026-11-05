@@ -141,6 +141,17 @@ class DGP:
                     indexed = keep('indexed_pixels', size)
                     record['indexed_pixels_bytes'] = size
                     record['indexed_pixels_sha256'] = hashlib.sha256(indexed).hexdigest()
+                    if self.sha256 == 'b31f5ecaf2ee01f48561440a4c730f83591d2dcbb6caf867af5a6d1fd1bc6ac0' and index == 97:
+                        # Shipped050's id18/19 reference this frame. 51FCC4
+                        # reads these bytes unchanged; 52A278/5458CD interpret
+                        # 0xBB8B as48011 spans and read outside this2927-byte
+                        # allocation. No deterministic native image exists.
+                        # Preserve the raw record and valid main pixels; never
+                        # replace its malformed additive pass with guessed art.
+                        record['malformed_source'] = dict(code='invalid-indexed-span-count',
+                            row=0, span_count=48011, width=self.width,
+                            policy='Exact shipped050 frame97 indexed channel omitted; native out-of-allocation drawing is undefined.',
+                            evidence='evidence/seal_battle_rewards_20261104/native.json')
                 record['end_offset'] = r.pos
                 self.indexed_auxiliary.append(record)
 

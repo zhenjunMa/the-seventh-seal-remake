@@ -131,7 +131,9 @@ def enrich_sequence(c, d, index, runtime_id=None, handler=None):
                     movement_step_raw=struct.unpack_from('<i', raw, 0x1e)[0], movement_source_field='0x1e', movement_flag_raw=raw[0x25],
                     event=dict(frame=event, field='0x49') if event else None, effects=effects, evidence=[NATIVE_IDS['range']]))
             else:
-                assert raw[0] == 1 and group in (0, 1, 4, 6, 7, 8, 10, 11)
+                assert raw[0] == 1 and group in (0, 1, 2, 4, 6, 7, 8, 10, 11)
+                if group == 2 and (raw[0x47] not in (0, 1) or raw[0x1d] or raw[0x23]):
+                    raise ValueError('Native camera follow mode is not recovered')
                 if group == 10 and raw[0x47] not in (0, 1):
                     raise ValueError('Native target vertical mode is not recovered')
                 if group == 1 and (raw[0x47] not in (0, 1) or raw[0x1d]):

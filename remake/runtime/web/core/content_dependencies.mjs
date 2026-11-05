@@ -10,11 +10,12 @@ import {nativeSupportSkillSupported} from './battle_support.mjs';
 import {validateChapterStory,chapterRestChoices} from './chapter.mjs';
 import {validateChapterAnimation} from './chapter_animation.mjs';
 import {validateBattleViewMetadata} from '../battle_view.mjs';
-import {nativeKeyedChest,nativeScriptedChest,nativeChestAnimation} from './native_map_chests.mjs';
+import {nativeKeyedChest,nativeScriptedChest,nativeChestAnimation,nativeToggleObject} from './native_map_chests.mjs';
 import {supplementalPartyCommands} from './party_skill_corrections.mjs';
 import {compileNativeTriggerFlow} from './story_flow_compiler.mjs';
 import {nativeAnmObjectTarget} from './native_anm_commands.mjs';
 import {compileNativeSequence,directSequence} from './skill_sequence.mjs';
+import {validateScheduler} from './battle_scheduler.mjs';
 const need=(ok,message)=>{if(!ok)throw new Error(`内容依赖：${message}`);};
 
 export function validateEnemySequenceClosure(ai,view,content){
@@ -69,6 +70,7 @@ export function validateStoryBindings(content,story,resources,{registeredMaps=co
       need(typeof raw==='string'&&raw.length===0x112*2,`${id} 物件 ${row.index} 缺少来源`);
       const b=Uint8Array.from(raw.match(/../g),part=>parseInt(part,16)),recordId=new DataView(b.buffer).getUint32(0xf6,true);
       if(row.handler==='keyed-chest')nativeKeyedChest(object);
+      else if(row.handler==='toggle-object')nativeToggleObject(object);
       else{
         if(['stationary-chest','scripted-object'].includes(row.handler)){
           nativeScriptedChest(object);
@@ -123,7 +125,7 @@ export function validateStoryBindings(content,story,resources,{registeredMaps=co
 
 export function validateContentDependencies(content,data){
   validateContentRegistration(content);
-  const {catalog,seed,story,resources,party,commands:sourceCommands,forest,ai,rewards,reactions,status,encounters,view,itemView,lifecycle,menu}=data;
+  const {catalog,seed,story,resources,party,commands:sourceCommands,forest,ai,rewards,reactions,status,encounters,view,itemView,lifecycle,menu,scheduler}=data;
   const commands={...sourceCommands,skills:{...sourceCommands.skills,...supplementalPartyCommands(sourceCommands,content)}};
   requireRegisteredRoles(Object.keys(party.actors),{side:'player',complete:true},content);
   requireRegisteredRoles(Object.keys(forest.actors),{side:'enemy',complete:true},content);
@@ -171,7 +173,7 @@ export function validateContentDependencies(content,data){
       validateNativeEffectBinding(skill,targetSide==='player'?commands.roles:ai.roles);
     }
   }
-  validateEncounterData(encounters,content);validateForestAIData(ai,content);
+  validateScheduler(scheduler);validateEncounterData(encounters,content);validateForestAIData(ai,content);
   validateForestRewards(rewards,content);validateForestReactionsData(reactions,content);
   validateEnemyReactionClosure(ai,reactions,content);
   validateForestStatusData(status,content);validateBattleViewMetadata(view,content);

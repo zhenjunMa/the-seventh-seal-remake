@@ -13,7 +13,8 @@ export function validateScheduler(data){
   fail(data.default_preparation_delay===undefined||(Number.isInteger(data.default_preparation_delay)&&data.default_preparation_delay>=1&&data.default_preparation_delay<=1000000&&(debug||data.default_preparation_delay===800)),'默认技能准备量无效');
   fail(data.initial_side_priority===0&&data.policy&&Object.values(data.evidence??{}).length===7&&Object.values(data.evidence).every(s=>/^ev_[a-f0-9]{64}$/.test(s)),'行动调度证据缺失');
   for(const id of ['001','011','012','013'])fail(/^([a-f0-9]{2}){1053}$/.test(data.idle_skills?.[id]?.fixed_raw_hex),'原待机属性缺失');
-  for(const [id,skill]of Object.entries(data.low_hp_skills??{}))fail(data.idle_skills[id]&&/^07([a-f0-9]{2}){1052}$/.test(skill.fixed_raw_hex)&&skill.segments?.length,'原低血量待机属性缺失');
+  for(const [id,skill]of Object.entries(data.low_hp_skills??{}))fail(data.idle_skills[id]&&/^07([a-f0-9]{2}){1052}$/.test(skill.fixed_raw_hex)
+    &&(skill.segments?.length||skill.invalid_source_actions?.length&&skill.invalid_source_actions.every(action=>action.native_frame_result===-2)),'原低血量待机属性缺失');
   return data;
 }
 export function initializeScheduler(actors,data,sidePriority=0,now=0){
@@ -60,6 +61,12 @@ export function advanceIdleSkill(actor,data,now){
   // id0 resumes when those gates clear. Reset the source cursor only on change.
   const selected=low&&(actor.hp.current<=(actor.raw_by_address['0x0524a705']>>2)||(actor.status_flags_raw&0x100)||actor.charge?.recovery)?low:idle;
   if(actor.current_skill.id!==selected.id){actor.current_skill=clone(selected);actor.idle_started_at=now;}
+  if(!selected.segments.length){
+    //50E980 writes the CHR class/mask before rejecting an absent DGP group.
+    // It returns-2 without advancing the previous displayed physical frame.
+    actor.idle_pose??=idlePoseAt(idle.segments,0);
+    actor.class_raw=selected.class_raw;actor.action_mask_raw=selected.action_mask_raw;return;
+  }
   actor.idle_pose=idlePoseAt(selected.segments,now-actor.idle_started_at);
   actor.class_raw=actor.idle_pose.class_raw;actor.action_mask_raw=actor.idle_pose.action_mask_raw;
 }

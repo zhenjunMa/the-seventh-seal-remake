@@ -5,9 +5,12 @@ import {runtimeContent,mapId,sourceHash,requireRegisteredRoles,battleStage} from
 const clone=v=>structuredClone(v);
 function requireValue(ok,message){if(!ok)throw new Error(message);}
 export function validateEncounterState(state,party){
-  requireValue(state&&[3,4].includes(Object.keys(state).length)&&Object.keys(state).every(k=>['rng_state','counters','remainders','global_pool_map_id'].includes(k)),'遇敌状态字段无效');
+  requireValue(state&&[3,4,5].includes(Object.keys(state).length)&&Object.keys(state).every(k=>['rng_state','counters','remainders','global_pool_map_id','modifier'].includes(k)),'遇敌状态字段无效');
   requireValue(Number.isInteger(state.rng_state)&&state.rng_state>=0&&state.rng_state<=0xffffffff,'遇敌随机状态无效');
   if('global_pool_map_id' in state)requireValue(state.global_pool_map_id===null||mapId(state.global_pool_map_id),'遇敌全局池来源无效');
+  if('modifier' in state)requireValue(state.modifier&&Object.keys(state.modifier).sort().join(',')==='expires_at_ms,value'
+    &&Number.isInteger(state.modifier.value)&&state.modifier.value>=-2147483648&&state.modifier.value<=2147483647
+    &&Number.isSafeInteger(state.modifier.expires_at_ms)&&state.modifier.expires_at_ms>=0,'遇敌药品状态无效');
   for(const key of ['counters','remainders']){
     requireValue(state[key]&&typeof state[key]==='object'&&!Array.isArray(state[key])&&Object.keys(state[key]).length===party.length,'遇敌角色表无效');
     requireValue(Object.keys(state[key]).every(id=>party.some(actor=>actor.id===id)),'遇敌角色未接入');
@@ -17,6 +20,14 @@ export function validateEncounterState(state,party){
   return clone(state);
 }
 export function initialEncounterState(party,seed=0x20261011){return {rng_state:seed>>>0,counters:Object.fromEntries(party.map(a=>[a.id,0])),remainders:Object.fromEntries(party.map(a=>[a.id,0]))};}
+//47D960 adds to the process-global modifier and its remaining100ms timer.
+// Cumulative game time supplies a saveable clock without a wall-clock epoch.
+export function applyEncounterItemEffect(state,effect,playTimeMs){
+  const next=clone(state),current=next.modifier?.expires_at_ms>playTimeMs?next.modifier:null;
+  next.modifier={value:((current?.value??0)+effect.modifier_delta)|0,
+    expires_at_ms:(current?.expires_at_ms??playTimeMs)+effect.duration_ticks*100};
+  return next;
+}
 export function loadEncounterMap(draft,map_id,data){
   const map=data?.maps[map_id];
   if(!(map?.global_pool_load_raw??Boolean(map?.members.length)))return;
@@ -55,8 +66,9 @@ export function generateGroup(map,data,rng,map_id=Object.keys(data.maps).find(id
 }
 // A non-mutating preview lets resource preparation fail without consuming the
 // draw/counter reset. The caller locks exploration before preparing a battle.
-export function previewMovement(state,{party,leader_id,map_id,dx,dy,distance=Math.max(Math.abs(dx),Math.abs(dy)),step_pixels,transition=false,phase='map'},data,rngOverride=null,content=runtimeContent){
+export function previewMovement(state,{party,leader_id,map_id,dx,dy,distance=Math.max(Math.abs(dx),Math.abs(dy)),step_pixels,transition=false,phase='map',play_time_ms=0},data,rngOverride=null,content=runtimeContent){
   const next=clone(state);step_pixels??=data.policy.step_pixels;
+  if(next.modifier&&next.modifier.expires_at_ms<=play_time_ms)delete next.modifier;
   requireValue(Number.isFinite(dx)&&Number.isFinite(dy)&&Number.isFinite(distance)&&distance>=0&&Number.isFinite(step_pixels)&&step_pixels>0,'遇敌移动量无效');
   if(phase!=='map'||distance===0)return {state:next,encounter:null,steps:0};
   requireValue(Object.hasOwn(next.counters,leader_id),'遇敌领队缺失');
@@ -72,7 +84,7 @@ export function previewMovement(state,{party,leader_id,map_id,dx,dy,distance=Mat
     accepted++;next.counters[leader_id]=(next.counters[leader_id]+1)&255;
     if(next.counters[leader_id]<=40||transition||!map||map.frequency===0)continue;
     const roll=rng();requireValue(Number.isInteger(roll)&&roll>=0&&roll<=32767,'原随机输出无效');
-    const chance=map.frequency+data.policy.equipment_bonus+data.policy.buff_bonus;
+    const chance=map.frequency+data.policy.equipment_bonus+data.policy.buff_bonus+(next.modifier?.value??0);
     if(chance>0&&roll%1000>=1000-2*chance){
       next.counters[leader_id]=0;
       if(pool){

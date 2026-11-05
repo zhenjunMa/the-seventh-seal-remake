@@ -119,8 +119,13 @@ export function partyResourcesForWorld(actor,options={}) {
   need(actor.mp.current===Math.max(0,mp+bonus.mp_current) && actor.raw_by_address?.[addr(0x524a709)] === mp, 'MP显示与原始提交字段不一致');
   need(actor.hp.maximum === actor.raw_hp_maximum + bonus.hp_maximum && actor.mp.maximum === actor.raw_mp_maximum + bonus.mp_maximum,
     '当前资源上限发生未支持的变化');
-  const header=actor.permanent_item_header_raw_hex?dataView(bytes(actor.permanent_item_header_raw_hex,0x30b,'永久道具角色头')):null;
-  return {hp:hp >>> 0, mp:mp >>> 0,...(header?{header_raw_hex:actor.permanent_item_header_raw_hex,
+  const stored=bytes(actor.permanent_item_header_raw_hex??actor.header_raw_hex,0x30b,'提交角色头'),header=dataView(stored);
+  //4FE0C0 clears status slots, then4FE7E0 copies the complete battle header.
+  // Periodic recovery writes raw maxima directly, so those gains survive it.
+  const changed=actor.permanent_item_header_raw_hex||header.getInt32(0x34,true)!==actor.raw_hp_maximum||header.getInt32(0x3c,true)!==actor.raw_mp_maximum;
+  if(changed){header.setInt32(0x30,hp,true);header.setInt32(0x34,actor.raw_hp_maximum,true);
+    header.setInt32(0x38,mp,true);header.setInt32(0x3c,actor.raw_mp_maximum,true);}
+  return {hp:hp >>> 0, mp:mp >>> 0,...(changed?{header_raw_hex:hex(stored),
     hp_maximum:actor.raw_hp_maximum>>>0,mp_maximum:actor.raw_mp_maximum>>>0,
     attributes_stored:Object.fromEntries([['attack',0x40],['defense',0x48]].map(([name,offset])=>[name,{current:header.getInt32(offset,true),base:header.getInt32(offset+4,true)}]))}:{})};
 }

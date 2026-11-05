@@ -1,0 +1,21 @@
+{
+  "schema": "seventh-seal-quests",
+  "version": 1,
+  "quests": [
+    {
+      "id": "seal-region",
+      "name": "封印遗迹",
+      "maps": ["M03050", "ELF-FOREST-P", "ELF-FOREST-Q", "M03032", "M03044", "M03011", "M03061", "M03065", "M03043-4", "M29011", "M29014", "M29015", "REBIRTH-B04", "REBIRTH-S01", "REBIRTH-D02", "REBIRTH-A01"],
+      "stages": [
+        {"id": "complete", "status": "completed", "text": "已面对隐藏的第七能量，返回守护者身边并取回颠覆的美德。", "when": {"flag": {"index": 215, "bit": 1, "value": true}}},
+        {"id": "trials", "status": "active", "text": "六种元素石版已合而为一。请携带六大能量的证明，前往封印圣殿面对隐藏的第七能量。若仍未完成六类试炼，应读取合成前的存档。", "when": {"flag": {"index": 227, "bit": 1, "value": true}}},
+        {"id": "tablets", "status": "active", "text": "已得知封印遗迹的位置。向飘城酒吧的基尔果雷打听其余石版，完成持有者的委托。收齐后先完成六类试炼、取得六大能量的证明，再合成石版。挑战审判之光前先保存，答错后需读取事前存档。", "when": {"flag": {"index": 428, "bit": 1, "value": true}}},
+        {"id": "scholar", "status": "active", "text": "前往图书馆底层，向研究古代文字的祭司询问封印遗迹的位置。", "when": {"flag": {"index": 419, "bit": 1, "value": true}}},
+        {"id": "clues", "status": "active", "text": "已把布里奇之戒交还主人。到飘城藏书阁询问封印祭司，也可向酒吧的基尔果雷打听其余石版。", "when": {"flag": {"index": 24, "bit": 3, "value": true}}},
+        {"id": "ring", "status": "active", "text": "受市集男子委托，前往妖精森林寻找布里奇的下落，再回市集报告。", "when": {"flag": {"index": 24, "bit": 2, "value": true}}},
+        {"id": "request", "status": "available", "text": "市集男子似乎有事相求，向他了解委托的详情。", "when": {"flag": {"index": 24, "bit": 1, "value": true}}},
+        {"id": "unavailable", "status": "hidden", "text": "", "when": {"all": []}}
+      ]
+    }
+  ]
+}

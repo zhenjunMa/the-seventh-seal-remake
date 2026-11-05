@@ -90,6 +90,7 @@ def main():
     assert sha(read('GAME.exe')) == GAME_SHA
     native = [evidence_record('remake/runtime/evidence/opening_native.json', '0x4c1d47'),
               evidence_record('remake/runtime/evidence/source/combat_presentation_native_20261011.json', '0x512210'),
+              evidence_record('remake/runtime/evidence/source/combat_presentation_native_20261011.json', '0x50e980'),
               evidence_record('remake/runtime/evidence/chapter_map_native.json', '0x4a5f00'),
               evidence_record('remake/runtime/evidence/forest_ai_rules_native_20261011.json', '0x49ffa0')]
     native_paths = ['remake/runtime/evidence/opening_native.json', 'remake/runtime/evidence/source/combat_presentation_native_20261011.json',
@@ -252,7 +253,7 @@ def main():
     assert b'%smworld.wav' in (ROOT/'GAME.exe').read_bytes()
     world_map = dict(clip=clip('sound/mworld.wav'),evidence=[evidence['0x49ffa0']],source_string='%smworld.wav',
                      confidence='native world-map open/close pauses/resumes map music')
-    meta_path=WEB/'data/party_battle_view.json'; meta=json.loads(meta_path.read_text('utf-8')); action_sources=[]; frame_sounds={}
+    meta_path=WEB/'data/party_battle_view.json'; meta=json.loads(meta_path.read_text('utf-8')); action_sources=[]; frame_sounds={}; invalid_source_actions=[]
     lifecycle_path=WEB/'data/battle_lifecycle.json';lifecycle_meta=json.loads(lifecycle_path.read_text('utf-8'))
     assert lifecycle_meta['schema']=='seventh-seal-battle-lifecycle' and lifecycle_meta['version']==2
     lifecycle_roles={role['id']:role for role in lifecycle_meta['roles']}
@@ -268,7 +269,10 @@ def main():
         item_roles={role['id']:role for role in item_meta['roles']}
     for role in meta['roles']:
         path=f"Fight_Role/{role['id']}.CHR"; read(path); chr_=CHR(ROOT/path)
-        indices={s['chr_skill_index'] for s in [role['skill'],*role.get('alternate_skills',[]),*role.get('response_skills',[])]}
+        dgp_path=f"Fight_Role/{role['id']}.dgp"; dgp_raw=read(dgp_path); assert dgp_raw[0]==9
+        assert meta['source_hashes'][path]==chr_.sha256 and meta['source_hashes'][dgp_path]==sha(dgp_raw)
+        views=[role['skill'],*role.get('alternate_skills',[]),*role.get('response_skills',[])]
+        indices={s['chr_skill_index'] for s in views}
         lifecycle_role=lifecycle_roles.get(role['id'])
         if lifecycle_role:
             assert lifecycle_role['source_chr_sha256']==chr_.sha256
@@ -279,7 +283,23 @@ def main():
             for action in chr_.skills[index]['actions']:
                 raw=bytes.fromhex(action['raw_hex'])
                 if raw[0] != 0: continue
-                groups.add(struct.unpack_from('<I',raw,1)[0])
+                group=struct.unpack_from('<I',raw,1)[0]
+                if group>=dgp_raw[2]:
+                    #50E980 returns frame result-2 before DGP/CHR sound
+                    # dispatch for a missing physical group. Only accept a
+                    # source-identical, explicitly retained missing action;
+                    # an unknown bad reference must still fail this export.
+                    declared=next((entry for presentation in views if presentation['chr_skill_index']==index
+                        for entry in presentation.get('invalid_source_actions',[])
+                        if entry['chr_record_index']==action['index'] and entry['action_index']==group),None)
+                    origin=dict(source=path,offset=action['offset'],bytes=len(raw),raw_sha256=sha(raw))
+                    assert declared and declared['native_frame_result']==-2 and declared['source']==origin, f"Unretained missing DGP action {role['id']}:{index}:{action['index']} group{group}"
+                    invalid_source_actions.append(dict(role_id=role['id'],skill_index=index,record_index=action['index'],
+                        action_index=group,native_frame_result=-2,source=origin,source_chr_sha256=chr_.sha256,
+                        source_dgp=dict(path=dgp_path,sha256=sha(dgp_raw),action_count=dgp_raw[2]),
+                        evidence=[evidence['0x50e980']],policy='Native missing DGP action returns before sound dispatch; no audio group or replacement clip.'))
+                    continue
+                groups.add(group)
                 token=original_text(raw,0x7a,20)
                 if not token: continue
                 assert token.lower().endswith('.wav')
@@ -287,7 +307,6 @@ def main():
                 action_sources.append(dict(role_id=role['id'],skill_index=index,record_index=action['index'],
                     source_path=path, source_sha256=chr_.sha256, offset=action['offset'],raw_sha256=sha(raw),
                     token_offset=0x7a, token=token, logical_frame_offset=0x8e, logical_frame=struct.unpack_from('<I',raw,0x8e)[0]))
-        dgp_path=f"Fight_Role/{role['id']}.dgp"; dgp_raw=read(dgp_path); assert dgp_raw[0]==9
         role_sounds={}
         for group in sorted(groups):
             assert 0<=group<dgp_raw[2]
@@ -331,12 +350,12 @@ def main():
         'Browser feedback coalesces keyboard/click handling to one cue per gesture; exact original nested-panel mixer timing is not reproduced.']
     manifest=dict(schema='seventh-seal-audio',version=1,clips=clips,maps=maps,battles=battles,cues=cues,world_map=world_map,action_tokens=tokens,frame_sounds=frame_sounds,
         effect_sounds=effect_sounds,item_effects=item_effects,object_sounds=object_sounds,native_sound_tokens=native_sound_tokens,native_sound_sources=native_sound_sources,reference_hashes=reference_hashes,
-        action_sources=action_sources,source_hashes=sources,native_evidence=evidence,native_bundle_hashes=native_ref,
+        action_sources=action_sources,invalid_source_actions=invalid_source_actions,source_hashes=sources,native_evidence=evidence,native_bundle_hashes=native_ref,
         missing_original_files=missing,limitations=limitations)
     save(WEB/'data/audio.json',manifest)
     assert all(sha((ROOT/p).read_bytes())==value for p,value in sources.items()), 'Original source changed during export'
     save(RUNTIME/'evidence/audio_export.json',dict(success=True,original_source_unchanged=True,original_game_execution_observed=False,
-        clips=len(clips),maps=len(maps),source_action_records=len(action_sources),source_hashes=sources,
+        clips=len(clips),maps=len(maps),source_action_records=len(action_sources),invalid_source_actions=invalid_source_actions,source_hashes=sources,
         missing_original_files=missing,manifest_sha256=sha((WEB/'data/audio.json').read_bytes()),
         decoded_audio_unchanged=all(c['export']['decoded_audio_unchanged'] for c in clips.values()),limitations=limitations))
     print(json.dumps(dict(clips=len(clips),maps=len(maps),action_records=len(action_sources),missing=missing)))

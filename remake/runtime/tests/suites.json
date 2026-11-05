@@ -227,7 +227,10 @@
         "test_guild_battles.mjs",
         "test_guild_crafting.mjs",
         "test_guild_shared.mjs",
-        "test_native_save_sources.py"
+        "test_native_save_sources.py",
+        "test_native_story_sequence.mjs",
+        "test_native_toggle_objects.mjs",
+        "test_seal_battle_rewards.mjs"
       ],
       "requires": [
         "GAME.exe"
@@ -269,11 +272,14 @@
     "content-full": {
       "description": "区域入口的完整动态遍历；阶段与版本验收显式执行",
       "files": [
-        "test_fire_valley_npc_sweep.mjs"
+        "test_fire_valley_npc_sweep.mjs",
+        "test_seal_tablets.mjs",
+        "test_seal_region.mjs"
       ],
       "layer": "content",
       "regions": [
-        "fire-valley"
+        "fire-valley",
+        "seal-region"
       ],
       "cache": true
     },
@@ -287,10 +293,13 @@
     }
   },
   "requirements": {
+    "test_native_story_sequence.mjs": ["Map/wing-b01-a.dat", "Map/wing-b01-a.TLK", "Map/wing-b01-b.dat", "Map/wing-b01-b.TLK", "Map/wing-b01-c.dat", "Map/wing-b01-c.TLK"],
+    "test_native_toggle_objects.mjs": ["Map/yearn-c02.dat", "Map/yearn-d02.dat", "mapm/m72073/013.dgp", "mapm/m72074/011.dgp"],
+    "test_seal_battle_rewards.mjs": ["remake/runtime/evidence/seal_battle_rewards_20261104/periodic_commit_native.json", "remake/runtime/evidence/battle_result_20261020/native_evidence.json", "remake/runtime/evidence/forest_status_native_20261011.json", "SYSTEM/Object.ITM", "Fight_Role/049.CHR", "Fight_Role/050.CHR", "Fight_Role/051.CHR", "Fight_Role/052.CHR", "Fight_Role/053.CHR", "Fight_Role/054.CHR", "Fight_Role/055.CHR", "Fight_Role/056.CHR", "Fight_Role/057.CHR", "Fight_Role/058.CHR", "Fight_Role/060.CHR", "Fight_Role/077.CHR", "Fight_Role/078.CHR", "Fight_Role/080.CHR", "Fight_Role/083.CHR", "Fight_Role/086.CHR", "Fight_Role/087.CHR", "Fight_Role/101.CHR", "Fight_Role/102.CHR", "Fight_Role/103.CHR", "Fight_Role/104.CHR", "Fight_Role/105.CHR", "Fight_Role/106.CHR", "Fight_Role/107.CHR", "Fight_Role/108.CHR", "Fight_Role/109.CHR", "Fight_Role/110.CHR", "Fight_Role/111.CHR", "Fight_Role/112.CHR", "Fight_Role/113.CHR", "Fight_Role/114.CHR", "Fight_Role/115.CHR", "Fight_Role/116.CHR", "Fight_Role/117.CHR", "Fight_Role/118.CHR", "Fight_Role/119.CHR", "Fight_Role/120.CHR", "Fight_Role/121.CHR", "Fight_Role/122.CHR", "Fight_Role/123.CHR", "Fight_Role/124.CHR"],
     "test_native_save_sources.py": ["SaveGame0.Dat", "SaveGame1.Dat", "SaveGame2.Dat"],
     "test_wind_entry_items.mjs": ["SYSTEM/Object.ITM", "Fight_Role/029.CHR", "Fight_Role/034.CHR", "Fight_Role/Status", "remake/runtime/evidence/wind_region_20261031/browser_outputs/boss_first_blocked_log.json"],
     "test_battle_appearance_source.mjs": ["GAME.exe", "Fight_Role/018.CHR", "remake/runtime/tests/fixtures/battle_appearance2_native.json"],
-    "test_actor_effects_source.mjs": ["GAME.exe", "remake/runtime/tests/fixtures/anm_actor_blend_native.json", "Animate/m01060-2.anm", "Animate/m17029-1.anm", "Animate/m17030-1.anm", "Animate/m70073-1.anm", "Animate/m70078-1.anm", "Animate/m01040-5.anm", "Animate/m01050-3.anm", "Animate/m01022-1.anm", "Animate/m01022-2.anm", "remake/runtime/tests/fixtures/guild_actor_fade_native.json", "Animate/m55001.anm", "Animate/m72062-1.anm", "Animate/m72063.anm", "Animate/m72062-2.anm", "Animate/m72063-2.anm", "Animate/m72062-3.anm", "Animate/m72063-3.anm", "Animate/m72064-1.anm", "Animate/m73013-1.anm", "Animate/m01066-3.anm", "Animate/m01053-2.anm", "Animate/m71080.anm", "Animate/elf-e.anm", "Animate/elf-i.anm", "Animate/elf-v.anm"],
+    "test_actor_effects_source.mjs": ["GAME.exe", "remake/runtime/tests/fixtures/anm_actor_blend_native.json", "Animate/m01060-2.anm", "Animate/m17029-1.anm", "Animate/m17030-1.anm", "Animate/m70073-1.anm", "Animate/m70078-1.anm", "Animate/m01040-5.anm", "Animate/m01050-3.anm", "Animate/m01022-1.anm", "Animate/m01022-2.anm", "remake/runtime/tests/fixtures/guild_actor_fade_native.json", "Animate/m55001.anm", "Animate/m72062-1.anm", "Animate/m72063.anm", "Animate/m72062-2.anm", "Animate/m72063-2.anm", "Animate/m72062-3.anm", "Animate/m72063-3.anm", "Animate/m72064-1.anm", "Animate/m73013-1.anm", "Animate/m01066-3.anm", "Animate/m01053-2.anm", "Animate/m71080.anm", "Animate/elf-e.anm", "Animate/elf-i.anm", "Animate/elf-v.anm", "Animate/judgeligh-s01.anm", "Animate/m03011.anm", "Animate/m72065.anm", "remake/runtime/tests/fixtures/seal_actor_pixels_native.json"],
     "test_native_story_conditions.mjs": ["Map/m03023.TLK"],
     "test_native_anm_extended.mjs": ["Animate/m17010-3.anm", "Animate/m03021.anm", "Animate/m17030-1.anm", "Fight_Role/004.CHR", "Fight_Role/006.CHR", "remake/runtime/web/data/opening_map_resources.json", "Animate/m71080.anm"],
     "test_yc05_jl03_battle.mjs": ["Fight_Role/031A1.CHR", "Fight_Role/031B2.CHR", "Fight_Role/031A1.dgp", "Fight_Role/031B2.dgp", "remake/runtime/evidence/yc05_jl03_20261030/battle_camera_native.json", "remake/runtime/evidence/yc05_jl03_20261030/battle_command9_native.json", "remake/runtime/evidence/yc05_jl03_20261030/battle_entry_native_bundle.json"],
@@ -300,7 +309,7 @@
     "test_battle_commands.mjs": ["remake/runtime/evidence/battle_alignment_20261015/native_41f070_assembly.json", "remake/runtime/evidence/forest_scheduler_instructions_20261011.json", "remake/runtime/evidence/turn_rules_assembly_20261011.json"],
     "test_battle_cursor_export.py": ["python:PIL"],
     "test_battle_idle.mjs": ["remake/runtime/evidence/turn_rules_assembly_20261011.json"],
-    "test_battle_reactions.mjs": ["remake/runtime/evidence/forest_death_reactions_native_20261011.json", "remake/runtime/evidence/forest_reactions_instructions_20261011.json"],
+    "test_battle_reactions.mjs": ["remake/runtime/evidence/forest_death_reactions_native_20261011.json", "remake/runtime/evidence/forest_reactions_instructions_20261011.json", "remake/runtime/evidence/fire_valley_20261025/vertical_519dd0_assembly.json"],
     "test_battle_result_fixture.mjs": ["remake/runtime/evidence/battle_alignment_20261015/controlled_entry_save.json", "remake/runtime/evidence/battle_result_20261020/fixtures/multi_notice_entry_save.json"],
     "test_battle_result_sequence.mjs": ["remake/runtime/web/assets"],
     "test_battle_revival.mjs": ["remake/runtime/evidence/battle_lifecycle_native_20261015.json", "remake/runtime/evidence/battle_revive_recovery_native_20261015.json", "remake/runtime/evidence/forest_status_native_20261011.json", "remake/runtime/evidence/turn_rules_assembly_20261011.json"],
@@ -394,7 +403,7 @@
     "test_guild_crafting.mjs": ["GAME.exe", "SYSTEM/Object.ITM", "Map/m01042.TLK", "Map/m03032.TLK", "remake/runtime/web/data/items.json", "remake/runtime/web/data/config/items.json"],
     "test_guild_battles.mjs": ["Fight_Role/043.CHR", "Fight_Role/061.CHR", "Fight_Role/063.CHR", "Fight_Role/084.CHR", "Map/m71078-3-24.TLK", "remake/runtime/web/data/forest_ai.json", "Fight_Role"],
     "test_guild_shared.mjs": ["Map/m01053.TLK", "Map/Elf-forest-E.TLK", "Map/m03066.TLK", "Map/m71078-3-24.dat", "remake/runtime/web/data/chapter_story.json"],
-    "test_audio.mjs": ["Map", "sound/E017.wav", "sound/E018.wav", "sound/E019.wav", "sound/E020.wav"]
+    "test_audio.mjs": ["Map", "sound/E017.wav", "sound/E018.wav", "sound/E019.wav", "sound/E020.wav", "Fight_Role/055.CHR", "Fight_Role/055.dgp", "Fight_Role/077.CHR", "Fight_Role/077.dgp", "Fight_Role/086.CHR", "Fight_Role/086.dgp"]
   },
   "profiles": {
     "task": [
@@ -528,6 +537,7 @@
     }
   },
   "regions": {
+    "seal-region": {"maps": ["rebirth-*", "hellway-*", "wing-*", "yearn-*", "ruinously-*", "judgeligh-*", "silence-*", "m72065"], "tests": ["test_seal_*", "test_native_story_sequence.mjs", "test_native_toggle_objects.mjs"]},
     "yc05-jl03": {
       "maps": ["m010*", "m710*", "m030*", "m29011", "m29012"],
       "tests": ["test_yc05_jl03*"]

@@ -1518,6 +1518,825 @@
       },
       "parameters": {}
     },
+    "101_9": {
+      "name": "槌槌",
+      "owner": {
+        "role_id": "101",
+        "skill_index": 9,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "101_10": {
+      "name": "黏黏",
+      "owner": {
+        "role_id": "101",
+        "skill_index": 10,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "101_11": {
+      "name": "嚼嚼",
+      "owner": {
+        "role_id": "101",
+        "skill_index": 11,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "102_9": {
+      "name": "球化攻击",
+      "owner": {
+        "role_id": "102",
+        "skill_index": 9,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "102_10": {
+      "name": "盘化突击",
+      "owner": {
+        "role_id": "102",
+        "skill_index": 10,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "102_11": {
+      "name": "变化连击",
+      "owner": {
+        "role_id": "102",
+        "skill_index": 11,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "103_9": {
+      "name": "",
+      "owner": {
+        "role_id": "103",
+        "skill_index": 9,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "103_10": {
+      "name": "",
+      "owner": {
+        "role_id": "103",
+        "skill_index": 10,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "103_11": {
+      "name": "",
+      "owner": {
+        "role_id": "103",
+        "skill_index": 11,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "103_12": {
+      "name": "",
+      "owner": {
+        "role_id": "103",
+        "skill_index": 12,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "103_13": {
+      "name": "",
+      "owner": {
+        "role_id": "103",
+        "skill_index": 13,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "103_14": {
+      "name": "",
+      "owner": {
+        "role_id": "103",
+        "skill_index": 14,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "103_15": {
+      "name": "风之羽",
+      "owner": {
+        "role_id": "103",
+        "skill_index": 15,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "103_16": {
+      "name": "回复药",
+      "owner": {
+        "role_id": "103",
+        "skill_index": 16,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "104_10": {
+      "name": "",
+      "owner": {
+        "role_id": "104",
+        "skill_index": 10,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "104_11": {
+      "name": "",
+      "owner": {
+        "role_id": "104",
+        "skill_index": 11,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "104_12": {
+      "name": "",
+      "owner": {
+        "role_id": "104",
+        "skill_index": 12,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "104_13": {
+      "name": "",
+      "owner": {
+        "role_id": "104",
+        "skill_index": 13,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "104_14": {
+      "name": "",
+      "owner": {
+        "role_id": "104",
+        "skill_index": 14,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "105_9": {
+      "name": "鹰爪",
+      "owner": {
+        "role_id": "105",
+        "skill_index": 9,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "105_10": {
+      "name": "连鹰爪",
+      "owner": {
+        "role_id": "105",
+        "skill_index": 10,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "105_11": {
+      "name": "飞鹰突击",
+      "owner": {
+        "role_id": "105",
+        "skill_index": 11,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "105_12": {
+      "name": "鹰浮爪",
+      "owner": {
+        "role_id": "105",
+        "skill_index": 12,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "106_9": {
+      "name": "鞭刑",
+      "owner": {
+        "role_id": "106",
+        "skill_index": 9,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "106_10": {
+      "name": "鞭刑落",
+      "owner": {
+        "role_id": "106",
+        "skill_index": 10,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "106_11": {
+      "name": "烙刑",
+      "owner": {
+        "role_id": "106",
+        "skill_index": 11,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "106_12": {
+      "name": "祭灵",
+      "owner": {
+        "role_id": "106",
+        "skill_index": 12,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "106_13": {
+      "name": "祭日灵",
+      "owner": {
+        "role_id": "106",
+        "skill_index": 13,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "107_9": {
+      "name": "死破斩－Ａ",
+      "owner": {
+        "role_id": "107",
+        "skill_index": 9,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "107_10": {
+      "name": "－Ｂ",
+      "owner": {
+        "role_id": "107",
+        "skill_index": 10,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "107_11": {
+      "name": "灵杀斩－Ｃ",
+      "owner": {
+        "role_id": "107",
+        "skill_index": 11,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "107_13": {
+      "name": "",
+      "owner": {
+        "role_id": "107",
+        "skill_index": 13,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "107_15": {
+      "name": "焰灵术",
+      "owner": {
+        "role_id": "107",
+        "skill_index": 15,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "107_16": {
+      "name": "雷灵术",
+      "owner": {
+        "role_id": "107",
+        "skill_index": 16,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "108_9": {
+      "name": "刺杀",
+      "owner": {
+        "role_id": "108",
+        "skill_index": 9,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "108_10": {
+      "name": "连刺杀",
+      "owner": {
+        "role_id": "108",
+        "skill_index": 10,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "108_11": {
+      "name": "吸血",
+      "owner": {
+        "role_id": "108",
+        "skill_index": 11,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "108_12": {
+      "name": "血浴",
+      "owner": {
+        "role_id": "108",
+        "skill_index": 12,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "108_13": {
+      "name": "死亡宣告",
+      "owner": {
+        "role_id": "108",
+        "skill_index": 13,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "109_8": {
+      "name": "花籽喷射",
+      "owner": {
+        "role_id": "109",
+        "skill_index": 8,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "109_9": {
+      "name": "藤荆刺",
+      "owner": {
+        "role_id": "109",
+        "skill_index": 9,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "109_10": {
+      "name": "花籽连射",
+      "owner": {
+        "role_id": "109",
+        "skill_index": 10,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "110_4": {
+      "name": "麻痹攻击",
+      "owner": {
+        "role_id": "110",
+        "skill_index": 4,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "111_4": {
+      "name": "冰冻攻击",
+      "owner": {
+        "role_id": "111",
+        "skill_index": 4,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "112_4": {
+      "name": "烈炎攻击",
+      "owner": {
+        "role_id": "112",
+        "skill_index": 4,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "113_4": {
+      "name": "中毒攻击",
+      "owner": {
+        "role_id": "113",
+        "skill_index": 4,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "114_4": {
+      "name": "圣光攻击",
+      "owner": {
+        "role_id": "114",
+        "skill_index": 4,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "115_4": {
+      "name": "混乱攻击",
+      "owner": {
+        "role_id": "115",
+        "skill_index": 4,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "116_9": {
+      "name": "急速猎杀",
+      "owner": {
+        "role_id": "116",
+        "skill_index": 9,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "116_10": {
+      "name": "多段爪击",
+      "owner": {
+        "role_id": "116",
+        "skill_index": 10,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "116_11": {
+      "name": "猛鵰扑杀",
+      "owner": {
+        "role_id": "116",
+        "skill_index": 11,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "116_12": {
+      "name": "狂羽风暴",
+      "owner": {
+        "role_id": "116",
+        "skill_index": 12,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "117_10": {
+      "name": "",
+      "owner": {
+        "role_id": "117",
+        "skill_index": 10,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "117_11": {
+      "name": "",
+      "owner": {
+        "role_id": "117",
+        "skill_index": 11,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "117_12": {
+      "name": "",
+      "owner": {
+        "role_id": "117",
+        "skill_index": 12,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "117_13": {
+      "name": "",
+      "owner": {
+        "role_id": "117",
+        "skill_index": 13,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "117_14": {
+      "name": "",
+      "owner": {
+        "role_id": "117",
+        "skill_index": 14,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "118_9": {
+      "name": "骨顶",
+      "owner": {
+        "role_id": "118",
+        "skill_index": 9,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "118_10": {
+      "name": "急速狙杀",
+      "owner": {
+        "role_id": "118",
+        "skill_index": 10,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "118_12": {
+      "name": "冰针地狱",
+      "owner": {
+        "role_id": "118",
+        "skill_index": 12,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "119_9": {
+      "name": "幻影之舞",
+      "owner": {
+        "role_id": "119",
+        "skill_index": 9,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "119_10": {
+      "name": "幻影之舞",
+      "owner": {
+        "role_id": "119",
+        "skill_index": 10,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "119_11": {
+      "name": "魔性华尔兹 ",
+      "owner": {
+        "role_id": "119",
+        "skill_index": 11,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "119_12": {
+      "name": "沉醉子守歌",
+      "owner": {
+        "role_id": "119",
+        "skill_index": 12,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "119_13": {
+      "name": "恶魔镇魂曲",
+      "owner": {
+        "role_id": "119",
+        "skill_index": 13,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "120_11": {
+      "name": "尾击冲",
+      "owner": {
+        "role_id": "120",
+        "skill_index": 11,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "120_13": {
+      "name": "尾击落",
+      "owner": {
+        "role_id": "120",
+        "skill_index": 13,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "120_14": {
+      "name": "撞落击",
+      "owner": {
+        "role_id": "120",
+        "skill_index": 14,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "120_15": {
+      "name": "连撞击",
+      "owner": {
+        "role_id": "120",
+        "skill_index": 15,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "120_16": {
+      "name": "连撞冲",
+      "owner": {
+        "role_id": "120",
+        "skill_index": 16,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "120_17": {
+      "name": "蝠翼天击",
+      "owner": {
+        "role_id": "120",
+        "skill_index": 17,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "120_18": {
+      "name": "迷惑音波",
+      "owner": {
+        "role_id": "120",
+        "skill_index": 18,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "120_19": {
+      "name": "闇云",
+      "owner": {
+        "role_id": "120",
+        "skill_index": 19,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "120_20": {
+      "name": "灵力吸收",
+      "owner": {
+        "role_id": "120",
+        "skill_index": 20,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "120_21": {
+      "name": "重力反置",
+      "owner": {
+        "role_id": "120",
+        "skill_index": 21,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "121_10": {
+      "name": "雷角突击",
+      "owner": {
+        "role_id": "121",
+        "skill_index": 10,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "121_11": {
+      "name": "电角猛击",
+      "owner": {
+        "role_id": "121",
+        "skill_index": 11,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "121_12": {
+      "name": "落雷术",
+      "owner": {
+        "role_id": "121",
+        "skill_index": 12,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "122_10": {
+      "name": "烈爪突击",
+      "owner": {
+        "role_id": "122",
+        "skill_index": 10,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "122_11": {
+      "name": "盾面突击",
+      "owner": {
+        "role_id": "122",
+        "skill_index": 11,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "122_12": {
+      "name": "猛狼突击",
+      "owner": {
+        "role_id": "122",
+        "skill_index": 12,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "122_13": {
+      "name": "升狼爪击",
+      "owner": {
+        "role_id": "122",
+        "skill_index": 13,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "123_9": {
+      "name": "落镰切击",
+      "owner": {
+        "role_id": "123",
+        "skill_index": 9,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "123_10": {
+      "name": "飞镰切击",
+      "owner": {
+        "role_id": "123",
+        "skill_index": 10,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "123_11": {
+      "name": "双镰夹杀",
+      "owner": {
+        "role_id": "123",
+        "skill_index": 11,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "123_12": {
+      "name": "爆毒刺针",
+      "owner": {
+        "role_id": "123",
+        "skill_index": 12,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "124_9": {
+      "name": "左齿拳击",
+      "owner": {
+        "role_id": "124",
+        "skill_index": 9,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "124_10": {
+      "name": "右齿拳击",
+      "owner": {
+        "role_id": "124",
+        "skill_index": 10,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "124_11": {
+      "name": "双齿拳击",
+      "owner": {
+        "role_id": "124",
+        "skill_index": 11,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "124_12": {
+      "name": "",
+      "owner": {
+        "role_id": "124",
+        "skill_index": 12,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "124_13": {
+      "name": "",
+      "owner": {
+        "role_id": "124",
+        "skill_index": 13,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
     "011_14": {
       "name": "鹰爪",
       "owner": {
@@ -3152,6 +3971,618 @@
       "owner": {
         "role_id": "088",
         "skill_index": 16,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "049_14": {
+      "name": "月下之舞 ",
+      "owner": {
+        "role_id": "049",
+        "skill_index": 14,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "049_15": {
+      "name": "幻影之舞",
+      "owner": {
+        "role_id": "049",
+        "skill_index": 15,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "049_18": {
+      "name": "恶魔镇魂曲",
+      "owner": {
+        "role_id": "049",
+        "skill_index": 18,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "050_17": {
+      "name": "猛狼突击",
+      "owner": {
+        "role_id": "050",
+        "skill_index": 17,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "050_18": {
+      "name": "盾面落击－混乱",
+      "owner": {
+        "role_id": "050",
+        "skill_index": 18,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "050_19": {
+      "name": "升狼爪击－昏迷",
+      "owner": {
+        "role_id": "050",
+        "skill_index": 19,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "050_20": {
+      "name": "烈爪冻击－冻结",
+      "owner": {
+        "role_id": "050",
+        "skill_index": 20,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "051_13": {
+      "name": "槌槌",
+      "owner": {
+        "role_id": "051",
+        "skill_index": 13,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "051_14": {
+      "name": "槌槌地",
+      "owner": {
+        "role_id": "051",
+        "skill_index": 14,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "051_15": {
+      "name": "黏黏",
+      "owner": {
+        "role_id": "051",
+        "skill_index": 15,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "051_16": {
+      "name": "嚼嚼",
+      "owner": {
+        "role_id": "051",
+        "skill_index": 16,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "052_14": {
+      "name": "虚弱",
+      "owner": {
+        "role_id": "052",
+        "skill_index": 14,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "052_15": {
+      "name": "退化",
+      "owner": {
+        "role_id": "052",
+        "skill_index": 15,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "052_16": {
+      "name": "解除",
+      "owner": {
+        "role_id": "052",
+        "skill_index": 16,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "053_17": {
+      "name": "",
+      "owner": {
+        "role_id": "053",
+        "skill_index": 17,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "053_18": {
+      "name": "",
+      "owner": {
+        "role_id": "053",
+        "skill_index": 18,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "053_19": {
+      "name": "",
+      "owner": {
+        "role_id": "053",
+        "skill_index": 19,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "053_20": {
+      "name": "风之羽",
+      "owner": {
+        "role_id": "053",
+        "skill_index": 20,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "053_21": {
+      "name": "回复药",
+      "owner": {
+        "role_id": "053",
+        "skill_index": 21,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "054_16": {
+      "name": "灵杀斩",
+      "owner": {
+        "role_id": "054",
+        "skill_index": 16,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "054_17": {
+      "name": "死破斩翔",
+      "owner": {
+        "role_id": "054",
+        "skill_index": 17,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "054_18": {
+      "name": "怨杀斩落",
+      "owner": {
+        "role_id": "054",
+        "skill_index": 18,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "054_19": {
+      "name": "死破斩翔",
+      "owner": {
+        "role_id": "054",
+        "skill_index": 19,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "054_20": {
+      "name": "焰灵术",
+      "owner": {
+        "role_id": "054",
+        "skill_index": 20,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "054_21": {
+      "name": "雷灵术",
+      "owner": {
+        "role_id": "054",
+        "skill_index": 21,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "055_13": {
+      "name": "槌槌",
+      "owner": {
+        "role_id": "055",
+        "skill_index": 13,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "055_14": {
+      "name": "槌槌地",
+      "owner": {
+        "role_id": "055",
+        "skill_index": 14,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "055_15": {
+      "name": "黏黏",
+      "owner": {
+        "role_id": "055",
+        "skill_index": 15,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "055_16": {
+      "name": "嚼嚼",
+      "owner": {
+        "role_id": "055",
+        "skill_index": 16,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "056_17": {
+      "name": "",
+      "owner": {
+        "role_id": "056",
+        "skill_index": 17,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "056_18": {
+      "name": "",
+      "owner": {
+        "role_id": "056",
+        "skill_index": 18,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "056_19": {
+      "name": "",
+      "owner": {
+        "role_id": "056",
+        "skill_index": 19,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "056_20": {
+      "name": "风之羽",
+      "owner": {
+        "role_id": "056",
+        "skill_index": 20,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "056_21": {
+      "name": "回复药",
+      "owner": {
+        "role_id": "056",
+        "skill_index": 21,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "057_14": {
+      "name": "物攻下",
+      "owner": {
+        "role_id": "057",
+        "skill_index": 14,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "057_15": {
+      "name": "物防下",
+      "owner": {
+        "role_id": "057",
+        "skill_index": 15,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "057_16": {
+      "name": "双齿拳击",
+      "owner": {
+        "role_id": "057",
+        "skill_index": 16,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "058_17": {
+      "name": "",
+      "owner": {
+        "role_id": "058",
+        "skill_index": 17,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "058_18": {
+      "name": "",
+      "owner": {
+        "role_id": "058",
+        "skill_index": 18,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "058_19": {
+      "name": "",
+      "owner": {
+        "role_id": "058",
+        "skill_index": 19,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "058_20": {
+      "name": "风之羽",
+      "owner": {
+        "role_id": "058",
+        "skill_index": 20,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "058_21": {
+      "name": "回复药",
+      "owner": {
+        "role_id": "058",
+        "skill_index": 21,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "078_17": {
+      "name": "",
+      "owner": {
+        "role_id": "078",
+        "skill_index": 17,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "078_18": {
+      "name": "",
+      "owner": {
+        "role_id": "078",
+        "skill_index": 18,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "078_19": {
+      "name": "",
+      "owner": {
+        "role_id": "078",
+        "skill_index": 19,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "078_20": {
+      "name": "风之羽",
+      "owner": {
+        "role_id": "078",
+        "skill_index": 20,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "078_21": {
+      "name": "回复药",
+      "owner": {
+        "role_id": "078",
+        "skill_index": 21,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "080_17": {
+      "name": "猛狼突击",
+      "owner": {
+        "role_id": "080",
+        "skill_index": 17,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "080_18": {
+      "name": "盾面落击－残炎",
+      "owner": {
+        "role_id": "080",
+        "skill_index": 18,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "080_19": {
+      "name": "升狼爪击－昏迷",
+      "owner": {
+        "role_id": "080",
+        "skill_index": 19,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "080_20": {
+      "name": "烈爪石击－石化",
+      "owner": {
+        "role_id": "080",
+        "skill_index": 20,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "083_14": {
+      "name": "虚弱",
+      "owner": {
+        "role_id": "083",
+        "skill_index": 14,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "083_15": {
+      "name": "退化",
+      "owner": {
+        "role_id": "083",
+        "skill_index": 15,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "083_16": {
+      "name": "解除",
+      "owner": {
+        "role_id": "083",
+        "skill_index": 16,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "086_13": {
+      "name": "槌槌",
+      "owner": {
+        "role_id": "086",
+        "skill_index": 13,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "086_14": {
+      "name": "槌槌地",
+      "owner": {
+        "role_id": "086",
+        "skill_index": 14,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "086_15": {
+      "name": "黏黏",
+      "owner": {
+        "role_id": "086",
+        "skill_index": 15,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "086_16": {
+      "name": "嚼嚼",
+      "owner": {
+        "role_id": "086",
+        "skill_index": 16,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "087_17": {
+      "name": "",
+      "owner": {
+        "role_id": "087",
+        "skill_index": 17,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "087_18": {
+      "name": "",
+      "owner": {
+        "role_id": "087",
+        "skill_index": 18,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "087_19": {
+      "name": "",
+      "owner": {
+        "role_id": "087",
+        "skill_index": 19,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "087_20": {
+      "name": "风之羽",
+      "owner": {
+        "role_id": "087",
+        "skill_index": 20,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "087_21": {
+      "name": "回复药",
+      "owner": {
+        "role_id": "087",
+        "skill_index": 21,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "077_15": {
+      "name": "冰封地牢",
+      "owner": {
+        "role_id": "077",
+        "skill_index": 15,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "077_16": {
+      "name": "腐魂龙咒",
+      "owner": {
+        "role_id": "077",
+        "skill_index": 16,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "077_17": {
+      "name": "烈火风暴",
+      "owner": {
+        "role_id": "077",
+        "skill_index": 17,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "077_18": {
+      "name": "诸神末日",
+      "owner": {
+        "role_id": "077",
+        "skill_index": 18,
+        "side": "enemy"
+      },
+      "parameters": {}
+    },
+    "077_19": {
+      "name": "",
+      "owner": {
+        "role_id": "077",
+        "skill_index": 19,
         "side": "enemy"
       },
       "parameters": {}
@@ -10158,24 +11589,6 @@
       },
       "parameters": {}
     },
-    "049_14": {
-      "name": "月下之舞 ",
-      "owner": {
-        "role_id": "049",
-        "skill_index": 14,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "049_15": {
-      "name": "幻影之舞",
-      "owner": {
-        "role_id": "049",
-        "skill_index": 15,
-        "side": "source"
-      },
-      "parameters": {}
-    },
     "049_16": {
       "name": "魔性华尔兹 ",
       "owner": {
@@ -10190,15 +11603,6 @@
       "owner": {
         "role_id": "049",
         "skill_index": 17,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "049_18": {
-      "name": "恶魔镇魂曲",
-      "owner": {
-        "role_id": "049",
-        "skill_index": 18,
         "side": "source"
       },
       "parameters": {}
@@ -10356,42 +11760,6 @@
       },
       "parameters": {}
     },
-    "050_17": {
-      "name": "猛狼突击",
-      "owner": {
-        "role_id": "050",
-        "skill_index": 17,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "050_18": {
-      "name": "盾面落击－混乱",
-      "owner": {
-        "role_id": "050",
-        "skill_index": 18,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "050_19": {
-      "name": "升狼爪击－昏迷",
-      "owner": {
-        "role_id": "050",
-        "skill_index": 19,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "050_20": {
-      "name": "烈爪冻击－冻结",
-      "owner": {
-        "role_id": "050",
-        "skill_index": 20,
-        "side": "source"
-      },
-      "parameters": {}
-    },
     "050_21": {
       "name": "不攻击",
       "owner": {
@@ -10518,42 +11886,6 @@
       },
       "parameters": {}
     },
-    "051_13": {
-      "name": "槌槌",
-      "owner": {
-        "role_id": "051",
-        "skill_index": 13,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "051_14": {
-      "name": "槌槌地",
-      "owner": {
-        "role_id": "051",
-        "skill_index": 14,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "051_15": {
-      "name": "黏黏",
-      "owner": {
-        "role_id": "051",
-        "skill_index": 15,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "051_16": {
-      "name": "嚼嚼",
-      "owner": {
-        "role_id": "051",
-        "skill_index": 16,
-        "side": "source"
-      },
-      "parameters": {}
-    },
     "052_0": {
       "name": "",
       "owner": {
@@ -10676,33 +12008,6 @@
       "owner": {
         "role_id": "052",
         "skill_index": 13,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "052_14": {
-      "name": "虚弱",
-      "owner": {
-        "role_id": "052",
-        "skill_index": 14,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "052_15": {
-      "name": "退化",
-      "owner": {
-        "role_id": "052",
-        "skill_index": 15,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "052_16": {
-      "name": "解除",
-      "owner": {
-        "role_id": "052",
-        "skill_index": 16,
         "side": "source"
       },
       "parameters": {}
@@ -10860,51 +12165,6 @@
       },
       "parameters": {}
     },
-    "053_17": {
-      "name": "",
-      "owner": {
-        "role_id": "053",
-        "skill_index": 17,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "053_18": {
-      "name": "",
-      "owner": {
-        "role_id": "053",
-        "skill_index": 18,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "053_19": {
-      "name": "",
-      "owner": {
-        "role_id": "053",
-        "skill_index": 19,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "053_20": {
-      "name": "风之羽",
-      "owner": {
-        "role_id": "053",
-        "skill_index": 20,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "053_21": {
-      "name": "回复药",
-      "owner": {
-        "role_id": "053",
-        "skill_index": 21,
-        "side": "source"
-      },
-      "parameters": {}
-    },
     "054_0": {
       "name": "",
       "owner": {
@@ -11049,60 +12309,6 @@
       },
       "parameters": {}
     },
-    "054_16": {
-      "name": "灵杀斩",
-      "owner": {
-        "role_id": "054",
-        "skill_index": 16,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "054_17": {
-      "name": "死破斩翔",
-      "owner": {
-        "role_id": "054",
-        "skill_index": 17,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "054_18": {
-      "name": "怨杀斩落",
-      "owner": {
-        "role_id": "054",
-        "skill_index": 18,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "054_19": {
-      "name": "死破斩翔",
-      "owner": {
-        "role_id": "054",
-        "skill_index": 19,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "054_20": {
-      "name": "焰灵术",
-      "owner": {
-        "role_id": "054",
-        "skill_index": 20,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "054_21": {
-      "name": "雷灵术",
-      "owner": {
-        "role_id": "054",
-        "skill_index": 21,
-        "side": "source"
-      },
-      "parameters": {}
-    },
     "055_0": {
       "name": "",
       "owner": {
@@ -11216,42 +12422,6 @@
       "owner": {
         "role_id": "055",
         "skill_index": 12,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "055_13": {
-      "name": "槌槌",
-      "owner": {
-        "role_id": "055",
-        "skill_index": 13,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "055_14": {
-      "name": "槌槌地",
-      "owner": {
-        "role_id": "055",
-        "skill_index": 14,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "055_15": {
-      "name": "黏黏",
-      "owner": {
-        "role_id": "055",
-        "skill_index": 15,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "055_16": {
-      "name": "嚼嚼",
-      "owner": {
-        "role_id": "055",
-        "skill_index": 16,
         "side": "source"
       },
       "parameters": {}
@@ -11409,51 +12579,6 @@
       },
       "parameters": {}
     },
-    "056_17": {
-      "name": "",
-      "owner": {
-        "role_id": "056",
-        "skill_index": 17,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "056_18": {
-      "name": "",
-      "owner": {
-        "role_id": "056",
-        "skill_index": 18,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "056_19": {
-      "name": "",
-      "owner": {
-        "role_id": "056",
-        "skill_index": 19,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "056_20": {
-      "name": "风之羽",
-      "owner": {
-        "role_id": "056",
-        "skill_index": 20,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "056_21": {
-      "name": "回复药",
-      "owner": {
-        "role_id": "056",
-        "skill_index": 21,
-        "side": "source"
-      },
-      "parameters": {}
-    },
     "057_0": {
       "name": "",
       "owner": {
@@ -11576,33 +12701,6 @@
       "owner": {
         "role_id": "057",
         "skill_index": 13,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "057_14": {
-      "name": "物攻下",
-      "owner": {
-        "role_id": "057",
-        "skill_index": 14,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "057_15": {
-      "name": "物防下",
-      "owner": {
-        "role_id": "057",
-        "skill_index": 15,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "057_16": {
-      "name": "双齿拳击",
-      "owner": {
-        "role_id": "057",
-        "skill_index": 16,
         "side": "source"
       },
       "parameters": {}
@@ -11756,51 +12854,6 @@
       "owner": {
         "role_id": "058",
         "skill_index": 16,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "058_17": {
-      "name": "",
-      "owner": {
-        "role_id": "058",
-        "skill_index": 17,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "058_18": {
-      "name": "",
-      "owner": {
-        "role_id": "058",
-        "skill_index": 18,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "058_19": {
-      "name": "",
-      "owner": {
-        "role_id": "058",
-        "skill_index": 19,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "058_20": {
-      "name": "风之羽",
-      "owner": {
-        "role_id": "058",
-        "skill_index": 20,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "058_21": {
-      "name": "回复药",
-      "owner": {
-        "role_id": "058",
-        "skill_index": 21,
         "side": "source"
       },
       "parameters": {}
@@ -12606,51 +13659,6 @@
       },
       "parameters": {}
     },
-    "077_15": {
-      "name": "冰封地牢",
-      "owner": {
-        "role_id": "077",
-        "skill_index": 15,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "077_16": {
-      "name": "腐魂龙咒",
-      "owner": {
-        "role_id": "077",
-        "skill_index": 16,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "077_17": {
-      "name": "烈火风暴",
-      "owner": {
-        "role_id": "077",
-        "skill_index": 17,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "077_18": {
-      "name": "诸神末日",
-      "owner": {
-        "role_id": "077",
-        "skill_index": 18,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "077_19": {
-      "name": "",
-      "owner": {
-        "role_id": "077",
-        "skill_index": 19,
-        "side": "source"
-      },
-      "parameters": {}
-    },
     "078_0": {
       "name": "",
       "owner": {
@@ -12800,51 +13808,6 @@
       "owner": {
         "role_id": "078",
         "skill_index": 16,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "078_17": {
-      "name": "",
-      "owner": {
-        "role_id": "078",
-        "skill_index": 17,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "078_18": {
-      "name": "",
-      "owner": {
-        "role_id": "078",
-        "skill_index": 18,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "078_19": {
-      "name": "",
-      "owner": {
-        "role_id": "078",
-        "skill_index": 19,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "078_20": {
-      "name": "风之羽",
-      "owner": {
-        "role_id": "078",
-        "skill_index": 20,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "078_21": {
-      "name": "回复药",
-      "owner": {
-        "role_id": "078",
-        "skill_index": 21,
         "side": "source"
       },
       "parameters": {}
@@ -13187,42 +14150,6 @@
       "owner": {
         "role_id": "080",
         "skill_index": 16,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "080_17": {
-      "name": "猛狼突击",
-      "owner": {
-        "role_id": "080",
-        "skill_index": 17,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "080_18": {
-      "name": "盾面落击－残炎",
-      "owner": {
-        "role_id": "080",
-        "skill_index": 18,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "080_19": {
-      "name": "升狼爪击－昏迷",
-      "owner": {
-        "role_id": "080",
-        "skill_index": 19,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "080_20": {
-      "name": "烈爪石击－石化",
-      "owner": {
-        "role_id": "080",
-        "skill_index": 20,
         "side": "source"
       },
       "parameters": {}
@@ -13677,33 +14604,6 @@
       },
       "parameters": {}
     },
-    "083_14": {
-      "name": "虚弱",
-      "owner": {
-        "role_id": "083",
-        "skill_index": 14,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "083_15": {
-      "name": "退化",
-      "owner": {
-        "role_id": "083",
-        "skill_index": 15,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "083_16": {
-      "name": "解除",
-      "owner": {
-        "role_id": "083",
-        "skill_index": 16,
-        "side": "source"
-      },
-      "parameters": {}
-    },
     "084_0": {
       "name": "",
       "owner": {
@@ -14118,42 +15018,6 @@
       },
       "parameters": {}
     },
-    "086_13": {
-      "name": "槌槌",
-      "owner": {
-        "role_id": "086",
-        "skill_index": 13,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "086_14": {
-      "name": "槌槌地",
-      "owner": {
-        "role_id": "086",
-        "skill_index": 14,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "086_15": {
-      "name": "黏黏",
-      "owner": {
-        "role_id": "086",
-        "skill_index": 15,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "086_16": {
-      "name": "嚼嚼",
-      "owner": {
-        "role_id": "086",
-        "skill_index": 16,
-        "side": "source"
-      },
-      "parameters": {}
-    },
     "087_0": {
       "name": "",
       "owner": {
@@ -14303,51 +15167,6 @@
       "owner": {
         "role_id": "087",
         "skill_index": 16,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "087_17": {
-      "name": "",
-      "owner": {
-        "role_id": "087",
-        "skill_index": 17,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "087_18": {
-      "name": "",
-      "owner": {
-        "role_id": "087",
-        "skill_index": 18,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "087_19": {
-      "name": "",
-      "owner": {
-        "role_id": "087",
-        "skill_index": 19,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "087_20": {
-      "name": "风之羽",
-      "owner": {
-        "role_id": "087",
-        "skill_index": 20,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "087_21": {
-      "name": "回复药",
-      "owner": {
-        "role_id": "087",
-        "skill_index": 21,
         "side": "source"
       },
       "parameters": {}
@@ -14559,33 +15378,6 @@
       },
       "parameters": {}
     },
-    "101_9": {
-      "name": "槌槌",
-      "owner": {
-        "role_id": "101",
-        "skill_index": 9,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "101_10": {
-      "name": "黏黏",
-      "owner": {
-        "role_id": "101",
-        "skill_index": 10,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "101_11": {
-      "name": "嚼嚼",
-      "owner": {
-        "role_id": "101",
-        "skill_index": 11,
-        "side": "source"
-      },
-      "parameters": {}
-    },
     "102_0": {
       "name": "",
       "owner": {
@@ -14663,33 +15455,6 @@
       "owner": {
         "role_id": "102",
         "skill_index": 8,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "102_9": {
-      "name": "球化攻击",
-      "owner": {
-        "role_id": "102",
-        "skill_index": 9,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "102_10": {
-      "name": "盘化突击",
-      "owner": {
-        "role_id": "102",
-        "skill_index": 10,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "102_11": {
-      "name": "变化连击",
-      "owner": {
-        "role_id": "102",
-        "skill_index": 11,
         "side": "source"
       },
       "parameters": {}
@@ -14784,78 +15549,6 @@
       },
       "parameters": {}
     },
-    "103_9": {
-      "name": "",
-      "owner": {
-        "role_id": "103",
-        "skill_index": 9,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "103_10": {
-      "name": "",
-      "owner": {
-        "role_id": "103",
-        "skill_index": 10,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "103_11": {
-      "name": "",
-      "owner": {
-        "role_id": "103",
-        "skill_index": 11,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "103_12": {
-      "name": "",
-      "owner": {
-        "role_id": "103",
-        "skill_index": 12,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "103_13": {
-      "name": "",
-      "owner": {
-        "role_id": "103",
-        "skill_index": 13,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "103_14": {
-      "name": "",
-      "owner": {
-        "role_id": "103",
-        "skill_index": 14,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "103_15": {
-      "name": "风之羽",
-      "owner": {
-        "role_id": "103",
-        "skill_index": 15,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "103_16": {
-      "name": "回复药",
-      "owner": {
-        "role_id": "103",
-        "skill_index": 16,
-        "side": "source"
-      },
-      "parameters": {}
-    },
     "104_0": {
       "name": "",
       "owner": {
@@ -14946,51 +15639,6 @@
       },
       "parameters": {}
     },
-    "104_10": {
-      "name": "",
-      "owner": {
-        "role_id": "104",
-        "skill_index": 10,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "104_11": {
-      "name": "",
-      "owner": {
-        "role_id": "104",
-        "skill_index": 11,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "104_12": {
-      "name": "",
-      "owner": {
-        "role_id": "104",
-        "skill_index": 12,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "104_13": {
-      "name": "",
-      "owner": {
-        "role_id": "104",
-        "skill_index": 13,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "104_14": {
-      "name": "",
-      "owner": {
-        "role_id": "104",
-        "skill_index": 14,
-        "side": "source"
-      },
-      "parameters": {}
-    },
     "105_0": {
       "name": "",
       "owner": {
@@ -15068,42 +15716,6 @@
       "owner": {
         "role_id": "105",
         "skill_index": 8,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "105_9": {
-      "name": "鹰爪",
-      "owner": {
-        "role_id": "105",
-        "skill_index": 9,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "105_10": {
-      "name": "连鹰爪",
-      "owner": {
-        "role_id": "105",
-        "skill_index": 10,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "105_11": {
-      "name": "飞鹰突击",
-      "owner": {
-        "role_id": "105",
-        "skill_index": 11,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "105_12": {
-      "name": "鹰浮爪",
-      "owner": {
-        "role_id": "105",
-        "skill_index": 12,
         "side": "source"
       },
       "parameters": {}
@@ -15198,51 +15810,6 @@
       },
       "parameters": {}
     },
-    "106_9": {
-      "name": "鞭刑",
-      "owner": {
-        "role_id": "106",
-        "skill_index": 9,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "106_10": {
-      "name": "鞭刑落",
-      "owner": {
-        "role_id": "106",
-        "skill_index": 10,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "106_11": {
-      "name": "烙刑",
-      "owner": {
-        "role_id": "106",
-        "skill_index": 11,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "106_12": {
-      "name": "祭灵",
-      "owner": {
-        "role_id": "106",
-        "skill_index": 12,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "106_13": {
-      "name": "祭日灵",
-      "owner": {
-        "role_id": "106",
-        "skill_index": 13,
-        "side": "source"
-      },
-      "parameters": {}
-    },
     "107_0": {
       "name": "",
       "owner": {
@@ -15324,33 +15891,6 @@
       },
       "parameters": {}
     },
-    "107_9": {
-      "name": "死破斩－Ａ",
-      "owner": {
-        "role_id": "107",
-        "skill_index": 9,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "107_10": {
-      "name": "－Ｂ",
-      "owner": {
-        "role_id": "107",
-        "skill_index": 10,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "107_11": {
-      "name": "灵杀斩－Ｃ",
-      "owner": {
-        "role_id": "107",
-        "skill_index": 11,
-        "side": "source"
-      },
-      "parameters": {}
-    },
     "107_12": {
       "name": "",
       "owner": {
@@ -15360,38 +15900,11 @@
       },
       "parameters": {}
     },
-    "107_13": {
-      "name": "",
-      "owner": {
-        "role_id": "107",
-        "skill_index": 13,
-        "side": "source"
-      },
-      "parameters": {}
-    },
     "107_14": {
       "name": "",
       "owner": {
         "role_id": "107",
         "skill_index": 14,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "107_15": {
-      "name": "焰灵术",
-      "owner": {
-        "role_id": "107",
-        "skill_index": 15,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "107_16": {
-      "name": "雷灵术",
-      "owner": {
-        "role_id": "107",
-        "skill_index": 16,
         "side": "source"
       },
       "parameters": {}
@@ -15477,51 +15990,6 @@
       },
       "parameters": {}
     },
-    "108_9": {
-      "name": "刺杀",
-      "owner": {
-        "role_id": "108",
-        "skill_index": 9,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "108_10": {
-      "name": "连刺杀",
-      "owner": {
-        "role_id": "108",
-        "skill_index": 10,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "108_11": {
-      "name": "吸血",
-      "owner": {
-        "role_id": "108",
-        "skill_index": 11,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "108_12": {
-      "name": "血浴",
-      "owner": {
-        "role_id": "108",
-        "skill_index": 12,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "108_13": {
-      "name": "死亡宣告",
-      "owner": {
-        "role_id": "108",
-        "skill_index": 13,
-        "side": "source"
-      },
-      "parameters": {}
-    },
     "109_0": {
       "name": "",
       "owner": {
@@ -15594,33 +16062,6 @@
       },
       "parameters": {}
     },
-    "109_8": {
-      "name": "花籽喷射",
-      "owner": {
-        "role_id": "109",
-        "skill_index": 8,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "109_9": {
-      "name": "藤荆刺",
-      "owner": {
-        "role_id": "109",
-        "skill_index": 9,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "109_10": {
-      "name": "花籽连射",
-      "owner": {
-        "role_id": "109",
-        "skill_index": 10,
-        "side": "source"
-      },
-      "parameters": {}
-    },
     "110_0": {
       "name": "",
       "owner": {
@@ -15653,15 +16094,6 @@
       "owner": {
         "role_id": "110",
         "skill_index": 3,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "110_4": {
-      "name": "麻痹攻击",
-      "owner": {
-        "role_id": "110",
-        "skill_index": 4,
         "side": "source"
       },
       "parameters": {}
@@ -15702,15 +16134,6 @@
       },
       "parameters": {}
     },
-    "111_4": {
-      "name": "冰冻攻击",
-      "owner": {
-        "role_id": "111",
-        "skill_index": 4,
-        "side": "source"
-      },
-      "parameters": {}
-    },
     "112_0": {
       "name": "",
       "owner": {
@@ -15743,15 +16166,6 @@
       "owner": {
         "role_id": "112",
         "skill_index": 3,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "112_4": {
-      "name": "烈炎攻击",
-      "owner": {
-        "role_id": "112",
-        "skill_index": 4,
         "side": "source"
       },
       "parameters": {}
@@ -15792,15 +16206,6 @@
       },
       "parameters": {}
     },
-    "113_4": {
-      "name": "中毒攻击",
-      "owner": {
-        "role_id": "113",
-        "skill_index": 4,
-        "side": "source"
-      },
-      "parameters": {}
-    },
     "114_0": {
       "name": "",
       "owner": {
@@ -15837,15 +16242,6 @@
       },
       "parameters": {}
     },
-    "114_4": {
-      "name": "圣光攻击",
-      "owner": {
-        "role_id": "114",
-        "skill_index": 4,
-        "side": "source"
-      },
-      "parameters": {}
-    },
     "115_0": {
       "name": "",
       "owner": {
@@ -15878,15 +16274,6 @@
       "owner": {
         "role_id": "115",
         "skill_index": 3,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "115_4": {
-      "name": "混乱攻击",
-      "owner": {
-        "role_id": "115",
-        "skill_index": 4,
         "side": "source"
       },
       "parameters": {}
@@ -15968,42 +16355,6 @@
       "owner": {
         "role_id": "116",
         "skill_index": 8,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "116_9": {
-      "name": "急速猎杀",
-      "owner": {
-        "role_id": "116",
-        "skill_index": 9,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "116_10": {
-      "name": "多段爪击",
-      "owner": {
-        "role_id": "116",
-        "skill_index": 10,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "116_11": {
-      "name": "猛鵰扑杀",
-      "owner": {
-        "role_id": "116",
-        "skill_index": 11,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "116_12": {
-      "name": "狂羽风暴",
-      "owner": {
-        "role_id": "116",
-        "skill_index": 12,
         "side": "source"
       },
       "parameters": {}
@@ -16098,51 +16449,6 @@
       },
       "parameters": {}
     },
-    "117_10": {
-      "name": "",
-      "owner": {
-        "role_id": "117",
-        "skill_index": 10,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "117_11": {
-      "name": "",
-      "owner": {
-        "role_id": "117",
-        "skill_index": 11,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "117_12": {
-      "name": "",
-      "owner": {
-        "role_id": "117",
-        "skill_index": 12,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "117_13": {
-      "name": "",
-      "owner": {
-        "role_id": "117",
-        "skill_index": 13,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "117_14": {
-      "name": "",
-      "owner": {
-        "role_id": "117",
-        "skill_index": 14,
-        "side": "source"
-      },
-      "parameters": {}
-    },
     "118_0": {
       "name": "",
       "owner": {
@@ -16224,38 +16530,11 @@
       },
       "parameters": {}
     },
-    "118_9": {
-      "name": "骨顶",
-      "owner": {
-        "role_id": "118",
-        "skill_index": 9,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "118_10": {
-      "name": "急速狙杀",
-      "owner": {
-        "role_id": "118",
-        "skill_index": 10,
-        "side": "source"
-      },
-      "parameters": {}
-    },
     "118_11": {
       "name": "毒酸地狱",
       "owner": {
         "role_id": "118",
         "skill_index": 11,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "118_12": {
-      "name": "冰针地狱",
-      "owner": {
-        "role_id": "118",
-        "skill_index": 12,
         "side": "source"
       },
       "parameters": {}
@@ -16337,51 +16616,6 @@
       "owner": {
         "role_id": "119",
         "skill_index": 8,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "119_9": {
-      "name": "幻影之舞",
-      "owner": {
-        "role_id": "119",
-        "skill_index": 9,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "119_10": {
-      "name": "幻影之舞",
-      "owner": {
-        "role_id": "119",
-        "skill_index": 10,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "119_11": {
-      "name": "魔性华尔兹 ",
-      "owner": {
-        "role_id": "119",
-        "skill_index": 11,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "119_12": {
-      "name": "沉醉子守歌",
-      "owner": {
-        "role_id": "119",
-        "skill_index": 12,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "119_13": {
-      "name": "恶魔镇魂曲",
-      "owner": {
-        "role_id": "119",
-        "skill_index": 13,
         "side": "source"
       },
       "parameters": {}
@@ -16485,101 +16719,11 @@
       },
       "parameters": {}
     },
-    "120_11": {
-      "name": "尾击冲",
-      "owner": {
-        "role_id": "120",
-        "skill_index": 11,
-        "side": "source"
-      },
-      "parameters": {}
-    },
     "120_12": {
       "name": "尾击冲",
       "owner": {
         "role_id": "120",
         "skill_index": 12,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "120_13": {
-      "name": "尾击落",
-      "owner": {
-        "role_id": "120",
-        "skill_index": 13,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "120_14": {
-      "name": "撞落击",
-      "owner": {
-        "role_id": "120",
-        "skill_index": 14,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "120_15": {
-      "name": "连撞击",
-      "owner": {
-        "role_id": "120",
-        "skill_index": 15,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "120_16": {
-      "name": "连撞冲",
-      "owner": {
-        "role_id": "120",
-        "skill_index": 16,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "120_17": {
-      "name": "蝠翼天击",
-      "owner": {
-        "role_id": "120",
-        "skill_index": 17,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "120_18": {
-      "name": "迷惑音波",
-      "owner": {
-        "role_id": "120",
-        "skill_index": 18,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "120_19": {
-      "name": "闇云",
-      "owner": {
-        "role_id": "120",
-        "skill_index": 19,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "120_20": {
-      "name": "灵力吸收",
-      "owner": {
-        "role_id": "120",
-        "skill_index": 20,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "120_21": {
-      "name": "重力反置",
-      "owner": {
-        "role_id": "120",
-        "skill_index": 21,
         "side": "source"
       },
       "parameters": {}
@@ -16674,33 +16818,6 @@
       },
       "parameters": {}
     },
-    "121_10": {
-      "name": "雷角突击",
-      "owner": {
-        "role_id": "121",
-        "skill_index": 10,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "121_11": {
-      "name": "电角猛击",
-      "owner": {
-        "role_id": "121",
-        "skill_index": 11,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "121_12": {
-      "name": "落雷术",
-      "owner": {
-        "role_id": "121",
-        "skill_index": 12,
-        "side": "source"
-      },
-      "parameters": {}
-    },
     "122_0": {
       "name": "",
       "owner": {
@@ -16787,42 +16904,6 @@
       "owner": {
         "role_id": "122",
         "skill_index": 9,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "122_10": {
-      "name": "烈爪突击",
-      "owner": {
-        "role_id": "122",
-        "skill_index": 10,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "122_11": {
-      "name": "盾面突击",
-      "owner": {
-        "role_id": "122",
-        "skill_index": 11,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "122_12": {
-      "name": "猛狼突击",
-      "owner": {
-        "role_id": "122",
-        "skill_index": 12,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "122_13": {
-      "name": "升狼爪击",
-      "owner": {
-        "role_id": "122",
-        "skill_index": 13,
         "side": "source"
       },
       "parameters": {}
@@ -16935,42 +17016,6 @@
       },
       "parameters": {}
     },
-    "123_9": {
-      "name": "落镰切击",
-      "owner": {
-        "role_id": "123",
-        "skill_index": 9,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "123_10": {
-      "name": "飞镰切击",
-      "owner": {
-        "role_id": "123",
-        "skill_index": 10,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "123_11": {
-      "name": "双镰夹杀",
-      "owner": {
-        "role_id": "123",
-        "skill_index": 11,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "123_12": {
-      "name": "爆毒刺针",
-      "owner": {
-        "role_id": "123",
-        "skill_index": 12,
-        "side": "source"
-      },
-      "parameters": {}
-    },
     "124_0": {
       "name": "",
       "owner": {
@@ -17048,51 +17093,6 @@
       "owner": {
         "role_id": "124",
         "skill_index": 8,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "124_9": {
-      "name": "左齿拳击",
-      "owner": {
-        "role_id": "124",
-        "skill_index": 9,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "124_10": {
-      "name": "右齿拳击",
-      "owner": {
-        "role_id": "124",
-        "skill_index": 10,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "124_11": {
-      "name": "双齿拳击",
-      "owner": {
-        "role_id": "124",
-        "skill_index": 11,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "124_12": {
-      "name": "",
-      "owner": {
-        "role_id": "124",
-        "skill_index": 12,
-        "side": "source"
-      },
-      "parameters": {}
-    },
-    "124_13": {
-      "name": "",
-      "owner": {
-        "role_id": "124",
-        "skill_index": 13,
         "side": "source"
       },
       "parameters": {}

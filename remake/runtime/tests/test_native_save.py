@@ -26,6 +26,21 @@ def envelope(world):
 
 
 class NativeSaveTests(unittest.TestCase):
+    def test_encounter_item_modifier_uses_native_remaining_ticks_and_signed_modifier_fields(self):
+        world = deepcopy(resources()[0])
+        world['play_time_ms'] = 1100
+        world['encounters'] = dict(rng_state=123, counters={'001': 0}, remainders={'001': 0},
+            modifier=dict(value=-100, expires_at_ms=13000))
+        raw = encode_native_save(envelope(world))
+        self.assertEqual(struct.unpack_from('<III', raw, 0x3B1), (119, 0, 0xFFFFFF9C))
+        loaded = json.loads(decode_native_save(raw)['payload'])
+        self.assertEqual(loaded['encounters']['modifier'], world['encounters']['modifier'])
+        self.assertEqual(encode_native_save(decode_native_save(raw)), raw)
+        loaded['play_time_ms'] = 13000
+        expired = encode_native_save(envelope(loaded))
+        self.assertEqual(struct.unpack_from('<III', expired, 0x3B1), (0, 0, 0))
+        self.assertNotIn('modifier', json.loads(decode_native_save(expired)['payload'])['encounters'])
+
     def test_new_game_is_complete_native_v2_without_a_save_template(self):
         world = deepcopy(resources()[0])
         raw = encode_native_save(envelope(world))

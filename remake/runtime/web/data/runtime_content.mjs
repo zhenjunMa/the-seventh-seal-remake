@@ -3,6 +3,78 @@ export const definition = {
   "schema": "seventh-seal-runtime-content",
   "version": 2,
   "roles": {
+    "101": {
+      "side": "enemy"
+    },
+    "102": {
+      "side": "enemy"
+    },
+    "103": {
+      "side": "enemy"
+    },
+    "104": {
+      "side": "enemy"
+    },
+    "105": {
+      "side": "enemy"
+    },
+    "106": {
+      "side": "enemy"
+    },
+    "107": {
+      "side": "enemy"
+    },
+    "108": {
+      "side": "enemy"
+    },
+    "109": {
+      "side": "enemy"
+    },
+    "110": {
+      "side": "enemy"
+    },
+    "111": {
+      "side": "enemy"
+    },
+    "112": {
+      "side": "enemy"
+    },
+    "113": {
+      "side": "enemy"
+    },
+    "114": {
+      "side": "enemy"
+    },
+    "115": {
+      "side": "enemy"
+    },
+    "116": {
+      "side": "enemy"
+    },
+    "117": {
+      "side": "enemy"
+    },
+    "118": {
+      "side": "enemy"
+    },
+    "119": {
+      "side": "enemy"
+    },
+    "120": {
+      "side": "enemy"
+    },
+    "121": {
+      "side": "enemy"
+    },
+    "122": {
+      "side": "enemy"
+    },
+    "123": {
+      "side": "enemy"
+    },
+    "124": {
+      "side": "enemy"
+    },
     "001": {
       "side": "player",
       "battle_skills": [
@@ -831,6 +903,54 @@ export const definition = {
     },
     "088": {
       "side": "enemy"
+    },
+    "049": {
+      "side": "enemy"
+    },
+    "050": {
+      "side": "enemy"
+    },
+    "051": {
+      "side": "enemy"
+    },
+    "052": {
+      "side": "enemy"
+    },
+    "053": {
+      "side": "enemy"
+    },
+    "054": {
+      "side": "enemy"
+    },
+    "055": {
+      "side": "enemy"
+    },
+    "056": {
+      "side": "enemy"
+    },
+    "057": {
+      "side": "enemy"
+    },
+    "058": {
+      "side": "enemy"
+    },
+    "078": {
+      "side": "enemy"
+    },
+    "080": {
+      "side": "enemy"
+    },
+    "083": {
+      "side": "enemy"
+    },
+    "086": {
+      "side": "enemy"
+    },
+    "087": {
+      "side": "enemy"
+    },
+    "077": {
+      "side": "enemy"
     }
   },
   "battle_rosters": {
@@ -873,7 +993,11 @@ export const definition = {
     "stage05": {},
     "stage08": {},
     "stage09": {},
-    "stage10": {}
+    "stage10": {},
+    "stage06": {},
+    "stage11": {},
+    "stage14": {},
+    "stage15": {}
   },
   "programs": [
     "m01010-2",
@@ -955,7 +1079,29 @@ export const definition = {
     "m71080",
     "elf-e",
     "elf-i",
-    "elf-v"
+    "elf-v",
+    "hellway-j04",
+    "hellway-m01",
+    "hellway-m02",
+    "hellway-m03",
+    "hellway-n01",
+    "hellway-n02",
+    "hellway-n03",
+    "judgeligh-s01",
+    "m72065",
+    "ruinously-b01",
+    "silence-a02",
+    "silence-a03",
+    "silence-a04",
+    "silence-a06",
+    "wing-d01-a",
+    "wing-d01-b",
+    "wing-d01-c",
+    "yearn-s01",
+    "m03050-1",
+    "m72040-q",
+    "m03011",
+    "m29011-1"
   ],
   "maps": {
     "M01060": {
@@ -2060,6 +2206,7 @@ export const definition = {
     },
     "M03043-4": {
       "npcs": [
+        10,
         11
       ]
     },
@@ -2076,6 +2223,7 @@ export const definition = {
       "npcs": [
         10,
         11,
+        12,
         13,
         14
       ],
@@ -2226,7 +2374,8 @@ export const definition = {
       "npcs": [
         10,
         12,
-        13
+        13,
+        14
       ]
     },
     "M03012_1F": {
@@ -2268,7 +2417,11 @@ export const definition = {
         14,
         19,
         23,
-        24
+        24,
+        25
+      ],
+      "triggers": [
+        31
       ]
     },
     "M03051": {
@@ -2333,6 +2486,7 @@ export const definition = {
     "M29011": {
       "npcs": [
         11,
+        12,
         13,
         14,
         15,
@@ -2342,6 +2496,7 @@ export const definition = {
         19,
         20,
         21,
+        22,
         23
       ]
     },
@@ -2904,14 +3059,17 @@ export const definition = {
         16,
         17,
         18,
+        19,
         20
       ]
     },
     "M29015": {
       "npcs": [
         10,
+        12,
         13,
-        14
+        14,
+        15
       ]
     },
     "M73011-02": {
@@ -4293,6 +4451,7 @@ export const definition = {
     },
     "M03032": {
       "npcs": [
+        18,
         19
       ]
     },
@@ -4450,6 +4609,2110 @@ export const definition = {
           "handler": "keyed-chest"
         }
       ]
+    },
+    "HELLWAY-A01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "HELLWAY-B01": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "tlk-object"
+        }
+      ]
+    },
+    "HELLWAY-E01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "HELLWAY-E02": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "HELLWAY-F01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "HELLWAY-F02": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "HELLWAY-G01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "HELLWAY-G02": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "HELLWAY-G03": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "HELLWAY-G04": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "HELLWAY-H01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "HELLWAY-H02": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "HELLWAY-I01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "HELLWAY-I02": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "HELLWAY-J01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "HELLWAY-J02": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "HELLWAY-J03": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "HELLWAY-J04": {
+      "npcs": [
+        10
+      ],
+      "triggers": [
+        3
+      ]
+    },
+    "HELLWAY-M01": {
+      "npcs": [],
+      "triggers": [
+        3
+      ]
+    },
+    "HELLWAY-M02": {
+      "npcs": [],
+      "triggers": [
+        3
+      ]
+    },
+    "HELLWAY-M03": {
+      "npcs": [],
+      "triggers": [
+        3
+      ]
+    },
+    "HELLWAY-N01": {
+      "npcs": [],
+      "triggers": [
+        3
+      ]
+    },
+    "HELLWAY-N02": {
+      "npcs": [],
+      "triggers": [
+        3
+      ]
+    },
+    "HELLWAY-N03": {
+      "npcs": [],
+      "triggers": [
+        3
+      ]
+    },
+    "JUDGELIGH-A01": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 7,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 8,
+          "handler": "tlk-object"
+        }
+      ]
+    },
+    "JUDGELIGH-A02": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 7,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 8,
+          "handler": "tlk-object"
+        }
+      ]
+    },
+    "JUDGELIGH-B01": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 9,
+          "handler": "tlk-object"
+        }
+      ]
+    },
+    "JUDGELIGH-B02": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 9,
+          "handler": "tlk-object"
+        }
+      ]
+    },
+    "JUDGELIGH-C01": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 9,
+          "handler": "tlk-object"
+        }
+      ]
+    },
+    "JUDGELIGH-C02": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 9,
+          "handler": "tlk-object"
+        }
+      ]
+    },
+    "JUDGELIGH-D01": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 7,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 8,
+          "handler": "tlk-object"
+        }
+      ]
+    },
+    "JUDGELIGH-D02": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 7,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 8,
+          "handler": "tlk-object"
+        }
+      ]
+    },
+    "JUDGELIGH-E01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "JUDGELIGH-F01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "JUDGELIGH-G01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "JUDGELIGH-G02": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "JUDGELIGH-H01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "JUDGELIGH-I01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "JUDGELIGH-J01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "JUDGELIGH-J02": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "JUDGELIGH-K01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "JUDGELIGH-K02": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "JUDGELIGH-K03": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "JUDGELIGH-L01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "JUDGELIGH-L02": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "JUDGELIGH-L03": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "JUDGELIGH-M01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "JUDGELIGH-M02": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "JUDGELIGH-M03": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "JUDGELIGH-N01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "JUDGELIGH-N02": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "JUDGELIGH-N03": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "JUDGELIGH-O01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "JUDGELIGH-P01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "JUDGELIGH-Q01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "JUDGELIGH-R01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "JUDGELIGH-S01": {
+      "npcs": [
+        10
+      ],
+      "objects": [
+        {
+          "index": 9,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 10,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 11,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 12,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 13,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 14,
+          "handler": "tlk-object"
+        }
+      ]
+    },
+    "REBIRTH-A01": {
+      "npcs": [
+        10
+      ],
+      "triggers": [
+        2
+      ]
+    },
+    "REBIRTH-A02": {
+      "npcs": [],
+      "triggers": [
+        2
+      ],
+      "objects": [
+        {
+          "index": 7,
+          "handler": "tlk-object"
+        }
+      ]
+    },
+    "REBIRTH-A03": {
+      "npcs": [],
+      "triggers": [
+        2
+      ],
+      "objects": [
+        {
+          "index": 7,
+          "handler": "tlk-object"
+        }
+      ]
+    },
+    "REBIRTH-A04": {
+      "npcs": [],
+      "triggers": [
+        2
+      ],
+      "objects": [
+        {
+          "index": 7,
+          "handler": "tlk-object"
+        }
+      ]
+    },
+    "REBIRTH-B01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "REBIRTH-B02": {
+      "npcs": [],
+      "triggers": [
+        2
+      ],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "tlk-object"
+        }
+      ]
+    },
+    "REBIRTH-B03": {
+      "npcs": [],
+      "triggers": [
+        2
+      ],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "tlk-object"
+        }
+      ]
+    },
+    "REBIRTH-B04": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 9,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 10,
+          "handler": "tlk-object"
+        }
+      ],
+      "triggers": [
+        2
+      ]
+    },
+    "REBIRTH-C01": {
+      "npcs": [],
+      "triggers": [
+        2
+      ],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "tlk-object"
+        }
+      ]
+    },
+    "REBIRTH-C02": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "REBIRTH-C03": {
+      "npcs": []
+    },
+    "REBIRTH-D01": {
+      "npcs": [],
+      "triggers": [
+        2
+      ],
+      "objects": [
+        {
+          "index": 7,
+          "handler": "tlk-object"
+        }
+      ]
+    },
+    "REBIRTH-D02": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 7,
+          "handler": "tlk-object"
+        }
+      ]
+    },
+    "REBIRTH-D03": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "REBIRTH-E01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "REBIRTH-E02": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "REBIRTH-F01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "REBIRTH-F02": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "REBIRTH-G01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "REBIRTH-G02": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "REBIRTH-H01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "REBIRTH-H02": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "REBIRTH-I01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "REBIRTH-I02": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "REBIRTH-J01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "REBIRTH-J02": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "REBIRTH-K01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "REBIRTH-K02": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "REBIRTH-K03": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "REBIRTH-K04": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "REBIRTH-K05": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "REBIRTH-K06": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "REBIRTH-K07": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "REBIRTH-K08": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "REBIRTH-K09": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "REBIRTH-L01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "REBIRTH-L02": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "REBIRTH-L03": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "REBIRTH-L04": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "REBIRTH-L05": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "REBIRTH-L06": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "REBIRTH-M01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "REBIRTH-M02": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "REBIRTH-M03": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "REBIRTH-M04": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "REBIRTH-M05": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "REBIRTH-M06": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "REBIRTH-M07": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "REBIRTH-M08": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "REBIRTH-N01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "REBIRTH-N02": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "REBIRTH-N03": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "REBIRTH-N04": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "REBIRTH-N05": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "REBIRTH-N06": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "REBIRTH-Q01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "REBIRTH-R01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "REBIRTH-S01": {
+      "npcs": [
+        10,
+        11
+      ],
+      "triggers": [
+        5
+      ]
+    },
+    "REBIRTH-S02": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "REBIRTH-S03": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "RUINOUSLY-A01": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 7,
+          "handler": "tlk-object"
+        }
+      ]
+    },
+    "RUINOUSLY-A02": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 7,
+          "handler": "stationary-chest"
+        }
+      ]
+    },
+    "RUINOUSLY-B01": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "stationary-chest"
+        }
+      ]
+    },
+    "RUINOUSLY-B02": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "stationary-chest"
+        }
+      ]
+    },
+    "RUINOUSLY-C01": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "stationary-chest"
+        }
+      ]
+    },
+    "RUINOUSLY-C02": {
+      "npcs": [],
+      "triggers": [
+        2
+      ],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "stationary-chest"
+        }
+      ]
+    },
+    "RUINOUSLY-D01": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 7,
+          "handler": "stationary-chest"
+        }
+      ]
+    },
+    "RUINOUSLY-D02": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "RUINOUSLY-E01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "RUINOUSLY-G01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "RUINOUSLY-H01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "RUINOUSLY-J01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "RUINOUSLY-K01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "RUINOUSLY-K02": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "RUINOUSLY-K03": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "RUINOUSLY-L01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "RUINOUSLY-L02": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "RUINOUSLY-M01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "RUINOUSLY-M02": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "RUINOUSLY-N01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "RUINOUSLY-N02": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "RUINOUSLY-N03": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "RUINOUSLY-O01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "RUINOUSLY-P01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "RUINOUSLY-S01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "RUINOUSLY-S02": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "SILENCE-A01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "SILENCE-A02": {
+      "npcs": [
+        10
+      ],
+      "triggers": [
+        3
+      ]
+    },
+    "SILENCE-A03": {
+      "npcs": [
+        10
+      ],
+      "triggers": [
+        3
+      ]
+    },
+    "SILENCE-A04": {
+      "npcs": [
+        10
+      ],
+      "triggers": [
+        3
+      ]
+    },
+    "SILENCE-A05": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "SILENCE-A06": {
+      "npcs": [
+        10
+      ],
+      "triggers": [
+        3
+      ]
+    },
+    "SILENCE-A07": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "SILENCE-A08": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "SILENCE-A09": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "SILENCE-A10": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "SILENCE-A11": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "SILENCE-B01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      },
+      "objects": [
+        {
+          "index": 8,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 9,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 10,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "SILENCE-B02": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "SILENCE-B03": {
+      "npcs": [],
+      "export": {
+        "story": false
+      },
+      "objects": [
+        {
+          "index": 8,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 9,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 10,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "SILENCE-B04": {
+      "npcs": [],
+      "export": {
+        "story": false
+      },
+      "objects": [
+        {
+          "index": 8,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "SILENCE-B05": {
+      "npcs": [],
+      "export": {
+        "story": false
+      },
+      "objects": [
+        {
+          "index": 8,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "SILENCE-B06": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "SILENCE-B07": {
+      "npcs": [],
+      "export": {
+        "story": false
+      },
+      "objects": [
+        {
+          "index": 8,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "SILENCE-B08": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "SILENCE-B09": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "SILENCE-B10": {
+      "npcs": [],
+      "export": {
+        "story": false
+      },
+      "objects": [
+        {
+          "index": 8,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "SILENCE-B11": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "SILENCE-B12": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "SILENCE-B13": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "tlk-object"
+        }
+      ]
+    },
+    "SILENCE-E01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "SILENCE-G01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "SILENCE-K01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "SILENCE-K02": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "SILENCE-K03": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "SILENCE-K04": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "SILENCE-K05": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "SILENCE-K06": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "SILENCE-K07": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "SILENCE-K08": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "SILENCE-K09": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "SILENCE-K10": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "SILENCE-K11": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "SILENCE-K12": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "SILENCE-L01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "SILENCE-L02": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "SILENCE-L03": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "SILENCE-L04": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "SILENCE-L05": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "SILENCE-L06": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "SILENCE-L07": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "SILENCE-L08": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "SILENCE-L09": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "SILENCE-L10": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "SILENCE-L11": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "SILENCE-L12": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "SILENCE-M01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "SILENCE-N01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "SILENCE-S01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "WING-A01-A": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 7,
+          "handler": "tlk-object"
+        }
+      ]
+    },
+    "WING-A01-B": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 7,
+          "handler": "tlk-object"
+        }
+      ]
+    },
+    "WING-A01-C": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 7,
+          "handler": "tlk-object"
+        }
+      ]
+    },
+    "WING-B01-A": {
+      "npcs": [],
+      "setup": true,
+      "objects": [
+        {
+          "index": 8,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 9,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 10,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 11,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 12,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 13,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 14,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 15,
+          "handler": "tlk-object"
+        }
+      ]
+    },
+    "WING-B01-B": {
+      "npcs": [],
+      "setup": true,
+      "objects": [
+        {
+          "index": 8,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 9,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 10,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 11,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 12,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 13,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 14,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 15,
+          "handler": "tlk-object"
+        }
+      ]
+    },
+    "WING-B01-C": {
+      "npcs": [],
+      "setup": true,
+      "objects": [
+        {
+          "index": 8,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 9,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 10,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 11,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 12,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 13,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 14,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 15,
+          "handler": "tlk-object"
+        }
+      ]
+    },
+    "WING-C01-A": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 9,
+          "handler": "tlk-object"
+        }
+      ]
+    },
+    "WING-C01-B": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "WING-C01-C": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "WING-D01-A": {
+      "npcs": [
+        10
+      ],
+      "triggers": [
+        2,
+        3
+      ]
+    },
+    "WING-D01-B": {
+      "npcs": [
+        10
+      ],
+      "triggers": [
+        2,
+        3
+      ],
+      "objects": [
+        {
+          "index": 7,
+          "handler": "tlk-object"
+        }
+      ]
+    },
+    "WING-D01-C": {
+      "npcs": [
+        10
+      ],
+      "triggers": [
+        2,
+        3
+      ]
+    },
+    "WING-E01-A": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "WING-E01-B": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "WING-E01-C": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "WING-G01-A": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "WING-G01-B": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "WING-G01-C": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "WING-H01-A": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "WING-H01-B": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "WING-H01-C": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "WING-J01-A": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "WING-J01-B": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "WING-J01-C": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "WING-K01-A": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "WING-K01-B": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "WING-K01-C": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "WING-K02-A": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "WING-K02-B": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "WING-K02-C": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "WING-L01-A": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "WING-L01-B": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "WING-L01-C": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "WING-L02-A": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "WING-L02-B": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "WING-L02-C": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "WING-M01-A": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "WING-M01-B": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "WING-M01-C": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "WING-M02-A": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "WING-M02-B": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "WING-M02-C": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "WING-N01-A": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "WING-N01-B": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "WING-N01-C": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "WING-N02-A": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "WING-N02-B": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "WING-N02-C": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "WING-S01-A": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "WING-S01-B": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "WING-S01-C": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "YEARN-A01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "YEARN-A02": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "YEARN-B01": {
+      "npcs": [],
+      "triggers": [
+        2
+      ]
+    },
+    "YEARN-B02": {
+      "npcs": [],
+      "triggers": [
+        2
+      ],
+      "objects": [
+        {
+          "index": 9,
+          "handler": "tlk-object"
+        }
+      ]
+    },
+    "YEARN-C01": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "stationary-chest"
+        }
+      ]
+    },
+    "YEARN-C02": {
+      "npcs": [],
+      "export": {
+        "story": false
+      },
+      "objects": [
+        {
+          "index": 8,
+          "handler": "toggle-object"
+        }
+      ]
+    },
+    "YEARN-D01": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 7,
+          "handler": "stationary-chest"
+        }
+      ]
+    },
+    "YEARN-D02": {
+      "npcs": [],
+      "export": {
+        "story": false
+      },
+      "objects": [
+        {
+          "index": 7,
+          "handler": "toggle-object"
+        }
+      ]
+    },
+    "YEARN-E01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "YEARN-E02": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "YEARN-F01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "YEARN-G01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "YEARN-G02": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "YEARN-G03": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "YEARN-H01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "YEARN-I01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "YEARN-J01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "YEARN-J02": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "YEARN-K01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "YEARN-K02": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "YEARN-K03": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "YEARN-L01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "YEARN-L02": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 7,
+          "handler": "stationary-chest"
+        }
+      ]
+    },
+    "YEARN-M01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "YEARN-N01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "YEARN-Q01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "YEARN-Q02": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "YEARN-Q03": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "YEARN-R01": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "YEARN-S01": {
+      "npcs": [
+        10
+      ],
+      "triggers": [
+        5
+      ]
+    },
+    "M72065": {
+      "npcs": []
+    },
+    "M03061": {
+      "npcs": [
+        10,
+        11
+      ]
+    },
+    "M03065": {
+      "npcs": [
+        10
+      ]
+    },
+    "ELF-FOREST-B": {
+      "npcs": [],
+      "export": {
+        "story": false
+      },
+      "objects": [
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "ELF-FOREST-C": {
+      "npcs": [],
+      "objects": [
+        {
+          "index": 20,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "ELF-FOREST-P": {
+      "npcs": [],
+      "export": {
+        "story": false
+      },
+      "objects": [
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ]
+    },
+    "ELF-FOREST-Q": {
+      "npcs": [],
+      "entry": true,
+      "objects": [
+        {
+          "index": 20,
+          "handler": "stationary-chest"
+        }
+      ]
     }
   },
   "story": {
@@ -4457,7 +6720,8 @@ export const definition = {
     "quests": [
       "content/quests/fire-valley.json",
       "content/quests/wind-region.json",
-      "content/quests/guild.json"
+      "content/quests/guild.json",
+      "content/quests/seal-region.json"
     ]
   }
 };
@@ -4466,6 +6730,174 @@ export default {
   "version": 1,
   "party_limit": 4,
   "roles": {
+    "101": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/101.CHR",
+        "sha256": "b450daccf7278aa7473803404ca51f648daffbb45fc598d6c361c3f94d8e7068"
+      }
+    },
+    "102": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/102.CHR",
+        "sha256": "277684f5dd2c4236587da1edd1e3695ee6b3128ca28f1b2e37cb5b9d3be672a9"
+      }
+    },
+    "103": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/103.CHR",
+        "sha256": "dd8edb004fd7c3b8e0b2b35c98acf367dd260d9142a50213d21a80b16ab420ab"
+      }
+    },
+    "104": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/104.CHR",
+        "sha256": "680df5fbef86c212f9eace8530a7a6d31a697903fb68bf9eaa6f0faff962d472"
+      }
+    },
+    "105": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/105.CHR",
+        "sha256": "b76f52a0aa0abac508caf69a26128480400fbf1457d7678c6e639c2bee7323a5"
+      }
+    },
+    "106": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/106.CHR",
+        "sha256": "17046a20ac39a5bd38262c8a9e66224317d639103172e953492df363022082e5"
+      }
+    },
+    "107": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/107.CHR",
+        "sha256": "5bd5df3b5b4d390fb5ee5c0ca4d1ce0c3d2b47fac762b05f3cca9e24e27abf57"
+      }
+    },
+    "108": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/108.CHR",
+        "sha256": "448bab0471454918ac06b52a281f7aae3d88db5711260e363f27c45ae59295d0"
+      }
+    },
+    "109": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/109.CHR",
+        "sha256": "7819035954c3b21132ceec507c342f4cdacc06d3454e2d160d0775444c3999eb"
+      }
+    },
+    "110": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/110.CHR",
+        "sha256": "b543da00186265a62b5b0d37bba76db93801c7a90be22d4697b9dc845c6dab23"
+      }
+    },
+    "111": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/111.CHR",
+        "sha256": "f2862c2883052a2b55cac0aaab97961e292c842a0ddca550f3b28c1f2a2a81f9"
+      }
+    },
+    "112": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/112.CHR",
+        "sha256": "12b5bfe30dd06510b94f224901c85df92a68cae82e8607d7c5e580cd6b13c990"
+      }
+    },
+    "113": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/113.CHR",
+        "sha256": "856ff570d8862f529ef86384b1e3efa02fcab4c8cc598f49820dcf3ff3c16e9d"
+      }
+    },
+    "114": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/114.CHR",
+        "sha256": "0c3844e46da7e2f9f15dea363bcb26e0236e01611a092eebf3ae271b25f91da1"
+      }
+    },
+    "115": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/115.CHR",
+        "sha256": "2a205c61135c9764172cf699f7a42bd0bb6a4562d06ee150f8f67f3f69625b22"
+      }
+    },
+    "116": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/116.CHR",
+        "sha256": "b8e3050a10db3048f23da1b7df0a86973ae632bb7d721d957d6e7294b4944191"
+      }
+    },
+    "117": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/117.CHR",
+        "sha256": "88cd1697dee7e39f1dd5fafda2f5cc5ee2c4da9b771640b49b4745d8ce87c3ce"
+      }
+    },
+    "118": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/118.CHR",
+        "sha256": "1cf9d893e7ec999caf7c17d9a6681ed843bfc37eb5046ded4c2af47473848cbd"
+      }
+    },
+    "119": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/119.CHR",
+        "sha256": "1d977e0d02657f725ec9137c9bad6f76b412849896887ad799059cc854ebcae0"
+      }
+    },
+    "120": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/120.CHR",
+        "sha256": "2f86a6e7d9a266733accdd22461e67555a750ab023f5daace38873bd31c36355"
+      }
+    },
+    "121": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/121.CHR",
+        "sha256": "13f73d2d68ef0beec1086b1326bb55d907a16f3450979362a0911466582e45ed"
+      }
+    },
+    "122": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/122.CHR",
+        "sha256": "c6dfaa4c424d3cd4e9e4e1ff89d3f2cb269380379ffe1aee4ff74dfabae7c55a"
+      }
+    },
+    "123": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/123.CHR",
+        "sha256": "3500afef28bf93dab6e766b5a32899bdc72bd7e59440189e407911bf6f0200cc"
+      }
+    },
+    "124": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/124.CHR",
+        "sha256": "48252e7679580cdfe3e9da75d2d3d8e41da0b6fa657839a0596513c9225ea8f3"
+      }
+    },
     "001": {
       "side": "player",
       "source": {
@@ -5643,6 +8075,118 @@ export default {
         "path": "Fight_Role/088.CHR",
         "sha256": "e72ded76a5f7e4a561edb0f6e4f1d878589ce04ff5052fa18f25a54dd070ae13"
       }
+    },
+    "049": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/049.CHR",
+        "sha256": "246bc87ed81859fae31f7e02401614733de8ec943742d77a88ed5d08a7a272ad"
+      }
+    },
+    "050": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/050.CHR",
+        "sha256": "8bb259b220d395c53d27c5bb27be2674c3b3ae4ce9111e7f42c98c82c9879083"
+      }
+    },
+    "051": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/051.CHR",
+        "sha256": "d48f6106a5eae12fa598ce15415f61b03323f1b16253f35cb52e7cad6819ac40"
+      }
+    },
+    "052": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/052.CHR",
+        "sha256": "e9de9d5ec580fe17b6e881303a20a35042790796f6bd0dd09d64d5df77519017"
+      }
+    },
+    "053": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/053.CHR",
+        "sha256": "8ae011d9fcd90e8b21c134b1bbb730d139d666afa67e1e07bbccf96333aa78b6"
+      }
+    },
+    "054": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/054.CHR",
+        "sha256": "988ec41e93227236ed59c501f8cad97f2e3afae64993e5d89bbabd26922a7048"
+      }
+    },
+    "055": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/055.CHR",
+        "sha256": "34805f47de68da012145d5e9817ba8018e7a8dcb6fcabe57939afbb2e853b315"
+      }
+    },
+    "056": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/056.CHR",
+        "sha256": "aa39c0a94ab8aae6c473c15b94dc8cd08c3126b45208ca8e27fb251618f304e6"
+      }
+    },
+    "057": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/057.CHR",
+        "sha256": "e72ded76a5f7e4a561edb0f6e4f1d878589ce04ff5052fa18f25a54dd070ae13"
+      }
+    },
+    "058": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/058.CHR",
+        "sha256": "8ae011d9fcd90e8b21c134b1bbb730d139d666afa67e1e07bbccf96333aa78b6"
+      }
+    },
+    "078": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/078.CHR",
+        "sha256": "aa39c0a94ab8aae6c473c15b94dc8cd08c3126b45208ca8e27fb251618f304e6"
+      }
+    },
+    "080": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/080.CHR",
+        "sha256": "1a61b71704872e47b59b3448ab7ceb748cb26a2275d982975f9ce5c8f60a5615"
+      }
+    },
+    "083": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/083.CHR",
+        "sha256": "e9de9d5ec580fe17b6e881303a20a35042790796f6bd0dd09d64d5df77519017"
+      }
+    },
+    "086": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/086.CHR",
+        "sha256": "34805f47de68da012145d5e9817ba8018e7a8dcb6fcabe57939afbb2e853b315"
+      }
+    },
+    "087": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/087.CHR",
+        "sha256": "aa39c0a94ab8aae6c473c15b94dc8cd08c3126b45208ca8e27fb251618f304e6"
+      }
+    },
+    "077": {
+      "side": "enemy",
+      "source": {
+        "path": "Fight_Role/077.CHR",
+        "sha256": "688c36e4b3f2a39672111e81df79e950b1a07858c7d4685d7979e1b772c2f33c"
+      }
     }
   },
   "battle_rosters": {
@@ -5652,6 +8196,30 @@ export default {
     ],
     "forest-source-group": [
       "001",
+      "101",
+      "102",
+      "103",
+      "104",
+      "105",
+      "106",
+      "107",
+      "108",
+      "109",
+      "110",
+      "111",
+      "112",
+      "113",
+      "114",
+      "115",
+      "116",
+      "117",
+      "118",
+      "119",
+      "120",
+      "121",
+      "122",
+      "123",
+      "124",
       "011",
       "012",
       "013",
@@ -5694,7 +8262,23 @@ export default {
       "082",
       "084",
       "085",
-      "088"
+      "088",
+      "049",
+      "050",
+      "051",
+      "052",
+      "053",
+      "054",
+      "055",
+      "056",
+      "057",
+      "058",
+      "078",
+      "080",
+      "083",
+      "086",
+      "087",
+      "077"
     ],
     "party-source-group": [
       "001",
@@ -5703,6 +8287,30 @@ export default {
       "004",
       "005",
       "006",
+      "101",
+      "102",
+      "103",
+      "104",
+      "105",
+      "106",
+      "107",
+      "108",
+      "109",
+      "110",
+      "111",
+      "112",
+      "113",
+      "114",
+      "115",
+      "116",
+      "117",
+      "118",
+      "119",
+      "120",
+      "121",
+      "122",
+      "123",
+      "124",
       "011",
       "012",
       "013",
@@ -5745,7 +8353,23 @@ export default {
       "082",
       "084",
       "085",
-      "088"
+      "088",
+      "049",
+      "050",
+      "051",
+      "052",
+      "053",
+      "054",
+      "055",
+      "056",
+      "057",
+      "058",
+      "078",
+      "080",
+      "083",
+      "086",
+      "087",
+      "077"
     ]
   },
   "stages": {
@@ -5808,6 +8432,26 @@ export default {
       "path": "data/stages/stage10.json",
       "schema": "seventh-seal-battle-stage",
       "asset_prefix": "assets/stages/stage10/"
+    },
+    "stage06": {
+      "path": "data/stages/stage06.json",
+      "schema": "seventh-seal-battle-stage",
+      "asset_prefix": "assets/stages/stage06/"
+    },
+    "stage11": {
+      "path": "data/stages/stage11.json",
+      "schema": "seventh-seal-battle-stage",
+      "asset_prefix": "assets/stages/stage11/"
+    },
+    "stage14": {
+      "path": "data/stages/stage14.json",
+      "schema": "seventh-seal-battle-stage",
+      "asset_prefix": "assets/stages/stage14/"
+    },
+    "stage15": {
+      "path": "data/stages/stage15.json",
+      "schema": "seventh-seal-battle-stage",
+      "asset_prefix": "assets/stages/stage15/"
     }
   },
   "programs": {
@@ -6210,6 +8854,116 @@ export default {
       "path": "Animate/elf-v.anm",
       "sha256": "1a4b84fa7fd739723b1e9de299351448f1a048293ca9f6a8fd88e196fc8b5727",
       "bytes": 1547
+    },
+    "hellway-j04": {
+      "path": "Animate/hellway-j04.anm",
+      "sha256": "20104e8cbc1d6a55937550ea16edcce3641185db3525561a341cc8d1eaee9336",
+      "bytes": 955
+    },
+    "hellway-m01": {
+      "path": "Animate/hellway-m01.anm",
+      "sha256": "6165b05ede22d49c381dc79ff970794137045dea7f67abd1fefb2f771b0eb780",
+      "bytes": 807
+    },
+    "hellway-m02": {
+      "path": "Animate/hellway-m02.anm",
+      "sha256": "a1dbebdc555801cca513bb056036c9686d8ddf21e4b6da5b1cde628106929451",
+      "bytes": 807
+    },
+    "hellway-m03": {
+      "path": "Animate/hellway-m03.anm",
+      "sha256": "02a9e4972997bb77f72c5d43c8a089a93d0018141147148b2d016b4a3070c1f3",
+      "bytes": 807
+    },
+    "hellway-n01": {
+      "path": "Animate/hellway-n01.anm",
+      "sha256": "617c4f7d8bc407bd67e216fe3cedbaad9f9d88980afed561b2ea03d0abc829e7",
+      "bytes": 807
+    },
+    "hellway-n02": {
+      "path": "Animate/hellway-n02.anm",
+      "sha256": "fbbd6d44695f5628615b213fe14ce72da4b03baeea7ddd40d3bb781592176c35",
+      "bytes": 807
+    },
+    "hellway-n03": {
+      "path": "Animate/hellway-n03.anm",
+      "sha256": "b31410ec951ab92ea2058ec35fcc6aa4b9f43aec92926e82ddd34d152297d323",
+      "bytes": 807
+    },
+    "judgeligh-s01": {
+      "path": "Animate/judgeligh-s01.anm",
+      "sha256": "ee6b4683183680b523c108b92275cbbc5a5e7b067d10211aa4e764557eec7ec1",
+      "bytes": 955
+    },
+    "m72065": {
+      "path": "Animate/m72065.anm",
+      "sha256": "cf4c40f519f83e65da04df8bfea92e7ae28ca8eb85aa8ad62f6fc848c0da2b38",
+      "bytes": 5321
+    },
+    "ruinously-b01": {
+      "path": "Animate/ruinously-b01.anm",
+      "sha256": "dd99937fd16be42ee2c59c1b4b1ad1d8637deacf04fb9e725d874ff05442323d",
+      "bytes": 807
+    },
+    "silence-a02": {
+      "path": "Animate/silence-a02.anm",
+      "sha256": "559027429369f1b2100febe58878626214e72b40c31be78e54cb1404539680aa",
+      "bytes": 1251
+    },
+    "silence-a03": {
+      "path": "Animate/silence-a03.anm",
+      "sha256": "f1617d1a690d736bfd9d0e81cc41b6ddfef603425434806f4e2d0b2eb512a667",
+      "bytes": 1251
+    },
+    "silence-a04": {
+      "path": "Animate/silence-a04.anm",
+      "sha256": "88e0ae09392c03d732050941087ac9291e997381ba5c5123bed7ef481efecb35",
+      "bytes": 1251
+    },
+    "silence-a06": {
+      "path": "Animate/silence-a06.anm",
+      "sha256": "fe82d278cabca7ce6446bb0680307666d1d99c27b252e2be4358f8eb198693f6",
+      "bytes": 1251
+    },
+    "wing-d01-a": {
+      "path": "Animate/wing-d01-a.anm",
+      "sha256": "6b815c5e3a77f7a029ac9085e8ff7e460c469060bcb2204ae5b3028f5086d31d",
+      "bytes": 955
+    },
+    "wing-d01-b": {
+      "path": "Animate/wing-d01-b.anm",
+      "sha256": "5b613a01b8df2622d87ebc303aec56a453651c500cb55830ab87e21fa26a3949",
+      "bytes": 955
+    },
+    "wing-d01-c": {
+      "path": "Animate/wing-d01-c.anm",
+      "sha256": "78a78d923224b084d417fecaa718a57f0bca4675123669d0028229f22de9e992",
+      "bytes": 955
+    },
+    "yearn-s01": {
+      "path": "Animate/yearn-s01.anm",
+      "sha256": "e22ccd2bb6067d069b238e5707f2706454d704de2036cad787e7e940065b15e0",
+      "bytes": 955
+    },
+    "m03050-1": {
+      "path": "Animate/m03050-1.anm",
+      "sha256": "806613183208cf5323088f09205c4bb5a9dc29bbbe2d2e6e96a261d109499dd8",
+      "bytes": 659
+    },
+    "m72040-q": {
+      "path": "Animate/m72040-q.anm",
+      "sha256": "a638b49a5a1a921181d667594cf7f93ae58e2c3503d1913f9d7a3e1beb561e91",
+      "bytes": 1177
+    },
+    "m03011": {
+      "path": "Animate/m03011.anm",
+      "sha256": "a0147621c17bc627642f946f3a6cb483f19d246a02f429be40e8f8524b365d1d",
+      "bytes": 3841
+    },
+    "m29011-1": {
+      "path": "Animate/m29011-1.anm",
+      "sha256": "da89afdfbc99338d0e83b5c17c79ce1ae696e0c166361ea57dce6a741768e716",
+      "bytes": 2213
     }
   },
   "maps": {
@@ -7720,6 +10474,7 @@ export default {
       "rests": [],
       "routes": [],
       "npcs": [
+        10,
         11
       ],
       "flag_index": 434
@@ -7749,6 +10504,7 @@ export default {
       "npcs": [
         10,
         11,
+        12,
         13,
         14
       ],
@@ -8003,7 +10759,8 @@ export default {
       "npcs": [
         10,
         12,
-        13
+        13,
+        14
       ],
       "flag_index": 407
     },
@@ -8069,7 +10826,9 @@ export default {
     },
     "M03050": {
       "path": "data/maps/m03050.json",
-      "triggers": [],
+      "triggers": [
+        31
+      ],
       "objects": [],
       "rests": [],
       "routes": [],
@@ -8081,7 +10840,8 @@ export default {
         14,
         19,
         23,
-        24
+        24,
+        25
       ],
       "flag_index": 24
     },
@@ -8199,6 +10959,7 @@ export default {
       "routes": [],
       "npcs": [
         11,
+        12,
         13,
         14,
         15,
@@ -8208,6 +10969,7 @@ export default {
         19,
         20,
         21,
+        22,
         23
       ],
       "flag_index": 519
@@ -8979,6 +11741,7 @@ export default {
         16,
         17,
         18,
+        19,
         20
       ],
       "flag_index": 521
@@ -8991,8 +11754,10 @@ export default {
       "routes": [],
       "npcs": [
         10,
+        12,
         13,
-        14
+        14,
+        15
       ],
       "flag_index": 522
     },
@@ -10687,6 +13452,7 @@ export default {
       "rests": [],
       "routes": [],
       "npcs": [
+        18,
         19
       ],
       "flag_index": 419
@@ -10903,6 +13669,3071 @@ export default {
         11
       ],
       "flag_index": 601
+    },
+    "HELLWAY-A01": {
+      "path": "data/maps/hellway-a01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 164
+    },
+    "HELLWAY-B01": {
+      "path": "data/maps/hellway-b01.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "tlk-object"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 165
+    },
+    "HELLWAY-E01": {
+      "path": "data/maps/hellway-e01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 166
+    },
+    "HELLWAY-E02": {
+      "path": "data/maps/hellway-e02.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 167
+    },
+    "HELLWAY-F01": {
+      "path": "data/maps/hellway-f01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 168
+    },
+    "HELLWAY-F02": {
+      "path": "data/maps/hellway-f02.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 169
+    },
+    "HELLWAY-G01": {
+      "path": "data/maps/hellway-g01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 170
+    },
+    "HELLWAY-G02": {
+      "path": "data/maps/hellway-g02.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 171
+    },
+    "HELLWAY-G03": {
+      "path": "data/maps/hellway-g03.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 172
+    },
+    "HELLWAY-G04": {
+      "path": "data/maps/hellway-g04.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 173
+    },
+    "HELLWAY-H01": {
+      "path": "data/maps/hellway-h01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 174
+    },
+    "HELLWAY-H02": {
+      "path": "data/maps/hellway-h02.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 175
+    },
+    "HELLWAY-I01": {
+      "path": "data/maps/hellway-i01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 176
+    },
+    "HELLWAY-I02": {
+      "path": "data/maps/hellway-i02.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 177
+    },
+    "HELLWAY-J01": {
+      "path": "data/maps/hellway-j01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 178
+    },
+    "HELLWAY-J02": {
+      "path": "data/maps/hellway-j02.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 179
+    },
+    "HELLWAY-J03": {
+      "path": "data/maps/hellway-j03.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 180
+    },
+    "HELLWAY-J04": {
+      "path": "data/maps/hellway-j04.json",
+      "triggers": [
+        3
+      ],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10
+      ],
+      "flag_index": 181
+    },
+    "HELLWAY-M01": {
+      "path": "data/maps/hellway-m01.json",
+      "triggers": [
+        3
+      ],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 182
+    },
+    "HELLWAY-M02": {
+      "path": "data/maps/hellway-m02.json",
+      "triggers": [
+        3
+      ],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 183
+    },
+    "HELLWAY-M03": {
+      "path": "data/maps/hellway-m03.json",
+      "triggers": [
+        3
+      ],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 184
+    },
+    "HELLWAY-N01": {
+      "path": "data/maps/hellway-n01.json",
+      "triggers": [
+        3
+      ],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 185
+    },
+    "HELLWAY-N02": {
+      "path": "data/maps/hellway-n02.json",
+      "triggers": [
+        3
+      ],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 186
+    },
+    "HELLWAY-N03": {
+      "path": "data/maps/hellway-n03.json",
+      "triggers": [
+        3
+      ],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 187
+    },
+    "JUDGELIGH-A01": {
+      "path": "data/maps/judgeligh-a01.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 7,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 8,
+          "handler": "tlk-object"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 188
+    },
+    "JUDGELIGH-A02": {
+      "path": "data/maps/judgeligh-a02.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 7,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 8,
+          "handler": "tlk-object"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 189
+    },
+    "JUDGELIGH-B01": {
+      "path": "data/maps/judgeligh-b01.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 9,
+          "handler": "tlk-object"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 190
+    },
+    "JUDGELIGH-B02": {
+      "path": "data/maps/judgeligh-b02.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 9,
+          "handler": "tlk-object"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 131
+    },
+    "JUDGELIGH-C01": {
+      "path": "data/maps/judgeligh-c01.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 9,
+          "handler": "tlk-object"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 132
+    },
+    "JUDGELIGH-C02": {
+      "path": "data/maps/judgeligh-c02.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 9,
+          "handler": "tlk-object"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 133
+    },
+    "JUDGELIGH-D01": {
+      "path": "data/maps/judgeligh-d01.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 7,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 8,
+          "handler": "tlk-object"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 134
+    },
+    "JUDGELIGH-D02": {
+      "path": "data/maps/judgeligh-d02.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 7,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 8,
+          "handler": "tlk-object"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 135
+    },
+    "JUDGELIGH-E01": {
+      "path": "data/maps/judgeligh-e01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 136
+    },
+    "JUDGELIGH-F01": {
+      "path": "data/maps/judgeligh-f01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 139
+    },
+    "JUDGELIGH-G01": {
+      "path": "data/maps/judgeligh-g01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 141
+    },
+    "JUDGELIGH-G02": {
+      "path": "data/maps/judgeligh-g02.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 143
+    },
+    "JUDGELIGH-H01": {
+      "path": "data/maps/judgeligh-h01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 145
+    },
+    "JUDGELIGH-I01": {
+      "path": "data/maps/judgeligh-i01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 146
+    },
+    "JUDGELIGH-J01": {
+      "path": "data/maps/judgeligh-j01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 149
+    },
+    "JUDGELIGH-J02": {
+      "path": "data/maps/judgeligh-j02.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 151
+    },
+    "JUDGELIGH-K01": {
+      "path": "data/maps/judgeligh-k01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 152
+    },
+    "JUDGELIGH-K02": {
+      "path": "data/maps/judgeligh-k02.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 153
+    },
+    "JUDGELIGH-K03": {
+      "path": "data/maps/judgeligh-k03.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 154
+    },
+    "JUDGELIGH-L01": {
+      "path": "data/maps/judgeligh-l01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 155
+    },
+    "JUDGELIGH-L02": {
+      "path": "data/maps/judgeligh-l02.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 156
+    },
+    "JUDGELIGH-L03": {
+      "path": "data/maps/judgeligh-l03.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 157
+    },
+    "JUDGELIGH-M01": {
+      "path": "data/maps/judgeligh-m01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 158
+    },
+    "JUDGELIGH-M02": {
+      "path": "data/maps/judgeligh-m02.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 159
+    },
+    "JUDGELIGH-M03": {
+      "path": "data/maps/judgeligh-m03.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 160
+    },
+    "JUDGELIGH-N01": {
+      "path": "data/maps/judgeligh-n01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 161
+    },
+    "JUDGELIGH-N02": {
+      "path": "data/maps/judgeligh-n02.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 162
+    },
+    "JUDGELIGH-N03": {
+      "path": "data/maps/judgeligh-n03.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 163
+    },
+    "JUDGELIGH-O01": {
+      "path": "data/maps/judgeligh-o01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 191
+    },
+    "JUDGELIGH-P01": {
+      "path": "data/maps/judgeligh-p01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 192
+    },
+    "JUDGELIGH-Q01": {
+      "path": "data/maps/judgeligh-q01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 193
+    },
+    "JUDGELIGH-R01": {
+      "path": "data/maps/judgeligh-r01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 194
+    },
+    "JUDGELIGH-S01": {
+      "path": "data/maps/judgeligh-s01.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 9,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 10,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 11,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 12,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 13,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 14,
+          "handler": "tlk-object"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10
+      ],
+      "flag_index": 195
+    },
+    "REBIRTH-A01": {
+      "path": "data/maps/rebirth-a01.json",
+      "triggers": [
+        2
+      ],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10
+      ],
+      "flag_index": 215
+    },
+    "REBIRTH-A02": {
+      "path": "data/maps/rebirth-a02.json",
+      "triggers": [
+        2
+      ],
+      "objects": [
+        {
+          "index": 7,
+          "handler": "tlk-object"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 216
+    },
+    "REBIRTH-A03": {
+      "path": "data/maps/rebirth-a03.json",
+      "triggers": [
+        2
+      ],
+      "objects": [
+        {
+          "index": 7,
+          "handler": "tlk-object"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 217
+    },
+    "REBIRTH-A04": {
+      "path": "data/maps/rebirth-a04.json",
+      "triggers": [
+        2
+      ],
+      "objects": [
+        {
+          "index": 7,
+          "handler": "tlk-object"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 218
+    },
+    "REBIRTH-B01": {
+      "path": "data/maps/rebirth-b01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 219
+    },
+    "REBIRTH-B02": {
+      "path": "data/maps/rebirth-b02.json",
+      "triggers": [
+        2
+      ],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "tlk-object"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 220
+    },
+    "REBIRTH-B03": {
+      "path": "data/maps/rebirth-b03.json",
+      "triggers": [
+        2
+      ],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "tlk-object"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 221
+    },
+    "REBIRTH-B04": {
+      "path": "data/maps/rebirth-b04.json",
+      "triggers": [
+        2
+      ],
+      "objects": [
+        {
+          "index": 9,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 10,
+          "handler": "tlk-object"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 222
+    },
+    "REBIRTH-C01": {
+      "path": "data/maps/rebirth-c01.json",
+      "triggers": [
+        2
+      ],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "tlk-object"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 223
+    },
+    "REBIRTH-C02": {
+      "path": "data/maps/rebirth-c02.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 224
+    },
+    "REBIRTH-C03": {
+      "path": "data/maps/rebirth-c03.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 225
+    },
+    "REBIRTH-D01": {
+      "path": "data/maps/rebirth-d01.json",
+      "triggers": [
+        2
+      ],
+      "objects": [
+        {
+          "index": 7,
+          "handler": "tlk-object"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 226
+    },
+    "REBIRTH-D02": {
+      "path": "data/maps/rebirth-d02.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 7,
+          "handler": "tlk-object"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 227
+    },
+    "REBIRTH-D03": {
+      "path": "data/maps/rebirth-d03.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 228
+    },
+    "REBIRTH-E01": {
+      "path": "data/maps/rebirth-e01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 229
+    },
+    "REBIRTH-E02": {
+      "path": "data/maps/rebirth-e02.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 230
+    },
+    "REBIRTH-F01": {
+      "path": "data/maps/rebirth-f01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 231
+    },
+    "REBIRTH-F02": {
+      "path": "data/maps/rebirth-f02.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 232
+    },
+    "REBIRTH-G01": {
+      "path": "data/maps/rebirth-g01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 233
+    },
+    "REBIRTH-G02": {
+      "path": "data/maps/rebirth-g02.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 234
+    },
+    "REBIRTH-H01": {
+      "path": "data/maps/rebirth-h01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 235
+    },
+    "REBIRTH-H02": {
+      "path": "data/maps/rebirth-h02.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 236
+    },
+    "REBIRTH-I01": {
+      "path": "data/maps/rebirth-i01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 237
+    },
+    "REBIRTH-I02": {
+      "path": "data/maps/rebirth-i02.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 238
+    },
+    "REBIRTH-J01": {
+      "path": "data/maps/rebirth-j01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 239
+    },
+    "REBIRTH-J02": {
+      "path": "data/maps/rebirth-j02.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 240
+    },
+    "REBIRTH-K01": {
+      "path": "data/maps/rebirth-k01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 241
+    },
+    "REBIRTH-K02": {
+      "path": "data/maps/rebirth-k02.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 242
+    },
+    "REBIRTH-K03": {
+      "path": "data/maps/rebirth-k03.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 243
+    },
+    "REBIRTH-K04": {
+      "path": "data/maps/rebirth-k04.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 244
+    },
+    "REBIRTH-K05": {
+      "path": "data/maps/rebirth-k05.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 245
+    },
+    "REBIRTH-K06": {
+      "path": "data/maps/rebirth-k06.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 246
+    },
+    "REBIRTH-K07": {
+      "path": "data/maps/rebirth-k07.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 247
+    },
+    "REBIRTH-K08": {
+      "path": "data/maps/rebirth-k08.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 248
+    },
+    "REBIRTH-K09": {
+      "path": "data/maps/rebirth-k09.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 249
+    },
+    "REBIRTH-L01": {
+      "path": "data/maps/rebirth-l01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 250
+    },
+    "REBIRTH-L02": {
+      "path": "data/maps/rebirth-l02.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 251
+    },
+    "REBIRTH-L03": {
+      "path": "data/maps/rebirth-l03.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 252
+    },
+    "REBIRTH-L04": {
+      "path": "data/maps/rebirth-l04.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 253
+    },
+    "REBIRTH-L05": {
+      "path": "data/maps/rebirth-l05.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 254
+    },
+    "REBIRTH-L06": {
+      "path": "data/maps/rebirth-l06.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 255
+    },
+    "REBIRTH-M01": {
+      "path": "data/maps/rebirth-m01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 256
+    },
+    "REBIRTH-M02": {
+      "path": "data/maps/rebirth-m02.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 257
+    },
+    "REBIRTH-M03": {
+      "path": "data/maps/rebirth-m03.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 258
+    },
+    "REBIRTH-M04": {
+      "path": "data/maps/rebirth-m04.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 259
+    },
+    "REBIRTH-M05": {
+      "path": "data/maps/rebirth-m05.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 260
+    },
+    "REBIRTH-M06": {
+      "path": "data/maps/rebirth-m06.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 261
+    },
+    "REBIRTH-M07": {
+      "path": "data/maps/rebirth-m07.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 262
+    },
+    "REBIRTH-M08": {
+      "path": "data/maps/rebirth-m08.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 263
+    },
+    "REBIRTH-N01": {
+      "path": "data/maps/rebirth-n01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 264
+    },
+    "REBIRTH-N02": {
+      "path": "data/maps/rebirth-n02.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 265
+    },
+    "REBIRTH-N03": {
+      "path": "data/maps/rebirth-n03.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 266
+    },
+    "REBIRTH-N04": {
+      "path": "data/maps/rebirth-n04.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 267
+    },
+    "REBIRTH-N05": {
+      "path": "data/maps/rebirth-n05.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 268
+    },
+    "REBIRTH-N06": {
+      "path": "data/maps/rebirth-n06.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 269
+    },
+    "REBIRTH-Q01": {
+      "path": "data/maps/rebirth-q01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 270
+    },
+    "REBIRTH-R01": {
+      "path": "data/maps/rebirth-r01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 271
+    },
+    "REBIRTH-S01": {
+      "path": "data/maps/rebirth-s01.json",
+      "triggers": [
+        5
+      ],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10,
+        11
+      ],
+      "flag_index": 272
+    },
+    "REBIRTH-S02": {
+      "path": "data/maps/rebirth-s02.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 273
+    },
+    "REBIRTH-S03": {
+      "path": "data/maps/rebirth-s03.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 274
+    },
+    "RUINOUSLY-A01": {
+      "path": "data/maps/ruinously-a01.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 7,
+          "handler": "tlk-object"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 275
+    },
+    "RUINOUSLY-A02": {
+      "path": "data/maps/ruinously-a02.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 7,
+          "handler": "stationary-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 276
+    },
+    "RUINOUSLY-B01": {
+      "path": "data/maps/ruinously-b01.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "stationary-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 277
+    },
+    "RUINOUSLY-B02": {
+      "path": "data/maps/ruinously-b02.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "stationary-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 278
+    },
+    "RUINOUSLY-C01": {
+      "path": "data/maps/ruinously-c01.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "stationary-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 279
+    },
+    "RUINOUSLY-C02": {
+      "path": "data/maps/ruinously-c02.json",
+      "triggers": [
+        2
+      ],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "stationary-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 280
+    },
+    "RUINOUSLY-D01": {
+      "path": "data/maps/ruinously-d01.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 7,
+          "handler": "stationary-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 281
+    },
+    "RUINOUSLY-D02": {
+      "path": "data/maps/ruinously-d02.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 282
+    },
+    "RUINOUSLY-E01": {
+      "path": "data/maps/ruinously-e01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 283
+    },
+    "RUINOUSLY-G01": {
+      "path": "data/maps/ruinously-g01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 284
+    },
+    "RUINOUSLY-H01": {
+      "path": "data/maps/ruinously-h01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 285
+    },
+    "RUINOUSLY-J01": {
+      "path": "data/maps/ruinously-j01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 286
+    },
+    "RUINOUSLY-K01": {
+      "path": "data/maps/ruinously-k01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 287
+    },
+    "RUINOUSLY-K02": {
+      "path": "data/maps/ruinously-k02.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 288
+    },
+    "RUINOUSLY-K03": {
+      "path": "data/maps/ruinously-k03.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 289
+    },
+    "RUINOUSLY-L01": {
+      "path": "data/maps/ruinously-l01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 290
+    },
+    "RUINOUSLY-L02": {
+      "path": "data/maps/ruinously-l02.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 291
+    },
+    "RUINOUSLY-M01": {
+      "path": "data/maps/ruinously-m01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 292
+    },
+    "RUINOUSLY-M02": {
+      "path": "data/maps/ruinously-m02.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 293
+    },
+    "RUINOUSLY-N01": {
+      "path": "data/maps/ruinously-n01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 294
+    },
+    "RUINOUSLY-N02": {
+      "path": "data/maps/ruinously-n02.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 295
+    },
+    "RUINOUSLY-N03": {
+      "path": "data/maps/ruinously-n03.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 296
+    },
+    "RUINOUSLY-O01": {
+      "path": "data/maps/ruinously-o01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 297
+    },
+    "RUINOUSLY-P01": {
+      "path": "data/maps/ruinously-p01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 298
+    },
+    "RUINOUSLY-S01": {
+      "path": "data/maps/ruinously-s01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 299
+    },
+    "RUINOUSLY-S02": {
+      "path": "data/maps/ruinously-s02.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 300
+    },
+    "SILENCE-A01": {
+      "path": "data/maps/silence-a01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 301
+    },
+    "SILENCE-A02": {
+      "path": "data/maps/silence-a02.json",
+      "triggers": [
+        3
+      ],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10
+      ],
+      "flag_index": 302
+    },
+    "SILENCE-A03": {
+      "path": "data/maps/silence-a03.json",
+      "triggers": [
+        3
+      ],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10
+      ],
+      "flag_index": 303
+    },
+    "SILENCE-A04": {
+      "path": "data/maps/silence-a04.json",
+      "triggers": [
+        3
+      ],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10
+      ],
+      "flag_index": 304
+    },
+    "SILENCE-A05": {
+      "path": "data/maps/silence-a05.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 305
+    },
+    "SILENCE-A06": {
+      "path": "data/maps/silence-a06.json",
+      "triggers": [
+        3
+      ],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10
+      ],
+      "flag_index": 306
+    },
+    "SILENCE-A07": {
+      "path": "data/maps/silence-a07.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 307
+    },
+    "SILENCE-A08": {
+      "path": "data/maps/silence-a08.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 308
+    },
+    "SILENCE-A09": {
+      "path": "data/maps/silence-a09.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 309
+    },
+    "SILENCE-A10": {
+      "path": "data/maps/silence-a10.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 310
+    },
+    "SILENCE-A11": {
+      "path": "data/maps/silence-a11.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 311
+    },
+    "SILENCE-B01": {
+      "path": "data/maps/silence-b01.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 9,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 10,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 312
+    },
+    "SILENCE-B02": {
+      "path": "data/maps/silence-b02.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 313
+    },
+    "SILENCE-B03": {
+      "path": "data/maps/silence-b03.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 9,
+          "handler": "keyed-chest"
+        },
+        {
+          "index": 10,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 314
+    },
+    "SILENCE-B04": {
+      "path": "data/maps/silence-b04.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 315
+    },
+    "SILENCE-B05": {
+      "path": "data/maps/silence-b05.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 316
+    },
+    "SILENCE-B06": {
+      "path": "data/maps/silence-b06.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 317
+    },
+    "SILENCE-B07": {
+      "path": "data/maps/silence-b07.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 318
+    },
+    "SILENCE-B08": {
+      "path": "data/maps/silence-b08.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 319
+    },
+    "SILENCE-B09": {
+      "path": "data/maps/silence-b09.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 320
+    },
+    "SILENCE-B10": {
+      "path": "data/maps/silence-b10.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 321
+    },
+    "SILENCE-B11": {
+      "path": "data/maps/silence-b11.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 322
+    },
+    "SILENCE-B12": {
+      "path": "data/maps/silence-b12.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 323
+    },
+    "SILENCE-B13": {
+      "path": "data/maps/silence-b13.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "tlk-object"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 324
+    },
+    "SILENCE-E01": {
+      "path": "data/maps/silence-e01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 325
+    },
+    "SILENCE-G01": {
+      "path": "data/maps/silence-g01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 326
+    },
+    "SILENCE-K01": {
+      "path": "data/maps/silence-k01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 327
+    },
+    "SILENCE-K02": {
+      "path": "data/maps/silence-k02.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 328
+    },
+    "SILENCE-K03": {
+      "path": "data/maps/silence-k03.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 329
+    },
+    "SILENCE-K04": {
+      "path": "data/maps/silence-k04.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 330
+    },
+    "SILENCE-K05": {
+      "path": "data/maps/silence-k05.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 331
+    },
+    "SILENCE-K06": {
+      "path": "data/maps/silence-k06.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 332
+    },
+    "SILENCE-K07": {
+      "path": "data/maps/silence-k07.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 333
+    },
+    "SILENCE-K08": {
+      "path": "data/maps/silence-k08.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 334
+    },
+    "SILENCE-K09": {
+      "path": "data/maps/silence-k09.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 335
+    },
+    "SILENCE-K10": {
+      "path": "data/maps/silence-k10.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 336
+    },
+    "SILENCE-K11": {
+      "path": "data/maps/silence-k11.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 337
+    },
+    "SILENCE-K12": {
+      "path": "data/maps/silence-k12.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 338
+    },
+    "SILENCE-L01": {
+      "path": "data/maps/silence-l01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 339
+    },
+    "SILENCE-L02": {
+      "path": "data/maps/silence-l02.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 340
+    },
+    "SILENCE-L03": {
+      "path": "data/maps/silence-l03.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 341
+    },
+    "SILENCE-L04": {
+      "path": "data/maps/silence-l04.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 342
+    },
+    "SILENCE-L05": {
+      "path": "data/maps/silence-l05.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 343
+    },
+    "SILENCE-L06": {
+      "path": "data/maps/silence-l06.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 344
+    },
+    "SILENCE-L07": {
+      "path": "data/maps/silence-l07.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 345
+    },
+    "SILENCE-L08": {
+      "path": "data/maps/silence-l08.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 346
+    },
+    "SILENCE-L09": {
+      "path": "data/maps/silence-l09.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 347
+    },
+    "SILENCE-L10": {
+      "path": "data/maps/silence-l10.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 348
+    },
+    "SILENCE-L11": {
+      "path": "data/maps/silence-l11.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 349
+    },
+    "SILENCE-L12": {
+      "path": "data/maps/silence-l12.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 350
+    },
+    "SILENCE-M01": {
+      "path": "data/maps/silence-m01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 351
+    },
+    "SILENCE-N01": {
+      "path": "data/maps/silence-n01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 352
+    },
+    "SILENCE-S01": {
+      "path": "data/maps/silence-s01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 353
+    },
+    "WING-A01-A": {
+      "path": "data/maps/wing-a01-a.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 7,
+          "handler": "tlk-object"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 528
+    },
+    "WING-A01-B": {
+      "path": "data/maps/wing-a01-b.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 7,
+          "handler": "tlk-object"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 534
+    },
+    "WING-A01-C": {
+      "path": "data/maps/wing-a01-c.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 7,
+          "handler": "tlk-object"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 535
+    },
+    "WING-B01-A": {
+      "path": "data/maps/wing-b01-a.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 9,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 10,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 11,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 12,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 13,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 14,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 15,
+          "handler": "tlk-object"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "setup_record": 8,
+      "npcs": [],
+      "flag_index": 536
+    },
+    "WING-B01-B": {
+      "path": "data/maps/wing-b01-b.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 9,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 10,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 11,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 12,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 13,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 14,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 15,
+          "handler": "tlk-object"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "setup_record": 8,
+      "npcs": [],
+      "flag_index": 537
+    },
+    "WING-B01-C": {
+      "path": "data/maps/wing-b01-c.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 9,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 10,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 11,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 12,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 13,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 14,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 15,
+          "handler": "tlk-object"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "setup_record": 8,
+      "npcs": [],
+      "flag_index": 538
+    },
+    "WING-C01-A": {
+      "path": "data/maps/wing-c01-a.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 9,
+          "handler": "tlk-object"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 539
+    },
+    "WING-C01-B": {
+      "path": "data/maps/wing-c01-b.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 540
+    },
+    "WING-C01-C": {
+      "path": "data/maps/wing-c01-c.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 541
+    },
+    "WING-D01-A": {
+      "path": "data/maps/wing-d01-a.json",
+      "triggers": [
+        2,
+        3
+      ],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10
+      ],
+      "flag_index": 542
+    },
+    "WING-D01-B": {
+      "path": "data/maps/wing-d01-b.json",
+      "triggers": [
+        2,
+        3
+      ],
+      "objects": [
+        {
+          "index": 7,
+          "handler": "tlk-object"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10
+      ],
+      "flag_index": 543
+    },
+    "WING-D01-C": {
+      "path": "data/maps/wing-d01-c.json",
+      "triggers": [
+        2,
+        3
+      ],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10
+      ],
+      "flag_index": 544
+    },
+    "WING-E01-A": {
+      "path": "data/maps/wing-e01-a.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 545
+    },
+    "WING-E01-B": {
+      "path": "data/maps/wing-e01-b.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 546
+    },
+    "WING-E01-C": {
+      "path": "data/maps/wing-e01-c.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 547
+    },
+    "WING-G01-A": {
+      "path": "data/maps/wing-g01-a.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 548
+    },
+    "WING-G01-B": {
+      "path": "data/maps/wing-g01-b.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 549
+    },
+    "WING-G01-C": {
+      "path": "data/maps/wing-g01-c.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 550
+    },
+    "WING-H01-A": {
+      "path": "data/maps/wing-h01-a.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 551
+    },
+    "WING-H01-B": {
+      "path": "data/maps/wing-h01-b.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 552
+    },
+    "WING-H01-C": {
+      "path": "data/maps/wing-h01-c.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 553
+    },
+    "WING-J01-A": {
+      "path": "data/maps/wing-j01-a.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 554
+    },
+    "WING-J01-B": {
+      "path": "data/maps/wing-j01-b.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 555
+    },
+    "WING-J01-C": {
+      "path": "data/maps/wing-j01-c.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 556
+    },
+    "WING-K01-A": {
+      "path": "data/maps/wing-k01-a.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 557
+    },
+    "WING-K01-B": {
+      "path": "data/maps/wing-k01-b.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 558
+    },
+    "WING-K01-C": {
+      "path": "data/maps/wing-k01-c.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 559
+    },
+    "WING-K02-A": {
+      "path": "data/maps/wing-k02-a.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 560
+    },
+    "WING-K02-B": {
+      "path": "data/maps/wing-k02-b.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 561
+    },
+    "WING-K02-C": {
+      "path": "data/maps/wing-k02-c.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 562
+    },
+    "WING-L01-A": {
+      "path": "data/maps/wing-l01-a.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 563
+    },
+    "WING-L01-B": {
+      "path": "data/maps/wing-l01-b.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 564
+    },
+    "WING-L01-C": {
+      "path": "data/maps/wing-l01-c.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 565
+    },
+    "WING-L02-A": {
+      "path": "data/maps/wing-l02-a.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 567
+    },
+    "WING-L02-B": {
+      "path": "data/maps/wing-l02-b.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 568
+    },
+    "WING-L02-C": {
+      "path": "data/maps/wing-l02-c.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 569
+    },
+    "WING-M01-A": {
+      "path": "data/maps/wing-m01-a.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 570
+    },
+    "WING-M01-B": {
+      "path": "data/maps/wing-m01-b.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 571
+    },
+    "WING-M01-C": {
+      "path": "data/maps/wing-m01-c.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 572
+    },
+    "WING-M02-A": {
+      "path": "data/maps/wing-m02-a.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 573
+    },
+    "WING-M02-B": {
+      "path": "data/maps/wing-m02-b.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 574
+    },
+    "WING-M02-C": {
+      "path": "data/maps/wing-m02-c.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 575
+    },
+    "WING-N01-A": {
+      "path": "data/maps/wing-n01-a.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 576
+    },
+    "WING-N01-B": {
+      "path": "data/maps/wing-n01-b.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 577
+    },
+    "WING-N01-C": {
+      "path": "data/maps/wing-n01-c.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 578
+    },
+    "WING-N02-A": {
+      "path": "data/maps/wing-n02-a.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 579
+    },
+    "WING-N02-B": {
+      "path": "data/maps/wing-n02-b.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 533
+    },
+    "WING-N02-C": {
+      "path": "data/maps/wing-n02-c.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 529
+    },
+    "WING-S01-A": {
+      "path": "data/maps/wing-s01-a.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 530
+    },
+    "WING-S01-B": {
+      "path": "data/maps/wing-s01-b.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 531
+    },
+    "WING-S01-C": {
+      "path": "data/maps/wing-s01-c.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 532
+    },
+    "YEARN-A01": {
+      "path": "data/maps/yearn-a01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 355
+    },
+    "YEARN-A02": {
+      "path": "data/maps/yearn-a02.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 356
+    },
+    "YEARN-B01": {
+      "path": "data/maps/yearn-b01.json",
+      "triggers": [
+        2
+      ],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 112
+    },
+    "YEARN-B02": {
+      "path": "data/maps/yearn-b02.json",
+      "triggers": [
+        2
+      ],
+      "objects": [
+        {
+          "index": 9,
+          "handler": "tlk-object"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 113
+    },
+    "YEARN-C01": {
+      "path": "data/maps/yearn-c01.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "stationary-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 137
+    },
+    "YEARN-C02": {
+      "path": "data/maps/yearn-c02.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "toggle-object"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 357
+    },
+    "YEARN-D01": {
+      "path": "data/maps/yearn-d01.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 7,
+          "handler": "stationary-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 358
+    },
+    "YEARN-D02": {
+      "path": "data/maps/yearn-d02.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 7,
+          "handler": "toggle-object"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 359
+    },
+    "YEARN-E01": {
+      "path": "data/maps/yearn-e01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 360
+    },
+    "YEARN-E02": {
+      "path": "data/maps/yearn-e02.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 361
+    },
+    "YEARN-F01": {
+      "path": "data/maps/yearn-f01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 362
+    },
+    "YEARN-G01": {
+      "path": "data/maps/yearn-g01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 363
+    },
+    "YEARN-G02": {
+      "path": "data/maps/yearn-g02.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 364
+    },
+    "YEARN-G03": {
+      "path": "data/maps/yearn-g03.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 365
+    },
+    "YEARN-H01": {
+      "path": "data/maps/yearn-h01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 366
+    },
+    "YEARN-I01": {
+      "path": "data/maps/yearn-i01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 367
+    },
+    "YEARN-J01": {
+      "path": "data/maps/yearn-j01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 368
+    },
+    "YEARN-J02": {
+      "path": "data/maps/yearn-j02.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 369
+    },
+    "YEARN-K01": {
+      "path": "data/maps/yearn-k01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 370
+    },
+    "YEARN-K02": {
+      "path": "data/maps/yearn-k02.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 371
+    },
+    "YEARN-K03": {
+      "path": "data/maps/yearn-k03.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 372
+    },
+    "YEARN-L01": {
+      "path": "data/maps/yearn-l01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 373
+    },
+    "YEARN-L02": {
+      "path": "data/maps/yearn-l02.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 7,
+          "handler": "stationary-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 374
+    },
+    "YEARN-M01": {
+      "path": "data/maps/yearn-m01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 375
+    },
+    "YEARN-N01": {
+      "path": "data/maps/yearn-n01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 376
+    },
+    "YEARN-Q01": {
+      "path": "data/maps/yearn-q01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 377
+    },
+    "YEARN-Q02": {
+      "path": "data/maps/yearn-q02.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 378
+    },
+    "YEARN-Q03": {
+      "path": "data/maps/yearn-q03.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 379
+    },
+    "YEARN-R01": {
+      "path": "data/maps/yearn-r01.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 380
+    },
+    "YEARN-S01": {
+      "path": "data/maps/yearn-s01.json",
+      "triggers": [
+        5
+      ],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10
+      ],
+      "flag_index": 381
+    },
+    "M72065": {
+      "path": "data/maps/m72065.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 617
+    },
+    "M03061": {
+      "path": "data/maps/m03061.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10,
+        11
+      ],
+      "flag_index": 446
+    },
+    "M03065": {
+      "path": "data/maps/m03065.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10
+      ],
+      "flag_index": 432
+    },
+    "ELF-FOREST-B": {
+      "path": "data/maps/elf-forest-b.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 581
+    },
+    "ELF-FOREST-C": {
+      "path": "data/maps/elf-forest-c.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 20,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 582
+    },
+    "ELF-FOREST-P": {
+      "path": "data/maps/elf-forest-p.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 12,
+          "handler": "keyed-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 595
+    },
+    "ELF-FOREST-Q": {
+      "path": "data/maps/elf-forest-q.json",
+      "triggers": [],
+      "objects": [
+        {
+          "index": 20,
+          "handler": "stationary-chest"
+        }
+      ],
+      "rests": [],
+      "routes": [],
+      "entry_record": 1,
+      "npcs": [],
+      "flag_index": 596
     }
   },
   "story": {
@@ -10910,7 +16741,8 @@ export default {
     "quests": [
       "content/quests/fire-valley.json",
       "content/quests/wind-region.json",
-      "content/quests/guild.json"
+      "content/quests/guild.json",
+      "content/quests/seal-region.json"
     ]
   }
 };

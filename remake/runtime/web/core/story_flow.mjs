@@ -7,7 +7,7 @@ const flagBit=n=>Number.isInteger(n)&&n>=1&&n<=32;
 const OPS=new Set(['record','say','choice','if_flag','test_flag_bit','test_all_flag_bits',
   'set_flag','add_flag','set_flag_bit','clear_flag_bit','set_object','jump','random_jump','end','wait',
   'animation','give_item','restore_party','request_save','set_native_object','test_native_condition','test_native_combination','change_native_money','native_service',
-  'learn_native_skill','native_noop','unlock_recipe','world_map_command','transfer_native_map','native_battle','native_sound','restore_native_resources','unsupported']);
+  'learn_native_skill','native_noop','unlock_recipe','set_native_sequence','append_native_sequence','world_map_command','transfer_native_map','native_battle','native_sound','restore_native_resources','unsupported']);
 export function validateStoryFlow(flow){
   need(flow?.schema==='seventh-seal-story-flow'&&flow.version===1&&typeof flow.id==='string'
     &&Array.isArray(flow.commands)&&flow.commands.length>0&&flow.commands.length<=50000,'版本或命令表无效');

@@ -1,8 +1,8 @@
 {
   "schema": "seventh-seal-tool-index",
   "version": 1,
-  "updated": "2026-11-01",
-  "registered_steps": 49,
+  "updated": "2026-11-04",
+  "registered_steps": 50,
   "content_plan": [
     "chapter-maps",
     "chapter-story",
@@ -371,6 +371,7 @@
         "export_floating_city_index.py",
         "export_inner_white_forest_index.py",
         "export_jade_lake_index.py",
+        "export_seal_region_index.py",
         "export_white_forest_index.py"
       ]
     },
@@ -1321,6 +1322,12 @@
       "imported_by": []
     },
     {
+      "path": "create_seal_region_fixtures.mjs",
+      "role": "fixture-or-observation-preparation",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
       "path": "export_wind_region_index.py",
       "role": "registered-build",
       "build_targets": [
@@ -1333,6 +1340,14 @@
       "role": "registered-build",
       "build_targets": [
         "research-index"
+      ],
+      "imported_by": []
+    },
+    {
+      "path": "export_seal_region_index.py",
+      "role": "registered-build",
+      "build_targets": [
+        "seal-region-index"
       ],
       "imported_by": []
     },

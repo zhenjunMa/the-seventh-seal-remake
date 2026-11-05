@@ -49,10 +49,11 @@ export function compileNativeSequence(meta,roleId,plan,layers=[]){
    const entry=group===9&&b[0x47]===4&&plan.handler==='native-response';
    const handler=plan.kind==='single'?plan.handler:plan.skill_handlers?.[record.source_skill_index];
    const magic=vertical||entry||plan.handler==='native-response'||['effect-carrier','native-revival','native-support'].includes(handler)||
-     group===4&&v.getUint32(0x49,true)===0||group===0||group===1||group===6||group===7||group===8||group===10||group===11||plan.allow_no_contacts;
-   fail(b[0]===1&&(group===11||vertical||entry||magic&&[0,1,4,6,7,8,10].includes(group)),'原组合类型命令未支持');
+     group===4&&v.getUint32(0x49,true)===0||group===0||group===1||group===2||group===6||group===7||group===8||group===10||group===11||plan.allow_no_contacts;
+   fail(b[0]===1&&(group===11||vertical||entry||magic&&[0,1,2,4,6,7,8,10].includes(group)),'原组合类型命令未支持');
    if(group===0)fail([0,1].includes(b[0x47])&&b[0x25]<=7,'原背景减色模式未支持');
    if(group===1)fail([0,1].includes(b[0x47])&&!b[0x1d],'原镜头抖动轴或等待模式未支持');
+   if(group===2)fail([0,1].includes(b[0x47])&&!b[0x1d]&&!b[0x23],'原镜头移动模式未支持');
    if(group===10)fail([0,1].includes(b[0x47]),'原目标高度模式未支持');
    if(!magic)continue;
    const previous=steps.findLast(s=>!s.command_raw&&s.command_raw!==0),visual=previous?.visual??previous??null;
@@ -64,7 +65,7 @@ export function compileNativeSequence(meta,roleId,plan,layers=[]){
     if(group===7||group===8){
      const mode=b[0x47],ticks=group===7?({1:7,7:39}[mode]):({1:30,2:30,3:30,4:30,5:30,6:30,7:30,9:39}[mode]);
      fail(Number.isInteger(ticks),'原角色显隐模式尚未恢复');
-     const previous=steps.findLast(step=>step.command_raw===undefined),nativeAction=role.actions.find(action=>action.index===previous?.action_index);
+     const previous=steps.findLast(step=>step.command_raw===undefined),nativeAction=role.actions.find(action=>action.index===(previous?.action_index??plan.initial_pose?.action_index??role.idle.action_index));
      const clock=group===7?60:new DataView(Uint8Array.from(nativeAction.native_raw_hex.match(/../g),h=>parseInt(h,16)).buffer).getUint32(1,true);
      fail(clock>0,'原角色显隐时钟缺失');
      const step=steps.at(-1);step.duration_ms=ticks*clock;step.visibility={kind:group===7?'appear':'disappear',mode,complete_ticks:ticks,clock_ms:clock};
@@ -83,7 +84,7 @@ export function compileNativeSequence(meta,roleId,plan,layers=[]){
    base.full_screen_effect=nativeEffectIsFullScreen(asset);
    const d=Uint8Array.from(asset.native_raw_hex.match(/../g),h=>parseInt(h,16)),dv=view(d);
    const start=v.getUint32(0x26,true),end=v.getUint32(0x2a,true)||asset.frames.length,contact=v.getUint32(0x49,true),wait=b[0x1d]!==0;
-   fail(start>=0&&end>start&&end-start<=300&&((d[0xd]&15)||end<=asset.frames.length)&&(!contact||contact>start&&contact<end),'原特效接触范围未支持');
+   fail(start>=0&&end>start&&end-start<=300&&((d[0xd]&15)||end<=0x5c),'原特效接触范围未支持');
    const frames=Array.from({length:end-start},(_,i)=>{const frame=(d[0xd]&15)?start+i:d[0x16+start+i];return frame<asset.frame_count?frame:null;});
    const slot=b[0x22]?'target':'actor',targetEffect=new TextDecoder().decode(b.slice(0x4e,0x62)).split('\0')[0].replace(/\.dgp$/i,'');
    if(!wait){
@@ -102,13 +103,26 @@ export function compileNativeSequence(meta,roleId,plan,layers=[]){
    const visit=wait?frames:[frames[0]];
    visit.forEach((frame,i)=>{const logical=start+i,effects=[];
     if(i===0)effects.push({asset_id:token,frame:logical,slot,unconditional:true,frame_count:end-start,source_frames:clone(frames),full_screen_effect:base.full_screen_effect});
-    if(contact&&logical===contact&&targetEffect)effects.push({asset_id:targetEffect,frame:logical,slot:'target'});
+    //505990 draws start immediately;5074C0 increments its logical cursor
+    // before testing contact and checks end before dispatch. A retained
+    // trigger at/before start or at/after end is therefore unreachable.
+    const hit=contact!==0&&logical>start&&logical===contact;
+    if(hit&&targetEffect)effects.push({asset_id:targetEffect,frame:logical,slot:'target'});
     steps.push({...base,index:steps.length,logical_frame:logical,carrier_asset_id:token,carrier_source_frame:frame,
-     effect_contact:contact!==0&&logical===contact,effect_token:contact!==0&&logical===contact?1:0,
-     event:contact!==0&&logical===contact?{frame:logical,field:'0x49'}:null,effects,duration_ms:wait?(['native-revival','native-support'].includes(plan.handler)?dv.getUint32(1,true):undefined):0});
+     effect_contact:hit,effect_token:hit?1:0,
+     event:hit?{frame:logical,field:'0x49'}:null,effects,duration_ms:wait?(['native-revival','native-support'].includes(plan.handler)?dv.getUint32(1,true):undefined):0});
    });continue;
   }
-  const action=role.actions.find(a=>a.index===group);fail(action&&action.native_raw_hex,'原组合DGP动作缺失');
+  const action=role.actions.find(a=>a.index===group);
+  if(!action&&role.response_skills?.some(skill=>skill.chr_skill_index===record.source_skill_index
+    &&skill.invalid_source_actions?.some(action=>action.chr_record_index===record.source_action_index&&action.action_index===group))){
+   // 50E980 rejects the absent source DGP action before any image/contact.
+   steps.push({index:steps.length,plan_record_index:ri,chr_record_index:record.source_action_index,
+    source_skill_index:record.source_skill_index,class_raw:b[0x24],action_mask_raw:b[0x78],source:clone(record),
+    command_raw:null,invalid_source_action:group,native_frame_result:-2,visual:clone(plan.initial_pose??null),
+    logical_frame:0,event:null,effects:[],duration_ms:0});continue;
+  }
+  fail(action&&action.native_raw_hex,'原组合DGP动作缺失');
   const d=Uint8Array.from(action.native_raw_hex.match(/../g),h=>parseInt(h,16)),dv=view(d),combo=plan.kind==='combination';
   const useCombo=combo&&(!(d[0x0d]&15)||v.getUint32(0x33,true)!==0);
   const start=v.getUint32(useCombo?0x2f:0x26,true),end=v.getUint32(useCombo?0x33:0x2a,true);

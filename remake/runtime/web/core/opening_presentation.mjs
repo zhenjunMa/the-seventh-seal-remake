@@ -59,10 +59,13 @@ export const nativeActorPixelEffects={
   facing:{
     1:{ticks:8,coefficientStep:32,coefficientFloor:20,blend:'lighter'},
     2:{ticks:30,particles:'fall'},
+    5:{particles:'scan-reveal'}, // 551B05: per-pixel opacity,8 per draw.
     7:{ticks:40,coefficientStep:6,coefficientFloor:10,blend:'source-over'},
     8:{ticks:8,coefficientStep:32,coefficientFloor:10,coefficientCutoff:20,blend:'source-over',startY:-240,stepY:32},
   },
   behavior:{1:{ticks:30,particles:'scatter'},2:{ticks:30,particles:'rise'},
+    4:{ticks:29,particles:'rise-trail'}, // 55430A: original body plus rising light.
+    9:{ticks:40,coefficientStep:6,fadeOut:true,blend:'source-over'},
     // 555CAD clamps alpha240, but y still uses the unclamped (elapsed*32+10)>>2.
-    10:{ticks:9,coefficientStep:32,fadeOut:true,blend:'source-over'}},
+    10:{ticks:9,coefficientStep:32,fadeOut:true,rise:true,blend:'source-over'}},
 };

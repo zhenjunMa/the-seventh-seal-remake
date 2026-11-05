@@ -131,7 +131,9 @@ export class DeathParticlePlayback {
     const target=Math.floor(Math.max(0,now-this.started)/DEATH_PARTICLE_TIMING.render_ms+1e-7);
     for(;this.tick<target&&!this.done;){
       const at=this.started+(++this.tick)*DEATH_PARTICLE_TIMING.render_ms;
-      this.elapsed=Math.floor((at-this.started+1e-7)/this.clock_ms);
+      // A source command8 leaves A7B1=0. Each render-adapter update then
+      // advances F66E once; the220ms fallback applies only without an id12.
+      this.elapsed=this.clock_ms===0?this.tick:Math.floor((at-this.started+1e-7)/this.clock_ms);
       if(this.elapsed===0){this.calls=0;this.effect?.reset();}
       this.calls++;
       const active=this.effect?this.effect.step():this.calls<DEATH_PARTICLE_TIMING.max_render_calls[this.mode];

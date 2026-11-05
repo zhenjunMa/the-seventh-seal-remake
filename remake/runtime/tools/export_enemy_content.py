@@ -90,7 +90,9 @@ def item_status_blocks():
         at = 0x61c + index * 0x3bf
         record = raw[at:at + 0x3bf]
         effect = record[0x2a8:0x36e]
-        if record[0x24] != 5 or record[0x25] not in (1, 3, 4) or effect[0xb] not in (0, 2) or not effect[1] or effect[1] > 100 or effect[0x10] > 1:
+        item = record[0x24] == 5 and record[0x25] in (1, 3, 4)
+        equipment = record[0x24] in (1, 2) or record[0x24:0x26] == b'\x03\x01'
+        if not (item or equipment) or effect[0xb] not in (0, 2) or not effect[1] or effect[1] > 100 or effect[0x10] > 1:
             continue
         blocks[str(index + 1)] = dict(item_id=index + 1, effect_raw_hex=effect.hex(),
             effect_id_raw=effect[1], mode_raw=effect[0xb],
@@ -143,12 +145,12 @@ def prepare_role(ident, status):
         skill = c.skills[index]
         fixed = bytes.fromhex(skill['fixed_raw_hex'])
         effect = fixed[0x16b:0x231]
-        if effect[0xb] not in (0, 2, 5) or effect[0xb] == 5 and effect[1] or effect[1] > 100 or effect[0x10] not in (0, 1):
+        if effect[0xb] not in (0, 1, 2, 5) or effect[0xb] == 5 and effect[1] or effect[1] > 100 or effect[0x10] not in (0, 1):
             raise ValueError(f'Enemy {ident} skill {index}: unsupported status handler {effect[1]} / mode {effect[0xb]}')
         commands = [(a['type_raw'], a['u32_at_0x01_raw']) for a in skill['actions'] if a['type_raw']]
         carrier = any(a['type_raw'] == 1 and a['u32_at_0x01_raw'] == 4
             and struct.unpack_from('<I', bytes.fromhex(a['raw_hex']), 0x49)[0] for a in skill['actions'])
-        if any(kind != 1 or group not in (0, 1, 4, 6, 7, 8, 10, 11) for kind, group in commands):
+        if any(kind != 1 or group not in (0, 1, 2, 4, 6, 7, 8, 10, 11) for kind, group in commands):
             raise ValueError(f'Enemy {ident} skill {index}: unsupported native action command')
         handler = 'effect-carrier' if carrier else 'direct'
         retained = ai['skills'][index]
@@ -190,7 +192,7 @@ def prepare_role(ident, status):
                         block_offset=skill['offset'] + 0x16b, fixed_bytes=0x41d, effect_bytes=0xc6))
     def pose(index):
         return sequence(c, d, index)['segments'][0]
-    responses = [sequence(c, d, index) for index, skill in enumerate(c.skills)
+    responses = [enrich_sequence(c, d, index) for index, skill in enumerate(c.skills)
                  if skill['id_raw'] in (1, 2, 3, 9, 12, 18, 19)]
     low_hp_index = next((index for index, skill in enumerate(c.skills) if skill['id_raw'] == 7), None)
     if low_hp_index is not None:
@@ -199,7 +201,9 @@ def prepare_role(ident, status):
     role = dict(id=ident, name=c.name, frame_width=d.width, frame_height=d.height,
         cursor_height_raw=d.cursor_height_raw,
         anchor=dict(x=d.anchor_raw[0], y=d.anchor_raw[1]), mirror=False, direction=0,
-        idle=idle['segments'][0], idle_sequence=idle, reaction=pose(1), skill=views[0], alternate_skills=views[1:], response_skills=responses)
+        idle=idle['segments'][0], idle_sequence=idle,
+        reaction=pose(next(index for index, skill in enumerate(c.skills) if skill['id_raw'] == 1)),
+        skill=views[0], alternate_skills=views[1:], response_skills=responses)
     primary = copy.deepcopy(ai['skills'][ai['learned_indices'][0]])
     primary['id'] = f'{ident}_attack'
     actor = combat.actor_record(ident, 'enemy', c.header, c.path, 8,
@@ -270,6 +274,7 @@ def export():
             scheduler['low_hp_skills'][ident] = dict(id=f'{ident}_low_hp_idle', actor_id=ident,
                 original_skill_index=skill['index'], name=skill['name_cp936'], fixed_raw_hex=skill['fixed_raw_hex'],
                 class_raw=action[0x24], action_mask_raw=action[0x78], segments=copy.deepcopy(low_hp['segments']),
+                **({'invalid_source_actions': copy.deepcopy(low_hp['invalid_source_actions'])} if low_hp.get('invalid_source_actions') else {}),
                 source=dict(path=f'Fight_Role/{ident}.CHR', sha256=c.sha256, offset=skill['offset'], bytes=0x41d),
                 evidence=['ev_15074ba1e716dbee5de449c6c18c8af0dfb570150803f5138f7f9fe4991fe96f'])
         # Use the same independently audited image/layer implementation as players.

@@ -8,7 +8,7 @@ import {directSequence} from '../web/core/skill_sequence.mjs';
 const read=async name=>JSON.parse(await readFile(new URL('../web/data/'+name,import.meta.url),'utf8'));
 const [commands,ai]=await Promise.all(['party_skills.json','forest_ai.json'].map(read));
 async function fixture(){
-  const drawn=new Map(),ctx={setTransform(){},clearRect(){},fillRect(){},beginPath(){},rect(){},clip(){},ellipse(){},fill(){},save(){},restore(){},fillText(){},drawImage(){}};
+  const drawn=new Map(),ctx={setTransform(){},translate(){},clearRect(){},fillRect(){},beginPath(){},rect(){},clip(){},ellipse(){},fill(){},save(){},restore(){},fillText(){},drawImage(){}};
   const view=new BattleView({canvas:{width:960,height:540,getContext:()=>ctx},metadataPath:'/data/party_battle_view.json',stageMetadataPath:'/data/forest_stage.json',
     jsonLoader:path=>read(path.slice('/data/'.length)),assetLoader:async a=>({width:a.width,height:a.height,path:a.path})});
   await view.prepare();

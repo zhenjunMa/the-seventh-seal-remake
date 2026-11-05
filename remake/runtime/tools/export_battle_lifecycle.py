@@ -195,10 +195,12 @@ def export_sequence(c,d,skill):
                     action_frame=frame,source_frame=d.actions[group]['first_frame']+frame,
                     interval_raw=segment['interval_raw'],movement_step_raw=segment['movement_step_raw'],raw_hex=raw.hex(),source=source))
         elif raw[0]==1:
-            if group not in (0,3,4,6,7,9,11):
+            if group not in (0,3,4,6,7,8,9,11):
                 raise ValueError(f'Uncovered lifecycle command {group}; preserve before implementing')
             if group == 9 and raw[0x47] != 4:
                 raise ValueError('Uncovered lifecycle entry-placement mode')
+            if group == 8 and raw[0x47] not in range(1, 8):
+                raise ValueError('Uncovered lifecycle disappearance mode')
             command=dict(chr_record_index=entry['index'],type_raw=1,command_raw=group,
                 mode_raw_0x47=raw[0x47],u32_at_0x05=struct.unpack_from('<I',raw,5)[0],source=source,
                 raw_hex=raw.hex(),immediate=group!=4 or not raw[0x1d])
@@ -213,6 +215,10 @@ def export_sequence(c,d,skill):
                     vertical_wait_raw=raw[0x1d],vertical_acceleration_raw=raw[0x23],
                     semantics='5130D0 case3 initializes the independent native vertical clock; preserve source wait and both original command records.',
                     evidence=NATIVE['command7'][1])
+            elif group==8:
+                command.update(semantics='5130D0 case8 starts the selected disappearance on the current source pose. Its clock remains zero after51A240; it does not acquire the220ms missing-id12 fallback clock.',
+                    disappearance_fields=dict(mode_address='0x0521f66a',elapsed_address='0x0521f66e',clock_raw=0),
+                    evidence=NATIVE['command7'][1],renderer_rules_reference='renderer_rules.death')
             elif group==7:
                 command.update(
                 semantics='5130D0 case7: F666=byte+0x47; when zero select [1,5,7] using native RNG; F66E=0; A7B1=60.',

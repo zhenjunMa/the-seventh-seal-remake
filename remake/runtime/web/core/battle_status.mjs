@@ -23,7 +23,7 @@ function templateEquals(raw,template){
 }
 function effectMetadata(data,id){return data.effects?.[String(id)]??(id===43?data.status43:undefined);}
 export function validateNativeSkillStatus(skill,data){
-  return validateSkillBlock(skill,data,0x16b,[0,2,5]);
+  return validateSkillBlock(skill,data,0x16b,[0,1,2,5]);
 }
 function validateSkillBlock(skill,data,offset,modes){
   const fixed=bytes(skill?.fixed_raw_hex,0x41d,'skill'),block=rawView(hex(fixed.slice(offset,offset+0xc6))),id=block.raw[1],mode=block.raw[0xb];
@@ -134,9 +134,10 @@ export function clearNativeStatuses(actor,data,content=runtimeContent){
 }
 function passiveBlock(passive){
   const block=rawView(passive?.effect_raw_hex);
-  need(passive.kind==='status-immunity'&&passive.mode_raw===6&&passive.effect_id_raw===block.raw[1]
-    &&block.raw[1]!==0&&block.raw[0xb]===6&&block.raw[0x10]<=1&&block.view.getInt32(2,true)===-1
-    &&block.view.getUint32(0xb8,true)===0&&(block.raw[0x10]===1||!block.raw.slice(0x23,0xb8).some(Boolean)),
+  need(passive.kind===(block.raw[0xb]===6?'status-immunity':'native-status')
+    &&passive.mode_raw===block.raw[0xb]&&passive.effect_id_raw===block.raw[1]
+    &&block.raw[1]!==0&&[0,6].includes(block.raw[0xb])&&block.raw[0x10]<=1&&block.view.getInt32(2,true)===-1
+    &&(block.raw[0xb]===0||block.view.getUint32(0xb8,true)===0&&(block.raw[0x10]===1||!block.raw.slice(0x23,0xb8).some(Boolean))),
     'Native equipment passive source is not implemented');
   return block;
 }
@@ -145,7 +146,7 @@ export function initializeNativeStatuses(actor,data,content=runtimeContent,rng){
   const trace=[];
   for(const passive of out.equipment_passives??[]){
     const block=passiveBlock(passive),result=applyNativeBlock({actor:out,data,rng,
-      records:slots(out,data),block,id:block.raw[1],mode:6,trace:[],remove_on_contact:false,content});
+      records:slots(out,data),block,id:block.raw[1],mode:block.raw[0xb],trace:[],remove_on_contact:false,content});
     out=result.actor;trace.push({kind:'equipment-passive',item_id:passive.item_id,
       group_index:passive.group_index,entry_index:passive.entry_index,reason:result.reason,
       native_return:result.native_return,trace:result.trace});
@@ -177,7 +178,7 @@ export function removeNativeStatus({actor,effect_raw_hex,data,content=runtimeCon
 export function applyNativeSkillStatus({actor,skill,data,rng,now,content=runtimeContent}){
   validateForestStatusData(data,content);integer(now,'native elapsed time');
   const {block,id,mode}=validateNativeSkillStatus(skill,data);
-  need([0,2,5].includes(mode)&&!(mode===5&&id),'Native hostile-contact status mode is not implemented');
+  need([0,1,2,5].includes(mode)&&!(mode===5&&id),'Native hostile-contact status mode is not implemented');
   return applyNativeBlock({actor,data,rng,records:slots(actor,data),block,id,mode,trace:[],remove_on_contact:true,content});
 }
 /**41B3C0 calls508BB0 directly for thrown items, without508A90's
@@ -218,6 +219,10 @@ function applyNativeBlock({actor,data,rng,records,block,id,mode,trace,remove_on_
     const existing=records[index];if(!existing.raw[1]||existing.raw[0xb]!==2)continue;
     const roll=rollFor('status-removal-chance'),chance=existing.raw[0x12];
     if(chance===0||roll<=chance){remove(index);trace.push({kind:'status-removed-on-contact',slot:index});}
+  }
+  if(mode===1){
+    const removed=removeNativeStatus({actor:out,effect_raw_hex:hex(block.raw),data,content});
+    return {...removed,cancel_command:cancel_command||removed.cancel_command,trace:[...trace,...removed.trace]};
   }
   if(mode===5){
     if(out.immune_raw||out.state_raw>=4)return result(0,'target-ineligible');

@@ -84,10 +84,24 @@ test('audio export binds real content, source digests and action fields, retaini
     assert.equal(digest(record),source.record_sha256);
     assert.equal(record.subarray(source.effect_field_offset,source.effect_field_offset+source.effect_field_bytes).toString().split('\0')[0],entry.effect_id===null?'':entry.effect_id+'.dgp');
   }
-  assert.deepEqual(data.object_sounds.filter(entry=>entry.behavior_raw_cf===1).map(entry=>[entry.map_id,entry.object_index,entry.clip]),
-    [['M01042',8,'sound/E015.wav'],['M71071',15,'sound/E034.wav'],
-      ['M71077-1',26,'sound/E034.wav'],['M71077-2',24,'sound/E034.wav'],['M71077-3',25,'sound/E034.wav'],
-      ['M71077-4',25,'sound/E034.wav'],['M71077-5',25,'sound/E034.wav']]);
+  const content=JSON.parse(readFileSync(new URL('../web/data/runtime_content.json',import.meta.url)));
+  assert.deepEqual(Object.keys(data.maps).sort(),Object.keys(content.maps).sort());
+  const expectedObjectSounds=[];
+  for(const [mapId,entry] of Object.entries(data.maps)){
+    const raw=readFileSync(new URL('../../../'+entry.source.path,import.meta.url)),scale=raw[0x145],
+      width=raw.readUInt32LE(0x146)||(raw[0x80]*40<<scale),height=raw.readUInt32LE(0x14a)||(raw[0x81]*40<<scale),
+      start=0x172+width*height*0x40+32*(0x2a+(raw.readUInt32LE(0x18)===1?0x42:0x2b)+0x1b+0x110),
+      base=raw.subarray(0x14e,0x16e).toString().split('\0')[0].replaceAll('\\','/').replace(/^\.\//,'').replace(/\/$/,'');
+    for(let i=0;i<raw.readUInt32LE(0x82);i++){
+      const object=raw.subarray(start+i*0x112,start+(i+1)*0x112);
+      if(object[0xcf]!==1||object.readUInt32LE(0x9e)===0)continue;
+      const dgp=readFileSync(new URL('../../../'+base+'/'+String(object.readUInt32LE(0x1e)).padStart(3,'0')+'.dgp',import.meta.url)),
+        token=dgp.subarray(67+0x56,67+0x6a).toString().split('\0')[0],
+        clip=token&&existsSync(new URL('../../../sound/'+token,import.meta.url))?'sound/'+token:null;
+      expectedObjectSounds.push([mapId,i,clip]);
+    }
+  }
+  assert.deepEqual(data.object_sounds.filter(entry=>entry.behavior_raw_cf===1).map(entry=>[entry.map_id,entry.object_index,entry.clip]),expectedObjectSounds);
   for(const entry of data.object_sounds){
     const object=readFileSync(new URL('../../../'+entry.object_source.path,import.meta.url)).subarray(entry.object_source.offset,entry.object_source.offset+0x112);
     const action=readFileSync(new URL('../../../'+entry.action_source.path,import.meta.url)).subarray(entry.action_source.offset,entry.action_source.offset+0xac);
@@ -99,7 +113,17 @@ test('audio export binds real content, source digests and action fields, retaini
   assert.deepEqual([...new Set(data.object_sounds.filter(entry=>entry.behavior_raw_cf===2).map(entry=>entry.token))].sort(),
     ['E035.wav','NEW.wav','NEWCantOp.wav','NEWlever1.wav']);
   for(const entry of data.object_sounds.filter(entry=>entry.behavior_raw_cf===2))assert.ok(data.clips[entry.clip],entry.token);
-  assert.deepEqual(Object.keys(data.native_sound_tokens).sort(),['E017.wav','E018.wav','E019.wav','E020.wav']);
+  const expectedNativeSounds=[];
+  for(const [mapId,binding] of Object.entries(content.maps)){
+    if(binding.export?.story===false)continue;
+    const raw=readFileSync(new URL('../../../Map/'+mapId.toLowerCase()+'.TLK',import.meta.url)),base=0x1a+raw.readUInt32LE(2)*4;
+    for(let i=0;i<raw.readUInt32LE(6);i++){
+      const offset=base+i*0x66f;if(raw[offset]!==6)continue;
+      expectedNativeSounds.push([mapId,i+1,offset,raw.subarray(offset+0x37,offset+0x137).toString().split('\0')[0]]);
+    }
+  }
+  assert.deepEqual(data.native_sound_sources.map(entry=>[entry.map_id,entry.record_id,entry.source.offset,entry.token]),expectedNativeSounds);
+  assert.deepEqual(Object.keys(data.native_sound_tokens).sort(),[...new Set(expectedNativeSounds.map(row=>row[3]))].sort());
   for(const entry of data.native_sound_sources){
     const file=readFileSync(new URL('../../../'+entry.source.path,import.meta.url));
     const record=file.subarray(entry.source.offset,entry.source.offset+entry.source.bytes);
@@ -174,6 +198,32 @@ test('every integrated skill, revival and item effect and lifecycle sound field 
       const dgpToken=dgp.subarray(offset+0x56,offset+0x6a).toString().split('\0')[0];
       if(dgpToken)assert.equal(data.frame_sounds[role.id][step.action_index].token,dgpToken);
     }}
+  }
+});
+
+test('retained055/086 missing physical groups are silent, while077 uses its real id1 source index and physical groups',()=>{
+  const meta=JSON.parse(readFileSync(new URL('../web/data/party_battle_view.json',import.meta.url)));
+  assert.deepEqual(data.invalid_source_actions.map(row=>[row.role_id,row.skill_index,row.record_index,row.action_index]),
+    [['055',6,0,16],['055',8,0,17],['086',6,0,16],['086',8,0,17]]);
+  for(const entry of data.invalid_source_actions){
+    const chr=readFileSync(new URL('../../../'+entry.source.source,import.meta.url));
+    const dgp=readFileSync(new URL('../../../'+entry.source_dgp.path,import.meta.url));
+    assert.equal(digest(chr),entry.source_chr_sha256);assert.equal(digest(dgp),entry.source_dgp.sha256);
+    const raw=chr.subarray(entry.source.offset,entry.source.offset+entry.source.bytes);
+    assert.equal(digest(raw),entry.source.raw_sha256);assert.equal(raw[0],0);assert.equal(raw.readUInt32LE(1),entry.action_index);
+    assert.equal(dgp[2],16);assert.ok(entry.action_index>=dgp[2]);assert.equal(entry.native_frame_result,-2);
+    assert.ok(entry.evidence.includes(data.native_evidence['0x50e980']));
+    assert.equal(data.frame_sounds[entry.role_id][entry.action_index],undefined);
+    assert.ok(!data.action_sources.some(row=>row.role_id===entry.role_id&&row.skill_index===entry.skill_index&&row.record_index===entry.record_index));
+  }
+  const role=meta.roles.find(row=>row.id==='077'),reaction=role.response_skills.find(row=>row.skill_id_raw===1);
+  assert.equal(reaction.chr_skill_index,2);assert.equal(role.reaction.action_index,1);
+  const dgp=readFileSync(new URL('../../../Fight_Role/077.dgp',import.meta.url));
+  for(const skill of [role.skill,...role.alternate_skills,...role.response_skills])for(const segment of skill.segments){
+    assert.ok(segment.action_index<dgp[2]);
+    const raw=dgp.subarray(0x43+segment.action_index*0xac,0x43+(segment.action_index+1)*0xac);
+    const token=raw.subarray(0x56,0x6a).toString().split('\0')[0];
+    if(token)assert.equal(data.frame_sounds['077'][segment.action_index].source.raw_sha256,digest(raw));
   }
 });
 

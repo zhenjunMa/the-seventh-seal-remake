@@ -31,7 +31,7 @@ function fixture({wall=false,sealed=false,encounters=false,roleId='001'}={}) {
     catalog:{roles:[role]},mapVitals:new Map(),view:{action:0,frame:0,follow:false,zoom:1},
     clock:0,chapterStory:{maps:{}},engine:{presentMap(){}},battleUnavailable:'',encounterData};
   value.encounters=initialEncounterState(value.party,294);
-  const controller=createMapController({state,actions:{guarded:fn=>fn,startBattle(group,encounters){
+  const controller=createMapController({state,actions:{currentPlayTime:()=>now,guarded:fn=>fn,startBattle(group,encounters){
     state.battle={group,encounters};state.scenes.phase='battle-loading';},runChapter(event){state.event=event;state.scenes.phase='event';}},$,canvas:{},ctx:{}});let now=0;
   return {state,controller,step(ms){now+=ms;controller.updateExploration(now,ms);}};
 }

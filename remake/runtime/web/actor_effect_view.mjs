@@ -10,11 +10,34 @@ export class ActorEffectView {
     const role=actor.role,action=role.actions.find(a=>a.index===actor.action);
     this.width=role.frame_width;this.height=role.frame_height;this.kind=kind;
     this.offsetX=kind==='scatter'?160:0;
-    this.visible=[];this.image={width:this.width+this.offsetX*2,height:this.height+160,pixels:()=>this.visible};
+    this.offsetY=kind==='rise-trail'?280:160;
+    this.visible=[];this.image={width:this.width+this.offsetX*2,height:this.height+this.offsetY,pixels:()=>this.visible};
     const source=document.createElement('canvas');source.width=this.width;source.height=this.height;
     const ctx=source.getContext('2d',{willReadFrequently:true});
     ctx.drawImage(action.bitmap,actor.frame*this.width,actor.direction*this.height,this.width,this.height,0,0,this.width,this.height);
     this.pixels=ctx.getImageData(0,0,this.width,this.height).data;
+
+    if(kind==='scan-reveal'){
+      // 5519CF starts each covered pixel at -y; 551B05 adds the minimum
+      // covered x and advances opacity by8, including its terminal draw.
+      let minX=this.width;this.points=[];
+      for(let y=0;y<this.height;y++)for(let x=0;x<this.width;x++){
+        const at=(y*this.width+x)*4,alpha=this.pixels[at+3];if(!alpha)continue;
+        minX=Math.min(minX,x);this.points.push({x,y,at,alpha});
+      }
+      this.minX=minX;this.ticks=1;
+      for(const point of this.points)this.ticks=Math.max(this.ticks,Math.ceil((point.alpha-minX+point.y)/8));
+    }
+    if(kind==='rise-trail'){
+      // 55422B gives all pixels life28; 55430A draws the source body plus
+      // a separate additive copy, moving up5 DGP/display pixels each tick.
+      this.ticks=29;this.sourcePixels=[];
+      for(let y=0;y<this.height;y++)for(let x=0;x<this.width;x++){
+        const at=(y*this.width+x)*4;if(!this.pixels[at+3])continue;
+        this.sourcePixels.push({x,y:y+this.offsetY,rgb:[...this.pixels.subarray(at,at+3)],alpha:1});
+      }
+      this.sourceImage={width:this.image.width,height:this.image.height,pixels:()=>this.lastTick<28?this.sourcePixels:[]};
+    }
 
     this.columns=particleColumns(this.width);this.lastTick=-1;
     if(kind==='scatter'){
@@ -40,6 +63,25 @@ export class ActorEffectView {
   update(tick) {
     if(tick===this.lastTick)return;this.lastTick=tick;
     this.visible=[];
+    if(this.kind==='scan-reveal'){
+      for(const p of this.points){
+        const opacity=Math.min(p.alpha,this.minX-p.y+8*tick);if(opacity<=0)continue;
+        this.visible.push({x:p.x,y:p.y+160,rgb:[...this.pixels.subarray(p.at,p.at+3)],alpha:opacity/255});
+      }
+      return;
+    }
+    if(this.kind==='rise-trail'){
+      if(tick>=28)return;
+      for(const p of this.sourcePixels){
+        const y=p.y-5*tick;if(y<0)continue;
+        const rgb=p.rgb.map((value,color)=>{
+          const shift=color===1?2:3,channel=Math.max(0,(value>>shift)-2*tick);
+          return (channel<<shift)|(channel>>(color===1?4:2));
+        });
+        this.visible.push({x:p.x,y,rgb,alpha:1});
+      }
+      return;
+    }
     if(this.kind==='scatter'){
       for(const p of this.particles){
         if(tick>29||tick>=p.life)continue;
@@ -62,7 +104,7 @@ export class ActorEffectView {
 
   }
   draw(ctx,x,y) {
-    if(['rise','scatter'].includes(this.kind))ctx.globalCompositeOperation='lighter';
-    ctx.drawImage(this.image,x-this.offsetX,y-160);
+    if(['rise','scatter','rise-trail'].includes(this.kind))ctx.globalCompositeOperation='lighter';
+    ctx.drawImage(this.image,x-this.offsetX,y-this.offsetY);
   }
 }

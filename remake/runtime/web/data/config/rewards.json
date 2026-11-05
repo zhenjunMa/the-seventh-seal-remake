@@ -36,18 +36,154 @@
     "Fight_Role/041.CHR": "d0427095198fb28533c2a48d8f2ce22475faf13154386c7098e44053d12e5c32",
     "Fight_Role/042.CHR": "e6165e6a8c0099485543a521e978e8943aef7f9c5b17711c64a7d4c7fc8c169b",
     "Fight_Role/043.CHR": "cf6d926ddb5990ef15138b67856371628494d1ddb2c5ba025ac7ce41c1ad719d",
+    "Fight_Role/049.CHR": "246bc87ed81859fae31f7e02401614733de8ec943742d77a88ed5d08a7a272ad",
+    "Fight_Role/050.CHR": "8bb259b220d395c53d27c5bb27be2674c3b3ae4ce9111e7f42c98c82c9879083",
+    "Fight_Role/051.CHR": "d48f6106a5eae12fa598ce15415f61b03323f1b16253f35cb52e7cad6819ac40",
+    "Fight_Role/052.CHR": "e9de9d5ec580fe17b6e881303a20a35042790796f6bd0dd09d64d5df77519017",
+    "Fight_Role/053.CHR": "8ae011d9fcd90e8b21c134b1bbb730d139d666afa67e1e07bbccf96333aa78b6",
+    "Fight_Role/054.CHR": "988ec41e93227236ed59c501f8cad97f2e3afae64993e5d89bbabd26922a7048",
+    "Fight_Role/055.CHR": "34805f47de68da012145d5e9817ba8018e7a8dcb6fcabe57939afbb2e853b315",
+    "Fight_Role/056.CHR": "aa39c0a94ab8aae6c473c15b94dc8cd08c3126b45208ca8e27fb251618f304e6",
+    "Fight_Role/057.CHR": "e72ded76a5f7e4a561edb0f6e4f1d878589ce04ff5052fa18f25a54dd070ae13",
+    "Fight_Role/058.CHR": "8ae011d9fcd90e8b21c134b1bbb730d139d666afa67e1e07bbccf96333aa78b6",
     "Fight_Role/060.CHR": "c60c96ca785c541875a9a9757c89c7535fd98d47ac0e2180907fe52a81952d85",
     "Fight_Role/061.CHR": "5d4f49e524682c7c43939e6b16bb848e4b403ac63aaa00580e97a3a5cf1c048c",
     "Fight_Role/062.CHR": "9e19bf6eada46232a1160fa6516cdd8fbf1a0118b5a4254c3d544a263ff47d25",
     "Fight_Role/063.CHR": "e5db8e5c5526f868b10124d703e49ae63b8036f1e7a221314f781ae8581b6063",
     "Fight_Role/064.CHR": "402b84cd0fc8a8c0335ee9f7d10ce9f0a9a3907e09b8e8d0983af272e2e7ed8b",
     "Fight_Role/065.CHR": "30adca02a5047aacbe9fe6aa44c41649d724864345363938be8cb47ac7335fdd",
+    "Fight_Role/077.CHR": "688c36e4b3f2a39672111e81df79e950b1a07858c7d4685d7979e1b772c2f33c",
+    "Fight_Role/078.CHR": "aa39c0a94ab8aae6c473c15b94dc8cd08c3126b45208ca8e27fb251618f304e6",
+    "Fight_Role/080.CHR": "1a61b71704872e47b59b3448ab7ceb748cb26a2275d982975f9ce5c8f60a5615",
     "Fight_Role/082.CHR": "5d5d5585d40151d2d0f2db00f6e590edb2a9d96313bc1f6bdcf1167457bcc881",
+    "Fight_Role/083.CHR": "e9de9d5ec580fe17b6e881303a20a35042790796f6bd0dd09d64d5df77519017",
     "Fight_Role/084.CHR": "8ae011d9fcd90e8b21c134b1bbb730d139d666afa67e1e07bbccf96333aa78b6",
     "Fight_Role/085.CHR": "82650e373c3c706c84049331a4907c0793016f87974325fa7bf8946539eae0b3",
-    "Fight_Role/088.CHR": "e72ded76a5f7e4a561edb0f6e4f1d878589ce04ff5052fa18f25a54dd070ae13"
+    "Fight_Role/086.CHR": "34805f47de68da012145d5e9817ba8018e7a8dcb6fcabe57939afbb2e853b315",
+    "Fight_Role/087.CHR": "aa39c0a94ab8aae6c473c15b94dc8cd08c3126b45208ca8e27fb251618f304e6",
+    "Fight_Role/088.CHR": "e72ded76a5f7e4a561edb0f6e4f1d878589ce04ff5052fa18f25a54dd070ae13",
+    "Fight_Role/101.CHR": "b450daccf7278aa7473803404ca51f648daffbb45fc598d6c361c3f94d8e7068",
+    "Fight_Role/102.CHR": "277684f5dd2c4236587da1edd1e3695ee6b3128ca28f1b2e37cb5b9d3be672a9",
+    "Fight_Role/103.CHR": "dd8edb004fd7c3b8e0b2b35c98acf367dd260d9142a50213d21a80b16ab420ab",
+    "Fight_Role/104.CHR": "680df5fbef86c212f9eace8530a7a6d31a697903fb68bf9eaa6f0faff962d472",
+    "Fight_Role/105.CHR": "b76f52a0aa0abac508caf69a26128480400fbf1457d7678c6e639c2bee7323a5",
+    "Fight_Role/106.CHR": "17046a20ac39a5bd38262c8a9e66224317d639103172e953492df363022082e5",
+    "Fight_Role/107.CHR": "5bd5df3b5b4d390fb5ee5c0ca4d1ce0c3d2b47fac762b05f3cca9e24e27abf57",
+    "Fight_Role/108.CHR": "448bab0471454918ac06b52a281f7aae3d88db5711260e363f27c45ae59295d0",
+    "Fight_Role/109.CHR": "7819035954c3b21132ceec507c342f4cdacc06d3454e2d160d0775444c3999eb",
+    "Fight_Role/110.CHR": "b543da00186265a62b5b0d37bba76db93801c7a90be22d4697b9dc845c6dab23",
+    "Fight_Role/111.CHR": "f2862c2883052a2b55cac0aaab97961e292c842a0ddca550f3b28c1f2a2a81f9",
+    "Fight_Role/112.CHR": "12b5bfe30dd06510b94f224901c85df92a68cae82e8607d7c5e580cd6b13c990",
+    "Fight_Role/113.CHR": "856ff570d8862f529ef86384b1e3efa02fcab4c8cc598f49820dcf3ff3c16e9d",
+    "Fight_Role/114.CHR": "0c3844e46da7e2f9f15dea363bcb26e0236e01611a092eebf3ae271b25f91da1",
+    "Fight_Role/115.CHR": "2a205c61135c9764172cf699f7a42bd0bb6a4562d06ee150f8f67f3f69625b22",
+    "Fight_Role/116.CHR": "b8e3050a10db3048f23da1b7df0a86973ae632bb7d721d957d6e7294b4944191",
+    "Fight_Role/117.CHR": "88cd1697dee7e39f1dd5fafda2f5cc5ee2c4da9b771640b49b4745d8ce87c3ce",
+    "Fight_Role/118.CHR": "1cf9d893e7ec999caf7c17d9a6681ed843bfc37eb5046ded4c2af47473848cbd",
+    "Fight_Role/119.CHR": "1d977e0d02657f725ec9137c9bad6f76b412849896887ad799059cc854ebcae0",
+    "Fight_Role/120.CHR": "2f86a6e7d9a266733accdd22461e67555a750ab023f5daace38873bd31c36355",
+    "Fight_Role/121.CHR": "13f73d2d68ef0beec1086b1326bb55d907a16f3450979362a0911466582e45ed",
+    "Fight_Role/122.CHR": "c6dfaa4c424d3cd4e9e4e1ff89d3f2cb269380379ffe1aee4ff74dfabae7c55a",
+    "Fight_Role/123.CHR": "3500afef28bf93dab6e766b5a32899bdc72bd7e59440189e407911bf6f0200cc",
+    "Fight_Role/124.CHR": "48252e7679580cdfe3e9da75d2d3d8e41da0b6fa657839a0596513c9225ea8f3"
   },
   "entries": {
+    "101": {
+      "name": "地魔使",
+      "parameters": {}
+    },
+    "102": {
+      "name": "水魔使",
+      "parameters": {}
+    },
+    "103": {
+      "name": "火魔使",
+      "parameters": {}
+    },
+    "104": {
+      "name": "风魔使",
+      "parameters": {}
+    },
+    "105": {
+      "name": "日魔使",
+      "parameters": {}
+    },
+    "106": {
+      "name": "月魔使",
+      "parameters": {}
+    },
+    "107": {
+      "name": "炼狱甲胄",
+      "parameters": {}
+    },
+    "108": {
+      "name": "水血蝠",
+      "parameters": {}
+    },
+    "109": {
+      "name": "水食魂藤",
+      "parameters": {}
+    },
+    "110": {
+      "name": "地元素",
+      "parameters": {}
+    },
+    "111": {
+      "name": "水元素",
+      "parameters": {}
+    },
+    "112": {
+      "name": "火元素",
+      "parameters": {}
+    },
+    "113": {
+      "name": "风元素",
+      "parameters": {}
+    },
+    "114": {
+      "name": "日元素",
+      "parameters": {}
+    },
+    "115": {
+      "name": "月元素",
+      "parameters": {}
+    },
+    "116": {
+      "name": "日使者",
+      "parameters": {}
+    },
+    "117": {
+      "name": "猛毒鎌虫王",
+      "parameters": {}
+    },
+    "118": {
+      "name": "冰冻刽齿蛟",
+      "parameters": {}
+    },
+    "119": {
+      "name": "混乱傀儡",
+      "parameters": {}
+    },
+    "120": {
+      "name": "迷魂魔兽",
+      "parameters": {}
+    },
+    "121": {
+      "name": "风雷兽",
+      "parameters": {}
+    },
+    "122": {
+      "name": "遗迹狩猎者",
+      "parameters": {}
+    },
+    "123": {
+      "name": "爆毒巨蜂",
+      "parameters": {}
+    },
+    "124": {
+      "name": "迷恋齿怪",
+      "parameters": {}
+    },
     "011": {
       "name": "角鹰",
       "parameters": {}
@@ -218,6 +354,70 @@
     },
     "088": {
       "name": "磨牙象",
+      "parameters": {}
+    },
+    "049": {
+      "name": "自我傀儡",
+      "parameters": {}
+    },
+    "050": {
+      "name": "森林狩猎者",
+      "parameters": {}
+    },
+    "051": {
+      "name": "奥克斯蜥蜴",
+      "parameters": {}
+    },
+    "052": {
+      "name": "磨牙象",
+      "parameters": {}
+    },
+    "053": {
+      "name": "鲁卡神信徒",
+      "parameters": {}
+    },
+    "054": {
+      "name": "死灵甲胄",
+      "parameters": {}
+    },
+    "055": {
+      "name": "奥克斯蜥蜴",
+      "parameters": {}
+    },
+    "056": {
+      "name": "鲁卡神信徒",
+      "parameters": {}
+    },
+    "057": {
+      "name": "磨牙象",
+      "parameters": {}
+    },
+    "058": {
+      "name": "鲁卡神信徒",
+      "parameters": {}
+    },
+    "078": {
+      "name": "鲁卡神信徒",
+      "parameters": {}
+    },
+    "080": {
+      "name": "森林狩猎者",
+      "parameters": {}
+    },
+    "083": {
+      "name": "磨牙象",
+      "parameters": {}
+    },
+    "086": {
+      "name": "奥克斯蜥蜴",
+      "parameters": {}
+    },
+    "087": {
+      "name": "鲁卡神信徒",
+      "parameters": {}
+    },
+    "077": {
+      "name": "艾诺唯",
       "parameters": {}
     }
   }

@@ -10,6 +10,7 @@ import {nativeChestAnimation} from '../core/native_map_chests.mjs';
 import {captureMapNpcState} from '../core/map_npc_state.mjs';
 import {locomotion} from '../core/movement.mjs';
 import {loadEncounterMap} from '../core/encounters.mjs';
+import {initializeMapSequence} from '../core/map_stage.mjs';
 
 export function createStoryController({state, actions, $, canvas, ctx}) {
   let session=null,sequence=0;
@@ -209,7 +210,10 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
         return state.scenes.current.objectRuntime.animate({objectIndex,state:objectState,signal});
       };
       for(const name of ['map','actor','move']){const invoke=hooks[name];hooks[name]=async payload=>{
-        await invoke(payload);if(name==='map')loadEncounterMap(draft,payload.mapId,state.encounterData);captureActors();
+        await invoke(payload);if(name==='map'){
+          loadEncounterMap(draft,payload.mapId,state.encounterData);
+          if(!payload.bootstrap)await initializeMapSequence({mapId:payload.mapId,world:draft,story:state.chapterStory,content});
+        }captureActors();
       };}
       const animation=new ChapterAnimationRunner({program,hooks:{...hooks,...media?.hooks()},runTlk:nestedTlk,joinActor,leaveActor,flagCommand,objectCommand,initialActor,initialLocation:draft.location,playback,
         visualState:state.anmVisualState,
@@ -252,7 +256,7 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
       if(result.story_completed)return result;
       if(result.rewards?.length)state.rewardNoticeView.show(result.rewards.map(reward=>state.itemData.definitions[reward.id].name));
       actions.status(result.locked?'需要对应元素钥匙。':result.already_done?
-        (state.chapterStory.maps[args.mapId]?.objects.find(row=>row.index===args.objectIndex)?.behavior_raw_cf===9?'机关已启动。':'宝箱已打开。'):'可以继续探索。');
+        ([7,9].includes(state.chapterStory.maps[args.mapId]?.objects.find(row=>row.index===args.objectIndex)?.behavior_raw_cf)?'机关已启动。':'宝箱已打开。'):'可以继续探索。');
       if(result.save_requested)await actions.openSaveCrystal();
       if(result.world_map_requested)state.worldMap.open(result.world_map_requested.area);
     }catch(error){if(error.gameOverPolicy)await actions.presentGameOver(error.gameOverPolicy);else actions.status(error.message,true);}
@@ -278,6 +282,7 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
       if(playback?.paused)await playback.ready();check();
       const location=worldMapEntry(scene,destination,state.chapterStory);actions.validateEntry(scene,location);check();
       loadEncounterMap(draft,destination.map_id,state.encounterData);
+      await initializeMapSequence({mapId:destination.map_id,world:draft,story:state.chapterStory,content:repository.content??runtimeContent});
       state.sceneEntryDraft=draft;installed=true;state.scenes.current=scene;
       delete draft.map_npc_state;
       const committed=actions.commitView(scene,location,'exit');
@@ -288,6 +293,7 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
   }
   async function enterMap(scene,draft,reason){
     loadEncounterMap(draft,scene.data.id,state.encounterData);
+    await initializeMapSequence({mapId:scene.data.id,world:draft,story:state.chapterStory,content:state.storyRepository?.content??runtimeContent,restore:reason==='restore'||reason==='boot'});
     const recordId=storyBindings(scene.data.id).entry_record;
     if(!recordId||!['exit','world-map'].includes(reason))return false;
     state.sceneEntryDraft=draft;
@@ -318,11 +324,11 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
       actions.log?.({type:'object-interaction-complete',mapId,objectIndex});
     }finally{state.objectActorPreview=null;}
   }
-  async function animateChapterObject({mapId,objectIndex,signal,playback}){
+  async function animateChapterObject({mapId,objectIndex,fromState=2,signal,playback}){
     const object=state.chapterStory.maps[mapId]?.objects.find(row=>row.index===objectIndex);
-    if([2,9].includes(object?.behavior_raw_cf)){
+    if([2,7,9].includes(object?.behavior_raw_cf)){
       if(state.scenes.current.data.id!==mapId)throw new Error('机关动作目标不是当前地图');
-      return state.scenes.current.objectRuntime.animate({objectIndex,state:2,signal});
+      return state.scenes.current.objectRuntime.animate({objectIndex,state:fromState,signal});
     }
     const resource=state.chapterResources.object_animations[mapId]?.find(row=>row.object_index_zero_based===objectIndex);
     if(!resource)throw new Error('物件动作资源尚未准备');

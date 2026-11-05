@@ -22,8 +22,9 @@ export const APPEARANCE_ALPHA_ADAPTER=Object.freeze({
 // F66A is a disappearance MODE selected by rand()%7+1, despite the legacy
 // event field name fade_increment_raw. It is never an opacity speed.
 export class BattleLifecyclePlayback {
-  constructor(manifest,{appearanceBounds=null,appearanceEffect=null,disappearanceEffect=null,nativeBridge=null,onFrame=null}={}){
+  constructor(manifest,{appearanceBounds=null,appearanceEffect=null,disappearanceEffect=null,nativeBridge=null,onFrame=null,onControl=null}={}){
     this.onFrame=onFrame;
+    this.onControl=onControl;
     this.nativeBridge=nativeBridge;
     this.disappearanceEffect=disappearanceEffect;
     this.appearanceEffect=appearanceEffect;
@@ -35,7 +36,17 @@ export class BattleLifecyclePlayback {
         need(integer(skill.chr_skill_index)&&!skills.has(skill.chr_skill_index)&&Array.isArray(skill.timeline),'Lifecycle source skill invalid');
         const timeline=skill.timeline.map(step=>{
           if(step.kind==='sprite')need(['action_index','action_frame','source_frame'].every(key=>integer(step[key]))&&integer(step.interval_raw,1),'Lifecycle source frame invalid');
-          else need(step.kind==='command'&&integer(step.command_raw),'Lifecycle source command invalid');return copy(step);
+          else need(step.kind==='command'&&integer(step.command_raw),'Lifecycle source command invalid');
+          const out=copy(step);
+          if(step.kind==='command'&&[0,6,11].includes(step.command_raw)){
+            need(typeof step.raw_hex==='string'&&/^[0-9a-f]{352}$/i.test(step.raw_hex),'Lifecycle source control record missing');
+            const raw=Uint8Array.from(step.raw_hex.match(/../g),part=>parseInt(part,16)),v=new DataView(raw.buffer);
+            need(raw[0]===1&&v.getUint32(1,true)===step.command_raw,'Lifecycle source control command differs');
+            need(step.command_raw===11||[0,1].includes(raw[0x47]),'Lifecycle source control mode unsupported');
+            out.control={mode_raw:raw[0x47],step_i32_raw:v.getInt32(0x1e,true),amount_i32_raw:v.getInt32(5,true),
+              ...(step.command_raw===0?{color_mask_raw:raw[0x25]}:{})};
+          }
+          return out;
         });
         skills.set(skill.chr_skill_index,{index:skill.chr_skill_index,id:skill.skill_id_raw??skill.original_id_raw,timeline});
       }
@@ -195,14 +206,22 @@ export class BattleLifecyclePlayback {
           ??{origin_x:channel.entry_origin_x,x:-350-channel.role.frame_width};
         need(Number.isFinite(placement.origin_x),'Lifecycle entry source position missing');
         channel.entry=nativeEntryPath(placement,channel.deadline);
-      }else if(step.command_raw===6||step.command_raw===11){
-        // These source cursor/camera commands share the battle view's
-        // established fixed-plane camera adapter. Retain them in order;
-        // they create no appearance or sprite wait of their own.
+      }else if([0,6,11].includes(step.command_raw)){
+        //5130D0 starts background subtraction, a camera snap or the shared
+        //511C30 return without a source wait. The owning view executes them.
         channel.last_control={command_raw:step.command_raw,mode_raw:step.mode_raw_0x47,at:channel.deadline};
+        this.onControl?.({...copy(step),actor_id:channel.actor_id,at:channel.deadline});
       }else if(step.command_raw===3){
         need(channel.nativeBridge&&step.raw_hex,'Lifecycle source vertical command missing');
         const vertical=channel.nativeBridge.begin(step.raw_hex,channel.deadline);channel.vertical_wait=vertical.waiting;
+      }else if(step.command_raw===8){
+        const mode=step.mode_raw_0x47??step.mode_raw47;
+        need(integer(mode,1)&&mode<=7,'Lifecycle source disappearance mode missing');
+        const effect=this.disappearanceEffect?.(channel.actor_id,channel.resource_id,mode,channel.event)??null;
+        if(effect?.pose)channel.pose=copy(effect.pose);
+        channel.mode='fade';channel.fade_mode_raw=mode;channel.fade_clock_ms=0;
+        channel.particles=new DeathParticlePlayback({mode,clock_ms:0,started:channel.deadline,effect});
+        return;
       }else if(step.command_raw===7){
         const sourceMode=step.mode_raw_0x47??step.mode_raw47;
         const mode=channel.nativeBridge?.appearance&&step.raw_hex?channel.nativeBridge.appearance(step.raw_hex).mode:sourceMode;

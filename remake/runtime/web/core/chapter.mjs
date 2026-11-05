@@ -17,7 +17,7 @@ import {compileTlkFlow,nativeFlowId,compileNativeTriggerFlow,nativeTriggerFlowId
 import {playbackDelay} from './story_playback.mjs';
 import {nativeMapTransfer} from './map_connections.mjs';
 import {nativeScriptedBattle} from './scripted_battle.mjs';
-import {nativeKeyedChest,nativeScriptedChest,canOpenNativeChest} from './native_map_chests.mjs';
+import {nativeKeyedChest,nativeScriptedChest,nativeToggleObject,canOpenNativeChest} from './native_map_chests.mjs';
 import {evaluateNativeStoryCombination} from './native_story_combinations.mjs';
 import {isNativeMapId} from './native_map_identity.mjs';
 import {createNativeRng} from './combat_rules.mjs';
@@ -170,7 +170,7 @@ export class ChapterRunner {
       }
     }
     this.flowRunner=new StoryFlowRunner(Object.fromEntries(['record','say','choice','animation','give_item','restore_party','request_save','set_native_object','wait',
-      'test_native_condition','test_native_combination','random_jump','change_native_money','native_service','native_sound','learn_native_skill','native_noop','unlock_recipe','world_map_command','transfer_native_map','native_battle','restore_native_resources']
+      'test_native_condition','test_native_combination','random_jump','change_native_money','native_service','native_sound','learn_native_skill','native_noop','unlock_recipe','set_native_sequence','append_native_sequence','world_map_command','transfer_native_map','native_battle','restore_native_resources']
       .map(op=>[op,(command,execution)=>this.applyFlowCommand(op,command,execution)])));
     this.running = false;
   }
@@ -247,14 +247,15 @@ export class ChapterRunner {
   }
   objectFor(mapId, objectIndex) {
     const binding=storyBindings(mapId,this.content).objects.find(row=>row.index===objectIndex);
-    need(binding&&['stationary-chest','keyed-chest','tlk-object','scripted-switch','scripted-object'].includes(binding.handler), '剧情物件行为尚未接入');
+    need(binding&&['stationary-chest','keyed-chest','tlk-object','scripted-switch','scripted-object','toggle-object'].includes(binding.handler), '剧情物件行为尚未接入');
     const table = this.data.maps[mapId], object = table?.objects.find(row => row.index === objectIndex);
     need(object, '剧情物件来源缺失');
     const b = bytes(object.raw_hex, 0x112, '剧情物件'), v = view(b);
     need(object.source?.sha256 === this.data.source_hashes[object.source.path], '剧情箱子来源无效');
     const chest=binding.handler==='keyed-chest'?nativeKeyedChest(object):null;
+    const toggle=binding.handler==='toggle-object'?nativeToggleObject(object):null;
     const repeatable=binding.handler==='tlk-object';
-    if(!chest){
+    if(!chest&&!toggle){
       if(repeatable)need(b[0xcf]===1&&b[0x109]===0,'剧情物件来源或状态类型无效');
       else if(binding.handler==='scripted-switch'){
         need(b[0xcf]===9&&v.getUint32(0xf6,true)>0,'机关剧情入口无效');
@@ -271,11 +272,11 @@ export class ChapterRunner {
         && manifest.source.sha256 === object.source.sha256 && manifest.source.raw_hex === object.raw_hex,
         '剧情物件清单与原始地图不一致');
     }
-    return {table, object, recordId:v.getUint32(0xf6, true),chest,repeatable,scriptedSwitch:binding.handler==='scripted-switch',interactionActionGroup:b[0xb5]};
+    return {table, object, recordId:v.getUint32(0xf6, true),chest,toggle,repeatable,scriptedSwitch:binding.handler==='scripted-switch',interactionActionGroup:b[0xb5]};
   }
   async runObject({mapId, objectIndex, playback} = {}) {
     need(!this.running, '火之谷剧情正在执行');
-    const {table, object, recordId,chest,repeatable,scriptedSwitch,interactionActionGroup} = this.objectFor(mapId, objectIndex);
+    const {table, object, recordId,chest,toggle,repeatable,scriptedSwitch,interactionActionGroup} = this.objectFor(mapId, objectIndex);
     need(this.world.location.map_id === mapId, '剧情物件不在当前地图');
     if(repeatable)return this.runTlk({mapId,recordId,playback,
       context:{steps:0,explicitInteraction:true,objectMapId:mapId,objectIndex}});
@@ -294,7 +295,7 @@ export class ChapterRunner {
       let result = {traversed:[], dialogueIds:[]};
       // Source 0x4137C0 clears pending state1 before dispatching +F6.
       // Saved state2 means its event already ran: finish the animation only.
-      if(chest)setObjectEventState(draft,table.map_flag_index,objectIndex,2);
+      if(chest||toggle)setObjectEventState(draft,table.map_flag_index,objectIndex,2);
       else{
         if (initialState === 1) setObjectEventState(draft, table.map_flag_index, objectIndex, 0);
         if (initialState !== 2) result = await this.walkTlk({mapId, recordId, draft,
@@ -441,7 +442,7 @@ export class ChapterRunner {
     }
   }
   applyMutation(draft, table, record, context={}) {
-    if([3,10,11,14,16,17].includes(record.mutation_type))return applyNativeStoryMutation(draft,record,{roleDefinitions:this.data.role_definitions});
+    if([3,7,8,10,11,14,16,17].includes(record.mutation_type))return applyNativeStoryMutation(draft,record,{roleDefinitions:this.data.role_definitions});
     if(record.mutation_type===9){
       const request=applyWorldMapCommandToDraft(draft,{mode:record.mutation_index,area:record.region_byte_raw,destination:record.mutation_bit},
         {initialState:this.worldMapState});
@@ -466,8 +467,10 @@ export class ChapterRunner {
       return;
     }
     if (record.mutation_type === 1) {
-      need(record.region_byte_raw===0&&flagIndex(record.mutation_index)
+      need([0,1].includes(record.region_byte_raw)&&flagIndex(record.mutation_index)
         &&Number.isInteger(record.mutation_bit)&&record.mutation_bit>=0&&record.mutation_bit<=1000,'剧情物件状态变更尚未接入');
+      need(record.region_byte_raw===0||record.mutation_index!==0&&record.mutation_index!==table.map_flag_index,
+        '当前地图物件反播TLK尚未接入');
       if(record.mutation_bit===0)return;
       const active=table,objectIndex=record.mutation_bit-1;
       const mapFlag=record.mutation_index||active.map_flag_index;
@@ -478,7 +481,11 @@ export class ChapterRunner {
         if([2,9].includes(object?.behavior_raw_cf))nativeAnmObjectTarget({u32_plus5:mapFlag,u32_plus25:objectIndex+1,byte_plus29:0},active.id,this.data);
         else this.objectFor(active.id,objectIndex);
         if(chapterObjectState(draft,active.id,objectIndex,this.data)!==3)setObjectEventState(draft,mapFlag,objectIndex,2);
-      }else setObjectEventState(draft,mapFlag,objectIndex,3);
+      }else{
+        // 464D80 case1 always passes arg3=1 to40C5C0. For another map,
+        // mode1 in arg4 is ignored and the source event state remains3.
+        setObjectEventState(draft,mapFlag,objectIndex,3);
+      }
       return;
     }
     if (record.mutation_type === 5) {

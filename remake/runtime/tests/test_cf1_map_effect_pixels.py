@@ -406,10 +406,12 @@ class CF1MapPixels(unittest.TestCase):
             extra = [row for row in report['cf1_frame_checks'] if row['source'] not in covered]
             legacy_city_maps = ['M01020A', 'M01031', 'M01032', 'M01041', 'M01042',
                                 'M01052', 'M01061', 'M01062', 'M01063', 'M01064']
-            legacy_city_sources = {manifest['object_banks'][obj['bank']]['source']['path']
-                                   for map_id in legacy_city_maps for obj in manifest['maps'][map_id]['objects']
-                                   if obj['behavior_raw_cf'] == 1}
-            self.assertEqual(sum(row['source'] in legacy_city_sources for row in extra), 176)
+            legacy_city_banks = {obj['bank'] for map_id in legacy_city_maps
+                                 for obj in manifest['maps'][map_id]['objects'] if obj['behavior_raw_cf'] == 1}
+            # Count the original city instances; other maps may reuse their DGP.
+            # Every added bank still receives the independent pixel replay below.
+            self.assertEqual(sum(FileRaster((ROOT / manifest['object_banks'][key]['source']['path']).read_bytes()).count
+                                 for key in legacy_city_banks), 176)
             added_banks = {obj['bank'] for current in manifest['maps'].values() for obj in current['objects']
                            if obj['behavior_raw_cf'] == 1 and manifest['object_banks'][obj['bank']]['source']['path'] not in covered}
             for key in added_banks:
@@ -417,6 +419,11 @@ class CF1MapPixels(unittest.TestCase):
                 source = (ROOT / bank['source']['path']).read_bytes()
                 self.assertEqual(hashlib.sha256(source).hexdigest(), bank['source']['sha256'])
                 raster = FileRaster(source)
+                if source[2] == 0:
+                    self.assertEqual(bank['actions'], [], bank['source']['path'])
+                    self.assertFalse(any(row['source'] == bank['source']['path'] for row in extra))
+                    continue
+                self.assertEqual(len(bank['actions']), 1)
                 action = bank['actions'][0]
                 self.assertEqual(action['source_action_raw_hex'], source[67:239].hex())
                 source_banks = sum(manifest['object_banks'][other]['source']['path'] == bank['source']['path']

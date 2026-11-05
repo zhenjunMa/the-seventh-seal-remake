@@ -9,12 +9,14 @@ import {createAudioController} from '../web/core/audio.mjs';
 import {planRouteExit} from '../web/core/route.mjs';
 import {nativeMapIdFromFilename} from '../web/core/native_map_identity.mjs';
 
-const variants=['M17030','M17030-1','M17030-2','M01020A','M70074_2','M03012_1F','M70078-1_1','M71076-1-03','M72010-0-A',
-  ...Array.from({length:23},(_,index)=>`ELF-FOREST-${String.fromCharCode(65+index)}`)];
+const variants=['M17030','M17030-1','M17030-2','M01020A','M70074_2','M03012_1F','M70078-1_1','M71076-1-03','M72010-0-A','MTEST','MTEST2',
+  ...Array.from({length:23},(_,index)=>`ELF-FOREST-${String.fromCharCode(65+index)}`),
+  'REBIRTH-A01','SILENCE-B13','JUDGELIGH-S01','YEARN-C01','RUINOUSLY-N03','HELLWAY-J04','WING-A01-A','WING-D01-B','WING-N02-C'];
 const binding=id=>({path:`data/maps/${id.toLowerCase()}.json`,triggers:[],objects:[],rests:[],routes:[]});
 const invalidIds=['../M17030-1','M17030-1/../M17020','M17030-x','M17030-','M17030__2','m17030-1',
   'M01020AA','M01020A.dat','M01020A\n','M01020A\r','M01020A\u2028','M01020A\0','M01020A\\x','M70074_2/','M70074_2?x','M70074_%32',
-  'ELF-FOREST','ELF-FOREST-X','ELF-FOREST-AA','ELF-FOREST-A-1','ELF_FOREST_A','elf-forest-a','ELF-FOREST-A\n','REBIRTH-A01','WING-A01'];
+  'ELF-FOREST','ELF-FOREST-X','ELF-FOREST-AA','ELF-FOREST-A-1','ELF_FOREST_A','elf-forest-a','ELF-FOREST-A\n',
+  'REBIRTH-A1','REBIRTH-A01-A','rebirth-a01','WING-A01','WING-A01-D','UNKNOWN-A01','MTEST1','MTEST3','MTEST2/..'];
 
 test('native map variants are separate admitted identities and reject invalid paths',()=>{
   const content=structuredClone(runtimeContent);
@@ -31,7 +33,7 @@ test('native map variants are separate admitted identities and reject invalid pa
 test('original DAT basenames normalize case without accepting path or extension tricks',()=>{
   for(const id of variants)assert.equal(nativeMapIdFromFilename(`${id.toLowerCase()}.dAt`),id);
   for(const value of ['M01020A.DAT/..','Map/M01020A.DAT','M01020A.DAT\n','M01020A.DAT.exe','M01020A.DAT\0','M01020A..DAT',
-    '../Elf-forest-E.dat','Elf-forest-X.dat','Elf-forest-A-1.dat','Elf-forest-A.dat\n','Rebirth-A01.dat',null,15])
+    '../Elf-forest-E.dat','Elf-forest-X.dat','Elf-forest-A-1.dat','Elf-forest-A.dat\n','../Rebirth-A01.dat','Wing-A01-D.dat',null,15])
     assert.equal(nativeMapIdFromFilename(value),null,String(value));
 });
 

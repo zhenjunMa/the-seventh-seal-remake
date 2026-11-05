@@ -15,8 +15,13 @@ export function nativeMapTransfer(table,record,{triggerId,triggerRecordId,npcSlo
   if(npcSlot!==undefined){
     need(storyBindings(table.id,content).npcs?.includes(npcSlot)&&table.index_nonzero?.some(row=>row.slot===npcSlot),'地图跳转缺少原NPC交互上下文');
   }else if(objectIndex!==undefined){
-    need(storyBindings(table.id,content).objects.some(row=>row.index===objectIndex&&row.handler==='tlk-object')
-      &&table.objects?.some(row=>row.index===objectIndex&&row.behavior_raw_cf===1&&row.interaction_record_raw_f6>0),
+    const binding=storyBindings(table.id,content).objects.find(row=>row.index===objectIndex),
+      object=table.objects?.find(row=>row.index===objectIndex);
+    // 4137C0 dispatches the CF3/CF4 +F6 through the same TLK interpreter;
+    // kind2 inherits the current placement sort for either explicit object.
+    need(object?.interaction_record_raw_f6>0&&(
+      binding?.handler==='tlk-object'&&object.behavior_raw_cf===1
+      ||binding?.handler==='stationary-chest'&&[3,4].includes(object.behavior_raw_cf)),
       '地图跳转缺少原物件交互上下文');
   }else{
     need(descriptor?.state_raw===2&&descriptor.field_26_raw===triggerRecordId

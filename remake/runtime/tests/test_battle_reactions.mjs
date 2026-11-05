@@ -11,6 +11,7 @@ const clone=structuredClone,hash=b=>createHash('sha256').update(b).digest('hex')
 const data=JSON.parse(await readFile(new URL('../web/data/enemy_reactions.json',import.meta.url)));
 const instructions=JSON.parse(await readFile(new URL('../evidence/forest_reactions_instructions_20261011.json',import.meta.url)));
 const native=JSON.parse(await readFile(new URL('../evidence/forest_death_reactions_native_20261011.json',import.meta.url)));
+const idle=JSON.parse(await readFile(new URL('../evidence/fire_valley_20261025/vertical_519dd0_assembly.json',import.meta.url)));
 const sample=JSON.parse(await readFile(new URL('../web/data/combat_sample.json',import.meta.url))),roles=['001','011','012','013'].map(id=>data.roles[id]),checks=[];
 const report={schema:'seventh-seal-forest-reactions-verification',version:1,passed:false,original_game_execution_observed:false,
   comparison:'Pure descriptors versus original 0x51C640/0x50B520/0x41EF00/0x50B770/0x5016B0/0x4FFE90/0x4FFD40 x86 instruction replay',checks,
@@ -36,7 +37,7 @@ function record(overrides={}){const b=Buffer.alloc(0xb0);b[0x62]=1;b[0x77]=9;for
 function selected(role,ident){return clone(role.skills.find(s=>s.original_id_raw===ident));}
 function scripted(values){let i=0;return()=>{assert.ok(i<values.length,'unexpected RNG draw');return values[i++];};}
 class ReactionOracle extends NativeAssemblyOracle{
-  constructor(actors,rng){super(instructions.functions,actors,rng);actors.forEach((a,i)=>{
+  constructor(actors,rng){super({...instructions.functions,'0x519dd0':idle.normalized_result.split(/\r?\n/)},actors,rng);actors.forEach((a,i)=>{
     const offset=i*0x30274,role=data.roles[a.resource_id],base=0x20000000+i*0x100000;
     Buffer.from(role.header_raw_hex,'hex').forEach((v,j)=>this.write(0x524a6d1+offset+j,v,1));
     for(const [address,value]of Object.entries(a.raw_by_address))this.write(Number(address)+offset,value);
@@ -127,6 +128,24 @@ test('active id19 attacker forces new defender id18, while inactive id19 allows 
 test('source action48 suppresses effective/probability draws but still dispatches id18 lookup',()=>{
   for(const r of roles){const {actual}=compareHandler(r,makeActor(data.roles['013'],'attacker'),makeActor(r,'target'),2,[32767],record({0x48:1}),'dodge');assert.equal(actual.skill.original_id_raw,18);assert.equal(actual.trace.length,1);}
   checks.push('4 action48 instruction comparisons omit effective/probability RNG and retain response lookup');
+});
+
+test('actual110-115 empty guard and dodge lookups follow native519DD0 with only the real idle lookup draw',()=>{
+  for(let id=110;id<=115;id++){
+    const role=data.roles[id],attacker=makeActor(data.roles['001'],'attacker');
+    assert.deepEqual(role.skills.map(skill=>skill.original_id_raw),[0,1,11,12,43]);
+    for(const branch of [0,7]){
+      const target=makeActor(role,'target',{reaction_busy_raw:0,current_target_id:attacker.id});
+      const {actual}=compareHandler(role,attacker,target,1,[branch,32767]);
+      assert.equal(actual.kind,'idle');assert.equal(actual.skill,null);assert.equal(actual.after.current_skill.original_id_raw,0);
+      assert.equal(actual.after.native_active,false);assert.equal(actual.target_id,attacker.id);
+      assert.deepEqual(actual.trace.filter(row=>row.kind==='rng').map(row=>row.label),['guard-response-choice','reaction-id-0']);
+    }
+    const target=makeActor(role,'target',{reaction_busy_raw:0});
+    const {actual}=compareHandler(role,attacker,target,2,[32767],record({0x48:1}),'dodge');
+    assert.equal(actual.kind,'idle');assert.equal(actual.target_id,attacker.id);
+    assert.deepEqual(actual.trace.filter(row=>row.kind==='rng').map(row=>row.label),['reaction-id-0']);
+  }
 });
 test('continuous CRT streams preserve every effective/probability/lookup draw for all four roles',()=>{
   for(const r of roles)for(let seed=0;seed<25;seed++){

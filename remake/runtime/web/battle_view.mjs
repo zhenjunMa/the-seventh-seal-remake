@@ -4,7 +4,7 @@
  */
 
 import {compileNativeSequence} from './core/skill_sequence.mjs';
-import {beginNativeCameraShake,advanceNativeCameraShake,beginNativeColorFade,advanceNativeColorFade} from './core/battle_camera.mjs';
+import {beginNativeCameraShake,advanceNativeCameraShake,beginNativeColorFade,advanceNativeColorFade,beginNativeCameraPan,advanceNativeCameraPan} from './core/battle_camera.mjs';
 import {nativeEntryPath,advanceNativeEntryPath,nativeEntryOffset} from './core/battle_entry.mjs';
 import {addCorrectedPartyPresentations} from './core/party_skill_corrections.mjs';
 import {BattleAssetPlan,effectReferences} from './core/battle_asset_plan.mjs';
@@ -93,7 +93,7 @@ export function validateBattleViewMetadata(meta,content=runtimeContent) {
     for(const skill of role.alternate_skills??[])if(skill.role_id!==role.id||(meta.policy.complete_contacts?!/^[A-Za-z0-9_]+$/.test(skill.runtime_skill_id):skill.runtime_skill_id!=='yanci')||!skill.segments.length||(meta.policy.complete_contacts?contactCount(skill)<1&&!skill.contactless:contactCount(skill)!==1)||
       (skill.layers&&(!urlAllowed(skill.layers.path)||!/^[a-f0-9]{64}$/.test(skill.layers.sha256))))throw new Error('追加技能表现未支持');
     for(const skill of skillsOf(role))for(const c of skill.command_effects??[]){
-      if(![0,1,4,6,7,8,10,11].includes(c.command_raw)||c.type_raw!==1)throw new Error('原类型命令范围未支持');
+      if(![0,1,2,4,6,7,8,10,11].includes(c.command_raw)||c.type_raw!==1)throw new Error('原类型命令范围未支持');
       if(c.command_raw===4&&!c.missing_source_file&&(!meta.effects.some(e=>e.id===c.effect_asset_id)||![0,1].includes(c.wait_raw)||!['actor','target'].includes(c.slot)||!Array.isArray(c.frames)||!c.frames.length||c.end_exclusive-c.start!==c.frames.length||c.event&&(c.event.frame<c.start||c.event.frame>=c.end_exclusive)))throw new Error('原类型4效果范围无效');
     }
   }
@@ -242,7 +242,7 @@ export class BattleView {
     this.itemMetadataPath=itemMetadataPath;this.itemMeta=null;
     this.stageMetadataPath=stageMetadataPath;this.stageMeta=null;this.stageStarted=null;
     this.lifecycleMetadataPath=lifecycleMetadataPath;this.lifecycle=null;
-    this.preparingEntry=false;this.entryFrameSounds=[];
+    this.preparingEntry=false;this.entryFrameSounds=[];this.entryFrameControls=[];
     this.lastActorPoses=new Map();
     this.roster=[{id:'001',resource_id:'001',side:'player',skill_id:'yantu'},{id:'012',resource_id:'012',side:'enemy',skill_id:'snow_attack'}];
     this.images = new Map();
@@ -384,6 +384,8 @@ export class BattleView {
     this.lifecycle=lifecycleMeta?new BattleLifecyclePlayback(lifecycleMeta,{appearanceBounds:(roleId,pose)=>this._appearanceBounds(roleId,pose),
       disappearanceEffect:(actorId,roleId,mode,event)=>this._particleEffect(actorId,roleId,mode,event),
       appearanceEffect:(actorId,roleId,mode,event)=>this._particleEffect(actorId,roleId,mode,event,true),
+      onControl:step=>{if(this.preparingEntry)this.entryFrameControls.push(step);
+        else this._nativeSourceControl(step,step.actor_id,undefined,step.at);},
       nativeBridge:actorId=>this._nativeBridge(actorId),onFrame:step=>{
         if(this.preparingEntry)this.entryFrameSounds.push({...step,sound_inhibited:Boolean(this.nativeControl?.actor(step.actor_id)?.immune_raw)});
         else this.onLifecycleFrame?.(step);
@@ -485,10 +487,10 @@ export class BattleView {
   }
 
   setRoster(actors,skills){
-    this.lastActorPoses.clear();this.cameraShake=null;this.colorFade=null;
+    this.lastActorPoses.clear();this.cameraShake=null;this.colorFade=null;this.cameraPan=null;
     this.stageStarted=null;
     this.drawnSlots=null;
-    this.lifecycle?.reset();this.entryFrameSounds=[];
+    this.lifecycle?.reset();this.entryFrameSounds=[];this.entryFrameControls=[];
     this.defendClocks=new Map();
     this.damageTexts=[];
     if(!this.ready||this.run)throw new Error('战斗资源尚未就绪或正在行动');
@@ -517,6 +519,23 @@ export class BattleView {
         if(this.sourceVisitTime!==at){this.sourceVisitTime=at;this.sourceVisits=new Set();}
         if(this.sourceVisits.has(actorId))return false;this.sourceVisits.add(actorId);}
         control.advanceNativeVerticals(at,actorId);return true;}};
+  }
+
+  _nativeSourceControl(step,actorId,targetId,at,control=this.nativeControl){
+    if(step.command_raw===1)this.cameraShake=beginNativeCameraShake(step.control,at,this.cameraShake);
+    if(step.command_raw===2||step.command_raw===6){
+      const id=step.control.mode_raw?(targetId===undefined?control?.actor(actorId)?.current_target_id:targetId):actorId,
+        actor=control?.actor(id)??this.roster.find(actor=>actor.id===id);
+      if(actor){const point=battleActorPositions(this.roster)[id],x=actor.native_x_raw??point[0]-320;
+        this.cameraPan=beginNativeCameraPan(x+(actor.side==='player'?128:-128),at,this.cameraPan,
+          {immediate:step.command_raw===6,limit:this.stageMeta?.default_composition.camera_limit_x??410});}
+    }
+    if(step.command_raw===11)this.cameraPan=beginNativeCameraPan(0,at,this.cameraPan,
+      {limit:this.stageMeta?.default_composition.camera_limit_x??410});
+    if(step.command_raw===0)this.colorFade=beginNativeColorFade(step.control,at,this.colorFade);
+    //511C30 starts the shared return-to-normal fade at source command11.
+    if(step.command_raw===11&&this.colorFade){this.colorFade=advanceNativeColorFade(this.colorFade,at);
+      if(this.colorFade.value){this.colorFade.active=true;if(this.colorFade.step>=0)this.colorFade.step=-8;}}
   }
 
   playSequence(result,{onContact,onRecord,onReactionContact,onReactionRecord,onReactionEnd,onPrimaryEnd,onAttackEnd,onPlaybackEnd,onFrame,onEffectFrame,onCarrierStart,onCarrierEnd,onCarrierTargets,onDetachedError}={}){
@@ -573,10 +592,10 @@ export class BattleView {
 
   stop(reason = '战斗表现已取消') {
     this.cancelPreparation(reason);
-    this.lastActorPoses.clear();this.cameraShake=null;this.colorFade=null;
+    this.lastActorPoses.clear();this.cameraShake=null;this.colorFade=null;this.cameraPan=null;
     this.drawnSlots=null;
     this.damageTexts=[];
-    this.lifecycle?.reset();this.entryFrameSounds=[];
+    this.lifecycle?.reset();this.entryFrameSounds=[];this.entryFrameControls=[];
     this.prefetchTicket=null;this.prefetchLease=null;
     for(const run of [this.run,...this.detachedRuns].filter(Boolean)){if(!run.primary_resolved)run.reject(abortError(reason));this._releaseRun(run);}
     this.run=null;this.detachedRuns=[];
@@ -727,10 +746,7 @@ export class BattleView {
           if(child)run.onReactionRecord?.({...clone(step),presentation_time_ms:run.started+at},clone(channel.descriptor));else run.onRecord({...clone(step),presentation_time_ms:run.started+at});
           channel.carrier_targets=step.command_raw===4?run.onCarrierTargets?.(clone(step),channel.descriptor?clone(channel.descriptor):null):null;
           channel.record_visited=step.plan_record_index;
-          if(step.command_raw===1)this.cameraShake=beginNativeCameraShake(step.control,run.started+at,this.cameraShake);
-          if(step.command_raw===0)this.colorFade=beginNativeColorFade(step.control,run.started+at,this.colorFade);
-          // 511C30 starts the shared return-to-normal fade at source command11.
-          if(step.command_raw===11&&this.colorFade){this.colorFade=advanceNativeColorFade(this.colorFade,run.started+at);if(this.colorFade.value){this.colorFade.active=true;if(this.colorFade.step>=0)this.colorFade.step=-8;}}
+          this._nativeSourceControl(step,channel.result.actor_id,channel.result.target_id,run.started+at,run.native_control);
         }
         if(!carrier&&step.command_raw===4&&channel.carrier_targets?.target_ids.length===0){channel.visited=i;channel.next_at=at;continue;}
         let entryVisited=i;
@@ -782,6 +798,7 @@ export class BattleView {
           if(response.interrupt_actor_id)this._interruptActor(response.interrupt_actor_id,run.started+at);
           for(const hit of response.group_results??[response])if(hit.reaction_descriptor){
             const descriptor=clone(hit.reaction_descriptor),role=this._role(descriptor.actor_id),plan=clone(descriptor.plan);plan.allow_no_contacts=true;plan.handler='native-response';
+            plan.initial_pose=clone(this.lastActorPoses.get(descriptor.actor_id)??null);
             const compiled=compileNativeSequence(this.meta,role.id,plan,[this.layers,...this.alternateLayers.values()]);
             for(const old of run.children)if(!old.done&&old.result.actor_id===descriptor.actor_id){old.done=true;run.onReactionEnd?.(clone(old.descriptor),false);}
             run.children.push({sequence:true,result:{actor_id:descriptor.actor_id,target_id:descriptor.target_id,skill_id:descriptor.skill.id,plan},descriptor,steps:compiled.steps,segments:compiled.segments,
@@ -949,7 +966,7 @@ export class BattleView {
 
   actorPositions(){
     if(!this.meta)return null;
-    return Object.fromEntries(Object.entries(this.drawnSlots??this._slots(this.run)).map(([id,[x,y]])=>[id,this.stageMeta?[(x-120)/1.125-(this.cameraShake?.x??0),y/1.125-(this.cameraShake?.y??0)]:[x*640/960-(this.cameraShake?.x??0),y*480/540-(this.cameraShake?.y??0)]]));
+    return Object.fromEntries(Object.entries(this.drawnSlots??this._slots(this.run)).map(([id,[x,y]])=>[id,this.stageMeta?[(x-120)/1.125-(this.cameraShake?.x??0)-(this.cameraPan?.x??0),y/1.125-(this.cameraShake?.y??0)]:[x*640/960-(this.cameraShake?.x??0)-(this.cameraPan?.x??0),y*480/540-(this.cameraShake?.y??0)]]));
   }
 
   actorCursorHeight(id){return this._role(id)?.cursor_height_raw;}
@@ -1005,6 +1022,9 @@ export class BattleView {
     try{
     if(!entryPreview){
       this.lastDrawAt=now;
+      // Hidden entry preparation stages controls until the battle is active.
+      // Its unshown source time never creates camera or color clock debt.
+      for(const step of this.entryFrameControls.splice(0))this._nativeSourceControl(step,step.actor_id,undefined,now);
       for(const step of this.entryFrameSounds.splice(0))this.onLifecycleFrame?.(step);
     }
     // Periodic source responses and deaths can replace a playing CHR record
@@ -1019,7 +1039,12 @@ export class BattleView {
       }
     }
     const run=!entryPreview&&this.ready?this._advance(now):null;
+    if(!entryPreview&&this.ready&&snapshot?.actors){
+      const current=this.nativeControl&&(!this.nativeControlIsCurrent||this.nativeControlIsCurrent())?this.nativeControl.state:null;
+      this.lifecycle?.advance(current?.lifecycle_events?{...snapshot,actors:current.actors,lifecycle_events:current.lifecycle_events}:snapshot,this.roster,now);
+    }
     if(!entryPreview&&this.cameraShake)this.cameraShake=advanceNativeCameraShake(this.cameraShake,now);
+    if(!entryPreview&&this.cameraPan)this.cameraPan=advanceNativeCameraPan(this.cameraPan,now);
     if(!entryPreview&&this.colorFade)this.colorFade=advanceNativeColorFade(this.colorFade,now);
     const ctx = this.context, width = this.canvas.width, height = this.canvas.height;
     ctx.beginFrame?.();
@@ -1031,7 +1056,7 @@ export class BattleView {
     if(!entryPreview&&this.cameraShake){const scale=this.stageMeta?1.125:(this.meta?.policy.sprite_scale??1.5);ctx.translate(-this.cameraShake.x*scale,-this.cameraShake.y*scale);}
     ctx.imageSmoothingEnabled = false;
     ctx.clearRect(0, 0, 960, 540);
-    if(this.stageMeta){if(!entryPreview)this.stageStarted??=now;ctx.fillStyle='#101719';ctx.fillRect(0,0,960,540);drawForestStageBackground(ctx,this.stageMeta,this.images,entryPreview?0:now-this.stageStarted,entryPreview?null:this.colorFade);}
+    if(this.stageMeta){if(!entryPreview)this.stageStarted??=now;ctx.fillStyle='#101719';ctx.fillRect(0,0,960,540);drawForestStageBackground(ctx,this.stageMeta,this.images,entryPreview?0:now-this.stageStarted,entryPreview?null:this.colorFade,entryPreview?0:this.cameraPan?.x??0);}
     else{
       const backdrop = ctx.createLinearGradient(0, 0, 0, 540);
       backdrop.addColorStop(0, '#111f27'); backdrop.addColorStop(.68, '#273b42'); backdrop.addColorStop(1, '#142429');
@@ -1039,11 +1064,8 @@ export class BattleView {
       ctx.strokeStyle = '#759a9a35'; ctx.beginPath(); ctx.moveTo(0, 384); ctx.lineTo(960, 384); ctx.stroke();
     }
     if (!this.ready){ctx.restore();return;}
+    if(!entryPreview&&this.cameraPan)ctx.translate(-this.cameraPan.x*(this.stageMeta?1.125:this.meta.policy.sprite_scale),0);
     const roots=entryPreview?[]:[...this.detachedRuns,...(this.run?[this.run]:[])],slots = this._slots(run),groundSlots=this._slots(run,true);
-    if(!entryPreview&&snapshot?.actors){
-      const current=this.nativeControl&&(!this.nativeControlIsCurrent||this.nativeControlIsCurrent())?this.nativeControl.state:null;
-      this.lifecycle?.advance(current?.lifecycle_events?{...snapshot,actors:current.actors,lifecycle_events:current.lifecycle_events}:snapshot,this.roster,now);
-    }
     if(run?.sequence)for(const c of roots.flatMap(root=>[...root.children,...(!root.main_done?[root]:[])]).filter(c=>!c.done)){slots[c.result.actor_id]=this._slots(c)[c.result.actor_id];groundSlots[c.result.actor_id]=this._slots(c,true)[c.result.actor_id];}
     if (run) {
       const o=run.observations,slot=slots[run.result.actor_id];o.draws++;

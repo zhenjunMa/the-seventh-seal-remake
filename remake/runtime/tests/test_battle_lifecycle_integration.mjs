@@ -12,10 +12,10 @@ import {isActorReady} from '../web/core/battle_scheduler.mjs';
 import {selectNativeNormalReaction} from '../web/core/battle_reactions.mjs';
 const base=new URL('../web/',import.meta.url),read=async p=>JSON.parse(await readFile(new URL(p.replace(/^\//,''),base),'utf8'));
 const meta=await read('/data/party_battle_view.json'),life=await read('/data/battle_lifecycle.json');
-function canvas(){const calls=[],c={globalAlpha:1,save(){},restore(){},setTransform(){},clearRect(){},fillRect(){},beginPath(){},rect(){},clip(){},ellipse(){},fill(){},moveTo(){},lineTo(){},stroke(){},createLinearGradient(){return {addColorStop(){}};},drawImage(img,...args){calls.push({path:img.path,args});},fillText(){},strokeText(){}};return {width:960,height:540,getContext:()=>c,calls};}
-async function fixture(){
+function canvas(){const calls=[],c={globalAlpha:1,save(){},restore(){},setTransform(){},translate(){},clearRect(){},fillRect(){},beginPath(){},rect(){},clip(){},ellipse(){},fill(){},moveTo(){},lineTo(){},stroke(){},createLinearGradient(){return {addColorStop(){}};},drawImage(img,...args){calls.push({path:img.path,args});},fillText(){},strokeText(){}};return {width:960,height:540,getContext:()=>c,calls};}
+async function fixture(enemyRole='012'){
  const target=canvas(),view=new BattleView({canvas:target,metadataPath:'/data/party_battle_view.json',lifecycleMetadataPath:'/data/battle_lifecycle.json',jsonLoader:read,assetLoader:async a=>({image:{width:a.width,height:a.height,path:a.path},sha256:a.sha256})});
- await view.prepare();view.setRoster([{id:'001',side:'player'},{id:'002',side:'player'},{id:'enemy',resource_id:'012',side:'enemy'}],{'yantu':{id:'yantu',actor_id:'001'},'001_43':{id:'001_43',actor_id:'001'},'kai_mieyan':{id:'kai_mieyan',actor_id:'002'},'enemy':{id:'enemy',actor_id:'enemy'}});
+ await view.prepare();view.setRoster([{id:'001',side:'player'},{id:'002',side:'player'},{id:'enemy',resource_id:enemyRole,side:'enemy'}],{'yantu':{id:'yantu',actor_id:'001'},'001_43':{id:'001_43',actor_id:'001'},'kai_mieyan':{id:'kai_mieyan',actor_id:'002'},'enemy':{id:'enemy',actor_id:'enemy'}});
  // This Canvas fixture owns source-record writes through the same controller
  // bridge as the browser. HP submission / lifecycle acknowledgements remain
  // explicit test inputs; no numeric battle is synthesized by these pixels.
@@ -56,6 +56,36 @@ test('transition prepares visible entry poses once, defers cues and resumes thei
  assert.ok(drawn.find(row=>row.id==='001').alpha>0);assert.deepEqual(view.drainLifecycleCompleted(),[]);
  view.draw(state,now+60);assert.equal(view.lifecycle.alpha('enemy'),2/7);assert.equal(sounds.length,2);
  view.stop();assert.deepEqual(view.entryFrameSounds,[]);assert.equal(view.lifecycle.entryPrepared,false);
+ }
+});
+
+test('077 original entry executes both background fades, camera snap and return only after activation, then restores both channels',async()=>{
+ for(const prepared of [false,true]){
+ const {view,control}=await fixture('077'),visited=[];
+ const source=life.roles.find(role=>role.id==='077').skills.find(skill=>skill.chr_skill_index===5);
+ assert.deepEqual(source.timeline.filter(step=>step.kind==='command').map(step=>[step.chr_record_index,step.command_raw]),[[0,0],[1,6],[3,7],[5,0],[7,11]]);
+ control.actor('enemy').native_x_raw=-146;
+ const apply=view._nativeSourceControl.bind(view);view._nativeSourceControl=(step,actor,target,at,owner)=>{
+   apply(step,actor,target,at,owner);visited.push({command:step.command_raw,control:step.control,at,
+     fade:view.colorFade&&structuredClone(view.colorFade),camera:view.cameraPan&&structuredClone(view.cameraPan)});
+ };
+ const event={token:'077-entry',actor_id:'enemy',life_epoch:0,kind:'entry',source_skill_index:5,source_id_raw:11},state=snapshot([event]),started=5000;
+ if(prepared){
+   view.prepareEntry(state,started);assert.deepEqual(view.entryFrameControls.map(step=>step.command_raw),[0,6]);
+   assert.equal(view.colorFade,null);assert.equal(view.cameraPan,null);assert.deepEqual(visited,[]);
+   const before=view.lifecycleSnapshot();view.draw(state,500000,{entryPreview:true});
+   assert.deepEqual(view.lifecycleSnapshot(),before);assert.equal(view.colorFade,null);assert.equal(view.cameraPan,null);
+ }
+ view.draw(state,started);assert.equal(visited[0].at,started);assert.equal(view.colorFade.value,50,'no hidden preparation time is charged to the first color update');
+ let now=started;for(;view.lifecycleSnapshot().active.length&&now<started+15000;){now+=20;view.draw(state,now);}
+ assert.ok(now<started+15000);assert.deepEqual(visited.map(row=>row.command),[0,6,0,11]);
+ assert.deepEqual(visited[0].control,{mode_raw:0,step_i32_raw:100,amount_i32_raw:50,color_mask_raw:7});
+ assert.equal(visited[1].camera.x,-274);assert.equal(visited[1].camera.active,false);
+ assert.equal(visited[2].fade.value,0);assert.equal(visited[2].fade.step,1);assert.equal(visited[2].fade.target,15);assert.equal(visited[2].fade.mask,1);
+ assert.equal(visited[3].fade.step,-8);assert.equal(visited[3].camera.target,0);
+ assert.deepEqual(view.drainLifecycleCompleted(),[{token:event.token,actor_id:'enemy',life_epoch:0}]);
+ view.draw(state,now+1000);assert.equal(view.colorFade.value,0);assert.equal(view.colorFade.active,false);
+ assert.equal(view.cameraPan.x,0);assert.equal(view.cameraPan.active,false);view.destroy();
  }
 });
 

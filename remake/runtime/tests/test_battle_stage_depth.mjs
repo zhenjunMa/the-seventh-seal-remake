@@ -14,7 +14,7 @@ function setActors(view,enemyResources,playerResources){
   return {actors:roster.map(a=>({...a,hp:{current:1000,maximum:1000},alive:true}))};
 }
 async function fixture(enemyResources=['011','012'],playerResources=['001','002']){
-  const calls=[],ctx={setTransform(){},clearRect(){},fillRect(){},beginPath(){},rect(){},clip(){},ellipse(){},fill(){},save(){},restore(){},fillText(){},
+  const calls=[],ctx={setTransform(){},translate(){},clearRect(){},fillRect(){},beginPath(){},rect(){},clip(){},ellipse(){},fill(){},save(){},restore(){},fillText(){},
     drawImage(image){calls.push(image.path);}};
   const view=new BattleView({canvas:{width:1280,height:960,getContext:()=>ctx},metadataPath:'/data/party_battle_view.json',stageMetadataPath:'/data/forest_stage.json',
     jsonLoader:path=>read(path.slice('/data/'.length)),assetLoader:async a=>({width:a.width,height:a.height,path:a.path})});

@@ -6,9 +6,10 @@ import {nativeFlowId} from './story_flow_compiler.mjs';
 import {validateChapterSetupAnimation} from './chapter_animation.mjs';
 import {storyBindings,runtimeContent} from './content_registry.mjs';
 import {restoreMapNpcState} from './map_npc_state.mjs';
+import {applyNativeStoryMutation} from './native_story_mutations.mjs';
 
 const need=(ok,message)=>{if(!ok)throw new Error(`地图布置：${message}`);};
-const PURE_COMMANDS=new Set(['record','test_flag_bit','jump','end','animation']);
+const STAGE_COMMANDS=new Set(['record','test_flag_bit','jump','end','animation','set_native_sequence']);
 
 export async function projectMapStage({mapId,world,story,npcs,roles,content=runtimeContent}){
   const result=structuredClone(npcs),binding=storyBindings(mapId,content);
@@ -19,8 +20,11 @@ export async function projectMapStage({mapId,world,story,npcs,roles,content=runt
   const runner=new StoryFlowRunner({
     record(command){
       const row=table.records.find(row=>row.id===command.record_id);
-      need(row&&row.condition_type===0&&row.mutation_type===0&&row.mutation_bit===0,`${mapId}:${command.record_id} 加载入口不是纯布局`);
+      need(row&&row.condition_type===0&&(row.mutation_type===0&&row.mutation_bit===0||row.mutation_type===7),`${mapId}:${command.record_id} 加载入口不是布局或序列初始化`);
     },
+    // The projection also serves previews; the real loader applies this
+    // transient native global separately, inside its world transaction.
+    set_native_sequence(){},
     animation(command){
       const program=story.programs[command.program_id];
       need(program,`布局演出 ${command.program_id} 未准备`);
@@ -42,6 +46,29 @@ export async function projectMapStage({mapId,world,story,npcs,roles,content=runt
     }
   });
   await runner.execute(flow,{entry:flow.entries[binding.setup_record],draft:structuredClone(world),
-    onCommand(command){need(PURE_COMMANDS.has(command.op),`加载入口不能执行 ${command.op}`);}});
+    onCommand(command){need(STAGE_COMMANDS.has(command.op),`加载入口不能执行 ${command.op}`);}});
   return restoreMapNpcState(result,world,mapId);
+}
+
+export async function initializeMapSequence({mapId,world,story,content=runtimeContent,restore=false}){
+  // Native files do not serialize 2B96D14..2B96F18. A native-file restore
+  // therefore rebuilds the target from setup flags; a world JSON restore can
+  // retain its explicit input snapshot. No arrival TLK or RNG runs here.
+  if(restore&&world.native_sequence)return;
+  const binding=storyBindings(mapId,content);
+  if(!binding.setup_record)return;
+  const flow=story?.flows?.[nativeFlowId(mapId)];
+  if(!flow?.commands.some(command=>command.op==='set_native_sequence'))return;
+  const table=story.maps[mapId];
+  need(table.header_setup_tlk_raw===binding.setup_record&&flow.entries[binding.setup_record],`${mapId} 缺少原加载入口`);
+  const runner=new StoryFlowRunner({
+    record(command){
+      const record=table.records.find(row=>row.id===command.record_id);
+      need(record&&record.condition_type===0&&(record.mutation_type===0&&record.mutation_bit===0||record.mutation_type===7),'序列初始化包含非加载行为');
+    },
+    animation(){},
+    set_native_sequence(command){applyNativeStoryMutation(world,table.records.find(row=>row.id===command.record_id));}
+  });
+  await runner.execute(flow,{entry:flow.entries[binding.setup_record],draft:world,
+    onCommand(command){need(STAGE_COMMANDS.has(command.op),`序列初始化不能执行 ${command.op}`);}});
 }

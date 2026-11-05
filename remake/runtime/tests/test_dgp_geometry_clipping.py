@@ -15,12 +15,35 @@ ROOT = RUNTIME.parents[1]
 sys.path.insert(0, str(RUNTIME / 'tools'))
 from source.dgp import DGP, DGPError
 from export_skill_layers import SourceAudit
+from export_combat_presentation import indexed_contribution
 
 SOURCE = ROOT / 'mapm/m01050/004.dgp'
 SHA = '981a62435975c301c6d1c38858ed40b02288e4756df0630925a932e339efe781'
 
 
 class DGPGeometryClipping(unittest.TestCase):
+    def test_shipped050_frame97_retains_the_known_invalid_indexed_bytes_without_guessing_pixels(self):
+        path = ROOT / 'Fight_Role/050.dgp'
+        original = path.read_bytes()
+        dgp, audit = DGP(path), SourceAudit(original)
+        self.assertEqual(dgp.sha256, 'b31f5ecaf2ee01f48561440a4c730f83591d2dcbb6caf867af5a6d1fd1bc6ac0')
+        rgba, check = audit.sparse(97, True)
+        image, stats = indexed_contribution(dgp, 97)
+        self.assertEqual(image.tobytes(), rgba)
+        self.assertEqual(check['malformed_source']['span_count'], 48011)
+        self.assertEqual(check['malformed_source'], dgp.indexed_auxiliary[97]['malformed_source'])
+        self.assertEqual(stats['covered_pixels'], 0)
+        self.assertEqual(check['source_span_sha256'], '653a6f0ff4d8c768f2562f4ce05ab8e728367f5742226caad5f7ccc78b2aac35')
+        main, _ = audit.sparse(97, False)
+        self.assertEqual(dgp.decode(97).tobytes(), main)
+        self.assertNotEqual(main, rgba)
+        # A different source hash receives no exemption, even with the same
+        # malformed row and frame number.
+        changed = bytearray(original);changed[0x36] ^= 1
+        with self.assertRaisesRegex(DGPError, 'Audit excessive span count'):
+            SourceAudit(bytes(changed)).sparse(97, True)
+        self.assertEqual(path.read_bytes(), original)
+
     def test_every_visible_pixel_equals_complete_original_blitter_and_the_independent_source_audit(self):
         original = SOURCE.read_bytes()
         self.assertEqual(hashlib.sha256(original).hexdigest(), SHA)

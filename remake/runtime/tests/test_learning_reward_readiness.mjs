@@ -36,5 +36,5 @@ test('source enemy skills close over every admitted player response, including s
     if(bytes[0]===1&&bytes.readUInt32LE(1)===3){bytes[0x47]=0;action.raw_hex=bytes.toString('hex');changed++;}
   }
   assert.ok(changed,'perturb an actual source vertical command, not a synthetic enemy');
-  assert.throws(()=>validateEnemyReactionClosure(ai,unsupported,runtimeContent),/敌人 032／技能索引(?:9|10|11) → 玩家 002/);
+  assert.throws(()=>validateEnemyReactionClosure({...ai,roles:{'032':ai.roles['032']}},unsupported,runtimeContent),/敌人 032／技能索引(?:9|10|11) → 玩家 002/);
 });

@@ -14,6 +14,7 @@ import {requiredSkillLevel} from './battle_skill_access.mjs';
 import {nativeEffectContextForTarget} from './combat_rules.mjs';
 import {nativeVerticalState,createNativeVertical,advanceNativeVertical,verticalActorPatch} from './battle_vertical.mjs';
 import {battleActorPositions} from './battle_layout.mjs';
+import {initialEncounterState,applyEncounterItemEffect} from './encounters.mjs';
 const copy = value => structuredClone(value);
 // 41BFB0 can request category4 death at rawHP0 while linked equipment keeps
 // effective/display HP positive. 4FFE90 and 519DD0 advance death through5/7;
@@ -42,8 +43,8 @@ export class BattleController {
   constructor({world, resolveAction, applyDamage, playAction, resourcesForWorld = actor => ({hp:actor.hp.current, mp:actor.mp.current}),
     consumeResources = (actor,cost)=>({...actor,mp:{...actor.mp,current:actor.mp.current-cost}}),
     notify = null, log = () => {}, id = () => crypto.randomUUID(), now = () => performance.now(),
-    waitTick = () => new Promise(resolve=>setTimeout(resolve,20)),playSequence=null,itemData=null,playItem=async(_event,{onUse})=>{onUse();}}) {
-    Object.assign(this, {world, resolveAction, applyDamage, playAction,playSequence, resourcesForWorld, consumeResources, notify, log, id,now,waitTick,itemData,playItem});
+    waitTick = () => new Promise(resolve=>setTimeout(resolve,20)),playSequence=null,itemData=null,playItem=async(_event,{onUse})=>{onUse();},playTime=()=>world.value.play_time_ms??0}) {
+    Object.assign(this, {world, resolveAction, applyDamage, playAction,playSequence, resourcesForWorld, consumeResources, notify, log, id,now,waitTick,itemData,playItem,playTime});
     this.state = null; this.running = false; this.completed = null; this.actionTask = null;
   }
   snapshot() { return this.state ? copy(this.state) : null; }
@@ -661,6 +662,7 @@ export class BattleController {
                   selectAnimation:(actor,{rng})=>selectNativeRevivalAnimation({actor,data:this.reactionData,rng})})
                   :{actor:copy(member),name:result.name,changes:{},applied:false,native_return:0,effect_requested:false,cancel_command:false,trace:[]};
                 if(used.effect_requested){if(used.revived)this.commitRevival(member,used);else Object.assign(member,used.actor);}
+                if(used.encounter_effect)this.state.encounters=applyEncounterItemEffect(this.state.encounters??this.world.value.encounters??initialEncounterState(this.world.value.party),used.encounter_effect,this.playTime());
                 if(used.cancel_command){const command=commandForActor(s,member.id);if(command)this.cancelQueuedCommand(command,'actor-status');}
                 group_results.push({target_id:member.id,hit:true,damage:0,item_used:used.applied,item_effect:used.effect_requested,native_return:used.native_return,
                   remainingHp:member.hp.current,changes:used.changes,trace:used.trace,revived:Boolean(used.revived)});
@@ -796,14 +798,19 @@ export class BattleController {
             victim.native_after_raw={...victim.native_after_raw,'0x0521f6a2':value};}
         }
         if(this.reactionData){reaction=applyContactReaction({attacker:striker,target:victim,result,record:step.source,data:this.reactionData,rng:this.rng,threshold:this.state.scheduler?.threshold,...this.nativeSourceHooks()});
-          if(reaction){const raw={...victim.native_after_raw,...reaction.after.native_after_raw};Object.assign(victim,copy(reaction.after));victim.native_after_raw=raw;if(reaction.skill){
+          if(reaction){const raw={...victim.native_after_raw,...reaction.after.native_after_raw};Object.assign(victim,copy(reaction.after));victim.native_after_raw=raw;
+            for(const effect of reaction.effects??[]){
+              if(effect.kind==='clear-native-chain'&&this.state.reward_ledger)resetNativeChain(this.state.reward_ledger,victim.id);
+              if(effect.kind==='release-active-owner'&&this.state.scheduler?.active_actor_id===victim.id)this.state.scheduler.active_actor_id=null;
+            }
+            if(reaction.skill){
             this.pendingSourceEnds.delete(victim.id);
             if(this.lifecycleEnabled)this.state.lifecycle_events=this.state.lifecycle_events.filter(event=>event.actor_id!==victim.id||event.kind!=='response');
             reaction.token=`${actionId}:reaction:${++reactionCount}`;victim.native_sequence_token=reaction.token;reaction.plan=directSequence(reaction.skill);reaction.plan.allow_no_contacts=true;}}
         }
       }
       const presented={...copy(result),remainingHp:victim?.hp.current??0,death:lethal,killer_frame_factor:lethal?2:1,status:status?{applied:status.applied,reason:status.reason,trace:status.trace}:null,
-        reaction_descriptor:reaction?.skill?copy(reaction):null,interrupt_actor_id:lethal||reaction?.skill?victim?.id:null};
+        reaction_descriptor:reaction?.skill?copy(reaction):null,interrupt_actor_id:lethal||reaction?.skill||reaction?.kind==='idle'?victim?.id:null};
       const contact={key:step.contact_key,source:copy(step),result:presented,before,after:copy({attacker:striker,target:victim??null})};seen.set(step.contact_key,presented);entry.contacts.push(contact);entry.result=copy(result);this.recordImpact(entry,historyIndex);entry.presentation=copy(step);entry.after=copy({attacker:striker,target:victim??null});
       this.log({type:'battle-impact',battle_id:this.state.id,action_id:actionId,contact_key:step.contact_key,actor_id:striker.id,target_id:victim?.id??null,skill_id:source.id,source_skill_index:step.source_skill_index,
         effect_token:step.effect_contact?step.effect_token:0,
@@ -932,10 +939,11 @@ export class BattleController {
     // Skill-test owns a private world in the browser controller. Return actual
     // resource / inventory changes for its caller's transaction; this is an
     // ownership boundary, not a native consumable or resource rollback rule.
-    if(!this.testMode&&(rewards?.applied||this.state.inventory&&JSON.stringify(this.state.inventory)!==JSON.stringify(before.inventory)||this.players().some(player=>{const persistent=before.party.find(actor=>actor.id===player.id),row=resourcesByActor[player.id];return persistent.hp.current!==row.hp||persistent.mp.current!==row.mp||row.header_raw_hex!==undefined&&persistent.combat_progress?.header_raw_hex!==row.header_raw_hex;}))) {
+    if(!this.testMode&&(rewards?.applied||this.state.encounters||this.state.inventory&&JSON.stringify(this.state.inventory)!==JSON.stringify(before.inventory)||this.players().some(player=>{const persistent=before.party.find(actor=>actor.id===player.id),row=resourcesByActor[player.id];return persistent.hp.current!==row.hp||persistent.mp.current!==row.mp||row.header_raw_hex!==undefined&&persistent.combat_progress?.header_raw_hex!==row.header_raw_hex;}))) {
       this.world.transact(next=>{for(const [id,row]of Object.entries(resourcesByActor)){const actor=next.party.find(actor=>actor.id===id);actor.hp.current=row.hp;actor.mp.current=row.mp;
         if(row.header_raw_hex){actor.combat_progress={header_raw_hex:row.header_raw_hex};actor.hp.maximum=row.hp_maximum;actor.mp.maximum=row.mp_maximum;actor.attributes_stored=row.attributes_stored;}}
         if(this.state.inventory)next.inventory=copy(this.state.inventory);
+        if(this.state.encounters)next.encounters=copy(this.state.encounters);
         if(rewards?.applied){Object.assign(next,copy(rewards.world_patch));next.reward_records??=[];requireValue(!next.reward_records.some(r=>r.battle_id===this.state.id),'奖励已经提交');next.reward_records.push(copy(rewards.reward_record));}});
     }
     this.expectedRevision=this.world.value.revision;

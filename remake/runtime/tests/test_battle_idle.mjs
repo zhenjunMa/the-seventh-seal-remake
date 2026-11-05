@@ -69,7 +69,16 @@ test('each record boundary and loop use the source class, including independent 
 });
 
 test('registered enemy low-HP idles retain the complete CHR id7 source and preload every rendered action',async()=>{
-  assert.equal(Object.keys(scheduler.low_hp_skills).length,Object.keys(forest.actors).length);
+  const expected=[];
+  for(const [id,actor]of Object.entries(forest.actors)){
+    const source=await readFile(new URL('../../../'+actor.source.path,import.meta.url));let offset=8+779;
+    for(let index=0;index<source.readUInt32LE(8);index++){
+      if(source[offset]===7)expected.push(id);
+      offset+=1053+source.readUInt32LE(offset+0x15)*176;
+    }
+    assert.equal(offset,source.length,id);
+  }
+  assert.deepEqual(Object.keys(scheduler.low_hp_skills).sort(),[...new Set(expected)].sort());
   for(const [id,low]of Object.entries(scheduler.low_hp_skills)){
     const source=await readFile(new URL('../../../'+low.source.path,import.meta.url)),view=meta.roles.find(r=>r.id===id);
     assert.equal(source.subarray(low.source.offset,low.source.offset+1053).toString('hex'),low.fixed_raw_hex,id);

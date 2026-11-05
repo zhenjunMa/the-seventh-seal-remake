@@ -78,9 +78,9 @@ export function compileItemConfiguration(data,cfg,mode){
     }
     if(permanent||['simple-restore','status-cure','status-attack','status-clear','status-support','element-source','revival-item'].includes(def.behavior.kind)){
       need(typeof p.use_in_field==='boolean'&&typeof p.use_in_battle==='boolean',`${id}使用场景须为布尔值`);
-      if(['status-cure','status-attack','status-clear','status-support'].includes(def.behavior.kind))need(p.use_in_field===false,`${id}原状态道具仅支持战斗场景`);
+      if(['status-cure','status-attack','status-clear','status-support'].includes(def.behavior.kind)&&!def.effect.encounter_modifier_delta)need(p.use_in_field===false,`${id}原状态道具仅支持战斗场景`);
       fields(p.effect,Object.keys(b.original.effect),`${id}.effect`);
-      for(const [key,n]of Object.entries(p.effect))if(key!=='revive')integer(n,`${id}.${key}`,key==='mp_maximum_percent'?-100:0,1000000);
+      for(const [key,n]of Object.entries(p.effect))if(key!=='revive')integer(n,`${id}.${key}`,key==='mp_maximum_percent'?-100:key==='encounter_modifier_delta'?-1000000:0,1000000);
       need(p.effect.revive===(def.behavior.kind==='revival-item'),`${id}复活行为与原来源不符`);
       def.effect=copy(p.effect);def.use_in_field=p.use_in_field;def.use_in_battle=p.use_in_battle;
     }
@@ -111,7 +111,7 @@ export function upgradeItemConfiguration(data,existing){
     if(capabilities){
       need(capabilities.policy==='registered-source-item-capabilities-v1','道具能力准入来源版本不兼容');
       for(const [id,previous]of Object.entries(capabilities.previous_definitions??{})){
-        need(capabilities.promoted_item_ids.includes(Number(id))&&['simple-restore','status-cure','status-attack','status-clear','status-support','element-source','revival-item','permanent-stat-source','crafting-material','equip','status-immunity-crystal'].includes(former.definitions[id]?.behavior.kind)&&
+        need(capabilities.promoted_item_ids.includes(Number(id))&&['simple-restore','status-cure','status-attack','status-clear','status-support','element-source','revival-item','permanent-stat-source','crafting-material','native-inert-item','equip','status-immunity-crystal'].includes(former.definitions[id]?.behavior.kind)&&
           ['source-only','equip'].includes(previous.behavior.kind)&&previous.availability.enabled===false,`${id}道具能力旧基线无效`);
         Object.assign(former.definitions[id],copy(previous));
         delete former.definitions[id].equipment_passive;

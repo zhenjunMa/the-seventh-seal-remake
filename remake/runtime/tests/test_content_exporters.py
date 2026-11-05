@@ -268,13 +268,13 @@ class ContentExporterTests(unittest.TestCase):
 
     def test_map_filename_syntax_is_source_supported_and_path_safe(self):
         root = RUNTIME.parents[1]
-        # Every shipped numeric M-family DAT variant remains a distinct source.
+        # All shipped DAT identities remain distinct, including the ruin families.
         for path in (root / 'Map').glob('*'):
-            if path.suffix.lower() == '.dat' and path.stem[:1].lower() == 'm' and path.stem[1:6].isdigit():
+            if path.suffix.lower() == '.dat':
                 self.assertTrue(is_native_map_id(path.stem.upper()), path.name)
                 self.assertEqual(native_map_id_from_filename(path.name), path.stem.upper())
         # The guild monster's forest is its own23-map family; never alias it
-        # to an identically named M720xx map or admit unrelated named families.
+        # to an identically named M720xx map.
         forest = sorted(path for path in (root / 'Map').glob('*')
                         if path.suffix.lower() == '.dat' and path.stem.upper().startswith('ELF-FOREST-'))
         self.assertEqual([path.stem.upper() for path in forest],
@@ -283,11 +283,11 @@ class ContentExporterTests(unittest.TestCase):
             self.assertTrue(is_native_map_id(path.stem.upper()), path.name)
             self.assertEqual(native_map_id_from_filename(path.name), path.stem.upper())
         for ident in ('ELF-FOREST-X', 'ELF-FOREST-AA', 'ELF-FOREST-A-1',
-                      'ELF_FOREST_A', 'elf-forest-a', 'REBIRTH-A01', 'WING-A01'):
+                      'ELF_FOREST_A', 'elf-forest-a', 'REBIRTH-A1', 'REBIRTH-A01-A', 'WING-A01', 'WING-A01-D', 'UNKNOWN-A01'):
             self.assertFalse(is_native_map_id(ident), ident)
         for value in ('Map/M01020A.DAT', 'M01020A.DAT\n', 'M01020A..DAT', 'M01020A.DAT.exe',
                       'M01020A\\x.DAT', 'M01020A\x00.DAT', '../Elf-forest-E.dat',
-                      'Elf-forest-X.dat', 'Elf-forest-A-1.dat', 'Elf-forest-A.dat\n', 'Rebirth-A01.dat', None, 15):
+                      'Elf-forest-X.dat', 'Elf-forest-A-1.dat', 'Elf-forest-A.dat\n', '../Rebirth-A01.dat', 'Wing-A01-D.dat', None, 15):
             self.assertIsNone(native_map_id_from_filename(value), value)
 
     def test_anm_letter_and_underscore_maps_require_exact_registration(self):

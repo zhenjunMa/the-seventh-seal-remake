@@ -157,8 +157,9 @@ export function createMapController({state, actions, $, canvas, ctx}) {
       if(binding.handler==='tlk-object'&&(object.behavior_raw_cf!==1||!object.interaction_record_raw_f6))continue;
       if(binding.handler==='scripted-switch'&&(object.behavior_raw_cf!==9||!object.interaction_record_raw_f6))continue;
       if(binding.handler==='scripted-object'&&(object.behavior_raw_cf!==2||!object.interaction_record_raw_f6))continue;
+      if(binding.handler==='toggle-object'&&object.behavior_raw_cf!==7)continue;
       const distance=Math.hypot(object.x_native*2-at.x,object.y_native*2-at.y);
-      if(distance<64&&(!state.nearest||distance<state.nearest.distance))state.nearest={...object,kind:'object',name:binding.handler==='keyed-chest'?'宝箱':binding.handler==='scripted-switch'?'机关':'物件',distance};
+      if(distance<64&&(!state.nearest||distance<state.nearest.distance))state.nearest={...object,kind:'object',name:binding.handler==='keyed-chest'?'宝箱':['scripted-switch','toggle-object'].includes(binding.handler)?'机关':'物件',distance};
     }
     for(const binding of storyBindings(at.map_id).rests){
       const bed=state.chapterStory.maps[at.map_id]?.descriptors?.find(row=>row.id===binding.descriptor_id);
@@ -278,7 +279,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
             const stop=Boolean(exit||story&&state.lastStoryTrigger!==`${at.map_id}:${story.id}`);
             if(state.encounterData&&!state.battleUnavailable){
               const preview=previewMovement(encounterState,{party:state.world.value.party,leader_id:state.selectedRole,map_id:at.map_id,
-                dx:segment.dx,dy:segment.dy,distance:segment.distance,step_pixels:motion.keyboardStepSize,transition:stop,phase:'map'},state.encounterData);
+                dx:segment.dx,dy:segment.dy,distance:segment.distance,step_pixels:motion.keyboardStepSize,transition:stop,phase:'map',play_time_ms:actions.currentPlayTime()},state.encounterData);
               encounterState=preview.state;encounter=preview.encounter;encounterAdvanced=true;
             }
             return !encounter&&!stop;
