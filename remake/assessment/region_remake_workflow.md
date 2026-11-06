@@ -50,10 +50,10 @@
 | --- | --- | --- |
 | 地图身份与资源 | 原ID可含有源依据的字母、连字符和下划线；素材目录读DAT +0x14E，不从文件名猜。背景复用不合并旗标／NPC身份。 | `tools/source/map_identity.py`、`source/map_data.py`；`web/core/exploration/native_map_identity.mjs` |
 | 加载与到达 | DAT +0x8A为加载布置，+0x13A为真实到达；NPC slot499不自动等于二者。恢复／缩略图用目标世界只读投影，不重播到达。 | `web/core/exploration/map_stage.mjs`、`scenes.mjs`；剧情指南 |
-| 传送与触发 | 描述符有0x2B紧凑表与0x42表，字段宽度不同。TLK kind2 +0x2F为目标入口marker，非本TLK记录。无cells描述符不增造触发格。 | `tools/source/map_data.py`；`web/core/story/chapter_runner.mjs`、`map_connections.mjs` |
+| 传送与触发 | 描述符有0x2B紧凑表与0x42表，字段宽度不同。TLK kind2 +0x2F为目标入口marker，非本TLK记录。原state2且TLK目标0的描述符不启动事件，不能仅因未登记就额外阻挡其原可通行格；无cells描述符不增造触发格。 | `tools/source/map_data.py`；`web/core/story/chapter_runner.mjs`、`map_connections.mjs` |
 | 原落点与移动适配 | 原4A5110可放置到terrain=1入口，允许移出但普通路径不进入。连续脚底不能封死原八邻对角接点；保留原地形、逻辑中心检查和NPC阻挡，不按地图ID补洞。 | `web/core/exploration/movement.mjs`；`tests/test_map_collision.mjs`、`test_map_transitions.mjs` |
 | 物件与宝箱 | 盘点交互表、更新队列和全部像素通道；CF4 +48为重建序号，F2为钥匙条件，+54起为十个奖励槽。即时完成与重载layer可不同。无TLK可直接走共同物件事务。 | `web/core/exploration/map_objects.mjs`、`native_map_chests.mjs`；`tools/export_chapter_story.py` |
-| CF1／CF7时序 | CF1物理帧与逻辑序列分开，410850初始化与4137C0单步循环保持原随机次序；隐藏物件继续更新。CF7独立处理默认／保存动作，不能套CF1。 | `web/core/exploration/map_objects.mjs`；`tests/test_cf1_map_effect_pixels.py`、`test_cf7_map_pixels.py` |
+| CF1／CF7时序 | CF1物理帧与逻辑序列分开，410850初始化与4137C0单步循环保持原随机次序；隐藏物件继续更新。CF7独立处理默认／保存动作，不能套CF1。+98=0允许反播，不代表实例开放主动交互；原选择器还检查+E1禁用字段，ANM控制不等于解除主动限制。 | `web/core/exploration/map_objects.mjs`；`tests/test_cf1_map_effect_pixels.py`、`test_cf7_map_pixels.py` |
 | 演出调用与索引 | ANM名不决定执行地图；取实际TLK／DAT调用者和opcode10。ANM命令零基、分支目标原一基，TLK记录一基，日志保留偏移。opcode255依原分派，不一概终止。 | `web/core/story/chapter_animation.mjs`、`anm_runtime.mjs`；来源索引的external_callers |
 | 人物动作 | ROLE raw+7E按469F50取首个匹配，缺walk才继承idle；DAT的FF模板不代表已初始化。ANM33 +25低字节为到达朝向，不是速度。 | `tools/map_npc_fields.py`、`web/core/exploration/map_npcs.mjs`、`anm_runtime.mjs` |
 | DGP帧边界 | 动作可引用全局帧池；CHR显式区间读取DGP +0x16表，不以+0x12声明数裁剪，仍核表容量及物理帧池。存储RLE行可能超出显示矩形，严审完整流，只绘声明矩形。图集合并核身份、原动作、方向／间隔与可见像素。 | `tools/source/dgp.py`、`export_combat_presentation.py`、`web/core/battle/skill_sequence.mjs`；`tests/test_dgp_native_clipping.mjs` |
