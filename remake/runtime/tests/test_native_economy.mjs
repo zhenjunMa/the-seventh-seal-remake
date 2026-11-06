@@ -7,6 +7,8 @@ import {initializeChapterItem,ChapterRunner} from '../web/core/story/chapter_run
 import {WorldStore,encodeSave,decodeSave} from '../web/core/world/world.mjs';
 import {withItemQuantity} from '../web/core/party/equipment.mjs';
 import {runtimeContent} from '../web/core/content/content_registry.mjs';
+import {readNativeSpecialService,NATIVE_STATUES,NATIVE_CASINO_CODES,applyNativeStatue,applyNativeCasinoCode,
+  nativeSmallLottoPrize,nativeRoulettePrize,nativeLottoCounts,playNativeLotto,revealNativeLottoCard,playNativeRoulette,playNativeSmallLotto} from '../web/core/items/native_special_services.mjs';
 const json=async name=>JSON.parse(await readFile(new URL(`../web/data/${name}.json`,import.meta.url),'utf8'));
 const [items,story,seed]=await Promise.all(['items','chapter_story','opening_seed'].map(json));
 const catalog=nativeEconomyCatalog(items);
@@ -77,4 +79,75 @@ test('a real kind8 service uses the existing story draft and rolls purchases bac
     }});
   await assert.rejects(runner.runTlk({mapId:'M01033',recordId:3,context:{explicitInteraction:true,steps:0}}),/test interaction cancelled/);
   assert.deepEqual(store.value,before);
+});
+
+test('the seven source statues preserve glyph identity, save their reward flags and repair the bit-zero setter',async()=>{
+  const value=world(),options={definitions:items.definitions,sourceHashes:items.source_hashes,mapId:'M01033',recordId:6};
+  assert.deepEqual(NATIVE_STATUES.map(row=>row.itemId),[139,142,124,134,138,141,143]);
+  for(const row of NATIVE_STATUES){
+    const special=readNativeSpecialService({mutation_type:18,mutation_index:2,mutation_bit:row.index});
+    const before=structuredClone(value);
+    assert.equal(applyNativeStatue(value,special,Array(6).fill(24),options).changed,false);assert.deepEqual(value,before);
+    assert.equal(applyNativeStatue(value,special,[...row.symbols],options).changed,true);
+    assert.equal(applyNativeStatue(value,special,[...row.symbols],options).changed,false);
+    assert.equal(nativeOwnedQuantity(value,row.itemId),1);
+  }
+  assert.equal(value.money,100000);assert.equal(value.flags[1997],0x8000003f);
+  const decoded=await decodeSave(await encodeSave(value),Object.keys(runtimeContent.maps));
+  assert.equal(decoded.flags[1997],0x8000003f);assert.deepEqual(decoded.inventory,value.inventory);
+});
+
+test('casino codes accept only the fixed six-digit table and retain shared source reward markers',async()=>{
+  const options={definitions:items.definitions,sourceHashes:items.source_hashes,mapId:'M01032-1',recordId:9};
+  assert.equal(Object.keys(NATIVE_CASINO_CODES).length,25);assert.equal(new Set(Object.values(NATIVE_CASINO_CODES)).size,24);
+  for(const code of ['', '12345','000000','１２３４５６','1324567','132456 ']){
+    const value=world(),before=structuredClone(value);
+    assert.equal(applyNativeCasinoCode(value,code,options).changed,false);assert.deepEqual(value,before);
+  }
+  for(const [code,id]of Object.entries(NATIVE_CASINO_CODES)){
+    const value=world();assert.equal(applyNativeCasinoCode(value,code,options).changed,true);
+    assert.ok(value.recipe_unlock_indices.includes(id-1));
+    assert.equal(nativeOwnedQuantity(value,id),1);assert.equal(applyNativeCasinoCode(value,code,options).changed,false);
+  }
+  const value=world();applyNativeCasinoCode(value,'651111',options);
+  assert.equal(applyNativeCasinoCode(value,'298445',options).changed,false);
+  applyNativeCasinoCode(value,'132456',options);assert.equal(applyNativeCasinoCode(value,'660528',options).changed,false);
+  const decoded=await decodeSave(await encodeSave(value),Object.keys(runtimeContent.maps));assert.equal(decoded.flags[1998],value.flags[1998]);
+});
+
+test('the native special-service opcode shares the outer rollback including rewards and original flags',async()=>{
+  const value=world();value.location={map_id:'M01033',x:640,y:480,direction:0};value.opening.status='complete';
+  const store=new WorldStore(value,Object.keys(runtimeContent.maps)),before=structuredClone(store.value);
+  const runner=new ChapterRunner({world:store,data:story,content:runtimeContent,say:async()=>{},
+    service:async({record,draft})=>{
+      assert.equal(record.mutation_type,18);
+      const special=readNativeSpecialService(record);
+      assert.equal(applyNativeStatue(draft,special,[...NATIVE_STATUES[0].symbols],{
+        definitions:items.definitions,sourceHashes:items.source_hashes}).changed,true);
+      throw new Error('cancel special service');
+    }});
+  await assert.rejects(runner.runTlk({mapId:'M01033',recordId:6,context:{explicitInteraction:true,steps:0}}),/cancel special service/);
+  assert.deepEqual(store.value,before);
+});
+
+test('casino settlement preserves source ordering and local lottery balances without spending on invalid bets',()=>{
+  assert.equal(nativeSmallLottoPrize([1,1,1,2,2,2]),1000);
+  assert.equal(nativeSmallLottoPrize([1,2,1,2,1,2]),1500);
+  const bets=Array(35).fill(0);for(const index of [0,24,27,33])bets[index]=1;
+  assert.equal(nativeRoulettePrize(bets,0),1500);
+  assert.deepEqual(nativeLottoCounts(6,6),{six:1,five:0,four:0,three:0,two:0,cards:20,money:0});
+  assert.equal(nativeLottoCounts(7,0).money,250);
+  const value=world(),before=structuredClone(value);
+  assert.equal(playNativeRoulette(value,Array(35).fill(0)).changed,false);assert.deepEqual(value,before);
+  value.money=49;const poor=structuredClone(value);assert.equal(playNativeSmallLotto(value).changed,false);assert.deepEqual(value,poor);
+  value.money=100000;
+  const result=playNativeLotto(value,[1,9,11,12,21,30],3,{definitions:items.definitions,sourceHashes:items.source_hashes});
+  assert.equal(result.cost,50);assert.equal(result.required_money,150);assert.equal(value.money,99950);assert.equal(result.counts.cards,20);
+  assert.equal(Object.values(result.rewards).reduce((n,count)=>n+count,0),20);
+  const deferred=world();deferred.money=100000;
+  const options={definitions:items.definitions,sourceHashes:items.source_hashes,deferRewards:true};
+  const pending=playNativeLotto(deferred,[1,9,11,12,21,30],1,options);
+  assert.equal(pending.remainingCards,20);assert.equal(deferred.inventory.length,0);
+  assert.equal(revealNativeLottoCard(deferred,options).changed,true);
+  assert.equal(deferred.inventory.reduce((total,row)=>total+row.quantity,0),1);
 });

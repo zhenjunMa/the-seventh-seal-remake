@@ -38,16 +38,18 @@ def confined_file(directory: Path, name: str) -> Path:
     matches = [path for path in directory.iterdir() if path.name.casefold() == name.casefold() and path.is_file()]
     if len(matches) != 1:
         raise ValueError(f'Expected one literal source {directory.name}/{name}; found {len(matches)}')
-    path = matches[0].resolve()
-    if not path.is_relative_to(directory.resolve()):
+    path = matches[0]
+    if not path.resolve().is_relative_to(directory.resolve()):
         raise ValueError(f'Source escapes selected directory: {name}')
+    # Preserve the selected installation's logical path even when developer
+    # source directories are read-only links into that installation.
     return path
 
 
 def discover(registered=None, source_programs=SOURCE_PREPARATION_PROGRAMS, root=ROOT) -> dict:
     registered = tuple(program_ids() if registered is None else registered)
     selected = sorted(set(registered) | set(source_programs))
-    result = {'programs': [], 'videos': {}, 'sounds': {}, 'empty_sound_commands': []}
+    result = {'programs': [], 'videos': {}, 'sounds': {}, 'missing_sounds': {}, 'empty_sound_commands': []}
     for ident in selected:
         if not re.fullmatch(r'[a-z0-9_-]+', ident):
             raise ValueError(f'Invalid ANM identity: {ident}')
@@ -74,6 +76,11 @@ def discover(registered=None, source_programs=SOURCE_PREPARATION_PROGRAMS, root=
             if not re.fullmatch(r'[A-Za-z0-9_-]+\.' + extension, token, re.IGNORECASE):
                 raise ValueError(f'Unsafe or unsupported ANM media token {ident}:{index}: {token!r}')
             kind, directory = ('videos', 'Animate') if command[0] == 60 else ('sounds', 'sound')
+            if kind == 'sounds' and not any(path.name.casefold() == token.casefold() and path.is_file()
+                                           for path in (root / directory).iterdir()):
+                result['missing_sounds'].setdefault(token.lower(), dict(source_path='sound/' + token,
+                    referenced_by=[], policy='declared-missing-original-sound; continue-without-substitution'))['referenced_by'].append(reference)
+                continue
             media = confined_file(root / directory, token)
             key = token.lower()
             row = result[kind].setdefault(key, {'source_path': media.relative_to(root).as_posix(), 'referenced_by': []})
@@ -255,7 +262,9 @@ def main():
                          'Bink audio may exceed full-scale float PCM. Encoding uses explicit half-amplitude headroom; a browser GainNode must restore audio.playback_gain=2 without resampling.',
                          'Native wav keys retain literal script identity; MPEG carriers use a truthful mp3 output suffix.']}
     manifest = {'schema': 'seventh-seal-story-media', 'version': 1, 'videos': {}, 'sounds': {},
+                'missing_sounds': selected['missing_sounds'],
                 'export_evidence': REPORT.relative_to(ROOT).as_posix(), 'authority': report['authority']}
+    report['missing_original_files'] = [row['source_path'] for row in selected['missing_sounds'].values()]
     encoders = {tool: subprocess.run([getattr(args,tool), '-version'], check=True, capture_output=True, text=True).stdout.splitlines()[0] for tool in ('ffmpeg','ffprobe')}
     try:
         for kind in ('videos', 'sounds'):

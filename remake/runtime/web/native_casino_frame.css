@@ -1,0 +1,6 @@
+.native-casino-panel{position:absolute;inset:0;z-index:56;background:#000;overflow:hidden}
+.native-casino-frame{position:absolute;left:50%;top:50%;width:640px;height:480px;transform-origin:center;overflow:hidden;outline:none;cursor:none;user-select:none;touch-action:none}
+.native-casino-frame img{position:absolute;pointer-events:none;max-width:none;image-rendering:auto}
+.native-casino-number{position:absolute;pointer-events:none}
+.native-casino-control,.native-casino-control:hover,.native-casino-control:focus,.native-casino-control:active{position:absolute;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;outline:none;cursor:none}
+.native-casino-cursor{z-index:100}

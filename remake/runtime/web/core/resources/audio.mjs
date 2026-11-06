@@ -68,6 +68,9 @@ export function createAudioController(manifest, options = {}) {
     for (const entry of effects) { entry.clean(); retire(entry.media); }
     effects.clear();
   }
+  function stopClip(clipId) {
+    for(const entry of [...effects])if(entry.clip===clipId){entry.clean();retire(entry.media);effects.delete(entry);}
+  }
   function clearMusic() {
     if (!music) return;
     if (Number.isFinite(music.media.currentTime)) positions.set(music.clip, music.media.currentTime);
@@ -142,7 +145,7 @@ export function createAudioController(manifest, options = {}) {
     cleanupUnlock = () => { target.removeEventListener('pointerdown', listener, true); target.removeEventListener('keydown', listener, true); };
     return cleanupUnlock;
   }
-  function playClip(clipId, eventKey = null, {position=null,singleVoice=false}={}) {
+  function playClip(clipId, eventKey = null, {position=null,singleVoice=false,loop=false}={}) {
     if (disposed || channelMuted('effects')) return false;
     if (!unlocked) { stats.suppressed_before_unlock++; return false; }
     if (!manifest.clips[clipId]) { stats.missing_clips++; return false; }
@@ -171,7 +174,7 @@ export function createAudioController(manifest, options = {}) {
       cleanSpatial=()=>{source.disconnect();panner.disconnect();};
       if(positionalContext.state==='suspended')positionalContext.resume().catch(error=>errorRecord(error,'positioned-effect',clipId));
     }
-    media.preload = 'auto'; media.loop = false; media.volume = channelVolume('effects')*gain; media.muted = channelMuted('effects');
+    media.preload = 'auto'; media.loop = Boolean(loop); media.volume = channelVolume('effects')*gain; media.muted = channelMuted('effects');
     const entry = {id:++nextId, clip:clipId, media, gain,panner,started:false, clean:() => {}};
     const event={clip:clipId,event_key:eventKey,started:false,...(position?{position:{...position},volume_native:volumeNative,pan_native:panNative}:{})};effectEvents.push(event);if(effectEvents.length>256)effectEvents.shift();
     const finish = () => { entry.clean(); effects.delete(entry); retire(media); };
@@ -251,5 +254,5 @@ export function createAudioController(manifest, options = {}) {
   function suspend() { desired = null; clearMusic(); stopEffects(); seen.clear(); return snapshot(); }
   function dispose() { if (disposed) return; disposed = true; cleanupUnlock?.(); cleanupUnlock = null; clearMusic(); stopEffects(); seen.clear();positionalContext?.close(); }
   return {setScene, setMusic, unlock, attachUnlock, playCue, playClip, playAction, playEffect, playItemEffect, setMuted, setVolume,
-    setChannelMuted, setChannelVolume,setStoryMusicSuppressed, stopEffects, suspend, snapshot, dispose};
+    setChannelMuted, setChannelVolume,setStoryMusicSuppressed, stopEffects, stopClip, suspend, snapshot, dispose};
 }

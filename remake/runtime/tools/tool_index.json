@@ -2,7 +2,7 @@
   "schema": "seventh-seal-tool-index",
   "version": 1,
   "updated": "2026-11-06",
-  "registered_steps": 50,
+  "registered_steps": 58,
   "content_plan": [
     "chapter-maps",
     "chapter-story",
@@ -43,6 +43,12 @@
   ],
   "tools": [
     {
+      "path": "append_builtin_glyphs.py",
+      "role": "independent-source-export",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
       "path": "battle_pack_inventory.mjs",
       "role": "independent-source-export",
       "build_targets": [],
@@ -52,7 +58,8 @@
       "path": "build_catalog.py",
       "role": "registered-build",
       "build_targets": [
-        "catalog"
+        "catalog",
+        "catalog-refresh"
       ],
       "imported_by": []
     },
@@ -60,7 +67,8 @@
       "path": "build_content_library.mjs",
       "role": "registered-build",
       "build_targets": [
-        "content-library"
+        "content-library",
+        "content-library-refresh"
       ],
       "imported_by": []
     },
@@ -113,7 +121,9 @@
         "export_party_combat.py",
         "export_party_rewards.py",
         "export_party_skills.py",
-        "export_story_media.py"
+        "export_story_media.py",
+        "refresh_audio_map_bindings.py",
+        "refresh_map_presentation.py"
       ]
     },
     {
@@ -124,6 +134,18 @@
     },
     {
       "path": "create_battle_lifecycle_fixture.mjs",
+      "role": "fixture-or-observation-preparation",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "create_guild_fixtures.mjs",
+      "role": "fixture-or-observation-preparation",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "create_inner_white_forest_seal_fixtures.mjs",
       "role": "fixture-or-observation-preparation",
       "build_targets": [],
       "imported_by": []
@@ -165,12 +187,26 @@
       "imported_by": []
     },
     {
+      "path": "create_seal_region_fixtures.mjs",
+      "role": "fixture-or-observation-preparation",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "create_wind_region_fixtures.mjs",
+      "role": "fixture-or-observation-preparation",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
       "path": "export_audio.py",
       "role": "registered-build",
       "build_targets": [
         "audio"
       ],
-      "imported_by": []
+      "imported_by": [
+        "refresh_audio_map_bindings.py"
+      ]
     },
     {
       "path": "export_battle_lifecycle.py",
@@ -240,7 +276,9 @@
       "build_targets": [
         "items"
       ],
-      "imported_by": []
+      "imported_by": [
+        "refresh_item_admission.py"
+      ]
     },
     {
       "path": "export_chapter_maps.py",
@@ -315,7 +353,8 @@
       "path": "export_content_registry.mjs",
       "role": "registered-build",
       "build_targets": [
-        "content"
+        "content",
+        "side-content"
       ],
       "imported_by": []
     },
@@ -324,6 +363,14 @@
       "role": "registered-build",
       "build_targets": [
         "dialogue-ui"
+      ],
+      "imported_by": []
+    },
+    {
+      "path": "export_ember_city_index.py",
+      "role": "registered-build",
+      "build_targets": [
+        "ember-city-index"
       ],
       "imported_by": []
     },
@@ -344,14 +391,6 @@
       "imported_by": [
         "build_runtime.py"
       ]
-    },
-    {
-      "path": "export_ember_city_index.py",
-      "role": "registered-build",
-      "build_targets": [
-        "ember-city-index"
-      ],
-      "imported_by": []
     },
     {
       "path": "export_events.py",
@@ -384,36 +423,12 @@
       "imported_by": []
     },
     {
-      "path": "export_inner_white_forest_index.py",
-      "role": "registered-build",
-      "build_targets": [
-        "inner-white-forest-index"
-      ],
-      "imported_by": []
-    },
-    {
-      "path": "export_jade_lake_index.py",
-      "role": "registered-build",
-      "build_targets": [
-        "jade-lake-index"
-      ],
-      "imported_by": []
-    },
-    {
       "path": "export_forest_ai.py",
       "role": "shared-current",
       "build_targets": [],
       "imported_by": [
         "export_enemy_content.py"
       ]
-    },
-    {
-      "path": "export_white_forest_index.py",
-      "role": "registered-build",
-      "build_targets": [
-        "white-forest-index"
-      ],
-      "imported_by": []
     },
     {
       "path": "export_forest_presentation.py",
@@ -467,10 +482,26 @@
       "imported_by": []
     },
     {
+      "path": "export_inner_white_forest_index.py",
+      "role": "registered-build",
+      "build_targets": [
+        "inner-white-forest-index"
+      ],
+      "imported_by": []
+    },
+    {
       "path": "export_item_presentation.py",
       "role": "registered-build",
       "build_targets": [
         "item-presentation"
+      ],
+      "imported_by": []
+    },
+    {
+      "path": "export_jade_lake_index.py",
+      "role": "registered-build",
+      "build_targets": [
+        "jade-lake-index"
       ],
       "imported_by": []
     },
@@ -480,7 +511,9 @@
       "build_targets": [
         "map-effects"
       ],
-      "imported_by": []
+      "imported_by": [
+        "refresh_map_presentation.py"
+      ]
     },
     {
       "path": "export_map_shadows.py",
@@ -488,7 +521,8 @@
       "build_targets": [],
       "imported_by": [
         "export_battle_lifecycle.py",
-        "export_map_effects.py"
+        "export_map_effects.py",
+        "refresh_map_presentation.py"
       ]
     },
     {
@@ -498,7 +532,17 @@
       "imported_by": [
         "export_chapter_maps.py",
         "export_opening_maps.py",
+        "refresh_story_media_selection.py",
         "route_export_maps.py"
+      ]
+    },
+    {
+      "path": "export_media.py",
+      "role": "daily-entry",
+      "build_targets": [],
+      "imported_by": [
+        "build_runtime.py",
+        "refresh_audio_map_bindings.py"
       ]
     },
     {
@@ -545,18 +589,21 @@
       "recovery_commit": "1ee90804fc1d1ad1a2b56d3dac56dab30bf6f634"
     },
     {
-      "path": "export_opening_maps.py",
-      "role": "registered-build",
-      "build_targets": [
-        "opening-maps"
-      ],
-      "imported_by": []
-    },
-    {
       "path": "export_native_services.py",
       "role": "registered-build",
       "build_targets": [
         "native-services"
+      ],
+      "imported_by": [
+        "export_media.py",
+        "refresh_audio_map_bindings.py"
+      ]
+    },
+    {
+      "path": "export_opening_maps.py",
+      "role": "registered-build",
+      "build_targets": [
+        "opening-maps"
       ],
       "imported_by": []
     },
@@ -619,6 +666,14 @@
       "imported_by": []
     },
     {
+      "path": "export_research_index.py",
+      "role": "registered-build",
+      "build_targets": [
+        "research-index"
+      ],
+      "imported_by": []
+    },
+    {
       "path": "export_route.py",
       "role": "independent-source-export",
       "build_targets": [],
@@ -628,7 +683,8 @@
       "path": "export_runtime_config.mjs",
       "role": "registered-build",
       "build_targets": [
-        "configuration"
+        "configuration",
+        "configuration-refresh"
       ],
       "imported_by": []
     },
@@ -637,6 +693,14 @@
       "role": "registered-build",
       "build_targets": [
         "save-menu"
+      ],
+      "imported_by": []
+    },
+    {
+      "path": "export_seal_region_index.py",
+      "role": "registered-build",
+      "build_targets": [
+        "seal-region-index"
       ],
       "imported_by": []
     },
@@ -685,7 +749,9 @@
       "build_targets": [
         "source-catalog"
       ],
-      "imported_by": []
+      "imported_by": [
+        "export_chapter_maps.py"
+      ]
     },
     {
       "path": "export_source_magic.py",
@@ -711,7 +777,9 @@
       "build_targets": [
         "startup-menu"
       ],
-      "imported_by": []
+      "imported_by": [
+        "export_native_services.py"
+      ]
     },
     {
       "path": "export_story_media.py",
@@ -720,7 +788,8 @@
         "story-media"
       ],
       "imported_by": [
-        "build_runtime.py"
+        "build_runtime.py",
+        "refresh_story_media_selection.py"
       ]
     },
     {
@@ -733,6 +802,22 @@
         "export_content_registry.mjs",
         "verify_phaser.mjs"
       ]
+    },
+    {
+      "path": "export_white_forest_index.py",
+      "role": "registered-build",
+      "build_targets": [
+        "white-forest-index"
+      ],
+      "imported_by": []
+    },
+    {
+      "path": "export_wind_region_index.py",
+      "role": "registered-build",
+      "build_targets": [
+        "wind-region-index"
+      ],
+      "imported_by": []
     },
     {
       "path": "export_world_map_ui.py",
@@ -750,6 +835,61 @@
       "previous_path": "remake/prototype/tools/extract.py",
       "previous_sha256": "e536682ff2ae059871707b7245711ca5686d020f27462f5690caeb5397c0aa3a",
       "recovery_commit": "1ee90804fc1d1ad1a2b56d3dac56dab30bf6f634"
+    },
+    {
+      "path": "image_atlas.py",
+      "role": "shared-current",
+      "build_targets": [],
+      "imported_by": [
+        "export_media.py"
+      ]
+    },
+    {
+      "path": "incremental.py",
+      "role": "shared-helper",
+      "build_targets": [],
+      "imported_by": [
+        "build_catalog.py",
+        "build_runtime.py",
+        "export_audio.py",
+        "export_battle_lifecycle.py",
+        "export_battle_packs.py",
+        "export_battle_result.py",
+        "export_battle_stages.py",
+        "export_battle_ui.py",
+        "export_chapter_maps.py",
+        "export_dialogue_ui.py",
+        "export_enemy_content.py",
+        "export_forest_stage.py",
+        "export_item_presentation.py",
+        "export_map_effects.py",
+        "export_map_shadows.py",
+        "export_maps.py",
+        "export_menu_font_gdi.py",
+        "export_menu_techniques.py",
+        "export_menu_text_gdi.py",
+        "export_opening_maps.py",
+        "export_operation_menu.py",
+        "export_party_skills.py",
+        "export_prologue_presentation.py",
+        "export_save_menu.py",
+        "export_skill_layers.py",
+        "export_skill_test.py",
+        "export_story_media.py",
+        "incremental_atlas.py",
+        "refresh_audio_map_bindings.py",
+        "refresh_item_admission.py",
+        "refresh_map_presentation.py",
+        "refresh_story_media_selection.py"
+      ]
+    },
+    {
+      "path": "incremental_atlas.py",
+      "role": "shared-helper",
+      "build_targets": [],
+      "imported_by": [
+        "export_battle_packs.py"
+      ]
     },
     {
       "path": "inspect_battle_ui_bindings.py",
@@ -774,6 +914,23 @@
       ]
     },
     {
+      "path": "media_definitions.py",
+      "role": "shared-current",
+      "build_targets": [],
+      "imported_by": [
+        "export_media.py",
+        "media_fingerprints.py"
+      ]
+    },
+    {
+      "path": "media_fingerprints.py",
+      "role": "shared-current",
+      "build_targets": [],
+      "imported_by": [
+        "export_media.py"
+      ]
+    },
+    {
       "path": "migrate_local_materials.py",
       "role": "daily-entry",
       "build_targets": [],
@@ -781,6 +938,12 @@
         "build_runtime.py",
         "verify_delivery.py"
       ]
+    },
+    {
+      "path": "migrate_native_saves.py",
+      "role": "one-time-save-migration",
+      "build_targets": [],
+      "imported_by": []
     },
     {
       "path": "prepare_battle_loading_fixture.mjs",
@@ -791,6 +954,44 @@
     {
       "path": "prepare_original_observation.py",
       "role": "fixture-or-observation-preparation",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "refresh_audio_map_bindings.py",
+      "role": "registered-build",
+      "build_targets": [
+        "audio-map-refresh"
+      ],
+      "imported_by": []
+    },
+    {
+      "path": "refresh_item_admission.py",
+      "role": "registered-build",
+      "build_targets": [
+        "items-admission"
+      ],
+      "imported_by": []
+    },
+    {
+      "path": "refresh_map_presentation.py",
+      "role": "registered-build",
+      "build_targets": [
+        "map-presentation-refresh"
+      ],
+      "imported_by": []
+    },
+    {
+      "path": "refresh_story_media_selection.py",
+      "role": "registered-build",
+      "build_targets": [
+        "story-media-refresh"
+      ],
+      "imported_by": []
+    },
+    {
+      "path": "repair_native_saves.py",
+      "role": "one-time-save-repair",
       "build_targets": [],
       "imported_by": []
     },
@@ -828,8 +1029,9 @@
       "imported_by": [
         "export_chapter_maps.py",
         "export_chapter_story.py",
+        "export_fire_valley_index.py",
         "export_opening_maps.py",
-        "export_fire_valley_index.py"
+        "refresh_audio_map_bindings.py"
       ]
     },
     {
@@ -917,6 +1119,8 @@
         "export_skill_layers.py",
         "export_skill_test.py",
         "extract.py",
+        "refresh_audio_map_bindings.py",
+        "refresh_map_presentation.py",
         "route_export_maps.py",
         "source/map_data.py",
         "source/map_objects.py",
@@ -970,7 +1174,9 @@
         "export_events.py",
         "export_map_effects.py",
         "export_maps.py",
-        "export_movement.py"
+        "export_movement.py",
+        "refresh_audio_map_bindings.py",
+        "refresh_map_presentation.py"
       ],
       "previous_path": "remake/prototype/tools/map_objects.py",
       "previous_sha256": "c4714d279ea85d26db583fcc58c0865f079cfc09469cd905bf746dd83fb4125e",
@@ -1023,6 +1229,15 @@
       "previous_path": "save_analysis_20261010/save_format.py",
       "previous_sha256": "9b7b751d21ad62626f84cb2cc30625f6e1aa1d204c779a15a3c333828de09800",
       "recovery_commit": "01165c09cbc05c81cbe6d305899ae985492a4367"
+    },
+    {
+      "path": "source/special_services.py",
+      "role": "shared-helper",
+      "build_targets": [],
+      "imported_by": [
+        "export_chapter_items.py",
+        "export_chapter_story.py"
+      ]
     },
     {
       "path": "sync_tool_docs.py",
@@ -1265,142 +1480,6 @@
       "role": "specialized-evidence-check",
       "build_targets": [],
       "imported_by": []
-    },
-    {
-      "path": "incremental.py",
-      "role": "shared-helper",
-      "build_targets": [],
-      "imported_by": [
-        "build_catalog.py",
-        "build_runtime.py",
-        "export_audio.py",
-        "export_battle_lifecycle.py",
-        "export_battle_packs.py",
-        "export_battle_result.py",
-        "export_battle_stages.py",
-        "export_battle_ui.py",
-        "export_chapter_maps.py",
-        "export_dialogue_ui.py",
-        "export_enemy_content.py",
-        "export_forest_stage.py",
-        "export_item_presentation.py",
-        "export_map_effects.py",
-        "export_map_shadows.py",
-        "export_maps.py",
-        "export_menu_font_gdi.py",
-        "export_menu_techniques.py",
-        "export_menu_text_gdi.py",
-        "export_opening_maps.py",
-        "export_operation_menu.py",
-        "export_party_skills.py",
-        "export_prologue_presentation.py",
-        "export_save_menu.py",
-        "export_skill_layers.py",
-        "export_skill_test.py",
-        "export_story_media.py",
-        "incremental_atlas.py"
-      ]
-    },
-    {
-      "path": "incremental_atlas.py",
-      "role": "shared-helper",
-      "build_targets": [],
-      "imported_by": [
-        "export_battle_packs.py"
-      ]
-    },
-    {
-      "path": "create_inner_white_forest_seal_fixtures.mjs",
-      "role": "fixture-or-observation-preparation",
-      "build_targets": [],
-      "imported_by": []
-    },
-    {
-      "path": "create_wind_region_fixtures.mjs",
-      "role": "fixture-or-observation-preparation",
-      "build_targets": [],
-      "imported_by": []
-    },
-    {
-      "path": "create_seal_region_fixtures.mjs",
-      "role": "fixture-or-observation-preparation",
-      "build_targets": [],
-      "imported_by": []
-    },
-    {
-      "path": "export_wind_region_index.py",
-      "role": "registered-build",
-      "build_targets": [
-        "wind-region-index"
-      ],
-      "imported_by": []
-    },
-    {
-      "path": "export_research_index.py",
-      "role": "registered-build",
-      "build_targets": [
-        "research-index"
-      ],
-      "imported_by": []
-    },
-    {
-      "path": "export_seal_region_index.py",
-      "role": "registered-build",
-      "build_targets": [
-        "seal-region-index"
-      ],
-      "imported_by": []
-    },
-    {
-      "path": "create_guild_fixtures.mjs",
-      "role": "fixture-or-observation-preparation",
-      "build_targets": [],
-      "imported_by": []
-    },
-    {
-      "path": "migrate_native_saves.py",
-      "role": "one-time-save-migration",
-      "build_targets": [],
-      "imported_by": []
-    },
-    {
-      "path": "repair_native_saves.py",
-      "role": "one-time-save-repair",
-      "build_targets": [],
-      "imported_by": []
-    },
-    {
-      "path": "export_media.py",
-      "role": "daily-entry",
-      "build_targets": [],
-      "imported_by": [
-        "build_runtime.py"
-      ]
-    },
-    {
-      "path": "image_atlas.py",
-      "role": "shared-current",
-      "build_targets": [],
-      "imported_by": [
-        "export_media.py"
-      ]
-    },
-    {
-      "path": "media_definitions.py",
-      "role": "shared-current",
-      "build_targets": [],
-      "imported_by": [
-        "export_media.py",
-        "media_fingerprints.py"
-      ]
-    },
-    {
-      "path": "media_fingerprints.py",
-      "role": "shared-current",
-      "build_targets": [],
-      "imported_by": [
-        "export_media.py"
-      ]
     }
   ],
   "notes": [

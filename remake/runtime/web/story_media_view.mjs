@@ -12,6 +12,13 @@ export function validateStoryMedia(data){
       need(row.source.path?.toLowerCase()===`${table==='videos'?'animate':'sound'}/${name}`,'原文件名不匹配');
       if(row.audio?.playback_gain!==undefined)need(Number.isFinite(row.audio.playback_gain)&&row.audio.playback_gain>0&&row.audio.playback_gain<=16,'播放补偿增益无效');
     }
+  for(const [name,row]of Object.entries(data.missing_sounds??{})){
+    need(/^[a-z0-9_-]+\.wav$/.test(name)&&row.source_path?.toLowerCase()===`sound/${name}`
+      &&!data.sounds[name]&&row.policy==='declared-missing-original-sound; continue-without-substitution'
+      &&row.referenced_by?.length>0&&row.referenced_by.every(reference=>reference.opcode===62
+        &&reference.filename_raw?.toLowerCase()===name&&digest(reference.source?.sha256)),
+      '缺失原声音声明无效');
+  }
   return data;
 }
 export class StoryMediaView{
@@ -119,7 +126,11 @@ export class StoryMediaView{
         else this.suppressMusic(true);
         return;
       }
-      need(kind==='play','声音操作未恢复');const entry=this.make('audio',filename,signal);
+      need(kind==='play','声音操作未恢复');
+      // Missing original sounds are explicit source facts. Retain the ANM
+      // command and music lifecycle without guessing another carrier.
+      if(this.manifest.missing_sounds?.[filename.toLowerCase()])return;
+      const entry=this.make('audio',filename,signal);
       if(persistent)this.persistent=entry;
       await this.start(entry);this.check();
     }

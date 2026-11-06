@@ -22,6 +22,17 @@ function setup(manifest=data, result) {
   return {audio,voices};
 }
 
+test('WordDisc rotation owns one looping voice and release stops only its own clip',async()=>{
+  const {audio,voices}=setup(),roll='sound/WordDisc/Roll.wav',click='sound/WordDisc/click.wav';
+  audio.unlock();await tick();
+  audio.playClip(roll,null,{singleVoice:true,loop:true});audio.playClip(roll,null,{singleVoice:true,loop:true});
+  await tick();assert.equal(voices.length,1);assert.equal(voices[0].loop,true);assert.equal(voices[0].playCalls,1);
+  audio.playClip(click);await tick();assert.equal(voices[1].loop,false);
+  audio.stopClip(roll);assert.equal(voices[0].paused,true);assert.equal(voices[0].listeners.size,0);assert.equal(voices[1].paused,false);
+  audio.playClip(roll,null,{singleVoice:true,loop:true});await tick();assert.equal(voices.length,3);
+  audio.dispose();assert.ok(voices.every(media=>media.paused));
+});
+
 test('title music uses registered clips, keeps channel settings and returns to scene music',async()=>{
   const {audio,voices}=setup();audio.setScene({mapId:'M70010'});audio.unlock();await tick();
   const original=audio.snapshot().desired_clip,clip=Object.keys(data.clips)[0];

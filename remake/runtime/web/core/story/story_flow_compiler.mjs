@@ -38,7 +38,7 @@ export function compileTlkFlow(table,{choices}){
       if(!flagIndex(index)||bit<-32||bit>32)add('unsupported',{reason:'剧情旗标变更无效'});
       else add(bit>0?'set_flag_bit':'clear_flag_bit',{index,bit:Math.abs(bit)});
     }else if(type!==0){
-      const op={1:'set_native_object',2:'restore_party',3:'change_native_money',4:'request_save',5:'give_item',7:'set_native_sequence',8:'append_native_sequence',9:'world_map_command',10:'restore_native_resources',11:'restore_native_resources',14:'learn_native_skill',16:'native_noop',17:'unlock_recipe'}[type];
+      const op={1:'set_native_object',2:'restore_party',3:'change_native_money',4:'request_save',5:'give_item',7:'set_native_sequence',8:'append_native_sequence',9:'world_map_command',10:'restore_native_resources',11:'restore_native_resources',14:'learn_native_skill',16:'native_noop',17:'unlock_recipe',18:'native_special_service'}[type];
       add(op??'unsupported',op?{}:{reason:`剧情变更 ${type} 尚未接入`});
     }
     // Kind4 bypasses the ordinary header condition/presentation dispatch.

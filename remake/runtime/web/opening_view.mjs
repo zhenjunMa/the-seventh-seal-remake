@@ -3,7 +3,7 @@ import {drawImageRegion} from './core/resources/image_regions.mjs';
 // blend-state transitions are browser approximations, not native equivalence.
 import {locomotion} from './core/exploration/movement.mjs';
 import {linkPlaybackAbort,playbackFrame,playbackTask} from './core/story/story_playback.mjs';
-import {openingCamera,approachPoint,directArrivalMoves,nativeActorPixelEffects} from './core/ui/opening_presentation.mjs';
+import {openingCamera,approachPoint,directArrivalMoves,nativeActorPixelEffects,nativeConversationDirection} from './core/ui/opening_presentation.mjs';
 import {ActorEffectView} from './actor_effect_view.mjs';
 import {drawMapSprite} from './map_sprite.mjs';
 import {runtimeContent} from './core/content/content_registry.mjs';
@@ -101,6 +101,31 @@ export class OpeningView {
       },
       actor: async payload => {
         const {kind, signal} = payload;
+        if(kind==='face-pair'){
+          const first=this.actors.get(payload.actor),second=this.actors.get(payload.targetActor);
+          // 460790 exits for a busy first actor and only turns source type8
+          // roles. Coordinates are retained throughout this command.
+          if(!first||first.nativeEffectActive)return;
+          const face=(actor,target,secondary)=>{
+            if(!actor?.role||!target)return;
+            const source=this.scene.npcRuntime?.actors.get(actor.id)?.source;
+            const raw=source?.raw_hex;
+            if(secondary&&raw&&parseInt(raw.slice(0xf5*2,0xf5*2+2),16)===2)return;
+            const template=(actor.role.source_actions??actor.role.actions)[0];
+            if(!template||parseInt(template.raw_hex.slice(0,2),16)!==8)return;
+            // 4A61BF reads DAT+88. The shared map exporter admits only its
+            // rectangular value1, which selects this native direction table.
+            actor.direction=nativeConversationDirection(actor,target,1);
+            actor.conversationPosition={x:actor.x,y:actor.y};
+            if(!secondary||(actor.nativeStateRawD5??0)<12){
+              const bindings=source?.bindings??nativeNpcActionBindings(actor.role);
+              actor.action=bindings[0];actor.frame=0;actor.nativeStateRawD5=2;
+            }
+          };
+          face(first,second,false);face(second,first,true);
+          this.snapshot('opening-face-pair',{actor:payload.actor,target_actor:payload.targetActor,command:payload.command?.index});
+          return;
+        }
         if (kind === 'restore') {
           for(const [slot,actor]of this.actors)if(slot<10)actor.visible=false;
           this.controlledActor=payload.controlledActor??this.controlledActor;
@@ -147,8 +172,10 @@ export class OpeningView {
         if (kind === 'facing' || kind === 'behavior') {
           const effect=nativeActorPixelEffects[kind][payload.nativeStateRaw],tickMs=this.effects.tick_ms??20;
           if(!effect)throw new Error(`未支持的人物像素效果 ${kind}:${payload.nativeStateRaw}`);
+          if(kind==='behavior')actor.nativeEffectActive=true;
           this.snapshot('opening-effect-start',{actor:payload.actor,kind,native_state:payload.nativeStateRaw,command:payload.command?.index});
           actor.awaitingAppearance=false;actor.visible=true;
+          try{
           if(effect.particles){
             actor.effect=new ActorEffectView(actor,effect.particles);
             const particleTicks=actor.effect.ticks??this.effects.particle_ticks??effect.ticks;
@@ -175,6 +202,7 @@ export class OpeningView {
             if(kind==='behavior')actor.visible=false;
           }
           this.snapshot('opening-effect-complete',{actor:payload.actor,kind,command:payload.command?.index});
+          }finally{if(kind==='behavior')actor.nativeEffectActive=false;}
           return;
         }
         throw new Error(`未支持的序章人物演出：${kind}`);

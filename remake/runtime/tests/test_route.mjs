@@ -37,6 +37,17 @@ test('counter <=40 never draws; standing and non-map phases do not count',()=>{
  assert.equal(s.counters['001'],40);assert.equal(rng.used(),0);
  assert.deepEqual(previewMovement(s,input(0),data,rng).state,s);assert.deepEqual(previewMovement(s,input(4,{phase:'event'}),data,rng).state,s);
 });
+test('the controlled role equipment suppresses encounters until removed without changing the native roll cadence',async()=>{
+ const itemData=await read('items.json'),state=initialEncounterState(seed.party);state.counters['001']=40;
+ const world={leader_id:'001',equipment:{version:1,roles:{'001':[{id:139}],'002':[]}}},before=clone(world);
+ const roll=queue([999]),suppressed=previewMovement(state,input(4,{world,itemData,play_time_ms:999999}),data,roll);
+ assert.equal(suppressed.encounter,null);assert.equal(suppressed.state.counters['001'],41);assert.equal(roll.used(),1);
+ assert.deepEqual(world,before);assert.equal(state.counters['001'],40);
+ // An equipped teammate does not contribute to the controlled role's sum.
+ world.equipment.roles['001']=[];world.equipment.roles['002']=[{id:139}];
+ const normal=previewMovement(state,input(4,{world,itemData}),data,queue([998,0,0,0,1]));
+ assert.ok(normal.encounter);assert.equal(normal.state.counters['001'],0);
+});
 test('native byte counter wraps; cities and transition completion suppress draws',()=>{
  const s=initialEncounterState(seed.party);s.counters['001']=255;
  assert.equal(previewMovement(s,input(),data,queue([])).state.counters['001'],0);

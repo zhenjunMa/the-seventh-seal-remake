@@ -211,11 +211,18 @@ class MediaBuilder:
         from export_startup_menu import sprite
         raw = self.source(source).read_bytes()
         key = Path(source).stem.lower()
-        if key == 'menuback':
+        from export_native_services import NAMED_PACK_COUNTS
+        if key == 'menuback' or key in {name.casefold() for name in NAMED_PACK_COUNTS}:
+            if len(raw) < 5 or raw[0] != 1:
+                raise ValueError('命名 BMP 素材包头无效：' + source)
             count = struct.unpack_from('<I', raw, 1)[0]
+            if count <= 0 or len(raw) < 5 + count * 72:
+                raise ValueError('命名 BMP 素材包索引无效：' + source)
             result = []
             for index in range(count):
                 offset, size = struct.unpack_from('<II', raw, 5+index*72)
+                if offset < 5 + count * 72 or offset + size > len(raw) or raw[offset:offset+2] != b'BM':
+                    raise ValueError(f'命名 BMP 素材包图片 {index} 越界：' + source)
                 with Image.open(io.BytesIO(raw[offset:offset+size])) as opened:
                     result.append(opened.convert('RGBA'))
             return result
@@ -323,7 +330,22 @@ class MediaBuilder:
                 raise ValueError('菜单感应平面与固定描述不一致：'+row['source'])
             return Image.frombytes('L', (row['width'], row['height']), plane)
         if kind == 'pak':
-            return self.pak(row['source'])[row['frame']]
+            result = self.pak(row['source'])[row['frame']]
+            if row.get('transparent_color') == 0:
+                result = result.copy()
+                pixels = result.load()
+                for y in range(result.height):
+                    for x in range(result.width):
+                        if pixels[x, y][:3] == (0, 0, 0):
+                            pixels[x, y] = (0, 0, 0, 0)
+            return result
+        if kind == 'bitmap':
+            with Image.open(self.source(row['source'])) as opened:
+                return opened.convert('RGBA')
+        if kind == 'pe-cursor':
+            from export_native_services import decode_pe_cursor
+            return decode_pe_cursor(self.source(row['source']).read_bytes(), row,
+                                    row['width'], row['height'], row['hotspot'])
         if kind == 'map':
             from route_export_maps import RouteMapBackground
             from export_maps import compose_background

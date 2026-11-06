@@ -12,6 +12,7 @@ import {nativeKeyedChest,nativeChestAnimation,nativeToggleObject} from '../explo
 import {nativeCombinationConditions} from '../story/native_story_combinations.mjs';
 import {nativeRandomBranches} from '../story/native_story_random.mjs';
 import {readNativeService} from '../items/native_economy.mjs';
+import {validateNativeSpecialService} from '../items/native_special_services.mjs';
 import {compileNativeTriggerFlow} from '../story/story_flow_compiler.mjs';
 const need=(ok,message)=>{if(!ok)throw new Error(message);};
 const flagIndex=n=>Number.isInteger(n)&&n>=0&&n<2000;
@@ -160,6 +161,9 @@ export function inspectContentReadiness(content,story,resources){
               requireLearningRewardReadiness(record,content,story.role_definitions);break;
             case 9:need(record.region_byte_raw>=0&&record.region_byte_raw<2&&record.mutation_index>=0&&record.mutation_index<=2
               &&record.mutation_bit>=0&&record.mutation_bit<7,'大地图状态命令未支持');break;
+            case 18:
+              need(item.explicit,'特殊服务需要已登记的主动入口');
+              validateNativeSpecialService(record,{definitions:story.item_definitions,sourceHashes:story.source_hashes});break;
             default:throw new Error(`剧情变更 ${record.mutation_type} 尚未实现`);
           }
           if((bit||record.condition_type!==0||record.kind===4)&&record.kind!==2&&!item.falseOnly)add(record.if_true);

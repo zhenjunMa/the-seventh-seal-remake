@@ -9,7 +9,7 @@ import {runtimeContent, storyBindings} from '../content/content_registry.mjs';
 import {StoryFlowRunner} from './story_flow.mjs';
 import {evaluateNativeStoryCondition} from './native_story_conditions.mjs';
 import {applyNativeStoryMutation} from './native_story_mutations.mjs';
-import {removeNativeStoryItem} from './native_story_inventory.mjs';
+import {removeNativeStoryItem, giveNativeStoryItem} from './native_story_inventory.mjs';
 import {applyWorldMapCommandToDraft} from '../exploration/world_map.mjs';
 import {
   compileTlkFlow,
@@ -30,9 +30,8 @@ import {evaluateNativeStoryCombination} from './native_story_combinations.mjs';
 import {createNativeRng} from '../battle/combat_rules.mjs';
 import {initialEncounterState} from '../exploration/encounters.mjs';
 
-import {bytes, hex, view} from '../content/native_bytes.mjs';
+import {bytes, view} from '../content/native_bytes.mjs';
 import {validateChapterStory, chapterChoices, chapterRestChoices, flagIndex} from './native_records.mjs';
-import {initializeChapterItem} from '../items/native_story_items.mjs';
 import {chapterObjectState, setObjectEventState} from './object_state.mjs';
 export {validateChapterStory, chapterChoices, chapterRestChoices} from './native_records.mjs';
 export {validateChapterItemDefinition, initializeChapterItem} from '../items/native_story_items.mjs';
@@ -130,6 +129,7 @@ export class ChapterRunner {
           'random_jump',
           'change_native_money',
           'native_service',
+          'native_special_service',
           'native_sound',
           'learn_native_skill',
           'native_noop',
@@ -530,10 +530,10 @@ export class ChapterRunner {
       need(native && record, '组合条件缺少原剧情来源');
       return evaluateNativeStoryCombination(record, draft, table);
     }
-    if (op === 'native_service') {
+    if (op === 'native_service' || op === 'native_special_service') {
       need(
         native && record && context.explicitInteraction === true && typeof this.service === 'function',
-        '原商店服务接口缺失或没有主动交互入口',
+        '原城镇服务接口缺失或没有主动交互入口',
       );
       return (async () => {
         playback?.check();
@@ -742,52 +742,13 @@ export class ChapterRunner {
         });
         return result;
       }
-      const definition = this.data.item_definitions?.[record.mutation_bit];
-      need(
-        definition && definition.source?.sha256 === this.data.source_hashes[definition.source.path],
-        '剧情道具来源缺失',
-      );
-      let rng;
-      const template = initializeChapterItem(definition, {
-        rng: () => {
-          if (!rng) {
-            draft.encounters ??= initialEncounterState(draft.party);
-            rng = createNativeRng(draft.encounters.rng_state);
-          }
-          return rng();
-        },
+      const result = giveNativeStoryItem(draft, this.data.item_definitions?.[record.mutation_bit], {
+        sourceHashes: this.data.source_hashes,
+        instanceId: `chapter-${table.id}-${record.id}-${draft.revision}-${draft.inventory.length}`,
+        initializationSource: context.itemInitializationSource,
       });
-      if (rng) draft.encounters.rng_state = rng.state;
-      const inventory = draft.inventory;
-      // 0x47BDC0 checks each stored slot in order, choosing the first matching
-      // stack (+0x0C=0) or empty ID0 slot. Gear type2 joins inventory too.
-      const slot = inventory.find(
-        (row) =>
-          row.id === 0 || (row.id === definition.id && bytes(row.source_raw_hex, 0xe5, '背包')[0x0c] === 0),
-      );
-      if (slot && slot.id !== 0) {
-        const quantity = (slot.quantity + 1) >>> 0;
-        slot.quantity = quantity < 100 ? quantity : 99;
-        const raw = bytes(slot.source_raw_hex, 0xe5, '背包');
-        view(raw).setUint32(4, slot.quantity, true);
-        slot.source_raw_hex = hex(raw);
-      } else if (slot || inventory.length < 1000) {
-        view(template).setUint32(4, 1, true);
-        const row = {
-          instance_id:
-            slot?.instance_id ?? `chapter-${table.id}-${record.id}-${draft.revision}-${inventory.length}`,
-          id: definition.id,
-          name: definition.name,
-          quantity: 1,
-          source_raw_hex: hex(template),
-          source_definition: copy(definition.source),
-          initialization_source:
-            context.itemInitializationSource ?? 'native-TLK-case5-0xCC-buffer-0x47B3C0-0x47BDC0',
-        };
-        if (slot) Object.assign(slot, row);
-        else inventory.push(row);
-      } else this.log({type: 'chapter-inventory-full', id: definition.id, native_capacity: 1000});
-      return;
+      if (result.full) this.log({type: 'chapter-inventory-full', id: record.mutation_bit, native_capacity: 1000});
+      return result;
     }
     throw new Error(`剧情行为 ${record.mutation_type} 尚未接入`);
   }

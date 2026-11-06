@@ -22,6 +22,7 @@ RUNTIME = ROOT / 'remake/runtime'
 # sibling tools explicitly, just as the other standalone runtime exporters do.
 sys.path.insert(0, str(RUNTIME / 'tools'))
 from source.native_item_init import initialize_existing_instance, VALUE_PAIRS
+from source.special_services import reward_ids as special_reward_ids
 from content_registration import definition as content_definition, map_ids
 from export_source_catalog import exe_bytes_at_va
 from export_encounters import map_pool
@@ -302,7 +303,7 @@ def registered_tlk_reachability(story, registration, original, hashes, require):
 
 
 def plain_equipment_supported(row):
-    """Admission is narrower than an equip slot: no unrecovered passive payload."""
+    """Numeric linking, source-ID-zero dormant mode7, and leader encounter sum."""
     fields = row.get('raw_fields', {})
     block = fields.get('special_effect_block', {})
     try:
@@ -314,11 +315,16 @@ def plain_equipment_supported(row):
                 and row.get('slot_id') in {slot['id'] for slot in SLOTS}
                 and row.get('initialization', {}).get('deterministic') is True
                 and row.get('validation', {}).get('all_value_ranges_ordered') is True
-                and len(payload) == 0x117 and not any(payload[:0xea]) and not any(payload[0xff:])
+                and len(payload) == 0x117
+                # 47A6A0 forwards134's mode7 block, but508E97 exits for
+                # effect ID0 before inserting any immunity status record.
+                and (not any(payload[:0xc6]) or payload[1] == 0 and payload[0xb] == 7)
+                and not any(payload[0xc6:0xea]) and not any(payload[0x107:])
                 and payload[0xea] <= 5
                 and all(1 <= u32(payload, 0xeb + index * 4) <= 416 for index in range(payload[0xea]))
-                and fields.get('effect_kind_raw_2b3') == 0
-                and fields.get('encounter_modifier_raw_3a7') == 0
+                and fields.get('effect_kind_raw_2b3') in (0, 7)
+                and fields.get('effect_kind_raw_2b3') == payload[0xb]
+                and fields.get('encounter_modifier_raw_3a7') == i32(payload, 0xff)
                 and fields.get('animation_skill_id_raw_142') == 0
                 and fields.get('effect_token_raw_126') == '')
 
@@ -433,6 +439,13 @@ def admit_registered_equipment(definitions, seed, story, registration):
         map_id, record_id = key.rsplit(':', 1)
         record = story['maps'][map_id]['records'][int(record_id) - 1]
         raw = bytes.fromhex(record['raw_hex'])
+        for reward_id in special_reward_ids(record, original['GAME.exe']):
+            item(reward_id)
+            sources.setdefault(str(reward_id), []).append(dict(kind='registered-special-service-reward',
+                map_id=map_id, record_id=record['id'], entrance=deepcopy(entrance),
+                source=deepcopy(record['source']), native_source=dict(path='GAME.exe', sha256=GAME_SHA,
+                    procedure='0x41a640' if record['mutation_index'] == 2 else '0x4e0890'),
+                mode=record['mutation_index'], index=record['mutation_bit']))
         if record['kind'] == 5:
             # 4FF480 derives CHR names from the literal six DGP slots. Only
             # registered enemies in a reachable battle can admit their loot.
@@ -542,6 +555,10 @@ def admit_registered_equipment(definitions, seed, story, registration):
             previous[ident] = deepcopy(row['availability'])
             row['availability'] = dict(enabled=True, chapter_enabled=True, catalog_visible=True,
                 default_enabled=True, reasons=['registered-source-equipment; pure-numeric-equip-and-linking-recovered'])
+        if row['raw_fields']['encounter_modifier_raw_3a7']:
+            row['behavior']['implemented_scope'].append('leader-equipment-encounter-modifier')
+        if row['raw_fields']['effect_kind_raw_2b3'] == 7:
+            row['behavior']['implemented_scope'].append('native-effect-id-zero-noop')
     return dict(policy='registered-source-plain-equipment-v1', promoted_item_ids=promoted,
         sources=sources, previous_availability=previous, rejected_sources=rejected,
         admitted_tlk_roots=roots, reachable_tlk_record_count=len(reachable),
@@ -803,10 +820,36 @@ def equipment_immunity_supported(row):
         and not any(raw[0x126:0x13a]) and i32(raw, 0x142) == 0 and i32(raw, 0x3a7) == 0)
 
 
+def stat_crystal_supported(row):
+    """The existing socket/link handler's exact pure-numeric source boundary."""
+    raw = bytes.fromhex(row['raw_hex'])
+    known = {0x0d, 0x11, 0x15, 0x19, 0x1d, 0x21, 0x25, 0x29, 0x2d,
+             0x35, 0x3d, 0x41, 0x45, 0x49, 0x4d, 0x51, 0x55, 0x59, 0x5d, 0x61,
+             0x65, 0x69, 0x6d, 0x71, 0x75, 0x79}
+    return bool(row['record_status'] == 'defined' and raw[0x24:0x26] == b'\x03\x01'
+        and not any(raw[0x1be:0x1ce]) and not any(raw[0x1d6:0x1ea]) and not any(raw[0x2a8:])
+        and not any(raw[0x126:0x13a]) and i32(raw, 0x142) == 0
+        and row['validation']['all_value_ranges_ordered'] and len(row['value_ranges']) == 32
+        and all(pair['instance_offset'] in known or pair['minimum'] == pair['maximum'] == 0
+                for pair in row['value_ranges']))
+
+
 def admit_registered_equipment_passives(definitions, equipment_admission, capabilities):
-    sources = {}
+    sources, stat_sources = {}, {}
     for ident, provenance in equipment_admission['sources'].items():
         row = definitions[ident]
+        if stat_crystal_supported(row):
+            stat_sources[ident] = deepcopy(provenance)
+            capabilities['previous_definitions'][ident] = {
+                key: deepcopy(row[key]) for key in ('availability', 'behavior')}
+            row['behavior'] = dict(kind='stat-crystal', status='recovered',
+                implemented_scope=['crystal-socketing', 'instance-attribute-linking',
+                                   'preserve-raw-hp-mp-on-socket-change'], unverified_scope=['crafting'])
+            row['availability'] = dict(enabled=True, chapter_enabled=True, catalog_visible=True,
+                default_enabled=True, reasons=['registered-source-acquisition; native-numeric-crystal-linking-recovered'])
+            row['crystal_material_source']['socketing_status'] = 'recovered'
+            row['crystal_material_source']['direct_use_status'] = 'not-a-consumable'
+            continue
         if not equipment_immunity_supported(row):
             continue
         sources[ident] = deepcopy(provenance)
@@ -828,7 +871,10 @@ def admit_registered_equipment_passives(definitions, equipment_admission, capabi
             evidence='ev_3896095f57f082ad42c4995b1b3ba73f5f5609d82426b7ab65f7767e8e10445b')
     capabilities['passive_sources'] = sources
     capabilities['passive_item_ids'] = sorted(map(int, sources))
-    capabilities['promoted_item_ids'] = sorted(set(capabilities['promoted_item_ids']) | set(map(int, sources)))
+    capabilities['stat_crystal_sources'] = stat_sources
+    capabilities['stat_crystal_item_ids'] = sorted(map(int, stat_sources))
+    capabilities['promoted_item_ids'] = sorted(set(capabilities['promoted_item_ids'])
+                                             | set(map(int, sources)) | set(map(int, stat_sources)))
     capabilities['passive_scope'] = ('4451C0 -> 47A6A0 scans equipment and retained sockets in native group/entry order; '
         '508BB0 preserves duplicate-before-RNG and inclusive chance. Mode0 uses normal aggregation and periodic clocks; '
         'mode6 blocks matching incoming status IDs, never ticks or renders, and retains dormant numeric payload.')

@@ -1101,7 +1101,8 @@ export const definition = {
     "m03050-1",
     "m72040-q",
     "m03011",
-    "m29011-1"
+    "m29011-1",
+    "m03061-1"
   ],
   "maps": {
     "M01060": {
@@ -1155,6 +1156,7 @@ export const definition = {
     },
     "M01032": {
       "npcs": [
+        10,
         11,
         12,
         13,
@@ -1168,6 +1170,7 @@ export const definition = {
       "npcs": [
         10,
         11,
+        12,
         13,
         14
       ]
@@ -1196,6 +1199,7 @@ export const definition = {
     },
     "M01041": {
       "npcs": [
+        10,
         11,
         12,
         13,
@@ -1307,7 +1311,9 @@ export const definition = {
       "npcs": []
     },
     "M71013": {
-      "npcs": [],
+      "npcs": [
+        11
+      ],
       "triggers": [
         1,
         2
@@ -1470,6 +1476,7 @@ export const definition = {
         17,
         18,
         19,
+        20,
         21,
         22,
         23,
@@ -2148,13 +2155,26 @@ export const definition = {
     },
     "M03034": {
       "npcs": [
+        10,
+        11,
+        12,
+        13,
         14,
+        15,
+        16,
+        17,
+        18,
         19
       ],
       "setup": true
     },
     "M03033": {
-      "npcs": []
+      "npcs": [
+        10,
+        11,
+        12,
+        13
+      ]
     },
     "M03030": {
       "npcs": [
@@ -2171,10 +2191,16 @@ export const definition = {
       "npcs": [
         10,
         11,
+        12,
         13,
         14,
         15,
-        16
+        16,
+        18,
+        19,
+        20,
+        21,
+        22
       ]
     },
     "M03041": {
@@ -2295,17 +2321,31 @@ export const definition = {
     },
     "M01021": {
       "npcs": [
-        12
+        10,
+        12,
+        13,
+        14,
+        15,
+        16
       ],
       "triggers": [
         31
       ]
     },
     "M01021-1": {
-      "npcs": []
+      "npcs": [
+        10,
+        11,
+        12,
+        13
+      ]
     },
     "M01021-2": {
-      "npcs": []
+      "npcs": [
+        13,
+        14,
+        15
+      ]
     },
     "M01022": {
       "npcs": [
@@ -2313,21 +2353,44 @@ export const definition = {
       ]
     },
     "M01022-1": {
-      "npcs": []
+      "npcs": [
+        12,
+        14
+      ]
     },
     "M03020-1": {
-      "npcs": []
+      "npcs": [
+        10,
+        11,
+        12,
+        14
+      ]
     },
     "M03021-2": {
-      "npcs": []
+      "npcs": [
+        10,
+        11,
+        12,
+        13
+      ]
     },
     "M03021-3": {
-      "npcs": []
+      "npcs": [
+        11,
+        12,
+        13,
+        27,
+        28,
+        29,
+        31,
+        34
+      ]
     },
     "M03021-4": {
       "npcs": [
         10,
         11,
+        21,
         22
       ],
       "setup": true
@@ -2354,7 +2417,12 @@ export const definition = {
         15,
         16,
         18,
-        19
+        19,
+        21,
+        22,
+        23,
+        24,
+        25
       ]
     },
     "M03010": {
@@ -2367,12 +2435,18 @@ export const definition = {
         15,
         16,
         17,
-        18
+        18,
+        19,
+        20,
+        21,
+        22,
+        23
       ]
     },
     "M03011": {
       "npcs": [
         10,
+        11,
         12,
         13,
         14
@@ -2416,9 +2490,13 @@ export const definition = {
         13,
         14,
         19,
+        20,
+        21,
+        22,
         23,
         24,
-        25
+        25,
+        26
       ],
       "triggers": [
         31
@@ -2449,8 +2527,16 @@ export const definition = {
         27,
         28,
         29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
         36,
         37,
+        38,
+        39,
         41
       ],
       "triggers": [
@@ -2459,18 +2545,28 @@ export const definition = {
     },
     "M03062": {
       "npcs": [
+        10,
         11,
         12
       ]
     },
     "M55001": {
-      "npcs": []
+      "npcs": [
+        10,
+        12,
+        17,
+        24
+      ]
     },
     "M72020": {
       "npcs": []
     },
     "M72010-0-A": {
       "npcs": [
+        10,
+        11,
+        14,
+        15,
         20
       ]
     },
@@ -2497,7 +2593,8 @@ export const definition = {
         20,
         21,
         22,
-        23
+        23,
+        24
       ]
     },
     "M72010-0-C": {
@@ -2896,7 +2993,8 @@ export const definition = {
     },
     "M72064": {
       "npcs": [
-        11
+        11,
+        12
       ],
       "triggers": [
         31
@@ -3032,8 +3130,13 @@ export const definition = {
         15,
         16,
         17,
+        18,
+        19,
+        20,
+        21,
         23,
-        24
+        24,
+        25
       ],
       "triggers": [
         1
@@ -3414,7 +3517,9 @@ export const definition = {
       ]
     },
     "M71077-5": {
-      "npcs": [],
+      "npcs": [
+        10
+      ],
       "triggers": [
         3
       ]
@@ -4412,7 +4517,8 @@ export const definition = {
     },
     "M71080": {
       "npcs": [
-        10
+        10,
+        11
       ],
       "triggers": [
         2
@@ -4451,6 +4557,12 @@ export const definition = {
     },
     "M03032": {
       "npcs": [
+        10,
+        11,
+        12,
+        13,
+        16,
+        17,
         18,
         19
       ]
@@ -6658,12 +6770,15 @@ export const definition = {
       ]
     },
     "M72065": {
-      "npcs": []
+      "npcs": [
+        10
+      ]
     },
     "M03061": {
       "npcs": [
         10,
-        11
+        11,
+        12
       ]
     },
     "M03065": {
@@ -6684,7 +6799,9 @@ export const definition = {
       ]
     },
     "ELF-FOREST-C": {
-      "npcs": [],
+      "npcs": [
+        11
+      ],
       "objects": [
         {
           "index": 20,
@@ -6713,6 +6830,102 @@ export const definition = {
           "handler": "stationary-chest"
         }
       ]
+    },
+    "M01032-1": {
+      "npcs": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37
+      ]
+    },
+    "ELF-FOREST-O": {
+      "npcs": [
+        11
+      ]
+    },
+    "ELF-FOREST-W": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "M03031": {
+      "npcs": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ]
+    },
+    "M03063": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "M03064": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "M03067": {
+      "npcs": [
+        10
+      ]
+    },
+    "M03035": {
+      "npcs": [
+        10
+      ]
+    },
+    "M03036": {
+      "npcs": [
+        10
+      ]
+    },
+    "M03037": {
+      "npcs": [
+        10
+      ]
+    },
+    "M03038": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
+    },
+    "M72040": {
+      "npcs": [],
+      "export": {
+        "story": false
+      }
     }
   },
   "story": {
@@ -8964,6 +9177,11 @@ export default {
       "path": "Animate/m29011-1.anm",
       "sha256": "da89afdfbc99338d0e83b5c17c79ce1ae696e0c166361ea57dce6a741768e716",
       "bytes": 2213
+    },
+    "m03061-1": {
+      "path": "Animate/m03061-1.anm",
+      "sha256": "faa2cf1b98a331b4a3900f20715c155331c4b6bc30d603929a6519d93dbbd7b7",
+      "bytes": 1103
     }
   },
   "maps": {
@@ -9044,6 +9262,7 @@ export default {
       "rests": [],
       "routes": [],
       "npcs": [
+        10,
         11,
         12,
         13,
@@ -9063,6 +9282,7 @@ export default {
       "npcs": [
         10,
         11,
+        12,
         13,
         14
       ],
@@ -9102,6 +9322,7 @@ export default {
       "rests": [],
       "routes": [],
       "npcs": [
+        10,
         11,
         12,
         13,
@@ -9280,7 +9501,9 @@ export default {
       "objects": [],
       "rests": [],
       "routes": [],
-      "npcs": [],
+      "npcs": [
+        11
+      ],
       "flag_index": 393
     },
     "M71014": {
@@ -9480,6 +9703,7 @@ export default {
         17,
         18,
         19,
+        20,
         21,
         22,
         23,
@@ -10370,7 +10594,15 @@ export default {
       "routes": [],
       "setup_record": 26,
       "npcs": [
+        10,
+        11,
+        12,
+        13,
         14,
+        15,
+        16,
+        17,
+        18,
         19
       ],
       "flag_index": 421
@@ -10381,7 +10613,12 @@ export default {
       "objects": [],
       "rests": [],
       "routes": [],
-      "npcs": [],
+      "npcs": [
+        10,
+        11,
+        12,
+        13
+      ],
       "flag_index": 420
     },
     "M03030": {
@@ -10409,10 +10646,16 @@ export default {
       "npcs": [
         10,
         11,
+        12,
         13,
         14,
         15,
-        16
+        16,
+        18,
+        19,
+        20,
+        21,
+        22
       ],
       "flag_index": 36
     },
@@ -10605,7 +10848,12 @@ export default {
       "rests": [],
       "routes": [],
       "npcs": [
-        12
+        10,
+        12,
+        13,
+        14,
+        15,
+        16
       ],
       "flag_index": 9
     },
@@ -10615,7 +10863,12 @@ export default {
       "objects": [],
       "rests": [],
       "routes": [],
-      "npcs": [],
+      "npcs": [
+        10,
+        11,
+        12,
+        13
+      ],
       "flag_index": 38
     },
     "M01021-2": {
@@ -10624,7 +10877,11 @@ export default {
       "objects": [],
       "rests": [],
       "routes": [],
-      "npcs": [],
+      "npcs": [
+        13,
+        14,
+        15
+      ],
       "flag_index": 39
     },
     "M01022": {
@@ -10644,7 +10901,10 @@ export default {
       "objects": [],
       "rests": [],
       "routes": [],
-      "npcs": [],
+      "npcs": [
+        12,
+        14
+      ],
       "flag_index": 397
     },
     "M03020-1": {
@@ -10653,7 +10913,12 @@ export default {
       "objects": [],
       "rests": [],
       "routes": [],
-      "npcs": [],
+      "npcs": [
+        10,
+        11,
+        12,
+        14
+      ],
       "flag_index": 22
     },
     "M03021-2": {
@@ -10662,7 +10927,12 @@ export default {
       "objects": [],
       "rests": [],
       "routes": [],
-      "npcs": [],
+      "npcs": [
+        10,
+        11,
+        12,
+        13
+      ],
       "flag_index": 414
     },
     "M03021-3": {
@@ -10671,7 +10941,16 @@ export default {
       "objects": [],
       "rests": [],
       "routes": [],
-      "npcs": [],
+      "npcs": [
+        11,
+        12,
+        13,
+        27,
+        28,
+        29,
+        31,
+        34
+      ],
       "flag_index": 409
     },
     "M03021-4": {
@@ -10684,6 +10963,7 @@ export default {
       "npcs": [
         10,
         11,
+        21,
         22
       ],
       "flag_index": 456
@@ -10727,7 +11007,12 @@ export default {
         15,
         16,
         18,
-        19
+        19,
+        21,
+        22,
+        23,
+        24,
+        25
       ],
       "flag_index": 20
     },
@@ -10746,7 +11031,12 @@ export default {
         15,
         16,
         17,
-        18
+        18,
+        19,
+        20,
+        21,
+        22,
+        23
       ],
       "flag_index": 37
     },
@@ -10758,6 +11048,7 @@ export default {
       "routes": [],
       "npcs": [
         10,
+        11,
         12,
         13,
         14
@@ -10839,9 +11130,13 @@ export default {
         13,
         14,
         19,
+        20,
+        21,
+        22,
         23,
         24,
-        25
+        25,
+        26
       ],
       "flag_index": 24
     },
@@ -10883,8 +11178,16 @@ export default {
         27,
         28,
         29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
         36,
         37,
+        38,
+        39,
         41
       ],
       "flag_index": 32
@@ -10896,6 +11199,7 @@ export default {
       "rests": [],
       "routes": [],
       "npcs": [
+        10,
         11,
         12
       ],
@@ -10907,7 +11211,12 @@ export default {
       "objects": [],
       "rests": [],
       "routes": [],
-      "npcs": [],
+      "npcs": [
+        10,
+        12,
+        17,
+        24
+      ],
       "flag_index": 527
     },
     "M72020": {
@@ -10926,6 +11235,10 @@ export default {
       "rests": [],
       "routes": [],
       "npcs": [
+        10,
+        11,
+        14,
+        15,
         20
       ],
       "flag_index": 78
@@ -10970,7 +11283,8 @@ export default {
         20,
         21,
         22,
-        23
+        23,
+        24
       ],
       "flag_index": 519
     },
@@ -11509,7 +11823,8 @@ export default {
       "rests": [],
       "routes": [],
       "npcs": [
-        11
+        11,
+        12
       ],
       "flag_index": 465
     },
@@ -11705,8 +12020,13 @@ export default {
         15,
         16,
         17,
+        18,
+        19,
+        20,
+        21,
         23,
-        24
+        24,
+        25
       ],
       "flag_index": 474
     },
@@ -12227,7 +12547,9 @@ export default {
       "objects": [],
       "rests": [],
       "routes": [],
-      "npcs": [],
+      "npcs": [
+        10
+      ],
       "flag_index": 451
     },
     "M71077-6": {
@@ -13407,7 +13729,8 @@ export default {
       "rests": [],
       "routes": [],
       "npcs": [
-        10
+        10,
+        11
       ],
       "flag_index": 614
     },
@@ -13452,6 +13775,12 @@ export default {
       "rests": [],
       "routes": [],
       "npcs": [
+        10,
+        11,
+        12,
+        13,
+        16,
+        17,
         18,
         19
       ],
@@ -16652,7 +16981,9 @@ export default {
       "objects": [],
       "rests": [],
       "routes": [],
-      "npcs": [],
+      "npcs": [
+        10
+      ],
       "flag_index": 617
     },
     "M03061": {
@@ -16663,7 +16994,8 @@ export default {
       "routes": [],
       "npcs": [
         10,
-        11
+        11,
+        12
       ],
       "flag_index": 446
     },
@@ -16703,7 +17035,9 @@ export default {
       ],
       "rests": [],
       "routes": [],
-      "npcs": [],
+      "npcs": [
+        11
+      ],
       "flag_index": 582
     },
     "ELF-FOREST-P": {
@@ -16734,6 +17068,159 @@ export default {
       "entry_record": 1,
       "npcs": [],
       "flag_index": 596
+    },
+    "M01032-1": {
+      "path": "data/maps/m01032-1.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37
+      ],
+      "flag_index": 435
+    },
+    "ELF-FOREST-O": {
+      "path": "data/maps/elf-forest-o.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        11
+      ],
+      "flag_index": 594
+    },
+    "ELF-FOREST-W": {
+      "path": "data/maps/elf-forest-w.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 602
+    },
+    "M03031": {
+      "path": "data/maps/m03031.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "flag_index": 417
+    },
+    "M03063": {
+      "path": "data/maps/m03063.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 430
+    },
+    "M03064": {
+      "path": "data/maps/m03064.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 431
+    },
+    "M03067": {
+      "path": "data/maps/m03067.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10
+      ],
+      "flag_index": 445
+    },
+    "M03035": {
+      "path": "data/maps/m03035.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10
+      ],
+      "flag_index": 422
+    },
+    "M03036": {
+      "path": "data/maps/m03036.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10
+      ],
+      "flag_index": 423
+    },
+    "M03037": {
+      "path": "data/maps/m03037.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [
+        10
+      ],
+      "flag_index": 424
+    },
+    "M03038": {
+      "path": "data/maps/m03038.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 425
+    },
+    "M72040": {
+      "path": "data/maps/m72040.json",
+      "triggers": [],
+      "objects": [],
+      "rests": [],
+      "routes": [],
+      "npcs": [],
+      "flag_index": 63
     }
   },
   "story": {

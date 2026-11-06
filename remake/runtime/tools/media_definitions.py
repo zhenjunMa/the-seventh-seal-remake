@@ -9,7 +9,7 @@ import json
 import re
 
 MEDIA = re.compile(r'^/?assets/.+\.(?:png|mp3|wav|ogg|mp4|webm)$', re.I)
-ORIGINAL = re.compile(r'^(?!/|[A-Za-z]:)(?!.*(?:^|/)\.\.(?:/|$)).+\.(?:dgp|dat|chr|itm|anm|tlk|mnu|cap|pak|bik|wav|exe|scn|mag|stg)$', re.I)
+ORIGINAL = re.compile(r'^(?!/|[A-Za-z]:)(?!.*(?:^|/)\.\.(?:/|$)).+\.(?:dgp|dat|chr|itm|anm|tlk|mnu|cap|pak|bik|wav|exe|scn|mag|stg|bmp)$', re.I)
 
 
 def checksum(path):
@@ -236,6 +236,18 @@ class MediaDefinitions:
         if source and source.lower().endswith('.pak') and isinstance(node.get('frames'), list):
             for index, frame in enumerate(node['frames']):
                 self.add(frame['path'], 'pak', source=source, frame=index)
+        elif source and source.lower().endswith('.pak') and isinstance(node.get('source_frame'), int):
+            self.add(node.get('image') or node.get('path'), 'pak', source=source, frame=node['source_frame'],
+                     **({'transparent_color': node['transparent_color']} if 'transparent_color' in node else {}))
+        if source and source.lower().endswith('.bmp'):
+            self.add(node.get('image'), 'bitmap', source=source)
+        if source and source.lower().endswith('.exe') and isinstance(node.get('source'), dict):
+            cursor = node['source']
+            if cursor.get('resource_type') == 'RT_CURSOR':
+                self.add(node.get('image'), 'pe-cursor', source=source,
+                         offset=cursor['offset'], bytes=cursor['bytes'],
+                         payload_sha256=cursor['payload_sha256'], width=node['width'],
+                         height=node['height'], hotspot=node['hotspot'])
         if source and source.lower().endswith('.wav'):
             self.add(node.get('path'), 'audio', source=source)
         if source and source.lower().endswith('.bik'):

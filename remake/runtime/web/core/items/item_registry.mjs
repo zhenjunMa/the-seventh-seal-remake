@@ -111,7 +111,7 @@ export function upgradeItemConfiguration(data,existing){
     if(capabilities){
       need(capabilities.policy==='registered-source-item-capabilities-v1','道具能力准入来源版本不兼容');
       for(const [id,previous]of Object.entries(capabilities.previous_definitions??{})){
-        need(capabilities.promoted_item_ids.includes(Number(id))&&['simple-restore','status-cure','status-attack','status-clear','status-support','element-source','revival-item','permanent-stat-source','crafting-material','native-inert-item','equip','status-immunity-crystal'].includes(former.definitions[id]?.behavior.kind)&&
+        need(capabilities.promoted_item_ids.includes(Number(id))&&['simple-restore','status-cure','status-attack','status-clear','status-support','element-source','revival-item','permanent-stat-source','crafting-material','native-inert-item','equip','stat-crystal','status-immunity-crystal'].includes(former.definitions[id]?.behavior.kind)&&
           ['source-only','equip'].includes(previous.behavior.kind)&&previous.availability.enabled===false,`${id}道具能力旧基线无效`);
         Object.assign(former.definitions[id],copy(previous));
         delete former.definitions[id].equipment_passive;
@@ -129,6 +129,13 @@ export function upgradeItemConfiguration(data,existing){
         fields(row.parameters,['drop_rate','enabled'],`${id}.parameters`);integer(row.parameters.drop_rate,`${id}.drop_rate`,-1,100);need(typeof row.parameters.enabled==='boolean',`${id}.enabled须为布尔值`);
         next.entries[id].parameters.drop_rate=row.parameters.drop_rate;
         next.entries[id].parameters.enabled=row.parameters.enabled===row.original.enabled?next.entries[id].original.enabled:row.parameters.enabled;
+      }else if(capabilities?.stat_crystal_sources?.[id]&&!same(row.catalog,next.entries[id].catalog)){
+        // These crystals already had a recovered socket/link capability.
+        // Recording an acquisition source changes catalog metadata only;
+        // preserve every existing numeric edit and explicit disable switch.
+        fields(row,['name','owner','source','catalog','original','parameters'],id);
+        for(const key of ['name','owner','source','catalog','original'])need(same(row[key],legacyEquipment.entries[id][key]),`${id}.${key}旧数值晶石来源或基线不匹配`);
+        next.entries[id].parameters=copy(row.parameters);
       }else if(capabilities?.previous_definitions?.[id]&&!same(row.original,next.entries[id].original)){
         fields(row,['name','owner','source','catalog','original','parameters'],id);
         for(const key of ['name','owner','source','catalog','original'])need(same(row[key],legacyEquipment.entries[id][key]),`${id}.${key}旧道具来源或基线不匹配`);

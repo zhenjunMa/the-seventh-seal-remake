@@ -131,9 +131,10 @@ class MapObjects:
         if not self.objects:
             return {}
         root = Path(root).resolve()
-        directory = root.joinpath(*self.resource_relative_base().split('/')).resolve()
-        mapm = (root / 'mapm').resolve()
-        if not mapm.is_relative_to(root) or not directory.is_relative_to(mapm):
+        directory = root.joinpath(*self.resource_relative_base().split('/'))
+        mapm = root / 'mapm'
+        resolved_directory, resolved_mapm = directory.resolve(), mapm.resolve()
+        if not resolved_mapm.is_relative_to(root) or not resolved_directory.is_relative_to(resolved_mapm):
             raise MapObjectError('Object resource directory escapes the local Mapm root')
         result = {}
         for item in self.objects:
@@ -148,11 +149,14 @@ class MapObjects:
                            if candidate.name.lower() == filename and candidate.is_file()]
                 if len(matches) == 1:
                     path = matches[0]
-            path = path.resolve()
-            if not path.is_relative_to(directory) or not path.is_relative_to(mapm):
+            resolved_path = path.resolve()
+            if not resolved_path.is_relative_to(resolved_directory) or not resolved_path.is_relative_to(resolved_mapm):
                 raise MapObjectError('Object resource file escapes the native Mapm directory')
             if not path.is_file():
                 raise MapObjectError(f'Missing exact native object resource: {self.resource_source(item["resource_identifier_raw"])}')
+            # Validate the physical target but retain the installation-local
+            # resource identity. Developer source links must not leak their
+            # physical host prefixes into portable runtime definitions.
             result[filename] = path
         return result
 

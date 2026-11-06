@@ -282,7 +282,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
             const stop=Boolean(exit||story&&state.lastStoryTrigger!==`${at.map_id}:${story.id}`);
             if(state.encounterData&&!state.battleUnavailable){
               const preview=previewMovement(encounterState,{party:state.world.value.party,leader_id:state.selectedRole,map_id:at.map_id,
-                dx:segment.dx,dy:segment.dy,distance:segment.distance,step_pixels:motion.keyboardStepSize,transition:stop,phase:'map',play_time_ms:actions.currentPlayTime()},state.encounterData);
+                dx:segment.dx,dy:segment.dy,distance:segment.distance,step_pixels:motion.keyboardStepSize,transition:stop,phase:'map',play_time_ms:actions.currentPlayTime(),world:state.world.value,itemData:state.itemData},state.encounterData);
               encounterState=preview.state;encounter=preview.encounter;encounterAdvanced=true;
             }
             return !encounter&&!stop;

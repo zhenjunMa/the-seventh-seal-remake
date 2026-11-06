@@ -31,6 +31,7 @@ const OPS = new Set([
   'test_native_combination',
   'change_native_money',
   'native_service',
+  'native_special_service',
   'learn_native_skill',
   'native_noop',
   'unlock_recipe',

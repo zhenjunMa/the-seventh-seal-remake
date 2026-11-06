@@ -2,6 +2,7 @@
 // continuous-motion adapter and persistent development RNG initialization.
 import {createNativeRng} from '../battle/combat_rules.mjs';
 import {runtimeContent,mapId,sourceHash,requireRegisteredRoles,battleStage} from '../content/content_registry.mjs';
+import {equipmentEncounterModifier} from '../items/item_passives.mjs';
 const clone=v=>structuredClone(v);
 function requireValue(ok,message){if(!ok)throw new Error(message);}
 export function validateEncounterState(state,party){
@@ -66,7 +67,7 @@ export function generateGroup(map,data,rng,map_id=Object.keys(data.maps).find(id
 }
 // A non-mutating preview lets resource preparation fail without consuming the
 // draw/counter reset. The caller locks exploration before preparing a battle.
-export function previewMovement(state,{party,leader_id,map_id,dx,dy,distance=Math.max(Math.abs(dx),Math.abs(dy)),step_pixels,transition=false,phase='map',play_time_ms=0},data,rngOverride=null,content=runtimeContent){
+export function previewMovement(state,{party,leader_id,map_id,dx,dy,distance=Math.max(Math.abs(dx),Math.abs(dy)),step_pixels,transition=false,phase='map',play_time_ms=0,world=null,itemData=null},data,rngOverride=null,content=runtimeContent){
   const next=clone(state);step_pixels??=data.policy.step_pixels;
   if(next.modifier&&next.modifier.expires_at_ms<=play_time_ms)delete next.modifier;
   requireValue(Number.isFinite(dx)&&Number.isFinite(dy)&&Number.isFinite(distance)&&distance>=0&&Number.isFinite(step_pixels)&&step_pixels>0,'遇敌移动量无效');
@@ -79,12 +80,13 @@ export function previewMovement(state,{party,leader_id,map_id,dx,dy,distance=Mat
   const rng=rngOverride??createNativeRng(next.rng_state),map=data.maps[map_id];let encounter=null,accepted=0;
   const poolMapId=next.global_pool_map_id===undefined?(map?.members.length?map_id:null):next.global_pool_map_id;
   const pool=poolMapId===null?null:data.maps[poolMapId];
+  const equipmentModifier=equipmentEncounterModifier(world,itemData,leader_id);
   if(poolMapId!==null)requireValue(pool?.members.length>0,'保存的全局遇敌池尚未接入');
   for(let i=0;i<steps;i++){
     accepted++;next.counters[leader_id]=(next.counters[leader_id]+1)&255;
     if(next.counters[leader_id]<=40||transition||!map||map.frequency===0)continue;
     const roll=rng();requireValue(Number.isInteger(roll)&&roll>=0&&roll<=32767,'原随机输出无效');
-    const chance=map.frequency+data.policy.equipment_bonus+data.policy.buff_bonus+(next.modifier?.value??0);
+    const chance=map.frequency+data.policy.equipment_bonus+equipmentModifier+data.policy.buff_bonus+(next.modifier?.value??0);
     if(chance>0&&roll%1000>=1000-2*chance){
       next.counters[leader_id]=0;
       if(pool){

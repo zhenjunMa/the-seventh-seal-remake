@@ -7,6 +7,7 @@ retained 0x4A5F00 loader's byte-to-DWORD expansion, never a guessed offset.
 from __future__ import annotations
 
 from collections import defaultdict
+import hashlib
 import json
 from pathlib import Path
 import struct
@@ -25,6 +26,7 @@ from source.map_objects import MapObjects
 from map_npc_fields import initial_npc_visibility
 from PIL import Image
 from content_registration import role_ids as registered_role_ids, map_ids, map_exports
+from export_source_catalog import exe_bytes_at_va
 
 LOADER = "ev_18893b05019e3c8a7fc6989b91972feddeb54b0118896397c96cacc974e60f1a"
 ENTRY = export_maps.EVIDENCE["entry_assembly"]
@@ -232,21 +234,51 @@ def exit_record(origin, ident, destination, bg, detail):
 
 
 def retain_evidence():
+    """Retain available historical queries without inventing absent REA records.
+
+    Exported rules are checked in independently of the optional query archive.
+    A byte-identical executable can reproduce those established rules while the
+    missing archive remains an explicit source-audit limitation.
+    """
     wanted = {LOADER, ENTRY, OBJECT_TICK, export_maps.EVIDENCE["transition_execute"], export_maps.EVIDENCE["transition_load"]}
     records = {}
+    missing_archives = []
+    executable = (ROOT / 'GAME.exe').read_bytes()
+    if export_maps.sha(ROOT / 'GAME.exe') != export_maps.GAME_SHA:
+        raise DGPError('Chapter fixed loading rules require the exact verified executable')
     for path in (RUNTIME / "evidence/forest_ai_native_20261011.json", RUNTIME / "evidence/map_native_20261011.json",
                  RUNTIME / "evidence/chapter_native.json"):
+        if not path.is_file():
+            missing_archives.append(path.relative_to(ROOT).as_posix())
+            continue
         for record in json.loads(path.read_text(encoding="utf-8")).get("records", []):
             if record.get("evidence_id") in wanted:
                 if record.get("subject", {}).get("digest", {}).get("sha256") != export_maps.GAME_SHA:
                     raise DGPError("Chapter evidence executable identity mismatch")
                 records[record["evidence_id"]] = record
-    if set(records) != wanted:
-        raise DGPError("Chapter native evidence is incomplete")
-    export_maps.write_json(RUNTIME / "evidence/chapter_map_native.json",
-        dict(schema="seventh-seal-chapter-map-native", target_sha256=export_maps.GAME_SHA,
-             authority="Retained native static analysis; not original runtime observation",
-             records=list(records.values()), limitations=["No original executable was launched"]))
+    missing = sorted(wanted - set(records))
+    limitations = ["No original executable was launched"]
+    status = 'historical-queries-retained' if not missing else 'fixed-rules-source-verified; historical-queries-unavailable'
+    result = dict(schema="seventh-seal-chapter-map-native", target_sha256=export_maps.GAME_SHA,
+                  authority="Checked-in loading/entry rules bound to byte-identical original executable",
+                  status=status, records=list(records.values()),
+                  unavailable_historical_archives=missing_archives,
+                  unavailable_historical_evidence_ids=missing,
+                  source_snapshots=[], fixed_rule_sources={}, limitations=limitations)
+    if missing:
+        limitations.append('Historical REA queries were not recovered or rerun. Current byte snapshots establish executable identity, not new decompilation or runtime equivalence.')
+        for address, label in [(0x4A5F00, 'map-loader'), (0x4A5110, 'entry-placement'),
+                               (0x4137C0, 'object-tick'), (0x4A80E0, 'transition-dispatch'),
+                               (0x4A85A0, 'transition-load')]:
+            file_offset, payload = exe_bytes_at_va(executable, address, 256)
+            result['source_snapshots'].append(dict(address=f'0x{address:08x}', file_offset=file_offset, bytes=len(payload),
+                label=label, raw_hex=payload.hex(), sha256=hashlib.sha256(payload).hexdigest(),
+                authority='current executable bytes only; no historical Evidence ID assigned'))
+        for path in [Path(__file__), Path(export_maps.__file__), Path(__file__).with_name('route_export_maps.py'),
+                     Path(__file__).parent / 'source/map_objects.py', Path(__file__).parent / 'source/dgp.py']:
+            result['fixed_rule_sources'][path.relative_to(ROOT).as_posix()] = export_maps.sha(path)
+    export_maps.write_json(RUNTIME / "evidence/chapter_map_native.json", result)
+    return result
 
 
 def optional_map_tlk(ident, policy):
@@ -292,7 +324,7 @@ def export():
     before = {name: export_maps.sha(ROOT / name) for name in sorted(sources)}
     if before["GAME.exe"] != export_maps.GAME_SHA:
         raise DGPError("Chapter executable differs from retained native evidence")
-    retain_evidence()
+    native_proof = retain_evidence()
     outputs = {}
     roles = {ident: opening["roles"][ident] for ident in sorted(role_ids) if ident in opening["roles"]}
     for ident in sorted(role_ids - set(roles)):
@@ -390,6 +422,8 @@ def export():
                         raw_hex=bg[ident].data[0x8A:0x8E].hex(), value=u32(bg[ident].data, 0x8A),
                         source=dict(path=detail[ident]["path"], sha256=detail[ident]["sha256"])) for ident in IDS},
                     authority="Original DAT/TLK/DGP plus retained native static loading/entry rules",
+                    native_evidence_status=native_proof['status'],
+                    unavailable_historical_evidence_ids=native_proof['unavailable_historical_evidence_ids'],
                     limitations=["Only native state0 DAT edges into registered maps are provided; TLK/ANM routes stay separate", "No original execution observed",
                                  "Map entry and chapter mutation execution is a separate runtime responsibility"])
     target = RUNTIME / "web/data/chapter_map_resources.json"
@@ -404,6 +438,8 @@ def export():
                   reviewed_edges=[dict(map_id=o, descriptor=i, destination=t,
                                        entry=next(e["entry"] for e in exits[o] if e["id"] == i)) for o, i, t in EDGES],
                   native_bundle="remake/runtime/evidence/chapter_map_native.json",
+                  native_evidence_status=native_proof['status'],
+                  unavailable_historical_archives=native_proof['unavailable_historical_archives'],
                   limits=["Maps with assets=existing retain their owning exporter files", "No story commands executed", "No original execution observed"])
     export_maps.write_json(RUNTIME / "evidence/chapter_map_export.json", report)
     print(json.dumps(dict(source_unchanged=True, new_maps=NEW_MAPS, roles=list(roles),

@@ -2,7 +2,7 @@
 // TLK interpretation and persistent writes remain with their owning runner.
 import {linkPlaybackAbort,playbackTask} from './story_playback.mjs';
 
-export const COMMON_ANM_OPCODES = new Set([11,16,17,30,31,32,33,35,41,48,49,60,62,63,255]);
+export const COMMON_ANM_OPCODES = new Set([11,16,17,30,31,32,33,35,38,41,48,49,60,62,63,255]);
 
 export function anmFilename(command){
   const bytes=Uint8Array.from(command.raw_hex.match(/../g),value=>parseInt(value,16));
@@ -62,7 +62,7 @@ export class AnmActions {
     this.check();
     // Native473E30 resolves slots6..9 at the instant each actor command runs.
     const slot=command.u32_plus5;
-    const actor = slot>5&&slot<10&&[32,33,35,41,48,49].includes(command.opcode)?this.context().controlledActor??0:slot;
+    const actor = slot>5&&slot<10&&[32,33,35,38,41,48,49].includes(command.opcode)?this.context().controlledActor??0:slot;
     const position = {x:(command.u32_plus13 | 0) * 2, y:(command.u32_plus17 | 0) * 2};
     if (this.nativeMetadata) Object.assign(position, {
       nativeX:command.u32_plus13 | 0, nativeY:command.u32_plus17 | 0});
@@ -112,6 +112,13 @@ export class AnmActions {
           ...position, poseRaw:command.u32_plus25,
           ...(this.nativeMetadata ? {placementModeRaw:command.u32_plus1}: {})});
         if (!command.u32_plus1) recordPosition(); break;
+      case 38: {
+        // 4757EA calls 460790 with two actor slots. It turns both actors
+        // toward each other; +13 is an actor identity, never an x coordinate.
+        const targetSlot=command.u32_plus13;
+        const targetActor=targetSlot>5&&targetSlot<10?this.context().controlledActor??0:targetSlot;
+        await this.call('actor',command,{kind:'face-pair',actor,targetActor});break;
+      }
       case 48:
         this.launch('actor', command, {kind:'animation', actor, actionId:command.byte_plus29,
           frameStart:command.u32_plus13, frameEnd:command.u32_plus17,

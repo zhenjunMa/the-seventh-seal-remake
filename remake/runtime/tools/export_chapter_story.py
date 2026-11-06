@@ -21,6 +21,8 @@ from source.native_item_init import VALUE_PAIRS
 from source.combat_resources import CHR
 from source.save_format import character_at_header
 from source.map_identity import native_map_id_from_filename
+from source.special_services import reward_ids as special_reward_ids
+from incremental import write_json
 
 GAME_SHA = "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18"
 VM_EVIDENCE = "ev_b22e41c65651a4372b3b155d8d241a6094c01a46a948633a0db792af188533c1"
@@ -46,7 +48,7 @@ def source(path, digest, offset=None, **fields):
 
 def write(path, value):
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    write_json(path, value)
 
 
 def program_map_context(commands, maps, ident):
@@ -227,6 +229,7 @@ def export():
                 item_ids.update(value for value in struct.unpack_from('<32H', raw, 0x37) if value)
             if record['mutation_type'] == 17 and record['mutation_bit']:
                 item_ids.add(record['mutation_bit'])
+            item_ids.update(special_reward_ids(record, original['GAME.exe']))
     pending = list(item_ids)
     while pending:
         ident = pending.pop()

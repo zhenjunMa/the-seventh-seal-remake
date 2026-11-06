@@ -44,6 +44,7 @@ from export_story_media import source_files as story_media_source_files
 from export_chapter_items import source_files as item_source_files
 from export_item_presentation import source_files as item_presentation_source_files
 from export_audio import source_files as audio_source_files
+from export_native_services import source_files as native_service_source_files
 from export_battle_lifecycle import NATIVE as LIFECYCLE_NATIVE, RENDERER_BUNDLE, RENDERER_FINDINGS, FAILURE_FINDINGS, FAILURE_RECORDS
 from migrate_local_materials import relocated_path
 
@@ -54,6 +55,7 @@ EVIDENCE = RUNTIME / 'evidence'
 REGISTERED_ROLE_IDS = role_ids()
 REGISTERED_PLAYER_IDS = role_ids('player')
 SOURCE_DISCOVERERS = {
+    'native-services': native_service_source_files,
     'items': item_source_files, 'enemies': enemy_source_files,
     'stages': stage_source_files, 'audio': audio_source_files,
     'item-presentation': item_presentation_source_files,
@@ -284,10 +286,7 @@ STEPS['seal-region-index']=Step('export_seal_region_index.py',
 STEPS['native-services']=Step('export_native_services.py',
     ('data/native_services.json','assets/native_services'),
     reports=('ember_city_20261028/service_export.json',),
-    sources=tuple(f'SYSTEM/{name}{suffix}'
-        for name in ('boss_main','boss_text_01','boss_text_02','boss_text_03',
-                     'boss_buy_01','boss_buy_02','boss_buy_03','boss_buy','boss_buy_03a')
-        for suffix in ('.mnu','.CAP') if (ROOT/f'SYSTEM/{name}{suffix}').is_file()))
+    sources=('@discover:native-services',))
 STEPS['content']=replace(STEPS['content'],depends=(*STEPS['content'].depends,'native-services'))
 
 # Registration has independent domains; adding a map must not invalidate art
@@ -335,6 +334,36 @@ for target, inputs in {
 }.items():
     STEPS[target] = replace(STEPS[target], inputs=tuple(dict.fromkeys((*STEPS[target].inputs, *inputs))))
 STEPS['menu'] = replace(STEPS['menu'], outputs=('data/operation_menu.json',), registration=('player-ids',))
+
+# Additive source admission can reuse the checked-in fixed combat/item/media
+# rules without regenerating optional historical native query archives. These
+# producers retain byte-bound source checks and the final full content gate.
+STEPS['items-admission'] = Step('refresh_item_admission.py', ('data/items.json',),
+    ('chapter-story',), ('item_admission_refresh.json',),
+    ('data/items.json', 'data/opening_seed.json', 'data/chapter_story.json', 'data/runtime_content.json'),
+    ('@discover:items',))
+STEPS['configuration-refresh'] = replace(STEPS['configuration'], depends=('items-admission', 'encounters'))
+STEPS['map-presentation-refresh'] = Step('refresh_map_presentation.py',
+    ('data/map_effects.json', 'data/map_shadows.json', 'assets/map_effects', 'assets/map_shadows'),
+    ('chapter-maps',), ('map_presentation_refresh.json',),
+    ('data/runtime_content.json', 'data/chapter_map_resources.json', 'data/opening_map_resources.json',
+     'data/catalog.json', 'data/map_effects.json', 'data/map_shadows.json', 'data/maps'),
+    ('GAME.exe', *tuple(f'Map/{ident.lower()}.dat' for ident in map_ids())))
+STEPS['audio-map-refresh'] = Step('refresh_audio_map_bindings.py', ('data/audio.json', 'assets/audio/WordDisc', 'assets/audio/NumberDisc', 'assets/audio/Lotto'),
+    ('chapter-story', 'native-services'), ('audio_map_binding_refresh.json',),
+    ('data/runtime_content.json', 'data/audio.json', 'data/native_services.json'),
+    ('GAME.exe', '@discover:audio', '@discover:native-services', 'sound/WordDisc/click.wav', 'sound/WordDisc/RollClick.wav',
+     'sound/WordDisc/Page.wav', 'sound/WordDisc/Roll.wav'))
+STEPS['story-media-refresh'] = Step('refresh_story_media_selection.py', ('data/story_media.json',),
+    ('chapter-story',), ('story_media_selection_refresh.json',),
+    ('data/runtime_content.json', 'data/story_media.json'), ('GAME.exe', '@discover:story-media'))
+STEPS['content-library-refresh'] = replace(STEPS['content-library'], depends=('configuration-refresh',))
+STEPS['catalog-refresh'] = replace(STEPS['catalog'],
+    depends=('configuration-refresh', 'content-library-refresh', 'map-presentation-refresh', 'audio-map-refresh', 'story-media-refresh'))
+STEPS['side-content'] = replace(STEPS['content'],
+    depends=('catalog-refresh', 'native-services'), reports=(),
+    sources=('GAME.exe', *tuple(f'Fight_Role/{ident}.CHR' for ident in role_ids()),
+             *tuple(f'Animate/{ident}.anm' for ident in program_ids())))
 
 
 def sha(path):

@@ -35,6 +35,23 @@ export function hasEquipmentPassiveSource(definition) {
   return Boolean(raw&&raw[0x2a9]!==0);
 }
 
+// 47CE6C..47CF36 sums ITM+3A7 for the controlled role's equipped records.
+// +3AB belongs to timed item use and is not read by this equipment path.
+export function equipmentEncounterModifier(world, itemData, leaderId = world?.leader_id) {
+  if (!world || !itemData) return 0;
+  const entries = world.equipment?.roles?.[leaderId]
+    ?? (world.source?.initial_equipment ?? []).filter(row => row.role_id === leaderId);
+  let value = 0;
+  for (const entry of entries) {
+    const id = entry.id ?? entry.item_id;
+    if (!id) continue;
+    const raw = bytes(itemData.definitions?.[String(id)]?.raw_hex);
+    if (!raw) throw new TypeError('装备遇敌修正的原定义缺失');
+    value = (value + new DataView(raw.buffer).getInt32(0x3a7, true)) | 0;
+  }
+  return value;
+}
+
 export function equipmentPassiveRows(entries, itemData) {
   const result = [];
   for (const row of entries) {

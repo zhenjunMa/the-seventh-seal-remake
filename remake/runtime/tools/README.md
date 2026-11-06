@@ -59,6 +59,7 @@ python3 -B remake/runtime/tools/build_runtime.py --original-dir "/path/to/DiQiFe
 | 无媒体代码预检查 | `node remake/runtime/tools/verify_phaser.mjs` |
 | 实际媒体核对 | 同上加`--assets`，再做正式浏览器流程 |
 | 新内容完整生产 | `python3 -B remake/runtime/tools/build_runtime.py --target content --run` |
+| 沿固定规则追加支线来源 | `python3 -B remake/runtime/tools/build_runtime.py --target side-content --run` |
 | 仅独立事件／任务 | build_runtime目标`story-pack --run`；地图／角色／ANM变化走content |
 | 查看目标计划／缓存原因 | build_runtime加`--target content --explain`，不导出 |
 | 同步／核对派生工具文档 | `python3 -B remake/runtime/tools/sync_tool_docs.py`；只读核对加`--check` |
@@ -85,6 +86,10 @@ python3 -B remake/runtime/tools/build_runtime.py --target content --run
 ```
 
 preflight只读已有源表，不导出、不写报告、不核原媒体；新地图须先准备来源。显式入口未知能力返回非零，旧隐式NPC只提示；正式登记与最终内容编译继续检查全部可达分支。
+
+`side-content`用于沿已提交规则追加地图、原NPC、ANM及奖励来源。它核对当前`GAME.exe`固定SHA、全416条ITM原字节和所有取得路径，复用共同地图／图层解码器与已验证音视频载体，重新计算道具准入、配置、资料库、音频绑定和剧情包；最后仍执行`export_content_registry.mjs`的完整能力及资源闭包检查。已有调参保留，玩家存档不参与。现存历史原生查询继续保留；缺失查询在本轮报告明确列出，不补造旧Evidence记录，也不把当前原字节快照称为重跑反编译。石像、数字符盘及赌场的固定 PCM 音效在音频刷新步骤通过既有媒体转码器导出，并逐一核对原始与导出 PCM；原名 Random.wav 缺失时登记静音，不替换 Random_old.wav。其他新增战斗规则、角色、尚未恢复的玩法或实际音视频载体仍须走各自完整来源导出；这个目标不会放行未知能力。
+
+剧情ANM字面引用不存在的声音时，来源发现将原文件名和调用者写入`story_media.json.missing_sounds`，只对这份明确清单静音继续声音命令，保留地图音乐释放／恢复时序；不会用近名文件替换。缺失视频仍拒绝构建。补回原声音后重新发现来源并完整导出该载体，缺失声明随之移除。
 
 ### 参数与内容查询
 
@@ -186,7 +191,7 @@ plan只用已提交元数据及既有图集区域，不读PNG或写正式产物�
 
 基础导出器extract、export_movement、export_combat_lab、export_combat_presentation已在本目录；正式生产不引用prototype。各自仍需原输入及保留证据，使用前核范围。共享原版资源与存档解析、道具初始化模块在`source/`，通过`source.<模块名>`导入；媒体统一`web/assets/`。
 
-每份共享生成表只有一个生产者；例如状态表由enemies生成，party-skills只校验引用。content贯通地图、剧情、怪物、玩家、配置、表现、声音、字体和最终登记。独立原城镇菜单素材使用native-services目标，已经包含在content中。
+每份共享生成表只有一个生产者；例如状态表由enemies生成，party-skills只校验引用。content贯通地图、剧情、怪物、玩家、配置、表现、声音、字体和最终登记。独立原城镇菜单素材使用native-services目标，已经包含在content中。该目标还登记石像盘面107帧、数字符盘及三种赌场游戏的原 PAK/BMP 图像、原GAME.exe内RT_CURSOR载荷及音效调用字串来源；首次素材构建按pe-cursor配方重建CUR并解码，使用原hotspot，不读取evidence图像。
 
 力城／劲风岛交接使用`node remake/runtime/tools/create_wind_region_fixtures.mjs --from <FF-02结束档> --out <新输出目录>`；`--near-events`仅调整交互附近的玩家坐标和八向朝向。加`--services-only`只准备力城宿屋、普通道具商和合成师的现场样本，保留原资金、背包及角色资源；成功买卖、住宿和合成由正式页面实际操作。
 
@@ -273,6 +278,14 @@ python3 -B remake/runtime/tools/source/inspect_equipment.py /path/to/SaveGame0.D
 | `research-index` | [export_research_index.py](export_research_index.py) | 无声明依赖 |
 | `seal-region-index` | [export_seal_region_index.py](export_seal_region_index.py) | 无声明依赖 |
 | `native-services` | [export_native_services.py](export_native_services.py) | 无声明依赖 |
+| `items-admission` | [refresh_item_admission.py](refresh_item_admission.py) | `chapter-story` |
+| `configuration-refresh` | [export_runtime_config.mjs](export_runtime_config.mjs) | `items-admission`、`encounters` |
+| `map-presentation-refresh` | [refresh_map_presentation.py](refresh_map_presentation.py) | `chapter-maps` |
+| `audio-map-refresh` | [refresh_audio_map_bindings.py](refresh_audio_map_bindings.py) | `chapter-story`、`native-services` |
+| `story-media-refresh` | [refresh_story_media_selection.py](refresh_story_media_selection.py) | `chapter-story` |
+| `content-library-refresh` | [build_content_library.mjs](build_content_library.mjs) | `configuration-refresh` |
+| `catalog-refresh` | [build_catalog.py](build_catalog.py) | `configuration-refresh`、`content-library-refresh`、`map-presentation-refresh`、`audio-map-refresh`、`story-media-refresh` |
+| `side-content` | [export_content_registry.mjs](export_content_registry.mjs) | `catalog-refresh`、`native-services` |
 
 <!-- 自动生成：构建目标结束 -->
 

@@ -13,6 +13,7 @@ WEB = RUNTIME / 'web'
 sys.path.insert(0, str(RUNTIME / 'tools'))
 from source.combat_resources import CHR
 from content_registration import definition, map_ids, role_ids
+from incremental import write_json
 
 
 def sha(path): return hashlib.sha256(path.read_bytes()).hexdigest()
@@ -71,7 +72,7 @@ def export():
     for row in value['maps'].values():
         for source in [*row['source'], *[m['chr_source'] for m in row['members']]]: sources[source['path']] = source['sha256']
     if any(sha(ROOT / p) != digest for p, digest in sources.items()): raise ValueError('Original encounter source changed')
-    path.write_text(json.dumps(value, ensure_ascii=False, indent=2)+'\n', 'utf-8')
+    write_json(path, value)
     report = dict(schema='seventh-seal-encounter-export', version=1, passed=True, source_unchanged=True,
         source_hashes=sources, output_hashes={path.relative_to(RUNTIME).as_posix(): sha(path)}, maps=list(value['maps']),
         original_game_execution_observed=False)
