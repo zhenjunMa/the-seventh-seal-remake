@@ -286,13 +286,15 @@
     "tooling": {
       "description": "测试选择、前置和结果复用的行为保障",
       "files": [
-        "test_verify_tests.py"
+        "test_verify_tests.py",
+        "test_media_fingerprints.py"
       ],
       "layer": "component",
       "cache": false
     }
   },
   "requirements": {
+    "test_media_fingerprints.py": ["python:PIL"],
     "test_native_story_sequence.mjs": ["Map/wing-b01-a.dat", "Map/wing-b01-a.TLK", "Map/wing-b01-b.dat", "Map/wing-b01-b.TLK", "Map/wing-b01-c.dat", "Map/wing-b01-c.TLK"],
     "test_native_toggle_objects.mjs": ["Map/yearn-c02.dat", "Map/yearn-d02.dat", "mapm/m72073/013.dgp", "mapm/m72074/011.dgp"],
     "test_seal_battle_rewards.mjs": ["remake/runtime/evidence/seal_battle_rewards_20261104/periodic_commit_native.json", "remake/runtime/evidence/battle_result_20261020/native_evidence.json", "remake/runtime/evidence/forest_status_native_20261011.json", "SYSTEM/Object.ITM", "Fight_Role/049.CHR", "Fight_Role/050.CHR", "Fight_Role/051.CHR", "Fight_Role/052.CHR", "Fight_Role/053.CHR", "Fight_Role/054.CHR", "Fight_Role/055.CHR", "Fight_Role/056.CHR", "Fight_Role/057.CHR", "Fight_Role/058.CHR", "Fight_Role/060.CHR", "Fight_Role/077.CHR", "Fight_Role/078.CHR", "Fight_Role/080.CHR", "Fight_Role/083.CHR", "Fight_Role/086.CHR", "Fight_Role/087.CHR", "Fight_Role/101.CHR", "Fight_Role/102.CHR", "Fight_Role/103.CHR", "Fight_Role/104.CHR", "Fight_Role/105.CHR", "Fight_Role/106.CHR", "Fight_Role/107.CHR", "Fight_Role/108.CHR", "Fight_Role/109.CHR", "Fight_Role/110.CHR", "Fight_Role/111.CHR", "Fight_Role/112.CHR", "Fight_Role/113.CHR", "Fight_Role/114.CHR", "Fight_Role/115.CHR", "Fight_Role/116.CHR", "Fight_Role/117.CHR", "Fight_Role/118.CHR", "Fight_Role/119.CHR", "Fight_Role/120.CHR", "Fight_Role/121.CHR", "Fight_Role/122.CHR", "Fight_Role/123.CHR", "Fight_Role/124.CHR"],
@@ -527,7 +529,8 @@
         "test_verify_tests.py",
         "test_build_runtime.py",
         "test_content_exporters.py",
-        "test_current_export_reports.py"
+        "test_current_export_reports.py",
+        "test_media_fingerprints.py"
       ]
     }
   },

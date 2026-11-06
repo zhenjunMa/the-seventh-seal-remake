@@ -1,7 +1,7 @@
 {
   "schema": "seventh-seal-tool-index",
   "version": 1,
-  "updated": "2026-11-05",
+  "updated": "2026-11-06",
   "registered_steps": 50,
   "content_plan": [
     "chapter-maps",
@@ -1379,6 +1379,15 @@
     },
     {
       "path": "media_definitions.py",
+      "role": "shared-current",
+      "build_targets": [],
+      "imported_by": [
+        "export_media.py",
+        "media_fingerprints.py"
+      ]
+    },
+    {
+      "path": "media_fingerprints.py",
       "role": "shared-current",
       "build_targets": [],
       "imported_by": [

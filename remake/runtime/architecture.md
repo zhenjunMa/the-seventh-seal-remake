@@ -103,7 +103,7 @@ runtime_content.json＋web/content → 能力检查与内容编译 → 运行登
 | `web/content/`、`data/story/` | 前者为独立事件／任务编辑内容，后者为生成的共享、分地图和序章运行包 |
 | `data/source/`、`tools/layout_migration.json` | 历史基础清单与迁移映射；原字节不重写成新验收 |
 
-用户首次构建使用 `build_runtime.py --target media --original-dir ...`：固定规则、数值、剧情和内置位图字库随 Git 提供，`media_definitions.py` 由这些定义推导素材提取配方，`export_media.py` 只生成 `web/assets`、缓存和本次构建报告。`assets/media_manifest.json` 记录实际媒体与原版输入指纹，允许编解码器产生不同音视频容器字节，不改变规则来源。开发用规则重导出和历史来源审计保留旧工具及其环境要求，见[本地资料](../local_materials.md)。
+用户首次构建使用 `build_runtime.py --target media --original-dir ...`：固定规则、数值、剧情和内置位图字库随 Git 提供，`media_definitions.py` 由这些定义推导素材提取配方，`export_media.py` 只生成 `web/assets`、缓存和本次构建报告。`media_fingerprints.py` 先对照独立的 `tools/media_inputs.json` 做来源准入，默认拒绝清单或字节差异；`--ignore-fingerprint` 显式放行来源差异，导出结果继续严格校验；`--write-reference` 单独维护基准，不改规则和历史来源。`assets/media_manifest.json` 记录实际媒体与原版输入指纹，允许编解码器产生不同音视频容器字节，不改变规则来源。开发用规则重导出和历史来源审计保留旧工具及其环境要求，见[本地资料](../local_materials.md)。
 
 ## 探索与剧情
 

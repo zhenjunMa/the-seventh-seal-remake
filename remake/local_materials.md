@@ -8,6 +8,7 @@
 | --- | --- | --- |
 | 正式媒体 | `remake/runtime/web/assets/`；地图、图集、字体、声音和影片 | 首次通过 `build_runtime.py --target media --original-dir <原版目录> --run` 生成；来源、输出及缺项记入 `assets/media_manifest.json`。无媒体的预览不记正式素材验收。 |
 | 固定规则与字库 | 已提交的 `web/core/`、`web/data/`、`web/content/` 和 `runtime/builtin/fonts/` | 随版本提供；首次构建不重新生成规则、剧情、数值和字形，不调用 GDI。 |
+| 原版指纹基准 | `remake/runtime/tools/media_inputs.json`；已验证安装的素材清单和 SHA-256 | 随代码提供，默认严格核验。确认可信完整安装后用 `--write-reference` 更新；临时采用有差异的来源用 `--ignore-fingerprint`，详见工具说明。 |
 | 原版输入 | `--original-dir` 指定的安装目录，保留 `GAME.exe`、`Map/`、`Fight_Role/`、`Fight_Bk/`、`SYSTEM/`、`Animate/`、sound等结构 | 从自己的完整安装准备；首次素材构建只读访问。旧开发导出器仍沿用根目录输入约定。 |
 | 来源及构建台账 | `remake/runtime/evidence/`；原生指令依据、来源SHA、导出记录和历史初始化材料 | 开发重导出及来源审计按声明准备；用户首次素材构建不读取这些历史输入。 |
 | 观察与交接档 | `evidence/`下按主题／日期的报告、截图、输入和输出存档 | 随报告交接来源、路径、SHA、环境及样本条件；缺少时标记无法复核，不生成假报告或改旧指纹。 |
@@ -46,6 +47,8 @@
 开发交接档须保留原文件和准备来源，复用前用当前WorldStore校验；新样本另名，不修改旧`saved_at`。规则回放、仅渲染恢复、重制浏览器和原GAME观察各自注明范围。历史浏览器指纹不同不自动否定当前代码，也不能把旧观察改成新版本通过。
 
 ## 历史文档与恢复
+
+原 `remake/runtime/tools/media_compatibility.json` 的自动放行策略已由独立指纹基准和显式 `--ignore-fingerprint` 取代；原文件 SHA-256 为 `65afffbff4bed7be1b8ea2e56a92c2f3ef60d64ac3bf6b04e4444556a32af071`，可从提交 `c2c5f08` 按原路径恢复。它不再作为构建输入。
 
 `runtime/tools/layout_migration.json`记录目录迁移与清单SHA；[工具索引](runtime/tools/tool_index.json)的`retired_documents`记录已删除文档的原路径、SHA、替代入口及恢复提交。先确认对应提交在本地，再用`git show <提交>:<原路径>`查看；放入独立目录核SHA，不覆盖当前指南。
 

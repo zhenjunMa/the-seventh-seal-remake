@@ -25,13 +25,29 @@ python3 -B remake/runtime/tools/build_runtime.py --target media --original-dir "
 python3 -B remake/runtime/tools/build_runtime.py --target media --original-dir "/path/to/DiQiFengYin" --run --serve
 ```
 
+默认先对照已提交的 `tools/media_inputs.json`，按文件清单和 SHA-256 核验来源；缺少基准文件、内容变化或多出素材均返回非零，在任何媒体写入前停止。基准覆盖 `GAME.exe`、安装根目录的背景 DGP，以及 Animate、anilink、Fight_Bk、Fight_Role、Font、Map、mapm、picture、ROLE、sound、System 目录的全部文件。文件名大小写和背景 DGP 的根目录／Map 位置归一化；玩家存档、日志、临时文件和系统杂项排除，安装器、驱动及第三方启动器不纳入游戏素材基准。
+
+确认使用另一份来源时显式加 `--ignore-fingerprint`。该选项只放行来源清单／指纹差异，仍检查必需原文件、内置字库、解码、固定 PNG／图集和音视频转换；无法兼容的资源仍会失败，不生成占位内容。修改过的来源不会用旧图片缓存或同指纹别名掩盖，已按同一输入与配方验证的缓存可以复用。
+
+```console
+python3 -B remake/runtime/tools/build_runtime.py --original-dir "/path/to/DiQiFengYin" --ignore-fingerprint --run
+```
+
+维护者确认完整原版来源后，可生成新的基准。此操作只更新 `tools/media_inputs.json`，保留规则、剧情、数值、旧来源指纹和历史证据，随后退出；无需 Pillow、FFmpeg 或 Windows。不能与 `--run`、`--serve`、`--force`、`--images-only` 或 `--ignore-fingerprint` 同用：
+
+```console
+python3 -B remake/runtime/tools/build_runtime.py --original-dir "/path/to/DiQiFengYin" --write-reference
+```
+
+基准由维护者选择并验证，指纹只证明与基准一致，不自动认定发行版本或资源可信度。修改基准后需随代码提交该 JSON；普通素材构建不会重写它。
+
 `--serve` 在素材构建及 `verify_phaser.mjs --assets` 通过后启动正式服务；可加 `--port`、`--save-dir`。后续直接运行 `serve.py`。原版文件保持原位，只读访问；路径按 Windows 文件名解析，兼容目录和文件大小写以及已声明背景 DGP 的根目录位置。
 
-固定定义中的媒体描述决定物件初始帧、动作分区、图层、裁切和图集坐标。构建不重写 `web/data`、`web/content` 或数值调参。PNG 按固定清单核 SHA；音频保留 MPEG 字节或核转码前后 PCM，影片核帧数、时长及画面质量。音视频编码后的实际指纹写入 `assets/media_manifest.json`，与固定规则的原来源记录分开；允许的来源变体在该清单及构建报告中明确记录。
+固定定义中的媒体描述决定物件初始帧、动作分区、图层、裁切和图集坐标。构建不重写 `web/data`、`web/content` 或数值调参。PNG 按固定清单核 SHA；音频保留 MPEG 字节或核转码前后 PCM，影片核帧数、时长及画面质量。音视频编码后的实际指纹写入 `assets/media_manifest.json`，与固定规则的原来源记录分开；来源基准 SHA、实际输入清单、缺失／变化／多出项和是否显式放行记入该清单及构建报告；`source_variants` 继续保留相对固定定义历史来源的差异。
 
 `runtime/.cache/media` 保存可核验缓存，失败可续跑；缺失或损坏输出重建，`--force` 重新提取但不重置调参。现有战斗图集按已提交页面布局恢复，其余图片保持现有路径。本目标不包含全图片图集改造。
 
-`--images-only` 只用于定向排查图片；该结果不记完整首次构建通过。完整构建缺少已声明音视频时返回非零，不生成占位素材。工具与报告入口为 `media_definitions.py`、`export_media.py` 和 `evidence/builds/<本次 media 构建>/run.json`。
+`--images-only` 只用于定向排查图片；该结果不记完整首次构建通过。完整构建缺少已声明音视频时返回非零，不生成占位素材。工具与报告入口为 `media_definitions.py`、`media_fingerprints.py`、`export_media.py` 和 `evidence/builds/<本次 media 构建>/run.json`。
 
 ## 常用操作
 

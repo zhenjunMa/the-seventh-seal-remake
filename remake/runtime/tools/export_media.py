@@ -20,6 +20,7 @@ import sys
 from uuid import uuid4
 
 from media_definitions import MediaDefinitions, OriginalFiles, checksum, url
+from media_fingerprints import SourceFingerprints, source_key, write_reference
 
 RUNTIME = Path(__file__).resolve().parents[1]
 
@@ -29,13 +30,14 @@ def digest(value):
 
 
 class MediaBuilder:
-    def __init__(self, runtime, original_dir, *, force=False, images_only=False):
+    def __init__(self, runtime, original_dir, *, force=False, images_only=False, ignore_fingerprint=False):
         self.runtime = Path(runtime)
         self.web = self.runtime / 'web'
         self.original = OriginalFiles(original_dir)
         self.plan = MediaDefinitions(self.runtime)
         self.force = force
         self.images_only = images_only
+        self.ignore_fingerprint = ignore_fingerprint
         self.cache = self.runtime / '.cache/media'
         self.state_path = self.cache / 'state.json'
         self.source_hashes = {}
@@ -45,6 +47,7 @@ class MediaBuilder:
         self.outputs = {}
         self.aliases = {}
         self.active = set()
+        self.variant_assets = {}
         self.stats = dict(exported=0, reused=0, deduplicated=0, atlas_pages=0)
         self.ffmpeg = shutil.which('ffmpeg')
         self.ffprobe = shutil.which('ffprobe')
@@ -74,15 +77,16 @@ class MediaBuilder:
             if row.get('source'):
                 names.add(row['source'])
             names.update(row.get('backgrounds', []))
+        self.fingerprints = SourceFingerprints(self.original, self.runtime / 'tools/media_inputs.json')
+        problems.extend(self.fingerprints.check(ignore=self.ignore_fingerprint))
         expected = {key.casefold(): value for key, value in self.plan.inputs.items()}
-        compatibility = json.loads((Path(__file__).parent / 'media_compatibility.json').read_text('utf-8'))['sources']
         for name in sorted(names):
             try:
                 path = self.original.path(name)
             except FileNotFoundError:
                 # A supported alternative location must match the retained
                 # content digest. Similar names are never substituted.
-                wanted = expected.get(name.casefold())
+                wanted = self.fingerprints.expected.get(name.casefold()) or expected.get(name.casefold())
                 candidates = [p for p in self.original.files.values() if p.name.casefold() == Path(name).name.casefold()]
                 matches = [p for p in candidates if wanted and checksum(p) == wanted]
                 if len(matches) == 1:
@@ -90,14 +94,10 @@ class MediaBuilder:
                 else:
                     self.missing[name] = '原版目录未提供该文件'
                     continue
-            actual = checksum(path)
+            actual = self.fingerprints.file_hash(path)
             wanted = expected.get(name.casefold())
             if wanted and actual != wanted:
-                admitted = compatibility.get(name.casefold(), {})
-                if name.lower().endswith('.wav') or (admitted.get('definition_sha256') == wanted and actual in admitted.get('accepted_sha256', [])):
-                    self.variants[name] = dict(definition_sha256=wanted, actual_sha256=actual)
-                else:
-                    problems.append('原版资源版本不匹配：' + name)
+                self.variants[name] = dict(definition_sha256=wanted, actual_sha256=actual)
             self.source_paths[name] = path
             self.source_hashes[name] = actual
         for name, row in self.plan.recipes.items():
@@ -372,6 +372,9 @@ class MediaBuilder:
                         dependencies.append(frame['intrinsic']['path'])
         inputs = {source: self.source_hashes.get(source) for source in sources}
         inputs.update({url(child): self.resource_signature(url(child)) for child in dependencies})
+        changed = self.fingerprints.report['changed']
+        self.variant_assets[name] = (any(source in self.variants or source_key(source) in changed for source in sources)
+                                    or any(self.variant_assets[url(child)] for child in dependencies))
         return digest(json.dumps([self.recipe_version, row, inputs], sort_keys=True).encode())
 
     def build_one(self, name):
@@ -387,7 +390,8 @@ class MediaBuilder:
         signature = self.resource_signature(name)
         previous = self.state.get(name)
         expected = self.plan.expected.get(name) if row['kind'] not in ('audio', 'video') else None
-        if not self.force and expected and path.is_file() and checksum(path) == expected:
+        must_decode = self.variant_assets[name]
+        if not self.force and not must_decode and expected and path.is_file() and checksum(path) == expected:
             self.outputs[name] = expected
             self.aliases[expected] = path
             self.state[name] = dict(signature=signature, sha256=expected)
@@ -398,7 +402,7 @@ class MediaBuilder:
             self.aliases[previous['sha256']] = path
             self.stats['reused'] += 1
             return
-        if expected and expected in self.aliases:
+        if expected and expected in self.aliases and not must_decode:
             write_bytes(path, self.aliases[expected].read_bytes())
             actual = expected
             self.stats['deduplicated'] += 1
@@ -472,7 +476,8 @@ class MediaBuilder:
             {str(p.relative_to(self.runtime)): checksum(p) for p in sorted(modules)}], sort_keys=True).encode())
         report = dict(schema='seventh-seal-media-build', version=1, scope='images' if self.images_only else 'game',
                       started_utc=datetime.now(timezone.utc).isoformat(), passed=False,
-                      missing_original_files=sorted(self.missing), source_variants=self.variants, definitions_unchanged=False)
+                      missing_original_files=sorted(self.missing), source_variants=self.variants,
+                      fingerprint=self.fingerprints.report, definitions_unchanged=False)
         directory = self.runtime / 'evidence/builds' / (datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')+'-media-'+uuid4().hex[:8])
         with build_lock(self.cache):
             try:
@@ -486,9 +491,7 @@ class MediaBuilder:
                         write_json(self.state_path, self.state, compact=True)
                         print(f'素材 {index+1}/{len(selected)} {self.stats}', flush=True)
                 self.battle_pages()
-                for name, expected in self.source_hashes.items():
-                    if checksum(self.source(name)) != expected:
-                        raise ValueError('构建期间原版文件发生变化：' + name)
+                self.fingerprints.verify_unchanged()
                 for name, expected in self.plan.definition_hashes.items():
                     if checksum(self.web / name) != expected:
                         raise ValueError('构建期间游戏定义发生变化：' + name)
@@ -499,6 +502,7 @@ class MediaBuilder:
                                 scope=report['scope'], definitions=self.plan.definition_hashes,
                                 sources=self.source_hashes, files=self.outputs,
                                 source_variants=self.variants,
+                                fingerprint=self.fingerprints.report, source_inventory=self.fingerprints.files,
                                 missing=report['missing_assets'], complete=not self.images_only and not report['missing_assets'])
                 write_json(self.web / 'assets/media_manifest.json', manifest, compact=True)
                 return report
@@ -520,18 +524,30 @@ def main(argv=None):
     parser.add_argument('--target', nargs='+', default=['media'], choices=['media', 'game'])
     parser.add_argument('--run', action='store_true', help='执行素材构建；默认只检查并列计划')
     parser.add_argument('--force', action='store_true', help='重新提取素材；保留固定规则与调参')
+    parser.add_argument('--ignore-fingerprint', action='store_true', help='允许来源文件指纹／清单差异；必需文件和导出结果仍须通过校验')
+    parser.add_argument('--write-reference', action='store_true', help='维护：从可信原版安装重写 tools/media_inputs.json，然后退出')
     parser.add_argument('--images-only', action='store_true', help='仅检查／构建图片和现有战斗图集，不计完整首次构建')
     parser.add_argument('--serve', action='store_true', help='完整素材构建成功后启动正式游戏服务')
     parser.add_argument('--port', type=int, default=8767)
     parser.add_argument('--save-dir', type=Path, help='独立存档目录，默认使用正式玩家目录')
     args = parser.parse_args(argv)
+    if args.write_reference and (args.run or args.serve or args.force or args.images_only or args.ignore_fingerprint):
+        parser.error('--write-reference 只维护基准，不能与构建／放行选项同用')
     if args.serve and (not args.run or args.images_only):
         parser.error('--serve 需要 --run，且不能与 --images-only 同用')
     try:
-        builder = MediaBuilder(RUNTIME, args.original_dir, force=args.force, images_only=args.images_only)
+        if args.write_reference:
+            result = write_reference(OriginalFiles(args.original_dir), RUNTIME / 'tools/media_inputs.json')
+            print(json.dumps(result, ensure_ascii=False, indent=2), flush=True)
+            return 0
+        builder = MediaBuilder(RUNTIME, args.original_dir, force=args.force, images_only=args.images_only,
+                               ignore_fingerprint=args.ignore_fingerprint)
         problems = builder.preflight()
         print(json.dumps(dict(assets=len(builder.selected()), original_files=len(builder.source_hashes),
-                              missing_original_files=builder.missing, problems=problems), ensure_ascii=False, indent=2), flush=True)
+                              missing_original_files=builder.missing, fingerprint=builder.fingerprints.report,
+                              problems=problems), ensure_ascii=False, indent=2), flush=True)
+        if args.ignore_fingerprint and not builder.fingerprints.report['matched']:
+            print('已按 --ignore-fingerprint 放行来源差异；缺失必需文件和不匹配的导出结果仍会失败', flush=True)
         if problems:
             return 1
         if args.run:

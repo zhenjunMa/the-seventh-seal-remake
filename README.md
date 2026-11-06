@@ -14,7 +14,13 @@ python3 -m venv .venv
 .venv/bin/python -B remake/runtime/tools/build_runtime.py --target media --original-dir "/path/to/DiQiFengYin" --run --serve
 ```
 
-构建只生成媒体及素材清单，直接使用仓库中的规则、数值、剧情和字库；不依赖历史台账、观察存档或 Windows GDI。缺原文件或图片不匹配会明确报错，已完成的素材可以复用。构建完成后在 <http://127.0.0.1:8767/> 开玩。
+构建只生成媒体及素材清单，直接使用仓库中的规则、数值、剧情和字库；不依赖历史台账、观察存档或 Windows GDI。默认先按已提交的 `media_inputs.json` 核对原版来源，缺失、内容变化或多出素材都会拒绝导出。确认采用不同来源时可显式加 `--ignore-fingerprint`；必需文件、解码和导出图片校验仍须通过。已完成的素材可以复用。构建完成后在 <http://127.0.0.1:8767/> 开玩。
+
+维护者确认一份完整原版可作为新基准后，可单独执行以下命令。它只更新来源指纹清单，不导出素材或重生成规则，不能与 `--run` 同用：
+
+```console
+.venv/bin/python -B remake/runtime/tools/build_runtime.py --original-dir "/path/to/DiQiFengYin" --write-reference
+```
 
 后续启动无需再次提供原版目录：
 
