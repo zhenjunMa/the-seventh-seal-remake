@@ -1,4 +1,5 @@
 import {drawImageRegion} from './core/resources/image_regions.mjs';
+import {setImageSource} from './core/ui/image_dom.mjs';
 import {drawingContext} from './phaser/rendering/recorded_surface.mjs';
 // Original Game_Save_01/02/03 pixels and hit rectangles on a 640x480 plane.
 import {MANUAL_SAVE_SLOTS} from './core/world/save_slots.mjs';
@@ -51,7 +52,7 @@ export class SaveMenuView {
   }
   setMessage(text){this.message.textContent=text;}
   drawImage(path,x=0,y=0){const bitmap=this.images.get(path);if(bitmap)drawImageRegion(this.ctx,bitmap,x,y);}
-  overlayImage(path,x=0,y=0){const image=this.images.get(path);if(image){image.alt='';Object.assign(image.style,{left:x+'px',top:y+'px'});this.buttons.append(image);}}
+  overlayImage(path,x=0,y=0){if(this.images.has(path)){const image=document.createElement('img');image.alt='';setImageSource(image,path);Object.assign(image.style,{left:x+'px',top:y+'px'});this.buttons.append(image);}}
   page(id){this.drawImage(this.menus.get(id).images[0].image);}
   button(label,rect,handler,{className='',text='',disabled=false}={}){
     const button=document.createElement('button');button.type='button';button.className=className;button.setAttribute('aria-label',label);Object.assign(button.style,{left:rect.left+'px',top:rect.top+'px',width:rect.right-rect.left+'px',height:rect.bottom-rect.top+'px'});

@@ -24,7 +24,7 @@ async function setup({onConfirm=async()=>{}}={}){
     Object.defineProperty(node,'textContent',{get(){return text+this.children.map(child=>child.textContent??'').join('');},set(value){text=value;this.children=[];}});return node;
   }};
   let closes=0;
-  const view=await SaveMenuView.create({manifest,root,image:async path=>({path,style:{},attributes:{}}),onConfirm,onClose(){closes++;view.hide();},log:event=>logs.push(event)});
+  const view=await SaveMenuView.create({manifest,root,image:async path=>Object.freeze({path,width:640,height:480}),onConfirm,onClose(){closes++;view.hide();},log:event=>logs.push(event)});
   return {view,root,buttons,message,draws,logs,styles,listeners,get closes(){return closes;}};
 }
 const slotButtons=buttons=>buttons.children.filter(button=>button.className==='save-slot');
