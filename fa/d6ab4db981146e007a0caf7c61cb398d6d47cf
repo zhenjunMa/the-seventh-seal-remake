@@ -1,0 +1,41 @@
+remake/runtime/tools/media_fingerprints.py
+  s_d7e2f97e2fd81b::t_bd78cbddf365f7 67
+  s_d7e2f97e2fd81b::t_6ddf934b987f46 1-17,20-66,68-99,103-116
+  s_d7e2f97e2fd81b::t_ff45065b943b69 18-19,100-102
+README.md
+  s_d7e2f97e2fd81b::t_a0476f06129534 17-23
+remake/runtime/tests/test_media_fingerprints.py
+  s_d7e2f97e2fd81b::t_50d08a146c2599 1-120
+remake/runtime/tools/README.md
+  s_d7e2f97e2fd81b::t_a0476f06129534 28-43,46,50
+remake/runtime/tools/export_media.py
+  s_d7e2f97e2fd81b::t_50d08a146c2599 23,50,375-377,393-394,405
+  s_d7e2f97e2fd81b::t_6ddf934b987f46 33,40,80-81,89,97,100,479-480,494,505,527-528,534-535,539-544,547-550
+remake/runtime/tests/suites.json
+  s_d7e2f97e2fd81b::t_51aa807e695f6f 289-290,297,532-533
+remake/local_materials.md
+  s_d7e2f97e2fd81b::t_a0476f06129534 11,51
+  s_d7e2f97e2fd81b::t_5d460d3268b32b 52
+remake/runtime/architecture.md
+  s_d7e2f97e2fd81b::t_a0476f06129534 106
+remake/assessment/validation_design.md
+  s_d7e2f97e2fd81b::t_f3fcf4b8f4d9f1 107
+remake/runtime/tools/tool_index.json
+  s_d7e2f97e2fd81b::t_cf63733cb60432 4,1384-1392
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "451a0bdfa37e242a52b450665cd9e25aa4376f7d",
+  "prompts": {},
+  "sessions": {
+    "s_d7e2f97e2fd81b": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1abcf-faf1-7183-a300-c0c04fab61b8",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
