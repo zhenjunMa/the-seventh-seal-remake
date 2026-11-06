@@ -1,0 +1,24 @@
+remake/assessment/validation_design.md
+  s_6636301e8caa48::t_81ae93a9531526 7,9,38,49-50,61,95-96,142
+  s_6636301e8caa48::t_38353f7c48a82e 48
+remake/runtime/web/save_menu_view.mjs
+  s_6636301e8caa48::t_5d4bfac2b240fe 2,55
+remake/runtime/tests/test_save_menu.mjs
+  s_6636301e8caa48::t_5d4bfac2b240fe 27
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "4a32868e6ab2d67866c2f327c338745139ae9653",
+  "prompts": {},
+  "sessions": {
+    "s_6636301e8caa48": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1aeda-5239-70f1-b890-02fe2ec97da6",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
