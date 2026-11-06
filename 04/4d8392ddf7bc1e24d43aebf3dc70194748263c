@@ -1,0 +1,30 @@
+remake/assessment/region_remake_workflow.md
+  s_08a4160557912d::t_f357cd2543b654 53,56
+remake/assessment/validation_design.md
+  s_08a4160557912d::t_f357cd2543b654 13,32,52,62
+  s_9a942bed5f27f1::t_860ea273379e7a 63
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "490e40172a5a16237a4b10c633a72f9c6957cf01",
+  "prompts": {},
+  "sessions": {
+    "s_08a4160557912d": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b026-6de8-70d1-b73b-8ec231d2cf3c",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    },
+    "s_9a942bed5f27f1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1aff4-1e88-7890-9657-77f0617bf3f5",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
