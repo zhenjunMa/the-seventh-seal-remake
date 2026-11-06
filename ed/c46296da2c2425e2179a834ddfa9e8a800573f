@@ -1,0 +1,136 @@
+remake/runtime/web/death_particles.mjs
+  s_19f16ddd62d505::t_0cb63b381db5a1 1,120-121
+remake/runtime/web/operation_technique_view.mjs
+  s_19f16ddd62d505::t_0cb63b381db5a1 1,74,140,146,172-173,188,332
+remake/runtime/web/dialogue_view.mjs
+  s_19f16ddd62d505::t_0cb63b381db5a1 1,91,115,119,125,142
+remake/runtime/web/operation_equipment_view.mjs
+  s_19f16ddd62d505::t_0cb63b381db5a1 1,69,81,113,125
+remake/assessment/validation_design.md
+  s_19f16ddd62d505::t_40d7385047bb35 107-108
+remake/runtime/web/core/ui/image_dom.mjs
+  s_19f16ddd62d505::t_215b3afedb53c2 21,27-30
+  s_19f16ddd62d505::t_1875ec128a9111 1-20,22-26,31-58
+remake/runtime/web/map_scene_view.mjs
+  s_19f16ddd62d505::t_0cb63b381db5a1 1,23,28
+remake/runtime/web/menu_dom.mjs
+  s_19f16ddd62d505::t_1875ec128a9111 1,7
+remake/runtime/web/battle_result_view.mjs
+  s_19f16ddd62d505::t_0cb63b381db5a1 1,54
+remake/runtime/web/core/resources/bitmap_residency.mjs
+  s_19f16ddd62d505::t_96513eed8e431d 1-5
+remake/runtime/tools/tool_index.json
+  s_19f16ddd62d505::t_c0c74dfb545cfd 1381-1383,1387
+  s_19f16ddd62d505::t_3b685b7d9727f9 1384-1386
+  s_19f16ddd62d505::t_483d881dc4fdce 1380
+remake/runtime/web/operation_formation_view.mjs
+  s_19f16ddd62d505::t_0cb63b381db5a1 1,30
+remake/runtime/web/operation_menu_view.mjs
+  s_19f16ddd62d505::t_0cb63b381db5a1 1,16,291,309,314,332,342
+remake/runtime/web/save_menu_view.mjs
+  s_19f16ddd62d505::t_0cb63b381db5a1 1,53,75
+remake/runtime/tools/export_media.py
+  s_19f16ddd62d505::t_894d7b0105590c 25,50,54,241-269,516-518,523-524,530,535
+  s_19f16ddd62d505::t_1592fc082c7b23 14,402-403,500,502-503,533
+remake/runtime/web/caption_view.mjs
+  s_19f16ddd62d505::t_0cb63b381db5a1 1,55,58
+remake/runtime/web/phaser/rendering/battle_surface.mjs
+  s_19f16ddd62d505::t_1b1f0a025d015f 3,86-87,89,92-93,103,114
+remake/runtime/web/operation_weapon_view.mjs
+  s_19f16ddd62d505::t_0cb63b381db5a1 1,36,54,62,67,74,83
+remake/runtime/web/tests/xbr_rendering_checks.mjs
+  s_19f16ddd62d505::t_7e1e8fa77367ec 68-69
+  s_19f16ddd62d505::t_4faa5bf83d7650 63-66,71-73,76,103
+  s_19f16ddd62d505::t_1e91dc12958778 70
+remake/runtime/web/map_name_notice_view.mjs
+  s_19f16ddd62d505::t_0cb63b381db5a1 1,31,33
+remake/runtime/web/core/resources/image_regions.mjs
+  s_19f16ddd62d505::t_b9467fb034dc2e 1-2,6-16,22
+  s_19f16ddd62d505::t_96513eed8e431d 3-5,17-21,23-38
+remake/runtime/web/phaser/rendering/recorded_surface.mjs
+  s_19f16ddd62d505::t_0cb63b381db5a1 1,40
+remake/runtime/web/phaser/rendering/texture_cache.mjs
+  s_19f16ddd62d505::t_e0f6b52adc4af1 33-42,65
+  s_19f16ddd62d505::t_bd758a6a67e356 23-31
+  s_19f16ddd62d505::t_681ab7bb35bf61 1-2,12,16-17,19,21-22,61-64,66-71,87-89,95,106,108
+  s_19f16ddd62d505::t_394abc69df10c9 32
+remake/runtime/tools/verify_phaser.mjs
+  s_19f16ddd62d505::t_11953d66be5bdd 8,73-75,102-112
+remake/runtime/web/loading_view.mjs
+  s_19f16ddd62d505::t_0cb63b381db5a1 1,20-21,23
+remake/runtime/web/native_service_view.mjs
+  s_19f16ddd62d505::t_0cb63b381db5a1 1,19
+remake/runtime/web/startup_view.mjs
+  s_19f16ddd62d505::t_0cb63b381db5a1 1,48
+remake/runtime/tests/test_image_resources.mjs
+  s_19f16ddd62d505::t_7b5b6df7e2df4e 4-5,63-85
+  s_19f16ddd62d505::t_db833bed637c35 86
+remake/runtime/web/core/resources/image_resources.mjs
+  s_19f16ddd62d505::t_1587e3583e6a30 1-3,10-11,23-36,49-73,89,96,98
+remake/runtime/web/controllers/inspection.mjs
+  s_19f16ddd62d505::t_0cb63b381db5a1 1,21-22
+remake/runtime/web/phaser/rendering/xbr_pipeline.mjs
+  s_19f16ddd62d505::t_2194b57a1399de 77-78,90-91
+  s_19f16ddd62d505::t_1b1f0a025d015f 167-170,173,247,251,255-256
+  s_19f16ddd62d505::t_1e91dc12958778 79,89
+remake/runtime/web/operation_system_view.mjs
+  s_19f16ddd62d505::t_0cb63b381db5a1 1,29
+remake/runtime/web/controllers/menu.mjs
+  s_19f16ddd62d505::t_0cb63b381db5a1 1,142
+remake/runtime/web/world_map_view.mjs
+  s_19f16ddd62d505::t_0cb63b381db5a1 1,24,131,135
+remake/runtime/web/actor_effect_view.mjs
+  s_19f16ddd62d505::t_0cb63b381db5a1 1,18,109
+remake/runtime/web/core/battle/battle_resources.mjs
+  s_19f16ddd62d505::t_6b0d32dacd8648 1-3,9,54,116,122
+remake/runtime/web/core/resources/image_catalog.mjs
+  s_19f16ddd62d505::t_63757b99390ef0 24-32
+  s_19f16ddd62d505::t_96513eed8e431d 1,3-23
+  s_19f16ddd62d505::t_215b3afedb53c2 2
+remake/runtime/web/reward_notice_view.mjs
+  s_19f16ddd62d505::t_0cb63b381db5a1 1,37-38
+remake/runtime/tools/README.md
+  s_19f16ddd62d505::t_33782c9a6f1d6d 48,50,334
+remake/runtime/web/phaser/rendering/interface_compositor.mjs
+  s_19f16ddd62d505::t_f6163882ec88bd 4,87,154
+  s_19f16ddd62d505::t_11953d66be5bdd 166
+remake/runtime/web/controllers/boot.mjs
+  s_19f16ddd62d505::t_1875ec128a9111 35,40
+remake/runtime/web/battle_menu_view.mjs
+  s_19f16ddd62d505::t_0cb63b381db5a1 1,201-202,214,232
+remake/runtime/web/opening_view.mjs
+  s_19f16ddd62d505::t_0cb63b381db5a1 1,289
+remake/runtime/web/controllers/services.mjs
+  s_19f16ddd62d505::t_d404487aa82d14 1,27
+remake/runtime/web/phaser/components/sprite_pose.mjs
+  s_19f16ddd62d505::t_e0f6b52adc4af1 17,23,25
+  s_19f16ddd62d505::t_4faa5bf83d7650 21-22
+remake/runtime/web/map_sprite.mjs
+  s_19f16ddd62d505::t_0cb63b381db5a1 1,13,15,18
+remake/runtime/architecture.md
+  s_19f16ddd62d505::t_40d7385047bb35 156,188
+  s_19f16ddd62d505::t_33782c9a6f1d6d 184
+remake/runtime/tools/image_atlas.py
+  s_19f16ddd62d505::t_f83ce21911648f 1-31,42-74,76-84,92-115,117-162,178-181
+  s_19f16ddd62d505::t_1000bc4c08489a 32-41,174-177
+  s_19f16ddd62d505::t_b9467fb034dc2e 75,85-91,116
+  s_19f16ddd62d505::t_1e91dc12958778 163-173
+remake/runtime/tests/test_media_fingerprints.py
+  s_19f16ddd62d505::t_b9467fb034dc2e 118-148
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "e369f56b84a1def5751d703a4e0b2772d817cd9b",
+  "prompts": {},
+  "sessions": {
+    "s_19f16ddd62d505": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1ae64-9fc8-7481-994a-5cfb151332b0",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
