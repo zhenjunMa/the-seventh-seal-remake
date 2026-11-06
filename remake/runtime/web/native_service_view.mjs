@@ -1,3 +1,4 @@
+import {setImageSource} from './core/ui/image_dom.mjs';
 // Original Boss MNU pixels and hit rectangles; economic decisions stay in the
 // controller. The two buying pages share the native (10,50) listing origin.
 const labels={buy:'购买',sell:'卖出',forge:'锻造',synthesize:'合成'};
@@ -15,7 +16,7 @@ export class NativeServiceView{
   get active(){return !this.root.hidden;}
   fit(){this.frame.style.transform=`translate(-50%,-50%) scale(${Math.min(this.root.clientWidth/640,this.root.clientHeight/480)})`;}
   widget(menu,name){return menu.widgets.find(widget=>widget.name.toUpperCase()===name.toUpperCase());}
-  image(path,x=0,y=0,parent=this.frame){const node=document.createElement('img');node.alt='';node.src=path;place(node,x,y);parent.append(node);return node;}
+  image(path,x=0,y=0,parent=this.frame){const node=document.createElement('img');node.alt='';setImageSource(node,path);place(node,x,y);parent.append(node);return node;}
   text(value,rect,parent=this.frame,className=''){
     const node=document.createElement('span');node.className=`native-service-text ${className}`;node.textContent=value??'';
     place(node,rect.left,rect.top,rect.right-rect.left+1,rect.bottom-rect.top+1);parent.append(node);return node;

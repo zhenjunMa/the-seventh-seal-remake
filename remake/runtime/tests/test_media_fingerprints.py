@@ -115,6 +115,37 @@ class FingerprintTests(unittest.TestCase):
             builder.build_one('/assets/demo.png')
         self.assertEqual(path.read_bytes(), b'cached PNG')
 
+    def test_direct_pages_need_no_loose_png_and_repair_only_missing_output(self):
+        from PIL import Image
+        from image_atlas import build_image_catalog
+        image = Image.new('RGBA', (16, 12), (17, 31, 47, 255))
+        stream = io.BytesIO()
+        image.save(stream, format='PNG')
+        builder = self.builder()
+        builder.plan.required = {'/assets/a/demo.png', '/assets/b/demo.png'}
+        builder.plan.recipes = {name: dict(kind='dgp', source='ROLE/001.dgp') for name in builder.plan.required}
+        builder.plan.expected = {name: hashlib.sha256(stream.getvalue()).hexdigest() for name in builder.plan.required}
+        builder.plan.documents = {'data/battle_packs.json': dict(pages=[], images={})}
+        builder.cache.mkdir(parents=True)
+        self.assertEqual(builder.preflight(), [])
+        builder.state = {}
+        builder.recipe_version = 'test'
+        with patch.object(builder, 'decode', side_effect=lambda row: image.copy()) as decode:
+            catalog = build_image_catalog(builder)
+            self.assertEqual(decode.call_count, 2)
+        self.assertEqual(len(catalog['pages']), 1)
+        for name in builder.plan.required:
+            self.assertFalse(builder.local(name).exists())
+        page = builder.local(catalog['pages'][0]['path'])
+        with Image.open(page) as decoded:
+            self.assertEqual(decoded.crop((2, 2, 18, 14)).tobytes(), image.tobytes())
+        with patch.object(builder, 'decode', side_effect=AssertionError('valid pages must be reused')):
+            self.assertEqual(build_image_catalog(builder), catalog)
+        page.write_bytes(b'damaged')
+        with patch.object(builder, 'decode', side_effect=lambda row: image.copy()) as decode:
+            self.assertEqual(build_image_catalog(builder), catalog)
+            self.assertEqual(decode.call_count, 1)
+
 
 if __name__ == '__main__':
     unittest.main()

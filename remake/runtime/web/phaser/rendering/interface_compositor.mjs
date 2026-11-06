@@ -1,6 +1,7 @@
 import {BattleSurface} from './battle_surface.mjs';
 import {installInterfaceCompositor} from './recorded_surface.mjs';
 import {characterPipeline,XBR_PIPELINE} from './xbr_pipeline.mjs';
+import {elementImage,maintainDomImages,disposeDomImages} from '../../core/ui/image_dom.mjs';
 
 // One shared WebGL context for every DOM-anchored UI surface. Move its output
 // beside the active screen's pixel plane, retaining semantic DOM controls and
@@ -83,6 +84,7 @@ export class InterfaceCompositor {
   }
   update(){
     if(!this.surface||this.runtime.destroyed||this.game.renderer.contextLost)return;this.frames++;
+    maintainDomImages();
     if(this.frames%120===0&&this.records.size)this.invalidate(true);
     if(this.layoutDirty){
       // Cached glyph nodes can be detached and inserted again without painting.
@@ -149,7 +151,7 @@ export class InterfaceCompositor {
         surface.save();surface.beginPath();surface.rect((c.left-base.left)*kx,(c.top-base.top)*ky,(c.right-c.left)*kx,(c.bottom-c.top)*ky);surface.clip();
         surface.globalAlpha=entry.alpha;
         const natural=node.tagName==='IMG'&&getComputedStyle(node).objectFit==='none';
-        surface.drawImage(node,0,0,node.naturalWidth??node.width,node.naturalHeight??node.height,
+        surface.drawImage(elementImage(node),0,0,node.naturalWidth??node.width,node.naturalHeight??node.height,
           (b.left-base.left)*kx,(b.top-base.top)*ky,natural?node.naturalWidth:b.width*kx,natural?node.naturalHeight:b.height*ky);
         surface.restore();
       }
@@ -161,6 +163,6 @@ export class InterfaceCompositor {
       return this.runtime.captureTexture(scene,{objects,onDestroy:()=>surface.destroy()});
     }catch(error){surface.destroy();throw error;}
   }
-  destroy(){installInterfaceCompositor(null);this.listeners.abort();this.observer.disconnect();this.records.clear();this.surface?.destroy();this.game.destroy(true);this.mount.remove();}
+  destroy(){installInterfaceCompositor(null);disposeDomImages();this.listeners.abort();this.observer.disconnect();this.records.clear();this.surface?.destroy();this.game.destroy(true);this.mount.remove();}
   snapshot(){return {renderer:'WEBGL',surfaces:this.records.size,visible:this.visible?.length??0,layoutReads:this.layoutReads,rebuilds:this.rebuilds,textures:this.surface?.textures.snapshot()};}
 }

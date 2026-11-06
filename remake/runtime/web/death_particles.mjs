@@ -1,3 +1,4 @@
+import {drawImageRegion} from './core/resources/image_regions.mjs';
 /** Enemy disappearance, derived from GAME.exe 553332..555259 and callbacks.
  * Native particles advance per render, separately from the 220ms state clock.
  * We use a fixed 60Hz presentation cadence, and a local visual RNG: neither
@@ -116,8 +117,8 @@ export function createDeathParticleSurface({rgba,width,height,anchor,mode,seed,a
   const base=mode===4||appearance?{...image,original:true}:null;
   effect.draw=(target,x,y)=>{
     target.save();target.globalAlpha=1;
-    if(base){target.globalCompositeOperation='source-over';target.drawImage(base,x+left,y+top);}
-    target.globalCompositeOperation='lighter';target.drawImage(image,x+left,y+top);target.restore();
+    if(base){target.globalCompositeOperation='source-over';drawImageRegion(target,base,x+left,y+top);}
+    target.globalCompositeOperation='lighter';drawImageRegion(target,image,x+left,y+top);target.restore();
   };
   return effect;
 }

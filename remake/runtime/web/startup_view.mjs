@@ -1,3 +1,4 @@
+import {drawImageRegion} from './core/resources/image_regions.mjs';
 import {drawingContext} from './phaser/rendering/recorded_surface.mjs';
 import {StartupSequence} from './core/ui/startup.mjs';
 import {appendSavePreview} from './save_preview_view.mjs';
@@ -44,7 +45,7 @@ export class StartupView {
   }
   asset(key,index=0,x=0,y=0) {
     const frame=this.manifest.assets[key]?.frames[index];if(!frame)return;
-    const image=this.images.get(frame.path);if(image)this.ctx.drawImage(image,x,y);
+    const image=this.images.get(frame.path);if(image)drawImageRegion(this.ctx,image,x,y);
   }
   announce(text){this.$('startupAnnouncement').textContent=text;}
   resize(){const rect=this.root.getBoundingClientRect();this.root.style.setProperty('--startup-scale',String(Math.min(rect.width/640,rect.height/480)));}

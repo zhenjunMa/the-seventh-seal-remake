@@ -74,6 +74,9 @@ float c_df(vec4 c1, vec4 c2) { vec4 d = abs(c1 - c2); return d.r + d.g + d.b + d
 
 // Treat samples outside this animation frame as transparent, never as atlas neighbours.
 vec4 S(vec2 uv) {
+  // Stabilize nearest sampling at exact pixel boundaries after atlas offsets
+  // and fractional scaling; normalized UV interpolation may land a few ulps low.
+  uv = (floor(uv / outSource.xy + vec2(0.0005)) + 0.5) * outSource.xy;
   if (uv.x < outBounds.x || uv.y < outBounds.y || uv.x >= outBounds.z || uv.y >= outBounds.w) return vec4(0.0);
   return T(uv);
 }
@@ -83,8 +86,9 @@ vec4 xbr() {
   float dx = d.x, dy = d.y;
   vec2 tc = outTexCoord;
   // 取到所在原图像素的中心，邻格按整像素偏移
-  vec2 px0 = (floor(tc * texSize) + 0.5) * d;
-  vec2 fp = fract(tc * texSize);
+  vec2 sourcePosition = tc * texSize + vec2(0.0005);
+  vec2 px0 = (floor(sourcePosition) + 0.5) * d;
+  vec2 fp = fract(sourcePosition);
 
   // 快路：中心与上下左右四邻亮度值都相同（透明底、纯色块）时，xBR 的边缘判断全为 0，
   // 输出就是中心像素本身——先取这 5 个，相同就直接返回，省掉其余 16 次取样。结果与完整计算一致。
@@ -160,11 +164,13 @@ vec4 xbr() {
 
 void main () {
   // tintEffect ≥ 4 表示这块要 xBR（物件标记），其余与 Phaser Multi.frag 相同
-  bool useXbr = outTintEffect > 3.5;
-  float effect = useXbr ? outTintEffect - 4.0 : outTintEffect;
+  bool masked = outTintEffect > 7.5;
+  float effect = masked ? outTintEffect - 8.0 : outTintEffect;
+  bool useXbr = effect > 3.5;
+  effect = useXbr ? effect - 4.0 : effect;
   vec4 texture;
   if (useXbr) texture = xbr();
-  else texture = T(outTexCoord);
+  else texture = masked ? S(outTexCoord) : T(outTexCoord);
   if (outColorSubtract > 0.0) {
     float mask = floor(outColorSubtract / 512.0);
     float amount = mod(outColorSubtract, 512.0);
@@ -238,15 +244,16 @@ export function characterPipeline(Phaser){
       const flushed=this.shouldFlush(6);if(flushed)this.flush();
       if(!this.currentBatch)unit=this.setTexture2D(texture);
       let meta=null;
-      if(this.enabled&&(object?.smoothActor||object?.smoothText)&&effect!==2){
+      if(((this.enabled&&(object?.smoothActor||object?.smoothText))||object?.xbrBounds)&&effect!==2){
         const tex=texture??object.frame.glTexture,w=tex.width,h=tex.height;
         const scale=Math.min(Math.hypot(x3-x0,y3-y0)/Math.max(0.001,Math.abs(u1-u0)*w),
           Math.hypot(x1-x0,y1-y0)/Math.max(0.001,Math.abs(v1-v0)*h));
-        if(scale>1.01){
+        if(scale>1.01&&this.enabled||object?.xbrBounds){
           const f=object.frame,r=object.xbrBounds??(object.smoothText?{x:0,y:0,width:w,height:h}
             :{x:f.cutX,y:f.cutY,width:f.cutWidth,height:f.cutHeight});
           meta=this.sampleMeta;meta[0]=r.x/w;meta[1]=r.y/h;meta[2]=(r.x+r.width)/w;meta[3]=(r.y+r.height)/h;
-          meta[4]=1/w;meta[5]=1/h;meta[6]=scale;effect+=4;
+          meta[4]=1/w;meta[5]=1/h;meta[6]=scale;
+          effect+=this.enabled&&scale>1.01&&(object?.smoothActor||object?.smoothText)?4:8;
         }
       }
       const colorSubtract=object?.nativeColorSubtract??0;

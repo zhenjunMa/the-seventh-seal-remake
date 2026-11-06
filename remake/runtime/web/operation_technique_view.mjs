@@ -1,3 +1,4 @@
+import {setImageSource} from './core/ui/image_dom.mjs';
 import {menuText,menuStyle,menuImage} from './menu_dom.mjs';
 import {techniqueSlots,sourceTechniqueSlot,techniqueSlotName,techniqueCandidates,TECHNIQUE_CATEGORIES,TECHNIQUE_WHEEL_NAVIGATION,techniqueCombinations,techniqueCombinationName} from './core/ui/menu_techniques.mjs';
 import {operationSummaryFields} from './core/ui/menu_presentation.mjs';
@@ -70,7 +71,7 @@ export class OperationTechniqueView{
     return this;
   }
   asset(menuId){const menu=this.menus.get(menuId);return menu.composed??menu.images[0].image;}
-  image(path,x,y,parent=this.paintParent??this.element){const image=document.createElement('img');image.alt='';image.src=path;position(image,x,y);parent.append(image);return image;}
+  image(path,x,y,parent=this.paintParent??this.element){const image=document.createElement('img');image.alt='';setImageSource(image,path);position(image,x,y);parent.append(image);return image;}
   text(value,x,y,parent=this.element,className='technique-name',options={}){const node=document.createElement('span');node.className=className;position(node,x,y);const font=className==='technique-target-value'?'simsun18':className==='technique-target-name'?'simsun20_text':className===''?'simsun19_text':'simsun22_text';node.style.pointerEvents='none';node.style.color=options.foreground??'#ffffff';this.paintText(node,value,font,options);parent.append(node);return node;}
   paintText(node,value,font,options={}){menuText(node,value,this.textRenderer,{font,foreground:'#ffffff',shadow:'#000000',...options});}
 
@@ -136,13 +137,13 @@ export class OperationTechniqueView{
         this.restoring=true;button.focus({preventScroll:true});this.restoring=false;
         if(button._widget)this.sourceHighlight(button,button._widget,true);
         // Restoring skips focus handlers, so repaint the retained healing target.
-        if(button.dataset.techniqueTarget)button.querySelector('img').src=this.manifest.item_target_panels.selected;
+        if(button.dataset.techniqueTarget)setImageSource(button.querySelector('img'),this.manifest.item_target_panels.selected);
       }
     }
   }
   paintRoster(){
     for(const [index,status]of this.rows.entries()){
-      const button=this.button('actor-'+status.id,status.name,20,50+index*86,480,83,{click:()=>this.chooseActor(status.id),focus:()=>{for(const row of this.element.querySelectorAll('[data-role-id]'))row.querySelector('img').src=this.manifest.actor_panels[row.dataset.roleId][row===button?'unfocused':'normal'];this.roleFocus=status.id;this.onActor?.(status.id,false);}});button.dataset.roleId=status.id;button.className='roster-actor';
+      const button=this.button('actor-'+status.id,status.name,20,50+index*86,480,83,{click:()=>this.chooseActor(status.id),focus:()=>{for(const row of this.element.querySelectorAll('[data-role-id]'))setImageSource(row.querySelector('img'),this.manifest.actor_panels[row.dataset.roleId][row===button?'unfocused':'normal']);this.roleFocus=status.id;this.onActor?.(status.id,false);}});button.dataset.roleId=status.id;button.className='roster-actor';
       const panel=this.manifest.actor_panels?.[status.id];if(panel)this.image(panel[this.roleFocus===status.id?'unfocused':'normal'],0,0,button);
       const dl=document.createElement('dl');dl.className='actor-summary-values';button.append(dl);
       for(const [label,value,className]of operationSummaryFields(status)){const row=document.createElement('div'),number=document.createElement('dd');row.className='summary-'+className;number.setAttribute('aria-label',label+' '+value);if(this.textRenderer){const canvas=document.createElement('canvas');const result=this.textRenderer.paint(canvas,value,{font:className==='level'?'simsun26':'simsun18'});position(canvas,result.offsetX,result.offsetY);number.append(canvas);}else number.textContent=value;row.append(number);dl.append(row);}
@@ -168,8 +169,8 @@ export class OperationTechniqueView{
   showShortcutCursor(index){
     const o=this.supplement.origins.shortcuts,w=this.menus.get('game002d').widgets[index+1],bank=this.supplement.icons.board_bright;let image=this.element.querySelector('[data-shortcut-cursor]');
     if(!image){image=this.image(bank.frames[0],0,0);image.dataset.shortcutCursor='true';}position(image,o.x+w.rect.left-13,o.y+w.rect.top-13);image.style.zIndex='4';
-    if(this.cursorIndex!==index){this.cursorIndex=index;this.cursorStarted=globalThis.performance?.now?.()??0;image.src=bank.frames[0];}
-    if(this.cursorAnimation===undefined&&globalThis.requestAnimationFrame){const step=now=>{this.cursorAnimation=undefined;if(this.element.hidden||this.stage!=='slot-confirm')return;const cursor=this.element.querySelector('[data-shortcut-cursor]');if(!cursor)return;const interval=bank.actions?.[0]?.interval_raw??120;cursor.src=bank.frames[Math.floor(Math.max(0,now-this.cursorStarted)/Math.max(1,interval))%bank.frames.length];this.cursorAnimation=globalThis.requestAnimationFrame(step);};this.cursorAnimation=globalThis.requestAnimationFrame(step);}
+    if(this.cursorIndex!==index){this.cursorIndex=index;this.cursorStarted=globalThis.performance?.now?.()??0;setImageSource(image,bank.frames[0]);}
+    if(this.cursorAnimation===undefined&&globalThis.requestAnimationFrame){const step=now=>{this.cursorAnimation=undefined;if(this.element.hidden||this.stage!=='slot-confirm')return;const cursor=this.element.querySelector('[data-shortcut-cursor]');if(!cursor)return;const interval=bank.actions?.[0]?.interval_raw??120;setImageSource(cursor,bank.frames[Math.floor(Math.max(0,now-this.cursorStarted)/Math.max(1,interval))%bank.frames.length]);this.cursorAnimation=globalThis.requestAnimationFrame(step);};this.cursorAnimation=globalThis.requestAnimationFrame(step);}
   }
   shortcutWheelVisible(){return this.roleId&&((this.section==='use'&&['list','targets'].includes(this.stage))||(this.section==='edit'&&this.action==='set'&&['categories','candidates','slot-confirm'].includes(this.stage)));}
   stopShortcutCursor(){if(this.cursorAnimation!==undefined)globalThis.cancelAnimationFrame?.(this.cursorAnimation);this.cursorAnimation=undefined;this.cursorIndex=undefined;this.element.querySelector('[data-shortcut-cursor]')?.remove();}
@@ -184,7 +185,7 @@ export class OperationTechniqueView{
     const bank=this.supplement.icons.board_brightB,o=this.supplement.origins.shortcuts,widget=this.menus.get('game002d').widgets[effect.slotIndex+1];
     let image=this.element.querySelector('[data-shortcut-replacement]');if(!image){image=this.image(bank.frames[effect.frame],0,0);image.dataset.shortcutReplacement='true';}
     // 427C90 uses rect[-23,-23]; 536FA0 adds and saturates source RGB.
-    position(image,o.x+widget.rect.left-23,o.y+widget.rect.top-23,bank.width,bank.height);image.src=bank.frames[effect.frame];image.dataset.frame=String(effect.frame);image.style.mixBlendMode='plus-lighter';image.style.zIndex='5';
+    position(image,o.x+widget.rect.left-23,o.y+widget.rect.top-23,bank.width,bank.height);setImageSource(image,bank.frames[effect.frame]);image.dataset.frame=String(effect.frame);image.style.mixBlendMode='plus-lighter';image.style.zIndex='5';
   }
   tick(now){
     const effect=this.replacement;if(!effect)return;
@@ -328,7 +329,7 @@ export class OperationTechniqueView{
   paintTargets(){
     const o=this.manifest.page_bindings.items.target_origin;this.image(this.asset('game003_4'),o.x,o.y);
     this.rows.forEach((status,index)=>{
-      const button=this.button('target-'+status.id,`目标 ${status.name}`,o.x+5,o.y+5+index*84,211,84,{click:()=>this.invoke(this.onFieldSkill,{casterId:this.roleId,targetId:status.id,skillId:this.selectedSkill.skillId,index:this.selectedSkill.index},{repaint:false}),focus:()=>{for(const node of this.element.querySelectorAll('[data-technique-target]'))node.querySelector('img').src=this.manifest.item_target_panels[node===button?'selected':'normal'];}});
+      const button=this.button('target-'+status.id,`目标 ${status.name}`,o.x+5,o.y+5+index*84,211,84,{click:()=>this.invoke(this.onFieldSkill,{casterId:this.roleId,targetId:status.id,skillId:this.selectedSkill.skillId,index:this.selectedSkill.index},{repaint:false}),focus:()=>{for(const node of this.element.querySelectorAll('[data-technique-target]'))setImageSource(node.querySelector('img'),this.manifest.item_target_panels[node===button?'selected':'normal']);}});
       button.dataset.techniqueTarget=status.id;button._targetFields={};button._targetStatus=status;
       this.image(this.manifest.item_target_panels.normal,0,0,button);this.text(status.name,20,13,button,'technique-target-name');
       for(const [key,y,frame,barY]of [['hp',30,1,47],['mp',53,0,70]]){

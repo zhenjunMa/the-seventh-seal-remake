@@ -32,10 +32,12 @@ import {StoryRepository} from "../core/story/story_repository.mjs";
 import {worldMapEntry} from "../core/exploration/map_connections.mjs";
 import {createSaveStorage} from "../core/world/save_storage.mjs";
 import {SaveMenuView} from "../save_menu_view.mjs";
+import {loadImageCatalog} from '../core/resources/image_catalog.mjs';
 
 export function createBootController({state, actions, $, canvas, ctx}) {
   async function boot(){
     actions.busy('boot');
+    await loadImageCatalog();
     state.saveStorage=createSaveStorage();
     state.catalog=await actions.json('data/catalog.json');if(state.catalog.schema!=='seventh-seal-runtime-catalog'||state.catalog.version!==1)throw new Error('运行清单版本不兼容');
     const registration=await actions.json(state.catalog.runtime_content??'data/runtime_content.json');

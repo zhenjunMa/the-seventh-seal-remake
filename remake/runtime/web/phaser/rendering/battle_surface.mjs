@@ -1,5 +1,6 @@
 import {TextureCache} from './texture_cache.mjs';
 import {pixelSprite} from './pixel_sprite.mjs';
+import {drawImageRegion} from '../../core/resources/image_regions.mjs';
 
 const properties=['globalAlpha','globalCompositeOperation','fillStyle','strokeStyle','lineWidth','font','textAlign','textBaseline','lineJoin','nativeColorSubtract'];
 const rgba=value=>{
@@ -82,12 +83,14 @@ export class BattleSurface {
     if(visible.width<=0||visible.height<=0)return;
     const frame=this.textures.actorFrame(source,sx,sy,sw,sh);if(!frame)return;
     const before=this.cursor.sprite;
-    this.drawImage(frame.bitmap,0,0,frame.width,frame.height,
-      dx+frame.x*dw/sw,dy+frame.y*dh/sh,frame.width*dw/sw,frame.height*dh/sh);
+    this.drawImage(frame.bitmap,frame.sx,frame.sy,frame.width,frame.height,
+      dx+frame.x*dw/sw,dy+frame.y*dh/sh,frame.width*dw/sw,frame.height*dh/sh,frame.bounds);
     if(this.cursor.sprite>before){const sprite=this.pools.sprite[before];sprite.smoothActor=true;
-      sprite.xbrBounds={x:0,y:0,width:frame.width,height:frame.height};}
+      sprite.xbrBounds=frame.bounds;}
   }
   drawImage(source,...args){
+    if(source.packed){drawImageRegion(this,source,...args);return;}
+    const sampleBounds=args.length===9?args.pop():null;
     let sx=0,sy=0,sw=source.width,sh=source.height,dx,dy,dw=sw,dh=sh;
     if(args.length===2)[dx,dy]=args;
     else if(args.length===4)[dx,dy,dw,dh]=args;
@@ -97,7 +100,7 @@ export class BattleSurface {
     const target=this.rectangle(dx,dy,dw,dh),visible=intersect(target,this.clipRect);
     if(sw<=0||sh<=0||visible.width<=0||visible.height<=0)return;
     // Clip both against the source dimensions and the active logical viewport.
-    const bounds=intersect({x:sx,y:sy,width:sw,height:sh},{x:0,y:0,width:source.width,height:source.height});
+    const bounds=sampleBounds?{x:sx,y:sy,width:sw,height:sh}:intersect({x:sx,y:sy,width:sw,height:sh},{x:0,y:0,width:source.width,height:source.height});
     const area=intersect(visible,{x:target.x+(bounds.x-sx)*target.width/sw,y:target.y+(bounds.y-sy)*target.height/sh,
       width:bounds.width*target.width/sw,height:bounds.height*target.height/sh});
     if(area.width<=0||area.height<=0)return;
@@ -108,6 +111,7 @@ export class BattleSurface {
       area.width*sw/target.width,area.height*sh/target.height);
     const sprite=this.take('sprite').setTexture(frame.key,frame.frame).setPosition(area.x,area.y).setDisplaySize(area.width,area.height);
     sprite.smoothText=Boolean(source.gpuGlyph);
+    sprite.xbrBounds=sampleBounds;
     sprite.nativeColorSubtract=this.nativeColorSubtract;
   }
   strokeRect(x,y,width,height){const r=this.rectangle(x,y,width,height),style=rgba(this.strokeStyle);

@@ -45,9 +45,9 @@ python3 -B remake/runtime/tools/build_runtime.py --original-dir "/path/to/DiQiFe
 
 固定定义中的媒体描述决定物件初始帧、动作分区、图层、裁切和图集坐标。构建不重写 `web/data`、`web/content` 或数值调参。PNG 按固定清单核 SHA；音频保留 MPEG 字节或核转码前后 PCM，影片核帧数、时长及画面质量。音视频编码后的实际指纹写入 `assets/media_manifest.json`，与固定规则的原来源记录分开；来源基准 SHA、实际输入清单、缺失／变化／多出项和是否显式放行记入该清单及构建报告；`source_variants` 继续保留相对固定定义历史来源的差异。
 
-`runtime/.cache/media` 保存可核验缓存，失败可续跑；缺失或损坏输出重建，`--force` 重新提取但不重置调参。现有战斗图集按已提交页面布局恢复，其余图片保持现有路径。本目标不包含全图片图集改造。
+`runtime/.cache/media` 保存可核验缓存，失败可续跑；缺失或损坏输出重建，`--force` 重新提取但不重置调参。战斗图集按已提交页面布局直接从解码像素恢复；其余静态图片按素材目录／使用范围生成纹理页，动画按逻辑帧裁切，大图离线分页，重复页面共享物理文件。字体、感应平面和需要直接读取的遮罩保持专用图片。`assets/image_catalog.json` 将原逻辑路径映射至纹理页，构建不要求散 PNG 中转；现有散 PNG 可作为经核验的迁移输入，旧文件不自动删除。正式交付文件以 `assets/media_manifest.json` 的 `files` 为准，`images` 记录逻辑图片指纹。
 
-`--images-only` 只用于定向排查图片；该结果不记完整首次构建通过。完整构建缺少已声明音视频时返回非零，不生成占位素材。工具与报告入口为 `media_definitions.py`、`media_fingerprints.py`、`export_media.py` 和 `evidence/builds/<本次 media 构建>/run.json`。
+`--images-only` 只用于定向排查图片；该结果不记完整首次构建通过。完整构建缺少已声明音视频时返回非零，不生成占位素材。工具与报告入口为 `media_definitions.py`、`media_fingerprints.py`、`image_atlas.py`、`export_media.py` 和 `evidence/builds/<本次 media 构建>/run.json`。
 
 ## 常用操作
 
@@ -331,7 +331,7 @@ python3 -B remake/runtime/tools/verify_tests.py --check
 
 `verify_phaser.mjs`核固定运行库、入口模块图、JS语法及剧情包，并报告JSON中的资源引用。默认可在code.passed=true、assets.passed=false时成功退出；`--assets`要求媒体齐全且声明SHA／尺寸匹配。`--report`可写runtime/evidence内新路径。
 
-战斗单帧逻辑路径可由battle_packs解析至图集页，交付不要求重复携带单帧源PNG；地图、菜单、字体和音视频等直接加载媒体仍需提供。
+静态图片逻辑路径由 `assets/image_catalog.json`／`battle_packs` 解析至图集页，交付不要求重复携带已入图集的散 PNG；提供素材构建清单 `files` 中列出的页面、专用字库／感应图及音视频即可。
 
 正式浏览器从`/`执行受影响流程，素材不足可用`/phaser-preview.html`限定示意检查。`/tests/phaser_lifecycle.html`用合成资源验证真实引擎，其他独立页面见web/tests。截图、时间、界面矩阵和报告要求统一见[测试与验收规范](../../assessment/testing_strategy.md#界面与动态表现)。
 

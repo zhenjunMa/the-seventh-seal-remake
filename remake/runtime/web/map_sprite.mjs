@@ -1,3 +1,4 @@
+import {drawImageRegion} from './core/resources/image_regions.mjs';
 // Native map draw darkens the destination with its source shadow mask before
 // main and indexed light. All share the physical frame and original anchor;
 // compact shadow bounds restore their offset inside that original frame.
@@ -9,11 +10,11 @@ export function shadowRectangle(sx,sy,width,height,geometry,scaleX=1,scaleY=1) {
 }
 export function drawMapSprite(ctx,main,intrinsic,sx,sy,width,height,x,y,shadow=null,shadowGeometry=null,bodyOffset=null) {
   if(shadow){const rect=shadowRectangle(sx,sy,width,height,shadowGeometry);
-    ctx.drawImage(shadow,rect.sx,rect.sy,rect.width,rect.height,x+rect.x,y+rect.y,rect.displayWidth,rect.displayHeight);}
+    drawImageRegion(ctx,shadow,rect.sx,rect.sy,rect.width,rect.height,x+rect.x,y+rect.y,rect.displayWidth,rect.displayHeight);}
   const bodyX=x+(bodyOffset?.x??0),bodyY=y+(bodyOffset?.y??0);
-  ctx.drawImage(main,sx,sy,width,height,bodyX,bodyY,width,height);
+  drawImageRegion(ctx,main,sx,sy,width,height,bodyX,bodyY,width,height);
   if(intrinsic){
     ctx.save();ctx.globalCompositeOperation='lighter';
-    ctx.drawImage(intrinsic,sx,sy,width,height,bodyX,bodyY,width,height);ctx.restore();
+    drawImageRegion(ctx,intrinsic,sx,sy,width,height,bodyX,bodyY,width,height);ctx.restore();
   }
 }

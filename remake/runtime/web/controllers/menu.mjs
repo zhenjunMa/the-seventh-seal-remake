@@ -1,3 +1,4 @@
+import {setImageSource} from '../core/ui/image_dom.mjs';
 // menu adapters. Persistent state belongs to the shared runtime context.
 import {effectiveSkillSource,updateEffectiveSkillSource} from "../core/battle/battle_skill_access.mjs";
 import {createPartyActors} from "../core/party/party_attributes.mjs";
@@ -138,7 +139,7 @@ export function createMenuController({state, actions, $, canvas, ctx}) {
     const selected=context.itemRows?.get(instanceId),def=selected&&itemData.definitions[String(selected.id)];
     const card=state.operationMenu.itemFocused?operationItemCard(def,state.operationMenu.manifest):null,back=context.itemCategory==='items'?state.operationMenu.manifest.item_card_back:null;
     const image=$('menuItemCard');image.hidden=!(card||back);
-    if(card||back){const path=card?.image??back.image??back;if(image.getAttribute?.('src')!==path)image.src=path;image.style.width=(card?.width??175)+'px';image.style.height=(card?.height??265)+'px';image.style.left=(state.operationMenu.cardRect?.left??292)+'px';image.style.top=((state.operationMenu.cardRect?.top??28)+(card?1:0))+'px';}
+    if(card||back){const path=card?.image??back.image??back;if(image.getAttribute?.('src')!==path)setImageSource(image,path);image.style.width=(card?.width??175)+'px';image.style.height=(card?.height??265)+'px';image.style.left=(state.operationMenu.cardRect?.left??292)+'px';image.style.top=((state.operationMenu.cardRect?.top??28)+(card?1:0))+'px';}
     const actor=context.combat?actions.battleMenuState().actors.find(row=>row.id===$('menuActor').value):null;
     $('menuUseItem').disabled=!context.usableItemIds?.has(instanceId)||context.combat&&actor?.hp.current===0;
     const hint=def?.description??(context.combat?'消耗当前行动人物的一次行动。':context.itemCategory==='items'?'选择物品与使用目标。':'');

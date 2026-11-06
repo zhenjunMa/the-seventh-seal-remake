@@ -1378,6 +1378,14 @@
       ]
     },
     {
+      "path": "image_atlas.py",
+      "role": "shared-current",
+      "build_targets": [],
+      "imported_by": [
+        "export_media.py"
+      ]
+    },
+    {
       "path": "media_definitions.py",
       "role": "shared-current",
       "build_targets": [],

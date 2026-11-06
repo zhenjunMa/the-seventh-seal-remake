@@ -14,13 +14,15 @@ export class SpritePose {
     this.shadow.setVisible(Boolean(shadow));
     if(shadow){const rect=shadowRectangle(sx,sy,width,height,shadow_geometry,displayWidth/width,displayHeight/height);
       const mask=this.textures.region(shadow,rect.sx,rect.sy,rect.width,rect.height);
+      this.shadow.setVisible(!mask.empty);
       this.shadow.setPosition(rect.x,rect.y).setTexture(mask.key,mask.frame).setDisplaySize(rect.displayWidth,rect.displayHeight);}
     this.body.setPosition(body_offset?.x??0,body_offset?.y??0);
     this.body.pixelImage=image.pixels?image:null;
-    if(image.pixels){this.body.setTexture('__WHITE').setSize(width,height).setScale(displayWidth/width,displayHeight/height);this.body.pixelRegion={sx,sy,sw:width,sh:height};}
-    else{const main=this.textures.region(image,sx,sy,width,height);this.body.setTexture(main.key,main.frame).setDisplaySize(displayWidth,displayHeight);}
+    if(image.pixels){this.body.setVisible(true);this.body.xbrBounds=null;this.body.setTexture('__WHITE').setSize(width,height).setScale(displayWidth/width,displayHeight/height);this.body.pixelRegion={sx,sy,sw:width,sh:height};}
+    else{const main=image.packed?this.textures.actorRegion(image,sx,sy,width,height):this.textures.region(image,sx,sy,width,height);this.body.setVisible(!main.empty);this.body.xbrBounds=main.bounds??null;
+      this.body.setTexture(main.key,main.frame).setDisplaySize(displayWidth,displayHeight);}
     this.light.setVisible(Boolean(light));
-    if(light){const glow=this.textures.region(light,sx,sy,width,height);
+    if(light){const glow=this.textures.region(light,sx,sy,width,height);this.light.setVisible(!glow.empty);
       this.light.setPosition(body_offset?.x??0,body_offset?.y??0);
       this.light.setTexture(glow.key,glow.frame).setDisplaySize(displayWidth,displayHeight);}
   }

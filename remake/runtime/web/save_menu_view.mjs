@@ -1,3 +1,4 @@
+import {drawImageRegion} from './core/resources/image_regions.mjs';
 import {drawingContext} from './phaser/rendering/recorded_surface.mjs';
 // Original Game_Save_01/02/03 pixels and hit rectangles on a 640x480 plane.
 import {MANUAL_SAVE_SLOTS} from './core/world/save_slots.mjs';
@@ -49,7 +50,7 @@ export class SaveMenuView {
     finally{if(this.active&&epoch===this.epoch){this.pending=false;this.render(false);}}
   }
   setMessage(text){this.message.textContent=text;}
-  drawImage(path,x=0,y=0){const bitmap=this.images.get(path);if(bitmap)this.ctx.drawImage(bitmap,x,y);}
+  drawImage(path,x=0,y=0){const bitmap=this.images.get(path);if(bitmap)drawImageRegion(this.ctx,bitmap,x,y);}
   overlayImage(path,x=0,y=0){const image=this.images.get(path);if(image){image.alt='';Object.assign(image.style,{left:x+'px',top:y+'px'});this.buttons.append(image);}}
   page(id){this.drawImage(this.menus.get(id).images[0].image);}
   button(label,rect,handler,{className='',text='',disabled=false}={}){
@@ -71,7 +72,7 @@ export class SaveMenuView {
     this.widgetButton('game_save_02','UP','向上翻动存档栏位',()=>this.move(-3),{disabled:this.confirming||this.selected===0});this.widgetButton('game_save_02','DN','向下翻动存档栏位',()=>this.move(3),{disabled:this.confirming||this.selected===count-1});
     this.widgetButton('game_save_01','OK',this.mode==='save'?'保存所选栏位':'读取所选栏位',()=>this.confirm(),{disabled:this.confirming});this.widgetButton('game_save_01','EXIT','离开存档页面',()=>this.onClose(),{disabled:this.confirming});
     this.ctx.fillStyle='#fff';this.ctx.font='16px SimSun,serif';this.ctx.fillText(this.summary.name??'',522,355);this.ctx.fillText(String(this.summary.money??0),523,406);
-    if(this.mode==='load'){const background=this.images.get(menu.images[0].image);if(background)this.ctx.drawImage(background,151,3,43,30,43,3,43,30);}
+    if(this.mode==='load'){const background=this.images.get(menu.images[0].image);if(background)drawImageRegion(this.ctx,background,151,3,43,30,43,3,43,30);}
     if(this.confirming){this.overlayImage(this.menus.get('game_save_03').images[0].image);const selected=this.menus.get('game_save_03').widgets.find(row=>row.name===(this.confirmIndex===1?'CANCEL':'OK'));this.overlayImage(selected.active_images[0],selected.draw_point_raw.x,selected.draw_point_raw.y);this.widgetButton('game_save_03','OK',`覆盖存档 ${this.row().slot}`,()=>this.submit());this.widgetButton('game_save_03','CANCEL','取消覆盖存档',()=>{this.confirming=false;this.render();});}
     if(resetMessage)this.setMessage(this.loading?'正在读取存档栏位…':this.pending?'正在存取进度…':this.confirming?`覆盖栏位 ${this.row().slot} 的现有存档？`:`${this.mode==='save'?'保存':'读取'}${this.row().slot==='quick'?'快速存档':`栏位 ${this.row().slot}`}　方向键选择，Enter确认，Esc返回（${this.selected+1}/${count}）`);
     this.root.dataset.mode=this.mode;this.root.dataset.slot=this.row().slot;this.root.dataset.state=this.pending?'pending':this.confirming?'overwrite':'list';

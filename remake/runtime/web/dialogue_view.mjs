@@ -1,3 +1,4 @@
+import {drawImageRegion} from './core/resources/image_regions.mjs';
 import {drawingContext} from './phaser/rendering/recorded_surface.mjs';
 import {createMenuTextRenderer} from './core/ui/menu_text.mjs';
 import {dialoguePages,DialoguePlayback} from './core/ui/dialogue.mjs';
@@ -87,7 +88,7 @@ export class DialogueView {
   }
   paintText(text,x,y,foreground,shadow){
     const font=text.codePointAt(0)<128?this.latinFont:this.font,ink=this.ink(text,font,foreground,shadow);
-    this.context.drawImage(ink.canvas,x-1+ink.offsetX,y-1+ink.offsetY);
+    drawImageRegion(this.context,ink.canvas,x-1+ink.offsetX,y-1+ink.offsetY);
   }
   choiceLayout(){
     const l=this.geometry(),height=this.profile.fontHeight,pen=this.playback.current.pen;
@@ -111,17 +112,17 @@ export class DialogueView {
   draw(now){
     if(!this.active)return;
     const c=this.context,r=this.resources,l=this.geometry();c.clearRect(0,0,640,480);c.imageSmoothingEnabled=false;
-    if(this.style===2)c.drawImage(r.think.bitmaps[0],l.board.x,l.board.y);
+    if(this.style===2)drawImageRegion(c,r.think.bitmaps[0],l.board.x,l.board.y);
     else{
       const entry=this.manifest.ordinary.board_entry;
       const slide=Math.min(entry.end_x,entry.start_x+entry.step_x*Math.floor((now-this.started)/entry.tick_ms));
-      c.drawImage(r.board.bitmaps[0],l.board.x+(this.faceLeft?-slide:slide),l.board.y);
+      drawImageRegion(c,r.board.bitmaps[0],l.board.x+(this.faceLeft?-slide:slide),l.board.y);
       const face=r.faces.bitmaps[this.faceIndex];
       if(face){
         const entry=this.manifest.ordinary.portrait_entry,tick=Math.min(entry.ticks,Math.floor((now-this.started)/entry.tick_ms));
         const width=entry.initial_size[0]+tick*entry.size_step[0],height=entry.initial_size[1]+tick*entry.size_step[1];
         c.save();c.globalAlpha=tick===entry.ticks?1:1-(entry.initial_alpha_raw+tick*entry.alpha_step_raw)/255;
-        c.drawImage(face,this.faceLeft?0:640-width,this.style===0?0:480-height,width,height);c.restore();
+        drawImageRegion(c,face,this.faceLeft?0:640-width,this.style===0?0:480-height,width,height);c.restore();
       }
     }
     if(now<this.readyAt)return;
@@ -138,7 +139,7 @@ export class DialogueView {
       if(this.playback.complete){
         const wait=this.style===2?r.wait2:r.wait1,index=Math.floor((now-this.readyAt)/wait.interval_ms)%wait.bitmaps.length;
         const pen=this.playback.current.pen;
-        c.drawImage(wait.bitmaps[index],l.text.x+pen.x+2,l.text.y+pen.y+this.profile.fontHeight-wait.height);
+        drawImageRegion(c,wait.bitmaps[index],l.text.x+pen.x+2,l.text.y+pen.y+this.profile.fontHeight-wait.height);
       }
     }
     this.root.dataset.stage=this.playback.stage;this.root.dataset.page=String(this.playback.page);

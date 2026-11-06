@@ -1,3 +1,4 @@
+import {setImageSource} from './core/ui/image_dom.mjs';
 import {menuStyle,menuImage} from './menu_dom.mjs';
 // Game005_1 / Game005_2: original pixels and four-row keyboard navigation.
 // Values are exposed through the audio adapter's normalized 0..1 API; the
@@ -25,7 +26,7 @@ export class OperationSystemView {
       if(index===3)continue;
       const bar=widget('BAR0'+(index+1)),slider=this.button(bar,['总音量','音乐音量','音效音量'][index],root);
       slider.setAttribute('role','slider');slider.setAttribute('aria-valuemin','0');slider.setAttribute('aria-valuemax','64');slider.dataset.systemRow=index;
-      const fill=document.createElement('span'),image=document.createElement('img');fill.className='system-volume-fill';image.src=bar.normal_images[0];image.alt='';fill.append(image);slider.append(fill);
+      const fill=document.createElement('span'),image=document.createElement('img');fill.className='system-volume-fill';setImageSource(image,bar.normal_images[0]);image.alt='';fill.append(image);slider.append(fill);
       slider.onfocus=button.onfocus;slider.onclick=event=>{const rect=slider.getBoundingClientRect(),raw=Math.max(0,Math.min(64,Math.round((event.clientX-rect.left)/rect.width*64)));this.change('volume',this.channels[index],raw/64);};
       this.bars.push(slider);
       const mute=widget('CBTN0'+(index+1)),toggle=this.button(mute,['关闭总音量','关闭音乐','关闭音效'][index],root);

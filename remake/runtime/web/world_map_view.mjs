@@ -1,3 +1,4 @@
+import {drawImageRegion} from './core/resources/image_regions.mjs';
 import {drawingContext} from './phaser/rendering/recorded_surface.mjs';
 // Native Locate_001/002 pixels and sensor plane. This view owns transient focus;
 // destination preparation, world writes and rollback stay in WorldMapController.
@@ -20,7 +21,7 @@ export class WorldMapView {
       await Promise.all([...new Set(paths)].map(async path => view.images.set(path, await options.image(path))));
       const sensor = document.createElement('canvas');
       sensor.width = 641; sensor.height = 481;
-      sensor.getContext('2d').drawImage(view.images.get(area.sensor.image), 0, 0);
+      drawImageRegion(sensor.getContext('2d'),view.images.get(area.sensor.image), 0, 0);
       view.sensors.set(area.id, sensor.getContext('2d').getImageData(0, 0, 641, 481).data);
     }));
     return view;
@@ -127,11 +128,11 @@ export class WorldMapView {
     if (this.snapshot.phase === 'closed' || !this.area) return;
     this.ctx.imageSmoothingEnabled = false;
     this.ctx.clearRect(0, 0, 640, 480);
-    this.ctx.drawImage(this.images.get(this.area.background), 0, 0);
+    drawImageRegion(this.ctx,this.images.get(this.area.background), 0, 0);
     for (const source of this.area.destinations) {
       if (!this.snapshot.destinations.some(destination => destination.index === source.index && destination.status === 0)) continue;
       const path = source.index === this.hovered ? source.active : source.index === this.selected ? source.selected : source.normal;
-      this.ctx.drawImage(this.images.get(path), source.point.x, source.point.y);
+      drawImageRegion(this.ctx,this.images.get(path), source.point.x, source.point.y);
     }
     for (const [index, button] of this.buttons) {
       button.classList.toggle('selected', index === this.selected);

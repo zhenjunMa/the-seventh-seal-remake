@@ -1,11 +1,12 @@
+import {ownBitmap,bitmapResident,onBitmapEvicted,evictBitmap} from '../resources/bitmap_residency.mjs';
+export {drawImageRegion as drawBattleImage} from '../resources/image_regions.mjs';
+
 // Shared, verified battle atlases. Views retain geometry, never private bitmap copies.
 const canonical=path=>'/'+path.replace(/^\/+/, '');
 const need=(ok,message)=>{if(!ok)throw new Error(`战斗资源：${message}`);};
 const sha=async bytes=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),n=>n.toString(16).padStart(2,'0')).join('');
 const safe=path=>/^\/assets\/battle_packs\/[a-f0-9]{24}\.png$/.test(path);
-const bitmapOwners=new WeakMap(),evictionListeners=new Set();
-export const battleBitmapResident=bitmap=>{const owner=bitmapOwners.get(bitmap);return owner?owner.pool.pages.get(owner.index)?.bitmap===bitmap:null;};
-export function onBattleBitmapEvicted(listener){evictionListeners.add(listener);return ()=>evictionListeners.delete(listener);}
+export {bitmapResident as battleBitmapResident,onBitmapEvicted as onBattleBitmapEvicted};
 
 export class BattleResources {
   constructor({read=fetch.bind(globalThis),decode=blob=>createImageBitmap(blob),budgetBytes=192*1024*1024}={}){
@@ -50,7 +51,7 @@ export class BattleResources {
       const bitmap=await this.decode(new Blob([bytes],{type:'image/png'}));this.stats.decode_ms+=performance.now()-started;
       if(controller.signal.aborted){bitmap.close?.();throw controller.signal.reason;}
       if(bitmap.width!==page.width||bitmap.height!==page.height){bitmap.close?.();throw new Error('战斗图集尺寸不符');}
-      this.stats.page_decodes++;this.pages.set(index,{bitmap,used:++this.clock,bytes:page.width*page.height*4});bitmapOwners.set(bitmap,{pool:this,index});
+      this.stats.page_decodes++;this.pages.set(index,{bitmap,used:++this.clock,bytes:page.width*page.height*4});ownBitmap(bitmap,this,index);
       this.stats.peak_decoded_bytes=Math.max(this.stats.peak_decoded_bytes,[...this.pages.values()].reduce((sum,e)=>sum+e.bytes,0));return bitmap;
     })();
     this.pending.set(index,promise);
@@ -112,32 +113,13 @@ export class BattleResources {
     for(const [index,entry]of [...this.pages].sort((a,b)=>a[1].used-b[1].used)){
       if(bytes<=this.budgetBytes)break;
       if(held.has(index)||this.leases.has(index))continue;
-      this.pages.delete(index);for(const listener of evictionListeners)listener(entry.bitmap);entry.bitmap.close?.();bytes-=entry.bytes;this.stats.evictions++;
+      this.pages.delete(index);evictBitmap(entry.bitmap);bytes-=entry.bytes;this.stats.evictions++;
     }
   }
   snapshot(){const held=new Set([...this.scopes.values()].flatMap(set=>[...set]));
     const bytes=[...this.pages.values()].reduce((sum,e)=>sum+e.bytes,0),active=[...this.pages].reduce((sum,[index,e])=>sum+(held.has(index)?e.bytes:0),0);
     return {...this.stats,resident_pages:this.pages.size,decoded_bytes:bytes,active_decoded_bytes:active,inactive_cache_bytes:bytes-active,budget_bytes:this.budgetBytes};}
-  dispose(){for(const operations of this.preparations.values())for(const operation of operations)operation.cancel();for(const controller of this.requests.values())controller.abort(new Error('战斗资源已释放'));for(const entry of this.pages.values()){for(const listener of evictionListeners)listener(entry.bitmap);entry.bitmap.close?.();}this.pages.clear();this.scopes.clear();}
+  dispose(){for(const operations of this.preparations.values())for(const operation of operations)operation.cancel();for(const controller of this.requests.values())controller.abort(new Error('战斗资源已释放'));for(const entry of this.pages.values()){evictBitmap(entry.bitmap);}this.pages.clear();this.scopes.clear();}
 }
 
 export const battleResources=new BattleResources();
-
-// Retain the original source coordinate system while drawing only occupied tiles.
-// UI masks are exported as full rectangles to preserve destination-in semantics.
-export function drawBattleImage(context,image,...args){
-  if(!image?.packed){context.drawImage(image,...args);return;}
-  let sx=0,sy=0,sw=image.width,sh=image.height,dx,dy,dw=sw,dh=sh;
-  if(args.length===2)[dx,dy]=args;
-  else if(args.length===4)[dx,dy,dw,dh]=args;
-  else if(args.length===8)[sx,sy,sw,sh,dx,dy,dw,dh]=args;
-  else throw new Error('战斗图片绘制参数无效');
-  if(sw<=0||sh<=0||dw<=0||dh<=0)return;
-  for(const [x,y,w,h,index,px,py]of image.regions){
-    const left=Math.max(x,sx),top=Math.max(y,sy),right=Math.min(x+w,sx+sw),bottom=Math.min(y+h,sy+sh);
-    if(left>=right||top>=bottom)continue;
-    const entry=image.pool.pages.get(index);need(entry,'当前战斗图集未准备好');entry.used=++image.pool.clock;
-    context.drawImage(entry.bitmap,px+left-x,py+top-y,right-left,bottom-top,
-      dx+(left-sx)*dw/sw,dy+(top-sy)*dh/sh,(right-left)*dw/sw,(bottom-top)*dh/sh);
-  }
-}

@@ -11,6 +11,7 @@ import argparse
 import hashlib
 import io
 import importlib.util
+import inspect
 import json
 import os
 import shutil
@@ -21,6 +22,7 @@ from uuid import uuid4
 
 from media_definitions import MediaDefinitions, OriginalFiles, checksum, url
 from media_fingerprints import SourceFingerprints, source_key, write_reference
+from image_atlas import build_image_catalog, independent
 
 RUNTIME = Path(__file__).resolve().parents[1]
 
@@ -45,10 +47,11 @@ class MediaBuilder:
         self.missing = {}
         self.variants = {}
         self.outputs = {}
+        self.logical = {}
         self.aliases = {}
         self.active = set()
         self.variant_assets = {}
-        self.stats = dict(exported=0, reused=0, deduplicated=0, atlas_pages=0)
+        self.stats = dict(exported=0, reused=0, deduplicated=0, atlas_pages=0, image_pages=0)
         self.ffmpeg = shutil.which('ffmpeg')
         self.ffprobe = shutil.which('ffprobe')
 
@@ -235,14 +238,35 @@ class MediaBuilder:
 
     def image(self, name):
         from PIL import Image
-        self.build_one(url(name))
-        opened = Image.open(self.local(url(name)))
-        opened.load()
-        if opened.mode == 'RGBA':
-            return opened
-        converted = opened.convert('RGBA')
-        opened.close()
-        return converted
+        name = url(name)
+        signature = self.resource_signature(name)
+        expected = self.plan.expected.get(name)
+        path = self.local(name)
+        previous = self.state.get(name)
+        wanted = expected or (previous.get('sha256') if previous and previous['signature'] == signature else None)
+        if not self.force and not self.variant_assets[name] and wanted and path.is_file() and checksum(path) == wanted:
+            with Image.open(path) as opened:
+                image = opened.convert('RGBA')
+            actual = wanted
+            self.stats['reused'] += 1
+        else:
+            if name in self.active:
+                raise ValueError('素材配方存在循环：' + name)
+            self.active.add(name)
+            try:
+                image = self.decode(self.plan.recipes[name])
+                stream = io.BytesIO()
+                image.save(stream, format='PNG')
+                actual = digest(stream.getvalue())
+                if expected and actual != expected:
+                    raise ValueError(f'素材与固定描述不一致：{name}，预期 {expected}，实际 {actual}')
+                image = image.convert('RGBA')
+                self.stats['exported'] += 1
+            finally:
+                self.active.remove(name)
+        self.logical[name] = actual
+        self.state[name] = dict(signature=signature, sha256=actual)
+        return image
 
     @lru_cache(maxsize=1)
     def atlas_image(self, name):
@@ -375,7 +399,8 @@ class MediaBuilder:
         changed = self.fingerprints.report['changed']
         self.variant_assets[name] = (any(source in self.variants or source_key(source) in changed for source in sources)
                                     or any(self.variant_assets[url(child)] for child in dependencies))
-        return digest(json.dumps([self.recipe_version, row, inputs], sort_keys=True).encode())
+        version = self.media_recipe_version if row['kind'] in ('audio', 'video') else self.recipe_version
+        return digest(json.dumps([version, row, inputs], sort_keys=True).encode())
 
     def build_one(self, name):
         from incremental import write_bytes
@@ -472,8 +497,10 @@ class MediaBuilder:
         modules = local_modules(Path(__file__), self.runtime)
         encoders = {name: self.run([tool, '-version']).decode('utf-8', 'replace').splitlines()[0]
                     for name, tool in [('ffmpeg', self.ffmpeg), ('ffprobe', self.ffprobe)] if tool} if not self.images_only else {}
-        self.recipe_version = digest(json.dumps([PIL.__version__, encoders,
+        self.recipe_version = digest(json.dumps([PIL.__version__,
             {str(p.relative_to(self.runtime)): checksum(p) for p in sorted(modules)}], sort_keys=True).encode())
+        self.media_recipe_version = digest(json.dumps([encoders, inspect.getsource(type(self).transcode),
+            checksum(Path(__file__).with_name('export_story_media.py'))], sort_keys=True).encode())
         report = dict(schema='seventh-seal-media-build', version=1, scope='images' if self.images_only else 'game',
                       started_utc=datetime.now(timezone.utc).isoformat(), passed=False,
                       missing_original_files=sorted(self.missing), source_variants=self.variants,
@@ -486,21 +513,26 @@ class MediaBuilder:
                 # frame decoding across the different frozen presentation banks.
                 selected.sort(key=lambda name: (self.plan.recipes[name].get('source', ''), name))
                 for index, name in enumerate(selected):
-                    self.build_one(name)
+                    row = self.plan.recipes[name]
+                    if not name.endswith('.png') or independent(row):
+                        self.build_one(name)
                     if (index+1) % 1024 == 0:
                         write_json(self.state_path, self.state, compact=True)
                         print(f'素材 {index+1}/{len(selected)} {self.stats}', flush=True)
                 self.battle_pages()
+                catalog = build_image_catalog(self)
+                resolved = set(self.outputs) | set(catalog['images'])
                 self.fingerprints.verify_unchanged()
                 for name, expected in self.plan.definition_hashes.items():
                     if checksum(self.web / name) != expected:
                         raise ValueError('构建期间游戏定义发生变化：' + name)
                 report.update(passed=True, definitions_unchanged=True, counts=self.stats,
-                              files=len(self.outputs), missing_assets=sorted(name for name in self.selected() if name not in self.outputs),
+                              files=len(self.outputs), missing_assets=sorted(name for name in self.selected() if name not in resolved),
                               report=str(directory / 'run.json'))
                 manifest = dict(schema='seventh-seal-media-manifest', version=1, recipe=self.recipe_version,
-                                scope=report['scope'], definitions=self.plan.definition_hashes,
+                                scope=report['scope'], definitions=self.plan.definition_hashes, media_recipe=self.media_recipe_version,
                                 sources=self.source_hashes, files=self.outputs,
+                                images={name: row['sha256'] for name, row in catalog['images'].items()},
                                 source_variants=self.variants,
                                 fingerprint=self.fingerprints.report, source_inventory=self.fingerprints.files,
                                 missing=report['missing_assets'], complete=not self.images_only and not report['missing_assets'])

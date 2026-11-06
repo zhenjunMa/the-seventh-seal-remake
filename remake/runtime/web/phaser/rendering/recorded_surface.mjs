@@ -1,3 +1,4 @@
+import {drawImageRegion} from '../../core/resources/image_regions.mjs';
 // A small retained drawing list, not a raster canvas. Logical UI coordinates
 // are replayed into Phaser objects; only glyph generation uses CPU bitmaps.
 const fields=['globalAlpha','globalCompositeOperation','fillStyle','strokeStyle','lineWidth','font','textAlign','textBaseline'];
@@ -36,7 +37,7 @@ export class RecordedSurface {
     target.beginPath();target.rect(sx,sy,sw,sh);target.clip();
     for(const c of this.commands){target.save();target.beginPath();target.rect(c.clip.x,c.clip.y,c.clip.width,c.clip.height);target.clip();
       target.globalAlpha=alpha*c.alpha;target.globalCompositeOperation=inheritedBlend==='lighter'?'lighter':c.blend;
-      if(c.kind==='image')target.drawImage(c.source,c.sx,c.sy,c.sw,c.sh,c.x,c.y,c.width,c.height);
+      if(c.kind==='image')drawImageRegion(target,c.source,c.sx,c.sy,c.sw,c.sh,c.x,c.y,c.width,c.height);
       else if(c.kind==='fill'){target.fillStyle=c.style;target.fillRect(c.x,c.y,c.width,c.height);}
       else if(c.kind==='stroke'){target.strokeStyle=c.style;target.lineWidth=c.lineWidth;target.strokeRect(c.x,c.y,c.width,c.height);}
       else{target.fillStyle=c.style;target.font=c.font;target.textAlign=c.align;target.textBaseline=c.baseline;target.fillText(c.value,c.x,c.y,c.maxWidth);}

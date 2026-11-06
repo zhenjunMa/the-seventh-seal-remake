@@ -1,9 +1,14 @@
+import {imageCatalog,imageDescriptor} from './image_catalog.mjs';
+import {ownBitmap,evictBitmap} from './bitmap_residency.mjs';
+
 // Scope-owned decoded images. A failed load can be retried; releasing an
 // unused scene also releases the cache's references to its decoded pixels.
 export class ImageResources {
   constructor({createImage = () => new Image()} = {}) {
     this.createImage = createImage;
     this.entries = new Map();
+    this.pages = new Map();
+    this.clock = 0;
     this.revision = 0;
   }
   load(path, scope = 'shared') {
@@ -15,6 +20,20 @@ export class ImageResources {
     entry = {scopes:new Set([scope]), bitmap:null, promise:null};
     this.entries.set(path, entry);
     this.revision++;
+    const descriptor=imageDescriptor(path);
+    if(descriptor){
+      entry.pages=new Set(descriptor.regions.map(r=>r[4]));
+      entry.promise=Promise.all([...entry.pages].map(index=>this.page(index))).then(()=>{
+        const image={packed:true,path,width:descriptor.width,height:descriptor.height,regions:descriptor.regions,pool:this};
+        entry.bitmap=image;
+        if(this.entries.get(path)!==entry)this.prunePages();
+        return image;
+      }).catch(error=>{
+        if(this.entries.get(path)===entry){this.entries.delete(path);this.revision++;}
+        this.prunePages();throw error;
+      });
+      return entry.promise;
+    }
     entry.promise = new Promise((resolve, reject) => {
       const bitmap = this.createImage();
       bitmap.onload = () => { bitmap.onload = bitmap.onerror = null; entry.bitmap = bitmap; resolve(bitmap); };
@@ -26,6 +45,31 @@ export class ImageResources {
       bitmap.src = path;
     });
     return entry.promise;
+  }
+  page(index){
+    let entry=this.pages.get(index);if(entry)return entry.promise;
+    const page=imageCatalog().pages[index];
+    entry={bitmap:null,promise:null,used:++this.clock};this.pages.set(index,entry);
+    entry.promise=new Promise((resolve,reject)=>{
+      const bitmap=this.createImage();
+      bitmap.onload=()=>{bitmap.onload=bitmap.onerror=null;
+        if(bitmap.width!==page.width||bitmap.height!==page.height){reject(new Error('图片纹理页尺寸不符：'+page.path));return;}
+        entry.bitmap=bitmap;ownBitmap(bitmap,this,index);resolve(bitmap);};
+      bitmap.onerror=()=>{bitmap.onload=bitmap.onerror=null;reject(new Error('图片纹理页加载失败：'+page.path));};
+      bitmap.src=page.path;
+    }).catch(error=>{if(this.pages.get(index)===entry)this.pages.delete(index);throw error;});
+    return entry.promise;
+  }
+  prunePages(){
+    const held=new Set([...this.entries.values()].flatMap(entry=>[...(entry.pages??[])]));
+    for(const [index,entry]of this.pages)if(!held.has(index)){
+      this.pages.delete(index);if(entry.bitmap)evictBitmap(entry.bitmap);
+      else entry.promise.then(bitmap=>evictBitmap(bitmap),()=>{});
+    }
+  }
+  release(scope){
+    for(const [path,entry]of this.entries){entry.scopes.delete(scope);if(!entry.scopes.size){this.entries.delete(path);this.revision++;}}
+    this.prunePages();
   }
   peek(path) { return this.entries.get(path)?.bitmap ?? null; }
   async attach(target, path, scope, property = 'bitmap') {
@@ -42,15 +86,16 @@ export class ImageResources {
       for (const scope of entry.scopes) if (!keep.has(scope)) { entry.scopes.delete(scope); this.revision++; }
       if (!entry.scopes.size) { this.entries.delete(path); released++; this.revision++; }
     }
-    return released;
+    this.prunePages();return released;
   }
   snapshot() {
     let ready = 0, decodedBytes = 0;
     const scopes = new Set();
     for (const entry of this.entries.values()) {
       for (const scope of entry.scopes) scopes.add(scope);
-      if (entry.bitmap) { ready++; decodedBytes += entry.bitmap.width * entry.bitmap.height * 4; }
+      if (entry.bitmap) { ready++; if(!entry.bitmap.packed)decodedBytes += entry.bitmap.width * entry.bitmap.height * 4; }
     }
+    for(const entry of this.pages.values())if(entry.bitmap)decodedBytes+=entry.bitmap.width*entry.bitmap.height*4;
     return {entries:this.entries.size, ready, pending:this.entries.size - ready,
       estimatedDecodedBytes:decodedBytes, scopes:[...scopes].sort()};
   }

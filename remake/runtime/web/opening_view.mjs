@@ -1,3 +1,4 @@
+import {drawImageRegion} from './core/resources/image_regions.mjs';
 // Presentation preview for the source-bound ANM player. Interpolation and
 // blend-state transitions are browser approximations, not native equivalence.
 import {locomotion} from './core/exploration/movement.mjs';
@@ -285,7 +286,7 @@ export class OpeningView {
       if(actor.effect?.sourceImage)return [{...entry,key:`opening:${slot}:source`,blend:'source-over',
         pose:{...entry.pose,image:actor.effect.sourceImage},draw:ctx=>{
           ctx.save();ctx.globalAlpha=actor.alpha;ctx.globalCompositeOperation='source-over';
-          ctx.drawImage(actor.effect.sourceImage,entry.pose.x,entry.pose.y);ctx.restore();}},entry];
+          drawImageRegion(ctx,actor.effect.sourceImage,entry.pose.x,entry.pose.y);ctx.restore();}},entry];
       return [entry];});
   }
 }

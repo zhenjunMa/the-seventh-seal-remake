@@ -1,3 +1,4 @@
+import {drawImageRegion} from './core/resources/image_regions.mjs';
 import {particleColumns} from './core/ui/opening_presentation.mjs';
 
 // 552437 alpha reveal, 550A28 falling pixels, 553A45 rising pixels,
@@ -14,7 +15,7 @@ export class ActorEffectView {
     this.visible=[];this.image={width:this.width+this.offsetX*2,height:this.height+this.offsetY,pixels:()=>this.visible};
     const source=document.createElement('canvas');source.width=this.width;source.height=this.height;
     const ctx=source.getContext('2d',{willReadFrequently:true});
-    ctx.drawImage(action.bitmap,actor.frame*this.width,actor.direction*this.height,this.width,this.height,0,0,this.width,this.height);
+    drawImageRegion(ctx,action.bitmap,actor.frame*this.width,actor.direction*this.height,this.width,this.height,0,0,this.width,this.height);
     this.pixels=ctx.getImageData(0,0,this.width,this.height).data;
 
     if(kind==='scan-reveal'){
@@ -105,6 +106,6 @@ export class ActorEffectView {
   }
   draw(ctx,x,y) {
     if(['rise','scatter','rise-trail'].includes(this.kind))ctx.globalCompositeOperation='lighter';
-    ctx.drawImage(this.image,x-this.offsetX,y-this.offsetY);
+    drawImageRegion(ctx,this.image,x-this.offsetX,y-this.offsetY);
   }
 }

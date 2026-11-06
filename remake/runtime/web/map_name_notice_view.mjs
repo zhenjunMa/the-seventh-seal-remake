@@ -1,3 +1,4 @@
+import {drawImageRegion} from './core/resources/image_regions.mjs';
 import {drawingContext} from './phaser/rendering/recorded_surface.mjs';
 
 // Native 0x425000 kind0: Map_Area_Name, 24ms visits, 8px travel,
@@ -27,9 +28,9 @@ export class MapNameNoticeView {
     if(exit>travel){this.close();return;}
     const x=640-Math.min(r.width,ticks*8)+Math.min(r.width,exit*8);
     c.globalAlpha=Math.min(1,ticks*8/128,Math.max(0,1-exit*8/128));
-    c.drawImage(r.bitmaps[0],x,0);
+    drawImageRegion(c,r.bitmaps[0],x,0);
     // Native text is drawn separately from the translucent plate.
-    c.globalAlpha=1;c.drawImage(this.ink,x+3+this.bounds.offsetX,3+this.bounds.offsetY);
+    c.globalAlpha=1;drawImageRegion(c,this.ink,x+3+this.bounds.offsetX,3+this.bounds.offsetY);
     this.frameTask=this.clock.requestFrame(time=>{this.frameTask=null;this.draw(time);});
   }
   close(){

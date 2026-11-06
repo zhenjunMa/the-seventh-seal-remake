@@ -5,6 +5,7 @@ import {fileURLToPath} from 'node:url';
 import {createHash} from 'node:crypto';
 import {spawnSync} from 'node:child_process';
 import {BattleResources} from '../web/core/battle/battle_resources.mjs';
+import {installImageCatalog} from '../web/core/resources/image_catalog.mjs';
 import {exportStoryPackages} from './export_story_packages.mjs';
 
 const runtime=fileURLToPath(new URL('../',import.meta.url)),web=path.join(runtime,'web');
@@ -69,6 +70,9 @@ try{
   await new BattleResources({read:async()=>({ok:true,json:async()=>packs})}).catalog();
   report.assets.packed_images=Object.keys(packs.images).length;report.assets.packed_pages=packs.pages.length;
   collect(packs.pages);
+  const imageCatalogPath=path.join(web,'assets/image_catalog.json');
+  const imageCatalog=await exists(imageCatalogPath)?installImageCatalog(await readJson(imageCatalogPath)):null;
+  if(imageCatalog){collect(imageCatalog.pages);report.assets.logical_images=Object.keys(imageCatalog.images).length;}
   const packedManifests=new Set(Object.keys(packs.manifests));
   for(const file of await files(path.join(web,'data')))if(file.endsWith('.json')){
     const url='/'+path.relative(web,file).split(path.sep).join('/');
@@ -95,6 +99,17 @@ try{
   }
   report.assets.required=assets.size;
   for(const [url,descriptor]of assets){
+    const logical=imageCatalog?.images[url];
+    if(logical){
+      report.assets.present++;
+      if(media?.images?.[url]!==undefined&&media.images[url]!==logical.sha256)
+        report.assets.invalid.push({path:url,reason:'逻辑图片指纹与构建清单不符'});
+      if(descriptor.sha256&&descriptor.sha256!==logical.sha256)
+        report.assets.invalid.push({path:url,reason:'逻辑图片指纹与固定定义不符'});
+      if(descriptor.width&&descriptor.height&&(descriptor.width!==logical.width||descriptor.height!==logical.height))
+        report.assets.invalid.push({path:url,reason:'逻辑图片尺寸与定义不符'});
+      continue;
+    }
     const file=resolveUrl(url);
     if(!await exists(file)){report.assets.missing.push(url);continue;}
     report.assets.present++;

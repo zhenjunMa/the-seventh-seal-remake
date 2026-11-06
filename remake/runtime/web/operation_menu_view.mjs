@@ -1,3 +1,4 @@
+import {setImageSource} from './core/ui/image_dom.mjs';
 // Keep original menu images and hit rectangles in the original coordinate plane.
 import {operationSummaryFields, operationStandingFrame, operationMnuTextOptions} from './core/ui/menu_presentation.mjs';
 import {menuText,menuStyle,menuImage} from './menu_dom.mjs';
@@ -12,7 +13,7 @@ export class OperationMenuView{
   constructor({manifest,root,textRenderer,techniquesSupplement,onPage,onActor,onItemSelect,onItemConfirm,onItemTarget,onSlot,onItemFilter,onSystemSetting,onSystemExit,onTechniqueActor,onTechniqueSlot,onTechniqueCast,onTechniqueTest,onTechniqueMessage,onTechniqueCreate,onTechniqueRename,onTechniqueDelete,onEquipmentSelect,onEquipmentConfirm,onEquipmentUnequip,onFormationExchange,onWeaponSocket,onWeaponSelect,onWeaponConfirm,onWeaponUnequip,onWeaponActorChange}){
     if(manifest?.version!==1||!Array.isArray(manifest.menus))throw new Error('操作界面素材版本无效');
     this.manifest=manifest;this.menus=new Map(manifest.menus.map(menu=>[menu.id,menu]));this.root=root;this.frame=root.querySelector('#operationFrame');this.onPage=onPage;this.onActor=onActor;this.onItemSelect=onItemSelect;this.onItemConfirm=onItemConfirm;this.onItemTarget=onItemTarget;this.onSlot=onSlot;this.rosterButtons=new Map();this.itemButtons=new Map();this.slotButtons=new Map();this.mode='main';this.mainIndex=0;
-    const nodes=new Map();this.node=id=>{if(!nodes.has(id))nodes.set(id,root.querySelector('#'+id));return nodes.get(id);};this.node('menuBackground').src=this.menus.get('game001').images[0].image;this.frame.tabIndex=-1;
+    const nodes=new Map();this.node=id=>{if(!nodes.has(id))nodes.set(id,root.querySelector('#'+id));return nodes.get(id);};setImageSource(this.node('menuBackground'),this.menus.get('game001').images[0].image);this.frame.tabIndex=-1;
     this.textRenderer=textRenderer;
     this.formation=new OperationFormationView({manifest,root,onExchange:onFormationExchange,onFocus:()=>{this.mode='content';},onInfo:message=>{this.info(message);}});
     this.messageObserver=new MutationObserver(()=>{const node=this.node('menuMessage');if(node.firstChild?.nodeType===3)this.mnuText(node,node.textContent,'game001','INFO',{maxLines:2});});
@@ -287,7 +288,7 @@ export class OperationMenuView{
       if(!button){
         button=document.createElement('button');button.dataset.roleId=row.id;button._panel=document.createElement('img');button._panel.className='menu-source target-panel';button._panel.alt='';button._name=document.createElement('span');button._name.className='target-name';button._fields={};button.append(button._panel,button._name);
         for(const [key,y,frame,barY]of [['hp',30,1,47],['mp',53,0,70]]){
-          const current=document.createElement('span'),maximum=document.createElement('span'),bar=document.createElement('span'),image=document.createElement('img');current.className='target-current';maximum.className='target-maximum';current.style.top=maximum.style.top=y+'px';bar.className='target-bar';bar.style.top=barY+'px';image.src=this.manifest.item_target_bars.frames[frame];image.alt='';bar.append(image);button.append(current,maximum,bar);button._fields[key]={current,maximum,bar};
+          const current=document.createElement('span'),maximum=document.createElement('span'),bar=document.createElement('span'),image=document.createElement('img');current.className='target-current';maximum.className='target-maximum';current.style.top=maximum.style.top=y+'px';bar.className='target-bar';bar.style.top=barY+'px';setImageSource(image,this.manifest.item_target_bars.frames[frame]);image.alt='';bar.append(image);button.append(current,maximum,bar);button._fields[key]={current,maximum,bar};
         }
         button.onfocus=()=>{const previous=this.targetButtons.get(this.targetFocusedId);this.targetFocusedId=row.id;if(previous&&previous!==button)this.paintItemTarget(previous,false);this.paintItemTarget(button,true);};button.onclick=()=>this.onItemTarget?.(row.id);
         this.targetButtons.set(row.id,button);list.append(button);
@@ -305,12 +306,12 @@ export class OperationMenuView{
   weapon(details){this.weaponView.render(details);}
   stats(status){
     this.actorId=status.id;
-    this.summary(this.node('menuActorSummary'),status);this.node('menuActorBar').src=this.manifest.actor_panels?.[status.id]?.normal??this.manifest.actor_bar.dynamic_name_image;
+    this.summary(this.node('menuActorSummary'),status);setImageSource(this.node('menuActorBar'),this.manifest.actor_panels?.[status.id]?.normal??this.manifest.actor_bar.dynamic_name_image);
     const standing=this.manifest.standing_actors?.[status.id],sprite=this.node('menuStandingActor');sprite.hidden=!standing||!['status','equipment'].includes(this.current);
     if(!sprite.hidden){
       if(this.standingRole!==status.id||this.standingPage!==this.current){
         this.standingRole=status.id;this.standingPage=this.current;this.standingStartedAt=performance.now();
-        this.standingImages=standing.frames.map(frame=>{const image=new Image();image.src=frame.image??frame;return image;});
+        this.standingImages=standing.frames.map(frame=>{const image=new Image();setImageSource(image,frame.image??frame);return image;});
       }
       this.standing=standing;this.tick(performance.now());
       sprite.style.left=((standing.position?.x??387)-standing.anchor[0])+'px';sprite.style.top=((standing.position?.y??340)-standing.anchor[1])+'px';
@@ -328,7 +329,7 @@ export class OperationMenuView{
     for(const [index,[label,value]]of values.entries()){
       const slot=body.widgets.find(w=>w.name===`text${String(index+1).padStart(2,'0')}`),bar=body.widgets.find(w=>w.name===`bar${String(index+1).padStart(2,'0')}`);
       let row=list.children[index];
-      if(!row){row=document.createElement('div');const name=document.createElement('dt'),number=document.createElement('dd'),fill=document.createElement('span'),image=document.createElement('img');row.className='stat-row';row.style.top=slot.rect.top+'px';name.textContent=label;number.style.top='0px';fill.className='operation-bars';fill.style.left=bar.rect.left+'px';fill.style.top=bar.rect.top-slot.rect.top+'px';image.src=bar.normal_images[0];image.alt='';fill.append(image);row.append(name,number,fill);list.append(row);}
+      if(!row){row=document.createElement('div');const name=document.createElement('dt'),number=document.createElement('dd'),fill=document.createElement('span'),image=document.createElement('img');row.className='stat-row';row.style.top=slot.rect.top+'px';name.textContent=label;number.style.top='0px';fill.className='operation-bars';fill.style.left=bar.rect.left+'px';fill.style.top=bar.rect.top-slot.rect.top+'px';setImageSource(image,bar.normal_images[0]);image.alt='';fill.append(image);row.append(name,number,fill);list.append(row);}
       this.text(row.children[1],value,operationMnuTextOptions(slot));menuStyle(row.children[2],{width:Math.floor(value*(bar.rect.right-bar.rect.left)/1000)+'px'});
     }
   }
@@ -338,7 +339,7 @@ export class OperationMenuView{
     const sprite=this.node('menuStandingActor');
     if(this.root.hidden||sprite.hidden||!this.standing)return;
     const frame=operationStandingFrame(this.standing,now-this.standingStartedAt);
-    if(sprite.getAttribute('src')!==frame)sprite.src=frame;
+    if(sprite.getAttribute('src')!==frame)setImageSource(sprite,frame);
   }
   suspend(){this.techniques.hide();this.standing=null;this.standingRole=null;this.standingPage=null;this.standingImages=[];}
 }

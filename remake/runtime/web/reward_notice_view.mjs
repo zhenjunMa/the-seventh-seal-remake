@@ -1,3 +1,4 @@
+import {drawImageRegion} from './core/resources/image_regions.mjs';
 import {drawingContext} from './phaser/rendering/recorded_surface.mjs';
 
 // 425000 kind1 uses Map_Object_Name.DGP, a 40ms visit, 10px travel,
@@ -33,8 +34,8 @@ export class RewardNoticeView {
     if(exit>=travel){this.next(now);return;}
     const x=640-r.width+offset,y=480-r.height;
     c.globalAlpha=Math.min(1,ticks*12/128,exit?Math.max(0,1-exit*12/128):1);
-    c.drawImage(r.bitmaps[0],x,y);
-    c.drawImage(this.ink,x+5+this.bounds.offsetX,y+2+this.bounds.offsetY);
+    drawImageRegion(c,r.bitmaps[0],x,y);
+    drawImageRegion(c,this.ink,x+5+this.bounds.offsetX,y+2+this.bounds.offsetY);
     c.globalAlpha=1;
     this.frameTask=this.clock.requestFrame(time=>{this.frameTask=null;this.draw(time);});
   }

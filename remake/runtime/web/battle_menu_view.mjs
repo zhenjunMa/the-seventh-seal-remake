@@ -1,3 +1,4 @@
+import {drawImageRegion} from './core/resources/image_regions.mjs';
 import {drawingContext} from './phaser/rendering/recorded_surface.mjs';
 import {battleViewport,battleActorPositions,battleBallState} from './core/battle/battle_layout.mjs';
 import {commandForActor} from './core/battle/battle_scheduler.mjs';
@@ -197,8 +198,8 @@ export class BattleMenuView{
     // inside a transformed frame first would bake its black coverage into HUD.
     const c=canvas.getContext('2d'),v=battleViewport(canvas.width,canvas.height);
     c.save();c.setTransform(1,0,0,1,0,0);c.imageSmoothingEnabled=false;
-    c.globalCompositeOperation='source-over';c.drawImage(this.canvas,v.x,v.y,v.width,v.height);
-    c.globalCompositeOperation='lighter';c.drawImage(this.glowCanvas,v.x,v.y,v.width,v.height);c.restore();
+    c.globalCompositeOperation='source-over';drawImageRegion(c,this.canvas,v.x,v.y,v.width,v.height);
+    c.globalCompositeOperation='lighter';drawImageRegion(c,this.glowCanvas,v.x,v.y,v.width,v.height);c.restore();
     this.root.dataset.compositeMode='webgl-source-over-lighter';
   }
   asset(id,index,x,y,{blend='source-over',mask=false}={}){const a=this.manifest.assets[id];if(!a)return;const f=a.frames[((index%a.frames.length)+a.frames.length)%a.frames.length],c=blend==='lighter'?this.glowCtx:this.ctx,image=this.images.get(mask&&f.inverse_mask_image?f.inverse_mask_image:f.image);c.save();c.globalCompositeOperation=blend;if(image)drawBattleImage(c,image,x,y);if(f.indexed_image){const indexed=this.images.get(f.indexed_image);if(indexed){this.glowCtx.save();this.glowCtx.globalCompositeOperation='lighter';drawBattleImage(this.glowCtx,indexed,x,y);this.glowCtx.restore();}}c.restore();}
@@ -210,7 +211,7 @@ export class BattleMenuView{
       const key=JSON.stringify([value,options]);let rendered=this.textCache.get(key);
       if(!rendered){const canvas=this.doc.createElement('canvas');rendered={canvas,...this.textRenderer.paint(canvas,value,options)};if(this.textCache.size>128)this.textCache.clear();this.textCache.set(key,rendered);}
       const anchor=!widget&&width===null?(align==='right'?1:align==='center'?.5:0)*this.textRenderer.measure(value,bitmapFont):0;
-      c.drawImage(rendered.canvas,x-anchor+rendered.offsetX,y+rendered.offsetY);return;
+      drawImageRegion(c,rendered.canvas,x-anchor+rendered.offsetX,y+rendered.offsetY);return;
     }
     c.font=font;c.textAlign=align;c.textBaseline='top';c.fillStyle='#000';c.fillText(value,x+1,y+1,width??640);c.fillStyle=color;c.fillText(value,x,y,width??640);
   }
@@ -228,7 +229,7 @@ export class BattleMenuView{
       const state=this.snapshot.scheduler?(actor.hp.current>0&&!(actor.state_raw>=4&&actor.state_raw<=7)?battleBallState(g,threshold):null):{top:0,color:[0,128,0],phase:'charge',level:23};
       const bar=this.images.get(this.manifest.assets.time_bar.frames[0].image),key=state?`${state.phase}:${state.level}`:null;let ball=this.ballCache.get(key);
       if(state&&state.top<46&&!ball&&bar){ball=this.doc.createElement('canvas');ball.width=47;ball.height=46;const bc=ball.getContext('2d');drawBattleImage(bc,bar,0,0);bc.globalCompositeOperation='multiply';bc.fillStyle=`rgb(${state.color.join(',')})`;bc.fillRect(0,0,47,46);bc.globalCompositeOperation='destination-in';drawBattleImage(bc,bar,0,0);this.ballCache.set(key,ball);}
-      if(state&&state.top<46&&ball){c.save();c.beginPath();c.rect(x+16,y+1+state.top,47,46-state.top);c.clip();c.drawImage(ball,x+16,y+1);c.restore();}
+      if(state&&state.top<46&&ball){c.save();c.beginPath();c.rect(x+16,y+1+state.top,47,46-state.top);c.clip();drawImageRegion(c,ball,x+16,y+1);c.restore();}
       this.asset('time_glass',0,x+16,y+1,{mask:true});
       if(actor.id===this.snapshot.player_id&&(this.ready().includes(actor.id)||this.available(actor.id)))this.asset('fight_mark',Math.floor(now/120),x-30,y-16,{blend:'lighter'});
     });

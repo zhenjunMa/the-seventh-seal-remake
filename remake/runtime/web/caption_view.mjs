@@ -1,3 +1,4 @@
+import {drawImageRegion} from './core/resources/image_regions.mjs';
 import {drawingContext} from './phaser/rendering/recorded_surface.mjs';
 import {CaptionPlayback,captionLayout} from './core/ui/caption.mjs';
 import {createMenuTextRenderer} from './core/ui/menu_text.mjs';
@@ -51,10 +52,10 @@ export class CaptionView {
     }
     c.clearRect(0,0,640,480);c.imageSmoothingEnabled=false;
     c.fillStyle='#00000080';c.fillRect(l.shade.x,l.shade.y,l.shade.width,l.shade.height);
-    c.drawImage(this.ink,l.text.x+this.inkBounds.offsetX,l.text.y+this.inkBounds.offsetY);
+    drawImageRegion(c,this.ink,l.text.x+this.inkBounds.offsetX,l.text.y+this.inkBounds.offsetY);
     if(this.playback.complete){
       const index=Math.floor(now/r.wait.interval_ms)%r.wait.bitmaps.length;
-      c.drawImage(r.wait.bitmaps[index],l.wait.x,l.wait.y);
+      drawImageRegion(c,r.wait.bitmaps[index],l.wait.x,l.wait.y);
     }
     this.root.dataset.complete=String(this.playback.complete);
     this.root.dataset.revealed=String(this.playback.revealed);

@@ -1,4 +1,5 @@
-import {battleBitmapResident,onBattleBitmapEvicted} from '../../core/battle/battle_resources.mjs';
+import {bitmapResident,onBitmapEvicted} from '../../core/resources/bitmap_residency.mjs';
+import {imageRegions} from '../../core/resources/image_regions.mjs';
 let serial=0;
 
 // ImageResources and BattleResources keep ownership of decoded pixels and hashes.
@@ -8,39 +9,37 @@ export class TextureCache {
     Object.assign(this,{scene,idleFrames,budgetBytes,maxFrames});this.sources=new WeakMap();this.entries=new Set();this.frame=0;
     const gl=scene.game?.renderer?.gl;this.maxSize=Math.min(2048,gl?gl.getParameter(gl.MAX_TEXTURE_SIZE):2048);
     this.cuts=new WeakMap();this.cutOwners=new WeakMap();
-    this.actorFrames=new WeakMap();this.actorOwners=new Map();
-    this.unsubscribe=onBattleBitmapEvicted(source=>{const entry=this.sources.get(source);if(entry)this.remove(entry);});
+    this.unsubscribe=onBitmapEvicted(source=>{const entry=this.sources.get(source);if(entry)this.remove(entry);});
     this.stats={created:0,removed:0,frames_created:0,uploads:0,uploaded_bytes:0};
   }
   begin(){this.frame++;}
-  // Reassemble just the occupied part of one packed animation frame. xBR must
-  // see neighbours across pack tiles, but must never see another animation pose.
+  // Padding is virtual: the shader treats samples outside bounds as transparent.
+  // A pose stays on its atlas page, including when smoothing is switched off.
   actorFrame(source,sx,sy,sw,sh){
-    let frames=this.actorFrames.get(source);if(!frames){frames=new Map();this.actorFrames.set(source,frames);}
-    const key=`${sx},${sy},${sw},${sh}`,cached=frames.get(key);
-    if(cached){cached.used=this.frame;return cached;}
-    const patches=[];
-    if(source.packed){
-      for(const [x,y,w,h,page,px,py]of source.regions){
-        const left=Math.max(sx,x),top=Math.max(sy,y),right=Math.min(sx+sw,x+w),bottom=Math.min(sy+sh,y+h);
-        if(right<=left||bottom<=top)continue;
-        const bitmap=source.pool.pages.get(page)?.bitmap;
-        if(!bitmap)throw new Error('人物动画所需图集尚未驻留');
-        patches.push({bitmap,x:left,y:top,width:right-left,height:bottom-top,sx:px+left-x,sy:py+top-y});
-      }
-    }else{
-      const x=Math.max(0,sx),y=Math.max(0,sy),right=Math.min(source.width,sx+sw),bottom=Math.min(source.height,sy+sh);
-      if(right>x&&bottom>y)patches.push({bitmap:source,x,y,width:right-x,height:bottom-y,sx:x,sy:y});
-    }
+    const patches=imageRegions(source,sx,sy,sw,sh);
     if(!patches.length)return null;
-    const x=Math.min(...patches.map(p=>p.x)),y=Math.min(...patches.map(p=>p.y));
-    const width=Math.max(...patches.map(p=>p.x+p.width))-x,height=Math.max(...patches.map(p=>p.y+p.height))-y;
-    if(width+4>this.maxSize||height+4>this.maxSize)throw new Error('人物单帧超过 GPU 纹理上限');
-    const bitmap=document.createElement('canvas');bitmap.width=width+4;bitmap.height=height+4;
-    const ctx=bitmap.getContext('2d');ctx.imageSmoothingEnabled=false;
-    for(const p of patches)ctx.drawImage(p.bitmap,p.sx,p.sy,p.width,p.height,p.x-x+2,p.y-y+2,p.width,p.height);
-    const result={bitmap,x:x-sx-2,y:y-sy-2,width:bitmap.width,height:bitmap.height,used:this.frame};
-    frames.set(key,result);this.actorOwners.set(bitmap,{frames,key,result});return result;
+    if(patches.length!==1)throw new Error('人物帧必须在构建时完整放入同一纹理页');
+    const p=patches[0];
+    let bitmap=p.bitmap,px=p.sx,py=p.sy;
+    // Compatibility for developer PNG exports made before offline pagination.
+    // Catalog-backed production frames never enter this raster-cut branch.
+    if(!source.packed&&(bitmap.width>this.maxSize||bitmap.height>this.maxSize)){
+      const frame=this.region(bitmap,px,py,p.width,p.height);
+      bitmap=this.scene.textures.get(frame.key).getSourceImage();px-=Math.floor(px);py-=Math.floor(py);
+    }
+    return {bitmap,sx:px-2,sy:py-2,x:p.x-sx-2,y:p.y-sy-2,
+      width:p.width+4,height:p.height+4,bounds:{x:px,y:py,width:p.width,height:p.height}};
+  }
+  actorRegion(source,x,y,width,height){
+    if(!source.packed)return this.region(source,x,y,width,height);
+    const pose=this.actorFrame(source,x,y,width,height);
+    if(!pose)return {key:'__WHITE',frame:'__BASE',empty:true};
+    const entry=this.texture(pose.bitmap),id=`actor:${pose.sx},${pose.sy},${pose.width},${pose.height},${pose.x},${pose.y},${width},${height}`;
+    if(!entry.texture.has(id)){
+      entry.texture.add(id,0,pose.sx,pose.sy,pose.width,pose.height).setTrim(width,height,pose.x,pose.y,pose.width,pose.height);
+      this.stats.frames_created++;
+    }
+    entry.frames.set(id,this.frame);return {key:entry.key,frame:id,bounds:pose.bounds};
   }
   texture(source){
     if(!source)throw new Error('Phaser 素材尚未准备');
@@ -59,6 +58,17 @@ export class TextureCache {
     entry.used=this.frame;return entry;
   }
   region(source,x=0,y=0,width=source.width,height=source.height,name=`${x},${y},${width},${height}`){
+    if(source.packed){
+      const patches=imageRegions(source,x,y,width,height);
+      if(!patches.length)return {key:'__WHITE',frame:'__BASE',empty:true};
+      if(patches.length!==1)throw new Error('单个精灵帧跨纹理页，请重新构建图片资源');
+      const p=patches[0],entry=this.texture(p.bitmap),id=`packed:${p.sx},${p.sy},${p.width},${p.height},${p.x-x},${p.y-y},${width},${height}`;
+      if(!entry.texture.has(id)){
+        const frame=entry.texture.add(id,0,p.sx,p.sy,p.width,p.height);
+        frame.setTrim(width,height,p.x-x,p.y-y,p.width,p.height);this.stats.frames_created++;
+      }
+      entry.frames.set(id,this.frame);return {key:entry.key,frame:id};
+    }
     if(source.width>this.maxSize||source.height>this.maxSize){
       const left=Math.floor(x),top=Math.floor(y),w=Math.ceil(x+width)-left,h=Math.ceil(y+height)-top;
       if(w>this.maxSize||h>this.maxSize)throw new Error('单个显示区域超过 GPU 纹理分页上限');
@@ -74,15 +84,15 @@ export class TextureCache {
     entry.frames.set(name,this.frame);
     return {key:entry.key,frame:name};
   }
-  tiles(source){const result=[];for(let y=0;y<source.height;y+=this.maxSize)for(let x=0;x<source.width;x+=this.maxSize){
+  tiles(source){
+    if(source.packed)return imageRegions(source).map(p=>({x:p.x,y:p.y,width:p.width,height:p.height,...this.region(p.bitmap,p.sx,p.sy,p.width,p.height)}));
+    const result=[];for(let y=0;y<source.height;y+=this.maxSize)for(let x=0;x<source.width;x+=this.maxSize){
     const width=Math.min(this.maxSize,source.width-x),height=Math.min(this.maxSize,source.height-y);result.push({x,y,width,height,...this.region(source,x,y,width,height)});
   }return result;}
   prune(){
-    // Offscreen frames may be prepared without ever becoming a GPU texture.
-    for(const [bitmap,owner]of this.actorOwners)if(!this.sources.has(bitmap)&&owner.result.used<this.frame){owner.frames.delete(owner.key);this.actorOwners.delete(bitmap);}
     // Atlas residency belongs to BattleResources. Dropping a texture merely
     // because its animation changed pages would undo that cache under WebGL.
-    const unmanaged=[...this.entries].filter(entry=>battleBitmapResident(entry.source)===null).sort((a,b)=>a.used-b.used);
+    const unmanaged=[...this.entries].filter(entry=>bitmapResident(entry.source)===null).sort((a,b)=>a.used-b.used);
     let bytes=unmanaged.reduce((sum,entry)=>sum+entry.bytes,0);
     for(const entry of unmanaged)if(entry.used<this.frame&&(this.frame-entry.used>this.idleFrames||bytes>this.budgetBytes||entry.source.width===0)){
       this.remove(entry);bytes-=entry.bytes;
@@ -93,7 +103,7 @@ export class TextureCache {
     }
   }
   remove(entry){this.scene.textures.remove(entry.key);this.sources.delete(entry.source);this.entries.delete(entry);const owner=this.cutOwners.get(entry.source);owner?.cuts.delete(owner.key);
-    const actor=this.actorOwners.get(entry.source);if(actor){actor.frames.delete(actor.key);this.actorOwners.delete(entry.source);}this.stats.removed++;}
+    this.stats.removed++;}
   snapshot(){return {...this.stats,resident:this.entries.size,bytes:[...this.entries].reduce((sum,e)=>sum+e.bytes,0)};}
-  destroy(){this.unsubscribe();for(const entry of [...this.entries])this.remove(entry);this.sources=new WeakMap();this.actorFrames=new WeakMap();this.actorOwners.clear();}
+  destroy(){this.unsubscribe();for(const entry of [...this.entries])this.remove(entry);this.sources=new WeakMap();}
 }

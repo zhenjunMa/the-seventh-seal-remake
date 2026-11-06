@@ -1,3 +1,4 @@
+import {setImageSource} from './core/ui/image_dom.mjs';
 import {menuImage} from './menu_dom.mjs';
 import {operationStandingFrame} from './core/ui/menu_presentation.mjs';
 
@@ -26,5 +27,5 @@ export class OperationFormationView{
   key(key,repeat=false){if(key==='Tab')return true;if(key===' '||key==='Enter'){if(!repeat)this.confirm();return true;}const index={ArrowLeft:0,ArrowUp:1,ArrowDown:2,ArrowRight:3}[key];if(index===undefined)return false;this.focusIndex=index;const button=this.buttons[index];if(this.root.ownerDocument.activeElement===button)this.paint();else button.focus({preventScroll:true});return true;}
   escape(){this.firstIndex=null;this.paint();return false;}
   reset(){this.firstIndex=null;this.focusIndex=0;this.startedAt=performance.now();this.paint();}
-  tick(now){if(this.section.hidden||this.root.hidden)return;for(const [id,sprite]of this.sprites){const standing=this.manifest.standing_actors[id],frame=operationStandingFrame(standing,now-this.startedAt);if(sprite.getAttribute('src')!==frame)sprite.src=frame;}}
+  tick(now){if(this.section.hidden||this.root.hidden)return;for(const [id,sprite]of this.sprites){const standing=this.manifest.standing_actors[id],frame=operationStandingFrame(standing,now-this.startedAt);if(sprite.getAttribute('src')!==frame)setImageSource(sprite,frame);}}
 }

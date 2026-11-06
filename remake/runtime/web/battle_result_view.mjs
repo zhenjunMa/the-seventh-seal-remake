@@ -1,3 +1,4 @@
+import {drawImageRegion} from './core/resources/image_regions.mjs';
 import {BattleResultSequence,validateBattleResultManifest} from './core/battle/battle_result.mjs';
 import {battleResources,drawBattleImage} from './core/battle/battle_resources.mjs';
 
@@ -50,7 +51,7 @@ export class BattleResultView{
     if(this.textRenderer?.supports(value,'simsun18')){
       const key=JSON.stringify([value,width,align,shadow]);let entry=this.textCache.get(key);
       if(!entry){const canvas=this.doc.createElement('canvas'),placement=this.textRenderer.paint(canvas,value,{font:'simsun18',foreground:'#fff',shadow:shadow?'#000':null,maxWidth:width,maxLines:1,align});entry={canvas,...placement};if(this.textCache.size>=128)this.textCache.clear();this.textCache.set(key,entry);}
-      ctx.drawImage(entry.canvas,x+entry.offsetX,y+entry.offsetY);return;
+      drawImageRegion(ctx,entry.canvas,x+entry.offsetX,y+entry.offsetY);return;
     }
     // x is the source rectangle's left edge; Canvas expects the alignment
     // anchor instead. Keep the same rectangle as the glyph-atlas path.

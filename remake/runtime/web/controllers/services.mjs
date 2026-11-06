@@ -1,3 +1,4 @@
+import {imageDefinitionJson} from '../core/resources/image_catalog.mjs';
 // services adapters. Persistent state belongs to the shared runtime context.
 import {encodeSave,DEFAULT_GAME_SETTINGS} from "../core/world/world.mjs";
 import {loadRuntimeConfiguration, createRuntimeConfigurationSession} from "../core/config/runtime_config.mjs";
@@ -23,7 +24,7 @@ export function createServicesController({state, actions, $, canvas, ctx,now=()=
       : event.error ?? `${event.type} ${event.event??''} ${event.op??''}`;
     $('eventLog').append(item); while($('eventLog').children.length>50) $('eventLog').firstChild.remove();
   }
-  async function json(path,{cache='no-cache'}={}) { const response=await fetch(path,{cache}); if(!response.ok) throw new Error(`资源加载失败：${path}（${response.status}）`); return response.json(); }
+  async function json(path,{cache='no-cache'}={}) { const response=await fetch(path,{cache}); if(!response.ok) throw new Error(`资源加载失败：${path}（${response.status}）`); return imageDefinitionJson(path,response); }
   async function initializeRuntimeConfiguration(options){
     // Coalesce startup calls, including a failed startup. Refreshing the page
     // creates a new owner; menu/battle/save operations never reload this input.

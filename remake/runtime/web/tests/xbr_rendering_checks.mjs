@@ -60,16 +60,20 @@ export async function checkCharacterSmoothing(runtime,record){
   runtime.flush();const isolated=read(200*3,50*3,96,144);
   for(let i=0;i<isolated.length;i+=4)assert(isolated[i]<=36,'xBR 读取了地图相邻动画帧');sprite.destroy();
 
-  // Split a character across two atlas pages. The result must equal the same
-  // single bitmap, including fractional scaling and viewport clipping.
-  const page0=bitmap(18,48,c=>c.drawImage(human,0,0,16,48,1,0,16,48));
-  const page1=bitmap(18,48,c=>c.drawImage(human,16,0,16,48,1,0,16,48));
-  const packed={packed:true,width:32,height:48,regions:[[0,0,16,48,0,1,0],[16,0,16,48,1,1,0]],pool:{pages:new Map([[0,{bitmap:page0}],[1,{bitmap:page1}]])}};
+  // A complete pose references its page directly, even with only one pixel of
+  // physical gutter and a bright neighbouring pose. Padding is shader metadata.
+  const page0=bitmap(68,52,c=>{c.drawImage(human,1,2);c.fillStyle='#ff0000';c.fillRect(34,0,34,52);});
+  const packed={packed:true,width:32,height:48,regions:[[0,0,32,48,0,1,2]],pool:{clock:0,pages:new Map([[0,{bitmap:page0}]])}};
   const draw=source=>{surface.beginFrame();surface.drawActorImage(source,0,0,32,48,-4,40,48,72);surface.endFrame();runtime.flush();return read(0,120,144,216);};
-  assert(same(draw(human),draw(packed)),'xBR 在战斗图集分块／裁切处产生接缝');
+  for(const enabled of [false,true]){runtime.setActorSmoothing(enabled);const a=draw(human),b=draw(packed);let differences=0,max=0,first=null;
+    for(let i=0;i<a.length;i++)if(a[i]!==b[i]){differences++;max=Math.max(max,Math.abs(a[i]-b[i]));first??={x:Math.floor(i/4)%144,y:Math.floor(i/4/144),channel:i%4,a:a[i],b:b[i]};}
+    assert(enabled?max<=1:!differences,`人物直接引用图集后像素／裁切不一致：${JSON.stringify({enabled,differences,max,first})}`);}
+  const entries=[...surface.textures.entries];assert(entries.some(entry=>entry.source===page0),'人物没有直接使用图集页');
+  const split={...packed,regions:[[0,0,16,48,0,1,2],[16,0,16,48,0,17,2]]};
+  let rejected=false;try{draw(split);}catch(error){rejected=/构建/.test(error.message);}assert(rejected,'跨区域人物帧没有在资源边界明确拒绝');
   const mark=surface.pools.sprite[0];assert(mark.smoothActor,'战斗角色主体没有标记');
   surface.beginFrame();surface.drawImage(human,0,0);surface.endFrame();assert(!surface.pools.sprite[0].smoothActor,'对象池把人物平滑传给了普通特效');
-  record('图集边界：地图相邻帧隔离、战斗跨页拼接、小数缩放／裁切与对象池标记清理通过');
+  record('图集边界：相邻帧隔离、直接引用、小数缩放／裁切、跨区域拒绝与对象池标记清理通过');
 
   const map={data:{id:'xbr-check'},bitmap:bitmap(640,480,c=>{c.fillStyle='#243539';c.fillRect(0,0,640,480);}),
     movement:{width:1,height:1},objects:[{index:0,bitmap:human,draw_x:100,draw_y:80}],
@@ -96,7 +100,7 @@ export async function checkCharacterSmoothing(runtime,record){
   runtime.flush();assert(same([...read(900,600,1,1)],[18,76,122,255]),'高分辨率快照的相机／显示尺寸错误');
   snapshotImage.destroy();shot.destroy();
   surface.beginFrame();for(const entry of [...surface.textures.entries])surface.textures.remove(entry);surface.endFrame();
-  assert(surface.textures.actorOwners.size===0,'人物帧的 CPU 缓存未随 GPU 纹理释放');
+  assert(surface.textures.snapshot().resident===0,'人物图集纹理未释放');
   runtime.fixedRenderScale=1;runtime.resize();runtime.setActorSmoothing(false);
   assert(runtime.battle.cameras.main.zoom===1&&runtime.battle.cameras.main.scrollX===0,'分辨率恢复改变了战斗逻辑相机');
   runtime.fixedRenderScale=3;runtime.resize();

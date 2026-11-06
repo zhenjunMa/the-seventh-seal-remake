@@ -1,3 +1,4 @@
+import {drawImageRegion} from './core/resources/image_regions.mjs';
 import {drawingContext} from './phaser/rendering/recorded_surface.mjs';
 // Original Progress01 + Progress.mnu in a fixed 640x480 viewport.
 import {playbackFrame,playbackDelay,playbackTask} from './core/story/story_playback.mjs';
@@ -16,10 +17,10 @@ export class LoadingView {
     this.root.style.setProperty('--loading-scale',String(Math.min(box.width/640,box.height/480)));}
   draw(progress){
     const c=this.context,{origin:o,fill_rect:r}=this.manifest;
-    c.clearRect(0,0,640,480);c.imageSmoothingEnabled=false;c.drawImage(this.backgrounds[this.backgroundIndex],0,0);
-    c.drawImage(this.frame,o.x,o.y);c.fillStyle='#000';c.fillRect(o.x+r.left,o.y+r.top,this.fill.width,this.fill.height);
+    c.clearRect(0,0,640,480);c.imageSmoothingEnabled=false;drawImageRegion(c,this.backgrounds[this.backgroundIndex],0,0);
+    drawImageRegion(c,this.frame,o.x,o.y);c.fillStyle='#000';c.fillRect(o.x+r.left,o.y+r.top,this.fill.width,this.fill.height);
     const width=Math.floor(this.fill.width*progress);
-    if(width)c.drawImage(this.fill,0,0,width,this.fill.height,o.x+r.left,o.y+r.top,width,this.fill.height);
+    if(width)drawImageRegion(c,this.fill,0,0,width,this.fill.height,o.x+r.left,o.y+r.top,width,this.fill.height);
   }
   async run(mapId,work,{signal,kind='opening',minimumDisplayMs=this.manifest.minimum_display_ms,clock=this.clock}={}) {
     signal?.throwIfAborted();

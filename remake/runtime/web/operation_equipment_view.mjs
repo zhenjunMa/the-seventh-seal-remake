@@ -1,3 +1,4 @@
+import {setImageSource} from './core/ui/image_dom.mjs';
 import {menuText,menuStyle,menuImage} from './menu_dom.mjs';
 // Game001a / Game001b equipment presentation. This view never changes world
 // equipment, saved item rolls, or actor resources; the controller owns commits.
@@ -65,7 +66,7 @@ export class OperationEquipmentView{
     // Legacy form controls can still be used as controller state, but never as
     // the visible original-game list or as extra equipment action buttons.
     for(const child of this.picker.children)child.hidden=true;
-    this.background=this.picker.querySelector('#menuEquipmentPickerSource')??this.picture(this.picker,null,0,0);this.background.id='menuEquipmentPickerSource';this.background.src=this.menus.get('game001b').composed;this.background.hidden=false;absolute(this.background,0,0);
+    this.background=this.picker.querySelector('#menuEquipmentPickerSource')??this.picture(this.picker,null,0,0);this.background.id='menuEquipmentPickerSource';setImageSource(this.background,this.menus.get('game001b').composed);this.background.hidden=false;absolute(this.background,0,0);
     this.rowButtons=Array.from({length:8},(_,i)=>{
       const widget=this.menus.get('game001b').widgets.find(row=>row.name==='list'+(i+1)),r=widget.rect,button=document.createElement('button');button.type='button';button.className='equipment-source-candidate';buttonStyle(button);absolute(button,r.left,r.top,r.right-r.left+1,r.bottom-r.top+1);button.style.fontSize='20px';
       button._highlight=this.picture(button,widget.active_images[0],widget.draw_point_raw.x-r.left,widget.draw_point_raw.y-r.top);button._icon=this.picture(button,null,10,0);button._name=document.createElement('span');absolute(button._name,40,3);button.append(button._name);button._name.style.lineHeight='22px';
@@ -77,7 +78,7 @@ export class OperationEquipmentView{
     this.picker.addEventListener('wheel',event=>{event.preventDefault();this.move(event.deltaY>0?1:-1);},{passive:false});
     this.details=document.createElement('div');this.details.className='equipment-source-details';this.details.hidden=true;absolute(this.details,-8,103,171,173);this.details.style.zIndex='5';this.detailsBackground=this.picture(this.details,null,0,0);this.detailNumbers=[];this.section.append(this.details);
   }
-  picture(parent,src,x,y){const image=document.createElement('img');image.alt='';image.className='menu-source';if(src)image.src=src;absolute(image,x,y);image.hidden=!src;parent.append(image);return image;}
+  picture(parent,src,x,y){const image=document.createElement('img');image.alt='';image.className='menu-source';if(src)setImageSource(image,src);absolute(image,x,y);image.hidden=!src;parent.append(image);return image;}
   text(node,value,font,foreground,shadow='#222222'){
     if(node.style.color!==foreground)node.style.color=foreground;
     menuText(node,value,this.textRenderer,{font,foreground,shadow,maxLines:1});
@@ -109,7 +110,7 @@ export class OperationEquipmentView{
       if(indices&&!indices.includes(visibleIndex))continue;
       const row=this.candidates[this.offset+visibleIndex];button.hidden=!row;if(!row)continue;const selected=this.offset+visibleIndex===this.selectedIndex,def=this.definition(row);button._highlight.hidden=!selected;button.setAttribute('aria-pressed',String(selected));button.dataset.instanceId=row.instance_id;button.dataset.empty=String(Boolean(row.empty));button.dataset.available=String(row.empty||this.available(row));
       this.text(button._name,row.empty?'':`${def?.name??row.name}${row.quantity>=2?'x'+row.quantity:''}`,'simsun20_text',row.empty||this.available(row)?selected?'#ffffff':'#ffff00':'#505050',this.available(row)?selected?'#222222':'#222200':'#000000');button.setAttribute('aria-label',row.empty?`卸下${this.slots.find(slot=>slot.id===this.slotId)?.label??'装备'}`:`${def?.name??row.name} ×${row.quantity}${this.available(row)?'':'，此角色无法装备'}`);
-      this.iconIndices??=new WeakMap();let iconIndex=def?this.iconIndices.get(def):null;if(def&&iconIndex===undefined){iconIndex=new DataView(Uint8Array.from(def.raw_hex.match(/../g),n=>parseInt(n,16)).buffer).getUint32(0x1c,true);this.iconIndices.set(def,iconIndex);}const frame=selected&&iconIndex>=1&&iconIndex<=21?iconIndex+95:iconIndex,asset=frame==null?null:this.manifest.item_row_icons?.frames?.[frame];button._icon.hidden=!asset;if(asset)button._icon.src=asset.image??asset;this.candidateButtons.set(row.instance_id,button);
+      this.iconIndices??=new WeakMap();let iconIndex=def?this.iconIndices.get(def):null;if(def&&iconIndex===undefined){iconIndex=new DataView(Uint8Array.from(def.raw_hex.match(/../g),n=>parseInt(n,16)).buffer).getUint32(0x1c,true);this.iconIndices.set(def,iconIndex);}const frame=selected&&iconIndex>=1&&iconIndex<=21?iconIndex+95:iconIndex,asset=frame==null?null:this.manifest.item_row_icons?.frames?.[frame];button._icon.hidden=!asset;if(asset)setImageSource(button._icon,asset.image??asset);this.candidateButtons.set(row.instance_id,button);
     }
   }
   infoWorn(){this.onInfo?.(this.definition(this.worn())?.description??'');}
@@ -121,7 +122,7 @@ export class OperationEquipmentView{
   confirm(){const row=this.candidates[this.selectedIndex];if(!row)return;if(row.empty){if(this.worn())this.onUnequip?.(this.slotId);}else if(this.available(row))this.onConfirm?.(row.instance_id,this.slotId,row);}
   paintDetails(){
     const row=this.candidates[this.selectedIndex],def=this.definition(row),values=operationEquipmentPreview(this.actor,this.definition(this.worn()),def);this.onDetails?.(this.detailsIndex,def,row,values?.[this.detailsIndex]??null);this.details.hidden=!this.pickerOpen||!def||!values;if(this.details.hidden)return;
-    const menu=this.menus.get(['game001f','game001g','game001h'][this.detailsIndex]);this.detailsBackground.src=menu.composed;this.detailsBackground.hidden=false;this.detailNumbers.forEach((node,index)=>node.hidden=index>=values[this.detailsIndex].length);values[this.detailsIndex].forEach((value,index)=>{const widget=menu.widgets.find(row=>row.name===String(index+1).padStart(2,'0')),number=this.detailNumbers[index]??=document.createElement('span');number.hidden=false;absolute(number,widget.rect.left,widget.rect.top);Object.assign(number.style,{fontFamily:'inherit',fontSize:'18px',lineHeight:'18px',whiteSpace:'pre',textShadow:'none'});this.text(number,value.before===value.after?String(value.before).padStart(3,' '):`${String(value.before).padStart(3,' ')}>${value.after}`,'simsun18',value.after<value.before?'#ff4040':value.after>value.before?'#00ff00':'#ffffff','#000000');if(number.parentNode!==this.details)this.details.append(number);});
+    const menu=this.menus.get(['game001f','game001g','game001h'][this.detailsIndex]);setImageSource(this.detailsBackground,menu.composed);this.detailsBackground.hidden=false;this.detailNumbers.forEach((node,index)=>node.hidden=index>=values[this.detailsIndex].length);values[this.detailsIndex].forEach((value,index)=>{const widget=menu.widgets.find(row=>row.name===String(index+1).padStart(2,'0')),number=this.detailNumbers[index]??=document.createElement('span');number.hidden=false;absolute(number,widget.rect.left,widget.rect.top);Object.assign(number.style,{fontFamily:'inherit',fontSize:'18px',lineHeight:'18px',whiteSpace:'pre',textShadow:'none'});this.text(number,value.before===value.after?String(value.before).padStart(3,' '):`${String(value.before).padStart(3,' ')}>${value.after}`,'simsun18',value.after<value.before?'#ff4040':value.after>value.before?'#00ff00':'#ffffff','#000000');if(number.parentNode!==this.details)this.details.append(number);});
   }
   key(key,repeat=false){
     if(key==='Tab')return true;if(!this.pickerOpen){if([' ','Enter'].includes(key)){if(!repeat)this.slotButtons.get(this.slotId)?.click();return true;}if(!['ArrowUp','ArrowDown'].includes(key))return false;const slots=this.controls(),index=Math.max(0,slots.indexOf(this.root.ownerDocument.activeElement));slots[(index+(key==='ArrowUp'?-1:1)+slots.length)%slots.length]?.focus({preventScroll:true});return true;}

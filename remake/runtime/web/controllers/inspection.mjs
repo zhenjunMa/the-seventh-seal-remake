@@ -1,3 +1,4 @@
+import {drawImageRegion} from '../core/resources/image_regions.mjs';
 // inspection adapters. Persistent state belongs to the shared runtime context.
 
 export function createInspectionController({state, actions, $, canvas, ctx}) {
@@ -17,8 +18,8 @@ export function createInspectionController({state, actions, $, canvas, ctx}) {
     g.clearRect(0,0,c.width,c.height);g.fillStyle='#17272a';g.fillRect(0,0,c.width,c.height);
     g.strokeStyle='#304345';g.beginPath();for(let x=0;x<c.width;x+=32){g.moveTo(x,0);g.lineTo(x,c.height);}for(let y=0;y<c.height;y+=32){g.moveTo(0,y);g.lineTo(c.width,y);}g.stroke();
     const scale=Math.min((c.width-60)/main.width,(c.height-30)/main.height),x=(c.width-main.width*scale)/2,y=(c.height-main.height*scale)/2;g.imageSmoothingEnabled=false;
-    if($('mainLayer').checked)g.drawImage(main,x,y,main.width*scale,main.height*scale);
-    if($('intrinsicLayer').checked){g.save();g.globalCompositeOperation='lighter';g.drawImage(intrinsic,x,y,main.width*scale,main.height*scale);g.restore();}
+    if($('mainLayer').checked)drawImageRegion(g,main,x,y,main.width*scale,main.height*scale);
+    if($('intrinsicLayer').checked){g.save();g.globalCompositeOperation='lighter';drawImageRegion(g,intrinsic,x,y,main.width*scale,main.height*scale);g.restore();}
     $('layerFrame').textContent=`${state.layerIndex+1} / ${state.layerData.frames.length} · 组${frame.action_index} / 帧${frame.action_frame} · 源帧${frame.source_frame}${frame.intrinsic.active?' · 本体层活动':' · 本体层空白'}`;
     $('layerSelect').value=String(state.layerIndex);
     $('layerPrevious').disabled=state.layerIndex===0;$('layerNext').disabled=state.layerIndex===state.layerData.frames.length-1;
