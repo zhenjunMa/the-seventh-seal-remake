@@ -1,0 +1,22 @@
+README.md
+  s_198965d8b84f96::t_680fee7077faf7 110
+  s_198965d8b84f96::t_832412e401c8a0 75-86,88-104,111-112,119
+  s_198965d8b84f96::t_9d4dbb879650e2 87
+  s_198965d8b84f96::t_295defe2c21f3f 120
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "918fe353333cf8613d79990cce9c13ba048a0ce6",
+  "prompts": {},
+  "sessions": {
+    "s_198965d8b84f96": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b58e-6a00-79f1-a51b-0d945f017660",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
