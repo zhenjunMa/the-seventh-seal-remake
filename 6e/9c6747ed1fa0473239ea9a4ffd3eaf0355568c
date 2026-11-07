@@ -1,0 +1,74 @@
+.gitignore
+  s_60c8438f1f7ead::t_600ef06777a829 42
+  s_60c8438f1f7ead::t_17867362f0c243 34-41
+remake/runtime/tools/export_media.py
+  s_60c8438f1f7ead::t_00615840621099 3-4,36-37,41,580,592,599-615,617
+remake/runtime/tools/README.md
+  s_60c8438f1f7ead::t_854f3ecb6052bf 21,34
+  s_60c8438f1f7ead::t_783ff52968b693 30-31
+  s_60c8438f1f7ead::t_17867362f0c243 17-20,22-29,32-33,35-38,67
+  s_60c8438f1f7ead::t_ac428599792eed 10
+remake/runtime/tests/suites.json
+  s_60c8438f1f7ead::t_309a12884d25d9 290-291,534-535
+remake/runtime/tests/test_data_recipes.py
+  s_60c8438f1f7ead::t_ec197cbce76a2a 1-3,5-25,27,31-34,37-47,49-63,65,67-83,90-98
+  s_60c8438f1f7ead::t_28128b0662db0a 26,66
+  s_60c8438f1f7ead::t_84b70e446448ee 84-89
+  s_60c8438f1f7ead::t_600ef06777a829 4,64
+  s_60c8438f1f7ead::t_cb034f48e93083 28-30,35-36,48
+remake/runtime/tools/export_data_recipes.py
+  s_60c8438f1f7ead::t_0e629659e74d88 34,37
+  s_60c8438f1f7ead::t_cb034f48e93083 25-26,53-54,94-95,229
+  s_60c8438f1f7ead::t_84b70e446448ee 15
+  s_60c8438f1f7ead::t_08f5d816011984 20,230-234,237-238
+  s_60c8438f1f7ead::t_6cbf071923364a 22-24,47-49,57-58,84,110,112-116,118-122
+  s_60c8438f1f7ead::t_c6c36d0f10176b 21,61-62,258
+  s_60c8438f1f7ead::t_c7188d6f091e82 1-9,11-12,14,16-19,27-33,35-36,38-40,43-46,51-52,55-56,63,65,85-88,93,100,104-109,123-127,130-138,140-144,147-198,245-257,260-264,267,269-274,276,278-281
+  s_60c8438f1f7ead::t_600ef06777a829 10,13,50,64,66-83,111,117,145-146,199-228,235-236,239-244,265-266,268,275,277
+  s_60c8438f1f7ead::t_7dc6c7fcd94dd3 89-92,96-97,101-103
+  s_60c8438f1f7ead::t_9a89ad5e6701f5 128-129,139
+  s_60c8438f1f7ead::t_e90c903e0f7c9b 98
+  s_60c8438f1f7ead::t_3a3878bebe2d75 41-42,59-60,99,259
+remake/local_materials.md
+  s_60c8438f1f7ead::t_17867362f0c243 10-11
+remake/runtime/tools/tool_index.json
+  s_60c8438f1f7ead::t_309a12884d25d9 201-209,370-373,375
+  s_60c8438f1f7ead::t_f9e22c93bee312 374
+remake/runtime/tools/build_runtime.py
+  s_60c8438f1f7ead::t_00615840621099 21
+remake/runtime/tools/media_definitions.py
+  s_60c8438f1f7ead::t_00615840621099 1,62,72-74,80-84
+remake/runtime/config_guide.md
+  s_60c8438f1f7ead::t_17867362f0c243 17-18
+remake/assessment/validation_design.md
+  s_60c8438f1f7ead::t_783ff52968b693 11-12
+remake/runtime/tools/data_recipes.py
+  s_60c8438f1f7ead::t_7915d294a932e8 25
+  s_60c8438f1f7ead::t_c7188d6f091e82 1-5,7-8,10-11,13,15-23,28-64,94-102,106-108,110-111,113-115,117-131,135-144,146-237
+  s_60c8438f1f7ead::t_0e629659e74d88 6,65-93,116,145
+  s_60c8438f1f7ead::t_84b70e446448ee 14,24,26-27,132-134
+  s_60c8438f1f7ead::t_600ef06777a829 9,103-105,109,112
+  s_60c8438f1f7ead::t_c987ead8d14017 12
+remake/runtime/tools/data_recipes/index.json
+  s_60c8438f1f7ead::t_ec344a95c5c7e8 1-5,8-25,27-39,41,43-44,52,54-56,59-65,67-82,86-19938
+  s_60c8438f1f7ead::t_25df5bbbdcd4b9 6-7,26,40,42,45-51,53,57-58,66,83-85
+README.md
+  s_60c8438f1f7ead::t_ac428599792eed 37
+  s_60c8438f1f7ead::t_17867362f0c243 3,17-19,65,71
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "70e5da7c2a7c64d7846be74a0f35a27ba883f3cf",
+  "prompts": {},
+  "sessions": {
+    "s_60c8438f1f7ead": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1afb4-66fc-7d73-84cb-f265adc59c5e",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
