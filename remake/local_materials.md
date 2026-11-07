@@ -7,7 +7,8 @@
 | 材料 | 位置及用途 | 缺失时如何处理 |
 | --- | --- | --- |
 | 正式媒体 | `remake/runtime/web/assets/`；地图、图集、字体、声音和影片 | 首次通过 `build_runtime.py --target media --original-dir <原版目录> --run` 生成；来源、输出及缺项记入 `assets/media_manifest.json`。无媒体的预览不记正式素材验收。 |
-| 固定规则与字库 | 已提交的 `web/core/`、`web/data/`、`web/content/` 和 `runtime/builtin/fonts/` | 随版本提供；首次构建不重新生成规则、剧情、数值和字形，不调用 GDI。 |
+| 代码、手工配置与字库 | 已提交的`web/core/`、`web/data/config/`、接入声明、`web/content/`和`runtime/builtin/fonts/` | 随版本提供；原版提取不覆盖自定义参数，不调用GDI。 |
+| 运行数据 | `runtime/web/data/`下被忽略的生成JSON；配方在`runtime/tools/data_recipes/` | 首次`media`／`game`先重建；也可用`--target data --original-dir <原版目录> --run`单独准备。无需历史台账，输出逐文件核SHA。 |
 | 原版指纹基准 | `remake/runtime/tools/media_inputs.json`；已验证安装的素材清单和 SHA-256 | 随代码提供，默认严格核验。确认可信完整安装后用 `--write-reference` 更新；临时采用有差异的来源用 `--ignore-fingerprint`，详见工具说明。 |
 | 原版输入 | `--original-dir` 指定的安装目录，保留 `GAME.exe`、`Map/`、`Fight_Role/`、`Fight_Bk/`、`SYSTEM/`、`Animate/`、sound等结构 | 从自己的完整安装准备；首次素材构建只读访问。旧开发导出器仍沿用根目录输入约定。 |
 | 来源及构建台账 | `remake/runtime/evidence/`；原生指令依据、来源SHA、导出记录和历史初始化材料 | 开发重导出及来源审计按声明准备；用户首次素材构建不读取这些历史输入。 |
@@ -48,7 +49,9 @@
 
 ## 历史文档与恢复
 
-原 `remake/runtime/tools/media_compatibility.json` 的自动放行策略已由独立指纹基准和显式 `--ignore-fingerprint` 取代；原文件 SHA-256 为 `65afffbff4bed7be1b8ea2e56a92c2f3ef60d64ac3bf6b04e4444556a32af071`，可从提交 `c2c5f08` 按原路径恢复。它不再作为构建输入。
+生成数据的Git历史已清理，原开发提交的说明、作者和时间保留；本文的恢复版本已更新为清理后的哈希。旧哈希可在[提交映射](runtime/tools/history_commit_map.json)查询。历史报告的原Git标识和原文件SHA保持原值，不回写旧证据；已移除的生成数据通过原版提取重新构建。
+
+原 `remake/runtime/tools/media_compatibility.json` 的自动放行策略已由独立指纹基准和显式 `--ignore-fingerprint` 取代；原文件 SHA-256 为 `65afffbff4bed7be1b8ea2e56a92c2f3ef60d64ac3bf6b04e4444556a32af071`，可从提交 `2c3b765` 按原路径恢复。它不再作为构建输入。
 
 `runtime/tools/layout_migration.json`记录目录迁移与清单SHA；[工具索引](runtime/tools/tool_index.json)的`retired_documents`记录已删除文档的原路径、SHA、替代入口及恢复提交。先确认对应提交在本地，再用`git show <提交>:<原路径>`查看；放入独立目录核SHA，不覆盖当前指南。
 
@@ -56,18 +59,18 @@
 
 | 原路径 | 恢复提交 | 原文件SHA-256 | 当前替代入口 |
 | --- | --- | --- | --- |
-| `remake/assessment/validation_design.md` | `6044664a5fe38a7b6943b90fefa3340423ad3f98` | `427ee8f6f0f1aae397e091db3e93ae7afe3b17ceba853dedbd30bff555fee6d9` | [当前开发计划](assessment/validation_design.md)；详细记录按原计划中的evidence路径交接 |
+| `remake/assessment/validation_design.md` | `84d76f578af798eded8e7302e0ea33b43262640e` | `427ee8f6f0f1aae397e091db3e93ae7afe3b17ceba853dedbd30bff555fee6d9` | [当前开发计划](assessment/validation_design.md)；详细记录按原计划中的evidence路径交接 |
 
 ```console
-git show 6044664a5fe38a7b6943b90fefa3340423ad3f98:remake/assessment/validation_design.md
+git show 84d76f578af798eded8e7302e0ea33b43262640e:remake/assessment/validation_design.md
 ```
 
-2026-10-29本轮精简前的完整技术笔记保留在Git提交`858f5ddacac9de3f27681817eafbdd46b83e06c7`，其中区域方法、剧情指南和计划包含详细来源推导。精简后的规则以当前代码、来源库及测试为准，需要回查旧解释时读取该版本原路径：
+2026-10-29本轮精简前的完整技术笔记保留在Git提交`196b1c1b0ba6dbf55635391c3512b61149e2caa9`，其中区域方法、剧情指南和计划包含详细来源推导。精简后的规则以当前代码、来源库及测试为准，需要回查旧解释时读取该版本原路径：
 
 ```console
-git log -1 --format=%H 858f5dd
-git show 858f5dd:remake/runtime/story_guide.md
-git show 858f5dd:remake/assessment/region_remake_workflow.md
+git log -1 --format=%H 196b1c1
+git show 196b1c1:remake/runtime/story_guide.md
+git show 196b1c1:remake/assessment/region_remake_workflow.md
 ```
 
 早期归档名`20261011_before_chapter`、`20261022_before_directory_cleanup`及其中压缩包仅供已有材料查找。缺少被忽略的文件时向资料持有者取得；文档、归档名称和旧SHA不能代替真实材料。

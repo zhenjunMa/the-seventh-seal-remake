@@ -1,4 +1,4 @@
-"""Plan media extraction from the checked-in game definitions, without decoding.
+"""Plan media extraction from reconstructed game definitions, without decoding.
 
 Game rules and story packages are inputs to this plan, never export outputs.
 The old research exporters remain available independently for developer audits.
@@ -59,7 +59,7 @@ class OriginalFiles:
 
 
 class MediaDefinitions:
-    def __init__(self, runtime):
+    def __init__(self, runtime, generated=None):
         self.runtime = Path(runtime)
         self.web = self.runtime / 'web'
         self.documents = {}
@@ -69,11 +69,19 @@ class MediaDefinitions:
         self.expected = {}
         self.definition_hashes = {}
         for path in sorted((self.web / 'data').rglob('*.json')):
+            relative = path.relative_to(self.web / 'data').as_posix()
+            if generated is not None and relative in generated.manifest['documents']:
+                continue
             if 'source' in path.relative_to(self.web / 'data').parts:
                 continue
             key = path.relative_to(self.web).as_posix()
             self.definition_hashes[key] = checksum(path)
             self.documents[key] = json.loads(path.read_text('utf-8-sig'))
+        if generated is not None:
+            for name, row in generated.manifest['documents'].items():
+                key = 'data/' + name
+                self.definition_hashes[key] = row['sha256']
+                self.documents[key] = generated.value(row['root'])
         for key, data in self.documents.items():
             if key == 'data/battle_packs.json':
                 continue

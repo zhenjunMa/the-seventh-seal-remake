@@ -1,6 +1,7 @@
 """从原版安装目录和仓库固定定义生成游戏素材。
 
-仅生成媒体与素材清单，保留规则、剧情、调参和历史证据。
+先从原版与结构配方还原运行数据，再生成媒体与素材清单。
+自定义调参、接入声明及历史证据保持原值。
 内置位图字库直接复制，不依赖 Windows 字体生成器。
 """
 from collections import defaultdict
@@ -32,11 +33,12 @@ def digest(value):
 
 
 class MediaBuilder:
-    def __init__(self, runtime, original_dir, *, force=False, images_only=False, ignore_fingerprint=False):
+    def __init__(self, runtime, original_dir, *, force=False, images_only=False, ignore_fingerprint=False,
+                 generated=None):
         self.runtime = Path(runtime)
         self.web = self.runtime / 'web'
         self.original = OriginalFiles(original_dir)
-        self.plan = MediaDefinitions(self.runtime)
+        self.plan = MediaDefinitions(self.runtime, generated=generated)
         self.force = force
         self.images_only = images_only
         self.ignore_fingerprint = ignore_fingerprint
@@ -575,7 +577,7 @@ class MediaBuilder:
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--original-dir', type=Path, required=True, help='原版安装目录；只读')
-    parser.add_argument('--target', nargs='+', default=['media'], choices=['media', 'game'])
+    parser.add_argument('--target', nargs='+', default=['media'], choices=['data', 'media', 'game'])
     parser.add_argument('--run', action='store_true', help='执行素材构建；默认只检查并列计划')
     parser.add_argument('--force', action='store_true', help='重新提取素材；保留固定规则与调参')
     parser.add_argument('--ignore-fingerprint', action='store_true', help='允许来源文件指纹／清单差异；必需文件和导出结果仍须通过校验')
@@ -587,15 +589,32 @@ def main(argv=None):
     args = parser.parse_args(argv)
     if args.write_reference and (args.run or args.serve or args.force or args.images_only or args.ignore_fingerprint):
         parser.error('--write-reference 只维护基准，不能与构建／放行选项同用')
-    if args.serve and (not args.run or args.images_only):
+    if args.serve and (not args.run or args.images_only or args.target == ['data']):
         parser.error('--serve 需要 --run，且不能与 --images-only 同用')
     try:
         if args.write_reference:
             result = write_reference(OriginalFiles(args.original_dir), RUNTIME / 'tools/media_inputs.json')
             print(json.dumps(result, ensure_ascii=False, indent=2), flush=True)
             return 0
+        from data_recipes import DataRecipes
+        # Fingerprints are checked before any output is installed, even when
+        # only rebuilding JSON. Config/ is never a recipe output.
+        inputs = SourceFingerprints(OriginalFiles(args.original_dir), RUNTIME / 'tools/media_inputs.json')
+        problems = inputs.check(ignore=args.ignore_fingerprint)
+        if problems:
+            print(json.dumps(dict(problems=problems, fingerprint=inputs.report), ensure_ascii=False, indent=2))
+            return 1
+        generated = DataRecipes(RUNTIME, args.original_dir)
+        data_report = generated.build(run=args.run)
+        print(json.dumps(dict(data=data_report), ensure_ascii=False, indent=2), flush=True)
+        if args.target == ['data']:
+            return 0
+        if args.run:
+            # Files are now materialized. Release the shared reconstruction
+            # graph before media decoding and let the planner read the files.
+            generated = None
         builder = MediaBuilder(RUNTIME, args.original_dir, force=args.force, images_only=args.images_only,
-                               ignore_fingerprint=args.ignore_fingerprint)
+                               ignore_fingerprint=args.ignore_fingerprint, generated=generated)
         problems = builder.preflight()
         print(json.dumps(dict(assets=len(builder.selected()), original_files=len(builder.source_hashes),
                               missing_original_files=builder.missing, fingerprint=builder.fingerprints.report,

@@ -1,6 +1,6 @@
 # The Seventh Seal Remake
 
-《第七封印》重制项目。仓库保存浏览器游戏代码、固定规则与内容定义、内置位图字库、资源导出工具和测试；原作图片、音乐、影片由使用者从自己的原版安装中提取。
+《第七封印》重制项目。仓库保存浏览器游戏代码、接入配置、自定义参数、结构配方、内置位图字库和工具；原作文本、原始记录、大型运行数据及图片、音乐、影片由使用者从自己的原版安装中提取生成。
 
 当前代码使用随仓库提供的 Phaser 3.90.0 和 WebGL 渲染，包含探索、剧情、战斗、操作菜单和存读档。已接入范围、剩余支线、工程待办与验收边界，统一见[当前开发计划](remake/assessment/validation_design.md)。
 
@@ -14,7 +14,9 @@ python3 -m venv .venv
 .venv/bin/python -B remake/runtime/tools/build_runtime.py --target media --original-dir "/path/to/DiQiFengYin" --run --serve
 ```
 
-构建只生成媒体及素材清单，直接使用仓库中的规则、数值、剧情和字库；不依赖历史台账、观察存档或 Windows GDI。默认先按已提交的 `media_inputs.json` 核对原版来源，缺失、内容变化或多出素材都会拒绝导出。确认采用不同来源时可显式加 `--ignore-fingerprint`；必需文件、解码和导出图片校验仍须通过。已完成的素材可以复用。构建完成后在 <http://127.0.0.1:8767/> 开玩。
+首次构建先按结构配方从原版还原文本、原始记录和运行表，再生成媒体及素材清单；不依赖历史台账、观察存档或 Windows GDI。自定义的 `web/data/config/` 和接入配置保持原值，技能优化在原版默认值之上继续生效。默认先按已提交的 `media_inputs.json` 核对原版来源，缺失、内容变化或多出素材都会拒绝导出。`--ignore-fingerprint` 可放行整体来源清单差异，但运行数据实际引用的原字节及重建结果仍须与配方一致。已完成且通过指纹核验的输出会复用。构建完成后在 <http://127.0.0.1:8767/> 开玩。
+
+仅准备文本和运行数据、不提取图片音视频时，使用同一命令并将目标改为 `--target data`。不加 `--run` 只读检查并列计划；正常启动仍须完成完整素材构建。
 
 维护者确认一份完整原版可作为新基准后，可单独执行以下命令。它只更新来源指纹清单，不导出素材或重生成规则，不能与 `--run` 同用：
 
@@ -32,7 +34,7 @@ Windows 将 `.venv/bin/python` 换成 `.venv\Scripts\python.exe`；已有媒体�
 
 没有媒体时，可访问 <http://127.0.0.1:8767/phaser-preview.html>，用示意图检查探索、缩放和战斗。预览不读写正式存档，其结果不代表原作画面或主线验收。
 
-代码与运行定义预检查需要 Node.js：
+完成数据提取后，代码与运行定义预检查需要 Node.js；该检查不要求已有图片音视频：
 
 ```console
 node remake/runtime/tools/verify_phaser.mjs
@@ -60,13 +62,13 @@ node remake/runtime/tools/verify_phaser.mjs
 
 | 路径 | 职责 |
 | --- | --- |
-| `remake/runtime/web/` | 正式代码、内容登记和生成的运行定义；媒体在被 Git 忽略的 `assets/` |
+| `remake/runtime/web/` | 正式代码、内容登记、自定义配置；生成的运行数据和 `assets/` 媒体不提交 |
 | `remake/runtime/tools/` | 构建、提取、验证；`source/` 为共享原版资源与存档解析、道具初始化模块 |
 | `remake/runtime/tests/` | 自动检查及已提交的辅助代码 |
 | `remake/assessment/` | 当前计划、区域方法、测试规范 |
 | `remake/prototype/` | 复用正式实现的实验页面，正式游戏不依赖它 |
 
-原版 `GAME.exe`、`Map/`、`Fight_Role/`、`SYSTEM/` 等保持原安装目录结构，通过 `--original-dir` 只读访问，不提交。旧开发导出器仍沿用其根目录输入约定。`.gitignore` 排除提取媒体、原存档、观察副本、证据、归档和缓存；内置字库及 `remake/saves/` 中的玩家存档纳入 Git。
+原版 `GAME.exe`、`Map/`、`Fight_Role/`、`SYSTEM/` 等保持原安装目录结构，通过 `--original-dir` 只读访问，不提交。`tools/data_recipes/` 保存已核实结构的共享节点与原文件范围引用，不内嵌原版文案或原文件；首次构建还原既有数据路径和文件格式。开发接入变更后须核验并同步配方，见[工具说明](remake/runtime/tools/README.md#运行数据与结构配方)。旧开发导出器仍沿用其根目录输入约定。`.gitignore` 排除生成数据、提取媒体、观察副本、证据、归档和缓存；`config/`、接入声明、独立事件、基础来源清单、内置字库及 `remake/saves/` 中的玩家存档继续纳入 Git。
 
 只查进度时先读开发计划；修改功能时再按上表查对应指南。工具说明含自动生成的目标与依赖表，无需作为进度文档通读。变更状态只在开发计划维护，详细开发过程留在证据与Git历史中。
 

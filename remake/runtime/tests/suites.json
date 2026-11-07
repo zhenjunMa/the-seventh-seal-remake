@@ -287,7 +287,8 @@
       "description": "测试选择、前置和结果复用的行为保障",
       "files": [
         "test_verify_tests.py",
-        "test_media_fingerprints.py"
+        "test_media_fingerprints.py",
+        "test_data_recipes.py"
       ],
       "layer": "component",
       "cache": false
@@ -530,7 +531,8 @@
         "test_build_runtime.py",
         "test_content_exporters.py",
         "test_current_export_reports.py",
-        "test_media_fingerprints.py"
+        "test_media_fingerprints.py",
+        "test_data_recipes.py"
       ]
     }
   },

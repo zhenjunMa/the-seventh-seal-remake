@@ -2,7 +2,7 @@
   "schema": "seventh-seal-layout-migration",
   "version": 1,
   "date": "2026-10-23",
-  "recovery_commit": "1ee90804fc1d1ad1a2b56d3dac56dab30bf6f634",
+  "recovery_commit": "c7d5865bfd98752ce4806511911d14e5b0ee6e60",
   "files": [
     {
       "previous_path": "remake/prototype/web/movement.mjs",

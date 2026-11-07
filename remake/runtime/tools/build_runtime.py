@@ -18,7 +18,7 @@ if __name__ == '__main__':
             if value.startswith('--'):
                 break
             targets.append(value)
-        first_build = first_build or bool({'media', 'game'} & set(targets))
+        first_build = first_build or bool({'data', 'media', 'game'} & set(targets))
     if first_build or '--help' in arguments or '-h' in arguments:
         from export_media import main as build_media
         raise SystemExit(build_media(arguments))

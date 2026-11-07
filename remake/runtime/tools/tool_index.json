@@ -199,6 +199,15 @@
       "imported_by": []
     },
     {
+      "path": "data_recipes.py",
+      "role": "shared-current",
+      "build_targets": [],
+      "imported_by": [
+        "export_data_recipes.py",
+        "export_media.py"
+      ]
+    },
+    {
       "path": "export_audio.py",
       "role": "registered-build",
       "build_targets": [
@@ -311,7 +320,7 @@
       "imported_by": [],
       "previous_path": "remake/prototype/tools/export_combat_lab.py",
       "previous_sha256": "11e394f64e6c3e0645c48fd857a4c00a008a79aa7b60e12214a1388853dff2d3",
-      "recovery_commit": "1ee90804fc1d1ad1a2b56d3dac56dab30bf6f634"
+      "recovery_commit": "c7d5865bfd98752ce4806511911d14e5b0ee6e60"
     },
     {
       "path": "export_combat_presentation.py",
@@ -330,7 +339,7 @@
       ],
       "previous_path": "remake/prototype/tools/export_combat_presentation.py",
       "previous_sha256": "b20d7fbddbb70cfe35eb1fbf20ddac48e64983eace0332b8ec5629706fb29db3",
-      "recovery_commit": "1ee90804fc1d1ad1a2b56d3dac56dab30bf6f634"
+      "recovery_commit": "c7d5865bfd98752ce4806511911d14e5b0ee6e60"
     },
     {
       "path": "export_combat_rules.py",
@@ -356,6 +365,12 @@
         "content",
         "side-content"
       ],
+      "imported_by": []
+    },
+    {
+      "path": "export_data_recipes.py",
+      "role": "independent-source-export",
+      "build_targets": [],
       "imported_by": []
     },
     {
@@ -586,7 +601,7 @@
       ],
       "previous_path": "remake/prototype/tools/export_movement.py",
       "previous_sha256": "04a438048e4ae4cbcfc455b2d24d297ecbb388304ca07f655a3dc46b9619ca38",
-      "recovery_commit": "1ee90804fc1d1ad1a2b56d3dac56dab30bf6f634"
+      "recovery_commit": "c7d5865bfd98752ce4806511911d14e5b0ee6e60"
     },
     {
       "path": "export_native_services.py",
@@ -834,7 +849,7 @@
       "imported_by": [],
       "previous_path": "remake/prototype/tools/extract.py",
       "previous_sha256": "e536682ff2ae059871707b7245711ca5686d020f27462f5690caeb5397c0aa3a",
-      "recovery_commit": "1ee90804fc1d1ad1a2b56d3dac56dab30bf6f634"
+      "recovery_commit": "c7d5865bfd98752ce4806511911d14e5b0ee6e60"
     },
     {
       "path": "image_atlas.py",
@@ -1011,7 +1026,7 @@
       "imported_by": [],
       "previous_path": "remake/assessment/resource_inventory.py",
       "previous_sha256": "783a500b41859c8fa5380692a34ea010c93a4f95d2409d1d8e4944aac0a4342b",
-      "recovery_commit": "5636876ffb7ae11e6c85c7c552f4b5620570a502"
+      "recovery_commit": "0f1975c7d1ef122faf3ee2034450f3ee24172e3b"
     },
     {
       "path": "route_export_maps.py",
@@ -1085,7 +1100,7 @@
       ],
       "previous_path": "remake/prototype/tools/combat_resources.py",
       "previous_sha256": "5a641a6dd7dd53f4021cc2325b63aa29110e6fc4aec6c0d4cff954282af98f30",
-      "recovery_commit": "1ee90804fc1d1ad1a2b56d3dac56dab30bf6f634"
+      "recovery_commit": "c7d5865bfd98752ce4806511911d14e5b0ee6e60"
     },
     {
       "path": "source/dgp.py",
@@ -1128,7 +1143,7 @@
       ],
       "previous_path": "remake/prototype/tools/dgp.py",
       "previous_sha256": "83c893cb773122a4e832fbb839240784d212bc8bd0e8793f1e854620468cc4d2",
-      "recovery_commit": "1ee90804fc1d1ad1a2b56d3dac56dab30bf6f634"
+      "recovery_commit": "c7d5865bfd98752ce4806511911d14e5b0ee6e60"
     },
     {
       "path": "source/inspect_equipment.py",
@@ -1141,7 +1156,7 @@
       ],
       "previous_path": "save_analysis_20261010/inspect_equipment.py",
       "previous_sha256": "3f5e2d32f1a161a6f84c1e67781d309378a53a0f6f91b92c331323057105e47a",
-      "recovery_commit": "01165c09cbc05c81cbe6d305899ae985492a4367"
+      "recovery_commit": "fbc1d95fe5bb5712ac1c2421a11fb245b5920721"
     },
     {
       "path": "source/map_data.py",
@@ -1154,7 +1169,7 @@
       ],
       "previous_path": "remake/prototype/tools/map_data.py",
       "previous_sha256": "f43beeb4cc4f4a6d8a7d2bdf2f661454efa59aab2def9471f09a0860ad4de8bf",
-      "recovery_commit": "1ee90804fc1d1ad1a2b56d3dac56dab30bf6f634"
+      "recovery_commit": "c7d5865bfd98752ce4806511911d14e5b0ee6e60"
     },
     {
       "path": "source/map_identity.py",
@@ -1180,7 +1195,7 @@
       ],
       "previous_path": "remake/prototype/tools/map_objects.py",
       "previous_sha256": "c4714d279ea85d26db583fcc58c0865f079cfc09469cd905bf746dd83fb4125e",
-      "recovery_commit": "1ee90804fc1d1ad1a2b56d3dac56dab30bf6f634"
+      "recovery_commit": "c7d5865bfd98752ce4806511911d14e5b0ee6e60"
     },
     {
       "path": "source/native_item_init.py",
@@ -1195,7 +1210,7 @@
       ],
       "previous_path": "save_analysis_20261010/native_item_init.py",
       "previous_sha256": "58f847f78adc3be6b2df6f33c53d2e3b65044a39fb7caaa77710225a74746c7c",
-      "recovery_commit": "01165c09cbc05c81cbe6d305899ae985492a4367"
+      "recovery_commit": "fbc1d95fe5bb5712ac1c2421a11fb245b5920721"
     },
     {
       "path": "source/read_inventory.py",
@@ -1207,7 +1222,7 @@
       ],
       "previous_path": "save_analysis_20261010/read_inventory.py",
       "previous_sha256": "76471ba0bfa12d07a55667a7805f58a8b830b360615e8a3a4ef0738f3d9280c5",
-      "recovery_commit": "01165c09cbc05c81cbe6d305899ae985492a4367"
+      "recovery_commit": "fbc1d95fe5bb5712ac1c2421a11fb245b5920721"
     },
     {
       "path": "source/save_format.py",
@@ -1228,7 +1243,7 @@
       ],
       "previous_path": "save_analysis_20261010/save_format.py",
       "previous_sha256": "9b7b751d21ad62626f84cb2cc30625f6e1aa1d204c779a15a3c333828de09800",
-      "recovery_commit": "01165c09cbc05c81cbe6d305899ae985492a4367"
+      "recovery_commit": "fbc1d95fe5bb5712ac1c2421a11fb245b5920721"
     },
     {
       "path": "source/special_services.py",
@@ -1491,49 +1506,49 @@
       "path": "remake/assessment/assessment.txt",
       "sha256": "81349dfb6f856d818c3cb4dfd4cd97188fed88d3ded8df63980173b318ef8a0a",
       "replacement": "remake/assessment/validation_design.md",
-      "recovery_commit": "5636876ffb7ae11e6c85c7c552f4b5620570a502"
+      "recovery_commit": "0f1975c7d1ef122faf3ee2034450f3ee24172e3b"
     },
     {
       "path": "remake/assessment/minimal_validation_next_20261011.txt",
       "sha256": "72f639cecd7b7f477cc8483a81f05a3cbda58eabac49caa8a8b7df68e0a37d4b",
       "replacement": "remake/assessment/validation_design.md",
-      "recovery_commit": "5636876ffb7ae11e6c85c7c552f4b5620570a502"
+      "recovery_commit": "0f1975c7d1ef122faf3ee2034450f3ee24172e3b"
     },
     {
       "path": "remake/assessment/runtime_config_20261011.txt",
       "sha256": "94021442d0bcda91f7445a64a4d7dc9c818519df9ef0fed6b78781d90947910d",
       "replacement": "remake/runtime/config_guide.md",
-      "recovery_commit": "5636876ffb7ae11e6c85c7c552f4b5620570a502"
+      "recovery_commit": "0f1975c7d1ef122faf3ee2034450f3ee24172e3b"
     },
     {
       "path": "remake/prototype/rules_probe.md",
       "sha256": "bb1a2f9b1fde2f223d39ac4b42c357cf1200f0789521feb3495c5b08909810b5",
       "replacement": "remake/runtime/architecture.md",
-      "recovery_commit": "ffd529a93457bc259e86d482be3e9da4b23ebb0d"
+      "recovery_commit": "20b1e1e8bb1c1918296562afca251eff04c53e9a"
     },
     {
       "path": "remake/runtime/skill_config_guide.txt",
       "sha256": "3e30039dc7fcc5173a73ebe2b71a9b9d5259069bd0c13fafdaeba6ba82b95363",
       "replacement": "remake/runtime/config_guide.md",
-      "recovery_commit": "ffd529a93457bc259e86d482be3e9da4b23ebb0d"
+      "recovery_commit": "20b1e1e8bb1c1918296562afca251eff04c53e9a"
     },
     {
       "path": "remake/README.md",
       "sha256": "eb23e841b2b86fa783d0b51d8b492f8bda10788679fc4f408aac323b830a4769",
       "replacement": "README.md",
-      "recovery_commit": "858f5ddacac9de3f27681817eafbdd46b83e06c7"
+      "recovery_commit": "196b1c1b0ba6dbf55635391c3512b61149e2caa9"
     },
     {
       "path": "remake/assessment/menu_alignment_workflow.md",
       "sha256": "c8424eade72736286b864913afbbe139b724c17a054a22a107ff781c26567a03",
       "replacement": "remake/assessment/testing_strategy.md",
-      "recovery_commit": "858f5ddacac9de3f27681817eafbdd46b83e06c7"
+      "recovery_commit": "196b1c1b0ba6dbf55635391c3512b61149e2caa9"
     },
     {
       "path": "remake/runtime/README.md",
       "sha256": "407de67fa7ee4d6074017a10443fbd9607c2acb653c93f468a890b3390bf2eb8",
       "replacement": "README.md",
-      "recovery_commit": "2633f17d24e051d18ba74fd948ff9108b9e23a8e",
+      "recovery_commit": "52da0e8e5ea4d09b338e18e2a3f65b195d88a141",
       "local_snapshot": {
         "path": "remake/archive/20261029_runtime_readme_removal/README.md",
         "sha256": "d46a06204bcc3ec0dc9b32a6438e6b0cd74c47f9b323e1962f300973fd969476"

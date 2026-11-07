@@ -7,14 +7,35 @@
 | 操作 | 前置 |
 | --- | --- |
 | 本地游戏服务 | Python 3.12+、Pillow，首次素材构建完成 |
-| 代码／剧情包预检查 | Node.js；`verify_phaser.mjs`默认允许媒体缺失，分别报告code与assets |
+| 代码／剧情包预检查 | Node.js、已完成`data`提取；`verify_phaser.mjs`默认允许媒体缺失，分别报告code与assets |
 | 首次素材构建 `media` | `--original-dir` 指定完整原版目录；`runtime/requirements.txt` 固定 Python 依赖，Node.js、FFmpeg／FFprobe；内置字库随仓库提供 |
 | 开发用规则／来源重导出 | 对应原版输入和来源台账；沿用原有开发目标及其环境要求 |
 | 原字体GDI导出、部分原版观察 | Windows及对应组件 |
 | 开发目标声明及文档同步 | 导出依赖需安装；来源发现延迟至实际输入核验，列计划和文档同步不读取原版文件；首次 `media` 帮助只用标准库 |
 | 来源、真实媒体、历史专项 | 检查声明的原文件、媒体、证据与环境；HTTP／保存集成需本地服务 |
 
-首次构建使用 `media` 目标，只从原版提取素材，读取仓库中固定的规则、数值、剧情和字库，不读取历史台账、观察存档或 GDI。`content`、`all` 等仍是开发用内容重导出目标，保留各自的来源审计依赖。
+首次构建使用 `media`／`game` 目标，先从原版和结构配方还原运行数据，再提取素材，不读取历史台账、观察存档或 GDI。仅还原数据使用 `data` 目标。自定义 `web/data/config/` 不参与重建；`content`、`all` 等仍是开发用内容重导出目标，保留各自的来源审计依赖。
+
+## 运行数据与结构配方
+
+原作对白、名称、说明、原始记录和大型运行表保留原路径，但不随 Git 分发。`tools/data_recipes/index.json` 声明输出文件、字节格式、指纹及原版输入；编号分片保存去重后的结构节点，原版字符串和原字节使用文件路径、偏移、长度、编码及范围 SHA 引用。分片对结构元数据使用确定性的gzip压缩，不打包原版安装或已生成的游戏文件。运行表仍由已有游戏执行器消费，没有新增剧情解释器。
+
+```console
+python3 -B remake/runtime/tools/build_runtime.py --target data --original-dir "/path/to/DiQiFengYin"
+python3 -B remake/runtime/tools/build_runtime.py --target data --original-dir "/path/to/DiQiFengYin" --run
+```
+
+不加`--run`只读检查，不创建数据或缓存；完整媒体计划在内存读取配方，干净克隆也可预检查。执行时先校验全部原版输入，将所有输出在缓存目录重建并逐文件核SHA，全部通过才安装，已有同SHA文件不重写。来源缺失、指纹或最后一个输出校验失败均不安装半套数据。输出禁止指向config、接入配置和存档。
+
+配方输入禁止引用玩家`SaveGame<number>.Dat`或`Game.SAV`；维护时即使派生的道具实例与某个玩家档中的字节相同，也不把存档作为来源。原版资源和玩家存档始终只读。
+
+继续提交的手工输入为`config/`、`runtime_content.json`、`content_checklist.json`、`battle_result.json`、`events/`和`source/`基础清单，以及`web/content/`。原版默认值提取后仍由同一个配置编译器应用parameters；当前debug模式与四项技能等级修改保持原样。`--force`不重置调参，只有配置导出器的显式`--reset`才恢复默认。
+
+开发者用原导出器接入内容并完成既有核对后，使用以下维护命令更新配方；它读取原版和已生成数据，不写原版、自定义配置、生成数据或历史证据。更新后应从空数据目录重建，核对输出指纹及自定义参数，并提交配方和代码。更新仅清理上一份配方所引用、已被替换的分片，不删除历史证据。`--repack`可只更新现有配方的文本范围引用和压缩格式，不读取生成表。
+
+```console
+python3 -B remake/runtime/tools/export_data_recipes.py --original-dir "/path/to/DiQiFengYin"
+```
 
 ## 首次素材构建
 
@@ -43,7 +64,7 @@ python3 -B remake/runtime/tools/build_runtime.py --original-dir "/path/to/DiQiFe
 
 `--serve` 在素材构建及 `verify_phaser.mjs --assets` 通过后启动正式服务；可加 `--port`、`--save-dir`。后续直接运行 `serve.py`。原版文件保持原位，只读访问；路径按 Windows 文件名解析，兼容目录和文件大小写以及已声明背景 DGP 的根目录位置。
 
-固定定义中的媒体描述决定物件初始帧、动作分区、图层、裁切和图集坐标。构建不重写 `web/data`、`web/content` 或数值调参。PNG 按固定清单核 SHA；音频保留 MPEG 字节或核转码前后 PCM，影片核帧数、时长及画面质量。音视频编码后的实际指纹写入 `assets/media_manifest.json`，与固定规则的原来源记录分开；来源基准 SHA、实际输入清单、缺失／变化／多出项和是否显式放行记入该清单及构建报告；`source_variants` 继续保留相对固定定义历史来源的差异。
+重建后的媒体描述决定物件初始帧、动作分区、图层、裁切和图集坐标。媒体阶段不重写这些定义、`web/content` 或数值调参。PNG 按固定清单核 SHA；音频保留 MPEG 字节或核转码前后 PCM，影片核帧数、时长及画面质量。音视频编码后的实际指纹写入 `assets/media_manifest.json`，与固定规则的原来源记录分开；来源基准 SHA、实际输入清单、缺失／变化／多出项和是否显式放行记入该清单及构建报告；`source_variants` 继续保留相对固定定义历史来源的差异。
 
 `runtime/.cache/media` 保存可核验缓存，失败可续跑；缺失或损坏输出重建，`--force` 重新提取但不重置调参。战斗图集按已提交页面布局直接从解码像素恢复；其余静态图片按素材目录／使用范围生成纹理页，动画按逻辑帧裁切，大图离线分页，重复页面共享物理文件。字体、感应平面和需要直接读取的遮罩保持专用图片。`assets/image_catalog.json` 将原逻辑路径映射至纹理页，构建不要求散 PNG 中转；现有散 PNG 可作为经核验的迁移输入，旧文件不自动删除。正式交付文件以 `assets/media_manifest.json` 的 `files` 为准，`images` 记录逻辑图片指纹。
 

@@ -31,6 +31,15 @@
 
 # Extracted media, source observations, reports, and historical snapshots.
 /remake/**/assets/
+# Original text, source records and runtime tables are reconstructed locally.
+/remake/runtime/web/data/**/*.json
+!/remake/runtime/web/data/config/**/*.json
+!/remake/runtime/web/data/source/**/*.json
+!/remake/runtime/web/data/events/**/*.json
+!/remake/runtime/web/data/runtime_content.json
+!/remake/runtime/web/data/content_checklist.json
+!/remake/runtime/web/data/battle_result.json
+!/remake/runtime/tools/data_recipes/*.json.gz
 /remake/observation/
 /remake/**/evidence/
 /remake/archive/

@@ -14,6 +14,8 @@
 
 `web/data/skills.json`是历史核对基线，当前调参使用`data/config/skills.json`。Phaser显示层沿用同一登记与规则；同类内容不新增专用Scene或角色数值分支。
 
+原版默认表和历史核对基线由首次提取生成，不提交；`data/config/`仍随仓库保存，不是提取输出，也不纳入生成文件的历史清理范围。重新提取先恢复默认来源，再由现有配置编译器应用parameters。技能优化、当前配置模式和其他人工参数不会被提取或`--force`覆盖。
+
 ## 查找原编号
 
 `data/library/index.json`关联全量角色、CHR记录、MAG及道具来源和唯一配置，保留名称、归属及runtime_registered。全量来源远大于实际开放范围，重名查询必须选具体编号。
