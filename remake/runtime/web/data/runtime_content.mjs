@@ -1152,6 +1152,16 @@ export const definition = {
       "npcs": [
         10,
         11
+      ],
+      "objects": [
+        {
+          "index": 10,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 11,
+          "handler": "tlk-object"
+        }
       ]
     },
     "M01032": {
@@ -1164,6 +1174,24 @@ export const definition = {
         15,
         16,
         17
+      ],
+      "objects": [
+        {
+          "index": 2,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 16,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 17,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 18,
+          "handler": "tlk-object"
+        }
       ]
     },
     "M01033": {
@@ -1238,6 +1266,24 @@ export const definition = {
         12,
         13,
         14
+      ],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 9,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 13,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 14,
+          "handler": "tlk-object"
+        }
       ]
     },
     "M01062": {
@@ -1258,6 +1304,12 @@ export const definition = {
     "M01064": {
       "npcs": [
         10
+      ],
+      "objects": [
+        {
+          "index": 1,
+          "handler": "tlk-object"
+        }
       ]
     },
     "M71010": {
@@ -2330,6 +2382,52 @@ export const definition = {
       ],
       "triggers": [
         31
+      ],
+      "objects": [
+        {
+          "index": 26,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 27,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 28,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 29,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 30,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 31,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 32,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 33,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 34,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 35,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 36,
+          "handler": "tlk-object"
+        }
       ]
     },
     "M01021-1": {
@@ -2338,6 +2436,20 @@ export const definition = {
         11,
         12,
         13
+      ],
+      "objects": [
+        {
+          "index": 23,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 24,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 25,
+          "handler": "tlk-object"
+        }
       ]
     },
     "M01021-2": {
@@ -2450,6 +2562,28 @@ export const definition = {
         12,
         13,
         14
+      ],
+      "objects": [
+        {
+          "index": 12,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 14,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 15,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 16,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 17,
+          "handler": "tlk-object"
+        }
       ]
     },
     "M03012_1F": {
@@ -2460,6 +2594,20 @@ export const definition = {
         14,
         15,
         16
+      ],
+      "objects": [
+        {
+          "index": 9,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 13,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 14,
+          "handler": "tlk-object"
+        }
       ]
     },
     "M03012_2F": {
@@ -4565,6 +4713,32 @@ export const definition = {
         17,
         18,
         19
+      ],
+      "objects": [
+        {
+          "index": 21,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 22,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 23,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 24,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 25,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 26,
+          "handler": "tlk-object"
+        }
       ]
     },
     "M03066": {
@@ -9246,7 +9420,16 @@ export default {
     "M01031": {
       "path": "data/maps/m01031.json",
       "triggers": [],
-      "objects": [],
+      "objects": [
+        {
+          "index": 10,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 11,
+          "handler": "tlk-object"
+        }
+      ],
       "rests": [],
       "routes": [],
       "npcs": [
@@ -9258,7 +9441,24 @@ export default {
     "M01032": {
       "path": "data/maps/m01032.json",
       "triggers": [],
-      "objects": [],
+      "objects": [
+        {
+          "index": 2,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 16,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 17,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 18,
+          "handler": "tlk-object"
+        }
+      ],
       "rests": [],
       "routes": [],
       "npcs": [
@@ -9375,7 +9575,24 @@ export default {
     "M01061": {
       "path": "data/maps/m01061.json",
       "triggers": [],
-      "objects": [],
+      "objects": [
+        {
+          "index": 8,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 9,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 13,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 14,
+          "handler": "tlk-object"
+        }
+      ],
       "rests": [],
       "routes": [],
       "npcs": [
@@ -9417,7 +9634,12 @@ export default {
     "M01064": {
       "path": "data/maps/m01064.json",
       "triggers": [],
-      "objects": [],
+      "objects": [
+        {
+          "index": 1,
+          "handler": "tlk-object"
+        }
+      ],
       "rests": [],
       "routes": [],
       "npcs": [
@@ -10844,7 +11066,52 @@ export default {
       "triggers": [
         31
       ],
-      "objects": [],
+      "objects": [
+        {
+          "index": 26,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 27,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 28,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 29,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 30,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 31,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 32,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 33,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 34,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 35,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 36,
+          "handler": "tlk-object"
+        }
+      ],
       "rests": [],
       "routes": [],
       "npcs": [
@@ -10860,7 +11127,20 @@ export default {
     "M01021-1": {
       "path": "data/maps/m01021-1.json",
       "triggers": [],
-      "objects": [],
+      "objects": [
+        {
+          "index": 23,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 24,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 25,
+          "handler": "tlk-object"
+        }
+      ],
       "rests": [],
       "routes": [],
       "npcs": [
@@ -11043,7 +11323,28 @@ export default {
     "M03011": {
       "path": "data/maps/m03011.json",
       "triggers": [],
-      "objects": [],
+      "objects": [
+        {
+          "index": 12,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 14,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 15,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 16,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 17,
+          "handler": "tlk-object"
+        }
+      ],
       "rests": [],
       "routes": [],
       "npcs": [
@@ -11058,7 +11359,20 @@ export default {
     "M03012_1F": {
       "path": "data/maps/m03012_1f.json",
       "triggers": [],
-      "objects": [],
+      "objects": [
+        {
+          "index": 9,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 13,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 14,
+          "handler": "tlk-object"
+        }
+      ],
       "rests": [],
       "routes": [],
       "npcs": [
@@ -13771,7 +14085,32 @@ export default {
     "M03032": {
       "path": "data/maps/m03032.json",
       "triggers": [],
-      "objects": [],
+      "objects": [
+        {
+          "index": 21,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 22,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 23,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 24,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 25,
+          "handler": "tlk-object"
+        },
+        {
+          "index": 26,
+          "handler": "tlk-object"
+        }
+      ],
       "rests": [],
       "routes": [],
       "npcs": [

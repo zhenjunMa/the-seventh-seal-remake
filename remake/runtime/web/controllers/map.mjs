@@ -13,6 +13,9 @@ import {storyBindings,registeredRoles} from "../core/content/content_registry.mj
 import {chapterRouteExits} from "../core/exploration/map_connections.mjs";
 import {MapLocomotion,mapMotionProfile,nativeMapMovement} from "../core/exploration/map_locomotion.mjs";
 
+import {mapPresentation} from '../core/ui/map_presentation.mjs';
+import {mapWorldPoint, pickMapDialogueObject} from '../core/exploration/map_interaction.mjs';
+
 import {createExplorationPresentation} from './presentation_handoff.mjs';
 
 export function createMapController({state, actions, $, canvas, ctx}) {
@@ -144,6 +147,23 @@ export function createMapController({state, actions, $, canvas, ctx}) {
     if(npc.hidden||npc.native_layer!==undefined&&state.scenes.current.data.native_layer!==undefined&&npc.native_layer!==state.scenes.current.data.native_layer)return false;
     const conditions=npc.event?.conditions??[];
     return conditions.every(condition=>state.world.value.flags[condition.index]===condition.value);
+  }
+  function mapPointerDown(event){
+    if(event.button!==0||state.engine?.paused||state.scenes.phase!=='map')return false;
+    const scene=state.scenes.current;
+    if(!scene)return false;
+    const point=mapWorldPoint(event,(state.engine?.canvas??canvas).getBoundingClientRect(),state.view);
+    if(!point)return false;
+    const queue=mapPresentation({scene,world:state.world.value,role:role(),action:sheetAction(),
+      view:state.view,objectBitmap});
+    const selected=pickMapDialogueObject({scene,world:state.world.value,
+      bindings:storyBindings(scene.data.id).objects,
+      header:state.chapterStory.maps[scene.data.id]?.header_raw_hex,queue,point});
+    if(!selected)return false;
+    event.preventDefault();
+    if(!selected.nearby){actions.status('请先靠近这个物件，再点击交谈。');return true;}
+    actions.guarded(()=>actions.runChapter({mapId:scene.data.id,objectIndex:selected.object.index}))();
+    return true;
   }
   function updateNearest(){
     state.nearest=null;if(!state.scenes.current)return;const at=state.world.location;
@@ -312,5 +332,5 @@ export function createMapController({state, actions, $, canvas, ctx}) {
     }else {motionState.reset();state.view.collisionFeedback=null;}
     paint();
   }
-  return {explorationPresentation:presentation,role, sheetAction, buildHud, prepareMap, validateEntry, commitView, changeMap, follow, fit, resize, npcAvailable, updateNearest, objectBitmap, transitionFor, renderWorldMap,selectWorldMapDestination,closeWorldMap, routeExit, drawCollision, paint, updateExploration,captureScene,captureSavePreview};
+  return {explorationPresentation:presentation,role, sheetAction, buildHud, prepareMap, validateEntry, commitView, changeMap, follow, fit, resize, npcAvailable, updateNearest, mapPointerDown, objectBitmap, transitionFor, renderWorldMap,selectWorldMapDestination,closeWorldMap, routeExit, drawCollision, paint, updateExploration,captureScene,captureSavePreview};
 }

@@ -100,7 +100,7 @@ export function createInputController({state, actions, $, canvas, ctx}) {
     window.addEventListener('blur',actions.releaseInput,options);
     document.addEventListener('visibilitychange',actions.releaseInput,options);
     window.addEventListener('resize',actions.resize,options);
-    canvas.addEventListener('pointerdown',()=>canvas.focus(),options);
+    canvas.addEventListener('pointerdown',event=>{canvas.focus();actions.mapPointerDown?.(event);},options);
     canvas.addEventListener('wheel',event=>{event.preventDefault();if(!state.engine?.paused&&state.scenes.phase==='map')state.view.zoom=Math.min(3,Math.max(.15,state.view.zoom*(event.deltaY<0?1.1:1/1.1)));},{...options,passive:false});
   }
   function disposeInput(){listeners.abort();fullscreen.dispose();state.keys.clear();}

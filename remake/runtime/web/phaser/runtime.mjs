@@ -45,7 +45,13 @@ export class PhaserRuntime {
               try{for(const snapshot of this.snapshots)snapshot.redraw();this.resume('webgl-main');}catch(error){this.fail(error);}
             });
             const options={signal:this.listeners.signal};
-            this.canvas.addEventListener('pointerdown',()=>focusTarget?.focus({preventScroll:true}),options);
+            this.canvas.addEventListener('pointerdown',event=>{
+              focusTarget?.focus({preventScroll:true});
+              focusTarget?.dispatchEvent?.(new PointerEvent('pointerdown',{
+                clientX:event.clientX,clientY:event.clientY,button:event.button,
+                buttons:event.buttons,pointerType:event.pointerType,isPrimary:event.isPrimary,cancelable:true,
+              }));
+            },options);
             this.canvas.addEventListener('wheel',event=>{
               event.preventDefault();focusTarget?.dispatchEvent(new WheelEvent('wheel',{deltaY:event.deltaY,cancelable:true}));
             },{...options,passive:false});

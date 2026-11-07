@@ -60,6 +60,8 @@ CF2动作音效沿共用地图声音接口播放：DAT对应动作的+9E句柄�
 
 物理state0出口由原DAT推导；TLK kind2使用目标marker和原排序，marker0依原4A5110归一化为marker1／sort2，不能误用对白跳转号。原CF1物件可按tlk-object登记+F6入口，主动交互沿同一StoryFlow事务执行，保持可重复交互；其kind2传送继承当前原排序，目标准备失败回滚物品和旗标。原障碍入口允许移出但不改terrain；无cells描述符不补自选触发格。物件CF1／CF4／CF7和动作绑定的共同规则见[来源规则速查](../assessment/region_remake_workflow.md#来源规则速查)。
 
+已登记CF1支持近距离明确点击：先检查可见NPC的屏幕矩形，再按原物件index顺序命中DGP完整矩形的闭边界；近距资格由DAT投影／缩放和DGP初始化占地计算，经同一StoryFlow交互。键盘继续使用附近交互提示；远距点击提示先靠近，未接原版自动寻路。规则在`core/exploration/map_interaction.mjs`，输入经实际Phaser画布转交共享控制器，界面缩放和黑边不改变原地图坐标。
+
 ## 来源查询
 
 来源索引独立于运行登记，保留各时期、原记录、SHA、旗标读写和跨区调用；索引完成不表示开放或可玩。

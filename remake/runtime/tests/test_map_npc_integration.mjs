@@ -1,4 +1,5 @@
 import test from 'node:test';
+import {nativeObjectInteractionNearby, mapWorldPoint, pickMapDialogueObject} from '../web/core/exploration/map_interaction.mjs';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {drawMapScene} from '../web/map_scene_view.mjs';
@@ -185,4 +186,41 @@ test('failed chapter ANM restores the previous roaming scene and leaves persiste
     assert.deepEqual(scene.npcRuntime.snapshot(),before);assert.deepEqual(state.world.snapshot(),world);
     assert.equal(state.openingView,null);
   }finally{restore();}
+});
+
+test('explicit CF1 picking reaches the real tavern object without selecting a nearer NPC or changing terrain',()=>{
+  // Native 412640, DAT+88=1: this real DGP footprint samples cells
+  // (28,26), (29,26), (27,26), (28,27); player cell is (27,29).
+  const header=Buffer.alloc(370);header[0x88]=1;header[0x142]=3;header[0x145]=1;
+  const object={index:9,x_native:224,y_native:208,width_cells:1,height_cells:1,
+    draw_x:370,draw_y:319,frame_width:143,frame_height:143};
+  const world={location:{x:446,y:464}},scene={objects:[object]},bindings=[{index:9,handler:'tlk-object'}];
+  const queue=[{key:'object:9',pose:{}},{key:'npc:nearer',pose:{x:384,y:400,width:64,height:96}}];
+  const args={scene,world,bindings,header:header.toString('hex'),queue,point:{x:380,y:330}};
+  assert.equal(nativeObjectInteractionNearby(object,world.location,args.header),true);
+  assert.equal(pickMapDialogueObject(args).object.index,9);
+  assert.equal(pickMapDialogueObject(args).nearby,true);
+  assert.equal(pickMapDialogueObject({...args,point:{x:400,y:420}}),null,'NPC screen hits take priority');
+  assert.equal(pickMapDialogueObject({...args,world:{location:{x:446,y:800}}}).nearby,false,'far clicks cannot execute TLK');
+  assert.equal(pickMapDialogueObject({...args,queue:queue.filter(x=>x.key!=='object:9')}),null,'hidden source object is not selectable');
+  assert.equal(pickMapDialogueObject({...args,bindings:[]}),null,'unregistered objects stay inactive');
+  assert.equal(pickMapDialogueObject({...args,point:{x:513,y:462},queue:[queue[0]]}).object.index,9,'native rectangle includes its edges');
+  assert.equal(pickMapDialogueObject({...args,point:{x:514,y:462}}),null);
+  const first={...object,index:3};
+  const chosen=pickMapDialogueObject({...args,scene:{objects:[object,first]},
+    bindings:[...bindings,{index:3,handler:'tlk-object'}],queue:[...queue,{key:'object:3',pose:{}}]});
+  assert.equal(chosen.object.index,3,'source selection order is independent of rendering order');
+});
+
+test('map pointer coordinates preserve the logical viewport under zoom, letterboxing and source grid boundaries',()=>{
+  assert.deepEqual(mapWorldPoint({clientX:700,clientY:400},{left:0,top:0,width:1400,height:800},
+    {x:446,y:464,zoom:2}),{x:446,y:464});
+  assert.equal(mapWorldPoint({clientX:0,clientY:400},{left:0,top:0,width:1400,height:800},
+    {x:446,y:464,zoom:2}),null);
+  const header=Buffer.alloc(370);header[0x145]=1;
+  const object={x_native:224,y_native:208,width_cells:1,height_cells:1};
+  assert.equal(nativeObjectInteractionNearby(object,{x:432,y:400},header.toString('hex')),true);
+  assert.equal(nativeObjectInteractionNearby(object,{x:416,y:400},header.toString('hex')),false);
+  header[0x88]=1;
+  assert.equal(nativeObjectInteractionNearby(object,{x:446,y:464},header.toString('hex')),true,'loader replaces zero coordinate shift with three');
 });
