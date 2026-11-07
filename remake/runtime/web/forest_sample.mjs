@@ -1,6 +1,7 @@
 import {retainDefinition} from './core/content/immutable_definition.mjs';
 import {createBattleSample} from './combat_sample.mjs';
 import {runtimeContent,requireRegisteredRoles,battleStage} from './core/content/content_registry.mjs';
+import {battleEnemyFormation} from './core/battle/battle_layout.mjs';
 const clone=value=>structuredClone(value);
 export function createForestSample(world,base,data,group,config,schedulerData=null,aiData=null,rewardData=null,reactionData=null,statusData=null){
   return assembleForestSample(createBattleSample(world,base,config),data,group,schedulerData,aiData,rewardData,reactionData,statusData);
@@ -12,7 +13,15 @@ export function assembleForestSample(sample,data,group,schedulerData=null,aiData
   const actors=sample.actors.filter(a=>a.side==='player').map(clone),playerIds=new Set(actors.map(a=>a.id));
   const skills=Object.fromEntries(Object.entries(sample.skills).filter(([,s])=>playerIds.has(s.actor_id)).map(([id,s])=>[id,clone(s)])),enemy_skill_ids={};
   if(!sample.source.party_new_game)for(const [id,skill] of Object.entries(data.player_skills??{}))skills[id]=clone(skill);
+  // 5173B0 disables enemies beyond the category-dependent formation capacity.
+  // Selection already consumed its native draws; preserve the original member
+  // indices and order for every retained actor, command, and source record.
+  const admitted=new Set(battleEnemyFormation(group.members.map((member,index)=>{
+    const actor=data.actors[member.id];if(!actor)throw new Error('森林角色尚未接入');
+    return {id:index,header_raw_hex:actor.header_raw_hex};
+  })).map(({actor})=>actor.id));
   group.members.forEach((member,index)=>{
+    if(!admitted.has(index))return;
     const resource=data.actors[member.id],rawSkill=data.skills[member.id+'_attack'];
     if(!resource||!rawSkill)throw new Error('森林角色或行动尚未接入');
     const actor=clone(resource),id=`enemy-${index}`,skill=clone(rawSkill),skillId=`${member.id}_attack_${index}`;

@@ -18,18 +18,19 @@ const integer=(value,min=0)=>Number.isInteger(value)&&value>=min;
 export const APPEARANCE_ALPHA_ADAPTER=Object.freeze({
   source_clock_ms:60,complete_elapsed_raw:Object.freeze({1:7,2:null,3:null,5:null,6:null,7:39}),
   particle_step_raw:8,particle_target_raw:255,
-  pixels:'8-bit alpha adapter; original scanline mask not reproduced',
+  pixels:'source per-pixel scan for modes5/6; browser RGBA blend with fixed60Hz presentation adapter',
 });
 // F66A is a disappearance MODE selected by rand()%7+1, despite the legacy
 // event field name fade_increment_raw. It is never an opacity speed.
 const compiledManifests=new WeakMap();
 export class BattleLifecyclePlayback {
-  constructor(manifest,{appearanceBounds=null,appearanceEffect=null,disappearanceEffect=null,nativeBridge=null,onFrame=null,onControl=null}={}){
+  constructor(manifest,{appearanceBounds=null,appearanceEffect=null,appearanceRenderMs=0,disappearanceEffect=null,nativeBridge=null,onFrame=null,onControl=null}={}){
     this.onFrame=onFrame;
     this.onControl=onControl;
     this.nativeBridge=nativeBridge;
     this.disappearanceEffect=disappearanceEffect;
     this.appearanceEffect=appearanceEffect;
+    this.appearanceRenderMs=appearanceRenderMs;
     need(appearanceBounds===null||typeof appearanceBounds==='function','Lifecycle appearance bounds provider invalid');this.appearanceBounds=appearanceBounds;
     need(Array.isArray(manifest?.roles),'Lifecycle manifest roles missing');this.roles=Object.isFrozen(manifest)?compiledManifests.get(manifest):null;
     if(!this.roles){this.roles=new Map();
@@ -149,9 +150,21 @@ export class BattleLifecyclePlayback {
             // 551F03 mode6 starts current=minX-x; mode5 starts minX-y.
             // Both renderer loops advance +8 and use the same strict bound.
             appearance.render_limit=geometry.empty?1:Math.max(1,Math.ceil((255+maximum-geometry.min_x)/8));
+            appearance.min_x=geometry.min_x??0;
           }
-          if(appearance.elapsed_raw===0)appearance.render_calls=0;
-          appearance.render_calls++;this.alphas.set(channel.actor_id,Math.min(1,appearance.render_calls/appearance.render_limit));
+          if(this.appearanceRenderMs>0){
+            // Source render visits advance each pixel by eight. Browser
+            // presentation uses a fixed 60Hz cadence, like the particle adapter,
+            // so a slow browser frame does not stretch the source reveal.
+            const tick=Math.floor(Math.max(0,now-appearance.started)/this.appearanceRenderMs+1e-7);
+            const resetTick=Math.ceil(APPEARANCE_ALPHA_ADAPTER.source_clock_ms/this.appearanceRenderMs)-1;
+            appearance.render_calls=Math.max(1,tick-resetTick+1);
+          }else{
+            // Execution-free callers can explicitly count source render visits.
+            if(appearance.elapsed_raw===0)appearance.render_calls=0;
+            appearance.render_calls++;
+          }
+          this.alphas.set(channel.actor_id,Math.min(1,appearance.render_calls/appearance.render_limit));
           if(appearance.render_calls<appearance.render_limit)return;
           // Render-count completion occurs NOW; do not backdate this to a
           // guessed duration and skip the following source sprite frames.
@@ -266,7 +279,7 @@ export class BattleLifecyclePlayback {
     }
     return this.snapshot();
   }
-  prepareEntry(snapshot,roster,now){
+  prepareEntry(snapshot,roster,now,isVisible=()=>true){
     if(this.entryPrepared&&this.battleId===snapshot.id)return this.snapshot();
     if(this.battleId!==null&&snapshot.id!==undefined&&snapshot.id!==this.battleId)this.reset();
     const entries=(snapshot.lifecycle_events??[]).filter(event=>event.kind==='entry');
@@ -284,12 +297,14 @@ export class BattleLifecyclePlayback {
           if(ready.has(event.actor_id))continue;
           const channel=this.channels.get(event.actor_id);
           need(!channel?.blocked,`Entry preparation blocked: ${channel?.blocked}`);
-          if(!channel||this.alpha(event.actor_id)>0){
+          if(!channel||this.alpha(event.actor_id)>0&&isVisible(event.actor_id,this.pose(event.actor_id))){
             ready.set(event.actor_id,time);this.preparingEntries.add(event.actor_id);continue;
           }
           const appearance=channel.appearance;
           const at=appearance?.particles?appearance.particles.started+(appearance.particles.tick+1)*DEATH_PARTICLE_TIMING.render_ms
-            :appearance?appearance.started+APPEARANCE_ALPHA_ADAPTER.source_clock_ms:channel.deadline;
+            :appearance&&(appearance.mode===5||appearance.mode===6)&&this.appearanceRenderMs>0
+              ?appearance.started+(Math.floor((time-appearance.started)/this.appearanceRenderMs+1e-7)+1)*this.appearanceRenderMs
+              :appearance?appearance.started+(Math.floor((time-appearance.started)/APPEARANCE_ALPHA_ADAPTER.source_clock_ms+1e-7)+1)*APPEARANCE_ALPHA_ADAPTER.source_clock_ms:channel.deadline;
           need(at>=time,'Entry preparation has no next hidden frame');next=Math.min(next,at);
         }
         if(ready.size<entries.length){need(Number.isFinite(next),'Entry preparation cannot reach a visible frame');time=next;}
@@ -306,8 +321,10 @@ export class BattleLifecyclePlayback {
     }finally{this.preparingEntries=null;}
   }
   alpha(actorId){return this.alphas.get(actorId)??1;}
-  pose(actorId){const channel=this.channels.get(actorId),pose=channel?.pose??this.held.get(actorId)?.pose,path=channel?.escape??channel?.entry;
-    return pose?{...pose,alpha:this.alpha(actorId),...(path?{offset_x:nativeEntryOffset(path,this.lastNow)}:{})}:null;}
+  pose(actorId){const channel=this.channels.get(actorId),pose=channel?.pose??this.held.get(actorId)?.pose,path=channel?.escape??channel?.entry,appearance=channel?.appearance;
+    const scan=appearance&&(appearance.mode===5||appearance.mode===6)&&appearance.render_limit!==null
+      ?{mode:appearance.mode,min_x:appearance.min_x,render_calls:appearance.render_calls}:null;
+    return pose?{...pose,alpha:this.alpha(actorId),...(scan?{appearance_scan:scan}:{}),...(path?{offset_x:nativeEntryOffset(path,this.lastNow)}:{})}:null;}
   hidden(actorId){return this.hiddenActors.has(actorId);}
   drawParticles(actorId,context,x,y){
     const channel=this.channels.get(actorId),effect=channel?.particles?.effect??channel?.appearance?.particles?.effect;

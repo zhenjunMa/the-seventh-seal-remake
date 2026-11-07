@@ -2,7 +2,7 @@ import {TextureCache} from './texture_cache.mjs';
 import {pixelSprite} from './pixel_sprite.mjs';
 import {drawImageRegion} from '../../core/resources/image_regions.mjs';
 
-const properties=['globalAlpha','globalCompositeOperation','fillStyle','strokeStyle','lineWidth','font','textAlign','textBaseline','lineJoin','nativeColorSubtract'];
+const properties=['globalAlpha','globalCompositeOperation','fillStyle','strokeStyle','lineWidth','font','textAlign','textBaseline','lineJoin','nativeColorSubtract','nativeAppearance'];
 const rgba=value=>{
   const css=String(value).match(/^rgba?\(\s*([\d.]+)[, ]+([\d.]+)[, ]+([\d.]+)(?:\s*[,/]\s*([\d.]+))?\s*\)$/);
   if(css)return {color:(Number(css[1])<<16)|(Number(css[2])<<8)|Number(css[3]),alpha:css[4]===undefined?1:Number(css[4])};
@@ -29,12 +29,12 @@ export class BattleSurface {
   constructor(scene){
     this.scene=scene;this.textures=new TextureCache(scene);
     this.pools={sprite:[],graphics:[],text:[],particle:[]};this.gradients=new Map();
-    this.canvas={width:640,height:480,getContext:()=>this};this.beginFrame();
+    this.canvas={width:640,height:480,getContext:()=>this};this.supportsNativeAppearance=true;this.beginFrame();
   }
   beginFrame(){
     this.cursor={sprite:0,graphics:0,text:0,particle:0};this.order=0;this.stack=[];this.matrix=[1,0,0,1,0,0];
     this.clipRect={x:0,y:0,width:640,height:480};this.path=[];
-    Object.assign(this,{globalAlpha:1,globalCompositeOperation:'source-over',nativeColorSubtract:0,fillStyle:'#000000',strokeStyle:'#000000',lineWidth:1,font:'12px sans-serif',textAlign:'left',textBaseline:'alphabetic',lineJoin:'miter'});
+    Object.assign(this,{globalAlpha:1,globalCompositeOperation:'source-over',nativeColorSubtract:0,nativeAppearance:null,fillStyle:'#000000',strokeStyle:'#000000',lineWidth:1,font:'12px sans-serif',textAlign:'left',textBaseline:'alphabetic',lineJoin:'miter'});
     for(const pool of Object.values(this.pools))for(const object of pool)object.setVisible(false);
     this.textures.begin();
   }
@@ -63,7 +63,7 @@ export class BattleSurface {
     object.setVisible(true).setDepth(this.order++).setAlpha(this.globalAlpha)
       .setBlendMode(this.globalCompositeOperation==='lighter'?'ADD':'NORMAL');
     if(kind==='graphics')object.clear();
-    if(kind==='sprite'){object.smoothActor=false;object.smoothText=false;object.xbrBounds=null;}
+    if(kind==='sprite'){object.smoothActor=false;object.smoothText=false;object.xbrBounds=null;object.nativeAppearance=null;}
     return object;
   }
   save(){this.stack.push({matrix:[...this.matrix],clipRect:{...this.clipRect},...Object.fromEntries(properties.map(k=>[k,this[k]]))});}
@@ -113,6 +113,13 @@ export class BattleSurface {
     sprite.smoothText=Boolean(source.gpuGlyph);
     sprite.xbrBounds=sampleBounds;
     sprite.nativeColorSubtract=this.nativeColorSubtract;
+    if(this.nativeAppearance){
+      const scan=this.nativeAppearance,rect=this.rectangle(scan.x,scan.y,scan.width,scan.height);
+      const base=scan.min_x+Math.max(0,scan.render_calls-1)*8;
+      const from=scan.mode===5?(area.y-rect.y)*scan.native_height/rect.height:(area.x-rect.x)*scan.native_width/rect.width;
+      const to=scan.mode===5?from+area.height*scan.native_height/rect.height:from+area.width*scan.native_width/rect.width;
+      sprite.nativeAppearance=scan.mode===5?[base-from,base-to,base-to,base-from]:[base-from,base-from,base-to,base-to];
+    }
   }
   strokeRect(x,y,width,height){const r=this.rectangle(x,y,width,height),style=rgba(this.strokeStyle);
     this.take('graphics').lineStyle(this.lineWidth*this.matrix[0],style.color,style.alpha).strokeRect(r.x,r.y,r.width,r.height);}

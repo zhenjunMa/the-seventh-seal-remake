@@ -376,8 +376,7 @@ export class BattleController {
     const positions = battleActorPositions(next);
     for (const actor of next) {
       actor.native_z_raw ??= 0;
-      // The player homes are 5181D0's source slots. Enemy layout currently
-      // uses the declared placement adapter; both start at their own home.
+      // 5181D0 player homes and 5173B0 enemy formations share this native plane.
       actor.native_x_raw = actor.native_home_x_raw = positions[actor.id][0] - 320;
       actor.native_y_raw = actor.native_home_y_raw = positions[actor.id][1] - 80;
     }

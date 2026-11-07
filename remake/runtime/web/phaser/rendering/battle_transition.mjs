@@ -30,10 +30,13 @@ function fragments(scene,key){
   sprite.renderWebGL=function(renderer,src,camera,parentMatrix){
     camera.addToRenderList(src);const pipeline=renderer.pipelines.setMulti(),matrix=Phaser.GameObjects.GetCalcMatrix(src,camera,parentMatrix).calc;
     const frame=src.frame,tint=Phaser.Renderer.WebGL.Utils.getTintAppendFloatAlpha;
+    // Graphics may already have opened a batch with __WHITE. batchQuad only
+    // binds its texture when the batch is empty, so bind the snapshot explicitly.
+    const unit=pipeline.setTexture2D(frame.glTexture);
     for(const p of src.parts){if(p.alpha<=0)continue;const q=matrix.setQuad(p.dx,p.dy,p.dx+p.w,p.dy+p.h),color=tint(0xffffff,p.alpha*camera.alpha);
       const u0=frame.u0+(frame.u1-frame.u0)*p.x/640,u1=frame.u0+(frame.u1-frame.u0)*(p.x+p.w)/640;
       const v0=frame.v0+(frame.v1-frame.v0)*p.y/480,v1=frame.v0+(frame.v1-frame.v0)*(p.y+p.h)/480;
-      pipeline.batchQuad(src,...q,u0,v0,u1,v1,color,color,color,color,0,frame.glTexture);
+      pipeline.batchQuad(src,...q,u0,v0,u1,v1,color,color,color,color,0,frame.glTexture,unit);
     }
   };return sprite;
 }
@@ -99,10 +102,10 @@ export class GpuBattleTransition {
       await new Promise((resolve,reject)=>{
         const schedule=()=>{this.pending=clock.requestFrame(now=>{try{
           check();
-          // A menu click can start between Phaser frames. Cross two update
-          // boundaries so the browser can present the covering frame before
-          // configuration cloning or metadata work begins in a microtask.
-          if(++presentationFrames>=2&&!preparationStarted){
+          // Finish removing the map before CPU-heavy metadata work. Even a
+          // cold entry must present every outgoing frame instead of freezing
+          // after its first two frames. White flash prepares at full white.
+          if(++presentationFrames>=2&&!preparationStarted&&frame>=(kind===1?32:battleTransitionFrame(kind,0).count)){
             preparationStarted=true;
             log?.({type:'battle-transition-preparation-start',kind,elapsed_ms:performance.now()-startedAt,renderer:'WEBGL'});
             Promise.resolve().then(()=>{check();return paintBattle(controller.signal);}).then(snapshot=>{

@@ -205,8 +205,8 @@ export function createBattleController({host, sessions = createBattleSessions()}
         current().battleView.draw(snapshot,now,{entryPreview:true});
         current().battleMenu.draw(now,current().battleView.actorPositions());current().battleMenu.paintTo(host.engine?.battle.surface.canvas??$('battleCanvas'));
         host.engine?.battle.surface.endFrame();
-        // Capture the first visible entry poses. Hidden preparation overlaps
-        // the transition; visible motion and queued audio resume afterwards.
+        // Capture prepared entry poses; source motion and queued audio resume
+        // once the covering transition releases the battlefield.
         return captureTransition('battle');
       };
       if(host.battleTransition&&before)await host.battleTransition.run(before,paintBattle,transitionOptions);
@@ -295,23 +295,25 @@ export function createBattleController({host, sessions = createBattleSessions()}
     try{
       before=host.battleTransition?captureTransition():null;
       host.setPhase('battle-loading');
-      check();await host.loadCombatData(signal);check();
-      const configured=await playbackTask(actions.readConfiguredData({shared:true}),signal);check();current().itemData=configured.items;
-      const scheduler={...configured.scheduler,idle_skills:{...configured.scheduler.idle_skills,...host.partySkills.idle_skills}};
-      const sample=assembleForestSample(createPartySample(simulation.world.value,host.partyCombat,host.partySkills,configured,current().itemData,host.menu.nameCharset),
-        configured.forest,group,scheduler,configured.ai,configured.rewards,host.partyReactions,host.statusData);
-      if(sample.actors.filter(actor=>actor.side==='player').every(actor=>actor.hp.current===0))throw new Error('队伍已经倒下，无法进入剧情战斗');
-      const preparedView=await playbackTask(prepareView({mode:'scripted',newParty:true,stagePath:'/'+battleStage(group.stage).path,lifecycle:true,actors:sample.actors,skills:sample.skills,inventory:simulation.world.value.inventory,signal}),signal);check();
-      session.view=current().battleView=preparedView;
-      session.view.setRoster(sample.actors,sample.skills);
-      session.battle=current().battle=createCombat(simulation.world,true,session.view);current().battleRng=simulation.rng;
-      host.audio?.setScene({mapId:draft.location.map_id,battle:true,stageId:group.stage});
-      await prepareHud(true,{world:simulation.world,battle:session.battle,owner:session,signal});check();
-      await playbackTask(revealBattle(before,()=>current().battle.start({...sample,lifecycle_enabled:true,rng:simulation.rng,side_priority:host.sidePriority,
-        source:{...sample.source,scripted_battle:true,record:group.source,rng_seed:simulation.encounters.rng_state,
-          rng_seed_policy:'persistent-development-global-stream',transition_draw:simulation.transitionRaw,
-          transition_visual_rng_policy:'Source kind uses CRT; existing pixel-transition adapter uses its separate presentation random source.'}}),
-        {kind:simulation.transitionKind,signal},isCurrent),signal);check();
+      await playbackTask(revealBattle(before,async transitionSignal=>{
+        const entrySignal=transitionSignal??signal,entryCheck=()=>{entrySignal?.throwIfAborted();check();};
+        entryCheck();await host.loadCombatData(entrySignal);entryCheck();
+        const configured=await playbackTask(actions.readConfiguredData({shared:true}),entrySignal);entryCheck();current().itemData=configured.items;
+        const scheduler={...configured.scheduler,idle_skills:{...configured.scheduler.idle_skills,...host.partySkills.idle_skills}};
+        const sample=assembleForestSample(createPartySample(simulation.world.value,host.partyCombat,host.partySkills,configured,current().itemData,host.menu.nameCharset),
+          configured.forest,group,scheduler,configured.ai,configured.rewards,host.partyReactions,host.statusData);
+        if(sample.actors.filter(actor=>actor.side==='player').every(actor=>actor.hp.current===0))throw new Error('队伍已经倒下，无法进入剧情战斗');
+        const preparedView=await playbackTask(prepareView({mode:'scripted',newParty:true,stagePath:'/'+battleStage(group.stage).path,lifecycle:true,actors:sample.actors,skills:sample.skills,inventory:simulation.world.value.inventory,signal:entrySignal}),entrySignal);entryCheck();
+        session.view=current().battleView=preparedView;
+        session.view.setRoster(sample.actors,sample.skills);
+        session.battle=current().battle=createCombat(simulation.world,true,session.view);current().battleRng=simulation.rng;
+        host.audio?.setScene({mapId:draft.location.map_id,battle:true,stageId:group.stage});
+        await prepareHud(true,{world:simulation.world,battle:session.battle,owner:session,signal:entrySignal});entryCheck();
+        current().battle.start({...sample,lifecycle_enabled:true,rng:simulation.rng,side_priority:host.sidePriority,
+          source:{...sample.source,scripted_battle:true,record:group.source,rng_seed:simulation.encounters.rng_state,
+            rng_seed_policy:'persistent-development-global-stream',transition_draw:simulation.transitionRaw,
+            transition_visual_rng_policy:'Source kind uses CRT; existing pixel-transition adapter uses its separate presentation random source.'}});
+      },{kind:simulation.transitionKind,signal},isCurrent),signal);check();
       actions.log({type:'scripted-battle-enter',group,revision,party:draft.party.map(role=>role.id)});
       actions.status('剧情战斗：选择招式和目标，战斗结束后继续剧情。');
       const result=await finished;check();

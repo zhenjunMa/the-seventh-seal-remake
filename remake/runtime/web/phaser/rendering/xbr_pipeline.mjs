@@ -44,7 +44,7 @@ varying float outTintEffect;
 varying vec4 outTint;
 varying vec4 outBounds;
 varying vec3 outSource;
-varying float outColorSubtract;
+varying vec3 outColorEffects;
 
 const float XBR_EQ_THRESHOLD = 15.0;
 const float LV2_CF = 2.0;
@@ -171,13 +171,22 @@ void main () {
   vec4 texture;
   if (useXbr) texture = xbr();
   else texture = masked ? S(outTexCoord) : T(outTexCoord);
-  if (outColorSubtract > 0.0) {
-    float mask = floor(outColorSubtract / 512.0);
-    float amount = mod(outColorSubtract, 512.0);
+  if (outColorEffects.x > 0.0) {
+    float mask = floor(outColorEffects.x / 512.0);
+    float amount = mod(outColorEffects.x, 512.0);
     vec3 channels = vec3(mod(mask,2.0),mod(floor(mask/2.0),2.0),mod(floor(mask/4.0),2.0));
     // 52B2FD subtracts packed RGB565 channel units, clamping each at zero.
     vec3 native = max(floor(texture.rgb * vec3(31.0,63.0,31.0) + 0.5) - channels * amount, vec3(0.0));
     texture.rgb = (native * vec3(8.0,4.0,8.0) + floor(native / vec3(4.0,16.0,4.0))) / 255.0;
+  }
+  if (outColorEffects.y > 0.5) {
+    // 551B05/552039 reveal source pixels with a vertical/horizontal scan.
+    // The native per-pixel weight starts at minX-y / minX-x and adds eight
+    // each render visit. It is independent of the actor's overall opacity.
+    float current = max(0.0, floor(outColorEffects.z + 0.0005));
+    float target = texture.a * 255.0;
+    float reveal = current >= target ? 1.0 : current * 255.0 / (256.0 * max(target, 1.0));
+    texture *= reveal;
   }
   vec4 texel = vec4(outTint.bgr * outTint.a, outTint.a);
   vec4 color = texture * texel;
@@ -200,18 +209,18 @@ attribute float inTintEffect;
 attribute vec4 inTint;
 attribute vec4 inBounds;
 attribute vec3 inSource;
-attribute float inColorSubtract;
+attribute vec3 inColorEffects;
 varying vec2 outTexCoord;
 varying float outTexId;
 varying float outTintEffect;
 varying vec4 outTint;
 varying vec4 outBounds;
 varying vec3 outSource;
-varying float outColorSubtract;
+varying vec3 outColorEffects;
 void main(){
   gl_Position=uProjectionMatrix*vec4(inPosition,1.0,1.0);
   outTexCoord=inTexCoord;outTexId=inTexId;outTintEffect=inTintEffect;
-  outTint=inTint;outBounds=inBounds;outSource=inSource;outColorSubtract=inColorSubtract;
+  outTint=inTint;outBounds=inBounds;outSource=inSource;outColorEffects=inColorEffects;
 }`;
 
 export const XBR_PIPELINE='SealCharacters';
@@ -226,18 +235,20 @@ export function characterPipeline(Phaser){
         {name:'inPosition',size:2,type:FLOAT},{name:'inTexCoord',size:2,type:FLOAT},
         {name:'inTexId',size:1,type:FLOAT},{name:'inTintEffect',size:1,type:FLOAT},
         {name:'inTint',size:4,type:UBYTE,normalized:true},
-        {name:'inBounds',size:4,type:FLOAT},{name:'inSource',size:3,type:FLOAT},{name:'inColorSubtract',size:1,type:FLOAT}
+        {name:'inBounds',size:4,type:FLOAT},{name:'inSource',size:3,type:FLOAT},{name:'inColorEffects',size:3,type:FLOAT}
       ]});
       this.enabled=true;this.sampleMeta=new Float32Array(7);
     }
     // MultiPipeline's native writers assume seven components. All entry points
-    // must write our fifteen-component layout, including Graphics triangles.
-    batchVert(x,y,u,v,unit,effect,tint,meta=null,colorSubtract=0){
+    // must write our seventeen-component layout, including Graphics triangles.
+    // Pack color effects together to retain WebGL's minimum eight attributes.
+    batchVert(x,y,u,v,unit,effect,tint,meta=null,colorSubtract=0,appearance=null){
       const f=this.vertexViewF32,b=this.vertexViewU32;
       let at=this.vertexCount*this.currentShader.vertexComponentCount;
       f[at++]=x;f[at++]=y;f[at++]=u;f[at++]=v;f[at++]=unit;f[at++]=effect;b[at++]=tint;
       for(let i=0;i<7;i++)f[at++]=meta?meta[i]:0;
       f[at++]=colorSubtract;
+      f[at++]=appearance===null?0:1;f[at++]=appearance??0;
       this.vertexCount++;this.currentBatch.count=this.vertexCount-this.currentBatch.start;
     }
     batchQuad(object,x0,y0,x1,y1,x2,y2,x3,y3,u0,v0,u1,v1,tl,tr,bl,br,effect=0,texture,unit=this.currentUnit){
@@ -257,9 +268,10 @@ export function characterPipeline(Phaser){
         }
       }
       const colorSubtract=object?.nativeColorSubtract??0;
-      this.batchVert(x0,y0,u0,v0,unit,effect,tl,meta,colorSubtract);this.batchVert(x1,y1,u0,v1,unit,effect,bl,meta,colorSubtract);
-      this.batchVert(x2,y2,u1,v1,unit,effect,br,meta,colorSubtract);this.batchVert(x0,y0,u0,v0,unit,effect,tl,meta,colorSubtract);
-      this.batchVert(x2,y2,u1,v1,unit,effect,br,meta,colorSubtract);this.batchVert(x3,y3,u1,v0,unit,effect,tr,meta,colorSubtract);
+      const scan=object?.nativeAppearance;
+      this.batchVert(x0,y0,u0,v0,unit,effect,tl,meta,colorSubtract,scan?.[0]??null);this.batchVert(x1,y1,u0,v1,unit,effect,bl,meta,colorSubtract,scan?.[1]??null);
+      this.batchVert(x2,y2,u1,v1,unit,effect,br,meta,colorSubtract,scan?.[2]??null);this.batchVert(x0,y0,u0,v0,unit,effect,tl,meta,colorSubtract,scan?.[0]??null);
+      this.batchVert(x2,y2,u1,v1,unit,effect,br,meta,colorSubtract,scan?.[2]??null);this.batchVert(x3,y3,u1,v0,unit,effect,tr,meta,colorSubtract,scan?.[3]??null);
       this.onBatch(object);return flushed;
     }
     batchTri(object,x0,y0,x1,y1,x2,y2,u0,v0,u1,v1,t0,t1,t2,effect,texture,unit=this.currentUnit){
