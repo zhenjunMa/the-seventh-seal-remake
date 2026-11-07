@@ -1,0 +1,27 @@
+remake/assessment/validation_design.md
+  s_28ff24ad124c95::t_6fa8951d2b288d 25
+remake/runtime/tests/test_battle_lifecycle_core.mjs
+  s_28ff24ad124c95::t_6fa8951d2b288d 60,63-64,68
+remake/runtime/architecture.md
+  s_28ff24ad124c95::t_6fa8951d2b288d 110
+remake/runtime/tests/test_battle_scheduler.mjs
+  s_28ff24ad124c95::t_6fa8951d2b288d 144
+remake/runtime/web/core/battle_scheduler.mjs
+  s_28ff24ad124c95::t_6fa8951d2b288d 26-27
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "01fe5928e410aa0a1d6f22230a9086c87f7c4d98",
+  "prompts": {},
+  "sessions": {
+    "s_28ff24ad124c95": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a19f5f-e4f6-73a1-b660-84e8a218835f",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}

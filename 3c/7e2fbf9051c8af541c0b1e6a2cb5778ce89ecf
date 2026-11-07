@@ -1,0 +1,25 @@
+remake/runtime/web/core/combat.mjs
+  s_d5ade6f47f205d::t_f4d727a7639fb4 324-342
+remake/assessment/validation_design.md
+  s_d5ade6f47f205d::t_94b10d04e81c00 25
+remake/runtime/architecture.md
+  s_d5ade6f47f205d::t_94b10d04e81c00 108
+remake/runtime/web/battle_menu_view.mjs
+  s_d5ade6f47f205d::t_f4d727a7639fb4 70-73,147-151,153,238-239
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "3c7e2fbf9051c8af541c0b1e6a2cb5778ce89ecf",
+  "prompts": {},
+  "sessions": {
+    "s_d5ade6f47f205d": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a490-502e-73d3-8a03-5a7a30d6d70c",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}

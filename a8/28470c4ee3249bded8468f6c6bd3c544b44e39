@@ -1,0 +1,27 @@
+remake/assessment/validation_design.md
+  s_538656160dfb83::t_897cc45b8b2f32 45
+  s_538656160dfb83::t_8cc1ca22cc6f54 1-44,46-93
+README.md
+  s_538656160dfb83::t_79e50c71e2ecce 5,33,57
+remake/assessment/testing_strategy.md
+  s_538656160dfb83::t_79e50c71e2ecce 53
+remake/local_materials.md
+  s_538656160dfb83::t_79e50c71e2ecce 51-60,63,67
+  s_538656160dfb83::t_1f6b289662f1d5 1-50,61-62,64-66,68-69
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "a828470c4ee3249bded8468f6c6bd3c544b44e39",
+  "prompts": {},
+  "sessions": {
+    "s_538656160dfb83": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a19ba2-914a-7d80-ae8c-9ac291bee231",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
