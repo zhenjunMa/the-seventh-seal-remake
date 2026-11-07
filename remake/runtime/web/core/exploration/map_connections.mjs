@@ -1,7 +1,33 @@
 // Connections derive from DAT descriptors and markers, never substitute coordinates.
 import {runtimeContent,storyBindings} from '../content/content_registry.mjs';
 import {nativeMapIdFromFilename} from './native_map_identity.mjs';
+import {bytes,view} from '../content/native_bytes.mjs';
 const need=(ok,message)=>{if(!ok)throw new Error(`地图接入：${message}`);};
+
+
+// 4A81D0 returns before entering event mode when a state2 target is zero.
+// Only the verified 0x42 descriptor format qualifies; terrain is never changed.
+export function nativeEmptyEventCells(movement,table){
+  const cells=new Set();
+  for(const descriptor of table?.descriptors??[]){
+    if(descriptor.state_raw!==2||descriptor.field_26_raw!==0||descriptor.record_bytes!==0x42)continue;
+    const source=descriptor.source;
+    need(source?.path?.toLowerCase()===movement.source?.toLowerCase()
+      &&source.sha256===movement.source_sha256&&source.sha256===table.map_source?.sha256,
+      '空事件地图来源不一致');
+    const raw=bytes(descriptor.raw_hex,0x42,'空事件描述符');
+    need(raw[0]===2&&view(raw).getUint32(0x26,true)===0,'空事件原目标不一致');
+    for(const cell of descriptor.cells??[]){
+      need(Number.isInteger(cell.x)&&Number.isInteger(cell.y)&&cell.x>=0&&cell.y>=0
+        &&cell.x<movement.width&&cell.y<movement.height
+        &&cell.offset===0x172+(cell.y*movement.width+cell.x)*64
+        &&movement.triggers.some(trigger=>trigger.id===descriptor.id&&trigger.x===cell.x&&trigger.y===cell.y),
+        '空事件原触发格不一致');
+      cells.add(`${cell.x},${cell.y}`);
+    }
+  }
+  return cells;
+}
 
 // 4A81D0 keeps descriptor+2A as the placement sort code. A kind2 TLK
 // replaces the entry marker with record+2F before 4A5110 scans it.

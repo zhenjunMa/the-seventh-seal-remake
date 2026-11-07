@@ -2,6 +2,8 @@ import test from 'node:test';
 import {nativeObjectInteractionNearby, mapWorldPoint, pickMapDialogueObject} from '../web/core/exploration/map_interaction.mjs';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
+import {nativeEmptyEventCells} from '../web/core/exploration/map_connections.mjs';
+import {MovementMap} from '../web/core/exploration/movement.mjs';
 import {drawMapScene} from '../web/map_scene_view.mjs';
 import {WorldStore} from '../web/core/world/world.mjs';
 import {ChapterRunner} from '../web/core/story/chapter_runner.mjs';
@@ -223,4 +225,29 @@ test('map pointer coordinates preserve the logical viewport under zoom, letterbo
   assert.equal(nativeObjectInteractionNearby(object,{x:416,y:400},header.toString('hex')),false);
   header[0x88]=1;
   assert.equal(nativeObjectInteractionNearby(object,{x:446,y:464},header.toString('hex')),true,'loader replaces zero coordinate shift with three');
+});
+
+
+test('formal map preparation leaves source-proven empty events traversable and rejects unverified gates',async()=>{
+  const {state,scene}=await fixture('M72050'),table=state.chapterStory.maps.M72050;
+  const empty=table.descriptors.find(row=>row.id===4),source=scene.data.movement;
+  assert.equal(empty.cells.length,19);
+  assert.ok(!scene.data.story_triggers.some(row=>row.id===4),'an empty target never starts a story');
+  for(const {x,y} of empty.cells){
+    assert.equal(source.terrain_rows[y][x],'0');
+    assert.equal(scene.movement.cell(x,y).blocked,false);
+  }
+  const changed=structuredClone(table),target=changed.descriptors.find(row=>row.id===4);
+  target.field_26_raw=33;
+  assert.equal(nativeEmptyEventCells(source,changed).size,0,'nonzero unregistered events stay guarded');
+  target.field_26_raw=0;target.raw_hex=target.raw_hex.slice(0,0x26*2)+'01000000'+target.raw_hex.slice(0x2a*2);
+  assert.throws(()=>nativeEmptyEventCells(source,changed),/原目标/);
+  target.raw_hex=empty.raw_hex;target.source.sha256='0'.repeat(64);
+  assert.throws(()=>nativeEmptyEventCells(source,changed),/来源/);
+  target.source.sha256=empty.source.sha256;target.cells[0].offset++;
+  assert.throws(()=>nativeEmptyEventCells(source,changed),/原触发格/);
+  const {x,y}=empty.cells[0],rows=[...source.terrain_rows];
+  rows[y]=rows[y].slice(0,x)+'1'+rows[y].slice(x+1);
+  const keepTerrain=new MovementMap({...source,terrain_rows:rows,triggers:source.triggers.map(row=>({...row,path_gate:false}))});
+  assert.equal(keepTerrain.cell(x,y).reason,'terrain','empty events cannot open original walls');
 });

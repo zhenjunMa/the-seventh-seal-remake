@@ -1513,6 +1513,8 @@ export const definition = {
       ],
       "triggers": [
         3,
+        4,
+        5,
         31
       ]
     },
@@ -2716,6 +2718,9 @@ export const definition = {
         14,
         15,
         20
+      ],
+      "triggers": [
+        4
       ]
     },
     "M72010-1-B": {
@@ -9891,6 +9896,8 @@ export default {
       "path": "data/maps/m01010.json",
       "triggers": [
         3,
+        4,
+        5,
         31
       ],
       "objects": [],
@@ -11544,7 +11551,9 @@ export default {
     },
     "M72010-0-A": {
       "path": "data/maps/m72010-0-a.json",
-      "triggers": [],
+      "triggers": [
+        4
+      ],
       "objects": [],
       "rests": [],
       "routes": [],

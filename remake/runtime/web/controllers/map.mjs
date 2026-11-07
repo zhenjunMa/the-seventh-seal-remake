@@ -10,7 +10,7 @@ import {MapNpcRuntime} from "../core/exploration/map_npcs.mjs";
 import {projectMapStage} from "../core/exploration/map_stage.mjs";
 import {MapObjectRuntime} from "../core/exploration/map_objects.mjs";
 import {storyBindings,registeredRoles} from "../core/content/content_registry.mjs";
-import {chapterRouteExits} from "../core/exploration/map_connections.mjs";
+import {chapterRouteExits,nativeEmptyEventCells} from "../core/exploration/map_connections.mjs";
 import {MapLocomotion,mapMotionProfile,nativeMapMovement} from "../core/exploration/map_locomotion.mjs";
 
 import {mapPresentation} from '../core/ui/map_presentation.mjs';
@@ -62,7 +62,8 @@ export function createMapController({state, actions, $, canvas, ctx}) {
       roles:state.openingResources.roles});
     data.story_triggers=(state.chapterResources.trigger_regions[id]??[]).filter(trigger=>storyBindings(id).triggers.includes(trigger.id));
     const readyCells=new Set([...(data.exits??[]).filter(exit=>exit.state==='ready').flatMap(exit=>exit.cells.map(cell=>`${cell.x},${cell.y}`)),
-      ...data.story_triggers.flatMap(trigger=>trigger.cells.map(cell=>`${cell.x},${cell.y}`))]);
+      ...data.story_triggers.flatMap(trigger=>trigger.cells.map(cell=>`${cell.x},${cell.y}`)),
+      ...nativeEmptyEventCells(data.movement,state.chapterStory.maps[id])]);
     // Unknown trigger handlers must be visible failures, not silent pass-through.
     // The source JSON retains the original gate; this is a runtime coverage guard.
     const movement=new MovementMap({...data.movement,triggers:data.movement.triggers.map(trigger=>
