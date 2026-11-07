@@ -1,0 +1,45 @@
+remake/runtime/web/forest_sample.mjs
+  s_a0a1d255dd1943::t_95d9af6fae4aff 4,16-22,24
+remake/runtime/web/core/battle/battle_controller.mjs
+  s_a0a1d255dd1943::t_bf3b6f78f161f6 379
+remake/runtime/web/phaser/rendering/battle_surface.mjs
+  s_a0a1d255dd1943::t_ad44ad1191af12 5,32,37,66,116-122
+remake/runtime/web/phaser/rendering/battle_transition.mjs
+  s_a0a1d255dd1943::t_bf3b6f78f161f6 33-35,39,105-108
+remake/runtime/web/battle_view.mjs
+  s_a0a1d255dd1943::t_3dfc2f87b599b0 516,623
+  s_a0a1d255dd1943::t_95d9af6fae4aff 15,581
+  s_a0a1d255dd1943::t_14e510cb2be57f 818,820-832,857,859,864-866
+  s_a0a1d255dd1943::t_d1ac7e5e4e3bb5 819
+  s_a0a1d255dd1943::t_9466bbd5e54b39 360,678,684-692,697,706-727,893-894,924,967,980
+  s_a0a1d255dd1943::t_67f0f9023467e4 728-729
+remake/runtime/web/phaser/rendering/xbr_pipeline.mjs
+  s_a0a1d255dd1943::t_9b47e7b3d643dc 47,174-176,182-190,212,219,223,238,243-245,251,271-274
+remake/runtime/web/core/battle/battle_layout.mjs
+  s_a0a1d255dd1943::t_9fbef5a70f2916 25
+  s_a0a1d255dd1943::t_e83d5ace02747b 20-24,26-65,67,71-72
+remake/runtime/web/controllers/battle.mjs
+  s_a0a1d255dd1943::t_bf3b6f78f161f6 208-209
+  s_a0a1d255dd1943::t_9a0b847c90f630 298-312,316
+  s_a0a1d255dd1943::t_379ad59406c98a 313-315
+remake/runtime/web/core/battle/battle_lifecycle.mjs
+  s_a0a1d255dd1943::t_3e12f6e9392ba6 21
+  s_a0a1d255dd1943::t_c56df2eaa5ea1b 27,33,153,155-167,282,300,305-306,324-327
+  s_a0a1d255dd1943::t_94003afaa47964 307
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "7e8f51c2d76553d84bdd056f8a6e8d1054263912",
+  "prompts": {},
+  "sessions": {
+    "s_a0a1d255dd1943": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b640-d4b3-7cc3-892e-4db3f6339a22",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
