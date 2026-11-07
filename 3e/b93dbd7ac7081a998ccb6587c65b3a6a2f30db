@@ -1,0 +1,25 @@
+remake/runtime/web/phaser/rendering/battle_transition.mjs
+  s_a0a1d255dd1943::t_dc7fb459c61ec4 56-65,94-95,125
+remake/runtime/web/controllers/battle.mjs
+  s_a0a1d255dd1943::t_c3850fc9f2f837 48-53,55
+remake/runtime/web/tests/webgl_rendering_checks.mjs
+  s_a0a1d255dd1943::t_2de67dc237275a 9-11,52-53,56-57,61-66,73,78,81
+remake/runtime/web/battle_menu_view.mjs
+  s_a0a1d255dd1943::t_c3850fc9f2f837 98,181
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "3eb93dbd7ac7081a998ccb6587c65b3a6a2f30db",
+  "prompts": {},
+  "sessions": {
+    "s_a0a1d255dd1943": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b640-d4b3-7cc3-892e-4db3f6339a22",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
