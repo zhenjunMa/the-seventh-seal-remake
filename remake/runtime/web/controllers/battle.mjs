@@ -45,11 +45,14 @@ export function createBattleController({host, sessions = createBattleSessions()}
     node.dataset.impactCount=snapshot.impact_count;
     $('battleMessage').textContent=entering?'正在入场':snapshot.phase==='victory'?'战斗胜利':snapshot.phase==='defeat'?'队伍已经倒下':snapshot.phase==='escaped'?'已经逃离战斗':snapshot.phase==='interrupted'?snapshot.error:snapshot.phase==='action'?'正在行动':snapshot.phase==='command'?'选择行动':'行动槽充能中';
     current().battleMenu?.update(snapshot);
-    if(current().scriptedBattleSession){
+    if(snapshot.phase==='escaped'){
+      const frame=current(),battle=frame.battle;
+      queueMicrotask(actions.guarded(()=>{
+        if(current()===frame&&current().battle===battle)return returnFromBattle();
+      }));
+    }else if(current().scriptedBattleSession){
       if(snapshot.phase==='defeat'&&!current().scriptedBattleSession.returnPending)queueMicrotask(actions.guarded(returnFromBattle));
-    }else if(current().skillTestSession){
-      if(snapshot.phase==='escaped'&&!current().skillTestSession.returnPending){current().skillTestSession.returnPending=true;queueMicrotask(actions.guarded(returnFromBattle));}
-    }else if(snapshot.phase==='defeat'&&!current().battleSampleMode)queueMicrotask(actions.guarded(returnFromBattle));
+    }else if(!current().skillTestSession&&snapshot.phase==='defeat'&&!current().battleSampleMode)queueMicrotask(actions.guarded(returnFromBattle));
   }
   function battleKey(key,repeat=false){if(current().battleEntryPending||host.phase==='battle-entry')return true;return current().battleMenu?.key(key,repeat)??false;}
   function battleKeyUp(key){current().battleMenu?.keyup(key);}

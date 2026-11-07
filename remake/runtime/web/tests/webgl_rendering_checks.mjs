@@ -6,6 +6,9 @@ const assert=(condition,message)=>{if(!condition)throw new Error(message);};
 const pixel=(renderer,x,y)=>{const data=new Uint8Array(4),scale=renderer.width/640;
   renderer.gl.readPixels(Math.floor((x+.5)*scale),renderer.height-1-Math.floor((y+.5)*scale),1,1,renderer.gl.RGBA,renderer.gl.UNSIGNED_BYTE,data);return [...data];};
 const near=(actual,expected)=>actual.every((value,index)=>Math.abs(value-expected[index])<=1);
+const nonBlackRows=(renderer,x)=>{const gl=renderer.gl,data=new Uint8Array(renderer.height*4),scale=renderer.width/640;
+  gl.readPixels(Math.floor((x+.5)*scale),0,1,renderer.height,gl.RGBA,gl.UNSIGNED_BYTE,data);
+  let rows=0;for(let at=0;at<data.length;at+=4)if(data[at]+data[at+1]+data[at+2]>3)rows++;return rows;};
 const flush=game=>{const r=game.renderer;r.preRender();game.scene.render(r);r.postRender();};
 async function until(test,message){for(let count=0;!test();count++){assert(count<180,message);await frame();}}
 
@@ -46,27 +49,36 @@ export async function checkWebglRendering(runtime,record){
   assert([...surface.textures.entries].every(entry=>entry.source.width<=2048),'上传了未分页的超长图集');
   surface.beginFrame();for(const entry of [...surface.textures.entries])surface.textures.remove(entry);surface.endFrame();
   record('粒子小数缩放、GL 状态隔离及 8360 像素图集的按帧裁切通过');
-  for(let kind=0;kind<7;kind++){
+  const white=runtime.transitions.scene.textures.getFrame('__WHITE'),whiteSize=[white.glTexture.width,white.glTexture.height];
+  for(const kind of [0,1,2,3,4,5,6,5,6]){
     runtime.setPhase('battle-loading');const held=runtime.battle.clock.time;
     paint([50,90,140],[140,90,50]);const before=runtime.captureTexture('battle');let draws=0,shaderFailure=null,preparing=false,releasePreparation;
-    const preparation=new Promise(resolve=>{releasePreparation=resolve;}),count=[16,64,16,16,20,30,20][kind];
+    const preparation=new Promise(resolve=>{releasePreparation=resolve;}),count=[16,64,16,16,20,30,20][kind];let firstRows,seed=7;
+    const random=kind===5?()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/0x100000000;}:()=>.5;
     const clock={time:0,requestFrame(callback){let stopped=false;requestAnimationFrame(()=>{if(stopped)return;runtime.flush();
       if(draws===0&&preparing)shaderFailure=new Error('资源准备阻塞了转场首帧');
       if(draws===0&&kind===1&&!near(pixel(runtime.game.renderer,20,20),[66,98,156,255]))shaderFailure=new Error(`白闪着色器方向／颜色错误：${pixel(runtime.game.renderer,20,20)}`);
+      if(kind===5&&draws===0){firstRows=nonBlackRows(runtime.game.renderer,320);
+        if(firstRows<=runtime.game.renderer.height*.7||firstRows>=runtime.game.renderer.height)shaderFailure=new Error('逐行消隐首帧没有保留大部分地图或未开始逐行变化');}
+      if(kind===5&&draws===6){const rows=nonBlackRows(runtime.game.renderer,320);
+        if(rows<=0||rows>=firstRows)shaderFailure=new Error('逐行消隐中间帧没有继续移除地图行');}
+      if(kind===6&&draws===0&&(!near(pixel(runtime.game.renderer,20,20),[0,0,0,255])||!near(pixel(runtime.game.renderer,620,20),[50,90,140,255])))shaderFailure=new Error('逐行滑动首帧没有移动地图');
+      if(kind===6&&draws===6&&(!near(pixel(runtime.game.renderer,100,20),[0,0,0,255])||!near(pixel(runtime.game.renderer,500,20),[50,90,140,255])))shaderFailure=new Error('逐行滑动中间帧没有继续移动地图');
       if(draws===count+3){
         if(!preparing||!runtime.transitions.active||runtime.transitions.frame!==(kind===1?31:count-1))shaderFailure=new Error(`转场 ${kind} 没有在慢加载期间推进并等待战场`);
         if(runtime.battle.clock.time!==held)shaderFailure=new Error('资源准备期间战斗时钟提前运行');
         releasePreparation();
       }
       draws++;clock.time+=250;callback(clock.time);});return {cancel(){stopped=true;}};}};
-    await runtime.transitions.run(before,async signal=>{preparing=true;await preparation;signal.throwIfAborted();paint([20,40,60],[60,40,20]);return runtime.captureTexture('battle');},{kind,random:()=>.5,clock});
+    await runtime.transitions.run(before,async signal=>{preparing=true;await preparation;signal.throwIfAborted();paint([20,40,60],[60,40,20]);return runtime.captureTexture('battle');},{kind,random,clock});
     if(shaderFailure)throw shaderFailure;
     assert(!runtime.transitions.active&&!runtime.snapshots.size,'转场未清理 GPU 快照');
     runtime.flush();assert(near(pixel(runtime.game.renderer,20,20),[20,40,60,255]),`转场 ${kind} 未完整显露战场`);
     assert(draws>0,'转场没有播放逻辑帧');
+    assert(white.glTexture.width===whiteSize[0]&&white.glTexture.height===whiteSize[1],'转场清理污染了共享白纹理的尺寸');
   }
   runtime.setPhase('battle-active');
-  record('七种 GPU 入战转场：首帧先显示、慢加载并行／等待、战斗时钟冻结、结束画面及快照释放通过');
+  record('七种 GPU 入战转场：逐行效果首帧／中间帧像素、重复切换、共享纹理保持、慢加载等待、战斗时钟冻结及快照释放通过');
   const menu=document.createElement('div');menu.className='operation-frame';
   menu.style.cssText='position:absolute;left:0;top:0;width:640px;height:480px;transform:none';stage.append(menu);
   const background=document.createElement('canvas');background.width=640;background.height=480;

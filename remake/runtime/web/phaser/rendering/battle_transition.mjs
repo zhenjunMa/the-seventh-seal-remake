@@ -53,7 +53,16 @@ export class GpuBattleTransition {
     const shader=new globalThis.Phaser.Display.BaseShader('seal-transition',fragment,undefined,{frame:{type:'1f',value:0},kind:{type:'1f',value:1},battleReady:{type:'1f',value:0}});
     this.shader=scene.add.shader(shader,320,240,640,480,['__WHITE','__WHITE','__WHITE']).setDepth(1).setVisible(false);
   }
-  clearShader(){this.shader.setVisible(false).setChannel0('__WHITE').setChannel1('__WHITE').setChannel2('__WHITE');}
+  bindChannel(index,key){
+    // Shader defaults to REPEAT, which makes the 1x480 row table incomplete
+    // in WebGL1. Keep its exact byte values with clamped nearest sampling.
+    // Use fresh options: setSampler2DBuffer adds snapshot dimensions in place;
+    // carrying them into __WHITE would resize and clear the shared texture.
+    this.shader.setSampler2D(`iChannel${index}`,key,index,{
+      repeat:false,wrapS:'clamp_to_edge',wrapT:'clamp_to_edge',minFilter:'nearest',magFilter:'nearest',
+    });
+  }
+  clearShader(){this.shader.setVisible(false);for(let index=0;index<3;index++)this.bindChannel(index,'__WHITE');}
   capture(source){if(!source?.gpuTexture)throw new Error('入战转场需要 GPU 场景纹理');return source;}
   async run(before,paintBattle,{kind,random=Math.random,clock=this.runtime.clock,log,signal,onCovered,startedAt=performance.now()}={}){
     if(!Number.isInteger(kind)||kind<0||kind>6)throw new Error('入战转场类型无效');
@@ -82,7 +91,8 @@ export class GpuBattleTransition {
         if(kind===5)for(let step=0;step<30;step++)for(let y=0;y<480;y++)if(onset[y]===255&&Math.floor(random()*10)===8)onset[y]=step;
         for(let y=0;y<480;y++){bytes[y*4]=kind===6?speeds[y]:onset[y];bytes[y*4+3]=255;}
         const rowKey=`seal:transition-rows:${epoch}`;scene.textures.addUint8Array(rowKey,bytes,1,480).setFilter(1);textures.push(rowKey);
-        effect=this.shader.setVisible(true).setChannel0(before.key).setChannel1('__WHITE').setChannel2(rowKey).setUniform('kind.value',kind).setUniform('battleReady.value',0);
+        effect=this.shader.setVisible(true).setUniform('kind.value',kind).setUniform('battleReady.value',0);
+        this.bindChannel(0,before.key);this.bindChannel(1,'__WHITE');this.bindChannel(2,rowKey);
       }
       if(effect!==this.shader)objects.push(effect);
       const paint=frame=>{
@@ -112,7 +122,7 @@ export class GpuBattleTransition {
               try{check();}catch(error){snapshot?.destroy?.();throw error;}
               after=snapshot;this.capture(after);
               objects.push(scene.add.image(0,0,after.key).setOrigin(0).setDisplaySize(640,480));
-              if(effect===this.shader)effect.setChannel1(after.key).setUniform('battleReady.value',1);
+              if(effect===this.shader){this.bindChannel(1,after.key);effect.setUniform('battleReady.value',1);}
               prepared=true;
             }).catch(reject);
           }

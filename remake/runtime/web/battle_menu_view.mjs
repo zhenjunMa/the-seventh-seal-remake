@@ -95,7 +95,7 @@ export class BattleMenuView{
     }
     this.syncPlayers();this.syncWheel();this.syncList();this.syncTargets();
     this.actorLayer.hidden=this.targetLayer.hidden=Boolean(this.resultView?.active);
-    this.returnButton.hidden=this.stage!=='result'||Boolean(this.resultView?.active)||Boolean(this.resultPreparing)||snapshot.phase==='defeat'&&this.autoReturnOnDefeat;this.returnButton.disabled=false;this.returnButton.textContent=this.returnLabel??(snapshot.phase==='defeat'&&this.autoReturnOnDefeat?'返回主菜单':'返回地图');
+    this.returnButton.hidden=this.stage!=='result'||snapshot.phase==='escaped'||Boolean(this.resultView?.active)||Boolean(this.resultPreparing)||snapshot.phase==='defeat'&&this.autoReturnOnDefeat;this.returnButton.disabled=false;this.returnButton.textContent=this.returnLabel??(snapshot.phase==='defeat'&&this.autoReturnOnDefeat?'返回主菜单':'返回地图');
     if((changed||this.needsFocus)&&this.available()){this.needsFocus=false;(this.stage==='actors'?this.players.get(snapshot.player_id):this.wheelButtons[this.focusIndex])?.focus({preventScroll:true});}
   }
   openResult(snapshot){
@@ -178,7 +178,7 @@ export class BattleMenuView{
     if(this.resultPreparing)return true;
     if(this.resultView?.active)return this.resultView.key(key,repeat);
     if(this.disposed)return false;if(['Enter',' ','Escape'].includes(key)&&repeat)return true;
-    if(this.autoReturnOnDefeat&&this.snapshot?.phase==='defeat')return true;
+    if(this.snapshot?.phase==='escaped'||this.autoReturnOnDefeat&&this.snapshot?.phase==='defeat')return true;
     if(key==='Escape'){this.escape();return true;}if(key==='Tab'||key==='x'||key==='z'){this.cycleActor(key==='z'?-1:1);return true;}
     if(!['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Enter',' '].includes(key))return false;
     if(this.stage==='skills'&&this.skillListKey(key))return true;
