@@ -127,7 +127,21 @@ def export():
             record["header_bytes_2_to14_raw"] = raw[2:15].hex()
         descriptors = []
         table = dat["fixed_sections"][1]
-        for entry in table["nonzero_records"]:
+        entries = {entry["id"]: entry for entry in table["nonzero_records"]}
+        # A source cell may reference an entirely zero descriptor. Retain its
+        # exact bytes so runtime admission can distinguish an empty native
+        # event from an unknown or missing handler, without changing terrain.
+        for descriptor_id in dat["trigger_cells"]:
+            descriptor_id = int(descriptor_id)
+            if not 1 <= descriptor_id <= 32:
+                raise ValueError("Original descriptor reference is outside its table")
+            if descriptor_id not in entries:
+                offset = table["offset"] + (descriptor_id - 1) * table["record_bytes"]
+                entry = data[offset:offset + table["record_bytes"]]
+                if len(entry) != table["record_bytes"]:
+                    raise ValueError("Original referenced descriptor is truncated")
+                entries[descriptor_id] = dict(id=descriptor_id, offset=offset, raw_hex=entry.hex())
+        for entry in sorted(entries.values(), key=lambda entry: entry["id"]):
             raw = bytes.fromhex(entry["raw_hex"])
             compact = table["record_bytes"] == 0x2B
             assert compact or table["record_bytes"] == 0x42

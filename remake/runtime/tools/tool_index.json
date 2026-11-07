@@ -1,7 +1,7 @@
 {
   "schema": "seventh-seal-tool-index",
   "version": 1,
-  "updated": "2026-11-06",
+  "updated": "2026-11-07",
   "registered_steps": 58,
   "content_plan": [
     "chapter-maps",
@@ -45,6 +45,12 @@
     {
       "path": "append_builtin_glyphs.py",
       "role": "independent-source-export",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "audit_content_coverage.py",
+      "role": "independent-source-audit",
       "build_targets": [],
       "imported_by": []
     },

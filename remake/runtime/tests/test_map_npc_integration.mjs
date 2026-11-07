@@ -229,25 +229,34 @@ test('map pointer coordinates preserve the logical viewport under zoom, letterbo
 
 
 test('formal map preparation leaves source-proven empty events traversable and rejects unverified gates',async()=>{
-  const {state,scene}=await fixture('M72050'),table=state.chapterStory.maps.M72050;
-  const empty=table.descriptors.find(row=>row.id===4),source=scene.data.movement;
-  assert.equal(empty.cells.length,19);
-  assert.ok(!scene.data.story_triggers.some(row=>row.id===4),'an empty target never starts a story');
-  for(const {x,y} of empty.cells){
-    assert.equal(source.terrain_rows[y][x],'0');
-    assert.equal(scene.movement.cell(x,y).blocked,false);
+  for(const [mapId,descriptorId,count]of [['M72050',4,19],['M72064',2,6]]){
+    const {state,scene}=await fixture(mapId),table=state.chapterStory.maps[mapId];
+    const empty=table.descriptors.find(row=>row.id===descriptorId),source=scene.data.movement;
+    assert.equal(empty.cells.length,count);
+    assert.ok(!scene.data.story_triggers.some(row=>row.id===descriptorId),'an empty target never starts a story');
+    for(const {x,y} of empty.cells){
+      assert.equal(source.terrain_rows[y][x],'0');
+      assert.equal(scene.movement.cell(x,y).blocked,false);
+    }
+    const changed=structuredClone(table),target=changed.descriptors.find(row=>row.id===descriptorId);
+    if(empty.state_raw===2){
+      target.field_26_raw=33;
+      assert.equal(nativeEmptyEventCells(source,changed).size,0,'nonzero unregistered events stay guarded');
+      target.field_26_raw=0;target.raw_hex=target.raw_hex.slice(0,0x26*2)+'01000000'+target.raw_hex.slice(0x2a*2);
+    }else{
+      assert.equal(empty.raw_hex,'00'.repeat(0x42),'the referenced all-zero descriptor survives export');
+      target.filename_raw='m72061.dat';
+      assert.equal(nativeEmptyEventCells(source,changed).size,0,'nonempty unregistered transfers stay guarded');
+      target.filename_raw='';target.raw_hex=target.raw_hex.slice(0,0x11*2)+'6d'+target.raw_hex.slice(0x12*2);
+    }
+    assert.throws(()=>nativeEmptyEventCells(source,changed),/原目标/);
+    target.raw_hex=empty.raw_hex;target.source.sha256='0'.repeat(64);
+    assert.throws(()=>nativeEmptyEventCells(source,changed),/来源/);
+    target.source.sha256=empty.source.sha256;target.cells[0].offset++;
+    assert.throws(()=>nativeEmptyEventCells(source,changed),/原触发格/);
+    const {x,y}=empty.cells[0],rows=[...source.terrain_rows];
+    rows[y]=rows[y].slice(0,x)+'1'+rows[y].slice(x+1);
+    const keepTerrain=new MovementMap({...source,terrain_rows:rows,triggers:source.triggers.map(row=>({...row,path_gate:false}))});
+    assert.equal(keepTerrain.cell(x,y).reason,'terrain','empty events cannot open original walls');
   }
-  const changed=structuredClone(table),target=changed.descriptors.find(row=>row.id===4);
-  target.field_26_raw=33;
-  assert.equal(nativeEmptyEventCells(source,changed).size,0,'nonzero unregistered events stay guarded');
-  target.field_26_raw=0;target.raw_hex=target.raw_hex.slice(0,0x26*2)+'01000000'+target.raw_hex.slice(0x2a*2);
-  assert.throws(()=>nativeEmptyEventCells(source,changed),/原目标/);
-  target.raw_hex=empty.raw_hex;target.source.sha256='0'.repeat(64);
-  assert.throws(()=>nativeEmptyEventCells(source,changed),/来源/);
-  target.source.sha256=empty.source.sha256;target.cells[0].offset++;
-  assert.throws(()=>nativeEmptyEventCells(source,changed),/原触发格/);
-  const {x,y}=empty.cells[0],rows=[...source.terrain_rows];
-  rows[y]=rows[y].slice(0,x)+'1'+rows[y].slice(x+1);
-  const keepTerrain=new MovementMap({...source,terrain_rows:rows,triggers:source.triggers.map(row=>({...row,path_gate:false}))});
-  assert.equal(keepTerrain.cell(x,y).reason,'terrain','empty events cannot open original walls');
 });

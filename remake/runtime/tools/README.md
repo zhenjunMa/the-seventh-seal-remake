@@ -127,6 +127,18 @@ node remake/runtime/tools/check_content.mjs --json
 
 ## 来源查询
 
+### 全游戏入口覆盖审计
+
+`audit_content_coverage.py`独立读取原安装全部DAT／TLK／ANM，再比较当前登记与运行来源；不以已登记地图限定扫描范围。它复用固定GAME SHA及`native_entry_contract.json`中的原字节锚点，展开条件、选项、随机、ANM分支／换图／回调，包含独立序章、直接机关、物件完成回调和NPC附加／路线点回调。原版无TLK的悬空指针、空事件、无触发格描述符和非NPC索引分别记录。
+
+```console
+python3 -B remake/runtime/tools/audit_content_coverage.py --original-dir original_downloads/game/DiQiFengYin --check-runtime --output remake/runtime/evidence/source_coverage_20261107/audit.json
+```
+
+不指定`--output`只输出摘要；指定时拒绝覆盖已有报告。`audit_complete`表示盘点执行完成，`source_coverage_passed`表示来源入口／字节对照无缺口；`passed`还要求空事件通行差集为零，存在已知通行问题时退出1并保留完整报告。`--check-runtime`另执行现有能力准入及剧情包过期检查。原程序SHA变化时拒绝沿用分派结论；来源分类不等于原作者确认废弃，不删除原文件，也不替代玩法与自然实玩验收。
+
+### 区域来源索引
+
 区域来源索引独立于运行登记。用下表目标生成，对应`export_<区域>_index.py --check`核来源和产物；查询共用`--query`、`--map`、`--flag`、`--limit`。
 
 | 区域 | 构建目标 | 导出脚本 |
