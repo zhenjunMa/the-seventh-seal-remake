@@ -1,4 +1,4 @@
-"""从构建声明同步文档清单；--check 只检查，不执行导出或写入证据。"""
+"""从构建声明同步工具索引；--check 只检查，不执行导出。"""
 from pathlib import Path
 from datetime import datetime, timedelta, timezone
 import argparse
@@ -12,9 +12,6 @@ from build_runtime import STEPS, plan
 
 TOOLS = Path(__file__).resolve().parent
 INDEX = TOOLS / 'tool_index.json'
-README = TOOLS / 'README.md'
-BEGIN = '<!-- 自动生成：构建目标开始 -->'
-END = '<!-- 自动生成：构建目标结束 -->'
 
 
 def generated_files():
@@ -38,18 +35,8 @@ def generated_files():
     if index != json.loads(INDEX.read_text(encoding='utf-8')):
         index['updated'] = datetime.now(timezone(timedelta(hours=8))).date().isoformat()
 
-    readme = README.read_text(encoding='utf-8')
-    if readme.count(BEGIN) != 1 or readme.count(END) != 1:
-        raise ValueError('README.md 必须有唯一的构建清单起止标记')
-    before, rest = readme.split(BEGIN)
-    _, after = rest.split(END)
-    lines = ['| 构建目标 | 工具 | 直接依赖 |', '| --- | --- | --- |']
-    for name, step in STEPS.items():
-        depends = '、'.join(f'`{dependency}`' for dependency in step.depends) or '无声明依赖'
-        lines.append(f'| `{name}` | [{step.tool}]({step.tool}) | {depends} |')
     return {
         INDEX: json.dumps(index, ensure_ascii=False, indent=2) + '\n',
-        README: before + BEGIN + '\n\n' + '\n'.join(lines) + '\n\n' + END + after,
     }
 
 
@@ -57,13 +44,13 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--check', action='store_true', help='只读核对生成内容是否与构建代码一致')
     args = parser.parse_args()
-    # 先准备全部内容，避免索引或文档有误时只写入一部分。
+    # 先核对工具分类和构建声明，再写入派生字段。
     files = generated_files()
     changed = [path for path, value in files.items() if path.read_text(encoding='utf-8') != value]
     if args.check:
         if changed:
-            parser.exit(1, '构建文档待同步：' + '、'.join(path.name for path in changed) + '\n')
-        print('构建文档一致：目标数量、content 计划、工具目标和依赖清单均通过。')
+            parser.exit(1, '工具索引待同步：' + '、'.join(path.name for path in changed) + '\n')
+        print('工具索引一致：工具分类、目标数量、content 计划和工具目标均通过。')
         return
     for path in changed:
         newline = '\r\n' if b'\r\n' in path.read_bytes() else '\n'

@@ -83,7 +83,7 @@
       "role": "daily-entry",
       "build_targets": [],
       "imported_by": [
-        "sync_tool_docs.py"
+        "sync_tool_index.py"
       ]
     },
     {
@@ -1261,7 +1261,7 @@
       ]
     },
     {
-      "path": "sync_tool_docs.py",
+      "path": "sync_tool_index.py",
       "role": "daily-entry",
       "build_targets": [],
       "imported_by": []
@@ -1506,59 +1506,5 @@
   "notes": [
     "Classification is navigation; independent source exporters still require their declared original inputs and retained evidence.",
     "Production source decoders live in tools/source; prototype may reuse them but production does not depend on experiments."
-  ],
-  "retired_documents": [
-    {
-      "path": "remake/assessment/assessment.txt",
-      "sha256": "81349dfb6f856d818c3cb4dfd4cd97188fed88d3ded8df63980173b318ef8a0a",
-      "replacement": "remake/assessment/validation_design.md",
-      "recovery_commit": "0f1975c7d1ef122faf3ee2034450f3ee24172e3b"
-    },
-    {
-      "path": "remake/assessment/minimal_validation_next_20261011.txt",
-      "sha256": "72f639cecd7b7f477cc8483a81f05a3cbda58eabac49caa8a8b7df68e0a37d4b",
-      "replacement": "remake/assessment/validation_design.md",
-      "recovery_commit": "0f1975c7d1ef122faf3ee2034450f3ee24172e3b"
-    },
-    {
-      "path": "remake/assessment/runtime_config_20261011.txt",
-      "sha256": "94021442d0bcda91f7445a64a4d7dc9c818519df9ef0fed6b78781d90947910d",
-      "replacement": "remake/runtime/config_guide.md",
-      "recovery_commit": "0f1975c7d1ef122faf3ee2034450f3ee24172e3b"
-    },
-    {
-      "path": "remake/prototype/rules_probe.md",
-      "sha256": "bb1a2f9b1fde2f223d39ac4b42c357cf1200f0789521feb3495c5b08909810b5",
-      "replacement": "remake/runtime/architecture.md",
-      "recovery_commit": "20b1e1e8bb1c1918296562afca251eff04c53e9a"
-    },
-    {
-      "path": "remake/runtime/skill_config_guide.txt",
-      "sha256": "3e30039dc7fcc5173a73ebe2b71a9b9d5259069bd0c13fafdaeba6ba82b95363",
-      "replacement": "remake/runtime/config_guide.md",
-      "recovery_commit": "20b1e1e8bb1c1918296562afca251eff04c53e9a"
-    },
-    {
-      "path": "remake/README.md",
-      "sha256": "eb23e841b2b86fa783d0b51d8b492f8bda10788679fc4f408aac323b830a4769",
-      "replacement": "README.md",
-      "recovery_commit": "196b1c1b0ba6dbf55635391c3512b61149e2caa9"
-    },
-    {
-      "path": "remake/assessment/menu_alignment_workflow.md",
-      "sha256": "c8424eade72736286b864913afbbe139b724c17a054a22a107ff781c26567a03",
-      "replacement": "remake/assessment/testing_strategy.md",
-      "recovery_commit": "196b1c1b0ba6dbf55635391c3512b61149e2caa9"
-    },
-    {
-      "path": "remake/runtime/README.md",
-      "sha256": "407de67fa7ee4d6074017a10443fbd9607c2acb653c93f468a890b3390bf2eb8",
-      "replacement": "README.md",
-      "recovery_commit": "52da0e8e5ea4d09b338e18e2a3f65b195d88a141",
-      "local_snapshot": {
-        "path": "remake/archive/20261029_runtime_readme_removal/README.md",
-        "sha256": "d46a06204bcc3ec0dc9b32a6438e6b0cd74c47f9b323e1962f300973fd969476"
-      }
-    }
   ]
 }

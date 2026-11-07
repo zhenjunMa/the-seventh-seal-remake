@@ -472,7 +472,7 @@ def main():
             original_game_execution_observed=False),
         limits=['技能接入范围以runtime_content.json为准；保留完整CHR技能用于来源核对，不表示全部技能已实现。',
                 '登记未学习技能不会自动解锁；开发样本的显式技能授予只作用于该样本。',
-                '七槽绑定、组合编辑与执行复用已接入技能；原type0及空白记录保留来源资格。当前验收范围见remake/assessment/validation_design.md。']))
+                '七槽绑定、组合编辑与执行复用已接入技能；原type0及空白记录保留来源资格。项目说明见仓库根README.md。']))
     reactions = read(WEB / 'data/enemy_reactions.json')
     reactions['roles'].update(roles)
     reactions['source_hashes'].update({p: sources[p] for p in original_paths if p.endswith('.CHR')})

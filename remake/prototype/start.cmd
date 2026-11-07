@@ -7,7 +7,7 @@ if errorlevel 1 (
   if exist "D:\game\youchenghuanjianlu\toolchain\python\python.exe" (
     set "SEAL_PREVIEW_PYTHON=D:\game\youchenghuanjianlu\toolchain\python\python.exe"
   ) else (
-    echo Python is not available. See README.md.
+    echo Python is not available. See ..\..\README.md.
     pause
     exit /b 1
   )

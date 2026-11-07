@@ -1,83 +1,99 @@
 # The Seventh Seal Remake
 
-《第七封印》重制项目。仓库保存浏览器游戏代码、接入配置、自定义参数、结构配方、内置位图字库和工具；原作文本、原始记录、大型运行数据及图片、音乐、影片由使用者从自己的原版安装中提取生成。
+## 项目介绍
 
-当前代码使用随仓库提供的 Phaser 3.90.0 和 WebGL 渲染，包含探索、剧情、战斗、操作菜单和存读档。已接入范围、剩余支线、工程待办与验收边界，统一见[当前开发计划](remake/assessment/validation_design.md)。
+《第七封印》的个人非官方重制项目，在浏览器中重现原作的地图探索、剧情演出、即时战斗、队伍成长、装备合成与存读档。
 
-## 本地运行
+目前主线、支线及游戏系统已完成接入，主线流程已接通至结局；接下来通过正常成长路线的全流程实际试玩验证体验与流程。
 
-首次准备需要 Python 3.12 或更新版本、Node.js、FFmpeg 和 FFprobe。从仓库根目录安装固定 Python 依赖，然后指定完整原版安装目录：
+仓库提供重制代码、内容配置、数据结构配方和内置字库。运行所需的原作文本、地图数据、图片、音乐和影片，须从自己合法取得的原版安装中导出。
 
-```console
-python3 -m venv .venv
-.venv/bin/python -m pip install -r remake/runtime/requirements.txt
-.venv/bin/python -B remake/runtime/tools/build_runtime.py --target media --original-dir "/path/to/DiQiFengYin" --run --serve
+## 架构
+
+```text
+原版安装（只读）＋数据结构配方
+              ↓ Python 导出工具
+      运行数据 web/data/ ＋ 媒体 web/assets/
+              ↓
+ JavaScript 游戏规则与控制器 → Phaser 3 / WebGL 画面
+              ↕
+       Python 本地服务 → remake/saves/ 存档
 ```
 
-首次构建先按结构配方从原版还原文本、原始记录和运行表，再生成媒体及素材清单；不依赖历史台账、观察存档或 Windows GDI。自定义的 `web/data/config/` 和接入配置保持原值，技能优化在原版默认值之上继续生效。默认先按已提交的 `media_inputs.json` 核对原版来源，缺失、内容变化或多出素材都会拒绝导出。`--ignore-fingerprint` 可放行整体来源清单差异，但运行数据实际引用的原字节及重建结果仍须与配方一致。已完成且通过指纹核验的输出会复用。构建完成后在 <http://127.0.0.1:8767/> 开玩。
+游戏使用随仓库提供的 Phaser 3.90.0，以 640×480 为逻辑分辨率。探索、剧情、战斗和菜单共用世界状态；剧情由统一的 StoryFlow 执行，事件与奖励通过事务提交。规则、流程和显示分别维护，画面对象不保存游戏进度。
 
-仅准备文本和运行数据、不提取图片音视频时，使用同一命令并将目标改为 `--target data`。不加 `--run` 只读检查并列计划；正常启动仍须完成完整素材构建。
-
-维护者确认一份完整原版可作为新基准后，可单独执行以下命令。它只更新来源指纹清单，不导出素材或重生成规则，不能与 `--run` 同用：
-
-```console
-.venv/bin/python -B remake/runtime/tools/build_runtime.py --original-dir "/path/to/DiQiFengYin" --write-reference
-```
-
-后续启动无需再次提供原版目录：
-
-```console
-.venv/bin/python -B remake/runtime/serve.py
-```
-
-Windows 将 `.venv/bin/python` 换成 `.venv\Scripts\python.exe`；已有媒体时也可双击 `remake/start.cmd`。存档目录仍为 `remake/saves/`，普通档使用原版 `SaveGame0.Dat`～`SaveGame19.Dat`，快速档使用 `Game.SAV`。可读取原版普通档与快速档，保存也使用原版二进制格式；JSON存档不再读取。具体操作以游戏内提示为准。
-
-没有媒体时，可访问 <http://127.0.0.1:8767/phaser-preview.html>，用示意图检查探索、缩放和战斗。预览不读写正式存档，其结果不代表原作画面或主线验收。
-
-完成数据提取后，代码与运行定义预检查需要 Node.js；该检查不要求已有图片音视频：
-
-```console
-node remake/runtime/tools/verify_phaser.mjs
-```
-
-素材齐全时加 `--assets` 核对资源存在性、已声明指纹和尺寸。环境依赖、增量构建和验收命令见[工具说明](remake/runtime/tools/README.md)。
-
-## 文档入口与维护分工
-
-| 要做的事 | 唯一说明入口 |
-| --- | --- |
-| 查已接入范围、剩余支线与验收边界 | [当前开发计划](remake/assessment/validation_design.md) |
-| 理解模块、状态、事务和时钟 | [实现架构](remake/runtime/architecture.md) |
-| 调整数值，接入角色、技能、怪物 | [配置与内容登记](remake/runtime/config_guide.md) |
-| 接入地图、NPC、对白与任务 | [剧情指南](remake/runtime/story_guide.md) |
-| 盘点新区、选择阶段、核对交接 | [区域重制方法](remake/assessment/region_remake_workflow.md) |
-| 选择检查范围、核对界面和动态表现 | [测试与验收规范](remake/assessment/testing_strategy.md) |
-| 构建、导出、排错、旧环境升级 | [工具说明](remake/runtime/tools/README.md) |
-| 分析原版存档、背包和装备 | [存档分析工具](remake/runtime/tools/README.md#原版存档分析) |
-| 准备媒体、来源证据和恢复旧资料 | [本地资料](remake/local_materials.md) |
-| 使用早期演示与定向检查 | [实验目录](remake/prototype/README.md) |
-| 修改项目前先读维护约束 | [目录约定](remake/AGENTS.md) |
-
-## 仓库布局
+下表路径以 `remake/runtime/` 为基准。
 
 | 路径 | 职责 |
 | --- | --- |
-| `remake/runtime/web/` | 正式代码、内容登记、自定义配置；生成的运行数据和 `assets/` 媒体不提交 |
-| `remake/runtime/tools/` | 构建、提取、验证；`source/` 为共享原版资源与存档解析、道具初始化模块 |
-| `remake/runtime/tests/` | 自动检查及已提交的辅助代码 |
-| `remake/assessment/` | 当前计划、区域方法、测试规范 |
-| `remake/prototype/` | 复用正式实现的实验页面，正式游戏不依赖它 |
+| `web/app.js`、`web/controllers/` | 启动、输入及各系统流程连接 |
+| `web/core/` | 探索、剧情、战斗、人物、道具与世界状态规则 |
+| `web/phaser/`、`web/*_view.mjs` | 场景、动画、界面、纹理与渲染 |
+| `web/content/` | 任务定义与独立事件 |
+| `web/data/runtime_content.json` | 地图、角色、演出等内容登记 |
+| `web/data/config/` | 技能、道具、战斗与奖励参数；修改 `parameters` 后刷新页面生效 |
+| `tools/` | 构建、导出及检查；`source/` 解析原版资源，`data_recipes/` 重建运行数据 |
+| `serve.py`、`native_save.py` | 本地静态服务、存档接口与原版格式编解码 |
+| `tests/`、`../prototype/` | 现有检查与实验；正式游戏不依赖实验目录 |
 
-原版 `GAME.exe`、`Map/`、`Fight_Role/`、`SYSTEM/` 等保持原安装目录结构，通过 `--original-dir` 只读访问，不提交。`tools/data_recipes/` 保存已核实结构的共享节点与原文件范围引用，不内嵌原版文案或原文件；首次构建还原既有数据路径和文件格式。开发接入变更后须核验并同步配方，见[工具说明](remake/runtime/tools/README.md#运行数据与结构配方)。旧开发导出器仍沿用其根目录输入约定。`.gitignore` 排除生成数据、提取媒体、观察副本、证据、归档和缓存；`config/`、接入声明、独立事件、基础来源清单、内置字库及 `remake/saves/` 中的玩家存档继续纳入 Git。
+生成的运行数据和媒体不提交到仓库；内容登记、自定义参数、结构配方与内置字库随代码提供。
 
-只查进度时先读开发计划；修改功能时再按上表查对应指南。工具说明含自动生成的目标与依赖表，无需作为进度文档通读。变更状态只在开发计划维护，详细开发过程留在证据与Git历史中。
+## 使用方式
 
-## 许可证与原作权利
+需要 Python 3.12 或更新版本、Node.js、FFmpeg（含 FFprobe），以及保留原目录结构的完整原版安装。以下命令均在仓库根目录执行。
+
+<details>
+<summary>首次环境准备</summary>
+
+```bash
+python3 -m venv .venv
+.venv/bin/python -m pip install -r remake/runtime/requirements.txt
+```
+
+</details>
+
+**导出运行数据与素材**：将路径替换成自己的原版安装目录，首次运行前执行。
+
+```bash
+.venv/bin/python -B remake/runtime/tools/build_runtime.py --target media --original-dir "/path/to/DiQiFengYin" --run
+```
+
+导出会校验原版来源，生成运行数据及图片、音视频，保留自定义参数，并复用已完成且校验通过的输出。原版安装只读。
+
+**启动游戏**：导出完成后，每次游玩执行。
+
+```bash
+.venv/bin/python -B remake/runtime/serve.py
+```
+
+浏览器打开 [本地游戏](http://127.0.0.1:8767/)，服务终端保持开启；结束后按 `Ctrl+C` 停止。
+
+方向键／`WASD` 移动，`Shift` 切换跑走，空格交互，`Tab` 打开操作菜单，空格／`Enter` 确认，`Esc` 返回，`F4` 快速保存，`F5` 快速读取。其他操作以游戏内提示为准。
+
+存档保存在 `remake/saves/`：普通档为 `SaveGame0.Dat`～`SaveGame19.Dat`，快速档为 `Game.SAV`。
+
+## 支线事件索引
+
+按主要发生区域列出支线任务和可选互动；跨区域事件在起点注明后续地区。
+
+| 主区域 | 支线事件 |
+| --- | --- |
+| 火之谷 | 烈南寻找阿宝的委托（地心） |
+| 炎城 | 热匠工坊街捉迷藏；遗失臂环（后续：里白木森林）；拉姆的锻材委托；失窃案调查与侦探戴丽尔的委托；蒂娜寻找洛克（后续：力城、妖精森林）；工会入会与晋级委托（铂丝乌金、紫龙晶、爱尔希家、下水道失窃案）；秘密赌场的乐透、转轮与字谜；道具店古代石像 |
+| 里白木森林 | 幻影之森入口 |
+| 飘城 | 工会后续晋级（苔藓水晶、茶晶水晶）；宿屋魔法石阵谜题；蜂鸟尾羽换矿；小涵的音乐盒；民家古代石像；寻找布里奇（后续：妖精森林）；封印石版线索、罗菲的古文委托与流风竖琴交换 |
+| 力城 | 工会狼人调查（后续：妖精森林）；席多夫妻与恍神解药；锻造师的霞光纠纷；空塔前广场古代石像 |
+| 妖精森林 | 森林古代石像 |
+| 翠碧湖／地下研究所 | 工会最终委托与地下研究所探索；地下第25层、封印之间的古代石像 |
+| 神殿 | 神殿前广场古代石像 |
+| 封印遗迹 | 六元素石版收集与合成；绝灭之地、迷恋之渊、回旋之风、炼狱之路、沈寂之梦、审判之光六类试炼；封印圣殿的隐藏挑战 |
+
+## 版权说明
 
 本项目新增且有权授权的代码、工具和文档采用 [MIT License](LICENSE)。
 
-原版《第七封印》的程序、图片、音乐、视频、剧情对白及其他原作内容，以及相关商标和标识，其权利归各自权利人所有，不在本项目的 MIT 授权范围内。本项目不分发原版游戏程序和媒体素材；运行所需原版资源须由使用者从合法取得的游戏副本中自行准备。
+原版《第七封印》的程序、图片、音乐、视频、剧情对白及其他原作内容，以及相关商标和标识，其权利归各自权利人所有，不在本项目的 MIT 授权范围内。本项目不分发原版游戏程序和提取媒体，运行资源须由使用者从合法取得的游戏副本中自行准备。
 
-第三方组件遵循各自许可证，使用和分发时须保留相应的版权及许可声明。Phaser 使用其[独立的 MIT 许可证](remake/runtime/web/vendor/phaser/LICENSE.md)，Noto 替代位图字库的来源及许可见[字库说明](remake/runtime/builtin/fonts/README.md)。
+第三方组件保留各自的版权与许可声明：Phaser 遵循其 [MIT 许可证](remake/runtime/web/vendor/phaser/LICENSE.md)；内置菜单、对白和字幕位图字库由 Noto Serif CJK SC／Noto Sans CJK SC 生成，遵循 [SIL Open Font License 1.1](remake/runtime/builtin/fonts/LICENSE.txt)。字体版本、源文件指纹及字形指标记录在字库定义的 `font_source` 等字段中，导出时直接复制内置图集。
 
-本项目为非官方重制项目，不代表原作权利人，也不表示获得其背书。
+本项目为非官方个人项目，不代表原作权利人，也不表示获得其背书。
