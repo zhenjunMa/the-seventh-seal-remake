@@ -1,0 +1,53 @@
+remake/runtime/web/phaser/runtime.mjs
+  s_9a942bed5f27f1::t_4966b668049164 48-54
+remake/runtime/web/controllers/input.mjs
+  s_9a942bed5f27f1::t_4966b668049164 103
+remake/runtime/web/core/exploration/map_interaction.mjs
+  s_9a942bed5f27f1::t_4b8f1c87581c85 1-53
+remake/runtime/web/controllers/map.mjs
+  s_9a942bed5f27f1::t_4966b668049164 16-18,151-167,335
+remake/runtime/web/data/runtime_content.json
+  s_9a942bed5f27f1::t_023d7fa92f0127 1154-1163
+  s_9a942bed5f27f1::t_79b5bc7790ae85 1176-1193,1268-1285,1306-1311,2384-2429,2438-2451,2564-2585,2596-2609,4715-4740
+remake/runtime/story_guide.md
+  s_9a942bed5f27f1::t_6ce37ec06d1a92 63-64
+remake/assessment/validation_design.md
+  s_9a942bed5f27f1::t_860484a29b7d60 75
+  s_9a942bed5f27f1::t_c83afbe93184cc 3,7,9,27-28,46,87
+  s_9a942bed5f27f1::t_5d33a64c569cab 13
+remake/runtime/tests/test_map_npc_integration.mjs
+  s_08a4160557912d::t_f38f583e56b117 190-226
+  s_9a942bed5f27f1::t_8b14cd82c28189 2
+remake/runtime/web/data/items.json
+  s_9a942bed5f27f1::t_4929a7135c9a25 694699-694710,694759-694782,695034-695057,695105-695110,696436-696501,696532-696549,696933-696962,696999-697016,699266-699301,702624,704082
+remake/runtime/web/data/library/index.json
+  s_9a942bed5f27f1::t_4d252ecd6ad49e 46170-46171
+remake/runtime/web/data/runtime_content.mjs
+  s_9a942bed5f27f1::t_2ea4a75e340c88 1155-1164,1177-1194,1269-1286,1307-1312,2385-2430,2439-2452,2565-2586,2597-2610,4716-4741,9423-9432,9444-9461,9578-9595,9637-9642,11069-11114,11130-11143,11326-11347,11362-11375,14088-14113
+remake/runtime/web/data/story/index.json
+  s_9a942bed5f27f1::t_a722ab11bdead3 4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "df4c6a2457307a374c8776c15be926129bc1d5ac",
+  "prompts": {},
+  "sessions": {
+    "s_08a4160557912d": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b026-6de8-70d1-b73b-8ec231d2cf3c",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    },
+    "s_9a942bed5f27f1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1aff4-1e88-7890-9657-77f0617bf3f5",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
