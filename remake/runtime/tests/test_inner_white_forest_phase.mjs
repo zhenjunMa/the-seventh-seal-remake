@@ -51,12 +51,14 @@ test('source014 chest retains its seventeenth logical wait and hides its missing
     assert.equal(resource.frames.length,17);assert.deepEqual(resource.frames.map(row=>row.index),Array.from({length:17},(_,i)=>i));
     assert.deepEqual(frameIndices,Array.from({length:17},(_,i)=>i+1));assert.equal(resource.completed_last_frame,17);
   }
-  const world=innerWhiteForestWorld(source);world.transact(draft=>{draft.location={map_id:'M70071',x:0,y:0,direction:0};});
+  const world=innerWhiteForestWorld(source);world.transact(draft=>{const object=source.story.maps.M70071.objects.find(row=>row.index===12);
+    draft.location={map_id:'M70071',x:object.x_native*2,y:object.y_native*2,direction:0};});
   const object={...source.maps.M70071.objects.find(row=>row.index===12),bitmap:{id:'closed014'}},scene={data:{id:'M70071'},objects:[object],npcs:[]};
   const resource=source.resources.object_animations.M70071.find(row=>row.object_index_zero_based===12);
-  const requested=[],frames=[],state={world,chapterStory:source.story,chapterResources:source.resources,
+  const hint={},requested=[],frames=[],state={world,chapterStory:source.story,chapterResources:source.resources,scenes:{phase:'map',current:scene},
     resources:{peek(){throw Error('The nonexistent completed physical frame must not be requested');}}};
-  const map=createMapController({state,actions:{},$:()=>({}),canvas:{},ctx:{}});
+  const map=createMapController({state,actions:{},$:()=>hint,canvas:{},ctx:{}});
+  map.updateNearest();assert.equal(state.nearest.index,12);assert.equal(hint.hidden,false);
   const queue=()=>mapPresentation({scene,world:world.value,role:{frame_width:16,frame_height:16,map_draw_offset:{x:0,y:0}},
     action:{bitmap:{id:'leader'}},view:{frame:0},objectBitmap:map.objectBitmap});
   const clock=new ActionClock();clock.update(0);state.engine={exploration:{clock}};
@@ -75,7 +77,9 @@ test('source014 chest retains its seventeenth logical wait and hides its missing
   assert.equal(requested.length,16);assert.equal(frames[0].path,resource.frames[2].image);
   assert.equal(frames[14].path,resource.frames[16].image);assert.equal(frames[15],null);assert.equal(state.objectPreview,null);
   assert.equal(map.objectBitmap(scene,object),null);assert.deepEqual(queue().map(row=>row.key),['leader']);
+  map.updateNearest();assert.equal(state.nearest,null);assert.equal(hint.hidden,true);
   await restore(world);assert.equal(map.objectBitmap(scene,object,world.value,false),null);assert.equal(quantity(world,349),1);
+  map.updateNearest();assert.equal(state.nearest,null);assert.equal(hint.hidden,true);
 });
 
 test('two forest trips naturally earn349,332,293/294 and299 before all three first-return rewards and005 admission',async()=>{

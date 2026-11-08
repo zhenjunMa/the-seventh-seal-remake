@@ -9,6 +9,7 @@ import {SAVE_PREVIEW_WIDTH,SAVE_PREVIEW_HEIGHT} from "../core/world/save_preview
 import {MapNpcRuntime} from "../core/exploration/map_npcs.mjs";
 import {projectMapStage} from "../core/exploration/map_stage.mjs";
 import {MapObjectRuntime} from "../core/exploration/map_objects.mjs";
+import {chapterObjectState} from '../core/story/object_state.mjs';
 import {storyBindings,registeredRoles} from "../core/content/content_registry.mjs";
 import {chapterRouteExits,nativeEmptyEventCells} from "../core/exploration/map_connections.mjs";
 import {MapLocomotion,mapMotionProfile,nativeMapMovement} from "../core/exploration/map_locomotion.mjs";
@@ -178,6 +179,8 @@ export function createMapController({state, actions, $, canvas, ctx}) {
       if(!binding)continue;
       if(binding.handler==='stationary-chest'&&(![3,4].includes(object.behavior_raw_cf)||!object.interaction_record_raw_f6))continue;
       if(binding.handler==='keyed-chest'&&![3,4].includes(object.behavior_raw_cf))continue;
+      if(['stationary-chest','keyed-chest'].includes(binding.handler)
+        &&chapterObjectState(state.world.value,at.map_id,object.index,state.chapterStory)===3)continue;
       if(binding.handler==='tlk-object'&&(object.behavior_raw_cf!==1||!object.interaction_record_raw_f6))continue;
       if(binding.handler==='scripted-switch'&&(object.behavior_raw_cf!==9||!object.interaction_record_raw_f6))continue;
       if(binding.handler==='scripted-object'&&(object.behavior_raw_cf!==2||!object.interaction_record_raw_f6))continue;
