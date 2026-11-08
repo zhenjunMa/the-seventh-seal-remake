@@ -16,7 +16,7 @@ const hash=b=>createHash('sha256').update(b).digest('hex');
 const manifests={},assets=new Map();
 const args=process.argv.slice(2),planning=args.includes('--plan');
 const option=name=>{const at=args.indexOf(name);if(at<0)return null;if(!args[at+1]||args[at+1].startsWith('--'))throw Error(`Missing ${name}`);return args[at+1];};
-const roleIds=option('--roles')?.split(','),stageId=option('--stage');
+const roleIds=option('--roles')?.split(','),stageId=option('--stage'),originalDir=option('--original-dir');
 if((roleIds||stageId)&&(!planning||!roleIds||!stageId))throw Error('--roles and --stage require --plan and must be supplied together');
 let content,packed;
 if(planning){
@@ -24,7 +24,7 @@ if(planning){
   if(JSON.stringify(JSON.parse(await fs.readFile(path.join(web,'data/runtime_content.json'))))!==JSON.stringify(runtimeContentDefinition))throw Error('Rebuild content registration before planning');
   packed=JSON.parse(await fs.readFile(path.join(web,'data/battle_packs.json')));
   if(roleIds&&(!content.stages[stageId]||!roleIds.length||new Set(roleIds).size!==roleIds.length||roleIds.some(id=>!content.roles[id])))throw Error('Unknown or duplicate battle roles / stage');
-}else ({content}=await readContentDefinition());
+}else ({content}=await readContentDefinition({originalDir:originalDir===null?null:path.resolve(originalDir)}));
 let selection=null;
 async function jsonLoader(p,expected){
   const bytes=await fs.readFile(local(p)),sha256=hash(bytes);
@@ -47,9 +47,11 @@ for(const [metadataPath,itemMetadataPath,stageMetadataPath,lifecycleMetadataPath
   // enemy/party banks. Its scope does not redefine the runtime's live roster.
   const viewContent=metadataPath==='/data/forest_full_battle_view.json'?structuredClone(content):content;
   if(viewContent!==content)viewContent.battle_rosters['forest-source-group']=['001','011','012','013'];
-  const view=new BattleView({canvas:{getContext:()=>({})},metadataPath,itemMetadataPath,stageMetadataPath,lifecycleMetadataPath,jsonLoader,content:viewContent,
+  const view=new BattleView({canvas:{getContext:()=>({})},metadataPath,itemMetadataPath,stageMetadataPath,lifecycleMetadataPath,statusMetadataPath:'/data/battle_status_view.json',jsonLoader,content:viewContent,
     assetLoader:async a=>{add(a);return {image:{width:a.width,height:a.height},sha256:a.sha256};}});
   await view.prepare();
+  for(const effect of Object.values(view.statusMeta.effects))for(const sheet of [effect.main_sheet,effect.intrinsic_sheet].filter(Boolean))
+    add({...assets.get(sheet),group:'effect-status-'+effect.id_raw,tile_width:effect.frame_width,tile_height:effect.frame_height});
   for(const role of view.meta.roles)for(const action of role.actions)add({...assets.get(action.sheet),group:'role-'+role.id,tile_width:role.frame_width,tile_height:role.frame_height});
   for(const role of view.meta.roles)if(role.shadow)add({...assets.get(role.shadow.sheet),group:'role-'+role.id,tile_width:role.shadow.frame_width,tile_height:role.shadow.frame_height});
   for(const effect of view.meta.effects)for(const sheet of effect.layer_order?effect.layer_order.map(layer=>effect[`${layer}_sheet`]):[effect.sheet])

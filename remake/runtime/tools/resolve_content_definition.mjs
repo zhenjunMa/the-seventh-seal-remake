@@ -6,7 +6,8 @@ import path from 'node:path';
 import {createHash} from 'node:crypto';
 import {resolveContentDefinition} from '../web/core/content/content_definition.mjs';
 const web=new URL('../web/',import.meta.url);
-export async function readContentDefinition(){
+export async function readContentDefinition({originalDir=null}={}){
+  if(originalDir!==null&&(typeof originalDir!=='string'||!path.isAbsolute(originalDir)))throw new Error('originalDir must be an absolute directory path');
   const input_sha256={},hash=bytes=>createHash('sha256').update(bytes).digest('hex');
   const read=async name=>{const bytes=await readFile(new URL(name,web));input_sha256[name]=hash(bytes);return JSON.parse(bytes);};
   const definition=await read('data/runtime_content.json');
@@ -14,7 +15,7 @@ export async function readContentDefinition(){
   const maps=Object.fromEntries(await Promise.all(Object.keys(definition.maps).map(async id=>{
     const map=await read(`data/maps/${id.toLowerCase()}.json`),source=map.source;
     if(source?.path?.toLowerCase()!==`map/${id.toLowerCase()}.dat`)throw new Error(`地图 ${id} 原始来源缺失`);
-    const bytes=await readFile(new URL('../../../'+source.path,import.meta.url));
+    const bytes=await readFile(originalDir===null?new URL('../../../'+source.path,import.meta.url):path.join(originalDir,source.path));
     if(hash(bytes)!==source.sha256||bytes.length<0x96)throw new Error(`地图 ${id} 原输入已变化`);
     input_sha256[`original/${source.path}`]=source.sha256;
     // Reuse the established DAT+0x92 field; old route map JSON omitted it.

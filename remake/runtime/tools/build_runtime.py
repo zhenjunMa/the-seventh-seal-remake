@@ -107,7 +107,8 @@ STEPS = {
             +tuple('../'+path.relative_to(RUNTIME).as_posix() for path in (RENDERER_BUNDLE,RENDERER_FINDINGS,FAILURE_FINDINGS,FAILURE_RECORDS))),
     'skill-test': Step('export_skill_test.py', ('data/skill_test.json','data/skill_test_stage.json','assets/skill_test_stage'), reports=('skill_test_20261020/export.json',), inputs=('../evidence/skill_test_20261020/native_evidence.json','../evidence/forest_stage_native.json','../evidence/menu_technique_native_20261013.json')),
     'battle-result': Step('export_battle_result.py', ('data/battle_result.json','assets/battle_result'), reports=('battle_result_20261020/export.json',), inputs=('../evidence/battle_result_20261020/native_evidence.json',)),
-    'battle-packs': Step('export_battle_packs.py', ('data/battle_packs.json','assets/battle_packs'), ('party-skills','item-presentation','forest-stage','battle-ui','battle-lifecycle','skill-test','battle-result'), ('battle_loading_20261021/pack_export.json',), ('battle_view.mjs','forest_stage.mjs','data/battle_view.json','data/forest_full_battle_view.json','data/enemy_battle_view.json','../tools/battle_pack_inventory.mjs')),
+    'battle-status': Step('export_battle_status.py', ('data/battle_status_view.json','assets/battle_status'), ('party-skills','items'), ('status_visuals_20261108/export.json',), ('data/forest_status.json',), tuple('Fight_Role/Status/'+path.name for path in sorted((ROOT/'Fight_Role/Status').glob('*.dgp')))),
+    'battle-packs': Step('export_battle_packs.py', ('data/battle_packs.json','assets/battle_packs'), ('party-skills','item-presentation','forest-stage','battle-ui','battle-lifecycle','skill-test','battle-result','battle-status'), ('battle_loading_20261021/pack_export.json',), ('battle_view.mjs','battle_status_view.mjs','forest_stage.mjs','data/battle_view.json','data/forest_full_battle_view.json','data/enemy_battle_view.json','../tools/battle_pack_inventory.mjs')),
     'menu-techniques': Step('export_menu_techniques.py', ('data/operation_techniques.json','assets/menu/techniques','assets/menu/game002d','assets/menu/game002e','assets/menu/game004'), ('menu','party-skills'), ('menu_technique_export_20261013.json',)),
     'menu-fonts': Step('export_menu_text_gdi.py', ('data/menu_fonts.json','assets/menu/fonts'), ('menu-techniques','enemies'), ('menu_text_armor_delivery_export_20261014.json',), ('../tools/menu_font_recipe.json','data/items.json','data/party_skills.json','data/forest_combat.json','data/maps','data/world_map.json','data/battle_ui.json','battle_menu_view.mjs', *tuple(p.name for p in sorted(WEB.glob('operation_*.mjs'))))),
     'startup-media': Step('export_startup_media.py', ('data/startup_media.json', 'assets/video/startup'), reports=('startup_media_export.json',)),
@@ -323,7 +324,7 @@ for target, inputs in {
               'data/encounters.json','data/menu_audio_rules.json'),
     'battle-packs': ('data/party_battle_view.json','data/item_presentation.json',
                      'data/forest_stage.json','data/battle_ui.json','data/battle_lifecycle.json',
-                     'data/battle_result.json',
+                     'data/battle_result.json','data/battle_status_view.json',
                      *tuple(f'data/{prefix}_role_layers_{ident}.json'
                             for prefix, ids in [('party',REGISTERED_PLAYER_IDS),('enemy',role_ids('enemy'))]
                             for ident in ids),

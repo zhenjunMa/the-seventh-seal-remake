@@ -15,6 +15,7 @@ import {createDeathParticleSurface} from './death_particles.mjs';
 import {battleViewport,battleActorPositions,battleActorCategory} from './core/battle/battle_layout.mjs';
 import {battleResources,drawBattleImage} from './core/battle/battle_resources.mjs';
 import {runtimeContent,requireRegisteredRoles} from './core/content/content_registry.mjs';
+import {validateBattleStatusView,battleStatusAssets,drawBattleStatuses} from './battle_status_view.mjs';
 import {validateForestStage,forestStageAssets,drawForestStageBackground,battleStageCameraOffset} from './forest_stage.mjs';
 const clone = value => structuredClone(value);
 const abortError = reason => Object.assign(new Error(reason || '战斗表现已取消'), {name: 'AbortError'});
@@ -230,7 +231,7 @@ async function loadJson(path, expectedHash) {
 
 /** Explicit advance owns playback; draw only paints the prepared state. */
 export class BattleView {
-  constructor({canvas, assetLoader = null, jsonLoader = loadJson,metadataPath='/data/battle_view.json',itemMetadataPath=null,stageMetadataPath=null,lifecycleMetadataPath=null,content=runtimeContent,definitionCache=battleDefinitions} = {}) {
+  constructor({canvas, assetLoader = null, jsonLoader = loadJson,metadataPath='/data/battle_view.json',itemMetadataPath=null,stageMetadataPath=null,lifecycleMetadataPath=null,statusMetadataPath=null,content=runtimeContent,definitionCache=battleDefinitions} = {}) {
     if (!canvas?.getContext) throw new Error('战斗画布缺失');
     this.playbackRuntime=new BattlePlayback({
       isReady:()=>this.ready&&!this.destroyed,
@@ -250,6 +251,7 @@ export class BattleView {
     this.itemMetadataPath=itemMetadataPath;this.itemMeta=null;
     this.stageMetadataPath=stageMetadataPath;this.stageMeta=null;this.stageStarted=null;
     this.lifecycleMetadataPath=lifecycleMetadataPath;this.lifecycle=null;
+    this.statusMetadataPath=statusMetadataPath;this.statusMeta=null;
     this.preparingEntry=false;this.entryFrameSounds=[];this.entryFrameControls=[];
     this.lastActorPoses=new Map();
     this.roster=[{id:'001',resource_id:'001',side:'player',skill_id:'yantu'},{id:'012',resource_id:'012',side:'enemy',skill_id:'snow_attack'}];
@@ -338,13 +340,13 @@ export class BattleView {
     const generation=++this.generation,isCurrent=()=>!this.destroyed&&generation===this.generation;
     const check=()=>{if(!isCurrent())throw abortError();};
     if(!this.definition){
-      const identity=JSON.stringify([this.metadataPath,this.itemMetadataPath,this.lifecycleMetadataPath]);
+      const identity=JSON.stringify([this.metadataPath,this.itemMetadataPath,this.lifecycleMetadataPath,this.statusMetadataPath]);
       const definition=await this.definitionCache.load(this.jsonLoader,this.content,identity,()=>this._readDefinition());
       check();
       const stageMeta=this.stageMetadataPath?validateForestStage(await this.jsonLoader(this.stageMetadataPath),this.content):null;
       check();
       this.definition=definition;
-      Object.assign(this,{meta:definition.meta,itemMeta:definition.itemMeta,lifecycleMeta:definition.lifecycleMeta,
+      Object.assign(this,{meta:definition.meta,itemMeta:definition.itemMeta,lifecycleMeta:definition.lifecycleMeta,statusMeta:definition.statusMeta,
         layers:definition.layers,alternateLayers:definition.alternateLayers,lifecyclePairs:definition.lifecyclePairs,
         damageTextAssets:definition.damageTextAssets,stageMeta:freezeDefinition(stageMeta)});
       const descriptors=new Map(definition.assetDescriptors.map(asset=>[asset.path,asset]));
@@ -374,6 +376,7 @@ export class BattleView {
 
   async _readDefinition(){
     const meta = validateBattleViewMetadata(await this.jsonLoader(this.metadataPath),this.content);
+    const statusMeta=this.statusMetadataPath?validateBattleStatusView(await this.jsonLoader(this.statusMetadataPath)):null;
     let itemMeta=null;
     if(this.itemMetadataPath){
       itemMeta=await this.jsonLoader(this.itemMetadataPath);
@@ -465,7 +468,7 @@ export class BattleView {
       add('/' + layer.path, layer.sha256, source.frame_width, source.frame_height,source.role_id);
     }
     const definition={meta,itemMeta,lifecycleMeta,layers,damageTextAssets,
-      assetDescriptors:[...descriptors.values()],alternateLayers:freezeDefinitionMap(alternateLayers),
+      statusMeta,assetDescriptors:[...descriptors.values(),...battleStatusAssets(statusMeta)],alternateLayers:freezeDefinitionMap(alternateLayers),
       lifecyclePairs:freezeDefinitionMap([layers,...alternateLayers.values()].flatMap(bank=>bank.frames.map(pair=>[`${bank.role_id}:${pair.source_frame}`,pair])))};
     for(const bank of alternateLayers.values())freezeDefinition(bank);
     return freezeDefinition(definition);
@@ -991,6 +994,7 @@ export class BattleView {
       }
       ctx.restore();
       if(!this.lifecycle?.drawParticles(id,ctx,slot[0],slot[1]))this._sprite(role, segment.action_index, frame, slot[0], slot[1], alpha, pair,appearanceScan);
+      if(!entryPreview&&this.statusMeta)drawBattleStatuses(ctx,this.images,this.statusMeta,[{actor,role,slot,alpha}],this.meta.policy.sprite_scale);
       if(acting&&pair?.intrinsic.active&&!run.observations.intrinsic_source_frames.includes(pair.source_frame))run.observations.intrinsic_source_frames.push(pair.source_frame);
     }
     if (run) {

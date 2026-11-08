@@ -10,6 +10,18 @@ const ZERO='00'.repeat(0xc6),FLAG_ADDRESS='0x0521f52a';
 const validatedData=new WeakMap();
 const templateCache=new WeakMap();
 const clone=value=>structuredClone(value);
+// Compact read-only projection for per-frame presentation. Do not clone the
+// hundred full C6 records into every frame/HUD snapshot.
+export function nativeStatusPresentation(records=[]){
+  const effects=[];
+  for(const {raw_hex:raw}of records){
+    if(typeof raw!=='string'||raw.length!==0xc6*2||raw.slice(2,4)==='00')continue;
+    const uint=offset=>parseInt(raw.slice(offset*2,offset*2+8).match(/../g).reverse().join(''),16);
+    effects.push({id_raw:parseInt(raw.slice(2,4),16),mode_raw:parseInt(raw.slice(22,24),16),frame_raw:uint(0x13),flags_raw:uint(0xb8)});
+  }
+  return effects;
+}
+function presentStatuses(actor){actor.native_status_effects=nativeStatusPresentation(actor.native_status_slots);return actor;}
 function need(ok,message){if(!ok)throw new TypeError(message);}
 function integer(value,name,min=-2147483648,max=2147483647){need(Number.isInteger(value)&&value>=min&&value<=max,`Invalid ${name}`);return value;}
 function bytes(hex,length,name){need(typeof hex==='string'&&new RegExp(`^([a-f0-9]{2}){${length}}$`,'i').test(hex),`${name} source bytes missing`);return Uint8Array.from(hex.match(/../g),h=>parseInt(h,16));}
@@ -130,7 +142,7 @@ function recalculate(actor,records,data){
 }
 export function clearNativeStatuses(actor,data,content=runtimeContent){
   validateForestStatusData(data,content);need(actor&&typeof actor==='object','Native actor missing');
-  const out=clone(actor);out.status_by_address??={};out.native_status_slots=Array.from({length:100},()=>({raw_hex:ZERO}));resetAggregate(out,data);return out;
+  const out=clone(actor);out.status_by_address??={};out.native_status_slots=Array.from({length:100},()=>({raw_hex:ZERO}));resetAggregate(out,data);return presentStatuses(out);
 }
 function passiveBlock(passive){
   const block=rawView(passive?.effect_raw_hex);
@@ -165,7 +177,7 @@ export function removeNativeStatus({actor,effect_raw_hex,data,content=runtimeCon
   need(block.raw[0xb]===1,'Native status removal requires mode1');
   need(Array.isArray(actor?.native_status_slots)&&actor.native_status_slots.length===100,'Native status slots must be explicitly initialized');flags(actor);
   const out=clone(actor),records=actor.native_status_slots.map(record=>rawView(record?.raw_hex)),trace=[];
-  const result=(native_return,reason,cancel_command=false)=>({actor:out,native_return,applied:native_return===1,cancel_command,reason,trace,evidence:data.evidence['0x508bb0']});
+  const result=(native_return,reason,cancel_command=false)=>({actor:presentStatuses(out),native_return,applied:native_return===1,cancel_command,reason,trace,evidence:data.evidence['0x508bb0']});
   if(id&&records.some(record=>record.raw[1]===id&&record.raw[0xb]===1))return result(0,'duplicate-id-and-mode');
   const index=id?records.findIndex(record=>record.raw[1]===id):-1;
   if(index<0)return result(0,'matching-status-absent');
@@ -210,7 +222,7 @@ export function applyNativeSupportStatus({actor,skill,data,rng,content=runtimeCo
 }
 function applyNativeBlock({actor,data,rng,records,block,id,mode,trace,remove_on_contact,content=runtimeContent}){
   const out=clone(actor);let cancel_command=false;
-  const result=(native_return,reason,applied=false)=>({actor:out,native_return,reason,applied,cancel_command,trace,evidence:data.evidence['0x508bb0']});
+  const result=(native_return,reason,applied=false)=>({actor:presentStatuses(out),native_return,reason,applied,cancel_command,trace,evidence:data.evidence['0x508bb0']});
   const next=typeof rng==='function'?rng:rng?.next?.bind(rng);
   const rollFor=label=>{need(next,'Explicit native RNG provider required');const raw=integer(next(),'native RNG output',0,32767),result=raw%100;
     trace.push({kind:'rng',label,raw,modulus:100,result});return result;};
@@ -324,5 +336,5 @@ export function tickNativeStatuses({actor,threshold,now,data,rng,onPeriodicEffec
     trace.push({kind:'status-tick',slot:index,now,gauge_before:before,gauge_added:gauge-before,gauge_after:records[index].view.getInt32(0x1b,true),duration_count_after:records[index].view.getInt32(2,true),expired:expired.includes(index)});
   }
   if(cancel_command)trace.push({kind:'native-command-cancel',function:'0x42fe40',command_kind_raw:6});
-  return {actor:out,ticks,expired,cancel_command,death_requested,periodic_reactions,trace,evidence:data.evidence['0x509e10']};
+  return {actor:presentStatuses(out),ticks,expired,cancel_command,death_requested,periodic_reactions,trace,evidence:data.evidence['0x509e10']};
 }

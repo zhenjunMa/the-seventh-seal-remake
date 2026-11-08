@@ -211,6 +211,23 @@ def prepare_role(ident, status):
     return c, d, ai, role, blocks, primary, actor
 
 
+def update_status_policy(status):
+    """Describe the complete registered table rather than the legacy forest slice."""
+    status['policy'].update(
+        scope=(f"Registered player/enemy skills: {len(status['skills'])} primary +16B blocks, "
+               f"{len(status.get('support_skills', {}))} allied +231 blocks and "
+               f"{len(status.get('item_effects', {}))} item/equipment templates; "
+               "each active effect retains its owner's C6 payload and its own Status DGP clock."),
+        chance='Per-source C6 application chance: zero always passes; otherwise rand%100<=chance; duplicate id/mode returns0 before the application roll; id0 applies no payload.',
+        initial_timestamp='Source block +0x17 is copied unchanged; application does not set now.')
+    status['limits'] = [
+        'Only registered skill/item/equipment templates are admitted; retaining a source block does not enable an unregistered skill or a contactless payload.',
+        'Mode0/2 application, mode2 contact removal, aggregation and periodic HP/MP updates share the native status lifecycle; cure, clear and revival use their dedicated contact handlers.',
+        'Missing original Status DGP files retain zero visual frames and the native80ms fallback clock; status artwork and rendering are described by the separate battle_status_view manifest.',
+        'Rules are reconstructed from original resource bytes and retained native instructions; this table does not claim observed original-game execution.'
+    ]
+
+
 def export():
     ids = role_ids('enemy')
     sources = {'GAME.exe': sha(ROOT / 'GAME.exe')}
@@ -291,6 +308,7 @@ def export():
     meta['extra_layer_banks'] = banks
     meta['policy']['roster'] = 'forest-source-group'
     meta['policy']['complete_contacts'] = True
+    update_status_policy(status)
     # Enemy-owned effects are complete before publishing this manifest.
     # The party pass reuses these references and owns only additional effects.
     values = dict(forest_ai=ai, forest_combat=data, forest_status=status,

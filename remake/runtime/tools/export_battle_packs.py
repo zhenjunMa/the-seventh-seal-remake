@@ -24,8 +24,11 @@ def local(url):
     return WEB / url.lstrip('/')
 
 
-def inventory(arguments=()):
-    result = subprocess.run(['node', str(RUNTIME / 'tools/battle_pack_inventory.mjs'), *arguments],
+def inventory(arguments=(), *, original_dir=None):
+    command = ['node', str(RUNTIME / 'tools/battle_pack_inventory.mjs'), *arguments]
+    if original_dir is not None:
+        command.extend(['--original-dir', str(Path(original_dir).resolve())])
+    result = subprocess.run(command,
                             cwd=ROOT, capture_output=True, text=True, encoding='utf-8')
     if result.returncode:
         raise RuntimeError('Battle pack inventory failed:\n'+result.stdout+result.stderr)
@@ -134,10 +137,10 @@ def plan(roles=None, stage=None):
     return report
 
 
-def build(repack=False):
+def build(repack=False, *, original_dir=None):
     from incremental_atlas import build_atlas
     from incremental import write_json
-    data = inventory()
+    data = inventory(original_dir=original_dir)
     manifest, sources, output_hashes, counters = build_atlas(data, runtime=RUNTIME, web=WEB, out=OUT,
         layout_pages=layout_pages, packing_family=packing_family, dependency_groups=dependency_groups, repack=repack)
     for name, entry in data['manifests'].items():
@@ -162,6 +165,7 @@ def build(repack=False):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--repack', action='store_true', help='Explicitly repack all pages instead of appending new tiles')
+    parser.add_argument('--original-dir', type=Path, help='原版安装目录；只读，默认保留仓库根目录的旧路径')
     parser.add_argument('--plan', action='store_true', help='只用已有清单估算依赖分组，不读媒体或生成图集')
     parser.add_argument('--roles', help='计划中本场角色资源编号，以逗号分隔')
     parser.add_argument('--stage', help='计划中本场舞台编号；与 --roles 同时提供')
@@ -181,4 +185,4 @@ if __name__ == '__main__':
             target.write_text(json.dumps(report, ensure_ascii=False, indent=2)+'\n', encoding='utf-8')
         print(json.dumps(report, ensure_ascii=False, indent=2))
     else:
-        build(repack=args.repack)
+        build(repack=args.repack, original_dir=args.original_dir)

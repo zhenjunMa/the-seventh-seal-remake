@@ -269,12 +269,37 @@ def export(runtime, original_dir):
         shared_nodes=len(compiler.nodes), **compiler.locator.stats), ensure_ascii=False, indent=2), flush=True)
 
 
+def update_documents(runtime, original_dir, names):
+    """只编译已重新核验的文档；保留其他文档和共享节点编号。"""
+    from data_recipes import DataRecipes
+    reader = DataRecipes(runtime, original_dir)
+    compiler = Compiler(original_dir)
+    compiler.nodes = reader.nodes
+    compiler.interned = {encoded(node): index for index, node in enumerate(reader.nodes)}
+    compiler.locator.sources.update(reader.sources)
+    documents = dict(reader.manifest['documents'])
+    for name in names:
+        path = reader.output(name)
+        raw = path.read_bytes()
+        data = json.loads(raw)
+        documents[name] = dict(root=compiler.value(data), format=formatting(raw, data), sha256=digest(raw), bytes=len(raw))
+    manifest = {**reader.manifest, 'documents': documents, 'sources': dict(sorted(compiler.locator.sources.items()))}
+    size = write_recipes(runtime, compiler.nodes, manifest)
+    print(json.dumps(dict(updated=names, files=len(documents), recipe_bytes=size), ensure_ascii=False, indent=2))
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--original-dir', type=Path, required=True)
     parser.add_argument('--repack', action='store_true', help='仅更新已有配方的文本范围引用及压缩分片，不读取生成表')
+    parser.add_argument('--document', action='append', help='只更新指定的已核验 data 文档，保留其他配方')
     args = parser.parse_args()
-    (repack if args.repack else export)(RUNTIME, args.original_dir)
+    if args.document:
+        if args.repack:
+            parser.error('--document 不能与 --repack 同用')
+        update_documents(RUNTIME, args.original_dir, args.document)
+    else:
+        (repack if args.repack else export)(RUNTIME, args.original_dir)
 
 
 if __name__ == '__main__':

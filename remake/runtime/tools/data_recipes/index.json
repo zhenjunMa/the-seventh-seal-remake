@@ -476,16 +476,20 @@
     "fight_role/effect/m77awz04.dgp": "780a8232a4331b4fe99b2d29b20631ef26541c252f648730355e8b82c151b3d9",
     "fight_role/effect/victor.dgp": "c9ac4c305a9900462eb1c75bc2478c2d3ff485384010ed75c049241fce3d6232",
     "fight_role/slime.chr": "17a0358397ee986c21483b3d046589c5a16961beded113242f07b45402703e3b",
+    "fight_role/status/001.dgp": "45c9a1faa92c28bcb12c92a2c520d32c1fa4b6f391f0583b34b402204e09cdb5",
     "fight_role/status/002.dgp": "c48941c7ae4cfa319b0d611ac3e3b3adbb351f38bc8c6e8093c2476dcf1b024c",
     "fight_role/status/003.dgp": "8ab14248da37a68590ebf9ebeb744694699d5fe7d5c81a0e6430236b41fe262a",
+    "fight_role/status/004.dgp": "353a4a06b34ce936c5aeae3d57dc2a801c211ece3cd3bedc1fa6203888b53f43",
     "fight_role/status/005.dgp": "006eaf5e334bd2bb0cda52cdc50252d6d61c1235a5148b1d0b6b0bf5e781473e",
     "fight_role/status/006.dgp": "d182087ee2d5ea9d919953e4af6ba96f2caba283f45c5791d58c8f6a0c252e32",
     "fight_role/status/010.dgp": "b60836b33a721194e23cb767ec095e2869a3a7c0738dd15b35247bfd299895b2",
+    "fight_role/status/011.dgp": "80990864f0aa3aa577fe3fc820febe72a36b4b58ea2bb84d1943f4aae29048b0",
     "fight_role/status/012.dgp": "da6bc2de08d96f316e9ab081fded9970388eba9224ad5cb16f4d0f20582d6991",
     "fight_role/status/015.dgp": "c9f30b7b9abef36dc4adcaf38fc75ce3bc089694290e1729d572a857d8caed32",
     "fight_role/status/016.dgp": "d5fb7248e2bca9d674328b13ee4ed1e72d631aa0ae66077ed8dcbcb8019b6dcb",
     "fight_role/status/018.dgp": "13cf3215da0f12cfb78a89bc0284404e4c5ae72968f6d09625a18e22265b1ad0",
     "fight_role/status/038.dgp": "1c3b1d658a0ecee95f0852f4fef1164d00fb014713ddd961d6d9bc6b9201615f",
+    "fight_role/status/041.dgp": "5c7dba50c36329f79d610eb0a7965acf363daba5cb6942694fd05f3470b1d35e",
     "fight_role/status/049.dgp": "4f658a7f257b85e0439878c46ed52da3a5cd3c465319a67ddb63fd62fd61cd00",
     "fight_role/wolf.chr": "f61e01c8dbe7432677c417dbf5526f03826c372177894b584f38682be6ed72cd",
     "game.exe": "fc6c01945d4898a221e40be72c32158371205896c096622727fa23f7ee794d18",
@@ -2878,7 +2882,7 @@
     },
     "battle_packs.json": {
       "root": [
-        276476
+        692174
       ],
       "format": {
         "indent": null,
@@ -2886,8 +2890,8 @@
         "crlf": false,
         "newline": true
       },
-      "sha256": "35e8efbd913afcc5196a3eb03528ca45cd747a49ca5aba9e9ac2456cbe55fdc8",
-      "bytes": 42976376
+      "sha256": "d8027c246a00052dc2315e379a260c42cc406fbc121f59312a13be8351e962a7",
+      "bytes": 43034673
     },
     "battle_scheduler.json": {
       "root": [
@@ -4256,7 +4260,7 @@
     },
     "forest_status.json": {
       "root": [
-        427082
+        688753
       ],
       "format": {
         "indent": 2,
@@ -4264,8 +4268,8 @@
         "crlf": true,
         "newline": true
       },
-      "sha256": "4a5af2aa60928e91991483ff9d9fb3c20dd4d5e39a1f082cccf37de9c9bbde37",
-      "bytes": 1757428
+      "sha256": "317e78bc552718a77e9c4b1ac469b78292681fceb39ebb4d89949653d5807b4f",
+      "bytes": 1758108
     },
     "item_presentation.json": {
       "root": [
@@ -19840,6 +19844,19 @@
       },
       "sha256": "fa161f165f8fdfd9c2c2e031e8eea002f7dc43bc0dbd06344171d330cc8fecbe",
       "bytes": 63838
+    },
+    "battle_status_view.json": {
+      "root": [
+        688463
+      ],
+      "format": {
+        "indent": 2,
+        "compact": false,
+        "crlf": false,
+        "newline": true
+      },
+      "sha256": "6e5bca503519be49d7d943f593b5cc0fcfc9e2753193b45faece4ab171be0947",
+      "bytes": 42317
     }
   },
   "compression": "gzip",
@@ -19928,6 +19945,6 @@
     "0081": "eb3813669fc314b975cc0dc07f9137e1f9e4ce6f090ee5a4412071b0cefb0eef",
     "0082": "e92f18530ba21c0d472a561d1f04408c0a6630e1c547b7ec33c0bb1c0a13a7f1",
     "0083": "6f9d2ab42832931a7363d9e19246632d7cb66bbaa30dc458ea17d653ff07ab84",
-    "0084": "c95a33f5047ee564a566cfad1f4c0842176899504d63198a7531afc2a94561f8"
+    "0084": "97a845d1e69adae710af1e5e5126a7c7e52da3df1355d83ddd3245e8bbc82c03"
   }
 }

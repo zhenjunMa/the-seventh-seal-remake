@@ -1,8 +1,8 @@
 {
   "schema": "seventh-seal-tool-index",
   "version": 1,
-  "updated": "2026-11-07",
-  "registered_steps": 58,
+  "updated": "2026-11-08",
+  "registered_steps": 59,
   "content_plan": [
     "chapter-maps",
     "chapter-story",
@@ -26,6 +26,7 @@
     "battle-lifecycle",
     "skill-test",
     "battle-result",
+    "battle-status",
     "battle-stages",
     "battle-packs",
     "audio",
@@ -262,6 +263,14 @@
       "imported_by": [
         "build_runtime.py"
       ]
+    },
+    {
+      "path": "export_battle_status.py",
+      "role": "registered-build",
+      "build_targets": [
+        "battle-status"
+      ],
+      "imported_by": []
     },
     {
       "path": "export_battle_ui.py",

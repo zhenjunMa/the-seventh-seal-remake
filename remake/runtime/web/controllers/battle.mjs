@@ -93,7 +93,7 @@ export function createBattleController({host, sessions = createBattleSessions()}
     mode=`${mode}:${stagePath??''}`;
     if(!sessions.views.has(mode))sessions.views.set(mode,new BattleView({canvas:host.engine?.battle.surface.canvas??$('battleCanvas'),
       metadataPath:newParty?'/'+host.catalog.party_battle_view:stagePath?'/'+host.catalog.forest_battle_view:'/data/battle_view.json',
-      itemMetadataPath:newParty?'/data/item_presentation.json':null,stageMetadataPath:stagePath,lifecycleMetadataPath:lifecycle?'/data/battle_lifecycle.json':null}));
+      itemMetadataPath:newParty?'/data/item_presentation.json':null,stageMetadataPath:stagePath,lifecycleMetadataPath:lifecycle?'/data/battle_lifecycle.json':null,statusMetadataPath:'/data/battle_status_view.json'}));
     const view=sessions.views.get(mode);sessions.views.delete(mode);sessions.views.set(mode,view);
     view.onResourcesPrepared=images=>host.engine?.battle.surface.prepareImages?.(images);
     view.onResourceError=error=>actions.log({type:'battle-resource-prefetch-failed',error:error.message});
