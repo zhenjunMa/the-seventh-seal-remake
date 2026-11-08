@@ -1,0 +1,25 @@
+remake/runtime/web/core/exploration/native_map_chests.mjs
+  s_42eae1dfafa97f::t_0fb0e9832ff988 63-68,72,86
+remake/runtime/tests/test_inner_white_forest_phase.mjs
+  s_42eae1dfafa97f::t_8b79336c4a6320 15,46-47,56,62,66-76,93
+remake/runtime/tests/test_native_map_chest_closure.mjs
+  s_42eae1dfafa97f::t_8b79336c4a6320 30,37-38,41-60,78,86-93,99,175,182
+remake/runtime/web/controllers/story.mjs
+  s_42eae1dfafa97f::t_e4c61b1fd620ee 338,342-347,349-356
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "8dd1512e1b0c950f56311d42c1d595a874ca8998",
+  "prompts": {},
+  "sessions": {
+    "s_42eae1dfafa97f": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b8a6-dd91-7b10-944f-c8ee55619a43",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
