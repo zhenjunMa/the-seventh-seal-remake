@@ -1,0 +1,21 @@
+remake/runtime/tests/test_inner_white_forest_phase.mjs
+  s_42eae1dfafa97f::t_dec151569f11c6 54-55,58,60-61,80,82
+remake/runtime/web/controllers/map.mjs
+  s_42eae1dfafa97f::t_dec151569f11c6 12,182-183
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "cb447ecf7fcb38d0c3ab82302826512c0591a802",
+  "prompts": {},
+  "sessions": {
+    "s_42eae1dfafa97f": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b8a6-dd91-7b10-944f-c8ee55619a43",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
