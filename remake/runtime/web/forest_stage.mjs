@@ -1,4 +1,4 @@
-// Source zero-camera composition; browser time and actor placement are preview policies.
+// Source stage composition and horizontal perspective; animation time remains adapted.
 import {drawBattleImage} from './core/battle/battle_resources.mjs';
 import {runtimeContent} from './core/content/content_registry.mjs';
 const need=(ok,message)=>{if(!ok)throw new Error(`森林战斗背景：${message}`);};
@@ -18,6 +18,12 @@ export function validateForestStage(stage,content=runtimeContent){
   return stage;
 }
 export function forestStageAssets(stage){return stage.layers.flatMap(l=>l.frames.flatMap(f=>[f,...f.intrinsic?[f.intrinsic]:[]].map(asset=>({...asset,path:'/'+asset.path,width:l.source.width,height:l.source.height}))));}
+export function battleStageCameraOffset(stage,cameraX,depth){
+  const ground=stage.layers.find(layer=>layer.id===stage.default_composition.ground.layer_id);
+  // 513FC0: camera X * actor/scenery ground Y, arithmetic half, divided by
+  // half the ground height. Preserve the view's fractional movement between poses.
+  return Math.floor(cameraX*depth/2)/(ground.source.height>>1);
+}
 export function drawForestStageLayer(ctx,stage,images,row,frame=row.frame??0,colorFade=null){
   const layer=stage.layers.find(l=>l.id===row.layer_id),asset=layer.frames[frame],scale=540/480,offset=(960-640*scale)/2;
   const [x,y,w,h]=row.destination_rect,[sx,sy,sw,sh]=row.source_rect;
@@ -37,19 +43,37 @@ export function drawForestStageLayer(ctx,stage,images,row,frame=row.frame??0,col
   }
   ctx.restore();
 }
+function drawForestStageGround(ctx,stage,images,cameraX,colorFade){
+  const ground=stage.default_composition.ground;
+  if(!cameraX){drawForestStageLayer(ctx,stage,images,ground,undefined,colorFade);return;}
+  const layer=stage.layers.find(layer=>layer.id===ground.layer_id);
+  const [sx,sy,sw,sh]=ground.source_rect,[x,y,w,h]=ground.destination_rect,halfHeight=layer.source.height>>1;
+  // 5145D0's scanline table is indexed from the bottom of the source image.
+  // Keep every row inside the image: the native +30 camera margin must not
+  // become an out-of-image Canvas/atlas sample at either side of the stage.
+  const sourceX=row=>Math.max(0,Math.min(layer.source.width-sw,sx+Math.trunc(cameraX*((sy+row+1)>>1)/halfHeight)));
+  for(let row=0;row<sh;){
+    const left=sourceX(row);let end=row+1;
+    while(end<sh&&sourceX(end)===left)end++;
+    drawForestStageLayer(ctx,stage,images,{...ground,source_rect:[left,sy+row,sw,end-row],
+      destination_rect:[x,y+row*h/sh,w,(end-row)*h/sh]},undefined,colorFade);
+    row=end;
+  }
+}
 export function drawForestStageBackground(ctx,stage,images,now,colorFade=null,cameraX=0){
   const sky=stage.layers.find(l=>l.id===stage.default_composition.sky.layer_id),frames=sky.animation?.frames;
   const initial=stage.default_composition.sky.initial_frame??0;
   const frame=frames?frames[(initial+Math.floor(now/sky.animation.interval_raw))%frames.length]:initial;
   drawForestStageLayer(ctx,stage,images,stage.default_composition.sky,frame,colorFade);
-  const ground=stage.default_composition.ground;
-  drawForestStageLayer(ctx,stage,images,cameraX?{...ground,source_rect:[ground.source_rect[0]+cameraX,...ground.source_rect.slice(1)]}:ground,undefined,colorFade);
+  drawForestStageGround(ctx,stage,images,cameraX,colorFade);
   // SCN objects here are scenery textures, not combat actors. Finish the
   // background pass before any monster or party sprite, regardless of its Y.
   const scenery=[...stage.default_composition.scene_objects].sort((a,b)=>(a.sort_category??0)-(b.sort_category??0)||(a.sort_y??0)-(b.sort_y??0));
   for(const row of scenery){
     const layer=stage.layers.find(l=>l.id===row.layer_id),animation=layer.animation;
     const frame=animation?animation.frames[((row.frame??0)+Math.floor(now/animation.interval_raw))%animation.frames.length]:row.frame;
-    drawForestStageLayer(ctx,stage,images,cameraX?{...row,destination_rect:[row.destination_rect[0]-cameraX,...row.destination_rect.slice(1)]}:row,frame,colorFade);
+    const fixedX=layer.scn.flags_raw_31_36?.[2]??parseInt(layer.scn.raw_hex.slice(0x33*2,0x34*2),16);
+    const offset=cameraX&&!fixedX?battleStageCameraOffset(stage,cameraX,layer.scn.position_raw.y):0;
+    drawForestStageLayer(ctx,stage,images,offset?{...row,destination_rect:[row.destination_rect[0]-offset,...row.destination_rect.slice(1)]}:row,frame,colorFade);
   }
 }

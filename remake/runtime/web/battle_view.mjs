@@ -15,7 +15,7 @@ import {createDeathParticleSurface} from './death_particles.mjs';
 import {battleViewport,battleActorPositions,battleActorCategory} from './core/battle/battle_layout.mjs';
 import {battleResources,drawBattleImage} from './core/battle/battle_resources.mjs';
 import {runtimeContent,requireRegisteredRoles} from './core/content/content_registry.mjs';
-import {validateForestStage,forestStageAssets,drawForestStageBackground} from './forest_stage.mjs';
+import {validateForestStage,forestStageAssets,drawForestStageBackground,battleStageCameraOffset} from './forest_stage.mjs';
 const clone = value => structuredClone(value);
 const abortError = reason => Object.assign(new Error(reason || '战斗表现已取消'), {name: 'AbortError'});
 const urlAllowed = path => typeof path === 'string' &&
@@ -656,7 +656,7 @@ export class BattleView {
     this.damageTexts=this.damageTexts.filter(e=>now-e.created_at<900);
     const lane=this.damageTexts.filter(e=>e.target_id===targetId).length;
     this.damageTexts.push({id:++this.damageTextSerial,target_id:targetId,text:miss?'MISS':String(result.supported?result.hp_delta:result.damage),miss,healed:Boolean(result.supported),created_at:now,
-      x:Math.max(this.stageMeta?140:20,Math.min(this.stageMeta?820:940,slot[0]+34+Math.floor(lane/4)*28)),
+      x:this.stageMeta?slot[0]+34+Math.floor(lane/4)*28:Math.max(20,Math.min(940,slot[0]+34+Math.floor(lane/4)*28)),ground_y:slot[1],
       y:Math.max(28,slot[1]-70-(lane%4)*24)});
   }
 
@@ -666,7 +666,8 @@ export class BattleView {
     for(const e of this.damageTexts){const age=Math.max(0,now-e.created_at);
       const asset=this.damageTextAssets[e.miss?'miss':e.healed?'healed':'damage'];
       const frames=e.miss?[asset.frames[0]]:[...e.text].map(digit=>asset.frames[Number(digit)]);
-      const width=asset.width*scaleX,height=asset.height*scaleY,x=e.x-width*frames.length/2,y=e.y-age/60-height;
+      const center=this.stageMeta?Math.max(140,Math.min(820,e.x-this._stageCameraOffset(e.ground_y))):e.x;
+      const width=asset.width*scaleX,height=asset.height*scaleY,x=center-width*frames.length/2,y=e.y-age/60-height;
       c.save();c.globalAlpha=1-age/900;
       for(const [index,frame]of frames.entries())drawBattleImage(c,this.images.get('/'+frame.image),x+index*width,y,width,height);
       c.restore();
@@ -804,7 +805,14 @@ export class BattleView {
 
   actorPositions(){
     if(!this.meta)return null;
-    return Object.fromEntries(Object.entries(this.drawnSlots??this._slots(this.run)).map(([id,[x,y]])=>[id,this.stageMeta?[(x-120)/1.125-(this.cameraShake?.x??0)-(this.cameraPan?.x??0),y/1.125-(this.cameraShake?.y??0)]:[x*640/960-(this.cameraShake?.x??0)-(this.cameraPan?.x??0),y*480/540-(this.cameraShake?.y??0)]]));
+    const slots=this.drawnSlots??this._slots(this.run);
+    return Object.fromEntries(Object.entries(slots).map(([id,[x,y]])=>[id,this.stageMeta?[(x-120-(!this.drawnSlots?this._stageCameraOffset(y):0))/1.125-(this.cameraShake?.x??0),y/1.125-(this.cameraShake?.y??0)]:[x*640/960-(this.cameraShake?.x??0)-(this.cameraPan?.x??0),y*480/540-(this.cameraShake?.y??0)]]));
+  }
+
+  _stageCameraOffset(y){
+    if(!this.stageMeta||!this.cameraPan?.x)return 0;
+    const ground=this.stageMeta.layers.find(layer=>layer.id===this.stageMeta.default_composition.ground.layer_id);
+    return battleStageCameraOffset(this.stageMeta,this.cameraPan.x,y/1.125-(480-ground.source.height))*1.125;
   }
 
   actorCursorHeight(id){return this._role(id)?.cursor_height_raw;}
@@ -869,6 +877,11 @@ export class BattleView {
   _actorPresentation(snapshot,now,{entryPreview=false,run=entryPreview?null:this.playbackRuntime.currentRun}={}){
     const roots=entryPreview?[]:[...this.detachedRuns,...(this.run?[this.run]:[])],slots = this._slots(run),groundSlots=this._slots(run,true);
     if(run?.sequence)for(const c of roots.flatMap(root=>[...root.children,...(!root.main_done?[root]:[])]).filter(c=>!c.done)){slots[c.result.actor_id]=this._slots(c)[c.result.actor_id];groundSlots[c.result.actor_id]=this._slots(c,true)[c.result.actor_id];}
+    // 513FC0 projects horizontal camera motion by ground depth before applying
+    // altitude. Shadows, effects and HUD consume these same projected slots.
+    if(!entryPreview&&this.stageMeta&&this.cameraPan?.x)for(const [id,slot]of Object.entries(slots)){
+      const offset=this._stageCameraOffset(slot[1]);slot[0]-=offset;groundSlots[id][0]-=offset;
+    }
     const actors = new Map((snapshot?.actors || []).map(actor => [actor.id, actor]));
     const queue=[...this.roster.filter(a=>a.side==='enemy'),...this.roster.filter(a=>a.side==='player')].map(a=>({...a,depth_y:groundSlots[a.id][1]}));
     // Ground depth follows approach/return on both stage and preview paths.
@@ -950,7 +963,7 @@ export class BattleView {
       ctx.strokeStyle = '#759a9a35'; ctx.beginPath(); ctx.moveTo(0, 384); ctx.lineTo(960, 384); ctx.stroke();
     }
     if (!this.ready){ctx.restore();return;}
-    if(!entryPreview&&this.cameraPan)ctx.translate(-this.cameraPan.x*(this.stageMeta?1.125:this.meta.policy.sprite_scale),0);
+    if(!entryPreview&&!this.stageMeta&&this.cameraPan)ctx.translate(-this.cameraPan.x*this.meta.policy.sprite_scale,0);
     const cached=this.presentationFrame;
     const {roots,slots,groundSlots,entries}=!entryPreview&&cached?.snapshot===snapshot&&cached.now===now
       ?cached.frame:this._actorPresentation(snapshot,now,{entryPreview,run});
