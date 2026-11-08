@@ -335,21 +335,25 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
     }
     const resource=state.chapterResources.object_animations[mapId]?.find(row=>row.object_index_zero_based===objectIndex);
     if(!resource)throw new Error('物件动作资源尚未准备');
-    const {action,frameIndices}=nativeChestAnimation(resource,object?.behavior_raw_cf);
+    const {frameIndices,intervalMs}=nativeChestAnimation(resource,object?.behavior_raw_cf);
     const frames=await playbackTask(Promise.all(frameIndices.map(index=>index>=resource.frames.length?null:
       actions.image(resource.frames.find(frame=>frame.index===index).image, `map:${mapId}`))),signal);
     if(playback?.paused)await playback.ready();signal?.throwIfAborted();playback?.check();
-    state.objectPreview={mapId,objectIndex,bitmap:frames[0]};
-    const start=performance.now(),interval=action.interval_raw;let completed=false;
+    const clock=state.engine?.exploration.clock;
+    // CF4 keeps its idle image when selecting action1; 414E92 advances to
+    // logical1 on the next eligible visit. CF3 already displays action0.
+    const preview={mapId,objectIndex,bitmap:frames[0]};
+    if(object.behavior_raw_cf===3)state.objectPreview=preview;
+    let frame=0,last=clock?.time??performance.now(),completed=false;
     try{
-      if(state.engine)await state.engine.exploration.clock.tween(interval*frames.length,t=>{
-        state.objectPreview.bitmap=frames[Math.min(frames.length-1,Math.floor(t*frames.length))];
-      },[signal]);
-      else{
-        let now=start;
-        do{now=await playbackFrame(null,signal);
-          const frame=Math.min(frames.length-1,Math.floor(Math.max(0,now-start)/interval));state.objectPreview.bitmap=frames[frame];
-        }while(now-start<interval*frames.length);
+      for(;;){
+        const now=await playbackFrame(clock,signal);
+        playback?.check();
+        if(now-last<intervalMs)continue;
+        // 413854 writes DD=now: advance once and discard elapsed overshoot.
+        last=now;
+        if(frame===frames.length-1){state.objectPreview=preview;break;}
+        preview.bitmap=frames[++frame];state.objectPreview=preview;
       }
       completed=true;
       // Keep the final pose while the parallel actor action finishes. The

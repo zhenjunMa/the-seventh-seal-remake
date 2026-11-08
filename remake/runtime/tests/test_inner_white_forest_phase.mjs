@@ -12,6 +12,7 @@ import {compileItemConfiguration} from '../web/core/items/item_registry.mjs';
 import {mapPresentation} from '../web/core/ui/map_presentation.mjs';
 import {createMapController} from '../web/controllers/map.mjs';
 import {createStoryController} from '../web/controllers/story.mjs';
+import {ActionClock} from '../web/phaser/components/action_clock.mjs';
 import {innerWhiteForestSource,innerWhiteForestWorld,innerWhiteForestRunner,
   innerWhiteForestMapIds,innerWhiteForestOriginal,innerWhiteForestComplete} from './helpers/inner_white_forest_world.mjs';
 
@@ -42,7 +43,8 @@ test('YC-03 uses actual seven-map DAT objects and complete original TLK/ANM byte
 test('source014 chest retains its seventeenth logical wait and hides its missing physical frame during collection and restore',async()=>{
   for(const index of [12,13]){
     const resource=source.resources.object_animations.M70071.find(row=>row.object_index_zero_based===index);
-    const original=await innerWhiteForestOriginal(resource.source.path),{action,frameIndices}=nativeChestAnimation(resource,4);
+    const original=await innerWhiteForestOriginal(resource.source.path),{action,frameIndices,intervalMs}=nativeChestAnimation(resource,4);
+    assert.equal(intervalMs,0,'native D9 retains action0 zero interval');
     assert.equal(createHash('sha256').update(original).digest('hex'),resource.source.sha256);
     assert.equal(original[0],9);assert.equal(original[2],2);assert.equal(original.readUInt32LE(0x43+2*0xac+4),17);
     assert.equal(original.subarray(0x43+0xac,0x43+2*0xac).toString('hex'),action.raw_hex);
@@ -51,23 +53,27 @@ test('source014 chest retains its seventeenth logical wait and hides its missing
   }
   const world=innerWhiteForestWorld(source);world.transact(draft=>{draft.location={map_id:'M70071',x:0,y:0,direction:0};});
   const object={...source.maps.M70071.objects.find(row=>row.index===12),bitmap:{id:'closed014'}},scene={data:{id:'M70071'},objects:[object],npcs:[]};
-  const resource=source.resources.object_animations.M70071.find(row=>row.object_index_zero_based===12),{action}=nativeChestAnimation(resource,4);
+  const resource=source.resources.object_animations.M70071.find(row=>row.object_index_zero_based===12);
   const requested=[],frames=[],state={world,chapterStory:source.story,chapterResources:source.resources,
     resources:{peek(){throw Error('The nonexistent completed physical frame must not be requested');}}};
   const map=createMapController({state,actions:{},$:()=>({}),canvas:{},ctx:{}});
   const queue=()=>mapPresentation({scene,world:world.value,role:{frame_width:16,frame_height:16,map_draw_offset:{x:0,y:0}},
     action:{bitmap:{id:'leader'}},view:{frame:0},objectBitmap:map.objectBitmap});
-  state.engine={exploration:{clock:{async tween(duration,update){
-    assert.equal(duration,action.interval_raw*17);
-    for(let i=0;i<17;i++){update((i+.25)/17);frames.push(state.objectPreview.bitmap);}
-    assert.equal(frames.at(-1),null);assert.deepEqual(queue().map(row=>row.key),['leader']);
-  }}}};
+  const clock=new ActionClock();clock.update(0);state.engine={exploration:{clock}};
   const story=createStoryController({state,actions:{image:async path=>{requested.push(path);return {path};}},$:()=>({}),canvas:{}});
   const {runner}=innerWhiteForestRunner(source,world,{objectAnimation:story.animateChapterObject});
   assert.equal(map.objectBitmap(scene,object),object.bitmap);
-  await story.playStory(playback=>runner.runObject({mapId:'M70071',objectIndex:12,playback}));
-  assert.equal(requested.length,16);assert.equal(frames[0].path,resource.frames[1].image);
-  assert.equal(frames[15].path,resource.frames[16].image);assert.equal(state.objectPreview,null);
+  const task=story.playStory(playback=>runner.runObject({mapId:'M70071',objectIndex:12,playback}));
+  for(let i=0;i<20;i++)await Promise.resolve();
+  assert.equal(state.objectPreview,undefined,'selecting action1 retains the idle image');
+  for(let i=0;i<17;i++){
+    clock.advance(1);for(let j=0;j<20;j++)await Promise.resolve();
+    frames.push(state.objectPreview?.bitmap??null);
+    if(i===15)assert.deepEqual(queue().map(row=>row.key),['leader']);
+  }
+  await task;
+  assert.equal(requested.length,16);assert.equal(frames[0].path,resource.frames[2].image);
+  assert.equal(frames[14].path,resource.frames[16].image);assert.equal(frames[15],null);assert.equal(state.objectPreview,null);
   assert.equal(map.objectBitmap(scene,object),null);assert.deepEqual(queue().map(row=>row.key),['leader']);
   await restore(world);assert.equal(map.objectBitmap(scene,object,world.value,false),null);assert.equal(quantity(world,349),1);
 });
@@ -84,7 +90,7 @@ test('M70071 wind chest accepts held333, grants usable145 once, and keeps key an
   const resource=source.resources.object_animations[mapId].find(row=>row.object_index_zero_based===objectIndex);
   const original=await innerWhiteForestOriginal(resource.source.path),animation=nativeChestAnimation(resource,4);
   assert.equal(createHash('sha256').update(original).digest('hex'),resource.source.sha256);
-  assert.equal(animation.action.interval_raw,130);assert.deepEqual(animation.frameIndices,Array.from({length:16},(_,i)=>i+10));
+  assert.equal(animation.action.interval_raw,130);assert.equal(animation.intervalMs,110);assert.deepEqual(animation.frameIndices,Array.from({length:16},(_,i)=>i+10));
   const world=innerWhiteForestWorld(source);world.transact(draft=>{draft.location={map_id:mapId,x:336,y:920,direction:0};});
   let interrupted=false,animations=0;
   const {runner}=innerWhiteForestRunner(source,world,{objectAnimation:async()=>{

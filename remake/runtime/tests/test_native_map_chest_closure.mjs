@@ -27,31 +27,37 @@ function keyItem(definition,index){
 function deterministicAnimation(row,world){
   const native=nativeChestAnimation(row.animation,4),trace={frames:[],images:[],elapsed:0,failAfter:0};
   const state={world,chapterStory:fixture.story,chapterResources:fixture.resources,objectPreview:null};
-  const clock={paused:false,closed:false,async tween(ms,update,signals=[]){
-    assert.equal(ms,native.action.interval_raw*native.frameIndices.length);
-    for(let index=0;index<native.frameIndices.length;index++){
-      for(const signal of signals)signal?.throwIfAborted();
-      update((index+0.01)/native.frameIndices.length);
-      trace.frames.push(state.objectPreview.bitmap.image);
-      assert.equal(quantity(world.value,nativeKeyedChest(row.object).rewards[0].id),trace.rewardBefore);
-      trace.elapsed+=native.action.interval_raw;
-      if(trace.failAfter&&trace.frames.length===trace.failAfter)throw new Error('Deterministic chest animation interruption');
-      await Promise.resolve();
-    }
-    update(1);
-  }};
+  const clock=new ActionClock();clock.update(0);
   state.engine={exploration:{clock}};
   const controller=createStoryController({state,actions:{image:async image=>{
     const frame=row.animation.frames.find(frame=>frame.image===image);assert.ok(frame);
     assert.equal(fileHash(`../web/${image}`),frame.sha256,'exported collection frame fingerprint');
     trace.images.push(image);return {image};
   }},$:()=>({}),canvas:{focus(){}},ctx:{}});
-  const expected=native.frameIndices.map(index=>row.animation.frames.find(frame=>frame.index===index).image);
+  const images=native.frameIndices.map(index=>row.animation.frames.find(frame=>frame.index===index).image);
+  const expected=[...images.slice(1),images.at(-1)];
   const reset=(failAfter=0)=>Object.assign(trace,{frames:[],images:[],elapsed:0,failAfter,
     rewardBefore:quantity(world.value,nativeKeyedChest(row.object).rewards[0].id)});
-  return {state,clock,trace,expected,reset,animate:controller.animateChapterObject,
-    native:{action_index:native.action.index,interval_ms:native.action.interval_raw,
-      frame_indices:native.frameIndices,duration_ms:native.action.interval_raw*native.frameIndices.length}};
+  const animate=async args=>{
+    const interrupted=new AbortController();let done=false,error;
+    const signal=AbortSignal.any([interrupted.signal,...(args.signal?[args.signal]:[])]);
+    const task=controller.animateChapterObject({...args,signal}).then(()=>{done=true;},cause=>{done=true;error=cause;});
+    while(!done){
+      for(let i=0;i<20;i++)await Promise.resolve();
+      if(done)break;
+      assert.equal(clock.tasks.size,1);
+      clock.advance(Math.max(1,native.intervalMs));
+      for(let i=0;i<20;i++)await Promise.resolve();
+      trace.frames.push(state.objectPreview.bitmap.image);trace.elapsed+=native.intervalMs;
+      assert.equal(quantity(world.value,nativeKeyedChest(row.object).rewards[0].id),trace.rewardBefore);
+      if(trace.failAfter&&trace.frames.length===trace.failAfter)
+        interrupted.abort(new Error('Deterministic chest animation interruption'));
+    }
+    await task;if(error)throw error;
+  };
+  return {state,clock,trace,expected,images,reset,animate,
+    native:{action_index:native.action.index,interval_ms:native.intervalMs,
+      frame_indices:native.frameIndices,duration_ms:native.intervalMs*native.frameIndices.length}};
 }
 
 test('Wind chest holds its final image while the longer actor action finishes, then releases it with the event',
@@ -69,7 +75,7 @@ test('Wind chest holds its final image while the longer actor action finishes, t
   const runner=new ChapterRunner({world,data:fixture.story,objectData:fixture.resources.interactive_objects,say:async()=>{},
     objectInteraction:controller.animateObjectInteraction,objectAnimation:controller.animateChapterObject});
   const object={index:row.object.index,bitmap:{image:'idle-chest'}},scene={data:{id:row.map_id}};
-  const native=nativeChestAnimation(row.animation,4),duration=native.action.interval_raw*native.frameIndices.length;
+  const native=nativeChestAnimation(row.animation,4),duration=native.intervalMs*native.frameIndices.length;
   const lastImage=row.animation.frames[native.frameIndices.at(-1)].image;
   for(const cancel of [false,true]){
     clock.update(0);
@@ -77,15 +83,20 @@ test('Wind chest holds its final image while the longer actor action finishes, t
     const task=controller.playStory(playback=>runner.runObject({mapId:row.map_id,objectIndex:row.object.index,playback}));
     for(let i=0;i<20&&clock.tasks.size<2;i++)await Promise.resolve();
     assert.equal(clock.tasks.size,2);
-    clock.advance(duration);
-    for(let i=0;i<10;i++)await Promise.resolve();
-    assert.equal(clock.tasks.size,1,'the actor action still has 760ms remaining');
+    const actorAction=state.objectActorPreview.action;
+    const actorDuration=actorAction.interval_raw*(actorAction.logical_count??actorAction.frame_count);
+    for(let i=0;i<native.frameIndices.length;i++){
+      clock.advance(native.intervalMs);
+      for(let j=0;j<10;j++)await Promise.resolve();
+    }
+    const remaining=actorDuration-duration;assert.ok(remaining>0);
+    assert.equal(clock.tasks.size,1,'the longer actor action is still running');
     assert.equal(map.objectBitmap(scene,object)?.image,lastImage,'never return to the idle chest after its animation');
     assert.deepEqual(world.snapshot(),before,'rewards wait for the complete interaction');
     if(cancel){state.storyPlayback.cancel();await assert.rejects(task,{name:'AbortError'});assert.deepEqual(world.snapshot(),before);}
     else{
       clock.paused=true;clock.advance(10000);assert.equal(map.objectBitmap(scene,object)?.image,lastImage);
-      clock.paused=false;clock.advance(760);await task;
+      clock.paused=false;clock.advance(remaining);await task;
       assert.equal(quantity(world.value,chest.rewards[0].id),quantity(before,chest.rewards[0].id)+1);
     }
     assert.equal(state.objectPreview,null);assert.equal(state.objectActorPreview,null);assert.equal(clock.tasks.size,0);
@@ -161,14 +172,14 @@ test('All thirteen registered direct chests close their key, reward, real action
       assert.deepEqual(animation.trace.frames,[]);results.scenarios.missing_key={passed:true,world_unchanged:true,animation_frames:0};
       world.replace(makeSeed(true));animation.reset();before=world.snapshot();const opened=await invoke();
       assert.equal(opened.state,3);assert.deepEqual(opened.rewards,chest.rewards);
-      assert.deepEqual(animation.trace.frames,animation.expected);assert.deepEqual(animation.trace.images,animation.expected);
+      assert.deepEqual(animation.trace.frames,animation.expected);assert.deepEqual(animation.trace.images,animation.images);
       assert.equal(animation.trace.elapsed,animation.native.duration_ms);
       assert.equal(animation.state.objectPreview.bitmap.image,animation.expected.at(-1));
       for(const reward of chest.rewards)assert.equal(quantity(world.value,reward.id),quantity(before,reward.id)+1);
       assert.deepEqual(world.value.inventory.find(item=>item.id===chest.keyId),before.inventory.find(item=>item.id===chest.keyId));
       assert.equal(world.value.event_records[flag][object.index],'03'+'a5'.repeat(13));
       results.scenarios.with_key={passed:true,key_retained:true,state:3,collection_frames:animation.trace.frames.length,
-        action_index:animation.native.action_index,first_physical_frame:animation.native.frame_indices[0]};
+        action_index:animation.native.action_index,first_physical_frame:animation.native.frame_indices[1]};
       animation.reset();before=world.snapshot();assert.equal((await invoke()).already_done,true);assert.deepEqual(world.snapshot(),before);
       assert.deepEqual(animation.trace.frames,[]);results.scenarios.repeat={passed:true,world_unchanged:true,animation_frames:0};
       world.replace(await decodeSave(await encodeSave(world.snapshot())));animation.reset();before=world.snapshot();

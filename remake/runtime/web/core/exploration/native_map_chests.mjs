@@ -60,12 +60,16 @@ export function canOpenNativeChest(world,chest){
 }
 export function nativeChestAnimation(resource,behavior){
   need([3,4].includes(behavior),'动画行为尚未接入');
+  const firstAction=resource.actions.find(row=>row.index===0);
+  const {raw:firstRaw,view:firstView}=sourceBytes(firstAction?.raw_hex??firstAction?.source_action_raw_hex,0xac,'首动作');
+  // 410CB0 initializes D9 from action0. CF4 selects action1 in 41497F
+  // without replacing that clock; its collection interval is still action0's.
+  const intervalMs=firstView.getUint32(1,true);
+  need(firstRaw[0]===0&&intervalMs<=0x7fffffff&&firstAction.interval_raw===intervalMs,'首动作时钟模式尚未接入');
   if(behavior===4){
-    const firstAction=resource.actions.find(row=>row.index===0);
-    const {raw}=sourceBytes(firstAction?.raw_hex??firstAction?.source_action_raw_hex,0xac,'首动作');
     // 4137C0 reads action0+7F before selecting the collection action. A
     // nonzero value requires actor D5=10 / 46F370, not direct collection.
-    need(raw[0x7f]===0,'首动作所需人物攻击尚未接入');
+    need(firstRaw[0x7f]===0,'首动作所需人物攻击尚未接入');
   }
   const index=behavior===4&&resource.actions.length>=2?1:0;
   const action=resource.actions.find(row=>row.index===index);
@@ -79,5 +83,5 @@ export function nativeChestAnimation(resource,behavior){
   '开箱帧序列、人物动作或时钟模式尚未接入');
   // 52AF12 rejects a physical frame outside the DGP pool without drawing.
   // Preserve that logical frame and its wait; do not clamp it to the last image.
-  return {action,frameIndices};
+  return {action,frameIndices,intervalMs};
 }
