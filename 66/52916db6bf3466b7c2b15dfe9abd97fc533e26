@@ -1,0 +1,21 @@
+remake/runtime/web/forest_stage.mjs
+  s_eecf3522374c3f::t_a9c9416ddf3f6c 1,21-26,46-62,68,75-77
+remake/runtime/web/battle_view.mjs
+  s_eecf3522374c3f::t_1783ba82242e32 18,659,669-670,808-815,880-884,966
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "6652916db6bf3466b7c2b15dfe9abd97fc533e26",
+  "prompts": {},
+  "sessions": {
+    "s_eecf3522374c3f": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1b8a7-9270-7e43-ba7e-b801cf9e8aa1",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
