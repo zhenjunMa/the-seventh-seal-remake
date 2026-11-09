@@ -1,0 +1,20 @@
+README.md
+  s_96050837d041dc::t_c35faaa1ce3976 3,91
+  s_96050837d041dc::t_8bdf66765516da 5,7,9,11,19,21,27,29,31,37,77-86,93
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "1182cc4cc2edecc4d21214621d73c361665e6219",
+  "prompts": {},
+  "sessions": {
+    "s_96050837d041dc": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1c02c-ec8f-7770-8144-8ec940cd878a",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
