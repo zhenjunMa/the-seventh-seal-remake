@@ -15,9 +15,9 @@ const description=skill=>{if(!skill)return '';const bytes=new Uint8Array(raw(ski
 // Owns only its overlay. World transactions, field casting and test battles are
 // host callbacks; scratch previews never modify the persistent seven-slot table.
 export class OperationTechniqueView{
-  constructor({root,manifest,supplement,textRenderer,onFocus,onSection,onActor,onFieldSkill,onSetSlot,onCreateCombination,onRenameCombination,onDeleteCombination,onMessage,onInfo,onTest}){
+  constructor({root,manifest,supplement,textRenderer,onFocus,onSection,onActor,onFieldSkill,onSetSlot,onCreateCombination,onRenameCombination,onDeleteCombination,onNameConfirm,onMessage,onInfo,onTest}){
     if(supplement?.version!==1)throw new Error('技巧界面补充素材缺失');
-    Object.assign(this,{root,manifest,supplement,textRenderer,onFocus,onSection,onActor,onFieldSkill,onSetSlot,onCreateCombination,onRenameCombination,onDeleteCombination,onMessage,onInfo,onTest});
+    Object.assign(this,{root,manifest,supplement,textRenderer,onFocus,onSection,onActor,onFieldSkill,onSetSlot,onCreateCombination,onRenameCombination,onDeleteCombination,onNameConfirm,onMessage,onInfo,onTest});
     this.menus=new Map([...manifest.menus,...supplement.menus].map(menu=>[menu.id,menu]));
     this.element=document.createElement('div');this.element.id='menuTechniqueUI';this.element.className='technique-ui';this.element.hidden=true;root.append(this.element);
     const style=document.createElement('style');style.textContent=`
@@ -285,12 +285,19 @@ export class OperationTechniqueView{
     const entry=button._entry,selected=button.dataset.selected==='true',direct=entry.type===0;
     // 450110 calls534C2B: a30px rectangle centers a19px line at Y+5,
     // with19px CJK steps. 451670 uses whole-string5358C4 at Y+7 instead.
-    const yellow=entry.type!==2&&selected;
-    const options={foreground:yellow?'#ffff00':'#ffffff',shadow:yellow?'#4f4f00':'#000000',
+    // Native 0x4524F3 gives a skill already in the draft priority over the focused color.
+    const composed=direct&&this.section==='edit'&&this.action==='compose'&&this.composition.includes(entry.index);
+    const yellow=!composed&&entry.type!==2&&selected;
+    const options={foreground:composed?'#505050':yellow?'#ffff00':'#ffffff',shadow:yellow?'#4f4f00':'#000000',
       ...(direct?{layout:'mnu',advanceOverride:19,lineHeight:19,maxWidth:250,maxLines:1}:{})};
     const cost=entry.source?Math.max(0,-raw(entry.source).getInt32(0x14f,true)):0;
     if(!button._labelNode)button._labelNode=this.text('',34,direct?5:7,button,'',options);
-    menuStyle(button._labelNode,{top:(direct?5:7)+'px'});this.paintText(button._labelNode,entry.name+(cost?' Mp/'+cost:''),'simsun19_text',options);
+    menuStyle(button._labelNode,{top:(direct?5:7)+'px',color:options.foreground});this.paintText(button._labelNode,entry.name+(cost?' Mp/'+cost:''),'simsun19_text',options);
+  }
+  updateCompositionPreview(index){
+    const button=this.element.querySelector('[data-technique-key="entry-0-'+index+'"]');
+    if(button&&!button.hidden)this.paintRowText(button);
+    this.paintPreview();
   }
   previewEntry(entry,button){
     this.preview=entry;
@@ -312,10 +319,31 @@ export class OperationTechniqueView{
   }
   confirmEntry(entry){
     if(this.section==='use'){this.selectedSkill=entry;this.stage='targets';this.paint();this.focus('content',Math.max(0,this.controls('content').findIndex(button=>button.dataset.techniqueKey==='target-'+this.roleId)));return;}
-    if(this.action==='compose'){if(this.composition.includes(entry.index)){this.onMessage?.('此技巧已经加入编成。',true);return;}const total=this.compositionUnits()+entry.slot.color;if(total>this.capacity){this.onMessage?.('编成球数超出法器容量。',true);return;}this.composition.push(entry.index);if(total===this.capacity)this.beginName();else this.paintPreview();return;}
+    if(this.action==='compose'){if(this.composition.includes(entry.index)){this.onMessage?.('此技巧已经加入编成。',true);return;}const total=this.compositionUnits()+entry.slot.color;if(total>this.capacity){this.onMessage?.('编成球数超出法器容量。',true);return;}this.composition.push(entry.index);if(total===this.capacity)this.beginName();else this.updateCompositionPreview(entry.index);return;}
     if(this.action==='name'){this.renameIndex=entry.index+1;this.composition=[...entry.record.indices];this.beginName(entry.record);return;}
-    if(this.action==='delete'){this.invoke(this.onDeleteCombination,{roleId:this.roleId,indexOneBased:entry.index+1,expectedRevision:this.world.revision});this.preview=null;return;}
+    if(this.action==='delete')return this.deleteEntry(entry);
     this.pending=entry;this.slotIndex=0;this.stage='slot-confirm';this.paint();this.focus('content',Math.max(0,this.controls('content').findIndex(button=>button.dataset.techniqueKey==='slot-0')));
+  }
+  async deleteEntry(entry){
+    if(!this.onDeleteCombination||this.deletePending)return;
+    const roleId=this.roleId;
+    this.deletePending=true;
+    try{
+      await this.onDeleteCombination({roleId,indexOneBased:entry.index+1,expectedRevision:this.world.revision});
+      if(this.element.hidden||this.section!=='edit'||this.stage!=='candidates'||this.action!=='delete'||this.roleId!==roleId)return;
+      const entries=this.currentEntries(),next=entries[Math.min(entry.index,entries.length-1)];
+      this.preview=next??null;
+      if(next)this.listOffset=Math.min(next.index,Math.max(this.listOffset,next.index-5));
+      this.paintList(entries,'game002_1a');
+      const button=next&&this.element.querySelector('[data-technique-key="entry-1-'+next.index+'"]');
+      if(button&&!button.hidden){
+        if(document.activeElement===button)this.previewEntry(next,button);
+        else button.focus({preventScroll:true});
+      }else{
+        this.paintPreview();this.onInfo?.('');this.focus('content');
+      }
+    }catch(error){this.onMessage?.(error.message,true);}
+    finally{this.deletePending=false;}
   }
   commitSlot(slotIndex){
     const pending=this.pending;if(!pending||!this.onSetSlot||this.slotCommit)return;
@@ -359,7 +387,7 @@ export class OperationTechniqueView{
     const naming=this.stage==='name-editor',menuId=naming?'game002_2a':'game002_2b';this.image(this.asset(menuId),0,0);
     this.paintNamePreview();
     if(naming){
-      for(const [name,label,click]of [['PROV','前移',()=>{this.nameCursor=Math.max(0,this.nameCursor-1);}],['NEXT','后移',()=>{this.nameCursor=Math.min(this.nameCodes.length,this.nameCursor+1);}],['DEL','删除',()=>this.nameCodes.splice(this.nameCursor,1)],['CANCEL','取消',()=>this.cancelNaming()],['OK','决定',()=>{if(!this.nameCodes.length){this.onMessage?.('请为技巧命名。',true);return;}this.stage='icon-editor';this.paint();this.focus('content',3+this.iconFocus);}]] )this.sourceButton(menuId,name,{x:0,y:0},'name-'+name,label,{focus:()=>{this.nameFocusZone='actions';},click:()=>{const stage=this.stage;click();if(this.stage===stage)this.paintNamePreview();}});
+      for(const [name,label,click]of [['PROV','前移',()=>{this.nameCursor=Math.max(0,this.nameCursor-1);}],['NEXT','后移',()=>{this.nameCursor=Math.min(this.nameCodes.length,this.nameCursor+1);}],['DEL','删除',()=>this.nameCodes.splice(this.nameCursor,1)],['CANCEL','取消',()=>this.cancelNaming()],['OK','决定',()=>{this.onNameConfirm?.();if(!this.nameCodes.length)return;this.stage='icon-editor';this.paint();this.focus('content',3+this.iconFocus);}]] )this.sourceButton(menuId,name,{x:0,y:0},'name-'+name,label,{focus:()=>{this.nameFocusZone='actions';},click:()=>{const stage=this.stage;click();if(this.stage===stage)this.paintNamePreview();}});
       this.supplement.name_charset.characters.forEach((char,index)=>this.sourceButton(menuId,String(index+1).padStart(3,'0'),{x:0,y:0},'char-'+index,char,{focus:()=>{this.nameFocusZone='characters';this.nameCharacterIndex=index;},click:()=>{if(this.nameCursor>=8){this.onMessage?.('技巧名称最多八个字符。',true);return;}if(this.action==='name')this.nameCodes[this.nameCursor]=index+1;else if(this.nameCodes.length<8)this.nameCodes.splice(this.nameCursor,0,index+1);else this.nameCodes[this.nameCursor]=index+1;this.nameCursor=Math.min(8,this.nameCursor+1);this.paintNamePreview();}}));
     }else{
       [['OK','完成',false],['SET','设定',true],['CANCEL','取消',null]].forEach(([name,label,setAfter])=>this.sourceButton(menuId,name,{x:0,y:0},'icon-'+name,label,{click:()=>{if(setAfter===null){this.stage='name-editor';this.paint();this.focus('content',5);return;}this.saveNamedCombination(setAfter);}}));
@@ -403,7 +431,7 @@ export class OperationTechniqueView{
     if(this.stage==='compose-confirm'){this.stage='candidates';this.paint();this.focus('content');return false;}
     if(this.stage==='targets'){this.stage='list';this.paint();this.focus('content');return false;}
     if(this.stage==='slot-confirm'){this.pending=null;this.preview=null;this.stage='candidates';this.paint();this.focus('content');return false;}
-    if(this.stage==='candidates'){if(this.action==='compose'&&this.composition.length){this.composition.pop();this.paintPreview();return false;}this.pending=null;this.preview=null;this.stage='categories';this.paint();this.focusCategory();return false;}
+    if(this.stage==='candidates'){if(this.action==='compose'&&this.composition.length){this.updateCompositionPreview(this.composition.pop());return false;}this.pending=null;this.preview=null;this.stage='categories';this.paint();this.focusCategory();return false;}
     if(this.stage==='categories'){this.preview=null;this.stage='actions';this.paint();this.focus('content',['compose','set','name','delete'].indexOf(this.action));return false;}
     if(this.stage==='actions'||this.stage==='list'){this.roleId=null;this.preview=null;this.stage='roster';this.paint();this.focus('content');return false;}
     this.mode='sub';this.paint();this.focus('sub',['use','edit','test'].indexOf(this.section));return false;

@@ -40,6 +40,7 @@ export function createMenuFeedback({playCue,getState,schedule=fn=>setTimeout(fn,
     if(result?.then)return Promise.resolve(result).then(value=>complete(true,value),error=>{complete(false);throw error;});
     return complete(true,result);
   }
+  function confirm(){if(active&&!active.done){active.success=true;queue(active);}else if(enabled)emit('menuConfirm');}
   function reject(){if(active){if(!active.done){active.failure=true;queue(active);}return;}if(enabled)emit('menuError');}
   function attach(root){
     const target=event=>event.target?.closest?.('button');
@@ -54,5 +55,5 @@ export function createMenuFeedback({playCue,getState,schedule=fn=>setTimeout(fn,
     for(const [name,listener,capture]of bindings)root.addEventListener(name,listener,capture);
     return ()=>{for(const [name,listener,capture]of bindings)root.removeEventListener(name,listener,capture);};
   }
-  return {run,transaction,reject,attach,activate(){enabled=true;active=null;},closing(){if(!active||active.done)emit('menuCancel');enabled=false;}};
+  return {run,transaction,confirm,reject,attach,activate(){enabled=true;active=null;},closing(){if(!active||active.done)emit('menuCancel');enabled=false;}};
 }

@@ -111,6 +111,7 @@ export function createBootController({state, actions, $, canvas, ctx}) {
       onTechniqueSlot:request=>menuTransaction(()=>actions.setTechniqueSlot(request)),onTechniqueCast:request=>menuTransaction(()=>actions.useFieldTechnique(request)),
       onTechniqueTest:request=>menuTransaction(()=>actions.startTechniqueTest(request)),
       onTechniqueCreate:request=>menuTransaction(()=>actions.editTechniqueCombination('create',request)),onTechniqueRename:request=>menuTransaction(()=>actions.editTechniqueCombination('rename',request)),onTechniqueDelete:request=>menuTransaction(()=>actions.editTechniqueCombination('delete',request)),
+      onTechniqueNameConfirm:()=>state.menuFeedback?.confirm(),
       onTechniqueMessage:(message,error=false)=>{state.operationMenu.info(message);$('menuMessage').classList.toggle('error',error);if(error)state.menuFeedback?.reject();},
       onEquipmentSelect:instanceId=>{$('menuEquipment').value=instanceId;},
       onEquipmentConfirm:async(instanceId)=>{$('menuEquipment').value=instanceId;await $('menuEquip').onclick();},
