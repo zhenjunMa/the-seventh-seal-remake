@@ -90,15 +90,19 @@ export function restoreActorWithItem(actor,item,data,{scope='battle',statusData,
   }
   for(const resource of ['hp','mp']){
     const flat=def.effect[`${resource}_maximum_flat`]??0,percent=def.effect[`${resource}_maximum_percent`]??0;
-    if(flat||percent){const maximum=(next[`raw_${resource}_maximum`]+flat)|0;
-      next[`raw_${resource}_maximum`]=(maximum+Math.trunc(Math.imul(maximum,percent)/100))|0;}
+    if(flat||percent){
+      const key=`raw_${resource}_maximum`,previous=next[key],base=(previous+flat)|0;
+      const maximum=(base+Math.trunc(Math.imul(base,percent)/100))|0;
+      const growthCap=resource==='hp'?9999:999;
+      // Limit new growth without reducing a maximum already earned by the party.
+      next[key]=next.side==='player'&&maximum>previous?Math.min(maximum,Math.max(previous,growthCap)):maximum;
+    }
   }
   for(const resource of ['hp','mp']){
     const effect=def.effect,amount=(effect[`restore_${resource}_flat`]??0)+Math.trunc(next[`raw_${resource}_maximum`]*(effect[`restore_${resource}_percent`]??0)/100);
-    //47D960's common epilogue runs even when508BB0 rejected the status and
-    // every numeric field is zero. Its raw caps also apply to enemy medicines.
-    const maximum=Math.min(resource==='hp'?9999:999,next[`raw_${resource}_maximum`]),raw=Math.min(maximum,Math.max(0,(next[`raw_${resource}`]+amount)|0));
-    next[`raw_${resource}_maximum`]=maximum;next[resource].maximum=maximum+next.resource_bonuses[`${resource}_maximum`];
+    const maximum=next[`raw_${resource}_maximum`];
+    const raw=Math.min(maximum,Math.max(0,(next[`raw_${resource}`]+amount)|0));
+    next[resource].maximum=maximum+next.resource_bonuses[`${resource}_maximum`];
     next.raw_by_address[resource==='hp'?'0x0524a705':'0x0524a70d']=maximum;
     const value=Math.max(0,raw+next.resource_bonuses[`${resource}_current`]);
     changes[resource]={before:next[resource].current,after:value};next[resource].current=value;

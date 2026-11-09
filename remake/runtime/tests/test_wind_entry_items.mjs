@@ -73,20 +73,19 @@ test('actual313 changes enemy MP maximum by the source -15 percent and398 clears
   const cleared=restoreActorWithItem(allied,instance(398),data,{statusData,content,rng:()=>{throw Error('clear must not roll');}});
   assert.equal(cleared.applied,true);assert.ok(cleared.actor.native_status_slots.every(row=>row.raw_hex==='00'.repeat(0xc6)));
   target.raw_mp=2000;target.raw_mp_maximum=2000;target.raw_by_address['0x0524a709']=2000;target.raw_by_address['0x0524a70d']=2000;target.mp={current:2000,maximum:2000};
-  const capped=restoreActorWithItem(target,instance(313),data,{statusData,content,caster:{side:'player'},rng:()=>0});
-  assert.equal(capped.actor.raw_mp_maximum,999);assert.equal(capped.actor.raw_mp,999);
+  const reduced=restoreActorWithItem(target,instance(313),data,{statusData,content,caster:{side:'player'},rng:()=>0});
+  assert.equal(reduced.actor.raw_mp_maximum,1700);assert.equal(reduced.actor.raw_mp,1700);
 });
 
-test('034 source HP100000 is clamped9999 even when322 fails or repeats; target mutation does not authorize consumption',async()=>{
+test('034 retains its source HP when322 fails or repeats',async()=>{
   const chr=await readFile(new URL('../../../Fight_Role/034.CHR',import.meta.url)),maximum=chr.readInt32LE(8+0x34);assert.equal(maximum,100000);
   let boss=actor();boss.side='enemy';boss.side_raw=0;boss.resource_id='034';boss.raw_hp=maximum;boss.raw_hp_maximum=maximum;boss.resource_bonuses.hp_current=0;boss.resource_bonuses.hp_maximum=0;
   boss.hp={current:maximum,maximum};boss.raw_by_address['0x0524a701']=maximum;boss.raw_by_address['0x0524a705']=maximum;
   const failed=restoreActorWithItem(boss,instance(322),data,{statusData,content,caster:{side:'player'},rng:()=>99});
-  assert.equal(failed.applied,false);assert.equal(failed.native_return,0);assert.equal(failed.state_changed,true);assert.equal(failed.actor.raw_hp_maximum,9999);assert.equal(failed.actor.raw_hp,9999);
+  assert.equal(failed.applied,false);assert.equal(failed.native_return,0);assert.equal(failed.state_changed,false);assert.equal(failed.actor.raw_hp_maximum,maximum);assert.equal(failed.actor.raw_hp,maximum);
   boss=restoreActorWithItem(boss,instance(322),data,{statusData,content,caster:{side:'player'},rng:()=>0}).actor;
-  boss.raw_hp=maximum;boss.raw_hp_maximum=maximum;boss.hp={current:maximum,maximum};boss.raw_by_address['0x0524a701']=maximum;boss.raw_by_address['0x0524a705']=maximum;
   const duplicate=restoreActorWithItem(boss,instance(322),data,{statusData,content,caster:{side:'player'},rng:()=>{throw Error('duplicate must not roll');}});
-  assert.equal(duplicate.applied,false);assert.equal(duplicate.actor.raw_hp_maximum,9999);assert.equal(duplicate.actor.raw_hp,9999);
+  assert.equal(duplicate.applied,false);assert.equal(duplicate.actor.raw_hp_maximum,maximum);assert.equal(duplicate.actor.raw_hp,maximum);
 });
 
 test('whole-side items touch each eligible native actor once, consume one unit, and battle element growth persists on exit',async()=>{
@@ -99,13 +98,12 @@ test('whole-side items touch each eligible native actor once, consume one unit, 
     await commandReady(battle,'001');battle.selectPlayer('001');await battle.chooseItem(instance(id).instance_id,target);
     assert.equal(battle.state.inventory.find(row=>row.id===id).quantity,2);
   }
-  // Failed repeated status still submits47D960's target writes, preserving
-  // the already-consumed count from the first successful whole-side throw.
+  // A repeated throw preserves enemy HP and the remaining item count.
   const enemies=battle.state.actors.filter(row=>row.side==='enemy');
   for(const enemy of enemies){Object.assign(enemy,restoreActorWithItem(enemy,instance(322),data,{statusData,content,caster:{side:'player'},rng:()=>0}).actor);
     enemy.raw_hp=100000;enemy.raw_hp_maximum=100000;enemy.hp={current:100000,maximum:100000};enemy.resource_bonuses.hp_current=0;enemy.resource_bonuses.hp_maximum=0;enemy.raw_by_address['0x0524a701']=100000;enemy.raw_by_address['0x0524a705']=100000;}
   await commandReady(battle,'001');battle.selectPlayer('001');await battle.chooseItem(instance(322).instance_id,enemies[0].id);
-  assert.ok(enemies.every(enemy=>enemy.raw_hp_maximum===9999&&enemy.raw_hp===9999));assert.equal(battle.state.inventory.find(row=>row.id===322).quantity,2);
+  assert.ok(enemies.every(enemy=>enemy.raw_hp_maximum===100000&&enemy.raw_hp===100000));assert.equal(battle.state.inventory.find(row=>row.id===322).quantity,2);
   const groupEvents=log.filter(row=>row.type==='battle-item-used'&&[18,322,398].includes(row.item_id));
   for(const event of groupEvents){assert.equal(event.result.group_results.length,2);assert.equal(new Set(event.result.group_results.map(row=>row.target_id)).size,2);}
   const initial=Buffer.from(seedBase.source.role_definitions['001'].header_raw_hex,'hex').readInt32LE(0x7a);
