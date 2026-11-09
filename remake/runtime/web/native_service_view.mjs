@@ -1,12 +1,15 @@
 import {setImageSource} from './core/ui/image_dom.mjs';
+import {menuText} from './menu_dom.mjs';
 // Original Boss MNU pixels and hit rectangles; economic decisions stay in the
 // controller. The two buying pages share the native (10,50) listing origin.
 const labels={buy:'购买',sell:'卖出',forge:'锻造',synthesize:'合成'};
+const regularFont='simsun19_text',compactFont='simsun12_text';
+const textShadow={shadow:'#000000',shadowOffsets:[[1,1]]};
 const place=(node,x,y,w,h)=>Object.assign(node.style,{left:`${x}px`,top:`${y}px`,...(w===undefined?{}:{width:`${w}px`,height:`${h}px`})});
 export class NativeServiceView{
-  constructor({root,manifest,onAction,onClose,isSuspended=()=>false}){
+  constructor({root,manifest,textRenderer,onAction,onClose,isSuspended=()=>false}){
     if(manifest?.schema!=='seventh-seal-native-services'||manifest.version!==1)throw new Error('城镇服务素材版本无效');
-    Object.assign(this,{root,manifest,onAction,onClose,isSuspended});
+    Object.assign(this,{root,manifest,textRenderer,onAction,onClose,isSuspended});
     this.menus=new Map(manifest.menus.map(menu=>[menu.id,menu]));
     root.classList.add('native-service-panel');root.hidden=true;
     this.frame=document.createElement('div');this.frame.className='native-service-frame';this.frame.tabIndex=-1;
@@ -17,9 +20,15 @@ export class NativeServiceView{
   fit(){this.frame.style.transform=`translate(-50%,-50%) scale(${Math.min(this.root.clientWidth/640,this.root.clientHeight/480)})`;}
   widget(menu,name){return menu.widgets.find(widget=>widget.name.toUpperCase()===name.toUpperCase());}
   image(path,x=0,y=0,parent=this.frame){const node=document.createElement('img');node.alt='';setImageSource(node,path);place(node,x,y);parent.append(node);return node;}
-  text(value,rect,parent=this.frame,className=''){
-    const node=document.createElement('span');node.className=`native-service-text ${className}`;node.textContent=value??'';
-    place(node,rect.left,rect.top,rect.right-rect.left+1,rect.bottom-rect.top+1);parent.append(node);return node;
+  text(value,rect,parent=this.frame,{font=regularFont,foreground='#eee',lineHeight=20,
+    align='left',verticalAlign='top'}={}){
+    const width=rect.right-rect.left+1,height=rect.bottom-rect.top+1;
+    const node=document.createElement('span');node.className='native-service-text';
+    Object.assign(node.style,{color:foreground,lineHeight:`${verticalAlign==='center'?height:lineHeight}px`,textAlign:align});
+    place(node,rect.left,rect.top,width,height);
+    menuText(node,value,this.textRenderer,{font,foreground,lineHeight,align,verticalAlign,
+      maxWidth:width,maxLines:Math.max(1,Math.floor(height/lineHeight)),boxHeight:height,...textShadow});
+    parent.append(node);
   }
   control(menu,widget,label,action,{x=0,y=0}={},parent=this.frame){
     const r=widget.rect,button=document.createElement('button');button.type='button';button.className='native-service-control';button.setAttribute('aria-label',label);
@@ -46,8 +55,10 @@ export class NativeServiceView{
       });
       button.setAttribute('aria-pressed',String(category?(mode==='buy'||mode==='sell')&&(state.category??'items')===category:target===mode));
     }
-    this.text(state.title,this.widget(main,'AREA').rect);this.text(String(state.money??0),this.widget(main,'GOLD').rect);
-    this.text(state.message??state.details?.description??'',this.widget(main,'INFO').rect,this.frame,'native-service-message');
+    const area=this.widget(main,'AREA'),gold=this.widget(main,'GOLD');
+    this.text(state.title,{...area.rect,top:area.draw_point_raw.y});
+    this.text(state.money??0,{...gold.rect,top:gold.draw_point_raw.y},this.frame,{font:compactFont});
+    this.text(state.message??state.details?.description??'',this.widget(main,'INFO').rect,this.frame,{font:compactFont,lineHeight:18});
     const header=this.menus.get(mode==='forge'?'boss_text_02':mode==='synthesize'?'boss_text_03':'boss_text_01');this.image(header.images[0].image);
     if(mode==='buy'||mode==='sell'){
       for(const [index,value]of ['buy','sell'].entries())if(allowed.includes(value))this.control(header,this.widget(header,String(index+1).padStart(2,'0')),labels[value],()=>this.changeMode(value));
@@ -68,30 +79,40 @@ export class NativeServiceView{
       const button=this.control(listing,widget,`${row.name}，${row.price??0}库伦`,()=>this.select(this.offset+index),o);this.rowButtons.push(button);
       button.classList.toggle('is-selected',row.id===selected?.id);button.setAttribute('aria-disabled',String(row.enabled===false));
       if(row.id===selected?.id&&widget.selected_images.length)this.image(widget.selected_images.at(-1),widget.draw_point_raw.x-widget.rect.left,widget.draw_point_raw.y-widget.rect.top,button);
-      const text=document.createElement('span');text.className='native-service-row-text';text.textContent=row.name;
-      const amount=document.createElement('span');amount.className='native-service-row-value';amount.textContent=String(row.price??row.quantity??'');button.append(text,amount);
+      const {left,top,right,bottom}=widget.rect,width=right-left+1,height=bottom-top+1;
+      this.text(row.name,{left:14,top:0,right:183,bottom:height-1},button,
+        {verticalAlign:'center',foreground:row.enabled===false?'#8a8278':'#eee'});
+      this.text(row.price??row.quantity,{left:184,top:0,right:width-9,bottom:height-1},button,
+        {font:compactFont,lineHeight:12,verticalAlign:'center',foreground:'#e4c485',align:'right'});
       button.ondblclick=()=>{if(!this.isSuspended()){this.select(this.offset+index);this.openConfirmation();}};
     }
     for(const [name,step]of [['up',-9],['dn',9]])this.control(listing,this.widget(listing,name),step<0?'上一页':'下一页',()=>this.select(Math.max(0,Math.min(rows.length-1,this.index+step))),o);
     const pic=this.widget(listing,'PIC').rect,rect={left:pic.left+o.x+12,top:pic.top+o.y+18,right:pic.right+o.x-12,bottom:pic.bottom+o.y-18};
     const details=state.details??{},lines=[details.name??selected?.name??'',details.owned===undefined?'':`持有 ${details.owned}`,details.description??'',...(details.materials??[]).map(row=>`${row.name} ${row.owned??0}/${row.quantity}`)].filter(Boolean);
-    this.text(lines.join('\n'),rect,this.frame,'native-service-details');
+    this.text(lines.join('\n'),rect,this.frame,{font:compactFont,foreground:'#f2daba',lineHeight:20});
     if(this.confirming&&selected)this.paintConfirmation(selected,mode);
   }
   paintConfirmation(row,mode){
     const popup=document.createElement('div');popup.className='native-service-popup';this.frame.append(popup);
     if(mode==='forge'||mode==='synthesize'){
       const menu=this.menus.get('boss_buy_03a');this.image(menu.images[0].image,0,0,popup);
-      this.text(this.state.details?.name??row.name,{left:180,top:168,right:460,bottom:194},popup);
+      this.text(this.state.details?.name??row.name,{left:180,top:152,right:460,bottom:173},popup,
+        {align:'center',verticalAlign:'center'});
       this.control(menu,this.widget(menu,'OK'),'确认合成',()=>this.confirm(),{},popup);
       this.control(menu,this.widget(menu,'CANCEL'),'取消合成',()=>{this.confirming=false;this.paint();},{},popup);
     }else{
       const menu=this.menus.get('boss_buy'),x=205,y=82;this.image(menu.images[0].image,x,y,popup);
       const values={NAME:row.name,C01:this.quantity,C02:this.state.details?.owned??row.quantity??0,G01:row.price,G02:(row.price??0)*this.quantity,G03:this.state.money};
-      for(const [name,value]of Object.entries(values)){const r=this.widget(menu,name).rect;this.text(String(value??''),{left:r.left+x,top:r.top+y,right:r.right+x,bottom:r.bottom+y},popup);}
+      for(const [name,value]of Object.entries(values)){
+        const r=this.widget(menu,name).rect;
+        this.text(value,{left:r.left+x,top:r.top+y,right:r.right+x,bottom:r.bottom+y},popup,
+          {font:compactFont,lineHeight:18});
+      }
       const controls=document.createElement('div');controls.className='native-service-quantity';popup.append(controls);
       for(const [label,action]of [['−',()=>this.changeQuantity(this.quantity-1)],['＋',()=>this.changeQuantity(this.quantity+1)],['确定',()=>this.confirm()],['取消',()=>{this.confirming=false;this.paint();}]]){
-        const button=document.createElement('button');button.type='button';button.textContent=label;button.onclick=()=>{if(!this.isSuspended())action();};controls.append(button);
+        const button=document.createElement('button');button.type='button';button.setAttribute('aria-label',label);
+        menuText(button,label,this.textRenderer,{font:compactFont,foreground:'#eed4a5',...textShadow},'native-menu-number');
+        button.onclick=()=>{if(!this.isSuspended())action();};controls.append(button);
       }
     }
   }

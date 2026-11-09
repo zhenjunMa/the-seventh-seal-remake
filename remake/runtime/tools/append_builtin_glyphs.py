@@ -1,4 +1,4 @@
-"""Append wide glyphs to fixed built-in atlases without changing old pixels.
+"""Append wide glyphs and math symbols to fixed built-in atlases.
 
 The font file must match the manifest's font_source SHA. This maintenance
 command never resolves system fonts and is not part of normal media builds.
@@ -92,8 +92,12 @@ def prepare(folder, key, row, characters, font_directory):
         ink = Image.new('RGBA', mask.size, (255, 255, 255, 255))
         ink.putalpha(mask)
         atlas.paste(ink, (x, y))
-        new_row['glyphs'][character] = dict(x=x, y=y, width=mask.width, height=mask.height,
-            offset_x=left, offset_y=top, advance=row['height'] + extra)
+        glyph = dict(x=x, y=y, width=mask.width, height=mask.height,
+                     offset_x=left, offset_y=top, advance=row['height'] + extra)
+        if unicodedata.east_asian_width(character) not in 'FW':
+            glyph['char_width'] = round(font.getlength(character))
+            glyph['advance'] = glyph['char_width'] + extra
+        new_row['glyphs'][character] = glyph
     if atlas.crop((0, 0, old.width, old.height)).tobytes() != old.tobytes():
         raise ValueError(f'旧图集像素发生变化：{key}')
     if any(new_row['glyphs'][c] != glyph for c, glyph in row['glyphs'].items()):
@@ -117,12 +121,14 @@ def main():
     parser.add_argument('--font-directory', type=Path, required=True,
                         help='Directory containing the exact font_source filenames and bytes.')
     parser.add_argument('--keys', required=True, help='Comma-separated explicit font profile keys.')
-    parser.add_argument('--characters', required=True, help='Printable wide characters to append.')
+    parser.add_argument('--characters', required=True, help='Printable wide characters or non-ASCII math symbols to append.')
     parser.add_argument('--evidence', required=True, help='New JSON filename inside runtime/evidence.')
     args = parser.parse_args()
     characters = ''.join(dict.fromkeys(args.characters))
-    if any(not c.isprintable() or unicodedata.east_asian_width(c) not in 'FW' for c in characters):
-        parser.error('Only printable wide characters are supported; existing ASCII spacing is preserved.')
+    if any(not c.isprintable() or c.isascii() or
+           (unicodedata.east_asian_width(c) not in 'FW' and unicodedata.category(c) != 'Sm')
+           for c in characters):
+        parser.error('Only printable wide characters and non-ASCII math symbols are supported.')
     evidence = RUNTIME / 'evidence' / args.evidence
     if evidence.parent.resolve() != (RUNTIME / 'evidence').resolve() or evidence.exists():
         parser.error('--evidence must be a new filename inside runtime/evidence')

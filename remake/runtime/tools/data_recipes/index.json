@@ -11891,7 +11891,7 @@
     },
     "menu_fonts.json": {
       "root": [
-        633731
+        696058
       ],
       "format": {
         "indent": 2,
@@ -11899,8 +11899,8 @@
         "crlf": true,
         "newline": true
       },
-      "sha256": "9df82400d6f47d6eddcf36ccae64cc7501ec3ef4e60df6df183fcc371f1fd077",
-      "bytes": 3191062
+      "sha256": "5afc9f21641106f892b6531375bca2584a80c2874feb6b2b24fe19a78dbe1027",
+      "bytes": 3194606
     },
     "native_services.json": {
       "root": [
@@ -19945,6 +19945,6 @@
     "0081": "eb3813669fc314b975cc0dc07f9137e1f9e4ce6f090ee5a4412071b0cefb0eef",
     "0082": "e92f18530ba21c0d472a561d1f04408c0a6630e1c547b7ec33c0bb1c0a13a7f1",
     "0083": "6f9d2ab42832931a7363d9e19246632d7cb66bbaa30dc458ea17d653ff07ab84",
-    "0084": "1efd309ea0cc8dd7604ec49d7919c2de3e785a63566b32e72db01353ac799b4a"
+    "0084": "ef32950094c044fab03c2aa836b509da16fa284da9110bbc6c16ab0c3e22caa7"
   }
 }
