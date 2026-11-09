@@ -494,13 +494,25 @@ class MediaBuilder:
         for name, image in data['images'].items():
             for region in image['regions']:
                 locations[region[4]].setdefault(name, []).append(region)
+        check_variants = bool(self.variants or self.fingerprints.report['changed'])
         for index, page in enumerate(data['pages']):
             path = self.local(page['path'])
+            page_images = locations[index]
             if path.is_file() and checksum(path) == page['sha256'] and not self.force:
+                if check_variants:
+                    # A valid page proves its pixels, but a changed input still
+                    # needs to reproduce the fixed PNG once per source signature.
+                    for name in page_images:
+                        signature = self.resource_signature(name)
+                        if not self.variant_assets[name]:
+                            continue
+                        verified = dict(signature=signature, sha256=self.plan.expected[name])
+                        if self.state.get(name) != verified:
+                            self.atlas_image(name)
                 self.outputs[page['path']] = page['sha256']
                 continue
             atlas = Image.new('RGBA', (page['width'], page['height']))
-            for name, regions in locations[index].items():
+            for name, regions in page_images.items():
                 image = self.atlas_image(name)
                 for ox, oy, w, h, _, x, y in regions:
                     atlas.paste(image.crop((ox, oy, ox+w, oy+h)), (x, y))

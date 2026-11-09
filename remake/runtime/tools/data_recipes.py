@@ -182,9 +182,10 @@ class DataRecipes:
             raw = self.source_bytes(name)[offset:offset + length]
             complete = len(raw) == length
             if not complete or digest(raw) != expected:
-                if not complete or index not in self.audio_headers:
+                header = self.audio_headers.get(index)
+                if not complete or header is None or raw[:4] != b'RIFF' or raw[8:12] != b'WAVE':
                     raise ValueError(f'运行数据原版范围不匹配：{name}+{offset}')
-                raw = self.audio_headers[index]
+                raw = header
             value = raw.hex() if codec == 'hex' else raw.decode(codec, 'strict')
         elif kind in {'object', 'array'}:
             children = node[1]
