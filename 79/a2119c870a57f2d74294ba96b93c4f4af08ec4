@@ -1,0 +1,26 @@
+remake/runtime/tools/create_party_skill_fixtures.mjs
+  s_6f40e323a89acd::t_bcd742f6cd46fc 32
+remake/runtime/tools/verify_delivery.py
+  s_6f40e323a89acd::t_bcd742f6cd46fc 119
+README.md
+  s_6f40e323a89acd::t_bcd742f6cd46fc 55-56,75
+  s_6f40e323a89acd::t_0df5666a3aad58 76
+remake/runtime/web/core/world/save_storage.mjs
+  s_6f40e323a89acd::t_bcd742f6cd46fc 11,16
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "79a2119c870a57f2d74294ba96b93c4f4af08ec4",
+  "prompts": {},
+  "sessions": {
+    "s_6f40e323a89acd": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1bf1b-eb9f-74d3-8c35-28d1346c5c2f",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
