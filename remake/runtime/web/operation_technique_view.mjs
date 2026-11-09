@@ -11,6 +11,7 @@ const raw=skill=>{
   return record.view;
 };
 const description=skill=>{if(!skill)return '';const bytes=new Uint8Array(raw(skill).buffer).slice(0x3b,0x3b+200);return new TextDecoder('gbk').decode(bytes.slice(0,Math.max(0,bytes.indexOf(0))));};
+const mpCostText=cost=>cost>0?` Mp/${cost}`:'';
 
 // Owns only its overlay. World transactions, field casting and test battles are
 // host callbacks; scratch previews never modify the persistent seven-slot table.
@@ -290,9 +291,9 @@ export class OperationTechniqueView{
     const yellow=!composed&&entry.type!==2&&selected;
     const options={foreground:composed?'#505050':yellow?'#ffff00':'#ffffff',shadow:yellow?'#4f4f00':'#000000',
       ...(direct?{layout:'mnu',advanceOverride:19,lineHeight:19,maxWidth:250,maxLines:1}:{})};
-    const cost=entry.source?Math.max(0,-raw(entry.source).getInt32(0x14f,true)):0;
+    const cost=this.section==='use'?mpCostText(entry.source?.mp_cost):'';
     if(!button._labelNode)button._labelNode=this.text('',34,direct?5:7,button,'',options);
-    menuStyle(button._labelNode,{top:(direct?5:7)+'px',color:options.foreground});this.paintText(button._labelNode,entry.name+(cost?' Mp/'+cost:''),'simsun19_text',options);
+    menuStyle(button._labelNode,{top:(direct?5:7)+'px',color:options.foreground});this.paintText(button._labelNode,entry.name+cost,'simsun19_text',options);
   }
   updateCompositionPreview(index){
     const button=this.element.querySelector('[data-technique-key="entry-0-'+index+'"]');
@@ -304,7 +305,15 @@ export class OperationTechniqueView{
     for(const row of this.element.querySelectorAll('.technique-row')){
       if(row.hidden)continue;const selected=row===button;if(row.dataset.selected!==String(selected))this.paintEntrySelection(row,selected);
     }
-    this.onInfo?.(entry.record?entry.record.indices.map(index=>this.source.roles[this.roleId].skills[index].name).join(' → '):description(entry.source));this.paintPreview();
+    if(entry.record){
+      const skills=entry.record.indices.map(index=>this.source.roles[this.roleId].skills[index]);
+      const cost=skills.reduce((sum,skill)=>sum+skill.mp_cost,0);
+      this.onInfo?.(skills.map(skill=>skill.name).join(' → ')+mpCostText(cost));
+    }else{
+      const cost=this.section==='edit'?mpCostText(entry.source?.mp_cost):'';
+      this.onInfo?.(description(entry.source)+cost);
+    }
+    this.paintPreview();
   }
   paintPreview(){
     const o=this.supplement.origins.composition_board,compiled=this.section==='edit'&&this.action==='compose'?this.compositionUnits():0,ghost=this.preview?.slot.color??0,units=compiled+ghost<=this.capacity?compiled+ghost:compiled;
