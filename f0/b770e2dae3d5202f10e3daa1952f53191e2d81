@@ -1,0 +1,27 @@
+remake/runtime/web/controllers/fullscreen.mjs
+  s_c93a42fe674b07::t_9d3b36923da0e8 22,27
+remake/runtime/web/index.html
+  s_c93a42fe674b07::t_d36f8afd787dd3 11,75
+README.md
+  s_c93a42fe674b07::t_d36f8afd787dd3 73
+remake/runtime/web/controllers/input.mjs
+  s_c93a42fe674b07::t_d36f8afd787dd3 4,19-39,79,114,117-127
+remake/runtime/tests/test_fullscreen.mjs
+  s_c93a42fe674b07::t_27c187a80fe45c 25,51,73
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "f0b770e2dae3d5202f10e3daa1952f53191e2d81",
+  "prompts": {},
+  "sessions": {
+    "s_c93a42fe674b07": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1bb6b-7ca5-7be1-8467-b62fca41f2e4",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
