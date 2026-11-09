@@ -202,7 +202,7 @@ def write_recipes(runtime, nodes, manifest):
     directory = Path(runtime) / 'tools/data_recipes'
     previous = []
     if (directory / 'index.json').is_file():
-        old = json.loads((directory / 'index.json').read_text())
+        old = json.loads((directory / 'index.json').read_text(encoding='utf-8'))
         previous = [directory / (name + ('.json.gz' if old.get('compression') else '.json')) for name in old['pools']]
     pools = {}
     for start in range(0, len(nodes), 8192):

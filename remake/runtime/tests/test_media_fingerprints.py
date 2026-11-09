@@ -5,6 +5,7 @@ import contextlib
 import hashlib
 import io
 import json
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -17,6 +18,13 @@ import export_media
 
 
 class FingerprintTests(unittest.TestCase):
+    def test_build_entrypoint_help_runs_in_isolated_python(self):
+        entry = Path(__file__).resolve().parents[1] / 'tools/build_runtime.py'
+        result = subprocess.run([sys.executable, '-I', '-X', 'utf8', '-B', str(entry), '--help'],
+                                capture_output=True, text=True, encoding='utf-8')
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn('--ignore-fingerprint', result.stdout)
+
     def setUp(self):
         self.directory = tempfile.TemporaryDirectory()
         self.addCleanup(self.directory.cleanup)

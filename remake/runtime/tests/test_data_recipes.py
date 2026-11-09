@@ -80,15 +80,15 @@ class DataRebuildTests(unittest.TestCase):
             DataRecipes(self.runtime, self.original).build(run=True)
         self.assertFalse((self.data / 'items.json').exists())
         manifest = self.runtime / 'tools/data_recipes/index.json'
-        value = json.loads(manifest.read_text())
+        value = json.loads(manifest.read_text(encoding='utf-8'))
         self.source.write_bytes(self.native)
         value['sources']['SaveGame0.Dat'] = '0' * 64
-        manifest.write_text(json.dumps(value))
+        manifest.write_text(json.dumps(value), encoding='utf-8')
         with self.assertRaisesRegex(ValueError, '玩家存档'):
             DataRecipes(self.runtime, self.original).build(run=True)
         value['sources'].pop('SaveGame0.Dat')
         value['documents']['config/skills.json'] = value['documents']['items.json']
-        manifest.write_text(json.dumps(value))
+        manifest.write_text(json.dumps(value), encoding='utf-8')
         with self.assertRaisesRegex(ValueError, '自定义配置'):
             DataRecipes(self.runtime, self.original)
         self.assertEqual(self.configuration.read_bytes(), self.custom)

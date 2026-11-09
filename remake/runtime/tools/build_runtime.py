@@ -4,7 +4,10 @@ Listing is read-only. --run explicitly runs selected steps; ordinary config
 export preserves parameters. Dated evidence is retained verbatim, with newly
 generated versions recorded under evidence/builds instead.
 """
+from pathlib import Path
 import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 # The player-facing media build is independent of the research exporters below.
 # Route before importing their optional decoders or discovering original files.
@@ -23,7 +26,6 @@ if __name__ == '__main__':
         from export_media import main as build_media
         raise SystemExit(build_media(arguments))
 
-from pathlib import Path
 from dataclasses import dataclass, replace
 from datetime import datetime, timezone
 import argparse
@@ -34,7 +36,6 @@ import re
 import subprocess
 import sys
 from uuid import uuid4
-sys.path.insert(0, str(Path(__file__).resolve().parent))
 from incremental import local_modules, write_json, build_lock
 from content_registration import definition, map_ids, role_ids, program_ids, stage_exports
 from export_battle_stages import source_files as stage_source_files
