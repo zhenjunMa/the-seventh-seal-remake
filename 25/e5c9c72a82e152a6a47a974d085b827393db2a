@@ -1,0 +1,21 @@
+remake/runtime/tools/data_recipes.py
+  s_fab25d475bde69::t_7e073b2100f1af 185-186,188
+remake/runtime/tools/export_media.py
+  s_fab25d475bde69::t_7e073b2100f1af 497,500,502-511,515
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "25e5c9c72a82e152a6a47a974d085b827393db2a",
+  "prompts": {},
+  "sessions": {
+    "s_fab25d475bde69": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1c292-c5fa-7b41-bd6c-1a6e2f886f57",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
