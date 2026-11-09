@@ -116,8 +116,7 @@ for name in browser['screenshots']:
 output = EVIDENCE/'runtime_delivery_20261011.json'
 files = [path for path in RUNTIME.rglob('*') if path.is_file() and path != output
          and '__pycache__' not in path.parts]
-files += [ROOT/name for name in ['remake/start.cmd', 'remake/start_runtime.cmd',
-          'remake/start_prototype.cmd', 'README.md',
+files += [ROOT/name for name in ['README.md',
           'remake/archive/20261011_before_chapter/assessment/runtime_phase1_20261011.txt',
           'remake/archive/20261011_before_chapter/assessment/runtime_phase2_20261011.txt']]
 report = dict(schema='seventh-seal-runtime-delivery', version=1,

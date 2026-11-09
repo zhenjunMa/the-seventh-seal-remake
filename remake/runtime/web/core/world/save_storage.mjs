@@ -8,12 +8,12 @@ export function createSaveStorage({fetchImpl=globalThis.fetch}={}) {
   async function request(endpoint,options={},binary=false) {
     let response;
     try { response=await fetchImpl(endpoint,{cache:'no-store',...options}); }
-    catch { throw new Error('无法连接本地存档服务，请启动 remake/start.cmd'); }
+    catch { throw new Error('无法连接本地存档服务，请从仓库根目录运行 python -B remake/runtime/serve.py'); }
     if(response.status===404&&!(options.method))return null;
     if(response.ok&&binary)return response.blob();
     let value;
     try { value=await response.json(); }
-    catch { throw new Error('本地存档服务不可用，请重启 remake/start.cmd'); }
+    catch { throw new Error('本地存档服务不可用，请重启 Python 游戏服务'); }
     if(!response.ok){const error=new Error(value.error??`存档操作失败（${response.status}）`);error.status=response.status;throw error;}
     return value;
   }

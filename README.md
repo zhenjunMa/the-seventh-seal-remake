@@ -52,6 +52,8 @@ python3 -m venv .venv
 .venv/bin/python -m pip install -r remake/runtime/requirements.txt
 ```
 
+Windows 下用 `python -m venv .venv` 创建虚拟环境，并将这里及后续命令中的 `.venv/bin/python` 替换为 `.\.venv\Scripts\python.exe`。
+
 </details>
 
 **导出运行数据与素材**：将路径替换成自己的原版安装目录，首次运行前执行。
@@ -69,6 +71,8 @@ python3 -m venv .venv
 ```
 
 浏览器打开 [本地游戏](http://127.0.0.1:8767/)，服务终端保持开启；结束后按 `Ctrl+C` 停止。
+
+开发用原型预览也使用已导出的数据。运行 `.venv/bin/python -B remake/prototype/serve.py` 后，打开 [原型预览](http://127.0.0.1:8765/)。
 
 方向键／`WASD` 移动，`Shift` 切换跑走，空格交互，`Tab` 切换队伍中的可操作人物，`Esc` 打开菜单或返回上一级，空格／`Enter` 确认，`F4` 快速保存，`F5` 快速读取。其他操作以游戏内提示为准。
 

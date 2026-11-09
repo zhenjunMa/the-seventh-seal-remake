@@ -29,7 +29,7 @@ function document(group,world,envelope){
   const active=world.party.map(role=>`${role.name}（${role.id}）`).join('、'),reserve=world.reserve_party.map(entry=>`${entry.role.name}（${entry.role.id}）`).join('、');
   const lines=[`# 六队友技能测试 ${group}：99级全技能`, '',`日期：2026-10-27。出场四人：${active}；候补：${reserve}。两组存档都保存六名队友的99级状态。`,'',
     `测试存档：[party_skill_${group.toLowerCase()}_99_save.json](party_skill_${group.toLowerCase()}_99_save.json)；校验 SHA-256：\`${envelope.sha256}\`。另一组见 [测试 ${group==='A'?'B':'A'}](test_${group==='A'?'b':'a'}_99.md)。`,'',
-    '从 `remake/start.cmd` 启动游戏，进入地图后，在“开发检查”选择对应的“99级全技能”样本。也可在游戏“导入存档”中选择上面的 JSON，直接恢复这组世界；导入只替换当前运行进度，需要时再手动另存为空槽。生成工具不会写入 `remake/saves` 或覆盖已有玩家存档。','',
+    '从仓库根目录运行 `python -B remake/runtime/serve.py`，并在浏览器打开 `http://127.0.0.1:8767/`。进入地图后，在“开发检查”选择对应的“99级全技能”样本。也可在游戏“导入存档”中选择上面的 JSON，直接恢复这组世界；导入只替换当前运行进度，需要时再手动另存为空槽。生成工具不会写入 `remake/saves` 或覆盖已有玩家存档。','',
     '六人均调用正式 `applyExperience` 和各自的原成长行逐级升到99级，成长随机固定取0。已学标记保存在每人的 `skill_progress`；保留原技巧等级和熟练度经验。源 CHR、技能类型、数值配置、学习等级和前置技巧等级都不修改，正常新游戏不会获得这些测试授予。','',
     '检查方法：','',
     '1. 打开人物菜单，核对当前四名队友均为99级、HP／MP为升级后资源；切换角色核对下表技能名称和原索引。候补两人保持99级并保留技能进度，当前菜单及战斗仍只使用出场四人。',
