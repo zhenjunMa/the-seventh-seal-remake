@@ -23,7 +23,8 @@ export class StartupView {
     Object.assign(this,{manifest,media,$,image,audio,onNew,onLoad,onResume,onStage,refreshSaves,isBusy,status,log});
     this.readSaves=getSaves??(()=>{const summary=getSave?.();return summary?[{slot:'manual',label:'普通存档',summary}]:[];});
     this.root=$('startMenu');this.canvas=$('startupCanvas');this.ctx=drawingContext(this.canvas);
-    this.video=$('startupVideo');this.images=new Map();this.allowResume=false;this.pending=false;
+    this.video=$('startupVideo');this.pressVideo=$('startupPressVideo');
+    this.images=new Map();this.allowResume=false;this.pending=false;
     this.sequence=new StartupSequence(snapshot=>this.changeStage(snapshot));
     this.root.addEventListener('pointerdown',event=>{
       if(this.sequence.stage==='menu')return;
@@ -52,14 +53,29 @@ export class StartupView {
   start(){this.allowResume=false;this.sequence.start();}
   showMenu({allowResume=false}={}){this.allowResume=allowResume;this.sequence.enter('menu');}
   hide(){this.sequence.close();}
-  stopMedia(){this.video.onended=null;this.video.onerror=null;this.video.pause();this.video.removeAttribute('src');this.video.load();}
+  get activeVideo(){return this.sequence.stage==='openpress'?this.pressVideo:this.video;}
+  stopMedia(video){
+    video.onended=null;
+    video.onerror=null;
+    video.onloadeddata=null;
+    video.hidden=true;
+    video.pause();
+    if(video.src){
+      video.removeAttribute('src');
+      video.load();
+    }
+  }
   changeStage({stage,epoch}) {
-    this.stopMedia();this.pending=false;this.rotation=null;this.root.hidden=stage==='closed';
+    if(stage!=='openpress'){
+      this.stopMedia(this.video);
+      this.stopMedia(this.pressVideo);
+    }
+    this.pending=false;this.rotation=null;this.root.hidden=stage==='closed';
     this.root.dataset.stage=stage;
     if(stage==='closed')return;
     this.onStage(stage);
     this.resize();this.root.focus({preventScroll:true});
-    const isMenu=stage==='menu';this.video.hidden=isMenu;this.canvas.hidden=!isMenu;
+    const isMenu=stage==='menu';this.canvas.hidden=!isMenu;
     this.$('startupButtons').hidden=!isMenu;this.$('startupOptions').hidden=true;
     this.$('menuResume').hidden=!isMenu||!this.allowResume;
     if(isMenu){
@@ -72,28 +88,46 @@ export class StartupView {
       return;
     }
     this.audio.suspend();
-    const clip=this.media.media[stage];this.video.loop=stage==='openpress';this.video.src=clip.url;
+    const clip=this.media.media[stage],video=this.activeVideo;
+    video.hidden=false;
     this.syncVideoAudio();
-    this.video.onended=()=>this.sequence.complete(epoch);
-    this.video.onerror=()=>{if(this.sequence.epoch!==epoch)return;this.log({type:'startup-media-error',stage,error:this.video.error?.message});this.sequence.fail(epoch);};
+    video.onended=()=>this.sequence.complete(epoch);
+    video.onerror=()=>{if(this.sequence.epoch!==epoch)return;this.log({type:'startup-media-error',stage,error:video.error?.message});this.sequence.fail(epoch);};
+    if(stage==='openpress'){
+      if(video.error){video.onerror();return;}
+      // Keep the ended transition on top until the loop has a decoded frame.
+      const reveal=()=>{
+        if(this.sequence.epoch!==epoch)return;
+        video.onloadeddata=null;
+        this.stopMedia(this.video);
+      };
+      video.onloadeddata=reveal;
+      if(video.readyState>=video.HAVE_CURRENT_DATA)reveal();
+    }else{
+      video.src=clip.url;
+      if(stage==='preopenpress'){
+        this.pressVideo.src=this.media.media.openpress.url;
+        this.pressVideo.hidden=false;
+      }
+    }
     this.announce(stage==='gametitle'?'片头电影，Esc跳过':stage==='preopenpress'?'启动提示过渡':'按任意键进入主菜单');
-    this.log({type:'startup-media-enter',stage,source:clip.source,url:clip.url,loop:this.video.loop});
-    const playback=this.video.play();
+    this.log({type:'startup-media-enter',stage,source:clip.source,url:clip.url,loop:video.loop});
+    const playback=video.play();
     playback?.catch(error=>{
       if(this.sequence.epoch!==epoch)return;
       if(error.name==='NotAllowedError'){
         // A browser can block sound before a trusted gesture. Keep the source
         // film running silently, then enable its sound on the first gesture.
-        this.video.muted=true;
-        this.video.play().catch(failure=>{if(this.sequence.epoch===epoch){this.status('点击启动画面以播放片头。');this.log({type:'startup-play-blocked',error:failure.message});}});
+        video.muted=true;
+        video.play().catch(failure=>{if(this.sequence.epoch===epoch){this.status('点击启动画面以播放片头。');this.log({type:'startup-play-blocked',error:failure.message});}});
       }else if(error.name!=='AbortError')this.sequence.fail(epoch);
     });
   }
   syncVideoAudio(retry=false){
-    const settings=this.audio.snapshot(),channels=settings.channels;
-    this.video.muted=!settings.unlocked||channels.master.muted||channels.music.muted;
-    this.video.volume=Math.max(1,Math.min(127,Math.floor(2*Math.round(channels.master.volume*64)*Math.round(channels.music.volume*64)/64)))/127;
-    if(retry&&this.video.paused&&['gametitle','preopenpress','openpress'].includes(this.sequence.stage))this.video.play().catch(()=>{});
+    const settings=this.audio.snapshot(),channels=settings.channels,video=this.activeVideo;
+    video.muted=!settings.unlocked||channels.master.muted||channels.music.muted;
+    video.volume=Math.max(1,Math.min(127,Math.floor(2*Math.round(channels.master.volume*64)*Math.round(channels.music.volume*64)/64)))/127;
+    if(retry&&video.paused&&['gametitle','preopenpress','openpress'].includes(this.sequence.stage))video.play().catch(()=>{});
   }
   cue(name){const id=this.manifest.audio.cues[name];if(id)this.audio.playClip(id);}
   select(index){
