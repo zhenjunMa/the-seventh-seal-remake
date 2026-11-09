@@ -604,7 +604,7 @@ def main(argv=None):
         if problems:
             print(json.dumps(dict(problems=problems, fingerprint=inputs.report), ensure_ascii=False, indent=2))
             return 1
-        generated = DataRecipes(RUNTIME, args.original_dir)
+        generated = DataRecipes(RUNTIME, args.original_dir, ignore_fingerprint=args.ignore_fingerprint)
         data_report = generated.build(run=args.run)
         print(json.dumps(dict(data=data_report), ensure_ascii=False, indent=2), flush=True)
         if args.target == ['data']:

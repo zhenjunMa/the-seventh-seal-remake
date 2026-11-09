@@ -92,10 +92,11 @@ class OriginalBytes:
 
 
 class DataRecipes:
-    def __init__(self, runtime, original_dir):
+    def __init__(self, runtime, original_dir, *, ignore_fingerprint=False):
         self.runtime = Path(runtime).resolve()
         self.directory = self.runtime / 'tools/data_recipes'
         self.original = OriginalFiles(original_dir)
+        self.ignore_fingerprint = ignore_fingerprint
         self.manifest = json.loads((self.directory / 'index.json').read_text('utf-8'))
         if self.manifest.get('schema') != SCHEMA or self.manifest.get('version') != 1:
             raise ValueError('运行数据配方版本无效')
@@ -116,6 +117,22 @@ class DataRecipes:
         self.source_cache = OriginalBytes()
         for name in self.manifest['documents']:
             self.output(name)
+        self.audio_headers = {}
+        audio = self.manifest['documents'].get('audio.json')
+        if ignore_fingerprint and audio:
+            definition = dict(self.nodes[audio['root'][0]][1])
+            for _, reference in self.nodes[definition['clips'][0]][1]:
+                clip = dict(self.nodes[reference[0]][1])
+                source = dict(self.nodes[clip['source'][0]][1])
+                index = source['header_hex'][0]
+                node = self.nodes[index]
+                if node[0] != 'source' or node[2:5] != [0, 16, 'hex'] or not node[1].casefold().endswith('.wav'):
+                    continue
+                # These are fixed provenance headers, not game content. Recover
+                # only a RIFF header whose bytes match the retained range SHA.
+                header = b'RIFF' + (source['bytes'] - 8).to_bytes(4, 'little') + b'WAVEfmt '
+                if digest(header) == node[5]:
+                    self.audio_headers[index] = header
 
     def output(self, name):
         path = PurePosixPath(name)
@@ -134,7 +151,7 @@ class DataRecipes:
                 continue
             try:
                 path = self.original.path(name)
-                if checksum(path) != expected:
+                if not self.ignore_fingerprint and checksum(path) != expected:
                     raise ValueError('原版内容与运行数据配方不一致：' + name)
                 self.paths[name] = path
             except (ValueError, OSError) as error:
@@ -163,8 +180,11 @@ class DataRecipes:
             if type(offset) is not int or type(length) is not int or offset < 0 or length < 0:
                 raise ValueError('运行数据原版范围无效')
             raw = self.source_bytes(name)[offset:offset + length]
-            if len(raw) != length or digest(raw) != expected:
-                raise ValueError(f'运行数据原版范围不匹配：{name}+{offset}')
+            complete = len(raw) == length
+            if not complete or digest(raw) != expected:
+                if not complete or index not in self.audio_headers:
+                    raise ValueError(f'运行数据原版范围不匹配：{name}+{offset}')
+                raw = self.audio_headers[index]
             value = raw.hex() if codec == 'hex' else raw.decode(codec, 'strict')
         elif kind in {'object', 'array'}:
             children = node[1]
@@ -224,9 +244,10 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--original-dir', type=Path, required=True)
     parser.add_argument('--run', action='store_true')
+    parser.add_argument('--ignore-fingerprint', action='store_true', help='忽略来源整文件指纹；范围字节及完整运行数据仍须通过校验')
     args = parser.parse_args(argv)
     try:
-        result = DataRecipes(RUNTIME, args.original_dir).build(run=args.run)
+        result = DataRecipes(RUNTIME, args.original_dir, ignore_fingerprint=args.ignore_fingerprint).build(run=args.run)
         print(json.dumps(result, ensure_ascii=False, indent=2))
         return 0
     except (ValueError, OSError, KeyError) as error:

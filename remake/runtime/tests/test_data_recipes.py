@@ -78,6 +78,8 @@ class DataRebuildTests(unittest.TestCase):
         self.source.write_bytes(b'changed original')
         with self.assertRaisesRegex(ValueError, '原版内容'):
             DataRecipes(self.runtime, self.original).build(run=True)
+        with self.assertRaisesRegex(ValueError, '运行数据原版范围'):
+            DataRecipes(self.runtime, self.original, ignore_fingerprint=True).build(run=True)
         self.assertFalse((self.data / 'items.json').exists())
         manifest = self.runtime / 'tools/data_recipes/index.json'
         value = json.loads(manifest.read_text(encoding='utf-8'))
@@ -92,6 +94,50 @@ class DataRebuildTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, '自定义配置'):
             DataRecipes(self.runtime, self.original)
         self.assertEqual(self.configuration.read_bytes(), self.custom)
+
+    def test_ignore_fingerprint_allows_only_changes_outside_referenced_ranges(self):
+        self.source.write_bytes(self.native + b'unreferenced audio or metadata')
+        with self.assertRaisesRegex(ValueError, '原版内容'):
+            DataRecipes(self.runtime, self.original).build(run=True)
+        DataRecipes(self.runtime, self.original, ignore_fingerprint=True).build(run=True)
+        for name, content in self.outputs.items():
+            self.assertEqual((self.data / name).read_bytes(), content)
+
+    def test_audio_variant_restores_exact_definition_and_keeps_document_hash_check(self):
+        sound = self.original / 'sound/click.wav'
+        sound.parent.mkdir()
+        raw = b'RIFF' + (72).to_bytes(4, 'little') + b'WAVEfmt ' + bytes(range(64))
+        sound.write_bytes(raw)
+        audio = dict(clips={'click': dict(source=dict(path='sound/click.wav', sha256=digest(raw),
+                                                     bytes=len(raw), header_hex=raw[:16].hex()))},
+                     cues={'confirm': 'click'})
+        target = self.data / 'audio.json'
+        target.write_text(json.dumps(audio), encoding='utf-8')
+        expected_audio = target.read_bytes()
+        for name, content in self.outputs.items():
+            (self.data / name).write_bytes(content)
+        with contextlib.redirect_stdout(io.StringIO()):
+            export(self.runtime, self.original)
+        variant = raw[:4] + (76).to_bytes(4, 'little') + raw[8:] + b'\0' * 4
+        sound.write_bytes(variant)
+        with self.assertRaisesRegex(ValueError, '原版内容'):
+            DataRecipes(self.runtime, self.original).build(run=True)
+        result = DataRecipes(self.runtime, self.original, ignore_fingerprint=True).build(run=True)
+        self.assertTrue(result['passed'])
+        self.assertEqual(target.read_bytes(), expected_audio)
+        self.assertEqual(sound.read_bytes(), variant)
+        for name, content in self.outputs.items():
+            self.assertEqual((self.data / name).read_bytes(), content)
+        self.assertEqual(self.configuration.read_bytes(), self.custom)
+        reader = DataRecipes(self.runtime, self.original, ignore_fingerprint=True)
+        root = reader.manifest['documents']['audio.json']['root'][0]
+        reader.nodes[root][1].append(['unexpected_rule_change', 1])
+        with self.assertRaisesRegex(ValueError, '重建后的运行数据'):
+            reader.build(run=True)
+        reader.source_cache.close()
+        sound.unlink()
+        with self.assertRaisesRegex(ValueError, '原版缺少文件'):
+            DataRecipes(self.runtime, self.original, ignore_fingerprint=True).build(run=True)
 
 
 if __name__ == '__main__':
