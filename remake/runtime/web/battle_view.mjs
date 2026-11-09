@@ -325,17 +325,21 @@ export class BattleView {
     try{
       const run=this.playbackRuntime.advance(snapshot,now);
       this.lastDrawAt=now;
-      if(this.ready&&snapshot?.phase==='victory'&&!this.victoryPlayback){
-        const sequences=new Map();
+      if(this.ready&&snapshot?.phase==='victory'){
+        const sequences=this.victoryPlayback??=new Map();
         for(const actor of snapshot.actors){
           if(!victoriousActor(actor))continue;
+          const current=sequences.get(actor.id);
+          if(current&&now-current.started<current.duration)continue;
           const variants=this._role(actor.id)?.victory_sequences;
           if(!variants?.length)continue;
-          // The selection is visual only and stays fixed for this victory.
-          const index=variants.length===1?0:Math.floor(Math.random()*variants.length);
-          sequences.set(actor.id,variants[index]);
+          // 510CDD returns an exhausted sequence to idle, then 51A9EA
+          // selects ID13 again while state9 persists. Keep each actor's
+          // complete CHR sequence and use only presentation RNG.
+          const segments=variants.length===1?variants[0]:variants[Math.floor(Math.random()*variants.length)];
+          const duration=segments.reduce((total,segment)=>total+segment.frames.length*segment.interval_raw,0);
+          sequences.set(actor.id,{segments,started:now,duration});
         }
-        this.victoryPlayback={started:now,sequences};
       }
       if(this.stageMeta)this.stageStarted??=now;
       for(const actor of snapshot?.actors??[]){
@@ -454,7 +458,7 @@ export class BattleView {
         role.shadow=clone(row.shadow??null);
         lifecycleFrames.set(row.layer_bank.path,{row,required:mergeNativeActionAtlases(role,row,meta.source_hashes)});
         role.victory_sequences=row.skills.filter(skill=>skill.skill_id_raw===13).map(skill=>
-          skill.segments.slice(0,2).map(segment=>({...segment,movement_source_field:'0x1e'})));
+          skill.segments.map(segment=>({...segment,movement_source_field:'0x1e'})));
         for(const skill of row.skills.filter(s=>s.source_skill?.battle_handler==='native-revival')){
           role.alternate_skills??=[];role.alternate_skills.push({...clone(skill),runtime_skill_id:`${row.id}_${skill.source_skill.original_skill_index}`,segments:skill.segments.map(segment=>({...clone(segment),movement_source_field:'0x1e'}))});
         }
@@ -970,10 +974,10 @@ export class BattleView {
       if(idlePose){segment={action_index:idlePose.action_index};frame=idlePose.action_frame;}
       const acting=run?.sequence?roots.flatMap(root=>[...root.children,...(!root.main_done?[root]:[])]).reverse().find(c=>!c.done&&c.result.actor_id===id):run?.result.actor_id===id?run:null;
       const impacting=run?.sequence?roots.flatMap(root=>this._sequenceChannels(root).map(channel=>({channel,at:root.started+(channel.at??0)+(channel.impact_elapsed??0)}))).filter(({channel:c})=>c.result.target_id===id&&c.impact_called&&this._damaging(c.result)).sort((a,b)=>b.at-a.at)[0]?.channel:run?.result.target_id===id&&run.impact_called&&this._damaging(run.result)?run:null;
-      const victorySequence=victory?.sequences.get(id);
+      const victorySequence=victory?.get(id);
       const appearanceScan=victorySequence?null:lifePose?.appearance_scan??null;
       if(victorySequence){
-        ({segment,frame}=victoryPoseAt(victorySequence,now-victory.started));
+        ({segment,frame}=victoryPoseAt(victorySequence.segments,now-victorySequence.started));
         const action=role.actions.find(row=>row.index===segment.action_index);
         pair=this.lifecyclePairs.get(`${role.id}:${action.first_frame+frame}`)??null;
       } else if(lifePose){segment={action_index:lifePose.action_index};frame=lifePose.action_frame;alpha=appearanceScan&&(this.context.supportsNativeAppearance||globalThis.document?.createElement)?1:lifePose.alpha??1;
