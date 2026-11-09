@@ -16,22 +16,6 @@ export function approachPoint(from,to,t,axisApproach=false) {
     {x:to.x,y:from.y+Math.sign(dy)*(distance-Math.abs(dx)),dx:dy?0:dx,dy};
 }
 
-// 486060 chooses a facing through the map's direction table. It uses the
-// original float32 coordinate deltas and ratio, compared with the executable's
-// float64 -2/-0.4/+0.4/+2 constants (x87 FCOMPL), rather than diagonals
-// for every pair of nonzero deltas as ordinary locomotion does.
-export function nativeConversationDirection(actor,target,directionMode=1) {
-  const directions=directionMode?[5,1,4,3,2,0,7,6]:[4,0,3,2,1,7,6,5];
-  const dx=Math.fround((actor.x-target.x)/2),dy=Math.fround((actor.y-target.y)/2);
-  if(dy!==0){
-    const ratio=Math.fround(dx/dy);
-    if(ratio>=0.4&&ratio<2)return directions[dy>0?2:5];
-    if(ratio>=-0.4&&ratio<0.4)return directions[dy>0?3:6];
-    if(ratio>=-2&&ratio<-0.4)return directions[dy>0?4:7];
-  }
-  return directions[dx>0?0:1];
-}
-
 // User-requested presentation: followers take one direct arrival instead of
 // visibly traversing both source waypoints. Keep every source command/barrier
 // in the VM. Only coalesce consecutive move groups separated by barriers;

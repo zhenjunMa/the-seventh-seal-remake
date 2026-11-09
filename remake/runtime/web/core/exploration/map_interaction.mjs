@@ -1,13 +1,32 @@
 // Direction indices match the eight exploration poses, starting down-right.
 const forwardVectors = [[1, 1], [1, 0], [1, -1], [0, -1], [-1, -1], [-1, 0], [-1, 1], [0, 1]];
 
-export function npcInFront(player, npc) {
-  const dx = npc.x - player.x, dy = npc.y - player.y;
+export function mapTargetInFront(player, target) {
+  const dx = target.x - player.x, dy = target.y - player.y;
   if (dx === 0 && dy === 0) return true;
   const [x, y] = forwardVectors[player.direction];
   const forward = x * dx + y * dy;
   // Allow 45 degrees to either side so diagonal approaches are easy to aim.
   return forward > 0 && Math.abs(x * dy - y * dx) <= forward;
+}
+
+// 486060 uses float32 coordinate deltas and ratio, then compares the ratio
+// against the executable's float64 thresholds before looking up the pose.
+export function nativeConversationDirection(actor,target,directionMode=1) {
+  const directions=directionMode?[5,1,4,3,2,0,7,6]:[4,0,3,2,1,7,6,5];
+  const dx=Math.fround((actor.x-target.x)/2),dy=Math.fround((actor.y-target.y)/2);
+  if(dy!==0){
+    const ratio=Math.fround(dx/dy);
+    if(ratio>=0.4&&ratio<2)return directions[dy>0?2:5];
+    if(ratio>=-0.4&&ratio<0.4)return directions[dy>0?3:6];
+    if(ratio>=-2&&ratio<-0.4)return directions[dy>0?4:7];
+  }
+  return directions[dx>0?0:1];
+}
+
+export function mapInteractionDirection(actor, target) {
+  if (!target || !(Math.hypot(target.x - actor.x, target.y - actor.y) > 0)) return actor.direction;
+  return nativeConversationDirection(actor, target);
 }
 
 // GAME.exe 43CE30/410850 selects explicit CF1 targets; 412640 checks reach.

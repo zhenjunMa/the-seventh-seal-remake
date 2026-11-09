@@ -2,8 +2,9 @@ import {drawImageRegion} from './core/resources/image_regions.mjs';
 // Presentation preview for the source-bound ANM player. Interpolation and
 // blend-state transitions are browser approximations, not native equivalence.
 import {locomotion} from './core/exploration/movement.mjs';
+import {nativeConversationDirection} from './core/exploration/map_interaction.mjs';
 import {linkPlaybackAbort,playbackFrame,playbackTask} from './core/story/story_playback.mjs';
-import {openingCamera,approachPoint,directArrivalMoves,nativeActorPixelEffects,nativeConversationDirection} from './core/ui/opening_presentation.mjs';
+import {openingCamera,approachPoint,directArrivalMoves,nativeActorPixelEffects} from './core/ui/opening_presentation.mjs';
 import {ActorEffectView} from './actor_effect_view.mjs';
 import {drawMapSprite} from './map_sprite.mjs';
 import {runtimeContent} from './core/content/content_registry.mjs';

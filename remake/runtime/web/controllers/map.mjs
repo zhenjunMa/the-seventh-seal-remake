@@ -15,7 +15,7 @@ import {chapterRouteExits,nativeEmptyEventCells} from "../core/exploration/map_c
 import {MapLocomotion,mapMotionProfile,nativeMapMovement} from "../core/exploration/map_locomotion.mjs";
 
 import {mapPresentation} from '../core/ui/map_presentation.mjs';
-import {mapWorldPoint, npcInFront, pickMapDialogueObject} from '../core/exploration/map_interaction.mjs';
+import {mapWorldPoint, mapTargetInFront, pickMapDialogueObject} from '../core/exploration/map_interaction.mjs';
 
 import {createExplorationPresentation} from './presentation_handoff.mjs';
 
@@ -174,7 +174,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
       if(!npcAvailable(npc))continue;
       if(!npc.event&&bindings.npcs&&!bindings.npcs.includes(npc.slot_zero_based))continue;
       const position=mapActorPosition(npc);
-      if(!npcInFront(at,position))continue;
+      if(!mapTargetInFront(at,position))continue;
       const distance=Math.hypot(position.x-at.x,position.y-at.y);
       if(distance<64&&(!state.nearest||distance<state.nearest.distance)){
         state.nearest={...npc,x:position.x,y:position.y,direction:position.direction??npc.direction,distance};
@@ -185,14 +185,16 @@ export function createMapController({state, actions, $, canvas, ctx}) {
       if(!binding)continue;
       if(binding.handler==='stationary-chest'&&(![3,4].includes(object.behavior_raw_cf)||!object.interaction_record_raw_f6))continue;
       if(binding.handler==='keyed-chest'&&![3,4].includes(object.behavior_raw_cf))continue;
-      if(['stationary-chest','keyed-chest'].includes(binding.handler)
-        &&chapterObjectState(state.world.value,at.map_id,object.index,state.chapterStory)===3)continue;
+      const isChest=binding.handler==='stationary-chest'||binding.handler==='keyed-chest';
+      if(isChest&&chapterObjectState(state.world.value,at.map_id,object.index,state.chapterStory)===3)continue;
       if(binding.handler==='tlk-object'&&(object.behavior_raw_cf!==1||!object.interaction_record_raw_f6))continue;
       if(binding.handler==='scripted-switch'&&(object.behavior_raw_cf!==9||!object.interaction_record_raw_f6))continue;
       if(binding.handler==='scripted-object'&&(object.behavior_raw_cf!==2||!object.interaction_record_raw_f6))continue;
       if(binding.handler==='toggle-object'&&object.behavior_raw_cf!==7)continue;
       if(binding.handler==='mechanism'&&object.behavior_raw_cf!==2)continue;
-      const distance=Math.hypot(object.x_native*2-at.x,object.y_native*2-at.y);
+      const position={x:object.x_native*2,y:object.y_native*2};
+      if(isChest&&!mapTargetInFront(at,position))continue;
+      const distance=Math.hypot(position.x-at.x,position.y-at.y);
       if(distance<64&&(!state.nearest||distance<state.nearest.distance))state.nearest={...object,kind:'object',name:binding.handler==='keyed-chest'?'宝箱':['scripted-switch','toggle-object','mechanism'].includes(binding.handler)?'机关':'物件',distance};
     }
     for(const binding of bindings.rests){

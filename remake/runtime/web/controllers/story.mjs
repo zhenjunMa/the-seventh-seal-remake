@@ -8,10 +8,9 @@ import {worldMapEntry} from '../core/exploration/map_connections.mjs';
 import {hasNativeStoryCompletion} from '../core/story/story_completion.mjs';
 import {nativeChestAnimation} from '../core/exploration/native_map_chests.mjs';
 import {captureMapNpcState} from '../core/exploration/map_npc_state.mjs';
-import {locomotion} from '../core/exploration/movement.mjs';
+import {mapInteractionDirection} from '../core/exploration/map_interaction.mjs';
 import {loadEncounterMap} from '../core/exploration/encounters.mjs';
 import {initializeMapSequence} from '../core/exploration/map_stage.mjs';
-import {nativeConversationDirection} from '../core/ui/opening_presentation.mjs';
 
 import {createStoryPresentation} from './presentation_handoff.mjs';
 
@@ -253,8 +252,7 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
     if(state.scenes.phase!=='map')return;
     const previous={scene:state.scenes.current,view:state.scenes.captureView()};
     const at=state.world.location;
-    const direction=npc&&Math.hypot(npc.x-at.x,npc.y-at.y)>0
-      ?nativeConversationDirection(at,npc):at.direction;
+    const direction=mapInteractionDirection(at,npc);
     const turn=direction!==at.direction?{scene:previous.scene,direction}:null;
     try{
       if(args.objectIndex!==undefined)state.scenes.setPhase('event');
@@ -332,8 +330,9 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
   async function animateObjectInteraction({mapId,objectIndex,object,actionGroup,signal,playback}){
     const role=state.openingResources.roles[state.world.value.leader_id];
     const actionIndex=role.native_action_bindings[actionGroup];
-    const at=state.world.location,direction=locomotion({dx:object.x_native*2-at.x,dy:object.y_native*2-at.y},false).direction??at.direction;
     if(!actionGroup||actionIndex===-1)return;
+    const target={x:object.x_native*2,y:object.y_native*2};
+    const direction=mapInteractionDirection(state.world.location,target);
     const action=role.actions.find(row=>row.index===actionIndex),count=action.logical_count??action.frame_count;
     const actor={role,action,direction,frame:action.uses_sequence?action.sequence_raw[0]:0};
     state.objectActorPreview=actor;
