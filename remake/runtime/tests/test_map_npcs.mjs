@@ -2,18 +2,21 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {MapNpcRuntime,decodeNpcBehavior,npcPath} from '../web/core/exploration/map_npcs.mjs';
+import {mapMotionProfile} from '../web/core/exploration/map_locomotion.mjs';
 import {MovementMap} from '../web/core/exploration/movement.mjs';
 import {createNativeRng} from '../web/core/battle/combat_rules.mjs';
 import {captureMapNpcState,restoreMapNpcState} from '../web/core/exploration/map_npc_state.mjs';
 
 const read=name=>JSON.parse(readFileSync(new URL('../web/data/'+name+'.json',import.meta.url),'utf8'));
 const story=read('chapter_story'),resources=read('chapter_map_resources'),village=read('maps/m17020');
-function fixture({actual=false,random=createNativeRng(21)}={}){
-  const source=actual?village:{...village,movement:{...village.movement,width:70,height:70,terrain_rows:Array(70).fill('0'.repeat(70)),triggers:[]}};
-  const npcs=structuredClone(actual?resources.npcs_by_map.M17020:[resources.npcs_by_map.M17020[0]]);
+function fixture({actual=false,random=createNativeRng(21),mapId='M17020',slot}={}){
+  const map=mapId==='M17020'?village:read(`maps/${mapId.toLowerCase()}`);
+  const source=actual?map:{...map,movement:{...map.movement,width:70,height:70,terrain_rows:Array(70).fill('0'.repeat(70)),triggers:[]}};
+  const mapNpcs=resources.npcs_by_map[mapId];
+  const npcs=structuredClone(actual?mapNpcs:[mapNpcs.find(npc=>slot===undefined||npc.slot_zero_based===slot)]);
   if(!actual){npcs[0].x=640;npcs[0].y=640;}
   const scene={data:source,movement:new MovementMap(source.movement),npcs};
-  const runtime=new MapNpcRuntime({scene,table:story.maps.M17020,roles:resources.roles,random});
+  const runtime=new MapNpcRuntime({scene,table:story.maps[mapId],roles:resources.roles,random});
   return {scene,runtime,npc:npcs[0]};
 }
 function run(runtime,ms,{from=0,step=10,...options}={}){
@@ -134,7 +137,9 @@ test('ordinary NPC visual travel is bounded by source speed, shares distance gai
 
 test('continuous NPC feet stop at a nearby player without route backlog and resume when the player moves away',()=>{
   for(const hz of [30,60,120]){
-    const {runtime,npc,scene}=fixture(),a=runtime.actors.get(npc.id),player={x:651,y:640};
+    const {runtime,npc,scene}=fixture({mapId:'M17010',slot:21});
+    const a=runtime.actors.get(npc.id),player={x:651,y:640};
+    const {speed}=mapMotionProfile(runtime.action(a,1),scene.data.movement,'',a.source.speedBias);
     a.path=Array.from({length:8},(_,i)=>({x:41+i,y:40}));a.wait=0;a.interval=43;
     runtime.update(0,{player});
     for(let n=1;n<=hz;n++){
@@ -146,7 +151,7 @@ test('continuous NPC feet stop at a nearby player without route backlog and resu
     for(let n=hz+1;n<=hz*3;n++)runtime.update(n*1000/hz,{player});
     assert.equal(npc.motion.x,stopped);assert.equal(npc.x,logical,'waiting cannot accumulate hidden source travel');
     player.y+=32;runtime.update((hz*3+1)*1000/hz,{player});
-    assert.ok(npc.motion.x>stopped);assert.ok(npc.motion.x-stopped<=4/43*1000/hz+1e-8);
+    assert.ok(npc.motion.x>stopped);assert.ok(npc.motion.x-stopped<=speed/hz+1e-8);
     assert.equal(a.contactBlocked,false);assert.equal(a.goal.x,640,'contact does not choose a new random goal');
   }
 });

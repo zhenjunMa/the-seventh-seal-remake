@@ -7,6 +7,9 @@ import {moveActorAgainst} from './movement.mjs';
 
 const EXPAND=[[-1,0],[-1,-1],[-1,1],[0,-1],[0,1],[1,0],[1,-1],[1,1]];
 const BACKTRACK=[[0,-1],[0,1],[-1,0],[1,0],[-1,-1],[-1,1],[1,-1],[1,1]];
+// Fire sprites, bat birds and hummingbirds use ordinary terrain routes, but
+// their sprites can overlap other actors without stopping either actor.
+const PASS_THROUGH_ROLES=new Set(['030','186','187']);
 const distance=(x,y,tx,ty)=>Math.max(Math.abs(x-tx),Math.abs(y-ty));
 const clamp=(x,low,high)=>Math.max(low,Math.min(high,x));
 const bytes=hex=>Uint8Array.from(hex.match(/../g)??[],x=>parseInt(x,16));
@@ -86,6 +89,7 @@ export class MapNpcRuntime {
     for(const npc of scene.npcs){
       let source=decodeNpcBehavior(sources.get(npc.slot_zero_based));const role=roles?.[npc.resource_id];
       if(!source||!role)continue;
+      npc.passThroughActors=source.type===1||PASS_THROUGH_ROLES.has(npc.resource_id);
       source={...source,bindings_raw:[...source.bindings],bindings:nativeNpcActionBindings(role),bindings_initialized:true};
       const idle=role.actions.find(action=>action.index===(npc.stage_action??source.bindings[0]));
       if(!idle)throw new Error('人物缺少源初始化待机动作');
@@ -111,12 +115,12 @@ export class MapNpcRuntime {
     const walk=this.action(a,1),motion=walk?mapMotionProfile(walk,this.movement,'',a.source.speedBias):null;
     const dx=a.npc.x-a.visual.x,dy=a.npc.y-a.visual.y;
     // Smooth only accepted logical travel, at the source per-axis speed.
-    // Source occupancy/RNG retain the logical route. The accepted visual
-    // ground path is swept against the player and used for both colliders.
+    // The accepted visual ground path is swept against the player for solid
+    // actors and used for both colliders.
     const travel=Math.max(Math.abs(dx),Math.abs(dy));
     const amount=this.held.has(a.npc.id)?0:Math.min(1,travel&&motion?motion.speed*delta/1000/travel:0);
     const accepted=moveActorAgainst(a.visual.x,a.visual.y,dx*amount,dy*amount,
-      player?this.scene.movement.actorObstacles([player]):[]);
+      player&&!a.npc.passThroughActors?this.scene.movement.actorObstacles([player]):[]);
     const movedX=accepted.x-a.visual.x,movedY=accepted.y-a.visual.y;
     a.visual.x=accepted.x;a.visual.y=accepted.y;
     if(delta>0)a.contactBlocked=accepted.blocked;
@@ -142,7 +146,7 @@ export class MapNpcRuntime {
   occupied(x,y,except,player){
     if(player&&Math.floor(player.x/this.cellSize)===x&&Math.floor(player.y/this.cellSize)===y)return true;
     for(const a of this.actors.values()){
-      if(a===except||a.npc.hidden||!this.visible(a.npc))continue;
+      if(a===except||a.npc.passThroughActors||a.npc.hidden||!this.visible(a.npc))continue;
       if(Math.floor(a.npc.x/this.cellSize)===x&&Math.floor(a.npc.y/this.cellSize)===y)return true;
       if(a.step&&a.step.cell.x===x&&a.step.cell.y===y)return true;
     }
@@ -174,13 +178,13 @@ export class MapNpcRuntime {
       const start={x:Math.floor(a.npc.x/this.cellSize),y:Math.floor(a.npc.y/this.cellSize)};
       const target={x:Math.floor(a.goal.x/this.cellSize),y:Math.floor(a.goal.y/this.cellSize)};
       a.path=npcPath(this.scene.movement,start,target,{flying:a.source.type===1,
-        occupied:(x,y)=>a.source.type!==1&&this.occupied(x,y,a,player)});
+        occupied:(x,y)=>!a.npc.passThroughActors&&this.occupied(x,y,a,player)});
       if(!a.path.length){a.goal={x:a.npc.x,y:a.npc.y};this.idle(a);return;}
       // 494DD0 builds/reverses the path on one tick, starts moving next tick.
       return;
     }
     const cell=a.path.shift();
-    if(a.source.type!==1&&this.occupied(cell.x,cell.y,a,player)){
+    if(!a.npc.passThroughActors&&this.occupied(cell.x,cell.y,a,player)){
       // Replan around live occupancy (493B70) without crossing another actor.
       const start={x:Math.floor(a.npc.x/this.cellSize),y:Math.floor(a.npc.y/this.cellSize)};
       const target={x:Math.floor(a.goal.x/this.cellSize),y:Math.floor(a.goal.y/this.cellSize)};

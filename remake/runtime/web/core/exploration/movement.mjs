@@ -331,10 +331,10 @@ export class MovementMap {
       segments,
     };
   }
-  // Visible actors use the same foot extent as the player. Callers filter
-  // story visibility; image dimensions and decorative map objects are ignored.
+  // Visible solid actors use the same foot extent as the player. Callers
+  // filter story visibility before requesting collision boxes.
   actorObstacles(actors) {
-    return actors.map((actor) => {
+    return actors.filter((actor) => !actor.passThroughActors).map((actor) => {
       const at = mapActorPosition(actor);
       return {
         left: at.x - MAP_FOOTPRINT.halfWidth,
