@@ -1,0 +1,22 @@
+remake/runtime/tests/test_wind_entry_items.mjs
+  s_744b55c23337ac::t_0aa2173bbe50d1 76-77,80,85,88,101,106
+remake/runtime/web/core/items/items.mjs
+  s_744b55c23337ac::t_c83a7f374164e6 93-99,103,105
+  s_744b55c23337ac::t_593cb857144ffa 104
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "e5c82baa0d2a550edf97068f757694e648fe42b9",
+  "prompts": {},
+  "sessions": {
+    "s_744b55c23337ac": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1c03c-9565-7842-bc94-d3c7efcbc5b6",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
