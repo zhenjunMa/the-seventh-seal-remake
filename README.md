@@ -1,88 +1,40 @@
 # The Seventh Seal Remake
 
-## 项目介绍
+《第七封印：魔神苏醒》的个人非官方浏览器重制，重现地图探索、剧情演出、即时战斗、队伍成长、装备合成和存读档。主线已接通至结局，支线和游戏系统已接入，仍待按正常成长路线完整试玩。
 
-《第七封印》的个人非官方重制项目，在浏览器中重现原作的地图探索、剧情演出、即时战斗、队伍成长、装备合成与存读档。
+## 快速开始
 
-目前主线、支线及游戏系统已完成接入，主线流程已接通至结局；接下来通过正常成长路线的全流程实际试玩验证体验与流程。
+需要 Python 3.12+、Node.js、FFmpeg（含 FFprobe）和保留目录结构的完整原版安装。请在仓库根目录执行以下命令，并将示例路径替换为自己合法取得的原版安装目录。
 
-仓库提供重制代码、内容配置、数据结构配方和内置字库。运行所需的原作文本、地图数据、图片、音乐和影片，须从自己合法取得的原版安装中导出。
+Windows 下用 `python -m venv .venv` 创建虚拟环境，后续将 `.venv/bin/python` 换成 `.\.venv\Scripts\python.exe`。
 
-## 架构
-
-```text
-原版安装（只读）＋数据结构配方
-              ↓ Python 导出工具
-      运行数据 web/data/ ＋ 媒体 web/assets/
-              ↓
- JavaScript 游戏规则与控制器 → Phaser 3 / WebGL 画面
-              ↕
-       Python 本地服务 → remake/saves/ 存档
-```
-
-游戏使用随仓库提供的 Phaser 3.90.0，以 640×480 为逻辑分辨率。探索、剧情、战斗和菜单共用世界状态；剧情由统一的 StoryFlow 执行，事件与奖励通过事务提交。规则、流程和显示分别维护，画面对象不保存游戏进度。
-
-战斗附加状态使用原版图像显示头顶图标或身体动画，帧数与实际状态结算同步；解除、到期、死亡和退出战斗时同步消失。控制类状态遵循原版显示优先级，原版缺少图像的状态保留数值效果。
-
-下表路径以 `remake/runtime/` 为基准。
-
-| 路径 | 职责 |
-| --- | --- |
-| `web/app.js`、`web/controllers/` | 启动、输入及各系统流程连接 |
-| `web/core/` | 探索、剧情、战斗、人物、道具与世界状态规则 |
-| `web/phaser/`、`web/*_view.mjs` | 场景、动画、界面、纹理与渲染 |
-| `web/content/` | 任务定义与独立事件 |
-| `web/data/runtime_content.json` | 地图、角色、演出等内容登记 |
-| `web/data/config/` | 技能、道具、战斗与奖励参数；修改 `parameters` 后刷新页面生效 |
-| `tools/` | 构建、导出及检查；`source/` 解析原版资源，`data_recipes/` 重建运行数据 |
-| `serve.py`、`native_save.py` | 本地静态服务、存档接口与原版格式编解码 |
-| `tests/`、`../prototype/` | 现有检查与实验；正式游戏不依赖实验目录 |
-
-生成的运行数据和媒体不提交到仓库；内容登记、自定义参数、结构配方与内置字库随代码提供。
-
-## 使用方式
-
-需要 Python 3.12 或更新版本、Node.js、FFmpeg（含 FFprobe），以及保留原目录结构的完整原版安装。以下命令均在仓库根目录执行。
-
-<details>
-<summary>首次环境准备</summary>
+**首次安装和导出**
 
 ```bash
 python3 -m venv .venv
 .venv/bin/python -m pip install -r remake/runtime/requirements.txt
-```
-
-Windows 下用 `python -m venv .venv` 创建虚拟环境，并将这里及后续命令中的 `.venv/bin/python` 替换为 `.\.venv\Scripts\python.exe`。
-
-</details>
-
-**导出运行数据与素材**：将路径替换成自己的原版安装目录，首次运行前执行。
-
-```bash
 .venv/bin/python -B remake/runtime/tools/build_runtime.py --target media --original-dir "/path/to/DiQiFengYin" --run
 ```
 
-导出会校验原版来源，生成运行数据及图片、音视频，保留自定义参数，并复用已完成且校验通过的输出。原版安装只读。
+导出工具以只读方式校验原版文件，生成运行数据和媒体，保留自定义参数并复用校验通过的产物。
 
-**启动游戏**：导出完成后，每次游玩执行。
+**启动游戏**
 
 ```bash
 .venv/bin/python -B remake/runtime/serve.py
 ```
 
-浏览器打开 [本地游戏](http://127.0.0.1:8767/)，服务终端保持开启；结束后按 `Ctrl+C` 停止。
+服务运行时在浏览器打开 [本地游戏](http://127.0.0.1:8767/)，结束后按 `Ctrl+C` 停止服务。
 
-开发用原型预览也使用已导出的数据。运行 `.venv/bin/python -B remake/prototype/serve.py` 后，打开 [原型预览](http://127.0.0.1:8765/)。
+方向键或 `WASD` 移动，`Shift` 切换跑走，`Tab` 切换队员，`Esc` 打开菜单或返回，空格交互，空格或 `Enter` 确认，`F4` 快速保存，`F5` 快速读取。
 
-方向键／`WASD` 移动，`Shift` 切换跑走，空格交互，`Tab` 切换队伍中的可操作人物，`Esc` 打开菜单或返回上一级，空格／`Enter` 确认，`F4` 快速保存，`F5` 快速读取。其他操作以游戏内提示为准。
-
-存档保存在 `remake/saves/`：普通档为 `SaveGame0.Dat`～`SaveGame19.Dat`，快速档为 `Game.SAV`。
+`remake/saves/` 中的 `SaveGame0.Dat` 至 `SaveGame19.Dat` 为普通档，`Game.SAV` 为快速档。
 
 ## 游戏事件索引
 
 ### 主线事件索引
 
-按剧情推进顺序列出关键事件，同一区域会多次返回。试玩时可逐阶段核对剧情衔接、队伍与物品变化，并保留普通存档以便回测。
+按剧情顺序核对阶段进度，试玩时可留普通存档回测。
 
 | 阶段 | 主区域 | 关键事件／阶段结束标志 |
 | --- | --- | --- |
@@ -109,8 +61,6 @@ Windows 下用 `python -m venv .venv` 创建虚拟环境，并将这里及后续
 
 ### 支线事件索引
 
-按主要发生区域列出支线任务和可选互动；跨区域事件在起点注明后续地区。
-
 | 主区域 | 支线事件 |
 | --- | --- |
 | 火之谷 | 烈南寻找阿宝的委托（地心）；学习爱西琳援攻（火之谷入口）；学习烈南援攻（烈南住处）；取回朱特修好的装备（火战士住处） |
@@ -124,12 +74,20 @@ Windows 下用 `python -m venv .venv` 创建虚拟环境，并将这里及后续
 
 同周目测试支线时，炎城早期先核对蒂娜、侦探和运河居民的线索，避免错过下水道调查窗口；六类试炼完成后再合成六元素石版。
 
+## 开发入口
+
+正式游戏在 `remake/runtime/`，由 Python 提供本地服务和存档接口，浏览器以 Phaser 3.90.0 渲染 640×480 的游戏画面。
+
+- `web/app.js` 装配游戏，`web/controllers/` 管流程，`web/core/` 管规则与状态，`web/phaser/` 和各视图负责显示。剧情统一由 StoryFlow 执行，事件和奖励通过事务提交。
+- `web/content/` 存放任务与事件，`web/data/runtime_content.json` 登记地图、角色与演出。调整 `web/data/config/` 中的 `parameters` 后刷新页面即可生效。
+- `tools/` 存放导出和检查工具。开发约定见 [remake/AGENTS.md](remake/AGENTS.md)。
+
+导出完成后，运行 `.venv/bin/python -B remake/prototype/serve.py` 可打开 [原型预览](http://127.0.0.1:8765/)。
+
 ## 版权说明
 
 本项目新增且有权授权的代码、工具和文档采用 [MIT License](LICENSE)。
 
-原版《第七封印》的程序、图片、音乐、视频、剧情对白及其他原作内容，以及相关商标和标识，其权利归各自权利人所有，不在本项目的 MIT 授权范围内。本项目不分发原版游戏程序和提取媒体，运行资源须由使用者从合法取得的游戏副本中自行准备。
+原版《第七封印：魔神苏醒》的程序、素材、剧情及相关商标归各自权利人所有，不在上述授权范围内。仓库不分发原版程序和提取媒体。
 
-第三方组件保留各自的版权与许可声明：Phaser 遵循其 [MIT 许可证](remake/runtime/web/vendor/phaser/LICENSE.md)；内置菜单、对白和字幕位图字库由 Noto Serif CJK SC／Noto Sans CJK SC 生成，遵循 [SIL Open Font License 1.1](remake/runtime/builtin/fonts/LICENSE.txt)。字体版本、源文件指纹及字形指标记录在字库定义的 `font_source` 等字段中，导出时直接复制内置图集。
-
-本项目为非官方个人项目，不代表原作权利人，也不表示获得其背书。
+Phaser 采用 [MIT 许可证](remake/runtime/web/vendor/phaser/LICENSE.md)。内置位图字库源自 Noto Serif CJK SC 和 Noto Sans CJK SC，采用 [SIL Open Font License 1.1](remake/runtime/builtin/fonts/LICENSE.txt)。
