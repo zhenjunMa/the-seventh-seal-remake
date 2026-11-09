@@ -305,6 +305,15 @@ def _export_role(ident,checks):
     if c.parsed_end!=len(c.data):
         raise ValueError('Lifecycle CHR EOF mismatch')
     wanted, selected=lifecycle_skills(c)
+    if registration()['roles'][ident]['side']=='player':
+        # 4FFA30 sets state9; 51A9EA selects CHR ID13 via 50E3A0.
+        victories=[skill for skill in c.skills if skill['id_raw']==13]
+        for skill in victories:
+            actions=skill['actions']
+            if not actions or any(a['type_raw']!=0 for a in actions) or len({a['raw_hex'] for a in actions[1:]})>1:
+                raise ValueError('Uncovered victory sequence: expected an opening with an optional repeated tail')
+        wanted=(*wanted,13)
+        selected.extend(victories)
     skills=[export_sequence(c,d,skill) for skill in selected]
     by_id={str(n):[s['chr_skill_index'] for s in skills if s['skill_id_raw']==n] for n in wanted}
     used=sorted({s['action_index'] for v in skills for s in v['segments']})
@@ -487,6 +496,7 @@ def main():
         policy=dict(selection='Core performs sourceLookup in native roster order and consumes native RNG; view receives the selected chr_skill_index.',
             appearance='Preserve each id11 command7 source mode and cursor. Mode0 draws once from [1,5,7] in the controller; fixed modes consume no combat RNG. Mode3 uses source column particles with local visual RNG and a30-step hard ceiling; modes5/6 use source pixel progression, modes1/7 source elapsed thresholds. Command-only entries keep the current pose.',
             timing='Use each DGP action interval_raw for sprite progression; global source clock/effect progression remains distinct.',
+            victory='State9 selects CHR ID13 (51A9EA). Preserve all source variants and their repeated tail records. The view chooses one per winner and plays its opening and at most one tail.',
             corpse='Source id12 final pose is available. Player corpse hold until revive is the requested presentation behavior, separate from enemy fade.',
             revival='id14 source animation is included for 001/002. HP/state/revival qualification and block150 application belong to the core dispatcher.',
             original_game_execution_observed=False),

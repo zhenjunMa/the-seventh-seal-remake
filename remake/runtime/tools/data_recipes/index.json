@@ -1712,7 +1712,7 @@
     },
     "battle_lifecycle.json": {
       "root": [
-        32502
+        695466
       ],
       "format": {
         "indent": 2,
@@ -1720,12 +1720,12 @@
         "crlf": true,
         "newline": true
       },
-      "sha256": "074b91f6c628ee66bfbc1d3a8dc83b63ba2bd5cc9942b8894f70d4a7acfdd8d2",
-      "bytes": 15928853
+      "sha256": "e8eafb8df4de65fc01a933c9477aafd359f44c205d14e971041100c8344f4b53",
+      "bytes": 17680746
     },
     "battle_lifecycle_layers_001.json": {
       "root": [
-        33648
+        695570
       ],
       "format": {
         "indent": 2,
@@ -1733,12 +1733,12 @@
         "crlf": true,
         "newline": true
       },
-      "sha256": "9ccdc582fe4cdbcaa9bb70c1324250b2aac4ebc22cf7207922a579e23c3fd6b4",
-      "bytes": 101445
+      "sha256": "f3ae51311d8764b71e4d2a35887d6fab04e022da3f5f71bc4fce8850b2c3895e",
+      "bytes": 129000
     },
     "battle_lifecycle_layers_002.json": {
       "root": [
-        34352
+        693629
       ],
       "format": {
         "indent": 2,
@@ -1746,12 +1746,12 @@
         "crlf": true,
         "newline": true
       },
-      "sha256": "457e9402c7831cc45648ad57031139e93460776874e8e2a4af8a6f4d5452acc3",
-      "bytes": 66612
+      "sha256": "5f9912d66466ae695031067785f750891bf92a683071f76a695932e9db3d0916",
+      "bytes": 86292
     },
     "battle_lifecycle_layers_003.json": {
       "root": [
-        35298
+        695754
       ],
       "format": {
         "indent": 2,
@@ -1759,12 +1759,12 @@
         "crlf": true,
         "newline": true
       },
-      "sha256": "968daa597da93edc9c06ee22176a484b0c7ccf25d7f16c7939dfb59fa6f01cd3",
-      "bytes": 82289
+      "sha256": "dbc44fd5fed4f36d40cf198244c768ca0efd4bbadead3cdc5479bab8d694f8fa",
+      "bytes": 112075
     },
     "battle_lifecycle_layers_004.json": {
       "root": [
-        36188
+        693954
       ],
       "format": {
         "indent": 2,
@@ -1772,12 +1772,12 @@
         "crlf": true,
         "newline": true
       },
-      "sha256": "e65c68c8c87514dbc2f76581210d271777b943c1b57626d7a7e44f7088f21722",
-      "bytes": 80650
+      "sha256": "281d099485b9b74cd760d76f86f8c82cac452bc76ecf57e75fd4066459fc42f6",
+      "bytes": 93023
     },
     "battle_lifecycle_layers_005.json": {
       "root": [
-        36850
+        694046
       ],
       "format": {
         "indent": 2,
@@ -1785,12 +1785,12 @@
         "crlf": true,
         "newline": true
       },
-      "sha256": "f0eb3587ea373c4e51f75516ac8314558ab79e653fd02355c0a0846ff74ddda2",
-      "bytes": 62675
+      "sha256": "1bb11be19f58556d5aaf5d2008ec6fd70758a59b8bb1873adeadf82106d8e3b9",
+      "bytes": 71120
     },
     "battle_lifecycle_layers_006.json": {
       "root": [
-        37656
+        694300
       ],
       "format": {
         "indent": 2,
@@ -1798,8 +1798,8 @@
         "crlf": true,
         "newline": true
       },
-      "sha256": "18bf7ee57a3cf9cf4cbb751662a8db4cab822d71bbc82596a9bfdb82ab94d765",
-      "bytes": 74474
+      "sha256": "32c5b21f6b90dac262b3fd4d645084b7ea665ca6ddb11f5cbb9f211ccf9c49f2",
+      "bytes": 94706
     },
     "battle_lifecycle_layers_011.json": {
       "root": [
@@ -2882,7 +2882,7 @@
     },
     "battle_packs.json": {
       "root": [
-        692174
+        696025
       ],
       "format": {
         "indent": null,
@@ -2890,8 +2890,8 @@
         "crlf": false,
         "newline": true
       },
-      "sha256": "d8027c246a00052dc2315e379a260c42cc406fbc121f59312a13be8351e962a7",
-      "bytes": 43034673
+      "sha256": "bb46f7a6ad055f856ca96d64d7c10db1d52179c7b7a755c19bd127df4b0030a0",
+      "bytes": 44505017
     },
     "battle_scheduler.json": {
       "root": [
@@ -19945,6 +19945,6 @@
     "0081": "eb3813669fc314b975cc0dc07f9137e1f9e4ce6f090ee5a4412071b0cefb0eef",
     "0082": "e92f18530ba21c0d472a561d1f04408c0a6630e1c547b7ec33c0bb1c0a13a7f1",
     "0083": "6f9d2ab42832931a7363d9e19246632d7cb66bbaa30dc458ea17d653ff07ab84",
-    "0084": "97a845d1e69adae710af1e5e5126a7c7e52da3df1355d83ddd3245e8bbc82c03"
+    "0084": "1efd309ea0cc8dd7604ec49d7919c2de3e785a63566b32e72db01353ac799b4a"
   }
 }

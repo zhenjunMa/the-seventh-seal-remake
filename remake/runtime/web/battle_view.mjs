@@ -30,6 +30,17 @@ const poseFrame=(segment,elapsed,loop=false)=>{
   return segment.frames[loop?step%segment.frames.length:Math.min(segment.frames.length-1,step)];
 };
 
+const victoriousActor=actor=>actor?.side==='player'&&actor.state_raw===9&&actor.hp.current>0&&!actor.escaped;
+function victoryPoseAt(segments,elapsed){
+  for(const segment of segments){
+    const duration=segment.frames.length*segment.interval_raw;
+    if(elapsed<duration)return {segment,frame:poseFrame(segment,elapsed)};
+    elapsed-=duration;
+  }
+  const segment=segments.at(-1);
+  return {segment,frame:segment.frames.at(-1)};
+}
+
 function effectOwners(meta, itemMeta, lifecycleMeta) {
   const owners = new Map(meta.effects.map(effect => [effect.id, new Set()]));
   const roles = new Set(meta.roles.map(role => role.id));
@@ -75,7 +86,7 @@ export function validateBattleViewMetadata(meta,content=runtimeContent) {
           !urlAllowed(action.sheet) || !/^[a-f0-9]{64}$/.test(action.sha256)) throw new Error('动作图集无效');
       actions.set(action.index, action);
     }
-    for (const segment of [role.idle, ...(role.idle_sequence?.segments??[]), role.reaction, ...(role.skill?.segments || []),...[...(role.alternate_skills??[]),...(role.response_skills??[])].flatMap(s=>s.segments??[])]) {
+    for (const segment of [role.idle, ...(role.idle_sequence?.segments??[]), role.reaction, ...(role.victory_sequences??[]).flat(), ...(role.skill?.segments || []),...[...(role.alternate_skills??[]),...(role.response_skills??[])].flatMap(s=>s.segments??[])]) {
       const action = actions.get(segment?.action_index);
       if (!action || !Array.isArray(segment.frames) || !segment.frames.length ||
           segment.frames.some(frame => !integer(frame) || frame >= action.frame_count) ||
@@ -314,6 +325,18 @@ export class BattleView {
     try{
       const run=this.playbackRuntime.advance(snapshot,now);
       this.lastDrawAt=now;
+      if(this.ready&&snapshot?.phase==='victory'&&!this.victoryPlayback){
+        const sequences=new Map();
+        for(const actor of snapshot.actors){
+          if(!victoriousActor(actor))continue;
+          const variants=this._role(actor.id)?.victory_sequences;
+          if(!variants?.length)continue;
+          // The selection is visual only and stays fixed for this victory.
+          const index=variants.length===1?0:Math.floor(Math.random()*variants.length);
+          sequences.set(actor.id,variants[index]);
+        }
+        this.victoryPlayback={started:now,sequences};
+      }
       if(this.stageMeta)this.stageStarted??=now;
       for(const actor of snapshot?.actors??[]){
         if(actor.defending){if(!this.defendClocks.has(actor.id))this.defendClocks.set(actor.id,now);}
@@ -404,6 +427,8 @@ export class BattleView {
         }
         role.shadow=clone(row.shadow??null);
         lifecycleFrames.set(row.layer_bank.path,{row,required:mergeNativeActionAtlases(role,row,meta.source_hashes)});
+        role.victory_sequences=row.skills.filter(skill=>skill.skill_id_raw===13).map(skill=>
+          skill.segments.slice(0,2).map(segment=>({...segment,movement_source_field:'0x1e'})));
         for(const skill of row.skills.filter(s=>s.source_skill?.battle_handler==='native-revival')){
           role.alternate_skills??=[];role.alternate_skills.push({...clone(skill),runtime_skill_id:`${row.id}_${skill.source_skill.original_skill_index}`,segments:skill.segments.map(segment=>({...clone(segment),movement_source_field:'0x1e'}))});
         }
@@ -570,7 +595,7 @@ export class BattleView {
 
   setRoster(actors,skills){
     this.lastActorPoses.clear();this.cameraShake=null;this.colorFade=null;this.cameraPan=null;
-    this.stageStarted=null;
+    this.stageStarted=null;this.victoryPlayback=null;
     this.drawnSlots=null;this.presentationFrame=null;
     this.lifecycle?.reset();this.entryFrameSounds=[];this.entryFrameControls=[];this.playbackRuntime.currentRun=null;
     this.defendClocks=new Map();
@@ -886,6 +911,7 @@ export class BattleView {
       const offset=this._stageCameraOffset(slot[1]);slot[0]-=offset;groundSlots[id][0]-=offset;
     }
     const actors = new Map((snapshot?.actors || []).map(actor => [actor.id, actor]));
+    const victory=!entryPreview&&snapshot?.phase==='victory'?this.victoryPlayback:null;
     const queue=[...this.roster.filter(a=>a.side==='enemy'),...this.roster.filter(a=>a.side==='player')].map(a=>({...a,depth_y:groundSlots[a.id][1]}));
     // Ground depth follows approach/return on both stage and preview paths.
     // Native altitude moves the body only; it must not change occlusion order.
@@ -906,8 +932,13 @@ export class BattleView {
       if(idlePose){segment={action_index:idlePose.action_index};frame=idlePose.action_frame;}
       const acting=run?.sequence?roots.flatMap(root=>[...root.children,...(!root.main_done?[root]:[])]).reverse().find(c=>!c.done&&c.result.actor_id===id):run?.result.actor_id===id?run:null;
       const impacting=run?.sequence?roots.flatMap(root=>this._sequenceChannels(root).map(channel=>({channel,at:root.started+(channel.at??0)+(channel.impact_elapsed??0)}))).filter(({channel:c})=>c.result.target_id===id&&c.impact_called&&this._damaging(c.result)).sort((a,b)=>b.at-a.at)[0]?.channel:run?.result.target_id===id&&run.impact_called&&this._damaging(run.result)?run:null;
-      const appearanceScan=lifePose?.appearance_scan??null;
-      if(lifePose){segment={action_index:lifePose.action_index};frame=lifePose.action_frame;alpha=appearanceScan&&(this.context.supportsNativeAppearance||globalThis.document?.createElement)?1:lifePose.alpha??1;
+      const victorySequence=victory?.sequences.get(id);
+      const appearanceScan=victorySequence?null:lifePose?.appearance_scan??null;
+      if(victorySequence){
+        ({segment,frame}=victoryPoseAt(victorySequence,now-victory.started));
+        const action=role.actions.find(row=>row.index===segment.action_index);
+        pair=this.lifecyclePairs.get(`${role.id}:${action.first_frame+frame}`)??null;
+      } else if(lifePose){segment={action_index:lifePose.action_index};frame=lifePose.action_frame;alpha=appearanceScan&&(this.context.supportsNativeAppearance||globalThis.document?.createElement)?1:lifePose.alpha??1;
         pair=this.lifecyclePairs.get(`${role.id}:${lifePose.source_frame}`)??null;
       } else if (acting) {
         const step = acting.steps[acting.cursor],visual=step.command_raw!==undefined?step.visual:step;
