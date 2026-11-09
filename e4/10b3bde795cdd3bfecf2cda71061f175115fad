@@ -1,0 +1,26 @@
+remake/runtime/web/map_scene_view.mjs
+  s_d2a2a87c87b950::t_3efad04e19bb1b 19-20,25
+remake/runtime/web/controllers/story.mjs
+  s_d2a2a87c87b950::t_9a8162ec60e986 357-360,363-364,366-371,376,387
+  s_d2a2a87c87b950::t_b1faab251efcaf 361-362,365
+remake/runtime/web/controllers/map.mjs
+  s_d2a2a87c87b950::t_50347885f96883 255
+remake/runtime/web/core/ui/map_presentation.mjs
+  s_d2a2a87c87b950::t_98be2e42bb81ca 18,23,25-27
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "e410b3bde795cdd3bfecf2cda71061f175115fad",
+  "prompts": {},
+  "sessions": {
+    "s_d2a2a87c87b950": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1c2a1-37db-7ca0-bec0-f56446a75a79",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
