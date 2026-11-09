@@ -53,10 +53,13 @@ export function nativeToggleObject(object){
   return {behavior:7};
 }
 export function canOpenNativeChest(world,chest){
+  return hasNativeObjectKey(world,chest.keyId);
+}
+export function hasNativeObjectKey(world,keyId){
   // Mode0 compares IDs across inventory and all retained native equipment;
   // it neither consumes the key nor requires it on the controlled actor.
   // 411F7F bypasses 47B0C0 when +F2 is zero; 412136 returns success.
-  return chest.keyId===0||evaluateNativeStoryCondition({condition_type:4,condition_index:0xffffffff,condition_bit:chest.keyId},world);
+  return keyId===0||evaluateNativeStoryCondition({condition_type:4,condition_index:0xffffffff,condition_bit:keyId},world);
 }
 export function nativeChestAnimation(resource,behavior){
   need([3,4].includes(behavior),'动画行为尚未接入');

@@ -185,8 +185,9 @@ export function createMapController({state, actions, $, canvas, ctx}) {
       if(binding.handler==='scripted-switch'&&(object.behavior_raw_cf!==9||!object.interaction_record_raw_f6))continue;
       if(binding.handler==='scripted-object'&&(object.behavior_raw_cf!==2||!object.interaction_record_raw_f6))continue;
       if(binding.handler==='toggle-object'&&object.behavior_raw_cf!==7)continue;
+      if(binding.handler==='mechanism'&&object.behavior_raw_cf!==2)continue;
       const distance=Math.hypot(object.x_native*2-at.x,object.y_native*2-at.y);
-      if(distance<64&&(!state.nearest||distance<state.nearest.distance))state.nearest={...object,kind:'object',name:binding.handler==='keyed-chest'?'宝箱':['scripted-switch','toggle-object'].includes(binding.handler)?'机关':'物件',distance};
+      if(distance<64&&(!state.nearest||distance<state.nearest.distance))state.nearest={...object,kind:'object',name:binding.handler==='keyed-chest'?'宝箱':['scripted-switch','toggle-object','mechanism'].includes(binding.handler)?'机关':'物件',distance};
     }
     for(const binding of storyBindings(at.map_id).rests){
       const bed=state.chapterStory.maps[at.map_id]?.descriptors?.find(row=>row.id===binding.descriptor_id);

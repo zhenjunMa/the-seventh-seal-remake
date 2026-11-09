@@ -1,6 +1,7 @@
 // Presentation clocks for source ordinary objects. Triggering/collecting an
 // object remains an event transaction, never an animation side effect.
 import {createNativeRng} from '../battle/combat_rules.mjs';
+import {restingMapMechanismState} from './native_map_mechanisms.mjs';
 
 function sourceBytes(hex,size,label){
   if(typeof hex!=='string'||!new RegExp(`^[0-9a-f]{${size*2}}$`,'i').test(hex))throw new Error(`${label}原始记录缺失`);
@@ -118,19 +119,23 @@ export class MapObjectRuntime {
     // last logical cursor, leaving its displayed image until the next tick.
     const before={commandState:actor.commandState,actionIndex:actor.actionIndex,displayActionIndex:actor.displayActionIndex,
       displayFrame:actor.displayFrame,frame:actor.frame,state:actor.state,elapsed:actor.elapsed,interval:actor.interval};
+    const layerBefore=actor.object.layer;
     const terrainBefore=actor.resource.terrain_frames&&this.movement?[...this.movement.rows]:null;
+    const restore=()=>{
+      Object.assign(actor,before);actor.object.layer=layerBefore;
+      if(terrainBefore)this.movement.rows=terrainBefore;
+      this.project(actor,before.state);
+    };
     actor.commandState=state;actor.actionIndex=actor.behavior===9?1:0;
     actor.frame=state===2?0:actor.resource.actions[0].logical_frames.length-1;
     if(state===2){actor.displayActionIndex=actor.actionIndex;actor.displayFrame=actor.resource.actions[actor.actionIndex].logical_frames[0];}
     this.project(actor,state);
     return new Promise((resolve,reject)=>{
       const abort=()=>{
-        signal.removeEventListener('abort',abort);actor.pending=null;Object.assign(actor,before);
-        if(terrainBefore)this.movement.rows=terrainBefore;
-        this.project(actor,before.state);reject(signal.reason);
+        signal.removeEventListener('abort',abort);actor.pending=null;restore();reject(signal.reason);
       };
       signal?.addEventListener('abort',abort,{once:true});
-      actor.pending=()=>{signal?.removeEventListener('abort',abort);actor.pending=null;resolve();};
+      actor.pending=()=>{signal?.removeEventListener('abort',abort);actor.pending=null;resolve(restore);};
     });
   }
   project(actor,state) {
@@ -170,7 +175,8 @@ export class MapObjectRuntime {
     const delta=this.lastTime===null?0:Math.max(0,now-this.lastTime);this.lastTime=now;
     for(const actor of this.actors){
       const record=world.event_records?.[this.mapFlagIndex]?.[actor.object.index];
-      const state=actor.commandState??(record?parseInt(record.slice(0,2),16):0);
+      const saved=record?parseInt(record.slice(0,2),16):0;
+      const state=actor.commandState??(actor.behavior===2?restingMapMechanismState(saved):saved);
       if([2,9].includes(actor.behavior)){
         if(![0,2,3,5].includes(state)||[2,5].includes(state)&&!actor.pending)throw new Error('机关物件主动状态缺少剧情时钟');
         if(!actor.loaded){

@@ -258,8 +258,10 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
       });
       if(result.story_completed)return result;
       if(result.rewards?.length)state.rewardNoticeView.show(result.rewards.map(reward=>state.itemData.definitions[reward.id].name));
-      actions.status(result.locked?'需要对应元素钥匙。':result.already_done?
-        ([7,9].includes(state.chapterStory.maps[args.mapId]?.objects.find(row=>row.index===args.objectIndex)?.behavior_raw_cf)?'机关已启动。':'宝箱已打开。'):'可以继续探索。');
+      const requiredItem=state.itemData?.definitions?.[result.key_id]?.name;
+      actions.status(result.locked?(result.mechanism&&requiredItem?`需要${requiredItem}。`:'需要对应元素钥匙。'):
+        result.already_done?(result.mechanism||[7,9].includes(state.chapterStory.maps[args.mapId]?.objects.find(row=>row.index===args.objectIndex)?.behavior_raw_cf)
+          ?'机关已启动。':'宝箱已打开。'):'可以继续探索。');
       if(result.save_requested)await actions.openSaveCrystal();
       if(result.world_map_requested)state.worldMap.open(result.world_map_requested.area);
     }catch(error){if(error.gameOverPolicy)await actions.presentGameOver(error.gameOverPolicy);else actions.status(error.message,true);}

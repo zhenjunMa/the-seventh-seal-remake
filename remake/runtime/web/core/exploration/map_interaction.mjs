@@ -40,7 +40,7 @@ export function pickMapDialogueObject({scene, world, bindings, header, queue, po
   // The native mouse dispatcher checks visible NPC rectangles before objects.
   if (queue.some(entry => entry.key.startsWith('npc:') && contains(point, entry.pose))) return null;
   const visible = new Set(queue.map(entry => entry.key));
-  const admitted = new Set(bindings.filter(row => row.handler === 'tlk-object').map(row => row.index));
+  const admitted = new Set(bindings.filter(row => ['tlk-object', 'mechanism'].includes(row.handler)).map(row => row.index));
   // 410850 builds the selection queue in source index order, not drawing order.
   for (const object of [...scene.objects].sort((a, b) => a.index - b.index)) {
     if (!admitted.has(object.index) || !visible.has(`object:${object.index}`)) continue;

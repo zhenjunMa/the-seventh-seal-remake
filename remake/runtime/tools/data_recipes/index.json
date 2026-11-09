@@ -12437,7 +12437,7 @@
     },
     "story/index.json": {
       "root": [
-        651129
+        696060
       ],
       "format": {
         "indent": 2,
@@ -12445,7 +12445,7 @@
         "crlf": false,
         "newline": true
       },
-      "sha256": "ec2d58e403d649dafd61a86623511c288c761179ca4fe9bebe071d68eb6786a2",
+      "sha256": "42b87cd0f08ebd9a458235d427e5460f43f9e51e39f474d9caefc2c46ffa4a75",
       "bytes": 89167
     },
     "story/maps/elf-forest-a.json": {
@@ -19945,6 +19945,6 @@
     "0081": "eb3813669fc314b975cc0dc07f9137e1f9e4ce6f090ee5a4412071b0cefb0eef",
     "0082": "e92f18530ba21c0d472a561d1f04408c0a6630e1c547b7ec33c0bb1c0a13a7f1",
     "0083": "6f9d2ab42832931a7363d9e19246632d7cb66bbaa30dc458ea17d653ff07ab84",
-    "0084": "ef32950094c044fab03c2aa836b509da16fa284da9110bbc6c16ab0c3e22caa7"
+    "0084": "1ea32a8ffdc9366d03cc73c4e3fdbf91c4c5bf17581575f4ba78b0570c9aec74"
   }
 }

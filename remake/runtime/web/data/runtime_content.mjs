@@ -3649,24 +3649,128 @@ export const definition = {
       "npcs": [],
       "triggers": [
         3
+      ],
+      "objects": [
+        {
+          "index": 18,
+          "handler": "mechanism"
+        },
+        {
+          "index": 19,
+          "handler": "mechanism"
+        },
+        {
+          "index": 20,
+          "handler": "mechanism"
+        },
+        {
+          "index": 21,
+          "handler": "mechanism"
+        },
+        {
+          "index": 22,
+          "handler": "mechanism"
+        },
+        {
+          "index": 23,
+          "handler": "mechanism"
+        },
+        {
+          "index": 24,
+          "handler": "mechanism"
+        }
       ]
     },
     "M71077-2": {
       "npcs": [],
       "triggers": [
         3
+      ],
+      "objects": [
+        {
+          "index": 18,
+          "handler": "mechanism"
+        },
+        {
+          "index": 19,
+          "handler": "mechanism"
+        },
+        {
+          "index": 20,
+          "handler": "mechanism"
+        },
+        {
+          "index": 21,
+          "handler": "mechanism"
+        },
+        {
+          "index": 22,
+          "handler": "mechanism"
+        }
       ]
     },
     "M71077-3": {
       "npcs": [],
       "triggers": [
         3
+      ],
+      "objects": [
+        {
+          "index": 18,
+          "handler": "mechanism"
+        },
+        {
+          "index": 19,
+          "handler": "mechanism"
+        },
+        {
+          "index": 20,
+          "handler": "mechanism"
+        },
+        {
+          "index": 21,
+          "handler": "mechanism"
+        },
+        {
+          "index": 22,
+          "handler": "mechanism"
+        },
+        {
+          "index": 23,
+          "handler": "mechanism"
+        }
       ]
     },
     "M71077-4": {
       "npcs": [],
       "triggers": [
         3
+      ],
+      "objects": [
+        {
+          "index": 18,
+          "handler": "mechanism"
+        },
+        {
+          "index": 19,
+          "handler": "mechanism"
+        },
+        {
+          "index": 20,
+          "handler": "mechanism"
+        },
+        {
+          "index": 21,
+          "handler": "mechanism"
+        },
+        {
+          "index": 22,
+          "handler": "mechanism"
+        },
+        {
+          "index": 23,
+          "handler": "mechanism"
+        }
       ]
     },
     "M71077-5": {
@@ -3675,35 +3779,173 @@ export const definition = {
       ],
       "triggers": [
         3
+      ],
+      "objects": [
+        {
+          "index": 18,
+          "handler": "mechanism"
+        },
+        {
+          "index": 19,
+          "handler": "mechanism"
+        },
+        {
+          "index": 20,
+          "handler": "mechanism"
+        },
+        {
+          "index": 21,
+          "handler": "mechanism"
+        },
+        {
+          "index": 22,
+          "handler": "mechanism"
+        },
+        {
+          "index": 23,
+          "handler": "mechanism"
+        }
       ]
     },
     "M71077-6": {
       "npcs": [],
       "triggers": [
         3
+      ],
+      "objects": [
+        {
+          "index": 18,
+          "handler": "mechanism"
+        },
+        {
+          "index": 19,
+          "handler": "mechanism"
+        },
+        {
+          "index": 20,
+          "handler": "mechanism"
+        },
+        {
+          "index": 21,
+          "handler": "mechanism"
+        },
+        {
+          "index": 22,
+          "handler": "mechanism"
+        },
+        {
+          "index": 23,
+          "handler": "mechanism"
+        }
       ]
     },
     "M71077-7": {
       "npcs": [],
       "triggers": [
         3
+      ],
+      "objects": [
+        {
+          "index": 17,
+          "handler": "mechanism"
+        },
+        {
+          "index": 18,
+          "handler": "mechanism"
+        },
+        {
+          "index": 19,
+          "handler": "mechanism"
+        },
+        {
+          "index": 20,
+          "handler": "mechanism"
+        },
+        {
+          "index": 21,
+          "handler": "mechanism"
+        },
+        {
+          "index": 22,
+          "handler": "mechanism"
+        }
       ]
     },
     "M71077-8": {
       "npcs": [],
       "triggers": [
         3
+      ],
+      "objects": [
+        {
+          "index": 17,
+          "handler": "mechanism"
+        },
+        {
+          "index": 18,
+          "handler": "mechanism"
+        },
+        {
+          "index": 19,
+          "handler": "mechanism"
+        },
+        {
+          "index": 20,
+          "handler": "mechanism"
+        },
+        {
+          "index": 21,
+          "handler": "mechanism"
+        }
       ]
     },
     "M71077-9": {
       "npcs": [],
       "triggers": [
         3
+      ],
+      "objects": [
+        {
+          "index": 17,
+          "handler": "mechanism"
+        },
+        {
+          "index": 18,
+          "handler": "mechanism"
+        },
+        {
+          "index": 19,
+          "handler": "mechanism"
+        },
+        {
+          "index": 20,
+          "handler": "mechanism"
+        },
+        {
+          "index": 21,
+          "handler": "mechanism"
+        },
+        {
+          "index": 22,
+          "handler": "mechanism"
+        }
       ]
     },
     "M71078-1-01": {
       "npcs": [],
       "objects": [
+        {
+          "index": 80,
+          "handler": "mechanism"
+        },
+        {
+          "index": 81,
+          "handler": "mechanism"
+        },
+        {
+          "index": 82,
+          "handler": "mechanism"
+        },
         {
           "index": 85,
           "handler": "keyed-chest"
@@ -3711,6 +3953,14 @@ export const definition = {
         {
           "index": 86,
           "handler": "stationary-chest"
+        },
+        {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
+          "index": 89,
+          "handler": "mechanism"
         },
         {
           "index": 90,
@@ -3721,6 +3971,18 @@ export const definition = {
     "M71078-1-02": {
       "npcs": [],
       "objects": [
+        {
+          "index": 80,
+          "handler": "mechanism"
+        },
+        {
+          "index": 81,
+          "handler": "mechanism"
+        },
+        {
+          "index": 82,
+          "handler": "mechanism"
+        },
         {
           "index": 86,
           "handler": "stationary-chest"
@@ -3738,6 +4000,10 @@ export const definition = {
           "handler": "scripted-object"
         },
         {
+          "index": 90,
+          "handler": "mechanism"
+        },
+        {
           "index": 91,
           "handler": "keyed-chest"
         }
@@ -3749,8 +4015,24 @@ export const definition = {
       ],
       "objects": [
         {
+          "index": 80,
+          "handler": "mechanism"
+        },
+        {
+          "index": 81,
+          "handler": "mechanism"
+        },
+        {
+          "index": 82,
+          "handler": "mechanism"
+        },
+        {
           "index": 83,
           "handler": "scripted-object"
+        },
+        {
+          "index": 84,
+          "handler": "mechanism"
         },
         {
           "index": 87,
@@ -3774,8 +4056,24 @@ export const definition = {
       "npcs": [],
       "objects": [
         {
+          "index": 80,
+          "handler": "mechanism"
+        },
+        {
+          "index": 81,
+          "handler": "mechanism"
+        },
+        {
+          "index": 82,
+          "handler": "mechanism"
+        },
+        {
           "index": 83,
           "handler": "scripted-object"
+        },
+        {
+          "index": 84,
+          "handler": "mechanism"
         },
         {
           "index": 85,
@@ -3799,8 +4097,24 @@ export const definition = {
       "npcs": [],
       "objects": [
         {
+          "index": 80,
+          "handler": "mechanism"
+        },
+        {
+          "index": 81,
+          "handler": "mechanism"
+        },
+        {
+          "index": 82,
+          "handler": "mechanism"
+        },
+        {
           "index": 83,
           "handler": "scripted-object"
+        },
+        {
+          "index": 84,
+          "handler": "mechanism"
         },
         {
           "index": 85,
@@ -3824,6 +4138,14 @@ export const definition = {
       "npcs": [],
       "objects": [
         {
+          "index": 80,
+          "handler": "mechanism"
+        },
+        {
+          "index": 81,
+          "handler": "mechanism"
+        },
+        {
           "index": 82,
           "handler": "scripted-object"
         },
@@ -3834,6 +4156,10 @@ export const definition = {
         {
           "index": 84,
           "handler": "scripted-object"
+        },
+        {
+          "index": 85,
+          "handler": "mechanism"
         },
         {
           "index": 88,
@@ -3854,6 +4180,26 @@ export const definition = {
         14
       ],
       "objects": [
+        {
+          "index": 85,
+          "handler": "mechanism"
+        },
+        {
+          "index": 86,
+          "handler": "mechanism"
+        },
+        {
+          "index": 87,
+          "handler": "mechanism"
+        },
+        {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
+          "index": 89,
+          "handler": "mechanism"
+        },
         {
           "index": 90,
           "handler": "scripted-object"
@@ -3879,6 +4225,22 @@ export const definition = {
     "M71078-2-13": {
       "npcs": [],
       "objects": [
+        {
+          "index": 85,
+          "handler": "mechanism"
+        },
+        {
+          "index": 86,
+          "handler": "mechanism"
+        },
+        {
+          "index": 87,
+          "handler": "mechanism"
+        },
+        {
+          "index": 88,
+          "handler": "mechanism"
+        },
         {
           "index": 90,
           "handler": "scripted-object"
@@ -3909,8 +4271,24 @@ export const definition = {
       "npcs": [],
       "objects": [
         {
+          "index": 85,
+          "handler": "mechanism"
+        },
+        {
+          "index": 86,
+          "handler": "mechanism"
+        },
+        {
+          "index": 87,
+          "handler": "mechanism"
+        },
+        {
           "index": 88,
           "handler": "scripted-object"
+        },
+        {
+          "index": 89,
+          "handler": "mechanism"
         },
         {
           "index": 90,
@@ -3942,6 +4320,14 @@ export const definition = {
       "npcs": [],
       "objects": [
         {
+          "index": 85,
+          "handler": "mechanism"
+        },
+        {
+          "index": 86,
+          "handler": "mechanism"
+        },
+        {
           "index": 87,
           "handler": "scripted-object"
         },
@@ -3958,6 +4344,10 @@ export const definition = {
           "handler": "keyed-chest"
         },
         {
+          "index": 96,
+          "handler": "mechanism"
+        },
+        {
           "index": 97,
           "handler": "keyed-chest"
         }
@@ -3968,6 +4358,26 @@ export const definition = {
         14
       ],
       "objects": [
+        {
+          "index": 85,
+          "handler": "mechanism"
+        },
+        {
+          "index": 86,
+          "handler": "mechanism"
+        },
+        {
+          "index": 87,
+          "handler": "mechanism"
+        },
+        {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
+          "index": 89,
+          "handler": "mechanism"
+        },
         {
           "index": 90,
           "handler": "scripted-object"
@@ -3994,12 +4404,32 @@ export const definition = {
       "npcs": [],
       "objects": [
         {
+          "index": 85,
+          "handler": "mechanism"
+        },
+        {
+          "index": 86,
+          "handler": "mechanism"
+        },
+        {
+          "index": 87,
+          "handler": "mechanism"
+        },
+        {
           "index": 88,
           "handler": "scripted-object"
         },
         {
+          "index": 89,
+          "handler": "mechanism"
+        },
+        {
           "index": 90,
           "handler": "scripted-object"
+        },
+        {
+          "index": 91,
+          "handler": "mechanism"
         },
         {
           "index": 94,
@@ -4017,12 +4447,36 @@ export const definition = {
       ],
       "objects": [
         {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
+          "index": 89,
+          "handler": "mechanism"
+        },
+        {
+          "index": 90,
+          "handler": "mechanism"
+        },
+        {
+          "index": 91,
+          "handler": "mechanism"
+        },
+        {
+          "index": 92,
+          "handler": "mechanism"
+        },
+        {
           "index": 93,
           "handler": "scripted-object"
         },
         {
           "index": 94,
           "handler": "scripted-object"
+        },
+        {
+          "index": 95,
+          "handler": "mechanism"
         },
         {
           "index": 99,
@@ -4038,12 +4492,32 @@ export const definition = {
       "npcs": [],
       "objects": [
         {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
+          "index": 89,
+          "handler": "mechanism"
+        },
+        {
+          "index": 90,
+          "handler": "mechanism"
+        },
+        {
           "index": 91,
           "handler": "scripted-object"
         },
         {
+          "index": 92,
+          "handler": "mechanism"
+        },
+        {
           "index": 93,
           "handler": "scripted-object"
+        },
+        {
+          "index": 94,
+          "handler": "mechanism"
         },
         {
           "index": 95,
@@ -4066,6 +4540,26 @@ export const definition = {
     "M71078-3-24": {
       "npcs": [],
       "objects": [
+        {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
+          "index": 89,
+          "handler": "mechanism"
+        },
+        {
+          "index": 90,
+          "handler": "mechanism"
+        },
+        {
+          "index": 91,
+          "handler": "mechanism"
+        },
+        {
+          "index": 92,
+          "handler": "mechanism"
+        },
         {
           "index": 93,
           "handler": "scripted-object"
@@ -4096,6 +4590,18 @@ export const definition = {
       "npcs": [],
       "objects": [
         {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
+          "index": 89,
+          "handler": "mechanism"
+        },
+        {
+          "index": 90,
+          "handler": "mechanism"
+        },
+        {
           "index": 91,
           "handler": "scripted-object"
         },
@@ -4104,8 +4610,20 @@ export const definition = {
           "handler": "scripted-object"
         },
         {
+          "index": 93,
+          "handler": "mechanism"
+        },
+        {
           "index": 94,
           "handler": "scripted-object"
+        },
+        {
+          "index": 95,
+          "handler": "mechanism"
+        },
+        {
+          "index": 100,
+          "handler": "mechanism"
         },
         {
           "index": 101,
@@ -4123,12 +4641,44 @@ export const definition = {
       ],
       "objects": [
         {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
+          "index": 89,
+          "handler": "mechanism"
+        },
+        {
+          "index": 90,
+          "handler": "mechanism"
+        },
+        {
+          "index": 91,
+          "handler": "mechanism"
+        },
+        {
+          "index": 92,
+          "handler": "mechanism"
+        },
+        {
+          "index": 93,
+          "handler": "mechanism"
+        },
+        {
           "index": 94,
           "handler": "scripted-object"
         },
         {
+          "index": 95,
+          "handler": "mechanism"
+        },
+        {
           "index": 96,
           "handler": "scripted-object"
+        },
+        {
+          "index": 97,
+          "handler": "mechanism"
         },
         {
           "index": 98,
@@ -4151,6 +4701,10 @@ export const definition = {
     "M71078-3-29": {
       "npcs": [],
       "objects": [
+        {
+          "index": 88,
+          "handler": "mechanism"
+        },
         {
           "index": 89,
           "handler": "scripted-object"
@@ -4193,6 +4747,14 @@ export const definition = {
       "npcs": [],
       "objects": [
         {
+          "index": 91,
+          "handler": "mechanism"
+        },
+        {
+          "index": 95,
+          "handler": "mechanism"
+        },
+        {
           "index": 97,
           "handler": "keyed-chest"
         },
@@ -4209,6 +4771,14 @@ export const definition = {
       "npcs": [],
       "objects": [
         {
+          "index": 87,
+          "handler": "mechanism"
+        },
+        {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
           "index": 89,
           "handler": "scripted-object"
         },
@@ -4217,12 +4787,20 @@ export const definition = {
           "handler": "scripted-object"
         },
         {
+          "index": 91,
+          "handler": "mechanism"
+        },
+        {
           "index": 92,
           "handler": "scripted-object"
         },
         {
           "index": 93,
           "handler": "scripted-object"
+        },
+        {
+          "index": 94,
+          "handler": "mechanism"
         },
         {
           "index": 95,
@@ -4248,12 +4826,36 @@ export const definition = {
       ],
       "objects": [
         {
+          "index": 87,
+          "handler": "mechanism"
+        },
+        {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
+          "index": 89,
+          "handler": "mechanism"
+        },
+        {
+          "index": 90,
+          "handler": "mechanism"
+        },
+        {
           "index": 91,
           "handler": "scripted-object"
         },
         {
           "index": 92,
           "handler": "scripted-object"
+        },
+        {
+          "index": 93,
+          "handler": "mechanism"
+        },
+        {
+          "index": 94,
+          "handler": "mechanism"
         },
         {
           "index": 95,
@@ -4289,20 +4891,44 @@ export const definition = {
           "handler": "scripted-object"
         },
         {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
           "index": 89,
           "handler": "scripted-object"
+        },
+        {
+          "index": 90,
+          "handler": "mechanism"
         },
         {
           "index": 91,
           "handler": "scripted-object"
         },
         {
+          "index": 92,
+          "handler": "mechanism"
+        },
+        {
           "index": 93,
           "handler": "scripted-object"
         },
         {
+          "index": 94,
+          "handler": "mechanism"
+        },
+        {
           "index": 95,
           "handler": "scripted-object"
+        },
+        {
+          "index": 96,
+          "handler": "mechanism"
+        },
+        {
+          "index": 97,
+          "handler": "mechanism"
         },
         {
           "index": 99,
@@ -4322,16 +4948,44 @@ export const definition = {
       "npcs": [],
       "objects": [
         {
+          "index": 87,
+          "handler": "mechanism"
+        },
+        {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
+          "index": 89,
+          "handler": "mechanism"
+        },
+        {
+          "index": 90,
+          "handler": "mechanism"
+        },
+        {
           "index": 91,
           "handler": "scripted-object"
+        },
+        {
+          "index": 92,
+          "handler": "mechanism"
         },
         {
           "index": 93,
           "handler": "scripted-object"
         },
         {
+          "index": 94,
+          "handler": "mechanism"
+        },
+        {
           "index": 95,
           "handler": "scripted-object"
+        },
+        {
+          "index": 96,
+          "handler": "mechanism"
         },
         {
           "index": 101,
@@ -4355,12 +5009,28 @@ export const definition = {
       "npcs": [],
       "objects": [
         {
+          "index": 87,
+          "handler": "mechanism"
+        },
+        {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
+          "index": 89,
+          "handler": "mechanism"
+        },
+        {
           "index": 90,
           "handler": "scripted-object"
         },
         {
           "index": 91,
           "handler": "scripted-object"
+        },
+        {
+          "index": 92,
+          "handler": "mechanism"
         },
         {
           "index": 93,
@@ -4379,6 +5049,10 @@ export const definition = {
           "handler": "keyed-chest"
         },
         {
+          "index": 100,
+          "handler": "mechanism"
+        },
+        {
           "index": 101,
           "handler": "keyed-chest"
         }
@@ -4389,6 +5063,22 @@ export const definition = {
         18
       ],
       "objects": [
+        {
+          "index": 87,
+          "handler": "mechanism"
+        },
+        {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
+          "index": 89,
+          "handler": "mechanism"
+        },
+        {
+          "index": 90,
+          "handler": "mechanism"
+        },
         {
           "index": 91,
           "handler": "scripted-object"
@@ -4402,8 +5092,16 @@ export const definition = {
           "handler": "scripted-object"
         },
         {
+          "index": 94,
+          "handler": "mechanism"
+        },
+        {
           "index": 95,
           "handler": "scripted-object"
+        },
+        {
+          "index": 96,
+          "handler": "mechanism"
         },
         {
           "index": 101,
@@ -4427,6 +5125,14 @@ export const definition = {
       "npcs": [],
       "objects": [
         {
+          "index": 87,
+          "handler": "mechanism"
+        },
+        {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
           "index": 89,
           "handler": "scripted-object"
         },
@@ -4435,8 +5141,16 @@ export const definition = {
           "handler": "scripted-object"
         },
         {
+          "index": 91,
+          "handler": "mechanism"
+        },
+        {
           "index": 92,
           "handler": "scripted-object"
+        },
+        {
+          "index": 93,
+          "handler": "mechanism"
         },
         {
           "index": 94,
@@ -4445,6 +5159,10 @@ export const definition = {
         {
           "index": 95,
           "handler": "scripted-object"
+        },
+        {
+          "index": 96,
+          "handler": "mechanism"
         },
         {
           "index": 99,
@@ -4468,8 +5186,24 @@ export const definition = {
       "npcs": [],
       "objects": [
         {
+          "index": 87,
+          "handler": "mechanism"
+        },
+        {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
+          "index": 89,
+          "handler": "mechanism"
+        },
+        {
           "index": 90,
           "handler": "scripted-object"
+        },
+        {
+          "index": 91,
+          "handler": "mechanism"
         },
         {
           "index": 92,
@@ -4484,8 +5218,16 @@ export const definition = {
           "handler": "scripted-object"
         },
         {
+          "index": 95,
+          "handler": "mechanism"
+        },
+        {
           "index": 96,
           "handler": "scripted-object"
+        },
+        {
+          "index": 97,
+          "handler": "mechanism"
         },
         {
           "index": 101,
@@ -4519,6 +5261,22 @@ export const definition = {
       ],
       "objects": [
         {
+          "index": 87,
+          "handler": "mechanism"
+        },
+        {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
+          "index": 89,
+          "handler": "mechanism"
+        },
+        {
+          "index": 90,
+          "handler": "mechanism"
+        },
+        {
           "index": 91,
           "handler": "scripted-object"
         },
@@ -4527,12 +5285,28 @@ export const definition = {
           "handler": "scripted-object"
         },
         {
+          "index": 93,
+          "handler": "mechanism"
+        },
+        {
           "index": 94,
           "handler": "scripted-object"
         },
         {
+          "index": 95,
+          "handler": "mechanism"
+        },
+        {
           "index": 96,
           "handler": "scripted-object"
+        },
+        {
+          "index": 97,
+          "handler": "mechanism"
+        },
+        {
+          "index": 98,
+          "handler": "mechanism"
         },
         {
           "index": 102,
@@ -4556,6 +5330,26 @@ export const definition = {
       "npcs": [],
       "objects": [
         {
+          "index": 87,
+          "handler": "mechanism"
+        },
+        {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
+          "index": 89,
+          "handler": "mechanism"
+        },
+        {
+          "index": 90,
+          "handler": "mechanism"
+        },
+        {
+          "index": 91,
+          "handler": "mechanism"
+        },
+        {
           "index": 92,
           "handler": "scripted-object"
         },
@@ -4574,6 +5368,14 @@ export const definition = {
         {
           "index": 96,
           "handler": "scripted-object"
+        },
+        {
+          "index": 97,
+          "handler": "mechanism"
+        },
+        {
+          "index": 98,
+          "handler": "mechanism"
         },
         {
           "index": 104,
@@ -12823,7 +13625,36 @@ export default {
       "triggers": [
         3
       ],
-      "objects": [],
+      "objects": [
+        {
+          "index": 18,
+          "handler": "mechanism"
+        },
+        {
+          "index": 19,
+          "handler": "mechanism"
+        },
+        {
+          "index": 20,
+          "handler": "mechanism"
+        },
+        {
+          "index": 21,
+          "handler": "mechanism"
+        },
+        {
+          "index": 22,
+          "handler": "mechanism"
+        },
+        {
+          "index": 23,
+          "handler": "mechanism"
+        },
+        {
+          "index": 24,
+          "handler": "mechanism"
+        }
+      ],
       "rests": [],
       "routes": [],
       "npcs": [],
@@ -12834,7 +13665,28 @@ export default {
       "triggers": [
         3
       ],
-      "objects": [],
+      "objects": [
+        {
+          "index": 18,
+          "handler": "mechanism"
+        },
+        {
+          "index": 19,
+          "handler": "mechanism"
+        },
+        {
+          "index": 20,
+          "handler": "mechanism"
+        },
+        {
+          "index": 21,
+          "handler": "mechanism"
+        },
+        {
+          "index": 22,
+          "handler": "mechanism"
+        }
+      ],
       "rests": [],
       "routes": [],
       "npcs": [],
@@ -12845,7 +13697,32 @@ export default {
       "triggers": [
         3
       ],
-      "objects": [],
+      "objects": [
+        {
+          "index": 18,
+          "handler": "mechanism"
+        },
+        {
+          "index": 19,
+          "handler": "mechanism"
+        },
+        {
+          "index": 20,
+          "handler": "mechanism"
+        },
+        {
+          "index": 21,
+          "handler": "mechanism"
+        },
+        {
+          "index": 22,
+          "handler": "mechanism"
+        },
+        {
+          "index": 23,
+          "handler": "mechanism"
+        }
+      ],
       "rests": [],
       "routes": [],
       "npcs": [],
@@ -12856,7 +13733,32 @@ export default {
       "triggers": [
         3
       ],
-      "objects": [],
+      "objects": [
+        {
+          "index": 18,
+          "handler": "mechanism"
+        },
+        {
+          "index": 19,
+          "handler": "mechanism"
+        },
+        {
+          "index": 20,
+          "handler": "mechanism"
+        },
+        {
+          "index": 21,
+          "handler": "mechanism"
+        },
+        {
+          "index": 22,
+          "handler": "mechanism"
+        },
+        {
+          "index": 23,
+          "handler": "mechanism"
+        }
+      ],
       "rests": [],
       "routes": [],
       "npcs": [],
@@ -12867,7 +13769,32 @@ export default {
       "triggers": [
         3
       ],
-      "objects": [],
+      "objects": [
+        {
+          "index": 18,
+          "handler": "mechanism"
+        },
+        {
+          "index": 19,
+          "handler": "mechanism"
+        },
+        {
+          "index": 20,
+          "handler": "mechanism"
+        },
+        {
+          "index": 21,
+          "handler": "mechanism"
+        },
+        {
+          "index": 22,
+          "handler": "mechanism"
+        },
+        {
+          "index": 23,
+          "handler": "mechanism"
+        }
+      ],
       "rests": [],
       "routes": [],
       "npcs": [
@@ -12880,7 +13807,32 @@ export default {
       "triggers": [
         3
       ],
-      "objects": [],
+      "objects": [
+        {
+          "index": 18,
+          "handler": "mechanism"
+        },
+        {
+          "index": 19,
+          "handler": "mechanism"
+        },
+        {
+          "index": 20,
+          "handler": "mechanism"
+        },
+        {
+          "index": 21,
+          "handler": "mechanism"
+        },
+        {
+          "index": 22,
+          "handler": "mechanism"
+        },
+        {
+          "index": 23,
+          "handler": "mechanism"
+        }
+      ],
       "rests": [],
       "routes": [],
       "npcs": [],
@@ -12891,7 +13843,32 @@ export default {
       "triggers": [
         3
       ],
-      "objects": [],
+      "objects": [
+        {
+          "index": 17,
+          "handler": "mechanism"
+        },
+        {
+          "index": 18,
+          "handler": "mechanism"
+        },
+        {
+          "index": 19,
+          "handler": "mechanism"
+        },
+        {
+          "index": 20,
+          "handler": "mechanism"
+        },
+        {
+          "index": 21,
+          "handler": "mechanism"
+        },
+        {
+          "index": 22,
+          "handler": "mechanism"
+        }
+      ],
       "rests": [],
       "routes": [],
       "npcs": [],
@@ -12902,7 +13879,28 @@ export default {
       "triggers": [
         3
       ],
-      "objects": [],
+      "objects": [
+        {
+          "index": 17,
+          "handler": "mechanism"
+        },
+        {
+          "index": 18,
+          "handler": "mechanism"
+        },
+        {
+          "index": 19,
+          "handler": "mechanism"
+        },
+        {
+          "index": 20,
+          "handler": "mechanism"
+        },
+        {
+          "index": 21,
+          "handler": "mechanism"
+        }
+      ],
       "rests": [],
       "routes": [],
       "npcs": [],
@@ -12913,7 +13911,32 @@ export default {
       "triggers": [
         3
       ],
-      "objects": [],
+      "objects": [
+        {
+          "index": 17,
+          "handler": "mechanism"
+        },
+        {
+          "index": 18,
+          "handler": "mechanism"
+        },
+        {
+          "index": 19,
+          "handler": "mechanism"
+        },
+        {
+          "index": 20,
+          "handler": "mechanism"
+        },
+        {
+          "index": 21,
+          "handler": "mechanism"
+        },
+        {
+          "index": 22,
+          "handler": "mechanism"
+        }
+      ],
       "rests": [],
       "routes": [],
       "npcs": [],
@@ -12924,12 +13947,32 @@ export default {
       "triggers": [],
       "objects": [
         {
+          "index": 80,
+          "handler": "mechanism"
+        },
+        {
+          "index": 81,
+          "handler": "mechanism"
+        },
+        {
+          "index": 82,
+          "handler": "mechanism"
+        },
+        {
           "index": 85,
           "handler": "keyed-chest"
         },
         {
           "index": 86,
           "handler": "stationary-chest"
+        },
+        {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
+          "index": 89,
+          "handler": "mechanism"
         },
         {
           "index": 90,
@@ -12945,6 +13988,18 @@ export default {
       "path": "data/maps/m71078-1-02.json",
       "triggers": [],
       "objects": [
+        {
+          "index": 80,
+          "handler": "mechanism"
+        },
+        {
+          "index": 81,
+          "handler": "mechanism"
+        },
+        {
+          "index": 82,
+          "handler": "mechanism"
+        },
         {
           "index": 86,
           "handler": "stationary-chest"
@@ -12962,6 +14017,10 @@ export default {
           "handler": "scripted-object"
         },
         {
+          "index": 90,
+          "handler": "mechanism"
+        },
+        {
           "index": 91,
           "handler": "keyed-chest"
         }
@@ -12976,8 +14035,24 @@ export default {
       "triggers": [],
       "objects": [
         {
+          "index": 80,
+          "handler": "mechanism"
+        },
+        {
+          "index": 81,
+          "handler": "mechanism"
+        },
+        {
+          "index": 82,
+          "handler": "mechanism"
+        },
+        {
           "index": 83,
           "handler": "scripted-object"
+        },
+        {
+          "index": 84,
+          "handler": "mechanism"
         },
         {
           "index": 87,
@@ -13008,8 +14083,24 @@ export default {
       "triggers": [],
       "objects": [
         {
+          "index": 80,
+          "handler": "mechanism"
+        },
+        {
+          "index": 81,
+          "handler": "mechanism"
+        },
+        {
+          "index": 82,
+          "handler": "mechanism"
+        },
+        {
           "index": 83,
           "handler": "scripted-object"
+        },
+        {
+          "index": 84,
+          "handler": "mechanism"
         },
         {
           "index": 85,
@@ -13038,8 +14129,24 @@ export default {
       "triggers": [],
       "objects": [
         {
+          "index": 80,
+          "handler": "mechanism"
+        },
+        {
+          "index": 81,
+          "handler": "mechanism"
+        },
+        {
+          "index": 82,
+          "handler": "mechanism"
+        },
+        {
           "index": 83,
           "handler": "scripted-object"
+        },
+        {
+          "index": 84,
+          "handler": "mechanism"
         },
         {
           "index": 85,
@@ -13068,6 +14175,14 @@ export default {
       "triggers": [],
       "objects": [
         {
+          "index": 80,
+          "handler": "mechanism"
+        },
+        {
+          "index": 81,
+          "handler": "mechanism"
+        },
+        {
           "index": 82,
           "handler": "scripted-object"
         },
@@ -13078,6 +14193,10 @@ export default {
         {
           "index": 84,
           "handler": "scripted-object"
+        },
+        {
+          "index": 85,
+          "handler": "mechanism"
         },
         {
           "index": 88,
@@ -13101,6 +14220,26 @@ export default {
       "path": "data/maps/m71078-2-11.json",
       "triggers": [],
       "objects": [
+        {
+          "index": 85,
+          "handler": "mechanism"
+        },
+        {
+          "index": 86,
+          "handler": "mechanism"
+        },
+        {
+          "index": 87,
+          "handler": "mechanism"
+        },
+        {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
+          "index": 89,
+          "handler": "mechanism"
+        },
         {
           "index": 90,
           "handler": "scripted-object"
@@ -13133,6 +14272,22 @@ export default {
       "path": "data/maps/m71078-2-13.json",
       "triggers": [],
       "objects": [
+        {
+          "index": 85,
+          "handler": "mechanism"
+        },
+        {
+          "index": 86,
+          "handler": "mechanism"
+        },
+        {
+          "index": 87,
+          "handler": "mechanism"
+        },
+        {
+          "index": 88,
+          "handler": "mechanism"
+        },
         {
           "index": 90,
           "handler": "scripted-object"
@@ -13168,8 +14323,24 @@ export default {
       "triggers": [],
       "objects": [
         {
+          "index": 85,
+          "handler": "mechanism"
+        },
+        {
+          "index": 86,
+          "handler": "mechanism"
+        },
+        {
+          "index": 87,
+          "handler": "mechanism"
+        },
+        {
           "index": 88,
           "handler": "scripted-object"
+        },
+        {
+          "index": 89,
+          "handler": "mechanism"
         },
         {
           "index": 90,
@@ -13206,6 +14377,14 @@ export default {
       "triggers": [],
       "objects": [
         {
+          "index": 85,
+          "handler": "mechanism"
+        },
+        {
+          "index": 86,
+          "handler": "mechanism"
+        },
+        {
           "index": 87,
           "handler": "scripted-object"
         },
@@ -13222,6 +14401,10 @@ export default {
           "handler": "keyed-chest"
         },
         {
+          "index": 96,
+          "handler": "mechanism"
+        },
+        {
           "index": 97,
           "handler": "keyed-chest"
         }
@@ -13235,6 +14418,26 @@ export default {
       "path": "data/maps/m71078-2-17.json",
       "triggers": [],
       "objects": [
+        {
+          "index": 85,
+          "handler": "mechanism"
+        },
+        {
+          "index": 86,
+          "handler": "mechanism"
+        },
+        {
+          "index": 87,
+          "handler": "mechanism"
+        },
+        {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
+          "index": 89,
+          "handler": "mechanism"
+        },
         {
           "index": 90,
           "handler": "scripted-object"
@@ -13268,12 +14471,32 @@ export default {
       "triggers": [],
       "objects": [
         {
+          "index": 85,
+          "handler": "mechanism"
+        },
+        {
+          "index": 86,
+          "handler": "mechanism"
+        },
+        {
+          "index": 87,
+          "handler": "mechanism"
+        },
+        {
           "index": 88,
           "handler": "scripted-object"
         },
         {
+          "index": 89,
+          "handler": "mechanism"
+        },
+        {
           "index": 90,
           "handler": "scripted-object"
+        },
+        {
+          "index": 91,
+          "handler": "mechanism"
         },
         {
           "index": 94,
@@ -13294,12 +14517,36 @@ export default {
       "triggers": [],
       "objects": [
         {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
+          "index": 89,
+          "handler": "mechanism"
+        },
+        {
+          "index": 90,
+          "handler": "mechanism"
+        },
+        {
+          "index": 91,
+          "handler": "mechanism"
+        },
+        {
+          "index": 92,
+          "handler": "mechanism"
+        },
+        {
           "index": 93,
           "handler": "scripted-object"
         },
         {
           "index": 94,
           "handler": "scripted-object"
+        },
+        {
+          "index": 95,
+          "handler": "mechanism"
         },
         {
           "index": 99,
@@ -13322,12 +14569,32 @@ export default {
       "triggers": [],
       "objects": [
         {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
+          "index": 89,
+          "handler": "mechanism"
+        },
+        {
+          "index": 90,
+          "handler": "mechanism"
+        },
+        {
           "index": 91,
           "handler": "scripted-object"
         },
         {
+          "index": 92,
+          "handler": "mechanism"
+        },
+        {
           "index": 93,
           "handler": "scripted-object"
+        },
+        {
+          "index": 94,
+          "handler": "mechanism"
         },
         {
           "index": 95,
@@ -13355,6 +14622,26 @@ export default {
       "path": "data/maps/m71078-3-24.json",
       "triggers": [],
       "objects": [
+        {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
+          "index": 89,
+          "handler": "mechanism"
+        },
+        {
+          "index": 90,
+          "handler": "mechanism"
+        },
+        {
+          "index": 91,
+          "handler": "mechanism"
+        },
+        {
+          "index": 92,
+          "handler": "mechanism"
+        },
         {
           "index": 93,
           "handler": "scripted-object"
@@ -13390,6 +14677,18 @@ export default {
       "triggers": [],
       "objects": [
         {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
+          "index": 89,
+          "handler": "mechanism"
+        },
+        {
+          "index": 90,
+          "handler": "mechanism"
+        },
+        {
           "index": 91,
           "handler": "scripted-object"
         },
@@ -13398,8 +14697,20 @@ export default {
           "handler": "scripted-object"
         },
         {
+          "index": 93,
+          "handler": "mechanism"
+        },
+        {
           "index": 94,
           "handler": "scripted-object"
+        },
+        {
+          "index": 95,
+          "handler": "mechanism"
+        },
+        {
+          "index": 100,
+          "handler": "mechanism"
         },
         {
           "index": 101,
@@ -13420,12 +14731,44 @@ export default {
       "triggers": [],
       "objects": [
         {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
+          "index": 89,
+          "handler": "mechanism"
+        },
+        {
+          "index": 90,
+          "handler": "mechanism"
+        },
+        {
+          "index": 91,
+          "handler": "mechanism"
+        },
+        {
+          "index": 92,
+          "handler": "mechanism"
+        },
+        {
+          "index": 93,
+          "handler": "mechanism"
+        },
+        {
           "index": 94,
           "handler": "scripted-object"
         },
         {
+          "index": 95,
+          "handler": "mechanism"
+        },
+        {
           "index": 96,
           "handler": "scripted-object"
+        },
+        {
+          "index": 97,
+          "handler": "mechanism"
         },
         {
           "index": 98,
@@ -13455,6 +14798,10 @@ export default {
       "path": "data/maps/m71078-3-29.json",
       "triggers": [],
       "objects": [
+        {
+          "index": 88,
+          "handler": "mechanism"
+        },
         {
           "index": 89,
           "handler": "scripted-object"
@@ -13502,6 +14849,14 @@ export default {
       "triggers": [],
       "objects": [
         {
+          "index": 91,
+          "handler": "mechanism"
+        },
+        {
+          "index": 95,
+          "handler": "mechanism"
+        },
+        {
           "index": 97,
           "handler": "keyed-chest"
         },
@@ -13520,6 +14875,14 @@ export default {
       "triggers": [],
       "objects": [
         {
+          "index": 87,
+          "handler": "mechanism"
+        },
+        {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
           "index": 89,
           "handler": "scripted-object"
         },
@@ -13528,12 +14891,20 @@ export default {
           "handler": "scripted-object"
         },
         {
+          "index": 91,
+          "handler": "mechanism"
+        },
+        {
           "index": 92,
           "handler": "scripted-object"
         },
         {
           "index": 93,
           "handler": "scripted-object"
+        },
+        {
+          "index": 94,
+          "handler": "mechanism"
         },
         {
           "index": 95,
@@ -13562,12 +14933,36 @@ export default {
       "triggers": [],
       "objects": [
         {
+          "index": 87,
+          "handler": "mechanism"
+        },
+        {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
+          "index": 89,
+          "handler": "mechanism"
+        },
+        {
+          "index": 90,
+          "handler": "mechanism"
+        },
+        {
           "index": 91,
           "handler": "scripted-object"
         },
         {
           "index": 92,
           "handler": "scripted-object"
+        },
+        {
+          "index": 93,
+          "handler": "mechanism"
+        },
+        {
+          "index": 94,
+          "handler": "mechanism"
         },
         {
           "index": 95,
@@ -13610,20 +15005,44 @@ export default {
           "handler": "scripted-object"
         },
         {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
           "index": 89,
           "handler": "scripted-object"
+        },
+        {
+          "index": 90,
+          "handler": "mechanism"
         },
         {
           "index": 91,
           "handler": "scripted-object"
         },
         {
+          "index": 92,
+          "handler": "mechanism"
+        },
+        {
           "index": 93,
           "handler": "scripted-object"
         },
         {
+          "index": 94,
+          "handler": "mechanism"
+        },
+        {
           "index": 95,
           "handler": "scripted-object"
+        },
+        {
+          "index": 96,
+          "handler": "mechanism"
+        },
+        {
+          "index": 97,
+          "handler": "mechanism"
         },
         {
           "index": 99,
@@ -13648,16 +15067,44 @@ export default {
       "triggers": [],
       "objects": [
         {
+          "index": 87,
+          "handler": "mechanism"
+        },
+        {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
+          "index": 89,
+          "handler": "mechanism"
+        },
+        {
+          "index": 90,
+          "handler": "mechanism"
+        },
+        {
           "index": 91,
           "handler": "scripted-object"
+        },
+        {
+          "index": 92,
+          "handler": "mechanism"
         },
         {
           "index": 93,
           "handler": "scripted-object"
         },
         {
+          "index": 94,
+          "handler": "mechanism"
+        },
+        {
           "index": 95,
           "handler": "scripted-object"
+        },
+        {
+          "index": 96,
+          "handler": "mechanism"
         },
         {
           "index": 101,
@@ -13686,12 +15133,28 @@ export default {
       "triggers": [],
       "objects": [
         {
+          "index": 87,
+          "handler": "mechanism"
+        },
+        {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
+          "index": 89,
+          "handler": "mechanism"
+        },
+        {
           "index": 90,
           "handler": "scripted-object"
         },
         {
           "index": 91,
           "handler": "scripted-object"
+        },
+        {
+          "index": 92,
+          "handler": "mechanism"
         },
         {
           "index": 93,
@@ -13710,6 +15173,10 @@ export default {
           "handler": "keyed-chest"
         },
         {
+          "index": 100,
+          "handler": "mechanism"
+        },
+        {
           "index": 101,
           "handler": "keyed-chest"
         }
@@ -13724,6 +15191,22 @@ export default {
       "triggers": [],
       "objects": [
         {
+          "index": 87,
+          "handler": "mechanism"
+        },
+        {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
+          "index": 89,
+          "handler": "mechanism"
+        },
+        {
+          "index": 90,
+          "handler": "mechanism"
+        },
+        {
           "index": 91,
           "handler": "scripted-object"
         },
@@ -13736,8 +15219,16 @@ export default {
           "handler": "scripted-object"
         },
         {
+          "index": 94,
+          "handler": "mechanism"
+        },
+        {
           "index": 95,
           "handler": "scripted-object"
+        },
+        {
+          "index": 96,
+          "handler": "mechanism"
         },
         {
           "index": 101,
@@ -13768,6 +15259,14 @@ export default {
       "triggers": [],
       "objects": [
         {
+          "index": 87,
+          "handler": "mechanism"
+        },
+        {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
           "index": 89,
           "handler": "scripted-object"
         },
@@ -13776,8 +15275,16 @@ export default {
           "handler": "scripted-object"
         },
         {
+          "index": 91,
+          "handler": "mechanism"
+        },
+        {
           "index": 92,
           "handler": "scripted-object"
+        },
+        {
+          "index": 93,
+          "handler": "mechanism"
         },
         {
           "index": 94,
@@ -13786,6 +15293,10 @@ export default {
         {
           "index": 95,
           "handler": "scripted-object"
+        },
+        {
+          "index": 96,
+          "handler": "mechanism"
         },
         {
           "index": 99,
@@ -13814,8 +15325,24 @@ export default {
       "triggers": [],
       "objects": [
         {
+          "index": 87,
+          "handler": "mechanism"
+        },
+        {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
+          "index": 89,
+          "handler": "mechanism"
+        },
+        {
           "index": 90,
           "handler": "scripted-object"
+        },
+        {
+          "index": 91,
+          "handler": "mechanism"
         },
         {
           "index": 92,
@@ -13830,8 +15357,16 @@ export default {
           "handler": "scripted-object"
         },
         {
+          "index": 95,
+          "handler": "mechanism"
+        },
+        {
           "index": 96,
           "handler": "scripted-object"
+        },
+        {
+          "index": 97,
+          "handler": "mechanism"
         },
         {
           "index": 101,
@@ -13868,6 +15403,22 @@ export default {
       "triggers": [],
       "objects": [
         {
+          "index": 87,
+          "handler": "mechanism"
+        },
+        {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
+          "index": 89,
+          "handler": "mechanism"
+        },
+        {
+          "index": 90,
+          "handler": "mechanism"
+        },
+        {
           "index": 91,
           "handler": "scripted-object"
         },
@@ -13876,12 +15427,28 @@ export default {
           "handler": "scripted-object"
         },
         {
+          "index": 93,
+          "handler": "mechanism"
+        },
+        {
           "index": 94,
           "handler": "scripted-object"
         },
         {
+          "index": 95,
+          "handler": "mechanism"
+        },
+        {
           "index": 96,
           "handler": "scripted-object"
+        },
+        {
+          "index": 97,
+          "handler": "mechanism"
+        },
+        {
+          "index": 98,
+          "handler": "mechanism"
         },
         {
           "index": 102,
@@ -13912,6 +15479,26 @@ export default {
       "triggers": [],
       "objects": [
         {
+          "index": 87,
+          "handler": "mechanism"
+        },
+        {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
+          "index": 89,
+          "handler": "mechanism"
+        },
+        {
+          "index": 90,
+          "handler": "mechanism"
+        },
+        {
+          "index": 91,
+          "handler": "mechanism"
+        },
+        {
           "index": 92,
           "handler": "scripted-object"
         },
@@ -13930,6 +15517,14 @@ export default {
         {
           "index": 96,
           "handler": "scripted-object"
+        },
+        {
+          "index": 97,
+          "handler": "mechanism"
+        },
+        {
+          "index": 98,
+          "handler": "mechanism"
         },
         {
           "index": 104,

@@ -3648,24 +3648,128 @@
       "npcs": [],
       "triggers": [
         3
+      ],
+      "objects": [
+        {
+          "index": 18,
+          "handler": "mechanism"
+        },
+        {
+          "index": 19,
+          "handler": "mechanism"
+        },
+        {
+          "index": 20,
+          "handler": "mechanism"
+        },
+        {
+          "index": 21,
+          "handler": "mechanism"
+        },
+        {
+          "index": 22,
+          "handler": "mechanism"
+        },
+        {
+          "index": 23,
+          "handler": "mechanism"
+        },
+        {
+          "index": 24,
+          "handler": "mechanism"
+        }
       ]
     },
     "M71077-2": {
       "npcs": [],
       "triggers": [
         3
+      ],
+      "objects": [
+        {
+          "index": 18,
+          "handler": "mechanism"
+        },
+        {
+          "index": 19,
+          "handler": "mechanism"
+        },
+        {
+          "index": 20,
+          "handler": "mechanism"
+        },
+        {
+          "index": 21,
+          "handler": "mechanism"
+        },
+        {
+          "index": 22,
+          "handler": "mechanism"
+        }
       ]
     },
     "M71077-3": {
       "npcs": [],
       "triggers": [
         3
+      ],
+      "objects": [
+        {
+          "index": 18,
+          "handler": "mechanism"
+        },
+        {
+          "index": 19,
+          "handler": "mechanism"
+        },
+        {
+          "index": 20,
+          "handler": "mechanism"
+        },
+        {
+          "index": 21,
+          "handler": "mechanism"
+        },
+        {
+          "index": 22,
+          "handler": "mechanism"
+        },
+        {
+          "index": 23,
+          "handler": "mechanism"
+        }
       ]
     },
     "M71077-4": {
       "npcs": [],
       "triggers": [
         3
+      ],
+      "objects": [
+        {
+          "index": 18,
+          "handler": "mechanism"
+        },
+        {
+          "index": 19,
+          "handler": "mechanism"
+        },
+        {
+          "index": 20,
+          "handler": "mechanism"
+        },
+        {
+          "index": 21,
+          "handler": "mechanism"
+        },
+        {
+          "index": 22,
+          "handler": "mechanism"
+        },
+        {
+          "index": 23,
+          "handler": "mechanism"
+        }
       ]
     },
     "M71077-5": {
@@ -3674,35 +3778,173 @@
       ],
       "triggers": [
         3
+      ],
+      "objects": [
+        {
+          "index": 18,
+          "handler": "mechanism"
+        },
+        {
+          "index": 19,
+          "handler": "mechanism"
+        },
+        {
+          "index": 20,
+          "handler": "mechanism"
+        },
+        {
+          "index": 21,
+          "handler": "mechanism"
+        },
+        {
+          "index": 22,
+          "handler": "mechanism"
+        },
+        {
+          "index": 23,
+          "handler": "mechanism"
+        }
       ]
     },
     "M71077-6": {
       "npcs": [],
       "triggers": [
         3
+      ],
+      "objects": [
+        {
+          "index": 18,
+          "handler": "mechanism"
+        },
+        {
+          "index": 19,
+          "handler": "mechanism"
+        },
+        {
+          "index": 20,
+          "handler": "mechanism"
+        },
+        {
+          "index": 21,
+          "handler": "mechanism"
+        },
+        {
+          "index": 22,
+          "handler": "mechanism"
+        },
+        {
+          "index": 23,
+          "handler": "mechanism"
+        }
       ]
     },
     "M71077-7": {
       "npcs": [],
       "triggers": [
         3
+      ],
+      "objects": [
+        {
+          "index": 17,
+          "handler": "mechanism"
+        },
+        {
+          "index": 18,
+          "handler": "mechanism"
+        },
+        {
+          "index": 19,
+          "handler": "mechanism"
+        },
+        {
+          "index": 20,
+          "handler": "mechanism"
+        },
+        {
+          "index": 21,
+          "handler": "mechanism"
+        },
+        {
+          "index": 22,
+          "handler": "mechanism"
+        }
       ]
     },
     "M71077-8": {
       "npcs": [],
       "triggers": [
         3
+      ],
+      "objects": [
+        {
+          "index": 17,
+          "handler": "mechanism"
+        },
+        {
+          "index": 18,
+          "handler": "mechanism"
+        },
+        {
+          "index": 19,
+          "handler": "mechanism"
+        },
+        {
+          "index": 20,
+          "handler": "mechanism"
+        },
+        {
+          "index": 21,
+          "handler": "mechanism"
+        }
       ]
     },
     "M71077-9": {
       "npcs": [],
       "triggers": [
         3
+      ],
+      "objects": [
+        {
+          "index": 17,
+          "handler": "mechanism"
+        },
+        {
+          "index": 18,
+          "handler": "mechanism"
+        },
+        {
+          "index": 19,
+          "handler": "mechanism"
+        },
+        {
+          "index": 20,
+          "handler": "mechanism"
+        },
+        {
+          "index": 21,
+          "handler": "mechanism"
+        },
+        {
+          "index": 22,
+          "handler": "mechanism"
+        }
       ]
     },
     "M71078-1-01": {
       "npcs": [],
       "objects": [
+        {
+          "index": 80,
+          "handler": "mechanism"
+        },
+        {
+          "index": 81,
+          "handler": "mechanism"
+        },
+        {
+          "index": 82,
+          "handler": "mechanism"
+        },
         {
           "index": 85,
           "handler": "keyed-chest"
@@ -3710,6 +3952,14 @@
         {
           "index": 86,
           "handler": "stationary-chest"
+        },
+        {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
+          "index": 89,
+          "handler": "mechanism"
         },
         {
           "index": 90,
@@ -3720,6 +3970,18 @@
     "M71078-1-02": {
       "npcs": [],
       "objects": [
+        {
+          "index": 80,
+          "handler": "mechanism"
+        },
+        {
+          "index": 81,
+          "handler": "mechanism"
+        },
+        {
+          "index": 82,
+          "handler": "mechanism"
+        },
         {
           "index": 86,
           "handler": "stationary-chest"
@@ -3737,6 +3999,10 @@
           "handler": "scripted-object"
         },
         {
+          "index": 90,
+          "handler": "mechanism"
+        },
+        {
           "index": 91,
           "handler": "keyed-chest"
         }
@@ -3748,8 +4014,24 @@
       ],
       "objects": [
         {
+          "index": 80,
+          "handler": "mechanism"
+        },
+        {
+          "index": 81,
+          "handler": "mechanism"
+        },
+        {
+          "index": 82,
+          "handler": "mechanism"
+        },
+        {
           "index": 83,
           "handler": "scripted-object"
+        },
+        {
+          "index": 84,
+          "handler": "mechanism"
         },
         {
           "index": 87,
@@ -3773,8 +4055,24 @@
       "npcs": [],
       "objects": [
         {
+          "index": 80,
+          "handler": "mechanism"
+        },
+        {
+          "index": 81,
+          "handler": "mechanism"
+        },
+        {
+          "index": 82,
+          "handler": "mechanism"
+        },
+        {
           "index": 83,
           "handler": "scripted-object"
+        },
+        {
+          "index": 84,
+          "handler": "mechanism"
         },
         {
           "index": 85,
@@ -3798,8 +4096,24 @@
       "npcs": [],
       "objects": [
         {
+          "index": 80,
+          "handler": "mechanism"
+        },
+        {
+          "index": 81,
+          "handler": "mechanism"
+        },
+        {
+          "index": 82,
+          "handler": "mechanism"
+        },
+        {
           "index": 83,
           "handler": "scripted-object"
+        },
+        {
+          "index": 84,
+          "handler": "mechanism"
         },
         {
           "index": 85,
@@ -3823,6 +4137,14 @@
       "npcs": [],
       "objects": [
         {
+          "index": 80,
+          "handler": "mechanism"
+        },
+        {
+          "index": 81,
+          "handler": "mechanism"
+        },
+        {
           "index": 82,
           "handler": "scripted-object"
         },
@@ -3833,6 +4155,10 @@
         {
           "index": 84,
           "handler": "scripted-object"
+        },
+        {
+          "index": 85,
+          "handler": "mechanism"
         },
         {
           "index": 88,
@@ -3853,6 +4179,26 @@
         14
       ],
       "objects": [
+        {
+          "index": 85,
+          "handler": "mechanism"
+        },
+        {
+          "index": 86,
+          "handler": "mechanism"
+        },
+        {
+          "index": 87,
+          "handler": "mechanism"
+        },
+        {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
+          "index": 89,
+          "handler": "mechanism"
+        },
         {
           "index": 90,
           "handler": "scripted-object"
@@ -3878,6 +4224,22 @@
     "M71078-2-13": {
       "npcs": [],
       "objects": [
+        {
+          "index": 85,
+          "handler": "mechanism"
+        },
+        {
+          "index": 86,
+          "handler": "mechanism"
+        },
+        {
+          "index": 87,
+          "handler": "mechanism"
+        },
+        {
+          "index": 88,
+          "handler": "mechanism"
+        },
         {
           "index": 90,
           "handler": "scripted-object"
@@ -3908,8 +4270,24 @@
       "npcs": [],
       "objects": [
         {
+          "index": 85,
+          "handler": "mechanism"
+        },
+        {
+          "index": 86,
+          "handler": "mechanism"
+        },
+        {
+          "index": 87,
+          "handler": "mechanism"
+        },
+        {
           "index": 88,
           "handler": "scripted-object"
+        },
+        {
+          "index": 89,
+          "handler": "mechanism"
         },
         {
           "index": 90,
@@ -3941,6 +4319,14 @@
       "npcs": [],
       "objects": [
         {
+          "index": 85,
+          "handler": "mechanism"
+        },
+        {
+          "index": 86,
+          "handler": "mechanism"
+        },
+        {
           "index": 87,
           "handler": "scripted-object"
         },
@@ -3957,6 +4343,10 @@
           "handler": "keyed-chest"
         },
         {
+          "index": 96,
+          "handler": "mechanism"
+        },
+        {
           "index": 97,
           "handler": "keyed-chest"
         }
@@ -3967,6 +4357,26 @@
         14
       ],
       "objects": [
+        {
+          "index": 85,
+          "handler": "mechanism"
+        },
+        {
+          "index": 86,
+          "handler": "mechanism"
+        },
+        {
+          "index": 87,
+          "handler": "mechanism"
+        },
+        {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
+          "index": 89,
+          "handler": "mechanism"
+        },
         {
           "index": 90,
           "handler": "scripted-object"
@@ -3993,12 +4403,32 @@
       "npcs": [],
       "objects": [
         {
+          "index": 85,
+          "handler": "mechanism"
+        },
+        {
+          "index": 86,
+          "handler": "mechanism"
+        },
+        {
+          "index": 87,
+          "handler": "mechanism"
+        },
+        {
           "index": 88,
           "handler": "scripted-object"
         },
         {
+          "index": 89,
+          "handler": "mechanism"
+        },
+        {
           "index": 90,
           "handler": "scripted-object"
+        },
+        {
+          "index": 91,
+          "handler": "mechanism"
         },
         {
           "index": 94,
@@ -4016,12 +4446,36 @@
       ],
       "objects": [
         {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
+          "index": 89,
+          "handler": "mechanism"
+        },
+        {
+          "index": 90,
+          "handler": "mechanism"
+        },
+        {
+          "index": 91,
+          "handler": "mechanism"
+        },
+        {
+          "index": 92,
+          "handler": "mechanism"
+        },
+        {
           "index": 93,
           "handler": "scripted-object"
         },
         {
           "index": 94,
           "handler": "scripted-object"
+        },
+        {
+          "index": 95,
+          "handler": "mechanism"
         },
         {
           "index": 99,
@@ -4037,12 +4491,32 @@
       "npcs": [],
       "objects": [
         {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
+          "index": 89,
+          "handler": "mechanism"
+        },
+        {
+          "index": 90,
+          "handler": "mechanism"
+        },
+        {
           "index": 91,
           "handler": "scripted-object"
         },
         {
+          "index": 92,
+          "handler": "mechanism"
+        },
+        {
           "index": 93,
           "handler": "scripted-object"
+        },
+        {
+          "index": 94,
+          "handler": "mechanism"
         },
         {
           "index": 95,
@@ -4065,6 +4539,26 @@
     "M71078-3-24": {
       "npcs": [],
       "objects": [
+        {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
+          "index": 89,
+          "handler": "mechanism"
+        },
+        {
+          "index": 90,
+          "handler": "mechanism"
+        },
+        {
+          "index": 91,
+          "handler": "mechanism"
+        },
+        {
+          "index": 92,
+          "handler": "mechanism"
+        },
         {
           "index": 93,
           "handler": "scripted-object"
@@ -4095,6 +4589,18 @@
       "npcs": [],
       "objects": [
         {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
+          "index": 89,
+          "handler": "mechanism"
+        },
+        {
+          "index": 90,
+          "handler": "mechanism"
+        },
+        {
           "index": 91,
           "handler": "scripted-object"
         },
@@ -4103,8 +4609,20 @@
           "handler": "scripted-object"
         },
         {
+          "index": 93,
+          "handler": "mechanism"
+        },
+        {
           "index": 94,
           "handler": "scripted-object"
+        },
+        {
+          "index": 95,
+          "handler": "mechanism"
+        },
+        {
+          "index": 100,
+          "handler": "mechanism"
         },
         {
           "index": 101,
@@ -4122,12 +4640,44 @@
       ],
       "objects": [
         {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
+          "index": 89,
+          "handler": "mechanism"
+        },
+        {
+          "index": 90,
+          "handler": "mechanism"
+        },
+        {
+          "index": 91,
+          "handler": "mechanism"
+        },
+        {
+          "index": 92,
+          "handler": "mechanism"
+        },
+        {
+          "index": 93,
+          "handler": "mechanism"
+        },
+        {
           "index": 94,
           "handler": "scripted-object"
         },
         {
+          "index": 95,
+          "handler": "mechanism"
+        },
+        {
           "index": 96,
           "handler": "scripted-object"
+        },
+        {
+          "index": 97,
+          "handler": "mechanism"
         },
         {
           "index": 98,
@@ -4150,6 +4700,10 @@
     "M71078-3-29": {
       "npcs": [],
       "objects": [
+        {
+          "index": 88,
+          "handler": "mechanism"
+        },
         {
           "index": 89,
           "handler": "scripted-object"
@@ -4192,6 +4746,14 @@
       "npcs": [],
       "objects": [
         {
+          "index": 91,
+          "handler": "mechanism"
+        },
+        {
+          "index": 95,
+          "handler": "mechanism"
+        },
+        {
           "index": 97,
           "handler": "keyed-chest"
         },
@@ -4208,6 +4770,14 @@
       "npcs": [],
       "objects": [
         {
+          "index": 87,
+          "handler": "mechanism"
+        },
+        {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
           "index": 89,
           "handler": "scripted-object"
         },
@@ -4216,12 +4786,20 @@
           "handler": "scripted-object"
         },
         {
+          "index": 91,
+          "handler": "mechanism"
+        },
+        {
           "index": 92,
           "handler": "scripted-object"
         },
         {
           "index": 93,
           "handler": "scripted-object"
+        },
+        {
+          "index": 94,
+          "handler": "mechanism"
         },
         {
           "index": 95,
@@ -4247,12 +4825,36 @@
       ],
       "objects": [
         {
+          "index": 87,
+          "handler": "mechanism"
+        },
+        {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
+          "index": 89,
+          "handler": "mechanism"
+        },
+        {
+          "index": 90,
+          "handler": "mechanism"
+        },
+        {
           "index": 91,
           "handler": "scripted-object"
         },
         {
           "index": 92,
           "handler": "scripted-object"
+        },
+        {
+          "index": 93,
+          "handler": "mechanism"
+        },
+        {
+          "index": 94,
+          "handler": "mechanism"
         },
         {
           "index": 95,
@@ -4288,20 +4890,44 @@
           "handler": "scripted-object"
         },
         {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
           "index": 89,
           "handler": "scripted-object"
+        },
+        {
+          "index": 90,
+          "handler": "mechanism"
         },
         {
           "index": 91,
           "handler": "scripted-object"
         },
         {
+          "index": 92,
+          "handler": "mechanism"
+        },
+        {
           "index": 93,
           "handler": "scripted-object"
         },
         {
+          "index": 94,
+          "handler": "mechanism"
+        },
+        {
           "index": 95,
           "handler": "scripted-object"
+        },
+        {
+          "index": 96,
+          "handler": "mechanism"
+        },
+        {
+          "index": 97,
+          "handler": "mechanism"
         },
         {
           "index": 99,
@@ -4321,16 +4947,44 @@
       "npcs": [],
       "objects": [
         {
+          "index": 87,
+          "handler": "mechanism"
+        },
+        {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
+          "index": 89,
+          "handler": "mechanism"
+        },
+        {
+          "index": 90,
+          "handler": "mechanism"
+        },
+        {
           "index": 91,
           "handler": "scripted-object"
+        },
+        {
+          "index": 92,
+          "handler": "mechanism"
         },
         {
           "index": 93,
           "handler": "scripted-object"
         },
         {
+          "index": 94,
+          "handler": "mechanism"
+        },
+        {
           "index": 95,
           "handler": "scripted-object"
+        },
+        {
+          "index": 96,
+          "handler": "mechanism"
         },
         {
           "index": 101,
@@ -4354,12 +5008,28 @@
       "npcs": [],
       "objects": [
         {
+          "index": 87,
+          "handler": "mechanism"
+        },
+        {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
+          "index": 89,
+          "handler": "mechanism"
+        },
+        {
           "index": 90,
           "handler": "scripted-object"
         },
         {
           "index": 91,
           "handler": "scripted-object"
+        },
+        {
+          "index": 92,
+          "handler": "mechanism"
         },
         {
           "index": 93,
@@ -4378,6 +5048,10 @@
           "handler": "keyed-chest"
         },
         {
+          "index": 100,
+          "handler": "mechanism"
+        },
+        {
           "index": 101,
           "handler": "keyed-chest"
         }
@@ -4388,6 +5062,22 @@
         18
       ],
       "objects": [
+        {
+          "index": 87,
+          "handler": "mechanism"
+        },
+        {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
+          "index": 89,
+          "handler": "mechanism"
+        },
+        {
+          "index": 90,
+          "handler": "mechanism"
+        },
         {
           "index": 91,
           "handler": "scripted-object"
@@ -4401,8 +5091,16 @@
           "handler": "scripted-object"
         },
         {
+          "index": 94,
+          "handler": "mechanism"
+        },
+        {
           "index": 95,
           "handler": "scripted-object"
+        },
+        {
+          "index": 96,
+          "handler": "mechanism"
         },
         {
           "index": 101,
@@ -4426,6 +5124,14 @@
       "npcs": [],
       "objects": [
         {
+          "index": 87,
+          "handler": "mechanism"
+        },
+        {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
           "index": 89,
           "handler": "scripted-object"
         },
@@ -4434,8 +5140,16 @@
           "handler": "scripted-object"
         },
         {
+          "index": 91,
+          "handler": "mechanism"
+        },
+        {
           "index": 92,
           "handler": "scripted-object"
+        },
+        {
+          "index": 93,
+          "handler": "mechanism"
         },
         {
           "index": 94,
@@ -4444,6 +5158,10 @@
         {
           "index": 95,
           "handler": "scripted-object"
+        },
+        {
+          "index": 96,
+          "handler": "mechanism"
         },
         {
           "index": 99,
@@ -4467,8 +5185,24 @@
       "npcs": [],
       "objects": [
         {
+          "index": 87,
+          "handler": "mechanism"
+        },
+        {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
+          "index": 89,
+          "handler": "mechanism"
+        },
+        {
           "index": 90,
           "handler": "scripted-object"
+        },
+        {
+          "index": 91,
+          "handler": "mechanism"
         },
         {
           "index": 92,
@@ -4483,8 +5217,16 @@
           "handler": "scripted-object"
         },
         {
+          "index": 95,
+          "handler": "mechanism"
+        },
+        {
           "index": 96,
           "handler": "scripted-object"
+        },
+        {
+          "index": 97,
+          "handler": "mechanism"
         },
         {
           "index": 101,
@@ -4518,6 +5260,22 @@
       ],
       "objects": [
         {
+          "index": 87,
+          "handler": "mechanism"
+        },
+        {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
+          "index": 89,
+          "handler": "mechanism"
+        },
+        {
+          "index": 90,
+          "handler": "mechanism"
+        },
+        {
           "index": 91,
           "handler": "scripted-object"
         },
@@ -4526,12 +5284,28 @@
           "handler": "scripted-object"
         },
         {
+          "index": 93,
+          "handler": "mechanism"
+        },
+        {
           "index": 94,
           "handler": "scripted-object"
         },
         {
+          "index": 95,
+          "handler": "mechanism"
+        },
+        {
           "index": 96,
           "handler": "scripted-object"
+        },
+        {
+          "index": 97,
+          "handler": "mechanism"
+        },
+        {
+          "index": 98,
+          "handler": "mechanism"
         },
         {
           "index": 102,
@@ -4555,6 +5329,26 @@
       "npcs": [],
       "objects": [
         {
+          "index": 87,
+          "handler": "mechanism"
+        },
+        {
+          "index": 88,
+          "handler": "mechanism"
+        },
+        {
+          "index": 89,
+          "handler": "mechanism"
+        },
+        {
+          "index": 90,
+          "handler": "mechanism"
+        },
+        {
+          "index": 91,
+          "handler": "mechanism"
+        },
+        {
           "index": 92,
           "handler": "scripted-object"
         },
@@ -4573,6 +5367,14 @@
         {
           "index": 96,
           "handler": "scripted-object"
+        },
+        {
+          "index": 97,
+          "handler": "mechanism"
+        },
+        {
+          "index": 98,
+          "handler": "mechanism"
         },
         {
           "index": 104,

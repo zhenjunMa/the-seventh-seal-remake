@@ -212,7 +212,7 @@ def registered_tlk_reachability(story, registration, original, hashes, require):
             require(slot in slots, f'{map_id} NPC {slot} TLK index')
             add(map_id, slots[slot], 'npc', npc_slot=slot)
         for index in binding.get('objects', []):
-            if index['handler'] in ('keyed-chest', 'toggle-object'):
+            if index['handler'] in ('keyed-chest', 'toggle-object', 'mechanism'):
                 continue  # Direct DAT interactions have no fabricated TLK root.
             obj = next((row for row in table['objects'] if row['index'] == index['index']), None)
             require(obj is not None, f'{map_id} object {index}')

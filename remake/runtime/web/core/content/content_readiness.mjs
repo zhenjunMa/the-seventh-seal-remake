@@ -9,6 +9,7 @@ import {validateNativeStoryCondition} from '../story/native_story_conditions.mjs
 import {validateNativeStoryMutation} from '../story/native_story_mutations.mjs';
 import {nativeScriptedBattle} from '../battle/scripted_battle.mjs';
 import {nativeKeyedChest,nativeChestAnimation,nativeToggleObject} from '../exploration/native_map_chests.mjs';
+import {nativeMapMechanism} from '../exploration/native_map_mechanisms.mjs';
 import {nativeCombinationConditions} from '../story/native_story_combinations.mjs';
 import {nativeRandomBranches} from '../story/native_story_random.mjs';
 import {readNativeService} from '../items/native_economy.mjs';
@@ -43,7 +44,7 @@ export function inspectContentReadiness(content,story,resources){
       roots.push(row?.state_raw===1?{kind:'dat-trigger',id,label:id,descriptor:table?.descriptors.find(row=>row.id===id)}:
         {kind:'trigger',id:row?.field_26_raw,label:id});
     }
-    for(const row of binding.objects)roots.push(['keyed-chest','toggle-object'].includes(row.handler)
+    for(const row of binding.objects)roots.push(['keyed-chest','toggle-object','mechanism'].includes(row.handler)
       ?{kind:'direct-object',id:row.index,label:row.index,handler:row.handler}
       :{kind:'object',id:table?.objects.find(obj=>obj.index===row.index)?.interaction_record_raw_f6,label:row.index,explicit:true});
     for(const row of binding.rests)roots.push({kind:'rest',id:row.record_id,label:row.descriptor_id,explicit:true});
@@ -74,15 +75,18 @@ export function inspectContentReadiness(content,story,resources){
       };
       if(root.kind==='direct-object'){
         try{
-          const object=table?.objects.find(row=>row.index===root.id),chest=root.handler==='toggle-object'?nativeToggleObject(object):nativeKeyedChest(object);
+          const object=table?.objects.find(row=>row.index===root.id);
+          const direct=root.handler==='mechanism'?nativeMapMechanism(object):
+            root.handler==='toggle-object'?nativeToggleObject(object):nativeKeyedChest(object);
           need(object.source?.sha256===story.source_hashes[object.source.path],'宝箱原地图来源缺失');
-          for(const reward of chest.rewards??[]){
+          for(const reward of direct.rewards??[]){
             const definition=story.item_definitions?.[reward.id];
             need(definition?.source?.sha256===story.source_hashes[definition.source.path],'宝箱奖励道具来源缺失');
             validateChapterItemDefinition(definition);
           }
           const animation=resources.object_animations[mapId]?.find(row=>row.object_index_zero_based===root.id);
-          need(animation,'物件动作资源缺失');if(root.handler!=='toggle-object')nativeChestAnimation(animation,object.behavior_raw_cf);
+          need(animation,'物件动作资源缺失');
+          if(root.handler==='keyed-chest')nativeChestAnimation(animation,object.behavior_raw_cf);
           entrances.push({map_id:mapId,kind:root.kind,id:root.id,records:0,advisory:false});
         }catch(error){target.push(diagnostic(null,error.message));}
         continue;

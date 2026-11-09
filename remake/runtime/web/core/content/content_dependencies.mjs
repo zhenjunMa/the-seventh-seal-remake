@@ -11,6 +11,7 @@ import {validateChapterStory,chapterRestChoices} from '../story/native_records.m
 import {validateChapterAnimation} from '../story/chapter_animation.mjs';
 import {validateBattleViewMetadata} from '../../battle_view.mjs';
 import {nativeKeyedChest,nativeScriptedChest,nativeChestAnimation,nativeToggleObject} from '../exploration/native_map_chests.mjs';
+import {nativeMapMechanism} from '../exploration/native_map_mechanisms.mjs';
 import {supplementalPartyCommands} from '../party/party_skill_corrections.mjs';
 import {compileNativeTriggerFlow} from '../story/story_flow_compiler.mjs';
 import {nativeAnmObjectTarget} from '../story/native_anm_commands.mjs';
@@ -71,6 +72,15 @@ export function validateStoryBindings(content,story,resources,{registeredMaps=co
       const b=Uint8Array.from(raw.match(/../g),part=>parseInt(part,16)),recordId=new DataView(b.buffer).getUint32(0xf6,true);
       if(row.handler==='keyed-chest')nativeKeyedChest(object);
       else if(row.handler==='toggle-object')nativeToggleObject(object);
+      else if(row.handler==='mechanism'){
+        const {target,keyId}=nativeMapMechanism(object);
+        if(keyId)need(story.item_definitions?.[keyId],`${id} 机关所需道具缺少来源`);
+        if(target){
+          const targetTable=target.mapFlag&&target.mapFlag!==table.map_flag_index
+            ?Object.values(story.maps).find(map=>map.map_flag_index===target.mapFlag):table;
+          if(targetTable)nativeMapMechanism(targetTable.objects.find(obj=>obj.index===target.index),{linked:true});
+        }
+      }
       else{
         if(['stationary-chest','scripted-object'].includes(row.handler)){
           nativeScriptedChest(object);

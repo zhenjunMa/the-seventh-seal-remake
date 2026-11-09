@@ -25,7 +25,9 @@ import {
   nativeScriptedChest,
   nativeToggleObject,
   canOpenNativeChest,
+  hasNativeObjectKey,
 } from '../exploration/native_map_chests.mjs';
+import {nativeMapMechanism, restingMapMechanismState} from '../exploration/native_map_mechanisms.mjs';
 import {evaluateNativeStoryCombination} from './native_story_combinations.mjs';
 import {createNativeRng} from '../battle/combat_rules.mjs';
 import {initialEncounterState} from '../exploration/encounters.mjs';
@@ -276,6 +278,7 @@ export class ChapterRunner {
           'scripted-switch',
           'scripted-object',
           'toggle-object',
+          'mechanism',
         ].includes(binding.handler),
       '剧情物件行为尚未接入',
     );
@@ -287,8 +290,9 @@ export class ChapterRunner {
     need(object.source?.sha256 === this.data.source_hashes[object.source.path], '剧情箱子来源无效');
     const chest = binding.handler === 'keyed-chest' ? nativeKeyedChest(object) : null;
     const toggle = binding.handler === 'toggle-object' ? nativeToggleObject(object) : null;
+    const mechanism = binding.handler === 'mechanism' ? nativeMapMechanism(object) : null;
     const repeatable = binding.handler === 'tlk-object';
-    if (!chest && !toggle) {
+    if (!chest && !toggle && !mechanism) {
       if (repeatable) need(b[0xcf] === 1 && b[0x109] === 0, '剧情物件来源或状态类型无效');
       else if (binding.handler === 'scripted-switch') {
         need(b[0xcf] === 9 && v.getUint32(0xf6, true) > 0, '机关剧情入口无效');
@@ -322,6 +326,7 @@ export class ChapterRunner {
       recordId: v.getUint32(0xf6, true),
       chest,
       toggle,
+      mechanism,
       repeatable,
       scriptedSwitch: binding.handler === 'scripted-switch',
       interactionActionGroup: b[0xb5],
@@ -329,9 +334,10 @@ export class ChapterRunner {
   }
   async runObject({mapId, objectIndex, playback} = {}) {
     need(!this.running, '当前剧情正在执行');
-    const {table, object, recordId, chest, toggle, repeatable, scriptedSwitch, interactionActionGroup} =
+    const {table, object, recordId, chest, toggle, mechanism, repeatable, scriptedSwitch, interactionActionGroup} =
       this.objectFor(mapId, objectIndex);
     need(this.world.location.map_id === mapId, '剧情物件不在当前地图');
+    if (mechanism) return this.runMapMechanism({table, object, mechanism, interactionActionGroup, playback});
     if (repeatable)
       return this.runTlk({
         mapId,
@@ -440,6 +446,57 @@ export class ChapterRunner {
       playback?.check();
       return {...result, mapId, objectIndex, state, already_done: false};
     });
+  }
+  async runMapMechanism({table, object, mechanism, interactionActionGroup, playback}) {
+    const mapId = table.id, mapFlag = table.map_flag_index, objectIndex = object.index;
+    const world = this.world.snapshot();
+    const initialState = chapterObjectState(world, mapId, objectIndex, this.data);
+    const enabled = initialState === 2 || restingMapMechanismState(initialState) === 0;
+    if (!enabled && !mechanism.reversible)
+      return {mapId, objectIndex, already_done: true, mechanism: true, state: 3, world};
+    const undo = [];
+    try {
+      return await this.atomic({mapId, objectIndex, playback}, async draft => {
+        await this.objectInteraction({
+          mapId, objectIndex, object, actionGroup: interactionActionGroup, playback, signal: playback?.signal,
+        });
+        playback?.check();
+        if (enabled && initialState !== 2 && !hasNativeObjectKey(draft, mechanism.keyId)) {
+          return {mapId, objectIndex, locked: true, mechanism: true, key_id: mechanism.keyId, state: initialState};
+        }
+        const visited = new Set();
+        let current = object, currentMechanism = mechanism, opening = enabled;
+        while (current) {
+          need(!visited.has(current.index), '地图机关存在循环联动');
+          visited.add(current.index);
+          const fromState = opening ? 2 : 5, toState = opening ? 3 : 0;
+          setObjectEventState(draft, mapFlag, current.index, fromState);
+          const restore = await this.objectAnimation({
+            mapId, objectIndex: current.index, draft, source: current.source,
+            fromState, toState, playback, signal: playback?.signal,
+          });
+          if (typeof restore === 'function') undo.push(restore);
+          playback?.check();
+          setObjectEventState(draft, mapFlag, current.index, toState);
+          const target = currentMechanism.target;
+          if (!target) break;
+          // 40ED70 writes the remote pose. Store its settled state directly.
+          // On the same map, the target animates and may link onward.
+          if (target.mapFlag && target.mapFlag !== mapFlag) {
+            setObjectEventState(draft, target.mapFlag, target.index, toState);
+            break;
+          }
+          current = table.objects.find(row => row.index === target.index);
+          currentMechanism = nativeMapMechanism(current, {linked: true});
+          opening = restingMapMechanismState(chapterObjectState(draft, mapId, current.index, this.data)) === 0;
+          if (!opening && !currentMechanism.reversible) break;
+        }
+        return {mapId, objectIndex, mechanism: true, state: enabled ? 3 : 0};
+      });
+    } catch (error) {
+      for (const restore of undo.reverse()) restore();
+      throw error;
+    }
   }
   async walkTlk({mapId, recordId, draft, context = {steps: 0}}) {
     const flow = this.data.flows?.[nativeFlowId(mapId)],
