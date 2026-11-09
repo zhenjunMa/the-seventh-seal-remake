@@ -1,0 +1,29 @@
+remake/runtime/web/native_service_view.mjs
+  s_147a1edfc10ddd::t_3da6065d2a6bde 2,6-7,10,12,23-26,28-31,61,82,92,106-110,113-115
+  s_147a1edfc10ddd::t_c3cb73e7e78ca1 58-60,99-100
+  s_147a1edfc10ddd::t_1cdb6d72fb4a8d 27,83-86
+remake/runtime/web/native_service_view.css
+  s_147a1edfc10ddd::t_3da6065d2a6bde 6-7,10
+remake/runtime/tools/append_builtin_glyphs.py
+  s_147a1edfc10ddd::t_1cdb6d72fb4a8d 1,95-100,124,128-131
+remake/runtime/web/controllers/native_services.mjs
+  s_147a1edfc10ddd::t_3da6065d2a6bde 32-33
+remake/runtime/tools/data_recipes/index.json
+  s_147a1edfc10ddd::t_cd76bf2703fd0a 11894,11902-11903,19948
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "9528a98966a428f48423d694b2afab918fe19284",
+  "prompts": {},
+  "sessions": {
+    "s_147a1edfc10ddd": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1beec-cf97-7c50-ab42-d49dc5ef53f9",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
