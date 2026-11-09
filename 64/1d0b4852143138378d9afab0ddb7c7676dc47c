@@ -1,0 +1,24 @@
+remake/runtime/web/core/exploration/map_npcs.mjs
+  s_c93a42fe674b07::t_85b02f1af587c5 10-12,92,118-119,123,149,181,187
+remake/runtime/web/core/exploration/movement.mjs
+  s_c93a42fe674b07::t_e806ac7cc36181 334-335,337
+remake/runtime/tests/test_map_npcs.mjs
+  s_c93a42fe674b07::t_923327fd90c4c5 5,12,15-16,19,140-142,154
+  s_c93a42fe674b07::t_ff3e2ba0faf2c5 13-14
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "641d0b4852143138378d9afab0ddb7c7676dc47c",
+  "prompts": {},
+  "sessions": {
+    "s_c93a42fe674b07": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1bb6b-7ca5-7be1-8467-b62fca41f2e4",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
