@@ -1,0 +1,26 @@
+remake/runtime/tools/export_battle_lifecycle.py
+  s_3f57301a87a126::t_2c9c222b4067fd 310-314,316,499
+  s_3f57301a87a126::t_873f5e7e06a003 308-309,315
+remake/runtime/web/battle_view.mjs
+  s_3f57301a87a126::t_873f5e7e06a003 33,36-39,41-43,936-937,941
+  s_3f57301a87a126::t_2c9c222b4067fd 34-35,40,89,328-339,430-431,598,914,935,938
+  s_3f57301a87a126::t_077635d4424eac 939-940
+remake/runtime/tools/data_recipes/index.json
+  s_3f57301a87a126::t_aa2f54fc250131 1715,1723-1724,1728,1736-1737,1741,1749-1750,1754,1762-1763,1767,1775-1776,1780,1788-1789,1793,1801-1802,2885,2893-2894,19948
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "dec02a364ec4d0a55d8c0c145fa162cb006ab738",
+  "prompts": {},
+  "sessions": {
+    "s_3f57301a87a126": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1bece-220d-7691-8471-f604af36844d",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
