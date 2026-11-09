@@ -27,6 +27,7 @@
 !/.gitattributes
 !/LICENSE
 !/README.md
+!/start-game.cmd
 !/remake/
 
 # Extracted media, source observations, reports, and historical snapshots.
