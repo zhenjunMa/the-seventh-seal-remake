@@ -16,13 +16,13 @@ export function drawGameScene(ctx,options) {
 export function drawOpeningScene(ctx,options) {
   drawGameScene(ctx,{...options,view:{...options.view,zoom:1},nearest:null,collision:null});
 }
-export function drawMapScene(ctx,{scene,world,role,action,view,width,height,objectBitmap=(_scene,obj)=>obj.bitmap,
-  openingQueue=null,collision=null,nearest=null,time=performance.now()}) {
+export function drawMapScene(ctx,options) {
+  const {scene,view,width,height,collision,nearest}=options;
   ctx.clearRect(0,0,width,height);ctx.fillStyle='#0e191b';ctx.fillRect(0,0,width,height);
   if(!scene)return;
   ctx.save();ctx.translate(width/2,height/2);ctx.scale(view.zoom,view.zoom);ctx.translate(-view.x,-view.y);drawImageRegion(ctx,scene.bitmap,0,0);
   collision?.();
-  for(const entry of mapPresentation({scene,world,role,action,view,objectBitmap,openingQueue,time})){
+  for(const entry of mapPresentation(options)){
     if(entry.draw){entry.draw(ctx);continue;}
     const p=entry.pose;
     if(p.width===undefined)drawImageRegion(ctx,p.image,p.x,p.y);

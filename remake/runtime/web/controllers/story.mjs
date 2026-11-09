@@ -354,14 +354,26 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
     }
     const resource=state.chapterResources.object_animations[mapId]?.find(row=>row.object_index_zero_based===objectIndex);
     if(!resource)throw new Error('物件动作资源尚未准备');
-    const {frameIndices,intervalMs}=nativeChestAnimation(resource,object?.behavior_raw_cf);
-    const frames=await playbackTask(Promise.all(frameIndices.map(index=>index>=resource.frames.length?null:
-      actions.image(resource.frames.find(frame=>frame.index===index).image, `map:${mapId}`))),signal);
+    const {action,frameIndices,intervalMs}=nativeChestAnimation(resource,object?.behavior_raw_cf);
+    const scene=state.scenes?.current;
+    const bank=scene?.data.id===mapId
+      ?scene.objectRuntime?.actors.find(actor=>actor.object.index===objectIndex)?.resource:null;
+    const layeredAction=bank?.actions.find(row=>row.index===action.index&&row.intrinsic_bitmap
+      &&frameIndices.every(index=>index>=resource.frames.length||index>=row.first_frame&&index<row.first_frame+row.frame_count));
+    // The standalone DGP frame PNGs contain only the main stream. Layered
+    // chests need the matching indexed light, including the final core flash.
+    const frames=layeredAction?frameIndices.map(index=>index>=resource.frames.length?{bitmap:null,motion:null}:({
+      bitmap:layeredAction.main_bitmap,
+      motion:{main:layeredAction.main_bitmap,intrinsic:layeredAction.intrinsic_bitmap,shadow:layeredAction.shadow_bitmap,
+        width:bank.frame_width,height:bank.frame_height,frame:index-layeredAction.first_frame},
+    })):await playbackTask(Promise.all(frameIndices.map(async index=>({
+      bitmap:index>=resource.frames.length?null:await actions.image(resource.frames.find(frame=>frame.index===index).image, `map:${mapId}`),
+    }))),signal);
     if(playback?.paused)await playback.ready();signal?.throwIfAborted();playback?.check();
     const clock=state.engine?.exploration.clock;
     // CF4 keeps its idle image when selecting action1; 414E92 advances to
     // logical1 on the next eligible visit. CF3 already displays action0.
-    const preview={mapId,objectIndex,bitmap:frames[0]};
+    const preview={mapId,objectIndex,...frames[0]};
     if(object.behavior_raw_cf===3)state.objectPreview=preview;
     let frame=0,last=clock?.time??performance.now(),completed=false;
     try{
@@ -372,7 +384,7 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
         // 413854 writes DD=now: advance once and discard elapsed overshoot.
         last=now;
         if(frame===frames.length-1){state.objectPreview=preview;break;}
-        preview.bitmap=frames[++frame];state.objectPreview=preview;
+        Object.assign(preview,frames[++frame]);state.objectPreview=preview;
       }
       completed=true;
       // Keep the final pose while the parallel actor action finishes. The

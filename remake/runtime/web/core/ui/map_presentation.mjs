@@ -15,14 +15,16 @@ const playerGroundAnchors = {
 // Shared source geometry for the live Phaser scene and read-only save previews.
 // Producing entries never advances animation, RNG, or persistent world state.
 export function mapPresentation({scene,world,role,action,view,
-  objectBitmap=(_scene,obj)=>obj.bitmap,openingQueue=null,time=performance.now()}) {
+  objectBitmap=(_scene,obj)=>obj.bitmap,objectPreview=null,openingQueue=null,time=performance.now()}) {
   if(!scene)return [];
   const opening=openingQueue!==null,at=world.location;
   const queue=scene.objects.filter(obj=>opening||world.object_states[`${scene.data.id}:${obj.index}`]?.visible!==false)
     .map(obj=>{
-      const bitmap=objectBitmap(scene,obj),motion=obj.motion;
+      const bitmap=objectBitmap(scene,obj);
       if(bitmap===null)return null;
-      const pose=motion&&bitmap===obj.bitmap
+      const previewing=objectPreview?.mapId===scene.data.id&&objectPreview.objectIndex===obj.index;
+      const motion=previewing?objectPreview.motion:bitmap===obj.bitmap?obj.motion:null;
+      const pose=motion
         ?{image:motion.main,light:motion.intrinsic,shadow:motion.shadow,sx:motion.frame*motion.width,sy:0,width:motion.width,height:motion.height,x:obj.draw_x,y:obj.draw_y}
         :{image:bitmap,x:obj.draw_x,y:obj.draw_y};
       return {key:`object:${obj.index}`,layer:obj.layer??0,sort_y:obj.sort_y??0,pose};

@@ -252,6 +252,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
     const world=direction===undefined?sourceWorld:{...sourceWorld,location:{...sourceWorld.location,direction}};
     const draw=state.openingView?.active&&state.openingView.nativeViewport?drawOpeningScene:drawGameScene;
     const options={scene,world,role:actor?.role??role(),action:actor?.action??sheetAction(),view:actor?{...state.view,frame:actor.frame,collisionFeedback:null}:state.view,width:state.cssWidth,height:state.cssHeight,objectBitmap:(scene,obj)=>objectBitmap(scene,obj,world),
+      objectPreview:state.objectPreview,
       openingQueue:state.openingView?.active?state.openingView.drawQueue(scene.data.role_layer_preview??2):null,
       nativeViewport:Boolean(state.openingView?.active&&state.openingView.nativeViewport),
       collision:scene&&state.view.collision?()=>drawCollision(scene):null,nearest:state.nearest};
