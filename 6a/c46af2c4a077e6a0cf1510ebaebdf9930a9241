@@ -1,0 +1,21 @@
+remake/runtime/web/startup_view.mjs
+  s_ecbf1bc908e959::t_cc925905c901da 26-27,56-67,69-73,78,91-92,94-112,114-115,121-122,127-130
+remake/runtime/web/index.html
+  s_ecbf1bc908e959::t_7dfc9b5a046d15 60
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "6ac46af2c4a077e6a0cf1510ebaebdf9930a9241",
+  "prompts": {},
+  "sessions": {
+    "s_ecbf1bc908e959": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1bb6a-93ee-7502-9239-9d489e1dcb6c",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
