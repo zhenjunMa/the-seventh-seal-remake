@@ -174,23 +174,24 @@ export class MovementMap {
     const hit = this.at(x, y);
     return !hit.blocked || (hit.reason === 'terrain' && this.entryCells.has(`${hit.x},${hit.y}`));
   }
-  moveAndSlide(x, y, dx, dy, {footprint = MAP_FOOTPRINT, obstacles = []} = {}) {
+  moveAndSlide(x, y, dx, dy, {footprint = MAP_FOOTPRINT, obstacles = [], allowTerrainStart = false} = {}) {
     if (
       ![x, y, dx, dy, footprint.halfWidth, footprint.halfHeight].every(Number.isFinite) ||
       footprint.halfWidth < 0 ||
       footprint.halfHeight < 0
     )
       throw new Error('移动坐标或脚底范围无效');
-    if (!this.validEntry(x, y)) return {x, y, moved: false, blocked: true, hit: this.at(x, y), contacts: []};
+    // Source entrances and scripted placements can start inside terrain.
+    // Ignore only the starting tile; all surrounding walls remain.
+    const entry = this.at(x, y);
+    const escape = entry.reason === 'terrain' && (allowTerrainStart || this.entryCells.has(`${entry.x},${entry.y}`))
+      ? entry : null;
+    if (entry.blocked && !escape) return {x, y, moved: false, blocked: true, hit: entry, contacts: []};
     const start = {x, y},
       contacts = [],
       segments = [];
     let rx = dx,
       ry = dy;
-    // A source marker may deliberately land inside terrain. Ignore only that
-    // starting tile until the centre leaves it; all surrounding walls remain.
-    const entry = this.at(x, y),
-      escape = entry.blocked && entry.reason === 'terrain' ? entry : null;
     // Source grid anchors may overlap the edge of a whole continuous wall.
     // Remember only faces actually overlapped at the start; permit travel
     // along that face across tile seams until the feet leave it naturally.

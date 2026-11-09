@@ -45,21 +45,26 @@ export function decodeNpcBehavior(record) {
 
 // 490DA0/491F10 flood distances and 48C070 backtrace. NPC expansion tests
 // the diagonal destination, not the player's conservative corner policy.
-export function npcPath({width,height,rows,triggers},start,target,{flying=false,occupied=()=>false}={}) {
+export function npcPath({width,height,rows,triggers},start,target,
+  {flying=false,occupied=()=>false,canStep=null,fallbackScore=null}={}) {
   const inside=(x,y)=>x>=0&&y>=0&&x<width&&y<height;
-  if(!inside(start.x,start.y)||!inside(target.x,target.y))return [];
+  const targetInside=inside(target.x,target.y);
+  if(!inside(start.x,start.y)||(!targetInside&&!fallbackScore))return [];
   const triggerAt=(x,y)=>triggers?.get(y*width+x);
   const walkable=(x,y)=>inside(x,y)&&(flying||(rows[y][x]==='0'&&!triggerAt(x,y)?.path_gate));
   const count=width*height,levels=new Int32Array(count),queue=new Int32Array(count);
-  const startIndex=start.y*width+start.x,targetIndex=target.y*width+target.x;
-  levels[startIndex]=1;queue[0]=startIndex;let head=0,tail=1,best=startIndex,bestDistance=distance(start.x,start.y,target.x,target.y);
+  const startIndex=start.y*width+start.x,targetIndex=targetInside?target.y*width+target.x:-1;
+  levels[startIndex]=1;queue[0]=startIndex;
+  let head=0,tail=1,best=startIndex,bestDistance=fallbackScore?
+    fallbackScore(start.x,start.y):distance(start.x,start.y,target.x,target.y);
   while(head<tail&&!levels[targetIndex]){
-    const index=queue[head++],x=index%width,y=Math.floor(index/width),d=distance(x,y,target.x,target.y);
-    // Native nearest fallback excludes the adjacent ring and replaces ties.
-    if(d>1&&d<=bestDistance){best=index;bestDistance=d;}
+    const index=queue[head++],x=index%width,y=Math.floor(index/width);
+    const d=fallbackScore?fallbackScore(x,y):distance(x,y,target.x,target.y);
+    // Ordinary NPCs retain the source rule for the adjacent ring and ties.
+    if(fallbackScore?d<bestDistance:d>1&&d<=bestDistance){best=index;bestDistance=d;}
     for(const [dx,dy] of EXPAND){
       const nx=x+dx,ny=y+dy,at=ny*width+nx;
-      if(!walkable(nx,ny)||levels[at])continue;
+      if(!walkable(nx,ny)||levels[at]||(canStep&&!canStep(x,y,nx,ny)))continue;
       levels[at]=levels[index]+1;queue[tail++]=at;
     }
   }
@@ -69,10 +74,59 @@ export function npcPath({width,height,rows,triggers},start,target,{flying=false,
   while(end!==startIndex&&reverse.length<5000){
     const x=end%width,y=Math.floor(end/width);reverse.push({x,y});let previous=-1;
     for(const [dx,dy] of BACKTRACK){const nx=x+dx,ny=y+dy;
-      if(inside(nx,ny)&&levels[ny*width+nx]===levels[end]-1){previous=ny*width+nx;break;}}
+      if(inside(nx,ny)&&levels[ny*width+nx]===levels[end]-1&&(!canStep||canStep(nx,ny,x,y))){previous=ny*width+nx;break;}}
     if(previous<0)return [];end=previous;
   }
   return end===startIndex?reverse.reverse():[];
+}
+
+// Source coordinates can name a spot inside a wall or across an isolated
+// section. Walk as far as a valid route allows and return the actual endpoint.
+export function scriptedGroundRoute(map,from,to) {
+  if(from.x===to.x&&from.y===to.y)return [from];
+  const start=map.at(from.x,from.y),target=map.at(to.x,to.y);
+  if(start.blocked&&start.reason!=='terrain')return [from];
+  const clear=(a,b)=>{
+    if(map.at(b.x,b.y).blocked)return false;
+    const result=map.moveAndSlide(a.x,a.y,b.x-a.x,b.y-a.y,{allowTerrainStart:a===from});
+    return !result.blocked||Math.hypot(result.x-b.x,result.y-b.y)<1e-6;
+  };
+  if(clear(from,to))return [from,to];
+  const center=(x,y)=>({x:(x+.5)*map.cellSize,y:(y+.5)*map.cellSize});
+  const connect=(a,b)=>{
+    if(clear(a,b))return [b];
+    // A source coordinate on a tile edge may need to leave wall contact
+    // along one axis before it can reach the centre of its own tile.
+    const corner=[{x:a.x,y:b.y},{x:b.x,y:a.y}].find(p=>clear(a,p)&&clear(p,b));
+    return corner?[corner,b]:null;
+  };
+  const isStart=(x,y)=>x===start.x&&y===start.y;
+  const enter=start.blocked?null:connect(from,center(start.x,start.y));
+  const anchor=(x,y)=>!enter&&isStart(x,y)?from:center(x,y);
+  const canStep=(x,y,nx,ny)=>{
+    if(!enter&&isStart(x,y))return clear(from,center(nx,ny));
+    const diagonal=x!==nx&&y!==ny;
+    return !diagonal||(!map.cell(nx,y).blocked&&!map.cell(x,ny).blocked)||clear(center(x,y),center(nx,ny));
+  };
+  const fallbackScore=(x,y)=>{
+    if(start.blocked&&isStart(x,y))return Infinity;
+    const point=anchor(x,y);
+    return (point.x-to.x)**2+(point.y-to.y)**2;
+  };
+  const cells=npcPath(map,start,target,{canStep,fallbackScore});
+  const last=cells.at(-1)??start;
+  const exit=last.x===target.x&&last.y===target.y?connect(anchor(last.x,last.y),to):null;
+  if(!cells.length&&!exit)return [from];
+  const points=[from,...(enter??[]),...cells.map(({x,y})=>center(x,y)),...(exit??[])];
+  const route=[from];
+  for(let i=0;i<points.length-1;){
+    let next=i+1;
+    if(!clear(points[i],points[next]))break;
+    // Merge successive cells into longer legs wherever feet can clear them.
+    while(next+1<points.length&&clear(points[i],points[next+1]))next++;
+    route.push(points[next]);i=next;
+  }
+  return route;
 }
 
 export class MapNpcRuntime {

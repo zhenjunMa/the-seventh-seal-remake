@@ -43,7 +43,7 @@ export class AnmActions {
     // wait for concurrent actions; a late completion cannot change positions
     // after another action has failed.
     this.pending.push(Promise.resolve(this.call(hook, command, payload))
-      .then(() => { if (!this.controller.signal.aborted) done?.(); })
+      .then(result => { if (!this.controller.signal.aborted) done?.(result); })
       .catch(error => {
         this.error ??= this.describeError(error, command);
         this.abort(this.error);
@@ -66,8 +66,10 @@ export class AnmActions {
     const position = {x:(command.u32_plus13 | 0) * 2, y:(command.u32_plus17 | 0) * 2};
     if (this.nativeMetadata) Object.assign(position, {
       nativeX:command.u32_plus13 | 0, nativeY:command.u32_plus17 | 0});
-    const recordPosition = () => this.positions.set(actor, {
-      map_id:this.context().mapId, x:position.x, y:position.y});
+    const recordPosition = result => {
+      const reached=result?.position??position;
+      this.positions.set(actor,{map_id:this.context().mapId,x:reached.x,y:reached.y});
+    };
     switch (command.opcode) {
       case 11: {
         const payload={kind:'position',x:position.x,y:position.y,modeRaw:command.byte_plus29};

@@ -213,10 +213,11 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
         return state.scenes.current.objectRuntime.animate({objectIndex,state:objectState,signal});
       };
       for(const name of ['map','actor','move']){const invoke=hooks[name];hooks[name]=async payload=>{
-        await invoke(payload);if(name==='map'){
+        const result=await invoke(payload);if(name==='map'){
           loadEncounterMap(draft,payload.mapId,state.encounterData);
           if(!payload.bootstrap)await initializeMapSequence({mapId:payload.mapId,world:draft,story:state.chapterStory,content});
         }captureActors();
+        return result;
       };}
       const animation=new ChapterAnimationRunner({program,hooks:{...hooks,...media?.hooks()},runTlk:nestedTlk,joinActor,leaveActor,flagCommand,objectCommand,initialActor,initialLocation:draft.location,playback,
         visualState:state.anmVisualState,

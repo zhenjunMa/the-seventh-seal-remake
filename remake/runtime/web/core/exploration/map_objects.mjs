@@ -151,6 +151,15 @@ export class MapObjectRuntime {
           const x=actor.object.cell_x+dx,y=actor.object.cell_y+dy,row=this.movement.rows[y];
           this.movement.rows[y]=row.slice(0,x)+(raw===2?'0':'1')+row.slice(x+1);
         }
+        // The temple door's volume stops one row short of the visible
+        // threshold. Once it opens, connect the floor within its own span.
+        if(this.mapId==='M72061'&&actor.object.index===0&&actor.behavior===2){
+          const {cell_x:x,cell_y:y,width_cells:width,height_cells:height}=actor.object;
+          const threshold=y+height,rows=this.movement.rows,open=(actor.commandState??state)===3;
+          const span=Array.from({length:width},(_,i)=>
+            open&&rows[threshold-1][x+i]==='0'&&rows[threshold+1][x+i]==='0'?'0':'1').join('');
+          rows[threshold]=rows[threshold].slice(0,x)+span+rows[threshold].slice(x+width);
+        }
       }
       return action;
     }

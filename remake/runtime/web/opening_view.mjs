@@ -8,7 +8,7 @@ import {ActorEffectView} from './actor_effect_view.mjs';
 import {drawMapSprite} from './map_sprite.mjs';
 import {runtimeContent} from './core/content/content_registry.mjs';
 import {DistanceGait,mapMotionProfile,mapTravelDistance} from './core/exploration/map_locomotion.mjs';
-import {nativeNpcActionBindings} from './core/exploration/map_npcs.mjs';
+import {nativeNpcActionBindings,scriptedGroundRoute} from './core/exploration/map_npcs.mjs';
 
 export function physicalFrame(action, logicalIndex) {
   const frame = action.uses_sequence ? action.sequence_raw[logicalIndex] : logicalIndex;
@@ -226,11 +226,28 @@ export class OpeningView {
         const motion=mapMotionProfile(action,this.scene.data.movement,'',source?.speedBias??0);
         const gait=new DistanceGait();let previous=0;
         const motionFrames=[];
-        const distance=mapTravelDistance(from,{x,y},axisApproach);
+        const to={x,y},map=this.scene.movement;
+        // 49A15F dispatches ordinary scripted ground travel to the map path planner.
+        const route=map&&!arrival&&!axisApproach&&source?.type!==1?scriptedGroundRoute(map,from,to):null;
+        const destination=route?.at(-1)??to;
+        const adjusted=destination.x!==to.x||destination.y!==to.y;
+        let distance=0,legIndex=0;
+        const legs=route?.slice(1).flatMap((end,index)=>{
+          const start=route[index],length=mapTravelDistance(start,end);
+          if(!length)return [];
+          const leg={start,end,length,offset:distance};distance+=length;return [leg];
+        });
+        if(!legs?.length)distance=mapTravelDistance(from,destination,axisApproach);
         const duration=distance/motion.speed*1000;
         const update=t=>{
-          const point=approachPoint(from,{x,y},t,axisApproach);
-          actor.x=point.x;actor.y=point.y;
+          const travelled=t*distance;
+          let point;
+          if(legs?.length){
+            while(legIndex+1<legs.length&&travelled>=legs[legIndex+1].offset)legIndex++;
+            const leg=legs[legIndex];
+            point=approachPoint(leg.start,leg.end,Math.min(1,(travelled-leg.offset)/leg.length));
+          }else point=approachPoint(from,destination,t,axisApproach);
+          actor.x=t===1?destination.x:point.x;actor.y=t===1?destination.y:point.y;
           if(point.dx||point.dy)actor.direction=locomotion(point,true).direction;
           actor.action=action.index;
           actor.frame=gait.advance(action,{dx:distance*Math.max(0,t-previous),stride:motion.stride});
@@ -245,7 +262,9 @@ export class OpeningView {
         if(arrival)actor.direction=arrival.arrivalDirection;
         else if(arrivalFacingRaw)actor.direction=arrivalFacingRaw-1;
         this.snapshot('opening-move-complete',{actor:id,command:command?.index,
-          presentation:arrival?'direct-arrival':'source-move',motion_frames:motionFrames});
+          presentation:arrival?'direct-arrival':adjusted||route?.length>2?'terrain-route':'source-move',
+          motion_frames:motionFrames});
+        return {position:destination};
       },
       camera: async ({kind,actor,x,y,modeRaw,signal,cycles,amplitude}) => {
         if(kind==='shake'){
