@@ -218,6 +218,7 @@ export class BattleMenuView{
   draw(now,positions=null){
     if(!this.snapshot||this.disposed)return;this.positions=positions;this.syncTargets();const c=this.ctx;c.clearRect(0,0,640,480);this.glowCtx.clearRect(0,0,640,480);c.imageSmoothingEnabled=this.glowCtx.imageSmoothingEnabled=false;
     if(this.resultView?.active){this.resultView.draw(c,this.glowCtx,now);return;}
+    const playerId=this.snapshot.player_id,canCommand=this.available();
     const party=this.snapshot.actors.filter(a=>a.side==='player');const stat=this.menus.get('fight_stat');
     party.forEach((actor,i)=>{if(actor.escaped||actor.state_raw===11)return;const [x,y]=originalSlots[actor.party_slot_zero_based??i],g=actor.charge,threshold=this.snapshot.scheduler?.threshold??1,ratio=this.snapshot.scheduler?clamp(g.gauge/threshold):1;
       this.image(stat.images[0].image,x,y);const hp=stat.widgets.find(w=>w.name==='hp_bar'),mp=stat.widgets.find(w=>w.name==='mp_bar');
@@ -231,12 +232,13 @@ export class BattleMenuView{
       if(state&&state.top<46&&!ball&&bar){ball=this.doc.createElement('canvas');ball.width=47;ball.height=46;const bc=ball.getContext('2d');drawBattleImage(bc,bar,0,0);bc.globalCompositeOperation='multiply';bc.fillStyle=`rgb(${state.color.join(',')})`;bc.fillRect(0,0,47,46);bc.globalCompositeOperation='destination-in';drawBattleImage(bc,bar,0,0);this.ballCache.set(key,ball);}
       if(state&&state.top<46&&ball){c.save();c.beginPath();c.rect(x+16,y+1+state.top,47,46-state.top);c.clip();drawImageRegion(c,ball,x+16,y+1);c.restore();}
       this.asset('time_glass',0,x+16,y+1,{mask:true});
-      if(actor.id===this.snapshot.player_id&&(this.ready().includes(actor.id)||this.available(actor.id)))this.asset('fight_mark',Math.floor(now/120),x-30,y-16,{blend:'lighter'});
+      if(actor.id===playerId&&canCommand)this.asset('fight_mark',Math.floor(now/120),x-30,y-16,{blend:'lighter'});
     });
     const info=this.menus.get('fight_info'),infoText=info.widgets.find(w=>w.name==='TEXT');this.image(info.images[0].image,0,443);this.text(this.message,infoText.rect.left,443+infoText.rect.top,{font:'14px SimSun',widget:infoText});
     if(this.stage!=='result')this.drawWheel(now);
     if(['skills','items'].includes(this.stage))this.drawList();
-    const selected=this.snapshot.actors.find(a=>a.id===this.snapshot.player_id),pointers=this.stage==='target'?this.targetPreview().actors:this.ready().includes(selected?.id)||this.available(selected?.id)?[selected]:[];
+    const selected=party.find(a=>a.id===playerId);
+    const pointers=!canCommand?[]:this.stage==='target'?this.targetPreview().actors:selected?[selected]:[];
     for(const pointer of pointers){
       const height=this.getCursorHeight?.(pointer.id);
       if(Number.isFinite(height)){

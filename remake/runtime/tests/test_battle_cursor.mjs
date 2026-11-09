@@ -25,10 +25,10 @@ function nativePoint(resource,height,position,actorIndex,queueIndex,side){
 function drawCursor(actors,selected,positions,{targetId=null}={}){
   const calls=[],ctx={clearRect(){}};
   const view=Object.create(BattleMenuView.prototype);
-  Object.assign(view,{manifest,snapshot:{actors,player_id:selected},stage:targetId?'target':'actors',targetId,ctx,glowCtx:ctx,
+  Object.assign(view,{manifest,snapshot:{actors,player_id:selected,phase:'command'},stage:targetId?'target':'actors',targetId,ctx,glowCtx:ctx,
     menus:new Map(manifest.menus.map(m=>[m.id,m])),images:new Map(),ballCache:new Map(),
     getCursorHeight:id=>meta.roles.find(r=>r.id===(actors.find(a=>a.id===id).resource_id??id)).cursor_height_raw,
-    ready:()=>actors.filter(a=>a.side==='player').map(a=>a.id),syncTargets(){},image(){},text(){},drawWheel(){},
+    syncTargets(){},image(){},text(){},drawWheel(){},
     asset:(id,frame,x,y)=>{if(id.startsWith('fight_cursor'))calls.push({id,x,y});}});
   view.draw(0,positions);assert.equal(calls.length,1);return calls[0];
 }
