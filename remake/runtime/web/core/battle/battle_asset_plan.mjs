@@ -21,14 +21,14 @@ export function effectReferences(value, result = new Set()) {
 const canonical = path => '/' + path.replace(/^\/+/, '');
 
 export class BattleAssetPlan {
-  constructor({meta, itemMeta, lifecycleMeta, descriptors, layers, actors, skills, inventory}) {
+  constructor({meta, itemMeta, lifecycleMeta, descriptors, layers, pairs, actors, skills, inventory}) {
     Object.assign(this, {meta, itemMeta, lifecycleMeta, skills});
     this.descriptors = new Map(descriptors.map(asset => [asset.path, asset]));
     this.actors = new Map(actors.map(actor => [actor.id, actor.resource_id ?? actor.id]));
     this.roles = new Map(meta.roles.map(role => [role.id, role]));
     this.effects = new Map();
     for (const effect of meta.effects) if (!this.effects.has(effect.id)) this.effects.set(effect.id, effect);
-    this.pairs = new Map(layers.flatMap(bank => bank.frames.map(pair => [`${bank.role_id}:${pair.source_frame}`, pair])));
+    this.pairs = pairs ?? new Map(layers.flatMap(bank => bank.frames.map(pair => [`${bank.role_id}:${pair.source_frame}`, pair])));
     this.itemIds = new Set(inventory.filter(item => item.quantity > 0).map(item => String(item.id)));
     this.base = new Set(descriptors.filter(asset => asset.owners.includes('shared')).map(asset => asset.path));
     for (const id of new Set(this.actors.values())) {

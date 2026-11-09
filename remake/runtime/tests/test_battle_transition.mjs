@@ -1,9 +1,14 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {BattleTransitionView,battleTransitionFrame} from '../web/battle_transition_view.mjs';
+import {BattleTransitionView,battleTransitionFrame,battleTransitionTimeline} from '../web/battle_transition_view.mjs';
 test('all seven transitions retain native frame counts and delay directions',()=>{
  assert.deepEqual(Array.from({length:7},(_,i)=>battleTransitionFrame(i,0).count),[16,64,16,16,20,30,20]);
  assert.equal(battleTransitionFrame(0,15).delay,0);assert.equal(battleTransitionFrame(3,15).delay,180);assert.equal(battleTransitionFrame(4,0).delay,30);
+ for(let kind=0;kind<7;kind++){
+  const timeline=battleTransitionTimeline(kind);
+  assert.equal(timeline[0],0);assert.equal(timeline.at(-1),1000);
+  assert.equal(timeline.length,battleTransitionFrame(kind,0).count);
+ }
 });
 test('the view passes GPU snapshots, source kind, owning clock and cancellation to the renderer without scene readback',async()=>{
  const before={gpuTexture:true},after={gpuTexture:true},clock={},random=()=>.5,signal=new AbortController().signal,calls=[];

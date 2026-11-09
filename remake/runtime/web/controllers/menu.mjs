@@ -57,6 +57,7 @@ export function createMenuController({state, actions, $, canvas, ctx}) {
     if(enteringItems&&!state.menuContext.combat){state.menuContext.itemFilter=nextItemCategory==='equipment'?[2,1]:nextItemCategory==='crystals'?[3,1]:[5,1];$('menuItem').value='';}
     state.menuContext.page=page;if(itemCategory)state.menuContext.itemCategory=itemCategory;state.menuContext.itemCategory??='items';$('menuShortcutEditor').hidden=true;
     state.operationMenu.page(page,{combat:state.menuContext.combat,itemCategory:state.menuContext.itemCategory,selectionPage:state.menuContext.selectionPage,deferTechniquePaint:true});refreshPartyMenu();
+    if(page==='skills'&&!state.menuContext.combat)void actions.warmBattleEntry?.({testing:true});
   }
   function closePartyMenu(){
     if(!state.menuContext)return;const previous=state.menuContext;if(previous.combat)battleItemSelections.set(previous.commandActor,$('menuItem').value);state.menuContext=null;$('partyMenu').hidden=true;state.operationMenu.suspend();

@@ -22,7 +22,7 @@ const report=()=>{$('report').textContent=JSON.stringify({scope:'Controlled entr
 const log=e=>{const {type,kind,elapsed_ms,mode,cache,frames,actor_id,action_id,error}=e;logs.push({type,kind,elapsed_ms,mode,cache,frames,actor_id,action_id,error,at:performance.now()});if(e.type==='battle-transition-complete')report();};
 state.engine=await PhaserRuntime.create({parent:$('phaserHost'),focusTarget:canvas,onError:error=>{checks.push({error:error.message});report();}});
 state.loadingView=await LoadingView.create({root:$('sceneLoading'),manifest:(await json('data/prologue_presentation.json')).loading,image:async p=>{const i=new Image();i.src=p;await i.decode();return i;},log});
-state.battleTransition=new BattleTransitionView({renderer:state.engine.transitions,clock:state.engine.clock,log});
+state.battleTransition=new BattleTransitionView({renderer:state.engine.transitions,log});
 const actions={json,log,status:message=>{$('phase').textContent=message;},guarded:fn=>async()=>{try{await fn();}catch(e){checks.push({error:e.message});report();}},resize(){},buildHud(){},updateNearest(){},refreshPartyMenu(){},
   readConfiguredData:async()=>compileRuntimeConfiguration({combat:state.battleData,forest:state.forestData,scheduler:state.schedulerData,ai:state.aiData,rewards:state.partyRewards,party_skills:state.partySkills,items:state.sourceItemData,source_skills:state.sourceSkills,source_magic:state.sourceMagic},await loadRuntimeConfiguration(json)),
   beginTechniqueTestMenu(){state.menuContext=null;return {};},resumeTechniqueTestMenu(){state.menuContext={combat:false,page:'skills'};state.scenes.setPhase('party-menu');}};

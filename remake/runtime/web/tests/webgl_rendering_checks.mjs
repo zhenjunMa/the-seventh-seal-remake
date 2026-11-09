@@ -57,6 +57,7 @@ export async function checkWebglRendering(runtime,record){
     const random=kind===5?()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/0x100000000;}:()=>.5;
     const clock={time:0,requestFrame(callback){let stopped=false;requestAnimationFrame(()=>{if(stopped)return;runtime.flush();
       if(draws===0&&preparing)shaderFailure=new Error('资源准备阻塞了转场首帧');
+      if(draws===6&&!preparing)shaderFailure=new Error(`转场 ${kind} 播放期间没有开始准备战场`);
       if(draws===0&&kind===1&&!near(pixel(runtime.game.renderer,20,20),[66,98,156,255]))shaderFailure=new Error(`白闪着色器方向／颜色错误：${pixel(runtime.game.renderer,20,20)}`);
       if(kind===5&&draws===0){firstRows=nonBlackRows(runtime.game.renderer,320);
         if(firstRows<=runtime.game.renderer.height*.7||firstRows>=runtime.game.renderer.height)shaderFailure=new Error('逐行消隐首帧没有保留大部分地图或未开始逐行变化');}
@@ -64,12 +65,12 @@ export async function checkWebglRendering(runtime,record){
         if(rows<=0||rows>=firstRows)shaderFailure=new Error('逐行消隐中间帧没有继续移除地图行');}
       if(kind===6&&draws===0&&(!near(pixel(runtime.game.renderer,20,20),[0,0,0,255])||!near(pixel(runtime.game.renderer,620,20),[50,90,140,255])))shaderFailure=new Error('逐行滑动首帧没有移动地图');
       if(kind===6&&draws===6&&(!near(pixel(runtime.game.renderer,100,20),[0,0,0,255])||!near(pixel(runtime.game.renderer,500,20),[50,90,140,255])))shaderFailure=new Error('逐行滑动中间帧没有继续移动地图');
-      if(draws===count+3){
+      if(draws===28){
         if(!preparing||!runtime.transitions.active||runtime.transitions.frame!==(kind===1?31:count-1))shaderFailure=new Error(`转场 ${kind} 没有在慢加载期间推进并等待战场`);
         if(runtime.battle.clock.time!==held)shaderFailure=new Error('资源准备期间战斗时钟提前运行');
         releasePreparation();
       }
-      draws++;clock.time+=250;callback(clock.time);});return {cancel(){stopped=true;}};}};
+      draws++;clock.time+=40;callback(clock.time);});return {cancel(){stopped=true;}};}};
     await runtime.transitions.run(before,async signal=>{preparing=true;await preparation;signal.throwIfAborted();paint([20,40,60],[60,40,20]);return runtime.captureTexture('battle');},{kind,random,clock});
     if(shaderFailure)throw shaderFailure;
     assert(!runtime.transitions.active&&!runtime.snapshots.size,'转场未清理 GPU 快照');

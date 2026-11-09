@@ -13,7 +13,7 @@ export class PhaserRuntime {
   constructor({parent,focusTarget,renderScale=null,actorSmoothing,onError=error=>{throw error;}}){
     const Phaser=globalThis.Phaser;
     if(Phaser?.VERSION!=='3.90.0')throw new Error('Phaser 3.90.0 本地运行库未加载，请检查 vendor/phaser');
-    this.clock=new ActionClock();this.started=false;this.onError=onError;this.parent=parent;
+    this.clock=new ActionClock();this.transitionClock=new ActionClock();this.started=false;this.onError=onError;this.parent=parent;
     this.adapters={};this.phase='boot';this.mode=null;this.pauseReasons=new Set();this.destroyed=false;
     this.listeners=new AbortController();this.snapshots=new Set();this.snapshotSerial=0;
     this.fixedRenderScale=renderScale;this.renderScale=this.preferredRenderScale();this.cameraViews=new Map();
@@ -76,6 +76,7 @@ export class PhaserRuntime {
   updateInterface(now,delta){
     if(!this.started||this.paused)return;
     try{
+      this.transitionClock.advance(this.skipDelta?0:this.game.loop.rawDelta);
       this.clock.advance(this.skipDelta?0:delta);this.skipDelta=false;
       this.adapters.interface?.(now,delta);
     }catch(error){this.fail(error);}
@@ -102,6 +103,7 @@ export class PhaserRuntime {
   }
   syncScenes(){
     this.clock.paused=!this.started||this.paused;
+    this.transitionClock.paused=this.clock.paused;
     if(!this.exploration||!this.battle)return;
     for(const key of ['exploration','battle']){
       const scene=this[key],sys=scene.sys;
@@ -192,7 +194,7 @@ export class PhaserRuntime {
     if(this.destroyed)return;
     this.destroyed=true;this.started=false;this.listeners.abort();
     this.transitions?.cancel();for(const snapshot of [...this.snapshots])snapshot.destroy();this.ui?.destroy();
-    this.clock.destroy();this.exploration?.clock.destroy();this.battle?.clock.destroy();
+    this.clock.destroy();this.transitionClock.destroy();this.exploration?.clock.destroy();this.battle?.clock.destroy();
     this.resizeObserver.disconnect();this.game.destroy(true);this.adapters={};this.cameraViews.clear();
   }
 }

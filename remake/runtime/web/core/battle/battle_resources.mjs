@@ -95,6 +95,18 @@ export class BattleResources {
     }
     return this.preparePaths(descriptors.map(a=>a.path),options);
   }
+  async pathsWithinBudget(paths,bytes){
+    const data=await this.catalog(),included=new Set(),selected=[];
+    for(const path of new Set(paths)){
+      const image=data.images[canonical(path)];need(image,`图片未登记到图集：${path}`);
+      const pages=new Set(image.regions.map(region=>region[4]).filter(index=>!included.has(index)));
+      const cost=[...pages].reduce((sum,index)=>sum+data.pages[index].width*data.pages[index].height*4,0);
+      if(cost>bytes)continue;
+      for(const index of pages)included.add(index);
+      bytes-=cost;selected.push(path);
+    }
+    return selected;
+  }
   has(descriptors){return Boolean(this.data)&&descriptors.every(asset=>this.data.images[canonical(asset.path)]?.regions.every(region=>this.pages.has(region[4])));}
   createScope(label='battle'){
     const scope=Symbol(label),pool=this;let closed=false;

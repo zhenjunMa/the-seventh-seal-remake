@@ -21,7 +21,6 @@ import {StartupView} from "../startup_view.mjs";
 import {CaptionView} from "../caption_view.mjs";
 import {LoadingView} from "../loading_view.mjs";
 import {BattleTransitionView} from "../battle_transition_view.mjs";
-import {battleResources} from '../core/battle/battle_resources.mjs';
 import {DialogueView} from "../dialogue_view.mjs";
 import {RewardNoticeView} from '../reward_notice_view.mjs';
 import {MapNameNoticeView} from '../map_name_notice_view.mjs';
@@ -79,8 +78,9 @@ export function createBootController({state, actions, $, canvas, ctx}) {
     const [worldMapData,loadedEncounters,loadedForest]=await Promise.all([actions.json(state.catalog.world_map),actions.json(state.catalog.encounters),actions.json(state.catalog.forest_combat)]);
     state.encounterData=validateEncounterData(loadedEncounters);state.forestData=loadedForest;
     state.schedulerData=validateScheduler(await actions.json('data/battle_scheduler.json'));
-    [state.aiData,state.rewardData,state.reactionData,state.statusData]=await Promise.all([actions.json('data/forest_ai.json').then(validateEnemyAIData),actions.json('data/forest_rewards.json').then(validateForestRewards),actions.json('data/enemy_reactions.json').then(validateForestReactionsData),actions.json('data/forest_status.json').then(validateForestStatusData)]);
-    [state.partyCombat,state.partySkills,state.partyRewards,state.partyReactions]=await Promise.all([actions.json(state.catalog.party_combat),actions.json(state.catalog.party_skills),actions.json(state.catalog.party_rewards).then(validateForestRewards),actions.json(state.catalog.party_reactions).then(validateForestReactionsData)]);
+    const readReactions=path=>actions.json(path).then(freezeDefinition).then(validateForestReactionsData);
+    [state.aiData,state.rewardData,state.reactionData,state.statusData]=await Promise.all([actions.json('data/forest_ai.json').then(validateEnemyAIData),actions.json('data/forest_rewards.json').then(validateForestRewards),readReactions('data/enemy_reactions.json'),actions.json('data/forest_status.json').then(validateForestStatusData)]);
+    [state.partyCombat,state.partySkills,state.partyRewards,state.partyReactions]=await Promise.all([actions.json(state.catalog.party_combat),actions.json(state.catalog.party_skills),actions.json(state.catalog.party_rewards).then(validateForestRewards),readReactions(state.catalog.party_reactions)]);
     for(const key of ['aiData','rewardData','reactionData','statusData','partyRewards','partyReactions'])freezeDefinition(state[key]);
     state.sourceItemData=validateItemData(await actions.json('data/items.json'));
     if(state.catalog.source_skills)state.sourceSkills=await actions.json(state.catalog.source_skills);
@@ -96,7 +96,7 @@ export function createBootController({state, actions, $, canvas, ctx}) {
       root:$('storyCaption'),clock:state.engine?.exploration.clock,onAdvance:()=>actions.advanceDialogue(),log:actions.log});
     state.loadingView=await LoadingView.create({manifest:state.prologuePresentation.loading,
       image:actions.image,root:$('sceneLoading'),clock:state.engine?.clock,log:actions.log});
-    state.battleTransition=new BattleTransitionView({renderer:state.engine.transitions,loadingView:state.loadingView,log:actions.log,clock:state.engine?.clock});
+    state.battleTransition=new BattleTransitionView({renderer:state.engine.transitions,log:actions.log});
     const dialogueManifest=await actions.json('data/dialogue_ui.json');state.dialogueManifest=dialogueManifest;
     state.dialogueView=await DialogueView.create({manifest:dialogueManifest,fonts:await actions.json(dialogueManifest.font_manifest),
       image:actions.image,root:$('dialogue'),clock:state.engine?.exploration.clock,onAdvance:actions.advanceDialogue,onChoose:actions.chooseDialogue,log:actions.log});
@@ -178,11 +178,7 @@ export function createBootController({state, actions, $, canvas, ctx}) {
     state.engine.start({phase:state.scenes.phase,interface:actions.updateInterface,
       exploration:actions.updateExploration,battle:actions.updateBattleFrame,suspend:actions.releaseInput});
     actions.status('片头按Esc跳过；提示画面按任意键进入主菜单。首次交互启用声音。');state.startupView.start();
-    // Warm shared metadata after the startup screen can appear. This does not
-    // draw an encounter/RNG or retain any decoded atlas lease.
-    state.engine.clock.requestFrame(()=>state.engine.clock.requestFrame(()=>{
-      void battleResources.catalog().catch(error=>actions.log({type:'battle-resource-prefetch-failed',error:error.message}));
-    }));
+    state.engine.clock.requestFrame(()=>state.engine.clock.requestFrame(()=>void actions.warmBattleShared()));
   }
   return {boot};
 }

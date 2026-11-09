@@ -10,9 +10,12 @@ export function freezeDefinition(value) {
   return value;
 }
 
+export function isFrozenDefinition(value) {
+  return Boolean(value && typeof value === 'object' && definitions.has(value));
+}
+
 export function retainDefinition(value) {
-  return value && typeof value === 'object' && definitions.has(value)
-    ? value : structuredClone(value);
+  return isFrozenDefinition(value) ? value : structuredClone(value);
 }
 
 export function freezeDefinitionMap(entries) {

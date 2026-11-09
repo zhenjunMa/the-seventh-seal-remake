@@ -4,15 +4,19 @@
  */
 import {buildEffectiveAttributes,idiv} from './combat_rules.mjs';
 import {runtimeContent,requireRegisteredRoles} from '../content/content_registry.mjs';
+import {isFrozenDefinition} from '../content/immutable_definition.mjs';
 const clone=structuredClone;
 // Native source strings are immutable values. Bounded decoding reuse avoids
 // parsing all 113 skill/action byte arrays again at every animation contact.
 const decodedSourceBytes=new Map();
+const validatedDefinitions=new WeakMap();
+const hexPatterns={0x41d:/^(?:[0-9a-f]{2}){1053}$/i,0xb0:/^(?:[0-9a-f]{2}){176}$/i};
 function requireValue(ok,message){if(!ok)throw new TypeError(message);}
 function integer(n,name,min=-2147483648,max=2147483647){requireValue(Number.isInteger(n)&&n>=min&&n<=max,`Invalid ${name}`);return n;}
+function validateHex(raw,size,label){requireValue(typeof raw==='string'&&hexPatterns[size].test(raw),`Missing native ${label} bytes`);}
 function bytes(raw,size,label){
   const saved=decodedSourceBytes.get(raw);if(saved?.length===size)return saved;
-  requireValue(typeof raw==='string'&&new RegExp(`^([0-9a-f]{2}){${size}}$`,'i').test(raw),`Missing native ${label} bytes`);
+  validateHex(raw,size,label);
   const value=Uint8Array.from(raw.match(/../g),h=>parseInt(h,16));if(decodedSourceBytes.size>=4096)decodedSourceBytes.clear();decodedSourceBytes.set(raw,value);return value;
 }
 function fixed(skill){return bytes(skill?.fixed_raw_hex,0x41d,'reaction skill');}
@@ -60,13 +64,15 @@ function inputActor(actor){
     special:integer(actor.reaction_special_gate_raw,'reaction_special_gate_raw'),z:integer(actor.native_z_raw,'native_z_raw')};
 }
 export function validateForestReactionsData(data,content=runtimeContent){
+  if(validatedDefinitions.get(data)===content)return data;
   requireValue(data?.schema==='seventh-seal-forest-reactions'&&data.version===1&&data.timing?.source_tick_ms===20,'Reaction source metadata missing');
   requireRegisteredRoles(Object.keys(data.roles??{}),{roster:data.party_native_bundle?'party-source-group':'forest-source-group'},content);
   for(const[id,r]of Object.entries(data.roles)){
     requireValue(r.id===id&&Array.isArray(r.skills)&&r.skills.length===r.skill_count,'Reaction skill table incomplete');
     for(const[sidx,s]of r.skills.entries()){
-      const f=fixed(s);requireValue(s.original_skill_index===sidx&&s.original_id_raw===f[0]&&Array.isArray(s.actions)&&s.actions.length,'Reaction original skill ordering invalid');
-      s.actions.forEach(a=>bytes(a.raw_hex,0xb0,'reaction action'));
+      validateHex(s.fixed_raw_hex,0x41d,'reaction skill');
+      requireValue(s.original_skill_index===sidx&&s.original_id_raw===parseInt(s.fixed_raw_hex.slice(0,2),16)&&Array.isArray(s.actions)&&s.actions.length,'Reaction original skill ordering invalid');
+      s.actions.forEach(a=>validateHex(a.raw_hex,0xb0,'reaction action'));
     }
     // 032 has no native id2/id3. 51C640 explicitly falls back through id5/id1
     // when those lookups fail; source absence must reach that same branch.
@@ -75,6 +81,7 @@ export function validateForestReactionsData(data,content=runtimeContent){
   }
   for(const address of ['0x50b520','0x41ef00','0x50b770','0x5016b0','0x51c640','0x50b3e0'])requireValue(data.evidence?.[address],'Reaction procedure evidence missing');
   requireValue(Object.values(data.roles).filter(r=>content.roles[r.id].side==='player').every(r=>r.skills.some(s=>s.original_id_raw===12))&&data.evidence?.['0x4ffe90'],'Death source evidence missing');
+  if(isFrozenDefinition(data))validatedDefinitions.set(data,content);
   return data;
 }
 function drawFactory(rng,trace){
@@ -82,7 +89,7 @@ function drawFactory(rng,trace){
   return(mod,label)=>{const raw=integer(rng(),'native RNG output',0,32767),value=raw%mod;trace.push({kind:'rng',label,raw,mod,value});return value;};
 }
 function sourceLookup(role,ident,draw){
-  const candidates=role.skills.filter(s=>fixed(s)[0]===ident);
+  const candidates=role.skills.filter(s=>s.original_id_raw===ident);
   // 0x5016B0 draws even for one cached/source candidate. The forest reaction
   // ids are singletons; the original source order remains explicit here.
   return candidates.length?candidates[draw(candidates.length,`reaction-id-${ident}`)]:null;

@@ -63,6 +63,11 @@ export function createServicesController({state, actions, $, canvas, ctx,now=()=
     $('newGame').disabled=!['map','menu'].includes(phase);
     $('menuNew').disabled=phase!=='menu';$('menuLoad').disabled=phase!=='menu';
     $('load').disabled=!['map','menu'].includes(phase);$('importSave').disabled=!['map','menu'].includes(phase);
+    if(phase==='map'&&state.encounterData){
+      const {location,encounters}=state.world.value,maps=state.encounterData.maps,map=maps[location.map_id];
+      const pool=encounters?.global_pool_map_id===undefined?map:maps[encounters.global_pool_map_id];
+      void actions.warmBattleEntry?.({pool:map?.frequency&&pool?.members.length?pool:null});
+    }
   }
   function download(value,filename){const url=URL.createObjectURL(value instanceof Blob?value:new Blob([JSON.stringify(value,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
   function exportRuntimeLog(){

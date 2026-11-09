@@ -356,6 +356,24 @@ export class BattleView {
     return this.draw(snapshot,now,options);
   }
 
+  loadDefinition(){
+    const identity=JSON.stringify([this.metadataPath,this.itemMetadataPath,this.lifecycleMetadataPath,this.statusMetadataPath]);
+    return this.definitionCache.load(this.jsonLoader,this.content,identity,()=>this._readDefinition());
+  }
+
+  loadStage(path){
+    return path?this.definitionCache.load(this.jsonLoader,this.content,path,
+      async()=>freezeDefinition(validateForestStage(await this.jsonLoader(path),this.content))):null;
+  }
+
+  async entryPaths(roleIds,stagePath){
+    const [definition,stage]=await Promise.all([this.loadDefinition(),this.loadStage(stagePath)]);
+    const {meta,itemMeta,lifecycleMeta,assetDescriptors,lifecyclePairs}=definition;
+    const plan=new BattleAssetPlan({meta,itemMeta,lifecycleMeta,descriptors:assetDescriptors,pairs:lifecyclePairs,
+      actors:roleIds.map(id=>({id})),inventory:[]});
+    return [...(stage?forestStageAssets(stage).map(asset=>asset.path):[]),...plan.base];
+  }
+
   async prepare({actors=null,skills=null,inventory=null,staged=false,onProgress=()=>{}}={}) {
     if(this.destroyed)throw new Error('战斗表现已销毁');
     if(this.run||this.detachedRuns.length)throw new Error('行动播放期间不能重新准备战斗');
@@ -363,15 +381,12 @@ export class BattleView {
     const generation=++this.generation,isCurrent=()=>!this.destroyed&&generation===this.generation;
     const check=()=>{if(!isCurrent())throw abortError();};
     if(!this.definition){
-      const identity=JSON.stringify([this.metadataPath,this.itemMetadataPath,this.lifecycleMetadataPath,this.statusMetadataPath]);
-      const definition=await this.definitionCache.load(this.jsonLoader,this.content,identity,()=>this._readDefinition());
-      check();
-      const stageMeta=this.stageMetadataPath?validateForestStage(await this.jsonLoader(this.stageMetadataPath),this.content):null;
+      const [definition,stageMeta]=await Promise.all([this.loadDefinition(),this.loadStage(this.stageMetadataPath)]);
       check();
       this.definition=definition;
       Object.assign(this,{meta:definition.meta,itemMeta:definition.itemMeta,lifecycleMeta:definition.lifecycleMeta,statusMeta:definition.statusMeta,
         layers:definition.layers,alternateLayers:definition.alternateLayers,lifecyclePairs:definition.lifecyclePairs,
-        damageTextAssets:definition.damageTextAssets,stageMeta:freezeDefinition(stageMeta)});
+        damageTextAssets:definition.damageTextAssets,stageMeta});
       const descriptors=new Map(definition.assetDescriptors.map(asset=>[asset.path,asset]));
       for(const asset of stageMeta?forestStageAssets(stageMeta):[]){
         const previous=descriptors.get(asset.path);
@@ -398,7 +413,16 @@ export class BattleView {
   }
 
   async _readDefinition(){
+    // The shared definition is built once, but a cold encounter can build it
+    // while the outgoing scene is still animating.
+    let sliceStarted=performance.now();
+    const yieldForRender=async()=>{
+      if(typeof requestAnimationFrame!=='function'||performance.now()-sliceStarted<8)return;
+      await new Promise(resolve=>requestAnimationFrame(()=>setTimeout(resolve,0)));
+      sliceStarted=performance.now();
+    };
     const meta = validateBattleViewMetadata(await this.jsonLoader(this.metadataPath),this.content);
+    await yieldForRender();
     const statusMeta=this.statusMetadataPath?validateBattleStatusView(await this.jsonLoader(this.statusMetadataPath)):null;
     let itemMeta=null;
     if(this.itemMetadataPath){
@@ -410,12 +434,14 @@ export class BattleView {
       }
       meta.effects.push(...clone(itemMeta.effects));meta.extra_layer_banks=[...(meta.extra_layer_banks??[]),...itemMeta.roles.map(r=>r.layer_bank)];
       validateBattleViewMetadata(meta,this.content);
+      await yieldForRender();
     }
     let lifecycleMeta=null;
     const lifecycleFrames=new Map();
     if(this.lifecycleMetadataPath){
       lifecycleMeta=await this.jsonLoader(this.lifecycleMetadataPath);
       if(lifecycleMeta?.schema!=='seventh-seal-battle-lifecycle'||![1,2].includes(lifecycleMeta.version)||!Array.isArray(lifecycleMeta.roles))throw new Error('战斗入场死亡清单无效');
+      await yieldForRender();
       for(const row of lifecycleMeta.roles){
         const role=meta.roles.find(r=>r.id===row.id);if(!role)continue;
         if(role.frame_width!==row.frame_width||role.frame_height!==row.frame_height||role.anchor.x!==row.anchor.x||role.anchor.y!==row.anchor.y)throw new Error('战斗入场死亡坐标不一致');
@@ -433,12 +459,13 @@ export class BattleView {
           role.alternate_skills??=[];role.alternate_skills.push({...clone(skill),runtime_skill_id:`${row.id}_${skill.source_skill.original_skill_index}`,segments:skill.segments.map(segment=>({...clone(segment),movement_source_field:'0x1e'}))});
         }
         meta.extra_layer_banks=[...(meta.extra_layer_banks??[]),clone(row.layer_bank)];
+        await yieldForRender();
       }
       for(const effect of lifecycleMeta.effects)if(!meta.effects.some(e=>e.id===effect.id))meta.effects.push(clone(effect));
       meta.missing_effects=[...new Map([...(meta.missing_effects??[]),...(lifecycleMeta.missing_effects??[])].map(row=>[row.id,clone(row)])).values()];
-      validateBattleViewMetadata(meta,this.content);
     }
     validateBattleViewMetadata(meta,this.content);
+    await yieldForRender();
     const layers = validateLayers(await this.jsonLoader(meta.layers.path, meta.layers.sha256), meta);
     const alternateLayers = new Map(),physicalLayers=new Map();
     for(const descriptor of [meta.extra_layers,...(meta.extra_layer_banks??[])].filter(Boolean)){
@@ -459,9 +486,11 @@ export class BattleView {
       }
       if(lifecycle&&[...lifecycle.required].some(frame=>!frames.has(frame)))throw new Error('战斗入场死亡图层缺少原始帧');
       alternateLayers.set(`${bank.role_id}:bank:${descriptor.path}`,bank);
+      await yieldForRender();
     }
     for (const role of meta.roles) for (const skill of role.alternate_skills ?? []) if (skill.layers) {
       alternateLayers.set(`${role.id}:${skill.runtime_skill_id}`,validateLayers(await this.jsonLoader(skill.layers.path,skill.layers.sha256),meta,skill.runtime_skill_id));
+      await yieldForRender();
       }
     const descriptors = new Map();
     const add = (path, sha256, width, height,owner='shared') => {
@@ -492,6 +521,7 @@ export class BattleView {
     for (const source of [layers,...alternateLayers.values()]) for (const pair of source.frames) for (const layer of [pair.main, pair.intrinsic]) {
       add('/' + layer.path, layer.sha256, source.frame_width, source.frame_height,source.role_id);
     }
+    await yieldForRender();
     const definition={meta,itemMeta,lifecycleMeta,layers,damageTextAssets,
       statusMeta,assetDescriptors:[...descriptors.values(),...battleStatusAssets(statusMeta)],alternateLayers:freezeDefinitionMap(alternateLayers),
       lifecyclePairs:freezeDefinitionMap([layers,...alternateLayers.values()].flatMap(bank=>bank.frames.map(pair=>[`${bank.role_id}:${pair.source_frame}`,pair])))};
@@ -543,7 +573,7 @@ export class BattleView {
     }
     this.preparedAssets=new WeakMap();this.appearanceRasters?.clear();
     this.assetPlan=staged?new BattleAssetPlan({meta:this.meta,itemMeta:this.itemMeta,lifecycleMeta:this.lifecycleMeta,
-      descriptors:this.assetDescriptors,layers:[this.layers,...this.alternateLayers.values()],actors,skills,inventory}):null;
+      descriptors:this.assetDescriptors,pairs:this.lifecyclePairs,actors,skills,inventory}):null;
     if(!staged){this.images=await this._prepareImages(this.assetDescriptors,actors,onProgress,isCurrent);return;}
     const previous=this.entryLease;
     this.entryLease=await this._loadAssets(this.assetPlan.assets(this.assetPlan.base),'battle-base',{onProgress,isCurrent});
@@ -894,11 +924,19 @@ export class BattleView {
     const sourcePose={action_index:action.index,action_frame:frame,source_frame:action.first_frame+frame};
     if(!globalThis.document?.createElement)return {min_x:0,min_y:0,max_x:Math.floor((role.frame_width-1)*scale),max_y:Math.floor((role.frame_height-1)*scale),empty:false,pose:sourcePose};
     const pair=this.lifecyclePairs.get(`${roleId}:${action.first_frame+frame}`),image=this.images.get(pair?'/'+pair.main.path:action.sheet);
-    const surface=document.createElement('canvas');surface.width=role.frame_width;surface.height=role.frame_height;
-    const c=surface.getContext('2d',{willReadFrequently:true});
-    drawBattleImage(c,image,pair?0:frame*role.frame_width,0,role.frame_width,role.frame_height,0,0,role.frame_width,role.frame_height);
-    const rgba=c.getImageData(0,0,surface.width,surface.height).data;let minX=surface.width,minY=surface.height,maxX=-1,maxY=-1;
-    for(let y=0;y<surface.height;y++)for(let x=0;x<surface.width;x++)if(rgba[(y*surface.width+x)*4+3]){minX=Math.min(minX,x);minY=Math.min(minY,y);maxX=Math.max(maxX,x);maxY=Math.max(maxY,y);}
+    const width=role.frame_width,height=role.frame_height,left=pair?0:frame*width;
+    let minX=width,minY=height,maxX=-1,maxY=-1;
+    const regions=image?.packed?image.regions.filter(([x,y,w])=>x<left+width&&x+w>left&&y<height):null;
+    if(regions?.every(([x,y,w,h])=>x>=left&&x+w<=left+width&&y+h<=height)){
+      // The atlas exporter crops each actor tile to its nonzero alpha bounds.
+      for(const [x,y,w,h]of regions){minX=Math.min(minX,x-left);minY=Math.min(minY,y);maxX=Math.max(maxX,x-left+w-1);maxY=Math.max(maxY,y+h-1);}
+    }else{
+      const surface=document.createElement('canvas');surface.width=width;surface.height=height;
+      const c=surface.getContext('2d',{willReadFrequently:true});
+      drawBattleImage(c,image,left,0,width,height,0,0,width,height);
+      const rgba=c.getImageData(0,0,width,height).data;
+      for(let y=0;y<height;y++)for(let x=0;x<width;x++)if(rgba[(y*width+x)*4+3]){minX=Math.min(minX,x);minY=Math.min(minY,y);maxX=Math.max(maxX,x);maxY=Math.max(maxY,y);}
+    }
     const bounds={min_x:Math.floor(minX*scale),min_y:Math.floor(minY*scale),max_x:Math.floor(maxX*scale),max_y:Math.floor(maxY*scale),empty:maxY<0,pose:sourcePose};this.lifecycleBounds.set(key,bounds);return bounds;
   }
 

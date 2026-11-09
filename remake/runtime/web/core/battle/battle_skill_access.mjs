@@ -16,6 +16,19 @@ export function validateBattleSkillProgress(value){
   return structuredClone(value);
 }
 export {applySavedSkillProgress};
+// Battle assembly and the command wheel only read role records. Replay the
+// saved changes without cloning the complete command and action tables.
+export function effectiveBattleSkillRoles(commands,world){
+  const roles={...commands.roles};
+  for(const actor of allPartyRoles(world)){
+    const role=roles[actor.id];if(!role)continue;
+    const progress=actor.skill_progress&&validateBattleSkillProgress(actor.skill_progress);
+    const changed=new Set([...(progress?.learned_indices??[]),...(progress?.records??[]).map(row=>row.index)]);
+    const skills=role.skills.map(skill=>correctPartySkillType(changed.has(skill.original_skill_index??skill.index)?applySavedSkillProgress(skill,actor):skill));
+    roles[actor.id]={...role,skills,learned_indices:skills.filter(skill=>skill.learned_raw).map(skill=>skill.original_skill_index)};
+  }
+  return {roles};
+}
 /** Read-only source facade for menus, bindings and displayed proficiency. */
 export function effectiveSkillSource(commands,world){
   const out=structuredClone(commands),roles=new Map(allPartyRoles(world).map(role=>{if(role.skill_progress)validateBattleSkillProgress(role.skill_progress);return [role.id,role];}));

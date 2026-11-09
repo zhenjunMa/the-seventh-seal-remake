@@ -7,11 +7,12 @@ const copy=structuredClone,need=(ok,message)=>{if(!ok)throw new Error(message);}
 const int=(n,label,min=-2147483648,max=2147483647)=>{need(Number.isInteger(n)&&n>=min&&n<=max,`${label}无效`);return n;};
 const add=(a,b)=>(a+b)|0;
 const decodedSkills=new WeakMap();
+const validateFixedRecord=skill=>need(/^(?:[0-9a-f]{2}){1053}$/i.test(skill?.fixed_raw_hex),'技巧成长原记录无效');
 const rememberBytes=(skill,b)=>{decodedSkills.set(skill,{raw:skill.fixed_raw_hex,bytes:b.slice()});return skill;};
 const bytes=skill=>{
   let cached=decodedSkills.get(skill);
   if(!cached||cached.raw!==skill?.fixed_raw_hex){
-    need(/^(?:[0-9a-f]{2}){1053}$/i.test(skill?.fixed_raw_hex),'技巧成长原记录无效');
+    validateFixedRecord(skill);
     cached={raw:skill.fixed_raw_hex,bytes:Uint8Array.from(skill.fixed_raw_hex.match(/../g),n=>parseInt(n,16))};decodedSkills.set(skill,cached);
   }
   // Growth callers edit their working bytes. Never expose the cached source.
@@ -59,7 +60,7 @@ export function applySavedSkillProgress(skill,role){
 export function skillGrowthSource(commands){
   need(commands?.schema==='seventh-seal-party-skills'&&commands.version===1&&commands.roles,'技巧成长来源缺失');
   return {roles:Object.fromEntries(Object.entries(commands.roles).map(([id,role])=>[id,{id,name:role.name,skill_count:role.skill_count,skills:role.skills.map(skill=>{
-    bytes(skill);need(skill.actor_id===id&&Number.isInteger(skill.original_skill_index),'技巧成长归属无效');
+    validateFixedRecord(skill);need(skill.actor_id===id&&Number.isInteger(skill.original_skill_index),'技巧成长归属无效');
     return {id:skill.id,actor_id:id,index:skill.original_skill_index,original_skill_index:skill.original_skill_index,name:skill.name,source:copy(skill.source),fixed_raw_hex:skill.fixed_raw_hex};
   })}]))};
 }

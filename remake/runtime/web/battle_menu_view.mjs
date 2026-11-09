@@ -15,6 +15,12 @@ const skillCategory=skill=>{
   const type=(skill?.type_flags_u32_0x32??skill?.type_raw??parseInt(skill?.fixed_raw_hex?.slice(0x64,0x66),16))&15;
   return {2:1,1:2,3:3}[type]??2;
 };
+export function battleHudPaths(manifest){
+  const paths=new Set();
+  for(const menu of manifest.menus)for(const image of menu.images)paths.add(image.image);
+  for(const asset of Object.values(manifest.assets))for(const f of asset.frames){paths.add(f.image);if(f.indexed_image)paths.add(f.indexed_image);if(f.inverse_mask_image)paths.add(f.inverse_mask_image);}
+  return [...paths];
+}
 // Stable transparent controls over the original source pixels. No world writes.
 export class BattleMenuView{
   constructor({root,manifest,battle,getSettings,getBindings=null,getCursorHeight,playCue,onReturn,onStage=()=>{},textRenderer=null,memory=null,returnLabel=null,autoReturnOnDefeat=false,resultManifest=null,onResultEvent=()=>{},now=()=>performance.now(),reuseReturnButton=true,deferResult=false,prepareResources=work=>work(),onResourcesPrepared=()=>{},prefetchCommand=()=>{},onResourceError=()=>{}}){
@@ -52,10 +58,7 @@ export class BattleMenuView{
   place(node,x,y,w,h){Object.assign(node.style,{left:x+'px',top:y+'px',width:w+'px',height:h+'px'});}
   fit(){const box=this.root.getBoundingClientRect(),v=battleViewport(box.width,box.height);Object.assign(this.frame.style,{left:v.x+'px',top:v.y+'px',transform:`scale(${v.scale})`});}
   async prepare({onProgress=()=>{}}={}){
-    const paths=new Set();
-    for(const menu of this.manifest.menus)for(const image of menu.images)paths.add(image.image);
-    for(const asset of Object.values(this.manifest.assets))for(const f of asset.frames){paths.add(f.image);if(f.indexed_image)paths.add(f.indexed_image);if(f.inverse_mask_image)paths.add(f.inverse_mask_image);}
-    this.images=await this.resourceScope.preparePaths([...paths],{onProgress:p=>onProgress({...p,stage:'hud'})});
+    this.images=await this.resourceScope.preparePaths(battleHudPaths(this.manifest),{onProgress:p=>onProgress({...p,stage:'hud'})});
     await this.onResourcesPrepared(this.images);
     if(!this.deferResult)await this.resultView?.prepare({onProgress:p=>onProgress({...p,stage:'result'})});
   }
