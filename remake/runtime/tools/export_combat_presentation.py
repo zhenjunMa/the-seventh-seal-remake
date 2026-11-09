@@ -94,21 +94,21 @@ def indexed_contribution(dgp: DGP, frame: int) -> tuple[Image.Image, dict]:
     if record['active_raw']:
         p = record['palette_offset']
         palette = dgp.data[p:p + 768]
+        colors = tuple(bytes((red & 0xF8, green & 0xFC, blue & 0xF8, 255))
+                       for red, green, blue in struct.iter_unpack('BBB', palette))
+        nonblack = tuple(any(color[:3]) for color in colors)
         bounds = [dgp.width, dgp.height, 0, 0]
         for y, spans in indexed_rows(dgp, frame):
             for x, count, indices in spans:
                 if count:
                     bounds = [min(bounds[0], x), min(bounds[1], y),
                               max(bounds[2], x + count), max(bounds[3], y + 1)]
-                for dx, index in enumerate(indices):
-                    red, green, blue = palette[index * 3:index * 3 + 3]
-                    color = bytes((red & 0xF8, green & 0xFC, blue & 0xF8, 255))
-                    q = ((y * dgp.width) + x + dx) * 4
-                    pixels[q:q + 4] = color
-                    stats['covered_pixels'] += 1
-                    stats['index_zero_pixels'] += index == 0
-                    stats['index_255_pixels'] += index == 255
-                    stats['nonblack_pixels'] += any(color[:3])
+                q = ((y * dgp.width) + x) * 4
+                pixels[q:q + count * 4] = b''.join(colors[index] for index in indices)
+                stats['covered_pixels'] += count
+                stats['index_zero_pixels'] += indices.count(0)
+                stats['index_255_pixels'] += indices.count(255)
+                stats['nonblack_pixels'] += sum(nonblack[index] for index in indices)
         if stats['covered_pixels']:
             stats['bounds'] = bounds
     stats['rgba_sha256'] = sha(pixels)

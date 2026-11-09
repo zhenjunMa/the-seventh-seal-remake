@@ -154,6 +154,29 @@ class FingerprintTests(unittest.TestCase):
             self.assertEqual(build_image_catalog(builder), catalog)
             self.assertEqual(decode.call_count, 1)
 
+    def test_shared_battle_sheet_is_decoded_once_and_damaged_cache_is_rebuilt(self):
+        from PIL import Image
+        image = Image.new('RGBA', (16, 12), (17, 31, 47, 255))
+        stream = io.BytesIO()
+        image.save(stream, format='PNG')
+        builder = self.builder()
+        name = '/assets/demo.png'
+        expected = hashlib.sha256(stream.getvalue()).hexdigest()
+        builder.plan.expected[name] = expected
+        builder.plan.documents = {'data/battle_packs.json': dict(images={name: dict(
+            regions=[[0, 0, 8, 12, 0, 0, 0], [8, 0, 8, 12, 1, 0, 0]])})}
+        self.assertEqual(builder.preflight(), [])
+        builder.state = {}
+        builder.recipe_version = 'test'
+        with patch.object(builder, 'decode', side_effect=lambda row: image.copy()) as decode:
+            self.assertEqual(builder.image(name).tobytes(), image.tobytes())
+            self.assertEqual(builder.image(name).tobytes(), image.tobytes())
+            self.assertEqual(decode.call_count, 1)
+            (builder.cache / 'battle_sources' / (expected + '.png')).write_bytes(b'damaged')
+            self.assertEqual(builder.image(name).tobytes(), image.tobytes())
+            self.assertEqual(decode.call_count, 2)
+        self.assertFalse(builder.local(name).exists())
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -13,6 +13,11 @@ import struct
 
 from PIL import Image
 
+RGBA565 = tuple(bytes((((value >> 11) << 3) | ((value >> 11) >> 2),
+                       (((value >> 5) & 63) << 2) | (((value >> 5) & 63) >> 4),
+                       ((value & 31) << 3) | ((value & 31) >> 2), 255))
+                for value in range(65536))
+
 
 class DGPError(ValueError):
     pass
@@ -243,14 +248,8 @@ class DGP:
                 x = skip if span_mode == 'absolute' else cursor + skip
                 if x < cursor or x + size > self.width:
                     raise DGPError(f"Frame {index}, row {y}: span outside width / overlaps ({x}, {size})")
-                for k, (value,) in enumerate(struct.iter_unpack('<H', raw)):
-                    red = (value >> 11) & 31
-                    green = (value >> 5) & 63
-                    blue = value & 31
-                    off = (y * self.width + x + k) * 4
-                    pixels[off:off + 4] = bytes(((red << 3) | (red >> 2),
-                                               (green << 2) | (green >> 4),
-                                               (blue << 3) | (blue >> 2), 255))
+                off = (y * self.width + x) * 4
+                pixels[off:off + size * 4] = b''.join(RGBA565[value] for (value,) in struct.iter_unpack('<H', raw))
                 cursor = x + size
         return Image.frombytes('RGBA', (self.width, self.height), bytes(pixels))
 

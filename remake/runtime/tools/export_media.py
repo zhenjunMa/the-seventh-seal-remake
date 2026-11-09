@@ -247,10 +247,15 @@ class MediaBuilder:
 
     def image(self, name):
         from PIL import Image
+        from incremental import write_bytes
         name = url(name)
         signature = self.resource_signature(name)
         expected = self.plan.expected.get(name)
         path = self.local(name)
+        packed = self.plan.documents['data/battle_packs.json']['images'].get(name)
+        shared = packed is not None and len({region[4] for region in packed['regions']}) > 1
+        if shared:
+            path = self.cache / 'battle_sources' / (expected + '.png')
         previous = self.state.get(name)
         wanted = expected or (previous.get('sha256') if previous and previous['signature'] == signature else None)
         if not self.force and not self.variant_assets[name] and wanted and path.is_file() and checksum(path) == wanted:
@@ -269,6 +274,8 @@ class MediaBuilder:
                 actual = digest(stream.getvalue())
                 if expected and actual != expected:
                     raise ValueError(f'素材与固定描述不一致：{name}，预期 {expected}，实际 {actual}')
+                if shared:
+                    write_bytes(path, stream.getvalue())
                 image = image.convert('RGBA')
                 self.stats['exported'] += 1
             finally:
