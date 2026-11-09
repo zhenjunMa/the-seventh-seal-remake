@@ -22,7 +22,7 @@ test('game fullscreen captures only Escape, focuses the game and keeps an explic
   assert.deepEqual(calls,[['enter'],['focus'],['lock',['Escape']]]);
   assert.equal($('fullscreenControls').hidden,false);
   assert.equal($('fullscreen').textContent,'退出全屏');
-  assert.match($('fullscreenHint').textContent,/Esc 返回游戏上一级/);
+  assert.match($('fullscreenHint').textContent,/Esc 打开菜单／返回 · Tab 切换人物/);
   assert.match($('fullscreenHint').textContent,/长按 Esc/);
   await controller.toggle();
   assert.equal(document.fullscreenElement,null);
@@ -48,7 +48,7 @@ test('unsupported and denied keyboard lock keep fullscreen usable with a visible
     assert.equal(document.fullscreenElement,$('screen'));
     assert.equal($('fullscreenControls').hidden,false);
     assert.match($('fullscreenHint').textContent,/F11/);
-    assert.doesNotMatch($('fullscreenHint').textContent,/Esc 返回游戏上一级/);
+    assert.doesNotMatch($('fullscreenHint').textContent,/Esc 打开菜单／返回/);
     await controller.toggle();assert.equal(document.fullscreenElement,null);
   }
 });
@@ -70,7 +70,7 @@ test('a late keyboard grant after exit or disposal cannot restore the fullscreen
     if(dispose)controller.dispose();else await document.exitFullscreen();
     grant();await entering;
     assert.deepEqual(calls.at(-1),['unlock']);
-    assert.doesNotMatch($('fullscreenHint').textContent,/Esc 返回游戏上一级/);
+    assert.doesNotMatch($('fullscreenHint').textContent,/Esc 打开菜单／返回/);
   }
 });
 

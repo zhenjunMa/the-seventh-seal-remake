@@ -1,6 +1,7 @@
 // input adapters. Persistent state belongs to the shared runtime context.
 import {useWorldItem, changeEquipment} from "../core/items/items.mjs";
 import {changeSkillShortcuts} from "../core/party/skill_shortcuts.mjs";
+import {controlPartyActor} from "../core/party/party_members.mjs";
 import {availableFieldSkills} from "../core/party/field_skills.mjs";
 import {effectiveSkillSource} from "../core/battle/battle_skill_access.mjs";
 import {createContentSample} from "../core/content/content_sample.mjs";
@@ -14,6 +15,27 @@ export function createInputController({state, actions, $, canvas, ctx}) {
     if(!['F4','F5'].includes(key))return false;
     if(!repeat){if(state.engine?.paused)actions.status('请先返回游戏，再存取进度。',true);else actions.guarded(()=>key==='F4'?actions.saveProgress('quick'):actions.loadProgress('quick'))();}
     return true;
+  }
+  function selectMapActor(id) {
+    const {world} = state;
+    if (state.scenes?.phase !== 'map' || !world.value.party.some(actor => actor.id === id)) return;
+    if (world.value.leader_id !== id) {
+      world.transact(draft => controlPartyActor(draft, id));
+      state.selectedRole = id;
+      state.view.action = 0;
+      state.view.frame = 0;
+      state.view.collisionFeedback = null;
+      state.clock = 0;
+    }
+    $('role').value = id;
+    canvas.focus({preventScroll:true});
+  }
+  function cycleMapActor() {
+    const {party, leader_id} = state.world.value;
+    const available = party.filter(actor => (state.mapVitals.get(actor.id) ?? actor).hp.current > 0);
+    if (!available.length) return;
+    const current = available.findIndex(actor => actor.id === leader_id);
+    selectMapActor(available[(current + 1) % available.length].id);
   }
   function wire(){
     $('partyMenuOpen').onclick=()=>actions.openPartyMenu();
@@ -54,7 +76,7 @@ export function createInputController({state, actions, $, canvas, ctx}) {
       actions.status(`已进入全技能测试${group}组：六人99级，当前出战${sample.party.map(role=>role.name).join('、')}。`);
       canvas.focus();
     });
-    $('role').onchange=()=>{state.selectedRole=$('role').value;state.world.transact(draft=>{draft.leader_id=state.selectedRole;});state.view.action=0;state.view.frame=0;state.clock=0;canvas.focus();};
+    $('role').onchange=()=>selectMapActor($('role').value);
     $('zoomOut').onclick=()=>{state.view.zoom=Math.max(.15,state.view.zoom/1.2);};$('zoomIn').onclick=()=>{state.view.zoom=Math.min(3,state.view.zoom*1.2);};$('fit').onclick=actions.fit;$('follow').onclick=()=>{state.view.zoom=1;state.view.follow=true;canvas.focus();};
     const smoothing=$('actorSmoothing');
     const showSmoothing=()=>{const enabled=state.engine.actorSmoothing;smoothing.textContent=`平滑显示：${enabled?'开':'关'}`;smoothing.setAttribute('aria-pressed',String(enabled));};
@@ -89,11 +111,20 @@ export function createInputController({state, actions, $, canvas, ctx}) {
       if(state.startupView?.key(key,event.repeat)){event.preventDefault();return;}
       if(['event','opening'].includes(state.scenes?.phase)&&actions.dialogueKey(key,event.repeat)){event.preventDefault();return;}
       if(state.worldMapView?.key(key,event.repeat)){event.preventDefault();return;}
-      if(state.menuContext){const kind=key==='Escape'?'cancel':[' ','Enter'].includes(key)?'confirm':key==='Tab'?'ignore':'select';const handle=()=>{if(key==='Escape'){if(!event.repeat&&state.operationMenu.escape())actions.closePartyMenu();return true;}return state.operationMenu.key(key,event.repeat);};const handled=state.menuFeedback?state.menuFeedback.run(kind,handle,{repeat:event.repeat}):handle();if(handled)event.preventDefault();return;}
+      if(state.menuContext){const kind=key==='Escape'?'cancel':[' ','Enter'].includes(key)?'confirm':key==='Tab'?'ignore':'select';const handle=()=>{if(key==='Escape'){if(!event.repeat&&($('partyMenu').hidden||state.operationMenu.escape()))actions.closePartyMenu();return true;}return state.operationMenu.key(key,event.repeat);};const handled=state.menuFeedback?state.menuFeedback.run(kind,handle,{repeat:event.repeat}):handle();if(handled)event.preventDefault();return;}
       if(state.scenes?.phase.startsWith('battle-')){if(actions.battleKey(key,event.repeat))event.preventDefault();return;}
-      if(state.scenes?.phase==='map'&&key==='Tab'&&!event.shiftKey){event.preventDefault();if(!event.repeat)actions.openPartyMenu();return;}
-      if(['INPUT','SELECT','TEXTAREA','BUTTON'].includes(document.activeElement?.tagName))return;
       if(state.scenes?.phase!=='map')return;
+      if (key === 'Escape') {
+        event.preventDefault();
+        if (!event.repeat) actions.openPartyMenu();
+        return;
+      }
+      if (key === 'Tab' && !event.shiftKey && !event.ctrlKey && !event.altKey && !event.metaKey) {
+        event.preventDefault();
+        if (!event.repeat) cycleMapActor();
+        return;
+      }
+      if(['INPUT','SELECT','TEXTAREA','BUTTON'].includes(document.activeElement?.tagName))return;
       if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','w','a','s','d','Shift',' '].includes(key)){event.preventDefault();if(key===' '){if(!event.repeat)actions.interact();}else if(key==='Shift'){if(!event.repeat)state.running=!state.running;}else state.keys.add(key);}
     },options);
     window.addEventListener('keyup',event=>{if(actions.dialogueKeyUp(event.key))event.preventDefault();if(state.scenes?.phase.startsWith('battle-')){actions.battleKeyUp?.(event.key);if(event.key===' ')event.preventDefault();}if(state.menuContext&&event.key===' '&&$('menuShortcutEditor').hidden&&state.menuContext.page!=='system')event.preventDefault();state.keys.delete(event.key.length===1?event.key.toLowerCase():event.key);},options);

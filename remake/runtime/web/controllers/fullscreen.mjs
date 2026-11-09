@@ -19,12 +19,12 @@ export function createFullscreenController({$, canvas, document=globalThis.docum
       $('fullscreenHint').textContent='此浏览器不支持接管 Esc；请使用 Chrome / Edge，或退出此全屏后按 F11。';
       return;
     }
-    $('fullscreenHint').textContent='请允许浏览器使用 Esc，以便在游戏内返回。';
+    $('fullscreenHint').textContent='请允许浏览器使用 Esc，以便在游戏内打开菜单或返回。';
     try{
       // Only capture Escape. Keep browser and OS shortcuts available.
       await keyboard.lock(['Escape']);
       if(disposed||!active()){keyboard.unlock();return;}
-      if(current===session)$('fullscreenHint').textContent='Esc 返回游戏上一级 · 长按 Esc 退出全屏';
+      if(current===session)$('fullscreenHint').textContent='Esc 打开菜单／返回 · Tab 切换人物 · 长按 Esc 退出全屏';
     }catch{
       if(!disposed&&active()&&current===session)$('fullscreenHint').textContent='未获准使用 Esc；请允许键盘锁定后重新进入全屏，或退出后按 F11。';
     }
