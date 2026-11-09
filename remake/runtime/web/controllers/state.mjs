@@ -23,6 +23,7 @@ export function createRuntimeState($) {
     selectedRole: '001',
     nearest: null,
     dialogueResolve: null,
+    npcConversationFacing: null,
     openingResources: null,
     openingProgram: null,
     openingView: null,

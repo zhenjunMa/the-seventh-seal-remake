@@ -11,6 +11,7 @@ import {captureMapNpcState} from '../core/exploration/map_npc_state.mjs';
 import {locomotion} from '../core/exploration/movement.mjs';
 import {loadEncounterMap} from '../core/exploration/encounters.mjs';
 import {initializeMapSequence} from '../core/exploration/map_stage.mjs';
+import {nativeConversationDirection} from '../core/ui/opening_presentation.mjs';
 
 import {createStoryPresentation} from './presentation_handoff.mjs';
 
@@ -145,19 +146,22 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
     return {x:320+(actor.x+16-state.view.x)*zoom,y:240+(actor.y-headOffset-state.view.y)*zoom};
   }
   async function interact(){
-    if(state.scenes.phase!=='map'||!state.nearest)return;
-    if(state.nearest.kind==='rest'){await runChapter({rest:true,descriptorId:state.nearest.descriptorId});return;}
-    if(state.nearest.kind==='object'){await runChapter({mapId:state.world.location.map_id,objectIndex:state.nearest.index});return;}
-    const target=state.scenes.current.npcs.find(npc=>npc.id===state.nearest.id);
-    const release=target?state.scenes.current.npcRuntime?.hold(target.id):null;
+    const selected=state.nearest;
+    if(state.scenes.phase!=='map'||!selected)return;
+    const mapId=state.world.location.map_id;
+    if(selected.kind==='rest'){await runChapter({rest:true,descriptorId:selected.descriptorId});return;}
+    if(selected.kind==='object'){await runChapter({mapId,objectIndex:selected.index});return;}
+    const target=state.scenes.current.npcs.find(npc=>npc.id===selected.id);
+    if(!target)return;
+    const release=state.scenes.current.npcRuntime?.hold(target.id);
     try{
-      if(!state.nearest.event){
-        const table=state.chapterStory.maps[state.world.location.map_id],slot=state.nearest.slot_zero_based;
-        const entry=table?.index_nonzero.find(row=>row.slot===slot);
-        if(entry){await runChapter({mapId:state.world.location.map_id,recordId:entry.record,context:{steps:0,explicitInteraction:true,npcMapId:state.world.location.map_id,npcSlot:slot}});return;}
+      if(!selected.event){
+        const slot=selected.slot_zero_based;
+        const entry=state.chapterStory.maps[mapId]?.index_nonzero.find(row=>row.slot===slot);
+        if(entry){await runChapter({mapId,recordId:entry.record,context:{steps:0,explicitInteraction:true,npcMapId:mapId,npcSlot:slot}},selected);return;}
         actions.status('这里暂时没有可执行的对白。');return;
       }
-      await runChapter({event:state.nearest.event});
+      await runChapter({event:selected.event},selected);
     }finally{release?.();}
   }
   function chapterSpeaker(mapId,record){
@@ -245,13 +249,22 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
       throw error;
     }finally{state.sceneEntryDraft=previous.entryDraft;media?.dispose();view?.dispose();lease?.release();$('openingShade').hidden=previous.shadeHidden;$('openingShade').style.opacity=previous.shadeOpacity;}
   }
-  async function runChapter(args){
+  async function runChapter(args,npc=null){
     if(state.scenes.phase!=='map')return;
     const previous={scene:state.scenes.current,view:state.scenes.captureView()};
+    const at=state.world.location;
+    const direction=npc&&Math.hypot(npc.x-at.x,npc.y-at.y)>0
+      ?nativeConversationDirection(at,npc):at.direction;
+    const turn=direction!==at.direction?{scene:previous.scene,direction}:null;
     try{
       if(args.objectIndex!==undefined)state.scenes.setPhase('event');
       const result=await playStory(async playback=>{
         try{
+          if(turn){
+            state.scenes.setPhase('event');
+            state.npcConversationFacing=turn;
+            if(playback.clock)await playbackFrame(playback.clock,playback.signal);
+          }
           const result=args.event?await state.chapterRunner.runEvent(args.event,{playback}):args.rest?await state.chapterRunner.runRest({explicitInteraction:true,descriptorId:args.descriptorId??null,playback}):args.triggerId!==undefined&&args.recordId===undefined?await state.chapterRunner.runTrigger({...args,playback}):args.objectIndex===undefined?await state.chapterRunner.runTlk({...args,playback}):await state.chapterRunner.runObject({...args,playback});
           if(!playback.nativeCompletion){actions.commitView(state.scenes.current,state.world.location);actions.buildHud();actions.updateNearest();}
           return result;
@@ -266,7 +279,11 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
       if(result.save_requested)await actions.openSaveCrystal();
       if(result.world_map_requested)state.worldMap.open(result.world_map_requested.area);
     }catch(error){if(error.gameOverPolicy)await actions.presentGameOver(error.gameOverPolicy);else actions.status(error.message,true);}
-    finally{if(args.objectIndex!==undefined&&state.scenes.phase==='event')state.scenes.setPhase('map');canvas.focus({preventScroll:true});}
+    finally{
+      if(turn&&state.npcConversationFacing===turn)state.npcConversationFacing=null;
+      if((turn||args.objectIndex!==undefined)&&state.scenes.phase==='event')state.scenes.setPhase('map');
+      canvas.focus({preventScroll:true});
+    }
   }
   async function transferChapter({mapId,destination,draft,playback,signal=playback?.signal}){
     const previous={scene:state.scenes.current,view:state.scenes.captureView?.(),entryDraft:state.sceneEntryDraft};

@@ -122,7 +122,7 @@ test('visible NPCs remain solid during direction reselection, hidden actors do n
     }
     assert.ok(f.state.world.location.x>320,'reselection can continue past the NPC');
     assert.equal(f.state.world.location.y===300,hidden);
-    if(!hidden){assert.equal(f.state.view.action,1);assert.equal(f.state.nearest.id,'guard');}
+    if(!hidden){assert.equal(f.state.view.action,1);assert.equal(f.state.nearest,null,'passing the guard puts it behind the player');}
   }
 });
 
@@ -219,7 +219,10 @@ test('NPC collision and interaction distance use its displayed feet during resel
   f.state.scenes.current.npcs.push(npc);f.state.keys.add('ArrowRight');
   for(let i=0;i<20;i++)f.step(16);
   assert.ok(f.state.world.location.x>320&&f.state.world.location.y<294);
-  assert.equal(f.state.nearest.x,320);assert.ok(Math.abs(f.state.nearest.distance-Math.hypot(320-f.state.world.location.x,300-f.state.world.location.y))<1e-8);
+  const {x,y}=f.state.world.location;
+  f.state.world.setPosition(x,y,6);
+  f.controller.updateNearest();
+  assert.equal(f.state.nearest.x,320);assert.ok(Math.abs(f.state.nearest.distance-Math.hypot(320-x,300-y))<1e-8);
   assert.equal(npc.x,340);
 });
 

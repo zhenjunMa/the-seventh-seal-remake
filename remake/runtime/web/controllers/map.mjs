@@ -15,7 +15,7 @@ import {chapterRouteExits,nativeEmptyEventCells} from "../core/exploration/map_c
 import {MapLocomotion,mapMotionProfile,nativeMapMovement} from "../core/exploration/map_locomotion.mjs";
 
 import {mapPresentation} from '../core/ui/map_presentation.mjs';
-import {mapWorldPoint, pickMapDialogueObject} from '../core/exploration/map_interaction.mjs';
+import {mapWorldPoint, npcInFront, pickMapDialogueObject} from '../core/exploration/map_interaction.mjs';
 
 import {createExplorationPresentation} from './presentation_handoff.mjs';
 
@@ -169,13 +169,19 @@ export function createMapController({state, actions, $, canvas, ctx}) {
   }
   function updateNearest(){
     state.nearest=null;if(!state.scenes.current)return;const at=state.world.location;
-    for(const npc of state.scenes.current.npcs){if(!npcAvailable(npc))continue;
-      const admitted=storyBindings(at.map_id).npcs;
-      if(!npc.event&&admitted&&!admitted.includes(npc.slot_zero_based))continue;
-      const position=mapActorPosition(npc),distance=Math.hypot(position.x-at.x,position.y-at.y);
-      if(distance<64&&(!state.nearest||distance<state.nearest.distance))state.nearest={...npc,x:position.x,y:position.y,direction:position.direction??npc.direction,distance};}
+    const bindings=storyBindings(at.map_id);
+    for(const npc of state.scenes.current.npcs){
+      if(!npcAvailable(npc))continue;
+      if(!npc.event&&bindings.npcs&&!bindings.npcs.includes(npc.slot_zero_based))continue;
+      const position=mapActorPosition(npc);
+      if(!npcInFront(at,position))continue;
+      const distance=Math.hypot(position.x-at.x,position.y-at.y);
+      if(distance<64&&(!state.nearest||distance<state.nearest.distance)){
+        state.nearest={...npc,x:position.x,y:position.y,direction:position.direction??npc.direction,distance};
+      }
+    }
     for(const object of state.chapterStory.maps[at.map_id]?.objects??[]){
-      const binding=storyBindings(at.map_id).objects.find(row=>row.index===object.index);
+      const binding=bindings.objects.find(row=>row.index===object.index);
       if(!binding)continue;
       if(binding.handler==='stationary-chest'&&(![3,4].includes(object.behavior_raw_cf)||!object.interaction_record_raw_f6))continue;
       if(binding.handler==='keyed-chest'&&![3,4].includes(object.behavior_raw_cf))continue;
@@ -189,7 +195,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
       const distance=Math.hypot(object.x_native*2-at.x,object.y_native*2-at.y);
       if(distance<64&&(!state.nearest||distance<state.nearest.distance))state.nearest={...object,kind:'object',name:binding.handler==='keyed-chest'?'宝箱':['scripted-switch','toggle-object','mechanism'].includes(binding.handler)?'机关':'物件',distance};
     }
-    for(const binding of storyBindings(at.map_id).rests){
+    for(const binding of bindings.rests){
       const bed=state.chapterStory.maps[at.map_id]?.descriptors?.find(row=>row.id===binding.descriptor_id);
       if(bed){const distance=Math.min(...bed.cells.map(cell=>Math.hypot((cell.x+.5)*16-at.x,(cell.y+.5)*16-at.y)));if(distance<40&&(!state.nearest||distance<state.nearest.distance))state.nearest={kind:'rest',name:'床铺',descriptorId:bed.id,distance};}
     }
@@ -239,7 +245,9 @@ export function createMapController({state, actions, $, canvas, ctx}) {
   function paint(){
     const scene=state.scenes?.current;
     const sourceWorld=state.sceneEntryDraft??state.world.value,actor=state.objectActorPreview;
-    const world=actor?{...sourceWorld,location:{...sourceWorld.location,direction:actor.direction}}:sourceWorld;
+    const conversation=state.npcConversationFacing;
+    const direction=actor?.direction??(!state.sceneEntryDraft&&conversation?.scene===scene?conversation?.direction:undefined);
+    const world=direction===undefined?sourceWorld:{...sourceWorld,location:{...sourceWorld.location,direction}};
     const draw=state.openingView?.active&&state.openingView.nativeViewport?drawOpeningScene:drawGameScene;
     const options={scene,world,role:actor?.role??role(),action:actor?.action??sheetAction(),view:actor?{...state.view,frame:actor.frame,collisionFeedback:null}:state.view,width:state.cssWidth,height:state.cssHeight,objectBitmap:(scene,obj)=>objectBitmap(scene,obj,world),
       openingQueue:state.openingView?.active?state.openingView.drawQueue(scene.data.role_layer_preview??2):null,

@@ -1,3 +1,15 @@
+// Direction indices match the eight exploration poses, starting down-right.
+const forwardVectors = [[1, 1], [1, 0], [1, -1], [0, -1], [-1, -1], [-1, 0], [-1, 1], [0, 1]];
+
+export function npcInFront(player, npc) {
+  const dx = npc.x - player.x, dy = npc.y - player.y;
+  if (dx === 0 && dy === 0) return true;
+  const [x, y] = forwardVectors[player.direction];
+  const forward = x * dx + y * dy;
+  // Allow 45 degrees to either side so diagonal approaches are easy to aim.
+  return forward > 0 && Math.abs(x * dy - y * dx) <= forward;
+}
+
 // GAME.exe 43CE30/410850 selects explicit CF1 targets; 412640 checks reach.
 // Coordinates use the initialized DGP footprint and the original DAT header.
 export function nativeObjectInteractionNearby(object, at, header) {
