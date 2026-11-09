@@ -1,0 +1,19 @@
+remake/runtime/web/core/ui/map_presentation.mjs
+  s_c93a42fe674b07::t_9ba22ba680babb 3-14,48-50
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "e1443932dbacce305178e4c8d93e3d7a84aa2915",
+  "prompts": {},
+  "sessions": {
+    "s_c93a42fe674b07": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1bb6b-7ca5-7be1-8467-b62fca41f2e4",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
