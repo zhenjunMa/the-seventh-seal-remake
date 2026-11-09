@@ -1,5 +1,17 @@
 import {mapActorPosition} from '../exploration/movement.mjs';
 
+// Ground contact in full sprite-frame pixels, measured from each playable
+// role's idle frames. A single point per role keeps the pose stable as gait
+// and facing change. Exploration collision already uses this world position.
+const playerGroundAnchors = {
+  '001': {x:80,y:134},
+  '002': {x:82,y:145},
+  '003': {x:87,y:143},
+  '004': {x:98,y:152},
+  '005': {x:86,y:136},
+  '006': {x:80,y:144},
+};
+
 // Shared source geometry for the live Phaser scene and read-only save previews.
 // Producing entries never advances animation, RNG, or persistent world state.
 export function mapPresentation({scene,world,role,action,view,
@@ -33,7 +45,9 @@ export function mapPresentation({scene,world,role,action,view,
   }
   if(opening)queue.push(...openingQueue);
   else {
-    const offset=role.map_draw_offset??{x:16-(role.anchor?.x??role.anchor_raw?.[0]??0),y:-(role.anchor?.y??role.anchor_raw?.[1]??0)};
+    const ground=playerGroundAnchors[role.id];
+    const offset=ground?{x:-ground.x,y:-ground.y}:
+      role.map_draw_offset??{x:16-(role.anchor?.x??role.anchor_raw?.[0]??0),y:-(role.anchor?.y??role.anchor_raw?.[1]??0)};
     queue.push({key:'leader',character:true,layer:scene.data.role_layer_preview??2,sort_y:at.y+32,
       pose:{image:action.bitmap,light:action.intrinsic_bitmap,shadow:action.shadow_bitmap,shadow_geometry:action.shadow_geometry,
         sx:(view.frame??0)*role.frame_width,sy:at.direction*role.frame_height,
