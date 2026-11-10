@@ -25,7 +25,7 @@ if(planning){
   packed=JSON.parse(await fs.readFile(path.join(web,'data/battle_packs.json')));
   if(roleIds&&(!content.stages[stageId]||!roleIds.length||new Set(roleIds).size!==roleIds.length||roleIds.some(id=>!content.roles[id])))throw Error('Unknown or duplicate battle roles / stage');
 }else ({content}=await readContentDefinition({originalDir:originalDir===null?null:path.resolve(originalDir)}));
-let selection=null;
+let selection=null,entryPaths=null;
 async function jsonLoader(p,expected){
   const bytes=await fs.readFile(local(p)),sha256=hash(bytes);
   if(expected&&expected!==sha256)throw Error('Manifest fingerprint mismatch: '+p);
@@ -50,6 +50,11 @@ for(const [metadataPath,itemMetadataPath,stageMetadataPath,lifecycleMetadataPath
   const view=new BattleView({canvas:{getContext:()=>({})},metadataPath,itemMetadataPath,stageMetadataPath,lifecycleMetadataPath,statusMetadataPath:'/data/battle_status_view.json',jsonLoader,content:viewContent,
     assetLoader:async a=>{add(a);return {image:{width:a.width,height:a.height},sha256:a.sha256};}});
   await view.prepare();
+  if(metadataPath==='/data/party_battle_view.json'&&!entryPaths){
+    const entry=new BattleAssetPlan({meta:view.meta,itemMeta:view.itemMeta,lifecycleMeta:view.lifecycleMeta,
+      descriptors:view.assetDescriptors,pairs:view.lifecyclePairs,actors:view.meta.roles.map(role=>({id:role.id})),inventory:[]});
+    entryPaths=entry.base;
+  }
   for(const effect of Object.values(view.statusMeta.effects))for(const sheet of [effect.main_sheet,effect.intrinsic_sheet].filter(Boolean))
     add({...assets.get(sheet),group:'effect-status-'+effect.id_raw,tile_width:effect.frame_width,tile_height:effect.frame_height});
   for(const role of view.meta.roles)for(const action of role.actions)add({...assets.get(action.sheet),group:'role-'+role.id,tile_width:role.frame_width,tile_height:role.frame_height});
@@ -83,6 +88,7 @@ for(const [p,group]of [['/data/battle_ui.json','hud'],['/data/battle_result.json
 for(const row of assets.values()){
   if(!row.group)throw Error('Image has no packing group: '+row.path);
   row.tile_width??=row.width;row.tile_height??=row.height;
+  if(row.group.startsWith('role-')&&entryPaths?.has(row.path))row.entry=true;
 }
 if(roleIds&&!selection)throw Error('No matching runtime battle view');
 process.stdout.write(JSON.stringify({manifests,assets:[...assets.values()],...(selection?{selection}:{})}));

@@ -40,7 +40,7 @@ def packing_family(asset):
 
 
 def dependency_groups(families):
-    """Share identical effect pixels first, then pack equal user sets together."""
+    """Group deduplicated tiles by when or by whom they are used."""
     groups = defaultdict(dict)
     for family, tiles in families.items():
         for key, tile in tiles.items():
@@ -48,6 +48,8 @@ def dependency_groups(families):
             if family == 'effects':
                 users = sorted(tile['owners'])
                 name = 'effects-roles-' + '-'.join(users) if users else 'effects-unreferenced'
+            elif family.startswith('role-') and tile.get('entry'):
+                name = family + '-entry'
             groups[name][key] = tile
     return groups
 
@@ -101,6 +103,8 @@ def plan(roles=None, stage=None):
             tile = groups[packing_family(asset)].setdefault(key, dict(width=width, height=height, paths=set(), owners=set()))
             tile['paths'].add(asset['path'])
             tile['owners'].update(asset.get('owners', []))
+            if asset.get('entry'):
+                tile['entry'] = True
     groups = dependency_groups(groups)
     pages, image_pages = [], defaultdict(set)
     group_reports = {}
@@ -137,12 +141,13 @@ def plan(roles=None, stage=None):
     return report
 
 
-def build(repack=False, *, original_dir=None):
+def build(repack=False, *, original_dir=None, repack_roles=False):
     from incremental_atlas import build_atlas
     from incremental import write_json
     data = inventory(original_dir=original_dir)
     manifest, sources, output_hashes, counters = build_atlas(data, runtime=RUNTIME, web=WEB, out=OUT,
-        layout_pages=layout_pages, packing_family=packing_family, dependency_groups=dependency_groups, repack=repack)
+        layout_pages=layout_pages, packing_family=packing_family, dependency_groups=dependency_groups,
+        repack=repack, repack_roles=repack_roles)
     for name, entry in data['manifests'].items():
         path = local(name)
         if sha(path.read_bytes()) != entry['sha256']:
@@ -156,7 +161,7 @@ def build(repack=False, *, original_dir=None):
         unique_tiles=unique_tiles, source_rgba_bytes=sum(a['width']*a['height']*4 for a in data['assets']),
         atlas_rgba_bytes=sum(p['width']*p['height']*4 for p in pages),
         png_bytes=sum(p['bytes'] for p in pages), pixel_reconstruction_passed=True,
-        **counters, policy='Append verified new tiles; freeze existing pages and coordinates. Explicit --repack compacts the library.')
+        **counters, policy='Append verified new tiles. Repack role pages with entry tiles together; reuse shared tiles across actions.')
     write_json(REPORT, report)
     print(json.dumps({k: report[k] for k in ['images','pages','unique_tiles','pixel_reconstruction_passed',*counters]}), flush=True)
     return report
@@ -164,15 +169,17 @@ def build(repack=False, *, original_dir=None):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--repack', action='store_true', help='Explicitly repack all pages instead of appending new tiles')
+    repack = parser.add_mutually_exclusive_group()
+    repack.add_argument('--repack', action='store_true', help='重新打包全部图集')
+    repack.add_argument('--repack-roles', action='store_true', help='只重排角色图集，复用其余现有页')
     parser.add_argument('--original-dir', type=Path, help='原版安装目录；只读，默认保留仓库根目录的旧路径')
     parser.add_argument('--plan', action='store_true', help='只用已有清单估算依赖分组，不读媒体或生成图集')
     parser.add_argument('--roles', help='计划中本场角色资源编号，以逗号分隔')
     parser.add_argument('--stage', help='计划中本场舞台编号；与 --roles 同时提供')
     parser.add_argument('--report', type=Path, help='将计划写入 evidence 下的新 JSON 文件')
     args = parser.parse_args()
-    if args.repack and args.plan:
-        parser.error('--repack cannot be combined with --plan')
+    if (args.repack or args.repack_roles) and args.plan:
+        parser.error('重排选项不能与 --plan 同时使用')
     if bool(args.roles) != bool(args.stage) or (args.roles or args.stage or args.report) and not args.plan:
         parser.error('--roles / --stage 必须配对，且仅在 --plan 时使用；--report 也仅用于计划')
     if args.plan:
@@ -185,4 +192,4 @@ if __name__ == '__main__':
             target.write_text(json.dumps(report, ensure_ascii=False, indent=2)+'\n', encoding='utf-8')
         print(json.dumps(report, ensure_ascii=False, indent=2))
     else:
-        build(repack=args.repack, original_dir=args.original_dir)
+        build(repack=args.repack, original_dir=args.original_dir, repack_roles=args.repack_roles)

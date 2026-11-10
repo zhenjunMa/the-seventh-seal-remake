@@ -22,19 +22,24 @@ def source_image(path,descriptor):
         Image.MAX_IMAGE_PIXELS=previous_limit
 
 
-def build_atlas(data, *, runtime, web, out, layout_pages, packing_family, dependency_groups, repack=False):
-    runtime, web, out = Path(runtime), Path(web), Path(out)
+def build_atlas(data, *, runtime, web, out, layout_pages, packing_family, dependency_groups,
+                repack=False, repack_roles=False):
+    runtime, web, out = (Path(directory).resolve() for directory in (runtime, web, out))
     manifest_path = web/'data/battle_packs.json'
     previous = json.loads(manifest_path.read_text('utf-8')) if manifest_path.is_file() and not repack else None
     pages = list(previous['pages']) if previous else []
     previous_images = previous['images'] if previous else {}
+    replaced_pages = {i for i, page in enumerate(pages)
+                      if repack_roles and page['group'].startswith('role-')}
     index_path = runtime/'evidence/resource_cache/battle_tiles.json'
     index = json.loads(index_path.read_text('utf-8')) if index_path.is_file() and not repack else {}
     # Index entries are only trusted against the exact manifest they describe.
     trusted = bool(previous and index.get('manifest_sha256') == file_hash(manifest_path))
-    tile_index = index.get('tiles', {}) if trusted else {}
+    tile_index = {family: bank for family, bank in index.get('tiles', {}).items()
+                  if not repack_roles or not family.startswith('role-')} if trusted else {}
     layouts = index.get('layouts', {}) if trusted else {}
-    new_layouts, images, groups, sources = {}, {}, defaultdict(dict), {}
+    new_layouts, groups, sources = {}, defaultdict(dict), {}
+    images = dict.fromkeys(asset['path'] for asset in data['assets'])
     decoded_pages = OrderedDict()
     counters = dict(reused_images=0, decoded_images=0, new_pages=0, repaired_pages=0)
 
@@ -63,6 +68,8 @@ def build_atlas(data, *, runtime, web, out, layout_pages, packing_family, depend
     # Repair the original page in place, at the original coordinates, using
     # retained verified source descriptors. No unrelated page is regenerated.
     for number, page in enumerate(pages):
+        if number in replaced_pages:
+            continue
         path = local(page['path'])
         if path.is_file() and file_hash(path) == page['sha256']:
             continue
@@ -96,6 +103,8 @@ def build_atlas(data, *, runtime, web, out, layout_pages, packing_family, depend
                 continue
             family = packing_family(asset)
             for _, _, w, h, number, px, py in old['regions']:
+                if number in replaced_pages:
+                    continue
                 retained_tiles[number][(family,px,py,w,h)] = None
         for number, locations in sorted(retained_tiles.items()):
             image = page_image(number)
@@ -103,19 +112,46 @@ def build_atlas(data, *, runtime, web, out, layout_pages, packing_family, depend
                 tile = image.crop((px, py, px+w, py+h))
                 tile_index.setdefault(family,{})[tile_key(tile)] = [number, px, py, w, h]
 
-    for asset in data['assets']:
+    def write_pending():
+        for group_name, tiles in sorted(dependency_groups(groups).items()):
+            for placed, width, height in layout_pages(tiles.values()):
+                atlas = Image.new('RGBA', (width,height))
+                for tile, x, y in placed:
+                    atlas.paste(tile['image'],(x,y))
+                raw = encode(atlas)
+                checksum = digest(raw)
+                path = out/(checksum[:24]+'.png')
+                write_bytes(path,raw)
+                number = len(pages)
+                pages.append(dict(path='/'+path.relative_to(web).as_posix(),sha256=checksum,
+                                  width=width,height=height,group=group_name,bytes=len(raw)))
+                counters['new_pages'] += 1
+                for tile,x,y in placed:
+                    tile_index[tile['family']][tile['key']] = [number,x,y,tile['width'],tile['height']]
+                    for region in tile['references']:
+                        region[4:] = [number,x,y]
+        groups.clear()
+
+    # Keep cropped pixels only for the current family. Deduplication still
+    # sees every action in that family before entry and skill tiles are split.
+    active_family = None
+    for asset in sorted(data['assets'], key=packing_family):
+        family = packing_family(asset)
+        if family != active_family:
+            write_pending()
+            active_family = family
         name = asset['path']
         source = local(name)
         if file_hash(source) != asset['sha256']:
             raise ValueError('Source image fingerprint mismatch: '+name)
         sources[source.relative_to(runtime.parents[1]).as_posix()] = asset['sha256']
-        family = packing_family(asset)
         recipe = {key: asset.get(key) for key in ('tile_width','tile_height','trim')}
         recipe['family'] = family
         new_layouts[name] = recipe
         old = previous_images.get(name)
         unchanged = (old and all(old[k] == asset[k] for k in ('sha256','width','height'))
-                     and (not trusted or layouts.get(name) == recipe))
+                     and (not trusted or layouts.get(name) == recipe)
+                     and not (repack_roles and family.startswith('role-')))
         if unchanged:
             images[name] = old
             counters['reused_images'] += 1
@@ -147,24 +183,9 @@ def build_atlas(data, *, runtime, web, out, layout_pages, packing_family, depend
                                             references=[], owners=set(), key=key, family=family)
                     pending[key]['references'].append(region)
                     pending[key]['owners'].update(asset.get('owners', []))
-
-    for group_name, tiles in sorted(dependency_groups(groups).items()):
-        for placed, width, height in layout_pages(tiles.values()):
-            atlas = Image.new('RGBA', (width,height))
-            for tile, x, y in placed:
-                atlas.paste(tile['image'],(x,y))
-            raw = encode(atlas)
-            checksum = digest(raw)
-            path = out/(checksum[:24]+'.png')
-            write_bytes(path,raw)
-            number = len(pages)
-            pages.append(dict(path='/'+path.relative_to(web).as_posix(),sha256=checksum,
-                              width=width,height=height,group=group_name,bytes=len(raw)))
-            counters['new_pages'] += 1
-            for tile,x,y in placed:
-                tile_index[tile['family']][tile['key']] = [number,x,y,tile['width'],tile['height']]
-                for region in tile['references']:
-                    region[4:] = [number,x,y]
+                    if asset.get('entry'):
+                        pending[key]['entry'] = True
+    write_pending()
 
     # New/changed images are reconstructed before publishing the manifest.
     # --force rechecks all original pixels while keeping the published layout.
@@ -183,6 +204,14 @@ def build_atlas(data, *, runtime, web, out, layout_pages, packing_family, depend
         occupied = original.getchannel('A').point(lambda v:255 if v else 0).convert('RGB')
         if ImageChops.multiply(difference,occupied).getbbox() is not None:
             raise ValueError('Atlas visible pixels differ: '+asset['path'])
+    if replaced_pages:
+        retained = [i for i in range(len(pages)) if i not in replaced_pages]
+        remap = {old: new for new, old in enumerate(retained)}
+        pages = [pages[i] for i in retained]
+        images = {name: dict(row, regions=[[x,y,w,h,remap[i],px,py] for x,y,w,h,i,px,py in row['regions']])
+                  for name, row in images.items()}
+        tile_index = {family: {key: [remap[tile[0]], *tile[1:]] for key, tile in bank.items()}
+                      for family, bank in tile_index.items()}
     manifest = dict(schema='seventh-seal-battle-packs',version=1,pages=pages,images=images,manifests=data['manifests'])
     if manifest != previous:
         write_json(manifest_path,manifest,compact=True)
